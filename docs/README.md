@@ -51,8 +51,10 @@ GUI Disconnect restores baseline, guest copies are destroyed, original test stat
 L04/L04.1 remain IN_PROGRESS; LIVE-2/L04.2 and device teardown remain NOT_RUN.
 LIVE-1 PARTIAL is review accepted; final-2 is retained only as historical evidence.
 [L04.1-LIVE-1-R](releases/2026-10-25-linux-poll-disconnect-l04-1-live-1-r.md)
-is the active source/package correction: deterministic poll/Disconnect fencing,
-reserved internal0.2.12~l03.2.2; package gates pending, live retest NOT_RUN.
+is the source/package checkpoint: deterministic poll/Disconnect fencing,
+source57f8eff/internal0.2.12~l03.2.2/candidate d9c0d07f…, unchanged system build-9.
+Exact inventory and both real systemd255/pkexec package gates PASS; CI pending,
+live retest NOT_RUN.
 NEXT review L04.1-LIVE-1-R, not another live or server operation.
 Windows broker IPC remains NOT_INTEGRATED;
 installed restricted-message acceptance is NOT_RUN, not a completed fallback.

@@ -3,15 +3,16 @@
 ## L03.2 — внутренний полный candidate,25.10
 
 Correction [L04.1-LIVE-1-R](releases/2026-10-25-linux-poll-disconnect-l04-1-live-1-r.md)
-ACTIVE: следующий internal version **0.2.12~l03.2.2** зарезервирован для новых user
-bytes; build/package gates pending, live retest NOT_RUN. Final-2/0.2.12~l03.2.1
+CHECKPOINT: новый internal **0.2.12~l03.2.2**, source57f8eff/candidate d9c0d07f…;
+exact inventory и оба real systemd255/pkexec package gates PASS, CI pending,
+live retest NOT_RUN. Final-2/0.2.12~l03.2.1
 retired для завершения L04.1 после принятого PARTIAL; не заменять его bytes/hash.
 Публичные version/catalog/download links не меняются.
 
 L03.1/L03.2 приняты; parent L03 DONE в scope внутреннего кандидата. Source VERSION
-и опубликованный Linux остаются0.2.11; внутренний candidate — **0.2.12~l03.2.1**.
+и опубликованный Linux остаются0.2.11; прежний L03 candidate — **0.2.12~l03.2.1**.
 [Точные артефакты/evidence](releases/2026-10-25-linux-candidate-l03-2.md).
-Для [L04.1](releases/2026-10-25-linux-installed-awg-tcp-l04-1.md) закреплён только
+Для исторического [L04.1](releases/2026-10-25-linux-installed-awg-tcp-l04-1.md) использован только
 final-2 candidate `9d4b13cc…`, не CI rebuild `f7f6e765…`. Integrity PASS.
 [L04.1-AUTH](releases/2026-10-25-linux-test-activation-l04-1-auth.md)
 и продолжение

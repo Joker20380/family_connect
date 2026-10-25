@@ -1,12 +1,14 @@
 # Текущее состояние / Current state
 
-Срез **L04.1-LIVE-1-R**,25.10.2026: **ACTIVE / source checkpoint**.
+Срез **L04.1-LIVE-1-R**,25.10.2026: **source/package CHECKPOINT; CI pending**.
 Детерминированный red:12 failures/30 PASS; actual backend/GTK GUI poll удерживал
 operation lock, один Disconnect получал ConnectionBusy без helper down.
 Короткий generation fence + unlocked read-only I/O + повторная проверка, включая
 ошибки чтения; stale callback игнорируется. Queued normal Disconnect отменяется
 при закрытии; выполняющаяся mutation не переигрывается. Адресные229 PASS/2 SKIP.
-Новый internal **0.2.12~l03.2.2** зарезервирован; build/package/CI gates в работе,
+Source `57f8eff`; новый internal **0.2.12~l03.2.2**, candidate `d9c0d07f…`,
+unchanged system build-9. Desktop1121 PASS/85 SKIP; exact artifact integrity и
+оба real offline systemd255/pkexec package gates PASS. CI ещё в работе;
 live retest NOT_RUN. Product VERSION/public Linux0.2.11 неизменны.
 [Отчёт correction](releases/2026-10-25-linux-poll-disconnect-l04-1-live-1-r.md).
 **STOP после source/package gate. NEXT — review L04.1-LIVE-1-R.**

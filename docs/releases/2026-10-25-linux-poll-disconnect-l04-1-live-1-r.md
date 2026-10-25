@@ -1,6 +1,6 @@
 # L04.1-LIVE-1-R — normal poll / Disconnect correction
 
-25.10.2026. **ACTIVE / source checkpoint**, не live acceptance и не public release.
+25.10.2026. **Source/package CHECKPOINT; CI pending**, не live acceptance и не public release.
 Вход main/remote `96f90bdff72603efec27ebda8cf6a948c4202ad3`.
 LIVE-1 PARTIAL принят review. Exact final-2 `9d4b13cc…` неизменен, но больше не
 кандидат для завершения L04.1. Его [положительное evidence и first failure](2026-10-25-linux-installed-awg-tcp-l04-1-live-1.md)
@@ -47,18 +47,81 @@ window close и generation assertions. Полный desktop: **1121 PASS,85 SKIP
 9 warnings; skips включают отсутствующие в этом image native workers и отдельные
 systemd fixtures, не считаются native PASS. Обязательные CI gates ещё в работе.
 Новый real-GTK regression step добавлен в Client Linux, существующие gates не удалены.
+GTK `recovery_check.py` PASS: threshold/reconnect/explicit disconnect/stale selection/close.
 Control/phase0/Docker full suites и прежние54 residual failures остаются видимыми;
 Windows/voice observations не исправляются в этом scope.
 
-## Новый кандидат / дальнейший bounded gate
+## Точный новый кандидат
 
-Reserved internal version **0.2.12~l03.2.2** по существующей internal policy;
-source/public VERSION0.2.11 неизменен. Стандартный L03.2 package path, новый source
-SHA/candidate ID/AppImage/DEB/legacy hashes будут записаны после сборки.
-Предполагается exact accepted system build-9 без изменения bytes/contract; перед
-embedding проверяются SHA/manifest. CI standard rebuild остаётся отдельным ID,
-не подменяет точную локальную пару. Package gate: disposable Ubuntu24.04/systemd255,
-synthetic state only, реальные systemd/pkexec/readback, без gateway/test identity.
+Product source/проверенный remote после source push:
+`57f8eff8b291062d69248ac46413f8c9fc0f561d`, source_dirty=false.
+Internal **0.2.12~l03.2.2**; source/public VERSION0.2.11 неизменен.
+Стандартный `scripts.package_linux` с exact retained system build-9, без rebuild
+системного компонента. Локальная директория (не Git/не public release):
+`state-client-build/linux-poll-disconnect-l041r-20261025/build-1/`.
+
+- Candidate ID: `d9c0d07f93542a633b5563757f0c5aa0d4f0c37410b3b884ba8b67db01c484ef`.
+- Runtime contract2, Python3.12, 707 user inventory members; одинаковый `candidate.json`
+  в AppImage/DEB, SHA256 `a6de4eb94788eeb8b1bb550057ab65d8d7922d450eb9f2d9c34e1351938b1470`.
+- System build-9: `8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da`.
+- Embedded archive:49247776 bytes, SHA256
+  `bdd7e04b8ca78a232acccd881004cfb3b6c96b13dc3c608d0b919f53f40f02d9`;
+  accepted system source `f826dbdfb562541bde95d2fcbecc1d944d15da3d`.
+  Bytes, contract и native/RNS/AWG/Xray provenance неизменны.
+- Appimagetool SHA256 `95cbe7cce9717fce90c484e34052ee7c7f1d7635b33c12525b4776826a7d29b6`.
+
+| Exact artifact | Bytes | SHA256 |
+|---|---:|---|
+| FamilyConnect-0.2.12~l03.2.2-x86_64.AppImage | 57924088 | `33537e451ab39010b70c989604477fc73c86f6b88f7f5d7d4c5a50dd07887a8a` |
+| FamilyConnect_0.2.12~l03.2.2_amd64.deb | 55951452 | `c806ed9fac2466772042cde6c84a59b7bd86172cd3d91dee724449de78f77dda` |
+| FamilyConnect-Linux-0.2.12~l03.2.2.tar.gz | 112344 | `79a2c8d7961d49e3b3c0240c259352c7bd426cdf98f260037cc6eaa98d13f4f2` |
+
+`scripts.verify_linux_candidate` PASS для извлечённых bytes: delivery hashes,
+exact inventories, common candidate identity, integration/maintainer scripts,
+audit и legacy six-file shape/source parity. Полный user inventory находится в
+обоих артефактах; legacy updater contract не изменён. Ничего не опубликовано.
+
+## Actual package gate
+
+Два новых offline disposable containers: Ubuntu24.04.5, настоящий PID1 systemd255
+(255.4-1ubuntu8.18), kernel7.0.0-38-generic; private PID/mount/cgroup/network,
+network none/только lo, private D-Bus/resolved/Secret Service/polkit/Xvfb.
+Image `fc-l032-system:check` SHA256
+`6705fc0e0b9a4c83fa3710e45f2b54a27c80cd49b27dbfe7db213d946f5b9dce`.
+В mounts только точные новые артефакты и существующий fixture
+`tests/fixtures/linux_candidate/smoke.py`; checkout/venv/real identity не монтируются.
+
+Оба формата **PASS**:
+- Clean UID1000 imports/GUI smoke, до setup root runtime отсутствует, нет silent VPN.
+- Реальный pkexec fixed bootstrap, UID/path denial, explicit setup и bounded reinstall;
+  installed inventory/capabilities READY exact build-9, temporary payload cleanup.
+- Missing manifest/tampered embedded archive/mixed system build/schema1/modified
+  installed module fail closed; после восстановления readback READY.
+- Fixed idle DIRECT/service-only chat prepare без VPN, настоящий user D-Bus daemon,
+  background owner переживает GUI exit; никакого gateway connect.
+- DEB reinstall/remove/reinstall сохраняет synthetic encrypted identity/history/settings,
+  root inventory и backups; user service останавливается, dangling package unit удалён.
+- AppImage service reopen использует original image, не временный mount;
+  explicit remove-integration сохраняет synthetic state и independent root runtime.
+
+Дополнительно оба launcher в одном DEB guest, UID1000/HOME и installed runtime:
+candidate-check равен, READY равен, второй setup не выполнялся; installed.json SHA256
+до/после `aabcce5e4baf25db37f05cd43d0ef4ab8a1ae83a622f30f05438c3f0c1c77b31`.
+Это shared runtime package check, не cross-format upgrade/live owner acceptance.
+Оба guest после PASS остановлены/удалены вместе с synthetic state.
+Host services/routes/DNS не менялись. Existing rollback fencing/backup contract
+не изменён; failure-injected rollback этого unchanged build не повторялся локально,
+его real L03.1 smoke сохраняется в mandatory CI standard-rebuild gate.
+
+## CI source57f8eff — pending
+
+Запущены существующие обязательные push workflows; результаты фиксируются отдельно
+от локальных bytes: Client builds40201296971, AWG40201297005, TCP40201297002,
+Auto native40201297010, internal candidate40201296910, control40201297046,
+phase0/Docker40201296976. Voice40201297057 уже FAILURE на прежнем
+`voice operation did not reach expected state` (job121192844607), вне correction scope.
+CI standard system rebuild получает собственный ID и не подменяет local build-9/pair.
+Общий CI PASS не заявляется.
 
 Private FC_L04_TEST_STATE/receipt/credentials не открывались и не переносились;
 server operations/configuration fetch/connect NOT_RUN. Live retest нового кандидата
