@@ -77,3 +77,8 @@ First candidate CI run40183917951/job121140566373:58 passed/2 skipped/1 failed
 before building. The new runner used hosted Python without real GI, not a
 product import failure. Reuse the existing `ci_desktop_env.sh` system-Python/GI
 environment; do not mock GI or skip the packaging import regression.
+
+Run40184000969/job121140811312 passed the bounded tests/native standard build,
+then RNS correctly rejected apt-provided pyserial without wheel RECORD. Separate
+the real-GI test environment from the existing L03.1 pure-wheel Docker builder.
+No dependency verification weakening and no change to accepted product bytes.

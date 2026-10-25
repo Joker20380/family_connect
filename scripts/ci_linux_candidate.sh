@@ -11,7 +11,9 @@ git -C "$work/xray" fetch --depth=1 origin d2758a023cd7f4174a5a5fa4ff66e487d4342
 (
   cd "$work/accepted"
   python -m scripts.build_desktop_mesh --go "$(command -v go)" --xray "$work/xray" --out "$work/native" --os linux --test
-  python -m scripts.build_desktop_rns --out "$work/rns"
+  tar -c tests/fixtures/linux_system_runtime/Dockerfile control/requirements.lock \
+    device_identity/requirements.lock provisioning/requirements.lock messenger/requirements.lock | \
+    docker build --target builder -t fc-l032-builder:ci -f tests/fixtures/linux_system_runtime/Dockerfile -
   docker build -f pilot/awg31/Dockerfile -t fc-l032-awg:ci .
   docker build -f pilot/tcp/Dockerfile -t fc-l032-tcp:ci .
 )
@@ -20,11 +22,12 @@ tcp_container=$(docker create fc-l032-tcp:ci)
 docker cp "$awg_container:/opt/awg31" "$work/normal/awg"
 docker cp "$tcp_container:/usr/local/bin/xray" "$work/normal/xray"
 docker rm "$awg_container" "$tcp_container"
-(
-  cd "$work/accepted"
-  python -m scripts.package_mesh_component --native "$work/native" --rns "$work/rns" \
-    --awg "$work/normal/awg" --tcp "$work/normal/xray" --out "$work/system"
-)
+docker run --rm --network none --read-only --tmpfs /tmp:exec \
+  --mount "type=bind,src=$work/accepted,dst=/workspace,readonly" \
+  --mount "type=bind,src=$work,dst=/evidence" fc-l032-builder:ci /bin/bash -c '
+    /opt/build-venv/bin/python -m scripts.build_desktop_rns --out /evidence/rns
+    /opt/build-venv/bin/python -m scripts.package_mesh_component --native /evidence/native --rns /evidence/rns \
+      --awg /evidence/normal/awg --tcp /evidence/normal/xray --out /evidence/system'
 docker build -f tests/fixtures/linux_candidate/Dockerfile -t fc-l032-system:ci tests/fixtures/linux_candidate
 mkdir -p artifacts/linux-candidate
 system_archive="$work/system/FamilyConnect-MESH-system-amd64.tar.gz"
