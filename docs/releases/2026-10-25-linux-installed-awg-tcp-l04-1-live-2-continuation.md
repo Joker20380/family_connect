@@ -69,7 +69,14 @@ explicit setup and exact system READY PASS; only protected home copied.
   repeated Connect. Initial nft syntax rejection was repaired before user action;
   its incomplete server pre-read is not counted among the three final reads.
 
-C2/D/E/F1/F2 still NOT_RUN at this intermediate documentation checkpoint.
+- **C2 TCP unavailable PASS:** independent clean snapshot, verified endpoint-only
+  guest drop; one Connect/up, HELPER_FAILED/OUTCOME_UNKNOWN, APPLYING/1/pending;
+  no CONNECTED/fallback. One authorized reopen recovery: down1/discard1, IDLE/2/null,
+  no owner/TUN/markers; first HELPER_FAILED retained. State, poll, structural network
+  baseline and three-pre/one-post server observations PASS. Fixture initially
+  rejected the TCP representation before action; corrected to installed `parse_tcp`.
+
+D/E/F1/F2 still NOT_RUN at this intermediate documentation checkpoint.
 Only sanitized docs/evidence committed; product/installed bytes untouched.
 L04.2/L05/device teardown/revoke/publication NOT_RUN.
 

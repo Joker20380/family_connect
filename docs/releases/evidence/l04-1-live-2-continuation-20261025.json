@@ -168,6 +168,73 @@
       },
       "transport": "awg"
     },
+    "C2": {
+      "action_start_utc": "2026-10-25T19:27:56Z",
+      "first_failure_preserved": true,
+      "fixture_note": "TCP endpoint fixture uses the installed parse_tcp on the cached verified assignment; no configuration fetch. Initial fixture parser rejection happened before Connect. One approved startup recovery, no Connect replay.",
+      "generation_before": 0,
+      "generation_recovered": 2,
+      "generation_refused": 1,
+      "helper_counts": {
+        "awg": {
+          "cleanup": 0,
+          "discard": 0,
+          "down": 0,
+          "import": 0,
+          "serve": 0,
+          "session": 0,
+          "up": 0
+        },
+        "tcp": {
+          "cleanup": 1,
+          "discard": 1,
+          "down": 1,
+          "import": 1,
+          "serve": 1,
+          "session": 2,
+          "up": 1
+        }
+      },
+      "network_restored": true,
+      "pending_recovered": false,
+      "phase_recovered": "IDLE",
+      "phase_refused": "APPLYING",
+      "poll_after_recovery": "PASS",
+      "post_read_timestamp": "2026-10-25T19:29:00.046611+00:00",
+      "pre_read_timestamps": [
+        {
+          "completed_utc": "2026-10-25T19:27:31.947395+00:00",
+          "started_utc": "2026-10-25T19:27:27.812697+00:00"
+        },
+        {
+          "completed_utc": "2026-10-25T19:27:44.369430+00:00",
+          "started_utc": "2026-10-25T19:27:41.947971+00:00"
+        },
+        {
+          "completed_utc": "2026-10-25T19:27:56.788305+00:00",
+          "started_utc": "2026-10-25T19:27:54.369864+00:00"
+        }
+      ],
+      "result": "PASS",
+      "server_readback": "PASS",
+      "state_preserved": true,
+      "terminal": {
+        "actual_transport": "none",
+        "connection_id": "f70305b6-5c68-407f-a51a-a0a5b36fb5dd",
+        "first_failure": "HELPER_FAILED",
+        "normal_operation": {
+          "category": "HELPER_FAILED",
+          "cleanup_confirmed": false,
+          "generation": 1,
+          "outcome": "OUTCOME_UNKNOWN",
+          "pending": true,
+          "phase": "APPLYING"
+        },
+        "selected_transport": "tcp",
+        "state": "DISCONNECTED"
+      },
+      "transport": "tcp"
+    },
     "P1": {
       "action_start_utc": "2026-10-25T18:57:06Z",
       "actual": "awg",
@@ -524,7 +591,6 @@
     "uid": 1000
   },
   "not_run": [
-    "C2",
     "D",
     "E",
     "F1",

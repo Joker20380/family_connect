@@ -9,7 +9,7 @@ D00 — организация документации; следующие ст
 L03.1/L03.2 **DONE (review accepted)**; parent **L03 DONE** в scope полного
 внутреннего Linux-кандидата. **L04.1-LIVE-2: PARTIAL / review accepted**, STOP на B1.
 **L04.1-LIVE-2-RESUME ACTIVE**, продолжение того же ID. P1/P2 continuity и B2 PASS;
-C1 unavailable/same-owner recovery PASS; C2/D/E/F1/F2 NOT_RUN. Review принимает exact .4
+C1/C2 unavailable/same-owner recovery PASS; D/E/F1/F2 NOT_RUN. Review принимает exact .4
 A/B1 PASS; B1 не повторять, service transition до action не блокирует его.
 Теперь P1/P2 continuity → B2–F; first new product failure STOP. Три согласованных
 pre-action server reads ≥10s; counter-free structural firewall hash. Product/candidate
