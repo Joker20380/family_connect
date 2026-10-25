@@ -1,0 +1,472 @@
+{
+  "accepted_not_repeated": [
+    "A",
+    "B1"
+  ],
+  "artifact_integrity": {
+    "artifacts": {
+      "FamilyConnect-0.2.12~l03.2.4-x86_64.AppImage": {
+        "sha256": "c78c68ec99b187269b87d40d457c8db09d3593b45f199a8705d0a83222cc3273",
+        "size": 57928184
+      },
+      "FamilyConnect-Linux-0.2.12~l03.2.4.tar.gz": {
+        "sha256": "106f09e2ff7bc31b2a2eff64a5b4c157ded7a76ea6e4d037ad5cdb513803ffaa",
+        "size": 114462
+      },
+      "FamilyConnect_0.2.12~l03.2.4_amd64.deb": {
+        "sha256": "8b23ac6d93c747955017a3b0d5c33745e7272f2c24fc950f4e8f0d0b367af4da",
+        "size": 55986866
+      }
+    },
+    "candidate": "42ea0699263f2527057a36082b2b95235c4ac452cc5e86eed6ec15ebd50898cf",
+    "legacy_members": 6,
+    "result": "PASS",
+    "source_commit": "053c4e5f9532ca927f49a78f9c0ed17903375baf",
+    "source_dirty": false,
+    "system": {
+      "build_id": "8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d",
+      "installer_sha256": "ce9acb1f363b0fafffb11c44097901a7871c28fbf0e6b9c2c5c3eaba9ef7bfb5",
+      "sha256": "ddd74c2132a76ac833b587d9df6409d779ce6afcdaa45fafd23faa86d7817726",
+      "size": 49250848,
+      "source_digest": "cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61"
+    },
+    "user_members": 707
+  },
+  "checkpoint": "L04.1-LIVE-2-RESUME",
+  "cleanup": "PER_SCENARIO_PENDING_FINAL_GUEST_DESTRUCTION",
+  "continuation": true,
+  "entry_docs_commit": "950fc6cb70bba9540eb74c3e91fffd3c31d4cff9",
+  "entry_main": "4abe406a7143d8f5353a1d1e1174f6ed05cd5dda",
+  "gates": {
+    "B2": {
+      "action_start_utc": "2026-10-25T19:12:25Z",
+      "fixture_note": "The waiting fixture process expired at its 300s bound before release. A replacement UID1000 fixture resumed the exact same owner token and called the production lease.finish(): 1/pending to 2/null. No second GUI action or manual journal write.",
+      "generation_before": 0,
+      "generation_finished": 2,
+      "generation_reserved": 1,
+      "helper_counts": {
+        "awg": {
+          "cleanup": 0,
+          "discard": 0,
+          "down": 0,
+          "import": 0,
+          "serve": 0,
+          "session": 0,
+          "up": 0
+        },
+        "tcp": {
+          "cleanup": 0,
+          "discard": 0,
+          "down": 0,
+          "import": 0,
+          "serve": 0,
+          "session": 0,
+          "up": 0
+        }
+      },
+      "network_restored": true,
+      "pending_preserved_until_same_owner_finish": true,
+      "poll_after_finish": "PASS",
+      "post_read_timestamp": "2026-10-25T19:17:13.739615+00:00",
+      "pre_read_timestamps": [
+        {
+          "completed_utc": "2026-10-25T19:11:59.099061+00:00",
+          "started_utc": "2026-10-25T19:11:56.843868+00:00"
+        },
+        {
+          "completed_utc": "2026-10-25T19:12:12.490009+00:00",
+          "started_utc": "2026-10-25T19:12:09.099578+00:00"
+        },
+        {
+          "completed_utc": "2026-10-25T19:12:24.813788+00:00",
+          "started_utc": "2026-10-25T19:12:22.490907+00:00"
+        }
+      ],
+      "result": "PASS",
+      "server_readback": "PASS",
+      "state_preserved": true,
+      "terminal": {
+        "actual_transport": "none",
+        "connection_id": "c9865c19-cbda-4c78-ae4e-30f707ee8343",
+        "first_failure": "PENDING_OPERATION",
+        "normal_operation": {
+          "category": "PENDING_OPERATION",
+          "cleanup_confirmed": false,
+          "generation": 1,
+          "outcome": "OUTCOME_UNKNOWN",
+          "pending": true,
+          "phase": "RECOVERY_REQUIRED"
+        },
+        "selected_transport": "awg",
+        "state": "DISCONNECTED"
+      }
+    },
+    "P1": {
+      "action_start_utc": "2026-10-25T18:57:06Z",
+      "actual": "awg",
+      "connection_id": "edf8d890-58e3-45b6-9597-c12e3bf1d937",
+      "disconnect_action_utc": "2026-10-25T18:57:59Z",
+      "generation_active": 2,
+      "generation_after": 3,
+      "generation_before": 0,
+      "handshakes": {
+        "fcawg7a4a361c": {
+          "peers": 1,
+          "recent": 1
+        }
+      },
+      "helper_counts": {
+        "awg": {
+          "cleanup": 0,
+          "discard": 0,
+          "down": 1,
+          "import": 1,
+          "serve": 0,
+          "session": 2,
+          "up": 1
+        },
+        "tcp": {
+          "cleanup": 0,
+          "discard": 0,
+          "down": 0,
+          "import": 0,
+          "serve": 0,
+          "session": 0,
+          "up": 0
+        }
+      },
+      "network_baseline": {
+        "default_route": "fb85cd466aa5f6f308975473aca2fe4979a1ad037cee470a2fc3a4d53b7aa601",
+        "dns": "b0191443e35e59618655d41343fb974821aa8eda45c0a4ed33344ea41d36cc6e",
+        "domains": "8d92db1545df492f433014cb97afe3a5b1fb1a73f7fd2a9d5a5955ac76255ffc",
+        "ip6tables": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "iptables": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "links": [
+          {
+            "flags": [
+              "LOOPBACK",
+              "UP",
+              "LOWER_UP"
+            ],
+            "ifname": "lo",
+            "mtu": 65536,
+            "operstate": "UNKNOWN"
+          },
+          {
+            "flags": [
+              "BROADCAST",
+              "MULTICAST",
+              "UP",
+              "LOWER_UP"
+            ],
+            "ifname": "ens3",
+            "mtu": 1500,
+            "operstate": "UP"
+          }
+        ],
+        "nft": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "routes4": "9433277d6fb2db39fb527b01a54aed996d9e420d66446743089cbc7621032513",
+        "routes6": "06345d44b4a3a0c65ab82c8fb4a16def2f4afabd8c4f9209a639d413aeb57d28",
+        "rules4": "c88a415e55c2b1d6ac4dd37c5ec360cbf3f5880a44aa1ecf71598f1d3ce4cbe2",
+        "rules6": "2f96b65baa9d426a3ede66b897f348316d82682e230b117f1ed363f7a5ebec41"
+      },
+      "network_restored": true,
+      "pending": false,
+      "phase": "IDLE",
+      "result": "PASS",
+      "root_generations": {
+        "awg": {
+          "generation": "f377f21e52bccd17dfcc3bdb7876ae66",
+          "id": "fcawg7a4a361c",
+          "ready": true
+        }
+      },
+      "selected_next": "awg",
+      "server": {
+        "comparison": "PASS",
+        "firewall_structure_sha256": "4a73b21c8a0d467a52f90961f36da0bbb687d2f22aaa39fa4ffabee6e550266a",
+        "gateway": {
+          "assigned_address_sha256": "4aba226c8f65cd276ddf5fa67ce3fbf2d81cbe405d5a9b878e9619c10168c6a9",
+          "foreign_clients_sha256": "9f1f63aea086d69f79d80d93e3eff650481178f5df1f2a79ecb9176e05d56c5c",
+          "foreign_live_sha256": "ca693eb9ea86ba183f5cbf3587a5d56fcfaa3b9b69d1a7ce2b04cb52245140f9",
+          "foreign_peers_sha256": "fa4cf90864acea6cbdc359d580f3d24144168d0ded382e2f033ceef191b92b21",
+          "foreign_runtime_sha256": "9f1f63aea086d69f79d80d93e3eff650481178f5df1f2a79ecb9176e05d56c5c",
+          "global_config_sha256": "c7ff070de3a33838d27caefadfadcfc870edd872fb6f8935931ecb88ade3dccb",
+          "server_json_sha256": "107d6b9b21b6b699693e95ece553302b8f1b56ac3ccf5872789eb536fc0bc9bd",
+          "services": {
+            "family-connect-friends-awg.service": {
+              "ActiveEnterTimestamp": "Sat 2026-10-24 03:20:15 UTC",
+              "ActiveState": "active",
+              "InvocationID": "c7ce778178da4014ad103ee7c689089e",
+              "MainPID": "3080290",
+              "SubState": "running"
+            },
+            "family-connect-friends-tcp.service": {
+              "ActiveEnterTimestamp": "Thu 2026-09-24 14:10:22 UTC",
+              "ActiveState": "active",
+              "InvocationID": "f1f5bd67647d468ea6bc3bd59b2793df",
+              "MainPID": "2420425",
+              "SubState": "running"
+            }
+          },
+          "target_clients": 1,
+          "target_live_clients": 1,
+          "target_live_peers": 1,
+          "target_peer_rows": 1
+        },
+        "post_read_timestamp": "2026-10-25T18:58:48.141180+00:00",
+        "pre_read_timestamps": [
+          {
+            "completed_utc": "2026-10-25T18:56:06.744765+00:00",
+            "started_utc": "2026-10-25T18:56:02.953506+00:00"
+          },
+          {
+            "completed_utc": "2026-10-25T18:56:19.413480+00:00",
+            "started_utc": "2026-10-25T18:56:16.745045+00:00"
+          },
+          {
+            "completed_utc": "2026-10-25T18:56:31.835356+00:00",
+            "started_utc": "2026-10-25T18:56:29.414655+00:00"
+          }
+        ],
+        "registry": {
+          "active": true,
+          "archive_sha256": "21d64558e542ff6ad80fb9b13799fbcb333167ffb5a79ec841e7c94dc65d71fa",
+          "catalog_sha256": "9a9f6e0d930766555bddf54ac5c17b388cf8abf5fe5badcac1d6dc817e1ec5d2",
+          "services": {
+            "family-connect-friends-http-candidate.service": {
+              "ActiveEnterTimestamp": "Sun 2026-10-25 18:28:22 UTC",
+              "ActiveState": "active",
+              "InvocationID": "16a0415f2930431da862080d65242381",
+              "MainPID": "345283",
+              "SubState": "running"
+            }
+          }
+        },
+        "ru": {
+          "clients": 0,
+          "peers": 0
+        }
+      },
+      "state_preserved": true,
+      "traffic": {
+        "after": {
+          "rx": 110281,
+          "tx": 13420
+        },
+        "before": {
+          "rx": 32926,
+          "tx": 10247
+        },
+        "interface": "fcawg7a4a361c",
+        "requests": [
+          {
+            "bytes": 217,
+            "http": 200,
+            "kind": "https",
+            "returncode": 0,
+            "seconds": 0.076105
+          },
+          {
+            "bytes": 65536,
+            "http": 200,
+            "kind": "download",
+            "returncode": 0,
+            "seconds": 0.156155
+          }
+        ],
+        "timestamp": 1792954679.069137
+      },
+      "transport": "awg"
+    },
+    "P2": {
+      "action_start_utc": "2026-10-25T19:08:58Z",
+      "actual": "tcp",
+      "connection_id": "b59cbf09-836c-4b81-b49c-a75b184de16c",
+      "disconnect_action_utc": "2026-10-25T19:09:59Z",
+      "generation_active": 5,
+      "generation_after": 6,
+      "generation_before": 3,
+      "handshakes": {},
+      "helper_counts": {
+        "awg": {
+          "cleanup": 0,
+          "discard": 0,
+          "down": 1,
+          "import": 1,
+          "serve": 0,
+          "session": 2,
+          "up": 1
+        },
+        "tcp": {
+          "cleanup": 1,
+          "discard": 0,
+          "down": 1,
+          "import": 1,
+          "serve": 1,
+          "session": 2,
+          "up": 1
+        }
+      },
+      "network_baseline": {
+        "default_route": "fb85cd466aa5f6f308975473aca2fe4979a1ad037cee470a2fc3a4d53b7aa601",
+        "dns": "b0191443e35e59618655d41343fb974821aa8eda45c0a4ed33344ea41d36cc6e",
+        "domains": "8d92db1545df492f433014cb97afe3a5b1fb1a73f7fd2a9d5a5955ac76255ffc",
+        "ip6tables": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "iptables": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "links": [
+          {
+            "flags": [
+              "LOOPBACK",
+              "UP",
+              "LOWER_UP"
+            ],
+            "ifname": "lo",
+            "mtu": 65536,
+            "operstate": "UNKNOWN"
+          },
+          {
+            "flags": [
+              "BROADCAST",
+              "MULTICAST",
+              "UP",
+              "LOWER_UP"
+            ],
+            "ifname": "ens3",
+            "mtu": 1500,
+            "operstate": "UP"
+          }
+        ],
+        "nft": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "routes4": "9433277d6fb2db39fb527b01a54aed996d9e420d66446743089cbc7621032513",
+        "routes6": "06345d44b4a3a0c65ab82c8fb4a16def2f4afabd8c4f9209a639d413aeb57d28",
+        "rules4": "c88a415e55c2b1d6ac4dd37c5ec360cbf3f5880a44aa1ecf71598f1d3ce4cbe2",
+        "rules6": "2f96b65baa9d426a3ede66b897f348316d82682e230b117f1ed363f7a5ebec41"
+      },
+      "network_restored": true,
+      "pending": false,
+      "phase": "IDLE",
+      "result": "PASS",
+      "root_generations": {},
+      "selected_next": "tcp",
+      "server": {
+        "comparison": "PASS",
+        "firewall_structure_sha256": "4a73b21c8a0d467a52f90961f36da0bbb687d2f22aaa39fa4ffabee6e550266a",
+        "gateway": {
+          "assigned_address_sha256": "4aba226c8f65cd276ddf5fa67ce3fbf2d81cbe405d5a9b878e9619c10168c6a9",
+          "foreign_clients_sha256": "9f1f63aea086d69f79d80d93e3eff650481178f5df1f2a79ecb9176e05d56c5c",
+          "foreign_live_sha256": "ca693eb9ea86ba183f5cbf3587a5d56fcfaa3b9b69d1a7ce2b04cb52245140f9",
+          "foreign_peers_sha256": "fa4cf90864acea6cbdc359d580f3d24144168d0ded382e2f033ceef191b92b21",
+          "foreign_runtime_sha256": "9f1f63aea086d69f79d80d93e3eff650481178f5df1f2a79ecb9176e05d56c5c",
+          "global_config_sha256": "c7ff070de3a33838d27caefadfadcfc870edd872fb6f8935931ecb88ade3dccb",
+          "server_json_sha256": "107d6b9b21b6b699693e95ece553302b8f1b56ac3ccf5872789eb536fc0bc9bd",
+          "services": {
+            "family-connect-friends-awg.service": {
+              "ActiveEnterTimestamp": "Sat 2026-10-24 03:20:15 UTC",
+              "ActiveState": "active",
+              "InvocationID": "c7ce778178da4014ad103ee7c689089e",
+              "MainPID": "3080290",
+              "SubState": "running"
+            },
+            "family-connect-friends-tcp.service": {
+              "ActiveEnterTimestamp": "Thu 2026-09-24 14:10:22 UTC",
+              "ActiveState": "active",
+              "InvocationID": "f1f5bd67647d468ea6bc3bd59b2793df",
+              "MainPID": "2420425",
+              "SubState": "running"
+            }
+          },
+          "target_clients": 1,
+          "target_live_clients": 1,
+          "target_live_peers": 1,
+          "target_peer_rows": 1
+        },
+        "post_read_timestamp": "2026-10-25T19:11:09.082541+00:00",
+        "pre_read_timestamps": [
+          {
+            "completed_utc": "2026-10-25T19:08:32.704204+00:00",
+            "started_utc": "2026-10-25T19:08:29.122731+00:00"
+          },
+          {
+            "completed_utc": "2026-10-25T19:08:45.087528+00:00",
+            "started_utc": "2026-10-25T19:08:42.704708+00:00"
+          },
+          {
+            "completed_utc": "2026-10-25T19:08:57.921549+00:00",
+            "started_utc": "2026-10-25T19:08:55.087860+00:00"
+          }
+        ],
+        "registry": {
+          "active": true,
+          "archive_sha256": "21d64558e542ff6ad80fb9b13799fbcb333167ffb5a79ec841e7c94dc65d71fa",
+          "catalog_sha256": "9a9f6e0d930766555bddf54ac5c17b388cf8abf5fe5badcac1d6dc817e1ec5d2",
+          "services": {
+            "family-connect-friends-http-candidate.service": {
+              "ActiveEnterTimestamp": "Sun 2026-10-25 18:28:22 UTC",
+              "ActiveState": "active",
+              "InvocationID": "16a0415f2930431da862080d65242381",
+              "MainPID": "345283",
+              "SubState": "running"
+            }
+          }
+        },
+        "ru": {
+          "clients": 0,
+          "peers": 0
+        }
+      },
+      "state_preserved": true,
+      "traffic": {
+        "after": {
+          "rx": 118215,
+          "tx": 16621
+        },
+        "before": {
+          "rx": 37837,
+          "tx": 11874
+        },
+        "interface": "fctcp4f85cf2d",
+        "requests": [
+          {
+            "bytes": 217,
+            "http": 200,
+            "kind": "https",
+            "returncode": 0,
+            "seconds": 0.117226
+          },
+          {
+            "bytes": 65536,
+            "http": 200,
+            "kind": "download",
+            "returncode": 0,
+            "seconds": 0.234635
+          }
+        ],
+        "timestamp": 1792955398.5676882
+      },
+      "transport": "tcp"
+    }
+  },
+  "identity": {
+    "catalog_sha256": "f4d812db722705d8fc853a1a1afd454922cd2bca71175db025f40b9a58c3628d",
+    "create": false,
+    "floor_sequence": 3,
+    "only_country": "nl",
+    "public_identity_sha256": "d07d33a81728ff70aec350ae59785990c194d90ecd44574b0da28439189532de",
+    "support_id": "FC-3YSQ-BE2D",
+    "uid": 1000
+  },
+  "not_run": [
+    "C1",
+    "C2",
+    "D",
+    "E",
+    "F1",
+    "F2",
+    "L04.2",
+    "L05",
+    "device_teardown",
+    "revoke"
+  ],
+  "status": "ACTIVE"
+}

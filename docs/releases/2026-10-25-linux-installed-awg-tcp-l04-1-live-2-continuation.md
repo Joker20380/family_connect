@@ -32,7 +32,33 @@ against the action window, not an unrelated earlier baseline. First new product
 failure stops further actions; only safe cleanup follows. No repeated fresh-DNS,
 upload, reconnect loop or AppImage close/reopen positive gate.
 
-All execution results remain NOT_RUN until recorded. Only sanitized docs/evidence
-are committed. L04.2/L05/device teardown/revoke/publication NOT_RUN.
+## Installed progress
+
+[Sanitized machine-readable receipt](evidence/l04-1-live-2-continuation-20261025.json).
+Exact artifact/member verification PASS (707 user members). New encrypted KVM:
+Ubuntu24.04.5, kernel6.8.0-147, systemd255.4; real NetworkManager/resolved,
+polkit/password approval, D-Bus/Secret Service, TUN and firewall. DEB GUI UID1000,
+explicit setup and exact system READY PASS; only protected home copied.
+
+- **P1 AWG PASS:** one up/down, one owner/TUN and recent handshake; HTTPS200,
+  download65536 bytes. Operation0→2 connected→3 disconnected, journal IDLE/null.
+- **P2 TCP PASS:** one up/down, actual TCP/Xray and one TUN; HTTPS200,
+  download65536 bytes. Operation3→5 connected→6 disconnected, journal IDLE/null.
+- Both restore the full structural network/DNS/firewall baseline and preserve
+  identity/cache/floors. Three immediate stable server reads before each action,
+  post-readback identical target1/1 +1/1, foreign/config/catalog/service identity.
+  No upload, fresh-DNS repeat, reconnect loop or AppImage close/reopen positive gate.
+- **B2 PASS:** clean independent snapshot, foreign durable generation1/pending;
+  one GUI Connect, helper requests0, terminal DISCONNECTED/PENDING_OPERATION,
+  RECOVERY_REQUIRED and unchanged foreign reservation. The fixture waiter expired
+  at its300s bound before release; a replacement UID1000 process resumed the exact
+  same fixture owner and used production `lease.finish()`, not a journal edit:
+  generation2/null, read-only poll PASS. This is same-owner completion, not a claim
+  that the original waiting PID survived. No second GUI action. State/network and
+  three-pre/one-post server checks PASS. Physical operation lock remains free.
+
+C1/C2/D/E/F1/F2 still NOT_RUN at this intermediate documentation checkpoint.
+Only sanitized docs/evidence committed; product/installed bytes untouched.
+L04.2/L05/device teardown/revoke/publication NOT_RUN.
 
 STOP. NEXT — review завершённого L04.1-LIVE-2.
