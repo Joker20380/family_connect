@@ -8,7 +8,7 @@ locks,630 RECORD/hash-verified runtime members, strict imports всех17 distri
 GTK/Adw/cairo/Secret Service/GStreamer/codec2 и129 адресных tests **PASS** без source edits.
 Начальная test-runner ошибка3 imports из-за отсутствия explicit public source path
 сохранена; исправлен только invocation, все129 PASS. Pins/hashes не менялись.
-Packaging готовит отдельный **0.2.12~l03.2.6 / Ubuntu26.04 / Python3.14**;
+Packaging готовит отдельный **0.2.12~l03.2.7 / Ubuntu26.04 / Python3.14**;
 new artifact/system IDs ещё NOT_BUILT. Frozen .5/3.12 immutable, L04.1 не переоткрывается.
 Production VPN/GUI/helper/protocol/identity/cache logic не меняется. Private identity,
 activation/cache/gateway не использованы. Publication/L04.2/L05/teardown/live VPN **NOT_RUN**.

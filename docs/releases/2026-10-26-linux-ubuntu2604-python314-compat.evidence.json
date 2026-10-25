@@ -137,7 +137,7 @@
     }
   },
   "candidate": {
-    "version": "0.2.12~l03.2.6",
+    "version": "0.2.12~l03.2.7",
     "target": "Ubuntu26.04/CPython3.14",
     "result": "NOT_BUILT"
   },

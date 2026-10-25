@@ -7,7 +7,7 @@ LOCAL-OWNER-UPGRADE **BLOCKED на ABI**: Ubuntu26.04/Python3.14.4 не подд
 frozen .5/Python3.12. Workstation/launchers/private state unchanged.
 Read-only source probe в disposable Ubuntu26.04.1/systemd259/Python3.14.4 **PASS**:
 exact locks, RECORD630/strict imports17 distributions, platform libraries и129 tests.
-Только packaging/runtime metadata/tests для отдельного internal .6; новые artifacts,
+Только packaging/runtime metadata/tests для отдельного internal .7; новые artifacts,
 system/user IDs и full/package gates пока NOT_RUN. Старые .5 hashes/IDs immutable.
 [Report](releases/2026-10-26-linux-ubuntu2604-python314-compat.md).
 L04.1 DONE сохраняется; L04 только L04.2. Publication/L04.2/L05/teardown/live VPN NOT_RUN.
@@ -115,7 +115,7 @@ D02.1-R остаётся PARTIAL/NOT_RUN; D01 открыт. Дальнейшие
 
 | ID | Результат | Зависимость | Статус | Критерий завершения |
 |---|---|---|---|---|
-| U2604-COMPAT | Отдельный Ubuntu26.04/CPython3.14 source/system/package candidate | exact lock compatibility probe; explicit owner request; frozen .5 immutable | IN_PROGRESS (probe PASS; packaging checkpoint) | [Report](releases/2026-10-26-linux-ubuntu2604-python314-compat.md). New .6 candidate/system IDs, Python3.14 manifests/dependency range, exact user/system imports, DEB/AppImage and real pkexec/READY, rollback/tamper/mixed-build/barrier gates, regressions/full suites without suppression. Synthetic disposable state only; no workstation/private identity/gateway/live VPN. |
+| U2604-COMPAT | Отдельный Ubuntu26.04/CPython3.14 source/system/package candidate | exact lock compatibility probe; explicit owner request; frozen .5 immutable | IN_PROGRESS (probe PASS; packaging checkpoint) | [Report](releases/2026-10-26-linux-ubuntu2604-python314-compat.md). New .7 candidate/system IDs, Python3.14 manifests/dependency range, exact user/system imports, DEB/AppImage and real pkexec/READY, rollback/tamper/mixed-build/barrier gates, regressions/full suites without suppression. Synthetic disposable state only; no workstation/private identity/gateway/live VPN. |
 | LOCAL-OWNER-UPGRADE | Установка совместимого candidate на workstation владельца | отдельный review U2604-COMPAT и разрешение владельца | BLOCKED (frozen .5 Python3.12 vs host Python3.14.4) | Пока никаких host changes. После отдельного review/разрешения: backup competing user launchers, exact DEB/setup, persistent close/reopen, один AWG и один TCP connect/disconnect. Это не повтор L04.1 и не publication. |
 | D00 | Компактное состояние и последовательный план | phase22 / baseline | DONE | Новый сеанс читает STATUS + выбранный ID; история сохранена побайтно, ссылки и diff проверены; commit/push с remote SHA отражён в итоговом ответе. |
 | D01 | Зависимости Linux/desktop CI | D00 | IN_PROGRESS | Dependency gates D01.1/D01.2 отдельно от общей CI-приёмки; закрытие требует полного PASS обязательных suites после устранения остаточных blockers, без скрытия тестов. |

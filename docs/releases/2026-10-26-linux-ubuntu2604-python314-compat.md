@@ -65,13 +65,17 @@ records each downloaded wheel's filename/SHA256; full member inventory stays loc
 
 ## Packaging-only adaptation
 
-Reserved new candidate **0.2.12~l03.2.6**, explicitly Ubuntu26.04/Python3.14.
+Reserved new candidate **0.2.12~l03.2.7**, explicitly Ubuntu26.04/Python3.14.
+The preliminary `.6` CI build is retained as failed evidence, not the owner-upgrade
+candidate: run40237804085/job121303012680 verified a3.14 package with the runner's
+3.12 interpreter and correctly rejected `Candidate runtime contract/ABI mismatch`.
+The verifier now runs in the offline Ubuntu26.04 container; no ABI check is bypassed.
 Explicit target selects ABI3.14 and DEB `python3 >=3.14, <3.15`; candidate manifest
 records Ubuntu26.04 and `/usr/bin/python3`. New target requires an explicit standard
 system rebuild, rejects Python3.12 and frozen .5 version reuse. System/user vendor
 payloads are collected afresh from locked3.14 distributions, never renamed old3.12 bytes.
 System build ID is content-derived from the new runtime inventory; no old-ID reuse.
-CI candidate version advances to .6 and uses official Ubuntu26.04 builder/package
+CI candidate version advances to .7 and uses official Ubuntu26.04 builder/package
 containers. Existing offline fixture guards accept only the matching
 Ubuntu24.04/systemd255/Python3.12 or Ubuntu26.04/systemd259/Python3.14 tuple.
 
