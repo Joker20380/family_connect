@@ -5,7 +5,7 @@ Review принимает fresh DNS matching request/reply на actual AWG/TCP T
 включая валидный terminal **NODATA**; positive installed gate завершён без повтора.
 Exact **0.2.12~l03.2.2**, source `57f8eff`, candidate `d9c0d07f…`, system build-9
 не меняются. [Исторический RETEST и решение review](releases/2026-10-25-linux-installed-awg-tcp-l04-1-retest.md).
-**L04.1-LIVE-2 PARTIAL / review pending**: actual installed tamper/reinstall A PASS;
+**L04.1-LIVE-2 PARTIAL / review accepted**: actual installed tamper/reinstall A PASS;
 B1 первый отказ — root lock блокирует transport, но AWG helper up1 и pending/APPLYING
 сохраняется после освобождения lock (generation0→1). Сеть/identity/cache/floors
 сохранены, guest уничтожен; journal не объявлен восстановленным. B2–F NOT_RUN.
@@ -14,7 +14,12 @@ FC-3YSQ-BE2D/nl сохраняются, новый issuance/provisioning/manual 
 L04/L04.1 IN_PROGRESS до LIVE-2 review; L04.2/L05/teardown NOT_RUN.
 [LIVE-2 checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md).
 D01/full suites54/54/53 failures и voice/Windows observations сохраняются.
-**Граница завершения — STOP; NEXT review L04.1-LIVE-2.**
+Выбран только **L04.1-LIVE-2-R1 ACTIVE**: actual root/session red→green,
+terminal pre-start refusal против unknown outcome, новый source/system/package checkpoint.
+Один helper up request допустим; дефект B1 — persistent APPLYING/pending.
+Private test state/gateway не используются, live B1 retest и B2–F NOT_RUN.
+[R1](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md).
+**Граница завершения — STOP; NEXT review L04.1-LIVE-2-R1.**
 
 Предыдущий **L04.1-LIVE-1 PARTIAL принят review**; final-2 больше не candidate
 для завершения L04.1. Его положительное live evidence ниже сохраняется исторически.

@@ -7,7 +7,10 @@
 Продуктовый checkpoint: phase22, source baseline `664342a6566792a4ea621274a369bcd6b6012143`.
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
 L03.1/L03.2 **DONE (review accepted)**; parent **L03 DONE** в scope полного
-внутреннего Linux-кандидата. **L04.1-LIVE-2: PARTIAL / review pending**, STOP на B1.
+внутреннего Linux-кандидата. **L04.1-LIVE-2: PARTIAL / review accepted**, STOP на B1.
+Выбран только **L04.1-LIVE-2-R1 ACTIVE**: исправить terminalization подтверждённого
+pre-start refusal, сохранив fail-closed unknown outcome; actual root/session tests,
+новый source/system/package candidate. Никакого live/gateway/private test state.
 LIVE-1 PARTIAL принят review; final-2 retired для завершения L04.1, прежние PASS
 сохраняются только за этим exact build. Red actual backend/GTK race подтверждён;
 generation-fenced unlocked poll и queued Disconnect cancellation: адресные229 PASS.
@@ -38,7 +41,7 @@ LIVE-2: A actual installed tamper/reinstall PASS; B1 root lock не допуск
 но helper up1 и pending/APPLYING остаются после освобождения lock (generation0→1).
 Network/state сохранены; pending не очищен вручную, guest уничтожен. B2–F NOT_RUN
 по first-failure STOP. Никакого rebuild/source fix; [отчёт](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md).
-STOP после checkpoint; NEXT — review L04.1-LIVE-2. Device teardown NOT_RUN.
+STOP после checkpoint; NEXT — review L04.1-LIVE-2-R1. B2–F/device teardown NOT_RUN.
 **L01/L01-R review принят в Linux source/native/root→UID/isolated-kernel scope. Review L02.2 принят: локальный критерий L02 authenticated OFF→ON→OFF через Manual и Auto/MESH выполнен. L02.1-R atomic RetainChat/terminal recovery и L02.1-R2 status classification приняты. D01.3/D01.3-R приняты в public completion/admission scope. L03.1/L03.2 и parent L03 приняты; correction L04.1-LIVE-1-R и RETEST приняты, NEXT только review LIVE-2 PARTIAL. Review D03/D04/D05, D02.1 collection/import isolation и D02.2 public-reference принят.
 Review D02.1-R и fleet-документации `1725656` принят;
 D02.1-R остаётся PARTIAL/NOT_RUN; D01 открыт. Дальнейшие L04.2/L05 и Windows задачи не начинаются.**
