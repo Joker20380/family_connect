@@ -18,7 +18,8 @@ D01/full suites54/54/53 failures и voice/Windows observations сохраняю�
 exact .4 Gate A/B1 PASS; B1 не повторять. Registry start18:28:22 до Connect18:34:12
 не блокирует принятое B1. Exact .4 P1 AWG/P2 TCP continuity и B2 PASS;
 один up/down, HTTPS/64KiB, baseline/state сохранены; B2 same-owner finish/poll PASS.
-C1/C2 unavailable/recovery PASS: up1/down1/discard1, IDLE/null; следующие D/E/F1/F2 NOT_RUN;
+C1/C2 unavailable и D channel-loss/recovery PASS: up1/down1/discard1, IDLE/null;
+следующие E/F1/F2 NOT_RUN;
 первый новый product failure STOP. Перед live action три согласованных server
 readbacks ≥10s, firewall structure без counters/timestamps. FC-3YSQ-BE2D/nl;
 новая KVM, immutable .4, без manual fetch/new identity. L04.1 IN_PROGRESS;

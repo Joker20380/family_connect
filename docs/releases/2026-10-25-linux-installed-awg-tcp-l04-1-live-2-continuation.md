@@ -76,7 +76,17 @@ explicit setup and exact system READY PASS; only protected home copied.
   baseline and three-pre/one-post server observations PASS. Fixture initially
   rejected the TCP representation before action; corrected to installed `parse_tcp`.
 
-D/E/F1/F2 still NOT_RUN at this intermediate documentation checkpoint.
+- **D authorization loss PASS:** after the single dispatched up, a guest-only
+  descriptor fault produced real client EOF, CHANNEL_LOST/OUTCOME_UNKNOWN,
+  APPLYING/1/pending and no false CONNECTED. Foreign owner could not finish.
+  Same-owner authorized startup recovery down1/discard1 restored IDLE/2/null,
+  network baseline and poll; first CHANNEL_LOST retained, no second Connect.
+  Identity/cache/floors and three-pre/one-post server invariants PASS.
+  No installed file/product method was patched; no root transport was killed.
+
+Accepted **B1** is not rerun: typed PRE_START_REJECTED, transport0, journal IDLE,
+pending null, network/user state preserved (review evidence).
+E/F1/F2 still NOT_RUN at this intermediate documentation checkpoint.
 Only sanitized docs/evidence committed; product/installed bytes untouched.
 L04.2/L05/device teardown/revoke/publication NOT_RUN.
 

@@ -235,6 +235,84 @@
       },
       "transport": "tcp"
     },
+    "D": {
+      "action_start_utc": "2026-10-25T19:37:17Z",
+      "fault_receipt": {
+        "completed": 1792957045.4205127,
+        "debugger_returncode": 0,
+        "dispatch_observed": true,
+        "eof_descriptor_confirmed": true,
+        "fixture": "client authorization read-pipe closed and replaced with EOF-only /dev/null",
+        "generation_before": 1,
+        "journal_before": "APPLYING",
+        "started": 1792957044.6647084
+      },
+      "first_failure_preserved": true,
+      "fixture_note": "After one dispatched up, the client authorization reply pipe was replaced with an EOF-only descriptor by the guest fixture. No installed file or product method changed. Same-owner authorized recovery only; no second Connect.",
+      "foreign_finish_refused": true,
+      "generation_before": 0,
+      "generation_recovered": 2,
+      "generation_refused": 1,
+      "helper_counts": {
+        "awg": {
+          "cleanup": 0,
+          "discard": 1,
+          "down": 1,
+          "import": 1,
+          "serve": 0,
+          "session": 2,
+          "up": 1
+        },
+        "tcp": {
+          "cleanup": 0,
+          "discard": 0,
+          "down": 0,
+          "import": 0,
+          "serve": 0,
+          "session": 0,
+          "up": 0
+        }
+      },
+      "network_restored": true,
+      "pending_recovered": false,
+      "phase_recovered": "IDLE",
+      "phase_refused": "APPLYING",
+      "poll_after_recovery": "PASS",
+      "post_read_timestamp": "2026-10-25T19:38:22.152653+00:00",
+      "pre_read_timestamps": [
+        {
+          "completed_utc": "2026-10-25T19:36:50.903108+00:00",
+          "started_utc": "2026-10-25T19:36:47.738945+00:00"
+        },
+        {
+          "completed_utc": "2026-10-25T19:37:03.596296+00:00",
+          "started_utc": "2026-10-25T19:37:00.903419+00:00"
+        },
+        {
+          "completed_utc": "2026-10-25T19:37:17.186289+00:00",
+          "started_utc": "2026-10-25T19:37:13.596806+00:00"
+        }
+      ],
+      "result": "PASS",
+      "server_readback": "PASS",
+      "state_preserved": true,
+      "terminal": {
+        "actual_transport": "none",
+        "connection_id": "2660e72b-ff8f-4573-b54c-91abfa6e3dd7",
+        "first_failure": "CHANNEL_LOST",
+        "normal_operation": {
+          "category": "CHANNEL_LOST",
+          "cleanup_confirmed": false,
+          "generation": 1,
+          "outcome": "OUTCOME_UNKNOWN",
+          "pending": true,
+          "phase": "APPLYING"
+        },
+        "selected_transport": "awg",
+        "state": "DISCONNECTED"
+      },
+      "transport": "awg"
+    },
     "P1": {
       "action_start_utc": "2026-10-25T18:57:06Z",
       "actual": "awg",
@@ -591,7 +669,6 @@
     "uid": 1000
   },
   "not_run": [
-    "D",
     "E",
     "F1",
     "F2",
