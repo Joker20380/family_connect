@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=com.familyconnect.Chat1
+Exec=/usr/bin/family-connect --chat-service
+SystemdService=family-connect-chat.service

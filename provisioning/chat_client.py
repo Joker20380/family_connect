@@ -16,7 +16,7 @@ def entry_command():
     root = Path(__file__).resolve().parents[1]
     image, appdir = os.environ.get('APPIMAGE'), os.environ.get('APPDIR')
     if image and appdir and root.is_relative_to(Path(appdir).resolve()) and Path(image).is_file():
-        return [str(Path(image).resolve())]
+        return [str(Path(image).resolve())] + (['--appimage-extract-and-run'] if os.environ.get('APPIMAGE_EXTRACT_AND_RUN') == '1' else [])
     if (root / 'launcher.py').is_file():
         return [sys.executable, str(root / 'launcher.py')]
     return [sys.executable, str(root / 'clients/desktop/chat_daemon.py')]
@@ -29,6 +29,17 @@ def session_environment():
 
 
 def start_service():
+    root = Path(__file__).resolve().parents[1]
+    if root == Path('/usr/lib/family-connect') and (root / 'candidate.json').is_file():
+        try:
+            names = [entry.split('=', 2)[1] for entry in session_environment()]
+            subprocess.run(['systemctl', '--user', 'import-environment', *names], check=True,
+                           stdin=subprocess.DEVNULL, capture_output=True, timeout=8)
+            subprocess.run(['systemctl', '--user', 'start', 'family-connect-chat.service'], check=True,
+                           stdin=subprocess.DEVNULL, capture_output=True, timeout=8)
+            return
+        except (OSError, subprocess.SubprocessError):
+            raise LocalError('service_unavailable') from None
     command = ['systemd-run', '--user', '--collect', '--quiet', '--unit=family-connect-chat',
         '--property=Type=dbus', '--property=BusName=' + BUS_NAME,
         '--property=Restart=on-failure', '--property=RestartSec=5s',

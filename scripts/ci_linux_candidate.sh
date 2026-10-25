@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+set -euo pipefail
+export PYTHONDONTWRITEBYTECODE=1
+source_root=$PWD
+work="${RUNNER_TEMP:?}/fc-linux-candidate"
+mkdir -p "$work/accepted" "$work/normal"
+git archive f826dbdfb562541bde95d2fcbecc1d944d15da3d | tar -xf - -C "$work/accepted"
+git init "$work/xray"
+git -C "$work/xray" remote add origin https://github.com/XTLS/Xray-core.git
+git -C "$work/xray" fetch --depth=1 origin d2758a023cd7f4174a5a5fa4ff66e487d4342ba0
+(
+  cd "$work/accepted"
+  python -m scripts.build_desktop_mesh --go "$(command -v go)" --xray "$work/xray" --out "$work/native" --os linux --test
+  python -m scripts.build_desktop_rns --out "$work/rns"
+  docker build -f pilot/awg31/Dockerfile -t fc-l032-awg:ci .
+  docker build -f pilot/tcp/Dockerfile -t fc-l032-tcp:ci .
+)
+awg_container=$(docker create fc-l032-awg:ci)
+tcp_container=$(docker create fc-l032-tcp:ci)
+docker cp "$awg_container:/opt/awg31" "$work/normal/awg"
+docker cp "$tcp_container:/usr/local/bin/xray" "$work/normal/xray"
+docker rm "$awg_container" "$tcp_container"
+(
+  cd "$work/accepted"
+  python -m scripts.package_mesh_component --native "$work/native" --rns "$work/rns" \
+    --awg "$work/normal/awg" --tcp "$work/normal/xray" --out "$work/system"
+)
+docker build -f tests/fixtures/linux_candidate/Dockerfile -t fc-l032-system:ci tests/fixtures/linux_candidate
+mkdir -p artifacts/linux-candidate
+system_archive="$work/system/FamilyConnect-MESH-system-amd64.tar.gz"
+run_container() (
+  local name=$1 fixture=$2
+  shift 2
+  docker run -d --name "$name" --network none --cgroupns private --privileged \
+    --tmpfs /run --tmpfs /run/lock --tmpfs /tmp:exec \
+    --mount "type=bind,src=$source_root/artifacts/linux-candidate,dst=/artifacts,readonly" \
+    --mount "type=bind,src=$system_archive,dst=/evidence/system.tar.gz,readonly" \
+    --mount "type=bind,src=$source_root/$fixture,dst=/evidence/smoke.py,readonly" \
+    fc-l032-system:ci /sbin/init
+  trap 'docker stop --timeout 30 "$name"; docker rm "$name"' EXIT
+  for attempt in $(seq 1 60); do
+    if docker exec "$name" systemctl is-active dbus systemd-resolved >/dev/null 2>&1; then break; fi
+    sleep 1
+  done
+  docker exec -e FC_L031_HOST_NETNS="$(stat -Lc %i /proc/self/ns/net)" \
+    -e FC_L032_HOST_NETNS="$(stat -Lc %i /proc/self/ns/net)" "$name" \
+    /usr/bin/python3 -I -S /evidence/smoke.py "$@"
+)
+run_container fc-l032-system-smoke tests/fixtures/linux_system_runtime/smoke.py /evidence/system.tar.gz | tee artifacts/linux-candidate/system-smoke.log
+curl -fsSL https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage -o "$work/appimagetool"
+chmod 755 "$work/appimagetool"
+sha256sum "$work/appimagetool"
+APPIMAGE_EXTRACT_AND_RUN=1 python -m scripts.package_linux --system-bundle "$system_archive" \
+  --standard-system-rebuild --internal-version '0.2.12~l03.2.1' --output artifacts/linux-candidate --appimagetool "$work/appimagetool"
+python -B -m scripts.verify_linux_candidate artifacts/linux-candidate | tee artifacts/linux-candidate/integrity.log
+run_container fc-l032-deb tests/fixtures/linux_candidate/smoke.py deb '/artifacts/FamilyConnect_0.2.12~l03.2.1_amd64.deb' | tee artifacts/linux-candidate/deb-smoke.log
+run_container fc-l032-appimage tests/fixtures/linux_candidate/smoke.py appimage '/artifacts/FamilyConnect-0.2.12~l03.2.1-x86_64.AppImage' | tee artifacts/linux-candidate/appimage-smoke.log

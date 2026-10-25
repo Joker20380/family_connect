@@ -33,5 +33,4 @@ esac
 
 export PYTHONNOUSERSITE=1
 export PYTHONDONTWRITEBYTECODE=1
-export PYTHONPATH="$HERE/usr/lib/family-connect/vendor${PYTHONPATH:+:$PYTHONPATH}"
-exec /usr/bin/python3 "$HERE/usr/lib/family-connect/launcher.py" "$@"
+exec /usr/bin/python3 -I "$HERE/usr/lib/family-connect/launcher.py" "$@"

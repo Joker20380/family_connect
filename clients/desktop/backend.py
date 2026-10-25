@@ -1014,6 +1014,10 @@ class _AuthorizationSession:
     def call(self, kind, action, ident, data):
         request = dict(kind=kind, action=action, ident=ident, data=data)
         _session_request(request)
+        if CANDIDATE_GUARD is not None and action != 'down':
+            state = system_component_status()
+            if state != 'READY':
+                raise BackendError('Matching internal candidate system required: ' + state)
         if self.failed:
             raise AuthorizationError('VPN authorization session unavailable; retry explicitly')
         if self.process is None:
@@ -1497,6 +1501,9 @@ class LinuxTCP(Linux):
 
 
 MESH_ROOT = Path('/usr/local/lib/family-connect-mesh')
+CANDIDATE_GUARD = None
+CANDIDATE_SETUP = None
+CANDIDATE_VERSION = None
 MESH_RUN = Path('/run/family-connect-mesh')
 MESH_FILES = ('helper', 'fc-mesh', 'mesh_ipc.py', 'mesh_chat.py', 'mesh_chat_host.py', 'provisioning/chat_bridge_protocol.py', 'mesh_materials.py', 'mesh_network.py', 'mesh_intent.py',
               'mesh_service.py', 'mesh_system.py', 'backend.py', 'profile_config.py',
@@ -1620,7 +1627,7 @@ def system_component_status():
         vendor = {str(path) for path in (MESH_ROOT / 'vendor').rglob('*') if path.is_symlink() or not path.is_dir()}
         if vendor != {name for name in files if name.startswith(str(MESH_ROOT / 'vendor') + '/')}:
             return 'PYTHON_RUNTIME_MEMBERS_MISMATCH'
-        return 'READY'
+        return CANDIDATE_GUARD(value) if CANDIDATE_GUARD is not None else 'READY'
     except FileNotFoundError:
         return 'RUNTIME_INCOMPLETE'
     except (OSError, ValueError, TypeError, KeyError, BackendError):
@@ -1637,6 +1644,12 @@ def prepare_chat_services():
         raise BackendError('Verified chat system component required: ' + state)
     with authorization_operation():
         return _operation_local.authorization.call('chat', 'up', 'fcchat0', None)
+
+
+def setup_candidate_system():
+    if CANDIDATE_SETUP is None:
+        raise BackendError('Install the complete internal candidate first')
+    return CANDIDATE_SETUP()
 
 
 def _mesh_protocol():

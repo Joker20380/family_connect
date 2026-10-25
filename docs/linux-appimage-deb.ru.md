@@ -1,5 +1,39 @@
 # Linux: AppImage и DEB вместо tar.gz preview
 
+## L03.2 — внутренний полный candidate,25.10
+
+L03.1 принят; только L03.2 ACTIVE, parent L03 IN_PROGRESS до review. Source VERSION
+и опубликованный Linux остаются0.2.11; внутренний candidate — **0.2.12~l03.2.1**.
+[Точные артефакты/evidence](releases/2026-10-25-linux-candidate-l03-2.md).
+Оба формата включают GUI/user daemon/vendor и exact embedded system/runtime;
+candidate manifest связывает весь user inventory, source SHA, ABI и system build ID.
+Это integrity/provenance, не подпись и не разрешение доверять неизвестному пакету.
+
+Для чистой Ubuntu24.04: DEB устанавливается обычным `apt install ./<candidate>.deb`,
+AppImage запускается обычным пользователем с прежними host GTK/GI/Secret Service/
+GStreamer/Codec2 prerequisites. Python нужен3.12; pip/venv/checkout не требуются.
+Если нет FUSE, допустим `--appimage-extract-and-run` с executable temp filesystem.
+`--integrate` добавляет меню/URI handler; chat owner заново открывает original image.
+
+Установка приложения не устанавливает root runtime и не активирует службы.
+Общие **Опции → Установить системный компонент (без VPN)** доступны до создания
+чата/identity; альтернативно фиксированный packaged `--setup-system` без аргументов.
+Это явный pkexec, только вложенные проверенные bytes, без сети/произвольного файла.
+Затем отдельное **Подготовить защищённый доступ чатов** / `--prepare-chat` включает
+только idle DIRECT/service-only hosts. Setup не меняет VPN intent/фоновые настройки.
+Live owner/sticky cleanup отклоняют reinstall; не удаляйте их markers ради установки.
+
+DEB remove останавливает только собственный user chat unit и удаляет user package;
+identity/history/settings и независимый root runtime/backups остаются. Root units
+не enabled; работающие idle hosts не имеют dangling paths в удалённом GUI.
+AppImage: сначала `--remove-integration`, затем удаление самого image. Это снимает
+собственный menu entry и user owner, не удаляя данные/root runtime; общий icon остаётся.
+Legacy six-file updater сохранён, но не применяется к internal candidate: upgrade/
+миграция старого клиента — L08, не принята. Rollback — reviewed matching full pair
+с explicit root reinstall только при idle/confirmed cleanup; L04/L05 не выполнены.
+
+Исторические версии/ограничения ниже не являются текущим составом L03.2.
+
 ## L03.1 — отдельный system/runtime checkpoint,25.10
 
 [L03.1](releases/2026-10-25-linux-system-runtime-l03-1.md) объединяет manual MESH,

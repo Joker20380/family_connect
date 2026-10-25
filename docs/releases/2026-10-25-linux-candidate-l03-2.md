@@ -28,3 +28,46 @@ observations are separate, not waived or repaired here.
 Builds, exact hashes, source SHA, installation/removal, rollback and CI receipts
 will be recorded here after the corresponding gates, never inferred from source.
 **STOP after completion. NEXT — review L03.2.**
+
+## Implementation checkpoint
+
+The two formats now bind an identical user inventory to the embedded system
+archive, ABI, source SHA and distinct candidate build ID. The fixed setup action
+is available in general GUI Settings before chat/identity creation, and via
+`--setup-system` with no file/UID arguments. The ordinary user verifies and
+extracts a private snapshot before polkit. The privileged fixed bootstrap receives
+only bounded archive bytes via stdin, rechecks the exact digest/inventory and
+invokes the accepted installer from a separate root-owned0700 temporary directory.
+No user-supplied executable path is used at privilege elevation. Both snapshots
+are removed normally/on denial; a killed caller never leaves a user-writable
+snapshot trusted by root. L03.1 transaction/rollback/ownership is unchanged.
+
+Matching user/system inventories gate READY and privileged start/import actions;
+cleanup remains possible. A mismatched system cannot become compatible merely by
+retaining the same native binary/version. DEB installs a non-enabled Type=dbus
+user unit and activation file. AppImage retains transient user ownership and
+reopens its original image, including extract-and-run when FUSE is unavailable.
+GUI exit does not kill permitted background chat. Explicit DEB removal stops its
+own user unit; AppImage `--remove-integration` removes its own menu entry/owner.
+Both retain encrypted user state and the independent root runtime/backups.
+Root chat services stay unenabled; no startup path mutates VPN intent.
+
+Prototype build-4 (dirty-source checkpoint, **not final candidate**) passed both
+real disposable package gates, including ordinary UID/polkit, installed imports,
+safe repeated setup, background D-Bus owner and removal/state preservation.
+Full source desktop at that checkpoint:1142 passed/24 skipped. Targeted final
+selection61 PASS; final exact artifacts/full desktop remain to check after commit.
+Local evidence: `state-client-build/linux-candidate-l032-20261025/` (ignored).
+Failures retained: startup was queried before D-Bus boot; public unit copies
+inherited builder umask002 (fixed to0644 with regression); synthetic identity
+fixture lacked its parent; Docker noexec `/tmp` and root-owned private AppImage
+extraction prevented fixture execution (runner corrected, not product hardening).
+No blocking L03.1 defect/correction was required.
+
+CI adds bounded package regressions, standard accepted-source rebuild, actual
+L03.1 smoke, candidate inventory and both clean install gates. Rebuilt system
+bytes have their own identity; they are not called build-9. Local final artifacts
+continue to embed the exact accepted build-9. Ordinary Client Linux source
+previews now use0.2.12~ci.preview.1 on branch builds, not public0.2.11 filenames;
+they are not full L03.2 candidates. Release/tag and signing paths are unchanged.
+Existing full desktop/native/root→UID/Auto/DIRECT and full suites stay enabled.

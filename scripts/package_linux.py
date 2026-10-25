@@ -15,6 +15,7 @@ import io
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -74,6 +75,7 @@ def safe_copy(source, target):
         fail('missing or unsafe public source: ' + source)
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(source, target)
+    target.chmod(0o644)
 
 
 def assemble_bundle(destination):
@@ -222,6 +224,14 @@ def build_deb(bundle, version, output):
     (staging / 'usr' / 'share' / 'doc' / 'family-connect').mkdir(parents=True)
     shutil.copy2(PACKAGING / 'copyright', staging / 'usr' / 'share' / 'doc' / 'family-connect' / 'copyright')
 
+    candidate = (bundle / 'candidate.json').is_file()
+    if candidate:
+        for source, relative in (('family-connect-chat.service', 'usr/lib/systemd/user/family-connect-chat.service'),
+                                 ('com.familyconnect.Chat1.service', 'usr/share/dbus-1/services/com.familyconnect.Chat1.service')):
+            safe_copy(PACKAGING / source, staging / relative)
+        (staging / 'usr/bin/family-connect').write_text(
+            '#!/bin/sh\nexport PYTHONDONTWRITEBYTECODE=1\nexec /usr/bin/python3 -I /usr/lib/family-connect/launcher.py "$@"\n')
+
     control = (
         'Package: family-connect\n'
         f'Version: {version}\n'
@@ -237,6 +247,11 @@ def build_deb(bundle, version, output):
         ' Bundled application dependencies; GTK/GI/NetworkManager are host deps.\n'
     )
     (staging / 'DEBIAN' / 'control').write_text(control)
+    if candidate:
+        control = control.replace('python3 (>= 3.10)', 'python3 (>= 3.12), python3 (<< 3.13)')
+        control = control.replace(', systemd, dbus-user-session',
+            ', systemd (>= 254), dbus-user-session, systemd-resolved, iproute2, nftables, curl, procps, bash, pkexec, polkitd')
+        (staging / 'DEBIAN/control').write_text(control)
 
     audit(staging / 'usr')
 
@@ -320,14 +335,26 @@ def build_release_files(version, output):
 
 
 def main():
+    os.umask(0o022)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, default=ROOT / 'artifacts' / 'clients')
     parser.add_argument('--vendor-from', type=Path, default=None,
                         help='offline: copy locked dists from an existing site-packages directory')
     parser.add_argument('--appimagetool', type=Path, default=None)
     parser.add_argument('--release-files', action='store_true')
+    parser.add_argument('--system-bundle', type=Path, help='exact accepted L03.1/build-9 archive')
+    parser.add_argument('--internal-version', help='reserved internal candidate identity, not public VERSION')
+    parser.add_argument('--standard-system-rebuild', action='store_true', help='explicit CI rebuild of accepted sources; never label new bytes build-9')
     args = parser.parse_args()
     version = read_version()
+    if (args.system_bundle and not args.internal_version) or (args.internal_version and args.release_files) or (args.standard_system_rebuild and not args.system_bundle):
+        fail('system-bundle/internal-version are paired and never release-files')
+    if args.internal_version:
+        if not re.fullmatch(r'0\.2\.12~(?:l03\.2|ci\.preview)\.[1-9][0-9]*', args.internal_version):
+            fail('unsupported internal version')
+        if args.internal_version.startswith('0.2.12~l03.2.') and not args.system_bundle:
+            fail('L03.2 requires its matching system payload')
+        version = args.internal_version
 
     if args.release_files:
         build_release_files(version, args.output)
@@ -338,7 +365,18 @@ def main():
     if bundle.exists():
         shutil.rmtree(bundle)
     assemble_bundle(bundle)
-    if args.vendor_from:
+    if args.system_bundle:
+        if __package__:
+            from .linux_candidate import embed, seal
+        else:
+            from linux_candidate import embed, seal
+        system, python = embed(bundle, args.system_bundle, standard_rebuild=args.standard_system_rebuild)
+        integration = bundle / 'integration'
+        for name in ('AppRun', 'com.familyconnect.Client.desktop', 'family-connect-chat.service',
+                     'com.familyconnect.Chat1.service', 'postinst', 'prerm'):
+            safe_copy(PACKAGING / name, integration / name)
+        seal(bundle, version, system, python)
+    elif args.vendor_from:
         vendor_from_site(args.vendor_from, bundle / 'vendor')
     else:
         vendor_pip(bundle / 'vendor')
@@ -348,6 +386,14 @@ def main():
     deb = build_deb(bundle, version, args.output)
     appdir = build_appdir(bundle, version, args.output)
     appimage = build_appimage(appdir, version, args.output, args.appimagetool)
+
+    if args.system_bundle:
+        record = json.loads((bundle / 'candidate.json').read_text())
+        record = {key: value for key, value in record.items() if key != 'files'} | {
+            'artifacts': {path.name: {'size': path.stat().st_size, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()}
+                          for path in (legacy, deb, appimage) if path},
+            'published': False, 'installed': False, 'acceptance': 'NOT_RUN'}
+        (args.output / 'candidate-delivery.json').write_text(json.dumps(record, sort_keys=True, indent=2) + '\n')
 
     print('built:')
     print('  deb      ', deb)

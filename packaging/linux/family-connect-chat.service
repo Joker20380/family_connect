@@ -1,0 +1,17 @@
+[Unit]
+Description=Family Connect per-user chat owner
+StartLimitIntervalSec=120
+StartLimitBurst=3
+
+[Service]
+Type=dbus
+BusName=com.familyconnect.Chat1
+ExecStart=/usr/bin/family-connect --chat-service
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=40
+KillMode=control-group
+UMask=0077
+StandardOutput=null
+StandardError=null
+Nice=5

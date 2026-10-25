@@ -557,6 +557,8 @@ class App:
         self.retry=self.button('fc-secondary',lambda:self.submit(self.initialize,'initialized'))
         self.update_button=self.button('fc-quiet',self.update_application)
         self.tcp_button=self.button('fc-quiet',self.install_tcp)
+        from backend import CANDIDATE_SETUP
+        self.system_button=self.button('fc-secondary',self.install_candidate_system) if CANDIDATE_SETUP is not None else None
         self.scroll=Gtk.ScrolledWindow();self.scroll.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC)
         self.scroll.set_propagate_natural_height(True)
         monitors=self.window.get_display().get_monitors()
@@ -564,7 +566,8 @@ class App:
         self.scroll.set_max_content_height(self.height_limit);self.scroll.set_vexpand(True);self.scroll.set_child(self.body);shell.append(self.scroll)
         self.page='status';self.confirmation=None;self.friends_window=None;self.friends_next_page='settings';self.exit_after_friends=False
         self.language_button=TerminalButton(label='RU / EN');self.language_button.add_css_class('fc-action');self.language_button.connect('clicked',lambda _:self.language());self.body.append(self.language_button)
-        self.version_label=Gtk.Label(label='v'+APP_VERSION,xalign=0);self.version_label.add_css_class('fc-caption');self.body.append(self.version_label)
+        from backend import CANDIDATE_VERSION
+        self.version_label=Gtk.Label(label='v'+(CANDIDATE_VERSION or APP_VERSION),xalign=0);self.version_label.add_css_class('fc-caption');self.body.append(self.version_label)
         self.chat_pane=None;self.chat_closed=False;self.chat_smoke=smoke
         try:
             from chat_ui import ChatPane
@@ -593,6 +596,7 @@ class App:
         self.diagnostic_button=self.button('fc-secondary',self.export_diagnostics)
         self.pages={'status':[self.card,self.choose,self.selectors,self.note,self.dashboard_map], 'route':[self.route_map,self.route_note,self.check], 'stats':[self.stats],
             'settings':[self.add,self.mesh_profile,self.mesh_profile_details,self.update_button,self.tcp_button,self.language_button,self.version_label,self.stats_button]+([self.friends_button] if self.friends_button else [])+[self.support_title,self.support_label,self.support_copy,self.support_refresh,self.support_online_row,self.support_upload_label,self.diagnostic_button], 'messenger':[self.messenger_note]}
+        if self.system_button is not None:self.pages['settings'].insert(0,self.system_button)
         footer=Gtk.Box(spacing=2);footer.set_homogeneous(True);footer.set_margin_start(12);footer.set_margin_end(12);footer.set_margin_bottom(12)
         self.nav={}
         for page in ('status','messenger','route','settings'):
@@ -657,6 +661,9 @@ class App:
             self.set_value(self.tcp_button,'visible','--awg-pilot' in sys.argv)
             self.set_value(self.tcp_button,'label','Установить / обновить TCP' if self.ru else 'Install / update TCP')
             self.set_value(self.tcp_button,'sensitive',not self.busy and self.active is False)
+            if self.system_button is not None:
+                self.set_value(self.system_button,'label','Установить системный компонент (без VPN)' if self.ru else 'Install system component (no VPN)')
+                self.set_value(self.system_button,'sensitive',not self.busy and self.active is False)
             self.set_value(self.choose,'sensitive',bool(self.items) and not self.busy)
             for widget,text,enabled in (
                 (self.toggle,self.t('disconnect' if connected or mesh['owned'] or self.service_starting else 'connect'),can_toggle),
@@ -1082,6 +1089,9 @@ class App:
                 self.update_plan=result;self.detail_text=(('Доступна версия ' if self.ru else 'Version available: ')+result['version']) if result else ('Установлена последняя версия.' if self.ru else 'You are up to date.')
             elif kind=='tcp_installed':
                 self.detail_text='TCP установлен. Добавьте TCP-профиль для подключения.' if self.ru else 'TCP installed. Add a TCP profile to connect.'
+            elif kind=='system_installed':
+                self.configure_transports()
+                self.detail_text='Системный компонент установлен. VPN и службы чатов не включены.' if self.ru else 'System component installed. VPN and chat services remain off.'
             elif kind=='update_installed':
                 subprocess.Popen([sys.executable,str(result)],start_new_session=True);self.close(True);return GLib.SOURCE_REMOVE
         except Exception as exc:
@@ -1106,6 +1116,8 @@ class App:
                 else:self.recovery.recovered(False)
             if kind=='tcp_installed':
                 self.detail_text=(('Установка TCP отменена.' if self.ru else 'TCP installation cancelled.') if isinstance(exc,AuthorizationError) else ('Не удалось установить TCP. Проверьте интернет и системный установщик; TCP должен быть отключён.' if self.ru else 'TCP installation failed. Check Internet access and system updater; TCP must be disconnected.'))
+            elif kind=='system_installed':
+                self.detail_text='Установка отменена или отклонена. Подключения не изменены.' if self.ru else 'Setup cancelled or refused. Connections unchanged.'
             elif kind in ('updates','update_installed'):
                 self.detail_text='Обновление недоступно или не прошло проверку. Текущая версия сохранена.' if self.ru else 'Update unavailable or verification failed. Current version preserved.'
             else:
@@ -1339,6 +1351,12 @@ class App:
             if proceed and not self.closed:accepted()
         cancel.connect('clicked',lambda *_:finish(False));accept.connect('clicked',lambda *_:finish(True))
         panel.cancel_button=cancel;self.confirmation=panel;self.scroll.set_child(panel);return panel
+    def install_candidate_system(self):
+        if self.busy or self.active is not False:return
+        from backend import setup_candidate_system
+        text=('Установить вложенный проверяемый системный компонент? Система запросит права администратора. Сеть не используется; VPN и службы чатов не включаются.' if self.ru else 'Install the embedded verified system component? Administrator authorization is required. No download, VPN activation or chat-service activation.')
+        self.confirm(text,'Установить' if self.ru else 'Install',lambda:self.submit(setup_candidate_system,'system_installed'))
+
     def install_tcp(self):
         if self.busy or self.active is not False:return
         from backend import tcp_updater_available,install_tcp_component
@@ -1352,6 +1370,10 @@ class App:
 
     def update_application(self):
         if self.busy:return
+        from backend import CANDIDATE_VERSION
+        if CANDIDATE_VERSION is not None:
+            self.set_detail('Внутренний кандидат обновляется только полным проверенным пакетом; миграция L08 ещё не принята.' if self.ru else 'Replace this internal candidate only with a reviewed full package; L08 migration is not accepted yet.')
+            return
         from updates import Updater
         if self.updater is None:self.updater=Updater(APP_VERSION)
         if self.update_plan is None:self.submit(self.updater.check,'updates');return

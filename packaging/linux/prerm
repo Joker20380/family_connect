@@ -1,5 +1,8 @@
 #!/bin/sh
 set -e
+if [ "${1:-}" = remove ] && [ -f /usr/lib/family-connect/remove_user_service.py ]; then
+    /usr/bin/python3 -I /usr/lib/family-connect/remove_user_service.py remove
+fi
 # Never touch $HOME state. Only drop the URI registration owned by this package.
 if command -v xdg-mime >/dev/null 2>&1; then
     if [ "$(xdg-mime query default x-scheme-handler/familyconnect 2>/dev/null || true)" = "com.familyconnect.Client.desktop" ]; then
