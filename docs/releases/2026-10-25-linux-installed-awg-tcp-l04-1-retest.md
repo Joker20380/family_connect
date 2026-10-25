@@ -2,6 +2,13 @@
 
 ## Решение и граница
 
+**Review decision,25.10.2026: DONE / review accepted.** Owner принимает matching
+request/reply на actual AWG/TCP TUN после cache flush и валидный terminal NODATA.
+Fresh-DNS positive/NXDOMAIN/NODATA contract выполнен; positive installed AWG/TCP
+acceptance corrected candidate завершена. Повтор gate не требуется. Исходный
+PARTIAL ниже и machine evidence сохранены как наблюдения до review, без изменения
+измерений. Разрешено отдельно только LIVE-2; parent L04.1 IN_PROGRESS до его review.
+
 **PARTIAL; review pending.** L04.1-LIVE-1-R DONE/review accepted в source/package
 scope. Новый installed retest подтвердил исправленный single Disconnect, включая
 original AppImage close/reopen, реальные AWG/TCP transfers и полный cleanup.

@@ -6,11 +6,12 @@ Correction [L04.1-LIVE-1-R](releases/2026-10-25-linux-poll-disconnect-l04-1-live
 DONE/review accepted (source/package): internal **0.2.12~l03.2.2**, source57f8eff/candidate d9c0d07f…;
 exact inventory и оба real systemd255/pkexec package gates PASS. Linux/AWG/TCP/native/
 package CI PASS; full suites54/54/53 failures, общий CI не зелёный.
-[Live RETEST](releases/2026-10-25-linux-installed-awg-tcp-l04-1-retest.md) PARTIAL:
+[Live RETEST](releases/2026-10-25-linux-installed-awg-tcp-l04-1-retest.md) DONE/review accepted:
 новая KVM, DEB/setup/AWG/TCP/traffic и AppImage close/reopen/single Disconnect PASS;
-fresh nonce DNS вернул NOERROR/NODATA, поэтому буквальный success/NXDOMAIN gate
-не закрыт. Cleanup/state сохранены; guest уничтожен, исходный test state оставлен.
-STOP/NEXT review RETEST, без автоматического LIVE-2/L04.2/L05/teardown.
+fresh nonce DNS вернул валидный terminal NOERROR/NODATA, принятый review наряду
+с positive/NXDOMAIN. Cleanup/state сохранены; guest уничтожен, test state оставлен.
+Разрешён только [LIVE-2](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md),
+без автоматического L04.2/L05/teardown.
 Final-2/0.2.12~l03.2.1
 retired для завершения L04.1 после принятого PARTIAL; не заменять его bytes/hash.
 Публичные version/catalog/download links не меняются.

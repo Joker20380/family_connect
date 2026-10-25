@@ -1,19 +1,26 @@
 # Текущее состояние / Current state
 
-Срез **L04.1-LIVE-1-RETEST**,25.10.2026: **PARTIAL; review pending**.
-Correction L04.1-LIVE-1-R **DONE / review accepted** в source/package scope.
-Exact **0.2.12~l03.2.2**, source `57f8eff`, candidate `d9c0d07f…`, build-9:
-новая KVM Ubuntu24.04/systemd255, DEB/setup/READY, AWG/TCP HTTPS и64KiB↓/↑ PASS.
-Каждый Disconnect: один click/down, generation +1, полный network/DNS/IP cleanup.
-Original AppImage close/reopen сохраняет owner; один Disconnect PASS, поздние polls
-25s не возвращают CONNECTED. Fresh nonce DNS доказан на actual TUN, но ответ
-NOERROR/NODATA (0 answers, resolvectl exit1), не требуемый success/NXDOMAIN:
-буквальный fresh-DNS gate не закрыт, полный RETEST DONE не заявляется.
-Identity/cache/floors и исходный protected state сохранены; VM/secret copies уничтожены.
-Source/public version, artifacts и серверные bindings не менялись. D01/full suites
-54/54/53 failures и voice observation сохраняются; CI заново не запускался.
-[Отчёт RETEST](releases/2026-10-25-linux-installed-awg-tcp-l04-1-retest.md).
-**STOP. NEXT — review L04.1-LIVE-1-RETEST.**
+Операционный read-only срез VPN24.10,21:26UTC и последующие короткие замеры:
+Friends registry53 устройства/49 non-revoked/4 revoked. AWG RU11 configured/0
+recent handshakes; NL45 configured/8 under3min/9 under15min. NL5s RX0.873,
+TX34.606Mbps. Friends AWG/TCP обоих серверов и NL bootstrap active; HTTPS status200.
+Legacy Docker peer-worker остаётся unhealthy (refused/timeout probes), host worker
+active. Journal error checks ограничены таймаутами: отсутствие ошибок не доказано.
+Версии/конфигурации/службы не менялись; текущий engineering review gate сохранён.
+[Отчёт и ограничения](releases/2026-10-24-vpn-health.md).
+
+Срез25.10.2026: **L04.1-LIVE-1-RETEST DONE / review accepted**.
+Review принимает fresh DNS matching request/reply на actual AWG/TCP TUN после flush,
+включая валидный terminal **NODATA**; positive installed gate завершён без повтора.
+Exact **0.2.12~l03.2.2**, source `57f8eff`, candidate `d9c0d07f…`, system build-9
+не меняются. [Исторический RETEST и решение review](releases/2026-10-25-linux-installed-awg-tcp-l04-1-retest.md).
+Выбран только **L04.1-LIVE-2 ACTIVE**: independent clean KVM snapshots, bounded
+negative A–F, first product failure STOP; product source/artifact bytes immutable.
+FC-3YSQ-BE2D/nl сохраняются, новый issuance/provisioning/manual fetch запрещён.
+L04/L04.1 IN_PROGRESS до LIVE-2 review; L04.2/L05/teardown NOT_RUN.
+[LIVE-2 checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md).
+D01/full suites54/54/53 failures и voice/Windows observations сохраняются.
+**Граница завершения — STOP; NEXT review L04.1-LIVE-2.**
 
 Предыдущий **L04.1-LIVE-1 PARTIAL принят review**; final-2 больше не candidate
 для завершения L04.1. Его положительное live evidence ниже сохраняется исторически.
