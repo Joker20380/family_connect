@@ -1,6 +1,14 @@
 # Текущее состояние / Current state
 
-Срез **L03.1**, 25.10.2026: внутренний system/runtime build-9 собран; review pending.
+Срез **L03.2**, 25.10.2026: ACTIVE, только внутренний AppImage/DEB candidate.
+L03.1 REVIEW ACCEPTED / DONE: product source `f826dbd`, неизменный build-9;
+continuation `1b285c6` повторно проверила те же bytes. Parent L03 IN_PROGRESS.
+[Отчёт L03.2](releases/2026-10-25-linux-candidate-l03-2.md). L04/L05 не начаты.
+**NEXT — review L03.2 после package/install gate; публикация не разрешена.**
+
+### Принятый checkpoint L03.1
+
+Срез **L03.1**, 25.10.2026: внутренний system/runtime build-9; review accepted.
 D01.3/D01.3-R приняты в public completion/admission scope; L01/L01-R,
 локальные L02/L02.2, D03/D04/D05 и native границы сохранены. D01 открыт,
 D02.1-R PARTIAL/NOT_RUN. [Отчёт L03.1](releases/2026-10-25-linux-system-runtime-l03-1.md).

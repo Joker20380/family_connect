@@ -6,9 +6,13 @@
 а не отдельные реализации продукта. [Текущий срез](STATUS.md) — источник текущего состояния.
 Продуктовый checkpoint: phase22, source baseline `664342a6566792a4ea621274a369bcd6b6012143`.
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
-**L01/L01-R review принят в Linux source/native/root→UID/isolated-kernel scope. Review L02.2 принят: локальный критерий L02 authenticated OFF→ON→OFF через Manual и Auto/MESH выполнен. L02.1-R atomic RetainChat/terminal recovery и L02.1-R2 status classification приняты. D01.3/D01.3-R приняты в public completion/admission scope. Выбран только L03.1; NEXT — review L03.1, не автоматический L03.2. Review D03/D04/D05, D02.1 collection/import isolation и D02.2 public-reference принят.
+L03.1 **REVIEW ACCEPTED / DONE** (`f826dbd`, exact build-9); выбран только
+**L03.2 ACTIVE**, parent **L03 IN_PROGRESS**. [Отчёт](releases/2026-10-25-linux-candidate-l03-2.md).
+Ниже прежняя последовательность review сохраняет accepted scope; текущий NEXT —
+review L03.2, без автоматических L04/L05/live/publication.
+**L01/L01-R review принят в Linux source/native/root→UID/isolated-kernel scope. Review L02.2 принят: локальный критерий L02 authenticated OFF→ON→OFF через Manual и Auto/MESH выполнен. L02.1-R atomic RetainChat/terminal recovery и L02.1-R2 status classification приняты. D01.3/D01.3-R приняты в public completion/admission scope. L03.1 принят; выбран только L03.2; NEXT — review L03.2, не автоматические L04/L05. Review D03/D04/D05, D02.1 collection/import isolation и D02.2 public-reference принят.
 Review D02.1-R и fleet-документации `1725656` принят;
-D02.1-R остаётся PARTIAL/NOT_RUN; D01 открыт. L03.2 и дальнейшие Linux/Windows задачи не начинаются.**
+D02.1-R остаётся PARTIAL/NOT_RUN; D01 открыт. Дальнейшие L04/L05 и Windows задачи не начинаются.**
 
 Порядок по умолчанию: D01.1 → D01.2 → D02.1 / принятый review D02.1-R → D02.2 / review → D03 → D04 → D05 → Linux → Windows → R01.
 Зависимости в таблицах — необходимые результаты, а не требование заново выполнять завершённые фазы.
@@ -109,8 +113,8 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 | L02.1-R2 | Классификация native status и сохранение typed errors | L02.1-R review принят | REVIEW ACCEPTED (bounded scope) | [Отчёт](releases/2026-10-24-linux-chat-mesh-l02-1-r2.md): actual CONTROL4 contention и malformed IPC red/green. BUSY не отменяет healthy generation; DENIED до ChatBridge/ChatHTTP без replay. Atomic pin/refcount/cleanup/caps сохранены; прежние15 authenticated остаются обязательными. |
 | L02.2 | Комбинированная local authenticated MESH OFF→ON→OFF приёмка | L02 partial; L02.1-R2 принят | DONE (review accepted, local source/native) | [Отчёт](releases/2026-10-24-linux-chat-mesh-l02-2.md): manual Supervisor и Auto/MESH отдельно; реальные UID IPC/native owner, TUN/private DNS/readback/health/publication, EXISTING_EXIT и новый SERVICE_ONLY; API/duplex byte-mailbox на каждом участке. Broker bind/renewal, lease/open/resource accounting, held cleanup/late result/profile mismatch/expiry/revocation/DENIED-no-replay; release CONTROL4 и packet RX fence приняты. Bounded CI gate сохраняет прежние15 и обязательные suites. Не live/installed/LXMF/F-01; исходный локальный L02 выполнен. |
 | L03 | Полный внутренний Linux-кандидат | L02, D05, D01.3; L03.1 + L03.2 | IN_PROGRESS (не полный кандидат) | Согласованы GUI, пользовательские службы, root-helper, native/RNS, зависимости и установка; capabilities соответствуют точному составу реально интегрированного пакета. Только после сборки и проверки точных AppImage/DEB в L03.2. |
-| L03.1 | Согласованный system/runtime payload, безопасная установка и ограниченный chat setup | принятые L01/L01-R, local L02/L02.2, D03/D04/D05, D01.3/D01.3-R | CHECKPOINT (local package/system gate PASS; review pending) | [Отчёт](releases/2026-10-25-linux-system-runtime-l03-1.md): полный hash/member/import closure, native/RNS/anchor; install exclusion/rollback и точные capabilities; fixed UID setup без VPN. Build-9,758 files;94 финальных адресных (umask077), desktop1120/24; actual disposable systemd255 install/polkit/UID/rollback/capability smoke PASS, private network/D-Bus/resolver. Source f826dbd: Client Linux и isolated native/root→UID/Auto/DIRECT CI PASS; rollback re-mask/start refusal PASS. Control/phase0/Docker по54 failures/errors0; voice observation сохранён, не общий CI PASS. Не parent L03/L04/L05 PASS. STOP → review L03.1. |
-| L03.2 | Включение принятого состава в AppImage/DEB | review L03.1 принят | QUEUED / NOT_RUN | Согласованные GUI/user daemon/system runtime и AWG/TCP доставлены без developer binaries; точные конечные артефакты проверены. Сохраняются родительский L03 gate и legacy six-file/updater. Не начинать автоматически. |
+| L03.1 | Согласованный system/runtime payload, безопасная установка и ограниченный chat setup | принятые L01/L01-R, local L02/L02.2, D03/D04/D05, D01.3/D01.3-R | DONE (review accepted; exact build-9) | [Отчёт](releases/2026-10-25-linux-system-runtime-l03-1.md): полный hash/member/import closure, native/RNS/anchor; install exclusion/rollback и точные capabilities; fixed UID setup без VPN. Build-9,758 files;94 финальных адресных (umask077), desktop1120/24; actual disposable systemd255 install/polkit/UID/rollback/capability smoke PASS, private network/D-Bus/resolver. Source f826dbd: Client Linux и isolated native/root→UID/Auto/DIRECT CI PASS; rollback re-mask/start refusal PASS. Control/phase0/Docker по54 failures/errors0; voice observation сохранён, не общий CI PASS. Не parent L03/L04/L05 PASS. Review принят; разрешён только L03.2. |
+| L03.2 | Включение принятого состава в AppImage/DEB | review L03.1 принят | ACTIVE | Согласованные GUI/user daemon/system runtime и AWG/TCP доставлены без developer binaries; точные конечные артефакты проверены. Сохраняются родительский L03 gate и legacy six-file/updater. Не начинать автоматически. |
 | L04 | Установленный Linux VPN | L03 | QUEUED | На установленном кандидате подтверждены реальные AWG/TCP/MESH/Auto, P0/P1, DNS/HTTPS и передачи, применённый target/profile и заявленные capabilities; не CLI/echo/SOCKS или model fixture. |
 | L05 | Установленный Linux-мессенджер | L03, L04 | QUEUED | DIRECT/MESH-доставка без VPN и с VPN, контакты/текст/голос, история и фоновые события подтверждены на реальных компонентах. |
 | L06 | Linux recovery | L04, L05 | QUEUED | Ограниченные loss/return, sleep/resume, рестарт службы и отмена проходят с корректной очисткой, backoff и одним reconnect owner. |
@@ -119,7 +123,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 
 Продолжение после обрыва25.10: неизменный L03.1/build-9 повторно прошёл hash/member/source
 verification, actual disposable systemd255 smoke и94 адресных проверки (umask077).
-Новый runtime/build не создавался; review L03.1 остаётся следующим gate, L03.2 NOT_RUN.
+Новый runtime/build не создавался; затем review L03.1 принят и отдельно разрешён L03.2.
 
 Phase22 подключила Linux ChatOwner к EXISTING_EXIT. L01 добавляет protected DIRECT;
 старый SYSTEM не переименован в DIRECT и не используется fallback этого нового пути.

@@ -1,7 +1,10 @@
 # L03.1 — Linux system/runtime component
 
-Date: **2026-10-25**. Internal system/runtime checkpoint, **review pending**.
-Only L03.1 is authorized; **STOP. NEXT — review L03.1**.
+Date: **2026-10-25**. Internal system/runtime checkpoint, **REVIEW ACCEPTED / DONE**.
+Accepted product source `f826dbdfb562541bde95d2fcbecc1d944d15da3d`, exact build-9.
+Continuation `1b285c6417676b3383c03c47620802a5f3d5ed6f` rechecked the same bytes.
+Only [L03.2 packaging](2026-10-25-linux-candidate-l03-2.md) is now authorized;
+older STOP/review-pending statements below are historical receipts, not active NEXTs.
 
 Entry branch: current `main`, `d7b4122`. Parallel uncommitted ops hunks in
 STATUS/PLAN and `2026-10-24-vpn-health.md` are preserved, not part of this work.
