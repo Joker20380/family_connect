@@ -5,8 +5,10 @@ STATUS/PLAN define the current bounded task and next review gate, not an automat
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
 [Ubuntu26.04/Python3.14 compatibility](releases/2026-10-26-linux-ubuntu2604-python314-compat.md)
-is the current bounded task: unchanged exact-lock probe PASS, separate internal .6
-packaging in progress. LOCAL-OWNER-UPGRADE remains ABI-blocked; workstation untouched.
+is CHECKPOINT PASS in compatibility scope: exact-lock probe and separate exact internal
+.7 user/system/package gates PASS. Full suites remain FAIL, unsuppressed technical debt.
+LOCAL-OWNER-UPGRADE remains blocked on the frozen .5 ABI and pending .7 review;
+workstation untouched.
 Frozen .5 below remains immutable. NEXT is review U2604-COMPAT, not publication or upgrade.
 
 [L04.1 final installed receipt](releases/2026-10-25-linux-installed-awg-tcp-l04-1-final.md)

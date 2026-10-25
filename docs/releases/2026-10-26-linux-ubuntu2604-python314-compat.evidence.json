@@ -1,6 +1,6 @@
 {
   "task": "U2604-COMPAT",
-  "result": "IN_PROGRESS",
+  "result": "CHECKPOINT_PASS",
   "scope": "source/system/package only; no workstation install or live VPN",
   "entry_source": "5c4f0f3e734c8a1da41f6ce33822fbd4b1b6cf13",
   "probe": {
@@ -137,9 +137,58 @@
     }
   },
   "candidate": {
-    "version": "0.2.12~l03.2.7",
-    "target": "Ubuntu26.04/CPython3.14",
-    "result": "NOT_BUILT"
+    "artifacts": {
+      "FamilyConnect-0.2.12~l03.2.7-x86_64.AppImage": {
+        "sha256": "ff3b41fb051154852efddf43eaba8a73d1a7cf61ab5eb7d8d29bba246ee7342a",
+        "size": 57924088
+      },
+      "FamilyConnect-Linux-0.2.12~l03.2.7.tar.gz": {
+        "sha256": "07ca375c7e8fc2794e8d2beb20c91ea7c96f2b1a2a08a0da27ebce8268aa42bd",
+        "size": 114495
+      },
+      "FamilyConnect_0.2.12~l03.2.7_amd64.deb": {
+        "sha256": "f77f44ea6ef70791d8e45a4b811e0e417e5ce1ecc4dbc6cbf1e320e2eda33d28",
+        "size": 55962464
+      }
+    },
+    "authorization_protocol": 2,
+    "build_id": "c79b4feb51f3755ce458367d057abcb5fdd87bd975fe6059fa8fe06d88617c45",
+    "compatibility": {
+      "distribution": "ubuntu",
+      "interpreter": "/usr/bin/python3",
+      "python": [
+        3,
+        14
+      ],
+      "version": "26.04"
+    },
+    "internal_version": "0.2.12~l03.2.7",
+    "published": false,
+    "python": [
+      3,
+      14
+    ],
+    "runtime_contract": 2,
+    "schema": 1,
+    "signing": "unsigned-internal-candidate",
+    "source_commit": "3df82b4555d48f2ae8284244d093e36de5c4bc1d",
+    "source_dirty": false,
+    "source_version": "0.2.11",
+    "system": {
+      "build_id": "43266d97c6a9f8d4e7026727cbb4b5cb6aeea49db799f93bd798b67a8135198c",
+      "installer_sha256": "ce9acb1f363b0fafffb11c44097901a7871c28fbf0e6b9c2c5c3eaba9ef7bfb5",
+      "sha256": "402affe5628da4ecd1df3e274f3c67848d5e59023a63374765c91419490b9a55",
+      "size": 49252181,
+      "source_digest": "cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61"
+    },
+    "system_kind": "standard-source-rebuild",
+    "system_source_commit": "053c4e5f9532ca927f49a78f9c0ed17903375baf",
+    "result": "CHECKPOINT_PASS",
+    "installed_on_owner_workstation": false,
+    "installed_in_disposable_gates": true,
+    "artifact_directory": "state-client-build/linux-ubuntu2604-python314-20261026/build",
+    "user_inventory_members": 707,
+    "legacy": "six-file shape compatibility only; not updater publication"
   },
   "full_desktop": {
     "passed": 1199,
@@ -156,11 +205,13 @@
     "changed": false,
     "package": "0.2.11",
     "system_python": "3.14.4",
-    "owner_upgrade": "BLOCKED: frozen Python3.12 ABI"
+    "owner_upgrade": "BLOCKED: frozen Python3.12 ABI",
+    "launcher_hashes_unchanged": true,
+    "user_desktop_entries_unchanged": true
   },
   "remaining": {
-    "package_gates": "NOT_RUN",
-    "full_regressions": "PENDING",
+    "package_gates": "PASS",
+    "full_regressions": "FAIL_UNSUPPRESSED; separate technical debt",
     "L04_2": "NOT_RUN",
     "L05": "NOT_RUN",
     "teardown": "NOT_RUN",
@@ -170,5 +221,222 @@
     "catalog_update": "NOT_RUN",
     "publication": "NOT_RUN"
   },
-  "next": "review U2604-COMPAT; no automatic owner upgrade"
+  "next": "review U2604-COMPAT; no automatic owner upgrade",
+  "acceptance_boundary": "Ubuntu26.04/system CPython3.14 compatibility only; full suites remain FAIL; no L04.1 reopening or owner install",
+  "manifests": {
+    "candidate": {
+      "file": "2026-10-26-linux-ubuntu2604-python314-compat.candidate.json",
+      "size": 110774,
+      "sha256": "9e55f7cd319fa844b0d04551e1841f728d49e5969f6f5eb834f7d3b74ae238d9"
+    },
+    "system": {
+      "file": "2026-10-26-linux-ubuntu2604-python314-compat.system.json",
+      "size": 122649,
+      "sha256": "d3a0521cc05356e4ff20b952a2a1e3e1c45dd9f0dd8f6e1baa0df4a50387f8a0"
+    },
+    "python-runtime": {
+      "file": "2026-10-26-linux-ubuntu2604-python314-compat.python-runtime.json",
+      "size": 71436,
+      "sha256": "761e5abb69ef1c2ba9766665982a47a410cf639f68c394e7865beb52e1796909"
+    }
+  },
+  "validation_source": "fb588c084240247166c500cdab568cc5ff0e48bc",
+  "production_functional_changes": false,
+  "system_python_runtime_identical_to_user": true,
+  "gates": {
+    "system_archive": "PASS",
+    "strict_user_imports": "PASS",
+    "strict_system_imports": "PASS",
+    "exact_deb": "PASS",
+    "exact_appimage": "PASS",
+    "explicit_pkexec": "PASS",
+    "matching_system": "READY",
+    "polkit_method": "real polkit127/pkexec; narrow fixture UID1000 and exact-command allow rule, not owner interactive authorization",
+    "missing_tampered_mixed_build_rejection": "PASS",
+    "installation_lock_cleanup_barriers": "PASS",
+    "rollback": "PASS",
+    "root_to_uid_ipc": "PASS",
+    "synthetic_state_preservation": "PASS",
+    "shared_appimage_deb_state": "PASS",
+    "deb_reinstall_remove": "PASS",
+    "no_package_local_private_state": "PASS",
+    "no_silent_vpn": "PASS",
+    "user_service_survives_gui": "PASS",
+    "uri_handler": "PASS",
+    "awg_prestart": "PASS",
+    "tcp_prestart": "PASS",
+    "successful_live_transport_starts": 0,
+    "native_targeted_passed": 144,
+    "auto_kernel_checks_passed": 18,
+    "direct_kernel": "PASS",
+    "lifetime_passed": 15,
+    "combined_release_passed": 3,
+    "native_go_race": "PASS"
+  },
+  "full_suite": {
+    "result": "FAIL_UNSUPPRESSED",
+    "python": "3.14.4",
+    "passed": 3257,
+    "failed": 55,
+    "skipped": 104,
+    "subtests_passed": 7,
+    "warnings": 12,
+    "release_fixtures": "source-pinned mandatory capsules; accepted Go1.26.0",
+    "prior_ci_residual_failures": 54,
+    "additional_observation": "root lock fixture fails with umask077 on both Python3.12 and3.14; separate ordinary-umask runtime selection6PASS; full result not waived"
+  },
+  "initial_failures_retained": [
+    "Stale native inventory rejected; fresh standard native rebuilt from current source, no inventory edits",
+    "Local bare clone omitted unreferenced shallow Xray revision; fetched exact pinned revision",
+    "CI .6 ABI verifier ran under3.12; fixed target environment, .6 not selected",
+    "AppImage build lacked file utility; installed only in disposable builder, completed image without replacing already-built DEB/legacy",
+    "Full-suite preparation required Go1.26.0 and predownloaded locked carrier modules; both supplied only in disposable environment",
+    "Polkit127 canonical program path refused by old fixture; exact UID/command retained with resolved interpreter path",
+    "DIRECT rejected UID1000-owned input; installed identical worker bytes root-owned inside disposable container and passed"
+  ],
+  "ci_artifacts": "Existing push workflows may upload internal diagnostic artifacts; no manual artifact upload or release/catalog publication",
+  "log_hashes": {
+    "system-smoke.log": "e568c1561f698f17110cf19a2e9e56a01612d343d0dbbe5994b8d1b0e73d28ac",
+    "deb-smoke-final.log": "7a40d6d641e23e3c281dc535407b455e442dbf452f334815a7849f50c2ff2c50",
+    "appimage-smoke-final.log": "554b5bd37b4d5a3bea26c62f381658829bc7f40438fbfbd962244256ca4e9596",
+    "prestart-awg.log": "45f78b35e4690801cc9a7a5901bb5a1cc1ba84744f4a010602c02b19da6da10c",
+    "prestart-tcp.log": "067421a67d42997e7913b50de490e900e6bf8206b6aa76cdf9c7e4ba90b1b35f",
+    "full-desktop.log": "d6429ba79fde36b799bba5c3aeeb3f1532ee912d51d137cbc7ffb210aef634bb",
+    "full-suite-final.log": "206d4b41780ebbdb435958814a40168426b0a6baed73354bef0bc72c186efd55",
+    "native-tests.log": "d4438018c40a69627b2300bd814ffdae0b2d2e90531f665b03c47ac7dcfb5546",
+    "kernel-native.log": "7ff7f9132be4a4a92c9502f66206ad4a7395dc361fe0c06489c2745948a48f80",
+    "direct-root-owned.log": "39213645864971d17721da7b2f6cce529a364aa03436e78ef659ba3cf0b09534",
+    "lifetime-tests.log": "40f7d3352f83f0a5011d90f86833b41e1f87496d4ed4f6f8572bc72ab7ceba0c",
+    "combined.log": "a906bb8c17e85cf5101d20875b402479c801658b1718e4cc930da767cbc8651a",
+    "direct-runtime-isolated.log": "3230560ca605e62ec8d6ead7a7bd614c50705fdc6ae66aa82ba19e68eb84f45a",
+    "lock-umask312.log": "7854cdb665e60dda3fa23d66745d800f43a829a0037936a0cd4b5c633abe74c1",
+    "lock-umask314.log": "341e3c1bef2778135efaf701fb72ca9e535635701cbdbdca476ca1ebf6656115",
+    "uri.log": "2f5f3d2b7a6bba780ce9515ab941bfbb4df2f6443167b8ecda8d0802b1f2a1f6",
+    "uri-final.log": "535994e0f6f60119e36dd7039d1c439879c2cf159627c6ab764a9b31ab0b7b58",
+    "uri-complete.log": "0b500a4bfdd0b40dbba74d7cc7ca8404636b7783bd821b83993c4d4a0ca56d1e"
+  },
+  "ci_jobs": [
+    {
+      "run": 40237803992,
+      "id": 121303012675,
+      "name": "isolated-linux",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Joker20380/family_connect/actions/runs/40237803992/job/121303012675"
+    },
+    {
+      "run": 40237803992,
+      "id": 121303012795,
+      "name": "protocol (windows-2022)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Joker20380/family_connect/actions/runs/40237803992/job/121303012795"
+    },
+    {
+      "run": 40237803992,
+      "id": 121303012875,
+      "name": "protocol (ubuntu-24.04)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Joker20380/family_connect/actions/runs/40237803992/job/121303012875"
+    },
+    {
+      "run": 40237803948,
+      "id": 121303012385,
+      "name": "linux",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Joker20380/family_connect/actions/runs/40237803948/job/121303012385"
+    },
+    {
+      "run": 40237803948,
+      "id": 121303012541,
+      "name": "windows",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Joker20380/family_connect/actions/runs/40237803948/job/121303012541"
+    },
+    {
+      "run": 40237803948,
+      "id": 121303012573,
+      "name": "android",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Joker20380/family_connect/actions/runs/40237803948/job/121303012573"
+    },
+    {
+      "run": 40237803948,
+      "id": 121304113663,
+      "name": "windows-compatibility",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Joker20380/family_connect/actions/runs/40237803948/job/121304113663"
+    },
+    {
+      "run": 40237803948,
+      "id": 121306865235,
+      "name": "release",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/Joker20380/family_connect/actions/runs/40237803948/job/121306865235"
+    },
+    {
+      "run": 40237804223,
+      "id": 121303013080,
+      "name": "failover",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/Joker20380/family_connect/actions/runs/40237804223/job/121303013080"
+    },
+    {
+      "run": 40237804223,
+      "id": 121303013244,
+      "name": "tests",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/Joker20380/family_connect/actions/runs/40237804223/job/121303013244"
+    },
+    {
+      "run": 40238990957,
+      "id": 121306534939,
+      "name": "linux-control",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/Joker20380/family_connect/actions/runs/40238990957/job/121306534939"
+    },
+    {
+      "run": 40238990965,
+      "id": 121306534652,
+      "name": "candidate",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Joker20380/family_connect/actions/runs/40238990965/job/121306534652"
+    },
+    {
+      "run": 40238990933,
+      "id": 121306534677,
+      "name": "tests",
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/Joker20380/family_connect/actions/runs/40238990933/job/121306534677"
+    },
+    {
+      "run": 40238990933,
+      "id": 121306534865,
+      "name": "failover",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/Joker20380/family_connect/actions/runs/40238990933/job/121306534865"
+    }
+  ],
+  "hygiene": {
+    "frozen_hashes": "PASS",
+    "exact_candidate_hashes": "PASS",
+    "json_and_ids": "PASS",
+    "secret_scan": "2934 staged entries; zero blocked files; bounded scanner",
+    "staged_scope": "sanitized docs/manifests only",
+    "whitespace": "PASS",
+    "preexisting_ops_work": "preserved unstaged",
+    "disposable_containers": "stopped and removed"
+  }
 }

@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**U2604-COMPAT — IN_PROGRESS / source packaging checkpoint.**
+**U2604-COMPAT — CHECKPOINT PASS, только Ubuntu26.04/CPython3.14 compatibility.**
 LOCAL-OWNER-UPGRADE **BLOCKED на ABI**: workstation Ubuntu26.04/system Python3.14.4,
 frozen .5 требует3.12. До установки/backup/launcher migration не дошли; workstation unchanged.
 Новая disposable Ubuntu26.04.1/systemd259/Python3.14.4: exact provisioning/messenger
@@ -8,12 +8,19 @@ locks,630 RECORD/hash-verified runtime members, strict imports всех17 distri
 GTK/Adw/cairo/Secret Service/GStreamer/codec2 и129 адресных tests **PASS** без source edits.
 Начальная test-runner ошибка3 imports из-за отсутствия explicit public source path
 сохранена; исправлен только invocation, все129 PASS. Pins/hashes не менялись.
-Packaging готовит отдельный **0.2.12~l03.2.7 / Ubuntu26.04 / Python3.14**;
-new artifact/system IDs ещё NOT_BUILT. Frozen .5/3.12 immutable, L04.1 не переоткрывается.
+Собран отдельный **0.2.12~l03.2.7 / Ubuntu26.04 / Python3.14**, internal/unpublished:
+candidate `c79b4feb…` / source `3df82b4` / system `43266d97…`.
+Exact DEB/AppImage, strict user/system imports, real pkexec/READY, rollback,
+tamper/mixed-build/locks, synthetic state и URI/user-service gates **PASS**.
+Full desktop1199 PASS/83 SKIP; native144, Auto18 checks, DIRECT, lifetime15,
+combined3 и AWG/TCP prestart PASS. Full suite3257 PASS/**55 FAIL**/104 SKIP без suppression;
+extra root lock/umask observation воспроизводится на3.12 и3.14, isolated runtime6 PASS.
+Общего CI/release PASS нет; residual failures — отдельный technical debt.
+Frozen .5/3.12 hashes/IDs повторно сверены, immutable; L04.1 не переоткрывается.
 Production VPN/GUI/helper/protocol/identity/cache logic не меняется. Private identity,
 activation/cache/gateway не использованы. Publication/L04.2/L05/teardown/live VPN **NOT_RUN**.
 [U2604-COMPAT report](releases/2026-10-26-linux-ubuntu2604-python314-compat.md).
-**STOP после checkpoint. NEXT — review U2604-COMPAT; owner upgrade не начинается автоматически.**
+**STOP. NEXT — review U2604-COMPAT; owner upgrade не начинается автоматически.**
 
 ### Frozen Linux AWG/TCP Beta baseline — сохранён, не активный NEXT
 

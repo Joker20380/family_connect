@@ -3,8 +3,11 @@
 ## L03.2 — внутренний полный candidate,25.10
 
 **Ubuntu26.04/CPython3.14 — отдельный U2604-COMPAT checkpoint, не host upgrade.**
-[Отчёт](releases/2026-10-26-linux-ubuntu2604-python314-compat.md): exact-lock probe PASS,
-packaging для нового internal .7 в работе; candidate/system artifacts пока NOT_BUILT.
+[Отчёт](releases/2026-10-26-linux-ubuntu2604-python314-compat.md): CHECKPOINT PASS,
+exact internal .7 candidate c79b4feb…/system43266d97…, Python [3,14]. DEB/AppImage,
+strict imports и real pkexec/READY gates PASS; full suites остаются FAIL/technical debt.
+Exact hashes/inventories и локальные installation/rollback boundaries — в отчёте;
+это не public download и не разрешение устанавливать candidate на workstation.
 Frozen .5 ниже привязан к3.12 и не изменён. Workstation upgrade BLOCKED на ABI;
 новые установленные/public/invitation версии не заявляются. NEXT — review U2604-COMPAT.
 
