@@ -14,10 +14,13 @@ FC-3YSQ-BE2D/nl сохраняются, новый issuance/provisioning/manual 
 L04/L04.1 IN_PROGRESS до LIVE-2 review; L04.2/L05/teardown NOT_RUN.
 [LIVE-2 checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md).
 D01/full suites54/54/53 failures и voice/Windows observations сохраняются.
-**L04.1-LIVE-2-RESUME ACTIVE**: только exact .4, entry B1 первым; после PASS B2–F.
-R1 review принят; Gate A .4 inherited из exact system/package evidence, не повторять.
-Новая disposable KVM; существующая FC-3YSQ-BE2D/nl, без issuance/manual fetch.
-При первом product failure STOP. L04.1 IN_PROGRESS; L04.2/L05/teardown NOT_RUN.
+**L04.1-LIVE-2-RESUME PARTIAL**: exact .4, real KVM/GUI/pkexec setup PASS.
+B1 local terminalization PASS: AWG up1/start0/discard1, TRANSPORT_BUSY/
+PRE_START_REJECTED, IDLE/generation2/pending null, poll/network/state cleanup PASS.
+Full entry gate BLOCKED: registry service изменился между baseline и Connect;
+server stability не объявлена PASS. B2–F NOT_RUN; нового product defect не установлено.
+Guest/secret copies уничтожены, FC-3YSQ-BE2D/nl сохранены. R1/Gate A .4 inherited.
+L04.1 IN_PROGRESS; L04.2/L05/teardown NOT_RUN; только sanitized docs/evidence.
 [Текущий checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2-resume.md).
 **L04.1-LIVE-2-R1 DONE / review accepted (source/system/package).**
 Final internal **0.2.12~l03.2.4**, source053c4e5, candidate42ea0699…,
@@ -28,7 +31,8 @@ Exact integrity/systemd255/pkexec/rollback/DEB/AppImage/coherence/old-build refu
 PASS; desktop1195 PASS/96 SKIP. Linux/AWG/TCP/package CI PASS; native/DIRECT
 первый отказ сохранён, один unchanged rerun PASS. Full CI54/54/53 failures;
 общего CI PASS нет.
-Live B1 retest/B2–F NOT_RUN; private test state/gateway не использовались.
+В самом R1 live B1/B2–F NOT_RUN; private state/gateway не использовались.
+Последующий installed результат — RESUME выше, не перенос evidence между scopes.
 [R1](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md).
 **Граница завершения — STOP; NEXT review L04.1-LIVE-2-RESUME.**
 

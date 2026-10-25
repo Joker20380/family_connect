@@ -1,0 +1,239 @@
+{
+  "B1": {
+    "action_utc": "2026-10-25T18:34:12Z",
+    "configuration_fetch_count": "NOT_INDEPENDENTLY_VERIFIED_JOURNAL_READ_TIMEOUT_20S",
+    "connect_retry": false,
+    "diagnostics": {
+      "actual_transport": "none",
+      "first_failure": "TRANSPORT_BUSY",
+      "normal_operation": {
+        "category": "TRANSPORT_BUSY",
+        "cleanup_confirmed": true,
+        "generation": 2,
+        "outcome": "PRE_START_REJECTED",
+        "pending": false,
+        "phase": "IDLE"
+      },
+      "selected_transport": "awg",
+      "state": "DISCONNECTED"
+    },
+    "fallback_observed": false,
+    "full_gate": "BLOCKED_BY_SERVER_BASELINE",
+    "generation_observed_after": 2,
+    "generation_observed_before": 0,
+    "gui_connect_requests": 1,
+    "held_fixture_lock": "HELD",
+    "helper_requests": {
+      "awg": {
+        "discard": 1,
+        "down": 0,
+        "import": 1,
+        "session": 0,
+        "up": 1
+      },
+      "tcp": {
+        "discard": 0,
+        "down": 0,
+        "import": 0,
+        "session": 0,
+        "up": 0
+      }
+    },
+    "imported_profiles_remaining": {
+      "awg": 0,
+      "tcp": 0
+    },
+    "intermediate_generation_1": "RESERVE_CONTRACT_NOT_SEPARATELY_SAMPLED",
+    "locks_after_fixture_release": {
+      "operation": "FREE",
+      "transport": "FREE"
+    },
+    "manual_fetch": false,
+    "markers": [],
+    "network_baseline": {
+      "default_route": "fb85cd466aa5f6f308975473aca2fe4979a1ad037cee470a2fc3a4d53b7aa601",
+      "dns": "b0191443e35e59618655d41343fb974821aa8eda45c0a4ed33344ea41d36cc6e",
+      "domains": "8d92db1545df492f433014cb97afe3a5b1fb1a73f7fd2a9d5a5955ac76255ffc",
+      "ip6tables": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "iptables": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "links": [
+        {
+          "flags": [
+            "LOOPBACK",
+            "UP",
+            "LOWER_UP"
+          ],
+          "ifname": "lo",
+          "mtu": 65536,
+          "operstate": "UNKNOWN"
+        },
+        {
+          "flags": [
+            "BROADCAST",
+            "MULTICAST",
+            "UP",
+            "LOWER_UP"
+          ],
+          "ifname": "ens3",
+          "mtu": 1500,
+          "operstate": "UP"
+        }
+      ],
+      "nft": "4ad6b1c9e0888c3b8e6333454901c4a3d5bc4c7b2bc645a22577a829e58da48b",
+      "routes4": "9433277d6fb2db39fb527b01a54aed996d9e420d66446743089cbc7621032513",
+      "routes6": "06345d44b4a3a0c65ab82c8fb4a16def2f4afabd8c4f9209a639d413aeb57d28",
+      "rules4": "c88a415e55c2b1d6ac4dd37c5ec360cbf3f5880a44aa1ecf71598f1d3ce4cbe2",
+      "rules6": "2f96b65baa9d426a3ede66b897f348316d82682e230b117f1ed363f7a5ebec41"
+    },
+    "network_baseline_equal": true,
+    "operation": {
+      "generation": 2,
+      "pending": false
+    },
+    "phase": "IDLE",
+    "polkit_approvals": 1,
+    "read_only_poll": "PASS",
+    "terminalization": "PASS",
+    "transport_starts": {
+      "amneziawg-go": 0,
+      "awg-quick": 0,
+      "xray": 0
+    }
+  },
+  "artifact_integrity": {
+    "artifacts": {
+      "FamilyConnect-0.2.12~l03.2.4-x86_64.AppImage": {
+        "sha256": "c78c68ec99b187269b87d40d457c8db09d3593b45f199a8705d0a83222cc3273",
+        "size": 57928184
+      },
+      "FamilyConnect-Linux-0.2.12~l03.2.4.tar.gz": {
+        "sha256": "106f09e2ff7bc31b2a2eff64a5b4c157ded7a76ea6e4d037ad5cdb513803ffaa",
+        "size": 114462
+      },
+      "FamilyConnect_0.2.12~l03.2.4_amd64.deb": {
+        "sha256": "8b23ac6d93c747955017a3b0d5c33745e7272f2c24fc950f4e8f0d0b367af4da",
+        "size": 55986866
+      }
+    },
+    "candidate": "42ea0699263f2527057a36082b2b95235c4ac452cc5e86eed6ec15ebd50898cf",
+    "legacy_members": 6,
+    "result": "PASS",
+    "source_commit": "053c4e5f9532ca927f49a78f9c0ed17903375baf",
+    "source_dirty": false,
+    "system": {
+      "build_id": "8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d",
+      "installer_sha256": "ce9acb1f363b0fafffb11c44097901a7871c28fbf0e6b9c2c5c3eaba9ef7bfb5",
+      "sha256": "ddd74c2132a76ac833b587d9df6409d779ce6afcdaa45fafd23faa86d7817726",
+      "size": 49250848,
+      "source_digest": "cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61"
+    },
+    "user_members": 707
+  },
+  "blocker": "SERVER_BASELINE_CHANGED_BEFORE_B1_ACTION",
+  "checkpoint": "L04.1-LIVE-2-RESUME",
+  "cleanup": {
+    "guest_destroyed": true,
+    "host_read_only_baseline": {
+      "dns": true,
+      "domains": true,
+      "routes4": true,
+      "rules4": true
+    },
+    "idle_catalog_host_stop": "FIXTURE_CLEANUP_ONLY",
+    "manual_down": false,
+    "manual_journal_delete": false,
+    "product_discard": "PASS",
+    "temporary_secret_material_deleted": true
+  },
+  "entry_docs_commit": "4fb62b937f76f4c393bb7dd1efef072818ff28e3",
+  "environment": {
+    "distribution": "Ubuntu 24.04.5",
+    "encrypted_qcow2": true,
+    "kernel": "6.8.0-147-generic",
+    "product_files_modified": false,
+    "qemu": "7.2.22",
+    "real_polkit_password_approval": true,
+    "systemd": "255.4-1ubuntu8.18",
+    "uid": 1000,
+    "virtualization": "KVM"
+  },
+  "identity": {
+    "catalog_sha256": "f4d812db722705d8fc853a1a1afd454922cd2bca71175db025f40b9a58c3628d",
+    "create": false,
+    "floor_sequence": 3,
+    "only_country": "nl",
+    "public_identity_sha256": "d07d33a81728ff70aec350ae59785990c194d90ecd44574b0da28439189532de",
+    "support_id": "FC-3YSQ-BE2D",
+    "uid": 1000
+  },
+  "input_main": "88c98f7c03f52b5f845a29819b0ccccb5484fd7d",
+  "not_run": [
+    "B2",
+    "C1",
+    "C2",
+    "D",
+    "E",
+    "F1",
+    "F2",
+    "L04.2",
+    "L05",
+    "device_teardown",
+    "revoke"
+  ],
+  "result": "PARTIAL",
+  "server_readback": {
+    "actions_by_checkpoint": "READ_ONLY_NO_RESTART_NO_DEPLOYMENT",
+    "baseline_utc": "2026-10-25T18:17:53.079943+00:00",
+    "changed_fields": [
+      ".gateway.network.iptables",
+      ".registry.service_sha256"
+    ],
+    "cleanup_target_foreign_and_services": "UNCHANGED_FROM_B1",
+    "firewall_measurement_limitation": "TIMESTAMPS_NORMALIZED_BUT_COUNTERS_RETAINED_NO_STRUCTURAL_BASELINE",
+    "nl": {
+      "assigned_address_sha256": "4aba226c8f65cd276ddf5fa67ce3fbf2d81cbe405d5a9b878e9619c10168c6a9",
+      "foreign_clients_sha256": "9f1f63aea086d69f79d80d93e3eff650481178f5df1f2a79ecb9176e05d56c5c",
+      "foreign_live_sha256": "ca693eb9ea86ba183f5cbf3587a5d56fcfaa3b9b69d1a7ce2b04cb52245140f9",
+      "foreign_peers_sha256": "fa4cf90864acea6cbdc359d580f3d24144168d0ded382e2f033ceef191b92b21",
+      "foreign_runtime_sha256": "9f1f63aea086d69f79d80d93e3eff650481178f5df1f2a79ecb9176e05d56c5c",
+      "global_config_sha256": "c7ff070de3a33838d27caefadfadcfc870edd872fb6f8935931ecb88ade3dccb",
+      "server_json_sha256": "107d6b9b21b6b699693e95ece553302b8f1b56ac3ccf5872789eb536fc0bc9bd",
+      "services_sha256": "b207689166bd0f5a615002de0b6ddcdfd8210d3a0bf2293ae8afee330eb3fd93",
+      "target_clients": 1,
+      "target_live_clients": 1,
+      "target_live_peers": 1,
+      "target_peer_rows": 1,
+      "tcp_email_sha256": "b80335fa461b5cf2450177134101905a1f592a25bc5f4331618039ff8088c5c4",
+      "tcp_uuid_sha256": "f3848f2dee8e7cf738b20c2013be7be7bd3fc07c5a3cfc3a2896ab53a272a52b",
+      "wireguard_public_sha256": "9a1b3cc0107d71dfa88cabdcfe519b10e9ba0ad6017956859fe8b66f6cc16bd4"
+    },
+    "registry_active": true,
+    "registry_archive_sha256": "21d64558e542ff6ad80fb9b13799fbcb333167ffb5a79ec841e7c94dc65d71fa",
+    "registry_catalog_sha256": "9a9f6e0d930766555bddf54ac5c17b388cf8abf5fe5badcac1d6dc817e1ec5d2",
+    "registry_current_start_utc": "2026-10-25T18:28:22Z",
+    "registry_service_after_sha256": "9d17484adaff8dffee88c276c1849c3ebb5b95f581e376b8b375d5d9a843141c",
+    "registry_service_before_sha256": "ab3f3f68b1c45f71ea61228045041f4ec41131f51ff7c081435903382cd9ebaf",
+    "ru": {
+      "target_peers": 0,
+      "target_tcp": 0
+    },
+    "target_and_foreign_bindings": "UNCHANGED"
+  },
+  "setup": {
+    "after": {
+      "candidate": "42ea0699263f2527057a36082b2b95235c4ac452cc5e86eed6ec15ebd50898cf",
+      "system": "READY"
+    },
+    "before": "SYSTEM_RUNTIME_ABSENT",
+    "explicit_gui_setup": "PASS",
+    "guest_identity_after_setup": "UNCHANGED",
+    "silent_vpn_start": false
+  },
+  "state_preservation": {
+    "operator_material_copied": false,
+    "result": "PASS",
+    "source_preflight_after": "PASS",
+    "source_state_modified": false,
+    "state_inventory_sha256": "b9bf966ec0cfe7fed821e0afd76e99b0df188f4c817f900b28e30dea87cbeab8"
+  }
+}

@@ -8,9 +8,11 @@
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
 L03.1/L03.2 **DONE (review accepted)**; parent **L03 DONE** в scope полного
 внутреннего Linux-кандидата. **L04.1-LIVE-2: PARTIAL / review accepted**, STOP на B1.
-**L04.1-LIVE-2-RESUME ACTIVE**: exact .4; B1 → только после PASS B2–F.
-Gate A .4 inherited из R1; не повторять. Первый product failure завершает checkpoint.
-Product/candidate bytes immutable; только существующая FC-3YSQ-BE2D/nl в новой KVM.
+**L04.1-LIVE-2-RESUME PARTIAL**: exact .4, KVM setup и B1 terminalization PASS:
+up1/start0/discard1, IDLE/generation2/pending null, poll/network/state cleanup PASS.
+Full B1 BLOCKED: registry service transition между baseline и Connect; серверная
+неизменность не доказана, нового product defect нет. B2–F NOT_RUN, guest уничтожен.
+Gate A .4 inherited из R1. Product/candidate bytes и FC-3YSQ-BE2D/nl сохранены.
 **L04.1-LIVE-2-R1 DONE / review accepted (source/system/package).**
 Final internal0.2.12~l03.2.4/source053c4e5/candidate42ea0699…/system8d7d78ec…,
 authorization2; .3 — immutable intermediate. Actual AWG/TCP up1/start0,
@@ -18,8 +20,8 @@ IDLE/generation2/pending null/poll PASS; unknown outcome fail-closed, перва
 diagnostic category сохраняется через recovery. Exact system/package/rollback/
 coherence/actual old-build refusal PASS; desktop1195/96. Linux/AWG/TCP/package CI
 PASS; native/DIRECT initial FAIL, один unchanged rerun PASS (оба receipt сохранены).
-Full CI54/54/53 failures, общего CI PASS нет. Live B1 retest/B2–F NOT_RUN;
-private state/gateway не тронуты.
+Full CI54/54/53 failures, общего CI PASS нет. В самом R1 live B1/B2–F NOT_RUN;
+private state/gateway не тронуты; последующий installed RESUME указан выше.
 LIVE-1 PARTIAL принят review; final-2 retired для завершения L04.1, прежние PASS
 сохраняются только за этим exact build. Red actual backend/GTK race подтверждён;
 generation-fenced unlocked poll и queued Disconnect cancellation: адресные229 PASS.
@@ -166,7 +168,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 | L04.1-LIVE-1-RETEST | Короткая installed приёмка exact corrected candidate | accepted LIVE-1-R; существующая FC-3YSQ-BE2D/nl; новая KVM | DONE (review accepted) | [Report](releases/2026-10-25-linux-installed-awg-tcp-l04-1-retest.md): exact DEB/setup/READY, AWG/TCP/HTTPS/64KiB↓/↑, single Disconnect и AppImage close/reopen PASS. Review принимает matching fresh-DNS request/reply с valid terminal NODATA. Cleanup/state PASS; positive gate не повторять. |
 | L04.1-LIVE-2 | Bounded negative installed AWG/TCP gates | accepted RETEST; explicit owner authorization | PARTIAL (review accepted) | [Checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md): exact .2; A installed tamper/reinstall PASS. B1: up1/start0 допустимо, но pending/APPLYING после authoritative refusal — product defect. Network/state preserved, guest destroyed. B2–F NOT_RUN. |
 | L04.1-LIVE-2-R1 | Terminal pre-start refusal / unknown outcome; новый system/user candidate | review LIVE-2 PARTIAL accepted; source/package only | DONE (review accepted; source/system/package) | [Report](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md): actual AWG/TCP red→green, same-owner terminalization/recovery, generation fencing; final .4/source053c4e5/candidate42ea0699…/system8d7d78ec…. Exact systemd/polkit/import/rollback, DEB/AppImage/coherence и actual old-build refusal PASS. Full CI не зелёный; live B1 retest/B2–F отдельно. |
-| L04.1-LIVE-2-RESUME | Installed negative B1→B2–F exact .4 | R1 review accepted; existing test identity/nl; fresh KVM | ACTIVE | [Report](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2-resume.md). Gate A inherited из exact .4 package gates; B1 первым, first product failure STOP. No source/candidate changes; L04.2/L05/teardown NOT_RUN. |
+| L04.1-LIVE-2-RESUME | Installed negative B1→B2–F exact .4 | R1 review accepted; existing test identity/nl; fresh KVM | PARTIAL (review pending) | [Report](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2-resume.md). B1 local terminalization PASS, up1/start0/discard1, IDLE/gen2/pending null. Full entry gate blocked by changed registry service baseline; B2–F NOT_RUN, no new product defect. Guest/secret copies removed, original state preserved. Gate A inherited; no source/candidate changes; L04.2/L05/teardown NOT_RUN. |
 | L04.1-AUTH-TEARDOWN | Обязательная очистка отдельного test device | после L04/L05 или завершения test campaign; отдельное разрешение/review | QUEUED / NOT_RUN | Device-scoped gateway cleanup → readback отсутствия только test peer/user при сохранении чужих ресурсов → registry revoke. Private receipt содержит exact binding hashes/row/address и read-only checks. Штатного unregister сейчас нет; не восстанавливать целиком старые DB/server.json и не начинать cleanup автоматически. |
 | L04.2 | Установленная приёмка MESH/Auto | review L04.1; отдельное разрешение | QUEUED / NOT_RUN | Оставшаяся часть parent L04: реальные installed MESH/Auto, применённые target/profile, P0/P1 в разрешённом scope, DNS/HTTPS/transfers и ownership/cleanup. Не начинается автоматически; нет новых grants/policy changes в L04.1. |
 | L05 | Установленный Linux-мессенджер | L03, L04 | QUEUED | DIRECT/MESH-доставка без VPN и с VPN, контакты/текст/голос, история и фоновые события подтверждены на реальных компонентах. |
