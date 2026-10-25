@@ -268,7 +268,7 @@ artifact identities, not the local .4 hashes above.
 | TCP | [40218252840/121243987868](https://github.com/Joker20380/family_connect/actions/runs/40218252840/job/121243987868) | PASS; release jobs skipped |
 | Standard system/package + actual pre-start AWG/TCP | [40218252828/121243987827](https://github.com/Joker20380/family_connect/actions/runs/40218252828/job/121243987827) | PASS |
 | Native protocol Linux/Windows | [40218252889](https://github.com/Joker20380/family_connect/actions/runs/40218252889),121243988079/121243988114 | PASS |
-| Isolated root→UID/Auto/DIRECT | [40218252889/121243987856](https://github.com/Joker20380/family_connect/actions/runs/40218252889/job/121243987856) | First attempt FAIL at DIRECT underlay `AssertionError: fallback used`; one unchanged diagnostic rerun requested |
+| Isolated root→UID/Auto/DIRECT | [40218252889/121243987856](https://github.com/Joker20380/family_connect/actions/runs/40218252889/job/121243987856); [rerun121246025793](https://github.com/Joker20380/family_connect/actions/runs/40218252889/job/121246025793) | First attempt FAIL at DIRECT underlay `AssertionError: fallback used`; one unchanged diagnostic rerun PASS |
 | Control full suite | [40218252902/121244048760](https://github.com/Joker20380/family_connect/actions/runs/40218252902/job/121244048760) | 3165 PASS/54 FAIL/156 SKIP |
 | Phase0 full suite | [40218252842/121243987751](https://github.com/Joker20380/family_connect/actions/runs/40218252842/job/121243987751) | 3165 PASS/54 FAIL/156 SKIP |
 | Docker full suite | [40218252842/121243987858](https://github.com/Joker20380/family_connect/actions/runs/40218252842/job/121243987858) | 3164 PASS/53 FAIL/158 SKIP |
@@ -282,8 +282,20 @@ The first isolated-native artifact12608780747 records Auto kernel **18 checks PA
 and combined manual/Auto/terminal **3 PASS**, but the DIRECT JSON is empty because
 the final DIRECT request used its forbidden fallback. Cause is not established;
 do not label the whole job PASS or transfer ddbf880's earlier PASS. Exactly one
-unchanged rerun was requested for that failed job; its result remains pending here.
-No product/candidate change or trust relaxation accompanies the rerun.
+unchanged rerun of that failed job completed **PASS**, including the final fixed
+protected DIRECT isolated-kernel step, at exact same source053c4e5. First failure
+remains evidence; a single successful rerun does not establish or repair its cause.
+No further retry, product/candidate change or trust relaxation accompanied it.
 
-Overall CI is not green. STOP after the bounded CI receipt.
+Final evidence checkpoint `21e46df1d3db271f73b33b22f3fe3cf2670f1af7` was pushed
+normally and remote main matched; this documentation continuation records only
+the completed CI receipt, not new product bytes. Staged allowlist/local links/JSON,
+whitespace and secret-pattern scan of staged files and this task's Git history PASS;
+public-source guard2920 index entries/0 blocked. Parallel ops changes remain outside
+the commits. Final artifact hashes and historical .2 hashes rechecked unchanged;
+all task systemd containers removed. No protected state/operator receipt in Git.
+
+Overall CI is not green. Source/system/package checkpoint is ready for review;
+live B1 retest, B2–F and the parent L04.1 completion remain NOT_RUN/open.
+STOP.
 NEXT — review L04.1-LIVE-2-R1.

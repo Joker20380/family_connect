@@ -20,7 +20,9 @@ Final internal **0.2.12~l03.2.4**, source053c4e5, candidate42ea0699…,
 Actual AWG/TCP red→green: up1/start0, IDLE/generation2/pending null, poll PASS;
 unknown outcome сохраняет pending до same-owner recovery и первую причину ошибки.
 Exact integrity/systemd255/pkexec/rollback/DEB/AppImage/coherence/old-build refusal
-PASS; desktop1195 PASS/96 SKIP. Control full CI54 failures; общего CI PASS нет.
+PASS; desktop1195 PASS/96 SKIP. Linux/AWG/TCP/package CI PASS; native/DIRECT
+первый отказ сохранён, один unchanged rerun PASS. Full CI54/54/53 failures;
+общего CI PASS нет.
 Live B1 retest/B2–F NOT_RUN; private test state/gateway не использовались.
 [R1](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md).
 **Граница завершения — STOP; NEXT review L04.1-LIVE-2-R1.**

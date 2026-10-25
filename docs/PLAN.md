@@ -13,8 +13,10 @@ Final internal0.2.12~l03.2.4/source053c4e5/candidate42ea0699…/system8d7d78ec�
 authorization2; .3 — immutable intermediate. Actual AWG/TCP up1/start0,
 IDLE/generation2/pending null/poll PASS; unknown outcome fail-closed, первая
 diagnostic category сохраняется через recovery. Exact system/package/rollback/
-coherence/actual old-build refusal PASS; desktop1195/96. Control full CI54 failures,
-общего CI PASS нет. Live B1 retest/B2–F NOT_RUN; private state/gateway не тронуты.
+coherence/actual old-build refusal PASS; desktop1195/96. Linux/AWG/TCP/package CI
+PASS; native/DIRECT initial FAIL, один unchanged rerun PASS (оба receipt сохранены).
+Full CI54/54/53 failures, общего CI PASS нет. Live B1 retest/B2–F NOT_RUN;
+private state/gateway не тронуты.
 LIVE-1 PARTIAL принят review; final-2 retired для завершения L04.1, прежние PASS
 сохраняются только за этим exact build. Red actual backend/GTK race подтверждён;
 generation-fenced unlocked poll и queued Disconnect cancellation: адресные229 PASS.
