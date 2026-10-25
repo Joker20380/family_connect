@@ -10,8 +10,10 @@ package CI PASS; full suites54/54/53 failures, общий CI не зелёный
 новая KVM, DEB/setup/AWG/TCP/traffic и AppImage close/reopen/single Disconnect PASS;
 fresh nonce DNS вернул валидный terminal NOERROR/NODATA, принятый review наряду
 с positive/NXDOMAIN. Cleanup/state сохранены; guest уничтожен, test state оставлен.
-Разрешён только [LIVE-2](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md),
-без автоматического L04.2/L05/teardown.
+[LIVE-2](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md) PARTIAL/review pending:
+A tamper/reinstall PASS; B1 не создаёт transport, но оставляет pending/APPLYING после
+освобождения root lock. First-failure STOP, B2–F NOT_RUN; guest уничтожен, исходный
+state сохранён. Никаких source fixes, автоматического L04.2/L05/teardown.
 Final-2/0.2.12~l03.2.1
 retired для завершения L04.1 после принятого PARTIAL; не заменять его bytes/hash.
 Публичные version/catalog/download links не меняются.

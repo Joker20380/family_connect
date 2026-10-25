@@ -60,8 +60,10 @@ is DONE/review accepted: new KVM exact DEB/setup, AWG/TCP transfers, single Disc
 original AppImage close/reopen PASS. Fresh nonce DNS reaches the actual TUN but
 returns valid terminal NOERROR/NODATA, accepted by review alongside positive/NXDOMAIN.
 Cleanup and state preservation PASS; guest copies destroyed. No product changes.
-Only [LIVE-2](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md) is now ACTIVE;
-first product failure STOP. L04.2/L05/device teardown remain NOT_RUN.
+[LIVE-2](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md) is PARTIAL/review pending:
+A installed tamper/reinstall PASS; B1 stops transport but leaves pending/APPLYING after
+root-lock release. First-failure STOP; B2–F NOT_RUN, no product changes/retries.
+Guest destroyed, original state retained. L04.2/L05/device teardown remain NOT_RUN.
 Windows broker IPC remains NOT_INTEGRATED;
 installed restricted-message acceptance is NOT_RUN, not a completed fallback.
 [Shared Auto policy and accepted-Java trace checks](../carrier/desktopauto/README.md)

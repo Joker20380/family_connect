@@ -1,0 +1,672 @@
+{
+  "A": {
+    "candidate_error": {
+      "candidate": "d9c0d07f93542a633b5563757f0c5aa0d4f0c37410b3b884ba8b67db01c484ef",
+      "system": "INSTALLED_MANIFEST_MISMATCH"
+    },
+    "connect": {
+      "connect_enabled": false,
+      "connect_sensitive": false
+    },
+    "fixture": {
+      "after_sha256": "b5d4cf0faef53757f81d40b769b93d2197e6397356b9d291583133637494a049",
+      "before_sha256": "aabcce5e4baf25db37f05cd43d0ef4ab8a1ae83a622f30f05438c3f0c1c77b31",
+      "gate": "A",
+      "mode": "0o644",
+      "owner": 0,
+      "tamper": "one root-owned installed.json trailing newline"
+    },
+    "mixed_build": "NOT_RUN locally; inherited source/package evidence only",
+    "restored": [
+      {
+        "candidate": "d9c0d07f93542a633b5563757f0c5aa0d4f0c37410b3b884ba8b67db01c484ef",
+        "system": "READY"
+      },
+      {
+        "candidate": "d9c0d07f93542a633b5563757f0c5aa0d4f0c37410b3b884ba8b67db01c484ef",
+        "user_imports": "PASS"
+      }
+    ],
+    "result": "PASS (installed manifest tamper only)",
+    "same_boot_network_unchanged": true,
+    "transport_starts": 0
+  },
+  "B1": {
+    "actual_helper_up_count": 1,
+    "after_lock_release": {
+      "diagnostics": {
+        "actual_transport": "none",
+        "connection_id": "52a97135-50e4-4441-afe0-4d2f51b5c658",
+        "device_support_id": "FC-3YSQ-BE2D",
+        "first_failure": "NONE",
+        "selected_transport": "awg",
+        "state": "DISCONNECTED"
+      },
+      "helper_counts": {
+        "awg": {
+          "down": 0,
+          "import": 1,
+          "session": 0,
+          "up": 1
+        },
+        "tcp": {
+          "down": 0,
+          "import": 0,
+          "session": 0,
+          "up": 0
+        }
+      },
+      "interfaces": [],
+      "markers": [],
+      "network": {
+        "ip6tables-save": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "iptables-save": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "links": [
+          {
+            "flags": [
+              "LOOPBACK",
+              "UP",
+              "LOWER_UP"
+            ],
+            "ifname": "lo",
+            "mtu": 65536,
+            "operstate": "UNKNOWN"
+          },
+          {
+            "flags": [
+              "BROADCAST",
+              "MULTICAST",
+              "UP",
+              "LOWER_UP"
+            ],
+            "ifname": "enp0s1",
+            "mtu": 1500,
+            "operstate": "UP"
+          }
+        ],
+        "nft": {
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "tables": []
+        },
+        "resolved_default-route": "f3f7c2563c720cb3d27d46e8135d5ad88b204c48cab81295b583a3fb97002cd3",
+        "resolved_dns": "df0e10af676bdfd4d6a86f511d9bddeebc1069fc5ffcfca28a14d77168263e73",
+        "resolved_domain": "31919adea1d9cb2e4daaf5827987af9ea84c133532618de765c5649dd7449c2a",
+        "route-4": {
+          "count": 7,
+          "owned": 0,
+          "sha256": "d0e8b68833d26e58ca1aa758393a5c7242022fe8edfc12f3438c74de6116459f"
+        },
+        "route-6": {
+          "count": 7,
+          "owned": 0,
+          "sha256": "768d6dc89434e9a1a32e342710572c04c560176cb00f219610ae23157b094fc9"
+        },
+        "rule-4": {
+          "count": 3,
+          "owned": 0,
+          "sha256": "c88a415e55c2b1d6ac4dd37c5ec360cbf3f5880a44aa1ecf71598f1d3ce4cbe2"
+        },
+        "rule-6": {
+          "count": 2,
+          "owned": 0,
+          "sha256": "2f96b65baa9d426a3ede66b897f348316d82682e230b117f1ed363f7a5ebec41"
+        }
+      },
+      "operation": {
+        "generation": 1,
+        "pending_present": true
+      },
+      "owners": {},
+      "processes": [],
+      "timestamp": 1792945613.5648065,
+      "units": [
+        {
+          "InvocationID": "4f71db78df9e412fbdb41f4e27ba6ff2",
+          "MainPID": "1561",
+          "unit": "family-connect-auto@1000.service"
+        }
+      ]
+    },
+    "authentication": {
+      "authentication_submissions": 1,
+      "timestamp": 1792945531.8576763
+    },
+    "before": {
+      "diagnostics": {
+        "actual_transport": "none",
+        "connection_id": "dd72ed09-c175-4352-8a81-b576c20929ee",
+        "device_support_id": "FC-3YSQ-BE2D",
+        "first_failure": "NONE",
+        "selected_transport": "awg",
+        "state": "DISCONNECTED"
+      },
+      "helper_counts": {
+        "awg": {
+          "down": 0,
+          "import": 0,
+          "session": 0,
+          "up": 0
+        },
+        "tcp": {
+          "down": 0,
+          "import": 0,
+          "session": 0,
+          "up": 0
+        }
+      },
+      "interfaces": [],
+      "markers": [],
+      "network": {
+        "ip6tables-save": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "iptables-save": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "links": [
+          {
+            "flags": [
+              "LOOPBACK",
+              "UP",
+              "LOWER_UP"
+            ],
+            "ifname": "lo",
+            "mtu": 65536,
+            "operstate": "UNKNOWN"
+          },
+          {
+            "flags": [
+              "BROADCAST",
+              "MULTICAST",
+              "UP",
+              "LOWER_UP"
+            ],
+            "ifname": "enp0s1",
+            "mtu": 1500,
+            "operstate": "UP"
+          }
+        ],
+        "nft": {
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "tables": []
+        },
+        "resolved_default-route": "f3f7c2563c720cb3d27d46e8135d5ad88b204c48cab81295b583a3fb97002cd3",
+        "resolved_dns": "df0e10af676bdfd4d6a86f511d9bddeebc1069fc5ffcfca28a14d77168263e73",
+        "resolved_domain": "31919adea1d9cb2e4daaf5827987af9ea84c133532618de765c5649dd7449c2a",
+        "route-4": {
+          "count": 7,
+          "owned": 0,
+          "sha256": "d0e8b68833d26e58ca1aa758393a5c7242022fe8edfc12f3438c74de6116459f"
+        },
+        "route-6": {
+          "count": 7,
+          "owned": 0,
+          "sha256": "768d6dc89434e9a1a32e342710572c04c560176cb00f219610ae23157b094fc9"
+        },
+        "rule-4": {
+          "count": 3,
+          "owned": 0,
+          "sha256": "c88a415e55c2b1d6ac4dd37c5ec360cbf3f5880a44aa1ecf71598f1d3ce4cbe2"
+        },
+        "rule-6": {
+          "count": 2,
+          "owned": 0,
+          "sha256": "2f96b65baa9d426a3ede66b897f348316d82682e230b117f1ed363f7a5ebec41"
+        }
+      },
+      "operation": {
+        "generation": 0,
+        "pending_present": false
+      },
+      "owners": {},
+      "processes": [],
+      "timestamp": 1792945524.2534206,
+      "units": []
+    },
+    "candidate_recheck": {
+      "candidate": "d9c0d07f93542a633b5563757f0c5aa0d4f0c37410b3b884ba8b67db01c484ef",
+      "user_imports": "PASS"
+    },
+    "catalog_host": {
+      "controller": null,
+      "desired_connected": false,
+      "selected": "",
+      "state": "DISCONNECTED"
+    },
+    "connect_click": {
+      "clicked": "Connect",
+      "count": 1,
+      "timestamp": 1792945529.9753406
+    },
+    "errors": [
+      {
+        "message": "Connection recovery is pending; resume the control client",
+        "read_only_poll_error": "ConnectionBusy"
+      },
+      {
+        "baseline_active_count": 0,
+        "baseline_known_count": 1,
+        "journal_phase": "APPLYING"
+      }
+    ],
+    "expected_helper_up_count": 0,
+    "fixture_cleanup": {
+      "diagnostics": {
+        "actual_transport": "none",
+        "connection_id": "52a97135-50e4-4441-afe0-4d2f51b5c658",
+        "device_support_id": "FC-3YSQ-BE2D",
+        "first_failure": "NONE",
+        "selected_transport": "awg",
+        "state": "DISCONNECTED"
+      },
+      "helper_counts": {
+        "awg": {
+          "down": 0,
+          "import": 1,
+          "session": 0,
+          "up": 1
+        },
+        "tcp": {
+          "down": 0,
+          "import": 0,
+          "session": 0,
+          "up": 0
+        }
+      },
+      "interfaces": [],
+      "markers": [],
+      "network": {
+        "ip6tables-save": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "iptables-save": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "links": [
+          {
+            "flags": [
+              "LOOPBACK",
+              "UP",
+              "LOWER_UP"
+            ],
+            "ifname": "lo",
+            "mtu": 65536,
+            "operstate": "UNKNOWN"
+          },
+          {
+            "flags": [
+              "BROADCAST",
+              "MULTICAST",
+              "UP",
+              "LOWER_UP"
+            ],
+            "ifname": "enp0s1",
+            "mtu": 1500,
+            "operstate": "UP"
+          }
+        ],
+        "nft": {
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "tables": []
+        },
+        "resolved_default-route": "f3f7c2563c720cb3d27d46e8135d5ad88b204c48cab81295b583a3fb97002cd3",
+        "resolved_dns": "df0e10af676bdfd4d6a86f511d9bddeebc1069fc5ffcfca28a14d77168263e73",
+        "resolved_domain": "31919adea1d9cb2e4daaf5827987af9ea84c133532618de765c5649dd7449c2a",
+        "route-4": {
+          "count": 7,
+          "owned": 0,
+          "sha256": "d0e8b68833d26e58ca1aa758393a5c7242022fe8edfc12f3438c74de6116459f"
+        },
+        "route-6": {
+          "count": 7,
+          "owned": 0,
+          "sha256": "768d6dc89434e9a1a32e342710572c04c560176cb00f219610ae23157b094fc9"
+        },
+        "rule-4": {
+          "count": 3,
+          "owned": 0,
+          "sha256": "c88a415e55c2b1d6ac4dd37c5ec360cbf3f5880a44aa1ecf71598f1d3ce4cbe2"
+        },
+        "rule-6": {
+          "count": 2,
+          "owned": 0,
+          "sha256": "2f96b65baa9d426a3ede66b897f348316d82682e230b117f1ed363f7a5ebec41"
+        }
+      },
+      "operation": {
+        "generation": 1,
+        "pending_present": true
+      },
+      "owners": {},
+      "processes": [],
+      "timestamp": 1792945713.4672248,
+      "units": []
+    },
+    "journal_cleared": false,
+    "last_observation_seconds_after_click": 183.492,
+    "late": {
+      "diagnostics": {
+        "actual_transport": "none",
+        "connection_id": "52a97135-50e4-4441-afe0-4d2f51b5c658",
+        "device_support_id": "FC-3YSQ-BE2D",
+        "first_failure": "NONE",
+        "selected_transport": "awg",
+        "state": "DISCONNECTED"
+      },
+      "helper_counts": {
+        "awg": {
+          "down": 0,
+          "import": 1,
+          "session": 0,
+          "up": 1
+        },
+        "tcp": {
+          "down": 0,
+          "import": 0,
+          "session": 0,
+          "up": 0
+        }
+      },
+      "interfaces": [],
+      "markers": [],
+      "network": {
+        "ip6tables-save": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "iptables-save": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "links": [
+          {
+            "flags": [
+              "LOOPBACK",
+              "UP",
+              "LOWER_UP"
+            ],
+            "ifname": "lo",
+            "mtu": 65536,
+            "operstate": "UNKNOWN"
+          },
+          {
+            "flags": [
+              "BROADCAST",
+              "MULTICAST",
+              "UP",
+              "LOWER_UP"
+            ],
+            "ifname": "enp0s1",
+            "mtu": 1500,
+            "operstate": "UP"
+          }
+        ],
+        "nft": {
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "tables": []
+        },
+        "resolved_default-route": "f3f7c2563c720cb3d27d46e8135d5ad88b204c48cab81295b583a3fb97002cd3",
+        "resolved_dns": "df0e10af676bdfd4d6a86f511d9bddeebc1069fc5ffcfca28a14d77168263e73",
+        "resolved_domain": "31919adea1d9cb2e4daaf5827987af9ea84c133532618de765c5649dd7449c2a",
+        "route-4": {
+          "count": 7,
+          "owned": 0,
+          "sha256": "d0e8b68833d26e58ca1aa758393a5c7242022fe8edfc12f3438c74de6116459f"
+        },
+        "route-6": {
+          "count": 7,
+          "owned": 0,
+          "sha256": "768d6dc89434e9a1a32e342710572c04c560176cb00f219610ae23157b094fc9"
+        },
+        "rule-4": {
+          "count": 3,
+          "owned": 0,
+          "sha256": "c88a415e55c2b1d6ac4dd37c5ec360cbf3f5880a44aa1ecf71598f1d3ce4cbe2"
+        },
+        "rule-6": {
+          "count": 2,
+          "owned": 0,
+          "sha256": "2f96b65baa9d426a3ede66b897f348316d82682e230b117f1ed363f7a5ebec41"
+        }
+      },
+      "operation": {
+        "generation": 1,
+        "pending_present": true
+      },
+      "owners": {},
+      "processes": [],
+      "timestamp": 1792945683.8576374,
+      "units": [
+        {
+          "InvocationID": "4f71db78df9e412fbdb41f4e27ba6ff2",
+          "MainPID": "1561",
+          "unit": "family-connect-auto@1000.service"
+        }
+      ]
+    },
+    "locks_after_release": {
+      "root_transport": "FREE",
+      "user_operation": "FREE"
+    },
+    "manual_journal_deletion": false,
+    "result": "FAIL",
+    "terminal": {
+      "diagnostics": {
+        "actual_transport": "none",
+        "connection_id": "52a97135-50e4-4441-afe0-4d2f51b5c658",
+        "device_support_id": "FC-3YSQ-BE2D",
+        "first_failure": "NONE",
+        "selected_transport": "awg",
+        "state": "DISCONNECTED"
+      },
+      "helper_counts": {
+        "awg": {
+          "down": 0,
+          "import": 1,
+          "session": 0,
+          "up": 1
+        },
+        "tcp": {
+          "down": 0,
+          "import": 0,
+          "session": 0,
+          "up": 0
+        }
+      },
+      "interfaces": [],
+      "markers": [],
+      "network": {
+        "ip6tables-save": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "iptables-save": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "links": [
+          {
+            "flags": [
+              "LOOPBACK",
+              "UP",
+              "LOWER_UP"
+            ],
+            "ifname": "lo",
+            "mtu": 65536,
+            "operstate": "UNKNOWN"
+          },
+          {
+            "flags": [
+              "BROADCAST",
+              "MULTICAST",
+              "UP",
+              "LOWER_UP"
+            ],
+            "ifname": "enp0s1",
+            "mtu": 1500,
+            "operstate": "UP"
+          }
+        ],
+        "nft": {
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "tables": []
+        },
+        "resolved_default-route": "f3f7c2563c720cb3d27d46e8135d5ad88b204c48cab81295b583a3fb97002cd3",
+        "resolved_dns": "df0e10af676bdfd4d6a86f511d9bddeebc1069fc5ffcfca28a14d77168263e73",
+        "resolved_domain": "31919adea1d9cb2e4daaf5827987af9ea84c133532618de765c5649dd7449c2a",
+        "route-4": {
+          "count": 7,
+          "owned": 0,
+          "sha256": "d0e8b68833d26e58ca1aa758393a5c7242022fe8edfc12f3438c74de6116459f"
+        },
+        "route-6": {
+          "count": 7,
+          "owned": 0,
+          "sha256": "768d6dc89434e9a1a32e342710572c04c560176cb00f219610ae23157b094fc9"
+        },
+        "rule-4": {
+          "count": 3,
+          "owned": 0,
+          "sha256": "c88a415e55c2b1d6ac4dd37c5ec360cbf3f5880a44aa1ecf71598f1d3ce4cbe2"
+        },
+        "rule-6": {
+          "count": 2,
+          "owned": 0,
+          "sha256": "2f96b65baa9d426a3ede66b897f348316d82682e230b117f1ed363f7a5ebec41"
+        }
+      },
+      "operation": {
+        "generation": 1,
+        "pending_present": true
+      },
+      "owners": {},
+      "processes": [],
+      "timestamp": 1792945562.584887,
+      "units": [
+        {
+          "InvocationID": "4f71db78df9e412fbdb41f4e27ba6ff2",
+          "MainPID": "1561",
+          "unit": "family-connect-auto@1000.service"
+        }
+      ]
+    },
+    "transport_created": false,
+    "user_action_repeated": false
+  },
+  "artifact_integrity": {
+    "artifacts": {
+      "FamilyConnect-0.2.12~l03.2.2-x86_64.AppImage": {
+        "sha256": "33537e451ab39010b70c989604477fc73c86f6b88f7f5d7d4c5a50dd07887a8a",
+        "size": 57924088
+      },
+      "FamilyConnect-Linux-0.2.12~l03.2.2.tar.gz": {
+        "sha256": "79a2c8d7961d49e3b3c0240c259352c7bd426cdf98f260037cc6eaa98d13f4f2",
+        "size": 112344
+      },
+      "FamilyConnect_0.2.12~l03.2.2_amd64.deb": {
+        "sha256": "c806ed9fac2466772042cde6c84a59b7bd86172cd3d91dee724449de78f77dda",
+        "size": 55951452
+      }
+    },
+    "candidate": "d9c0d07f93542a633b5563757f0c5aa0d4f0c37410b3b884ba8b67db01c484ef",
+    "legacy_members": 6,
+    "result": "PASS",
+    "source_commit": "57f8eff8b291062d69248ac46413f8c9fc0f561d",
+    "source_dirty": false,
+    "system": {
+      "build_id": "8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da",
+      "installer_sha256": "ed8eac3d1b1c666b1d00433f09ec9a6eec578623249e0895adfa96ae3b53f9d5",
+      "sha256": "bdd7e04b8ca78a232acccd881004cfb3b6c96b13dc3c608d0b919f53f40f02d9",
+      "size": 49247776,
+      "source_digest": "cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61"
+    },
+    "user_members": 707
+  },
+  "checkpoint": "L04.1-LIVE-2",
+  "cleanup": {
+    "guest_encrypted_disks_keys_seed_credentials_private_logs_removed": true,
+    "idle_catalog_stop": "fixture only, after DISCONNECTED/desired=false/controller=null readback",
+    "network_baseline": true,
+    "product_pending_journal": "NOT restored; preserved until guest destruction"
+  },
+  "environment": {
+    "cpu": 2,
+    "independent_snapshots": [
+      "A unactivated, no protected test state",
+      "B1 clean protected home handoff"
+    ],
+    "kernel": "6.8.0-147-generic",
+    "memory_mib": 4096,
+    "network": "SLIRP, guest NetworkManager/resolved",
+    "os": "Ubuntu 24.04.5",
+    "qemu": "10.2.1",
+    "storage": "LUKS encrypted qcow2",
+    "systemd": "255.4-1ubuntu8.18",
+    "type": "disposable KVM"
+  },
+  "execution_checkpoint": "4e9f1f6805740f14a8febe37ae604a942ace2e3f",
+  "first_failure": "B1",
+  "host": {
+    "after": {
+      "dns": "f4a6ddc01f23b9b28b303ab62a2f48d532a04c5c9ad349ea89ed814a452cc3e1",
+      "domains": "b51e724cabf0437f1a9a73cb7474b0750bc905de6d622af916544a970e0bb1bf",
+      "routes4": "217638411988e2be312b96843f84f7c869c10d1da0421a46ec601c6e52ca3896",
+      "rules4": "e79a76eff86a78de4ce5d38c6277dbafbab227656214e1e116d9ac63597dbb9d"
+    },
+    "before": {
+      "dns": "f4a6ddc01f23b9b28b303ab62a2f48d532a04c5c9ad349ea89ed814a452cc3e1",
+      "domains": "b51e724cabf0437f1a9a73cb7474b0750bc905de6d622af916544a970e0bb1bf",
+      "routes4": "217638411988e2be312b96843f84f7c869c10d1da0421a46ec601c6e52ca3896",
+      "rules4": "e79a76eff86a78de4ce5d38c6277dbafbab227656214e1e116d9ac63597dbb9d"
+    },
+    "unchanged": true
+  },
+  "input_main": "472b37483ff918f2e4870003b7901beb249e14ba",
+  "remaining": {
+    "B2": "NOT_RUN (first failure STOP at B1)",
+    "C1": "NOT_RUN (first failure STOP at B1)",
+    "C2": "NOT_RUN (first failure STOP at B1)",
+    "D": "NOT_RUN (first failure STOP at B1)",
+    "E": "NOT_RUN (first failure STOP at B1)",
+    "F-AWG": "NOT_RUN (first failure STOP at B1)",
+    "F-TCP": "NOT_RUN (first failure STOP at B1)"
+  },
+  "result": "PARTIAL",
+  "server": {
+    "nl": {
+      "clients_count": 46,
+      "country": "nl",
+      "foreign_clients_sha256": "9f1f63aea086d69f79d80d93e3eff650481178f5df1f2a79ecb9176e05d56c5c",
+      "foreign_live_sha256": "ca693eb9ea86ba183f5cbf3587a5d56fcfaa3b9b69d1a7ce2b04cb52245140f9",
+      "foreign_peers_sha256": "fa4cf90864acea6cbdc359d580f3d24144168d0ded382e2f033ceef191b92b21",
+      "foreign_runtime_sha256": "9f1f63aea086d69f79d80d93e3eff650481178f5df1f2a79ecb9176e05d56c5c",
+      "global_config_sha256": "c7ff070de3a33838d27caefadfadcfc870edd872fb6f8935931ecb88ade3dccb",
+      "helper_sha256": "8e536367a391661f003d0725afc13f69c45a9e43bb1763b61fd21ce0b998035a",
+      "live_clients_count": 46,
+      "live_peers_count": 46,
+      "peers_count": 46,
+      "server_json_sha256": "107d6b9b21b6b699693e95ece553302b8f1b56ac3ccf5872789eb536fc0bc9bd",
+      "services_sha256": "b207689166bd0f5a615002de0b6ddcdfd8210d3a0bf2293ae8afee330eb3fd93",
+      "target_clients": 1,
+      "target_live_clients": 1,
+      "target_live_peers": 1,
+      "target_peer_rows": 1,
+      "tcp_email_sha256": "b80335fa461b5cf2450177134101905a1f592a25bc5f4331618039ff8088c5c4",
+      "tcp_uuid_sha256": "f3848f2dee8e7cf738b20c2013be7be7bd3fc07c5a3cfc3a2896ab53a272a52b",
+      "wireguard_public_sha256": "9a1b3cc0107d71dfa88cabdcfe519b10e9ba0ad6017956859fe8b66f6cc16bd4"
+    },
+    "registry": {
+      "active": true,
+      "archive_sha256": "21d64558e542ff6ad80fb9b13799fbcb333167ffb5a79ec841e7c94dc65d71fa",
+      "catalog_sha256": "9a9f6e0d930766555bddf54ac5c17b388cf8abf5fe5badcac1d6dc817e1ec5d2",
+      "foreign_sha256": "a67aed86ca6f1d7f54ba04a65e25737aa597fd216a87a6273e1b4ba45f2a7b7d",
+      "service_sha256": "ab3f3f68b1c45f71ea61228045041f4ec41131f51ff7c081435903382cd9ebaf"
+    },
+    "result": "PASS",
+    "ru": {
+      "counts": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "same_binding_address_foreign_global_service": true
+  },
+  "source_state_preflight_equal": true,
+  "state": {
+    "catalog_hash": "f4d812db722705d8fc853a1a1afd454922cd2bca71175db025f40b9a58c3628d",
+    "configuration_sha256": "d05447cea81d06e7d2a7266e70a53e5787b6ec9ff84c398b3be00e154f239049",
+    "countries": [
+      "nl"
+    ],
+    "create": false,
+    "modes": "0700/0600",
+    "public_fingerprint": "d07d33a81728ff70aec350ae59785990c194d90ecd44574b0da28439189532de",
+    "result": "PASS",
+    "sequence": 3,
+    "support_id": "FC-3YSQ-BE2D",
+    "uid": 1000
+  },
+  "teardown": "NOT_RUN; original protected state and assignment retained"
+}

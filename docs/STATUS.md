@@ -5,8 +5,11 @@ Review принимает fresh DNS matching request/reply на actual AWG/TCP T
 включая валидный terminal **NODATA**; positive installed gate завершён без повтора.
 Exact **0.2.12~l03.2.2**, source `57f8eff`, candidate `d9c0d07f…`, system build-9
 не меняются. [Исторический RETEST и решение review](releases/2026-10-25-linux-installed-awg-tcp-l04-1-retest.md).
-Выбран только **L04.1-LIVE-2 ACTIVE**: independent clean KVM snapshots, bounded
-negative A–F, first product failure STOP; product source/artifact bytes immutable.
+**L04.1-LIVE-2 PARTIAL / review pending**: actual installed tamper/reinstall A PASS;
+B1 первый отказ — root lock блокирует transport, но AWG helper up1 и pending/APPLYING
+сохраняется после освобождения lock (generation0→1). Сеть/identity/cache/floors
+сохранены, guest уничтожен; journal не объявлен восстановленным. B2–F NOT_RUN.
+Product source/artifact bytes immutable; никаких повторов/исправлений.
 FC-3YSQ-BE2D/nl сохраняются, новый issuance/provisioning/manual fetch запрещён.
 L04/L04.1 IN_PROGRESS до LIVE-2 review; L04.2/L05/teardown NOT_RUN.
 [LIVE-2 checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md).
