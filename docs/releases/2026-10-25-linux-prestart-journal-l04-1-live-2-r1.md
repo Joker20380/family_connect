@@ -1,6 +1,6 @@
 # L04.1-LIVE-2-R1 — pre-start refusal terminalization,25.10.2026
 
-**Final audit follow-up ACTIVE: immutable first failure across recovery; .4 rebuild.** Entry main
+**CHECKPOINT: final .4 source/system/package PASS; review pending; live NOT_RUN.** Entry main
 `403b22f25722252633c8ca4c5c8cb80f4f0a3395`; affected product source
 `57f8eff8b291062d69248ac46413f8c9fc0f561d`.
 
@@ -160,7 +160,7 @@ Rollback/removal remains explicit matching root reinstall only while idle/cleanu
 confirmed; root-owned backups retained. User uninstall preserves identity/history/
 settings and independent root runtime; units are not silently enabled. No L08 claim.
 
-## CI / limits
+## Intermediate .3 CI / limits
 
 Client Linux `40216881690/121239898896` PASS; TCP `40216881704/121239821034` PASS;
 fixed AWG `40217060322/121240380205` PASS. Native/root→UID/Auto/DIRECT receipt above.
@@ -198,4 +198,92 @@ immutable intermediate artifacts, not the final retest candidate. Exact gates wi
 be repeated, not transferred. Control285de3e job ended cancelled in apt prerequisites;
 its full suite is NOT_RUN, not PASS.
 
-STOP after final exact gates. NEXT — review L04.1-LIVE-2-R1.
+## Final exact .4 checkpoint
+
+Final product/system source and build input:
+`053c4e5f9532ca927f49a78f9c0ed17903375baf` (clean main, ordinary push/remote verified).
+The diagnostic regression was also run against the actual prior backend from
+`285de3e`: **1 deterministic failure** (CHANNEL_LOST replaced by HELPER_FAILED),
+then **41 PASS** on corrected source. No installed files were patched.
+
+| Identity/artifact | Exact value |
+| --- | --- |
+| Internal version | `0.2.12~l03.2.4` |
+| Candidate ID | `42ea0699263f2527057a36082b2b95235c4ac452cc5e86eed6ec15ebd50898cf` |
+| AppImage | `FamilyConnect-0.2.12~l03.2.4-x86_64.AppImage`,57928184 bytes |
+| AppImage SHA256 | `c78c68ec99b187269b87d40d457c8db09d3593b45f199a8705d0a83222cc3273` |
+| DEB | `FamilyConnect_0.2.12~l03.2.4_amd64.deb`,55986866 bytes |
+| DEB SHA256 | `8b23ac6d93c747955017a3b0d5c33745e7272f2c24fc950f4e8f0d0b367af4da` |
+| Legacy six-file archive | `FamilyConnect-Linux-0.2.12~l03.2.4.tar.gz`,114462 bytes |
+| Legacy SHA256 | `106f09e2ff7bc31b2a2eff64a5b4c157ded7a76ea6e4d037ad5cdb513803ffaa` |
+| New system-build-2 | `8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d` |
+| System archive | 49250848 bytes, SHA256 `ddd74c2132a76ac833b587d9df6409d779ce6afcdaa45fafd23faa86d7817726` |
+| System installer SHA256 | `ce9acb1f363b0fafffb11c44097901a7871c28fbf0e6b9c2c5c3eaba9ef7bfb5` |
+| Contract | runtime2, capabilities schema2, authorization2, Python3.12, user707/system759 archive members |
+
+Final files are under ignored
+`state-client-build/linux-prestart-journal-l041r1-20261025/build-2/`, with system
+archive in sibling `system-build-2/`. Source VERSION/public remains0.2.11;
+.4 is built and installed only in disposable acceptance containers, unsigned and
+unpublished. .3/build-1 and historical .2 remain unchanged, not final candidates.
+
+[Exact .4 sanitized evidence](2026-10-25-linux-prestart-journal-l04-1-live-2-r1.final.json)
+is freshly collected, not copied from .3:
+
+- Inventory/hash/member/isolated import verification PASS: both exact formats,
+  707 user members, 759 system archive members, legacy exactly6. No checkout/dev
+  dependencies or private state in the payload.
+- Separate AWG/TCP real root-lock sessions each PASS: actual FriendsApplication,
+  control journal, polkit/session/fixed helper; import1/up1/discard1, start0,
+  owner0/TUN0, TRANSPORT_BUSY preserved, cleanup exception none. IDLE generation2,
+  pending null; read-only poll and same-owner repeated recover PASS without replay.
+- New exact system smoke PASS: isolated/installed imports, native/RNS readback,
+  actual root↔UID/wrong-UID rejection, idle units, install exclusion/live-owner/sticky
+  preservation, actual import-readback failure rollback and tamper rejection.
+- Exact DEB install/reinstall/remove and original AppImage integration/GUI/setup/
+  removal PASS with real pkexec/systemd255. Same UID/HOME and matching installed
+  system in both formats PASS; background user owner survives GUI exit; no silent
+  VPN, second setup or dangling FUSE dependency. Synthetic state retained.
+- Retained exact old build-9 actually installed: new client is RUNTIME_INCOMPLETE,
+  not READY; explicit exact .4 embedded setup restores READY. Separate embedded/
+  installed tamper checks PASS. No old-build evidence relabelled as .4.
+- Final full desktop plus Friends/Linux chat: **1195 PASS/96 SKIP**. All local
+  installed gates used fresh Ubuntu24.04/systemd255 containers with private D-Bus,
+  resolver/network/cgroup, `--network none`; no host service/network mutation.
+
+All task gate containers are stopped/removed after each run. Synthetic fixtures
+only; protected identity/assignment and gateways never accessed. Same explicit
+rollback/removal boundaries above apply to .4. This is source/package acceptance,
+not installed live B1 retest, B2–F or L04.1 completion.
+
+## Final source CI
+
+All following jobs target exact source `053c4e5`; CI standard rebuild has its own
+artifact identities, not the local .4 hashes above.
+
+| Gate | Run/job | Result |
+| --- | --- | --- |
+| Client Linux | [40218252850/121243988256](https://github.com/Joker20380/family_connect/actions/runs/40218252850/job/121243988256) | PASS |
+| AWG | [40218252802/121243987783](https://github.com/Joker20380/family_connect/actions/runs/40218252802/job/121243987783) | PASS |
+| TCP | [40218252840/121243987868](https://github.com/Joker20380/family_connect/actions/runs/40218252840/job/121243987868) | PASS; release jobs skipped |
+| Standard system/package + actual pre-start AWG/TCP | [40218252828/121243987827](https://github.com/Joker20380/family_connect/actions/runs/40218252828/job/121243987827) | PASS |
+| Native protocol Linux/Windows | [40218252889](https://github.com/Joker20380/family_connect/actions/runs/40218252889),121243988079/121243988114 | PASS |
+| Isolated root→UID/Auto/DIRECT | [40218252889/121243987856](https://github.com/Joker20380/family_connect/actions/runs/40218252889/job/121243987856) | First attempt FAIL at DIRECT underlay `AssertionError: fallback used`; one unchanged diagnostic rerun requested |
+| Control full suite | [40218252902/121244048760](https://github.com/Joker20380/family_connect/actions/runs/40218252902/job/121244048760) | 3165 PASS/54 FAIL/156 SKIP |
+| Phase0 full suite | [40218252842/121243987751](https://github.com/Joker20380/family_connect/actions/runs/40218252842/job/121243987751) | 3165 PASS/54 FAIL/156 SKIP |
+| Docker full suite | [40218252842/121243987858](https://github.com/Joker20380/family_connect/actions/runs/40218252842/job/121243987858) | 3164 PASS/53 FAIL/158 SKIP |
+
+All three full suites actually ran, with errors0 and7 subtests passed; no disabled
+assertions or xfails. D01 residual failures remain open, including observed local
+readiness adapter port collision in control/phase0; no unrelated repair. Voice job
+121243988131 passed, but historical voice/Windows observations are not declared fixed.
+
+The first isolated-native artifact12608780747 records Auto kernel **18 checks PASS**
+and combined manual/Auto/terminal **3 PASS**, but the DIRECT JSON is empty because
+the final DIRECT request used its forbidden fallback. Cause is not established;
+do not label the whole job PASS or transfer ddbf880's earlier PASS. Exactly one
+unchanged rerun was requested for that failed job; its result remains pending here.
+No product/candidate change or trust relaxation accompanies the rerun.
+
+Overall CI is not green. STOP after the bounded CI receipt.
+NEXT — review L04.1-LIVE-2-R1.

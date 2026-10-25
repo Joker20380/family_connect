@@ -1,0 +1,353 @@
+{
+  "actual_prestart": {
+    "awg": {
+      "before": {
+        "generation": 0,
+        "pending": null
+      },
+      "cache_preserved": true,
+      "events": [
+        {
+          "stage": "enter",
+          "step": "finish"
+        },
+        {
+          "stage": "return",
+          "step": "finish"
+        },
+        {
+          "stage": "enter",
+          "step": "journal-write"
+        },
+        {
+          "stage": "return",
+          "step": "journal-write"
+        },
+        {
+          "stage": "enter",
+          "step": "connect"
+        },
+        {
+          "error": "PreStartRejected",
+          "message": "VPN start refused before apply: TRANSPORT_BUSY",
+          "step": "authorization"
+        },
+        {
+          "error": "PreStartRejected",
+          "message": "VPN start refused before apply: TRANSPORT_BUSY",
+          "stage": "failure",
+          "step": "connect"
+        },
+        {
+          "stage": "enter",
+          "step": "rollback"
+        },
+        {
+          "stage": "return",
+          "step": "rollback"
+        },
+        {
+          "stage": "enter",
+          "step": "journal-write"
+        },
+        {
+          "stage": "return",
+          "step": "journal-write"
+        },
+        {
+          "stage": "enter",
+          "step": "finish"
+        },
+        {
+          "stage": "return",
+          "step": "finish"
+        },
+        {
+          "stage": "enter",
+          "step": "finish"
+        },
+        {
+          "stage": "return",
+          "step": "finish"
+        }
+      ],
+      "fetches": 1,
+      "generation": 2,
+      "green_assertions": true,
+      "journal_phase": "IDLE",
+      "journal_validation_error": null,
+      "network_unchanged": true,
+      "pending": false,
+      "physical_user_lock_free": true,
+      "requests": [
+        {
+          "action": "import",
+          "kind": "awg"
+        },
+        {
+          "action": "up",
+          "kind": "awg"
+        },
+        {
+          "action": "discard",
+          "kind": "awg"
+        }
+      ],
+      "root_fixture_released": true,
+      "root_owner_count": 0,
+      "successful_transport_starts": 0,
+      "terminal": {
+        "error": "PreStartRejected",
+        "message": "VPN start refused before apply: TRANSPORT_BUSY"
+      },
+      "transport": "awg",
+      "tun_count": 0
+    },
+    "tcp": {
+      "before": {
+        "generation": 0,
+        "pending": null
+      },
+      "cache_preserved": true,
+      "events": [
+        {
+          "stage": "enter",
+          "step": "finish"
+        },
+        {
+          "stage": "return",
+          "step": "finish"
+        },
+        {
+          "stage": "enter",
+          "step": "journal-write"
+        },
+        {
+          "stage": "return",
+          "step": "journal-write"
+        },
+        {
+          "stage": "enter",
+          "step": "connect"
+        },
+        {
+          "error": "PreStartRejected",
+          "message": "VPN start refused before apply: TRANSPORT_BUSY",
+          "step": "authorization"
+        },
+        {
+          "error": "PreStartRejected",
+          "message": "VPN start refused before apply: TRANSPORT_BUSY",
+          "stage": "failure",
+          "step": "connect"
+        },
+        {
+          "stage": "enter",
+          "step": "rollback"
+        },
+        {
+          "stage": "return",
+          "step": "rollback"
+        },
+        {
+          "stage": "enter",
+          "step": "journal-write"
+        },
+        {
+          "stage": "return",
+          "step": "journal-write"
+        },
+        {
+          "stage": "enter",
+          "step": "finish"
+        },
+        {
+          "stage": "return",
+          "step": "finish"
+        },
+        {
+          "stage": "enter",
+          "step": "finish"
+        },
+        {
+          "stage": "return",
+          "step": "finish"
+        }
+      ],
+      "fetches": 1,
+      "generation": 2,
+      "green_assertions": true,
+      "journal_phase": "IDLE",
+      "journal_validation_error": null,
+      "network_unchanged": true,
+      "pending": false,
+      "physical_user_lock_free": true,
+      "requests": [
+        {
+          "action": "import",
+          "kind": "tcp"
+        },
+        {
+          "action": "up",
+          "kind": "tcp"
+        },
+        {
+          "action": "discard",
+          "kind": "tcp"
+        }
+      ],
+      "root_fixture_released": true,
+      "root_owner_count": 0,
+      "successful_transport_starts": 0,
+      "terminal": {
+        "error": "PreStartRejected",
+        "message": "VPN start refused before apply: TRANSPORT_BUSY"
+      },
+      "transport": "tcp",
+      "tun_count": 0
+    }
+  },
+  "boundaries": {
+    "live_vpn": false,
+    "protected_test_state_used": false,
+    "published": false,
+    "server_operations": false,
+    "workstation_network_changed": false
+  },
+  "checkpoint": "L04.1-LIVE-2-R1",
+  "environment": {
+    "identity": "synthetic only; no protected state",
+    "isolation": "separate disposable privileged systemd containers; private D-Bus/resolver/network/cgroup; network none",
+    "os": "Ubuntu 24.04",
+    "python": "3.12",
+    "systemd": 255
+  },
+  "integrity": {
+    "artifacts": {
+      "FamilyConnect-0.2.12~l03.2.4-x86_64.AppImage": {
+        "sha256": "c78c68ec99b187269b87d40d457c8db09d3593b45f199a8705d0a83222cc3273",
+        "size": 57928184
+      },
+      "FamilyConnect-Linux-0.2.12~l03.2.4.tar.gz": {
+        "sha256": "106f09e2ff7bc31b2a2eff64a5b4c157ded7a76ea6e4d037ad5cdb513803ffaa",
+        "size": 114462
+      },
+      "FamilyConnect_0.2.12~l03.2.4_amd64.deb": {
+        "sha256": "8b23ac6d93c747955017a3b0d5c33745e7272f2c24fc950f4e8f0d0b367af4da",
+        "size": 55986866
+      }
+    },
+    "candidate": "42ea0699263f2527057a36082b2b95235c4ac452cc5e86eed6ec15ebd50898cf",
+    "legacy_members": 6,
+    "result": "PASS",
+    "source_commit": "053c4e5f9532ca927f49a78f9c0ed17903375baf",
+    "source_dirty": false,
+    "system": {
+      "build_id": "8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d",
+      "installer_sha256": "ce9acb1f363b0fafffb11c44097901a7871c28fbf0e6b9c2c5c3eaba9ef7bfb5",
+      "sha256": "ddd74c2132a76ac833b587d9df6409d779ce6afcdaa45fafd23faa86d7817726",
+      "size": 49250848,
+      "source_digest": "cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61"
+    },
+    "user_members": 707
+  },
+  "packages": {
+    "appimage": {
+      "appimage_explicit_removal_preserves_state_and_root_runtime": true,
+      "appimage_owner_reopens_original_image_not_gui_mount": true,
+      "artifact": {
+        "file": "FamilyConnect-0.2.12~l03.2.4-x86_64.AppImage",
+        "mode": "appimage",
+        "sha256": "c78c68ec99b187269b87d40d457c8db09d3593b45f199a8705d0a83222cc3273",
+        "size": 57928184
+      },
+      "clean_user_install_imports_gui_no_silent_system_setup": true,
+      "explicit_polkit_setup_reinstall_uid_path_and_cleanup": {
+        "build_id": "8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d"
+      },
+      "fixed_chat_prepare_without_vpn": true,
+      "real_user_dbus_background_owner_survives_gui_exit": true,
+      "result": "PASS",
+      "tampered_embedded_and_mixed_system_fail_closed": true
+    },
+    "deb": {
+      "actual_retained_build_9_mismatch": {
+        "build_id": "8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da",
+        "status": "RUNTIME_INCOMPLETE"
+      },
+      "artifact": {
+        "file": "FamilyConnect_0.2.12~l03.2.4_amd64.deb",
+        "mode": "deb",
+        "sha256": "8b23ac6d93c747955017a3b0d5c33745e7272f2c24fc950f4e8f0d0b367af4da",
+        "size": 55986866
+      },
+      "clean_user_install_imports_gui_no_silent_system_setup": true,
+      "deb_remove_preserves_encrypted_state_and_independent_root_runtime": true,
+      "explicit_polkit_setup_reinstall_uid_path_and_cleanup": {
+        "build_id": "8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d"
+      },
+      "fixed_chat_prepare_without_vpn": true,
+      "original_appimage_and_deb_same_uid_state_system_no_second_setup": true,
+      "real_user_dbus_background_owner_survives_gui_exit": true,
+      "result": "PASS",
+      "tampered_embedded_and_mixed_system_fail_closed": true
+    }
+  },
+  "regressions": {
+    "diagnostic_recovery": {
+      "green_passed": 41,
+      "red_failed": 1
+    },
+    "full_desktop_and_friends_linux_chat": {
+      "passed": 1195,
+      "skipped": 96
+    }
+  },
+  "schema": 1,
+  "scope": "offline source/system/package; live NOT_RUN",
+  "system": {
+    "checks": {
+      "actual_failed_import_readback_rollback": true,
+      "archive": {
+        "build_id": "8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d",
+        "members": 759,
+        "sha256": "ddd74c2132a76ac833b587d9df6409d779ce6afcdaa45fafd23faa86d7817726"
+      },
+      "capability_rejects_changed_runtime": true,
+      "concurrent_unit_and_direct_exec_excluded": true,
+      "extracted_isolated_imports": {
+        "imports": "PASS",
+        "python": [
+          3,
+          12
+        ],
+        "runtime": 2
+      },
+      "identity_history_settings_safe_files_network_vpn_intent_preserved": true,
+      "installation": {
+        "backup": "/var/backups/family-connect/mesh-bundle-py8uiblt",
+        "installed": true,
+        "service_started": false,
+        "user_state_changed": false
+      },
+      "installed_imports": {
+        "imports": "PASS",
+        "python": [
+          3,
+          12
+        ],
+        "runtime": 2
+      },
+      "installed_normal_binaries": {
+        "awg": "amneziawg-tools v3.1.20260812 - https://amnezia.org",
+        "xray": "Xray 26.3.27 (Xray, Penetrates Everything.) d2758a0 (go1.26.1 linux/amd64)"
+      },
+      "live_owner_refused_without_stopping": true,
+      "manual_auto_units_idle_without_vpn": true,
+      "mesh_owner_lock_refused": true,
+      "real_polkit_uid_setup_and_ipc_no_vpn": true,
+      "sticky_cleanup_preserved": true
+    },
+    "result": "PASS"
+  }
+}

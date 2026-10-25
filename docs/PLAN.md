@@ -8,15 +8,13 @@
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
 L03.1/L03.2 **DONE (review accepted)**; parent **L03 DONE** в scope полного
 внутреннего Linux-кандидата. **L04.1-LIVE-2: PARTIAL / review accepted**, STOP на B1.
-**L04.1-LIVE-2-R1 final audit ACTIVE; review pending.**
-First diagnostic category неизменна через recovery того же generation (41 PASS);
-новые system-build-2/.4 и повтор exact gates. .3 ниже — intermediate immutable.
-Authorization-v2 различает pre-start/unknown; actual AWG/TCP up1/start0,
-IDLE/generation2/pending null/poll PASS. Internal0.2.12~l03.2.3, candidate7d00cce0…,
-новый systemb8140c68…; exact system/package/rollback/coherence/mixed-build PASS.
-Live B1 retest/B2–F NOT_RUN; private test state/gateway не использовались.
-Linux/AWG/TCP/native/package CI PASS; local1194/96, phase0/Docker55/54 failures;
-control CI ещё на prerequisites. Общего CI PASS нет.
+**L04.1-LIVE-2-R1 CHECKPOINT: source/system/package PASS; review pending.**
+Final internal0.2.12~l03.2.4/source053c4e5/candidate42ea0699…/system8d7d78ec…,
+authorization2; .3 — immutable intermediate. Actual AWG/TCP up1/start0,
+IDLE/generation2/pending null/poll PASS; unknown outcome fail-closed, первая
+diagnostic category сохраняется через recovery. Exact system/package/rollback/
+coherence/actual old-build refusal PASS; desktop1195/96. Control full CI54 failures,
+общего CI PASS нет. Live B1 retest/B2–F NOT_RUN; private state/gateway не тронуты.
 LIVE-1 PARTIAL принят review; final-2 retired для завершения L04.1, прежние PASS
 сохраняются только за этим exact build. Red actual backend/GTK race подтверждён;
 generation-fenced unlocked poll и queued Disconnect cancellation: адресные229 PASS.
@@ -161,7 +159,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 | L04.1-LIVE-1-R | Poll/Disconnect race correction и новый internal candidate | LIVE-1 PARTIAL accepted; source/package only | DONE (review accepted; source/package scope) | [Report](releases/2026-10-25-linux-poll-disconnect-l04-1-live-1-r.md): deterministic red/green, generation fencing, pending/foreign fail-closed, stale callback/queued close. Source57f8eff, internal0.2.12~l03.2.2/d9c0d07f…; build-9 unchanged, exact pair integrity/real package gates PASS. Linux/AWG/TCP/native/package CI PASS; full suites54/54/53 failures, voice FAILURE. Live приёмка не входит в принятие source/package correction. |
 | L04.1-LIVE-1-RETEST | Короткая installed приёмка exact corrected candidate | accepted LIVE-1-R; существующая FC-3YSQ-BE2D/nl; новая KVM | DONE (review accepted) | [Report](releases/2026-10-25-linux-installed-awg-tcp-l04-1-retest.md): exact DEB/setup/READY, AWG/TCP/HTTPS/64KiB↓/↑, single Disconnect и AppImage close/reopen PASS. Review принимает matching fresh-DNS request/reply с valid terminal NODATA. Cleanup/state PASS; positive gate не повторять. |
 | L04.1-LIVE-2 | Bounded negative installed AWG/TCP gates | accepted RETEST; explicit owner authorization | PARTIAL (review accepted) | [Checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md): exact .2; A installed tamper/reinstall PASS. B1: up1/start0 допустимо, но pending/APPLYING после authoritative refusal — product defect. Network/state preserved, guest destroyed. B2–F NOT_RUN. |
-| L04.1-LIVE-2-R1 | Terminal pre-start refusal / unknown outcome; новый system/user candidate | review LIVE-2 PARTIAL accepted; source/package only | CHECKPOINT (source/package PASS; review pending) | [Report](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md): actual AWG/TCP red→green, same-owner terminalization/recovery, generation fencing; internal .3/source285de3e/candidate7d00cce0…/systemb8140c68…. Exact systemd/polkit/import/rollback, DEB/AppImage/coherence и old-build refusal PASS. Full CI не зелёный; live B1 retest/B2–F NOT_RUN. |
+| L04.1-LIVE-2-R1 | Terminal pre-start refusal / unknown outcome; новый system/user candidate | review LIVE-2 PARTIAL accepted; source/package only | CHECKPOINT (source/system/package PASS; review pending) | [Report](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md): actual AWG/TCP red→green, same-owner terminalization/recovery, generation fencing; final .4/source053c4e5/candidate42ea0699…/system8d7d78ec…. Exact systemd/polkit/import/rollback, DEB/AppImage/coherence и actual old-build refusal PASS. Full CI не зелёный; live B1 retest/B2–F NOT_RUN. |
 | L04.1-AUTH-TEARDOWN | Обязательная очистка отдельного test device | после L04/L05 или завершения test campaign; отдельное разрешение/review | QUEUED / NOT_RUN | Device-scoped gateway cleanup → readback отсутствия только test peer/user при сохранении чужих ресурсов → registry revoke. Private receipt содержит exact binding hashes/row/address и read-only checks. Штатного unregister сейчас нет; не восстанавливать целиком старые DB/server.json и не начинать cleanup автоматически. |
 | L04.2 | Установленная приёмка MESH/Auto | review L04.1; отдельное разрешение | QUEUED / NOT_RUN | Оставшаяся часть parent L04: реальные installed MESH/Auto, применённые target/profile, P0/P1 в разрешённом scope, DNS/HTTPS/transfers и ownership/cleanup. Не начинается автоматически; нет новых grants/policy changes в L04.1. |
 | L05 | Установленный Linux-мессенджер | L03, L04 | QUEUED | DIRECT/MESH-доставка без VPN и с VPN, контакты/текст/голос, история и фоновые события подтверждены на реальных компонентах. |

@@ -14,18 +14,14 @@ FC-3YSQ-BE2D/nl сохраняются, новый issuance/provisioning/manual 
 L04/L04.1 IN_PROGRESS до LIVE-2 review; L04.2/L05/teardown NOT_RUN.
 [LIVE-2 checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md).
 D01/full suites54/54/53 failures и voice/Windows observations сохраняются.
-**L04.1-LIVE-2-R1 final audit ACTIVE; review pending.**
-Same-generation recovery теперь не заменяет первую diagnostic category (41 PASS).
-Нужны новый system-build-2 и internal .4; .3/package PASS ниже — промежуточный,
-не финальный retest candidate. Control285de3e cancelled на apt, pytest NOT_RUN.
-Actual root/session AWG/TCP red→green: up1/start0, IDLE, generation2/pending null,
-poll/recover PASS; unknown outcome остаётся fail-closed до same-owner recovery.
-Internal0.2.12~l03.2.3, source285de3e, candidate7d00cce0…; новый systemb8140c68…
-(не build-9). Exact integrity, systemd255/pkexec/rollback, DEB/AppImage/coherence,
-actual old-build refusal/reinstall PASS. Live B1 retest/B2–F NOT_RUN.
-Linux/AWG/TCP/native/package CI PASS; local desktop1194 PASS/96 SKIP.
-Full suites красные (phase0 55, Docker54), control CI ещё на prerequisites;
-общего CI PASS нет. Private state/gateway не тронуты.
+**L04.1-LIVE-2-R1 CHECKPOINT: source/system/package PASS; review pending.**
+Final internal **0.2.12~l03.2.4**, source053c4e5, candidate42ea0699…,
+новый system8d7d78ec…/authorization2 (не build-9). .3 — intermediate immutable.
+Actual AWG/TCP red→green: up1/start0, IDLE/generation2/pending null, poll PASS;
+unknown outcome сохраняет pending до same-owner recovery и первую причину ошибки.
+Exact integrity/systemd255/pkexec/rollback/DEB/AppImage/coherence/old-build refusal
+PASS; desktop1195 PASS/96 SKIP. Control full CI54 failures; общего CI PASS нет.
+Live B1 retest/B2–F NOT_RUN; private test state/gateway не использовались.
 [R1](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md).
 **Граница завершения — STOP; NEXT review L04.1-LIVE-2-R1.**
 
@@ -33,7 +29,8 @@ Full suites красные (phase0 55, Docker54), control CI ещё на prerequ
 для завершения L04.1. Его положительное live evidence ниже сохраняется исторически.
 L03.1/L03.2 **DONE (review accepted)**; parent L03 **DONE** в scope внутреннего
 Linux-кандидата. AUTH/PROVISION **DONE, review accepted**. L04/L04.1 **IN_PROGRESS**;
-L04.1-LIVE-2 и L04.2 **QUEUED / NOT_RUN**. Exact final-2 не изменён.
+LIVE-2 теперь PARTIAL (см. текущий checkpoint); L04.2 **QUEUED / NOT_RUN**.
+Exact final-2 не изменён.
 Реальная KVM Ubuntu24.04/systemd255: DEB/GUI/pkexec/READY PASS; AWG×3 и TCP×1,
 DNS/HTTPS/64KiB download+upload, reconnect/handoff и network cleanup PASS.
 Original AppImage AWG/traffic и single-owner/confirmed GUI close PASS; после reopen

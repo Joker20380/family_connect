@@ -3,15 +3,16 @@
 ## L03.2 — внутренний полный candidate,25.10
 
 [R1 source/package correction](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md)
-CHECKPOINT/source-package PASS, review pending: internal **0.2.12~l03.2.3**,
-source285de3e/candidate7d00cce0…, authorization-session-v2, новый exact systemb8140c68…
+CHECKPOINT/source-system-package PASS, review pending: final **0.2.12~l03.2.4**,
+source053c4e5/candidate42ea0699…, authorization-session-v2, новый exact system8d7d78ec…
 вместо build-9. Readback связывает inventory/build ID/auth protocol; actual build-9
 отвергнут, matching reinstall возвращает READY. Exact DEB/AppImage и real systemd255
 package/coherence/rollback gates PASS; hashes/размеры в отчёте. .2 сохраняется только
 как historical evidence. Live retest NOT_RUN; общий CI не зелёный.
-Финальный аудит R1 потребовал сохранить первую diagnostic category через restart/
-failed recovery. Готовится новый **0.2.12~l03.2.4/system-build-2**; .3 остаётся
-промежуточным immutable artifact, его gate не переносится на новые bytes.
+Финальный аудит R1 сохраняет первую diagnostic category через restart/failed
+recovery. Exact gates повторены для .4/system-build-2; .3 остаётся промежуточным
+immutable artifact, его evidence не перенесено на новые bytes. Public VERSION0.2.11
+не менялся; .4 не опубликован и установлен только в disposable package environment.
 Подтверждённый pre-start busy завершает IDLE; неизвестный outcome требует recovery
 тем же owner. Нельзя вручную стирать journal, повторять Connect или обходить lock.
 
