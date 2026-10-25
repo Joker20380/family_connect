@@ -49,7 +49,11 @@ Ubuntu24.04 VM; original AppImage Disconnect against the retained owner fails af
 GUI reopen with connection-operation contention. No reconnect after failure; cleanup-only
 GUI Disconnect restores baseline, guest copies are destroyed, original test state is retained.
 L04/L04.1 remain IN_PROGRESS; LIVE-2/L04.2 and device teardown remain NOT_RUN.
-NEXT review L04.1-LIVE-1; any correction is a separate source checkpoint.
+LIVE-1 PARTIAL is review accepted; final-2 is retained only as historical evidence.
+[L04.1-LIVE-1-R](releases/2026-10-25-linux-poll-disconnect-l04-1-live-1-r.md)
+is the active source/package correction: deterministic poll/Disconnect fencing,
+reserved internal0.2.12~l03.2.2; package gates pending, live retest NOT_RUN.
+NEXT review L04.1-LIVE-1-R, not another live or server operation.
 Windows broker IPC remains NOT_INTEGRATED;
 installed restricted-message acceptance is NOT_RUN, not a completed fallback.
 [Shared Auto policy and accepted-Java trace checks](../carrier/desktopauto/README.md)

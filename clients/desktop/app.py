@@ -473,7 +473,7 @@ class App:
             except (OSError,UnicodeError):pass
         self.friends_registered=False;self.registration_error="";self.route_path=None if smoke else Path.home()/".config/family-connect/route.json"
         self.driver=None;self.items=[];self.selected_id=None;self.active=None;self.busy=False;self.initializing=False
-        self.closed=False;self.revision=0;self.polling=False;self.poll_error=False
+        self.closed=False;self.revision=0;self.polling=False;self.poll_error=False;self.disconnect_future=None
         self.recovery=RecoveryPolicy();self.operation_generation=None
         self.mesh_state=None;self.auto_state=None;self.service_starting=False;self.service_cancel_requested=False
         self.mesh_identity_available=False
@@ -972,9 +972,10 @@ class App:
         if kind=='recovered':self.connection_action='RESTORING'
         if kind=='initialized':self.initializing=True
         self.paint();revision=self.revision;future=self.pool.submit(fn)
+        if kind=='state' and self.connection_action=='STOPPING':self.disconnect_future=future
         future.add_done_callback(lambda f:GLib.idle_add(self.complete,kind,f,revision,None))
     def complete(self,kind,future,revision,ident):
-        if self.closed:return GLib.SOURCE_REMOVE
+        if self.closed or future.cancelled():return GLib.SOURCE_REMOVE
         if kind=='auto-poll':
             self.polling=False
             if revision!=self.revision or self.busy:return GLib.SOURCE_REMOVE
@@ -994,6 +995,8 @@ class App:
             self.paint();return GLib.SOURCE_REMOVE
         if kind in ('poll','health'):
             try:observed=future.result()
+            except StaleConnection:
+                self.polling=False;return GLib.SOURCE_REMOVE
             except ConnectionBusy:
                 if revision!=self.revision or ident!=self.selected() or self.busy:
                     self.polling=False;return GLib.SOURCE_REMOVE
@@ -1054,7 +1057,7 @@ class App:
             if error:self.detail_text=self.t('error')
             elif self.poll_error:self.detail_text=''
             self.poll_error=error;self.paint();return GLib.SOURCE_REMOVE
-        self.busy=False;self.connection_action=None
+        self.busy=False;self.connection_action=None;self.disconnect_future=None
         try:
             result=future.result()
             if kind=='initialized':
@@ -1177,6 +1180,7 @@ class App:
             driver.disconnect('fcmesh0');return driver.mesh_status()
         self.submit(action,'mesh-stopped')
     def toggle_vpn(self):
+        if self.closed:return
         ident=self.selected();active=self.active
         if self.service_starting:
             self.service_cancel_requested=True;self.paint();return
@@ -1382,11 +1386,15 @@ class App:
             self.submit(lambda:self.updater.install(plan,self.updater.download(plan)),'update_installed')
         text=(f"Скачать и установить версию {plan['version']}? Окно перезапустится. Профили и ключи сохранятся." if self.ru else f"Download and install {plan['version']}? The window will restart. Profiles and keys will be preserved.")
         self.confirm(text,'Установить обновление' if self.ru else 'Install update',install)
+    def cancel_queued_disconnect(self):
+        if self.disconnect_future is None or not self.disconnect_future.cancel():return False
+        self.disconnect_future=None;self.busy=False;self.connection_action=None;self.revision+=1
+        return True
     def on_close(self,*_):
         if self.closed:return False
         if self.friends_window is not None:
             self.exit_after_friends=True;self.friends_window.request_close();return True
-        if self.busy:return True
+        if self.busy and not self.cancel_queued_disconnect():return True
         if self.active or self.managed_view()['owned']:
             message=self.t('closing')
             if self.managed_view()['owned']:
@@ -1395,7 +1403,8 @@ class App:
             self.confirm(message,'Закрыть окно' if self.ru else 'Close window',lambda:self.close(True));return True
         self.close(True);return True
     def close(self,confirmed=False):
-        if self.closed or self.busy:return False
+        if self.closed:return False
+        if self.busy and not self.cancel_queued_disconnect():return False
         if (self.active or self.managed_view()['owned']) and not confirmed:return self.on_close()
         if self.chat_pane is not None and not self.chat_closed:
             def after_chat():

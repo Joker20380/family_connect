@@ -1222,10 +1222,14 @@ class Linux:
 
     def poll_state(self, ident, health=False):
         with connection_operation() as lease:
+            generation=lease.record['generation']
+        try:
             items=self.profiles()
             active_ids=[key for key,_ in items if self.active(key)]
-            return ConnectionSnapshot(lease.record['generation'],items,active_ids,
-                ident in active_ids,self.healthy(ident) if health else None)
+            healthy=self.healthy(ident) if health else None
+        finally:
+            with connection_operation(expected=generation):pass
+        return ConnectionSnapshot(generation,items,active_ids,ident in active_ids,healthy)
 
     def recover_if_current(self, ident, generation):
         # Recovery preserves connection intent and its finite retry budget.

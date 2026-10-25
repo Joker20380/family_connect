@@ -134,3 +134,93 @@ def test_control_contention_is_bounded(tmp_path, monkeypatch):
     with pytest.raises(backend.ConnectionBusy):
         with backend.Linux().control_transaction('a'*64):
             pytest.fail('must not bypass ownership')
+
+
+@pytest.mark.parametrize('stage', ['profiles', 'active', 'health'])
+@pytest.mark.parametrize('read_error', [False, True])
+def test_slow_production_poll_does_not_block_one_disconnect(normal_owner, stage, read_error):
+    owner = normal_owner
+    owner.block_at = stage
+    owner.read_error = read_error
+    with backend.connection_operation() as lease:
+        generation = lease.record['generation']
+    with ThreadPoolExecutor(max_workers=1, thread_name_prefix='fc-poll') as executor:
+        poll = executor.submit(owner.driver.poll_state, owner.ident, stage == 'health')
+        try:
+            assert owner.entered.wait(5)
+            try:
+                owner.driver.disconnect(owner.ident)
+            except backend.ConnectionBusy:
+                assert owner.active and owner.downs == []
+                with pytest.raises(backend.ConnectionBusy):
+                    with backend.connection_operation():
+                        pass
+                raise
+            assert owner.downs == [owner.ident] and not owner.active
+            with backend.connection_operation() as lease:
+                assert lease.record['generation'] == generation + 1
+        finally:
+            owner.release.set()
+        with pytest.raises(backend.StaleConnection):
+            poll.result(timeout=5)
+
+
+@pytest.mark.parametrize('health', [False, True])
+def test_production_poll_snapshot_without_mutation(normal_owner, health):
+    owner = normal_owner
+    with backend.connection_operation() as lease:
+        generation = lease.record['generation']
+    snapshot = owner.driver.poll_state(owner.ident, health)
+    assert snapshot.generation == generation and snapshot.active
+    assert snapshot.active_ids == [owner.ident]
+    assert snapshot.healthy is (True if health else None)
+    with backend.connection_operation() as lease:
+        assert lease.record['generation'] == generation
+    assert owner.downs == []
+
+
+def test_poll_revalidation_refuses_pending_owner(normal_owner):
+    owner = normal_owner
+    owner.block_at = 'profiles'
+    with ThreadPoolExecutor(max_workers=1, thread_name_prefix='fc-poll') as executor:
+        poll = executor.submit(owner.driver.poll_state, owner.ident)
+        try:
+            assert owner.entered.wait(5)
+            with backend.connection_operation(owner=OWNER) as lease:
+                lease.reserve()
+        finally:
+            owner.release.set()
+        with pytest.raises(backend.ConnectionBusy):
+            poll.result(timeout=5)
+    assert owner.active and owner.downs == []
+
+
+def test_production_disconnect_still_refuses_durable_owner(normal_owner):
+    with backend.connection_operation(owner=OWNER) as lease:
+        lease.reserve()
+    with pytest.raises(backend.ConnectionBusy):
+        normal_owner.driver.disconnect(normal_owner.ident)
+    assert normal_owner.active and normal_owner.downs == []
+
+
+def test_production_disconnect_still_refuses_foreign_process(normal_owner, tmp_path):
+    script = '''
+import sys
+from pathlib import Path
+import backend
+backend.operation_directory=lambda:Path(sys.argv[1])
+with backend.connection_operation(mutate=True):
+    print('locked',flush=True)
+    sys.stdin.readline()
+'''
+    process = subprocess.Popen([sys.executable, '-c', script, str(tmp_path/'operations')],
+        env={**os.environ, 'PYTHONPATH': str(Path(backend.__file__).parent)},
+        stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True)
+    try:
+        assert process.stdout.readline().strip() == 'locked'
+        with pytest.raises(backend.ConnectionBusy):
+            normal_owner.driver.disconnect(normal_owner.ident)
+        assert normal_owner.active and normal_owner.downs == []
+    finally:
+        process.communicate('\n', timeout=5)
+        assert process.returncode == 0

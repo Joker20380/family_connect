@@ -211,6 +211,8 @@ jobs:
       - name: Mandatory desktop pytest
         run: '"$RUNNER_TEMP/fc-desktop-env/bin/python" -m pytest -q clients/desktop/tests -ra --tb=short'
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a "$RUNNER_TEMP/fc-desktop-env/bin/python" clients/desktop/app.py --smoke
+      - name: Deterministic normal poll versus Disconnect (real GTK)
+        run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a "$RUNNER_TEMP/fc-desktop-env/bin/python" -m pytest -q clients/desktop/tests/test_poll_disconnect_gui.py
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a -s "-screen 0 2560x2160x24" "$RUNNER_TEMP/fc-desktop-env/bin/python" clients/desktop/layout_check.py
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a "$RUNNER_TEMP/fc-desktop-env/bin/python" clients/desktop/map_check.py
       - name: Check invitation delivery to existing Linux instance

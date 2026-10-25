@@ -1,6 +1,18 @@
 # Текущее состояние / Current state
 
-Срез **L04.1-LIVE-1**,25.10.2026: **PARTIAL / first failure, review pending**.
+Срез **L04.1-LIVE-1-R**,25.10.2026: **ACTIVE / source checkpoint**.
+Детерминированный red:12 failures/30 PASS; actual backend/GTK GUI poll удерживал
+operation lock, один Disconnect получал ConnectionBusy без helper down.
+Короткий generation fence + unlocked read-only I/O + повторная проверка, включая
+ошибки чтения; stale callback игнорируется. Queued normal Disconnect отменяется
+при закрытии; выполняющаяся mutation не переигрывается. Адресные229 PASS/2 SKIP.
+Новый internal **0.2.12~l03.2.2** зарезервирован; build/package/CI gates в работе,
+live retest NOT_RUN. Product VERSION/public Linux0.2.11 неизменны.
+[Отчёт correction](releases/2026-10-25-linux-poll-disconnect-l04-1-live-1-r.md).
+**STOP после source/package gate. NEXT — review L04.1-LIVE-1-R.**
+
+Предыдущий **L04.1-LIVE-1 PARTIAL принят review**; final-2 больше не candidate
+для завершения L04.1. Его положительное live evidence ниже сохраняется исторически.
 L03.1/L03.2 **DONE (review accepted)**; parent L03 **DONE** в scope внутреннего
 Linux-кандидата. AUTH/PROVISION **DONE, review accepted**. L04/L04.1 **IN_PROGRESS**;
 L04.1-LIVE-2 и L04.2 **QUEUED / NOT_RUN**. Exact final-2 не изменён.
@@ -14,7 +26,7 @@ nl bindings, исходный protected state/cache/floors и teardown receipt �
 Device-scoped gateway cleanup → readback → registry revoke остаётся NOT_RUN.
 D01 открыт:54 residual failures; D02.1-R PARTIAL/NOT_RUN; Windows/voice сохранены.
 [Отчёт LIVE-1 и точная граница отказа](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-1.md).
-**STOP. NEXT — review L04.1-LIVE-1; correction только отдельным source checkpoint.**
+LIVE-1 — исторический checkpoint, не активный NEXT. L04.1-LIVE-2/L04.2/L05/teardown NOT_RUN.
 
 ### Принятый checkpoint L03.1
 

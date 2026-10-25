@@ -2,6 +2,12 @@
 
 ## L03.2 — внутренний полный candidate,25.10
 
+Correction [L04.1-LIVE-1-R](releases/2026-10-25-linux-poll-disconnect-l04-1-live-1-r.md)
+ACTIVE: следующий internal version **0.2.12~l03.2.2** зарезервирован для новых user
+bytes; build/package gates pending, live retest NOT_RUN. Final-2/0.2.12~l03.2.1
+retired для завершения L04.1 после принятого PARTIAL; не заменять его bytes/hash.
+Публичные version/catalog/download links не меняются.
+
 L03.1/L03.2 приняты; parent L03 DONE в scope внутреннего кандидата. Source VERSION
 и опубликованный Linux остаются0.2.11; внутренний candidate — **0.2.12~l03.2.1**.
 [Точные артефакты/evidence](releases/2026-10-25-linux-candidate-l03-2.md).
