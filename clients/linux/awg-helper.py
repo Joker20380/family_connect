@@ -100,6 +100,10 @@ def execute():
         if len(sys.argv) not in (3,4) or not re.fullmatch(r'fcawg[0-9a-f]{8}',sys.argv[2]):
             raise ValueError('Invalid AWG identifier')
         ident=sys.argv[2];config=ROOT/(ident+'.conf');metadata=ROOT/(ident+'.json')
+        if action == 'discard' and len(sys.argv) == 3:
+            from backend import discard_inactive_profile
+            discard_inactive_profile('awg', ident, uid)
+            return
         meta=json.loads(read(metadata))
         if uid!=0 and meta['owner']!=uid: raise ValueError('AWG profile belongs to another user')
         if action=='pair' and len(sys.argv)==4:
@@ -141,6 +145,10 @@ def main():
 if __name__=='__main__':
     try: main()
     except Exception as error:
+        from backend import PreStartRejected, PRE_START_EXIT, pre_start_receipt
+        if isinstance(error, PreStartRejected):
+            print(json.dumps(pre_start_receipt(error)), flush=True)
+            sys.exit(PRE_START_EXIT)
         if isinstance(error,RuntimeError):print(str(error),file=sys.stderr)
         print('Family Connect AWG operation failed; check installation, profile and connectivity.',file=sys.stderr)
         sys.exit(1)

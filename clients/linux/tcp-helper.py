@@ -174,7 +174,12 @@ def execute():
             write(ROOT/(ident+'.json'),json.dumps(dict(id=ident,owner=uid,endpoint=p['server'],primary=None)),0o644)
             print(ident);return
         if len(args)<2 or not re.fullmatch(r'fctcp[0-9a-f]{8}',args[1]):raise ValueError('Invalid TCP identity')
-        ident=args[1];path=ROOT/(ident+'.json');meta=json.loads(read(path))
+        ident=args[1];path=ROOT/(ident+'.json')
+        if action == 'discard' and len(args) == 2:
+            from backend import discard_inactive_profile
+            discard_inactive_profile('tcp', ident, uid)
+            return
+        meta=json.loads(read(path))
         if uid and meta['owner']!=uid:raise ValueError('TCP profile belongs to another user')
         if action=='pair' and len(args)==3:
             primary=str(uuid.UUID(args[2]))
@@ -212,6 +217,10 @@ def main():
 if __name__=='__main__':
     try:main()
     except Exception as error:
+        from backend import PreStartRejected, PRE_START_EXIT, pre_start_receipt
+        if isinstance(error, PreStartRejected):
+            print(json.dumps(pre_start_receipt(error)), flush=True)
+            sys.exit(PRE_START_EXIT)
         if isinstance(error,RuntimeError):print(str(error),file=sys.stderr)
         print('TCP operation failed; check installation, profile and connectivity.',file=sys.stderr)
         sys.exit(1)

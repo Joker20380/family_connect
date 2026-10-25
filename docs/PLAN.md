@@ -11,6 +11,8 @@ L03.1/L03.2 **DONE (review accepted)**; parent **L03 DONE** в scope полно�
 Выбран только **L04.1-LIVE-2-R1 ACTIVE**: исправить terminalization подтверждённого
 pre-start refusal, сохранив fail-closed unknown outcome; actual root/session tests,
 новый source/system/package candidate. Никакого live/gateway/private test state.
+R1 source: authorization-v2 typed outcome, same-owner recovery,126 targeted PASS;
+новый system и user0.2.12~l03.2.3, actual-root/package/full gates ACTIVE.
 LIVE-1 PARTIAL принят review; final-2 retired для завершения L04.1, прежние PASS
 сохраняются только за этим exact build. Red actual backend/GTK race подтверждён;
 generation-fenced unlocked poll и queued Disconnect cancellation: адресные229 PASS.

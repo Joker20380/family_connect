@@ -25,6 +25,12 @@ if sys.argv[1] == 'import':
     print('fcawg12345678')
 if sys.argv[1:] == ['up', 'fcawg00000000']:
     sys.exit(1)
+if sys.argv[1:] == ['up', 'fcawg11111111']:
+    import signal
+    os.kill(os.getppid(), signal.SIGKILL)
+if sys.argv[1:] == ['up', 'fcawg22222222']:
+    import time
+    time.sleep(10)
 ''')
     helper.chmod(0o700)
     harness = tmp_path/'server.py'
@@ -35,6 +41,11 @@ import backend
 backend.os.geteuid = lambda: 0
 backend._SESSION_HELPERS = {{'awg': {str(helper)!r}, 'tcp': {str(helper)!r}}}
 os.environ['PKEXEC_UID'] = '1234'
+original_run = backend.subprocess.run
+def bounded_run(args, **kwargs):
+    if args[-1] == 'fcawg22222222': kwargs['timeout'] = .05
+    return original_run(args, **kwargs)
+backend.subprocess.run = bounded_run
 backend.privileged_session()
 ''')
     original = subprocess.Popen
@@ -130,3 +141,57 @@ def test_exception_closes_privilege(session_process):
             raise RuntimeError('application failed')
     assert calls[0].poll() == 0
     assert backend._operation_local.authorization is None
+
+
+@pytest.mark.parametrize('kind', ['awg', 'tcp'])
+def test_reserved_helper_receipt_not_error_text_classifies_prestart(kind):
+    from types import SimpleNamespace
+    request = dict(kind=kind,action='up',ident='fc'+kind+'12345678',data=None)
+    receipt = backend.pre_start_receipt(backend.PreStartRejected('TRANSPORT_BUSY'))
+    result = SimpleNamespace(returncode=backend.PRE_START_EXIT,stdout=json.dumps(receipt))
+    reply = backend._helper_reply(request,result)
+    backend._validate_session_reply(reply)
+    assert reply == dict(schema=2,outcome='PRE_START_REJECTED',reason='TRANSPORT_BUSY',value='')
+    result.returncode = 1
+    assert backend._helper_reply(request,result)['outcome'] == 'OUTCOME_UNKNOWN'
+
+
+@pytest.mark.parametrize('change', [{'schema':True},{'schema':1},{'outcome':'safe'}, {'reason':'arbitrary'},
+                                  {'value':'secret'},{'outcome':[]},{'extra':'field'}])
+def test_unknown_or_malformed_receipts_fail_closed(change):
+    reply=dict(schema=2,outcome='PRE_START_REJECTED',reason='TRANSPORT_BUSY',value='')
+    reply.update(change)
+    with pytest.raises(ValueError):backend._validate_session_reply(reply)
+
+
+def test_non_start_cannot_claim_prestart():
+    from types import SimpleNamespace
+    receipt=json.dumps(backend.pre_start_receipt(backend.PreStartRejected('TRANSPORT_BUSY')))
+    result=SimpleNamespace(returncode=backend.PRE_START_EXIT,stdout=receipt)
+    assert backend._helper_reply(dict(kind='awg',action='discard'),result)['outcome']=='OUTCOME_UNKNOWN'
+
+
+def test_discard_is_fixed_owned_profile_only():
+    assert backend._session_request(dict(kind='awg',action='discard',ident='fcawg12345678',data=None))[0] == [backend._SESSION_HELPERS['awg'],'discard','fcawg12345678']
+    for kind in ('mesh','auto','chat'):
+        with pytest.raises(ValueError):backend._session_request(dict(kind=kind,action='discard',ident='fcawg12345678',data=None))
+
+
+@pytest.mark.parametrize('kind', ['awg', 'tcp'])
+def test_recovery_sends_down_even_when_tun_is_already_absent(monkeypatch, kind):
+    driver = backend.LinuxTCP()
+    calls = []
+    monkeypatch.setattr(driver, '_'+kind, lambda action, ident: calls.append((action, ident)))
+    monkeypatch.setattr(driver, 'active', lambda _: False)
+    driver.rollback_imported('fc'+kind+'12345678')
+    assert calls == [('down', 'fc'+kind+'12345678')]
+
+
+@pytest.mark.parametrize(('ident','reason'), [('fcawg11111111','CHANNEL_LOST'),('fcawg22222222','HELPER_TIMEOUT')])
+def test_real_pipe_loss_and_process_timeout_remain_unknown(session_process, ident, reason):
+    calls, log = session_process
+    with backend.authorization_operation():
+        with pytest.raises(backend.RecoveryRequired) as caught:backend.Linux()._awg('up',ident)
+        assert caught.value.outcome == 'OUTCOME_UNKNOWN' and caught.value.reason == reason
+    assert len(calls) == 1
+    assert [json.loads(line)[0] for line in log.read_text().splitlines()] == [['up',ident]]

@@ -311,6 +311,6 @@ def test_existing_manual_starts_refuse_auto_ownership_without_a_root_lease(tmp_p
         with backend.privileged_transport_start(manual_kind):
             pass
         return
-    with pytest.raises(backend.BackendError, match='Disconnect '+('AWG' if journal == 'awg' else 'Auto')):
+    with pytest.raises(backend.PreStartRejected, match='OWNER_CONFLICT'):
         with backend.privileged_transport_start(manual_kind):
             pytest.fail('A manual transport must not overlap Auto')

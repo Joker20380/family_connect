@@ -40,4 +40,4 @@ done
 install -o root -g root -m 644 "$binary_dir/awg31.json" "$destination/awg31.json"
 
 # Publish capability only after the helper and its module are installed.
-install -o root -g root -m 644 /dev/null /usr/local/lib/family-connect-awg/authorization-session-v1
+install -o root -g root -m 644 /dev/null /usr/local/lib/family-connect-awg/authorization-session-v2

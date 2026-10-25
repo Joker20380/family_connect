@@ -84,10 +84,26 @@ def child(transport):
     with backend.connection_operation(owner=application.owner):
         physical_lock_free = True
     assert hashlib.sha256((identity/'friends.configuration.json').read_bytes()).hexdigest() == cache_before
+    green = os.environ.get('FC_PRESTART_EXPECT') == 'green'
+    if green:
+        assert terminal['error'] == 'PreStartRejected'
+        assert terminal['message'].endswith('TRANSPORT_BUSY')
+        assert before == dict(generation=0, pending=None)
+        assert journal['phase'] == 'IDLE' and operation == dict(generation=2, pending=None)
+        assert requests == [dict(kind=transport, action=action) for action in ('import', 'up', 'discard')]
+        assert not any(item['stage'] == 'failure' for item in events if item['step'] == 'rollback')
+        assert len(fetches) == 1
+        assert not any(ident.startswith(('fcawg', 'fctcp')) for ident, _ in driver.profiles())
+        snapshot = driver.poll_state(None)
+        assert not snapshot.active and snapshot.generation == 2
+        application.recover()
+        with backend.connection_operation() as lease:
+            assert lease.record == dict(generation=2, pending=None)
     print(json.dumps(dict(transport=transport, before=before, terminal=terminal, events=events,
                           requests=requests, fetches=len(fetches), journal_phase=journal['phase'],
                           generation=operation['generation'], pending=operation['pending'] is not None,
                           physical_user_lock_free=physical_lock_free, cache_preserved=True,
+                          green_assertions=green,
                           journal_validation_error=journal_validation)), flush=True)
 
 

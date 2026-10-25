@@ -79,6 +79,28 @@ def test_gui_real_owner_failure_remains_visible(normal_owner, reopened_app):
     assert 'Connection recovery is pending' in application.detail_text
 
 
+def test_gui_prestart_and_unknown_remain_distinct(normal_owner, reopened_app, monkeypatch):
+    application, _ = reopened_app
+    monkeypatch.setattr(application, 'transport_id', lambda: 'awg' if normal_owner.ident.startswith('fcawg') else 'tcp')
+    failure = backend.PreStartRejected('TRANSPORT_BUSY')
+    failure.operation_diagnostic = dict(category='TRANSPORT_BUSY', phase='IDLE', outcome='PRE_START_REJECTED',
+        cleanup_confirmed=True, generation=2, pending=False)
+    future = Future();future.set_exception(failure)
+    application.complete('initialized', future, application.revision, normal_owner.ident)
+    application.render()
+    assert 'TRANSPORT_BUSY' in application.detail_text and not application.active
+    assert application.diagnostics.current['first_failure'] == 'TRANSPORT_BUSY'
+    unknown = backend.RecoveryRequired('PENDING_OPERATION')
+    unknown.operation_diagnostic = dict(category='PENDING_OPERATION', phase='RECOVERY_REQUIRED', outcome='OUTCOME_UNKNOWN',
+        cleanup_confirmed=False, generation=3, pending=True)
+    future = Future();future.set_exception(unknown)
+    application.complete('poll', future, application.revision, application.selected())
+    application.render()
+    assert 'recovery required' in application.detail_text
+    assert 'Waiting for completion' not in application.detail_text
+    assert application.diagnostics.current['normal_operation']['pending'] is True
+
+
 @pytest.mark.parametrize('kind', ['poll', 'health'])
 def test_stale_generation_never_becomes_health_failure(normal_owner, reopened_app, kind):
     application, _ = reopened_app

@@ -41,7 +41,7 @@ def bundle(tmp_path, runtime):
         path.write_bytes(b'fixture')
         path.chmod(0o644)
         files[name] = dict(sha256=hashlib.sha256(b'fixture').hexdigest(), size=7)
-    record = dict(schema=1, runtime_contract=2, python=list(sys.version_info[:2]),
+    record = dict(schema=1, runtime_contract=2, authorization_protocol=2, python=list(sys.version_info[:2]),
                   source_commit='a'*40, system=dict(build_id='b'*64, **files['embedded/system.tar.gz']), files=files)
     return tmp_path, seal(tmp_path, record)
 
@@ -104,7 +104,9 @@ def test_compatibility_binds_exact_system_build(runtime, bundle, monkeypatch):
     directory, record = bundle
     actual_verify = runtime.verify
     monkeypatch.setattr(runtime, 'verify', lambda: actual_verify(directory))
-    assert runtime.installed_guard(dict(build_id='b'*64)) == 'READY'
+    assert runtime.installed_guard(dict(build_id='b'*64, authorization_protocol=2)) == 'READY'
+    assert runtime.installed_guard(dict(build_id='b'*64, authorization_protocol=1)) == 'CANDIDATE_AUTHORIZATION_PROTOCOL_MISMATCH'
+    assert runtime.installed_guard(dict(build_id='b'*64)) == 'CANDIDATE_AUTHORIZATION_PROTOCOL_MISMATCH'
     assert runtime.installed_guard(dict(build_id='c'*64)) == 'CANDIDATE_SYSTEM_BUILD_MISMATCH'
     (directory / 'clients/desktop/chat_daemon.py').unlink()
     assert runtime.installed_guard(dict(build_id='b'*64)) == 'CANDIDATE_USER_INTEGRITY_FAILED'

@@ -50,18 +50,19 @@ class BackendApplication:
             if active and active != previous['active']:
                 raise ValueError('active connection changed outside control transaction')
             active = previous['active']
-        return dict(known=profiles, active=active)
+        return self._snapshot(dict(known=profiles, active=active))
 
     @staticmethod
     def _snapshot(value):
         import re
         if (type(value) is not dict or set(value) != {'known', 'active'} or
                 any(type(value[k]) is not list for k in value) or
-                any(type(item) is not str or not re.fullmatch(r'(?:[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}|fcawg[0-9a-f]{8}|fctcp[0-9a-f]{8})', item)
+                any(type(item) is not str or not re.fullmatch(r'(?:[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}|fcawg[0-9a-f]{8}|fctcp[0-9a-f]{8}|fcmesh0|fcauto0)', item)
                     for key in value for item in value[key]) or
-                not set(value['active']) <= set(value['known']) or len(value['active']) > 1):
+                not set(value['active']) <= set(value['known']) or len(value['active']) > 1 or
+                set(value['active']) & {'fcmesh0', 'fcauto0'}):
             raise ValueError('invalid application recovery metadata')
-        return value
+        return dict(known=[ident for ident in value['known'] if ident not in ('fcmesh0', 'fcauto0')], active=list(value['active']))
 
     def _install(self, profile):
         raw = profile.config
@@ -108,7 +109,7 @@ class BackendApplication:
         return (self.current is not None and self.current_endpoint is not None and
                 self.driver.control_healthy(self.current, self.current_endpoint) is True)
 
-    def rollback(self, staged, previous, baseline):
+    def rollback(self, staged, previous, baseline, *, remove_imported=False, recover=False, restore=True):
         expired = baseline.get('expired_active', [])
         baseline = self._snapshot({k:v for k,v in baseline.items() if k != 'expired_active'})
         if expired:
@@ -116,15 +117,21 @@ class BackendApplication:
             for ident in expired:
                 if self.driver.active(ident):
                     self.driver.disconnect(ident)
-        current = {ident for ident, _ in self.driver.profiles()}
+        current = {ident for ident, _ in self.driver.profiles() if ident not in ('fcmesh0', 'fcauto0')}
         # Shared durable ownership excludes GUI imports through crash recovery.
         for ident in sorted(current - set(baseline['known'])):
-            if self.driver.active(ident):
+            if remove_imported and recover:
+                self.driver.rollback_imported(ident)
+            elif self.driver.active(ident):
                 self.driver.disconnect(ident)
+            if remove_imported:
+                self.driver.discard_inactive(ident)
         for ident in baseline['active']:
             if ident not in current:
                 raise RuntimeError('last-known-good profile missing')
             if not self.driver.active(ident):
+                if not restore:
+                    raise RuntimeError('Previous session requires explicit recovery')
                 self.driver.connect(ident)
             if not self.driver.healthy(ident):
                 raise RuntimeError('last-known-good health failed')

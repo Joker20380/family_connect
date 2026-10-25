@@ -40,7 +40,8 @@ def read_file(path, maximum):
 
 def verify(root=ROOT):
     record = json.loads(read_file(root / 'candidate.json', 1048576))
-    if record['schema'] != 1 or record['runtime_contract'] != 2 or record['python'] != list(sys.version_info[:2]):
+    if (record['schema'] != 1 or record['runtime_contract'] != 2 or record.get('authorization_protocol') != 2 or
+            record['python'] != list(sys.version_info[:2])):
         raise ValueError('Candidate runtime contract/ABI mismatch')
     identity = digest(json.dumps({key: value for key, value in record.items() if key != 'build_id'},
                                  sort_keys=True, separators=(',', ':')).encode())
@@ -81,6 +82,8 @@ def installed_guard(capability):
         record = verify()
         if capability['build_id'] != record['system']['build_id']:
             return 'CANDIDATE_SYSTEM_BUILD_MISMATCH'
+        if capability.get('authorization_protocol') != record['authorization_protocol']:
+            return 'CANDIDATE_AUTHORIZATION_PROTOCOL_MISMATCH'
         return 'READY'
     except (OSError, ValueError, KeyError, TypeError):
         return 'CANDIDATE_USER_INTEGRITY_FAILED'

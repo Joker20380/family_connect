@@ -17,6 +17,9 @@ D01/full suites54/54/53 failures и voice/Windows observations сохраняю�
 Выбран только **L04.1-LIVE-2-R1 ACTIVE**: actual root/session red→green,
 terminal pre-start refusal против unknown outcome, новый source/system/package checkpoint.
 Один helper up request допустим; дефект B1 — persistent APPLYING/pending.
+R1 source correction: strict authorization-v2 pre-start/unknown receipts,
+same-owner terminalization/recovery и bounded diagnostics;126 targeted PASS.
+Нужен новый system build (не build-9) и internal0.2.12~l03.2.3; package gate ACTIVE.
 Private test state/gateway не используются, live B1 retest и B2–F NOT_RUN.
 [R1](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md).
 **Граница завершения — STOP; NEXT review L04.1-LIVE-2-R1.**

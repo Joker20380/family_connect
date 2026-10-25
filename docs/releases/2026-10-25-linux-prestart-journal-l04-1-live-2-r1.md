@@ -37,4 +37,30 @@ The reproduction fixture's first attempt could not export the invalid journal vi
 its own strict `_read`; read-only raw phase projection repaired that fixture only.
 Final AWG and TCP reproductions each use a fresh container and one Connect.
 
-STOP. NEXT — review L04.1-LIVE-2-R1.
+## Source correction checkpoint
+
+Authorization session v2 has strict schema2 replies: OK, PRE_START_REJECTED
+(TRANSPORT_BUSY/OWNER_CONFLICT), OUTCOME_UNKNOWN (HELPER_FAILED/HELPER_TIMEOUT).
+Only fixed AWG/TCP up plus reserved helper exit78 and a strict schema1 root receipt
+can prove pre-start rejection. EOF/malformed/unknown replies remain unknown;
+exception text or a free physical lock never proves cleanup.
+
+Normal snapshots exclude inactive virtual MESH/Auto identifiers, including recovery
+of the old persisted baseline. Confirmed rejection removes only the operation's
+unpaired, UID-owned inactive import using fixed `discard`, writes IDLE, then finishes
+the same lease: generation0→1 reserve→2 finish, pending null. No retry/fallback.
+Unknown outcome keeps APPLYING/generation1/pending; only same-owner recovery sends
+bounded down even when TUN is absent, then checks/discards the inactive profile.
+Unconfirmed cleanup retains pending. Primary and cleanup exceptions are kept
+separately; expired leases cannot finish later generations. GUI diagnostics retain
+bounded category/phase/outcome/cleanup/generation/pending, not profiles or endpoints.
+
+Targeted ownership/Friends/auth pipes/diagnostics/GTK poll suite: **126 PASS**.
+Intermediate full desktop runs exposed stale v1 fixtures and a new GTK test which
+asserted before the idle render; these test-contract issues are corrected, not xfailed.
+Mandatory full/actual-root/system/package gates remain in progress at this source
+checkpoint. System build-9 is NOT reused: root helpers, backend and authorization
+protocol changed. New internal version reserved: **0.2.12~l03.2.3**; public VERSION,
+catalogs and historical .2 artifacts unchanged.
+
+STOP after package evidence. NEXT — review L04.1-LIVE-2-R1.

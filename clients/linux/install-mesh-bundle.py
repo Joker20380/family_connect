@@ -322,7 +322,7 @@ def apply(payload, source_digest, build_id=None, masked=None):
         path, mode = target(name)
         destinations[path] = (data, mode)
         if name.startswith('compat/'):
-            destinations[path.parent / 'authorization-session-v1'] = (b'', 0o644)
+            destinations[path.parent / 'authorization-session-v2'] = (b'', 0o644)
             for module in ('backend.py', 'profile_config.py'):
                 destinations[path.parent / module] = (payload['lib/' + module], 0o644)
             if name == 'compat/awg-helper.py':
@@ -332,10 +332,10 @@ def apply(payload, source_digest, build_id=None, masked=None):
                             for path, (raw, mode) in destinations.items()})
     installed_raw = json.dumps(inventory, sort_keys=True, separators=(',', ':')).encode()
     destinations[ROOT / 'installed.json'] = (installed_raw, 0o644)
-    capability = dict(schema=2, runtime_contract=2, chat_setup_protocol=1, bridge_protocol=1, materials_protocol=1, intent_protocol=1, core_reference='android106-native105',
+    capability = dict(schema=2, runtime_contract=2, authorization_protocol=2, chat_setup_protocol=1, bridge_protocol=1, materials_protocol=1, intent_protocol=1, core_reference='android106-native105',
                       build_id=build_id, installed_sha256=hashlib.sha256(installed_raw).hexdigest(),
                       source_digest=source_digest, profiles=['P0', 'P1'])
-    destinations[ROOT / 'authorization-session-v1'] = (b'', 0o644)
+    destinations[ROOT / 'authorization-session-v2'] = (b'', 0o644)
     destinations[CAPABILITY] = (json.dumps(capability, separators=(',', ':')).encode(), 0o644)
     destinations[AUTO_CAPABILITY] = (json.dumps(dict(schema=2, service_protocol=1, catalog_protocol=1,
         source_digest=source_digest, build_id=build_id), separators=(',', ':')).encode(), 0o644)

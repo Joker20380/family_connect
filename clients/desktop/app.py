@@ -26,7 +26,7 @@ import gi
 gi.require_version('Gtk','4.0')
 gi.require_version('Adw','1')
 from gi.repository import Gtk, Adw, Gdk, Gio, GLib, Pango, Graphene, GdkPixbuf
-from backend import backend, BackendError, AuthorizationError, RecoveryPolicy, ConnectionBusy, StaleConnection, ConnectionSnapshot, mesh_presentation, auto_presentation, DesktopDiagnostics
+from backend import backend, BackendError, AuthorizationError, RecoveryRequired, RecoveryPolicy, ConnectionBusy, StaleConnection, ConnectionSnapshot, mesh_presentation, auto_presentation, DesktopDiagnostics
 
 
 # Natural Earth public-domain land, identical to Android maps/land.json.
@@ -997,11 +997,15 @@ class App:
             try:observed=future.result()
             except StaleConnection:
                 self.polling=False;return GLib.SOURCE_REMOVE
-            except ConnectionBusy:
+            except ConnectionBusy as error:
                 if revision!=self.revision or ident!=self.selected() or self.busy:
                     self.polling=False;return GLib.SOURCE_REMOVE
                 self.polling=False;self.recovery.stop()
-                self.detail_text=('Обновляются настройки подключения. Ожидаем завершения.' if self.ru else 'Connection settings are being updated. Waiting for completion.')
+                if isinstance(error, RecoveryRequired):
+                    self.detail_text=('Требуется восстановление подключения тем же владельцем.' if self.ru else 'Connection recovery required; resume the same control owner.')
+                    self.diagnostics.operation_failure(getattr(error, 'operation_diagnostic', None))
+                else:
+                    self.detail_text=('Обновляются настройки подключения. Ожидаем завершения.' if self.ru else 'Connection settings are being updated. Waiting for completion.')
                 self.paint();return GLib.SOURCE_REMOVE
             except Exception:observed=None
             if isinstance(observed,ConnectionSnapshot):
@@ -1098,6 +1102,7 @@ class App:
             elif kind=='update_installed':
                 subprocess.Popen([sys.executable,str(result)],start_new_session=True);self.close(True);return GLib.SOURCE_REMOVE
         except Exception as exc:
+            self.diagnostics.operation_failure(getattr(exc, 'operation_diagnostic', None))
             if kind in ('auto-started','auto-stopped'):
                 cancelled=self.service_cancel_requested
                 self.service_starting=False;self.service_cancel_requested=False

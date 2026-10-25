@@ -1,5 +1,14 @@
 # L03.2 disposable exact-artifact gate
 
+R1 extends the same offline gate with `prestart-awg` and `prestart-tcp` modes.
+Each uses a fresh container, real polkit/session-v2 and the fixed installed helper,
+one synthetic verified configuration, and an actual root transport flock.
+`prestart.py` requires one import/up/discard, zero network starts, IDLE and
+generation0→1→2/pending null, unchanged cache and successful subsequent poll/recover.
+This is source/package evidence, not a live B1 retest. No protected test state is used.
+CI builds current committed system sources against the pinned native/RNS/normal
+builders; it does not silently reuse the earlier accepted build-9 protocol.
+
 Only run `smoke.py` inside a new Ubuntu24.04/systemd255 Docker container, once
 per format. Never install on the workstation. Use `--network none`, private
 cgroup/PID/mount namespaces, `--privileged`, and tmpfs `/run`, `/run/lock`,

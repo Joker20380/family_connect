@@ -259,7 +259,7 @@ def test_capabilities_filter_missing_engines_and_old_awg31_without_running_them(
         root = library/('family-connect-'+kind)
         root.mkdir()
         (config/kind).mkdir()
-        for name in ['helper','backend.py','profile_config.py','authorization-session-v1','awg_lifecycle.py',*engines]:
+        for name in ['helper','backend.py','profile_config.py','authorization-session-v2','awg_lifecycle.py',*engines]:
             (root/name).write_text('not executed')
             (root/name).chmod(0o755)
     (units/'family-connect-tcp@.service').write_text('synthetic fixture')

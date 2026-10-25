@@ -2,6 +2,14 @@
 
 ## L03.2 — внутренний полный candidate,25.10
 
+[R1 source/package correction](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md)
+ACTIVE: новый internal **0.2.12~l03.2.3**, authorization-session-v2, новый exact
+system/runtime вместо build-9. Readback связывает inventory/build ID и auth protocol;
+смешанная пара отказывает. Сборка/установленные gates ещё не завершены этим source
+checkpoint; .2 сохраняется только как historical evidence. Live retest NOT_RUN.
+Подтверждённый pre-start busy завершает IDLE; неизвестный outcome требует recovery
+тем же owner. Нельзя вручную стирать journal, повторять Connect или обходить lock.
+
 Correction [L04.1-LIVE-1-R](releases/2026-10-25-linux-poll-disconnect-l04-1-live-1-r.md)
 DONE/review accepted (source/package): internal **0.2.12~l03.2.2**, source57f8eff/candidate d9c0d07f…;
 exact inventory и оба real systemd255/pkexec package gates PASS. Linux/AWG/TCP/native/
@@ -10,7 +18,7 @@ package CI PASS; full suites54/54/53 failures, общий CI не зелёный
 новая KVM, DEB/setup/AWG/TCP/traffic и AppImage close/reopen/single Disconnect PASS;
 fresh nonce DNS вернул валидный terminal NOERROR/NODATA, принятый review наряду
 с positive/NXDOMAIN. Cleanup/state сохранены; guest уничтожен, test state оставлен.
-[LIVE-2](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md) PARTIAL/review pending:
+[LIVE-2](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md) PARTIAL/review accepted:
 A tamper/reinstall PASS; B1 не создаёт transport, но оставляет pending/APPLYING после
 освобождения root lock. First-failure STOP, B2–F NOT_RUN; guest уничтожен, исходный
 state сохранён. Никаких source fixes, автоматического L04.2/L05/teardown.

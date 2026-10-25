@@ -96,6 +96,21 @@ def test_awg_export_never_claims_previous_mesh_session():
     assert record['restricted_history'][0]['session_tag'] == 'a' * 64
 
 
+def test_normal_refusal_diagnostic_is_bounded_and_survives_poll(tmp_path):
+    path=tmp_path/'private'/'snapshot.json'
+    collector=DesktopDiagnostics('0.2.11',path)
+    refused=dict(category='TRANSPORT_BUSY',phase='IDLE',outcome='PRE_START_REJECTED',cleanup_confirmed=True,generation=2,pending=False)
+    assert collector.operation_failure(refused)
+    collector.sample('DISCONNECTED','awg');collector.persist()
+    record=json.loads(collector.export())['ring']
+    assert record['first_failure']=='TRANSPORT_BUSY' and record['normal_operation']==refused
+    assert not collector.operation_failure(dict(refused,profile='private'))
+    resumed=DesktopDiagnostics('0.2.11',path);resumed.sample('DISCONNECTED','awg')
+    assert resumed.current['normal_operation']==refused
+    resumed.sample('CONNECTING','awg')
+    assert 'normal_operation' not in resumed.current
+
+
 def test_size_budget_is_valid_json_keeps_first_last_and_reports_omissions():
     record = DesktopDiagnostics('0.2.11').current
     details = [dict(sequence=index, diagnostic='x' * 1800) for index in range(192)]

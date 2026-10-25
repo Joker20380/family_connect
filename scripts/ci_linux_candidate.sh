@@ -4,7 +4,7 @@ export PYTHONDONTWRITEBYTECODE=1
 source_root=$PWD
 work="${RUNNER_TEMP:?}/fc-linux-candidate"
 mkdir -p "$work/accepted" "$work/normal"
-git archive f826dbdfb562541bde95d2fcbecc1d944d15da3d | tar -xf - -C "$work/accepted"
+git archive HEAD | tar -xf - -C "$work/accepted"
 git init "$work/xray"
 git -C "$work/xray" remote add origin https://github.com/XTLS/Xray-core.git
 git -C "$work/xray" fetch --depth=1 origin d2758a023cd7f4174a5a5fa4ff66e487d4342ba0
@@ -39,6 +39,8 @@ run_container() (
     --mount "type=bind,src=$source_root/artifacts/linux-candidate,dst=/artifacts,readonly" \
     --mount "type=bind,src=$system_archive,dst=/evidence/system.tar.gz,readonly" \
     --mount "type=bind,src=$source_root/$fixture,dst=/evidence/smoke.py,readonly" \
+    --mount "type=bind,src=$source_root/tests/fixtures/linux_candidate/prestart.py,dst=/fixture/prestart.py,readonly" \
+    --mount "type=bind,src=$source_root/tests/fixtures/desktop-friends-catalog-v2.json,dst=/fixture/catalog.json,readonly" \
     fc-l032-system:ci /sbin/init
   trap 'docker stop --timeout 30 "$name"; docker rm "$name"' EXIT
   for attempt in $(seq 1 60); do
@@ -54,7 +56,10 @@ curl -fsSL https://github.com/AppImage/appimagetool/releases/download/continuous
 chmod 755 "$work/appimagetool"
 sha256sum "$work/appimagetool"
 APPIMAGE_EXTRACT_AND_RUN=1 python -m scripts.package_linux --system-bundle "$system_archive" \
-  --standard-system-rebuild --internal-version '0.2.12~l03.2.2' --output artifacts/linux-candidate --appimagetool "$work/appimagetool"
+  --standard-system-rebuild --internal-version '0.2.12~l03.2.3' --output artifacts/linux-candidate --appimagetool "$work/appimagetool"
 python -B -m scripts.verify_linux_candidate artifacts/linux-candidate | tee artifacts/linux-candidate/integrity.log
-run_container fc-l032-deb tests/fixtures/linux_candidate/smoke.py deb '/artifacts/FamilyConnect_0.2.12~l03.2.2_amd64.deb' | tee artifacts/linux-candidate/deb-smoke.log
-run_container fc-l032-appimage tests/fixtures/linux_candidate/smoke.py appimage '/artifacts/FamilyConnect-0.2.12~l03.2.2-x86_64.AppImage' | tee artifacts/linux-candidate/appimage-smoke.log
+run_container fc-l032-deb tests/fixtures/linux_candidate/smoke.py deb '/artifacts/FamilyConnect_0.2.12~l03.2.3_amd64.deb' | tee artifacts/linux-candidate/deb-smoke.log
+run_container fc-l032-appimage tests/fixtures/linux_candidate/smoke.py appimage '/artifacts/FamilyConnect-0.2.12~l03.2.3-x86_64.AppImage' | tee artifacts/linux-candidate/appimage-smoke.log
+for transport in awg tcp; do
+  run_container "fc-r1-$transport" tests/fixtures/linux_candidate/smoke.py "prestart-$transport" '/artifacts/FamilyConnect_0.2.12~l03.2.3_amd64.deb' | tee "artifacts/linux-candidate/prestart-$transport.log"
+done

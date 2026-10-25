@@ -56,6 +56,9 @@ def main():
     no_vpn()
     assert not SYSTEM.exists()
     mode, artifact = sys.argv[1:]
+    prestart = mode.removeprefix('prestart-') if mode in ('prestart-awg', 'prestart-tcp') else None
+    if prestart:
+        mode = 'deb'
     artifact = Path(artifact)
     record('artifact', dict(mode=mode, file=artifact.name, size=artifact.stat().st_size,
                             sha256=hashlib.sha256(artifact.read_bytes()).hexdigest()))
@@ -109,6 +112,17 @@ def main():
         }
     });'''.replace('USER', json.dumps(pwd.getpwuid(1000).pw_name)).replace('COMMAND', json.dumps(expected_command))
     Path('/etc/polkit-1/rules.d/00-fc-candidate-fixture.rules').write_text(rule)
+    if prestart:
+        session_rule = '''polkit.addRule(function(action, subject) {
+            if (action.id === "org.freedesktop.policykit.exec" && subject.user === USER &&
+                ((action.lookup("program") === "/usr/local/lib/family-connect-awg/helper" &&
+                  action.lookup("command_line") === "/usr/local/lib/family-connect-awg/helper session") ||
+                 (action.lookup("program") === "/usr/local/lib/family-connect-tcp/helper" &&
+                  action.lookup("command_line") === "/usr/local/lib/family-connect-tcp/helper session"))) {
+                return polkit.Result.YES;
+            }
+        });'''.replace('USER', json.dumps(pwd.getpwuid(1000).pw_name))
+        Path('/etc/polkit-1/rules.d/00-aa-fc-prestart-fixture.rules').write_text(session_rule)
     run('systemctl', 'restart', 'polkit')
     assert run(*application, '--setup-system', '/tmp/other-installer', user=True, ok=False).returncode != 0
     assert run(*application, '--setup-system', user=True, uid=1001, ok=False).returncode != 0
@@ -124,6 +138,12 @@ def main():
     assert not list(Path('/tmp').glob('family-connect-user-setup-*'))
     assert not list(Path('/var/tmp').glob('family-connect-root-setup-*'))
     record('explicit_polkit_setup_reinstall_uid_path_and_cleanup', dict(build_id=contract['system']['build_id']))
+    if prestart:
+        evidence = run('/usr/bin/env', 'FC_PRESTART_EXPECT=green', '/usr/bin/python3', '-I', '-S',
+                       '/fixture/prestart.py', 'parent', prestart).stdout
+        record('actual_prestart_terminalization', json.loads(evidence))
+        no_vpn()
+        return
     damaged = Path('/opt/tampered-user')
     shutil.copytree(root, damaged)
     for member in (damaged, *damaged.rglob('*')):

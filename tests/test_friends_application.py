@@ -40,6 +40,12 @@ class Driver(desktop.LinuxTCP):
     def healthy(self, ident):
         if ident == NEW:self.step('health')
         return ident in self.live and not (ident == NEW and self.bad_health)
+    def discard_inactive(self, ident):
+        assert ident not in self.live
+        self.known.remove(ident)
+
+    def rollback_imported(self, ident):
+        self.disconnect(ident)
 
 
 @pytest.fixture
@@ -67,6 +73,95 @@ def test_apply_commits_only_after_health(setup):
     assert driver.live == {NEW};assert_idle(app,root)
     FriendsApplication(app.store, driver).recover()
     assert driver.live == {NEW}  # A committed tunnel is not rolled back on restart.
+
+
+@pytest.mark.parametrize('transport', ['awg', 'tcp'])
+def test_terminal_prestart_refusal_has_one_request_and_finishes(setup, monkeypatch, transport):
+    app, driver, fetch, root = setup
+    driver.known = ['fcmesh0'];driver.live.clear()
+    attempts, fetches = [], []
+    def reject(ident):
+        attempts.append(ident)
+        raise desktop.PreStartRejected('TRANSPORT_BUSY')
+    monkeypatch.setattr(driver, 'connect', reject)
+    def configuration():
+        fetches.append(True)
+        return fetch()
+    with pytest.raises(desktop.PreStartRejected) as caught:
+        app.connect(configuration, transport=transport)
+    assert attempts == [NEW] and fetches == [True] and driver.known == ['fcmesh0']
+    assert_idle(app, root)
+    observed = driver.poll_state(None)
+    assert observed.generation == 2 and not observed.active_ids
+    assert caught.value.operation_diagnostic == dict(category='TRANSPORT_BUSY', phase='IDLE',
+        outcome='PRE_START_REJECTED', cleanup_confirmed=True, generation=2, pending=False)
+    assert caught.value.cleanup_error is None
+
+
+@pytest.mark.parametrize('reason', ['CHANNEL_LOST', 'HELPER_TIMEOUT', 'HELPER_FAILED'])
+def test_unknown_dispatch_preserves_journal_until_same_owner_recovery(setup, monkeypatch, reason):
+    app, driver, fetch, root = setup
+    driver.known = ['fcmesh0'];driver.live.clear()
+    attempts = []
+    primary = desktop.RecoveryRequired(reason)
+    def uncertain(ident):
+        attempts.append(ident);driver.live.add(ident)
+        raise primary
+    monkeypatch.setattr(driver, 'connect', uncertain)
+    with pytest.raises(desktop.RecoveryRequired) as caught:
+        app.connect(fetch)
+    assert caught.value.primary_error is primary and caught.value.cleanup_error is None
+    assert attempts == [NEW] and driver.live == {NEW}
+    with app.store._locked() as directory:assert app._read(directory)['phase'] == 'APPLYING'
+    with desktop.connection_operation(owner=app.owner) as lease:
+        assert lease.record == dict(generation=1, pending=app.owner)
+    with pytest.raises(desktop.ConnectionBusy):
+        with desktop.connection_operation(owner='f'*64) as lease:lease.finish()
+    driver.broken_rollback = True
+    with pytest.raises(RuntimeError):FriendsApplication(app.store, driver).recover()
+    with desktop.connection_operation(owner=app.owner) as lease:assert lease.record['pending'] == app.owner
+    driver.broken_rollback = False
+    FriendsApplication(app.store, driver).recover()
+    assert_idle(app, root)
+    assert not driver.live and driver.known == ['fcmesh0'] and attempts == [NEW]
+    FriendsApplication(app.store, driver).recover()
+    assert driver.poll_state(None).generation == 2
+
+
+def test_cleanup_failure_preserves_primary_and_does_not_write_idle(setup, monkeypatch):
+    app, driver, fetch, root = setup
+    driver.live.clear();driver.known = ['fcmesh0']
+    primary = desktop.PreStartRejected('TRANSPORT_BUSY')
+    cleanup = RuntimeError('synthetic inactive-profile cleanup refused')
+    def reject(_):raise primary
+    def refuse(_):raise cleanup
+    monkeypatch.setattr(driver, 'connect', reject)
+    monkeypatch.setattr(driver, 'discard_inactive', refuse)
+    with pytest.raises(desktop.RecoveryRequired) as caught:app.connect(fetch)
+    assert caught.value.primary_error is primary and caught.value.__cause__ is primary
+    assert caught.value.cleanup_error is cleanup
+    assert caught.value.operation_diagnostic['cleanup_confirmed'] is False
+    with app.store._locked() as directory:assert app._read(directory)['phase'] == 'APPLYING'
+    with desktop.connection_operation(owner=app.owner) as lease:assert lease.record['generation'] == 1
+
+
+def test_old_virtual_inventory_is_normalized_only_when_inactive(setup):
+    app, driver, fetch, root = setup
+    baseline = dict(known=['fcmesh0', NEW], active=[])
+    assert app.adapter._snapshot(baseline) == dict(known=[NEW], active=[])
+    with pytest.raises(ValueError):app.adapter._snapshot(dict(known=['fcmesh0'], active=['fcmesh0']))
+
+
+def test_expired_lease_cannot_finish_a_later_generation(setup):
+    app, driver, fetch, root = setup
+    with desktop.connection_operation(owner=app.owner) as old:
+        old.reserve();old.finish()
+    with desktop.connection_operation(owner=app.owner) as current:
+        current.reserve()
+        with pytest.raises(desktop.StaleConnection):old.finish()
+        assert current.record == dict(generation=3,pending=app.owner)
+        current.finish()
+    assert driver.poll_state(None).generation == 4
 
 
 @pytest.mark.parametrize('failure', ['import','disconnect','connect','health','unhealthy'])

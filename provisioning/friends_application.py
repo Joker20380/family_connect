@@ -45,7 +45,7 @@ class FriendsApplication:
         if record['phase'] == 'IDLE':
             require(record['baseline'] is None)
         else:
-            self.adapter._snapshot(record['baseline'])
+            record['baseline'] = self.adapter._snapshot(record['baseline'])
         return record
 
     @staticmethod
@@ -67,14 +67,19 @@ class FriendsApplication:
     def _recover(self, directory, lease):
         record = self._read(directory)
         if record['phase'] == 'APPLYING':
-            self.adapter.rollback(None, None, record['baseline'])
+            self.adapter.rollback(None, None, record['baseline'], remove_imported=True, recover=True)
             self._write(directory, self._idle())
         lease.finish()
 
     def recover(self):
         with self.driver.control_transaction(self.owner) as lease:
             with self.store._locked() as directory:
-                self._recover(directory, lease)
+                try:
+                    self._recover(directory, lease)
+                except Exception as error:
+                    if lease.record['pending'] == self.owner:
+                        raise self.driver.operation_failure(error, error, lease, False) from error
+                    raise
 
     def connect(self, fetch, *, transport="tcp"):
         """fetch verifies and durably saves configuration before any VPN mutation."""
@@ -102,11 +107,23 @@ class FriendsApplication:
                     if not self.driver.healthy(ident):
                         raise RuntimeError('Friends VPN health failed')
                     self._write(directory, self._idle())
-                except Exception:
-                    self.adapter.rollback(None, None, baseline)
-                    self._write(directory, self._idle())
-                    lease.finish()
-                    raise
+                except Exception as error:
+                    if self.driver.unknown_outcome(error):
+                        raise self.driver.operation_failure(error, None, lease, False) from error
+                    cleanup_error = None
+                    phase = 'APPLYING'
+                    try:
+                        self.adapter.rollback(None, None, baseline, remove_imported=True,
+                                              restore=not self.driver.pre_start_rejected(error))
+                        self._write(directory, self._idle())
+                        phase = 'IDLE'
+                        lease.finish()
+                    except Exception as failure:
+                        cleanup_error = failure
+                    terminal = self.driver.operation_failure(error, cleanup_error, lease, cleanup_error is None, phase)
+                    if terminal is error:
+                        raise
+                    raise terminal from error
                 lease.finish()
                 return dict(profile=ident, country=configuration.country,
                             transport=transport, sequence=configuration.sequence)

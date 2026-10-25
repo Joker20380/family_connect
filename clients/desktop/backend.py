@@ -359,6 +359,9 @@ class DesktopDiagnostics:
         'startup_credentials_rejected', 'startup_control_unavailable', 'startup_failed', 'bootstrap_exchange_failed'))
     CLOSE_SOURCES = frozenset('UNKNOWN UPPER_CLOSE PARENT_CANCELLED PARENT_DEADLINE RECEIVE_QUEUE_FULL SUBSCRIBER_DISCONNECTED PUBLISHER_DISCONNECTED SIGNAL_WRITE SIGNAL_READ CONFERENCE_ENDED SUBSCRIBER_NEGOTIATION SUBSCRIBER_ICE_CONFIG PUBLISHER_ICE_CONFIG PUBLISHER_ANSWER PUBLISHER_NEGOTIATION ICE_PENDING_LIMIT REMOTE_ICE QUEUED_ICE HEARTBEAT_WRITE DATA_CHANNEL_WRITE VP8_WRITE RELIABLE_EXHAUSTION BROKER_LIFETIME BROKER_UNUSED BROKER_AUTHORIZATION FAMILY_CONTRACT FAMILY_CONTEXT FAMILY_WRITE FAMILY_READ FAMILY_UPPER_CLOSE FAMILY_CREDENTIAL_EXPIRY'.split())
 
+    CODES = CODES | frozenset(('TRANSPORT_BUSY', 'OWNER_CONFLICT', 'HELPER_FAILED', 'HELPER_TIMEOUT',
+                              'CHANNEL_LOST', 'CLEANUP_UNCONFIRMED', 'PENDING_OPERATION', 'OPERATION_FAILED'))
+
     def __init__(self, version, storage=None, clock=time.time):
         self.version, self.storage, self.clock = version, Path(storage) if storage else None, clock
         self.lock = threading.RLock()
@@ -369,7 +372,26 @@ class DesktopDiagnostics:
         self.current = self._base()
         self.last_signature = None
         self.persistence_failed = False
+        self.normal_operation = None
         self._restore()
+
+    def operation_failure(self, value):
+        categories = {'TRANSPORT_BUSY', 'OWNER_CONFLICT', 'HELPER_FAILED', 'HELPER_TIMEOUT',
+                      'CHANNEL_LOST', 'CLEANUP_UNCONFIRMED', 'PENDING_OPERATION', 'OPERATION_FAILED'}
+        if (type(value) is not dict or set(value) != {'category', 'phase', 'outcome', 'cleanup_confirmed', 'generation', 'pending'} or
+                type(value['category']) is not str or value['category'] not in categories or
+                value['phase'] not in ('IDLE', 'APPLYING', 'RECOVERY_REQUIRED') or
+                value['outcome'] not in ('PRE_START_REJECTED', 'OUTCOME_UNKNOWN') or
+                type(value['cleanup_confirmed']) is not bool or type(value['pending']) is not bool or
+                type(value['generation']) is not int or not 0 <= value['generation'] < 2**63):
+            return False
+        with self.lock:
+            if (self.normal_operation and self.normal_operation['generation'] == value['generation'] and
+                    value['category'] == 'PENDING_OPERATION'):
+                return False
+            self.normal_operation = dict(value)
+            self.last_signature = None
+        return True
 
     def _storage_ready(self):
         self.storage.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
@@ -394,6 +416,7 @@ class DesktopDiagnostics:
             if not isinstance(bundle, dict) or set(bundle) - {'ring', 'incident'}:
                 raise ValueError('Invalid diagnostic record')
             previous = bundle.get('ring', {})
+            self.operation_failure(previous.get('normal_operation'))
             losses = previous.get('diagnostic_losses', {})
             self.events_dropped = self._count(losses.get('events_dropped'))
             self.history_dropped = self._count(losses.get('history_dropped'))
@@ -527,6 +550,7 @@ class DesktopDiagnostics:
             old = self.current
             if state in ('CONNECTING', 'RESTORING') and old['state'] in ('DISCONNECTED', 'FAILED'):
                 self.connection, self.incident_id = str(uuid.uuid4()), str(uuid.uuid4())
+                self.normal_operation = None
             record = self._base()
             record.update(state=state, selected_transport='auto' if automatic else transport, selected_profile=profile if (automatic or transport == 'restricted') and profile in ('P0', 'P1') else 'UNKNOWN')
             record['device_support_id'] = old['device_support_id']
@@ -607,6 +631,9 @@ class DesktopDiagnostics:
                 record['transport_outcomes'] = dict(old['transport_outcomes'])
             if state in ('CONNECTED', 'FAILED'):
                 record['transport_outcomes'][transport] = 'SUCCESS' if state == 'CONNECTED' else record['first_failure']
+            if self.normal_operation is not None and transport in ('awg', 'tcp'):
+                record['normal_operation'] = dict(self.normal_operation)
+                record['first_failure'] = self.normal_operation['category']
             self.current = record
             if state == 'FAILED':
                 self.incident = copy.deepcopy(record)
@@ -813,6 +840,37 @@ class StaleConnection(BackendError):
     pass
 
 
+PRE_START_REASONS = frozenset(('TRANSPORT_BUSY', 'OWNER_CONFLICT'))
+PRE_START_EXIT = 78
+
+
+class PreStartRejected(ConnectionBusy):
+    outcome = 'PRE_START_REJECTED'
+
+    def __init__(self, reason):
+        if reason not in PRE_START_REASONS:
+            raise ValueError('Invalid pre-start reason')
+        self.reason = reason
+        super().__init__('VPN start refused before apply: ' + reason)
+
+
+class RecoveryRequired(ConnectionBusy, RuntimeError):
+    outcome = 'OUTCOME_UNKNOWN'
+
+    def __init__(self, reason, primary_error=None, cleanup_error=None):
+        if reason not in ('HELPER_FAILED', 'HELPER_TIMEOUT', 'CHANNEL_LOST', 'CLEANUP_UNCONFIRMED', 'PENDING_OPERATION'):
+            raise ValueError('Invalid recovery reason')
+        self.reason = reason
+        self.primary_error, self.cleanup_error = primary_error, cleanup_error
+        super().__init__('Connection recovery is pending; recovery required by the same control owner (' + reason + ')')
+
+
+def pre_start_receipt(error):
+    if not isinstance(error, PreStartRejected):
+        raise ValueError('Pre-start proof required')
+    return dict(schema=1, outcome=error.outcome, reason=error.reason)
+
+
 _operation_mutex = threading.RLock()
 _operation_local = threading.local()
 
@@ -844,6 +902,8 @@ class OperationLease:
             self.record['pending']=self.owner;self.record['generation']+=1;self.save()
 
     def finish(self):
+        if getattr(_operation_local, 'lease', None) is not self:
+            raise StaleConnection('Expired operation lease')
         if self.record['pending'] is not None:
             if self.record['pending']!=self.owner:raise ConnectionBusy('Connection recovery is pending')
             self.record['pending']=None;self.record['generation']+=1;self.save()
@@ -902,7 +962,10 @@ def connection_operation(*, owner=None, mutate=False, expected=None):
                 raise BackendError('Invalid connection coordination state') from None
             finally:os.close(fd)
         if record['pending'] is not None and record['pending']!=owner:
-            raise ConnectionBusy('Connection recovery is pending; resume the control client')
+            error = RecoveryRequired('PENDING_OPERATION')
+            error.operation_diagnostic = dict(category='PENDING_OPERATION', phase='RECOVERY_REQUIRED',
+                outcome='OUTCOME_UNKNOWN', cleanup_confirmed=False, generation=record['generation'], pending=True)
+            raise error
         if expected is not None and expected!=record['generation']:
             raise StaleConnection('Connection settings changed; refresh the selection')
         lease=OperationLease(directory,owner,record)
@@ -945,7 +1008,7 @@ def _session_request(request):
     if not isinstance(request, dict) or set(request) != {'kind', 'action', 'ident', 'data'}:
         raise ValueError('Invalid session request')
     kind, action, ident, data = (request[k] for k in ('kind', 'action', 'ident', 'data'))
-    if kind not in _SESSION_HELPERS or action not in ('import', 'up', 'down'):
+    if kind not in _SESSION_HELPERS or action not in ('import', 'up', 'down', 'discard'):
         raise ValueError('Invalid session operation')
     if kind == 'chat':
         if action != 'up' or ident != 'fcchat0' or data is not None:
@@ -968,6 +1031,34 @@ def _session_request(request):
     return [_SESSION_HELPERS[kind], action] + ([ident] if ident else []), data
 
 
+def _helper_reply(request, result):
+    if result.returncode == 0:
+        return dict(schema=2, outcome='OK', reason='NONE', value=result.stdout.strip())
+    if request['kind'] in ('awg', 'tcp') and request['action'] == 'up' and result.returncode == PRE_START_EXIT:
+        try:
+            receipt = json.loads(result.stdout)
+            if (type(receipt) is dict and set(receipt) == {'schema', 'outcome', 'reason'} and
+                    type(receipt['schema']) is int and receipt['schema'] == 1 and
+                    receipt['outcome'] == 'PRE_START_REJECTED' and receipt['reason'] in PRE_START_REASONS):
+                return dict(schema=2, outcome=receipt['outcome'], reason=receipt['reason'], value='')
+        except (ValueError, TypeError):
+            pass
+    return dict(schema=2, outcome='OUTCOME_UNKNOWN', reason='HELPER_FAILED', value='')
+
+
+def _validate_session_reply(reply):
+    if (type(reply) is not dict or set(reply) != {'schema', 'outcome', 'reason', 'value'} or
+            type(reply['schema']) is not int or reply['schema'] != 2 or type(reply['value']) is not str or
+            type(reply['outcome']) is not str or type(reply['reason']) is not str):
+        raise ValueError('Invalid operation receipt')
+    reasons = {'OK': {'NONE'}, 'PRE_START_REJECTED': PRE_START_REASONS,
+               'OUTCOME_UNKNOWN': {'HELPER_FAILED', 'HELPER_TIMEOUT'}}
+    if reply['outcome'] not in reasons or reply['reason'] not in reasons[reply['outcome']]:
+        raise ValueError('Invalid operation outcome')
+    if reply['outcome'] != 'OK' and reply['value'] != '':
+        raise ValueError('Invalid failed operation value')
+
+
 def privileged_session():
     # Invoked only by the root-installed helper, after pkexec authentication.
     uid = os.environ.get('PKEXEC_UID', '')
@@ -976,7 +1067,7 @@ def privileged_session():
     deadline = time.monotonic() + 300
     env = {'PATH': '/usr/sbin:/usr/bin:/sbin:/bin', 'LANG': 'C',
            'HOME': '/root', 'PKEXEC_UID': uid}
-    print('{"ready":1}', flush=True)
+    print('{"ready":2}', flush=True)
     for _ in range(32):
         try:
             request = _session_line(sys.stdin.buffer, deadline)
@@ -986,16 +1077,15 @@ def privileged_session():
         try:
             result = subprocess.run(args, input=data, capture_output=True, text=True,
                                     env=env, timeout=min(120, max(.1, deadline-time.monotonic())))
-            reply = {'ok': result.returncode == 0,
-                     'value': result.stdout.strip() if result.returncode == 0 else ''}
+            reply = _helper_reply(request, result)
         except subprocess.TimeoutExpired:
-            reply = {'ok': False, 'value': ''}
+            reply = dict(schema=2, outcome='OUTCOME_UNKNOWN', reason='HELPER_TIMEOUT', value='')
         print(json.dumps(reply), flush=True)
 
 
 def _authorization_available(helper):
     try:
-        marker = Path(helper).with_name('authorization-session-v1')
+        marker = Path(helper).with_name('authorization-session-v2')
         for parent in marker.parents:
             info = parent.lstat()
             if not stat.S_ISDIR(info.st_mode) or info.st_uid != 0 or info.st_mode & 0o022:
@@ -1028,7 +1118,7 @@ class _AuthorizationSession:
             self.process = subprocess.Popen(['pkexec', helper, 'session'], stdin=subprocess.PIPE,
                                             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, bufsize=0)
             try:
-                if _session_line(self.process.stdout, time.monotonic()+120) != {'ready': 1}:
+                if _session_line(self.process.stdout, time.monotonic()+120) != {'ready': 2}:
                     raise ValueError('Invalid authorization response')
             except (EOFError, ValueError, BackendError):
                 raise AuthorizationError('VPN authorization cancelled or unavailable') from None
@@ -1041,13 +1131,16 @@ class _AuthorizationSession:
                     raise OSError('Closed authorization pipe')
                 payload = payload[count:]
             reply = _session_line(self.process.stdout, time.monotonic()+125)
-            if not isinstance(reply, dict) or set(reply) != {'ok', 'value'}:
-                raise ValueError('Invalid operation response')
+            _validate_session_reply(reply)
+            if reply['outcome'] == 'PRE_START_REJECTED' and (kind not in ('awg', 'tcp') or action != 'up'):
+                raise ValueError('Unexpected pre-start receipt')
         except (OSError, EOFError, ValueError, BackendError):
             self.failed = True
-            raise BackendError('VPN authorization session interrupted; recovery required') from None
-        if reply['ok'] is not True:
-            raise BackendError('VPN operation failed')
+            raise RecoveryRequired('CHANNEL_LOST') from None
+        if reply['outcome'] == 'PRE_START_REJECTED':
+            raise PreStartRejected(reply['reason'])
+        if reply['outcome'] == 'OUTCOME_UNKNOWN':
+            raise RecoveryRequired(reply['reason'])
         return reply['value']
 
     def close(self):
@@ -1093,18 +1186,67 @@ def privileged_transport_start(kind, *, auto_guard=None):
         info = os.fstat(descriptor)
         if not stat.S_ISREG(info.st_mode) or info.st_uid != 0 or info.st_nlink != 1 or stat.S_IMODE(info.st_mode) != 0o600:
             raise ValueError('Unsafe transport lock')
-        fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        try:
+            fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            raise PreStartRejected('TRANSPORT_BUSY') from None
         if any(os.path.lexists('/run/family-connect-auto/'+name) for name in ('guard.json', 'normal.json', 'mesh.json')):
             if auto_guard is None:
-                raise BackendError('Disconnect Auto and finish its cleanup before switching transports')
+                raise PreStartRejected('OWNER_CONFLICT')
             auto_guard._owned()
         elif auto_guard is not None:
             raise BackendError('Auto traffic guard is unavailable')
         if kind != 'mesh' and Path('/run/family-connect-mesh/active.json').exists():
-            raise BackendError('Disconnect MESH and finish its cleanup before switching transports')
+            raise PreStartRejected('OWNER_CONFLICT')
         if kind != 'awg' and os.path.lexists('/run/family-connect-awg/active.json'):
-            raise BackendError('Disconnect AWG and finish its cleanup before switching transports')
+            raise PreStartRejected('OWNER_CONFLICT')
         yield
+    finally:
+        os.close(descriptor)
+
+
+def discard_inactive_profile(kind, ident, uid):
+    if os.geteuid() != 0 or kind not in ('awg', 'tcp') or uid <= 0 or not re.fullmatch('fc'+kind+r'[0-9a-f]{8}', ident):
+        raise ValueError('Authenticated profile owner required')
+    root = Path('/etc/family-connect') / kind
+    metadata, config = root/(ident+'.json'), root/(ident+'.conf')
+    def read_safe(path, mode):
+        descriptor = os.open(path, os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+        try:
+            info = os.fstat(descriptor)
+            if not stat.S_ISREG(info.st_mode) or info.st_uid != 0 or info.st_nlink != 1 or stat.S_IMODE(info.st_mode) != mode:
+                raise ValueError('Unsafe profile cleanup state')
+            raw = os.read(descriptor, MAX_PROFILE+1)
+            if len(raw) > MAX_PROFILE:
+                raise ValueError('Oversized profile cleanup state')
+            return raw
+        finally:
+            os.close(descriptor)
+    if not os.path.lexists(metadata) and not os.path.lexists(config):
+        return
+    record = json.loads(read_safe(metadata, 0o644))
+    if (type(record) is not dict or type(record.get('owner')) is not int or record['owner'] != uid or
+            record.get('id') != ident or 'primary' not in record or record['primary'] is not None):
+        raise ValueError('Profile cleanup ownership mismatch')
+    if Path('/sys/class/net', ident).exists():
+        raise BackendError('Profile cleanup requires a stopped transport')
+    marker = Path('/run/family-connect-'+kind) / ('active.json' if kind == 'awg' else 'active')
+    if os.path.lexists(marker):
+        active = json.loads(read_safe(marker, 0o600))
+        if (type(active) is not dict or type(active.get('id')) is not str or
+                not re.fullmatch('fc'+kind+r'[0-9a-f]{8}', active['id']) or active['id'] == ident):
+            raise BackendError('Profile cleanup requires confirmed network cleanup')
+    if kind == 'tcp':
+        state = run('systemctl', 'show', 'family-connect-tcp@'+ident+'.service', '-p', 'ActiveState', '--value')
+        if state not in ('inactive', 'failed'):
+            raise BackendError('Profile cleanup requires a stopped service')
+    if os.path.lexists(config):
+        read_safe(config, 0o600)
+        config.unlink()
+    metadata.unlink()
+    descriptor = os.open(root, os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+    try:
+        os.fsync(descriptor)
     finally:
         os.close(descriptor)
 
@@ -1183,6 +1325,39 @@ class RecoveryPolicy:
 
 
 class Linux:
+    @staticmethod
+    def unknown_outcome(error):
+        return isinstance(error, RecoveryRequired)
+
+    @staticmethod
+    def pre_start_rejected(error):
+        return isinstance(error, PreStartRejected)
+
+    @staticmethod
+    def operation_failure(error, cleanup_error, lease, confirmed, phase='APPLYING'):
+        result = error if confirmed else RecoveryRequired('CLEANUP_UNCONFIRMED', error, cleanup_error)
+        result.cleanup_error = cleanup_error
+        category = error.reason if isinstance(error, (PreStartRejected, RecoveryRequired)) else 'OPERATION_FAILED'
+        result.operation_diagnostic = dict(category=category, phase='IDLE' if confirmed else phase,
+            outcome='PRE_START_REJECTED' if isinstance(error, PreStartRejected) else 'OUTCOME_UNKNOWN',
+            cleanup_confirmed=confirmed, generation=lease.record['generation'], pending=lease.record['pending'] is not None)
+        return result
+
+    @serialized_connection
+    def rollback_imported(self, ident):
+        if re.fullmatch(r'fcawg[0-9a-f]{8}', ident):
+            self._awg('down', ident)
+        elif re.fullmatch(r'fctcp[0-9a-f]{8}', ident) and hasattr(self, '_tcp'):
+            self._tcp('down', ident)
+        else:
+            raise BackendError('Unsupported operation profile cleanup')
+
+    @serialized_connection
+    def discard_inactive(self, ident):
+        if not re.fullmatch(r'fcawg[0-9a-f]{8}', ident):
+            raise BackendError('Unsupported operation profile cleanup')
+        self._awg('discard', ident)
+
     def server_load(self,ident):
         if ident in ('country:ru','country:nl'):country=ident.split(':')[1]
         else:
@@ -1400,6 +1575,13 @@ class Linux:
 
 
 class LinuxTCP(Linux):
+    @serialized_connection
+    def discard_inactive(self, ident):
+        if re.fullmatch(r'fctcp[0-9a-f]{8}', ident):
+            self._tcp('discard', ident)
+        else:
+            super().discard_inactive(ident)
+
     tcp_root=Path('/etc/family-connect/tcp')
     tcp_helper='/usr/local/lib/family-connect-tcp/helper'
     def _tcp_records(self):return self._records(self.tcp_root,'fctcp')
@@ -1448,7 +1630,7 @@ class LinuxTCP(Linux):
                 elif kind=='awg':self._awg('up',ident)
                 else:self._tcp('up',ident)
                 self._check(item);return
-            except AuthorizationError:raise
+            except (AuthorizationError, PreStartRejected, RecoveryRequired):raise
             except (BackendError,subprocess.TimeoutExpired):
                 # A cleanup failure stops the chain; never stack conflicting routes.
                 # No later transport will start: an inactive final TCP needs no
@@ -1511,7 +1693,7 @@ CANDIDATE_VERSION = None
 MESH_RUN = Path('/run/family-connect-mesh')
 MESH_FILES = ('helper', 'fc-mesh', 'mesh_ipc.py', 'mesh_chat.py', 'mesh_chat_host.py', 'provisioning/chat_bridge_protocol.py', 'mesh_materials.py', 'mesh_network.py', 'mesh_intent.py',
               'mesh_service.py', 'mesh_system.py', 'backend.py', 'profile_config.py',
-              'authorization-session-v1', 'capabilities.json', 'rns/fc-rns.pyz', 'rns/build.json',
+              'authorization-session-v2', 'capabilities.json', 'rns/fc-rns.pyz', 'rns/build.json',
               'installed.json', 'python-runtime.json', 'system_runtime.py', 'chat_direct_host.py',
               'mesh_chat_service.py', 'mesh_ownership.py', 'update.pub', 'provisioning/chat_direct.py',
               'provisioning/chat_bridge.py', 'provisioning/friends.py', 'device_identity/device.py', 'messenger/codec.py')
@@ -1592,7 +1774,8 @@ def system_component_status():
         if len(raw) > 2048:
             return 'CAPABILITY_OVERSIZED'
         value = json.loads(raw)
-        compatible = (type(value) is dict and value.get('schema') == 2 and value.get('runtime_contract') == 2 and value.get('chat_setup_protocol') == 1 and
+        compatible = (type(value) is dict and value.get('schema') == 2 and value.get('runtime_contract') == 2 and
+                type(value.get('authorization_protocol')) is int and value['authorization_protocol'] == 2 and value.get('chat_setup_protocol') == 1 and
                 all(type(value.get(key)) is int and value[key] == 1 for key in ('bridge_protocol', 'materials_protocol', 'intent_protocol')) and
                 value['core_reference'] == 'android106-native105' and value['profiles'] == ['P0', 'P1'] and
                 isinstance(value['source_digest'], str) and re.fullmatch('[a-f0-9]{64}', value['source_digest']) is not None)
@@ -1606,13 +1789,13 @@ def system_component_status():
         if inventory['schema'] != 2 or inventory['build_id'] != value['build_id'] or inventory['source_digest'] != value['source_digest']:
             return 'BUILD_ID_MISMATCH'
         files = inventory['files']
-        required = {str(MESH_ROOT / name) for name in MESH_FILES if name not in ('installed.json', 'capabilities.json', 'authorization-session-v1')}
+        required = {str(MESH_ROOT / name) for name in MESH_FILES if name not in ('installed.json', 'capabilities.json', 'authorization-session-v2')}
         required.update('/etc/systemd/system/family-connect-' + name + '@.service' for name in ('mesh', 'auto', 'chat-direct', 'chat-mesh'))
         required.add('/etc/systemd/system/family-connect-tcp@.service')
         for kind, names in {'awg': ('awg', 'amneziawg-go', 'awg-quick', 'awg31.json', 'LICENSE-go', 'LICENSE-tools', 'awg_lifecycle.py'),
                             'tcp': ('xray', 'LICENSE')}.items():
             required.update('/usr/local/lib/family-connect-' + kind + '/' + name
-                            for name in (*names, 'helper', 'backend.py', 'profile_config.py', 'authorization-session-v1'))
+                            for name in (*names, 'helper', 'backend.py', 'profile_config.py', 'authorization-session-v2'))
         if not required <= set(files) or not any(str(MESH_ROOT / 'vendor') + '/' in name for name in files):
             return 'RUNTIME_INCOMPLETE'
         for name, expected in files.items():

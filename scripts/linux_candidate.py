@@ -8,8 +8,8 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-SYSTEM = dict(build_id='8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da',
-              sha256='bdd7e04b8ca78a232acccd881004cfb3b6c96b13dc3c608d0b919f53f40f02d9', size=49247776,
+SYSTEM = dict(build_id='b8140c68e42f78506cd64c8c254c4db76cef14789bdeda471214e8348bf91c1c',
+              sha256='df5ddf2b7a8c6a10295a7358ba515ee2204b6ed6e32b5e0cc4239fd3faf5b7c7', size=49250908,
               source_digest='cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61')
 
 
@@ -23,7 +23,7 @@ def load(name):
 def embed(bundle, archive, *, standard_rebuild=False):
     raw = archive.read_bytes()
     if not standard_rebuild and (len(raw) != SYSTEM['size'] or hashlib.sha256(raw).hexdigest() != SYSTEM['sha256']):
-        raise ValueError('Expected accepted L03.1/build-9, not a same-version replacement')
+        raise ValueError('Expected pinned internal system build, not a same-version replacement')
     import io
     import tarfile
     with tarfile.open(fileobj=io.BytesIO(raw), mode='r:gz') as source:
@@ -31,7 +31,7 @@ def embed(bundle, archive, *, standard_rebuild=False):
         manifest = json.load(source.extractfile('FamilyConnect-MESH-system-amd64/manifest.json'))
     reference = json.loads((ROOT / 'packaging/linux/system-reference.json').read_text())
     if any(manifest['sha256'].get(name) != checksum for name, checksum in reference['source_files'].items()):
-        raise ValueError('System sources differ from accepted L03.1')
+        raise ValueError('System sources differ from the pinned candidate contract')
     if manifest['source_digest'] != reference['native_source_digest']:
         raise ValueError('Native source reference mismatch')
     expected = dict(build_id=manifest['build_id'], source_digest=manifest['source_digest'], size=len(raw),
@@ -73,10 +73,14 @@ def seal(bundle, version, system, python):
             files[str(path.relative_to(bundle))] = dict(sha256=hashlib.sha256(raw).hexdigest(), size=len(raw))
         elif path.is_dir():
             path.chmod(0o755)
-    record = dict(schema=1, runtime_contract=2, internal_version=version,
+    system_source = subprocess.check_output(['git', 'log', '-1', '--format=%H', '--',
+        'clients/linux', 'clients/desktop/backend.py', 'clients/desktop/profile_config.py',
+        'provisioning', 'device_identity', 'messenger', 'scripts/package_mesh_component.py',
+        'scripts/package_system_python.py'], cwd=ROOT, text=True).strip()
+    record = dict(schema=1, runtime_contract=2, authorization_protocol=2, internal_version=version,
                   source_version=(ROOT / 'VERSION').read_text().strip(), python=python, system=system,
-                  system_source_commit='f826dbdfb562541bde95d2fcbecc1d944d15da3d',
-                  system_kind='accepted-build-9' if system['sha256'] == SYSTEM['sha256'] else 'standard-source-rebuild',
+                  system_source_commit=system_source,
+                  system_kind='pinned-internal-system' if system['sha256'] == SYSTEM['sha256'] else 'standard-source-rebuild',
                   source_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
                   source_dirty=dirty, files=files, signing='unsigned-internal-candidate')
     record['build_id'] = hashlib.sha256(json.dumps(record, sort_keys=True, separators=(',', ':')).encode()).hexdigest()

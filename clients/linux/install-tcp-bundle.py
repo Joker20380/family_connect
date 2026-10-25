@@ -10,8 +10,8 @@ FILES={'bin/xray':'/usr/local/lib/family-connect-tcp/xray',
        'systemd/family-connect-tcp@.service':'/etc/systemd/system/family-connect-tcp@.service'}
 
 # Generated locally: preserve the existing signed archive member set.
-INSTALL_FILES={**FILES, 'generated/authorization-session-v1':
-               '/usr/local/lib/family-connect-tcp/authorization-session-v1'}
+INSTALL_FILES={**FILES, 'generated/authorization-session-v2':
+               '/usr/local/lib/family-connect-tcp/authorization-session-v2'}
 
 def verify(root):
     manifest=json.loads((root/'manifest.json').read_text())
@@ -50,7 +50,7 @@ def main():
     if os.geteuid()!=0:raise ValueError('Run the trusted installer as root')
     if os.uname().machine!='x86_64':raise ValueError('This bundle requires x86_64')
     payload=verify(Path(__file__).resolve().parent)
-    payload['generated/authorization-session-v1']=b''
+    payload['generated/authorization-session-v2']=b''
     for program in ('ip','curl','resolvectl','systemctl','pkexec','sysctl'):
         if not shutil.which(program):raise ValueError('Missing dependency: '+program)
     if not stat.S_ISCHR(Path('/dev/net/tun').stat().st_mode):raise ValueError('TUN device required')

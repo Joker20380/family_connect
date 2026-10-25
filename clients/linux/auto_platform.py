@@ -92,7 +92,7 @@ class Capabilities:
                     trusted(parent, True)
                 for parent in (self.config / kind, *self.config.parents, self.config):
                     trusted(parent, True)
-                for name in ('helper', 'backend.py', 'profile_config.py', 'authorization-session-v1', *engines):
+                for name in ('helper', 'backend.py', 'profile_config.py', 'authorization-session-v2', *engines):
                     info = trusted(root / name)
                     if name in ('helper', *engines):
                         require(bool(info.st_mode & 0o111))

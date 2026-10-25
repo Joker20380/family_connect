@@ -24,4 +24,4 @@ install -o root -g root -m 644 "$source_dir/clients/linux/family-connect-tcp@.se
 systemctl daemon-reload
 
 # Publish capability only after the helper and its module are installed.
-install -o root -g root -m 644 /dev/null /usr/local/lib/family-connect-tcp/authorization-session-v1
+install -o root -g root -m 644 /dev/null /usr/local/lib/family-connect-tcp/authorization-session-v2
