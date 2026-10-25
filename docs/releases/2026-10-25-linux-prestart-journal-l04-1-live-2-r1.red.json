@@ -1,0 +1,159 @@
+{
+  "candidate": "d9c0d07f93542a633b5563757f0c5aa0d4f0c37410b3b884ba8b67db01c484ef",
+  "records": [
+    {
+      "before": {
+        "generation": 0,
+        "pending": null
+      },
+      "cache_preserved": true,
+      "events": [
+        {
+          "stage": "enter",
+          "step": "finish"
+        },
+        {
+          "stage": "return",
+          "step": "finish"
+        },
+        {
+          "stage": "enter",
+          "step": "journal-write"
+        },
+        {
+          "stage": "return",
+          "step": "journal-write"
+        },
+        {
+          "stage": "enter",
+          "step": "connect"
+        },
+        {
+          "error": "BackendError",
+          "message": "VPN operation failed",
+          "step": "authorization"
+        },
+        {
+          "error": "BackendError",
+          "message": "VPN operation failed",
+          "stage": "failure",
+          "step": "connect"
+        },
+        {
+          "stage": "enter",
+          "step": "rollback"
+        },
+        {
+          "error": "ValueError",
+          "message": "invalid application recovery metadata",
+          "stage": "failure",
+          "step": "rollback"
+        }
+      ],
+      "fetches": 1,
+      "generation": 1,
+      "journal_phase": "APPLYING",
+      "journal_validation_error": "invalid application recovery metadata",
+      "network_unchanged": true,
+      "pending": true,
+      "physical_user_lock_free": true,
+      "requests": [
+        {
+          "action": "import",
+          "kind": "awg"
+        },
+        {
+          "action": "up",
+          "kind": "awg"
+        }
+      ],
+      "root_fixture_released": true,
+      "root_owner_count": 0,
+      "successful_transport_starts": 0,
+      "terminal": {
+        "error": "ValueError",
+        "message": "invalid application recovery metadata"
+      },
+      "transport": "awg",
+      "tun_count": 0
+    },
+    {
+      "before": {
+        "generation": 0,
+        "pending": null
+      },
+      "cache_preserved": true,
+      "events": [
+        {
+          "stage": "enter",
+          "step": "finish"
+        },
+        {
+          "stage": "return",
+          "step": "finish"
+        },
+        {
+          "stage": "enter",
+          "step": "journal-write"
+        },
+        {
+          "stage": "return",
+          "step": "journal-write"
+        },
+        {
+          "stage": "enter",
+          "step": "connect"
+        },
+        {
+          "error": "BackendError",
+          "message": "VPN operation failed",
+          "step": "authorization"
+        },
+        {
+          "error": "BackendError",
+          "message": "All VPN transports failed",
+          "stage": "failure",
+          "step": "connect"
+        },
+        {
+          "stage": "enter",
+          "step": "rollback"
+        },
+        {
+          "error": "ValueError",
+          "message": "invalid application recovery metadata",
+          "stage": "failure",
+          "step": "rollback"
+        }
+      ],
+      "fetches": 1,
+      "generation": 1,
+      "journal_phase": "APPLYING",
+      "journal_validation_error": "invalid application recovery metadata",
+      "network_unchanged": true,
+      "pending": true,
+      "physical_user_lock_free": true,
+      "requests": [
+        {
+          "action": "import",
+          "kind": "tcp"
+        },
+        {
+          "action": "up",
+          "kind": "tcp"
+        }
+      ],
+      "root_fixture_released": true,
+      "root_owner_count": 0,
+      "successful_transport_starts": 0,
+      "terminal": {
+        "error": "ValueError",
+        "message": "invalid application recovery metadata"
+      },
+      "transport": "tcp",
+      "tun_count": 0
+    }
+  ],
+  "result": "RED reproduced",
+  "source": "57f8eff8b291062d69248ac46413f8c9fc0f561d"
+}
