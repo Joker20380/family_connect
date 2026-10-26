@@ -1,29 +1,30 @@
 # Текущее состояние / Current state
 
-**L04.2 — R2 PARTIAL / immutable delivery; Phase B rollback environment BLOCKED.**
+**L04.2 — R2 PARTIAL / Phase B PASS; installed Phase C next, no review pause.**
 Source169aa68 DONE/review accepted: containment/drain separation и R1
 first_reason/cleanup/all-stage/retry сохранены. Native15, cleanup32, combined3,
 desktop1306/82skip и exact local36/phase0-Docker54 baseline приняты.
 Control/Client Linux setup incomplete больше не блокируют progression по review;
 общего CI PASS нет. Runtime169aa68/test/locks/pins неизменны; reference70f33f6 принят.
-Input main4bef7b3; от candidate sourceb8e9196 только docs, clean copy. Exact .10
+Input maina0f54a7; от candidate sourceb8e9196 только docs, clean copy. Exact .10
 candidate42644067…/system8ab7f298…/system_source169aa68/source_dirty=false неизменён;
 delivery hashes, embedded DEB/AppImage candidate/system equality и protected state PASS.
 Retained artifacts0444/AppImage0555/directories0555; rebuild0. Prior integrity,
 systemd/pkexec/DEB/AppImage/shared-state PASS сохраняются. AWG durable receipt включает
 routes/rules/DNS/nftables и cleanup: PASS_BY_REVIEWED_ASSERTIONS, без повтора;
 прежний XIT finalization FAIL_ENVIRONMENT_EXCLUDED, не общий wrapper PASS.
-Все13 scripts заранее sealed/hash/mode0555/RO mount, после запуска не изменялись.
-TCP package gate PASS/exit0,32.03s: IDLE/generation2/pending=false/owner/TUN0.
-Exact .9 rollback fixture BLOCKED до dpkg/setup: loginctl enable-linger1000,
-system scope bus unavailable (ENOENT), exit1/1.42s. Причина bus failure не локализована;
-product defect не установлен. Containers removed; no retry/fix. Actual .9 rollback,
-remaining regressions и Phase C NOT_RUN; Phase B PASS не объявлен.
+AWG/TCP actions не повторялись. Новый rollback script sealed/hash/0555/RO,
+loginctl отсутствует; real system/user D-Bus readiness до dpkg/setup PASS.
+Один exact .9→.10→.9 rollback PASS/exit0; оба mixed builds rejected, synthetic
+state/network baseline unchanged, owner/TUN0. Fresh cleanup32/package46/native15/
+combined3/MESH157 PASS; desktop1305/83skip plus omitted reference case1 PASS
+(82 existing skips remain). Pre-test mountpoint failure retained; no assertion replay. Scripts unchanged,
+containers removed. Phase B PASS; далее один installed P0 на .10, пока NOT_RUN.
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
-Exact complete construction artifact/system IDs/hashes в report, package acceptance incomplete. .9/state immutable;
+Exact immutable artifact/system IDs/hashes в report; package acceptance PASS. .9/state immutable;
 owner workstation NOT_USED. L04.1 DONE, parent L04 IN_PROGRESS; L05 NOT_RUN,
 delivery_unavailable backlog без диагностики. L06/L07/L08 прежние QUEUED;
-signing/publication/revoke/teardown NOT_RUN. **STOP. NEXT — final review L04.2-R2.**
+signing/publication/revoke/teardown NOT_RUN. NEXT — authorized Phase C, no review pause.
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted (owner review).**
 Exact **0.2.12~l03.2.9** установлен; candidate/package/system checks PASS,

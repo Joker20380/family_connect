@@ -1,6 +1,99 @@
 # L04.2-R2 — process containment versus authenticated drain
 
-## Package-harness continuation — current checkpoint
+## Prepared user-manager rollback and remaining Phase B — current checkpoint
+
+Input main `a0f54a7e7e4367daa79247f77a025a4ef06f8f15`,26.10. Same L04.2-R2;
+no new task, version, candidate, system build or runtime/source checkpoint.
+Review excludes `loginctl enable-linger` from rollback acceptance: the preceding
+fixture stopped before any package operation, not at a product assertion.
+AWG remains **PASS_BY_REVIEWED_ASSERTIONS**, TCP remains **PASS/exit0**; neither
+VPN package action is replayed. Prior integrity/systemd/pkexec/DEB/AppImage/
+shared-state gates remain accepted.
+
+**Phase B PASS. L04.2-R2 remains PARTIAL pending Phase C; installed P0/P1/Auto/
+lifecycle are not yet run on .10. Continue directly to the authorized installed
+gate, without an intermediate review.** No overall CI PASS is claimed.
+
+### Immutable entry and harness
+
+A clean current-main copy excludes unrelated local changes. The diff from
+candidate sourceb8e9196 is documentation only; runtime169aa68, tests, locks,
+pins and accepted three-pin reference remain unchanged. Exact .10 candidate
+`4264406722f6dd3efb83e9d9666e67180ce4f950333bb3e711bcbb4f5068b55a`, system
+`8ab7f298df10a89bcd116fbddaa8a23e37ff1581de3a456bb1cce69175ad9120`, all three
+delivery artifacts and system archive match the complete size/SHA256 table below.
+No rebuild or incomplete assembly is used; source_dirty=false. Artifact files
+remain0444, executable AppImage0555, directories0555, mounted read-only.
+Historical .9 is independently checked against the accepted CHAT-UX-2 manifest,
+including candidate6f312d1e… and system43266d97…. Original protected seven files
+remain byte-identical. No owner workstation or personal identity is used.
+
+The new rollback script and launcher are fully written before execution,
+`bash -n`/embedded Python parse PASS, mode0555, SHA256 recorded, read-only bind
+mount, separate writable evidence. The required literal command exclusion passes.
+The scripts are never edited, renamed or appended after launch. Rollback script
+SHA256 `9da4ec1857a5b769738b860c5fb83e07585028acea8cd280f3fca912416af020`;
+launcher `345f515ba16224a67c307229c28041325f8f454be375f658231475fa8ae76951`.
+After that PID exits, six separate remaining-gate scripts are sealed before
+their sequential launches; every recorded hash remains unchanged.
+
+### One rollback attempt, then remaining gates
+
+Disposable Ubuntu26.04/systemd PID1, separate namespaces, network none, no host
+bus/home/resolver mount. Before the first dpkg/setup, explicit system bus socket
+and actual D-Bus NameHasOwner readback pass. `user-runtime-dir@1000` and
+`user@1000` are started directly; user manager, real user D-Bus call, runtime
+uid1000/mode0700 and bus socket all pass. Root and user calls use distinct bus/
+runtime environments. No linger operation is invoked or required.
+
+| Gate | Result |
+| --- | --- |
+| Exact .9 install and real user pkexec setup | READY, exact old candidate/system; no automatic VPN |
+| .10 user / .9 system | CANDIDATE_SYSTEM_BUILD_MISMATCH, rejected |
+| Exact .10 matching setup | READY, exact new candidate/system |
+| .9 user / .10 system | CANDIDATE_SYSTEM_BUILD_MISMATCH, rejected |
+| Explicit system rollback to exact .9 | PASS/exit0, one attempt; exact old READY, synthetic preservation markers unchanged, network baseline equal, owner/TUN0 |
+| R1/R2 cleanup | 32 PASS,4.92s |
+| Candidate/system runtime unit selection | 46 PASS,0.35s |
+| Exact authenticated lifetime/terminal/status | 15 PASS,107.59s; same fixture worker and isolated root namespace |
+| Combined manual/Auto root→UID | 3 PASS,79.90s; authenticated OFF/ON/OFF, isolated packet/DNS/ownership |
+| MESH service/network/ownership/chat admission | 157 PASS,13.56s; exact complete system native binary, no rebuild |
+| Full desktop | 1305 PASS / 83 SKIP,64.54s; real GTK/Xvfb; one local-reference prerequisite absent from clean copy |
+| Unexecuted reference diagnostic case | 1 PASS,0.06s with exact accepted read-only source capsule; closes that extra skip, leaving82 existing skips |
+
+The additional desktop skip is
+`test_diagnostics.py::test_accepted_startup_and_trace_enumerations_remain_exportable`.
+Only its two accepted Android106 Java source files are needed; their hashes match
+the retained source inventory. The first container preparation for this unexecuted
+case exits125 before any PID/test because a nested mountpoint is absent beneath
+the RO source bind. That infrastructure failure is retained, not called a test PASS.
+After full container removal, an empty ignored mountpoint and a separate RO tree
+containing only those two source files are prepared. The unchanged sealed script
+then executes the case once, PASS. No assertion is replayed, full suite rerun,
+runtime/test edit or Android device action occurs. Combined coverage is1306 passing
+desktop cases plus82 pre-existing skips; the full-suite run itself is1305/83.
+
+Each remaining wrapper exits0; all test containers are removed. No suppression,
+xfail, test edits or deselection is introduced. The combined fixture has its
+normal disposable writable root filesystem, with source/scripts mounted RO;
+its resolver does not touch host network configuration.
+
+Accepted full-repository local36 and phase0/Docker54 failure-ID receipts are
+read back and their canonical ID hashes exactly match the source evidence below;
+new/error IDs remain empty in those accepted comparisons. These are **retained
+source comparisons**, not a new repository-wide run. Fresh affected/package
+selections above have zero failures/errors. Control/Client Linux dependency-setup
+incompleteness is retained as reviewed infrastructure evidence, not general CI PASS.
+
+Phase C will use only a new encrypted derivative of the retained authorized test
+base. Original protected home and retained bases remain untouched at this boundary.
+Live first_reason/cleanup_reason/process_contained/drain_acknowledged/attempt/
+generation are not yet observed on .10. L04.1 DONE; parent L04 IN_PROGRESS;
+L05/messages/voice acceptance/signing/publication/revoke/teardown NOT_RUN.
+Chat delivery_unavailable remains the existing L05 observation, not a VPN gate.
+Owner workstation **NOT_USED**.
+
+## Package-harness continuation — previous checkpoint
 
 Input main `4bef7b3083456beeb6debc1dc4a047edfbad3782`,26.10. Same L04.2-R2;
 no new task ID, version, candidate, system build or source checkpoint. Review
