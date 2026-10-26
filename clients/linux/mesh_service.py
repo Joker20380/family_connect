@@ -17,6 +17,9 @@ TRANSIENT = frozenset(("DEADLINE", "NETWORK_TIMEOUT", "NETWORK_ERROR", "EOF", "I
                        "REMOTE_RESET", "RELIABLE_EXHAUSTED", "WORKER_EXITED", "UNDERLAY_UNAVAILABLE", "UNDERLAY_CHANGED",
                        "HEALTH_UNAVAILABLE", "MISSING", "EXPIRED_ON_IMPORT", "CHALLENGE_TIMEOUT", "CHALLENGE_TEMPORARY_SERVER_FAILURE",
                        "FETCH_TEMPORARY_SERVER_FAILURE", "FETCH_NETWORK_FAILURE"))
+CLEANUP_REASONS = frozenset(('CHAT_BINDING_CLEANUP_FAILED', 'WORKER_REAP_FAILED', 'WORKER_READER_FAILED',
+                             'WORKER_DESCRIPTOR_FAILED', 'WORKER_CLEANUP_FAILED', 'NETWORK_DETACH_FAILED',
+                             'NETWORK_CLEANUP_FAILED'))
 
 
 class NativeWorker:
@@ -33,6 +36,9 @@ class NativeWorker:
             child.close()
         self.chat = ChatLane(parent)
         self.identifier = 0
+        self.close_lock = threading.Lock()
+        self.close_done = False
+        self.cleanup_reason = None
 
     def call(self, action, start=None):
         if self.process.poll() is not None:
@@ -50,34 +56,68 @@ class NativeWorker:
             raise ipc.ProtocolError()
         return reply
 
-    def close(self):
-        self.chat.close()
-        graceful = True
-        try:
-            self.call("stop")
-        except (OSError, ValueError, EOFError, TimeoutError):
-            graceful = False
+    def _reap(self, deadline):
+        if self.process.poll() is None:
             try:
-                self.process.terminate()
-            except ProcessLookupError:
-                pass
-        finally:
-            self.process.stdin.close()
-            self.process.stdout.close()
+                self.call('stop')
+            except Exception:
+                try:
+                    self.process.terminate()
+                except OSError:
+                    pass
+        for action in (None, self.process.terminate, self.process.kill):
+            if action is not None:
+                try:
+                    action()
+                except OSError:
+                    pass
             try:
-                self.process.wait(timeout=2)
+                result = self.process.wait(timeout=max(0, min(2, deadline - time.monotonic())))
+                if result is None or self.process.returncode is None:
+                    raise SessionFailure('CLEANUP_PENDING', 'WORKER_REAP_FAILED')
+                return
             except subprocess.TimeoutExpired:
-                graceful = False
-                self.process.kill()
-                self.process.wait(timeout=2)
-        self.chat.reader.join(2)
-        if not graceful or self.process.returncode != 0 or self.chat.reader.is_alive():
-            raise SessionFailure('CLEANUP_PENDING')
+                continue
+        raise SessionFailure('CLEANUP_PENDING', 'WORKER_REAP_FAILED')
+
+    def close(self):
+        with self.close_lock:
+            if not self.close_done:
+                deadline = time.monotonic() + 10
+                failures = []
+                try:
+                    self.chat.close()
+                except Exception:
+                    failures.append('WORKER_READER_FAILED')
+                try:
+                    self._reap(deadline)
+                except Exception:
+                    failures.append('WORKER_REAP_FAILED')
+                for stream in (self.process.stdin, self.process.stdout):
+                    try:
+                        stream.close()
+                        if not stream.closed:
+                            raise SessionFailure('CLEANUP_PENDING')
+                    except Exception:
+                        failures.append('WORKER_DESCRIPTOR_FAILED')
+                try:
+                    self.chat.reader.join(max(0, min(2, deadline - time.monotonic())))
+                    if self.chat.reader.is_alive() or self.chat.connection.fileno() != -1:
+                        raise SessionFailure('CLEANUP_PENDING')
+                except Exception:
+                    failures.append('WORKER_READER_FAILED')
+                if time.monotonic() > deadline:
+                    failures.append('WORKER_CLEANUP_FAILED')
+                self.cleanup_reason = failures[0] if failures else None
+                self.close_done = True
+            if self.cleanup_reason is not None:
+                raise SessionFailure('CLEANUP_PENDING', self.cleanup_reason)
 
 
 class SessionFailure(RuntimeError):
-    def __init__(self, code):
+    def __init__(self, code, cleanup_reason=None):
         self.code = code
+        self.cleanup_reason = cleanup_reason
         super().__init__(code)
 
 
@@ -90,6 +130,10 @@ class PacketSession:
         self.snapshot = {}
         self.underlying, self.deadline = 0, 0
         self.chat_binding = None
+        self.close_lock = threading.Lock()
+        self.close_done = False
+        self.cleanup_confirmed = False
+        self.cleanup_reason = None
 
     def begin(self, materials, underlying, startup_deadline, readiness_deadline):
         if self.started:
@@ -164,13 +208,34 @@ class PacketSession:
         raise SessionFailure('CANCELLED')
 
     def close(self):
-        if self.chat_binding is not None:
-            self.chat_binding.close()
-        self.reply = None
-        if self.worker is not None:
-            self.worker.close()
-            self.worker = None
-        self.network.detach()
+        with self.close_lock:
+            if not self.close_done:
+                failures = []
+                if self.chat_binding is not None:
+                    try:
+                        self.chat_binding.close()
+                    except Exception:
+                        failures.append('CHAT_BINDING_CLEANUP_FAILED')
+                self.reply = None
+                if self.worker is not None:
+                    try:
+                        self.worker.close()
+                    except Exception as error:
+                        reason = getattr(error, 'cleanup_reason', None)
+                        failures.append(reason if reason in CLEANUP_REASONS else 'WORKER_CLEANUP_FAILED')
+                    else:
+                        self.worker = None
+                try:
+                    self.network.detach()
+                except Exception:
+                    failures.append('NETWORK_DETACH_FAILED')
+                else:
+                    self.attached = False
+                self.cleanup_reason = failures[0] if failures else None
+                self.cleanup_confirmed = not failures
+                self.close_done = True
+            if not self.cleanup_confirmed:
+                raise SessionFailure('CLEANUP_PENDING', self.cleanup_reason)
 
 
 class Supervisor:
@@ -196,6 +261,7 @@ class Supervisor:
             self.materials_owner.native = NativeMaterials(ownership)
         self.restarted = False
         self.session = None
+        self.cleanup_pending = False
 
     def chat_binding(self):
         with self.lock:
@@ -252,16 +318,19 @@ class Supervisor:
         return self.state == "DISCONNECTED"
 
     def run(self, materials):
-        prepared = False
         failure = "NONE"
         retries = 0
         try:
             if self.cancel.is_set():
                 return
-            if self.ownership is not None:
-                self.ownership.acquire(self.cancel, time.monotonic() + 30)
-            self.network.prepare()
-            prepared = True
+            try:
+                if self.ownership is not None:
+                    self.ownership.acquire(self.cancel, time.monotonic() + 30)
+                self.network.prepare()
+            except Exception:
+                self.transition('FAILED', 'NETWORK_SETUP_FAILED')
+                self.cancel.wait()
+                return
             while not self.cancel.is_set():
                 try:
                     underlying = self.network.underlying()
@@ -281,30 +350,34 @@ class Supervisor:
                 retries += 1
                 self.cancel.wait(min(30, 2 ** min(retries, 5)))
         except Exception:
-            failure = "NETWORK_SETUP_FAILED"
+            failure = "PACKET_OR_IPC_FAILED"
             self.transition("FAILED", failure)
             self.cancel.wait()
         finally:
             materials.clear()
             try:
+                if self.cleanup_pending:
+                    raise SessionFailure('CLEANUP_PENDING')
                 self.network.cleanup()
                 if self.ownership is not None and self.ownership.active:
                     if self.session is not None:
                         raise SessionFailure('CLEANUP_PENDING')
                     self.ownership.finish()
-            except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
+            except Exception:
+                if not self.cleanup_pending:
+                    self.transition('FAILED', 'NETWORK_CLEANUP_FAILED')
                 self.transition("FAILED", "CLEANUP_PENDING")
             else:
                 if self.cancel.is_set():
                     self.transition("DISCONNECTED", "CANCELLED")
-                elif not prepared:
-                    self.transition("FAILED", failure)
 
     def connect(self, materials, underlying):
-        session = PacketSession(self.network, self.materials_owner, self.cancel, self.attempt, self.worker_factory)
-        with self.lock:
-            self.session = session
+        session = None
+        failure = 'CANCELLED'
         try:
+            session = PacketSession(self.network, self.materials_owner, self.cancel, self.attempt, self.worker_factory)
+            with self.lock:
+                self.session = session
             self.transition("CONNECTING" if self.attempt == 1 and not self.restarted else "RESTORING")
             startup_deadline = time.monotonic() + 200
             session.begin(materials, underlying, startup_deadline, startup_deadline + 35)
@@ -318,15 +391,24 @@ class Supervisor:
                     self.transition('CONNECTED')
                 if self.cancel.wait(1):
                     break
-            return "CANCELLED"
         except (MaterialsError, SessionFailure) as error:
-            return error.code
+            failure = error.code
         except (EOFError, BrokenPipeError, TimeoutError):
-            return "WORKER_EXITED"
+            failure = 'WORKER_EXITED'
         except Exception:
-            return "PACKET_OR_IPC_FAILED"
+            failure = 'PACKET_OR_IPC_FAILED'
         finally:
-            session.close()
-            with self.lock:
-                if self.session is session:
-                    self.session = None
+            if failure != 'CANCELLED':
+                self.transition('STOPPING', failure)
+            try:
+                if session is not None:
+                    session.close()
+            except Exception as error:
+                reason = getattr(error, 'cleanup_reason', None)
+                self.transition('STOPPING', reason if reason in CLEANUP_REASONS else 'CLEANUP_FAILED')
+                self.cleanup_pending = True
+            finally:
+                with self.lock:
+                    if self.session is session:
+                        self.session = None
+        return 'CLEANUP_PENDING' if self.cleanup_pending else failure

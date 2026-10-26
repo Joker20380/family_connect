@@ -4,20 +4,15 @@ Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN
 STATUS/PLAN define the current bounded task and next review gate, not an automatic
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
-[L04.2 core continuation](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
-is the current bounded task: **PARTIAL / first manual P0 Connect failed**.
-The old literal one-ChatClient criterion was corrected by review, not a product patch:
-one messenger plus one support proxy are expected; no third proxy/second owner.
-Earlier .9/system READY, derived state/reopen, native readiness/ACK and DIRECT
-registration PASS remain accepted. Final review moves the previous
-registration_error=delivery_unavailable to L05 backlog, not a core VPN prerequisite;
-cause remains unresolved, no diagnosis/repair or client/gateway attribution.
-One P0 Connect reached FAILED / NETWORK_SETUP_FAILED (attempt1); one Disconnect
-restored the immediate network baseline, owner/TUN0 and pending null. Late underlay
-IPv6 flag difference is disclosed. P1/Auto/active reopen/AppImage remain NOT_RUN.
-Encrypted state is retained; [RESUME evidence](releases/2026-10-26-linux-installed-mesh-auto-l04-2-resume.md)
-remains historical, as does the accepted [BLOCKED observation](releases/2026-10-26-linux-installed-mesh-auto-l04-2-final.md).
-Owner workstation is excluded. **STOP. NEXT — final review L04.2 core.**
+[L04.2-R1 source checkpoint](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r1.md)
+continues the same PLAN L04.2: deterministic primary/cleanup preservation,
+focused213 PASS/2 SKIP and full desktop1296 PASS/82 SKIP. Full/package gate remains
+IN_PROGRESS; no new candidate or live acceptance yet. The accepted
+[core P0 failure](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
+is not replayed on .9. Historical reports and .9/system bytes remain immutable.
+Chat delivery_unavailable stays in L05 backlog, not a VPN prerequisite; no chat
+diagnosis, owner-workstation use, signing or publication. Expected messenger/support
+proxies remain distinct; the earlier literal singleton gate was corrected by review.
 [CHAT-UX-2](releases/2026-10-26-chat-ux-2.md) source/package is DONE:
 one main-window messenger and the exact49-face Android106 ICQ-classic GIF/token pack.
 [CHAT-UX-1](releases/2026-10-26-chat-ux-1.md) is technically completed in reviewed

@@ -1,27 +1,22 @@
 # Текущее состояние / Current state
 
-**L04.2 — current task, PARTIAL / core P0 Connect failure,26.10.**
-Checkpoint4a4b102 принят как BLOCKED observation; delivery_unavailable перенесён в
-L05 backlog, причина не локализована, client defect/gateway outage не заявлены.
-Chat registration/route не prerequisite; диагностика/repair не выполнялись.
-Literal one-ChatClient gate **corrected by review**, не product patch: messenger1,
-support1, unexpected0; один ChatService/ChatOwner/D-Bus/store lock. Support trace
-текущего run: только support_status154, без messenger lifecycle операций.
-Exact0.2.12~l03.2.9/system unchanged READY, прежние state/reopen/readiness/ACK/DIRECT
-PASS сохранены, не повторялись как acceptance gates. Clean encrypted P0 snapshot:
-один GUI Connect → FAILED / NETWORK_SETUP_FAILED, attempt1, elapsed60835ms.
-Applied/negotiated P0 не достигнут; owner1/TUN0, без AWG/TCP/Auto fallback.
-Readiness VERIFIED_READBACK/READY/VALIDATED_CACHE; отдельный receipt ACK_PENDING/
-FETCH_FAILED не переименован в ACK PASS. Root cause не локализован; source unchanged.
-Один GUI Disconnect → DISCONNECTED, owner/TUN0, pending null, intent desired=false;
-immediate network/DNS/address baseline equal. Позднее изменился только underlay IPv6
-mngtmpaddr flag; late address-metadata equality NOT_PROVEN. Исходные7 файлов identical,
-chat identity/store и nl/MESH/P0 settings сохранены. Runtime/VM остановлены, encrypted
-base/copy/receipt retained. P1/Auto/DNS-HTTPS/refresh/lifecycle/AppImage NOT_RUN после STOP.
-Owner workstation не использовался; revoke/teardown NOT_RUN.
-[Core continuation](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md).
-L04.1 DONE; parent L04 IN_PROGRESS. L05 NOT_RUN; L06/L07/L08 прежние QUEUED.
-Signing/publication NOT_RUN. **STOP. NEXT — final review L04.2 core.**
+**L04.2 — current task; R1 source checkpoint, package/full gate IN_PROGRESS.**
+Core PARTIAL принят; старую .9 P0 не повторяли. На input36606ea воспроизведён
+primary→NETWORK_SETUP_FAILED collapse: corrected red18 FAIL/2 PASS; source fix
+сохраняет primary first_reason и отдельный cleanup stage. Native nonzero exit
+не равен cleanup failure при подтверждённых reap/reader/descriptors. Все стадии
+PacketSession.close исполняются; unconfirmed cleanup → FAILED/CLEANUP_PENDING,
+без retry/ownership release; complete cleanup → штатный bounded recovery.
+Focused213 PASS/2 SKIP; full desktop1296 PASS/82 SKIP после исправления только
+fixture /tmp:noexec→exec. Новые reason codes входят в strict diagnostics allowlist.
+[Единый R1 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r1.md).
+Новый system/candidate пока NOT_BUILT; exact .9/system immutable. Mandatory full
+suites/CI/package gate ещё не PASS; до их успеха installed live не начинать.
+L04.1 DONE; parent L04 IN_PROGRESS. delivery_unavailable остаётся L05 backlog,
+без диагностики/repair и без route prerequisite для VPN. Literal proxy criterion
+corrected by review, не product patch; messenger/support projections допустимы.
+Retained test state не запускался; owner workstation NOT_USED. L05 NOT_RUN;
+L06/L07/L08 прежние QUEUED, signing/publication/revoke/teardown NOT_RUN.
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted (owner review).**
 Exact **0.2.12~l03.2.9** установлен; candidate/package/system checks PASS,
