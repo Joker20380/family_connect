@@ -1,23 +1,27 @@
 # Текущее состояние / Current state
 
-**L04.2 — current task, BLOCKED / protected chat resume preflight,26.10.**
-RESUME PARTIAL принят; прежний literal one-ChatClient gate **corrected by review**,
-не product patch. Допустимы messenger1 + support1; unexpected0, один ChatService/
-ChatOwner/D-Bus/store owner подтверждены. Support trace: только support_status52,
-без chat open/queue/edit/heartbeat/visible peer. VPN-time contract ещё NOT_RUN.
-Exact internal0.2.12~l03.2.9/system unchanged READY; ранее принятые derived chat state,
-create=False reopen, readiness/readback/ACK и DIRECT registration остаются PASS,
-не повторялись как acceptance gates. Retained encrypted base использована для clean P0 copy.
-Новый preflight14:47:49UTC: registration_error=delivery_unavailable, route/node absent.
-Причина не локализована; client defect/gateway outage не доказаны. Поздний root DIRECT
-active response не заменяет healthy ChatOwner readback. Один product-driven renewal:
-certificate records1→2, revision1, expiry18:31:47UTC; native readback/ACK READY.
-P0 Connect не вызывался; P0/P1/Auto/EXISTING_EXIT/lifecycle/AppImage live NOT_RUN.
-Runtime остановлен, encrypted base/copy/receipt сохранены, исходные7 файлов identical.
-Routes/DNS baseline совпал; address equality NOT_PROVEN. Revoke/teardown NOT_RUN.
-Owner workstation не использовался. [Final review report](releases/2026-10-26-linux-installed-mesh-auto-l04-2-final.md).
-L04.1 DONE; parent L04 IN_PROGRESS, не DONE. L05 NOT_RUN; L06/L07/L08 QUEUED,
-без новых проверок. Signing/publication NOT_RUN. **STOP. NEXT — final review L04.2.**
+**L04.2 — current task, PARTIAL / core P0 Connect failure,26.10.**
+Checkpoint4a4b102 принят как BLOCKED observation; delivery_unavailable перенесён в
+L05 backlog, причина не локализована, client defect/gateway outage не заявлены.
+Chat registration/route не prerequisite; диагностика/repair не выполнялись.
+Literal one-ChatClient gate **corrected by review**, не product patch: messenger1,
+support1, unexpected0; один ChatService/ChatOwner/D-Bus/store lock. Support trace
+текущего run: только support_status154, без messenger lifecycle операций.
+Exact0.2.12~l03.2.9/system unchanged READY, прежние state/reopen/readiness/ACK/DIRECT
+PASS сохранены, не повторялись как acceptance gates. Clean encrypted P0 snapshot:
+один GUI Connect → FAILED / NETWORK_SETUP_FAILED, attempt1, elapsed60835ms.
+Applied/negotiated P0 не достигнут; owner1/TUN0, без AWG/TCP/Auto fallback.
+Readiness VERIFIED_READBACK/READY/VALIDATED_CACHE; отдельный receipt ACK_PENDING/
+FETCH_FAILED не переименован в ACK PASS. Root cause не локализован; source unchanged.
+Один GUI Disconnect → DISCONNECTED, owner/TUN0, pending null, intent desired=false;
+immediate network/DNS/address baseline equal. Позднее изменился только underlay IPv6
+mngtmpaddr flag; late address-metadata equality NOT_PROVEN. Исходные7 файлов identical,
+chat identity/store и nl/MESH/P0 settings сохранены. Runtime/VM остановлены, encrypted
+base/copy/receipt retained. P1/Auto/DNS-HTTPS/refresh/lifecycle/AppImage NOT_RUN после STOP.
+Owner workstation не использовался; revoke/teardown NOT_RUN.
+[Core continuation](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md).
+L04.1 DONE; parent L04 IN_PROGRESS. L05 NOT_RUN; L06/L07/L08 прежние QUEUED.
+Signing/publication NOT_RUN. **STOP. NEXT — final review L04.2 core.**
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted (owner review).**
 Exact **0.2.12~l03.2.9** установлен; candidate/package/system checks PASS,

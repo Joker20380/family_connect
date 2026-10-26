@@ -4,16 +4,20 @@ Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN
 STATUS/PLAN define the current bounded task and next review gate, not an automatic
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
-[L04.2 final review checkpoint](releases/2026-10-26-linux-installed-mesh-auto-l04-2-final.md)
-is the current bounded task: **BLOCKED / protected chat resume preflight; VPN NOT_RUN**.
+[L04.2 core continuation](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
+is the current bounded task: **PARTIAL / first manual P0 Connect failed**.
 The old literal one-ChatClient criterion was corrected by review, not a product patch:
 one messenger plus one support proxy are expected; no third proxy/second owner.
 Earlier .9/system READY, derived state/reopen, native readiness/ACK and DIRECT
-registration PASS remain accepted. Current preflight instead observed
-registration_error=delivery_unavailable with no route; cause is unresolved, no
-client defect/gateway outage proved. P0 Connect and P1/Auto were not started.
+registration PASS remain accepted. Final review moves the previous
+registration_error=delivery_unavailable to L05 backlog, not a core VPN prerequisite;
+cause remains unresolved, no diagnosis/repair or client/gateway attribution.
+One P0 Connect reached FAILED / NETWORK_SETUP_FAILED (attempt1); one Disconnect
+restored the immediate network baseline, owner/TUN0 and pending null. Late underlay
+IPv6 flag difference is disclosed. P1/Auto/active reopen/AppImage remain NOT_RUN.
 Encrypted state is retained; [RESUME evidence](releases/2026-10-26-linux-installed-mesh-auto-l04-2-resume.md)
-remains historical. Owner workstation is excluded. **STOP. NEXT — final review L04.2.**
+remains historical, as does the accepted [BLOCKED observation](releases/2026-10-26-linux-installed-mesh-auto-l04-2-final.md).
+Owner workstation is excluded. **STOP. NEXT — final review L04.2 core.**
 [CHAT-UX-2](releases/2026-10-26-chat-ux-2.md) source/package is DONE:
 one main-window messenger and the exact49-face Android106 ICQ-classic GIF/token pack.
 [CHAT-UX-1](releases/2026-10-26-chat-ux-1.md) is technically completed in reviewed
@@ -34,7 +38,8 @@ E/F1/F2 accepted. [Single beta-freeze manifest](releases/2026-10-25-linux-awg-tc
 pins exact .5, internal/unpublished, unchanged bytes. Registry restart remains a
 separate operational observation: uninterrupted continuity NOT_PROVEN, cause unknown,
 assignment/configuration unchanged. No F2 replay or R3. Parent L04 remains IN_PROGRESS
-only because of L04.2; its VPN scenarios, L05 and device teardown remain NOT_RUN.
+only because of L04.2; P0 core failure is recorded above, P1/Auto, L05 and device
+teardown remain NOT_RUN.
 MESH/Auto and messenger are outside the historical beta scope;
 its signing/publication decision is not the current NEXT.
 [R2 queued Connect/Close](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md)
