@@ -1,0 +1,38 @@
+{
+  "scale": 1.5,
+  "rendering": "real GTK/X11/Xvfb widget snapshots; native popover at observed widget coordinates",
+  "synthetic": true,
+  "one_toplevel": true,
+  "same_window": true,
+  "sizes": {
+    "wide-conversation": [
+      890,
+      790
+    ],
+    "narrow-conversation": [
+      350,
+      670
+    ],
+    "narrow-contacts": [
+      350,
+      670
+    ],
+    "empty": [
+      890,
+      670
+    ],
+    "onboarding": [
+      890,
+      670
+    ]
+  },
+  "screenshots": [
+    "empty.png",
+    "icq-picker.png",
+    "narrow-contacts.png",
+    "narrow-conversation.png",
+    "onboarding.png",
+    "status.png",
+    "wide-conversation.png"
+  ]
+}

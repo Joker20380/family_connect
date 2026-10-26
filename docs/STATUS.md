@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**CHAT-UX-2 — current bounded task / IN PROGRESS.**
+**CHAT-UX-2 — implemented checkpoint / REVIEW REQUIRED; validation PARTIAL.**
 Owner decisions: мессенджер внутри единственного главного окна; exact Android106
 ICQ-classic49 GIF вместо системного picker. CHAT-UX-1 technically completed в
 reviewed source/UI/package scope, но product design superseded; исходное evidence
@@ -12,9 +12,15 @@ OWNER-CHAT-UX-INSTALL: dpkg/package/import checks PASS; installed UX acceptance
 PARTIAL. Пользователь подтвердил ручную отправку наблюдавшегося сообщения.
 CHAT-UX-2 source: embedded Stack, прежние RPC/drafts/bubbles/voice,49-face manifest,
 Android aliases/boundaries, literal copy, один visibility-bound GIF clock.
-Full desktop1267 PASS/84 SKIP; final candidate/gates ещё выполняются.
-Планируется exact Ubuntu26.04/Python3.14 **0.2.12~l03.2.9** с прежним system build;
-.7/.8 immutable. [CHAT-UX-2 report](releases/2026-10-26-chat-ux-2.md).
+Full desktop1272 PASS/84 SKIP; messenger222 PASS; parser/picker/UX72 PASS;
+exact DEB/AppImage/integrity/AWG/TCP gates и14 synthetic GTK captures PASS.
+Full local3353 PASS/36 прежних FAIL/101 SKIP/1 отдельная новая FD teardown ERROR
+(22 vs24 descriptors, повторилась на final source); общий full-suite PASS не заявлен.
+CI full suites54/54/53 FAIL без suppression. Failure IDs/ограничения сохранены в отчёте.
+Собран exact Ubuntu26.04/Python3.14 **0.2.12~l03.2.9**, source `cb81cd5`,
+candidate `6f312d1e7c783ea42a39ca164d93d74b0ec4faf5bac53e24c12551cedd052a5b`;
+прежний system build byte-identical, .7/.8 immutable.
+[CHAT-UX-2 report, hashes/screenshots/gates](releases/2026-10-26-chat-ux-2.md).
 Owner .9 install / L04.2 / full L05 / TCP HTTPS diagnosis / signing / publication **NOT_RUN**.
 **STOP после CHAT-UX-2. NEXT — review перед установкой .9 владельцу.**
 

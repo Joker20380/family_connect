@@ -10,7 +10,9 @@ one main-window messenger and the exact49-face Android106 ICQ-classic GIF/token 
 source/UI/package scope, but its product design is superseded by owner decision.
 Its historical screenshots, .8 artifacts and unsuppressed failures remain intact.
 Owner-installed internal .8 is temporary/unpublished; .9 installation is NOT_RUN.
-Current NEXT after validation is CHAT-UX-2 review, not publication or upgrade.
+The .9 source/UI/package checkpoint is implemented; full-suite acceptance remains
+PARTIAL with unsuppressed residuals and a separate FD teardown observation.
+Current NEXT is CHAT-UX-2 review, not publication or upgrade.
 [Ubuntu26.04/Python3.14 compatibility](releases/2026-10-26-linux-ubuntu2604-python314-compat.md)
 remains historical compatibility evidence; frozen .5/.7/.8 are not rebuilt.
 

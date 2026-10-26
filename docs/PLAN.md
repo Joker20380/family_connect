@@ -2,15 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Текущий bounded task — CHAT-UX-2, IN PROGRESS.**
+**Текущий bounded task — CHAT-UX-2, implemented / REVIEW REQUIRED.**
 Зависимость: owner review CHAT-UX-1 source/UI/package accepted; installed .8 temporary.
 CHAT-UX-1 technically completed, product design superseded by explicit owner decision;
 [original evidence](releases/2026-10-26-chat-ux-1.md) и failures сохранены.
 Gate: единственное main window/ChatClient, embedded adaptive chat, exact Android106
 49 GIF catalog/order/tokens/aliases/labels/SHA256, text-only wire/store, bounded
 visibility animation, прежние composer/history/voice/onboarding и lifecycle.
-Full desktop1267 PASS/84 SKIP; final parser/GTK/full/package/visual gates pending.
-Candidate .9 Ubuntu26.04/Python3.14, system43266d97… unchanged; .7/.8 immutable.
+UI/package gate: parser/picker/UX72 PASS, desktop1272 PASS/84 SKIP, messenger222 PASS;
+exact DEB/AppImage/integrity/AWG/TCP PASS,14 real synthetic captures100/150%.
+Full acceptance PARTIAL: local3353 PASS/36 historical FAIL/101 SKIP и1 новая
+FD teardown ERROR (22 vs24), CI full54/54/53 FAIL; no suppression, no overall PASS.
+Candidate .9/sourcecb81cd5/6f312d1e… Ubuntu26.04/Python3.14,
+system43266d97… unchanged byte-for-byte; .7/.8 immutable, owner остаётся на .8.
 [CHAT-UX-2 report](releases/2026-10-26-chat-ux-2.md).
 Owner install/publication/signing/L04.2/full L05/TCP HTTPS diagnosis **NOT_RUN**.
 **STOP после task. NEXT — review CHAT-UX-2 перед установкой .9 владельцу.**

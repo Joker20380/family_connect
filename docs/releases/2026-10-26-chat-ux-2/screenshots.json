@@ -1,0 +1,135 @@
+{
+  "synthetic": true,
+  "engine": "Ubuntu26.04 GTK4/Xvfb/GSK; actual final packaged widgets",
+  "scale_method": "100% = 96 DPI; 150% = 144 DPI, GDK_SCALE=1; not fractional-compositor installed acceptance",
+  "source_commit": "cb81cd50e0afaee0b25d78bb3bd7176c9999d250",
+  "candidate_id": "6f312d1e7c783ea42a39ca164d93d74b0ec4faf5bac53e24c12551cedd052a5b",
+  "screenshots": [
+    {
+      "path": "100/empty.png",
+      "size": 33466,
+      "sha256": "5d1f320b9b16943de1970fd4f80d497ad6a618ba1aa258d9dde886e98ad547e7",
+      "pixels": [
+        890,
+        670
+      ]
+    },
+    {
+      "path": "100/icq-picker.png",
+      "size": 114690,
+      "sha256": "bd86a29f7d9293a48f4b0218b253f75b2acc0e43e87078a498e7c31db9a13c0a",
+      "pixels": [
+        890,
+        790
+      ]
+    },
+    {
+      "path": "100/narrow-contacts.png",
+      "size": 29644,
+      "sha256": "3ed19abc8d65b550137b3098e1d26dfa41e10f2a7e1c082acb67bdcfba749c20",
+      "pixels": [
+        350,
+        670
+      ]
+    },
+    {
+      "path": "100/narrow-conversation.png",
+      "size": 40127,
+      "sha256": "4f81f83137c7dd398758fe08321a32172f05486350dbe68b9d8e40854fef0b51",
+      "pixels": [
+        350,
+        670
+      ]
+    },
+    {
+      "path": "100/onboarding.png",
+      "size": 33855,
+      "sha256": "2f3517197c244d347b2bcef752a19edd0aee0362f13314268ed8158110ab5891",
+      "pixels": [
+        890,
+        670
+      ]
+    },
+    {
+      "path": "100/status.png",
+      "size": 72506,
+      "sha256": "027827bd6db2f9a7a1463221871ea90ff1fe46dbe0386fe4f3543274ea2ea788",
+      "pixels": [
+        380,
+        964
+      ]
+    },
+    {
+      "path": "100/wide-conversation.png",
+      "size": 73035,
+      "sha256": "3f147dc653e5c85af3983df95e38b60d6f7be23cdfe1d27e928852575f158f82",
+      "pixels": [
+        890,
+        790
+      ]
+    },
+    {
+      "path": "150/empty.png",
+      "size": 34643,
+      "sha256": "d64b032589358ac91346e0bf6cbab4743fec4f71f6450f4865144490ec7ad2c3",
+      "pixels": [
+        890,
+        670
+      ]
+    },
+    {
+      "path": "150/icq-picker.png",
+      "size": 142297,
+      "sha256": "2e96f9199db7a8d8d38edc684287b93f4e191ee916392bc74d28e326c62dbcee",
+      "pixels": [
+        890,
+        790
+      ]
+    },
+    {
+      "path": "150/narrow-contacts.png",
+      "size": 30782,
+      "sha256": "6c2b754528da90fcc43bf5ba7dabc87a14e887d766b876ded4e69a3c1d92d2bc",
+      "pixels": [
+        350,
+        670
+      ]
+    },
+    {
+      "path": "150/narrow-conversation.png",
+      "size": 41241,
+      "sha256": "6291dcb04d83eac22da57ad70cf49fe8190ae3f17b8553977ab97b0ea88d1243",
+      "pixels": [
+        350,
+        670
+      ]
+    },
+    {
+      "path": "150/onboarding.png",
+      "size": 35016,
+      "sha256": "510aedc3bef1ade835c0f2b76480b1146e9de57877f6932e4531db2eb828a7b5",
+      "pixels": [
+        890,
+        670
+      ]
+    },
+    {
+      "path": "150/status.png",
+      "size": 80573,
+      "sha256": "9601c2332d0fb3d479bd32b57819ef847764922b9ab9971e210d3de40cf76118",
+      "pixels": [
+        523,
+        964
+      ]
+    },
+    {
+      "path": "150/wide-conversation.png",
+      "size": 75949,
+      "sha256": "85ec89f2e5dee51d563b4038a37fa40f5843fe96f461a87873de98e8914efdb8",
+      "pixels": [
+        890,
+        790
+      ]
+    }
+  ]
+}
