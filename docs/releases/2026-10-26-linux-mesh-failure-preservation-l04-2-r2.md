@@ -1,6 +1,65 @@
 # L04.2-R2 — process containment versus authenticated drain
 
-## Phase B exact safe-directory continuation — current checkpoint
+## Reference advancement and package continuation — current checkpoint
+
+Input main `3ae2e3c0acf8f5cb1c3deaff9f1123ce435801e3`,26.10. Same L04.2-R2.
+Review authorizes only three source-file pins and their provenance string in
+`packaging/linux/system-reference.json`; accepted runtime169aa68 remains unchanged.
+No new runtime/source checkpoint or PLAN ID is created. **Reference gate PASS;
+Phase B IN_PROGRESS. Package/live acceptance is not yet claimed.**
+
+Before editing, SHA256 is independently computed from `git show` of accepted
+`169aa687f497f8be690be5331879f994636135e1` and actual members of the exact complete
+system archive, then compared with its manifest. Both sources match the requested
+new hashes for backend.py, mesh_chat_service.py and mesh_service.py, listed in the
+previous package-failure table below. No hash is copied without this verification.
+
+The only product-tree diff is four literal replacements: exactly those three
+source_files SHA256 values and source_checkpoint, now exactly:
+
+```text
+L04.2-R2 source 169aa687f497f8be690be5331879f994636135e1 primary-cleanup-containment-drain
+```
+
+Strict old/new parsing confirms no duplicate keys, unchanged113-member source_files
+key set/count, exactly three changed hashes, exactly one provenance change, and all
+other reference bytes unchanged. Native digestcfcb7bae… and RNS digest66128235…
+remain unchanged. No verifier, SYSTEM constant, runtime, dependency or toolchain
+pin is changed; the whole reference is not regenerated.
+
+Exact reusable archive: build8ab7f298df10a89bcd116fbddaa8a23e37ff1581de3a456bb1cce69175ad9120,
+49,251,070 bytes, SHA256
+`bea874702228b153a4ed6a5c5ecfebc3f47e5c46b64f4e5e8c7b22b91181448f`.
+Regular-file/hash/root/native/RNS checks,759 unique regular members, uid/gid0,
+no group/world-writable members and actual fixed-installer extraction/verification/
+readback PASS. No system rebuild is required or performed.
+
+Using the unchanged real `embed()` and fixed installer in disposable offline
+Ubuntu26.04/Python3.14, the bounded reference harness records:
+
+| Reference case | Result |
+| --- | --- |
+| Old reference + exact new archive | Exact source-contract rejection |
+| New reference + exact new archive | PASS, matching build/ABI3.14 |
+| New reference + separately mutated backend / mesh_chat_service / mesh_service | All three rejected |
+| New reference + mutated unchanged mesh_network member | Rejected |
+| New reference + exact historical .9 system | Rejected as source-contract mismatch |
+
+Synthetic mutation archives are temporary copies with recomputed member/manifest
+hashes, so these negatives exercise source pins rather than only an outer digest.
+The real complete archive and historical .9 are never modified. Existing targeted
+`test_linux_candidate.py` and `test_system_runtime.py`: **46 PASS**, no skips or
+suppression. No additional source test is needed for this literal pin advancement;
+the exact-archive positive/negative receipts remain local sanitized evidence.
+
+Reference advancement is committed/pushed separately before candidate build,
+with only the reference plus STATUS/PLAN/this report. Secret/JSON/link/scope/
+whitespace checks PASS. The next step is a fresh .10 build from that commit with
+source_dirty=false, reusing only the verified complete system artifact. No separate
+review pause is required after this passing reference gate. Owner workstation
+NOT_USED; L05/messages/signing/publication NOT_RUN; protected state untouched.
+
+## Prior Phase B package source-contract stop — review accepted
 
 Input main `9bfee698f1793e8fc7700a7438b6e7c244b31fb5`,26.10. Same L04.2-R2,
 no new task ID, R3 or source checkpoint. Review accepts the previous namespace/

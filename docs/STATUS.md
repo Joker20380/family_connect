@@ -1,25 +1,22 @@
 # Текущее состояние / Current state
 
-**L04.2 — R2 PARTIAL / Phase B package source-contract FAIL; STOP до live.**
+**L04.2 — R2 PARTIAL / reference advancement PASS; Phase B IN_PROGRESS.**
 Source169aa68 DONE/review accepted: containment/drain separation и R1
 first_reason/cleanup/all-stage/retry сохранены. Native15, cleanup32, combined3,
 desktop1306/82skip и exact local36/phase0-Docker54 baseline приняты.
 Control/Client Linux setup incomplete больше не блокируют progression по review;
-общего CI PASS нет.169aa68→9bfee69 и working runtime byte-identical, только CI/docs.
-Fresh Ubuntu26.04.1/Python3.14.4, exact locks/RECORD630/17 distributions/reference
-PASS; Go1.26.0/Xray pins неизменны. Один новый полный run в clean current-main copy:
-network-none/NET_ADMIN dummy namespace без внешней сети, точечный safe.directory;
-native7/protection PASS, build/inventory/licenses/RNS PASS. Новый system8ab7f298…
-построен и archive/readback PASS; ещё не installed/runtime accepted.
-Candidate packaging FAIL в embed: pinned system-reference hashes для backend.py,
-mesh_service.py и mesh_chat_service.py не совпадают с accepted169aa68 payload.
-Это package integration failure; verifier работает fail-closed, не live VPN defect.
-Source/pins не изменены, retry нет. .10 NOT_BUILT, candidate ID/artifact hashes N/A.
+общего CI PASS нет. Runtime169aa68 неизменён. Review разрешает ровно три source-file
+pins + provenance в system-reference; независимые accepted-source/archive hashes PASS.
+113 keys сохранены, только три SHA изменены; native/RNS/остальные pins unchanged.
+Old/new/synthetic/old-system reference gates PASS; candidate/runtime tests46 PASS.
+Complete system8ab7f298…/49,251,070 bytes/bea87470… повторно verified, не rebuilt.
+Reference metadata commit отдельно до .10 build; verifier/SYSTEM/runtime не меняются.
+Candidate/package/live gates ещё не приняты; после pin commit продолжить Phase B.
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
-Installed package gates/Phase C NOT_RUN; new system IDs/hashes в report. .9/state immutable;
+Installed package gates/Phase C пока NOT_RUN; new system IDs/hashes в report. .9/state immutable;
 owner workstation NOT_USED. L04.1 DONE, parent L04 IN_PROGRESS; L05 NOT_RUN,
 delivery_unavailable backlog без диагностики. L06/L07/L08 прежние QUEUED;
-signing/publication/revoke/teardown NOT_RUN. **NEXT — final review L04.2-R2.**
+signing/publication/revoke/teardown NOT_RUN. NEXT после bounded continuation — final review L04.2-R2.
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted (owner review).**
 Exact **0.2.12~l03.2.9** установлен; candidate/package/system checks PASS,
