@@ -1,22 +1,24 @@
 # Текущее состояние / Current state
 
-**L04.2 — R2 PARTIAL / delivery complete; Phase B harness environment BLOCKED.**
+**L04.2 — R2 PARTIAL / immutable delivery; Phase B rollback environment BLOCKED.**
 Source169aa68 DONE/review accepted: containment/drain separation и R1
 first_reason/cleanup/all-stage/retry сохранены. Native15, cleanup32, combined3,
 desktop1306/82skip и exact local36/phase0-Docker54 baseline приняты.
 Control/Client Linux setup incomplete больше не блокируют progression по review;
 общего CI PASS нет. Runtime169aa68/test/locks/pins неизменны; reference70f33f6 принят.
-Input mainb8e9196, clean copy. Exact system8ab7f298…/49,251,070 bytes/bea87470…
-readback PASS, reused. Official Type-2 release417724209: три exact asset IDs/hashes,
-detached signature PASS; тот же appimagetool854e19e/build313. Prerequisite receipt PASS.
-Один fresh offline .10 run COMPLETE: candidate42644067…, sourceb8e9196,
-system_source169aa68, source_dirty=false; DEB/AppImage/legacy/manifest созданы.
-Integrity/coherence PASS; real systemd/pkexec system/DEB/AppImage gates PASS, encrypted
-state/shared system/no silent VPN PASS. AWG fixture assertions PASS, но orchestration
-FAIL после них: agent изменил ещё исполняемый private wrapper, `XIT: command not found`.
-Environment/harness error, не product defect. Test container удалён, owner/TUN0,
-IDLE/pending=false/network unchanged. No retry/source fix. TCP/exact .9 rollback,
-remaining package regressions и Phase C NOT_RUN; Phase B PASS не объявлен.
+Input main4bef7b3; от candidate sourceb8e9196 только docs, clean copy. Exact .10
+candidate42644067…/system8ab7f298…/system_source169aa68/source_dirty=false неизменён;
+delivery hashes, embedded DEB/AppImage candidate/system equality и protected state PASS.
+Retained artifacts0444/AppImage0555/directories0555; rebuild0. Prior integrity,
+systemd/pkexec/DEB/AppImage/shared-state PASS сохраняются. AWG durable receipt включает
+routes/rules/DNS/nftables и cleanup: PASS_BY_REVIEWED_ASSERTIONS, без повтора;
+прежний XIT finalization FAIL_ENVIRONMENT_EXCLUDED, не общий wrapper PASS.
+Все13 scripts заранее sealed/hash/mode0555/RO mount, после запуска не изменялись.
+TCP package gate PASS/exit0,32.03s: IDLE/generation2/pending=false/owner/TUN0.
+Exact .9 rollback fixture BLOCKED до dpkg/setup: loginctl enable-linger1000,
+system scope bus unavailable (ENOENT), exit1/1.42s. Причина bus failure не локализована;
+product defect не установлен. Containers removed; no retry/fix. Actual .9 rollback,
+remaining regressions и Phase C NOT_RUN; Phase B PASS не объявлен.
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
 Exact complete construction artifact/system IDs/hashes в report, package acceptance incomplete. .9/state immutable;
 owner workstation NOT_USED. L04.1 DONE, parent L04 IN_PROGRESS; L05 NOT_RUN,

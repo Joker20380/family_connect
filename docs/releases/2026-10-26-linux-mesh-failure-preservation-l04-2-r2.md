@@ -1,6 +1,120 @@
 # L04.2-R2 — process containment versus authenticated drain
 
-## Verified offline runtime and fresh delivery — current checkpoint
+## Package-harness continuation — current checkpoint
+
+Input main `4bef7b3083456beeb6debc1dc4a047edfbad3782`,26.10. Same L04.2-R2;
+no new task ID, version, candidate, system build or source checkpoint. Review
+accepts exact .10 construction/delivery, prior integrity/systemd/pkexec/DEB/
+AppImage/shared-state gates, and the durable AWG product assertions/cleanup.
+**Result: PARTIAL; Phase B ENVIRONMENT_BLOCKED at rollback fixture entry;
+Phase C NOT_RUN. STOP. NEXT — final review L04.2-R2.**
+
+### Immutable entry audit and reviewed AWG evidence
+
+Read-only audit PASS. Current main differs from candidate sourceb8e9196 only in
+four documentation files. A clean current-main copy excludes unrelated working
+changes; product/package/runtime/test bytes remain unchanged. No build command
+or package/native/RNS/system reconstruction is run.
+
+Retained `state-client-build/linux-l042-r2-offline-20261026/candidate/` is the only
+delivery input. Exact IDs, sizes and SHA256 match the complete artifact table in
+the previous checkpoint below:
+
+- Version `0.2.12~l03.2.10`; candidate
+  `4264406722f6dd3efb83e9d9666e67180ce4f950333bb3e711bcbb4f5068b55a`.
+- Source `b8e9196d205c6810e02a642678517a4fc44b921b`; `source_dirty=false`.
+- System source `169aa687f497f8be690be5331879f994636135e1`; system
+  `8ab7f298df10a89bcd116fbddaa8a23e37ff1581de3a456bb1cce69175ad9120`.
+
+`candidate-delivery.json` matches the actual artifacts. Temporary extraction in
+an offline disposable container confirms byte-identical DEB/AppImage
+`candidate.json`, and both embedded system archives are byte-identical to the
+exact complete system artifact. Historical .9 delivery/system and original
+protected seven files match their recorded hashes. No earlier incomplete .10
+assembly is used. After the audit, the retained candidate directory is made
+read-only: regular files0444, executable original AppImage0555, directories0555.
+Tests mount artifacts read-only and write only to separate evidence/fixture paths.
+Post-stop hashes and modes remain correct.
+
+The preceding durable AWG receipt is read, not regenerated. It contains expected
+TRANSPORT_BUSY, IDLE, generation2, pending=false, successful starts0, root owner0,
+TUN0, physical user lock free, root fixture released and preserved cache. Its
+`network_unchanged=true` is traced to the exact unchanged fixture: before/after
+hash equality covers links, IPv4/IPv6 routes and rules, resolver DNS/domains and
+the nftables ruleset. The receipt is emitted after releasing the root fixture;
+the XIT line follows it. No AWG action or assertion is rerun.
+
+```text
+AWG_PACKAGE_REGRESSION=PASS_BY_REVIEWED_ASSERTIONS
+HARNESS_FINALIZATION=FAIL_ENVIRONMENT_EXCLUDED
+```
+
+The historical wrapper exit1 remains recorded, not rewritten as a successful
+wrapper run or general package PASS.
+
+### Immutable scripts and remaining gate results
+
+Before launching remaining gates, all scripts are prepared completely. Each gate
+has its own shell script with `set -Eeuo pipefail`; `bash -n` and Python AST
+checks pass. SHA256 for every script is recorded, scripts/directories are0555,
+and containers receive a read-only scripts bind mount. A separate writable
+evidence directory receives logs and one-write PID files. Full current-PID exit
+is observed before the next gate starts. All thirteen recorded script hashes
+remain unchanged; no running file is edited, renamed, appended or replaced.
+
+| Gate | Result |
+| --- | --- |
+| Prior integrity/systemd/pkexec/DEB/AppImage/shared-state | PASS retained by review; not replayed as standalone acceptance gates |
+| AWG regression | PASS_BY_REVIEWED_ASSERTIONS; no replay |
+| TCP package pre-start regression | PASS, wrapper exit0,32.03s; expected TRANSPORT_BUSY, IDLE/generation2/pending=false, owner/TUN/starts0, cache/physical lock/network/root-fixture cleanup PASS |
+| Exact .9 rollback fixture | ENVIRONMENT_BLOCKED before first install; exit1,1.42s |
+| Actual old/mixed .9/.10 install/rollback assertions | NOT_RUN; first `dpkg -i` is not reached |
+| Fresh cleanup32/package46/native15/combined3/MESH/full desktop | NOT_RUN after stop; prepared scripts are not execution evidence |
+| Installed P0/P1/Auto/lifecycle | NOT_RUN; Phase C not entered |
+
+TCP and rollback each use a fresh offline Ubuntu26.04/systemd container with
+separate namespaces and no host bus/home/resolver mount. TCP exercises the
+existing unchanged real-systemd fixture, including normal explicit setup as its
+prerequisite, then the actual TCP pre-start refusal/cleanup assertions. Its shell
+and container cleanup both exit successfully; no AWG scenario is hidden inside it.
+
+The rollback fixture reaches its first session-environment operation and fails:
+
+```text
+stage: ROLLBACK_FIXTURE_SYSTEM_BUS_UNAVAILABLE
+command: loginctl enable-linger 1000
+exit: 1
+stderr: Failed to connect to system scope bus via local transport: No such file or directory
+```
+
+The launcher had observed `systemctl is-active dbus systemd-resolved` succeed,
+but this did not establish that `loginctl` could use the system bus. The exact
+reason for the unavailable bus is not localized; a startup race is not asserted
+as proven. This is a harness/environment prerequisite failure, **not** evidence
+that the .9 rollback, .10 package, polkit contract or runtime is defective.
+The fixture fails before `dpkg -i`, setup, synthetic-state creation or any VPN
+action. No retry, sleep workaround, script/source correction or next gate follows.
+
+Both test containers are stopped/removed; readback finds no remaining containers
+for this continuation. New receipts/logs are retained separately from the prior
+evidence. Candidate/system bytes, historical .9 and protected seven files remain
+unchanged; retained encrypted derived bases are not booted or modified. Owner
+workstation **NOT_USED**. No private state, keys, materials, messages or artifacts
+are staged in Git.
+
+Earlier source-gate native15/cleanup32/combined3/desktop1306 and accepted exact
+local36/phase0-Docker54 historical comparisons remain source evidence only. No new
+full-suite run, failure-ID comparison or overall CI PASS is claimed. Control/
+Client Linux setup incompleteness remains the accepted infrastructure observation.
+Live first_reason/cleanup_reason/process_contained/drain_acknowledged/attempt/
+generation remain NOT_OBSERVED for .10. L04.1 DONE and parent L04 IN_PROGRESS are
+unchanged; L05/messages/voice acceptance/signing/publication/teardown NOT_RUN.
+
+Documentation checks PASS: secret scan, strict JSON/no duplicate keys,417 local
+links, four-file staged scope and `git diff --check`. Pre-existing unrelated work
+is preserved outside the commit; generated artifacts and private harnesses stay local.
+
+## Verified offline runtime and fresh delivery — previous checkpoint
 
 Input main `b8e9196d205c6810e02a642678517a4fc44b921b`,26.10. Same L04.2-R2;
 no new task, version, runtime/source checkpoint or product patch. Review accepts
