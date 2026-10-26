@@ -26,7 +26,7 @@ PACKAGING = ROOT / 'packaging' / 'linux'
 
 DESKTOP_RUNTIME = (
     'app.py', 'backend.py', 'profile_config.py', 'updates.py', 'update.pub',
-    'friends_qr.py', 'friends_ui.py', 'chat_ui.py', 'messenger_window.py', 'messenger_widgets.py', 'chat_strings.py', 'chat_voice.py', 'chat_notifications.py', 'chat_daemon.py', 'chat_announcements.py', 'support_daemon.py',
+    'friends_qr.py', 'friends_ui.py', 'chat_ui.py', 'messenger_window.py', 'messenger_widgets.py', 'smiley_catalog.py', 'smiley_catalog.json', 'smiley_widgets.py', 'chat_strings.py', 'chat_voice.py', 'chat_notifications.py', 'chat_daemon.py', 'chat_announcements.py', 'support_daemon.py',
 )
 DEVICE_IDENTITY = ('__init__.py', 'device.py', 'friends.py')
 PROVISIONING = (
@@ -83,6 +83,10 @@ def assemble_bundle(destination):
     desktop = ROOT / 'clients' / 'desktop'
     for name in DESKTOP_RUNTIME:
         safe_copy(desktop / name, destination / 'clients' / 'desktop' / name)
+    from scripts.smiley_assets import copy_assets
+    copy_assets(destination, ROOT)
+    safe_copy(ROOT / 'clients/android/app/src/main/assets/chat/icq-classic/provenance.json',
+              destination / 'licenses/icq-classic-provenance.json')
     safe_copy(ROOT/'VERSION', destination/'VERSION')
     for name in DEVICE_IDENTITY:
         safe_copy(ROOT / 'device_identity' / name, destination / 'device_identity' / name)

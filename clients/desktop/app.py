@@ -499,7 +499,7 @@ class App:
         texture=Gdk.Texture.new_from_bytes(GLib.Bytes.new(base64.b64decode(ICON_PNG)))
         icon=Gtk.Image.new_from_paintable(texture);icon.set_pixel_size(28);brand.append(icon)
         name=Gtk.Label(label='family_connect');name.add_css_class('fc-brand');brand.append(name)
-        header.set_title_widget(Gtk.Label(label=''));outer.append(header)
+        header.set_title_widget(Gtk.Label(label='Family Connect'));outer.append(header)
         brand_header=TerminalHeader();brand_header.set_margin_start(12);brand_header.set_margin_end(12);shell.append(brand_header)
         self.body=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=8)
         for side in ('top','bottom','start','end'):getattr(self.body,'set_margin_'+side)(12)
@@ -568,11 +568,10 @@ class App:
         self.language_button=TerminalButton(label='RU / EN');self.language_button.add_css_class('fc-action');self.language_button.connect('clicked',lambda _:self.language());self.body.append(self.language_button)
         from backend import CANDIDATE_VERSION
         self.version_label=Gtk.Label(label='v'+(CANDIDATE_VERSION or APP_VERSION),xalign=0);self.version_label.add_css_class('fc-caption');self.body.append(self.version_label)
-        self.chat_pane=None;self.chat_closed=False;self.chat_smoke=smoke;self.messenger_window=None
+        self.chat_pane=None;self.chat_closed=False;self.chat_smoke=smoke
         try:
-            from messenger_window import MessengerWindow
-            self.messenger_window=MessengerWindow(self.window.get_application(),show_settings=lambda:(self.present(),self.select_page('settings')))
-            self.chat_pane=self.messenger_window.pane
+            from messenger_window import MessengerPane
+            self.chat_pane=MessengerPane(show_chat=lambda:(self.present(),self.select_page('messenger')),show_settings=lambda:self.select_page('settings'))
             if not smoke:GLib.idle_add(self.chat_pane.resume_existing)
         except ImportError:pass
         self.messenger_note=Gtk.Label(label='',xalign=0,wrap=True);self.body.append(self.messenger_note)
@@ -602,9 +601,13 @@ class App:
         for page in ('status','messenger','route','settings'):
             button=TerminalButton();button.nav_page=page;button.add_css_class('fc-action');button.add_css_class('fc-nav');button.set_hexpand(True)
             button.connect('clicked',lambda _,p=page:self.select_page(p));footer.append(button);self.nav[page]=button
-        shell.append(footer);clamp=Adw.Clamp();clamp.set_maximum_size(560);clamp.set_tightening_threshold(400);clamp.set_child(shell)
+        clamp=Adw.Clamp();clamp.set_maximum_size(560);clamp.set_tightening_threshold(400);clamp.set_child(shell)
         if hasattr(clamp,'set_unit'):clamp.set_unit(Adw.LengthUnit.PX)
-        clamp.set_vexpand(True);outer.append(clamp);self.window.set_content(outer)
+        clamp.set_vexpand(True)
+        self.workspace=Gtk.Stack(hhomogeneous=False,vhomogeneous=False,vexpand=True)
+        self.workspace.add_named(clamp,'dashboard')
+        if self.chat_pane is not None:self.workspace.add_named(self.chat_pane,'messenger')
+        outer.append(self.workspace);outer.append(footer);self.window.set_content(outer)
         self.last_profiles=None
         if not smoke:self.register_icon();self.submit(self.initialize,'initialized')
         if self.render_source:GLib.source_remove(self.render_source);self.render_source=0
@@ -851,24 +854,25 @@ class App:
         if self.fit_clock is not None:
             self.fit_clock.disconnect(self.fit_source);self.fit_clock=None
         self.fit_source=0
-        if self.closed:return GLib.SOURCE_REMOVE
+        if self.closed or self.fitted_height is not None or self.page=='messenger':return GLib.SOURCE_REMOVE
         width=max(320,self.window.get_default_size()[0])
         _,natural,_,_=self.window.measure(Gtk.Orientation.VERTICAL,width)
         if natural!=self.fitted_height:
             self.fitted_height=natural;self.window.set_default_size(width,natural)
         return GLib.SOURCE_REMOVE
     def select_page(self,page):
-        if page=='messenger' and self.messenger_window is not None:
-            self.messenger_window.present()
-            if not self.chat_smoke:self.chat_pane.activate(True,self.ru)
-            return
+        if self.fitted_height is None:self.fit_height()
         if self.confirmation is not None:self.scroll.set_child(self.body);self.confirmation=None
         if self.friends_window is not None:
             self.friends_next_page=page;self.friends_window.request_close();return
-        self.page=page;self.scroll.get_vadjustment().set_value(0);self.paint()
+        self.page=page;self.scroll.get_vadjustment().set_value(0)
+        self.workspace.set_visible_child_name('messenger' if page=='messenger' and self.chat_pane is not None else 'dashboard')
+        if self.chat_pane is not None and (not self.chat_smoke or self.chat_pane.owner_factory is not None):self.chat_pane.activate(page=='messenger',self.ru)
+        self.paint()
     def open_chat(self,peer):
         import re
         if not re.fullmatch('(?:[0-9a-f]{32}|service)',peer):return
+        self.present()
         self.pending_chat=peer;self.select_page('messenger')
         deadline=time.monotonic()+30
         def ready():
@@ -924,7 +928,7 @@ class App:
 
     def language(self):
         self.ru=not self.ru
-        if self.chat_pane is not None and not self.chat_smoke:self.chat_pane.activate(self.messenger_window.get_visible(),self.ru)
+        if self.chat_pane is not None and (not self.chat_smoke or self.chat_pane.owner_factory is not None):self.chat_pane.activate(self.page=='messenger',self.ru)
         index=self.country.get_selected()
         self.refresh_country_labels()
         self.country.set_selected(index)
@@ -1433,7 +1437,6 @@ class App:
         GLib.source_remove(self.poll_source)
         self.pool.shutdown(wait=False,cancel_futures=True);self.poll_pool.shutdown(wait=False,cancel_futures=True)
         Gtk.StyleContext.remove_provider_for_display(self.window.get_display(),self.provider)
-        if self.messenger_window is not None:self.messenger_window.dispose_window()
         self.window.destroy();return False
     @staticmethod
     def register_icon(_=None):

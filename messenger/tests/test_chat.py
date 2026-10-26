@@ -39,6 +39,26 @@ def test_bidirectional_signed_text_and_upstream_decode(pair):
     assert len(alice.store.messages())==len(bob.store.messages())==2
 
 
+def test_icq_tokens_and_unicode_bidirectional_signed_history(pair):
+    alice, bob, key, root = pair
+    original = 'Привет :) *LOL* *HI* @}->-- *DANCE* *ROFL* 🙂 е\u0301\nБез нормализации'
+    for sender, receiver in ((alice, bob), (bob, alice)):
+        ident = sender.queue(receiver.address, original)
+        token, packed = sender.store.begin_attempt(ident)
+        assert receiver.receive(packed)
+        RNS.Identity.remember(None, sender.address, sender.public)
+        upstream = LXMF.LXMessage.unpack_from_bytes(packed)
+        assert upstream.signature_validated
+        assert upstream.content.decode() == original
+        assert all(message['text'] == original for message in receiver.store.messages())
+    alice.store.close()
+    reopened = Store(root / 'alice', key)
+    try:
+        assert all(message['text'] == original for message in reopened.messages())
+    finally:
+        reopened.close()
+
+
 def test_restart_preserves_identity_contacts_pending_and_dedupe(pair):
     alice,bob,key,root=pair
     public=alice.public

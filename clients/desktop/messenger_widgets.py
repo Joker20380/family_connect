@@ -5,6 +5,8 @@ import hashlib
 from gi.repository import Gdk, GObject, Gtk, Pango
 
 from messenger.codec import MAX_TEXT
+from smiley_catalog import insertion
+from smiley_widgets import SmileyLabel
 
 
 def accessible(widget, label):
@@ -90,6 +92,15 @@ class Composer(Gtk.TextView):
         self.grab_focus()
         return True
 
+    def insert_smiley(self, token):
+        buffer = self.get_buffer()
+        selection = buffer.get_selection_bounds()
+        if selection:
+            start, end = (iterator.get_offset() for iterator in selection)
+        else:
+            start = end = buffer.get_iter_at_mark(buffer.get_insert()).get_offset()
+        return self.insert_emoji(insertion(self.get_text(), start, end, token))
+
     def key_pressed(self, controller, keyval, keycode, modifiers):
         if keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter) and not modifiers & Gdk.ModifierType.SHIFT_MASK:
             if not modifiers & (Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.ALT_MASK | Gdk.ModifierType.SUPER_MASK):
@@ -149,11 +160,7 @@ class Bubble(Gtk.Box):
             audio.append(Gtk.Label(label=label, wrap=True, max_width_chars=24))
             self.append(audio)
         else:
-            text = Gtk.Label(label=message['text'], xalign=0, wrap=True, selectable=True, max_width_chars=48)
-            text.set_wrap_mode(Pango.WrapMode.WORD_CHAR)
-            attributes = Pango.AttrList()
-            attributes.insert(Pango.attr_insert_hyphens_new(False))
-            text.set_attributes(attributes)
+            text = SmileyLabel(message['text'], pane.animation_clock)
             self.append(text)
         footer = Gtk.Box(spacing=8, halign=Gtk.Align.END)
         timestamp = stamp(message['timestamp'])

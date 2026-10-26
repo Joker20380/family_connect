@@ -136,9 +136,9 @@ def main(destination, scale):
             settled(pane)
             assert pane.compose.get_text() == ''
             pane.compose.grab_focus()
-            focus = app.messenger_window.get_focus()
+            focus = app.window.get_focus()
             assert focus == pane.compose or focus.is_ancestor(pane.compose)
-            assert app.messenger_window.child_focus(Gtk.DirectionType.TAB_FORWARD)
+            assert app.window.child_focus(Gtk.DirectionType.TAB_FORWARD)
             pump(.2)
             capture(app, destination / (language + '-conversation.png'))
             pane.compose.set_text('draft preserved')

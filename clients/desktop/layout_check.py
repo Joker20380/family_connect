@@ -85,9 +85,8 @@ def layouts(scale):
                 for page in ('status','messenger','stats','settings'):
                     app.select_page(page);pump(.2)
                     if page == 'messenger':
-                        assert app.messenger_window.get_visible() and app.messenger_window.get_width() >= 320
-                        app.messenger_window.close()
-                        app.present()
+                        assert app.chat_pane.get_mapped() and app.window.get_width() >= 320
+                        assert all(button.get_mapped() for button in app.nav.values())
                         continue
                     assert all(button.get_mapped() for button in app.nav.values()),'Navigation disappeared'
                     for name,widgets in app.pages.items():

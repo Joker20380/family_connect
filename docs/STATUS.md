@@ -1,23 +1,22 @@
 # Текущее состояние / Current state
 
-**CHAT-UX-1 — IMPLEMENTED / REVIEW REQUIRED; validation PARTIAL, не acceptance PASS.**
-Owner workstation read-only: установлен exact **0.2.12~l03.2.7**, candidate
-`c79b4feb51f3755ce458367d057abcb5fdd87bd975fe6059fa8fe06d88617c45`;
-system `43266d97c6a9f8d4e7026727cbb4b5cb6aeea49db799f93bd798b67a8135198c`.
-Prepare-chat выполнен ранее владельцем; текущая задача не запускает host setup.
-Отдельное окно, адаптивные диалоги/bubbles, fixed composer/native emoji и bounded
-onboarding реализованы через прежние RPC; wire/store/identity/ownership не меняются.
-GTK27 PASS, full desktop1226 PASS/85 SKIP; encrypted mixed Cyrillic/emoji history,
-voice/notification/announcement, final DEB/AppImage/AWG/TCP package gates и integrity PASS.
-12 real GTK synthetic screenshots100/150% сохранены. Mandatory full3282 PASS/**57 FAIL**/
-106 SKIP без suppression (старые55 IDs +2 readiness configuration observations);
-phase0/Linux-control CI54 FAIL, общий PASS не заявляется. Остаточные gates — в отчёте.
-Собран internal **0.2.12~l03.2.8**, source `b094595`, candidate `0bf09cee…`;
-прежний system43266d97… byte-for-byte, .7 immutable. Test-only layout import correction
-`581272a` не меняет bundled UI; все24 layout cases PASS с unset PYTHONPATH и Linux client CI PASS.
-[CHAT-UX-1 report](releases/2026-10-26-chat-ux-1.md).
-Owner installation/publication/L04.2/full L05/TCP HTTPS diagnosis **NOT_RUN**.
-**STOP. NEXT — review CHAT-UX-1 перед установкой владельцу; open gates не обходить.**
+**CHAT-UX-2 — current bounded task / IN PROGRESS.**
+Owner decisions: мессенджер внутри единственного главного окна; exact Android106
+ICQ-classic49 GIF вместо системного picker. CHAT-UX-1 technically completed в
+reviewed source/UI/package scope, но product design superseded; исходное evidence
+и residual failures сохранены, не превращены в PASS нового дизайна.
+На owner workstation временно установлен internal **0.2.12~l03.2.8**, candidate
+`0bf09cee08e27014f27e96abbd219ce3e31a1cf8eb1f8e906434d807f0577a87`;
+system `43266d97c6a9f8d4e7026727cbb4b5cb6aeea49db799f93bd798b67a8135198c` READY.
+OWNER-CHAT-UX-INSTALL: dpkg/package/import checks PASS; installed UX acceptance
+PARTIAL. Пользователь подтвердил ручную отправку наблюдавшегося сообщения.
+CHAT-UX-2 source: embedded Stack, прежние RPC/drafts/bubbles/voice,49-face manifest,
+Android aliases/boundaries, literal copy, один visibility-bound GIF clock.
+Full desktop1267 PASS/84 SKIP; final candidate/gates ещё выполняются.
+Планируется exact Ubuntu26.04/Python3.14 **0.2.12~l03.2.9** с прежним system build;
+.7/.8 immutable. [CHAT-UX-2 report](releases/2026-10-26-chat-ux-2.md).
+Owner .9 install / L04.2 / full L05 / TCP HTTPS diagnosis / signing / publication **NOT_RUN**.
+**STOP после CHAT-UX-2. NEXT — review перед установкой .9 владельцу.**
 
 ### Предыдущий compatibility checkpoint — историческая граница
 

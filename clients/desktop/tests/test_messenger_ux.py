@@ -7,7 +7,7 @@ pytest.importorskip('gi')
 pytestmark = pytest.mark.skipif(not os.environ.get('DISPLAY'), reason='Real GTK display required')
 
 from app import Adw, Gdk, GLib, Gtk
-from messenger_window import MessengerWindow
+from app import App
 from messenger_widgets import Bubble, Composer, DialogRow, initials, preview
 from messenger_fixture import ChatFixture
 
@@ -38,20 +38,25 @@ def window():
     def factory():
         created.append(fixture)
         return fixture
-    window = MessengerWindow(owner_factory=factory)
-    window.present_chat()
+    app = App(smoke=True)
+    window = app.window
+    window.pane = app.chat_pane
+    window.app = app
+    window.pane.owner_factory = factory
+    app.select_page('messenger')
+    app.present()
+    window.set_default_size(900, 680)
+    window.pane.activate(True, True)
     settle(window.pane)
     window.pane.conversation(fixture.cards[0])
     settle(window.pane)
     yield window, fixture, created
-    closed = []
-    window.pane.request_close(lambda: closed.append(True))
+    app.close(True)
     for attempt in range(100):
         pump(.02)
-        if closed:
+        if app.closed:
             break
-    assert closed
-    window.dispose_window()
+    assert app.closed
 
 
 def test_emoji_at_cursor_and_replaces_selection(window):
@@ -59,10 +64,10 @@ def test_emoji_at_cursor_and_replaces_selection(window):
     pane.compose.set_text('Привет мир')
     buffer = pane.compose.get_buffer()
     buffer.place_cursor(buffer.get_iter_at_offset(7))
-    pane.emoji.emit('emoji-picked', '🙂')
+    pane.compose.insert_emoji('🙂')
     assert pane.compose.get_text() == 'Привет 🙂мир'
     buffer.select_range(buffer.get_iter_at_offset(7), buffer.get_end_iter())
-    pane.emoji.emit('emoji-picked', '👩🏽‍💻🌿')
+    pane.compose.insert_emoji('👩🏽‍💻🌿')
     assert pane.compose.get_text() == 'Привет 👩🏽‍💻🌿'
     assert window[0].get_focus() == pane.compose
 
@@ -110,11 +115,11 @@ def test_draft_survives_switch_failure_and_close(window):
     settle(pane)
     assert pane.compose.get_text() == 'Черновик 🙂'
     assert pane.composer_box.get_sensitive()
-    messenger.close()
+    messenger.app.select_page('status')
     settle(pane)
-    assert not messenger.get_visible()
+    assert messenger.get_visible() and not pane.get_mapped()
     assert fixture.heartbeats[-1]['visible'] is False
-    messenger.present_chat()
+    messenger.app.select_page('messenger')
     settle(pane)
     assert pane.compose.get_text() == 'Черновик 🙂'
     assert len(created) == fixture.open_count == 1
@@ -291,17 +296,20 @@ def test_app_navigation_and_deep_link_reuse_one_window(monkeypatch):
     app.select_page('messenger')
     pane.activate(True, True)
     settle(pane)
-    messenger = app.messenger_window
+    messenger = app.window
+    app.present()
     original_size = app.window.get_default_size()
     app.open_chat(fixture.cards[0]['address'])
     pump(.3)
     settle(pane)
     assert pane.peer['address'] == fixture.cards[0]['address']
-    messenger.close()
+    app.select_page('route')
     app.open_chat(fixture.cards[1]['address'])
     pump(.3)
     settle(pane)
-    assert app.messenger_window is messenger and fixture.open_count == 1
+    assert app.window is messenger and fixture.open_count == 1
+    assert not hasattr(app, 'messenger_window')
+    assert len([window for window in Gtk.Window.get_toplevels() if window.get_visible()]) == 1
     assert app.window.get_default_size() == original_size
     app.close(True)
     for attempt in range(100):

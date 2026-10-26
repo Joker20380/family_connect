@@ -2,19 +2,18 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Текущий bounded task — CHAT-UX-1, IMPLEMENTED / REVIEW REQUIRED. Validation PARTIAL.**
-Зависимость: explicit owner request, установленная Ubuntu26.04/Python3.14 .7 и штатный
-prepare-chat (owner context; installed version/IDs read-only verified).
-Gate: одно адаптивное GTK окно/ChatClient, bubbles, fixed byte-bounded composer,
-native emoji, bounded отдельные onboarding CTA; прежние RPC/форматы/privacy/ownership.
-GTK27 PASS; full desktop1226 PASS/85 SKIP; exact .8 DEB/AppImage/AWG/TCP gates,
-integrity и12 synthetic GTK screenshots100/150% PASS. Mandatory full3282 PASS/**57 FAIL**/
-106 SKIP без suppression; phase0/Linux-control CI54 FAIL. Полный acceptance gate не закрыт.
-Source `b094595`, candidate `0bf09cee…`; test-only correction `581272a` (layout24 PASS).
-System43266d97… byte-for-byte неизменен, .7 immutable и остаётся установленным владельцу.
-[Report](releases/2026-10-26-chat-ux-1.md). Не устанавливать владельцу/не публиковать.
-**STOP после CHAT-UX-1. NEXT — review CHAT-UX-1 перед установкой UI-кандидата владельцу.**
-L04.2/full L05/TCP HTTPS diagnosis и другие queued tasks не начинать.
+**Текущий bounded task — CHAT-UX-2, IN PROGRESS.**
+Зависимость: owner review CHAT-UX-1 source/UI/package accepted; installed .8 temporary.
+CHAT-UX-1 technically completed, product design superseded by explicit owner decision;
+[original evidence](releases/2026-10-26-chat-ux-1.md) и failures сохранены.
+Gate: единственное main window/ChatClient, embedded adaptive chat, exact Android106
+49 GIF catalog/order/tokens/aliases/labels/SHA256, text-only wire/store, bounded
+visibility animation, прежние composer/history/voice/onboarding и lifecycle.
+Full desktop1267 PASS/84 SKIP; final parser/GTK/full/package/visual gates pending.
+Candidate .9 Ubuntu26.04/Python3.14, system43266d97… unchanged; .7/.8 immutable.
+[CHAT-UX-2 report](releases/2026-10-26-chat-ux-2.md).
+Owner install/publication/signing/L04.2/full L05/TCP HTTPS diagnosis **NOT_RUN**.
+**STOP после task. NEXT — review CHAT-UX-2 перед установкой .9 владельцу.**
 
 ### Предыдущий compatibility checkpoint — не активный NEXT
 

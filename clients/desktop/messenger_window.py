@@ -1,4 +1,4 @@
-"""One adaptive messenger window in the existing GTK process and chat session."""
+"""Adaptive embedded messenger page in the existing GTK application/chat session."""
 import os
 from pathlib import Path
 
@@ -6,6 +6,7 @@ from gi.repository import Adw, GLib, Gtk
 
 from chat_ui import ChatPane, ERRORS
 from messenger_widgets import Bubble, Composer, DialogRow, accessible, icon_button, stamp
+from smiley_widgets import AnimationClock, SmileyPicker
 from messenger.codec import MAX_TEXT
 
 
@@ -51,6 +52,9 @@ def preparation_status():
 
 class MessengerPane(ChatPane):
     def __init__(self, **options):
+        self.animation_clock = AnimationClock()
+        self.animation_root = None
+        self.animation_signal = 0
         self.component, self.prepared = 'UNKNOWN', False
         self.open_error = None
         self.status_busy = False
@@ -61,6 +65,12 @@ class MessengerPane(ChatPane):
         for child in (self.heading, self.content, self.notice):
             self.remove(child)
         self.set_spacing(0)
+        self.add_css_class('messenger')
+        self.provider = Gtk.CssProvider()
+        self.provider.load_from_data(CSS.encode())
+        Gtk.StyleContext.add_provider_for_display(self.get_display(), self.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION + 1)
+        self.connect('map', self.animation_mapped)
+        self.connect('unmap', lambda *_: self.animation_clock.set_active(False))
         self.split = Adw.Leaflet(can_unfold=True, can_navigate_back=True, can_navigate_forward=False)
         self.split.set_transition_type(Adw.LeafletTransitionType.SLIDE)
         self.split.set_vexpand(True)
@@ -174,6 +184,7 @@ class MessengerPane(ChatPane):
     def activate(self, active, ru):
         changed = self.ru != ru
         super().activate(active, ru)
+        self.animation_active()
         if active and self.owner is not None and not self.opened and not self.busy:
             self.open(False)
         if changed:
@@ -183,6 +194,29 @@ class MessengerPane(ChatPane):
             self.displayed_address = None
         if active:
             self.check_preparation()
+
+    def animation_mapped(self, *_):
+        root = self.get_root()
+        if root is not self.animation_root:
+            if self.animation_signal:
+                self.animation_root.disconnect(self.animation_signal)
+            self.animation_root = root
+            self.animation_signal = root.connect('notify::is-active', self.animation_active)
+        self.animation_active()
+
+    def animation_active(self, *_):
+        root = self.get_root()
+        self.animation_clock.set_active(bool(self.active and self.get_mapped() and root and root.is_active()))
+
+    def request_close(self, callback):
+        if self.closing:
+            return
+        self.animation_clock.close()
+        if self.animation_signal:
+            self.animation_root.disconnect(self.animation_signal)
+            self.animation_signal = 0
+        Gtk.StyleContext.remove_provider_for_display(self.get_display(), self.provider)
+        super().request_close(callback)
 
     def check_preparation(self):
         if self.owner_factory is not None:
@@ -403,12 +437,9 @@ class MessengerPane(ChatPane):
         overlay.add_overlay(hint)
         self.composer_box.append(overlay)
         controls = Gtk.Box(spacing=8)
-        self.emoji_button = accessible(Gtk.MenuButton(icon_name='face-smile-symbolic'), self.words('Выбрать эмодзи', 'Choose emoji'))
-        self.emoji = Gtk.EmojiChooser()
-        self.emoji.set_position(Gtk.PositionType.TOP)
-        self.emoji.connect('emoji-picked', lambda chooser, emoji: self.compose.insert_emoji(emoji))
-        self.emoji.connect('closed', lambda *_: self.compose.grab_focus())
-        self.emoji_button.set_popover(self.emoji)
+        self.emoji_button = accessible(Gtk.MenuButton(icon_name='face-smile-symbolic'), self.words('Смайлики ICQ-classic', 'ICQ-classic smileys'))
+        self.smileys = SmileyPicker(self.compose, self.animation_clock)
+        self.emoji_button.set_popover(self.smileys)
         self.emoji_button.set_direction(Gtk.ArrowType.UP)
         controls.append(self.emoji_button)
         self.voice_button = icon_button('audio-input-microphone-symbolic', self.words('Голосовое сообщение', 'Voice message'), self.show_voice)
@@ -494,32 +525,3 @@ class MessengerPane(ChatPane):
         if self.delivery_state.get('registration_error') or self.delivery_state.get('error'):
             return self.words('Пока не удалось доставить сообщения. История и черновики сохранены.', 'Messages cannot be delivered yet. History and drafts are safe.')
         return ''
-
-
-class MessengerWindow(Adw.ApplicationWindow):
-    def __init__(self, application=None, *, show_settings=None, **options):
-        super().__init__(application=application, title='Family Connect · Чаты', default_width=900, default_height=680)
-        self.add_css_class('messenger')
-        self.pane = MessengerPane(show_chat=self.present_chat, show_settings=show_settings, **options)
-        shell = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        shell.append(Adw.HeaderBar(title_widget=Gtk.Label(label='Family Connect')))
-        shell.append(self.pane)
-        self.set_content(shell)
-        self.provider = Gtk.CssProvider()
-        self.provider.load_from_data(CSS.encode())
-        Gtk.StyleContext.add_provider_for_display(self.get_display(), self.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION + 1)
-        self.connect('close-request', self.hide_chat)
-
-    def present_chat(self, ru=None):
-        self.present()
-        self.pane.activate(True, self.pane.ru if ru is None else ru)
-
-    def hide_chat(self, *_):
-        self.pane.activate(False, self.pane.ru)
-        self.set_visible(False)
-        self.pane.poll()
-        return True
-
-    def dispose_window(self):
-        Gtk.StyleContext.remove_provider_for_display(self.get_display(), self.provider)
-        self.destroy()

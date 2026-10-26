@@ -137,7 +137,7 @@ def main(root, scale):
         server.store.grant_device(server.access, device.reference, 'Synthetic operator')
         (server.root / 'hold-list').touch()
         admin.listing()
-        app.messenger_window.close()
+        app.select_page('status')
         app.select_page('status')
         pump(.2)
         (server.root / 'hold-list').unlink()

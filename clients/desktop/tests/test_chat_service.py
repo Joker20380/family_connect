@@ -127,7 +127,7 @@ def test_fit_waits_for_frame_and_preserves_outer_window_geometry():
         return (247, 756, -1, -1)
     window = SimpleNamespace(get_frame_clock=lambda: clock, get_default_size=lambda: (360, 286),
         measure=measure, set_default_size=lambda width, height: calls.append(('size', width, height)))
-    app = SimpleNamespace(window=window, closed=False, fit_source=0, fit_clock=None, fitted_height=None)
+    app = SimpleNamespace(window=window, closed=False, fit_source=0, fit_clock=None, fitted_height=None, page='status')
     app.fit_height = lambda: App.fit_height(app)
     App.request_fit(app)
     App.request_fit(app)
@@ -135,3 +135,9 @@ def test_fit_waits_for_frame_and_preserves_outer_window_geometry():
     callbacks[0](clock)
     assert calls[-2:] == [('disconnect', 21), ('size', 360, 756)]
     assert app.fit_clock is None and app.fit_source == 0 and app.fitted_height == 756
+    calls.clear()
+    app.page = 'messenger'
+    App.fit_height(app)
+    app.page = 'route'
+    App.fit_height(app)
+    assert not calls

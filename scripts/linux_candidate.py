@@ -81,7 +81,9 @@ def seal(bundle, version, system, python, *, target='ubuntu24.04'):
     if target == 'ubuntu26.04' and int(version.rsplit('.', 1)[1]) <= 5:
         raise ValueError('Ubuntu26.04 requires a new candidate version after the frozen .5')
     paths = ['clients/desktop', 'provisioning', 'messenger', 'device_identity', 'packaging',
-             'scripts/package_linux.py', 'scripts/linux_candidate.py']
+             'scripts/package_linux.py', 'scripts/linux_candidate.py', 'scripts/smiley_assets.py',
+             'clients/android/app/src/main/assets/chat/icq-classic',
+             'clients/android/app/src/main/java/com/familyconnect/app/ChatSmileys.java']
     dirty = bool(subprocess.check_output(['git', 'diff', 'HEAD', '--', *paths], cwd=ROOT))
     files = {}
     for path in sorted(bundle.rglob('*')):

@@ -34,6 +34,8 @@ def verify(directory):
             raise ValueError('AppImage and DEB candidate identities differ')
         for root in (deb, appimage):
             audit(root)
+            from scripts.smiley_assets import verify_bundle
+            verify_bundle(root)
         for path in ('usr/lib/systemd/user/family-connect-chat.service',
                      'usr/share/dbus-1/services/com.familyconnect.Chat1.service',
                      'usr/share/applications/com.familyconnect.Client.desktop'):

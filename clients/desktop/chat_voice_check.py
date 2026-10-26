@@ -60,12 +60,12 @@ def pointer_checks(app, voice, destination):
         voice.source_factory = lambda: _element('audiotestsrc', is_live=True, samplesperbuffer=160)
         voice.pane.show_voice()
         pump(.2)
-        success, point = voice.record.compute_point(app.messenger_window, Graphene.Point().init(
+        success, point = voice.record.compute_point(app.window, Graphene.Point().init(
             voice.record.get_width() / 2, voice.record.get_height() / 2))
         assert success
         position_x, position_y, child = ctypes.c_int(), ctypes.c_int(), ctypes.c_ulong()
-        scale = app.messenger_window.get_scale_factor()
-        assert x11.XTranslateCoordinates(display, app.messenger_window.get_surface().get_xid(), x11.XDefaultRootWindow(display),
+        scale = app.window.get_scale_factor()
+        assert x11.XTranslateCoordinates(display, app.window.get_surface().get_xid(), x11.XDefaultRootWindow(display),
                                          round(point.x * scale), round(point.y * scale), ctypes.byref(position_x),
                                          ctypes.byref(position_y), ctypes.byref(child))
         def motion(delta_x=0, delta_y=0):
@@ -211,7 +211,7 @@ def main(destination, scale):
             pump(.1)
             capture(app, destination / f'{mode}-preview.png')
             voice.send.grab_focus()
-            assert app.messenger_window.get_focus() == voice.send
+            assert app.window.get_focus() == voice.send
             voice.send.emit('clicked')
             wait_for(lambda: not voice.busy and not pane.busy and voice.state == 'idle')
             history = pane.owner.invoke('history', address=card['address'], offset=0, limit=50)
