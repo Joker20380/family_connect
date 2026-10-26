@@ -1,15 +1,37 @@
 # Текущее состояние / Current state
 
-**CHAT-UX-2 — implemented checkpoint / REVIEW REQUIRED; validation PARTIAL.**
+**L04.2 — current task, BLOCKED / installed live acceptance NOT_RUN,26.10.**
+Exact internal .9 и matching system не пересобирались. Offline inventory762,
+DEB/AppImage/legacy6 и system archive hashes PASS в новой disposable
+Ubuntu26.04.1/Python3.14.4, network none. Разрешённый test home:7 файлов,
+create=False, verified nl AWG/TCP cache/floor3, bytes preserved; chat identity/store
+отсутствует. Read-only registry: test identity active, policy all_activated допускает
+её, но unexpired MESH certificates0; готовый native context не передан.
+Это не DENIED и не product defect: свежая выдача MESH credentials/создание chat
+identity не разрешены. Install/setup/prepare-chat, SERVICE_ONLY, P0/P1/Auto,
+ownership и installed lifecycle NOT_RUN; owner workstation не использовался.
+[L04.2 report](releases/2026-10-26-linux-installed-mesh-auto-l04-2.md).
+L04.1 DONE; parent L04 IN_PROGRESS, не DONE. L05 NOT_RUN; L06/L07/L08 QUEUED,
+без новых проверок. Signing/publication NOT_RUN. **STOP. NEXT — review L04.2.**
+
+**OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted (owner review).**
+Exact **0.2.12~l03.2.9** установлен; candidate/package/system checks PASS,
+одно main window/embedded chat, один ChatClient и один D-Bus owner подтверждены
+владельцем. Две queue-операции неизвестного происхождения исключены из acceptance
+evidence; product defect не установлен. Установка принята для дальнейшего owner-use,
+не как full L05 или публикация. OWNER-CHAT-UX-2-INSTALL не продолжался;
+дополнительных сообщений, smiley/composer/visual проверок владельцу не выполнялось.
+
+### CHAT-UX-2 — source/package DONE; прежние ограничения сохранены
+
 Owner decisions: мессенджер внутри единственного главного окна; exact Android106
 ICQ-classic49 GIF вместо системного picker. CHAT-UX-1 technically completed в
 reviewed source/UI/package scope, но product design superseded; исходное evidence
 и residual failures сохранены, не превращены в PASS нового дизайна.
-На owner workstation временно установлен internal **0.2.12~l03.2.8**, candidate
-`0bf09cee08e27014f27e96abbd219ce3e31a1cf8eb1f8e906434d807f0577a87`;
+По текущему owner review установлен internal **0.2.12~l03.2.9**, candidate
+`6f312d1e7c783ea42a39ca164d93d74b0ec4faf5bac53e24c12551cedd052a5b`;
 system `43266d97c6a9f8d4e7026727cbb4b5cb6aeea49db799f93bd798b67a8135198c` READY.
-OWNER-CHAT-UX-INSTALL: dpkg/package/import checks PASS; installed UX acceptance
-PARTIAL. Пользователь подтвердил ручную отправку наблюдавшегося сообщения.
+Исторический OWNER-CHAT-UX-INSTALL относился к .8; текущий review .9 указан выше.
 CHAT-UX-2 source: embedded Stack, прежние RPC/drafts/bubbles/voice,49-face manifest,
 Android aliases/boundaries, literal copy, один visibility-bound GIF clock.
 Full desktop1272 PASS/84 SKIP; messenger222 PASS; parser/picker/UX72 PASS;
@@ -21,8 +43,8 @@ CI full suites54/54/53 FAIL без suppression. Failure IDs/ограничени
 candidate `6f312d1e7c783ea42a39ca164d93d74b0ec4faf5bac53e24c12551cedd052a5b`;
 прежний system build byte-identical, .7/.8 immutable.
 [CHAT-UX-2 report, hashes/screenshots/gates](releases/2026-10-26-chat-ux-2.md).
-Owner .9 install / L04.2 / full L05 / TCP HTTPS diagnosis / signing / publication **NOT_RUN**.
-**STOP после CHAT-UX-2. NEXT — review перед установкой .9 владельцу.**
+Full L05 / TCP HTTPS diagnosis / signing / publication **NOT_RUN**.
+Текущий NEXT — только review L04.2; исторический report CHAT-UX-2 не активный NEXT.
 
 ### Предыдущий compatibility checkpoint — историческая граница
 

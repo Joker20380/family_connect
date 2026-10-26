@@ -4,15 +4,23 @@ Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN
 STATUS/PLAN define the current bounded task and next review gate, not an automatic
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
-[CHAT-UX-2](releases/2026-10-26-chat-ux-2.md) is the current bounded task:
+[L04.2 installed MESH/Auto](releases/2026-10-26-linux-installed-mesh-auto-l04-2.md)
+is the current bounded task: **BLOCKED / live NOT_RUN**, not a product defect.
+Exact .9 offline integrity passes; the authorized test home lacks chat identity/store
+and has no handed-off verified MESH context. Read-only all_activated eligibility is
+not denied; new credential issuance/account creation was not attempted.
+Owner workstation is excluded. **STOP. NEXT — review L04.2.**
+[CHAT-UX-2](releases/2026-10-26-chat-ux-2.md) source/package is DONE:
 one main-window messenger and the exact49-face Android106 ICQ-classic GIF/token pack.
 [CHAT-UX-1](releases/2026-10-26-chat-ux-1.md) is technically completed in reviewed
 source/UI/package scope, but its product design is superseded by owner decision.
 Its historical screenshots, .8 artifacts and unsuppressed failures remain intact.
-Owner-installed internal .8 is temporary/unpublished; .9 installation is NOT_RUN.
+Owner review accepts installed internal .9 as PARTIAL / owner-use accepted;
+two queue events of unknown origin are excluded, no product defect established.
+OWNER-CHAT-UX-2-INSTALL is not continued; no additional owner UX checks.
 The .9 source/UI/package checkpoint is implemented; full-suite acceptance remains
 PARTIAL with unsuppressed residuals and a separate FD teardown observation.
-Current NEXT is CHAT-UX-2 review, not publication or upgrade.
+Full L05/signing/publication remain NOT_RUN, not implied by owner-use acceptance.
 [Ubuntu26.04/Python3.14 compatibility](releases/2026-10-26-linux-ubuntu2604-python314-compat.md)
 remains historical compatibility evidence; frozen .5/.7/.8 are not rebuilt.
 
@@ -22,9 +30,9 @@ E/F1/F2 accepted. [Single beta-freeze manifest](releases/2026-10-25-linux-awg-tc
 pins exact .5, internal/unpublished, unchanged bytes. Registry restart remains a
 separate operational observation: uninterrupted continuity NOT_PROVEN, cause unknown,
 assignment/configuration unchanged. No F2 replay or R3. Parent L04 remains IN_PROGRESS
-only because of L04.2; L04.2/L05/device teardown NOT_RUN. MESH/Auto and messenger
-are outside beta scope; signing/publication NOT_RUN. STOP; NEXT is the owner's
-decision on signing and limited Linux AWG/TCP Beta publication.
+only because of L04.2; its live scenarios, L05 and device teardown remain NOT_RUN.
+MESH/Auto and messenger are outside the historical beta scope;
+its signing/publication decision is not the current NEXT.
 [R2 queued Connect/Close](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md)
 is DONE/review accepted in source/package scope. Linux/AWG/TCP/package CI PASS,
 full suites54/54/54 failures retained; no new general CI PASS claim.
