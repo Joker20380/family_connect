@@ -1,16 +1,21 @@
 # Текущее состояние / Current state
 
-**L04.2 — current task, BLOCKED / installed live acceptance NOT_RUN,26.10.**
-Exact internal .9 и matching system не пересобирались. Offline inventory762,
-DEB/AppImage/legacy6 и system archive hashes PASS в новой disposable
-Ubuntu26.04.1/Python3.14.4, network none. Разрешённый test home:7 файлов,
-create=False, verified nl AWG/TCP cache/floor3, bytes preserved; chat identity/store
-отсутствует. Read-only registry: test identity active, policy all_activated допускает
-её, но unexpired MESH certificates0; готовый native context не передан.
-Это не DENIED и не product defect: свежая выдача MESH credentials/создание chat
-identity не разрешены. Install/setup/prepare-chat, SERVICE_ONLY, P0/P1/Auto,
-ownership и installed lifecycle NOT_RUN; owner workstation не использовался.
-[L04.2 report](releases/2026-10-26-linux-installed-mesh-auto-l04-2.md).
+**L04.2 — current task, RESUME: PARTIAL / singleton prerequisite FAIL,26.10.**
+Предыдущий BLOCKED review принят; разрешённые test-state prerequisites выполнены
+в новой encrypted disposable KVM Ubuntu26.04.1/Python3.14.4, не на owner workstation.
+Exact internal0.2.12~l03.2.9 и matching system неизменны; install/setup/READY PASS.
+Test-only chat identity/store/binding созданы штатным product flow, Secret Service;
+create=False reopen PASS. Исходные7 файлов protected home/copy byte-identical.
+MESH fresh revision1, VERIFIED_READBACK/ACK_RECEIVED; records0→1, policy all_activated
+не менялась. Native SERVICE_ONLY context затем штатно idle-released.
+GUI registration DIRECT healthy, один ChatOwner/D-Bus owner, но **два живых
+ChatClient RPC proxies: messenger + support**. Literal singleton gate не выполнен;
+это не доказательство второго transport owner или delivery defect. First-failure STOP,
+без source fix/retry. P0/P1/Auto, VPN ownership/lifecycle и live AppImage sharing NOT_RUN.
+Runtime очищен, encrypted base сохранена; teardown receipt дополнен, revoke NOT_RUN.
+Routes/DNS baseline совпал; address digest изменился, full equality NOT_PROVEN.
+[Continuation report](releases/2026-10-26-linux-installed-mesh-auto-l04-2-resume.md);
+[initial BLOCKED evidence](releases/2026-10-26-linux-installed-mesh-auto-l04-2.md).
 L04.1 DONE; parent L04 IN_PROGRESS, не DONE. L05 NOT_RUN; L06/L07/L08 QUEUED,
 без новых проверок. Signing/publication NOT_RUN. **STOP. NEXT — review L04.2.**
 

@@ -4,11 +4,14 @@ Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN
 STATUS/PLAN define the current bounded task and next review gate, not an automatic
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
-[L04.2 installed MESH/Auto](releases/2026-10-26-linux-installed-mesh-auto-l04-2.md)
-is the current bounded task: **BLOCKED / live NOT_RUN**, not a product defect.
-Exact .9 offline integrity passes; the authorized test home lacks chat identity/store
-and has no handed-off verified MESH context. Read-only all_activated eligibility is
-not denied; new credential issuance/account creation was not attempted.
+[L04.2 installed MESH/Auto resume](releases/2026-10-26-linux-installed-mesh-auto-l04-2-resume.md)
+is the current bounded task: **PARTIAL / singleton prerequisite FAIL; VPN NOT_RUN**.
+Exact .9/system READY, derived test chat state/reopen and native readiness/ACK pass.
+DIRECT registration is healthy, but the installed GUI has two live ChatClient RPC
+proxies (messenger/support), despite one ChatOwner/D-Bus owner. No second transport
+is established; no repair/retry or P0/P1/Auto followed. Encrypted test state is retained.
+The [initial BLOCKED report](releases/2026-10-26-linux-installed-mesh-auto-l04-2.md)
+remains accepted historical evidence, superseded only by this authorized resume.
 Owner workstation is excluded. **STOP. NEXT — review L04.2.**
 [CHAT-UX-2](releases/2026-10-26-chat-ux-2.md) source/package is DONE:
 one main-window messenger and the exact49-face Android106 ICQ-classic GIF/token pack.
@@ -30,7 +33,7 @@ E/F1/F2 accepted. [Single beta-freeze manifest](releases/2026-10-25-linux-awg-tc
 pins exact .5, internal/unpublished, unchanged bytes. Registry restart remains a
 separate operational observation: uninterrupted continuity NOT_PROVEN, cause unknown,
 assignment/configuration unchanged. No F2 replay or R3. Parent L04 remains IN_PROGRESS
-only because of L04.2; its live scenarios, L05 and device teardown remain NOT_RUN.
+only because of L04.2; its VPN scenarios, L05 and device teardown remain NOT_RUN.
 MESH/Auto and messenger are outside the historical beta scope;
 its signing/publication decision is not the current NEXT.
 [R2 queued Connect/Close](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md)
