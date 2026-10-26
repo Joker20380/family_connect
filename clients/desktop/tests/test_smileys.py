@@ -93,3 +93,16 @@ def test_packaged_bytes_and_extra_inventory(tmp_path):
     (tmp_path / 'clients/desktop/assets/chat/icq-classic/extra.gif').write_bytes(b'extra')
     with pytest.raises(ValueError):
         verify_bundle(tmp_path)
+
+
+@pytest.mark.parametrize('entry', ['module', 'script'])
+def test_packaging_entrypoints_without_pythonpath(tmp_path, entry):
+    import subprocess
+    import sys
+    directory = ROOT if entry == 'module' else ROOT / 'scripts'
+    module = 'scripts.package_linux' if entry == 'module' else 'package_linux'
+    code = (f'import sys;sys.path.insert(0,{str(directory)!r});'
+            f'from pathlib import Path;from {module} import assemble_bundle;'
+            f'assemble_bundle(Path({str(tmp_path)!r}))')
+    subprocess.run([sys.executable, '-I', '-B', '-c', code], cwd=tmp_path, check=True)
+    verify_bundle(tmp_path)

@@ -83,7 +83,10 @@ def assemble_bundle(destination):
     desktop = ROOT / 'clients' / 'desktop'
     for name in DESKTOP_RUNTIME:
         safe_copy(desktop / name, destination / 'clients' / 'desktop' / name)
-    from scripts.smiley_assets import copy_assets
+    if __package__:
+        from .smiley_assets import copy_assets
+    else:
+        from smiley_assets import copy_assets
     copy_assets(destination, ROOT)
     safe_copy(ROOT / 'clients/android/app/src/main/assets/chat/icq-classic/provenance.json',
               destination / 'licenses/icq-classic-provenance.json')
