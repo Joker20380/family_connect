@@ -270,8 +270,11 @@ class MessengerPane(ChatPane):
         self.refresh()
 
     def history_layout(self, adjustment):
-        if self.follow_bottom:
-            adjustment.set_value(max(0, adjustment.get_upper() - adjustment.get_page_size()))
+        def settled_layout():
+            if self.follow_bottom and not self.closing:
+                adjustment.set_value(max(0, adjustment.get_upper() - adjustment.get_page_size()))
+            return False
+        GLib.idle_add(settled_layout)
 
     def snapshot(self, address, offset):
         sidebar = super().snapshot(None, 0)

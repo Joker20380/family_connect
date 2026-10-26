@@ -186,6 +186,17 @@ def test_pagination_keeps_composer_and_local_search(window):
     assert pane.dialogs.get_row_at_index(1).get_child_visible()
 
 
+def test_last_bubble_is_above_fixed_composer_after_allocation(window):
+    messenger = window[0]
+    pane = messenger.pane
+    for width in (900, 360):
+        messenger.set_default_size(width, 680)
+        pump(.3)
+        last = pane.content.get_last_child().compute_bounds(messenger)[1]
+        composer = pane.composer_box.compute_bounds(messenger)[1]
+        assert last.get_y() + last.get_height() <= composer.get_y()
+
+
 def children(widget):
     child = widget.get_first_child()
     while child is not None:
