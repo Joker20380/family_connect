@@ -1,6 +1,6 @@
 # L04.2-R2 — process containment versus authenticated drain
 
-## Prepared user-manager rollback and remaining Phase B — current checkpoint
+## Prepared rollback, Phase B completion and Phase C entry — current checkpoint
 
 Input main `a0f54a7e7e4367daa79247f77a025a4ef06f8f15`,26.10. Same L04.2-R2;
 no new task, version, candidate, system build or runtime/source checkpoint.
@@ -10,9 +10,9 @@ AWG remains **PASS_BY_REVIEWED_ASSERTIONS**, TCP remains **PASS/exit0**; neither
 VPN package action is replayed. Prior integrity/systemd/pkexec/DEB/AppImage/
 shared-state gates remain accepted.
 
-**Phase B PASS. L04.2-R2 remains PARTIAL pending Phase C; installed P0/P1/Auto/
-lifecycle are not yet run on .10. Continue directly to the authorized installed
-gate, without an intermediate review.** No overall CI PASS is claimed.
+**Phase B PASS; L04.2-R2 PARTIAL. Phase C immediately continued, then
+ENVIRONMENT_BLOCKED at explicit system setup authentication. Installed P0/P1/Auto/
+lifecycle NOT_RUN. STOP. NEXT — final review L04.2-R2.** No overall CI PASS is claimed.
 
 ### Immutable entry and harness
 
@@ -85,13 +85,76 @@ source comparisons**, not a new repository-wide run. Fresh affected/package
 selections above have zero failures/errors. Control/Client Linux dependency-setup
 incompleteness is retained as reviewed infrastructure evidence, not general CI PASS.
 
-Phase C will use only a new encrypted derivative of the retained authorized test
-base. Original protected home and retained bases remain untouched at this boundary.
-Live first_reason/cleanup_reason/process_contained/drain_acknowledged/attempt/
-generation are not yet observed on .10. L04.1 DONE; parent L04 IN_PROGRESS;
-L05/messages/voice acceptance/signing/publication/revoke/teardown NOT_RUN.
-Chat delivery_unavailable remains the existing L05 observation, not a VPN gate.
-Owner workstation **NOT_USED**.
+Phase B documentation commit `994119e7427d7f2c665b28f10c9d1736aedc23d2` is
+pushed and remote SHA verified before the immediate Phase C continuation. It
+changes only the report/STATUS/PLAN/index, not runtime or artifact provenance.
+
+### Phase C: explicit setup authentication unavailable; no VPN action
+
+A fresh encrypted copy of the retained authorized core test snapshot is used,
+not the protected original home or owner workstation. A QEMU backing-image mount
+omission is caught before guest execution; the failed container is removed, its
+log retained, and a new immutable launcher supplies the existing public backing
+image read-only. No product action has run at that point. The VM subsequently
+boots with its own kernel/network/user bus; the original encrypted base remains
+read-only and its full SHA256 is verified unchanged after shutdown.
+
+The exact retained .10 DEB and original AppImage are copied to this disposable
+VM and rehashed. One .10 DEB install succeeds; candidate-check succeeds. No
+AppImage launch, GUI VPN action, certificate renewal or chat registration gate
+is attempted. The next explicit `family-connect --setup-system` is requested
+once as the test user. Its actual log reports:
+
+```text
+System setup cancelled or refused; no automatic retry.
+Error creating textual authentication agent:
+Error opening current controlling terminal for the process (/dev/tty):
+No such device or address
+```
+
+Typed checkpoint stage: **SYSTEM_SETUP_AUTHENTICATION_UNAVAILABLE**. This is a
+fixture/session authentication prerequisite failure, not a demonstrated candidate
+or runtime defect. Xvfb/Openbox/polkit-agent processes and a user bus exist, but
+their presence did not prove that this non-interactive SSH-launched setup could
+authenticate; no stronger cause is asserted. The setup is **not retried**, no
+authorization bypass/rule is installed in this VM, and no Connect follows.
+
+The private installer harness then raises `KeyError: status` because its final
+readback expectation uses the wrong JSON key. This secondary harness error is
+retained separately and does not replace the original setup refusal. Read-only
+reconciliation uses the actual `candidate`/`system` schema: candidate42644067…,
+`CANDIDATE_SYSTEM_BUILD_MISMATCH`. Root installed.json still names the exact old
+system43266d97…; matching new system was **not installed**, and Phase C READY is
+**not** claimed. The entry journal is ABSENT both before and after, not falsely
+reported as IDLE. Package rollback PASS above is separate from this VM result.
+
+| Phase C observation | Result |
+| --- | --- |
+| Exact .10 DEB install / candidate-check | PASS |
+| Explicit matching system setup | ENVIRONMENT_BLOCKED; one request, zero retries |
+| Candidate/system READY | NOT_REACHED; old system unchanged, mismatch readback |
+| P0 / P1 / Auto / active GUI lifecycle / live AppImage sharing | NOT_RUN; user Connect0, Disconnect0 |
+| first_reason / cleanup_reason / process_contained / drain_acknowledged | NOT_OBSERVED; no packet session or attempt/generation started |
+| Owned VPN resources | owner0, TUN0, pending=null; no running Family Connect root VPN units |
+| Routes/rules/DNS/firewall/address baseline | byte-normalized readback unchanged; no underlay IPv6 edit |
+| Original seven files / settings | unchanged in derived VM; protected host home independently byte-identical |
+| Original encrypted base | SHA256 byte-identical; never booted writable |
+
+The disposable VM is gracefully shut down, QEMU exits0 and its container is
+removed. The encrypted derivative is retained mode0400 for evidence. No chat
+messages/voice, store creation, new identity/invite/activation, grant/policy or
+gateway change is made. A post-VPN chat-store/lifecycle acceptance is NOT_RUN,
+not inferred from the absence of a VPN action. Existing accepted chat-state
+evidence is retained. The private test teardown receipt records this entry stop,
+zero renewal/registration operations, preserved base/home and retained derivative;
+revoke/teardown is not performed.
+
+Final checks: strict JSON/no duplicate keys, secret/private-byte scan,417 local
+links, four-file staged scope, immutable artifact/script checks and
+`git diff --check` PASS. Unrelated working changes remain outside the commits.
+L04.1 DONE; parent L04 IN_PROGRESS; L05/messages/voice acceptance/signing/
+publication/revoke/teardown NOT_RUN. Chat delivery_unavailable remains the existing
+L05 observation, not a VPN gate. Owner workstation **NOT_USED**.
 
 ## Package-harness continuation — previous checkpoint
 

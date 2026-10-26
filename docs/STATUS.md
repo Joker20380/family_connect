@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**L04.2 — R2 PARTIAL / Phase B PASS; installed Phase C next, no review pause.**
+**L04.2 — R2 PARTIAL / Phase B PASS; Phase C setup authentication BLOCKED.**
 Source169aa68 DONE/review accepted: containment/drain separation и R1
 first_reason/cleanup/all-stage/retry сохранены. Native15, cleanup32, combined3,
 desktop1306/82skip и exact local36/phase0-Docker54 baseline приняты.
@@ -19,12 +19,19 @@ loginctl отсутствует; real system/user D-Bus readiness до dpkg/setu
 state/network baseline unchanged, owner/TUN0. Fresh cleanup32/package46/native15/
 combined3/MESH157 PASS; desktop1305/83skip plus omitted reference case1 PASS
 (82 existing skips remain). Pre-test mountpoint failure retained; no assertion replay. Scripts unchanged,
-containers removed. Phase B PASS; далее один installed P0 на .10, пока NOT_RUN.
+containers removed. Phase B docs994119e pushed/remote verified; Phase C сразу начат.
+Fresh encrypted VM: exact .10 DEB/check PASS; один setup refused, textual polkit
+agent не открыл /dev/tty (No such device or address). No retry/Connect; product
+defect не установлен. Secondary harness KeyError reconciled read-only, не скрывает
+setup refusal. Candidate/system mismatch, old43266d97 system unchanged; READY нет.
+P0/P1/Auto/lifecycle/live AppImage NOT_RUN. Owner/TUN0,pending=null,journal ABSENT
+unchanged; network/settings/original7/base preserved. VM gracefully stopped/removed;
+encrypted derivative retained0400, private teardown receipt updated without revoke.
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
 Exact immutable artifact/system IDs/hashes в report; package acceptance PASS. .9/state immutable;
 owner workstation NOT_USED. L04.1 DONE, parent L04 IN_PROGRESS; L05 NOT_RUN,
 delivery_unavailable backlog без диагностики. L06/L07/L08 прежние QUEUED;
-signing/publication/revoke/teardown NOT_RUN. NEXT — authorized Phase C, no review pause.
+signing/publication/revoke/teardown NOT_RUN. **STOP. NEXT — final review L04.2-R2.**
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted (owner review).**
 Exact **0.2.12~l03.2.9** установлен; candidate/package/system checks PASS,

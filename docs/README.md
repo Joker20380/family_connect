@@ -18,7 +18,12 @@ state/network cleanup PASS. Fresh cleanup32/package46/native15/combined3/MESH157
 desktop1305/83skip plus reference case1 PASS (82 existing skips remain). Pre-test
 mountpoint infrastructure failure retained; no assertion replay. Scripts sealed/hash/
 0555/RO, unchanged; containers removed.
-Phase B PASS. NEXT — authorized installed Phase C, without review pause. The accepted
+Phase B PASS, pushed994119e; Phase C immediately continued in encrypted VM.
+Exact .10 DEB/check PASS, but one setup is refused: textual polkit agent cannot
+open /dev/tty. No retry/Connect; secondary harness KeyError reconciled read-only,
+old system unchanged/mismatch, no READY or product defect claim. P0/P1/Auto/
+lifecycle/live AppImage NOT_RUN. Network/state/base preserved, owner/TUN0,pending=null;
+VM gracefully stopped/removed. STOP. NEXT — final review L04.2-R2. The accepted
 [core P0 failure](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
 is not replayed on .9. Historical reports and .9/system bytes remain immutable.
 Chat delivery_unavailable stays in L05 backlog, not a VPN prerequisite; no chat

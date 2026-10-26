@@ -2,7 +2,7 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Текущий bounded task — L04.2; R2 PARTIAL / Phase B PASS, Phase C next.**
+**Текущий bounded task — L04.2; R2 PARTIAL / Phase B PASS, Phase C setup BLOCKED.**
 Зависимости: L04.1 DONE, CHAT-UX-2 DONE; source169aa68 DONE/review accepted.
 R1 first_reason/cleanup/all-stage/retry и R2 containment/drain приняты; native15,
 cleanup32, combined3, desktop1306 и exact local36/phase0-Docker54 baseline приняты.
@@ -18,8 +18,14 @@ user D-Bus readiness before install PASS. One exact .9→.10→.9 rollback PASS/
 both mixed builds rejected, state/network/owner/TUN cleanup PASS. Fresh cleanup32,
 package46, native15, combined3, MESH157 PASS; desktop1305/83skip plus reference case1
 PASS (82 existing skips remain); pre-test mountpoint failure retained. Scripts unchanged,
-containers removed. Phase B PASS; Phase C NOT_RUN yet, continue without review pause.
-.9/protected seven files immutable; owner workstation NOT_USED.
+containers removed. Phase B docs994119e pushed; Phase C immediately continued.
+Fresh encrypted VM .10 DEB/check PASS; one explicit setup refused: textual polkit
+agent cannot open /dev/tty. No retry/Connect; no product defect established.
+Secondary harness KeyError reconciled read-only; candidate/system mismatch,
+old system43266d97 unchanged. P0/P1/Auto/lifecycle/live AppImage NOT_RUN.
+Owner/TUN0,pending=null,journal ABSENT unchanged; network/state/base preserved;
+VM stopped/removed, encrypted derivative0400. .9/protected seven files immutable;
+owner workstation NOT_USED. **STOP. NEXT — final review L04.2-R2.**
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
 L04 IN_PROGRESS; L05/messages/voice/signing/publication NOT_RUN; delivery_unavailable
 не VPN prerequisite, не диагностируется. L06/L07/L08 прежние QUEUED.
@@ -258,7 +264,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 | L04.1-LIVE-2-RESUME | Installed negative acceptance exact .4, continuation | A/B1 review PASS; existing test identity/nl; fresh KVM | PARTIAL (STOP E; review accepted) | [Continuation](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2-continuation.md). P1/P2/B1/B2/C1/C2/D PASS on exact .4. E FAIL: queued Future/busy/open/CONNECTING; no late VPN start proven, helper/TUN0/generation0/null. Fixture cancels before worker release; F1/F2 NOT_RUN. Source/candidate unchanged; L04.2/L05/teardown NOT_RUN. |
 | L04.1-LIVE-2-R2 | Normal queued Connect/Close ownership; new internal .5 | LIVE-2 PARTIAL/review accepted, E defect; source/package only | DONE (review accepted; source/package) | [Report](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md): source1c2beb6/candidate f0ee1760…, unchanged verified system8d7d78ec…. Red4/targeted197/full1191 PASS; normal mutation Future/revision fence, running/done-undelivered blocks Close. Exact .5 package/integrity and Linux/AWG/TCP/package CI PASS; local isolated gates PASS. Full CI54/54/54 failures retained, no overall PASS. R2 used no private state/gateway/live E/F; later LIVE-2 result above. |
 | L04.1-AUTH-TEARDOWN | Обязательная очистка отдельного test device | после L04/L05 или завершения test campaign; отдельное разрешение/review | QUEUED / NOT_RUN | Device-scoped gateway cleanup → readback отсутствия только test peer/user при сохранении чужих ресурсов → registry revoke. Private receipt содержит exact binding hashes/row/address/read-only checks и дополнен L04.2 test chat/store/keyring, certificate issuance/expiry и registration. Revoke/teardown не выполнялись. Штатного unregister сейчас нет; не восстанавливать целиком старые DB/server.json и не начинать cleanup автоматически. |
-| L04.2 | Установленная MESH/Auto приёмка; R2 installed continuation | L04.1 DONE; source169aa68 DONE/review accepted | R2 PARTIAL / Phase B PASS, Phase C next | [R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md): inputa0f54a7, retained .10 candidate42644067…/system8ab7f298…/sourceb8e9196/source_dirty=false immutable, rebuild0. Prior package gates/AWG/TCP retained without replay. New no-loginctl fixture actual system/user D-Bus PASS; one exact .9→.10→.9 rollback PASS, mixed rejection/state/network cleanup PASS. Fresh cleanup32/package46/native15/combined3/MESH157 PASS; desktop1305/83 plus reference case1 PASS,82 existing skips remain. Pre-test mountpoint infrastructure failure retained, no assertion replay. Scripts unchanged, containers removed; Phase B PASS. Next authorized Phase C without review pause; no .9 P0 replay. .9/test state unchanged; owner workstation NOT_USED. |
+| L04.2 | Установленная MESH/Auto приёмка; R2 installed continuation | L04.1 DONE; source169aa68 DONE/review accepted | R2 PARTIAL / Phase B PASS, Phase C setup authentication BLOCKED | [R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md): inputa0f54a7, exact .10 candidate42644067…/system8ab7f298… immutable, rebuild0. AWG/TCP retained, no replay. One prepared .9→.10→.9 rollback PASS; mixed/state/network PASS. Fresh cleanup32/package46/native15/combined3/MESH157 PASS; desktop1305/83 + reference1 PASS,82 existing skips. Phase B docs994119e pushed, Phase C immediately continued: encrypted VM .10 DEB/check PASS, one setup authentication refusal (/dev/tty unavailable), no retry/Connect. Secondary harness KeyError reconciled; old system unchanged/mismatch, READY not reached. P0/P1/Auto/lifecycle NOT_RUN, no product defect established. Owner/TUN0,pending=null, journal ABSENT unchanged; network/state/base preserved, VM removed. Owner workstation NOT_USED. STOP/NEXT final review L04.2-R2. |
 | L05 | Установленный Linux-мессенджер | L03, L04 | QUEUED / NOT_RUN | DIRECT/MESH-доставка без VPN и с VPN, контакты/текст/голос, история и фоновые события — completion gate на реальных компонентах. Backlog: L04.2 observation registration_error=delivery_unavailable; причина не локализована, client defect/gateway outage не заявлены. Исключён из L04.2 core prerequisites final review-решением; диагностика/repair здесь NOT_RUN. Вне Linux AWG/TCP Beta scope; автоматически не начинать. |
 | L06 | Linux recovery | L04, L05 | QUEUED | Ограниченные loss/return, sleep/resume, рестарт службы и отмена проходят с корректной очисткой, backoff и одним reconnect owner. |
 | L07 | Linux visual parity | L03, L06 | QUEUED | Реальные окна: согласованные экраны/состояния, список вариантов и отдельные selected-next/active state по D05, RU/EN, DPI100/125/150/200%, resize/focus/Tab/Enter/Escape; сопоставление с точным Android-эталоном без изменения Android106. |
