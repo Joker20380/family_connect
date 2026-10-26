@@ -1,26 +1,22 @@
 # Текущее состояние / Current state
 
-**L04.2 — R2 PARTIAL / STOP до package build.**
-R1 primary/cleanup preservation сохраняется; .9 P0 не повторять.
-Exact isolated old red2 FAIL/13 PASS: watcher alive/failed=false на8s,
-stop timeout + два terminate; admission red9 FAIL отдельно доказывает release
-без drain ACK. NativeCleanup разделяет containment и strict drain proof;
-ServiceOwner сохраняет gate без живых process/fds, PacketSession — R1 retry fence.
-Focused237 PASS/2 SKIP; final cleanup32 PASS; exact lifetime15 PASS;
-desktop1306 PASS/82 SKIP, combined root→UID3 PASS. Source169aa68 pushed/verified.
-Local full36 FAIL/3387 PASS/99 SKIP: exact historical36 IDs; phase0/Docker CI54 IDs
-exact R1 baseline, новых failure/error IDs нет. Native/AWG/TCP/voice CI PASS.
-Evidence commitca8c710 pushed/verified: полный pytest/nonzero exit сохранены.
-Control CI40377384751 исчерпал15m на dependency setup; pytest SKIPPED,
-receipt completed=false: exact residual comparison NOT_PROVEN, не zero-fail PASS.
-Client Linux ещё IN_PROGRESS в dependency preparation на18:40UTC.
-Mandatory source verification BLOCKED; нового product failure не установлено.
-Review допускает только unchanged historical set, не объявляет overall CI PASS.
+**L04.2 — R2 PARTIAL / Phase B build environment BLOCKED; STOP до live.**
+Source169aa68 DONE/review accepted: containment/drain separation и R1
+first_reason/cleanup/all-stage/retry сохранены. Native15, cleanup32, combined3,
+desktop1306/82skip и exact local36/phase0-Docker54 baseline приняты.
+Control/Client Linux setup incomplete больше не блокируют progression по review;
+общего CI PASS нет.169aa68→0aec7a1 и working runtime byte-identical, только CI/docs.
+Fresh Ubuntu26.04.1/Python3.14.4, exact locks/RECORD630/17 distributions/reference
+PASS; pinned Go1.26.0/Xray неизменны. Native build go test остановился:
+TestProtectionFailureNeverConnectsAndProtocolIsBounded требует up non-loopback
+interface; агент запустил --network none без него. Это ошибка build environment,
+не product/gateway/cleanup defect. По affected-test STOP rule replay/repair нет.
+AWG/TCP input builds завершены, но не являются package PASS.
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
-Новый .10/system NOT_BUILT, package/live NOT_RUN до source gate. .9/state immutable;
+Новый .10/system NOT_BUILT; matching IDs/hashes N/A, package/live NOT_RUN. .9/state immutable;
 owner workstation NOT_USED. L04.1 DONE, parent L04 IN_PROGRESS; L05 NOT_RUN,
 delivery_unavailable backlog без диагностики. L06/L07/L08 прежние QUEUED;
-signing/publication/revoke/teardown NOT_RUN. **NEXT — review L04.2-R2.**
+signing/publication/revoke/teardown NOT_RUN. **NEXT — final review L04.2-R2.**
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted (owner review).**
 Exact **0.2.12~l03.2.9** установлен; candidate/package/system checks PASS,

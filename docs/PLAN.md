@@ -2,26 +2,21 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Текущий bounded task — L04.2; подпункт R2 PARTIAL / STOP до package build.**
-Зависимости: L04.1 DONE, CHAT-UX-2 DONE; R1 primary/cleanup fix сохраняется.
-Не новый PLAN ID. Owner workstation/identity запрещены; .9 P0 не повторять.
-Два isolated failures: duplicate terminate/wait превышает8s; отдельно admission
-ошибочно освобождается по containment без drain ACK. Новый внутренний proof
-разделяет эти контракты, PacketSession first_reason/all-stage/retry сохранены.
-Exact old2 FAIL/13 PASS →15 PASS; admission old red9 FAIL; final cleanup32 PASS,
-desktop1306/82skip, combined3 PASS. Source169aa68 pushed/verified.
-Full local36 IDs и phase0/Docker CI54 IDs совпадают с baseline; zero new failure/error.
-Native/AWG/TCP/voice CI PASS. Control CI40377384751:15m setup timeout, pytest
-SKIPPED/completed=false; exact control IDs NOT_PROVEN. Client Linux ещё в setup
-на18:40UTC. Mandatory source verification BLOCKED, не новый product defect.
-Evidence commitca8c710: полный pytest/nonzero exit сохранены; overall CI не зелёный.
-Source gate: R1/R2, exact15 native, combined root→UID, desktop, AWG/TCP/Client Linux/
-voice; local/control/phase0/Docker без новых failure/error IDs и suppression.
-Exact historical baseline допустим по review, не означает overall PASS.
-Новый system/.10 NOT_BUILT; package inventory/setup/rollback/tamper/mixed/
-old-build/coherence/isolated/AWG/TCP NOT_RUN. Installed P0/P1/Auto/lifecycle/
-shared state NOT_RUN. Поздний CI не возобновляет progression автоматически.
-**STOP. NEXT — review L04.2-R2.**
+**Текущий bounded task — L04.2; R2 PARTIAL / Phase B build environment BLOCKED.**
+Зависимости: L04.1 DONE, CHAT-UX-2 DONE; source169aa68 DONE/review accepted.
+R1 first_reason/cleanup/all-stage/retry и R2 containment/drain приняты; native15,
+cleanup32, combined3, desktop1306 и exact local36/phase0-Docker54 baseline приняты.
+Control/Client Linux setup incomplete — infrastructure observation, не blocker
+по новому review; общего CI PASS нет. Новый PLAN ID не создан.
+На current main0aec7a1 подтверждено отсутствие runtime изменений после169aa68.
+Fresh Ubuntu26.04/Python3.14, exact locks/RECORD/reference PASS. Native build test
+TestProtectionFailureNeverConnectsAndProtocolIsBounded FAIL на precondition:
+agent --network none не предоставил up non-loopback interface. Не product defect;
+affected-test STOP соблюдён, replay/source repair/live не выполняются.
+AWG/TCP input builds готовы, но новый system/.10 NOT_BUILT; IDs/hashes N/A.
+Package inventory/setup/rollback/tamper/mixed/old-build/coherence/regressions и
+installed P0/P1/Auto/lifecycle/shared state NOT_RUN. .9/state immutable,
+owner workstation NOT_USED. **STOP. NEXT — final review L04.2-R2.**
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
 L04 IN_PROGRESS; L05/messages/voice/signing/publication NOT_RUN; delivery_unavailable
 не VPN prerequisite, не диагностируется. L06/L07/L08 прежние QUEUED.
@@ -260,7 +255,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 | L04.1-LIVE-2-RESUME | Installed negative acceptance exact .4, continuation | A/B1 review PASS; existing test identity/nl; fresh KVM | PARTIAL (STOP E; review accepted) | [Continuation](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2-continuation.md). P1/P2/B1/B2/C1/C2/D PASS on exact .4. E FAIL: queued Future/busy/open/CONNECTING; no late VPN start proven, helper/TUN0/generation0/null. Fixture cancels before worker release; F1/F2 NOT_RUN. Source/candidate unchanged; L04.2/L05/teardown NOT_RUN. |
 | L04.1-LIVE-2-R2 | Normal queued Connect/Close ownership; new internal .5 | LIVE-2 PARTIAL/review accepted, E defect; source/package only | DONE (review accepted; source/package) | [Report](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md): source1c2beb6/candidate f0ee1760…, unchanged verified system8d7d78ec…. Red4/targeted197/full1191 PASS; normal mutation Future/revision fence, running/done-undelivered blocks Close. Exact .5 package/integrity and Linux/AWG/TCP/package CI PASS; local isolated gates PASS. Full CI54/54/54 failures retained, no overall PASS. R2 used no private state/gateway/live E/F; later LIVE-2 result above. |
 | L04.1-AUTH-TEARDOWN | Обязательная очистка отдельного test device | после L04/L05 или завершения test campaign; отдельное разрешение/review | QUEUED / NOT_RUN | Device-scoped gateway cleanup → readback отсутствия только test peer/user при сохранении чужих ресурсов → registry revoke. Private receipt содержит exact binding hashes/row/address/read-only checks и дополнен L04.2 test chat/store/keyring, certificate issuance/expiry и registration. Revoke/teardown не выполнялись. Штатного unregister сейчас нет; не восстанавливать целиком старые DB/server.json и не начинать cleanup автоматически. |
-| L04.2 | Установленная MESH/Auto приёмка; R2 containment/drain separation | L04.1 DONE; R1 retained | R2 PARTIAL / source verification BLOCKED | [R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md): exact old2 FAIL/13 PASS →15 PASS; cleanup32, desktop1306/82skip, combined3 PASS. Strict service ACK; packet first_reason/cleanup/retry retained. Local36 и phase0/Docker54 IDs exact baseline; control15m setup timeout/pytest NOT_RUN, Client Linux setup pending. Новый system/.10 NOT_BUILT, package/live NOT_RUN, owner workstation NOT_USED. STOP; NEXT review L04.2-R2. |
+| L04.2 | Установленная MESH/Auto приёмка; R2 system/candidate continuation | L04.1 DONE; source169aa68 DONE/review accepted | R2 PARTIAL / Phase B build environment BLOCKED | [R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md): source/runtime unchanged, exact locks/reference PASS. Native build direct protection test requires up non-loopback interface; agent network-none fixture omitted it. Affected-test STOP, not product failure attribution. Новый system/.10 NOT_BUILT, IDs/hashes N/A, package/live NOT_RUN, .9/test state immutable, owner workstation NOT_USED. NEXT final review L04.2-R2. |
 | L05 | Установленный Linux-мессенджер | L03, L04 | QUEUED / NOT_RUN | DIRECT/MESH-доставка без VPN и с VPN, контакты/текст/голос, история и фоновые события — completion gate на реальных компонентах. Backlog: L04.2 observation registration_error=delivery_unavailable; причина не локализована, client defect/gateway outage не заявлены. Исключён из L04.2 core prerequisites final review-решением; диагностика/repair здесь NOT_RUN. Вне Linux AWG/TCP Beta scope; автоматически не начинать. |
 | L06 | Linux recovery | L04, L05 | QUEUED | Ограниченные loss/return, sleep/resume, рестарт службы и отмена проходят с корректной очисткой, backoff и одним reconnect owner. |
 | L07 | Linux visual parity | L03, L06 | QUEUED | Реальные окна: согласованные экраны/состояния, список вариантов и отдельные selected-next/active state по D05, RU/EN, DPI100/125/150/200%, resize/focus/Tab/Enter/Escape; сопоставление с точным Android-эталоном без изменения Android106. |

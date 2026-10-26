@@ -4,13 +4,13 @@ Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN
 STATUS/PLAN define the current bounded task and next review gate, not an automatic
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
-[L04.2-R2 source / exact residual-ID checkpoint](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md)
-continues the same PLAN L04.2. R1 preservation remains; containment and authenticated
-drain acknowledgement are distinct. Exact lifetime old2 FAIL/13 PASS →15 PASS;
-desktop1306 PASS/82 SKIP; local36/phase0-Docker54 residual IDs unchanged.
-PARTIAL/STOP: control CI setup timed out before pytest, exact comparison unproven;
-Client Linux still in setup at readback. .10/system NOT_BUILT, package/live NOT_RUN.
-NEXT is review L04.2-R2, not automatic progression. The accepted
+[L04.2-R2 system/candidate continuation](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md)
+continues the same PLAN L04.2. Source169aa68 is review accepted, including R1
+preservation and R2 containment/drain separation; CI setup hangs no longer block
+progression, but no overall CI PASS is claimed. Current PARTIAL/STOP: native build
+test requires an up non-loopback interface omitted by the agent's network-none
+fixture. This is build-environment failure, not product defect evidence.
+.10/system NOT_BUILT; package/live NOT_RUN. NEXT — final review L04.2-R2. The accepted
 [core P0 failure](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
 is not replayed on .9. Historical reports and .9/system bytes remain immutable.
 Chat delivery_unavailable stays in L05 backlog, not a VPN prerequisite; no chat
