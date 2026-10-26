@@ -7,12 +7,12 @@ Entries below are an evidence/runbook index; historical NEXTs are not current as
 [L04.2-R2 system/candidate continuation](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md)
 continues the same PLAN L04.2. Source169aa68 is review accepted, including R1
 preservation and R2 containment/drain separation; CI setup hangs no longer block
-progression, but no overall CI PASS is claimed. Current PARTIAL/STOP: corrected
-network-none/NET_ADMIN dummy namespace passes preflight and all7 native test packages,
-including protection assertions. Binary builds, then go list inventory fails on
-Git dubious ownership of /workspace (agent omitted its safe.directory setup).
-This is a new build-environment blocker, not product defect evidence; no build replay.
-.10/system NOT_BUILT; package/live NOT_RUN. NEXT — final review L04.2-R2. The accepted
+progression, but no overall CI PASS is claimed. Current PARTIAL/STOP: one full offline
+native7/protection/build/inventory/RNS PASS after exact safe.directory setup; new
+system8ab7f298… archive/readback PASS. Candidate embed rejects three unchanged
+system-reference pins versus accepted runtime bytes. Package integration failure,
+not a live VPN defect; no pin/source fix or retry. .10 NOT_BUILT, installed package
+and live gates NOT_RUN. NEXT — final review L04.2-R2. The accepted
 [core P0 failure](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
 is not replayed on .9. Historical reports and .9/system bytes remain immutable.
 Chat delivery_unavailable stays in L05 backlog, not a VPN prerequisite; no chat

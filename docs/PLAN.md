@@ -2,22 +2,22 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Текущий bounded task — L04.2; R2 PARTIAL / Phase B build environment BLOCKED.**
+**Текущий bounded task — L04.2; R2 PARTIAL / Phase B package source-contract FAIL.**
 Зависимости: L04.1 DONE, CHAT-UX-2 DONE; source169aa68 DONE/review accepted.
 R1 first_reason/cleanup/all-stage/retry и R2 containment/drain приняты; native15,
 cleanup32, combined3, desktop1306 и exact local36/phase0-Docker54 baseline приняты.
 Control/Client Linux setup incomplete — infrastructure observation, не blocker
 по новому review; общего CI PASS нет. Новый PLAN ID не создан.
-На input main601f6a7 подтверждено отсутствие runtime изменений после169aa68.
-Fresh Ubuntu26.04/Python3.14, exact locks/RECORD/reference PASS. Предыдущий interface
-blocker принят review. Исправленный --network none/NET_ADMIN namespace: dummy fcbuild0,
-нет адресов/default route, external probe ENETUNREACH. Один standard native run:
-7 test packages PASS, protection assertion PASS; binary построен после tests.
-Затем go list inventory FAIL: Git VCS128/dubious ownership, агент не настроил
-safe.directory /workspace. Новый environment blocker, не product defect;
-build replay/source repair/live нет. Новый system/.10 NOT_BUILT; IDs/hashes N/A.
-Package inventory/setup/rollback/tamper/mixed/old-build/coherence/regressions и
-installed P0/P1/Auto/lifecycle/shared state NOT_RUN. .9/state immutable,
+Input main9bfee69 и working runtime byte-identical после169aa68. Clean source copy
+исключает unrelated work. Ubuntu26.04/Python3.14 locks/RECORD/reference PASS;
+network-none/NET_ADMIN dummy namespace + exact safe.directory PASS, внешней сети нет.
+Один полный native run:7 packages/protection PASS, binary/inventory/licenses/RNS PASS.
+Новый system8ab7f298…/archive readback PASS, не installed acceptance. Candidate embed
+FAIL: три system-reference pins (backend, mesh_service, mesh_chat_service) не совпадают
+с accepted runtime payload. Package integration STOP; pins/source/retry не менялись.
+.10 NOT_BUILT, candidate ID/artifact hashes N/A; system hash/size в report.
+Installed setup/rollback/tamper/mixed/old/coherence/regressions и Phase C
+P0/P1/Auto/lifecycle/shared state NOT_RUN. .9/state immutable,
 owner workstation NOT_USED. **STOP. NEXT — final review L04.2-R2.**
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
 L04 IN_PROGRESS; L05/messages/voice/signing/publication NOT_RUN; delivery_unavailable
@@ -257,7 +257,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 | L04.1-LIVE-2-RESUME | Installed negative acceptance exact .4, continuation | A/B1 review PASS; existing test identity/nl; fresh KVM | PARTIAL (STOP E; review accepted) | [Continuation](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2-continuation.md). P1/P2/B1/B2/C1/C2/D PASS on exact .4. E FAIL: queued Future/busy/open/CONNECTING; no late VPN start proven, helper/TUN0/generation0/null. Fixture cancels before worker release; F1/F2 NOT_RUN. Source/candidate unchanged; L04.2/L05/teardown NOT_RUN. |
 | L04.1-LIVE-2-R2 | Normal queued Connect/Close ownership; new internal .5 | LIVE-2 PARTIAL/review accepted, E defect; source/package only | DONE (review accepted; source/package) | [Report](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md): source1c2beb6/candidate f0ee1760…, unchanged verified system8d7d78ec…. Red4/targeted197/full1191 PASS; normal mutation Future/revision fence, running/done-undelivered blocks Close. Exact .5 package/integrity and Linux/AWG/TCP/package CI PASS; local isolated gates PASS. Full CI54/54/54 failures retained, no overall PASS. R2 used no private state/gateway/live E/F; later LIVE-2 result above. |
 | L04.1-AUTH-TEARDOWN | Обязательная очистка отдельного test device | после L04/L05 или завершения test campaign; отдельное разрешение/review | QUEUED / NOT_RUN | Device-scoped gateway cleanup → readback отсутствия только test peer/user при сохранении чужих ресурсов → registry revoke. Private receipt содержит exact binding hashes/row/address/read-only checks и дополнен L04.2 test chat/store/keyring, certificate issuance/expiry и registration. Revoke/teardown не выполнялись. Штатного unregister сейчас нет; не восстанавливать целиком старые DB/server.json и не начинать cleanup автоматически. |
-| L04.2 | Установленная MESH/Auto приёмка; R2 system/candidate continuation | L04.1 DONE; source169aa68 DONE/review accepted | R2 PARTIAL / Phase B build environment BLOCKED | [R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md): source/runtime unchanged, exact locks/reference PASS. One corrected isolated namespace run: all7 native test packages/protection PASS; binary built, then go list inventory blocked by Git VCS128/dubious ownership of /workspace. Agent environment error, no replay/product attribution. Новый system/.10 NOT_BUILT, IDs/hashes N/A, package/live NOT_RUN, .9/test state immutable, owner workstation NOT_USED. NEXT final review L04.2-R2. |
+| L04.2 | Установленная MESH/Auto приёмка; R2 system/candidate continuation | L04.1 DONE; source169aa68 DONE/review accepted | R2 PARTIAL / Phase B package source-contract FAIL | [R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md): exact current-main clean copy; unchanged source/locks/pins. One offline native7/protection/build/inventory/RNS PASS; new system8ab7f298… archive/readback PASS. Candidate embed rejects three stale system-reference hashes versus accepted runtime payload; no pin/source fix or retry. .10 NOT_BUILT, installed package/live gates NOT_RUN, .9/test state immutable, owner workstation NOT_USED. NEXT final review L04.2-R2. |
 | L05 | Установленный Linux-мессенджер | L03, L04 | QUEUED / NOT_RUN | DIRECT/MESH-доставка без VPN и с VPN, контакты/текст/голос, история и фоновые события — completion gate на реальных компонентах. Backlog: L04.2 observation registration_error=delivery_unavailable; причина не локализована, client defect/gateway outage не заявлены. Исключён из L04.2 core prerequisites final review-решением; диагностика/repair здесь NOT_RUN. Вне Linux AWG/TCP Beta scope; автоматически не начинать. |
 | L06 | Linux recovery | L04, L05 | QUEUED | Ограниченные loss/return, sleep/resume, рестарт службы и отмена проходят с корректной очисткой, backoff и одним reconnect owner. |
 | L07 | Linux visual parity | L03, L06 | QUEUED | Реальные окна: согласованные экраны/состояния, список вариантов и отдельные selected-next/active state по D05, RU/EN, DPI100/125/150/200%, resize/focus/Tab/Enter/Escape; сопоставление с точным Android-эталоном без изменения Android106. |

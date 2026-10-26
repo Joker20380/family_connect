@@ -1,6 +1,145 @@
 # L04.2-R2 — process containment versus authenticated drain
 
-## Phase B isolated-namespace continuation — current checkpoint
+## Phase B exact safe-directory continuation — current checkpoint
+
+Input main `9bfee698f1793e8fc7700a7438b6e7c244b31fb5`,26.10. Same L04.2-R2,
+no new task ID, R3 or source checkpoint. Review accepts the previous namespace/
+native-test PASS and Git VCS128 as an environment error; it authorizes one new
+complete Phase B attempt, without reusing its partial binary or manifests.
+
+**Result: L04.2-R2 PARTIAL; Phase B FAIL at candidate package source-contract
+verification; Phase C NOT_RUN. STOP. NEXT — final review L04.2-R2.**
+
+### Clean inputs and corrected builder
+
+Product/runtime/test sources, locks, Go/Xray pins and accepted Android106
+references remain byte-identical to accepted source
+`169aa687f497f8be690be5331879f994636135e1`. Later commits change only CI evidence
+workflows and documentation. The main worktree stays on current main; its unrelated
+changes are preserved and excluded from the build through a clean, exact-current-
+main local source copy. Its Git status is empty before and after the build.
+An initial local hardlink clone cannot cross filesystems and exits before creating
+the copy; copying objects with `--no-hardlinks` succeeds before any builder/test.
+
+A new empty output directory is used. No previous partial binary, incomplete
+manifest, .9 archive or .9 system member is an input. AWG/TCP inputs are freshly
+extracted from the previously completed pinned Docker input images, not from
+failed build directories or installed packages. Native module/compiler caches
+are reused offline; the native delivery itself is rebuilt.
+
+The builder retains `--network none --cap-add NET_ADMIN`, read-only `/workspace`,
+fresh writable output, `GOPROXY=off` and `GOTOOLCHAIN=local`. Only the exact
+`safe.directory` values `/workspace` and `/xray.git` are configured in disposable
+container HOME; no wildcard or host Git configuration change. Dummy `fcbuild0`
+is created with loopback up and brought up without an address, route or uplink;
+dummy automatic IPv6 address generation remains disabled as in the accepted run.
+Preflight confirms a distinct network namespace, interface count2, non-loopback
+`fcbuild0` flags `up|broadcast|running`, zero dummy addresses and zero IPv4/IPv6
+default routes. The bounded numeric-address external probe returns ENETUNREACH;
+no resolver access is used. No host network metadata is printed or changed.
+
+Ubuntu26.04.1/system Python3.14.4, all four exact locks,630 RECORD files across17
+runtime distributions, pip check and Android106/native reference verification
+PASS. Go1.26.0, Xray`d2758a023cd7f4174a5a5fa4ff66e487d4342ba0` and patch SHA256
+`eaeb30fd1e2aa52272d7f3a2a06bcad7b983ca9866a87fbd0a614eede6048872` are unchanged.
+
+### Full native/RNS and new system build PASS
+
+The unchanged standard native builder completes once, including its own
+`go test -race -count=1 -mod=readonly ... ./...`, binary build, `go list -deps`,
+licenses, dependency inventory and source/build manifests. Seven packages PASS:
+automatic, chatipc, direct, materials, normal, platform and worker; the command
+package has no tests. No separate duplicate test invocation, suppression,
+deselection, xfail or source modification occurs.
+
+`TestProtectionFailureNeverConnectsAndProtocolIsBounded` PASS includes the
+unchanged assertions: protector invoked exactly once, protection denial returns
+UNAVAILABLE, four malformed commands return DENIED without another protector
+invocation. Binary build occurs after test PASS. Standard RNS delivery completes.
+The native and RNS source digests match their unchanged reference pins.
+
+The standard system packager completes with the newly built native/RNS delivery,
+locked Python runtime and pinned normal-transport inputs. Its own native metadata,
+source inventory, dependency notices, installer verification and archive extraction/
+readback checks PASS. Additional read-only archive accounting confirms759 regular
+members, uid/gid0 and no group/other-writable members. This is package construction
+and integrity evidence, **not installed runtime or real pkexec acceptance**.
+
+| Identity/artifact | Exact value |
+| --- | --- |
+| Accepted runtime source | `169aa687f497f8be690be5331879f994636135e1` |
+| Build input main | `9bfee698f1793e8fc7700a7438b6e7c244b31fb5` |
+| Native source digest | `cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61` |
+| RNS source digest | `66128235484f01b82bfd2e4ad604a486428706fc48020abbf84211554edef26e` |
+| Fresh native binary | 29,017,971 bytes; SHA256 `5de514390105b5fab5fbf52238cdb5055d17c8fe37db7736d4cf263f5ade8dab` |
+| New system build ID | `8ab7f298df10a89bcd116fbddaa8a23e37ff1581de3a456bb1cce69175ad9120` |
+| New system archive | 49,251,070 bytes; SHA256 `bea874702228b153a4ed6a5c5ecfebc3f47e5c46b64f4e5e8c7b22b91181448f` |
+| Requested candidate | `0.2.12~l03.2.10` NOT_BUILT; candidate ID N/A |
+| DEB / AppImage / legacy | NOT_BUILT; sizes/SHA256 N/A |
+
+The fresh binary has the same size but a different hash from the previous partial
+binary. It was produced by this run, not copied or relabelled. New system ID differs
+from historical .9 system43266d97…; neither archive is substituted for the other.
+
+### First package failure: pinned system-source contract
+
+One standard candidate build with `--standard-system-rebuild`, Ubuntu26.04 and
+internal version0.2.12~l03.2.10 reaches `scripts/linux_candidate.py:embed` and exits1:
+
+```text
+candidate.embed/system-source-contract
+ValueError: System sources differ from the pinned candidate contract
+```
+
+Read-only comparison localizes exactly three mismatches in the unchanged
+`packaging/linux/system-reference.json`. Each actual system payload hash matches
+both the clean source copy and accepted runtime commit169aa68:
+
+| System member | Pinned SHA256 | Actual accepted-source SHA256 |
+| --- | --- | --- |
+| lib/backend.py | `7a39e76b5e725f232dfa3c28a586a2795f7fee87317b787087b97ec01a95233e` | `3805bdb290c39af3738fbe803bf5bc415e31c251196e5673cbcaea41c33e6157` |
+| lib/mesh_chat_service.py | `d906207df0d9a1aade141890e2266adad8b09e717f9b777af782957d29d68637` | `8570fd3a26932b77ad1446073947747800e28d23811ae7eed42a669e4ddac00d` |
+| lib/mesh_service.py | `540db319e9a2cff21fc6f13278bdb302df2154de764934d4ef85d8f06377faa6` | `277d6fe544b86a34da85bf1f37f2dc739faf8c4d5035a2efe14409ff3e6bf244` |
+
+The candidate's pinned source contract has not been advanced to the already
+accepted R1/R2 runtime bytes. The strict verifier rejects the mismatch as designed;
+this is a **package integration gate failure**, not recurrence of the prior build
+environment error or evidence of a live VPN/cleanup defect. No pin refresh, bypass,
+source fix, package retry or next gate follows. R1 primary/cleanup preservation
+and R2 containment/drain separation are unchanged. The partially assembled user
+bundle is not sealed into a candidate and is not an installer or build input.
+
+### Unreached gates, preservation and handoff
+
+Real systemd/pkexec installation, installed imports/root→UID checks, candidate-check/
+READY, DEB/AppImage coherence, reinstall/remove/.9 rollback, tampered/old/mixed-build
+rejection, chat preparation and affected source/package regression reruns are
+**NOT_RUN** after this first package STOP. Prior native15/cleanup32/combined3/
+desktop1306 and exact local36/phase0-Docker54 baseline comparisons remain accepted
+historical evidence, not rerun results. CI infrastructure observations remain
+unchanged; no fresh full-suite failure-ID comparison or overall CI PASS is claimed.
+
+Installed entry, P0, P1, Auto, lifecycle and AppImage shared-state gates are
+**NOT_RUN**. No live first_reason, cleanup_reason, process_contained,
+drain_acknowledged, attempt, generation or owner/TUN result is fabricated.
+No old .9 P0 replay, chat delivery diagnosis, message or voice acceptance occurs.
+
+Historical .9 artifacts/system and the original protected seven files are
+byte-identical at entry and final audit. Retained encrypted derived snapshots are
+not booted or modified; identity/store/cache/floors/settings are preserved. No
+provisioning, certificate renewal, registration, policy change or teardown occurs.
+Disposable builder/extraction containers are removed, no installed system or VPN
+resources require cleanup. Owner workstation **NOT_USED**. L05, signing and
+publication remain NOT_RUN; public VERSION/download links are unchanged.
+
+Private receipts/logs/source copy are retained under
+`/var/tmp/fc-l042-r2-safedir-20261026`; new system/native outputs and incomplete
+candidate assembly remain ignored under
+`state-client-build/linux-l042-r2-safedir-20261026`. Previous evidence is preserved.
+Only the report, STATUS/PLAN and documentation index are staged. Secret scan,
+JSON, links, staged scope and whitespace checks PASS; unrelated work is preserved.
+
+## Prior Phase B isolated-namespace checkpoint — review accepted
 
 Input main `601f6a7afb72f30711fe150f9e16a5422a302942`,26.10. Same L04.2-R2,
 no new task ID or source checkpoint. Review accepts the previous missing-interface
