@@ -7,12 +7,15 @@ Entries below are an evidence/runbook index; historical NEXTs are not current as
 [L04.2-R2 system/candidate continuation](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md)
 continues the same PLAN L04.2. Source169aa68 is review accepted, including R1
 preservation and R2 containment/drain separation; CI setup hangs no longer block
-progression, but no overall CI PASS is claimed. Current PARTIAL/STOP: authorized
-three-pin/provenance commit70f33f6 and reference gates PASS, targeted46/cleanup32 PASS.
-Complete system8ab7f298… reused; .10 embed/seal PASS with source_dirty=false and
-system_source169aa68. DEB/legacy built but NOT_ACCEPTED; AppImage packaging fails
-because the agent omitted its offline type2 runtime. No retry/source fix; installed
-package and live gates NOT_RUN. NEXT — final review L04.2-R2. The accepted
+progression, but no overall CI PASS is claimed. Current PARTIAL/STOP: reference70f33f6
+accepted, system8ab7f298… readback PASS/reused. Exact official Type-2 assets/signature
+and same appimagetool313 preflight PASS. One fresh offline .10 construction COMPLETE:
+candidate42644067…/sourceb8e9196/system_source169aa68/source_dirty=false; DEB/AppImage/
+legacy integrity PASS. Real systemd/pkexec system/DEB/AppImage/shared-state gates PASS.
+AWG assertions PASS, but editing the still-running private wrapper causes shell XIT
+finalization failure. Harness environment blocker, not an established product defect;
+safe container cleanup, no repeat/source fix. TCP/exact .9 rollback/remaining package
+and live gates NOT_RUN. NEXT — final review L04.2-R2. The accepted
 [core P0 failure](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
 is not replayed on .9. Historical reports and .9/system bytes remain immutable.
 Chat delivery_unavailable stays in L05 backlog, not a VPN prerequisite; no chat

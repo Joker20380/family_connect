@@ -1,23 +1,24 @@
 # Текущее состояние / Current state
 
-**L04.2 — R2 PARTIAL / reference PASS; Phase B AppImage environment BLOCKED.**
+**L04.2 — R2 PARTIAL / delivery complete; Phase B harness environment BLOCKED.**
 Source169aa68 DONE/review accepted: containment/drain separation и R1
 first_reason/cleanup/all-stage/retry сохранены. Native15, cleanup32, combined3,
 desktop1306/82skip и exact local36/phase0-Docker54 baseline приняты.
 Control/Client Linux setup incomplete больше не блокируют progression по review;
-общего CI PASS нет. Runtime169aa68 неизменён. Review разрешает ровно три source-file
-pins + provenance в system-reference; независимые accepted-source/archive hashes PASS.
-113 keys сохранены, только три SHA изменены; native/RNS/остальные pins unchanged.
-Old/new/synthetic/old-system reference gates PASS; candidate/runtime tests46 PASS.
-Complete system8ab7f298…/49,251,070 bytes/bea87470… повторно verified, не rebuilt.
-Reference commit70f33f6 pushed/remote SHA verified; verifier/SYSTEM/runtime unchanged.
-Fresh .10 embed/seal PASS: candidate5286116a…, source70f33f6/system_source169aa68,
-source_dirty=false. DEB/legacy built, NOT_ACCEPTED. AppImage FAIL: agent не предоставил
-offline type2 runtime; appimagetool download невозможен в network-none builder.
-Environment blocker, не product defect; no retry/fix. Cleanup32 PASS параллельно build.
-AppImage/delivery manifest не созданы; installed gates и Phase C NOT_RUN.
+общего CI PASS нет. Runtime169aa68/test/locks/pins неизменны; reference70f33f6 принят.
+Input mainb8e9196, clean copy. Exact system8ab7f298…/49,251,070 bytes/bea87470…
+readback PASS, reused. Official Type-2 release417724209: три exact asset IDs/hashes,
+detached signature PASS; тот же appimagetool854e19e/build313. Prerequisite receipt PASS.
+Один fresh offline .10 run COMPLETE: candidate42644067…, sourceb8e9196,
+system_source169aa68, source_dirty=false; DEB/AppImage/legacy/manifest созданы.
+Integrity/coherence PASS; real systemd/pkexec system/DEB/AppImage gates PASS, encrypted
+state/shared system/no silent VPN PASS. AWG fixture assertions PASS, но orchestration
+FAIL после них: agent изменил ещё исполняемый private wrapper, `XIT: command not found`.
+Environment/harness error, не product defect. Test container удалён, owner/TUN0,
+IDLE/pending=false/network unchanged. No retry/source fix. TCP/exact .9 rollback,
+remaining package regressions и Phase C NOT_RUN; Phase B PASS не объявлен.
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
-Exact partial artifact/system IDs/hashes в report. .9/state immutable;
+Exact complete construction artifact/system IDs/hashes в report, package acceptance incomplete. .9/state immutable;
 owner workstation NOT_USED. L04.1 DONE, parent L04 IN_PROGRESS; L05 NOT_RUN,
 delivery_unavailable backlog без диагностики. L06/L07/L08 прежние QUEUED;
 signing/publication/revoke/teardown NOT_RUN. **STOP. NEXT — final review L04.2-R2.**

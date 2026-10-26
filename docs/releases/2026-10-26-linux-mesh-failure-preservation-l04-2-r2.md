@@ -1,6 +1,141 @@
 # L04.2-R2 — process containment versus authenticated drain
 
-## Reference advancement and package continuation — current checkpoint
+## Verified offline runtime and fresh delivery — current checkpoint
+
+Input main `b8e9196d205c6810e02a642678517a4fc44b921b`,26.10. Same L04.2-R2;
+no new task, version, runtime/source checkpoint or product patch. Review accepts
+the three-pin advancement and authorizes one fresh .10 package run after closing
+external prerequisites. **Construction/delivery integrity PASS; L04.2-R2 PARTIAL;
+Phase B ENVIRONMENT_BLOCKED at package-harness finalization; Phase C NOT_RUN.**
+No product defect is established by this run. STOP. NEXT — final review L04.2-R2.
+
+### Read-only prerequisite receipt
+
+A clean local copy of current main excludes all unrelated working changes. The
+complete diff after accepted runtime `169aa687f497f8be690be5331879f994636135e1`
+contains only CI/docs/evidence and the already accepted system-reference change.
+Runtime/test sources, locks, Go/Xray/RNS pins and Android106 references are
+unchanged. The113 source-file keys and exact three accepted hashes are verified
+again against accepted Git blobs, current files and actual archive members.
+
+The exact complete system8ab7f298… is reused, not rebuilt: regular archive,
+49,251,070 bytes, exact SHA256, expected root,759 unique regular members, uid/gid0,
+no group/world-writable members, native/RNS digests and three runtime hashes PASS.
+The unchanged fixed installer performs full extraction/verification/readback in
+offline Ubuntu26.04/Python3.14. Historical .9 delivery/system hashes and original
+protected seven files match their retained baseline before and after the run.
+Neither earlier incomplete candidate output nor partial native binary is an input.
+
+Public Type-2 assets are fetched by exact asset IDs in a separate bounded staging
+container with network access, no source/private-state mount, dropped capabilities
+and a read-only root. Release417724209 resolves to target commit
+`fedfad51acc2860b2916a1eef32ba4a500ff31ef`. The continuous tag is mutable; acceptance
+uses release/asset IDs and pinned byte hashes, not the tag name.
+
+| External input | Exact identity / size | SHA256 |
+| --- | --- | --- |
+| Existing appimagetool | revision854e19e951900cf141245b384d45735942521abe;15,092,216 bytes | `95cbe7cce9717fce90c484e34052ee7c7f1d7635b33c12525b4776826a7d29b6` |
+| runtime-x86_64 | asset657374641;944,632 bytes | `617aa77314d57c8b8e4fae9c3f0b35af7b30d5529cb69e98f64f92510ed98a46` |
+| runtime-x86_64.sig | asset657374763;119 bytes | `4c38bbfd3c8fe7b43cd37483544e5aa682b5932674d89e53fcccd2d3fc3a8f12` |
+| signing-pubkey.asc | asset657374839;685 bytes | `db8b615eb5bbf5e8418d52906b4a492960926370e2c5041ad6acaccda56ef0c6` |
+
+Actual tool output: `appimagetool, continuous build (git version 854e19e), build 313
+built on 2026-10-04 14:58:08 UTC`; executable ELF64 x86-64. No replacement tool is
+downloaded. Detached runtime signature verifies in a new isolated GnuPG home:
+VALIDSIG `570C77ACEA40C0F1B758902CBF96CCA56490F695`. Trust comes from the exact
+user-pinned public-key bytes, not local Web-of-Trust certification. This is
+verification of an upstream artifact, not Family Connect signing/publication.
+
+An initial staging write fails before any asset is written: root with all
+capabilities dropped cannot write the UID1000-owned staging directory. Only the
+staging container UID is corrected to1000; subsequent exact downloads succeed.
+This occurs before the package run and before its prerequisite receipt PASS.
+The completed receipt and staged inputs are made read-only before building.
+
+### One fresh package run and complete delivery
+
+Unchanged `scripts.package_linux` runs once in offline Ubuntu26.04/Python3.14,
+`--network none`, read-only clean source, fresh writable output,
+`GOPROXY=off`, `GOTOOLCHAIN=local`, exact `/workspace` safe.directory. A private
+external wrapper passes `--runtime-file` to the same appimagetool; no product,
+verifier or package source changes. Embed/seal and AppImage construction complete;
+the standard delivery manifest is emitted. Legacy is rebuilt from source: its
+deterministic bytes happen to equal the previous legacy output, but are not copied.
+
+- Internal version: `0.2.12~l03.2.10`, unsigned/unpublished.
+- Candidate: `4264406722f6dd3efb83e9d9666e67180ce4f950333bb3e711bcbb4f5068b55a`.
+- Source: `b8e9196d205c6810e02a642678517a4fc44b921b`; `source_dirty=false`.
+- System source: `169aa687f497f8be690be5331879f994636135e1`.
+- System build: `8ab7f298df10a89bcd116fbddaa8a23e37ff1581de3a456bb1cce69175ad9120`;
+  `system_kind=standard-source-rebuild`.
+
+| Artifact | Bytes | SHA256 |
+| --- | --- | --- |
+| FamilyConnect_0.2.12~l03.2.10_amd64.deb | 56,146,990 | `e1b9cb323c1bb6bc51ef06c08e0be91639cd25eabca3fe8b6b425657298d717c` |
+| FamilyConnect-0.2.12~l03.2.10-x86_64.AppImage | 58,120,696 | `56a4a76db1e3571e90aeba374042f1f02a662fe3ef70333e0c5554fd7cbab6e3` |
+| FamilyConnect-Linux-0.2.12~l03.2.10.tar.gz | 114,632 | `7cf31f40806d021b20cd24b12847874feed5b8c982844eb714dfe9d16de8b851` |
+| FamilyConnect-MESH-system-amd64.tar.gz | 49,251,070 | `bea874702228b153a4ed6a5c5ecfebc3f47e5c46b64f4e5e8c7b22b91181448f` |
+
+Fresh outputs are retained under ignored
+`state-client-build/linux-l042-r2-offline-20261026/candidate/`; prior incomplete
+outputs/evidence remain separate and unaccepted. Unchanged artifact verifier PASS:
+762 user members, matching DEB/AppImage inventories, integration scripts, embedded
+system and candidate IDs, exact artifact hashes, six-member legacy compatibility.
+Construction is complete, but the candidate is **not package/live accepted**.
+
+### Disposable package results and stop
+
+All installed checks below use fresh offline Ubuntu26.04.1/systemd259/Python3.14
+containers with separate network namespaces, no host bus/resolver/state mounts.
+Real systemd/pkexec are exercised; no owner workstation installation occurs.
+
+| Gate | Observed result |
+| --- | --- |
+| Complete system smoke | PASS: exact inventory/imports, root→UID IPC, real polkit, native AWG/Xray inventory, idle manual/Auto, ownership exclusion, sticky cleanup, failed-import rollback, changed-runtime rejection, state/network preservation |
+| Exact DEB | PASS: user imports/GUI, no silent system setup/VPN, explicit pkexec setup/reinstall, READY, tampered embedded payload/missing manifest/mixed capability rejection, prepare-chat without VPN, one background D-Bus service, remove/reinstall preserves encrypted state/root runtime |
+| Original AppImage | PASS: extraction/integration/launch, same matching system, READY, tamper/mixed guards, background owner and removal preservation |
+| DEB/AppImage sharing | PASS in disposable package fixture: same UID/state/system, original image launch, no second setup |
+| AWG pre-start fixture assertions | PASS: expected TRANSPORT_BUSY, terminal IDLE/generation2/pending=false, physical user lock free, cache preserved, successful starts0, root owner0/TUN0, network unchanged, root fixture released |
+| AWG wrapper finalization | FAIL: shell reports `line 39: XIT: command not found`; outer gate chain exits1 |
+| TCP package regression | NOT_RUN after stop |
+| Exact .9 rollback and actual cross-version install gate | NOT_RUN; do not substitute synthetic mixed-capability or failed-import rollback results |
+| Fresh cleanup32/native15/combined3/full desktop and remaining regressions | NOT_RUN after stop; earlier accepted results retained, not relabelled as this candidate's package gate |
+| Installed live P0/P1/Auto/lifecycle | NOT_RUN; Phase C never entered |
+
+The finalization error is caused by agent orchestration: while the AWG wrapper
+was still executing, the agent edited that same private shell file to prepare a
+later exact-.9 rollback mode. The active shell subsequently read a displaced
+fragment of `EXIT` as `XIT`. This is a **test-harness/environment error**, not a
+failure of the AWG protection assertions, runtime cleanup or sealed package bytes.
+The later rollback helper was only prepared, never executed. No source/test patch,
+package rebuild, gate replay or next profile follows this failure.
+
+The existing cleanup trap removes the test container; subsequent Docker readback
+finds no remaining containers with this run's namespace. The durable AWG receipt
+already confirms zero owner/TUN, IDLE, no pending journal operation, unchanged
+network and released root fixture. No cleanup is performed on host/client/server
+resources. Logs, prerequisite receipt and complete delivery are retained locally.
+
+Accepted source gate results remain cleanup32/native15/combined3/desktop1306 with
+82 skips. Local36 and phase0/Docker54 exact historical ID comparisons remain the
+accepted evidence below; there is no new full-suite run or new comparison claim.
+Control/Client Linux dependency setup incompleteness is still infrastructure-only.
+No overall CI PASS, suppression, xfail, test deletion or deselection is claimed.
+
+Retained encrypted derived bases are not booted or modified. Original protected
+seven files and historical .9/system remain byte-identical. Live first_reason,
+cleanup_reason, process_contained, drain_acknowledged, attempt and generation are
+**NOT_OBSERVED** in this continuation, not fabricated from the package pre-start
+fixture. Chat delivery_unavailable stays untouched in L05 backlog. Owner workstation
+**NOT_USED**; L05/messages/voice acceptance/signing/publication/teardown NOT_RUN.
+Parent L04 remains IN_PROGRESS; Phase B requires review of this bounded stop.
+
+Final documentation validation: secret scan, JSON parse,417 tracked local links,
+four-file staged scope and `git diff --check` PASS. Pre-existing unrelated edits
+are preserved and excluded. No generated artifact, private state or helper script
+is staged; only STATUS/PLAN, documentation index and this report are committed.
+
+## Reference advancement and package continuation — previous checkpoint
 
 Input main `3ae2e3c0acf8f5cb1c3deaff9f1123ce435801e3`,26.10. Same L04.2-R2.
 Review authorizes only three source-file pins and their provenance string in
