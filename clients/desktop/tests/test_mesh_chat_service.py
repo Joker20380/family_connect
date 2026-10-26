@@ -12,6 +12,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'linux'))
 from mesh_chat_service import ServiceHost, ServiceOwner
+from mesh_service import NativeCleanup
 from mesh_materials import MaterialsError
 from provisioning.chat_bridge import ChatBridge
 from provisioning import chat_bridge_protocol as wire
@@ -94,6 +95,7 @@ class Worker:
         self.closed = True
         if self.fail:
             raise RuntimeError('CLEANUP_PENDING')
+        return NativeCleanup(True, True)
 
 
 @pytest.fixture

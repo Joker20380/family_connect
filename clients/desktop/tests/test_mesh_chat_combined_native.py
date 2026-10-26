@@ -81,7 +81,7 @@ def combined(authenticated, monkeypatch):
             return result
         def close(self):
             try:
-                super().close()
+                return super().close()
             except Exception:
                 print('NATIVE CLOSE FAILED:', self.process.returncode)
                 if self.process.returncode == 66:

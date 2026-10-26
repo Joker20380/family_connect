@@ -13,6 +13,7 @@ from test_mesh_chat import lane, read, respond
 from test_mesh_chat_host import DEVICE, body
 from mesh_chat import ChatError, ChatLane, MAX_FRAME
 import mesh_ipc
+from mesh_service import NativeCleanup
 from mesh_chat_host import Binding, Host
 from provisioning.chat_bridge import ChatBridge, ChatHTTP
 from provisioning import chat_bridge_protocol as wire
@@ -146,6 +147,7 @@ class StatusWorker:
         assert not self.chat.reader.is_alive() and not self.thread.is_alive()
         self.peer.close()
         self.closed.set()
+        return NativeCleanup(True, True)
 
 
 def wire_generation(service):

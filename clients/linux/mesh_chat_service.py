@@ -21,7 +21,7 @@ from mesh_chat_host import Binding, Cancellation, Host
 from mesh_chat import ChatError
 from mesh_materials import CacheStore, MaterialOwner, MaterialsError, NativeMaterials
 from mesh_ownership import Ownership, OwnershipError, locked_file, prepare_runtime
-from mesh_service import NativeWorker
+from mesh_service import NativeCleanup, NativeWorker
 from provisioning import chat_bridge_protocol as wire
 
 
@@ -157,16 +157,31 @@ class ServiceOwner:
             self._cleanup_locked()
 
     def _cleanup_locked(self):
+        if self.failed:
+            raise RuntimeError('CLEANUP_UNCONFIRMED')
         self.cancel.set()
-        if self.current is not None:
-            self.current.close()
-            if self.generation_lease is not None:
-                self.current.release(self.generation_lease)
-                self.generation_lease = None
-            self.current = None
+        binding, self.current = self.current, None
+        failed = False
+        if binding is not None:
+            try:
+                binding.close()
+                if self.generation_lease is not None:
+                    binding.release(self.generation_lease)
+            except Exception:
+                failed = True
+        self.generation_lease = None
         if self.worker is not None:
-            self.worker.close()
-            self.worker = None
+            try:
+                result = self.worker.close()
+                if not isinstance(result, NativeCleanup) or not result.admission_release_safe:
+                    failed = True
+            except Exception:
+                failed = True
+            if not failed:
+                self.worker = None
+        if failed:
+            self.failed = True
+            raise RuntimeError('CLEANUP_UNCONFIRMED')
         if self.gate is not None:
             if self.gate.active:
                 self.gate.finish()

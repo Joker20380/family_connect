@@ -2,33 +2,24 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Текущий bounded task — L04.2; подпункт R1 PARTIAL / STOP, review pending.**
-Зависимости: L04.1 DONE, CHAT-UX-2 DONE; core36606ea PARTIAL принят.
-Не новый PLAN ID. Старую .9 P0 не повторять; новый exact system/candidate обязателен
-только после source/package gates. Owner workstation/identity запрещены.
-Phase A: deterministic collapse red18 FAIL/2 PASS; primary first_reason сохранён,
-отдельный sanitized cleanup stage, полные binding/worker/detach attempts,
-confirmed reap/reader/fds независимо от exit code. Cleanup pending → fail-closed,
-без следующей попытки; complete cleanup → bounded recovery; stale close fenced.
-Focused213 PASS/2 SKIP; full desktop1296 PASS/82 SKIP, no suppression.
-Source9c6f867 pushed/remote verified. Mandatory full suite36 FAIL/3377 PASS/99 SKIP;
-exact36 IDs совпадают с CHAT-UX-2, без suppression; FD error не повторился, не fixed.
-CI control54/3232/226 и Docker54/3230/228 FAIL; isolated lifetime2 FAIL/13 PASS
-(cancel/peer admission assertion), отдельный unaccepted результат без rerun/patch.
-Local combined3 PASS; AWG/TCP/Client Linux CI PASS, общего gate PASS нет.
-Phase B STOP: новый system inventory/imports/setup/rollback/mixed rejection и
-DEB/AppImage coherence NOT_RUN; новый exact .10/system NOT_BUILT.
-Без unrelated repair и без live. **NEXT — review L04.2-R1.**
-Phase C только после B PASS: один new-candidate P0 Connect; при failure exact
-primary/cleanup reason и safe cleanup/STOP. При PASS clean P1/Auto, actual profile,
-DNS/HTTPS, selected-next/active separation, refresh/stale fence, active GUI reopen,
-один Disconnect, shared DEB/AppImage state и отсутствие второго VPN owner/TUN.
-Прежние .9/system/state PASS сохраняются; Phase C NOT_RUN. Test snapshots
-не booted, original seven files byte-identical. delivery_unavailable — L05 backlog, не core
-prerequisite; не диагностировать chat и не требовать carrier route/EXISTING_EXIT.
-[Единый R1 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r1.md).
-Parent L04 IN_PROGRESS; L05 NOT_RUN; L06/L07/L08 прежние QUEUED. Без messages/voice,
-Android106, Windows/iOS, signing/publication, grants/policy/revoke/teardown.
+**Текущий bounded task — L04.2; подпункт R2, source gate IN_PROGRESS.**
+Зависимости: L04.1 DONE, CHAT-UX-2 DONE; R1 primary/cleanup fix сохраняется.
+Не новый PLAN ID. Owner workstation/identity запрещены; .9 P0 не повторять.
+Два isolated failures: duplicate terminate/wait превышает8s; отдельно admission
+ошибочно освобождается по containment без drain ACK. Новый внутренний proof
+разделяет эти контракты, PacketSession first_reason/all-stage/retry сохранены.
+Exact old2 FAIL/13 PASS →15 PASS; admission old red9 FAIL; final cleanup32 PASS,
+desktop1306/82skip, combined3 PASS. Full/CI/residual-ID gates pending.
+Source gate: R1/R2, exact15 native, combined root→UID, desktop, AWG/TCP/Client Linux/
+voice; local/control/phase0/Docker без новых failure/error IDs и suppression.
+Exact historical baseline допустим по review, не означает overall PASS.
+После source PASS: новый system и .10, inventory/setup/rollback/tamper/mixed/
+old-build/coherence, isolated/AWG/TCP package gates. Пока NOT_BUILT.
+После package PASS без review: один installed P0 Connect; failure→diagnostics/
+cleanup/STOP; success→clean P1/Auto/lifecycle/shared state. New live NOT_RUN.
+[Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
+L04 IN_PROGRESS; L05/messages/voice/signing/publication NOT_RUN; delivery_unavailable
+не VPN prerequisite, не диагностируется. L06/L07/L08 прежние QUEUED.
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted.** По owner review exact
 0.2.12~l03.2.9 установлен, candidate/package/system PASS, одно main window/embedded
@@ -264,7 +255,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 | L04.1-LIVE-2-RESUME | Installed negative acceptance exact .4, continuation | A/B1 review PASS; existing test identity/nl; fresh KVM | PARTIAL (STOP E; review accepted) | [Continuation](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2-continuation.md). P1/P2/B1/B2/C1/C2/D PASS on exact .4. E FAIL: queued Future/busy/open/CONNECTING; no late VPN start proven, helper/TUN0/generation0/null. Fixture cancels before worker release; F1/F2 NOT_RUN. Source/candidate unchanged; L04.2/L05/teardown NOT_RUN. |
 | L04.1-LIVE-2-R2 | Normal queued Connect/Close ownership; new internal .5 | LIVE-2 PARTIAL/review accepted, E defect; source/package only | DONE (review accepted; source/package) | [Report](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md): source1c2beb6/candidate f0ee1760…, unchanged verified system8d7d78ec…. Red4/targeted197/full1191 PASS; normal mutation Future/revision fence, running/done-undelivered blocks Close. Exact .5 package/integrity and Linux/AWG/TCP/package CI PASS; local isolated gates PASS. Full CI54/54/54 failures retained, no overall PASS. R2 used no private state/gateway/live E/F; later LIVE-2 result above. |
 | L04.1-AUTH-TEARDOWN | Обязательная очистка отдельного test device | после L04/L05 или завершения test campaign; отдельное разрешение/review | QUEUED / NOT_RUN | Device-scoped gateway cleanup → readback отсутствия только test peer/user при сохранении чужих ресурсов → registry revoke. Private receipt содержит exact binding hashes/row/address/read-only checks и дополнен L04.2 test chat/store/keyring, certificate issuance/expiry и registration. Revoke/teardown не выполнялись. Штатного unregister сейчас нет; не восстанавливать целиком старые DB/server.json и не начинать cleanup автоматически. |
-| L04.2 | Установленная приёмка MESH/Auto; R1 primary/cleanup preservation | L04.1 DONE; core PARTIAL accepted | R1 PARTIAL / STOP; review pending | [R1 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r1.md), source9c6f867: red18/2, focused213/2skip, desktop1296/82skip, combined3 PASS. Full36 FAIL/3377 PASS/99 SKIP; CI mandatory54 failures, isolated lifetime2 failures без rerun/repair. Primary/cleanup разделены; полного gate PASS нет. Новый exact system/candidate NOT_BUILT; old .9 P0 не повторялся, new package/live NOT_RUN. Original seven files unchanged, owner workstation NOT_USED, L05 observation без диагностики. NEXT review L04.2-R1. |
+| L04.2 | Установленная MESH/Auto приёмка; R2 containment/drain separation | L04.1 DONE; R1 retained | R2 source gate IN_PROGRESS | [R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md): exact old2 FAIL/13 PASS →15 PASS; admission old red9 FAIL; focused237/2skip, desktop1306/82skip. Strict service drain ACK; packet first_reason/cleanup/retry retained. Full/CI/baseline comparison pending; новый system/.10 NOT_BUILT, package/live NOT_RUN, owner workstation NOT_USED. |
 | L05 | Установленный Linux-мессенджер | L03, L04 | QUEUED / NOT_RUN | DIRECT/MESH-доставка без VPN и с VPN, контакты/текст/голос, история и фоновые события — completion gate на реальных компонентах. Backlog: L04.2 observation registration_error=delivery_unavailable; причина не локализована, client defect/gateway outage не заявлены. Исключён из L04.2 core prerequisites final review-решением; диагностика/repair здесь NOT_RUN. Вне Linux AWG/TCP Beta scope; автоматически не начинать. |
 | L06 | Linux recovery | L04, L05 | QUEUED | Ограниченные loss/return, sleep/resume, рестарт службы и отмена проходят с корректной очисткой, backoff и одним reconnect owner. |
 | L07 | Linux visual parity | L03, L06 | QUEUED | Реальные окна: согласованные экраны/состояния, список вариантов и отдельные selected-next/active state по D05, RU/EN, DPI100/125/150/200%, resize/focus/Tab/Enter/Escape; сопоставление с точным Android-эталоном без изменения Android106. |

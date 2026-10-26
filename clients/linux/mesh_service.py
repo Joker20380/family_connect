@@ -1,5 +1,6 @@
 """Single-owner MESH supervisor with native validation and private atomic cache."""
 import copy
+from dataclasses import dataclass
 import os
 import socket
 import subprocess
@@ -22,6 +23,17 @@ CLEANUP_REASONS = frozenset(('CHAT_BINDING_CLEANUP_FAILED', 'WORKER_REAP_FAILED'
                              'NETWORK_CLEANUP_FAILED'))
 
 
+@dataclass(frozen=True)
+class NativeCleanup:
+    process_contained: bool
+    drain_acknowledged: bool
+    cleanup_reason: str | None = None
+
+    @property
+    def admission_release_safe(self):
+        return self.process_contained and self.drain_acknowledged
+
+
 class NativeWorker:
     def __init__(self, ownership=None):
         parent, child = socket.socketpair(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -39,6 +51,8 @@ class NativeWorker:
         self.close_lock = threading.Lock()
         self.close_done = False
         self.cleanup_reason = None
+        self.cleanup_result = None
+        self.drain_acknowledged = False
 
     def call(self, action, start=None):
         if self.process.poll() is not None:
@@ -50,40 +64,46 @@ class NativeWorker:
         deadline = time.monotonic() + 4
         ipc.send(self.process.stdin.fileno(), request, ipc.MAX_REQUEST, deadline)
         reply = ipc.receive(self.process.stdout.fileno(), ipc.MAX_REPLY, deadline)
-        if reply.get("schema") != 1 or reply.get("id") != self.identifier or type(reply.get("ok")) is not bool:
+        if (type(reply.get("schema")) is not int or reply["schema"] != 1 or
+                type(reply.get("id")) is not int or reply["id"] != self.identifier or type(reply.get("ok")) is not bool):
             raise ipc.ProtocolError()
         if set(reply) - {"schema", "id", "ok", "state", "error", "interface", "mtu", "snapshot"}:
             raise ipc.ProtocolError()
         return reply
 
     def _reap(self, deadline):
+        def wait():
+            try:
+                result = self.process.wait(timeout=max(0, min(2, deadline - time.monotonic())))
+            except subprocess.TimeoutExpired:
+                return False
+            return result is not None and self.process.returncode is not None
+
         if self.process.poll() is None:
             try:
-                self.call('stop')
+                reply = self.call('stop')
+                self.drain_acknowledged = reply.get('ok') is True and reply.get('state') == 'DISCONNECTED'
             except Exception:
-                try:
-                    self.process.terminate()
-                except OSError:
-                    pass
-        for action in (None, self.process.terminate, self.process.kill):
-            if action is not None:
+                self.drain_acknowledged = False
+            if self.drain_acknowledged and wait():
+                return
+        elif wait():
+            return
+        for action in (self.process.terminate, self.process.kill):
+            if self.process.poll() is None:
+                self.drain_acknowledged = False
                 try:
                     action()
                 except OSError:
                     pass
-            try:
-                result = self.process.wait(timeout=max(0, min(2, deadline - time.monotonic())))
-                if result is None or self.process.returncode is None:
-                    raise SessionFailure('CLEANUP_PENDING', 'WORKER_REAP_FAILED')
+            if wait():
                 return
-            except subprocess.TimeoutExpired:
-                continue
         raise SessionFailure('CLEANUP_PENDING', 'WORKER_REAP_FAILED')
 
     def close(self):
         with self.close_lock:
             if not self.close_done:
-                deadline = time.monotonic() + 10
+                deadline = time.monotonic() + 7
                 failures = []
                 try:
                     self.chat.close()
@@ -109,9 +129,11 @@ class NativeWorker:
                 if time.monotonic() > deadline:
                     failures.append('WORKER_CLEANUP_FAILED')
                 self.cleanup_reason = failures[0] if failures else None
+                self.cleanup_result = NativeCleanup(not failures, self.drain_acknowledged, self.cleanup_reason)
                 self.close_done = True
             if self.cleanup_reason is not None:
                 raise SessionFailure('CLEANUP_PENDING', self.cleanup_reason)
+            return self.cleanup_result
 
 
 class SessionFailure(RuntimeError):
