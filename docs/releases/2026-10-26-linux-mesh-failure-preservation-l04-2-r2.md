@@ -6,7 +6,8 @@ Input main `3ae2e3c0acf8f5cb1c3deaff9f1123ce435801e3`,26.10. Same L04.2-R2.
 Review authorizes only three source-file pins and their provenance string in
 `packaging/linux/system-reference.json`; accepted runtime169aa68 remains unchanged.
 No new runtime/source checkpoint or PLAN ID is created. **Reference gate PASS;
-Phase B IN_PROGRESS. Package/live acceptance is not yet claimed.**
+L04.2-R2 PARTIAL; Phase B ENVIRONMENT_BLOCKED at AppImage runtime acquisition;
+Phase C NOT_RUN. STOP. NEXT — final review L04.2-R2.**
 
 Before editing, SHA256 is independently computed from `git show` of accepted
 `169aa687f497f8be690be5331879f994636135e1` and actual members of the exact complete
@@ -52,12 +53,78 @@ The real complete archive and historical .9 are never modified. Existing targete
 suppression. No additional source test is needed for this literal pin advancement;
 the exact-archive positive/negative receipts remain local sanitized evidence.
 
-Reference advancement is committed/pushed separately before candidate build,
-with only the reference plus STATUS/PLAN/this report. Secret/JSON/link/scope/
-whitespace checks PASS. The next step is a fresh .10 build from that commit with
-source_dirty=false, reusing only the verified complete system artifact. No separate
-review pause is required after this passing reference gate. Owner workstation
-NOT_USED; L05/messages/signing/publication NOT_RUN; protected state untouched.
+Reference advancement commit
+`70f33f66a3e52269f4f197c777565ae9ff6b15da` contains only the reference plus
+STATUS/PLAN/this report, and is pushed separately before candidate build. Remote
+main SHA is verified equal. Secret/JSON/link/scope/whitespace checks PASS; the
+working product tree is clean. Continuation begins immediately without another
+review pause, from a clean copy of this exact commit.
+
+### Candidate embed/seal PASS; first packaging environment failure
+
+The fresh Ubuntu26.04/Python3.14 candidate build reuses only the exact complete
+system8ab7f298… archive. No system/native rebuild, incomplete prior candidate
+assembly, old partial binary or .9 system member is used. Unchanged `embed()` now
+passes; sealing records source_dirty=false, source_commit equal to the reference
+commit and system_source_commit equal to accepted runtime169aa68. Verifier and
+SYSTEM constant remain unchanged. Unrelated work is excluded from the clean copy.
+
+| Identity/artifact | Exact value / status |
+| --- | --- |
+| Internal version | `0.2.12~l03.2.10`, incomplete delivery, not installed |
+| Sealed user-bundle candidate ID | `5286116a5e75b913028bb0c7040fd0be6641a535283e1c09b2a3ed24166b120b` |
+| source_commit | `70f33f66a3e52269f4f197c777565ae9ff6b15da` |
+| system_source_commit | `169aa687f497f8be690be5331879f994636135e1` |
+| source_dirty / system_kind | `false` / `standard-source-rebuild` |
+| System build ID | `8ab7f298df10a89bcd116fbddaa8a23e37ff1581de3a456bb1cce69175ad9120` |
+| System archive | 49,251,070 bytes; SHA256 `bea874702228b153a4ed6a5c5ecfebc3f47e5c46b64f4e5e8c7b22b91181448f` |
+| DEB, built but NOT_ACCEPTED | 56,146,922 bytes; SHA256 `e2342b9fb5a53aa3a82ea6bcf1aaeb14a6e1e7c153abeab37476356e8ca74ad1` |
+| Six-file legacy archive, shape compatibility only | 114,632 bytes; SHA256 `7cf31f40806d021b20cd24b12847874feed5b8c982844eb714dfe9d16de8b851` |
+| AppImage | NOT_BUILT; size/SHA256 N/A |
+| candidate-delivery.json | NOT_CREATED; no complete delivery inventory/acceptance |
+
+After DEB and legacy creation, AppImage packaging stops with exit1. The existing
+appimagetool (continuous854e19e/build313) attempts to download its separate type2
+runtime; the offline builder has no supplied runtime file and no external network:
+
+```text
+package.appimage.runtime-fetch
+Failed to download runtime: server returned status code 0
+Failed to download runtime file ... pass it to appimagetool with --runtime-file
+```
+
+The agent omitted this offline packaging prerequisite. This is a **build-environment
+packaging blocker**, not a recurrence of the reference mismatch or evidence of a
+runtime/cleanup/VPN defect. Optional AppStream/GPG warnings are not the failure;
+signing is not attempted or required here. No runtime download retry, online
+fallback, package replay, source/verifier/pin fix or further gate is performed.
+The incomplete outputs are retained as evidence, not an accepted candidate to
+install or reuse automatically. The container is removed; no installed resources
+need cleanup.
+
+R1/R2 cleanup tests already running alongside the build complete **32 PASS**;
+targeted reference/candidate/runtime46 PASS remains recorded above. Native15,
+combined3, full desktop, MESH/admission/AWG/TCP package regressions, real systemd/
+pkexec setup, imports/root→UID, candidate-check/READY, DEB/AppImage inventory/
+coherence, reinstall/remove/.9 rollback and tampered/old/mixed/wrong-build gates
+are **NOT_RUN in this continuation**. Prior accepted source/CI evidence is not
+relabelled as package acceptance; no new full-suite comparison or overall CI PASS.
+
+Phase C entry/P0/P1/Auto/lifecycle/AppImage sharing are **NOT_RUN**. No user Connect
+or Disconnect, certificate renewal, chat registration or live diagnostic values
+are produced. first_reason, cleanup_reason, process_contained, drain_acknowledged,
+attempt, generation and owner/TUN counts remain unobserved for .10 live sessions.
+The original seven protected files and .9 artifacts/system remain byte-identical;
+retained encrypted snapshots are not booted or modified. No new identity/store,
+invite, activation, grant, policy change, message, teardown or owner-workstation
+operation occurs. Owner workstation **NOT_USED**; L05, signing/publication NOT_RUN.
+
+Local receipts/source copy: `/var/tmp/fc-l042-r2-pins-20261026`. Incomplete .10
+outputs: ignored `state-client-build/linux-l042-r2-pins-20261026/candidate`.
+Earlier evidence and complete system archive are preserved. Final STATUS/PLAN/
+report/index changes contain no generated artifacts or private state; secret scan,
+JSON, links, staged scope and whitespace checks PASS. Existing public version,
+download links and owner-use .9 status are unchanged. Unrelated work is preserved.
 
 ## Prior Phase B package source-contract stop — review accepted
 

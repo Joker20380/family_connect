@@ -2,7 +2,7 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Текущий bounded task — L04.2; R2 reference advancement PASS / Phase B IN_PROGRESS.**
+**Текущий bounded task — L04.2; R2 PARTIAL / Phase B AppImage environment BLOCKED.**
 Зависимости: L04.1 DONE, CHAT-UX-2 DONE; source169aa68 DONE/review accepted.
 R1 first_reason/cleanup/all-stage/retry и R2 containment/drain приняты; native15,
 cleanup32, combined3, desktop1306 и exact local36/phase0-Docker54 baseline приняты.
@@ -12,11 +12,12 @@ Input main3ae2e3c. Runtime169aa68 unchanged; review разрешает толь�
 pins и provenance system-reference. Независимые source/archive hashes PASS;113 keys
 сохранены; native/RNS и прочие hashes unchanged. Real embed old/new/synthetic/.9
 reference gates PASS; targeted candidate/runtime46 PASS. Complete system8ab7f298…
-verified и разрешён к reuse, не installed acceptance. Отдельный pin commit/push
-до fresh .10; после PASS без review-паузы продолжить package gates, затем Phase C.
-Первый новый affected/package/live failure → STOP без повторов/source repair.
-Installed gates/P0/P1/Auto/lifecycle пока NOT_RUN. .9/state immutable,
-owner workstation NOT_USED. NEXT после continuation — final review L04.2-R2.
+verified и reused, не installed acceptance. Pin commit70f33f6 pushed/remote verified.
+Fresh .10 candidate5286116a… embed/seal PASS, source_dirty=false, system_source169aa68.
+DEB/legacy built but NOT_ACCEPTED. AppImage runtime-fetch FAIL: agent omitted offline
+type2 runtime; network-none download unavailable. Environment blocker, no retry/fix.
+Cleanup32 PASS; remaining package gates/P0/P1/Auto/lifecycle NOT_RUN. .9/state immutable,
+owner workstation NOT_USED. **STOP. NEXT — final review L04.2-R2.**
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
 L04 IN_PROGRESS; L05/messages/voice/signing/publication NOT_RUN; delivery_unavailable
 не VPN prerequisite, не диагностируется. L06/L07/L08 прежние QUEUED.
@@ -255,7 +256,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 | L04.1-LIVE-2-RESUME | Installed negative acceptance exact .4, continuation | A/B1 review PASS; existing test identity/nl; fresh KVM | PARTIAL (STOP E; review accepted) | [Continuation](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2-continuation.md). P1/P2/B1/B2/C1/C2/D PASS on exact .4. E FAIL: queued Future/busy/open/CONNECTING; no late VPN start proven, helper/TUN0/generation0/null. Fixture cancels before worker release; F1/F2 NOT_RUN. Source/candidate unchanged; L04.2/L05/teardown NOT_RUN. |
 | L04.1-LIVE-2-R2 | Normal queued Connect/Close ownership; new internal .5 | LIVE-2 PARTIAL/review accepted, E defect; source/package only | DONE (review accepted; source/package) | [Report](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md): source1c2beb6/candidate f0ee1760…, unchanged verified system8d7d78ec…. Red4/targeted197/full1191 PASS; normal mutation Future/revision fence, running/done-undelivered blocks Close. Exact .5 package/integrity and Linux/AWG/TCP/package CI PASS; local isolated gates PASS. Full CI54/54/54 failures retained, no overall PASS. R2 used no private state/gateway/live E/F; later LIVE-2 result above. |
 | L04.1-AUTH-TEARDOWN | Обязательная очистка отдельного test device | после L04/L05 или завершения test campaign; отдельное разрешение/review | QUEUED / NOT_RUN | Device-scoped gateway cleanup → readback отсутствия только test peer/user при сохранении чужих ресурсов → registry revoke. Private receipt содержит exact binding hashes/row/address/read-only checks и дополнен L04.2 test chat/store/keyring, certificate issuance/expiry и registration. Revoke/teardown не выполнялись. Штатного unregister сейчас нет; не восстанавливать целиком старые DB/server.json и не начинать cleanup автоматически. |
-| L04.2 | Установленная MESH/Auto приёмка; R2 system/candidate continuation | L04.1 DONE; source169aa68 DONE/review accepted | R2 PARTIAL / reference PASS, Phase B IN_PROGRESS | [R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md): review-authorized three-pin/provenance advancement only; independent accepted-source/archive hashes, exact113-key diff, real embed positive/negative gates and targeted46 PASS. Complete system8ab7f298… verified/reusable. Separate pin commit before fresh .10; continue package/live without review pause, STOP first failure. Runtime/.9/test state immutable, owner workstation NOT_USED. NEXT final review L04.2-R2 after continuation. |
+| L04.2 | Установленная MESH/Auto приёмка; R2 system/candidate continuation | L04.1 DONE; source169aa68 DONE/review accepted | R2 PARTIAL / reference PASS, AppImage environment BLOCKED | [R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md): exact three-pin/provenance commit70f33f6; independent hashes,113-key diff, embed negatives/positive and targeted46/cleanup32 PASS. System8ab7f298… reused; .10 candidate5286116a… source_dirty=false, DEB/legacy built NOT_ACCEPTED. AppImage offline runtime missing, runtime-fetch FAIL; no retry/source fix. Remaining package/live gates NOT_RUN. Runtime/.9/test state immutable, owner workstation NOT_USED. STOP/NEXT final review L04.2-R2. |
 | L05 | Установленный Linux-мессенджер | L03, L04 | QUEUED / NOT_RUN | DIRECT/MESH-доставка без VPN и с VPN, контакты/текст/голос, история и фоновые события — completion gate на реальных компонентах. Backlog: L04.2 observation registration_error=delivery_unavailable; причина не локализована, client defect/gateway outage не заявлены. Исключён из L04.2 core prerequisites final review-решением; диагностика/repair здесь NOT_RUN. Вне Linux AWG/TCP Beta scope; автоматически не начинать. |
 | L06 | Linux recovery | L04, L05 | QUEUED | Ограниченные loss/return, sleep/resume, рестарт службы и отмена проходят с корректной очисткой, backoff и одним reconnect owner. |
 | L07 | Linux visual parity | L03, L06 | QUEUED | Реальные окна: согласованные экраны/состояния, список вариантов и отдельные selected-next/active state по D05, RU/EN, DPI100/125/150/200%, resize/focus/Tab/Enter/Escape; сопоставление с точным Android-эталоном без изменения Android106. |

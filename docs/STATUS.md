@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**L04.2 — R2 PARTIAL / reference advancement PASS; Phase B IN_PROGRESS.**
+**L04.2 — R2 PARTIAL / reference PASS; Phase B AppImage environment BLOCKED.**
 Source169aa68 DONE/review accepted: containment/drain separation и R1
 first_reason/cleanup/all-stage/retry сохранены. Native15, cleanup32, combined3,
 desktop1306/82skip и exact local36/phase0-Docker54 baseline приняты.
@@ -10,13 +10,17 @@ pins + provenance в system-reference; независимые accepted-source/ar
 113 keys сохранены, только три SHA изменены; native/RNS/остальные pins unchanged.
 Old/new/synthetic/old-system reference gates PASS; candidate/runtime tests46 PASS.
 Complete system8ab7f298…/49,251,070 bytes/bea87470… повторно verified, не rebuilt.
-Reference metadata commit отдельно до .10 build; verifier/SYSTEM/runtime не меняются.
-Candidate/package/live gates ещё не приняты; после pin commit продолжить Phase B.
+Reference commit70f33f6 pushed/remote SHA verified; verifier/SYSTEM/runtime unchanged.
+Fresh .10 embed/seal PASS: candidate5286116a…, source70f33f6/system_source169aa68,
+source_dirty=false. DEB/legacy built, NOT_ACCEPTED. AppImage FAIL: agent не предоставил
+offline type2 runtime; appimagetool download невозможен в network-none builder.
+Environment blocker, не product defect; no retry/fix. Cleanup32 PASS параллельно build.
+AppImage/delivery manifest не созданы; installed gates и Phase C NOT_RUN.
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
-Installed package gates/Phase C пока NOT_RUN; new system IDs/hashes в report. .9/state immutable;
+Exact partial artifact/system IDs/hashes в report. .9/state immutable;
 owner workstation NOT_USED. L04.1 DONE, parent L04 IN_PROGRESS; L05 NOT_RUN,
 delivery_unavailable backlog без диагностики. L06/L07/L08 прежние QUEUED;
-signing/publication/revoke/teardown NOT_RUN. NEXT после bounded continuation — final review L04.2-R2.
+signing/publication/revoke/teardown NOT_RUN. **STOP. NEXT — final review L04.2-R2.**
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted (owner review).**
 Exact **0.2.12~l03.2.9** установлен; candidate/package/system checks PASS,
