@@ -7,8 +7,10 @@ Entries below are an evidence/runbook index; historical NEXTs are not current as
 [L04.2-R2 source / exact residual-ID checkpoint](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md)
 continues the same PLAN L04.2. R1 preservation remains; containment and authenticated
 drain acknowledgement are distinct. Exact lifetime old2 FAIL/13 PASS →15 PASS;
-desktop1306 PASS/82 SKIP. Remaining full/CI/residual-ID gate IN_PROGRESS;
-.10/system NOT_BUILT and package/live NOT_RUN. The accepted
+desktop1306 PASS/82 SKIP; local36/phase0-Docker54 residual IDs unchanged.
+PARTIAL/STOP: control CI setup timed out before pytest, exact comparison unproven;
+Client Linux still in setup at readback. .10/system NOT_BUILT, package/live NOT_RUN.
+NEXT is review L04.2-R2, not automatic progression. The accepted
 [core P0 failure](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
 is not replayed on .9. Historical reports and .9/system bytes remain immutable.
 Chat delivery_unavailable stays in L05 backlog, not a VPN prerequisite; no chat

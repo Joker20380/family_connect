@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**L04.2 — текущий подпункт R2, source gate IN_PROGRESS.**
+**L04.2 — R2 PARTIAL / STOP до package build.**
 R1 primary/cleanup preservation сохраняется; .9 P0 не повторять.
 Exact isolated old red2 FAIL/13 PASS: watcher alive/failed=false на8s,
 stop timeout + два terminate; admission red9 FAIL отдельно доказывает release
@@ -8,16 +8,19 @@ stop timeout + два terminate; admission red9 FAIL отдельно доказ
 ServiceOwner сохраняет gate без живых process/fds, PacketSession — R1 retry fence.
 Focused237 PASS/2 SKIP; final cleanup32 PASS; exact lifetime15 PASS;
 desktop1306 PASS/82 SKIP, combined root→UID3 PASS. Source169aa68 pushed/verified.
-Local full36 FAIL/3387 PASS/99 SKIP: exact historical36 IDs; Docker CI54 IDs
+Local full36 FAIL/3387 PASS/99 SKIP: exact historical36 IDs; phase0/Docker CI54 IDs
 exact R1 baseline, новых failure/error IDs нет. Native/AWG/TCP/voice CI PASS.
-Client Linux и control/phase0 exact receipts pending; добавляется только
-sanitized ID receipt без изменения full command/nonzero exit. Общего CI PASS нет.
+Evidence commitca8c710 pushed/verified: полный pytest/nonzero exit сохранены.
+Control CI40377384751 исчерпал15m на dependency setup; pytest SKIPPED,
+receipt completed=false: exact residual comparison NOT_PROVEN, не zero-fail PASS.
+Client Linux ещё IN_PROGRESS в dependency preparation на18:40UTC.
+Mandatory source verification BLOCKED; нового product failure не установлено.
 Review допускает только unchanged historical set, не объявляет overall CI PASS.
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
 Новый .10/system NOT_BUILT, package/live NOT_RUN до source gate. .9/state immutable;
 owner workstation NOT_USED. L04.1 DONE, parent L04 IN_PROGRESS; L05 NOT_RUN,
 delivery_unavailable backlog без диагностики. L06/L07/L08 прежние QUEUED;
-signing/publication/revoke/teardown NOT_RUN.
+signing/publication/revoke/teardown NOT_RUN. **NEXT — review L04.2-R2.**
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted (owner review).**
 Exact **0.2.12~l03.2.9** установлен; candidate/package/system checks PASS,
