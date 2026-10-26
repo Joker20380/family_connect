@@ -2,28 +2,30 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Текущий bounded task — L04.2, RESUME: PARTIAL / singleton prerequisite FAIL.**
+**Текущий bounded task — L04.2, BLOCKED / protected chat resume preflight.**
 Зависимости: L04.1 DONE/review accepted; CHAT-UX-2 source/package DONE;
-exact .9 owner-use accepted. Resume26.10 разрешает только существующему test device
-chat identity/store/binding/Secret Service и normal readiness/registration в encrypted
-disposable Ubuntu26.04; исходный protected home immutable, owner identity запрещена.
-Gate: exact .9/system READY → SERVICE_ONLY → manual P0 → separate clean P1 →
+exact .9 owner-use accepted. RESUME PARTIAL принят; retained encrypted test base,
+исходный protected home immutable, owner workstation/identity запрещены.
+Review исправил literal one-ChatClient: messenger1 + support1 допустимы, unexpected0;
+один Chat1/ChatService/ChatOwner/store lock/native owner/TUN. Source не менялся.
+Support только support_status/support_consent, без chat lifecycle/native acquisition.
+Gate: protected DIRECT либо SERVICE_ONLY → manual P0 → separate clean P1 →
 separate clean Auto; actual profile/generation, один owner/TUN, bounded DNS/HTTPS,
-refresh/next preference без apply, chat ownership, reopen/Disconnect и cleanup.
+refresh/next preference без apply, EXISTING_EXIT borrowing, reopen/Disconnect/cleanup.
 Без L05 delivery, benchmark/soak, новых Friends identity/invite/activation, grants/policy,
 Android106, Windows/iOS, signing/publication. При первом failure STOP без repair/retry.
-Exact .9/system unchanged, installed READY PASS; test chat create/reopen PASS,
-7 original files byte-identical. Fresh MESH revision1/ACK/readback PASS, records0→1;
-native SERVICE_ONLY context штатно idle-released. DIRECT registration healthy.
-Первый FAIL:2 live ChatClient proxies (messenger + support), при одном ChatOwner/
-D-Bus owner; это singleton acceptance mismatch, не доказательство второго transport.
-STOP без source fix/retry. P0/P1/Auto, ownership/lifecycle/AppImage live NOT_RUN.
-Runtime очищен, encrypted base/receipt сохранены; teardown/revoke не выполнялись.
-Routes/DNS baseline совпал; full address equality NOT_PROVEN. Owner workstation не использован.
-[Continuation report](releases/2026-10-26-linux-installed-mesh-auto-l04-2-resume.md),
-[accepted initial BLOCKED checkpoint](releases/2026-10-26-linux-installed-mesh-auto-l04-2.md).
+Ранее принятые .9/system READY, chat state/reopen, readiness/ACK/DIRECT registration
+остаются PASS, не повторялись как acceptance gates. Corrected role counts preflight PASS;
+support trace только support_status52. Новый14:47:49UTC registration_error=
+delivery_unavailable, route/node absent; причина не локализована, client defect не доказан.
+Один product-driven renewal/readback/ACK, certificate records1→2; ручного fetch нет.
+P0 Connect не выполнен; P0/P1/Auto/ownership/lifecycle/AppImage live NOT_RUN.
+Runtime остановлен; encrypted base/copy/receipt и original7 files сохранены, revoke нет.
+Routes/DNS baseline совпал, full address equality NOT_PROVEN.
+[Final review report](releases/2026-10-26-linux-installed-mesh-auto-l04-2-final.md);
+старый literal gate corrected by review, не product patch.
 Parent L04 IN_PROGRESS; L04.1 DONE. L05 NOT_RUN; L06/L07/L08 прежние QUEUED.
-**STOP. NEXT — review L04.2.** Не переходить к следующей задаче автоматически.
+**STOP. NEXT — final review L04.2.** Не переходить к следующей задаче автоматически.
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted.** По owner review exact
 0.2.12~l03.2.9 установлен, candidate/package/system PASS, одно main window/embedded
@@ -247,7 +249,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 | L03 | Полный внутренний Linux-кандидат | L02, D05, D01.3; L03.1 + L03.2 | DONE (review accepted; internal candidate scope) | Согласованы GUI, пользовательские службы, root-helper, native/RNS, зависимости и установка; capabilities соответствуют точному составу реально интегрированного пакета. Exact final-2 AppImage/DEB L03.2 проверены, review принят. Это не installed live acceptance L04/L05 и не public release. |
 | L03.1 | Согласованный system/runtime payload, безопасная установка и ограниченный chat setup | принятые L01/L01-R, local L02/L02.2, D03/D04/D05, D01.3/D01.3-R | DONE (review accepted; exact build-9) | [Отчёт](releases/2026-10-25-linux-system-runtime-l03-1.md): полный hash/member/import closure, native/RNS/anchor; install exclusion/rollback и точные capabilities; fixed UID setup без VPN. Build-9,758 files;94 финальных адресных (umask077), desktop1120/24; actual disposable systemd255 install/polkit/UID/rollback/capability smoke PASS, private network/D-Bus/resolver. Source f826dbd: Client Linux и isolated native/root→UID/Auto/DIRECT CI PASS; rollback re-mask/start refusal PASS. Control/phase0/Docker по54 failures/errors0; voice observation сохранён, не общий CI PASS. Собственный system-only gate не равен L04/L05 PASS; review принят, включение в полный кандидат завершено в L03.2. |
 | L03.2 | Включение принятого состава в AppImage/DEB | review L03.1 принят | DONE (review accepted; exact final-2) | Sourcecf66532, candidate9d4b13cc…, внутренние0.2.12~l03.2.1 AppImage/DEB с exact build-9; inventory/import/реальные polkit/setup/background/removal и rollback/barrier PASS в disposable Ubuntu24.04/systemd255. Desktop1146/24, адресные62 PASS; Client Linux/isolated native и final package CI40184803906 PASS. CI rebuildf7f6e765… не заменяет final-2. Full suites по54 failures отдельно. [Evidence](releases/2026-10-25-linux-candidate-l03-2.md). Legacy six-file/updater сохранён; не L04/L05 PASS. |
-| L04 | Установленный Linux VPN | L03; L04.1 + L04.2 | IN_PROGRESS (только L04.2) | L04.1 AWG/TCP DONE/review accepted. L04.2 RESUME PARTIAL: installed/test prerequisites выполнены, singleton gate FAIL; VPN scenarios NOT_RUN. Parent DONE/review pending только после всех installed L04.2 gates. |
+| L04 | Установленный Linux VPN | L03; L04.1 + L04.2 | IN_PROGRESS (только L04.2) | L04.1 AWG/TCP DONE/review accepted. Старый literal singleton gate corrected by review, не product patch. L04.2 BLOCKED на новом protected chat preflight; VPN scenarios NOT_RUN. Parent DONE/review pending только после всех installed L04.2 gates. |
 | L04.1 | Установленная приёмка exact Linux candidate: AWG/TCP | review L03/AUTH/PROVISION/LIVE-1-R/RETEST/R2 и final LIVE-2 принят | DONE (review accepted; installed Linux AWG/TCP) | [RETEST](releases/2026-10-25-linux-installed-awg-tcp-l04-1-retest.md) и [final E/F1/F2](releases/2026-10-25-linux-installed-awg-tcp-l04-1-final.md) accepted. Exact .5 frozen/internal/unpublished. Registry restart — отдельное ops observation, continuity NOT_PROVEN/cause unknown; assignment/configuration unchanged. F2 не повторять; R3 не создавать. |
 | L04.1-AUTH | Одна отдельная test identity/activation | explicit owner authorization25.10; fbb1732 accepted; L04.1-AUTH-PROVISION | DONE (review accepted) | [Activation](releases/2026-10-25-linux-test-activation-l04-1-auth.md) и [provisioning](releases/2026-10-25-linux-test-provisioning-l04-1-auth.md): одна FC-3YSQ-BE2D; registry/replay/resume и verified nl AWG/TCP assignment PASS. Outside-checkout state UID1000/0700/0600, private teardown receipt. Issuance не повторять; последующий guest-only handoff проверен в LIVE-1, original state сохранён. |
 | L04.1-AUTH-PROVISION | Один штатный per-device nl assignment | accepted AUTH identity/activation subset; explicit owner authorization25.10 | DONE (review accepted) | Один FriendsOwner.configuration("nl") из exact final-2 Python3.12/vendor, без driver/retry: один AWG row/live peer и один persisted/runtime Xray user; чужие bindings и global settings сохранены. Signature/device/cache/floor/readback PASS, apply в этом checkpoint NOT_RUN. [Evidence и ограничения](releases/2026-10-25-linux-test-provisioning-l04-1-auth.md). Не повторять provisioning отдельно от разрешённого product connect. |
@@ -259,7 +261,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 | L04.1-LIVE-2-RESUME | Installed negative acceptance exact .4, continuation | A/B1 review PASS; existing test identity/nl; fresh KVM | PARTIAL (STOP E; review accepted) | [Continuation](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2-continuation.md). P1/P2/B1/B2/C1/C2/D PASS on exact .4. E FAIL: queued Future/busy/open/CONNECTING; no late VPN start proven, helper/TUN0/generation0/null. Fixture cancels before worker release; F1/F2 NOT_RUN. Source/candidate unchanged; L04.2/L05/teardown NOT_RUN. |
 | L04.1-LIVE-2-R2 | Normal queued Connect/Close ownership; new internal .5 | LIVE-2 PARTIAL/review accepted, E defect; source/package only | DONE (review accepted; source/package) | [Report](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md): source1c2beb6/candidate f0ee1760…, unchanged verified system8d7d78ec…. Red4/targeted197/full1191 PASS; normal mutation Future/revision fence, running/done-undelivered blocks Close. Exact .5 package/integrity and Linux/AWG/TCP/package CI PASS; local isolated gates PASS. Full CI54/54/54 failures retained, no overall PASS. R2 used no private state/gateway/live E/F; later LIVE-2 result above. |
 | L04.1-AUTH-TEARDOWN | Обязательная очистка отдельного test device | после L04/L05 или завершения test campaign; отдельное разрешение/review | QUEUED / NOT_RUN | Device-scoped gateway cleanup → readback отсутствия только test peer/user при сохранении чужих ресурсов → registry revoke. Private receipt содержит exact binding hashes/row/address/read-only checks и дополнен L04.2 test chat/store/keyring, certificate issuance/expiry и registration. Revoke/teardown не выполнялись. Штатного unregister сейчас нет; не восстанавливать целиком старые DB/server.json и не начинать cleanup автоматически. |
-| L04.2 | Установленная приёмка MESH/Auto | L04.1 DONE; CHAT-UX-2 source/package DONE; resume scope26.10 | CURRENT / PARTIAL; VPN scenarios NOT_RUN | [Resume report](releases/2026-10-26-linux-installed-mesh-auto-l04-2-resume.md): exact .9/system READY; derived chat state/reopen и MESH fresh revision1/readback/ACK PASS;7 original files preserved. DIRECT registration healthy;2 live ChatClient proxies (messenger/support), один D-Bus/ChatOwner: singleton FAIL, не второй transport. P0/P1/Auto/ownership/lifecycle/AppImage live NOT_RUN. Runtime cleanup, encrypted base/receipt retained; owner workstation не использован. STOP → review L04.2. |
+| L04.2 | Установленная приёмка MESH/Auto | L04.1 DONE; CHAT-UX-2 DONE; RESUME review/corrected role contract26.10 | CURRENT / BLOCKED; VPN scenarios NOT_RUN | [Final review report](releases/2026-10-26-linux-installed-mesh-auto-l04-2-final.md): previous .9/system/chat/readiness/DIRECT PASS retained; messenger1/support1/unexpected0, один D-Bus/ChatOwner/store lock. Новый preflight delivery_unavailable/route absent, cause unresolved, client defect не доказан. Product renewal1/readback/ACK, certificate records1→2. P0 Connect не выполнен; P0/P1/Auto/EXISTING_EXIT/lifecycle/AppImage live NOT_RUN. Runtime cleanup, encrypted state/receipt retained, original7 preserved; owner workstation не использован. STOP → final review L04.2. |
 | L05 | Установленный Linux-мессенджер | L03, L04 | QUEUED / NOT_RUN | DIRECT/MESH-доставка без VPN и с VPN, контакты/текст/голос, история и фоновые события подтверждены на реальных компонентах. Вне Linux AWG/TCP Beta scope; автоматически не начинать. |
 | L06 | Linux recovery | L04, L05 | QUEUED | Ограниченные loss/return, sleep/resume, рестарт службы и отмена проходят с корректной очисткой, backoff и одним reconnect owner. |
 | L07 | Linux visual parity | L03, L06 | QUEUED | Реальные окна: согласованные экраны/состояния, список вариантов и отдельные selected-next/active state по D05, RU/EN, DPI100/125/150/200%, resize/focus/Tab/Enter/Escape; сопоставление с точным Android-эталоном без изменения Android106. |

@@ -4,15 +4,16 @@ Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN
 STATUS/PLAN define the current bounded task and next review gate, not an automatic
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
-[L04.2 installed MESH/Auto resume](releases/2026-10-26-linux-installed-mesh-auto-l04-2-resume.md)
-is the current bounded task: **PARTIAL / singleton prerequisite FAIL; VPN NOT_RUN**.
-Exact .9/system READY, derived test chat state/reopen and native readiness/ACK pass.
-DIRECT registration is healthy, but the installed GUI has two live ChatClient RPC
-proxies (messenger/support), despite one ChatOwner/D-Bus owner. No second transport
-is established; no repair/retry or P0/P1/Auto followed. Encrypted test state is retained.
-The [initial BLOCKED report](releases/2026-10-26-linux-installed-mesh-auto-l04-2.md)
-remains accepted historical evidence, superseded only by this authorized resume.
-Owner workstation is excluded. **STOP. NEXT — review L04.2.**
+[L04.2 final review checkpoint](releases/2026-10-26-linux-installed-mesh-auto-l04-2-final.md)
+is the current bounded task: **BLOCKED / protected chat resume preflight; VPN NOT_RUN**.
+The old literal one-ChatClient criterion was corrected by review, not a product patch:
+one messenger plus one support proxy are expected; no third proxy/second owner.
+Earlier .9/system READY, derived state/reopen, native readiness/ACK and DIRECT
+registration PASS remain accepted. Current preflight instead observed
+registration_error=delivery_unavailable with no route; cause is unresolved, no
+client defect/gateway outage proved. P0 Connect and P1/Auto were not started.
+Encrypted state is retained; [RESUME evidence](releases/2026-10-26-linux-installed-mesh-auto-l04-2-resume.md)
+remains historical. Owner workstation is excluded. **STOP. NEXT — final review L04.2.**
 [CHAT-UX-2](releases/2026-10-26-chat-ux-2.md) source/package is DONE:
 one main-window messenger and the exact49-face Android106 ICQ-classic GIF/token pack.
 [CHAT-UX-1](releases/2026-10-26-chat-ux-1.md) is technically completed in reviewed
