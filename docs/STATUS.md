@@ -5,13 +5,16 @@ Source169aa68 DONE/review accepted: containment/drain separation и R1
 first_reason/cleanup/all-stage/retry сохранены. Native15, cleanup32, combined3,
 desktop1306/82skip и exact local36/phase0-Docker54 baseline приняты.
 Control/Client Linux setup incomplete больше не блокируют progression по review;
-общего CI PASS нет.169aa68→0aec7a1 и working runtime byte-identical, только CI/docs.
+общего CI PASS нет.169aa68→601f6a7 и working runtime byte-identical, только CI/docs.
 Fresh Ubuntu26.04.1/Python3.14.4, exact locks/RECORD630/17 distributions/reference
-PASS; pinned Go1.26.0/Xray неизменны. Native build go test остановился:
-TestProtectionFailureNeverConnectsAndProtocolIsBounded требует up non-loopback
-interface; агент запустил --network none без него. Это ошибка build environment,
-не product/gateway/cleanup defect. По affected-test STOP rule replay/repair нет.
-AWG/TCP input builds завершены, но не являются package PASS.
+PASS; pinned Go1.26.0/Xray неизменны. Предыдущий interface blocker принят review;
+новый isolated namespace --network none/NET_ADMIN с dummy fcbuild0 проходит preflight:
+нет адресов/default route, external probe ENETUNREACH. Один standard native run:
+все7 test packages PASS, protection test подтверждает protector1/malformed0.
+Binary построен после test PASS; затем go list inventory остановлен Git VCS128:
+агент не настроил safe.directory для /workspace с другим ownership. Новый environment
+blocker, не product defect; разрешённый build не повторён, source/pins не изменены.
+Частичный native binary — только evidence, не accepted delivery/package PASS.
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
 Новый .10/system NOT_BUILT; matching IDs/hashes N/A, package/live NOT_RUN. .9/state immutable;
 owner workstation NOT_USED. L04.1 DONE, parent L04 IN_PROGRESS; L05 NOT_RUN,

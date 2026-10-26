@@ -1,6 +1,132 @@
 # L04.2-R2 — process containment versus authenticated drain
 
-## Phase B continuation — current checkpoint
+## Phase B isolated-namespace continuation — current checkpoint
+
+Input main `601f6a7afb72f30711fe150f9e16a5422a302942`,26.10. Same L04.2-R2,
+no new task ID or source checkpoint. Review accepts the previous missing-interface
+observation as an environment precondition failure, not a protection assertion
+failure. The one newly authorized standard native build is attempted below.
+
+**Result: L04.2-R2 PARTIAL; Phase B ENVIRONMENT_BLOCKED at post-build dependency
+inventory; Phase C NOT_RUN. STOP. NEXT — final review L04.2-R2.**
+
+### Unchanged inputs and isolated preflight
+
+Runtime source `169aa687f497f8be690be5331879f994636135e1` remains DONE / review
+accepted. Read-only comparison through601f6a7 and the working tree confirms
+byte-identical product/runtime/test sources, locks and pins. Subsequent commits
+change only two CI receipt workflows and four documentation files. No checkout
+back, cleanup repair, protocol/schema change or pin update occurs.
+
+The fresh output directory is empty before this run; neither the previous failed
+output nor .9 package/system members are build inputs. Existing pinned Go module
+and compiler caches are reused offline. Ubuntu26.04.1/system Python3.14.4, all four
+exact requirements locks,630 runtime RECORD files/17 distributions, pip check and
+accepted Android106/native references PASS. Go remains1.26.0 and Xray remains
+`d2758a023cd7f4174a5a5fa4ff66e487d4342ba0`; accepted patch SHA256 remains
+`eaeb30fd1e2aa52272d7f3a2a06bcad7b983ca9866a87fbd0a614eede6048872`.
+Native source digest remains
+`cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61`.
+
+The disposable container uses `--network none --cap-add NET_ADMIN`, read-only
+root/source and a temporary writable build output. No host networking, bridge,
+privileged mode, physical interface or namespace peer is used. Before the standard
+builder it brings loopback up, creates dummy `fcbuild0`, disables automatic IPv6
+address generation on that dummy, and brings it up. No address, gateway, DNS or
+default route is assigned. The separate read-only Go interface preflight reports:
+
+```json
+{"interface_count":2,"found":true,"synthetic_interface":"fcbuild0","flags":"up|broadcast|running"}
+```
+
+Namespace inode comparison confirms a different namespace from the host without
+printing host metadata. Dummy address count0; IPv4/IPv6 default route count0.
+A one-second numeric-address TCP probe fails with `ENETUNREACH`; no DNS lookup or
+`/etc/resolv.conf` access is used for the probe. `GOPROXY=off` and
+`GOTOOLCHAIN=local` enforce offline cached build inputs. External connectivity is
+not available or required; the successful tests use their local fixtures.
+
+### One standard native build: tests PASS, metadata environment failure
+
+The unchanged `scripts.build_desktop_mesh` runs its own
+`go test -race -count=1 -mod=readonly ... ./...` exactly once. No separate product
+test invocation precedes or follows it. All seven tested packages PASS:
+automatic, chatipc, direct, materials, normal, platform and worker; the command
+package has no tests. No suppression, deselection, xfail or assertion change.
+
+`TestProtectionFailureNeverConnectsAndProtocolIsBounded` now PASSes beyond its
+interface precondition. Its unchanged assertions verify protector call count1,
+UNAVAILABLE on protection denial and DENIED for four malformed commands; the
+final count remains1, so malformed commands never reach the protector. This is
+evidence from the full native test run, not a second test or an inferred bypass.
+Counting correction to the previous receipt: that failed run had six passing
+packages plus one failing direct package, not seven other passing packages.
+
+Only after test PASS does `go build -buildvcs=false` produce `fc-mesh`.
+The following `go list -deps` dependency/license inventory step exits1:
+`error obtaining VCS status: exit status 128`. A bounded read-only diagnosis
+confirms Git rejects the mounted `/workspace` repository as dubious ownership:
+container root differs from its filesystem owner, and the agent configured
+`safe.directory` for the Xray checkout but omitted `/workspace`.
+
+This is an **agent build-environment configuration error**, not a native test,
+product, cleanup, gateway or dependency-pin defect. It does not erase the native
+test PASS, but the standard builder as a whole did not complete. No configuration
+repair, builder replay, manual metadata completion or source change follows.
+The diagnostic reads Git status and binary version only, not another build/test.
+The disposable containers are removed; no installed service, VPN owner or TUN
+is created. No host network setting is changed.
+
+### IDs, incomplete artifact and unreached gates
+
+| Output | Result |
+| --- | --- |
+| Accepted runtime source | `169aa687f497f8be690be5331879f994636135e1` |
+| New standard native delivery | INCOMPLETE: dependency/license/build manifests not produced |
+| Partial native binary, evidence only | 29,017,971 bytes; SHA256 `3f2909d63eeb329b86db861e1dea75b26570d9ca2aa7d6edc1b1272137bfc3e0` |
+| New matching system build ID/archive/inventory | NOT_BUILT; ID/size/SHA256 N/A |
+| Requested internal candidate `0.2.12~l03.2.10` | NOT_BUILT; candidate ID N/A |
+| New DEB / AppImage / legacy archive | NOT_BUILT; sizes/SHA256 N/A |
+| System/package imports, modes, polkit, root→UID, real systemd/pkexec setup | NOT_RUN |
+| Reinstall/remove/.9 rollback, tampered/old/mixed rejection, candidate-check/status | NOT_RUN |
+| Package MESH/admission/cleanup/AWG/TCP regressions and chat preparation | NOT_RUN |
+| Installed entry / P0 / P1 / Auto / lifecycle / AppImage sharing | NOT_RUN |
+
+The partial binary's read-only version metadata matches Go1.26.0,
+android106-native105 and the source digest above. It is retained only as incomplete
+build evidence, not accepted delivery or a subsequent build input. Native/RNS/system
+and package completion must not be inferred from this binary.
+
+Accepted source results remain native15, cleanup32, combined3, desktop1306/82skip,
+and exact local36/phase0-Docker54 historical failure IDs. Those selections and
+full suites are not rerun after the environment STOP; no new full-suite comparison
+or overall CI PASS is claimed. Control timeout before pytest and Client Linux
+dependency setup hang remain accepted infrastructure-incomplete observations,
+not package evidence. No workflow timeout change or waiting for a hung CI job.
+
+### State preservation and scope
+
+Historical .9 candidate/system and all three artifact sizes/hashes are rechecked
+against the unchanged [candidate manifest](2026-10-26-chat-ux-2/candidate-delivery.json).
+Original protected seven files remain byte-identical. Retained encrypted derived
+snapshots are not booted or modified. No identity/store/cache/floor/settings change,
+certificate renewal, registration, provisioning or teardown occurs. No new live
+first_reason, cleanup_reason, process_contained, drain_acknowledged, attempt,
+generation or owner/TUN measurement exists: Phase C is NOT_RUN, not a zero-attempt
+accepted session. Old .9 P0 is not repeated.
+
+Private sanitized receipts/logs are retained under
+`/var/tmp/fc-l042-r2-namespace-20261026`; incomplete generated output is ignored
+under `state-client-build/linux-l042-r2-namespace-20261026`. Previous BLOCKED
+evidence is preserved. Nothing from these directories is staged.
+
+Owner workstation **NOT_USED**. L05/messages/voice acceptance, signing/publication,
+Android106 changes and server policy changes **NOT_RUN**. Chat delivery_unavailable
+remains uninvestigated L05 backlog, not a VPN gate. Parent L04 remains IN_PROGRESS;
+L04.1 remains DONE. STATUS/PLAN retain the same L04.2 ID. Secret/JSON/link/staged-scope
+and whitespace checks PASS; unrelated pre-existing work is preserved unstaged.
+
+## Prior Phase B checkpoint — environment observation review accepted
 
 Input main `0aec7a1324a5457a0936ff5219f988491367e4fd`,26.10.
 The source correction at `169aa687f497f8be690be5331879f994636135e1` is **DONE /
@@ -52,7 +178,7 @@ The test enumerates interfaces and exits at that explicit fixture precondition,
 before invoking the protection assertion or attempting its synthetic destination.
 The supplied network-none namespace does not satisfy the recipe. This is an
 agent build-environment configuration error, **not evidence of a product,
-gateway, certificate, cleanup or protocol defect**. Seven other native test
+gateway, certificate, cleanup or protocol defect**. Six other native test
 packages pass; the command package has no tests. The failing test is not waived,
 deleted, suppressed or counted as PASS, and is not added to the accepted
 historical full-repository residual baseline.
