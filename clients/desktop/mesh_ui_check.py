@@ -53,6 +53,10 @@ class Owner:
 
 def capture(app, path):
     from gi.repository import Gsk
+    messenger = getattr(app, 'messenger_window', None)
+    if messenger is not None and messenger.get_visible():
+        from types import SimpleNamespace
+        app = SimpleNamespace(window=messenger)
     content=app.window.get_content()
     paintable=Gtk.WidgetPaintable.new(content)
     node=None

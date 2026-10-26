@@ -568,14 +568,14 @@ class App:
         self.language_button=TerminalButton(label='RU / EN');self.language_button.add_css_class('fc-action');self.language_button.connect('clicked',lambda _:self.language());self.body.append(self.language_button)
         from backend import CANDIDATE_VERSION
         self.version_label=Gtk.Label(label='v'+(CANDIDATE_VERSION or APP_VERSION),xalign=0);self.version_label.add_css_class('fc-caption');self.body.append(self.version_label)
-        self.chat_pane=None;self.chat_closed=False;self.chat_smoke=smoke
+        self.chat_pane=None;self.chat_closed=False;self.chat_smoke=smoke;self.messenger_window=None
         try:
-            from chat_ui import ChatPane
-            self.chat_pane=ChatPane(TerminalButton,show_chat=lambda:(self.present(),self.select_page('messenger')),
-                                    show_settings=lambda:self.select_page('settings'),layout_changed=self.request_fit)
+            from messenger_window import MessengerWindow
+            self.messenger_window=MessengerWindow(self.window.get_application(),show_settings=lambda:(self.present(),self.select_page('settings')))
+            self.chat_pane=self.messenger_window.pane
             if not smoke:GLib.idle_add(self.chat_pane.resume_existing)
         except ImportError:pass
-        self.messenger_note=self.chat_pane or Gtk.Label(label='',xalign=0,wrap=True);self.body.append(self.messenger_note)
+        self.messenger_note=Gtk.Label(label='',xalign=0,wrap=True);self.body.append(self.messenger_note)
         self.dashboard_map=RouteMap(compact=True);self.body.append(self.dashboard_map)
         self.route_map=RouteMap();self.body.append(self.route_map)
         self.route_note=self.label('fc-caption');self.body.append(self.route_note)
@@ -858,15 +858,18 @@ class App:
             self.fitted_height=natural;self.window.set_default_size(width,natural)
         return GLib.SOURCE_REMOVE
     def select_page(self,page):
+        if page=='messenger' and self.messenger_window is not None:
+            self.messenger_window.present()
+            if not self.chat_smoke:self.chat_pane.activate(True,self.ru)
+            return
         if self.confirmation is not None:self.scroll.set_child(self.body);self.confirmation=None
         if self.friends_window is not None:
             self.friends_next_page=page;self.friends_window.request_close();return
         self.page=page;self.scroll.get_vadjustment().set_value(0);self.paint()
-        if self.chat_pane is not None and not self.chat_smoke:self.chat_pane.activate(page=='messenger',self.ru)
     def open_chat(self,peer):
         import re
         if not re.fullmatch('(?:[0-9a-f]{32}|service)',peer):return
-        self.pending_chat=peer;self.present();self.select_page('messenger')
+        self.pending_chat=peer;self.select_page('messenger')
         deadline=time.monotonic()+30
         def ready():
             if self.closed or self.pending_chat!=peer or time.monotonic()>=deadline:return GLib.SOURCE_REMOVE
@@ -921,7 +924,7 @@ class App:
 
     def language(self):
         self.ru=not self.ru
-        if self.chat_pane is not None and not self.chat_smoke:self.chat_pane.activate(self.page=='messenger',self.ru)
+        if self.chat_pane is not None and not self.chat_smoke:self.chat_pane.activate(self.messenger_window.get_visible(),self.ru)
         index=self.country.get_selected()
         self.refresh_country_labels()
         self.country.set_selected(index)
@@ -1430,6 +1433,7 @@ class App:
         GLib.source_remove(self.poll_source)
         self.pool.shutdown(wait=False,cancel_futures=True);self.poll_pool.shutdown(wait=False,cancel_futures=True)
         Gtk.StyleContext.remove_provider_for_display(self.window.get_display(),self.provider)
+        if self.messenger_window is not None:self.messenger_window.dispose_window()
         self.window.destroy();return False
     @staticmethod
     def register_icon(_=None):

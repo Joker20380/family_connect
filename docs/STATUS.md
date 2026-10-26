@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**CHAT-UX-1 — IN_PROGRESS, единственный bounded task: desktop messenger UX.**
+Owner workstation read-only: установлен exact **0.2.12~l03.2.7**, candidate
+`c79b4feb51f3755ce458367d057abcb5fdd87bd975fe6059fa8fe06d88617c45`;
+system `43266d97c6a9f8d4e7026727cbb4b5cb6aeea49db799f93bd798b67a8135198c`.
+Prepare-chat выполнен ранее владельцем; текущая задача не запускает host setup.
+Отдельное окно, адаптивные диалоги/bubbles, fixed composer/native emoji и bounded
+onboarding реализованы через прежние RPC; wire/store/identity/ownership не меняются.
+Адресные GTK/package62 PASS; encrypted mixed Cyrillic/emoji history и старые
+notification/announcement сценарии PASS. Voice gesture geometry regression исправлена,
+real pointer/keyboard/codec check100% PASS. Полные suites, новые artifacts и финальная
+visual evidence ещё проверяются; это **source checkpoint, не release/acceptance PASS**.
+Reserved internal **0.2.12~l03.2.8**, прежний system build сохраняется; .7 immutable.
+[CHAT-UX-1 report](releases/2026-10-26-chat-ux-1.md).
+Owner installation/publication/L04.2/full L05/TCP HTTPS diagnosis **NOT_RUN**.
+**После этого bounded task STOP. NEXT — review CHAT-UX-1 перед установкой владельцу.**
+
+### Предыдущий compatibility checkpoint — историческая граница
+
 **U2604-COMPAT — CHECKPOINT PASS, только Ubuntu26.04/CPython3.14 compatibility.**
 LOCAL-OWNER-UPGRADE **BLOCKED на ABI**: workstation Ubuntu26.04/system Python3.14.4,
 frozen .5 требует3.12. До установки/backup/launcher migration не дошли; workstation unchanged.
@@ -20,7 +38,7 @@ Frozen .5/3.12 hashes/IDs повторно сверены, immutable; L04.1 не
 Production VPN/GUI/helper/protocol/identity/cache logic не меняется. Private identity,
 activation/cache/gateway не использованы. Publication/L04.2/L05/teardown/live VPN **NOT_RUN**.
 [U2604-COMPAT report](releases/2026-10-26-linux-ubuntu2604-python314-compat.md).
-**STOP. NEXT — review U2604-COMPAT; owner upgrade не начинается автоматически.**
+Прежний STOP U2604-COMPAT сохранён в отчёте; установленная .7 подтверждена выше.
 
 ### Frozen Linux AWG/TCP Beta baseline — сохранён, не активный NEXT
 
@@ -544,5 +562,5 @@ D00 ничего не устанавливает: runtime rollback не нуже
 [STATUS до D00](STATUS.history-2026-10-24.md) и [PLAN до D00](PLAN.history-2026-10-24.md)
 сохранены целиком; старые NEXT/ACTIVE/checkpoints — история, не параллельные задания.
 [Отчёт D00](releases/2026-10-24-desktop-parity106-d00.md) фиксирует сохранность и границы.
-**STOP. NEXT — review U2604-COMPAT. LOCAL-OWNER-UPGRADE остаётся отдельным решением;
-L04.2/L05/teardown/signing/publication не начинать. Frozen F2 не повторять, R3 не создавать.**
+**STOP после CHAT-UX-1. NEXT — review CHAT-UX-1 перед установкой нового UI-кандидата владельцу.
+L04.2/full L05/TCP HTTPS diagnosis/teardown/signing/publication не начинать.**

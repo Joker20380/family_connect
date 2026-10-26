@@ -15,6 +15,8 @@ def test_new_chat_runtime_closure_and_legacy_shape(tmp_path):
     assert (bundle / 'clients/desktop/chat_voice.py').is_file()
     assert (bundle / 'clients/desktop/chat_notifications.py').is_file()
     assert (bundle / 'clients/desktop/chat_daemon.py').is_file()
+    assert (bundle / 'clients/desktop/messenger_window.py').is_file()
+    assert (bundle / 'clients/desktop/messenger_widgets.py').is_file()
     assert (bundle / 'clients/desktop/chat_announcements.py').is_file()
     assert (bundle / 'provisioning/chat_client.py').is_file()
     assert (bundle / 'provisioning/chat_rpc.py').is_file()

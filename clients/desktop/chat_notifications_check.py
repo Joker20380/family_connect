@@ -194,6 +194,7 @@ def main(destination, scale):
             raw = bob._store.begin_attempt(ident)[1]
             assert pane.owner.local._chat.receive(raw)
             return ident
+        app.messenger_window.close()
         app.select_page('status')
         settled(pane)
         wait(lambda: pane.notifications.proxy is not None and pane.notifications.proxy.get_name_owner())
@@ -227,11 +228,11 @@ def main(destination, scale):
         toggle.grab_focus()
         key(Gdk.KEY_space)
         wait(lambda: not pane.busy and not pane.owner.invoke('delivery_settings')['background'])
-        assert app.window.get_focus() is toggle
+        assert app.messenger_window.get_focus() is toggle
         key(Gdk.KEY_Return)
         wait(lambda: not pane.busy and pane.owner.invoke('delivery_settings')['background'])
         key(Gdk.KEY_Tab)
-        assert app.window.get_focus() is pane.delivery_switches['notifications']
+        assert app.messenger_window.get_focus() is pane.delivery_switches['notifications']
         capture(app, destination / 'ru-notification-settings.png')
         app.ru = False
         app.paint()
@@ -240,6 +241,7 @@ def main(destination, scale):
         settled(pane)
         capture(app, destination / 'en-notification-settings.png')
         pane.owner.invoke('notification_settings', enabled=False)
+        app.messenger_window.close()
         app.select_page('status')
         receive('Disabled notification stays pending')
         pane.refresh_notifications()
@@ -254,6 +256,7 @@ def main(destination, scale):
         pane.service_events()
         settled(pane)
         capture(app, destination / 'en-empty-service-notices.png')
+        app.messenger_window.close()
         app.select_page('status')
         now = int(time.time())
         event = dict(id='b' * 32, kind='information', title='Плановые работы / Maintenance',
@@ -266,7 +269,7 @@ def main(destination, scale):
         wait(lambda: pane.screen == 'service' and not pane.busy)
         wait(lambda: pane.owner.invoke('service_events')[0]['read'])
         try:
-            wait(lambda: app.window.get_height() > 500)
+            wait(lambda: app.messenger_window.get_height() > 500)
         except AssertionError:
             capture(app, destination / 'failed-service-layout.png')
             (destination / 'failed-service-layout.json').write_text(json.dumps(dict(
@@ -286,6 +289,7 @@ def main(destination, scale):
         assert 'Public service notice' not in str(daemon.posts)
         pane.contacts()
         settled(pane)
+        app.messenger_window.close()
         app.select_page('status')
         daemon.delay = True
         receive('Exit while daemon reply is delayed')

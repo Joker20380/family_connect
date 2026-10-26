@@ -3,7 +3,7 @@ import base64
 from concurrent.futures import ThreadPoolExecutor
 import time
 
-from gi.repository import Gtk, GLib
+from gi.repository import Gtk, GLib, Graphene
 
 from provisioning.chat_audio import Recorder, Player, _wipe
 
@@ -24,6 +24,7 @@ class VoiceControls(Gtk.Box):
         self.started = 0
         self.press_timer = 0
         self.pointer = False
+        self.press_origin = None
         self.mouse_activation = False
         self.labels_language = None
         self.status = Gtk.Label(xalign=0, wrap=True)
@@ -220,6 +221,9 @@ class VoiceControls(Gtk.Box):
         gesture.set_state(Gtk.EventSequenceState.CLAIMED)
         self.mouse_activation = True
         self.pointer = True
+        root = self.get_root()
+        success, origin = self.compute_point(root, Graphene.Point().init(0, 0)) if root else (False, None)
+        self.press_origin = (origin.x, origin.y) if success else None
         def begin():
             self.press_timer = 0
             self.start()
@@ -229,6 +233,12 @@ class VoiceControls(Gtk.Box):
     def move(self, gesture, delta_x, delta_y):
         if not self.pointer:
             return
+        root = self.get_root()
+        if root and self.press_origin is not None:
+            success, origin = self.compute_point(root, Graphene.Point().init(0, 0))
+            if success:
+                delta_x += origin.x - self.press_origin[0]
+                delta_y += origin.y - self.press_origin[1]
         if self.press_timer and (abs(delta_x) > 24 or abs(delta_y) > 24):
             self.cancel()
         elif self.state == 'holding':

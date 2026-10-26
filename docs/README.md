@@ -4,6 +4,11 @@ Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN
 STATUS/PLAN define the current bounded task and next review gate, not an automatic
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
+[CHAT-UX-1](releases/2026-10-26-chat-ux-1.md) is the bounded desktop messenger UX
+checkpoint: separate adaptive window, bubbles, fixed composer and native emoji,
+unchanged backend/system build. Internal .8 only; no owner install/publication.
+Owner-installed .7 is now read-only verified; older pre-install observations below
+are historical, not a current ABI blocker or an installation instruction.
 [Ubuntu26.04/Python3.14 compatibility](releases/2026-10-26-linux-ubuntu2604-python314-compat.md)
 is CHECKPOINT PASS in compatibility scope: exact-lock probe and separate exact internal
 .7 user/system/package gates PASS. Full suites remain FAIL, unsuppressed technical debt.

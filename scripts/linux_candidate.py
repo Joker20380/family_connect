@@ -75,7 +75,7 @@ def embed(bundle, archive, *, standard_rebuild=False, target='ubuntu24.04'):
 
 
 def seal(bundle, version, system, python, *, target='ubuntu24.04'):
-    if not re.fullmatch(r'0\.2\.12~l03\.2\.[1-9][0-9]*', version):
+    if not re.fullmatch(r'0\.2\.12~(?:l03\.2|ci\.preview)\.[1-9][0-9]*', version):
         raise ValueError('Explicit reserved internal Linux candidate version required')
     platform = compatibility(target, python)
     if target == 'ubuntu26.04' and int(version.rsplit('.', 1)[1]) <= 5:

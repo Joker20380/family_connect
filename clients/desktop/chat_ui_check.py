@@ -36,6 +36,27 @@ def settled(pane):
 
 
 def click(pane, text):
+    if text == pane.t('chat_add') and hasattr(pane, 'add_button'):
+        pane.add_button.emit('clicked')
+        settled(pane)
+        return
+    if text == pane.t('chat_create') and hasattr(pane, 'status_action'):
+        pane.status_action.emit('clicked')
+        settled(pane)
+        return
+    if text == pane.t('chat_rename') and hasattr(pane, 'split'):
+        pane.header_menu.emit('clicked')
+        settled(pane)
+        return
+    if text in (pane.t('chat_profile'), pane.t('chat_background')) and hasattr(pane, 'options'):
+        pane.options.popup()
+        widget = pane.options.get_popover().get_child().get_first_child()
+        while widget is not None:
+            if widget.get_label() == text:
+                widget.emit('clicked')
+                settled(pane)
+                return
+            widget = widget.get_next_sibling()
     widget = pane.content.get_first_child()
     while widget is not None:
         if isinstance(widget, Gtk.Button) and widget.get_label() == text:
@@ -103,21 +124,21 @@ def main(destination, scale):
             settled(pane)
             assert pane.screen == 'verify' and not pane.save_contact.get_sensitive()
             capture(app, destination / (language + '-verify.png'))
-            app.scroll.get_vadjustment().set_value(app.scroll.get_vadjustment().get_upper())
+            pane.messages_scroll.get_vadjustment().set_value(pane.messages_scroll.get_vadjustment().get_upper())
             pump(.2)
             capture(app, destination / (language + '-verify-actions.png'))
             pane.verified.set_active(True)
             pane.save_contact.emit('clicked')
             settled(pane)
             assert pane.screen == 'conversation'
-            pane.compose.set_text('Привет / Hello ' + language)
+            pane.compose.set_text('Привет / Hello ' + language + ' 👩🏽‍💻🙂🇧🇪 е\u0301')
             pane.compose.emit('activate')
             settled(pane)
             assert pane.compose.get_text() == ''
             pane.compose.grab_focus()
-            focus = app.window.get_focus()
+            focus = app.messenger_window.get_focus()
             assert focus == pane.compose or focus.is_ancestor(pane.compose)
-            assert app.window.child_focus(Gtk.DirectionType.TAB_FORWARD)
+            assert app.messenger_window.child_focus(Gtk.DirectionType.TAB_FORWARD)
             pump(.2)
             capture(app, destination / (language + '-conversation.png'))
             pane.compose.set_text('draft preserved')
@@ -148,17 +169,17 @@ def main(destination, scale):
         pane.conversation(card)
         settled(pane)
         history = pane.owner.invoke('history', address=card['address'], offset=0, limit=50)
-        assert [item['text'] for item in history['messages']] == ['Привет / Hello ru', 'Привет / Hello en']
+        assert [item['text'] for item in history['messages']] == ['Привет / Hello ' + language + ' 👩🏽‍💻🙂🇧🇪 е\u0301' for language in ('ru', 'en')]
         assert all(item['status'] == 'queued' for item in history['messages'])
         click(pane, pane.t('chat_rename'))
         pane.content.get_first_child().set_text('Contact / Контакт')
         click(pane, 'Save')
         assert pane.peer['name'] == 'Contact / Контакт'
         row = pane.content.get_first_child()
-        while row is not None and not isinstance(row, Gtk.Box):
+        while row is not None and not hasattr(row, 'menu'):
             row = row.get_next_sibling()
         assert row is not None
-        menu = row.get_last_child()
+        menu = row.menu
         assert isinstance(menu, Gtk.MenuButton)
         menu.popup()
         pump(.1)

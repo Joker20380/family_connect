@@ -83,6 +83,10 @@ def layouts(scale):
                 app.set_detail(app.t('error')+'\n'+app.t('system'));pump(.1)
                 for page in ('status','messenger','stats','settings'):
                     app.select_page(page);pump(.2)
+                    if page == 'messenger':
+                        assert app.messenger_window.get_visible() and app.messenger_window.get_width() >= 320
+                        app.messenger_window.close()
+                        continue
                     assert all(button.get_mapped() for button in app.nav.values()),'Navigation disappeared'
                     for name,widgets in app.pages.items():
                         if name!=page:assert all(not w.get_visible() for w in widgets),'Inactive section is visible'

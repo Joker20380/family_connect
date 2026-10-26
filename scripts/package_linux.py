@@ -26,7 +26,7 @@ PACKAGING = ROOT / 'packaging' / 'linux'
 
 DESKTOP_RUNTIME = (
     'app.py', 'backend.py', 'profile_config.py', 'updates.py', 'update.pub',
-    'friends_qr.py', 'friends_ui.py', 'chat_ui.py', 'chat_strings.py', 'chat_voice.py', 'chat_notifications.py', 'chat_daemon.py', 'chat_announcements.py', 'support_daemon.py',
+    'friends_qr.py', 'friends_ui.py', 'chat_ui.py', 'messenger_window.py', 'messenger_widgets.py', 'chat_strings.py', 'chat_voice.py', 'chat_notifications.py', 'chat_daemon.py', 'chat_announcements.py', 'support_daemon.py',
 )
 DEVICE_IDENTITY = ('__init__.py', 'device.py', 'friends.py')
 PROVISIONING = (
@@ -239,6 +239,7 @@ def build_deb(bundle, version, output):
         'Maintainer: Family Connect <maintainers@family-connect.invalid>\n'
         f'Installed-Size: {installed_size(staging / "usr")}\n'
         'Depends: python3 (>= 3.10), python3-gi, python3-gi-cairo, gir1.2-gtk-4.0, gir1.2-adw-1, gir1.2-secret-1, gir1.2-gstreamer-1.0, gir1.2-gst-plugins-base-1.0, gstreamer1.0-plugins-base, gstreamer1.0-plugins-good, gstreamer1.0-pulseaudio, libcodec2-1.2, librsvg2-common, network-manager, libqrencode4, libzbar0, systemd, dbus-user-session\n'
+        'Recommends: fonts-noto-color-emoji\n'
         'Section: net\n'
         'Priority: optional\n'
         'Homepage: https://github.com/Joker20380/family_connect\n'

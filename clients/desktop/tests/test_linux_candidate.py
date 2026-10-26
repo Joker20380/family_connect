@@ -13,6 +13,21 @@ import pytest
 ROOT = Path(__file__).resolve().parents[3]
 
 
+@pytest.mark.parametrize('version', ['0.2.12~l03.2.8', '0.2.12~ci.preview.8'])
+def test_distinct_user_and_ci_candidate_versions(tmp_path, monkeypatch, version):
+    from scripts import linux_candidate
+    (tmp_path / 'VERSION').write_text('0.2.11\n')
+    monkeypatch.setattr(linux_candidate, 'ROOT', tmp_path)
+    monkeypatch.setattr(linux_candidate.subprocess, 'check_output',
+                        lambda command, **options: b'' if 'diff' in command else 'a' * 40 + '\n')
+    bundle = tmp_path / 'bundle'
+    bundle.mkdir()
+    (bundle / 'app.py').write_text('pass\n')
+    record = linux_candidate.seal(bundle, version, dict(sha256='b' * 64), [3, 14], target='ubuntu26.04')
+    assert record['internal_version'] == version and not record['source_dirty']
+    assert record['compatibility']['python'] == [3, 14]
+
+
 def load(name):
     spec = importlib.util.spec_from_file_location(name, ROOT / 'packaging/linux' / (name + '.py'))
     module = importlib.util.module_from_spec(spec)

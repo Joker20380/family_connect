@@ -34,11 +34,11 @@ def pointer_checks(app, voice, destination):
     for index in range(controllers.get_n_items()):
         controller = controllers.get_item(index)
         signals = (('pressed', 'released', 'cancel') if isinstance(controller, Gtk.GestureClick) else
-                   ('drag-begin', 'drag-end', 'cancel') if isinstance(controller, Gtk.GestureDrag) else ())
+                   ('drag-begin', 'drag-update', 'drag-end', 'cancel') if isinstance(controller, Gtk.GestureDrag) else ())
         for signal in signals:
             controller.connect(signal, lambda *arguments, signal=signal: trace.append(dict(
                 event=signal, state=voice.state, pointer=voice.pointer, busy=voice.busy,
-                pending_hold=bool(voice.press_timer))))
+                pending_hold=bool(voice.press_timer), offsets=list(arguments[1:]) if signal == 'drag-update' else [])))
     x11 = ctypes.CDLL(ctypes.util.find_library('X11'))
     xtest = ctypes.CDLL(ctypes.util.find_library('Xtst'))
     signatures = {'XOpenDisplay': (ctypes.c_void_p, [ctypes.c_char_p]),
@@ -58,14 +58,14 @@ def pointer_checks(app, voice, destination):
     assert display
     try:
         voice.source_factory = lambda: _element('audiotestsrc', is_live=True, samplesperbuffer=160)
-        app.scroll.get_vadjustment().set_value(app.scroll.get_vadjustment().get_upper())
+        voice.pane.show_voice()
         pump(.2)
-        success, point = voice.record.compute_point(app.window, Graphene.Point().init(
+        success, point = voice.record.compute_point(app.messenger_window, Graphene.Point().init(
             voice.record.get_width() / 2, voice.record.get_height() / 2))
         assert success
         position_x, position_y, child = ctypes.c_int(), ctypes.c_int(), ctypes.c_ulong()
-        scale = app.window.get_scale_factor()
-        assert x11.XTranslateCoordinates(display, app.window.get_surface().get_xid(), x11.XDefaultRootWindow(display),
+        scale = app.messenger_window.get_scale_factor()
+        assert x11.XTranslateCoordinates(display, app.messenger_window.get_surface().get_xid(), x11.XDefaultRootWindow(display),
                                          round(point.x * scale), round(point.y * scale), ctypes.byref(position_x),
                                          ctypes.byref(position_y), ctypes.byref(child))
         def motion(delta_x=0, delta_y=0):
@@ -191,7 +191,7 @@ def main(destination, scale):
                 assert voice.state == 'idle'
                 voice.record.emit('clicked')
             wait_for(lambda: voice.state == 'locked')
-            app.scroll.get_vadjustment().set_value(app.scroll.get_vadjustment().get_upper())
+            pane.show_voice()
             pump(.2)
             capture(app, destination / f'{mode}-recording.png')
             wait_for(lambda: voice.state == 'ready')
@@ -207,11 +207,11 @@ def main(destination, scale):
             voice.seek(voice.progress, None, 250)
             wait_for(lambda: not voice.busy)
             assert voice.player.paused
-            app.scroll.get_vadjustment().set_value(app.scroll.get_vadjustment().get_upper())
+            pane.show_voice()
             pump(.1)
             capture(app, destination / f'{mode}-preview.png')
             voice.send.grab_focus()
-            assert app.window.get_focus() == voice.send
+            assert app.messenger_window.get_focus() == voice.send
             voice.send.emit('clicked')
             wait_for(lambda: not voice.busy and not pane.busy and voice.state == 'idle')
             history = pane.owner.invoke('history', address=card['address'], offset=0, limit=50)

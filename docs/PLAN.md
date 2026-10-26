@@ -2,7 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Текущий bounded task — U2604-COMPAT, CHECKPOINT PASS / ожидает review.**
+**Текущий bounded task — CHAT-UX-1, IN_PROGRESS: первый desktop messenger UX checkpoint.**
+Зависимость: explicit owner request, установленная Ubuntu26.04/Python3.14 .7 и штатный
+prepare-chat (owner context; installed version/IDs read-only verified).
+Gate: одно адаптивное GTK окно/ChatClient, bubbles, fixed byte-bounded composer,
+native emoji, bounded отдельные onboarding CTA; прежние RPC/форматы/privacy/ownership.
+Source/GTK/package62 PASS; synthetic visual, full desktop/full suites и exact .8
+package/AWG/TCP gates продолжаются. System43266d97… неизменен, .7 immutable.
+[Report](releases/2026-10-26-chat-ux-1.md). Не устанавливать владельцу/не публиковать.
+**STOP после CHAT-UX-1. NEXT — review CHAT-UX-1 перед установкой UI-кандидата владельцу.**
+L04.2/full L05/TCP HTTPS diagnosis и другие queued tasks не начинать.
+
+### Предыдущий compatibility checkpoint — не активный NEXT
+
+**U2604-COMPAT — CHECKPOINT PASS в compatibility scope.**
 LOCAL-OWNER-UPGRADE **BLOCKED на ABI**: Ubuntu26.04/Python3.14.4 не поддерживается
 frozen .5/Python3.12. Workstation/launchers/private state unchanged.
 Read-only source probe в disposable Ubuntu26.04.1/systemd259/Python3.14.4 **PASS**:
@@ -14,7 +27,7 @@ Full desktop1199/83/0; full suite3257 PASS/55 FAIL/104 SKIP, без suppression;
 отдельный technical debt, не общий CI PASS. Старые .5 hashes/IDs immutable.
 [Report](releases/2026-10-26-linux-ubuntu2604-python314-compat.md).
 L04.1 DONE сохраняется; L04 только L04.2. Publication/L04.2/L05/teardown/live VPN NOT_RUN.
-**STOP. NEXT — review U2604-COMPAT**, без автоматического owner upgrade.
+Исторический STOP сохранён в U2604-COMPAT report; установленная .7 подтверждена выше.
 
 ### Frozen baseline — не текущая задача
 
@@ -118,6 +131,7 @@ D02.1-R остаётся PARTIAL/NOT_RUN; D01 открыт. Дальнейшие
 
 | ID | Результат | Зависимость | Статус | Критерий завершения |
 |---|---|---|---|---|
+| CHAT-UX-1 | Первый продуктовый desktop messenger UX checkpoint | explicit owner request; installed Ubuntu26.04 .7; штатный prepare-chat | IN_PROGRESS (source checkpoint) | [Report](releases/2026-10-26-chat-ux-1.md). Одно GTK окно/ChatClient, адаптивные диалоги, bubbles, composer/4096 UTF-8 bytes, native emoji, bounded onboarding; existing backend contract. Targeted62 PASS; full/package/visual gates pending. Новый internal .8, прежний system43266d97…, .7 immutable; owner install/publication/L04.2/full L05 NOT_RUN. STOP for review. |
 | U2604-COMPAT | Отдельный Ubuntu26.04/CPython3.14 source/system/package candidate | exact lock compatibility probe; explicit owner request; frozen .5 immutable | CHECKPOINT PASS (compatibility scope; review pending) | [Report](releases/2026-10-26-linux-ubuntu2604-python314-compat.md). Exact .7 candidate c79b4feb…/system43266d97…, manifests [3,14], imports/DEB/AppImage/pkexec/READY/rollback/tamper/barriers/state PASS. Full suites executed unsuppressed: local3257/55/104; general CI not PASS, residual debt retained. No workstation/private identity/gateway/live VPN. STOP for review. |
 | LOCAL-OWNER-UPGRADE | Установка совместимого candidate на workstation владельца | отдельный review U2604-COMPAT и разрешение владельца | BLOCKED (frozen .5 Python3.12 vs host Python3.14.4) | Пока никаких host changes. После отдельного review/разрешения: backup competing user launchers, exact DEB/setup, persistent close/reopen, один AWG и один TCP connect/disconnect. Это не повтор L04.1 и не publication. |
 | D00 | Компактное состояние и последовательный план | phase22 / baseline | DONE | Новый сеанс читает STATUS + выбранный ID; история сохранена побайтно, ссылки и diff проверены; commit/push с remote SHA отражён в итоговом ответе. |
@@ -362,5 +376,5 @@ Django7.1 (servers/access/payments) зависит от backend/fencing и recov
 [Полный прежний PLAN](PLAN.history-2026-10-24.md), [STATUS](STATUS.history-2026-10-24.md),
 [phase22](releases/2026-10-23-desktop-parity106.md#linux-user-chat-admission-and-existing-exit-handoff-2410-phase22),
 [отчёт D00](releases/2026-10-24-desktop-parity106-d00.md).
-**STOP. NEXT — review U2604-COMPAT. LOCAL-OWNER-UPGRADE отдельно после review/разрешения;
-L04.2/L05/teardown/signing/publication NOT_RUN; без F2 replay или R3.**
+**STOP после CHAT-UX-1. NEXT — review CHAT-UX-1 перед установкой нового UI-кандидата владельцу;
+L04.2/full L05/TCP HTTPS diagnosis/teardown/signing/publication NOT_RUN.**
