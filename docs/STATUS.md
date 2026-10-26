@@ -1,32 +1,32 @@
 # Текущее состояние / Current state
 
-**L04.2 — R2 PARTIAL / Phase B PASS; Phase C setup authentication BLOCKED.**
+**L04.2 — R2 PARTIAL / Phase B DONE (review accepted); Phase C polkit cookie BLOCKED.**
 Source169aa68 DONE/review accepted: containment/drain separation и R1
 first_reason/cleanup/all-stage/retry сохранены. Native15, cleanup32, combined3,
 desktop1306/82skip и exact local36/phase0-Docker54 baseline приняты.
 Control/Client Linux setup incomplete больше не блокируют progression по review;
 общего CI PASS нет. Runtime169aa68/test/locks/pins неизменны; reference70f33f6 принят.
-Input maina0f54a7; от candidate sourceb8e9196 только docs, clean copy. Exact .10
+Input maina3c51d2; от candidate sourceb8e9196 только docs. Exact .10
 candidate42644067…/system8ab7f298…/system_source169aa68/source_dirty=false неизменён;
 delivery hashes, embedded DEB/AppImage candidate/system equality и protected state PASS.
 Retained artifacts0444/AppImage0555/directories0555; rebuild0. Prior integrity,
 systemd/pkexec/DEB/AppImage/shared-state PASS сохраняются. AWG durable receipt включает
 routes/rules/DNS/nftables и cleanup: PASS_BY_REVIEWED_ASSERTIONS, без повтора;
 прежний XIT finalization FAIL_ENVIRONMENT_EXCLUDED, не общий wrapper PASS.
-AWG/TCP actions не повторялись. Новый rollback script sealed/hash/0555/RO,
-loginctl отсутствует; real system/user D-Bus readiness до dpkg/setup PASS.
-Один exact .9→.10→.9 rollback PASS/exit0; оба mixed builds rejected, synthetic
-state/network baseline unchanged, owner/TUN0. Fresh cleanup32/package46/native15/
-combined3/MESH157 PASS; desktop1305/83skip plus omitted reference case1 PASS
-(82 existing skips remain). Pre-test mountpoint failure retained; no assertion replay. Scripts unchanged,
-containers removed. Phase B docs994119e pushed/remote verified; Phase C сразу начат.
-Fresh encrypted VM: exact .10 DEB/check PASS; один setup refused, textual polkit
-agent не открыл /dev/tty (No such device or address). No retry/Connect; product
-defect не установлен. Secondary harness KeyError reconciled read-only, не скрывает
-setup refusal. Candidate/system mismatch, old43266d97 system unchanged; READY нет.
-P0/P1/Auto/lifecycle/live AppImage NOT_RUN. Owner/TUN0,pending=null,journal ABSENT
-unchanged; network/settings/original7/base preserved. VM gracefully stopped/removed;
-encrypted derivative retained0400, private teardown receipt updated without revoke.
+Phase B целиком и частично НЕ ПОВТОРЯЛСЯ: rollback/AWG/TCP/cleanup32/package46/
+native15/combined3/MESH157/accepted desktop1306+82skip сохранены PASS.
+27.10 fresh encrypted derivative из protected base, не из прошлой failed VM.
+Один exact .10 DEB install, dpkg audit/apt check/candidate-check PASS. Existing
+ordinary admin user/groups/default polkit, system bus/PolicyKit1/clock PASS.
+SSH -tt: same-session /dev/tty read/write/open и preflight PASS до setup.
+Один setup/один password prompt, exit1/8.27s: AUTHENTICATION FAILED,
+No session for cookie / Not authorized. Root installer не запускался; причина
+cookie/session отказа не локализована, product defect не установлен. No retry/bypass.
+Old43266d97 system unchanged/mismatch; READY нет. Connect0, P0/P1/Auto/lifecycle/
+live AppImage NOT_RUN. Owner/TUN0,pending=null,journal ABSENT unchanged; network,
+identity/chat store/cache/floors/settings/keyring/original7/base unchanged.
+VM gracefully stopped/removed; encrypted derivative0400; private teardown receipt
+updated без revoke. Пароль не записан; groups/polkit rules не менялись.
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
 Exact immutable artifact/system IDs/hashes в report; package acceptance PASS. .9/state immutable;
 owner workstation NOT_USED. L04.1 DONE, parent L04 IN_PROGRESS; L05 NOT_RUN,

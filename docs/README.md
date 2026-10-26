@@ -7,23 +7,21 @@ Entries below are an evidence/runbook index; historical NEXTs are not current as
 [L04.2-R2 system/candidate continuation](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md)
 continues the same PLAN L04.2. Source169aa68 is review accepted, including R1
 preservation and R2 containment/drain separation; CI setup hangs no longer block
-progression, but no overall CI PASS is claimed. Current PARTIAL: inputa0f54a7;
+progression, but no overall CI PASS is claimed. Current PARTIAL: inputa3c51d2;
 exact retained .10 candidate42644067…/sourceb8e9196/system8ab7f298… unchanged, no rebuild.
 Read-only delivery/embedded candidate/system/state audit PASS. Prior integrity and
 real systemd/pkexec/DEB/AppImage/shared-state gates retained; AWG durable assertions
 accepted without replay, earlier XIT finalization excluded as harness failure.
-AWG/TCP not replayed. New no-loginctl rollback fixture verifies real system/user
-D-Bus before install; one exact .9→.10→.9 rollback PASS/exit0, mixed rejection and
-state/network cleanup PASS. Fresh cleanup32/package46/native15/combined3/MESH157 PASS;
-desktop1305/83skip plus reference case1 PASS (82 existing skips remain). Pre-test
-mountpoint infrastructure failure retained; no assertion replay. Scripts sealed/hash/
-0555/RO, unchanged; containers removed.
-Phase B PASS, pushed994119e; Phase C immediately continued in encrypted VM.
-Exact .10 DEB/check PASS, but one setup is refused: textual polkit agent cannot
-open /dev/tty. No retry/Connect; secondary harness KeyError reconciled read-only,
-old system unchanged/mismatch, no READY or product defect claim. P0/P1/Auto/
-lifecycle/live AppImage NOT_RUN. Network/state/base preserved, owner/TUN0,pending=null;
-VM gracefully stopped/removed. STOP. NEXT — final review L04.2-R2. The accepted
+Phase B DONE/review accepted, not repeated wholly or partly; accepted rollback,
+AWG/TCP and source/package selections remain PASS. Fresh encrypted Phase C derivative
+27.10: exact .10 install/dpkg audit/apt check/candidate-check PASS; ordinary admin,
+default polkit, system bus/clock PASS. Same-session SSH -tt /dev/tty preflight PASS.
+One setup/one password prompt fails: No session for cookie / Not authorized.
+Root installer not run; no retry/bypass/Connect, cause not localized or attributed
+to product. Old system unchanged/mismatch; P0/P1/Auto/lifecycle/live AppImage NOT_RUN.
+Network/private state/original7/base preserved, owner/TUN0,pending=null; VM gracefully
+stopped/removed, no password logged or policy/groups changed.
+STOP. NEXT — final review L04.2-R2. The accepted
 [core P0 failure](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
 is not replayed on .9. Historical reports and .9/system bytes remain immutable.
 Chat delivery_unavailable stays in L05 backlog, not a VPN prerequisite; no chat

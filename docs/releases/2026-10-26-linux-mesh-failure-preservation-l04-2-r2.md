@@ -1,6 +1,104 @@
 # L04.2-R2 — process containment versus authenticated drain
 
-## Prepared rollback, Phase B completion and Phase C entry — current checkpoint
+## Phase C with a real controlling terminal — current checkpoint
+
+Input main `a3c51d2828104941a4faa37f92261bc305c530a9`. Run27.10 Europe/Brussels
+(26.10 UTC), same L04.2-R2. **Phase B DONE / review accepted, not repeated in
+whole or in part.** Rollback/AWG/TCP/cleanup32/package46/native15/combined3/MESH157
+and accepted desktop1306/82 coverage remain PASS. No new task ID, version,
+candidate, system build, runtime/source checkpoint or rebuild.
+
+**Result: L04.2-R2 PARTIAL; Phase C ENVIRONMENT_BLOCKED at polkit authentication.
+Real PTY prerequisite PASS, but the single setup returns AUTHENTICATION FAILED /
+No session for cookie / Not authorized. Root installer and Connect are not run.
+STOP. NEXT — final review L04.2-R2.** No product defect or overall CI PASS claimed.
+
+### Fresh derivative and entry
+
+Read-only identity check confirms exact immutable .10 artifacts and their sizes/
+SHA256 from the complete delivery table below: candidate42644067…, sourceb8e9196,
+system source169aa68, system8ab7f298…. Current main differs from candidate source
+only in documentation. No Phase B tests, installation regressions or builds run.
+An encrypted writable copy is made from the retained read-only core L04.2 base,
+**not** from the modified VM of the preceding setup refusal. The original base
+is mode0400 and full SHA256 byte-identical before/after; protected original seven
+files also match their accepted hashes. Owner workstation **NOT_USED**.
+
+The disposable Ubuntu26.04 VM has its own kernel, network, system bus and ordinary
+test user session. Only its private work directory and public backing image
+(read-only) are mounted into its QEMU container; no host home, bus, resolver or
+network namespace is mounted. No groups, polkit rules, identities or server state
+are changed. Existing identity/chat store/cache/floors/settings/keyring are present
+and hashed privately before installation.
+
+| Entry / prerequisite | Result |
+| --- | --- |
+| Exact .10 DEB install | One install; dpkg version0.2.12~l03.2.10 |
+| dpkg audit / apt-get check / candidate-check | PASS |
+| Pre-setup candidate/system | candidate42644067…; expected CANDIDATE_SYSTEM_BUILD_MISMATCH against old system43266d97… |
+| VPN owner / TUN / pending | 0 / 0 / null; journal ABSENT, unchanged baseline |
+| Test account | Ordinary uid1000, existing sudo-group admin identity under default polkit rule; groups unchanged |
+| System bus / PolicyKit1 owner / polkit active / pkexec | PASS |
+| System clock | Within10s of current host UTC; no clock edit |
+| Local password | Existing retained test password used; no temporary password created |
+
+### One PTY setup; authentication stop
+
+Private scripts are complete, syntax-checked, SHA256-recorded and0555 before
+execution; none is rewritten while running. The normal product command executes
+as the test user through mandatory **SSH `-tt`**. In that same session, before
+the command, `id -u`, `tty`, both `/dev/tty` access tests and Python
+`os.open('/dev/tty', os.O_RDWR)`/`os.ttyname`/close succeed. The harness observes
+`FC_PTY_PREFLIGHT_PASS` before sending the single password response. The exact
+terminal path is not retained in the bounded error tail; the immutable script
+and pre-product pass marker are the PTY evidence, not a later replacement session.
+
+No nohup, non-PTY pipe, direct root_main, root installer launch, sudo replacement
+for setup, custom rules, passwordless authorization, disabled internal agent or
+graphical automation is used. Password input goes only to the PTY; it is neither
+an argument nor printed or retained in logs. Setup has one request and one password
+prompt, exits1 after8.27s, and is not retried. Its bounded sanitized result is:
+
+```text
+AUTHENTICATION FAILED
+org.freedesktop.PolicyKit1.Error.Failed: No session for cookie
+Error executing command as another user: Not authorized
+System setup cancelled or refused; no automatic retry.
+```
+
+Checkpoint stage **POLKIT_AUTHENTICATION_FAILED_NO_SESSION_FOR_COOKIE** is an
+evidence classification, not a new product/network reason code. This is distinct
+from the previous missing `/dev/tty` failure: the terminal now works. The cause
+of the polkit cookie/session refusal is not localized; password failure, runtime
+defect or gateway failure is not asserted. No policy repair, second authentication
+attempt, setup replay or root bypass follows.
+
+Read-only reconciliation confirms old installed system43266d97… remains unchanged,
+candidate-status still returns CANDIDATE_SYSTEM_BUILD_MISMATCH, and matching
+system READY is not reached. P0/P1/Auto/active GUI lifecycle/live AppImage sharing
+are **NOT_RUN**. User Connect0/Disconnect0; packet attempt/generation not started;
+first_reason/cleanup_reason/process_contained/drain_acknowledged **NOT_OBSERVED**.
+No certificate renewal, chat registration, message or voice operation is requested.
+
+### Cleanup, preservation and handoff
+
+Owner0/TUN0/pending=null, no running root VPN units; journal ABSENT equals entry.
+Normalized addresses/routes/rules/DNS/firewall baseline is unchanged, with no
+underlay IPv6 edit. Private byte-hash comparison of identity/chat store/cache/
+floors/settings/keyring before install versus after refusal is equal. Original
+protected seven files and original encrypted base remain byte-identical.
+The VM shuts down gracefully, QEMU exits0, its container is removed; the new
+encrypted derivative is retained mode0400. The private teardown receipt records
+this one PTY setup refusal and zero provisioning/renewal/registration/VPN actions;
+actual revoke/teardown remains NOT_RUN.
+
+Secret/private-byte scan, strict JSON/no duplicate keys, local links, four-file
+staged scope, immutable artifact/script checks and `git diff --check` PASS.
+Unrelated local changes remain outside the commit. L04.1 DONE, parent L04
+IN_PROGRESS, L05/messages/voice acceptance/signing/publication NOT_RUN;
+delivery_unavailable remains the unchanged L05 backlog. Owner workstation **NOT_USED**.
+
+## Prepared rollback, Phase B completion and Phase C entry — previous checkpoint
 
 Input main `a0f54a7e7e4367daa79247f77a025a4ef06f8f15`,26.10. Same L04.2-R2;
 no new task, version, candidate, system build or runtime/source checkpoint.
