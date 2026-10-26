@@ -4,10 +4,12 @@ Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN
 STATUS/PLAN define the current bounded task and next review gate, not an automatic
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
-[L04.2-R1 source checkpoint](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r1.md)
+[L04.2-R1 PARTIAL checkpoint](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r1.md)
 continues the same PLAN L04.2: deterministic primary/cleanup preservation,
-focused213 PASS/2 SKIP and full desktop1296 PASS/82 SKIP. Full/package gate remains
-IN_PROGRESS; no new candidate or live acceptance yet. The accepted
+focused213 PASS/2 SKIP and full desktop1296 PASS/82 SKIP. STOP at mandatory full
+suite36 FAIL/3377 PASS/99 SKIP and CI failures, including two isolated lifetime
+cleanup failures; no rerun/repair. New exact .10/system NOT_BUILT, package/live
+NOT_RUN. NEXT review L04.2-R1; no full source/package PASS. The accepted
 [core P0 failure](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
 is not replayed on .9. Historical reports and .9/system bytes remain immutable.
 Chat delivery_unavailable stays in L05 backlog, not a VPN prerequisite; no chat

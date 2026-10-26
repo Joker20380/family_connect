@@ -2,7 +2,9 @@
 
 Date: 2026-10-26. Continuation of **L04.2**, not a new PLAN ID.
 Input main: `36606eae3162b3c5e1d93397a05caab5118ccc74`.
-**Source checkpoint; system/package/full-suite gate still pending. No live PASS.**
+Source correction: `9c6f867ea3e866df6a0ce65dbd311e1882336bb0` (pushed main,
+remote SHA verified). **PARTIAL / STOP at mandatory source/CI gate. No new exact
+candidate, system build or live PASS. NEXT — review L04.2-R1.**
 
 The [accepted core report](2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
 records one .9 P0 Connect returning NETWORK_SETUP_FAILED at attempt1/60835ms.
@@ -75,13 +77,60 @@ No network protocol, Android106, identity/store, certificate, policy or underlay
 IPv6 changes. The prior mngtmpaddr observation remains supplementary; no manual
 underlay correction is performed.
 
-## Remaining gate and immutable artifacts
+## Mandatory gate result and CI
+
+Complete local suite on Ubuntu26.04/Python3.14, with fresh80-file release fixtures
+pinned to source9c6f867 and Go1.26.0: **36 FAIL / 3377 PASS / 99 SKIP**,7 passing
+subtests,231.20s. No deselection, suppression or unchanged rerun. Its36 failure
+IDs exactly match the recorded [CHAT-UX-2 failure list](2026-10-26-chat-ux-2/validation.json).
+The earlier separate FD teardown error did not reproduce in this run; it is not
+claimed fixed. Historical failures still fail this mandatory gate and are not waived.
+They concern HTTP-route expectations, permission/root-execution assumptions,
+native expiry and readiness socket reuse; none is relabelled as a MESH live cause.
+The first fixture-preparation command stopped on container Git safe-directory
+validation before producing the inventory; a container-local safe.directory entry
+allowed preparation. No product sources or test selection changed for that repair.
+
+Automatic push CI for the exact source commit (readback17:26UTC), not a new
+installed .10 candidate:
+
+| Gate | Result |
+| --- | --- |
+| [AWG](https://github.com/Joker20380/family_connect/actions/runs/40366892370) | PASS |
+| [TCP](https://github.com/Joker20380/family_connect/actions/runs/40366892151) | build PASS; release jobs SKIPPED |
+| [Client Linux](https://github.com/Joker20380/family_connect/actions/runs/40366892183/job/121726915514) | PASS |
+| [Voice/encrypted messaging source tests](https://github.com/Joker20380/family_connect/actions/runs/40366892697) | PASS; not L05 or live voice acceptance |
+| [Native bridge](https://github.com/Joker20380/family_connect/actions/runs/40366892046) | protocol jobs PASS; isolated-linux FAIL |
+| [Linux control full suite](https://github.com/Joker20380/family_connect/actions/runs/40366892214/job/121726915996) | 54 FAIL / 3232 PASS / 226 SKIP;7 passing subtests |
+| [phase0 Docker mandatory test layer](https://github.com/Joker20380/family_connect/actions/runs/40366892149/job/121726916075) | 54 FAIL / 3230 PASS / 228 SKIP;7 passing subtests; downstream failover NOT_RUN |
+| [phase0 tests](https://github.com/Joker20380/family_connect/actions/runs/40366892149/job/121726915683) | IN_PROGRESS at local vault dependency setup; full tests not yet reached, not PASS |
+| [Internal candidate CI](https://github.com/Joker20380/family_connect/actions/runs/40366892194) | IN_PROGRESS at supported Python/GI preparation; not the requested .10 package acceptance |
+
+The isolated-linux failure is a **separate unaccepted regression observation**:
+authenticated service-only lifetime selection **2 FAIL / 13 PASS**,112.24s:
+`test_mesh_chat_lifetime_native.py::test_unconfirmed_authenticated_cleanup_retains_admission[cancel]`
+and `[peer]`, at the assertion that the failed owner retains active admission.
+It is not covered by the local three-case combined PASS and is not declared an
+environment issue, known residual, gateway failure or accepted behavior change.
+No rerun or further source patch follows this result. The gate does not establish
+that all existing chat-binding/cleanup tests remain green. This source-level fixture
+failure is separate from the untouched live delivery_unavailable observation.
+
+No workflows were manually dispatched; the existing push matrix also starts
+other-platform jobs automatically. Those jobs are not Windows/Android acceptance,
+and no platform source, installed device or release is changed by this checkpoint.
+Full CI PASS is **not** claimed. CI skip counts differ from the real-GTK local run
+and are not interchangeable. Later package/system/live stages remain stopped even
+if an already-running CI job finishes successfully.
+
+## Stopped package gate and immutable artifacts
 
 This source checkpoint is not a candidate, installed acceptance or release.
-Mandatory complete suites, CI and isolated/package gates must complete before
-live continuation. No full-suite failures may be suppressed or waived here.
-The first non-fixture source/package failure stops progression to a new candidate
-and live acceptance; it does not authorize unrelated repairs.
+The mandatory source/CI failure stops progression to a new exact candidate and
+live acceptance. No unrelated repairs or test weakening are performed.
+New system inventory/imports, real systemd/pkexec setup, rollback, old/mixed-build
+rejection, .10 DEB/AppImage coherence and candidate-check/status are **NOT_RUN**.
+Historical .9 package PASS is not substituted for these gates.
 
 Historical .9 and its system remain immutable, per the unchanged
 [manifest](2026-10-26-chat-ux-2/candidate-delivery.json):
@@ -92,10 +141,46 @@ Historical .9 and its system remain immutable, per the unchanged
 - AppImage SHA256 `dc790701321da9e63325bc097bf6eab81032ed7f46236e0ed2de39cc673d45d4`.
 - System archive SHA256 `402affe5628da4ecd1df3e274f3c67848d5e59023a63374765c91419490b9a55`.
 
-Expected next internal version .10 is **not built or assigned an ID** in this
-source checkpoint. The old system must not be reused for its eventual build.
-P0/P1/Auto and active GUI/AppImage lifecycle on a new candidate are NOT_RUN.
+Expected next internal version .10 is **NOT_BUILT**, with no candidate/system ID
+or DEB/AppImage hashes to report. Automatic CI build outputs are not promoted,
+downloaded or installed as .10. The old system is not reused as a new build.
+P0/P1/Auto and active GUI/AppImage lifecycle on a new candidate are **NOT_RUN**;
+no new live primary_reason/cleanup_reason or attempt count exists.
 Retained encrypted test snapshots and original protected home are not booted or
 mutated by source tests. Owner workstation **NOT_USED** for acceptance.
 L05/messages/voice/signing/publication/revoke/teardown NOT_RUN. No deployment or
 installed rollback is performed. Unrelated VPN-health working changes are preserved.
+
+Original protected home: all seven files compared with the retained pre-run
+digests, byte-identical. Historical .9 DEB/AppImage/legacy/system hashes rechecked;
+the manifest and previous L04.2 reports are unchanged. No identity/store/cache/
+floor/settings changes, provisioning, registration, renewal or teardown in this run.
+
+```json
+{
+  "task_id": "L04.2",
+  "checkpoint": "R1",
+  "result": "PARTIAL",
+  "source_commit": "9c6f867ea3e866df6a0ce65dbd311e1882336bb0",
+  "mandatory_source_gate": "FAIL",
+  "new_candidate_id": null,
+  "new_system_build_id": null,
+  "new_deb_sha256": null,
+  "new_appimage_sha256": null,
+  "new_live_p0": "NOT_RUN",
+  "new_live_p1": "NOT_RUN",
+  "new_live_auto": "NOT_RUN",
+  "new_installed_lifecycle": "NOT_RUN",
+  "owner_workstation": "NOT_USED",
+  "L05": "NOT_RUN",
+  "publication": "NOT_RUN"
+}
+```
+
+Sanitized source logs, fixture inventory and read-only CI receipts are retained
+privately under `/var/tmp/fc-l042-r1-20261026`; no private test data is added to Git.
+Secret scan **PASS**; report JSON and11 private receipt/inventory JSON files parse;
+419 local links **PASS**; staged scope is exactly STATUS/PLAN/README/this report;
+git diff --check and staged whitespace **PASS**. Source-log SHA256 receipts are
+retained privately. Unrelated unstaged work is excluded. L04.1 remains DONE; parent L04 stays
+IN_PROGRESS. **STOP. NEXT — review L04.2-R1**, not automatic continuation or L05.

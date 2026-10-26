@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**L04.2 — current task; R1 source checkpoint, package/full gate IN_PROGRESS.**
+**L04.2 — R1 PARTIAL / STOP на mandatory source/CI gate; review pending.**
 Core PARTIAL принят; старую .9 P0 не повторяли. На input36606ea воспроизведён
 primary→NETWORK_SETUP_FAILED collapse: corrected red18 FAIL/2 PASS; source fix
 сохраняет primary first_reason и отдельный cleanup stage. Native nonzero exit
@@ -10,13 +10,20 @@ PacketSession.close исполняются; unconfirmed cleanup → FAILED/CLEAN
 Focused213 PASS/2 SKIP; full desktop1296 PASS/82 SKIP после исправления только
 fixture /tmp:noexec→exec. Новые reason codes входят в strict diagnostics allowlist.
 [Единый R1 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r1.md).
-Новый system/candidate пока NOT_BUILT; exact .9/system immutable. Mandatory full
-suites/CI/package gate ещё не PASS; до их успеха installed live не начинать.
+Source9c6f867 pushed/remote verified. Mandatory full suite36 FAIL/3377 PASS/99 SKIP,
+7 subtests; exact36 IDs совпадают с CHAT-UX-2, FD teardown ERROR не повторился,
+не объявлен исправленным. CI control54/3232/226, Docker54/3230/228 FAIL;
+isolated lifetime2 FAIL/13 PASS (cancel/peer admission retained assertion) —
+отдельное unaccepted observation, без rerun/repair. Local combined3 PASS не
+заменяет этот gate. AWG/TCP/Client Linux CI PASS; полного CI PASS нет.
+Новый .10/system/candidate NOT_BUILT; exact .9/system immutable. New package
+setup/rollback/coherence и live P0/P1/Auto/lifecycle NOT_RUN по stop rule.
 L04.1 DONE; parent L04 IN_PROGRESS. delivery_unavailable остаётся L05 backlog,
 без диагностики/repair и без route prerequisite для VPN. Literal proxy criterion
 corrected by review, не product patch; messenger/support projections допустимы.
 Retained test state не запускался; owner workstation NOT_USED. L05 NOT_RUN;
 L06/L07/L08 прежние QUEUED, signing/publication/revoke/teardown NOT_RUN.
+Original protected seven files byte-identical. **NEXT — review L04.2-R1.**
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted (owner review).**
 Exact **0.2.12~l03.2.9** установлен; candidate/package/system checks PASS,
