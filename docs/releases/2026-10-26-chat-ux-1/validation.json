@@ -1,0 +1,451 @@
+{
+  "schema": 1,
+  "task": "CHAT-UX-1",
+  "date": "2026-10-26",
+  "status": "IMPLEMENTED_REVIEW_REQUIRED_VALIDATION_PARTIAL",
+  "candidate_source": "b09459565e17d65247a2ca600c52ff7ad7fd0cd7",
+  "test_fixture_followup_source": "581272a92de900be62e5fe4c6ff1ec820aa8637d",
+  "candidate_id": "0bf09cee08e27014f27e96abbd219ce3e31a1cf8eb1f8e906434d807f0577a87",
+  "system_build_id": "43266d97c6a9f8d4e7026727cbb4b5cb6aeea49db799f93bd798b67a8135198c",
+  "system_archive_reused_byte_for_byte": true,
+  "owner_installed_version": "0.2.12~l03.2.7",
+  "owner_installation": "NOT_RUN",
+  "publication": "NOT_RUN",
+  "full_L05": "NOT_RUN",
+  "L04_2": "NOT_RUN",
+  "TCP_HTTPS_diagnosis": "NOT_RUN",
+  "candidate_integrity": {
+    "artifacts": {
+      "FamilyConnect-0.2.12~l03.2.8-x86_64.AppImage": {
+        "sha256": "5b90e367eb1b24d8edebef9dd306d7f519f8c796403bb9875b9c96e197488daf",
+        "size": 57932280
+      },
+      "FamilyConnect-Linux-0.2.12~l03.2.8.tar.gz": {
+        "sha256": "5bd8666a0780fae1c355a284383cefa9a0494f7ca3810ab495ac0bbe32e1a120",
+        "size": 114530
+      },
+      "FamilyConnect_0.2.12~l03.2.8_amd64.deb": {
+        "sha256": "0b67e820a8c762cef419bed3182822d189ed4ff1a63f5a4b3910ad070bf7c7b6",
+        "size": 55971078
+      }
+    },
+    "candidate": "0bf09cee08e27014f27e96abbd219ce3e31a1cf8eb1f8e906434d807f0577a87",
+    "legacy_members": 6,
+    "result": "PASS",
+    "source_commit": "b09459565e17d65247a2ca600c52ff7ad7fd0cd7",
+    "source_dirty": false,
+    "system": {
+      "build_id": "43266d97c6a9f8d4e7026727cbb4b5cb6aeea49db799f93bd798b67a8135198c",
+      "installer_sha256": "ce9acb1f363b0fafffb11c44097901a7871c28fbf0e6b9c2c5c3eaba9ef7bfb5",
+      "sha256": "402affe5628da4ecd1df3e274f3c67848d5e59023a63374765c91419490b9a55",
+      "size": 49252181,
+      "source_digest": "cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61"
+    },
+    "user_members": 709
+  },
+  "results": {
+    "targeted_real_GTK": {
+      "passed": 27,
+      "failed": 0
+    },
+    "full_desktop": {
+      "passed": 1226,
+      "failed": 0,
+      "skipped": 85,
+      "warnings": 63272
+    },
+    "full_repository": {
+      "passed": 3282,
+      "failed": 57,
+      "skipped": 106,
+      "warnings": 63293,
+      "subtests_passed": 7
+    },
+    "chat_store_voice_notifications_initial_source": {
+      "source": "4aea27d590d516b0b06c4aaf22db2934172d9a99",
+      "passed": 254
+    },
+    "layout": {
+      "cases_passed": 24,
+      "scales": [
+        1,
+        1.5,
+        2,
+        2.5
+      ],
+      "direct_script_without_PYTHONPATH": "PASS"
+    },
+    "exact_final_DEB": "PASS",
+    "exact_final_AppImage": "PASS",
+    "exact_final_AWG_prestart": "PASS",
+    "exact_final_TCP_prestart": "PASS",
+    "unchanged_system_archive": "PASS",
+    "frozen_7_artifacts_unchanged": true,
+    "failure_suppression": false,
+    "overall_full_suite_pass": false
+  },
+  "full_suite_failed_tests": [
+    "tests/fixtures/mobile_bootstrap/test_transport_bridge.py::TransportBridgeTest::test_actual_old_boundary_raises_and_new_boundary_returns_typed_unavailability",
+    "tests/fixtures/mobile_bootstrap/test_transport_bridge.py::TransportBridgeTest::test_invalid_bootstrap_busy_and_unknown_failure_do_not_become_availability",
+    "tests/fixtures/mobile_bootstrap/test_transport_bridge.py::TransportBridgeTest::test_no_underlay_is_availability_but_cancel_is_not",
+    "tests/fixtures/mobile_bootstrap/test_transport_bridge.py::TransportBridgeTest::test_rejected_or_malformed_response_cannot_use_cached_authority",
+    "tests/fixtures/mobile_bootstrap/test_transport_bridge.py::TransportBridgeTest::test_request_timeout_is_typed_and_proof_is_not_replayed",
+    "tests/fixtures/mobile_bootstrap/test_transport_bridge.py::TransportBridgeTest::test_wait_deadline_and_cancellation_are_distinct",
+    "tests/fixtures/owner_disconnect/test_deadline_bridge.py::DeadlineBridgeTest::test_explicit_cancel_remains_non_availability",
+    "tests/fixtures/owner_disconnect/test_deadline_bridge.py::DeadlineBridgeTest::test_invalid_stop_reason_is_fail_closed",
+    "tests/fixtures/owner_disconnect/test_deadline_bridge.py::DeadlineBridgeTest::test_no_network_shared_deadline_releases_lock",
+    "tests/fixtures/owner_disconnect/test_deadline_bridge.py::DeadlineBridgeTest::test_non_transport_response_errors_stay_errors",
+    "tests/fixtures/owner_disconnect/test_deadline_bridge.py::DeadlineBridgeTest::test_shared_deadline_is_typed_unavailability",
+    "tests/fixtures/owner_disconnect/test_deadline_bridge.py::DeadlineBridgeTest::test_shared_deadline_request_never_sends_or_replays",
+    "tests/fixtures/owner_disconnect/test_deadline_bridge.py::InheritedBridgeTest::test_actual_old_boundary_raises_and_new_boundary_returns_typed_unavailability",
+    "tests/fixtures/owner_disconnect/test_deadline_bridge.py::InheritedBridgeTest::test_invalid_bootstrap_busy_and_unknown_failure_do_not_become_availability",
+    "tests/fixtures/owner_disconnect/test_deadline_bridge.py::InheritedBridgeTest::test_no_underlay_is_availability_but_cancel_is_not",
+    "tests/fixtures/owner_disconnect/test_deadline_bridge.py::InheritedBridgeTest::test_rejected_or_malformed_response_cannot_use_cached_authority",
+    "tests/fixtures/owner_disconnect/test_deadline_bridge.py::InheritedBridgeTest::test_request_timeout_is_typed_and_proof_is_not_replayed",
+    "tests/fixtures/owner_disconnect/test_deadline_bridge.py::InheritedBridgeTest::test_wait_deadline_and_cancellation_are_distinct",
+    "tests/fixtures/tunnel_restart/test_health.py::test_health_fixture",
+    "tests/test_device_identity.py::test_unsafe_directory_rejected",
+    "tests/test_friends_http_evidence.py::test_evidence_rejects_unsafe_path_and_generation",
+    "tests/test_friends_http_runtime.py::test_support_and_status_authorization_matrix[missing]",
+    "tests/test_friends_http_runtime.py::test_support_and_status_authorization_matrix[invalid]",
+    "tests/test_friends_http_runtime.py::test_support_and_status_authorization_matrix[unknown]",
+    "tests/test_friends_http_runtime.py::test_support_and_status_authorization_matrix[revoked]",
+    "tests/test_friends_http_runtime.py::test_support_and_status_authorization_matrix[invite_revoked]",
+    "tests/test_friends_http_runtime.py::test_support_and_status_authorization_matrix[malformed]",
+    "tests/test_friends_http_runtime.py::test_support_and_status_authorization_matrix[missing_backfill]",
+    "tests/test_friends_http_runtime.py::test_actual_nginx_handler_matrix[False]",
+    "tests/test_friends_http_runtime.py::test_actual_nginx_handler_matrix[True]",
+    "tests/test_friends_http_runtime.py::test_nginx_reports_unready_upstream_without_status_regression",
+    "tests/test_friends_http_runtime.py::test_probe_receipt_survives_failed_gate_and_rollback",
+    "tests/test_friends_http_runtime.py::test_exact_future_https_gate_verifies_tls",
+    "tests/test_friends_http_runtime.py::test_packaged_operator_shell_trap_preserves_receipts",
+    "tests/test_http_candidate_preflight.py::test_source_unit_route_and_immutable_archive_guards",
+    "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[None]",
+    "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[accept]",
+    "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[restore]",
+    "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[render]",
+    "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[incomplete_external]",
+    "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[owner]",
+    "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[incomplete_owner]",
+    "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[old_drain]",
+    "tests/test_http_transition.py::test_exact_attempt9_cadence_reproduces_shared_per_ip_limit[matrix]",
+    "tests/test_http_transition.py::test_exact_attempt9_cadence_reproduces_shared_per_ip_limit[observer]",
+    "tests/test_http_transition.py::test_stop_before_start_reproduces_refused_socket_and_nginx_502",
+    "tests/test_http_transition.py::test_readiness_first_switch_and_three_paced_complete_matrices",
+    "tests/test_http_transition.py::test_user_like_ordinary_challenges_do_not_hit_limits",
+    "tests/test_http_transition.py::test_three_live_switches_keep_paced_inflight_ordinary_requests_healthy",
+    "tests/test_http_transition.py::test_failed_real_switch_restores_routing_before_candidate_stop",
+    "tests/test_native_authority_compat.py::test_long_testing_window_preserves_native_expiry_checks",
+    "tests/test_native_authority_compat.py::test_four_hour_real_delivery_cross_language",
+    "tests/test_product_registration.py::test_database_requires_private_storage",
+    "tests/test_readiness_adapter_packaging.py::test_startup_and_config_from_closed_tree",
+    "tests/test_readiness_adapter_packaging.py::test_controlled_bg_matrix",
+    "tests/test_readiness_adapter_packaging.py::test_exact_candidate_mode_with_local_fixture_only",
+    "clients/desktop/tests/test_chat_direct_runtime.py::test_unit_umask_fresh_runtime_and_real_uid[lock]"
+  ],
+  "failure_groups": {
+    "tests/fixtures/mobile_bootstrap/test_transport_bridge.py": 6,
+    "tests/fixtures/owner_disconnect/test_deadline_bridge.py": 12,
+    "tests/fixtures/tunnel_restart/test_health.py": 1,
+    "tests/test_device_identity.py": 1,
+    "tests/test_friends_http_evidence.py": 1,
+    "tests/test_friends_http_runtime.py": 13,
+    "tests/test_http_candidate_preflight.py": 9,
+    "tests/test_http_transition.py": 7,
+    "tests/test_native_authority_compat.py": 2,
+    "tests/test_product_registration.py": 1,
+    "tests/test_readiness_adapter_packaging.py": 3,
+    "clients/desktop/tests/test_chat_direct_runtime.py": 1
+  },
+  "new_failure_ids_relative_to_U2604_COMPAT": [
+    "tests/test_readiness_adapter_packaging.py::test_controlled_bg_matrix",
+    "tests/test_readiness_adapter_packaging.py::test_startup_and_config_from_closed_tree"
+  ],
+  "removed_failure_ids_relative_to_U2604_COMPAT": [],
+  "logs": {
+    "gtk-scroll-fix.log": {
+      "sha256": "0281ff74beba41578053ef3a9860d07e8ec231ba30c8a938b7e2db989e7822eb",
+      "size": 3057
+    },
+    "chat-store-voice-notifications.log": {
+      "sha256": "85e7f5941c3293fc7ee6ce3cc709c193e6c250c42b711349a23c2e46f56dd602",
+      "size": 777
+    },
+    "full-desktop-b094595.log": {
+      "sha256": "62aece8f10fbed5b87eab5978572ec5769bdb39a550fb675793eb50abe510672",
+      "size": 9634
+    },
+    "full-suite-final.log": {
+      "sha256": "648624f8b7192f529decc19f6f77c44633fbfa2e743a5ddc3985fdbaec2d59fe",
+      "size": 71939
+    },
+    "layout-b094595.log": {
+      "sha256": "2f51a5a0bed10b804b78da85cbb1cb8dd3b20e981e2ea8636bdf23ebf946e51f",
+      "size": 1130
+    },
+    "layout-clean-path.log": {
+      "sha256": "db709a41f14f6c9be463bd5b528ecdcf46cd09efe69ad0588b38d6352a1ab52f",
+      "size": 1345
+    },
+    "recovery-final.log": {
+      "sha256": "786d26799488fe2b68f2fe11c43efd89a636e1802e63435fdb4631c0b6ddfc23",
+      "size": 225
+    },
+    "tcp_install-final.log": {
+      "sha256": "0463580c2219ce4b65f7184404ae7e3029d672bc8987d0f25067ee5595d77982",
+      "size": 273
+    },
+    "package-final-source.log": {
+      "sha256": "c367bc9084a604fec0a95015fa341db56e99534e554172b6acabcae6a3833b05",
+      "size": 2691
+    },
+    "package-system.log": {
+      "sha256": "fdc96cd78754e962940a155c9dccd2a97962344914a7a716698f265b48a3f05b",
+      "size": 2483
+    },
+    "final-package-deb.log": {
+      "sha256": "5884f6167db8c1be5c7a91e3f642d34a76b80f7b77f5424bd8f28169cf07963d",
+      "size": 1646
+    },
+    "final-package-appimage.log": {
+      "sha256": "a7c28599d1ffcc502396d07f02c47a97c786ee42cd87b0e57ff25175a28162b1",
+      "size": 1630
+    },
+    "final-package-prestart-awg.log": {
+      "sha256": "95e2a80ac599a41b5f05fcc5e1d1369dd2e324a35227c26817548b5161e0b5e6",
+      "size": 1979
+    },
+    "final-package-prestart-tcp.log": {
+      "sha256": "c67e9c44c97e71c22a2aed66df861cb03d1499b849915df5fb3fd7441fe051e0",
+      "size": 1979
+    },
+    "integrity-final.log": {
+      "sha256": "7b9cb9c8a55056dad48a28db191b71594318cddfe7bcb57fe6a2c71891526fb0",
+      "size": 1141
+    },
+    "visual-final.log": {
+      "sha256": "7005cd69af26badf3cb3510ad157fca78404c7d11bb686d902c13ede386b5d5a",
+      "size": 268
+    },
+    "visual-shared-style.log": {
+      "sha256": "7005cd69af26badf3cb3510ad157fca78404c7d11bb686d902c13ede386b5d5a",
+      "size": 268
+    },
+    "chat_ui-r2-1.log": {
+      "sha256": "b443793a433834ca54a3b6886d82bcc3823817e36b4bc18016a5954ea80dd518",
+      "size": 175
+    },
+    "chat_notifications-r2-1.log": {
+      "sha256": "b04fd281ae6ef491433041d3076e6977cb078d66dedba5ebee3012cbbc857c40",
+      "size": 437
+    },
+    "chat_announcements-r2-1.log": {
+      "sha256": "b443793a433834ca54a3b6886d82bcc3823817e36b4bc18016a5954ea80dd518",
+      "size": 175
+    },
+    "voice-r4-1.log": {
+      "sha256": "9f9f59cac52389da27af02adda3ce11012cb4d62050c4e16b2efdd1076730920",
+      "size": 409
+    }
+  },
+  "logs_location": "local ignored state-client-build/linux-chat-ux-1-20261026/evidence; raw logs not committed",
+  "screenshots": {
+    "100/emoji-chooser.png": {
+      "sha256": "9828946bde66de798d567c3b459164179a45380b1c487f4e46694832f096c4d0",
+      "size": 128714
+    },
+    "100/empty.png": {
+      "sha256": "0a6f029edea61c3fc8af126e5aeb0e8a7d9a797ce187e4971297f130af37a87e",
+      "size": 30983
+    },
+    "100/narrow-contacts.png": {
+      "sha256": "35fe7d55d0147d859abd4491b9112b109d0b5d4af4469e83dab485be23d6a8fc",
+      "size": 26414
+    },
+    "100/narrow-conversation.png": {
+      "sha256": "c72644176a0634f19fff0883c43c6614aa9a57723e37ee7340f067b4d3285581",
+      "size": 42263
+    },
+    "100/onboarding.png": {
+      "sha256": "95845ea2f3c03f8326b35f1314b823fe18eb6a833a1f1d79d7faca7ea5b0c9fd",
+      "size": 31288
+    },
+    "100/wide-conversation.png": {
+      "sha256": "805c37b1fa340c55f783fa373398dfec0c232915bf8fc8d383c8e8bd937411f0",
+      "size": 66236
+    },
+    "150/emoji-chooser.png": {
+      "sha256": "f72b43a0cd5ce217adc541e857efb2cacbd790f8950f8a984f9260f3b01edc75",
+      "size": 146081
+    },
+    "150/empty.png": {
+      "sha256": "ee56aa126816eb572a63247983e111e391e6bd58edd9eb2f50564ccfa6e07568",
+      "size": 40123
+    },
+    "150/narrow-contacts.png": {
+      "sha256": "f868a3fd8f65c1fabfeff91ac67e5aa9ff320baa8e71622069f64c097dccfa05",
+      "size": 35350
+    },
+    "150/narrow-conversation.png": {
+      "sha256": "bb76bea1b97ddbde542e17466d9c8114e1caed7a47f93245b9dba778f417e3cb",
+      "size": 47410
+    },
+    "150/onboarding.png": {
+      "sha256": "dd320fd71623d3b107529f64bb1014f02cb29ba495c1630a90d0acf9a0096791",
+      "size": 39678
+    },
+    "150/wide-conversation.png": {
+      "sha256": "2c7dfe421e24830f4afcef134a6bb49c33f5fbbb56ffadb0ba7c1a02835d3640",
+      "size": 80954
+    }
+  },
+  "screenshot_method": "Real GTK/Xvfb WidgetPaintable and GSK renderer, exact final bundle, mapped native popover at observed coordinates; synthetic fixture only",
+  "scaling": {
+    "100": "96 DPI GDK_SCALE=1",
+    "150": "144 DPI GDK_SCALE=1; not GNOME fractional compositor acceptance"
+  },
+  "emoji_font": {
+    "package": "fonts-noto-color-emoji",
+    "version": "2.051-1build1",
+    "fc_match": "NotoColorEmoji.ttf",
+    "deb_dependency": "Recommends",
+    "embedded_font": false
+  },
+  "ci": [
+    {
+      "id": 40300920750,
+      "name": "TCP pilot",
+      "head_sha": "b09459565e17d65247a2ca600c52ff7ad7fd0cd7",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40300920750"
+    },
+    {
+      "id": 40300920625,
+      "name": "Linux voice and encrypted messaging",
+      "head_sha": "b09459565e17d65247a2ca600c52ff7ad7fd0cd7",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40300920625"
+    },
+    {
+      "id": 40300920755,
+      "name": "AmneziaWG pilot",
+      "head_sha": "b09459565e17d65247a2ca600c52ff7ad7fd0cd7",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40300920755"
+    },
+    {
+      "id": 40300920510,
+      "name": "Linux internal candidate",
+      "head_sha": "b09459565e17d65247a2ca600c52ff7ad7fd0cd7",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40300920510"
+    },
+    {
+      "id": 40300920618,
+      "name": "Linux control preview",
+      "head_sha": "b09459565e17d65247a2ca600c52ff7ad7fd0cd7",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40300920618"
+    },
+    {
+      "id": 40300920537,
+      "name": "Client builds",
+      "head_sha": "b09459565e17d65247a2ca600c52ff7ad7fd0cd7",
+      "status": "in_progress",
+      "conclusion": null,
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40300920537"
+    },
+    {
+      "id": 40300920580,
+      "name": "phase0",
+      "head_sha": "b09459565e17d65247a2ca600c52ff7ad7fd0cd7",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40300920580"
+    },
+    {
+      "id": 40302263122,
+      "name": "TCP pilot",
+      "head_sha": "581272a92de900be62e5fe4c6ff1ec820aa8637d",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40302263122"
+    },
+    {
+      "id": 40302263023,
+      "name": "Linux control preview",
+      "head_sha": "581272a92de900be62e5fe4c6ff1ec820aa8637d",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40302263023"
+    },
+    {
+      "id": 40302263057,
+      "name": "Linux internal candidate",
+      "head_sha": "581272a92de900be62e5fe4c6ff1ec820aa8637d",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40302263057"
+    },
+    {
+      "id": 40302262940,
+      "name": "Client builds",
+      "head_sha": "581272a92de900be62e5fe4c6ff1ec820aa8637d",
+      "status": "in_progress",
+      "conclusion": null,
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40302262940"
+    },
+    {
+      "id": 40302262928,
+      "name": "phase0",
+      "head_sha": "581272a92de900be62e5fe4c6ff1ec820aa8637d",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40302262928"
+    },
+    {
+      "id": 40302263169,
+      "name": "Linux voice and encrypted messaging",
+      "head_sha": "581272a92de900be62e5fe4c6ff1ec820aa8637d",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40302263169"
+    }
+  ],
+  "fixture_followup_client_jobs": [
+    {
+      "id": 121502842024,
+      "name": "windows",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40302262940/job/121502842024"
+    },
+    {
+      "id": 121502842255,
+      "name": "linux",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40302262940/job/121502842255"
+    },
+    {
+      "id": 121502842320,
+      "name": "android",
+      "status": "in_progress",
+      "conclusion": null,
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40302262940/job/121502842320"
+    },
+    {
+      "id": 121505064614,
+      "name": "windows-compatibility",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/40302262940/job/121505064614"
+    }
+  ],
+  "shared_application_css_loaded": true
+}

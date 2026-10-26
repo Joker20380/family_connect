@@ -2,13 +2,16 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Текущий bounded task — CHAT-UX-1, IN_PROGRESS: первый desktop messenger UX checkpoint.**
+**Текущий bounded task — CHAT-UX-1, IMPLEMENTED / REVIEW REQUIRED. Validation PARTIAL.**
 Зависимость: explicit owner request, установленная Ubuntu26.04/Python3.14 .7 и штатный
 prepare-chat (owner context; installed version/IDs read-only verified).
 Gate: одно адаптивное GTK окно/ChatClient, bubbles, fixed byte-bounded composer,
 native emoji, bounded отдельные onboarding CTA; прежние RPC/форматы/privacy/ownership.
-Source/GTK/package62 PASS; synthetic visual, full desktop/full suites и exact .8
-package/AWG/TCP gates продолжаются. System43266d97… неизменен, .7 immutable.
+GTK27 PASS; full desktop1226 PASS/85 SKIP; exact .8 DEB/AppImage/AWG/TCP gates,
+integrity и12 synthetic GTK screenshots100/150% PASS. Mandatory full3282 PASS/**57 FAIL**/
+106 SKIP без suppression; phase0/Linux-control CI54 FAIL. Полный acceptance gate не закрыт.
+Source `b094595`, candidate `0bf09cee…`; test-only correction `581272a` (layout24 PASS).
+System43266d97… byte-for-byte неизменен, .7 immutable и остаётся установленным владельцу.
 [Report](releases/2026-10-26-chat-ux-1.md). Не устанавливать владельцу/не публиковать.
 **STOP после CHAT-UX-1. NEXT — review CHAT-UX-1 перед установкой UI-кандидата владельцу.**
 L04.2/full L05/TCP HTTPS diagnosis и другие queued tasks не начинать.
@@ -131,9 +134,9 @@ D02.1-R остаётся PARTIAL/NOT_RUN; D01 открыт. Дальнейшие
 
 | ID | Результат | Зависимость | Статус | Критерий завершения |
 |---|---|---|---|---|
-| CHAT-UX-1 | Первый продуктовый desktop messenger UX checkpoint | explicit owner request; installed Ubuntu26.04 .7; штатный prepare-chat | IN_PROGRESS (source checkpoint) | [Report](releases/2026-10-26-chat-ux-1.md). Одно GTK окно/ChatClient, адаптивные диалоги, bubbles, composer/4096 UTF-8 bytes, native emoji, bounded onboarding; existing backend contract. Targeted62 PASS; full/package/visual gates pending. Новый internal .8, прежний system43266d97…, .7 immutable; owner install/publication/L04.2/full L05 NOT_RUN. STOP for review. |
+| CHAT-UX-1 | Первый продуктовый desktop messenger UX checkpoint | explicit owner request; installed Ubuntu26.04 .7; штатный prepare-chat | IMPLEMENTED / REVIEW; validation PARTIAL | [Report](releases/2026-10-26-chat-ux-1.md). Одно GTK окно/ChatClient, adaptive dialogs/bubbles, fixed4096-byte composer/native emoji, bounded onboarding; backend unchanged. GTK27, desktop1226, exact package/AWG/TCP/integrity/12 screenshots PASS; mandatory full57 FAIL unsuppressed, no overall acceptance PASS. Built .8 sourceb094595/candidate0bf09cee…, system43266d97… unchanged; owner install/publication/L04.2/full L05 NOT_RUN. STOP for review. |
 | U2604-COMPAT | Отдельный Ubuntu26.04/CPython3.14 source/system/package candidate | exact lock compatibility probe; explicit owner request; frozen .5 immutable | CHECKPOINT PASS (compatibility scope; review pending) | [Report](releases/2026-10-26-linux-ubuntu2604-python314-compat.md). Exact .7 candidate c79b4feb…/system43266d97…, manifests [3,14], imports/DEB/AppImage/pkexec/READY/rollback/tamper/barriers/state PASS. Full suites executed unsuppressed: local3257/55/104; general CI not PASS, residual debt retained. No workstation/private identity/gateway/live VPN. STOP for review. |
-| LOCAL-OWNER-UPGRADE | Установка совместимого candidate на workstation владельца | отдельный review U2604-COMPAT и разрешение владельца | BLOCKED (frozen .5 Python3.12 vs host Python3.14.4) | Пока никаких host changes. После отдельного review/разрешения: backup competing user launchers, exact DEB/setup, persistent close/reopen, один AWG и один TCP connect/disconnect. Это не повтор L04.1 и не publication. |
+| LOCAL-OWNER-UPGRADE | Установка совместимого candidate на workstation владельца | отдельный review U2604-COMPAT и разрешение владельца | Исторический ABI blocker .5; установленная .7 теперь read-only verified | CHAT-UX-1 подтверждает только installed .7 manifest/dpkg и owner context prepare-chat, не воспроизводит acceptance/upgrade. Новая .8 владельцу NOT_RUN; сначала review CHAT-UX-1. Остальные installed checks не объявлены выполненными и не запускаются автоматически. |
 | D00 | Компактное состояние и последовательный план | phase22 / baseline | DONE | Новый сеанс читает STATUS + выбранный ID; история сохранена побайтно, ссылки и diff проверены; commit/push с remote SHA отражён в итоговом ответе. |
 | D01 | Зависимости Linux/desktop CI | D00 | IN_PROGRESS | Dependency gates D01.1/D01.2 отдельно от общей CI-приёмки; закрытие требует полного PASS обязательных suites после устранения остаточных blockers, без скрытия тестов. |
 | D01.1 | Client builds/linux, AmneziaWG pilot, TCP pilot | D00 | PARTIAL | Dependency gates `26f71d6` приняты review; реальные Python3.12 imports/адресные CI PASS. Полный desktop FAIL: RNS capsule, AWG Auto lifecycle assertion; PARTIAL сохранён. |

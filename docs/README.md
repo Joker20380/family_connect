@@ -6,15 +6,18 @@ continuation. Phase22 is the product baseline; D03–D05 source checkpoints are 
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
 [CHAT-UX-1](releases/2026-10-26-chat-ux-1.md) is the bounded desktop messenger UX
 checkpoint: separate adaptive window, bubbles, fixed composer and native emoji,
-unchanged backend/system build. Internal .8 only; no owner install/publication.
+unchanged backend/system build. Internal .8 built; exact hashes and12 synthetic
+screenshots in the report. GTK27/full desktop1226/package gates PASS, mandatory full
+suite57 FAIL unsuppressed: validation PARTIAL, review required. No owner install/publication.
 Owner-installed .7 is now read-only verified; older pre-install observations below
 are historical, not a current ABI blocker or an installation instruction.
 [Ubuntu26.04/Python3.14 compatibility](releases/2026-10-26-linux-ubuntu2604-python314-compat.md)
 is CHECKPOINT PASS in compatibility scope: exact-lock probe and separate exact internal
 .7 user/system/package gates PASS. Full suites remain FAIL, unsuppressed technical debt.
-LOCAL-OWNER-UPGRADE remains blocked on the frozen .5 ABI and pending .7 review;
-workstation untouched.
-Frozen .5 below remains immutable. NEXT is review U2604-COMPAT, not publication or upgrade.
+At that compatibility checkpoint LOCAL-OWNER-UPGRADE was blocked on the frozen .5
+ABI and pending .7 review; its workstation observation is historical. CHAT-UX-1 now
+read-only verifies installed .7 without repeating installed acceptance.
+Frozen .5 below remains immutable. Current NEXT is CHAT-UX-1 review, not publication or upgrade.
 
 [L04.1 final installed receipt](releases/2026-10-25-linux-installed-awg-tcp-l04-1-final.md)
 closes LIVE-2 and L04.1 as DONE/review accepted in installed Linux AWG/TCP scope:

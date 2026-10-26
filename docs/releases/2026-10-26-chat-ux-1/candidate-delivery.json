@@ -1,0 +1,50 @@
+{
+  "acceptance": "NOT_RUN",
+  "artifacts": {
+    "FamilyConnect-0.2.12~l03.2.8-x86_64.AppImage": {
+      "sha256": "5b90e367eb1b24d8edebef9dd306d7f519f8c796403bb9875b9c96e197488daf",
+      "size": 57932280
+    },
+    "FamilyConnect-Linux-0.2.12~l03.2.8.tar.gz": {
+      "sha256": "5bd8666a0780fae1c355a284383cefa9a0494f7ca3810ab495ac0bbe32e1a120",
+      "size": 114530
+    },
+    "FamilyConnect_0.2.12~l03.2.8_amd64.deb": {
+      "sha256": "0b67e820a8c762cef419bed3182822d189ed4ff1a63f5a4b3910ad070bf7c7b6",
+      "size": 55971078
+    }
+  },
+  "authorization_protocol": 2,
+  "build_id": "0bf09cee08e27014f27e96abbd219ce3e31a1cf8eb1f8e906434d807f0577a87",
+  "compatibility": {
+    "distribution": "ubuntu",
+    "interpreter": "/usr/bin/python3",
+    "python": [
+      3,
+      14
+    ],
+    "version": "26.04"
+  },
+  "installed": false,
+  "internal_version": "0.2.12~l03.2.8",
+  "published": false,
+  "python": [
+    3,
+    14
+  ],
+  "runtime_contract": 2,
+  "schema": 1,
+  "signing": "unsigned-internal-candidate",
+  "source_commit": "b09459565e17d65247a2ca600c52ff7ad7fd0cd7",
+  "source_dirty": false,
+  "source_version": "0.2.11",
+  "system": {
+    "build_id": "43266d97c6a9f8d4e7026727cbb4b5cb6aeea49db799f93bd798b67a8135198c",
+    "installer_sha256": "ce9acb1f363b0fafffb11c44097901a7871c28fbf0e6b9c2c5c3eaba9ef7bfb5",
+    "sha256": "402affe5628da4ecd1df3e274f3c67848d5e59023a63374765c91419490b9a55",
+    "size": 49252181,
+    "source_digest": "cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61"
+  },
+  "system_kind": "standard-source-rebuild",
+  "system_source_commit": "053c4e5f9532ca927f49a78f9c0ed17903375baf"
+}

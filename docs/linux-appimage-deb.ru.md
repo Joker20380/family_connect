@@ -1,5 +1,16 @@
 # Linux: AppImage и DEB вместо tar.gz preview
 
+## CHAT-UX-1 — review UI candidate,26.10
+
+Собран **0.2.12~l03.2.8** для Ubuntu26.04/Python3.14, sourceb094595/candidate0bf09cee…,
+с прежним system43266d97…: [exact hashes, manifest, проверки и screenshots](releases/2026-10-26-chat-ux-1.md).
+Это отдельное окно мессенджера, не изменение VPN/transport/backend. Exact DEB/AppImage,
+AWG/TCP prestart и integrity PASS; full suites FAIL без suppression, общего PASS нет.
+DEB добавляет только Recommends на distro `fonts-noto-color-emoji`; AppImage не встраивает
+произвольный шрифт. Старые .7 artifacts immutable, владелец остаётся на установленной .7.
+Новая .8 не установлена владельцу, не подписана и не опубликована; публичные ссылки прежние.
+**STOP. NEXT — review CHAT-UX-1 до установки.** Старые NEXT/ABI-blockers ниже исторические.
+
 ## L03.2 — внутренний полный candidate,25.10
 
 **Ubuntu26.04/CPython3.14 — отдельный U2604-COMPAT checkpoint, не host upgrade.**

@@ -1,5 +1,17 @@
 # Client installation
 
+## CHAT-UX-1 — internal UI checkpoint,26 October
+
+Ubuntu26.04/Python3.14 candidate **0.2.12~l03.2.8** is built for review only:
+[report, screenshots and exact hashes](releases/2026-10-26-chat-ux-1.md).
+Chats opens a separate adaptive window; Enter sends, Shift+Enter adds a newline,
+and the emoji button opens the system chooser. Back returns to dialogs on narrow windows.
+Onboarding keeps activation, system setup and messaging preparation explicit and separate.
+DEB recommends distro `fonts-noto-color-emoji`; no hidden font download is added.
+The owner workstation stays on **0.2.12~l03.2.7**; no new UI installation/publication.
+Full suites still fail without suppression. STOP for review before any installation.
+Public downloads and signed catalogs are unchanged. Development sections below are historical.
+
 ## Desktop parity106 — development only
 
 Native worker binaries now exist for both amd64 platforms; they are internal

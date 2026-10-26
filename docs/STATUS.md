@@ -1,20 +1,23 @@
 # Текущее состояние / Current state
 
-**CHAT-UX-1 — IN_PROGRESS, единственный bounded task: desktop messenger UX.**
+**CHAT-UX-1 — IMPLEMENTED / REVIEW REQUIRED; validation PARTIAL, не acceptance PASS.**
 Owner workstation read-only: установлен exact **0.2.12~l03.2.7**, candidate
 `c79b4feb51f3755ce458367d057abcb5fdd87bd975fe6059fa8fe06d88617c45`;
 system `43266d97c6a9f8d4e7026727cbb4b5cb6aeea49db799f93bd798b67a8135198c`.
 Prepare-chat выполнен ранее владельцем; текущая задача не запускает host setup.
 Отдельное окно, адаптивные диалоги/bubbles, fixed composer/native emoji и bounded
 onboarding реализованы через прежние RPC; wire/store/identity/ownership не меняются.
-Адресные GTK/package62 PASS; encrypted mixed Cyrillic/emoji history и старые
-notification/announcement сценарии PASS. Voice gesture geometry regression исправлена,
-real pointer/keyboard/codec check100% PASS. Полные suites, новые artifacts и финальная
-visual evidence ещё проверяются; это **source checkpoint, не release/acceptance PASS**.
-Reserved internal **0.2.12~l03.2.8**, прежний system build сохраняется; .7 immutable.
+GTK27 PASS, full desktop1226 PASS/85 SKIP; encrypted mixed Cyrillic/emoji history,
+voice/notification/announcement, final DEB/AppImage/AWG/TCP package gates и integrity PASS.
+12 real GTK synthetic screenshots100/150% сохранены. Mandatory full3282 PASS/**57 FAIL**/
+106 SKIP без suppression (старые55 IDs +2 readiness configuration observations);
+phase0/Linux-control CI54 FAIL, общий PASS не заявляется. Остаточные gates — в отчёте.
+Собран internal **0.2.12~l03.2.8**, source `b094595`, candidate `0bf09cee…`;
+прежний system43266d97… byte-for-byte, .7 immutable. Test-only layout import correction
+`581272a` не меняет bundled UI; все24 layout cases PASS с unset PYTHONPATH и Linux client CI PASS.
 [CHAT-UX-1 report](releases/2026-10-26-chat-ux-1.md).
 Owner installation/publication/L04.2/full L05/TCP HTTPS diagnosis **NOT_RUN**.
-**После этого bounded task STOP. NEXT — review CHAT-UX-1 перед установкой владельцу.**
+**STOP. NEXT — review CHAT-UX-1 перед установкой владельцу; open gates не обходить.**
 
 ### Предыдущий compatibility checkpoint — историческая граница
 
