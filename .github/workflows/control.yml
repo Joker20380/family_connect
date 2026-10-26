@@ -38,7 +38,34 @@ jobs:
       - name: Provision source-pinned release fixtures
         run: '"$FC_TEST_PYTHON" scripts/ci_release_fixtures.py prepare --output "$RUNNER_TEMP/fc-release-fixtures" --go "$(command -v go)"'
       - name: Protocol, crash recovery, arbiter and packaging regression
-        run: '"$FC_TEST_PYTHON" scripts/ci_release_fixtures.py run --fixtures "$RUNNER_TEMP/fc-release-fixtures" --go "$(command -v go)" --nginx /usr/sbin/nginx -- "$FC_TEST_PYTHON" -m pytest -q'
+        id: full_pytest
+        shell: bash
+        run: |
+          set -o pipefail
+          "$FC_TEST_PYTHON" scripts/ci_release_fixtures.py run --fixtures "$RUNNER_TEMP/fc-release-fixtures" --go "$(command -v go)" --nginx /usr/sbin/nginx -- "$FC_TEST_PYTHON" -m pytest -q 2>&1 | tee "$RUNNER_TEMP/full-pytest.log"
+      - name: Record sanitized full-suite failure IDs
+        if: always()
+        env:
+          FC_PYTEST_OUTCOME: ${{ steps.full_pytest.outcome }}
+        run: |
+          python - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          log = Path(os.environ['RUNNER_TEMP']) / 'full-pytest.log'
+          text = log.read_text() if log.is_file() else ''
+          summary = re.findall(r'(?m)^\d+ (?:failed|passed)[^\n]* in [0-9.]+s[^\n]*$', text)
+          result = dict(source_commit=os.environ['GITHUB_SHA'], outcome=os.environ['FC_PYTEST_OUTCOME'],
+                        completed=bool(summary), summary=summary[-1] if summary else None,
+                        failure_ids=sorted(set(re.findall(r'(?m)^FAILED (\S+)', text))),
+                        error_ids=sorted(set(re.findall(r'(?m)^ERROR (\S+)', text))))
+          (Path(os.environ['RUNNER_TEMP']) / 'full-pytest-receipt.json').write_text(json.dumps(result, indent=2) + '\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: control-full-pytest
+          path: ${{ runner.temp }}/full-pytest-receipt.json
+          if-no-files-found: error
       - name: System GTK dependencies
         run: sudo apt-get update && sudo apt-get install -y python3-gi python3-gi-cairo python3-venv gir1.2-gtk-4.0 gir1.2-adw-1 libqrencode4 libzbar0 python3-cryptography xvfb dbus-x11
       - name: Render and interaction regression

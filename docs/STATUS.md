@@ -7,8 +7,11 @@ stop timeout + два terminate; admission red9 FAIL отдельно доказ
 без drain ACK. NativeCleanup разделяет containment и strict drain proof;
 ServiceOwner сохраняет gate без живых process/fds, PacketSession — R1 retry fence.
 Focused237 PASS/2 SKIP; final cleanup32 PASS; exact lifetime15 PASS;
-desktop1306 PASS/82 SKIP, combined root→UID3 PASS. Full repository/CI
-и exact residual-ID comparison ещё pending.
+desktop1306 PASS/82 SKIP, combined root→UID3 PASS. Source169aa68 pushed/verified.
+Local full36 FAIL/3387 PASS/99 SKIP: exact historical36 IDs; Docker CI54 IDs
+exact R1 baseline, новых failure/error IDs нет. Native/AWG/TCP/voice CI PASS.
+Client Linux и control/phase0 exact receipts pending; добавляется только
+sanitized ID receipt без изменения full command/nonzero exit. Общего CI PASS нет.
 Review допускает только unchanged historical set, не объявляет overall CI PASS.
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
 Новый .10/system NOT_BUILT, package/live NOT_RUN до source gate. .9/state immutable;

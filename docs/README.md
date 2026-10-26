@@ -4,7 +4,7 @@ Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN
 STATUS/PLAN define the current bounded task and next review gate, not an automatic
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
-[L04.2-R2 source checkpoint](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md)
+[L04.2-R2 source / exact residual-ID checkpoint](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md)
 continues the same PLAN L04.2. R1 preservation remains; containment and authenticated
 drain acknowledgement are distinct. Exact lifetime old2 FAIL/13 PASS →15 PASS;
 desktop1306 PASS/82 SKIP. Remaining full/CI/residual-ID gate IN_PROGRESS;

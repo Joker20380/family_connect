@@ -78,9 +78,29 @@ artifact skips). Final added case also refuses forced exit after a valid reply.
 Final R1/R2 cleanup selection: **32 PASS / 0 FAIL**, including that case.
 Exact authenticated lifetime/terminal/status: **15 PASS / 0 FAIL**. Full desktop
 with privileged disposable kernel and real GTK/Xvfb: **1306 PASS / 82 SKIP**.
-Final combined/manual/Auto root→UID: **3 PASS / 78.90s**. Full-repository/CI and
-exact residual-ID comparisons remain pending.
-No source/package acceptance is claimed before those results and failure-ID checks.
+Final combined/manual/Auto root→UID: **3 PASS / 78.90s**.
+Runtime source commit `169aa687f497f8be690be5331879f994636135e1` is pushed and
+remote main verified. Full local repository: **36 FAIL / 3387 PASS / 99 SKIP**,
+7 passing subtests; all36 failure IDs exactly match CHAT-UX-2 and R1, zero new
+failure/error IDs. No suppression, deselection or new xfail is used.
+
+Automatic source CI: native bridge (including exact15/combined), AWG, TCP and
+voice source jobs PASS. phase0 Docker: **54 FAIL / 3240 PASS / 228 SKIP**,
+7 passing subtests; its54 IDs exactly match the retained R1 Docker artifact,
+zero new failure/error IDs. CI is not generally green. Client Linux is pending.
+Control/phase0 full-suite jobs fail; their exact-ID comparison is pending, not
+inferred from counts or truncated logs. Narrow workflow evidence changes retain
+the full pytest command and nonzero pipeline exit, and upload only source SHA,
+outcome, completion, summary and sorted failure/error IDs as JSON. Both receipt
+generators validate against the local36-ID log and an incomplete-log case;
+pipefail preserves a synthetic nonzero exit17. Raw logs are not uploaded by this
+new receipt step. No source/package acceptance is claimed before all required
+source results and failure-ID checks.
+
+The automatic internal-candidate preview rejects changed system source hashes
+against the historical pinned candidate contract before sealing. It is not a
+.10 build or acceptance; reference/inventory updates belong to the gated new
+system/package phase, not a bypass of historical .9 integrity checks.
 
 Fixture-only corrections are retained, not hidden: initial test import order and
 unsafe temporary root-ownership fixture were corrected before the retained red

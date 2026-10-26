@@ -9,7 +9,10 @@
 ошибочно освобождается по containment без drain ACK. Новый внутренний proof
 разделяет эти контракты, PacketSession first_reason/all-stage/retry сохранены.
 Exact old2 FAIL/13 PASS →15 PASS; admission old red9 FAIL; final cleanup32 PASS,
-desktop1306/82skip, combined3 PASS. Full/CI/residual-ID gates pending.
+desktop1306/82skip, combined3 PASS. Source169aa68 pushed/verified.
+Full local36 IDs и Docker CI54 IDs совпадают с baseline; zero new failure/error.
+Native/AWG/TCP/voice CI PASS; Client Linux/control/phase0 receipts pending.
+CI receipts сохраняют полный pytest/nonzero exit; overall CI не зелёный.
 Source gate: R1/R2, exact15 native, combined root→UID, desktop, AWG/TCP/Client Linux/
 voice; local/control/phase0/Docker без новых failure/error IDs и suppression.
 Exact historical baseline допустим по review, не означает overall PASS.
