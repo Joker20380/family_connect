@@ -78,10 +78,34 @@ permit archive is created even by those packaging fixtures.
 The console image/schema/configuration was not rebuilt/restarted/migrated in this
 source checkpoint. No historical full suite, CP2 source/package gate, Linux or Windows
 gate repeated. Prior production counts0/0 remain accepted input, not a fresh live read.
-Source commit/push and exact committed lookup-only package receipt follow this gate;
-prior lookup artifact c25447d9… stays immutable historical evidence.
+Source commit `49bdd794cce32075d93691daa0b9f9cc7f7dffcf`
+(`feat: add terminal emergency recovery for owner canary`) pushed to main; remote
+SHA verified before packaging. Prior lookup artifact c25447d9… stays immutable
+historical evidence and was independently verified unchanged.
 Pre-existing123 added lines in unrelated working-tree edits and untracked work are
 preserved outside this source commit; private validation evidence remains ignored.
+
+### Deterministic emergency-capable lookup artifact
+
+| Field | Exact result |
+|---|---|
+| Source commit | `49bdd794cce32075d93691daa0b9f9cc7f7dffcf` |
+| Binding | `lookup_only` (envelope null) |
+| Members |15 |
+| Size |56021 bytes |
+| SHA256 | `c5f2346cd4d46a6bf3875e2181e81027c7db43f62b886161756230b6499adc31` |
+| Independent builds |2; byte-identical PASS |
+| Strict manifest / exact inventory / member hashes |PASS |
+| Members match exact committed source |PASS |
+| Existing backend/identity modules match accepted28657bf source |PASS |
+| Python syntax / private-selector scan / local import-help smoke |PASS |
+| Production registry opened / bound permit archive / live operation |NOT_RUN / NOT_BUILT / NOT_RUN |
+
+Both newly named local artifacts are retained read-only in private ignored evidence;
+no historical archive was replaced. Only sanitized package metadata is committed.
+This artifact includes the recovery source but cannot perform a bound operation:
+lookup_only does not carry a device binding or operation permit. Smoke used --help,
+not lookup/status/apply, and did not open any registry. No automatic next-stage run.
 
 **STOP. NEXT — production lookup, binding and coordinated owner-phone live procedure.**
 Do not start that next stage automatically; this checkpoint grants no live execution.
