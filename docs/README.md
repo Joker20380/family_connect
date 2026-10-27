@@ -9,19 +9,19 @@ continues the same PLAN L04.2. Runtime169aa68 is review accepted; exact .10
 candidate42644067…/sourceb8e9196/system8ab7f298… unchanged, no rebuild or new ID.
 Phase B DONE/review accepted, not repeated wholly or partly; all accepted
 source/package selections and historical residual baseline retained, no overall CI PASS.
-Current PARTIAL, input370f141: read-only previous-derivative polkit provenance
-PASS (127-2ubuntu1.1, four exact Ubuntu binaries, f93c746 fix present), no OS update.
-Fresh encrypted Phase C derivative; exact .10 entry PASS. One SSH -tt setup with
-pre-registered exact-process pkttyagent, one prompt, exit0; matching system READY
-by independent readback, no setup replay after a stdout-receipt parser miss.
-One GUI P0 Connect stops at authorization ready-handshake: AuthorizationError /
-EOFError, child exit127, desktop OPERATION_FAILED, packet attempt0. No more
-specific product/gateway cause established. No retry/fix; P1/Auto/active lifecycle/
-live AppImage NOT_RUN. Owner/TUN0,pending=null,journal ABSENT baseline; routes/rules/
-DNS/firewall preserved, address-digest delta supplementary/unlocalized. Identity,
-settings, keyring, chat identity and empty message history preserved; local
-service-events/announce cache updates only. Original7/base/previous derivative
-unchanged; VM gracefully removed, private teardown ledger updated without revoke.
+Current PARTIAL, input91d5184: fresh encrypted retained READY derivative; install/
+setup0, helper/polkit hashes PASS. Genuine active logind/PTY and pre-registered
+exact GUI PID/start-time agent, no handoff. One P0 Connect reaches supervisor/
+strict ready:2 path. Readiness EXPIRED_ON_IMPORT, first failure attempt1/50801ms;
+reason preserved through internal retries, attempt12 before one Disconnect.
+Max owner1/TUN0, packet worker starts0; no applied P0 or packet/gateway defect claim.
+SSH interruption recovered through private serial console. Second password prompt
+on Disconnect not answered; PTY wrapper aborts. Final owner/TUN0,unit inactive/exit0,
+pending=null,generation4,journal ABSENT; full same-run firewall/network baseline
+not captured, no full cleanup/lifecycle PASS. P1/Auto/lifecycle/AppImage NOT_RUN.
+Identity/settings/keyring/sealed chat identity/meta/message rows0 preserved;
+local service-events/announce cache updates only. Original7/READY base/artifacts
+unchanged; VM gracefully removed, private ledger updated without revoke.
 STOP. NEXT — final review L04.2-R2. The accepted
 [core P0 failure](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
 is not replayed on .9. Historical reports and .9/system bytes remain immutable.

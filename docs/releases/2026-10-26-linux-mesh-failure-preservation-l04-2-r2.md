@@ -1,6 +1,160 @@
 # L04.2-R2 — process containment versus authenticated drain
 
-## Phase C polkit provenance and exact-process agent — current checkpoint
+## Phase C GUI-bound authorization continuation — current checkpoint
+
+Input main `91d518496bd76598e48f6dcccaeae90e50834137`,27.10. Same L04.2-R2,
+Phase C only. Phase B remains **DONE / review accepted**, not repeated, wholly
+or partly. No new task/R3/version/candidate/system build/runtime checkpoint.
+Runtime169aa68 and exact immutable .10 delivery below are unchanged; no overall
+CI PASS, publication or signing is claimed.
+
+**Result: L04.2-R2 PARTIAL / readiness BLOCKED — EXPIRED_ON_IMPORT.** The new
+GUI-bound agent permits authorization to reach the supervisor. One user P0
+Connect reaches readiness, not an applied packet session. First failure is
+`EXPIRED_ON_IMPORT`, attempt1, elapsed50801ms; it remains `first_reason` through
+product-owned retries. No second Connect. One cleanup Disconnect is invoked.
+P1, Auto, active GUI lifecycle, DNS/HTTPS through VPN and live AppImage sharing
+are **NOT_RUN**. This is not evidence of a packet-worker defect or gateway outage.
+There is also a cleanup-harness limitation: a second password prompt on Disconnect
+is not answered; the single-input PTY wrapper aborts. Full cleanup/lifecycle
+acceptance is therefore **not** claimed despite the final zero-resource readback.
+**STOP. NEXT — final review L04.2-R2.**
+
+### Immutable READY derivative and helper preflight
+
+The retained encrypted READY base is mode0400,2242707456 bytes, full SHA256
+`47095296a9b4352450c2c5b79a875ea76a5064f1e142bc84e781147b6ce5ac68` before
+and after. A fresh encrypted writable copy of that exact base is booted, not
+the previous failed P0 derivative. Separate KVM kernel/network/system bus/user
+session; no host home, bus, resolver or network namespace is mounted.
+DEB installation, system setup and setup pkexec calls in this continuation: **0**.
+Candidate-status is exact42644067… / system READY before GUI and after cleanup.
+Initial VPN owner0/TUN0, coordination generation2/pending=null.
+
+Exact artifacts are rechecked read-only, never rebuilt:
+
+| Artifact | Bytes | SHA256 |
+|---|---:|---|
+| .10 DEB | 56146990 | `e1b9cb323c1bb6bc51ef06c08e0be91639cd25eabca3fe8b6b425657298d717c` |
+| .10 AppImage | 58120696 | `56a4a76db1e3571e90aeba374042f1f02a662fe3ef70333e0c5554fd7cbab6e3` |
+| matching system archive | 49251070 | `bea874702228b153a4ed6a5c5ecfebc3f47e5c46b64f4e5e8c7b22b91181448f` |
+
+Candidate42644067…/sourceb8e9196, system8ab7f298…/source169aa68 stay unchanged.
+Installed verified `backend.py` supplies `_SESSION_HELPERS`; its actual
+`LinuxMesh._mesh_setup` call selects `mesh`. Resolved helper is
+`/usr/local/lib/family-connect-mesh/helper`, SHA256
+`030f0d5b25bf12b0a01a78527a59703bdbfe0f9b584aea8508cf85ca1d828e1d`, matching
+installed system manifest8ab7f298…. Regular/nlink1/root:root/executable and safe
+parent-directory checks PASS; no group/world write permissions. Its session
+dispatch and the generated empty0644 `authorization-session-v2` marker PASS.
+The marker is installer-generated, not a manifest payload member: the initial
+read-only audit's lookup assumption is corrected in a separate completed script,
+not treated as a missing product member. No helper is launched as a probe.
+Installed pkexec/pkttyagent hashes match the accepted127-2ubuntu1.1 receipt below.
+
+### Exact GUI subject and authorization result
+
+Private scripts are completed, syntax checked, hashed and made0555 before use;
+none is edited while running. Ordinary tester uid1000 has a genuine SSH `-tt`
+logind session: User1000,Active=yes,State=active,Type=tty,Class=user. System bus,
+PolicyKit1, polkit service, user bus and read/write `/dev/tty` PASS. No existing
+GUI/application instance or pkttyagent; no graphical authentication agent is
+started. The test display is private Xvfb/openbox; no installed-app CI renderer
+or accessibility overrides are set.
+
+The parent forks a child blocked on a private pipe, reads its PID/start-time,
+registers `pkttyagent --process PID,START_TIME --notify-fd FD` without fallback,
+waits for notify-fd EOF and verifies the live agent. Only then does it release
+the child to exec canonical `/usr/bin/family-connect`. PID/start-time remain
+unchanged. AT-SPI and visible-window enumeration find one main GUI in that same
+process, no handoff. UI shows manual MESH and P0, negotiated profile absent,
+VPN off. AT-SPI invokes the real visible Connect control exactly once; no backend
+Connect call or privileged helper is invoked by the fixture.
+
+| Sanitized event (UTC) | Observation |
+|---|---|
+| 07:22:48.651 | Agent registration complete/live; subject PID1956/start26762, agent PID1957 |
+| 07:22:48.792 | Canonical GUI exec retains exact subject |
+| 07:27:38.029 | Single GUI Connect; agent live |
+| 07:27:39.968 | Authorization child PID3266 observed |
+| 07:27:40.205 | pkexec journal confirms execution of exact MESH helper |
+| 07:27:41.197 | Supervisor CONNECTING/attempt1/readiness PREPARING; generation3 |
+| 07:28:31.963 | First observed readiness failure EXPIRED_ON_IMPORT/attempt1/elapsed50801ms |
+| 07:32:39.388 | One owned-session Disconnect, supervisor attempt12; original agent still live |
+| 07:35:01.370 | Owner0/TUN0,pending=null,generation4; system unit inactive/MainPID0/exit0 |
+
+One ordinary PTY password is submitted once. `ready:2` is **proved by the strict
+installed call path reaching the supervisor**, not by recording private pipe
+traffic. The authorization child's numerical exit status was not captured;
+it is not reported as exit0 by inference. The previous exit127 cause remains
+unlocalized; this run supports the missing GUI-agent interpretation without
+retrospectively proving it. No sudo, direct root/helper call, pkexec wrapper,
+custom polkit rule, passwordless authorization or second agent is used.
+
+### Readiness stop and cleanup evidence limits
+
+The guarded MESH operation interrupts SSH management connectivity. Guest-local
+sanitized observation continues; a private QEMU serial console is attached to
+recover observation and invoke cleanup as the ordinary tester. Two console
+receipt parsers initially stop on partial serial frames; complete-line framing
+then recovers the already-recorded result. These are read-only fixture failures,
+not repeated product actions. No manual fetch, replay, provisioning, policy or
+certificate/cache-file edit is performed. No successful issuance/readback/ACK is
+asserted for this run.
+
+Observed primary reason stays `EXPIRED_ON_IMPORT`; readiness stage is FAILED.
+The installed supervisor performs its own backoff retries while SSH observation
+is unavailable: attempt10 is the last durable periodic sample, attempt12 is read
+immediately before the single Disconnect. There is only one user Connect.
+Maximum observed privileged VPN owner count1; TUN count0 throughout. No applied
+or effective P0, no CONNECTED state and no packet worker start are established.
+The typed readiness failure is before `PacketSession` creates its packet worker.
+
+- `first_reason`: EXPIRED_ON_IMPORT, preserved across observed retries.
+- `cleanup_reason`: no cleanup-failure event observed; no fabricated wire field.
+- Packet worker `process_contained` / `drain_acknowledged`: not applicable because
+  that worker is not created. Materials-worker cleanup is not directly instrumented.
+- Network detach success for observed retry cycles follows the accepted strict
+  close/retry path; final system unit is inactive/exit0. This is not a new full
+  R1/R2 cleanup-test PASS or direct measurement of every internal cleanup result.
+
+At Disconnect the existing agent presents another password prompt. The harness
+enforces one password submission and aborts instead of answering it, closing
+the PTY. GUI and agent subsequently disappear; a normal GUI-close/agent-wait
+receipt is **not** obtained. No replacement agent or second Disconnect is started.
+Independent readback confirms all four normal owner markers absent, TUN0,
+no running Family Connect system units, raw pending=null,
+generation4, and journal ABSENT matching the READY baseline. SSH access recovers.
+Routes/rules/DNS are recorded after cleanup; a same-run complete firewall/network
+baseline was not captured, so full network-baseline restoration is not claimed.
+The separate pre-shutdown process-name probe used `fc-mesh-native` instead of
+the installed `fc-mesh`; its negative result is excluded, not proof of native
+process absence. The later complete VM shutdown contains any remaining guest
+processes but does not replace a successful installed cleanup gate.
+No manual IPv6 metadata correction is made.
+
+### Preservation and closeout
+
+Friends identity/activation/cache/floors, settings and keyring file hashes are
+unchanged. Only eight chat announce-cache files and the store file change.
+Read-only offline comparison of READY base and stopped derivative, using private
+tmpfs without target mount/journal replay or decryption of chat records, confirms
+SQLite quick_check PASS, sealed identity and format metadata byte-identical,
+message rows0→0; the only changed store record is local `service-events`.
+Original protected seven files, READY base, historical .9 and exact .10 artifacts
+remain byte-identical. The private teardown receipt accounts for the attempted
+readiness flow; issuance is not independently attested, no revoke/teardown occurs.
+
+The disposable VM is shut down through graceful ACPI, QEMU exits0, its container
+is removed and encrypted derivative retained0400. Owner workstation **NOT_USED**.
+No chat delivery/route diagnosis, messages or voice acceptance. Existing
+delivery_unavailable remains L05 backlog. L04.1 DONE; parent L04 IN_PROGRESS;
+L05 NOT_RUN; L06/L07/L08 unchanged. P1/Auto/active lifecycle/AppImage sharing remain
+NOT_RUN under the first-failure stop policy. Documentation-only closeout checks
+cover strict JSON, local links, secrets, staged scope and whitespace; no Phase B
+or source suite is replayed.
+
+## Phase C polkit provenance and exact-process agent — previous checkpoint
 
 Input main `370f1412ca35d77ab23bd575592ab1fd904e52c3`,27.10. Same L04.2-R2,
 Phase C only. **Phase B DONE / review accepted, not repeated wholly or partly.**

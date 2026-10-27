@@ -1,31 +1,29 @@
 # Текущее состояние / Current state
 
-**L04.2 — R2 PARTIAL / Phase B DONE (review accepted); Phase C pre-packet authorization BLOCKED.**
-Input main370f141; same L04.2, no new ID/version/source checkpoint/build.
-Runtime169aa68, reference70f33f6 и immutable .10 candidate42644067…/sourceb8e9196/
-system8ab7f298… unchanged. Phase B целиком и частично НЕ ПОВТОРЯЛСЯ: rollback,
-AWG reviewed assertions/TCP/cleanup32/package46/native15/combined3/MESH157/
-desktop1306+82 и exact historical failure baseline сохранены; общего CI PASS нет.
-Read-only offline forensic предыдущей derivative: polkit127-2ubuntu1.1,
-все4 binaries совпадают с dpkg/Ubuntu; exact source содержит f93c746 fix.
-Прежний cookie error не доказывает отсутствие fix. Target не загружался/не менялся;
-polkit upgrade/rules/groups/password changes0. Protected base/original7 неизменны.
-Fresh encrypted Phase C derivative: .10 entry PASS. SSH -tt /dev/tty и exact-process
-pkttyagent PID+start-time/notify-fd registration PASS. Один setup/один prompt,
-exit0/11.76s; agent reaped. Stdout-receipt parser error reconciled read-only:
-exact installed system READY, owner/TUN0; setup НЕ повторялся.
-Один GUI manual P0 Connect: AuthorizationError/EOFError при ready-handshake,
-authorization child exit127/reaped/streams closed. Desktop incident OPERATION_FAILED;
-packet attempt0, native first/cleanup reasons NOT_REACHED, owner/TUN0.
-Причина refusal versus helper startup не локализована; product/gateway defect
-не заявляется. No retry/source fix; P1/Auto/active lifecycle/live AppImage NOT_RUN.
-GUI/chat остановлены, VM gracefully removed; encrypted READY base/derivative0400.
-Pending raw null, coordination generation3, journal ABSENT baseline. Routes/rules/
-DNS/firewall unchanged; address-digest delta supplementary/unlocalized, no IPv6 edit.
-Identity/cache/floors/settings/keyring preserved. Chat sealed identity unchanged,
-SQLite quick_check PASS, message rows0→0; only local service-events record and
-announce-cache updates. Original7/base/previous derivative byte-identical;
-private teardown ledger updated, no revoke. Owner workstation NOT_USED.
+**L04.2 — R2 PARTIAL / Phase B DONE (review accepted); Phase C readiness BLOCKED.**
+Input main91d5184; same L04.2, no new ID/version/source checkpoint/build.
+Runtime169aa68 and immutable .10 candidate42644067…/sourceb8e9196/system8ab7f298…
+unchanged. Phase B and source regressions НЕ ПОВТОРЯЛИСЬ; accepted results and
+historical residual baseline retained, no overall CI PASS. Fresh encrypted copy
+of retained READY base47095296…; installations/setup0. Installed helper/inventory
+and accepted polkit127-2ubuntu1.1 hashes PASS. Genuine active uid1000 logind/PTY,
+one pkttyagent registered for exact GUI PID/start-time before canonical exec;
+one window/no handoff. One GUI manual P0 Connect, one password submission.
+Authorization reaches supervisor (strict ready:2 path); child exit code not
+captured. First reason EXPIRED_ON_IMPORT, attempt1/elapsed50801ms; preserved through
+product-owned retries, attempt12 at the sole Disconnect. Packet worker starts0,
+max VPN owner1/TUN0; no applied P0, no packet-path/gateway defect established.
+Guarded operation interrupts SSH; private serial console recovers observation
+and invokes cleanup, no Connect replay/manual fetch/source fix. Disconnect asks
+for a second password; it is not entered and single-input PTY wrapper aborts.
+Full lifecycle/cleanup acceptance NOT claimed. Independent final readback:
+owner/TUN0, unit inactive/MainPID0/exit0, pending=null,generation4,journal ABSENT.
+Same-run full firewall/network baseline not captured. GUI/agent absent; VM
+gracefully shut down/removed. P1/Auto/active lifecycle/live AppImage NOT_RUN.
+Identity/cache/floors/settings/keyring byte-identical. Sealed chat identity/meta
+preserved, SQLite quick_check PASS, message rows0→0; only service-events/announce
+cache changes. Original7/READY base/historical .9/exact .10 unchanged; private
+ledger updated, no revoke. Owner workstation NOT_USED.
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
 L04.1 DONE; parent L04 IN_PROGRESS; L05 NOT_RUN/delivery_unavailable backlog,
 L06/L07/L08 прежние QUEUED; messages/voice acceptance/signing/publication NOT_RUN.
