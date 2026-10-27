@@ -9,19 +9,19 @@ continues the same PLAN L04.2. Runtime169aa68 is review accepted; exact .10
 candidate42644067…/sourceb8e9196/system8ab7f298… unchanged, no rebuild or new ID.
 Phase B DONE/review accepted, not repeated wholly or partly; all accepted
 source/package selections and historical residual baseline retained, no overall CI PASS.
-Current PARTIAL, input91d5184: fresh encrypted retained READY derivative; install/
-setup0, helper/polkit hashes PASS. Genuine active logind/PTY and pre-registered
-exact GUI PID/start-time agent, no handoff. One P0 Connect reaches supervisor/
-strict ready:2 path. Readiness EXPIRED_ON_IMPORT, first failure attempt1/50801ms;
-reason preserved through internal retries, attempt12 before one Disconnect.
-Max owner1/TUN0, packet worker starts0; no applied P0 or packet/gateway defect claim.
-SSH interruption recovered through private serial console. Second password prompt
-on Disconnect not answered; PTY wrapper aborts. Final owner/TUN0,unit inactive/exit0,
-pending=null,generation4,journal ABSENT; full same-run firewall/network baseline
-not captured, no full cleanup/lifecycle PASS. P1/Auto/lifecycle/AppImage NOT_RUN.
-Identity/settings/keyring/sealed chat identity/meta/message rows0 preserved;
-local service-events/announce cache updates only. Original7/READY base/artifacts
-unchanged; VM gracefully removed, private ledger updated without revoke.
+Current PARTIAL / READINESS_CAUSE_UNRESOLVED, classification F, inputf417982.
+Read-only offline cache/server correlation only; no target boot or product action.
+Persisted import receipt FETCH_FAILED/ACK_PENDING differs from final supervisor
+EXPIRED_ON_IMPORT. Old response/context unchanged, only next_attempt changed;
+prior server READY row matches, original remaining lifetime13488s. No fresh
+near-expiry delivery proved. Current-window durable challenge/fetch/ACK rows0 and
+exact ingress-probe matches0 do not establish actual wire counts or exact HTTP/
+network cause. No source/material/server/clock changes and no corrected Connect.
+Phase B/setup/exact GUI authorization remain accepted; no repeats. Original7,
+READY/failed images and immutable .9/.10 preserved. Request candidate-ID suffix
+mismatch recorded; sealed delivery not replaced. Cooldown-only retry observation
+belongs to L06 review; one actual server fetch unproven. P1/Auto/lifecycle/AppImage
+NOT_RUN; no full lifecycle acceptance or overall CI PASS.
 STOP. NEXT — final review L04.2-R2. The accepted
 [core P0 failure](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
 is not replayed on .9. Historical reports and .9/system bytes remain immutable.

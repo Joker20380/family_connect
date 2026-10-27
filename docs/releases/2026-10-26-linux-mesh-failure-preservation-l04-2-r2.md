@@ -1,6 +1,194 @@
 # L04.2-R2 — process containment versus authenticated drain
 
-## Phase C GUI-bound authorization continuation — current checkpoint
+## Read-only readiness correlation — current checkpoint
+
+27.10.2026, input main `f417982c588e90da737fa888984c33573d9e72fc`.
+Same L04.2-R2; no new task/R3/version/candidate/system/runtime checkpoint.
+Phase B, system setup and exact-GUI-subject authorization remain **DONE / review
+accepted**. No package/source gates, setup, GUI, helper, fetch, registration or
+Connect/Disconnect were run in this continuation. No failed derivative was booted.
+
+**Result: PARTIAL / READINESS_CAUSE_UNRESOLVED; classification F — UNRESOLVED.**
+The retained failure receipt proves **FETCH_FAILED**, separately from the
+supervisor's **EXPIRED_ON_IMPORT**. The response in the cache was not replaced:
+it is the previously accepted26.10 response, already expired before this P0 action.
+The accepted source explains the diagnostic path: an availability-class fetch
+failure falls through to `cache.Usable`, which returns EXPIRED_ON_IMPORT for that
+old response. This is evidence for the *mechanism described in B*, but not a
+complete B classification: the exact challenge/fetch HTTP status or network
+subreason and the failed fetch prerequisite are not retained/proven. In accordance
+with F, no server/client correction, material refresh or corrected P0 is authorized
+by this observation. In particular, there is no proof of a new near-expiry server
+delivery; the conditional300-second server guard was **NOT_RUN**.
+
+### Immutable entry and read-only method
+
+- Current-main changes since candidate sourceb8e9196 are documentation only;
+  `clients/`, `carrier/`, `control/` match accepted runtime169aa68. Product/package
+  paths, reference pins, artifacts and system build were not changed.
+- The request's candidate string ends `…24c12551cedd052a5b`; it does **not** match
+  the retained sealed manifest. Actual accepted .10 remains
+  `4264406722f6dd3efb83e9d9666e67180ce4f950333bb3e711bcbb4f5068b55a`,
+  source_dirty=false. No substitution or new candidate was made. Read-only
+  correlation concerns the previous run on that sealed artifact; no live action
+  was taken using the discrepant string.
+- Exact DEB/AppImage/system sizes and SHA256 match the immutable delivery table
+  below. READY base SHA256 remains
+  `47095296a9b4352450c2c5b79a875ea76a5064f1e142bc84e781147b6ce5ac68`.
+  Failed encrypted derivative SHA256 is
+  `c5bddde7b2e75d1593017bfdfff73089a8e9baf8569225284949156f421ecde1`.
+  Both0400 images remain byte-identical before/after inspection.
+- Offline helper has `--network none`; images/backing/source are read-only binds,
+  decrypted filesystem slices are temporary memory-backed files. `debugfs` reads
+  without mounting/replaying the target filesystem. No target service executes.
+  Existing `mesh_ipc.decode` and `mesh_materials._receipt` reject malformed/duplicate
+  JSON and validate the receipt; cache/delivery field sets are checked explicitly.
+  Metadata inspection is not a new native readiness-validation acceptance gate.
+- Server queries use the exact private teardown device binding, read-only SQLite
+  URI plus `PRAGMA query_only=ON`, bounded device/time selection and in-memory
+  hashing of correlation IDs. No broad database dump, raw identity/certificate,
+  URL, key, seed, probe ID or cache contents enter this report or Git.
+
+### Cache and local timeline
+
+All times UTC. Cache `response_present=true`, `denied=false`,
+`receipt_context_present=true` before and after. Response and receipt_context are
+unchanged; the only changed cache field is `next_attempt`. The separate failure
+receipt changed. The previously accepted response's hashed correlation/fetch
+binding matches its server row and READY ACK; it is not evidence of a new fetch.
+
+| Evidence | Value |
+|---|---|
+| Response issued / original server fetch |26.10 14:46:54 /14:46:59 |
+| Response expires |26.10 18:31:47 |
+| Revision / minimum_crl |1 /27198 |
+| Directory issued / expires |26.10 14:32:01.605521380 /18:31:59.437942680 |
+| Cached certificate NotAfter / CRL nextUpdate |26.10 18:31:47 /18:31:47 |
+| Cached CRL thisUpdate / number |26.10 14:31:47 /27198 |
+| Cached issuer issued / expires |18.10 22:36:48 /16.01.2027 22:36:48 |
+| Authority NotAfter |16.01.2027 22:36:48 |
+| Cache SHA256 before |`c351df1df47f12ab771729da2cf246addf685800adec68a4e51374f68b814079` |
+| Cache SHA256 after |`c84eb855b383cb344f700aa2a32df6a77c6d7ec8fbe3d9743ce9bdc064c7f76e` |
+| Canonical response SHA256, both reads |`292c9745a1a56e3f3bab6a82a6b015fa7545bd770710d93ef14eecef1388fe42` |
+| next_attempt before / after, epoch seconds |1793028334 /1793086375 |
+| Current-run attempt timestamp inferred from next_attempt−300 |27.10 07:27:55 |
+| Durable failure receipt |result=FETCH_FAILED, phase=import, observed_at=27.10 07:28:16 |
+| Receipt ACK / expiry / revision / minimum_crl |ACK_PENDING /0 /0 /0 |
+| Supervisor first/final reason |EXPIRED_ON_IMPORT; first observed27.10 07:28:31.963, attempt1/50801ms |
+| Retained response remaining at original server fetch |13488 seconds |
+| Cache remaining at current recorded attempt start |−46568 seconds |
+| Cache remaining at failure receipt observed_at |−46589 seconds |
+
+The receipt's `expires_at=0` is a failure-receipt field, **not** the expiration
+of a freshly issued delivery. `FETCH_FAILED` is the persisted import-result
+evidence from the first transaction; later raw native reply `import_result` was
+not captured. In the unchanged resolver, cooldown-only iterations leave that
+result empty while `cache.Usable` can still return EXPIRED_ON_IMPORT. Do not equate
+the final supervisor code with an observed fresh-response `cache.Accept` failure.
+
+### Scoped server correlation and its limits
+
+Authoritative Friends service was read, not restarted/deployed. Served archive
+SHA256 remains `21d64558e542ff6ad80fb9b13799fbcb333167ffb5a79ec841e7c94dc65d71fa`;
+the served restricted/readiness-receipt source hashes were retained privately.
+For this device and27.10 **07:22:30–07:36:00**:
+
+| Durable observation | Result |
+|---|---|
+| `restricted_readiness_results` challenge rows |0 |
+| Rows with fetch_at / expires |0 |
+| Rows with ACK / ack_at |0 |
+| Exact failed-receipt challenge/fetch probe matches in ingress trace |0 |
+| Latest retained device results |Only prior26.10 results; cached response matches the earlier READY row |
+| Current device / invite |One of each; both non-revoked |
+| Explicit grant / effective policy |No explicit grant; all_activated; effective grant has no expiry |
+| Current stored certificate records for this device |0; not proof of count at failure before ordinary expiry pruning |
+
+Other ingress records in the time window are **not attributed** to this device.
+The active configuration has conditional probe logging; exact probe matches are
+absent, not an observed HTTP200/503/timeout for this action. General service
+journal query timed out20s; bounded current-journal-file query completed with no
+service rows in the failure window. Neither establishes absence from every
+archived log. ACK uses a newly generated, non-retained request-probe pair; an
+ACK_PENDING receipt and absent ACK row do not prove that no ACK request was sent.
+Relay calls also cannot be counted solely by the direct HTTP probe trace.
+
+Therefore **actual wire challenge/fetch/ACK counts and requests after the first
+failure are NOT_DETERMINED**. Zero durable successful rows is not a claim of zero
+network attempts; nor is one supervisor action proof of one server fetch.
+Exact challenge/fetch/ACK HTTP status and lower-level network reason remain
+unavailable. Fresh response reception, new response expiry, challenge→fetch and
+fetch→client-observed delays cannot be calculated for this run. No gateway outage,
+client defect, clock skew, stale proxy or local import delay is asserted.
+
+### Active source material and clocks
+
+Read-only current metadata is distinct from material availability at07:27.
+Existing served parsers verify issuer delegation and CRL signatures without
+reading the issuer private key. Family/gateway hashed references match the cache.
+
+| Current observation | Value |
+|---|---|
+| Configured delivery lifetime |14400 seconds, unchanged |
+| Issuer sequence / minimum revision |18 /1 |
+| Issuer issued / expires; authority NotAfter |18.10 22:36:48 /16.01.2027 22:36:48; same NotAfter |
+| CRL thisUpdate / nextUpdate / number |27.10 08:04:13 /12:04:13 /27205 |
+| Directory issued / expires |27.10 08:04:28.532887827 /12:04:26.326927420 |
+| Read-only server time for expiry calculation |27.10 08:19:28 |
+| Current potential expiry **ceiling**, excluding a new issuance |27.10 12:04:13, limited by CRL;13485 seconds remaining |
+| Server time service |NTP=yes, NTPSynchronized=yes; current RTC/system seconds agree |
+
+This current ceiling is not a verified new delivery or a Phase C preflight PASS.
+The retained old response was bounded by the old CRL/certificate expiry; the
+limiting component of a *new response in this failed action* is not established.
+No source material was refreshed by this continuation. In particular, no near-
+expiry response of less than300 seconds has been proven: the matched old server
+fetch had13488 seconds remaining.
+
+Guest failure wall-clock timestamps survive in the receipt and timeline. The
+powered-off derivative has no measurable live RTC/system delta; no synchronized
+flag was captured at failure. Both retained journal files were read successfully
+offline; the selected window has one chrony unit event after cleanup, not an
+offset/synchronization measurement at import. `/etc/adjtime` is absent and a
+chrony drift file exists; neither proves synchronization. This does not establish
+a numerical server-to-guest offset at import. A current server timestamp cannot
+retrospectively prove that offset.
+Consequently C and E are not proven, and no clock correction is performed.
+
+### Retry accounting, preservation and stop
+
+`next_attempt=07:32:55` is unchanged after the first transaction. At observed
+attempts2–10 its remaining cooldown is approximately261/257/249/233/203/173/143/
+113/83 seconds. At the sole Disconnect,07:32:39.388/attempt12,15.612 seconds
+remain. Accepted `ReadinessCache.Attempt(required=false)` does not fetch inside
+that window. This supports cooldown-only retries, **not eleven new fetches**.
+The requested condition of exactly one actual server fetch is unproven; do not
+upgrade `READINESS_RETRY_COOLDOWN_SPIN` to a fully correlated confirmed-debt claim.
+Keep this as an observation for existing L06 recovery review, no .10 patch/.11
+or new task ID, no public-release completion claim.
+
+Original protected seven files, READY base, failed derivative and .9/.10 delivery
+remain unchanged. No new derivative or writable target was created; no identity,
+cache, floor, settings, keyring/store edit or test message occurred. Existing
+message-count0 and safe-cleanup receipts are preserved, **not rerun or promoted**
+to full lifecycle acceptance. Server queries made no database/material/policy/
+service changes; no teardown/revoke. Owner workstation **NOT_USED**.
+
+Read-only helper dependency/parser limitations were kept distinct from product
+failures; they did not cause a target boot or repeated product action. Sanitized
+receipts remain private outside Git; only documentation is committed. Strict JSON,
+links, secret scan, staged scope and whitespace validation are recorded with this
+checkpoint:4 staged docs,417 local links,8 private JSON receipts, duplicate-key/
+non-finite rejection, secret scan and `git diff --check` PASS. Historical .9
+artifacts, exact native test files, protected seven and final .10/image hash
+readbacks are unchanged. No product tests or general CI PASS are claimed.
+
+Correction and corrected P0/P1/Auto/lifecycle/AppImage: **NOT_RUN** under F.
+L04.2-R2 remains PARTIAL, parent L04 IN_PROGRESS; L04.1 DONE, L05 NOT_RUN,
+delivery_unavailable untouched; L06/L07/L08 remain queued. Signing/publication
+NOT_RUN. **STOP. NEXT — final review L04.2-R2.**
+
+## Phase C GUI-bound authorization continuation — previous checkpoint
 
 Input main `91d518496bd76598e48f6dcccaeae90e50834137`,27.10. Same L04.2-R2,
 Phase C only. Phase B remains **DONE / review accepted**, not repeated, wholly
