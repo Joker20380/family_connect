@@ -3,7 +3,7 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-**Current substep BETA-0-CANARY-1 — CHECKPOINT / LOCAL_CONSOLE_UPGRADED / CANARY_OPERATOR SOURCE_READY / LIVE NOT_RUN.**
+**Current substep BETA-0-CANARY-1 — SOURCE_READY_WITH_EMERGENCY_RECOVERY / LIVE_NOT_RUN.**
 Dependency: CP2 accepted DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING, publisher
 capability preserved, real payment/enrollment NOT_RUN. No CP2 redeployment/restart/
 migration/source-package gates. Same ANDROID-CONTROLLED-BETA root, no CP3.
@@ -17,17 +17,21 @@ migration0006 installed,50 bindings/3 old customer records/operations/prior audi
 credentials preserved.118 PostgreSQL console +76 affected backend tests PASS.
 Source-only context permissions corrected for restrictive umask (2 tests).
 Bounded HMAC-token-only canary wrapper and committed-source packaging implemented:
-30 synthetic tests PASS; existing backend remains authority. Fixed per-event permits,
-four-stage budget, no alternate-device selector on writes or generic Django writes.
-No production lookup/mutation, Android interaction, CRL or CP2 restart.
+Normal four-stage path unchanged; emergency recover added only for versions1/2
+after natural expiry with no valid certificate, exact30 days from server_now and
+execution window<=300s. Terminal reference_hash marker prohibits new operations
+after recovery; identical backend-payload replay alone remains allowed.68 canary
+tests PASS; existing backend remains sole authority. No new schema/CRL action or
+generic Django production write. Source packaging is lookup_only; see report receipt.
+No production lookup/registry access/mutation, Android interaction, CRL or CP2 restart.
 Completion gate: exact authorized-device binding; live activation/paid certificate
 boundary/MESH Connect; natural expiry and new challenge/fetch/reconnect denial;
 active-session behavior; CRL generation/propagation; recovery/reconciliation and
 reactivation on the same identity; Android state preservation. All live stages NOT_RUN.
-Blocker: continuation stops at the suggested wrapper component paths. Obtain short
-expiry/observation windows, reviewed CRL delivery/session stop procedure and phone
-coordination before enrollment. Final same-identity recovery to server_now+30 days is
-the accepted goal, not observed evidence. Never invent a window that strands the owner.
+Emergency recovery source gate complete; production/live acceptance remains NOT_RUN.
+NEXT — production lookup, binding and coordinated owner-phone procedure, not an
+automatic continuation of this source checkpoint. Final same-identity30-day active
+recovery is a future live gate, not synthetic acceptance transferred to the phone.
 [Bounded checkpoint](releases/2026-10-27-android106-beta-0-canary-1.md).
 
 **Accepted input CONTROL-PLANE-2 — DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING.**
@@ -135,8 +139,9 @@ debt, не Android launch blocker. Linux installed acceptance только от�
 не запускать P0/P1/Auto/AppImage lifecycle/L05/L06 и не публиковать Linux artifacts.
 
 **STOP. NEXT — закрыть только фактические Android controlled-beta launch blockers.**
-Следующий конечный этап — продолжение BETA-0-CANARY-1 после получения полной live
-процедуры, оборванной после списка компонентов wrapper. Только OWNER_CANARY_1; customer payments/
+Следующий конечный этап — production lookup, binding и coordinated owner-phone live
+procedure в следующем разрешённом продолжении BETA-0-CANARY-1, не автоматически.
+Только OWNER_CANARY_1; customer payments/
 enrollment не разрешены. Ни одного live canary stage пока не выполнено. CP2 принят,
 бюджет consumed1 rollout/0 emergency; его deployment/migration/restart/gates не повторять.
 Terminal scripts не запускать, paid schema не удалять. Read-only monitoring продолжается.

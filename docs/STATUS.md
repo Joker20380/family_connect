@@ -2,7 +2,22 @@
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
-**Current substep BETA-0-CANARY-1 — CHECKPOINT / LOCAL_CONSOLE_UPGRADED / CANARY_OPERATOR SOURCE_READY / LIVE NOT_RUN.**
+**Current substep BETA-0-CANARY-1 — SOURCE_READY_WITH_EMERGENCY_RECOVERY / LIVE_NOT_RUN.**
+Emergency recovery source gate from68b99ac: recover only from versions1/2 after
+natural expiry, no valid bound certificate, exact server_now+2592000 period and
+at most300s execution window. Existing paid_beta payment/idempotency authority
+unchanged. Terminal reference_hash marker blocks all further normal/new recovery
+events; only the identical backend-payload replay remains allowed. No new schema,
+CRL mutation, identity/invite change or Django production adapter.
+68 canary +118 PostgreSQL console +76 affected backend +2 preparation tests PASS;
+Django system/drift checks PASS. Normal four-stage path retained. Packaging must
+remain lookup_only, from exact committed source; artifact receipt is in the report.
+Production lookup/registry access/binding/enrollment/CRL/Android/live operations
+NOT_RUN. No Friends restart/deployment, CP2 change or desktop work.
+STOP. NEXT — production lookup, binding and coordinated owner-phone live procedure,
+only in the next authorized continuation; do not start automatically.
+
+Historical local preparation at28657bf/68b99ac:
 Continuation from55c6a24: private PG+synthetic-volume backups and disposable restore
 checks PASS. Running loopback console rebuilt; migration0006 installed, system/drift
 checks PASS. Existing50 synthetic bindings,3 customer-payment records, operations,
@@ -17,8 +32,8 @@ Production lookup/binding/package execution/enrollment/CRL/Android actions NOT_R
 The continuation ends at the suggested component paths. Short expiry/observation
 windows, reviewed CRL delivery procedure and physical-phone coordination remain
 unspecified; the final30-day recovery target is accepted, not executed.
-NEXT — obtain that live procedure and coordinate OWNER_CANARY_1, then perform only
-its agreed stages; no automatic enrollment or guessed production expiry window.
+Historical NEXT was to obtain the live procedure and coordinate OWNER_CANARY_1;
+the current emergency source gate and next authorized boundary are recorded above.
 
 Historical source checkpoint55c6a24 (before the local console upgrade):
 Dependency: owner accepted CP2 as DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING /

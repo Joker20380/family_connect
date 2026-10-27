@@ -1,3 +1,5 @@
+import copy
+import hashlib
 import io
 import json
 import subprocess
@@ -169,20 +171,21 @@ def test_package_uses_committed_inventory_and_is_deterministic(tmp_path, registr
     subprocess.run(['git', '-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '-qm', 'fixture'], cwd=repository, check=True)
     (repository / 'control/friends/paid_beta.py').write_text('dirty_source_must_not_ship = True\n')
     output = tmp_path / 'first.pyz'
-    receipt = package.build(output, 'HEAD', envelope(registry), repository=repository)
+    receipt = package.build(output, 'HEAD', repository=repository)
     other = tmp_path / 'second.pyz'
-    assert package.build(other, 'HEAD', envelope(registry), repository=repository) == receipt
+    assert package.build(other, 'HEAD', repository=repository) == receipt
     assert output.read_bytes() == other.read_bytes()
     with zipfile.ZipFile(output) as archive:
         assert set(package.SOURCES) <= set(archive.namelist())
         assert b'dirty_source_must_not_ship' not in archive.read('control/friends/paid_beta.py')
         assert not any(name.endswith(('.db', '.sqlite3', '.env', '.key')) for name in archive.namelist())
+        assert json.loads(archive.read('canary-envelope.json')) is None
+        assert receipt['binding'] == 'lookup_only'
     with pytest.raises(FileExistsError):
         package.build(output, 'HEAD', repository=repository)
-    response = subprocess.run([sys.executable, str(output), '--db', str(registry[0].path), 'status'],
-                              input=json.dumps(dict(hmac_key=KEY.hex())), text=True, capture_output=True, check=True,
+    response = subprocess.run([sys.executable, str(output), '--help'], text=True, capture_output=True, check=True,
                               cwd=tmp_path)
-    assert json.loads(response.stdout)['safe_ref'] == envelope(registry)['safe_ref']
+    assert 'lookup' in response.stdout
     assert response.stderr == ''
 
 
@@ -215,3 +218,277 @@ def test_backend_eligibility_is_not_bypassed(registry, change):
         with pytest.raises(paid_beta.PaidBetaError):
             operation()
     assert snapshot(access) == before
+
+
+def recovery_envelope(registry, version, now):
+    request = envelope(registry, version, now, canary.RECOVERY_SECONDS)
+    request['permit'].update(action='recover', event_id='canary_' + 'e' * 32,
+                            period_start=now, paid_until=now + canary.RECOVERY_SECONDS,
+                            not_after=now + 300)
+    return request
+
+
+def recovery_phase(registry, version):
+    access, device, _ = registry
+    canary.apply(access.path, KEY, envelope(registry), NOW)
+    if version == 2:
+        canary.apply(access.path, KEY, envelope(registry, 1, NOW + 60), NOW + 60)
+    now = NOW + version * 60
+    with paid_beta.connection(access.path, write=True) as database:
+        database.execute('CREATE TABLE restricted_certificates(device TEXT,expires INTEGER,serial TEXT)')
+        database.execute('INSERT INTO restricted_certificates VALUES (?,?,?)', (device.reference, now, '123'))
+        database.execute('CREATE TABLE restricted_crl_sequence(singleton INTEGER PRIMARY KEY, sequence INTEGER)')
+        database.execute('INSERT INTO restricted_crl_sequence VALUES (1,7)')
+    return now, recovery_envelope(registry, version, now)
+
+
+@pytest.mark.parametrize('version,classification', [
+    (1, 'NATURAL_PHASE_ABORTED_OWNER_RECOVERED'), (2, 'CRL_PHASE_ABORTED_OWNER_RECOVERED')])
+def test_recovery_delegates_exact_period_preserves_state_and_sanitizes_output(registry, monkeypatch, version, classification):
+    access, device, selector = registry
+    now, request = recovery_phase(registry, version)
+    before = snapshot(access)
+    with paid_beta.connection(access.path) as database:
+        non_paid = canary.preserved_tables(database)
+    original = paid_beta.apply_event
+    captured = []
+    def traced(*args, **kwargs):
+        receipt = original(*args, **kwargs)
+        captured.append(copy.deepcopy(receipt))
+        return receipt
+    monkeypatch.setattr(paid_beta, 'apply_event', traced)
+    receipt = canary.apply(access.path, KEY, request, now)
+    assert receipt['classification'] == classification and receipt['branch'] == 'emergency_recovery'
+    assert receipt['effective_state'] == 'active' and receipt['paid_allow'] is True
+    assert receipt['version'] == receipt['event_count'] == version + 1
+    assert receipt['paid_until'] == receipt['entitlement_until'] == now + 2592000
+    assert receipt['purpose'] == 'internal_canary' and receipt['amount_minor'] == 0
+    reference = 'internal-canary-recovery:' + request['permit']['event_id']
+    with paid_beta.connection(access.path) as database:
+        assert canary.preserved_tables(database) == non_paid
+        record = dict(database.execute('SELECT * FROM paid_beta_events WHERE event_id=?', (receipt['event_id'],)).fetchone())
+        assert record == captured[0]['event']
+        assert record['event_type'] == 'payment' and record['period_start'] == now
+        assert record['paid_until'] == now + 2592000
+        assert record['reference_hash'] == hashlib.sha256(reference.encode()).hexdigest()
+    after = snapshot(access)
+    for table in ('devices', 'invites', 'device_support'):
+        assert after[table] == before[table]
+    text = json.dumps(receipt)
+    assert all(secret not in text for secret in (selector, device.reference, KEY.hex(), reference))
+    assert not set(receipt) & {'device', 'support_id', 'hmac_key', 'reference', 'invite', 'certificate', 'revenue'}
+
+
+@pytest.mark.parametrize('version', [0, 3])
+def test_recovery_version_zero_and_three_forbidden(registry, version):
+    with pytest.raises(paid_beta.PaidBetaError, match='INVALID_CANARY_STAGE'):
+        canary.apply(registry[0].path, KEY, recovery_envelope(registry, version, NOW), NOW)
+    assert not snapshot(registry[0])['paid_beta_events']
+
+
+@pytest.mark.parametrize('version', [1, 2])
+def test_recovery_active_entitlement_and_valid_certificate_rejected(registry, version):
+    access, device, _ = registry
+    now, request = recovery_phase(registry, version)
+    active_request = recovery_envelope(registry, version, now - 1)
+    with pytest.raises(paid_beta.PaidBetaError, match='EXPIRY_NOT_OBSERVED'):
+        canary.apply(access.path, KEY, active_request, now - 1)
+    with paid_beta.connection(access.path, write=True) as database:
+        database.execute('INSERT INTO restricted_certificates VALUES (?,?,?)', (device.reference, now + 1, '124'))
+    before = snapshot(access)
+    with pytest.raises(paid_beta.PaidBetaError, match='CERTIFICATES_STILL_VALID'):
+        canary.apply(access.path, KEY, request, now)
+    assert snapshot(access) == before
+
+
+@pytest.mark.parametrize('delta', [-1, 1, -2592000, 86400])
+def test_recovery_rejects_every_non_30_day_period(registry, delta):
+    now, request = recovery_phase(registry, 1)
+    request['permit']['paid_until'] += delta
+    with pytest.raises(paid_beta.PaidBetaError, match='INVALID_RECOVERY_PERIOD'):
+        canary.apply(registry[0].path, KEY, request, now)
+    assert len(snapshot(registry[0])['paid_beta_events']) == 1
+
+
+@pytest.mark.parametrize('change,reason', [
+    ('long_window', 'INVALID_EXECUTION_WINDOW'), ('empty_window', 'INVALID_EXECUTION_WINDOW'),
+    ('before_window', 'EXECUTION_WINDOW_CLOSED'), ('end_window', 'EXECUTION_WINDOW_CLOSED'),
+    ('past_start', 'INVALID_RECOVERY_PERIOD'), ('future_start', 'INVALID_RECOVERY_PERIOD'),
+    ('outside_start', 'INVALID_RECOVERY_PERIOD')])
+def test_recovery_requires_short_window_and_start_equal_server_now(registry, change, reason):
+    now, request = recovery_phase(registry, 1)
+    permit = request['permit']
+    if change == 'long_window':
+        permit['not_after'] = now + 301
+    elif change == 'empty_window':
+        permit['not_after'] = now
+    elif change == 'before_window':
+        now -= 1
+    elif change == 'end_window':
+        now += 300
+    else:
+        shift = {'past_start': -1, 'future_start': 1, 'outside_start': 301}[change]
+        permit['not_before'] -= 1 if change == 'past_start' else 0
+        permit['not_after'] -= 1 if change == 'past_start' else 0
+        permit['period_start'] += shift
+        permit['paid_until'] += shift
+    with pytest.raises(paid_beta.PaidBetaError, match=reason):
+        canary.apply(registry[0].path, KEY, request, now)
+
+
+@pytest.mark.parametrize('change', ['token', 'safe_ref', 'alias', 'key', 'other_device'])
+def test_recovery_remains_bound_to_one_device(registry, change):
+    access, _, _ = registry
+    now, request = recovery_phase(registry, 1)
+    key = KEY
+    if change == 'token':
+        request['device_token'] = '0' * 64
+        request['safe_ref'] = 'dev_' + '0' * 12
+    elif change == 'key':
+        key = b'\x18' * 32
+    elif change == 'other_device':
+        other, _ = activated_device(access)
+        request['device_token'] = canary.token_for(KEY, other.reference)
+        request['safe_ref'] = 'dev_' + request['device_token'][:12]
+    else:
+        request[change] = 'invalid'
+    before = snapshot(access)
+    with pytest.raises(paid_beta.PaidBetaError):
+        canary.apply(access.path, key, request, now)
+    assert snapshot(access) == before
+
+
+@pytest.mark.parametrize('version', [1, 2])
+def test_terminal_recovery_idempotency_conflict_and_no_normal_continuation(registry, version):
+    access, _, _ = registry
+    now, request = recovery_phase(registry, version)
+    first = canary.apply(access.path, KEY, request, now)
+    after = snapshot(access)
+    for later in (now + 1, now + 301, now + 2592001):
+        replay = canary.apply(access.path, KEY, request, later)
+        assert replay['duplicate'] is True and replay['applied_at'] == now
+        assert replay['classification'] == first['classification']
+        assert replay['event_count'] == version + 1
+        assert snapshot(access) == after
+    changed = copy.deepcopy(request)
+    changed['permit']['period_start'] += 1
+    changed['permit']['paid_until'] += 1
+    with pytest.raises(paid_beta.PaidBetaError, match='EVENT_ID_CONFLICT'):
+        canary.apply(access.path, KEY, changed, now + 1)
+    for delta in (-1, 1, -2592000):
+        changed = copy.deepcopy(request)
+        changed['permit']['paid_until'] += delta
+        with pytest.raises(paid_beta.PaidBetaError, match='EVENT_ID_CONFLICT'):
+            canary.apply(access.path, KEY, changed, now + 1)
+    for next_request in [envelope(registry, stage, now) for stage in range(4)] + [copy.deepcopy(request)]:
+        if next_request['permit']['action'] == 'recover':
+            next_request['permit']['event_id'] = 'canary_' + 'f' * 32
+        with pytest.raises(paid_beta.PaidBetaError, match='RECOVERY_TERMINAL'):
+            canary.apply(access.path, KEY, next_request, now)
+    assert snapshot(access) == after
+    assert canary.apply(access.path, KEY, request, now + 1)['duplicate']
+    second_recovery = recovery_envelope(registry, version + 1, now)
+    second_recovery['permit']['event_id'] = 'canary_' + 'd' * 32
+    with pytest.raises(paid_beta.PaidBetaError, match='RECOVERY_TERMINAL'):
+        canary.apply(access.path, KEY, second_recovery, now)
+
+
+@pytest.mark.parametrize('action', ['revoke', 'grace'])
+def test_recovery_does_not_enable_forbidden_actions(registry, action):
+    now, request = recovery_phase(registry, 1)
+    request['permit']['action'] = action
+    with pytest.raises(paid_beta.PaidBetaError, match='INVALID_CANARY_STAGE'):
+        canary.apply(registry[0].path, KEY, request, now)
+
+
+@pytest.mark.parametrize('change,reason', [
+    ('revoked', 'ACTIVE_IDENTITY_REQUIRED'), ('invite_revoked', 'ACTIVE_IDENTITY_REQUIRED'),
+    ('version', 'ANDROID106_REQUIRED'), ('terminal_revoke', 'REVOCATION_TERMINAL'),
+    ('explicit_expire', 'NATURAL_EXPIRY_REQUIRED'), ('missing_certificates', 'CERTIFICATE_INVENTORY_REQUIRED'),
+    ('other_member', 'OTHER_COHORT_MEMBER')])
+def test_recovery_eligibility_and_history_fail_closed(registry, change, reason):
+    access, _, selector = registry
+    now, request = recovery_phase(registry, 1)
+    with paid_beta.connection(access.path, write=True) as database:
+        if change == 'version':
+            database.execute('UPDATE device_support SET version_code=84')
+        elif change in ('revoked', 'invite_revoked'):
+            table = 'devices' if change == 'revoked' else 'invites'
+            database.execute('UPDATE ' + table + ' SET revoked=1')
+        elif change in ('terminal_revoke', 'explicit_expire'):
+            paid_beta.apply_event(database, selector, 'revoke' if change == 'terminal_revoke' else 'expire',
+                                 'fixture-outside-canary', 'fixture', now=now)
+            request['permit']['expected_version'] = 2
+        elif change == 'missing_certificates':
+            database.execute('DROP TABLE restricted_certificates')
+    if change == 'other_member':
+        other, support = activated_device(access)
+        event((access, other, support))
+    before = snapshot(access)
+    with pytest.raises(paid_beta.PaidBetaError, match=reason):
+        canary.apply(access.path, KEY, request, now)
+    assert snapshot(access) == before
+
+
+def test_recovery_rolls_back_nonpaid_side_effect_and_does_not_rewrite_crl(registry):
+    access, _, _ = registry
+    now, request = recovery_phase(registry, 1)
+    with paid_beta.connection(access.path, write=True) as database:
+        database.execute('CREATE TRIGGER bad_recovery AFTER INSERT ON paid_beta_events '
+                         'BEGIN UPDATE restricted_crl_sequence SET sequence=99; END')
+    before = snapshot(access)
+    with pytest.raises(paid_beta.PaidBetaError, match='NON_PAID_STATE_CHANGED'):
+        canary.apply(access.path, KEY, request, now)
+    assert snapshot(access) == before
+    with paid_beta.connection(access.path) as database:
+        assert database.execute('SELECT sequence FROM restricted_crl_sequence').fetchone()[0] == 7
+
+
+def test_recovery_rejects_real_version_three_after_explicit_expire(registry):
+    access, _, _ = registry
+    now, _ = recovery_phase(registry, 2)
+    expired = canary.apply(access.path, KEY, envelope(registry, 2, now - 1), now - 1)
+    assert expired['version'] == expired['event_count'] == 3
+    before = snapshot(access)
+    with pytest.raises(paid_beta.PaidBetaError, match='INVALID_CANARY_STAGE'):
+        canary.apply(access.path, KEY, recovery_envelope(registry, 3, now), now)
+    assert snapshot(access) == before
+
+
+def test_terminal_replay_uses_backend_payload_and_skips_new_certificate_guards(registry):
+    access, device, _ = registry
+    now, request = recovery_phase(registry, 1)
+    initial = canary.apply(access.path, KEY, request, now)
+    with paid_beta.connection(access.path, write=True) as database:
+        database.execute('INSERT INTO restricted_certificates VALUES (?,?,?)', (device.reference, now + 100, '125'))
+    replay = copy.deepcopy(request)
+    replay['permit']['expected_version'] = 2
+    result = canary.apply(access.path, KEY, replay, now + 1)
+    assert result['duplicate'] and result['classification'] == initial['classification']
+    assert result['paid_until'] == initial['paid_until'] and result['event_count'] == 2
+
+
+def test_recovery_serializes_concurrent_replay_to_one_event(registry):
+    from concurrent.futures import ThreadPoolExecutor
+
+    now, request = recovery_phase(registry, 1)
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        receipts = list(executor.map(lambda _: canary.apply(registry[0].path, KEY, request, now), range(2)))
+    assert sorted(receipt['duplicate'] for receipt in receipts) == [False, True]
+    assert all(receipt['event_count'] == receipt['version'] == 2 for receipt in receipts)
+
+
+def test_recovery_cli_uses_server_clock_without_rebasing_permit(registry, monkeypatch, capsys):
+    access, device, selector = registry
+    now, request = recovery_phase(registry, 1)
+    monkeypatch.setattr(canary.time, 'time', lambda: now + 1)
+    def run():
+        monkeypatch.setattr(sys, 'stdin', io.TextIOWrapper(io.BytesIO(json.dumps(dict(hmac_key=KEY.hex())).encode())))
+        return canary.main(['--db', str(access.path), 'apply'], envelope=request)
+    assert run() == 2
+    assert json.loads(capsys.readouterr().out)['reason'] == 'INVALID_RECOVERY_PERIOD'
+    monkeypatch.setattr(canary.time, 'time', lambda: now)
+    assert run() == 0
+    output = capsys.readouterr()
+    assert json.loads(output.out)['branch'] == 'emergency_recovery' and output.err == ''
+    assert all(secret not in output.out for secret in (selector, device.reference, KEY.hex(), 'internal-canary-recovery:'))

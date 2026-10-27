@@ -14,6 +14,8 @@ from . import paid_beta
 ALIAS = 'OWNER_CANARY_1'
 PURPOSE = 'internal_canary'
 MAX_INPUT = 4096
+RECOVERY_SECONDS = 2592000
+RECOVERY_REFERENCE = 'internal-canary-recovery:'
 require = paid_beta.require
 
 
@@ -41,7 +43,7 @@ def token_for(key, device):
     return hmac.new(key, device.encode(), hashlib.sha256).hexdigest()
 
 
-def validate_envelope(envelope):
+def validate_envelope(envelope, *, check_recovery_guards=True):
     fields(envelope, 'schema alias device_token safe_ref permit')
     require(type(envelope['schema']) is int and envelope['schema'] == 1 and envelope['alias'] == ALIAS,
             'INVALID_BINDING')
@@ -54,13 +56,24 @@ def validate_envelope(envelope):
     fields(permit, 'action event_id expected_version period_start paid_until not_before not_after')
     version = permit['expected_version']
     require(type(version) is int and 0 <= version <= 3, 'INVALID_CANARY_STAGE')
-    require(permit['action'] == ('expire' if version == 2 else 'activate'), 'INVALID_CANARY_STAGE')
+    recovery = permit['action'] == 'recover'
+    require((not check_recovery_guards or version in (1, 2)) if recovery else
+            permit['action'] == ('expire' if version == 2 else 'activate'),
+            'INVALID_CANARY_STAGE')
     require(type(permit['event_id']) is str and re.fullmatch('canary_[0-9a-f]{32}', permit['event_id']),
             'INVALID_EVENT_ID')
     for name in ('not_before', 'not_after'):
         paid_beta.instant(permit[name])
-    require(0 < permit['not_after'] - permit['not_before'] <= 900, 'INVALID_EXECUTION_WINDOW')
-    if permit['action'] == 'activate':
+    if recovery and not check_recovery_guards:
+        return
+    require(0 < permit['not_after'] - permit['not_before'] <= (300 if recovery else 900), 'INVALID_EXECUTION_WINDOW')
+    if recovery:
+        require(all(type(permit[name]) is int and 0 <= permit[name] <= paid_beta.MAX_TIME
+                    for name in ('period_start', 'paid_until'))
+                and permit['paid_until'] - permit['period_start'] == RECOVERY_SECONDS
+                and permit['not_before'] <= permit['period_start'] <= permit['not_after'],
+                'INVALID_RECOVERY_PERIOD')
+    elif permit['action'] == 'activate':
         for name in ('period_start', 'paid_until'):
             paid_beta.instant(permit[name])
         require(0 < permit['paid_until'] - permit['period_start'] <= 31 * 86400, 'INVALID_PERIOD')
@@ -76,8 +89,8 @@ def cohort_guard(database, device):
     require(database.execute('SELECT count(*) FROM paid_beta_events').fetchone()[0] <= 4, 'CANARY_EVENT_LIMIT')
 
 
-def resolve_bound(database, key, envelope):
-    validate_envelope(envelope)
+def resolve_bound(database, key, envelope, *, check_recovery_guards=True):
+    validate_envelope(envelope, check_recovery_guards=check_recovery_guards)
     matches = [row['device'] for row in database.execute('SELECT device FROM devices')
                if hmac.compare_digest(token_for(key, row['device']), envelope['device_token'])]
     require(len(matches) == 1, 'BOUND_DEVICE_NOT_FOUND')
@@ -127,39 +140,69 @@ def observe(path, key, envelope, now):
 
 
 def apply(path, key, envelope, now):
-    validate_envelope(envelope)
+    validate_envelope(envelope, check_recovery_guards=False)
     permit = envelope['permit']
     require(permit is not None, 'PERMIT_REQUIRED')
     with paid_beta.connection(path, write=True) as database:
-        device, selector = resolve_bound(database, key, envelope)
+        device, selector = resolve_bound(database, key, envelope, check_recovery_guards=False)
         previous = database.execute('SELECT * FROM paid_beta_events WHERE event_id=?', (permit['event_id'],)).fetchone()
+        terminal = [row['event_id'] for row in database.execute(
+            'SELECT event_id,reference_hash FROM paid_beta_events WHERE device=?', (device,))
+            if hmac.compare_digest(row['reference_hash'], hashlib.sha256(
+                (RECOVERY_REFERENCE + row['event_id']).encode()).hexdigest())]
+        require(not terminal or terminal == [permit['event_id']], 'RECOVERY_TERMINAL')
+        recovery = permit['action'] == 'recover'
         before = sanitized_status(database, selector, envelope, now)
         if previous is None:
+            validate_envelope(envelope)
             require(permit['not_before'] <= now < permit['not_after'], 'EXECUTION_WINDOW_CLOSED')
             version = permit['expected_version']
             require(before['version'] == before['event_count'] == version, 'STALE_CANARY_PERMIT')
-            if version in (1, 3):
+            if recovery:
+                require(before['effective_state'] != 'revoked', 'REVOCATION_TERMINAL')
+                require(before['effective_state'] == 'expired' and before['paid_allow'] is False,
+                        'EXPIRY_NOT_OBSERVED')
+                subscription = database.execute('SELECT state FROM paid_beta_subscriptions WHERE device=?', (device,)).fetchone()
+                require(subscription is not None and subscription['state'] == 'active' and database.execute(
+                    "SELECT count(*) FROM paid_beta_events WHERE device=? AND event_type='payment'", (device,)).fetchone()[0] == version,
+                    'NATURAL_EXPIRY_REQUIRED')
+                require(permit['period_start'] == now and permit['paid_until'] == now + RECOVERY_SECONDS,
+                        'INVALID_RECOVERY_PERIOD')
+            elif version in (1, 3):
                 require(before['effective_state'] == 'expired', 'EXPIRY_NOT_OBSERVED')
-            if version == 2:
+            if not recovery and version == 2:
                 require(before['paid_allow'] is True, 'ACTIVE_ENTITLEMENT_REQUIRED')
-            if version in (2, 3):
+            if recovery or version in (2, 3):
                 require(database.execute("SELECT 1 FROM sqlite_master WHERE name='restricted_certificates'").fetchone(),
                         'CERTIFICATE_INVENTORY_REQUIRED')
                 valid_certificate = database.execute(
                     'SELECT 1 FROM restricted_certificates WHERE device=? AND expires>? LIMIT 1', (device, now)).fetchone()
-                require(valid_certificate is not None if version == 2 else valid_certificate is None,
-                        'EXPIRE_REQUIRES_VALID_CERTIFICATE' if version == 2 else 'CERTIFICATES_STILL_VALID')
+                needs_valid_certificate = not recovery and version == 2
+                require(valid_certificate is not None if needs_valid_certificate else valid_certificate is None,
+                        'EXPIRE_REQUIRES_VALID_CERTIFICATE' if needs_valid_certificate else 'CERTIFICATES_STILL_VALID')
         preserved = preserved_tables(database)
         values = {}
-        if permit['action'] == 'activate':
+        if permit['action'] in ('activate', 'recover'):
             values = dict(period_start=permit['period_start'], paid_until=permit['paid_until'], apk_sha256=paid_beta.APK_SHA256)
-        raw = paid_beta.apply_event(database, selector, 'payment' if permit['action'] == 'activate' else 'expire',
-                                    permit['event_id'], 'internal-canary:' + permit['event_id'], now=now, **values)
+        reference = (RECOVERY_REFERENCE if recovery else 'internal-canary:') + permit['event_id']
+        try:
+            raw = paid_beta.apply_event(database, selector, 'expire' if permit['action'] == 'expire' else 'payment',
+                                        permit['event_id'], reference, now=now, **values)
+        except paid_beta.PaidBetaError:
+            if previous is not None and recovery:
+                raise paid_beta.PaidBetaError('EVENT_ID_CONFLICT') from None
+            raise
         require(preserved_tables(database) == preserved, 'NON_PAID_STATE_CHANGED')
         result = sanitized_status(database, selector, envelope, now)
         result.update(event_id=raw['event']['event_id'], event_type=raw['event']['event_type'],
                       payload_hash=raw['event']['payload_hash'], applied_at=raw['event']['applied_at'],
                       result=raw['event']['result'], duplicate=raw['duplicate'])
+        if recovery:
+            prior_events = database.execute('SELECT count(*) FROM paid_beta_events WHERE device=? AND rowid < '
+                '(SELECT rowid FROM paid_beta_events WHERE event_id=?)', (device, permit['event_id'])).fetchone()[0]
+            require(prior_events in (1, 2), 'INVALID_CANARY_STAGE')
+            result.update(branch='emergency_recovery', classification=(
+                'NATURAL_PHASE_ABORTED_OWNER_RECOVERED' if prior_events == 1 else 'CRL_PHASE_ABORTED_OWNER_RECOVERED'))
         return result
 
 

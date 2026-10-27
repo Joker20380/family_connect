@@ -1,6 +1,92 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
-## Continuation from55c6a24 — local upgrade and bounded operator
+## Emergency recovery source gate
+
+**SOURCE_READY_WITH_EMERGENCY_RECOVERY / LIVE_NOT_RUN.** Input main
+`68b99ac667c78fa6f20f95ffa443cdbd7d1a5ef7`, accepted previous product source
+`28657bf9e53411a4cdaff44d8ad5ebfb252046e0`. Same BETA-0-CANARY-1 under the existing
+Android critical path. Only source/tests/docs and local lookup-only packaging;
+no production registry/lookup, binding, enrollment, real payment, CRL publication,
+Android action, Friends restart/deployment, CP2 backend change or desktop work.
+
+### Exact recovery contract
+
+- Normal activate0/activate1/expire2/activate3 sequence retained. Separate permit
+  action recover is allowed only at expected_version1 or2, matching current
+  subscription version and paid-event count. Versions0/3, explicit expiry and
+  terminal revoke cannot start emergency recovery.
+- First/second activation must already exist; all prior events are payments.
+  Subscription stored state active, effective_state expired and paid_allow false
+  prove natural expiry. Existing backend rechecks exact Android106 eligibility,
+  non-revoked device/invite and existing admission restrictions. Full bound HMAC
+  token/safe_ref/alias and no-other-cohort-member guards remain unchanged.
+- Exact30 days: period_start=server_now, paid_until=server_now+2592000. First apply
+  rejects a past/future start rather than rebasing the permit. Static bounds require
+  period_start within not_before..not_after, execution within the half-open window,
+  and window length1..300 seconds. Other durations fail INVALID_RECOVERY_PERIOD.
+- Certificate inventory must exist and have no bound row with expires>server_now.
+  Certificates, expiry/revision and non-paid tables remain unchanged. Future live
+  procedure must wait any issued certificate's NotAfter+30 seconds; that wait and
+  phone/serial observation are not performed or claimed by this source gate.
+- Delegate to existing paid_beta.apply_event(event_type=payment), unchanged schema,
+  APK attestation and authority. The transient reference is
+  internal-canary-recovery:<event_id>; backend stores its SHA256, not raw text.
+  No new event type, field, table, identity, invite or entitlement machine.
+- Terminal detection reads reference_hash against SHA256 of that prefix plus each
+  existing event ID. Find the incoming event first, then check the terminal marker,
+  then run guards for a new event. A different ID after recovery fails
+  RECOVERY_TERMINAL, including old normal-event replays. Same ID/backend payload
+  returns the existing event; changed payload fails EVENT_ID_CONFLICT. Replay is
+  permitted after window/entitlement expiry and does not extend the original period.
+- After version1 recovery: active/version2/count2 and
+  NATURAL_PHASE_ABORTED_OWNER_RECOVERED. After version2 recovery:
+  active/version3/count3 and CRL_PHASE_ABORTED_OWNER_RECOVERED. The checkpoint's
+  normal path is permanently closed after either branch. Classification is derived
+  from immutable event order, not a replay caller's changed expected_version.
+- Safe wrapper output adds branch emergency_recovery; purpose internal_canary and
+  amount0 stay non-revenue. Raw authoritative backend event/receipt is unchanged.
+  No selector, canonical device, HMAC key, raw reference, invite or certificate body
+  enters the sanitized output. Transactional non-paid fingerprints are checked;
+  unexpected trigger side effects roll back the whole new event.
+- CRL number/entries are not generated, published, removed or rolled back. An old
+  expired serial may stay in CRL; proving a future new certificate has a different
+  unlisted serial is live acceptance, not a source-checkpoint side effect.
+
+### Required validation
+
+| Gate | Result |
+|---|---|
+| All canary operator tests, including normal path |68 PASS (30 existing +38 emergency cases) |
+| Existing PostgreSQL console tests |118 PASS in separate disposable test DB |
+| Existing affected paid backend tests |76 PASS |
+| Existing preparation tests |2 PASS |
+| Django system check / migration drift |PASS / no changes detected |
+| Staged source syntax / strict JSON / secret-private scan |PASS |
+| Markdown local links / anchors |446 /23 PASS |
+| Staged scope / working and staged diff --check |7 files / PASS |
+| Production lookup/registry access/binding/live procedure |NOT_RUN |
+
+Emergency tests cover both versions, active/valid-certificate/revoked/explicit-expire
+denial, exact period/start/window, token/alias/safe_ref/device/eligibility guards,
+sanitized zero-amount classification, unchanged identity/invite/support/certificates/
+CRL sequence, transactional rollback, concurrent replay, payload conflict, terminal
+normal-path/recovery rejection and exact server-clock CLI behavior. Existing normal
+expire/final certificate guards still PASS. Tests use generated synthetic identities
+only. Packaging tests now build only lookup_only archives and smoke --help; no bound
+permit archive is created even by those packaging fixtures.
+
+The console image/schema/configuration was not rebuilt/restarted/migrated in this
+source checkpoint. No historical full suite, CP2 source/package gate, Linux or Windows
+gate repeated. Prior production counts0/0 remain accepted input, not a fresh live read.
+Source commit/push and exact committed lookup-only package receipt follow this gate;
+prior lookup artifact c25447d9… stays immutable historical evidence.
+Pre-existing123 added lines in unrelated working-tree edits and untracked work are
+preserved outside this source commit; private validation evidence remains ignored.
+
+**STOP. NEXT — production lookup, binding and coordinated owner-phone live procedure.**
+Do not start that next stage automatically; this checkpoint grants no live execution.
+
+## Historical continuation from55c6a24 — local upgrade and bounded operator
 
 **CHECKPOINT / LOCAL_CONSOLE_UPGRADED / CANARY_OPERATOR SOURCE_READY / LIVE NOT_RUN.**
 Same task and same sole OWNER_CANARY_1 authorization; no new top-level PLAN ID.
@@ -93,8 +179,8 @@ CLI import/help PASS, no registry opened. Both private artifacts retained read-o
   payment/enrollment, CP2 deployment/restart/migration, gateway/publisher/admission
   mutation or Android/Linux/Windows change. No canary slot occupied yet.
 
-**STOP. NEXT — obtain the remainder of the live procedure and coordinate the owner
-phone; then execute only the agreed OWNER_CANARY_1 stages.** The final30-day active
+**Historical NEXT at28657bf/68b99ac — obtain the remainder of the live procedure and
+coordinate the owner phone.** The final30-day active
 and connect-capable owner state is a required future gate, not a claimed result.
 
 ## Historical result and scope at55c6a24

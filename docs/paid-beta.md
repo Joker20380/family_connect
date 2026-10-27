@@ -37,19 +37,52 @@ A bound envelope has exactly schema, alias, device_token, safe_ref, permit. A no
 permit has exactly action, event_id (`canary_` +32 random hex), expected_version,
 period_start, paid_until, not_before, not_after. All timestamps are integer UTC.
 No arbitrary external reference: backend reference is derived from the fixed event ID.
-The four-stage workflow permits only activate at versions0,1,3 and expire at version2;
+The normal four-stage workflow permits activate at versions0,1,3 and expire at version2;
 event count/version must agree. Version1 requires expired effective state; version2
 requires active entitlement and an unexpired target certificate; version3 requires
 expired effective state and no unexpired retained target certificate. No revoke,
 grace, unenrollment or fifth new event is exposed. This is workflow sequencing, not
 an alternative subscription state machine.
 
-Execution windows are explicit and at most900 seconds; paid periods have no default
+Normal-path execution windows are explicit and at most900 seconds; paid periods have no default
 and a31-day ceiling. The short natural-expiry/CRL stages must be coordinated with
 phone observations, clock health and reviewed CRL delivery before issuing permits.
 Final recovery is intended for approximately server_now+30 days after revoked
 certificates have expired, without a new identity/invite. The wrapper does not
 publish CRLs, prove gateway delivery, kill a session or verify APK signer remotely.
+
+Emergency permit action `recover` is separate and allowed only at versions1/2,
+with matching current version/event count and only prior payment events. The stored
+subscription must still be active but its effective state expired/paid_allow false:
+natural expiry only, not explicit expire or terminal revoke. Existing Android106,
+device/invite and one-cohort guards remain in force. A known certificate inventory
+must contain no bound-device row with expires>server_now; no row/expiry/revision is
+deleted or modified. Future live procedure must wait NotAfter+30s if any certificate
+was issued; this source wrapper neither sleeps nor performs a live CRL operation.
+
+Recovery period_start must equal server_now on first apply and paid_until must equal
+server_now+2592000 (exact30 days); the permit is never silently rebased. Its period
+start must be within the explicit execution bounds and window length is1..300 seconds.
+Other periods fail INVALID_RECOVERY_PERIOD. A delayed execution that misses its exact
+start also rejects; a fresh event is not a way to reconcile an uncertain prior commit.
+
+Recovery delegates to unchanged paid_beta.apply_event as payment, with transient
+reference `internal-canary-recovery:<event_id>`; only its SHA256 is stored. The wrapper
+first finds the incoming event and then scans existing reference_hash values for
+that marker. Once present, every different event ID fails RECOVERY_TERMINAL, including
+old normal-event replays, normal expire/final activation and another recovery. Same
+recovery ID and canonical backend payload is an idempotent readback, even after the
+window/entitlement expires; changed payload fails EVENT_ID_CONFLICT. Duplicate
+readback never restores expired/revoked access or extends its original paid period.
+No extra field/table/authority is introduced. Safe output adds emergency_recovery
+branch and NATURAL_PHASE_ABORTED_OWNER_RECOVERED or CRL_PHASE_ABORTED_OWNER_RECOVERED;
+purpose remains internal_canary, amount0, never revenue. Backend receipt is unchanged.
+
+After emergency recovery the normal path for this checkpoint is permanently closed.
+No CRL generation/publication/number update/entry removal/rollback occurs. Old expired
+serials may remain in the CRL; observing a new unlisted serial after future live
+recovery is a separate live acceptance gate. This source checkpoint produces only
+lookup-only packages: no production lookup, bound archive or live operation.
 
 Each apply holds the existing BEGIN IMMEDIATE transaction, delegates to paid_beta,
 rejects other cohort members and checks non-paid tables remain unchanged. The raw
