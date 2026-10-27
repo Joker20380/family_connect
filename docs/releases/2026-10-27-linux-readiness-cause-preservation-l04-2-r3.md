@@ -538,3 +538,13 @@ acceptance remains open. Ordinary commit/push follows secret/JSON/link/scope/
 whitespace checks; unrelated work is excluded.
 
 **STOP. NEXT — review L04.2-R3 package-harness finalization.**
+
+## Owner decision — 2026-10-27
+
+**PAUSED / non-blocking desktop engineering.** R3 SOURCE GATE DONE/review accepted;
+.11 CONSTRUCTION DONE/frozen internal candidate. L04.2 is not DONE; installed
+package/live P0/P1/Auto remain NOT_RUN. No retry, launcher repair or new Linux
+checkpoint. Critical path is now ANDROID-CONTROLLED-BETA; receipt collision stays
+in existing D02/CI debt, not an Android launch blocker.
+[Single owner-decision/readiness report](2026-10-27-android106-controlled-beta-readiness.md).
+All earlier results/NEXTs above remain historical evidence, not current permission.

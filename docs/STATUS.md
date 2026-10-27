@@ -1,5 +1,49 @@
 # Текущее состояние / Current state
 
+## Current critical path — ANDROID-CONTROLLED-BETA
+
+**Owner decision27.10: Linux L04.2 PAUSED / NON-BLOCKING DESKTOP ENGINEERING.**
+L04.2-R3 SOURCE GATE **DONE / review accepted**; .11 CONSTRUCTION **DONE /
+frozen internal candidate**. L04.2 не DONE. Exact0.2.12~l03.2.11,
+candidate570a5515…/system34b27cb9…: четыре размера/SHA256 сверены, artifacts
+read-only/internal. Source/native/system/reference и46 tests PASS; embedded
+DEB/AppImage equality PASS/inner exit0; outer exit1 только на root-owned
+`embedded.json` overwrite. Product defect не установлен. Installed package и
+live P0/P1/Auto NOT_RUN; Linux MESH installed acceptance и overall CI PASS нет.
+`PACKAGE_HARNESS_EMBEDDED_RECEIPT_FILENAME_COLLISION` перенесён в существующий
+D02/CI debt; не Android blocker. Никакого Linux retry/checkpoint/harness repair,
+rebuild/install/rollback, retained test identity, AppImage lifecycle, L05/L06 или
+публикации. Дальнейшая installed acceptance — отдельный поток после controlled beta.
+
+**ANDROID106-MESH-FIELD-1 = PASS / owner accepted:** реальный внешний пользователь,
+реальная whitelist-сеть, обычное приложение, MESH подтверждён. Desktop parity не
+блокирует Android beta; field PASS не переносится на Linux/Windows.
+Exact signed106: `0.1.18-beta106-recovery`/106, `com.familyconnect.app.friends`,
+56093664 bytes, SHA256`242855c43e889e708234ce2f687fa02d37bccb1eee408904f09216b6abd8f020`.
+Manifest/signature/reference/2073 source files проверены; другие code106 inputs
+разделены на byte-identical installed copy и unsigned builds. No source change.
+Read-only administrative lookup: одна canonical identity/invite, activation active,
+revoked=false, MESH eligible; более новый authenticated ACK26.10 21:00:50UTC
+сообщает106/READY (старый support snapshot84 не текущий). APK bytes/signer на
+устройстве и точное время field use не аттестованы; новых invite/записей0.
+
+**Preparation checkpoint DONE; controlled paid launch BLOCKED.**49 locked backend
+и20 JVM checks PASS, включая synthetic retained-vault/identity cold owners×3;
+это не full APK upgrade/settings/history/Keystore/three-launch PASS. ADB targets0,
+production device untouched. Trial/active/grace/expired/revoked/payment audit и
+paid expiry не реализованы в live Friends path; existing all_activated игнорирует
+legacy grant expiry. Saved signed105 verified, но downgrade не принят как safe
+rollback. Public signed updater still60/sequence1;106 только internal handoff.
+Delivery, non-destructive recovery, commercial text, opt-in cohort и monitoring/
+stop criteria остаются launch gates. Полный green repository suite не prerequisite.
+[Единственный readiness report, exact artifacts и14 gates](releases/2026-10-27-android106-controlled-beta-readiness.md).
+**STOP. NEXT — закрыть только фактические Android controlled-beta launch blockers.**
+
+## Предыдущие записи — evidence, не активные NEXT
+
+Записи ниже сохранены, включая прежние Linux NEXT и ops observations; текущие
+priority/status определены owner decision выше. Они не разрешают продолжение Linux.
+
 **L04.2 — R3 PARTIAL / PACKAGE_GATE_FAILED (environment harness finalization).**
 R2 FINAL PARTIAL / READINESS_CAUSE_UNRESOLVED accepted: diagnostic collapse
 hid the original fetch cause. No further live Connect on .10. R3 is a bounded
@@ -574,8 +618,10 @@ D00 ничего не устанавливает: runtime rollback не нуже
   сохраняют HTTP/TLS/invalid_response/timeout/cancellation при ошибке teardown.
   Это локальная логика с synthetic transport, НЕ installed/live delivery PASS;
   review D03/D04 принят; D05 не расширяет fixed chat DIRECT/service-only scope.
-- L04.1 DONE только в installed AWG/TCP scope. Parent L04 IN_PROGRESS только из-за L04.2;
-  L04.2 MESH/Auto, L05 messenger и test-device teardown NOT_RUN; recovery/visual/upgrade остаются gates.
+- L04.1 DONE только в installed AWG/TCP scope. Parent L04 и L04.2 PAUSED /
+  NON-BLOCKING DESKTOP ENGINEERING по owner decision27.10; L04.2 не DONE.
+  Installed MESH/Auto, L05 messenger и test-device teardown остаются незакрытыми,
+  но не блокируют ANDROID-CONTROLLED-BETA и не запускаются автоматически.
 - W01–W12: Windows native↔broker, Auto/recovery и продуктовые функции, затем полный installer,
   installed runtime и upgrade. Cross-build/Wine/headless не заменяют Windows TUN/driver acceptance.
 - R01: конечные точные пакеты и проверки их установки/обновления; публикация отдельно.
@@ -618,3 +664,7 @@ D00 ничего не устанавливает: runtime rollback не нуже
 [Отчёт D00](releases/2026-10-24-desktop-parity106-d00.md) фиксирует сохранность и границы.
 **STOP после CHAT-UX-1. NEXT — review CHAT-UX-1 перед установкой нового UI-кандидата владельцу.
 L04.2/full L05/TCP HTTPS diagnosis/teardown/signing/publication не начинать.**
+
+Этот прежний STOP сохранён как история. **Текущий STOP27.10: readiness checkpoint
+завершён. NEXT — только фактические ANDROID-CONTROLLED-BETA launch blockers;
+Linux L04.2 PAUSED / NON-BLOCKING DESKTOP ENGINEERING.**

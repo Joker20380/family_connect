@@ -4,6 +4,26 @@ Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN
 STATUS/PLAN define the current bounded task and next review gate, not an automatic
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
+
+## Current priority — Android controlled paid beta
+
+[27.10 owner decision and Android106 readiness](releases/2026-10-27-android106-controlled-beta-readiness.md):
+**ANDROID-CONTROLLED-BETA** replaces Linux as critical path. FIELD-1 owner PASS
+covers real external whitelist-network MESH use, not desktop parity. Exact signed
+APK/reference/metadata verified; read-only activation/admission active, newer106
+READY ACK distinguished from stale support84.49 backend +20 JVM PASS bounded;
+full installed upgrade, paid subscription/payment/expiry, delivery/recovery and
+legal/cohort/monitoring gates remain BLOCKED. No Android source change or rollout.
+Linux L04.2 **PAUSED / NON-BLOCKING DESKTOP ENGINEERING**, not DONE: R3 source
+gate accepted, .11 construction frozen/read-only; installed package/live acceptance
+NOT_RUN. Receipt filename collision is existing D02/CI debt, not an Android blocker.
+**STOP. NEXT: close only actual Android controlled-beta launch blockers.**
+
+## Historical engineering index — not active NEXTs
+
+The earlier progression instructions below are retained evidence, superseded by
+the27.10 owner decision. They do not authorize a Linux retry or another task.
+
 [L04.2-R3 readiness cause preservation](releases/2026-10-27-linux-readiness-cause-preservation-l04-2-r3.md)
 continues existing PLAN L04.2. R2 is FINAL PARTIAL / READINESS_CAUSE_UNRESOLVED;
 its Phase B/setup/GUI authorization and immutable .10 evidence remain accepted.

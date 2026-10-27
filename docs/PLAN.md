@@ -1,6 +1,46 @@
-# План / bounded desktop parity106 queue
+# План / Android controlled beta and paused desktop queue
 
 ## Current engineering priority / Текущий critical path
+
+**ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
+Preparation checkpoint DONE; controlled paid launch **BLOCKED** только на
+фактических Android gates в [readiness report](releases/2026-10-27-android106-controlled-beta-readiness.md).
+Dependencies: exact accepted signed106/reference, owner-accepted
+**ANDROID106-MESH-FIELD-1 PASS**, read-only canonical activation/admission lookup.
+Положительный field result: real external user/whitelist network/ordinary app/MESH;
+не Windows/Linux PASS. Desktop parity не prerequisite Android beta.
+
+Exact106 APK manifest/signature/source inventory verified; one accepted hash,
+unsigned106 builds не кандидаты.49 locked backend +20 JVM tests PASS; synthetic
+vault/identity reload×3 не заменяет full installed APK upgrade и три запуска.
+Новый authenticated106 READY ACK отделён от stale support84; production device
+не менялся. Никаких Android source changes/rebuild/signing/publication автоматически.
+
+Completion gate: все14 минимальных launch rows закрыты exact evidence. Осталось:
+authorized in-place upgrade fixture (state/Keystore/history/settings/no re-invite/
+MESH/three launches), paid subscription state/payment audit/expiry enforcement,
+approved private delivery и safe recovery rehearsal, terms/privacy/subscription,
+explicit opt-in first cohort, monitoring/stop review. Existing activation→MESH
+automation PASS не является paid entitlement PASS.105 rollback APK сохранён,
+но forced downgrade/uninstall/reset запрещены; updater60 не доставляет106.
+
+**Linux L04.2 PAUSED / NON-BLOCKING DESKTOP ENGINEERING, не DONE.**
+R3 SOURCE GATE DONE/review accepted; .11 CONSTRUCTION DONE/frozen internal candidate,
+exact0.2.12~l03.2.11/candidate570a5515…/system34b27cb9… read-only. Source/native/
+system/reference/46 tests/embedded equality PASS; inner exit0, outer exit1 только
+root-owned `embedded.json` collision. Installed package/live P0/P1/Auto NOT_RUN;
+product defect не установлен, overall CI PASS нет. Collision — existing D02/CI
+debt, не Android launch blocker. Linux installed acceptance только отдельным
+потоком после controlled beta; не повторять harness, не переименовывать receipt,
+не чинить launcher, не rebuild/install/rollback, не использовать retained identity,
+не запускать P0/P1/Auto/AppImage lifecycle/L05/L06 и не публиковать Linux artifacts.
+
+**STOP. NEXT — закрыть только фактические Android controlled-beta launch blockers.**
+Этот readiness checkpoint не начинает их реализацию автоматически.
+
+### Предыдущие priority/ops records — исторические, не активные NEXT
+
+Ни один сохранённый ниже Linux NEXT не переопределяет owner decision27.10.
 
 **Текущий bounded task — L04.2; R3 PARTIAL / PACKAGE_GATE_FAILED (environment harness finalization).**
 R2 FINAL PARTIAL / READINESS_CAUSE_UNRESOLVED accepted; original typed fetch
@@ -168,6 +208,7 @@ D02.1-R остаётся PARTIAL/NOT_RUN; D01 открыт. Дальнейшие
 
 | ID | Результат | Зависимость | Статус | Критерий завершения |
 |---|---|---|---|---|
+| ANDROID-CONTROLLED-BETA | Controlled paid Android beta readiness | exact signed106/reference; owner FIELD-1 PASS; canonical read-only lookup | PREPARATION DONE / LAUNCH BLOCKED | [14 launch gates](releases/2026-10-27-android106-controlled-beta-readiness.md): full in-place preservation/three launches, paid state/payment/expiry, delivery/recovery, legal/opt-in cohort/monitoring/stop evidence.49 backend +20 JVM PASS bounded; not full upgrade or paid-launch PASS. No desktop/full-green-CI dependency; no automatic source edits/deployment. |
 | CHAT-UX-1 | Первый продуктовый desktop messenger UX checkpoint | explicit owner request; installed Ubuntu26.04 .7; штатный prepare-chat | IMPLEMENTED / REVIEW; validation PARTIAL | [Report](releases/2026-10-26-chat-ux-1.md). Одно GTK окно/ChatClient, adaptive dialogs/bubbles, fixed4096-byte composer/native emoji, bounded onboarding; backend unchanged. GTK27, desktop1226, exact package/AWG/TCP/integrity/12 screenshots PASS; mandatory full57 FAIL unsuppressed, no overall acceptance PASS. Built .8 sourceb094595/candidate0bf09cee…, system43266d97… unchanged; owner install/publication/L04.2/full L05 NOT_RUN. STOP for review. |
 | U2604-COMPAT | Отдельный Ubuntu26.04/CPython3.14 source/system/package candidate | exact lock compatibility probe; explicit owner request; frozen .5 immutable | CHECKPOINT PASS (compatibility scope; review pending) | [Report](releases/2026-10-26-linux-ubuntu2604-python314-compat.md). Exact .7 candidate c79b4feb…/system43266d97…, manifests [3,14], imports/DEB/AppImage/pkexec/READY/rollback/tamper/barriers/state PASS. Full suites executed unsuppressed: local3257/55/104; general CI not PASS, residual debt retained. No workstation/private identity/gateway/live VPN. STOP for review. |
 | LOCAL-OWNER-UPGRADE | Установка совместимого candidate на workstation владельца | отдельный review U2604-COMPAT и разрешение владельца | Исторический ABI blocker .5; установленная .7 теперь read-only verified | CHAT-UX-1 подтверждает только installed .7 manifest/dpkg и owner context prepare-chat, не воспроизводит acceptance/upgrade. Новая .8 владельцу NOT_RUN; сначала review CHAT-UX-1. Остальные installed checks не объявлены выполненными и не запускаются автоматически. |
@@ -187,6 +228,13 @@ D02.1-R остаётся PARTIAL/NOT_RUN; D01 открыт. Дальнейшие
 
 <a id="ci-evidence"></a>
 ### D01/D02: наблюдавшиеся ошибки после baseline push
+
+**PACKAGE_HARNESS_EMBEDDED_RECEIPT_FILENAME_COLLISION — OPEN technical debt.**
+R3 inner `embedded.json` root-owned receipt уже содержит PASS/container exit0;
+outer summary пытается перезаписать тот же path и получает PermissionError/exit1.
+Product defect не установлен. Future correction: разные filenames для inner и
+outer либо outer summary в отдельном user-owned evidence directory. В этом
+checkpoint нет rename/repair/replay; не launch blocker Android. L04.2 PAUSED.
 
 Эти ссылки — исходные наблюдения, не CI-проверки D00 и не автоматическое заключение
 о причине каждого job. Разделить dependency/collection и fixture-import failures по фактическим logs.
@@ -260,7 +308,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 | L03 | Полный внутренний Linux-кандидат | L02, D05, D01.3; L03.1 + L03.2 | DONE (review accepted; internal candidate scope) | Согласованы GUI, пользовательские службы, root-helper, native/RNS, зависимости и установка; capabilities соответствуют точному составу реально интегрированного пакета. Exact final-2 AppImage/DEB L03.2 проверены, review принят. Это не installed live acceptance L04/L05 и не public release. |
 | L03.1 | Согласованный system/runtime payload, безопасная установка и ограниченный chat setup | принятые L01/L01-R, local L02/L02.2, D03/D04/D05, D01.3/D01.3-R | DONE (review accepted; exact build-9) | [Отчёт](releases/2026-10-25-linux-system-runtime-l03-1.md): полный hash/member/import closure, native/RNS/anchor; install exclusion/rollback и точные capabilities; fixed UID setup без VPN. Build-9,758 files;94 финальных адресных (umask077), desktop1120/24; actual disposable systemd255 install/polkit/UID/rollback/capability smoke PASS, private network/D-Bus/resolver. Source f826dbd: Client Linux и isolated native/root→UID/Auto/DIRECT CI PASS; rollback re-mask/start refusal PASS. Control/phase0/Docker по54 failures/errors0; voice observation сохранён, не общий CI PASS. Собственный system-only gate не равен L04/L05 PASS; review принят, включение в полный кандидат завершено в L03.2. |
 | L03.2 | Включение принятого состава в AppImage/DEB | review L03.1 принят | DONE (review accepted; exact final-2) | Sourcecf66532, candidate9d4b13cc…, внутренние0.2.12~l03.2.1 AppImage/DEB с exact build-9; inventory/import/реальные polkit/setup/background/removal и rollback/barrier PASS в disposable Ubuntu24.04/systemd255. Desktop1146/24, адресные62 PASS; Client Linux/isolated native и final package CI40184803906 PASS. CI rebuildf7f6e765… не заменяет final-2. Full suites по54 failures отдельно. [Evidence](releases/2026-10-25-linux-candidate-l03-2.md). Legacy six-file/updater сохранён; не L04/L05 PASS. |
-| L04 | Установленный Linux VPN | L03; L04.1 + L04.2 | IN_PROGRESS (только L04.2) | L04.1 DONE; R2 FINAL PARTIAL/cause unresolved accepted. R3 source gate DONE/review accepted; raw full suite FAIL, fixture-absent19 remains D02.1-R/CI debt. .11 candidate570a5515/system34b27cb9 constructed; package harness STOP, live NOT_RUN. Parent DONE/review pending only after complete installed P0/P1/Auto/lifecycle gates. |
+| L04 | Установленный Linux VPN | L03; L04.1 + L04.2 | PAUSED / NON-BLOCKING DESKTOP ENGINEERING | L04.1 DONE; L04.2 paused by owner27.10, not DONE. R3 source gate accepted, .11 construction frozen; installed MESH/Auto gates remain open in a separate stream after controlled beta. Not an Android launch prerequisite; no automatic retry, install or publication. |
 | L04.1 | Установленная приёмка exact Linux candidate: AWG/TCP | review L03/AUTH/PROVISION/LIVE-1-R/RETEST/R2 и final LIVE-2 принят | DONE (review accepted; installed Linux AWG/TCP) | [RETEST](releases/2026-10-25-linux-installed-awg-tcp-l04-1-retest.md) и [final E/F1/F2](releases/2026-10-25-linux-installed-awg-tcp-l04-1-final.md) accepted. Exact .5 frozen/internal/unpublished. Registry restart — отдельное ops observation, continuity NOT_PROVEN/cause unknown; assignment/configuration unchanged. F2 не повторять; R3 не создавать. |
 | L04.1-AUTH | Одна отдельная test identity/activation | explicit owner authorization25.10; fbb1732 accepted; L04.1-AUTH-PROVISION | DONE (review accepted) | [Activation](releases/2026-10-25-linux-test-activation-l04-1-auth.md) и [provisioning](releases/2026-10-25-linux-test-provisioning-l04-1-auth.md): одна FC-3YSQ-BE2D; registry/replay/resume и verified nl AWG/TCP assignment PASS. Outside-checkout state UID1000/0700/0600, private teardown receipt. Issuance не повторять; последующий guest-only handoff проверен в LIVE-1, original state сохранён. |
 | L04.1-AUTH-PROVISION | Один штатный per-device nl assignment | accepted AUTH identity/activation subset; explicit owner authorization25.10 | DONE (review accepted) | Один FriendsOwner.configuration("nl") из exact final-2 Python3.12/vendor, без driver/retry: один AWG row/live peer и один persisted/runtime Xray user; чужие bindings и global settings сохранены. Signature/device/cache/floor/readback PASS, apply в этом checkpoint NOT_RUN. [Evidence и ограничения](releases/2026-10-25-linux-test-provisioning-l04-1-auth.md). Не повторять provisioning отдельно от разрешённого product connect. |
@@ -272,7 +320,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 | L04.1-LIVE-2-RESUME | Installed negative acceptance exact .4, continuation | A/B1 review PASS; existing test identity/nl; fresh KVM | PARTIAL (STOP E; review accepted) | [Continuation](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2-continuation.md). P1/P2/B1/B2/C1/C2/D PASS on exact .4. E FAIL: queued Future/busy/open/CONNECTING; no late VPN start proven, helper/TUN0/generation0/null. Fixture cancels before worker release; F1/F2 NOT_RUN. Source/candidate unchanged; L04.2/L05/teardown NOT_RUN. |
 | L04.1-LIVE-2-R2 | Normal queued Connect/Close ownership; new internal .5 | LIVE-2 PARTIAL/review accepted, E defect; source/package only | DONE (review accepted; source/package) | [Report](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md): source1c2beb6/candidate f0ee1760…, unchanged verified system8d7d78ec…. Red4/targeted197/full1191 PASS; normal mutation Future/revision fence, running/done-undelivered blocks Close. Exact .5 package/integrity and Linux/AWG/TCP/package CI PASS; local isolated gates PASS. Full CI54/54/54 failures retained, no overall PASS. R2 used no private state/gateway/live E/F; later LIVE-2 result above. |
 | L04.1-AUTH-TEARDOWN | Обязательная очистка отдельного test device | после L04/L05 или завершения test campaign; отдельное разрешение/review | QUEUED / NOT_RUN | Device-scoped gateway cleanup → readback отсутствия только test peer/user при сохранении чужих ресурсов → registry revoke. Private receipt содержит exact binding hashes/row/address/read-only checks и дополнен L04.2 test chat/store/keyring, certificate issuance/expiry и registration. Revoke/teardown не выполнялись. Штатного unregister сейчас нет; не восстанавливать целиком старые DB/server.json и не начинать cleanup автоматически. |
-| L04.2 | Installed Linux MESH/Auto | L04.1; accepted R3 source gate | PARTIAL (R3 package harness) | R2 FINAL PARTIAL/cause unresolved. Source2d125137 and retained affected gates accepted; raw full55 normalized as local36 + environment fixture-absent19, no overall CI PASS or new baseline. .11 candidate570a5515/system34b27cb9 constructed; reference tests46 PASS. Embedded assertions/container exit0 PASS; outer receipt overwrite PermissionError/exit1 stops remaining package/live gates. No replay or source fix. No live .10/owner/L05/server changes. [R3 report](releases/2026-10-27-linux-readiness-cause-preservation-l04-2-r3.md). |
+| L04.2 | Installed Linux MESH/Auto | L04.1; accepted R3 source gate; separate future owner authorization | PAUSED / NON-BLOCKING DESKTOP ENGINEERING | SOURCE GATE DONE/review accepted; .11 CONSTRUCTION DONE/frozen internal candidate570a5515/system34b27cb9.46 tests/embedded equality PASS, inner exit0; outer exit1 only receipt collision, existing D02/CI debt. No established product defect; installed package/live P0/P1/Auto NOT_RUN, not L04.2 DONE or overall CI PASS. No harness/launcher/rebuild/install/rollback/identity/lifecycle/L05/L06/publication. [Owner decision](releases/2026-10-27-android106-controlled-beta-readiness.md), [historical R3 evidence](releases/2026-10-27-linux-readiness-cause-preservation-l04-2-r3.md). |
 | L05 | Установленный Linux-мессенджер | L03, L04 | QUEUED / NOT_RUN | DIRECT/MESH-доставка без VPN и с VPN, контакты/текст/голос, история и фоновые события — completion gate на реальных компонентах. Backlog: L04.2 observation registration_error=delivery_unavailable; причина не локализована, client defect/gateway outage не заявлены. Исключён из L04.2 core prerequisites final review-решением; диагностика/repair здесь NOT_RUN. Вне Linux AWG/TCP Beta scope; автоматически не начинать. |
 | L06 | Linux recovery | L04, L05 | QUEUED | Loss/return, sleep/resume, restart/cancel, bounded recovery and one reconnect owner. READINESS_RELAY_PROBE_CORRELATION_GAP: validated Post probe is not forwarded through relayProcess/RNS/Channel/provider; zero direct rows cannot count relay calls. No wire expansion in R3. R2 cooldown-only retry mechanism reproduced deterministically in R3; original live exact network counts remain unknown. Automatically do not start. |
 | L07 | Linux visual parity | L03, L06 | QUEUED | Реальные окна: согласованные экраны/состояния, список вариантов и отдельные selected-next/active state по D05, RU/EN, DPI100/125/150/200%, resize/focus/Tab/Enter/Escape; сопоставление с точным Android-эталоном без изменения Android106. |
@@ -415,3 +463,7 @@ Django7.1 (servers/access/payments) зависит от backend/fencing и recov
 [отчёт D00](releases/2026-10-24-desktop-parity106-d00.md).
 **STOP после CHAT-UX-1. NEXT — review CHAT-UX-1 перед установкой нового UI-кандидата владельцу;
 L04.2/full L05/TCP HTTPS diagnosis/teardown/signing/publication NOT_RUN.**
+
+Этот прежний STOP сохранён как история. **Текущий STOP27.10: readiness checkpoint
+завершён; NEXT — закрыть только фактические ANDROID-CONTROLLED-BETA launch blockers.
+Linux L04.2 PAUSED / NON-BLOCKING DESKTOP ENGINEERING, не DONE.**
