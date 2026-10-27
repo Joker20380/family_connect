@@ -1,32 +1,27 @@
 # Текущее состояние / Current state
 
-**L04.2 — R2 PARTIAL / READINESS_CAUSE_UNRESOLVED; classification F.**
-Read-only correlation27.10, inputf417982. Phase B/setup/GUI-bound authorization
-remain DONE/review accepted; not replayed. Runtime169aa68 and sealed .10
-candidate42644067…068b55a/sourceb8e9196/system8ab7f298… unchanged. Latest request's
-candidate suffix differs from sealed manifest; no substitution or live use.
-Failed derivative inspected offline/read-only, not booted; no new derivative,
-GUI/helper/setup/Connect/Disconnect/fetch/registration or Phase B tests.
-Durable import receipt=FETCH_FAILED/ACK_PENDING, distinct from final supervisor
-EXPIRED_ON_IMPORT. Cache response and receipt_context unchanged; only next_attempt
-changed. Old response expired26.10 18:31:47, already46589s expired at27.10
-07:28:16 failure receipt. Hash binding matches prior server READY row, whose
-original fetch had13488s remaining. Near-expiry fresh delivery NOT_PROVEN.
-Exact device/time query: challenge/fetch/ACK rows0; matching failed-probe ingress
-records0. These are durable counts, NOT actual wire request counts. Exact HTTP/
-network subreason and failed prerequisite unavailable; B-shaped fallback mechanism
-proven, full B cause not established, therefore F and STOP. No client/server patch,
-material update, policy edit/deployment or clock fix. Current source-material
-metadata is not proof of availability/clock offset at failure.
-Attempts2–12 occur inside retained cooldown; not twelve fetches. Exactly one
-actual server fetch unproven; L06 recovery observation, not confirmed correlation.
-Original7/READY base/failed derivative/.9/.10 hashes preserved. Existing safe
-cleanup/message-count0 evidence retained, not full lifecycle PASS. Owner workstation
-NOT_USED. P0 replay/P1/Auto/lifecycle/AppImage NOT_RUN.
-[Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
-L04.1 DONE; parent L04 IN_PROGRESS; L05 NOT_RUN/delivery_unavailable backlog,
-L06/L07/L08 прежние QUEUED; messages/voice/signing/publication NOT_RUN.
-**STOP. NEXT — final review L04.2-R2.**
+**L04.2 — R3 PARTIAL / SOURCE_GATE_FAILED.**
+R2 FINAL PARTIAL / READINESS_CAUSE_UNRESOLVED accepted: diagnostic collapse
+hid the original fetch cause. No further live Connect on .10. R3 is a bounded
+subtask of L04.2, not a new top-level PLAN ID. Input70b919b; R1/R2 runtime169aa68
+cleanup/containment/drain semantics preserved. Deterministic old-red reproduces
+availability→expired/missing cache masking; source now retains typed fetch error,
+keeps FETCH_FAILED as import result, preserves validated-cache fallback and makes
+cooldown-only MISSING/EXPIRED terminal. Existing FETCH_INCOMPATIBLE_RESPONSE is
+added to strict desktop diagnostics. Exact Go race, native15, combined3, MESH157,
+cleanup32 and desktop1317/82skip PASS. Android/Python selection142 PASS/1 FAIL:
+Java fixture cannot load Gson JsonElement, before readiness assertion. This new
+affected failure ID is not in historical36 baseline; no product defect inferred.
+STOP without replay/fix: full-repository comparison NOT_RUN; .11 NOT_BUILT,
+new system/package/live NOT_RUN. Sealed internal/unpublished .10 remains
+4264406722f6dd3efb83e9d9666e67180ce4f950333bb3e711bcbb4f5068b55a;
+incorrect historical task suffix is not an artifact identity. Phase B/setup/GUI
+authorization evidence retained, not replayed. No server/material/policy changes.
+READINESS_RELAY_PROBE_CORRELATION_GAP belongs to L06; direct correlation rows
+cannot count relay requests. No RNS/wire expansion. Owner workstation NOT_USED.
+L04 IN_PROGRESS; L04.1 DONE; L05/messages/voice/signing/publication NOT_RUN.
+[Current R3 report](releases/2026-10-27-linux-readiness-cause-preservation-l04-2-r3.md).
+**STOP. NEXT — review L04.2-R3.**
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted (owner review).**
 Exact **0.2.12~l03.2.9** установлен; candidate/package/system checks PASS,

@@ -4,25 +4,18 @@ Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN
 STATUS/PLAN define the current bounded task and next review gate, not an automatic
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
-[L04.2-R2 system/candidate continuation](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md)
-continues the same PLAN L04.2. Runtime169aa68 is review accepted; exact .10
-candidate42644067…/sourceb8e9196/system8ab7f298… unchanged, no rebuild or new ID.
-Phase B DONE/review accepted, not repeated wholly or partly; all accepted
-source/package selections and historical residual baseline retained, no overall CI PASS.
-Current PARTIAL / READINESS_CAUSE_UNRESOLVED, classification F, inputf417982.
-Read-only offline cache/server correlation only; no target boot or product action.
-Persisted import receipt FETCH_FAILED/ACK_PENDING differs from final supervisor
-EXPIRED_ON_IMPORT. Old response/context unchanged, only next_attempt changed;
-prior server READY row matches, original remaining lifetime13488s. No fresh
-near-expiry delivery proved. Current-window durable challenge/fetch/ACK rows0 and
-exact ingress-probe matches0 do not establish actual wire counts or exact HTTP/
-network cause. No source/material/server/clock changes and no corrected Connect.
-Phase B/setup/exact GUI authorization remain accepted; no repeats. Original7,
-READY/failed images and immutable .9/.10 preserved. Request candidate-ID suffix
-mismatch recorded; sealed delivery not replaced. Cooldown-only retry observation
-belongs to L06 review; one actual server fetch unproven. P1/Auto/lifecycle/AppImage
-NOT_RUN; no full lifecycle acceptance or overall CI PASS.
-STOP. NEXT — final review L04.2-R2. The accepted
+[L04.2-R3 readiness cause preservation](releases/2026-10-27-linux-readiness-cause-preservation-l04-2-r3.md)
+continues existing PLAN L04.2. R2 is FINAL PARTIAL / READINESS_CAUSE_UNRESOLVED;
+its Phase B/setup/GUI authorization and immutable .10 evidence remain accepted.
+No further live Connect on .10. R3 is PARTIAL / SOURCE_GATE_FAILED: preserve typed
+availability failure independently of FETCH_FAILED receipt, preserve validated
+cache fallback, bound cooldown-only supervisor retry. Exact Go/native/MESH/cleanup
+and desktop1317+82skip pass; Android/Python142 PASS/1 FAIL because the Java fixture
+cannot load Gson before the readiness assertion. No replay; full-suite comparison
+and .11/system/package/live NOT_RUN. READINESS_RELAY_PROBE_CORRELATION_GAP is L06 debt; no server,
+material, policy or wire changes. Owner workstation NOT_USED; L05/messages/voice
+acceptance/signing/publication NOT_RUN. STOP. NEXT: review L04.2-R3.
+The accepted
 [core P0 failure](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
 is not replayed on .9. Historical reports and .9/system bytes remain immutable.
 Chat delivery_unavailable stays in L05 backlog, not a VPN prerequisite; no chat

@@ -1,0 +1,137 @@
+{
+  "schema": 1,
+  "task": "L04.2",
+  "checkpoint": "R3",
+  "result": "PARTIAL / SOURCE_GATE_FAILED",
+  "reason": "ANDROID_CONTRACT_FIXTURE_CLASSPATH_UNAVAILABLE",
+  "input_commit": "70b919bba0aac1249c6d2c5a6e220e1ee0ae058d",
+  "accepted_r2_runtime": "169aa687f497f8be690be5331879f994636135e1",
+  "sealed_candidate_10": "4264406722f6dd3efb83e9d9666e67180ce4f950333bb3e711bcbb4f5068b55a",
+  "source_sha256": {
+    "carrier/desktopmesh/readiness_fetch.go": "f2f456d752d8abae1a5c991f86ffe402fa10e7841cb9b1526375d9cdfa624984",
+    "clients/linux/mesh_service.py": "e34d6b1462370dea9d6046ffedc1e6316be4e43e962208065f6fa707aac21bf3",
+    "clients/desktop/backend.py": "12ab9f4b9b3938c652eb58271d126c73509c1f47cd71e44bb4c81bcd68766a0d",
+    "carrier/desktopmesh/readiness_cause_test.go": "d34011e358fd2873b45eded942028c1e5e74e3eaa076bf24ff00039481a251f8",
+    "clients/mesh/materials/cause_test.go": "912b150b79e2ffb492de90c64683aaf43c056a7153b693aec1e22e43271eca93",
+    "clients/desktop/tests/test_mesh_readiness_cause.py": "60a0ea8fedc0906dcd71c61ea10786b6c6b158866f99869ba03adc09356c0672"
+  },
+  "private_log_sha256": {
+    "go-old-red.log": "cda1dc57409e994178ab3500535068218a0215c16a31521a0b106967245e6785",
+    "materials-old-red-verified.log": "92e87d82f3d6c4349e3670bfa244a69411de4aadd2e0b453de3befe28443f283",
+    "python-old-red-bounded.log": "ba8c4f51922fda745bb24e66b3949496721da15d462ce12f2918d2b0518dc9ff",
+    "go-exact.log": "ef4948a600ff19014980ddd99048eef2316831d07017748e90e7914f359dfaad",
+    "evidence/exact/native15.log": "dfc4aeed89d7c640e1fd2264106bb0e504c6d37120b02cb29b73b9d6fd34c977",
+    "evidence/exact/combined3.log": "0482e3785a9fadd06cbc32137540bcc3c9e3a0fd18158ebbb8111bc72e29b533",
+    "evidence/desktop.log": "447ceb4d8b2d064adc7cf44cdb481e58620817cceaab0fbcdc72de9c74baf0eb",
+    "evidence/mesh-cleanup.log": "39c998b2d0f0ea7c8d66c94833c4bfa6df4c6908e01f3efbf517e569f74eb66c",
+    "evidence/contracts.log": "a235993ea6b777f8f89f619401835739bd83b1b8bad12186f04498d51aa2d5df"
+  },
+  "gates": {
+    "go_version": "go1.26.0",
+    "go_race_desktopmesh": "PASS",
+    "go_race_native_packages": 7,
+    "native15": {
+      "passed": 15,
+      "failed": 0,
+      "seconds": 108.29
+    },
+    "combined3": {
+      "passed": 3,
+      "failed": 0,
+      "seconds": 79.2
+    },
+    "mesh": {
+      "passed": 157,
+      "failed": 0,
+      "seconds": 19.5
+    },
+    "cleanup": {
+      "passed": 32,
+      "failed": 0,
+      "seconds": 4.84
+    },
+    "desktop": {
+      "passed": 1317,
+      "failed": 0,
+      "skipped": 82,
+      "seconds": 78.48
+    },
+    "readiness_android_contracts": {
+      "passed": 142,
+      "failed": 1,
+      "skipped": 0,
+      "seconds": 10.93
+    },
+    "full_repository": "NOT_RUN_AFTER_STOP",
+    "system_build": "NOT_BUILT",
+    "candidate_11": "NOT_BUILT",
+    "package": "NOT_RUN",
+    "live": "NOT_RUN"
+  },
+  "failure_comparison": {
+    "scope": "affected selection only; not a full-suite comparison",
+    "historical_baseline_failure_ids": [
+      "clients/desktop/tests/test_chat_direct_runtime.py::test_unit_umask_fresh_runtime_and_real_uid[lock]",
+      "tests/test_device_identity.py::test_unsafe_directory_rejected",
+      "tests/test_friends_http_evidence.py::test_evidence_rejects_unsafe_path_and_generation",
+      "tests/test_friends_http_runtime.py::test_actual_nginx_handler_matrix[False]",
+      "tests/test_friends_http_runtime.py::test_actual_nginx_handler_matrix[True]",
+      "tests/test_friends_http_runtime.py::test_exact_future_https_gate_verifies_tls",
+      "tests/test_friends_http_runtime.py::test_nginx_reports_unready_upstream_without_status_regression",
+      "tests/test_friends_http_runtime.py::test_packaged_operator_shell_trap_preserves_receipts",
+      "tests/test_friends_http_runtime.py::test_probe_receipt_survives_failed_gate_and_rollback",
+      "tests/test_friends_http_runtime.py::test_support_and_status_authorization_matrix[invalid]",
+      "tests/test_friends_http_runtime.py::test_support_and_status_authorization_matrix[invite_revoked]",
+      "tests/test_friends_http_runtime.py::test_support_and_status_authorization_matrix[malformed]",
+      "tests/test_friends_http_runtime.py::test_support_and_status_authorization_matrix[missing]",
+      "tests/test_friends_http_runtime.py::test_support_and_status_authorization_matrix[missing_backfill]",
+      "tests/test_friends_http_runtime.py::test_support_and_status_authorization_matrix[revoked]",
+      "tests/test_friends_http_runtime.py::test_support_and_status_authorization_matrix[unknown]",
+      "tests/test_http_candidate_preflight.py::test_source_unit_route_and_immutable_archive_guards",
+      "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[None]",
+      "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[accept]",
+      "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[incomplete_external]",
+      "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[incomplete_owner]",
+      "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[old_drain]",
+      "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[owner]",
+      "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[render]",
+      "tests/test_http_candidate_preflight.py::test_verified_blue_green_direct_and_external_contracts[restore]",
+      "tests/test_http_transition.py::test_exact_attempt9_cadence_reproduces_shared_per_ip_limit[matrix]",
+      "tests/test_http_transition.py::test_exact_attempt9_cadence_reproduces_shared_per_ip_limit[observer]",
+      "tests/test_http_transition.py::test_failed_real_switch_restores_routing_before_candidate_stop",
+      "tests/test_http_transition.py::test_readiness_first_switch_and_three_paced_complete_matrices",
+      "tests/test_http_transition.py::test_stop_before_start_reproduces_refused_socket_and_nginx_502",
+      "tests/test_http_transition.py::test_three_live_switches_keep_paced_inflight_ordinary_requests_healthy",
+      "tests/test_http_transition.py::test_user_like_ordinary_challenges_do_not_hit_limits",
+      "tests/test_native_authority_compat.py::test_four_hour_real_delivery_cross_language",
+      "tests/test_native_authority_compat.py::test_long_testing_window_preserves_native_expiry_checks",
+      "tests/test_product_registration.py::test_database_requires_private_storage",
+      "tests/test_readiness_adapter_packaging.py::test_exact_candidate_mode_with_local_fixture_only"
+    ],
+    "observed_failure_ids": [
+      "tests/test_android_challenge_contract.py::test_android_response_parser_and_proof_roundtrip"
+    ],
+    "observed_error_ids": [],
+    "new_failure_ids": [
+      "tests/test_android_challenge_contract.py::test_android_response_parser_and_proof_roundtrip"
+    ],
+    "full_suite_failure_set_equality": "NOT_EVALUATED_AFTER_STOP"
+  },
+  "state_preservation": {
+    "candidate_id": "4264406722f6dd3efb83e9d9666e67180ce4f950333bb3e711bcbb4f5068b55a",
+    "artifacts_unchanged": true,
+    "ready_base_unchanged": true,
+    "failed_derivative_unchanged": true,
+    "protected_seven_unchanged": true,
+    "android_wire_pins_server_unchanged": true,
+    "owner_workstation": "NOT_USED",
+    "connect_count": 0,
+    "server_changes": false
+  },
+  "relay_observability_debt": "READINESS_RELAY_PROBE_CORRELATION_GAP",
+  "owner_workstation": "NOT_USED",
+  "source_fixes_after_stop": false,
+  "builds_after_stop": false,
+  "live_connects": 0,
+  "server_changes": false
+}

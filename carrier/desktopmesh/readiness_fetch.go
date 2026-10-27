@@ -206,6 +206,7 @@ func resolveReadiness(ctx context.Context, cache *ReadinessCache, client *Readin
 	if err != nil {
 		return nil, "", err
 	}
+	var availabilityError error
 	if run {
 		*result = "FETCH_FAILED"
 		raw, err := client.Fetch(ctx, transport, attempt)
@@ -257,6 +258,7 @@ func resolveReadiness(ctx context.Context, cache *ReadinessCache, client *Readin
 		if !failure.Availability {
 			return nil, "", err
 		}
+		availabilityError = err
 	}
 	raw, code := cache.Usable(client.clock())
 	if ctx.Err() != nil {
@@ -264,6 +266,9 @@ func resolveReadiness(ctx context.Context, cache *ReadinessCache, client *Readin
 		return nil, "", ctx.Err()
 	}
 	if code != ReadinessReady {
+		if availabilityError != nil {
+			return nil, "", availabilityError
+		}
 		return nil, "", code
 	}
 	return raw, ReadinessSaved, nil
