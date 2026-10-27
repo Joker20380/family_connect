@@ -20,6 +20,13 @@ loader, SSH credential, transport or canary binding is installed. A future revie
 bound launcher must select one fixed root-owned configuration and the existing sync
 lock; choosing a different lock or accepting config through stdin/web/argv is forbidden.
 
+The capsule contains only exact committed segments of the existing generic strict
+parser (require/unique/parse/fields/key and base64/json imports); unused catalog and
+profile code is not included. The manifest records full-source and selected-segment
+hashes. This removes operational-looking IP constants without reimplementing parser
+functions or weakening any validation. Build-time scans reject embedded IPs/private
+selectors/keys/config paths. No installed source or accepted lookup capsule is changed.
+
 The pure `restricted_admin.build_crl_payload` reads an existing DB snapshot and
 returns PEM/metadata without writing a sequence/file. Existing `publish_crl` uses
 that builder and keeps its operator behavior. Canary lifetime is fixed900s, number

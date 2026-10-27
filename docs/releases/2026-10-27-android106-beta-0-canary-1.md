@@ -120,6 +120,16 @@ Its source inventory excludes the changed restricted_admin and new helper; no re
 is needed. New unbound CRL package receipt follows after exact source commit/build.
 No bound envelope/activation/expire/recovery permit is built.
 
+The first post-commit package audit found IP constants in unused catalog-validation
+functions. It was rejected by the capsule's no-IP gate and retained privately, not
+delivered. A packaging-only follow-up extracts exact committed source segments for
+the five required strict-parser functions and their two stdlib imports; no function
+is rewritten, no authority/parser policy is relaxed. The full source blob hash,
+selected names and exact segment hashes are recorded in source_projections, alongside
+ordinary member hashes. Unused catalog/profile code and all IP constants are excluded.
+AST equality, isolated import/help and deterministic package tests PASS. No accepted
+lookup artifact or backend source is changed by this packaging correction.
+
 **STOP. NEXT — production read-only owner lookup and binding, not automatically.**
 No production key/configuration installed, no CRL publication or local live files
 changed, no CP2 redeployment or gateway/Android change. Historical evidence retained.

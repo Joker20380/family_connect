@@ -38,6 +38,13 @@ def test_deterministic_unbound_committed_package(source, tmp_path):
         manifest = strict(manifest_raw, 32768)
         assert manifest['binding'] == 'unbound' and manifest['operation_permit'] is None
         assert manifest['production_configuration'] == 'absent'
+        original = subprocess.check_output(['git', 'show', 'HEAD:' + package.PARSER_SOURCE], cwd=source)
+        projected, provenance = package.parser_projection(original)
+        assert archive.read(package.PARSER_SOURCE) == projected
+        assert manifest['source_projections'] == {package.PARSER_SOURCE: provenance}
+        original_functions = {node.name: ast.dump(node) for node in ast.parse(original).body if isinstance(node, ast.FunctionDef)}
+        projected_functions = {node.name: ast.dump(node) for node in ast.parse(projected).body if isinstance(node, ast.FunctionDef)}
+        assert projected_functions == {name: original_functions[name] for name in package.PARSER_DEFINITIONS}
         assert archive.read('operation-permit.json') == b'null'
         assert receipt['manifest_sha256'] == hashlib.sha256(manifest_raw).hexdigest()
         assert set(archive.namelist()) == set(manifest['files']) | {'source-manifest.json'}
@@ -45,6 +52,7 @@ def test_deterministic_unbound_committed_package(source, tmp_path):
             raw = archive.read(name)
             assert hashlib.sha256(raw).hexdigest() == expected
             assert not re.search(rb'FC-[A-Z0-9]{4}-[A-Z0-9]{4}|-----BEGIN [A-Z ]*PRIVATE KEY|dirty_source_must_not_ship', raw)
+            assert not re.search(rb'\b(?:\d{1,3}\.){3}\d{1,3}\b|/opt/apps/|/etc/family', raw)
             assert not any(name.endswith(suffix) for suffix in ('.db', '.env', '.pem', '.key'))
             assert archive.getinfo(name).date_time == (1980, 1, 1, 0, 0, 0)
             if name.endswith('.py'):
@@ -78,3 +86,12 @@ def test_missing_committed_member_rejected(source, tmp_path):
                     'commit', '-qm', 'missing fixture member'], cwd=source, check=True)
     with pytest.raises(ValueError, match='Missing committed regular source'):
         package.build(tmp_path / 'missing.pyz', 'HEAD', repository=source)
+    (source / 'LICENSE').write_bytes((package.ROOT / 'LICENSE').read_bytes())
+    helper = source / 'control/friends/paid_canary_crl.py'
+    helper.write_text(helper.read_text() + '\nFORBIDDEN_ENDPOINT = ' + repr('.'.join(('192', '0', '2', '1'))) + '\n')
+    subprocess.run(['git', 'add', '.'], cwd=source, check=True)
+    subprocess.run(['git', '-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
+                    'commit', '-qm', 'forbidden endpoint fixture'], cwd=source, check=True)
+    with pytest.raises(ValueError, match='Operational data forbidden'):
+        package.build(tmp_path / 'forbidden.pyz', 'HEAD', repository=source)
+    assert not (tmp_path / 'forbidden.pyz').exists()
