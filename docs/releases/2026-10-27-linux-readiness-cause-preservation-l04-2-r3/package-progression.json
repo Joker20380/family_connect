@@ -1,0 +1,161 @@
+{
+  "accepted_product_source": "2d125137b28e096187433608022daa1590d7a6f0",
+  "build_source": "7983b587f47a2b3c425568949a760da8396c73e5",
+  "system": {
+    "file": "FamilyConnect-MESH-system-amd64.tar.gz",
+    "sha256": "4794ae4d8bb0b794aced081b4c330595e18aeaf334ba6b787c248daaa5725ae4",
+    "size": 49251389,
+    "source_digest": "2292c24503ed0b275d2c296100dbca4572973cf3dce41d12e22645154ca9c833",
+    "build_id": "34b27cb97abb149b9a59f7ea4ad2ea2e9b79aab5e4e9345c064b6a98d20e5db8",
+    "installed": false,
+    "published": false,
+    "runtime_acceptance": "NOT_RUN",
+    "complete_desktop_installer": false,
+    "signature": "none",
+    "archive_verified": true
+  },
+  "archive_regular_members": 759,
+  "root_modes": "PASS",
+  "source_files_count": 113,
+  "source_files_key_set_unchanged": true,
+  "source_changes": {
+    "lib/backend.py": {
+      "old": "3805bdb290c39af3738fbe803bf5bc415e31c251196e5673cbcaea41c33e6157",
+      "new": "12ab9f4b9b3938c652eb58271d126c73509c1f47cd71e44bb4c81bcd68766a0d"
+    },
+    "lib/mesh_service.py": {
+      "old": "277d6fe544b86a34da85bf1f37f2dc739faf8c4d5035a2efe14409ff3e6bf244",
+      "new": "e34d6b1462370dea9d6046ffedc1e6316be4e43e962208065f6fa707aac21bf3"
+    }
+  },
+  "native_source_digest_old": "cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61",
+  "native_source_digest_new": "2292c24503ed0b275d2c296100dbca4572973cf3dce41d12e22645154ca9c833",
+  "rns_source_digest_unchanged": "66128235484f01b82bfd2e4ad604a486428706fc48020abbf84211554edef26e",
+  "all_other_source_pins_unchanged": true,
+  "independent_source_manifest_archive_hashes": "PASS",
+  "schema": 1,
+  "source_gate": "DONE / review accepted for package progression",
+  "full_suite": {
+    "failures": 55,
+    "passed": 3373,
+    "skipped": 105,
+    "errors": 0,
+    "common": 35,
+    "local_only": 1,
+    "fixture_absent": 19,
+    "new_vs_union": 0,
+    "missing_vs_union": 0,
+    "union_is_permanent_baseline": false,
+    "overall_ci_pass": false,
+    "fixture_classification": "ENVIRONMENT_FIXTURE_INPUT_ABSENT",
+    "debt": "D02.1-R",
+    "rerun": false
+  },
+  "native": {
+    "schema": 1,
+    "os": "linux",
+    "arch": "amd64",
+    "reference": "android106-native105",
+    "source_digest": "2292c24503ed0b275d2c296100dbca4572973cf3dce41d12e22645154ca9c833",
+    "xray_revision": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+    "xray_patch_sha256": "eaeb30fd1e2aa52272d7f3a2a06bcad7b983ca9866a87fbd0a614eede6048872",
+    "go": "go version go1.26.0 linux/amd64",
+    "build_tags": [],
+    "files": {
+      "fc-mesh": {
+        "sha256": "08314caba221da54c359c9554e365cb5f0ea748c9e3074b245c1821a0f32c718",
+        "size": 29018163
+      }
+    },
+    "installed": false,
+    "runtime_acceptance": "NOT_RUN",
+    "publicly_distributed": false,
+    "local_packet_ipc_tests": "PASS",
+    "chat_reference_manifest": "9e89de27fd970ad387a7841dace204c9d55748cc60b36e652d489a2a366de6d5",
+    "chat_integration": {
+      "vpn_ownership": "integrated",
+      "private_worker_ipc": "inherited-unix-stream-v1",
+      "desktop_api_mailbox_ipc": "linux-existing-exit-host-source",
+      "service_only_host": "linux-demand-host-source-partial",
+      "process_ownership": "linux-flock-drain-source",
+      "protected_underlying_direct": "linux-fixed-chat-host-source"
+    }
+  },
+  "reference_gates": {
+    "old_reference": "System sources differ from the pinned candidate contract",
+    "new_reference": "PASS",
+    "changed_member_mutation": "System sources differ from the pinned candidate contract",
+    "unchanged_member_mutation": "System sources differ from the pinned candidate contract",
+    "historical_10_system": "System sources differ from the pinned candidate contract"
+  },
+  "namespace_preflight": {
+    "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+    "locks": {
+      "control/requirements.lock": "5adccf995e9634be711ae3167229cca0d2751b493c3a041dd68c745ec44ad94a",
+      "device_identity/requirements.lock": "8133533475c48477f7ccf6d65a5c426a2511ceea61f6539c1667b3a6900a77be",
+      "provisioning/requirements.lock": "837d0aa08e47bca06da94f07056f0e3fc46380f03c365ad4fd48ce9a3d601e7c",
+      "messenger/requirements.lock": "d20e0c6336cc571e2313827b4d0c14ef328e9e0cc724bdc24054f15a7182493b"
+    },
+    "record_files": 630,
+    "distributions": {
+      "annotated-types": "0.8.0",
+      "anyio": "4.15.1",
+      "certifi": "2026.7.22",
+      "cffi": "2.1.1",
+      "cryptography": "46.0.7",
+      "h11": "0.16.0",
+      "httpcore": "1.0.9",
+      "httpx": "0.28.1",
+      "idna": "3.19",
+      "lxmf": "1.1.1",
+      "pycparser": "3.0",
+      "pydantic": "2.13.5",
+      "pydantic_core": "2.46.5",
+      "pyserial": "3.5",
+      "rns": "1.5.1",
+      "typing-inspection": "0.4.4",
+      "typing_extensions": "4.16.0"
+    },
+    "namespace_differs": true,
+    "dummy_address_count": 0,
+    "default_routes": 0,
+    "external_probe": "ENETUNREACH",
+    "resolver_used": false,
+    "reference": "PASS"
+  },
+  "owner_workstation": "NOT_USED",
+  "candidate": "NOT_BUILT",
+  "package_gates": "NOT_RUN",
+  "live": "NOT_RUN",
+  "system_installed": false,
+  "logs": {
+    "native-system.log": "f70bb8953c59f451e79f0ec3f81523ff13dfcbe3d33a7003fc85cba6f306b3d8",
+    "readiness-race.log": "b4572090e6176ba931bccafd7ff0f63532bf8f6b730ba97aaf6b57d601348a2a",
+    "reference-gates.log": "cf25c0725be4634fb6376adff4291450d56efcadd4b16bcd04ad653a82fc7db7",
+    "reference-tests.log": "8d5041452db0200229224c0878bb696bc5a1b0f6da1aa98ea09c8a5998f7bbfe",
+    "reference-tests.xml": "aa6c21e34511cba19802fe5cdc9067a2e95fdd15e224174dc16e81e4f8c05e53"
+  },
+  "immutable_state": {
+    "current_main": "623cdb290c23243a69000675c28824e56512bb62",
+    "accepted_product_source": "2d125137b28e096187433608022daa1590d7a6f0",
+    "workflow_docs_only_since_source": true,
+    "product_runtime_tests_locks_unchanged": true,
+    "source_sha256": {
+      "carrier/go.mod": "1db5f64f967ed2c2dd8597044e0b80eb96b7a006cb565ec00ce68cf2bd5a56e6",
+      "carrier/go.sum": "def397bbc55025fb9dc466467b6db0890fda295e7e42a393035533562dbba581",
+      "clients/android/control-tests/build.gradle": "ddf32796ee4e640611e46a3888e6f513b11830430d4edd5a0e97d366a9191790",
+      "clients/shared/android106-reference.json": "bbf115bd257abea956f6b41ab1617a5b2b371a8a7073c2daba8255a81143cbbb",
+      "carrier/desktopmesh/readiness_fetch.go": "f2f456d752d8abae1a5c991f86ffe402fa10e7841cb9b1526375d9cdfa624984",
+      "clients/linux/mesh_service.py": "e34d6b1462370dea9d6046ffedc1e6316be4e43e962208065f6fa707aac21bf3",
+      "clients/desktop/backend.py": "12ab9f4b9b3938c652eb58271d126c73509c1f47cd71e44bb4c81bcd68766a0d",
+      "carrier/desktopmesh/readiness_cause_test.go": "d34011e358fd2873b45eded942028c1e5e74e3eaa076bf24ff00039481a251f8",
+      "clients/mesh/materials/cause_test.go": "912b150b79e2ffb492de90c64683aaf43c056a7153b693aec1e22e43271eca93",
+      "clients/desktop/tests/test_mesh_readiness_cause.py": "60a0ea8fedc0906dcd71c61ea10786b6c6b158866f99869ba03adc09356c0672"
+    },
+    "immutable_10_artifacts_unchanged": true,
+    "ready_base_unchanged": true,
+    "protected_seven_unchanged": true,
+    "owner_workstation": "NOT_USED",
+    "connect_count": 0
+  }
+}

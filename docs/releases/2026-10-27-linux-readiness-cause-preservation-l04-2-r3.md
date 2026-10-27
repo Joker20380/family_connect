@@ -386,3 +386,60 @@ only after package PASS. No separate source checkpoint or review pause.
 Historical .10/system and authorized READY/protected state stay immutable;
 owner workstation NOT_USED. L05/messages/voice acceptance/signing/publication
 remain NOT_RUN. No server/material/policy changes are authorized here.
+
+## R3 native/system construction and bounded reference advancement
+
+Review acceptance commit7983b587f47a2b3c425568949a760da8396c73e5 was pushed;
+remote main matched. Build input is its clean tracked export, with no unrelated
+worktree changes. Runtime/tests/locks/pins match accepted2d125137. No .10 member,
+incomplete native binary or historical fixture capsule is reused as new source.
+
+Offline Ubuntu26.04/Python3.14.4 builder uses exact Go1.26.0, pinned Xray revision
+d2758a023cd7f4174a5a5fa4ff66e487d4342ba0 and unchanged patch/Android106/RNS pins.
+Private network namespace, `--network none --cap-add NET_ADMIN`, scoped
+safe.directory `/workspace` and `/xray.git`, synthetic UP/non-loopback fcbuild0
+without addresses, zero default routes and bounded ENETUNREACH probe PASS;
+resolver unused. Four exact requirement locks,630 RECORD files,17 distributions,
+pip check and reference preflight PASS. Source is read-only; harness is complete,
+syntax-checked, hashed and read-only before launch; output is fresh and separate.
+
+Standard native builder completes once: seven native packages PASS with race
+detector, including unchanged protection assertions; binary follows test PASS.
+Carrier desktopmesh readiness race PASS separately. Dependency/license inventory,
+source set before/after equality, RNS packaging and system installer/archive
+readback PASS. AWG/TCP pinned inputs come from their retained builder images,
+not historical system archives; behavior/pins are unchanged.
+
+| Construction artifact | Exact result |
+|---|---|
+| Native source digest |2292c24503ed0b275d2c296100dbca4572973cf3dce41d12e22645154ca9c833 |
+| Native binary |29018163 bytes; SHA25608314caba221da54c359c9554e365cb5f0ea748c9e3074b245c1821a0f32c718 |
+| System build ID |34b27cb97abb149b9a59f7ea4ad2ea2e9b79aab5e4e9345c064b6a98d20e5db8 |
+| System archive |49251389 bytes; SHA2564794ae4d8bb0b794aced081b4c330595e18aeaf334ba6b787c248daaa5725ae4 |
+| Archive inventory |759 regular members; uid/gid0; no group/world-writable members |
+| RNS digest, unchanged |66128235484f01b82bfd2e4ad604a486428706fc48020abbf84211554edef26e |
+
+Reference advancement changes only source_checkpoint, native_source_digest and
+two of113 source_files hashes, preserving the complete key set:
+
+| Member | New SHA256 (accepted source = manifest = extracted member) |
+|---|---|
+| lib/backend.py |12ab9f4b9b3938c652eb58271d126c73509c1f47cd71e44bb4c81bcd68766a0d |
+| lib/mesh_service.py |e34d6b1462370dea9d6046ffedc1e6316be4e43e962208065f6fa707aac21bf3 |
+
+mesh_chat_service.py, mesh_materials.py and every other source pin remain exact.
+No native binary-derived fields exist in this reference contract; none are added.
+Verifier logic/SYSTEM constants and all Go/Xray/RNS/Android pins remain unchanged.
+Old reference/new system rejects with `System sources differ from the pinned
+candidate contract`; new reference/new system passes actual embed/extract/import
+verification. Synthetic self-consistent mutations of changed mesh_service and
+unchanged mesh_chat_service reject with the same source-contract error. Historical
+.10 system also rejects. Targeted candidate/system tests: **46 PASS**.
+[Construction/reference receipt](2026-10-27-linux-readiness-cause-preservation-l04-2-r3/package-progression.json)
+records identities, exact hash changes and test log hashes.
+
+This is complete system construction/readback, **not installed acceptance**.
+Next: commit/push bounded reference advancement, then offline .11 candidate and
+package gates without review pause. No overall CI PASS; full-suite review
+normalization and D02.1-R debt remain as recorded. Owner workstation NOT_USED;
+no live .10, server/material changes, L05, signing or publication.

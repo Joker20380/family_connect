@@ -1,7 +1,7 @@
 {
-  "native_source_digest": "cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61",
+  "native_source_digest": "2292c24503ed0b275d2c296100dbca4572973cf3dce41d12e22645154ca9c833",
   "rns_source_digest": "66128235484f01b82bfd2e4ad604a486428706fc48020abbf84211554edef26e",
-  "source_checkpoint": "L04.2-R2 source 169aa687f497f8be690be5331879f994636135e1 primary-cleanup-containment-drain",
+  "source_checkpoint": "L04.2-R3 source 2d125137b28e096187433608022daa1590d7a6f0 readiness-cause-preservation-bounded-retry",
   "source_files": {
     "README.txt": "81006876b899607be39dea31e3e00d0be88bea7b431e59fc7f1f278b050f6881",
     "compat/awg-helper.py": "e60a4fbd0b601cab890736ca4f317f66675b371ce7b8b14336f27b32b6a5d618",
@@ -19,7 +19,7 @@
     "lib/auto_runtime.py": "784d03c98ffa792eff3b06be5e85d615386370524d6cf7b43fdb131f087c63e9",
     "lib/auto_service.py": "a88a92d8259c676cdeb9d4f6c32d7f24c1547299b0029ab737c1d6078e03bfde",
     "lib/awg_lifecycle.py": "8096dfe6a8986865b02ec919aa58a0aec05c5b3836c6335204e6d758bc062f83",
-    "lib/backend.py": "3805bdb290c39af3738fbe803bf5bc415e31c251196e5673cbcaea41c33e6157",
+    "lib/backend.py": "12ab9f4b9b3938c652eb58271d126c73509c1f47cd71e44bb4c81bcd68766a0d",
     "lib/chat_direct_host.py": "7d230a832e170d3174f462613cdf4117fd00fc0b859a7970463fe84eb45d5347",
     "lib/clients/desktop/profile_config.py": "0c72f3353aa4be1ada9c6bfc6c29475ba3c1ae9f8ce2860dbfb0d5fd3a3ec83a",
     "lib/device_identity/__init__.py": "3cd56edaf5fbfde9c88df7078dc55be15bf23cfc830727ee410bc8f31dc9990f",
@@ -34,7 +34,7 @@
     "lib/mesh_materials.py": "dd8fdb637976cb6787906445cbb0725b6a782cee8cbd571e260bdefef0d0ce95",
     "lib/mesh_network.py": "3bc5485294635249917b138baac6a70eaf226272c8cd5299dc5e9c04bdbeadb5",
     "lib/mesh_ownership.py": "8cb630aaf5f6e76e6c817b48d70647f9e31b6c04057104a728da9cb8a7ce03e0",
-    "lib/mesh_service.py": "277d6fe544b86a34da85bf1f37f2dc739faf8c4d5035a2efe14409ff3e6bf244",
+    "lib/mesh_service.py": "e34d6b1462370dea9d6046ffedc1e6316be4e43e962208065f6fa707aac21bf3",
     "lib/mesh_system.py": "1dd71160873f9c014d3719477ef3296c22e28627657fe1d48ffd941ea4334aa7",
     "lib/messenger/__init__.py": "5276c4dec78953223d5bc4296242b30411baf74ae2e5de55471a7485effbf415",
     "lib/messenger/admission.py": "73fbab8d4437bf0dc304f2608b290c9814f3af5c86a08c950995919f7f0fe913",

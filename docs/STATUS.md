@@ -23,7 +23,8 @@ local36 remains. Union55 is NOT a newly adopted permanent baseline. Full suite
 will not be rerun; no historical capsules fabricated, tests suppressed or changed.
 Source gate DONE/review accepted; continue new native/system, bounded reference
 advancement and internal .11 package gates, then one corrected P0 only after PASS.
-.11 construction/package/live currently NOT_RUN. Sealed internal/unpublished .10 remains
+New native/system34b27cb9 construction/readback and reference gates PASS;
+reference/candidate tests46 PASS. .11 candidate/package/live pending. Sealed internal/unpublished .10 remains
 4264406722f6dd3efb83e9d9666e67180ce4f950333bb3e711bcbb4f5068b55a;
 incorrect historical task suffix is not an artifact identity. Phase B/setup/GUI
 authorization evidence retained, not replayed. No server/material/policy changes.
