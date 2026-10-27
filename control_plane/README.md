@@ -1,4 +1,4 @@
-# CONTROL-PLANE-1 · русская локальная панель и наблюдаемость
+# CONTROL-PLANE · русская локальная панель и наблюдаемость
 
 Substep of **ANDROID-CONTROLLED-BETA**, over the accepted
 [PAID-ENTITLEMENT-MVP](../docs/paid-beta.md). Django5.2 LTS + PostgreSQL17,
@@ -64,13 +64,70 @@ HMAC-SHA256: локальный случайный ключ `.local/inventory-hm
 точные поля/типы/источники, UTC, конечные метрики и хеш целого снимка. Повторный
 импорт идемпотентен; журналирует system audit один раз. PG triggers запрещают
 изменение/удаление наблюдений. Веб-формы импорта и редактирования отсутствуют даже
-для superuser. Нет scheduler и live polling: следующий снимок собирает оператор.
+для superuser. CP1 сам не имеет scheduler; CP2 добавляет внешний локальный timer
+ниже. Web UI не выполняет live SSH polling и не получает SSH credentials.
 Старше5 минут — «устарело», недоступный реестр — «недоступно», а не0 устройств.
 Период в фильтре выбирает последние снимки каждого источника в этом периоде;
 история устройства/сервера ограничена100 наблюдениями и явно подписана.
 Systemd active/низкая нагрузка не являются проверкой MESH Connect или SLO.
 Автоматические alerts, production crash/session denominator, retention/архивация
 и полноценные least-privilege SSH credentials требуют отдельного этапа.
+
+### CONTROL-PLANE-2: continuous read-only collection
+
+`python3 control_plane/monitor_inventory.py` — один ограниченный цикл: существующий
+collector RU/NL → существующий strict stdin importer → локальный PostgreSQL.
+Никаких payment/entitlement commands, remote uploads/units/config edits. `flock`
+не допускает параллельных циклов. Каждый subprocess ограничен60s, цикл unit260s;
+ошибка одного источника не прекращает попытку другого. Старые observations не
+переписываются, unavailable не превращается в0. После попытки импорта новый
+промежуточный snapshot удаляется; прежние ручные снимки не затрагиваются.
+`.local/monitor-latest.json` (0600) атомарно содержит последний результат/ошибку,
+observed_at/hash, без stderr/credentials/device IDs. История результатов — user
+journal; успешные observations — существующий PG audit. Retention PG не добавлен.
+
+Для оператора: `monitor.service.in` подставляет абсолютные `@PYTHON@` и `@ROOT@`;
+установить как `~/.config/systemd/user/family-connect-readonly-monitor.service`,
+а `monitor.timer` — как `family-connect-readonly-monitor.timer`. Это **локальные**
+user units, не units шлюзов. В checkpoint timer включён; интервал60s после цикла.
+
+```sh
+systemctl --user status family-connect-readonly-monitor.timer
+journalctl --user -u family-connect-readonly-monitor.service -n 10
+systemctl --user disable --now family-connect-readonly-monitor.timer
+systemctl --user stop family-connect-readonly-monitor.service
+```
+
+Для возобновления — `systemctl --user enable --now family-connect-readonly-monitor.timer`.
+Timer требует работающие Docker/SSH и бодрствующий workstation/user manager; это
+не круглосуточный внешний monitoring SLA. Свежесть UI ограничена5 минутами; при
+остановке timer новые данные не появляются. Автоматическая доставка alerts и
+production client crash/connect telemetry NOT_COLLECTED. Административный SSH
+credential **может писать**: read-only обеспечивается фиксированным кодом и SQLite
+`mode=ro/query_only`, не ограниченным ключом. Ключа/production mount в Django нет.
+Отдельный least-privilege SSH endpoint требует нового security gate, не выдаётся за PASS.
+
+### Paid boundary: blocked rollout, not another authority
+
+[CP2 report](../docs/releases/2026-10-27-android106-control-plane-2.md) фиксирует
+source drift и exact candidate. `python3 -m scripts.package_paid_boundary build
+--ref <commit> --output <new-private-tar>` из repository root экспортирует только
+явный committed inventory; dirty working tree/DB/env не входят. `source-gate
+--served <private-served-pyz> --candidate <candidate-pyz>` возвращает ненулевой
+exit при любом не-paid изменении/удалении. Это необходимый, не достаточный gate;
+нельзя обходить его переименованием архивов или объявлять hash-equivalence по версии.
+Bundle не устанавливает зависимости, не содержит чужие wheels; внешние Python/
+package pins проверяются отдельно. Source/AST import/hash manifests и retained
+licenses/notices включены; полный host binary/license audit этим не заявляется.
+
+`scripts/backup_paid_registry.py --database <operator-known-db> --destination
+<new-private-directory>` создаёт consistent backup и проверяет **изолированную**
+SQLite restore-copy (integrity/FK/logical fingerprints). Source открывается только
+`mode=ro`; live registry не заменяется. Отказывается при paid rows/events>0,
+симлинках и существующем destination. Private files0600/directory0700. Ошибка —
+STOP с сохранением evidence; не удалять backup и не повторять с live restore.
+Это не application disaster-recovery: issuer state, service restart, live acceptance
+и безопасный application rollback требуют отдельной проверки согласованного baseline.
 
 ### Аварийная остановка и восстановление
 

@@ -2,7 +2,24 @@
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
-**Current substep CONTROL-PLANE-1 — DONE / LOCAL SYNTHETIC + PRODUCTION-READONLY SNAPSHOTS.**
+**Current substep CONTROL-PLANE-2 — CHECKPOINT / DEPLOYMENT BLOCKED_SERVED_SOURCE_DRIFT.**
+Exact committed-source paid bundle from21dd8d7 built twice identically; runtime
+Python3.14.4 +5 dependency versions match production. Read-only preflight:
+RU54 devices, integrity/NTP PASS, paid tables absent = EXPECTED_PREDEPLOY_STATE,
+not an empty migrated schema. Private consistent registry backup + isolated SQLite
+restore PASS; application recovery NOT_RUN. Served archive21d64558… differs outside
+paid delta: candidate would remove2 deployed optional publisher modules and change
+3 other modules. No silent downgrade/import of off-branch code. Migration/deployment/
+Friends restart NOT_RUN; real paid rows/events0; registry/admission/identity unchanged.
+94 focused backend/bundle/backup/monitor tests +38 PostgreSQL observability tests
+PASS; not production-identical acceptance or general CI. Local user timer reads
+RU/NL and imports snapshots into existing Django; no remote monitoring deployment,
+no public console. NL registry remains UNAVAILABLE, not0; client telemetry not collected.
+[Report / exact hashes / remaining gate](releases/2026-10-27-android106-control-plane-2.md).
+STOP; NEXT — reconcile served-source baseline, then finish empty-cohort deployment
+and acceptance within this same substep. No real enrollment/payment authorized.
+
+**Принятый вход CONTROL-PLANE-1 — DONE / LOCAL SYNTHETIC + PRODUCTION-READONLY SNAPSHOTS.**
 Русский Django Admin/UI, 50 demo identities (paid cap10 неизменён), отдельные
 read-only inventory/server observations и synthetic technical samples, фильтры/
 charts/drill-down, timestamp/freshness, emergency stop новых demo dispatch.

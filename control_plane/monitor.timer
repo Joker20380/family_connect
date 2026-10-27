@@ -1,0 +1,11 @@
+[Unit]
+Description=Family Connect local read-only inventory every minute
+
+[Timer]
+OnBootSec=30s
+OnUnitInactiveSec=60s
+AccuracySec=5s
+Unit=family-connect-readonly-monitor.service
+
+[Install]
+WantedBy=timers.target

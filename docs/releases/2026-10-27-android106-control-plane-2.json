@@ -1,0 +1,241 @@
+{
+  "bundle_id": "paid-boundary-4127f359cbb85b20ae0f4a323304579a9489040d7c1f5e5ab78ec5e4b1c6545c",
+  "console_observability_tests": 38,
+  "deployment": "NOT_RUN",
+  "full_suite": "NOT_RUN",
+  "inventory": {
+    "builder_sha256": "853d84de2a87e8c57b8adbf4222c426e6f8cfb302119de367d062856e3ab91d3",
+    "files": {
+      "artifacts/friends-http.pyz": {
+        "sha256": "9e66308e3f698fc6c62274b5d261bffc0f3525703ffd43b2acabcee084f92365",
+        "size": 45651
+      },
+      "artifacts/paid-beta.pyz": {
+        "sha256": "9666ce6e96172449fc6c2c2e39cd61a2d082c6742e794a52ba8edb5ef01ba271",
+        "size": 117988
+      },
+      "artifacts/restricted-sync.pyz": {
+        "sha256": "e74408a1dbd72f89be0daea807460cadaf8747ed79f1643e49342f2d2d0ff328",
+        "size": 117970
+      },
+      "imports.json": {
+        "sha256": "d4b77113872ea6676803ca407bdf5d1ddb35c3a19c90fcc00cb75c0d1fe201d7",
+        "size": 8149
+      },
+      "runtime.json": {
+        "sha256": "4f38163b157374b2b9bfcb9f80bb9f397a718bde7954b99e36f80d66506f1e76",
+        "size": 317
+      },
+      "source/LICENSE": {
+        "sha256": "cfe0da6ed33d20d2b6a97ab5363e204660f0c9987469724c92938a846a1afcb4",
+        "size": 1778
+      },
+      "source/THIRD_PARTY_NOTICES.md": {
+        "sha256": "ff178d44895279252b303c7488c887f995d6bcd95977a9f04cc2ada88c58e316",
+        "size": 7415
+      },
+      "source/clients/android/app/src/main/assets/control-licenses/PySerial.txt": {
+        "sha256": "f91cb9813de6a5b142b8f7f2dede630b5134160aedaeaf55f4d6a7e2593ca3f3",
+        "size": 1885
+      },
+      "source/clients/android/app/src/main/assets/control-licenses/Reticulum.txt": {
+        "sha256": "20803159e7089ad1b123e5c688eafb7b01d8a30b5a47ee08a6bd7875bae8cd94",
+        "size": 1510
+      },
+      "source/clients/desktop/profile_config.py": {
+        "sha256": "0c72f3353aa4be1ada9c6bfc6c29475ba3c1ae9f8ce2860dbfb0d5fd3a3ec83a",
+        "size": 9295
+      },
+      "source/control/friends/__init__.py": {
+        "sha256": "efb76720b2ad1c9594aee9488b342e3311ed01a4bff3082c2fa3999663354cc8",
+        "size": 84
+      },
+      "source/control/friends/access.py": {
+        "sha256": "b70e7d210c9347602ba2c8531454f5e01d0eeb18556eaffc71ea1c4995bea900",
+        "size": 6697
+      },
+      "source/control/friends/chat.py": {
+        "sha256": "6401c061aab650416e733c4433ce9a3a4f12742bcb0acd136248ab344736eda7",
+        "size": 5624
+      },
+      "source/control/friends/chat_sync.py": {
+        "sha256": "08635a9713259f21f39a2577f3777529198ec22d09a85e741be827ac06f43ac8",
+        "size": 1228
+      },
+      "source/control/friends/diagnostics.py": {
+        "sha256": "2a42cb9fce97f446083cb6f2c63be1059bdb195c8fcafa49f089d184dd0ad703",
+        "size": 6344
+      },
+      "source/control/friends/notices.py": {
+        "sha256": "3f2c88c7984fa9d0a4d8857d342057b31ba1445f3aa8eea2df9007d35f67c3a7",
+        "size": 3286
+      },
+      "source/control/friends/paid_beta.py": {
+        "sha256": "a30b804d0b9e44ff76411731fb469f4ba930a5b1bca301386ea81382379af45e",
+        "size": 13792
+      },
+      "source/control/friends/paid_beta_admin.py": {
+        "sha256": "fb64b481fef5b4991f0de7e0d44c0fb4e1901069567dc6cceda53d59bf0c394b",
+        "size": 2924
+      },
+      "source/control/friends/readiness_adapter.py": {
+        "sha256": "a13d7a4ed861cc9d27cbf7ae0a3aec3e3b0f9d84486645203615111ebf615c21",
+        "size": 6344
+      },
+      "source/control/friends/readiness_fixture.py": {
+        "sha256": "a77d844bfc35b6194ccab4568df604f6668951533528f179776abff7f21a56e9",
+        "size": 6081
+      },
+      "source/control/friends/readiness_receipts.py": {
+        "sha256": "16e4556af6d914e7411b3563bef44efebd2a8ba2d7dda1d0faa4f4e100ceb660",
+        "size": 9011
+      },
+      "source/control/friends/referrals.py": {
+        "sha256": "f8788d8e8e22cb9d95c7d57b9614beb5bff604f7d9cf9ae7a3c72a6a7611b4ce",
+        "size": 3818
+      },
+      "source/control/friends/restricted.py": {
+        "sha256": "57570d455a69d91a9a8d971a83d7d28153610ded55cb4208138d6d8c36658155",
+        "size": 25740
+      },
+      "source/control/friends/restricted_admin.py": {
+        "sha256": "d3ff58346e929442f981b099c7c76bf50a5a70fea0747b1d48e73ff74b079a10",
+        "size": 6816
+      },
+      "source/control/friends/restricted_sync.py": {
+        "sha256": "602592dac706c17111f9d241f1f3ca4ff713aad30565960c59ff7aaf99fdb992",
+        "size": 8546
+      },
+      "source/control/friends/support_admin.py": {
+        "sha256": "754e175331a5a549c8cc0fe4d02fcfb13663db5d775e83d545f9674078392e1d",
+        "size": 6778
+      },
+      "source/control/friends/support_ids.py": {
+        "sha256": "cab3cef66085ac11253d3ce8a41d636769f040841fe839a96e03e536939aa169",
+        "size": 7967
+      },
+      "source/control/requirements.lock": {
+        "sha256": "5adccf995e9634be711ae3167229cca0d2751b493c3a041dd68c745ec44ad94a",
+        "size": 409
+      },
+      "source/control_plane/apps/console/collector.py": {
+        "sha256": "05d5221de9f15094f6a6bda45b64ebaeac7dab166e2e6afa237f03c4ad49d422",
+        "size": 4785
+      },
+      "source/deploy/friends/access-api.py": {
+        "sha256": "f0bfb48ec3467564fd9f6177cf45ca8eb7cc21927978d947200efc212a1614a0",
+        "size": 7743
+      },
+      "source/deploy/friends/restricted/http-runtime-files.json": {
+        "sha256": "835384ba849dd70963629639711138f81d555fb1929335f3a789178bcf0a6aeb",
+        "size": 705
+      },
+      "source/deploy/friends/restricted/readiness-runtime-files.json": {
+        "sha256": "dfd9889ab36976ca7ab2a4508afd000ab8aa6ba11eaad9332c722b87e3a565f7",
+        "size": 1122
+      },
+      "source/deploy/friends/restricted/runtime-files.json": {
+        "sha256": "dfef8c08ee8e96d8fde54002b9641951bf03aca6c1358c3216f87f8e82a56bd0",
+        "size": 506
+      },
+      "source/device_identity/__init__.py": {
+        "sha256": "3cd56edaf5fbfde9c88df7078dc55be15bf23cfc830727ee410bc8f31dc9990f",
+        "size": 83
+      },
+      "source/device_identity/device.py": {
+        "sha256": "38e29e640c913c1331164aa36fde0ca95b1d13ee057ae92c3d31ec7b993151d3",
+        "size": 8926
+      },
+      "source/device_identity/requirements.lock": {
+        "sha256": "8133533475c48477f7ccf6d65a5c426a2511ceea61f6539c1667b3a6900a77be",
+        "size": 131
+      },
+      "source/messenger/__init__.py": {
+        "sha256": "5276c4dec78953223d5bc4296242b30411baf74ae2e5de55471a7485effbf415",
+        "size": 77
+      },
+      "source/messenger/admission.py": {
+        "sha256": "73fbab8d4437bf0dc304f2608b290c9814f3af5c86a08c950995919f7f0fe913",
+        "size": 999
+      },
+      "source/messenger/service_events.py": {
+        "sha256": "8535cd7c3086537b159b966ac6c582380d776726e9fdda2bf2016fea834f78ee",
+        "size": 2864
+      },
+      "source/provisioning/__init__.py": {
+        "sha256": "a8d11b35f8be63395d505bcf0cf7774aa5c0dbffa5eee905eef911a8d3fdb905",
+        "size": 88
+      },
+      "source/provisioning/friends_catalog.py": {
+        "sha256": "12d64b9a0c25f2e11ebfaee86bf6eab110a931668190732cf05c0cb1a26a64ec",
+        "size": 8395
+      },
+      "source/scripts/friends_http_acceptance.py": {
+        "sha256": "830b5dec96af01fd5650e9afd15d27661dba1a3191f5943aecbdf41fc8d0fc42",
+        "size": 9988
+      },
+      "source/scripts/friends_http_transition.py": {
+        "sha256": "aeaecbf9ea87a18e879f83fe5798dbdc7e4906f1717cfbd6b3b3adff284d6d39",
+        "size": 33584
+      },
+      "source/scripts/friends_readiness_adapter.py": {
+        "sha256": "590b02b89d403b38d2d6a8ed916343c07b87d4fffe4ffddf784a1de25bc4c698",
+        "size": 5552
+      },
+      "source/scripts/read_readiness_ack.py": {
+        "sha256": "b1f3f92b112b4e9365097ee7751be6338ca15eae498841b76664dd7de37e48cf",
+        "size": 1559
+      },
+      "source/scripts/service_notices.py": {
+        "sha256": "80df5a26b7121d40f6f180f17bbfe96e2e4d2b734c8230c78bafb6ee2ba31167",
+        "size": 11578
+      }
+    },
+    "schema": 1,
+    "source_commit": "21dd8d72ad5505cd82631856083694729d292c8b"
+  },
+  "member_count": 47,
+  "paid_migration": "NOT_RUN",
+  "reproducible": true,
+  "runtime": {
+    "distributions": {
+      "cffi": "2.1.1",
+      "cryptography": "46.0.7",
+      "pycparser": "3.0",
+      "pyserial": "3.5",
+      "rns": "1.5.1"
+    },
+    "python": "3.14.4"
+  },
+  "schema": 1,
+  "sha256": "4127f359cbb85b20ae0f4a323304579a9489040d7c1f5e5ab78ec5e4b1c6545c",
+  "size": 583680,
+  "source_commit": "21dd8d72ad5505cd82631856083694729d292c8b",
+  "source_gate": {
+    "boundary": "Necessary source delta gate only; not deployment or behavioral acceptance",
+    "candidate_sha256": "9e66308e3f698fc6c62274b5d261bffc0f3525703ffd43b2acabcee084f92365",
+    "changed": [
+      "control/friends/access.py",
+      "control/friends/chat_publishers.py",
+      "control/friends/paid_beta.py",
+      "control/friends/restricted.py",
+      "friends_http.py",
+      "provisioning/chat_publishers.py",
+      "provisioning/friends_catalog.py"
+    ],
+    "removed": [
+      "control/friends/chat_publishers.py",
+      "provisioning/chat_publishers.py"
+    ],
+    "result": "BLOCKED_SERVED_SOURCE_DRIFT",
+    "served_sha256": "21d64558e542ff6ad80fb9b13799fbcb333167ffb5a79ec841e7c94dc65d71fa",
+    "unexpected": [
+      "control/friends/access.py",
+      "control/friends/chat_publishers.py",
+      "friends_http.py",
+      "provisioning/chat_publishers.py",
+      "provisioning/friends_catalog.py"
+    ]
+  },
+  "synthetic_tests": 94
+}
