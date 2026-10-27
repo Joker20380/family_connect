@@ -2,7 +2,21 @@
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
-**Current substep BETA-0-CANARY-1 — SOURCE_READY_WITH_EMERGENCY_RECOVERY / LIVE_NOT_RUN.**
+**Current substep BETA-0-CANARY-1 — LIVE_ENTRY_SOURCE_READY / CRL_HELPER_UNBOUND_READY /
+PRODUCTION_LOOKUP_NOT_RUN / LIVE_WRITES_NOT_RUN.**
+Exact-payload CRL source gate from11b99a6: pure paid-aware builder, no live sequence/
+file mutation during preparation; one persisted payload/request per operation.
+Private journal, one proven-NOT_SENT retry only, trusted exact remote readback,
+post-acceptance local commit and crash reconciliation A–E implemented. Existing
+publisher behavior and accepted recovery/lookup semantics preserved.98 new CRL/
+packaging +79 canary +76 paid-backend +2 preparation tests PASS;206 restricted/sync/
+directory tests PASS (29 existing optional native skips,4 native deselections).
+118 PostgreSQL console tests and Django system/drift checks PASS. Unbound packaging
+only; no production configuration/credential/permit/transport installed.
+STOP. NEXT — production read-only owner lookup and binding, not automatically.
+No production registry, CRL, subscription/event, phone, restart or deployment action.
+
+Historical bounded-dispatch source gate:
 Bounded dispatch correction from3a5e91d over accepted emergency source49bdd794:
 recover only from versions1/2 after natural expiry, no valid bound certificate,
 exact2592000s permit period and at most300s execution window. First apply allows
@@ -16,9 +30,8 @@ Django system/drift checks PASS. Normal four-stage path retained. Packaging must
 remain lookup_only, from exact committed source; artifact receipt is in the report.
 Production lookup/registry access/binding/enrollment/CRL/Android/live operations
 NOT_RUN. No Friends restart/deployment, CP2 change or desktop work.
-STOP. NEXT — obtain the exact-payload CRL delivery helper contract, complete its
-source gate, then read-only owner lookup/binding and phone-procedure preparation.
-Those preparation steps remain NOT_RUN; live phone operations wait for owner ГОТОВ.
+Its historical NEXT was the CRL helper contract/source gate, now completed above.
+Read-only owner lookup/binding remain NOT_RUN; live phone operations wait for owner ГОТОВ.
 
 Historical local preparation at28657bf/68b99ac:
 Continuation from55c6a24: private PG+synthetic-volume backups and disposable restore

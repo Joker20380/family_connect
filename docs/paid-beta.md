@@ -9,6 +9,61 @@ not permission to deploy, collect payment or enroll the existing field user.
 
 ## Owner canary operator — source-ready, live not run
 
+### Exact-payload CRL source boundary
+
+`control.friends.paid_canary_crl` is a separate unbound source capsule. Its public
+entry point accepts only help/manifest inspection, never paths, hosts, commands,
+credentials, lifetime or an operational permit. Configuration and trusted transport/
+readback adapters are internal injected dependencies, tested only against synthetic
+registries and the actual existing `restricted_sync.gateway` function. No production
+loader, SSH credential, transport or canary binding is installed. A future reviewed
+bound launcher must select one fixed root-owned configuration and the existing sync
+lock; choosing a different lock or accepting config through stdin/web/argv is forbidden.
+
+The pure `restricted_admin.build_crl_payload` reads an existing DB snapshot and
+returns PEM/metadata without writing a sequence/file. Existing `publish_crl` uses
+that builder and keeps its operator behavior. Canary lifetime is fixed900s, number
+is max(previous signed number, stored sequence)+1. Only bound version3/event-count3
+after two payments and explicit expire is eligible; the exact bound certificate must
+still be valid and denied by paid state. Valid unrelated allowed certificates cannot
+enter the newly revoked set. Private serial tokens are HMAC decimal serial prefixes.
+
+Preparation holds the existing configured sync lock, opens registry mode=ro/query_only,
+exclusively creates a0700 operation directory and persists exact PEM/request bytes
+and an authenticated private0600 journal. No live DB/CRL/directory is changed.
+The directory is never reused for generation, even after interrupted preparation;
+an incomplete staging directory requires inspection, not a second builder call.
+Existing complete operations resume via status/deliver/commit/reconcile.
+
+Transport may classify NOT_SENT only with proven process/remote-command-not-started
+evidence. Only a first NOT_SENT allows one retry of persisted identical request bytes.
+Timeout, generic nonzero exit, partial output or a crash in DELIVERY_IN_PROGRESS is
+UNKNOWN/DELIVERY_UNRESOLVED, never an automatic resend. Rejected/conflicting payloads
+are terminal. CRL generation and number allocation are never repeated for retry.
+
+The existing forced command returns directory bytes, not a signed hash/minimum-CRL
+receipt. Those bytes alone are insufficient for acceptance. The injected trusted
+adapter must also supply authenticated gateway readback of exact payload hash,
+installed number and minimum_crl. Directory parsing reuses strict family/gateway/
+timestamp/seed validation; no directory signature is invented. This source gate
+tests readback locally; production readback transport is not installed.
+
+Only validated REMOTE_ACCEPTED permits local sequence/CRL/directory commit. Relevant
+paid/identity/certificate/authority fingerprints and old hashes are checked again.
+Staged local temp files are fsynced before the in-progress journal, SQL update and
+atomic replacements. Restart reconciles old/old/old, new/new/new, old/new and new/old
+DB/CRL states against exact old/new directory hashes; unknown values fail closed.
+Remote-accepted local failure retains payload/response/journal and permits only local
+reconciliation, not another delivery. UNKNOWN readback proving old state stays
+unresolved; exact installed payload permits commit; conflicting readback is rejected.
+Expired material is never installed as fresh acceptance. No rollback CRL or new
+generation is used to repair uncertainty.
+
+See the [source checkpoint](releases/2026-10-27-android106-beta-0-canary-1.md)
+for recovery matrix, typed outcomes, tests and deterministic unbound inventory.
+
+### Identity and recovery operator
+
 The BETA-0-CANARY-1 exception authorizes only OWNER_CANARY_1, not customer enrollment.
 Use `control.friends.paid_beta_canary`, not the generic selector-in-argv CLI below.
 No owner token is embedded in source. Read-only lookup accepts an exact JSON object

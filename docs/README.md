@@ -1,6 +1,12 @@
 # Documentation
 
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
+**LIVE_ENTRY_SOURCE_READY / CRL_HELPER_UNBOUND_READY.** Pure paid-aware CRL builder,
+one-generation private journal, exact-byte retry after proven NOT_SENT only and
+remote/local crash recovery;98 new tests PASS. Existing restricted/sync/directory206
+PASS (29 optional native skips/4 native deselections). Production lookup/live writes
+NOT_RUN; unbound package has no operational config/credential. Next is read-only
+owner lookup/binding, not an automatic action.
 Running local console upgraded through migration0006 after paired private backups
 and disposable restores;118 console +76 backend tests PASS. Single-token canary
 operator now SOURCE_READY_WITH_EMERGENCY_RECOVERY (79 tests); source-context umask
@@ -8,8 +14,8 @@ regressions2 PASS. Internal canary remains zero-value and outside customer reven
 Recovery from versions1/2 is exact30 days from permit start, permits dispatch delay
 0..299s, is certificate-guarded and terminal via an existing reference_hash marker;
 normal path unchanged. Live owner lookup/enrollment/expiry/CRL/recovery NOT_RUN.
-Next: CRL delivery helper contract/source gate, then read-only binding and phone
-preparation; live operations wait for owner ГОТОВ. No production change or selector persistence.
+CRL source gate is now complete; read-only binding and phone preparation remain
+NOT_RUN. Live operations wait for owner ГОТОВ. No production change or selector persistence.
 
 [CONTROL-PLANE-2 — paid-aware production boundary](releases/2026-10-27-android106-control-plane-2.md):
 owner accepted **DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING**, не paid launch.

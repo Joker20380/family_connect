@@ -1,6 +1,130 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
-## Bounded recovery dispatch — source-only continuation
+## Exact-payload CRL delivery — source-only gate
+
+**LIVE_ENTRY_SOURCE_READY / CRL_HELPER_UNBOUND_READY / PRODUCTION_LOOKUP_NOT_RUN /
+LIVE_WRITES_NOT_RUN.** Input main `11b99a6cae1c9c8722b266bd773caa821d3e3a61`;
+accepted bounded-dispatch source `ad086c030cc77c680d924fb9c8e37faa286adc4c` unchanged.
+Same BETA-0-CANARY-1; no new top-level task. No production access or operational action.
+
+### Source and authority boundary
+
+- New helper/packager and their tests only; minimal existing restricted_admin refactor
+  extracts pure build_crl_payload. It reads a query-only snapshot, computes the existing
+  paid-aware deny set, signs once and returns PEM, number/timestamps/serial metadata.
+  It does not change any DB row or file. Existing publish_crl delegates to it and keeps
+  its public/operator behavior, including valid lifetime choices and monotonic floor.
+- Canary lifetime900s; generated number=max(previous CRL number, stored sequence)+1.
+  Expected certificate must be newly revoked; other newly added serials require
+  independently proven current deny/revision/family reasons. Allowed unrelated
+  certificates are excluded. Serial output uses HMAC(decimal serial) short tokens
+  privately; sanitized receipts never expose raw serials or CRL contents.
+- Immutable bound-envelope contract is tested only with synthetic values: alias,
+  operation_id, HMAC device/safe_ref, version3/count3/expired, exact certificate token
+  and <=300s generation window. Two payment events followed by explicit expire,
+  current Android106 eligibility, non-revoked device/invite, paid denial and valid
+  authority/revision/family/identity-bound certificate are required. No other cohort
+  member is allowed. No helper operation can change paid/identity/invite/grant state.
+- No default/live configuration, host, key, credential, readback transport or bound
+  package is installed. Public CLI is help/manifest only; it cannot run prepare,
+  deliver, commit or accept operational input. Future configuration/transport injection
+  must be fixed and operator-reviewed, never supplied via public input. Existing
+  sync lock identity must be verified by that future configuration, not guessed here.
+- Existing gateway returns directory only. Acceptance additionally requires trusted
+  authenticated readback of exact payload SHA256, installed CRL number and minimum_crl.
+  Plain directory output is not treated as that proof. Existing strict directory
+  parser checks time/family/gateway/seeds; no new signature or wire schema is invented.
+
+### Immutable operation and delivery
+
+Preparation holds the configured existing restricted-sync lock and opens authoritative
+DB read-only. Exclusive0700 operation directories and0600 regular/non-symlink/single-link
+files retain PEM, exact canonical compact JSON request (only revocations), hashes,
+generation metadata, prior local hashes/sequence, safe revoke tokens and private
+fingerprints. Journal updates are authenticated, atomic and parent-fsynced. Key and
+canonical device/selector/certificate body are never persisted in the journal.
+
+Generation_count=1 for every prepared operation. Existing directory prevents any
+second generation, including after a partial preparation crash. Payload/request bytes
+are hash-checked on every resume, never recomputed for retry. Request<=20000 bytes,
+PEM<=16384, returned directory<=8192; duplicate/nonfinite JSON is rejected.
+
+| State/outcome | Continuation |
+|---|---|
+| PREPARED |One delivery of saved request bytes |
+| DELIVERY_IN_PROGRESS after crash |DELIVERY_UNRESOLVED; no resend |
+| NOT_SENT with proven pre-execution failure |TRANSPORT_NOT_SENT; one exact-byte retry, at most2 attempts |
+| Generic exit/timeout/lost/partial output |UNKNOWN / DELIVERY_UNRESOLVED; readback only |
+| Definitive pre-apply rejection |REMOTE_REJECTED; no retry |
+| Valid exact gateway acceptance |REMOTE_ACCEPTED; local commit only |
+| Local commit begun |LOCAL_COMMIT_IN_PROGRESS; reconcile files/DB |
+| Remote accepted, local I/O failure |LOCAL_COMMIT_FAILED / REMOTE_ACCEPTED_LOCAL_COMMIT_FAILED; retain all evidence |
+| Readback/hash/sequence complete |COMMITTED; idempotent local readback |
+
+The adapter contract does not equate an arbitrary SSH exit with NOT_SENT or REJECTED.
+Actual gateway tests prove same number/same bytes idempotency and reject same number/
+different bytes (typed adapter outcome CRL_PAYLOAD_CONFLICT), bad signature/issuer,
+rollback number and invalid time/lifetime. Gateway mutation followed by lost/invalid
+directory output is uncertainty, not proof of pre-apply rejection.
+
+### Local commit and crash reconciliation
+
+After remote acceptance: recheck prior CRL/hash/sequence and relevant paid/event/device/
+invite/certificate/authority fingerprint; fsync local temp files, persist in-progress
+journal, set exact sequence, atomically replace CRL/directory, fsync parents, commit
+SQL, read back exact bytes/sequence and mark COMMITTED. Newer/conflicting local state
+is not overwritten. No payload regeneration or second delivery repairs local failure.
+
+| Restart case | Action |
+|---|---|
+| A: DB old, CRL old, directory old |Commit exact saved payload/response |
+| B: DB new, CRL new, directory new |Validate and mark COMMITTED |
+| C: DB old, CRL exact new |Finish sequence/directory from saved evidence |
+| D: DB new, CRL exact old baseline |Install saved CRL/directory without incrementing again |
+| E: Unknown/conflicting number or hash |LOCAL_COMMIT_CONFLICT; no generation/delivery |
+
+Current directory hash must match exact old or validated new bytes in every case.
+UNKNOWN trusted readback proving exact installed payload transitions REMOTE_ACCEPTED;
+old payload remains unresolved, with no automatic resend; conflicts fail READBACK_MISMATCH.
+
+Typed results: PASS, LOCK_BUSY, INVALID_PERMIT, PRECONDITION_FAILED,
+CRL_GENERATION_FAILED, CRL_GENERATION_ALREADY_COMPLETED, CRL_EXPECTED_SET_MISMATCH,
+CRL_UNEXPECTED_REVOCATION, TRANSPORT_NOT_SENT, TRANSPORT_FAILED,
+CRL_DELIVERY_UNRESOLVED, CRL_PAYLOAD_CONFLICT, REMOTE_REJECTED,
+GATEWAY_VALIDATION_FAILED, DIRECTORY_VALIDATION_FAILED, LOCAL_PRECONDITION_CHANGED,
+REMOTE_ACCEPTED_LOCAL_COMMIT_FAILED, LOCAL_COMMIT_FAILED, LOCAL_COMMIT_CONFLICT,
+READBACK_MISMATCH. Receipts use only the prescribed sanitized allowlist; no stderr,
+raw exception, profile, directory, URL, host, private path or key is returned.
+
+### Source validation
+
+| Gate | Result |
+|---|---|
+| New CRL helper / package tests |95 /3 PASS |
+| Existing canary / paid backend / preparation |79 /76 /2 PASS |
+| Existing restricted/admin/sync/directory/window tests |206 PASS,29 existing optional Go/native skips,4 explicit native deselections |
+| PostgreSQL console / Django check / migration drift |118 PASS / PASS / no changes detected |
+| Syntax / strict JSON / private-content scan / scoped links / staged scope / diff checks |PASS |
+| Production registry/lookup/binding/CRL/delivery/paid writes |NOT_RUN |
+
+Tests exercise the actual existing gateway against synthetic local files, not live
+transport. A first run's3 isolated-sync tests rejected a venv site path inside checkout;
+unchanged tests passed using the same accepted dependencies copied to an external
+disposable venv. No production/path workaround or test assertion weakening. No native
+build, Android action, full historical suite, Linux/Windows task or Friends restart.
+Console tests used a separate disposable local PostgreSQL test DB.
+
+Accepted lookup-only artifact remains unchanged:15 members/56017 bytes/SHA256
+`63ffe0f1ac4dad0c15a94558423de4eab2a5aff754167e8108d75064bb95d308`.
+Its source inventory excludes the changed restricted_admin and new helper; no rebuild
+is needed. New unbound CRL package receipt follows after exact source commit/build.
+No bound envelope/activation/expire/recovery permit is built.
+
+**STOP. NEXT — production read-only owner lookup and binding, not automatically.**
+No production key/configuration installed, no CRL publication or local live files
+changed, no CP2 redeployment or gateway/Android change. Historical evidence retained.
+
+## Historical bounded recovery dispatch — source-only continuation
 
 **SOURCE_READY_WITH_EMERGENCY_RECOVERY / LIVE_NOT_RUN.** Input main
 `3a5e91d06977eb86fa78dec386477518fb5a0bfc`; accepted emergency source

@@ -3,7 +3,8 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-**Current substep BETA-0-CANARY-1 — SOURCE_READY_WITH_EMERGENCY_RECOVERY / LIVE_NOT_RUN.**
+**Current substep BETA-0-CANARY-1 — LIVE_ENTRY_SOURCE_READY / CRL_HELPER_UNBOUND_READY /
+PRODUCTION_LOOKUP_NOT_RUN / LIVE_WRITES_NOT_RUN.**
 Dependency: CP2 accepted DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING, publisher
 capability preserved, real payment/enrollment NOT_RUN. No CP2 redeployment/restart/
 migration/source-package gates. Same ANDROID-CONTROLLED-BETA root, no CP3.
@@ -25,15 +26,21 @@ Terminal reference_hash marker prohibits new operations
 after recovery; identical backend-payload replay alone remains allowed.79 canary
 tests PASS; existing backend remains sole authority. No new schema/CRL action or
 generic Django production write. Source packaging is lookup_only; see report receipt.
+Exact-payload CRL source gate complete: pure builder reused by publish_crl, immutable
+private payload/request, one-generation journal, proven-NOT_SENT-only retry (max2
+attempts), exact trusted gateway readback, post-acceptance commit/recovery A–E.
+98 new tests PASS;206 existing restricted/sync/directory PASS with29 optional native
+skips/4 native deselections.118 console/79 canary/76 backend/2 preparation PASS;
+Django system/drift PASS. Unbound source package only, no transport/config/permit.
 No production lookup/registry access/mutation, Android interaction, CRL or CP2 restart.
 Completion gate: exact authorized-device binding; live activation/paid certificate
 boundary/MESH Connect; natural expiry and new challenge/fetch/reconnect denial;
 active-session behavior; CRL generation/propagation; recovery/reconciliation and
 reactivation on the same identity; Android state preservation. All live stages NOT_RUN.
 Emergency recovery source gate complete; production/live acceptance remains NOT_RUN.
-NEXT — obtain the exact-payload CRL delivery helper contract and finish its source
-gate before read-only lookup/binding and coordinated phone-procedure preparation.
-Preparation remains incomplete; live phone operations require owner ГОТОВ.
+NEXT — production read-only owner lookup and binding, not automatic. Live-entry
+source gate is ready; binding/phone coordination remain unperformed, and live phone
+operations require owner ГОТОВ. No production transport/credential is installed.
 Final same-identity30-day active
 recovery is a future live gate, not synthetic acceptance transferred to the phone.
 [Bounded checkpoint](releases/2026-10-27-android106-beta-0-canary-1.md).
@@ -143,8 +150,8 @@ debt, не Android launch blocker. Linux installed acceptance только от�
 не запускать P0/P1/Auto/AppImage lifecycle/L05/L06 и не публиковать Linux artifacts.
 
 **STOP. NEXT — закрыть только фактические Android controlled-beta launch blockers.**
-Следующий конечный этап — контракт/source gate exact-payload CRL delivery helper,
-затем read-only lookup/binding и подготовка phone procedure в BETA-0-CANARY-1.
+Следующий конечный этап — production read-only owner lookup/binding в BETA-0-CANARY-1,
+не автоматически. CRL helper source gate завершён, пакет только unbound.
 Live procedure не начинать до owner ГОТОВ.
 Только OWNER_CANARY_1; customer payments/
 enrollment не разрешены. Ни одного live canary stage пока не выполнено. CP2 принят,
