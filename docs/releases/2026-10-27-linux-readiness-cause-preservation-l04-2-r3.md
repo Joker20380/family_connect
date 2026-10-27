@@ -443,3 +443,37 @@ Next: commit/push bounded reference advancement, then offline .11 candidate and
 package gates without review pause. No overall CI PASS; full-suite review
 normalization and D02.1-R debt remain as recorded. Owner workstation NOT_USED;
 no live .10, server/material changes, L05, signing or publication.
+
+## Exact internal .11 construction/delivery
+
+Bounded reference commitadf81057b21798a4041779658a69c57f680cdd68 is pushed and
+remote main verified. The package build uses a new clean tracked export of that
+commit, Ubuntu26.04/Python3.14.4, network none and the unchanged standard package
+builder/verifier. Exact appimagetool854e19e/build313 and official Type-2 runtime
+release417724209/targetfedfad51acc2860b2916a1eef32ba4a500ff31ef retain their
+accepted sizes/hashes/signature provenance; runtime supplied offline, no fetch.
+
+Version **0.2.12~l03.2.11**, candidate
+**570a5515173d66b9a25cd9f01f76e72f492a41acb1f341ee95368aac62e78252**;
+sourceadf81057b21798a4041779658a69c57f680cdd68,
+system_source2d125137b28e096187433608022daa1590d7a6f0, source_dirty=false.
+System34b27cb97abb149b9a59f7ea4ad2ea2e9b79aab5e4e9345c064b6a98d20e5db8,
+standard-source-rebuild. No package/application ID or public version changes.
+
+| Internal artifact | Bytes | SHA256 |
+|---|---:|---|
+| FamilyConnect_0.2.12~l03.2.11_amd64.deb |56148076 |1976d2bfe13cc0efc421e7cfcdf52bd301ed725168e743c0b32d372422ab062f |
+| FamilyConnect-0.2.12~l03.2.11-x86_64.AppImage |58116600 |92ff5a79f61d8d29e32596d8333d0880f1fe60803d831de418cad63952517a5d |
+| FamilyConnect-Linux-0.2.12~l03.2.11.tar.gz |114647 |8adeda8e6af059100d1254c40db186fd4d8abd7812090c33af38271c575c3a70 |
+| FamilyConnect-MESH-system-amd64.tar.gz |49251389 |4794ae4d8bb0b794aced081b4c330595e18aeaf334ba6b787c248daaa5725ae4 |
+
+[Exact delivery manifest](2026-10-27-linux-readiness-cause-preservation-l04-2-r3/candidate-delivery.json).
+Legacy remains compatibility shape only. Complete artifacts stay local, sealed
+and read-only, with writable evidence separate; no artifacts enter Git. A host
+chmod preflight encountered root ownership before any gate; modes were set in
+an isolated container without changing artifact bytes, before test execution.
+Package/systemd/rollback/live acceptance is still pending, not inferred from
+construction. Owner installed/public/invitation versions are unchanged; no public
+download/catalog link, signature or rollout. Rollback target for disposable
+package gates is the exact immutable .10/system8ab7f298 pair, never a .10 live
+Connect. Next: affected package gates, then corrected P0 only after complete PASS.

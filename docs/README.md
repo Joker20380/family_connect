@@ -14,10 +14,10 @@ and desktop1317+82skip pass; reviewed Gson/cache harness blockers resolved. Reta
 Gradle171 is not rerun; offline Go cache closure and Android/Python143 PASS.
 Canonical readiness run40491350035 SUCCESS. Raw full suite55/3373/105 remains FAIL, not overall CI PASS. Review separates
 local36 from historical fixture-absent19 (D02.1-R/CI debt); union55 is not a new
-permanent baseline. Continue .11/system construction and package gates, then live
-only after PASS. No full-suite replay. READINESS_RELAY_PROBE_CORRELATION_GAP is L06 debt; no server,
+permanent baseline. Internal .11 candidate570a5515/system34b27cb9 constructed and sealed;
+installed package gates pending, then live only after PASS. No full-suite replay. READINESS_RELAY_PROBE_CORRELATION_GAP is L06 debt; no server,
 material, policy or wire changes. Owner workstation NOT_USED; L05/messages/voice
-acceptance/signing/publication NOT_RUN. NEXT: offline .11/system and package gates.
+acceptance/signing/publication NOT_RUN. NEXT: exact .11 package gates.
 The accepted
 [core P0 failure](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
 is not replayed on .9. Historical reports and .9/system bytes remain immutable.
