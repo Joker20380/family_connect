@@ -1,6 +1,7 @@
 import uuid
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from .labels import LABELS, label
@@ -38,9 +39,14 @@ class CohortMetadata(models.Model):
 
 
 class PaymentRecord(models.Model):
+    class Purpose(models.TextChoices):
+        CUSTOMER_PAYMENT = 'customer_payment', 'Оплата клиента'
+        INTERNAL_CANARY = 'internal_canary', 'Внутренняя проверка (canary)'
+
     id = models.UUIDField(verbose_name=LABELS.get('id', 'id'), primary_key=True, default=uuid.uuid4, editable=False)
     device = models.ForeignKey(DeviceProjection, verbose_name=LABELS.get('device', 'device'), on_delete=models.PROTECT)
-    amount_minor = models.PositiveIntegerField(verbose_name=LABELS.get('amount_minor', 'amount_minor'), validators=[MinValueValidator(1)])
+    purpose = models.CharField(verbose_name='Назначение', max_length=24, choices=Purpose.choices, default=Purpose.CUSTOMER_PAYMENT)
+    amount_minor = models.PositiveIntegerField(verbose_name=LABELS.get('amount_minor', 'amount_minor'), validators=[MinValueValidator(0)])
     currency = models.CharField(verbose_name=LABELS.get('currency', 'currency'), max_length=3, choices=[('EUR', 'EUR'), ('USD', 'USD')])
     reference_hash = models.CharField(verbose_name=LABELS.get('reference_hash', 'reference_hash'), max_length=64, unique=True, validators=[RegexValidator(r'^[0-9a-f]{64}$')])
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=LABELS.get('created_by', 'created_by'), on_delete=models.PROTECT, related_name='+')
@@ -52,12 +58,21 @@ class PaymentRecord(models.Model):
         verbose_name = 'запись оплаты'
         verbose_name_plural = 'записи оплат'
         permissions = [('confirm_payment', 'Подтверждать ручную демо-оплату')]
-        constraints = [models.CheckConstraint(condition=models.Q(amount_minor__gt=0), name='positive_payment_amount'),
+        constraints = [models.CheckConstraint(condition=(models.Q(purpose='customer_payment', amount_minor__gt=0) |
+                           models.Q(purpose='internal_canary', amount_minor=0)), name='payment_purpose_amount'),
                        models.CheckConstraint(condition=(models.Q(confirmed_at__isnull=True, confirmed_by__isnull=True) |
                            models.Q(confirmed_at__isnull=False, confirmed_by__isnull=False)), name='complete_payment_confirmation')]
 
     def __str__(self):
-        return f'{self.id} · {self.currency} {self.amount_minor} мин. единиц'
+        return f'{self.id} · {self.get_purpose_display()} · {self.currency} {self.amount_minor} мин. единиц'
+
+    def clean(self):
+        super().clean()
+        if isinstance(self.amount_minor, int):
+            if self.purpose == self.Purpose.INTERNAL_CANARY and self.amount_minor != 0:
+                raise ValidationError({'amount_minor': 'Служебная canary не является оплатой: сумма должна быть нулевой.'})
+            if self.purpose == self.Purpose.CUSTOMER_PAYMENT and self.amount_minor <= 0:
+                raise ValidationError({'amount_minor': 'Сумма оплаты клиента должна быть положительной.'})
 
 
 class OperationRequest(models.Model):

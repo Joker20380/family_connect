@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 import re
 
 from django import forms
+from django.core.exceptions import ValidationError
 
 from control.friends import paid_beta, support_ids
 from .models import DeviceProjection, OperationRequest, PaymentRecord
@@ -27,7 +28,10 @@ class UTCInstant(forms.CharField):
 
 class PaymentForm(forms.Form):
     device = forms.ModelChoiceField(label='Устройство', queryset=DeviceProjection.objects.all())
-    amount_minor = forms.IntegerField(min_value=1, max_value=100_000_000, label='Демо-сумма в минимальных единицах валюты')
+    purpose = forms.ChoiceField(label='Назначение', choices=PaymentRecord.Purpose.choices,
+        initial=PaymentRecord.Purpose.CUSTOMER_PAYMENT, required=False,
+        help_text='Назначение неизменно после создания. Canary — служебная проверка, не оплата и не выручка.')
+    amount_minor = forms.IntegerField(min_value=0, max_value=100_000_000, label='Демо-сумма в минимальных единицах валюты')
     currency = forms.ChoiceField(label='Валюта', choices=PaymentRecord._meta.get_field('currency').choices)
     reference = forms.CharField(label='Основание', min_length=8, max_length=128, help_text='Непрозрачное демо-основание: сохраняется только SHA256. Без данных плательщика, банка и Support ID.')
 
@@ -37,11 +41,22 @@ class PaymentForm(forms.Form):
             raise forms.ValidationError('Используйте непрозрачное демо-основание без идентификаторов пользователя.')
         return value
 
+    def clean_purpose(self):
+        return self.cleaned_data['purpose'] or PaymentRecord.Purpose.CUSTOMER_PAYMENT
+
+    def clean(self):
+        values = super().clean()
+        try:
+            PaymentRecord(purpose=values.get('purpose'), amount_minor=values.get('amount_minor')).clean()
+        except ValidationError as error:
+            self.add_error(None, error)
+        return values
+
 
 class OperationForm(forms.Form):
     device = forms.ModelChoiceField(label='Устройство', queryset=DeviceProjection.objects.all())
     action = forms.ChoiceField(label='Действие', choices=OperationRequest.ACTIONS)
-    payment = forms.ModelChoiceField(label='Подтверждённая оплата', queryset=PaymentRecord.objects.filter(confirmed_at__isnull=False, operationrequest__isnull=True), required=False)
+    payment = forms.ModelChoiceField(label='Подтверждённая запись (оплата или canary)', queryset=PaymentRecord.objects.filter(confirmed_at__isnull=False, operationrequest__isnull=True), required=False)
     period_start = UTCInstant(label='Начало периода')
     paid_until = UTCInstant(label='Оплачено до')
     grace_until = UTCInstant(label='Льготный период до')
@@ -52,9 +67,9 @@ class OperationForm(forms.Form):
         action = values.get('action')
         if action == 'activate':
             if not all(values.get(name) for name in ('payment', 'period_start', 'paid_until', 'attest_exact_apk')) or values.get('grace_until'):
-                raise forms.ValidationError('Для активации нужны только оплата, начало/конец периода и подтверждение APK.')
+                raise forms.ValidationError('Для активации нужны только подтверждённая запись, начало/конец периода и подтверждение APK.')
             if values['payment'].device_id != getattr(values.get('device'), 'pk', None):
-                raise forms.ValidationError('Оплата должна относиться к этому устройству.')
+                raise forms.ValidationError('Подтверждённая запись должна относиться к этому устройству.')
         elif action == 'grace':
             if not values.get('grace_until') or any(values.get(name) for name in ('payment', 'period_start', 'paid_until', 'attest_exact_apk')):
                 raise forms.ValidationError('Для льготного периода нужна только дата его окончания.')

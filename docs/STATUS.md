@@ -2,7 +2,27 @@
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
-**Current substep CONTROL-PLANE-2 — CHECKPOINT / DEPLOYED_EMPTY_COHORT / REVIEW_PENDING.**
+**Current substep BETA-0-CANARY-1 — CHECKPOINT / PAYMENT_PURPOSE SOURCE_READY / LIVE NOT_RUN.**
+Dependency: owner accepted CP2 as DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING /
+PUBLISHER CAPABILITY PRESERVED / REAL PAYMENT AND ENROLLMENT NOT_RUN.
+Only OWNER_CANARY_1 may become the permanent internal production canary; planned
+allocation1 owner +9 customer devices, not an enrollment or an occupied slot yet.
+Control-plane-only PaymentRecord purpose: customer_payment (default, existing rows
+preserved) /internal_canary (zero amount, not customer payment/revenue). Purpose
+immutable from creation; separate analytics/UI/audit/admin receipt metadata.
+118 console PostgreSQL tests PASS, including23 new purpose/migration/workflow tests.
+No entitlement-authority/client changes, CP2 source/package gates, migration or
+restart repeated. Test migrations use a separate disposable local PG test database;
+running console/schema not upgraded, production never connected by the new workflow.
+Owner administrative lookup/HMAC binding, activation, live Connect/expiry/CRL/session/
+recovery/reactivation and Android state readback NOT_RUN. No private selector copied
+into code, docs, operator files, audit, events or receipts.
+The request ends at purpose choices; live period, observation/CRL bounds and safe
+recovery procedure are unspecified. NEXT — obtain that continuation, then execute
+only the agreed OWNER_CANARY_1 live stages. No substitute identity or invented window.
+[Canary source checkpoint and remaining gates](releases/2026-10-27-android106-beta-0-canary-1.md).
+
+**Accepted input CONTROL-PLANE-2 — DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING.**
 Owner-authorized continuation from90ad148 completed. Exact source8b4177d/bundle6ea4ef3a…/
 HTTPdcd76998… preserved, not rebuilt. Committed typed D-Bus observer a2bf728 handles
 empty/nonempty jobs, strict signatures, full argv and PID/config stability;
@@ -20,9 +40,9 @@ pre-start pending-job stop consumed0/0 and was independently cleaned up; bounded
 read-only quiescence wait then passed. All terminal runners/receipts remain historical.
 Monitor active/waiting, post-start cycle SUCCESS; NL registry unavailable, not0.
 No real payment/enrollment, CRL/gateway/client/desktop change; Android106 unchanged.
-STOP. NEXT — review this CP2 empty-cohort rollout, then only actual Android Beta-0
-launch blockers (including live paid CRL/session/recovery, opt-in/legal/monitoring).
-No further automatic restart, payment or enrollment.
+CP2 review accepted by the owner. Historical NEXT was CP2 rollout review, then
+actual Android Beta-0 blockers. No further CP2 restart/deployment/migration/gates;
+the new limited canary authorization does not authorize customer payments/enrollment.
 
 Previous guarded attempt (historical, not a second active NEXT):
 Stale active-looking Linux blocks removed by242f428; only Android CP2 is active.

@@ -242,14 +242,19 @@ There are no free-form diagnostic uploads or payment-provider webhooks.
    stale after60 seconds. Even a recent projection is not a current MESH decision.
 2. In **Cohort metadata**, explicitly record synthetic opt-in and verified exact106
    handoff for the chosen fixture. This does not grant any entitlement.
-3. Record a synthetic manual payment (positive minor units, EUR/USD, opaque unique
-   reference). Only SHA256 of that reference is stored. Explicitly confirm it.
-   Duplicate reference hashes are rejected; confirmed metadata is immutable.
-4. Create an **activate** intent with the matching confirmed payment, UTC start/end
-   and exact APK attestation. One payment backs at most one intent. Grace requires
+3. Record synthetic operational metadata with explicit purpose: `customer_payment`
+   (positive minor units, EUR/USD) or `internal_canary` (strictly zero minor units,
+   not a customer payment or revenue). Existing records/default calls remain
+   `customer_payment`. Purpose is immutable from creation, even before confirmation;
+   PostgreSQL constraints enforce the purpose/amount pairing. Only SHA256 of an
+   opaque unique reference is stored. Explicitly confirm the record. Duplicate
+   reference hashes are rejected; confirmed metadata remains immutable.
+4. Create an **activate** intent with the matching confirmed record, UTC start/end
+   and exact APK attestation. One record backs at most one intent. Grace requires
    only a grace boundary; expire/revoke have no payment/date fields. No automatic
    trial/grace and no trial issuance UI. The existing backend supplies all state,
    version, activation, limit10 and terminal-revocation validation.
+
 5. **Preview** runs the real `paid_beta.apply_event` on an in-memory SQLite snapshot,
    then reads before/after via the same backend. Nothing is committed to the real
    synthetic registry. An invalid operation has a safe rejection code, not a fake
@@ -265,6 +270,18 @@ There are no free-form diagnostic uploads or payment-provider webhooks.
    For support, add categorized/severity/owner/status incidents in Admin; no raw
    logs/messages or personal payment details. Charts aggregate recorded operations,
    observed backend states and version observations, not invented live telemetry.
+
+The BETA-0-CANARY-1 source extension separates `confirmed_payments` (customer only)
+from `confirmed_internal_canary_records` in analytics (records, not distinct devices
+or occupied cohort slots). Operational activity charts still count all operations,
+not revenue. Purpose is shown on record/operation screens, admin filters, new metadata
+audit rows and the administrative receipt wrapper; the authoritative backend
+receipt/event stays unchanged (`event_type=payment`). Do not infer revenue from that
+technical event type or the generic payment audit action. No additional subscription
+state machine or production adapter is added. Migration0006 is tested on an isolated
+PostgreSQL test database; this checkpoint does not upgrade the running local console/
+schema or connect a production canary. Do not reverse to the old positive-only schema
+with zero-value canary records or delete retained records to make a downgrade fit.
 
 Only a staff account with the relevant permission can act. `Наблюдатели панели`
 have read access; `Операторы панели` may record/confirm synthetic payments,

@@ -3,7 +3,27 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-**Current substep CONTROL-PLANE-2 — CHECKPOINT / DEPLOYED_EMPTY_COHORT / REVIEW_PENDING.**
+**Current substep BETA-0-CANARY-1 — CHECKPOINT / PAYMENT_PURPOSE SOURCE_READY / LIVE NOT_RUN.**
+Dependency: CP2 accepted DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING, publisher
+capability preserved, real payment/enrollment NOT_RUN. No CP2 redeployment/restart/
+migration/source-package gates. Same ANDROID-CONTROLLED-BETA root, no CP3.
+Scope: only OWNER_CANARY_1; planned permanent1/10 internal slot and9 customer slots.
+No slot occupied/reserved in the backend yet. No substitute production identity.
+Progress: purpose customer_payment/internal_canary in control-plane operational
+metadata only; existing payments default customer, zero-value canary, immutable
+purpose, separate counters and explicit UI/audit/admin receipt classification.
+118 PostgreSQL console tests PASS, including23 new tests; synthetic real-backend
+event_type=payment/idempotency preserved. No production mutation or console upgrade.
+Completion gate: exact authorized-device binding; live activation/paid certificate
+boundary/MESH Connect; natural expiry and new challenge/fetch/reconnect denial;
+active-session behavior; CRL generation/propagation; recovery/reconciliation and
+reactivation on the same identity; Android state preservation. All live stages NOT_RUN.
+Blocker: submitted instructions stop at purpose choices. Obtain the remaining live
+procedure with expiry/observation windows, CRL/session acceptance/stop bounds and
+recovery sequence before enrollment. Never invent a period that can strand the owner.
+[Bounded checkpoint](releases/2026-10-27-android106-beta-0-canary-1.md).
+
+**Accepted input CONTROL-PLANE-2 — DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING.**
 Dependency: accepted CONTROL-PLANE-1 at21dd8d72ad5505cd82631856083694729d292c8b.
 Gate: exact paid-aware bundle; read-only preflight; consistent private backup/recovery;
 existing paid schema PRESENT_EMPTY, no repeat migration; guarded Friends restart;
@@ -19,8 +39,8 @@ plus independent listener/health/inventory/empty-cohort readback PASS. Critical
 registry/admission/publisher fingerprints unchanged. Consumed1 rollout/0 emergency;
 no second candidate restart. Pre-start harness stop spent no restart; historical
 receipts preserved. No migration, rebuild, real paid/client/gateway mutation.
-NEXT only CP2 rollout review, then actual Android Beta-0 launch blockers. Live paid
-CRL/session/recovery acceptance remains open; monitor active, no client telemetry.
+Historical NEXT was CP2 rollout review; the owner has accepted it. Live paid
+CRL/session/recovery acceptance remains open under the canary gate, not a CP2 retry.
 Previous attempt evidence: exact publisher-preserving bundle6ea4ef3a…/source8b4177d unchanged;
 fresh baseline/empty-schema/NTP gate and backup643fe650…/isolated restore PASS.
 New ordered drop-in selected exact candidate; effective ExecStart guard PASS.
@@ -108,12 +128,11 @@ debt, не Android launch blocker. Linux installed acceptance только от�
 не запускать P0/P1/Auto/AppImage lifecycle/L05/L06 и не публиковать Linux artifacts.
 
 **STOP. NEXT — закрыть только фактические Android controlled-beta launch blockers.**
-Следующий конечный этап — review CONTROL-PLANE-2 deployed-empty-cohort outcome.
-Бюджет consumed1 rollout/0 emergency; второго actual rollout restart не будет.
-Реальные paid enforcement/CRL/session/recovery, opt-in/legal/monitoring ownership
-остаются launch gates, не разрешением запускать их автоматически. Terminal scripts
-не повторять; paid schema не удалять. Реальные payments/enrollment/gateway edits
-запрещены. Read-only monitoring продолжает чтение.
+Следующий конечный этап — продолжение BETA-0-CANARY-1 после получения полной live
+процедуры, оборванной после purpose. Только OWNER_CANARY_1; customer payments/
+enrollment не разрешены. Ни одного live canary stage пока не выполнено. CP2 принят,
+бюджет consumed1 rollout/0 emergency; его deployment/migration/restart/gates не повторять.
+Terminal scripts не запускать, paid schema не удалять. Read-only monitoring продолжается.
 Новый top-level PLAN ID и CONTROL-PLANE-3 не создаются.
 
 ### Предыдущие priority/ops records — исторические, не активные NEXT

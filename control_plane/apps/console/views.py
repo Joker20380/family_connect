@@ -48,7 +48,10 @@ def analytics_data():
     return dict(scope='synthetic-only; read-only projections, not current entitlement', observed_at=now.isoformat(),
         devices=len(devices), stale=sum(item.observed_at < now - timedelta(seconds=60) for item in devices),
         states=dict(states), versions=dict(versions), daily=series,
-        confirmed_payments=PaymentRecord.objects.filter(confirmed_at__isnull=False).count(),
+        confirmed_payments=PaymentRecord.objects.filter(confirmed_at__isnull=False,
+            purpose=PaymentRecord.Purpose.CUSTOMER_PAYMENT).count(),
+        confirmed_internal_canary_records=PaymentRecord.objects.filter(confirmed_at__isnull=False,
+            purpose=PaymentRecord.Purpose.INTERNAL_CANARY).count(),
         uncertain_operations=OperationRequest.objects.filter(status__in=['RUNNING', 'UNKNOWN']).count(),
         open_incidents=Incident.objects.exclude(status='resolved').count(),
         live_crash_rate=None, live_mesh_success_rate=None)
@@ -117,7 +120,7 @@ def payment_new(request):
             return redirect('console:payment', payment_id=payment.pk)
         except (ValidationError, IntegrityError):
             form.add_error(None, 'Основание некорректно или уже записано. Не дублируйте оплату для повтора операции.')
-    return render(request, 'console/form.html', dict(form=form, title='Запись ручной демо-оплаты', subtitle='Без эквайринга и данных плательщика. Запись не означает подтверждение или доступ.'))
+    return render(request, 'console/form.html', dict(form=form, title='Запись демо-оплаты или служебной canary', subtitle='Без эквайринга и данных плательщика. Canary — не выручка. Запись не означает подтверждение или доступ.'))
 
 
 @staff('view_paymentrecord')
@@ -199,7 +202,9 @@ def operation_reconcile(request, request_id):
 def receipt(request, request_id):
     operation = get_object_or_404(OperationRequest, pk=request_id)
     return JsonResponse(dict(scope='synthetic-only administrative receipt; not MESH authorization',
-        request=str(operation.pk), status=operation.status, receipt=operation.receipt), json_dumps_params={'allow_nan': False})
+        request=str(operation.pk), status=operation.status,
+        payment_purpose=operation.payment.purpose if operation.payment_id else None,
+        receipt=operation.receipt), json_dumps_params={'allow_nan': False})
 
 
 @staff('view_auditrecord')

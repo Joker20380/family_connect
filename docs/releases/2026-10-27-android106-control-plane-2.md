@@ -1,8 +1,16 @@
 # ANDROID-CONTROLLED-BETA / CONTROL-PLANE-2
 
-## Current outcome — exact paid-aware HTTP serving an empty cohort
+## Owner review — accepted input to BETA-0-CANARY-1
 
-**CHECKPOINT / DEPLOYED_EMPTY_COHORT / REVIEW_PENDING.** Owner-authorized re-entry
+Owner accepts CP2 at6d5202128ebfda6b60446d4f85cd7d9e5f2323fc as **DONE /
+PAID-AWARE EMPTY-COHORT BACKEND SERVING / PUBLISHER CAPABILITY PRESERVED /
+REAL PAYMENT AND ENROLLMENT NOT_RUN**. No repeat deployment, migration, systemd
+restart or source/package gates. Canary work remains a separate bounded substep of
+the existing Android critical path. Original checkpoint/evidence below is retained.
+
+## Accepted outcome — exact paid-aware HTTP serving an empty cohort
+
+Original result: **CHECKPOINT / DEPLOYED_EMPTY_COHORT / REVIEW_PENDING** (review now accepted). Owner-authorized re-entry
 from90ad14809512ce9b1358a45a9cf2dc5fe84a1442 completed within the same CP2 task.
 One actual rollout restart, zero emergency restarts; no second candidate restart.
 [Sanitized deterministic rollout receipt](2026-10-27-android106-control-plane-2-deterministic-rollout.json).

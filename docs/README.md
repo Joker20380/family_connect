@@ -1,7 +1,13 @@
 # Documentation
 
+[BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
+control-plane payment purpose metadata source checkpoint;118 console PG tests PASS.
+Internal canary is zero-value, immutable-purpose and excluded from customer-payment
+metrics. Live owner canary NOT_RUN; remaining procedure/window/CRL/recovery details
+are required. No real payment/enrollment, selector persistence or production change.
+
 [CONTROL-PLANE-2 — paid-aware production boundary](releases/2026-10-27-android106-control-plane-2.md):
-bounded checkpoint, **DEPLOYED_EMPTY_COHORT / REVIEW_PENDING**, не paid launch.
+owner accepted **DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING**, не paid launch.
 Exact candidate unchanged; typed D-Bus observer, fresh PRESENT_EMPTY backup/restore,
 effective ExecStart guard and post-start inventory/liveness PASS. One rollout restart,
 zero emergency restarts; paid rows/events0, critical non-cohort/publisher fingerprints

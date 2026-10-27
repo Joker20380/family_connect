@@ -106,7 +106,7 @@ def test_local_time_is_not_accepted(value):
 
 
 def test_payment_form_has_no_raw_financial_fields(console):
-    assert set(PaymentForm().fields) == {'device', 'amount_minor', 'currency', 'reference'}
+    assert set(PaymentForm().fields) == {'device', 'purpose', 'amount_minor', 'currency', 'reference'}
     device = DeviceProjection.objects.first()
     form = PaymentForm(dict(device=device.pk, amount_minor=100, currency='EUR', reference='FC-2222-2222'))
     assert not form.is_valid()

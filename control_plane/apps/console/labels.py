@@ -28,7 +28,7 @@ LABELS = {
     'version_name': 'Версия приложения', 'version_code': 'Код версии', 'package_id': 'Пакет',
     'size': 'Размер в байтах', 'sha256': 'SHA256', 'signer_sha256': 'SHA256 сертификата',
     'channel': 'Канал передачи', 'id': 'Идентификатор',
-    'payment.create': 'Запись оплаты', 'payment.confirm': 'Подтверждение оплаты',
+    'payment.create': 'Создание записи оплаты / canary', 'payment.confirm': 'Подтверждение записи оплаты / canary',
     'operation.create': 'Создание запроса', 'operation.preview': 'Предпросмотр операции',
     'operation.dispatch': 'Отправка операции', 'operation.result': 'Результат операции',
     'operation.readback_absent': 'Квитанция пока не найдена', 'projection.refresh': 'Обновление снимков',

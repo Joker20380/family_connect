@@ -19,7 +19,7 @@ def authorize(actor, permission):
 
 
 def audit(actor, action, target, **details):
-    allowed = {'status', 'code', 'operation', 'payment', 'synthetic', 'category', 'severity', 'apk_attested'}
+    allowed = {'status', 'code', 'operation', 'payment', 'synthetic', 'category', 'severity', 'apk_attested', 'purpose'}
     if not set(details) <= allowed:
         raise ValueError('Unsupported audit field')
     return AuditRecord.objects.create(actor=actor, action=action, target=str(target), details=dict(details, synthetic=True))
@@ -41,13 +41,13 @@ def refresh_all(actor):
 
 
 @transaction.atomic
-def create_payment(actor, *, device, amount_minor, currency, reference):
+def create_payment(actor, *, device, amount_minor, currency, reference, purpose=PaymentRecord.Purpose.CUSTOMER_PAYMENT):
     authorize(actor, 'add_paymentrecord')
-    payment = PaymentRecord(device=device, amount_minor=amount_minor, currency=currency,
+    payment = PaymentRecord(device=device, purpose=purpose, amount_minor=amount_minor, currency=currency,
         reference_hash=hashlib.sha256(reference.encode()).hexdigest(), created_by=actor)
     payment.full_clean()
     payment.save()
-    audit(actor, 'payment.create', payment.pk)
+    audit(actor, 'payment.create', payment.pk, purpose=payment.purpose)
     return payment
 
 
@@ -59,7 +59,7 @@ def confirm_payment(actor, payment_id):
         payment.confirmed_at = timezone.now()
         payment.confirmed_by = actor
         payment.save(update_fields=['confirmed_at', 'confirmed_by'])
-        audit(actor, 'payment.confirm', payment.pk)
+        audit(actor, 'payment.confirm', payment.pk, purpose=payment.purpose)
     return payment
 
 

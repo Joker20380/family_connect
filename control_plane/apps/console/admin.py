@@ -31,8 +31,8 @@ class DeviceAdmin(ReadOnlyAdmin):
 
 @admin.register(models.PaymentRecord)
 class PaymentAdmin(ReadOnlyAdmin):
-    list_display = ('id', 'device', 'amount_minor', 'currency', 'confirmed_at')
-    list_filter = ('currency', 'confirmed_at')
+    list_display = ('id', 'device', 'purpose', 'amount_minor', 'currency', 'confirmed_at')
+    list_filter = ('purpose', 'currency', 'confirmed_at')
     search_fields = ('device__device', 'reference_hash')
 
 
