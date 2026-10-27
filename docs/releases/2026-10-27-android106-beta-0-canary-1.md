@@ -65,6 +65,12 @@ on a gateway. There is no new Django production adapter or receipt importer; any
 future import must validate a strict sanitized safe_ref-keyed receipt, not create
 a fake DeviceProjection or authoritative subscription copy.
 
+Committed lookup-only artifact (not bound to an owner and not deployed): source
+`28657bf9e53411a4cdaff44d8ad5ebfb252046e0`,15 members,52921 bytes, SHA256
+`c25447d92bcc3edd0b26889734465e759cbb5a682697f055a3d64a847a894e8e`.
+Independent repeat build byte-identical; internal source-manifest hashes and local
+CLI import/help PASS, no registry opened. Both private artifacts retained read-only.
+
 ### Validation and remaining boundary
 
 -118 PostgreSQL console tests PASS on the rebuilt image in a separate disposable
@@ -76,6 +82,12 @@ a fake DeviceProjection or authoritative subscription copy.
   real synthetic backend transitions, denial/recovery/idempotency/conflict, guarded
   stage/window/certificate/binding/eligibility rejection, unrelated-trigger rollback,
   strict input/no echo and packaged subprocess readback.
+- Source closeout:11 staged source/test/doc files; Python syntax,448 local link
+  targets, added-content privacy scan, strict private JSON and both staged/working
+  `git diff --check` PASS. Unrelated pre-existing123 added lines and untracked work
+  remain outside the commits. Private backups, credentials and historical evidence
+  retained, never staged. Source commit pushed and remote SHA verified before this
+  artifact-receipt closeout.
 - Production lookup, binding, activation, expiry, live Connect/session, CRL delivery,
   recovery/reactivation and Android state readback remain **NOT_RUN**. No customer
   payment/enrollment, CP2 deployment/restart/migration, gateway/publisher/admission
