@@ -26,6 +26,15 @@ STOP; NEXT requires owner approval for one additional restart, after fresh prefl
 backup and effective ExecStart guard PASS. Do not rerun the first rollout script
 (its absent-schema/PID preconditions are obsolete). No real enrollment/payment.
 
+Bounded L04.2-R2 Phase C request27.10 сверён с уже выполненным continuation:
+вход91d5184 уже продолжен commitf417982, GUI-bound authorization прошла, затем
+единственный P0 остановился на EXPIRED_ON_IMPORT; fetch cause остаётся unresolved.
+Повторный Connect/setup/build не выполнялся. Exact .10 delivery hashes совпали;
+новые runtime/base/helper/session checks не заявляются. L04.2-R2 PARTIAL, не L04 DONE.
+[Сверка и retained evidence](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
+STOP этого bounded запроса; NEXT — final review L04.2-R2. Android priority, CP2 blocker
+и frozen .11 не изменены; это не запуск нового Linux task.
+
 **Принятый вход CONTROL-PLANE-1 — DONE / LOCAL SYNTHETIC + PRODUCTION-READONLY SNAPSHOTS.**
 Русский Django Admin/UI, 50 demo identities (paid cap10 неизменён), отдельные
 read-only inventory/server observations и synthetic technical samples, фильтры/

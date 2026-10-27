@@ -1,6 +1,52 @@
 # L04.2-R2 — process containment versus authenticated drain
 
-## Read-only readiness correlation — current checkpoint
+## Повторный запрос Phase C — сверка уже выполненного continuation
+
+27.10.2026: запрос снова указывает вход
+`91d518496bd76598e48f6dcccaeae90e50834137`; фактический HEAD при сверке —
+`7e2d9f685d435ab28476538cee87775d3d620234`. В текущей истории уже присутствует
+`f417982c588e90da737fa888984c33573d9e72fc`, который выполнил именно этот
+[GUI-bound authorization continuation](#phase-c-gui-bound-authorization-continuation--previous-checkpoint)
+на exact .10. Это не новый непроверенный authorization gap. Branch не откатывался;
+новый task/R3/version/candidate/system/runtime/source checkpoint не создавался.
+
+Сохранённый результат: exact-process pkttyagent зарегистрирован до exec GUI;
+PID/start-time сохранены, agent жив при единственном P0 Connect. Строгий установленный
+call path прошёл `ready:2` и вошёл в supervisor. Сам pipe handshake не записывался,
+численный exit status authorization child не был получен — exit0 не заявляется.
+Первый failure — `EXPIRED_ON_IMPORT`, attempt1/generation3; packet worker не создан,
+TUN0. Следующая корреляция `70b919bba0aac1249c6d2c5a6e220e1ee0ae058d` уточнила:
+новый fetch оставил `FETCH_FAILED`, а прежний cached response уже истёк. Точная
+challenge/fetch/network причина остаётся **READINESS_CAUSE_UNRESOLVED**, не доказан
+дефект MESH worker или gateway. Исторический exit127 сам по себе не доказывает denial
+или причину; успешное прохождение с GUI-agent не локализует его ретроспективно.
+
+**Повторный Connect не выполнялся:** запрос описывает уже завершённый переход от
+exit127 к exact GUI agent и не учитывает последующий first-failure stop. Новый P0
+под видом проверки прежнего authorization gap повторил бы остановленное действие.
+P1/Auto/lifecycle/AppImage sharing остаются NOT_RUN. Предыдущий Disconnect встретил
+второй password prompt; он не был отвечен, wrapper завершился. Финальные owner0/
+TUN0/pending=null не заменяют отсутствующий полный cleanup/lifecycle PASS.
+
+В этой сверке заново read-only проверены только size/SHA256 трёх exact .10 delivery
+artifacts из таблицы ниже — все совпали с запросом; два retained candidate JSON
+прошли strict parsing без duplicate keys/non-finite values. Phase B/package/source
+tests не запускались. Полный hash READY base, helper/session/agent preflight и
+runtime-состояние не переаттестовывались; прежние receipts не выдаются за новые.
+Новая derivative/VM/GUI/agent не запускалась, setup/install/provisioning/fetch не
+выполнялись, private state не менялось. **Owner workstation NOT_USED.**
+
+Это documentation-only reconciliation существующего L04.2-R2, не новый runtime
+checkpoint и не возобновление R3/L05/L06. Android critical path и незавершённый
+CONTROL-PLANE-2 rollout не меняются. **L04.2-R2 PARTIAL / READINESS_CAUSE_UNRESOLVED;
+L04.2 и parent L04 не DONE. STOP. NEXT — final review L04.2-R2.**
+
+Closeout:3 staged Markdown documents/169 links, strict JSON for2 retained manifests,
+added-content secret/private-data scan and `git diff --check` PASS. Full working-tree
+link check also found an unrelated unstaged STATUS anchor to the evening VPN-health
+note; that separate work is preserved, not repaired or included in this commit.
+
+## Read-only readiness correlation — retained checkpoint
 
 27.10.2026, input main `f417982c588e90da737fa888984c33573d9e72fc`.
 Same L04.2-R2; no new task/R3/version/candidate/system/runtime checkpoint.
