@@ -4,6 +4,12 @@ Status: **PARTIAL / SOURCE_GATE_FAILED**. Same PLAN L04.2; no new top-level ID.
 Input main `70b919bba0aac1249c6d2c5a6e220e1ee0ae058d`.
 Accepted R2 runtime `169aa687f497f8be690be5331879f994636135e1`.
 
+Latest continuation input `2d125137b28e096187433608022daa1590d7a6f0`: runtime
+correction review accepted in affected scope, unchanged. Mandatory source gate
+remains open due to **ENVIRONMENT_GO_MODULE_CACHE_UNAVAILABLE**; see the final
+same-environment continuation section. The initial checkpoint evidence below
+is preserved, not presented as a second active task or a current product defect.
+
 ## Review and immutable boundary
 
 [R2](2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md) is **FINAL PARTIAL /
@@ -74,7 +80,7 @@ relay calls. R2 attempts1–12 are not relabelled as twelve fetches or exactly o
 server fetch. R3 acceptance uses the preserved typed cause; the network/public
 protocol is not expanded and this debt does not block the source correction.
 
-## Gate and delivery status
+## Initial checkpoint — gate and delivery status
 
 | Gate | Status |
 |---|---|
@@ -154,3 +160,87 @@ their children have exited; original protected state and .10 hashes still match.
 **STOP. NEXT — review L04.2-R3.** Resolve the failed contract fixture/gate through
 review before any .11 system/package or installed continuation. No live replay on
 .10 is permitted.
+
+## Reviewed same-environment Android/Python continuation
+
+Review accepts source2d125137 for affected scope and classifies the earlier
+Gson `NoClassDefFoundError` as a host-classpath/symlink harness failure. The
+accepted Go race, cleanup32, native15, combined3, MESH157 and desktop1317/82skip
+results are retained, not rerun. No product/runtime/test source, assertion,
+Android106 reference, lock, dependency pin or Gradle build file is changed.
+No new task ID, R4, runtime checkpoint, version or candidate is created.
+
+### Environment and one authorized gate
+
+- Exact tracked current-main source is exported and its Git tree restored inside
+  a fresh Docker named filesystem; unrelated working-tree changes are excluded.
+- Java17.0.13+11, Gradle8.11.1 and Python3.13.17; every requirement from the exact
+  control/identity locks is checked against installed versions. Synthetic release
+  fixtures use exact Go1.26.0 and current source, not retained product artifacts.
+- `GRADLE_USER_HOME=/workspace-state/gradle-home` is a fresh real directory.
+  Standard unchanged `test goldenClasspath` resolves pinned Gson2.13.2 through
+  Gradle. No old golden-classpath, host CLASSPATH, retained symlink cache, manual
+  JAR injection, dynamic dependency or unpinned substitution is used.
+- Generated classes and dependency JARs remain in the same image/named filesystems
+  and absolute paths for Python consumption. Every JAR is present and hashed;
+  no classpath parent is a symlink. Source and output are inside this environment.
+- Private scripts are complete before execution, syntax-checked, SHA256-recorded,
+  mode0555 and mounted read-only; evidence is separate. No running file is edited.
+
+Gradle ran **once:171 PASS /0 FAIL /0 ERROR /0 SKIP**. The assistant's post-Gradle
+preflight incorrectly required the optional absent `build/resources/main`
+directory even though the project has no main resources. It stopped before
+pytest. After that PID exited, a separate immutable Python-only harness accepted
+this standard optional directory and consumed the same freshly generated
+classpath. Gradle tests/classpath generation were not repeated; no product
+assertion or classpath entry was changed or removed.
+
+The one Python selection finishes **139 PASS /4 FAIL /0 ERROR /0 SKIP**, exit1,
+11.642s. The original
+`tests/test_android_challenge_contract.py::test_android_response_parser_and_proof_roundtrip`
+now **PASS**; Gson loading and the Android/Python readiness assertion are reached.
+
+### New environment blocker and STOP
+
+All four failures are in
+`tests/test_friends_restricted.py::test_backend_delivery_consumed_by_native_material`:
+`[current]`, `[production-offset]`, `[production-utc]`, `[negative-offset]`.
+Their Go subprocess exits before delivery validation with
+`module lookup disabled by GOPROXY=off`.
+
+The assistant's preparation container mounted/configured the offline Go module
+and build caches, but the Python test container did not. Thus fixture construction
+passed while its later `go run` could not resolve dependencies. This is a concrete
+**harness prerequisite omission**, not evidence of Android106, R3 readiness or
+native delivery incompatibility. No cache/pin/source repair or test replay is
+performed after this failure.
+
+The four observed IDs are outside the accepted36-ID historical residual set;
+they cannot be waived as historical failures. This comparison covers only the
+affected143-test selection, **not a fresh full-repository comparison**. The
+mandatory source gate remains unclosed. Full-suite comparison, new system/.11,
+package gates and corrected P0/P1/Auto/lifecycle/AppImage are **NOT_RUN/NOT_BUILT**.
+No general CI PASS is claimed. Runtime source remains exactly2d125137.
+
+[Sanitized continuation receipt](2026-10-27-linux-readiness-cause-preservation-l04-2-r3/same-environment-gate.json)
+records exact tools, locks, classpath/JAR hashes,171/139/4 counts, failure IDs and
+baseline comparison, immutable harness/log hashes and preservation checks. Raw
+logs, source capsule, synthetic fixtures and Docker filesystems remain private.
+
+### Preservation and handoff
+
+Exact .10/system artifact hashes, the read-only READY base, failed derivative and
+original protected seven files remain byte-identical. No VM is booted; no install,
+setup, Connect, fetch, registration, server/material/policy change or teardown
+occurs. **Owner workstation NOT_USED**. Messages, voice acceptance, L05, signing
+and publication remain **NOT_RUN**. L04 stays IN_PROGRESS under existing L04.2.
+
+Only STATUS/PLAN, this existing report and sanitized continuation JSON are changed
+for this documentation/evidence checkpoint. Secret scan, strict JSON, local links,
+staged scope and `git diff --check` PASS before the ordinary commit/push;
+unrelated local work remains unstaged. No rollback is required: product bytes and
+installed state have not changed.
+
+**STOP. NEXT — review L04.2-R3.** Close the missing Go-cache harness prerequisite
+under review before a further mandatory source-gate run; no .10 live replay and
+no .11 build while that gate remains open.

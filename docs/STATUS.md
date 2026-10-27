@@ -9,10 +9,14 @@ availability→expired/missing cache masking; source now retains typed fetch err
 keeps FETCH_FAILED as import result, preserves validated-cache fallback and makes
 cooldown-only MISSING/EXPIRED terminal. Existing FETCH_INCOMPATIBLE_RESPONSE is
 added to strict desktop diagnostics. Exact Go race, native15, combined3, MESH157,
-cleanup32 and desktop1317/82skip PASS. Android/Python selection142 PASS/1 FAIL:
-Java fixture cannot load Gson JsonElement, before readiness assertion. This new
-affected failure ID is not in historical36 baseline; no product defect inferred.
-STOP without replay/fix: full-repository comparison NOT_RUN; .11 NOT_BUILT,
+cleanup32 and desktop1317/82skip PASS retained. Source2d125137 is review accepted
+in affected scope; runtime/tests/locks/pins unchanged. Reviewed Gson classpath
+failure is resolved in fresh Java17/Gradle8.11.1/Python3.13 environment:
+Gradle171 PASS; original Android response-parser case PASS. One Python selection:
+139 PASS/4 FAIL/0 ERROR/0 SKIP. Four native delivery checks cannot resolve Go
+modules: harness omitted module-cache mounts with GOPROXY=off. Environment
+failure, not a proven product defect; four affected IDs outside historical36.
+No replay/source fix. Full-repository comparison NOT_RUN; .11 NOT_BUILT,
 new system/package/live NOT_RUN. Sealed internal/unpublished .10 remains
 4264406722f6dd3efb83e9d9666e67180ce4f950333bb3e711bcbb4f5068b55a;
 incorrect historical task suffix is not an artifact identity. Phase B/setup/GUI
