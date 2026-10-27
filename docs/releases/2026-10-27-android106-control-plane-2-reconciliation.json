@@ -1,0 +1,135 @@
+{
+  "schema": 1,
+  "checkpoint": "ANDROID-CONTROLLED-BETA / CONTROL-PLANE-2",
+  "status": "MIGRATED_EMPTY_ROLLOUT_BLOCKED_EFFECTIVE_EXECSTART",
+  "source_commit": "8b4177dec7867fe380418a02c542a3a40723d40f",
+  "observed_at": "2026-10-27T17:28:07Z",
+  "receipt_scope": "sanitized operator summary; private evidence retained separately",
+  "reconciliation": {
+    "result": "PASS",
+    "publisher_capability": "PRESERVED",
+    "strict_catalog_validations": "PRESERVED",
+    "access_import_and_api_equivalence": "PASS",
+    "baseline_path": "deploy/friends/restricted/served-baseline.json",
+    "baseline_sha256": "83b17c9a28638b5d8b4cb44e7c58252d8519b2bbbba827a2fb6a16ce7933477c",
+    "served_archive_sha256": "21d64558e542ff6ad80fb9b13799fbcb333167ffb5a79ec841e7c94dc65d71fa",
+    "served_archive_size": 125205,
+    "served_archive_members": 24,
+    "served_source_changed_since_previous_preflight": false,
+    "historical_artifacts_preserved": true
+  },
+  "candidate": {
+    "bundle_id": "paid-boundary-6ea4ef3a1f57ffeef8bf71322fa88129e95c1197431f0ca6d4ac8752be4c0584",
+    "sha256": "6ea4ef3a1f57ffeef8bf71322fa88129e95c1197431f0ca6d4ac8752be4c0584",
+    "member_count": 50,
+    "size": 593920,
+    "reproducible_builds": 2,
+    "python_version": "3.14.4",
+    "runtime_dependency_versions_match": true,
+    "http_sha256": "dcd769986a1da7cb1662c0f73d18a88e9f73485a977db937ca5b1428c1fd1029",
+    "http_size": 47091,
+    "http_members": 25,
+    "distribution": "PRIVATE_STAGED_NOT_SERVING"
+  },
+  "fresh_backup": {
+    "created_at": "2026-10-27T17:18:15Z",
+    "sha256": "a5f00b523fefa8b43c27f7aca601e209a699fbb51d469ff1fe1006a039d084ac",
+    "size": 442368,
+    "consistent_sqlite_backup": "PASS",
+    "isolated_restore_integrity_foreign_keys_fingerprints": "PASS",
+    "storage": "PRIVATE_SERVER_ONLY",
+    "production_restore": "NOT_RUN"
+  },
+  "migration": {
+    "result": "COMMITTED_EMPTY_IDEMPOTENT",
+    "authority": "control.friends.paid_beta",
+    "precondition": "PAID_TABLES_ABSENT",
+    "postcondition": "PAID_TABLES_PRESENT_EMPTY",
+    "invocations_in_single_transaction": 2,
+    "schema_repeat_equal": true,
+    "transaction_total_changes": 0,
+    "nonpaid_all_table_fingerprints_unchanged_inside_transaction": true,
+    "non_cohort_devices": 54,
+    "subscriptions": 0,
+    "events": 0
+  },
+  "rollout": {
+    "result": "NOT_SERVING_CANDIDATE",
+    "reason": "EFFECTIVE_EXECSTART_SHADOWED",
+    "execution_defect": "effective ExecStart was not checked before the single restart",
+    "unit": "family-connect-friends-http-candidate.service",
+    "controlled_restarts_performed": 1,
+    "service_started_at": "2026-10-27T17:22:17Z",
+    "pid": 4187296,
+    "served_http_sha256": "21d64558e542ff6ad80fb9b13799fbcb333167ffb5a79ec841e7c94dc65d71fa",
+    "service_state": "active/running",
+    "automatic_restarts": 0,
+    "unknown_post_route_health_status": 404,
+    "health_scope": "liveness only; no real-user MESH acceptance",
+    "cleanup": {
+      "completed_at": "2026-10-27T17:26:38Z",
+      "own_ineffective_dropin_preserved_privately_then_removed": true,
+      "prior_dropins_untouched": true,
+      "daemon_reload_only": true,
+      "pid_unchanged": true,
+      "additional_restarts": 0
+    }
+  },
+  "final_readback": {
+    "sqlite_integrity": "PASS",
+    "foreign_key_violations": 0,
+    "subscriptions": 0,
+    "events": 0,
+    "devices": 54,
+    "invites": 108,
+    "explicit_grants": 2,
+    "revoked_devices": 4,
+    "revoked_invites": 5,
+    "certificates": 6,
+    "readiness_results": 114,
+    "device_invite_grant_fingerprints_unchanged": true,
+    "admission_hash_unchanged": true,
+    "runtime_counters_claimed_immutable": false
+  },
+  "validation": {
+    "focused_acceptance_unique_passed": 192,
+    "effective_execstart_guard_passed": 8,
+    "remaining_skips_in_selected_acceptance": 0,
+    "initial_interoperability_skip": "RERUN_PASS_WITH_EXACT_SYNC_HASH",
+    "initial_closure_staging_error": "RERUN_PASS_WITH_BYTE_IDENTICAL_HTTP_SOURCE_SIDECAR",
+    "actual_effective_candidate_guard": "BLOCKED_EFFECTIVE_EXECSTART",
+    "actual_effective_served_guard": "PASS",
+    "synthetic_expiry_revoke_crl_recovery": "PASS",
+    "repository_full_suite": "NOT_RUN",
+    "live_paid_crl_propagation": "NOT_ACCEPTED",
+    "real_payments_enrollment": "NOT_RUN"
+  },
+  "monitoring": {
+    "local_readonly_timer": "active/waiting",
+    "last_cycle": "SUCCESS",
+    "nl_registry": "UNAVAILABLE_NOT_ZERO",
+    "production_client_telemetry": "NOT_COLLECTED"
+  },
+  "android106": {
+    "sha256": "242855c43e889e708234ce2f687fa02d37bccb1eee408904f09216b6abd8f020",
+    "size": 56093664,
+    "bytes_rechecked_unchanged": true,
+    "rebuild_install_catalog_change": "NOT_RUN"
+  },
+  "next_gate": {
+    "requires_owner_authorization": "ONE_ADDITIONAL_CONTROLLED_RESTART",
+    "preconditions": [
+      "fresh preflight and consistent private backup",
+      "verified PRESENT_EMPTY paid schema",
+      "reviewed drop-in precedence preserving existing runtime configuration",
+      "daemon-reload then exact archive and effective ExecStart guard PASS"
+    ],
+    "postconditions": [
+      "actual served source hash and PID/start-time readback",
+      "service health and empty paid ledger",
+      "non-cohort registry and admission invariants"
+    ],
+    "real_payment_enrollment_authorized": false,
+    "gateway_crl_changes_authorized": false
+  }
+}

@@ -134,7 +134,16 @@ propagation/session bound before billing; do not advertise instant revocation.
 
 ## Deployment, rollback and stop boundary
 
-This checkpoint has no deployment/paid activation. Future acceptance must verify
+CONTROL-PLANE-2 operational update27.10: production paid schema migrated empty;
+subscriptions0/events0. The reconciled paid-aware bundle is staged but **NOT SERVING**:
+one restart selected the old archive due to drop-in precedence. Old service remains
+healthy; only the ineffective new drop-in was removed, no DB restore. An additional
+restart needs owner approval and an effective ExecStart gate before execution.
+[Exact outcome and next gate](releases/2026-10-27-android106-control-plane-2.md).
+No real payment/enrollment is authorized; live paid CRL propagation remains unaccepted.
+
+The original PAID-ENTITLEMENT-MVP source checkpoint had no deployment/paid activation.
+Remaining acceptance must verify
 exact packaged server modules, consistent migration, empty-cohort non-regression,
 then an authorized synthetic106 path/payment/expiry/revocation/audit receipt before
 any real enrollment. A production identity is not a test fixture. Clock health and

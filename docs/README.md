@@ -1,11 +1,11 @@
 # Documentation
 
 [CONTROL-PLANE-2 — paid-aware production boundary](releases/2026-10-27-android106-control-plane-2.md):
-bounded checkpoint, **SOURCE RECONCILED / ROLLOUT PENDING**, не paid launch.
-Publisher capability restored with provenance, exact baseline contract,160 focused
-tests including synthetic application recovery PASS. Historical bundle/backup retained;
-fresh empty-cohort rollout pending, real enrollment/payment prohibited. Local read-only
-monitoring continues; live CRL propagation is not accepted by synthetic tests.
+bounded checkpoint, **MIGRATED_EMPTY / ROLLOUT BLOCKED_EFFECTIVE_EXECSTART**, не paid launch.
+Publisher capability preserved, exact baseline PASS;192 acceptance +8 guard tests PASS.
+Fresh backup/restore and empty migration PASS; one restart still selected old healthy
+runtime because of drop-in precedence. Own ineffective drop-in removed; additional
+restart needs owner approval. No real enrollment/payment; read-only monitoring continues.
 
 [CONTROL-PLANE-1 — русская панель и read-only observability](releases/2026-10-27-android106-control-plane-1.md):
 50 demo identities, production-readonly inventory двух шлюзов (RU54, NL registry

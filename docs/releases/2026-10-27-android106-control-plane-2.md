@@ -1,9 +1,80 @@
 # ANDROID-CONTROLLED-BETA / CONTROL-PLANE-2
 
-## Continuation — served-source reconciliation
+## Current operational outcome — migrated empty, deployment not completed
+
+**CHECKPOINT / MIGRATED_EMPTY / ROLLOUT BLOCKED_EFFECTIVE_EXECSTART.** Reconciliation
+source commit `8b4177dec7867fe380418a02c542a3a40723d40f` pushed and remote SHA verified.
+Publisher feature preserved, exact served-baseline gate PASS; the source-drift blocker
+is resolved. This does **not** mean paid-aware code is serving production.
+
+New immutable bundle: ID
+`paid-boundary-6ea4ef3a1f57ffeef8bf71322fa88129e95c1197431f0ca6d4ac8752be4c0584`,
+50 members,593920 bytes, SHA256
+`6ea4ef3a1f57ffeef8bf71322fa88129e95c1197431f0ca6d4ac8752be4c0584`.
+Two byte-identical builds from source8b4177d, same Python3.14.4/dependency versions
+as production, exact HTTPdcd76998… checked against versioned baseline. Source/operator/
+sync archives, manifests/imports/licenses and readonly bridge are in the private
+bundle; runtime dependencies not installed or changed. Bundle staged privately on RU,
+not publicly distributed. [Sanitized outcome receipt](2026-10-27-android106-control-plane-2-reconciliation.json).
+
+Fresh preflight17:15:14UTC: NTP/integrity/FK/health PASS, old PID3874974/source21d64558…
+unchanged, paid tables absent;54 devices/108 invites/2 grants,6 certificates/116
+readiness records, revoked devices4/invites5. No private configuration or DB download.
+Fresh private backup at17:18:15UTC,442368 bytes, SHA256
+`a5f00b523fefa8b43c27f7aca601e209a699fbb51d469ff1fe1006a039d084ac`;
+consistent SQLite copy + isolated integrity/FK/all-table fingerprint restore PASS.
+Old backup1c19bd39… and historical candidate4127f359… retained, not used as fresh input.
+
+Production migration used the exact packaged `paid_beta.migrate` authority twice in
+one write transaction. Schema repeat identical; foreign-key check PASS;
+`total_changes=0`, non-paid all-table logical fingerprints unchanged inside transaction;
+54 devices return no paid subscription. Commit contains only additive paid schema,
+**0 subscriptions /0 events**. No activation, payment, grant or identity mutation.
+
+**Rollout execution defect:** the script checked unit syntax but omitted verification
+of **effective ExecStart before restart**. Its `90-control-plane-2-paid-boundary.conf`
+was shadowed by later existing drop-ins, ultimately `zzz-support-diagnostics.conf`.
+The single authorized restart occurred17:22:17UTC and successfully restarted the
+**old**21d64558… archive, not the candidate. Post-start archive/argv check caught
+this; receipt `RESTART_REQUESTED / STOP / AssertionError`, not deployment PASS.
+New PID4187296, active/running, NRestarts0, expected unknown-route404 health.
+
+Only the new ineffective drop-in was preserved as private attempt evidence then
+removed at17:26:38UTC; daemon-reload only, PID unchanged, no second restart.
+Original drop-ins untouched, no live database restore/downgrade or gateway/CRL edits.
+New candidate remains staged; old immutable archive remains served. Schema is
+**PRESENT_EMPTY**, not ABSENT. Repeating the first rollout script is forbidden:
+its PID/absent-schema preconditions are obsolete and its operation receipt is retained.
+
+Final readback17:28:07UTC: paid rows/events0;54 devices/108 invites/2 grants;
+revoked4/5; integrity/FK PASS; exact device/invite/grant fingerprints and admission
+unchanged.6 certificates/114 readiness records observed (runtime counters are not
+claimed immutable across ordinary service activity). No real readiness challenge/
+fetch or production user fixture. Local read-only timer active/waiting, last cycle
+success; NL remains UNAVAILABLE, not0. Existing UI/demo/client source untouched.
+APK106 SHA256 rechecked unchanged242855c4…; no rebuild/catalog/public distribution.
+
+Validation:192 unique focused checks PASS (186 first selection +6 sync/CLI checks,
+including the initially skipped interoperability test rerun with the exact sync
+artifact hash). The initial closure test used a bundle directory without its source
+sidecar; rerun against the byte-identical HTTP source staging passed. No remaining
+skip in selected acceptance. Added8 effective ExecStart guard tests PASS. New
+read-only guard rejects the candidate against **actual live effective ExecStart**,
+and accepts the actually served old archive; neither guard performs a restart.
+No general repository CI or paid launch PASS. Existing disabled/pre-paid live CRL
+sync path remains a separate real launch gap; synthetic CRL is not live revocation.
+
+**STOP. Finite NEXT, same CONTROL-PLANE-2:** owner authorization for **one additional
+controlled restart**. Then fresh preflight/backup with PRESENT_EMPTY schema; a
+reviewed highest-priority drop-in preserving all existing arguments/environment;
+daemon-reload; exact archive hash **and effective ExecStart** guard PASS before
+restart; post-start SHA/PID/health/empty ledger/non-cohort readback. Do not enable
+real enrollment/payment or change gateway/CRL settings as part of that retry.
+
+## Historical source stage — served-source reconciliation
 
 Input `d4205d256ae9000ca80826b982661b6abfe4fb04`; same bounded substep, no CP3.
-**SOURCE RECONCILED / ROLLOUT PENDING**, not paid launch. Owner review forbids
+At that source commit: **SOURCE RECONCILED / ROLLOUT PENDING**, not paid launch. Owner review forbids
 publisher capability removal even with0 configured entries. Fresh read-only recovery
 confirmed exact served21d64558…/125205 bytes/24 files, same PID3874974/start15:35:09Z
 and systemd unit. Only generic source archive and metadata downloaded; no registry,
