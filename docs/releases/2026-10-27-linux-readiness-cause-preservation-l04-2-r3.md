@@ -1,13 +1,13 @@
 # L04.2-R3 — readiness cause preservation and bounded retry
 
-Status: **PARTIAL / SOURCE_GATE_FAILED**. Same PLAN L04.2; no new top-level ID.
+Status: **IN_PROGRESS / source gate continuation**. Same PLAN L04.2; no new top-level ID.
 Input main `70b919bba0aac1249c6d2c5a6e220e1ee0ae058d`.
 Accepted R2 runtime `169aa687f497f8be690be5331879f994636135e1`.
 
-Latest continuation input `2d125137b28e096187433608022daa1590d7a6f0`: runtime
-correction review accepted in affected scope, unchanged. Mandatory source gate
-remains open due to **ENVIRONMENT_GO_MODULE_CACHE_UNAVAILABLE**; see the final
-same-environment continuation section. The initial checkpoint evidence below
+Latest continuation input `0a37d23177d6aa10c0e38fd52a45a652f4e60615`: runtime
+source2d125137 remains review accepted in affected scope, unchanged. The reviewed
+Go-cache environment blocker is closed and Android/Python143 PASS; canonical
+readiness CI and full-suite comparison still gate progression. The earlier evidence below
 is preserved, not presented as a second active task or a current product defect.
 
 ## Review and immutable boundary
@@ -244,3 +244,53 @@ installed state have not changed.
 **STOP. NEXT — review L04.2-R3.** Close the missing Go-cache harness prerequisite
 under review before a further mandatory source-gate run; no .10 live replay and
 no .11 build while that gate remains open.
+
+## Reviewed Go-cache closure and canonical workflow continuation
+
+Input main `0a37d23177d6aa10c0e38fd52a45a652f4e60615`; accepted product source
+`2d125137b28e096187433608022daa1590d7a6f0` remains byte-identical. All intervening
+commits are documentation/evidence only. Android source/reference, Gradle build
+file/dependency versions, R3 tests, Go locks and runtime files are unchanged.
+Current tracked source is exported separately from unrelated local changes.
+
+Retained image `sha256:42071675d572679422f4f937a7eb325da5783d95073a82823f56ed2eb6dcf9ee`
+and named filesystems pass read-only provenance checks. Java17.0.13+11,
+Gradle8.11.1, Python3.13.17 and exact Python locks are preserved. JAR hashes match
+the accepted Gson2.13.2, BouncyCastle1.85.2 and JUnit4.13.2 receipts; canonical
+classpath has no host path or symlink dependency. Read-only `javap` resolves both
+JsonElement and FriendsReadinessGoldenTest. Gradle171 PASS is retained, **not rerun**.
+Generated build files are copied byte-identically to the current clean export at
+the same `/workspace` path; dependency cache remains read-only at its original
+`/workspace-state/gradle-home` path. No old channel-only cache is used.
+
+Before pytest, the same isolated environment proves **offline Go cache closure**:
+exact Go1.26.0, `GOPROXY=off`, `GOTOOLCHAIN=local`, read-only `GOMODCACHE`, shared
+writable `GOCACHE`; `go mod verify`, `go list -mod=readonly -deps` and compilation
+of the actual delivery-check program PASS. The preflight compiles but does not
+execute that validator. Synthetic fixture preparation and the subsequent test
+container use those same cache mounts/environment. No external network is needed.
+
+The one authorized exact Android/Python selection now completes **143 PASS /
+0 FAIL /0 ERROR /0 SKIP**, exit0,11.17s. All four native delivery cases and the
+original Android response/proof case PASS. No assertion, selection, pin, product
+code or wire contract was changed. No retries were needed.
+
+[Cache-closure receipt](2026-10-27-linux-readiness-cause-preservation-l04-2-r3/cache-closure.json)
+records source/tool/cache provenance, JAR/build inventory hashes,143-test result,
+bounded workflow path checks and unchanged protected state.
+
+Only bounded path coverage is added to both push/pull_request triggers of the
+existing canonical readiness workflow: readiness Go files/locks, native materials,
+Linux material/supervisor boundary, desktop diagnostics/R3 test and control lock.
+Jobs, commands, actions, tools, assertions and timeout are unchanged. This is a
+CI/evidence commit, **not a new product-source checkpoint**. Canonical GitHub
+workflow result is PENDING; full-suite failure-ID comparison is NOT_RUN until it
+succeeds. No overall CI/source gate PASS is claimed yet.
+
+Exact .10/system, read-only READY base and protected seven files remain unchanged;
+owner workstation NOT_USED. New system/.11/package/live, L05/messages/voice
+acceptance/signing/publication remain NOT_RUN. No server/material/policy changes.
+
+**NEXT — canonical readiness workflow SUCCESS, then full-suite comparison.**
+Only complete source gate PASS permits the already-authorized .11/package/live
+continuation; the same L04.2-R3 task remains active.

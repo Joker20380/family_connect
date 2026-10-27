@@ -1,9 +1,9 @@
 name: Android Friends readiness wire contract
 on:
   push:
-    paths: ['scripts/ci_release_fixtures.py', 'clients/android/**', 'control/friends/**', 'deploy/friends/**', 'device_identity/**', 'scripts/package_friends_http.py', 'tests/**', '.github/workflows/readiness-contract.yml']
+    paths: ['scripts/ci_release_fixtures.py', 'clients/android/**', 'control/friends/**', 'deploy/friends/**', 'device_identity/**', 'scripts/package_friends_http.py', 'tests/**', '.github/workflows/readiness-contract.yml', 'carrier/desktopmesh/readiness*.go', 'carrier/go.mod', 'carrier/go.sum', 'clients/mesh/materials/**', 'clients/mesh/go.mod', 'clients/mesh/go.sum', 'clients/linux/mesh_materials.py', 'clients/linux/mesh_service.py', 'clients/desktop/backend.py', 'clients/desktop/tests/test_mesh_readiness_cause.py', 'control/requirements.lock']
   pull_request:
-    paths: ['scripts/ci_release_fixtures.py', 'clients/android/**', 'control/friends/**', 'deploy/friends/**', 'device_identity/**', 'scripts/package_friends_http.py', 'tests/**', '.github/workflows/readiness-contract.yml']
+    paths: ['scripts/ci_release_fixtures.py', 'clients/android/**', 'control/friends/**', 'deploy/friends/**', 'device_identity/**', 'scripts/package_friends_http.py', 'tests/**', '.github/workflows/readiness-contract.yml', 'carrier/desktopmesh/readiness*.go', 'carrier/go.mod', 'carrier/go.sum', 'clients/mesh/materials/**', 'clients/mesh/go.mod', 'clients/mesh/go.sum', 'clients/linux/mesh_materials.py', 'clients/linux/mesh_service.py', 'clients/desktop/backend.py', 'clients/desktop/tests/test_mesh_readiness_cause.py', 'control/requirements.lock']
 permissions:
   contents: read
 jobs:

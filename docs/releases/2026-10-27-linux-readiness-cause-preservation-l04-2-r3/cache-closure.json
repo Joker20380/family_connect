@@ -1,0 +1,170 @@
+{
+  "task": "L04.2-R3",
+  "accepted_product_source": "2d125137b28e096187433608022daa1590d7a6f0",
+  "tested_current_main": "0a37d23177d6aa10c0e38fd52a45a652f4e60615",
+  "source_gate": "IN_PROGRESS",
+  "retained_gradle": {
+    "tests": 171,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "gradle_repeated": false,
+  "java": "17.0.13+11",
+  "gradle": "8.11.1",
+  "python": "3.13.17",
+  "image_id": "sha256:42071675d572679422f4f937a7eb325da5783d95073a82823f56ed2eb6dcf9ee",
+  "retained_classpath": [
+    {
+      "path": "/workspace/clients/android/control-tests/build/classes/java/test",
+      "exists": true,
+      "sha256": null
+    },
+    {
+      "path": "/workspace/clients/android/control-tests/build/resources/test",
+      "exists": true,
+      "sha256": null
+    },
+    {
+      "path": "/workspace/clients/android/control-tests/build/classes/java/main",
+      "exists": true,
+      "sha256": null
+    },
+    {
+      "path": "/workspace/clients/android/control-tests/build/resources/main",
+      "exists": false,
+      "sha256": null
+    },
+    {
+      "path": "/workspace-state/gradle-home/caches/modules-2/files-2.1/org.bouncycastle/bcprov-jdk18on/1.85.2/aeb3dac02f799ed4783d5ed5900513339880727f/bcprov-jdk18on-1.85.2.jar",
+      "exists": true,
+      "sha256": "986b0fb92ec10e0c66b43e036ce0077e6150cfaecd1db9fb92b56672e157afe5"
+    },
+    {
+      "path": "/workspace-state/gradle-home/caches/modules-2/files-2.1/com.google.code.gson/gson/2.13.2/48b8230771e573b54ce6e867a9001e75977fe78e/gson-2.13.2.jar",
+      "exists": true,
+      "sha256": "dd0ce1b55a3ed2080cb70f9c655850cda86c206862310009dcb5e5c95265a5e0"
+    },
+    {
+      "path": "/workspace-state/gradle-home/caches/modules-2/files-2.1/junit/junit/4.13.2/8ac9e16d933b6fb43bc7f576336b8f4d7eb5ba12/junit-4.13.2.jar",
+      "exists": true,
+      "sha256": "8e495b634469d64fb8acfa3495a065cbacc8a0fff55ce1e31007be4c16dc57d3"
+    },
+    {
+      "path": "/workspace-state/gradle-home/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.41.0/4381275efdef6ddfae38f002c31e84cd001c97f0/error_prone_annotations-2.41.0.jar",
+      "exists": true,
+      "sha256": "a56e782b5b50811ac204073a355a21d915a2107fce13ec711331ad036f660fcc"
+    },
+    {
+      "path": "/workspace-state/gradle-home/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar",
+      "exists": true,
+      "sha256": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9"
+    }
+  ],
+  "retained_build_inventory_sha256": "4c3b01da2cd9643184ffc3fd59918fc2f2eca3d6f3074d12495f540d72ef3a2a",
+  "retained_build_file_count": 237,
+  "javap_both_classes": "PASS",
+  "entry": {
+    "current_main": "0a37d23177d6aa10c0e38fd52a45a652f4e60615",
+    "accepted_product_source": "2d125137b28e096187433608022daa1590d7a6f0",
+    "docs_only_since_source": true,
+    "product_runtime_tests_locks_unchanged": true,
+    "source_sha256": {
+      "carrier/go.mod": "1db5f64f967ed2c2dd8597044e0b80eb96b7a006cb565ec00ce68cf2bd5a56e6",
+      "carrier/go.sum": "def397bbc55025fb9dc466467b6db0890fda295e7e42a393035533562dbba581",
+      "clients/android/control-tests/build.gradle": "ddf32796ee4e640611e46a3888e6f513b11830430d4edd5a0e97d366a9191790",
+      "clients/shared/android106-reference.json": "bbf115bd257abea956f6b41ab1617a5b2b371a8a7073c2daba8255a81143cbbb",
+      "carrier/desktopmesh/readiness_fetch.go": "f2f456d752d8abae1a5c991f86ffe402fa10e7841cb9b1526375d9cdfa624984",
+      "clients/linux/mesh_service.py": "e34d6b1462370dea9d6046ffedc1e6316be4e43e962208065f6fa707aac21bf3",
+      "clients/desktop/backend.py": "12ab9f4b9b3938c652eb58271d126c73509c1f47cd71e44bb4c81bcd68766a0d",
+      "carrier/desktopmesh/readiness_cause_test.go": "d34011e358fd2873b45eded942028c1e5e74e3eaa076bf24ff00039481a251f8",
+      "clients/mesh/materials/cause_test.go": "912b150b79e2ffb492de90c64683aaf43c056a7153b693aec1e22e43271eca93",
+      "clients/desktop/tests/test_mesh_readiness_cause.py": "60a0ea8fedc0906dcd71c61ea10786b6c6b158866f99869ba03adc09356c0672"
+    },
+    "immutable_10_artifacts_unchanged": true,
+    "ready_base_unchanged": true,
+    "protected_seven_unchanged": true,
+    "owner_workstation": "NOT_USED",
+    "connect_count": 0
+  },
+  "go_cache_closure": {
+    "source_commit": "0a37d23177d6aa10c0e38fd52a45a652f4e60615",
+    "accepted_product_source": "2d125137b28e096187433608022daa1590d7a6f0",
+    "go": "1.26.0",
+    "environment": {
+      "GOMODCACHE": "/gomodcache",
+      "GOCACHE": "/gate-state/go-build",
+      "GOPROXY": "off",
+      "GOTOOLCHAIN": "local"
+    },
+    "module_verify": "PASS",
+    "dependency_list": "PASS",
+    "validator_compile": "PASS",
+    "validator_executed": false,
+    "external_network": false,
+    "readonly_module_cache": true,
+    "gradle_build_inventory_unchanged": true,
+    "dependency_count": 300,
+    "compiled_test_helper_sha256": "3945d399cc76541de796aa566367a80eb234bed98f23efea64209326bcd72e02",
+    "carrier_mod_sha256": "1db5f64f967ed2c2dd8597044e0b80eb96b7a006cb565ec00ce68cf2bd5a56e6",
+    "carrier_sum_sha256": "def397bbc55025fb9dc466467b6db0890fda295e7e42a393035533562dbba581"
+  },
+  "android_python": {
+    "passed": 143,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "exit_code": 0,
+    "elapsed_seconds": 11.17,
+    "run_count": 1,
+    "failure_ids": [],
+    "error_ids": [],
+    "original_parser": "PASS",
+    "four_native_delivery_cases": "PASS"
+  },
+  "workflow": {
+    "path": ".github/workflows/readiness-contract.yml",
+    "added_paths": [
+      "carrier/desktopmesh/readiness*.go",
+      "carrier/go.mod",
+      "carrier/go.sum",
+      "clients/desktop/backend.py",
+      "clients/desktop/tests/test_mesh_readiness_cause.py",
+      "clients/linux/mesh_materials.py",
+      "clients/linux/mesh_service.py",
+      "clients/mesh/go.mod",
+      "clients/mesh/go.sum",
+      "clients/mesh/materials/**",
+      "control/requirements.lock"
+    ],
+    "jobs_commands_tools_timeout_unchanged": true,
+    "path_coverage": "PASS",
+    "canonical_result": "PENDING"
+  },
+  "full_suite": {
+    "result": "NOT_RUN",
+    "overall_ci_pass": false
+  },
+  "candidate_11": "NOT_BUILT",
+  "package": "NOT_RUN",
+  "live": "NOT_RUN",
+  "private_evidence_sha256": {
+    "prepare.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "prepare.log": "0c74d5b609e142f49415b50f6b63bd4ccfb6378f9ee00f08df4087c21f3c10d5",
+    "retained-preflight.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "contracts.xml": "183d61fdf0c034a124a628bcc08e6eee63d56b5459608b0566d622281fca3666",
+    "entry.json": "1722840f21fdcf20eeedc1376863a73724bf7f52439738b5f3f53c4a275c1fa0",
+    "contracts.log": "c231954217f8dd8c3c061ca6b9d8cc32758f4b6d89623586a19516829ccf7ef7",
+    "contracts.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "harness.sha256": "9379ba9b958ae39e7075a5fbdf0b0e32b23eafc00734234b7d534e4eba83679c",
+    "go-closure.json": "374d7ccb0490274bc3a141b196f7f93894fa6facf438675396bc453042ce7f9a",
+    "retained-preflight.log": "ef766a367ce895e52cec7cd86d432665ca6759599b67d4a2e332b27797025540",
+    "retained-harness.sha256": "9797c91eb55a547cc0eb6f902814d980ab3f7126693abf9056548d2ad291110d",
+    "retained-preflight.json": "5c7b3b3eee323b26bec6f0a55a6580c731f3268505450d6e627ca56c94f27522"
+  },
+  "harness_sha256": {
+    "contracts.sh": "d9036e569ea8aaac9837d64ba82a89c941f0973e586ba911482403e1370c4d41",
+    "retained-preflight.sh": "1d653faec3b15eb318b4722a490fd1dc9d105fc3217e8c9d78eaa2f3247c5d05",
+    "prepare-closure.sh": "dce10f8548d985e5723b38c6a2eddc06b8cfddc7ed474b04d98e4755ae6ca036"
+  }
+}

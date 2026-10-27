@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**L04.2 — R3 PARTIAL / SOURCE_GATE_FAILED.**
+**L04.2 — R3 IN_PROGRESS / source gate continuation.**
 R2 FINAL PARTIAL / READINESS_CAUSE_UNRESOLVED accepted: diagnostic collapse
 hid the original fetch cause. No further live Connect on .10. R3 is a bounded
 subtask of L04.2, not a new top-level PLAN ID. Input70b919b; R1/R2 runtime169aa68
@@ -10,13 +10,13 @@ keeps FETCH_FAILED as import result, preserves validated-cache fallback and make
 cooldown-only MISSING/EXPIRED terminal. Existing FETCH_INCOMPATIBLE_RESPONSE is
 added to strict desktop diagnostics. Exact Go race, native15, combined3, MESH157,
 cleanup32 and desktop1317/82skip PASS retained. Source2d125137 is review accepted
-in affected scope; runtime/tests/locks/pins unchanged. Reviewed Gson classpath
-failure is resolved in fresh Java17/Gradle8.11.1/Python3.13 environment:
-Gradle171 PASS; original Android response-parser case PASS. One Python selection:
-139 PASS/4 FAIL/0 ERROR/0 SKIP. Four native delivery checks cannot resolve Go
-modules: harness omitted module-cache mounts with GOPROXY=off. Environment
-failure, not a proven product defect; four affected IDs outside historical36.
-No replay/source fix. Full-repository comparison NOT_RUN; .11 NOT_BUILT,
+in affected scope; runtime/tests/locks/pins unchanged. Reviewed Gson and missing
+Go-cache blockers are environment-only. Retained Gradle171/classpath/JAR integrity
+and read-only javap PASS, no Gradle replay. Offline Go module verify/dependency
+list/validator compile close the cache prerequisite; one authorized Android/Python
+selection now143 PASS/0 FAIL/0 ERROR/0 SKIP. Bounded readiness workflow path
+coverage added; canonical GitHub result PENDING. Full-suite comparison NOT_RUN;
+mandatory source gate not yet closed. .11 NOT_BUILT,
 new system/package/live NOT_RUN. Sealed internal/unpublished .10 remains
 4264406722f6dd3efb83e9d9666e67180ce4f950333bb3e711bcbb4f5068b55a;
 incorrect historical task suffix is not an artifact identity. Phase B/setup/GUI
@@ -25,7 +25,7 @@ READINESS_RELAY_PROBE_CORRELATION_GAP belongs to L06; direct correlation rows
 cannot count relay requests. No RNS/wire expansion. Owner workstation NOT_USED.
 L04 IN_PROGRESS; L04.1 DONE; L05/messages/voice/signing/publication NOT_RUN.
 [Current R3 report](releases/2026-10-27-linux-readiness-cause-preservation-l04-2-r3.md).
-**STOP. NEXT — review L04.2-R3.**
+**NEXT — canonical readiness CI, then full-suite ID comparison; build only after complete source gate PASS.**
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted (owner review).**
 Exact **0.2.12~l03.2.9** установлен; candidate/package/system checks PASS,
