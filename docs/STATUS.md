@@ -2,16 +2,27 @@
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
-**Current substep CONTROL-PLANE-2 — CHECKPOINT / DETERMINISTIC_OBSERVER_READY / NOT_DEPLOYED.**
-Owner explicitly reauthorized entry from90ad148: read-only dry runs may repeat
-before restart; rollout1/emergency1 remaining, consumed0/0. Committed typed D-Bus
-observer uses GetUnit/GetAll/ListJobs, not systemctl JSON/table assumptions. Exact
-argv checks, double-read PID/start/config/job stability, sanitized stage/error codes;
-53 observer +8 existing ExecStart tests PASS. No candidate/source/backend changes.
-NEXT — only CP2: live observer dry runs, fresh PRESENT_EMPTY preflight/backup,
-own drop-in/effective ExecStart guard, one rollout restart and post-start acceptance.
-Emergency old-source restart only on post-start failure; no second candidate restart.
-Failed runners are historical evidence and must not be invoked.
+**Current substep CONTROL-PLANE-2 — CHECKPOINT / DEPLOYED_EMPTY_COHORT / REVIEW_PENDING.**
+Owner-authorized continuation from90ad148 completed. Exact source8b4177d/bundle6ea4ef3a…/
+HTTPdcd76998… preserved, not rebuilt. Committed typed D-Bus observer a2bf728 handles
+empty/nonempty jobs, strict signatures, full argv and PID/config stability;
+53 observer +8 existing guard tests PASS,9 private mocked operator-flow tests PASS.
+Fresh20:09:45UTC preflight PASS, paid schema PRESENT_EMPTY/8 objects; consistent
+backupff9d0c50…/446464 bytes, isolated restore/integrity/FK PASS, six original unit
+files and old archive retained privately. No repeat migration or live DB restore.
+Only own highest-priority ExecStart drop-in installed; typed + existing argv guards
+PASS. One rollout restart at20:10:09UTC: PID120606→486622, NRestarts0. Three post-start
+observations and independent20:11:13UTC readback PASS, sole HTTP listener belongs to
+new MainPID. Paid subscriptions0/events0; device/invite/grant/revocation/admission/
+publisher fingerprints unchanged. HTTP404 proves liveness, not paid-user acceptance.
+Restart budget consumed1 rollout/0 emergency; no second rollout allowed. Earlier
+pre-start pending-job stop consumed0/0 and was independently cleaned up; bounded
+read-only quiescence wait then passed. All terminal runners/receipts remain historical.
+Monitor active/waiting, post-start cycle SUCCESS; NL registry unavailable, not0.
+No real payment/enrollment, CRL/gateway/client/desktop change; Android106 unchanged.
+STOP. NEXT — review this CP2 empty-cohort rollout, then only actual Android Beta-0
+launch blockers (including live paid CRL/session/recovery, opt-in/legal/monitoring).
+No further automatic restart, payment or enrollment.
 
 Previous guarded attempt (historical, not a second active NEXT):
 Stale active-looking Linux blocks removed by242f428; only Android CP2 is active.
@@ -32,7 +43,7 @@ Historical artifacts/backups and Android106 unchanged; no real payments/enrollme
 CRL/gateway changes or Linux/Windows work. Local read-only timer active/success;
 NL registry remains unavailable, not0. Live paid CRL/session acceptance still open.
 [Current and immutable historical evidence](releases/2026-10-27-android106-control-plane-2.md).
-The previous pre-start stop is superseded only by the explicit re-entry above.
+The previous pre-start stop is superseded by the explicit continuation above.
 No real enrollment, paid events or client/gateway changes are authorized.
 
 **Принятый вход CONTROL-PLANE-1 — DONE / LOCAL SYNTHETIC + PRODUCTION-READONLY SNAPSHOTS.**
@@ -88,7 +99,9 @@ revoked=false, MESH eligible; более новый authenticated ACK26.10 21:00
 устройстве и точное время field use не аттестованы; новых invite/записей0.
 
 **ANDROID-CONTROLLED-BETA / PAID-ENTITLEMENT-MVP — source checkpoint DONE,
-NOT_DEPLOYED; controlled paid launch BLOCKED.** Owner Beta-0: максимум10 existing
+originally NOT_DEPLOYED; CP2 now DEPLOYED_EMPTY_COHORT, paid launch BLOCKED.**
+The following source-acceptance record is historical, not the current deployment state.
+Owner Beta-0: максимум10 existing
 activated Friends identities, только exact106 (new106 install/already106), private
 verified handoff, manual confirmed payment/operator event. Older-version upgrade и
 external acquiring исключены из Beta-0, не новые PASS/launch blockers. APK неизменён.
@@ -108,7 +121,7 @@ Saved signed105 verified, downgrade не safe rollback. Public updater60/sequenc
 [Readiness/artifacts](releases/2026-10-27-android106-controlled-beta-readiness.md),
 [MVP result and finite blockers](releases/2026-10-27-android106-paid-entitlement-mvp.md),
 [private operator runbook](paid-beta.md).
-**STOP. NEXT — закрыть только фактические Android controlled-beta launch blockers.**
+**Historical source-checkpoint NEXT — закрыть только фактические Android controlled-beta launch blockers.**
 Следующий bounded этап — review CONTROL-PLANE-0 и только фактические Beta-0 gates;
 paid-aware server/synthetic acceptance/recovery требует отдельного разрешения.
 Local console не разрешает production connection/deploy/enrollment/сбор оплаты.

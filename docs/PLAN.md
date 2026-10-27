@@ -3,19 +3,24 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-**Current substep CONTROL-PLANE-2 — CHECKPOINT / DETERMINISTIC_OBSERVER_READY / NOT_DEPLOYED.**
+**Current substep CONTROL-PLANE-2 — CHECKPOINT / DEPLOYED_EMPTY_COHORT / REVIEW_PENDING.**
 Dependency: accepted CONTROL-PLANE-1 at21dd8d72ad5505cd82631856083694729d292c8b.
 Gate: exact paid-aware bundle; read-only preflight; consistent private backup/recovery;
 existing paid schema PRESENT_EMPTY, no repeat migration; guarded Friends restart;
 unchanged non-cohort access;
 read-only local bridge/continuous collection; synthetic production-identical expiry/
 revoke/CRL/recovery. No real subscriptions/events, client/gateway changes or public console.
-Current continuation from90ad148 explicitly authorized: committed typed D-Bus
-observer +53 tests PASS, existing ExecStart8 tests PASS. Read-only dry runs may
-repeat before restart. NEXT only CP2: fresh live observation/PRESENT_EMPTY backup,
-own drop-in + exact effective argv, one rollout restart and post-start acceptance.
-Budget rollout1/emergency1 remaining, consumed0/0; rollback restart only on post-start
-failure, never a second candidate restart. No old failed runner or ABSENT migration.
+Current continuation from90ad148: typed D-Bus observer53 +existing ExecStart8 tests
+PASS,9 private runner-flow tests PASS. Live empty/nonempty jobs readback confirmed.
+Fresh20:09 preflight/PRESENT_EMPTY backupff9d0c50…/isolated restore PASS. Own drop-in,
+effective full argv guard and one actual rollout restart PASS at20:10:09UTC.
+New PID486622/NRestarts0 serves exact HTTPdcd76998…; three post-start observations
+plus independent listener/health/inventory/empty-cohort readback PASS. Critical
+registry/admission/publisher fingerprints unchanged. Consumed1 rollout/0 emergency;
+no second candidate restart. Pre-start harness stop spent no restart; historical
+receipts preserved. No migration, rebuild, real paid/client/gateway mutation.
+NEXT only CP2 rollout review, then actual Android Beta-0 launch blockers. Live paid
+CRL/session/recovery acceptance remains open; monitor active, no client telemetry.
 Previous attempt evidence: exact publisher-preserving bundle6ea4ef3a…/source8b4177d unchanged;
 fresh baseline/empty-schema/NTP gate and backup643fe650…/isolated restore PASS.
 New ordered drop-in selected exact candidate; effective ExecStart guard PASS.
@@ -54,7 +59,8 @@ deployment, real payment/enrollment NOT_RUN; Android106/client/catalog unchanged
 [local runbook](../control_plane/README.md). This is local implementation acceptance,
 not approval of live billing or production console security.
 
-Preparation и **PAID-ENTITLEMENT-MVP source checkpoint DONE / NOT_DEPLOYED**;
+Preparation и **PAID-ENTITLEMENT-MVP source checkpoint DONE** (originally NOT_DEPLOYED;
+now CP2 DEPLOYED_EMPTY_COHORT);
 controlled paid launch **BLOCKED** только на фактических Beta-0 gates в
 [MVP report](releases/2026-10-27-android106-paid-entitlement-mvp.md).
 Dependencies: exact accepted signed106/reference, owner-accepted
@@ -83,8 +89,8 @@ migration/deployment/payment/cohort mutation, no Android source/APK/wire changes
 signer proof and documents existing-cache/CRL revocation bounds.
 
 Completion gate: applicable14 launch rows under Beta-0 scope need exact evidence.
-Remaining: review/authorize paid-aware server deployment + empty-cohort regression
-and synthetic106 payment/expiry/revoke/CRL/session/recovery acceptance; approved
+Remaining: review CP2 deployed-empty-cohort evidence and live paid CRL/session/
+recovery acceptance (retained synthetic tests are not live acceptance); approved
 private handoff/opt-in roster/operator, legal/subscription text, monitoring/stop
 ownership. Source tests do not prove live paid enforcement. No pre-paid backend
 rollback with nonempty cohort; saved105 does not authorize downgrade/uninstall/
@@ -102,13 +108,12 @@ debt, не Android launch blocker. Linux installed acceptance только от�
 не запускать P0/P1/Auto/AppImage lifecycle/L05/L06 и не публиковать Linux artifacts.
 
 **STOP. NEXT — закрыть только фактические Android controlled-beta launch blockers.**
-Следующий конечный этап — только CONTROL-PLANE-2 guarded rollout: review pre-start
-observation failure и явное решение о повторном входе. Бюджет разрешённых restart
-не использован (0 rollout/0 emergency), но второй rollout attempt автоматически
-запрещён. После разрешения снова fresh preflight/backup/PRESENT_EMPTY и effective
-ExecStart guard до restart; затем actual served inventory/health/non-cohort readback.
-Оба прежних rollout script не повторять; paid schema не удалять. Реальные payments/
-enrollment/gateway edits запрещены. Read-only monitoring продолжает чтение.
+Следующий конечный этап — review CONTROL-PLANE-2 deployed-empty-cohort outcome.
+Бюджет consumed1 rollout/0 emergency; второго actual rollout restart не будет.
+Реальные paid enforcement/CRL/session/recovery, opt-in/legal/monitoring ownership
+остаются launch gates, не разрешением запускать их автоматически. Terminal scripts
+не повторять; paid schema не удалять. Реальные payments/enrollment/gateway edits
+запрещены. Read-only monitoring продолжает чтение.
 Новый top-level PLAN ID и CONTROL-PLANE-3 не создаются.
 
 ### Предыдущие priority/ops records — исторические, не активные NEXT

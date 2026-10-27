@@ -1,0 +1,153 @@
+{
+  "backup": {
+    "result": "BACKUP_AND_ISOLATED_SQLITE_RESTORE_PASS",
+    "sha256": "ff9d0c504fa90980628aee5492f888cc448276c144cdedfacf0bba67bca9467b",
+    "size": 446464,
+    "unit_files": 6,
+    "utc": "2026-10-27T20:09:46.795699+00:00"
+  },
+  "baseline_contract_sha256": "83b17c9a28638b5d8b4cb44e7c58252d8519b2bbbba827a2fb6a16ce7933477c",
+  "bundle": {
+    "id": "paid-boundary-6ea4ef3a1f57ffeef8bf71322fa88129e95c1197431f0ca6d4ac8752be4c0584",
+    "members": 50,
+    "sha256": "6ea4ef3a1f57ffeef8bf71322fa88129e95c1197431f0ca6d4ac8752be4c0584",
+    "size": 593920
+  },
+  "candidate_source_commit": "8b4177dec7867fe380418a02c542a3a40723d40f",
+  "forbidden_operations": {
+    "android_changed": false,
+    "crl_published": false,
+    "desktop_work": false,
+    "gateway_changed": false,
+    "paid_schema_removed": false,
+    "publisher_configuration_mutated": false,
+    "real_payment_events": 0,
+    "real_subscription_rows": 0,
+    "schema_migration_repeated": false
+  },
+  "independent_acceptance": {
+    "active_state": "active",
+    "additional_own_dropins": 1,
+    "admission_publisher_fingerprints": "UNCHANGED",
+    "certificate_readiness_counts_are_observations_only": true,
+    "counts": {
+      "devices": 54,
+      "invites": 108,
+      "paid_beta_events": 0,
+      "paid_beta_subscriptions": 0,
+      "restricted_certificates": 10,
+      "restricted_grants": 2,
+      "restricted_readiness_results": 105
+    },
+    "device_invite_grant_revocation_fingerprints": "UNCHANGED",
+    "effective_execstart": "PASS",
+    "foreign_keys": "PASS",
+    "http_liveness": "EXPECTED_404_NOT_FOUND",
+    "nrestarts": 0,
+    "ntp": "PASS",
+    "pid": 486622,
+    "prior_unit_files": "UNCHANGED",
+    "publisher_capability": "PRESERVED",
+    "registry_integrity": "PASS",
+    "result": "PASS",
+    "running_argv": "PASS",
+    "sole_listener_owned_by_main_pid": true,
+    "sub_state": "running",
+    "utc": "2026-10-27T20:11:13.611512+00:00"
+  },
+  "input_main": "90ad14809512ce9b1358a45a9cf2dc5fe84a1442",
+  "limitations": [
+    "No live paid-user enforcement or session revocation acceptance",
+    "No application disaster-recovery or production rollback restart exercised",
+    "Live paid CRL propagation remains unaccepted",
+    "Prior 192 exact-candidate tests retained, not rerun; no full-suite claim",
+    "No real enrollment/payment authorized"
+  ],
+  "monitoring": {
+    "client_telemetry": "NOT_COLLECTED",
+    "last_poststart_cycle": "SUCCESS",
+    "last_poststart_exit_utc": "2026-10-27T20:10:58Z",
+    "local_timer": "ACTIVE_WAITING",
+    "nl_registry": "UNAVAILABLE_NOT_ZERO",
+    "production_writes": false
+  },
+  "next": "Review CONTROL-PLANE-2 empty-cohort rollout; close only actual Android Beta-0 launch blockers; no further automatic rollout",
+  "observer": {
+    "existing_execstart_tests_pass": 8,
+    "production_empty_jobs": "OBSERVED",
+    "production_nonempty_jobs": "OBSERVED",
+    "read_only": true,
+    "sha256": "905ee8a459bb1efa103299c39041552b6f3a4c297c69e5eddb10ff1175a5a9a0",
+    "tests_pass": 53,
+    "transport": "typed systemd D-Bus via busctl"
+  },
+  "observer_source_commit": "a2bf72896220ba0d6047470f364f33c2657a9a49",
+  "preflight": {
+    "disk_free_bytes": 7826911232,
+    "foreign_keys": "PASS",
+    "integrity": "PASS",
+    "memory_available_bytes": 887410688,
+    "nrestarts": 0,
+    "ntp": "PASS",
+    "package_locks": "UNHELD",
+    "paid_schema": "PRESENT_EMPTY",
+    "paid_schema_objects": 8,
+    "pid": 120606,
+    "runtime": {
+      "packages": {
+        "cffi": "2.1.1",
+        "cryptography": "46.0.7",
+        "pycparser": "3.0",
+        "pyserial": "3.5",
+        "rns": "1.5.1"
+      },
+      "python": "3.14.4"
+    },
+    "systemd_jobs": 0,
+    "utc": "2026-10-27T20:09:45.506399+00:00"
+  },
+  "prestart_history": {
+    "actual_restarts_before_final": 0,
+    "failed_private_runner_ee3b_preserved": true,
+    "helper_upload_owner_guard": "BLOCKED_THEN_OWN_HELPER_METADATA_CORRECTED",
+    "independent_cleanup": "PASS",
+    "job_quiescence_wait": "BOUNDED_READ_ONLY_ONLY",
+    "typed_pending_transaction_stop": "BEFORE_RESTART"
+  },
+  "previous_http_sha256": "21d64558e542ff6ad80fb9b13799fbcb333167ffb5a79ec841e7c94dc65d71fa",
+  "private_runner": {
+    "mock_flow_tests_pass": 9,
+    "sha256": "4314efaad5351713973b62e39a9ed210487240e98629c6bea18c6b5e22a8e85f",
+    "terminal_runners_reused": false
+  },
+  "result": "DEPLOYED_EMPTY_COHORT_REVIEW_PENDING",
+  "retention": {
+    "historical_artifacts_and_backups": "VERIFIED_UNCHANGED",
+    "new_backup_permissions": "DIRECTORY_0700_FILES_0600",
+    "production_database_restored": false
+  },
+  "rollout": {
+    "candidate_sha256": "dcd769986a1da7cb1662c0f73d18a88e9f73485a977db937ca5b1428c1fd1029",
+    "emergency_restarts": 0,
+    "events": 0,
+    "new_pid": 486622,
+    "old_pid": 120606,
+    "own_dropin_sha256": "4ab62dd9a692413f704d206db5bb8a95ccf51033e457fc443147fee6072685b0",
+    "post_start_observations": 3,
+    "remaining_emergency": 1,
+    "remaining_rollout": 0,
+    "result": "DEPLOYED_EMPTY_COHORT",
+    "rollout_restarts": 1,
+    "runtime_start": 1793131809225776,
+    "stage": "post-start-acceptance",
+    "subscriptions": 0,
+    "utc": "2026-10-27T20:10:23.001715+00:00"
+  },
+  "schema": 1,
+  "served_http": {
+    "members": 25,
+    "sha256": "dcd769986a1da7cb1662c0f73d18a88e9f73485a977db937ca5b1428c1fd1029",
+    "size": 47091
+  },
+  "task": "ANDROID-CONTROLLED-BETA / CONTROL-PLANE-2"
+}

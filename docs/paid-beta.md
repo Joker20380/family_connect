@@ -2,8 +2,9 @@
 
 Subscope of **ANDROID-CONTROLLED-BETA / PAID-ENTITLEMENT-MVP**, not a new PLAN ID.
 [Checkpoint and evidence](releases/2026-10-27-android106-paid-entitlement-mvp.md).
-Source implemented/tested; **NOT_DEPLOYED, no real payment/cohort mutation** in
-this checkpoint. Commands below describe a future authorized operator action,
+Original source checkpoint was **NOT_DEPLOYED**; CP2 now serves the exact paid-aware
+backend with **empty cohort/events**, not paid launch approval. Commands below
+describe a future authorized operator action,
 not permission to deploy, collect payment or enroll the existing field user.
 
 ## Scope and prerequisites
@@ -134,20 +135,20 @@ propagation/session bound before billing; do not advertise instant revocation.
 
 ## Deployment, rollback and stop boundary
 
-CONTROL-PLANE-2 operational update27.10: production paid schema migrated empty;
-subscriptions0/events0. The reconciled paid-aware bundle is staged but **NOT SERVING**.
-The guarded continuation selected candidate ExecStart and passed its guard, but the
-following observation helper failed before restart. Own drop-in removed; original
-unit/healthy PID and registry/publisher fingerprints unchanged. No repeat migration
-or DB restore. New rollout/emergency restart budgets remain unused (0/0); the owner
-forbids a second attempt without a new re-entry decision. No real-user operation.
+CONTROL-PLANE-2 operational update27.10: **DEPLOYED_EMPTY_COHORT / REVIEW_PENDING**.
+Exact paid-aware HTTPdcd76998… now serving after one guarded restart; subscriptions0/
+events0, critical non-cohort/admission/publisher fingerprints unchanged. Typed D-Bus
+observer, fresh backup/isolated restore, complete effective argv and three post-start
+plus independent listener/health/inventory readbacks PASS. No repeat migration or
+live DB restore. Consumed1 rollout/0 emergency; second actual rollout restart forbidden.
+Earlier pre-start stops spent no restart and their evidence is retained. No real-user operation.
 [Exact outcome and next gate](releases/2026-10-27-android106-control-plane-2.md).
 No real payment/enrollment is authorized; live paid CRL propagation remains unaccepted.
 
 The original PAID-ENTITLEMENT-MVP source checkpoint had no deployment/paid activation.
-Remaining acceptance must verify
-exact packaged server modules, consistent migration, empty-cohort non-regression,
-then an authorized synthetic106 path/payment/expiry/revocation/audit receipt before
+CP2 now verifies exact packaged server modules, retained empty schema, backup and
+empty-cohort operational invariants. Remaining acceptance requires review of that
+evidence and authorized paid expiry/revocation/CRL/session/recovery evidence before
 any real enrollment. A production identity is not a test fixture. Clock health and
 consistent UTC are prerequisites. Owner must approve cohort/terms/monitoring and
 private delivery; cap10 is not consent from any existing tester.

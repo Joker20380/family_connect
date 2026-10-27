@@ -1,11 +1,12 @@
 # Documentation
 
 [CONTROL-PLANE-2 — paid-aware production boundary](releases/2026-10-27-android106-control-plane-2.md):
-bounded checkpoint, **GUARDED_PRESTART_OBSERVATION_FAILED / NOT_DEPLOYED**, не paid launch.
-Exact candidate unchanged; fresh PRESENT_EMPTY preflight/backup PASS. Effective
-candidate ExecStart guard PASS, then pre-start observer JSONDecodeError:0 rollout/
-0 emergency restarts. Own drop-in removed; old healthy PID/unit/fingerprints unchanged.
-No second attempt, real enrollment/payment or Linux work; read-only monitoring continues.
+bounded checkpoint, **DEPLOYED_EMPTY_COHORT / REVIEW_PENDING**, не paid launch.
+Exact candidate unchanged; typed D-Bus observer, fresh PRESENT_EMPTY backup/restore,
+effective ExecStart guard and post-start inventory/liveness PASS. One rollout restart,
+zero emergency restarts; paid rows/events0, critical non-cohort/publisher fingerprints
+unchanged.61 committed focused tests +9 private runner-flow tests PASS. No second
+rollout, real enrollment/payment or desktop work; read-only monitoring continues.
 
 [CONTROL-PLANE-1 — русская панель и read-only observability](releases/2026-10-27-android106-control-plane-1.md):
 50 demo identities, production-readonly inventory двух шлюзов (RU54, NL registry
@@ -35,12 +36,12 @@ APK/reference/metadata verified; read-only activation/admission active, newer106
 READY ACK distinguished from stale support84.49 backend +20 JVM PASS historical;
 [PAID-ENTITLEMENT-MVP](releases/2026-10-27-android106-paid-entitlement-mvp.md) now
 implements atomic paid cohort/model/audit/operator and challenge/fetch expiry caps:
-243 targeted PASS,10 skips/8 deselections, **NOT_DEPLOYED**. [Private operator
+243 targeted PASS,10 skips/8 deselections, **originally NOT_DEPLOYED; CP2 now deployed empty**. [Private operator
 runbook](paid-beta.md). Owner Beta-0: cap10 existing activated identities on exact106,
 private handoff/manual payments; older-version upgrade and external acquiring are
 out of first-beta scope, not newly PASS. Paid-aware live/synthetic106 acceptance,
 safe recovery, delivery/opt-in, legal and monitoring/stop gates remain BLOCKED.
-No Android source change, APK rebuild, real paid enrollment or rollout.
+No Android source change, APK rebuild or real paid enrollment; only CP2 empty-cohort server rollout.
 Linux L04.2 **PAUSED / NON-BLOCKING DESKTOP ENGINEERING**, not DONE: R3 source
 gate accepted, .11 construction frozen/read-only; installed package/live acceptance
 NOT_RUN. Receipt filename collision is existing D02/CI debt, not an Android blocker.

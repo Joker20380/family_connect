@@ -1,6 +1,135 @@
 # ANDROID-CONTROLLED-BETA / CONTROL-PLANE-2
 
-## Current continuation — deterministic observer source checkpoint
+## Current outcome — exact paid-aware HTTP serving an empty cohort
+
+**CHECKPOINT / DEPLOYED_EMPTY_COHORT / REVIEW_PENDING.** Owner-authorized re-entry
+from90ad14809512ce9b1358a45a9cf2dc5fe84a1442 completed within the same CP2 task.
+One actual rollout restart, zero emergency restarts; no second candidate restart.
+[Sanitized deterministic rollout receipt](2026-10-27-android106-control-plane-2-deterministic-rollout.json).
+No real subscriptions/payments/enrollment or client/gateway/desktop changes.
+
+### Committed observer and pre-start corrections
+
+Observer/test source committed and remote verified at
+`a2bf72896220ba0d6047470f364f33c2657a9a49`. GetUnit/GetAll/ListJobs typed D-Bus via
+busctl replaces private systemctl JSON/table assumptions. Exact signatures, variant
+types, complete ExecStart argv, environment-name/hash sanitation, bounded transport
+errors and double-read process/config/jobs checks are tested. Live read-only runs
+observed both a nonempty jobs array (one unrelated job) and an empty array without
+JSON decoding failure. Neither a valid OBSERVED result nor a drop-in filename is
+an operational acceptance PASS by itself.
+
+The first private helper upload retained local ownership through tar; its file-owner
+gate stopped before service changes. Only those newly uploaded operator helper files
+were corrected to root ownership, preserving bytes. Artifact hashes never differed.
+A later pre-start quiescence gate stopped at PENDING_SYSTEMD_TRANSACTION after own
+drop-in/reload, before reserving or issuing a restart. Cleanup removed only that
+drop-in; independent20:08:44UTC readback confirmed original unit hash, old PID120606,
+healthy old archive and paid0/0. The stop receipt did not retain the job's identity;
+no exact offending job or backend defect is inferred. Consumed0/0 at that point.
+
+That terminal runner/receipt and the forbidden historical ee3ba2… runner were not
+rerun or overwritten. A new immutable private runner
+`4314efaad5351713973b62e39a9ed210487240e98629c6bea18c6b5e22a8e85f`
+records observations before gating, waits read-only up to15 bounded observations
+for pending/moving jobs, and never retries non-transient failures or restart commands.
+Durable restart-reservation receipts prevent replay.9 private mocked flow tests PASS:
+success, pre-start stop, post-start/command failure, guarded rollback, unsafe recovery,
+reserved-budget replay prevention, read-only dry run and transient-only waiting.
+The owner explicitly allowed harness corrections/dry runs before actual restart.
+
+### Exact artifact, preflight and fresh recovery point
+
+Unchanged candidate source `8b4177dec7867fe380418a02c542a3a40723d40f`:
+
+- Bundle `paid-boundary-6ea4ef3a1f57ffeef8bf71322fa88129e95c1197431f0ca6d4ac8752be4c0584`;
+  593920 bytes/50 members, SHA2566ea4ef3a1f57ffeef8bf71322fa88129e95c1197431f0ca6d4ac8752be4c0584.
+- HTTP47091 bytes/25 members,
+  SHA256dcd769986a1da7cb1662c0f73d18a88e9f73485a977db937ca5b1428c1fd1029.
+- Known-good HTTP125205 bytes/24 members,
+  SHA25621d64558e542ff6ad80fb9b13799fbcb333167ffb5a79ec841e7c94dc65d71fa.
+
+Regular/non-symlink files, exact versioned served-baseline membership/hashes and
+authenticated publisher capability PASS. No rebuild or substitution. Current source
+hashes for observer/ExecStart guard/backup helper checked against committed files.
+Runtime Python3.14.4; cffi2.1.1, cryptography46.0.7, pycparser3.0, pyserial3.5, rns1.5.1
+unchanged. No package installation or source hotpatch.
+
+Fresh20:09:45UTC preflight read actual active/running PID120606, start18:05:36UTC,
+NRestarts0, original fragment/five ordered drop-ins/effective argv/User/Group/working
+directory and environment names/hash. Old source/liveness/publisher capability PASS.
+Paid schema exactly8 objects PRESENT_EMPTY, subscriptions0/events0; integrity/FK PASS.
+Device/invite/grant/revocation logical fingerprints, admission policy and publisher
+entry/hash baseline unchanged. NTP=yes/NTPSynchronized=yes, sufficient disk/memory,
+idle systemd transactions and unheld package locks; operator deployment lock held.
+
+New20:09:46UTC online consistent backup446464 bytes:
+`ff9d0c504fa90980628aee5492f888cc448276c144cdedfacf0bba67bca9467b`.
+Private directory0700/files0600; all-table fingerprints, isolated SQLite restore/open,
+integrity/FK and paid0/0 PASS. Saved exact old archive, six original unit/drop-in files,
+unit inventory/cat and private baseline. Earlier backups including643fe650… and
+f94d3225… remain historical, not substitutes for this fresh rollback point.
+The private operator directory's `rollback/` and backup receipt identify the recovery
+files; no database, raw registry rows, IDs, configuration or credentials enter Git/Django.
+
+### Actual rollout and independent post-start acceptance
+
+Only own `zzzz-control-plane-2-paid-boundary.conf` was installed. Syntax verification,
+daemon-reload, typed exact candidate ExecStart and existing committed argv/hash guard
+PASS while the old process still served. Other unit/drop-in files and configuration
+were unchanged. Fresh runner dry run20:09:48UTC PASS before actual operation.
+
+One controlled restart of `family-connect-friends-http-candidate.service` at
+20:10:09UTC produced new MainPID486622/start20:10:09.225776UTC/NRestarts0. Existing
+Restart=no policy unchanged. Three post-start observations PASS; final runner receipt
+20:10:23UTC DEPLOYED_EMPTY_COHORT. Independent20:11:13UTC readback confirms:
+
+- Effective argv and running process select exact paid-aware HTTPdcd76998…; same
+  MainPID owns the sole port18086 listening socket. Active/running/result success.
+- Expected unknown-route HTTP404 JSON confirms application liveness only; no real
+  identity challenge/fetch or paid-user entitlement exercise was performed.
+- Paid subscriptions0/events0; exact schema, integrity/FK, device/invite/grant/
+  revocation/admission/publisher invariants unchanged.54 devices/108 invites/2 grants.
+ 10 certificates/105 readiness results are dynamic observations, not frozen invariants.
+- Six original unit files unchanged, exactly one own additional drop-in; old source,
+  historical failed runner/backups and current backup retained with matching hashes.
+
+Budget consumed **1 rollout /0 emergency**, remaining **0 rollout /1 emergency**.
+No second actual rollout restart is authorized. The unused emergency budget was
+conditional on post-start failure, not permission for later unrelated operations.
+Emergency branch would remove only own drop-in, reload, guard known-good effective
+argv and empty cohort, then issue one restart without DB restore; this branch passed
+mock tests but was **NOT_RUN in production**. Never restore a pre-paid backend with
+nonempty paid rows or delete paid schema to force legacy admission.
+
+### Monitoring, limitations and finite NEXT
+
+Existing local read-only monitor timer active/waiting; post-start20:10:58UTC cycle
+SUCCESS/exit0. Local bridge and synthetic Django workflows remain separate from
+production authority; no new console deployment or production writable workflow.
+NL registry remains UNAVAILABLE, not0; production client telemetry NOT_COLLECTED.
+No CRL publication, sync enablement or gateway configuration change.
+
+53 observer +8 existing guard tests PASS (61 committed focused tests);9 private
+runner-flow tests PASS. Prior192 exact-candidate source/synthetic acceptance tests
+are retained evidence, not rerun and not overall CI PASS. Empty-cohort runtime and
+unchanged logical data do not prove live paid-user expiry/revocation/session behavior.
+Live paid CRL propagation and application-level recovery remain launch gates.
+Android106/APK/catalog unchanged; no real user enrolled, payment event applied,
+identity/invite/grant modified, migration repeated or live database restored.
+
+Closeout validation:7 staged docs/receipt files,455 local Markdown links/anchors,
+strict JSON, added-content secret/private-data scan and `git diff --check` PASS.
+Private helpers, archives, databases and receipts stay out of Git. Existing unrelated
+123 added lines in four tracked files and unrelated untracked work remain unstaged;
+this is staged-scope validation, not a global documentation/full-suite PASS.
+
+**STOP. NEXT — review CONTROL-PLANE-2 empty-cohort rollout**, then close only actual
+Android Beta-0 launch blockers: authorized paid CRL/session/recovery acceptance,
+private delivery/opt-in, terms and monitoring/stop ownership. No automatic restart,
+paid operation, new CP3/top-level task, Linux or Windows work.
+
+## Historical continuation — deterministic observer source checkpoint
 
 Input main90ad14809512ce9b1358a45a9cf2dc5fe84a1442. Owner explicitly permits repeated
 read-only observer dry runs before restart, one rollout restart and one emergency

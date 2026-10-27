@@ -110,8 +110,10 @@ credential **может писать**: read-only обеспечивается �
 ### Paid boundary: reviewed served baseline, not another authority
 
 [CP2 report](../docs/releases/2026-10-27-android106-control-plane-2.md) фиксирует
-reconciled baseline и pre-start observation failure; paid schema уже PRESENT_EMPTY,
-но новый backend не обслуживает production. `python3 -m scripts.package_paid_boundary build
+reconciled baseline и **DEPLOYED_EMPTY_COHORT / REVIEW_PENDING**: paid schema
+PRESENT_EMPTY, exact paid-aware HTTP обслуживает production после одного guarded
+restart. Реальных subscriptions/events0; это не paid launch. Общий packaging tool:
+`python3 -m scripts.package_paid_boundary build
 --ref <commit> --output <new-private-tar>` из repository root экспортирует только
 явный committed inventory; dirty working tree/DB/env не входят. `source-gate
 --served <private-served-pyz> --candidate <candidate-pyz> --baseline
@@ -125,13 +127,17 @@ paid-only gate; это не способ обойти reconciliation. Это н�
 ExecStart и весь argv, а не имя/presence drop-in. Проверка read-only; несовпадение
 означает STOP до restart. Успешный `systemd-analyze verify` проверяет синтаксис,
 но не доказывает, какой поздний drop-in победил. Не выбирать приоритет по догадке.
-В guarded continuation effective candidate ExecStart прошёл этот gate, но следующий
-private readback завершился JSONDecodeError до restart. Drop-in удалён, исходный
-unit/PID подтверждён независимым readback. Новые бюджеты rollout1/emergency1 не
-использованы; второй rollout attempt требует явного решения владельца. Не повторять
-terminal runner и не трактовать его parsing failure как backend failure. Отсутствие
-jobs и непустая таблица jobs должны иметь отдельные проверенные parser paths;
-`systemctl --output=json` нельзя без проверки считать JSON-контрактом list-jobs.
+`scripts/observe_friends_service.py --python <existing-python> --archive <exact-pyz>`
+читает только типизированный systemd D-Bus через busctl GetUnit/GetAll/ListJobs.
+До restart с уже выбранным candidate используйте `--running-archive <old-pyz>`.
+OBSERVED не равно PASS: отдельно требуются argv matches, idle jobs, health и DB gates.
+Проверяются signatures/types, empty/nonempty jobs, двойной readback PID/start/config;
+ошибки имеют stage/code без stderr/environment values/arbitrary argv. Не использовать
+`systemctl list-jobs --output=json` или shell table parsing. Pending jobs допускают
+только bounded read-only ожидание до gate, не повторный restart. Committed tests53+8 PASS.
+Fresh backup, effective argv и post-start inventory/health PASS; consumed1 rollout/
+0 emergency. Второй actual restart candidate запрещён. Предыдущие failed runner/
+receipts не изменены и не повторялись. Никакого нового rebuild immutable candidate.
 Нельзя удалять paid schema/события или восстанавливать старый DB для повторения
 ABSENT gate; новый preflight должен принимать только проверенный PRESENT_EMPTY.
 Bundle не устанавливает зависимости, не содержит чужие wheels; внешние Python/
