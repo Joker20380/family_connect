@@ -2,7 +2,18 @@
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
-**Current substep CONTROL-PLANE-2 — CHECKPOINT / GUARDED_PRESTART_OBSERVATION_FAILED / NOT_DEPLOYED.**
+**Current substep CONTROL-PLANE-2 — CHECKPOINT / DETERMINISTIC_OBSERVER_READY / NOT_DEPLOYED.**
+Owner explicitly reauthorized entry from90ad148: read-only dry runs may repeat
+before restart; rollout1/emergency1 remaining, consumed0/0. Committed typed D-Bus
+observer uses GetUnit/GetAll/ListJobs, not systemctl JSON/table assumptions. Exact
+argv checks, double-read PID/start/config/job stability, sanitized stage/error codes;
+53 observer +8 existing ExecStart tests PASS. No candidate/source/backend changes.
+NEXT — only CP2: live observer dry runs, fresh PRESENT_EMPTY preflight/backup,
+own drop-in/effective ExecStart guard, one rollout restart and post-start acceptance.
+Emergency old-source restart only on post-start failure; no second candidate restart.
+Failed runners are historical evidence and must not be invoked.
+
+Previous guarded attempt (historical, not a second active NEXT):
 Stale active-looking Linux blocks removed by242f428; only Android CP2 is active.
 Exact source8b4177d/bundle6ea4ef3a…/HTTPdcd76998… unchanged, baseline/publisher
 preservation gate PASS. Fresh19:28 preflight: old healthy PID120606, paid schema
@@ -21,9 +32,8 @@ Historical artifacts/backups and Android106 unchanged; no real payments/enrollme
 CRL/gateway changes or Linux/Windows work. Local read-only timer active/success;
 NL registry remains unavailable, not0. Live paid CRL/session acceptance still open.
 [Current and immutable historical evidence](releases/2026-10-27-android106-control-plane-2.md).
-STOP. NEXT — CONTROL-PLANE-2 guarded rollout: review the pre-start observer failure
-and obtain an explicit re-entry decision; authorized restart budgets remain unused,
-but a second rollout attempt is not automatically permitted. No real enrollment.
+The previous pre-start stop is superseded only by the explicit re-entry above.
+No real enrollment, paid events or client/gateway changes are authorized.
 
 **Принятый вход CONTROL-PLANE-1 — DONE / LOCAL SYNTHETIC + PRODUCTION-READONLY SNAPSHOTS.**
 Русский Django Admin/UI, 50 demo identities (paid cap10 неизменён), отдельные

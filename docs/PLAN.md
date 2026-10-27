@@ -3,21 +3,27 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-**Current substep CONTROL-PLANE-2 — CHECKPOINT / GUARDED_PRESTART_OBSERVATION_FAILED / NOT_DEPLOYED.**
+**Current substep CONTROL-PLANE-2 — CHECKPOINT / DETERMINISTIC_OBSERVER_READY / NOT_DEPLOYED.**
 Dependency: accepted CONTROL-PLANE-1 at21dd8d72ad5505cd82631856083694729d292c8b.
 Gate: exact paid-aware bundle; read-only preflight; consistent private backup/recovery;
 existing paid schema PRESENT_EMPTY, no repeat migration; guarded Friends restart;
 unchanged non-cohort access;
 read-only local bridge/continuous collection; synthetic production-identical expiry/
 revoke/CRL/recovery. No real subscriptions/events, client/gateway changes or public console.
-Progress: exact publisher-preserving bundle6ea4ef3a…/source8b4177d unchanged;
+Current continuation from90ad148 explicitly authorized: committed typed D-Bus
+observer +53 tests PASS, existing ExecStart8 tests PASS. Read-only dry runs may
+repeat before restart. NEXT only CP2: fresh live observation/PRESENT_EMPTY backup,
+own drop-in + exact effective argv, one rollout restart and post-start acceptance.
+Budget rollout1/emergency1 remaining, consumed0/0; rollback restart only on post-start
+failure, never a second candidate restart. No old failed runner or ABSENT migration.
+Previous attempt evidence: exact publisher-preserving bundle6ea4ef3a…/source8b4177d unchanged;
 fresh baseline/empty-schema/NTP gate and backup643fe650…/isolated restore PASS.
 New ordered drop-in selected exact candidate; effective ExecStart guard PASS.
 Subsequent pre-start observation raised JSONDecodeError; no restart requested.
 Only own drop-in removed; independent final readback confirms original unit/PID,
 healthy old runtime21d64558…, paid rows/events0 and unchanged non-cohort/publisher
-fingerprints. Current authorization: rollout1/emergency1, consumed0/0; no second
-attempt.8 guard tests rerun PASS,192 prior acceptance retained. Historical evidence
+fingerprints. That attempt consumed0/0; the owner now permits the continuation above.
+8 guard tests rerun PASS,192 prior acceptance retained. Historical evidence
 preserved, no migration/rebuild/client/gateway/real paid mutation. Live CRL/session
 acceptance remains open. Stale Linux active blocks removed, no desktop task resumed.
 [Exact evidence and finite next gate](releases/2026-10-27-android106-control-plane-2.md).

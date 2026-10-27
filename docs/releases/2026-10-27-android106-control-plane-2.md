@@ -1,6 +1,28 @@
 # ANDROID-CONTROLLED-BETA / CONTROL-PLANE-2
 
-## Current guarded continuation — pre-start observation failure, no restart
+## Current continuation — deterministic observer source checkpoint
+
+Input main90ad14809512ce9b1358a45a9cf2dc5fe84a1442. Owner explicitly permits repeated
+read-only observer dry runs before restart, one rollout restart and one emergency
+rollback restart only on post-start failure. Consumed0/0, remaining1/1. No new task
+ID, artifact rebuild, paid mutation, client/gateway change or desktop work.
+
+[Committed observer](../../scripts/observe_friends_service.py) uses bounded, strict
+JSON from typed systemd D-Bus GetUnit/GetAll/ListJobs only. It validates signatures,
+variants and job structures for empty/nonempty lists, compares complete ExecStart
+argv against an expectation, double-reads service/process/jobs to reject races and
+reports explicit sanitized stage/code failures. Environment values and arbitrary
+argv are hashed, never emitted. OBSERVED is not an acceptance PASS; operational
+gates must additionally require expected argv, health, idle transactions and DB
+invariants. The observer cannot mutate units or restart a service.
+
+53 observer tests +8 existing ExecStart tests PASS. Production read-only D-Bus
+contract probe confirmed typed signatures; full observer dry runs and fresh backup/
+rollout acceptance are pending. Source-only checkpoint, **NOT_DEPLOYED**. Previous
+failed private runner and receipts remain untouched and will not be invoked.
+NEXT — same CP2 guarded empty-cohort rollout; real payments/enrollment forbidden.
+
+## Historical guarded continuation — pre-start observation failure, no restart
 
 Input main `cd307fcebc98658077ad7be3e11ee5e11ac947c7`. Only the two stale
 active-looking Linux blocks were removed from STATUS/PLAN in
