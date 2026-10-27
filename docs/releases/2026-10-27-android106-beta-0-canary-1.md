@@ -117,7 +117,7 @@ Console tests used a separate disposable local PostgreSQL test DB.
 Accepted lookup-only artifact remains unchanged:15 members/56017 bytes/SHA256
 `63ffe0f1ac4dad0c15a94558423de4eab2a5aff754167e8108d75064bb95d308`.
 Its source inventory excludes the changed restricted_admin and new helper; no rebuild
-is needed. New unbound CRL package receipt follows after exact source commit/build.
+is needed. The final unbound CRL package receipt follows below.
 No bound envelope/activation/expire/recovery permit is built.
 
 The first post-commit package audit found IP constants in unused catalog-validation
@@ -129,6 +129,38 @@ selected names and exact segment hashes are recorded in source_projections, alon
 ordinary member hashes. Unused catalog/profile code and all IP constants are excluded.
 AST equality, isolated import/help and deterministic package tests PASS. No accepted
 lookup artifact or backend source is changed by this packaging correction.
+
+### Deterministic unbound CRL package
+
+Requested source commit: `ce09b96e9e00a9d8e23a31acbb4fdb906442cd28`
+(`feat: add exact-payload CRL delivery for owner canary`). The subsequent packaging
+correction is `8ba535d49c4e914a0aee0cacdd20405733bbe53f`; both ordinary pushes had
+their remote main SHA independently verified. No published history was rewritten.
+
+| Field | Verified result |
+|---|---|
+| Exact final package source |`8ba535d49c4e914a0aee0cacdd20405733bbe53f` |
+| Binding / operation permit / production configuration |unbound / null / absent |
+| Members / size |24 /138174 bytes |
+| SHA256 |`3c3736917efb1720b7086e57e4e8b2182fcb56734ec85b662b9bed71c15840a6` |
+| Source manifest SHA256 |`704b67df66d21e198e175344932f81e4d23e2e697f15475f45656be9af476ebb` |
+| Two independent builds / fixed timestamps and modes |Byte-identical / PASS |
+| Exact source/member/selected-segment hashes / AST equality |PASS |
+| Strict JSON / IP-private scan / Python syntax |PASS |
+| External-cwd help/manifest and isolated import smoke |PASS, Python3.14.4 |
+| generate/deliver/commit/lookup CLI probes |DENIED; no registry opened |
+| License/notices |LICENSE + THIRD_PARTY_NOTICES.md included; runtime dependencies not vendored |
+| Original accepted lookup-only package |UNCHANGED; not rebuilt |
+
+[Sanitized source manifest, all member hashes and projection provenance](2026-10-27-android106-beta-0-canary-1-crl-unbound.json).
+Both final archives are retained read-only in private ignored evidence; rejected
+pre-projection builds remain separate and must not be used. No archive is published,
+bound, uploaded or executed against a registry. No private configuration, credential,
+owner/certificate token, Support ID, CRL payload or production endpoint is included.
+
+Source gate DONE. Status remains LIVE_ENTRY_SOURCE_READY / CRL_HELPER_UNBOUND_READY /
+PRODUCTION_LOOKUP_NOT_RUN / LIVE_WRITES_NOT_RUN. This proves synthetic source behavior,
+not production CRL delivery or live canary acceptance.
 
 **STOP. NEXT — production read-only owner lookup and binding, not automatically.**
 No production key/configuration installed, no CRL publication or local live files

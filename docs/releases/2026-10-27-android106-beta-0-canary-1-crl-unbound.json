@@ -1,0 +1,84 @@
+{
+  "artifact": {
+    "accepted_lookup": "UNCHANGED",
+    "binding": "unbound",
+    "committed_source_and_segments": "PASS",
+    "deterministic": "PASS",
+    "import_help": "PASS",
+    "manifest_sha256": "704b67df66d21e198e175344932f81e4d23e2e697f15475f45656be9af476ebb",
+    "member_hashes": "PASS",
+    "members": 24,
+    "operational_commands": "DENIED",
+    "private_ip_scan": "PASS",
+    "production": "NOT_RUN",
+    "python": "3.14.4",
+    "sha256": "3c3736917efb1720b7086e57e4e8b2182fcb56734ec85b662b9bed71c15840a6",
+    "size": 138174,
+    "source_commit": "8ba535d49c4e914a0aee0cacdd20405733bbe53f",
+    "strict_json": "PASS",
+    "syntax": "PASS"
+  },
+  "schema": 1,
+  "source_manifest": {
+    "binding": "unbound",
+    "dependencies": [
+      "control/requirements.lock",
+      "device_identity/requirements.lock"
+    ],
+    "files": {
+      "LICENSE": "cfe0da6ed33d20d2b6a97ab5363e204660f0c9987469724c92938a846a1afcb4",
+      "THIRD_PARTY_NOTICES.md": "ff178d44895279252b303c7488c887f995d6bcd95977a9f04cc2ada88c58e316",
+      "__main__.py": "fa156dcf322dd8dd8768108cb8a57decc1fc631ed62a81de3da037c01cb52769",
+      "control/": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "control/friends/": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "control/friends/__init__.py": "efb76720b2ad1c9594aee9488b342e3311ed01a4bff3082c2fa3999663354cc8",
+      "control/friends/access.py": "b70e7d210c9347602ba2c8531454f5e01d0eeb18556eaffc71ea1c4995bea900",
+      "control/friends/paid_beta.py": "a30b804d0b9e44ff76411731fb469f4ba930a5b1bca301386ea81382379af45e",
+      "control/friends/paid_beta_canary.py": "e7cee9d29155fc6a1f8e14ae12b863234b893026bf3ffe9644c2f144e6d8e711",
+      "control/friends/paid_canary_crl.py": "81b26ba72636f325d107aaa1131bc99b754480251c542c4ea819d219add7124b",
+      "control/friends/readiness_receipts.py": "16e4556af6d914e7411b3563bef44efebd2a8ba2d7dda1d0faa4f4e100ceb660",
+      "control/friends/restricted.py": "57570d455a69d91a9a8d971a83d7d28153610ded55cb4208138d6d8c36658155",
+      "control/friends/restricted_admin.py": "4c14e4d8c1dbb9cec13009ef2cc3495690ed6a39e8cb7ca33dcd503964fad801",
+      "control/friends/support_ids.py": "cab3cef66085ac11253d3ce8a41d636769f040841fe839a96e03e536939aa169",
+      "control/requirements.lock": "5adccf995e9634be711ae3167229cca0d2751b493c3a041dd68c745ec44ad94a",
+      "device_identity/": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "device_identity/__init__.py": "3cd56edaf5fbfde9c88df7078dc55be15bf23cfc830727ee410bc8f31dc9990f",
+      "device_identity/device.py": "38e29e640c913c1331164aa36fde0ca95b1d13ee057ae92c3d31ec7b993151d3",
+      "device_identity/requirements.lock": "8133533475c48477f7ccf6d65a5c426a2511ceea61f6539c1667b3a6900a77be",
+      "operation-permit.json": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "provisioning/": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "provisioning/__init__.py": "a8d11b35f8be63395d505bcf0cf7774aa5c0dbffa5eee905eef911a8d3fdb905",
+      "provisioning/friends_catalog.py": "811cc33d24dd0351166bed48cfba17f84bfd19d7ebf66a639a386f733907e46c"
+    },
+    "operation_permit": null,
+    "production_configuration": "absent",
+    "python_minimum": "3.13",
+    "schema": 1,
+    "source_commit": "8ba535d49c4e914a0aee0cacdd20405733bbe53f",
+    "source_projections": {
+      "provisioning/friends_catalog.py": {
+        "definitions": [
+          "require",
+          "unique",
+          "parse",
+          "fields",
+          "key"
+        ],
+        "imports": [
+          "base64",
+          "json"
+        ],
+        "segment_sha256": [
+          "f30aabd4a95e13b98c9537425bb02f63ac9631f1e6311b7f0ab80d85f88f61b8",
+          "ff3e4d4dcf7250cae8d622d77c9a6d69aefcf4ab04ef9920218fafe93c0f1991",
+          "ff23a4708945a43a861982cbb93672dd534644e47857e22ca55f2edba8698e40",
+          "55483f1068a8bd1dc595a67ac18d9844f4caea041d5b70058a844565ec7e94eb",
+          "d450f844334e2469000f47501f48df4ff312885cd1935f4bedd2d42a405d28f0",
+          "e494523b26a3ffdf87440aed73991a2499e9d62e9f15d4b92ae05df16b9e5892",
+          "cfbc7bd00d7879112435281208c0bb8c4ed127f22a2f5a7b7646452caef23983"
+        ],
+        "source_sha256": "12d64b9a0c25f2e11ebfaee86bf6eab110a931668190732cf05c0cb1a26a64ec"
+      }
+    }
+  }
+}
