@@ -1,6 +1,162 @@
 # L04.2-R2 — process containment versus authenticated drain
 
-## Phase C with a real controlling terminal — current checkpoint
+## Phase C polkit provenance and exact-process agent — current checkpoint
+
+Input main `370f1412ca35d77ab23bd575592ab1fd904e52c3`,27.10. Same L04.2-R2,
+Phase C only. **Phase B DONE / review accepted, not repeated wholly or partly.**
+Rollback/AWG/TCP/cleanup32/package46/native15/combined3/MESH157 and accepted
+desktop1306/82 remain accepted. No new task ID, version, candidate, system build,
+runtime/source checkpoint, package build, policy change or overall CI PASS.
+
+**Result: L04.2-R2 PARTIAL. Fixed-polkit provenance PASS; one exact-process
+pkttyagent setup PASS/exit0; matching system READY. One subsequent GUI manual P0
+Connect stops at the authorization ready-handshake, before the MESH supervisor,
+worker or TUN starts. P1/Auto/active lifecycle/live AppImage sharing NOT_RUN.
+STOP. NEXT — final review L04.2-R2.** Authorization remains an unresolved entry
+blocker, not evidence of a packet-path defect or gateway outage.
+
+### Read-only provenance, not an inferred polkit upgrade
+
+The previous encrypted failed derivative is exposed read-only to a network-none
+offline inspection container. It is not booted; no services or target executables
+are run. QEMU reads the encrypted input read-only; sparse plaintext inspection
+copies exist only in a private tmpfs and are removed with the helper container.
+Read-only debugfs performs no mount or filesystem journal replay. The prior
+derivative and original encrypted base remain byte-identical by full SHA256.
+Setup/pkexec/password prompts/Connect/package updates/service restarts in that
+forensic target: **all0**.
+
+The actual package ownership and on-disk binaries are:
+
+| File | Package/version | UID:GID / mode | SHA256 |
+|---|---|---|---|
+| `/usr/bin/pkexec` | pkexec127-2ubuntu1.1/amd64 | 0:0 /04755 | `3d0a1d1bfe7dea0669562a4858ca11f886a15fc3636e10b904b4cb00e30b426a` |
+| `/usr/bin/pkttyagent` | polkitd127-2ubuntu1.1/amd64 | 0:0 /0755 | `1368ade05173ca500a999289726d816b4a7b5c645eb8f01ddeab8da6a935c1bc` |
+| `/usr/lib/polkit-1/polkitd` | polkitd127-2ubuntu1.1/amd64 | 0:0 /0755 | `cb21d4d107a977b1a18c199faaaca304343eb183a70660ad5b253c3ce6583c73` |
+| `/usr/lib/polkit-1/polkit-agent-helper-1` | polkitd127-2ubuntu1.1/amd64 | 0:0 /0755 | `8864e9dfa2030b925c2c337760dd49b02a630666d9765c0a84b95c193fd9e7db` |
+
+All four match both their installed dpkg checksums and independently downloaded
+exact Ubuntu binaries. Source package is **policykit-1 127-2ubuntu1.1**.
+[Ubuntu source descriptor](https://archive.ubuntu.com/ubuntu/pool/main/p/policykit-1/policykit-1_127-2ubuntu1.1.dsc)
+hashes validate the upstream tarball and distribution patch archive. Applying
+the two distribution patches in a separate public-source inspection directory
+retains `authentication_agent_new(..., subject, user_of_subject, ...)`, the exact
+fix from [upstream f93c746](https://github.com/polkit-org/polkit/commit/f93c7466039ea3403e0576928aeb620b806d0cce).
+This is stronger than a version-string inference. Downloads use official HTTPS;
+independent OpenPGP verification of the source descriptor is not claimed.
+
+Thus the previous cookie-error text does **not** demonstrate that this fix is
+missing: the fix is already present. No polkit upgrade/reinstall, group change,
+custom rule, passwordless authorization or service repair is performed.
+
+### Fresh derivative, one registered-agent setup
+
+Immutable .10 candidate `4264406722f6dd3efb83e9d9666e67180ce4f950333bb3e711bcbb4f5068b55a`,
+candidate source `b8e9196d205c6810e02a642678517a4fc44b921b`, system source
+`169aa687f497f8be690be5331879f994636135e1` and system build
+`8ab7f298df10a89bcd116fbddaa8a23e37ff1581de3a456bb1cce69175ad9120`
+remain the exact delivery documented below. DEB56146990 bytes/SHA256e1b9cb32…,
+AppImage58120696/56a4a76d… and system49251070/bea87470… match; no artifact is
+rebuilt or modified. Current-main delta from candidate source is documentation
+only. Historical .9 and protected seven files remain unchanged.
+
+A fresh writable encrypted derivative comes from the original authorized base,
+not the failed forensic target. Separate kernel/network/system bus/user manager;
+no host home, bus, resolver or network namespace mounts. One .10 DEB install,
+dpkg audit, apt check and candidate-check PASS. Existing non-root desktop admin,
+unchanged default polkit rules/groups, PolicyKit1 owner/service and clock PASS.
+All four polkit binary hashes match the fixed-provenance receipt again before setup.
+
+In one SSH `-tt` session, uid/tty and `/dev/tty` read/write/open preflight PASS.
+The product-launch child waits on a pipe. Its exact PID **and start time** are
+registered with `pkttyagent --process ... --notify-fd ...`; notify-fd EOF and a
+live agent are verified before releasing the child to exec the unchanged
+installed launcher. The launcher retains that process identity and invokes its
+normal pkexec setup. No direct root installer, sudo setup replacement, disabled
+internal agent or graphical-authentication bypass is used.
+
+**One setup, one password prompt, exit0,11.76s.** Existing test password enters
+only the PTY, never arguments or logs. The agent is terminated/reaped afterwards.
+The wrapper fails to recognize the installer stdout JSON line, so that wrapper
+exit is not relabelled PASS. No setup replay: independent readback confirms the
+exact installed system8ab7f298…, candidate/system READY, owner0/TUN0/pending clear,
+and unchanged identity/cache/floors/settings/keyring/store at setup completion.
+A clean encrypted READY base is retained0400 after graceful shutdown; P0 boots
+its writable derivative without another install/setup.
+
+### Single P0 action and stop evidence
+
+Installed GUI baseline is OFF, manual MESH/P0 selected. One messenger proxy,
+one support proxy, no unexpected proxy; support operations only `support_status`.
+One GUI Connect is emitted. Coordination generation advances2→3; the GUI first
+shows CONNECTING, then refreshes to DISCONNECTED. The durable diagnostic incident
+retains **FAILED / first_failure=OPERATION_FAILED**, selected restricted/P0,
+recovery attempt0. This later OFF view is not a successful Connect.
+
+Read-only inspection of the retained failed Future establishes:
+
+| Observation | Result |
+|---|---|
+| Failure stage | `GUI_CONNECT_AUTHORIZATION_READY_HANDSHAKE` (checkpoint classification only) |
+| Call path | `FriendsOwner.connect_mesh` → `start_mesh` → `_mesh_setup` → `_AuthorizationSession.call` |
+| Exception/context | `AuthorizationError` / `EOFError`, backend.py1125 |
+| Authorization child | exit127, reaped; stdin/stdout closed |
+| Required handshake | no valid `{"ready":2}` received |
+| User Connects | 1; no replay |
+| Packet attempts / active packet generation | 0 / not created; coordination generation3 is not an active VPN generation |
+| VPN owner / normal TUN | 0 /0 throughout observations |
+| Supervisor first_reason / cleanup_reason | NOT_REACHED; desktop OPERATION_FAILED is not a native first_reason |
+| process_contained / drain_acknowledged | NOT_APPLICABLE: native worker never started |
+| Network detach | NOT_APPLICABLE: no packet network attachment |
+
+The ordinary GUI authentication observer sees no usable password prompt before
+its bounded timeout. That observer timeout is not a native timeout. The product
+discards authorization-child stderr, so EOF/exit127 alone cannot distinguish a
+polkit refusal from helper startup failure. No more specific cause, missing
+upstream fix, packet runtime defect or gateway outage is asserted. No new
+authorization attempt, Connect, certificate fetch/replay or source fix follows.
+Native readiness/renewal is not reached; P0 DNS/HTTPS/selected-next/refresh-active
+gates and all P1/Auto/active lifecycle/live AppImage-sharing gates are NOT_RUN.
+
+### Cleanup and state preservation
+
+No Disconnect click is emitted against an already OFF, unowned session: that
+toggle would be a forbidden second Connect. GUI closes normally; test desktop
+and chat services stop. The already-collected transient GUI unit produces a
+`not loaded` stop result; read-only reconciliation confirms all relevant user
+units inactive. No action replay is used to hide this harness finalization result.
+The VM shuts down gracefully, QEMU exits0, its container is removed and its
+encrypted derivative is retained0400. No late owner/TUN is observed.
+
+Owner0/TUN0, raw coordination pending=null and generation3, journal **ABSENT**
+(same as baseline; not misreported IDLE). Routes/rules/default route/DNS/domains/
+iptables/nftables match baseline. The aggregate address digest differs later;
+the hash-only baseline does not establish which address/metadata field changed.
+This is supplementary, unlocalized underlay evidence, not a full address-baseline
+PASS and not a reason to edit `mngtmpaddr` or host networking.
+
+Friends identity/cache/floors, settings and keyring remain byte-identical.
+One ChatService, one ChatOwner and one D-Bus owner are observed; chat creates no
+second privileged packet session/TUN. Chat storage is not falsely called wholly
+byte-identical: eight announce-cache entries and history.sqlite change during
+normal service use. Offline read-only SQLite comparison (no boot, decryption or
+message-content read) confirms quick_check PASS before/after, identical sealed
+identity and format records, **zero message records before/after**, and only the
+local `service-events` record changed. Original protected seven files, original
+encrypted base and previous failed derivative remain byte-identical.
+
+Private teardown ledger records the provenance, successful setup, single failed
+pre-packet Connect and preserved state; no revoke/teardown is executed. Immutable
+live-action scripts are complete, syntax-checked and hashed before launch; no
+running script is rewritten. Offline-reader partition/symlink corrections and
+read-only receipt parsing corrections do not repeat a product action.
+Secret/private-byte scan, JSON/no duplicate keys, local links, four-document
+staged scope and `git diff --check` PASS. Unrelated changes remain unstaged.
+Owner workstation **NOT_USED**. L04.1 DONE; parent L04 IN_PROGRESS; L05/messages/
+voice acceptance/signing/publication NOT_RUN. Chat delivery_unavailable remains
+the unchanged L05 observation, not diagnosed or used as a VPN prerequisite.
+
+## Phase C with a real controlling terminal — previous checkpoint
 
 Input main `a3c51d2828104941a4faa37f92261bc305c530a9`. Run27.10 Europe/Brussels
 (26.10 UTC), same L04.2-R2. **Phase B DONE / review accepted, not repeated in

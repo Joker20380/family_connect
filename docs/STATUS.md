@@ -1,37 +1,35 @@
 # Текущее состояние / Current state
 
-**L04.2 — R2 PARTIAL / Phase B DONE (review accepted); Phase C polkit cookie BLOCKED.**
-Source169aa68 DONE/review accepted: containment/drain separation и R1
-first_reason/cleanup/all-stage/retry сохранены. Native15, cleanup32, combined3,
-desktop1306/82skip и exact local36/phase0-Docker54 baseline приняты.
-Control/Client Linux setup incomplete больше не блокируют progression по review;
-общего CI PASS нет. Runtime169aa68/test/locks/pins неизменны; reference70f33f6 принят.
-Input maina3c51d2; от candidate sourceb8e9196 только docs. Exact .10
-candidate42644067…/system8ab7f298…/system_source169aa68/source_dirty=false неизменён;
-delivery hashes, embedded DEB/AppImage candidate/system equality и protected state PASS.
-Retained artifacts0444/AppImage0555/directories0555; rebuild0. Prior integrity,
-systemd/pkexec/DEB/AppImage/shared-state PASS сохраняются. AWG durable receipt включает
-routes/rules/DNS/nftables и cleanup: PASS_BY_REVIEWED_ASSERTIONS, без повтора;
-прежний XIT finalization FAIL_ENVIRONMENT_EXCLUDED, не общий wrapper PASS.
-Phase B целиком и частично НЕ ПОВТОРЯЛСЯ: rollback/AWG/TCP/cleanup32/package46/
-native15/combined3/MESH157/accepted desktop1306+82skip сохранены PASS.
-27.10 fresh encrypted derivative из protected base, не из прошлой failed VM.
-Один exact .10 DEB install, dpkg audit/apt check/candidate-check PASS. Existing
-ordinary admin user/groups/default polkit, system bus/PolicyKit1/clock PASS.
-SSH -tt: same-session /dev/tty read/write/open и preflight PASS до setup.
-Один setup/один password prompt, exit1/8.27s: AUTHENTICATION FAILED,
-No session for cookie / Not authorized. Root installer не запускался; причина
-cookie/session отказа не локализована, product defect не установлен. No retry/bypass.
-Old43266d97 system unchanged/mismatch; READY нет. Connect0, P0/P1/Auto/lifecycle/
-live AppImage NOT_RUN. Owner/TUN0,pending=null,journal ABSENT unchanged; network,
-identity/chat store/cache/floors/settings/keyring/original7/base unchanged.
-VM gracefully stopped/removed; encrypted derivative0400; private teardown receipt
-updated без revoke. Пароль не записан; groups/polkit rules не менялись.
+**L04.2 — R2 PARTIAL / Phase B DONE (review accepted); Phase C pre-packet authorization BLOCKED.**
+Input main370f141; same L04.2, no new ID/version/source checkpoint/build.
+Runtime169aa68, reference70f33f6 и immutable .10 candidate42644067…/sourceb8e9196/
+system8ab7f298… unchanged. Phase B целиком и частично НЕ ПОВТОРЯЛСЯ: rollback,
+AWG reviewed assertions/TCP/cleanup32/package46/native15/combined3/MESH157/
+desktop1306+82 и exact historical failure baseline сохранены; общего CI PASS нет.
+Read-only offline forensic предыдущей derivative: polkit127-2ubuntu1.1,
+все4 binaries совпадают с dpkg/Ubuntu; exact source содержит f93c746 fix.
+Прежний cookie error не доказывает отсутствие fix. Target не загружался/не менялся;
+polkit upgrade/rules/groups/password changes0. Protected base/original7 неизменны.
+Fresh encrypted Phase C derivative: .10 entry PASS. SSH -tt /dev/tty и exact-process
+pkttyagent PID+start-time/notify-fd registration PASS. Один setup/один prompt,
+exit0/11.76s; agent reaped. Stdout-receipt parser error reconciled read-only:
+exact installed system READY, owner/TUN0; setup НЕ повторялся.
+Один GUI manual P0 Connect: AuthorizationError/EOFError при ready-handshake,
+authorization child exit127/reaped/streams closed. Desktop incident OPERATION_FAILED;
+packet attempt0, native first/cleanup reasons NOT_REACHED, owner/TUN0.
+Причина refusal versus helper startup не локализована; product/gateway defect
+не заявляется. No retry/source fix; P1/Auto/active lifecycle/live AppImage NOT_RUN.
+GUI/chat остановлены, VM gracefully removed; encrypted READY base/derivative0400.
+Pending raw null, coordination generation3, journal ABSENT baseline. Routes/rules/
+DNS/firewall unchanged; address-digest delta supplementary/unlocalized, no IPv6 edit.
+Identity/cache/floors/settings/keyring preserved. Chat sealed identity unchanged,
+SQLite quick_check PASS, message rows0→0; only local service-events record and
+announce-cache updates. Original7/base/previous derivative byte-identical;
+private teardown ledger updated, no revoke. Owner workstation NOT_USED.
 [Единый R2 report](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
-Exact immutable artifact/system IDs/hashes в report; package acceptance PASS. .9/state immutable;
-owner workstation NOT_USED. L04.1 DONE, parent L04 IN_PROGRESS; L05 NOT_RUN,
-delivery_unavailable backlog без диагностики. L06/L07/L08 прежние QUEUED;
-signing/publication/revoke/teardown NOT_RUN. **STOP. NEXT — final review L04.2-R2.**
+L04.1 DONE; parent L04 IN_PROGRESS; L05 NOT_RUN/delivery_unavailable backlog,
+L06/L07/L08 прежние QUEUED; messages/voice acceptance/signing/publication NOT_RUN.
+**STOP. NEXT — final review L04.2-R2.**
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted (owner review).**
 Exact **0.2.12~l03.2.9** установлен; candidate/package/system checks PASS,
