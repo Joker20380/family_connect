@@ -15,6 +15,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from . import backend, workflow
+from .labels import error_label
 from .forms import ConfirmForm, LookupForm, OperationForm, PaymentForm
 from .models import AuditRecord, CohortMetadata, DeviceProjection, Incident, OperationRequest, PaymentRecord, ReleaseMetadata
 
@@ -78,7 +79,7 @@ def devices(request):
             workflow.audit(request.user, 'device.lookup', device)
             return redirect('console:device', device=device)
         except backend.BackendError:
-            form.add_error(None, 'No matching accessible synthetic fixture. No production lookup is available.')
+            form.add_error(None, 'Демо-устройство не найдено. Поиск реальных устройств доступен отдельно в инвентаризации.')
     return render(request, 'console/devices.html', dict(form=form, devices=DeviceProjection.objects.all()))
 
 
@@ -96,9 +97,9 @@ def device_detail(request, device):
 def refresh(request):
     try:
         workflow.refresh_all(request.user)
-        messages.success(request, 'Synthetic backend readbacks refreshed. They are not live admission decisions.')
+        messages.success(request, 'Демо-снимки обновлены. Это наблюдения, не текущие решения о доступе.')
     except backend.BackendError:
-        messages.error(request, 'Readback unavailable. Retained projections remain historical; no entitlement inferred.')
+        messages.error(request, 'Чтение недоступно. Сохранённые снимки исторические, доступ не подтверждён.')
     return redirect('console:devices')
 
 
@@ -115,8 +116,8 @@ def payment_new(request):
             payment = workflow.create_payment(request.user, **form.cleaned_data)
             return redirect('console:payment', payment_id=payment.pk)
         except (ValidationError, IntegrityError):
-            form.add_error(None, 'Invalid or already recorded reference. Do not duplicate a payment to retry an operation.')
-    return render(request, 'console/form.html', dict(form=form, title='Record a synthetic manual payment', subtitle='No acquiring API. No payer details. Recording is not confirmation or entitlement.'))
+            form.add_error(None, 'Основание некорректно или уже записано. Не дублируйте оплату для повтора операции.')
+    return render(request, 'console/form.html', dict(form=form, title='Запись ручной демо-оплаты', subtitle='Без эквайринга и данных плательщика. Запись не означает подтверждение или доступ.'))
 
 
 @staff('view_paymentrecord')
@@ -143,8 +144,8 @@ def operation_new(request):
             operation = workflow.create_operation(request.user, values)
             return redirect('console:operation', request_id=operation.pk)
         except (workflow.WorkflowError, ValidationError, IntegrityError):
-            form.add_error(None, 'Check opt-in/handoff metadata, matching confirmed payment and unused payment reference. Intent was not created.')
-    return render(request, 'console/form.html', dict(form=form, title='Request an operation', subtitle='Immutable intent → real-backend preview → explicit confirmation. Revoke is terminal; this changes only synthetic subscriptions.'))
+            form.add_error(None, 'Проверьте согласие, передачу APK и соответствующую подтверждённую неиспользованную оплату. Запрос не создан.')
+    return render(request, 'console/form.html', dict(form=form, title='Создать запрос операции', subtitle='Неизменяемый запрос → предпросмотр в настоящем backend → явное подтверждение. Отзыв окончателен; меняются только демо-подписки.'))
 
 
 @staff('view_operationrequest')
@@ -164,7 +165,7 @@ def operation_preview(request, request_id):
     try:
         workflow.prepare(request.user, request_id)
     except (workflow.WorkflowError, backend.BackendError) as error:
-        messages.error(request, str(error))
+        messages.error(request, error_label(error))
     return redirect('console:operation', request_id=request_id)
 
 
@@ -177,9 +178,9 @@ def operation_execute(request, request_id):
         try:
             workflow.execute(request.user, request_id, form.cleaned_data['token'])
         except workflow.WorkflowError as error:
-            messages.error(request, str(error))
+            messages.error(request, error_label(error))
     else:
-        messages.error(request, 'Explicit confirmation is required; no operation dispatched.')
+        messages.error(request, 'Необходимо явное подтверждение. Операция не отправлена.')
     return redirect('console:operation', request_id=request_id)
 
 
@@ -190,7 +191,7 @@ def operation_reconcile(request, request_id):
     try:
         workflow.reconcile(request.user, request_id)
     except (workflow.WorkflowError, backend.BackendError) as error:
-        messages.error(request, str(error))
+        messages.error(request, error_label(error))
     return redirect('console:operation', request_id=request_id)
 
 
@@ -220,3 +221,7 @@ def health(request):
     except Exception:
         return JsonResponse({'status': 'unready', 'scope': 'synthetic'}, status=503)
     return JsonResponse({'status': 'ok', 'scope': 'synthetic'})
+
+
+def csrf_failure(request, reason=''):
+    return render(request, '403.html', status=403)

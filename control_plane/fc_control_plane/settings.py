@@ -35,6 +35,7 @@ TEMPLATES = [{
     'APP_DIRS': True, 'OPTIONS': {'context_processors': [
         'django.template.context_processors.request', 'django.contrib.auth.context_processors.auth',
         'django.contrib.messages.context_processors.messages',
+        'apps.console.context.operation_controls',
     ]},
 }]
 WSGI_APPLICATION = 'fc_control_plane.wsgi.application'
@@ -49,7 +50,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
@@ -65,6 +66,7 @@ SESSION_COOKIE_SAMESITE = 'Strict'
 SESSION_COOKIE_AGE = 1800
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 CSRF_COOKIE_SAMESITE = 'Strict'
+CSRF_FAILURE_VIEW = 'apps.console.views.csrf_failure'
 CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8765', 'http://localhost:8765']
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_REFERRER_POLICY = 'same-origin'

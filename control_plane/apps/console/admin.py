@@ -1,9 +1,12 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin, GroupAdmin
+from django.contrib.auth.models import Group
 from . import models, workflow
 
-admin.site.site_header = 'Family Connect · Control Plane 0'
-admin.site.site_title = 'Synthetic Beta-0 console'
-admin.site.index_title = 'Operational metadata · never entitlement authority'
+admin.site.site_header = 'Family Connect · Панель управления'
+admin.site.site_title = 'Панель демо Beta-0'
+admin.site.index_title = 'Операционные метаданные · не источник решений о доступе'
 admin.site.index_template = 'admin/console_index.html'
 
 
@@ -76,3 +79,53 @@ class IncidentAdmin(MetadataAdmin):
     list_display = ('device', 'category', 'severity', 'status', 'owner', 'updated_at')
     list_filter = ('category', 'severity', 'status')
     search_fields = ('device__label', 'device__device')
+
+
+@admin.register(models.InventorySnapshot)
+class SnapshotAdmin(ReadOnlyAdmin):
+    list_display = ('source', 'scope', 'observed_at', 'imported_at', 'registry_status')
+    list_filter = ('scope', 'source', 'registry_status')
+
+
+@admin.register(models.InventoryDevice)
+class InventoryAdmin(ReadOnlyAdmin):
+    list_display = ('pseudonym', 'snapshot', 'version_code', 'activated', 'revoked')
+    search_fields = ('pseudonym',)
+    list_filter = ('activated', 'revoked', 'version_code')
+
+
+@admin.register(models.TechnicalSample)
+class SampleAdmin(ReadOnlyAdmin):
+    list_display = ('scope', 'source', 'device', 'metric', 'value', 'observed_at')
+    list_filter = ('scope', 'source', 'metric')
+    search_fields = ('device__label',)
+
+
+admin.site.register(models.ServerObservation, ReadOnlyAdmin)
+admin.site.register(models.OperationSwitch, ReadOnlyAdmin)
+
+
+class RussianPermissionLabels:
+    def formfield_for_manytomany(self, database_field, request, **kwargs):
+        field = super().formfield_for_manytomany(database_field, request, **kwargs)
+        if database_field.name in ('permissions', 'user_permissions'):
+            def permission_label(permission):
+                action = permission.codename.split('_', 1)[0]
+                verb = {'add': 'Добавление', 'change': 'Изменение', 'delete': 'Удаление', 'view': 'Просмотр'}.get(action)
+                return f'{permission.content_type.name} · {verb}' if verb else permission.name
+            field.label_from_instance = permission_label
+        return field
+
+
+class RussianUserAdmin(RussianPermissionLabels, UserAdmin):
+    pass
+
+
+class RussianGroupAdmin(RussianPermissionLabels, GroupAdmin):
+    pass
+
+
+admin.site.unregister(get_user_model())
+admin.site.unregister(Group)
+admin.site.register(get_user_model(), RussianUserAdmin)
+admin.site.register(Group, RussianGroupAdmin)

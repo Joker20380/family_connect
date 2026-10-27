@@ -1,5 +1,13 @@
 # Documentation
 
+
+[CONTROL-PLANE-1 — русская панель и read-only observability](releases/2026-10-27-android106-control-plane-1.md):
+50 demo identities, production-readonly inventory двух шлюзов (RU54, NL registry
+недоступен), fleet snapshots/technical models, charts/filters/drill-down, emergency
+stop;95 console+76 backend tests и desktop/mobile PASS. Без реальных оплат,
+enrollment/deployment; live client telemetry/alerts не собираются. Sole entitlement
+authority — Friends paid_beta. [Локальный runbook](../control_plane/README.md).
+
 Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN.md).
 STATUS/PLAN define the current bounded task and next review gate, not an automatic
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.

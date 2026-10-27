@@ -1,11 +1,92 @@
-# CONTROL-PLANE-0 · local synthetic Beta-0 console
+# CONTROL-PLANE-1 · русская локальная панель и наблюдаемость
 
 Substep of **ANDROID-CONTROLLED-BETA**, over the accepted
 [PAID-ENTITLEMENT-MVP](../docs/paid-beta.md). Django5.2 LTS + PostgreSQL17,
 custom Django Admin, dashboard/accessible SVG charts, device lookup/readbacks,
 manual-payment metadata, preview/confirm/reconcile, cohort metadata, incidents,
 append-only audit, aggregate analytics and fixed Android106 release metadata.
-**Local synthetic implementation only. Not a production service or paid launch.**
+**Локальные демо-операции + production-снимки только для чтения. Не production service и не paid launch.**
+
+
+## CONTROL-PLANE-1: текущие возможности и границы
+
+- Интерфейс, Admin, роли, формы, ошибки, состояния и подтверждения — русский
+  (`LANGUAGE_CODE=ru`, `USE_I18N=True`). UTC сохранён; технические JSON-ключи,
+  коды событий и immutable receipts не переводятся и не переписываются.
+- 50 демо-identities не означают 50 paid subscriptions: лимит существующего
+  backend остаётся10. Старые12 identities и их события сохраняются при расширении.
+- `/observability/`: контур, источник, период до91 дня, знаменатели, диаграммы,
+  версии, свежесть; `/inventory/`: реальные устройства, поиск HMAC-псевдонима,
+  пагинация25, история устройства; `/servers/gateway-ru/` и `/servers/gateway-nl/`:
+  точечные нагрузка/память/диск/uptime/systemd и история снимков.
+- Данные разных контуров не суммируются. Демо-телеметрия маркируется явно:
+  7 дней ×50 устройств ×4 метрики =1400 измерений. Повтор команды не добавляет
+  данные и не создаёт оплаты или подписки:
+
+```sh
+docker compose --project-directory control_plane -f control_plane/compose.yaml exec -T console python manage.py seed_observability
+```
+
+Production-телеметрия клиента пока **не собирается**: отсутствие данных = `null`,
+не0 и не100% успешность. `TechnicalSample` сейчас допускает только синтетические
+измерения (ограничение PostgreSQL); нет открытого ingestion API. Для реальных
+источников потребуется отдельный согласованный адаптер/схема. Не собираются raw
+логи, тексты сообщений, сетевые адреса клиентов, ключи и сведения плательщиков.
+Код версии — сообщение устройства (support/readiness ACK), не аттестация APK и не
+доказательство платформы, текущего запуска или пригодности к Beta-0.
+
+### Read-only production inventory
+
+В Django не монтируются SSH credentials, production registry или его копия.
+Отдельный локальный `collect_inventory.py` передаёт проверенный collector по SSH
+stdin (`BatchMode`, `StrictHostKeyChecking`, фиксированные два разрешённых адреса).
+На шлюзе: только SQLite `mode=ro`/`query_only`/read transaction, `/proc`/disk stats
+и `systemctl show` для фиксированного перечня Family Connect служб. Без изменений
+service/policy/schema, миграций, файлов collector на сервере или чтения приватных
+ключей, environment, raw logs и paid/payment таблиц. Готовый снимок импортируется
+в отдельные PG таблицы; они не связаны с платёжными FK и не определяют entitlement.
+
+```sh
+python3 control_plane/collect_inventory.py gateway-ru
+python3 control_plane/collect_inventory.py gateway-nl
+# Вместо пути ниже — точный файл, выведенный collector (локальный, приватный).
+docker compose --project-directory control_plane -f control_plane/compose.yaml exec -T console python manage.py import_inventory < control_plane/.local/ИМЯ_СНИМКА.json
+```
+
+Collector сохраняет `.local/gateway-*.json` (0600). Идентификатор устройства заменён
+HMAC-SHA256: локальный случайный ключ `.local/inventory-hmac.key` (0600) передаётся
+только в памяти по SSH, не хранится на шлюзе. Не меняйте ключ для «обновления»:
+это разорвёт историю псевдонимов. Support ID/canonical references/public/WG keys
+не входят в экспорт. Снимки, HMAC-ключ, скриншоты и `.env` остаются вне Git.
+Не публикуйте снимки: псевдонимизация не делает их общедоступными данными.
+
+Импорт ограничен4MiB/10000 устройств, строгий JSON без duplicate keys/NaN/Infinity,
+точные поля/типы/источники, UTC, конечные метрики и хеш целого снимка. Повторный
+импорт идемпотентен; журналирует system audit один раз. PG triggers запрещают
+изменение/удаление наблюдений. Веб-формы импорта и редактирования отсутствуют даже
+для superuser. Нет scheduler и live polling: следующий снимок собирает оператор.
+Старше5 минут — «устарело», недоступный реестр — «недоступно», а не0 устройств.
+Период в фильтре выбирает последние снимки каждого источника в этом периоде;
+история устройства/сервера ограничена100 наблюдениями и явно подписана.
+Systemd active/низкая нагрузка не являются проверкой MESH Connect или SLO.
+Автоматические alerts, production crash/session denominator, retention/архивация
+и полноценные least-privilege SSH credentials требуют отдельного этапа.
+
+### Аварийная остановка и восстановление
+
+`/stop/` блокирует новые dispatch в **демо** backend (RBAC+CSRF+подтверждение,
+сохранённый PG singleton и audit). Уже отправленные RUNNING/UNKNOWN операции
+не отменяются: только read-only reconcile исходного события. Чтение APPLIED
+идемпотентно даже при stop. Подписки, сертификаты и production не меняются.
+
+Обновление локального образа: подготовить context, `up --build -d --wait`.
+Сохраняйте `.env`, HMAC-ключ и оба volumes. Безопасное немедленное действие при
+регрессии — `docker compose ... stop console`, не `down -v` и не откат одного store.
+CP0 не принимает fixture50: нельзя запускать прежний образ с новой registry или
+переименовывать marker. Возврат к старому состоянию возможен только после review
+согласованной пары PG+synthetic registry backup; это не проверенный disaster-recovery
+PASS. Частичный PG backup этого checkpoint не считается такой парой.
+Никакого production rollout/rollback этим runbook не разрешено.
 
 ## Quick start
 
@@ -26,12 +107,13 @@ The checkpoint's browser QA may leave a local-only operator login in ignored
 it into tickets, commits, public receipts or release notes. Fresh checkouts use
 `createsuperuser` above. Do not regenerate `.env` against an existing PG volume.
 
-Startup applies PostgreSQL migrations, initializes12 synthetic Friends identities
-(11 report exact106; one intentionally reports84), refreshes projections and
+Startup applies PostgreSQL migrations, initializes50 synthetic Friends identities
+(49 report exact106; one intentionally reports84), refreshes projections and
 collects local static assets. It **does not enroll any device in paid beta**.
 Re-running `seed_demo` validates/reuses the same fixture without creating new
-identities or payment events. Synthetic private identity keys are discarded after
-the normal activation flow; they are not stored in PostgreSQL or served by UI.
+identities or payment events after the one-time guarded12→50 fixture expansion.
+Expansion retains the original12 identities, invite bindings and paid events. Synthetic private identity keys are discarded after
+fixture generation; they are not stored in PostgreSQL or served by UI.
 
 `prepare_local.py` stages an explicit source-only build context at
 `.local/build-context`. Docker never traverses the parent repository's state,
@@ -39,7 +121,8 @@ APKs, profiles, `.env`, credentials or backups. Re-run preparation before rebuil
 after source changes. Docker image bases are digest-pinned; Python dependencies
 are transitively pinned with hashes. Runtime does not mount the checkout or any
 production directory. Local named volumes retain PG workflow and synthetic
-registry independently; no services on authorized gateway hosts are contacted.
+registry independently. Django does not contact authorized gateway hosts; the
+separate operator-only read-only collector described below does.
 
 Only the console's HTTP port is published, on **127.0.0.1**. PostgreSQL has no
 published port and uses an internal Docker network. The console additionally uses
@@ -102,8 +185,8 @@ There are no free-form diagnostic uploads or payment-provider webhooks.
    logs/messages or personal payment details. Charts aggregate recorded operations,
    observed backend states and version observations, not invented live telemetry.
 
-Only a staff account with the relevant permission can act. `Control-plane viewers`
-have read access; `Control-plane operators` may record/confirm synthetic payments,
+Only a staff account with the relevant permission can act. `Наблюдатели панели`
+have read access; `Операторы панели` may record/confirm synthetic payments,
 preview/execute/reconcile, and edit cohort/incident metadata. Superusers manage
 accounts/groups. Readback/operation/payment/audit/release Admin screens are read-only;
 generic Admin edits cannot bypass workflow. Metadata changes also append audit;

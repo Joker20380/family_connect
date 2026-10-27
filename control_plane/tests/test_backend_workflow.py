@@ -29,7 +29,7 @@ def test_real_postgresql_and_no_subscription_models(console):
     assert connection.vendor == 'postgresql'
     names = connection.introspection.table_names()
     assert not any('subscription' in name or name == 'paid_beta_events' for name in names)
-    assert len(backend.members()) == DeviceProjection.objects.count() == 12
+    assert len(backend.members()) == DeviceProjection.objects.count() == 50
     assert counts() == (0, 0)
 
 
@@ -125,7 +125,7 @@ def test_uncertain_without_receipt_never_automatically_retries(console, operatio
 
 
 def test_projection_cannot_grant_entitlement_or_override_version(console, operation):
-    device = DeviceProjection.objects.get(label='Synthetic 12')
+    device = DeviceProjection.objects.get(label='Демо 12')
     fake = dict(device.readback)
     fake['status'] = dict(cohort=True, effective_state='active', paid_allow=True)
     fake['version_observation']['version_code'] = 106
@@ -138,7 +138,7 @@ def test_projection_cannot_grant_entitlement_or_override_version(console, operat
 
 
 def test_cap_is_enforced_by_real_backend(console, operation):
-    for number, device in enumerate(DeviceProjection.objects.exclude(label='Synthetic 12')):
+    for number, device in enumerate(DeviceProjection.objects.exclude(label='Демо 12')):
         request = workflow.prepare(console, operation(device=device).pk)
         if number < 10:
             assert workflow.execute(console, request.pk, workflow.confirmation_token(console, request)).status == 'APPLIED'
@@ -222,7 +222,7 @@ def test_seed_is_idempotent_without_paid_or_identity_mutation(console, operation
 def test_viewer_cannot_prepare_execute_or_confirm(console, operation):
     request = operation()
     viewer = get_user_model().objects.create_user(username='viewer', is_staff=True)
-    viewer.groups.add(Group.objects.get(name='Control-plane viewers'))
+    viewer.groups.add(Group.objects.get(name='Наблюдатели панели'))
     for callback in (lambda: workflow.prepare(viewer, request.pk), lambda: workflow.execute(viewer, request.pk, ''),
                      lambda: workflow.confirm_payment(viewer, request.payment_id)):
         with pytest.raises(PermissionDenied):

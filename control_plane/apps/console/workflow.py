@@ -6,7 +6,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from . import backend
-from .models import AuditRecord, CohortMetadata, DeviceProjection, OperationRequest, PaymentRecord
+from .models import AuditRecord, CohortMetadata, DeviceProjection, OperationRequest, PaymentRecord, OperationSwitch
 
 
 class WorkflowError(Exception):
@@ -123,6 +123,8 @@ def execute(actor, request_id, token):
         request = OperationRequest.objects.select_for_update().get(pk=request_id)
         if request.status == 'APPLIED':
             return request
+        if OperationSwitch.objects.select_for_update().get(pk=1).stopped:
+            raise WorkflowError('EMERGENCY_STOP')
         if request.status != 'PREVIEWED' or request.previewed_by_id != actor.pk:
             raise WorkflowError('PREVIEW_REQUIRED_OR_RECONCILE')
         try:

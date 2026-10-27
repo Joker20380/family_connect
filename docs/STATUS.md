@@ -2,7 +2,22 @@
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
-**Current substep CONTROL-PLANE-0 — DONE / LOCAL SYNTHETIC ONLY.** Django/PostgreSQL
+**Current substep CONTROL-PLANE-1 — DONE / LOCAL SYNTHETIC + PRODUCTION-READONLY SNAPSHOTS.**
+Русский Django Admin/UI, 50 demo identities (paid cap10 неизменён), отдельные
+read-only inventory/server observations и synthetic technical samples, фильтры/
+charts/drill-down, timestamp/freshness, emergency stop новых demo dispatch.
+Friends paid_beta остаётся единственной authority; production snapshots не могут
+попасть в payment workflow. Read-only SSH collection двух разрешённых шлюзов:
+RU54 devices, NL registry UNAVAILABLE (не пустой); server metrics наблюдались.
+95 PostgreSQL console +76 unchanged-backend tests PASS; Chromium desktop/mobile,
+русский payment→preview→confirm и stop/resume PASS. Реальная client telemetry/
+continuous monitoring/alerts не подключены: отсутствующие показатели = null,
+не0/100%. Production writes/deployment/payment/enrollment0; Android106/backend/
+public catalog неизменны. [Отчёт и границы](releases/2026-10-27-android106-control-plane-1.md),
+[runbook](../control_plane/README.md). STOP; NEXT — review и только фактические
+Android controlled-beta launch blockers, не автоматический rollout.
+
+**Принятый вход CONTROL-PLANE-0 — DONE / LOCAL SYNTHETIC ONLY.** Django/PostgreSQL
 management console over accepted PAID-ENTITLEMENT-MVP; no second subscription state
 machine. Friends registry/paid_beta remain authority; PG stores workflow, payment/
 cohort/incident/audit/release metadata and timestamped read-only projections.

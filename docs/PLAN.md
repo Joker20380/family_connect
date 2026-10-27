@@ -3,7 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-**Current substep CONTROL-PLANE-0: DONE / LOCAL SYNTHETIC ONLY.** Dependency —
+**Current substep CONTROL-PLANE-1 — DONE / LOCAL SYNTHETIC + PRODUCTION-READONLY.**
+Dependency: accepted CONTROL-PLANE-0 at `a948d2328b5bd419b7d88be04b719c1dc6e16646`.
+Gate: русский Admin/UI; 50 synthetic identities без изменения paid cap10/authority;
+раздельный production-readonly inventory/fleet snapshots; technical telemetry models,
+charts/filters/drill-down с явными unknown/stale boundaries; no production writes.
+Gate met:95 PostgreSQL console +76 existing backend tests PASS, Chromium desktop/mobile
+PASS. RU54 устройств наблюдались; NL registry недоступен; server stats read-only.
+Client production telemetry/continuous alerts не собираются; production deployment,
+real payments/enrollment NOT_RUN. Android106/backend/catalog unchanged.
+[Checkpoint](releases/2026-10-27-android106-control-plane-1.md),
+[runbook](../control_plane/README.md). Не новый PLAN root и не paid launch acceptance.
+
+**Принятый вход CONTROL-PLANE-0: DONE / LOCAL SYNTHETIC ONLY.** Dependency —
 accepted PAID-ENTITLEMENT-MVP at `ac90a2ac2f9e053b367bc3f7dde1711e94fd24a6`.
 Django/PostgreSQL console, not a new product/PLAN root. Source of truth remains
 Friends registry/paid_beta; no subscription ORM/state-machine duplication.
@@ -65,7 +77,7 @@ debt, не Android launch blocker. Linux installed acceptance только от�
 не запускать P0/P1/Auto/AppImage lifecycle/L05/L06 и не публиковать Linux artifacts.
 
 **STOP. NEXT — закрыть только фактические Android controlled-beta launch blockers.**
-Следующий конечный этап: review CONTROL-PLANE-0, затем только фактические Beta-0
+Следующий конечный этап: review CONTROL-PLANE-1, затем только фактические Beta-0
 blockers в отдельно разрешённом bounded checkpoint. Paid-aware server/synthetic
 acceptance/recovery и operational/security gates не закрыты локальной консолью.
 Никаких production connections/deploy/реальных платежей/enrollment автоматически;

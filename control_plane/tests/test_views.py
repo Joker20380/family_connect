@@ -25,7 +25,7 @@ def test_staff_pages_are_local_and_synthetic(console, client, path):
     assert result['Cache-Control'] == 'no-store'
     assert "default-src 'self'" in result['Content-Security-Policy']
     if path != '/analytics.json':
-        assert b'SYNTHETIC' in result.content
+        assert 'ДЕМО' in result.content.decode()
 
 
 def test_csrf_and_no_get_mutations(console, operation):
@@ -83,7 +83,7 @@ def test_nonstaff_and_viewer_permissions(console, client, operation):
     request = operation()
     for is_staff in (False, True):
         user = get_user_model().objects.create_user(username='viewer-' + str(is_staff), is_staff=is_staff)
-        user.groups.add(Group.objects.get(name='Control-plane viewers'))
+        user.groups.add(Group.objects.get(name='Наблюдатели панели'))
         client.force_login(user)
         assert client.get('/').status_code == (200 if is_staff else 403)
         assert client.post(reverse('console:preview', args=[request.pk])).status_code == 403
@@ -94,7 +94,7 @@ def test_analytics_never_fabricates_live_rates_or_recalculates_paid_state(consol
     client.force_login(console)
     data = client.get('/analytics.json').json()
     assert data['live_crash_rate'] is None and data['live_mesh_success_rate'] is None
-    assert data['states'] == {'non-cohort': 12}
+    assert data['states'] == {'non-cohort': 50}
     assert len(data['daily']) == 7 and 'read-only projections' in data['scope']
 
 

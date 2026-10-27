@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import sqlite3
 import time
+import uuid
 
 from django.conf import settings
 
@@ -13,7 +14,7 @@ from control.friends.access import Access
 from device_identity.device import DeviceIdentity
 
 ROOT = settings.BASE_DIR / '.local' / 'synthetic'
-FIXTURE_VERSION = 'CONTROL-PLANE-0-SYNTHETIC-v1'
+FIXTURE_VERSION = 'CONTROL-PLANE-1-SYNTHETIC-v2'
 
 
 class BackendError(Exception):
@@ -31,13 +32,14 @@ def checked_path():
     return path
 
 
-def guard(database):
+def guard(database, *, legacy=False):
     try:
         marker = database.execute('SELECT version FROM control_plane_fixture WHERE singleton=1').fetchone()
         count = database.execute('SELECT count(*) FROM devices').fetchone()[0]
         known = database.execute('SELECT count(*) FROM control_plane_devices').fetchone()[0]
         unexpected = database.execute('SELECT device FROM devices EXCEPT SELECT device FROM control_plane_devices').fetchone()
-        if marker is None or marker[0] != FIXTURE_VERSION or count != 12 or known != count or unexpected:
+        version = 'CONTROL-PLANE-0-SYNTHETIC-v1' if legacy else FIXTURE_VERSION
+        if marker is None or marker[0] != version or count != (12 if legacy else 50) or known != count or unexpected:
             raise BackendError('SYNTHETIC_FIXTURE_REQUIRED')
     except sqlite3.Error:
         raise BackendError('SYNTHETIC_FIXTURE_REQUIRED') from None
@@ -62,8 +64,21 @@ def seed_fixture():
     with (ROOT / 'seed.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         if (ROOT / 'registry.sqlite3').exists():
-            with registry():
-                return
+            with paid_beta.connection(checked_path(), write=True) as database:
+                marker = database.execute('SELECT version FROM control_plane_fixture WHERE singleton=1').fetchone()
+                if marker and marker[0] == 'CONTROL-PLANE-0-SYNTHETIC-v1':
+                    guard(database, legacy=True)
+                    for number in range(13, 51):
+                        identity = DeviceIdentity.generate()
+                        database.execute('INSERT INTO devices(device,public,wg,tcp,revoked) VALUES (?,?,?,?,0)',
+                            (identity.reference, identity.public_identity, identity.wireguard_public_key, str(uuid.uuid4())))
+                        database.execute('INSERT INTO invites(hash,device,revoked) VALUES (?,?,0)',
+                            (Access.code_hash(uuid.uuid4().hex), identity.reference))
+                        add_member(database, identity.reference, number)
+                    database.execute('UPDATE control_plane_fixture SET version=?', (FIXTURE_VERSION,))
+                    database.execute("UPDATE control_plane_devices SET label=replace(label,'Synthetic ','Демо ')")
+                guard(database)
+            return
         temporary = ROOT / 'initializing.sqlite3'
         if temporary.exists():
             raise BackendError('INCOMPLETE_FIXTURE_REQUIRES_REVIEW')
@@ -74,17 +89,21 @@ def seed_fixture():
             database.execute('CREATE TABLE control_plane_fixture(singleton INTEGER PRIMARY KEY, version TEXT NOT NULL)')
             database.execute('INSERT INTO control_plane_fixture VALUES (1,?)', (FIXTURE_VERSION,))
             database.execute('CREATE TABLE control_plane_devices(device TEXT PRIMARY KEY REFERENCES devices(device), label TEXT NOT NULL)')
-        for number in range(1, 13):
+        for number in range(1, 51):
             identity = DeviceIdentity.generate()
             challenge = access.challenge(identity.public_identity, identity.wireguard_public_key, 'activate', access.invite())
             access.complete(identity.prove_transport_key(challenge['challenge']), 'activate')
             with access.db() as database:
-                support_ids.registered(database, identity.reference)
-                database.execute('INSERT INTO control_plane_devices VALUES (?,?)', (identity.reference, f'Synthetic {number:02d}'))
-                database.execute('UPDATE device_support SET platform=?,app_version=?,version_code=?,last_seen=? WHERE device=?',
-                    ('android', paid_beta.VERSION if number != 12 else '0.1.18-beta84',
-                     106 if number != 12 else 84, int(time.time()), identity.reference))
+                add_member(database, identity.reference, number)
         temporary.rename(ROOT / 'registry.sqlite3')
+
+
+def add_member(database, device, number):
+    support_ids.registered(database, device)
+    database.execute('INSERT INTO control_plane_devices VALUES (?,?)', (device, f'Демо {number:02d}'))
+    database.execute('UPDATE device_support SET platform=?,app_version=?,version_code=?,last_seen=? WHERE device=?',
+        ('android', paid_beta.VERSION if number != 12 else '0.1.18-beta84',
+         106 if number != 12 else 84, int(time.time()), device))
 
 
 def members():

@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class ConsoleConfig(AppConfig):
     name = 'apps.console'
-    verbose_name = 'Beta-0 operations · synthetic only'
+    verbose_name = 'Операции Beta-0 · только демо'
