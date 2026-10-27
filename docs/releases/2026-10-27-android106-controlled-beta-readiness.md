@@ -1,5 +1,15 @@
 # Android106 controlled paid beta — readiness, 2026-10-27
 
+## Subsequent Beta-0 scope decision
+
+Owner subsequently limited Beta-0 to10 existing activated identities on exact106
+or new106 installs, private verified handoff and manually confirmed payments.
+Older-version upgrades and external acquiring are excluded from this first scope,
+not newly accepted. The historical gate table below is retained; current Beta-0
+scope, implemented paid server model/operator, tests and remaining launch blockers
+are in the [PAID-ENTITLEMENT-MVP checkpoint](2026-10-27-android106-paid-entitlement-mvp.md).
+No APK change/deployment/real paid enrollment. Linux remains PAUSED/non-blocking.
+
 ## Owner decision and result
 
 **Current critical path: ANDROID-CONTROLLED-BETA. Preparation checkpoint DONE;

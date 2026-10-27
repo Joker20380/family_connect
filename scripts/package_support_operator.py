@@ -8,10 +8,14 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def build(output, source=ROOT):
+def build(output, source=ROOT, *, operator='support'):
+    if operator not in ('support', 'paid-beta'):
+        raise ValueError('Unknown operator')
     paths = json.loads((source / 'deploy/friends/restricted/runtime-files.json').read_text())
     paths = sorted(set(paths + ['control/friends/support_admin.py', 'control/friends/restricted_admin.py']))
-    content = {'__main__.py': b'from control.friends.support_admin import main\nmain()\n'}
+    entrypoint = ('from control.friends.paid_beta_admin import main\nraise SystemExit(main())\n'
+                  if operator == 'paid-beta' else 'from control.friends.support_admin import main\nmain()\n')
+    content = {'__main__.py': entrypoint.encode()}
     for name in paths:
         path = source / name
         if (Path(name).is_absolute() or '..' in Path(name).parts or path.suffix != '.py'
@@ -34,8 +38,9 @@ def build(output, source=ROOT):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--operator', choices=('support', 'paid-beta'), default='support')
     args = parser.parse_args()
-    print(json.dumps(build(args.output), sort_keys=True))
+    print(json.dumps(build(args.output, operator=args.operator), sort_keys=True))
 
 
 if __name__ == '__main__':

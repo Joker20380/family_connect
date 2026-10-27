@@ -3,8 +3,9 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-Preparation checkpoint DONE; controlled paid launch **BLOCKED** только на
-фактических Android gates в [readiness report](releases/2026-10-27-android106-controlled-beta-readiness.md).
+Preparation и **PAID-ENTITLEMENT-MVP source checkpoint DONE / NOT_DEPLOYED**;
+controlled paid launch **BLOCKED** только на фактических Beta-0 gates в
+[MVP report](releases/2026-10-27-android106-paid-entitlement-mvp.md).
 Dependencies: exact accepted signed106/reference, owner-accepted
 **ANDROID106-MESH-FIELD-1 PASS**, read-only canonical activation/admission lookup.
 Положительный field result: real external user/whitelist network/ordinary app/MESH;
@@ -16,13 +17,27 @@ vault/identity reload×3 не заменяет full installed APK upgrade и т�
 Новый authenticated106 READY ACK отделён от stale support84; production device
 не менялся. Никаких Android source changes/rebuild/signing/publication автоматически.
 
-Completion gate: все14 минимальных launch rows закрыты exact evidence. Осталось:
-authorized in-place upgrade fixture (state/Keystore/history/settings/no re-invite/
-MESH/three launches), paid subscription state/payment audit/expiry enforcement,
-approved private delivery и safe recovery rehearsal, terms/privacy/subscription,
-explicit opt-in first cohort, monitoring/stop review. Existing activation→MESH
-automation PASS не является paid entitlement PASS.105 rollback APK сохранён,
-но forced downgrade/uninstall/reset запрещены; updater60 не доставляет106.
+Owner Beta-0 scope: максимум10 existing activated Friends devices, new106 installs
+или already106, exact accepted APK без rebuild; older-version users исключены.
+Private verified handoff, manual payments/operator events; external acquiring API
+и older-version upgrade не Beta-0 prerequisites (не PASS). Новый top-level ID нет.
+
+Bounded PAID-ENTITLEMENT-MVP: отдельные мигрируемые subscription/event tables,
+atomic paid opt-in/cap10/idempotency, server effective state и private operator CLI
+DONE. Non-cohort admission unchanged; paid state rechecked challenge/fetch,
+certificate/readiness capped by entitlement/material expiry.243 targeted PASS,
+10 nginx skips/8 external-integration deselections; no general CI claim. No live
+migration/deployment/payment/cohort mutation, no Android source/APK/wire changes.
+[Runbook](paid-beta.md) separates private receipts/operator attestation from remote
+signer proof and documents existing-cache/CRL revocation bounds.
+
+Completion gate: applicable14 launch rows under Beta-0 scope need exact evidence.
+Remaining: review/authorize paid-aware server deployment + empty-cohort regression
+and synthetic106 payment/expiry/revoke/CRL/session/recovery acceptance; approved
+private handoff/opt-in roster/operator, legal/subscription text, monitoring/stop
+ownership. Source tests do not prove live paid enforcement. No pre-paid backend
+rollback with nonempty cohort; saved105 does not authorize downgrade/uninstall/
+reset. Public updater60/catalog unchanged; no launch or payment collection yet.
 
 **Linux L04.2 PAUSED / NON-BLOCKING DESKTOP ENGINEERING, не DONE.**
 R3 SOURCE GATE DONE/review accepted; .11 CONSTRUCTION DONE/frozen internal candidate,
@@ -36,7 +51,9 @@ debt, не Android launch blocker. Linux installed acceptance только от�
 не запускать P0/P1/Auto/AppImage lifecycle/L05/L06 и не публиковать Linux artifacts.
 
 **STOP. NEXT — закрыть только фактические Android controlled-beta launch blockers.**
-Этот readiness checkpoint не начинает их реализацию автоматически.
+Следующий конечный этап: review MVP и отдельно разрешённый bounded server/synthetic
+acceptance/recovery checkpoint. Этот source checkpoint не начинает deploy/реальные
+платежи/enrollment автоматически; никакой новый top-level PLAN ID не создаётся.
 
 ### Предыдущие priority/ops records — исторические, не активные NEXT
 

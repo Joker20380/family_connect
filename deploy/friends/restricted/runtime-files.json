@@ -3,6 +3,8 @@
   "control/friends/access.py",
   "control/friends/support_ids.py",
   "control/friends/restricted.py",
+  "control/friends/paid_beta.py",
+  "control/friends/paid_beta_admin.py",
   "control/friends/readiness_receipts.py",
   "control/friends/restricted_admin.py",
   "control/friends/restricted_sync.py",

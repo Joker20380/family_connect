@@ -11,9 +11,15 @@ Entries below are an evidence/runbook index; historical NEXTs are not current as
 **ANDROID-CONTROLLED-BETA** replaces Linux as critical path. FIELD-1 owner PASS
 covers real external whitelist-network MESH use, not desktop parity. Exact signed
 APK/reference/metadata verified; read-only activation/admission active, newer106
-READY ACK distinguished from stale support84.49 backend +20 JVM PASS bounded;
-full installed upgrade, paid subscription/payment/expiry, delivery/recovery and
-legal/cohort/monitoring gates remain BLOCKED. No Android source change or rollout.
+READY ACK distinguished from stale support84.49 backend +20 JVM PASS historical;
+[PAID-ENTITLEMENT-MVP](releases/2026-10-27-android106-paid-entitlement-mvp.md) now
+implements atomic paid cohort/model/audit/operator and challenge/fetch expiry caps:
+243 targeted PASS,10 skips/8 deselections, **NOT_DEPLOYED**. [Private operator
+runbook](paid-beta.md). Owner Beta-0: cap10 existing activated identities on exact106,
+private handoff/manual payments; older-version upgrade and external acquiring are
+out of first-beta scope, not newly PASS. Paid-aware live/synthetic106 acceptance,
+safe recovery, delivery/opt-in, legal and monitoring/stop gates remain BLOCKED.
+No Android source change, APK rebuild, real paid enrollment or rollout.
 Linux L04.2 **PAUSED / NON-BLOCKING DESKTOP ENGINEERING**, not DONE: R3 source
 gate accepted, .11 construction frozen/read-only; installed package/live acceptance
 NOT_RUN. Receipt filename collision is existing D02/CI debt, not an Android blocker.

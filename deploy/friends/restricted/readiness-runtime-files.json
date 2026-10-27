@@ -4,6 +4,7 @@
   "control/friends/access.py": "control/friends/access.py",
   "control/friends/support_ids.py": "control/friends/support_ids.py",
   "control/friends/restricted.py": "control/friends/restricted.py",
+  "control/friends/paid_beta.py": "control/friends/paid_beta.py",
   "control/friends/readiness_receipts.py": "control/friends/readiness_receipts.py",
   "control/friends/readiness_adapter.py": "control/friends/readiness_adapter.py",
   "control/friends/readiness_fixture.py": "control/friends/readiness_fixture.py",

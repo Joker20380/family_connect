@@ -8,6 +8,7 @@
   "control/friends/notices.py",
   "control/friends/referrals.py",
   "control/friends/restricted.py",
+  "control/friends/paid_beta.py",
   "control/friends/readiness_receipts.py",
   "device_identity/__init__.py",
   "device_identity/device.py",

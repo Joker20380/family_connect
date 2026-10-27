@@ -22,7 +22,7 @@ from cryptography.x509.oid import ExtendedKeyUsageOID, NameOID
 from device_identity.device import verify_transport_key_proof
 from provisioning.friends_catalog import fields, key, parse, require
 from .access import Rejected, CHALLENGE_TTL
-from . import readiness_receipts
+from . import paid_beta, readiness_receipts
 
 DOMAIN = b'family-connect/restricted-issuer/v1\0'
 PROTOCOL = 'family-connect-5n3-test-v1'
@@ -251,6 +251,7 @@ def migrate(access):
         database.execute('CREATE TABLE IF NOT EXISTS restricted_certificates ('
                          'device TEXT NOT NULL, revision INTEGER NOT NULL, serial TEXT PRIMARY KEY, '
                          'expires INTEGER NOT NULL, certificate TEXT NOT NULL)')
+        paid_beta.migrate(database)
 
 
 class RestrictedReadiness:
@@ -297,6 +298,19 @@ class RestrictedReadiness:
         return activated_grant(database, device, trust['family'], trust['minimum_revision'])
 
     def _grant(self, database, device, now):
+        row = self._legacy_grant(database, device, now)
+        subscription = paid_beta.effective_subscription_state(database, device, now)
+        if subscription is None:
+            return row
+        subscription = paid_beta.effective_subscription_state(database, device, max(now, int(self.access.clock())))
+        if not subscription.allowed:
+            raise Rejected()
+        result = dict(row)
+        result['paid_beta_until'] = subscription.expires_at
+        result['expires'] = min(row['expires'], subscription.expires_at) if row['expires'] is not None else subscription.expires_at
+        return result
+
+    def _legacy_grant(self, database, device, now):
         if getattr(self, 'all_activated', False):
             return self._activated_grant(database, device, now)
         if self.eligible_devices is not None and device not in self.eligible_devices and '*' not in self.eligible_devices:
@@ -369,7 +383,8 @@ class RestrictedReadiness:
                 raise Rejected()
             issued = max(now - readiness_receipts.CLOCK_SKEW_SECONDS, trust['issued_at'], int(authority.not_valid_before_utc.timestamp()))
             expires = min(issued + self.delivery_lifetime, row['expires'] if row['expires'] is not None else trust['expires_at'], trust['expires_at'], int(crl.next_update_utc.timestamp()))
-            if self.delivery_lifetime == MAX_TEST_LIFETIME:
+            paid = 'paid_beta_until' in row.keys()
+            if self.delivery_lifetime == MAX_TEST_LIFETIME or paid:
                 expires = min(expires, timestamp(seeds['expires_at']))
             database.execute('DELETE FROM restricted_certificates WHERE expires<=?', (now,))
             current = database.execute('SELECT serial FROM restricted_certificates WHERE device=? AND revision=?',
@@ -378,6 +393,11 @@ class RestrictedReadiness:
                 raise Rejected()
             previous = database.execute('SELECT * FROM restricted_certificates WHERE device=? AND revision=? '
                                         'AND expires>? ORDER BY expires DESC LIMIT 1', (device, row['revision'], now + 300)).fetchone()
+            if paid and previous is not None:
+                retained = x509.load_pem_x509_certificate(previous['certificate'].encode())
+                retained.verify_directly_issued_by(authority)
+                if int(retained.not_valid_after_utc.timestamp()) > expires:
+                    previous = None
             if previous is None or (self.delivery_lifetime == MAX_TEST_LIFETIME and previous['expires'] < expires):
                 certificate = self._issue(row, authority, now, expires)
                 pem = certificate.public_bytes(Encoding.PEM).decode()

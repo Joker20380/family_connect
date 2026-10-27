@@ -27,17 +27,30 @@ revoked=false, MESH eligible; более новый authenticated ACK26.10 21:00
 сообщает106/READY (старый support snapshot84 не текущий). APK bytes/signer на
 устройстве и точное время field use не аттестованы; новых invite/записей0.
 
-**Preparation checkpoint DONE; controlled paid launch BLOCKED.**49 locked backend
-и20 JVM checks PASS, включая synthetic retained-vault/identity cold owners×3;
-это не full APK upgrade/settings/history/Keystore/three-launch PASS. ADB targets0,
-production device untouched. Trial/active/grace/expired/revoked/payment audit и
-paid expiry не реализованы в live Friends path; existing all_activated игнорирует
-legacy grant expiry. Saved signed105 verified, но downgrade не принят как safe
-rollback. Public signed updater still60/sequence1;106 только internal handoff.
-Delivery, non-destructive recovery, commercial text, opt-in cohort и monitoring/
-stop criteria остаются launch gates. Полный green repository suite не prerequisite.
-[Единственный readiness report, exact artifacts и14 gates](releases/2026-10-27-android106-controlled-beta-readiness.md).
+**ANDROID-CONTROLLED-BETA / PAID-ENTITLEMENT-MVP — source checkpoint DONE,
+NOT_DEPLOYED; controlled paid launch BLOCKED.** Owner Beta-0: максимум10 existing
+activated Friends identities, только exact106 (new106 install/already106), private
+verified handoff, manual confirmed payment/operator event. Older-version upgrade и
+external acquiring исключены из Beta-0, не новые PASS/launch blockers. APK неизменён.
+Отдельные paid subscription/event tables, atomic opt-in/cap10/idempotent audit,
+trial/active/grace/expired/revoked effective state и private CLI реализованы.
+Без paid row прежняя admission/all_activated семантика сохранена; paid challenge и
+fetch повторно проверяют entitlement, certificate/response ограничены paid/crypto
+expiry. No automatic trial/grace, identity/invite/activation/client changes.
+243 targeted PASS,10 nginx skips,8 external-integration deselections; не overall CI.
+Ранее49 backend/20 JVM остаются историческими, не full installed upgrade PASS.
+Production DB/deployment/payment/cohort mutations0; live paid enforcement NOT_RUN.
+Старый certificate/session не отзывается мгновенно: действуют signed expiry/CRL
+propagation; paid-aware deployment/empty-cohort + synthetic106 expiry/revoke/recovery
+rehearsal остаются gate. Нельзя rollback на pre-paid backend при nonempty cohort.
+Saved signed105 verified, downgrade не safe rollback. Public updater60/sequence1
+не менялся. Delivery/opt-in roster, legal text, monitoring/stop ownership открыты.
+[Readiness/artifacts](releases/2026-10-27-android106-controlled-beta-readiness.md),
+[MVP result and finite blockers](releases/2026-10-27-android106-paid-entitlement-mvp.md),
+[private operator runbook](paid-beta.md).
 **STOP. NEXT — закрыть только фактические Android controlled-beta launch blockers.**
+Следующий bounded этап — review MVP и отдельно разрешённый server/synthetic
+acceptance/recovery checkpoint; не автоматический deploy/enrollment/сбор оплаты.
 
 ## Предыдущие записи — evidence, не активные NEXT
 
