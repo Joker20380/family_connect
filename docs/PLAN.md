@@ -21,15 +21,6 @@ precheck; own shadowed drop-in removed without another restart. Old service heal
 timer disabled/pre-paid; live propagation/session acceptance remains a launch gate.
 [Exact evidence and finite next gate](releases/2026-10-27-android106-control-plane-2.md).
 
-Bounded L04.2-R2 authorization continuation27.10: указанный вход91d5184 уже выполнен
-в f417982. Exact GUI agent позволил пройти ready:2, но P0 остановился на readiness;
-70b919b сохранил FETCH_FAILED/EXPIRED_ON_IMPORT без установленной fetch cause.
-В этом проходе только documentation/read-only artifact reconciliation, не новый
-runtime gate: повторный Connect/setup/Phase B/build NOT_RUN. P1/Auto/lifecycle/
-AppImage sharing не разрешаются до P0 PASS. L04.2-R2 PARTIAL, без нового ID/R3;
-STOP; NEXT — final review L04.2-R2. [Evidence](releases/2026-10-26-linux-mesh-failure-preservation-l04-2-r2.md).
-Android critical path и CP2 deployment blocker сохранены, .11 не затронут.
-
 **Принятый вход CONTROL-PLANE-1 — DONE / LOCAL SYNTHETIC + PRODUCTION-READONLY.**
 Dependency: accepted CONTROL-PLANE-0 at `a948d2328b5bd419b7d88be04b719c1dc6e16646`.
 Gate: русский Admin/UI; 50 synthetic identities без изменения paid cap10/authority;
