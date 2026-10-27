@@ -363,3 +363,26 @@ unrelated work remains excluded. Secret scan, strict JSON, links, staged scope a
 whitespace checks precede the ordinary documentation/evidence commit and push.
 
 **STOP. NEXT — review L04.2-R3 full-suite baseline/environment comparison.**
+
+## Review acceptance — package progression authorized
+
+Input main623cdb290c23243a69000675c28824e56512bb62; accepted product source
+2d125137b28e096187433608022daa1590d7a6f0. **R3 SOURCE GATE DONE / review accepted
+for package progression**. This supersedes the preceding baseline STOP, not its
+raw evidence. Full suite remains **55 FAIL/3373 PASS/105 SKIP/0 ERROR**; no overall
+CI PASS. Accepted decomposition: common35, local-only1 known lock/umask case,
+Docker-only19 historical fixture-input absences. Actual55 is the exact union,
+new/missing IDs0. The19 stop before product assertions and are classified
+ENVIRONMENT_FIXTURE_INPUT_ABSENT, existing D02.1-R/CI debt. Separating them leaves
+the accepted local36 baseline. Union55 is **not** a new permanent baseline.
+
+Full suite is not rerun; historical capsules are not copied/fabricated, and no
+test assertion/skip/xfail or product source is changed for this normalization.
+Go race, cleanup32, native15, combined3, MESH157, desktop1317/82 existing skips,
+Android/Python143 and canonical workflow40491350035 SUCCESS remain accepted.
+Proceed in the same L04.2-R3 task with offline native/system, bounded reference
+advancement and internal0.2.12~l03.2.11, package gates, then one corrected live P0
+only after package PASS. No separate source checkpoint or review pause.
+Historical .10/system and authorized READY/protected state stay immutable;
+owner workstation NOT_USED. L05/messages/voice acceptance/signing/publication
+remain NOT_RUN. No server/material/policy changes are authorized here.
