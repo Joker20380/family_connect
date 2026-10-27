@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**L04.2 — R3 SOURCE GATE DONE / review accepted for package progression.**
+**L04.2 — R3 PARTIAL / PACKAGE_GATE_FAILED (environment harness finalization).**
 R2 FINAL PARTIAL / READINESS_CAUSE_UNRESOLVED accepted: diagnostic collapse
 hid the original fetch cause. No further live Connect on .10. R3 is a bounded
 subtask of L04.2, not a new top-level PLAN ID. Input70b919b; R1/R2 runtime169aa68
@@ -25,7 +25,10 @@ Source gate DONE/review accepted; continue new native/system, bounded reference
 advancement and internal .11 package gates, then one corrected P0 only after PASS.
 New native/system34b27cb9 construction/readback and reference gates PASS;
 reference/candidate tests46 PASS. .11 candidate570a5515/system34b27cb9 built and sealed, source_dirty=false;
-package/live acceptance pending. Sealed internal/unpublished .10 remains
+embedded candidate/system equality PASS/container exit0; launcher exit1 on
+root-owned receipt overwrite (ENVIRONMENT_HARNESS_FINALIZATION). No product defect
+established; no replay/harness patch. Remaining installed package/live gates
+NOT_RUN. Containers removed; .10/.11/READY/protected seven byte-identical. Sealed internal/unpublished .10 remains
 4264406722f6dd3efb83e9d9666e67180ce4f950333bb3e711bcbb4f5068b55a;
 incorrect historical task suffix is not an artifact identity. Phase B/setup/GUI
 authorization evidence retained, not replayed. No server/material/policy changes.
@@ -33,7 +36,7 @@ READINESS_RELAY_PROBE_CORRELATION_GAP belongs to L06; direct correlation rows
 cannot count relay requests. No RNS/wire expansion. Owner workstation NOT_USED.
 L04 IN_PROGRESS; L04.1 DONE; L05/messages/voice/signing/publication NOT_RUN.
 [Current R3 report](releases/2026-10-27-linux-readiness-cause-preservation-l04-2-r3.md).
-**NEXT — L04.2-R3 exact .11 installed package gates, then corrected P0 after PASS.**
+**STOP. NEXT — review L04.2-R3 package-harness finalization.**
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted (owner review).**
 Exact **0.2.12~l03.2.9** установлен; candidate/package/system checks PASS,

@@ -124,8 +124,68 @@
     "reference": "PASS"
   },
   "owner_workstation": "NOT_USED",
-  "candidate": "NOT_BUILT",
-  "package_gates": "NOT_RUN",
+  "candidate": {
+    "acceptance": "NOT_RUN",
+    "artifacts": {
+      "FamilyConnect-0.2.12~l03.2.11-x86_64.AppImage": {
+        "sha256": "92ff5a79f61d8d29e32596d8333d0880f1fe60803d831de418cad63952517a5d",
+        "size": 58116600
+      },
+      "FamilyConnect-Linux-0.2.12~l03.2.11.tar.gz": {
+        "sha256": "8adeda8e6af059100d1254c40db186fd4d8abd7812090c33af38271c575c3a70",
+        "size": 114647
+      },
+      "FamilyConnect_0.2.12~l03.2.11_amd64.deb": {
+        "sha256": "1976d2bfe13cc0efc421e7cfcdf52bd301ed725168e743c0b32d372422ab062f",
+        "size": 56148076
+      }
+    },
+    "authorization_protocol": 2,
+    "build_id": "570a5515173d66b9a25cd9f01f76e72f492a41acb1f341ee95368aac62e78252",
+    "compatibility": {
+      "distribution": "ubuntu",
+      "interpreter": "/usr/bin/python3",
+      "python": [
+        3,
+        14
+      ],
+      "version": "26.04"
+    },
+    "installed": false,
+    "internal_version": "0.2.12~l03.2.11",
+    "published": false,
+    "python": [
+      3,
+      14
+    ],
+    "runtime_contract": 2,
+    "schema": 1,
+    "signing": "unsigned-internal-candidate",
+    "source_commit": "adf81057b21798a4041779658a69c57f680cdd68",
+    "source_dirty": false,
+    "source_version": "0.2.11",
+    "system": {
+      "build_id": "34b27cb97abb149b9a59f7ea4ad2ea2e9b79aab5e4e9345c064b6a98d20e5db8",
+      "installer_sha256": "ce9acb1f363b0fafffb11c44097901a7871c28fbf0e6b9c2c5c3eaba9ef7bfb5",
+      "sha256": "4794ae4d8bb0b794aced081b4c330595e18aeaf334ba6b787c248daaa5725ae4",
+      "size": 49251389,
+      "source_digest": "2292c24503ed0b275d2c296100dbca4572973cf3dce41d12e22645154ca9c833"
+    },
+    "system_kind": "standard-source-rebuild",
+    "system_source_commit": "2d125137b28e096187433608022daa1590d7a6f0"
+  },
+  "package_gates": {
+    "embedded": {
+      "embedded_candidate_byte_identical": true,
+      "embedded_system_byte_identical": true,
+      "candidate": "570a5515173d66b9a25cd9f01f76e72f492a41acb1f341ee95368aac62e78252",
+      "system": "34b27cb97abb149b9a59f7ea4ad2ea2e9b79aab5e4e9345c064b6a98d20e5db8"
+    },
+    "reference_tests": {
+      "passed": 46,
+      "failed": 0
+    }
+  },
   "live": "NOT_RUN",
   "system_installed": false,
   "logs": {
@@ -133,7 +193,11 @@
     "readiness-race.log": "b4572090e6176ba931bccafd7ff0f63532bf8f6b730ba97aaf6b57d601348a2a",
     "reference-gates.log": "cf25c0725be4634fb6376adff4291450d56efcadd4b16bcd04ad653a82fc7db7",
     "reference-tests.log": "8d5041452db0200229224c0878bb696bc5a1b0f6da1aa98ea09c8a5998f7bbfe",
-    "reference-tests.xml": "aa6c21e34511cba19802fe5cdc9067a2e95fdd15e224174dc16e81e4f8c05e53"
+    "reference-tests.xml": "aa6c21e34511cba19802fe5cdc9067a2e95fdd15e224174dc16e81e4f8c05e53",
+    "candidate-build.log": "7c386514c7dc46d7db3a5b51e2420a48f8e6b8e8832a31dc6ee381b35792d44a",
+    "embedded.log": "119326184af7f97b613136e306c9ed050bf8f9421623d74a719b46e2da6247f4",
+    "embedded.json": "fd22aa0699ff5be8c4a29efffca77ae552164f65f95cbbd9c20a5a995fdae70e",
+    "embedded-container-die.jsonl": "8c12313b4754c33132e13d2cc359bffc86ede56afd8545f3f089f3dc864adb9c"
   },
   "immutable_state": {
     "current_main": "623cdb290c23243a69000675c28824e56512bb62",
@@ -157,5 +221,109 @@
     "protected_seven_unchanged": true,
     "owner_workstation": "NOT_USED",
     "connect_count": 0
+  },
+  "reference_advancement_commit": "adf81057b21798a4041779658a69c57f680cdd68",
+  "delivery_documentation_commit": "91406d958e43adb3d3b2ad27bfb97c0962916ec3",
+  "final": {
+    "result": "PARTIAL / PACKAGE_GATE_FAILED",
+    "classification": "ENVIRONMENT_HARNESS_FINALIZATION",
+    "stage": "EMBEDDED_RECEIPT_FILENAME_COLLISION",
+    "exception": "PermissionError",
+    "errno": 13,
+    "embedded_assertions": "PASS",
+    "embedded_container_exit": 0,
+    "outer_launcher_exit": 1,
+    "durable_receipt_owner": "root:root",
+    "durable_receipt_mode": "0644",
+    "reason": "Inner gate created embedded.json; unprivileged outer launcher attempted to overwrite the same receipt path after container removal",
+    "replay": false,
+    "harness_patched_after_run": false,
+    "product_defect_established": false,
+    "scripts_unchanged": true,
+    "containers_remaining": 0,
+    "remaining_package_gates": {
+      "system": "NOT_RUN",
+      "deb": "NOT_RUN",
+      "appimage": "NOT_RUN",
+      "rollback": "NOT_RUN",
+      "awg": "NOT_RUN",
+      "tcp": "NOT_RUN",
+      "cleanup32": "NOT_RUN",
+      "readiness": "NOT_RUN",
+      "mesh": "NOT_RUN",
+      "native15": "NOT_RUN",
+      "combined3": "NOT_RUN",
+      "desktop": "NOT_RUN"
+    },
+    "live": {
+      "P0": "NOT_RUN",
+      "P1": "NOT_RUN",
+      "Auto": "NOT_RUN",
+      "lifecycle": "NOT_RUN",
+      "AppImage_sharing": "NOT_RUN",
+      "Connect_count": 0
+    },
+    "preservation": {
+      "historical_artifacts": "BYTE_IDENTICAL",
+      "candidate_11": "BYTE_IDENTICAL / READ_ONLY",
+      "system_11": "BYTE_IDENTICAL",
+      "ready_base": "BYTE_IDENTICAL / READ_ONLY",
+      "protected_seven": "BYTE_IDENTICAL",
+      "product_runtime_tests_locks": "UNCHANGED",
+      "ready_base_used_writable": false,
+      "private_state_used_by_gate": false
+    },
+    "owner_workstation": "NOT_USED",
+    "L05": "NOT_RUN",
+    "messages": "NOT_RUN",
+    "voice_acceptance": "NOT_RUN",
+    "signing": "NOT_RUN",
+    "publication": "NOT_RUN"
+  },
+  "appimage_prerequisites": {
+    "appimagetool": {
+      "size": 15092216,
+      "sha256": "95cbe7cce9717fce90c484e34052ee7c7f1d7635b33c12525b4776826a7d29b6",
+      "version": "appimagetool, continuous build (git version 854e19e), build 313 built on 2026-10-04 14:58:08 UTC",
+      "architecture": "x86-64",
+      "source_revision": "854e19e951900cf141245b384d45735942521abe"
+    },
+    "release_id": 417724209,
+    "runtime_target_commit": "fedfad51acc2860b2916a1eef32ba4a500ff31ef",
+    "assets": {
+      "runtime-x86_64": {
+        "asset_id": 657374641,
+        "size": 944632,
+        "sha256": "617aa77314d57c8b8e4fae9c3f0b35af7b30d5529cb69e98f64f92510ed98a46"
+      },
+      "runtime-x86_64.sig": {
+        "asset_id": 657374763,
+        "size": 119,
+        "sha256": "4c38bbfd3c8fe7b43cd37483544e5aa682b5932674d89e53fcccd2d3fc3a8f12"
+      },
+      "signing-pubkey.asc": {
+        "asset_id": 657374839,
+        "size": 685,
+        "sha256": "db8b615eb5bbf5e8418d52906b4a492960926370e2c5041ad6acaccda56ef0c6"
+      }
+    },
+    "runtime_signature": "VALIDSIG pinned public key"
+  },
+  "harness_sha256": {
+    "embedded.py": "f74fd0768d5bb96fe85f23eec1ca62f30fa115a92109d3351bbc6ec6bb171aca",
+    "embedded.sh": "0dd3571466a943d66d836fb494e2159e433006c310485c86e26832d265ac08ab",
+    "deb.sh": "b95e39086d30920ea6c208e6ae59d02eefef9e393251b614f8dd3013008210c7",
+    "appimage.sh": "49b40c000a4bffcb4f722fc1f4cb84f9d6937b17d498b72ac2c7d685c3ac9b1b",
+    "awg.sh": "08b73b30890b08aaa06c4d2a4003e124741136ba40766e1cc5ed4cfe79b6de3f",
+    "tcp.sh": "d3df8a18ac317b570c7d964931974299d3049c7344fb1a7ab51d6f651d958542",
+    "system.sh": "5d4026fb2b395f1b8abf9a91e88bd576a20c5ca896cd7b6e115178b50eb99326",
+    "rollback.sh": "8e18218f0ae88eb4dae3e0a141935cb34dda09a7559fc6d232cb9b140c831561",
+    "cleanup32.sh": "a3caa0e7de09c888fd5e66a918c0e8339131ebd950317c31204c37da19c15b95",
+    "readiness.sh": "2ef6d14f06038c34f78b1fe8a1a896a3de74c9464fe68bac7b3871324dc90308",
+    "mesh.sh": "c1df8be1d290f66cd9751bf6efeede3f1e096f058d3da9ce72a7175fe98976cd",
+    "native15.sh": "6ceb50dde4c27127b30545169704aacc43898b626206c1fc4bef50f88d0f9f91",
+    "combined3.sh": "875aa6eb2762c6b03d8917b159ec1ee016461f76b27c46ceb40edbae6f684f33",
+    "desktop.sh": "c137d35dc97db4b7df73c7ea753e3d85013e9ec72696758a19fb1bd83282c8f7",
+    "launcher": "5dde9382f3311431b03367d61d0a4c32905cbeee81c7d29f493ffecb441f1a19"
   }
 }

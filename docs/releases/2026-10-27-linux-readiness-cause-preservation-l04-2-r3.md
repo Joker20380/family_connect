@@ -1,16 +1,19 @@
 # L04.2-R3 — readiness cause preservation and bounded retry
 
-Status: **PARTIAL / SOURCE_GATE_FAILED — exact full-suite baseline mismatch**.
+Status: **PARTIAL / PACKAGE_GATE_FAILED — ENVIRONMENT_HARNESS_FINALIZATION**.
 Same PLAN L04.2; no new top-level ID.
 Input main `70b919bba0aac1249c6d2c5a6e220e1ee0ae058d`.
 Accepted R2 runtime `169aa687f497f8be690be5331879f994636135e1`.
 
-Latest continuation input `0a37d23177d6aa10c0e38fd52a45a652f4e60615`: runtime
-source2d125137 remains review accepted in affected scope, unchanged. The reviewed
-Go-cache environment blocker is closed and Android/Python143 PASS; canonical
-readiness CI SUCCESS. Full55 does not exactly match historical36/54; see final
-comparison below. No new product defect is established. The earlier evidence below
-is preserved, not presented as a second active task or a current product defect.
+Latest continuation input `623cdb290c23243a69000675c28824e56512bb62`: source gate
+DONE/review accepted for package progression; raw full suite remains FAIL, not
+overall CI PASS. Review separates local36 from environment fixture-absent19;
+union55 is not a new baseline. Runtime2d125137 remains unchanged. New native/
+system, bounded reference and exact .11 construction PASS. First embedded
+integrity gate assertions/container exit0 PASS, but the outer launcher exits1
+when overwriting the root-owned inner receipt. No installed package or live gate
+follows. This is an environment/harness failure, not an established product defect.
+The earlier evidence below remains historical, not a second active task.
 
 ## Review and immutable boundary
 
@@ -69,8 +72,8 @@ observed the old Supervisor during explicit later resolve; the test now starts a
 separate actual Supervisor after confirmed cleanup. No existing assertion,
 native timing contract or production path was relaxed.
 
-The targeted correction passes, but the mandatory gate below stops progression.
-No package progression is authorized by targeted-test results alone.
+The initial targeted correction alone did not authorize package progression.
+The later source-gate review acceptance and package continuation are recorded below.
 
 ## Relay observability debt
 
@@ -477,3 +480,61 @@ construction. Owner installed/public/invitation versions are unchanged; no publi
 download/catalog link, signature or rollout. Rollback target for disposable
 package gates is the exact immutable .10/system8ab7f298 pair, never a .10 live
 Connect. Next: affected package gates, then corrected P0 only after complete PASS.
+
+## Package harness finalization STOP
+
+The first package gate extracts the exact DEB and AppImage, compares embedded
+candidate.json bytes and both embedded system archives against the complete
+new system artifact. All assertions pass; durable sanitized inner receipt
+confirms candidate570a5515/system34b27cb9 equality. The retained Docker terminal
+event independently records **container exit0**. No installed system, polkit
+setup, VPN action or private identity is used by this extraction-only gate.
+
+The outer launcher then removes the disposable container and attempts to write
+its own execution summary to **the same `embedded.json` path** already created
+by the inner root process with root:root/mode0644. The ordinary host user cannot
+overwrite that file: **PermissionError, errno13**, launcher exit1. This is a
+private orchestration receipt-name/ownership collision; it is not an artifact
+integrity failure. The original assertion receipt is preserved. No raw secret,
+credentials or private state is involved. Outer exit1 is not reported as PASS.
+
+| Gate | Actual outcome |
+|---|---|
+| Source gate | DONE / review accepted; no full-suite replay |
+| Standard native seven packages + carrier readiness race | PASS |
+| RNS, dependency/license inventory, system/archive readback | PASS |
+| Bounded reference positive/negative gates; candidate/system unit tests | PASS;46 PASS |
+| Exact .11 DEB/AppImage/legacy construction and checksums | PASS; source_dirty=false |
+| Embedded DEB/AppImage candidate/system equality | PASS; inner container exit0 |
+| Package harness finalization | FAIL_ENVIRONMENT; outer exit1; receipt collision |
+| Installed system/DEB/AppImage, pkexec, reinstall/remove, rollback, mixed system | NOT_RUN after stop |
+| New .11 package AWG/TCP, cleanup/readiness/native/combined/MESH/full-desktop selections | NOT_RUN after stop; prior accepted source evidence retained |
+| Corrected live P0/P1/Auto, lifecycle, installed AppImage sharing | NOT_RUN; Connect count0 |
+
+All executed scripts retain their sealed hashes; no running script was edited,
+renamed or appended. The launcher hash is
+5dde9382f3311431b03367d61d0a4c32905cbeee81c7d29f493ffecb441f1a19.
+The failed gate is not replayed, and neither product source nor the harness is
+patched after the stop. A separate final accounting receipt records the failure
+without overwriting the inner receipt. All task containers are removed; no VM
+is created or booted and no privileged product owner/TUN was started. Prepared
+remaining scripts are not evidence of execution or PASS.
+
+Final readback: exact .11 artifacts/system and historical .10/system are
+byte-identical; .11 delivery files are read-only. The retained READY image remains
+read-only and retains SHA25647095296a9b4352450c2c5b79a875ea76a5064f1e142bc84e781147b6ce5ac68;
+original protected seven files are byte-identical. Identity/cache/floors/settings/
+keyring/store are not opened or changed in this continuation. Product/runtime/
+tests/locks/pins remain accepted2d125137; only the authorized reference fields
+advance. No server/material/policy change, .10 Connect, owner-workstation action,
+message, voice acceptance, L05, signing or publication. Full raw suite remains
+55 FAIL/3373 PASS/105 SKIP/0 ERROR; overall CI PASS is not claimed.
+
+**Result: L04.2-R3 PARTIAL / PACKAGE_GATE_FAILED**, typed substage
+`ENVIRONMENT_HARNESS_FINALIZATION / EMBEDDED_RECEIPT_FILENAME_COLLISION`.
+L04/L04.2 are not DONE. This does not revoke the accepted source gate or invent a
+new runtime checkpoint/version. New construction is complete but installed
+acceptance remains open. Ordinary commit/push follows secret/JSON/link/scope/
+whitespace checks; unrelated work is excluded.
+
+**STOP. NEXT — review L04.2-R3 package-harness finalization.**
