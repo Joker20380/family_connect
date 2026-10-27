@@ -47,9 +47,28 @@ upgrade, backend deployment or production connection is performed.
 Unrelated unstaged operational notes remain untouched, including one pre-existing
 missing Markdown anchor found by the working-tree check; the staged link gate passes.
 
-Lookup-only packaging is performed from the exact committed source after this gate;
-its deterministic receipt is recorded below when verified. Prior artifacts/evidence
-remain untouched; no bound or time-bound write-permit archive is built.
+### Dispatch lookup-only artifact
+
+Source/tests/docs committed and pushed as
+`ad086c030cc77c680d924fb9c8e37faa286adc4c`; remote main SHA independently verified.
+Two independent builds from that exact committed source are byte-identical.
+
+| Field | Verified value |
+|---|---|
+| Source commit |`ad086c030cc77c680d924fb9c8e37faa286adc4c` |
+| Binding / envelope |`lookup_only` / null |
+| Members / size |15 /56017 bytes |
+| SHA256 |`63ffe0f1ac4dad0c15a94558423de4eab2a5aff754167e8108d75064bb95d308` |
+| Strict manifest / exact member hashes / committed-source equality |PASS |
+| Non-wrapper source members unchanged from accepted49bdd794 |PASS |
+| Python syntax / strict JSON / private-selector scan |PASS |
+| Import and --help smoke outside repository import path |PASS |
+| Historical c5f2346c artifact unchanged |PASS |
+| Bound/write-permit archive / production registry opened |NOT_BUILT / NOT_OPENED |
+
+Both new artifacts are read-only inside private ignored evidence. Historical
+artifacts/evidence remain untouched. Smoke executes only --help; no lookup, status,
+apply or registry connection. No binding, credential or permit is included.
 
 **STOP. NEXT — obtain the exact-payload CRL delivery helper contract, complete its
 source gate, then read-only owner lookup/binding and coordinated phone preparation.**
