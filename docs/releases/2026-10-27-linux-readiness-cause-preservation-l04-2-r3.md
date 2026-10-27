@@ -1,13 +1,15 @@
 # L04.2-R3 — readiness cause preservation and bounded retry
 
-Status: **IN_PROGRESS / source gate continuation**. Same PLAN L04.2; no new top-level ID.
+Status: **PARTIAL / SOURCE_GATE_FAILED — exact full-suite baseline mismatch**.
+Same PLAN L04.2; no new top-level ID.
 Input main `70b919bba0aac1249c6d2c5a6e220e1ee0ae058d`.
 Accepted R2 runtime `169aa687f497f8be690be5331879f994636135e1`.
 
 Latest continuation input `0a37d23177d6aa10c0e38fd52a45a652f4e60615`: runtime
 source2d125137 remains review accepted in affected scope, unchanged. The reviewed
 Go-cache environment blocker is closed and Android/Python143 PASS; canonical
-readiness CI and full-suite comparison still gate progression. The earlier evidence below
+readiness CI SUCCESS. Full55 does not exactly match historical36/54; see final
+comparison below. No new product defect is established. The earlier evidence below
 is preserved, not presented as a second active task or a current product defect.
 
 ## Review and immutable boundary
@@ -284,8 +286,9 @@ existing canonical readiness workflow: readiness Go files/locks, native material
 Linux material/supervisor boundary, desktop diagnostics/R3 test and control lock.
 Jobs, commands, actions, tools, assertions and timeout are unchanged. This is a
 CI/evidence commit, **not a new product-source checkpoint**. Canonical GitHub
-workflow result is PENDING; full-suite failure-ID comparison is NOT_RUN until it
-succeeds. No overall CI/source gate PASS is claimed yet.
+workflow result was PENDING at the coverage commit; its final SUCCESS and the
+subsequent full-suite comparison are recorded below. No overall CI/source gate
+PASS is inferred from this targeted workflow.
 
 Exact .10/system, read-only READY base and protected seven files remain unchanged;
 owner workstation NOT_USED. New system/.11/package/live, L05/messages/voice
@@ -294,3 +297,69 @@ acceptance/signing/publication remain NOT_RUN. No server/material/policy changes
 **NEXT — canonical readiness workflow SUCCESS, then full-suite comparison.**
 Only complete source gate PASS permits the already-authorized .11/package/live
 continuation; the same L04.2-R3 task remains active.
+
+## Canonical CI SUCCESS; full-suite exact-baseline STOP
+
+Coverage/evidence commit `e93bf7ddc76504e857ffaeffc8558c1a8526e780` was pushed and
+the remote main SHA verified. Initial ordinary push encountered transient DNS
+resolution failure; the next ordinary non-force push succeeded, without resolver
+or workstation-network changes.
+
+Canonical [Android Friends readiness wire contract run40491350035](https://github.com/Joker20380/family_connect/actions/runs/40491350035)
+is **completed / SUCCESS**, attempt1, exact commit e93bf7d, golden job122145788727.
+All setup, Gradle, Android/Python contract and post-job steps report success. Its
+existing commands/tool versions/timeout remain unchanged; only bounded trigger
+paths changed. This canonical workflow result is separate from the local exact
+143-test selection and is not an overall repository CI PASS.
+
+The full repository then ran once, without selection/deselection, xfail, removed
+assertions or suppression, in the retained Ubuntu26.04/Python3.14.4 full-suite
+image, private network namespace, exact Go1.26.0/offline caches and Java17.0.13+11.
+The source is a clean tracked export of e93bf7d; synthetic release fixtures bind
+that same commit. Retained fresh Gradle classes/JARs are reused; Gradle is not
+rerun locally. The test image differs from the Python3.13 Android-only gate;
+neither result is mislabeled as the other environment.
+
+Full result: **55 FAIL /3373 PASS /105 SKIP /0 ERROR**,7 subtests PASS, exit1,
+254.67s. Existing conditional skips remain unsuppressed; their observed count is
+105, not the earlier local99. No skip marker or test configuration was changed.
+
+| Comparison | New IDs relative to that baseline | Missing baseline IDs | Exact match |
+|---|---|---|---|
+| Accepted local36 |19 |0 |NO |
+| Accepted phase0/Docker54 |1 |0 |NO |
+| Union of historical36 and54 |0 |0 |55-ID union only; **not adopted as a new baseline** |
+
+The19 additional local IDs are six mobile-bootstrap TransportBridgeTest cases,
+six owner-disconnect DeadlineBridgeTest cases, six inherited bridge cases and
+the tunnel-restart health fixture. All stop with FileNotFoundError on historical
+untracked source-capsule paths absent from the clean tracked export, before their
+product assertions. All19 IDs already occur in the historical Docker54 receipt.
+The single ID additional to Docker54 is
+`clients/desktop/tests/test_chat_direct_runtime.py::test_unit_umask_fresh_runtime_and_real_uid[lock]`,
+already present in the accepted local36 receipt. Thus **no novel failure/error ID
+relative to the historical union and no new product defect are established**.
+
+Nevertheless55 exceeds both historical counts and matches neither exact accepted
+environment baseline. The checkpoint does not silently combine them to claim
+source-gate PASS. The [updated cache-closure receipt](2026-10-27-linux-readiness-cause-preservation-l04-2-r3/cache-closure.json)
+contains both complete baseline ID sets, actual IDs, differences, canonical CI
+IDs, counts and log/XML SHA256. No historical fixture tree is fabricated/copied
+to hide these failures; full suite is not rerun and no product/test patch follows.
+
+Result remains **PARTIAL / SOURCE_GATE_FAILED** at
+`FULL_SUITE_EXACT_BASELINE_MISMATCH`. New native/system/reference advancement/.11,
+package gates and corrected P0/P1/Auto/lifecycle/AppImage remain **NOT_BUILT /
+NOT_RUN**. No new version, system/candidate ID or artifact hash is invented.
+There is no deployment or rollback to perform.
+
+Final readback: tracked tested source unchanged; current product/runtime/tests/
+locks still byte-identical to accepted2d125137. Exact .10/system artifacts,
+read-only READY base and protected seven files retain their hashes. All test
+containers have exited. Owner workstation NOT_USED; no VM boot, live .10 Connect,
+server/material/policy change, message, voice acceptance, L05, signing or publication.
+STATUS/PLAN/index and this report/evidence are updated under the same L04.2 ID;
+unrelated work remains excluded. Secret scan, strict JSON, links, staged scope and
+whitespace checks precede the ordinary documentation/evidence commit and push.
+
+**STOP. NEXT — review L04.2-R3 full-suite baseline/environment comparison.**

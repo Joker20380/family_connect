@@ -7,15 +7,16 @@ Entries below are an evidence/runbook index; historical NEXTs are not current as
 [L04.2-R3 readiness cause preservation](releases/2026-10-27-linux-readiness-cause-preservation-l04-2-r3.md)
 continues existing PLAN L04.2. R2 is FINAL PARTIAL / READINESS_CAUSE_UNRESOLVED;
 its Phase B/setup/GUI authorization and immutable .10 evidence remain accepted.
-No further live Connect on .10. R3 source gate continuation is IN_PROGRESS: preserve typed
+No further live Connect on .10. R3 remains PARTIAL / SOURCE_GATE_FAILED: preserve typed
 availability failure independently of FETCH_FAILED receipt, preserve validated
 cache fallback, bound cooldown-only supervisor retry. Exact Go/native/MESH/cleanup
 and desktop1317+82skip pass; reviewed Gson/cache harness blockers resolved. Retained
 Gradle171 is not rerun; offline Go cache closure and Android/Python143 PASS.
-Canonical readiness CI PENDING; full-suite comparison and .11/system/package/live
-NOT_RUN. READINESS_RELAY_PROBE_CORRELATION_GAP is L06 debt; no server,
+Canonical readiness run40491350035 SUCCESS. Full suite55/3373/105 does not exactly
+match historical36/54 sets; no new IDs vs their union, but no union waiver.
+.11/system/package/live NOT_RUN. READINESS_RELAY_PROBE_CORRELATION_GAP is L06 debt; no server,
 material, policy or wire changes. Owner workstation NOT_USED; L05/messages/voice
-acceptance/signing/publication NOT_RUN. NEXT: canonical readiness CI and full-suite comparison.
+acceptance/signing/publication NOT_RUN. STOP. NEXT: review R3 baseline/environment comparison.
 The accepted
 [core P0 failure](releases/2026-10-26-linux-installed-mesh-auto-l04-2-core.md)
 is not replayed on .9. Historical reports and .9/system bytes remain immutable.

@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**L04.2 — R3 IN_PROGRESS / source gate continuation.**
+**L04.2 — R3 PARTIAL / SOURCE_GATE_FAILED (exact baseline mismatch).**
 R2 FINAL PARTIAL / READINESS_CAUSE_UNRESOLVED accepted: diagnostic collapse
 hid the original fetch cause. No further live Connect on .10. R3 is a bounded
 subtask of L04.2, not a new top-level PLAN ID. Input70b919b; R1/R2 runtime169aa68
@@ -15,8 +15,12 @@ Go-cache blockers are environment-only. Retained Gradle171/classpath/JAR integri
 and read-only javap PASS, no Gradle replay. Offline Go module verify/dependency
 list/validator compile close the cache prerequisite; one authorized Android/Python
 selection now143 PASS/0 FAIL/0 ERROR/0 SKIP. Bounded readiness workflow path
-coverage added; canonical GitHub result PENDING. Full-suite comparison NOT_RUN;
-mandatory source gate not yet closed. .11 NOT_BUILT,
+coverage commite93bf7d; canonical GitHub run40491350035 SUCCESS. Full suite:
+55 FAIL/3373 PASS/105 SKIP,0 ERROR,7 subtests; exact local36/Docker54 sets do not
+match. Nineteen extra vs local are missing historical source-fixture paths in
+clean export; extra vs Docker is the already-known local chat-direct lock case.
+No new ID vs their union, but union55 is not accepted as a replacement baseline.
+No replay/source fix. Mandatory source gate remains open. .11 NOT_BUILT,
 new system/package/live NOT_RUN. Sealed internal/unpublished .10 remains
 4264406722f6dd3efb83e9d9666e67180ce4f950333bb3e711bcbb4f5068b55a;
 incorrect historical task suffix is not an artifact identity. Phase B/setup/GUI
@@ -25,7 +29,7 @@ READINESS_RELAY_PROBE_CORRELATION_GAP belongs to L06; direct correlation rows
 cannot count relay requests. No RNS/wire expansion. Owner workstation NOT_USED.
 L04 IN_PROGRESS; L04.1 DONE; L05/messages/voice/signing/publication NOT_RUN.
 [Current R3 report](releases/2026-10-27-linux-readiness-cause-preservation-l04-2-r3.md).
-**NEXT — canonical readiness CI, then full-suite ID comparison; build only after complete source gate PASS.**
+**STOP. NEXT — review L04.2-R3 full-suite baseline/environment comparison.**
 
 **OWNER-CHAT-UX-2-INSTALL — PARTIAL / owner-use accepted (owner review).**
 Exact **0.2.12~l03.2.9** установлен; candidate/package/system checks PASS,
