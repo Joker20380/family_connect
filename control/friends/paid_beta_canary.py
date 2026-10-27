@@ -155,7 +155,9 @@ def apply(path, key, envelope, now):
         before = sanitized_status(database, selector, envelope, now)
         if previous is None:
             validate_envelope(envelope)
-            require(permit['not_before'] <= now < permit['not_after'], 'EXECUTION_WINDOW_CLOSED')
+            require(permit['not_before'] <= now < permit['not_after']
+                    and (not recovery or 0 <= now - permit['period_start'] < 300),
+                    'RECOVERY_DISPATCH_WINDOW_CLOSED' if recovery else 'EXECUTION_WINDOW_CLOSED')
             version = permit['expected_version']
             require(before['version'] == before['event_count'] == version, 'STALE_CANARY_PERMIT')
             if recovery:
@@ -166,8 +168,6 @@ def apply(path, key, envelope, now):
                 require(subscription is not None and subscription['state'] == 'active' and database.execute(
                     "SELECT count(*) FROM paid_beta_events WHERE device=? AND event_type='payment'", (device,)).fetchone()[0] == version,
                     'NATURAL_EXPIRY_REQUIRED')
-                require(permit['period_start'] == now and permit['paid_until'] == now + RECOVERY_SECONDS,
-                        'INVALID_RECOVERY_PERIOD')
             elif version in (1, 3):
                 require(before['effective_state'] == 'expired', 'EXPIRY_NOT_OBSERVED')
             if not recovery and version == 2:

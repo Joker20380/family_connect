@@ -18,9 +18,11 @@ credentials preserved.118 PostgreSQL console +76 affected backend tests PASS.
 Source-only context permissions corrected for restrictive umask (2 tests).
 Bounded HMAC-token-only canary wrapper and committed-source packaging implemented:
 Normal four-stage path unchanged; emergency recover added only for versions1/2
-after natural expiry with no valid certificate, exact30 days from server_now and
-execution window<=300s. Terminal reference_hash marker prohibits new operations
-after recovery; identical backend-payload replay alone remains allowed.68 canary
+after natural expiry with no valid certificate, exact30 days from permit.period_start
+and execution window<=300s. Bounded dispatch permits server delay0..299s without
+rebasing the payload; future/closed dispatch fails RECOVERY_DISPATCH_WINDOW_CLOSED.
+Terminal reference_hash marker prohibits new operations
+after recovery; identical backend-payload replay alone remains allowed.79 canary
 tests PASS; existing backend remains sole authority. No new schema/CRL action or
 generic Django production write. Source packaging is lookup_only; see report receipt.
 No production lookup/registry access/mutation, Android interaction, CRL or CP2 restart.
@@ -29,8 +31,10 @@ boundary/MESH Connect; natural expiry and new challenge/fetch/reconnect denial;
 active-session behavior; CRL generation/propagation; recovery/reconciliation and
 reactivation on the same identity; Android state preservation. All live stages NOT_RUN.
 Emergency recovery source gate complete; production/live acceptance remains NOT_RUN.
-NEXT — production lookup, binding and coordinated owner-phone procedure, not an
-automatic continuation of this source checkpoint. Final same-identity30-day active
+NEXT — obtain the exact-payload CRL delivery helper contract and finish its source
+gate before read-only lookup/binding and coordinated phone-procedure preparation.
+Preparation remains incomplete; live phone operations require owner ГОТОВ.
+Final same-identity30-day active
 recovery is a future live gate, not synthetic acceptance transferred to the phone.
 [Bounded checkpoint](releases/2026-10-27-android106-beta-0-canary-1.md).
 
@@ -139,8 +143,9 @@ debt, не Android launch blocker. Linux installed acceptance только от�
 не запускать P0/P1/Auto/AppImage lifecycle/L05/L06 и не публиковать Linux artifacts.
 
 **STOP. NEXT — закрыть только фактические Android controlled-beta launch blockers.**
-Следующий конечный этап — production lookup, binding и coordinated owner-phone live
-procedure в следующем разрешённом продолжении BETA-0-CANARY-1, не автоматически.
+Следующий конечный этап — контракт/source gate exact-payload CRL delivery helper,
+затем read-only lookup/binding и подготовка phone procedure в BETA-0-CANARY-1.
+Live procedure не начинать до owner ГОТОВ.
 Только OWNER_CANARY_1; customer payments/
 enrollment не разрешены. Ни одного live canary stage пока не выполнено. CP2 принят,
 бюджет consumed1 rollout/0 emergency; его deployment/migration/restart/gates не повторять.

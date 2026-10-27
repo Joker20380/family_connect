@@ -3,12 +3,13 @@
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
 Running local console upgraded through migration0006 after paired private backups
 and disposable restores;118 console +76 backend tests PASS. Single-token canary
-operator now SOURCE_READY_WITH_EMERGENCY_RECOVERY (68 tests); source-context umask
+operator now SOURCE_READY_WITH_EMERGENCY_RECOVERY (79 tests); source-context umask
 regressions2 PASS. Internal canary remains zero-value and outside customer revenue.
-Recovery from versions1/2 is exact30 days, certificate-guarded and terminal via an
-existing reference_hash marker; normal path unchanged. Live owner lookup/enrollment/
-expiry/CRL/recovery NOT_RUN. Next: lookup/binding/coordinated phone procedure, never
-automatic. No production change or private-selector persistence.
+Recovery from versions1/2 is exact30 days from permit start, permits dispatch delay
+0..299s, is certificate-guarded and terminal via an existing reference_hash marker;
+normal path unchanged. Live owner lookup/enrollment/expiry/CRL/recovery NOT_RUN.
+Next: CRL delivery helper contract/source gate, then read-only binding and phone
+preparation; live operations wait for owner ГОТОВ. No production change or selector persistence.
 
 [CONTROL-PLANE-2 — paid-aware production boundary](releases/2026-10-27-android106-control-plane-2.md):
 owner accepted **DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING**, не paid launch.

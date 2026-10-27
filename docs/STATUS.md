@@ -3,19 +3,22 @@
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
 **Current substep BETA-0-CANARY-1 — SOURCE_READY_WITH_EMERGENCY_RECOVERY / LIVE_NOT_RUN.**
-Emergency recovery source gate from68b99ac: recover only from versions1/2 after
-natural expiry, no valid bound certificate, exact server_now+2592000 period and
-at most300s execution window. Existing paid_beta payment/idempotency authority
+Bounded dispatch correction from3a5e91d over accepted emergency source49bdd794:
+recover only from versions1/2 after natural expiry, no valid bound certificate,
+exact2592000s permit period and at most300s execution window. First apply allows
+period_start<=server_now with dispatch delay0..299s, never rebases the period;
+future/closed dispatch fails RECOVERY_DISPATCH_WINDOW_CLOSED. Existing authority
 unchanged. Terminal reference_hash marker blocks all further normal/new recovery
 events; only the identical backend-payload replay remains allowed. No new schema,
 CRL mutation, identity/invite change or Django production adapter.
-68 canary +118 PostgreSQL console +76 affected backend +2 preparation tests PASS;
+79 canary +118 PostgreSQL console +76 affected backend +2 preparation tests PASS;
 Django system/drift checks PASS. Normal four-stage path retained. Packaging must
 remain lookup_only, from exact committed source; artifact receipt is in the report.
 Production lookup/registry access/binding/enrollment/CRL/Android/live operations
 NOT_RUN. No Friends restart/deployment, CP2 change or desktop work.
-STOP. NEXT — production lookup, binding and coordinated owner-phone live procedure,
-only in the next authorized continuation; do not start automatically.
+STOP. NEXT — obtain the exact-payload CRL delivery helper contract, complete its
+source gate, then read-only owner lookup/binding and phone-procedure preparation.
+Those preparation steps remain NOT_RUN; live phone operations wait for owner ГОТОВ.
 
 Historical local preparation at28657bf/68b99ac:
 Continuation from55c6a24: private PG+synthetic-volume backups and disposable restore

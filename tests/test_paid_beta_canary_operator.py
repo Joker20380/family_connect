@@ -244,7 +244,8 @@ def recovery_phase(registry, version):
 
 @pytest.mark.parametrize('version,classification', [
     (1, 'NATURAL_PHASE_ABORTED_OWNER_RECOVERED'), (2, 'CRL_PHASE_ABORTED_OWNER_RECOVERED')])
-def test_recovery_delegates_exact_period_preserves_state_and_sanitizes_output(registry, monkeypatch, version, classification):
+@pytest.mark.parametrize('delay', [0, 1, 150, 299])
+def test_recovery_delegates_exact_period_preserves_state_and_sanitizes_output(registry, monkeypatch, version, classification, delay):
     access, device, selector = registry
     now, request = recovery_phase(registry, version)
     before = snapshot(access)
@@ -257,7 +258,9 @@ def test_recovery_delegates_exact_period_preserves_state_and_sanitizes_output(re
         captured.append(copy.deepcopy(receipt))
         return receipt
     monkeypatch.setattr(paid_beta, 'apply_event', traced)
-    receipt = canary.apply(access.path, KEY, request, now)
+    original_request = copy.deepcopy(request)
+    receipt = canary.apply(access.path, KEY, request, now + delay)
+    assert request == original_request
     assert receipt['classification'] == classification and receipt['branch'] == 'emergency_recovery'
     assert receipt['effective_state'] == 'active' and receipt['paid_allow'] is True
     assert receipt['version'] == receipt['event_count'] == version + 1
@@ -270,6 +273,7 @@ def test_recovery_delegates_exact_period_preserves_state_and_sanitizes_output(re
         assert record == captured[0]['event']
         assert record['event_type'] == 'payment' and record['period_start'] == now
         assert record['paid_until'] == now + 2592000
+        assert record['applied_at'] == now + delay
         assert record['reference_hash'] == hashlib.sha256(reference.encode()).hexdigest()
     after = snapshot(access)
     for table in ('devices', 'invites', 'device_support'):
@@ -312,11 +316,16 @@ def test_recovery_rejects_every_non_30_day_period(registry, delta):
 
 @pytest.mark.parametrize('change,reason', [
     ('long_window', 'INVALID_EXECUTION_WINDOW'), ('empty_window', 'INVALID_EXECUTION_WINDOW'),
-    ('before_window', 'EXECUTION_WINDOW_CLOSED'), ('end_window', 'EXECUTION_WINDOW_CLOSED'),
-    ('past_start', 'INVALID_RECOVERY_PERIOD'), ('future_start', 'INVALID_RECOVERY_PERIOD'),
-    ('outside_start', 'INVALID_RECOVERY_PERIOD')])
-def test_recovery_requires_short_window_and_start_equal_server_now(registry, change, reason):
+    ('before_window', 'RECOVERY_DISPATCH_WINDOW_CLOSED'),
+    ('end_window', 'RECOVERY_DISPATCH_WINDOW_CLOSED'),
+    ('late_dispatch', 'RECOVERY_DISPATCH_WINDOW_CLOSED'),
+    ('short_window_end', 'RECOVERY_DISPATCH_WINDOW_CLOSED'),
+    ('future_start', 'RECOVERY_DISPATCH_WINDOW_CLOSED'),
+    ('start_at_window_end', 'RECOVERY_DISPATCH_WINDOW_CLOSED'),
+    ('outside_start', 'INVALID_RECOVERY_PERIOD'), ('before_start', 'INVALID_RECOVERY_PERIOD')])
+def test_recovery_requires_bounded_dispatch_and_execution_window(registry, change, reason):
     now, request = recovery_phase(registry, 1)
+    before = snapshot(registry[0])
     permit = request['permit']
     if change == 'long_window':
         permit['not_after'] = now + 301
@@ -326,14 +335,18 @@ def test_recovery_requires_short_window_and_start_equal_server_now(registry, cha
         now -= 1
     elif change == 'end_window':
         now += 300
+    elif change == 'late_dispatch':
+        now += 301
+    elif change == 'short_window_end':
+        permit['not_after'] = now + 2
+        now += 2
     else:
-        shift = {'past_start': -1, 'future_start': 1, 'outside_start': 301}[change]
-        permit['not_before'] -= 1 if change == 'past_start' else 0
-        permit['not_after'] -= 1 if change == 'past_start' else 0
+        shift = {'future_start': 1, 'start_at_window_end': 300, 'outside_start': 301, 'before_start': -1}[change]
         permit['period_start'] += shift
         permit['paid_until'] += shift
     with pytest.raises(paid_beta.PaidBetaError, match=reason):
         canary.apply(registry[0].path, KEY, request, now)
+    assert snapshot(registry[0]) == before
 
 
 @pytest.mark.parametrize('change', ['token', 'safe_ref', 'alias', 'key', 'other_device'])
@@ -478,17 +491,22 @@ def test_recovery_serializes_concurrent_replay_to_one_event(registry):
     assert all(receipt['event_count'] == receipt['version'] == 2 for receipt in receipts)
 
 
-def test_recovery_cli_uses_server_clock_without_rebasing_permit(registry, monkeypatch, capsys):
+@pytest.mark.parametrize('delay', [0, 1, 299])
+def test_recovery_cli_uses_server_clock_without_rebasing_permit(registry, monkeypatch, capsys, delay):
     access, device, selector = registry
     now, request = recovery_phase(registry, 1)
-    monkeypatch.setattr(canary.time, 'time', lambda: now + 1)
+    monkeypatch.setattr(canary.time, 'time', lambda: now + 300)
     def run():
         monkeypatch.setattr(sys, 'stdin', io.TextIOWrapper(io.BytesIO(json.dumps(dict(hmac_key=KEY.hex())).encode())))
         return canary.main(['--db', str(access.path), 'apply'], envelope=request)
     assert run() == 2
-    assert json.loads(capsys.readouterr().out)['reason'] == 'INVALID_RECOVERY_PERIOD'
-    monkeypatch.setattr(canary.time, 'time', lambda: now)
+    output = capsys.readouterr()
+    assert json.loads(output.out)['reason'] == 'RECOVERY_DISPATCH_WINDOW_CLOSED' and output.err == ''
+    monkeypatch.setattr(canary.time, 'time', lambda: now + delay)
     assert run() == 0
     output = capsys.readouterr()
-    assert json.loads(output.out)['branch'] == 'emergency_recovery' and output.err == ''
+    receipt = json.loads(output.out)
+    assert receipt['branch'] == 'emergency_recovery' and output.err == ''
+    assert receipt['paid_until'] == now + canary.RECOVERY_SECONDS
+    assert receipt['applied_at'] == now + delay
     assert all(secret not in output.out for secret in (selector, device.reference, KEY.hex(), 'internal-canary-recovery:'))

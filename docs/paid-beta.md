@@ -60,11 +60,16 @@ must contain no bound-device row with expires>server_now; no row/expiry/revision
 deleted or modified. Future live procedure must wait NotAfter+30s if any certificate
 was issued; this source wrapper neither sleeps nor performs a live CRL operation.
 
-Recovery period_start must equal server_now on first apply and paid_until must equal
-server_now+2592000 (exact30 days); the permit is never silently rebased. Its period
-start must be within the explicit execution bounds and window length is1..300 seconds.
-Other periods fail INVALID_RECOVERY_PERIOD. A delayed execution that misses its exact
-start also rejects; a fresh event is not a way to reconcile an uncertain prior commit.
+Recovery paid_until-period_start must equal2592000 (exact30 days). First apply allows
+period_start<=server_now and server_now-period_start<300; dispatch at the permit start
+or1..299 seconds later is allowed only while not_before<=server_now<not_after.
+The permit is never rebased: paid_until remains period_start+2592000, not execution
+time+2592000. Static bounds still require not_before<=period_start<=not_after and
+0<not_after-not_before<=300. Other periods fail INVALID_RECOVERY_PERIOD; invalid
+window lengths fail INVALID_EXECUTION_WINDOW. Future,300s-or-later or execution-window
+closed dispatch fails RECOVERY_DISPATCH_WINDOW_CLOSED. These new-event guards do not
+block identical terminal-event replay. A fresh event is not a way to reconcile an
+uncertain prior commit.
 
 Recovery delegates to unchanged paid_beta.apply_event as payment, with transient
 reference `internal-canary-recovery:<event_id>`; only its SHA256 is stored. The wrapper

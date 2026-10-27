@@ -1,6 +1,63 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
-## Emergency recovery source gate
+## Bounded recovery dispatch — source-only continuation
+
+**SOURCE_READY_WITH_EMERGENCY_RECOVERY / LIVE_NOT_RUN.** Input main
+`3a5e91d06977eb86fa78dec386477518fb5a0bfc`; accepted emergency source
+`49bdd794cce32075d93691daa0b9f9cc7f7dffcf`. Same checkpoint, no new PLAN ID.
+Only the practical dispatch guard, focused tests/docs and local lookup-only package
+change. This is not completion of the broader live-entry preparation.
+
+- New recovery first apply accepts `period_start<=server_now` and
+  `server_now-period_start<300`: execution at start or1..299 seconds later can pass.
+- Preserve exact `paid_until-period_start==2592000`, inclusive static period-start
+  bounds `not_before<=period_start<=not_after`, half-open execution window
+  `not_before<=server_now<not_after`, and `0<not_after-not_before<=300`.
+- Never rebase or extend the signed-off payload: expiry is30 days from permit start,
+  not30 days from delayed execution. Backend receives original period fields.
+- Future dispatch, delay>=300s or a closed execution window fails typed
+  `RECOVERY_DISPATCH_WINDOW_CLOSED` without inserting an event. Invalid duration or
+  static period bounds still fail `INVALID_RECOVERY_PERIOD`; invalid window length
+  still fails `INVALID_EXECUTION_WINDOW`.
+- Normal four-stage path, version/state/certificate/eligibility guards, backend
+  authority and terminal marker remain unchanged. Identical terminal recovery replay
+  bypasses new-event dispatch checks; changed payload remains `EVENT_ID_CONFLICT`.
+- Certificate/CRL state is not modified. Internal purpose/zero amount, sanitized
+  receipts and non-paid fingerprints remain unchanged.
+
+### Dispatch validation
+
+| Gate | Result |
+|---|---|
+| Canary operator tests |79 PASS |
+| PostgreSQL console tests / affected paid backend / preparation |118 /76 /2 PASS |
+| Django system check / migration drift |PASS / no changes detected |
+| Staged syntax / strict JSON / private-content scan |PASS |
+| Staged Markdown local links / anchors |444 /23 PASS |
+| Scoped staged diff / git diff --check |PASS |
+| Production lookup/registry/binding/write permits/live operations |NOT_RUN |
+
+Both recovery versions cover dispatch0/1/150/299s, unchanged payload/expiry and
+actual server applied_at. Negative tests cover future start,300/301s delay, shortened
+execution window, out-of-bounds period start and invalid duration/window length;
+rejections preserve registry snapshots. CLI tests use the server clock at0/1/299s,
+reject300s and prove no rebase. Existing idempotency/terminal/normal-path tests PASS.
+Console tests use a separate disposable local PostgreSQL test DB; no running-console
+upgrade, backend deployment or production connection is performed.
+Unrelated unstaged operational notes remain untouched, including one pre-existing
+missing Markdown anchor found by the working-tree check; the staged link gate passes.
+
+Lookup-only packaging is performed from the exact committed source after this gate;
+its deterministic receipt is recorded below when verified. Prior artifacts/evidence
+remain untouched; no bound or time-bound write-permit archive is built.
+
+**STOP. NEXT — obtain the exact-payload CRL delivery helper contract, complete its
+source gate, then read-only owner lookup/binding and coordinated phone preparation.**
+The helper contract was not supplied in this continuation and is not invented.
+No production lookup, binding, CRL generation/publication, Android action, payment,
+enrollment, Friends restart or CP2 change. Live phone operations wait for owner ГОТОВ.
+
+## Historical emergency recovery source gate —49bdd794
 
 **SOURCE_READY_WITH_EMERGENCY_RECOVERY / LIVE_NOT_RUN.** Input main
 `68b99ac667c78fa6f20f95ffa443cdbd7d1a5ef7`, accepted previous product source
