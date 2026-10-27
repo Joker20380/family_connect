@@ -59,6 +59,9 @@ class Handler(BaseHTTPRequestHandler):
      snapshot,node=synchronize(chat_access)
      if value['chat_public'] not in snapshot['public_keys']:raise Rejected()
      result.update(status='active',node=node)
+     from control.friends.chat_publishers import configured
+     publisher_config=configured(ROOT/'chat-publishers.json',result['device'],value['chat_public'],node['expires_at'],int(access.clock()))
+     if publisher_config is not None:result['publisher_configuration']=publisher_config
    elif self.path=='/friends/challenge':
     assert set(value)=={'public_identity','wireguard_public_key','purpose','invitation'}
     result=access.challenge(**value)

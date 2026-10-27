@@ -2,22 +2,21 @@
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
-**Current substep CONTROL-PLANE-2 — CHECKPOINT / DEPLOYMENT BLOCKED_SERVED_SOURCE_DRIFT.**
-Exact committed-source paid bundle from21dd8d7 built twice identically; runtime
-Python3.14.4 +5 dependency versions match production. Read-only preflight:
-RU54 devices, integrity/NTP PASS, paid tables absent = EXPECTED_PREDEPLOY_STATE,
-not an empty migrated schema. Private consistent registry backup + isolated SQLite
-restore PASS; application recovery NOT_RUN. Served archive21d64558… differs outside
-paid delta: candidate would remove2 deployed optional publisher modules and change
-3 other modules. No silent downgrade/import of off-branch code. Migration/deployment/
-Friends restart NOT_RUN; real paid rows/events0; registry/admission/identity unchanged.
-94 focused backend/bundle/backup/monitor tests +38 PostgreSQL observability tests
-PASS; not production-identical acceptance or general CI. Local user timer reads
-RU/NL and imports snapshots into existing Django; no remote monitoring deployment,
-no public console. NL registry remains UNAVAILABLE, not0; client telemetry not collected.
-[Report / exact hashes / remaining gate](releases/2026-10-27-android106-control-plane-2.md).
-STOP; NEXT — reconcile served-source baseline, then finish empty-cohort deployment
-and acceptance within this same substep. No real enrollment/payment authorized.
+**Current substep CONTROL-PLANE-2 — CHECKPOINT / SOURCE RECONCILED, ROLLOUT PENDING.**
+Owner-preserved publisher capability:2 exact generic modules recovered from retained
+source receipt, authenticated HTTP delivery restored byte-identically to served;
+current stricter catalog helpers and equivalent Access imports/API retained.
+Served21d64558…/PID/start/24-member inventory unchanged on fresh read-only recovery.
+Versioned exact served/candidate contract, not permissive path allowlist; candidate
+HTTPdcd76998…/25 members.160 focused reconciliation/catalog/access/chat/paid tests PASS,
+including synthetic application material+registry recovery/revoke/CRL. No prod data
+download or publisher entries; historical artifacts/backup unchanged. Fresh production
+backup/migration/one restart still pending. Live CRL sync timer disabled with pre-paid
+runtime: not changed, not live revocation PASS or permission for real billing.
+Read-only local monitoring continues; NL registry unavailable, not0. No Android change.
+[Current and immutable historical evidence](releases/2026-10-27-android106-control-plane-2.md).
+NEXT within same checkpoint: exact committed bundle and fresh empty-cohort rollout;
+no real subscription/payment/enrollment or gateway configuration change.
 
 **Принятый вход CONTROL-PLANE-1 — DONE / LOCAL SYNTHETIC + PRODUCTION-READONLY SNAPSHOTS.**
 Русский Django Admin/UI, 50 demo identities (paid cap10 неизменён), отдельные

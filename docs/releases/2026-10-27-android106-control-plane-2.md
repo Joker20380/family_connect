@@ -1,5 +1,59 @@
 # ANDROID-CONTROLLED-BETA / CONTROL-PLANE-2
 
+## Continuation — served-source reconciliation
+
+Input `d4205d256ae9000ca80826b982661b6abfe4fb04`; same bounded substep, no CP3.
+**SOURCE RECONCILED / ROLLOUT PENDING**, not paid launch. Owner review forbids
+publisher capability removal even with0 configured entries. Fresh read-only recovery
+confirmed exact served21d64558…/125205 bytes/24 files, same PID3874974/start15:35:09Z
+and systemd unit. Only generic source archive and metadata downloaded; no registry,
+environment, certificates, identities, keys, publisher configuration or Support IDs.
+Historical artifacts,47-member bundle4127f359… and prior private backup are immutable.
+
+Provenance search covered fetched origin branches/tags and all local refs/exact Git
+blobs, then retained source receipts. The two publisher modules match retained
+`mesh-perf-3b/receipts/api-baseline.json` and its generic source byte-for-byte (receipt
+is not asserted signed), and also the current served archive. Neither exact blob
+is in available Git history. Served catalog blob
+`969dd4c2ee9ef076925b381c31f2e5d1c4552e32` is in Git history, including
+`65c3e9d3c7ef7d699fb13e80bee85a7d76462350`. Exact served HTTP/access blobs were not
+found in available refs: only the generic three-line HTTP delivery block is restored;
+Access is not copied. Private provenance receipt records every archive/member/blob
+hash and source selection. No served archive or private receipt committed.
+
+Resolutions: exact publisher modules and exact authenticated served HTTP member
+restored; no new route. Current catalog validation/floor helpers retained unchanged,
+legitimate legacy vectors match; signature/hash/size/sequence negatives remain DENY.
+Access normalized imports/API AST and both old/new synthetic API executions agree;
+only import placement/module docstring differs, no cosmetic rollback. No publisher
+configuration entries, gateway changes or paid authority changes.
+
+[Versioned served baseline](../../deploy/friends/restricted/served-baseline.json)
+pins whole archive SHA/size and every member for both observed and candidate sides;
+unknown changes, missing publisher modules, changed served baseline and changed
+candidate bytes fail closed. Baseline SHA256
+`83b17c9a28638b5d8b4cb44e7c58252d8519b2bbbba827a2fb6a16ce7933477c`.
+Candidate HTTP47091 bytes/25 files, SHA256
+`dcd769986a1da7cb1662c0f73d18a88e9f73485a977db937ca5b1428c1fd1029`.
+Remaining differences are exact reviewed Access/catalog plus paid_beta/restricted;
+zero removed members, exact source gate PASS.160 focused tests PASS under pinned
+Python3.14.4 environment: authenticated publisher delivery/empty result, unauthorized
+and forged proof rejection, malformed/duplicate/oversize/stale data, catalog legacy
+compatibility, Access equivalence, paid challenge/fetch. Synthetic recovery restores
+registry plus issuer material into another directory, restarts the exact HTTP archive,
+preserves certificate/replay denial and ledger, then verifies revoke/non-cohort/CRL.
+External chat node sync is a synthetic stub in publisher HTTP tests, never a gateway call.
+
+Read-only live CRL discovery: `family-connect-restricted-sync.timer` disabled;
+service inactive/pre-paid `sync-clock-skew-20261005.pyz` (no paid_beta member).
+Directory-sync timer separately enabled; that is not paid CRL propagation proof.
+No sync timer/unit/gateway changes made. Synthetic CRL PASS is not live propagation/
+session termination PASS. This remains a real paid-launch gate, not a reason to
+enroll a production test device. Next: committed bundle, fresh backup/preflight,
+idempotent empty migration and one authorized Friends restart, no real billing.
+
+## Historical first stop — immutable evidence
+
 ## Decision and bounded outcome
 
 **CHECKPOINT / DEPLOYMENT BLOCKED_SERVED_SOURCE_DRIFT**, not DONE, not paid launch.

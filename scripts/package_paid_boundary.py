@@ -69,15 +69,37 @@ def archive_hashes(path):
         return {name: digest(archive.read(name)) for name in sorted(names) if not name.endswith('/')}
 
 
-def source_gate(served, candidate):
+def unique_fields(items):
+    result = {}
+    for name, value in items:
+        if name in result:
+            raise ValueError('Duplicate baseline field')
+        result[name] = value
+    return result
+
+
+def source_gate(served, candidate, baseline=None):
     before, after = archive_hashes(served), archive_hashes(candidate)
     changed = sorted(name for name in before.keys() | after.keys() if before.get(name) != after.get(name))
     unexpected = [name for name in changed if name not in PAID_DELTA]
     removed = sorted(before.keys() - after.keys())
     valid = not unexpected and not removed and 'control/friends/paid_beta.py' in after
+    baseline_hash = None
+    if baseline is not None:
+        raw = Path(baseline).read_bytes()
+        contract = json.loads(raw, object_pairs_hook=unique_fields,
+            parse_constant=lambda value: (_ for _ in ()).throw(ValueError('Nonfinite baseline field')))
+        if (type(contract) is not dict or set(contract) != {'schema', 'review', 'input_commit', 'served', 'candidate', 'resolutions'}
+                or type(contract['schema']) is not int or contract['schema'] != 1):
+            raise ValueError('Invalid served baseline contract')
+        baseline_hash = digest(raw)
+        valid = (contract['served'] == dict(sha256=digest(Path(served).read_bytes()), size=Path(served).stat().st_size, members=before)
+            and contract['candidate'] == dict(sha256=digest(Path(candidate).read_bytes()), size=Path(candidate).stat().st_size, members=after)
+            and not removed and 'control/friends/paid_beta.py' in after)
+        unexpected = [] if valid else unexpected
     return dict(result='PASS' if valid else 'BLOCKED_SERVED_SOURCE_DRIFT',
         served_sha256=digest(Path(served).read_bytes()), candidate_sha256=digest(Path(candidate).read_bytes()),
-        changed=changed, unexpected=unexpected, removed=removed,
+        changed=changed, unexpected=unexpected, removed=removed, baseline_sha256=baseline_hash,
         boundary='Necessary source delta gate only; not deployment or behavioral acceptance')
 
 
@@ -98,6 +120,7 @@ def build(output, ref='HEAD'):
                  'control/friends/restricted_admin.py', 'control/requirements.lock',
                  'device_identity/requirements.lock', 'scripts/friends_http_acceptance.py',
                  'control_plane/apps/console/collector.py', 'LICENSE', 'THIRD_PARTY_NOTICES.md',
+                 'deploy/friends/restricted/served-baseline.json',
                  'clients/android/app/src/main/assets/control-licenses/Reticulum.txt',
                  'clients/android/app/src/main/assets/control-licenses/PySerial.txt'):
         sources[name] = committed(ref, name)
@@ -150,8 +173,9 @@ def main():
     check = commands.add_parser('source-gate')
     check.add_argument('--served', type=Path, required=True)
     check.add_argument('--candidate', type=Path, required=True)
+    check.add_argument('--baseline', type=Path)
     args = parser.parse_args()
-    result = build(args.output, args.ref) if args.command == 'build' else source_gate(args.served, args.candidate)
+    result = build(args.output, args.ref) if args.command == 'build' else source_gate(args.served, args.candidate, args.baseline)
     print(encoded(result).decode(), end='')
     return int(result.get('result', 'PASS') != 'PASS')
 

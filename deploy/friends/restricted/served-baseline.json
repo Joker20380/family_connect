@@ -1,0 +1,93 @@
+{
+  "candidate": {
+    "members": {
+      "__main__.py": "96422459b1228a8d4981a5eee199393f2f22c520984069970dcfef2b9b9f2b6c",
+      "clients/desktop/profile_config.py": "0c72f3353aa4be1ada9c6bfc6c29475ba3c1ae9f8ce2860dbfb0d5fd3a3ec83a",
+      "control/friends/__init__.py": "efb76720b2ad1c9594aee9488b342e3311ed01a4bff3082c2fa3999663354cc8",
+      "control/friends/access.py": "b70e7d210c9347602ba2c8531454f5e01d0eeb18556eaffc71ea1c4995bea900",
+      "control/friends/chat.py": "6401c061aab650416e733c4433ce9a3a4f12742bcb0acd136248ab344736eda7",
+      "control/friends/chat_publishers.py": "b51537e8a6c2d7d2aa61191001adfc274f1872a8dc6715fd4548159be16686ce",
+      "control/friends/chat_sync.py": "08635a9713259f21f39a2577f3777529198ec22d09a85e741be827ac06f43ac8",
+      "control/friends/diagnostics.py": "2a42cb9fce97f446083cb6f2c63be1059bdb195c8fcafa49f089d184dd0ad703",
+      "control/friends/notices.py": "3f2c88c7984fa9d0a4d8857d342057b31ba1445f3aa8eea2df9007d35f67c3a7",
+      "control/friends/paid_beta.py": "a30b804d0b9e44ff76411731fb469f4ba930a5b1bca301386ea81382379af45e",
+      "control/friends/readiness_receipts.py": "16e4556af6d914e7411b3563bef44efebd2a8ba2d7dda1d0faa4f4e100ceb660",
+      "control/friends/referrals.py": "f8788d8e8e22cb9d95c7d57b9614beb5bff604f7d9cf9ae7a3c72a6a7611b4ce",
+      "control/friends/restricted.py": "57570d455a69d91a9a8d971a83d7d28153610ded55cb4208138d6d8c36658155",
+      "control/friends/support_ids.py": "cab3cef66085ac11253d3ce8a41d636769f040841fe839a96e03e536939aa169",
+      "device_identity/__init__.py": "3cd56edaf5fbfde9c88df7078dc55be15bf23cfc830727ee410bc8f31dc9990f",
+      "device_identity/device.py": "38e29e640c913c1331164aa36fde0ca95b1d13ee057ae92c3d31ec7b993151d3",
+      "friends_http.py": "799154e3a9af752a0c6ed6df51bf3df3957998426f51203680e0dedd7695b6b6",
+      "messenger/__init__.py": "5276c4dec78953223d5bc4296242b30411baf74ae2e5de55471a7485effbf415",
+      "messenger/admission.py": "73fbab8d4437bf0dc304f2608b290c9814f3af5c86a08c950995919f7f0fe913",
+      "messenger/service_events.py": "8535cd7c3086537b159b966ac6c582380d776726e9fdda2bf2016fea834f78ee",
+      "provisioning/__init__.py": "a8d11b35f8be63395d505bcf0cf7774aa5c0dbffa5eee905eef911a8d3fdb905",
+      "provisioning/chat_publishers.py": "2115d7f485b2ac2c1ee546783c39b733ea752399e9624490dcf2ada763fd44c2",
+      "provisioning/friends_catalog.py": "12d64b9a0c25f2e11ebfaee86bf6eab110a931668190732cf05c0cb1a26a64ec",
+      "scripts/read_readiness_ack.py": "b1f3f92b112b4e9365097ee7751be6338ca15eae498841b76664dd7de37e48cf",
+      "scripts/service_notices.py": "80df5a26b7121d40f6f180f17bbfe96e2e4d2b734c8230c78bafb6ee2ba31167"
+    },
+    "sha256": "dcd769986a1da7cb1662c0f73d18a88e9f73485a977db937ca5b1428c1fd1029",
+    "size": 47091
+  },
+  "input_commit": "d4205d256ae9000ca80826b982661b6abfe4fb04",
+  "resolutions": {
+    "control/friends/access.py": {
+      "candidate_sha256": "b70e7d210c9347602ba2c8531454f5e01d0eeb18556eaffc71ea1c4995bea900",
+      "resolution": "Keep current main; normalized imports and API AST equivalent; only import placement/module docstring differs.",
+      "served_sha256": "44733e25dc65505cfa295c3c1ff71940dc2a1ef4d0c602a2ae6a1df9a07f1695"
+    },
+    "control/friends/chat_publishers.py": {
+      "candidate_sha256": "b51537e8a6c2d7d2aa61191001adfc274f1872a8dc6715fd4548159be16686ce",
+      "resolution": "Restore exact generic retained-source receipt, byte-identical served module; no configuration.",
+      "served_sha256": "b51537e8a6c2d7d2aa61191001adfc274f1872a8dc6715fd4548159be16686ce"
+    },
+    "friends_http.py": {
+      "candidate_sha256": "799154e3a9af752a0c6ed6df51bf3df3957998426f51203680e0dedd7695b6b6",
+      "resolution": "Restore authenticated publisher delivery; exact served member bytes, no public route.",
+      "served_sha256": "799154e3a9af752a0c6ed6df51bf3df3957998426f51203680e0dedd7695b6b6"
+    },
+    "provisioning/chat_publishers.py": {
+      "candidate_sha256": "2115d7f485b2ac2c1ee546783c39b733ea752399e9624490dcf2ada763fd44c2",
+      "resolution": "Restore exact generic retained-source receipt, byte-identical served module; strict bounded authenticated response.",
+      "served_sha256": "2115d7f485b2ac2c1ee546783c39b733ea752399e9624490dcf2ada763fd44c2"
+    },
+    "provisioning/friends_catalog.py": {
+      "candidate_sha256": "12d64b9a0c25f2e11ebfaee86bf6eab110a931668190732cf05c0cb1a26a64ec",
+      "resolution": "Keep current-main stricter catalog/floor helpers; compatibility and negative authentication/validation tests required.",
+      "served_sha256": "add970991089003c7b4589e8dbb135d56e63a601b5530c939f4b6ab8b964bebe"
+    }
+  },
+  "review": "CONTROL-PLANE-2/served-reconciliation-1",
+  "schema": 1,
+  "served": {
+    "members": {
+      "__main__.py": "96422459b1228a8d4981a5eee199393f2f22c520984069970dcfef2b9b9f2b6c",
+      "clients/desktop/profile_config.py": "0c72f3353aa4be1ada9c6bfc6c29475ba3c1ae9f8ce2860dbfb0d5fd3a3ec83a",
+      "control/friends/__init__.py": "efb76720b2ad1c9594aee9488b342e3311ed01a4bff3082c2fa3999663354cc8",
+      "control/friends/access.py": "44733e25dc65505cfa295c3c1ff71940dc2a1ef4d0c602a2ae6a1df9a07f1695",
+      "control/friends/chat.py": "6401c061aab650416e733c4433ce9a3a4f12742bcb0acd136248ab344736eda7",
+      "control/friends/chat_publishers.py": "b51537e8a6c2d7d2aa61191001adfc274f1872a8dc6715fd4548159be16686ce",
+      "control/friends/chat_sync.py": "08635a9713259f21f39a2577f3777529198ec22d09a85e741be827ac06f43ac8",
+      "control/friends/diagnostics.py": "2a42cb9fce97f446083cb6f2c63be1059bdb195c8fcafa49f089d184dd0ad703",
+      "control/friends/notices.py": "3f2c88c7984fa9d0a4d8857d342057b31ba1445f3aa8eea2df9007d35f67c3a7",
+      "control/friends/readiness_receipts.py": "16e4556af6d914e7411b3563bef44efebd2a8ba2d7dda1d0faa4f4e100ceb660",
+      "control/friends/referrals.py": "f8788d8e8e22cb9d95c7d57b9614beb5bff604f7d9cf9ae7a3c72a6a7611b4ce",
+      "control/friends/restricted.py": "3f8613a92d1b26e6dc4d7d9e2f05ff6e87d4a8e3482580db0a7745058b48ae09",
+      "control/friends/support_ids.py": "cab3cef66085ac11253d3ce8a41d636769f040841fe839a96e03e536939aa169",
+      "device_identity/__init__.py": "3cd56edaf5fbfde9c88df7078dc55be15bf23cfc830727ee410bc8f31dc9990f",
+      "device_identity/device.py": "38e29e640c913c1331164aa36fde0ca95b1d13ee057ae92c3d31ec7b993151d3",
+      "friends_http.py": "799154e3a9af752a0c6ed6df51bf3df3957998426f51203680e0dedd7695b6b6",
+      "messenger/__init__.py": "5276c4dec78953223d5bc4296242b30411baf74ae2e5de55471a7485effbf415",
+      "messenger/admission.py": "73fbab8d4437bf0dc304f2608b290c9814f3af5c86a08c950995919f7f0fe913",
+      "messenger/service_events.py": "8535cd7c3086537b159b966ac6c582380d776726e9fdda2bf2016fea834f78ee",
+      "provisioning/__init__.py": "a8d11b35f8be63395d505bcf0cf7774aa5c0dbffa5eee905eef911a8d3fdb905",
+      "provisioning/chat_publishers.py": "2115d7f485b2ac2c1ee546783c39b733ea752399e9624490dcf2ada763fd44c2",
+      "provisioning/friends_catalog.py": "add970991089003c7b4589e8dbb135d56e63a601b5530c939f4b6ab8b964bebe",
+      "scripts/read_readiness_ack.py": "b1f3f92b112b4e9365097ee7751be6338ca15eae498841b76664dd7de37e48cf",
+      "scripts/service_notices.py": "80df5a26b7121d40f6f180f17bbfe96e2e4d2b734c8230c78bafb6ee2ba31167"
+    },
+    "sha256": "21d64558e542ff6ad80fb9b13799fbcb333167ffb5a79ec841e7c94dc65d71fa",
+    "size": 125205
+  }
+}

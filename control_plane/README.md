@@ -107,14 +107,16 @@ credential **может писать**: read-only обеспечивается �
 `mode=ro/query_only`, не ограниченным ключом. Ключа/production mount в Django нет.
 Отдельный least-privilege SSH endpoint требует нового security gate, не выдаётся за PASS.
 
-### Paid boundary: blocked rollout, not another authority
+### Paid boundary: reviewed served baseline, not another authority
 
 [CP2 report](../docs/releases/2026-10-27-android106-control-plane-2.md) фиксирует
 source drift и exact candidate. `python3 -m scripts.package_paid_boundary build
 --ref <commit> --output <new-private-tar>` из repository root экспортирует только
 явный committed inventory; dirty working tree/DB/env не входят. `source-gate
---served <private-served-pyz> --candidate <candidate-pyz>` возвращает ненулевой
-exit при любом не-paid изменении/удалении. Это необходимый, не достаточный gate;
+--served <private-served-pyz> --candidate <candidate-pyz> --baseline
+deploy/friends/restricted/served-baseline.json` требует точного SHA/size/inventory
+обоих архивов из versioned reviewed contract. Без baseline действует прежний
+paid-only gate; это не способ обойти reconciliation. Это необходимый, не достаточный gate;
 нельзя обходить его переименованием архивов или объявлять hash-equivalence по версии.
 Bundle не устанавливает зависимости, не содержит чужие wheels; внешние Python/
 package pins проверяются отдельно. Source/AST import/hash manifests и retained

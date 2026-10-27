@@ -3,19 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-**Current substep CONTROL-PLANE-2 — CHECKPOINT / DEPLOYMENT BLOCKED_SERVED_SOURCE_DRIFT.**
+**Current substep CONTROL-PLANE-2 — CHECKPOINT / SOURCE RECONCILED, ROLLOUT PENDING.**
 Dependency: accepted CONTROL-PLANE-1 at21dd8d72ad5505cd82631856083694729d292c8b.
 Gate: exact paid-aware bundle; read-only preflight; consistent private backup/recovery;
 idempotent empty-cohort migration; one Friends restart; unchanged non-cohort access;
 read-only local bridge/continuous collection; synthetic production-identical expiry/
 revoke/CRL/recovery. No real subscriptions/events, client/gateway changes or public console.
-Progress: deterministic47-member bundle, private SQLite backup/isolated restore,
-94 focused tests +38 PostgreSQL observability tests PASS; local read-only timer enabled.
-Blocker: served21d64558… has5 non-paid source differences versus candidate9e66308e…,
-including2 removed optional publisher modules. Their configuration currently has0
-entries, but feature removal is not authorized by empty-cohort deployment. Do not
-silently overwrite or import deployed off-branch source. Paid tables absent, migration/
-deployment/restart NOT_RUN; application recovery/production-identical acceptance open.
+Progress: owner review preserves publisher functionality; exact modules/HTTP delivery
+recovered, strict current catalog helpers retained, Access imports/API equivalent.
+Exact versioned served21d64558… → candidate dcd76998… baseline PASS;160 focused tests
+including synthetic registry+issuer-material recovery PASS. Historical47-member bundle
+and private backup retained unchanged. New committed bundle/fresh production backup,
+empty migration/one restart pending. Live CRL sync timer is disabled/pre-paid; no
+gateway/CRL changes authorized, live revocation remains a launch gate. No real enrollment.
 [Exact evidence and finite next gate](releases/2026-10-27-android106-control-plane-2.md).
 
 **Принятый вход CONTROL-PLANE-1 — DONE / LOCAL SYNTHETIC + PRODUCTION-READONLY.**
@@ -92,12 +92,11 @@ debt, не Android launch blocker. Linux installed acceptance только от�
 не запускать P0/P1/Auto/AppImage lifecycle/L05/L06 и не публиковать Linux artifacts.
 
 **STOP. NEXT — закрыть только фактические Android controlled-beta launch blockers.**
-Следующий конечный этап: reconcile5 served-source differences CONTROL-PLANE-2,
-повторный fresh preflight, завершить empty-cohort migration/one-restart acceptance
-только на согласованном baseline. Owner разрешил этот bounded production rollout,
-но source-drift gate его остановил; review не разрешает реальные payments/enrollment.
-Application recovery/production-identical acceptance остаются открыты; локальный
-monitor timer продолжает только чтение. Новый top-level PLAN ID не создаётся.
+Следующий конечный этап CONTROL-PLANE-2: exact committed bundle на reconciled baseline,
+fresh preflight/backup и empty-cohort migration/one-restart acceptance. Owner review
+не разрешает реальные payments/enrollment или gateway configuration. Synthetic
+recovery не заменяет live CRL/session acceptance; read-only monitor продолжает
+чтение. Новый top-level PLAN ID и CONTROL-PLANE-3 не создаются.
 
 ### Предыдущие priority/ops records — исторические, не активные NEXT
 
