@@ -1,0 +1,120 @@
+{
+  "activation_active": true,
+  "alias": "OWNER_CANARY_1",
+  "android106": {
+    "app_version": "0.1.18-beta106-recovery",
+    "observed_at": 1793084340,
+    "platform": "android",
+    "source": "authenticated_readiness_ack",
+    "versionCode": 106
+  },
+  "binding_status": "OWNER_CANARY_BOUND_READONLY",
+  "certificate_horizon": {
+    "classification": "CERTIFICATE_HORIZON_CLEAR",
+    "latest_remaining_seconds": 0,
+    "latest_valid_expiry": null,
+    "valid_certificate_count": 0
+  },
+  "checkpoint": "ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1",
+  "input_main": "6dff337795b0545dbe9a63e5a5619ac9a13e1da8",
+  "ledger": {
+    "cohort": 0,
+    "events": 0,
+    "limit": 10,
+    "subscriptions": 0
+  },
+  "live": "NOT_RUN",
+  "lookup": {
+    "members": 15,
+    "production_calls": 1,
+    "result": "PASS",
+    "selector_unlinked": true,
+    "sha256": "63ffe0f1ac4dad0c15a94558423de4eab2a5aff754167e8108d75064bb95d308",
+    "size": 56017,
+    "source_commit": "ad086c030cc77c680d924fb9c8e37faa286adc4c"
+  },
+  "materials": {
+    "classification": "MATERIALS_INVALID",
+    "directory_expires_at": 1793156793,
+    "directory_full_lifetime_seconds": 13402,
+    "directory_issued_at": 1793143391,
+    "family_gateway_authority_bindings_match": true,
+    "gateway_minimum_crl": 27088,
+    "installed_crl_number": 27211,
+    "minimum_remaining_seconds": 12667,
+    "nl_directory_validation": {
+      "field": "expires_at",
+      "predicate": "invalid_lifetime",
+      "result": "FAIL",
+      "stage": "time"
+    },
+    "ntp": "PASS",
+    "observed_at": 1793144114,
+    "ru_validation": "PASS",
+    "same_crl_directory_bytes": true,
+    "signature_checks": "PASS"
+  },
+  "mesh_eligible": true,
+  "monitoring": {
+    "client_telemetry": "NOT_COLLECTED",
+    "console_loopback_only": true,
+    "console_writes": "synthetic_only",
+    "credential_mount": false,
+    "last_cycle": "success",
+    "nl_registry": "UNAVAILABLE",
+    "pid_build_in_monitor": "NOT_COLLECTED",
+    "ru_registry": "observed",
+    "timer": "active"
+  },
+  "next": "Review NL directory lifetime validation and gateway floor compatibility; separately authorize correction/recheck. No phone entry until READY_FOR_OWNER_LIVE and owner confirmation.",
+  "no_write": {
+    "android_actions": 0,
+    "global_tables_changed": [
+      "chat_challenges",
+      "chat_sequence"
+    ],
+    "ledger_unchanged": true,
+    "material_hashes_unchanged": true,
+    "production_writes": 0,
+    "protected_table_fingerprints_unchanged": true,
+    "restarts": 0,
+    "restricted_challenge_readiness_certificate_unchanged": true,
+    "result": "PASS_FOR_SCOPED_READONLY_ACTIONS",
+    "service_unchanged": true,
+    "target_tables_changed": [
+      "chat_challenges"
+    ],
+    "whole_database_equality_claimed": false
+  },
+  "result": "BLOCKED_READONLY_PREFLIGHT",
+  "safe_ref": "dev_fa4f7e03ca04",
+  "schema": 1,
+  "status": {
+    "cohort": false,
+    "effective_state": null,
+    "event_count": 0,
+    "paid_allow": null,
+    "paid_until": null,
+    "production_calls": 1,
+    "result": "PASS",
+    "version": 0
+  },
+  "status_package": {
+    "binding": "single_canary",
+    "byte_identical": true,
+    "independent_builds": 2,
+    "manifest_sha256": "1923f3405e45112630648ebf14697fc0d3c6cc85aa0122ee6bb3f681dd842028",
+    "members": 15,
+    "permit": null,
+    "sha256": "ab27f3bf3d55475d752af9b3b3ed193e19832aa8df2ffb6dc7f38adb776090c0",
+    "size": 56187,
+    "source_commit": "ad086c030cc77c680d924fb9c8e37faa286adc4c"
+  },
+  "synthetic_checks": {
+    "apply_rejection": "PERMIT_REQUIRED",
+    "exact_status_fixture_token_mapping": true,
+    "lookup_rejection": "BOUND_LOOKUP_FORBIDDEN",
+    "original_hmac_fixture": true,
+    "passed": 4
+  }
+}

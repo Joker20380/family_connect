@@ -2,8 +2,27 @@
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
-**Current substep BETA-0-CANARY-1 — LIVE_ENTRY_SOURCE_READY / CRL_HELPER_UNBOUND_READY /
-PRODUCTION_LOOKUP_NOT_RUN / LIVE_WRITES_NOT_RUN.**
+**Current substep BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
+BLOCKED_READONLY_PREFLIGHT / MATERIALS_INVALID / LIVE_WRITES_NOT_RUN.**
+Read-only continuation from6dff337: one owner lookup and one bound status PASS;
+OWNER_CANARY_1 is `dev_fa4f7e03ca04`, exact Android106 authenticated ACK confirmed.
+Paid subscriptions/events0/0, cohort0/10; no slot enrolled. No valid owner certificate
+rows: CERTIFICATE_HORIZON_CLEAR. Two identical private status-only packages from
+ad086c0, permit=null;4 disposable synthetic package/guard checks PASS.
+RU materials valid, but NL's installed strict directory parser rejects the same
+directory bytes: time / invalid_lifetime / expires_at. NL minimum_crl27088 versus
+installed signed CRL27211 also remains an explicit compatibility observation, not
+future exact-payload gateway acceptance. No material refresh or repair attempted.
+Read-only monitor active/fresh; NL registry UNAVAILABLE, not0; console writes remain
+synthetic-only. Paid/device/invite/grant/revocation/admission/publisher/certificate/
+restricted-readiness state, service PID/start/restarts and material hashes unchanged.
+Concurrent chat tables changed; no whole-database equality is claimed.
+STOP. NEXT — review the NL directory lifetime validation and gateway floor contract,
+then a separately authorized read-only recheck. Do not request phone actions or
+owner ГОТОВ until READY_FOR_OWNER_LIVE. No activation, CRL or other live write.
+[Read-only evidence](releases/2026-10-27-android106-beta-0-canary-1.md#read-only-owner-binding-and-live-entry-preflight--28-october-local).
+
+Historical exact-payload CRL source gate:
 Exact-payload CRL source gate from11b99a6: pure paid-aware builder, no live sequence/
 file mutation during preparation; one persisted payload/request per operation.
 Private journal, one proven-NOT_SENT retry only, trusted exact remote readback,
@@ -13,8 +32,9 @@ packaging +79 canary +76 paid-backend +2 preparation tests PASS;206 restricted/s
 directory tests PASS (29 existing optional native skips,4 native deselections).
 118 PostgreSQL console tests and Django system/drift checks PASS. Unbound packaging
 only; no production configuration/credential/permit/transport installed.
-STOP. NEXT — production read-only owner lookup and binding, not automatically.
-No production registry, CRL, subscription/event, phone, restart or deployment action.
+Its historical NEXT was read-only owner lookup/binding, now performed above.
+That source gate performed no production registry, CRL, subscription/event, phone,
+restart or deployment action.
 
 Historical bounded-dispatch source gate:
 Bounded dispatch correction from3a5e91d over accepted emergency source49bdd794:
@@ -31,7 +51,7 @@ remain lookup_only, from exact committed source; artifact receipt is in the repo
 Production lookup/registry access/binding/enrollment/CRL/Android/live operations
 NOT_RUN. No Friends restart/deployment, CP2 change or desktop work.
 Its historical NEXT was the CRL helper contract/source gate, now completed above.
-Read-only owner lookup/binding remain NOT_RUN; live phone operations wait for owner ГОТОВ.
+Read-only owner lookup/binding are now recorded above; live phone operations remain blocked.
 
 Historical local preparation at28657bf/68b99ac:
 Continuation from55c6a24: private PG+synthetic-volume backups and disposable restore

@@ -1,5 +1,114 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Read-only owner binding and live-entry preflight — 28 October local
+
+**OWNER_CANARY_BOUND_READONLY / BLOCKED_READONLY_PREFLIGHT / MATERIALS_INVALID /
+LIVE_WRITES_NOT_RUN.** Input main `6dff337795b0545dbe9a63e5a5619ac9a13e1da8`.
+Same checkpoint; no new product task or canary ID. This continuation changes only
+documentation and a [sanitized receipt](2026-10-27-android106-beta-0-canary-1-readonly.json).
+Server observations below use UTC, starting27 October23:31:11. No paid/live acceptance.
+
+### Artifacts and binding
+
+- Accepted lookup-only artifact: source `ad086c030cc77c680d924fb9c8e37faa286adc4c`,
+ 15 members,56017 bytes, SHA256 `63ffe0f1ac4dad0c15a94558423de4eab2a5aff754167e8108d75064bb95d308`.
+ Regular/non-symlink, strict ZIP/JSON, exact committed member hashes, null envelope,
+ absence of operational configuration/permit, import/help and private-data scans PASS.
+ It was not rebuilt. Accepted unbound CRL package unchanged:24 members,138174 bytes,
+ SHA256 `3c3736917efb1720b7086e57e4e8b2182fcb56734ec85b662b9bed71c15840a6`, manifest
+ `704b67df66d21e198e175344932f81e4d23e2e697f15475f45656be9af476ebb`; unbound/null permit/
+ absent production configuration verified read-only. No CRL helper production execution.
+- Fresh private operation directory0700 outside Git/Django/web; separate random32-byte
+ HMAC key0600. Selector supplied transiently without echo via stdin, never argv.
+ Temporary0600 input unlinked immediately after the single lookup; exact selector
+ absent from remaining operation files and process arguments. No forensic SSD erase
+ claim. No selector input to PostgreSQL, Django, audit, URL, environment or shell history.
+- One production lookup PASS at23:31:27; OWNER_CANARY_1=`dev_fa4f7e03ca04`.
+ Unique bound identity, existing activation and non-revoked device/invite; MESH
+ admission checked read-only with the existing grant logic. Exact106 accepted under
+ confirm_android106: latest authenticated readiness ACK at27 October06:59:00,
+ platform android, versionCode106, app_version `0.1.18-beta106-recovery`.
+ No observation was updated. Full token/key/envelope remain private.
+- Bound status-only package from the same exactad086c0 source:15 members,56187 bytes,
+ SHA256 `ab27f3bf3d55475d752af9b3b3ed193e19832aa8df2ffb6dc7f38adb776090c0`, manifest
+ `1923f3405e45112630648ebf14697fc0d3c6cc85aa0122ee6bb3f681dd842028`.
+ Two independent byte-identical builds; binding=single_canary, permit=null, private
+ read-only artifacts. Exact source/member checks PASS; no selector/key/config/path.
+- Four disposable synthetic checks PASS: exact packaged status with a test-only
+ synthetic token mapping (no production identity copied into a fixture), exact
+ packaged apply→PERMIT_REQUIRED and lookup→BOUND_LOOKUP_FORBIDDEN, and unchanged
+ original HMAC resolution/status on a separate synthetic binding. Package bytes
+ were not modified by those tests. No production apply or second production lookup.
+- One production bound status PASS at23:32:31 using the real private HMAC key:
+ same binding, activation_active=true, cohort=false, version0, event_count0,
+ effective_state/paid_allow/paid_until=null. Ledger remains subscriptions0/events0,
+ cohort0/10. No owner slot has been enrolled.
+
+### Freshness and the blocking result
+
+Friends active/running, exact paid-aware archive
+`dcd769986a1da7cb1662c0f73d18a88e9f73485a977db937ca5b1428c1fd1029`, effective/running
+argv match, MainPID1002753, NRestarts0. This is a fresh observation, not reuse of
+the historical CP2 PID. Publisher capability and historical core/policy fingerprints
+match. SQLite mode=ro/query_only/read transaction: integrity, foreign keys, exact
+paid schema and empty ledger PASS. NTP/NTPSynchronized=yes, resources sufficient,
+no pending service/package transaction observed; read-only HTTP liveness PASS.
+
+Certificate horizon: valid_certificate_count=0, latest_valid_expiry=null,
+latest_remaining_seconds=0 — **CERTIFICATE_HORIZON_CLEAR**. No certificate issuance,
+deletion or expiry modification; no readiness challenge/fetch.
+
+RU issuer/authority signatures, CRL issuer/signature/number, strict directory
+time/family/gateway validation PASS. At23:34:16, authority/delegation remaining
+6994952s, CRL12725s, directory12737s; all exceed720s. Stored CRL sequence27211 matches.
+NL has byte-identical CRL and directory, matching authority/family/gateway bindings;
+signatures and wall-clock validity PASS, NTP synchronized. However, its **installed
+strict directory parser rejects stage=time, predicate=invalid_lifetime,
+field=expires_at**. Directory issued23:23:11, expires03:06:33 next UTC day; full
+lifetime13402s. RU strict parsing passes those bytes; NL strict parsing does not.
+No validator was weakened or production package changed to obtain PASS.
+
+NL profile minimum_crl=27088, installed signed CRL number27211. A lower floor is
+recorded as a compatibility question, not asserted by itself to prove invalid
+cryptography; it is not the future exact-payload acceptance proof requiring the
+generated number. The independent NL directory rejection already blocks entry.
+Thus **MATERIALS_INVALID / BLOCKED_READONLY_PREFLIGHT**, not a short remaining-TTL
+MATERIALS_REFRESH_REQUIRED and not READY_FOR_OWNER_LIVE. No refresh, CRL generation,
+delivery, sequence increment, gateway repair or write credential/permit installation.
+
+### Monitoring and no-write proof
+
+Read-only timer active/waiting, last completed cycle27 October23:36:29 successful.
+Latest RU snapshot observed/fresh (19s at inspection); NL snapshot fresh (16s) with
+registry UNAVAILABLE, never false0. The existing monitor reports service state,
+not paid build/PID; those were verified separately in this preflight. Client
+telemetry remains NOT_COLLECTED. Console loopback-only, synthetic backend guard
+present, no production write adapter or SSH/canary credential mount/home credential.
+The existing external administrative SSH channel is not claimed to be least-privilege.
+No monitoring configuration or PostgreSQL record was changed by this checkpoint.
+
+Before/after read-only observations preserve paid rows/events, devices, invites,
+grants, revocation state, admission, publishers, certificates, restricted challenges
+and readiness results; service PID/start/NRestarts unchanged. RU CRL number/hash,
+directory hash and NL profile/hash/minimum_crl/directory unchanged across inspection.
+Concurrent chat_challenges/chat_sequence changes were observed (target chat_challenges
+also changed); **no whole-registry or all-target-tables byte equality is claimed**.
+They are outside the read-only commands performed here; the restricted challenge,
+readiness and certificate fingerprints are unchanged. No Android action or Friends
+restart, deployment, payment, enrollment, production subscription/event or CRL write.
+
+Private observer-only dry-run corrections preceded successful readbacks (namespace
+collision, a non-exported legacy validator constant, and a local credential-path
+permission probe). No extra owner lookup/status and no production repair resulted.
+Strict JSON, scoped selector/secret scans, Markdown links, staged scope and whitespace
+checks PASS at closeout; full historical suites/platform builds were not run.
+
+**STOP. NEXT — review NL directory lifetime validation and gateway floor compatibility;
+any correction requires separate authorization, then fresh read-only recheck.**
+Do not ask the owner to open the app or reply ГОТОВ yet. Stage0 requires
+READY_FOR_OWNER_LIVE plus the owner's explicit ГОТОВ and a fresh production backup;
+no automatic lookup repeat, activation, CRL phase or phone procedure.
+
 ## Exact-payload CRL delivery — source-only gate
 
 **LIVE_ENTRY_SOURCE_READY / CRL_HELPER_UNBOUND_READY / PRODUCTION_LOOKUP_NOT_RUN /

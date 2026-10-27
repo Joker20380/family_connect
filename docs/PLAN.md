@@ -3,8 +3,8 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-**Current substep BETA-0-CANARY-1 — LIVE_ENTRY_SOURCE_READY / CRL_HELPER_UNBOUND_READY /
-PRODUCTION_LOOKUP_NOT_RUN / LIVE_WRITES_NOT_RUN.**
+**Current substep BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
+BLOCKED_READONLY_PREFLIGHT / MATERIALS_INVALID / LIVE_WRITES_NOT_RUN.**
 Dependency: CP2 accepted DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING, publisher
 capability preserved, real payment/enrollment NOT_RUN. No CP2 redeployment/restart/
 migration/source-package gates. Same ANDROID-CONTROLLED-BETA root, no CP3.
@@ -32,15 +32,28 @@ attempts), exact trusted gateway readback, post-acceptance commit/recovery A–E
 98 new tests PASS;206 existing restricted/sync/directory PASS with29 optional native
 skips/4 native deselections.118 console/79 canary/76 backend/2 preparation PASS;
 Django system/drift PASS. Unbound source package only, no transport/config/permit.
-No production lookup/registry access/mutation, Android interaction, CRL or CP2 restart.
+Those source gates performed no production lookup/registry access/mutation, Android
+interaction, CRL or CP2 restart.
+Read-only continuation from6dff337: exact lookup artifact verified; one owner lookup
+and one bound status PASS. OWNER_CANARY_1=`dev_fa4f7e03ca04`, authenticated Android106
+observation PASS; ledger0/0, cohort0/10. Private status-only artifact fromad086c0:
+two byte-identical builds, permit=null,4 synthetic status/negative-guard checks PASS.
+No valid owner certificates; CERTIFICATE_HORIZON_CLEAR. RU material validation PASS.
+NL installed strict directory parser rejects time / invalid_lifetime / expires_at;
+gateway minimum_crl27088 and installed CRL27211 are recorded without silently treating
+them as future exact-payload acceptance. Same CRL/directory bytes and bindings on RU/NL.
+Local read-only monitoring active/fresh, NL registry UNAVAILABLE, production writes
+disabled. Protected ledger/identity/policy/certificate/readiness/service/material
+state unchanged; concurrent chat changes disclosed, no whole-DB equality claim.
 Completion gate: exact authorized-device binding; live activation/paid certificate
 boundary/MESH Connect; natural expiry and new challenge/fetch/reconnect denial;
 active-session behavior; CRL generation/propagation; recovery/reconciliation and
 reactivation on the same identity; Android state preservation. All live stages NOT_RUN.
-Emergency recovery source gate complete; production/live acceptance remains NOT_RUN.
-NEXT — production read-only owner lookup and binding, not automatic. Live-entry
-source gate is ready; binding/phone coordination remain unperformed, and live phone
-operations require owner ГОТОВ. No production transport/credential is installed.
+Emergency recovery source gate complete; binding is read-only, paid/live acceptance
+remains NOT_RUN. NEXT — review NL directory lifetime validation and gateway floor
+compatibility, then a separately authorized read-only recheck. No repair, refresh,
+phone opening/Connect or request for ГОТОВ while live entry is blocked. No bound
+write permit, canary write credential or CRL transport is installed.
 Final same-identity30-day active
 recovery is a future live gate, not synthetic acceptance transferred to the phone.
 [Bounded checkpoint](releases/2026-10-27-android106-beta-0-canary-1.md).
