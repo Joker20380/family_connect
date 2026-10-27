@@ -2,7 +2,25 @@
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
-**Current substep BETA-0-CANARY-1 — CHECKPOINT / PAYMENT_PURPOSE SOURCE_READY / LIVE NOT_RUN.**
+**Current substep BETA-0-CANARY-1 — CHECKPOINT / LOCAL_CONSOLE_UPGRADED / CANARY_OPERATOR SOURCE_READY / LIVE NOT_RUN.**
+Continuation from55c6a24: private PG+synthetic-volume backups and disposable restore
+checks PASS. Running loopback console rebuilt; migration0006 installed, system/drift
+checks PASS. Existing50 synthetic bindings,3 customer-payment records, operations,
+559 prior audit records and private configuration preserved; concurrent read-only
+inventory imports append audit normally.118 console +76 paid-backend tests PASS.
+Source-only preparation now handles restrictive umask without changing original
+source/private-file permissions (2 regression tests). Bounded single-HMAC-token
+canary operator/committed-source packager:30 synthetic tests PASS; no second
+entitlement state machine, Django production adapter or real owner projection.
+Only fixed activate/expire permits; no revoke/grace/migration/delete/CRL/restart API.
+Production lookup/binding/package execution/enrollment/CRL/Android actions NOT_RUN.
+The continuation ends at the suggested component paths. Short expiry/observation
+windows, reviewed CRL delivery procedure and physical-phone coordination remain
+unspecified; the final30-day recovery target is accepted, not executed.
+NEXT — obtain that live procedure and coordinate OWNER_CANARY_1, then perform only
+its agreed stages; no automatic enrollment or guessed production expiry window.
+
+Historical source checkpoint55c6a24 (before the local console upgrade):
 Dependency: owner accepted CP2 as DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING /
 PUBLISHER CAPABILITY PRESERVED / REAL PAYMENT AND ENROLLMENT NOT_RUN.
 Only OWNER_CANARY_1 may become the permanent internal production canary; planned
@@ -17,9 +35,8 @@ running console/schema not upgraded, production never connected by the new workf
 Owner administrative lookup/HMAC binding, activation, live Connect/expiry/CRL/session/
 recovery/reactivation and Android state readback NOT_RUN. No private selector copied
 into code, docs, operator files, audit, events or receipts.
-The request ends at purpose choices; live period, observation/CRL bounds and safe
-recovery procedure are unspecified. NEXT — obtain that continuation, then execute
-only the agreed OWNER_CANARY_1 live stages. No substitute identity or invented window.
+The original request ended at purpose choices; its historical NEXT was to obtain
+the continuation. Current progress and the remaining live gate are recorded above.
 [Canary source checkpoint and remaining gates](releases/2026-10-27-android106-beta-0-canary-1.md).
 
 **Accepted input CONTROL-PLANE-2 — DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING.**

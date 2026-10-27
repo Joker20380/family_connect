@@ -278,9 +278,11 @@ not revenue. Purpose is shown on record/operation screens, admin filters, new me
 audit rows and the administrative receipt wrapper; the authoritative backend
 receipt/event stays unchanged (`event_type=payment`). Do not infer revenue from that
 technical event type or the generic payment audit action. No additional subscription
-state machine or production adapter is added. Migration0006 is tested on an isolated
-PostgreSQL test database; this checkpoint does not upgrade the running local console/
-schema or connect a production canary. Do not reverse to the old positive-only schema
+state machine or production adapter is added. Migration0006 was initially source-only;
+the BETA-0-CANARY-1 continuation installed it into the running loopback console after
+paired PG/synthetic backups and disposable restores. Existing data/configuration was
+preserved;118 console tests PASS. This does not connect or enroll a production canary.
+Do not reverse to the old positive-only schema
 with zero-value canary records or delete retained records to make a downgrade fit.
 
 Only a staff account with the relevant permission can act. `Наблюдатели панели`

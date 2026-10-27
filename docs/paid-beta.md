@@ -7,6 +7,60 @@ backend with **empty cohort/events**, not paid launch approval. Commands below
 describe a future authorized operator action,
 not permission to deploy, collect payment or enroll the existing field user.
 
+## Owner canary operator — source-ready, live not run
+
+The BETA-0-CANARY-1 exception authorizes only OWNER_CANARY_1, not customer enrollment.
+Use `control.friends.paid_beta_canary`, not the generic selector-in-argv CLI below.
+No owner token is embedded in source. Read-only lookup accepts an exact JSON object
+with `support_id` and a64-hex `hmac_key` through private stdin only, never argv,
+shell history, session, URL or logs. No selector is echoed. Operators must provide
+it via a non-recording input channel; do not paste private values into command
+examples, here-documents, recorded tool calls or receipts.
+
+Lookup returns a safe binding: schema1, alias OWNER_CANARY_1, full HMAC device_token,
+`safe_ref=dev_<first12 token hex>`, permit null. The HMAC domain matches inventory.
+Review this binding against the authorized owner before building a bound archive;
+a label alone is not proof that a device belongs to the owner. Subsequent status/
+apply stdin contains only hmac_key. The wrapper resolves the bound device server-side,
+keeps canonical identifiers in memory and returns only allowlisted safe receipt fields.
+It neither changes Django's synthetic adapter nor enables a production web action.
+
+Build with `python -m scripts.package_paid_canary_operator --ref <reviewed-commit>
+--output <new-private.pyz> --envelope <reviewed-safe-envelope.json>` using the accepted
+control/identity runtime. Omit envelope for a lookup-only archive. Explicit committed
+source inventory, fixed ZIP metadata and exclusive output creation preserve artifact
+identity. Verify exact archive SHA/source inventory before use; the envelope is an
+operator-reviewed operational guard, not a signature or sandbox against a host admin.
+No private key/selector/DB enters the archive. Packaging does not upload or execute it.
+
+A bound envelope has exactly schema, alias, device_token, safe_ref, permit. A non-null
+permit has exactly action, event_id (`canary_` +32 random hex), expected_version,
+period_start, paid_until, not_before, not_after. All timestamps are integer UTC.
+No arbitrary external reference: backend reference is derived from the fixed event ID.
+The four-stage workflow permits only activate at versions0,1,3 and expire at version2;
+event count/version must agree. Version1 requires expired effective state; version2
+requires active entitlement and an unexpired target certificate; version3 requires
+expired effective state and no unexpired retained target certificate. No revoke,
+grace, unenrollment or fifth new event is exposed. This is workflow sequencing, not
+an alternative subscription state machine.
+
+Execution windows are explicit and at most900 seconds; paid periods have no default
+and a31-day ceiling. The short natural-expiry/CRL stages must be coordinated with
+phone observations, clock health and reviewed CRL delivery before issuing permits.
+Final recovery is intended for approximately server_now+30 days after revoked
+certificates have expired, without a new identity/invite. The wrapper does not
+publish CRLs, prove gateway delivery, kill a session or verify APK signer remotely.
+
+Each apply holds the existing BEGIN IMMEDIATE transaction, delegates to paid_beta,
+rejects other cohort members and checks non-paid tables remain unchanged. The raw
+backend event retains event_type payment; safe receipt purpose internal_canary and
+amount_minor0 are operational metadata, not revenue. Duplicate execution uses the
+same immutable event and exact payload, with a fresh effective-state observation;
+conflicts reject. On lost output preserve the exact archive/permit: status is read-only,
+replaying the same permit is idempotent, and a new event ID is not reconciliation.
+No production receipt has been imported into PostgreSQL in this checkpoint.
+[Local upgrade, tests and remaining live gate](releases/2026-10-27-android106-beta-0-canary-1.md).
+
 ## Scope and prerequisites
 
 - At most10 distinct, already activated Friends devices; retained expired/revoked

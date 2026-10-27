@@ -55,8 +55,14 @@ def prepare():
             target.parent.mkdir(parents=True, exist_ok=True)
             raw = source.read_bytes()
             target.write_bytes(raw)
+            target.chmod(0o644)
             manifest[relative] = hashlib.sha256(raw).hexdigest()
         (temporary / 'source-manifest.json').write_text(json.dumps(manifest, sort_keys=True, indent=2) + '\n')
+        (temporary / 'source-manifest.json').chmod(0o644)
+        for directory in temporary.rglob('*'):
+            if directory.is_dir():
+                directory.chmod(0o755)
+        temporary.chmod(0o755)
         temporary.rename(destination)
     finally:
         if temporary.exists():

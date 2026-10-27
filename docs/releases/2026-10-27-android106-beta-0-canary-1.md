@@ -1,6 +1,91 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
-## Result and scope
+## Continuation from55c6a24 — local upgrade and bounded operator
+
+**CHECKPOINT / LOCAL_CONSOLE_UPGRADED / CANARY_OPERATOR SOURCE_READY / LIVE NOT_RUN.**
+Same task and same sole OWNER_CANARY_1 authorization; no new top-level PLAN ID.
+The owner has supplied the four live goals and the final same-identity recovery
+target of server_now+30 days. The continuation stops at the suggested component
+paths; short live windows, reviewed CRL delivery and physical-phone coordination
+have not been supplied. They were not guessed.
+
+### Local console upgrade
+
+- Private backups: PostgreSQL custom dump and the complete synthetic volume, taken
+  while the local console was stopped. Online PG dump remains consistent while the
+  separate read-only inventory monitor runs. PG disposable restore/open and SQLite
+  disposable restore/integrity/FK checks PASS. Files0600/directory0700; no backup,
+  DB, credentials or private receipt committed.
+- `.env`, inventory HMAC key and operator credentials backed up privately and
+  verified byte-identical after upgrade. No credentials printed or regenerated.
+- Source-only preparation and local image rebuild completed; running migration
+  now0006. Django system check and migration drift PASS. Console health PASS;
+  HTTP remains127.0.0.1:8765, PostgreSQL has no published port.
+- First local start stopped before Django because a restrictive umask produced
+  root-owned source files unreadable by the non-root console user. Preparation now
+  sets only copied allowlisted generic source files0644/directories0755 beneath
+  private `.local`0700. Original source/private permissions unchanged. Rebuild and
+  local start PASS. This was not a production restart or a paid-service failure.
+- Running image ID: `sha256:1e28103e380a4acd5143f7055feb49ad6019ebe2fd01b142fd37f06d336752d9`.
+  Application payload is the accepted55c6a24 console source; the preparation fix
+  changes context permissions, not the entitlement authority or Android artifact.
+-50 synthetic device bindings and synthetic registry devices/invites/support/paid
+  tables preserved; all prior workflow rows preserved. Existing3 payment records
+  now have default customer_payment.559 prior audit rows compared to the restored
+  backup and retained unchanged;8 concurrent inventory.import records were appended
+  at the comparison readback. Projection observation timestamps refresh normally.
+- No real-owner DeviceProjection or synthetic substitute created. Production
+  write actions remain absent: Django still opens only the guarded synthetic
+  registry. No production DB is mounted or copied into Django.
+
+### Canary-only source boundary
+
+`control/friends/paid_beta_canary.py` delegates status/activation/expiry, idempotency
+and conflict detection to the unchanged `control.friends.paid_beta`. It provides
+read-only transient-stdin lookup, then full HMAC-token-bound status and a fixed
+single-operation permit. No runtime write selector/reference/event/time override;
+no revoke/grace/delete/migrate/restart/CRL operation. Exceptions/receipts do not echo
+the selector, key, raw device or registry path.
+
+The bounded workflow has at most four new events: initial activation, activation
+after natural expiry, explicit expire with a still-valid certificate, and recovery
+after all retained target certificates expire. Each operation needs a separately
+reviewed exact envelope (server execution window at most15 minutes; no default
+paid duration; ceiling31 days). Existing paid backend remains the only state machine.
+Guards reject a second cohort member, stale versions/counts, bad bindings, invalid
+Android eligibility and non-paid table changes. Duplicate permits return the
+original event plus fresh status, never an implicit renewal.
+
+`scripts/package_paid_canary_operator.py` exports only allowlisted committed
+sources with source hashes/license/dependency metadata and an optional immutable
+safe envelope. Repeated builds are byte-identical; dirty source, DBs, `.env`, keys,
+private selector and other operator modules are excluded. No production-bound
+envelope/package or owner token has been created. No package was uploaded/executed
+on a gateway. There is no new Django production adapter or receipt importer; any
+future import must validate a strict sanitized safe_ref-keyed receipt, not create
+a fake DeviceProjection or authoritative subscription copy.
+
+### Validation and remaining boundary
+
+-118 PostgreSQL console tests PASS on the rebuilt image in a separate disposable
+  test database: purpose defaults, zero canary acceptance/customer rejection and
+  analytics separation included. System/drift checks PASS.
+-76 existing affected paid backend tests PASS using the retained control/identity
+  environment. No CP2 source/package gate or repository full suite repeated.
+-30 new canary wrapper/packaging tests +2 restrictive-umask tests PASS, including
+  real synthetic backend transitions, denial/recovery/idempotency/conflict, guarded
+  stage/window/certificate/binding/eligibility rejection, unrelated-trigger rollback,
+  strict input/no echo and packaged subprocess readback.
+- Production lookup, binding, activation, expiry, live Connect/session, CRL delivery,
+  recovery/reactivation and Android state readback remain **NOT_RUN**. No customer
+  payment/enrollment, CP2 deployment/restart/migration, gateway/publisher/admission
+  mutation or Android/Linux/Windows change. No canary slot occupied yet.
+
+**STOP. NEXT — obtain the remainder of the live procedure and coordinate the owner
+phone; then execute only the agreed OWNER_CANARY_1 stages.** The final30-day active
+and connect-capable owner state is a required future gate, not a claimed result.
+
+## Historical result and scope at55c6a24
 
 **CHECKPOINT / PAYMENT_PURPOSE SOURCE_READY / LIVE NOT_RUN.** Input main:
 `6d5202128ebfda6b60446d4f85cd7d9e5f2323fc`. This is a substep of the existing Android
@@ -90,6 +175,6 @@ strict JSON validation of the local sanitized validation summary, and
 `git diff --check` / `git diff --cached --check` PASS. Pre-existing unrelated
 working-tree changes and private/historical evidence remain untouched and unstaged.
 
-**STOP. NEXT — continue BETA-0-CANARY-1 after receiving the remaining live procedure.**
+**Historical NEXT at55c6a24 — obtain the remaining live procedure.**
 Only OWNER_CANARY_1 is eligible; no customer payment/enrollment, alternate identity,
 CP2 redeployment, Linux/Windows work or new top-level PLAN ID.
