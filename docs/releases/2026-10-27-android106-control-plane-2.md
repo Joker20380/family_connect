@@ -1,6 +1,110 @@
 # ANDROID-CONTROLLED-BETA / CONTROL-PLANE-2
 
-## Current operational outcome — migrated empty, deployment not completed
+## Current guarded continuation — pre-start observation failure, no restart
+
+Input main `cd307fcebc98658077ad7be3e11ee5e11ac947c7`. Only the two stale
+active-looking Linux blocks were removed from STATUS/PLAN in
+`242f428deb77bc1cee81161d2cf8e78d451edb6f`, pushed/remote verified. Historical report
+and Git history retained; Android CP2 remains the sole active task. No CP3/new PLAN
+ID, Linux/Windows work, product-source or Android change. Work continued beyond
+that documentation cleanup into fresh preflight, backup and guarded unit selection.
+
+**CHECKPOINT / GUARDED_PRESTART_OBSERVATION_FAILED / NOT_DEPLOYED.** The candidate
+effective ExecStart gate passed, but the next pre-start observation failed. This
+attempt performed **0 rollout restarts /0 emergency restarts**, not a deployment.
+[Sanitized guarded receipt](2026-10-27-android106-control-plane-2-guarded-rollout.json).
+
+### Immutable audit and fresh rollback point
+
+Reused exact source8b4177dec7867fe380418a02c542a3a40723d40f and bundle
+`paid-boundary-6ea4ef3a1f57ffeef8bf71322fa88129e95c1197431f0ca6d4ac8752be4c0584`:
+593920 bytes/50 members. HTTPdcd769986a1da7cb1662c0f73d18a88e9f73485a977db937ca5b1428c1fd1029:
+47091 bytes/25 members. Both regular/non-symlink, no rebuild/substitution. Generic
+publisher modules/authenticated delivery retained; exact served-baseline contract
+PASS against old21d64558… and candidate. Committed ExecStart guard unchanged,
+SHA25692c7947b5c845601bf4ff2f29e77ee8950c057d0ae7641d0aaceeeede908d4ab.
+
+Fresh19:28:19UTC preflight used actual PID120606/start18:05:36UTC/NRestarts0, not
+the obsolete PID from the earlier operation. Old served archive and complete unit
+configuration match reviewed baseline; earlier unit backup matches current cat hash.
+Observed order contains five drop-ins, last `zzz-support-diagnostics.conf`.
+User/Group/WorkingDirectory remain existing defaults; three environment names
+observed without exporting values. NTP=yes/NTPSynchronized=yes; no pending jobs or
+held package locks. Disk free7829422080 bytes, memory available904704000 bytes.
+
+SQLite integrity/FK PASS; exact8 paid schema objects PRESENT_EMPTY, subscriptions0/
+events0.54 devices/108 invites/2 grants;18 certificates/109 readiness results are
+observations only. Device/invite/grant/revocation fingerprints, admission hash and
+publisher entry/hash baseline recorded privately; publisher entries0 is not license
+to remove capability. No registry/configuration/keys/certificates downloaded.
+
+Fresh backup19:31:16UTC:446464 bytes, SHA256
+`643fe6509d267883ee073db4abf13cc7df48ca214e87cc4353806a122fd00d0d`.
+Online consistent SQLite backup, integrity/FK/all-table logical comparison and
+disposable restore/open PASS. Root-private directory0700/files0600, paid rows/events0;
+exact old archive plus six unit/drop-in files and concatenated unit saved privately.
+Older backups retained, not substituted. No migration (including ABSENT migration),
+live DB restore or real payment/subscription/event operation was executed.
+
+### Effective ExecStart and stop
+
+New private runner uses an exclusive existing deployment lock, fresh stable-state
+checks, durable restart counters and a guarded emergency rollback branch. Its SHA256
+is `ee3ba2cec118440ff8220c42991ead9f654cbc35dbda2520400a96f2a60fbd6e`.
+Only new `zzzz-control-plane-2-paid-boundary.conf` overrides ExecStart; existing
+directives, environment and files are preserved. Syntax check and daemon-reload
+completed. Exact committed guard **PASS for candidate HTTP** before any restart.
+
+The following `observe()` call raised **JSONDecodeError**, before the runner reached
+its restart counter/command. This is an execution-harness observation failure, not a
+paid-backend/product failure. The receipt records the exception class, not a stack
+frame or offending input; exact parser call is **not proven retrospectively**.
+The helper assumed JSON for nonempty `systemctl list-jobs --output=json`; its empty
+output path passed initial preflight. This parser assumption is a concrete review
+point, not a proved explanation of that particular exception. No raw failed-parser response,
+environment values, authentication data or user identifiers were exported.
+
+Fail-closed cleanup removed only this attempt's drop-in, daemon-reloaded and passed
+the **old effective ExecStart guard**. Its subsequent observation also raised
+JSONDecodeError, leaving the preserved runner receipt STOP_RECOVERY_REQUIRES_OWNER
+at19:34:49UTC. No second runner invocation, rollout restart or emergency restart.
+The old original rollout script was never run.
+
+Separate read-only recovery verification at19:37:09UTC, using a bounded plain jobs
+table parser, confirms original cat hash/ordered drop-ins/argv, same PID120606/
+start/NRestarts0, active/running, no own drop-in and no pending daemon reload/jobs.
+Unknown-route HTTP404 with expected JSON confirms liveness only, not user MESH
+acceptance. Paid rows/events0 and exact schema preserved; device/invite/grant/
+revocation/admission/publisher fingerprints unchanged.19 certificates/107 readiness
+results reflect ordinary activity, not a claim that runtime counters cannot change.
+This independent readback resolves the cleanup-state uncertainty without rewriting
+the failed runner receipt. Candidate remains staged; old backend remains serving.
+
+### Validation and finite NEXT
+
+8 committed effective ExecStart tests rerun PASS; private baseline check plus three
+negative fingerprint/nonempty-ledger checks PASS. The prior192 exact-candidate
+acceptance checks are retained evidence, not rerun or general CI PASS. No production
+post-start acceptance was reached. Existing read-only monitor active/waiting, last
+cycle SUCCESS. No CRL publication/gateway changes; live paid revocation/session
+acceptance remains open. Historical candidate4127…/backup a5f0… retained unchanged;
+accepted Android106 size/SHA256 unchanged. No public catalog/Django deployment.
+
+Closeout:7 staged docs/receipt files,453 Markdown links, strict JSON, added-content
+Support-ID/secret/private-data scan and `git diff --check` PASS. Unrelated working-tree
+changes remain unstaged, including their existing VPN-health anchor error; no global
+working-tree documentation PASS is claimed. Private operational scripts/backup/data
+are not in Git. No product-source or candidate changes are included.
+
+**STOP. NEXT — only CONTROL-PLANE-2 guarded rollout:** review the pre-start observer
+and obtain an explicit decision to re-enter rollout. The granted restart budgets
+remain unspent (rollout1/emergency1; consumed0/0), but the owner forbids a second
+rollout attempt. No automatic retry. Any permitted continuation needs a new fresh
+PRESENT_EMPTY preflight/backup, effective ExecStart PASS and actual post-start
+inventory/health acceptance. Do not rerun either retained terminal runner or remove
+paid schema. Real payments/enrollment remain forbidden.
+
+## Historical operational outcome — migrated empty, deployment not completed
 
 **CHECKPOINT / MIGRATED_EMPTY / ROLLOUT BLOCKED_EFFECTIVE_EXECSTART.** Reconciliation
 source commit `8b4177dec7867fe380418a02c542a3a40723d40f` pushed and remote SHA verified.

@@ -110,7 +110,7 @@ credential **может писать**: read-only обеспечивается �
 ### Paid boundary: reviewed served baseline, not another authority
 
 [CP2 report](../docs/releases/2026-10-27-android106-control-plane-2.md) фиксирует
-reconciled baseline и blocked effective ExecStart; paid schema уже PRESENT_EMPTY,
+reconciled baseline и pre-start observation failure; paid schema уже PRESENT_EMPTY,
 но новый backend не обслуживает production. `python3 -m scripts.package_paid_boundary build
 --ref <commit> --output <new-private-tar>` из repository root экспортирует только
 явный committed inventory; dirty working tree/DB/env не входят. `source-gate
@@ -125,7 +125,13 @@ paid-only gate; это не способ обойти reconciliation. Это н�
 ExecStart и весь argv, а не имя/presence drop-in. Проверка read-only; несовпадение
 означает STOP до restart. Успешный `systemd-analyze verify` проверяет синтаксис,
 но не доказывает, какой поздний drop-in победил. Не выбирать приоритет по догадке.
-На текущем этапе один restart уже использован; дополнительный требует owner approval.
+В guarded continuation effective candidate ExecStart прошёл этот gate, но следующий
+private readback завершился JSONDecodeError до restart. Drop-in удалён, исходный
+unit/PID подтверждён независимым readback. Новые бюджеты rollout1/emergency1 не
+использованы; второй rollout attempt требует явного решения владельца. Не повторять
+terminal runner и не трактовать его parsing failure как backend failure. Отсутствие
+jobs и непустая таблица jobs должны иметь отдельные проверенные parser paths;
+`systemctl --output=json` нельзя без проверки считать JSON-контрактом list-jobs.
 Нельзя удалять paid schema/события или восстанавливать старый DB для повторения
 ABSENT gate; новый preflight должен принимать только проверенный PRESENT_EMPTY.
 Bundle не устанавливает зависимости, не содержит чужие wheels; внешние Python/

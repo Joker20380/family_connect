@@ -2,29 +2,28 @@
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
-**Current substep CONTROL-PLANE-2 — CHECKPOINT / MIGRATED_EMPTY, ROLLOUT BLOCKED_EFFECTIVE_EXECSTART.**
-Owner-preserved publisher capability:2 exact generic modules recovered from retained
-source receipt, authenticated HTTP delivery restored byte-identically to served;
-current stricter catalog helpers and equivalent Access imports/API retained.
-Served21d64558…/PID/start/24-member inventory unchanged on fresh read-only recovery.
-Versioned exact served/candidate contract, not permissive path allowlist; candidate
-HTTPdcd76998…/25 members, committed-source bundle6ea4ef3a…/50 members,593920 bytes.
-192 focused acceptance checks +8 effective ExecStart guard tests PASS, no remaining
-skip in selected coverage. Fresh private backup a5f00b52…/isolated restore PASS.
-Production paid schema migrated idempotently:0 subscriptions/0 events; all non-paid
-table fingerprints unchanged inside migration. One restart occurred17:22:17UTC,
-but later `zzz-support-diagnostics.conf` shadowed the new ExecStart: old21d64558…
-still serves, healthy PID4187296/NRestarts0. Rollout procedure missed effective
-ExecStart verification before restart; not a successful paid-aware deployment.
-Only own ineffective drop-in removed; no second restart or DB restore. Final
-readback17:28:07UTC:54 devices, identity/invite/grant fingerprints/admission unchanged.
-Historical artifacts/backups untouched; no private data download or publisher entries.
-Live CRL timer remains disabled/pre-paid, not live revocation PASS or billing approval.
-Read-only local monitoring continues; NL registry unavailable, not0. No Android change.
+**Current substep CONTROL-PLANE-2 — CHECKPOINT / GUARDED_PRESTART_OBSERVATION_FAILED / NOT_DEPLOYED.**
+Stale active-looking Linux blocks removed by242f428; only Android CP2 is active.
+Exact source8b4177d/bundle6ea4ef3a…/HTTPdcd76998… unchanged, baseline/publisher
+preservation gate PASS. Fresh19:28 preflight: old healthy PID120606, paid schema
+PRESENT_EMPTY/8 objects,54 devices/108 invites/2 grants; NTP/integrity/FK PASS.
+Fresh consistent backup643fe650…/446464 bytes + isolated restore PASS; six exact
+unit/drop-in files and old archive saved privately. No migration repeated.
+New highest-priority drop-in selected candidate; committed effective ExecStart
+guard PASS **before any restart**. The following private observation helper raised
+JSONDecodeError; no restart was requested. Own drop-in removed, old effective
+ExecStart guard PASS. Initial cleanup observation also failed parsing; independent
+19:37 readback confirms original unit hash/argv/PID restored, old21d64558… healthy,
+paid rows/events0, device/invite/grant/revocation/admission/publisher fingerprints
+unchanged. Rollout restarts0/emergency restarts0; no second rollout attempt.
+8 guard tests rerun PASS; prior192 focused acceptance retained, not rerun/full CI.
+Historical artifacts/backups and Android106 unchanged; no real payments/enrollment,
+CRL/gateway changes or Linux/Windows work. Local read-only timer active/success;
+NL registry remains unavailable, not0. Live paid CRL/session acceptance still open.
 [Current and immutable historical evidence](releases/2026-10-27-android106-control-plane-2.md).
-STOP; NEXT requires owner approval for one additional restart, after fresh preflight/
-backup and effective ExecStart guard PASS. Do not rerun the first rollout script
-(its absent-schema/PID preconditions are obsolete). No real enrollment/payment.
+STOP. NEXT — CONTROL-PLANE-2 guarded rollout: review the pre-start observer failure
+and obtain an explicit re-entry decision; authorized restart budgets remain unused,
+but a second rollout attempt is not automatically permitted. No real enrollment.
 
 **Принятый вход CONTROL-PLANE-1 — DONE / LOCAL SYNTHETIC + PRODUCTION-READONLY SNAPSHOTS.**
 Русский Django Admin/UI, 50 demo identities (paid cap10 неизменён), отдельные

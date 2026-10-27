@@ -135,10 +135,12 @@ propagation/session bound before billing; do not advertise instant revocation.
 ## Deployment, rollback and stop boundary
 
 CONTROL-PLANE-2 operational update27.10: production paid schema migrated empty;
-subscriptions0/events0. The reconciled paid-aware bundle is staged but **NOT SERVING**:
-one restart selected the old archive due to drop-in precedence. Old service remains
-healthy; only the ineffective new drop-in was removed, no DB restore. An additional
-restart needs owner approval and an effective ExecStart gate before execution.
+subscriptions0/events0. The reconciled paid-aware bundle is staged but **NOT SERVING**.
+The guarded continuation selected candidate ExecStart and passed its guard, but the
+following observation helper failed before restart. Own drop-in removed; original
+unit/healthy PID and registry/publisher fingerprints unchanged. No repeat migration
+or DB restore. New rollout/emergency restart budgets remain unused (0/0); the owner
+forbids a second attempt without a new re-entry decision. No real-user operation.
 [Exact outcome and next gate](releases/2026-10-27-android106-control-plane-2.md).
 No real payment/enrollment is authorized; live paid CRL propagation remains unaccepted.
 
