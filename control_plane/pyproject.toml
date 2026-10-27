@@ -1,0 +1,11 @@
+[project]
+name = "family-connect-control-plane"
+version = "0.0.1"
+description = "Local synthetic operator console over the existing paid-beta authority"
+requires-python = ">=3.13"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "fc_control_plane.settings"
+pythonpath = [".", ".."]
+testpaths = ["tests"]
+addopts = "--strict-markers"

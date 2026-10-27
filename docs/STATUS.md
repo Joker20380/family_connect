@@ -2,6 +2,18 @@
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
+**Current substep CONTROL-PLANE-0 — DONE / LOCAL SYNTHETIC ONLY.** Django/PostgreSQL
+management console over accepted PAID-ENTITLEMENT-MVP; no second subscription state
+machine. Friends registry/paid_beta remain authority; PG stores workflow, payment/
+cohort/incident/audit/release metadata and timestamped read-only projections.
+Custom Admin/dashboard/charts, POST lookup, pure real-backend preview, signed
+confirmation and uncertain-result reconciliation implemented.57 PostgreSQL tests
++76 focused unchanged-backend checks PASS; Chromium desktop/mobile PASS,5 synthetic
+events/2 synthetic payment records, no JS errors. Local loopback UI healthy;
+production deployment/registry lookup/real payments/enrollment NOT_RUN.
+Android106/APK/source/catalog unchanged. [Report and limits](releases/2026-10-27-android106-control-plane-0.md),
+[local console runbook](../control_plane/README.md). No new top-level project/PLAN ID.
+
 **Owner decision27.10: Linux L04.2 PAUSED / NON-BLOCKING DESKTOP ENGINEERING.**
 L04.2-R3 SOURCE GATE **DONE / review accepted**; .11 CONSTRUCTION **DONE /
 frozen internal candidate**. L04.2 не DONE. Exact0.2.12~l03.2.11,
@@ -49,8 +61,9 @@ Saved signed105 verified, downgrade не safe rollback. Public updater60/sequenc
 [MVP result and finite blockers](releases/2026-10-27-android106-paid-entitlement-mvp.md),
 [private operator runbook](paid-beta.md).
 **STOP. NEXT — закрыть только фактические Android controlled-beta launch blockers.**
-Следующий bounded этап — review MVP и отдельно разрешённый server/synthetic
-acceptance/recovery checkpoint; не автоматический deploy/enrollment/сбор оплаты.
+Следующий bounded этап — review CONTROL-PLANE-0 и только фактические Beta-0 gates;
+paid-aware server/synthetic acceptance/recovery требует отдельного разрешения.
+Local console не разрешает production connection/deploy/enrollment/сбор оплаты.
 
 ## Предыдущие записи — evidence, не активные NEXT
 

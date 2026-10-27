@@ -1,0 +1,5 @@
+{% extends 'admin/base.html' %}{% load static %}
+{% block title %}{{ title }} · Synthetic Beta-0{% endblock %}
+{% block branding %}<div id="site-name"><a href="{% url 'console:dashboard' %}">Family Connect · Control Plane 0</a></div><span class="admin-synthetic">SYNTHETIC ONLY · NO PRODUCTION REGISTRY</span>{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'console/admin.css' %}">{% endblock %}
+{% block nav-global %}<a class="admin-dashboard" href="{% url 'console:dashboard' %}">Operations dashboard ↗</a>{% endblock %}

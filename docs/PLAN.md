@@ -3,6 +3,20 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
+**Current substep CONTROL-PLANE-0: DONE / LOCAL SYNTHETIC ONLY.** Dependency —
+accepted PAID-ENTITLEMENT-MVP at `ac90a2ac2f9e053b367bc3f7dde1711e94fd24a6`.
+Django/PostgreSQL console, not a new product/PLAN root. Source of truth remains
+Friends registry/paid_beta; no subscription ORM/state-machine duplication.
+Completion gate: local Compose/PostgreSQL + customized Admin/dashboard/charts,
+device lookup/readbacks, immutable intent/preview/confirm/reconcile, payment/cohort/
+incident/audit/release metadata; actual synthetic backend integration, permission/
+CSRF/concurrency/uncertainty tests and visual QA. Gate met:57 console+76 backend
+PASS, desktop/mobile browser5 synthetic operations PASS. Production registry,
+deployment, real payment/enrollment NOT_RUN; Android106/client/catalog unchanged.
+[Checkpoint](releases/2026-10-27-android106-control-plane-0.md),
+[local runbook](../control_plane/README.md). This is local implementation acceptance,
+not approval of live billing or production console security.
+
 Preparation и **PAID-ENTITLEMENT-MVP source checkpoint DONE / NOT_DEPLOYED**;
 controlled paid launch **BLOCKED** только на фактических Beta-0 gates в
 [MVP report](releases/2026-10-27-android106-paid-entitlement-mvp.md).
@@ -51,9 +65,11 @@ debt, не Android launch blocker. Linux installed acceptance только от�
 не запускать P0/P1/Auto/AppImage lifecycle/L05/L06 и не публиковать Linux artifacts.
 
 **STOP. NEXT — закрыть только фактические Android controlled-beta launch blockers.**
-Следующий конечный этап: review MVP и отдельно разрешённый bounded server/synthetic
-acceptance/recovery checkpoint. Этот source checkpoint не начинает deploy/реальные
-платежи/enrollment автоматически; никакой новый top-level PLAN ID не создаётся.
+Следующий конечный этап: review CONTROL-PLANE-0, затем только фактические Beta-0
+blockers в отдельно разрешённом bounded checkpoint. Paid-aware server/synthetic
+acceptance/recovery и operational/security gates не закрыты локальной консолью.
+Никаких production connections/deploy/реальных платежей/enrollment автоматически;
+никакой новый top-level PLAN ID не создаётся.
 
 ### Предыдущие priority/ops records — исторические, не активные NEXT
 

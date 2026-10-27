@@ -1,0 +1,51 @@
+name: fc-control-plane-0
+services:
+  postgres:
+    image: postgres:17-alpine@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73
+    environment:
+      POSTGRES_DB: fc_control_plane
+      POSTGRES_USER: fc_control_plane
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a private random password in .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks: [local_only]
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U fc_control_plane -d fc_control_plane]
+      interval: 3s
+      retries: 20
+  console:
+    build:
+      context: ./.local/build-context
+      dockerfile: Dockerfile
+    environment:
+      CONTROL_PLANE_MODE: synthetic
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Set a private random secret in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a private random password in .env}
+      POSTGRES_HOST: postgres
+    command: >-
+      sh -ec 'python manage.py migrate --noinput && python manage.py seed_demo &&
+      python manage.py collectstatic --noinput && exec gunicorn fc_control_plane.wsgi:application
+      --bind 0.0.0.0:8000 --workers 2 --timeout 30 --access-logfile -'
+    ports: ["127.0.0.1:8765:8000"]
+    volumes:
+      - synthetic_state:/app/control_plane/.local
+    networks: [local_only, loopback_ui]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/', timeout=3)"]
+      interval: 10s
+      retries: 15
+networks:
+  local_only:
+    internal: true
+  loopback_ui:
+    driver: bridge
+volumes:
+  postgres_data:
+  synthetic_state:

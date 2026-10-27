@@ -1,0 +1,6 @@
+.local/
+.env
+staticfiles/
+__pycache__/
+.pytest_cache/
+.coverage

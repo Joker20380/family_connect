@@ -7,6 +7,13 @@ Entries below are an evidence/runbook index; historical NEXTs are not current as
 
 ## Current priority — Android controlled paid beta
 
+[CONTROL-PLANE-0 local checkpoint](releases/2026-10-27-android106-control-plane-0.md):
+Django/PostgreSQL console over the accepted paid backend, **LOCAL SYNTHETIC ONLY**.
+Custom Admin/dashboard/charts, lookup/read-only projections, preview/confirm/
+reconcile, payment/cohort/incident/audit/release metadata; no second subscription
+state machine.57 console+76 focused backend PASS; desktop/mobile browser workflow
+PASS. Production registry/deployment/real payment/enrollment NOT_RUN. [Run locally](../control_plane/README.md).
+
 [27.10 owner decision and Android106 readiness](releases/2026-10-27-android106-controlled-beta-readiness.md):
 **ANDROID-CONTROLLED-BETA** replaces Linux as critical path. FIELD-1 owner PASS
 covers real external whitelist-network MESH use, not desktop parity. Exact signed

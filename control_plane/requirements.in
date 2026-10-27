@@ -1,0 +1,7 @@
+Django==5.2.18
+psycopg[binary]>=3.2,<4
+gunicorn>=23,<24
+whitenoise>=6.9,<7
+pytest==9.1.1
+pytest-django>=4.11,<5
+-r ../device_identity/requirements.lock
