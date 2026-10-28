@@ -1,12 +1,16 @@
 # Documentation
 
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
-**OWNER_CANARY_BOUND_READONLY / BLOCKED_READONLY_PREFLIGHT / MATERIALS_INVALID.**
-One owner lookup and bound status PASS; exact106, ledger0/0, certificate horizon clear.
-NL's installed strict directory parser rejects `time / invalid_lifetime / expires_at`;
-no repair/refresh or phone action. Read-only monitoring fresh, protected state unchanged.
-NEXT: review that validation boundary and gateway floor compatibility, then authorized
-read-only recheck; no live writes or request for owner ГОТОВ yet.
+**OWNER_CANARY_BOUND_READONLY / BLOCKED_CRL_PROFILE_COMPATIBILITY.**
+Read-only provenance review proves NL_VALIDATOR_ONLY_DRIFT: actual gateway parser
+accepts14400s, stale auxiliary validator3600s. No precision mismatch or parser repair.
+Actual forced command accepts read-only snapshots, rejects CRL writes; the lagging
+floor cannot yet satisfy the required next-payload/update guarantee (CRL_FLOOR_UNRESOLVED).
+96 affected +48 parser-boundary +18 gateway/floor checks PASS. Existing binding/exact106
+retained, ledger0/0, owner certificates0; no lookup/status repeat or live write.
+[Sanitized review receipt](releases/2026-10-28-android106-beta-0-canary-nl-readonly.json).
+NEXT: separately authorized bounded maintenance/delivery and floor-contract reconciliation,
+without generic writes or replacing the read-only snapshot boundary. No phone instruction yet.
 Historical source gate: pure paid-aware CRL builder,
 one-generation private journal, exact-byte retry after proven NOT_SENT only and
 remote/local crash recovery;98 new tests PASS. Existing restricted/sync/directory206

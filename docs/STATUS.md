@@ -3,24 +3,28 @@
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
 **Current substep BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
-BLOCKED_READONLY_PREFLIGHT / MATERIALS_INVALID / LIVE_WRITES_NOT_RUN.**
-Read-only continuation from6dff337: one owner lookup and one bound status PASS;
-OWNER_CANARY_1 is `dev_fa4f7e03ca04`, exact Android106 authenticated ACK confirmed.
-Paid subscriptions/events0/0, cohort0/10; no slot enrolled. No valid owner certificate
-rows: CERTIFICATE_HORIZON_CLEAR. Two identical private status-only packages from
-ad086c0, permit=null;4 disposable synthetic package/guard checks PASS.
-RU materials valid, but NL's installed strict directory parser rejects the same
-directory bytes: time / invalid_lifetime / expires_at. NL minimum_crl27088 versus
-installed signed CRL27211 also remains an explicit compatibility observation, not
-future exact-payload gateway acceptance. No material refresh or repair attempted.
-Read-only monitor active/fresh; NL registry UNAVAILABLE, not0; console writes remain
-synthetic-only. Paid/device/invite/grant/revocation/admission/publisher/certificate/
-restricted-readiness state, service PID/start/restarts and material hashes unchanged.
-Concurrent chat tables changed; no whole-database equality is claimed.
-STOP. NEXT — review the NL directory lifetime validation and gateway floor contract,
-then a separately authorized read-only recheck. Do not request phone actions or
-owner ГОТОВ until READY_FOR_OWNER_LIVE. No activation, CRL or other live write.
-[Read-only evidence](releases/2026-10-27-android106-beta-0-canary-1.md#read-only-owner-binding-and-live-entry-preflight--28-october-local).
+BLOCKED_CRL_PROFILE_COMPATIBILITY / LIVE_WRITES_NOT_RUN.**
+Read-only provenance review fromf499bdf: **NL_VALIDATOR_ONLY_DRIFT** proven. The old
+auxiliary validator allows3600s; actual SSH forced-command parser allows14400s and
+its directory/timestamp function hashes match current accepted source. Exact directory
+lifetime13401.739755428s passes the actual parser; no timestamp precision mismatch.
+No parser correction/package/deployment is required by this finding.
+Separate blocker: actual forced command accepts READ_ONLY_SECURITY_SNAPSHOT only;
+CRL payloads fail MAINTENANCE_TRANSACTION_REQUIRED. Embedded/observed/RU CRL27211
+match, minimum_crl27088; max(embedded,minimum) is enforced, but this route cannot
+accept the next payload or update the floor. CRL_FLOOR_UNRESOLVED for that required
+forward-update guarantee; do not claim CRL_FLOOR_LAG_NONBLOCKING or numeric corruption.
+OWNER_CANARY_1=`dev_fa4f7e03ca04`; prior exact106/binding/status artifacts unchanged.
+No lookup/status repeat. Ledger0/0, cohort0/10, owner certificates0/horizon CLEAR.
+96 affected tests +48 synthetic parser +18 synthetic gateway/floor checks PASS.
+Materials remain valid beyond720s at readback; monitor read-only/fresh, NL registry
+UNAVAILABLE, not0; console synthetic-only. Protected identity/policy/ledger, owner
+certificate/readiness scope, services and material/profile hashes unchanged. One
+unrelated certificate was added by concurrent traffic; no global table equality claim.
+STOP. NEXT — separately authorize one bounded maintenance/delivery and floor-contract
+reconciliation; preserve the read-only snapshot boundary, no generic write enablement.
+No refresh, activation, phone instruction or request for ГОТОВ while blocked.
+[Provenance review](releases/2026-10-27-android106-beta-0-canary-1.md#nl-parser-provenance-and-read-only-material-review--28-october-local).
 
 Historical exact-payload CRL source gate:
 Exact-payload CRL source gate from11b99a6: pure paid-aware builder, no live sequence/

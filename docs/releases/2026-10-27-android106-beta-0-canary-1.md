@@ -1,5 +1,150 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## NL parser provenance and read-only material review — 28 October local
+
+**OWNER_CANARY_BOUND_READONLY / BLOCKED_CRL_PROFILE_COMPATIBILITY /
+LIVE_WRITES_NOT_RUN.** Input main `f499bdf80eec2022c3b58cd1db4ebfb93cafd7ed`.
+Same checkpoint, documentation/evidence only; no product source or parser-limit change.
+The single parser classification is **NL_VALIDATOR_ONLY_DRIFT**. The previous
+MATERIALS_INVALID result below came from an auxiliary archive, not the actual forced
+command, and is superseded by this exact-path review. Historical evidence is retained.
+[Sanitized machine-readable receipt](2026-10-28-android106-beta-0-canary-nl-readonly.json).
+
+### Execution-path and source provenance
+
+Effective SSH configuration, authorized forced command and its exact exec argv were
+resolved read-only. No alternate SSH ForceCommand/AuthorizedKeysCommand overrides it.
+The forced command is a short-lived per-connection Python3.14.4 process; the separate
+bootstrap service remains active, PID2491265/NRestarts0, unchanged start identity.
+Configuration, argv, private paths and raw generic archives remain private. No forced
+command was invoked against production; only its exact parser source was imported
+into isolated read-only probes. The earlier helper and real gateway use different
+archives: **NL_VALIDATOR_EXECUTION_PATH_DRIFT**.
+
+| Role | Size / members | Archive SHA256 | Directory maximum |
+| --- | --- | --- | --- |
+| Actual forced-command gateway | 26854 / 18 | `0120dad028ead353b8b83a600538f3e578b2b46ddf871bf16e97529f9449f450` | 14400s |
+| Previous auxiliary directory validator | 26406 / 18 | `f6aa8859ab716383bf207b2ff7b302687692832b2ccb410f1aef0ada0793a9c9` | 3600s |
+
+The receipt contains exact member/module hashes. Actual gateway's `restricted.py`
+and `restricted_sync.py` did not match exact Git blobs in the searched all-ref file
+history: provenance is **exact installed generic source**, not an invented source
+commit. The old parser/sync modules and shared catalog matched verified Git blobs.
+Actual `directory`, `timestamp`, `timestamp_ns` function source hashes **all match**
+current accepted main. `MAX_TEST_LIFETIME=14400` is a local constant, not imported or
+replaced; predicate is `0 < expires-issued <= MAX_TEST_LIFETIME * 1000000000`.
+The auxiliary parser has a literal3600s bound. Its absent exported constant must not
+be confused with actual gateway behavior. No `strings`-only inference was used.
+
+### Exact timestamps and synthetic boundaries
+
+Same directory SHA256 `0aa55347adaa2fbd977b6c98b812ac2443a95c6f132f030785c33c5617c3a22a`,
+same family/gateway bindings and explicit `now_ns=1793145321597295579` for all three
+isolated parser calls. Current accepted function source was extracted without changes;
+the two installed implementations were imported from exact verified archives.
+
+| Field | Exact value |
+| --- | --- |
+| issued_at | `2026-10-27T23:23:11.48947495Z` |
+| expires_at | `2026-10-28T03:06:33.229230378Z` |
+| issued_at nanoseconds | 1793143391489474950 |
+| expires_at nanoseconds | 1793156793229230378 |
+| Delta nanoseconds | 13401739755428 |
+| Delta seconds | 13401.739755428 |
+
+All parsers preserve these exact nanoseconds. Current/actual parser PASS; auxiliary
+parser rejects `time / invalid_lifetime / expires_at`. Fractions1–9 digits and zones
+Z/signed HH:MM are supported. The old implementation passes a fractional timestamp
+through datetime, then reconstructs nanoseconds from the original fraction; the current
+one parses whole seconds and adds the exact fraction. Neither truncates this directory.
+The earlier13402s observation subtracted individually floored display endpoints;
+it was not the exact lifetime. **TIMESTAMP_PRECISION_MISMATCH is not established.**
+
+Disposable, network-free synthetic matrix:899/900/3599/3600/3601/10799/10800/10801/
+13399/13402/14399/14400/14401 seconds, identical types and synthetic bindings only.
+All three parsers ran with fixed `now_ns=1800000000123456789`; additional maximum−1ns,
+maximum and maximum+1ns checks confirm exact limits. **48 checks PASS**. Current and
+actual gateway accept through14400s; auxiliary through3600s. No production seed/join
+URL was used in synthetic fixtures or emitted in evidence.
+
+### CRL floor and the separate blocking contract
+
+Profile embedded CRL27211 equals the observed installed CRL and RU current CRL;
+RU stored sequence27211. SHA256 of both exact CRL payloads:
+`b98c1012d045d4923e8d4242d597c0fd771c2357b10bfa898608c1868eb586c3`.
+No separate NL CRL file was found at the inspected material location: the installed
+source here is the profile-embedded payload, not an independent newer file. Authority,
+issuer and signature checks PASS. Profile hash and minimum_crl27088 remain unchanged.
+Neither CRL_PROFILE_BEHIND_INSTALLED nor CRL_MINIMUM_AHEAD is supported by these data.
+
+Actual gateway code enforces `number >= max(previous_embedded_number, minimum_crl)`.
+However, its only accepted request is `READ_ONLY_SECURITY_SNAPSHOT`; all CRL-write
+requests fail **MAINTENANCE_TRANSACTION_REQUIRED**, before mutation. It validates
+the embedded payload/directory and returns a snapshot, never updates minimum_crl.
+Thus the owner's required "next exact accepted payload updates the floor" condition
+cannot be satisfied by this command. **CRL_FLOOR_UNRESOLVED** refers specifically to
+that forward-write/maintenance contract, not to unknown bytes or proven invalid
+cryptography. **CRL_FLOOR_LAG_NONBLOCKING is not claimed.**
+
+18 disposable gateway/floor checks PASS across current source, old auxiliary archive
+and actual deployed archive: below/equal floors, ahead-floor rejection, replay and
+changed/next payload cases. Actual snapshot replay is byte-preserving/idempotent;
+next CRL and same-number/different-bytes write requests both fail the maintenance
+guard without touching the fixture. The old/current generic mutating gateways do
+update the floor and reject same-number/different bytes, but those results are **not**
+transferred to the actual production forced command. No attempt to bypass its guard.
+
+### No-write evidence and validation
+
+- Existing owner binding `dev_fa4f7e03ca04`, HMAC resolution and private lookup/status
+ artifacts unchanged. Prior exact Android106 confirmation retained; **zero lookup or
+ status-operation repeats**. No selector used. Ledger subscriptions0/events0, cohort0/10;
+ owner certificate rows0, valid0, horizon CLEAR. No new owner challenge/fetch since baseline.
+- SQLite mode=ro/query_only/read transactions only. Identity/invite/support/grant,
+ paid tables, revocation-bearing records, admission/publisher and stored CRL sequence
+ unchanged. One unrelated certificate was added during ordinary production traffic;
+ the prior certificate rows still match their authoritative fingerprint. Global
+ certificate/readiness/challenge/chat tables are **not** claimed equal. Owner scope
+ remains unchanged; observers did not call challenge/fetch/issue endpoints.
+- RU/NL directory/CRL bytes, NL profile/minimum, forced-command configuration and
+ service identities unchanged. Friends exact paid-aware archive unchanged, active,
+ PID1002753/NRestarts0, effective/running argv match. No restart/reload, file replacement,
+ gateway write, CRL action, paid event, material refresh or Android action.
+- Final material readback: authority/issuer6993155s remaining, CRL10928s, directory
+ 10940s; strict actual parser, bindings/signatures PASS. Both hosts NTP synchronized.
+ These are timestamped observations, not a perpetual live-entry authorization.
+- Read-only monitor active, latest cycle28 October00:03:09 UTC; RU registry observed,
+ NL registry UNAVAILABLE, not0. Console remains loopback-only/synthetic/read-only root,
+ no production configuration mounts or credential environment entries. Monitoring
+ itself does not collect PID/build or client telemetry; service identity was inspected
+ separately. Administrative SSH was used for read-only commands, not relabeled as a
+ technically restricted read-only credential.
+- **96 affected pytest tests PASS,32 explicit deselections** (unrelated packaging and
+ optional native/Android parity). Directory/timestamp, restricted-sync, CRL signature/
+ issuer/time/number and same-number idempotency/conflict checks included. **48 parser
+ +18 gateway/floor synthetic checks PASS**. No full repository/platform suite or build.
+ No imported product code changed, so no CRL helper rewrite or correction packaging.
+- Strict JSON, private-data/selector-pattern scan, new Markdown links, staged scope
+ and `git diff --check` PASS. Only five documentation/evidence files are staged;
+ pre-existing unrelated working changes remain unstaged and byte-preserved.
+
+### Decision and next bounded action
+
+The parser cause is resolved as **NL_VALIDATOR_ONLY_DRIFT**, with a stale auxiliary
+validator left as technical debt. Actual validation remains strict14400s; no parser
+correction candidate is authorized by the proven findings, and none was built/deployed.
+Live entry remains **BLOCKED_CRL_PROFILE_COMPATIBILITY** because the required CRL
+delivery/floor-update boundary is not established on the actual read-only command.
+
+NEXT — separately authorize one bounded maintenance/delivery and floor-contract
+reconciliation: review the exact authorized maintenance route, preserve the snapshot
+endpoint's read-only guard, and establish atomic exact-payload acceptance/floor update
+with a defined rollback boundary. The numeric reconciliation target is the exact
+embedded/current CRL27211 (not a regenerated CRL); changing minimum_crl alone does not
+prove future delivery. Do not substitute the old mutating archive, enable generic
+writes, remove a safety guard or silently install credentials. This review performs
+none of those corrections. **STOP; no phone opening/Connect or request for ГОТОВ.**
+
 ## Read-only owner binding and live-entry preflight — 28 October local
 
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_READONLY_PREFLIGHT / MATERIALS_INVALID /

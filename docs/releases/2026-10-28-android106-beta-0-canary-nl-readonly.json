@@ -1,0 +1,931 @@
+{
+  "alias": "OWNER_CANARY_1",
+  "android106": "PRIOR_AUTHENTICATED_CONFIRMATION_RETAINED_NO_NEW_STATUS_CALL",
+  "artifacts": {
+    "correction_candidate": "NOT_BUILT_RUNTIME_PARSER_DRIFT_NOT_PROVEN",
+    "lookup": {
+      "binding": "lookup_only",
+      "members": 15,
+      "sha256": "63ffe0f1ac4dad0c15a94558423de4eab2a5aff754167e8108d75064bb95d308",
+      "size": 56017,
+      "unchanged": true
+    },
+    "status": {
+      "binding": "single_canary",
+      "members": 15,
+      "permit": null,
+      "sha256": "ab27f3bf3d55475d752af9b3b3ed193e19832aa8df2ffb6dc7f38adb776090c0",
+      "size": 56187,
+      "unchanged": true
+    }
+  },
+  "binding": "UNCHANGED_READONLY",
+  "checkpoint": "ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1",
+  "crl_floor": {
+    "actual_gateway_number_guard": "max(previous_embedded_crl_number, minimum_crl)",
+    "actual_gateway_request_contract": "READ_ONLY_SECURITY_SNAPSHOT_ONLY",
+    "classification": "CRL_FLOOR_UNRESOLVED",
+    "incoming_crl_payload_result": "MAINTENANCE_TRANSACTION_REQUIRED",
+    "issuer_valid": true,
+    "lag_nonblocking_not_proven": "REQUIRED_NEXT_ACCEPTED_PAYLOAD_AND_FLOOR_UPDATE_UNAVAILABLE_ON_OBSERVED_COMMAND",
+    "minimum_crl": 27088,
+    "next_payload_updates_minimum": false,
+    "numeric_inconsistency_claimed": false,
+    "numeric_state": "OBSERVED_EMBEDDED_CRL_EQUAL_RU_CURRENT_MINIMUM_BELOW",
+    "observed_installed_crl_number": 27211,
+    "observed_installed_crl_source": "PROFILE_EMBEDDED",
+    "profile_embedded_number": 27211,
+    "profile_embedded_sha256": "b98c1012d045d4923e8d4242d597c0fd771c2357b10bfa898608c1868eb586c3",
+    "profile_sha256": "6a3f903ff9137c67c93679178f4f2f12c5321b8085aa46394cb1f934cc3621d1",
+    "ru_current_crl_number": 27211,
+    "ru_stored_crl_sequence": 27211,
+    "separate_nl_crl_source_present": false,
+    "separately_authorized_mutating_maintenance_path": "NOT_ESTABLISHED_BY_THIS_REVIEW",
+    "signature_valid": true,
+    "synthetic_gateway_matrix": {
+      "accepted_current": {
+        "cases": [
+          {
+            "case": "floor_1",
+            "minimum_after": 2,
+            "profile_unchanged": false,
+            "result": "PASS"
+          },
+          {
+            "case": "floor_2",
+            "minimum_after": 2,
+            "profile_unchanged": false,
+            "result": "PASS"
+          },
+          {
+            "case": "floor_3",
+            "minimum_after": 3,
+            "profile_unchanged": true,
+            "result": "REJECTED"
+          },
+          {
+            "case": "same_number_same_bytes",
+            "minimum_after": 2,
+            "result": "PASS"
+          },
+          {
+            "case": "same_number_different_bytes",
+            "result": "REJECTED"
+          },
+          {
+            "case": "next_crl_payload",
+            "minimum_after": 3,
+            "result": "PASS"
+          }
+        ],
+        "result": "PASS"
+      },
+      "forced_gateway": {
+        "cases": [
+          {
+            "case": "floor_1",
+            "minimum_after": 1,
+            "profile_unchanged": true,
+            "result": "PASS"
+          },
+          {
+            "case": "floor_2",
+            "minimum_after": 2,
+            "profile_unchanged": true,
+            "result": "PASS"
+          },
+          {
+            "case": "floor_3",
+            "minimum_after": 3,
+            "profile_unchanged": true,
+            "result": "REJECTED"
+          },
+          {
+            "case": "snapshot_replay",
+            "profile_unchanged": true,
+            "result": "PASS"
+          },
+          {
+            "case": "next_crl_payload",
+            "profile_unchanged": true,
+            "result": "MAINTENANCE_TRANSACTION_REQUIRED"
+          },
+          {
+            "case": "same_number_different_bytes",
+            "profile_unchanged": true,
+            "result": "MAINTENANCE_TRANSACTION_REQUIRED"
+          }
+        ],
+        "result": "PASS"
+      },
+      "prior_directory_validator": {
+        "cases": [
+          {
+            "case": "floor_1",
+            "minimum_after": 2,
+            "profile_unchanged": false,
+            "result": "PASS"
+          },
+          {
+            "case": "floor_2",
+            "minimum_after": 2,
+            "profile_unchanged": false,
+            "result": "PASS"
+          },
+          {
+            "case": "floor_3",
+            "minimum_after": 3,
+            "profile_unchanged": true,
+            "result": "REJECTED"
+          },
+          {
+            "case": "same_number_same_bytes",
+            "minimum_after": 2,
+            "result": "PASS"
+          },
+          {
+            "case": "same_number_different_bytes",
+            "result": "REJECTED"
+          },
+          {
+            "case": "next_crl_payload",
+            "minimum_after": 3,
+            "result": "PASS"
+          }
+        ],
+        "result": "PASS"
+      }
+    }
+  },
+  "exact_comparison_now_ns": 1793145321597295579,
+  "exact_directory_comparisons": [
+    {
+      "delta_ns": 13401739755428,
+      "delta_seconds": "13401.739755428",
+      "expires_at_ns": 1793156793229230378,
+      "fractional_seconds": true,
+      "issued_at_ns": 1793143391489474950,
+      "now_ns": 1793145321597295579,
+      "parser": "accepted_current",
+      "raw_expires_at": "2026-10-28T03:06:33.229230378Z",
+      "raw_issued_at": "2026-10-27T23:23:11.48947495Z",
+      "result": "PASS",
+      "sha256": "0aa55347adaa2fbd977b6c98b812ac2443a95c6f132f030785c33c5617c3a22a"
+    },
+    {
+      "delta_ns": 13401739755428,
+      "delta_seconds": "13401.739755428",
+      "expires_at_ns": 1793156793229230378,
+      "field": "expires_at",
+      "fractional_seconds": true,
+      "issued_at_ns": 1793143391489474950,
+      "now_ns": 1793145321597295579,
+      "parser": "prior_directory_validator",
+      "predicate": "invalid_lifetime",
+      "raw_expires_at": "2026-10-28T03:06:33.229230378Z",
+      "raw_issued_at": "2026-10-27T23:23:11.48947495Z",
+      "result": "FAIL",
+      "sha256": "0aa55347adaa2fbd977b6c98b812ac2443a95c6f132f030785c33c5617c3a22a",
+      "stage": "time"
+    },
+    {
+      "delta_ns": 13401739755428,
+      "delta_seconds": "13401.739755428",
+      "expires_at_ns": 1793156793229230378,
+      "fractional_seconds": true,
+      "issued_at_ns": 1793143391489474950,
+      "now_ns": 1793145321597295579,
+      "parser": "forced_gateway",
+      "raw_expires_at": "2026-10-28T03:06:33.229230378Z",
+      "raw_issued_at": "2026-10-27T23:23:11.48947495Z",
+      "result": "PASS",
+      "sha256": "0aa55347adaa2fbd977b6c98b812ac2443a95c6f132f030785c33c5617c3a22a"
+    }
+  ],
+  "execution": {
+    "archives": {
+      "forced_gateway": {
+        "inventory": {
+          "__main__.py": {
+            "sha256": "4fb4c672cd2a023909808e1aeb3b14bbff216aef14a79722c47dbafea8df8117",
+            "size": 102
+          },
+          "clients/": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          "clients/desktop/": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          "clients/desktop/profile_config.py": {
+            "sha256": "0c72f3353aa4be1ada9c6bfc6c29475ba3c1ae9f8ce2860dbfb0d5fd3a3ec83a",
+            "size": 9295
+          },
+          "control/": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          "control/friends/": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          "control/friends/__init__.py": {
+            "sha256": "efb76720b2ad1c9594aee9488b342e3311ed01a4bff3082c2fa3999663354cc8",
+            "size": 84
+          },
+          "control/friends/access.py": {
+            "sha256": "63098918ec20d8610038dbaa246a2f605dad889108648f18ec192b944325880b",
+            "size": 6461
+          },
+          "control/friends/readiness_receipts.py": {
+            "sha256": "16e4556af6d914e7411b3563bef44efebd2a8ba2d7dda1d0faa4f4e100ceb660",
+            "size": 9011
+          },
+          "control/friends/restricted.py": {
+            "sha256": "4a932f292290ba7060f705ade74279d81834fc7816e14e17fa7c7d42c16c8397",
+            "size": 22826
+          },
+          "control/friends/restricted_admin.py": {
+            "sha256": "d3ff58346e929442f981b099c7c76bf50a5a70fea0747b1d48e73ff74b079a10",
+            "size": 6816
+          },
+          "control/friends/restricted_sync.py": {
+            "sha256": "30a4247d295d22b5a84ca0263c5c3a76b7082754e7911297ccf8960eaf42453e",
+            "size": 8626
+          },
+          "device_identity/": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          "device_identity/__init__.py": {
+            "sha256": "3cd56edaf5fbfde9c88df7078dc55be15bf23cfc830727ee410bc8f31dc9990f",
+            "size": 83
+          },
+          "device_identity/device.py": {
+            "sha256": "38e29e640c913c1331164aa36fde0ca95b1d13ee057ae92c3d31ec7b993151d3",
+            "size": 8926
+          },
+          "provisioning/": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          "provisioning/__init__.py": {
+            "sha256": "a8d11b35f8be63395d505bcf0cf7774aa5c0dbffa5eee905eef911a8d3fdb905",
+            "size": 88
+          },
+          "provisioning/friends_catalog.py": {
+            "sha256": "add970991089003c7b4589e8dbb135d56e63a601b5530c939f4b6ab8b964bebe",
+            "size": 6189
+          }
+        },
+        "members": 18,
+        "sha256": "0120dad028ead353b8b83a600538f3e578b2b46ddf871bf16e97529f9449f450",
+        "size": 26854
+      },
+      "prior_directory_validator": {
+        "inventory": {
+          "__main__.py": {
+            "sha256": "4fb4c672cd2a023909808e1aeb3b14bbff216aef14a79722c47dbafea8df8117",
+            "size": 102
+          },
+          "clients/": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          "clients/desktop/": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          "clients/desktop/profile_config.py": {
+            "sha256": "0c72f3353aa4be1ada9c6bfc6c29475ba3c1ae9f8ce2860dbfb0d5fd3a3ec83a",
+            "size": 9295
+          },
+          "control/": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          "control/friends/": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          "control/friends/__init__.py": {
+            "sha256": "efb76720b2ad1c9594aee9488b342e3311ed01a4bff3082c2fa3999663354cc8",
+            "size": 84
+          },
+          "control/friends/access.py": {
+            "sha256": "63098918ec20d8610038dbaa246a2f605dad889108648f18ec192b944325880b",
+            "size": 6461
+          },
+          "control/friends/readiness_receipts.py": {
+            "sha256": "4e45675f2d3a9a08fbaa43e9ff048c509902902a8ab26d5f5ca5f3799fb13237",
+            "size": 8937
+          },
+          "control/friends/restricted.py": {
+            "sha256": "445d0663be6f01a727dbf3e61d8d741c591c3a45250bdb674cbb7b5a18e8c7ba",
+            "size": 21956
+          },
+          "control/friends/restricted_admin.py": {
+            "sha256": "23a924257f43ed36913fd583f50884dee269b2137eb497e4d5ae16f95a8db913",
+            "size": 6399
+          },
+          "control/friends/restricted_sync.py": {
+            "sha256": "30e87de8c5a7ddbed2d9eaabc94c6b3177cbad49e696935d50c7b617bff6b923",
+            "size": 8224
+          },
+          "device_identity/": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          "device_identity/__init__.py": {
+            "sha256": "3cd56edaf5fbfde9c88df7078dc55be15bf23cfc830727ee410bc8f31dc9990f",
+            "size": 83
+          },
+          "device_identity/device.py": {
+            "sha256": "38e29e640c913c1331164aa36fde0ca95b1d13ee057ae92c3d31ec7b993151d3",
+            "size": 8926
+          },
+          "provisioning/": {
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0
+          },
+          "provisioning/__init__.py": {
+            "sha256": "a8d11b35f8be63395d505bcf0cf7774aa5c0dbffa5eee905eef911a8d3fdb905",
+            "size": 88
+          },
+          "provisioning/friends_catalog.py": {
+            "sha256": "add970991089003c7b4589e8dbb135d56e63a601b5530c939f4b6ab8b964bebe",
+            "size": 6189
+          }
+        },
+        "members": 18,
+        "sha256": "f6aa8859ab716383bf207b2ff7b302687692832b2ccb410f1aef0ada0793a9c9",
+        "size": 26406
+      }
+    },
+    "authorized_command_configuration_sha256": "2088977f54df68d5d4a4209042d3e8e75d0ec15b569a9a4c7f2b197eeee4694a",
+    "bootstrap_service": {
+      "ActiveState": "active",
+      "ExecMainStartTimestampMonotonic": "3850111891575",
+      "MainPID": "2491265",
+      "NRestarts": "0",
+      "SubState": "running"
+    },
+    "bootstrap_service_is_separate": true,
+    "discovery": "EFFECTIVE_SSH_CONFIGURATION_AUTHORIZED_FORCED_COMMAND_EXEC_ARGV",
+    "effective_configuration": {
+      "authorizedkeyscommand": "none",
+      "forcecommand": "none",
+      "pubkeyauthentication": "yes"
+    },
+    "forced_command_lifetime": "PER_CONNECTION_NOT_PERSISTENT",
+    "forced_command_sha256": "5e05e31a2a151966f7c933fc5e541034ad91e13fa61ba88735de817a88c2ac5f",
+    "production_forced_command_invocations": 0,
+    "python": "3.14.4",
+    "wrapper_sha256": "fd3d3ba4ee74365a431b4d95b8eea737a507976489c002b948d607f4e24a26ef"
+  },
+  "execution_path_observation": "NL_VALIDATOR_EXECUTION_PATH_DRIFT",
+  "friends_archive_sha256": "dcd769986a1da7cb1662c0f73d18a88e9f73485a977db937ca5b1428c1fd1029",
+  "friends_service": {
+    "ActiveState": "active",
+    "ExecMainStartTimestampMonotonic": 4877589183478,
+    "MainPID": 1002753,
+    "NRestarts": 0,
+    "SubState": "running",
+    "effective_execstart_matches": true,
+    "running_argv_matches": true
+  },
+  "function_hash_method": "SHA256_UTF8_AST_GET_SOURCE_SEGMENT_NO_REFORMATTING",
+  "input_main": "f499bdf80eec2022c3b58cd1db4ebfb93cafd7ed",
+  "live_writes": "NOT_RUN",
+  "materials": {
+    "all_required_remaining_seconds_at_least_720": true,
+    "directory_sha256": "0aa55347adaa2fbd977b6c98b812ac2443a95c6f132f030785c33c5617c3a22a",
+    "family_gateway_authority_bindings_equal": true,
+    "nl_clock": {
+      "NTP": "yes",
+      "NTPSynchronized": "yes"
+    },
+    "observed_at": 1793145853,
+    "remaining_seconds": {
+      "authority": 6993155,
+      "crl": 10928,
+      "directory": 10940,
+      "issuer": 6993155
+    },
+    "ru_clock": {
+      "NTP": "yes",
+      "NTPSynchronized": "yes"
+    },
+    "ru_nl_crl_bytes_equal": true,
+    "ru_nl_directory_bytes_equal": true,
+    "signatures_and_bindings": "PASS"
+  },
+  "monitoring": {
+    "administrative_ssh_credential_used_only_for_readonly_commands": true,
+    "client_telemetry": "NOT_COLLECTED",
+    "completed_at": "2026-10-28T00:03:09.182679+00:00",
+    "console_boundary": {
+      "container_status": "running",
+      "credential_environment_names": 0,
+      "loopback_only": true,
+      "mode": "synthetic",
+      "production_configuration_mounts": 0,
+      "production_write_workflows": "UNAVAILABLE",
+      "read_only_rootfs": true,
+      "result": "PASS",
+      "schema": 1
+    },
+    "pid_build_from_monitor": "NOT_COLLECTED_SEPARATELY_OBSERVED",
+    "production_writes": 0,
+    "sources": [
+      {
+        "observed_at": "2026-10-28T00:03:03.810883+00:00",
+        "registry_status": "ok",
+        "source": "gateway-ru",
+        "status": "IMPORTED"
+      },
+      {
+        "observed_at": "2026-10-28T00:03:06.703838+00:00",
+        "registry_status": "unavailable",
+        "source": "gateway-nl",
+        "status": "IMPORTED"
+      }
+    ],
+    "timer": {
+      "ActiveState": "active",
+      "SubState": "running"
+    }
+  },
+  "next": "SEPARATELY_AUTHORIZE_BOUNDED_CRL_MAINTENANCE_DELIVERY_AND_FLOOR_CONTRACT_RECONCILIATION",
+  "no_write_proof": {
+    "android_actions": 0,
+    "artifact_hashes_unchanged": true,
+    "canary_certificates": 0,
+    "cohort_count": 0,
+    "material_hashes_unchanged": true,
+    "nl_execution_configuration_unchanged": true,
+    "observed_at": 1793145733,
+    "ordinary_concurrent_changed_tables": [
+      "challenges",
+      "chat_challenges",
+      "chat_sequence",
+      "restricted_certificates",
+      "restricted_challenges",
+      "restricted_readiness_results"
+    ],
+    "production_ledger": {
+      "events": 0,
+      "subscriptions": 0
+    },
+    "production_lookup_calls": 0,
+    "production_status_calls": 0,
+    "production_writes": 0,
+    "profile_and_minimum_unchanged": true,
+    "protected_registry_unchanged": true,
+    "protected_tables": [
+      "devices",
+      "invites",
+      "device_support",
+      "restricted_grants",
+      "paid_beta_events",
+      "paid_beta_subscriptions",
+      "restricted_crl_sequence"
+    ],
+    "readiness_calls": 0,
+    "restart_reload_calls": 0,
+    "result": "PASS",
+    "schema": 1,
+    "scoped_registry_evidence": {
+      "observed_at": 1793145866,
+      "owner_certificate_rows": 0,
+      "owner_new_challenges": 0,
+      "owner_new_fetches": 0,
+      "owner_readiness_rows": 1,
+      "previous_certificate_rows_unchanged": true,
+      "result": "PASS",
+      "schema": 1,
+      "unrelated_added_certificates": 1
+    },
+    "service_unchanged": true
+  },
+  "observation_start_utc": "2026-10-27T23:50:14+00:00",
+  "parser_classification": "NL_VALIDATOR_ONLY_DRIFT",
+  "parser_contracts": {
+    "accepted_current": {
+      "functions": {
+        "directory": "bd10a1b520f96d1879f4dc66ddbcda3ed4a628c7e254bf1629ab8b29aa276dfb",
+        "timestamp": "3b709dcb000f24594e950f06c4c9df2fd7cc058db4e7babe05e43762e0bc319f",
+        "timestamp_ns": "77d02a4dca71ffec20e30293dd394ba17abfcaa33bab12b3e95c1f1b31333fb2"
+      },
+      "maximum_directory_lifetime": 14400,
+      "module_sha256": "57570d455a69d91a9a8d971a83d7d28153610ded55cb4208138d6d8c36658155",
+      "source_commit": "f499bdf80eec2022c3b58cd1db4ebfb93cafd7ed"
+    },
+    "forced_gateway": {
+      "functions": {
+        "directory": "bd10a1b520f96d1879f4dc66ddbcda3ed4a628c7e254bf1629ab8b29aa276dfb",
+        "timestamp": "3b709dcb000f24594e950f06c4c9df2fd7cc058db4e7babe05e43762e0bc319f",
+        "timestamp_ns": "77d02a4dca71ffec20e30293dd394ba17abfcaa33bab12b3e95c1f1b31333fb2"
+      },
+      "gateway_function_sha256": "542827d5f606460a3792ddc92e9aefd37024908ec5e1aad6a0476567fc0ef314",
+      "limit_provenance": "local_constant",
+      "maximum_directory_lifetime": 14400,
+      "module_hashes": {
+        "control/friends/restricted.py": "4a932f292290ba7060f705ade74279d81834fc7816e14e17fa7c7d42c16c8397",
+        "control/friends/restricted_sync.py": "30a4247d295d22b5a84ca0263c5c3a76b7082754e7911297ccf8960eaf42453e",
+        "provisioning/friends_catalog.py": "add970991089003c7b4589e8dbb135d56e63a601b5530c939f4b6ab8b964bebe"
+      }
+    },
+    "prior_directory_validator": {
+      "functions": {
+        "directory": "78525ee0d27ad34d42971ffdd74d64e8f5549364f1a6ece9965b0a949f9a2044",
+        "timestamp": "3b709dcb000f24594e950f06c4c9df2fd7cc058db4e7babe05e43762e0bc319f",
+        "timestamp_ns": "d61c5dbf2768c3109606ab9e57225b724bb24e5d8832e1d45bc28ba13c26c679"
+      },
+      "gateway_function_sha256": "fd4f1b42e624c5e93febe0914faf9213b74dbdb3a0a38ba9b2c830c983be4485",
+      "limit_provenance": "literal_in_predicate",
+      "maximum_directory_lifetime": 3600,
+      "module_hashes": {
+        "control/friends/restricted.py": "445d0663be6f01a727dbf3e61d8d741c591c3a45250bdb674cbb7b5a18e8c7ba",
+        "control/friends/restricted_sync.py": "30e87de8c5a7ddbed2d9eaabc94c6b3177cbad49e696935d50c7b617bff6b923",
+        "provisioning/friends_catalog.py": "add970991089003c7b4589e8dbb135d56e63a601b5530c939f4b6ab8b964bebe"
+      }
+    }
+  },
+  "phone_instruction": "NONE_LIVE_ENTRY_BLOCKED",
+  "safe_ref": "dev_fa4f7e03ca04",
+  "schema": 1,
+  "source_provenance": {
+    "forced_gateway": {
+      "control/friends/restricted.py": {
+        "git_blob": null,
+        "provenance": "EXACT_INSTALLED_GENERIC_SOURCE",
+        "sha256": "4a932f292290ba7060f705ade74279d81834fc7816e14e17fa7c7d42c16c8397"
+      },
+      "control/friends/restricted_sync.py": {
+        "git_blob": null,
+        "provenance": "EXACT_INSTALLED_GENERIC_SOURCE",
+        "sha256": "30a4247d295d22b5a84ca0263c5c3a76b7082754e7911297ccf8960eaf42453e"
+      },
+      "provisioning/friends_catalog.py": {
+        "git_blob": "969dd4c2ee9ef076925b381c31f2e5d1c4552e32",
+        "provenance": "EXACT_GIT_BLOB",
+        "sha256": "add970991089003c7b4589e8dbb135d56e63a601b5530c939f4b6ab8b964bebe",
+        "verified_commit": "ccb52578fb514467abd0bbc7577c9eae869cf790"
+      }
+    },
+    "prior_directory_validator": {
+      "control/friends/restricted.py": {
+        "git_blob": "11c3ee181778ab81c669690fc52382f4f3e2e893",
+        "provenance": "EXACT_GIT_BLOB",
+        "sha256": "445d0663be6f01a727dbf3e61d8d741c591c3a45250bdb674cbb7b5a18e8c7ba",
+        "verified_commit": "ad17db7faf7407296dd48748045a202664860ed7"
+      },
+      "control/friends/restricted_sync.py": {
+        "git_blob": "3998d0d2c6f8d01a6183e7036bb114be5796eae2",
+        "provenance": "EXACT_GIT_BLOB",
+        "sha256": "30e87de8c5a7ddbed2d9eaabc94c6b3177cbad49e696935d50c7b617bff6b923",
+        "verified_commit": "29d15d73dae52ac8a1079c52dd349b5b21045742"
+      },
+      "provisioning/friends_catalog.py": {
+        "git_blob": "969dd4c2ee9ef076925b381c31f2e5d1c4552e32",
+        "provenance": "EXACT_GIT_BLOB",
+        "sha256": "add970991089003c7b4589e8dbb135d56e63a601b5530c939f4b6ab8b964bebe",
+        "verified_commit": "ccb52578fb514467abd0bbc7577c9eae869cf790"
+      }
+    }
+  },
+  "status": "BLOCKED_CRL_PROFILE_COMPATIBILITY",
+  "synthetic_boundary_matrix": {
+    "cases": [
+      {
+        "expected": "PASS",
+        "lifetime_ns": 899000000000,
+        "parser": "accepted_current",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 900000000000,
+        "parser": "accepted_current",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 3599000000000,
+        "parser": "accepted_current",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 3600000000000,
+        "parser": "accepted_current",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 3601000000000,
+        "parser": "accepted_current",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 10799000000000,
+        "parser": "accepted_current",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 10800000000000,
+        "parser": "accepted_current",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 10801000000000,
+        "parser": "accepted_current",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 13399000000000,
+        "parser": "accepted_current",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 13402000000000,
+        "parser": "accepted_current",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 14399000000000,
+        "parser": "accepted_current",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 14400000000000,
+        "parser": "accepted_current",
+        "result": "PASS"
+      },
+      {
+        "expected": "FAIL",
+        "lifetime_ns": 14401000000000,
+        "parser": "accepted_current",
+        "result": "FAIL"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 899000000000,
+        "parser": "prior_directory_validator",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 900000000000,
+        "parser": "prior_directory_validator",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 3599000000000,
+        "parser": "prior_directory_validator",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 3600000000000,
+        "parser": "prior_directory_validator",
+        "result": "PASS"
+      },
+      {
+        "expected": "FAIL",
+        "lifetime_ns": 3601000000000,
+        "parser": "prior_directory_validator",
+        "result": "FAIL"
+      },
+      {
+        "expected": "FAIL",
+        "lifetime_ns": 10799000000000,
+        "parser": "prior_directory_validator",
+        "result": "FAIL"
+      },
+      {
+        "expected": "FAIL",
+        "lifetime_ns": 10800000000000,
+        "parser": "prior_directory_validator",
+        "result": "FAIL"
+      },
+      {
+        "expected": "FAIL",
+        "lifetime_ns": 10801000000000,
+        "parser": "prior_directory_validator",
+        "result": "FAIL"
+      },
+      {
+        "expected": "FAIL",
+        "lifetime_ns": 13399000000000,
+        "parser": "prior_directory_validator",
+        "result": "FAIL"
+      },
+      {
+        "expected": "FAIL",
+        "lifetime_ns": 13402000000000,
+        "parser": "prior_directory_validator",
+        "result": "FAIL"
+      },
+      {
+        "expected": "FAIL",
+        "lifetime_ns": 14399000000000,
+        "parser": "prior_directory_validator",
+        "result": "FAIL"
+      },
+      {
+        "expected": "FAIL",
+        "lifetime_ns": 14400000000000,
+        "parser": "prior_directory_validator",
+        "result": "FAIL"
+      },
+      {
+        "expected": "FAIL",
+        "lifetime_ns": 14401000000000,
+        "parser": "prior_directory_validator",
+        "result": "FAIL"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 899000000000,
+        "parser": "forced_gateway",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 900000000000,
+        "parser": "forced_gateway",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 3599000000000,
+        "parser": "forced_gateway",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 3600000000000,
+        "parser": "forced_gateway",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 3601000000000,
+        "parser": "forced_gateway",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 10799000000000,
+        "parser": "forced_gateway",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 10800000000000,
+        "parser": "forced_gateway",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 10801000000000,
+        "parser": "forced_gateway",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 13399000000000,
+        "parser": "forced_gateway",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 13402000000000,
+        "parser": "forced_gateway",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 14399000000000,
+        "parser": "forced_gateway",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 14400000000000,
+        "parser": "forced_gateway",
+        "result": "PASS"
+      },
+      {
+        "expected": "FAIL",
+        "lifetime_ns": 14401000000000,
+        "parser": "forced_gateway",
+        "result": "FAIL"
+      }
+    ],
+    "checks": 48,
+    "nanosecond_edges": [
+      {
+        "expected": "PASS",
+        "lifetime_ns": 14399999999999,
+        "parser": "accepted_current",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 14400000000000,
+        "parser": "accepted_current",
+        "result": "PASS"
+      },
+      {
+        "expected": "FAIL",
+        "lifetime_ns": 14400000000001,
+        "parser": "accepted_current",
+        "result": "FAIL"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 3599999999999,
+        "parser": "prior_directory_validator",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 3600000000000,
+        "parser": "prior_directory_validator",
+        "result": "PASS"
+      },
+      {
+        "expected": "FAIL",
+        "lifetime_ns": 3600000000001,
+        "parser": "prior_directory_validator",
+        "result": "FAIL"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 14399999999999,
+        "parser": "forced_gateway",
+        "result": "PASS"
+      },
+      {
+        "expected": "PASS",
+        "lifetime_ns": 14400000000000,
+        "parser": "forced_gateway",
+        "result": "PASS"
+      },
+      {
+        "expected": "FAIL",
+        "lifetime_ns": 14400000000001,
+        "parser": "forced_gateway",
+        "result": "FAIL"
+      }
+    ],
+    "network_calls": 0,
+    "now_ns": 1800000000123456789,
+    "result": "PASS",
+    "schema": 1
+  },
+  "tests": {
+    "affected_pytest_passed": 96,
+    "deselection_reason": "UNRELATED_PACKAGING_AND_OPTIONAL_NATIVE_ANDROID_PARITY_NOT_IN_SCOPE",
+    "explicit_deselections": 32,
+    "full_repository_suite": "NOT_RUN",
+    "package_determinism": "NOT_APPLICABLE_NO_CORRECTION_PACKAGE",
+    "platform_builds": "NOT_RUN",
+    "scope": [
+      "directory validation",
+      "timestamp precision",
+      "restricted-sync gateway",
+      "same-number idempotency/conflict",
+      "CRL signature/issuer/time/number negatives",
+      "deployed read-only gateway floor matrix"
+    ],
+    "synthetic_boundary_checks_passed": 48,
+    "synthetic_gateway_floor_checks_passed": 18,
+    "synthetic_network_calls": 0,
+    "synthetic_production_data_used": false
+  },
+  "timestamp_contract": {
+    "directory_uses_exact_nanoseconds": true,
+    "display_timestamp_helper": "INTEGER_SECONDS_FLOOR",
+    "fractional_digits": "1..9",
+    "historical_13402_seconds": "DIFFERENCE_OF_INDIVIDUALLY_FLOORED_ENDPOINTS_NOT_EXACT_LIFETIME",
+    "parser_results_differ_due_to_precision": false,
+    "timezone_forms": [
+      "Z",
+      "+HH:MM",
+      "-HH:MM"
+    ]
+  }
+}
