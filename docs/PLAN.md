@@ -3,10 +3,13 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-**Current substep BETA-0-CANARY-1 — COORDINATED_CANONICAL_PROFILE_SOURCE_IN_PROGRESS /
+**Current substep BETA-0-CANARY-1 — COORDINATED_CANONICAL_PROFILE_STAGED_INACTIVE /
 LIVE_WRITES_NOT_RUN.** Continue the owner's coordinated migration in this same task;
 the snapshot-only proposal is cancelled. Dependency: fresh exact reader/writer graph,
 including the accepted renewal writer and running gateway, not just maintenance.
+Root-private backups and inactive artifacts are now staged on both gateways; no active
+route change, canonical copy, timer pause, restart or floor operation. Remaining next
+gate is exact staged-config/rollback qualification before the one-cycle quiescence.
 Shared transaction core and accepted renewal method integration: canonical stage,
 shared-lock promote, exact rollback and floor normalization implemented. Bounded
 maintenance now uses the same canonical locator/lock, with read-only renewable directory

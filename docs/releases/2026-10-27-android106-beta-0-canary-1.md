@@ -328,6 +328,35 @@ reader group covers the required readers; the gateway reader is also the existin
 publisher and needs profile read access only. No group/account or production path changed.
 All artifacts remain **unbound/uninstalled**, and all mutation budgets remain unspent.
 
+### Private backups and inactive production staging
+
+After a new read-only gate with7512s material headroom, validated root-private backups
+and immutable inactive artifacts were created on both authorized gateways. RU backup23
+files; NL backup34 files. Configuration, accepted source/API, service/timer definitions,
+gateway binary/argv, snapshot authorization/wrapper, profile/directory bytes and original
+metadata are retained privately. Every backup copy was read back and hash-checked.
+No backup, configuration, key or material body is committed or uploaded to Django.
+
+Backup manifest hashes:
+- RU: `6a22e5819b245787587a81dd36897a7fd58851a7f0ba4e25bcebf2d7f0cb5cc1`.
+- NL: `0d32fe35eb74522f79846143b63804baa9ff1332c65bad06b9438c9d03265b0a`.
+
+Installed inactive artifacts pass exact source/package hashes and import/help smoke
+under the production interpreter. **No active configuration changed**, no canonical
+profile copy created, no timer paused, no gateway/Friends restart, no floor/CRL/paid/
+Android/readiness action. Old accepted readers/writer remain authoritative together;
+there is no partial migration. Existing reader group remains unchanged.
+
+An initial private staging harness Path/string guard failed before its first write.
+Read-only reconciliation proved both destination trees absent. The guard was corrected,
+read-only prewrite checks passed, and staging then completed. This did not spend a
+cutover, pause or floor-operation budget. Additional accepted-source publisher/cache/
+timestamp checks:5 native tests with16 subcases PASS; no publisher source change.
+
+Current classification: **COORDINATED_CANONICAL_PROFILE_STAGED_INACTIVE**, not READY.
+Exact staged-config and rollback qualification, fresh quiescence, canonical copy,
+single bounded reconciliation and coordinated cutover/final acceptance remain open.
+
 ## Split-boundary writer inventory — 28 October
 
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_PROFILE_WRITER_CONFLICT /

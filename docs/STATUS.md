@@ -2,9 +2,13 @@
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
-**Current substep BETA-0-CANARY-1 — COORDINATED_CANONICAL_PROFILE_SOURCE_IN_PROGRESS /
+**Current substep BETA-0-CANARY-1 — COORDINATED_CANONICAL_PROFILE_STAGED_INACTIVE /
 LIVE_WRITES_NOT_RUN.** Owner authorizes coordinated migration, superseding the
 snapshot-only proposal; the checkpoint and top-level task are unchanged.
+Current production change is limited to validated root-private backups and inactive
+artifacts on both gateways. Active configurations, profile/directory contents, timers
+and running processes are unchanged by this checkpoint. No canonical copy or floor
+operation yet; pause/cutover/rollback budgets remain0/1. This is not migration acceptance.
 Fresh read-only entry at4439242 confirms the legitimate renewal writer, active
 schedule/latest success,13 exact source pins, gateway reader and independent publisher.
 CRL/sequence27216, floor27088, paid ledger0/0 and owner certificates0 at entry;

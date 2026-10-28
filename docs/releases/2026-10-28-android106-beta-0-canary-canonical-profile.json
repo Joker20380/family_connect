@@ -101,6 +101,32 @@
     "renewal": "EXISTING_LEGITIMATE_PROFILE_WRITER",
     "snapshot": "EXISTING_READ_ONLY_PROFILE_AND_DIRECTORY_READER"
   },
+  "inactive_staging": {
+    "nl": {
+      "active_configuration_changes": 0,
+      "backup_files": 34,
+      "backup_manifest_sha256": "0d32fe35eb74522f79846143b63804baa9ff1332c65bad06b9438c9d03265b0a",
+      "floor_operations": 0,
+      "profile_writes": 0,
+      "restarts": 0,
+      "result": "BACKUP_AND_INACTIVE_ASSETS_STAGED",
+      "role": "NL",
+      "source": "c9c0a4de55f455e0788e7b519383c0cb0743fc96",
+      "timer_pauses": 0
+    },
+    "ru": {
+      "active_configuration_changes": 0,
+      "backup_files": 23,
+      "backup_manifest_sha256": "6a22e5819b245787587a81dd36897a7fd58851a7f0ba4e25bcebf2d7f0cb5cc1",
+      "floor_operations": 0,
+      "profile_writes": 0,
+      "restarts": 0,
+      "result": "BACKUP_AND_INACTIVE_ASSETS_STAGED",
+      "role": "RU",
+      "source": "c9c0a4de55f455e0788e7b519383c0cb0743fc96",
+      "timer_pauses": 0
+    }
+  },
   "intermediate_artifacts": {
     "artifacts": {
       "maintenance": {
@@ -154,8 +180,8 @@
       "subscriptions": 0
     },
     "minimum_crl": 27088,
-    "minimum_remaining_seconds": 8537,
-    "observed_at": 1793211442,
+    "minimum_remaining_seconds": 7512,
+    "observed_at": 1793212468,
     "owner_binding": "UNCHANGED",
     "owner_certificate_readiness": "UNCHANGED",
     "owner_certificates": 0,
@@ -204,23 +230,27 @@
     "subscriptions": 0
   },
   "production": {
+    "active_configuration_changes": 0,
     "all_counts_are_checkpoint_actions": true,
     "android_actions": 0,
-    "backups_created": 0,
+    "backups_created": 2,
+    "canonical_copy_created": false,
     "credentials_installed": 0,
     "emergency_restarts": 0,
     "floor_operations": 0,
     "gateway_cutover_restarts": 0,
     "latest_renewal_result": "success",
     "observed_material_advancement": "NORMAL_SCHEDULED_RENEWAL_COMMITTED",
+    "profile_writes": 0,
     "readiness_calls": 0,
-    "renewal_timer": "ACTIVE_AT_FRESH_ENTRY",
+    "renewal_timer": "ACTIVE_UNPAUSED",
     "rollback": "NOT_NEEDED",
     "route_changes": 0,
-    "ru_mutations": 0,
+    "ru_material_mutations": 0,
+    "ru_mutations": "INACTIVE_ASSETS_AND_PRIVATE_BACKUPS_ONLY",
     "stage0": "NOT_RUN",
     "timer_pause_cycles": 0,
-    "writes": 0
+    "writes": "PRIVATE_BACKUPS_AND_INACTIVE_ARTIFACTS_ONLY"
   },
   "publisher_profile_access": "SAME_GATEWAY_READER_REQUIRES_READ_ONLY",
   "reader_group_route": "EXISTING_STABLE_GROUP_AVAILABLE_NO_ACCOUNT_CHANGE",
@@ -231,11 +261,11 @@
     "snapshot_fixed_configuration_and_route_qualification",
     "bounded_maintenance_and_exact_crl_route_qualification",
     "affected_integration_suites",
-    "fresh_preflight_private_backup",
     "coordinated_cutover_within_owner_budgets",
-    "floor_alignment_and_final_acceptance"
+    "floor_alignment_and_final_acceptance",
+    "fresh_quiescence_gate_and_validated_rollback_route"
   ],
-  "result": "SOURCE_IN_PROGRESS",
+  "result": "COORDINATED_CANONICAL_PROFILE_STAGED_INACTIVE",
   "safe_ref": "dev_fa4f7e03ca04",
   "schema": 1,
   "source": {
@@ -378,6 +408,8 @@
   "task": "ANDROID-CONTROLLED-BETA",
   "tests": {
     "accepted_gateway_tree_reader_tls_recheck": "PASS_12_TESTS_26_SUBCASES",
+    "accepted_publisher_directory_timestamp_native": 5,
+    "accepted_publisher_directory_timestamp_subcases": 16,
     "affected_total": 478,
     "canonical_renewal_rechecked": 4,
     "canonical_snapshot": 22,
