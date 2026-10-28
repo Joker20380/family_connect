@@ -20,7 +20,9 @@ def source(tmp_path):
     for name in package.SOURCES:
         path = root / name
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes((package.ROOT / name).read_bytes())
+        raw = (subprocess.check_output(['git', 'show', package.ACCEPTED_API_SOURCE + ':' + name], cwd=package.ROOT)
+               if name in package.API_MEMBERS else (package.ROOT / name).read_bytes())
+        path.write_bytes(raw)
     subprocess.run(['git', 'add', '.'], cwd=root, check=True)
     subprocess.run(['git', '-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
                     'commit', '-qm', 'synthetic renewal source'], cwd=root, check=True)
@@ -30,8 +32,8 @@ def source(tmp_path):
 def test_renewal_package_pins_every_source_and_shared_profile_module(source, tmp_path):
     (source / package.DIRECTORY / 'production_transport.py').write_text('dirty_work_must_not_ship\n')
     first, second = tmp_path / 'first.tar.gz', tmp_path / 'second.tar.gz'
-    initial = package.build(first, 'HEAD', repository=source)
-    assert package.build(second, 'HEAD', repository=source) == initial
+    initial = package.build(first, 'HEAD', repository=source, api_ref='HEAD')
+    assert package.build(second, 'HEAD', repository=source, api_ref='HEAD') == initial
     assert first.read_bytes() == second.read_bytes()
     extracted = tmp_path / 'extracted'
     extracted.mkdir(mode=0o700)
@@ -55,6 +57,11 @@ def test_renewal_package_pins_every_source_and_shared_profile_module(source, tmp
     with zipfile.ZipFile(extracted / 'api.pyz') as archive:
         api_manifest = json.loads(archive.read('source-manifest.json'))
         assert api_manifest['source_commit'] == manifest['source_commit']
+        assert api_manifest['accepted_api_archive_sha256'] == package.ACCEPTED_API_ARCHIVE
+        for name, expected in package.API_MEMBERS.items():
+            if name != package.PARSER_SOURCE:
+                assert hashlib.sha256(archive.read(name)).hexdigest() == expected
+        assert 'control/friends/paid_beta.py' not in archive.namelist()
         assert archive.read('control/friends/profile_store.py') == (package.ROOT / 'control/friends/profile_store.py').read_bytes()
         assert package.digest((extracted / 'api.pyz').read_bytes()) == manifest['api_sha256']
         assert {'LICENSE', 'THIRD_PARTY_NOTICES.md'} <= set(api_manifest['files'])
@@ -68,7 +75,7 @@ def test_renewal_package_pins_every_source_and_shared_profile_module(source, tmp
     subprocess.run([sys.executable, '-I', '-B', '-c', probe, str(extracted / 'renewal'), str(extracted / 'api.pyz')],
                    capture_output=True, check=True)
     with pytest.raises(FileExistsError):
-        package.build(first, 'HEAD', repository=source)
+        package.build(first, 'HEAD', repository=source, api_ref='HEAD')
 
 
 def test_renewal_missing_source_member_rejected(source, tmp_path):
@@ -76,4 +83,14 @@ def test_renewal_missing_source_member_rejected(source, tmp_path):
     subprocess.run(['git', '-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
                     'commit', '-qm', 'incomplete fixture'], cwd=source, check=True)
     with pytest.raises(ValueError, match='Missing committed renewal source'):
-        package.build(tmp_path / 'missing.tar.gz', 'HEAD', repository=source)
+        package.build(tmp_path / 'missing.tar.gz', 'HEAD', repository=source, api_ref='HEAD')
+
+
+def test_current_friends_api_cannot_replace_accepted_renewal_api(source, tmp_path):
+    name = 'control/friends/restricted.py'
+    (source / name).write_bytes((package.ROOT / name).read_bytes())
+    subprocess.run(['git', 'add', name], cwd=source, check=True)
+    subprocess.run(['git', '-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
+                    'commit', '-qm', 'unaccepted API fixture'], cwd=source, check=True)
+    with pytest.raises(ValueError, match='Accepted renewal API source mismatch'):
+        package.build(tmp_path / 'rejected.tar.gz', 'HEAD', repository=source, api_ref='HEAD')

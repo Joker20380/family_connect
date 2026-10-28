@@ -3,6 +3,9 @@ import json
 import os
 from pathlib import Path
 import sys
+import base64
+import subprocess
+import tarfile
 
 import pytest
 
@@ -66,6 +69,49 @@ def transaction(fixture, action='reconcile_current_floor', payload=None, persist
     return fixture.store.transact('synthetic_operation_01', action, expected_sha256=store.digest(fixture.before),
         payload=payload, permit=permit or (lambda: fixture.permit_checks.append(True)),
         persist=persist or (lambda record, before, target: fixture.receipts.append(record)))
+
+
+def test_packaged_renewal_construct_uses_exact_api_and_canonical_route(canonical, tmp_path):
+    package = Path(os.environ['FC_TEST_RENEWAL_PACKAGE'])
+    extracted = tmp_path / 'packaged'
+    extracted.mkdir(mode=0o700)
+    (extracted / 'state').mkdir(mode=0o700)
+    with tarfile.open(package, 'r:gz') as archive:
+        archive.extractall(extracted, filter='data')
+    manifest = json.loads((extracted / 'source-manifest.json').read_bytes())
+    for path in (extracted / 'renewal').glob('*.py'):
+        path.chmod(0o600)
+    anchor = private_file(extracted / 'anchor', base64.b64encode(b'synthetic-trust-anchor'))
+    configuration = dict(schema=1, role='NL', live=str(canonical.locator.directory_port.path.parent),
+        state=str(extracted / 'state'), database=None, anchor=str(anchor),
+        anchor_sha256=store.digest(b'synthetic-trust-anchor'), api_archive=str(extracted / 'api.pyz'),
+        api_sha256=manifest['api_sha256'], service_units=['synthetic-gateway.service'],
+        source_files=manifest['source_files'], source_sha256=manifest['source_sha256'],
+        admission_mode='all_activated', profile_locator=str(canonical.fixed_locator),
+        profile_locator_sha256=store.digest(canonical.fixed_locator.read_bytes()))
+    config = private_file(extracted / 'node.json', store.encode(configuration))
+    probe = '''import sys,json,hashlib
+from pathlib import Path
+sys.path.insert(0,sys.argv[1])
+import node
+instance,identity=node.construct(Path(sys.argv[2]))
+from control.friends import restricted,profile_store
+assert restricted.__file__.startswith('/proc/self/fd/')
+assert profile_store.__file__.startswith('/proc/self/fd/')
+assert hashlib.sha256(Path(restricted.__file__.split('/control/')[0]).read_bytes()).hexdigest()==json.loads(Path(sys.argv[2]).read_bytes())['api_sha256']
+assert instance.inspect()['files']['gateway.json']==sys.argv[3]
+assert str(instance.profile_store.locator.profile)==sys.argv[4]
+assert str(instance.directory_path())==sys.argv[5]
+assert str(instance.profile_store.locator.lock)==sys.argv[6]
+assert instance.barrier.units==('synthetic-gateway.service',)
+assert identity==sys.argv[7]
+'''
+    result = subprocess.run([sys.executable, '-I', '-B', '-c', probe, str(extracted / 'renewal'), str(config),
+        store.digest(canonical.before), str(canonical.locator.profile), str(canonical.locator.directory_port.path),
+        str(canonical.locator.lock), manifest['source_sha256']], capture_output=True)
+    assert result.returncode == 0, result.stderr.decode()
+    assert canonical.locator.profile.read_bytes() == canonical.before
+    assert canonical.profile.read_bytes() == canonical.before
 
 
 def rotate(fixture, *, valid=True):

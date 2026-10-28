@@ -41,6 +41,12 @@ remain.20 new route +27 existing renewal checks PASS (the earlier optional nativ
 is now closed on accepted source/toolchain);2 renewal package checks PASS,4 canonical
 renewal integrations rechecked. All13 source pins plus the shared API archive are
 covered by the new deterministic renewal packager; production pins are not activated.
+Exact read-only API inventory then confirmed that both renewal nodes use the same
+older accepted API, not the current paid-aware Friends API. Packaging now preserves
+its nine required source members exactly (parser-only projection), adding the shared
+profile core without an HTTP entrypoint. Current Friends API substitution is rejected.
+Three package checks and an isolated actual pinned-node constructor check PASS; the
+fixture validates canonical profile/directory/lock routing without promoting anything.
 Fresh fixed-configuration/source-pin qualification, staged gateway/snapshot routes,
 coordinated packaging and production gates remain unfinished. No migration or READY
 claim, no second authoritative profile, no owner phone instruction or stage0.

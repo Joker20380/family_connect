@@ -22,6 +22,9 @@ capsules are deterministic and unbound, not activated. No gateway binary install
 Renewal fixed transport/unit source and13-member deterministic packaging contract now
 qualified;20 route +27 existing renewal tests PASS, including the former native skip,
 and2 renewal package tests PASS. Production configuration/pins remain unchanged.
+Subsequent exact API inventory corrects the package dependency: preserve the accepted
+renewal API members rather than substitute the newer Friends API. Three package tests
+and one isolated real node-constructor route/pin test PASS. No production replacement.
 Remaining gate: qualify the concrete new fixed configurations/pins and all fixed routes,
 preserve the independent publisher directory, qualify affected suites and deterministic
 packages, then fresh material/backup/quiescence/coordinated-cutover acceptance within

@@ -244,6 +244,33 @@ integrations were rerun and PASS. Recorded affected Python test inventory is now
 suite or production RPC was run. Fresh concrete fixed-config construction/route checks,
 coherent committed-source artifacts and every live migration gate still remain.
 
+### Exact renewal API provenance qualification
+
+The preceding source checkpoint `643115451c0db9454dab3b76c05874d012b2b43c` is pushed
+and remote-verified. A further read-only inventory found that both deployed renewal
+nodes use accepted API archive
+`e986f98e70ff7f1abc2678566dd360bb6555583f2e1744ea985c63699bcb3ef7`, whose required
+members match source `edca5447418141cb44c0706e26d1973d7defd397`. This is not the newer
+paid-aware Friends API. The earlier synthetic package checks did not qualify that
+live dependency; no package from that intermediate design was installed.
+
+The renewal packager now hash-verifies and preserves all nine needed accepted API
+members, with only the existing parser projection and the new shared profile store.
+Unneeded old HTTP/client entrypoints are omitted; the library has an inert entrypoint
+and no production configuration. Substituting current Friends API source fails closed.
+Three deterministic/package/import/negative checks PASS. An isolated root container
+also constructs the actual pinned NL node in a clean interpreter from the packaged
+archive, verifies all13 source pins and canonical profile/directory/shared-lock routes,
+and proves that the API imports come from the verified archive descriptor, not cached
+repository modules. That check PASS; it performs no renewal promotion or live RPC.
+Two initial fixture defects (missing private state directory and list/tuple expectation)
+were corrected and rerun, without changing production-source guards.
+
+Recorded affected Python inventory is now **378 PASS,0 skips**, plus the previously
+qualified12 native gateway tests/26 subcases. Production routes, artifacts and all
+mutation budgets remain unchanged. Concrete fixed configuration, coherent final
+packages and the full coordinated live gates remain open; no READY claim.
+
 ## Split-boundary writer inventory — 28 October
 
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_PROFILE_WRITER_CONFLICT /
