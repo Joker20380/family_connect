@@ -55,6 +55,58 @@ restart, Android action, readiness request or canary stage0. Current production 
 and routes remain the rollback baseline; no deployment rollback is needed at this step.
 Do not substitute source-unit success for end-to-end reader/writer alignment.
 
+### Accepted renewal method integration and source closeout
+
+The first source checkpoint `f81757fda45b8943cd74fb66b4e9438d8ffd931f` was pushed
+to main and its remote SHA verified. The next bounded source change modifies the
+exact inventoried renewal implementation, not a substitute controller:
+
+- NL construction requires a root-controlled locator whose digest is pinned in fixed
+  node configuration. The canonical profile and independently managed directory are
+  resolved separately. Missing canonical configuration fails closed.
+- Stage validates the renewal target through the shared module and normalizes the
+  floor to the incoming embedded CRL. Lower numbers and changed bindings are rejected.
+  Existing signed expired-predecessor recovery remains validated by the original
+  renewal validator; the incoming profile must still be current. No new RPC action.
+- Canonical promote and rollback hold the same profile lock used by the shared store,
+  use its atomic replacement and exact metadata, and leave the directory read-only.
+  Post-write directory/validation failure restores exact previous profile bytes.
+  Existing operation journal, archive/cleanup, promote replay and scheduled NOOP
+  semantics are preserved in synthetic integration.
+- No new artifact, locator or source pin has been activated on either server. Direct
+  legacy fixture construction remains separate from the configured production path;
+  it is not proof that an old live node has migrated.
+
+Latest bounded checks: **173 root transaction/maintenance/exact-snapshot tests PASS**,
+including4 canonical renewal integrations; **127 renewal/exact-CRL/package tests PASS**.
+One optional test needing the explicit accepted native source/toolchain was not run.
+The first host CRL attempts saw the sandbox's remapped ownership of the temporary
+ancestor and failed the intended secure-parent guard. The unchanged suite passed
+outside that sandbox with a private fixture base; no guard was weakened. The synthetic
+publisher fixture was corrected to use temp+rename, and journal assertions to inspect
+the existing completed/archive state rather than already-cleaned owner markers.
+Total **300 PASS,1 optional native skip** is not the full migration completion gate.
+
+Fresh16:48:44UTC readback observes RU/NL CRL27218, floor27088, minimum headroom13855s,
+paid ledger0/0, cohort0/10, owner certificates0, unchanged owner certificate/readiness
+scope and binding. The active accepted schedule completed a normal renewal; its
+COMMITTED receipt and candidate CRL hash match the newly observed materials.
+Friends started16:39:56UTC; the normal renewal receipt is16:39:57UTC. New runtime
+invocations therefore do not constitute a checkpoint restart or a PID-only blocker.
+Gateway binary/config, Friends source/config/runtime, publisher route and snapshot
+forced-command authorization/source remain the same. Fresh ownership/modes/link/
+extended-metadata comparison passes. This checkpoint generated no CRL and made no
+RU, profile, directory, paid, Android or readiness write. Do not describe the materials
+as byte-identical throughout the session: the legitimate scheduled writer advanced them.
+
+**STOP at incomplete source checkpoint; live migration NOT_RUN.** Still required:
+controller/transport fixed-configuration and source-pin integration; actual gateway
+reader compatibility; actual snapshot canonical routing; bounded maintenance's
+canonical layout and renewable-directory redesign; all cross-component/package gates;
+fresh coordinated backup and permit; the single pause/cutover/resume and bounded
+floor operation; old-route retirement and final live acceptance. Budgets remain0 used.
+No READY_FOR_OWNER_LIVE classification or phone procedure is authorized by these tests.
+
 ## Split-boundary writer inventory — 28 October
 
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_PROFILE_WRITER_CONFLICT /

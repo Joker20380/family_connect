@@ -7,9 +7,12 @@
 LIVE_WRITES_NOT_RUN.** Continue the owner's coordinated migration in this same task;
 the snapshot-only proposal is cancelled. Dependency: fresh exact reader/writer graph,
 including the accepted renewal writer and running gateway, not just maintenance.
-Shared transaction-core source step:45 new +124 existing maintenance/snapshot tests,
-3 deterministic-package tests PASS. No production writes or route changes.
-Remaining gate: integrate the accepted renewal sources/pins and every reader/writer,
+Shared transaction core and accepted renewal method integration: canonical stage,
+shared-lock promote, exact rollback and floor normalization implemented.300 affected
+tests PASS; one optional accepted-native compatibility test not run. No checkpoint
+production writes or route changes. Normal scheduled renewal advanced fresh RU/NL
+CRL to27218; floor remains27088. This is not an agent-issued CRL or cutover.
+Remaining gate: complete renewal controller/transport configuration and pins plus every reader/writer,
 preserve the independent publisher directory, qualify affected suites and deterministic
 packages, then fresh material/backup/quiescence/coordinated-cutover acceptance within
 the owner's one-cycle/one-cutover/one-floor-operation budgets. Gateway mode compatibility

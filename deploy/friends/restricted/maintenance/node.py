@@ -18,7 +18,7 @@ NODE_MODULES = frozenset(('node.py','credential_renewal.py','production_node.py'
 def construct(config_path):
     require(os.geteuid() == 0, 'ROOT_REQUIRED')
     config = parse(read_private(config_path))
-    require(set(config) - {'admission_mode'} == {'schema','role','live','state','database','anchor','anchor_sha256','api_archive','api_sha256',
+    require(set(config) - {'admission_mode', 'profile_locator', 'profile_locator_sha256'} == {'schema','role','live','state','database','anchor','anchor_sha256','api_archive','api_sha256',
                            'source_files','source_sha256'}, 'NODE_CONFIG_SCHEMA')
     require(config['schema'] == 1 and config['role'] in ('RU','NL'), 'NODE_CONFIG_SCHEMA')
     source = Path(__file__).resolve().parent
@@ -65,11 +65,26 @@ def construct(config_path):
             database = GrantDatabase(Path(config['database']),lambda connection,device,now:
                 RestrictedReadiness._grant(policy,connection,device,now))
     policy_paths = {'anchor':Path(config['anchor'])}
+    profile_store = None
+    if config['role'] == 'NL':
+        require(type(config.get('profile_locator')) is str and type(config.get('profile_locator_sha256')) is str,
+                'CANONICAL_PROFILE_REQUIRED')
+        from control.friends.profile_store import Locator, ProfileStore, metadata, read_regular
+        locator_path = Path(config['profile_locator'])
+        require(digest(read_regular(locator_path, metadata(locator_path.lstat()), 16384)) ==
+                config['profile_locator_sha256'], 'PROFILE_LOCATOR_CHANGED')
+        locator = Locator.load(locator_path)
+        locator.validate()
+        profile_store = ProfileStore(locator)
+        require(locator.directory_port.path.parent == live, 'DIRECTORY_ROUTE_CHANGED')
+    else:
+        require(not {'profile_locator', 'profile_locator_sha256'} & set(config), 'PROFILE_STORE_ROLE')
     if validator.all_activated:
         policy_paths['node_config'] = config_path
     if config['role'] == 'RU':
         policy_paths['admission'] = live/'admission.json'
-    node = ProductionNode(config['role'],live,Path(config['state']),validator,database=database,policy_paths=policy_paths)
+    node = ProductionNode(config['role'],live,Path(config['state']),validator,database=database,
+                          policy_paths=policy_paths,profile_store=profile_store)
     node.pinned_archive_descriptor = descriptor
     return node,config['source_sha256']
 

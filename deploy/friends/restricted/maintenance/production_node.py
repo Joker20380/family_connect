@@ -1,4 +1,5 @@
 import base64
+from contextlib import contextmanager
 import hmac
 import os
 from pathlib import Path
@@ -32,11 +33,13 @@ def pinned(path, allowed_owners):
 
 class ProductionNode:
     def __init__(self, role, live, state, validator, *, database=None, barrier=None, clock=time.time, fault=lambda stage:None,
-                 profile_uid=979, policy_paths=None):
+                 profile_uid=None, policy_paths=None, profile_store=None):
         require(role in ('RU','NL'), 'NODE_ROLE')
         self.role,self.live,self.state,self.validator = role,Path(live),Path(state),validator
         self.database,self.clock,self.fault,self.profile_uid = database,clock,fault,profile_uid
         self.operation = DurableOperation(self.state)
+        self.profile_store = profile_store
+        require(profile_store is None or role == 'NL', 'PROFILE_STORE_ROLE')
         self.policy_paths = policy_paths or {}
         self.barrier = barrier or SystemdBarrier(role,self.state,clock=clock)
         private_directory(self.state)
@@ -48,7 +51,31 @@ class ProductionNode:
 
     def read(self, name):
         require(name in (*self.names(),'issuer.key'), 'PATH_NOT_ALLOWLISTED')
+        if name == 'gateway.json' and self.profile_store is not None:
+            return self.profile_store.read(), self.profile_store.locator.profile_metadata
         return pinned(self.live/name,{os.geteuid(),self.profile_uid})
+
+    @contextmanager
+    def profile_lock(self):
+        if self.profile_store is None:
+            yield
+            return
+        from control.friends.profile_store import ProfileError
+        try:
+            with self.profile_store.lock():
+                yield
+        except ProfileError as error:
+            raise Rejected(error.code) from None
+
+    def directory_path(self):
+        return self.profile_store.locator.directory_port.path if self.profile_store is not None else self.live/'directory.json'
+
+    def read_directory(self):
+        if self.profile_store is not None:
+            from control.friends.profile_store import read_regular
+            port = self.profile_store.locator.directory_port
+            return read_regular(port.path, port.expected, 8192, publisher_parent=port.publisher_parent), port.expected
+        return pinned(self.directory_path(), {os.geteuid(), self.profile_uid})
 
     def inspect(self):
         files = {name:digest(self.read(name)[0]) for name in self.names()}
@@ -234,7 +261,7 @@ class ProductionNode:
             owner = self.owner(operation_id)
             require(owner['state'] in ('ACQUIRED','QUIESCED'), 'TRANSACTION_STATE')
             if self.role == 'NL' and not (self.state/'directory-before.json').exists():
-                raw,_ = pinned(self.live/'directory.json',{os.geteuid(),self.profile_uid})
+                raw,_ = self.read_directory()
                 atomic(self.state/'directory-before.json',canonical(dict(sha256=digest(raw))))
             self.barrier.quiesce()
             require(self.inspect() == owner['expected_state'], 'STALE_NODE_STATE')
@@ -244,7 +271,7 @@ class ProductionNode:
         with self.operation.lock():
             self.owner(operation_id)
             if self.role == 'NL' and not (self.state/'directory-before.json').exists():
-                raw,_ = pinned(self.live/'directory.json',{os.geteuid(),self.profile_uid})
+                raw,_ = self.read_directory()
                 atomic(self.state/'directory-before.json',canonical(dict(sha256=digest(raw))))
             self.barrier.quiesce()
             require(self.barrier.stopped(), 'READERS_NOT_QUIESCED')
@@ -378,7 +405,13 @@ class ProductionNode:
                 profile = json.loads(self.read('gateway.json')[0])
                 profile.update(authority=self.validator.validate(canonical(plan['candidate']),int(self.clock()))[1]['authority'],
                                certificate=plan['candidate']['certificate'],revocations=plan['candidate']['crl'])
-                files = {'gateway.json':canonical(profile)}
+                from control.friends.profile_store import ProfileError, renewal_target
+                try:
+                    target = renewal_target(self.read('gateway.json')[0], canonical(profile), self.clock(),
+                                            expired_predecessor=True)
+                except ProfileError as error:
+                    raise Rejected(error.code) from None
+                files = {'gateway.json':target}
             metadata = {}
             for name,raw in files.items():
                 before,info = self.read(name)
@@ -397,11 +430,14 @@ class ProductionNode:
             return dict(plan_sha256=digest(canonical(plan)),crl_sha256=digest(plan['candidate']['crl'].encode()),
                         files={name:item['after'] for name,item in metadata.items()})
 
-    def replace(self, name, raw, metadata):
+    def replace(self, name, raw, metadata, *, rollback=False):
         require(self.barrier.stopped(), 'READERS_NOT_QUIESCED')
         current,info = self.read(name)
         require(info == {key:metadata[key] for key in ('uid','gid','mode')}, 'ACTIVE_FILE_METADATA_CHANGED')
         require(digest(current) in (metadata['before'],metadata['after']), 'ACTIVE_FILE_UNEXPECTED')
+        if name == 'gateway.json' and self.profile_store is not None:
+            self.replace_profile(raw, current, metadata, rollback=rollback)
+            return
         temporary = self.state/(name+'.promoting')
         if temporary.exists() or temporary.is_symlink():
             pending,info = pinned(temporary,{os.geteuid(),metadata['uid']})
@@ -425,8 +461,38 @@ class ProductionNode:
         self.fault('after-rename-'+name)
         require(self.read(name)[0] == raw, 'PROMOTE_READBACK_MISMATCH')
 
+    def replace_profile(self, raw, current, metadata, *, rollback):
+        from control.friends.profile_store import ProfileError, profile_material, renewal_target
+        store = self.profile_store
+        require(store is not None, 'CANONICAL_PROFILE_REQUIRED')
+        try:
+            if rollback:
+                require(digest(raw) == metadata['before'], 'ROLLBACK_PROFILE_MISMATCH')
+                profile_material(raw, self.clock(), expired_predecessor=True)
+                store.replace(raw, expected=current, permit=lambda: require(self.barrier.stopped(), 'READERS_NOT_QUIESCED'))
+                return
+            require(digest(raw) == metadata['after'], 'STAGED_FILE_CHANGED')
+            require(renewal_target(current, raw, self.clock(), expired_predecessor=True) == raw, 'STAGED_FILE_CHANGED')
+            profile = profile_material(raw, self.clock())[0]
+            before_directory = store.locator.directory_port.read(profile, self.clock())
+            def ready():
+                require(self.barrier.stopped(), 'READERS_NOT_QUIESCED')
+                require(renewal_target(current, raw, self.clock(), expired_predecessor=True) == raw, 'STAGED_FILE_CHANGED')
+                store.locator.directory_port.after(before_directory, profile, self.clock())
+            self.fault('before-rename-gateway.json')
+            store.replace(raw, expected=current, permit=ready)
+            try:
+                self.fault('after-rename-gateway.json')
+                store.locator.directory_port.after(before_directory, profile, self.clock())
+                require(store.read() == raw, 'PROMOTE_READBACK_MISMATCH')
+            except Exception:
+                store.replace(current, expected=raw, permit=lambda: require(self.barrier.stopped(), 'READERS_NOT_QUIESCED'))
+                raise
+        except ProfileError as error:
+            raise Rejected(error.code) from None
+
     def promote(self, operation_id):
-        with self.operation.lock():
+        with self.operation.lock(), self.profile_lock():
             owner = self.owner(operation_id)
             require(owner['state'] in ('STAGED','PROMOTING','PROMOTED') and self.barrier.stopped(), 'READERS_NOT_QUIESCED')
             plan = parse(read_private(self.state/'plan.json'))
@@ -478,7 +544,7 @@ class ProductionNode:
         return dict(plan_sha256=digest(canonical(plan)),crl_sha256=digest(plan['candidate']['crl'].encode()),state='PROMOTED')
 
     def rollback(self, operation_id):
-        with self.operation.lock():
+        with self.operation.lock(), self.profile_lock():
             owner = self.owner(operation_id)
             require(owner['state'] not in ('COMMIT_DECIDED','RESUMED'), 'ROLLBACK_AFTER_COMMIT_FORBIDDEN')
             require(self.barrier.stopped(), 'READERS_NOT_QUIESCED')
@@ -495,7 +561,7 @@ class ProductionNode:
             for name,item in metadata.items():
                 raw = read_private(self.state/(name+'.before'))
                 require(digest(raw) == item['before'], 'BACKUP_CHANGED')
-                self.replace(name,raw,item)
+                self.replace(name,raw,item,rollback=True)
             if self.role == 'RU':
                 with self.database.connect(write=True) as database:
                     actual = self.database.snapshot(database)
@@ -549,7 +615,7 @@ class ProductionNode:
         previous = parse(read_private(self.state/'directory-before.json'))['sha256']
         stop_at = time.monotonic()+90
         while True:
-            raw,_ = pinned(self.live/'directory.json',{os.geteuid(),self.profile_uid})
+            raw,_ = self.read_directory()
             profile = self.public_gateway()
             if digest(raw) != previous:
                 try:

@@ -300,3 +300,104 @@ def test_replace_requires_lock(canonical):
 def test_strict_json_rejects_ambiguous_or_noninteger_numbers(raw):
     with pytest.raises(store.ProfileError, match='INVALID_JSON'):
         store.parse(raw)
+
+
+@pytest.fixture
+def renewal(canonical, tmp_path):
+    from test_activated_maintenance import Cluster
+    root = tmp_path / 'renewal'
+    root.mkdir(mode=0o700)
+    cluster = Cluster(root)
+    node = cluster.nodes['NL']
+    canonical.locator.profile.write_bytes(node.read('gateway.json')[0])
+    node.profile_store = store.ProfileStore(canonical.locator, clock=cluster.clock)
+    publisher = canonical.locator.directory_port.path
+    def publish(raw):
+        pending = publisher.with_name('publisher-rotation')
+        pending.write_bytes(raw)
+        pending.chmod(0o600)
+        os.chown(pending, 41001, 41002)
+        os.replace(pending, publisher)
+    original_resume = node.barrier.resume
+    def resume(**arguments):
+        original_resume(**arguments)
+        publish((node.live / 'directory.json').read_bytes())
+    node.barrier.resume = resume
+    cluster.now += 12000
+    value = json.loads((node.live / 'directory.json').read_bytes())
+    value.update(issued_at=iso(cluster.now - 1), expires_at=iso(cluster.now + 3599))
+    publish(store.encode(value))
+    canonical.cluster = cluster
+    canonical.node = node
+    canonical.before = node.profile_store.read()
+    return canonical
+
+
+def test_accepted_renewal_source_uses_canonical_profile_and_journal(renewal):
+    node = renewal.node
+    old_path = node.live / 'gateway.json'
+    old_raw = old_path.read_bytes()
+    result = renewal.cluster.scheduled('canonical')
+    assert result['result'] == 'COMMITTED', result
+    profile = json.loads(node.profile_store.read())
+    assert profile['minimum_crl'] == 2
+    assert profile['revocations'] == renewal.cluster.snapshot()['crl']
+    assert old_path.read_bytes() == old_raw
+    assert node.read('gateway.json')[1] == renewal.locator.profile_metadata
+    operation = 'test-renewal-operation-canonical'
+    assert not (node.state / 'owner.json').exists()
+    assert json.loads((node.state / 'completed.json').read_bytes())[operation]['result'] == 'CLEANED'
+    assert json.loads((node.state / 'archive' / operation / 'files.json').read_bytes())['gateway.json']['mode'] == 0o640
+    assert node.public_gateway()['minimum_crl'] == 2
+    stable = node.profile_store.read()
+    assert renewal.cluster.scheduled('canonical')['result'] == 'NOOP'
+    assert node.profile_store.read() == stable
+
+
+def test_renewal_promotion_holds_shared_maintenance_lock(renewal):
+    observations = []
+    competitor = store.ProfileStore(renewal.locator, clock=renewal.cluster.clock)
+    def probe(stage):
+        if stage == 'before-rename-gateway.json':
+            with pytest.raises(store.ProfileError, match='PROFILE_TRANSACTION_BUSY'):
+                with competitor.lock():
+                    pytest.fail('Maintenance interleaved with renewal promotion')
+            observations.append(stage)
+    renewal.node.fault = probe
+    result = renewal.cluster.scheduled('locked')
+    assert result['result'] == 'COMMITTED', result
+    assert observations == ['before-rename-gateway.json']
+    with pytest.raises(store.ProfileError, match='PROFILE_CAS_FAILED'):
+        competitor.transact('stale_maintenance_01', 'reconcile_current_floor',
+            expected_sha256=store.digest(renewal.before), permit=lambda: None, persist=lambda *args: None)
+
+
+def test_canonical_renewal_rollback_exact_bytes_and_metadata(renewal):
+    before = renewal.node.profile_store.read()
+    def fail(stage):
+        if stage == 'after-rename-gateway.json':
+            raise RuntimeError('synthetic post-rename failure')
+    renewal.node.fault = fail
+    result = renewal.cluster.scheduled('rollback')
+    assert result['result'] == 'ABORTED', result
+    assert renewal.node.profile_store.read() == before
+    assert store.metadata(renewal.locator.profile.stat()) == renewal.locator.profile_metadata
+    assert not (renewal.node.state / 'owner.json').exists()
+    assert json.loads((renewal.node.state / 'completed.json').read_bytes())['test-renewal-operation-rollback']['result'] == 'CLEANED'
+
+
+def test_canonical_renewal_promote_replay_preserves_exact_target(renewal):
+    def interrupt(stage):
+        if stage == 'NL_PROMOTED':
+            raise KeyboardInterrupt()
+    renewal.cluster.controller.fault = interrupt
+    with pytest.raises(KeyboardInterrupt):
+        renewal.cluster.scheduled('replay')
+    target = renewal.node.profile_store.read()
+    operation = 'test-renewal-operation-replay'
+    first = renewal.node.readback(operation)
+    assert renewal.node.promote(operation) == first
+    assert renewal.node.profile_store.read() == target
+    renewal.cluster.controller.fault = lambda stage: None
+    assert renewal.cluster.scheduled('recover')['result'] == 'ABORTED'
+    assert renewal.node.profile_store.read() == renewal.before

@@ -118,12 +118,12 @@ def read_regular(path, expected, limit, *, publisher_parent=None, empty=False):
     return raw
 
 
-def crl_material(raw, authority, now):
+def crl_material(raw, authority, now, *, expired_predecessor=False):
     try:
         value = x509.load_pem_x509_crl(raw)
         require(value.public_bytes(Encoding.PEM) == raw and value.issuer == authority.subject and
                 value.is_signature_valid(authority.public_key()), 'CRL_INVALID')
-        require(value.last_update_utc <= utc(now) < value.next_update_utc and
+        require(value.last_update_utc <= utc(now) and (utc(now) < value.next_update_utc or expired_predecessor) and
                 0 < (value.next_update_utc - value.last_update_utc).total_seconds() <= MAX_TEST_LIFETIME,
                 'CRL_INVALID')
         number = value.extensions.get_extension_for_class(x509.CRLNumber).value.crl_number
@@ -133,7 +133,7 @@ def crl_material(raw, authority, now):
         raise ProfileError('CRL_INVALID') from None
 
 
-def profile_material(raw, now):
+def profile_material(raw, now, *, expired_predecessor=False):
     try:
         value = parse(raw)
         require(type(value) is dict and {'authority', 'revocations', 'family', 'gateway', 'minimum_crl'} <= set(value),
@@ -147,9 +147,9 @@ def profile_material(raw, now):
         authority.verify_directly_issued_by(authority)
         require(authority.extensions.get_extension_for_class(x509.BasicConstraints).value.ca, 'PROFILE_INVALID')
         usage = authority.extensions.get_extension_for_class(x509.KeyUsage).value
-        require(usage.key_cert_sign and usage.crl_sign and
-                authority.not_valid_before_utc <= utc(now) < authority.not_valid_after_utc, 'PROFILE_INVALID')
-        crl, number = crl_material(value['revocations'].encode(), authority, now)
+        require(usage.key_cert_sign and usage.crl_sign and authority.not_valid_before_utc <= utc(now) and
+                (utc(now) < authority.not_valid_after_utc or expired_predecessor), 'PROFILE_INVALID')
+        crl, number = crl_material(value['revocations'].encode(), authority, now, expired_predecessor=expired_predecessor)
         require(value['minimum_crl'] <= number, 'CRL_FLOOR_AHEAD')
         return value, authority, crl, number
     except ProfileError:
@@ -158,8 +158,8 @@ def profile_material(raw, now):
         raise ProfileError('PROFILE_INVALID') from None
 
 
-def renewal_target(current, incoming, now):
-    previous, old_authority, old_crl, old_number = profile_material(current, now)
+def renewal_target(current, incoming, now, *, expired_predecessor=False):
+    previous, old_authority, old_crl, old_number = profile_material(current, now, expired_predecessor=expired_predecessor)
     target, new_authority, new_crl, new_number = profile_material(incoming, now)
     require(all(target[name] == previous[name] for name in ('family', 'gateway')), 'PROFILE_BINDING_CHANGED')
     require(old_authority.public_key().public_bytes(Encoding.DER, PublicFormat.SubjectPublicKeyInfo) ==
@@ -196,7 +196,7 @@ class DirectoryPort:
         result = []
         for spelling, expected_hash, expected_metadata in self.publisher_contract:
             path = Path(spelling)
-            raw = read_regular(path, expected_metadata, 64 * 1024 * 1024)
+            raw = read_regular(path, expected_metadata, 64 * 1024 * 1024, publisher_parent=self.publisher_parent)
             require(digest(raw) == expected_hash, 'PUBLISHER_CONTRACT_CHANGED')
             result.append((spelling, expected_hash, expected_metadata))
         return encode(result)

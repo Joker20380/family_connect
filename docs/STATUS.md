@@ -14,8 +14,16 @@ CRL-monotonic target builders and read-only directory-rotation validation.
 Existing bounded maintenance now delegates its replacement primitive; its old layout
 contract remains intentionally nondeployable.45 new +124 existing maintenance/snapshot
 tests and3 package tests PASS. Production writes/restarts/timer pauses/floor operations0.
-Renewal integration/pins, gateway reader, snapshot route, bounded maintenance redesign,
-coordinated packaging and production gates remain unfinished. No migration or READY
+Second source step integrates accepted renewal stage/promote/rollback with canonical
+profile resolution, the shared lock and floor normalization; configured NL construction
+requires a pinned locator.173 root transaction/maintenance/snapshot +127 affected
+renewal/CRL/package tests PASS; one optional accepted-native compatibility test not run.
+Fresh16:48UTC readback: normal scheduled renewal COMMITTED, RU/NL CRL27218, floor27088,
+headroom13855s; source/config healthy, ledger0/0, cohort0/10, owner certificates0.
+Observed new Friends/gateway invocations belong to the normal renewal, not this task;
+all checkpoint production budgets remain unspent. Old production route stays active.
+Controller/transport configuration and pins, gateway reader, snapshot route, bounded
+maintenance redesign, coordinated packaging and production gates remain unfinished. No migration or READY
 claim, no second authoritative profile, no owner phone instruction or stage0.
 [Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).
 

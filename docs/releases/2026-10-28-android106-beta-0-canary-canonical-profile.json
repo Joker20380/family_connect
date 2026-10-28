@@ -38,6 +38,7 @@
     "subscriptions": 0
   },
   "production": {
+    "all_counts_are_checkpoint_actions": true,
     "android_actions": 0,
     "backups_created": 0,
     "credentials_installed": 0,
@@ -45,6 +46,7 @@
     "floor_operations": 0,
     "gateway_cutover_restarts": 0,
     "latest_renewal_result": "success",
+    "observed_material_advancement": "NORMAL_SCHEDULED_RENEWAL_COMMITTED",
     "readiness_calls": 0,
     "renewal_timer": "ACTIVE_AT_FRESH_ENTRY",
     "rollback": "NOT_NEEDED",
@@ -56,7 +58,7 @@
   },
   "ready_for_owner_live": false,
   "remaining": [
-    "renewal_source_and_pin_integration",
+    "renewal_controller_transport_configuration_source_pins_and_packages",
     "gateway_reader_integration",
     "snapshot_integration",
     "bounded_maintenance_and_exact_crl_integration",
@@ -87,29 +89,89 @@
     },
     "accepted_renewal_members_match": true,
     "accepted_renewal_source_inventory": "c67332cfff9aeafd90690c13518f55a75ef9687ceadb464624263657ff005ff2",
+    "core_commit": "f81757fda45b8943cd74fb66b4e9438d8ffd931f",
+    "core_commit_push": "VERIFIED",
     "deployed_gateway_binary_sha256": "96754942e7518233bc702277d860b0c9b740fb7553c9742b2ae642a0746fe367",
     "deployed_snapshot_archive_sha256": "0120dad028ead353b8b83a600538f3e578b2b46ddf871bf16e97529f9449f450",
     "files": {
-      "control/friends/profile_store.py": "a1d932dac2ed34e4108a9b89c008eac311a124e897923a3485a0d266f6dbb745",
+      "control/friends/profile_store.py": "7ecf5264c25f44c081f3c8778d811c180cde82ed51155f6784affc5556308d32",
       "control/friends/restricted_maintenance.py": "513c0a6e2e4857b0087954c55021746b8d32024a2d1b927b71841c55e41d5677",
+      "deploy/friends/restricted/maintenance/node.py": "749a54742cc9f98144f231337aa736e7cbf85dda34c75e79a6d21fe559bae13d",
+      "deploy/friends/restricted/maintenance/production_node.py": "331a4744cf873dc67c28befb84f90d141d0453730b2d9528f39d61f6fd898096",
       "scripts/package_restricted_maintenance.py": "f0c102c1079b1c3bda044fcde05a5060d219c733748a8fbcb17269b488243a45",
-      "tests/test_profile_store.py": "ed881d838b7d0b07a7737b476f1d9657c2d9479e80848b8ddd010e0317b2802c"
+      "tests/test_profile_store.py": "7142b7f673426be48b16181235f0216bb2da7f45083f008158c67cdc239b9e93"
     },
     "gateway_reader_source_change_required": true,
-    "integration": "INCOMPLETE",
-    "step": "SHARED_TRANSACTION_CORE"
+    "integration": "INCOMPLETE_PENDING_CONTROLLER_PINS_READERS_AND_MAINTENANCE",
+    "production_pins_updated": false,
+    "renewal_canonical_promote_rollback_share_lock": true,
+    "renewal_configured_node_requires_pinned_canonical_locator": true,
+    "renewal_source_activated": false,
+    "renewal_stage_normalizes_floor": true,
+    "step": "SHARED_CORE_AND_ACCEPTED_RENEWAL_METHODS"
+  },
+  "source_closeout": {
+    "android_actions": 0,
+    "cohort": 0,
+    "credentials_installed": 0,
+    "crl_sha256": "3003101f07bc0b7701741687fbbbd7b72ca1b7a2c62fe8f42ced3ebb22255b85",
+    "directory_sha256": "a975be15e08703eb26abe9c35bc60aa8ea1cba662c3dcff214b65f700207aa2a",
+    "directory_validation": "PASS",
+    "embedded_crl_number": 27218,
+    "emergency_restarts": 0,
+    "external_restart_attribution": "NORMAL_SCHEDULED_RENEWAL_COMMITTED",
+    "floor_operations": 0,
+    "friends": "HEALTHY_SAME_SOURCE_CONFIG",
+    "friends_invocation_changed": true,
+    "gateway": "HEALTHY_SAME_BINARY_CONFIG",
+    "gateway_cutover_restarts": 0,
+    "latest_renewal_result": "success",
+    "ledger": {
+      "events": 0,
+      "subscriptions": 0
+    },
+    "minimum_crl": 27088,
+    "minimum_remaining_seconds": 13855,
+    "observed_at": 1793206124,
+    "owner_binding": "UNCHANGED",
+    "owner_certificate_readiness": "UNCHANGED",
+    "owner_certificates": 0,
+    "production_writes_by_checkpoint": 0,
+    "profile_and_directory_metadata": "OWNERSHIP_MODES_UNCHANGED_NORMAL_REPLACEMENT",
+    "profile_changed_during_source_work": true,
+    "profile_sha256": "cac6a4542c874c1a4fd3ca06c889e4721447c074bc532bc3cfac9f05bc4d1219",
+    "protected_registry": "UNCHANGED",
+    "publisher": "SAME_ROUTE_HEALTHY",
+    "readiness_calls": 0,
+    "renewal_timer": "ACTIVE",
+    "result": "NO_WRITE_READBACK_PASS",
+    "ru_mutations": 0,
+    "ru_sequence": [
+      27218
+    ],
+    "snapshot_route": "UNCHANGED",
+    "source_only": true,
+    "timer_pause_cycles": 0
   },
   "task": "ANDROID-CONTROLLED-BETA",
   "tests": {
-    "affected_total": 172,
+    "affected_total": 300,
+    "exact_crl_and_package_tests": 101,
     "existing_maintenance_including_exact_snapshot": 124,
+    "existing_renewal": 26,
+    "expired_predecessor_recovery": "PASS_WITH_ORIGINAL_AUTHORIZATION_VALIDATOR",
     "final_snapshot_skips": 0,
     "full_historical_suite": "NOT_RUN",
-    "harness_recovery": "PACKAGE_SUITE_PASSED_IN_EXISTING_HOST_ENVIRONMENT",
-    "initial_harness_failure": "CONTAINER_PACKAGE_FIXTURES_MISSING_GIT",
-    "new_profile_core": 45,
-    "package": 3,
+    "local_harness_recoveries": [
+      "container_package_git_unavailable",
+      "snapshot_archive_supplied",
+      "publisher_fixture_atomic_rename",
+      "existing_archive_cleanup_assertions",
+      "host_sandbox_remapped_ancestor_ownership_rerun_outside_sandbox"
+    ],
+    "new_profile_core_and_canonical_renewal": 49,
+    "optional_native_skips": 1,
     "platform_builds": "NOT_RUN",
-    "result": "PASS"
+    "result": "PASS_WITH_ONE_OPTIONAL_NATIVE_SKIP"
   }
 }
