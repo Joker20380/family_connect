@@ -3,31 +3,35 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-**Current substep BETA-0-CANARY-1 — BLOCKED_PROFILE_CUTOVER_ROLLED_BACK /
-LIVE_WRITES_NOT_RUN.** Coordinated source/package work is retained; the single production
-cutover failed its snapshot acceptance and was rolled back. **NOT READY_FOR_OWNER_LIVE.**
-Renewal, gateway and snapshot again use the exact old route; timer active/latest success,
-old snapshot read-only PASS, publisher healthy on its unchanged directory route.
-Canonical copy is retained privately and inactive; it is not a second authoritative profile.
+**Current substep BETA-0-CANARY-1 — BLOCKED_SNAPSHOT_LAUNCHER_REHEARSAL /
+LIVE_WRITES_NOT_RUN.** Continue the same checkpoint from684430b; the previous rollback
+remains accepted. New bounded budgets were granted, but **all remain unused0/1**.
+Strict launcher builder/validator and53 new tests PASS: canonical executable/stat/hash,
+actual account Python3.14 probe, exact argv, isolated exec without shell interpolation,
+restricted authorized-key round-trip and read-only rehearsal payload guard. Diagnostic
+version cannot replace the executable.185 focused snapshot/canonical-route/package/
+authorization/directory checks PASS; unchanged prior native results retained.
 
-Fresh19:14:58UTC28.10 post-rollback: RU/NL CRL27219, live floor27088, materials14110s;
-ledger0/0, cohort0/10, owner certificates0, horizon clear, binding/exact Android106 unchanged.
-Pre-cutover normal scheduled renewal, not this checkpoint, advanced CRL to27219.
-One offline canonical reconciliation changed only floor27088→27219; CRL and old live profile
-were unchanged. Valid directory rotations occurred through the unchanged publisher.
-Budgets spent: timer pause/resume1/1, cutover restart1/1, emergency rollback restart1/1,
-floor operation1/1. No RU material mutation, Friends restart, temporary SSH credential,
-paid/Android/readiness action or stage0. No second cutover/floor operation is authorized.
+Read-only discovery confirms the exact four retained artifacts; no rebuild/substitution.
+Two independent sources resolve the same absolute Python3.14 executable. However,
+the accepted PYZ imports successfully with the working virtual-environment interpreter,
+but its resolved base executable exits1 with missing RNS under the actual snapshot account.
+Separately, accepted locator validation rejects the old profile inside the publisher
+boundary with LOCATOR_PATH_CONFLICT. The old profile's metadata also differs from the
+canonical contract. These are rehearsal prerequisites, not evidence of corrupt artifacts
+or invalid materials. No path/permission/runtime bypass or validation weakening was made.
 
-Failure: the fixed snapshot launcher used an interpreter version string instead of an
-absolute executable; the actual forced command exited127. Gateway/publisher acceptance
-passed, but the one canonical snapshot request failed before renewal preflight.
-Existing source tests and library/permission fixtures did not cover this exact launcher.
-478 affected Python checks, focused gateway/publisher checks, deterministic artifacts and
-the isolated operator cutover/rollback fixture passed; this is not production acceptance.
-Follow-up requires a corrected launcher and an actual account-level fixed-command rehearsal,
-then explicit renewed production authorization/budgets. This checkpoint **STOPs** here;
-no canary stage0 or phone instruction. Sources/artifacts/rollback evidence remain retained.
+The corrected production/read-only launchers are private local candidates only.
+**Actual temporary-key SSH rehearsal NOT_RUN**: its prerequisites fail before credential
+installation. No new backup, canonical copy, floor operation, timer pause or restart.
+No new cutover; previous canonical copy remains private/inactive. Old authoritative route
+and its actual-account production snapshot remain PASS; timer active/latest success.
+Fresh19:38:59UTC28.10: CRL27219/floor27088, material headroom12668s;
+ledger0/0, cohort0/10, owner certificates0, horizon clear and accepted Android106 unchanged.
+No paid/readiness/Android/stage0, RU material mutation or Friends HTTP restart.
+STOP. Resolve the interpreter-environment and old-profile rehearsal contract explicitly
+before the mandatory real SSH rehearsal; do not silently change retained artifacts,
+move/alias the old profile, use the stale canonical copy, or start cutover/stage0.
 [Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).
 
 **Historical entry BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /

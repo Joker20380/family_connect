@@ -1,18 +1,15 @@
 # Documentation
 
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
-**COORDINATED_CANONICAL_PROFILE_SOURCE_IN_PROGRESS / LIVE_WRITES_NOT_RUN.**
-The owner now authorizes coordinated renewal/gateway/snapshot/maintenance migration,
-not a snapshot-only split. Fresh exact graph and first shared transaction-core source
-step, accepted renewal method integration and canonical bounded maintenance completed
-as source-only increments; canonical snapshot response/access/dispatch now qualified
-with224 root checks and5 affected package checks PASS,
-the earlier optional compatibility check is now PASS on accepted native source.
-Renewal fixed-route externalization and13-source packaging contract pass their checks.
-Gateway secure reader source additionally
-passes12 native tests with26 subcases. Two committed-source Python capsules are
-deterministic unbound intermediates. Remaining integrations, complete packages and
-production gates are unfinished; all production budgets remain unspent. No phone action.
+**BLOCKED_SNAPSHOT_LAUNCHER_REHEARSAL / LIVE_WRITES_NOT_RUN.**
+Previous cutover rollback remains accepted. Strict launcher correction and238 focused
+checks PASS; all four retained artifacts match exactly and remain unchanged. Corrected
+launchers are private local candidates, not installed. Actual-account read-only probes
+show that resolved Python loses the working virtual environment's RNS import and the
+accepted locator rejects the old publisher-boundary profile. These block the mandatory
+temporary-key SSH rehearsal before installation; it is NOT_RUN, not a PASS.
+All newly authorized production budgets remain0/1. Old renewal/gateway/snapshot routes
+remain healthy; no new cutover, paid/Android/readiness/stage0 action or phone instruction.
 [Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).
 
 Historical entry: **OWNER_CANARY_BOUND_READONLY / BLOCKED_PROFILE_WRITER_CONFLICT.**

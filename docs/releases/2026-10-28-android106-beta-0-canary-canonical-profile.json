@@ -250,6 +250,115 @@
     "snapshot_route": "UNCHANGED",
     "timer_pause_cycles": 0
   },
+  "launcher_continuation": {
+    "absolute_executable_resolution": "PASS",
+    "active_temporary_credentials": 0,
+    "actual_account_package_probe": {
+      "canonical_resolved_interpreter": "FAIL_MISSING_RNS",
+      "working_interpreter": "PASS"
+    },
+    "actual_ssh_rehearsal": "NOT_RUN_PREREQUISITES_BLOCKED",
+    "artifact_rebuilds": 0,
+    "artifacts": "EXACT_HASH_SIZE_UNCHANGED",
+    "entry_main": "684430b84d2c80069a0d57eeb65bbebb1551768b",
+    "final_readonly": {
+      "absolute_executable_resolution": "PASS",
+      "accepted_android106": "UNCHANGED_PASS",
+      "accepted_artifacts": "EXACT_UNCHANGED",
+      "actual_ssh_rehearsal": "NOT_STARTED_PREREQUISITES_BLOCKED",
+      "android_actions": 0,
+      "canonical_runtime_package_import": "FAIL_MISSING_RNS",
+      "certificate_horizon": "CLEAR",
+      "cohort": 0,
+      "continuation_budgets": {
+        "cutover_restart": 0,
+        "floor_reconciliation": 0,
+        "rehearsal_credentials": 0,
+        "rollback_restart": 0,
+        "timer_pause_resume": 0
+      },
+      "corrected_launcher": "VALIDATED_PRIVATE_ONLY",
+      "crl_sha256": "35ffc42fac758970453afe906160da2b3fbcfd1dfcc88acb4a90565b60e5513f",
+      "directory_sha256": "b92e30d2cee873b974e721af213d19cad273aef16248719e71f75a2c7ce25dc9",
+      "embedded_crl_number": 27219,
+      "friends_restarts": 0,
+      "gateway": "HEALTHY_OLD_ROUTE",
+      "latest_renewal": "SUCCESS",
+      "ledger": {
+        "events": 0,
+        "subscriptions": 0
+      },
+      "live_canary_writes": 0,
+      "minimum_crl": 27088,
+      "minimum_remaining_seconds": 12668,
+      "observed_at": 1793216339,
+      "old_profile_route_compatibility": "LOCATOR_PATH_CONFLICT",
+      "owner_binding": "UNCHANGED",
+      "owner_certificates": 0,
+      "production_writes": 0,
+      "profile_sha256": "018fb19ff8b8843a0082b367c6c3be4c0d93ca8fa6ec2841b05983afd0fe35cc",
+      "publisher": "HEALTHY_UNCHANGED_ROUTE",
+      "python314": "PASS",
+      "readiness_calls": 0,
+      "ready_for_owner_live": false,
+      "renewal_timer": "ACTIVE_OLD_ROUTE",
+      "result": "BLOCKED_SNAPSHOT_LAUNCHER_REHEARSAL",
+      "ru_material_mutations": 0,
+      "snapshot_old_route": "ACTUAL_ACCOUNT_PASS",
+      "working_runtime_package_import": "PASS"
+    },
+    "floor_reconciliation": "NOT_RUN",
+    "fresh_backup": "NOT_RUN",
+    "fresh_canonical_copy": "NOT_RUN",
+    "gateway_cutover": "NOT_RUN",
+    "launcher_argv": "PASS",
+    "new_authorized_budgets": {
+      "cutover_restart": 1,
+      "emergency_restart": 1,
+      "offline_floor": 1,
+      "rehearsal_credential_cycle": 1,
+      "timer_pause_resume": 1
+    },
+    "old_profile_locator_probe": "LOCATOR_PATH_CONFLICT",
+    "original_failure": "PYTHON_VERSION_USED_AS_EXECUTABLE",
+    "post_cutover_snapshot": "NOT_RUN",
+    "pre_restart_snapshot": "NOT_RUN",
+    "private_fixed_configuration": "CORRECTED_LOCAL_ONLY",
+    "production_writes": 0,
+    "python314": "PASS",
+    "rehearsal_key_installed": false,
+    "renewal_evaluate": "NOT_RUN",
+    "renewal_extracted_members": {
+      "nl": 17,
+      "ru": 17
+    },
+    "rollback": "NOT_NEEDED_NO_NEW_CUTOVER",
+    "source_files": [
+      "scripts/build_profile_snapshot_launcher.py",
+      "tests/test_profile_snapshot_launcher.py"
+    ],
+    "source_fix": "THIS_COMMIT_PENDING_PUSH",
+    "spent": {
+      "cutover_restart": 0,
+      "floor_reconciliation": 0,
+      "rehearsal_credentials": 0,
+      "rollback_restart": 0,
+      "timer_pause_resume": 0
+    },
+    "strict_builder": "PASS",
+    "tests": {
+      "credential_and_parser": 14,
+      "launcher": 53,
+      "native_directory_deselected": 29,
+      "package": 2,
+      "prior_native_result": "RETAINED_UNCHANGED",
+      "python_directory": 68,
+      "skips": 0,
+      "snapshot_canonical_routes": 101,
+      "total": 238
+    },
+    "timer_resume": "NOT_NEEDED_NEVER_PAUSED"
+  },
   "launcher_diagnosis": {
     "cause": "INTERPRETER_VERSION_USED_AS_FIXED_LAUNCHER_EXECUTABLE",
     "evidence": "EXACT_FAILED_FIXED_LAUNCHER_AND_REMOTE_EXEC_NOT_FOUND",
@@ -288,7 +397,7 @@
     "ru_crl_number": 27216,
     "ru_sequence_matches": true
   },
-  "migration": "ATTEMPTED_ROLLED_BACK",
+  "migration": "PREVIOUS_ATTEMPT_ROLLED_BACK_NEW_CUTOVER_NOT_STARTED",
   "offline_floor_reconciliation": {
     "before_profile_sha256": "018fb19ff8b8843a0082b367c6c3be4c0d93ca8fa6ec2841b05983afd0fe35cc",
     "crl_sha256": "35ffc42fac758970453afe906160da2b3fbcfd1dfcc88acb4a90565b60e5513f",
@@ -319,6 +428,7 @@
     "events": 0,
     "subscriptions": 0
   },
+  "previous_production_result": "BLOCKED_PROFILE_CUTOVER_ROLLED_BACK",
   "production": {
     "active_configuration_changes": "ACTIVATED_THEN_EXACTLY_ROLLED_BACK",
     "all_counts_are_checkpoint_actions": true,
@@ -345,6 +455,7 @@
     "route_changes": "ONE_CUTOVER_ONE_ROLLBACK",
     "ru_material_mutations": 0,
     "ru_mutations": "CONFIGURATION_ACTIVATED_RESTORED_PRIVATE_ASSETS_RETAINED",
+    "scope": "CUMULATIVE_PREVIOUS_ATTEMPT_NO_NEW_ACTIONS",
     "stage0": "NOT_RUN",
     "timer_pause_cycles": 1,
     "writes": "CONTROLLED_CUTOVER_ROLLED_BACK_OFFLINE_FLOOR_RETAINED"
@@ -370,12 +481,13 @@
   "reader_group_route": "EXISTING_STABLE_GROUP_AVAILABLE_NO_ACCOUNT_CHANGE",
   "ready_for_owner_live": false,
   "remaining": [
-    "STOP_NO_SECOND_CUTOVER_OR_FLOOR_OPERATION",
-    "future_authorized_launcher_configuration_correction_and_actual_fixed_command_rehearsal",
-    "explicit_new_production_authorization_required_before_any_new_migration_attempt",
-    "no_stage0_or_owner_phone_procedure_before_READY_FOR_OWNER_LIVE"
+    "STOP_SNAPSHOT_REHEARSAL_PREREQUISITES_BLOCKED",
+    "resolve_canonical_executable_and_working_virtual_environment_contract_without_silent_substitution",
+    "resolve_old_profile_readonly_rehearsal_contract_without_boundary_weakening",
+    "actual_temporary_key_ssh_rehearsal_required_before_any_pause_or_cutover",
+    "no_stage0_or_phone_procedure_before_READY_FOR_OWNER_LIVE"
   ],
-  "result": "BLOCKED_PROFILE_CUTOVER_ROLLED_BACK",
+  "result": "BLOCKED_SNAPSHOT_LAUNCHER_REHEARSAL",
   "safe_ref": "dev_fa4f7e03ca04",
   "schema": 1,
   "source": {

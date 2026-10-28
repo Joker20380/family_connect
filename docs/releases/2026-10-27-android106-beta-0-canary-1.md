@@ -2,6 +2,71 @@
 
 ## Coordinated canonical-profile migration — 28 October
 
+### Current launcher continuation — 19:38:59UTC28.10
+
+**BLOCKED_SNAPSHOT_LAUNCHER_REHEARSAL / LIVE_WRITES_NOT_RUN.**
+Actual temporary-key SSH rehearsal **NOT_RUN: prerequisites blocked**. Not ready for
+owner live. This remains BETA-0-CANARY-1; no new task or canary checkpoint.
+
+The owner accepts the previous rollback and grants a new bounded rehearsal/migration
+budget. Every new production budget remains0/1. Previous spent budgets are historical
+and have not been reset or confused with this continuation's counters.
+
+- `scripts/build_profile_snapshot_launcher.py` requires an absolute canonical regular
+  executable, exact private stat/hash pin, target-account execute/traverse access and an
+  actual isolated CPython3.14 invocation. Version text, relative/argument-bearing paths,
+  wrappers, unsafe modes and caller extra fields fail with typed errors. Optional
+  diagnostic version never enters argv. No production path/account/pin is embedded.
+- The launcher executes exactly the validated interpreter, `-I`, `-B` and exact package.
+  argv-aware quoting is parsed back and the complete generated launcher is checked.
+  It uses isolated direct exec, not shell interpolation or `sh -c`. Original-command
+  restrictions and all required SSH restrictions are preserved. Read-only rehearsal
+  mode rejects renewal/write payloads before package execution and uses no disk spool.
+-53 launcher tests PASS, including the actual previous version-as-command regression,
+  direct real-process read-only launcher execution, malformed input, argv tamper,
+  account permission, private pins and restricted key/command checks.101 existing
+  snapshot/canonical-profile checks,2 package checks,14 existing credential/parser checks
+  and68 Python directory checks PASS:238 focused checks total.29 native directory cases
+  are deliberately deselected; their unchanged previous accepted result is retained.
+  No full historical suite or Android/Linux/Windows client build.
+- Retained snapshot/renewal/maintenance/gateway hashes and sizes match the owner's exact
+  accepted values. All17 extracted renewal package members also match on both hosts.
+  Coherent artifacts are unchanged fromc9c0a4d; this utility/test change is outside all
+  packaged source inventories. No production candidate rebuilt or substituted.
+- Parsed working forced-command argv and target-account executable/stat/runtime probes
+  independently resolve the same absolute Python3.14 target. Corrected production and
+  read-only launchers/configuration/pins were retained privately **locally**, not installed.
+  No executable path, metadata or account identity appears in committed evidence.
+- Prerequisite1: using that resolved target changes the virtual-environment import
+  context. The accepted snapshot PYZ `--help` exits1 under the real snapshot account with
+  `ModuleNotFoundError: No module named 'RNS'`. The same exact PYZ with the currently
+  working route's interpreter passes. This is deployment/runtime context, not artifact
+  drift or evidence that the snapshot source itself is broken. No dependency installation,
+  symlink substitution, extra argv, environment override or runtime modification was made.
+- Prerequisite2: accepted `Locator.validate_reader()` under the same actual account
+  rejects a locator targeting the authoritative old profile with `LOCATOR_PATH_CONFLICT`:
+  that profile shares the independent publisher boundary. Its ownership/mode also do not
+  match the secure canonical reader contract. Pointing the unchanged package there cannot
+  satisfy the requested old-profile rehearsal without changing a required contract.
+  No copying/aliasing the old profile to pretend it is that route; no weakened validation.
+- Therefore no rehearsal key/line was installed, and no actual temporary-key forced
+  command was attempted. Direct account-level probes are explicitly **not** claimed as
+  the mandatory SSH rehearsal. Fresh production backup, canonical copy, reconciliation,
+  renewal pause, pre-restart snapshot activation and gateway restart are all NOT_RUN.
+- Fresh read-only production gate at19:38:59UTC: old renewal timer active/latest success,
+  no pending operation; old gateway/publisher route healthy; original production snapshot
+  actually invoked through its real account/transport: exit0/no stderr/strict schema.
+  CRL27219/floor27088, material headroom12668s, ledger0/0/cohort0/10,
+  owner certificates0/horizon clear/binding unchanged, accepted Android106 retained.
+  No RU material mutation, Friends restart, paid/readiness/Android action or stage0.
+
+Required follow-up is an explicit compatible interpreter/environment and old-profile
+rehearsal design. Do not silently rebuild/substitute artifacts, weaken the canonical
+boundary, spend a cutover budget without the real SSH gate, or ask the owner to open the app.
+STOP. This is source correction plus diagnosed prerequisites, not completed migration.
+
+### Historical accepted rollback from the previous production attempt
+
 **BLOCKED_PROFILE_CUTOVER_ROLLED_BACK / LIVE_WRITES_NOT_RUN.**
 **NOT READY_FOR_OWNER_LIVE.** No second production attempt is authorized.
 
