@@ -1,5 +1,50 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Owner-aware maintenance source gate — 28 October
+
+Continuation from `8acd6b0a242685d18da6ec79a72ed2f57493b775`, same checkpoint.
+**OWNER_AWARE_MAINTENANCE_SOURCE_READY / LIVE_WRITES_NOT_RUN.** The historical
+package `a39ea9515f7a7ed3b674322a6d4e007d2a230b3f90366390a28e0c92e81b114c`
+is retained unchanged and must not be used against service-owned material files.
+
+The fixed private configuration now separates root-private control objects from
+explicitly pinned live profile, directory and existing lock metadata. Exact outer
+fields are profile/directory/sync_lock/operations/journal_key/package_sha256/
+operation_id, each material's uid/gid/mode, and material_boundary. To pin the boundary
+without adding outer fields, material_boundary is a strict descriptor containing
+path, uid, gid, mode, device and inode. These are private configuration fields;
+no production values belong in this report or package. No caller/environment override.
+Modes are strict integers; live files and lock must be private, regular, single-link,
+non-symlink files. Secure root ancestors, a pinned root-or-service-owned boundary,
+non-writable parents and no descendant mount/symlink escape are required. Operations
+are outside that boundary and remain root-private. The lock must already exist;
+maintenance never creates or replaces it.
+
+Atomic control writes remain root-private. Profile replacement creates an exclusive
+same-directory temporary file, assigns the pinned service metadata before writing,
+fsyncs, rechecks content/metadata/directory/window/journal, replaces and reads back.
+Existing targets are never chowned/chmodded or written in place. Unsupported xattrs
+(including ACLs) and file flags are rejected, not silently stripped. The automatic
+extent-layout flag is not treated as a user access attribute. Rollback uses the same
+metadata-preserving primitive. MAC-protected journals bind the configuration and
+material/parent metadata, directory and lock identities. Before/target bytes with
+wrong metadata fail recovery without repair. Root-owned fixtures remain supported
+only with explicit matching configuration. Crypto, permit, profile, idempotency,
+snapshot read-only and paid-state semantics are unchanged.
+
+New typed guards: MATERIAL_METADATA_MISMATCH,
+MATERIAL_EXTENDED_METADATA_UNSUPPORTED, MATERIAL_TEMP_METADATA_FAILED and
+MAINTENANCE_ROUTE_UNAVAILABLE. Sanitized responses expose no owner metadata.
+
+Validation:124 maintenance tests PASS in a root-isolated, network-disabled container
+with disposable ownership fixtures;245 package/restricted-sync/gateway/exact-payload
+CRL/directory/paid-readiness tests PASS,33 existing native/extended-parity deselections.
+Total369 PASS, including the previous320 affected tests and49 ownership/schema
+regressions. Packaging tests run in the local locked environment because the isolated
+console image has no Git executable; no gate is skipped. Production, paid/canary,
+Android and service restart actions NOT_RUN. The new committed-source package must
+pass two independent identical builds before production preflight begins.
+
 ## Fresh service baseline and maintenance ownership boundary — 28 October
 
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_MAINTENANCE_ROUTE_UNAVAILABLE /

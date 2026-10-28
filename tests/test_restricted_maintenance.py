@@ -52,6 +52,8 @@ def setup(tmp_path):
     root.mkdir(mode=0o700)
     operations = root / 'operations'
     operations.mkdir(mode=0o700)
+    material = root / 'materials'
+    material.mkdir(mode=0o700)
     now = 1800000000
     signing = Ed25519PrivateKey.generate()
     name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, 'synthetic maintenance authority')])
@@ -61,15 +63,18 @@ def setup(tmp_path):
         .add_extension(x509.KeyUsage(False, False, False, False, False, True, True, False, False), True).sign(signing, None))
     fixture = SimpleNamespace(now=now, signing=signing, authority=authority, root=root)
     fixture.payload = make_crl(fixture)
-    fixture.profile = private_file(root / 'profile.json', json.dumps(dict(authority=authority.public_bytes(Encoding.PEM).decode(),
+    fixture.profile = private_file(material / 'profile.json', json.dumps(dict(authority=authority.public_bytes(Encoding.PEM).decode(),
         revocations=fixture.payload.decode(), minimum_crl=27088, family='a' * 32, gateway='b' * 32,
         minimum_revision=1, certificate='synthetic certificate projection', private_key='synthetic-key-marker',
         unrelated=dict(settings=[1, 'unchanged', True])), indent=2).encode())
-    fixture.directory = private_file(root / 'directory.json', maintenance.encode(dict(version=1, family='a' * 32,
+    fixture.directory = private_file(material / 'directory.json', maintenance.encode(dict(version=1, family='a' * 32,
         issued_at=iso(now - 1), expires_at=iso(now + 899), seeds=[dict(gateway='b' * 32,
         transport='telemost-webrtc', join_url='https://telemost.yandex.ru/j/maintenance-synthetic-only')])))
-    fixture.config = maintenance.Configuration(fixture.profile, fixture.directory, operations, b'x' * 32,
-                                               owner_uid=os.getuid(), boundary=root)
+    fixture.config = maintenance.Configuration(profile=fixture.profile, directory=fixture.directory,
+        sync_lock=private_file(material / 'sync.lock', b''), operations=operations, journal_key=b'x' * 32,
+        profile_uid=0, profile_gid=0, profile_mode=0o600, directory_uid=0, directory_gid=0,
+        directory_mode=0o600, lock_uid=0, lock_gid=0, lock_mode=0o600,
+        material_boundary=dict(path=str(material), **maintenance.metadata(material.stat())))
     fixture.permit, fixture.request = permit_for(fixture)
     fixture.operation = maintenance.Operation(fixture.config, fixture.permit, clock=lambda: fixture.now)
     return fixture
@@ -77,6 +82,257 @@ def setup(tmp_path):
 
 def journal(setup):
     return maintenance.strict((setup.operation.root / 'journal.json').read_bytes(), 16384, 'INVALID_REQUEST')['journal']
+
+
+@pytest.fixture
+def service_setup(setup):
+    assert os.geteuid() == 0, 'Run ownership tests inside the isolated root test container'
+    for path in (setup.profile, setup.directory, setup.config.sync_lock):
+        os.chown(path, 41001, 41002)
+    setup.config = replace(setup.config, profile_uid=41001, profile_gid=41002,
+        directory_uid=41001, directory_gid=41002, lock_uid=41001, lock_gid=41002)
+    setup.operation = maintenance.Operation(setup.config, setup.permit, clock=lambda: setup.now)
+    return setup
+
+
+def test_service_materials_root_controls_and_preservation(service_setup, monkeypatch):
+    setup = service_setup
+    before = {path: (path.read_bytes(), maintenance.metadata(path.stat())) for path in
+              (setup.directory, setup.config.sync_lock)}
+    original_profile = json.loads(setup.profile.read_bytes())
+    original_replace = os.replace
+    original_chown = os.chown
+    original_chmod = os.chmod
+    def forbidden_target_chown(path, *args, **kwargs):
+        assert path not in (setup.profile, setup.directory, setup.config.sync_lock)
+        return original_chown(path, *args, **kwargs)
+    def forbidden_target_chmod(path, *args, **kwargs):
+        assert path not in (setup.profile, setup.directory, setup.config.sync_lock)
+        return original_chmod(path, *args, **kwargs)
+    def checked_replace(source, target, **kwargs):
+        if target == setup.profile.name:
+            info = (setup.profile.parent / source).stat()
+            assert (info.st_uid, info.st_gid, info.st_mode & 0o777) == (41001, 41002, 0o600)
+        return original_replace(source, target, **kwargs)
+    monkeypatch.setattr(os, 'chown', forbidden_target_chown)
+    monkeypatch.setattr(os, 'chmod', forbidden_target_chmod)
+    monkeypatch.setattr(os, 'replace', checked_replace)
+    assert setup.operation.execute(setup.request)['result'] == 'PASS'
+    assert setup.operation.execute(setup.request)['result'] == 'IDEMPOTENT'
+    assert json.loads(setup.profile.read_bytes()) == dict(original_profile, minimum_crl=27211)
+    assert setup.config.expected(setup.profile) == {name: maintenance.metadata(setup.profile.stat())[name]
+                                                   for name in ('uid', 'gid', 'mode')}
+    for path, value in before.items():
+        assert (path.read_bytes(), maintenance.metadata(path.stat())) == value
+    for path in setup.operation.root.iterdir():
+        assert path.stat().st_uid == path.stat().st_gid == 0 and path.stat().st_mode & 0o777 == 0o600
+    assert journal(setup)['material_metadata']['before_profile_uid'] == 41001
+
+
+@pytest.mark.parametrize('member', ['profile', 'directory', 'sync_lock'])
+@pytest.mark.parametrize('field', ['uid', 'gid', 'mode'])
+def test_exact_material_metadata_required_before_journal(service_setup, member, field):
+    setup = service_setup
+    path = getattr(setup.config, member)
+    if field == 'uid':
+        os.chown(path, 0, -1)
+    elif field == 'gid':
+        os.chown(path, -1, 0)
+    else:
+        path.chmod(0o640)
+    expected = 'MAINTENANCE_ROUTE_UNAVAILABLE' if member == 'sync_lock' else 'MATERIAL_METADATA_MISMATCH'
+    with pytest.raises(maintenance.MaintenanceError, match=expected):
+        setup.operation.execute(setup.request)
+    assert not setup.operation.root.exists()
+
+
+def test_missing_lock_never_created(service_setup):
+    setup = service_setup
+    setup.config.sync_lock.unlink()
+    with pytest.raises(maintenance.MaintenanceError, match='MAINTENANCE_ROUTE_UNAVAILABLE'):
+        setup.operation.execute(setup.request)
+    assert not setup.config.sync_lock.exists() and not setup.operation.root.exists()
+
+
+@pytest.mark.parametrize('case', ['parent_writable', 'escape', 'symlink', 'hardlink', 'boundary_changed'])
+def test_material_boundary_rejects_escapes_and_unsafe_metadata(service_setup, case):
+    setup = service_setup
+    if case == 'parent_writable':
+        setup.profile.parent.chmod(0o777)
+    elif case == 'escape':
+        setup.config = replace(setup.config, profile=setup.root / 'outside.json')
+    elif case == 'symlink':
+        setup.profile.rename(setup.root / 'original')
+        setup.profile.symlink_to(setup.root / 'original')
+    elif case == 'hardlink':
+        os.link(setup.profile, setup.root / 'hardlink')
+    else:
+        setup.config = replace(setup.config, material_boundary=dict(setup.config.material_boundary, inode=0))
+    with pytest.raises(maintenance.MaintenanceError):
+        maintenance.Operation(setup.config, setup.permit, clock=lambda: setup.now).execute(setup.request)
+    assert not setup.operation.root.exists()
+
+
+def test_service_owned_boundary_requires_explicit_pin(service_setup):
+    setup = service_setup
+    boundary = setup.profile.parent
+    os.chown(boundary, 41001, 41002)
+    with pytest.raises(maintenance.MaintenanceError):
+        setup.config.validate()
+    setup.config = replace(setup.config, material_boundary=dict(path=str(boundary), **maintenance.metadata(boundary.stat())))
+    assert maintenance.Operation(setup.config, setup.permit, clock=lambda: setup.now).execute(setup.request)['result'] == 'PASS'
+
+
+@pytest.mark.parametrize('kind', ['xattr', 'acl', 'immutable', 'append'])
+def test_extended_metadata_never_silently_lost(service_setup, monkeypatch, kind):
+    setup = service_setup
+    if kind == 'xattr':
+        os.setxattr(setup.profile, 'user.synthetic-test', b'preserve')
+    elif kind == 'acl':
+        original = os.listxattr
+        monkeypatch.setattr(os, 'listxattr', lambda descriptor: ['system.posix_acl_access']
+            if os.fstat(descriptor).st_ino == setup.profile.stat().st_ino else original(descriptor))
+    else:
+        original = maintenance.fcntl.ioctl
+        def flags(descriptor, request, buffer, mutate):
+            if os.fstat(descriptor).st_ino == setup.profile.stat().st_ino:
+                buffer[:] = (0x10 if kind == 'immutable' else 0x20).to_bytes(len(buffer), sys.byteorder)
+                return 0
+            return original(descriptor, request, buffer, mutate)
+        monkeypatch.setattr(maintenance.fcntl, 'ioctl', flags)
+    with pytest.raises(maintenance.MaintenanceError, match='MATERIAL_EXTENDED_METADATA_UNSUPPORTED'):
+        setup.operation.execute(setup.request)
+    assert not setup.operation.root.exists()
+
+
+@pytest.mark.parametrize('state', ['before', 'target'])
+@pytest.mark.parametrize('field', ['uid', 'gid', 'mode'])
+def test_recovery_wrong_metadata_conflicts_without_repair(service_setup, state, field):
+    setup = service_setup
+    if state == 'target':
+        setup.operation.execute(setup.request)
+    else:
+        setup.operation._prepare(setup.request)
+    value = journal(setup)
+    setup.operation._save(value, 'APPLYING')
+    if field == 'uid':
+        os.chown(setup.profile, 0, -1)
+    elif field == 'gid':
+        os.chown(setup.profile, -1, 0)
+    else:
+        setup.profile.chmod(0o644)
+    before = setup.profile.read_bytes(), maintenance.metadata(setup.profile.stat())
+    for action in (setup.operation.execute, setup.operation.reconcile):
+        with pytest.raises(maintenance.MaintenanceError, match='MAINTENANCE_STATE_CONFLICT'):
+            action(setup.request)
+    assert (setup.profile.read_bytes(), maintenance.metadata(setup.profile.stat())) == before
+
+
+@pytest.mark.parametrize('corrupt_metadata', [False, True])
+def test_service_rollback_preserves_metadata_or_fails_closed(service_setup, monkeypatch, corrupt_metadata):
+    setup = service_setup
+    before = setup.profile.read_bytes()
+    def failed_readback(value):
+        if corrupt_metadata:
+            os.chown(setup.profile, 0, -1)
+        raise maintenance.MaintenanceError('READBACK_MISMATCH')
+    monkeypatch.setattr(setup.operation, '_target', failed_readback)
+    code = 'MAINTENANCE_ROLLBACK_FAILED' if corrupt_metadata else 'MAINTENANCE_ROLLED_BACK'
+    with pytest.raises(maintenance.MaintenanceError, match=code):
+        setup.operation.execute(setup.request)
+    if not corrupt_metadata:
+        assert setup.profile.read_bytes() == before
+        assert (setup.profile.stat().st_uid, setup.profile.stat().st_gid, setup.profile.stat().st_mode & 0o777) == (41001, 41002, 0o600)
+    else:
+        assert setup.profile.stat().st_uid == 0
+
+
+def test_same_operation_different_configuration_conflicts(service_setup):
+    setup = service_setup
+    setup.operation.execute(setup.request)
+    changed = replace(setup.config, max_attempts=2)
+    with pytest.raises(maintenance.MaintenanceError, match='MAINTENANCE_STATE_CONFLICT'):
+        maintenance.Operation(changed, setup.permit, clock=lambda: setup.now).execute(setup.request)
+
+
+def test_temp_metadata_failure_never_replaces_target(service_setup, monkeypatch):
+    setup = service_setup
+    before = setup.profile.read_bytes(), maintenance.metadata(setup.profile.stat())
+    def failure(*args):
+        raise PermissionError('synthetic')
+    monkeypatch.setattr(os, 'fchown', failure)
+    with pytest.raises(maintenance.MaintenanceError, match='MATERIAL_TEMP_METADATA_FAILED'):
+        setup.operation.execute(setup.request)
+    assert (setup.profile.read_bytes(), maintenance.metadata(setup.profile.stat())) == before
+    assert not list(setup.profile.parent.glob('.profile.json.*'))
+
+
+@pytest.mark.parametrize('field,value', [('profile_uid', True), ('directory_gid', -1), ('lock_mode', 0o644),
+    ('profile_mode', True), ('profile', Path('relative')), ('profile', Path('/safe/../escape'))])
+def test_invalid_private_configuration_rejected(service_setup, field, value):
+    with pytest.raises(maintenance.MaintenanceError, match='INVALID_PERMIT'):
+        replace(service_setup.config, **{field: value}).validate()
+
+
+def test_caller_cannot_supply_metadata(service_setup):
+    setup = service_setup
+    request = maintenance.encode(dict(revocations=setup.payload.decode(), profile_uid=0))
+    with pytest.raises(maintenance.MaintenanceError, match='INVALID_REQUEST'):
+        setup.operation.execute(request)
+    with pytest.raises(maintenance.MaintenanceError, match='INVALID_PERMIT'):
+        maintenance.Operation(setup.config, dict(setup.permit, profile_uid=0))
+
+
+@pytest.mark.parametrize('case', ['service_owner', 'public_mode', 'hardlink', 'symlink'])
+def test_control_domain_stays_root_private(service_setup, case):
+    setup = service_setup
+    control = private_file(setup.root / 'control.json', b'{}')
+    if case == 'service_owner':
+        os.chown(control, 41001, 41002)
+    elif case == 'public_mode':
+        control.chmod(0o644)
+    elif case == 'hardlink':
+        os.link(control, setup.root / 'linked')
+    else:
+        control.rename(setup.root / 'original-control')
+        control.symlink_to(setup.root / 'original-control')
+    with pytest.raises((maintenance.MaintenanceError, OSError)):
+        maintenance.read_control(control, 8192)
+
+
+@pytest.mark.parametrize('case', ['valid', 'missing', 'unknown', 'duplicate', 'nonfinite', 'mode', 'owner'])
+def test_fixed_configuration_exact_schema(service_setup, monkeypatch, case):
+    setup = service_setup
+    key = private_file(setup.root / 'journal.key', setup.config.journal_key)
+    package = private_file(setup.root / 'bound.pyz', b'synthetic immutable package')
+    package.chmod(0o400)
+    value = {name: getattr(setup.config, name) for name in maintenance.CONFIG_FIELDS
+             if name not in ('operation_id', 'package_sha256', 'journal_key')}
+    for name in ('profile', 'directory', 'sync_lock', 'operations'):
+        value[name] = str(value[name])
+    value.update(journal_key=str(key), operation_id=setup.permit['operation_id'], package_sha256=maintenance.digest(package.read_bytes()))
+    if case == 'missing':
+        del value['lock_uid']
+    elif case == 'unknown':
+        value['owner_uid'] = 0
+    raw = maintenance.encode(value)
+    if case == 'duplicate':
+        raw = b'{"profile_uid":0,' + raw[1:]
+    elif case == 'nonfinite':
+        raw = raw.replace(b'"profile_uid":41001', b'"profile_uid":NaN')
+    config = private_file(setup.root / 'fixed.json', raw)
+    monkeypatch.setattr(maintenance, 'CONFIGURATION_PATH', config)
+    if case == 'mode':
+        config.chmod(0o644)
+    elif case == 'owner':
+        os.chown(config, 41001, 41002)
+    if case == 'valid':
+        loaded = maintenance.load_configuration(setup.permit, package)
+        assert loaded.contract() == setup.config.contract()
+        assert maintenance.Operation(loaded, setup.permit, clock=lambda: setup.now).execute(setup.request)['result'] == 'PASS'
+    else:
+        with pytest.raises(maintenance.MaintenanceError):
+            maintenance.load_configuration(setup.permit, package)
 
 
 def test_reconcile_floor_exact_payload_and_private_receipt(setup):
@@ -320,12 +576,13 @@ def test_directory_validated_before_write(setup):
 
 def test_staged_file_fsynced_before_applying_and_replace(setup, monkeypatch):
     original = maintenance.os.replace
-    def checked(source, target):
-        if target == setup.profile:
-            assert source.parent == setup.profile.parent and source.stat().st_mode & 0o777 == 0o600
-            assert source.read_bytes() == (setup.operation.root / 'target-profile.json').read_bytes()
+    def checked(source, target, **kwargs):
+        if target == setup.profile.name:
+            pending = setup.profile.parent / source
+            assert pending.stat().st_mode & 0o777 == 0o600
+            assert pending.read_bytes() == (setup.operation.root / 'target-profile.json').read_bytes()
             assert journal(setup)['state'] == 'APPLYING' and journal(setup)['attempt_count'] == 1
-        return original(source, target)
+        return original(source, target, **kwargs)
     monkeypatch.setattr(maintenance.os, 'replace', checked)
     assert setup.operation.execute(setup.request)['result'] == 'PASS'
 
@@ -337,13 +594,12 @@ def test_lock_contention(setup):
 
 
 def test_profile_drift_during_staging_is_not_overwritten(setup, monkeypatch):
-    original = maintenance.atomic
+    original = maintenance.atomic_material_replace
     changed = setup.profile.read_bytes() + b'\n'
-    def drift(path, raw, **kwargs):
-        if path == setup.profile:
-            setup.profile.write_bytes(changed)
-        return original(path, raw, **kwargs)
-    monkeypatch.setattr(maintenance, 'atomic', drift)
+    def drift(config, raw, **kwargs):
+        setup.profile.write_bytes(changed)
+        return original(config, raw, **kwargs)
+    monkeypatch.setattr(maintenance, 'atomic_material_replace', drift)
     with pytest.raises(maintenance.MaintenanceError, match='MAINTENANCE_PRECONDITION_CHANGED'):
         setup.operation.execute(setup.request)
     assert setup.profile.read_bytes() == changed and journal(setup)['state'] == 'CONFLICT'

@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from decimal import Decimal
 import fcntl
+import errno
 import hashlib
 import hmac
 import json
@@ -14,6 +15,7 @@ import re
 import secrets
 import shlex
 import stat
+import struct
 import sys
 import time
 import zipfile
@@ -29,9 +31,14 @@ PERMIT_FIELDS = frozenset(('schema operation_id action expected_profile_sha256 e
     'expected_embedded_crl_sha256 expected_embedded_crl_number expected_minimum_crl request_sha256 '
     'target_crl_sha256 target_crl_number target_minimum_crl not_before not_after').split())
 STATES = frozenset('PREPARED APPLYING COMMITTED IDEMPOTENT ROLLED_BACK UNKNOWN CONFLICT'.split())
+CONFIG_FIELDS = frozenset(('profile directory sync_lock operations journal_key package_sha256 operation_id '
+    'profile_uid profile_gid profile_mode directory_uid directory_gid directory_mode lock_uid lock_gid lock_mode '
+    'material_boundary').split())
 CODES = frozenset(('PASS IDEMPOTENT INVALID_PERMIT INVALID_REQUEST MAINTENANCE_PRECONDITION_CHANGED '
     'CRL_PAYLOAD_CONFLICT PROFILE_VALIDATION_FAILED DIRECTORY_VALIDATION_FAILED APPLY_FAILED '
-    'MAINTENANCE_ROLLED_BACK MAINTENANCE_ROLLBACK_FAILED MAINTENANCE_STATE_CONFLICT READBACK_MISMATCH').split())
+    'MAINTENANCE_ROLLED_BACK MAINTENANCE_ROLLBACK_FAILED MAINTENANCE_STATE_CONFLICT READBACK_MISMATCH '
+    'MATERIAL_METADATA_MISMATCH MATERIAL_EXTENDED_METADATA_UNSUPPORTED MATERIAL_TEMP_METADATA_FAILED '
+    'MAINTENANCE_ROUTE_UNAVAILABLE').split())
 
 
 class MaintenanceError(ValueError):
@@ -111,7 +118,36 @@ def fsync_directory(path):
         os.close(descriptor)
 
 
-def atomic(path, raw, *, before_replace=None):
+def absolute(path):
+    require(isinstance(path, Path) and path.is_absolute() and '..' not in path.parts, 'INVALID_PERMIT')
+
+
+def root_parents(path):
+    absolute(path)
+    for parent in (path.parent, *path.parent.parents):
+        info = parent.lstat()
+        require(stat.S_ISDIR(info.st_mode) and info.st_uid == 0 and not info.st_mode & 0o022,
+                'MAINTENANCE_STATE_CONFLICT')
+
+
+def read_control(path, limit, *, mode=0o600):
+    require(os.geteuid() == 0, 'INVALID_PERMIT')
+    root_parents(path)
+    descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(descriptor, 'rb') as source:
+        info = os.fstat(source.fileno())
+        require(stat.S_ISREG(info.st_mode) and info.st_nlink == 1 and info.st_uid == info.st_gid == 0 and
+                stat.S_IMODE(info.st_mode) == mode, 'MAINTENANCE_STATE_CONFLICT')
+        raw = source.read(limit + 1)
+    require(0 < len(raw) <= limit, 'MAINTENANCE_STATE_CONFLICT')
+    return raw
+
+
+def atomic_control(path, raw):
+    require(os.geteuid() == 0, 'INVALID_PERMIT')
+    root_parents(path)
+    if path.exists() or path.is_symlink():
+        read_control(path, 1024 * 1024)
     pending = path.with_name('.' + path.name + '.' + secrets.token_hex(12))
     descriptor = os.open(pending, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
     try:
@@ -119,8 +155,6 @@ def atomic(path, raw, *, before_replace=None):
             output.write(raw)
             output.flush()
             os.fsync(output.fileno())
-        if before_replace is not None:
-            before_replace()
         os.replace(pending, path)
         fsync_directory(path.parent)
     finally:
@@ -128,56 +162,160 @@ def atomic(path, raw, *, before_replace=None):
             pending.unlink()
 
 
+def metadata(info):
+    return dict(uid=info.st_uid, gid=info.st_gid, mode=stat.S_IMODE(info.st_mode),
+                device=info.st_dev, inode=info.st_ino)
+
+
+def extended_metadata(descriptor):
+    code = 'MATERIAL_EXTENDED_METADATA_UNSUPPORTED'
+    try:
+        require(not os.listxattr(descriptor), code)
+        flags = bytearray(struct.calcsize('L'))
+        try:
+            fcntl.ioctl(descriptor, 0x80006601 | (len(flags) << 16), flags, True)
+        except OSError as error:
+            require(error.errno in (errno.ENOTTY, errno.EOPNOTSUPP), code)
+        else:
+            require(not int.from_bytes(flags, sys.byteorder) & ~0x80000, code)
+    except OSError:
+        raise MaintenanceError(code) from None
+
+
 @dataclass(frozen=True, repr=False)
 class Configuration:
     profile: Path
     directory: Path
+    sync_lock: Path
     operations: Path
     journal_key: bytes
-    owner_uid: int = 0
-    boundary: Path = Path('/')
+    profile_uid: int
+    profile_gid: int
+    profile_mode: int
+    directory_uid: int
+    directory_gid: int
+    directory_mode: int
+    lock_uid: int
+    lock_gid: int
+    lock_mode: int
+    material_boundary: dict
     max_attempts: int = 1
 
-    def parents(self, path):
-        require(path.is_absolute() and '..' not in path.parts and path.is_relative_to(self.boundary), 'MAINTENANCE_STATE_CONFLICT')
-        for parent in (path.parent, *path.parent.parents):
-            info = parent.lstat()
-            require(stat.S_ISDIR(info.st_mode) and info.st_uid == self.owner_uid and not info.st_mode & 0o022,
-                    'MAINTENANCE_STATE_CONFLICT')
-            if parent == self.boundary:
-                break
+    def expected(self, path):
+        for name in ('profile', 'directory', 'lock'):
+            if path == getattr(self, 'sync_lock' if name == 'lock' else name):
+                return {field: getattr(self, name + '_' + field) for field in ('uid', 'gid', 'mode')}
+        raise MaintenanceError('MATERIAL_METADATA_MISMATCH')
 
-    def read(self, path, limit):
-        self.parents(path)
-        descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
-        with os.fdopen(descriptor, 'rb') as source:
-            info = os.fstat(source.fileno())
-            require(stat.S_ISREG(info.st_mode) and info.st_nlink == 1 and info.st_uid == self.owner_uid and
-                    stat.S_IMODE(info.st_mode) == 0o600, 'MAINTENANCE_STATE_CONFLICT')
-            raw = source.read(limit + 1)
-        require(0 < len(raw) <= limit, 'MAINTENANCE_STATE_CONFLICT')
-        return raw
+    def parents(self, path):
+        code = 'MATERIAL_METADATA_MISMATCH'
+        boundary = Path(self.material_boundary['path'])
+        absolute(path)
+        require(path != boundary and path.is_relative_to(boundary), code)
+        root_parents(boundary)
+        info = boundary.lstat()
+        require(stat.S_ISDIR(info.st_mode) and metadata(info) == {key: value for key, value in
+                self.material_boundary.items() if key != 'path'}, code)
+        require(info.st_uid in (0, self.profile_uid) and not info.st_mode & 0o022, code)
+        result = {}
+        for parent in (path.parent, *path.parent.parents):
+            if not parent.is_relative_to(boundary):
+                break
+            current = parent.lstat()
+            require(stat.S_ISDIR(current.st_mode) and current.st_uid in (0, self.profile_uid) and
+                    not current.st_mode & 0o022 and current.st_dev == info.st_dev, code)
+            result[str(parent)] = metadata(current)
+        require(path.parent.resolve(strict=True) == path.parent, code)
+        for line in Path('/proc/self/mountinfo').read_text().splitlines():
+            mounted = Path(re.sub(r'\\([0-7]{3})', lambda match: chr(int(match[1], 8)), line.split()[4]))
+            require(mounted == boundary or not mounted.is_relative_to(boundary), code)
+        return result
+
+    def verify_material_fd(self, path, descriptor):
+        info = os.fstat(descriptor)
+        require(stat.S_ISREG(info.st_mode) and info.st_nlink == 1 and
+                all(metadata(info)[key] == value for key, value in self.expected(path).items()) and
+                info.st_dev == self.material_boundary['device'], 'MATERIAL_METADATA_MISMATCH')
+        extended_metadata(descriptor)
+        return info
+
+    def read_material(self, path, limit):
+        try:
+            self.parents(path)
+            descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+            with os.fdopen(descriptor, 'rb') as source:
+                info = self.verify_material_fd(path, source.fileno())
+                require(metadata(path.lstat()) == metadata(info) and not path.is_symlink(), 'MATERIAL_METADATA_MISMATCH')
+                raw = source.read(limit + 1)
+            require(len(raw) <= limit and (bool(raw) or path == self.sync_lock), 'MATERIAL_METADATA_MISMATCH')
+            return raw
+        except OSError:
+            raise MaintenanceError('MATERIAL_METADATA_MISMATCH') from None
+
+    def contract(self):
+        return dict(paths={name: str(getattr(self, name)) for name in ('profile', 'directory', 'sync_lock', 'operations')},
+                    materials={name: self.expected(getattr(self, name)) for name in ('profile', 'directory', 'sync_lock')},
+                    boundary=self.material_boundary, max_attempts=self.max_attempts)
+
+    def material_snapshot(self):
+        for path, limit in ((self.profile, 49152), (self.directory, 8192), (self.sync_lock, 4096)):
+            self.read_material(path, limit)
+        parents = {str(path): self.parents(path) for path in (self.profile, self.directory, self.sync_lock)}
+        return dict(before_profile_uid=self.profile_uid, before_profile_gid=self.profile_gid,
+                    before_profile_mode=self.profile_mode, target_profile_uid=self.profile_uid,
+                    target_profile_gid=self.profile_gid, target_profile_mode=self.profile_mode,
+                    directory_uid=self.directory_uid, directory_gid=self.directory_gid, directory_mode=self.directory_mode,
+                    lock_uid=self.lock_uid, lock_gid=self.lock_gid, lock_mode=self.lock_mode,
+                    lock_sha256=digest(self.read_material(self.sync_lock, 4096)),
+                    lock_inode=self.sync_lock.lstat().st_ino, directory_inode=self.directory.lstat().st_ino,
+                    material_boundary_metadata_sha256=digest(encode(parents)))
 
     def validate(self):
-        require(type(self.journal_key) is bytes and len(self.journal_key) == 32 and
+        require(os.geteuid() == 0 and type(self.journal_key) is bytes and len(self.journal_key) == 32 and
                 type(self.max_attempts) is int and self.max_attempts in (1, 2), 'INVALID_PERMIT')
-        require(len({self.profile, self.directory, self.operations}) == 3, 'INVALID_PERMIT')
-        self.parents(self.operations / 'placeholder')
-        require(stat.S_IMODE(self.operations.stat().st_mode) == 0o700, 'MAINTENANCE_STATE_CONFLICT')
-        for path in (self.profile, self.directory):
+        for name in ('profile', 'directory', 'lock'):
+            for field in ('uid', 'gid'):
+                value = getattr(self, name + '_' + field)
+                require(type(value) is int and 0 <= value < 2**32 - 1, 'INVALID_PERMIT')
+            require(type(getattr(self, name + '_mode')) is int and getattr(self, name + '_mode') == 0o600, 'INVALID_PERMIT')
+        require(type(self.material_boundary) is dict and set(self.material_boundary) ==
+                {'path', 'uid', 'gid', 'mode', 'device', 'inode'}, 'INVALID_PERMIT')
+        require(type(self.material_boundary['path']) is str, 'INVALID_PERMIT')
+        boundary = Path(self.material_boundary['path'])
+        absolute(boundary)
+        for name in ('uid', 'gid', 'mode', 'device', 'inode'):
+            require(type(self.material_boundary[name]) is int and self.material_boundary[name] >= 0, 'INVALID_PERMIT')
+        paths = (self.profile, self.directory, self.sync_lock, self.operations)
+        for path in paths:
+            absolute(path)
+        require(len(set(paths)) == 4 and not self.operations.is_relative_to(boundary), 'INVALID_PERMIT')
+        for path in paths[:3]:
             require(not path.is_relative_to(self.operations), 'INVALID_PERMIT')
-        self.read(self.profile, 49152)
-        self.read(self.directory, 8192)
+        root_parents(self.operations / 'placeholder')
+        info = self.operations.lstat()
+        require(stat.S_ISDIR(info.st_mode) and info.st_uid == info.st_gid == 0 and
+                stat.S_IMODE(info.st_mode) == 0o700, 'MAINTENANCE_STATE_CONFLICT')
+        try:
+            self.read_material(self.sync_lock, 4096)
+        except MaintenanceError as error:
+            if error.code == 'MATERIAL_EXTENDED_METADATA_UNSUPPORTED':
+                raise
+            raise MaintenanceError('MAINTENANCE_ROUTE_UNAVAILABLE') from None
+        self.material_snapshot()
 
     @contextmanager
     def lock(self):
-        path = self.profile.with_suffix('.sync-lock')
-        self.parents(path)
-        descriptor = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK, 0o600)
         try:
-            info = os.fstat(descriptor)
-            require(stat.S_ISREG(info.st_mode) and info.st_uid == self.owner_uid and info.st_nlink == 1 and
-                    stat.S_IMODE(info.st_mode) == 0o600, 'MAINTENANCE_STATE_CONFLICT')
+            self.parents(self.sync_lock)
+            descriptor = os.open(self.sync_lock, os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK)
+        except (OSError, MaintenanceError):
+            raise MaintenanceError('MAINTENANCE_ROUTE_UNAVAILABLE') from None
+        try:
+            try:
+                self.verify_material_fd(self.sync_lock, descriptor)
+                require(self.sync_lock.lstat().st_ino == os.fstat(descriptor).st_ino, 'MATERIAL_METADATA_MISMATCH')
+            except MaintenanceError:
+                raise MaintenanceError('MAINTENANCE_ROUTE_UNAVAILABLE') from None
             try:
                 fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
             except BlockingIOError:
@@ -185,6 +323,43 @@ class Configuration:
             yield
         finally:
             os.close(descriptor)
+
+
+def atomic_material_replace(config, raw, *, before_replace):
+    path = config.profile
+    config.read_material(path, 49152)
+    parents = config.parents(path)
+    parent_fd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    pending = '.' + path.name + '.' + secrets.token_hex(12)
+    try:
+        require(metadata(os.fstat(parent_fd)) == parents[str(path.parent)], 'MATERIAL_METADATA_MISMATCH')
+        descriptor = os.open(pending, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=parent_fd)
+        with os.fdopen(descriptor, 'wb') as output:
+            try:
+                os.fchown(output.fileno(), config.profile_uid, config.profile_gid)
+                os.fchmod(output.fileno(), config.profile_mode)
+                config.verify_material_fd(path, output.fileno())
+            except (OSError, MaintenanceError):
+                raise MaintenanceError('MATERIAL_TEMP_METADATA_FAILED') from None
+            output.write(raw)
+            output.flush()
+            os.fsync(output.fileno())
+        require(config.parents(path) == parents, 'MATERIAL_METADATA_MISMATCH')
+        before_replace()
+        require(config.parents(path) == parents, 'MATERIAL_METADATA_MISMATCH')
+        descriptor = os.open(pending, os.O_RDONLY | os.O_NOFOLLOW, dir_fd=parent_fd)
+        with os.fdopen(descriptor, 'rb') as source:
+            config.verify_material_fd(path, source.fileno())
+            require(source.read(len(raw) + 1) == raw, 'MATERIAL_TEMP_METADATA_FAILED')
+        os.replace(pending, path.name, src_dir_fd=parent_fd, dst_dir_fd=parent_fd)
+        os.fsync(parent_fd)
+        require(config.read_material(path, 49152) == raw, 'MATERIAL_METADATA_MISMATCH')
+    finally:
+        try:
+            os.unlink(pending, dir_fd=parent_fd)
+        except FileNotFoundError:
+            pass
+        os.close(parent_fd)
 
 
 def profile_material(raw, directory_raw, now):
@@ -239,32 +414,50 @@ class Operation:
         journal['state'] = state
         raw = encode(journal)
         envelope = dict(journal=journal, mac=hmac.new(self.config.journal_key, raw, hashlib.sha256).hexdigest())
-        atomic(self.root / 'journal.json', encode(envelope))
+        atomic_control(self.root / 'journal.json', encode(envelope))
 
     def _load(self, request):
         code = 'MAINTENANCE_STATE_CONFLICT'
         require(stat.S_IMODE(self.root.lstat().st_mode) == 0o700 and not self.root.is_symlink(), code)
-        envelope = strict(self.config.read(self.root / 'journal.json', 16384), 16384, code)
+        envelope = strict(read_control(self.root / 'journal.json', 16384), 16384, code)
         require(type(envelope) is dict and set(envelope) == {'journal', 'mac'}, code)
         journal = envelope['journal']
         require(type(envelope['mac']) is str and hmac.compare_digest(envelope['mac'],
                 hmac.new(self.config.journal_key, encode(journal), hashlib.sha256).hexdigest()), code)
         require(journal['state'] in STATES and journal['permit_sha256'] == digest(encode(self.permit)) and
                 journal['request_sha256'] == digest(request), code)
-        require(self.config.read(self.root / 'permit.json', 8192) == encode(self.permit) and
-                self.config.read(self.root / 'request.json', 20000) == request, code)
+        require(read_control(self.root / 'permit.json', 8192) == encode(self.permit) and
+                read_control(self.root / 'request.json', 20000) == request, code)
         for name, field, limit in (('before-profile.json', 'before_profile_sha256', 49152),
                                    ('before-directory.json', 'before_directory_sha256', 8192),
                                    ('target-profile.json', 'target_profile_sha256', 49152)):
-            require(digest(self.config.read(self.root / name, limit)) == journal[field], code)
+            require(digest(read_control(self.root / name, limit)) == journal[field], code)
+        require(journal['configuration_sha256'] == digest(encode(self.config.contract())), code)
+        self._unchanged_metadata(journal)
         return journal
+
+    def _unchanged_metadata(self, journal):
+        try:
+            require(self.config.material_snapshot() == journal['material_metadata'], 'MAINTENANCE_STATE_CONFLICT')
+        except (MaintenanceError, OSError):
+            raise MaintenanceError('MAINTENANCE_STATE_CONFLICT') from None
+        require(digest(self.config.read_material(self.config.directory, 8192)) ==
+                journal['before_directory_sha256'], 'MAINTENANCE_STATE_CONFLICT')
+
+    def _validate(self):
+        try:
+            self.config.validate()
+        except (MaintenanceError, OSError):
+            if self.root.exists() or self.root.is_symlink():
+                raise MaintenanceError('MAINTENANCE_STATE_CONFLICT') from None
+            raise
 
     def _prepare(self, request):
         permit, config = self.permit, self.config
         now = self.clock()
         require(permit['not_before'] <= now < permit['not_after'], 'INVALID_PERMIT')
-        profile_raw = config.read(config.profile, 49152)
-        directory_raw = config.read(config.directory, 8192)
+        profile_raw = config.read_material(config.profile, 49152)
+        directory_raw = config.read_material(config.directory, 8192)
         require(digest(profile_raw) == permit['expected_profile_sha256'] and
                 digest(directory_raw) == permit['expected_directory_sha256'], 'MAINTENANCE_PRECONDITION_CHANGED')
         profile, authority, previous, old_number = profile_material(profile_raw, directory_raw, now)
@@ -290,25 +483,28 @@ class Operation:
             target['revocations'] = payload.decode()
         target_raw = encode(target)
         require(len(target_raw) <= 49152, 'PROFILE_VALIDATION_FAILED')
+        material_metadata = config.material_snapshot()
         self.root.mkdir(mode=0o700)
         fsync_directory(config.operations)
         for name, raw in (('permit.json', encode(permit)), ('request.json', request),
                           ('before-profile.json', profile_raw), ('before-directory.json', directory_raw),
                           ('target-profile.json', target_raw)):
-            atomic(self.root / name, raw)
+            atomic_control(self.root / name, raw)
         journal = dict(schema=1, permit_sha256=digest(encode(permit)), request_sha256=digest(request),
             before_profile_sha256=digest(profile_raw), before_directory_sha256=digest(directory_raw),
             target_profile_sha256=digest(target_raw), expected_crl_number=old_number, target_crl_number=number,
             expected_minimum_crl=profile['minimum_crl'], target_minimum_crl=target['minimum_crl'],
             target_payload_sha256=digest(payload), attempt_count=0, replace_started=False, committed_write=False,
-            applied_at=None)
+            applied_at=None, material_metadata=material_metadata,
+            configuration_sha256=digest(encode(config.contract())))
         self._save(journal, 'PREPARED')
         return journal
 
     def _target(self, journal):
+        self._unchanged_metadata(journal)
         config = self.config
-        raw = config.read(config.profile, 49152)
-        directory_raw = config.read(config.directory, 8192)
+        raw = config.read_material(config.profile, 49152)
+        directory_raw = config.read_material(config.directory, 8192)
         require(digest(raw) == journal['target_profile_sha256'] and
                 digest(directory_raw) == journal['before_directory_sha256'], 'READBACK_MISMATCH')
         profile, _, _, number = profile_material(raw, directory_raw, self.clock())
@@ -325,20 +521,26 @@ class Operation:
             journal['applied_at'] = int(self.clock())
         journal['committed_write'] = True
         response.update(result='IDEMPOTENT' if duplicate else 'PASS', applied_at=journal['applied_at'])
-        atomic(self.root / 'response.json', encode(response))
+        atomic_control(self.root / 'response.json', encode(response))
         self._save(journal, 'IDEMPOTENT' if duplicate else 'COMMITTED')
         return response
 
     def _rollback(self, journal):
         try:
-            current = digest(self.config.read(self.config.profile, 49152))
+            self._unchanged_metadata(journal)
+            current = digest(self.config.read_material(self.config.profile, 49152))
             require(current in (journal['before_profile_sha256'], journal['target_profile_sha256']), 'MAINTENANCE_ROLLBACK_FAILED')
+            def rollback_ready():
+                self._unchanged_metadata(journal)
+                require(digest(self.config.read_material(self.config.profile, 49152)) == current,
+                        'MAINTENANCE_ROLLBACK_FAILED')
             if current != journal['before_profile_sha256']:
-                atomic(self.config.profile, self.config.read(self.root / 'before-profile.json', 49152))
-            require(digest(self.config.read(self.config.profile, 49152)) == journal['before_profile_sha256'] and
-                    digest(self.config.read(self.config.directory, 8192)) == journal['before_directory_sha256'],
+                atomic_material_replace(self.config, read_control(self.root / 'before-profile.json', 49152),
+                                        before_replace=rollback_ready)
+            require(digest(self.config.read_material(self.config.profile, 49152)) == journal['before_profile_sha256'] and
+                    digest(self.config.read_material(self.config.directory, 8192)) == journal['before_directory_sha256'],
                     'MAINTENANCE_ROLLBACK_FAILED')
-            profile_material(self.config.read(self.config.profile, 49152), self.config.read(self.config.directory, 8192), self.clock())
+            profile_material(self.config.read_material(self.config.profile, 49152), self.config.read_material(self.config.directory, 8192), self.clock())
             self._save(journal, 'ROLLED_BACK')
         except Exception:
             self._save(journal, 'UNKNOWN')
@@ -347,11 +549,11 @@ class Operation:
 
     def execute(self, request):
         request_payload(request)
-        self.config.validate()
+        self._validate()
         with self.config.lock():
             journal = self._load(request) if self.root.exists() or self.root.is_symlink() else self._prepare(request)
-            current = digest(self.config.read(self.config.profile, 49152))
-            current_directory = digest(self.config.read(self.config.directory, 8192))
+            current = digest(self.config.read_material(self.config.profile, 49152))
+            current_directory = digest(self.config.read_material(self.config.directory, 8192))
             require(current_directory == journal['before_directory_sha256'], 'MAINTENANCE_STATE_CONFLICT')
             if journal['state'] in ('COMMITTED', 'IDEMPOTENT', 'APPLYING', 'UNKNOWN') and current == journal['target_profile_sha256']:
                 return self._complete(journal, duplicate=True)
@@ -360,19 +562,21 @@ class Operation:
                     not journal['replace_started'] and journal['attempt_count'] < self.config.max_attempts,
                     'MAINTENANCE_STATE_CONFLICT')
             require(self.permit['not_before'] <= self.clock() < self.permit['not_after'], 'INVALID_PERMIT')
-            profile_material(self.config.read(self.config.profile, 49152), self.config.read(self.config.directory, 8192), self.clock())
+            profile_material(self.config.read_material(self.config.profile, 49152), self.config.read_material(self.config.directory, 8192), self.clock())
             journal['attempt_count'] += 1
             self._save(journal, 'PREPARED')
             def prepared():
-                require(digest(self.config.read(self.config.profile, 49152)) == journal['before_profile_sha256'] and
-                        digest(self.config.read(self.config.directory, 8192)) == journal['before_directory_sha256'],
+                self._unchanged_metadata(journal)
+                require(self._load(request) == journal, 'MAINTENANCE_STATE_CONFLICT')
+                require(digest(self.config.read_material(self.config.profile, 49152)) == journal['before_profile_sha256'] and
+                        digest(self.config.read_material(self.config.directory, 8192)) == journal['before_directory_sha256'],
                         'MAINTENANCE_PRECONDITION_CHANGED')
                 require(self.permit['not_before'] <= self.clock() < self.permit['not_after'], 'INVALID_PERMIT')
-                profile_material(self.config.read(self.config.profile, 49152), self.config.read(self.config.directory, 8192), self.clock())
+                profile_material(self.config.read_material(self.config.profile, 49152), self.config.read_material(self.config.directory, 8192), self.clock())
                 journal['replace_started'] = True
                 self._save(journal, 'APPLYING')
             try:
-                atomic(self.config.profile, self.config.read(self.root / 'target-profile.json', 49152), before_replace=prepared)
+                atomic_material_replace(self.config, read_control(self.root / 'target-profile.json', 49152), before_replace=prepared)
                 return self._complete(journal)
             except Exception as error:
                 if not journal['replace_started']:
@@ -381,7 +585,7 @@ class Operation:
                 self._rollback(journal)
 
     def reconcile(self, request):
-        self.config.validate()
+        self._validate()
         with self.config.lock():
             journal = self._load(request)
             require(journal['state'] in ('COMMITTED', 'IDEMPOTENT', 'APPLYING', 'UNKNOWN'), 'MAINTENANCE_STATE_CONFLICT')
@@ -433,16 +637,21 @@ def remove_credential(configuration, line):
 
 def load_configuration(permit, package):
     require(os.geteuid() == 0, 'INVALID_PERMIT')
-    probe = Configuration(CONFIGURATION_PATH, CONFIGURATION_PATH, CONFIGURATION_PATH.parent, b'0' * 32)
-    value = strict(probe.read(CONFIGURATION_PATH, 8192), 8192, 'INVALID_PERMIT')
-    require(type(value) is dict and set(value) == {'profile', 'directory', 'operations', 'journal_key', 'package_sha256', 'operation_id'}, 'INVALID_PERMIT')
+    value = strict(read_control(CONFIGURATION_PATH, 8192), 8192, 'INVALID_PERMIT')
+    require(type(value) is dict and set(value) == CONFIG_FIELDS, 'INVALID_PERMIT')
     require(value['operation_id'] == permit['operation_id'], 'INVALID_PERMIT')
-    info = package.lstat()
-    probe.parents(package)
-    require(stat.S_ISREG(info.st_mode) and info.st_nlink == 1 and info.st_uid == 0 and stat.S_IMODE(info.st_mode) == 0o400, 'INVALID_PERMIT')
-    require(digest(package.read_bytes()) == value['package_sha256'], 'INVALID_PERMIT')
-    return Configuration(Path(value['profile']), Path(value['directory']), Path(value['operations']),
-                         probe.read(Path(value['journal_key']), 32))
+    require(digest(read_control(package, 1048576, mode=0o400)) == value['package_sha256'], 'INVALID_PERMIT')
+    for field in ('profile', 'directory', 'sync_lock', 'operations', 'journal_key'):
+        require(type(value[field]) is str, 'INVALID_PERMIT')
+        absolute(Path(value[field]))
+    config = Configuration(profile=Path(value['profile']), directory=Path(value['directory']),
+        sync_lock=Path(value['sync_lock']), operations=Path(value['operations']),
+        journal_key=read_control(Path(value['journal_key']), 32),
+        **{name: value[name] for name in ('profile_uid', 'profile_gid', 'profile_mode',
+            'directory_uid', 'directory_gid', 'directory_mode', 'lock_uid', 'lock_gid', 'lock_mode',
+            'material_boundary')})
+    config.validate()
+    return config
 
 
 def main(argv=None):

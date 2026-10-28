@@ -4,25 +4,18 @@
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
 **Current substep BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
-BLOCKED_MAINTENANCE_ROUTE_UNAVAILABLE / LIVE_WRITES_NOT_RUN.**
-Friends baseline accepted: CLEAN_RESTART_ACTOR_UNRESOLVED,3 stable observations over
-120s, PID2744086/start4913682774688; exact archive/argv/unit/drop-ins/runtime/listener
-and health match. Journal attribution unavailable within bounded timeout; no human
-actor invented. Historical PID mismatch is no longer the blocker.
-Fresh material rotation accepted: RU/NL CRL27215 and RU sequence27215; NL floor27088,
-CRL_FLOOR_RECONCILIATION_REQUIRED. Equal signed payload/directory, valid bindings,
-remaining lifetime>=10156s at readback; ledger0/0, owner certificates0, binding retained.
-Backup preparation detects an incompatible live-file ownership contract: mode0600,
-non-root service owner, but accepted source7ce43ea requires owner0. It stops before
-any remote backup, permit, credential or transaction. No chown/chmod/guard bypass.
-Production apply attempts0/1, mutations0; no paid, Android, CRL generation or restart.
-Accepted unbound artifact unchanged;320 tests/33 deselections remain historical
-source evidence, not production compatibility acceptance. Monitor remains read-only.
-NEXT — separately authorize owner-aware maintenance validation/atomic replacement
-that preserves exact live ownership/modes while keeping root-private config/journal;
-then fresh preflight and only the bounded reconciliation. No automatic source repair,
-rebind, refresh or phone instruction.
-[Fresh baseline/route receipt](releases/2026-10-28-android106-beta-0-canary-maintenance-baseline.json).
+OWNER_AWARE_MAINTENANCE_SOURCE_READY / LIVE_WRITES_NOT_RUN.**
+Continuation from8acd6b0: control ownership and material ownership separated.
+Root-private fixed configuration/package/journal; live material metadata explicitly
+pinned, existing lock required, metadata-preserving atomic replacement/rollback.
+No chown/chmod of existing live files; unsupported ACL/xattrs/flags fail closed.
+369 affected tests PASS,33 existing deselections; no historical full suite or platform
+build. Historical package a39ea951 is immutable and NOT production-compatible.
+Source gate only so far; no production access/write/credential/permit this continuation.
+NEXT within the authorized checkpoint: deterministic new unbound package, then fresh
+read-only ownership/material/service preflight; at most one floor-only transaction
+if every gate passes. No canary activation or phone action.
+[Ownership source contract](releases/2026-10-27-android106-beta-0-canary-1.md#owner-aware-maintenance-source-gate--28-october).
 
 **Historical read-only input — BETA-0-CANARY-1 / OWNER_CANARY_BOUND_READONLY /
 BLOCKED_CRL_PROFILE_COMPATIBILITY / LIVE_WRITES_NOT_RUN.**

@@ -1,15 +1,13 @@
 # Documentation
 
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
-**OWNER_CANARY_BOUND_READONLY / BLOCKED_MAINTENANCE_ROUTE_UNAVAILABLE.**
-Fresh Friends baseline accepted after3 stable observations over120s; clean restart
-actor unresolved, exact source/config/runtime/health match. Current signed RU/NL
-CRL27215 and directory agree; NL floor27088 needs reconciliation, ledger0/0 and owner
-certificates0. Materials exceed720s. New blocker: live files are non-root service-owned,
-mode0600, whereas accepted maintenance requires root ownership. Stopped before backup,
-permit, credential or transaction; no production mutation/restart or paid/Android action.
-NEXT: separately authorized owner-aware source contract preserving live ownership/modes
-and root-private configuration/journal, then fresh preflight. No guard bypass or phone instruction.
+**OWNER_CANARY_BOUND_READONLY / OWNER_AWARE_MAINTENANCE_SOURCE_READY.**
+Root-private control and explicitly pinned service-owned material domains are now
+separate; atomic replacement/rollback preserve metadata, existing lock required,
+unsupported ACL/xattrs/flags rejected.369 affected tests PASS/33 existing deselections.
+Historical package is retained but not production-compatible. NEXT: new deterministic
+unbound package, fresh preflight and at most one authorized floor-only reconciliation
+if all gates pass. No canary writes/phone actions or service restart.
 [Fresh baseline/route receipt](releases/2026-10-28-android106-beta-0-canary-maintenance-baseline.json).
 [Historical PID stop](releases/2026-10-28-android106-beta-0-canary-maintenance.json).
 
