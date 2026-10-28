@@ -2,7 +2,70 @@
 
 ## Coordinated canonical-profile migration — 28 October
 
-### Pinned venv runtime continuation — source checkpoint
+### Final pinned-venv canonical acceptance — 20:20:38UTC28.10
+
+**READY_FOR_OWNER_LIVE / LIVE_CANARY_WRITES_NOT_RUN.**
+PINNED_VENV_RUNTIME_PASS / SNAPSHOT_LAUNCHER_ACCOUNT_REHEARSAL_PASS /
+CANONICAL_PROFILE_MIGRATED / RENEWAL_GATEWAY_SNAPSHOT_ALIGNED / CRL_FLOOR_ALIGNED.
+This continues BETA-0-CANARY-1, not a new task or canary checkpoint. The historical
+failed cutover/accepted rollback and its spent budgets remain separate evidence.
+
+- Runtime source fix5cc52f6bf967174bdfa34ba89436c4ad3b13ca60 and rehearsal receipt
+  commit18120833a8b0fedf01fb9c7df0d31fb750156d87 pushed; remote SHAs verified.
+  The invocation entrypoint is preserved; resolved ELF is provenance, not a substitute.
+  Exact private runtime pins were checked before rehearsal installation, before production
+  snapshot activation and at final readback. CPython3.14, rns1.5.1,
+  cryptography46.0.7 and pyserial3.5 PASS; isolated user-site/dependency inventory PASS.
+- Real account-level SSH rehearsal PASS using the exact accepted PYZ and fresh secure
+  non-authoritative production-byte copy. No floor/CRL change for rehearsal.
+  Exit0/no stderr/strict schema, exact profile projection and valid directory PASS.
+  Temporary key removed and rejected; original authorization bytes restored exactly;
+  temporary config removed; rehearsal files private/inactive; old actual snapshot PASS.
+- Repeated fresh preflight PASS with current materials; no historical hash used as a
+  permit without readback. A legacy blanket systemd-job guard was narrowed to the
+  observed target service: no target job, no daemon reload needed, healthy exact argv.
+  Unrelated pending jobs were not operated on. A separate stable publisher read and
+  strict signature/binding/time validation passed; directory validation was not weakened.
+- Fresh coordinated private backups on both hosts validated, including artifacts,
+  profile/directory metadata, effective units/argv, snapshot authorization/configuration,
+  publisher configuration, runtime pins and rollback source. Prior backups were not reused.
+  Renewal paused once, no running/pending/staged operation or lock holder.
+- A new secure canonical copy was created from then-current authoritative bytes under
+  the shared lock. Neither the failed prior candidate nor the rehearsal copy was reused.
+  Actual gateway/snapshot read access, write denial, publisher write denial, exact metadata
+  and both root atomic-write fixtures PASS. All routes were staged coherently.
+- One fresh root-local permit-bound offline floor reconciliation changed only
+  minimum_crl27088→27219. Embedded CRL hash/number unchanged; old live profile untouched,
+  directory untouched by the operation, no RU CRL/sequence mutation or new CRL generation.
+- Snapshot-only canonical activation passed the **actual SSH pre-restart gate**: exit0,
+  no stderr, strict schema, aligned canonical floor and valid current directory.
+  Only then renewal/gateway routes activated; cross-component route audit PASS.
+- Exactly one controlled gateway restart. Accepted binary/effective/running argv,
+  new invocation, no restart loop, listener and pinned TLS server identity PASS.
+  Co-hosted publisher remains healthy with unchanged configuration/directory target;
+  its valid signed directory rotation is accepted. No separate publisher restart/change.
+- Post-cutover actual SSH snapshot PASS. Accepted non-mutating renewal evaluate reached
+  the real account/transport and returned NOOP, zero file/remote writes/restarts and no
+  promotion. Protected ledger0/0, cohort0/10, owner certificates0/horizon clear,
+  owner binding/accepted exact106 unchanged. Friends HTTP invocation unchanged across
+  this cutover; RU CRL hash/sequence unchanged. No readiness/Android/stage0 action.
+- Timer resumed once and is active on canonical configuration, latest result success,
+  no pending failure. Old profile moved intact to private rollback evidence, not deleted.
+  Final real SSH snapshot and accepted evaluate both PASS **after old-profile retirement**.
+  Five profile routes share one canonical profile/lock; future exact-CRL permit remains
+  disabled. No temporary maintenance/rehearsal credential; monitoring remains active.
+- Final20:20:38UTC28.10: CRL/floor27219, material headroom10170s (required≥720).
+  New budgets: credential1/1, timer cycle1/1, offline floor1/1, gateway restart1/1,
+  emergency rollback0/1. Rollback not needed; no second cutover/floor operation.
+  77 launcher/runtime +115 snapshot/canonical/authorization/parser +70 package/directory
+  checks PASS (262);29 unchanged native directory cases deliberately deselected.
+  Full historical suite and Android/Linux/Windows builds NOT_RUN.
+
+STOP. NEXT only after READY_FOR_OWNER_LIVE and owner reply **ГОТОВ**: fresh canary
+backup, stage0 natural-expiry activation and coordinated phone procedure. Do not start
+stage0 automatically. This is preparation acceptance, not paid/live-canary execution.
+
+### Historical pinned venv runtime continuation — source checkpoint
 
 Source fix5cc52f6bf967174bdfa34ba89436c4ad3b13ca60 is pushed and remote SHA verified.
 Actual account-level temporary-key SSH rehearsal PASS: exit0/no stderr, strict schema,

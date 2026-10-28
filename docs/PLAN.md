@@ -3,25 +3,30 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-**Current substep BETA-0-CANARY-1 — PINNED_RUNTIME_SOURCE_READY / LIVE_WRITES_NOT_RUN.**
-Continue frome494755 within the same checkpoint and newly authorized bounded budgets.
-The launcher preserves the invocation entrypoint and virtual-environment context;
-resolved ELF target, bounded symlink chain, configuration and installed dependency
-inventory are integrity pins only. Isolated actual-account probes confirm CPython3.14,
-rns1.5.1, cryptography46.0.7 and pyserial3.5; the accepted snapshot package help passes.
-The unsuitable base interpreter's missing-RNS failure is reproduced, not used as fallback.
-Private runtime classification: PINNED_EXISTING_VENV_READY. No dependency installation.
-77 launcher/runtime +115 snapshot/canonical/credential/parser +70 package/directory
-focused tests PASS (262 total); unchanged native results retained. Production artifacts
-remain exact and unchanged. Private pins are rechecked before launcher installation.
-Source fix5cc52f6bf967174bdfa34ba89436c4ad3b13ca60 pushed; remote SHA verified.
-Actual temporary-key SSH rehearsal PASS: exit0/no stderr/strict schema using a fresh
-secure non-authoritative copy. Runtime pins rechecked; cleanup PASS, removed key rejected,
-original authorization bytes restored and old snapshot actual SSH PASS. Rehearsal files
-are private/inactive. NEXT: fresh preflight/backup/canonical copy and mandatory snapshot-first
-pre-restart gate before coordinated cutover. Not READY_FOR_OWNER_LIVE yet.
-No locator weakening, base-interpreter fallback, stale-copy reuse or automatic stage0.
-Rehearsal credential budget1/1; timer/floor/restart budgets0/1. Prior rollback retained.
+**Current substep BETA-0-CANARY-1 — READY_FOR_OWNER_LIVE / LIVE_CANARY_WRITES_NOT_RUN.**
+PINNED_VENV_RUNTIME_PASS / SNAPSHOT_LAUNCHER_ACCOUNT_REHEARSAL_PASS /
+CANONICAL_PROFILE_MIGRATED / RENEWAL_GATEWAY_SNAPSHOT_ALIGNED / CRL_FLOOR_ALIGNED.
+Same checkpoint; previous rollback is historical and remains accepted.
+Source fix5cc52f6bf967174bdfa34ba89436c4ad3b13ca60 pushed, remote SHA verified.
+262 focused launcher/runtime/snapshot/canonical/package/authorization/parser/directory
+checks PASS; retained coherent artifacts remain exact and unchanged fromc9c0a4d.
+Real temporary-key SSH rehearsal PASS on a fresh secure non-authoritative copy;
+cleanup PASS, original authorization bytes restored, removed key rejected.
+Fresh private coordinated backups and a separate fresh canonical copy from current
+live bytes verified. Only its floor changed27088→27219; CRL bytes/number unchanged.
+Actual canonical snapshot PASS **before** the sole gateway restart, again afterward,
+and after old-profile retirement. TLS/listener/publisher PASS; accepted renewal evaluate
+NOOP with zero writes/promotions, including after retirement. Renewal timer active.
+One authoritative canonical profile; all five profile routes and shared root-controlled
+lock aligned. Publisher directory route/configuration unchanged, valid rotation accepted.
+Old profile and rehearsal copy private/inactive; temporary credentials0.
+New continuation budgets: rehearsal credential1/1, timer cycle1/1, offline floor1/1,
+gateway cutover restart1/1, emergency rollback0/1. No automatic second cutover.
+Final20:20:38UTC28.10: embedded CRL/floor27219, material headroom10170s;
+ledger0/0, cohort0/10, owner certificates0, binding/exact Android106 unchanged.
+No paid/readiness/Android/stage0 action, RU CRL/sequence mutation or Friends HTTP restart.
+STOP. NEXT only after owner replies **ГОТОВ**: fresh canary backup, stage0 natural-expiry
+activation and coordinated phone procedure. Do not start stage0 automatically.
 [Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).
 
 **Historical entry BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
