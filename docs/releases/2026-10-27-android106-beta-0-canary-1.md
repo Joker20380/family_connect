@@ -1,5 +1,95 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Fresh service baseline and maintenance ownership boundary — 28 October
+
+**OWNER_CANARY_BOUND_READONLY / BLOCKED_MAINTENANCE_ROUTE_UNAVAILABLE /
+LIVE_WRITES_NOT_RUN.** Continuation from `d1fec6420cc534f12bbc5965087fa54db1112c95`;
+no new task ID. [Sanitized receipt](2026-10-28-android106-beta-0-canary-maintenance-baseline.json).
+The earlier PID-only stop below is historical and superseded by this owner-authorized
+baseline adoption. Source `7ce43ead7fdaace18cb1730e8d0e6a04f881dcb0` and its unbound
+package `a39ea9515f7a7ed3b674322a6d4e007d2a230b3f90366390a28e0c92e81b114c` remain
+unchanged; no source correction, rebuild or deployment was performed.
+
+### Friends baseline accepted
+
+Classification: **CLEAN_RESTART_ACTOR_UNRESOLVED**. Adoption:
+**FRESH_FRIENDS_BASELINE_ACCEPTED_WITH_UNATTRIBUTED_CLEAN_RESTART**.
+Three observations scheduled at0/60/120s (123.74s including final read overhead)
+retain PID2744086, start4913682774688 monotonic microseconds, InvocationID, NRestarts0,
+active/running state, exact paid-aware archive, effective/running argv and environment
+fingerprints. All7 fragment/drop-in file hashes/sizes/numeric modes, runtime packages,
+service user/group/working-directory and sole listener ownership match accepted CP2
+configuration. Health PASS; no pending unit job or daemon reload required.
+
+Attribution was bounded to a240s window around the current process start. Unit and
+manager journal reads and boot-history retrieval timed out; current boot ID was
+observed privately. Available package/unattended-upgrade logs and retained deployment
+receipts contain no matching entry. No raw messages, unrelated shell histories or
+command bodies were exported. Actor and a complete absence of historical tracebacks
+are **not established**. Stable protected state and no contradictory current failure
+satisfy the owner's adoption rule; PID difference alone no longer blocks work.
+One local harness comparison initially differed only in octal-mode string spelling;
+numeric comparison confirmed all hashes/modes unchanged. It was not production drift.
+
+### Fresh authoritative material state
+
+- SQLite mode=ro/query_only/read transaction: integrity/FKs/exact paid schema PASS;
+ subscriptions0/events0, cohort0/10; bound owner has no paid rows and no certificates.
+ Certificate horizon CLEAR; existing binding unchanged; no new selector lookup/status.
+- Current RU CRL number and stored sequence27215; NL embedded CRL27215, minimum27088.
+ Exact signed RU/NL CRL SHA256
+ `43210026e66566ff8b7ebf3695e2485fcfeb3e166cb347ffa3be123998b18b15`.
+- Exact RU/NL directory SHA256
+ `ceb4f6baab137b8d079f2cfc88c3a4a9cfce676d32505629f505bd9d6a3bac31`.
+ Issuer/authority signatures, family/gateway bindings and actual14400s parser PASS.
+ Monotonic coherent rotation since historical27211 is accepted read-only; no old permit
+ or historical payload is reused. **CRL_FLOOR_RECONCILIATION_REQUIRED**,27088→27215.
+- Final readback remaining lifetimes: issuer/authority6956290s, RU CRL10156s,
+ RU directory10168s, NL authority6956292s, NL CRL10158s, NL directory10169s. All exceed720s.
+ Freshness alone does not establish READY_FOR_OWNER_LIVE while the route is blocked.
+
+### Route unavailable without an ownership-contract correction
+
+Both current NL profile and directory are regular files with mode0600 and the same
+**non-root service owner**. The accepted maintenance `Configuration.read()` requires
+`st_uid == owner_uid`; the production loader constructs `Configuration` with default
+owner0, and offers no authorized owner override. Its atomic replacement creates a
+root-owned file. Installing that exact package cannot preserve the current ownership
+contract simply by supplying the fresh hashes/permit.
+
+Backup preparation therefore stopped at the live-file ownership check **before**
+creating the remote backup directory, fixed configuration, bound permit/package,
+SSH key or transaction. Follow-up read-only proof confirms those remote paths absent.
+No chown/chmod, source edit, guard weakening, account change or snapshot substitution
+was attempted. Private local planning evidence is retained; production apply attempts
+remain **0/1**. Rollback NOT_REQUIRED; credential removal NOT_APPLICABLE_NOT_INSTALLED.
+This is not MATERIALS_INVALID or a renewed Friends PID blocker.
+
+### Preservation, validation and next boundary
+
+After-readback PASS: profile/directory/CRL bytes and floor unchanged; snapshot archive,
+authorized-key configuration, forced-command configuration and current NL service
+unchanged during this checkpoint. Friends accepted baseline unchanged. Protected
+devices/invites/support/grants/revocations/admission/publisher/paid ledger and RU
+sequence preserved; owner certificate/readiness fingerprints unchanged. Unrelated
+chat challenge/sequence activity is disclosed; no global database-equality claim.
+Read-only monitoring timer active, fresh RU/NL snapshots imported; NL registry remains
+UNAVAILABLE, not0. Local console remains synthetic-only. No new production write
+credential, paid event, readiness call, CRL generation/delivery, Android action or restart.
+
+Only documentation/sanitized evidence changes are committed. Strict JSON, private-data
+scan, links, staged scope and whitespace checks PASS; private read-only harness syntax
+PASS. Accepted320 affected tests/33 native deselections are historical source evidence
+and were not rerun for this operational/documentation continuation. No full suite or
+platform build was run; existing unrelated changes remain unstaged.
+
+**STOP. NEXT — separately authorize an owner-aware maintenance source contract**:
+validate the exact service-owned live files and preserve their owner/group/mode through
+replacement/rollback, while retaining root-private configuration, key and journal and
+all existing cryptographic/path guards. Do not change live ownership to fit the package
+or disable the guard. Repeat fresh preflight after that source gate; no automatic
+maintenance retry, material refresh, stage0 or phone instruction.
+
 ## Bounded maintenance package and preflight stop — 28 October
 
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_MAINTENANCE_PRECONDITION_CHANGED /

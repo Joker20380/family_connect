@@ -1,14 +1,17 @@
 # Documentation
 
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
-**OWNER_CANARY_BOUND_READONLY / BLOCKED_MAINTENANCE_PRECONDITION_CHANGED.**
-Bounded maintenance source7ce43ea and deterministic unbound package PASS;320 affected
-tests PASS,33 native deselections. Fresh preflight observed a different Friends service
-PID/start while health/archive/ledger0/0 remain accepted. STOP before any NL transaction,
-backup, production permit or credential. No restart/reload, paid or Android action.
-NEXT: review that service change and explicitly accept a fresh baseline before resuming
-preflight; no automatic rebind/refresh or phone instruction.
-[Maintenance receipt](releases/2026-10-28-android106-beta-0-canary-maintenance.json).
+**OWNER_CANARY_BOUND_READONLY / BLOCKED_MAINTENANCE_ROUTE_UNAVAILABLE.**
+Fresh Friends baseline accepted after3 stable observations over120s; clean restart
+actor unresolved, exact source/config/runtime/health match. Current signed RU/NL
+CRL27215 and directory agree; NL floor27088 needs reconciliation, ledger0/0 and owner
+certificates0. Materials exceed720s. New blocker: live files are non-root service-owned,
+mode0600, whereas accepted maintenance requires root ownership. Stopped before backup,
+permit, credential or transaction; no production mutation/restart or paid/Android action.
+NEXT: separately authorized owner-aware source contract preserving live ownership/modes
+and root-private configuration/journal, then fresh preflight. No guard bypass or phone instruction.
+[Fresh baseline/route receipt](releases/2026-10-28-android106-beta-0-canary-maintenance-baseline.json).
+[Historical PID stop](releases/2026-10-28-android106-beta-0-canary-maintenance.json).
 
 Historical read-only input: **BLOCKED_CRL_PROFILE_COMPATIBILITY.**
 Read-only provenance review proves NL_VALIDATOR_ONLY_DRIFT: actual gateway parser

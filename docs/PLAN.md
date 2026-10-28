@@ -4,19 +4,25 @@
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
 **Current substep BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
-BLOCKED_MAINTENANCE_PRECONDITION_CHANGED / LIVE_WRITES_NOT_RUN.**
-Bounded maintenance source7ce43ea pushed/remote verified;320 affected tests PASS,
-33 native deselections. Deterministic unbound package PASS:25 members,164110 bytes,
-SHA256 a39ea951…81b114c, permit=null, no production configuration or write capability
-without a separately bound package and root-private configuration. Snapshot unchanged.
-Fresh preflight observed Friends PID/start changed from1002753/4877589183478 to
-2744086/4913682774688. Service healthy, archive/argv match, NRestarts0, ledger0/0,
-admission/publisher unchanged; cause not established. STOP before NL/owner/material
-recheck, backup, bound production package, credential installation or transaction.
-Production apply attempts0/1; no mutation, paid event, restart/reload or Android action.
-NEXT — review intervening service change and explicitly accept a fresh baseline,
-then resume read-only preflight under a new owner continuation. No automatic rebind,
-refresh, floor write or phone instruction. Source/package PASS does not satisfy live entry.
+BLOCKED_MAINTENANCE_ROUTE_UNAVAILABLE / LIVE_WRITES_NOT_RUN.**
+Friends baseline accepted: CLEAN_RESTART_ACTOR_UNRESOLVED,3 stable observations over
+120s, PID2744086/start4913682774688; exact archive/argv/unit/drop-ins/runtime/listener
+and health match. Journal attribution unavailable within bounded timeout; no human
+actor invented. Historical PID mismatch is no longer the blocker.
+Fresh material rotation accepted: RU/NL CRL27215 and RU sequence27215; NL floor27088,
+CRL_FLOOR_RECONCILIATION_REQUIRED. Equal signed payload/directory, valid bindings,
+remaining lifetime>=10156s at readback; ledger0/0, owner certificates0, binding retained.
+Backup preparation detects an incompatible live-file ownership contract: mode0600,
+non-root service owner, but accepted source7ce43ea requires owner0. It stops before
+any remote backup, permit, credential or transaction. No chown/chmod/guard bypass.
+Production apply attempts0/1, mutations0; no paid, Android, CRL generation or restart.
+Accepted unbound artifact unchanged;320 tests/33 deselections remain historical
+source evidence, not production compatibility acceptance. Monitor remains read-only.
+NEXT — separately authorize owner-aware maintenance validation/atomic replacement
+that preserves exact live ownership/modes while keeping root-private config/journal;
+then fresh preflight and only the bounded reconciliation. No automatic source repair,
+rebind, refresh or phone instruction.
+[Fresh baseline/route receipt](releases/2026-10-28-android106-beta-0-canary-maintenance-baseline.json).
 
 **Historical read-only input — BETA-0-CANARY-1 / OWNER_CANARY_BOUND_READONLY /
 BLOCKED_CRL_PROFILE_COMPATIBILITY / LIVE_WRITES_NOT_RUN.**

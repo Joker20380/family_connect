@@ -3,24 +3,30 @@
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
 **Current substep BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
-BLOCKED_MAINTENANCE_PRECONDITION_CHANGED / LIVE_WRITES_NOT_RUN.**
-Separate bounded maintenance source7ce43ea committed/pushed, remote SHA verified;
-320 affected tests PASS,33 explicit native deselections. Exact source produced two
-byte-identical unbound packages:25 members,164110 bytes, SHA256 a39ea951…81b114c.
-Null permit, no production configuration; import/help/manifest and action denial PASS.
-Fresh read-only preflight stopped at Friends service identity: accepted PID1002753 /
-start4877589183478, observed PID2744086 / start4913682774688 (monotonic microseconds).
-Service active/healthy, NRestarts0; paid-aware archive and effective/running argv still
-match, ledger0/0, admission/publisher unchanged. Cause of intervening process change
-is not established; this checkpoint issued no restart/reload.
-Per STOP policy, no further NL/owner/material inspection, backup, bound production
-permit/package, temporary credential or maintenance transaction. Floor27211 alignment
-is NOT_RUN;27088 remains only the last accepted NL floor, not a fresh observation.
-Production apply attempts0/1, production mutations0, paid/Android operations0.
-STOP. NEXT — review the intervening service change and explicitly accept a fresh
-baseline before resuming read-only preflight. No automatic rebind, refresh or phone
-instruction; source readiness is not production acceptance.
-[Maintenance receipt](releases/2026-10-28-android106-beta-0-canary-maintenance.json).
+BLOCKED_MAINTENANCE_ROUTE_UNAVAILABLE / LIVE_WRITES_NOT_RUN.**
+Fresh Friends baseline accepted under the owner continuation fromd1fec64:
+CLEAN_RESTART_ACTOR_UNRESOLVED. Three observations across120s: PID2744086,
+start4913682774688, InvocationID/NRestarts0 stable; exact paid-aware archive, argv,
+all7 unit/drop-in files, runtime, listener and health PASS. Bounded journals/boot
+history timed out; actor and historical failure absence are not claimed. PID drift
+alone is no longer the blocker. No restart/reload was issued.
+Fresh RU/NL material now CRL27215, RU sequence27215, NL minimum27088; signed payload
+and directory identical, bindings/parser PASS, minimum remaining lifetime10156s at
+final readback. Monotonic coherent rotation from historical27211 accepted read-only.
+Ledger0/0, cohort0/10, owner certificates0/horizon CLEAR, existing binding unchanged.
+New route blocker: both live NL files are service-owned (non-root), mode0600;
+accepted maintenance7ce43ea requires root-owned live files. Backup preparation stopped
+at this guard before creating any remote backup or write. No ownership/permission
+change, guard bypass, bound permit/package, credential or transaction. Attempts0/1.
+Source/package remain unchanged; accepted320 tests/33 deselections were not rerun.
+No-write proof PASS; snapshot/config/materials, paid/identity/policy and owner scope
+preserved. Read-only monitor active; NL registry UNAVAILABLE, not0; console synthetic.
+STOP. NEXT — separately authorize an owner-aware maintenance source contract that
+preserves live ownership/modes and root-private configuration/journal, then repeat
+fresh preflight. Do not chown live files or weaken the guard. No phone instruction.
+[Fresh baseline/route receipt](releases/2026-10-28-android106-beta-0-canary-maintenance-baseline.json).
+The [earlier PID stop](releases/2026-10-28-android106-beta-0-canary-maintenance.json)
+is retained as historical evidence, not an active blocker.
 
 **Historical read-only input for BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
 BLOCKED_CRL_PROFILE_COMPATIBILITY / LIVE_WRITES_NOT_RUN.**
