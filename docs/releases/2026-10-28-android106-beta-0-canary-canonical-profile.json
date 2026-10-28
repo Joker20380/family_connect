@@ -6,6 +6,91 @@
     "source_projection_correction": "IMPLEMENTED_TESTED"
   },
   "checkpoint": "BETA-0-CANARY-1",
+  "coherent_artifacts": {
+    "gateway": {
+      "accepted_source_preserved_except": {
+        "cmd/bootstrap-broker/chat_services.go": "84de76646a25fc64810ae6fc77631cc3fa9e6e7ea2ebd57c0f68e138fb8b7cd0",
+        "cmd/bootstrap-broker/chat_services_test.go": "916814156247c1f5ed601934284e0e7c7114044ba4d594ac0de4bd1792daef1a",
+        "cmd/bootstrap-broker/main.go": "8465cf268bd818b5121734d1fe545f694214fedb9a4c682af5c807e7eb3439db",
+        "roombroker/canonical_profile_linux.go": "7024eb86f2a94978e8dbae4747db0822eb2bebb87e68871e0182dd318abc0f23",
+        "roombroker/canonical_profile_linux_test.go": "933cf1eec7bf5ad03e2853726a5d1b864fe2d552345aa930ec3b488d6c7601c0",
+        "roombroker/canonical_profile_other.go": "35f7524533ccebbb1a087b4c28bed6987ee47d45766e6f216a3da57ef02d1976",
+        "roombroker/control.go": "0c2c4b7dd38699180ff88ee330586f27ab37452b09b0e9e22f8800778cd62c22"
+      },
+      "baseline_binary_sha256": "96754942e7518233bc702277d860b0c9b740fb7553c9742b2ae642a0746fe367",
+      "baseline_source_inventory_sha256": "33de05072f68097669a38ce3d41f378deecd62375c61d48e85150b6fb95a8580",
+      "build_settings": [
+        "go1.26.1",
+        "linux/amd64",
+        "CGO1",
+        "fc_perf_diagnostic",
+        "trimpath",
+        "buildvcs=false"
+      ],
+      "deterministic": "PASS",
+      "help": "PASS",
+      "licenses_notices": "PRESENT",
+      "manifest_sha256": "27b54a9dd167c3b6af639bb03864f4d7d121c0e8b96c90eccb45a198c936f117",
+      "operation_permit": null,
+      "package_member_hashes": {
+        "LICENSE": "cfe0da6ed33d20d2b6a97ab5363e204660f0c9987469724c92938a846a1afcb4",
+        "THIRD_PARTY_NOTICES.md": "ff178d44895279252b303c7488c887f995d6bcd95977a9f04cc2ada88c58e316",
+        "gateway": "f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef",
+        "licenses/dependencies.txt": "2d19d58e22585d520cdb40d6d48952a4ed50ee87c8d600de0a199b529d53ced1",
+        "licenses/olcrtc.txt": "7321836b10600d7221f5bfee57924fbdf453cdd38377e4a2fc808e01399ae51d",
+        "licenses/whitelist-bypass.txt": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+        "source-manifest.json": "27b54a9dd167c3b6af639bb03864f4d7d121c0e8b96c90eccb45a198c936f117"
+      },
+      "package_sha256": "a20f68ec89c05a5fafa5885cbc77e32bbf440239e5b0dc5bc79d5f52d734ea74",
+      "privacy": "PASS",
+      "production_configuration": "absent",
+      "publisher_source": "UNCHANGED",
+      "sha256": "f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef",
+      "size": 17925498,
+      "source_commit": "c9c0a4de55f455e0788e7b519383c0cb0743fc96"
+    },
+    "maintenance": {
+      "binding": "unbound",
+      "deterministic": "PASS",
+      "import_help": "PASS",
+      "licenses_notices": "PRESENT",
+      "manifest_sha256": "9b90a3f8c15f643a97954254c7662ab69f48f2fcce13aaee7acd3e57deffe102",
+      "member_hashes": "PASS",
+      "members": 26,
+      "privacy": "PASS",
+      "sha256": "c134eb6b56f01a4a54829b73c3259ba15886f603726058cc5f29afd3778b2a2d",
+      "size": 201792,
+      "source_commit": "c9c0a4de55f455e0788e7b519383c0cb0743fc96"
+    },
+    "renewal": {
+      "api_sha256": "ab0bcbd06d4b5978da3aa5550fc305b7cfa78492c8b64870135087c51593efbd",
+      "binding": "unbound",
+      "deterministic": "PASS",
+      "import_help": "PASS",
+      "licenses_notices": "PRESENT",
+      "manifest_sha256": "912971d48306ad158a008c0e331a62c9711562cb456ae842d7dc5b2456ea6ae1",
+      "member_hashes": "PASS",
+      "members": 17,
+      "privacy": "PASS",
+      "sha256": "c2ce2b01ac15cbb553692579e7a03b6bc7ad97f2159906ed884c3fda490a40c0",
+      "size": 60950,
+      "source_commit": "c9c0a4de55f455e0788e7b519383c0cb0743fc96",
+      "source_sha256": "a9fbd201ae4a8b0db2eb81c65f878ba020861368ffabd2ea658ad443faa6a33f"
+    },
+    "snapshot": {
+      "binding": "unbound",
+      "deterministic": "PASS",
+      "import_help": "PASS",
+      "licenses_notices": "PRESENT",
+      "manifest_sha256": "42841ae7f3adec3b9017f1c8bdfaeadd026801279b56f02e9020bf7de841b37a",
+      "member_hashes": "PASS",
+      "members": 26,
+      "privacy": "PASS",
+      "sha256": "6dd51ead36a977abd4e6afee978d81df229ac767a6315bc4b2347328bde60c84",
+      "size": 167573,
+      "source_commit": "c9c0a4de55f455e0788e7b519383c0cb0743fc96"
+    }
+  },
   "entry_main": "44392427b8082f21cfe3d6c321efd86938e9cb63",
   "graph": {
     "coordinated_route_alignment": "NOT_IMPLEMENTED",
@@ -47,6 +132,49 @@
     },
     "classification": "UNBOUND_INTERMEDIATE_NOT_DEPLOYABLE",
     "source_commit": "ff792db15e03690c977b2bdb154ab6b56d48abaa"
+  },
+  "latest_readonly_preflight": {
+    "android_actions": 0,
+    "cohort": 0,
+    "credentials_installed": 0,
+    "crl_sha256": "3003101f07bc0b7701741687fbbbd7b72ca1b7a2c62fe8f42ced3ebb22255b85",
+    "directory_sha256": "a975be15e08703eb26abe9c35bc60aa8ea1cba662c3dcff214b65f700207aa2a",
+    "directory_validation": "PASS",
+    "embedded_crl_number": 27218,
+    "emergency_restarts": 0,
+    "external_restart_attribution": "NORMAL_SCHEDULED_RENEWAL_COMMITTED",
+    "floor_operations": 0,
+    "friends": "HEALTHY_SAME_SOURCE_CONFIG",
+    "friends_invocation_changed": true,
+    "gateway": "HEALTHY_SAME_BINARY_CONFIG",
+    "gateway_cutover_restarts": 0,
+    "latest_renewal_result": "success",
+    "ledger": {
+      "events": 0,
+      "subscriptions": 0
+    },
+    "minimum_crl": 27088,
+    "minimum_remaining_seconds": 8537,
+    "observed_at": 1793211442,
+    "owner_binding": "UNCHANGED",
+    "owner_certificate_readiness": "UNCHANGED",
+    "owner_certificates": 0,
+    "production_writes_by_checkpoint": 0,
+    "profile_and_directory_metadata": "OWNERSHIP_MODES_UNCHANGED_NORMAL_REPLACEMENT",
+    "profile_changed_during_source_work": true,
+    "profile_sha256": "cac6a4542c874c1a4fd3ca06c889e4721447c074bc532bc3cfac9f05bc4d1219",
+    "protected_registry": "UNCHANGED",
+    "publisher": "SAME_ROUTE_HEALTHY",
+    "readiness_calls": 0,
+    "renewal_timer": "ACTIVE",
+    "result": "NO_WRITE_READBACK_PASS",
+    "ru_mutations": 0,
+    "ru_sequence": [
+      27218
+    ],
+    "snapshot_route": "UNCHANGED",
+    "source_only": true,
+    "timer_pause_cycles": 0
   },
   "live_canary_writes": "NOT_RUN",
   "materials": {
@@ -94,6 +222,8 @@
     "timer_pause_cycles": 0,
     "writes": 0
   },
+  "publisher_profile_access": "SAME_GATEWAY_READER_REQUIRES_READ_ONLY",
+  "reader_group_route": "EXISTING_STABLE_GROUP_AVAILABLE_NO_ACCOUNT_CHANGE",
   "ready_for_owner_live": false,
   "remaining": [
     "renewal_concrete_fixed_configuration_source_pins_and_package_qualification",
@@ -101,7 +231,6 @@
     "snapshot_fixed_configuration_and_route_qualification",
     "bounded_maintenance_and_exact_crl_route_qualification",
     "affected_integration_suites",
-    "committed_source_deterministic_candidate_packages",
     "fresh_preflight_private_backup",
     "coordinated_cutover_within_owner_budgets",
     "floor_alignment_and_final_acceptance"
@@ -182,6 +311,8 @@
     "maintenance_legacy_configuration_rejected": true,
     "maintenance_rollback": "EXACT_PROFILE_ONLY",
     "maintenance_source_activated": false,
+    "package_source_commit": "c9c0a4de55f455e0788e7b519383c0cb0743fc96",
+    "package_source_push": "VERIFIED",
     "production_pins_updated": false,
     "renewal_canonical_promote_rollback_share_lock": true,
     "renewal_commit": "4523476201249123fc7c02ee7fb6b01f97561fb0",
@@ -247,9 +378,10 @@
   "task": "ANDROID-CONTROLLED-BETA",
   "tests": {
     "accepted_gateway_tree_reader_tls_recheck": "PASS_12_TESTS_26_SUBCASES",
-    "affected_total": 381,
+    "affected_total": 478,
     "canonical_renewal_rechecked": 4,
     "canonical_snapshot": 22,
+    "directory_parser14400": 97,
     "exact_crl_and_package_tests": 101,
     "exact_packaged_node_constructor": 1,
     "existing_maintenance_including_exact_snapshot": 124,
@@ -282,7 +414,7 @@
     "new_renewal_fixed_routes": 20,
     "optional_native_skips": 0,
     "packaged_constructor_result": "PASS_CANONICAL_ROUTES_PINS_AND_ISOLATED_ARCHIVE_IMPORTS",
-    "platform_builds": "NO_CLIENT_BUILDS_GATEWAY_TEST_BINARY_ONLY",
+    "platform_builds": "GATEWAY_ONLY_NO_ANDROID_LINUX_WINDOWS_CLIENT_BUILDS",
     "previous_optional_native_compatibility": "PASS_ACCEPTED_SOURCE_GO_1_26_1",
     "previous_unaffected_host": 124,
     "renewal_package": 3,

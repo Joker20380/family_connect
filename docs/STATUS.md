@@ -53,6 +53,13 @@ into fixed startup configuration; no routing target or publisher behavior is cha
 Three projection checks, one native service-map check and the12 reader/TLS checks on
 the actual accepted-source delta PASS. No candidate is installed; route preservation
 must still be proven against the staged effective argv before any cutover.
+Coherent renewal/snapshot/maintenance/gateway artifacts fromc9c0a4d now each reproduce
+byte-identically, with member/manifest hashes, privacy/import/help and notices checked.
+The accepted frozen gateway source is preserved except the recorded reader/fixed-target
+delta. Parser14400/directory suite97 PASS, no client build. Fresh read-only live gate:
+CRL27218/floor27088, headroom8537s, unchanged owner/ledger0/0/cohort0/10; timer active.
+One suitable existing reader group is available; gateway and snapshot use the same
+reader identity, also the existing directory publisher. No group or path changed.
 Fresh fixed-configuration/source-pin qualification, staged gateway/snapshot routes,
 coordinated packaging and production gates remain unfinished. No migration or READY
 claim, no second authoritative profile, no owner phone instruction or stage0.

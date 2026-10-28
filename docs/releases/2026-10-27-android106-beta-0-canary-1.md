@@ -295,6 +295,39 @@ affected Python inventory381 PASS; native inventory13 tests/26 subcases. Coheren
 rebuild/manifest/privacy checks and exact effective-argv route equivalence remain
 required before any mutation. Production budgets are still entirely unspent.
 
+### Coherent committed-source artifact qualification
+
+Source `c9c0a4de55f455e0788e7b519383c0cb0743fc96` is pushed and remote-verified.
+Each coherent artifact was built twice byte-identically; all manifest/member hashes,
+required import/help checks, absence of production configuration/credentials and
+licenses/notices PASS. No release tag, catalog publication or installation.
+
+| Artifact | SHA256 |
+|---|---|
+| Renewal source/API capsule | `c2ce2b01ac15cbb553692579e7a03b6bc7ad97f2159906ed884c3fda490a40c0` |
+| Canonical snapshot | `6dd51ead36a977abd4e6afee978d81df229ac767a6315bc4b2347328bde60c84` |
+| Bounded maintenance | `c134eb6b56f01a4a54829b73c3259ba15886f603726058cc5f29afd3778b2a2d` |
+| Gateway binary | `f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef` |
+| Gateway archive with source manifest/notices | `a20f68ec89c05a5fafa5885cbc77e32bbf440239e5b0dc5bc79d5f52d734ea74` |
+
+The renewal inventory is
+`a9fbd201ae4a8b0db2eb81c65f878ba020861368ffabd2ea658ad443faa6a33f` and its exact
+accepted-API-plus-shared-core archive is
+`ab0bcbd06d4b5978da3aa5550fc305b7cfa78492c8b64870135087c51593efbd`.
+The gateway manifest binds accepted source inventory
+`33de05072f68097669a38ce3d41f378deecd62375c61d48e85150b6fb95a8580` plus the exact
+committed seven-member reader/fixed-endpoint delta; publisher implementation unchanged.
+The separate upstream exact-payload CRL helper source inventory was not changed;
+its downstream canonical profile writer is the shared bounded maintenance action.
+
+Additional parser14400/directory suite:97 PASS using disposable host-native validators,
+not Android/client builds or live challenge/fetch. Fresh read-only production observation
+has8537s minimum material headroom, CRL27218/floor27088, unchanged owner binding/certificate
+scope, zero paid ledger/cohort and active successful renewal schedule. A suitable existing
+reader group covers the required readers; the gateway reader is also the existing
+publisher and needs profile read access only. No group/account or production path changed.
+All artifacts remain **unbound/uninstalled**, and all mutation budgets remain unspent.
+
 ## Split-boundary writer inventory — 28 October
 
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_PROFILE_WRITER_CONFLICT /
