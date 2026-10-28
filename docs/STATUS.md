@@ -13,12 +13,14 @@ Private runtime classification: PINNED_EXISTING_VENV_READY. No dependency instal
 77 launcher/runtime +115 snapshot/canonical/credential/parser +70 package/directory
 focused tests PASS (262 total); unchanged native results retained. Production artifacts
 remain exact and unchanged. Private pins are rechecked before launcher installation.
-Actual temporary-key SSH rehearsal is still NOT_RUN at this source checkpoint, not PASS.
-NEXT in this authorized continuation: fresh production preflight, secure non-authoritative
-rehearsal copy and actual restricted SSH rehearsal with cleanup; only then fresh backup,
-fresh canonical copy and snapshot-first pre-restart gate before coordinated cutover.
+Source fix5cc52f6bf967174bdfa34ba89436c4ad3b13ca60 pushed; remote SHA verified.
+Actual temporary-key SSH rehearsal PASS: exit0/no stderr/strict schema using a fresh
+secure non-authoritative copy. Runtime pins rechecked; cleanup PASS, removed key rejected,
+original authorization bytes restored and old snapshot actual SSH PASS. Rehearsal files
+are private/inactive. NEXT: fresh preflight/backup/canonical copy and mandatory snapshot-first
+pre-restart gate before coordinated cutover. Not READY_FOR_OWNER_LIVE yet.
 No locator weakening, base-interpreter fallback, stale-copy reuse or automatic stage0.
-All new production budgets remain0/1; prior rollback and historical budgets are retained.
+Rehearsal credential budget1/1; timer/floor/restart budgets0/1. Prior rollback retained.
 [Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).
 
 **Historical entry BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /

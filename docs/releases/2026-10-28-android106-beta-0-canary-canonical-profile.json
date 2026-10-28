@@ -703,7 +703,7 @@
       "emergency_restarts": 0,
       "gateway_cutover_restarts": 0,
       "offline_floor": 0,
-      "rehearsal_credentials": 0,
+      "rehearsal_credentials": 1,
       "timer_cycles": 0
     },
     "dependency_versions": {
@@ -718,11 +718,15 @@
     "no_readiness_actions": true,
     "post_cutover_snapshot": "NOT_RUN",
     "pre_restart_snapshot": "NOT_RUN",
-    "rehearsal": "NOT_RUN",
-    "rehearsal_copy": "NOT_CREATED",
+    "rehearsal": "SNAPSHOT_LAUNCHER_ACCOUNT_REHEARSAL_PASS",
+    "rehearsal_cleanup": "ORIGINAL_BYTES_RESTORED_KEY_REJECTED_OLD_SNAPSHOT_PASS",
+    "rehearsal_copy": "FRESH_NON_AUTHORITATIVE_THEN_PRIVATE_INACTIVE",
     "renewal_evaluation": "NOT_RUN",
     "root_cause": "RESOLVED_BASE_TARGET_LOSES_VENV_CONTEXT",
     "runtime": "PINNED_EXISTING_VENV_READY",
+    "runtime_pins_rechecked": "PASS",
+    "source_fix": "5cc52f6bf967174bdfa34ba89436c4ad3b13ca60",
+    "source_push": "REMOTE_SHA_VERIFIED",
     "stage0": "NOT_RUN",
     "tests": {
       "launcher": 77,

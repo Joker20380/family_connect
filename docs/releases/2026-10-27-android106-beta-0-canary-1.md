@@ -4,6 +4,17 @@
 
 ### Pinned venv runtime continuation — source checkpoint
 
+Source fix5cc52f6bf967174bdfa34ba89436c4ad3b13ca60 is pushed and remote SHA verified.
+Actual account-level temporary-key SSH rehearsal PASS: exit0/no stderr, strict schema,
+exact unchanged live-profile projection from a fresh secure non-authoritative copy,
+valid existing directory and unchanged CRL/floor. The canonical locator contract was
+not weakened. Runtime pins were rechecked immediately before installation.
+Cleanup PASS: original authorization bytes restored exactly, removed key rejected,
+temporary configuration removed, rehearsal copy/locator/launcher private and inactive,
+old production snapshot actual SSH PASS. Credential budget1/1; timer/floor/restarts0/1.
+No service restart, old-profile mutation, paid/readiness/Android action or stage0.
+Fresh coordinated cutover gates remain pending; this is not READY_FOR_OWNER_LIVE.
+
 PINNED_RUNTIME_SOURCE_READY / LIVE_WRITES_NOT_RUN. The owner authorizes preserving
 the working venv invocation entrypoint and a fresh secure non-authoritative rehearsal
 copy. The prior realpath-only model pinned the correct base ELF but lost the venv
