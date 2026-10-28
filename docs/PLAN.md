@@ -3,45 +3,31 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-**Current substep BETA-0-CANARY-1 — COORDINATED_CANONICAL_PROFILE_STAGED_INACTIVE /
-LIVE_WRITES_NOT_RUN.** Continue the owner's coordinated migration in this same task;
-the snapshot-only proposal is cancelled. Dependency: fresh exact reader/writer graph,
-including the accepted renewal writer and running gateway, not just maintenance.
-Root-private backups and inactive artifacts are now staged on both gateways; no active
-route change, canonical copy, timer pause, restart or floor operation. Remaining next
-gate is exact staged-config/rollback qualification before the one-cycle quiescence.
-Shared transaction core and accepted renewal method integration: canonical stage,
-shared-lock promote, exact rollback and floor normalization implemented. Bounded
-maintenance now uses the same canonical locator/lock, with read-only renewable directory
-validation and profile-only rollback. Legacy fixed maintenance route fails closed.329 affected
-tests PASS; one optional accepted-native compatibility test not run. No checkpoint
-production writes or route changes. Normal scheduled renewal advanced fresh RU/NL
-CRL to27218; floor remains27088. This is not an agent-issued CRL or cutover.
-Canonical snapshot source now preserves the exact accepted response and fixed renewal
-dispatch;224 root checks PASS and5 affected package tests PASS, no route activation.
-Gateway secure reader source passes12 focused native tests with26 subcases; original
-private-mode rollback compatibility remains. Snapshot/maintenance committed-source
-capsules are deterministic and unbound, not activated. No gateway binary installed.
-Renewal fixed transport/unit source and13-member deterministic packaging contract now
-qualified;20 route +27 existing renewal tests PASS, including the former native skip,
-and2 renewal package tests PASS. Production configuration/pins remain unchanged.
-Subsequent exact API inventory corrects the package dependency: preserve the accepted
-renewal API members rather than substitute the newer Friends API. Three package tests
-and one isolated real node-constructor route/pin test PASS. No production replacement.
-Accepted gateway binary privacy requires externalizing its existing embedded service
-endpoint into fixed startup configuration; hash-guarded source projection and targeted
-tests PASS. The exact endpoint must remain unchanged at cutover; publisher unchanged.
-Remaining gate: qualify the concrete new fixed configurations/pins and all fixed routes,
-preserve the independent publisher directory, qualify affected suites and deterministic
-packages, then fresh material/backup/quiescence/coordinated-cutover acceptance within
-the owner's one-cycle/one-cutover/one-floor-operation budgets. Gateway mode compatibility
-requires a reader-source change; changing only its path is insufficient.
-Coherent four-component artifacts fromc9c0a4d are now deterministic/privacy-qualified;
-parser14400/directory97 PASS. They remain unbound and uninstalled. Fresh source-stage
-preflight passes with8537s material headroom, ledger0/0 and no production mutation.
-All budgets remain unspent; old unbound maintenance package is not deployable.
-No partial route migration, stage0, Android/readiness action or paid write.
-READY_FOR_OWNER_LIVE requires the full live gate, not this source checkpoint.
+**Current substep BETA-0-CANARY-1 — BLOCKED_PROFILE_CUTOVER_ROLLED_BACK /
+LIVE_WRITES_NOT_RUN.** Coordinated source/package work is retained; the single production
+cutover failed its snapshot acceptance and was rolled back. **NOT READY_FOR_OWNER_LIVE.**
+Renewal, gateway and snapshot again use the exact old route; timer active/latest success,
+old snapshot read-only PASS, publisher healthy on its unchanged directory route.
+Canonical copy is retained privately and inactive; it is not a second authoritative profile.
+
+Fresh19:14:58UTC28.10 post-rollback: RU/NL CRL27219, live floor27088, materials14110s;
+ledger0/0, cohort0/10, owner certificates0, horizon clear, binding/exact Android106 unchanged.
+Pre-cutover normal scheduled renewal, not this checkpoint, advanced CRL to27219.
+One offline canonical reconciliation changed only floor27088→27219; CRL and old live profile
+were unchanged. Valid directory rotations occurred through the unchanged publisher.
+Budgets spent: timer pause/resume1/1, cutover restart1/1, emergency rollback restart1/1,
+floor operation1/1. No RU material mutation, Friends restart, temporary SSH credential,
+paid/Android/readiness action or stage0. No second cutover/floor operation is authorized.
+
+Failure: the fixed snapshot launcher used an interpreter version string instead of an
+absolute executable; the actual forced command exited127. Gateway/publisher acceptance
+passed, but the one canonical snapshot request failed before renewal preflight.
+Existing source tests and library/permission fixtures did not cover this exact launcher.
+478 affected Python checks, focused gateway/publisher checks, deterministic artifacts and
+the isolated operator cutover/rollback fixture passed; this is not production acceptance.
+Follow-up requires a corrected launcher and an actual account-level fixed-command rehearsal,
+then explicit renewed production authorization/budgets. This checkpoint **STOPs** here;
+no canary stage0 or phone instruction. Sources/artifacts/rollback evidence remain retained.
 [Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).
 
 **Historical entry BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /

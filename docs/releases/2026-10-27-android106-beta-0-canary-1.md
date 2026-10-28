@@ -2,7 +2,66 @@
 
 ## Coordinated canonical-profile migration — 28 October
 
-**SOURCE_IN_PROGRESS / LIVE_WRITES_NOT_RUN; NOT READY_FOR_OWNER_LIVE.**
+**BLOCKED_PROFILE_CUTOVER_ROLLED_BACK / LIVE_WRITES_NOT_RUN.**
+**NOT READY_FOR_OWNER_LIVE.** No second production attempt is authorized.
+
+### Final coordinated attempt and rollback — 19:14:58UTC28.10
+
+- The exact accepted renewal API/source and narrowly projected accepted gateway source
+  were packaged fromc9c0a4de55f455e0788e7b519383c0cb0743fc96. All four artifacts have
+  two byte-identical builds, member manifests, privacy/import/help and license checks.
+  No client release/version/catalog changed; installed active binaries are restored to
+  their exact pre-cutover identities. New packages remain inactive private assets.
+- Fresh preflight observed normal scheduled renewal COMMITTED, CRL/sequence27219,
+  floor27088, materials14335s, paid ledger0/0/cohort0/10, owner certificates0, horizon clear.
+  Both root-private coordinated backups validated. Inactive configuration corrections
+  restored the exact accepted transport target and ensured last-sorting gateway override.
+  These did not change active routes or spend a restart/timer budget.
+- One renewal timer pause confirmed no running or pending renewal and no lock holder.
+  The canonical copy used exact fresh bytes and the shared root-controlled lock; gateway,
+  snapshot and publisher read access/write denial passed. Renewal/maintenance root atomic
+  fixtures passed. Directory remained at its original path/metadata/publisher contract.
+- One root-local single-use bounded operation reconciled the **offline** copy floor
+  27088→27219. Embedded CRL bytes/number, old live profile and directory were unchanged.
+  No external maintenance credential, new CRL or RU material write occurred.
+- Renewal, snapshot and gateway target configurations were activated while renewal stayed
+  paused. The route audit passed before the one controlled gateway restart. The new
+  binary/profile route, stable process/listener, group access, valid regenerated directory
+  and publisher all passed; canonical floor27219 matched embedded CRL27219.
+- The single actual canonical snapshot forced command then exited127: the fixed launcher
+  contained the Python **version string**, not its absolute executable. The snapshot
+  package did not run. Therefore source/library fixtures were insufficient launch proof;
+  this is an operator fixed-configuration defect, not accepted migration or a reason to
+  weaken validation. Renewal's non-mutating post-cutover evaluate was not reached.
+- Required emergency rollback restored exact old renewal configuration, snapshot wrapper
+  and gateway overrides, used one emergency gateway restart, verified the old snapshot
+  route, and resumed the timer on the old source/pins. No second cutover or floor operation.
+  The canonical copy is now private/inactive; the old live copy remains authoritative.
+  Maintenance configuration is inactive; no maintenance/write SSH credential exists.
+- Post-rollback readback: old gateway/source/config healthy; publisher valid on unchanged
+  directory route; renewal timer active/latest success; no pending renewal; old snapshot
+  response/SSH restrictions restored. Live profile bytes exactly match fresh pre-cutover.
+  Live CRL27219/floor27088; offline inactive copy remains27219/27219. Minimum material
+  lifetime14110s at19:14:58UTC. Directory hash changed only through legitimate publication.
+- Friends source/config/invocation unchanged across this attempt; RU CRL/sequence unchanged.
+  Ledger0/0, cohort0/10, owner certificates0, binding/horizon unchanged. Exact Android106 is
+  the retained accepted observation, not a new phone action. No stage0/readiness/paid action.
+
+Validation:478 affected Python checks plus focused native gateway/publisher suites and
+deterministic artifacts PASS; one isolated actual-package copy/floor plus simulated
+cutover/rollback fixture PASS. Production snapshot acceptance **FAILED** as above.
+Strict JSON/privacy/Markdown-links/staged-scope/whitespace checks apply to this closeout.
+Raw evidence/configuration/backup/permit and material contents remain private, outside Git.
+
+Spent budgets: renewal pause/resume1/1; gateway cutover1/1; emergency rollback1/1;
+offline floor reconciliation1/1. Profile migration is **not accepted**. The rollback route
+is already active, not a pending recovery action. A future attempt needs the launcher
+correction, end-to-end fixed-command rehearsal and explicit renewed production budgets.
+STOP in this same checkpoint. Do not start stage0 or ask the owner to open the app.
+
+### Historical source-stage observations before this rolled-back attempt
+
+**Historical SOURCE_IN_PROGRESS; not the current production result.**
 Continuation from44392427b8082f21cfe3d6c321efd86938e9cb63 in the same checkpoint.
 The owner supersedes the cancelled snapshot-only proposal with one coordinated
 profile route for renewal, gateway, snapshot, bounded maintenance and future exact CRL
