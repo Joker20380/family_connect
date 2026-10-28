@@ -33,7 +33,7 @@ def pinned(path, allowed_owners):
 
 class ProductionNode:
     def __init__(self, role, live, state, validator, *, database=None, barrier=None, clock=time.time, fault=lambda stage:None,
-                 profile_uid=None, policy_paths=None, profile_store=None):
+                 profile_uid=None, policy_paths=None, profile_store=None, service_units=None):
         require(role in ('RU','NL'), 'NODE_ROLE')
         self.role,self.live,self.state,self.validator = role,Path(live),Path(state),validator
         self.database,self.clock,self.fault,self.profile_uid = database,clock,fault,profile_uid
@@ -41,7 +41,7 @@ class ProductionNode:
         self.profile_store = profile_store
         require(profile_store is None or role == 'NL', 'PROFILE_STORE_ROLE')
         self.policy_paths = policy_paths or {}
-        self.barrier = barrier or SystemdBarrier(role,self.state,clock=clock)
+        self.barrier = barrier or SystemdBarrier(role,self.state,units=service_units,clock=clock)
         private_directory(self.state)
         require(self.live.stat().st_dev == self.state.stat().st_dev, 'STAGING_FILESYSTEM_MISMATCH')
         require(not self.live.is_symlink() and self.live.is_dir(), 'LIVE_DIRECTORY_INVALID')
@@ -240,10 +240,9 @@ class ProductionNode:
         path = self.state/'start-intent-0.json'
         if owner['state'] not in ('COMMIT_DECIDED','RESUMED','ROLLED_BACK','ABORTED') or not path.exists():
             return False
-        from production_transport import UNITS
         intent = parse(read_private(path))
         require(set(intent) == {'schema','unit','timestamp'} and intent['schema'] == 1
-                and intent['unit'] == UNITS[self.role][0], 'RESUME_INTENT_INVALID')
+                and intent['unit'] == self.barrier.units[0], 'RESUME_INTENT_INVALID')
         return True
 
     def previous_readback(self, operation_id):

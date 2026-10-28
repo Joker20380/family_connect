@@ -19,7 +19,10 @@ dispatch;224 root checks PASS and5 affected package tests PASS, no route activat
 Gateway secure reader source passes12 focused native tests with26 subcases; original
 private-mode rollback compatibility remains. Snapshot/maintenance committed-source
 capsules are deterministic and unbound, not activated. No gateway binary installed.
-Remaining gate: complete renewal controller/transport configuration and pins plus all fixed routes,
+Renewal fixed transport/unit source and13-member deterministic packaging contract now
+qualified;20 route +27 existing renewal tests PASS, including the former native skip,
+and2 renewal package tests PASS. Production configuration/pins remain unchanged.
+Remaining gate: qualify the concrete new fixed configurations/pins and all fixed routes,
 preserve the independent publisher directory, qualify affected suites and deterministic
 packages, then fresh material/backup/quiescence/coordinated-cutover acceptance within
 the owner's one-cycle/one-cutover/one-floor-operation budgets. Gateway mode compatibility

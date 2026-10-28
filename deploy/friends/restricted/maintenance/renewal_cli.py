@@ -26,12 +26,13 @@ def main():
     try:
         from control.friends.restricted import delegation
         config = parse(read_private(args.config))
-        require(set(config) - {'admission_mode'} == {'schema','state','anchor','node_sources'}
+        require(set(config) - {'admission_mode'} == {'schema','state','anchor','node_sources','ssh_routes'}
                 and config['schema'] == 1, 'OPERATOR_CONFIG')
         mode = config.get('admission_mode', 'legacy')
         require(mode in ('legacy', 'all_activated'), 'ADMISSION_MODE')
         anchor = base64.b64decode(config['anchor'],validate=True)
-        nodes = {role:SshNode(role,config['node_sources'][role]) for role in ('RU','NL')}
+        require(type(config['ssh_routes']) is dict and set(config['ssh_routes']) == {'RU','NL'}, 'OPERATOR_CONFIG')
+        nodes = {role:SshNode(role,config['node_sources'][role],route=config['ssh_routes'][role]) for role in ('RU','NL')}
         validator = Validator(anchor,delegation,all_activated=mode == 'all_activated')
         controller = ProductionController(Path(config['state']),nodes,validator)
         if args.action == 'authority-request':

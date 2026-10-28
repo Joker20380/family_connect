@@ -18,9 +18,9 @@ NODE_MODULES = frozenset(('node.py','credential_renewal.py','production_node.py'
 def construct(config_path):
     require(os.geteuid() == 0, 'ROOT_REQUIRED')
     config = parse(read_private(config_path))
-    require(set(config) - {'admission_mode', 'profile_locator', 'profile_locator_sha256'} == {'schema','role','live','state','database','anchor','anchor_sha256','api_archive','api_sha256',
+    require(set(config) - {'admission_mode', 'profile_locator', 'profile_locator_sha256', 'snapshot_target'} == {'schema','role','live','state','database','anchor','anchor_sha256','api_archive','api_sha256','service_units',
                            'source_files','source_sha256'}, 'NODE_CONFIG_SCHEMA')
-    require(config['schema'] == 1 and config['role'] in ('RU','NL'), 'NODE_CONFIG_SCHEMA')
+    require(type(config['schema']) is int and config['schema'] == 1 and config['role'] in ('RU','NL'), 'NODE_CONFIG_SCHEMA')
     source = Path(__file__).resolve().parent
     require(type(config['source_files']) is dict and NODE_MODULES <= set(config['source_files']),
             'SOURCE_MANIFEST_INCOMPLETE')
@@ -67,6 +67,7 @@ def construct(config_path):
     policy_paths = {'anchor':Path(config['anchor'])}
     profile_store = None
     if config['role'] == 'NL':
+        require('snapshot_target' not in config, 'NODE_CONFIG_SCHEMA')
         require(type(config.get('profile_locator')) is str and type(config.get('profile_locator_sha256')) is str,
                 'CANONICAL_PROFILE_REQUIRED')
         from control.friends.profile_store import Locator, ProfileStore, metadata, read_regular
@@ -84,7 +85,8 @@ def construct(config_path):
     if config['role'] == 'RU':
         policy_paths['admission'] = live/'admission.json'
     node = ProductionNode(config['role'],live,Path(config['state']),validator,database=database,
-                          policy_paths=policy_paths,profile_store=profile_store)
+                          policy_paths=policy_paths,profile_store=profile_store,service_units=config['service_units'])
+    node.snapshot_target = config.get('snapshot_target')
     node.pinned_archive_descriptor = descriptor
     return node,config['source_sha256']
 

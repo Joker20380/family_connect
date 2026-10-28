@@ -40,7 +40,7 @@ def main():
                 'RECOVERY_EXPLICIT_MODE_REQUIRED')
         config = parse(read_private(args.config))
         require(set(config) == {'schema','node_config','coordinator_state','nl_source_sha256',
-            'ssh','approved_leaf_crl_schedule'} and config['schema'] == 1
+            'ssh','approved_leaf_crl_schedule'} and type(config['schema']) is int and config['schema'] == 1
             and type(config['approved_leaf_crl_schedule']) is bool, 'CONTROLLER_CONFIG')
         node, source = construct(Path(config['node_config']))
         require(node.role == 'RU', 'NODE_ROLE')

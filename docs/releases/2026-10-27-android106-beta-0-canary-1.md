@@ -211,6 +211,39 @@ locator, permission, reader group, backup, timer pause, restart or floor operati
 The recorded live observation remains time-bounded; fresh production preflight is still
 required. Same checkpoint, no migration acceptance, no owner phone procedure.
 
+### Renewal fixed-route source and deterministic package contract
+
+Gateway reader checkpoint `c309bff9f267bf5250495a3c1ca8e777af52cec8` is pushed and its
+remote SHA verified. The accepted renewal modules now resolve SSH endpoints, exact
+remote command, reader service allowlists and health targets from fixed root-controlled
+configuration rather than embedded deployment details. Missing routes fail closed;
+there is no historical default. The forced endpoint and RPC envelope stay exact, SSH
+uses pinned key/known-host paths and strict checking, ignores ambient SSH config and
+receives a clean environment. No action, target, unit or path is accepted from RPC input.
+
+Node configuration requires the fixed service list; the original role-specific stop/
+resume order, resume-intent guard, operation journal and source-pin checks remain.
+Normal scheduled mode is still only credential renewal; floor reconciliation is not
+added to that API. The directory publisher implementation/configuration is untouched.
+Health reads derive their systemd object from the fixed timer, with exact unit escaping.
+
+The new deterministic renewal capsule covers **all13 accepted source members**, exact
+inventory hash, the shared profile API archive and its manifest hash. It contains no
+production configuration, permit, key or operational endpoint, and carries licenses/
+notices. Two identical synthetic committed-source builds, every member/hash, isolated
+imports and controller/node CLI help PASS; missing source fails closed. This is a
+package-construction gate, not an assertion that production controller pins changed.
+
+Validation: **20 new fixed-route checks +27 existing renewal checks PASS**. The prior
+optional native-compatibility skip was run separately using the accepted gateway source
+and Go1.26.1: two existing synthetic identities remain compatible through authority/
+credential renewal. It builds only the disposable validation executable, not an Android
+or desktop client. **2 renewal packaging checks PASS**; the4 canonical renewal/store
+integrations were rerun and PASS. Recorded affected Python test inventory is now
+**376 PASS,0 skips**, plus the12 native gateway tests/26 subcases. No full historical
+suite or production RPC was run. Fresh concrete fixed-config construction/route checks,
+coherent committed-source artifacts and every live migration gate still remain.
+
 ## Split-boundary writer inventory — 28 October
 
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_PROFILE_WRITER_CONFLICT /

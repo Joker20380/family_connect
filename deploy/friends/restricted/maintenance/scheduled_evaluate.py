@@ -11,14 +11,11 @@ import time
 
 from credential_renewal import MAX_BYTES, Rejected, canonical, digest, evaluate, parse, read_private, require
 from node import construct
+from production_transport import snapshot_command
 
 
-def read_gateway(ssh_key, known_hosts):
-    for path in (ssh_key,known_hosts):
-        require(path.is_absolute() and not path.is_symlink() and path.is_file(), 'SSH_CONFIG')
-    command = ['/usr/bin/ssh','-i',str(ssh_key),'-o','IdentitiesOnly=yes','-o','BatchMode=yes',
-        '-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile='+str(known_hosts),'-o','ConnectTimeout=8',
-        'family-restricted@186.246.45.246','restricted-sync']
+def read_gateway(ssh_key, known_hosts, target):
+    command = snapshot_command(dict(key=str(ssh_key),known_hosts=str(known_hosts),target=target))
     request = canonical(dict(schema=1,operation='READ_ONLY_SECURITY_SNAPSHOT'))
     with tempfile.TemporaryFile() as output:
         def bounded():
@@ -69,7 +66,7 @@ def main():
         if (node.state/'owner.json').exists():
             print(canonical(dict(result='MAINTENANCE_IN_PROGRESS',mutations=0)).decode())
             return
-        remote = read_gateway(args.ssh_key,args.known_hosts)
+        remote = read_gateway(args.ssh_key,args.known_hosts,node.snapshot_target)
         result,validated = inspect(node,remote,int(time.time()))
         if args.directory_only:
             from control.friends.restricted import directory

@@ -35,7 +35,13 @@ native tests with26 subcases PASS, including fresh synthetic Family TLS/reload a
 existing mTLS/lease tests. No gateway candidate installed or restarted.
 Committed-source snapshot/maintenance capsules each built twice identically and checked;
 unbound intermediate artifacts only, not a coordinated deployment candidate.
-Controller/transport configuration and pins, staged gateway/snapshot routes,
+Renewal transport/service allowlists and health target now come from fixed configuration,
+not embedded operational routes. Existing RPC/actions, resume ordering and journal semantics
+remain.20 new route +27 existing renewal checks PASS (the earlier optional native skip
+is now closed on accepted source/toolchain);2 renewal package checks PASS,4 canonical
+renewal integrations rechecked. All13 source pins plus the shared API archive are
+covered by the new deterministic renewal packager; production pins are not activated.
+Fresh fixed-configuration/source-pin qualification, staged gateway/snapshot routes,
 coordinated packaging and production gates remain unfinished. No migration or READY
 claim, no second authoritative profile, no owner phone instruction or stage0.
 [Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).
