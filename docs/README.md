@@ -1,15 +1,23 @@
 # Documentation
 
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
-**BLOCKED_SNAPSHOT_LAUNCHER_REHEARSAL / LIVE_WRITES_NOT_RUN.**
-Previous cutover rollback remains accepted. Strict launcher correction and238 focused
-checks PASS; all four retained artifacts match exactly and remain unchanged. Corrected
-launchers are private local candidates, not installed. Actual-account read-only probes
-show that resolved Python loses the working virtual environment's RNS import and the
-accepted locator rejects the old publisher-boundary profile. These block the mandatory
-temporary-key SSH rehearsal before installation; it is NOT_RUN, not a PASS.
-All newly authorized production budgets remain0/1. Old renewal/gateway/snapshot routes
-remain healthy; no new cutover, paid/Android/readiness/stage0 action or phone instruction.
+**Current substep BETA-0-CANARY-1 — PINNED_RUNTIME_SOURCE_READY / LIVE_WRITES_NOT_RUN.**
+Continue frome494755 within the same checkpoint and newly authorized bounded budgets.
+The launcher preserves the invocation entrypoint and virtual-environment context;
+resolved ELF target, bounded symlink chain, configuration and installed dependency
+inventory are integrity pins only. Isolated actual-account probes confirm CPython3.14,
+rns1.5.1, cryptography46.0.7 and pyserial3.5; the accepted snapshot package help passes.
+The unsuitable base interpreter's missing-RNS failure is reproduced, not used as fallback.
+Private runtime classification: PINNED_EXISTING_VENV_READY. No dependency installation.
+77 launcher/runtime +115 snapshot/canonical/credential/parser +70 package/directory
+focused tests PASS (262 total); unchanged native results retained. Production artifacts
+remain exact and unchanged. Private pins are rechecked before launcher installation.
+Actual temporary-key SSH rehearsal is still NOT_RUN at this source checkpoint, not PASS.
+NEXT in this authorized continuation: fresh production preflight, secure non-authoritative
+rehearsal copy and actual restricted SSH rehearsal with cleanup; only then fresh backup,
+fresh canonical copy and snapshot-first pre-restart gate before coordinated cutover.
+No locator weakening, base-interpreter fallback, stale-copy reuse or automatic stage0.
+All new production budgets remain0/1; prior rollback and historical budgets are retained.
 [Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).
 
 Historical entry: **OWNER_CANARY_BOUND_READONLY / BLOCKED_PROFILE_WRITER_CONFLICT.**

@@ -3,36 +3,23 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-**Current substep BETA-0-CANARY-1 — BLOCKED_SNAPSHOT_LAUNCHER_REHEARSAL /
-LIVE_WRITES_NOT_RUN.** Continue the same checkpoint from684430b; the previous rollback
-remains accepted. New bounded budgets were granted, but **all remain unused0/1**.
-Strict launcher builder/validator and53 new tests PASS: canonical executable/stat/hash,
-actual account Python3.14 probe, exact argv, isolated exec without shell interpolation,
-restricted authorized-key round-trip and read-only rehearsal payload guard. Diagnostic
-version cannot replace the executable. Source fixdd926aefccc978b9e73d9353d7bdf442f5374a8e
-is committed/pushed with remote SHA verified.185 focused snapshot/canonical-route/package/
-authorization/directory checks PASS; unchanged prior native results retained.
-
-Read-only discovery confirms the exact four retained artifacts; no rebuild/substitution.
-Two independent sources resolve the same absolute Python3.14 executable. However,
-the accepted PYZ imports successfully with the working virtual-environment interpreter,
-but its resolved base executable exits1 with missing RNS under the actual snapshot account.
-Separately, accepted locator validation rejects the old profile inside the publisher
-boundary with LOCATOR_PATH_CONFLICT. The old profile's metadata also differs from the
-canonical contract. These are rehearsal prerequisites, not evidence of corrupt artifacts
-or invalid materials. No path/permission/runtime bypass or validation weakening was made.
-
-The corrected production/read-only launchers are private local candidates only.
-**Actual temporary-key SSH rehearsal NOT_RUN**: its prerequisites fail before credential
-installation. No new backup, canonical copy, floor operation, timer pause or restart.
-No new cutover; previous canonical copy remains private/inactive. Old authoritative route
-and its actual-account production snapshot remain PASS; timer active/latest success.
-Fresh19:38:59UTC28.10: CRL27219/floor27088, material headroom12668s;
-ledger0/0, cohort0/10, owner certificates0, horizon clear and accepted Android106 unchanged.
-No paid/readiness/Android/stage0, RU material mutation or Friends HTTP restart.
-STOP. Resolve the interpreter-environment and old-profile rehearsal contract explicitly
-before the mandatory real SSH rehearsal; do not silently change retained artifacts,
-move/alias the old profile, use the stale canonical copy, or start cutover/stage0.
+**Current substep BETA-0-CANARY-1 — PINNED_RUNTIME_SOURCE_READY / LIVE_WRITES_NOT_RUN.**
+Continue frome494755 within the same checkpoint and newly authorized bounded budgets.
+The launcher preserves the invocation entrypoint and virtual-environment context;
+resolved ELF target, bounded symlink chain, configuration and installed dependency
+inventory are integrity pins only. Isolated actual-account probes confirm CPython3.14,
+rns1.5.1, cryptography46.0.7 and pyserial3.5; the accepted snapshot package help passes.
+The unsuitable base interpreter's missing-RNS failure is reproduced, not used as fallback.
+Private runtime classification: PINNED_EXISTING_VENV_READY. No dependency installation.
+77 launcher/runtime +115 snapshot/canonical/credential/parser +70 package/directory
+focused tests PASS (262 total); unchanged native results retained. Production artifacts
+remain exact and unchanged. Private pins are rechecked before launcher installation.
+Actual temporary-key SSH rehearsal is still NOT_RUN at this source checkpoint, not PASS.
+NEXT in this authorized continuation: fresh production preflight, secure non-authoritative
+rehearsal copy and actual restricted SSH rehearsal with cleanup; only then fresh backup,
+fresh canonical copy and snapshot-first pre-restart gate before coordinated cutover.
+No locator weakening, base-interpreter fallback, stale-copy reuse or automatic stage0.
+All new production budgets remain0/1; prior rollback and historical budgets are retained.
 [Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).
 
 **Historical entry BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /

@@ -2,6 +2,7 @@
 import argparse
 import ast
 import base64
+import configparser
 from dataclasses import dataclass
 import hashlib
 import json
@@ -18,6 +19,9 @@ import subprocess
 INVALID = 'SNAPSHOT_PYTHON_EXECUTABLE_INVALID'
 VERSION = 'SNAPSHOT_PYTHON_VERSION_MISMATCH'
 ARGV = 'SNAPSHOT_LAUNCHER_ARGV_MISMATCH'
+UNSAFE = 'BLOCKED_SNAPSHOT_RUNTIME_UNSAFE'
+DEPENDENCIES = {'rns': ('RNS', '1.5.1'), 'cryptography': ('cryptography', '46.0.7'),
+                'pyserial': ('serial', '3.5')}
 ORIGINAL_COMMAND = 'restricted-sync'
 OPTIONS = ('restrict', 'no-agent-forwarding', 'no-port-forwarding', 'no-pty',
            'no-user-rc', 'no-X11-forwarding')
@@ -25,6 +29,22 @@ PROBE = ('import json,os,pathlib,platform,sys;'
          'print(json.dumps(dict(executable=str(pathlib.Path(sys.executable).resolve(strict=True)),'
          'version=list(sys.version_info[:3]),implementation=platform.python_implementation(),'
          'executable_access=os.access(sys.executable,os.X_OK))))')
+RUNTIME_PROBE = '''import importlib, importlib.metadata, json, os, platform, site, sys
+dependencies = {}
+for name, module in [('rns', 'RNS'), ('cryptography', 'cryptography'), ('pyserial', 'serial')]:
+    distribution = importlib.metadata.distribution(name)
+    records = [item for item in distribution.files if item.name == 'RECORD']
+    if len(records) != 1:
+        raise ValueError('distribution inventory')
+    dependencies[name] = dict(version=distribution.version,
+        origin=importlib.import_module(module).__file__,
+        record=str(distribution.locate_file(records[0])))
+print(json.dumps(dict(executable=sys.executable, prefix=sys.prefix, base_prefix=sys.base_prefix,
+    version=list(sys.version_info[:3]), implementation=platform.python_implementation(),
+    user_site=site.ENABLE_USER_SITE, user_path=site.getusersitepackages(), path=sys.path,
+    isolated=sys.flags.isolated, no_bytecode=sys.dont_write_bytecode,
+    pythonpath=os.environ.get('PYTHONPATH'), dependencies=dependencies)))
+'''
 
 
 class LauncherError(ValueError):
@@ -84,11 +104,13 @@ def metadata(info):
 
 def permission(info, account, bit):
     shift = 6 if info.st_uid == account.uid else 3 if info.st_gid in account.groups else 0
-    return bool(info.st_mode & (bit << shift))
+    return info.st_mode & (bit << shift) == bit << shift
 
 
 def pinned_file(path, account, *, executable):
     require(path.resolve(strict=True) == path)
+    require(not {'system.posix_acl_access', 'system.posix_acl_default', 'security.capability'} &
+            set(os.listxattr(path, follow_symlinks=False)), UNSAFE)
     info = path.lstat()
     require(stat.S_ISREG(info.st_mode) and not info.st_mode & 0o7022)
     require(permission(info, account, 1 if executable else 4))
@@ -103,11 +125,50 @@ def pinned_file(path, account, *, executable):
     return dict(metadata=metadata(info), sha256=hashlib.sha256(raw).hexdigest())
 
 
+def secure_ancestors(path, account):
+    result = {}
+    for parent in path.parents:
+        info = parent.lstat()
+        require(not {'system.posix_acl_access', 'system.posix_acl_default'} &
+                set(os.listxattr(parent, follow_symlinks=False)), UNSAFE)
+        require(stat.S_ISDIR(info.st_mode) and not info.st_mode & 0o022 and
+                not permission(info, account, 2) and permission(info, account, 1), UNSAFE)
+        result[str(parent)] = dict(uid=info.st_uid, gid=info.st_gid,
+                                   mode=stat.S_IMODE(info.st_mode), device=info.st_dev, inode=info.st_ino)
+    return result
+
+
+def entrypoint_pin(value, account):
+    entrypoint = absolute(value)
+    require(re.fullmatch(r'python(?:3(?:\.14)?)?', entrypoint.name))
+    current = entrypoint
+    links = []
+    ancestors = {}
+    visited = set()
+    for depth in range(9):
+        require(current not in visited, UNSAFE)
+        visited.add(current)
+        ancestors.update(secure_ancestors(current, account))
+        info = current.lstat()
+        if not stat.S_ISLNK(info.st_mode):
+            target = pinned_file(current, account, executable=True)
+            require(not permission(info, account, 2), UNSAFE)
+            return dict(entrypoint=str(entrypoint), target=str(current), target_pin=target,
+                        links=links, ancestors=ancestors)
+        require(depth < 8 and info.st_uid != account.uid and info.st_nlink == 1, UNSAFE)
+        link = os.readlink(current)
+        require(type(link) is str and re.fullmatch(r'[A-Za-z0-9_./-]+', link), UNSAFE)
+        if not os.path.isabs(link):
+            require('..' not in Path(link).parts and link == os.path.normpath(link), UNSAFE)
+        links.append(dict(path=str(current), target=link, metadata=metadata(info)))
+        current = absolute(link if os.path.isabs(link) else str(current.parent / link))
+    raise LauncherError(UNSAFE)
+
+
 def inspect_executable(value, account, *, expected_pin=None, run=subprocess.run):
     try:
         path = absolute(value)
-        require(re.fullmatch(r'python(?:3(?:\.14)?)?', path.name))
-        pin = pinned_file(path, account, executable=True)
+        pin = entrypoint_pin(value, account)
         require(expected_pin is None or pin == expected_pin)
         result = run([str(path), '-I', '-B', '-c', PROBE], capture_output=True, timeout=15,
                      cwd='/', env={'PATH': '/usr/bin:/bin', 'LANG': 'C'}, preexec_fn=account.enter)
@@ -118,13 +179,99 @@ def inspect_executable(value, account, *, expected_pin=None, run=subprocess.run)
         require(type(runtime['version']) is list and len(runtime['version']) == 3 and
                 all(type(number) is int for number in runtime['version']) and
                 runtime['version'][:2] == [3, 14] and runtime['implementation'] == 'CPython', VERSION)
-        require(runtime['executable'] == str(path) and runtime['executable_access'] is True, VERSION)
-        require(pinned_file(path, account, executable=True) == pin)
+        require(runtime['executable'] == pin['target'] and runtime['executable_access'] is True, VERSION)
+        require(entrypoint_pin(value, account) == pin, UNSAFE)
         return dict(pin=pin, runtime=runtime)
     except LauncherError:
         raise
     except (OSError, ValueError, subprocess.SubprocessError):
         raise LauncherError(INVALID) from None
+
+
+def venv_inventory(entrypoint, account):
+    root = absolute(entrypoint).parent.parent
+    require(Path(entrypoint).parent.name == 'bin', UNSAFE)
+    secure_ancestors(root / 'pyvenv.cfg', account)
+    configuration = pinned_file(root / 'pyvenv.cfg', account, executable=False)
+    require(not permission((root / 'pyvenv.cfg').stat(), account, 2), UNSAFE)
+    parser = configparser.ConfigParser(interpolation=None)
+    parser.read_string('[venv]\n' + (root / 'pyvenv.cfg').read_text())
+    require(parser.get('venv', 'include-system-site-packages').lower() == 'false' and
+            parser.get('venv', 'version').startswith('3.14.') and
+            Path(parser.get('venv', 'home')).is_absolute(), UNSAFE)
+    site_packages = root / 'lib' / 'python3.14' / 'site-packages'
+    secure_ancestors(site_packages / 'inventory', account)
+    files = {}
+    directories = {}
+    for directory, children, names in os.walk(site_packages, followlinks=False):
+        path = Path(directory)
+        info = path.lstat()
+        require(stat.S_ISDIR(info.st_mode) and not info.st_mode & 0o022 and
+                not permission(info, account, 2) and permission(info, account, 5), UNSAFE)
+        directories[str(path.relative_to(root))] = metadata(info)
+        for name in children:
+            require(not (path / name).is_symlink(), UNSAFE)
+        for name in names:
+            member = path / name
+            require(not permission(member.lstat(), account, 2), UNSAFE)
+            files[str(member.relative_to(root))] = pinned_file(member, account, executable=False)
+    require(files and directories, UNSAFE)
+    inventory_hash = hashlib.sha256(json.dumps(files, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+    return dict(root=str(root), configuration=configuration, directories=directories,
+                inventory_sha256=inventory_hash, file_count=len(files)), files
+
+
+def validate_runtime(runtime, inventory, files, entrypoint):
+    require(type(runtime) is dict and set(runtime) == {'executable', 'prefix', 'base_prefix', 'version',
+            'implementation', 'user_site', 'user_path', 'path', 'isolated', 'no_bytecode',
+            'pythonpath', 'dependencies'}, UNSAFE)
+    require(type(runtime['version']) is list and len(runtime['version']) == 3 and
+            all(type(number) is int for number in runtime['version']) and
+            runtime['version'][:2] == [3, 14] and runtime['implementation'] == 'CPython', VERSION)
+    root = Path(inventory['root'])
+    require(runtime['executable'] == entrypoint and Path(runtime['prefix']).resolve() == root and
+            Path(runtime['base_prefix']).resolve() != root, UNSAFE)
+    require(runtime['user_site'] is False and runtime['isolated'] == 1 and
+            runtime['no_bytecode'] is True and runtime['pythonpath'] is None, UNSAFE)
+    base = absolute(runtime['base_prefix'], UNSAFE).resolve(strict=True)
+    allowed = {str(base / 'lib' / 'python314.zip'), str(base / 'lib' / 'python3.14'),
+               str(base / 'lib' / 'python3.14' / 'lib-dynload'),
+               str(root / 'lib' / 'python3.14' / 'site-packages')}
+    require(type(runtime['path']) is list and set(runtime['path']) <= allowed and
+            str(root / 'lib' / 'python3.14' / 'site-packages') in runtime['path'] and
+            runtime['user_path'] not in runtime['path'], UNSAFE)
+    require(type(runtime['dependencies']) is dict and set(runtime['dependencies']) == set(DEPENDENCIES), UNSAFE)
+    for name, dependency in runtime['dependencies'].items():
+        require(type(dependency) is dict and set(dependency) == {'version', 'origin', 'record'} and
+                dependency['version'] == DEPENDENCIES[name][1], UNSAFE)
+        for field in ('origin', 'record'):
+            member = absolute(dependency[field], UNSAFE)
+            require(member.is_relative_to(root) and str(member.relative_to(root)) in files, UNSAFE)
+        require(Path(dependency['record']).name == 'RECORD' and
+                Path(dependency['record']).parent.name.endswith('.dist-info'), UNSAFE)
+
+
+def inspect_runtime(value, account, *, expected_pin=None, run=subprocess.run):
+    try:
+        entrypoint_pin(value, account)
+        inventory, files = venv_inventory(value, account)
+        require(expected_pin is None or inventory == expected_pin['venv'], UNSAFE)
+        executable = inspect_executable(value, account,
+            expected_pin=expected_pin['executable'] if expected_pin else None, run=run)
+        result = run([value, '-I', '-B', '-c', RUNTIME_PROBE], capture_output=True, timeout=30,
+                     cwd='/', env={'PATH': '/usr/bin:/bin', 'LANG': 'C'}, preexec_fn=account.enter)
+        require(result.returncode == 0 and not result.stderr and len(result.stdout) <= 16384, UNSAFE)
+        runtime = strict_json(result.stdout)
+        validate_runtime(runtime, inventory, files, value)
+        require(venv_inventory(value, account)[0] == inventory and
+                entrypoint_pin(value, account) == executable['pin'], UNSAFE)
+        pin = dict(executable=executable['pin'], venv=inventory, runtime=runtime)
+        require(expected_pin is None or pin == expected_pin, UNSAFE)
+        return dict(classification='PINNED_EXISTING_VENV_READY', pin=pin)
+    except LauncherError:
+        raise
+    except (OSError, ValueError, KeyError, TypeError, configparser.Error, subprocess.SubprocessError):
+        raise LauncherError(UNSAFE) from None
 
 
 def expected_argv(python_executable, snapshot_package):
@@ -139,6 +286,7 @@ def render_argv(argv, *, read_only):
     require(argv == expected_argv(argv[0], argv[-1]), ARGV)
     command = shlex.join(argv)
     require(shlex.split(command) == argv, ARGV)
+    require(len(f'#!{argv[0]} -I\n'.encode()) <= 127, ARGV)
     return (f'#!{argv[0]} -I\n'
             'import json\nimport os\nimport shlex\nimport sys\n'
             f'COMMAND = {command!r}\nREAD_ONLY = {read_only!r}\n'
@@ -168,7 +316,9 @@ def render_argv(argv, *, read_only):
             '        stream.seek(0)\n'
             '        os.dup2(stream.fileno(), 0, inheritable=True)\n'
             'arguments = shlex.split(COMMAND)\n'
-            'os.execv(arguments[0], arguments)\n').encode()
+            'os.chdir("/")\n'
+            'os.execve(arguments[0], arguments, {"PATH": "/usr/bin:/bin", "LANG": "C", '
+            '"SSH_ORIGINAL_COMMAND": "restricted-sync"})\n').encode()
 
 
 def validate_launcher(raw, argv, *, read_only):
@@ -187,8 +337,8 @@ def build(configuration, account, *, read_only=False, expected_executable_pin=No
     require(type(configuration) is dict and {'python_executable', 'snapshot_package', 'snapshot_sha256'} <= set(configuration)
             and set(configuration) <= {'python_executable', 'python_version', 'snapshot_package', 'snapshot_sha256'})
     require('python_version' not in configuration or type(configuration['python_version']) is str)
-    executable = inspect_executable(configuration['python_executable'], account,
-                                    expected_pin=expected_executable_pin, run=run)
+    executable = inspect_runtime(configuration['python_executable'], account,
+                                 expected_pin=expected_executable_pin, run=run)
     try:
         package = absolute(configuration['snapshot_package'], ARGV)
         require(package.suffix == '.pyz', ARGV)
@@ -233,10 +383,13 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--pins', type=Path, required=True)
     parser.add_argument('--read-only', action='store_true')
+    parser.add_argument('--expected-pins', type=Path)
     args = parser.parse_args()
     os.umask(0o077)
     try:
-        raw, pins = build(strict_json(args.configuration.read_bytes()), Account.lookup(args.account), read_only=args.read_only)
+        expected = strict_json(args.expected_pins.read_bytes())['executable']['pin'] if args.expected_pins else None
+        raw, pins = build(strict_json(args.configuration.read_bytes()), Account.lookup(args.account),
+                          read_only=args.read_only, expected_executable_pin=expected)
         with args.output.open('xb') as output:
             output.write(raw)
         with args.pins.open('x') as output:

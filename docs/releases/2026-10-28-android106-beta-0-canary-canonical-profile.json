@@ -502,7 +502,7 @@
     "actual_temporary_key_ssh_rehearsal_required_before_any_pause_or_cutover",
     "no_stage0_or_phone_procedure_before_READY_FOR_OWNER_LIVE"
   ],
-  "result": "BLOCKED_SNAPSHOT_LAUNCHER_REHEARSAL",
+  "result": "PINNED_RUNTIME_SOURCE_READY",
   "safe_ref": "dev_fa4f7e03ca04",
   "schema": 1,
   "source": {
@@ -695,5 +695,43 @@
     "renewal_package": 3,
     "result": "PASS",
     "snapshot_package": 2
+  },
+  "venv_continuation": {
+    "accepted_package_help": "PASS",
+    "artifacts": "EXACT_UNCHANGED",
+    "budgets": {
+      "emergency_restarts": 0,
+      "gateway_cutover_restarts": 0,
+      "offline_floor": 0,
+      "rehearsal_credentials": 0,
+      "timer_cycles": 0
+    },
+    "dependency_versions": {
+      "cryptography": "46.0.7",
+      "pyserial": "3.5",
+      "rns": "1.5.1"
+    },
+    "entry_main": "e494755bf1670900e3c893ed2cbd10ff605418b8",
+    "fresh_backup": "NOT_CREATED",
+    "no_android_actions": true,
+    "no_paid_actions": true,
+    "no_readiness_actions": true,
+    "post_cutover_snapshot": "NOT_RUN",
+    "pre_restart_snapshot": "NOT_RUN",
+    "rehearsal": "NOT_RUN",
+    "rehearsal_copy": "NOT_CREATED",
+    "renewal_evaluation": "NOT_RUN",
+    "root_cause": "RESOLVED_BASE_TARGET_LOSES_VENV_CONTEXT",
+    "runtime": "PINNED_EXISTING_VENV_READY",
+    "stage0": "NOT_RUN",
+    "tests": {
+      "launcher": 77,
+      "native_deselected": 29,
+      "package_directory": 70,
+      "result": "PASS",
+      "snapshot_canonical_authorization_parser": 115,
+      "total": 262
+    },
+    "unsuitable_base": "REPRODUCED_AND_REJECTED_MISSING_RNS"
   }
 }

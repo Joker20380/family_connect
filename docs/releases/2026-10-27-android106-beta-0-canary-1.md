@@ -2,7 +2,27 @@
 
 ## Coordinated canonical-profile migration — 28 October
 
-### Current launcher continuation — 19:38:59UTC28.10
+### Pinned venv runtime continuation — source checkpoint
+
+PINNED_RUNTIME_SOURCE_READY / LIVE_WRITES_NOT_RUN. The owner authorizes preserving
+the working venv invocation entrypoint and a fresh secure non-authoritative rehearsal
+copy. The prior realpath-only model pinned the correct base ELF but lost the venv
+context. The new builder preserves entrypoint identity in both shebang and exec argv,
+pins the bounded secure symlink chain/final ELF, configuration and installed inventory,
+and rejects writable roots/packages, unsafe links, dependency drift and injection.
+Runtime probes execute as the actual snapshot account with isolated flags, fixed clean
+environment and root working directory. CPython3.14/prefix/user-site and exact
+rns1.5.1/cryptography46.0.7/pyserial3.5 checks PASS: PINNED_EXISTING_VENV_READY.
+Accepted snapshot help PASS; unsuitable base missing-RNS failure reproduced/rejected.
+No package member changed; retained coordinated artifacts remain exact, not rebuilt.
+77 launcher/runtime +115 snapshot/canonical/credential/parser +70 package/directory
+tests PASS.29 unchanged native directory cases deliberately deselected; no full suite
+or platform build. Local fixture umask defect corrected and tests rerun successfully.
+Mandatory actual SSH rehearsal, fresh backup/copy/floor and cutover remain NOT_RUN
+at this source checkpoint; budgets0/1. No paid/readiness/Android/stage0/RU mutation.
+The authorized next gates must complete before READY_FOR_OWNER_LIVE or phone instructions.
+
+### Historical launcher continuation — 19:38:59UTC28.10
 
 **BLOCKED_SNAPSHOT_LAUNCHER_REHEARSAL / LIVE_WRITES_NOT_RUN.**
 Actual temporary-key SSH rehearsal **NOT_RUN: prerequisites blocked**. Not ready for
