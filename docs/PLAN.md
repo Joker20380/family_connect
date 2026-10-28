@@ -8,7 +8,9 @@ LIVE_WRITES_NOT_RUN.** Continue the owner's coordinated migration in this same t
 the snapshot-only proposal is cancelled. Dependency: fresh exact reader/writer graph,
 including the accepted renewal writer and running gateway, not just maintenance.
 Shared transaction core and accepted renewal method integration: canonical stage,
-shared-lock promote, exact rollback and floor normalization implemented.300 affected
+shared-lock promote, exact rollback and floor normalization implemented. Bounded
+maintenance now uses the same canonical locator/lock, with read-only renewable directory
+validation and profile-only rollback. Legacy fixed maintenance route fails closed.329 affected
 tests PASS; one optional accepted-native compatibility test not run. No checkpoint
 production writes or route changes. Normal scheduled renewal advanced fresh RU/NL
 CRL to27218; floor remains27088. This is not an agent-issued CRL or cutover.

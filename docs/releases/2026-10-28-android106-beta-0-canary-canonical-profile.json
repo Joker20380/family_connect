@@ -61,7 +61,7 @@
     "renewal_controller_transport_configuration_source_pins_and_packages",
     "gateway_reader_integration",
     "snapshot_integration",
-    "bounded_maintenance_and_exact_crl_integration",
+    "bounded_maintenance_and_exact_crl_route_qualification",
     "affected_integration_suites",
     "committed_source_deterministic_candidate_packages",
     "fresh_preflight_private_backup",
@@ -94,21 +94,29 @@
     "deployed_gateway_binary_sha256": "96754942e7518233bc702277d860b0c9b740fb7553c9742b2ae642a0746fe367",
     "deployed_snapshot_archive_sha256": "0120dad028ead353b8b83a600538f3e578b2b46ddf871bf16e97529f9449f450",
     "files": {
-      "control/friends/profile_store.py": "7ecf5264c25f44c081f3c8778d811c180cde82ed51155f6784affc5556308d32",
-      "control/friends/restricted_maintenance.py": "513c0a6e2e4857b0087954c55021746b8d32024a2d1b927b71841c55e41d5677",
+      "control/friends/profile_store.py": "dfb353eee68434c819c8850da5e4437141e0648a87f20c1f622f75752f8df979",
+      "control/friends/restricted_maintenance.py": "79d35d2a4c0c5568ee23349b6c92a50ab40bff334a906b8c24593202ccb31acd",
       "deploy/friends/restricted/maintenance/node.py": "749a54742cc9f98144f231337aa736e7cbf85dda34c75e79a6d21fe559bae13d",
       "deploy/friends/restricted/maintenance/production_node.py": "331a4744cf873dc67c28befb84f90d141d0453730b2d9528f39d61f6fd898096",
       "scripts/package_restricted_maintenance.py": "f0c102c1079b1c3bda044fcde05a5060d219c733748a8fbcb17269b488243a45",
-      "tests/test_profile_store.py": "7142b7f673426be48b16181235f0216bb2da7f45083f008158c67cdc239b9e93"
+      "tests/test_profile_store.py": "6d2b66a4b7d694ca1429b817d50aa6df4bdf3e329c31831e741268730facfbc3",
+      "tests/test_restricted_maintenance.py": "1dada62408907dcb80f4fd56c7db7456a8507c896068262dc698e46cf32462da"
     },
     "gateway_reader_source_change_required": true,
-    "integration": "INCOMPLETE_PENDING_CONTROLLER_PINS_READERS_AND_MAINTENANCE",
+    "integration": "INCOMPLETE_PENDING_CONTROLLER_PINS_AND_READERS",
+    "maintenance_configured_route_requires_canonical_locator": true,
+    "maintenance_directory_rotation": "READ_ONLY_VALIDATED_PROGRESSION",
+    "maintenance_legacy_configuration_rejected": true,
+    "maintenance_rollback": "EXACT_PROFILE_ONLY",
+    "maintenance_source_activated": false,
     "production_pins_updated": false,
     "renewal_canonical_promote_rollback_share_lock": true,
+    "renewal_commit": "4523476201249123fc7c02ee7fb6b01f97561fb0",
+    "renewal_commit_push": "VERIFIED",
     "renewal_configured_node_requires_pinned_canonical_locator": true,
     "renewal_source_activated": false,
     "renewal_stage_normalizes_floor": true,
-    "step": "SHARED_CORE_AND_ACCEPTED_RENEWAL_METHODS"
+    "step": "SHARED_CORE_RENEWAL_AND_BOUNDED_MAINTENANCE"
   },
   "source_closeout": {
     "android_actions": 0,
@@ -155,7 +163,7 @@
   },
   "task": "ANDROID-CONTROLLED-BETA",
   "tests": {
-    "affected_total": 300,
+    "affected_total": 329,
     "exact_crl_and_package_tests": 101,
     "existing_maintenance_including_exact_snapshot": 124,
     "existing_renewal": 26,
@@ -167,9 +175,12 @@
       "snapshot_archive_supplied",
       "publisher_fixture_atomic_rename",
       "existing_archive_cleanup_assertions",
-      "host_sandbox_remapped_ancestor_ownership_rerun_outside_sandbox"
+      "host_sandbox_remapped_ancestor_ownership_rerun_outside_sandbox",
+      "canonical_contract_serialization",
+      "structural_directory_index_flag_explicitly_supported_not_regular_files"
     ],
-    "new_profile_core_and_canonical_renewal": 49,
+    "new_bounded_maintenance_and_structural_flags": 29,
+    "new_profile_core_and_canonical_renewal": 78,
     "optional_native_skips": 1,
     "platform_builds": "NOT_RUN",
     "result": "PASS_WITH_ONE_OPTIONAL_NATIVE_SKIP"

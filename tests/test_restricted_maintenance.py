@@ -301,7 +301,7 @@ def test_control_domain_stays_root_private(service_setup, case):
 
 
 @pytest.mark.parametrize('case', ['valid', 'missing', 'unknown', 'duplicate', 'nonfinite', 'mode', 'owner'])
-def test_fixed_configuration_exact_schema(service_setup, monkeypatch, case):
+def test_legacy_fixed_configuration_is_not_an_active_route(service_setup, monkeypatch, case):
     setup = service_setup
     key = private_file(setup.root / 'journal.key', setup.config.journal_key)
     package = private_file(setup.root / 'bound.pyz', b'synthetic immutable package')
@@ -326,13 +326,8 @@ def test_fixed_configuration_exact_schema(service_setup, monkeypatch, case):
         config.chmod(0o644)
     elif case == 'owner':
         os.chown(config, 41001, 41002)
-    if case == 'valid':
-        loaded = maintenance.load_configuration(setup.permit, package)
-        assert loaded.contract() == setup.config.contract()
-        assert maintenance.Operation(loaded, setup.permit, clock=lambda: setup.now).execute(setup.request)['result'] == 'PASS'
-    else:
-        with pytest.raises(maintenance.MaintenanceError):
-            maintenance.load_configuration(setup.permit, package)
+    with pytest.raises(maintenance.MaintenanceError):
+        maintenance.load_configuration(setup.permit, package)
 
 
 def test_reconcile_floor_exact_payload_and_private_receipt(setup):

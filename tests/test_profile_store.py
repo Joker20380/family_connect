@@ -2,12 +2,13 @@ from dataclasses import replace
 import json
 import os
 from pathlib import Path
+import sys
 
 import pytest
 
-from control.friends import profile_store as store
+from control.friends import profile_store as store, restricted_maintenance as maintenance
 from control.friends.restricted import iso
-from test_restricted_maintenance import make_crl, setup
+from test_restricted_maintenance import make_crl, setup, permit_for, private_file
 
 
 @pytest.fixture
@@ -78,6 +79,174 @@ def rotate(fixture, *, valid=True):
     os.chown(pending, port.expected['uid'], port.expected['gid'])
     pending.chmod(port.expected['mode'])
     os.replace(pending, port.path)
+
+
+@pytest.fixture
+def canonical_maintenance(canonical):
+    canonical.maintenance_config = maintenance.CanonicalConfiguration(canonical.store, b'm' * 32)
+    canonical.maintenance_operation = maintenance.Operation(canonical.maintenance_config, canonical.permit,
+                                                           clock=lambda: canonical.now)
+    return canonical
+
+
+@pytest.mark.parametrize('action', ['reconcile_current_floor', 'apply_exact_crl'])
+def test_bounded_maintenance_uses_canonical_profile_and_exact_target(canonical_maintenance, action):
+    fixture = canonical_maintenance
+    before_directory = fixture.locator.directory_port.path.read_bytes()
+    old_profile = fixture.profile.read_bytes()
+    payload = fixture.payload if action == 'reconcile_current_floor' else make_crl(fixture, 27212)
+    permit, request = permit_for(fixture, action=action, payload=payload)
+    operation = maintenance.Operation(fixture.maintenance_config, permit, clock=lambda: fixture.now)
+    response = operation.execute(request)
+    assert response['result'] == 'PASS'
+    target_number = 27211 if action == 'reconcile_current_floor' else 27212
+    assert json.loads(fixture.store.read()) == dict(json.loads(fixture.before), minimum_crl=target_number,
+                                                  revocations=payload.decode())
+    assert store.metadata(fixture.locator.profile.stat()) == fixture.locator.profile_metadata
+    assert fixture.profile.read_bytes() == old_profile
+    assert fixture.locator.directory_port.path.read_bytes() == before_directory
+    assert operation.execute(request)['result'] == 'IDEMPOTENT'
+    assert operation.reconcile(request)['result'] == 'IDEMPOTENT'
+    journal = json.loads((operation.root / 'journal.json').read_bytes())['journal']
+    assert journal['attempt_count'] == 1 and journal['committed_write']
+
+
+@pytest.mark.parametrize('phase', ['before_prepare', 'before_replace', 'after_replace'])
+def test_bounded_maintenance_accepts_publisher_rotation(canonical_maintenance, monkeypatch, phase):
+    fixture = canonical_maintenance
+    original = os.replace
+    if phase == 'before_prepare':
+        rotate(fixture)
+    def replacement(source, target, **kwargs):
+        if target == fixture.locator.profile.name and phase == 'before_replace':
+            rotate(fixture)
+        original(source, target, **kwargs)
+        if target == fixture.locator.profile.name and phase == 'after_replace':
+            rotate(fixture)
+    monkeypatch.setattr(os, 'replace', replacement)
+    response = fixture.maintenance_operation.execute(fixture.request)
+    assert response['result'] == 'PASS'
+    assert response['directory_sha256'] != fixture.permit['expected_directory_sha256']
+    assert fixture.maintenance_operation.execute(fixture.request)['result'] == 'IDEMPOTENT'
+
+
+@pytest.mark.parametrize('failure', ['binding', 'publisher_contract', 'mode', 'time_rollback', 'same_generation'])
+def test_bounded_maintenance_rolls_back_profile_only(canonical_maintenance, monkeypatch, failure):
+    fixture = canonical_maintenance
+    original = os.replace
+    changed = []
+    def replacement(source, target, **kwargs):
+        original(source, target, **kwargs)
+        if target != fixture.locator.profile.name or changed:
+            return
+        changed.append(True)
+        port = fixture.locator.directory_port
+        if failure == 'publisher_contract':
+            Path(port.publisher_contract[0][0]).write_bytes(b'changed-contract')
+        elif failure == 'mode':
+            port.path.chmod(0o644)
+        elif failure == 'binding':
+            rotate(fixture, valid=False)
+        else:
+            value = json.loads(port.path.read_bytes())
+            if failure == 'time_rollback':
+                value.update(issued_at=iso(fixture.now - 2), expires_at=iso(fixture.now + 898))
+            else:
+                value['seeds'][0]['join_url'] = 'https://telemost.yandex.ru/j/synthetic-conflict'
+            pending = port.path.with_name('publisher-fault')
+            pending.write_bytes(store.encode(value))
+            os.chown(pending, port.expected['uid'], port.expected['gid'])
+            pending.chmod(port.expected['mode'])
+            original(pending, port.path)
+        changed.append((port.path.read_bytes(), store.metadata(port.path.stat())))
+    monkeypatch.setattr(os, 'replace', replacement)
+    with pytest.raises(maintenance.MaintenanceError, match='MAINTENANCE_ROLLED_BACK'):
+        fixture.maintenance_operation.execute(fixture.request)
+    assert fixture.store.read() == fixture.before
+    assert store.metadata(fixture.locator.profile.stat()) == fixture.locator.profile_metadata
+    port = fixture.locator.directory_port
+    assert (port.path.read_bytes(), store.metadata(port.path.stat())) == changed[-1]
+    journal = json.loads((fixture.maintenance_operation.root / 'journal.json').read_bytes())['journal']
+    assert journal['state'] == 'ROLLED_BACK' and journal['attempt_count'] == 1
+    with pytest.raises(maintenance.MaintenanceError):
+        fixture.maintenance_operation.execute(fixture.request)
+    assert fixture.store.read() == fixture.before
+
+
+def test_bounded_maintenance_and_renewal_share_one_lock(canonical_maintenance):
+    fixture = canonical_maintenance
+    other = store.ProfileStore(fixture.locator, clock=lambda: fixture.now)
+    with other.lock():
+        with pytest.raises(maintenance.MaintenanceError, match='MAINTENANCE_PRECONDITION_CHANGED'):
+            fixture.maintenance_operation.execute(fixture.request)
+    assert not fixture.maintenance_operation.root.exists()
+    transaction(fixture, 'credential_renewal', fixture.before)
+    with pytest.raises(maintenance.MaintenanceError, match='MAINTENANCE_PRECONDITION_CHANGED'):
+        fixture.maintenance_operation.execute(fixture.request)
+    assert not fixture.maintenance_operation.root.exists()
+
+
+@pytest.mark.parametrize('target,flags,allowed', [('parent', 0x81000, True), ('profile', 0x81000, False),
+    ('profile', 0x80000, True), ('parent', 0x80010, False), ('profile', 0x80020, False), ('parent', 0x80080, False)])
+def test_structural_index_flag_only_allowed_for_directories(canonical, monkeypatch, target, flags, allowed):
+    path = canonical.locator.profile.parent if target == 'parent' else canonical.locator.profile
+    descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+    def ioctl(descriptor, request, buffer, mutate):
+        buffer[:] = flags.to_bytes(len(buffer), sys.byteorder)
+    monkeypatch.setattr(store.fcntl, 'ioctl', ioctl)
+    try:
+        if allowed:
+            store.extended_metadata(descriptor)
+        else:
+            with pytest.raises(store.ProfileError, match='EXTENDED_METADATA_UNSUPPORTED'):
+                store.extended_metadata(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+@pytest.mark.parametrize('case', ['valid', 'missing', 'unknown', 'duplicate', 'nonfinite', 'mode', 'owner',
+                                 'locator_hash', 'locator_override', 'package_hash', 'operation', 'lock_missing'])
+def test_canonical_maintenance_fixed_configuration(canonical_maintenance, monkeypatch, case):
+    fixture = canonical_maintenance
+    key = private_file(fixture.root / 'journal.key', fixture.maintenance_config.journal_key)
+    package = private_file(fixture.root / 'bound.pyz', b'synthetic immutable package')
+    package.chmod(0o400)
+    value = dict(schema=2, profile_locator=str(fixture.fixed_locator),
+                 profile_locator_sha256=store.digest(fixture.fixed_locator.read_bytes()), journal_key=str(key),
+                 package_sha256=store.digest(package.read_bytes()), operation_id=fixture.permit['operation_id'])
+    if case == 'missing':
+        del value['profile_locator']
+    elif case == 'unknown':
+        value['profile'] = str(fixture.profile)
+    elif case == 'locator_hash':
+        value['profile_locator_sha256'] = '0' * 64
+    elif case == 'package_hash':
+        value['package_sha256'] = '0' * 64
+    elif case == 'operation':
+        value['operation_id'] = 'restricted_maintenance_' + 'b' * 32
+    elif case == 'locator_override':
+        monkeypatch.setenv('PROFILE_LOCATOR', str(fixture.profile))
+    elif case == 'lock_missing':
+        fixture.locator.lock.unlink()
+    raw = store.encode(value)
+    if case == 'duplicate':
+        raw = b'{"schema":2,' + raw[1:]
+    elif case == 'nonfinite':
+        raw = raw.replace(b'"schema":2', b'"schema":NaN')
+    config = private_file(fixture.root / 'canonical-fixed.json', raw)
+    monkeypatch.setattr(maintenance, 'CONFIGURATION_PATH', config)
+    if case == 'mode':
+        config.chmod(0o644)
+    elif case == 'owner':
+        os.chown(config, 41001, 41002)
+    if case in ('valid', 'locator_override'):
+        loaded = maintenance.load_configuration(fixture.permit, package)
+        assert loaded.contract() == fixture.maintenance_config.contract()
+        assert loaded.profile == fixture.locator.profile and loaded.sync_lock == fixture.locator.lock
+        assert maintenance.Operation(loaded, fixture.permit, clock=lambda: fixture.now).execute(fixture.request)['result'] == 'PASS'
+    else:
+        with pytest.raises(maintenance.MaintenanceError):
+            maintenance.load_configuration(fixture.permit, package)
 
 
 @pytest.mark.parametrize('consumer', ['gateway', 'snapshot', 'renewal', 'maintenance', 'exact_crl'])

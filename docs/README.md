@@ -4,7 +4,8 @@
 **COORDINATED_CANONICAL_PROFILE_SOURCE_IN_PROGRESS / LIVE_WRITES_NOT_RUN.**
 The owner now authorizes coordinated renewal/gateway/snapshot/maintenance migration,
 not a snapshot-only split. Fresh exact graph and first shared transaction-core source
-step and accepted renewal method integration completed;300 affected tests PASS,
+step, accepted renewal method integration and canonical bounded maintenance completed
+as source-only increments;329 affected tests PASS,
 one optional native compatibility check not run. Remaining source integrations, packages and
 production gates are unfinished; all production budgets remain unspent. No phone action.
 [Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).

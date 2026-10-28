@@ -73,7 +73,8 @@ def extended_metadata(descriptor):
     except OSError as error:
         require(error.errno in (errno.ENOTTY, errno.EOPNOTSUPP), 'EXTENDED_METADATA_UNSUPPORTED')
     else:
-        require(not int.from_bytes(flags, sys.byteorder) & ~0x80000, 'EXTENDED_METADATA_UNSUPPORTED')
+        structural = 0x80000 | (0x1000 if stat.S_ISDIR(os.fstat(descriptor).st_mode) else 0)
+        require(not int.from_bytes(flags, sys.byteorder) & ~structural, 'EXTENDED_METADATA_UNSUPPORTED')
 
 
 def absolute(path):
@@ -201,7 +202,7 @@ class DirectoryPort:
             result.append((spelling, expected_hash, expected_metadata))
         return encode(result)
 
-    def read(self, profile, now):
+    def snapshot(self, profile, now, *, previous=None):
         require(self.path.parent == Path(self.publisher_parent['path']), 'PUBLISHER_BOUNDARY_CHANGED')
         contract = self.contract()
         raw = read_regular(self.path, self.expected, 8192, publisher_parent=self.publisher_parent)
@@ -211,19 +212,23 @@ class DirectoryPort:
         except Exception:
             raise ProfileError('DIRECTORY_INVALID') from None
         require(self.contract() == contract, 'PUBLISHER_CONTRACT_CHANGED')
-        return dict(sha256=digest(raw), family=profile['family'], gateway=profile['gateway'],
-                    issued=timestamp_ns(value['issued_at']), expires=timestamp_ns(value['expires_at']),
-                    contract_sha256=digest(contract))
+        current = dict(sha256=digest(raw), family=profile['family'], gateway=profile['gateway'],
+                       issued=timestamp_ns(value['issued_at']), expires=timestamp_ns(value['expires_at']),
+                       contract_sha256=digest(contract))
+        if previous is not None:
+            require(all(current[name] == previous[name] for name in ('family', 'gateway', 'contract_sha256')),
+                    'DIRECTORY_BINDING_CHANGED')
+            require(current['issued'] >= previous['issued'] and current['expires'] >= previous['expires'],
+                    'DIRECTORY_TIME_ROLLBACK')
+            require(current['sha256'] == previous['sha256'] or current['issued'] > previous['issued'],
+                    'DIRECTORY_GENERATION_CONFLICT')
+        return raw, current
+
+    def read(self, profile, now):
+        return self.snapshot(profile, now)[1]
 
     def after(self, previous, profile, now):
-        current = self.read(profile, now)
-        require(all(current[name] == previous[name] for name in ('family', 'gateway', 'contract_sha256')),
-                'DIRECTORY_BINDING_CHANGED')
-        require(current['issued'] >= previous['issued'] and current['expires'] >= previous['expires'],
-                'DIRECTORY_TIME_ROLLBACK')
-        require(current['sha256'] == previous['sha256'] or current['issued'] > previous['issued'],
-                'DIRECTORY_GENERATION_CONFLICT')
-        return current
+        return self.snapshot(profile, now, previous=previous)[1]
 
 
 @dataclass(frozen=True, repr=False)

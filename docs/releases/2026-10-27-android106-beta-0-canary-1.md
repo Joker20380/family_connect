@@ -99,13 +99,47 @@ extended-metadata comparison passes. This checkpoint generated no CRL and made n
 RU, profile, directory, paid, Android or readiness write. Do not describe the materials
 as byte-identical throughout the session: the legitimate scheduled writer advanced them.
 
-**STOP at incomplete source checkpoint; live migration NOT_RUN.** Still required:
+At that source checkpoint live migration was NOT_RUN. Still required at that point:
 controller/transport fixed-configuration and source-pin integration; actual gateway
 reader compatibility; actual snapshot canonical routing; bounded maintenance's
 canonical layout and renewable-directory redesign; all cross-component/package gates;
 fresh coordinated backup and permit; the single pause/cutover/resume and bounded
 floor operation; old-route retirement and final live acceptance. Budgets remain0 used.
 No READY_FOR_OWNER_LIVE classification or phone procedure is authorized by these tests.
+
+### Canonical bounded maintenance integration
+
+Renewal source checkpoint `4523476201249123fc7c02ee7fb6b01f97561fb0` is pushed;
+remote main SHA verified. This next source increment replaces the **active fixed**
+maintenance configuration with a strict schema requiring a pinned canonical locator.
+Legacy direct configuration remains only for historical synthetic regression fixtures;
+the production configuration loader rejects it. No runtime caller path/identity/action
+override or new scheduled renewal RPC is introduced.
+
+Both bounded actions use the shared profile store, target builders and renewal lock.
+The existing single-operation permit, authenticated journal, one-attempt limit, CAS,
+readback and idempotent replay remain. Directory observations validate publisher pins,
+metadata, bindings and forward progression, rather than requiring immutable directory
+bytes/inode. The permit's directory digest is retained as an observation, not a CAS on
+renewable material. Valid rotations before preparation or during replacement pass;
+invalid post-write directory/binding/progression/contract causes exact **profile-only**
+rollback. Directory bytes, metadata and publisher are never restored or modified.
+
+Latest affected checks: **202 root transaction/renewal/maintenance/snapshot tests PASS**
+and **127 host renewal/exact-CRL/package tests PASS**, with the same one optional native
+compatibility skip. Total **329 PASS,1 skip**; no full historical/platform build.
+The first local attempt found contract tuple/list serialization and an automatically
+indexed synthetic directory. Contract serialization is canonicalized; the shared
+metadata guard explicitly accepts the structural directory-index flag only on
+directories, still rejecting policy/mutability flags and indexed regular files.
+Six focused flag checks and23 bounded canonical maintenance checks cover these changes.
+
+**SOURCE_IN_PROGRESS; live migration NOT_RUN.** No production action since the recorded
+read-only observation, which must be refreshed before any permit. Controller transport/
+pins, actual gateway and snapshot reader integration, coherent deterministic packages,
+cross-component route qualification and every coordinated production gate remain.
+All checkpoint production budgets are still0 used. No partial migration or owner-live
+acceptance is implied; no stage0 or phone instruction.
 
 ## Split-boundary writer inventory — 28 October
 

@@ -25,6 +25,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 from cryptography.hazmat.primitives.serialization import Encoding
 
 from .restricted import MAX_TEST_LIFETIME, directory, utc
+from . import profile_store
 
 CONFIGURATION_PATH = Path('/etc/fc-restricted-maintenance.json')
 PERMIT_FIELDS = frozenset(('schema operation_id action expected_profile_sha256 expected_directory_sha256 '
@@ -34,6 +35,8 @@ STATES = frozenset('PREPARED APPLYING COMMITTED IDEMPOTENT ROLLED_BACK UNKNOWN C
 CONFIG_FIELDS = frozenset(('profile directory sync_lock operations journal_key package_sha256 operation_id '
     'profile_uid profile_gid profile_mode directory_uid directory_gid directory_mode lock_uid lock_gid lock_mode '
     'material_boundary').split())
+CANONICAL_CONFIG_FIELDS = frozenset(('schema profile_locator profile_locator_sha256 journal_key '
+    'package_sha256 operation_id').split())
 CODES = frozenset(('PASS IDEMPOTENT INVALID_PERMIT INVALID_REQUEST MAINTENANCE_PRECONDITION_CHANGED '
     'CRL_PAYLOAD_CONFLICT PROFILE_VALIDATION_FAILED DIRECTORY_VALIDATION_FAILED APPLY_FAILED '
     'MAINTENANCE_ROLLED_BACK MAINTENANCE_ROLLBACK_FAILED MAINTENANCE_STATE_CONFLICT READBACK_MISMATCH '
@@ -326,8 +329,90 @@ class Configuration:
 
 
 def atomic_material_replace(config, raw, *, before_replace):
-    from .profile_store import atomic_profile_replace
-    atomic_profile_replace(config, raw, before_replace=before_replace, error_type=MaintenanceError)
+    if isinstance(config, CanonicalConfiguration):
+        with profile_guard('MAINTENANCE_PRECONDITION_CHANGED'):
+            config.store.replace(raw, expected=config.store.read(), permit=before_replace)
+    else:
+        profile_store.atomic_profile_replace(config, raw, before_replace=before_replace, error_type=MaintenanceError)
+
+
+@contextmanager
+def profile_guard(code):
+    try:
+        yield
+    except (profile_store.ProfileError, OSError):
+        raise MaintenanceError(code) from None
+
+
+@dataclass(frozen=True, repr=False)
+class CanonicalConfiguration:
+    store: profile_store.ProfileStore
+    journal_key: bytes
+    max_attempts: int = 1
+
+    @property
+    def profile(self):
+        return self.store.profile
+
+    @property
+    def directory(self):
+        return self.store.locator.directory_port.path
+
+    @property
+    def sync_lock(self):
+        return self.store.locator.lock
+
+    @property
+    def operations(self):
+        return self.store.locator.operations
+
+    def read_material(self, path, limit):
+        with profile_guard('MATERIAL_METADATA_MISMATCH'):
+            if path == self.profile:
+                return self.store.read_material(path, limit)
+            port = self.store.locator.directory_port
+            require(path == port.path, 'MATERIAL_METADATA_MISMATCH')
+            return profile_store.read_regular(path, port.expected, limit, publisher_parent=port.publisher_parent)
+
+    def observe_directory(self, raw, now, *, previous=None):
+        with profile_guard('DIRECTORY_VALIDATION_FAILED'):
+            profile = profile_store.profile_material(raw, now)[0]
+            return self.store.locator.directory_port.snapshot(profile, now, previous=previous)
+
+    def contract(self):
+        locator = self.store.locator
+        port = locator.directory_port
+        result = dict(schema=2, profile=str(self.profile), directory=str(self.directory), lock=str(self.sync_lock),
+                      operations=str(self.operations), profile_metadata=locator.profile_metadata,
+                      directory_metadata=port.expected, publisher_parent=port.publisher_parent,
+                      publisher_contract=port.publisher_contract, max_attempts=self.max_attempts)
+        return strict(encode(result), 16384, 'INVALID_PERMIT')
+
+    def material_snapshot(self):
+        with profile_guard('MATERIAL_METADATA_MISMATCH'):
+            self.store.read()
+            lock_raw = profile_store.read_regular(self.sync_lock, dict(uid=0, gid=0, mode=0o600), 4096, empty=True)
+            info = self.operations.lstat()
+            require(stat.S_ISDIR(info.st_mode) and profile_store.metadata(info) == dict(uid=0, gid=0, mode=0o700),
+                    'MAINTENANCE_STATE_CONFLICT')
+            result = dict(profile_metadata=self.store.locator.profile_metadata, lock_sha256=digest(lock_raw),
+                          lock_inode=self.sync_lock.lstat().st_ino, operations_inode=info.st_ino,
+                          parents={str(path): profile_store.parents(path) for path in
+                                   (self.profile, self.sync_lock, self.operations / 'placeholder')})
+            return strict(encode(result), 16384, 'MATERIAL_METADATA_MISMATCH')
+
+    def validate(self):
+        require(os.geteuid() == 0 and type(self.journal_key) is bytes and len(self.journal_key) == 32 and
+                type(self.max_attempts) is int and self.max_attempts == 1, 'INVALID_PERMIT')
+        with profile_guard('MAINTENANCE_ROUTE_UNAVAILABLE'):
+            self.store.locator.validate()
+        self.material_snapshot()
+
+    @contextmanager
+    def lock(self):
+        with profile_guard('MAINTENANCE_PRECONDITION_CHANGED'):
+            with self.store.lock():
+                yield
 
 
 def profile_material(raw, directory_raw, now):
@@ -409,8 +494,16 @@ class Operation:
             require(self.config.material_snapshot() == journal['material_metadata'], 'MAINTENANCE_STATE_CONFLICT')
         except (MaintenanceError, OSError):
             raise MaintenanceError('MAINTENANCE_STATE_CONFLICT') from None
-        require(digest(self.config.read_material(self.config.directory, 8192)) ==
-                journal['before_directory_sha256'], 'MAINTENANCE_STATE_CONFLICT')
+        if not isinstance(self.config, CanonicalConfiguration):
+            require(digest(self.config.read_material(self.config.directory, 8192)) ==
+                    journal['before_directory_sha256'], 'MAINTENANCE_STATE_CONFLICT')
+
+    def _directory(self, journal, profile_raw):
+        if isinstance(self.config, CanonicalConfiguration):
+            return self.config.observe_directory(profile_raw, self.clock(), previous=journal['directory_checkpoint'])[0]
+        raw = self.config.read_material(self.config.directory, 8192)
+        require(digest(raw) == journal['before_directory_sha256'], 'MAINTENANCE_STATE_CONFLICT')
+        return raw
 
     def _validate(self):
         try:
@@ -425,9 +518,13 @@ class Operation:
         now = self.clock()
         require(permit['not_before'] <= now < permit['not_after'], 'INVALID_PERMIT')
         profile_raw = config.read_material(config.profile, 49152)
-        directory_raw = config.read_material(config.directory, 8192)
-        require(digest(profile_raw) == permit['expected_profile_sha256'] and
-                digest(directory_raw) == permit['expected_directory_sha256'], 'MAINTENANCE_PRECONDITION_CHANGED')
+        directory_checkpoint = None
+        if isinstance(config, CanonicalConfiguration):
+            directory_raw, directory_checkpoint = config.observe_directory(profile_raw, now)
+        else:
+            directory_raw = config.read_material(config.directory, 8192)
+            require(digest(directory_raw) == permit['expected_directory_sha256'], 'MAINTENANCE_PRECONDITION_CHANGED')
+        require(digest(profile_raw) == permit['expected_profile_sha256'], 'MAINTENANCE_PRECONDITION_CHANGED')
         profile, authority, previous, old_number = profile_material(profile_raw, directory_raw, now)
         require(old_number == permit['expected_embedded_crl_number'] and
                 digest(profile['revocations'].encode()) == permit['expected_embedded_crl_sha256'] and
@@ -450,6 +547,12 @@ class Operation:
         if permit['action'] == 'apply_exact_crl':
             target['revocations'] = payload.decode()
         target_raw = encode(target)
+        if isinstance(config, CanonicalConfiguration):
+            with profile_guard('PROFILE_VALIDATION_FAILED'):
+                built = (profile_store.floor_target(profile_raw, now) if permit['action'] == 'reconcile_current_floor'
+                         else profile_store.exact_crl_target(profile_raw, payload, now))
+                require(built == target_raw, 'PROFILE_VALIDATION_FAILED')
+                target_raw = built
         require(len(target_raw) <= 49152, 'PROFILE_VALIDATION_FAILED')
         material_metadata = config.material_snapshot()
         self.root.mkdir(mode=0o700)
@@ -464,6 +567,7 @@ class Operation:
             expected_minimum_crl=profile['minimum_crl'], target_minimum_crl=target['minimum_crl'],
             target_payload_sha256=digest(payload), attempt_count=0, replace_started=False, committed_write=False,
             applied_at=None, material_metadata=material_metadata,
+            directory_checkpoint=directory_checkpoint,
             configuration_sha256=digest(encode(config.contract())))
         self._save(journal, 'PREPARED')
         return journal
@@ -472,9 +576,8 @@ class Operation:
         self._unchanged_metadata(journal)
         config = self.config
         raw = config.read_material(config.profile, 49152)
-        directory_raw = config.read_material(config.directory, 8192)
-        require(digest(raw) == journal['target_profile_sha256'] and
-                digest(directory_raw) == journal['before_directory_sha256'], 'READBACK_MISMATCH')
+        directory_raw = self._directory(journal, raw)
+        require(digest(raw) == journal['target_profile_sha256'], 'READBACK_MISMATCH')
         profile, _, _, number = profile_material(raw, directory_raw, self.clock())
         require(number == journal['target_crl_number'] and profile['minimum_crl'] == journal['target_minimum_crl'] and
                 digest(profile['revocations'].encode()) == journal['target_payload_sha256'], 'READBACK_MISMATCH')
@@ -505,10 +608,13 @@ class Operation:
             if current != journal['before_profile_sha256']:
                 atomic_material_replace(self.config, read_control(self.root / 'before-profile.json', 49152),
                                         before_replace=rollback_ready)
-            require(digest(self.config.read_material(self.config.profile, 49152)) == journal['before_profile_sha256'] and
-                    digest(self.config.read_material(self.config.directory, 8192)) == journal['before_directory_sha256'],
-                    'MAINTENANCE_ROLLBACK_FAILED')
-            profile_material(self.config.read_material(self.config.profile, 49152), self.config.read_material(self.config.directory, 8192), self.clock())
+            restored = self.config.read_material(self.config.profile, 49152)
+            require(digest(restored) == journal['before_profile_sha256'], 'MAINTENANCE_ROLLBACK_FAILED')
+            if isinstance(self.config, CanonicalConfiguration):
+                with profile_guard('MAINTENANCE_ROLLBACK_FAILED'):
+                    profile_store.profile_material(restored, self.clock())
+            else:
+                profile_material(restored, self._directory(journal, restored), self.clock())
             self._save(journal, 'ROLLED_BACK')
         except Exception:
             self._save(journal, 'UNKNOWN')
@@ -520,9 +626,9 @@ class Operation:
         self._validate()
         with self.config.lock():
             journal = self._load(request) if self.root.exists() or self.root.is_symlink() else self._prepare(request)
-            current = digest(self.config.read_material(self.config.profile, 49152))
-            current_directory = digest(self.config.read_material(self.config.directory, 8192))
-            require(current_directory == journal['before_directory_sha256'], 'MAINTENANCE_STATE_CONFLICT')
+            current_raw = self.config.read_material(self.config.profile, 49152)
+            current = digest(current_raw)
+            self._directory(journal, current_raw)
             if journal['state'] in ('COMMITTED', 'IDEMPOTENT', 'APPLYING', 'UNKNOWN') and current == journal['target_profile_sha256']:
                 return self._complete(journal, duplicate=True)
             require(journal['state'] in ('PREPARED', 'APPLYING', 'UNKNOWN') and
@@ -536,11 +642,10 @@ class Operation:
             def prepared():
                 self._unchanged_metadata(journal)
                 require(self._load(request) == journal, 'MAINTENANCE_STATE_CONFLICT')
-                require(digest(self.config.read_material(self.config.profile, 49152)) == journal['before_profile_sha256'] and
-                        digest(self.config.read_material(self.config.directory, 8192)) == journal['before_directory_sha256'],
-                        'MAINTENANCE_PRECONDITION_CHANGED')
+                current_raw = self.config.read_material(self.config.profile, 49152)
+                require(digest(current_raw) == journal['before_profile_sha256'], 'MAINTENANCE_PRECONDITION_CHANGED')
                 require(self.permit['not_before'] <= self.clock() < self.permit['not_after'], 'INVALID_PERMIT')
-                profile_material(self.config.read_material(self.config.profile, 49152), self.config.read_material(self.config.directory, 8192), self.clock())
+                profile_material(current_raw, self._directory(journal, current_raw), self.clock())
                 journal['replace_started'] = True
                 self._save(journal, 'APPLYING')
             try:
@@ -606,18 +711,19 @@ def remove_credential(configuration, line):
 def load_configuration(permit, package):
     require(os.geteuid() == 0, 'INVALID_PERMIT')
     value = strict(read_control(CONFIGURATION_PATH, 8192), 8192, 'INVALID_PERMIT')
-    require(type(value) is dict and set(value) == CONFIG_FIELDS, 'INVALID_PERMIT')
+    require(type(value) is dict and set(value) == CANONICAL_CONFIG_FIELDS and
+            type(value['schema']) is int and value['schema'] == 2, 'INVALID_PERMIT')
     require(value['operation_id'] == permit['operation_id'], 'INVALID_PERMIT')
     require(digest(read_control(package, 1048576, mode=0o400)) == value['package_sha256'], 'INVALID_PERMIT')
-    for field in ('profile', 'directory', 'sync_lock', 'operations', 'journal_key'):
+    for field in ('profile_locator', 'journal_key'):
         require(type(value[field]) is str, 'INVALID_PERMIT')
         absolute(Path(value[field]))
-    config = Configuration(profile=Path(value['profile']), directory=Path(value['directory']),
-        sync_lock=Path(value['sync_lock']), operations=Path(value['operations']),
-        journal_key=read_control(Path(value['journal_key']), 32),
-        **{name: value[name] for name in ('profile_uid', 'profile_gid', 'profile_mode',
-            'directory_uid', 'directory_gid', 'directory_mode', 'lock_uid', 'lock_gid', 'lock_mode',
-            'material_boundary')})
+    with profile_guard('INVALID_PERMIT'):
+        path = Path(value['profile_locator'])
+        raw = profile_store.read_regular(path, profile_store.metadata(path.lstat()), 16384)
+        require(type(value['profile_locator_sha256']) is str and digest(raw) == value['profile_locator_sha256'], 'INVALID_PERMIT')
+        locator = profile_store.Locator.load(path)
+    config = CanonicalConfiguration(profile_store.ProfileStore(locator), read_control(Path(value['journal_key']), 32))
     config.validate()
     return config
 
