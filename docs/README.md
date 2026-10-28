@@ -7,7 +7,9 @@ not a snapshot-only split. Fresh exact graph and first shared transaction-core s
 step, accepted renewal method integration and canonical bounded maintenance completed
 as source-only increments; canonical snapshot response/access/dispatch now qualified
 with224 root checks and5 affected package checks PASS,
-one optional native compatibility check not run. Remaining source integrations, packages and
+one optional compatibility check not run. Gateway secure reader source additionally
+passes12 native tests with26 subcases. Two committed-source Python capsules are
+deterministic unbound intermediates. Remaining integrations, complete packages and
 production gates are unfinished; all production budgets remain unspent. No phone action.
 [Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).
 

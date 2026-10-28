@@ -29,7 +29,13 @@ configuration is rejected.202 root +127 affected host tests PASS, one optional n
 Fourth source step adds a fixed canonical snapshot reader, byte-equal accepted response,
 read-only group access and unchanged bounded renewal envelope.224 root checks PASS;
 snapshot/maintenance package tests5 PASS. No production snapshot route is activated.
-Controller/transport configuration and pins, gateway reader, staged snapshot route,
+Gateway loader source now accepts the secure reader-group contract with root ancestry,
+no symlink/hardlink/mount/xattr escape, bounded descriptor reads and rechecks.12 focused
+native tests with26 subcases PASS, including fresh synthetic Family TLS/reload and
+existing mTLS/lease tests. No gateway candidate installed or restarted.
+Committed-source snapshot/maintenance capsules each built twice identically and checked;
+unbound intermediate artifacts only, not a coordinated deployment candidate.
+Controller/transport configuration and pins, staged gateway/snapshot routes,
 coordinated packaging and production gates remain unfinished. No migration or READY
 claim, no second authoritative profile, no owner phone instruction or stage0.
 [Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).

@@ -20,7 +20,13 @@ import (
 
 func LoadCredentials(path string) ([]byte, error) {
 	info, err := os.Lstat(path)
-	if err != nil || !info.Mode().IsRegular() || info.Mode().Perm() != 0600 || info.Size() > 48<<10 {
+	if err != nil || !info.Mode().IsRegular() || info.Size() > 48<<10 {
+		return nil, Code("credentials_rejected")
+	}
+	if info.Mode().Perm() == 0640 {
+		return loadCanonicalProfile(path)
+	}
+	if info.Mode().Perm() != 0600 {
 		return nil, Code("credentials_rejected")
 	}
 	raw, err := os.ReadFile(path)

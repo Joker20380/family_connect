@@ -172,6 +172,45 @@ production procedure. No production migration, pause, restart, floor operation, 
 Android, readiness or canary action by this checkpoint. Material observations must be
 refreshed for any future permit. READY_FOR_OWNER_LIVE remains false.
 
+### Gateway secure reader and committed-source capsules
+
+Snapshot checkpoint `ff792db15e03690c977b2bdb154ab6b56d48abaa` is pushed; remote SHA
+verified. The tracked gateway credential-loader file is byte-identical to the retained
+accepted gateway source at entry (hash782bb9cd43ff2c4668efcbfef5aebdef8b29e2f8bb4b9cd5686754baebbc7732).
+The narrow reader change admits the canonical root-owned group-read contract only
+through a descriptor-based guard: secure ancestry, exact parent/file metadata,
+no symlink or hardlink, no nested mount, no actual xattrs or unsupported policy flags,
+bounded read and file/parent identity rechecks. Existing owner-private loading remains
+for the explicit rollback route; no automatic path fallback or directory writer is added.
+Other target platforms fail closed on this new group-read mode; no client build or
+desktop feature/release work is performed.
+
+Qualification uses the accepted gateway's Go1.26.1 toolchain, cached pinned dependencies,
+an isolated root container without external network, and fresh disposable Family TLS
+fixtures. **12 focused native tests with26 subcases PASS**, covering reader read-only
+access, unrelated publisher denial, negative metadata/link/xattr inputs, mount-boundary
+rejection, Family TLS initialization/reload, and existing mTLS/binding/lease controls.
+The initial local guard rejection came from overlayfs's xattr sizing probe reporting
+space for hidden internal entries while the actual name list is empty. The guard now
+checks the bounded **returned list**, as the Python reader does; actual xattrs/ACLs remain
+rejected and are exercised negatively. No production permission was weakened.
+
+Two byte-identical builds of each unbound Python capsule from the exact snapshot commit:
+
+| Capsule | SHA256 | Bytes | Members |
+| --- | --- | --- | --- |
+| Bounded maintenance | `9afd6a7903bf88b98be4f5247697935e904942d780fe5e954049152fd60994f0` | 201792 | 26 |
+| Canonical snapshot | `49e91005fdad21ba71b20d233fe042a3968b87d5dba2a8b188a0d581416f61cb` | 167573 | 26 |
+
+Exact member/manifest hashes, import/help, absent operation permits/production config,
+privacy and licenses/notices PASS. These are retained **unbound intermediate artifacts**,
+not the historical maintenance package and not a permission to deploy partially.
+Gateway executable and renewal controller/node artifacts remain to be assembled and
+qualified as a coherent set with fixed route/source pins. No new production binary,
+locator, permission, reader group, backup, timer pause, restart or floor operation.
+The recorded live observation remains time-bounded; fresh production preflight is still
+required. Same checkpoint, no migration acceptance, no owner phone procedure.
+
 ## Split-boundary writer inventory — 28 October
 
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_PROFILE_WRITER_CONFLICT /
