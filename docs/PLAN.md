@@ -4,18 +4,23 @@
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
 **Current substep BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
-OWNER_AWARE_MAINTENANCE_SOURCE_READY / LIVE_WRITES_NOT_RUN.**
-Continuation from8acd6b0: control ownership and material ownership separated.
-Root-private fixed configuration/package/journal; live material metadata explicitly
-pinned, existing lock required, metadata-preserving atomic replacement/rollback.
-No chown/chmod of existing live files; unsupported ACL/xattrs/flags fail closed.
-369 affected tests PASS,33 existing deselections; no historical full suite or platform
-build. Historical package a39ea951 is immutable and NOT production-compatible.
-Source gate only so far; no production access/write/credential/permit this continuation.
-NEXT within the authorized checkpoint: deterministic new unbound package, then fresh
-read-only ownership/material/service preflight; at most one floor-only transaction
-if every gate passes. No canary activation or phone action.
-[Ownership source contract](releases/2026-10-27-android106-beta-0-canary-1.md#owner-aware-maintenance-source-gate--28-october).
+BLOCKED_MAINTENANCE_ROUTE_UNAVAILABLE / LIVE_WRITES_NOT_RUN.**
+Owner-aware source73ae964 and deterministic unbound package75dd8dec PASS.
+369 affected tests PASS/33 existing deselections; historical packagea39ea951 retained
+unchanged and forbidden for production. Live ownership is no longer assumed root.
+Fresh3 observations across126s: accepted service/process/argv/source stable, ledger0/0,
+cohort0/10, owner certificates0. CRL27215/RU sequence27215, NL floor27088; matching
+signed RU/NL material and parser PASS, minimum lifetime7667s at final readback.
+New exact route blocker: immediate material parent is group-writable. Live files and
+existing lock are private, regular, single-link and service-owned; no unsupported
+extended file metadata. The secure-parent guard correctly rejects this configuration.
+No guard weakening or chmod/chown; backup/config/permit/bound package/credential and
+maintenance transaction NOT_RUN, budget0/1. No-write proof PASS, protected registry,
+owner scope, CRL/directory/profile, ownership and service/snapshot unchanged.
+STOP. NEXT — separately authorized secure-parent boundary correction or alternative
+reviewed route; do not alter the live parent automatically. No phone instruction,
+canary activation or request for ГОТОВ.
+[Ownership maintenance receipt](releases/2026-10-28-android106-beta-0-canary-ownership-maintenance.json).
 
 **Historical read-only input — BETA-0-CANARY-1 / OWNER_CANARY_BOUND_READONLY /
 BLOCKED_CRL_PROFILE_COMPATIBILITY / LIVE_WRITES_NOT_RUN.**

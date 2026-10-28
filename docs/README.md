@@ -1,13 +1,16 @@
 # Documentation
 
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
-**OWNER_CANARY_BOUND_READONLY / OWNER_AWARE_MAINTENANCE_SOURCE_READY.**
-Root-private control and explicitly pinned service-owned material domains are now
-separate; atomic replacement/rollback preserve metadata, existing lock required,
-unsupported ACL/xattrs/flags rejected.369 affected tests PASS/33 existing deselections.
-Historical package is retained but not production-compatible. NEXT: new deterministic
-unbound package, fresh preflight and at most one authorized floor-only reconciliation
-if all gates pass. No canary writes/phone actions or service restart.
+**OWNER_CANARY_BOUND_READONLY / BLOCKED_MAINTENANCE_ROUTE_UNAVAILABLE.**
+Owner-aware source/package gate PASS:369 affected tests,33 existing deselections;
+new unbound package75dd8dec, historical package retained/not production-compatible.
+Fresh three-observation preflight found an unsafe group-writable material parent.
+Files/lock metadata and extended-metadata checks otherwise pass. Secure-parent guard
+is preserved; no live chmod/chown, backup/config/permit/credential or transaction.
+Ledger0/0, owner certificates0, CRL27215/floor27088 unchanged; no-write proof PASS.
+NEXT: separately authorize parent-boundary correction or another reviewed safe route.
+No phone instruction or live canary action.
+[Ownership maintenance receipt](releases/2026-10-28-android106-beta-0-canary-ownership-maintenance.json).
 [Fresh baseline/route receipt](releases/2026-10-28-android106-beta-0-canary-maintenance-baseline.json).
 [Historical PID stop](releases/2026-10-28-android106-beta-0-canary-maintenance.json).
 

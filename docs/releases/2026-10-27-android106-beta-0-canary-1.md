@@ -1,5 +1,63 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Owner-aware fresh production preflight — 28 October
+
+**OWNER_CANARY_BOUND_READONLY / BLOCKED_MAINTENANCE_ROUTE_UNAVAILABLE /
+LIVE_WRITES_NOT_RUN.** Same BETA-0-CANARY-1; source gate DONE, production floor
+reconciliation NOT_RUN. [Sanitized receipt](2026-10-28-android106-beta-0-canary-ownership-maintenance.json).
+
+Source commit `73ae9645564b0d4e2891b42d532fede1954de109` pushed; remote SHA verified.
+Two independent unbound builds from that exact commit are byte-identical:
+
+| Property | Result |
+|---|---|
+| Binding / permit / production configuration | unbound / null / absent |
+| Members / bytes | 25 / 174944 |
+| SHA256 | `75dd8dec59062a6cb73c785dcd8e539b23ab03260fcd48898bb9330cb1ca9f6c` |
+| Manifest SHA256 | `3a3a6d5bc94ccd979a31e8524fbd350622617de201a653fbac4a305c3f325cd6` |
+| Manifest/member hashes, deterministic metadata, import/help | PASS |
+| Operational invocation without a permit | DENIED / INVALID_PERMIT |
+
+The historical a39ea951 package remains byte-identical and prohibited for production.
+No bound maintenance package or time-bound permit was built in this continuation.
+
+Fresh read-only production observations at three points across126s confirm the
+accepted Friends process and source/argv/unit/runtime/health baseline. No repeat
+owner lookup/status; the private binding remains unchanged, exact106 is the prior
+accepted authenticated observation. Paid ledger0/0, cohort0/10, owner certificates0
+and scoped readiness unchanged. RU sequence/CRL and NL embedded CRL27215 match;
+NL minimum remains27088. Exact CRL hash
+`43210026e66566ff8b7ebf3695e2485fcfeb3e166cb347ffa3be123998b18b15`, directory hash
+`ceb4f6baab137b8d079f2cfc88c3a4a9cfce676d32505629f505bd9d6a3bac31`.
+Signature/issuer/bindings/actual parser PASS; minimum remaining material lifetime7667s
+at final readback. This observation is not a lasting material-freshness guarantee.
+
+**Blocking predicate: MATERIAL_PARENT_GROUP_WRITABLE.** Profile, directory and the
+existing synchronization lock have the expected service ownership, private file
+modes, single links and no unsupported extended metadata. However, the immediate
+material parent permits group writes. The committed guard requires non-group/world-
+writable parents and correctly rejects it. Pinning its current metadata does not
+make this unsafe mode acceptable. The initial private observer also tested an extra
+snapshot-account equality assumption; it was replaced by explicit service-owner
+metadata qualification without changing the source guards. The final localized
+failure is the parent-write predicate, not file ownership or missing-lock ambiguity.
+No numeric owner/group values, account names or operational paths are published.
+
+Stopped before fresh backup, fixed config installation, write permit, temporary key
+or production transaction. Attempts0/1; rollback not needed; no active maintenance
+credential was installed. No chmod/chown of live objects or parents, no CRL generation,
+sequence change, RU write, paid event, readiness call, Android action, restart/reload
+or snapshot-route mutation. Final readback proves protected registry and owner scope,
+service/process and snapshot configuration, material bytes/floor and metadata unchanged.
+Only unrelated concurrent chat challenge/sequence activity changed; global table
+identity is not claimed. The read-only monitor remains active and current; NL registry
+is explicitly UNAVAILABLE, not zero.
+
+NEXT: separately authorize a secure material-parent boundary correction or an
+alternative reviewed route preserving the trust requirements. Do not weaken validation
+or modify live ownership/permissions automatically. Repeat fresh preflight afterwards.
+READY_FOR_OWNER_LIVE is not reached; no instruction to open the app or reply ГОТОВ.
+
 ## Owner-aware maintenance source gate — 28 October
 
 Continuation from `8acd6b0a242685d18da6ec79a72ed2f57493b775`, same checkpoint.

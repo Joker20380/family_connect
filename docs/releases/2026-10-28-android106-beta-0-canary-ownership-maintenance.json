@@ -1,0 +1,172 @@
+{
+  "alias": "OWNER_CANARY_1",
+  "checkpoint": "ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1",
+  "entry_main": "8acd6b0a242685d18da6ec79a72ed2f57493b775",
+  "historical_package": {
+    "production_use": "FORBIDDEN",
+    "sha256": "a39ea9515f7a7ed3b674322a6d4e007d2a230b3f90366390a28e0c92e81b114c",
+    "unchanged": true
+  },
+  "maintenance": {
+    "action": "NOT_RUN",
+    "backup": "NOT_CREATED",
+    "bound_package": "NOT_CREATED",
+    "bound_permit": "NOT_CREATED",
+    "credential": "NOT_INSTALLED",
+    "credential_removal": "NOT_APPLICABLE",
+    "maximum_apply_attempts": 1,
+    "production_apply_attempts": 0,
+    "rollback": "NOT_REQUIRED"
+  },
+  "materials": {
+    "classification": "CRL_FLOOR_RECONCILIATION_REQUIRED",
+    "crl_sha256": "43210026e66566ff8b7ebf3695e2485fcfeb3e166cb347ffa3be123998b18b15",
+    "directory_sha256": "ceb4f6baab137b8d079f2cfc88c3a4a9cfce676d32505629f505bd9d6a3bac31",
+    "minimum_crl_after": 27088,
+    "minimum_crl_before": 27088,
+    "minimum_remaining_seconds": 7667,
+    "nl_embedded_crl_number": 27215,
+    "observed_at": 1793185205,
+    "ready_for_owner_live": false,
+    "ru_crl_number": 27215,
+    "ru_sequence_matches": true,
+    "signatures_bindings_parser": "PASS",
+    "valid_at_readback": true
+  },
+  "monitoring": {
+    "completed_at": "2026-10-28T10:59:31.307576+00:00",
+    "production_writes": 0,
+    "sources": [
+      {
+        "observed_at": "2026-10-28T10:59:27.880856+00:00",
+        "registry_status": "ok",
+        "source": "gateway-ru",
+        "status": "IMPORTED"
+      },
+      {
+        "observed_at": "2026-10-28T10:59:29.930972+00:00",
+        "registry_status": "unavailable",
+        "source": "gateway-nl",
+        "status": "IMPORTED"
+      }
+    ],
+    "timer_active": true
+  },
+  "next": "Separately authorize a secure material-parent boundary correction or alternative reviewed route; do not weaken guards or change live metadata automatically. No phone action.",
+  "no_write_proof": {
+    "android_actions": 0,
+    "backup_created": false,
+    "binding_unchanged": true,
+    "cohort": 0,
+    "credentials_installed": 0,
+    "ledger": {
+      "events": 0,
+      "subscriptions": 0
+    },
+    "material_metadata_unchanged": true,
+    "monitor_read_only": true,
+    "nl_service_unchanged": true,
+    "ordinary_concurrent_changed_tables": [
+      "chat_challenges",
+      "chat_sequence"
+    ],
+    "owner_certificate_and_readiness_unchanged": true,
+    "owner_certificates": 0,
+    "paid_events_created": 0,
+    "production_apply_attempts": 0,
+    "production_mutations": 0,
+    "profile_crl_directory_unchanged": true,
+    "protected_registry_unchanged": true,
+    "protected_tables": [
+      "devices",
+      "invites",
+      "device_support",
+      "restricted_grants",
+      "paid_beta_subscriptions",
+      "paid_beta_events",
+      "restricted_crl_sequence"
+    ],
+    "readiness_calls": 0,
+    "restart_reload_calls": 0,
+    "result": "PASS",
+    "ru_sequence_unchanged": true,
+    "schema": 1,
+    "service_baseline_unchanged": true,
+    "snapshot_configuration_unchanged": true
+  },
+  "ownership": {
+    "boundary_guard": "FAIL_CLOSED",
+    "contract": "BLOCKED_PARENT_SAFETY",
+    "existing_lock": "PRESENT_PRIVATE_REGULAR_SINGLE_LINK",
+    "file_extended_metadata": "PASS_NO_UNSUPPORTED_METADATA",
+    "live_files": "SERVICE_OWNED_PRIVATE_REGULAR_SINGLE_LINK",
+    "live_ownership_changes": 0,
+    "live_permission_changes": 0,
+    "material_parent_group_writable": true,
+    "material_parent_world_writable": false,
+    "metadata_stable_observations": 3
+  },
+  "package": {
+    "binding": "unbound",
+    "determinism": "PASS",
+    "manifest_sha256": "3a3a6d5bc94ccd979a31e8524fbd350622617de201a653fbac4a305c3f325cd6",
+    "manifest_validation": "PASS",
+    "member_hashes": {
+      "LICENSE": "cfe0da6ed33d20d2b6a97ab5363e204660f0c9987469724c92938a846a1afcb4",
+      "THIRD_PARTY_NOTICES.md": "ff178d44895279252b303c7488c887f995d6bcd95977a9f04cc2ada88c58e316",
+      "__main__.py": "f7419dff5b45bc177aaa9270543fb2dbeca8d9778ce256ea390865b67b711580",
+      "control/": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "control/friends/": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "control/friends/__init__.py": "efb76720b2ad1c9594aee9488b342e3311ed01a4bff3082c2fa3999663354cc8",
+      "control/friends/access.py": "b70e7d210c9347602ba2c8531454f5e01d0eeb18556eaffc71ea1c4995bea900",
+      "control/friends/paid_beta.py": "a30b804d0b9e44ff76411731fb469f4ba930a5b1bca301386ea81382379af45e",
+      "control/friends/paid_beta_canary.py": "e7cee9d29155fc6a1f8e14ae12b863234b893026bf3ffe9644c2f144e6d8e711",
+      "control/friends/paid_canary_crl.py": "81b26ba72636f325d107aaa1131bc99b754480251c542c4ea819d219add7124b",
+      "control/friends/readiness_receipts.py": "16e4556af6d914e7411b3563bef44efebd2a8ba2d7dda1d0faa4f4e100ceb660",
+      "control/friends/restricted.py": "57570d455a69d91a9a8d971a83d7d28153610ded55cb4208138d6d8c36658155",
+      "control/friends/restricted_admin.py": "4c14e4d8c1dbb9cec13009ef2cc3495690ed6a39e8cb7ca33dcd503964fad801",
+      "control/friends/restricted_maintenance.py": "183c68ae9956db87544f22948f0073b206e05bca3a5207eaf698dc269c92355d",
+      "control/friends/support_ids.py": "cab3cef66085ac11253d3ce8a41d636769f040841fe839a96e03e536939aa169",
+      "control/requirements.lock": "5adccf995e9634be711ae3167229cca0d2751b493c3a041dd68c745ec44ad94a",
+      "device_identity/": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "device_identity/__init__.py": "3cd56edaf5fbfde9c88df7078dc55be15bf23cfc830727ee410bc8f31dc9990f",
+      "device_identity/device.py": "38e29e640c913c1331164aa36fde0ca95b1d13ee057ae92c3d31ec7b993151d3",
+      "device_identity/requirements.lock": "8133533475c48477f7ccf6d65a5c426a2511ceea61f6539c1667b3a6900a77be",
+      "operation-permit.json": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "provisioning/": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "provisioning/__init__.py": "a8d11b35f8be63395d505bcf0cf7774aa5c0dbffa5eee905eef911a8d3fdb905",
+      "provisioning/friends_catalog.py": "811cc33d24dd0351166bed48cfba17f84bfd19d7ebf66a639a386f733907e46c"
+    },
+    "members": 25,
+    "operation_permit": null,
+    "operational_invocation": "DENIED",
+    "production_configuration": "absent",
+    "sha256": "75dd8dec59062a6cb73c785dcd8e539b23ab03260fcd48898bb9330cb1ca9f6c",
+    "size": 174944,
+    "smoke": "PASS",
+    "source_commit": "73ae9645564b0d4e2891b42d532fede1954de109"
+  },
+  "reason": "MATERIAL_PARENT_GROUP_WRITABLE",
+  "result": "BLOCKED_MAINTENANCE_ROUTE_UNAVAILABLE",
+  "safe_ref": "dev_fa4f7e03ca04",
+  "schema": 1,
+  "service": {
+    "archive_sha256": "dcd769986a1da7cb1662c0f73d18a88e9f73485a977db937ca5b1428c1fd1029",
+    "baseline": "FRESH_FRIENDS_BASELINE_ACCEPTED_WITH_UNATTRIBUTED_CLEAN_RESTART",
+    "checkpoint_restart_reload_calls": 0,
+    "observation_window_seconds": 126,
+    "same_accepted_process": true,
+    "source_argv_units_runtime_health": "PASS",
+    "stable_observations": 3
+  },
+  "source_gate": "PASS",
+  "tests": {
+    "deselected": 33,
+    "deselection_scope": "existing native and extended_directory_lifetime_security_parity",
+    "full_historical_suite": "NOT_RUN",
+    "maintenance": 124,
+    "ownership_environment": "isolated root container, network disabled",
+    "package_gateway_crl_directory_paid_readiness": 245,
+    "total_pass": 369
+  }
+}
