@@ -1,7 +1,14 @@
 # Documentation
 
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
-**OWNER_CANARY_BOUND_READONLY / BLOCKED_PROFILE_WRITER_CONFLICT.**
+**COORDINATED_CANONICAL_PROFILE_SOURCE_IN_PROGRESS / LIVE_WRITES_NOT_RUN.**
+The owner now authorizes coordinated renewal/gateway/snapshot/maintenance migration,
+not a snapshot-only split. Fresh exact graph and first shared transaction-core source
+step completed;172 affected tests PASS. Remaining source integrations, packages and
+production gates are unfinished; all production budgets remain unspent. No phone action.
+[Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).
+
+Historical entry: **OWNER_CANARY_BOUND_READONLY / BLOCKED_PROFILE_WRITER_CONFLICT.**
 Pre-source read-only inventory proves an active approved credential-renewal writer
 of the exact live profile;13 source hashes and controller/node pins match. The running
 gateway also reads that profile. Snapshot-only migration would detach its view from

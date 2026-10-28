@@ -10,7 +10,7 @@ import zipfile
 from scripts.package_paid_canary_crl import ROOT, SOURCES as HELPER_SOURCES, PARSER_SOURCE, parser_projection
 from control.friends.restricted_maintenance import encode, strict, validate_permit
 
-SOURCES = (*HELPER_SOURCES, 'control/friends/restricted_maintenance.py')
+SOURCES = (*HELPER_SOURCES, 'control/friends/restricted_maintenance.py', 'control/friends/profile_store.py')
 
 
 def build(output, ref, *, permit=None, repository=ROOT):

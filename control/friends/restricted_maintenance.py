@@ -326,40 +326,8 @@ class Configuration:
 
 
 def atomic_material_replace(config, raw, *, before_replace):
-    path = config.profile
-    config.read_material(path, 49152)
-    parents = config.parents(path)
-    parent_fd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
-    pending = '.' + path.name + '.' + secrets.token_hex(12)
-    try:
-        require(metadata(os.fstat(parent_fd)) == parents[str(path.parent)], 'MATERIAL_METADATA_MISMATCH')
-        descriptor = os.open(pending, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=parent_fd)
-        with os.fdopen(descriptor, 'wb') as output:
-            try:
-                os.fchown(output.fileno(), config.profile_uid, config.profile_gid)
-                os.fchmod(output.fileno(), config.profile_mode)
-                config.verify_material_fd(path, output.fileno())
-            except (OSError, MaintenanceError):
-                raise MaintenanceError('MATERIAL_TEMP_METADATA_FAILED') from None
-            output.write(raw)
-            output.flush()
-            os.fsync(output.fileno())
-        require(config.parents(path) == parents, 'MATERIAL_METADATA_MISMATCH')
-        before_replace()
-        require(config.parents(path) == parents, 'MATERIAL_METADATA_MISMATCH')
-        descriptor = os.open(pending, os.O_RDONLY | os.O_NOFOLLOW, dir_fd=parent_fd)
-        with os.fdopen(descriptor, 'rb') as source:
-            config.verify_material_fd(path, source.fileno())
-            require(source.read(len(raw) + 1) == raw, 'MATERIAL_TEMP_METADATA_FAILED')
-        os.replace(pending, path.name, src_dir_fd=parent_fd, dst_dir_fd=parent_fd)
-        os.fsync(parent_fd)
-        require(config.read_material(path, 49152) == raw, 'MATERIAL_METADATA_MISMATCH')
-    finally:
-        try:
-            os.unlink(pending, dir_fd=parent_fd)
-        except FileNotFoundError:
-            pass
-        os.close(parent_fd)
+    from .profile_store import atomic_profile_replace
+    atomic_profile_replace(config, raw, before_replace=before_replace, error_type=MaintenanceError)
 
 
 def profile_material(raw, directory_raw, now):

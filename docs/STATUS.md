@@ -2,7 +2,24 @@
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
-**Current substep BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
+**Current substep BETA-0-CANARY-1 — COORDINATED_CANONICAL_PROFILE_SOURCE_IN_PROGRESS /
+LIVE_WRITES_NOT_RUN.** Owner authorizes coordinated migration, superseding the
+snapshot-only proposal; the checkpoint and top-level task are unchanged.
+Fresh read-only entry at4439242 confirms the legitimate renewal writer, active
+schedule/latest success,13 exact source pins, gateway reader and independent publisher.
+CRL/sequence27216, floor27088, paid ledger0/0 and owner certificates0 at entry;
+material headroom11254s is an observation, not a future permit.
+First source step: shared atomic profile replacement, canonical locator/lock contract,
+CRL-monotonic target builders and read-only directory-rotation validation.
+Existing bounded maintenance now delegates its replacement primitive; its old layout
+contract remains intentionally nondeployable.45 new +124 existing maintenance/snapshot
+tests and3 package tests PASS. Production writes/restarts/timer pauses/floor operations0.
+Renewal integration/pins, gateway reader, snapshot route, bounded maintenance redesign,
+coordinated packaging and production gates remain unfinished. No migration or READY
+claim, no second authoritative profile, no owner phone instruction or stage0.
+[Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).
+
+**Historical entry BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
 BLOCKED_PROFILE_WRITER_CONFLICT / LIVE_WRITES_NOT_RUN.**
 Read-only continuation from9205588 stopped at the required pre-source writer gate.
 The active approved credential-renewal schedule reaches the existing root RPC;

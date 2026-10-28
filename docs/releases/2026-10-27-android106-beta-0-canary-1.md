@@ -1,5 +1,60 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Coordinated canonical-profile migration — 28 October
+
+**SOURCE_IN_PROGRESS / LIVE_WRITES_NOT_RUN; NOT READY_FOR_OWNER_LIVE.**
+Continuation from44392427b8082f21cfe3d6c321efd86938e9cb63 in the same checkpoint.
+The owner supersedes the cancelled snapshot-only proposal with one coordinated
+profile route for renewal, gateway, snapshot, bounded maintenance and future exact CRL
+delivery. The publisher directory must remain independent and unchanged.
+[Sanitized migration receipt](2026-10-28-android106-beta-0-canary-canonical-profile.json).
+
+### Fresh graph and first source step
+
+- Read-only inventory confirms all13 deployed renewal source members match local
+  accepted source and controller/node pins. Renewal timer active, latest service success,
+  inspected NL owner/plan/files markers absent. No stage/promote RPC invoked.
+- Gateway executable remains96754942e7518233bc702277d860b0c9b740fb7553c9742b2ae642a0746fe367.
+  The retained accepted binary matches that running identity. Its credential loader
+  accepts only owner-private mode; the new reader-group contract therefore requires
+  a narrowly qualified reader-source change, not merely an argv substitution.
+- Fresh entry observes RU/NL CRL27216/floor27088, paid ledger0/0, owner certificates0,
+  certificate horizon clear, minimum material headroom11254s. These are time-bounded
+  observations, not a write permit or a refreshed Android observation. No Android action.
+- `control/friends/profile_store.py` introduces a root-controlled locator, existing
+  shared-lock validation, CAS/metadata/permit rechecks, same-directory exclusive temp,
+  metadata-before-write, fsync/replace/readback and transaction receipt callbacks.
+  Renewal/equal-or-higher CRL, floor-only and strictly increasing exact-CRL builders
+  align the target floor. The directory port exposes no mutation operation and accepts
+  valid forward publisher rotations; invalid post-write directory causes exact profile
+  rollback without restoring/chmod/chown of directory material.
+- Existing bounded maintenance delegates its atomic replacement to the shared primitive.
+  Its legacy same-parent/byte-identity assumptions have **not yet** been replaced;
+  neither the historical package nor this intermediate source is a migration permit.
+
+### Bounded validation and unfinished gates
+
+45 new core tests and124 existing maintenance tests PASS in an isolated root container,
+without network or production-state mounts. This includes all3 exact retained snapshot
+contract checks and the existing14400 parser matrix.3 package tests PASS, including
+byte-identical synthetic committed-source builds and import/help/manifest checks.
+The first container invocation lacked Git for package fixtures; those3 fixture errors
+were corrected by running the package suite in the existing locked host environment.
+The initial optional snapshot skips were eliminated by supplying the hash-verified
+generic archive; no production material was passed to tests. No full historical suite,
+Linux/Windows tests or Android build.
+
+This is a **source checkpoint, not release or migration acceptance**. Remaining:
+accepted renewal integration and pins; canonical gateway/snapshot readers; maintenance
+and exact-CRL integration; full affected-source gates; committed-source deterministic
+production-candidate artifacts; fresh preflight and private backup; one coordinated
+timer pause/cutover/resume; bounded floor reconciliation; old-route retirement; final
+readback and owner readiness. No secure production parent/group/lock/locator, backup,
+credential or permit created; no profile/directory/RU/paid write, timer pause, service
+restart, Android action, readiness request or canary stage0. Current production versions
+and routes remain the rollback baseline; no deployment rollback is needed at this step.
+Do not substitute source-unit success for end-to-end reader/writer alignment.
+
 ## Split-boundary writer inventory — 28 October
 
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_PROFILE_WRITER_CONFLICT /
