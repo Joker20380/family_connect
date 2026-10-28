@@ -1,7 +1,24 @@
 # Documentation
 
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
-**Current substep BETA-0-CANARY-1 — READY_FOR_OWNER_LIVE / LIVE_CANARY_WRITES_NOT_RUN.**
+**Current substep BETA-0-CANARY-1 — OWNER_READY_RECEIVED /
+BLOCKED_EXISTING_CERTIFICATE_HORIZON / LIVE_WRITES_NOT_RUN.**
+Owner replied ГОТОВ after accepted canonical migration. Fresh read-only entry at
+20:36:58UTC28.10: same owner binding/exact Android106, ledger0/0, cohort0/10,
+but owner certificates1/valid1 (previously0 at20:20:38); NotAfter23:10:09UTC28.10.
+Issuance cause is not established; this does not prove the owner pressed Connect.
+Canonical/gateway/actual SSH snapshot PASS, renewal timer active/latest success,
+publisher directory route unchanged; CRL/floor27219, material headroom9194s.
+Migration acceptance remains valid; this is a separate live-entry horizon blocker.
+No stage0/paid event, permit, temporary credential, fresh canary backup, restart,
+timer change, CRL mutation or operator readiness/Android action in this continuation.
+STOP before mutation. Do not delete/revoke the certificate or refresh materials.
+NEXT: resolve the horizon with a fresh readback; explicitly agree stage0 paid period
+and observation/stop bounds (no default or bound permit exists), then fresh preflight
+and a new canary backup immediately before an authorized apply. No automatic retry.
+[Owner-ready read-only receipt](releases/2026-10-28-android106-beta-0-canary-owner-ready.json).
+
+**Accepted migration milestone at3996fa0 — READY_FOR_OWNER_LIVE / LIVE_CANARY_WRITES_NOT_RUN.**
 PINNED_VENV_RUNTIME_PASS / SNAPSHOT_LAUNCHER_ACCOUNT_REHEARSAL_PASS /
 CANONICAL_PROFILE_MIGRATED / RENEWAL_GATEWAY_SNAPSHOT_ALIGNED / CRL_FLOOR_ALIGNED.
 Same checkpoint; previous rollback is historical and remains accepted.
@@ -23,8 +40,8 @@ gateway cutover restart1/1, emergency rollback0/1. No automatic second cutover.
 Final20:20:38UTC28.10: embedded CRL/floor27219, material headroom10170s;
 ledger0/0, cohort0/10, owner certificates0, binding/exact Android106 unchanged.
 No paid/readiness/Android/stage0 action, RU CRL/sequence mutation or Friends HTTP restart.
-STOP. NEXT only after owner replies **ГОТОВ**: fresh canary backup, stage0 natural-expiry
-activation and coordinated phone procedure. Do not start stage0 automatically.
+Historical NEXT at3996fa0 was owner ГОТОВ; that reply is now received.
+The current live-entry certificate-horizon gate above supersedes that pending handoff.
 [Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).
 
 Historical entry: **OWNER_CANARY_BOUND_READONLY / BLOCKED_PROFILE_WRITER_CONFLICT.**

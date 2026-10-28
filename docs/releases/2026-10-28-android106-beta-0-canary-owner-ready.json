@@ -1,0 +1,84 @@
+{
+  "actions_this_continuation": {
+    "android_actions_by_operator": 0,
+    "backups": 0,
+    "certificate_deletion_or_revocation": 0,
+    "credential_installed": false,
+    "crl_generation": 0,
+    "crl_sequence_mutations": 0,
+    "friends_http_restarts": 0,
+    "gateway_restarts": 0,
+    "paid_events": 0,
+    "permit_created": false,
+    "production_writes": 0,
+    "readiness_calls_by_operator": 0,
+    "stage0": "NOT_RUN",
+    "timer_changes": 0
+  },
+  "canonical_migration": "ACCEPTED_UNCHANGED",
+  "checkpoint": "BETA-0-CANARY-1",
+  "entry_main": "3996fa05fcf6bef7ba660f8e78e9a614381ef274",
+  "live_canary_writes": "NOT_RUN",
+  "materials": {
+    "crl_number": 27219,
+    "crl_sha256": "35ffc42fac758970453afe906160da2b3fbcfd1dfcc88acb4a90565b60e5513f",
+    "directory_sha256": "17ab652498fb381346bdb870ca54a3c9d67442c56929ef1d2c3fa780bd5176be",
+    "historical_values_used_as_permit": false,
+    "minimum_crl": 27219,
+    "minimum_remaining_seconds": 9194,
+    "profile_sha256": "dae370a07fbc36d3ebf7021998d9b99497f391794cd0bef02ef3d4602cc20a0d",
+    "signatures_bindings_directory": "PASS"
+  },
+  "observed_at": "2026-10-28T20:36:58+00:00",
+  "owner": {
+    "binding": "UNCHANGED",
+    "certificates": 1,
+    "connect_action": "NOT_INFERRED",
+    "exact_android106": "FRESH_READONLY_PASS",
+    "horizon": "BLOCKED_EXISTING_CERTIFICATE_HORIZON",
+    "issuance_cause": "NOT_ESTABLISHED",
+    "latest_not_after": "2026-10-28T23:10:09+00:00",
+    "previous_observation": {
+      "certificates": 0,
+      "observed_at": "2026-10-28T20:20:38+00:00"
+    },
+    "valid_certificates": 1
+  },
+  "owner_ready_received": true,
+  "paid": {
+    "cap": 10,
+    "cohort": 0,
+    "events": 0,
+    "subscriptions": 0
+  },
+  "remaining": [
+    "Resolve existing owner certificate horizon without deleting or revoking it.",
+    "Agree explicit stage0 paid period and observation/stop bounds; no default period or bound permit exists.",
+    "Repeat fresh preflight and create a new coordinated canary backup immediately before any authorized apply.",
+    "Do not start stage0, CRL delivery, recovery or phone Connect automatically."
+  ],
+  "result": "BLOCKED_EXISTING_CERTIFICATE_HORIZON",
+  "routes": {
+    "canonical": "ACTIVE",
+    "future_exact_crl": "DISABLED_NO_PERMIT",
+    "gateway": "HEALTHY_CANONICAL",
+    "publisher": "UNCHANGED_DIRECTORY_ROUTE",
+    "renewal": "ALIGNED_ACTIVE_TIMER",
+    "snapshot": "ACTUAL_SSH_PASS",
+    "temporary_credentials": 0
+  },
+  "safe_ref": "dev_fa4f7e03ca04",
+  "schema": 1,
+  "task": "ANDROID-CONTROLLED-BETA",
+  "validation": {
+    "canonical_and_actual_ssh": "PASS",
+    "diff_checks": "PASS",
+    "local_observer_correction": "SEQUENCE_LIST_SHAPE_FIXED_NO_PRODUCT_CHANGE",
+    "markdown_links": "PASS",
+    "privacy": "PASS",
+    "product_source_tests": "NOT_RERUN_DOCUMENTATION_ONLY",
+    "readonly_service_registry_owner": "PASS",
+    "staged_scope": "PASS",
+    "strict_json": "PASS"
+  }
+}

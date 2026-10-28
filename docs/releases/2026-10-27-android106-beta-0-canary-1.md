@@ -1,5 +1,42 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Owner ГОТОВ — fresh live-entry stop, 28 October
+
+**OWNER_READY_RECEIVED / BLOCKED_EXISTING_CERTIFICATE_HORIZON / LIVE_WRITES_NOT_RUN.**
+Entry main3996fa05fcf6bef7ba660f8e78e9a614381ef274. Same BETA-0-CANARY-1;
+no new PLAN ID, no new canary and no repeated migration operation.
+
+- Fresh read-only observation20:36:58UTC: protected ledger0/0, cohort0/10,
+  unchanged binding and fresh exact Android106 eligibility. One valid owner certificate
+  now exists; the accepted20:20:38 readback had none. Its NotAfter is23:10:09UTC28.10
+  (00:10:09 Brussels29.10), with more than1800 seconds remaining. The certificate
+  horizon is blocked. Its appearance is not evidence of a Connect press; no causal
+  attribution or absence of concurrent device activity is claimed.
+- Canonical gateway and actual account SSH snapshot PASS; strict profile/directory
+  signatures, bindings and times PASS. Renewal active/latest success, no pending
+  operation, source pins exact. Publisher directory route unchanged. CRL/floor27219,
+  headroom9194s. Canonical migration remains accepted; rollback is neither needed nor run.
+- Stage0 stopped before any production mutation. No paid event, permit/package,
+  rehearsal/write credential, backup, timer change, restart, CRL/sequence update,
+  operator readiness request or Android action. The existing certificate was not
+  deleted, revoked, shortened or replaced. Future exact-CRL route remains disabled
+  without a permit; this readback does not activate a CRL phase.
+- Private bound envelope still has permit=null. The runbook requires an explicit
+  paid period and observation/stop bounds; none is supplied in the recorded live
+  procedure. ГОТОВ satisfies phone readiness, not an invented duration. A new backup
+  is deferred until immediately before a fully specified, fresh-gated operation.
+- Read-only observer initially stopped on the new certificate, then completed a
+  diagnostic-only readback. Its local sequence comparison was corrected to the
+  existing one-element list shape; no production source or validation was changed.
+  Strict JSON, privacy scan, Markdown links, staged scope and diff checks PASS.
+  Product tests/builds are not rerun for this documentation-only result.
+
+STOP. Keep Connect unpressed. A later NotAfter+30s readback is only a candidate
+check, not automatic clearance: another issued certificate can extend the horizon.
+Explicit stage0 period/observation bounds, fresh materials and a fresh canary backup
+remain required before any apply. No automatic retry, activation, CRL or recovery.
+[Sanitized receipt](2026-10-28-android106-beta-0-canary-owner-ready.json).
+
 ## Coordinated canonical-profile migration — 28 October
 
 ### Final pinned-venv canonical acceptance — 20:20:38UTC28.10
@@ -61,9 +98,9 @@ failed cutover/accepted rollback and its spent budgets remain separate evidence.
   checks PASS (262);29 unchanged native directory cases deliberately deselected.
   Full historical suite and Android/Linux/Windows builds NOT_RUN.
 
-STOP. NEXT only after READY_FOR_OWNER_LIVE and owner reply **ГОТОВ**: fresh canary
-backup, stage0 natural-expiry activation and coordinated phone procedure. Do not start
-stage0 automatically. This is preparation acceptance, not paid/live-canary execution.
+Historical NEXT at this migration milestone was the owner reply **ГОТОВ**.
+That reply is received; the fresh live-entry stop above now controls continuation.
+This remains preparation acceptance, not paid/live-canary execution.
 
 ### Historical pinned venv runtime continuation — source checkpoint
 
