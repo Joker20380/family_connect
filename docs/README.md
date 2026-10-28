@@ -1,15 +1,16 @@
 # Documentation
 
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
-**OWNER_CANARY_BOUND_READONLY / BLOCKED_MAINTENANCE_ROUTE_UNAVAILABLE.**
-Owner-aware source/package gate PASS:369 affected tests,33 existing deselections;
-new unbound package75dd8dec, historical package retained/not production-compatible.
-Fresh three-observation preflight found an unsafe group-writable material parent.
-Files/lock metadata and extended-metadata checks otherwise pass. Secure-parent guard
-is preserved; no live chmod/chown, backup/config/permit/credential or transaction.
-Ledger0/0, owner certificates0, CRL27215/floor27088 unchanged; no-write proof PASS.
-NEXT: separately authorize parent-boundary correction or another reviewed safe route.
+**OWNER_CANARY_BOUND_READONLY / BLOCKED_MATERIAL_PARENT_HARDENING_UNSAFE.**
+Category B: GROUP_WRITE_REQUIRED_BY_LEGITIMATE_WRITER. The active non-root directory
+publisher relies on parent group-write for atomic export; source/binary provenance
+and isolated DAC reproduction PASS. Removing that bit would break a required writer.
+No chmod/chown, backup, permit, credential or transaction; parent and maintenance
+budgets remain0/1. Ledger0/0, owner certificates0, CRL27215/floor27088 unchanged.
+Source/package unchanged; no-write proof PASS. NEXT: separately authorize review
+of a secure material-layout/writer boundary, preserving the publisher and strict guard.
 No phone instruction or live canary action.
+[Parent hardening receipt](releases/2026-10-28-android106-beta-0-canary-parent-hardening.json).
 [Ownership maintenance receipt](releases/2026-10-28-android106-beta-0-canary-ownership-maintenance.json).
 [Fresh baseline/route receipt](releases/2026-10-28-android106-beta-0-canary-maintenance-baseline.json).
 [Historical PID stop](releases/2026-10-28-android106-beta-0-canary-maintenance.json).

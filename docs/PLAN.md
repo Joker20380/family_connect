@@ -4,23 +4,25 @@
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
 **Current substep BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
-BLOCKED_MAINTENANCE_ROUTE_UNAVAILABLE / LIVE_WRITES_NOT_RUN.**
-Owner-aware source73ae964 and deterministic unbound package75dd8dec PASS.
-369 affected tests PASS/33 existing deselections; historical packagea39ea951 retained
-unchanged and forbidden for production. Live ownership is no longer assumed root.
-Fresh3 observations across126s: accepted service/process/argv/source stable, ledger0/0,
-cohort0/10, owner certificates0. CRL27215/RU sequence27215, NL floor27088; matching
-signed RU/NL material and parser PASS, minimum lifetime7667s at final readback.
-New exact route blocker: immediate material parent is group-writable. Live files and
-existing lock are private, regular, single-link and service-owned; no unsupported
-extended file metadata. The secure-parent guard correctly rejects this configuration.
-No guard weakening or chmod/chown; backup/config/permit/bound package/credential and
-maintenance transaction NOT_RUN, budget0/1. No-write proof PASS, protected registry,
-owner scope, CRL/directory/profile, ownership and service/snapshot unchanged.
-STOP. NEXT — separately authorized secure-parent boundary correction or alternative
-reviewed route; do not alter the live parent automatically. No phone instruction,
-canary activation or request for ГОТОВ.
-[Ownership maintenance receipt](releases/2026-10-28-android106-beta-0-canary-ownership-maintenance.json).
+BLOCKED_MATERIAL_PARENT_HARDENING_UNSAFE / LIVE_WRITES_NOT_RUN.**
+Read-only continuation frombc6ea11: category B,
+GROUP_WRITE_REQUIRED_BY_LEGITIMATE_WRITER. The active gateway exports the live
+seed directory as a different non-root owner and relies on parent group write.
+Running binary matches the retained immutable binary;279-member source inventory
+verified. Its publisher creates a sibling temporary file and atomically renames it.
+No DAC override, world write or ACL bypass; removing group write would break that
+legitimate writer. Isolated synthetic DAC proof PASS (export allowed before, denied
+after removing only that bit). Category A is not met; chmod is NOT authorized.
+Parent/live metadata, sources, snapshot route and services remain unchanged.
+No safety/maintenance backup, bound permit/package, credential or transaction;
+parent corrections0/1, maintenance0/1, permission rollback0. Ledger0/0, cohort0/10,
+owner certificates0, CRL27215/floor27088 unchanged; no-write proof PASS.
+Accepted source73ae964/package75dd8dec audited unchanged; no product/source/build
+change. Materials valid with6315s minimum at final readback, not an owner-live PASS.
+STOP. NEXT — separately authorize a secure material-layout/writer-boundary review
+preserving the directory publisher and committed guard; no chmod/chown or guard
+weakening automatically. No phone instruction or canary activation.
+[Parent hardening receipt](releases/2026-10-28-android106-beta-0-canary-parent-hardening.json).
 
 **Historical read-only input — BETA-0-CANARY-1 / OWNER_CANARY_BOUND_READONLY /
 BLOCKED_CRL_PROFILE_COMPATIBILITY / LIVE_WRITES_NOT_RUN.**

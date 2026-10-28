@@ -1,5 +1,76 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Secure parent classification — 28 October
+
+**OWNER_CANARY_BOUND_READONLY / BLOCKED_MATERIAL_PARENT_HARDENING_UNSAFE /
+LIVE_WRITES_NOT_RUN.** Continuation from `bc6ea113b5f1e42e0faee6ad4c12987dead4befe`,
+not a new checkpoint. [Sanitized receipt](2026-10-28-android106-beta-0-canary-parent-hardening.json).
+
+Fresh read-only classification is exactly **B: GROUP_WRITE_REQUIRED_BY_LEGITIMATE_WRITER**.
+The material parent owner differs from the effective owner of the running gateway
+that exports the live seed directory. That non-root process belongs to the parent's
+write-enabled group, has no effective DAC-override capability and uses the exact live
+directory as its configured export target. Parent ACL/xattrs/unsupported flags are
+absent, there is no world write or alternate owner-write permission for this process,
+and upper-ancestor/mount/canonical-path checks pass. The private inventory retains
+account/group membership, process credentials and security context without publishing
+those identifiers. Profile, directory and existing lock remain private regular
+single-link service-owned files. The read-only snapshot command is a separate reader,
+not evidence that the directory has no other legitimate writer.
+
+Provenance of the required writer is verified independently of current-main assumptions:
+
+| Evidence | SHA256 / result |
+|---|---|
+| Running executable = retained accepted binary | `96754942e7518233bc702277d860b0c9b740fb7553c9742b2ae642a0746fe367` |
+| Retained source inventory, all279 members verified | `33de05072f68097669a38ce3d41f378deecd62375c61d48e85150b6fb95a8580` |
+| Gateway entry source | `aff554747a2c1a2f50e68c6a94b5299ede76c18442462e0dd7ae0f4436d34552` |
+| Directory-cache source | `79ab44cd607742080b53a78d46f8a0732dc201af9db15407aa2092731e110de5` |
+| Seed-manager source | `2e465921849c3aaa9832512417be3c9bd9de1f8fabc4330aa772aa5497dbed2b` |
+
+The running argv enables directory export. In the verified source, the publisher
+calls `Cache.Store`; this creates a sibling temporary file and renames it over the
+live directory export. Both require parent write/execute permission. No Git revision
+is embedded in this binary; provenance is the matched retained binary/source inventory,
+not an invented current-main build claim. Relevant unit/drop-ins, process identity,
+deployed maintenance source and snapshot forced-command inventories were inspected
+privately. A required non-root writer is sufficient to disprove safe category A;
+there is no claim to discover arbitrary privileged programs outside this bounded audit.
+
+An isolated, network-disabled synthetic DAC probe confirms atomic export succeeds
+with the group-write bit and fails with permission denied after removing only that
+bit. This changes disposable fixture permissions only; production chmod was never
+attempted. One initial read-only inventory probe had an escaping error and failed
+before execution; its corrected remote source was syntax-checked before successful
+readback. No source guard was modified or bypassed.
+
+Per the owner decision, category B stops before safety backup and any permission
+change. Parent correction0/1, maintenance operation0/1, permission rollback0;
+no fixed configuration, bound permit/package, temporary credential, CRL generation,
+RU mutation, paid event, readiness call, Android action or service restart/reload.
+No rollback is needed because nothing was applied. The accepted maintenance source
+`73ae9645564b0d4e2891b42d532fede1954de109` and unbound package75dd8dec remain exact;
+the historical root-only package remains forbidden. The accepted369 affected tests
+were not rerun for this documentation/read-only checkpoint. New checks are immutable
+artifact/source audit, isolated DAC proof, strict JSON/privacy/link/scope/whitespace
+validation; no full historical suite or platform build.
+
+Final authoritative readback: ledger0/0, cohort0/10, owner certificates0, retained
+binding unchanged and no repeated lookup/status call. Existing authenticated Android106
+acceptance is retained, not a new phone observation. CRL27215, RU sequence27215,
+NL floor27088 and exact signed CRL/directory hashes remain unchanged. Signatures,
+bindings and actual parser pass; minimum material lifetime6315s at final readback.
+Parent/live bytes and metadata, owner-specific certificate/readiness state, protected
+registry/policy/publisher state, Friends/NL services and snapshot authorization are
+unchanged. Unrelated concurrent chat/readiness activity is reported separately, not attributed
+to this checkpoint. Read-only monitoring remains active; NL registry remains explicitly
+UNAVAILABLE rather than zero. READY_FOR_OWNER_LIVE is not reached.
+
+NEXT: separately authorize review of a secure material-layout/writer boundary that
+preserves the live directory publisher while satisfying the committed maintenance
+guard. Do not simply remove its needed group permission, change ownership or weaken
+the guard. No automatic correction, app-open instruction or stage0 activation.
+
 ## Owner-aware fresh production preflight — 28 October
 
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_MAINTENANCE_ROUTE_UNAVAILABLE /

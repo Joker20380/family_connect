@@ -1,0 +1,184 @@
+{
+  "accepted_package": {
+    "audit": "PASS",
+    "binding": "unbound",
+    "historical_package_production_use": "FORBIDDEN",
+    "manifest_sha256": "3a3a6d5bc94ccd979a31e8524fbd350622617de201a653fbac4a305c3f325cd6",
+    "members": 25,
+    "permit": null,
+    "production_configuration": "absent",
+    "rebuilt": false,
+    "sha256": "75dd8dec59062a6cb73c785dcd8e539b23ab03260fcd48898bb9330cb1ca9f6c",
+    "size": 174944
+  },
+  "accepted_source": {
+    "commit": "73ae9645564b0d4e2891b42d532fede1954de109",
+    "unchanged": true
+  },
+  "alias": "OWNER_CANARY_1",
+  "checkpoint": "ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1",
+  "classification": {
+    "category": "B",
+    "classification": "GROUP_WRITE_REQUIRED_BY_LEGITIMATE_WRITER",
+    "hardening": "NOT_AUTHORIZED_BY_CLASSIFICATION",
+    "maintenance_operations": 0,
+    "mount_boundary": "PASS",
+    "nonroot_writer_parent_group_member": true,
+    "parent_acl_xattrs_absent": true,
+    "parent_corrections": 0,
+    "parent_owner_equals_writer": false,
+    "parent_unsupported_flags_absent": true,
+    "parent_world_write": false,
+    "permission_rollbacks": 0,
+    "profile_directory_lock": "PRIVATE_REGULAR_SINGLE_LINK",
+    "reason": "ACTIVE_DIRECTORY_EXPORT_WRITER_DEPENDS_ON_PARENT_GROUP_WRITE",
+    "result": "BLOCKED_MATERIAL_PARENT_HARDENING_UNSAFE",
+    "schema": 1,
+    "upper_ancestors": "PASS",
+    "writer_dac_override": false
+  },
+  "entry_main": "bc6ea113b5f1e42e0faee6ad4c12987dead4befe",
+  "maintenance": {
+    "bound_package": "NOT_CREATED",
+    "bound_permit": "NOT_CREATED",
+    "credential_removal": "NOT_APPLICABLE",
+    "maintenance_backup": "NOT_CREATED",
+    "maintenance_operation_budget": 1,
+    "maintenance_operations": 0,
+    "parent_correction_budget": 1,
+    "parent_corrections": 0,
+    "permission_rollbacks": 0,
+    "rollback": "NOT_REQUIRED",
+    "safety_backup": "NOT_CREATED_CLASSIFICATION_B",
+    "temporary_credential": "NOT_INSTALLED"
+  },
+  "materials": {
+    "crl_sha256": "43210026e66566ff8b7ebf3695e2485fcfeb3e166cb347ffa3be123998b18b15",
+    "directory_sha256": "ceb4f6baab137b8d079f2cfc88c3a4a9cfce676d32505629f505bd9d6a3bac31",
+    "minimum_remaining_seconds": 6315,
+    "new_floor": 27088,
+    "nl_embedded_crl_number": 27215,
+    "observed_at": "2026-10-28T11:22:37+00:00",
+    "old_floor": 27088,
+    "ready_for_owner_live": false,
+    "ru_crl_number": 27215,
+    "ru_stored_sequence_matches": true,
+    "validation": "SIGNATURE_ISSUER_BINDING_ACTUAL_PARSER_PASS"
+  },
+  "monitoring": {
+    "completed_at": "2026-10-28T11:22:16.004296+00:00",
+    "production_writes": 0,
+    "sources": [
+      {
+        "observed_at": "2026-10-28T11:22:12.497047+00:00",
+        "registry_status": "ok",
+        "source": "gateway-ru",
+        "status": "IMPORTED"
+      },
+      {
+        "observed_at": "2026-10-28T11:22:14.678274+00:00",
+        "registry_status": "unavailable",
+        "source": "gateway-nl",
+        "status": "IMPORTED"
+      }
+    ],
+    "timer_active": true
+  },
+  "next": "Separately authorize review of a secure material-layout/writer boundary preserving the directory publisher and strict maintenance guards. No parent chmod, ownership change or live canary action automatically.",
+  "no_write_proof": {
+    "android_actions": 0,
+    "backups_created": 0,
+    "cohort": 0,
+    "credentials_installed": 0,
+    "crl_directory_hashes_unchanged": true,
+    "ledger": {
+      "events": 0,
+      "subscriptions": 0
+    },
+    "live_file_bytes_and_metadata_unchanged": true,
+    "maintenance_operations": 0,
+    "monitor_readonly": true,
+    "ordinary_concurrent_changed_tables": [
+      "challenges",
+      "chat_challenges",
+      "chat_sequence",
+      "restricted_challenges",
+      "restricted_readiness_results"
+    ],
+    "owner_binding_unchanged": true,
+    "owner_certificate_readiness_unchanged": true,
+    "owner_certificates": 0,
+    "paid_events_created": 0,
+    "parent_corrections": 0,
+    "parent_metadata_and_extended_attributes_unchanged": true,
+    "permission_rollbacks": 0,
+    "production_mutations": 0,
+    "protected_registry_unchanged": true,
+    "protected_tables": [
+      "devices",
+      "invites",
+      "device_support",
+      "restricted_grants",
+      "paid_beta_subscriptions",
+      "paid_beta_events",
+      "restricted_crl_sequence"
+    ],
+    "readiness_calls": 0,
+    "restart_reload_calls": 0,
+    "result": "PASS",
+    "ru_crl_sequence_unchanged": true,
+    "schema": 1,
+    "services_unchanged": true,
+    "snapshot_route_and_authorization_unchanged": true,
+    "source_and_package_unchanged": true
+  },
+  "parent": {
+    "after": "UNCHANGED",
+    "ancestors_mounts": "PASS",
+    "before": "GROUP_WRITABLE_NOT_WORLD_WRITABLE",
+    "decision": "DO_NOT_CHMOD",
+    "extended_metadata": "NO_NONTRIVIAL_ACL_XATTR_OR_UNSUPPORTED_FLAGS",
+    "known_writer_depends_on_group_access": true,
+    "metadata_stable": true,
+    "owner_matches_required_directory_writer": false
+  },
+  "result": "BLOCKED_MATERIAL_PARENT_HARDENING_UNSAFE",
+  "safe_ref": "dev_fa4f7e03ca04",
+  "schema": 1,
+  "synthetic_dac_proof": {
+    "fixture": "ISOLATED_SYNTHETIC_ONLY",
+    "group_write_present": "ATOMIC_EXPORT_ALLOWED",
+    "group_write_removed": "ATOMIC_EXPORT_PERMISSION_DENIED",
+    "network": false,
+    "production_mutations": 0,
+    "result": "PASS",
+    "schema": 1
+  },
+  "validation": {
+    "accepted_affected_test_results": "369 PASS / 33 existing deselections; not rerun",
+    "full_suite_and_platform_builds": "NOT_RUN",
+    "immutable_artifact_audit": "PASS",
+    "isolated_dac_probe": "PASS",
+    "new_source_or_package_build": "NOT_RUN",
+    "product_source": "UNCHANGED",
+    "retained_writer_source_inventory": "PASS"
+  },
+  "writer_provenance": {
+    "argv_targets_exact_live_directory": true,
+    "cache_creates_sibling_temporary_file": true,
+    "cache_renames_sibling_over_directory": true,
+    "directory_publish_callback_present": true,
+    "inventory_member_count": 279,
+    "modules": {
+      "directory_cache": "79ab44cd607742080b53a78d46f8a0732dc201af9db15407aa2092731e110de5",
+      "gateway_main": "aff554747a2c1a2f50e68c6a94b5299ede76c18442462e0dd7ae0f4436d34552",
+      "seed_manager": "2e465921849c3aaa9832512417be3c9bd9de1f8fabc4330aa772aa5497dbed2b"
+    },
+    "provenance": "RETAINED_SOURCE_INVENTORY_AND_EXACT_RETAINED_BINARY",
+    "result": "PASS",
+    "retained_inventory_sha256": "33de05072f68097669a38ce3d41f378deecd62375c61d48e85150b6fb95a8580",
+    "running_binary_sha256": "96754942e7518233bc702277d860b0c9b740fb7553c9742b2ae642a0746fe367",
+    "schema": 1,
+    "vcs_revision_embedded": false
+  }
+}
