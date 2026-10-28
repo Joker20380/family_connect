@@ -1,6 +1,10 @@
 # Documentation
 
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
+Bounded maintenance source ready: single-operation permit/MAC journal, exact-floor
+reconciliation, rollback/recovery and synthetic next-CRL contract;320 affected tests
+PASS,33 native deselections. Existing snapshot unchanged. Production entry still
+requires deterministic committed-source packaging and fresh exact-state preflight.
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_CRL_PROFILE_COMPATIBILITY.**
 Read-only provenance review proves NL_VALIDATOR_ONLY_DRIFT: actual gateway parser
 accepts14400s, stale auxiliary validator3600s. No precision mismatch or parser repair.
@@ -9,7 +13,7 @@ floor cannot yet satisfy the required next-payload/update guarantee (CRL_FLOOR_U
 96 affected +48 parser-boundary +18 gateway/floor checks PASS. Existing binding/exact106
 retained, ledger0/0, owner certificates0; no lookup/status repeat or live write.
 [Sanitized review receipt](releases/2026-10-28-android106-beta-0-canary-nl-readonly.json).
-NEXT: separately authorized bounded maintenance/delivery and floor-contract reconciliation,
+Historical review NEXT, now authorized above: bounded maintenance/delivery and floor-contract reconciliation,
 without generic writes or replacing the read-only snapshot boundary. No phone instruction yet.
 Historical source gate: pure paid-aware CRL builder,
 one-generation private journal, exact-byte retry after proven NOT_SENT only and

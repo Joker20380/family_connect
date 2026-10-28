@@ -1,5 +1,73 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Bounded NL maintenance source gate — 28 October
+
+Input main `644f65617f6d4d26e34954e1e8c0704e9811156c`; same checkpoint, no new task ID.
+**MAINTENANCE_SOURCE_READY / PRODUCTION_RECONCILIATION_NOT_RUN.** This source gate
+does not assert production freshness, install a credential or reconcile the floor.
+
+### Separate bounded contract
+
+New [maintenance module](../../control/friends/restricted_maintenance.py) and
+[committed-source packager](../../scripts/package_restricted_maintenance.py), with
+[transaction tests](../../tests/test_restricted_maintenance.py) and
+[packaging tests](../../tests/test_package_restricted_maintenance.py).
+Existing restricted-sync, snapshot archive, parsers, paid backend and Android source
+are unchanged. The existing14400-second validation limit is not widened.
+
+- Exact permit field set, strict integer/hash/operation checks, duplicate/nonfinite
+ JSON rejection and server-time execution window<=300s. One operation per immutable
+ package; caller cannot choose action, path, payload, floor, number or operation.
+- `reconcile_current_floor` requires identical incoming/embedded CRL bytes and number;
+ only minimum_crl changes semantically. Other profile fields and exact directory
+ bytes are preserved. No CRL generation/sequence allocation or registry access.
+- `apply_exact_crl` accepts only a permit-bound number strictly above both previous
+ CRL and floor, with signature/issuer/time/lifetime/directory checks before mutation.
+ This action is synthetic-only in the present authorization.
+- Root-owned fixed external configuration; no CLI/environment path override. The
+ package has a public fixed loader convention, but contains no production configuration,
+ actual operational paths/host, credentials, profile, directory or device binding.
+- Root-private0700 operation directory,0600 files, owner/parent/symlink/hardlink checks,
+ existing profile sync-lock, exact before/target/request/permit backups, atomic fsync
+ journal with HMAC. States PREPARED/APPLYING/COMMITTED/IDEMPOTENT/ROLLED_BACK/UNKNOWN/
+ CONFLICT. Partial/pre-existing operations are never silently regenerated or rebound.
+- Profile stage fsynced on the same filesystem, state/window CAS checked again before
+ APPLYING/atomic replacement, then validated readback. Failure after replacement
+ restores exact backup bytes; rollback failure or unknown conflicting state stops.
+ No overwrite of a concurrent unknown profile. No directory or service mutation.
+- Production configuration fixes maximum apply attempts=1. Exact committed replay
+ or readback of an already installed target does not apply again. A synthetic-only
+ two-attempt fixture proves a retry of a known untouched before-state; replace-started
+ uncertainty is never treated as proof of no write. Production does not enable that retry.
+- Exact private response maps to the existing paid CRL helper's `TrustedReadback`;
+ public sanitization omits directory bytes, CRL/profile, raw operation ID and secrets.
+- Temporary credential-line construction requires a fixed Python/package command,
+ timeout, no PTY/forwarding/agent/X11/user-rc; caller SSH commands are rejected.
+ Removal preserves other authorization lines exactly. These are source/synthetic
+ policy proofs, **not** a claim that a production key has been installed or removed.
+
+### Source validation and package boundary
+
+**320 affected tests PASS;33 explicit native/Android parity deselections.** Selection:
+maintenance/package tests, exact-payload CRL helper/package, restricted gateway/admin,
+paid readiness and directory/timestamp tests. The retained exact snapshot archive
+`0120dad028ead353b8b83a600538f3e578b2b46ddf871bf16e97529f9449f450` was imported only
+into disposable synthetic fixtures: snapshot response fields preserved, mutation
+request denied, snapshot remains read-only after synthetic floor reconciliation.
+The13-value lifetime matrix retains maximum14400s; no native build or full suite.
+
+Deterministic unbound and bound-*synthetic-fixture* packages are covered by tests,
+including manifest/member hashes, source-only projection provenance, fixed ZIP times/
+modes, import/help, null-permit action denial and arbitrary-command rejection. Source
+commit packaging will be built twice independently and recorded in the next receipt.
+No production bound permit exists. Existing lookup/CRL helper artifacts are not rebuilt.
+
+NEXT within this authorization: commit/push source, exact unbound package, then fresh
+read-only production preflight. A changed profile/floor/hash, expired material, ledger
+change or other failed gate means STOP before backup/credential/transaction. Never
+refresh or rebind automatically. No paid enrollment, new certificate, phone action,
+CP2 deployment, restart/reload, or actual canary stage is authorized here.
+
 ## NL parser provenance and read-only material review — 28 October local
 
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_CRL_PROFILE_COMPATIBILITY /

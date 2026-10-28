@@ -3,6 +3,14 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
+Current bounded continuation: **MAINTENANCE_SOURCE_READY / PRODUCTION_RECONCILIATION_NOT_RUN**.
+Separate single-operation maintenance source is implemented; existing snapshot route
+is not replaced or weakened.320 affected tests PASS,33 explicit native deselections.
+Source commit/package gate precedes all production reads/backup/temporary credential
+and the one authorized floor-only transaction. Fresh preflight must prove the exact
+accepted state and currently valid CRL/directory; otherwise STOP without rebinding,
+refresh, write credential or transaction. No paid activation or Android actions.
+
 **Current substep BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
 BLOCKED_CRL_PROFILE_COMPATIBILITY / LIVE_WRITES_NOT_RUN.**
 Dependency: CP2 accepted DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING, publisher
@@ -60,8 +68,8 @@ boundary/MESH Connect; natural expiry and new challenge/fetch/reconnect denial;
 active-session behavior; CRL generation/propagation; recovery/reconciliation and
 reactivation on the same identity; Android state preservation. All live stages NOT_RUN.
 Emergency recovery source gate complete; binding is read-only, paid/live acceptance
-remains NOT_RUN. NEXT — separately authorize one bounded maintenance/delivery and
-floor-contract reconciliation, preserving the read-only snapshot endpoint. Do not
+remains NOT_RUN. Historical review NEXT is now owner-authorized above: bounded
+maintenance/delivery and floor-contract reconciliation, preserving the snapshot. Do not
 enable generic writes or substitute the old mutating archive. No repair, refresh,
 phone opening/Connect or request for ГОТОВ while live entry is blocked. No bound
 write permit, canary write credential or CRL transport is installed.
