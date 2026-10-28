@@ -260,6 +260,15 @@
     "actual_ssh_rehearsal": "NOT_RUN_PREREQUISITES_BLOCKED",
     "artifact_rebuilds": 0,
     "artifacts": "EXACT_HASH_SIZE_UNCHANGED",
+    "automatic_followup": "STOP_NO_CUTOVER",
+    "checks": {
+      "actual_private_values_scan": "PASS",
+      "git_diff": "PASS",
+      "markdown_links": "PASS_467",
+      "privacy": "PASS",
+      "staged_scope": "PASS",
+      "strict_json": "PASS"
+    },
     "entry_main": "684430b84d2c80069a0d57eeb65bbebb1551768b",
     "final_readonly": {
       "absolute_executable_resolution": "PASS",
@@ -321,6 +330,7 @@
     },
     "old_profile_locator_probe": "LOCATOR_PATH_CONFLICT",
     "original_failure": "PYTHON_VERSION_USED_AS_EXECUTABLE",
+    "package_member_changes": false,
     "post_cutover_snapshot": "NOT_RUN",
     "pre_restart_snapshot": "NOT_RUN",
     "private_fixed_configuration": "CORRECTED_LOCAL_ONLY",
@@ -337,7 +347,12 @@
       "scripts/build_profile_snapshot_launcher.py",
       "tests/test_profile_snapshot_launcher.py"
     ],
-    "source_fix": "THIS_COMMIT_PENDING_PUSH",
+    "source_fix": "dd926aefccc978b9e73d9353d7bdf442f5374a8e",
+    "source_fix_push": "VERIFIED_REMOTE_SHA",
+    "source_member_hashes": {
+      "scripts/build_profile_snapshot_launcher.py": "0a7f89b453233b77b8f647d5bd74e84851e4d92090d0c2e8e0eeec5d17e40565",
+      "tests/test_profile_snapshot_launcher.py": "66f3e3e23e6856d874313906347ec2974d1820aac6396b2cffc4be084c515189"
+    },
     "spent": {
       "cutover_restart": 0,
       "floor_reconciliation": 0,

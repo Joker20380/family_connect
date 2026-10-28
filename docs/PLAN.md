@@ -9,7 +9,8 @@ remains accepted. New bounded budgets were granted, but **all remain unused0/1**
 Strict launcher builder/validator and53 new tests PASS: canonical executable/stat/hash,
 actual account Python3.14 probe, exact argv, isolated exec without shell interpolation,
 restricted authorized-key round-trip and read-only rehearsal payload guard. Diagnostic
-version cannot replace the executable.185 focused snapshot/canonical-route/package/
+version cannot replace the executable. Source fixdd926aefccc978b9e73d9353d7bdf442f5374a8e
+is committed/pushed with remote SHA verified.185 focused snapshot/canonical-route/package/
 authorization/directory checks PASS; unchanged prior native results retained.
 
 Read-only discovery confirms the exact four retained artifacts; no rebuild/substitution.

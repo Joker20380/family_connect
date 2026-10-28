@@ -9,7 +9,9 @@ Actual temporary-key SSH rehearsal **NOT_RUN: prerequisites blocked**. Not ready
 owner live. This remains BETA-0-CANARY-1; no new task or canary checkpoint.
 
 The owner accepts the previous rollback and grants a new bounded rehearsal/migration
-budget. Every new production budget remains0/1. Previous spent budgets are historical
+budget. Source fixdd926aefccc978b9e73d9353d7bdf442f5374a8e
+(`fix: pin executable in canonical snapshot launcher`) is pushed; remote SHA verified.
+Every new production budget remains0/1. Previous spent budgets are historical
 and have not been reset or confused with this continuation's counters.
 
 - `scripts/build_profile_snapshot_launcher.py` requires an absolute canonical regular
