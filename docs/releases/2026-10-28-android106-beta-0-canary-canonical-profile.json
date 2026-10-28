@@ -1,4 +1,10 @@
 {
+  "artifacts_failed_private_only": {
+    "deployment_authorized": false,
+    "gateway": "BASELINE_EMBEDDED_OPERATIONAL_ENDPOINT",
+    "installed": false,
+    "source_projection_correction": "IMPLEMENTED_TESTED"
+  },
   "checkpoint": "BETA-0-CANARY-1",
   "entry_main": "44392427b8082f21cfe3d6c321efd86938e9cb63",
   "graph": {
@@ -104,6 +110,8 @@
   "safe_ref": "dev_fa4f7e03ca04",
   "schema": 1,
   "source": {
+    "accepted_api_commit": "20ce0cbbdc57b7a366756fc9739589cbc34f24ad",
+    "accepted_api_commit_push": "VERIFIED",
     "accepted_renewal_api_archive_sha256": "e986f98e70ff7f1abc2678566dd360bb6555583f2e1744ea985c63699bcb3ef7",
     "accepted_renewal_api_members": "NINE_HASH_PINNED_MEMBERS_PLUS_SHARED_PROFILE_STORE",
     "accepted_renewal_api_source_commit": "edca5447418141cb44c0706e26d1973d7defd397",
@@ -137,6 +145,8 @@
       "control/friends/profile_snapshot.py": "cd1ca4b118b56051ddd61717c908f2f16c2eb5bc14b070fcfa6046d0dbec9492",
       "control/friends/profile_store.py": "dfb353eee68434c819c8850da5e4437141e0648a87f20c1f622f75752f8df979",
       "control/friends/restricted_maintenance.py": "79d35d2a4c0c5568ee23349b6c92a50ab40bff334a906b8c24593202ccb31acd",
+      "deploy/friends/restricted/canonical-profile/chat_services.go": "84de76646a25fc64810ae6fc77631cc3fa9e6e7ea2ebd57c0f68e138fb8b7cd0",
+      "deploy/friends/restricted/canonical-profile/chat_services_test.go": "916814156247c1f5ed601934284e0e7c7114044ba4d594ac0de4bd1792daef1a",
       "deploy/friends/restricted/maintenance/node.py": "0547ef52d28f1304a98ed03882f50327690a4687aab54a6e31005bed756003f0",
       "deploy/friends/restricted/maintenance/production_node.py": "8823b24781a8048e4f7d4ffece8159d88f43e884c1574c32b0c8e3c7c8befa37",
       "deploy/friends/restricted/maintenance/production_transport.py": "b61833ac22bb1efd85ab593881cf6315c228b633169e56b0d3d8ce169f994815",
@@ -144,9 +154,11 @@
       "deploy/friends/restricted/maintenance/renewal_health.py": "5dc3f459be0dffebd36bfd2f3a56787c2373620d5c8f142cf891c392d98d3664",
       "deploy/friends/restricted/maintenance/runtime_controller.py": "527af51dc9d4e5b4a7a4bd76490bd9a647931933a981e2d0cde6825222f67236",
       "deploy/friends/restricted/maintenance/scheduled_evaluate.py": "5acf2afa480cf2e11c162e67240e281624ae29629fa9f634af13c9f8c1661fe4",
+      "scripts/canonical_gateway_source.py": "f4c2b7c315add3a07403498ea0d00ce0248f5891b09f7b3c65b9a3d41ab3cfe7",
       "scripts/package_credential_renewal.py": "aa171b3a872f1069fd508a6a88d11f1207fe7a2721f6f20aa0fc97bbc1aedf2c",
       "scripts/package_profile_snapshot.py": "48595cdab85a5af1e2be615df352f9f83a3be6c3c9f303a77ebae66f7af3bc99",
       "scripts/package_restricted_maintenance.py": "75c50d69c33f327f642fa1f1b17acb1057d028cecd310fe79fa806c231237223",
+      "tests/test_canonical_gateway_source.py": "155b15d2cdd4f2db90bddd0135f103a67c2307a6e9dbe20bfc98f9704c14604b",
       "tests/test_package_credential_renewal.py": "ff78289a22710cfe74ba2053047ba787dd41392ef6eca8ea76f8acff6ccc7800",
       "tests/test_package_profile_snapshot.py": "8265a336c27b4eb6930583c104923d30f41a3dc16b05e77aa63ff433ebc58198",
       "tests/test_profile_snapshot.py": "d9b6ca22db648966d883cc3ce2c5e19bb193657a01e47b47deb5ebb20befb6d0",
@@ -154,6 +166,8 @@
       "tests/test_renewal_profile_routes.py": "80a2ef65a7ff4d49f6d6c84c7fbcb4a07e9663963b49e29dfe6adb47d789a3a0",
       "tests/test_restricted_maintenance.py": "1dada62408907dcb80f4fd56c7db7456a8507c896068262dc698e46cf32462da"
     },
+    "gateway_endpoint_runtime_equivalence": "PENDING_STAGED_FIXED_CONFIGURATION",
+    "gateway_fixed_endpoint_projection": "EXACT_BASE_HASH_GUARDED",
     "gateway_loader_original_sha256": "782bb9cd43ff2c4668efcbfef5aebdef8b29e2f8bb4b9cd5686754baebbc7732",
     "gateway_reader_commit": "c309bff9f267bf5250495a3c1ca8e777af52cec8",
     "gateway_reader_commit_push": "VERIFIED",
@@ -232,7 +246,8 @@
   },
   "task": "ANDROID-CONTROLLED-BETA",
   "tests": {
-    "affected_total": 378,
+    "accepted_gateway_tree_reader_tls_recheck": "PASS_12_TESTS_26_SUBCASES",
+    "affected_total": 381,
     "canonical_renewal_rechecked": 4,
     "canonical_snapshot": 22,
     "exact_crl_and_package_tests": 101,
@@ -242,6 +257,8 @@
     "expired_predecessor_recovery": "PASS_WITH_ORIGINAL_AUTHORIZATION_VALIDATOR",
     "final_snapshot_skips": 0,
     "full_historical_suite": "NOT_RUN",
+    "gateway_fixed_service_map": 1,
+    "gateway_source_projection": 3,
     "latest_package_suite": 5,
     "latest_root_suite": 224,
     "local_harness_recoveries": [
@@ -259,7 +276,7 @@
     "native_gateway_skips": 0,
     "native_gateway_subcases": 26,
     "native_gateway_toolchain": "go1.26.1",
-    "native_gateway_top_level": 12,
+    "native_gateway_top_level": 13,
     "new_bounded_maintenance_and_structural_flags": 29,
     "new_profile_core_and_canonical_renewal": 78,
     "new_renewal_fixed_routes": 20,

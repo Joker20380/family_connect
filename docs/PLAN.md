@@ -25,6 +25,9 @@ and2 renewal package tests PASS. Production configuration/pins remain unchanged.
 Subsequent exact API inventory corrects the package dependency: preserve the accepted
 renewal API members rather than substitute the newer Friends API. Three package tests
 and one isolated real node-constructor route/pin test PASS. No production replacement.
+Accepted gateway binary privacy requires externalizing its existing embedded service
+endpoint into fixed startup configuration; hash-guarded source projection and targeted
+tests PASS. The exact endpoint must remain unchanged at cutover; publisher unchanged.
 Remaining gate: qualify the concrete new fixed configurations/pins and all fixed routes,
 preserve the independent publisher directory, qualify affected suites and deterministic
 packages, then fresh material/backup/quiescence/coordinated-cutover acceptance within

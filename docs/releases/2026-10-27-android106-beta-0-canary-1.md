@@ -271,6 +271,30 @@ qualified12 native gateway tests/26 subcases. Production routes, artifacts and a
 mutation budgets remain unchanged. Concrete fixed configuration, coherent final
 packages and the full coordinated live gates remain open; no READY claim.
 
+### Accepted gateway source projection and privacy gate
+
+Exact renewal API checkpoint `20ce0cbbdc57b7a366756fc9739589cbc34f24ad` is pushed and
+remote-verified. Building the accepted gateway plus the canonical reader exposed an
+operational endpoint embedded in the **accepted baseline binary itself**. The first
+two byte-identical candidate binaries failed the required no-operational-endpoint
+package gate. They remain private, uninstalled and unsuitable for deployment.
+
+The bounded accepted-source projection now requires exact startup/service source
+hashes and replaces only that embedded endpoint with an explicit fixed startup
+argument. Enabled services without a valid fixed target fail closed; disabled services
+cannot carry a target. Service names, loopback mailbox target and accepted external
+target must remain unchanged in deployment configuration. No DNS/request-provided
+target, new listener, publisher change or Friends restart is introduced. This source
+projection applies to the frozen accepted gateway tree, not unrelated current client
+source. The manifest records its base inventory and exact committed delta.
+
+Three projection tests and one native fixed-service-map test PASS. The12 canonical
+reader/TLS/lease checks (26 subcases) were also run against the actual frozen accepted
+source with the narrow delta, not merely current repository source: PASS. Recorded
+affected Python inventory381 PASS; native inventory13 tests/26 subcases. Coherent
+rebuild/manifest/privacy checks and exact effective-argv route equivalence remain
+required before any mutation. Production budgets are still entirely unspent.
+
 ## Split-boundary writer inventory — 28 October
 
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_PROFILE_WRITER_CONFLICT /

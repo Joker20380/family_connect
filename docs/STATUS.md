@@ -47,6 +47,12 @@ its nine required source members exactly (parser-only projection), adding the sh
 profile core without an HTTP entrypoint. Current Friends API substitution is rejected.
 Three package checks and an isolated actual pinned-node constructor check PASS; the
 fixture validates canonical profile/directory/lock routing without promoting anything.
+Binary privacy qualification found an operational endpoint embedded in the accepted
+gateway baseline. A hash-guarded source projection externalizes that same endpoint
+into fixed startup configuration; no routing target or publisher behavior is changed.
+Three projection checks, one native service-map check and the12 reader/TLS checks on
+the actual accepted-source delta PASS. No candidate is installed; route preservation
+must still be proven against the staged effective argv before any cutover.
 Fresh fixed-configuration/source-pin qualification, staged gateway/snapshot routes,
 coordinated packaging and production gates remain unfinished. No migration or READY
 claim, no second authoritative profile, no owner phone instruction or stage0.
