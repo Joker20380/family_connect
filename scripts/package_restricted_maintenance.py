@@ -16,9 +16,18 @@ SOURCES = (*HELPER_SOURCES, 'control/friends/restricted_maintenance.py', 'contro
 def build(output, ref, *, permit=None, repository=ROOT):
     if permit is not None:
         validate_permit(permit)
+    return build_capsule(output, ref, sources=SOURCES, entrypoint='control.friends.restricted_maintenance',
+                         permit=permit, repository=repository)
+
+
+def build_capsule(output, ref, *, sources, entrypoint, permit=None, repository=ROOT):
+    if entrypoint not in ('control.friends.restricted_maintenance', 'control.friends.profile_snapshot'):
+        raise ValueError('Unsupported capsule entrypoint')
+    if entrypoint == 'control.friends.profile_snapshot' and permit is not None:
+        raise ValueError('Snapshot capsule cannot embed a write permit')
     source = subprocess.check_output(['git', 'rev-parse', '--verify', '--end-of-options', ref + '^{commit}'], cwd=repository).decode().strip()
     content, projections = {}, {}
-    for name in SOURCES:
+    for name in sources:
         entry = subprocess.check_output(['git', 'ls-tree', source, '--', name], cwd=repository).decode()
         if not entry.startswith(('100644 blob ', '100755 blob ')):
             raise ValueError('Missing committed regular source')
@@ -26,7 +35,7 @@ def build(output, ref, *, permit=None, repository=ROOT):
         if name == PARSER_SOURCE:
             content[name], projections[name] = parser_projection(content[name])
     content['operation-permit.json'] = encode(permit)
-    content['__main__.py'] = b'from control.friends.restricted_maintenance import main\nraise SystemExit(main())\n'
+    content['__main__.py'] = ('from ' + entrypoint + ' import main\nraise SystemExit(main())\n').encode()
     for raw in content.values():
         if re.search(rb'\b(?:\d{1,3}\.){3}\d{1,3}\b|FC-[A-Z0-9]{4}-[A-Z0-9]{4}|-----BEGIN [A-Z ]*PRIVATE KEY|/opt/apps/', raw):
             raise ValueError('Operational data forbidden in capsule')
@@ -34,7 +43,8 @@ def build(output, ref, *, permit=None, repository=ROOT):
         for parent in Path(name).parents:
             if parent != Path('.'):
                 content[str(parent) + '/'] = b''
-    manifest = dict(schema=1, source_commit=source, binding='unbound' if permit is None else 'single_operation',
+    manifest = dict(schema=1, source_commit=source, entrypoint=entrypoint,
+        binding='unbound' if permit is None else 'single_operation',
         operation_permit=permit, production_configuration='absent', python_minimum='3.13',
         dependencies=['control/requirements.lock', 'device_identity/requirements.lock'],
         fixed_config_convention='root_owned_external_only', source_projections=projections,

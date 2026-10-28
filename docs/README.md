@@ -5,7 +5,8 @@
 The owner now authorizes coordinated renewal/gateway/snapshot/maintenance migration,
 not a snapshot-only split. Fresh exact graph and first shared transaction-core source
 step, accepted renewal method integration and canonical bounded maintenance completed
-as source-only increments;329 affected tests PASS,
+as source-only increments; canonical snapshot response/access/dispatch now qualified
+with224 root checks and5 affected package checks PASS,
 one optional native compatibility check not run. Remaining source integrations, packages and
 production gates are unfinished; all production budgets remain unspent. No phone action.
 [Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).

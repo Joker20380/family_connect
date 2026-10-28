@@ -26,7 +26,10 @@ Third source step: permit-bound maintenance now requires the pinned canonical lo
 shares the renewal lock/atomic store and accepts valid independent directory rotations.
 Invalid post-write directory restores only exact profile bytes/metadata; legacy fixed
 configuration is rejected.202 root +127 affected host tests PASS, one optional native skip.
-Controller/transport configuration and pins, gateway reader, snapshot route,
+Fourth source step adds a fixed canonical snapshot reader, byte-equal accepted response,
+read-only group access and unchanged bounded renewal envelope.224 root checks PASS;
+snapshot/maintenance package tests5 PASS. No production snapshot route is activated.
+Controller/transport configuration and pins, gateway reader, staged snapshot route,
 coordinated packaging and production gates remain unfinished. No migration or READY
 claim, no second authoritative profile, no owner phone instruction or stage0.
 [Canonical-profile receipt](releases/2026-10-28-android106-beta-0-canary-canonical-profile.json).

@@ -141,6 +141,37 @@ cross-component route qualification and every coordinated production gate remain
 All checkpoint production budgets are still0 used. No partial migration or owner-live
 acceptance is implied; no stage0 or phone instruction.
 
+### Canonical snapshot source and package contract
+
+Maintenance checkpoint `db7174e78de98fa5b7e04828499764c1cedb876a` is pushed and its
+remote SHA verified. Canonical snapshot source now uses a strict root-controlled fixed
+configuration with a pinned locator and pinned renewal-helper executable contract.
+The security snapshot returns the **same exact bytes/schema** as the retained accepted
+archive for equivalent materials; no private key, extra profile fields or changed
+response envelope. It opens no writer lock, creates no lock/journal and cannot write
+the secure profile as the configured reader. Profile replacement during a snapshot
+fails closed rather than returning a mixed observation. Valid publisher rotation passes.
+
+Existing bounded credential-renewal dispatch remains a separate exact envelope to
+the fixed pinned helper, with bounded input/output/time and a clean process environment.
+Snapshot requests cannot invoke it. Unknown actions, path/config overrides, duplicate
+fields and noninteger schema values are rejected; the exact forced-command guard remains.
+No new general write route, external credential or production authorization change.
+
+**224 root tests PASS**, including22 new snapshot route/access/compatibility checks;
+**5 snapshot/maintenance package tests PASS**, including two identical synthetic
+committed-source builds, member hashes, licenses/notices, import/help and privacy checks.
+The initial snapshot collection error was a reserved pytest parameter name, corrected
+locally before the passing run. The earlier124 other host tests retain their recorded
+PASS plus one optional native skip; they are not counted as a new execution here.
+These are source/fixture gates, not installed or production-candidate package claims.
+
+Remaining: gateway reader, renewal controller/transport pins and configuration,
+committed-source coherent artifacts, all active/staged route proofs and the coordinated
+production procedure. No production migration, pause, restart, floor operation, paid,
+Android, readiness or canary action by this checkpoint. Material observations must be
+refreshed for any future permit. READY_FOR_OWNER_LIVE remains false.
+
 ## Split-boundary writer inventory — 28 October
 
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_PROFILE_WRITER_CONFLICT /

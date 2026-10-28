@@ -14,7 +14,9 @@ validation and profile-only rollback. Legacy fixed maintenance route fails close
 tests PASS; one optional accepted-native compatibility test not run. No checkpoint
 production writes or route changes. Normal scheduled renewal advanced fresh RU/NL
 CRL to27218; floor remains27088. This is not an agent-issued CRL or cutover.
-Remaining gate: complete renewal controller/transport configuration and pins plus every reader/writer,
+Canonical snapshot source now preserves the exact accepted response and fixed renewal
+dispatch;224 root checks PASS and5 affected package tests PASS, no route activation.
+Remaining gate: complete renewal controller/transport configuration and pins plus gateway reader,
 preserve the independent publisher directory, qualify affected suites and deterministic
 packages, then fresh material/backup/quiescence/coordinated-cutover acceptance within
 the owner's one-cycle/one-cutover/one-floor-operation budgets. Gateway mode compatibility

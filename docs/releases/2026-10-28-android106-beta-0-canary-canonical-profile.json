@@ -60,7 +60,7 @@
   "remaining": [
     "renewal_controller_transport_configuration_source_pins_and_packages",
     "gateway_reader_integration",
-    "snapshot_integration",
+    "snapshot_fixed_configuration_and_route_qualification",
     "bounded_maintenance_and_exact_crl_route_qualification",
     "affected_integration_suites",
     "committed_source_deterministic_candidate_packages",
@@ -94,16 +94,22 @@
     "deployed_gateway_binary_sha256": "96754942e7518233bc702277d860b0c9b740fb7553c9742b2ae642a0746fe367",
     "deployed_snapshot_archive_sha256": "0120dad028ead353b8b83a600538f3e578b2b46ddf871bf16e97529f9449f450",
     "files": {
+      "control/friends/profile_snapshot.py": "cd1ca4b118b56051ddd61717c908f2f16c2eb5bc14b070fcfa6046d0dbec9492",
       "control/friends/profile_store.py": "dfb353eee68434c819c8850da5e4437141e0648a87f20c1f622f75752f8df979",
       "control/friends/restricted_maintenance.py": "79d35d2a4c0c5568ee23349b6c92a50ab40bff334a906b8c24593202ccb31acd",
       "deploy/friends/restricted/maintenance/node.py": "749a54742cc9f98144f231337aa736e7cbf85dda34c75e79a6d21fe559bae13d",
       "deploy/friends/restricted/maintenance/production_node.py": "331a4744cf873dc67c28befb84f90d141d0453730b2d9528f39d61f6fd898096",
-      "scripts/package_restricted_maintenance.py": "f0c102c1079b1c3bda044fcde05a5060d219c733748a8fbcb17269b488243a45",
+      "scripts/package_profile_snapshot.py": "48595cdab85a5af1e2be615df352f9f83a3be6c3c9f303a77ebae66f7af3bc99",
+      "scripts/package_restricted_maintenance.py": "75c50d69c33f327f642fa1f1b17acb1057d028cecd310fe79fa806c231237223",
+      "tests/test_package_profile_snapshot.py": "8265a336c27b4eb6930583c104923d30f41a3dc16b05e77aa63ff433ebc58198",
+      "tests/test_profile_snapshot.py": "d9b6ca22db648966d883cc3ce2c5e19bb193657a01e47b47deb5ebb20befb6d0",
       "tests/test_profile_store.py": "6d2b66a4b7d694ca1429b817d50aa6df4bdf3e329c31831e741268730facfbc3",
       "tests/test_restricted_maintenance.py": "1dada62408907dcb80f4fd56c7db7456a8507c896068262dc698e46cf32462da"
     },
     "gateway_reader_source_change_required": true,
-    "integration": "INCOMPLETE_PENDING_CONTROLLER_PINS_AND_READERS",
+    "integration": "INCOMPLETE_PENDING_CONTROLLER_PINS_AND_GATEWAY",
+    "maintenance_commit": "db7174e78de98fa5b7e04828499764c1cedb876a",
+    "maintenance_commit_push": "VERIFIED",
     "maintenance_configured_route_requires_canonical_locator": true,
     "maintenance_directory_rotation": "READ_ONLY_VALIDATED_PROGRESSION",
     "maintenance_legacy_configuration_rejected": true,
@@ -116,7 +122,10 @@
     "renewal_configured_node_requires_pinned_canonical_locator": true,
     "renewal_source_activated": false,
     "renewal_stage_normalizes_floor": true,
-    "step": "SHARED_CORE_RENEWAL_AND_BOUNDED_MAINTENANCE"
+    "snapshot_exact_response_compatibility": "PASS",
+    "snapshot_requires_pinned_canonical_locator": true,
+    "snapshot_source_activated": false,
+    "step": "SHARED_CORE_RENEWAL_MAINTENANCE_AND_SNAPSHOT"
   },
   "source_closeout": {
     "android_actions": 0,
@@ -163,13 +172,16 @@
   },
   "task": "ANDROID-CONTROLLED-BETA",
   "tests": {
-    "affected_total": 329,
+    "affected_total": 353,
+    "canonical_snapshot": 22,
     "exact_crl_and_package_tests": 101,
     "existing_maintenance_including_exact_snapshot": 124,
     "existing_renewal": 26,
     "expired_predecessor_recovery": "PASS_WITH_ORIGINAL_AUTHORIZATION_VALIDATOR",
     "final_snapshot_skips": 0,
     "full_historical_suite": "NOT_RUN",
+    "latest_package_suite": 5,
+    "latest_root_suite": 224,
     "local_harness_recoveries": [
       "container_package_git_unavailable",
       "snapshot_archive_supplied",
@@ -177,12 +189,15 @@
       "existing_archive_cleanup_assertions",
       "host_sandbox_remapped_ancestor_ownership_rerun_outside_sandbox",
       "canonical_contract_serialization",
-      "structural_directory_index_flag_explicitly_supported_not_regular_files"
+      "structural_directory_index_flag_explicitly_supported_not_regular_files",
+      "snapshot_pytest_reserved_parameter_renamed"
     ],
     "new_bounded_maintenance_and_structural_flags": 29,
     "new_profile_core_and_canonical_renewal": 78,
     "optional_native_skips": 1,
     "platform_builds": "NOT_RUN",
-    "result": "PASS_WITH_ONE_OPTIONAL_NATIVE_SKIP"
+    "previous_unaffected_host": 124,
+    "result": "PASS_WITH_ONE_OPTIONAL_NATIVE_SKIP",
+    "snapshot_package": 2
   }
 }
