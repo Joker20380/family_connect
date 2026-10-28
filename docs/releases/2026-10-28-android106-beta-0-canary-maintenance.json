@@ -1,0 +1,181 @@
+{
+  "automatic_refresh_or_rebinding": false,
+  "checkpoint": "ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1",
+  "input_main": "644f65617f6d4d26e34954e1e8c0704e9811156c",
+  "live_writes": "NOT_RUN",
+  "next": "REVIEW_INTERVENING_FRIENDS_SERVICE_CHANGE_AND_EXPLICITLY_ACCEPT_A_FRESH_BASELINE_BEFORE_RESUMING_PREFLIGHT",
+  "no_write_proof": {
+    "android_actions": 0,
+    "crl_delivery": 0,
+    "crl_generation": 0,
+    "global_state_equality_claimed": false,
+    "nl_mutations": 0,
+    "paid_events_created": 0,
+    "production_mutations": 0,
+    "production_selector_uses": 0,
+    "readiness_calls": 0,
+    "restart_reload_calls": 0,
+    "ru_mutations": 0,
+    "service_identity_change": "OBSERVED_NOT_CAUSED_OR_EXPLAINED_BY_THIS_CHECKPOINT",
+    "sqlite_access": "MODE_RO_QUERY_ONLY_READ_TRANSACTION",
+    "subscriptions_created": 0
+  },
+  "package": {
+    "binding": "unbound",
+    "byte_identical": true,
+    "deterministic_builds": 2,
+    "import_help_manifest": "PASS",
+    "manifest_sha256": "1bf017a48703e9f62cc0ed1a2651d7b23c9df09f9f2c11d8692f1efb33d818cb",
+    "member_hashes": {
+      "LICENSE": "cfe0da6ed33d20d2b6a97ab5363e204660f0c9987469724c92938a846a1afcb4",
+      "THIRD_PARTY_NOTICES.md": "ff178d44895279252b303c7488c887f995d6bcd95977a9f04cc2ada88c58e316",
+      "__main__.py": "f7419dff5b45bc177aaa9270543fb2dbeca8d9778ce256ea390865b67b711580",
+      "control/": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "control/friends/": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "control/friends/__init__.py": "efb76720b2ad1c9594aee9488b342e3311ed01a4bff3082c2fa3999663354cc8",
+      "control/friends/access.py": "b70e7d210c9347602ba2c8531454f5e01d0eeb18556eaffc71ea1c4995bea900",
+      "control/friends/paid_beta.py": "a30b804d0b9e44ff76411731fb469f4ba930a5b1bca301386ea81382379af45e",
+      "control/friends/paid_beta_canary.py": "e7cee9d29155fc6a1f8e14ae12b863234b893026bf3ffe9644c2f144e6d8e711",
+      "control/friends/paid_canary_crl.py": "81b26ba72636f325d107aaa1131bc99b754480251c542c4ea819d219add7124b",
+      "control/friends/readiness_receipts.py": "16e4556af6d914e7411b3563bef44efebd2a8ba2d7dda1d0faa4f4e100ceb660",
+      "control/friends/restricted.py": "57570d455a69d91a9a8d971a83d7d28153610ded55cb4208138d6d8c36658155",
+      "control/friends/restricted_admin.py": "4c14e4d8c1dbb9cec13009ef2cc3495690ed6a39e8cb7ca33dcd503964fad801",
+      "control/friends/restricted_maintenance.py": "2904209951646c9ac0707197d960d76f7a70d6456cbbea2b3493bb28449c0fdd",
+      "control/friends/support_ids.py": "cab3cef66085ac11253d3ce8a41d636769f040841fe839a96e03e536939aa169",
+      "control/requirements.lock": "5adccf995e9634be711ae3167229cca0d2751b493c3a041dd68c745ec44ad94a",
+      "device_identity/": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "device_identity/__init__.py": "3cd56edaf5fbfde9c88df7078dc55be15bf23cfc830727ee410bc8f31dc9990f",
+      "device_identity/device.py": "38e29e640c913c1331164aa36fde0ca95b1d13ee057ae92c3d31ec7b993151d3",
+      "device_identity/requirements.lock": "8133533475c48477f7ccf6d65a5c426a2511ceea61f6539c1667b3a6900a77be",
+      "operation-permit.json": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "provisioning/": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "provisioning/__init__.py": "a8d11b35f8be63395d505bcf0cf7774aa5c0dbffa5eee905eef911a8d3fdb905",
+      "provisioning/friends_catalog.py": "811cc33d24dd0351166bed48cfba17f84bfd19d7ebf66a639a386f733907e46c"
+    },
+    "members": 25,
+    "operation_permit": null,
+    "production_configuration": "absent",
+    "result": "PASS",
+    "schema": 1,
+    "sha256": "a39ea9515f7a7ed3b674322a6d4e007d2a230b3f90366390a28e0c92e81b114c",
+    "size": 164110,
+    "source_commit": "7ce43ead7fdaace18cb1730e8d0e6a04f881dcb0",
+    "source_inventory": "EXACT_COMMITTED",
+    "source_projections": {
+      "provisioning/friends_catalog.py": {
+        "definitions": [
+          "require",
+          "unique",
+          "parse",
+          "fields",
+          "key"
+        ],
+        "imports": [
+          "base64",
+          "json"
+        ],
+        "segment_sha256": [
+          "f30aabd4a95e13b98c9537425bb02f63ac9631f1e6311b7f0ab80d85f88f61b8",
+          "ff3e4d4dcf7250cae8d622d77c9a6d69aefcf4ab04ef9920218fafe93c0f1991",
+          "ff23a4708945a43a861982cbb93672dd534644e47857e22ca55f2edba8698e40",
+          "55483f1068a8bd1dc595a67ac18d9844f4caea041d5b70058a844565ec7e94eb",
+          "d450f844334e2469000f47501f48df4ff312885cd1935f4bedd2d42a405d28f0",
+          "e494523b26a3ffdf87440aed73991a2499e9d62e9f15d4b92ae05df16b9e5892",
+          "cfbc7bd00d7879112435281208c0bb8c4ed127f22a2f5a7b7646452caef23983"
+        ],
+        "source_sha256": "12d64b9a0c25f2e11ebfaee86bf6eab110a931668190732cf05c0cb1a26a64ec"
+      }
+    },
+    "unbound_action": "INVALID_PERMIT"
+  },
+  "phone_instruction": "NONE",
+  "preflight": {
+    "current_material_readiness": "NOT_RECHECKED",
+    "ledger": {
+      "cohort": 0,
+      "events": 0,
+      "subscriptions": 0
+    },
+    "nl_inspection": "NOT_RUN_STOPPED_AT_FRIENDS_SERVICE_IDENTITY",
+    "observed_utc": "2026-10-28T09:41:36+00:00",
+    "owner_certificate_recheck": "NOT_RUN_STOPPED_BEFORE_OWNER_INSPECTION",
+    "reasons": [
+      "FRIENDS_SERVICE_IDENTITY_CHANGED"
+    ],
+    "result": "MAINTENANCE_PRECONDITION_CHANGED",
+    "service": {
+      "admission_unchanged": true,
+      "archive_matches_accepted": true,
+      "before": {
+        "ActiveState": "active",
+        "ExecMainStartTimestampMonotonic": 4877589183478,
+        "MainPID": 1002753,
+        "NRestarts": 0,
+        "SubState": "running",
+        "effective_execstart_matches": true,
+        "running_argv_matches": true
+      },
+      "changed_service_fields": [
+        "ExecMainStartTimestampMonotonic",
+        "MainPID"
+      ],
+      "clock": {
+        "NTP": "yes",
+        "NTPSynchronized": "yes"
+      },
+      "ledger": {
+        "events": 0,
+        "subscriptions": 0
+      },
+      "observed": {
+        "ActiveState": "active",
+        "ExecMainStartTimestampMonotonic": 4913682774688,
+        "MainPID": 2744086,
+        "NRestarts": 0,
+        "SubState": "running",
+        "effective_execstart_matches": true,
+        "running_argv_matches": true
+      },
+      "observed_at": 1793180496,
+      "publisher_unchanged": true,
+      "result": "MAINTENANCE_PRECONDITION_CHANGED",
+      "schema": 1,
+      "service_health": "PASS"
+    }
+  },
+  "reconciliation": {
+    "action": "reconcile_current_floor",
+    "active_maintenance_credential_created_by_checkpoint": false,
+    "bound_permit": "NOT_BUILT",
+    "bound_production_package": "NOT_BUILT",
+    "credential_installed": false,
+    "credential_removed": "NOT_APPLICABLE_NOT_INSTALLED",
+    "fresh_nl_floor": null,
+    "last_accepted_crl_sha256": "b98c1012d045d4923e8d4242d597c0fd771c2357b10bfa898608c1868eb586c3",
+    "last_accepted_directory_sha256": "0aa55347adaa2fbd977b6c98b812ac2443a95c6f132f030785c33c5617c3a22a",
+    "last_accepted_embedded_crl_number": 27211,
+    "last_accepted_minimum_crl": 27088,
+    "post_write_floor": null,
+    "private_backup": "NOT_RUN_PRECONDITION_FAILED",
+    "production_attempts": 0,
+    "remaining_authorized_attempts": 1,
+    "result": "NOT_RUN",
+    "rollback": "NOT_RUN_NO_WRITE",
+    "target_minimum_crl": 27211
+  },
+  "safe_ref": "dev_fa4f7e03ca04",
+  "schema": 1,
+  "source_commit": "7ce43ead7fdaace18cb1730e8d0e6a04f881dcb0",
+  "source_gate": "PASS",
+  "source_remote_sha_verified": true,
+  "status": "BLOCKED_MAINTENANCE_PRECONDITION_CHANGED",
+  "tests": {
+    "deselected": 33,
+    "full_repository_suite": "NOT_RUN",
+    "native_platform_tests": "NOT_RUN",
+    "passed": 320,
+    "production_ssh_credential_acceptance": "NOT_RUN",
+    "scope": "maintenance/package, restricted gateway, paid CRL helper/readiness, directory parser",
+    "snapshot_fixture": "EXACT_RETAINED_GENERIC_ARCHIVE_SYNTHETIC_INPUT_ONLY"
+  }
+}

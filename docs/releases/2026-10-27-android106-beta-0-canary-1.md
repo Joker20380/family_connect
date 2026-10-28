@@ -1,5 +1,74 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Bounded maintenance package and preflight stop — 28 October
+
+**OWNER_CANARY_BOUND_READONLY / BLOCKED_MAINTENANCE_PRECONDITION_CHANGED /
+LIVE_WRITES_NOT_RUN.** Same checkpoint. Input main644f656; source commit
+`7ce43ead7fdaace18cb1730e8d0e6a04f881dcb0` pushed and remote SHA verified before
+packaging/preflight. [Sanitized receipt](2026-10-28-android106-beta-0-canary-maintenance.json).
+The source gate below is historical preparation, not an independent active NEXT.
+
+### Exact unbound package
+
+- Source `7ce43ead7fdaace18cb1730e8d0e6a04f881dcb0`;25 members,164110 bytes.
+- SHA256 `a39ea9515f7a7ed3b674322a6d4e007d2a230b3f90366390a28e0c92e81b114c`.
+- Manifest SHA256 `1bf017a48703e9f62cc0ed1a2651d7b23c9df09f9f2c11d8692f1efb33d818cb`.
+- Two independent builds byte-identical; binding=unbound, operation permit=null,
+ production configuration absent. Exact committed members/source projection hashes,
+ deterministic ZIP metadata, private artifact permissions and import/help/manifest
+ smoke PASS. Unbound operational invocation returns INVALID_PERMIT without config/DB access.
+- Full member hashes are in the receipt. No production bound package, permit, key,
+ profile/directory, device selector or host configuration is present. Existing accepted
+ lookup and exact-payload CRL artifacts remain unchanged and were not rebuilt.
+
+### Fresh read-only preflight and mandatory stop
+
+Fresh RU SQLite mode=ro/query_only/read transaction: integrity/FKs/schema PASS;
+subscriptions0/events0, cohort0/10. Paid-aware archive remains
+`dcd769986a1da7cb1662c0f73d18a88e9f73485a977db937ca5b1428c1fd1029`, effective/running
+argv match; publisher/admission unchanged. Service active/running, liveness PASS,
+NTP/NTPSynchronized=yes. However, its process identity no longer matches the accepted
+read-only baseline:
+
+| Service observation | Accepted baseline | Fresh preflight |
+| --- | --- | --- |
+| MainPID | 1002753 | 2744086 |
+| ExecMainStartTimestampMonotonic (microseconds) | 4877589183478 | 4913682774688 |
+| NRestarts | 0 | 0 |
+
+This proves a different process/start identity; NRestarts0 does **not** prove no
+intervening restart. Cause/actor are **not established** by this read-only observation.
+No restart, reload or deployment was issued by this checkpoint. We did not accept
+the new process as a replacement baseline or retry the preflight automatically.
+
+Per the owner stop policy: **MAINTENANCE_PRECONDITION_CHANGED**, reason
+FRIENDS_SERVICE_IDENTITY_CHANGED. No subsequent NL execution/material inspection,
+owner certificate recheck, backup, production permit/package or temporary credential
+installation. Therefore the earlier owner horizon and NL material/floor observations
+are retained as historical input, **not claimed freshly revalidated**.
+
+Maintenance apply attempts **0/1**; reconciliation **NOT_RUN**; rollback **NOT_RUN**
+(nothing written). Last accepted floor27088, intended target27211; there is no new
+post-write floor observation and no CRL_FLOOR_ALIGNED acceptance. No maintenance key
+was generated/installed, so removal is NOT_APPLICABLE, not a fictitious removal PASS.
+No new production write credential exists from this checkpoint. No CRL generation/
+delivery/number allocation, RU mutation, subscription/event, readiness call, Android
+action or application deployment. Global production equality is not claimed across
+the intervening process change. Existing administrative access was used read-only.
+
+### Validation and next boundary
+
+320 affected tests PASS,33 explicit native deselections; deterministic package and
+syntax/strict JSON/privacy/link/staged-scope/whitespace gates PASS. Only bounded
+maintenance source/tests and sanitized docs are committed; unrelated existing work
+remains unstaged. No full historical suite or platform build was run.
+
+**STOP. NEXT — review the intervening Friends service change and explicitly accept
+a fresh production baseline before resuming read-only preflight.** If authorized to
+continue, exact NL materials, lifetime, owner horizon and zero ledger must all pass
+again before backup/permit/credential installation. No automatic rebind, refresh,
+transaction retry or phone instruction. Stage0 and owner Connect remain NOT_RUN.
+
 ## Bounded NL maintenance source gate — 28 October
 
 Input main `644f65617f6d4d26e34954e1e8c0704e9811156c`; same checkpoint, no new task ID.

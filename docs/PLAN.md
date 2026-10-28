@@ -3,15 +3,22 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-Current bounded continuation: **MAINTENANCE_SOURCE_READY / PRODUCTION_RECONCILIATION_NOT_RUN**.
-Separate single-operation maintenance source is implemented; existing snapshot route
-is not replaced or weakened.320 affected tests PASS,33 explicit native deselections.
-Source commit/package gate precedes all production reads/backup/temporary credential
-and the one authorized floor-only transaction. Fresh preflight must prove the exact
-accepted state and currently valid CRL/directory; otherwise STOP without rebinding,
-refresh, write credential or transaction. No paid activation or Android actions.
-
 **Current substep BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
+BLOCKED_MAINTENANCE_PRECONDITION_CHANGED / LIVE_WRITES_NOT_RUN.**
+Bounded maintenance source7ce43ea pushed/remote verified;320 affected tests PASS,
+33 native deselections. Deterministic unbound package PASS:25 members,164110 bytes,
+SHA256 a39ea951…81b114c, permit=null, no production configuration or write capability
+without a separately bound package and root-private configuration. Snapshot unchanged.
+Fresh preflight observed Friends PID/start changed from1002753/4877589183478 to
+2744086/4913682774688. Service healthy, archive/argv match, NRestarts0, ledger0/0,
+admission/publisher unchanged; cause not established. STOP before NL/owner/material
+recheck, backup, bound production package, credential installation or transaction.
+Production apply attempts0/1; no mutation, paid event, restart/reload or Android action.
+NEXT — review intervening service change and explicitly accept a fresh baseline,
+then resume read-only preflight under a new owner continuation. No automatic rebind,
+refresh, floor write or phone instruction. Source/package PASS does not satisfy live entry.
+
+**Historical read-only input — BETA-0-CANARY-1 / OWNER_CANARY_BOUND_READONLY /
 BLOCKED_CRL_PROFILE_COMPATIBILITY / LIVE_WRITES_NOT_RUN.**
 Dependency: CP2 accepted DONE / PAID-AWARE EMPTY-COHORT BACKEND SERVING, publisher
 capability preserved, real payment/enrollment NOT_RUN. No CP2 redeployment/restart/
@@ -68,8 +75,9 @@ boundary/MESH Connect; natural expiry and new challenge/fetch/reconnect denial;
 active-session behavior; CRL generation/propagation; recovery/reconciliation and
 reactivation on the same identity; Android state preservation. All live stages NOT_RUN.
 Emergency recovery source gate complete; binding is read-only, paid/live acceptance
-remains NOT_RUN. Historical review NEXT is now owner-authorized above: bounded
-maintenance/delivery and floor-contract reconciliation, preserving the snapshot. Do not
+remains NOT_RUN. Historical review proposed bounded maintenance/delivery and
+floor-contract reconciliation. Source is ready; production continuation is blocked by
+the fresh preflight above. Preserve the snapshot. Do not
 enable generic writes or substitute the old mutating archive. No repair, refresh,
 phone opening/Connect or request for ГОТОВ while live entry is blocked. No bound
 write permit, canary write credential or CRL transport is installed.

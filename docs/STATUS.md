@@ -2,20 +2,27 @@
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
-Bounded NL maintenance continuation from644f656: **MAINTENANCE_SOURCE_READY /
-PRODUCTION_RECONCILIATION_NOT_RUN**. Separate immutable single-operation permit,
-MAC journal, one-attempt production budget, exact-current-floor reconciliation,
-synthetic-only next-CRL action, CAS recheck, atomic replacement/rollback and trusted
-readback adapter implemented. Existing snapshot source/route remains untouched.
-320 affected tests PASS,33 explicit native deselections; exact retained snapshot
-archive tested only against disposable fixtures, including after reconciliation.
-NEXT within this authorization: deterministic unbound package from committed source,
-then fresh read-only preflight. Any changed/expired material stops production entry;
-no automatic refresh, rebind, credential installation or mutation on failed preflight.
-No paid/canary/Android operation. The prior blocker and evidence below remain applicable
-until a separately recorded successful production reconciliation/readback.
-
 **Current substep BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
+BLOCKED_MAINTENANCE_PRECONDITION_CHANGED / LIVE_WRITES_NOT_RUN.**
+Separate bounded maintenance source7ce43ea committed/pushed, remote SHA verified;
+320 affected tests PASS,33 explicit native deselections. Exact source produced two
+byte-identical unbound packages:25 members,164110 bytes, SHA256 a39ea951…81b114c.
+Null permit, no production configuration; import/help/manifest and action denial PASS.
+Fresh read-only preflight stopped at Friends service identity: accepted PID1002753 /
+start4877589183478, observed PID2744086 / start4913682774688 (monotonic microseconds).
+Service active/healthy, NRestarts0; paid-aware archive and effective/running argv still
+match, ledger0/0, admission/publisher unchanged. Cause of intervening process change
+is not established; this checkpoint issued no restart/reload.
+Per STOP policy, no further NL/owner/material inspection, backup, bound production
+permit/package, temporary credential or maintenance transaction. Floor27211 alignment
+is NOT_RUN;27088 remains only the last accepted NL floor, not a fresh observation.
+Production apply attempts0/1, production mutations0, paid/Android operations0.
+STOP. NEXT — review the intervening service change and explicitly accept a fresh
+baseline before resuming read-only preflight. No automatic rebind, refresh or phone
+instruction; source readiness is not production acceptance.
+[Maintenance receipt](releases/2026-10-28-android106-beta-0-canary-maintenance.json).
+
+**Historical read-only input for BETA-0-CANARY-1 — OWNER_CANARY_BOUND_READONLY /
 BLOCKED_CRL_PROFILE_COMPATIBILITY / LIVE_WRITES_NOT_RUN.**
 Read-only provenance review fromf499bdf: **NL_VALIDATOR_ONLY_DRIFT** proven. The old
 auxiliary validator allows3600s; actual SSH forced-command parser allows14400s and
@@ -34,8 +41,9 @@ Materials remain valid beyond720s at readback; monitor read-only/fresh, NL regis
 UNAVAILABLE, not0; console synthetic-only. Protected identity/policy/ledger, owner
 certificate/readiness scope, services and material/profile hashes unchanged. One
 unrelated certificate was added by concurrent traffic; no global table equality claim.
-Historical review NEXT, now owner-authorized above: bounded maintenance/delivery and
-floor-contract reconciliation; preserve the read-only snapshot, no generic writes.
+Historical review proposed bounded maintenance/delivery and floor-contract
+reconciliation. Its source gate is complete; production continuation is blocked by
+the fresh preflight above. Preserve the read-only snapshot, no generic writes.
 No refresh, activation, phone instruction or request for ГОТОВ while blocked.
 [Provenance review](releases/2026-10-27-android106-beta-0-canary-1.md#nl-parser-provenance-and-read-only-material-review--28-october-local).
 
