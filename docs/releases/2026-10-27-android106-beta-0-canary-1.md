@@ -1,5 +1,83 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Split-boundary writer inventory — 28 October
+
+**OWNER_CANARY_BOUND_READONLY / BLOCKED_PROFILE_WRITER_CONFLICT /
+LIVE_WRITES_NOT_RUN.** Continuation from `9205588dbe33a1e94ad862a425d335c0ff76bc94`,
+not a new checkpoint. [Sanitized receipt](2026-10-28-android106-beta-0-canary-split-boundary.json).
+
+The required writer gate fails **before source redesign or layout migration**.
+The fresh read-only inventory establishes an existing legitimate credential-renewal
+writer of the exact NL profile, distinct from the proposed bounded maintenance route.
+Its RU timer is active/waiting, the latest scheduled service result is successful,
+and the fixed controller configuration explicitly approves the leaf/CRL schedule.
+The deployed transport uses the existing `CREDENTIAL_RENEWAL_RPC` branch of the
+forced command, whose root helper is authorized by the existing exact rule. No RPC,
+renewal evaluation, stage, promotion or restart was invoked by this checkpoint.
+
+| Material / route | Observed reader or writer |
+|---|---|
+| Profile | Existing authorized renewal node stages and atomically replaces it |
+| Profile reader | Running gateway references the same live profile in its effective argv |
+| Directory | Existing publisher exports via sibling temporary file and rename |
+| Snapshot operation | Reads profile and directory; read-only snapshot contract unchanged |
+| Existing lock | Present and unchanged; no new lock or lock substitution |
+
+The snapshot **operation** remains read-only. This does not imply that the entire
+forced-command endpoint lacks the separately authorized credential-renewal RPC branch.
+The relevant source path is `dispatch` → `stage` / `promote` → atomic `replace` of
+the configured live profile. All13 node source hashes match the fixed node inventory
+and the RU controller's expected NL source identity:
+`c67332cfff9aeafd90690c13518f55a75ef9687ceadb464624263657ff005ff2`.
+The deployed dispatcher SHA256 is
+`4052d7dc0deda7cd5d50df044ed9abb59e0dfc5102162345066273ca7f82f6b0`;
+profile-writer implementation SHA256 is
+`02fec6882af79210cdf949e892f132f0bb24088bf8b13faddbe160f0fbf8f588`.
+The root helper, gateway source and transport hashes are retained in the sanitized
+receipt; private configurations, paths, account data and authorization remain private.
+No open material descriptors were observed at the bounded FD readback; this is not
+evidence of no writers because short-lived writers open files only during operations.
+The inspected node owner/plan/files transaction markers were absent at that
+observation; this is not a claim about every coordinator journal.
+
+Moving only snapshot and maintenance to a copied profile would leave the existing
+renewal writer and gateway reader on the old profile. The required conclusion that
+only future maintenance writes the profile is therefore false. Per the owner stop
+policy, **BLOCKED_PROFILE_WRITER_CONFLICT** is the result; layout separability is
+NOT_QUALIFIED, not an invented claim that a coordinated redesign is impossible.
+Do not disable renewal or repoint its configuration under this checkpoint.
+
+No product source/test/package change, layout migration, route switch, secure-profile
+creation, safety backup, permit, temporary credential, maintenance transaction or
+rollback. Shared parent mode/owner/group, publisher permissions/configuration, current
+profile/directory/lock bytes and metadata, snapshot authorization and running services
+remain unchanged. Maintenance budget0/1; no profile/RU/CRL/paid/readiness/Android writes,
+no restart/reload. Accepted owner-aware source73ae964 and historical package75dd8dec
+were audited unchanged, including manifest/member hashes; no package was used in
+production and no replacement package was built. Source suites are NOT_RUN because
+the explicit pre-source gate stopped the work, not reported as a new source PASS.
+
+Fresh entry already observed coherent signed RU/NL CRL27216 and RU sequence27216,
+advanced from the prior27215 receipt by activity outside this checkpoint. Floor27088
+and current CRL/directory hashes are unchanged between this checkpoint's fresh
+before/after observations. Final readback minimum material lifetime13266s; signatures,
+issuer/bindings and actual parser PASS. Ledger0/0, cohort0/10, owner certificates0,
+certificate horizon CLEAR, binding unchanged, accepted exact106 retained (no new
+phone observation/lookup/status call). Protected registry/policy/publisher and owner
+certificate/readiness fingerprints are unchanged; ordinary unrelated chat/readiness
+activity is disclosed separately rather than claiming whole-DB equality.
+Read-only monitoring remains active; no production mutation was performed.
+
+Validation: fresh private inventories/strict JSON, exact source and historical
+package member hashes, private harness syntax, privacy/selector scan, Markdown links,
+selective staged scope and whitespace checks. No full historical suite or platform
+build. Existing unrelated work is preserved outside the commit.
+
+NEXT: separately authorize a coordinated profile-path/ownership design including
+the existing credential-renewal writer and gateway reader while preserving the
+publisher's directory path and strict guards. No layout correction, renewal change,
+phone instruction or stage0 activation automatically. READY_FOR_OWNER_LIVE is not met.
+
 ## Secure parent classification — 28 October
 
 **OWNER_CANARY_BOUND_READONLY / BLOCKED_MATERIAL_PARENT_HARDENING_UNSAFE /
