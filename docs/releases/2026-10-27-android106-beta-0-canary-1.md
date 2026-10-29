@@ -1,5 +1,30 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Fresh certificate-horizon recheck — 29 October
+
+**BLOCKED_EXISTING_CERTIFICATE_HORIZON / LIVE_WRITES_NOT_RUN.**
+Entry main6136618777a0feeaff045d57f5ffb2cc19163350; same checkpoint and binding,
+no Support ID or repeated production lookup. Exactly one read-only certificate
+readback: server UTC08:50:36, after the required28 October23:10:39 margin.
+Device/invite active and not revoked; exact Android106 eligibility PASS.
+One valid certificate: safe certificate token `dc6b3aa3b462`, latest NotAfter
+`2026-10-29T11:42:38Z` (12:42:38 Europe/Brussels). Cause not established.
+Same read-only transaction confirms subscriptions/events0/0 and cohort0/10.
+
+STOP at the explicit certificate gate. Active-session check, canonical/material
+preflight and fresh backup NOT_RUN; earlier infrastructure acceptance is not a fresh
+readback for this continuation. No production write, permit construction/application,
+paid event, activation, readiness request, CRL operation, certificate edit/deletion/
+revocation, Android action, restart/reload or route/source/package change.
+
+Stage0 parameters recorded **without application**: natural paid period600s,
+owner Connect deadline90s, post-expiry observation120s, purpose `internal_canary`,
+amount_minor0, customer revenue0. No additional infrastructure/source gates.
+Only this report and its existing [receipt](2026-10-28-android106-beta-0-canary-owner-ready.json)
+are updated; STATUS/PLAN remain unchanged because the blocker is unchanged.
+Strict JSON, privacy scan, Markdown links, staged scope and diff checks PASS.
+No automatic retry or stage0; any later activation still requires explicit owner command.
+
 ## Owner ГОТОВ — fresh live-entry stop, 28 October
 
 **OWNER_READY_RECEIVED / BLOCKED_EXISTING_CERTIFICATE_HORIZON / LIVE_WRITES_NOT_RUN.**

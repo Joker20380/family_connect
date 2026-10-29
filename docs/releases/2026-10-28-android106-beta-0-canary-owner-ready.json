@@ -18,6 +18,53 @@
   "canonical_migration": "ACCEPTED_UNCHANGED",
   "checkpoint": "BETA-0-CANARY-1",
   "entry_main": "3996fa05fcf6bef7ba660f8e78e9a614381ef274",
+  "latest_horizon_recheck": {
+    "active_owner_vpn_session_check": "NOT_RUN_STOPPED_AT_CERTIFICATE_GATE",
+    "additional_infrastructure_source_gates": false,
+    "binding": "EXISTING_PRIVATE_HMAC_ONLY",
+    "canonical_material_preflight": "NOT_RUN_STOPPED_AT_CERTIFICATE_GATE",
+    "certificate_readbacks": 1,
+    "device_invite_active_not_revoked": true,
+    "entry_main": "6136618777a0feeaff045d57f5ffb2cc19163350",
+    "exact_android106": "PASS",
+    "fresh_backup": "NOT_RUN",
+    "issuance_cause": "NOT_ESTABLISHED",
+    "latest_not_after": "2026-10-29T11:42:38Z",
+    "live_writes": "NOT_RUN",
+    "observed_at": "2026-10-29T08:50:36Z",
+    "paid": {
+      "cap": 10,
+      "cohort": 0,
+      "events": 0,
+      "subscriptions": 0
+    },
+    "permit_applied": false,
+    "permit_built": false,
+    "production_lookups": 0,
+    "production_writes": 0,
+    "result": "BLOCKED_EXISTING_CERTIFICATE_HORIZON",
+    "safe_certificate_token": "dc6b3aa3b462",
+    "server_utc_after_required_margin": true,
+    "stage0_parameters": {
+      "amount_minor": 0,
+      "applied": false,
+      "customer_revenue": 0,
+      "natural_paid_period_seconds": 600,
+      "owner_connect_deadline_seconds": 90,
+      "post_expiry_observation_seconds": 120,
+      "purpose": "internal_canary"
+    },
+    "status_plan_changed": false,
+    "valid_certificate_count": 1,
+    "validation": {
+      "diff_checks": "PASS",
+      "markdown_links": "PASS",
+      "privacy": "PASS",
+      "product_tests": "NOT_RUN_DOCUMENTATION_ONLY",
+      "staged_scope": "PASS",
+      "strict_json": "PASS"
+    }
+  },
   "live_canary_writes": "NOT_RUN",
   "materials": {
     "crl_number": 27219,
@@ -52,10 +99,11 @@
     "subscriptions": 0
   },
   "remaining": [
-    "Resolve existing owner certificate horizon without deleting or revoking it.",
-    "Agree explicit stage0 paid period and observation/stop bounds; no default period or bound permit exists.",
-    "Repeat fresh preflight and create a new coordinated canary backup immediately before any authorized apply.",
-    "Do not start stage0, CRL delivery, recovery or phone Connect automatically."
+    "STOP: a valid owner certificate still exists; do not modify, revoke or delete it.",
+    "A later authorized recheck must use the existing binding, require zero valid certificates and no active owner VPN session.",
+    "Only after horizon clearance continue the listed minimal canonical preflight with at least3600s material lifetime and a fresh validated private backup.",
+    "Stage0 parameters600/90/120s are fixed but unapplied; do not build a permit in this recheck.",
+    "Stage0 activation and coordinated phone procedure require a later explicit owner command; no additional infrastructure/source gates."
   ],
   "result": "BLOCKED_EXISTING_CERTIFICATE_HORIZON",
   "routes": {
