@@ -1,6 +1,73 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
-## Fresh certificate-horizon recheck — 29 October
+## Owner pause and read-only NL diagnosis — 29 October
+
+**PAUSED_BY_OWNER / LIVE_WRITES_NOT_RUN.** Canary paused at the owner's request;
+only read-only server diagnosis continues. No stage0, recovery, migration or restart.
+
+- Around09:20UTC, local ICMP4/4 replies,0% loss, mean12.4ms. From both the local
+  workstation and RU host, TCP22/443 connect in approximately15–42ms. SSH supplies
+  no banner within8s; the full administrative SSH attempt also times out after30s.
+  The existing server-to-server forced-command snapshot already failed the same way.
+- A raw no-SNI TLS probe on443 times out8s; it is **not** an authenticated VPN test
+  and is not independently proof that the configured TCP/VPN protocol failed.
+  Port80 refuses connections; no claim that a service was expected there.
+- Last successful stored NL observation09:03:55UTC: load3.796, RAM89.92%,
+  disk50.42%, uptime3972354s. At08:55:40UTC load peaked15.55; available-memory-based
+  utilization then rose70.58%→89.92% by the last sample. Historical capacity is1 CPU.
+  Current CPU, process, kernel/OOM and IO metrics are inaccessible through stalled SSH.
+- Network reachability is present; user-space/resource or IO stall is the leading
+  hypothesis, not established root cause. Earlier27 October IO stalls are historical
+  context only. No claim that the disk is full, OOM occurred or a particular process
+  caused this incident. Need provider out-of-band console/kernel evidence to distinguish.
+- No reboot, service restart/reload, kill, configuration change or automatic repair.
+  Private diagnostic evidence retained; pre-interruption documentation is preserved.
+  Canary remains paused even if the server later recovers; owner resume is required.
+
+## Live entry with a pre-existing certificate — 29 October
+
+**LIVE_ENTRY_PREFLIGHT_FAILED / LIVE_WRITES_NOT_RUN.**
+Entry main89af55432bf2f748311914a78548f9051b67e259. Same task/checkpoint.
+Former `BLOCKED_EXISTING_CERTIFICATE_HORIZON` entry gate:
+**SUPERSEDED_BY_PRODUCT_CONTRACT_REVIEW** by the explicit owner decision.
+Stage0 version0 activation does not require zero valid certificates. Existing
+`RestrictedReadiness.fetch()` rejects reuse of a retained certificate beyond the new
+paid expiry and issues a paid-bounded replacement; the paid-aware CRL builder checks
+every still-valid certificate against `_grant()`. Product source/packages unchanged.
+The zero-valid-certificate requirement applies to final recovery, not stage0.
+
+- Fresh09:14:18UTC: existing private HMAC binding only, same safe_ref, exact106 and
+  active non-revoked device/invite PASS; subscriptions/events0/0, cohort0/10.
+  Baseline safe certificate token `dc6b3aa3b462`, NotAfter `2026-10-29T11:42:38Z`,
+  retained unchanged. No manual deletion, expiry/revision edit or early revocation.
+- Actual09:17:07UTC: existing RU→NL account-level forced-command snapshot exits255
+  with SSH banner-exchange timeout. Renewal timer is active; worker is not running,
+  latest normal result `exit-code`, status1. Direct administrative SSH also times out
+  before remote inspection. Cause is not established; a local-only transport issue
+  is not assumed because the accepted server-to-server snapshot route also fails.
+- Consequently fresh canonical/material health and the coordinated backup cannot
+  be accepted. No fresh backup or bound permit was built; stage0 and phone handoff
+  were not started. Earlier canonical migration remains accepted, not rolled back.
+  No source/package/launcher/route change, floor operation, service restart/reload,
+  paid event, readiness challenge/fetch, CRL generation/delivery or Android action.
+- This is an observed failure of the already-listed preflight health requirement,
+  not a new infrastructure checkpoint or additional gate. No zero-certificate wait.
+  The latest renewal failure was observed, not triggered by a manual renewal run.
+
+The complete live parameters are recorded without application: natural600s,
+Connect deadline90s, post-expiry120s, CRL phase900s, post-CRL session180s,
+final recovery2592000s; purpose `internal_canary`, amount_minor0, customer revenue0.
+Paid replacement/new safe token, paid_until, natural-expiry/cached-certificate/session
+results, CRL revoke-set count and final recovery all remain NOT_RUN.
+
+After owner resumes the paused canary and the existing route is functional: complete only
+the authorized minimal preflight and fresh private backup; then ask the owner to open
+Family Connect, leave Connect unpressed and reply ГОТОВ. No activation before that
+fresh reply. No automatic infrastructure repair, migration or restart is authorized here.
+Sanitized documentation only: strict JSON, privacy, links, scope and diff checks PASS.
+[Existing receipt](2026-10-28-android106-beta-0-canary-owner-ready.json).
+
+## Historical certificate-horizon recheck — superseded
 
 **BLOCKED_EXISTING_CERTIFICATE_HORIZON / LIVE_WRITES_NOT_RUN.**
 Entry main6136618777a0feeaff045d57f5ffb2cc19163350; same checkpoint and binding,

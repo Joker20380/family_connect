@@ -17,7 +17,9 @@
   },
   "canonical_migration": "ACCEPTED_UNCHANGED",
   "checkpoint": "BETA-0-CANARY-1",
+  "current_observation": "owner_pause_nl_diagnosis",
   "entry_main": "3996fa05fcf6bef7ba660f8e78e9a614381ef274",
+  "former_zero_certificate_gate": "SUPERSEDED_BY_PRODUCT_CONTRACT_REVIEW",
   "latest_horizon_recheck": {
     "active_owner_vpn_session_check": "NOT_RUN_STOPPED_AT_CERTIFICATE_GATE",
     "additional_infrastructure_source_gates": false,
@@ -65,6 +67,81 @@
       "strict_json": "PASS"
     }
   },
+  "latest_live_entry": {
+    "administrative_readback": "SSH_TIMEOUT_BEFORE_REMOTE_INSPECTION",
+    "baseline": {
+      "not_after": "2026-10-29T11:42:38Z",
+      "retained_unchanged": true,
+      "safe_certificate_token": "dc6b3aa3b462"
+    },
+    "binding": "EXISTING_PRIVATE_HMAC_UNCHANGED",
+    "cached_certificate": "NOT_RUN",
+    "canonical_migration": "ACCEPTED_NOT_REPEATED",
+    "cause": "NOT_ESTABLISHED",
+    "credentials_installed": 0,
+    "crl_revoke_set_count": null,
+    "device_invite": "ACTIVE_NOT_REVOKED",
+    "entry_main": "89af55432bf2f748311914a78548f9051b67e259",
+    "exact_android106": "PASS",
+    "final_recovery": "NOT_RUN",
+    "former_zero_certificate_gate": "SUPERSEDED_BY_PRODUCT_CONTRACT_REVIEW",
+    "fresh_backup": "NOT_RUN",
+    "fresh_owner_handoff": "NOT_STARTED_PREFLIGHT_FAILED",
+    "materials": "FRESH_COORDINATED_ACCEPTANCE_INCOMPLETE",
+    "natural_expiry": "NOT_RUN",
+    "new_infrastructure_gates": false,
+    "new_paid_certificate_safe_token": null,
+    "observed_at": "2026-10-29T09:17:07Z",
+    "owner_observed_at": "2026-10-29T09:14:18Z",
+    "paid": {
+      "cap": 10,
+      "cohort": 0,
+      "events": 0,
+      "subscriptions": 0
+    },
+    "paid_boundary": null,
+    "permit_built": false,
+    "production_writes": 0,
+    "renewal": {
+      "exit_status": 1,
+      "latest_result": "exit-code",
+      "manually_triggered": false,
+      "running": false,
+      "timer": "ACTIVE"
+    },
+    "restarts": 0,
+    "result": "LIVE_ENTRY_PREFLIGHT_FAILED",
+    "safe_ref": "dev_fa4f7e03ca04",
+    "session_classification": "NOT_RUN",
+    "snapshot": {
+      "error": "SSH_BANNER_EXCHANGE_TIMEOUT",
+      "exit_code": 255,
+      "result": "ACTUAL_SSH_FAILED",
+      "source": "EXISTING_SERVER_TO_SERVER_FORCED_COMMAND"
+    },
+    "source_package_route_changes": 0,
+    "stage0": "NOT_RUN",
+    "stage0_parameters": {
+      "amount_minor": 0,
+      "applied": false,
+      "crl_phase_paid_period_seconds": 900,
+      "customer_revenue": 0,
+      "final_recovery_seconds": 2592000,
+      "natural_paid_period_seconds": 600,
+      "owner_connect_deadline_seconds": 90,
+      "post_crl_session_observation_seconds": 180,
+      "post_expiry_observation_seconds": 120,
+      "purpose": "internal_canary"
+    },
+    "validation": {
+      "diff_checks": "PASS",
+      "markdown_links": "PASS",
+      "privacy": "PASS",
+      "product_tests": "NOT_RERUN_DOCUMENTATION_ONLY",
+      "staged_scope": "PASS",
+      "strict_json": "PASS"
+    }
+  },
   "live_canary_writes": "NOT_RUN",
   "materials": {
     "crl_number": 27219,
@@ -91,6 +168,45 @@
     },
     "valid_certificates": 1
   },
+  "owner_pause_nl_diagnosis": {
+    "canary_resume": "EXPLICIT_OWNER_REQUIRED",
+    "canary_resumed": false,
+    "network_probe_observed_at_utc": [
+      "2026-10-29T09:20:17Z",
+      "2026-10-29T09:20:30Z"
+    ],
+    "earlier_load_peak": {
+      "load_1m": 15.55,
+      "memory_used_percent": 70.58,
+      "observed_at": "2026-10-29T08:55:40.389498Z"
+    },
+    "kernel_and_process_evidence": "UNAVAILABLE_SSH_STALLED",
+    "last_monitor": {
+      "disk_used_percent": 50.42,
+      "load_1m": 3.796,
+      "memory_used_percent": 89.92,
+      "observed_at": "2026-10-29T09:03:55.900055Z",
+      "uptime_seconds": 3972354
+    },
+    "network": {
+      "icmp_average_ms": 12.426,
+      "icmp_received": 4,
+      "icmp_sent": 4,
+      "packet_loss_percent": 0,
+      "raw_tls_probe": "NO_SNI_TIMEOUT_NOT_AUTHENTICATED_VPN_TEST",
+      "ssh_full_attempt": "BANNER_TIMEOUT_30_SECONDS",
+      "tcp22": "CONNECTED_NO_SSH_BANNER",
+      "tcp443": "CONNECTED",
+      "tcp80": "REFUSED_NO_SERVICE_EXPECTATION",
+      "vantage_points": 2
+    },
+    "next_diagnostic": "PROVIDER_OUT_OF_BAND_CONSOLE_WITHOUT_AUTOMATIC_REBOOT",
+    "production_changes": 0,
+    "restarts": 0,
+    "result": "PAUSED_BY_OWNER",
+    "root_cause": "NOT_CONFIRMED",
+    "working_hypothesis": "USERSPACE_RESOURCE_OR_IO_STALL"
+  },
   "owner_ready_received": true,
   "paid": {
     "cap": 10,
@@ -99,13 +215,14 @@
     "subscriptions": 0
   },
   "remaining": [
-    "STOP: a valid owner certificate still exists; do not modify, revoke or delete it.",
-    "A later authorized recheck must use the existing binding, require zero valid certificates and no active owner VPN session.",
-    "Only after horizon clearance continue the listed minimal canonical preflight with at least3600s material lifetime and a fresh validated private backup.",
-    "Stage0 parameters600/90/120s are fixed but unapplied; do not build a permit in this recheck.",
-    "Stage0 activation and coordinated phone procedure require a later explicit owner command; no additional infrastructure/source gates."
+    "Canary paused by owner: do not resume it as part of server diagnosis or automatic server recovery.",
+    "The former zero-certificate stage0 gate is superseded; preserve baseline evidence without editing or deleting the certificate.",
+    "The existing required snapshot route currently fails and renewal last result is unsuccessful; no automatic infrastructure repair is authorized.",
+    "Once the existing route is functional, complete only the authorized minimal preflight and fresh backup, then request a fresh owner GOTOV before activation.",
+    "Continue the specified600/90/120/900/180/2592000-second procedure in this same checkpoint, using the same event on an unknown apply outcome.",
+    "Final recovery alone waits for the actual maximum CRL-covered NotAfter plus30 seconds; do not repeat stage0 or CRL generation."
   ],
-  "result": "BLOCKED_EXISTING_CERTIFICATE_HORIZON",
+  "result": "PAUSED_BY_OWNER",
   "routes": {
     "canonical": "ACTIVE",
     "future_exact_crl": "DISABLED_NO_PERMIT",

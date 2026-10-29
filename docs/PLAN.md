@@ -3,22 +3,27 @@
 ## Current engineering priority / Текущий critical path
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
-**Current substep BETA-0-CANARY-1 — OWNER_READY_RECEIVED /
-BLOCKED_EXISTING_CERTIFICATE_HORIZON / LIVE_WRITES_NOT_RUN.**
-Owner replied ГОТОВ after accepted canonical migration. Fresh read-only entry at
-20:36:58UTC28.10: same owner binding/exact Android106, ledger0/0, cohort0/10,
-but owner certificates1/valid1 (previously0 at20:20:38); NotAfter23:10:09UTC28.10.
-Issuance cause is not established; this does not prove the owner pressed Connect.
-Canonical/gateway/actual SSH snapshot PASS, renewal timer active/latest success,
-publisher directory route unchanged; CRL/floor27219, material headroom9194s.
-Migration acceptance remains valid; this is a separate live-entry horizon blocker.
-No stage0/paid event, permit, temporary credential, fresh canary backup, restart,
-timer change, CRL mutation or operator readiness/Android action in this continuation.
-STOP before mutation. Do not delete/revoke the certificate or refresh materials.
-NEXT: resolve the horizon with a fresh readback; explicitly agree stage0 paid period
-and observation/stop bounds (no default or bound permit exists), then fresh preflight
-and a new canary backup immediately before an authorized apply. No automatic retry.
-[Owner-ready read-only receipt](releases/2026-10-28-android106-beta-0-canary-owner-ready.json).
+**Current substep BETA-0-CANARY-1 — PAUSED_BY_OWNER / LIVE_WRITES_NOT_RUN.**
+Owner paused the canary29.10 and requested read-only NL diagnosis. No automatic resume.
+NL IP responds, but SSH banner exchange times out from both local and RU vantage points.
+Last successful monitor09:03:55UTC: RAM89.92%, disk50.42%; earlier load peak15.55.
+Resource/IO stall is a hypothesis, not confirmed OOM or storage failure; console needed.
+No restart/reload or production change. Prior live-entry preflight failure follows.
+Owner decision29.10: former zero-certificate gate is
+**SUPERSEDED_BY_PRODUCT_CONTRACT_REVIEW**. No wait for zero certificates before stage0.
+Fresh09:14:18UTC binding/exact Android106/device-invite PASS, ledger0/0, cohort0/10;
+baseline safe certificate token dc6b3aa3b462 retained unchanged as evidence.
+Actual09:17:07UTC failure: existing forced-command SSH snapshot exits255 with banner
+exchange timeout. Renewal timer active, worker not running, last result exit-code/1.
+Direct administrative SSH also times out; cause not established. This is failure of
+the already-required live route, not a new certificate/infrastructure/source gate.
+Canonical migration acceptance retained; no redesign, reconciliation or restart.
+Fresh backup/permit/activation NOT_RUN; no paid/readiness/Android/CRL writes.
+Parameters fixed: natural600s, Connect90s, post-expiry120s, CRL phase900s,
+post-CRL180s, final recovery2592000s; internal_canary/amount0/revenue0.
+Future canary continuation requires owner resume first, then the listed minimal
+preflight/backup and fresh ГОТОВ before stage0. No automatic repair or resume.
+[Current canary evidence](releases/2026-10-27-android106-beta-0-canary-1.md).
 
 **Accepted migration milestone at3996fa0 — READY_FOR_OWNER_LIVE / LIVE_CANARY_WRITES_NOT_RUN.**
 PINNED_VENV_RUNTIME_PASS / SNAPSHOT_LAUNCHER_ACCOUNT_REHEARSAL_PASS /
