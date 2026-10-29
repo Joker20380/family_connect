@@ -17,7 +17,7 @@
   },
   "canonical_migration": "ACCEPTED_UNCHANGED",
   "checkpoint": "BETA-0-CANARY-1",
-  "current_observation": "provider_boot_kernel_panic",
+  "current_observation": "memory_pressure_retrospective",
   "entry_main": "3996fa05fcf6bef7ba660f8e78e9a614381ef274",
   "former_zero_certificate_gate": "SUPERSEDED_BY_PRODUCT_CONTRACT_REVIEW",
   "latest_horizon_recheck": {
@@ -167,6 +167,31 @@
       "observed_at": "2026-10-28T20:20:38+00:00"
     },
     "valid_certificates": 1
+  },
+  "memory_pressure_retrospective": {
+    "source": "READ_ONLY_LOCAL_MONITORING_DATABASE",
+    "sample_count": 1282,
+    "source_sha256": "e9f7a24126d3189d72695c89ce5259b9e89ace2599e75594e64982c33f7de6fc",
+    "metric": "100*(1-MemAvailable/MemTotal)",
+    "before_cutover_median_percent": 58.28,
+    "observed_after_cutover_median_percent": 60.10,
+    "morning_baseline_range_percent": [58.81, 60.90],
+    "rise_start_observed_utc": "2026-10-29T08:33:33Z",
+    "rise_start_percent": 66.94,
+    "first_peak_observed_utc": "2026-10-29T08:42:54Z",
+    "first_peak_percent": 87.52,
+    "last_observed_utc": "2026-10-29T09:03:55Z",
+    "last_memory_percent": 89.92,
+    "overnight_coverage_gap_seconds": 33827,
+    "pre_failure_coverage_gap_seconds": 766,
+    "per_process_rss": "NOT_CAPTURED",
+    "oom_victim_evidence": "UNAVAILABLE",
+    "ru_renewal_journal_read": "BOUNDED_READ_TIMED_OUT",
+    "application_or_background_workload_cause": "NOT_EXCLUDED_NOT_PROVEN",
+    "provider_fault": "NOT_ESTABLISHED",
+    "causal_link_to_boot_panic": "NOT_ESTABLISHED",
+    "production_changes": 0,
+    "canary_resumed": false
   },
   "provider_boot_kernel_panic": {
     "source": "OWNER_SUPPLIED_PROVIDER_REPLY_AND_SCREENSHOT",

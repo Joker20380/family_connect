@@ -1,5 +1,36 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Memory-pressure retrospective — 29 October
+
+Read-only local monitoring database analysis covers1282 NL samples from27 October
+14:53:03UTC through29 October09:03:55UTC. It does not contain per-process RSS/PSS,
+OOM victim records or historical memory-pressure counters, so no responsible process
+is identified. Our application, workload and background tasks remain candidates.
+
+- Before the28 October cutover,606 observed daytime samples have memory median58.28%.
+  After20:20 through23:00UTC,137 samples have median60.10%, range57.55–65.89%.
+  No immediate large sustained increase appears in that observed post-cutover window;
+  this does not exclude a later application leak or workload-triggered regression.
+- A coverage gap spans28 October23:00:05 to29 October08:23:52UTC. After it, seven
+  morning samples through08:30:52UTC remain58.81–60.90%.
+- At08:33:33UTC memory is66.94%, increasing to87.52% by08:42:54. After a766-second
+  observation gap,08:55:40 shows70.58% and load15.55; memory then rises to89.92% at
+  09:03:55. A drop across missing observations is not proof of an OOM kill or restart.
+- The collector computes100*(1-MemAvailable/MemTotal). This is not merely the usual
+  low-MemFree/page-cache presentation. The historical host capacity is about955MiB;
+  the last sample would correspond to about96MiB available if that capacity is unchanged.
+- The stored schema lacks process attribution. Current collector source uses bounded,
+  serial subprocesses and a non-overlap lock, but source inspection is not evidence of
+  the historical remote process population or proof that monitoring had zero overhead.
+- A bounded RU renewal-journal read timed out; schedule correlation remains unresolved.
+  No repeated unbounded journal scan, manual renewal or production configuration change.
+
+Request retained previous-boot kernel/OOM and service-accounting evidence, any existing
+process-history capture, and OS package/initramfs update logs for29 October08:25–09:10UTC.
+Memory exhaustion could explain the original unresponsiveness, but is not established;
+the later VFS boot panic still requires its own disk/boot-chain diagnosis. Do not assign
+provider or application fault from aggregate memory alone. Canary stays paused.
+
 ## Provider boot-panic evidence — 29 October
 
 Owner supplied a provider reply and screenshot showing `Kernel panic - not syncing:

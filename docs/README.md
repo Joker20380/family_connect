@@ -2,6 +2,11 @@
 
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
 **Current substep BETA-0-CANARY-1 — PAUSED_BY_OWNER / LIVE_WRITES_NOT_RUN.**
+Memory retrospective:1282 stored NL samples. Observed post-cutover28.10 median60.10%;
+29.10 08:23–08:30UTC58.81–60.90%, rising to87.52% at08:42 and89.92% at09:03.
+Metric uses MemAvailable, not merely free memory. Overnight and pre-failure gaps exist.
+Per-process RSS/OOM evidence is absent; our application/background workload is not ruled
+out. No process attribution or proven causal link to the separate boot panic yet.
 Provider screenshot supplied29.10 now identifies a boot-time kernel panic:
 VFS unable to mount root filesystem on unknown-block(0,0). This is provider evidence,
 not a successful remote readback. Underlying cause and original pre-reboot stall remain
