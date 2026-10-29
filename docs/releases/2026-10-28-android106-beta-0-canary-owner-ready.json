@@ -17,7 +17,7 @@
   },
   "canonical_migration": "ACCEPTED_UNCHANGED",
   "checkpoint": "BETA-0-CANARY-1",
-  "current_observation": "owner_pause_nl_diagnosis",
+  "current_observation": "owner_requested_nl_reboot",
   "entry_main": "3996fa05fcf6bef7ba660f8e78e9a614381ef274",
   "former_zero_certificate_gate": "SUPERSEDED_BY_PRODUCT_CONTRACT_REVIEW",
   "latest_horizon_recheck": {
@@ -167,6 +167,44 @@
       "observed_at": "2026-10-28T20:20:38+00:00"
     },
     "valid_certificates": 1
+  },
+  "owner_requested_nl_reboot": {
+    "observed_window_utc": "2026-10-29T09:35:17Z/2026-10-29T09:37:03Z",
+    "owner_reported_control_pressed": true,
+    "provider_control_mode": "UNKNOWN",
+    "reboot_completion": "UNCONFIRMED",
+    "provider_console": "UNAVAILABLE_OWNER_REPORTED",
+    "ssh_banner_checks": 6,
+    "ssh_banner": "TIMEOUT",
+    "tcp22": "CONNECTED",
+    "tcp443": "CONNECTED",
+    "icmp_sent": 3,
+    "icmp_received": 3,
+    "service_health": "NOT_VERIFIED",
+    "kernel_evidence": "UNAVAILABLE",
+    "root_cause": "NOT_CONFIRMED",
+    "second_reboot_requested": false,
+    "subsequent_owner_boot_report": true,
+    "post_boot_network": {
+      "observed_utc": "2026-10-29T09:40:08Z",
+      "tcp22": "CONNECT_TIMEOUT",
+      "tcp443": "CONNECT_TIMEOUT",
+      "icmp_sent": 3,
+      "icmp_received": 0,
+      "ru_ssh_connect": "TIMEOUT",
+      "os_boot_verified": false
+    },
+    "ru_readback": {
+      "observed_utc": "2026-10-29T09:39:25Z",
+      "friends_http": "ACTIVE",
+      "renewal_timer": "ACTIVE_WAITING",
+      "latest_renewal_worker": "FAILED_EXIT_1",
+      "latest_renewal_exit_utc": "2026-10-29T09:27:52Z",
+      "manual_renewal_triggered": false
+    },
+    "application_or_configuration_changes": false,
+    "canary_resumed": false,
+    "next": "READ_PROVIDER_OPERATION_STATUS_BEFORE_ANOTHER_POWER_ACTION"
   },
   "owner_pause_nl_diagnosis": {
     "canary_resume": "EXPLICIT_OWNER_REQUIRED",

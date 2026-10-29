@@ -1,5 +1,27 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Owner-requested NL reboot — completion unconfirmed, 29 October
+
+Canary remains **PAUSED_BY_OWNER / LIVE_WRITES_NOT_RUN**. After reporting the provider
+console unusable, the owner requested availability recovery and reported pressing the
+provider reboot control. Exact control/mode and operation completion are not observed.
+At09:35–09:37UTC, six SSH banner checks still time out. Fresh09:36:53UTC network check:
+TCP22/443 reachable, SSH banner absent, ICMP3/3 with0% loss. This does not prove that
+the VM rebooted or identify the cause. Boot time, services and previous kernel journal
+remain unreadable; no restored-health claim. Need provider operation status before a
+second power action. No operator-issued reboot/service restart, application/config
+change, canary activation, paid event, CRL or Android action. Earlier no-reboot evidence
+below describes only the preceding read-only diagnosis. Raw evidence remains private.
+
+The owner subsequently reported the server booted. Fresh09:40:08UTC external check:
+TCP22/443 now time out, ICMP0/3; the09:39:25UTC RU vantage point also cannot reach SSH.
+This change is not proof of successful OS startup or restored service. Six bounded SSH
+probes after the boot report remain unable to connect. Need the current console boot
+screen or provider operation status, not another blind restart. RU Friends HTTP remains
+active; renewal timer active/waiting, latest worker result remains failed from09:27:52UTC.
+No manual renewal or snapshot RPC was sent after the boot report; remote NL diagnostic
+shell was not reached. No root-cause, material-readiness or canary acceptance claim.
+
 ## Owner pause and read-only NL diagnosis — 29 October
 
 **PAUSED_BY_OWNER / LIVE_WRITES_NOT_RUN.** Canary paused at the owner's request;

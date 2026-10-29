@@ -7,7 +7,13 @@ Owner paused the canary29.10 and requested read-only NL diagnosis. No automatic 
 NL IP responds, but SSH banner exchange times out from both local and RU vantage points.
 Last successful monitor09:03:55UTC: RAM89.92%, disk50.42%; earlier load peak15.55.
 Resource/IO stall is a hypothesis, not confirmed OOM or storage failure; console needed.
-No restart/reload or production change. Prior live-entry preflight failure follows.
+Owner subsequently requested availability recovery and reported pressing the provider
+reboot control. Completion is unconfirmed:09:35–09:37UTC SSH still gives no banner;
+ICMP3/3 and TCP22/443 were then reachable. Owner subsequently reported boot completion;
+at09:40UTC TCP22/443 time out and ICMP0/3; RU also cannot reach SSH. OS/service startup
+is unverified. Need console boot screen/provider status; no second reboot requested.
+No canary resume or application/config change.
+Prior live-entry preflight failure follows.
 Owner decision29.10: former zero-certificate gate is
 **SUPERSEDED_BY_PRODUCT_CONTRACT_REVIEW**. No wait for zero certificates before stage0.
 Fresh09:14:18UTC binding/exact Android106/device-invite PASS, ledger0/0, cohort0/10;
