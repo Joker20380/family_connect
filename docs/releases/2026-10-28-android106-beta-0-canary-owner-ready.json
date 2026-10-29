@@ -17,7 +17,7 @@
   },
   "canonical_migration": "ACCEPTED_UNCHANGED",
   "checkpoint": "BETA-0-CANARY-1",
-  "current_observation": "owner_requested_nl_reboot",
+  "current_observation": "owner_second_nl_reboot",
   "entry_main": "3996fa05fcf6bef7ba660f8e78e9a614381ef274",
   "former_zero_certificate_gate": "SUPERSEDED_BY_PRODUCT_CONTRACT_REVIEW",
   "latest_horizon_recheck": {
@@ -167,6 +167,25 @@
       "observed_at": "2026-10-28T20:20:38+00:00"
     },
     "valid_certificates": 1
+  },
+  "owner_second_nl_reboot": {
+    "owner_report": "RUNNING_PANEL_EMPTY_CONNECTED_CONSOLE_REBOOT_ANNOUNCED",
+    "observed_window_utc": "2026-10-29T10:06:24Z/2026-10-29T10:09:14Z",
+    "reboot_mode": "UNKNOWN",
+    "reboot_completion": "UNVERIFIED",
+    "network_checks": 7,
+    "tcp22": "CONNECT_TIMEOUT_ALL_CHECKS",
+    "tcp443": "CONNECT_TIMEOUT_ALL_CHECKS",
+    "icmp_replies": 0,
+    "icmp_probes": 7,
+    "independent_ru_observed_utc": "2026-10-29T10:08:26Z",
+    "independent_ru_tcp22_tcp443": "CONNECT_TIMEOUT",
+    "remote_diagnostic_shell_reached": false,
+    "root_cause": "NOT_CONFIRMED",
+    "additional_operator_power_actions": 0,
+    "application_or_configuration_changes": false,
+    "canary_resumed": false,
+    "next": "PROVIDER_OPERATION_DETAILS_OR_FUNCTIONING_CONSOLE_NO_BLIND_RESET"
   },
   "owner_requested_nl_reboot": {
     "observed_window_utc": "2026-10-29T09:35:17Z/2026-10-29T09:37:03Z",

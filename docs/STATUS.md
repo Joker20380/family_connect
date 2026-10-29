@@ -11,7 +11,10 @@ Owner subsequently requested availability recovery and reported pressing the pro
 reboot control. Completion is unconfirmed:09:35–09:37UTC SSH still gives no banner;
 ICMP3/3 and TCP22/443 were then reachable. Owner subsequently reported boot completion;
 at09:40UTC TCP22/443 time out and ICMP0/3; RU also cannot reach SSH. OS/service startup
-is unverified. Need console boot screen/provider status; no second reboot requested.
+is unverified. Owner subsequently reported Running with an empty connected console,
+and announced another reboot at10:06UTC. Seven bounded checks through10:09UTC show
+no ICMP reply and TCP22/443 timeouts; RU independently confirms both port timeouts.
+Reboot mode/completion and OS startup remain unverified. No further power action sent.
 No canary resume or application/config change.
 Prior live-entry preflight failure follows.
 Owner decision29.10: former zero-certificate gate is

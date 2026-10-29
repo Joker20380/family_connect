@@ -1,5 +1,19 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Repeated owner reboot report — no recovered access, 29 October
+
+At10:06UTC the owner reported that the provider panel showed Running, the console
+showed only connected with no OS output, and announced another reboot. This records
+the owner's action report, not two verified host boots or a known soft/hard reset mode.
+Seven bounded checks from10:06:24 through10:09:06UTC each show TCP22/443 connection
+timeouts and no ICMP reply. Independent RU check10:08:26UTC confirms both TCP timeouts.
+Existing read-only monitoring also fails to collect NL while collecting RU successfully.
+The remote diagnostic shell never ran; kernel evidence, boot completion and services
+remain unverified. Root cause remains unknown. No additional power operation, service
+restart, configuration/source/package change or canary action was sent by the operator.
+Next recovery step requires provider identity/operation details or a functioning console;
+do not repeat blind resets. Canary remains **PAUSED_BY_OWNER / LIVE_WRITES_NOT_RUN**.
+
 ## Owner-requested NL reboot — completion unconfirmed, 29 October
 
 Canary remains **PAUSED_BY_OWNER / LIVE_WRITES_NOT_RUN**. After reporting the provider
