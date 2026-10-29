@@ -17,7 +17,7 @@
   },
   "canonical_migration": "ACCEPTED_UNCHANGED",
   "checkpoint": "BETA-0-CANARY-1",
-  "current_observation": "owner_second_nl_reboot",
+  "current_observation": "provider_boot_kernel_panic",
   "entry_main": "3996fa05fcf6bef7ba660f8e78e9a614381ef274",
   "former_zero_certificate_gate": "SUPERSEDED_BY_PRODUCT_CONTRACT_REVIEW",
   "latest_horizon_recheck": {
@@ -167,6 +167,23 @@
       "observed_at": "2026-10-28T20:20:38+00:00"
     },
     "valid_certificates": 1
+  },
+  "provider_boot_kernel_panic": {
+    "source": "OWNER_SUPPLIED_PROVIDER_REPLY_AND_SCREENSHOT",
+    "evidence_retained_utc": "2026-10-29T10:23:34Z",
+    "screenshot_sha256": "9c24d9e51edaa07b76bb91cbc39140d01f90e9bdd3fcdc5ce386de31922a87cf",
+    "classification": "BOOT_KERNEL_PANIC_VFS_UNABLE_TO_MOUNT_ROOT_FS",
+    "device_diagnostic": "unknown-block(0,0)",
+    "underlying_cause": "NOT_CONFIRMED",
+    "original_pre_reboot_stall_cause": "NOT_CONFIRMED",
+    "data_loss": "NOT_ESTABLISHED",
+    "application_migration_causality": "NOT_ESTABLISHED",
+    "remote_os_readback": "UNAVAILABLE",
+    "reviewed_migration_boot_chain_changes": "NONE_IN_REVIEWED_SCRIPTS",
+    "unattended_os_updates": "NOT_AUDITED",
+    "os_repair_executed": false,
+    "canary_resumed": false,
+    "next": "PROVIDER_FULL_BOOT_LOG_DISK_AND_BOOT_CHAIN_INSPECTION_PRESERVE_DATA"
   },
   "owner_second_nl_reboot": {
     "owner_report": "RUNNING_PANEL_EMPTY_CONNECTED_CONSOLE_REBOOT_ANNOUNCED",

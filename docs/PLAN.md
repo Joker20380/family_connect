@@ -4,6 +4,11 @@
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
 **Current substep BETA-0-CANARY-1 — PAUSED_BY_OWNER / LIVE_WRITES_NOT_RUN.**
+Provider screenshot supplied29.10 now identifies a boot-time kernel panic:
+VFS unable to mount root filesystem on unknown-block(0,0). This is provider evidence,
+not a successful remote readback. Underlying cause and original pre-reboot stall remain
+unknown; it does not prove lost data or implicate the application migration. No OS repair
+performed. Need full boot log, attached-disk/initramfs/root-target checks and safe recovery.
 Owner paused the canary29.10 and requested read-only NL diagnosis. No automatic resume.
 NL IP responds, but SSH banner exchange times out from both local and RU vantage points.
 Last successful monitor09:03:55UTC: RAM89.92%, disk50.42%; earlier load peak15.55.

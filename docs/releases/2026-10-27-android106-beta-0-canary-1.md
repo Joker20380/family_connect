@@ -1,5 +1,24 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Provider boot-panic evidence — 29 October
+
+Owner supplied a provider reply and screenshot showing `Kernel panic - not syncing:
+VFS: Unable to mount root fs on unknown-block(0,0)`. The boot failure is supported by
+that external evidence, not by a recovered SSH session. The screenshot does not establish
+why the root device/filesystem is unavailable, whether data is damaged, or the cause of
+the earlier stall before the reboot requests. Missing/mismatched initramfs, root-target
+configuration and disk/controller availability require evidence, not assumed fixes.
+The retained28 October deployment record concerns application artifacts, profile/runtime
+configuration, access boundaries and service units; one gateway-service restart passed.
+Reviewed migration scripts do not perform kernel/bootloader/initramfs or partition repair.
+This is not an audit of unattended OS updates or unrelated actors. On29 October this
+incident work was read-only diagnosis; reboot controls were operated by the owner.
+Request full boot output and disk/boot-chain inspection from the provider, preserving
+disks and evidence; a previous installed kernel is a recovery option, not an executed fix.
+No rescue repair, filesystem correction, boot configuration rewrite or OS reinstall has
+been performed by this task. Canary remains paused. Raw screenshot retained privately;
+only its digest and the sanitized failure classification are recorded in the receipt.
+
 ## Repeated owner reboot report — no recovered access, 29 October
 
 At10:06UTC the owner reported that the provider panel showed Running, the console
