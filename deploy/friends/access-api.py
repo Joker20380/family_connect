@@ -1,5 +1,5 @@
 """Loopback invite/identity API. Public access only through the existing TLS ingress."""
-import json,logging,subprocess,threading,sys
+import base64,ipaddress,json,logging,subprocess,threading,sys
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from pathlib import Path
 ROOT=Path('/opt/apps/family_connect/friends-access')
@@ -17,6 +17,20 @@ def unique(pairs):
   if key in result:raise ValueError()
   result[key]=value
  return result
+
+def configuration_catalog(country):
+ raw=(ROOT/'catalog.json').read_bytes()
+ if len(raw)>16384:raise ValueError('Oversized catalog')
+ catalog=json.loads(raw,object_pairs_hook=unique)
+ payload=json.loads(base64.b64decode(catalog['payload'],validate=True),object_pairs_hook=unique)
+ gateways=[gateway for gateway in payload['gateways'] if gateway['country']==country]
+ if len(gateways)!=1:raise ValueError('Ambiguous gateway')
+ host=gateways[0]['tcp']['server']
+ address=ipaddress.IPv4Address(host)
+ if str(address)!=host or address.is_loopback or address.packed[0]==0 or address.packed[0]>=224:
+  raise ValueError('Invalid gateway address')
+ return catalog,host
+
 class Handler(BaseHTTPRequestHandler):
  def log_message(self,*args):pass
  def reply(self,status,value):
@@ -77,12 +91,13 @@ class Handler(BaseHTTPRequestHandler):
     result=request(access,value)
    else:
     country=self.path.rsplit('/',1)[1];record=access.complete(value,country)
+    catalog,host=configuration_catalog(country)
     if country=='ru':command=['/usr/bin/python3','/opt/apps/family_connect/friends-awg/awg-gateway.py','register']
-    else:command=['/usr/bin/ssh','-i','/opt/apps/family_connect/friends-awg/registration-key','-o','IdentitiesOnly=yes','-o','BatchMode=yes','-o','ConnectTimeout=5','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/opt/apps/family_connect/friends-awg/known_hosts','root@186.246.45.246','register']
+    else:command=['/usr/bin/ssh','-i','/opt/apps/family_connect/friends-awg/registration-key','-o','IdentitiesOnly=yes','-o','BatchMode=yes','-o','ConnectTimeout=5','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/opt/apps/family_connect/friends-awg/known_hosts','root@'+host,'register']
     reply=subprocess.run(command,input=json.dumps(record).encode(),capture_output=True,timeout=15)
     if reply.returncode:raise RuntimeError('Gateway unavailable')
     assigned=json.loads(reply.stdout);assert assigned['public_key']==record['public_key'] and assigned['transport']=='amneziawg-3.1'
-    result={'device':record['device'],'country':country,'address':assigned['address'],'tcp_id':record['tcp_id'],'catalog':json.loads((ROOT/'catalog.json').read_bytes())}
+    result={'device':record['device'],'country':country,'address':assigned['address'],'tcp_id':record['tcp_id'],'catalog':catalog}
    self.reply(200,result)
   except Exhausted:self.reply(410,{'error':'referral-pool-exhausted'})
   except RateLimited:self.reply(429,{'error':'referral-rate-limited'})

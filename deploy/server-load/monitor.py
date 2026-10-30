@@ -1,5 +1,6 @@
 """Read-only host resource samples; no profiles, peer identifiers or traffic history."""
 import argparse
+import ipaddress
 import json
 import math
 import os
@@ -41,10 +42,12 @@ def atomic(path, value):
 
 
 def remote(config):
+    host=config.get('remote_host','186.246.45.246')
+    if str(ipaddress.IPv4Address(host))!=host:raise ValueError('Invalid remote address')
     result=subprocess.run(['/usr/bin/ssh','-T','-i',config['key'],
         '-o','IdentitiesOnly=yes','-o','BatchMode=yes','-o','ConnectTimeout=4',
         '-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile='+config['known_hosts'],
-        'root@186.246.45.246','load'],capture_output=True,timeout=6,check=True)
+        'root@'+host,'load'],capture_output=True,timeout=6,check=True)
     if len(result.stdout)>4096:raise ValueError('Oversized sample')
     value=json.loads(result.stdout)
     if value['country']!='nl' or not -15<=time.time()-value['observed_at']<=45:

@@ -1,6 +1,7 @@
 """Forced SSH command on the authorized mailbox host; root-owned input only."""
 import json
 import fcntl
+import ipaddress
 import os
 from pathlib import Path
 import subprocess
@@ -10,6 +11,16 @@ import tempfile
 ROOT = Path('/opt/apps/family_connect/mailbox-pilot')
 sys.path.insert(0, str(ROOT/'app'))
 from messenger.membership import validate
+
+
+def acknowledgement(value,settings,bootstrap):
+    host=str(ipaddress.IPv4Address(bootstrap['server']))
+    port=bootstrap['port']
+    if (host!=bootstrap['server'] or type(port) is not int or not 1<=port<=65535
+            or bootstrap['public_key']!=settings['public_key']):
+        raise ValueError('Invalid mailbox bootstrap')
+    return dict(sequence=value['sequence'],expires_at=value['expires_at'],
+                host=host,port=port,public_key=settings['public_key'])
 
 
 def main():
@@ -25,6 +36,7 @@ def main():
         raise ValueError('Stale snapshot')
     subprocess.run(['systemctl','is-active','--quiet','family-connect-mailbox'],check=True)
     settings=json.loads((ROOT/'settings.json').read_bytes())
+    reply=acknowledgement(value,settings,json.loads((ROOT/'bootstrap.json').read_bytes()))
     import grp
     fd,path=tempfile.mkstemp(prefix='.members-',dir=ROOT)
     try:
@@ -37,8 +49,7 @@ def main():
         finally:os.close(directory)
     finally:
         if os.path.exists(path):os.unlink(path)
-    print(json.dumps(dict(sequence=value['sequence'],expires_at=value['expires_at'],
-                         host='186.246.45.246',port=4243,public_key=settings['public_key'])))
+    print(json.dumps(reply))
 
 
 if __name__=='__main__':

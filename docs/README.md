@@ -4,23 +4,17 @@
 
 [NL gateway replacement — 30 October](releases/2026-10-30-nl-gateway-replacement.md)
 and [sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json):
-**ORDINARY_PASS_RESTRICTED_RENEWAL_PENDING**: old NL FENCED, final coordinated backup
-verified. New AWG/TCP synthetic DNS/HTTPS/egress/cleanup PASS;46 peers/46 credentials,
-three stable samples and0 restarts. Restricted renewal/supporting acceptance pending;
-no signed cutover or owner smoke. RU backup verified, ledger0/0 and catalog sequence3
-unchanged. Earlier owner-authorized installation on
-`185.10.158.212` completed through official22.04→24.04→26.04 upgrades. Ubuntu26.04.1,
-kernel7.0.0-42-generic, four guarded reboots, about2GiB swap, NTP/TUN/strict SSH PASS.
-Exact CPython3.14.4 and retained runtime imports/execution PASS. Required diagnostic
-TCP/UDP ingress PASS from workstation/RU; RU SYN captured, not VPN acceptance.
-Initial Ubuntu22.04/glibc2.35 was incompatible; the interpreter needsGLIBC2.38 and
-its retained extensions needGLIBC2.42/OpenSSL3.4. No custom runtime/libc substitution.
-Owner-interactive SSH key setup and strict pinned login PASS; provider verification
-was unavailable. Private13-role matrix and inactive restoration verified;5285 files,
-canonical boundaries/exact launcher, mailbox identity/volume and configuration checks PASS.
-Service-start guards remain in place; final mutable export is pending. No product
-identity activation, fencing or publication. This availability-restoration task
-supersedes provider repair as the active recovery path, not the paused product queue.
+**BLOCKED_NL_REPLACEMENT / DIRECTORY_INVALID**: exact renewal rejects the expired publisher
+directory before canonical promotion. RU/NL rollback readbacks PASS; journal preserved,
+restricted inactive, renewal paused. RU ordinary HTTP restored and public HTTPS dispatch
+verified. Old NL FENCED; new `185.10.158.212` AWG/TCP synthetic DNS/HTTPS/egress/cleanup PASS,
+46 peers/46 credentials, three stable samples/0 restarts. Final coordinated backup verified.
+Ubuntu26.04.1/kernel7.0.0-42, exact runtime/artifacts, about2GiB swap and RU ingress verified.
+Paid ledger0/0, signed catalog sequence3 unchanged; no publication or owner smoke.
+Endpoint-routing source checkpoint has43 passing tests/14 optional skips and reproducible
+builds, but is NOT_DEPLOYED. Next: accepted expired-directory recovery, then remaining
+server and client acceptance. No bypass or automatic transaction replay. This operational
+exception does not advance the paused product queue.
 **BETA-0-CANARY-1 remains PAUSED; paid events and Android stage0 remain off.**
 
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):

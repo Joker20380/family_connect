@@ -2,9 +2,13 @@
 
 ## Status and authorization
 
-**NL-REPLACEMENT-20261030 / ORDINARY_PASS_RESTRICTED_RENEWAL_PENDING.** Old NL is FENCED;
-new ordinary AWG/TCP synthetic data-plane and cleanup PASS. Restricted renewal, remaining
-supporting/data-plane acceptance, signed publication and owner smoke are pending.
+**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT.** Localized cause: exact accepted
+renewal rejects the expired publisher directory before canonical profile promotion
+(`DIRECTORY_INVALID`). RU/NL previous-snapshot rollback readbacks PASS; the transaction
+remains `RECOVERY_REQUIRED`, with no commit decision. RU ordinary HTTP is restored;
+restricted services remain inactive/quiesced and renewal is paused. Old NL is FENCED.
+New ordinary AWG/TCP synthetic data-plane and cleanup PASS, but no client publication,
+Android106 endpoint verification or owner smoke. This is not full server acceptance.
 Host/staging provenance: after the initial
 blocked audit, the owner authorized installing the required OS/packages over SSH.
 Supported LTS upgrades and exact-runtime compatibility checks are complete, not a
@@ -38,7 +42,7 @@ PAUSED**. Paid-canary, subscription events and Android stage0 were not run.
 - Fetched `origin/main`; local and remote entry SHA both
   `17713e70279ed86d13c52ebddf167b6dc3d40a47`.
 - Existing unrelated tracked and untracked changes are preserved and excluded from
-  this documentation change. No branch switch, reset or history rewrite.
+  this source/documentation checkpoint. No branch switch, reset or history rewrite.
 - Accepted coherent canonical source remains
   `c9c0a4de55f455e0788e7b519383c0cb0743fc96`; no rebuild or approximate substitution.
 - Read the current incident, canonical acceptance and backup boundaries. The accepted
@@ -98,7 +102,7 @@ monitor were active; restricted gateway was inactive/disabled. All six observed
 **Old NL remains unfenced**; nothing has been activated on the replacement. No identity
 conflict was introduced. Old service activity is not evidence of healthy production.
 
-## Inactive restoration qualification
+## Historical inactive restoration qualification
 
 Private deployment matrix now covers13 roles and10 source units, including ordinary
 AWG/TCP, canonical gateway, snapshot/renewal/publisher/maintenance boundaries, mailbox,
@@ -161,6 +165,61 @@ Restricted gateway remains inactive pending current-valid materials.
 These are server-side ordinary results, not full supporting-role/MESH or owner acceptance.
 No normal-client endpoint or RU production route has been switched.
 
+## Restricted renewal blocker and safe rollback
+
+At20:14UTC, non-mutating evaluation of the retained exact renewal package reported
+`RENEWAL_REQUIRED`: no file changes, remote writes or restarts. Actual forced-command
+RPC inspection already passed through the new host's pinned SSH route. The owner-paid
+identity was not used. The renewal timer was paused to exclude overlapping runs.
+
+One manual accepted renewal transaction started20:21UTC, using a private controller
+configuration pointing to new NL, without changing the production controller route.
+Fresh candidate profile validation reached the canonical promotion boundary, where
+`DirectoryPort.read(candidate, now)` rejected the still-expired publisher directory.
+The exact maintenance gate reports `DIRECTORY_INVALID`; no binary, validator or
+accepted package was patched. Independent20:29UTC readback confirms directory expiry
+at29.10 13:04:25UTC; its historical signature/binding validates, its current validity does
+not. Original certificate/CRL are also expired; CRL/floor remain aligned at27224.
+
+The accepted recovery logic rolled profile state back on both nodes. Actual RU and NL
+readbacks return `PREVIOUS_SNAPSHOT_RESTORED`. Reader resumption is blocked by the expired
+previous materials, so the coordinator retains `RECOVERY_REQUIRED`, first cause
+`DIRECTORY_INVALID`, `commit_decided=false`. Preserve this journal and staged evidence;
+do not rerun renewal, erase the transaction, relax validation or create a new trust anchor.
+The legacy credential-only publication helper is not an accepted canonical-directory
+recovery path; the expired-apply route reaches the same promotion gate.
+
+After both rollback readbacks, only the pre-existing RU ordinary HTTP service was
+restarted with its unchanged accepted artifact.20:26UTC loopback dispatch and20:34UTC
+external trusted HTTPS return the expected JSON400 for malformed requests. This verifies
+API availability, not an authenticated client/VPN smoke. Automatic renewal remains paused;
+restricted sync timers remain quiesced. New restricted gateway was never started and
+has0 restarts. The manual controller is no longer running. Renewal failure records and
+state from both nodes were encrypted, hash-verified and read back privately.
+
+Final20:34UTC safety checks: eight old product units remain inactive with persistent
+guards; old interfaces/listeners absent and external TCP checks negative. New ordinary
+AWG/TCP remain active, no catalog cutover; paid subscriptions/events freshly0/0 and catalog
+sequence3 unchanged. No paid-canary, subscription event or Android stage0 activity.
+
+## Source-only cutover preparation
+
+Endpoint routing preparation is committed as a **NOT_DEPLOYED source checkpoint**:
+ordinary NL registration uses the same operator-owned catalog envelope returned to the
+client, chat synchronization uses its configured node, mailbox acknowledgement uses the
+identity-bound bootstrap, and monitoring accepts a configured remote host. Strict SSH
+pinning is preserved; RU registration remains local. No endpoint/private configuration,
+monitoring inventory, signing key, APK or production HTTP artifact was switched.
+
+Focused routing, monitoring, HTTP-runtime and chat tests:43 PASS,14 optional skips.
+Skipped tests require the configured native Nginx matrix or pinned synchronization
+artifact; this is not a complete HTTP deployment gate. Two local HTTP builds are
+byte-identical:47368bytes, SHA256
+`44a6b50f1a1ce00fd74f53e0d35c5937c6b5f5c2a561fc94b7a0150f39149204`.
+This candidate does not supersede any retained accepted artifact. The unchanged active
+RU HTTP package is47091bytes, SHA256
+`dcd769986a1da7cb1662c0f73d18a88e9f73485a977db937ca5b1428c1fd1029`.
+
 ## Acceptance and publication gates
 
 ### Authorized host preparation continuation
@@ -207,7 +266,7 @@ No normal-client endpoint or RU production route has been switched.
   six units and11 network/runtime sections; source/configuration bodies encrypted and
   verified locally. This remains a partial private matrix, not a consistent full backup.
 
-Final host readback19:11:14UTC: NTP synchronized, cloud-init done, TUN accessible,
+Historical pre-activation host readback19:11:14UTC: NTP synchronized, cloud-init done, TUN accessible,
 no failed units, no pending reboot or reported package upgrades, strict pinned root SSH
 PASS. Fail2ban/resolver/time synchronization active with0 restarts in this sample.
 Only public SSH22 and loopback DNS listeners remain. Root/password login was not disabled;
@@ -244,15 +303,15 @@ misreported as gateway-binary corruption or a failure of all five accepted packa
 | --- | --- |
 | New-host SSH identity/login | Owner-interactive TOFU, pin matched, key login PASS; no provider verification |
 | New-host OS/runtime | Ubuntu26.04.1/kernel7.0.0-42; exact interpreter and retained runtime import/execution PASS |
-| Architecture/TUN/NTP | Read-only x86_64/TUN/NTP PASS; no data-plane test |
+| Architecture/TUN/NTP | x86_64/TUN/NTP PASS; ordinary data-plane acceptance separately recorded |
 | Provider constraints/recovery console | Required diagnostic ports reachable from RU/workstation; console NOT_VERIFIED |
 | Base preparation, updates/reboot, swap and SSH recovery | Four guarded reboots, final OS/swap/strict SSH PASS; console still unavailable |
 | Private deployment matrix/identity staging |13 roles derived; inactive staging and final coordinated mutable export complete |
 | Old-NL fencing | FENCED; eight product units disabled, interfaces/listeners absent, persistent guards |
 | New AWG handshake, DNS, HTTPS and cleanup | PASS synthetic; egress185.10.158.212, IPv6 fail-closed |
 | New TCP authentication, tunneled HTTPS and cleanup | PASS synthetic; egress185.10.158.212 |
-| Canonical profile, fresh certificate/CRL/floor/directory | NOT_RUN; expired old material not accepted |
-| Actual snapshot SSH, renewal preflight/timer and restricted data plane | NOT_RUN |
+| Canonical profile, fresh certificate/CRL/floor/directory | BLOCKED_DIRECTORY_INVALID; previous snapshot restored, expired material not accepted |
+| Actual snapshot SSH, renewal preflight/timer and restricted data plane | RPC inspect PASS; snapshot rejects expiry; renewal RECOVERY_REQUIRED/timer paused; restricted inactive |
 | Supporting roles and accepted firewall/NAT/sysctl restoration | Services started; scoped networking verified; supporting data plane pending |
 | RU-origin packet arrival | Diagnostic ports/SYN PASS; product data plane NOT_RUN |
 | Multi-sample stability and monitoring cutover | Three ordinary/supporting samples PASS; inventory cutover pending |
@@ -260,22 +319,27 @@ misreported as gateway-binary corruption or a failure of all five accepted packa
 | New signed catalog sequence and restricted publication | NOT_PUBLISHED; no sequence allocated |
 | Android106 endpoint fetch and owner AWG/TCP/Auto-MESH smoke | NOT_RUN |
 
-RU production configuration and the existing catalog were not changed. Paid ledger0/0
-is freshly queried during the RU backup. Monitoring
-inventory remains unchanged; unavailable old registry data must not be reported as zero.
+RU renewal attempted canonical mutation and rolled back; ordinary HTTP availability was
+restored afterwards. The signed catalog and production endpoint configuration were not
+switched. Paid ledger0/0 is freshly queried at final readback. Monitoring inventory remains
+unchanged; unavailable old registry data must not be reported as zero.
 No new NL readiness, rollout or full-success claim is made.
 
 ## Resume and rollback
 
 Host preparation, private matrix, final coordinated export, fencing and ordinary synthetic
-acceptance are complete. Finish restricted renewal/supporting gates before publication.
+acceptance are complete. STOP on the signed-material validation blocker, not an ordinary
+installation error. The exact remaining action is to qualify an accepted recovery path
+that refreshes the expired publisher directory before canonical profile promotion,
+while preserving authority, the shared transaction lock and the pending recovery journal.
+Only then complete restricted renewal/supporting gates before publication.
 No disk reinstallation was performed; SSH host keys and root access remain intact.
 The preferred24.04 baseline does not meet the full retained extension ABI requirements,
 so26.04 is the verified final baseline.
 Do not bypass the3.14 guard, replace system libc independently or silently rebuild
 accepted runtime bytes. Reverify host identity without replacing the known-host entry.
-Continue in the same task with complete private identity/configuration coverage and
-fresh restoration guards. Prove old-node fencing before activating copied identities.
+Continue only after that localized blocker is resolved, with fresh restoration guards.
+Reverify old-node fencing before any further identity activation.
 Do not regenerate a recoverable identity, trust anchor or client credentials.
 
 Prepare and restore the exact accepted contract, renew expired restricted materials via
@@ -285,24 +349,26 @@ fresh RU backup and verify ledger0/0, paused canary and fencing; publish one mon
 signed NL control-plane update. Verify Android106 without an APK change before asking
 for the owner's AWG smoke, then TCP, then Auto/MESH. Canary stays paused throughout.
 
-Rollback now: **NO_PUBLICATION_OLD_FENCED_NEW_UNPUBLISHED**. Ordinary/supporting services
+Rollback now: **PREVIOUS_SNAPSHOTS_RESTORED_RU_ORDINARY_AVAILABLE_RECOVERY_REQUIRED**.
+No catalog rollback is required; new NL remains unpublished and old NL remains fenced.
+Do not mistake profile rollback for successful restricted-service recovery. Ordinary/supporting services
 and forced SSH routes are active on new NL; old NL must remain inactive. Stop the affected
-new service if an identity conflict appears. Do not return traffic to old NL. No catalog
-rollback is required because no endpoint publication occurred. Encrypted pre-upgrade configuration is
+new service if an identity conflict appears. Do not return traffic to old NL. Encrypted pre-upgrade configuration is
 retained, but it is not a full disk image or a promise of automatic OS downgrade.
 Old NL must remain fenced. New ordinary/supporting identities are active only on the new host.
-Before publication, a failed replacement stays unpublished and RU unchanged. After a
+Before publication, a failed replacement stays unpublished and RU ordinary service is preserved. After a
 failed publication, use the supported catalog mechanism to stop NL admission/return to
 RU; do not reactivate old NL without independent full acceptance. Never serve one copied
 identity on both hosts. Preserve all old files as recovery evidence.
 
 ## Verification scope
 
-Sanitized documentation checkpoint: strict JSON, targeted privacy/secret scan,10 changed
-local Markdown links, exact five-document staged scope and whitespace checks PASS.
+Sanitized source/documentation checkpoint: strict JSON, targeted privacy/secret scan,
+changed local Markdown links, exact11-file staged scope and whitespace checks PASS.
 Unrelated changes remain outside the index; original document suffixes are preserved.
-No platform build or historical full test suite was run; none substitutes for the
-unperformed production/data-plane gates. This is a source audit checkpoint, not a release.
+Focused tests and two deterministic HTTP package builds are recorded above. No platform
+build or historical full test suite was run; none substitutes for unperformed production
+and client gates. This is an incomplete restoration checkpoint, not a release.
 
 [Sanitized JSON receipt](2026-10-30-nl-gateway-replacement.json) ·
 [Accepted canonical receipt](2026-10-28-android106-beta-0-canary-canonical-profile.json) ·

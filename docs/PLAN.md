@@ -5,37 +5,29 @@
 ### Authorized operational exception — NL-REPLACEMENT-20261030
 
 Availability restoration to `185.10.158.212`, not a new product checkpoint.
-**ORDINARY_PASS_RESTRICTED_RENEWAL_PENDING**, owner-authorized installation continuation.
-Old NL now FENCED: eight product units, persistent restart/ingress guards, absent listeners
-and interfaces, external TCP checks. Final coordinated encrypted export PASS. New AWG/TCP
-synthetic DNS/HTTPS/egress/cleanup PASS;46 peers/46 credentials, three stable samples,
-0 restarts. Supporting roles started; canonical SSH RPC inspection PASS, expired snapshot
-correctly rejected. RU backup and ledger0/0 readback PASS; catalog sequence3 unchanged.
-No owner smoke or client publication. Earlier host/staging provenance follows.
-Official22.04→24.04→26.04 upgrades and four guarded reboots completed; Ubuntu26.04.1,
-kernel7.0.0-42-generic. Unneeded320MiB crash-kernel reservation removed; about2GiB swap,
-bounded SSH/log protection, NTP/TUN and strict key login PASS. Exact CPython3.14.4 hash,
-pinned dependencies/snapshot import and retained gateway/Xray execution PASS. Diagnostic
-required-port ingress PASS from workstation and RU, with RU SYN captured. Not a product
-data-plane gate. No bespoke runtime/libc substitution, product identity or publication.
-Initial **BLOCKED_NEW_HOST_OS** provenance: Ubuntu22.04/glibc2.35 cannot run
-the exact accepted CPython3.14.4 interpreter requiring `GLIBC_2.38`; snapshot guards
-reject system Python3.10. This blocker is resolved by the supported OS upgrades.
-Owner-interactive TOFU and public-key installation completed; strict SSH login PASS,
-provider-console verification unavailable. TUN/NTP/x86_64 preflight PASS; not deployment.
-Entry remote main matches `17713e70279ed86d13c52ebddf167b6dc3d40a47`; five retained
-artifacts match exact anchors. Later42-file coordinated backup exported read-only and
-verified with encrypted local readback; additional current backups and recovery bundles
-verified.46 AWG peers match the running identity/registry;46 TCP credentials are unique.
-Historical canonical signatures/bindings PASS, but current-valid material is still pending.
-Private13-role matrix derived;5285 files/689 directories staged behind service-start
-guards. Five locked service accounts, exact snapshot launcher/runtime and canonical
-boundaries qualified; mailbox identity/volume and TCP/WG/firewall preflight PASS.
-Final coordinated mutable export remains pending. Old ordinary/support services remain
-active, restricted disabled, fencing NOT_RUN. No live product/control-plane mutation.
-Dependencies now: host, private matrix, final backup, fencing and ordinary synthetic
-data plane complete → accepted restricted renewal → remaining supporting/restricted
-data-plane gates → monotonic publication and actual Android106/owner acceptance.
+**BLOCKED_NL_REPLACEMENT / DIRECTORY_INVALID.** Exact accepted renewal cannot promote
+the fresh canonical profile while the publisher directory is expired. Transaction
+`RECOVERY_REQUIRED`, no commit decision; actual RU/NL rollback readbacks PASS.
+Do not retry blindly, erase the journal, bypass signed-material validation or activate
+expired restricted services. Renewal timer paused and restricted sync timers quiesced.
+RU ordinary HTTP restored after verified rollback; public trusted HTTPS dispatch PASS.
+Final20:34UTC readback: old NL FENCED, paid ledger0/0, catalog sequence3 unchanged.
+No publication, Android106 endpoint verification or owner smoke.
+
+Completed dependencies: official OS upgrades to Ubuntu26.04.1/kernel7.0.0-42-generic,
+exact runtime/artifacts, bounded swap/SSH/log protection, private13-role matrix, final
+coordinated encrypted export and persistent old-node fencing. New AWG/TCP synthetic
+DNS/HTTPS/egress/cleanup PASS;46 peers/46 credentials, three stable samples,0 restarts.
+RU diagnostic SYN arrival PASS. Supporting roles started, not fully accepted; snapshot
+correctly rejects expired material. Provider-console verification remains unavailable;
+owner accepted TOFU and strict key login is verified. No custom runtime/libc replacement.
+Source-only configurable endpoint routing checkpoint:43 tests PASS/14 optional skips,
+two reproducible HTTP package builds, NOT_DEPLOYED. No APK update or artifact substitution.
+
+NEXT dependency: qualify an accepted expired-directory recovery path before canonical
+profile promotion, retaining the pending transaction, authority and shared profile lock.
+Then complete restricted/supporting acceptance, take fresh prepublication backups and
+publish one monotonic update; actual Android106/owner acceptance remains mandatory.
 Completion gate: stable AWG/TCP/restricted/supporting services, actual SSH snapshot and
 renewal acceptance, one monotonic signed cutover, Android106 endpoint readback and owner
 AWG/TCP/Auto-MESH smoke, monitoring updated, old NL fenced. No acceptance from unit state.

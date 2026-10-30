@@ -1,6 +1,7 @@
 """Operator-only lease publication over a pinned, forced-command SSH identity."""
 import json
 import fcntl
+import ipaddress
 from pathlib import Path
 import subprocess
 
@@ -16,10 +17,12 @@ def synchronize(registry):
 def _synchronize(registry):
     snapshot=registry.snapshot()
     node=json.loads((ROOT/'chat-node.json').read_bytes())
+    host=str(ipaddress.IPv4Address(node['host']))
+    if host!=node['host']:raise ValueError('Invalid mailbox address')
     command=['/usr/bin/ssh','-i',str(ROOT/'chat-sync-key'),'-o','IdentitiesOnly=yes',
              '-o','BatchMode=yes','-o','ConnectTimeout=5','-o','StrictHostKeyChecking=yes',
              '-o','UserKnownHostsFile='+str(ROOT/'chat-known-hosts'),
-             'root@186.246.45.246','chat-sync']
+             'root@'+host,'chat-sync']
     result=subprocess.run(command,input=json.dumps(snapshot).encode(),capture_output=True,timeout=10)
     if result.returncode or len(result.stdout)>2048:raise RuntimeError('Node synchronization unavailable')
     reply=json.loads(result.stdout)
