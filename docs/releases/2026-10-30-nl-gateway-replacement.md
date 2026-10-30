@@ -2,9 +2,11 @@
 
 ## Status and authorization
 
-**NL-REPLACEMENT-20261030 / HOST_PREPARATION_IN_PROGRESS.** After the initial
+**NL-REPLACEMENT-20261030 / HOST_BASELINE_VERIFIED_RESTORE_PENDING.** After the initial
 blocked audit, the owner authorized installing the required OS/packages over SSH.
-Supported LTS upgrades are now in progress, not a provider disk reinstallation.
+Supported LTS upgrades and exact-runtime compatibility checks are complete, not a
+provider disk reinstallation or product deployment. Final OS: Ubuntu26.04.1 LTS,
+kernel7.0.0-42-generic. Product restore/acceptance remain pending.
 No product identity, old-node fencing, catalog publication or client smoke yet.
 
 The initial **BLOCKED_NEW_HOST_OS** finding was an incompatible OS/runtime: Ubuntu22.04/glibc2.35
@@ -73,6 +75,19 @@ identities, forced-command lines, runtime, firewall/NAT/sysctl and monitoring co
 still require a complete private restoration matrix and fresh coordinated export.
 Backup integrity PASS is **not** full identity-recovery or deployment acceptance.
 
+Additional read-only exports are encrypted and verified: current application7 files
+and infrastructure14 files, with one SQLite backup checked in each; recovery bundle
+3895 files/549 directories and a separate NL renewal-state bundle1394 files/164
+directories. Bulk live exports are **not coordinated across all roles**; final
+quiescent/fenced export and the full private deployment matrix remain required.
+The application snapshot's AWG private identity derives the running server public key;
+all46 peer/address mappings match the live interface, with no duplicate addresses.
+All46 TCP credential IDs and mappings are unique. No client credential was regenerated.
+The canonical private identity matches both retained coordinated profile copies.
+Historical canonical profile signatures/bindings PASS, CRL/floor27224 aligned. Its
+authority remains valid until16 January2027; gateway certificate and CRL expired
+29 October11:42:38UTC. Historical validation is not current-valid production acceptance.
+
 Read-only current inventory at17:57:40UTC retained112 file/directory metadata records,
 effective service argv and listeners privately. AWG, TCP, mailbox, Reticulum and load
 monitor were active; restricted gateway was inactive/disabled. All six observed
@@ -103,18 +118,41 @@ conflict was introduced. Old service activity is not evidence of healthy product
   SSH checks passed before reboot. No product service was involved in either recovery.
 - One controlled security-update reboot returned successfully with unchanged trusted
   SSH host key and key login: Ubuntu22.04.5 LTS, kernel5.15.0-202-generic.
-- The official upgrader offers24.04.5 LTS. The supported22.04→24.04 operation has
-  started asynchronously, with private logs and no automatic reboot. Completion and
-  its guarded reboot are still pending at this source checkpoint.
+- The supported22.04→24.04.5 operation completed, followed by a guarded reboot to
+  kernel6.8.0-147-generic. The upgrade left the resolver disabled; enabling the already
+  installed system resolver restored DNS and the official26.04.1 upgrade offer. This
+  ordinary configuration error was corrected without changing provider networking.
 - Read-only inspection of53 retained runtime ELF files also identifiesGLIBC2.42 and
   OpenSSL3.3/3.4 version requirements in the accepted extension set. Ubuntu24.04 alone
-  is therefore not the final runtime baseline; the next official LTS hop to26.04 is
-  planned after24.04 passes its own checks. No CPython rebuild or libc transplant.
+  is therefore not the final runtime baseline. The official24.04→26.04.1 upgrade also
+  completed successfully, then rebooted to7.0.0-42-generic. No CPython rebuild or libc
+  transplant. Temporary SSH restart windows recovered; no host-key bypass or reset.
+- Ubuntu26.04 automatically reserved320MiB for crash capture despite the existing
+  disabled crash-dump policy. A guarded boot-configuration override removed that
+  reservation; the fourth reboot restored1960380KiB usable RAM. Kernel reservation
+  readback is0; persistent swap remains about2GiB, unused in the sample.
+- Exact accepted interpreter SHA256
+  `52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41`
+  matches the installed CPython3.14.4. Isolated retained-runtime qualification1795
+  files PASS: cryptography46.0.7, rns1.5.1, pyserial3.5, snapshot package import,
+  exact gateway help and Xray version execution. No identity/configuration was installed
+  with this runtime probe; it is not actual snapshot-account or data-plane acceptance.
 - Old NL deployment contract was additionally collected read-only:88 metadata records,
   six units and11 network/runtime sections; source/configuration bodies encrypted and
   verified locally. This remains a partial private matrix, not a consistent full backup.
 
-### New-host read-only preflight
+Final host readback19:11:14UTC: NTP synchronized, cloud-init done, TUN accessible,
+no failed units, no pending reboot or reported package upgrades, strict pinned root SSH
+PASS. Fail2ban/resolver/time synchronization active with0 restarts in this sample.
+Only public SSH22 and loopback DNS listeners remain. Root/password login was not disabled;
+provider-console recovery remains unverified. No broad firewall flush was performed.
+
+Diagnostic ingress19:06:45UTC PASS from both workstation and RU: TCP443/4242/4243 and
+UDP443/51820/51823. Paired bounded capture confirms a RU-origin SYN at the new interface.
+All12 nonce echo checks passed; temporary diagnostic listeners closed. No product
+identity was used. Provider-path reachability is demonstrated, not VPN/TLS/mesh operation.
+
+### Historical new-host entry preflight
 
 Observed18:08:03UTC, successful root public-key login. Ubuntu22.04.1 LTS, kernel
 `5.15.0-46-generic`, x86_64, KVM,2 CPUs;1973984KiB total RAM (about1.88GiB).
@@ -139,17 +177,18 @@ misreported as gateway-binary corruption or a failure of all five accepted packa
 | Gate | Current result |
 | --- | --- |
 | New-host SSH identity/login | Owner-interactive TOFU, pin matched, key login PASS; no provider verification |
-| New-host OS/runtime | Supported LTS upgrades IN_PROGRESS; exact runtime acceptance pending |
+| New-host OS/runtime | Ubuntu26.04.1/kernel7.0.0-42; exact interpreter and retained runtime import/execution PASS |
 | Architecture/TUN/NTP | Read-only x86_64/TUN/NTP PASS; no data-plane test |
-| Provider constraints/recovery console | NOT_VERIFIED |
-| Base preparation, updates/reboot, swap and SSH recovery | Jammy base/reboot PASS; final OS and provider-console recovery pending |
+| Provider constraints/recovery console | Required diagnostic ports reachable from RU/workstation; console NOT_VERIFIED |
+| Base preparation, updates/reboot, swap and SSH recovery | Four guarded reboots, final OS/swap/strict SSH PASS; console still unavailable |
 | Full private matrix/current identity coverage | INCOMPLETE |
 | Old-NL fencing | NOT_RUN; ordinary/support services still active |
 | New AWG handshake, DNS, HTTPS and cleanup | NOT_RUN |
 | New TCP authentication, tunneled HTTPS and cleanup | NOT_RUN |
 | Canonical profile, fresh certificate/CRL/floor/directory | NOT_RUN; expired old material not accepted |
 | Actual snapshot SSH, renewal preflight/timer and restricted data plane | NOT_RUN |
-| Supporting roles, firewall/NAT/sysctl and RU-origin packet arrival | NOT_RUN |
+| Supporting roles and accepted firewall/NAT/sysctl restoration | NOT_RUN |
+| RU-origin packet arrival | Diagnostic ports/SYN PASS; product data plane NOT_RUN |
 | Multi-sample stability and monitoring cutover | NOT_RUN |
 | Fresh RU backup, ledger and configuration prepublication checks | NOT_RUN |
 | New signed catalog sequence and restricted publication | NOT_PUBLISHED; no sequence allocated |
@@ -162,14 +201,15 @@ No new NL readiness, rollout or full-success claim is made.
 
 ## Resume and rollback
 
-Complete the owner-authorized supported OS upgrades; observe each job and validate
-boot/SSH before its controlled reboot. No disk reinstallation is performed; SSH host
-keys and root access must remain intact. The preferred24.04 baseline does not meet
-the full retained extension ABI requirements, so26.04 is the selected final baseline.
+Host preparation is complete. Finish the private restoration matrix and inactive
+staging; no normal-client publication is authorized before the remaining acceptance gates.
+No disk reinstallation was performed; SSH host keys and root access remain intact.
+The preferred24.04 baseline does not meet the full retained extension ABI requirements,
+so26.04 is the verified final baseline.
 Do not bypass the3.14 guard, replace system libc independently or silently rebuild
 accepted runtime bytes. Reverify host identity without replacing the known-host entry.
-Continue in the same task with final full read-only preflight and
-private identity/configuration coverage. Prove old-node fencing before activating copied identities.
+Continue in the same task with complete private identity/configuration coverage and
+fresh restoration guards. Prove old-node fencing before activating copied identities.
 Do not regenerate a recoverable identity, trust anchor or client credentials.
 
 Prepare and restore the exact accepted contract, renew expired restricted materials via
@@ -179,7 +219,7 @@ fresh RU backup and verify ledger0/0, paused canary and fencing; publish one mon
 signed NL control-plane update. Verify Android106 without an APK change before asking
 for the owner's AWG smoke, then TCP, then Auto/MESH. Canary stays paused throughout.
 
-Rollback now: **NOT_NEEDED_NO_PUBLICATION**. No endpoint, service or production identity
+Rollback now: **NOT_NEEDED_NO_PUBLICATION**. No product endpoint, service or identity
 was changed. New-host management changes now include SSH setup and authorized base/OS
 preparation; these are not a product rollout. Encrypted pre-upgrade configuration is
 retained, but it is not a full disk image or a promise of automatic OS downgrade.
@@ -192,7 +232,7 @@ identity on both hosts. Preserve all old files as recovery evidence.
 
 ## Verification scope
 
-Documentation-only checkpoint: strict JSON, targeted privacy/secret scan,10 changed
+Sanitized documentation checkpoint: strict JSON, targeted privacy/secret scan,10 changed
 local Markdown links, exact five-document staged scope and whitespace checks PASS.
 Unrelated changes remain outside the index; original document suffixes are preserved.
 No platform build or historical full test suite was run; none substitutes for the

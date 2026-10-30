@@ -5,24 +5,27 @@
 ### Authorized operational exception — NL-REPLACEMENT-20261030
 
 Availability restoration to `185.10.158.212`, not a new product checkpoint.
-**HOST_PREPARATION_IN_PROGRESS**, owner-authorized installation continuation.
-Jammy updates/base tooling and bounded SSH/log/memory protection installed. First
-controlled reboot returned with strict key login, Ubuntu22.04.5/kernel5.15.0-202-generic.
-Official22.04→24.04 upgrade started;24.04→26.04 follows only its successful gates.
-Full accepted runtime extensions require GLIBC2.42/OpenSSL3.4, not only the interpreter's
-GLIBC2.38. No bespoke runtime or system-libc substitution. No product activation.
+**HOST_BASELINE_VERIFIED_RESTORE_PENDING**, owner-authorized installation continuation.
+Official22.04→24.04→26.04 upgrades and four guarded reboots completed; Ubuntu26.04.1,
+kernel7.0.0-42-generic. Unneeded320MiB crash-kernel reservation removed; about2GiB swap,
+bounded SSH/log protection, NTP/TUN and strict key login PASS. Exact CPython3.14.4 hash,
+pinned dependencies/snapshot import and retained gateway/Xray execution PASS. Diagnostic
+required-port ingress PASS from workstation and RU, with RU SYN captured. Not a product
+data-plane gate. No bespoke runtime/libc substitution, product identity or publication.
 Initial **BLOCKED_NEW_HOST_OS** provenance: Ubuntu22.04/glibc2.35 cannot run
 the exact accepted CPython3.14.4 interpreter requiring `GLIBC_2.38`; snapshot guards
-reject system Python3.10. This blocker is being resolved through supported OS upgrades.
+reject system Python3.10. This blocker is resolved by the supported OS upgrades.
 Owner-interactive TOFU and public-key installation completed; strict SSH login PASS,
 provider-console verification unavailable. TUN/NTP/x86_64 preflight PASS; not deployment.
 Entry remote main matches `17713e70279ed86d13c52ebddf167b6dc3d40a47`; five retained
 artifacts match exact anchors. Later42-file coordinated backup exported read-only and
-verified with encrypted local readback; it does not yet establish full current identity,
-ordinary-service or machine-restoration coverage. Old NL ordinary/support services remain
+verified with encrypted local readback; additional current backups and recovery bundles
+verified.46 AWG peers match the running identity/registry;46 TCP credentials are unique.
+Historical canonical signatures/bindings PASS, but current-valid material is still pending.
+Full private restoration matrix/consistent final export remain pending. Old NL ordinary/support services remain
 active, restricted disabled, fencing NOT_RUN. No product or control-plane mutation.
-Dependencies: compatible OS provision → host-key verification and runtime preflight →
-qualify complete private matrix/backup and exact identities → prepare host → prove old-NL
+Dependencies: host baseline/runtime checks complete; next qualify complete private
+matrix/backup and exact identities → prepare inactive service staging → prove old-NL
 fencing → restore/renew through accepted routes → synthetic data-plane and RU-path gates.
 Completion gate: stable AWG/TCP/restricted/supporting services, actual SSH snapshot and
 renewal acceptance, one monotonic signed cutover, Android106 endpoint readback and owner

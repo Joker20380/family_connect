@@ -2,15 +2,17 @@
 
 ## NL availability restoration — 30 October
 
-**NL-REPLACEMENT-20261030 / HOST_PREPARATION_IN_PROGRESS.** Owner subsequently
-authorized installing the required OS/packages over SSH. New-host management backup
-encrypted and verified. Jammy security/base packages installed; controlled reboot
-returned with strict key login on Ubuntu22.04.5/kernel5.15.0-202-generic. Existing1GiB
-partition swap retained plus1GiB file, bounded SSH fail2ban and journal retention enabled.
-Official22.04→24.04 upgrade started;24.04 is not yet accepted installed. Full accepted
-runtime extensions also require GLIBC2.42/OpenSSL3.4 symbols, so a second supported
-LTS upgrade to26.04 is planned, not a custom runtime/libc replacement. No product
-identity, old-node fencing or client publication. Canary remains PAUSED.
+**NL-REPLACEMENT-20261030 / HOST_BASELINE_VERIFIED_RESTORE_PENDING.** Owner-authorized
+official22.04→24.04→26.04 upgrades completed. Final readback19:11UTC: Ubuntu26.04.1,
+kernel7.0.0-42-generic, strict SSH, NTP/TUN/cloud-init PASS, no failed units or pending
+reboot. Four guarded reboots completed, including removal of the upgrader's320MiB
+crash-kernel reservation on this2GiB VPS;1960380KiB RAM is now available to the kernel.
+About2GiB persistent swap, bounded SSH fail2ban and journal retention are configured.
+CPython3.14.4 executable matches the accepted hash exactly; retained pinned dependencies,
+snapshot import, gateway help and Xray execution PASS in an isolated runtime check.
+Required TCP/UDP diagnostic probes PASS from workstation and RU; RU SYN captured on
+the new interface. This is not VPN/data-plane acceptance. No product identity installed,
+old-node fencing or client publication. Canary remains PAUSED.
 The initial read-only **BLOCKED_NEW_HOST_OS** finding is retained as provenance:
 replacement production NL `185.10.158.212` initially had Ubuntu22.04.1/glibc2.35, incompatible
 with the exact accepted CPython3.14.4 interpreter's ELF requirement `GLIBC_2.38`.
@@ -28,12 +30,16 @@ before local persistence and decrypted/read back successfully. It is not a compl
 current machine backup; full identity/configuration coverage remains to be qualified.
 Old NL read-only inventory30.10 17:57:40UTC confirms ordinary AWG/TCP, mailbox,
 Reticulum and monitoring active; restricted inactive/disabled. Old NL is **not fenced**
-and remains untrusted production, not accepted healthy. No product preparation,
-identity activation, service change, catalog/directory publication or client smoke.
+and remains untrusted production, not accepted healthy. No product identity activation,
+old-service change, catalog/directory publication or client smoke. Additional encrypted
+current application/infrastructure and recovery bundles verified;46 AWG peers and46
+TCP credentials have no duplicates, AWG backup matches the running identity/inventory.
+Historical canonical signatures/bindings PASS, floor/CRL27224 aligned; expired material
+is provenance only, not READY. Full private restoration matrix remains unfinished.
 RU configuration unchanged; ledger last accepted0/0, not freshly queried in this audit.
 **BETA-0-CANARY-1 PAUSED; paid-canary, subscription events and Android stage0 NOT_RUN.**
-Next: finish supported LTS upgrades with guarded reboot/SSH readbacks, then qualify
-exact runtimes and complete the private restoration inventory. No disk reinstallation;
+Next: complete the private restoration matrix and inactive staging, then fence old NL
+before restoring production services and renewing restricted materials. No disk reinstallation;
 existing SSH host keys/access are preserved. Fencing must precede copied
 identity activation; server data-plane acceptance must precede one monotonic publication.
 [Restoration report and rollback](releases/2026-10-30-nl-gateway-replacement.md) ·

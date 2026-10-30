@@ -4,9 +4,11 @@
 
 [NL gateway replacement — 30 October](releases/2026-10-30-nl-gateway-replacement.md)
 and [sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json):
-**HOST_PREPARATION_IN_PROGRESS**: owner authorized required installation on
-`185.10.158.212`. Jammy updates/base tooling and first guarded reboot completed;
-official22.04→24.04 upgrade started, with26.04 planned for the full accepted runtime.
+**HOST_BASELINE_VERIFIED_RESTORE_PENDING**: owner-authorized installation on
+`185.10.158.212` completed through official22.04→24.04→26.04 upgrades. Ubuntu26.04.1,
+kernel7.0.0-42-generic, four guarded reboots, about2GiB swap, NTP/TUN/strict SSH PASS.
+Exact CPython3.14.4 and retained runtime imports/execution PASS. Required diagnostic
+TCP/UDP ingress PASS from workstation/RU; RU SYN captured, not VPN acceptance.
 Initial Ubuntu22.04/glibc2.35 was incompatible; the interpreter needsGLIBC2.38 and
 its retained extensions needGLIBC2.42/OpenSSL3.4. No custom runtime/libc substitution.
 Owner-interactive SSH key setup and strict pinned login PASS; provider verification
