@@ -1,5 +1,35 @@
 # NL production gateway replacement — 30 October 2026
 
+## Append-only registry correction — same operation
+
+The owner authorized retaining strictly proven device/invite additions without rewriting
+the historical database snapshot or any expected-state hash. The new narrow RU
+`rollback-registry-overlay` RPC validates schema, integrity, foreign keys, unique identities,
+application bindings, unchanged historical rows and exact restricted security tables.
+Only safe hashes/counts enter its immutable private receipt. Later drift is rejected.
+Normal previous-readback, rollback and grant application retain exact-state comparisons.
+
+Explicit fenced recovery binds the historical and live database hashes and overlay receipt,
+archives the complete evidence and returns `ROLLED_BACK_READERS_STOPPED` with controller
+state `ABORTED`. It preserves `first_cause=DIRECTORY_INVALID`, never writes the database,
+never publishes a directory and never resumes expired readers. A recovery-only source
+bridge verifies both retained and replacement source inventories without changing the fixed
+node configuration included in historical state. Ordinary/scheduled entrypoints cannot use
+the overlay. Production deployment and recovery execution are not yet performed.
+
+Focused qualification:231 tests PASS, one optional native interoperability probe skipped.
+This includes overlay rejection/replay, cleanup fault injection, explicit CLI gates,
+unchanged ordinary recovery, package inventory and canonical-route construction with
+both retained/current source tamper rejection. No unrelated client/build suite was run.
+
+The retained authenticated encrypted SQLite backup and live accepted schema match for all
+five projected tables. Read-only entry audit reconfirms two device and two invite additions,
+no removals, exact restricted tables, unchanged coordinator journal, NL exact rollback and
+RU ordinary HTTP active. Counts are observations, not hard-coded acceptance requirements.
+Next: qualify the deterministic renewal-only package, fresh backup/quiescence, terminalize
+the existing operation, restore ordinary HTTP, then continue publisher/fresh renewal and
+cutover. The earlier blocker evidence below remains historical, not a new operation.
+
 ## Status and authorization
 
 **NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / BLOCKED_RENEWAL_JOURNAL_UNRESOLVED.**

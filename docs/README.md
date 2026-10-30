@@ -2,6 +2,12 @@
 
 ## Current operational restoration
 
+The same NL restoration now includes an owner-authorized append-only registry overlay
+correction, source-qualified but not deployed. Historical expected snapshots remain exact
+and immutable; the narrow recovery path proves the overlay separately with readers stopped.
+Next: deterministic package, private backup, bounded RU writer quiescence, terminal
+rollback/archive, then the existing publisher/fresh renewal and client-cutover gates.
+
 [NL gateway replacement — 30 October](releases/2026-10-30-nl-gateway-replacement.md)
 and [sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json):
 **BLOCKED_NL_REPLACEMENT / BLOCKED_RENEWAL_JOURNAL_UNRESOLVED**: fenced-rollback source

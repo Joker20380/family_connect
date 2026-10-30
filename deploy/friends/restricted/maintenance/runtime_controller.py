@@ -31,18 +31,22 @@ def main():
     parser.add_argument('--mode', choices=('evaluate','scheduled','operator','recover','expired-request','expired-apply','expired-resume'), default='evaluate')
     parser.add_argument('--authority-bundle', type=Path)
     parser.add_argument('--operation')
+    parser.add_argument('--preserve-registry-overlay',action='store_true')
+    parser.add_argument('--fenced-recovery',action='store_true')
     parser.add_argument('--approve-maintenance-outage', action='store_true')
     parser.add_argument('--grant-scope', type=Path)
     parser.add_argument('--request-output', type=Path)
     args = parser.parse_args()
     try:
+        require(not args.preserve_registry_overlay or args.mode == 'recover', 'RECOVERY_EXPLICIT_MODE_REQUIRED')
+        require(not args.fenced_recovery or (args.mode == 'recover' and args.preserve_registry_overlay), 'RECOVERY_EXPLICIT_MODE_REQUIRED')
         require(args.mode.startswith('expired-') or (args.grant_scope is None and args.request_output is None),
                 'RECOVERY_EXPLICIT_MODE_REQUIRED')
         config = parse(read_private(args.config))
         require(set(config) == {'schema','node_config','coordinator_state','nl_source_sha256',
             'ssh','approved_leaf_crl_schedule'} and type(config['schema']) is int and config['schema'] == 1
             and type(config['approved_leaf_crl_schedule']) is bool, 'CONTROLLER_CONFIG')
-        node, source = construct(Path(config['node_config']))
+        node, source = construct(Path(config['node_config']),**({'fenced_recovery':True} if args.fenced_recovery else {}))
         require(node.role == 'RU', 'NODE_ROLE')
         nodes = {'RU': LocalNode(node, source),
                  'NL': SshNode('NL', config['nl_source_sha256'], forced=config['ssh'])}
@@ -76,7 +80,7 @@ def main():
             record = parse(read_private(controller.root / 'transaction.json'))
             require(args.operation is None or record['operation_id'] == args.operation, 'OPERATION_ID')
             with controller.operation.lock():
-                result = controller.recover(record)
+                result = controller.recover(record,**({'preserve_registry_overlay':True} if args.preserve_registry_overlay else {}))
         else:
             approval = None
             handoff = None

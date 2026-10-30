@@ -11,7 +11,7 @@ from credential_renewal import MAX_BYTES, Rejected, atomic, canonical, digest, p
 
 
 ACTIONS = frozenset(('recovery-evidence','recovery-authority-request','prepare-expired','inspect','public-gateway','public-authority','public-directory','publish-directory','authority-request','prepare','acquire','quiesce','stopped','stage','promote','readback','restore',
-                     'rollback','rollback-readback','finalize-fenced-rollback','commit-decision','resume','fence','cleanup'))
+                     'rollback','rollback-readback','rollback-registry-overlay','finalize-fenced-rollback','commit-decision','resume','fence','cleanup'))
 
 
 def ssh_route(value, *, forced):

@@ -71,7 +71,8 @@ def transaction(fixture, action='reconcile_current_floor', payload=None, persist
         persist=persist or (lambda record, before, target: fixture.receipts.append(record)))
 
 
-def test_packaged_renewal_construct_uses_exact_api_and_canonical_route(canonical, tmp_path):
+@pytest.mark.parametrize('bridge', [None, 'valid', 'retained-tamper', 'current-tamper'])
+def test_packaged_renewal_construct_uses_exact_api_and_canonical_route(canonical, tmp_path, bridge):
     package = Path(os.environ['FC_TEST_RENEWAL_PACKAGE'])
     extracted = tmp_path / 'packaged'
     extracted.mkdir(mode=0o700)
@@ -90,11 +91,31 @@ def test_packaged_renewal_construct_uses_exact_api_and_canonical_route(canonical
         admission_mode='all_activated', profile_locator=str(canonical.fixed_locator),
         profile_locator_sha256=store.digest(canonical.fixed_locator.read_bytes()))
     config = private_file(extracted / 'node.json', store.encode(configuration))
+    original_config = config.read_bytes()
+    source = extracted / 'renewal'
+    identity = manifest['source_sha256']
+    if bridge:
+        source = tmp_path / 'replacement' / 'renewal'
+        source.mkdir(parents=True, mode=0o700)
+        source.parent.chmod(0o700)
+        checkout = Path(__file__).resolve().parents[1] / 'deploy/friends/restricted/maintenance'
+        hashes = {}
+        for name in manifest['source_files']:
+            raw = (checkout / name).read_bytes()
+            private_file(source / name, raw)
+            hashes[name] = store.digest(raw)
+        identity = store.digest(store.encode(hashes))
+        private_file(source.parent / 'source-manifest.json', store.encode(dict(manifest,
+            source_files=hashes, source_sha256=identity)))
+        if bridge == 'retained-tamper':
+            (extracted / 'renewal' / 'renewal_health.py').write_bytes(b'changed = True\n')
+        if bridge == 'current-tamper':
+            (source / 'renewal_health.py').write_bytes(b'changed = True\n')
     probe = '''import sys,json,hashlib
 from pathlib import Path
 sys.path.insert(0,sys.argv[1])
 import node
-instance,identity=node.construct(Path(sys.argv[2]))
+instance,identity=node.construct(Path(sys.argv[2]),**({'fenced_recovery':True} if sys.argv[8]=='bridge' else {}))
 from control.friends import restricted,profile_store
 assert restricted.__file__.startswith('/proc/self/fd/')
 assert profile_store.__file__.startswith('/proc/self/fd/')
@@ -106,10 +127,14 @@ assert str(instance.profile_store.locator.lock)==sys.argv[6]
 assert instance.barrier.units==('synthetic-gateway.service',)
 assert identity==sys.argv[7]
 '''
-    result = subprocess.run([sys.executable, '-I', '-B', '-c', probe, str(extracted / 'renewal'), str(config),
+    result = subprocess.run([sys.executable, '-I', '-B', '-c', probe, str(source), str(config),
         store.digest(canonical.before), str(canonical.locator.profile), str(canonical.locator.directory_port.path),
-        str(canonical.locator.lock), manifest['source_sha256']], capture_output=True)
-    assert result.returncode == 0, result.stderr.decode()
+        str(canonical.locator.lock), identity, 'bridge' if bridge else 'normal'], capture_output=True)
+    if bridge in ('retained-tamper', 'current-tamper'):
+        assert result.returncode != 0 and b'SOURCE_IDENTITY_MISMATCH' in result.stderr
+    else:
+        assert result.returncode == 0, result.stderr.decode()
+    assert config.read_bytes() == original_config
     assert canonical.locator.profile.read_bytes() == canonical.before
     assert canonical.profile.read_bytes() == canonical.before
 

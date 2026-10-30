@@ -1,4 +1,20 @@
 {
+  "registry_overlay_correction": {
+    "focused_tests_passed": 231,
+    "focused_tests_skipped": 1,
+    "source_status": "QUALIFIED_NOT_DEPLOYED",
+    "source_commit": null,
+    "entry_main": "e82c2c2e33fe7332b143c7205539f0d286d9f51d",
+    "historical_schema": "PASS",
+    "historical_expected_state_unchanged": true,
+    "normal_exact_state_guards": "UNCHANGED",
+    "production_execution": "NOT_RUN",
+    "production_database_writes": 0,
+    "publisher_room_creations": 0,
+    "directory_publications": 0,
+    "new_renewal_operations": 0,
+    "source_bridge": "RECOVERY_ONLY_FIXED_CONFIGURATION_UNCHANGED"
+  },
   "schema": 1,
   "task": "NL-REPLACEMENT-20261030",
   "scope": "AVAILABILITY_RESTORATION_NOT_PRODUCT_CHECKPOINT",

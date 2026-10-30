@@ -4,6 +4,14 @@
 
 ### Authorized operational exception — NL-REPLACEMENT-20261030
 
+Owner decision: preserve proven append-only RU registry additions, never restore the old
+database over them. The dedicated fenced recovery correction is source-qualified, not
+deployed. Historical expected hashes stay immutable; normal exact-state guards stay intact.
+Execute deterministic packaging and fresh backup, one bounded RU writer stop, immutable
+overlay proof, terminal rollback/archive and ordinary HTTP restart. Then continue the
+already authorized publisher/fresh renewal/Restricted acceptance and signed NL cutover;
+no additional internal owner checkpoint. Canary and Android stage0 remain paused.
+
 Availability restoration to `185.10.158.212`, not a new product checkpoint.
 **BLOCKED_NL_REPLACEMENT / BLOCKED_RENEWAL_JOURNAL_UNRESOLVED.** Authorized source fix
 `dfbfbc34cc3345e281294ff429555d9b95a35f91` adds verified fenced rollback terminalization

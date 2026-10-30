@@ -2,8 +2,10 @@ import contextlib
 import hmac
 import os
 from pathlib import Path
+import re
 import sqlite3
 import stat
+import uuid
 
 from cryptography import x509
 from cryptography.hazmat.primitives.serialization import Encoding
@@ -14,6 +16,67 @@ from credential_renewal import DAY, THRESHOLD, VALIDITY, canonical, digest, requ
 
 GRANT_FIELDS = ('device', 'family', 'revision', 'expires', 'revoked')
 TABLES = ('devices', 'invites', 'restricted_grants', 'restricted_certificates', 'restricted_crl_sequence')
+REGISTRY_TABLES = ('devices', 'invites')
+OVERLAY_SCHEMA = {
+    'devices': 'CREATE TABLE devices(device TEXT PRIMARY KEY, public TEXT UNIQUE NOT NULL, wg TEXT UNIQUE NOT NULL, tcp TEXT UNIQUE NOT NULL, revoked INTEGER NOT NULL DEFAULT 0)',
+    'invites': 'CREATE TABLE invites(hash TEXT PRIMARY KEY, device TEXT UNIQUE, revoked INTEGER NOT NULL DEFAULT 0)',
+    'restricted_grants': 'CREATE TABLE restricted_grants (device TEXT PRIMARY KEY REFERENCES devices(device), family TEXT NOT NULL, revision INTEGER NOT NULL, expires INTEGER, revoked INTEGER NOT NULL DEFAULT 0)',
+    'restricted_certificates': 'CREATE TABLE restricted_certificates (device TEXT NOT NULL, revision INTEGER NOT NULL, serial TEXT PRIMARY KEY, expires INTEGER NOT NULL, certificate TEXT NOT NULL)',
+    'restricted_crl_sequence': 'CREATE TABLE restricted_crl_sequence (singleton INTEGER PRIMARY KEY CHECK(singleton=1), sequence INTEGER NOT NULL)',
+}
+
+
+def restricted_projection(snapshot):
+    require(type(snapshot) is dict and set(snapshot) == set(TABLES), 'ROLLBACK_DATABASE_SCHEMA_CHANGED')
+    return {name:sorted(snapshot[name],key=canonical) for name in TABLES if name not in REGISTRY_TABLES}
+
+
+def registry_projection(snapshot):
+    return {name:sorted(snapshot[name],key=canonical) for name in REGISTRY_TABLES}
+
+
+def append_only_registry_overlay(expected, current):
+    from control.friends.access import Access
+    restricted = restricted_projection(expected)
+    require(canonical(restricted) == canonical(restricted_projection(current)), 'ROLLBACK_RESTRICTED_STATE_CHANGED')
+    overlay = {}
+    for table,key,fields,unique in (
+            ('devices','device',('device','public','wg','tcp','revoked'),('device','public','wg','tcp')),
+            ('invites','hash',('hash','device','revoked'),('hash','device'))):
+        mappings = []
+        for snapshot in (expected,current):
+            rows = snapshot[table]
+            require(type(rows) is list and all(type(row) is dict and set(row) == set(fields) for row in rows),
+                    'ROLLBACK_DATABASE_SCHEMA_CHANGED')
+            for column in unique:
+                values = [row[column] for row in rows if row[column] is not None]
+                require(all(type(value) is str for value in values) and len(set(values)) == len(values),
+                        'ROLLBACK_REGISTRY_UNIQUE_CONFLICT')
+            require(all(type(row[key]) is str for row in rows), 'ROLLBACK_REGISTRY_INVALID')
+            mappings.append({row[key]:row for row in rows})
+        before,after = mappings
+        require(set(before) <= set(after), 'ROLLBACK_HISTORICAL_ROW_REMOVED')
+        require(all(canonical(row) == canonical(after[value]) for value,row in before.items()),
+                'ROLLBACK_HISTORICAL_ROW_CHANGED')
+        overlay[table] = sorted([row for value,row in after.items() if value not in before],key=canonical)
+        for row in overlay[table]:
+            require(type(row['revoked']) is int and row['revoked'] in (0,1), 'ROLLBACK_REGISTRY_INVALID')
+            if table == 'devices':
+                try:
+                    valid = (Access.binding(row['public'],row['wg']) == row['device']
+                             and type(row['tcp']) is str and str(uuid.UUID(row['tcp'])) == row['tcp']
+                             and uuid.UUID(row['tcp']).version == 4)
+                except ValueError:
+                    valid = False
+                require(valid, 'ROLLBACK_REGISTRY_INVALID')
+            else:
+                require(re.fullmatch('[0-9a-f]{64}',row['hash']) is not None
+                        and (row['device'] is None or row['device'] in {item['device'] for item in current['devices']}),
+                        'ROLLBACK_INVITE_BINDING_INVALID')
+    return dict(expected_database_sha256=digest(canonical(expected)),current_database_sha256=digest(canonical(current)),
+        restricted_projection_sha256=digest(canonical(restricted)),historical_registry_sha256=digest(canonical(registry_projection(expected))),
+        current_registry_sha256=digest(canonical(registry_projection(current))),overlay_sha256=digest(canonical(overlay)),
+        devices_added=len(overlay['devices']),invites_added=len(overlay['invites']),baseline_rows_preserved=True,restricted_state_exact=True)
 
 
 class GrantDatabase:
@@ -80,6 +143,29 @@ class GrantDatabase:
         require(len(value['restricted_crl_sequence']) == 1
                 and value['restricted_crl_sequence'][0]['singleton'] == 1, 'CRL_SEQUENCE_STATE')
         return value
+
+    def registry_overlay(self, expected):
+        identity = self.path.lstat()
+        with self.connect() as database:
+            require(not list(database.execute('PRAGMA foreign_key_check')), 'ROLLBACK_FOREIGN_KEY_FAILURE')
+            for table,sql in OVERLAY_SCHEMA.items():
+                row = database.execute('SELECT sql FROM sqlite_master WHERE type="table" AND name=?',(table,)).fetchone()
+                require(row is not None and ''.join(row['sql'].split()).lower() == ''.join(sql.split()).lower(),
+                        'ROLLBACK_DATABASE_SCHEMA_CHANGED')
+                require(not list(database.execute('SELECT name FROM sqlite_master WHERE type="trigger" AND tbl_name=?',(table,))),
+                        'ROLLBACK_DATABASE_SCHEMA_CHANGED')
+                require(all(index['origin'] in ('pk','u') and not index['partial']
+                            for index in database.execute('PRAGMA index_list('+table+')')), 'ROLLBACK_DATABASE_SCHEMA_CHANGED')
+            for table in ('paid_beta_subscriptions','paid_beta_events'):
+                if database.execute('SELECT 1 FROM sqlite_master WHERE type="table" AND name=?',(table,)).fetchone():
+                    require(database.execute('SELECT COUNT(*) FROM '+table).fetchone()[0] == 0, 'ROLLBACK_PAID_LEDGER_CHANGED')
+            current = self.snapshot(database)
+            proof = append_only_registry_overlay(expected,current)
+            require(database.total_changes == 0, 'ROLLBACK_DATABASE_WRITE_FORBIDDEN')
+        after = self.path.lstat()
+        require((identity.st_dev,identity.st_ino) == (after.st_dev,after.st_ino), 'ROLLBACK_REGISTRY_OVERLAY_STALE')
+        require(digest(canonical(self.snapshot())) == proof['current_database_sha256'], 'ROLLBACK_REGISTRY_OVERLAY_STALE')
+        return dict(proof,schema_exact=True,foreign_keys_valid=True)
 
     def pending_revocations(self, crl, now):
         pending = []

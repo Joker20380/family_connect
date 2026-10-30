@@ -260,7 +260,6 @@ class ProductionNode:
 
     def fenced_rollback_readback(self, owner, archive=None):
         require(self.barrier.stopped(), 'READERS_NOT_QUIESCED')
-        require(self.inspect() == owner['expected_state'], 'ROLLBACK_READBACK_MISMATCH')
         locations = (self.state,) if archive is None else (self.state,archive)
         for location in locations:
             require(not list(location.glob('start-intent-*.json')), 'READER_START_INTENT_PRESENT')
@@ -273,8 +272,12 @@ class ProductionNode:
                     if (location/'rollback-terminal.json').exists()]
         require(len(receipts) == 1, 'ROLLBACK_TERMINAL_RECEIPT_MISSING')
         receipt = parse(read_private(receipts[0]))
+        overlay_fields = {'registry_overlay_receipt_sha256','historical_database_sha256','current_database_sha256',
+                          'restricted_projection_sha256','devices_added','invites_added'}
+        overlay = 'registry_overlay_receipt_sha256' in receipt
         require(set(receipt) == {'schema','operation_id','role','result','reason','expected_state_sha256',
                 'controller_operation_sha256','rollback_verified','readers_resumed','readers_state','timestamp'}
+                | (overlay_fields if overlay else set())
                 and receipt['schema'] == 1 and receipt['operation_id'] == owner['operation_id']
                 and receipt['role'] == self.role and receipt['result'] == 'ROLLED_BACK_READERS_STOPPED'
                 and receipt['reason'] == 'PREVIOUS_LEAF_EXPIRED'
@@ -284,10 +287,85 @@ class ProductionNode:
                 and receipt['rollback_verified'] is True and receipt['readers_resumed'] is False
                 and receipt['readers_state'] == 'STOPPED' and type(receipt['timestamp']) is int,
                 'ROLLBACK_TERMINAL_RECEIPT_INVALID')
+        if overlay:
+            proof = self.previous_readback_with_registry_overlay(owner,archive)
+            require(receipt['registry_overlay_receipt_sha256'] == proof['receipt_sha256']
+                    and receipt['historical_database_sha256'] == proof['expected_database_sha256']
+                    and all(receipt[name] == proof[name] for name in overlay_fields
+                            - {'registry_overlay_receipt_sha256','historical_database_sha256'}), 'ROLLBACK_TERMINAL_BINDING_MISMATCH')
+        else:
+            require(self.inspect() == owner['expected_state'], 'ROLLBACK_READBACK_MISMATCH')
         return receipt
 
+    def overlay_plan(self, owner, archive=None):
+        require(self.role == 'RU' and owner['state'] in ('ROLLED_BACK','ABORTED_FENCED','CLEANING'), 'TRANSACTION_STATE')
+        require(not owner.get('commit_decided') and self.barrier.stopped(), 'READERS_NOT_QUIESCED')
+        locations = (self.state,) if archive is None else (self.state,archive)
+        for location in locations:
+            require(not list(location.glob('start-intent-*.json')), 'READER_START_INTENT_PRESENT')
+            require(not (location/'reconciliation.json').exists(), 'COMMIT_DECISION_PRESENT')
+            require(not (location/'directory-accepted.json').exists(), 'DIRECTORY_PUBLICATION_PRESENT')
+        plans = [location/'plan.json' for location in locations if (location/'plan.json').exists()]
+        require(len(plans) == 1, 'ROLLBACK_EXPECTED_DATABASE_BINDING_MISMATCH')
+        plan = parse(read_private(plans[0]))
+        require(plan['operation_id'] == owner['operation_id'] and 'expired_recovery' not in plan, 'PLAN_BINDING')
+        before = plan['grant_plan']['before']
+        require(digest(canonical(before)) == plan['grant_plan']['before_sha256'] == owner['expected_state']['database_sha256'],
+                'ROLLBACK_EXPECTED_DATABASE_BINDING_MISMATCH')
+        now = int(self.clock())
+        _,_,_,_,leaf = self.validator.validate(canonical(plan['previous']),now,expired_leaf_predecessor=True)
+        require(leaf.not_valid_before_utc <= utc(now) and leaf.not_valid_after_utc <= utc(now), 'PREVIOUS_LEAF_NOT_EXPIRED')
+        actual,expected = self.inspect(),dict(owner['expected_state'])
+        actual.pop('database_sha256')
+        expected.pop('database_sha256')
+        require(actual == expected, 'ROLLBACK_READBACK_MISMATCH')
+        return before
+
+    def previous_readback_with_registry_overlay(self, owner, archive=None):
+        before = self.overlay_plan(owner,archive)
+        locations = (self.state,) if archive is None else (self.state,archive)
+        receipts = [location/'rollback-registry-overlay.json' for location in locations
+                    if (location/'rollback-registry-overlay.json').exists()]
+        require(len(receipts) == 1, 'ROLLBACK_REGISTRY_OVERLAY_MISSING')
+        raw = read_private(receipts[0])
+        receipt = parse(raw)
+        require(self.inspect()['database_sha256'] == receipt['current_database_sha256'], 'ROLLBACK_REGISTRY_OVERLAY_STALE')
+        proof = self.database.registry_overlay(before)
+        require(set(receipt) == set(proof) | {'schema','operation_id','role','result','controller_operation_sha256','timestamp'}
+                and receipt['schema'] == 1 and receipt['operation_id'] == owner['operation_id'] and receipt['role'] == 'RU'
+                and receipt['result'] == 'APPEND_ONLY_REGISTRY_OVERLAY_PRESERVED'
+                and type(receipt['timestamp']) is int and type(receipt['controller_operation_sha256']) is str
+                and re.fullmatch('[0-9a-f]{64}',receipt['controller_operation_sha256'])
+                and all(receipt[name] == value for name,value in proof.items()), 'ROLLBACK_REGISTRY_OVERLAY_STALE')
+        require(self.barrier.stopped(), 'READERS_NOT_QUIESCED')
+        return dict(receipt,receipt_sha256=digest(raw))
+
+    def rollback_registry_overlay(self, operation_id, payload):
+        require(self.role == 'RU', 'NODE_ROLE')
+        require(type(payload) is dict and set(payload) == {'expected_database_sha256','controller_operation_sha256'}
+                and all(type(value) is str and re.fullmatch('[0-9a-f]{64}',value) for value in payload.values()), 'RPC_SCHEMA')
+        with self.operation.lock():
+            owner = self.owner(operation_id)
+            require(owner['state'] in ('ROLLED_BACK','ABORTED_FENCED'), 'TRANSACTION_STATE')
+            before = self.overlay_plan(owner)
+            require(payload['expected_database_sha256'] == owner['expected_state']['database_sha256'],
+                    'ROLLBACK_EXPECTED_DATABASE_BINDING_MISMATCH')
+            path = self.state/'rollback-registry-overlay.json'
+            if not path.exists():
+                require(owner['state'] == 'ROLLED_BACK', 'ROLLBACK_REGISTRY_OVERLAY_MISSING')
+                proof = self.database.registry_overlay(before)
+                receipt = dict(proof,schema=1,operation_id=operation_id,role='RU',result='APPEND_ONLY_REGISTRY_OVERLAY_PRESERVED',
+                    controller_operation_sha256=payload['controller_operation_sha256'],timestamp=int(self.clock()))
+                require(self.barrier.stopped() and self.inspect()['database_sha256'] == proof['current_database_sha256'],
+                        'ROLLBACK_REGISTRY_OVERLAY_STALE')
+                atomic(path,canonical(receipt))
+                self.fault('registry-overlay-receipt')
+            receipt = self.previous_readback_with_registry_overlay(owner)
+            require(all(receipt[name] == value for name,value in payload.items()), 'ROLLBACK_REGISTRY_OVERLAY_BINDING_MISMATCH')
+            return receipt
+
     def finalize_fenced_rollback(self, operation_id, payload):
-        require(type(payload) is dict and set(payload) == {'reason','expected_state_sha256','controller_operation_sha256'}
+        require(type(payload) is dict and set(payload) - {'registry_overlay_receipt_sha256'} == {'reason','expected_state_sha256','controller_operation_sha256'}
                 and payload['reason'] == 'PREVIOUS_LEAF_EXPIRED'
                 and all(type(payload[name]) is str and re.fullmatch('[0-9a-f]{64}',payload[name])
                         for name in ('expected_state_sha256','controller_operation_sha256')), 'RPC_SCHEMA')
@@ -296,8 +374,13 @@ class ProductionNode:
             require(owner['state'] in ('ROLLED_BACK','ABORTED_FENCED'), 'TRANSACTION_STATE')
             require(not owner.get('commit_decided'), 'COMMIT_DECISION_PRESENT')
             require(payload['expected_state_sha256'] == digest(canonical(owner['expected_state'])), 'ROLLBACK_READBACK_MISMATCH')
-            self.previous_readback(operation_id)
-            require(self.inspect() == owner['expected_state'], 'ROLLBACK_READBACK_MISMATCH')
+            overlay = None
+            if 'registry_overlay_receipt_sha256' in payload:
+                overlay = self.previous_readback_with_registry_overlay(owner)
+                require(payload['registry_overlay_receipt_sha256'] == overlay['receipt_sha256'], 'ROLLBACK_REGISTRY_OVERLAY_BINDING_MISMATCH')
+            else:
+                self.previous_readback(operation_id)
+                require(self.inspect() == owner['expected_state'], 'ROLLBACK_READBACK_MISMATCH')
             require(self.barrier.stopped(), 'READERS_NOT_QUIESCED')
             require(not list(self.state.glob('start-intent-*.json')), 'READER_START_INTENT_PRESENT')
             require(not (self.state/'reconciliation.json').exists(), 'COMMIT_DECISION_PRESENT')
@@ -310,6 +393,9 @@ class ProductionNode:
                 require(owner['state'] == 'ROLLED_BACK', 'ROLLBACK_TERMINAL_RECEIPT_MISSING')
                 receipt = dict(schema=1,operation_id=operation_id,role=self.role,result='ROLLED_BACK_READERS_STOPPED',
                     **payload,rollback_verified=True,readers_resumed=False,readers_state='STOPPED',timestamp=int(self.clock()))
+                if overlay is not None:
+                    receipt.update(historical_database_sha256=overlay['expected_database_sha256'],
+                        **{name:overlay[name] for name in ('current_database_sha256','restricted_projection_sha256','devices_added','invites_added')})
                 atomic(path,canonical(receipt))
                 self.fault('rollback-terminal-receipt')
             receipt = self.fenced_rollback_readback(owner)
@@ -767,6 +853,8 @@ class ProductionNode:
             if owner['state'] != 'CLEANING':
                 if owner['state'] == 'RESUMED':
                     self.readback(operation_id)
+                elif owner['state'] == 'ABORTED_FENCED':
+                    self.fenced_rollback_readback(owner)
                 else:
                     self.previous_readback(operation_id)
                 if owner['state'] == 'ABORTED_FENCED':

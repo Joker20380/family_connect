@@ -19,11 +19,13 @@ def main():
     parser.add_argument('action',choices=('evaluate','authority-request','apply','recover'))
     parser.add_argument('--config',type=Path,required=True)
     parser.add_argument('--operation',required=True)
+    parser.add_argument('--preserve-registry-overlay',action='store_true')
     parser.add_argument('--authority-bundle',type=Path)
     parser.add_argument('--output',type=Path)
     parser.add_argument('--approve-maintenance-outage',action='store_true')
     args = parser.parse_args()
     try:
+        require(not args.preserve_registry_overlay or args.action == 'recover', 'RECOVERY_EXPLICIT_MODE_REQUIRED')
         from control.friends.restricted import delegation
         config = parse(read_private(args.config))
         require(set(config) - {'admission_mode'} == {'schema','state','anchor','node_sources','ssh_routes'}
@@ -50,7 +52,7 @@ def main():
             marker = parse(read_private(controller.root/'transaction.json'))
             require(marker['operation_id'] == args.operation, 'OPERATION_ID')
             with controller.operation.lock():
-                result = controller.recover(marker)
+                result = controller.recover(marker,**({'preserve_registry_overlay':True} if args.preserve_registry_overlay else {}))
         else:
             approval = None
             if args.approve_maintenance_outage:

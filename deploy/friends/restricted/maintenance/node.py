@@ -15,21 +15,36 @@ NODE_MODULES = frozenset(('node.py','credential_renewal.py','production_node.py'
                          'grant_cutover.py','offline_handoff.py','expired_recovery.py'))
 
 
-def construct(config_path):
+def construct(config_path, *, fenced_recovery=False):
     require(os.geteuid() == 0, 'ROOT_REQUIRED')
     config = parse(read_private(config_path))
     require(set(config) - {'admission_mode', 'profile_locator', 'profile_locator_sha256', 'snapshot_target'} == {'schema','role','live','state','database','anchor','anchor_sha256','api_archive','api_sha256','service_units',
                            'source_files','source_sha256'}, 'NODE_CONFIG_SCHEMA')
     require(type(config['schema']) is int and config['schema'] == 1 and config['role'] in ('RU','NL'), 'NODE_CONFIG_SCHEMA')
     source = Path(__file__).resolve().parent
+    retained_source = Path(config['api_archive']).parent/'renewal' if fenced_recovery else source
     require(type(config['source_files']) is dict and NODE_MODULES <= set(config['source_files']),
             'SOURCE_MANIFEST_INCOMPLETE')
     hashes = {}
     for name,expected in config['source_files'].items():
         require(type(name) is str and '/' not in name and name.endswith('.py') and not name.startswith('.'), 'SOURCE_PATH')
-        hashes[name] = digest(pinned(source/name,{0})[0])
+        hashes[name] = digest(pinned(retained_source/name,{0})[0])
         require(hashes[name] == expected, 'SOURCE_IDENTITY_MISMATCH')
     require(digest(canonical(hashes)) == config['source_sha256'], 'SOURCE_IDENTITY_MISMATCH')
+    source_sha256 = config['source_sha256']
+    if fenced_recovery:
+        require(retained_source.resolve() != source, 'RECOVERY_SOURCE_BOUNDARY')
+        manifest = parse(read_private(source.parent/'source-manifest.json'))
+        require(manifest['production_configuration'] == 'absent' and manifest['binding'] == 'unbound'
+                and manifest['operation_permit'] is None and set(manifest['source_files']) == set(config['source_files']),
+                'SOURCE_MANIFEST_INCOMPLETE')
+        current = {}
+        for name,expected in manifest['source_files'].items():
+            require('/' not in name and name.endswith('.py') and not name.startswith('.'), 'SOURCE_PATH')
+            current[name] = digest(pinned(source/name,{0})[0])
+            require(current[name] == expected, 'SOURCE_IDENTITY_MISMATCH')
+        require(digest(canonical(current)) == manifest['source_sha256'], 'SOURCE_IDENTITY_MISMATCH')
+        source_sha256 = manifest['source_sha256']
     archive = Path(config['api_archive'])
     descriptor = os.open(archive,os.O_RDONLY|os.O_NOFOLLOW)
     try:
@@ -88,7 +103,8 @@ def construct(config_path):
                           policy_paths=policy_paths,profile_store=profile_store,service_units=config['service_units'])
     node.snapshot_target = config.get('snapshot_target')
     node.pinned_archive_descriptor = descriptor
-    return node,config['source_sha256']
+    node.fenced_recovery = fenced_recovery
+    return node,source_sha256
 
 
 def dispatch(node, request):
@@ -98,6 +114,14 @@ def dispatch(node, request):
     action,operation,payload = request['action'],request['operation_id'],request['payload']
     import re
     require(type(operation) is str and re.fullmatch('[a-z0-9-]{16,96}',operation), 'OPERATION_ID')
+    if getattr(node,'fenced_recovery',False):
+        require(action in {'inspect','stopped','rollback-readback','rollback-registry-overlay','finalize-fenced-rollback','cleanup','fence'},
+                'FENCED_RECOVERY_ACTION_FORBIDDEN')
+        if (node.state/'owner.json').exists():
+            require(node.owner(operation)['state'] in ('ROLLED_BACK','ABORTED_FENCED','CLEANING'), 'TRANSACTION_STATE')
+        else:
+            ledger = parse(read_private(node.state/'completed.json'))
+            require(operation in ledger and ledger[operation]['result'] == 'CLEANED_FENCED_ROLLBACK', 'TRANSACTION_STATE')
     if action == 'inspect':
         require(payload is None, 'RPC_SCHEMA')
         return node.inspect()
@@ -133,6 +157,8 @@ def dispatch(node, request):
         return node.restore(operation,payload)
     if action == 'finalize-fenced-rollback':
         return node.finalize_fenced_rollback(operation,payload)
+    if action == 'rollback-registry-overlay':
+        return node.rollback_registry_overlay(operation,payload)
     require(payload is None, 'RPC_SCHEMA')
     if action == 'stopped':
         node.owner(operation)
@@ -148,10 +174,11 @@ def main():
     resource.setrlimit(resource.RLIMIT_CORE,(0,0))
     parser = argparse.ArgumentParser()
     parser.add_argument('--config',type=Path,required=True)
+    parser.add_argument('--fenced-recovery',action='store_true')
     arguments = parser.parse_args()
     try:
         request = parse(sys.stdin.buffer.read(MAX_BYTES+1))
-        node,source_sha256 = construct(arguments.config)
+        node,source_sha256 = construct(arguments.config,**({'fenced_recovery':True} if arguments.fenced_recovery else {}))
         require(request['expected_source_sha256'] == source_sha256, 'SOURCE_IDENTITY_MISMATCH')
         payload = dispatch(node,request)
         response = dict(schema=1,role=node.role,operation_id=request['operation_id'],action=request['action'],

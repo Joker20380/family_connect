@@ -189,7 +189,8 @@ class ProductionController:
     def receipts(self, record):
         safe = {key:record[key] for key in ('schema','operation_id','state','first_cause','before_sha256')}
         for key in ('terminal_result','rollback_verified','previous_material_current','readers_resumed',
-                    'readers_state','terminal_reason','first_reason'):
+                    'readers_state','terminal_reason','first_reason','registry_overlay_preserved','registry_overlay_result',
+                    'registry_devices_added','registry_invites_added','historical_expected_state_unchanged'):
             if key in record:
                 safe[key] = record[key]
         safe.update(timestamp=int(self.clock()),remote_alert_delivery='UNAVAILABLE',
@@ -313,18 +314,42 @@ class ProductionController:
         return dict(result=record.get('terminal_result',terminal),operation_id=operation,receipt_written=receipt_written,
                     first_cause=record['first_cause'])
 
-    def finalize_fenced_rollback(self, record, leaf, now):
+    def finalize_fenced_rollback(self, record, leaf, now, *, preserve_registry_overlay=False):
         require(not record['commit_decided'] and not record.get('reconciliation'), 'COMMIT_DECISION_PRESENT')
         require(leaf.not_valid_before_utc <= utc(now) and leaf.not_valid_after_utc <= utc(now), 'PREVIOUS_LEAF_NOT_EXPIRED')
         require(digest(canonical(record['before'])) == record['before_sha256'], 'ROLLBACK_READBACK_MISMATCH')
         plan = parse(read_private(self.root/'plan.json'))
         require(plan['operation_id'] == record['operation_id'] and plan['previous'] == record['previous'], 'PLAN_BINDING')
         for role,node in self.nodes.items():
-            require(node.call('inspect',record['operation_id']) == record['before'][role], 'ROLLBACK_READBACK_MISMATCH')
+            actual,expected = node.call('inspect',record['operation_id']),dict(record['before'][role])
+            if role == 'RU' and preserve_registry_overlay:
+                actual.pop('database_sha256')
+                expected.pop('database_sha256')
+            require(actual == expected, 'ROLLBACK_READBACK_MISMATCH')
             require(node.call('stopped',record['operation_id'])['stopped'], 'READERS_NOT_QUIESCED')
+            if role == 'NL' or not preserve_registry_overlay:
+                require(node.call('rollback-readback',record['operation_id'])['result'] == 'PREVIOUS_SNAPSHOT_RESTORED',
+                        'ROLLBACK_READBACK_MISMATCH')
         binding = dict(operation_id=record['operation_id'],before_sha256=record['before_sha256'],
                        previous_sha256=digest(canonical(record['previous'])),plan_sha256=digest(canonical(plan)),
                        first_cause=record['first_cause'],commit_decided=False)
+        overlay = None
+        if preserve_registry_overlay:
+            expected_database = record['before']['RU']['database_sha256']
+            require(digest(canonical(plan['grant_plan']['before'])) == plan['grant_plan']['before_sha256'] == expected_database,
+                    'ROLLBACK_EXPECTED_DATABASE_BINDING_MISMATCH')
+            overlay = self.nodes['RU'].call('rollback-registry-overlay',record['operation_id'],
+                dict(expected_database_sha256=expected_database,controller_operation_sha256=digest(canonical(binding))))
+            require(overlay['result'] == 'APPEND_ONLY_REGISTRY_OVERLAY_PRESERVED'
+                    and overlay['expected_database_sha256'] == expected_database
+                    and overlay['controller_operation_sha256'] == digest(canonical(binding))
+                    and all(overlay[name] is True for name in ('baseline_rows_preserved','restricted_state_exact','schema_exact','foreign_keys_valid'))
+                    and overlay['current_database_sha256'] == self.nodes['RU'].call('inspect',record['operation_id'])['database_sha256']
+                    and overlay['receipt_sha256'] == digest(canonical({key:value for key,value in overlay.items() if key != 'receipt_sha256'})),
+                    'ROLLBACK_REGISTRY_OVERLAY_STALE')
+            binding.update(historical_database_sha256=expected_database,current_database_sha256=overlay['current_database_sha256'],
+                registry_overlay_receipt_sha256=overlay['receipt_sha256'],restricted_projection_sha256=overlay['restricted_projection_sha256'],
+                devices_added=overlay['devices_added'],invites_added=overlay['invites_added'])
         if 'fenced_rollback' in record:
             require(record['fenced_rollback'] == binding, 'ROLLBACK_TERMINAL_BINDING_MISMATCH')
         else:
@@ -333,6 +358,8 @@ class ProductionController:
         for role,node in self.nodes.items():
             payload = dict(reason='PREVIOUS_LEAF_EXPIRED',expected_state_sha256=digest(canonical(record['before'][role])),
                            controller_operation_sha256=digest(canonical(binding)))
+            if role == 'RU' and overlay is not None:
+                payload['registry_overlay_receipt_sha256'] = overlay['receipt_sha256']
             receipt = node.call('finalize-fenced-rollback',record['operation_id'],payload)
             require(receipt['result'] == 'ROLLED_BACK_READERS_STOPPED' and receipt['operation_id'] == record['operation_id']
                     and receipt['role'] == role and all(receipt[name] == value for name,value in payload.items())
@@ -341,10 +368,14 @@ class ProductionController:
         record.update(terminal_result='ROLLED_BACK_READERS_STOPPED',rollback_verified=True,previous_material_current=False,
                       readers_resumed=False,readers_state='STOPPED',terminal_reason='PREVIOUS_LEAF_EXPIRED')
         record.setdefault('first_reason',record['first_cause'])
+        if overlay is not None:
+            record.update(registry_overlay_preserved=True,registry_overlay_result=overlay['result'],
+                          registry_devices_added=overlay['devices_added'],registry_invites_added=overlay['invites_added'],
+                          historical_expected_state_unchanged=True)
         self.save(record,'CLEANING')
         return self.cleanup(record)
 
-    def recover(self, record):
+    def recover(self, record, *, preserve_registry_overlay=False):
         require(record.get('mode') != 'expired', 'OPERATOR_RECOVERY_REQUIRED')
         operation = record['operation_id']
         record['first_cause'] = record['first_cause'] or 'CONTROLLER_INTERRUPTED'
@@ -359,6 +390,14 @@ class ProductionController:
                 return self.finish(record)
             now = int(self.clock())
             _,_,_,_,leaf = self.validator.validate(canonical(record['previous']),now,expired_leaf_predecessor=True)
+            if preserve_registry_overlay or record.get('fenced_rollback',{}).get('registry_overlay_receipt_sha256'):
+                try:
+                    self.validator.validate(canonical(record['previous']),int(self.clock()))
+                except Rejected as error:
+                    if str(error) != 'LEAF_EXPIRED_OR_FUTURE':
+                        raise
+                    return self.finalize_fenced_rollback(record,leaf,int(self.clock()),preserve_registry_overlay=True)
+                require(False, 'PREVIOUS_LEAF_NOT_EXPIRED')
             if record['state'] != 'ROLLED_BACK' and 'fenced_rollback' not in record:
                 for role,node in self.nodes.items():
                     node.call('acquire',operation,record['before'][role])

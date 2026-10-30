@@ -2,6 +2,16 @@
 
 ## NL availability restoration — 30 October
 
+Owner-authorized continuation: append-only registry preservation is now source-qualified,
+not yet deployed. The dedicated fenced recovery proof retains historical snapshots and
+checks exact restricted tables, schema, constraints and immutable existing rows. Normal
+renewal/rollback still require exact state. A recovery-only runtime bridge preserves fixed
+configuration/source pins while authenticating the replacement package separately.
+Historical encrypted SQLite schema comparison PASS. Next within the same operation:
+deterministic package, fresh private backup, one bounded RU writer stop, overlay proof,
+terminal rollback/archive, ordinary HTTP restart, then publisher/fresh renewal/cutover.
+No production mutation, new room, directory or catalog publication from this source check.
+
 **NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / BLOCKED_RENEWAL_JOURNAL_UNRESOLVED.**
 Owner-authorized fenced rollback correction pushed as
 `dfbfbc34cc3345e281294ff429555d9b95a35f91`, **NOT_DEPLOYED**.168 focused tests PASS,

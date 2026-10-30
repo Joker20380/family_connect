@@ -265,7 +265,8 @@ def test_systemd_barrier_proves_no_active_or_activating_reader(tmp_path, active,
 
 @pytest.mark.parametrize('module,explicit', [(runtime_controller,True),(runtime_controller,False),
                                           (renewal_cli,True),(renewal_cli,False)])
-def test_cli_accepts_fenced_result_only_for_explicit_recover(rolled_back, monkeypatch, capsys, module, explicit, process_umask):
+@pytest.mark.parametrize('overlay', [False, True])
+def test_cli_accepts_fenced_result_only_for_explicit_recover(rolled_back, monkeypatch, capsys, module, explicit, overlay, process_umask):
     cluster = rolled_back
     operation = cluster.record['operation_id']
     config_path = cluster.controller.root/'cli.json'
@@ -281,16 +282,21 @@ def test_cli_accepts_fenced_result_only_for_explicit_recover(rolled_back, monkey
     atomic(config_path,canonical(config))
     monkeypatch.setattr(module,'SshNode',lambda *args,**kwargs: object())
     monkeypatch.setattr(module,'ProductionController',lambda *args,**kwargs: cluster.controller)
-    monkeypatch.setattr(cluster.controller,'recover',lambda record: dict(result=RESULT))
+    def recovered(record, **options):
+        assert options == ({'preserve_registry_overlay':True} if overlay else {})
+        return dict(result=RESULT)
+    monkeypatch.setattr(cluster.controller,'recover',recovered)
     monkeypatch.setattr(cluster.controller,'run',lambda *args,**kwargs: dict(result=RESULT))
-    monkeypatch.setattr(sys,'argv',['fixture',*arguments,'--config',str(config_path),'--operation',operation])
+    monkeypatch.setattr(sys,'argv',['fixture',*arguments,'--config',str(config_path),'--operation',operation,
+                                 *(['--preserve-registry-overlay'] if overlay else [])])
     if explicit:
         module.main()
     else:
         with pytest.raises(SystemExit) as error:
             module.main()
-        assert error.value.code == 75
-    assert json.loads(capsys.readouterr().out)['result'] == RESULT
+        assert error.value.code == (1 if overlay else 75)
+    output = json.loads(capsys.readouterr().out)
+    assert output['result'] == ('FAIL_CLOSED' if overlay and not explicit else RESULT)
 
 
 @pytest.fixture
