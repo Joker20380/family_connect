@@ -4,6 +4,18 @@
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
 **Current substep BETA-0-CANARY-1 — PAUSED_BY_OWNER / LIVE_WRITES_NOT_RUN.**
+Post-provider boot readback30.10 08:55–09:04UTC: NL administrative SSH restored;
+ordinary AWG/TCP, mailbox, Reticulum and monitoring units active. Memory29.19–31.12%,
+load0.14–0.25, no swap; this short observation does not resolve the earlier memory rise.
+Service recovery is PARTIAL: restricted gateway inactive/disabled, its listener absent;
+canonical gateway certificate and CRL expired29.10 11:42:38UTC, directory expired13:04:25UTC.
+Floor remains aligned27224; canonical boundary/configuration and accepted snapshot/gateway
+artifact hashes retained. Actual RU-origin SSH snapshot times out; direct RU→NL TCP22/443
+also time out while local→NL succeeds. Renewal timer waiting, last worker failed.
+RU Friends HTTP dispatch responds as expected; paid ledger freshly0/0. No operator
+restart, refresh, route/source change or canary action. No full VPN/client acceptance;
+46 AWG peers loaded but no recent handshake/traffic in the bounded sample. Canary paused.
+This fresh observation supersedes the earlier total-inaccessibility observations below.
 Memory retrospective:1282 stored NL samples. Observed post-cutover28.10 median60.10%;
 29.10 08:23–08:30UTC58.81–60.90%, rising to87.52% at08:42 and89.92% at09:03.
 Metric uses MemAvailable, not merely free memory. Overnight and pre-failure gaps exist.

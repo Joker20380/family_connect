@@ -1,5 +1,50 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Post-provider boot readback — 30 October
+
+Owner reports that the provider has brought NL back up. Read-only observations from
+08:55:23 through09:04:32UTC confirm administrative SSH access and OS uptime about33
+minutes at the first observation. The provider's repair actions and original failure
+cause remain unverified; no reinstall, kernel repair or service start was performed here.
+
+- Ordinary Friends AWG/TCP, mailbox, Reticulum and load-monitor units are active,
+  with zero recorded automatic restarts in their current invocations. The ordinary
+  AWG interface is up with46 peers, forwarding enabled and an observed NAT rule.
+  No handshake within15 minutes or transfer delta in the five-second sample was
+  observed. This is not end-to-end VPN/Internet or messenger-client acceptance.
+- Memory usage by MemAvailable is29.19–31.12% across the bounded reads; total RAM
+  about955MiB, no swap, load0.14–0.25. Memory PSI avg10/60/300 is zero in the initial
+  sample; disk use51%. The earlier growth remains unexplained, not declared fixed.
+- The restricted gateway unit is loaded but inactive/dead and disabled; its listener
+  refuses connection. Its configured argv still matches the accepted canonical route.
+  When or why it was disabled was not determined. No automatic start was attempted.
+- The canonical profile and locator remain present; reader-boundary validation and
+  profile/directory/lock locator identity checks pass. Snapshot package and gateway
+  candidate size/hash match the retained accepted artifacts. No rebuild or substitution.
+- Embedded CRL and floor both27224. The gateway certificate and CRL expired on29 October
+  at11:42:38UTC. Historical signature checks pass, but current profile validation fails
+  CRL_INVALID. Directory expiry is29 October13:04:25.250203756UTC and current validation
+  fails DIRECTORY_INVALID. Historical signature validity is not current-material readiness.
+- Actual RU-origin read-only SSH snapshot exits255 with connection timeout. Independent
+  RU TCP probes to NL SSH and public TCP VPN also time out, while local probes succeed.
+  NL fail2ban reports zero current bans and no RU entry; inspected IPv4 iptables policies
+  accept input/output. This does not identify the blocking network hop or exclude other
+  firewall layers. No host-key, firewall, credential or route changes were attempted.
+- RU renewal timer is active/waiting; latest worker is failed/exit1. RU Friends HTTP
+  remains active; the accepted non-mutating unknown-route dispatcher probe returns the
+  expected404 JSON. A GET probe first returned501 because this handler supports POST;
+  that probe was not classified as a service failure. Paid tables freshly contain0/0.
+- Bounded previous-boot and selected service journal reads timed out. Missing readback
+  is not proof of absent logs, a clean previous boot or a specific OOM/update cause.
+
+Result: **NL_BOOT_RECOVERED_SERVICES_PARTIAL**. Existing BETA-0-CANARY-1 stays
+**PAUSED_BY_OWNER / LIVE_WRITES_NOT_RUN**. Current priorities within availability
+diagnosis are the RU→NL transport failure, expired restricted materials and stopped
+restricted gateway; this read-only check does not authorize automatic material issuance
+or canary resumption. No paid/readiness/Android action, CRL generation, backup,
+production configuration change, restart/reload, timer change or source/package change.
+Private evidence retained locally; only sanitized state and digests are committed.
+
 ## Memory-pressure retrospective — 29 October
 
 Read-only local monitoring database analysis covers1282 NL samples from27 October

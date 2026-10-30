@@ -17,7 +17,7 @@
   },
   "canonical_migration": "ACCEPTED_UNCHANGED",
   "checkpoint": "BETA-0-CANARY-1",
-  "current_observation": "memory_pressure_retrospective",
+  "current_observation": "post_provider_boot_readback",
   "entry_main": "3996fa05fcf6bef7ba660f8e78e9a614381ef274",
   "former_zero_certificate_gate": "SUPERSEDED_BY_PRODUCT_CONTRACT_REVIEW",
   "latest_horizon_recheck": {
@@ -344,5 +344,128 @@
     "readonly_service_registry_owner": "PASS",
     "staged_scope": "PASS",
     "strict_json": "PASS"
+  },
+  "post_provider_boot_readback": {
+    "actual_ssh_snapshot": {
+      "exit": 255,
+      "result": "CONNECTION_TIMEOUT",
+      "strict_response_received": false
+    },
+    "administrative_ssh": "PASS",
+    "android_actions": 0,
+    "artifacts": {
+      "gateway_candidate": {
+        "retained_match": true,
+        "sha256": "f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef",
+        "size": 17925498
+      },
+      "snapshot_package": {
+        "retained_match": true,
+        "sha256": "6dd51ead36a977abd4e6afee978d81df229ac767a6315bc4b2347328bde60c84",
+        "size": 167573
+      }
+    },
+    "awg": {
+      "exit": 0,
+      "peers": 46,
+      "recent_180s": 0,
+      "recent_900s": 0,
+      "traffic_5s_bytes": [
+        0,
+        0
+      ]
+    },
+    "canary": "PAUSED_BY_OWNER",
+    "canary_resumed": false,
+    "canonical_locator_matches": true,
+    "canonical_reader_boundary": "PASS",
+    "client_end_to_end": "NOT_RUN",
+    "disk_used_percent": 51,
+    "evidence_sha256": {
+      "actual_snapshot": "a3c33cd70009debb01873f69dfac25b8e9fd5cc5a57bf8fbaf1e58a3c6a3f90e",
+      "directory_times": "0cbaa35005350d6544e0a4e24e54c3ee54e6de818ff873cebf8634dd7f01c63d",
+      "http_ledger": "6b6281edee3e3884fb743dbfc3d754abef6c8cbef3f84e8a73394de3f4987627",
+      "nl_materials": "91a263c95bb793979c08dbe7a2e9ddb9ba07206c5b96511c14c96433731e7e06",
+      "nl_units": "2c67c626f77dd07326c01f726378506b57a1c74495ec6d53e8edd86d16e69b76",
+      "ru_network": "a51bb585134b36445d673f4e3fb930917665acf42dc29b5f47e6d48d25a74fad",
+      "ru_units": "b47964ef4d3b432d54e2921fe7a5a314000402b7abc2320e0f8d2a93fb081818"
+    },
+    "friends_http": {
+      "dispatch_liveness": "PASS",
+      "restart_by_operator": false,
+      "state": "ACTIVE"
+    },
+    "load_1m_range": [
+      0.14,
+      0.25
+    ],
+    "mailbox_reticulum_monitor_units": "ACTIVE",
+    "material_refreshes": 0,
+    "materials": {
+      "certificate_not_after": "2026-10-29T11:42:38+00:00",
+      "certificate_remaining_seconds": -76668,
+      "crl_next_update": "2026-10-29T11:42:38+00:00",
+      "crl_remaining_seconds": -76668,
+      "current_profile_validation": "CRL_INVALID",
+      "directory_expires_at": "2026-10-29T13:04:25.250203756Z",
+      "directory_validation": "DIRECTORY_INVALID",
+      "embedded_crl": 27224,
+      "floor_aligned": true,
+      "historical_signatures_only": "PASS",
+      "minimum_crl": 27224,
+      "profile_sha256": "f3282684aa60e899a139078d6e82626016f5cec9d38755174a9be0ee176497ac",
+      "ready": false
+    },
+    "memory_percent_range": [
+      29.19,
+      31.12
+    ],
+    "memory_root_cause": "NOT_ESTABLISHED",
+    "memory_total_mib": 955.3,
+    "network": {
+      "blocking_hop": "NOT_ESTABLISHED",
+      "local_to_nl_tcp22": "PASS",
+      "local_to_nl_tcp443": "PASS",
+      "nl_fail2ban_current_bans": 0,
+      "ru_to_nl_tcp22": "TIMEOUT",
+      "ru_to_nl_tcp443": "TIMEOUT"
+    },
+    "observed_through_utc": "2026-10-30T09:04:32.791817+00:00",
+    "ordinary_awg_tcp_units": "ACTIVE",
+    "owner_binding_and_android": "NOT_RECHECKED_NO_OWNER_ACTION",
+    "paid": {
+      "events": 0,
+      "subscriptions": 0
+    },
+    "paid_events_applied": 0,
+    "prior_boot_and_service_journal": "BOUNDED_READ_TIMEOUT_NOT_ABSENCE",
+    "production_writes": 0,
+    "profile_unchanged_during_read": true,
+    "provider_repair_details": "NOT_VERIFIED",
+    "readiness_actions": 0,
+    "reloads": 0,
+    "renewal": {
+      "latest_worker": "FAILED_EXIT_1",
+      "source_present": true,
+      "timer": "ACTIVE_WAITING"
+    },
+    "restarts": 0,
+    "restricted_gateway": {
+      "accepted_argv_matches": true,
+      "disable_origin": "NOT_ESTABLISHED",
+      "listener": "CONNECTION_REFUSED",
+      "state": "INACTIVE_DEAD",
+      "unit_file_state": "DISABLED"
+    },
+    "result": "NL_BOOT_RECOVERED_SERVICES_PARTIAL",
+    "swap_mib": 0,
+    "validation": {
+      "diff_checks": "PASS",
+      "markdown_links": "PASS",
+      "privacy": "PASS",
+      "product_tests": "NOT_RUN_DOCUMENTATION_ONLY",
+      "staged_scope": "PASS",
+      "strict_json": "PASS"
+    }
   }
 }
