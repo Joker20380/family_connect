@@ -4,8 +4,11 @@
 
 [NL gateway replacement — 30 October](releases/2026-10-30-nl-gateway-replacement.md)
 and [sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json):
-**BLOCKED_NL_REPLACEMENT / BLOCKED_NEW_HOST_OS**: `185.10.158.212` has
-Ubuntu22.04/glibc2.35; the exact accepted CPython3.14.4 requires `GLIBC_2.38`.
+**HOST_PREPARATION_IN_PROGRESS**: owner authorized required installation on
+`185.10.158.212`. Jammy updates/base tooling and first guarded reboot completed;
+official22.04→24.04 upgrade started, with26.04 planned for the full accepted runtime.
+Initial Ubuntu22.04/glibc2.35 was incompatible; the interpreter needsGLIBC2.38 and
+its retained extensions needGLIBC2.42/OpenSSL3.4. No custom runtime/libc substitution.
 Owner-interactive SSH key setup and strict pinned login PASS; provider verification
 was unavailable. Exact artifacts and retained coordinated backup verified; no product
 identity activation, fencing or publication. This availability-restoration task

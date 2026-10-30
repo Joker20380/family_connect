@@ -2,12 +2,17 @@
 
 ## Status and authorization
 
-**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / BLOCKED_NEW_HOST_OS.**
-The localized blocker is an incompatible target OS/runtime: Ubuntu22.04/glibc2.35
+**NL-REPLACEMENT-20261030 / HOST_PREPARATION_IN_PROGRESS.** After the initial
+blocked audit, the owner authorized installing the required OS/packages over SSH.
+Supported LTS upgrades are now in progress, not a provider disk reinstallation.
+No product identity, old-node fencing, catalog publication or client smoke yet.
+
+The initial **BLOCKED_NEW_HOST_OS** finding was an incompatible OS/runtime: Ubuntu22.04/glibc2.35
 cannot load the exact accepted CPython3.14.4 executable requiring `GLIBC_2.38`.
 The snapshot launcher explicitly requires CPython3.14; system Python3.10 is not an
 accepted substitute. No runtime downgrade, custom build, libc replacement or OS
-upgrade was attempted. This is an ELF ABI incompatibility, not a missing ordinary tool.
+upgrade was attempted during that initial read-only audit. This is an ELF ABI
+incompatibility, not a missing ordinary tool. Subsequent installation is recorded below.
 
 Initial host-key verification was paused. The owner could not locate the provider
 console and then explicitly chose direct public-key installation. In a separate local
@@ -77,6 +82,38 @@ conflict was introduced. Old service activity is not evidence of healthy product
 
 ## Acceptance and publication gates
 
+### Authorized host preparation continuation
+
+- Owner authorized required installation; continuation entry main
+  `6ed27282b582d0600208cdb31d32e245e0ee99f8` was fetched and remote-verified.
+- New-host SSH/access, package-source, network and boot configuration were backed up
+  encrypted before management writes; authenticated decryption readback PASS.
+- Official Jammy security updates and base diagnostic/upgrade packages installed.
+  Root/password access was not disabled. No public product listener was introduced.
+- Hostname identifies replacement NL. Bounded SSH fail2ban configured; journald limits
+  200MiB persistent/32MiB runtime/14days. Existing approximately1GiB swap partition is
+  retained; an additional1GiB mode0600 file is enabled persistently, total about2GiB.
+  Swappiness10; no gateway service memory cap was guessed before exact restoration.
+- Package `needrestart` restarted the preparation runner once during its first pass.
+  Readback reconciled the running job rather than starting a duplicate. Base installation
+  subsequently completed; upgrade runners are now excluded from automatic needrestart.
+- A local boot-test fixture initially expected ext4 as a module; the installed kernel
+  builds ext4 in. The corrected gate accepts the exact kernel configuration or initrd
+  module, not an absent filesystem driver. GRUB, initrd/virtio/root-filesystem, dpkg and
+  SSH checks passed before reboot. No product service was involved in either recovery.
+- One controlled security-update reboot returned successfully with unchanged trusted
+  SSH host key and key login: Ubuntu22.04.5 LTS, kernel5.15.0-202-generic.
+- The official upgrader offers24.04.5 LTS. The supported22.04→24.04 operation has
+  started asynchronously, with private logs and no automatic reboot. Completion and
+  its guarded reboot are still pending at this source checkpoint.
+- Read-only inspection of53 retained runtime ELF files also identifiesGLIBC2.42 and
+  OpenSSL3.3/3.4 version requirements in the accepted extension set. Ubuntu24.04 alone
+  is therefore not the final runtime baseline; the next official LTS hop to26.04 is
+  planned after24.04 passes its own checks. No CPython rebuild or libc transplant.
+- Old NL deployment contract was additionally collected read-only:88 metadata records,
+  six units and11 network/runtime sections; source/configuration bodies encrypted and
+  verified locally. This remains a partial private matrix, not a consistent full backup.
+
 ### New-host read-only preflight
 
 Observed18:08:03UTC, successful root public-key login. Ubuntu22.04.1 LTS, kernel
@@ -102,10 +139,10 @@ misreported as gateway-binary corruption or a failure of all five accepted packa
 | Gate | Current result |
 | --- | --- |
 | New-host SSH identity/login | Owner-interactive TOFU, pin matched, key login PASS; no provider verification |
-| New-host OS/runtime | BLOCKED_NEW_HOST_OS: exact interpreter ABI incompatible |
+| New-host OS/runtime | Supported LTS upgrades IN_PROGRESS; exact runtime acceptance pending |
 | Architecture/TUN/NTP | Read-only x86_64/TUN/NTP PASS; no data-plane test |
 | Provider constraints/recovery console | NOT_VERIFIED |
-| Base preparation, updates/reboot, swap and SSH recovery | NOT_RUN |
+| Base preparation, updates/reboot, swap and SSH recovery | Jammy base/reboot PASS; final OS and provider-console recovery pending |
 | Full private matrix/current identity coverage | INCOMPLETE |
 | Old-NL fencing | NOT_RUN; ordinary/support services still active |
 | New AWG handshake, DNS, HTTPS and cleanup | NOT_RUN |
@@ -125,14 +162,13 @@ No new NL readiness, rollout or full-success claim is made.
 
 ## Resume and rollback
 
-First provision a target OS compatible with the exact accepted runtime. OS reinstallation
-has **not** been performed or authorized by this readback; a reinstall would erase the
-newly added SSH authorization and change host keys. Ubuntu24.04 is the owner's preferred
-baseline but still needs exact runtime/library qualification; Ubuntu26.04 is the observed
-donor baseline, not blanket permission to change the requested target. Do not guess
-compatibility, bypass the3.14 guard, replace system libc or silently rebuild runtime bytes.
-After provisioning, verify new host identity explicitly without silently replacing the
-existing known-host entry. Continue in the same task with full read-only preflight and
+Complete the owner-authorized supported OS upgrades; observe each job and validate
+boot/SSH before its controlled reboot. No disk reinstallation is performed; SSH host
+keys and root access must remain intact. The preferred24.04 baseline does not meet
+the full retained extension ABI requirements, so26.04 is the selected final baseline.
+Do not bypass the3.14 guard, replace system libc independently or silently rebuild
+accepted runtime bytes. Reverify host identity without replacing the known-host entry.
+Continue in the same task with final full read-only preflight and
 private identity/configuration coverage. Prove old-node fencing before activating copied identities.
 Do not regenerate a recoverable identity, trust anchor or client credentials.
 
@@ -144,7 +180,9 @@ signed NL control-plane update. Verify Android106 without an APK change before a
 for the owner's AWG smoke, then TCP, then Auto/MESH. Canary stays paused throughout.
 
 Rollback now: **NOT_NEEDED_NO_PUBLICATION**. No endpoint, service or production identity
-was changed; the only new-host management change was owner-run SSH public-key addition.
+was changed. New-host management changes now include SSH setup and authorized base/OS
+preparation; these are not a product rollout. Encrypted pre-upgrade configuration is
+retained, but it is not a full disk image or a promise of automatic OS downgrade.
 Do not fence the still-serving old ordinary services merely to close this
 blocked audit; fencing remains mandatory before replacement identity activation.
 Before publication, a failed replacement stays unpublished and RU unchanged. After a

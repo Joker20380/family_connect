@@ -5,9 +5,15 @@
 ### Authorized operational exception — NL-REPLACEMENT-20261030
 
 Availability restoration to `185.10.158.212`, not a new product checkpoint.
-**BLOCKED_NL_REPLACEMENT / BLOCKED_NEW_HOST_OS:** Ubuntu22.04/glibc2.35 cannot run
+**HOST_PREPARATION_IN_PROGRESS**, owner-authorized installation continuation.
+Jammy updates/base tooling and bounded SSH/log/memory protection installed. First
+controlled reboot returned with strict key login, Ubuntu22.04.5/kernel5.15.0-202-generic.
+Official22.04→24.04 upgrade started;24.04→26.04 follows only its successful gates.
+Full accepted runtime extensions require GLIBC2.42/OpenSSL3.4, not only the interpreter's
+GLIBC2.38. No bespoke runtime or system-libc substitution. No product activation.
+Initial **BLOCKED_NEW_HOST_OS** provenance: Ubuntu22.04/glibc2.35 cannot run
 the exact accepted CPython3.14.4 interpreter requiring `GLIBC_2.38`; snapshot guards
-reject system Python3.10. No unaccepted runtime/libc substitution or OS upgrade.
+reject system Python3.10. This blocker is being resolved through supported OS upgrades.
 Owner-interactive TOFU and public-key installation completed; strict SSH login PASS,
 provider-console verification unavailable. TUN/NTP/x86_64 preflight PASS; not deployment.
 Entry remote main matches `17713e70279ed86d13c52ebddf167b6dc3d40a47`; five retained

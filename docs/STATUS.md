@@ -2,11 +2,20 @@
 
 ## NL availability restoration — 30 October
 
-**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / BLOCKED_NEW_HOST_OS:**
-replacement production NL `185.10.158.212` has Ubuntu22.04.1/glibc2.35, incompatible
+**NL-REPLACEMENT-20261030 / HOST_PREPARATION_IN_PROGRESS.** Owner subsequently
+authorized installing the required OS/packages over SSH. New-host management backup
+encrypted and verified. Jammy security/base packages installed; controlled reboot
+returned with strict key login on Ubuntu22.04.5/kernel5.15.0-202-generic. Existing1GiB
+partition swap retained plus1GiB file, bounded SSH fail2ban and journal retention enabled.
+Official22.04→24.04 upgrade started;24.04 is not yet accepted installed. Full accepted
+runtime extensions also require GLIBC2.42/OpenSSL3.4 symbols, so a second supported
+LTS upgrade to26.04 is planned, not a custom runtime/libc replacement. No product
+identity, old-node fencing or client publication. Canary remains PAUSED.
+The initial read-only **BLOCKED_NEW_HOST_OS** finding is retained as provenance:
+replacement production NL `185.10.158.212` initially had Ubuntu22.04.1/glibc2.35, incompatible
 with the exact accepted CPython3.14.4 interpreter's ELF requirement `GLIBC_2.38`.
 The accepted snapshot launcher explicitly requires CPython3.14; system3.10 is not a
-replacement. No custom runtime, libc replacement or OS upgrade was improvised.
+replacement. No custom runtime or libc replacement is used.
 Owner installed the existing public SSH key in a separate local terminal and accepted
 the observed host key using TOFU; provider-console verification was not available.
 Strict pinned SSH key login PASS. Read-only preflight18:08UTC: x86_64/KVM, kernel
@@ -23,9 +32,9 @@ and remains untrusted production, not accepted healthy. No product preparation,
 identity activation, service change, catalog/directory publication or client smoke.
 RU configuration unchanged; ledger last accepted0/0, not freshly queried in this audit.
 **BETA-0-CANARY-1 PAUSED; paid-canary, subscription events and Android stage0 NOT_RUN.**
-Next: provision a compatible target OS, reverify its host key after any reinstall,
-then qualify exact runtimes and complete the private restoration inventory. OS
-reinstallation has not been performed. Fencing must precede copied
+Next: finish supported LTS upgrades with guarded reboot/SSH readbacks, then qualify
+exact runtimes and complete the private restoration inventory. No disk reinstallation;
+existing SSH host keys/access are preserved. Fencing must precede copied
 identity activation; server data-plane acceptance must precede one monotonic publication.
 [Restoration report and rollback](releases/2026-10-30-nl-gateway-replacement.md) ·
 [Sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json).
