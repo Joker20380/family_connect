@@ -17,7 +17,7 @@
   },
   "canonical_migration": "ACCEPTED_UNCHANGED",
   "checkpoint": "BETA-0-CANARY-1",
-  "current_observation": "post_provider_boot_readback",
+  "current_observation": "availability_restore_network_localization",
   "entry_main": "3996fa05fcf6bef7ba660f8e78e9a614381ef274",
   "former_zero_certificate_gate": "SUPERSEDED_BY_PRODUCT_CONTRACT_REVIEW",
   "latest_horizon_recheck": {
@@ -459,6 +459,77 @@
     },
     "result": "NL_BOOT_RECOVERED_SERVICES_PARTIAL",
     "swap_mib": 0,
+    "validation": {
+      "diff_checks": "PASS",
+      "markdown_links": "PASS",
+      "privacy": "PASS",
+      "product_tests": "NOT_RUN_DOCUMENTATION_ONLY",
+      "staged_scope": "PASS",
+      "strict_json": "PASS"
+    }
+  },
+  "availability_restore_network_localization": {
+    "android_actions": 0,
+    "canary": "PAUSED_BY_OWNER",
+    "crl_generation": 0,
+    "evidence_sha256": {
+      "forward_syn_capture": "e02bead00a22bfba629786e09a1b28bc76d4bd1fd61600e9f4cfeb73e004f849",
+      "nic_unit_readback": "44826d2badfb1b4d30b149b7437c5bc7e88e692801dbe46e2fe5b29c6321c5e2",
+      "nl_source_audit": "0edbc950eda64f4940bdb432d0bced9e1bf0394f217cfadde2d1b7699c06ae4e",
+      "reverse_syn_capture": "d257338c0a6e677a25204c6bf7ac4bb476b0d55c312384c72758e5df25f9df87"
+    },
+    "forward_capture": {
+      "application_payload_collected": false,
+      "duration_seconds": 22,
+      "expected_source_destination": true,
+      "kernel_drops": 0,
+      "nl_matching_packets": 0,
+      "ru_outbound_syn": 19,
+      "scope": "TCP_SYN_HEADERS_EXACT_COUNTERPART_AND_PORTS"
+    },
+    "forward_ports": {
+      "ssh": "TIMEOUT",
+      "tcp_vpn": "TIMEOUT"
+    },
+    "gateway_base_unit_matches_pre_migration_backup": true,
+    "inspected_application_code_change": "NOT_OBSERVED",
+    "launcher_plan_match": true,
+    "network_failure_hop": "NOT_ESTABLISHED",
+    "next_action": "INVESTIGATE_INTER_SERVER_NEW_CONNECTION_FILTERING_THEN_REQUALIFY_EXISTING_RENEWAL",
+    "nl_tc_egress_filters": 0,
+    "nl_tc_ingress_filters": 0,
+    "nl_xdp_attached": false,
+    "observed_through_utc": "2026-10-30T09:16:48.110901+00:00",
+    "owner_authorization": "RESTORE_AVAILABILITY_NOT_CANARY",
+    "paid_events": 0,
+    "production_writes": 0,
+    "readiness_actions": 0,
+    "reloads": 0,
+    "renewal_helper_plan_match": true,
+    "restarts": 0,
+    "result": "RECOVERY_BLOCKED_RU_TO_NL_NEW_CONNECTIONS",
+    "retained_artifact_match": {
+      "gateway_binary": {
+        "result": "PASS",
+        "sha256": "f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef",
+        "size": 17925498
+      },
+      "maintenance_package": {
+        "result": "PASS",
+        "sha256": "c134eb6b56f01a4a54829b73c3259ba15886f603726058cc5f29afd3778b2a2d",
+        "size": 201792
+      },
+      "snapshot_package": {
+        "result": "PASS",
+        "sha256": "6dd51ead36a977abd4e6afee978d81df229ac767a6315bc4b2347328bde60c84",
+        "size": 167573
+      }
+    },
+    "reverse_ports": {
+      "https": "CONNECTED",
+      "ssh": "TIMEOUT_NOT_REQUIRED_ROUTE"
+    },
+    "service_restored": false,
     "validation": {
       "diff_checks": "PASS",
       "markdown_links": "PASS",

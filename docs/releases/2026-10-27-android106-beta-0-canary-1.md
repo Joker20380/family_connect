@@ -1,5 +1,38 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Availability restoration attempt: network localization — 30 October
+
+Owner authorizes restoring service availability and suspects provider code changes.
+Canary remains paused. Bounded checks09:11–09:16UTC localize a prerequisite failure;
+no production mutation is justified by the observed evidence yet.
+
+- Deployed snapshot, maintenance and gateway artifacts match accepted exact hashes
+  and sizes. Renewal helper and snapshot launcher match the retained private plan.
+  Base gateway unit bytes match the pre-migration private backup; configured gateway
+  argv matches the accepted canonical route. This does not audit every system file or
+  prove who changed service enablement, but gives no basis to replace these artifacts.
+- Simultaneous22-second header-only SYN captures on both external interfaces, with
+  exact counterpart/port filters, accompany RU-origin TCP22/443 probes. RU captures19
+  outbound SYNs with the expected source/destination; NL captures zero matching packets.
+  Both captures report zero kernel drops. Probe connections time out. No application
+  payload or unrelated client traffic is collected; raw headers remain private.
+- Reverse NL→RU TCP443 connects and SYN/SYN-ACK traffic is observed. Reverse SSH
+  times out; it is not an accepted required route and no RU access policy is changed.
+  The evidence isolates failure of new RU→NL connections, not total bidirectional
+  loss or a proven specific provider/AS/filter. Routing uses the expected addresses.
+- NL readback has no XDP attachment or tc ingress/egress filters on the external
+  interface. Previously inspected NL fail2ban has zero current bans and IPv4
+  iptables INPUT/OUTPUT policies accept. These checks do not expose upstream policy.
+
+Result: **RECOVERY_BLOCKED_RU_TO_NL_NEW_CONNECTIONS**. Required next action is network
+investigation/correction on the inter-server path, using the paired timestamped capture
+evidence. No application rollback, speculative firewall reset, credential bypass,
+host-key replacement, laptop-dependent production tunnel or expired-material acceptance.
+Once the existing transport is restored, re-evaluate the accepted credential-renewal
+route and stopped restricted gateway; do not equate transport recovery with completed
+service acceptance. No paid/readiness/Android action or automatic canary resumption.
+Operator production writes/restarts/reloads/CRL generation remain zero for this attempt.
+
 ## Post-provider boot readback — 30 October
 
 Owner reports that the provider has brought NL back up. Read-only observations from

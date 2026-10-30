@@ -2,6 +2,15 @@
 
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
 **Current substep BETA-0-CANARY-1 — PAUSED_BY_OWNER / LIVE_WRITES_NOT_RUN.**
+Owner subsequently authorized availability restoration, not canary resumption.
+Fresh09:11–09:16UTC comparison finds accepted snapshot/maintenance/gateway hashes,
+renewal helper, launcher and base gateway unit unchanged. Paired header-only capture:
+19 matching RU outbound SYNs, zero matching packets at NL; no capture drops. Reverse
+NL→RU HTTPS connects, while new RU→NL SSH/HTTPS still time out. NL has no attached XDP
+or tc ingress/egress filters in this readback. Blocking network hop remains unknown;
+no evidence supports an application-code rollback. Recovery is blocked on RU→NL
+connection establishment. No production changes/restarts; expired material retained,
+not accepted or substituted. Provider network investigation is required; canary paused.
 Post-provider boot readback30.10 08:55–09:04UTC: NL administrative SSH restored;
 ordinary AWG/TCP, mailbox, Reticulum and monitoring units active. Memory29.19–31.12%,
 load0.14–0.25, no swap; this short observation does not resolve the earlier memory rise.
