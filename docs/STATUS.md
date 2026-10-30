@@ -1,5 +1,36 @@
 # Текущее состояние / Current state
 
+## NL availability restoration — 30 October
+
+**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / BLOCKED_NEW_HOST_OS:**
+replacement production NL `185.10.158.212` has Ubuntu22.04.1/glibc2.35, incompatible
+with the exact accepted CPython3.14.4 interpreter's ELF requirement `GLIBC_2.38`.
+The accepted snapshot launcher explicitly requires CPython3.14; system3.10 is not a
+replacement. No custom runtime, libc replacement or OS upgrade was improvised.
+Owner installed the existing public SSH key in a separate local terminal and accepted
+the observed host key using TOFU; provider-console verification was not available.
+Strict pinned SSH key login PASS. Read-only preflight18:08UTC: x86_64/KVM, kernel
+5.15.0-46-generic,2 CPUs, about1.88GiB RAM, existing about1GiB partition swap,
+TUN accessible, NTP synchronized, cloud-init complete, only SSH TCP22 listening.
+Remote `main` verified at `17713e70279ed86d13c52ebddf167b6dc3d40a47`.
+All five retained artifact anchors match exactly. The later accepted coordinated
+backup (28.10 20:14:20UTC,42 files) was exported read-only, hash-verified, encrypted
+before local persistence and decrypted/read back successfully. It is not a complete
+current machine backup; full identity/configuration coverage remains to be qualified.
+Old NL read-only inventory30.10 17:57:40UTC confirms ordinary AWG/TCP, mailbox,
+Reticulum and monitoring active; restricted inactive/disabled. Old NL is **not fenced**
+and remains untrusted production, not accepted healthy. No product preparation,
+identity activation, service change, catalog/directory publication or client smoke.
+RU configuration unchanged; ledger last accepted0/0, not freshly queried in this audit.
+**BETA-0-CANARY-1 PAUSED; paid-canary, subscription events and Android stage0 NOT_RUN.**
+Next: provision a compatible target OS, reverify its host key after any reinstall,
+then qualify exact runtimes and complete the private restoration inventory. OS
+reinstallation has not been performed. Fencing must precede copied
+identity activation; server data-plane acceptance must precede one monotonic publication.
+[Restoration report and rollback](releases/2026-10-30-nl-gateway-replacement.md) ·
+[Sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json).
+The retained incident observations below do not authorize old-NL reactivation or canary work.
+
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
 **Current substep BETA-0-CANARY-1 — PAUSED_BY_OWNER / LIVE_WRITES_NOT_RUN.**

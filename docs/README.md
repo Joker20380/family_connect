@@ -1,5 +1,17 @@
 # Documentation
 
+## Current operational restoration
+
+[NL gateway replacement — 30 October](releases/2026-10-30-nl-gateway-replacement.md)
+and [sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json):
+**BLOCKED_NL_REPLACEMENT / BLOCKED_NEW_HOST_OS**: `185.10.158.212` has
+Ubuntu22.04/glibc2.35; the exact accepted CPython3.14.4 requires `GLIBC_2.38`.
+Owner-interactive SSH key setup and strict pinned login PASS; provider verification
+was unavailable. Exact artifacts and retained coordinated backup verified; no product
+identity activation, fencing or publication. This availability-restoration task
+supersedes provider repair as the active recovery path, not the paused product queue.
+**BETA-0-CANARY-1 remains PAUSED; paid events and Android stage0 remain off.**
+
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
 **Current substep BETA-0-CANARY-1 — PAUSED_BY_OWNER / LIVE_WRITES_NOT_RUN.**
 Owner subsequently authorized availability restoration, not canary resumption.

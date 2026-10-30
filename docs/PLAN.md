@@ -2,6 +2,30 @@
 
 ## Current engineering priority / Текущий critical path
 
+### Authorized operational exception — NL-REPLACEMENT-20261030
+
+Availability restoration to `185.10.158.212`, not a new product checkpoint.
+**BLOCKED_NL_REPLACEMENT / BLOCKED_NEW_HOST_OS:** Ubuntu22.04/glibc2.35 cannot run
+the exact accepted CPython3.14.4 interpreter requiring `GLIBC_2.38`; snapshot guards
+reject system Python3.10. No unaccepted runtime/libc substitution or OS upgrade.
+Owner-interactive TOFU and public-key installation completed; strict SSH login PASS,
+provider-console verification unavailable. TUN/NTP/x86_64 preflight PASS; not deployment.
+Entry remote main matches `17713e70279ed86d13c52ebddf167b6dc3d40a47`; five retained
+artifacts match exact anchors. Later42-file coordinated backup exported read-only and
+verified with encrypted local readback; it does not yet establish full current identity,
+ordinary-service or machine-restoration coverage. Old NL ordinary/support services remain
+active, restricted disabled, fencing NOT_RUN. No product or control-plane mutation.
+Dependencies: compatible OS provision → host-key verification and runtime preflight →
+qualify complete private matrix/backup and exact identities → prepare host → prove old-NL
+fencing → restore/renew through accepted routes → synthetic data-plane and RU-path gates.
+Completion gate: stable AWG/TCP/restricted/supporting services, actual SSH snapshot and
+renewal acceptance, one monotonic signed cutover, Android106 endpoint readback and owner
+AWG/TCP/Auto-MESH smoke, monitoring updated, old NL fenced. No acceptance from unit state.
+**BETA-0-CANARY-1 stays PAUSED; paid-canary, subscription events, Android stage0 stay off.**
+Only this restoration is authorized; no automatic advance into the product queue.
+[Current report, remaining checks and rollback](releases/2026-10-30-nl-gateway-replacement.md).
+Earlier provider/network observations below are retained context, not the restoration path.
+
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
 **Current substep BETA-0-CANARY-1 — PAUSED_BY_OWNER / LIVE_WRITES_NOT_RUN.**
 Owner subsequently authorized availability restoration, not canary resumption.

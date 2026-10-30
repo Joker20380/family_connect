@@ -1,0 +1,135 @@
+{
+  "schema": 1,
+  "task": "NL-REPLACEMENT-20261030",
+  "scope": "AVAILABILITY_RESTORATION_NOT_PRODUCT_CHECKPOINT",
+  "status": "BLOCKED_NL_REPLACEMENT",
+  "blocker": "BLOCKED_NEW_HOST_OS",
+  "target": {
+    "ipv4": "185.10.158.212",
+    "role": "replacement_nl_production_gateway",
+    "ssh_fingerprint": "OWNER_INTERACTIVE_TOFU_ACCEPTED_PIN_MATCH",
+    "provider_console_verified": false,
+    "authenticated_login": true,
+    "strict_host_key_checking": true,
+    "os": "Ubuntu 22.04.1 LTS",
+    "kernel": "5.15.0-46-generic",
+    "architecture": "x86_64",
+    "virtualization": "kvm",
+    "cpus": 2,
+    "memory_kib": 1973984,
+    "existing_swap_bytes": 1048551424,
+    "tun_accessible": true,
+    "ntp_synchronized": true,
+    "cloud_init_complete": true,
+    "product_listeners": false,
+    "os_reinstalled": false
+  },
+  "runtime_compatibility": {
+    "observed_utc": "2026-10-30T18:09:50.261512+00:00",
+    "required_runtime": "CPython 3.14",
+    "accepted_runtime": "CPython 3.14.4",
+    "accepted_runtime_elf_glibc_requirement": "2.38",
+    "new_host_glibc": "2.35",
+    "new_host_python": "3.10.4",
+    "accepted_runtime_abi_compatible": false,
+    "donor_os": "Ubuntu 26.04 LTS",
+    "donor_glibc": "2.43",
+    "unaccepted_runtime_substitution": false
+  },
+  "entry_remote_main": "17713e70279ed86d13c52ebddf167b6dc3d40a47",
+  "entry_remote_verified": true,
+  "canonical_source": "c9c0a4de55f455e0788e7b519383c0cb0743fc96",
+  "artifacts": {
+    "snapshot": {
+      "size": 167573,
+      "sha256": "6dd51ead36a977abd4e6afee978d81df229ac767a6315bc4b2347328bde60c84",
+      "retained_match": "PASS"
+    },
+    "renewal": {
+      "size": 60950,
+      "sha256": "c2ce2b01ac15cbb553692579e7a03b6bc7ad97f2159906ed884c3fda490a40c0",
+      "retained_match": "PASS"
+    },
+    "maintenance": {
+      "size": 201792,
+      "sha256": "c134eb6b56f01a4a54829b73c3259ba15886f603726058cc5f29afd3778b2a2d",
+      "retained_match": "PASS"
+    },
+    "gateway": {
+      "size": 17925498,
+      "sha256": "f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef",
+      "retained_match": "PASS"
+    },
+    "exact_crl": {
+      "size": 138174,
+      "sha256": "3c3736917efb1720b7086e57e4e8b2182fcb56734ec85b662b9bed71c15840a6",
+      "retained_match": "PASS"
+    }
+  },
+  "private_inventory": {
+    "local_records": 889,
+    "old_host_records": 112,
+    "complete_deployment_matrix": false,
+    "full_identity_recovery_qualified": false
+  },
+  "coordinated_backup": {
+    "created_utc": "2026-10-28T20:14:20+00:00",
+    "export_verified_utc": "2026-10-30T17:57:07.583806+00:00",
+    "files": 42,
+    "manifest_sha256": "de7f7af32260b310a6b41f6758b95b0175d5f4f2adda42085901fd08bb45c969",
+    "receipt_hash_verification": "PASS_REMOTE_AND_LOCAL",
+    "encrypted_before_local_persistence": true,
+    "authenticated_decryption_readback": "PASS",
+    "supersedes_earlier_34_file_staging_backup_for_recovery_selection": true,
+    "complete_current_machine_backup": false
+  },
+  "old_node": {
+    "observed_utc": "2026-10-30T17:57:40.671997+00:00",
+    "fencing": "NOT_RUN",
+    "ordinary_awg_tcp": "ACTIVE_NOT_DATA_PLANE_ACCEPTANCE",
+    "mailbox_reticulum_monitoring": "ACTIVE_NOT_DATA_PLANE_ACCEPTANCE",
+    "restricted": "INACTIVE_DISABLED",
+    "production_health": "NOT_TRUSTED"
+  },
+  "acceptance": {
+    "new_host": "READONLY_PREFLIGHT_BLOCKED_NEW_HOST_OS",
+    "awg": "NOT_RUN",
+    "tcp": "NOT_RUN",
+    "restricted_mesh": "NOT_RUN",
+    "snapshot": "NOT_RUN",
+    "renewal": "NOT_RUN",
+    "supporting_roles": "NOT_RUN",
+    "firewall_nat_sysctl": "NOT_RUN",
+    "ru_to_new_nl": "NOT_RUN",
+    "stability": "NOT_RUN",
+    "owner_smoke": "NOT_RUN"
+  },
+  "publication": {
+    "catalog": "NOT_PUBLISHED",
+    "new_sequence": null,
+    "restricted_materials": "NOT_PUBLISHED",
+    "android106_new_endpoint": "NOT_VERIFIED",
+    "apk_update": false,
+    "ru_configuration": "UNCHANGED",
+    "monitoring_inventory": "UNCHANGED"
+  },
+  "protected_scope": {
+    "canary": "PAUSED",
+    "paid_canary": "NOT_RUN",
+    "subscription_events": "NOT_RUN",
+    "android_stage0": "NOT_RUN",
+    "paid_ledger_last_accepted": {"subscriptions": 0, "events": 0},
+    "paid_ledger_fresh_query": "NOT_RUN",
+    "product_and_control_plane_mutations": 0,
+    "new_host_management_change": "OWNER_INSTALLED_OPERATOR_PUBLIC_KEY"
+  },
+  "rollback": "NOT_NEEDED_NO_PUBLICATION",
+  "next_action": "PROVISION_COMPATIBLE_OS_THEN_REVERIFY_HOST_IDENTITY_AND_EXACT_RUNTIME",
+  "checks": {
+    "strict_json": "PASS",
+    "targeted_privacy_secret_scan": "PASS",
+    "changed_markdown_links": "PASS_10_LOCAL_LINKS",
+    "staged_scope": "PASS_5_DOCUMENTS_UNRELATED_WORK_EXCLUDED",
+    "git_diff_check": "PASS"
+  }
+}
