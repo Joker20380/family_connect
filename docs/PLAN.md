@@ -5,13 +5,20 @@
 ### Authorized operational exception — NL-REPLACEMENT-20261030
 
 Availability restoration to `185.10.158.212`, not a new product checkpoint.
-**BLOCKED_NL_REPLACEMENT / DIRECTORY_INVALID.** Exact accepted renewal cannot promote
-the fresh canonical profile while the publisher directory is expired. Transaction
+**BLOCKED_NL_REPLACEMENT / BLOCKED_RENEWAL_JOURNAL_UNRESOLVED.** Read-only continuation
+confirms exact controller rollback requires a current-valid previous leaf before terminal
+cleanup; it fails `LEAF_EXPIRED_OR_FUTURE` before directory reconciliation. Normal
+rollforward is unsupported, expired recovery requires a committed checkpoint. Existing
+candidate is current-valid, but that alone does not authorize a journal transition.
+Exact-method replay with simulated writes/RPCs confirms the gate; live journal unchanged.
+Publisher contract/source inventory PASS; no source correction, room creation, publication
+or new renewal operation.127 focused directory/profile/snapshot/sync tests PASS.
+Original promotion failure remains `DIRECTORY_INVALID`. Transaction
 `RECOVERY_REQUIRED`, no commit decision; actual RU/NL rollback readbacks PASS.
 Do not retry blindly, erase the journal, bypass signed-material validation or activate
 expired restricted services. Renewal timer paused and restricted sync timers quiesced.
 RU ordinary HTTP restored after verified rollback; public trusted HTTPS dispatch PASS.
-Final20:34UTC readback: old NL FENCED, paid ledger0/0, catalog sequence3 unchanged.
+Final21:00UTC readback: old NL FENCED, paid ledger0/0, catalog sequence3 unchanged.
 No publication, Android106 endpoint verification or owner smoke.
 
 Completed dependencies: official OS upgrades to Ubuntu26.04.1/kernel7.0.0-42-generic,
@@ -24,9 +31,11 @@ owner accepted TOFU and strict key login is verified. No custom runtime/libc rep
 Source-only configurable endpoint routing checkpoint:43 tests PASS/14 optional skips,
 two reproducible HTTP package builds, NOT_DEPLOYED. No APK update or artifact substitution.
 
-NEXT dependency: qualify an accepted expired-directory recovery path before canonical
-profile promotion, retaining the pending transaction, authority and shared profile lock.
-Then complete restricted/supporting acceptance, take fresh prepublication backups and
+NEXT dependency within this same operation: an authorized bounded controller transition
+to terminal verified rollback while expired readers remain fenced, retaining first cause
+and rollback history. Publisher-only recovery is insufficient and is the only source
+change currently authorized. After that gate, qualify expired-directory recovery before
+canonical promotion, retaining authority and the shared lock. Complete acceptance, take fresh backups and
 publish one monotonic update; actual Android106/owner acceptance remains mandatory.
 Completion gate: stable AWG/TCP/restricted/supporting services, actual SSH snapshot and
 renewal acceptance, one monotonic signed cutover, Android106 endpoint readback and owner

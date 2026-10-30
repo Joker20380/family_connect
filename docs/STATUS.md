@@ -2,16 +2,26 @@
 
 ## NL availability restoration — 30 October
 
-**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT.** Localized blocker:
-the exact accepted renewal rejects the expired publisher directory during canonical
-profile promotion (`DIRECTORY_INVALID`). Transaction is `RECOVERY_REQUIRED`, no commit
+**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / BLOCKED_RENEWAL_JOURNAL_UNRESOLVED.**
+Read-only continuation from `edadd7fe050147d05dc976af9530234a2b6896ff` confirms a
+separate journal gate: the exact controller cannot finish rollback while its previous
+leaf is expired (`LEAF_EXPIRED_OR_FUTURE`). It has no normal-operation rollforward path;
+expired recovery requires an already committed checkpoint. Even a fresh directory cannot
+reach that gate. In-memory replay of the exact deployed method, with all writes/RPCs
+simulated, confirms this; the production journal remains byte-identical. No recovery
+mutation, Telemost room, directory publication or new transaction was attempted.
+Publisher contract and282 retained source members match; publisher is integrated into
+the gateway, not an independent refresh timer/one-shot. Its configuration matches the
+fenced backup.127 focused directory/profile/snapshot/sync tests PASS,72 deselected.
+Original promotion failure remains `DIRECTORY_INVALID`; it is not overwritten.
+Transaction is `RECOVERY_REQUIRED`, no commit
 decision. RU and NL actual rollback readbacks both confirm `PREVIOUS_SNAPSHOT_RESTORED`.
 Expired certificate/CRL/directory cannot satisfy the reader-resume gate; restricted
 gateway remains inactive, renewal timer paused, restricted sync timers left quiesced.
 Do not replay this transaction, bypass directory validity or start expired restricted
 services. Encrypted failure evidence and recovery journal are retained.
 
-Safe state rechecked20:34UTC: old NL **FENCED** with eight product units stopped/disabled,
+Safe state rechecked21:00UTC: old NL **FENCED** with eight product units stopped/disabled,
 persistent restart/ingress guards and absent interfaces/listeners. Operator SSH and old
 files retained. Final coordinated encrypted export PASS. New NL `185.10.158.212` ordinary
 AWG/TCP synthetic DNS, external HTTPS, egress and cleanup PASS; AWG IPv6 fails closed.
@@ -33,9 +43,11 @@ login retained. Detailed historical host/staging evidence is in the restoration 
 
 Source-only endpoint routing preparation:43 tests PASS/14 optional skips, two identical
 HTTP package builds; **not deployed or substituted for accepted artifacts**. No APK change.
-NEXT: an accepted recovery path must refresh the expired publisher directory before
-canonical promotion, preserving authority, shared lock and pending journal. Only after
-that gate may restricted/supporting acceptance and the guarded monotonic cutover proceed.
+NEXT: authorize/qualify a bounded controller recovery path in this same operation that
+can make verified rollback terminal without resuming expired readers or losing journal
+history. The currently authorized publisher-only source correction cannot supply that
+controller transition. Then recover the publisher directory and complete restricted/
+supporting acceptance before the guarded monotonic cutover. No new PLAN ID or product work.
 **BETA-0-CANARY-1 PAUSED; paid-canary, subscription events and Android stage0 NOT_RUN.**
 [Restoration report and rollback](releases/2026-10-30-nl-gateway-replacement.md) ·
 [Sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json).

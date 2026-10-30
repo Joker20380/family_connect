@@ -2,9 +2,12 @@
 
 ## Status and authorization
 
-**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT.** Localized cause: exact accepted
-renewal rejects the expired publisher directory before canonical profile promotion
-(`DIRECTORY_INVALID`). RU/NL previous-snapshot rollback readbacks PASS; the transaction
+**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / BLOCKED_RENEWAL_JOURNAL_UNRESOLVED.**
+Read-only continuation identifies an additional, independently blocking controller gate:
+terminal rollback requires a current-valid predecessor leaf. Fresh directory publication
+alone cannot satisfy it. The original promotion first cause stays `DIRECTORY_INVALID`.
+No production recovery transition was attempted in this continuation; no new report,
+PLAN ID or product checkpoint is created. RU/NL previous-snapshot rollback readbacks PASS; the transaction
 remains `RECOVERY_REQUIRED`, with no commit decision. RU ordinary HTTP is restored;
 restricted services remain inactive/quiesced and renewal is paused. Old NL is FENCED.
 New ordinary AWG/TCP synthetic data-plane and cleanup PASS, but no client publication,
@@ -202,6 +205,62 @@ guards; old interfaces/listeners absent and external TCP checks negative. New or
 AWG/TCP remain active, no catalog cutover; paid subscriptions/events freshly0/0 and catalog
 sequence3 unchanged. No paid-canary, subscription event or Android stage0 activity.
 
+### Read-only continuation: publisher and journal recovery gate
+
+Fetched local/remote main both match `edadd7fe050147d05dc976af9530234a2b6896ff`.
+Fresh actual RU/NL rollback readbacks confirm the accepted previous snapshots; coordinator
+is still normal-mode `RECOVERY_REQUIRED`, `commit_decided=false`, first cause unchanged.
+Journal files are hash-identical before/after the audit. The candidate is current-valid;
+the predecessor passes historical validation only, not current validation.
+
+Exact publisher audit PASS: effective executable is the retained canonical gateway
+`f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef`, covered by Locator's
+unchanged publisher contract. All282 retained source-member hashes validate against
+manifest `27b54a9dd167c3b6af639bb03864f4d7d121c0e8b96c90eccb45a198c936f117`.
+Provider configuration matches the exact fenced backup; no credential/API call was made.
+The sole declared publisher is integrated into the stopped restricted gateway: duration4h,
+seed rotation3h, systemd restart delay30s, not a separate publisher timer. No accepted
+publisher process is running. The exact executable has no one-shot recovery command.
+Publication uses the retained `Cache.Store` lock, exclusive sibling temporary file,
+file fsync, rename and parent fsync. The source validates the current profile before
+starting the seed publisher. Normal startup is not an expired-predecessor recovery path.
+
+Current directory remains unchanged:
+SHA256 `e0c1674381f910b6133d9ce295a01784f47487a437a3ad993e1e3be57a4ba53c`,
+issued29.10 09:04:28.459218429UTC, expires29.10 13:04:25.250203756UTC.
+Historical family/gateway binding PASS; current-time validation rejects expiry.
+No new directory hash/generation exists. Room creation, room validation, directory
+publication and restricted start are **NOT_RUN**, not failed attempts or acceptance PASS.
+
+The deployed renewal controller source matches the repository exactly, SHA256
+`d0ab545cc71d54d95600b10a03d3e501226c018a01d60a5ea4039f9003627bce`.
+Its normal `recover()` path verifies rollback, then requires current-valid predecessor
+credentials before restoring readers and reaching cleanup. Exact production validation
+returns `LEAF_EXPIRED_OR_FUTURE`. An in-memory replay of the deployed method with all
+writes and node RPCs replaced by simulation reaches `ROLLED_BACK` then `RECOVERY_REQUIRED`;
+it never reaches directory reconciliation or terminal cleanup. These are simulated
+states only: no production journal write, service fence/restart or recovery RPC occurred.
+Normal `run()` always dispatches this unfinished operation back to recovery; it does not
+resume the fresh candidate. The exact expired-recovery checkpoint check independently
+rejects `OTHER_OPERATION_RECOVERY_REQUIRED`, because it requires a committed checkpoint.
+
+This is **BLOCKED_RENEWAL_JOURNAL_UNRESOLVED**, not a publisher permission/package fixture
+error. The allowed publisher-only source correction cannot change that controller gate.
+Stop before creating a room or publishing a directory that cannot unblock promotion.
+Required next authorization within the same operation: a bounded controller recovery
+transition that makes verified rollback terminal while expired readers stay fenced,
+preserving first cause, prior receipts and authority; no manual journal edit or validator
+relaxation. No source was changed or production artifact rebuilt in this continuation.
+
+Focused directory/profile-store/snapshot/restricted-sync checks:127 PASS,72 deselected
+in an isolated root container with network disabled and read-only source/artifacts.
+Two initial missing retained-fixture inputs were supplied and hash-verified, then the
+entire same selection passed; no test was skipped to hide those fixture errors.
+Final21:00UTC readback confirms old NL FENCED, RU ordinary HTTP available with trusted
+public HTTPS dispatch, renewal paused, ledger0/0 and catalog sequence3. New ordinary
+services remain active with0 restarts; restricted inactive, CRL/floor27224 unchanged.
+No owner/canary identity, subscription/event, APK or client endpoint change.
+
 ## Source-only cutover preparation
 
 Endpoint routing preparation is committed as a **NOT_DEPLOYED source checkpoint**:
@@ -328,11 +387,12 @@ No new NL readiness, rollout or full-success claim is made.
 ## Resume and rollback
 
 Host preparation, private matrix, final coordinated export, fencing and ordinary synthetic
-acceptance are complete. STOP on the signed-material validation blocker, not an ordinary
-installation error. The exact remaining action is to qualify an accepted recovery path
-that refreshes the expired publisher directory before canonical profile promotion,
-while preserving authority, the shared transaction lock and the pending recovery journal.
-Only then complete restricted renewal/supporting gates before publication.
+acceptance are complete. STOP on the proven journal recovery gate, not an ordinary
+installation error. First qualify an explicitly authorized bounded controller path to
+terminal verified rollback without resuming expired readers or losing journal history.
+Publisher recovery is already authorized, but is insufficient without that transition.
+Then refresh the expired publisher directory before canonical profile promotion,
+preserving authority and the shared lock; complete restricted/supporting gates before publication.
 No disk reinstallation was performed; SSH host keys and root access remain intact.
 The preferred24.04 baseline does not meet the full retained extension ABI requirements,
 so26.04 is the verified final baseline.
@@ -363,10 +423,11 @@ identity on both hosts. Preserve all old files as recovery evidence.
 
 ## Verification scope
 
-Sanitized source/documentation checkpoint: strict JSON, targeted privacy/secret scan,
-changed local Markdown links, exact11-file staged scope and whitespace checks PASS.
+Current read-only continuation updates five existing documents only: strict JSON,
+targeted privacy/secret scan, changed local Markdown links, staged scope and whitespace
+checks PASS. No extra report or sanitized receipt file is created.
 Unrelated changes remain outside the index; original document suffixes are preserved.
-Focused tests and two deterministic HTTP package builds are recorded above. No platform
+Current127 focused tests and the earlier two deterministic HTTP package builds are recorded above. No platform
 build or historical full test suite was run; none substitutes for unperformed production
 and client gates. This is an incomplete restoration checkpoint, not a release.
 

@@ -4,16 +4,20 @@
 
 [NL gateway replacement — 30 October](releases/2026-10-30-nl-gateway-replacement.md)
 and [sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json):
-**BLOCKED_NL_REPLACEMENT / DIRECTORY_INVALID**: exact renewal rejects the expired publisher
-directory before canonical promotion. RU/NL rollback readbacks PASS; journal preserved,
+**BLOCKED_NL_REPLACEMENT / BLOCKED_RENEWAL_JOURNAL_UNRESOLVED**: read-only continuation
+proves exact controller cannot make rollback terminal with an expired previous leaf,
+even after directory refresh. Original first cause remains `DIRECTORY_INVALID`.
+Publisher contract/source inventory PASS;127 focused tests PASS. No new room/publication,
+source correction or renewal operation. RU/NL rollback readbacks PASS; journal preserved,
 restricted inactive, renewal paused. RU ordinary HTTP restored and public HTTPS dispatch
 verified. Old NL FENCED; new `185.10.158.212` AWG/TCP synthetic DNS/HTTPS/egress/cleanup PASS,
 46 peers/46 credentials, three stable samples/0 restarts. Final coordinated backup verified.
 Ubuntu26.04.1/kernel7.0.0-42, exact runtime/artifacts, about2GiB swap and RU ingress verified.
 Paid ledger0/0, signed catalog sequence3 unchanged; no publication or owner smoke.
 Endpoint-routing source checkpoint has43 passing tests/14 optional skips and reproducible
-builds, but is NOT_DEPLOYED. Next: accepted expired-directory recovery, then remaining
-server and client acceptance. No bypass or automatic transaction replay. This operational
+builds, but is NOT_DEPLOYED. Next: bounded controller recovery authorization/qualification
+within the same operation, then publisher recovery and remaining acceptance. No bypass,
+journal editing or automatic replay. This operational
 exception does not advance the paused product queue.
 **BETA-0-CANARY-1 remains PAUSED; paid events and Android stage0 remain off.**
 

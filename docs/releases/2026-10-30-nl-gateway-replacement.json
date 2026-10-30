@@ -3,7 +3,7 @@
   "task": "NL-REPLACEMENT-20261030",
   "scope": "AVAILABILITY_RESTORATION_NOT_PRODUCT_CHECKPOINT",
   "status": "BLOCKED_NL_REPLACEMENT",
-  "blocker": "DIRECTORY_INVALID_EXPIRED_PUBLISHER_DIRECTORY_PREVENTS_CANONICAL_PROMOTION",
+  "blocker": "BLOCKED_RENEWAL_JOURNAL_UNRESOLVED",
   "initial_blocker": "BLOCKED_NEW_HOST_OS",
   "target": {
     "ipv4": "185.10.158.212",
@@ -155,7 +155,7 @@
     "product_identity_used": false
   },
   "old_node": {
-    "observed_utc": "2026-10-30T20:34:08.455291+00:00",
+    "observed_utc": "2026-10-30T20:59:56.897376+00:00",
     "fencing": "FENCED_PERSISTENT_GUARDS_AND_EXTERNAL_READBACK",
     "ordinary_awg_tcp": "STOPPED_DISABLED",
     "mailbox_reticulum_monitoring": "PRODUCT_STOPPED_MONITORING_RETAINED",
@@ -218,13 +218,56 @@
     "accepted_packages_modified": false
   },
   "final_safe_state": {
-    "observed_utc": "2026-10-30T20:34:21.634067+00:00",
+    "observed_utc": "2026-10-30T21:00:10.800685+00:00",
     "ru_ordinary_http": "ACTIVE_UNCHANGED_ACCEPTED_ARTIFACT",
     "public_ru_https_dispatch": "PASS_TRUSTED_TLS_EXPECTED_400_NOT_CLIENT_SMOKE",
     "manual_renewal_controller_running": false,
     "new_nl_client_publication": false,
     "old_nl": "FENCED",
     "paid_ledger": {"subscriptions": 0, "events": 0}
+  },
+  "publisher_recovery_continuation": {
+    "entry_local_and_remote_main": "edadd7fe050147d05dc976af9530234a2b6896ff",
+    "scope": "SAME_OPERATION_READ_ONLY_CLASSIFICATION_NO_PRODUCTION_STATE_TRANSITION",
+    "publisher_contract": "EXACT_MATCH",
+    "publisher_executable_sha256": "f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef",
+    "publisher_contract_sha256": "f9fbf6528071c4916bd04b188cba83e151be39a8ba009ab4d00d794117fa1596",
+    "source_manifest_sha256": "27b54a9dd167c3b6af639bb03864f4d7d121c0e8b96c90eccb45a198c936f117",
+    "source_members_verified": 282,
+    "provider_configuration": "EXACT_FENCED_BACKUP_MATCH_API_NOT_CALLED",
+    "publisher_schedule": "INTEGRATED_GATEWAY_SEED_ROTATION_AND_SERVICE_RESTART",
+    "duration_seconds": 14400,
+    "seed_rotation_seconds": 10800,
+    "restart_delay_seconds": 30,
+    "independent_one_shot_recovery": false,
+    "accepted_publisher_processes_running": 0,
+    "atomic_store": "LOCK_EXCLUSIVE_SIBLING_TEMP_FILE_FSYNC_RENAME_PARENT_FSYNC",
+    "old_directory_sha256": "e0c1674381f910b6133d9ce295a01784f47487a437a3ad993e1e3be57a4ba53c",
+    "new_directory_sha256": null,
+    "directory_issued_at": "2026-10-29T09:04:28.459218429Z",
+    "directory_expires_at": "2026-10-29T13:04:25.250203756Z",
+    "directory_current_validation": "EXPIRED",
+    "directory_historical_binding": "PASS",
+    "room_creations": 0,
+    "room_validation": "NOT_RUN",
+    "directory_publications": 0,
+    "source_changed": false,
+    "production_artifacts_built": 0,
+    "production_writes": 0,
+    "new_renewal_transactions": 0,
+    "existing_journal_unchanged": true,
+    "controller_source_sha256": "d0ab545cc71d54d95600b10a03d3e501226c018a01d60a5ea4039f9003627bce",
+    "previous_historical_validation": "PASS",
+    "previous_current_validation": "LEAF_EXPIRED_OR_FUTURE",
+    "candidate_current_validation": "PASS",
+    "normal_operation_rollforward_supported": false,
+    "expired_recovery_checkpoint": "OTHER_OPERATION_RECOVERY_REQUIRED",
+    "exact_method_in_memory_replay": "ROLLED_BACK_THEN_RECOVERY_REQUIRED_BEFORE_DIRECTORY_READ_OR_TERMINAL_CLEANUP",
+    "replay_production_writes_or_node_rpc": 0,
+    "journal_resolution": "BLOCKED_RENEWAL_JOURNAL_UNRESOLVED_FIRST_CAUSE_PRESERVED",
+    "focused_tests_passed": 127,
+    "focused_tests_deselected": 72,
+    "focused_test_isolation": "ROOT_CONTAINER_NETWORK_DISABLED_READ_ONLY_SOURCE_AND_EXACT_RETAINED_FIXTURES"
   },
   "source_checkpoint": {
     "status": "NOT_DEPLOYED",
@@ -271,12 +314,12 @@
     "coordinated_across_roles": true,
     "changed_files_reconciled": 2
   },
-  "next_action": "QUALIFY_ACCEPTED_EXPIRED_DIRECTORY_RECOVERY_BEFORE_CANONICAL_PROMOTION_PRESERVING_JOURNAL_AND_AUTHORITY",
+  "next_action": "AUTHORIZE_BOUNDED_CONTROLLER_TERMINAL_ROLLBACK_WITH_EXPIRED_READERS_FENCED_THEN_PUBLISHER_RECOVERY_WITHIN_SAME_OPERATION",
   "checks": {
     "strict_json": "PASS",
     "targeted_privacy_secret_scan": "PASS",
     "changed_markdown_links": "PASS",
-    "staged_scope": "PASS_11_FILES_UNRELATED_WORK_EXCLUDED",
+    "staged_scope": "PASS_5_EXISTING_DOCUMENTS_UNRELATED_WORK_EXCLUDED",
     "git_diff_check": "PASS"
   }
 }
