@@ -2,32 +2,33 @@
 
 ## Current operational restoration
 
-The same NL restoration now includes an owner-authorized append-only registry overlay
-correction, source-qualified but not deployed. Historical expected snapshots remain exact
-and immutable; the narrow recovery path proves the overlay separately with readers stopped.
-Next: deterministic package, private backup, bounded RU writer quiescence, terminal
-rollback/archive, then the existing publisher/fresh renewal and client-cutover gates.
+The existing rollback is now terminal **ABORTED / ROLLED_BACK_READERS_STOPPED**.
+Source `e822b391a43dd4cec5949df7a8a33ba6e44872a5` and its deterministic renewal package
+were deployed through the recovery-only bridge. Fresh quiesced proof preserved two device
+and two invite additions, all historical rows and exact restricted tables. Historical
+expected hashes and `first_cause=DIRECTORY_INVALID` are unchanged; terminal reason is
+`PREVIOUS_LEAF_EXPIRED`, with no commit decision or expired reader resume. Both node owners
+were released only after complete archive and `CLEANED_FENCED_ROLLBACK` ledger verification.
+The single RU HTTP stop/start lasted122.44s; ordinary HTTP/public trusted HTTPS are restored
+with the original artifact/argv and all registrations retained. Paid ledger remains0/0.
 
-[NL gateway replacement — 30 October](releases/2026-10-30-nl-gateway-replacement.md)
-and [sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json):
-**BLOCKED_NL_REPLACEMENT / BLOCKED_RENEWAL_JOURNAL_UNRESOLVED**: fenced-rollback source
-correction pushed,168 focused tests PASS/one optional skip, two identical packages and
-import/help/construction PASS, **NOT_DEPLOYED**. Fresh RU rollback readback now fails:
-its registry has two added device rows and two added invite rows, while the RU HTTP reader
-is active inside the renewal barrier. NL readback PASS/readers stopped. Journal remains
-`RECOVERY_REQUIRED`, first cause `DIRECTORY_INVALID`, no commit decision. No recovery
-execution, room/publication or fresh operation. Restricted inactive, renewal paused.
-RU ordinary HTTP/public HTTPS remain available. Old NL FENCED; new
-`185.10.158.212` AWG/TCP synthetic DNS/HTTPS/egress/cleanup previously PASS,
-46 peers/46 credentials, three stable samples/0 restarts. Final coordinated backup verified.
-Ubuntu26.04.1/kernel7.0.0-42, exact runtime/artifacts, about2GiB swap and RU ingress verified.
-Paid ledger0/0, signed catalog sequence3 unchanged; no publication or owner smoke.
-Endpoint-routing source checkpoint has43 passing tests/14 optional skips and reproducible
-builds, but is NOT_DEPLOYED. Next: resolve RU registry/snapshot conflict without losing
-new records or weakening exact-state checks; then terminalize rollback and continue
-publisher recovery within the same operation. No journal editing or automatic replay. This operational
-exception does not advance the paused product queue.
+Next within **NL-REPLACEMENT-20261030**: bounded publisher recovery, one fresh renewal,
+actual restricted/snapshot/MESH acceptance, schedules and monotonic client publication.
+The integrated publisher has no one-shot command and rejects the expired predecessor before
+room creation. A narrowly scoped fixed-configuration recovery worker is therefore qualified
+from the exact retained publisher source; no gateway binary rebuild or validator weakening.
+It checks historical signatures/binding and the exact publisher contract, journals one room
+attempt, verifies READY, stages privately and uses the existing locked atomic store.
+It never writes profile/CRL/floor and never starts expired readers. Recovery is unavailable
+once its fixed permit expires or normal current material is restored.
+
+New NL185.10.158.212 ordinary AWG/TCP server data-plane remains accepted; old NL is FENCED.
+Restricted gateway inactive, renewal paused, stale directory retained. No room generation,
+directory publication, fresh renewal, client catalog change or owner smoke yet. Catalog3.
 **BETA-0-CANARY-1 remains PAUSED; paid events and Android stage0 remain off.**
+
+[NL restoration report](releases/2026-10-30-nl-gateway-replacement.md) and
+[sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json).
 
 [BETA-0-CANARY-1 — owner canary preparation](releases/2026-10-27-android106-beta-0-canary-1.md):
 **Current substep BETA-0-CANARY-1 — PAUSED_BY_OWNER / LIVE_WRITES_NOT_RUN.**

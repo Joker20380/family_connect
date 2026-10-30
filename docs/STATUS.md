@@ -2,67 +2,32 @@
 
 ## NL availability restoration — 30 October
 
-Owner-authorized continuation: append-only registry preservation is now source-qualified,
-not yet deployed. The dedicated fenced recovery proof retains historical snapshots and
-checks exact restricted tables, schema, constraints and immutable existing rows. Normal
-renewal/rollback still require exact state. A recovery-only runtime bridge preserves fixed
-configuration/source pins while authenticating the replacement package separately.
-Historical encrypted SQLite schema comparison PASS. Next within the same operation:
-deterministic package, fresh private backup, one bounded RU writer stop, overlay proof,
-terminal rollback/archive, ordinary HTTP restart, then publisher/fresh renewal/cutover.
-No production mutation, new room, directory or catalog publication from this source check.
+The existing rollback is now terminal **ABORTED / ROLLED_BACK_READERS_STOPPED**.
+Source `e822b391a43dd4cec5949df7a8a33ba6e44872a5` and its deterministic renewal package
+were deployed through the recovery-only bridge. Fresh quiesced proof preserved two device
+and two invite additions, all historical rows and exact restricted tables. Historical
+expected hashes and `first_cause=DIRECTORY_INVALID` are unchanged; terminal reason is
+`PREVIOUS_LEAF_EXPIRED`, with no commit decision or expired reader resume. Both node owners
+were released only after complete archive and `CLEANED_FENCED_ROLLBACK` ledger verification.
+The single RU HTTP stop/start lasted122.44s; ordinary HTTP/public trusted HTTPS are restored
+with the original artifact/argv and all registrations retained. Paid ledger remains0/0.
 
-**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / BLOCKED_RENEWAL_JOURNAL_UNRESOLVED.**
-Owner-authorized fenced rollback correction pushed as
-`dfbfbc34cc3345e281294ff429555d9b95a35f91`, **NOT_DEPLOYED**.168 focused tests PASS,
-one optional native interoperability probe skipped; two byte-identical renewal packages,
-manifest/member checks,13 imports/four help commands and actual-package construction PASS.
-The new terminal result `ROLLED_BACK_READERS_STOPPED` keeps controller state `ABORTED`,
-preserves the first cause, archives node journals and never resumes expired readers.
-These are source-test results, not a production terminalization.
+Next within **NL-REPLACEMENT-20261030**: bounded publisher recovery, one fresh renewal,
+actual restricted/snapshot/MESH acceptance, schedules and monotonic client publication.
+The integrated publisher has no one-shot command and rejects the expired predecessor before
+room creation. A narrowly scoped fixed-configuration recovery worker is therefore qualified
+from the exact retained publisher source; no gateway binary rebuild or validator weakening.
+It checks historical signatures/binding and the exact publisher contract, journals one room
+attempt, verifies READY, stages privately and uses the existing locked atomic store.
+It never writes profile/CRL/floor and never starts expired readers. Recovery is unavailable
+once its fixed permit expires or normal current material is restored.
 
-Fresh readback supersedes the earlier RU/NL rollback PASS: RU now reports
-`ROLLBACK_READBACK_MISMATCH`; only its `database_sha256` differs. The live registry has
-two additional device rows and two additional invite rows versus the retained snapshot;
-no previous rows were removed. Restricted grants/certificates/CRL sequence are unchanged.
-RU ordinary HTTP is active and part of the renewal barrier, so RU is not fenced.
-NL still confirms `PREVIOUS_SNAPSHOT_RESTORED` and stopped readers. The original journal
-is byte-identical, `RECOVERY_REQUIRED`, `first_cause=DIRECTORY_INVALID`, no commit decision.
-No production package deployment, recovery execution, new transaction, room or publication.
-Do not restore the old RU database over these additions, rewrite expected hashes or bypass
-the exact-state gate. Encrypted evidence is retained. Restricted remains inactive,
-renewal paused and restricted sync timers quiesced.
+New NL185.10.158.212 ordinary AWG/TCP server data-plane remains accepted; old NL is FENCED.
+Restricted gateway inactive, renewal paused, stale directory retained. No room generation,
+directory publication, fresh renewal, client catalog change or owner smoke yet. Catalog3.
+**BETA-0-CANARY-1 remains PAUSED; paid events and Android stage0 remain off.**
 
-Safe state rechecked21:29UTC: old NL **FENCED** with eight product units stopped/disabled,
-persistent restart/ingress guards and absent interfaces/listeners. Operator SSH and old
-files retained. Final coordinated encrypted export PASS. New NL `185.10.158.212` ordinary
-AWG/TCP synthetic DNS, external HTTPS, egress and cleanup PASS; AWG IPv6 fails closed.
-46 authoritative peers/46 TCP credentials, three stable samples, unchanged PIDs and0
-restarts. Supporting services started, not fully accepted. Canonical SSH RPC inspection
-PASS; snapshot correctly rejects expired material, not acceptance PASS.
-RU ordinary HTTP remains available; public trusted HTTPS dispatch PASS. Paid ledger
-freshly0/0; signed catalog sequence3 unchanged. No client
-endpoint publication, Android106 new-endpoint verification or owner smoke.
-
-Host preparation complete: official22.04→24.04→26.04 upgrades, Ubuntu26.04.1,
-kernel7.0.0-42-generic, four guarded reboots, about2GiB persistent swap, bounded SSH/log
-protection, strict key login and NTP/TUN PASS. Exact CPython3.14.4 and all five retained
-artifact anchors verified; no custom runtime/libc substitution. Required diagnostic
-ingress PASS from workstation/RU, RU SYN seen. Private13-role deployment matrix,
-canonical ownership boundaries, exact launcher and identity restoration qualified.
-Owner accepted SSH TOFU; provider-console verification remains unavailable, password
-login retained. Detailed historical host/staging evidence is in the restoration report.
-
-Source-only endpoint routing preparation:43 tests PASS/14 optional skips, two identical
-HTTP package builds; **not deployed or substituted for accepted artifacts**. No APK change.
-NEXT: resolve the live RU registry/rollback snapshot conflict without losing new records
-or weakening exact-state checks. Deployment/recovery require fresh exact readbacks and
-stopped barriers first. Then continue publisher recovery, one fresh renewal and restricted/
-supporting acceptance before guarded monotonic cutover. No new PLAN ID or product work.
-**BETA-0-CANARY-1 PAUSED; paid-canary, subscription events and Android stage0 NOT_RUN.**
-[Restoration report and rollback](releases/2026-10-30-nl-gateway-replacement.md) ·
-[Sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json).
-The retained incident observations below do not authorize old-NL reactivation or canary work.
+[Restoration evidence and remaining gates](releases/2026-10-30-nl-gateway-replacement.md).
 
 ## Current critical path — ANDROID-CONTROLLED-BETA
 

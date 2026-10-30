@@ -1,5 +1,53 @@
 # NL production gateway replacement — 30 October 2026
 
+## Confirmed terminal rollback and publisher continuation
+
+The existing rollback is now terminal **ABORTED / ROLLED_BACK_READERS_STOPPED**.
+Source `e822b391a43dd4cec5949df7a8a33ba6e44872a5` and its deterministic renewal package
+were deployed through the recovery-only bridge. Fresh quiesced proof preserved two device
+and two invite additions, all historical rows and exact restricted tables. Historical
+expected hashes and `first_cause=DIRECTORY_INVALID` are unchanged; terminal reason is
+`PREVIOUS_LEAF_EXPIRED`, with no commit decision or expired reader resume. Both node owners
+were released only after complete archive and `CLEANED_FENCED_ROLLBACK` ledger verification.
+The single RU HTTP stop/start lasted122.44s; ordinary HTTP/public trusted HTTPS are restored
+with the original artifact/argv and all registrations retained. Paid ledger remains0/0.
+
+Next within **NL-REPLACEMENT-20261030**: bounded publisher recovery, one fresh renewal,
+actual restricted/snapshot/MESH acceptance, schedules and monotonic client publication.
+The integrated publisher has no one-shot command and rejects the expired predecessor before
+room creation. A narrowly scoped fixed-configuration recovery worker is therefore qualified
+from the exact retained publisher source; no gateway binary rebuild or validator weakening.
+It checks historical signatures/binding and the exact publisher contract, journals one room
+attempt, verifies READY, stages privately and uses the existing locked atomic store.
+It never writes profile/CRL/floor and never starts expired readers. Recovery is unavailable
+once its fixed permit expires or normal current material is restored.
+
+New NL185.10.158.212 ordinary AWG/TCP server data-plane remains accepted; old NL is FENCED.
+Restricted gateway inactive, renewal paused, stale directory retained. No room generation,
+directory publication, fresh renewal, client catalog change or owner smoke yet. Catalog3.
+**BETA-0-CANARY-1 remains PAUSED; paid events and Android stage0 remain off.**
+
+Renewal package SHA256 `2624c1ba1f49863f767ca9e9ea165a5c74c0c4f95a5ba84d2cac1d91d81d5dd1`,
+66287bytes/17members; two byte-identical builds, exact source/member inventory,13 imports,
+four help commands and canonical-route construction PASS.231 focused Python tests PASS,
+one optional native interoperability skip. Fresh authenticated encrypted backups/readback
+PASS before deployment, during writer quiescence and after terminalization.
+Historical rollback is labeled `HISTORICAL_NL_REPLACEMENT_ROLLBACK`; its private ID and
+complete controller/node journals are retained privately, not published. The controller
+transaction remains available as ABORTED; no database/profile/directory writes occurred.
+
+Publisher recovery source qualification is separate from production execution. The exact
+282-member retained capsule is verified; only the atomic-store extraction and six bounded
+recovery source/test members are projected. Normal publisher logic is unchanged.
+Focused publisher checks:113 current-tree and119 exact-capsule Go tests PASS;
+181 directory/sync/profile-store Python tests PASS,29 optional integration prerequisites
+skipped; two bounded source-projection tests PASS. No Android/client/full-history suites.
+Production helper deployment, fresh room/publication and fresh renewal are pending.
+
+## Historical source qualification and blocker evidence — superseded
+
+The following entries describe earlier states, not the current operation gate.
+
 ## Append-only registry correction — same operation
 
 The owner authorized retaining strictly proven device/invite additions without rewriting

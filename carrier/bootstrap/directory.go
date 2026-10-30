@@ -173,6 +173,10 @@ func (cache *Cache) Store(raw []byte, now time.Time) error {
 		return lockErr
 	}
 	defer lock.Close()
+	return cache.store(raw, now)
+}
+
+func (cache *Cache) store(raw []byte, now time.Time) error {
 	directory, err := ParseDirectory(raw, cache.Family, cache.Gateway, now)
 	if err != nil {
 		return err

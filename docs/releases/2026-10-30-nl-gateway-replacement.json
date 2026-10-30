@@ -2,24 +2,39 @@
   "registry_overlay_correction": {
     "focused_tests_passed": 231,
     "focused_tests_skipped": 1,
-    "source_status": "QUALIFIED_NOT_DEPLOYED",
-    "source_commit": null,
+    "source_status": "DEPLOYED_TERMINALIZATION_PASS",
+    "source_commit": "e822b391a43dd4cec5949df7a8a33ba6e44872a5",
     "entry_main": "e82c2c2e33fe7332b143c7205539f0d286d9f51d",
     "historical_schema": "PASS",
     "historical_expected_state_unchanged": true,
     "normal_exact_state_guards": "UNCHANGED",
-    "production_execution": "NOT_RUN",
+    "production_execution": "PASS",
     "production_database_writes": 0,
     "publisher_room_creations": 0,
     "directory_publications": 0,
     "new_renewal_operations": 0,
-    "source_bridge": "RECOVERY_ONLY_FIXED_CONFIGURATION_UNCHANGED"
+    "source_bridge": "RECOVERY_ONLY_FIXED_CONFIGURATION_UNCHANGED",
+    "package_sha256": "2624c1ba1f49863f767ca9e9ea165a5c74c0c4f95a5ba84d2cac1d91d81d5dd1",
+    "package_size": 66287,
+    "package_members": 17,
+    "matching_builds": 2,
+    "historical_database_sha256": "3cdb25a1fb917b775b94be25310053845bf168e025280eb8c6f3b90fbee7f42d",
+    "current_database_sha256": "ba802412100497cfeeda06b61b6e8ea8734ca428690e5c0f93af4a2794963410",
+    "overlay_receipt_sha256": "a70198f1c4de63a03d58f337c92d7de94f143496b211a292558f0f457dffec0c",
+    "restricted_projection_sha256": "ebb14524684a150b8f6a7476ab122cc8d97c6ba7448fd44a64f83691965f9639",
+    "devices_added": 2,
+    "invites_added": 2,
+    "restricted_state_exact": true,
+    "baseline_rows_preserved": true,
+    "ordinary_http_stop_start_cycles": 1,
+    "ordinary_http_outage_seconds": 122.44,
+    "registry_overlay_result": "APPEND_ONLY_REGISTRY_OVERLAY_PRESERVED"
   },
   "schema": 1,
   "task": "NL-REPLACEMENT-20261030",
   "scope": "AVAILABILITY_RESTORATION_NOT_PRODUCT_CHECKPOINT",
-  "status": "BLOCKED_NL_REPLACEMENT",
-  "blocker": "BLOCKED_RENEWAL_JOURNAL_UNRESOLVED",
+  "status": "IN_PROGRESS_AFTER_TERMINAL_ROLLBACK",
+  "blocker": null,
   "initial_blocker": "BLOCKED_NEW_HOST_OS",
   "target": {
     "ipv4": "185.10.158.212",
@@ -56,7 +71,11 @@
     "exact_interpreter_sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
     "interpreter_matches_accepted_bytes": true,
     "isolated_runtime_files": 1795,
-    "pinned_dependencies": {"cryptography": "46.0.7", "rns": "1.5.1", "pyserial": "3.5"},
+    "pinned_dependencies": {
+      "cryptography": "46.0.7",
+      "rns": "1.5.1",
+      "pyserial": "3.5"
+    },
     "snapshot_package_import": "PASS",
     "gateway_help": "PASS",
     "xray_version_execution": "PASS",
@@ -163,8 +182,16 @@
     "scope": "DIAGNOSTIC_ONLY_NOT_PRODUCT_ACCEPTANCE",
     "workstation": "PASS",
     "ru": "PASS",
-    "tcp_ports": [443, 4242, 4243],
-    "udp_ports": [443, 51820, 51823],
+    "tcp_ports": [
+      443,
+      4242,
+      4243
+    ],
+    "udp_ports": [
+      443,
+      51820,
+      51823
+    ],
     "nonce_echo_checks_passed": 12,
     "ru_origin_syn_visible_at_new_interface": true,
     "diagnostic_listeners_closed": true,
@@ -206,7 +233,10 @@
     "paid_canary": "NOT_RUN",
     "subscription_events": "NOT_RUN",
     "android_stage0": "NOT_RUN",
-    "paid_ledger_last_accepted": {"subscriptions": 0, "events": 0},
+    "paid_ledger_last_accepted": {
+      "subscriptions": 0,
+      "events": 0
+    },
     "paid_ledger_fresh_query": "PASS_0_SUBSCRIPTIONS_0_EVENTS",
     "live_product_changes": "OLD_FENCED_NEW_ORDINARY_SUPPORT_STARTED",
     "ru_production_changes": "RENEWAL_ATTEMPT_ROLLED_BACK_ORDINARY_HTTP_RESTORED",
@@ -214,13 +244,13 @@
     "restricted_sync_timers": "LEFT_QUIESCED",
     "new_host_management_change": "AUTHORIZED_SSH_BASE_PACKAGES_AND_OS_UPGRADE"
   },
-  "rollback": "RU_DATABASE_DRIFT_NL_PREVIOUS_SNAPSHOT_RESTORED_RECOVERY_REQUIRED_NO_REPLAY",
+  "rollback": "ROLLED_BACK_READERS_STOPPED",
   "restricted_recovery": {
     "manual_transactions_started": 1,
-    "transaction_state": "RECOVERY_REQUIRED",
+    "transaction_state": "ABORTED",
     "first_cause": "DIRECTORY_INVALID",
     "commit_decided": false,
-    "ru_rollback_readback": "ROLLBACK_READBACK_MISMATCH",
+    "ru_rollback_readback": "APPEND_ONLY_REGISTRY_OVERLAY_PRESERVED",
     "nl_rollback_readback": "PREVIOUS_SNAPSHOT_RESTORED",
     "directory_current_rejection": "EXPIRED",
     "directory_historical_binding": "PASS",
@@ -230,21 +260,37 @@
     "restricted_gateway_started": false,
     "journal_preserved": true,
     "failure_evidence": "ENCRYPTED_HASH_VERIFIED_READBACK_PASS_BOTH_NODES",
-    "automatic_retry": "PROHIBITED_PENDING_ACCEPTED_RECOVERY_PATH",
-    "accepted_packages_modified": false
+    "automatic_retry": "NOT_APPLICABLE_TERMINAL_OPERATION",
+    "accepted_packages_modified": false,
+    "terminal_result": "ROLLED_BACK_READERS_STOPPED",
+    "terminal_reason": "PREVIOUS_LEAF_EXPIRED",
+    "rollback_verified": true,
+    "readers_resumed": false,
+    "node_cleanup": {
+      "RU": "CLEANED_FENCED_ROLLBACK",
+      "NL": "CLEANED_FENCED_ROLLBACK"
+    },
+    "active_node_owners": 0,
+    "expired_restricted_readers": "STOPPED",
+    "ordinary_ru_http": "RESTORED_AFTER_TERMINALIZATION",
+    "operation_label": "HISTORICAL_NL_REPLACEMENT_ROLLBACK"
   },
   "final_safe_state": {
-    "observed_utc": "2026-10-30T21:29:06.232593+00:00",
-    "ru_ordinary_http": "ACTIVE_UNCHANGED_ACCEPTED_ARTIFACT",
+    "observed_utc": "2026-10-30T22:12:23+00:00",
+    "ru_ordinary_http": "RESTORED_EXACT_ORIGINAL_ARTIFACT_AND_ARGV",
     "public_ru_https_dispatch": "PASS_TRUSTED_TLS_EXPECTED_400_NOT_CLIENT_SMOKE",
     "manual_renewal_controller_running": false,
     "new_nl_client_publication": false,
     "old_nl": "FENCED",
-    "paid_ledger": {"subscriptions": 0, "events": 0}
+    "paid_ledger": {
+      "subscriptions": 0,
+      "events": 0
+    },
+    "preserved_registrations": "PASS"
   },
   "publisher_recovery_continuation": {
     "entry_local_and_remote_main": "edadd7fe050147d05dc976af9530234a2b6896ff",
-    "scope": "SAME_OPERATION_READ_ONLY_CLASSIFICATION_NO_PRODUCTION_STATE_TRANSITION",
+    "scope": "SAME_OPERATION_AFTER_CONFIRMED_TERMINAL_ROLLBACK",
     "publisher_contract": "EXACT_MATCH",
     "publisher_executable_sha256": "f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef",
     "publisher_contract_sha256": "f9fbf6528071c4916bd04b188cba83e151be39a8ba009ab4d00d794117fa1596",
@@ -267,11 +313,11 @@
     "room_creations": 0,
     "room_validation": "NOT_RUN",
     "directory_publications": 0,
-    "source_changed": false,
+    "source_changed": true,
     "production_artifacts_built": 0,
     "production_writes": 0,
     "new_renewal_transactions": 0,
-    "existing_journal_unchanged": true,
+    "existing_journal_unchanged": false,
     "controller_source_sha256": "d0ab545cc71d54d95600b10a03d3e501226c018a01d60a5ea4039f9003627bce",
     "previous_historical_validation": "PASS",
     "previous_current_validation": "LEAF_EXPIRED_OR_FUTURE",
@@ -280,14 +326,23 @@
     "expired_recovery_checkpoint": "OTHER_OPERATION_RECOVERY_REQUIRED",
     "exact_method_in_memory_replay": "ROLLED_BACK_THEN_RECOVERY_REQUIRED_BEFORE_DIRECTORY_READ_OR_TERMINAL_CLEANUP",
     "replay_production_writes_or_node_rpc": 0,
-    "journal_resolution": "BLOCKED_RENEWAL_JOURNAL_UNRESOLVED_FIRST_CAUSE_PRESERVED",
+    "journal_resolution": "ABORTED_ROLLED_BACK_READERS_STOPPED_FIRST_CAUSE_PRESERVED",
     "focused_tests_passed": 127,
     "focused_tests_deselected": 72,
-    "focused_test_isolation": "ROOT_CONTAINER_NETWORK_DISABLED_READ_ONLY_SOURCE_AND_EXACT_RETAINED_FIXTURES"
+    "focused_test_isolation": "ROOT_CONTAINER_NETWORK_DISABLED_READ_ONLY_SOURCE_AND_EXACT_RETAINED_FIXTURES",
+    "recovery_path": "BOUNDED_FIXED_CONFIGURATION_RECOVERY_WORKER",
+    "deployment": "NOT_DEPLOYED",
+    "normal_publisher_path": "UNCHANGED",
+    "profile_crl_floor_writes": 0
   },
   "source_checkpoint": {
     "status": "NOT_DEPLOYED",
-    "roles": ["ordinary_registration_catalog_target", "chat_sync_target", "mailbox_bootstrap_acknowledgement", "monitoring_remote_host"],
+    "roles": [
+      "ordinary_registration_catalog_target",
+      "chat_sync_target",
+      "mailbox_bootstrap_acknowledgement",
+      "monitoring_remote_host"
+    ],
     "strict_ssh_pinning_retained": true,
     "ru_registration": "LOCAL_UNCHANGED",
     "tests_passed": 43,
@@ -359,9 +414,17 @@
     "production_commit_decided": false,
     "production_journal_byte_identical": true,
     "production_rollback_verified_both_nodes": false,
-    "barriers_stopped": {"RU": false, "NL": true},
-    "expected_state_match": {"RU": false, "NL": true},
-    "ru_mismatch_fields": ["database_sha256"],
+    "barriers_stopped": {
+      "RU": false,
+      "NL": true
+    },
+    "expected_state_match": {
+      "RU": false,
+      "NL": true
+    },
+    "ru_mismatch_fields": [
+      "database_sha256"
+    ],
     "ru_database_drift": {
       "previous_snapshot_hash_internally_consistent": true,
       "devices_added": 2,
@@ -382,7 +445,14 @@
       "manifest_sha256": "edc26e30c88edaf8fabf2d7c69d9e869374b1f0e7238374d4f8394005c9436c4",
       "api_sha256": "87c1725dbe8e337c5986de64c01768ddcfceee66a25b15d9487dc7ebdc8db413",
       "exact_source_modules": 13,
-      "changed_modules": ["node.py", "production_controller.py", "production_node.py", "production_transport.py", "renewal_cli.py", "runtime_controller.py"],
+      "changed_modules": [
+        "node.py",
+        "production_controller.py",
+        "production_node.py",
+        "production_transport.py",
+        "renewal_cli.py",
+        "runtime_controller.py"
+      ],
       "manifest_and_member_hashes": "PASS",
       "privacy_scan": "PASS",
       "imported_modules": 13,
@@ -407,7 +477,7 @@
     "catalog_publication": "NOT_RUN",
     "owner_smoke": "NOT_RUN"
   },
-  "next_action": "RECONCILE_RU_LIVE_REGISTRY_ADDITIONS_WITH_ROLLBACK_SNAPSHOT_WITHOUT_DATA_LOSS_OR_WEAKENED_EXACT_STATE_CHECKS_BEFORE_DEPLOYMENT_AND_RECOVERY",
+  "next_action": "BOUNDED_PUBLISHER_RECOVERY_THEN_FRESH_RENEWAL_AND_ACTUAL_RESTRICTED_ACCEPTANCE_BEFORE_CLIENT_PUBLICATION",
   "checks": {
     "strict_json": "PASS",
     "targeted_privacy_secret_scan": "PASS",
