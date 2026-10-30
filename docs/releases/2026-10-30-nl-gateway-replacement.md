@@ -3,15 +3,74 @@
 ## Status and authorization
 
 **NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / BLOCKED_RENEWAL_JOURNAL_UNRESOLVED.**
-Read-only continuation identifies an additional, independently blocking controller gate:
-terminal rollback requires a current-valid predecessor leaf. Fresh directory publication
-alone cannot satisfy it. The original promotion first cause stays `DIRECTORY_INVALID`.
-No production recovery transition was attempted in this continuation; no new report,
-PLAN ID or product checkpoint is created. RU/NL previous-snapshot rollback readbacks PASS; the transaction
-remains `RECOVERY_REQUIRED`, with no commit decision. RU ordinary HTTP is restored;
-restricted services remain inactive/quiesced and renewal is paused. Old NL is FENCED.
+The owner-authorized fenced-rollback source correction is qualified but **NOT_DEPLOYED**.
+Fresh read-only verification supersedes the earlier two-node rollback PASS: RU now returns
+`ROLLBACK_READBACK_MISMATCH`; NL still returns `PREVIOUS_SNAPSHOT_RESTORED`.
+Only RU `database_sha256` differs from its recorded expected state. Relative to the
+rollback snapshot, the current registry contains two additional device rows and two
+additional invite rows, with no removed rows. Restricted grants, certificates and CRL
+sequence rows are unchanged. The recorded previous database hash is internally consistent.
+The RU ordinary HTTP reader is active and belongs to the renewal barrier; therefore the
+claim that both barriers are stopped is also no longer true. No records were deleted,
+expected hashes rewritten or services stopped to manufacture an exact rollback proof.
+The existing journal remains `RECOVERY_REQUIRED`, `first_cause=DIRECTORY_INVALID`,
+`commit_decided=false`. Recovery execution and package deployment are **NOT_RUN**.
+This is a genuine live-state conflict, not another leaf-validation exception.
+Restricted services remain inactive/quiesced and renewal is paused. Old NL is FENCED.
 New ordinary AWG/TCP synthetic data-plane and cleanup PASS, but no client publication,
 Android106 endpoint verification or owner smoke. This is not full server acceptance.
+
+## Fenced rollback correction — source only
+
+Entry local/remote main: `c6e1f725a638c0a3f416712ffeed3b381d0067cd`.
+This continues the same operation; no new PLAN ID or product checkpoint.
+
+- The controller distinguishes verified rollback, current-valid predecessor and resumed
+  readers. Only the exact `LEAF_EXPIRED_OR_FUTURE` exception, with a historically valid
+  and demonstrably expired leaf, permits fenced finalization. Future material and other
+  validation failures remain fail-closed. Normal valid rollback, committed recovery and
+  expired-authority rollforward retain their existing paths.
+- The new `finalize-fenced-rollback` RPC binds the existing operation, expected state and
+  controller recovery evidence. It requires stopped barriers, exact readbacks and no start
+  intent, reconciliation or directory publication. It writes only a private terminal receipt
+  and node owner state `ABORTED_FENCED`; it never restores material or resumes readers.
+- Cleanup archives the complete node journal, terminal receipt and owner/first-cause
+  evidence, then durably records `CLEANED_FENCED_ROLLBACK` before releasing ownership.
+  Replay verifies the archive and stopped barrier. Partial finalization/cleanup is resumable
+  without a second rollback or reader start.
+- The controller remains available as `ABORTED`, with external result
+  `ROLLED_BACK_READERS_STOPPED`, `rollback_verified=true`,
+  `previous_material_current=false`, `readers_resumed=false`, `readers_state=STOPPED`,
+  `terminal_reason=PREVIOUS_LEAF_EXPIRED`, and no commit decision. Original `first_cause`
+  is retained; the terminal receipt also exposes the same value as `first_reason`.
+  Only explicit recover CLI actions accept this result as successful command completion.
+- These are **tested source semantics, not production terminalization results**. The
+  historical rollback operation is referenced only by the safe label
+  `replacement-initial-renewal`; its private operation ID and journals are not published.
+
+Focused qualification: **168 passed,1 skipped** across fenced rollback, activated
+maintenance, renewal transport, deterministic renewal packaging and canonical profile
+store tests. The skip is the optional accepted-native-source/toolchain interoperability
+probe; no gateway or client build was requested or performed. Fault coverage includes
+terminal-receipt/owner interruption, partial archive moves, archive fsync and completed
+ledger interruption, idempotent replay and fresh-operation exclusion until both cleanups.
+Ordinary test-harness issues (missing Git, explicit synthetic unit argument and CLI umask
+isolation) were corrected before the successful run. No production workaround was used.
+
+Fresh21:18–21:21UTC read-only evidence confirms the database-only conflict and retains
+authenticated encrypted evidence. At21:22UTC the old node remains fenced with eight
+product units stopped/disabled and no product interfaces/listeners. New AWG/TCP remain
+active; restricted remains inactive, with expired directory still correctly rejected.
+Paid ledger0/0 and catalog sequence3 remain unchanged. No publisher room, directory
+publication, new renewal operation, service start, client cutover or owner smoke occurred.
+
+**Next gate:** reconcile the live RU registry additions with the retained operation
+without discarding records or weakening exact-state checks. Do not deploy or execute
+recovery until both exact rollback readbacks and stopped-reader prerequisites are proven.
+Only then may the authorized publisher/fresh-renewal/cutover sequence continue.
+
+## Earlier host preparation provenance
+
 Host/staging provenance: after the initial
 blocked audit, the owner authorized installing the required OS/packages over SSH.
 Supported LTS upgrades and exact-runtime compatibility checks are complete, not a

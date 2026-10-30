@@ -60,7 +60,8 @@ def main():
             handoff = read_private(args.authority_bundle) if args.authority_bundle else None
             result = controller.run(args.operation,approval=approval,authority_handoff=handoff)
         print(canonical(result).decode())
-        if result['result'] not in ('COMMITTED','NOOP','OFFLINE_AUTHORITY_SIGNING_REQUEST_READY'):
+        if result['result'] not in ('COMMITTED','NOOP','OFFLINE_AUTHORITY_SIGNING_REQUEST_READY') and not (
+                args.action == 'recover' and result['result'] == 'ROLLED_BACK_READERS_STOPPED'):
             raise SystemExit(75)
     except Exception as error:
         print(canonical(dict(result='FAIL_CLOSED',cause=str(error) if isinstance(error,Rejected) else 'UNKNOWN',

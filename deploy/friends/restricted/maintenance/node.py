@@ -131,6 +131,8 @@ def dispatch(node, request):
         return node.commit_decision(operation,payload)
     if action == 'restore':
         return node.restore(operation,payload)
+    if action == 'finalize-fenced-rollback':
+        return node.finalize_fenced_rollback(operation,payload)
     require(payload is None, 'RPC_SCHEMA')
     if action == 'stopped':
         node.owner(operation)

@@ -71,6 +71,8 @@ def test_renewal_package_pins_every_source_and_shared_profile_module(source, tmp
         assert result.stdout and not result.stderr
     probe = ('import sys;sys.path.insert(0,sys.argv[1]);sys.path.insert(0,sys.argv[2]);'
              'import node,renewal_health;from control.friends import profile_store;'
+             'assert "finalize-fenced-rollback" in node.ACTIONS;'
+             'assert hasattr(node.ProductionNode,"finalize_fenced_rollback");'
              'assert profile_store.__file__.startswith(sys.argv[2]+"/");assert len(node.NODE_MODULES)==7')
     subprocess.run([sys.executable, '-I', '-B', '-c', probe, str(extracted / 'renewal'), str(extracted / 'api.pyz')],
                    capture_output=True, check=True)

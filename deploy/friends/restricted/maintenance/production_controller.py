@@ -4,7 +4,7 @@ import re
 import time
 
 from credential_renewal import (Rejected, atomic, canonical, digest, evaluate, parse, private_directory,
-                               read_private, require)
+                               read_private, require, utc)
 from maintenance_policy import maintenance_gate
 from production_transport import DurableOperation
 from offline_handoff import verify as verify_handoff
@@ -188,6 +188,10 @@ class ProductionController:
 
     def receipts(self, record):
         safe = {key:record[key] for key in ('schema','operation_id','state','first_cause','before_sha256')}
+        for key in ('terminal_result','rollback_verified','previous_material_current','readers_resumed',
+                    'readers_state','terminal_reason','first_reason'):
+            if key in record:
+                safe[key] = record[key]
         safe.update(timestamp=int(self.clock()),remote_alert_delivery='UNAVAILABLE',
                     grant_successor_model='MAINTENANCE_CUTOVER_NO_OVERLAP')
         try:
@@ -296,15 +300,49 @@ class ProductionController:
         operation = record['operation_id']
         try:
             for node in self.nodes.values():
-                node.call('cleanup',operation)
+                result = node.call('cleanup',operation)
+                if record.get('terminal_result') == 'ROLLED_BACK_READERS_STOPPED':
+                    require(not record['commit_decided'] and result['result'] == 'CLEANED_FENCED_ROLLBACK',
+                            'FENCED_CLEANUP_MISMATCH')
         except Exception:
             self.receipts(record)
             return dict(result='CLEANUP_REQUIRED',operation_id=operation,readers='UNCHANGED')
         terminal = 'COMMITTED' if record['commit_decided'] else 'ABORTED'
         self.save(record,terminal)
         receipt_written = self.receipts(record)
-        return dict(result=terminal,operation_id=operation,receipt_written=receipt_written,
+        return dict(result=record.get('terminal_result',terminal),operation_id=operation,receipt_written=receipt_written,
                     first_cause=record['first_cause'])
+
+    def finalize_fenced_rollback(self, record, leaf, now):
+        require(not record['commit_decided'] and not record.get('reconciliation'), 'COMMIT_DECISION_PRESENT')
+        require(leaf.not_valid_before_utc <= utc(now) and leaf.not_valid_after_utc <= utc(now), 'PREVIOUS_LEAF_NOT_EXPIRED')
+        require(digest(canonical(record['before'])) == record['before_sha256'], 'ROLLBACK_READBACK_MISMATCH')
+        plan = parse(read_private(self.root/'plan.json'))
+        require(plan['operation_id'] == record['operation_id'] and plan['previous'] == record['previous'], 'PLAN_BINDING')
+        for role,node in self.nodes.items():
+            require(node.call('inspect',record['operation_id']) == record['before'][role], 'ROLLBACK_READBACK_MISMATCH')
+            require(node.call('stopped',record['operation_id'])['stopped'], 'READERS_NOT_QUIESCED')
+        binding = dict(operation_id=record['operation_id'],before_sha256=record['before_sha256'],
+                       previous_sha256=digest(canonical(record['previous'])),plan_sha256=digest(canonical(plan)),
+                       first_cause=record['first_cause'],commit_decided=False)
+        if 'fenced_rollback' in record:
+            require(record['fenced_rollback'] == binding, 'ROLLBACK_TERMINAL_BINDING_MISMATCH')
+        else:
+            record['fenced_rollback'] = binding
+            self.save(record,'ROLLED_BACK')
+        for role,node in self.nodes.items():
+            payload = dict(reason='PREVIOUS_LEAF_EXPIRED',expected_state_sha256=digest(canonical(record['before'][role])),
+                           controller_operation_sha256=digest(canonical(binding)))
+            receipt = node.call('finalize-fenced-rollback',record['operation_id'],payload)
+            require(receipt['result'] == 'ROLLED_BACK_READERS_STOPPED' and receipt['operation_id'] == record['operation_id']
+                    and receipt['role'] == role and all(receipt[name] == value for name,value in payload.items())
+                    and receipt['rollback_verified'] is True and receipt['readers_resumed'] is False
+                    and receipt['readers_state'] == 'STOPPED', 'ROLLBACK_TERMINAL_RECEIPT_INVALID')
+        record.update(terminal_result='ROLLED_BACK_READERS_STOPPED',rollback_verified=True,previous_material_current=False,
+                      readers_resumed=False,readers_state='STOPPED',terminal_reason='PREVIOUS_LEAF_EXPIRED')
+        record.setdefault('first_reason',record['first_cause'])
+        self.save(record,'CLEANING')
+        return self.cleanup(record)
 
     def recover(self, record):
         require(record.get('mode') != 'expired', 'OPERATOR_RECOVERY_REQUIRED')
@@ -312,13 +350,16 @@ class ProductionController:
         record['first_cause'] = record['first_cause'] or 'CONTROLLER_INTERRUPTED'
         if record['state'] == 'CLEANING':
             return self.cleanup(record)
+        if record['state'] == 'ABORTED' and record.get('terminal_result') == 'ROLLED_BACK_READERS_STOPPED':
+            return self.cleanup(record)
         try:
             if record['commit_decided']:
                 receipts = {role:node.call('readback',operation) for role,node in self.nodes.items()}
                 require(receipts == record['reconciliation'], 'COMMITTED_READBACK_MISMATCH')
                 return self.finish(record)
-            self.validator.validate(canonical(record['previous']),int(self.clock()),expired_leaf_predecessor=True)
-            if record['state'] != 'ROLLED_BACK':
+            now = int(self.clock())
+            _,_,_,_,leaf = self.validator.validate(canonical(record['previous']),now,expired_leaf_predecessor=True)
+            if record['state'] != 'ROLLED_BACK' and 'fenced_rollback' not in record:
                 for role,node in self.nodes.items():
                     node.call('acquire',operation,record['before'][role])
                     node.call('fence',operation)
@@ -328,7 +369,13 @@ class ProductionController:
             require(all(node.call('rollback-readback',operation)['result'] == 'PREVIOUS_SNAPSHOT_RESTORED'
                         for node in self.nodes.values()), 'ROLLBACK_READBACK_MISMATCH')
             self.save(record,'ROLLED_BACK')
-            self.validator.validate(canonical(record['previous']),int(self.clock()))
+            try:
+                self.validator.validate(canonical(record['previous']),int(self.clock()))
+            except Rejected as error:
+                if str(error) != 'LEAF_EXPIRED_OR_FUTURE':
+                    raise
+                return self.finalize_fenced_rollback(record,leaf,int(self.clock()))
+            require('fenced_rollback' not in record, 'FENCED_ROLLBACK_CANNOT_RESUME')
             for role in ('NL','RU'):
                 if role == 'RU':
                     directory = self.nodes['NL'].call('public-directory',operation)

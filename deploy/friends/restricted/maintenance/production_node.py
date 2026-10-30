@@ -3,6 +3,7 @@ from contextlib import contextmanager
 import hmac
 import os
 from pathlib import Path
+import re
 import stat
 import time
 
@@ -247,13 +248,76 @@ class ProductionNode:
 
     def previous_readback(self, operation_id):
         owner = self.owner(operation_id)
-        require(owner['state'] in ('ROLLED_BACK','ABORTED'), 'TRANSACTION_STATE')
+        require(owner['state'] in ('ROLLED_BACK','ABORTED','ABORTED_FENCED'), 'TRANSACTION_STATE')
+        if owner['state'] == 'ABORTED_FENCED':
+            self.fenced_rollback_readback(owner)
         actual,expected = self.inspect(),dict(owner['expected_state'])
         if self.role == 'RU' and self.resume_authorized(owner):
             actual.pop('database_sha256')
             expected.pop('database_sha256')
         require(actual == expected, 'ROLLBACK_READBACK_MISMATCH')
         return dict(result='PREVIOUS_SNAPSHOT_RESTORED')
+
+    def fenced_rollback_readback(self, owner, archive=None):
+        require(self.barrier.stopped(), 'READERS_NOT_QUIESCED')
+        require(self.inspect() == owner['expected_state'], 'ROLLBACK_READBACK_MISMATCH')
+        locations = (self.state,) if archive is None else (self.state,archive)
+        for location in locations:
+            require(not list(location.glob('start-intent-*.json')), 'READER_START_INTENT_PRESENT')
+            require(not (location/'reconciliation.json').exists(), 'COMMIT_DECISION_PRESENT')
+            require(not (location/'directory-accepted.json').exists(), 'DIRECTORY_PUBLICATION_PRESENT')
+            before = location/'directory-before.json'
+            if before.exists():
+                require(digest(self.read_directory()[0]) == parse(read_private(before))['sha256'], 'DIRECTORY_CHANGED')
+        receipts = [location/'rollback-terminal.json' for location in locations
+                    if (location/'rollback-terminal.json').exists()]
+        require(len(receipts) == 1, 'ROLLBACK_TERMINAL_RECEIPT_MISSING')
+        receipt = parse(read_private(receipts[0]))
+        require(set(receipt) == {'schema','operation_id','role','result','reason','expected_state_sha256',
+                'controller_operation_sha256','rollback_verified','readers_resumed','readers_state','timestamp'}
+                and receipt['schema'] == 1 and receipt['operation_id'] == owner['operation_id']
+                and receipt['role'] == self.role and receipt['result'] == 'ROLLED_BACK_READERS_STOPPED'
+                and receipt['reason'] == 'PREVIOUS_LEAF_EXPIRED'
+                and receipt['expected_state_sha256'] == digest(canonical(owner['expected_state']))
+                and type(receipt['controller_operation_sha256']) is str
+                and re.fullmatch('[0-9a-f]{64}',receipt['controller_operation_sha256'])
+                and receipt['rollback_verified'] is True and receipt['readers_resumed'] is False
+                and receipt['readers_state'] == 'STOPPED' and type(receipt['timestamp']) is int,
+                'ROLLBACK_TERMINAL_RECEIPT_INVALID')
+        return receipt
+
+    def finalize_fenced_rollback(self, operation_id, payload):
+        require(type(payload) is dict and set(payload) == {'reason','expected_state_sha256','controller_operation_sha256'}
+                and payload['reason'] == 'PREVIOUS_LEAF_EXPIRED'
+                and all(type(payload[name]) is str and re.fullmatch('[0-9a-f]{64}',payload[name])
+                        for name in ('expected_state_sha256','controller_operation_sha256')), 'RPC_SCHEMA')
+        with self.operation.lock(), self.profile_lock():
+            owner = self.owner(operation_id)
+            require(owner['state'] in ('ROLLED_BACK','ABORTED_FENCED'), 'TRANSACTION_STATE')
+            require(not owner.get('commit_decided'), 'COMMIT_DECISION_PRESENT')
+            require(payload['expected_state_sha256'] == digest(canonical(owner['expected_state'])), 'ROLLBACK_READBACK_MISMATCH')
+            self.previous_readback(operation_id)
+            require(self.inspect() == owner['expected_state'], 'ROLLBACK_READBACK_MISMATCH')
+            require(self.barrier.stopped(), 'READERS_NOT_QUIESCED')
+            require(not list(self.state.glob('start-intent-*.json')), 'READER_START_INTENT_PRESENT')
+            require(not (self.state/'reconciliation.json').exists(), 'COMMIT_DECISION_PRESENT')
+            require(not (self.state/'directory-accepted.json').exists(), 'DIRECTORY_PUBLICATION_PRESENT')
+            before = self.state/'directory-before.json'
+            if before.exists():
+                require(digest(self.read_directory()[0]) == parse(read_private(before))['sha256'], 'DIRECTORY_CHANGED')
+            path = self.state/'rollback-terminal.json'
+            if not path.exists():
+                require(owner['state'] == 'ROLLED_BACK', 'ROLLBACK_TERMINAL_RECEIPT_MISSING')
+                receipt = dict(schema=1,operation_id=operation_id,role=self.role,result='ROLLED_BACK_READERS_STOPPED',
+                    **payload,rollback_verified=True,readers_resumed=False,readers_state='STOPPED',timestamp=int(self.clock()))
+                atomic(path,canonical(receipt))
+                self.fault('rollback-terminal-receipt')
+            receipt = self.fenced_rollback_readback(owner)
+            require(all(receipt[name] == value for name,value in payload.items()), 'ROLLBACK_TERMINAL_BINDING_MISMATCH')
+            if owner['state'] != 'ABORTED_FENCED':
+                self.operation.advance(owner,'ABORTED_FENCED')
+                self.fault('aborted-fenced')
+            return receipt
 
     def quiesce(self, operation_id):
         with self.operation.lock():
@@ -679,9 +743,19 @@ class ProductionNode:
             ledger = parse(read_private(ledger_path)) if ledger_path.exists() else {}
             if not (self.state/'owner.json').exists():
                 require(operation_id in ledger, 'TRANSACTION_STATE')
-                return dict(result='CLEANED',operation_id=operation_id)
+                if ledger[operation_id]['result'] == 'CLEANED_FENCED_ROLLBACK':
+                    destination = self.state/'archive'/operation_id
+                    metadata = parse(read_private(destination/'archive-manifest.json'))
+                    require(digest(canonical(metadata)) == ledger[operation_id]['manifest_sha256'], 'ARCHIVE_HASH_MISMATCH')
+                    for name,expected in metadata.items():
+                        require('/' not in name and name not in ('.','..'), 'ARCHIVE_PATH')
+                        require(digest(read_private(destination/name)) == expected, 'ARCHIVE_HASH_MISMATCH')
+                    owner = parse(read_private(destination/'owner-before-cleanup.json'))
+                    require(owner['operation_id'] == operation_id and owner['state'] == 'ABORTED_FENCED', 'ARCHIVE_OWNER_MISMATCH')
+                    self.fenced_rollback_readback(owner,destination)
+                return dict(result=ledger[operation_id]['result'],operation_id=operation_id)
             owner = self.owner(operation_id)
-            require(owner['state'] in ('RESUMED','ABORTED','CLEANING'), 'TRANSACTION_STATE')
+            require(owner['state'] in ('RESUMED','ABORTED','ABORTED_FENCED','CLEANING'), 'TRANSACTION_STATE')
             archive = self.state/'archive'
             if not archive.exists():
                 archive.mkdir(mode=0o700)
@@ -695,12 +769,18 @@ class ProductionNode:
                     self.readback(operation_id)
                 else:
                     self.previous_readback(operation_id)
+                if owner['state'] == 'ABORTED_FENCED':
+                    atomic(self.state/'owner-before-cleanup.json',canonical(owner))
                 names = [path.name for path in self.state.iterdir()
                          if path.name not in ('operation.lock','owner.json','completed.json','archive')]
                 metadata = {name:digest(read_private(self.state/name)) for name in names}
                 atomic(destination/'archive-manifest.json',canonical(metadata))
                 owner = self.operation.advance(owner,'CLEANING')
             metadata = parse(read_private(destination/'archive-manifest.json'))
+            fenced = 'rollback-terminal.json' in metadata
+            if fenced:
+                require('owner-before-cleanup.json' in metadata, 'ROLLBACK_TERMINAL_RECEIPT_INVALID')
+                self.fenced_rollback_readback(owner,destination)
             for name,expected in metadata.items():
                 require('/' not in name and name not in ('.','..'), 'ARCHIVE_PATH')
                 source,target = self.state/name,destination/name
@@ -718,12 +798,18 @@ class ProductionNode:
                     os.close(descriptor)
             limit = 4096 if self.validator.all_activated else 256
             require(len(ledger) < limit or operation_id in ledger, 'OPERATION_HISTORY_CAPACITY')
-            ledger[operation_id] = dict(result='CLEANED',manifest_sha256=digest(canonical(metadata)),timestamp=int(self.clock()))
+            if fenced:
+                archived_owner = parse(read_private(destination/'owner-before-cleanup.json'))
+                require(archived_owner == dict(owner,state='ABORTED_FENCED'), 'ARCHIVE_OWNER_MISMATCH')
+                self.fenced_rollback_readback(owner,destination)
+            result = 'CLEANED_FENCED_ROLLBACK' if fenced else 'CLEANED'
+            ledger[operation_id] = dict(result=result,manifest_sha256=digest(canonical(metadata)),timestamp=int(self.clock()))
             atomic(ledger_path,canonical(ledger))
+            self.fault('completed-ledger')
             (self.state/'owner.json').unlink()
             descriptor = os.open(self.state,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
             try:
                 os.fsync(descriptor)
             finally:
                 os.close(descriptor)
-            return dict(result='CLEANED',operation_id=operation_id,retention='BOUNDED_256_OPERATIONS_OPERATOR_ARCHIVE_REQUIRED')
+            return dict(result=result,operation_id=operation_id,retention='BOUNDED_256_OPERATIONS_OPERATOR_ARCHIVE_REQUIRED')

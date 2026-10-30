@@ -74,6 +74,7 @@ def main():
             result.update(files_changed=0, remote_writes=0, restarts=0)
         elif args.mode == 'recover':
             record = parse(read_private(controller.root / 'transaction.json'))
+            require(args.operation is None or record['operation_id'] == args.operation, 'OPERATION_ID')
             with controller.operation.lock():
                 result = controller.recover(record)
         else:
@@ -91,7 +92,8 @@ def main():
                 approved_leaf_crl_schedule=config['approved_leaf_crl_schedule'], authority_handoff=handoff)
         result.update(policy='CURRENT_PRODUCTION_VALIDITY_LIMITS', remote_alert_delivery='UNAVAILABLE')
         print(canonical(result).decode())
-        if result['result'] not in ('NOOP','COMMITTED','RECOVERY_REQUESTED'):
+        if result['result'] not in ('NOOP','COMMITTED','RECOVERY_REQUESTED') and not (
+                args.mode == 'recover' and result['result'] == 'ROLLED_BACK_READERS_STOPPED'):
             raise SystemExit(75)
     except Exception as error:
         print(canonical(dict(result='FAIL_CLOSED', cause=str(error) if isinstance(error, Rejected) else 'UNKNOWN',
