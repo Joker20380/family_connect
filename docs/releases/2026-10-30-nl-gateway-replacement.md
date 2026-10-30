@@ -57,12 +57,30 @@ ledger interruption, idempotent replay and fresh-operation exclusion until both 
 Ordinary test-harness issues (missing Git, explicit synthetic unit argument and CLI umask
 isolation) were corrected before the successful run. No production workaround was used.
 
+Source checkpoint `dfbfbc34cc3345e281294ff429555d9b95a35f91` was pushed and remote SHA
+verified before packaging. Only the credential-renewal/controller-node package was rebuilt:
+two byte-identical builds,62716 bytes,17 members. Package SHA256:
+`349018be0015b03743cd9164f287589b79e46f60d405da26712a7d9b71e61e0d`.
+Exact13-module inventory SHA256:
+`7d5012cb0ff7b811f4d33ad42cb4da5e74ae6ce1d1be00a9a38a0c34a9025cf1`.
+Manifest SHA256:
+`edc26e30c88edaf8fabf2d7c69d9e869374b1f0e7238374d4f8394005c9436c4`.
+Six changed modules match the source commit; archive/API member hashes and privacy scan
+PASS. The actual package passes13 module imports, four CLI help commands and one isolated
+canonical-route construction test using its pinned API. Import/help runtime: Python3.13.15;
+this is local qualification, not a production CPython3.14.4 deployment claim.
+The prior accepted renewal artifact remains deployed and is **not superseded** operationally.
+AWG, TCP, gateway binary, Android, snapshot and maintenance artifacts were not rebuilt.
+
 Fresh21:18–21:21UTC read-only evidence confirms the database-only conflict and retains
 authenticated encrypted evidence. At21:22UTC the old node remains fenced with eight
 product units stopped/disabled and no product interfaces/listeners. New AWG/TCP remain
 active; restricted remains inactive, with expired directory still correctly rejected.
 Paid ledger0/0 and catalog sequence3 remain unchanged. No publisher room, directory
 publication, new renewal operation, service start, client cutover or owner smoke occurred.
+Final21:29UTC readback confirms the same conflict, byte-identical controller journal,
+paid0/0, catalog3, paused renewal, fenced old NL and available RU public HTTPS. No new
+production recovery command was sent; both node owners and all history remain retained.
 
 **Next gate:** reconcile the live RU registry additions with the retained operation
 without discarding records or weakening exact-state checks. Do not deploy or execute

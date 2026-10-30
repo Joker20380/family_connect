@@ -4,20 +4,22 @@
 
 [NL gateway replacement — 30 October](releases/2026-10-30-nl-gateway-replacement.md)
 and [sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json):
-**BLOCKED_NL_REPLACEMENT / BLOCKED_RENEWAL_JOURNAL_UNRESOLVED**: read-only continuation
-proves exact controller cannot make rollback terminal with an expired previous leaf,
-even after directory refresh. Original first cause remains `DIRECTORY_INVALID`.
-Publisher contract/source inventory PASS;127 focused tests PASS. No new room/publication,
-source correction or renewal operation. RU/NL rollback readbacks PASS; journal preserved,
-restricted inactive, renewal paused. RU ordinary HTTP restored and public HTTPS dispatch
-verified. Old NL FENCED; new `185.10.158.212` AWG/TCP synthetic DNS/HTTPS/egress/cleanup PASS,
+**BLOCKED_NL_REPLACEMENT / BLOCKED_RENEWAL_JOURNAL_UNRESOLVED**: fenced-rollback source
+correction pushed,168 focused tests PASS/one optional skip, two identical packages and
+import/help/construction PASS, **NOT_DEPLOYED**. Fresh RU rollback readback now fails:
+its registry has two added device rows and two added invite rows, while the RU HTTP reader
+is active inside the renewal barrier. NL readback PASS/readers stopped. Journal remains
+`RECOVERY_REQUIRED`, first cause `DIRECTORY_INVALID`, no commit decision. No recovery
+execution, room/publication or fresh operation. Restricted inactive, renewal paused.
+RU ordinary HTTP/public HTTPS remain available. Old NL FENCED; new
+`185.10.158.212` AWG/TCP synthetic DNS/HTTPS/egress/cleanup previously PASS,
 46 peers/46 credentials, three stable samples/0 restarts. Final coordinated backup verified.
 Ubuntu26.04.1/kernel7.0.0-42, exact runtime/artifacts, about2GiB swap and RU ingress verified.
 Paid ledger0/0, signed catalog sequence3 unchanged; no publication or owner smoke.
 Endpoint-routing source checkpoint has43 passing tests/14 optional skips and reproducible
-builds, but is NOT_DEPLOYED. Next: bounded controller recovery authorization/qualification
-within the same operation, then publisher recovery and remaining acceptance. No bypass,
-journal editing or automatic replay. This operational
+builds, but is NOT_DEPLOYED. Next: resolve RU registry/snapshot conflict without losing
+new records or weakening exact-state checks; then terminalize rollback and continue
+publisher recovery within the same operation. No journal editing or automatic replay. This operational
 exception does not advance the paused product queue.
 **BETA-0-CANARY-1 remains PAUSED; paid events and Android stage0 remain off.**
 

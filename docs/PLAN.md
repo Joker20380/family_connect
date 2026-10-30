@@ -5,20 +5,20 @@
 ### Authorized operational exception — NL-REPLACEMENT-20261030
 
 Availability restoration to `185.10.158.212`, not a new product checkpoint.
-**BLOCKED_NL_REPLACEMENT / BLOCKED_RENEWAL_JOURNAL_UNRESOLVED.** Read-only continuation
-confirms exact controller rollback requires a current-valid previous leaf before terminal
-cleanup; it fails `LEAF_EXPIRED_OR_FUTURE` before directory reconciliation. Normal
-rollforward is unsupported, expired recovery requires a committed checkpoint. Existing
-candidate is current-valid, but that alone does not authorize a journal transition.
-Exact-method replay with simulated writes/RPCs confirms the gate; live journal unchanged.
-Publisher contract/source inventory PASS; no source correction, room creation, publication
-or new renewal operation.127 focused directory/profile/snapshot/sync tests PASS.
-Original promotion failure remains `DIRECTORY_INVALID`. Transaction
-`RECOVERY_REQUIRED`, no commit decision; actual RU/NL rollback readbacks PASS.
-Do not retry blindly, erase the journal, bypass signed-material validation or activate
-expired restricted services. Renewal timer paused and restricted sync timers quiesced.
-RU ordinary HTTP restored after verified rollback; public trusted HTTPS dispatch PASS.
-Final21:00UTC readback: old NL FENCED, paid ledger0/0, catalog sequence3 unchanged.
+**BLOCKED_NL_REPLACEMENT / BLOCKED_RENEWAL_JOURNAL_UNRESOLVED.** Authorized source fix
+`dfbfbc34cc3345e281294ff429555d9b95a35f91` adds verified fenced rollback terminalization
+without accepting expired material or resuming readers.168 focused tests PASS/one optional
+native skip; deterministic package, exact inventory, import/help and package construction PASS.
+Source and package are **NOT_DEPLOYED**: fresh readback finds RU `ROLLBACK_READBACK_MISMATCH`
+in `database_sha256`, with two added device rows and two added invite rows. No removed rows;
+restricted grants/certificates/CRL sequence unchanged. RU ordinary HTTP remains active inside
+the renewal barrier. NL rollback readback PASS and its barrier stopped. The existing journal
+remains byte-identical, `RECOVERY_REQUIRED`, first cause `DIRECTORY_INVALID`, no commit decision.
+Do not overwrite live registry additions or rewrite expected state to claim exact rollback.
+No recovery execution, room generation/publication or fresh operation was attempted.
+Renewal timer paused, restricted gateway inactive and sync timers quiesced.
+Final21:29UTC readback: RU public HTTPS dispatch PASS, old NL FENCED, paid ledger0/0,
+catalog sequence3 unchanged.
 No publication, Android106 endpoint verification or owner smoke.
 
 Completed dependencies: official OS upgrades to Ubuntu26.04.1/kernel7.0.0-42-generic,
@@ -31,11 +31,11 @@ owner accepted TOFU and strict key login is verified. No custom runtime/libc rep
 Source-only configurable endpoint routing checkpoint:43 tests PASS/14 optional skips,
 two reproducible HTTP package builds, NOT_DEPLOYED. No APK update or artifact substitution.
 
-NEXT dependency within this same operation: an authorized bounded controller transition
-to terminal verified rollback while expired readers remain fenced, retaining first cause
-and rollback history. Publisher-only recovery is insufficient and is the only source
-change currently authorized. After that gate, qualify expired-directory recovery before
-canonical promotion, retaining authority and the shared lock. Complete acceptance, take fresh backups and
+NEXT dependency within this same operation: reconcile the live RU registry additions with
+the recorded rollback snapshot without losing records or weakening exact-state checks.
+Only after exact rollback readbacks and stopped barriers may the qualified correction be
+deployed and the existing operation terminalized. Then qualify publisher recovery and one
+fresh renewal, retaining authority and the shared lock. Complete acceptance, take fresh backups and
 publish one monotonic update; actual Android106/owner acceptance remains mandatory.
 Completion gate: stable AWG/TCP/restricted/supporting services, actual SSH snapshot and
 renewal acceptance, one monotonic signed cutover, Android106 endpoint readback and owner
