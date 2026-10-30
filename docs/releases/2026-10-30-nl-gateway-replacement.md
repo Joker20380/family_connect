@@ -1,5 +1,113 @@
 # NL production gateway replacement — 30 October 2026
 
+## Current result — terminal rollback and renewal complete, client cutover held
+
+Observed 2026-10-30T23:10:37+00:00. Same existing operation; no new product checkpoint.
+
+**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / RESTRICTED_TEST_IDENTITY_UNAVAILABLE.**
+The historical rollback is terminal **ABORTED / ROLLED_BACK_READERS_STOPPED** with
+`first_cause=DIRECTORY_INVALID` and separate `terminal_reason=PREVIOUS_LEAF_EXPIRED`.
+Two device and two invite additions are preserved; historical expected hashes and restricted
+state remain exact under the dedicated overlay contract. Both complete archives/ledgers
+PASS, old active owners removed. No old database restoration or expired reader resume.
+
+The bounded publisher recovery created one fresh room (READY PASS), staged and published
+one directory through the accepted atomic store. Strict production directory/DirectoryPort
+validation PASS. One fresh renewal operation is now **COMMITTED**, CRL/floor **27225/27225**,
+current profile/certificate/CRL and synchronized RU/NL directory. Its initial
+`NEW_DIRECTORY_NOT_READY` was resolved by the authorized normal gateway start and explicit
+committed recovery of the same operation; no additional transaction or manual journal edits.
+Actual RU→new-NL forced-command snapshot exits0 with empty stderr; strict schema/signatures
+and non-mutating renewal NOOP PASS. Normal publisher produced its own fresh generation.
+
+Remaining real acceptance blocker: no permitted production-bound synthetic MESH identity
+was found.98 scoped disposable profiles use independent trust, and four previously recorded
+custody locations remain absent. This is not an exhaustive claim about all database users.
+No owner/tester identity was substituted, no new client key/identity/grant was generated.
+MESH registration/DNS/HTTPS/egress therefore remain NOT_RUN; no catalog publication or
+Android106/owner smoke. An existing authorized synthetic identity is required to continue;
+creating one would require an explicit exception to the owner's no-new-identities rule.
+
+Safe hold: old NL FENCED; new185.10.158.212 AWG/TCP remain active with accepted synthetic
+data-plane evidence. Restricted gateway passed three stable samples/zero restarts, then
+was stopped because data-plane acceptance is incomplete. Its integrated publisher is also
+stopped; recovery entrypoint disabled and archived. Renewal/read-only sync definitions now
+use the accepted package and pinned new-host route; actual read-only sync PASS, timers stay
+paused at the acceptance gate. RU ordinary HTTP/public trusted HTTPS healthy, catalog3
+unchanged, paid ledger0/0. Current leaf/CRL expire2026-10-31T02:47:21Z: revalidate freshness
+before continuation and never start expired readers. **BETA-0-CANARY-1 stays PAUSED;
+paid-canary, subscription events and Android stage0 stay off.**
+
+### Source, artifacts and verification
+
+- Registry-overlay source: `e822b391a43dd4cec5949df7a8a33ba6e44872a5`, pushed/remote verified;
+  deployed renewal package SHA256 `2624c1ba1f49863f767ca9e9ea165a5c74c0c4f95a5ba84d2cac1d91d81d5dd1`,66287bytes.
+ 231 focused tests PASS/one optional native interoperability skip; source/member manifests,
+  two identical builds,13 imports/four help commands and canonical-route construction PASS.
+- Publisher recovery source: `a11eb8f2614ed7dff85522c437c54862daedaf74`, pushed/remote verified;
+  package SHA256 `7904fc9e457f74c414e85ac665622a49c9cf5c353affffee1fca301cea59024c`,8700919bytes/4members.
+  Helper binary SHA256 `f44ace11d7013cdf2908e888a5ed6175a936970ab9c9195ddf9846d77f587995`,16342590bytes;
+  source inventory SHA256 `526a5a9884e115cd78bc7d414cd241f4b876bafdccec933d8c53f628eb47c0e6`.
+  The retained282-member source capsule is exact; seven narrowly projected/added members.
+  Two byte-identical builds, manifest/member metadata/hashes, help and privacy scan PASS.
+  Gateway binary remains exact `f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef`.
+- Publisher tests:113 current-tree and119 exact-capsule Go tests PASS;181 focused Python
+  directory/sync/profile-store tests PASS,29 optional integration prerequisites skipped;
+  two bounded source-projection tests PASS. No Android/desktop/full historical suite.
+- Fresh authenticated encrypted backups/readback PASS for controller/node journals,
+  SQLite/schema/integrity, profile/Locator, publisher metadata/configuration and final routes.
+  Protected private records retain full provenance; no material contents enter this report.
+
+### Publisher and fresh renewal result
+
+Recovery directory: old SHA256 `e0c1674381f910b6133d9ce295a01784f47487a437a3ad993e1e3be57a4ba53c`;
+fresh SHA256 `101524bb996a39716bde2a9fef2c6c32e94675e7a81c13ec5f3eff560b8f7a90`.
+Issued `2026-10-30T22:40:46.140928387Z`, expires `2026-10-31T02:40:46.140928387Z`.
+Exactly one recovery room creation and one recovery live promotion; real room READY PASS,
+staging left live bytes unchanged, publisher contract/parent/ownership/mode preserved.
+Profile/CRL/floor unchanged by this worker. Normal runtime then generated a separate directory:
+SHA256 `31ce04ac75168db1119bc299bd8bd4736c79232ae1fa799d448ac18edfa0f77a`, issued `2026-10-30T22:52:38.661449239Z`,
+expires `2026-10-31T02:52:36.127149321Z`. This is normal publisher startup, not a second
+recovery publication. RU/NL copies are equal through the accepted renewal/read-only sync path.
+
+Historical operation safe label `HISTORICAL_NL_REPLACEMENT_ROLLBACK` remains ABORTED;
+original cause and complete archives are retained. Fresh operation safe label
+`FRESH_NL_RENEWAL_1` is COMMITTED, with both cleanup ledgers and no active owners.
+Its first cause `NEW_DIRECTORY_NOT_READY` is preserved: the original service snapshot was
+inactive, so normal resume did not start the publisher. After strict current candidate and
+two-node commit reconciliation, one authorized gateway start generated a fresh directory;
+explicit committed recovery finished that same transaction. No commit-decision reversal.
+The historical terminalization HTTP outage was122.44s. The separate fresh-renewal maintenance
+outage was387.23s; RU HTTP is restored with original exact artifact/argv.
+
+Actual forced-account SSH snapshot: exit0, stderr empty, schema/signatures/current certificate
+and CRL/floor PASS. Non-mutating renewal evaluation NOOP. The ordinary registry additions and
+all pre-renewal device/invite rows remain present. Paid subscriptions/events0/0.
+Schedule definitions/source pins/new-NL route aligned, but timers not resumed. A bounded
+read-only directory sync service run PASS. Its initial protected-home known-hosts path issue
+was corrected by copying the exact already-pinned host entry into the root-controlled runtime
+boundary; StrictHostKeyChecking and systemd ProtectHome remain enabled. No trust relaxation.
+
+### Acceptance hold and remaining work
+
+One restricted gateway start, three stable PID/memory samples,0 restarts/OOM/storage errors,
+current profile and healthy directory were observed. These are not MESH data-plane acceptance.
+No allowed production-bound synthetic credential was located in scoped retained material;
+independent-trust fixtures are not a substitute. No owner/tester private identity was used.
+Restricted was stopped once for safe pre-publication hold; normal publisher stops with it.
+The one-shot recovery permit is archived/disabled. Ordinary AWG/TCP and load monitoring stay
+active. Old NL remains persistently fenced; unavailable old-node metrics are not zero users.
+
+Catalog sequence3 and RU configuration remain unchanged; endpoint-routing source is still
+NOT_DEPLOYED, normal client publication/Android106/owner smoke NOT_RUN. Full NL acceptance
+and READY_FOR_OWNER_NL_SMOKE are not claimed. Continue only after resolving the synthetic
+identity prerequisite and revalidating material freshness; then actual MESH data-plane,
+normal schedules, monotonic client publication and owner smoke. No new checkpoint is needed.
+Rollback status: PRE_PUBLICATION_SAFE_HOLD; no old-NL reactivation, no database restoration,
+no identity conflict, no temporary write credential and no pending renewal operation.
+
+## Earlier observations — superseded by the current result
+
 ## Confirmed terminal rollback and publisher continuation
 
 The existing rollback is now terminal **ABORTED / ROLLED_BACK_READERS_STOPPED**.

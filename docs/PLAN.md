@@ -4,37 +4,46 @@
 
 ### Authorized operational exception — NL-REPLACEMENT-20261030
 
-The existing rollback is now terminal **ABORTED / ROLLED_BACK_READERS_STOPPED**.
-Source `e822b391a43dd4cec5949df7a8a33ba6e44872a5` and its deterministic renewal package
-were deployed through the recovery-only bridge. Fresh quiesced proof preserved two device
-and two invite additions, all historical rows and exact restricted tables. Historical
-expected hashes and `first_cause=DIRECTORY_INVALID` are unchanged; terminal reason is
-`PREVIOUS_LEAF_EXPIRED`, with no commit decision or expired reader resume. Both node owners
-were released only after complete archive and `CLEANED_FENCED_ROLLBACK` ledger verification.
-The single RU HTTP stop/start lasted122.44s; ordinary HTTP/public trusted HTTPS are restored
-with the original artifact/argv and all registrations retained. Paid ledger remains0/0.
+**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / RESTRICTED_TEST_IDENTITY_UNAVAILABLE.**
+The historical rollback is terminal **ABORTED / ROLLED_BACK_READERS_STOPPED** with
+`first_cause=DIRECTORY_INVALID` and separate `terminal_reason=PREVIOUS_LEAF_EXPIRED`.
+Two device and two invite additions are preserved; historical expected hashes and restricted
+state remain exact under the dedicated overlay contract. Both complete archives/ledgers
+PASS, old active owners removed. No old database restoration or expired reader resume.
 
-Next within **NL-REPLACEMENT-20261030**: bounded publisher recovery, one fresh renewal,
-actual restricted/snapshot/MESH acceptance, schedules and monotonic client publication.
-The integrated publisher has no one-shot command and rejects the expired predecessor before
-room creation. A narrowly scoped fixed-configuration recovery worker is therefore qualified
-from the exact retained publisher source; no gateway binary rebuild or validator weakening.
-It checks historical signatures/binding and the exact publisher contract, journals one room
-attempt, verifies READY, stages privately and uses the existing locked atomic store.
-It never writes profile/CRL/floor and never starts expired readers. Recovery is unavailable
-once its fixed permit expires or normal current material is restored.
+The bounded publisher recovery created one fresh room (READY PASS), staged and published
+one directory through the accepted atomic store. Strict production directory/DirectoryPort
+validation PASS. One fresh renewal operation is now **COMMITTED**, CRL/floor **27225/27225**,
+current profile/certificate/CRL and synchronized RU/NL directory. Its initial
+`NEW_DIRECTORY_NOT_READY` was resolved by the authorized normal gateway start and explicit
+committed recovery of the same operation; no additional transaction or manual journal edits.
+Actual RU→new-NL forced-command snapshot exits0 with empty stderr; strict schema/signatures
+and non-mutating renewal NOOP PASS. Normal publisher produced its own fresh generation.
 
-New NL185.10.158.212 ordinary AWG/TCP server data-plane remains accepted; old NL is FENCED.
-Restricted gateway inactive, renewal paused, stale directory retained. No room generation,
-directory publication, fresh renewal, client catalog change or owner smoke yet. Catalog3.
-**BETA-0-CANARY-1 remains PAUSED; paid events and Android stage0 remain off.**
+Remaining real acceptance blocker: no permitted production-bound synthetic MESH identity
+was found.98 scoped disposable profiles use independent trust, and four previously recorded
+custody locations remain absent. This is not an exhaustive claim about all database users.
+No owner/tester identity was substituted, no new client key/identity/grant was generated.
+MESH registration/DNS/HTTPS/egress therefore remain NOT_RUN; no catalog publication or
+Android106/owner smoke. An existing authorized synthetic identity is required to continue;
+creating one would require an explicit exception to the owner's no-new-identities rule.
 
-Completion gate: stable AWG/TCP/restricted/supporting services, real SSH snapshot and
-disposable MESH DNS/HTTPS/egress, one monotonic signed cutover, Android106 endpoint readback
-and owner AWG/TCP/Auto-MESH smoke. Do not infer acceptance from systemd state. Do not reuse
-the aborted operation ID or resume restricted readers before fresh material promotion.
-No automatic advancement into the paused product queue.
-[Current report and rollback](releases/2026-10-30-nl-gateway-replacement.md).
+Safe hold: old NL FENCED; new185.10.158.212 AWG/TCP remain active with accepted synthetic
+data-plane evidence. Restricted gateway passed three stable samples/zero restarts, then
+was stopped because data-plane acceptance is incomplete. Its integrated publisher is also
+stopped; recovery entrypoint disabled and archived. Renewal/read-only sync definitions now
+use the accepted package and pinned new-host route; actual read-only sync PASS, timers stay
+paused at the acceptance gate. RU ordinary HTTP/public trusted HTTPS healthy, catalog3
+unchanged, paid ledger0/0. Current leaf/CRL expire2026-10-31T02:47:21Z: revalidate freshness
+before continuation and never start expired readers. **BETA-0-CANARY-1 stays PAUSED;
+paid-canary, subscription events and Android stage0 stay off.**
+
+NEXT within this same operation: locate an authorized production-bound synthetic identity;
+revalidate material freshness, finish real MESH acceptance, resume normal schedules, then
+deploy the prepared endpoint-routing configuration and publish one monotonic NL catalog.
+Only after server acceptance/publication issue READY_FOR_OWNER_NL_SMOKE and complete
+Android106 AWG/TCP/Auto-MESH plus cleanup. No new PLAN ID or automatic product-queue advance.
+[Current evidence and rollback](releases/2026-10-30-nl-gateway-replacement.md).
 Earlier provider/network observations below are retained context, not the restoration path.
 
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
