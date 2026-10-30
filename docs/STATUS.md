@@ -2,7 +2,7 @@
 
 ## NL availability restoration — 30 October
 
-**NL-REPLACEMENT-20261030 / HOST_BASELINE_VERIFIED_RESTORE_PENDING.** Owner-authorized
+**NL-REPLACEMENT-20261030 / INACTIVE_RESTORE_VERIFIED_FENCING_PENDING.** Owner-authorized
 official22.04→24.04→26.04 upgrades completed. Final readback19:11UTC: Ubuntu26.04.1,
 kernel7.0.0-42-generic, strict SSH, NTP/TUN/cloud-init PASS, no failed units or pending
 reboot. Four guarded reboots completed, including removal of the upgrader's320MiB
@@ -11,7 +11,11 @@ About2GiB persistent swap, bounded SSH fail2ban and journal retention are config
 CPython3.14.4 executable matches the accepted hash exactly; retained pinned dependencies,
 snapshot import, gateway help and Xray execution PASS in an isolated runtime check.
 Required TCP/UDP diagnostic probes PASS from workstation and RU; RU SYN captured on
-the new interface. This is not VPN/data-plane acceptance. No product identity installed,
+the new interface. This is not VPN/data-plane acceptance. Private13-role matrix derived;
+5285 files/689 directories staged with all product service starts guarded. Five locked
+service accounts restored; two UID collisions remapped by account, source GIDs retained.
+Canonical boundaries, exact snapshot launcher/runtime, mailbox identity/isolated volume,
+TCP/WG configurations and scoped firewall syntax PASS. No production identity activation,
 old-node fencing or client publication. Canary remains PAUSED.
 The initial read-only **BLOCKED_NEW_HOST_OS** finding is retained as provenance:
 replacement production NL `185.10.158.212` initially had Ubuntu22.04.1/glibc2.35, incompatible
@@ -35,11 +39,11 @@ old-service change, catalog/directory publication or client smoke. Additional en
 current application/infrastructure and recovery bundles verified;46 AWG peers and46
 TCP credentials have no duplicates, AWG backup matches the running identity/inventory.
 Historical canonical signatures/bindings PASS, floor/CRL27224 aligned; expired material
-is provenance only, not READY. Full private restoration matrix remains unfinished.
+is provenance only, not READY. Final coordinated mutable export is still required after fencing.
 RU configuration unchanged; ledger last accepted0/0, not freshly queried in this audit.
 **BETA-0-CANARY-1 PAUSED; paid-canary, subscription events and Android stage0 NOT_RUN.**
-Next: complete the private restoration matrix and inactive staging, then fence old NL
-before restoring production services and renewing restricted materials. No disk reinstallation;
+Next: fence old NL, take the final mutable export, then activate restored services and
+renew restricted materials through the accepted route. No disk reinstallation;
 existing SSH host keys/access are preserved. Fencing must precede copied
 identity activation; server data-plane acceptance must precede one monotonic publication.
 [Restoration report and rollback](releases/2026-10-30-nl-gateway-replacement.md) ·

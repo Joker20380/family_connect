@@ -5,7 +5,7 @@
 ### Authorized operational exception — NL-REPLACEMENT-20261030
 
 Availability restoration to `185.10.158.212`, not a new product checkpoint.
-**HOST_BASELINE_VERIFIED_RESTORE_PENDING**, owner-authorized installation continuation.
+**INACTIVE_RESTORE_VERIFIED_FENCING_PENDING**, owner-authorized installation continuation.
 Official22.04→24.04→26.04 upgrades and four guarded reboots completed; Ubuntu26.04.1,
 kernel7.0.0-42-generic. Unneeded320MiB crash-kernel reservation removed; about2GiB swap,
 bounded SSH/log protection, NTP/TUN and strict key login PASS. Exact CPython3.14.4 hash,
@@ -22,10 +22,12 @@ artifacts match exact anchors. Later42-file coordinated backup exported read-onl
 verified with encrypted local readback; additional current backups and recovery bundles
 verified.46 AWG peers match the running identity/registry;46 TCP credentials are unique.
 Historical canonical signatures/bindings PASS, but current-valid material is still pending.
-Full private restoration matrix/consistent final export remain pending. Old NL ordinary/support services remain
-active, restricted disabled, fencing NOT_RUN. No product or control-plane mutation.
-Dependencies: host baseline/runtime checks complete; next qualify complete private
-matrix/backup and exact identities → prepare inactive service staging → prove old-NL
+Private13-role matrix derived;5285 files/689 directories staged behind service-start
+guards. Five locked service accounts, exact snapshot launcher/runtime and canonical
+boundaries qualified; mailbox identity/volume and TCP/WG/firewall preflight PASS.
+Final coordinated mutable export remains pending. Old ordinary/support services remain
+active, restricted disabled, fencing NOT_RUN. No live product/control-plane mutation.
+Dependencies: host baseline, exact runtime, private matrix and inactive staging complete → prove old-NL
 fencing → restore/renew through accepted routes → synthetic data-plane and RU-path gates.
 Completion gate: stable AWG/TCP/restricted/supporting services, actual SSH snapshot and
 renewal acceptance, one monotonic signed cutover, Android106 endpoint readback and owner

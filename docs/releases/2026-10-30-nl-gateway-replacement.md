@@ -2,12 +2,12 @@
 
 ## Status and authorization
 
-**NL-REPLACEMENT-20261030 / HOST_BASELINE_VERIFIED_RESTORE_PENDING.** After the initial
+**NL-REPLACEMENT-20261030 / INACTIVE_RESTORE_VERIFIED_FENCING_PENDING.** After the initial
 blocked audit, the owner authorized installing the required OS/packages over SSH.
 Supported LTS upgrades and exact-runtime compatibility checks are complete, not a
 provider disk reinstallation or product deployment. Final OS: Ubuntu26.04.1 LTS,
-kernel7.0.0-42-generic. Product restore/acceptance remain pending.
-No product identity, old-node fencing, catalog publication or client smoke yet.
+kernel7.0.0-42-generic. Inactive file restoration is verified; product activation and
+acceptance remain pending. No old-node fencing, catalog publication or client smoke yet.
 
 The initial **BLOCKED_NEW_HOST_OS** finding was an incompatible OS/runtime: Ubuntu22.04/glibc2.35
 cannot load the exact accepted CPython3.14.4 executable requiring `GLIBC_2.38`.
@@ -95,6 +95,29 @@ monitor were active; restricted gateway was inactive/disabled. All six observed
 **Old NL remains unfenced**; nothing has been activated on the replacement. No identity
 conflict was introduced. Old service activity is not evidence of healthy production.
 
+## Inactive restoration qualification
+
+Private deployment matrix now covers13 roles and10 source units, including ordinary
+AWG/TCP, canonical gateway, snapshot/renewal/publisher/maintenance boundaries, mailbox,
+Reticulum, monitoring, retained legacy AWG/native WG and the mailbox mount.5285 verified
+files and689 directories are restored inactive. Full paths/configurations remain private.
+Five locked service accounts preserve names/groups; two numeric UID collisions with
+base OS accounts were remapped, without changing those OS accounts or creating admins.
+Production service starts are guarded by an absent activation marker. Forced-command
+authorized-key routes are not installed; existing new-host SSH identity/admin access is unchanged.
+
+The external interface changes from the observed old `ens3` to new `eth0` in the two
+active JSON configurations and two scoped nftables files only. No signed material or
+binary was patched. The publisher directory inode/device binding and dependent locator
+hashes are rebound to the new filesystem; profile/directory ownership boundaries remain
+separate. A missing parent-directory traversal mode was corrected from source metadata.
+Exact accepted snapshot launcher bytes match after fresh pinned-runtime qualification.
+Mailbox uses a newly allocated bounded ext4 volume with the original marker, identities
+and file-level snapshot; no live filesystem image was copied. Mailbox preflight, Xray
+configuration, native WG configuration and both scoped firewall syntax checks PASS.
+These checks neither start product listeners nor establish current-valid restricted
+materials, data-plane acceptance, actual SSH snapshot or successful renewal.
+
 ## Acceptance and publication gates
 
 ### Authorized host preparation continuation
@@ -181,7 +204,7 @@ misreported as gateway-binary corruption or a failure of all five accepted packa
 | Architecture/TUN/NTP | Read-only x86_64/TUN/NTP PASS; no data-plane test |
 | Provider constraints/recovery console | Required diagnostic ports reachable from RU/workstation; console NOT_VERIFIED |
 | Base preparation, updates/reboot, swap and SSH recovery | Four guarded reboots, final OS/swap/strict SSH PASS; console still unavailable |
-| Full private matrix/current identity coverage | INCOMPLETE |
+| Private deployment matrix/inactive identity staging |13 roles derived;5285 files/689 directories restored inactive; final mutable export pending |
 | Old-NL fencing | NOT_RUN; ordinary/support services still active |
 | New AWG handshake, DNS, HTTPS and cleanup | NOT_RUN |
 | New TCP authentication, tunneled HTTPS and cleanup | NOT_RUN |
@@ -201,8 +224,8 @@ No new NL readiness, rollout or full-success claim is made.
 
 ## Resume and rollback
 
-Host preparation is complete. Finish the private restoration matrix and inactive
-staging; no normal-client publication is authorized before the remaining acceptance gates.
+Host preparation, private matrix and inactive staging are complete. Fence old NL and
+take the final coordinated mutable export; no normal-client publication before acceptance.
 No disk reinstallation was performed; SSH host keys and root access remain intact.
 The preferred24.04 baseline does not meet the full retained extension ABI requirements,
 so26.04 is the verified final baseline.
@@ -220,11 +243,10 @@ signed NL control-plane update. Verify Android106 without an APK change before a
 for the owner's AWG smoke, then TCP, then Auto/MESH. Canary stays paused throughout.
 
 Rollback now: **NOT_NEEDED_NO_PUBLICATION**. No product endpoint, service or identity
-was changed. New-host management changes now include SSH setup and authorized base/OS
-preparation; these are not a product rollout. Encrypted pre-upgrade configuration is
+was activated. Inactive identity/configuration files are present behind service-start
+guards, without authorized-key routes. These are not a product rollout. Encrypted pre-upgrade configuration is
 retained, but it is not a full disk image or a promise of automatic OS downgrade.
-Do not fence the still-serving old ordinary services merely to close this
-blocked audit; fencing remains mandatory before replacement identity activation.
+Old-node fencing is the next operational dependency before replacement identity activation.
 Before publication, a failed replacement stays unpublished and RU unchanged. After a
 failed publication, use the supported catalog mechanism to stop NL admission/return to
 RU; do not reactivate old NL without independent full acceptance. Never serve one copied

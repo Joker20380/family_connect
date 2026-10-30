@@ -4,7 +4,7 @@
 
 [NL gateway replacement — 30 October](releases/2026-10-30-nl-gateway-replacement.md)
 and [sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json):
-**HOST_BASELINE_VERIFIED_RESTORE_PENDING**: owner-authorized installation on
+**INACTIVE_RESTORE_VERIFIED_FENCING_PENDING**: owner-authorized installation on
 `185.10.158.212` completed through official22.04→24.04→26.04 upgrades. Ubuntu26.04.1,
 kernel7.0.0-42-generic, four guarded reboots, about2GiB swap, NTP/TUN/strict SSH PASS.
 Exact CPython3.14.4 and retained runtime imports/execution PASS. Required diagnostic
@@ -12,7 +12,9 @@ TCP/UDP ingress PASS from workstation/RU; RU SYN captured, not VPN acceptance.
 Initial Ubuntu22.04/glibc2.35 was incompatible; the interpreter needsGLIBC2.38 and
 its retained extensions needGLIBC2.42/OpenSSL3.4. No custom runtime/libc substitution.
 Owner-interactive SSH key setup and strict pinned login PASS; provider verification
-was unavailable. Exact artifacts and retained coordinated backup verified; no product
+was unavailable. Private13-role matrix and inactive restoration verified;5285 files,
+canonical boundaries/exact launcher, mailbox identity/volume and configuration checks PASS.
+Service-start guards remain in place; final mutable export is pending. No product
 identity activation, fencing or publication. This availability-restoration task
 supersedes provider repair as the active recovery path, not the paused product queue.
 **BETA-0-CANARY-1 remains PAUSED; paid events and Android stage0 remain off.**

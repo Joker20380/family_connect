@@ -2,7 +2,7 @@
   "schema": 1,
   "task": "NL-REPLACEMENT-20261030",
   "scope": "AVAILABILITY_RESTORATION_NOT_PRODUCT_CHECKPOINT",
-  "status": "HOST_BASELINE_VERIFIED_RESTORE_PENDING",
+  "status": "INACTIVE_RESTORE_VERIFIED_FENCING_PENDING",
   "blocker": null,
   "initial_blocker": "BLOCKED_NEW_HOST_OS",
   "target": {
@@ -107,7 +107,7 @@
     "old_host_records": 112,
     "expanded_recovery_files": 5653,
     "expanded_units": 9,
-    "complete_deployment_matrix": false,
+    "complete_deployment_matrix": true,
     "full_identity_recovery_qualified": false
   },
   "coordinated_backup": {
@@ -191,11 +191,30 @@
     "android_stage0": "NOT_RUN",
     "paid_ledger_last_accepted": {"subscriptions": 0, "events": 0},
     "paid_ledger_fresh_query": "NOT_RUN",
-    "product_and_control_plane_mutations": 0,
+    "live_product_and_control_plane_mutations": 0,
     "new_host_management_change": "AUTHORIZED_SSH_BASE_PACKAGES_AND_OS_UPGRADE"
   },
   "rollback": "NOT_NEEDED_NO_PUBLICATION",
-  "next_action": "COMPLETE_PRIVATE_MATRIX_AND_INACTIVE_STAGING_THEN_FENCE_OLD_NL_BEFORE_ACTIVATION",
+  "inactive_restoration": {
+    "roles": 13,
+    "source_units": 10,
+    "files": 5285,
+    "directories": 689,
+    "locked_service_accounts": 5,
+    "remapped_uid_collisions": 2,
+    "new_administrators": 0,
+    "service_start_guards": true,
+    "authorized_key_routes_installed": false,
+    "snapshot_launcher_exact_bytes": "PASS",
+    "snapshot_runtime_requalification": "PASS",
+    "canonical_boundaries": "PASS",
+    "mailbox_identity_and_isolated_volume": "PASS",
+    "tcp_and_native_wg_configuration": "PASS",
+    "scoped_firewall_syntax": "PASS",
+    "current_material_validity": "PENDING_RENEWAL",
+    "final_coordinated_mutable_export": "PENDING_FENCING"
+  },
+  "next_action": "FENCE_OLD_NL_THEN_FINAL_MUTABLE_EXPORT_AND_GUARDED_ACTIVATION",
   "checks": {
     "strict_json": "PASS",
     "targeted_privacy_secret_scan": "PASS",
