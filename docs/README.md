@@ -4,7 +4,11 @@
 
 [NL gateway replacement — 30 October](releases/2026-10-30-nl-gateway-replacement.md)
 and [sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json):
-**INACTIVE_RESTORE_VERIFIED_FENCING_PENDING**: owner-authorized installation on
+**ORDINARY_PASS_RESTRICTED_RENEWAL_PENDING**: old NL FENCED, final coordinated backup
+verified. New AWG/TCP synthetic DNS/HTTPS/egress/cleanup PASS;46 peers/46 credentials,
+three stable samples and0 restarts. Restricted renewal/supporting acceptance pending;
+no signed cutover or owner smoke. RU backup verified, ledger0/0 and catalog sequence3
+unchanged. Earlier owner-authorized installation on
 `185.10.158.212` completed through official22.04→24.04→26.04 upgrades. Ubuntu26.04.1,
 kernel7.0.0-42-generic, four guarded reboots, about2GiB swap, NTP/TUN/strict SSH PASS.
 Exact CPython3.14.4 and retained runtime imports/execution PASS. Required diagnostic

@@ -5,7 +5,13 @@
 ### Authorized operational exception — NL-REPLACEMENT-20261030
 
 Availability restoration to `185.10.158.212`, not a new product checkpoint.
-**INACTIVE_RESTORE_VERIFIED_FENCING_PENDING**, owner-authorized installation continuation.
+**ORDINARY_PASS_RESTRICTED_RENEWAL_PENDING**, owner-authorized installation continuation.
+Old NL now FENCED: eight product units, persistent restart/ingress guards, absent listeners
+and interfaces, external TCP checks. Final coordinated encrypted export PASS. New AWG/TCP
+synthetic DNS/HTTPS/egress/cleanup PASS;46 peers/46 credentials, three stable samples,
+0 restarts. Supporting roles started; canonical SSH RPC inspection PASS, expired snapshot
+correctly rejected. RU backup and ledger0/0 readback PASS; catalog sequence3 unchanged.
+No owner smoke or client publication. Earlier host/staging provenance follows.
 Official22.04→24.04→26.04 upgrades and four guarded reboots completed; Ubuntu26.04.1,
 kernel7.0.0-42-generic. Unneeded320MiB crash-kernel reservation removed; about2GiB swap,
 bounded SSH/log protection, NTP/TUN and strict key login PASS. Exact CPython3.14.4 hash,
@@ -27,8 +33,9 @@ guards. Five locked service accounts, exact snapshot launcher/runtime and canoni
 boundaries qualified; mailbox identity/volume and TCP/WG/firewall preflight PASS.
 Final coordinated mutable export remains pending. Old ordinary/support services remain
 active, restricted disabled, fencing NOT_RUN. No live product/control-plane mutation.
-Dependencies: host baseline, exact runtime, private matrix and inactive staging complete → prove old-NL
-fencing → restore/renew through accepted routes → synthetic data-plane and RU-path gates.
+Dependencies now: host, private matrix, final backup, fencing and ordinary synthetic
+data plane complete → accepted restricted renewal → remaining supporting/restricted
+data-plane gates → monotonic publication and actual Android106/owner acceptance.
 Completion gate: stable AWG/TCP/restricted/supporting services, actual SSH snapshot and
 renewal acceptance, one monotonic signed cutover, Android106 endpoint readback and owner
 AWG/TCP/Auto-MESH smoke, monitoring updated, old NL fenced. No acceptance from unit state.

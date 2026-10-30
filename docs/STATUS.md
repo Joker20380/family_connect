@@ -2,7 +2,17 @@
 
 ## NL availability restoration — 30 October
 
-**NL-REPLACEMENT-20261030 / INACTIVE_RESTORE_VERIFIED_FENCING_PENDING.** Owner-authorized
+**NL-REPLACEMENT-20261030 / ORDINARY_PASS_RESTRICTED_RENEWAL_PENDING.** Old NL is now
+**FENCED**: eight product units stopped/disabled, restart guards and persistent scoped
+ingress isolation verified, interfaces/listeners absent, external TCP checks negative.
+Administrative SSH and evidence are retained. Final coordinated encrypted export PASS.
+New NL ordinary AWG and TCP synthetic data-plane PASS: DNS, external HTTPS, egress
+`185.10.158.212`, cleanup; AWG IPv6 fails closed.46 authoritative peers/46 TCP credentials,
+three stable samples, unchanged PIDs and0 restarts. Supporting services started, not yet
+fully accepted. Canonical SSH forced-command RPC inspection PASS; read-only snapshot
+correctly rejects expired material. Renewal/current restricted acceptance remains pending.
+RU backup verified; paid ledger freshly0/0, catalog sequence3 unchanged. No publication
+or owner smoke; canary stays PAUSED. Host/staging provenance follows. Owner-authorized
 official22.04→24.04→26.04 upgrades completed. Final readback19:11UTC: Ubuntu26.04.1,
 kernel7.0.0-42-generic, strict SSH, NTP/TUN/cloud-init PASS, no failed units or pending
 reboot. Four guarded reboots completed, including removal of the upgrader's320MiB
@@ -42,8 +52,8 @@ Historical canonical signatures/bindings PASS, floor/CRL27224 aligned; expired m
 is provenance only, not READY. Final coordinated mutable export is still required after fencing.
 RU configuration unchanged; ledger last accepted0/0, not freshly queried in this audit.
 **BETA-0-CANARY-1 PAUSED; paid-canary, subscription events and Android stage0 NOT_RUN.**
-Next: fence old NL, take the final mutable export, then activate restored services and
-renew restricted materials through the accepted route. No disk reinstallation;
+Next: renew restricted materials through the accepted route, complete supporting-role
+and restricted data-plane acceptance, then perform the guarded signed cutover. No disk reinstallation;
 existing SSH host keys/access are preserved. Fencing must precede copied
 identity activation; server data-plane acceptance must precede one monotonic publication.
 [Restoration report and rollback](releases/2026-10-30-nl-gateway-replacement.md) ·

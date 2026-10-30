@@ -2,12 +2,15 @@
 
 ## Status and authorization
 
-**NL-REPLACEMENT-20261030 / INACTIVE_RESTORE_VERIFIED_FENCING_PENDING.** After the initial
+**NL-REPLACEMENT-20261030 / ORDINARY_PASS_RESTRICTED_RENEWAL_PENDING.** Old NL is FENCED;
+new ordinary AWG/TCP synthetic data-plane and cleanup PASS. Restricted renewal, remaining
+supporting/data-plane acceptance, signed publication and owner smoke are pending.
+Host/staging provenance: after the initial
 blocked audit, the owner authorized installing the required OS/packages over SSH.
 Supported LTS upgrades and exact-runtime compatibility checks are complete, not a
 provider disk reinstallation or product deployment. Final OS: Ubuntu26.04.1 LTS,
 kernel7.0.0-42-generic. Inactive file restoration is verified; product activation and
-acceptance remain pending. No old-node fencing, catalog publication or client smoke yet.
+acceptance were then pending. Current fencing/ordinary results are recorded below.
 
 The initial **BLOCKED_NEW_HOST_OS** finding was an incompatible OS/runtime: Ubuntu22.04/glibc2.35
 cannot load the exact accepted CPython3.14.4 executable requiring `GLIBC_2.38`.
@@ -118,6 +121,46 @@ configuration, native WG configuration and both scoped firewall syntax checks PA
 These checks neither start product listeners nor establish current-valid restricted
 materials, data-plane acceptance, actual SSH snapshot or successful renewal.
 
+## Fencing and ordinary data plane
+
+Old NL: eight product units stopped/disabled, with persistent missing-marker restart
+guards and a separate scoped ingress quarantine. Product interfaces and listeners are
+absent; external TCP443/4242/4243 no longer accept connections. RU mutating SSH ingress
+to old NL is blocked while direct operator SSH and read-only local monitoring remain.
+No old file or identity was deleted. An initial verification fixture treated systemd's
+unprintable `Conditions` property as text; corrected readback checks loaded guard files,
+unit states, network interfaces and actual firewall rules instead. Fencing is proven.
+
+Final coordinated export19:59:43UTC runs with product services inactive, mutating ingress
+isolated and profile/registration/membership locks held:5289 files,709 directories,
+75623230bytes, SHA256 `a7e8b7ed5eec29ec0ccec166d295c02995dc2608bce179d2a2165d46daae9b8f`.
+Authenticated encrypted readback PASS; two changed files reconciled before activation.
+The new host retains its own verified SSH host identity and owner administrative key.
+Four accepted forced-command public-key lines and one bounded sudoers route are restored;
+no private SSH key was transferred. Actual RU→new-NL canonical RPC inspection PASS.
+Snapshot rejects the expired profile; this is not current-valid snapshot acceptance.
+A canonical JSON newline fixture error was corrected without rebuilding any artifact.
+
+New scoped ingress is default-deny with loopback, established/related, ICMP/IPv6 ICMP,
+SSH and only required product ports allowed. SSH/fail2ban remain usable; no global flush.
+Accepted IPv4 forwarding/rp-filter and IPv6 policy verified; scoped AWG NAT uses `eth0`.
+AWG/TCP plus retained legacy interfaces, mailbox, Reticulum and monitoring started.
+Restricted gateway remains inactive pending current-valid materials.
+
+- AWG20:03UTC: synthetic handshake, DNS, HTTPS, new-IP egress, IPv6 fail-closed and cleanup PASS.
+- TCP20:04UTC: synthetic REALITY authentication, remote DNS, HTTPS, new-IP egress and cleanup PASS.
+- No owner/paid-canary identity or persistent peer/credential was used. A non-root Docker
+  fixture write-permission error was corrected inside the bounded synthetic container.
+- Three samples over30seconds: stable ordinary/supporting PIDs,0 restarts,46 authoritative
+  AWG peers/46 TCP credentials, no duplicate allowed addresses, no OOM/kernel storage error.
+- New monitoring samples are fresh. Old provider capacity200Mbps is not asserted for the
+  replacement: capacity remains unknown until independently established.
+- Fresh RU application backup:54 files/six SQLite databases; infrastructure backup:40 files;
+  encrypted/hash-verified. Paid subscriptions/events0/0; signed catalog sequence3 unchanged.
+
+These are server-side ordinary results, not full supporting-role/MESH or owner acceptance.
+No normal-client endpoint or RU production route has been switched.
+
 ## Acceptance and publication gates
 
 ### Authorized host preparation continuation
@@ -204,28 +247,28 @@ misreported as gateway-binary corruption or a failure of all five accepted packa
 | Architecture/TUN/NTP | Read-only x86_64/TUN/NTP PASS; no data-plane test |
 | Provider constraints/recovery console | Required diagnostic ports reachable from RU/workstation; console NOT_VERIFIED |
 | Base preparation, updates/reboot, swap and SSH recovery | Four guarded reboots, final OS/swap/strict SSH PASS; console still unavailable |
-| Private deployment matrix/inactive identity staging |13 roles derived;5285 files/689 directories restored inactive; final mutable export pending |
-| Old-NL fencing | NOT_RUN; ordinary/support services still active |
-| New AWG handshake, DNS, HTTPS and cleanup | NOT_RUN |
-| New TCP authentication, tunneled HTTPS and cleanup | NOT_RUN |
+| Private deployment matrix/identity staging |13 roles derived; inactive staging and final coordinated mutable export complete |
+| Old-NL fencing | FENCED; eight product units disabled, interfaces/listeners absent, persistent guards |
+| New AWG handshake, DNS, HTTPS and cleanup | PASS synthetic; egress185.10.158.212, IPv6 fail-closed |
+| New TCP authentication, tunneled HTTPS and cleanup | PASS synthetic; egress185.10.158.212 |
 | Canonical profile, fresh certificate/CRL/floor/directory | NOT_RUN; expired old material not accepted |
 | Actual snapshot SSH, renewal preflight/timer and restricted data plane | NOT_RUN |
-| Supporting roles and accepted firewall/NAT/sysctl restoration | NOT_RUN |
+| Supporting roles and accepted firewall/NAT/sysctl restoration | Services started; scoped networking verified; supporting data plane pending |
 | RU-origin packet arrival | Diagnostic ports/SYN PASS; product data plane NOT_RUN |
-| Multi-sample stability and monitoring cutover | NOT_RUN |
-| Fresh RU backup, ledger and configuration prepublication checks | NOT_RUN |
+| Multi-sample stability and monitoring cutover | Three ordinary/supporting samples PASS; inventory cutover pending |
+| Fresh RU backup, ledger and configuration prepublication checks | Backups PASS, ledger0/0; recheck before publication |
 | New signed catalog sequence and restricted publication | NOT_PUBLISHED; no sequence allocated |
 | Android106 endpoint fetch and owner AWG/TCP/Auto-MESH smoke | NOT_RUN |
 
 RU production configuration and the existing catalog were not changed. Paid ledger0/0
-is the last accepted incident observation, **not a fresh query in this audit**. Monitoring
+is freshly queried during the RU backup. Monitoring
 inventory remains unchanged; unavailable old registry data must not be reported as zero.
 No new NL readiness, rollout or full-success claim is made.
 
 ## Resume and rollback
 
-Host preparation, private matrix and inactive staging are complete. Fence old NL and
-take the final coordinated mutable export; no normal-client publication before acceptance.
+Host preparation, private matrix, final coordinated export, fencing and ordinary synthetic
+acceptance are complete. Finish restricted renewal/supporting gates before publication.
 No disk reinstallation was performed; SSH host keys and root access remain intact.
 The preferred24.04 baseline does not meet the full retained extension ABI requirements,
 so26.04 is the verified final baseline.
@@ -242,11 +285,12 @@ fresh RU backup and verify ledger0/0, paused canary and fencing; publish one mon
 signed NL control-plane update. Verify Android106 without an APK change before asking
 for the owner's AWG smoke, then TCP, then Auto/MESH. Canary stays paused throughout.
 
-Rollback now: **NOT_NEEDED_NO_PUBLICATION**. No product endpoint, service or identity
-was activated. Inactive identity/configuration files are present behind service-start
-guards, without authorized-key routes. These are not a product rollout. Encrypted pre-upgrade configuration is
+Rollback now: **NO_PUBLICATION_OLD_FENCED_NEW_UNPUBLISHED**. Ordinary/supporting services
+and forced SSH routes are active on new NL; old NL must remain inactive. Stop the affected
+new service if an identity conflict appears. Do not return traffic to old NL. No catalog
+rollback is required because no endpoint publication occurred. Encrypted pre-upgrade configuration is
 retained, but it is not a full disk image or a promise of automatic OS downgrade.
-Old-node fencing is the next operational dependency before replacement identity activation.
+Old NL must remain fenced. New ordinary/supporting identities are active only on the new host.
 Before publication, a failed replacement stays unpublished and RU unchanged. After a
 failed publication, use the supported catalog mechanism to stop NL admission/return to
 RU; do not reactivate old NL without independent full acceptance. Never serve one copied

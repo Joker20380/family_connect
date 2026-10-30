@@ -2,7 +2,7 @@
   "schema": 1,
   "task": "NL-REPLACEMENT-20261030",
   "scope": "AVAILABILITY_RESTORATION_NOT_PRODUCT_CHECKPOINT",
-  "status": "INACTIVE_RESTORE_VERIFIED_FENCING_PENDING",
+  "status": "ORDINARY_PASS_RESTRICTED_RENEWAL_PENDING",
   "blocker": null,
   "initial_blocker": "BLOCKED_NEW_HOST_OS",
   "target": {
@@ -23,7 +23,7 @@
     "tun_accessible": true,
     "ntp_synchronized": true,
     "cloud_init_complete": true,
-    "product_listeners": false,
+    "product_listeners": true,
     "os_reinstalled": false
   },
   "runtime_compatibility": {
@@ -156,23 +156,23 @@
   },
   "old_node": {
     "observed_utc": "2026-10-30T17:57:40.671997+00:00",
-    "fencing": "NOT_RUN",
-    "ordinary_awg_tcp": "ACTIVE_NOT_DATA_PLANE_ACCEPTANCE",
-    "mailbox_reticulum_monitoring": "ACTIVE_NOT_DATA_PLANE_ACCEPTANCE",
+    "fencing": "FENCED_PERSISTENT_GUARDS_AND_EXTERNAL_READBACK",
+    "ordinary_awg_tcp": "STOPPED_DISABLED",
+    "mailbox_reticulum_monitoring": "PRODUCT_STOPPED_MONITORING_RETAINED",
     "restricted": "INACTIVE_DISABLED",
     "production_health": "NOT_TRUSTED"
   },
   "acceptance": {
     "new_host": "BASELINE_CHECKS_PASS_NOT_PRODUCT_ACCEPTANCE",
-    "awg": "NOT_RUN",
-    "tcp": "NOT_RUN",
+    "awg": "SYNTHETIC_HANDSHAKE_DNS_HTTPS_EGRESS_CLEANUP_PASS_IPV6_FAIL_CLOSED",
+    "tcp": "SYNTHETIC_REALITY_DNS_HTTPS_EGRESS_CLEANUP_PASS",
     "restricted_mesh": "NOT_RUN",
     "snapshot": "NOT_RUN",
-    "renewal": "NOT_RUN",
-    "supporting_roles": "NOT_RUN",
-    "firewall_nat_sysctl": "NOT_RUN",
+    "renewal": "ACTUAL_FORCED_SSH_RPC_INSPECT_PASS_CURRENT_VALIDITY_PENDING",
+    "supporting_roles": "STARTED_PREFLIGHT_PASS_DATA_PLANE_PENDING",
+    "firewall_nat_sysctl": "SCOPED_INGRESS_FORWARDING_NAT_VERIFIED",
     "ru_to_new_nl": "DIAGNOSTIC_INGRESS_PASS_RU_SYN_SEEN",
-    "stability": "NOT_RUN",
+    "stability": "THREE_ORDINARY_SUPPORT_SAMPLES_STABLE_PID_ZERO_RESTARTS",
     "owner_smoke": "NOT_RUN"
   },
   "publication": {
@@ -190,12 +190,14 @@
     "subscription_events": "NOT_RUN",
     "android_stage0": "NOT_RUN",
     "paid_ledger_last_accepted": {"subscriptions": 0, "events": 0},
-    "paid_ledger_fresh_query": "NOT_RUN",
-    "live_product_and_control_plane_mutations": 0,
+    "paid_ledger_fresh_query": "PASS_0_SUBSCRIPTIONS_0_EVENTS",
+    "live_product_changes": "OLD_FENCED_NEW_ORDINARY_SUPPORT_STARTED",
+    "ru_production_mutations": 0,
     "new_host_management_change": "AUTHORIZED_SSH_BASE_PACKAGES_AND_OS_UPGRADE"
   },
-  "rollback": "NOT_NEEDED_NO_PUBLICATION",
+  "rollback": "NO_PUBLICATION_OLD_FENCED_NEW_UNPUBLISHED",
   "inactive_restoration": {
+    "scope": "HISTORICAL_INACTIVE_STAGE_BEFORE_FENCING",
     "roles": 13,
     "source_units": 10,
     "files": 5285,
@@ -214,7 +216,17 @@
     "current_material_validity": "PENDING_RENEWAL",
     "final_coordinated_mutable_export": "PENDING_FENCING"
   },
-  "next_action": "FENCE_OLD_NL_THEN_FINAL_MUTABLE_EXPORT_AND_GUARDED_ACTIVATION",
+  "final_coordinated_export": {
+    "observed_utc": "2026-10-30T19:59:43.862553+00:00",
+    "files": 5289,
+    "directories": 709,
+    "size": 75623230,
+    "sha256": "a7e8b7ed5eec29ec0ccec166d295c02995dc2608bce179d2a2165d46daae9b8f",
+    "encrypted_readback": "PASS",
+    "coordinated_across_roles": true,
+    "changed_files_reconciled": 2
+  },
+  "next_action": "RESTRICTED_RENEWAL_AND_REMAINING_SERVER_ACCEPTANCE_BEFORE_SIGNED_CUTOVER",
   "checks": {
     "strict_json": "PASS",
     "targeted_privacy_secret_scan": "PASS",
