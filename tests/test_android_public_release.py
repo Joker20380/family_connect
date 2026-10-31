@@ -40,6 +40,14 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
             assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == expected, name
 
 
+def test_accepted_jni_startup_observation_helper_is_in_public_source():
+    helper = ROOT / 'pilot/android-restricted/native/startup_owner.go'
+    assert hashlib.sha256(helper.read_bytes()).hexdigest() == 'f9e96fdad59e255dc4808a196e146265d3ad77ead697b7ac33b2ebdbf99700f5'
+    assert 'func retainStartup(' in helper.read_text()
+    assert 'func startupStats(' in helper.read_text()
+    assert '//go:build' not in helper.read_text()
+
+
 def test_audio_linker_rejects_missing_speech_objects(tmp_path):
     with pytest.raises(ValueError, match='Incomplete'):
         audio.objects_for_link(tmp_path)

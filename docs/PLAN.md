@@ -48,7 +48,11 @@ foreground notification flags PASS. Two Friends UI harness assumptions remain st
 to accepted106: independently scrolling dashboard workspaces and asynchronous audio preparation.
 Test-only corrections check fixed navigation/scroll bounds and await real playback before
 pause/seek; product UI/audio code is unchanged. Instrumentation compilation and36 focused
-checks PASS. Full hosted UI/release qualification remains pending; no APK signed or published.
+checks PASS. The next run41212080509 passes all43 executed instrumentation cases
+(24 variant-specific skips), including Friends UI and Android control conformance. Final JNI
+compilation exposes an omitted accepted106 startup-observation helper. Restored that exact
+hash-verified source member; no new diagnostic mode or carrier behavior. All37 focused checks
+PASS. Final native build/artifact qualification and owner runtime remain pending; no publication.
 Fresh HTTPS/signature readback: public Android beta60/update sequence1, optional policy unchanged.
 Gateway catalog4 is separate and unchanged. No server/registry/admission change or mandatory update.
 Owner says an older version is quiet; notification regression cause remains unproven without
