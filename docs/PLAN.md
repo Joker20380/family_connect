@@ -20,14 +20,17 @@ This is owner-reported AWG egress PASS; resource cleanup is not yet verified. TC
 The missing NL load percentage is localized: fresh metrics, but the replacement provider's
 channel capacity is unverified. Android intentionally displays No data rather than treating
 CPU alone as total load. No guessed capacity, source/configuration change or APK update.
-Owner requests fixing repeated Tunnel is on notifications before further smoke tests.
-Source-only correction adds setOnlyAlertOnce(true) to the existing foreground notification:
-status updates, health warnings and Disconnect remain available; transport/retry logic unchanged.
-Regression fails before the fix;12 focused Android source-contract checks PASS afterward.
-No APK build/install/version change: Android106 on the phone is not patched by this source push.
-Phone re-alert/reconnect classification remains unproven; installed runtime verification pending.
-Panel1000GB describes traffic volume, not Mbps; channel capacity remains unknown. No server,
-monitoring configuration or catalog change. Canary stays PAUSED.
+Owner authorizes a general MESH-capable Android update: the no-build restriction is lifted,
+not the release gates. Candidate107 is built from all2073 hash-verified accepted106 source
+members plus three bounded changes: version, quiet notification updates and explicit microphone
+permission-denial handling required by lint. All12 native libraries including MESH are unchanged.
+219 JVM tests/33 suites and lint PASS;15 source/delta and4 publication tests PASS. APK unsigned,
+not installed or published. Exact-source public CI, older-device compatibility and owner runtime
+acceptance remain pending. Candidate ARM64/Android12+ is not blanket older-Android acceptance.
+Fresh HTTPS/signature readback: public Android beta60/update sequence1, optional policy unchanged.
+Gateway catalog4 is separate and unchanged. No server/registry/admission change or mandatory update.
+Owner says an older version is quiet; notification regression cause remains unproven without
+phone evidence. Panel1000GB is traffic volume, not Mbps. Canary stays PAUSED.
 
 New NL **185.10.158.212** has accepted AWG/TCP and now real production-bound MESH
 DNS/HTTPS/egress acceptance. Reused **FLEET_MESH_PROBE_1**; no second identity/invitation,
@@ -56,11 +59,13 @@ paid-canary, subscription events and Android stage0 stay off. Complete the curre
 notification installed-runtime and AWG cleanup checks, then TCP and Auto/MESH once each in this
 same operation. No further publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
 
-NEXT within this same operation: verify the notification fix on an updated owner APK only
-after the existing no-Android-build restriction is explicitly lifted; source push is not rollout.
-Owner confirms new NL HTTPS egress and has disconnected. Runtime re-alerting and resource cleanup
-remain unverified. No transport changes. Provider1000GB is traffic volume, not channel Mbps;
-do not guess capacity or make informational monitoring a VPN blocker. Keep catalog4 unchanged.
+NEXT within this same operation: qualify candidate107 for exact-source public platform CI
+and older-device compatibility; then offline signing and owner in-place runtime acceptance
+before optional publication. No ADB device is connected. Do not substitute the older main
+Android tree for the accepted106 capsule:30 pinned Android members differ and28 are absent.
+Local build/tests/lint are not installed acceptance. Keep public beta60 and gateway catalog4
+unchanged until their separate gates pass. Owner reports new NL HTTPS egress and Disconnect;
+resource cleanup remains unverified. No new identity, paid action or admission expansion.
 After notification/runtime and cleanup acceptance, test TCP once and Auto/MESH once with current readiness
 import/ACK. Keep normal freshness monitoring active while waiting. Only all owner/server
 gates permit NL_REPLACEMENT_LIVE. No new PLAN ID, probe identity, owner-canary use or

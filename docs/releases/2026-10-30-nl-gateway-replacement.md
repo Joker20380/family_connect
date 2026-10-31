@@ -1,6 +1,6 @@
 # NL production gateway replacement — 30 October 2026
 
-## Current result — notification source fix; owner NL smoke unfinished
+## Current result — Android107 candidate built; public rollout not accepted
 
 Observed 2026-10-31T12:07:52Z. Same NL-REPLACEMENT-20261030 continuation, not a product checkpoint.
 
@@ -20,14 +20,17 @@ This is owner-reported AWG egress PASS; resource cleanup is not yet verified. TC
 The missing NL load percentage is localized: fresh metrics, but the replacement provider's
 channel capacity is unverified. Android intentionally displays No data rather than treating
 CPU alone as total load. No guessed capacity, source/configuration change or APK update.
-Owner requests fixing repeated Tunnel is on notifications before further smoke tests.
-Source-only correction adds setOnlyAlertOnce(true) to the existing foreground notification:
-status updates, health warnings and Disconnect remain available; transport/retry logic unchanged.
-Regression fails before the fix;12 focused Android source-contract checks PASS afterward.
-No APK build/install/version change: Android106 on the phone is not patched by this source push.
-Phone re-alert/reconnect classification remains unproven; installed runtime verification pending.
-Panel1000GB describes traffic volume, not Mbps; channel capacity remains unknown. No server,
-monitoring configuration or catalog change. Canary stays PAUSED.
+Owner authorizes a general MESH-capable Android update: the no-build restriction is lifted,
+not the release gates. Candidate107 is built from all2073 hash-verified accepted106 source
+members plus three bounded changes: version, quiet notification updates and explicit microphone
+permission-denial handling required by lint. All12 native libraries including MESH are unchanged.
+219 JVM tests/33 suites and lint PASS;15 source/delta and4 publication tests PASS. APK unsigned,
+not installed or published. Exact-source public CI, older-device compatibility and owner runtime
+acceptance remain pending. Candidate ARM64/Android12+ is not blanket older-Android acceptance.
+Fresh HTTPS/signature readback: public Android beta60/update sequence1, optional policy unchanged.
+Gateway catalog4 is separate and unchanged. No server/registry/admission change or mandatory update.
+Owner says an older version is quiet; notification regression cause remains unproven without
+phone evidence. Panel1000GB is traffic volume, not Mbps. Canary stays PAUSED.
 
 New NL **185.10.158.212** has accepted AWG/TCP and now real production-bound MESH
 DNS/HTTPS/egress acceptance. Reused **FLEET_MESH_PROBE_1**; no second identity/invitation,
@@ -56,6 +59,52 @@ paid-canary, subscription events and Android stage0 stay off. Complete the curre
 notification installed-runtime and AWG cleanup checks, then TCP and Auto/MESH once each in this
 same operation. No further publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
 
+### Android107 general update — local candidate, not published
+
+Recorded 2026-10-31T12:54:27.563759+00:00. Owner authorizes a MESH-capable general update, lifting the earlier
+no-build restriction, not signing/CI/runtime gates. No new PLAN ID or top-level operation.
+The older-version-is-quiet report is retained. Historical beta60 also lacks only-alert-once;
+the omission alone does not prove this runtime regression. Installed verification is pending.
+
+Both live Android discovery routes still agree on beta60/code60. The production manifest
+validator passes signature, update sequence1, minimum_supported_version1 and mandatory_after0.
+These Android update manifests are separate from gateway catalog4; neither was republished.
+
+All2073 retained106 source hashes PASS. Of152 pinned Android members, the canonical main tree
+has94 identical,30 different and28 absent. Derivation therefore uses the exact accepted106
+capsule, not an older main build labelled as current MESH. The
+[three-file delta](../../tests/fixtures/android_notification_release/beta106-to107.patch)
+changes only version, notification alert policy and explicit microphone SecurityException
+propagation as IOException. This corrects the sole lint error without suppressing checks.
+All12 native libraries remain byte-identical to accepted106; MESH/gateway are not rebuilt.
+
+| Candidate | Verified result |
+| --- | --- |
+| Version/package/ABI |0.1.18-beta107 / com.familyconnect.app.friends / ARM64 |
+| Minimum/target API |31/35; Android12+; older-device compatibility not qualified |
+| Artifact |unsigned local APK;56072941 bytes |
+| APK SHA256 |b7ed8d09b6c46d303396330decb94622d86f9f0a3cb121502e45a8b4bd7c2e4f |
+| Full source inventory SHA256 |85d2028f3a6a5237bdc1956fb05234d0dde93b955e1b7255543c445a8a201bf7 |
+| Baseline106 inventory SHA256 |8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c |
+| Tests |219 JVM tests/33 suites;15 source/delta and4 publication tests PASS |
+| Lint/package checks |PASS; non-debuggable;16KiB APK ZIP alignment PASS |
+| Privacy scope |asset-text private-key marker scan PASS, not a complete release audit |
+| Hosted CI/signing/install/publication |NOT_RUN / NOT_RUN / NOT_RUN / NOT_RUN |
+| Public updater/invitation |beta60 unchanged; optional policy unchanged |
+| Owner phone |last accepted106; no ADB device;107 runtime not observed |
+
+The initial local build harness lacked the retained Git baseline context; the provenance
+verifier rejected it. Corrected the harness, not the verifier. Corrected an aapt output-label
+assertion as well. Neither ordinary error caused production changes or a release-gate waiver.
+
+Remaining: public exact-source/platform CI and artifact qualification; Android8–11 compatibility
+or safe delivery policy; offline signing with the existing signer; real106→107 update without
+data loss; notification continuity and AWG/TCP/Auto-MESH owner acceptance. No blanket publication
+from local build success. Do not widen MESH admission/paid cohort merely by distributing APKs.
+Existing readiness/admission rules remain authoritative. No registry/service changes; canary
+PAUSED, old NL fenced. Source rollback is a normal revert of the bounded delta; nothing new is
+installed, so no live rollback is needed. Preserve all immutable APKs and existing public links.
+
 ### Repeated tunnel-on message — source fix qualified, not installed
 
 The owner confirms the address from the requested HTTPS egress check matches the new NL,
@@ -76,9 +125,9 @@ These checks do not prove runtime behavior on the owner's phone. No ADB device i
 notification-channel settings and service restart events were not observed. The reported
 10s interval alone does not prove reconnection. Installed notification acceptance is pending.
 
-No APK build, version bump, signing, upload or installation. The owner phone remains on the
-previously accepted Android106; a source push does not alter that installation. The earlier
-no-Android-build restriction remains in force pending explicit permission for an owner update.
+At this earlier source-only step there was no build/signing/installation. The later owner
+authorization and candidate107 build above supersede the no-build restriction, but do not
+change the last accepted Android106 installation.
 No server restart, identity change, catalog publication or paid operation. Catalog4 is retained,
 old NL remains fenced and canary PAUSED. Source rollback is a normal revert of this one-line
 change; there is no deployed artifact to roll back. Do not mark NL_REPLACEMENT_LIVE.

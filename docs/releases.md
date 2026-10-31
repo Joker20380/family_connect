@@ -1,5 +1,16 @@
 # Release distribution / Выпуски
 
+**31 October —107 candidate, not distributed / кандидат107, не опубликован.**
+RU: владелец разрешил общий MESH-выпуск. Кандидат107 сохраняет принятую106 и12 native-библиотек;
+исправляет повторные оповещения и обработку отказа микрофона.219 JVM-тестов и lint PASS.
+APK не подписан/не установлен; требуются CI, совместимость (Android12+/ARM64) и проверка
+обновления на телефоне без потери данных. Общий updater/приглашение остаются60, owner —106.
+EN:107 is an unsigned local candidate, not a public download or installed acceptance.
+Public updater/invitation stay60. CI, compatibility, signing and device gates remain required.
+Do not uninstall, clear data or reenroll. Canary paused.
+[Same-operation evidence](releases/2026-10-30-nl-gateway-replacement.md).
+
+
 **Private owner research84/code84,12.10 — not publicly distributed:**
 installed in place11:47:34UTC; APK SHA256
 `fd3106170ceeb1e24dad6c8eacda4107b1ab09a6ee120ccf495d92d96841aa48`, same

@@ -535,7 +535,7 @@
     "catalog_publication": "NOT_RUN",
     "owner_smoke": "NOT_RUN"
   },
-  "next_action": "AUTHORIZE_OWNER_APK_UPDATE_FOR_NOTIFICATION_FIX_THEN_VERIFY_RUNTIME_AWG_CLEANUP_TCP_AUTO_MESH",
+  "next_action": "QUALIFY_ANDROID107_PUBLIC_CI_AND_COMPATIBILITY_THEN_SIGN_OWNER_RUNTIME_BEFORE_OPTIONAL_PUBLICATION",
   "checks": {
     "strict_json": "PASS",
     "targeted_privacy_secret_scan": "PASS",
@@ -1105,7 +1105,78 @@
       "app_version_change": false,
       "server_changes": false,
       "catalog_changes": false,
-      "existing_android_build_restriction": "NOT_LIFTED"
+      "existing_android_build_restriction": "LIFTED_BY_OWNER_FOR_GENERAL_UPDATE_RELEASE_GATES_REMAIN"
+    },
+    "android107_candidate": {
+      "result": "UNSIGNED_CANDIDATE_LOCAL_BUILD_PASS",
+      "version_code": 107,
+      "version": "0.1.18-beta107",
+      "apk_sha256": "b7ed8d09b6c46d303396330decb94622d86f9f0a3cb121502e45a8b4bd7c2e4f",
+      "apk_bytes": 56072941,
+      "tests": 219,
+      "suites": 33,
+      "source_inventory_sha256": "85d2028f3a6a5237bdc1956fb05234d0dde93b955e1b7255543c445a8a201bf7",
+      "source_delta_sha256": "3933504f9e3808a0928d699812cc87794b15ccb4dc3d2ea125b1ccd4adfbd9c7",
+      "baseline_inventory_sha256": "8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c",
+      "changed_source_files": {
+        "clients/android/app/build.gradle": {
+          "before": "257f581bf701fb2fa4b6d49c7c797cdfbe6320288020f1c7d0d8004143a70feb",
+          "after": "488dc70633ca902feadea3aff6d69048126d19baec8d909e4e15dee48d93d741"
+        },
+        "clients/android/app/src/main/java/com/familyconnect/app/ChatAudio.java": {
+          "before": "caf59980f5415f8dac762c03a459d5b9235ae8d3e104a6133d6cd39b0d6315bb",
+          "after": "c587088576f1c84d2dff79389937e265e225ad7ba3f2635684e23e2bbfdd2a89"
+        },
+        "clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java": {
+          "before": "7401663833dd11189023854ec7e9902fddbcf79e55c821948a1411e6c3aedff2",
+          "after": "69bdf5c8e3c9eb6e61caded104e6d89b05c64912d5ad27b7aa98d12e776a7a3b"
+        }
+      },
+      "unchanged_native_libraries": 12,
+      "notification_source_contract": "PASS",
+      "signing": false,
+      "installed": false,
+      "distributed": false,
+      "hosted_ci": "NOT_RUN",
+      "owner_runtime": "NOT_RUN_NO_ADB",
+      "min_sdk": 31,
+      "gateway_changes": false,
+      "native_rebuilt": false,
+      "qualification": {
+        "manifest": "PASS",
+        "package": "com.familyconnect.app.friends",
+        "version_code": 107,
+        "min_sdk": 31,
+        "target_sdk": 35,
+        "abi": "arm64-v8a",
+        "debuggable": false,
+        "alignment_16k": "PASS",
+        "private_key_marker_scan": "PASS_ASSET_TEXT_ONLY",
+        "public_catalog_signature": "PASS",
+        "public_catalog_sha256": "f042becae969474ed7ebc28890a635ae5812769a3203fa6d75cf18fd22060006",
+        "public_sequence": 1,
+        "public_code": 60,
+        "lint_exit": 0,
+        "public_changes": false,
+        "signed": false,
+        "installed": false
+      },
+      "recorded_utc": "2026-10-31T12:54:27.563759+00:00",
+      "entry_main": "9827f48e07bafa2598b6c1d0d158082e6ecb8482",
+      "source_delta_patch_sha256": "1932ab8f32c2b1b929661179c9c64624e61f2ca3275ad2544af13b0998b911f3",
+      "source_and_delta_tests": "PASS_15",
+      "publication_tests": "PASS_4",
+      "owner_reports_older_version_quiet": true,
+      "notification_runtime_cause": "NOT_PROVEN",
+      "rollout_authorized": true,
+      "forced_update": false,
+      "invitation_version": 60,
+      "gateway_catalog_sequence": 4,
+      "gateway_catalog_writes": 0,
+      "android_catalog_writes": 0,
+      "registry_writes": 0,
+      "mesh_admission_expansion": false,
+      "canary": "PAUSED"
     }
   }
 }

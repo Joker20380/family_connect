@@ -1,5 +1,16 @@
 # Owner recovery106 — private candidate / закрытый кандидат
 
+**31 October —107 candidate, not distributed / кандидат107, не опубликован.**
+RU: владелец разрешил общий MESH-выпуск. Кандидат107 сохраняет принятую106 и12 native-библиотек;
+исправляет повторные оповещения и обработку отказа микрофона.219 JVM-тестов и lint PASS.
+APK не подписан/не установлен; требуются CI, совместимость (Android12+/ARM64) и проверка
+обновления на телефоне без потери данных. Общий updater/приглашение остаются60, owner —106.
+EN:107 is an unsigned local candidate, not a public download or installed acceptance.
+Public updater/invitation stay60. CI, compatibility, signing and device gates remain required.
+Do not uninstall, clear data or reenroll. Canary paused.
+[Same-operation evidence](../releases/2026-10-30-nl-gateway-replacement.md).
+
+
 **SIGNED_APK_READY=YES; PRIVATE_FIELD_READY=YES** for the confirmed three existing
 devices only. No public release or automatic sending.23 October: actual105 readback
 preserved first, Wi-Fi/VPN off, active consent but full JSON unavailable. Finished
