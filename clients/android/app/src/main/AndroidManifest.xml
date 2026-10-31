@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <application android:name=".FamilyApplication" android:label="${appLabel}" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher"
-        android:theme="@android:style/Theme.Material.NoActionBar" android:allowBackup="false"
+        android:theme="@style/ExitTheme" android:allowBackup="false"
         android:fullBackupContent="false" android:dataExtractionRules="@xml/extraction_rules" android:usesCleartextTraffic="false">
         <provider android:name=".UpdateApkProvider" android:authorities="${applicationId}.updates" android:exported="false" android:grantUriPermissions="true"/>
         <provider android:name=".DiagnosticsProvider" android:authorities="${applicationId}.diagnostics" android:exported="false" android:grantUriPermissions="true"/>

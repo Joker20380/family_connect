@@ -1,6 +1,6 @@
 # NL production gateway replacement — 30 October 2026
 
-## Current result — Android107 candidate built; public rollout not accepted
+## Current result — Android107 public source integrated; release qualification pending
 
 Observed 2026-10-31T12:07:52Z. Same NL-REPLACEMENT-20261030 continuation, not a product checkpoint.
 
@@ -25,8 +25,14 @@ not the release gates. Candidate107 is built from all2073 hash-verified accepted
 members plus three bounded changes: version, quiet notification updates and explicit microphone
 permission-denial handling required by lint. All12 native libraries including MESH are unchanged.
 219 JVM tests/33 suites and lint PASS;15 source/delta and4 publication tests PASS. APK unsigned,
-not installed or published. Exact-source public CI, older-device compatibility and owner runtime
-acceptance remain pending. Candidate ARM64/Android12+ is not blanket older-Android acceptance.
+not installed or published. Owner explicitly accepts Android12+/ARM64 as the general-release
+target; Android below12 is unsupported, not a pending compatibility gate. Public-source
+integration now preserves the accepted106 Android UI/MESH code with the notification fix.
+All376 canonical JVM tests/63 suites and lint PASS;34 focused release/source checks PASS.
+CI rebuilds Android JNI from public source with provenance and Codec2 corresponding-source
+materials; no gateway rebuild/deployment or unrelated desktop job for this Android-only change.
+Hosted platform CI, downloaded artifact qualification, offline signing and owner runtime remain
+required before optional publication. The earlier private unsigned candidate is not the release.
 Fresh HTTPS/signature readback: public Android beta60/update sequence1, optional policy unchanged.
 Gateway catalog4 is separate and unchanged. No server/registry/admission change or mandatory update.
 Owner says an older version is quiet; notification regression cause remains unproven without
@@ -58,6 +64,30 @@ Paid ledger **0/0**, payments/revenue0, cohort0/10. **BETA-0-CANARY-1 PAUSED**;
 paid-canary, subscription events and Android stage0 stay off. Complete the current owner
 notification installed-runtime and AWG cleanup checks, then TCP and Auto/MESH once each in this
 same operation. No further publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
+
+### Android107 canonical release-source integration
+
+Owner explicitly accepts Android12+/ARM64; no older-device compatibility work is required.
+The prior private source base is not a published Git commit and the previous client workflow
+still built65. It cannot qualify the private107 APK. Accepted106 Android UI, readiness,
+recovery, chat JNI and associated tests are now integrated as normal public source, not
+a private source capsule. Shared carrier and messenger adaptations are preserved.
+Quiet foreground-notification updates and explicit microphone denial handling are retained.
+Canonical Friends version107/minSDK31 keeps the same package; provisioning faults remain
+disabled. APK signing, distribution and device installation are NOT_RUN.
+
+Local canonical JVM:376 tests/63 suites PASS; lint PASS. Focused Python source, native
+provenance, release-delta and publication checks:34 PASS, unrelated Windows check deselected.
+Public CI now includes pinned dynamic Codec2 build and corresponding-source export,
+source-bound Android JNI verification and APK-only packaging. No gateway binary is built
+by this Android release job. Platform selection keeps Android-only changes out of Windows/
+Linux jobs; manual/tag release gates still select all platforms.
+
+Next: hosted Android platform result and exact downloaded APK inspection, offline vault
+signing, owner in-place/runtime acceptance, then one optional Android updater publication.
+The earlier private candidate hash is historical only and will not be relabeled as a CI
+artifact. Current public/invitation beta60 and owner106 remain unchanged. Rollback requires
+no live action at this source-only point; gateway catalog4, paid0/0 and canary PAUSED persist.
 
 ### Android107 general update — local candidate, not published
 

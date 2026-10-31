@@ -27,9 +27,61 @@ final class RestrictedCache {
     }
     private static byte[] bytes(JsonElement value){return value.toString().getBytes(StandardCharsets.UTF_8);}
     private void save(JsonObject value)throws Exception{storage.write(bytes(value));}
+    JsonObject diagnostic(long now){
+        JsonObject result=new JsonObject();
+        try{
+            JsonObject saved=state();
+            if(saved.get("response").isJsonNull()){result.addProperty("validation","MISSING");return result;}
+            JsonObject response=saved.getAsJsonObject("response");byte[] raw=bytes(response);
+            try{
+                ReadinessImportResult.Code code=saved.get("denied").getAsBoolean()?ReadinessImportResult.Code.AUTHORIZATION_REJECTED:validation(raw,now);
+                result.addProperty("validation",code.name());
+                result.addProperty("age_seconds",Math.max(0,now-integer(response.get("issued_at"),0)));
+                result.addProperty("expires_at",integer(response.get("expires_at"),1));
+                result.addProperty("revision",integer(response.get("revision"),1));
+                result.addProperty("minimum_crl",integer(response.get("minimum_crl"),1));
+                byte[] hash=java.security.MessageDigest.getInstance("SHA-256").digest(raw);
+                StringBuilder fingerprint=new StringBuilder();for(byte part:hash)fingerprint.append(String.format(java.util.Locale.ROOT,"%02x",part&255));
+                result.addProperty("fingerprint",fingerprint.toString());
+                JsonObject documents=new JsonObject();
+                for(String name:new String[]{"issuer","certificate","revocations","directory"})documents.addProperty(name,code==ReadinessImportResult.Code.READY?"VALIDATED_AS_BUNDLE":"NOT_PROVEN");
+                for(String name:new String[]{"issuer","certificate","revocations","directory"}){
+                    try{
+                        long expiry;
+                        if(name.equals("issuer"))expiry=integer(issuer(response).get("expires_at"),1);
+                        else if(name.equals("directory"))expiry=java.time.Instant.parse(text(response.getAsJsonObject(name).get("expires_at"))).getEpochSecond();
+                        else{
+                            java.security.cert.CertificateFactory factory=java.security.cert.CertificateFactory.getInstance("X.509");
+                            java.io.ByteArrayInputStream input=new java.io.ByteArrayInputStream(text(response.get(name)).getBytes(StandardCharsets.UTF_8));
+                            expiry=name.equals("certificate")?((java.security.cert.X509Certificate)factory.generateCertificate(input)).getNotAfter().getTime()/1000:((java.security.cert.X509CRL)factory.generateCRL(input)).getNextUpdate().getTime()/1000;
+                        }
+                        result.addProperty(name+"_expires_at",expiry);
+                        if(expiry<=now)documents.addProperty(name,"EXPIRED");
+                    }catch(Exception unavailable){if(code!=ReadinessImportResult.Code.READY)documents.addProperty(name,"INVALID_OR_UNREADABLE");}
+                }
+                result.add("documents",documents);
+            }finally{java.util.Arrays.fill(raw,(byte)0);}
+        }catch(Exception|LinkageError failure){result.addProperty("validation","PERSISTENCE_OR_VALIDATION_ERROR");}
+        return result;
+    }
     byte[] usable()throws Exception{
         JsonObject value=state();if(value.get("denied").getAsBoolean()||value.get("response").isJsonNull())return null;
         byte[] raw=bytes(value.get("response"));return validator.valid(raw)?raw:null;
+    }
+    byte[] usable(long now)throws Exception{
+        JsonObject value=state();if(value.get("denied").getAsBoolean()||value.get("response").isJsonNull())return null;
+        byte[] raw=bytes(value.get("response"));
+        if(validation(raw,now)==ReadinessImportResult.Code.READY)return raw;
+        java.util.Arrays.fill(raw,(byte)0);return null;
+    }
+    boolean refreshable(long now)throws Exception{
+        JsonObject value=state();if(value.get("denied").getAsBoolean())return false;
+        if(value.get("response").isJsonNull())return true;
+        byte[] raw=bytes(value.get("response"));
+        try{
+            ReadinessImportResult.Code code=validation(raw,now);
+            return code==ReadinessImportResult.Code.READY||code==ReadinessImportResult.Code.EXPIRED_ON_IMPORT;
+        }finally{java.util.Arrays.fill(raw,(byte)0);}
     }
     OwnerPrewarmReceipt context()throws Exception{
         JsonObject value=state();if(!value.has("receipt_context"))return null;
@@ -57,7 +109,10 @@ final class RestrictedCache {
         return detailed.validate(raw);
     }
     boolean attempt(long now)throws Exception{
-        JsonObject value=state();if(integer(value.get("next_attempt"),0)>now)return false;
+        return attempt(now,false);
+    }
+    boolean attempt(long now,boolean required)throws Exception{
+        JsonObject value=state();if(!required&&integer(value.get("next_attempt"),0)>now)return false;
         value.addProperty("next_attempt",now+300);save(value);return true;
     }
     void denied()throws Exception{JsonObject value=state();value.addProperty("denied",true);save(value);}

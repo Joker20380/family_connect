@@ -25,19 +25,37 @@ final class Diagnostics {
     static void readinessResult(Context context,ReadinessImportResult.Code code){try{Diagnostics store=get(context);synchronized(store){store.ring.readinessResult(code,System.currentTimeMillis());store.save(false);}}catch(Exception ignored){}}
     static void vpn(Context context,boolean open){try{Diagnostics store=get(context);synchronized(store){store.ring.vpn(open,System.currentTimeMillis());store.save(false);}}catch(Exception ignored){}}
     static void dns(Context context,boolean good){try{Diagnostics store=get(context);synchronized(store){store.ring.dns(good,System.currentTimeMillis());store.save(false);}}catch(Exception ignored){}}
+    static void dnsProgress(Context context){try{Diagnostics store=get(context);synchronized(store){store.ring.dnsProgress(System.currentTimeMillis());store.save(false);}}catch(Exception ignored){}}
     static void cleanup(Context context,boolean success){try{Diagnostics store=get(context);synchronized(store){store.ring.cleanup(success,System.currentTimeMillis());store.save(false);}}catch(Exception ignored){}}
+    static String readinessConnection(Context context){try{return get(context).ring.readinessConnection();}catch(Exception failure){return "";}}
+    static void readinessFetch(Context context,ReadinessFetchTrace trace){try{Diagnostics store=get(context);synchronized(store){store.ring.readinessFetch(trace);store.save(false);}}catch(Exception ignored){}}
     static void nativeStats(Context context,org.json.JSONObject stats){
         try{Diagnostics store=get(context);synchronized(store){
+            org.json.JSONObject startup=stats.optJSONObject("owner_startup");
+            if(startup!=null)nativeStartup(store.ring,startup.toString());
             org.json.JSONArray events=stats.optJSONArray("events");
             if(events!=null)for(int index=0;index<Math.min(32,events.length());index++)store.ring.nativeEvent(events.optString(index),System.currentTimeMillis());
             for(String name:new String[]{"protect_ok","protect_denied"})store.ring.counter(name,stats.optLong(name,-1));
             org.json.JSONObject packet=stats.optJSONObject("packet");
-            if(packet!=null)for(String name:new String[]{"dns","tcp","tcp_active","tcp_peak","udp_denied","ipv6_denied"})store.ring.counter(name,packet.optLong(name,-1));
+            if(packet!=null)nativePacket(store.ring,packet.toString());
             org.json.JSONObject diagnostic=packet==null?null:packet.optJSONObject("diagnostic");
             JsonObject safeInput=diagnostic==null?new JsonObject():JsonParser.parseString(diagnostic.toString()).getAsJsonObject();
             store.ring.restricted(safeInput,stats.optInt("state",-1),stats.optBoolean("authorization_denied",false),System.currentTimeMillis());
             store.save(false);
-        }}catch(Exception ignored){}
+        }SupportAutomation.tick(context);}catch(Exception ignored){}
+    }
+    static void nativePacket(DiagnosticRing ring,String packet){
+        try{JsonObject source=JsonParser.parseString(packet).getAsJsonObject();
+            for(String name:new String[]{"dns","tcp","tcp_active","tcp_peak","limit_denied","udp_denied","ipv6_denied"}){
+                JsonElement value=source.get(name);
+                if(value!=null&&value.isJsonPrimitive()&&value.getAsJsonPrimitive().isNumber()){
+                    try{ring.counter(name,value.getAsBigDecimal().longValueExact());}catch(ArithmeticException|NumberFormatException ignored){}
+                }
+            }
+        }catch(Exception ignored){}
+    }
+    static void nativeStartup(DiagnosticRing ring,String startup){
+        JsonObject input=new JsonObject();input.add("owner_startup",JsonParser.parseString(startup));ring.startupStats(input);
     }
     private void network(){
         ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);NetworkCapabilities caps=manager.getNetworkCapabilities(manager.getActiveNetwork());
@@ -61,7 +79,7 @@ final class Diagnostics {
                 try{Diagnostics store=get(activity);String support=DeviceSupport.cached(activity);JsonObject bundle=new JsonObject();String filename="diagnostics-"+UUID.randomUUID().toString().replace("-","")+".json";synchronized(store){
                     store.ring.support(support);
                     for(String name:new String[]{"ring","incident"}){
-                        try{byte[] raw=store.file(name).readFully();if(raw.length>DiagnosticRing.RECORD_LIMIT)throw new IOException("Diagnostic bound");JsonObject record=JsonParser.parseString(new String(raw,StandardCharsets.UTF_8)).getAsJsonObject();record.addProperty("device_support_id",support);bundle.add(name,record);}
+                        try{DiagnosticRing.exportRecord(bundle,name,store.file(name).readFully(),support);}
                         catch(FileNotFoundException missing){if(name.equals("ring"))bundle.add(name,store.ring.snapshot());}
                     }
                     File[] previous=activity.getCacheDir().listFiles((directory,name)->name.matches("diagnostics-[0-9a-f]{32}\\.json"));
@@ -69,8 +87,7 @@ final class Diagnostics {
                         activity.revokeUriPermission(Uri.parse("content://"+activity.getPackageName()+".diagnostics/"+file.getName()),Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         if(!file.delete())throw new IOException("Diagnostic cleanup");
                     }
-                    byte[] encoded=bundle.toString().getBytes(StandardCharsets.UTF_8);
-                    if(encoded.length>DiagnosticRing.EXPORT_LIMIT)throw new IOException("Diagnostic bound");
+                    byte[] encoded=DiagnosticRing.exportBytes(bundle);
                     File target=new File(activity.getCacheDir(),filename);try(FileOutputStream output=new FileOutputStream(target)){output.write(encoded);}
                 }
                 Uri uri=Uri.parse("content://"+activity.getPackageName()+".diagnostics/"+filename);

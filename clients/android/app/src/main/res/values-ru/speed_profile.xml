@@ -1,0 +1,4 @@
+<resources>
+    <string name="mesh_speed_profile">MESH owner-тест · новая сессия</string>
+    <string name="mesh_speed_hint">Нужен согласованный профиль шлюза. Выбор не подтверждает фактические лимиты. Менять после отключения; P0 возвращает исходное поведение.</string>
+</resources>

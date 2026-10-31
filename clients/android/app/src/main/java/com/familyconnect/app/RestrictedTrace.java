@@ -7,6 +7,7 @@ final class RestrictedTrace {
     static final String REASONS="NONE|SIGNAL_WS_CLOSE|ICE_DISCONNECTED|ICE_FAILED|PEER_CONNECTION_FAILED|CARRIER_EOF|CARRIER_ERROR|FAMILY_TLS_EOF|FAMILY_TLS_ERROR|GATEWAY_CLOSE|HEARTBEAT_TIMEOUT|REMOTE_CLOSE|RECOVERY_CLEANUP_FAILED|RECOVERY_DESCRIPTOR_FAILED|RECOVERY_JOIN_FAILED|RECOVERY_CARRIER_FAILED|RELIABLE_HANDSHAKE_TIMEOUT|RELIABLE_FRAME_TIMEOUT|RELIABLE_RETRY_EXHAUSTED|UNKNOWN_INTERNAL";
     static final String STAGES="AUTHORIZED|ROOM_CREATION|DESCRIPTOR|GATEWAY_JOIN|SIGNALING|WEBSOCKET|ICE|PEER_CONNECTION|CARRIER|CARRIER_ACTIVITY|FAMILY_TLS|GATEWAY_SESSION|HEARTBEAT|LIVENESS|LOCAL_CLOSE|REMOTE_CLOSE|RECOVERY|CLEANUP";
     static final String STATES="STARTED|ESTABLISHED|ISSUED|TX|RX|FAILED|CLOSED|COMPLETED|ATTEMPTED|NOT_ATTEMPTED|new|checking|connecting|connected|completed|disconnected|failed|closed";
+    static final String CLOSE_SOURCES="UNKNOWN|UPPER_CLOSE|PARENT_CANCELLED|PARENT_DEADLINE|RECEIVE_QUEUE_FULL|SUBSCRIBER_DISCONNECTED|PUBLISHER_DISCONNECTED|SIGNAL_WRITE|SIGNAL_READ|CONFERENCE_ENDED|SUBSCRIBER_NEGOTIATION|SUBSCRIBER_ICE_CONFIG|PUBLISHER_ICE_CONFIG|PUBLISHER_ANSWER|PUBLISHER_NEGOTIATION|ICE_PENDING_LIMIT|REMOTE_ICE|QUEUED_ICE|HEARTBEAT_WRITE|DATA_CHANNEL_WRITE|VP8_WRITE|RELIABLE_EXHAUSTION|BROKER_LIFETIME|BROKER_UNUSED|BROKER_AUTHORIZATION|FAMILY_CONTRACT|FAMILY_CONTEXT|FAMILY_WRITE|FAMILY_READ|FAMILY_UPPER_CLOSE|FAMILY_CREDENTIAL_EXPIRY";
     static String text(JsonObject source,String field){
         JsonElement value=source.get(field);
         return value!=null&&value.isJsonPrimitive()&&value.getAsJsonPrimitive().isString()?value.getAsString():"";
@@ -28,6 +29,9 @@ final class RestrictedTrace {
             safe.addProperty(field,value);
         }
         safe.addProperty("session_tag",tag);
+        String sourceCode=text(source,"close_source");if(!sourceCode.isEmpty())safe.addProperty("close_source",allowed(sourceCode,CLOSE_SOURCES)?sourceCode:"UNKNOWN");
+        number(source,safe,"lease_deadline_ms");
+        String leaseAction=text(source,"lease_action");if(allowed(leaseAction,"offer|request|accepted|applied|confirmed")){safe.addProperty("lease_action",leaseAction);number(source,safe,"lease_sequence");}
         JsonObject delivery=RestrictedDelivery.project(source.get("delivery"));if(delivery!=null)safe.add("delivery",delivery);
         for(String field:new String[]{"sequence","timestamp_ms","tx","rx","reliable_age_ms","reliable_retries","reliable_pending","reliable_sacked","reliable_ack_age_ms","reliable_progress_age_ms","reliable_ack_received"})number(source,safe,field);
         if(!safe.has("sequence")||safe.get("sequence").getAsLong()==0||!safe.has("timestamp_ms"))return null;
@@ -47,6 +51,8 @@ final class RestrictedTrace {
         for(String field:new String[]{"trace_dropped","export_dropped","delivery_dropped"})number(source,safe,field);
         JsonObject first=event(source.get("first_failure"),tag);
         if(first!=null&&!"NONE".equals(text(first,"reason")))safe.add("first_failure",first);
+        JsonObject firstClose=event(source.get("first_close"),tag);
+        if(firstClose!=null&&firstClose.has("close_source"))safe.add("first_close",firstClose);
         JsonArray trace=new JsonArray();int rejected=0;
         JsonElement entries=source.get("trace");
         if(entries!=null&&entries.isJsonArray()){

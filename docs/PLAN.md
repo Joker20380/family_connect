@@ -25,8 +25,14 @@ not the release gates. Candidate107 is built from all2073 hash-verified accepted
 members plus three bounded changes: version, quiet notification updates and explicit microphone
 permission-denial handling required by lint. All12 native libraries including MESH are unchanged.
 219 JVM tests/33 suites and lint PASS;15 source/delta and4 publication tests PASS. APK unsigned,
-not installed or published. Exact-source public CI, older-device compatibility and owner runtime
-acceptance remain pending. Candidate ARM64/Android12+ is not blanket older-Android acceptance.
+not installed or published. Owner explicitly accepts Android12+/ARM64 as the general-release
+target; Android below12 is unsupported, not a pending compatibility gate. Public-source
+integration now preserves the accepted106 Android UI/MESH code with the notification fix.
+All376 canonical JVM tests/63 suites and lint PASS;34 focused release/source checks PASS.
+CI rebuilds Android JNI from public source with provenance and Codec2 corresponding-source
+materials; no gateway rebuild/deployment or unrelated desktop job for this Android-only change.
+Hosted platform CI, downloaded artifact qualification, offline signing and owner runtime remain
+required before optional publication. The earlier private unsigned candidate is not the release.
 Fresh HTTPS/signature readback: public Android beta60/update sequence1, optional policy unchanged.
 Gateway catalog4 is separate and unchanged. No server/registry/admission change or mandatory update.
 Owner says an older version is quiet; notification regression cause remains unproven without
@@ -59,10 +65,10 @@ paid-canary, subscription events and Android stage0 stay off. Complete the curre
 notification installed-runtime and AWG cleanup checks, then TCP and Auto/MESH once each in this
 same operation. No further publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
 
-NEXT within this same operation: qualify candidate107 for exact-source public platform CI
-and older-device compatibility; then offline signing and owner in-place runtime acceptance
-before optional publication. No ADB device is connected. Do not substitute the older main
-Android tree for the accepted106 capsule:30 pinned Android members differ and28 are absent.
+NEXT within this same operation: run exact-source public platform CI for canonical107;
+then downloaded artifact qualification, offline signing and owner in-place runtime acceptance
+before optional publication. No ADB device is connected. The former65-source discrepancy
+is corrected by canonical integration of accepted106 Android members; qualify those public sources.
 Local build/tests/lint are not installed acceptance. Keep public beta60 and gateway catalog4
 unchanged until their separate gates pass. Owner reports new NL HTTPS egress and Disconnect;
 resource cleanup remains unverified. No new identity, paid action or admission expansion.

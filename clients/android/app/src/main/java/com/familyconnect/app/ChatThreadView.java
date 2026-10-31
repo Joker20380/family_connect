@@ -27,6 +27,8 @@ final class ChatThreadView extends LinearLayout {
     private final TextView recordingInfo;
     private long recordingMillis;
     ChatAudio audio;
+    Runnable preview;
+    private final Button previewButton;
     ChatThreadView(Context c,String draft,Consumer<String> changed,Consumer<String> send){
         super(c);setOrientation(VERTICAL);
         history=new ScrollView(c);history.setFillViewport(true);
@@ -35,6 +37,7 @@ final class ChatThreadView extends LinearLayout {
         LinearLayout row=new LinearLayout(c);row.setGravity(Gravity.BOTTOM);row.setPadding(0,TerminalUi.dp(c,6),0,TerminalUi.dp(c,6));
         faces=small(c,"☺",c.getString(R.string.chat_smileys));row.addView(faces,new LayoutParams(TerminalUi.dp(c,48),TerminalUi.dp(c,52)));
         cancelVoice=small(c,"×",c.getString(R.string.chat_voice_cancel));cancelVoice.setVisibility(GONE);row.addView(cancelVoice,new LayoutParams(TerminalUi.dp(c,48),TerminalUi.dp(c,52)));
+        previewButton=small(c,"▶",c.getString(R.string.voice_preview));previewButton.setVisibility(GONE);previewButton.setOnClickListener(view->{if(preview!=null)preview.run();});row.addView(previewButton,new LayoutParams(TerminalUi.dp(c,48),TerminalUi.dp(c,52)));
         composer=new EditText(c);TerminalUi.textStyle(composer,16,TerminalUi.TEXT);composer.setTypeface(Typeface.create("sans-serif",Typeface.NORMAL));
         composer.setHint(R.string.chat_message_hint);composer.setHintTextColor(TerminalUi.MUTED);composer.setMinLines(1);composer.setMaxLines(4);
         composer.setInputType(android.text.InputType.TYPE_CLASS_TEXT|android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE|android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
@@ -59,6 +62,7 @@ final class ChatThreadView extends LinearLayout {
         recordingInfo.setVisibility(idle?GONE:VISIBLE);
         cancelVoice.setVisibility(state==VoiceHoldButton.LOCKED||state==VoiceHoldButton.READY?VISIBLE:GONE);
         submit.setVisibility(idle?VISIBLE:GONE);
+        previewButton.setVisibility(state==VoiceHoldButton.READY?VISIBLE:GONE);
         voice.setVisibility(VISIBLE);
         if(!idle)recordingElapsed(recordingMillis);
     }
@@ -103,20 +107,20 @@ final class ChatThreadView extends LinearLayout {
         for(JsonElement entry:data.getAsJsonArray("messages")){
             JsonObject message=entry.getAsJsonObject();boolean outgoing=message.get("outgoing").getAsBoolean();
             LinearLayout bubble=new LinearLayout(getContext());bubble.setOrientation(VERTICAL);int pad=TerminalUi.dp(getContext(),10);bubble.setPadding(pad,pad,pad,pad);
-            bubble.setBackground(TerminalUi.frame(getContext(),outgoing?0xff153d30:TerminalUi.SURFACE,outgoing?TerminalUi.FRAME:0xff285346));
+            bubble.setBackground(TerminalUi.frame(getContext(),outgoing?0xff1b3430:TerminalUi.SURFACE,outgoing?TerminalUi.FRAME:0xff29453f));
             LayoutParams bp=new LayoutParams(-1,-2);bp.topMargin=TerminalUi.dp(getContext(),6);if(outgoing)bp.leftMargin=TerminalUi.dp(getContext(),38);else bp.rightMargin=TerminalUi.dp(getContext(),38);messages.addView(bubble,bp);
             if(message.has("kind")&&message.get("kind").getAsString().equals("audio")){
                 bubble.addView(new ChatVoiceView(getContext(),message.get("id").getAsString(),message.get("duration_ms").getAsInt(),audio,
                     ()->{if(playAudio!=null)playAudio.accept(message);}),new LayoutParams(-1,-2));
             }else{
-                ChatSmileyTextView text=new ChatSmileyTextView(getContext());TerminalUi.textStyle(text,17,TerminalUi.TEXT);text.setTypeface(Typeface.create("sans-serif",Typeface.NORMAL));text.setMessage(message.get("text").getAsString());text.setTextIsSelectable(true);text.setForegroundActive(foreground);bubble.addView(text,new LayoutParams(-1,-2));
+                ChatSmileyTextView text=new ChatSmileyTextView(getContext());TerminalUi.textStyle(text,17,TerminalUi.TEXT);text.setMinHeight(TerminalUi.dp(getContext(),48));text.setTypeface(Typeface.create("sans-serif",Typeface.NORMAL));text.setMessage(message.get("text").getAsString());text.setTextIsSelectable(true);text.setForegroundActive(foreground);bubble.addView(text,new LayoutParams(-1,-2));
                 if(outgoing){
                     bubble.setOnLongClickListener(v->{if(editMessage!=null)editMessage.accept(message);return true;});
                     text.setOnLongClickListener(v->{if(editMessage!=null)editMessage.accept(message);return true;});
                 }
             }
             String timestamp=DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT).format(new Date((long)(message.get("timestamp").getAsDouble()*1000)));
-            TextView meta=new TextView(getContext());TerminalUi.textStyle(meta,10,TerminalUi.MUTED);meta.setGravity(Gravity.END);meta.setText(timestamp+(message.has("edited")?" · "+getContext().getString(R.string.notice_edited):"")+(outgoing?" · "+getContext().getString(ChatActivity.status(message.get("status").getAsString())):""));bubble.addView(meta);
+            TextView meta=new TextView(getContext());TerminalUi.textStyle(meta,12,TerminalUi.MUTED);meta.setGravity(Gravity.END);meta.setText(timestamp+(message.has("edited")?" · "+getContext().getString(R.string.notice_edited):"")+(outgoing?" · "+getContext().getString(ChatActivity.status(message.get("status").getAsString())):""));bubble.addView(meta);
         }
         if(data.getAsJsonArray("messages").isEmpty())TerminalUi.label(messages,getContext().getString(R.string.chat_no_messages),14,TerminalUi.MUTED);
         if(!data.get("next_offset").isJsonNull())TerminalUi.button(messages,R.string.chat_next,next);

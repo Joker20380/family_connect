@@ -28,7 +28,7 @@ final class VoiceHoldButton extends View {
     };
     VoiceHoldButton(Context context){super(context);setClickable(true);setFocusable(true);setState(IDLE);}
     void setState(int value){state=value;if(value==IDLE||value==READY||value==SENDING){gesture.reset();removeCallbacks(begin);}setEnabled(value!=SENDING);
-        setContentDescription(getContext().getString(value==LOCKED||value==READY?R.string.chat_send:value==HOLDING?R.string.chat_voice_hold_hint:R.string.chat_voice_hold));invalidate();}
+        setContentDescription(getContext().getString(value==LOCKED?R.string.voice_stop_preview:value==READY?R.string.chat_send:value==HOLDING?R.string.chat_voice_hold_hint:R.string.chat_voice_hold));invalidate();}
     int state(){return state;}
     @Override public boolean onTouchEvent(MotionEvent event){
         if(!isEnabled())return false;
@@ -70,7 +70,7 @@ final class VoiceHoldButton extends View {
     }
     @Override public boolean performClick(){
         super.performClick();if(suppressClick||listener==null)return true;
-        // TalkBack/keyboard click starts locked recording; the next click sends.
+        // TalkBack/keyboard starts recording, then stops for preview, then sends.
         if(state==IDLE&&listener.start()){setState(LOCKED);listener.lock();}
         else if(state==LOCKED||state==READY)listener.send();return true;
     }
@@ -79,8 +79,8 @@ final class VoiceHoldButton extends View {
         super.onDraw(canvas);float d=getResources().getDisplayMetrics().density,cx=getWidth()/2f,cy=getHeight()/2f;
         paint.setStyle(Paint.Style.FILL);paint.setColor(state==HOLDING?0xffe78c80:TerminalUi.MINT);canvas.drawCircle(cx,cy,22*d,paint);
         paint.setColor(0xff153d30);
-        if(state==LOCKED||state==READY){iconPath.reset();iconPath.moveTo(cx-7*d,cy-10*d);iconPath.lineTo(cx+12*d,cy);iconPath.lineTo(cx-7*d,cy+10*d);iconPath.lineTo(cx-3*d,cy);iconPath.close();canvas.drawPath(iconPath,paint);}
-        else if(state==HOLDING||state==SENDING)canvas.drawRoundRect(cx-7*d,cy-7*d,cx+7*d,cy+7*d,2*d,2*d,paint);
+        if(state==READY){iconPath.reset();iconPath.moveTo(cx-7*d,cy-10*d);iconPath.lineTo(cx+12*d,cy);iconPath.lineTo(cx-7*d,cy+10*d);iconPath.lineTo(cx-3*d,cy);iconPath.close();canvas.drawPath(iconPath,paint);}
+        else if(state==LOCKED||state==HOLDING||state==SENDING)canvas.drawRoundRect(cx-7*d,cy-7*d,cx+7*d,cy+7*d,2*d,2*d,paint);
         else{
             canvas.drawRoundRect(cx-4*d,cy-12*d,cx+4*d,cy+4*d,4*d,4*d,paint);
             paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(2*d);paint.setStrokeCap(Paint.Cap.ROUND);

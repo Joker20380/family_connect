@@ -7,7 +7,7 @@ static JNIEnv *environment(int *attached){JNIEnv *env=NULL;*attached=0;if((*vm)-
 int fcRestrictedProtect(uintptr_t owner,int fd){int attached;JNIEnv *env=environment(&attached);if(!env)return 0;jobject service=(jobject)owner;jclass cls=(*env)->GetObjectClass(env,service);jmethodID method=(*env)->GetMethodID(env,cls,"protect","(I)Z");int ok=method&&(*env)->CallBooleanMethod(env,service,method,fd);if((*env)->ExceptionCheck(env)){(*env)->ExceptionClear(env);ok=0;}(*env)->DeleteLocalRef(env,cls);if(attached)(*vm)->DetachCurrentThread(vm);return ok;}
 void fcRestrictedRelease(uintptr_t owner){int attached;JNIEnv *env=environment(&attached);if(!env)return;(*env)->DeleteGlobalRef(env,(jobject)owner);if(attached)(*vm)->DetachCurrentThread(vm);}
 struct text{const char *str;long size;};
-extern int64_t fcRestrictedBegin(struct text,struct text,struct text,uintptr_t);
+extern int64_t fcRestrictedBegin(struct text,struct text,struct text,int64_t,uintptr_t);
 extern int32_t fcRestrictedTun(int64_t,int32_t);
 extern int32_t fcRestrictedState(int64_t);
 extern int32_t fcRestrictedStop(int64_t);
@@ -22,7 +22,7 @@ JNIEXPORT jint JNICALL Java_com_familyconnect_app_NativeRestricted_validationCod
  if(raw&&public&&root)result=fcRestrictedValidationCode((struct text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct text){(char*)public,(*env)->GetArrayLength(env,identity)},(struct text){(char*)root,(*env)->GetArrayLength(env,anchor)});
  if(raw)(*env)->ReleaseByteArrayElements(env,response,raw,JNI_ABORT);if(public)(*env)->ReleaseByteArrayElements(env,identity,public,JNI_ABORT);if(root)(*env)->ReleaseByteArrayElements(env,anchor,root,JNI_ABORT);return result;
 }
-extern int64_t fcRestrictedBeginReady(struct text,struct text,struct text,struct text,uintptr_t);
+extern int64_t fcRestrictedBeginReady(struct text,struct text,struct text,struct text,int64_t,uintptr_t,int32_t);
 JNIEXPORT jboolean JNICALL Java_com_familyconnect_app_NativeRestricted_validateDelivery(JNIEnv *env,jclass cls,jbyteArray response,jbyteArray identity,jbyteArray anchor){
  if(!response||!identity||!anchor)return 0;
  jbyte *raw=(*env)->GetByteArrayElements(env,response,NULL),*public=(*env)->GetByteArrayElements(env,identity,NULL),*root=(*env)->GetByteArrayElements(env,anchor,NULL);
@@ -30,21 +30,21 @@ JNIEXPORT jboolean JNICALL Java_com_familyconnect_app_NativeRestricted_validateD
  if(raw&&public&&root)result=fcRestrictedValidateDelivery((struct text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct text){(char*)public,(*env)->GetArrayLength(env,identity)},(struct text){(char*)root,(*env)->GetArrayLength(env,anchor)});
  if(raw)(*env)->ReleaseByteArrayElements(env,response,raw,JNI_ABORT);if(public)(*env)->ReleaseByteArrayElements(env,identity,public,JNI_ABORT);if(root)(*env)->ReleaseByteArrayElements(env,anchor,root,JNI_ABORT);return result!=0;
 }
-JNIEXPORT jlong JNICALL Java_com_familyconnect_app_NativeRestricted_beginReady(JNIEnv *env,jclass cls,jbyteArray response,jbyteArray identity,jbyteArray anchor,jstring resolver,jobject service){
+JNIEXPORT jlong JNICALL Java_com_familyconnect_app_NativeRestricted_beginReady(JNIEnv *env,jclass cls,jbyteArray response,jbyteArray identity,jbyteArray anchor,jstring resolver,jlong budget,jobject service,jint speed){
  if(!response||!identity||!anchor||!resolver||!service)return 0;
  jbyte *raw=(*env)->GetByteArrayElements(env,response,NULL),*secret=(*env)->GetByteArrayElements(env,identity,NULL),*root=(*env)->GetByteArrayElements(env,anchor,NULL);
  const char *dns=(*env)->GetStringUTFChars(env,resolver,NULL);int64_t result=0;
- if(raw&&secret&&root&&dns){jobject owner=(*env)->NewGlobalRef(env,service);if(owner)result=fcRestrictedBeginReady((struct text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct text){(char*)secret,(*env)->GetArrayLength(env,identity)},(struct text){(char*)root,(*env)->GetArrayLength(env,anchor)},(struct text){dns,(*env)->GetStringUTFLength(env,resolver)},(uintptr_t)owner);}
+ if(raw&&secret&&root&&dns){jobject owner=(*env)->NewGlobalRef(env,service);if(owner)result=fcRestrictedBeginReady((struct text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct text){(char*)secret,(*env)->GetArrayLength(env,identity)},(struct text){(char*)root,(*env)->GetArrayLength(env,anchor)},(struct text){dns,(*env)->GetStringUTFLength(env,resolver)},budget,(uintptr_t)owner,(int32_t)speed);}
  if(secret){volatile jbyte *wipe=secret;jsize length=(*env)->GetArrayLength(env,identity);for(jsize index=0;index<length;index++)wipe[index]=0;}
  if(raw)(*env)->ReleaseByteArrayElements(env,response,raw,JNI_ABORT);if(secret)(*env)->ReleaseByteArrayElements(env,identity,secret,JNI_ABORT);if(root)(*env)->ReleaseByteArrayElements(env,anchor,root,JNI_ABORT);if(dns)(*env)->ReleaseStringUTFChars(env,resolver,dns);return result;
 }
 JNIEXPORT jstring JNICALL Java_com_familyconnect_app_NativeRestricted_readiness(JNIEnv *env,jclass cls,jstring directory){if(!directory)return NULL;const char *path=(*env)->GetStringUTFChars(env,directory,0);if(!path)return NULL;char *raw=fcRestrictedReadiness((struct text){path,(*env)->GetStringUTFLength(env,directory)});(*env)->ReleaseStringUTFChars(env,directory,path);if(!raw)return NULL;jstring result=(*env)->NewStringUTF(env,raw);free(raw);return result;}
-JNIEXPORT jlong JNICALL Java_com_familyconnect_app_NativeRestricted_begin(JNIEnv *env,jclass cls,jstring directory,jstring control,jstring resolver,jobject service){
+JNIEXPORT jlong JNICALL Java_com_familyconnect_app_NativeRestricted_begin(JNIEnv *env,jclass cls,jstring directory,jstring control,jstring resolver,jlong budget,jobject service){
  if(!directory||!control||!resolver||!service)return 0;
  const char *dir=(*env)->GetStringUTFChars(env,directory,NULL),*url=(*env)->GetStringUTFChars(env,control,NULL),*dns=(*env)->GetStringUTFChars(env,resolver,NULL);
  if(!dir||!url||!dns){if(dir)(*env)->ReleaseStringUTFChars(env,directory,dir);if(url)(*env)->ReleaseStringUTFChars(env,control,url);if(dns)(*env)->ReleaseStringUTFChars(env,resolver,dns);return 0;}
  jobject owner=(*env)->NewGlobalRef(env,service);int64_t result=0;
- if(owner)result=fcRestrictedBegin((struct text){dir,(*env)->GetStringUTFLength(env,directory)},(struct text){url,(*env)->GetStringUTFLength(env,control)},(struct text){dns,(*env)->GetStringUTFLength(env,resolver)},(uintptr_t)owner);
+ if(owner)result=fcRestrictedBegin((struct text){dir,(*env)->GetStringUTFLength(env,directory)},(struct text){url,(*env)->GetStringUTFLength(env,control)},(struct text){dns,(*env)->GetStringUTFLength(env,resolver)},budget,(uintptr_t)owner);
  (*env)->ReleaseStringUTFChars(env,directory,dir);(*env)->ReleaseStringUTFChars(env,control,url);(*env)->ReleaseStringUTFChars(env,resolver,dns);return result;
 }
 extern char *fcRestrictedFault(struct text);

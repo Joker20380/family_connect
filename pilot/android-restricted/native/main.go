@@ -9,6 +9,7 @@ import "C"
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"errors"
 	"path/filepath"
@@ -18,8 +19,11 @@ import (
 	"time"
 
 	"github.com/Joker20380/family_connect/carrier/familysession"
+	"github.com/Joker20380/family_connect/carrier/restrictedowner"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
+	"github.com/Joker20380/family_connect/carrier/sessionprofile"
 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+	"github.com/Joker20380/family_connect/carrier/startupdiag"
 	"github.com/Joker20380/family_connect/carrier/underlay"
 	"github.com/Joker20380/family_connect/carrier/wholedevice"
 	"github.com/Joker20380/family_connect/restrictedandroid/packet"
@@ -32,21 +36,25 @@ import (
 var ownerMu sync.Mutex
 var current *ownedSession
 var sequence int64
+var transportOwner restrictedowner.Coordinator
 
 type ownedSession struct {
-	id       int64
-	owner    C.uintptr_t
-	ctx      context.Context
-	cancel   context.CancelFunc
-	done     chan struct{}
-	mu       sync.Mutex
-	state    int
-	events   []string
-	network  *underlay.Network
-	session  *wholedevice.Session
-	engine   tun.Stack
-	endpoint stack.LinkEndpoint
-	fd       int
+	id          int64
+	owner       C.uintptr_t
+	ctx         context.Context
+	cancel      context.CancelFunc
+	done        chan struct{}
+	mu          sync.Mutex
+	state       int
+	events      []string
+	network     *underlay.Network
+	session     *wholedevice.Session
+	engine      tun.Stack
+	endpoint    stack.LinkEndpoint
+	fd          int
+	profileHash [32]byte
+	ownership   *restrictedowner.VPN
+	cleanupOnce sync.Once
 }
 
 func (owned *ownedSession) event(name string) {
@@ -72,8 +80,8 @@ func (owned *ownedSession) failure(err error) {
 }
 
 //export fcRestrictedBegin
-func fcRestrictedBegin(directory, control, resolver string, owner C.uintptr_t) int64 {
-	return begin(directory, control, resolver, nil, nil, owner)
+func fcRestrictedBegin(directory, control, resolver string, budget int64, owner C.uintptr_t) int64 {
+	return begin(directory, control, resolver, nil, nil, budget, owner, sessionprofile.P0)
 }
 
 //export fcRestrictedValidationCode
@@ -91,7 +99,11 @@ func fcRestrictedValidateDelivery(response, public, anchor string) int32 {
 }
 
 //export fcRestrictedBeginReady
-func fcRestrictedBeginReady(response, identity, anchor, resolver string, owner C.uintptr_t) int64 {
+func fcRestrictedBeginReady(response, identity, anchor, resolver string, budget int64, owner C.uintptr_t, speed int32) int64 {
+	if speed < 0 || speed > 2 {
+		C.fcRestrictedRelease(owner)
+		return 0
+	}
 	material := []byte(identity)
 	defer clear(material)
 	profile, directory, err := wholedevice.DeliveryMaterial([]byte(response), material, []byte(anchor), time.Now())
@@ -99,43 +111,72 @@ func fcRestrictedBeginReady(response, identity, anchor, resolver string, owner C
 		C.fcRestrictedRelease(owner)
 		return 0
 	}
-	return begin("/", "provisioned", resolver, profile, directory, owner)
+	return begin("/", "provisioned", resolver, profile, directory, budget, owner, sessionprofile.Profile(speed))
 }
 
-func begin(directory, control, resolver string, profile, seed []byte, owner C.uintptr_t) int64 {
+func begin(directory, control, resolver string, profile, seed []byte, budget int64, owner C.uintptr_t, speed sessionprofile.Profile) int64 {
 	directory, control, resolver = strings.Clone(directory), strings.Clone(control), strings.Clone(resolver)
 	ownerMu.Lock()
 	defer ownerMu.Unlock()
-	if current != nil || !filepath.IsAbs(directory) {
+	if current != nil || !filepath.IsAbs(directory) || budget <= 0 || budget > 200000 {
 		clear(profile)
 		C.fcRestrictedRelease(owner)
 		return 0
 	}
 	ctx, cancel := context.WithCancel(context.Background())
-	ctx = sessiontrace.Watch(ctx)
-	network, err := underlay.New(ctx, resolver, func(fd int) bool { return C.fcRestrictedProtect(owner, C.int(fd)) != 0 })
+	ownership, err := transportOwner.ReserveVPN(ctx)
 	if err != nil {
 		clear(profile)
 		cancel()
 		C.fcRestrictedRelease(owner)
 		return 0
 	}
+	ctx = sessionprofile.With(ctx, speed)
+	ctx = startupdiag.Start(ctx, sequence+1)
+	stopBudget := startupdiag.StartBudget(ctx, time.Duration(budget)*time.Millisecond, cancel)
+	ctx = sessiontrace.Watch(ctx)
+	network, err := underlay.New(ctx, resolver, func(fd int) bool { return C.fcRestrictedProtect(owner, C.int(fd)) != 0 })
+	if err != nil {
+		stopBudget()
+		ownership.Release()
+		clear(profile)
+		cancel()
+		C.fcRestrictedRelease(owner)
+		return 0
+	}
 	sequence++
-	owned := &ownedSession{id: sequence, owner: owner, ctx: ctx, cancel: cancel, done: make(chan struct{}), network: network, fd: -1}
+	retainStartup(ctx)
+	owned := &ownedSession{id: sequence, owner: owner, ctx: ctx, cancel: cancel, done: make(chan struct{}), network: network, fd: -1, ownership: ownership}
+	owned.profileHash = sha256.Sum256(profile)
 	current = owned
 	go func() {
 		defer clear(profile)
 		defer close(owned.done)
-		var err error
+		defer stopBudget()
+		err := owned.ownership.Wait(ctx)
+		if err != nil {
+			owned.event("ownership_drain_failed")
+			startupdiag.Failure(ctx, "OWNERSHIP_DRAIN", err)
+			owned.cleanup()
+			owned.mu.Lock()
+			owned.state = 3
+			owned.mu.Unlock()
+			startupdiag.Complete(ctx, err)
+			return
+		}
+		owned.event("ownership_cleanup_complete")
 		path, cache := filepath.Join(directory, "family.json"), filepath.Join(directory, "bootstrap.json")
 		if control != "" && control != "auto" && control != "provisioned" {
 			bounded, finish := context.WithTimeout(ctx, 30*time.Second)
 			defer finish()
 			err = wholedevice.Refresh(bounded, path, cache, control, network)
+			startupdiag.Failure(ctx, "CONTROL_REFRESH", err)
+			startupdiag.Complete(ctx, err)
 			owned.failure(err)
 			if err == nil {
 				owned.event("bootstrap_cache_stored")
 			}
+			owned.cleanup()
 			owned.mu.Lock()
 			defer owned.mu.Unlock()
 			if err == nil {
@@ -153,17 +194,31 @@ func begin(directory, control, resolver string, profile, seed []byte, owner C.ui
 		} else {
 			session, err = wholedevice.Open(ctx, path, cache, network, owned.event)
 		}
+		if !stopBudget() && err == nil {
+			err = context.DeadlineExceeded
+		}
+		if err == nil {
+			err = owned.ownership.Publish(session, owned.profileHash)
+		}
+		owned.mu.Lock()
+		owned.session = session
+		owned.mu.Unlock()
+		if err != nil {
+			startupdiag.Failure(ctx, "STARTUP", err)
+			owned.cleanup()
+		}
 		owned.failure(err)
 		owned.mu.Lock()
 		defer owned.mu.Unlock()
+		startupdiag.Complete(ctx, err)
 		if err != nil {
 			owned.state = 3
-			if errors.Is(err, familysession.ErrRejected) || errors.Is(err, roombroker.Code("credentials_rejected")) || errors.Is(err, roombroker.Code("bootstrap_auth_failed")) {
+			legacy := startupdiag.Legacy(err)
+			if errors.Is(legacy, familysession.ErrRejected) || errors.Is(legacy, roombroker.Code("credentials_rejected")) || errors.Is(legacy, roombroker.Code("bootstrap_auth_failed")) {
 				owned.state = 5
 			}
 			return
 		}
-		owned.session = session
 		owned.state = 1
 	}()
 	return owned.id
@@ -227,7 +282,10 @@ func fcRestrictedStats(id int64) *C.char {
 	ownerMu.Lock()
 	defer ownerMu.Unlock()
 	if current == nil || current.id != id {
-		return C.CString("{}")
+		stats := map[string]any{}
+		startupStats(stats, id)
+		raw, _ := json.Marshal(stats)
+		return C.CString(string(raw))
 	}
 	owned := current
 	owned.mu.Lock()
@@ -236,6 +294,7 @@ func fcRestrictedStats(id int64) *C.char {
 	runtime.ReadMemStats(&memory)
 	stats := map[string]any{"events": owned.events, "state": owned.state, "goroutines": runtime.NumGoroutine(),
 		"go_heap": memory.Alloc, "protect_ok": owned.network.Protected.Load(), "protect_denied": owned.network.Rejected.Load(), "underlay_dns": owned.network.DNS.Load()}
+	startupStats(stats, id)
 	owned.events = nil
 	if owned.session != nil {
 		stats["packet"] = owned.session.Snapshot()
@@ -259,25 +318,37 @@ func fcRestrictedStop(id int64) int32 {
 	}
 	owned := current
 	sessiontrace.From(owned.ctx).Add("LOCAL_CLOSE", "STARTED", "NONE")
+	startupdiag.Stop(owned.ctx, "CONNECT_CANCEL")
+	startupdiag.Cancel(owned.ctx)
 	owned.cancel()
 	<-owned.done
-	if owned.session != nil {
-		owned.session.Close()
-	}
-	if owned.engine != nil {
-		owned.engine.Close()
-	}
-	if owned.endpoint != nil {
-		owned.endpoint.Close()
-		owned.endpoint.Wait()
-	}
-	if owned.fd >= 0 {
-		unix.Close(owned.fd)
-	}
-	owned.network.Close()
-	C.fcRestrictedRelease(owned.owner)
+	owned.cleanup()
 	current = nil
 	return 1
+}
+
+func (owned *ownedSession) cleanup() {
+	owned.cleanupOnce.Do(func() {
+		startupdiag.Stop(owned.ctx, "CLEANUP")
+		owned.cancel()
+		if owned.session != nil {
+			owned.session.Close()
+		}
+		if owned.engine != nil {
+			owned.engine.Close()
+		}
+		if owned.endpoint != nil {
+			owned.endpoint.Close()
+			owned.endpoint.Wait()
+		}
+		if owned.fd >= 0 {
+			unix.Close(owned.fd)
+		}
+		owned.network.Close()
+		owned.ownership.Drain()
+		C.fcRestrictedRelease(owned.owner)
+		owned.ownership.Release()
+	})
 }
 
 //export fcRestrictedReadiness

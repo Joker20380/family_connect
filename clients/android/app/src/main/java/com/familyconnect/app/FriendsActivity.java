@@ -16,11 +16,13 @@ import javax.net.ssl.HttpsURLConnection;
 
 /** Separate open-test launcher: one-use invitation, no accounts or billing; separate from managed journal. */
 public final class FriendsActivity extends LocalizedActivity {
-    private static final String[][] TRANSPORTS={{"auto","Auto"},{"awg","AWG 3.1"},{"tcp","TCP REALITY"}};
+    private static final String[][] TRANSPORTS={{"auto","Auto"},{"awg","AWG 3.1"},{"tcp","TCP REALITY"},{"telemost",TransportPresentation.MESH}};
     private final Handler handler=new Handler(Looper.getMainLooper());
     private final ExecutorService worker=Executors.newSingleThreadExecutor();
-    private TextView status,detail,routeCaption,routeStatus,routeDetail;private Button check,activate;private TerminalToggle connect;private Spinner countries,transports;
+    private TextView status,detail,routeCaption,routeStatus,routeDetail,messageRoute;private Button check,activate,speedButton;private TerminalToggle connect;private Spinner countries,transports;
     private boolean busy,reconnect,initializing=true;
+    private ConnectionTerminalView vpnTerminal,chatTerminal;
+    private LinearLayout connectionWorkspace;
     private TerminalUi.Dial dial;
     private final ExecutorService loadWorker=Executors.newSingleThreadExecutor();
     private TextView loadLabel;private ProgressBar loadBar;
@@ -31,6 +33,8 @@ public final class FriendsActivity extends LocalizedActivity {
     private final Runnable restrictedRefresh=new Runnable(){public void run(){if(!loadResumed)return;if(getPreferences(MODE_PRIVATE).getBoolean("activated",false))FriendsRestricted.prewarm(FriendsActivity.this);handler.postDelayed(this,60000);}};
     private AppUpdateUi appUpdate;
     private boolean motion;
+    private HomeBrand homeBrand;
+    private TextView homeActiveTransport,homeBattery;
     private String country,activeCountry;
     private LiveNetworkPanel telemetry;
     private RouteMapView routeMap, dashboardMap;
@@ -42,6 +46,8 @@ public final class FriendsActivity extends LocalizedActivity {
     private LinearLayout dashboardRoot;
     private int currentTab;
     private String transport;
+    private long telemetryAttempt=-1,telemetrySession=-1;
+    private boolean telemetryConnected;
     private final Runnable refresh=new Runnable(){public void run(){render();handler.postDelayed(this,500);}};
     @Override public void onCreate(Bundle state){
         super.onCreate(state);getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE);transport=getPreferences(MODE_PRIVATE).getString("transport","auto");country=getPreferences(MODE_PRIVATE).getString("country","nl");
@@ -54,7 +60,7 @@ public final class FriendsActivity extends LocalizedActivity {
         countries.setSelection(country.equals("nl")?1:0);
         String[] transportLabels=new String[TRANSPORTS.length];for(int i=0;i<TRANSPORTS.length;i++)transportLabels[i]=TRANSPORTS[i][1];
         transports=new Spinner(this);TerminalUi.inlinePicker(transports,transportLabels);
-        transports.setContentDescription(getString(R.string.terminal_transport));transports.setSelection(transport.equals("auto")?0:transport.equals("awg")?1:2);
+        transports.setContentDescription(getString(R.string.terminal_transport));transports.setSelection(transport.equals("auto")?0:transport.equals("awg")?1:transport.equals("tcp")?2:3);
         countries.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onNothingSelected(AdapterView<?> parent){}
             public void onItemSelected(AdapterView<?> parent,android.view.View view,int position,long id){
@@ -78,12 +84,13 @@ public final class FriendsActivity extends LocalizedActivity {
     }
     private void buildDashboard(){
         LinearLayout root=TerminalUi.dashboard(this);dashboardRoot=root;
-        TerminalUi.dashboardHeader(root);
+        homeBrand=new HomeBrand(this);TerminalUi.dashboardHeader(root);
         LinearLayout panel=TerminalUi.dashboardPanel(root,1);
         dial=new TerminalUi.Dial(this);dial.setMotion(motion);
         dial.setOnClickListener(v->{if(busy)return;if(getPreferences(MODE_PRIVATE).getBoolean("activated",false))toggle();else register(true);});
         panel.addView(dial,new LinearLayout.LayoutParams(-1,0,1));
         status=TerminalUi.compactLabel(panel,"",18,TerminalUi.TEXT);status.setGravity(Gravity.CENTER);status.setMaxLines(2);
+        messageRoute=TerminalUi.compactLabel(panel,"",12,TerminalUi.MUTED);
         connect=new TerminalToggle(this);connect.setControlled(true);connect.setMotion(motion);
         connect.setOnClickListener(v->{if(getPreferences(MODE_PRIVATE).getBoolean("activated",false))toggle();else register(true);});
         loadLabel=TerminalUi.compactLabel(panel,"",12,TerminalUi.MUTED);
@@ -92,13 +99,21 @@ public final class FriendsActivity extends LocalizedActivity {
         loadBar.setProgressBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.rgb(16,46,36)));
         LinearLayout.LayoutParams loadLayout=new LinearLayout.LayoutParams(-1,TerminalUi.dp(this,8));loadLayout.bottomMargin=TerminalUi.dp(this,12);panel.addView(loadBar,loadLayout);
         routeCaption=TerminalUi.compactLabel(root,"",12,TerminalUi.MUTED);routeCaption.setGravity(Gravity.CENTER);routeCaption.setMaxLines(2);routeCaption.setVisibility(android.view.View.GONE);
-        telemetry=new LiveNetworkPanel(this);telemetry.selectors(countries,transports);LinearLayout.LayoutParams telemetryLayout=new LinearLayout.LayoutParams(-1,TerminalUi.dp(this,150));telemetryLayout.topMargin=TerminalUi.dp(this,8);root.addView(telemetry,telemetryLayout);
+        connectionWorkspace=new LinearLayout(this);connectionWorkspace.setOrientation(LinearLayout.VERTICAL);connectionWorkspace.setTag("connection_workspace");
+        telemetry=new LiveNetworkPanel(this);connectionWorkspace.addView(telemetry,new LinearLayout.LayoutParams(-1,-1));
+        panel.removeView(messageRoute);telemetry.selectors(countries,transports,messageRoute);
+        homeActiveTransport=new TextView(this);TerminalUi.textStyle(homeActiveTransport,12,TerminalUi.MUTED);homeActiveTransport.setTag("home_active_transport");
+        homeBattery=new TextView(this);TerminalUi.textStyle(homeBattery,12,TerminalUi.MUTED);homeBattery.setTag("home_battery");
+        for(TextView label:new TextView[]{homeActiveTransport,homeBattery}){label.setPadding(0,0,0,0);label.setIncludeFontPadding(false);label.setSingleLine(true);label.setHorizontallyScrolling(false);}
+        LinearLayout.LayoutParams telemetryLayout=new LinearLayout.LayoutParams(-1,TerminalUi.dp(this,212));telemetryLayout.topMargin=TerminalUi.dp(this,8);root.addView(connectionWorkspace,telemetryLayout);
         activate=new Button(this);activate.setOnClickListener(v->{
             if(getPreferences(MODE_PRIVATE).getBoolean("activated",false))startActivity(new Intent(this,ReferralActivity.class));else activate();
         });
         TerminalUi.actionStyle(activate);
         detail=TerminalUi.compactLabel(panel,"",12,TerminalUi.MUTED);detail.setMaxLines(2);detail.setVisibility(android.view.View.GONE);
         detail.setEllipsize(android.text.TextUtils.TruncateAt.END);detail.setGravity(Gravity.CENTER);
+        vpnTerminal=new ConnectionTerminalView(this,ConnectionTerminal.VPN,false,this::disconnect,true);connectionWorkspace.addView(vpnTerminal,new LinearLayout.LayoutParams(-1,-1));
+        chatTerminal=new ConnectionTerminalView(this,ConnectionTerminal.CHAT,true,()->{ConnectionTerminal.CHAT.end(ConnectionTerminal.CHAT.snapshot().attempt,ConnectionTerminal.Stage.CANCELLED,false);stopService(new Intent(this,ChatDeliveryService.class));ChatRuntime.stop();},true);connectionWorkspace.addView(chatTerminal,new LinearLayout.LayoutParams(-1,-1));
         detail.addTextChangedListener(new android.text.TextWatcher(){
             public void beforeTextChanged(CharSequence s,int start,int count,int after){}
             public void onTextChanged(CharSequence s,int start,int before,int count){detail.setVisibility(s.length()==0?android.view.View.GONE:android.view.View.VISIBLE);}
@@ -109,7 +124,7 @@ public final class FriendsActivity extends LocalizedActivity {
         dashboardMap=new RouteMapView(this,code->{});dashboardMap.compactPreview();
         dashboardMap.setOnClickListener(v->navigate(2));
         dashboardLocation=new RouteLocation(this,location->{mapOrigin=location;dashboardMap.locate(location);if(routeMap!=null)routeMap.locate(location);},resource->{});
-        TerminalUi.compactDashboardDial(root,panel,dial,telemetry,dashboardMap);
+        TerminalUi.compactDashboardDial(root,panel,dial,connectionWorkspace,dashboardMap);
         render();
     }
     void navigate(int tab){
@@ -131,7 +146,7 @@ public final class FriendsActivity extends LocalizedActivity {
     }
     private void showRoute(){
 
-        countries.setSelection(country.equals("nl")?1:0);transports.setSelection(transport.equals("auto")?0:transport.equals("awg")?1:2);
+        countries.setSelection(country.equals("nl")?1:0);transports.setSelection(transport.equals("auto")?0:transport.equals("awg")?1:transport.equals("tcp")?2:3);
 
         LinearLayout page=dialogContent();page.setPadding(TerminalUi.dp(this,12),TerminalUi.dp(this,8),TerminalUi.dp(this,12),TerminalUi.dp(this,8));
         TerminalUi.dashboardHeader(page);
@@ -154,7 +169,7 @@ public final class FriendsActivity extends LocalizedActivity {
 
         attach(panel,check);routeDetail=TerminalUi.label(panel,detail.getText().toString(),12,TerminalUi.MUTED);
         TerminalUi.tabs(page,this,2);
-        setContentView(page);
+        TerminalUi.install(this,page);
         if(routeLocation.permitted())routeLocation.start();render();
     }
     private void showSettings(){
@@ -170,6 +185,16 @@ public final class FriendsActivity extends LocalizedActivity {
         toggle.setOnCheckedChangeListener((button,checked)->{
             motion=checked;toggle.setMotion(motion);getPreferences(MODE_PRIVATE).edit().putBoolean("motion",motion).apply();dial.setMotion(motion);connect.setMotion(motion);
         });
+        RadioSettings.attach(panel);
+        speedButton=TerminalUi.button(panel,R.string.mesh_speed_profile,()->{
+            if(!SpeedProfile.canSelect(ConnectionService.status,busy))return;
+            new android.app.AlertDialog.Builder(this).setTitle(R.string.mesh_speed_profile)
+                .setSingleChoiceItems(new String[]{"P0 · RS8/16 · legacy", "P1 · RS32/32 · CREDIT128", "P2 · P1 + Q1"},SpeedProfile.read(this),(dialog,index)->{
+                    if(SpeedProfile.canSelect(ConnectionService.status,busy))SpeedProfile.save(this,index);
+                    dialog.dismiss();render();
+                }).setNegativeButton(android.R.string.cancel,null).show();
+        });
+        TerminalUi.label(panel,getString(R.string.mesh_speed_hint),13,TerminalUi.MUTED);
         String selectedLanguage=AppLanguage.selected(this);
         String languageName=selectedLanguage.equals("ru")?"Русский":selectedLanguage.equals("en")?"English":getString(R.string.language_system);
         TerminalUi.label(panel,getString(R.string.language),12,TerminalUi.AMBER);
@@ -185,6 +210,7 @@ public final class FriendsActivity extends LocalizedActivity {
         DeviceSupport.attach(this,panel,worker);
         TerminalUi.label(panel,getString(R.string.product_version,TerminalUi.version(this)),12,TerminalUi.MUTED);
         appUpdate.attach(panel);
+        SupportAutomation.controls(this,panel);
         TerminalUi.button(panel,R.string.diagnostics_send,()->Diagnostics.share(this));
         TerminalUi.label(panel,getString(R.string.friends_hint),12,TerminalUi.MUTED);
         attach(panel,activate);
@@ -213,21 +239,39 @@ public final class FriendsActivity extends LocalizedActivity {
         });
         ScrollView scroll=new ScrollView(this);scroll.addView(panel);
         page.addView(scroll,new LinearLayout.LayoutParams(-1,0,1));TerminalUi.tabs(page,this,3);
-        setContentView(page);
+        TerminalUi.install(this,page);
     }
     private TextView label(LinearLayout parent,String text,int size){return TerminalUi.label(parent,text,size,TerminalUi.TEXT);}
     private Button button(LinearLayout parent,int title,Runnable action){return TerminalUi.button(parent,title,action);}
     private void text(TextView view,String value){if(!value.contentEquals(view.getText()))view.setText(value);}
     private void render(){
+        if(vpnTerminal!=null)vpnTerminal.refresh();if(chatTerminal!=null)chatTerminal.refresh();
         if(connect==null)return;String value=ConnectionService.status;boolean on=value.equals("on"),off=value.equals("off");
+        if(speedButton!=null){speedButton.setEnabled(SpeedProfile.canSelect(value,busy));speedButton.setText(getString(R.string.mesh_speed_profile)+": P"+SpeedProfile.read(this));}
+        homeBrand.connection(value,motion);
+        String actual=ConnectionService.activeTransport;
+        text(homeActiveTransport,!on?"—":actual.equals("awg")?"AWG 3.1":actual.equals("tcp")?"TCP":actual.equals("restricted")||actual.equals("telemost")?TransportPresentation.MESH:"—");
+        homeActiveTransport.setContentDescription("VPN · "+getString(R.string.terminal_transport)+": "+homeActiveTransport.getText());
+        homeActiveTransport.setTooltipText(homeActiveTransport.getContentDescription());
+        int battery=getSystemService(android.os.BatteryManager.class).getIntProperty(android.os.BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        text(homeBattery,battery>=0&&battery<=100?battery+"%":"—");
+        homeBattery.setContentDescription(getString(R.string.live_battery)+": "+homeBattery.getText());homeBattery.setTooltipText(homeBattery.getContentDescription());
+        long attempt=ConnectionTerminal.VPN.snapshot().attempt;
+        if(attempt!=telemetryAttempt||on!=telemetryConnected||telemetrySession!=ConnectionService.sessionId){telemetry.pause();telemetryAttempt=attempt;telemetryConnected=on;telemetrySession=ConnectionService.sessionId;}
+        int connectionPane=ConnectionTerminal.homePane(value,ConnectionTerminal.VPN.snapshot());
+        telemetry.setVisibility(connectionPane==0?android.view.View.VISIBLE:android.view.View.GONE);
+        vpnTerminal.setVisibility(connectionPane==1?android.view.View.VISIBLE:android.view.View.GONE);
+        chatTerminal.setVisibility(connectionPane==2?android.view.View.VISIBLE:android.view.View.GONE);
+        text(messageRoute,getString(R.string.message_configured_route,ChatRuntime.configuredRoute()));
         dial.update(value,ConnectionService.healthStatus);dial.setEnabled(!busy);
-        text(status,getString(value.equals("restoring")?R.string.restoring:value.equals("failed")?R.string.unable_connect:off?R.string.off:on?R.string.on:R.string.connecting));
-        text(connect,getString(off?R.string.connect:R.string.disconnect));connect.setChecked(on);connect.setPending(!off&&!on);boolean enabled=getPreferences(MODE_PRIVATE).getBoolean("activated",false);connect.setEnabled(!busy);text(activate,getString(enabled?R.string.referral_title:R.string.friends_activate));activate.setEnabled(!busy);
+        text(status,getString(Ui60Presentation.status(value,ConnectionService.failed)));
+        text(connect,getString(off||value.equals("failed")?R.string.connect:on?R.string.disconnect:android.R.string.cancel));connect.setChecked(on);connect.setPending(!off&&!on);boolean enabled=getPreferences(MODE_PRIVATE).getBoolean("activated",false);connect.setEnabled(!busy);text(activate,getString(enabled?R.string.referral_title:R.string.friends_activate));activate.setEnabled(!busy);
         String shownCountry=off?country:activeCountry;
         String shownTransport=off?transport:ConnectionService.activeTransport;
-        String transportLabel=shownTransport.equals("auto")?"Auto":shownTransport.equals("awg")?"AWG 3.1":shownTransport.equals("restricted")?TransportPresentation.MESH:"TCP REALITY";
+        String transportLabel=shownTransport.equals("auto")?"Auto":shownTransport.equals("awg")?"AWG 3.1":shownTransport.equals("restricted")||shownTransport.equals("telemost")?TransportPresentation.MESH:"TCP REALITY";
         String summary=getString(shownCountry.equals("nl")?R.string.gateway_netherlands:R.string.gateway_russia)+"  /  "+transportLabel;
-        text(routeCaption,summary);telemetry.connection(getString(shownCountry.equals("nl")?R.string.gateway_netherlands:R.string.gateway_russia),transportLabel,getString(off?R.string.off:on?(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.health_checking):R.string.connecting));telemetry.sample();renderLoad();
+        text(routeCaption,summary);telemetry.connection(getString(shownCountry.equals("nl")?R.string.gateway_netherlands:R.string.gateway_russia),transportLabel,getString(off?R.string.off:on?(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.health_checking):R.string.connecting));if(connectionPane==0&&on)telemetry.sample();else telemetry.pause();renderLoad();
+        telemetry.deviceBattery(battery);
         if(routeDial!=null){routeDial.setMotion(motion);routeDial.update(value,ConnectionService.healthStatus);routeDial.setEnabled(!busy);}
         if(dashboardMap!=null)dashboardMap.update(shownCountry,value,ConnectionService.healthStatus,false);
         if(routeMap!=null){routeMap.update(shownCountry,value,ConnectionService.healthStatus,motion);text(routeStatus,getString(off?R.string.route_selected:R.string.route_active)+" · "+summary+"\n"+getString(R.string.route_core)+": "+getString(off?R.string.route_waiting:on?R.string.on:R.string.connecting)+"\n"+getString(R.string.route_check)+": "+getString(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:off?R.string.route_waiting:R.string.health_checking));text(routeDetail,detail.getText().toString());}
@@ -275,6 +319,16 @@ public final class FriendsActivity extends LocalizedActivity {
             });
         });
     }
+    private String supportCommand(String method,String argument){
+        if(busy)return "BUSY";
+        if("disconnect".equals(method)){reconnect=false;if("off".equals(ConnectionService.status))return "ALREADY_OFF";disconnect();return "DISCONNECT_REQUESTED";}
+        if(!"off".equals(ConnectionService.status))return "DISCONNECT_FIRST";
+        if("profile".equals(method)){SpeedProfile.save(this,Integer.parseInt(argument.substring(1)));render();return "NEXT_SESSION_"+argument;}
+        if(!"telemost".equals(transport))return "SELECT_MESH_IN_APP_FIRST";
+        if(VpnService.prepare(this)!=null)return "VPN_PERMISSION_REQUIRED";
+        if(Build.VERSION.SDK_INT>=33&&checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=android.content.pm.PackageManager.PERMISSION_GRANTED)return "NOTIFICATION_PERMISSION_REQUIRED";
+        prepareConnect();return "CONNECT_REQUESTED";
+    }
     private void disconnect(){startService(new Intent(this,ConnectionService.class).setAction("disconnect"));}
     private void toggle(){
         if(busy)return;if(!ConnectionService.status.equals("off")){reconnect=false;disconnect();return;}
@@ -285,10 +339,10 @@ public final class FriendsActivity extends LocalizedActivity {
         connectNow();
     }
     private void connectNow(){
-        if("auto".equals(transport)){
+        if("auto".equals(transport)||"telemost".equals(transport)){
             activeCountry=country;getPreferences(MODE_PRIVATE).edit().putString("session_country",country).apply();
             ConnectionService.status="connecting";ConnectionService.failed=false;
-            startForegroundService(new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport","auto").putExtra("country",country));render();return;
+            startForegroundService(new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport",transport).putExtra("country",country));render();return;
         }
         busy=true;ConnectionService.failed=false;detail.setText(R.string.checking);render();final String chosen=country,chosenTransport=transport;
         worker.execute(()->{
@@ -354,9 +408,9 @@ public final class FriendsActivity extends LocalizedActivity {
         boolean ru=code.equals("ru");
         ImageView flag=new ImageView(c);flag.setImageResource(ru?R.drawable.ic_flag_ru:R.drawable.ic_flag_nl);flag.setAdjustViewBounds(true);
         LinearLayout.LayoutParams flagParams=new LinearLayout.LayoutParams(TerminalUi.dp(c,24),TerminalUi.dp(c,16));flagParams.rightMargin=TerminalUi.dp(c,10);row.addView(flag,flagParams);
-        TextView name=new TextView(c);name.setText(ru?R.string.gateway_russia:R.string.gateway_netherlands);TerminalUi.textStyle(name,collapsed?12:14,collapsed?TerminalUi.MINT:TerminalUi.TEXT);name.setGravity(Gravity.CENTER_VERTICAL);
+        TextView name=collapsed?new TerminalUi.InlineLabel(c):new TextView(c);name.setText(ru?R.string.gateway_russia:R.string.gateway_netherlands);TerminalUi.textStyle(name,collapsed?12:14,collapsed?TerminalUi.MINT:TerminalUi.TEXT);name.setGravity(Gravity.CENTER_VERTICAL);
         row.addView(name,new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,1));
-        if(collapsed){name.append("  ▾");return row;}
+        if(collapsed){((TerminalUi.InlineLabel)name).label(name.getText()+"  ▾");name.setMinHeight(Math.max(TerminalUi.dp(c,48),(int)Math.ceil(name.getPaint().getFontMetrics().bottom-name.getPaint().getFontMetrics().top)));return row;}
         ServerLoad sample=serverLoads.get(code);if(sample!=null&&!sample.fresh(System.currentTimeMillis()/1000.0))sample=null;
         Double percent=sample==null?null:sample.percent;boolean locRu=getResources().getConfiguration().getLocales().get(0).getLanguage().equals("ru");
         TextView load=new TextView(c);load.setText(percent==null?(locRu?"Нет данных":"No data"):(sample.estimated?"≈ ":"")+Math.round(percent)+"%");
@@ -365,7 +419,7 @@ public final class FriendsActivity extends LocalizedActivity {
         row.addView(load,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
         row.setMinimumHeight(TerminalUi.dp(c,48));row.setPadding(TerminalUi.dp(c,12),TerminalUi.dp(c,6),TerminalUi.dp(c,12),TerminalUi.dp(c,6));return row;
     }
-    @Override protected void onResume(){super.onResume();if(getPreferences(MODE_PRIVATE).getBoolean("activated",false)){ChatNotifications.request(this);ChatDeliveryService.start(this);}if(dashboardLocation!=null&&dashboardLocation.permitted())dashboardLocation.start();if(appUpdate!=null){appUpdate.render();appUpdate.onForeground(this::showSettings);}loadResumed=true;handler.post(loadRefresh);handler.post(restrictedRefresh);handler.post(refresh);if(routeLocation!=null&&routeLocation.permitted())routeLocation.start();}
-    @Override protected void onPause(){if(dashboardLocation!=null)dashboardLocation.stop();loadResumed=false;handler.removeCallbacks(loadRefresh);handler.removeCallbacks(restrictedRefresh);handler.removeCallbacks(refresh);if(telemetry!=null)telemetry.pause();if(routeLocation!=null)routeLocation.stop();super.onPause();}
+    @Override protected void onResume(){super.onResume();SupportAutomation.attach(this::supportCommand);if(getPreferences(MODE_PRIVATE).getBoolean("activated",false)){ChatNotifications.request(this);ChatDeliveryService.start(this);}if(dashboardLocation!=null&&dashboardLocation.permitted())dashboardLocation.start();if(appUpdate!=null){appUpdate.render();appUpdate.onForeground(this::showSettings);}loadResumed=true;handler.post(loadRefresh);handler.post(restrictedRefresh);handler.post(refresh);if(routeLocation!=null&&routeLocation.permitted())routeLocation.start();}
+    @Override protected void onPause(){SupportAutomation.detach();if(dashboardLocation!=null)dashboardLocation.stop();loadResumed=false;handler.removeCallbacks(loadRefresh);handler.removeCallbacks(restrictedRefresh);handler.removeCallbacks(refresh);if(telemetry!=null)telemetry.pause();if(routeLocation!=null)routeLocation.stop();super.onPause();}
     @Override protected void onDestroy(){handler.removeCallbacks(refresh);handler.removeCallbacks(restrictedRefresh);if(routeLocation!=null)routeLocation.stop();loadResumed=false;handler.removeCallbacks(loadRefresh);loadWorker.shutdownNow();if(appUpdate!=null)appUpdate.close();worker.shutdownNow();super.onDestroy();}
 }

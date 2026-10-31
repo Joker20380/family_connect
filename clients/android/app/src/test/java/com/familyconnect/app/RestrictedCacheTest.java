@@ -7,6 +7,22 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class RestrictedCacheTest {
+    @Test public void explicitStartupRefreshKeepsDurableCooldownAndReplayFloors()throws Exception{
+        Memory storage=new Memory();RestrictedCache original=cache(storage,1000);
+        byte[] saved=response(1000,2000,5,7,2,"seed");original.accept(saved);
+        assertTrue(original.attempt(1000));assertFalse(original.attempt(1001));
+        assertTrue(original.attempt(1001,true));assertFalse(original.attempt(1300));
+        rejected(original,response(1002,2000,4,7,2,"rollback"));
+        assertArrayEquals(saved,original.usable());
+        original.denied();assertTrue(original.attempt(1002,true));
+        assertNull(original.usable());rejected(original,saved);
+    }
+    @Test public void explicitRefreshCannotBypassFailedCooldownPersistence()throws Exception{
+        Memory storage=new Memory();RestrictedCache original=cache(storage,1000);
+        assertTrue(original.attempt(1000));storage.fail=true;
+        try{original.attempt(1001,true);fail("refresh without durable attempt");}
+        catch(java.io.IOException expected){}
+    }
     @Test public void validLongLivedCacheStillRefreshesOnPersistentCadence()throws Exception{
         Memory storage=new Memory();RestrictedCache original=cache(storage,1000);
         assertTrue(original.attempt(1000));

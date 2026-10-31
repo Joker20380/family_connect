@@ -1,0 +1,19 @@
+<resources>
+    <string name="event_update">UPDATE NOTICE</string>
+    <string name="event_maintenance">MAINTENANCE</string>
+    <string name="event_server_change">SERVICE CHANGE</string>
+    <string name="event_information">INFORMATION</string>
+    <string name="event_builds">Builds %1$s–%2$s</string>
+    <string name="chat_local_only">Local history · delivery is not configured</string>
+    <string name="radio_title">VOICE PROFILE</string>
+    <string name="radio_normal">Normal · Opus</string>
+    <string name="radio_notice">Radio uses digital Codec2, not an analogue channel. Experimental: send only to peers whose Codec2 support you have confirmed. Opus remains the default.</string>
+    <string name="radio_confirm">This contact supports Codec2</string>
+    <string name="radio_confirm_body">Confirm support on the recipient’s client before sending Radio audio. This does not change their identity or trust verification.</string>
+    <string name="voice_stop_preview">Stop and preview</string>
+    <string name="voice_preview">Preview voice recording</string>
+    <string name="exit_official">EXIT · Verified LXMF publisher</string>
+    <string name="event_valid_until">Valid until %1$s</string>
+    <string name="vpn_separate">VPN and message delivery are separate services</string>
+    <string name="message_configured_route">Messages · configured route: %1$s\nIndependent of full VPN</string>
+</resources>

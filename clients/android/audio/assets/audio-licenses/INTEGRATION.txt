@@ -1,0 +1,20 @@
+Family Connect Android audio profile — corresponding-source obligations.
+
+Codec2 1.2.0, drowe67/codec2 commit 06d4c11e699b0351765f10398abb4f663a984f36.
+Unmodified upstream shared library, LGPL version 2.1; COPYING accompanies it.
+KissFFT BSD notice and original linked-source headers accompany it.
+JNI uses the public codec2_create/encode/decode/frame-size API. Android dynamically
+loads libexit_audio.so and libcodec2.so. No Sideband or LXST implementation copied.
+Sideband ef572b58e88ff4e4326d51778336922a53b2a03f is a reference only,
+licensed CC BY-NC-SA 4.0; it is NOT an APK dependency.
+
+The release must provide the exact Codec2 source archive, clients/android/audio/build.py,
+JNI source and these notices alongside the APK. The builder produces this bundle
+in corresponding-source/. Rebuild/replace libcodec2.so with that script and re-sign
+your modified APK with your own key; there is no audio-library hash lock or requirement
+to possess the production signing key. A differently signed APK cannot replace an
+installed production APK in place; use an isolated installation for modified builds.
+LGPL permissions for modification of the linked library and reverse
+engineering to debug those modifications are not restricted by the project notice.
+Any external distribution requires these materials and obligations to accompany
+the binary; this notice is not blanket clearance of other app dependencies.

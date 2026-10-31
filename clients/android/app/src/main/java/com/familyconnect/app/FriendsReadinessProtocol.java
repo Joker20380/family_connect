@@ -8,10 +8,20 @@ import java.util.Map;
 import static com.familyconnect.app.ControlJson.*;
 
 final class FriendsReadinessProtocol {
+    static class AuthorizationFailure extends Exception {}
+    static final class Unavailable extends java.io.IOException {}
     enum ChallengeCode { CHALLENGE_UNAUTHORIZED, CHALLENGE_TEMPORARY_SERVER_FAILURE, CHALLENGE_INCOMPATIBLE_RESPONSE, CHALLENGE_TIMEOUT, CHALLENGE_INTERNAL_ERROR }
     static final class ChallengeFailure extends IllegalArgumentException {
         final ChallengeCode code;
-        ChallengeFailure(ChallengeCode code){super(code.name());this.code=code;}
+        final boolean availabilityFailure;
+        ChallengeFailure(ChallengeCode code){this(code,code==ChallengeCode.CHALLENGE_TIMEOUT||code==ChallengeCode.CHALLENGE_TEMPORARY_SERVER_FAILURE);}
+        ChallengeFailure(ChallengeCode code,boolean availabilityFailure){super(code.name());this.code=code;this.availabilityFailure=availabilityFailure;}
+    }
+    static boolean unavailable(Exception failure){
+        if(failure instanceof ChallengeFailure)return ((ChallengeFailure)failure).availabilityFailure;
+        return failure instanceof Unavailable||failure instanceof java.net.SocketTimeoutException
+            ||failure instanceof java.net.SocketException
+            ||failure instanceof java.net.UnknownHostException;
     }
     static byte[] wireBytes(JsonObject body){return body.toString().getBytes(StandardCharsets.UTF_8);}
     static Map<String,String> wireHeaders(String requestId){
@@ -38,7 +48,7 @@ final class FriendsReadinessProtocol {
         try{nonce=challengeResponse(transport.post("/friends/restricted-readiness/challenge",request,receipt.challengeId),System.currentTimeMillis()/1000);}
         catch(ChallengeFailure failure){throw failure;}
         catch(java.net.SocketTimeoutException failure){throw new ChallengeFailure(ChallengeCode.CHALLENGE_TIMEOUT);}
-        catch(java.io.IOException failure){throw new ChallengeFailure(ChallengeCode.CHALLENGE_TEMPORARY_SERVER_FAILURE);}
+        catch(java.io.IOException failure){throw new ChallengeFailure(ChallengeCode.CHALLENGE_TEMPORARY_SERVER_FAILURE,unavailable(failure));}
         catch(Exception failure){throw new ChallengeFailure(ChallengeCode.CHALLENGE_INTERNAL_ERROR);}
         receipt.challengeIssued();
         JsonObject response=transport.post("/friends/restricted-readiness",identity.proveTransportKey(nonce),receipt.fetchId);

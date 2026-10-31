@@ -26,12 +26,16 @@ def _object(pairs):
 
 
 class Session:
-    def __init__(self, directory, runtime_directory, cipher, create):
+    def __init__(self, directory, runtime_directory, cipher, create, platform, version):
         self.local = None
         self.carrier = None
+        if platform != 'android' or type(version) is not int or not 0 <= version <= 2147483647:
+            raise LocalError('runtime_context_unavailable')
         try:
             initialize(str(runtime_directory))
-            self.local = LocalChat(str(directory), create=create, cipher=_JavaCipher(cipher))
+            self.local = LocalChat(str(directory), create=create, cipher=_JavaCipher(cipher),
+                                   platform=platform, version=version)
+            self.local._chat.durable_delivery = True
         except Exception:
             raise LocalError('store_unavailable') from None
 
@@ -47,6 +51,7 @@ class Session:
                           'history': ('address', 'offset', 'limit'), 'delivery_state': (), 'request_sync': (), 'inbox': (),
                           'mark_inbox': ('ids', 'flag'), 'rename_contact': ('address', 'name'), 'service_events': (),
                           'edit_message': ('address','message_id','text'), 'queue_audio': ('address','audio'), 'audio': ('message_id',),
+                          'queue_radio': ('address','audio','mode','confirmed'),
                           'import_events': ('feed',), 'mark_events': ('ids', 'flag')}
             if operation not in signatures or type(data) is not dict or set(data) != set(signatures[operation]):
                 raise LocalError('invalid_input')
@@ -66,15 +71,30 @@ class Session:
             code = 'store_unavailable'
         return json.dumps(dict(ok=False, error=code), separators=(',', ':'))
 
-    def configure_delivery(self, host, port, public_hex, callbacks):
+    def configure_delivery(self, host, port, public_hex, callbacks, expires=None):
         if self.local is None:
             raise LocalError('closed')
         if self.carrier is not None:
-            raise LocalError('delivery_already_attached')
-        from fc_chat_transport import CarrierMailbox
+            if expires is None:
+                raise LocalError('delivery_already_attached')
+            if self.configuration == (host, port, public_hex):
+                self.carrier.callbacks = callbacks
+                self.carrier.expires = expires
+                return
+            self.local.detach_carrier()
+            self.carrier.close()
+            self.carrier = None
+        from fc_chat_transport import CarrierMailbox, ServiceMailbox
         public = bytes.fromhex(public_hex)
+        self.configuration = (host, port, public_hex)
         self.carrier = self.local.attach_carrier(
-            lambda chat: CarrierMailbox(chat, host, port, public, callbacks))
+            lambda chat: CarrierMailbox(chat, host, port, public, callbacks) if expires is None else
+            ServiceMailbox(chat, host, port, public, callbacks, expires), timeout=30)
+
+    def pin_publisher(self, public_hex):
+        if self.local is None:
+            raise LocalError('closed')
+        self.local._chat.pin_service_publisher(bytes.fromhex(public_hex))
 
     def enrollment_proof(self, device, challenge):
         if self.local is None:

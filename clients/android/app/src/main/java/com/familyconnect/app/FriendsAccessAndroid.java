@@ -14,16 +14,21 @@ import static com.familyconnect.app.ControlJson.*;
 final class FriendsAccessAndroid {
     private final Context context;
     private final boolean direct;
+    private ChatCarrier chatCarrier;
     private long deadline=Long.MAX_VALUE;
     private volatile HttpsURLConnection pending;
     private volatile boolean cancelled;
-    static final class Denied extends Exception {}
+    private volatile ControlRnsAndroid readinessRelay;
+    private ReadinessFetchTrace fetchTrace;
+    static final class Denied extends FriendsReadinessProtocol.AuthorizationFailure {}
     static final class Conflict extends Exception {}
     static final class SupportRateLimited extends IOException {}
     FriendsAccessAndroid(Context context){this(context,false);}
     FriendsAccessAndroid(Context context,boolean direct){this.context=context;this.direct=direct;}
     FriendsAccessAndroid(Context context,long deadline){this(context,true);this.deadline=deadline;}
-    void cancel(){cancelled=true;HttpsURLConnection connection=pending;if(connection!=null)connection.disconnect();}
+    FriendsAccessAndroid(Context context,long deadline,ReadinessFetchTrace trace){this(context,deadline);fetchTrace=trace;}
+    FriendsAccessAndroid(Context context,ChatCarrier carrier){this(context,true);this.chatCarrier=carrier;this.deadline=android.os.SystemClock.elapsedRealtime()+60000;}
+    void cancel(){cancelled=true;HttpsURLConnection connection=pending;if(connection!=null)connection.disconnect();ControlRnsAndroid relay=readinessRelay;if(relay!=null)relay.cancel();}
     private int remaining(int maximum)throws IOException{
         long remaining=deadline-android.os.SystemClock.elapsedRealtime();
         if(cancelled)throw new IOException("Cancelled");
@@ -43,21 +48,39 @@ final class FriendsAccessAndroid {
         return post(path,body,null);
     }
     private JsonObject post(String path,JsonObject body,String requestId)throws Exception{
+        if(chatCarrier!=null){
+            require(path.equals("/friends/chat/challenge")||path.equals("/friends/chat/register"));
+            try{return directPost(path,body,requestId);}
+            catch(javax.net.ssl.SSLException trustFailure){throw trustFailure;}
+            catch(IOException unavailable){return chatCarrier.request(path,body.toString(),remaining(30000));}
+        }
+        return directPost(path,body,requestId);
+    }
+    private JsonObject directPost(String path,JsonObject body,String requestId)throws Exception{
+        try{return directPostObserved(path,body,requestId);}
+        catch(Exception failure){if(fetchTrace!=null)fetchTrace.failed(failure);throw failure;}
+    }
+    private JsonObject directPostObserved(String path,JsonObject body,String requestId)throws Exception{
         remaining(5000);
         require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/(status|support|diagnostics)|notices/device/(role|publish|list|edit))"));
-        HttpsURLConnection connection=direct?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();
+        boolean viaVpn=ReadinessBootstrapRoute.allowed(path)&&"on".equals(ConnectionService.status)&&"ok".equals(ConnectionService.healthStatus);
+        if(fetchTrace!=null){fetchTrace.request(path,direct&&!viaVpn?ReadinessFetchTrace.Route.HTTPS_UNDERLAY:ReadinessFetchTrace.Route.HTTPS_VPN);fetchTrace.stage(ReadinessFetchTrace.Stage.OPEN_NETWORK);}
+        HttpsURLConnection connection=direct&&!viaVpn?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path,fetchTrace):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();
         pending=connection;
         try{
             connection.setConnectTimeout(remaining(5000));connection.setReadTimeout(remaining(15000));connection.setInstanceFollowRedirects(false);connection.setUseCaches(false);connection.setRequestMethod("POST");connection.setDoOutput(true);connection.setRequestProperty("Content-Type","application/json");
             for(Map.Entry<String,String> header:FriendsReadinessProtocol.wireHeaders(requestId).entrySet())connection.setRequestProperty(header.getKey(),header.getValue());
             byte[] raw=FriendsReadinessProtocol.wireBytes(body);require(raw.length<=((path.equals("/friends/notices/device/publish")||path.equals("/friends/notices/device/edit"))?32768:8192));connection.setFixedLengthStreamingMode(raw.length);
+            if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.CONNECT_TLS_WRITE);
             try(OutputStream out=connection.getOutputStream()){out.write(raw);}finally{Arrays.fill(raw,(byte)0);}
-            connection.setReadTimeout(remaining(15000));int status=connection.getResponseCode();if(path.equals("/friends/device/diagnostics")&&status==429)throw new SupportRateLimited();if(path.equals("/friends/restricted-readiness/challenge"))FriendsReadinessProtocol.challengeStatus(status);if(status==409)throw new Conflict();if((status==400&&!path.startsWith("/friends/restricted-readiness"))||status==401||status==403)throw new Denied();if(status!=200)throw new IOException("Test access unavailable");
+            connection.setReadTimeout(remaining(15000));int status=connection.getResponseCode();if(path.equals("/friends/device/diagnostics")&&status==429)throw new SupportRateLimited();if(fetchTrace!=null)fetchTrace.status(status);if(path.equals("/friends/restricted-readiness/challenge"))FriendsReadinessProtocol.challengeStatus(status);if(status==409)throw new Conflict();if((status==400&&!path.startsWith("/friends/restricted-readiness"))||status==401||status==403)throw new Denied();if(path.equals("/friends/restricted-readiness")&&(status==429||status>=500&&status<=599))throw new FriendsReadinessProtocol.Unavailable();if(status!=200)throw new IOException("Test access unavailable");
             ByteArrayOutputStream bytes=new ByteArrayOutputStream();long deadline=System.nanoTime()+20_000_000_000L;
+            if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.READ_BODY);
             try(InputStream input=connection.getInputStream()){byte[] buffer=new byte[1024];while(true){connection.setReadTimeout(remaining(15000));int count=input.read(buffer);if(count==-1)break;
                 if(bytes.size()+count>(path.equals("/friends/notices/device/list")?1048576:path.equals("/friends/restricted-readiness")?65536:16384)){
                     if(path.equals("/friends/restricted-readiness/challenge"))throw new FriendsReadinessProtocol.ChallengeFailure(FriendsReadinessProtocol.ChallengeCode.CHALLENGE_INCOMPATIBLE_RESPONSE);throw new IOException();}
                 if(System.nanoTime()>deadline)throw new java.net.SocketTimeoutException();if(Thread.currentThread().isInterrupted())throw new IOException();bytes.write(buffer,0,count);}}
+            if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.PARSE);
             try{return parse(bytes.toByteArray()).getAsJsonObject();}
             catch(Exception failure){if(path.equals("/friends/restricted-readiness/challenge"))throw new FriendsReadinessProtocol.ChallengeFailure(FriendsReadinessProtocol.ChallengeCode.CHALLENGE_INCOMPATIBLE_RESPONSE);throw failure;}
         }finally{connection.disconnect();pending=null;}
@@ -69,9 +92,46 @@ final class FriendsAccessAndroid {
         return identity.proveTransportKey(text(challenge.get("challenge")));
     }
     byte[] restrictedReadiness(ControlIdentity identity,OwnerPrewarmReceipt receipt)throws Exception{
-        return FriendsReadinessProtocol.fetch(this::post,identity,receipt);
+        try(ProvisioningTestGate.Permit permit=ProvisioningTestGate.enter(context)){
+            permit.requireAvailable();
+            ReadinessBootstrapRoute route=new ReadinessBootstrapRoute(this::post,this::relayPost);
+            try{
+                byte[] result=FriendsReadinessProtocol.fetch(route::post,identity,receipt);
+                if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.COMPLETE);
+                return result;
+            }catch(Exception failure){if(fetchTrace!=null)fetchTrace.failed(failure);throw failure;}
+        }finally{closeReadinessRelay();}
     }
-    void readinessAck(ControlIdentity identity,JsonObject receipt)throws Exception{FriendsReadinessProtocol.acknowledge(this::post,identity,receipt);}
+    void readinessAck(ControlIdentity identity,JsonObject receipt)throws Exception{
+        try(ProvisioningTestGate.Permit permit=ProvisioningTestGate.enter(context)){
+            permit.requireAvailable();
+            ReadinessBootstrapRoute route=new ReadinessBootstrapRoute(this::post,this::relayPost);
+            FriendsReadinessProtocol.acknowledge(route::post,identity,receipt);
+        }finally{closeReadinessRelay();}
+    }
+    private JsonObject relayPost(String path,JsonObject body,String requestId)throws Exception{
+        if(fetchTrace!=null)fetchTrace.request(path,ReadinessFetchTrace.Route.RNS);
+        try{return relayPostObserved(path,body,requestId);}
+        catch(Exception failure){if(fetchTrace!=null)fetchTrace.failed(failure);throw failure;}
+    }
+    private JsonObject relayPostObserved(String path,JsonObject body,String requestId)throws Exception{
+        remaining(1);
+        if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.RELAY_OPEN);
+        if(readinessRelay==null){readinessRelay=new ControlRnsAndroid(context,deadline);readinessRelay.openReadiness(fetchTrace);}
+        if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.RELAY_REQUEST);
+        JsonObject envelope=parse(readinessRelay.requestReadiness(path,FriendsReadinessProtocol.wireBytes(body))).getAsJsonObject();
+        fields(envelope,"status body");int status=(int)integer(envelope.get("status"),100);require(status<=599);
+        if(fetchTrace!=null)fetchTrace.status(status);
+        if(path.equals("/friends/restricted-readiness/challenge"))FriendsReadinessProtocol.challengeStatus(status);
+        if(status==401||status==403)throw new Denied();
+        if(status==409)throw new Conflict();
+        if(status==429||status>=500)throw new FriendsReadinessProtocol.Unavailable();
+        if(status!=200)throw new IOException("Readiness relay rejected request");
+        byte[] raw=ControlProtocol.base64(text(envelope.get("body")),true);
+        require(raw.length>0&&raw.length<=65536);remaining(1);
+        try{return parse(raw).getAsJsonObject();}finally{Arrays.fill(raw,(byte)0);}
+    }
+    private void closeReadinessRelay(){ControlRnsAndroid relay=readinessRelay;readinessRelay=null;if(relay!=null)relay.close();}
     void activate(String invitation)throws Exception{
         try(ControlIdentity identity=identity(true)){
             JsonObject result=post("/friends/activate",proof(identity,"activate",invitation));fields(result,"device status");

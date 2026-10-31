@@ -14,6 +14,19 @@ from RNS.Interfaces.TCPInterface import TCPClientInterface
 _runtime = None
 _runtime_lock = threading.Lock()
 _session_lock = threading.Lock()
+_readiness_paths = frozenset('/friends/restricted-readiness' + suffix for suffix in
+                             ('', '/challenge', '/ack-challenge', '/ack'))
+
+
+class TransportUnavailable(OSError):
+    pass
+
+
+def readiness_open(*args):
+    try:
+        return ['AVAILABLE', Channel(*args)]
+    except TransportUnavailable:
+        return ['UNAVAILABLE', None]
 
 
 def initialize(directory):
@@ -60,9 +73,13 @@ class Channel:
             self.provider.load_public_key(public)
             self.sock = socket.socket(socket.AF_INET6 if address.version == 6 else socket.AF_INET, socket.SOCK_STREAM)
             if not callbacks.bindSocket(self.sock.fileno()):
-                raise OSError('Underlying network unavailable')
+                self._check_cancelled()
+                raise TransportUnavailable('Underlying network unavailable')
             self.sock.settimeout(5)
-            self.sock.connect((str(address), port))
+            try:
+                self.sock.connect((str(address), port))
+            except OSError as failure:
+                raise TransportUnavailable('Relay socket unavailable') from failure
             self.sock.settimeout(None)
             self.interface = TCPClientInterface(RNS.Transport, {'name': 'fc-android-control'}, connected_socket=self.sock)
             self.interface.OUT = True
@@ -89,35 +106,57 @@ class Channel:
             self.close()
             raise
 
-    def _wait(self, predicate, deadline):
-        while True:
+    def _check_cancelled(self):
+        classify = getattr(self.callbacks, 'stopReason', None)
+        if classify is None:
             if self.callbacks.cancelled():
                 raise OSError('RNS cancelled')
+            return
+        reason = str(classify())
+        if reason == 'CANCELLED':
+            raise OSError('RNS cancelled')
+        if reason == 'TIMEOUT':
+            raise TransportUnavailable('RNS shared deadline')
+        if reason != 'NONE':
+            raise ValueError('Invalid RNS stop reason')
+
+    def _wait(self, predicate, deadline):
+        while True:
+            self._check_cancelled()
             if time.monotonic() >= deadline:
-                raise TimeoutError('RNS timeout')
+                raise TransportUnavailable('RNS timeout')
             if predicate():
                 return
             time.sleep(.02)
 
+    def readiness_request(self, path, encoded):
+        if str(path) not in _readiness_paths:
+            raise ValueError('Invalid readiness request')
+        try:
+            return ['AVAILABLE', self.request(path, encoded)]
+        except TransportUnavailable:
+            return ['UNAVAILABLE', None]
+
     def request(self, path, encoded):
         path = str(path)
         raw = base64.b64decode(str(encoded), validate=True)
-        if path not in ('/control/v1/challenge', '/control/v1/fetch', '/control/v1/ack') or len(raw) > 4096:
+        readiness = path in _readiness_paths
+        if (path not in ('/control/v1/challenge', '/control/v1/fetch', '/control/v1/ack') and not readiness
+                or len(raw) > (8192 if readiness else 4096)):
             raise ValueError('Invalid RNS request')
         result = []
         done = threading.Event()
         def received(receipt):
             result.append(receipt.response)
             done.set()
-        if self.callbacks.cancelled():
-            raise OSError("RNS cancelled")
+        self._check_cancelled()
         receipt = self.link.request(path, data=raw, response_callback=received,
                                     failed_callback=lambda _: done.set(), timeout=20,
-                                    max_response_size=65536)
+                                    max_response_size=90000 if readiness else 65536)
         if receipt is None or receipt is False:
             raise OSError('RNS request unavailable')
         self._wait(lambda: done.is_set() or self.link.status == RNS.Link.CLOSED, time.monotonic()+20)
-        if not result or type(result[0]) is not bytes or not 0 < len(result[0]) <= 65536:
+        if not result or type(result[0]) is not bytes or not 0 < len(result[0]) <= (90000 if readiness else 65536):
             raise OSError('Invalid RNS response')
         if result[0] in (b'{"code":"PROVISIONING_REJECTED"}', b'{"code":"PROVISIONING_UNAVAILABLE"}'):
             raise OSError('Relay refused request')

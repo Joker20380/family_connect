@@ -1,0 +1,12 @@
+<resources>
+    <string-array name="connection_terminal_compact">
+        <item>Подготовка</item><item>AWG</item><item>TCP</item><item>MESH</item><item>Восстановление</item><item>VPN готов</item><item>Настройка чата</item><item>DIRECT · настройки</item><item>Служебный канал</item><item>EXIT · настройки</item><item>Ожидание sync</item><item>Недоступно</item><item>Отказ доступа</item><item>Ошибка</item><item>Отменено</item>
+        <item>Ожидание повтора</item>
+    </string-array>
+    <string name="connection_terminal_vpn">VPN · подключение</string>
+    <string name="connection_terminal_chat">Сообщения · не полный VPN</string>
+    <string-array name="connection_terminal_stages">
+        <item>[ .. ] Подготовка подключения</item><item>[ .. ] Открытие WireGuard/AWG</item><item>[ .. ] Открытие TCP</item><item>[ .. ] Открытие канала MESH</item><item>[ .. ] Восстановление подключения</item><item>[ OK ] VPN-соединение установлено</item><item>[ .. ] Обновление настроек чата</item><item>[ OK ] Настройки получены напрямую</item><item>[ OK ] Настройки через служебный канал</item><item>[ OK ] Настройки через готовый канал</item><item>[ OK ] Mailbox настроен; ожидается sync</item><item>[ -- ] Маршрут недоступен; выбор следующего</item><item>[ !! ] Авторизация отклонена</item><item>[ !! ] Подключение не завершено</item><item>[ -- ] Отменено</item>
+        <item>[ .. ] Ожидание повторной попытки</item>
+    </string-array>
+</resources>

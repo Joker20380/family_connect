@@ -26,9 +26,16 @@ final class AutomaticConnection implements TunnelEngine,ConnectivityOrchestrator
     private volatile FriendsAccessAndroid access;
     private volatile ConnectivityOrchestrator.Failure interrupted;
     private int unhealthy;
+    private RestrictedHealthPolicy restrictedHealth=new RestrictedHealthPolicy();
+    private long nextHealth;
     private boolean ownerOpen;
     private final boolean debug;
+    private final boolean restrictedOnly;
     AutomaticConnection(Context context,String country,Consumer<ConnectivityOrchestrator.Event> changed) {
+        this(context,country,false,changed);
+    }
+    AutomaticConnection(Context context,String country,boolean restrictedOnly,Consumer<ConnectivityOrchestrator.Event> changed) {
+        this.restrictedOnly=restrictedOnly;
         this.context=context;this.country=country;this.changed=changed;owner=new AutomaticVpnOwner(context);
         debug=(context.getApplicationInfo().flags&android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE)!=0;
     }
@@ -37,11 +44,22 @@ final class AutomaticConnection implements TunnelEngine,ConnectivityOrchestrator
         orchestrator.connect(new ArrayList<>(),preferred,hint);
     }
     public long now() { return SystemClock.elapsedRealtime(); }
+    public long jitter(long maximum) { return java.util.concurrent.ThreadLocalRandom.current().nextLong(maximum+1); }
+    public boolean networkAvailable() {
+        android.net.ConnectivityManager manager=context.getSystemService(android.net.ConnectivityManager.class);
+        for(android.net.Network network:manager.getAllNetworks()) {
+            android.net.NetworkCapabilities capabilities=manager.getNetworkCapabilities(network);
+            if(capabilities!=null&&capabilities.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                &&capabilities.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_NOT_VPN))return true;
+        }
+        return false;
+    }
     public void pause(long millis) throws InterruptedException { Thread.sleep(millis); }
     public List<String> configure(List<String> ignored,long deadline) throws Exception {
         orchestrator.check(deadline);
         owner.open(()->interrupt(ConnectivityOrchestrator.Failure.AUTH));ownerOpen=true;
         orchestrator.check(deadline);
+        if(restrictedOnly)return List.of();
         if(country!=null) {
             access=new FriendsAccessAndroid(context,deadline);
             try { profiles.putAll(access.normalProfiles(country)); }
@@ -60,7 +78,7 @@ final class AutomaticConnection implements TunnelEngine,ConnectivityOrchestrator
     public void open(String id,long deadline) throws Exception {
         orchestrator.check(deadline);ConnectionService.activeTransport=id;
         if(ConnectivityOrchestrator.RESTRICTED.equals(id)) {
-            RestrictedTunnelEngine restricted=new RestrictedTunnelEngine(context,()->interrupted!=null,up->{},owner,deadline);
+            RestrictedTunnelEngine restricted=new RestrictedTunnelEngine(context,()->interrupted!=null,up->{},owner,deadline,orchestrator.state()==ConnectivityOrchestrator.State.RESTORING);
             candidate=restricted;restricted.up("");ConnectionService.vpnSource="10.79.0.2";
         } else {
             if(debug&&context.getSharedPreferences("orchestrator-diagnostic",Context.MODE_PRIVATE).getBoolean("deny_"+id,false))
@@ -76,14 +94,17 @@ final class AutomaticConnection implements TunnelEngine,ConnectivityOrchestrator
                 pause(100);
             }
         }
-        orchestrator.check(deadline);unhealthy=0;
+        orchestrator.check(deadline);unhealthy=0;nextHealth=0;restrictedHealth=new RestrictedHealthPolicy();
+        if(health==null)health=new VpnHealth(context);
     }
     void interrupt(ConnectivityOrchestrator.Failure reason) {
+        if(reason==ConnectivityOrchestrator.Failure.AUTH)ConnectionService.forgetRequest(context);
         interrupted=reason;orchestrator.interrupt(reason);
         VpnHealth probe=health;if(probe!=null)probe.cancel();
         FriendsAccessAndroid pending=access;if(pending!=null)pending.cancel();
     }
     void poll() {
+        if(orchestrator.state()==ConnectivityOrchestrator.State.RESTORING){orchestrator.retryIfDue();return;}
         if(orchestrator.state()!=ConnectivityOrchestrator.State.CONNECTED)return;
         if(interrupted!=null) { orchestrator.lost(interrupted);return; }
         if(debug&&context.getSharedPreferences("orchestrator-diagnostic",Context.MODE_PRIVATE).getBoolean("fail_active",false)) {
@@ -94,16 +115,31 @@ final class AutomaticConnection implements TunnelEngine,ConnectivityOrchestrator
         if(active instanceof RestrictedTunnelEngine) {
             RestrictedTunnelEngine restricted=(RestrictedTunnelEngine)active;
             ConnectivityOrchestrator.Failure failure=restricted.connectionFailure();
-            if(failure!=null)orchestrator.lost(failure);
+            if(failure!=null){orchestrator.lost(failure);return;}
+            if(!networkAvailable()){orchestrator.lost(ConnectivityOrchestrator.Failure.NETWORK);return;}
+            if(now()>=nextHealth){
+                restrictedHealth.begin(restricted.healthSample());
+                boolean good=health.check("10.79.0.2");nextHealth=now()+30000;
+                Diagnostics.dns(context,good);
+                failure=restricted.connectionFailure();
+                if(interrupted!=null){orchestrator.lost(interrupted);return;}
+                if(failure!=null){orchestrator.lost(failure);return;}
+                RestrictedHealthPolicy.Decision decision=restrictedHealth.observe(good,restricted.healthSample());
+                if(!good&&decision.progress)Diagnostics.dnsProgress(context);
+                orchestrator.trafficHealthy(good||decision.progress);
+                if(decision.recover)orchestrator.lost(ConnectivityOrchestrator.Failure.NETWORK);
+            }
         } else if(active instanceof AutomaticNormalEngine) {
             boolean good=health.check(((AutomaticNormalEngine)active).source);
             Diagnostics.dns(context,good);
+            orchestrator.trafficHealthy(good);
             if(interrupted!=null)orchestrator.lost(interrupted);
             else if(good)unhealthy=0;
             else if(++unhealthy>=2)orchestrator.lost(ConnectivityOrchestrator.Failure.NETWORK);
         }
     }
     boolean connected() { return orchestrator.state()==ConnectivityOrchestrator.State.CONNECTED; }
+    boolean needsPolling() { return orchestrator.needsPolling(); }
     public void closeCandidate() throws Exception {
         VpnHealth probe=health;if(probe!=null) { probe.cancel();health=null; }
         if(candidate!=null) {

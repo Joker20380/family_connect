@@ -1,0 +1,12 @@
+<resources>
+    <string-array name="connection_terminal_compact">
+        <item>Preparing</item><item>AWG</item><item>TCP</item><item>MESH</item><item>Restoring</item><item>VPN ready</item><item>Chat config</item><item>Direct config</item><item>Service config</item><item>EXIT config</item><item>Sync pending</item><item>Unavailable</item><item>Auth rejected</item><item>Failed</item><item>Cancelled</item>
+        <item>Waiting to retry</item>
+    </string-array>
+    <string name="connection_terminal_vpn">VPN · connection</string>
+    <string name="connection_terminal_chat">Messages · not a full VPN</string>
+    <string-array name="connection_terminal_stages">
+        <item>[ .. ] Preparing connection</item><item>[ .. ] Opening WireGuard/AWG</item><item>[ .. ] Opening TCP</item><item>[ .. ] Opening MESH carrier</item><item>[ .. ] Restoring connection</item><item>[ OK ] VPN connection established</item><item>[ .. ] Updating chat configuration</item><item>[ OK ] Configuration received directly</item><item>[ OK ] Configuration via service carrier</item><item>[ OK ] Configuration via existing carrier</item><item>[ OK ] Mailbox configured; sync pending</item><item>[ -- ] Route unavailable; selecting next</item><item>[ !! ] Authorization rejected</item><item>[ !! ] Connection not completed</item><item>[ -- ] Cancelled</item>
+        <item>[ .. ] Waiting before next recovery attempt</item>
+    </string-array>
+</resources>

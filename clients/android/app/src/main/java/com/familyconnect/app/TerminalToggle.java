@@ -39,7 +39,7 @@ final class TerminalToggle extends CompoundButton {
         float d=getResources().getDisplayMetrics().density,w=getWidth(),h=getHeight(),cy=h/2;
         float left=w-63*d,right=w-12*d,radius=15.5f*d;
         int color=pending?TerminalUi.SWITCH_OFF:blend(TerminalUi.SWITCH_OFF,TerminalUi.SWITCH_ON,position);
-        paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(d);paint.setColor(color);paint.setAlpha(isEnabled()?210:95);
+        paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(TerminalUi.stroke(getContext(),TerminalUi.STROKE_FRAME));paint.setColor(color);paint.setAlpha(isEnabled()?210:95);
         paint.setStyle(Paint.Style.FILL);paint.setColor(TerminalUi.TEXT);paint.setAlpha(isEnabled()?255:120);
         paint.setTypeface(getTypeface());paint.setTextSize(getTextSize());paint.setTextAlign(Paint.Align.LEFT);
         canvas.save();canvas.clipRect(10*d,0,left-8*d,h);
@@ -49,7 +49,7 @@ final class TerminalToggle extends CompoundButton {
         label=android.text.TextUtils.ellipsize(label,paint,available,android.text.TextUtils.TruncateAt.END).toString();
         canvas.drawText(label,12*d,cy-(paint.ascent()+paint.descent())/2,paint);canvas.restore();
         paint.setColor(color);paint.setAlpha(isEnabled()?35:15);canvas.drawRoundRect(left,cy-radius,right,cy+radius,radius,radius,paint);
-        paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(d);paint.setAlpha(isEnabled()?255:90);
+        paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(TerminalUi.stroke(getContext(),TerminalUi.STROKE_FRAME));paint.setAlpha(isEnabled()?255:90);
         canvas.drawRoundRect(left,cy-radius,right,cy+radius,radius,radius,paint);
         float knob=left+radius+position*(right-left-radius*2);
         paint.setStyle(Paint.Style.FILL);paint.setAlpha(isEnabled()?40:15);canvas.drawCircle(knob,cy,14.5f*d,paint);

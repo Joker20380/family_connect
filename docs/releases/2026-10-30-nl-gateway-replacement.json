@@ -535,7 +535,7 @@
     "catalog_publication": "NOT_RUN",
     "owner_smoke": "NOT_RUN"
   },
-  "next_action": "QUALIFY_ANDROID107_PUBLIC_CI_AND_COMPATIBILITY_THEN_SIGN_OWNER_RUNTIME_BEFORE_OPTIONAL_PUBLICATION",
+  "next_action": "QUALIFY_CANONICAL_ANDROID107_CI_ARTIFACT_THEN_VAULT_SIGN_AND_OWNER_RUNTIME_BEFORE_OPTIONAL_PUBLICATION",
   "checks": {
     "strict_json": "PASS",
     "targeted_privacy_secret_scan": "PASS",
@@ -1176,6 +1176,33 @@
       "android_catalog_writes": 0,
       "registry_writes": 0,
       "mesh_admission_expansion": false,
+      "canary": "PAUSED"
+    },
+    "android107_public_source": {
+      "result": "CANONICAL_SOURCE_INTEGRATED_QUALIFICATION_PENDING",
+      "recorded_utc": "2026-10-31T13:49:07.110879+00:00",
+      "version_code": 107,
+      "version": "0.1.18-beta107",
+      "min_sdk": 31,
+      "abi": "arm64-v8a",
+      "older_android_support": "EXPLICITLY_OUT_OF_SCOPE_BY_OWNER",
+      "canonical_jvm_tests": 376,
+      "canonical_jvm_suites": 63,
+      "lint": "PASS",
+      "focused_python_tests": 34,
+      "hosted_platform_ci": "PENDING_SOURCE_PUSH",
+      "native_source_build": "REQUIRED_FOR_PUBLIC_PROVENANCE",
+      "private_candidate_is_release": false,
+      "signing": false,
+      "installed": false,
+      "distributed": false,
+      "forced_update": false,
+      "public_version_code": 60,
+      "invitation_version_code": 60,
+      "owner_version_code": 106,
+      "gateway_rebuild": false,
+      "gateway_catalog_writes": 0,
+      "registry_writes": 0,
       "canary": "PAUSED"
     }
   }

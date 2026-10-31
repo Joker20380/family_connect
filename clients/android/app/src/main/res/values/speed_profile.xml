@@ -1,0 +1,4 @@
+<resources>
+    <string name="mesh_speed_profile">MESH owner test · next session</string>
+    <string name="mesh_speed_hint">Operator-matched gateway required. Selection is not proof of applied limits. Disconnect before changing; P0 restores default behavior.</string>
+</resources>

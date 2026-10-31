@@ -13,6 +13,59 @@ import RNS
 from RNS.Interfaces.TCPInterface import TCPClientInterface
 from messenger.mailbox import Mailbox, MailboxError
 import fc_rns_transport as transport
+from messenger.routed import RoutedMailbox
+
+
+class ServiceMailbox(RoutedMailbox):
+    def __init__(self, chat, host, port, node_public, callbacks, expires):
+        self.host = ipaddress.ip_address(host)
+        if type(port) is not int or not 1 <= port <= 65535:
+            raise ValueError('Invalid mailbox port')
+        self.port, self.callbacks, self.expires = port, callbacks, expires
+        self._closed = False
+        from messenger.codec import identity
+        identity(node_public)
+        source = RNS.Destination(chat.identity, RNS.Destination.IN, RNS.Destination.SINGLE, 'lxmf', 'delivery')
+        source.accepts_links(False)
+        try:
+            super().__init__(chat, source, node_public, transport._runtime,
+                             [('DIRECT', self._direct), ('SERVICE_ONLY', self._service)], transport._session_lock)
+        except BaseException:
+            RNS.Transport.deregister_destination(source)
+            raise
+
+    def _direct(self, deadline, cancel):
+        sock = socket.socket(socket.AF_INET6 if self.host.version == 6 else socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            if not self.callbacks.bindSocket(sock.fileno()):
+                raise OSError('underlay_unavailable')
+            sock.settimeout(min(2, max(.001, deadline-time.monotonic())))
+            sock.connect((str(self.host), self.port))
+            return sock
+        except BaseException:
+            sock.close()
+            raise
+
+    def _service(self, deadline, cancel):
+        self._wait(lambda: True, deadline, cancel)
+        descriptor = self.callbacks.openMailbox(max(1, int((deadline-time.monotonic())*1000)))
+        if descriptor < 0:
+            raise OSError('carrier_unavailable')
+        sock = socket.socket(fileno=descriptor)
+        if cancel.is_set():
+            sock.close()
+            raise MailboxError('cancelled')
+        return sock
+
+    def exchange(self, *, timeout=30, cancel=None):
+        if self._closed or time.time() >= self.expires:
+            raise MailboxError('access_denied')
+        return super().exchange(timeout=min(timeout, self.expires-time.time()), cancel=cancel)
+
+    def close(self):
+        if not self._closed:
+            RNS.Transport.deregister_destination(self.source)
+            self._closed = True
 
 
 class CarrierMailbox(Mailbox):

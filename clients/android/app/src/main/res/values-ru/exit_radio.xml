@@ -1,0 +1,19 @@
+<resources>
+    <string name="event_update">ОБНОВЛЕНИЕ</string>
+    <string name="event_maintenance">ОБСЛУЖИВАНИЕ</string>
+    <string name="event_server_change">ИЗМЕНЕНИЕ СЕРВИСА</string>
+    <string name="event_information">ИНФОРМАЦИЯ</string>
+    <string name="event_builds">Сборки %1$s–%2$s</string>
+    <string name="chat_local_only">Локальная история · доставка не настроена</string>
+    <string name="radio_title">ГОЛОСОВОЙ ПРОФИЛЬ</string>
+    <string name="radio_normal">Обычный · Opus</string>
+    <string name="radio_notice">«Рация» — цифровой Codec2, не аналоговый канал. Экспериментальный режим: только для контактов с подтверждённой поддержкой Codec2. По умолчанию — Opus.</string>
+    <string name="radio_confirm">Контакт поддерживает Codec2</string>
+    <string name="radio_confirm_body">Убедитесь, что клиент получателя поддерживает Codec2. Это не меняет identity или проверку доверия контакту.</string>
+    <string name="voice_stop_preview">Остановить и прослушать</string>
+    <string name="voice_preview">Прослушать запись</string>
+    <string name="exit_official">EXIT · Проверенный LXMF-издатель</string>
+    <string name="event_valid_until">Актуально до %1$s</string>
+    <string name="vpn_separate">VPN и доставка сообщений — отдельные службы</string>
+    <string name="message_configured_route">Сообщения · настроенный путь: %1$s\nНезависимо от полного VPN</string>
+</resources>

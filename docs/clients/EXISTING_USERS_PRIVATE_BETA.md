@@ -1,12 +1,18 @@
 # Existing-users private Android update / Частное обновление Android
 
+Android107 general release targets Android12+/ARM64 by explicit owner decision.
+Older Android support is not a release gate. Canonical source integration and376 JVM
+tests/lint PASS; hosted CI, offline signing and installed-runtime acceptance remain pending.
+Public updater/invitation remain beta60; accepted owner build remains106. No107 download
+has been published and no forced-update policy has changed.
+
 **31 October —107 candidate, not distributed / кандидат107, не опубликован.**
 RU: владелец разрешил общий MESH-выпуск. Кандидат107 сохраняет принятую106 и12 native-библиотек;
 исправляет повторные оповещения и обработку отказа микрофона.219 JVM-тестов и lint PASS.
-APK не подписан/не установлен; требуются CI, совместимость (Android12+/ARM64) и проверка
+APK не подписан/не установлен; требуются CI и проверка
 обновления на телефоне без потери данных. Общий updater/приглашение остаются60, owner —106.
 EN:107 is an unsigned local candidate, not a public download or installed acceptance.
-Public updater/invitation stay60. CI, compatibility, signing and device gates remain required.
+Public updater/invitation stay60. CI, signing and device gates remain required; Android12+/ARM64 is owner-approved.
 Do not uninstall, clear data or reenroll. Canary paused.
 [Same-operation evidence](../releases/2026-10-30-nl-gateway-replacement.md).
 

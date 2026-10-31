@@ -47,6 +47,10 @@ final class ChatLocalAndroid implements AutoCloseable {
             try {
                 Context app = context.getApplicationContext();
                 owner.context = app;
+                var metadata = app.getPackageManager().getPackageInfo(app.getPackageName(), 0);
+                long version = android.os.Build.VERSION.SDK_INT >= 28 ? metadata.getLongVersionCode() : metadata.versionCode;
+                if (version < 0 || version > Integer.MAX_VALUE)
+                    throw new ChatException("runtime_context_unavailable");
                 File directory = new File(app.getNoBackupFilesDir(), "chat-store");
                 if (create && Files.exists(directory.toPath(), LinkOption.NOFOLLOW_LINKS))
                     throw new ChatException("store_unavailable");
@@ -57,7 +61,8 @@ final class ChatLocalAndroid implements AutoCloseable {
                 owner.cipher = new ChatStoreCipher(key);
                 Arrays.fill(key, (byte) 0);
                 owner.session = module.callAttr("Session", directory.getAbsolutePath(),
-                    new File(app.getNoBackupFilesDir(), "rns-control").getAbsolutePath(), owner.cipher, create);
+                    new File(app.getNoBackupFilesDir(), "rns-control").getAbsolutePath(), owner.cipher, create,
+                    "android", (int) version);
                 active = owner;
                 return owner;
             } catch (Exception failure) {
@@ -106,6 +111,24 @@ final class ChatLocalAndroid implements AutoCloseable {
                 session.callAttr("configure_delivery", host, port, publicHex,
                     new ChatNetworkAndroid(context));
             } catch (Exception failure) { throw new ChatException("delivery_unavailable"); }
+        }
+    }
+
+    void configureDelivery(String host, int port, String publicHex, ChatCarrier carrier, long expires) throws ChatException {
+        requireWorker();
+        synchronized (LOCK) {
+            if (session == null) throw new ChatException("closed");
+            try { session.callAttr("configure_delivery", host, port, publicHex, carrier, expires); }
+            catch (Exception failure) { throw new ChatException("delivery_unavailable"); }
+        }
+    }
+
+    void pinPublisher(String publicHex) throws ChatException {
+        requireWorker();
+        synchronized (LOCK) {
+            if (session == null) throw new ChatException("closed");
+            try { session.callAttr("pin_publisher", publicHex); }
+            catch (Exception failure) { throw new ChatException("publisher_unavailable"); }
         }
     }
 

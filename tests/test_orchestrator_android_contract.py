@@ -122,7 +122,7 @@ def test_restricted_loss_uses_typed_cause_before_cleanup_and_revalidates_access(
     host = source('AutomaticConnection')
     poll = host.split('void poll()', 1)[1].split('boolean connected()', 1)[0]
     assert 'restricted.connectionFailure()' in poll
-    assert 'if(failure!=null)orchestrator.lost(failure)' in poll
+    assert 'if(failure!=null){orchestrator.lost(failure);return;}' in poll
     assert 'orchestrator.lost(ConnectivityOrchestrator.Failure.INTERNAL)' not in poll
     engine = source('RestrictedTunnelEngine')
     failure = engine.split('ConnectivityOrchestrator.Failure connectionFailure()', 1)[1].split('static void failure(', 1)[0]
@@ -131,7 +131,10 @@ def test_restricted_loss_uses_typed_cause_before_cleanup_and_revalidates_access(
     assert 'authorizationDenied(),snapshot)' in failure
     startup = engine.split('public void up(', 1)[1].split('boolean healthy()', 1)[0]
     assert startup.index('checkAccess();') < startup.index('NativeRestricted.load()')
-    assert startup.index('.usable()') < startup.index('NativeRestricted.beginReady(')
+    assert startup.index('FriendsRestricted.ready(') < startup.index('NativeRestricted.beginReady(')
+    bootstrap = source('RestrictedBootstrap')
+    assert 'return cache.usable(now);' in bootstrap
+    assert 'result.code()!=ReadinessImportResult.Code.READY' in bootstrap
     assert 'try{checkAccess();handle=NativeRestricted.beginReady(' in startup
     assert 'while ((phase=NativeRestricted.state(handle))==0' in startup
     assert '!authorizationDenied()' in startup

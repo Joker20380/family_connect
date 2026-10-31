@@ -21,8 +21,8 @@ def main():
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--owner-diagnostic', action='store_true')
     args = parser.parse_args()
-    if args.owner_diagnostic:
-        os.environ['GOFLAGS'] = '-tags=fc_owner_diagnostic'
+    revision_source = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
+    subprocess.run(['git', 'diff', '--exit-code', 'HEAD', '--', 'carrier', 'clients/android', 'pilot/android-restricted'], cwd=ROOT, check=True)
     revision = subprocess.check_output(['git', '-C', str(args.xray), 'rev-parse', 'HEAD'], text=True).strip()
     if revision != REVISION or args.out.exists():
         raise RuntimeError('Pinned source and fresh output required')
@@ -50,6 +50,9 @@ def main():
                                     'CGO_LDFLAGS': '-Wl,-z,max-page-size=16384'}
         environment.pop('YANDEX_TELEMOST_OAUTH_TOKEN', None)
         environment.pop('FC_TELEMOST_ROOM', None)
+        environment.pop('GOFLAGS', None)
+        if args.owner_diagnostic:
+            environment['GOFLAGS'] = '-tags=fc_owner_diagnostic'
         subprocess.run([args.go, 'build', '-modfile='+str(module), '-trimpath', '-ldflags=-checklinkname=0', '-buildmode=c-shared', '-o', str(output), './native'], cwd=source, env=environment, check=True)
         assets = args.out / 'assets/restricted-licenses'
         assets.mkdir(parents=True)
@@ -60,9 +63,13 @@ def main():
         shutil.copy2(source / 'xray-packet-boundary.patch', assets / 'Xray-modifications.patch')
         manifest = {'xray_revision': REVISION, 'gvisor_version': 'v0.0.0-20260122175437-89a5d21be8f0',
                     'patch_sha256': hashlib.sha256((source / 'xray-packet-boundary.patch').read_bytes()).hexdigest(),
-                    'binary_sha256': hashlib.sha256(output.read_bytes()).hexdigest(), 'diagnostic_only': True}
+                    'binary_sha256': hashlib.sha256(output.read_bytes()).hexdigest(), 'diagnostic_only': args.owner_diagnostic}
         manifest['owner_diagnostic_fault_schema'] = 1 if args.owner_diagnostic else 0
-        manifest['source_revision'] = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
+        manifest.update(metadata_schema=2, source_revision=revision_source,
+                        source_tree=subprocess.check_output(['git', 'rev-parse', 'HEAD^{tree}'], cwd=ROOT, text=True).strip(),
+                        abi='arm64-v8a', provider='telemost',
+                        build_tags=['fc_owner_diagnostic'] if args.owner_diagnostic else [],
+                        builder_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
         (args.out / 'assets/restricted-build.json').write_text(json.dumps(manifest, indent=2)+'\n')
         print(json.dumps(manifest))
 

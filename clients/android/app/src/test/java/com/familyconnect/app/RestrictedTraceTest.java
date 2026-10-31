@@ -5,6 +5,14 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class RestrictedTraceTest {
+	@Test public void leaseReceiptsAreBoundedAndRetainGeneration(){
+		JsonObject source=event(1,"NONE");source.addProperty("stage","GATEWAY_SESSION");source.addProperty("state","ESTABLISHED");
+		source.addProperty("lease_action","confirmed");source.addProperty("lease_sequence",2);source.addProperty("lease_deadline_ms",1791705374000L);
+		JsonObject safe=RestrictedTrace.event(source,TAG);
+		assertEquals("confirmed",safe.get("lease_action").getAsString());assertEquals(2,safe.get("lease_sequence").getAsInt());assertFalse(safe.toString().contains("secret"));
+		source.addProperty("lease_action","secret");safe=RestrictedTrace.event(source,TAG);assertFalse(safe.has("lease_action"));assertFalse(safe.has("lease_sequence"));
+		source.addProperty("lease_action","accepted");source.addProperty("lease_sequence",-1);assertFalse(RestrictedTrace.event(source,TAG).has("lease_sequence"));
+	}
     @Test public void reliableCauseAndProgressAreSafeAndPreserved(){
         for(String reason:new String[]{"RELIABLE_HANDSHAKE_TIMEOUT","RELIABLE_FRAME_TIMEOUT","RELIABLE_RETRY_EXHAUSTED"}){
             JsonObject source=snapshot(1),first=event(1,reason);
@@ -21,7 +29,7 @@ public class RestrictedTraceTest {
             assertEquals(0,cause.get("reliable_sacked").getAsInt());
             assertFalse(safe.toString().contains("secret"));
             JsonObject nativeValue=new JsonObject();nativeValue.addProperty("session_tag",TAG);nativeValue.add("lifecycle",source);
-            DiagnosticRing ring=new DiagnosticRing("FC-YHQB-9VJN","diagnostic",61,30);
+            DiagnosticRing ring=new DiagnosticRing("FC-AAAA-BBBB","diagnostic",61,30);
             ring.restricted(nativeValue,3,false,100);
             assertEquals(reason,RestrictedTrace.firstReason(ring.snapshot().getAsJsonObject("restricted_session")));
             assertEquals(reason,DiagnosticRing.Code.valueOf(reason).name());
@@ -52,7 +60,7 @@ public class RestrictedTraceTest {
         bad=event(1,"NONE");bad.addProperty("session_tag",TAG.replace('a','b'));assertNull(RestrictedTrace.event(bad,TAG));
     }
     @Test public void terminalUpdatesKeepFirstAndBindHistory(){
-        DiagnosticRing ring=new DiagnosticRing("FC-YHQB-9VJN","0.1.18-beta61",61,30);
+        DiagnosticRing ring=new DiagnosticRing("FC-AAAA-BBBB","0.1.18-beta61",61,30);
         JsonObject source=new JsonObject();source.addProperty("session_tag",TAG);source.addProperty("terminal_reason","IO_CLOSED");
         source.add("lifecycle",snapshot(1));ring.restricted(source,3,false,100);
         String connection=ring.snapshot().get("connection_id").getAsString();
@@ -68,7 +76,7 @@ public class RestrictedTraceTest {
         ring.cleanup(false,400);assertEquals("RECOVERY_CLEANUP_FAILED",ring.snapshot().getAsJsonArray("events").get(0).getAsJsonObject().get("reason_code").getAsString());
     }
     @Test public void fullHistoryAndTwoSnapshotsFitExportBudget(){
-        DiagnosticRing ring=new DiagnosticRing("FC-YHQB-9VJN","0.1.18-beta61",61,30);
+        DiagnosticRing ring=new DiagnosticRing("FC-AAAA-BBBB","0.1.18-beta61",61,30);
         for(int index=0;index<128;index++)ring.nativeEvent("bootstrap_family_auth",Long.MAX_VALUE);
         for(int index=1;index<=6;index++){
             String tag=String.format(java.util.Locale.ROOT,"%064x",index);

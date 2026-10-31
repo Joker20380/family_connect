@@ -105,6 +105,10 @@ public final class ChatActivity extends LocalizedActivity {
                     ChatRuntime.syncEvents(ChatActivity.this,chat,false);
                     JsonObject state = chat.call("delivery_state", args()).getAsJsonObject();
                     ChatRuntime.deliverNotifications(ChatActivity.this,chat);
+                    if(!state.get("attached").getAsBoolean()){
+                        runOnUiThread(()->{if(visible&&generation==expected&&!busy&&(screen.equals("contacts")||screen.equals("conversation")))notice.setText(R.string.chat_local_only);});
+                        return;
+                    }
                     if(deliveryAttached&&polling.poll(android.os.SystemClock.elapsedRealtime(),visible&&generation==expected,
                             state.get("online").getAsBoolean(),state.get("running").getAsBoolean(),
                             state.get("pending").getAsBoolean(),state.get("error").isJsonNull()))
@@ -256,6 +260,7 @@ public final class ChatActivity extends LocalizedActivity {
                 LinearLayout text=new LinearLayout(this);text.setOrientation(LinearLayout.VERTICAL);row.addView(text,new LinearLayout.LayoutParams(0,-2,1));
                 TextView title=TerminalUi.label(text,contactTitle(card)+(card.get("unread").getAsInt()>0?" · "+card.get("unread").getAsInt():""),16,TerminalUi.TEXT);title.setGravity(Gravity.START);
                 TextView preview=TerminalUi.label(text,card.has("last")?card.getAsJsonObject("last").get("text").getAsString():getString(R.string.chat_no_messages),13,TerminalUi.MUTED);preview.setGravity(Gravity.START);preview.setMaxLines(1);preview.setEllipsize(android.text.TextUtils.TruncateAt.END);
+                if(card.has("last")){JsonObject last=card.getAsJsonObject("last");if(last.has("kind")&&last.get("kind").getAsString().equals("audio"))preview.setText(R.string.chat_voice_play);String stamp=DateFormat.getTimeInstance(DateFormat.SHORT).format(new Date((long)(last.get("timestamp").getAsDouble()*1000)));TerminalUi.label(text,stamp+(last.get("outgoing").getAsBoolean()?" · "+getString(status(last.get("status").getAsString())):""),12,TerminalUi.MUTED);}
                 row.setFocusable(true);row.setContentDescription(contactTitle(card));row.setOnClickListener(v->{if(busy)return;peer=card;offset=-1;draft=drafts.getOrDefault(card.get("address").getAsString(),"");screen="opening";conversation();});content.addView(row,new LinearLayout.LayoutParams(-1,-2));
             }
         });
@@ -345,10 +350,11 @@ public final class ChatActivity extends LocalizedActivity {
                 thread.editMessage=this::editChatMessage;thread.voice.listener=new VoiceHoldButton.Listener(){
                     public boolean start(){return startVoice();}
                     public void lock(){if(recordingVoice&&thread!=null)thread.recordingState(VoiceHoldButton.LOCKED);}
-                    public void release(){stopVoice(true);}
+                    public void release(){stopVoice(false);}
                     public void cancel(){clearVoice();}
-                    public void send(){if(recordingVoice)stopVoice(true);else sendVoiceDraft();}
+                    public void send(){if(recordingVoice)stopVoice(false);else sendVoiceDraft();}
                 };thread.playAudio=this::playVoice;thread.audio=audio;
+                thread.preview=()->{if(voiceDraft!=null)try{audio.play(voiceDraft,()->{});}catch(Exception failure){notice.setText(R.string.chat_voice_failed);}};
                 page.addView(thread,index,new LinearLayout.LayoutParams(-1,0,1));
             }
             ChatRuntime.visiblePeer=address;ChatNotifications.cancel(this,address);
@@ -379,8 +385,13 @@ public final class ChatActivity extends LocalizedActivity {
             if(events.isEmpty())TerminalUi.label(content,getString(R.string.service_events_empty),15,TerminalUi.MUTED);
             for(int i=events.size()-1;i>=0;i--){JsonObject event=events.get(i).getAsJsonObject();ids.add(event.get("id"));
                 LinearLayout card=TerminalUi.section(content,null);
+                if(event.has("publisher"))TerminalUi.label(card,getString(R.string.exit_official),12,TerminalUi.AMBER);
+                if(event.has("kind")){String kind=event.get("kind").getAsString();TerminalUi.label(card,getString(kind.equals("update")?R.string.event_update:kind.equals("maintenance")?R.string.event_maintenance:kind.equals("server_change")?R.string.event_server_change:R.string.event_information),12,TerminalUi.MUTED);}
                 TerminalUi.label(card,event.get("title").getAsString(),18,TerminalUi.MINT);
                 TerminalUi.label(card,event.get("body").getAsString(),15,TerminalUi.TEXT);
+                if(event.has("expires"))TerminalUi.label(card,getString(R.string.event_valid_until,DateFormat.getDateTimeInstance().format(new Date(event.get("expires").getAsLong()*1000))),12,TerminalUi.MUTED);
+                if(event.has("platforms")){java.util.List<String> targets=new java.util.ArrayList<>();for(JsonElement target:event.getAsJsonArray("platforms"))targets.add(target.getAsString());TerminalUi.label(card,String.join(" · ",targets)+(event.has("min_version")?" · "+getString(R.string.event_builds,event.get("min_version").getAsString(),event.get("max_version").getAsString()):""),12,TerminalUi.MUTED);}
+                if(event.has("kind")&&"update".equals(event.get("kind").getAsString()))TerminalUi.button(card,R.string.update_check,()->TerminalUi.goTab(this,3));
                 if(event.has("revision")&&event.get("revision").getAsInt()>1)TerminalUi.label(card,getString(R.string.notice_edited),11,TerminalUi.MUTED);
                 TerminalUi.label(card,event.get("author").getAsString()+" · "+DateFormat.getDateTimeInstance().format(new Date(event.get("created").getAsLong()*1000)),11,TerminalUi.MUTED);
             }
@@ -483,9 +494,13 @@ public final class ChatActivity extends LocalizedActivity {
         if(!visible||busy||peer==null||thread==null||!screen.equals("conversation")||recordingVoice||voiceSending)return false;
         if(android.os.Build.VERSION.SDK_INT<29){notice.setText(R.string.chat_voice_unsupported);return false;}
         if(checkSelfPermission(android.Manifest.permission.RECORD_AUDIO)!=android.content.pm.PackageManager.PERMISSION_GRANTED){requestPermissions(new String[]{android.Manifest.permission.RECORD_AUDIO},81);return false;}
+        int selected=RadioSettings.mode(this);String confirmation="peer-"+peer.get("address").getAsString();
+        if(selected!=16&&!RadioSettings.preferences(this).getBoolean(confirmation,false)){
+            new AlertDialog.Builder(this).setTitle(R.string.radio_confirm).setMessage(R.string.radio_confirm_body).setNegativeButton(android.R.string.cancel,null).setPositiveButton(android.R.string.ok,(dialog,which)->RadioSettings.preferences(this).edit().putBoolean(confirmation,true).apply()).show();return false;
+        }
         clearVoice();
         try{
-            audio.start(()->stopVoice(false));recordingVoice=true;recordingStarted=android.os.SystemClock.elapsedRealtime();
+            audio.start(selected,()->stopVoice(false));recordingVoice=true;recordingStarted=android.os.SystemClock.elapsedRealtime();
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             thread.recordingElapsed(0);thread.recordingState(VoiceHoldButton.HOLDING);
             voiceTimer=new Runnable(){public void run(){if(!recordingVoice||thread==null)return;thread.recordingElapsed(android.os.SystemClock.elapsedRealtime()-recordingStarted);handler.postDelayed(this,200);}};handler.post(voiceTimer);
@@ -498,11 +513,11 @@ public final class ChatActivity extends LocalizedActivity {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         long elapsed=android.os.SystemClock.elapsedRealtime()-recordingStarted;
         if(elapsed<400){clearVoice();notice.setText(R.string.chat_voice_hold);return;}
-        try{
-            voiceDraft=audio.finish();
+        if(thread!=null)thread.recordingState(VoiceHoldButton.SENDING);
+        audio.finishAsync(value->{
+            voiceDraft=value;
             if(thread!=null){thread.recordingState(VoiceHoldButton.READY);thread.recordingElapsed(Math.min(elapsed,ChatAudio.MAX_MILLIS));}
-            if(send)sendVoiceDraft();
-        }catch(Exception error){clearVoice();notice.setText(R.string.chat_voice_failed);}
+        },()->{clearVoice();notice.setText(R.string.chat_voice_failed);});
     }
     private void sendVoiceDraft(){
         if(!visible||!screen.equals("conversation")||voiceDraft==null||voiceSending||peer==null)return;
@@ -510,9 +525,10 @@ public final class ChatActivity extends LocalizedActivity {
         if(busy){if(voiceSendTimer==null){voiceSendTimer=()->{voiceSendTimer=null;sendVoiceDraft();};handler.postDelayed(voiceSendTimer,100);}return;}
         busy=true;voiceSending=true;final int expected=generation;
         final String encoded=java.util.Base64.getEncoder().encodeToString(voiceDraft),address=peer.get("address").getAsString();
+        final int selectedMode=audio.mode();
         WORKER.execute(()->{
             String error=null;
-            try{chat.call("queue_audio",args("address",address,"audio",encoded));}
+            try{JsonObject request=args("address",address,"audio",encoded);if(selectedMode!=16){request.addProperty("mode",selectedMode);request.addProperty("confirmed",RadioSettings.preferences(this).getBoolean("peer-"+address,false));}chat.call(selectedMode==16?"queue_audio":"queue_radio",request);}
             catch(ChatLocalAndroid.ChatException failure){error=failure.code.equals("invalid_input")?"invalid_audio":failure.code;}
             catch(Exception failure){error="store_unavailable";}
             final String code=error;
@@ -530,7 +546,8 @@ public final class ChatActivity extends LocalizedActivity {
         if(audio.selected(id)){audio.toggle(id);return;}
         job(()->chat.call("audio",args("message_id",message.get("id").getAsString())),result->{
             byte[] bytes=java.util.Base64.getDecoder().decode(result.getAsJsonObject().get("audio").getAsString());
-            try{audio.playMessage(id,bytes,()->{});}catch(Exception error){notice.setText(R.string.chat_voice_failed);}finally{java.util.Arrays.fill(bytes,(byte)0);}
+            int selected=result.getAsJsonObject().has("mode")?result.getAsJsonObject().get("mode").getAsInt():16;
+            try{audio.playMessage(id,bytes,selected,()->{});}catch(Exception error){notice.setText(R.string.chat_voice_failed);}finally{java.util.Arrays.fill(bytes,(byte)0);}
         });
     }
     @Override public void onRequestPermissionsResult(int request,String[] permissions,int[] results){
@@ -592,6 +609,8 @@ public final class ChatActivity extends LocalizedActivity {
             case "queued": return R.string.chat_queued;
             case "sending": return R.string.chat_sending;
             case "relayed": return R.string.chat_relayed;
+            case "recipient_stored": return R.string.chat_recipient_stored;
+            case "expired": return R.string.chat_expired;
             case "delivered": return R.string.chat_delivered;
             case "received": return R.string.chat_received;
             default: return R.string.chat_unknown;

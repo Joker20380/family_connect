@@ -32,13 +32,24 @@ public final class ConnectionService extends Service {
     private volatile boolean stopping=false,closing=false,claimed=false;
     private volatile long generation=0;
     private boolean started=false,automatic=false;
+    private long terminalAttempt;
     private final java.util.concurrent.atomic.AtomicBoolean selectingGateway=new java.util.concurrent.atomic.AtomicBoolean();
     private volatile VpnHealth health;
     private ScheduledFuture<?> pending;
     private String source;
-    @Override public int onStartCommand(Intent intent,int flags,int startId){
+    static void forgetRequest(android.content.Context context){context.getSharedPreferences("connection-request",MODE_PRIVATE).edit().putBoolean("requested",false).commit();}
+    private int restartMode(){return getSharedPreferences("connection-request",MODE_PRIVATE).getBoolean("requested",false)?START_STICKY:START_NOT_STICKY;}
+    private Intent resumeRequest(){
+        android.content.SharedPreferences saved=getSharedPreferences("connection-request",MODE_PRIVATE);
+        String transport=saved.getString("transport",null);
+        if(!ConnectionResume.allowed(saved.getBoolean("requested",false),VpnService.prepare(this)==null,transport)){forgetRequest(this);return null;}
+        return new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport",transport).putExtra("country",saved.getString("country",null));
+    }
+    @Override public int onStartCommand(Intent incomingIntent,int flags,int startId){
+        final Intent intent=incomingIntent==null?resumeRequest():incomingIntent;
+        if(intent==null){stopSelf();return START_NOT_STICKY;}
         startForeground(1,notification());
-        if(intent!=null&&"disconnect".equals(intent.getAction())){if(!started){stopSelf();return START_NOT_STICKY;}cancel();worker.execute(()->owned(this::stopConnection));return START_NOT_STICKY;}
+        if("disconnect".equals(intent.getAction())){forgetRequest(this);if(!started){stopSelf();return START_NOT_STICKY;}cancel();worker.execute(()->owned(this::stopConnection));return START_NOT_STICKY;}
         final boolean sync=intent!=null&&"sync-control".equals(intent.getAction());
         final boolean intake=intent!=null&&"apply-control".equals(intent.getAction());
         final boolean selection=intent!=null&&"select-gateway".equals(intent.getAction());
@@ -53,7 +64,7 @@ public final class ConnectionService extends Service {
             });}finally{selectingGateway.set(false);}});
             return START_NOT_STICKY;
         }
-        if(started||stopping||closing){if(intake||sync||selection)reportControl("BUSY");return START_NOT_STICKY;}
+        if(started||stopping||closing){if(intake||sync||selection)reportControl("BUSY");return restartMode();}
         final String priorStatus=status;
         byte[] received=null;
         if(intake){try{received=ControlIntake.copy(intent.getByteArrayExtra("envelope"));}
@@ -61,8 +72,16 @@ public final class ConnectionService extends Service {
         final byte[] incoming=received;
         started=true;status="connecting";failed=false;
         String id=intent==null?"auto":intent.getStringExtra("transport");requestedTransport=id==null?"auto":id;
-        automatic="auto".equals(requestedTransport);
+        automatic="auto".equals(requestedTransport)||"telemost".equals(requestedTransport);
+        terminalAttempt=ConnectionTerminal.VPN.begin(ConnectionTerminal.Stage.PREPARING);
         final boolean connectRequested=intent!=null&&"connect".equals(intent.getAction());
+        if(connectRequested){
+            boolean retain=ConnectionResume.allowed(true,true,requestedTransport);
+            if(!getSharedPreferences("connection-request",MODE_PRIVATE).edit().putBoolean("requested",retain)
+                .putString("transport",requestedTransport).putString("country",intent.getStringExtra("country")).commit()){
+                failed=true;status="failed";forgetRequest(this);stopSelf();return START_NOT_STICKY;
+            }
+        }
         worker.execute(()->{
             try{ControlOperations.APP.claim(operationOwner);claimed=true;}
             catch(Exception busy){if(intake||selection)reportControl("BUSY");main.post(()->{status=priorStatus;stopSelf();});return;}
@@ -91,11 +110,11 @@ public final class ConnectionService extends Service {
                 }
                 catch(Exception|LinkageError e){
                     if("restricted".equals(requestedTransport)||"restricted-refresh".equals(requestedTransport))RestrictedTunnelEngine.failure(this,e);
-                    if(intake||sync||selection)reportControl("FAILED");failed=true;cancel();stopConnection();
+                    if(intake||sync||selection)reportControl("FAILED");failed=true;forgetRequest(this);cancel();stopConnection();
                 }
             });
         });
-        return START_NOT_STICKY;
+        return restartMode();
     }
     private void syncControl(){
         if(!rnsEnabled||stopping||closing)return;
@@ -129,7 +148,7 @@ public final class ConnectionService extends Service {
         try{ControlOperations.APP.session(operationOwner,action);}
         catch(ControlOperations.Stale ignored){/* Late callback belongs to a released service. */}
     }
-    private void cancel(){AutomaticConnection connection=automaticConnection;if(connection!=null)connection.interrupt(ConnectivityOrchestrator.Failure.CANCELLED);rnsEnabled=false;ControlRnsAndroid transport=rnsCarrier;if(transport!=null)transport.cancel();stopping=true;status="disconnecting";healthStatus="off";VpnHealth h=health;if(h!=null)h.cancel();ControlTrafficHealth c=controlHealth;if(c!=null)c.cancel();}
+    private void cancel(){ConnectionTerminal.VPN.end(terminalAttempt,failed?ConnectionTerminal.Stage.FAILED:ConnectionTerminal.Stage.CANCELLED,false);AutomaticConnection connection=automaticConnection;if(connection!=null)connection.interrupt(ConnectivityOrchestrator.Failure.CANCELLED);rnsEnabled=false;ControlRnsAndroid transport=rnsCarrier;if(transport!=null)transport.cancel();stopping=true;status="disconnecting";healthStatus="off";VpnHealth h=health;if(h!=null)h.cancel();ControlTrafficHealth c=controlHealth;if(c!=null)c.cancel();}
     private void schedule(Runnable action,int seconds){if(!stopping&&!closing)pending=worker.schedule(()->owned(action),seconds,TimeUnit.SECONDS);}
     private boolean cleanup(){
         managedExpiry=0;Runnable lease=leaseTask;if(lease!=null){main.removeCallbacks(lease);leaseTask=null;}ControlTrafficHealth c=controlHealth;if(c!=null)c.cancel();
@@ -139,12 +158,18 @@ public final class ConnectionService extends Service {
     }
     private void startAutomatic(String country){
         final long token=++generation;sessionId=sessionCounter.incrementAndGet();
-        AutomaticConnection connection=new AutomaticConnection(this,country,event->{
+        AutomaticConnection connection=new AutomaticConnection(this,country,"telemost".equals(requestedTransport),event->{
+            if(token!=generation||closing)return;
+            if("recovery_wait".equals(event.name))terminalAttempt=ConnectionTerminal.VPN.begin(ConnectionTerminal.Stage.RETRY_WAIT);
+            if(token==generation&&!closing){
+                if("restoration_attempted".equals(event.name))terminalAttempt=ConnectionTerminal.VPN.begin(ConnectionTerminal.Stage.RESTORING);
+                ConnectionTerminal.VPN.event(terminalAttempt,event);
+            }
             if("restoration_attempted".equals(event.name)){sessionId=sessionCounter.incrementAndGet();vpnSource=null;}
             switch(event.state){
                 case CONNECTED:status="on";healthStatus="ok";break;
                 case RESTORING:status="restoring";healthStatus="checking";break;
-                case FAILED:status="failed";healthStatus="unavailable";failed=true;break;
+                case FAILED:status="failed";healthStatus="unavailable";failed=true;forgetRequest(this);break;
                 case DISCONNECTED:status="disconnecting";healthStatus="off";break;
                 case DISCONNECTING:status="disconnecting";break;
                 default:status="connecting";healthStatus="checking";
@@ -155,14 +180,15 @@ public final class ConnectionService extends Service {
         if(stopping||closing)connection.interrupt(ConnectivityOrchestrator.Failure.CANCELLED);
         connection.up(getSharedPreferences("connectivity",MODE_PRIVATE).getString("preferred",null));
         if(stopping||closing){stopConnection();return;}
-        if(connection.connected())schedule(()->automaticHealth(token,connection),5);
+        if(connection.needsPolling())schedule(()->automaticHealth(token,connection),5);
     }
     private void automaticHealth(long token,AutomaticConnection connection){
         if(token!=generation||stopping||closing||engine!=connection)return;
         connection.poll();
-        if(connection.connected())schedule(()->automaticHealth(token,connection),5);
+        if(connection.needsPolling())schedule(()->automaticHealth(token,connection),5);
     }
     private void start(Transport type)throws Exception{
+        ConnectionTerminal.VPN.add(terminalAttempt,ConnectionTerminal.transport(type.id));
         String profile=ProfileValidator.validate(new ProfileStore(this,type).load(),type);
         if(stopping||closing){stopConnection();return;}
         activeTransport=type.id;status="connecting";main.post(this::notifyState);
@@ -172,9 +198,10 @@ public final class ConnectionService extends Service {
         engine.up(profile);
         if(stopping||closing){stopConnection();return;}
         health=new VpnHealth(this);if(!controlApplying)schedule(()->probe(token),1);
-        if(!automatic&&!controlApplying){status="on";main.post(this::notifyState);}
+        if(!automatic&&!controlApplying){status="on";ConnectionTerminal.VPN.end(terminalAttempt,ConnectionTerminal.Stage.VPN_READY,true);main.post(this::notifyState);}
     }
     private void startRestricted(String control)throws Exception{
+        ConnectionTerminal.VPN.add(terminalAttempt,ConnectionTerminal.Stage.TELEMOST);
         final long token=++generation;sessionId=sessionCounter.incrementAndGet();activeTransport="restricted";
         RestrictedTunnelEngine restricted=new RestrictedTunnelEngine(this,()->stopping||closing,up->{
             if(!up&&token==generation&&!stopping&&!closing){cancel();worker.execute(()->owned(this::stopConnection));}
@@ -184,7 +211,7 @@ public final class ConnectionService extends Service {
         if(refresh&&(control==null||!control.startsWith("https://")))throw new IllegalArgumentException("Preparation endpoint required");
         restricted.up(refresh?control:"");
         if(refresh||stopping||closing){stopConnection();return;}
-        status="on";healthStatus="ok";main.post(this::notifyState);
+        status="on";healthStatus="ok";ConnectionTerminal.VPN.end(terminalAttempt,ConnectionTerminal.Stage.VPN_READY,true);main.post(this::notifyState);
         schedule(()->restrictedHealth(token,restricted),5);
     }
     private void restrictedHealth(long token,RestrictedTunnelEngine restricted){

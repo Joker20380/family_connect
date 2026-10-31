@@ -11,7 +11,7 @@
     <string name="failed">Operation failed. Check the profile, VPN permission and network.</string>
     <string name="import_failed">Unsupported profile. One peer, numeric endpoint, DNS and full IPv4/IPv6 routes are required.</string>
     <string name="disconnect_first">Disconnect before replacing the profile.</string>
-    <string name="notification">family_connect VPN</string>
+    <string name="notification">EXIT VPN</string>
     <string name="permission_denied">VPN permission was not granted.</string>
     <string name="forget">Remove saved profile</string>
     <string name="health_checking">Checking VPN response…</string>
@@ -33,7 +33,7 @@
     <string name="control_rolled_back">Configuration was not accepted; previous profiles restored.</string>
     <string name="control_failed">Could not apply configuration. Keep the device identity and app data for recovery.</string>
     <string name="rns_connect">Connect via Reticulum</string>
-    <string name="rns_hint">Fetch signed configuration for this registered device from the pinned family_connect relay. VPN will connect after verification. Configuration and confirmation delivery retry every minute until Disconnect.</string>
+    <string name="rns_hint">Fetch signed configuration for this registered device from the pinned EXIT relay. VPN will connect after verification. Configuration and confirmation delivery retry every minute until Disconnect.</string>
     <string name="rns_unavailable">Reticulum relay unavailable. Retrying; the current VPN is preserved.</string>
     <string name="choose_gateway">Server</string>
     <string name="gateway_russia">Russia</string>
@@ -54,7 +54,7 @@
     <string name="terminal_transport">PROTOCOL</string>
     <string name="terminal_access">ACCESS</string>
     <string name="terminal_settings">SETTINGS</string>
-    <string name="terminal_footer">family_connect // STAY CLOSE</string>
+    <string name="terminal_footer">EXIT // STAY CLOSE</string>
     <string name="chat_title">Messenger</string>
     <string name="chat_connection">Back to connection</string>
     <string name="chat_local_notice">Messaging is not enabled yet</string>
@@ -89,6 +89,8 @@
     <string name="chat_queued">Queued</string>
     <string name="chat_sending">Sending</string>
     <string name="chat_relayed">Stored on node</string>
+    <string name="chat_recipient_stored">Saved on recipient device</string>
+    <string name="chat_expired">Delivery expired — kept locally</string>
     <string name="chat_delivered">Delivered</string>
     <string name="chat_received">Received</string>
     <string name="chat_unknown">Status unavailable</string>
@@ -110,7 +112,7 @@
     <string name="referral_load">Show my QR</string>
     <string name="referral_loading">Loading invitation link…</string>
     <string name="referral_remaining">Invitations remaining in the shared pool: %1$d</string>
-    <string name="referral_qr">QR code with the Family Connect invitation link</string>
+    <string name="referral_qr">QR code with the EXIT invitation link</string>
     <string name="referral_copy">Copy invitation link</string>
     <string name="referral_copied">Invitation link copied</string>
     <string name="referral_unavailable">Activate this device with an invitation first. If it is already active, check your connection and retry.</string>
@@ -165,14 +167,14 @@
     <string name="update_ready">Update verified. Android will ask you to confirm installation.</string>
     <string name="update_download_failed">Download or verification failed. Please download again.</string>
     <string name="update_disconnect">Turn off the VPN before installing the update.</string>
-    <string name="update_allow">Allow installation from family_connect, then return and tap Install update.</string>
+    <string name="update_allow">Allow installation from EXIT, then return and tap Install update.</string>
     <string name="update_install_failed">Could not open the installer. You can try again.</string>
     <string name="language">Language</string>
     <string name="language_system">System language</string>
     <string name="live_connection">CONNECTION</string>
     <string name="chat_notifications">Messages</string>
-    <string name="service_events">Family Connect · service notices</string>
-    <string name="chat_background">Family Connect messenger</string>
+    <string name="service_events">EXIT · service notices</string>
+    <string name="chat_background">EXIT messenger</string>
     <string name="chat_background_hint">Receiving messages in the background</string>
     <string name="chat_new_message">New message</string>
     <string name="chat_enable_notifications">Enable notifications</string>
@@ -230,9 +232,9 @@
     <string name="chat_voice_ready_status">%1$s   Ready to send</string>
     <string name="chat_voice_sending">%1$s   Saving…</string>
     <string name="gateway_selected">Gateway selected</string>
-    <string name="update_notice_title">Family Connect update</string>
-    <string name="update_optional_notice">A newer Family Connect version is available. Update in Settings; your activation and data are kept.</string>
-    <string name="update_required_notice">A newer Family Connect build is required for support. Update in Settings. Your connection and data stay intact while you arrange the update.</string>
+    <string name="update_notice_title">EXIT update</string>
+    <string name="update_optional_notice">A newer EXIT version is available. Update in Settings; your activation and data are kept.</string>
+    <string name="update_required_notice">A newer EXIT build is required for support. Update in Settings. Your connection and data stay intact while you arrange the update.</string>
     <string name="update_later">Later</string>
     <string name="support_title">About / Diagnostics</string>
     <string name="support_unavailable">Support ID unavailable. Connect to the Internet and refresh.</string>

@@ -1,0 +1,15 @@
+<resources>
+    <style name="ExitTheme" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:colorAccent">#A8DFCE</item>
+        <item name="android:windowBackground">#071211</item>
+        <item name="android:colorBackground">#071211</item>
+        <item name="android:textColorPrimary">#E2EEE8</item>
+        <item name="android:textColorSecondary">#A4BAB2</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorControlNormal">#A4BAB2</item>
+        <item name="android:colorControlActivated">#A8DFCE</item>
+        <item name="android:colorButtonNormal">#102321</item>
+        <item name="android:statusBarColor">#071211</item>
+        <item name="android:navigationBarColor">#071211</item>
+    </style>
+</resources>

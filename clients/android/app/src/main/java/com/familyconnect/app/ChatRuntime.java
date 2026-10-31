@@ -11,7 +11,9 @@ import javax.net.ssl.HttpsURLConnection;
 final class ChatRuntime {
     static final ScheduledExecutorService WORKER=Executors.newSingleThreadScheduledExecutor();
     private static ChatLocalAndroid owner;
-    private static boolean attached;
+    private static volatile boolean attached;
+    private static volatile ChatCarrier carrier;
+    private static long enrollmentExpires;
     private static long retryEnrollment,nextEvents,nextMailbox;
     private static ScheduledFuture<?> task;
     static volatile String visiblePeer;
@@ -19,33 +21,43 @@ final class ChatRuntime {
     static volatile int unread;
     static volatile long eventsRevision;
     static volatile boolean eventsUnavailable;
+    static String configuredRoute(){ChatCarrier current=carrier;return attached&&current!=null?current.route():"—";}
     static ChatLocalAndroid open(Context context,boolean create)throws Exception{
         if(owner==null)owner=ChatLocalAndroid.open(context,create);
         return owner;
     }
     static JsonObject enroll(Context context,ChatLocalAndroid chat)throws Exception{
-        if(attached){JsonObject value=new JsonObject();value.addProperty("status","active");return value;}
-        JsonObject result=new FriendsAccessAndroid(context,true).registerChat(chat);
+        if(attached&&System.currentTimeMillis()/1000<enrollmentExpires-20){JsonObject value=new JsonObject();value.addProperty("status","active");return value;}
+        if(carrier==null)carrier=new ChatCarrier(context);
+        long terminal=ConnectionTerminal.CHAT.begin(ConnectionTerminal.Stage.CHAT_ENROLL);
+        JsonObject result;
+        try{result=new FriendsAccessAndroid(context,carrier).registerChat(chat);}
+        catch(FriendsAccessAndroid.Denied|FriendsAccessAndroid.Conflict rejected){ConnectionTerminal.CHAT.end(terminal,ConnectionTerminal.Stage.AUTH,false);enrollmentExpires=0;chat.deliveryUpdate(false,false);carrier.close();carrier=null;throw rejected;}
+        catch(Exception|LinkageError unavailable){ConnectionTerminal.CHAT.end(terminal,ConnectionTerminal.Stage.FAILED,false);throw unavailable;}
         if("active".equals(result.get("status").getAsString())){
+            ConnectionTerminal.CHAT.add(terminal,"SERVICE_ONLY".equals(carrier.route())?ConnectionTerminal.Stage.CHAT_SERVICE:"EXISTING_EXIT".equals(carrier.route())?ConnectionTerminal.Stage.CHAT_EXISTING:ConnectionTerminal.Stage.CHAT_DIRECT);
             JsonObject node=result.getAsJsonObject("node");
-            chat.configureDelivery(node.get("host").getAsString(),node.get("port").getAsInt(),node.get("public_key").getAsString());attached=true;
+            enrollmentExpires=node.get("expires_at").getAsLong();
+            try{chat.configureDelivery(node.get("host").getAsString(),node.get("port").getAsInt(),node.get("public_key").getAsString(),carrier,enrollmentExpires);attached=true;ConnectionTerminal.CHAT.end(terminal,ConnectionTerminal.Stage.CHAT_READY,true);}
+            catch(Exception|LinkageError unavailable){ConnectionTerminal.CHAT.end(terminal,ConnectionTerminal.Stage.FAILED,false);throw unavailable;}
         }
+        else ConnectionTerminal.CHAT.end(terminal,ConnectionTerminal.Stage.FAILED,false);
         return result;
     }
     static void start(Context context){
         Context app=context.getApplicationContext();
         WORKER.execute(()->{if(task==null)task=WORKER.scheduleWithFixedDelay(()->tick(app),0,6,TimeUnit.SECONDS);});
     }
-    static void stop(){WORKER.execute(()->{if(task!=null){task.cancel(false);task=null;}if(owner!=null&&!uiVisible)try{owner.deliveryUpdate(false,false);}catch(Exception ignored){}});}
+    static void stop(){ChatCarrier active=carrier;if(active!=null&&!uiVisible)active.close();WORKER.execute(()->{if(task!=null){task.cancel(false);task=null;}if(owner!=null&&!uiVisible)try{owner.close();owner=null;attached=false;carrier=null;}catch(Exception ignored){}});}
     private static void tick(Context context){
         try{
             // An existing identity must never be replaced on a failed resume.
             ChatLocalAndroid chat=open(context,!ChatLocalAndroid.hasState(context));
             boolean online=new ChatNetworkAndroid(context).available();
             long now=android.os.SystemClock.elapsedRealtime();
-            if(!attached&&online&&now>=retryEnrollment){retryEnrollment=now+60000;try{enroll(context,chat);}catch(Exception ignored){}}
+            if((!attached||System.currentTimeMillis()/1000>=enrollmentExpires-20)&&online&&now>=retryEnrollment){retryEnrollment=now+60000;try{enroll(context,chat);}catch(Exception ignored){}}
             if(attached){
-                chat.deliveryUpdate(online,true);
+                chat.deliveryUpdate(online&&System.currentTimeMillis()/1000<enrollmentExpires,true);
                 JsonObject state=chat.call("delivery_state",new JsonObject()).getAsJsonObject();
                 if(online&&!state.get("running").getAsBoolean()&&!state.get("pending").getAsBoolean()&&now>=nextMailbox){nextMailbox=now+(state.get("error").isJsonNull()?15000:60000);chat.call("request_sync",new JsonObject());}
             }
@@ -94,7 +106,7 @@ final class ChatRuntime {
             for(var entry:conversations.entrySet()){
                 String peer=entry.getKey();var messages=entry.getValue();
                 if(peer.equals(visiblePeer)){ChatNotifications.cancel(context,peer);continue;}
-                boolean fresh=false;for(JsonObject message:messages)fresh|=!message.get("notified").getAsBoolean();
+                boolean fresh=false;for(JsonObject message:messages)fresh|=!message.get("notified").getAsBoolean()&&!(message.has("notification_suppressed")&&message.get("notification_suppressed").getAsBoolean());
                 if(!fresh)continue;
                 JsonObject latest=messages.get(messages.size()-1);latest.addProperty("unread",messages.size());
                 if(ChatNotifications.message(context,peer,latest,service,names.get(peer)))for(JsonObject message:messages)posted.add(message.get("id"));

@@ -51,7 +51,24 @@ index ab767c61..24023185 100644
  		go func(r *tcp.ForwarderRequest) {
  			var wq waiter.Queue
  			var id = r.ID()
-@@ -114,6 +119,7 @@ func (t *stackGVisor) Start() error {
+@@ -83,6 +88,7 @@ func (t *stackGVisor) Start() error {
+ 				return
+ 			}
++			r.Complete(false)
+ 
+ 			options := ep.SocketOptions()
+ 			options.SetKeepAlive(false)
+ 			options.SetReuseAddress(true)
+@@ -97,8 +103,6 @@ func (t *stackGVisor) Start() error {
+ 			// close the socket
+ 			ep.Close()
+-			// send connection complete upstream
+-			r.Complete(false)
+ 		}(r)
+ 	})
+ 	ipStack.SetTransportProtocolHandler(tcp.ProtocolNumber, tcpForwarder.HandlePacket)
+ 
+@@ -114,6 +118,7 @@ func (t *stackGVisor) Start() error {
  		// this function handle packets passing from the tun to the gVisor, therefore the src/dst assignement
  		src := net.UDPDestination(net.IPAddress(id.RemoteAddress.AsSlice()), net.Port(id.RemotePort))
  		dst := net.UDPDestination(net.IPAddress(id.LocalAddress.AsSlice()), net.Port(id.LocalPort))

@@ -10,9 +10,11 @@ import android.widget.*;
 
 /** Terminal presentation; animation follows view visibility and real connection state. */
 final class TerminalUi {
-    static final int BACKGROUND = 0xff03110e, SURFACE = 0xff072018, FRAME = 0xff438e79;
-    static final int SWITCH_ON = 0xff70f4c6, SWITCH_OFF = 0xffffad46;
-    static final int TEXT = 0xffdafff2, MUTED = 0xff99c4b5, MINT = 0xff98f7d8, AMBER = 0xffffad46;
+    static final int BACKGROUND = 0xff071211, SURFACE = 0xff102321, FRAME = 0xff416861;
+    static final int SWITCH_ON = 0xffa8dfce, SWITCH_OFF = 0xffdbb674;
+    static final int TEXT = 0xffe2eee8, MUTED = 0xffa4bab2, MINT = 0xffa8dfce, AMBER = 0xffdbb674;
+    static final float STROKE_FINE=.5f, STROKE_DETAIL=.65f, STROKE_FRAME=1f;
+    static float stroke(Context context,float width){return Math.max(.5f,width*context.getResources().getDisplayMetrics().density);}
 
     static int dp(Context context, int value) { return Math.round(value * context.getResources().getDisplayMetrics().density); }
 
@@ -21,49 +23,76 @@ final class TerminalUi {
         catch (android.content.pm.PackageManager.NameNotFoundException impossible) { return ""; }
     }
 
-    /** Fixed viewport: only secondary dialogs and histories may scroll. */
+    /** Shared viewport with independently scrollable workspaces. */
     static LinearLayout dashboard(Activity activity) {
         activity.getWindow().setStatusBarColor(BACKGROUND);activity.getWindow().setNavigationBarColor(BACKGROUND);
         activity.getWindow().getDecorView().setSystemUiVisibility(0);
         LinearLayout root=new DashboardLayout(activity);root.setOrientation(LinearLayout.VERTICAL);root.setBackground(new Grid(activity));
         int p=dp(activity,12);root.setPadding(p,dp(activity,8),p,dp(activity,8));
-        if(android.os.Build.VERSION.SDK_INT>=35)root.setOnApplyWindowInsetsListener((view,insets)->{
-            Insets bars=insets.getInsets(WindowInsets.Type.systemBars()|WindowInsets.Type.displayCutout());
-            root.setPadding(p+bars.left,dp(activity,8)+bars.top,p+bars.right,dp(activity,8)+bars.bottom);return insets;
-        });
-        activity.setContentView(root);return root;
+        install(activity,root);return root;
     }
 
-    /** Measure the available height first, then cap only the main dial and give the remaining space to the traffic graph. */
+    static void install(Activity activity,View root){
+        int left=root.getPaddingLeft(),top=root.getPaddingTop(),right=root.getPaddingRight(),bottom=root.getPaddingBottom();
+        if(android.os.Build.VERSION.SDK_INT>=35)root.setOnApplyWindowInsetsListener((view,insets)->{
+            Insets bars=insets.getInsets(WindowInsets.Type.systemBars()|WindowInsets.Type.displayCutout()|WindowInsets.Type.ime());
+            View navigation=root.findViewWithTag("exit_navigation");if(navigation!=null&&activity instanceof ChatActivity)navigation.setVisibility(insets.isVisible(WindowInsets.Type.ime())?View.GONE:View.VISIBLE);
+            root.setPadding(left+bars.left,top+bars.top,right+bars.right,bottom+bars.bottom);return insets;
+        });
+        root.addOnLayoutChangeListener((view,newLeft,newTop,newRight,newBottom,oldLeft,oldTop,oldRight,oldBottom)->{
+            if(root instanceof ViewGroup){ViewGroup group=(ViewGroup)root;if(group.getChildCount()>0&&group.getChildAt(0) instanceof BrandHeader){View header=group.getChildAt(0);int available=root.getHeight()-root.getPaddingTop()-root.getPaddingBottom();boolean compact=available<dp(activity,420)||(activity.getResources().getConfiguration().fontScale>=1.3f&&available<dp(activity,560));int visibility=compact?View.GONE:View.VISIBLE;if(header.getVisibility()!=visibility)root.post(()->header.setVisibility(visibility));}}
+        });
+        activity.setContentView(root);root.requestApplyInsets();enter(root);
+    }
+
+    static void enter(View view) {
+        if (!android.animation.ValueAnimator.areAnimatorsEnabled() || !view.getContext().getSharedPreferences(FriendsActivity.class.getName(),Context.MODE_PRIVATE).getBoolean("motion",true)) return;
+        view.setAlpha(.72f);view.setTranslationY(dp(view.getContext(),3));
+        view.animate().alpha(1).translationY(0).setDuration(140).start();
+        view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener(){
+            public void onViewAttachedToWindow(View target){}
+            public void onViewDetachedFromWindow(View target){target.animate().cancel();target.setAlpha(1);target.setTranslationY(0);}
+        });
+    }
+
+    /** Keep navigation reachable while the workspace adapts to actual viewport pixels. */
     private static final class DashboardLayout extends LinearLayout {
-        private LinearLayout panel;private Dial dial;private View telemetry,spacer;private int telemetryHeight;
+        private LinearLayout panel,body;
+        private Dial dial;
+        private View workspace,map;
+        private ScrollView scroll;
         DashboardLayout(Context context){super(context);}
-        void compact(LinearLayout panel,Dial dial,View telemetry,View preview){
-            this.panel=panel;this.dial=dial;this.telemetry=telemetry;telemetryHeight=telemetry.getLayoutParams().height;
-            spacer=preview;addView(spacer,getChildCount()-1,new LinearLayout.LayoutParams(-1,0,0));
+        void compact(LinearLayout panel,Dial dial,View workspace,View map){
+            this.panel=panel;this.dial=dial;this.workspace=workspace;this.map=map;
+            View header=getChildAt(0),footer=getChildAt(getChildCount()-1);
+            removeAllViews();addView(header);
+            body=new LinearLayout(getContext());body.setOrientation(VERTICAL);body.setTag("ui60_body");
+            panel.setTag("home_connection");dial.setTag("ui60_dial");workspace.setTag("home_workspace");map.setTag("home_map");
+            body.addView(panel,new LayoutParams(-1,-2));
+            LayoutParams network=new LayoutParams(-1,LiveNetworkPanel.minimumHeight(getContext()));network.topMargin=dp(getContext(),8);body.addView(workspace,network);
+            LayoutParams preview=new LayoutParams(-1,0);preview.topMargin=dp(getContext(),8);body.addView(map,preview);
+            scroll=new ScrollView(getContext());scroll.setFillViewport(false);scroll.addView(body,new ScrollView.LayoutParams(-1,-2));
+            addView(scroll,new LayoutParams(-1,0,1));addView(footer);
         }
         @Override protected void onMeasure(int widthSpec,int heightSpec){
             if(dial==null){super.onMeasure(widthSpec,heightSpec);return;}
-            LinearLayout.LayoutParams panelParams=(LinearLayout.LayoutParams)panel.getLayoutParams();
-            LinearLayout.LayoutParams dialParams=(LinearLayout.LayoutParams)dial.getLayoutParams();
-            LinearLayout.LayoutParams telemetryParams=(LinearLayout.LayoutParams)telemetry.getLayoutParams();
-            panelParams.height=0;panelParams.weight=1;dialParams.height=0;dialParams.weight=1;telemetryParams.height=telemetryHeight;telemetryParams.weight=0;spacer.setVisibility(VISIBLE);LinearLayout.LayoutParams mapParams=(LinearLayout.LayoutParams)spacer.getLayoutParams();mapParams.height=0;mapParams.topMargin=0;mapParams.weight=0;
-            panel.forceLayout();dial.forceLayout();telemetry.forceLayout();spacer.forceLayout();
+            int width=MeasureSpec.getSize(widthSpec)-getPaddingLeft()-getPaddingRight();
+            LiveNetworkPanel network=(LiveNetworkPanel)((ViewGroup)workspace).getChildAt(0);
+            LayoutParams networkParams=(LayoutParams)workspace.getLayoutParams();networkParams.height=network.requiredHeight(width,0);
+            LayoutParams dialParams=(LayoutParams)dial.getLayoutParams();dialParams.weight=0;dialParams.height=Ui60Presentation.dialHeight(width-panel.getPaddingLeft()-panel.getPaddingRight(),MeasureSpec.getSize(heightSpec),dp(getContext(),120));
+            LayoutParams mapParams=(LayoutParams)map.getLayoutParams();mapParams.height=0;map.setVisibility(GONE);
+            panel.forceLayout();dial.forceLayout();body.forceLayout();scroll.forceLayout();
             super.onMeasure(widthSpec,heightSpec);
-            int available=dial.getMeasuredHeight();int compact=Math.round(dial.getMeasuredWidth()*.60f);
-            dialParams.height=Math.min(available,compact);dialParams.weight=0;
-            panelParams.height=LayoutParams.WRAP_CONTENT;panelParams.weight=0;
-            int combined=telemetryHeight+Math.max(0,available-compact);
-            boolean showMap=combined>=dp(getContext(),300);
-            int gap=showMap?telemetryParams.topMargin:0;
-            telemetryParams.height=showMap?(combined-gap)/2:combined;
-            spacer.setVisibility(showMap?VISIBLE:INVISIBLE);
-            mapParams.topMargin=gap;mapParams.height=showMap?combined-gap-telemetryParams.height:0;mapParams.weight=0;
-            panel.forceLayout();dial.forceLayout();telemetry.forceLayout();spacer.forceLayout();
-            super.onMeasure(widthSpec,heightSpec);
+            int free=scroll.getMeasuredHeight()-panel.getMeasuredHeight()-workspace.getMeasuredHeight()-dp(getContext(),16);
+            int preview=((RouteMapView)map).compactHeight(width),deficit=Math.max(0,preview-free);
+            int compactNetwork=network.requiredHeight(width,deficit);
+            deficit=Math.max(0,deficit-(networkParams.height-compactNetwork));networkParams.height=compactNetwork;
+            dialParams.height=Ui60Presentation.compactDialHeight(dialParams.height,dp(getContext(),120),deficit);
+            mapParams.height=preview;map.setVisibility(VISIBLE);
+            panel.forceLayout();dial.forceLayout();workspace.forceLayout();body.forceLayout();scroll.forceLayout();super.onMeasure(widthSpec,heightSpec);
         }
     }
-    static void compactDashboardDial(LinearLayout root,LinearLayout panel,Dial dial,View telemetry,View preview){((DashboardLayout)root).compact(panel,dial,telemetry,preview);}
+    static void compactDashboardDial(LinearLayout root,LinearLayout panel,Dial dial,View workspace,View map){((DashboardLayout)root).compact(panel,dial,workspace,map);}
 
     static void dashboardHeader(LinearLayout root) {
         root.addView(new BrandHeader(root.getContext()),new LinearLayout.LayoutParams(-1,dp(root.getContext(),72)));
@@ -72,20 +101,26 @@ final class TerminalUi {
     private static final class BrandHeader extends View {
         private final Paint paint=new Paint(Paint.ANTI_ALIAS_FLAG);
         private final Drawable mark;
-        BrandHeader(Context context){super(context);mark=context.getDrawable(R.drawable.ic_brand);setBackground(frame(context,BACKGROUND,MINT));setContentDescription("family_connect · Secure Network Terminal");}
+        BrandHeader(Context context){super(context);mark=context.getDrawable(R.drawable.ic_brand);setBackground(frame(context,BACKGROUND,FRAME));setContentDescription("EXIT · Personal communications");}
         @Override protected void onDraw(Canvas canvas){
             float d=getResources().getDisplayMetrics().density,w=getWidth(),h=getHeight();
+            if(w<220*d){paint.setTypeface(Typeface.MONOSPACE);paint.setColor(TEXT);paint.setTextSize(18*getResources().getDisplayMetrics().scaledDensity);canvas.drawText("EXIT",(w-paint.measureText("EXIT"))/2,(h-paint.ascent()-paint.descent())/2,paint);return;}
+            if(h<60*d){
+                int size=dp(getContext(),30);mark.setBounds(dp(getContext(),12),(getHeight()-size)/2,dp(getContext(),12)+size,(getHeight()+size)/2);mark.draw(canvas);
+                paint.setTypeface(Typeface.MONOSPACE);paint.setColor(TEXT);paint.setTextSize(23*getResources().getDisplayMetrics().scaledDensity);
+                canvas.drawText("EXIT",54*d,(h-paint.ascent()-paint.descent())/2,paint);return;
+            }
             int logo=dp(getContext(),46);int x=dp(getContext(),19),y=(getHeight()-logo)/2;
             mark.setBounds(x,y,x+logo,y+logo);mark.draw(canvas);
             paint.setColor(AMBER);for(int i=0;i<3;i++)canvas.drawRect(7*d,h/2-10*d+i*7*d,11*d,h/2-6*d+i*7*d,paint);
             float left=76*d,available=w-left-14*d;
             paint.setTypeface(Typeface.create(Typeface.MONOSPACE,Typeface.NORMAL));paint.setTextSize(27*d);paint.setTextScaleX(1);
-            paint.setTextSize(Math.min(27*d,paint.getTextSize()*available/paint.measureText("family_connect")));paint.setColor(TEXT);
-            canvas.drawText("family_connect",left,h*.48f,paint);
+            paint.setTextSize(32*d);paint.setColor(TEXT);
+            canvas.drawText("EXIT",left,h*.49f,paint);
             paint.setTypeface(Typeface.MONOSPACE);paint.setTextScaleX(1);paint.setTextSize(9*d);paint.setColor(MINT);
-            String sub="SECURE NETWORK TERMINAL";paint.setTextSize(Math.min(9*d,paint.getTextSize()*available/paint.measureText(sub)));
+            String sub="PERSONAL COMMUNICATIONS";paint.setTextSize(Math.min(9*d,paint.getTextSize()*available/paint.measureText(sub)));
             canvas.drawText(sub,left,h*.73f,paint);
-            float ruleWidth=paint.measureText(sub);paint.setStrokeWidth(.5f*d);paint.setColor(0x38438e79);
+            float ruleWidth=paint.measureText(sub);paint.setStrokeWidth(stroke(getContext(),STROKE_FINE));paint.setColor(0x38438e79);
             canvas.drawLine(left,h*.55f,left+ruleWidth,h*.55f,paint);canvas.drawLine(left,h*.81f,left+ruleWidth,h*.81f,paint);
         }
     }
@@ -112,16 +147,16 @@ final class TerminalUi {
 
     static void navigation(LinearLayout root,Runnable status,Runnable chats,Runnable route,Runnable settings) { navigation(root,0,status,chats,route,settings); }
     static void navigation(LinearLayout root,int selected,Runnable status,Runnable chats,Runnable route,Runnable settings) {
-        Context c=root.getContext();LinearLayout row=new LinearLayout(c);
+        Context c=root.getContext();LinearLayout row=new LinearLayout(c);row.setTag("exit_navigation");
         int[] names={R.string.dashboard_status,R.string.dashboard_chats,R.string.dashboard_route_short,R.string.dashboard_settings_short};
         Runnable[] actions={status,chats,route,settings};
         for(int i=0;i<4;i++) {
             final Runnable action=actions[i];Button button=new Button(c);textStyle(button,10,i==selected?AMBER:MUTED);
-            button.setText(names[i]);button.setSelected(i==selected);button.setAllCaps(false);button.setSingleLine(true);button.setAutoSizeTextTypeUniformWithConfiguration(7,10,1,android.util.TypedValue.COMPLEX_UNIT_SP);button.setIncludeFontPadding(false);
+            button.setText(names[i]);button.setSelected(i==selected);button.setAllCaps(false);button.setMaxLines(2);button.setMinHeight(dp(c,58));button.setIncludeFontPadding(false);
             button.setPadding(dp(c,2),dp(c,5),dp(c,2),dp(c,4));button.setMinWidth(0);button.setMinimumWidth(0);
             button.setBackground(new RippleDrawable(ColorStateList.valueOf(0x4470f4c6),frame(c,i==selected?SURFACE:BACKGROUND,i==selected?AMBER:FRAME),null));
             Drawable icon=new NavIcon(c,i,i==selected?AMBER:MINT);icon.setBounds(0,0,dp(c,21),dp(c,21));button.setCompoundDrawables(null,icon,null,null);
-            button.setOnClickListener(v->action.run());row.addView(button,new LinearLayout.LayoutParams(0,dp(c,58),1));
+            button.setOnClickListener(v->action.run());row.addView(button,new LinearLayout.LayoutParams(0,-1,1));
         }
         root.addView(row,new LinearLayout.LayoutParams(-1,-2));
     }
@@ -185,20 +220,20 @@ final class TerminalUi {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -2); params.bottomMargin = dp(context, 12);
         parent.addView(panel, params);
         if (title != null) {
-            TextView label = label(panel, title + "_", 14, MINT);
-            label.setGravity(Gravity.START); label.setLetterSpacing(.1f);
+            TextView label = label(panel, title, 13, MINT);
+            label.setTypeface(Typeface.MONOSPACE);label.setGravity(Gravity.START); label.setLetterSpacing(.04f);
         }
         return panel;
     }
 
     static void textStyle(TextView view, int size, int color) {
-        view.setTextSize(size); view.setTextColor(color); view.setTypeface(Typeface.MONOSPACE);
+        view.setTextSize(size); view.setTextColor(color); view.setTypeface(Typeface.create("sans-serif",Typeface.NORMAL));
         view.setIncludeFontPadding(true);
     }
 
     static TextView label(LinearLayout parent, String text, int size, int color) {
         TextView view = new TextView(parent.getContext()); textStyle(view, size, color);
-        view.setText(text); view.setGravity(Gravity.CENTER); view.setLineSpacing(dp(view.getContext(), 3), 1);
+        view.setText(text); view.setGravity(Gravity.START); view.setLineSpacing(dp(view.getContext(), 3), 1);
         view.setPadding(0, dp(view.getContext(), 7), 0, dp(view.getContext(), 7));
         parent.addView(view, new LinearLayout.LayoutParams(-1, -2)); return view;
     }
@@ -219,16 +254,20 @@ final class TerminalUi {
         parent.addView(button, params); return button;
     }
 
+    static final class InlineLabel extends TextView {
+        InlineLabel(Context context){super(context);setMaxLines(3);setHorizontallyScrolling(false);}
+        void label(CharSequence value){setText(value);setContentDescription(value);}
+    }
     static void inlinePicker(Spinner spinner,String[] items){
         Context c=spinner.getContext();
         spinner.setAdapter(new ArrayAdapter<String>(c,android.R.layout.simple_spinner_dropdown_item,items){
             @Override public View getView(int position,View recycled,ViewGroup parent){
-                TextView text=(TextView)super.getView(position,recycled,parent);
-                textStyle(text,12,MINT);text.setText(items[position]+" ▾");text.setSingleLine(true);
-                text.setEllipsize(android.text.TextUtils.TruncateAt.END);text.setMinHeight(0);text.setPadding(0,0,0,0);text.setGravity(Gravity.CENTER_VERTICAL);text.setBackgroundColor(Color.TRANSPARENT);return text;
+                InlineLabel text=new InlineLabel(c);
+                textStyle(text,12,MINT);text.label(items[position]+" ▾");
+                text.setEllipsize(android.text.TextUtils.TruncateAt.END);text.setMinHeight(Math.max(dp(c,48),(int)Math.ceil(text.getPaint().getFontMetrics().bottom-text.getPaint().getFontMetrics().top)));text.setPadding(0,0,0,0);text.setGravity(Gravity.CENTER_VERTICAL);text.setBackgroundColor(Color.TRANSPARENT);return text;
             }
             @Override public View getDropDownView(int position,View recycled,ViewGroup parent){
-                TextView text=(TextView)super.getDropDownView(position,recycled,parent);textStyle(text,14,TEXT);
+                TextView text=(TextView)super.getDropDownView(position,recycled instanceof InlineLabel?null:recycled,parent);textStyle(text,14,TEXT);
                 text.setMinHeight(dp(c,48));text.setPadding(dp(c,12),dp(c,8),dp(c,12),dp(c,8));text.setGravity(Gravity.CENTER_VERTICAL);return text;
             }
         });
@@ -263,14 +302,13 @@ final class TerminalUi {
         private final Paint paint=new Paint(Paint.ANTI_ALIAS_FLAG);private final Path border=new Path();
         private final float d;private final int fill,stroke;
         TerminalFrame(Context c,int fill,int stroke){d=c.getResources().getDisplayMetrics().density;this.fill=fill;this.stroke=stroke;}
-        @Override protected void onBoundsChange(Rect b){float x=b.left+d,y=b.top+d,r=b.right-d,t=b.bottom-d,k=5*d;border.reset();border.moveTo(x+k,y);border.lineTo(r-k,y);border.lineTo(r,y+k);border.lineTo(r,t-k);border.lineTo(r-k,t);border.lineTo(x+k,t);border.lineTo(x,t-k);border.lineTo(x,y+k);border.close();}
+        @Override protected void onBoundsChange(Rect bounds){
+            float left=bounds.left+d/2,top=bounds.top+d/2,right=bounds.right-d/2,bottom=bounds.bottom-d/2;
+            border.reset();border.addRect(left,top,right,bottom,Path.Direction.CW);
+        }
         @Override public void draw(Canvas canvas){
             Rect b=getBounds();canvas.save();canvas.clipPath(border);paint.setStyle(Paint.Style.FILL);paint.setColor(fill);canvas.drawRect(b,paint);
-            paint.setStrokeWidth(1);paint.setColor(0x12438e79);
-            for(float x=b.left;x<b.right;x+=12*d)canvas.drawLine(x,b.top,x,b.bottom,paint);
-            for(float y=b.top;y<b.bottom;y+=12*d)canvas.drawLine(b.left,y,b.right,y,paint);
-            paint.setColor(0x08438e79);for(float y=b.top;y<b.bottom;y+=3*d)canvas.drawLine(b.left,y,b.right,y,paint);
-            canvas.restore();paint.setStyle(Paint.Style.STROKE);paint.setColor(stroke);paint.setStrokeWidth(d);canvas.drawPath(border,paint);
+            canvas.restore();paint.setStyle(Paint.Style.STROKE);paint.setColor(stroke);paint.setStrokeWidth(Math.max(.5f,STROKE_FRAME*d));canvas.drawPath(border,paint);
 
         }
         @Override public void setAlpha(int alpha){paint.setAlpha(alpha);invalidateSelf();}
@@ -282,11 +320,7 @@ final class TerminalUi {
         private final Paint paint = new Paint(); private final int step;
         Grid(Context context) { step = dp(context, 12); }
         @Override public void draw(Canvas canvas) {
-            canvas.drawColor(BACKGROUND); paint.setColor(0x18438e79); paint.setStrokeWidth(1);
-            Rect bounds = getBounds();
-            for (int x = 0; x < bounds.right; x += step) canvas.drawLine(x, 0, x, bounds.bottom, paint);
-            for (int y = 0; y < bounds.bottom; y += step) canvas.drawLine(0, y, bounds.right, y, paint);
-            paint.setColor(0x08438e79);for(int y=0;y<bounds.bottom;y+=Math.max(1,step/4))canvas.drawLine(0,y,bounds.right,y,paint);
+            canvas.drawColor(BACKGROUND);
         }
         @Override public void setAlpha(int alpha) {}
         @Override public void setColorFilter(ColorFilter filter) {}
@@ -302,7 +336,7 @@ final class TerminalUi {
         private String state="off",health="";
         Dial(Context context){super(context);setClickable(true);setFocusable(true);describe();}
         @Override public CharSequence getAccessibilityClassName(){return Button.class.getName();}
-        private void describe(){setContentDescription(getContext().getString(state.equals("off")?R.string.connect:R.string.disconnect));}
+        private void describe(){setContentDescription(getContext().getString(state.equals("off")||state.equals("failed")?R.string.connect:state.equals("on")?R.string.disconnect:android.R.string.cancel));}
         void setMotion(boolean enabled){motion=enabled;animateState();invalidate();}
         private void animateState(){
             boolean run=motion&&android.animation.ValueAnimator.areAnimatorsEnabled()&&isAttachedToWindow()&&getWindowVisibility()==VISIBLE&&isShown()&&hasWindowFocus()&&!state.equals("off");
@@ -317,7 +351,7 @@ final class TerminalUi {
         @Override protected void drawableStateChanged(){super.drawableStateChanged();invalidate();}
         @android.annotation.SuppressLint("ClickableViewAccessibility") // View dispatches native click/accessibility actions.
         @Override public boolean onTouchEvent(MotionEvent event){
-            if(event.getActionMasked()==MotionEvent.ACTION_DOWN&&Math.hypot(event.getX()-getWidth()/2f,event.getY()-getHeight()/2f)>Math.min(getWidth(),getHeight())*.47f)return false;
+            if(!"home_action".equals(getTag())&&event.getActionMasked()==MotionEvent.ACTION_DOWN&&Math.hypot(event.getX()-getWidth()/2f,event.getY()-getHeight()/2f)>Math.min(getWidth(),getHeight())*.47f)return false;
             return super.onTouchEvent(event);
         }
         @Override public boolean performClick(){return super.performClick();}
@@ -333,7 +367,9 @@ final class TerminalUi {
         }
         @Override protected void onDraw(Canvas canvas){
             super.onDraw(canvas);
-            float x=getWidth()/2f,y=getHeight()/2f,r=Math.min(getWidth(),getHeight())*.385f,d=getResources().getDisplayMetrics().density;
+            boolean home="home_action".equals(getTag());
+            float captionSpace=home?17*getResources().getDisplayMetrics().scaledDensity+dp(getContext(),4):0;
+            float x=getWidth()/2f,y=(getHeight()-captionSpace)/2f,r=Math.min(getWidth(),getHeight()-captionSpace)*.385f,d=getResources().getDisplayMetrics().density;
             if(r<4)return;
             boolean off=state.equals("off"),ready=state.equals("on")&&health.equals("ok");
             int accent=ready?SWITCH_ON:SWITCH_OFF;
@@ -379,10 +415,10 @@ final class TerminalUi {
             paint.setColor(BACKGROUND);canvas.drawCircle(x,lockY+lockW*.43f,r*.033f,paint);canvas.drawRect(x-r*.016f,lockY+lockW*.43f,x+r*.016f,lockY+lockW*.84f,paint);
             paint.setStyle(Paint.Style.FILL);paint.setTypeface(Typeface.create(Typeface.MONOSPACE,Typeface.BOLD));paint.setTextAlign(Paint.Align.CENTER);paint.setColor(accent);paint.setAlpha(isEnabled()?255:110);
             paint.setTextSize(Math.min(30*d,r*.29f));canvas.drawText(off?"OFF":ready?"ON":"…",x,y+r*.20f,paint);
-            String label=getContext().getString(off?R.string.connect:R.string.disconnect).toUpperCase(java.util.Locale.ROOT);
-            paint.setTypeface(Typeface.MONOSPACE);paint.setTextSize(Math.min(11*d,r*.115f));
-            paint.setTextSize(Math.min(paint.getTextSize(),paint.getTextSize()*r*1.13f/Math.max(1,paint.measureText(label))));paint.setColor(accent);
-            canvas.drawText(label,x,y+r*.39f,paint);paint.setAlpha(255);
+            String label=getContentDescription().toString().toUpperCase(java.util.Locale.ROOT);
+            paint.setTypeface(Typeface.MONOSPACE);paint.setTextSize(home?14*getResources().getDisplayMetrics().scaledDensity:Math.min(11*d,r*.115f));
+            if(!home)paint.setTextSize(Math.min(paint.getTextSize(),paint.getTextSize()*r*1.13f/Math.max(1,paint.measureText(label))));paint.setColor(accent);
+            canvas.drawText(label,x,home?getHeight()-dp(getContext(),2)-paint.descent():y+r*.39f,paint);paint.setAlpha(255);
         }
     }
 }

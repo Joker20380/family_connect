@@ -16,8 +16,29 @@ def digest(raw):
     return hashlib.sha256(raw).hexdigest()
 
 
-def inspect(apk, native, metadata):
+def verify_generated(native, metadata, revision):
     manifest = json.loads(metadata.read_bytes())
+    if manifest.get('metadata_schema') != 2 or manifest.get('source_revision') != revision:
+        raise ValueError('Restricted source metadata mismatch')
+    if not re.fullmatch('[0-9a-f]{40}', revision) or not re.fullmatch('[0-9a-f]{40}', manifest.get('source_tree', '')):
+        raise ValueError('Restricted source identity missing')
+    if manifest.get('provider') != 'telemost' or manifest.get('abi') != 'arm64-v8a':
+        raise ValueError('Restricted provider/ABI mismatch')
+    if manifest.get('build_tags') != [] or manifest.get('diagnostic_only') is not False or manifest.get('owner_diagnostic_fault_schema') != 0:
+        raise ValueError('Diagnostic native cannot enter Friends')
+    if manifest.get('binary_sha256') != digest(native.read_bytes()):
+        raise ValueError('Restricted generated native mismatch')
+    if manifest.get('builder_sha256') != digest(Path(__file__).with_name('build.py').read_bytes()):
+        raise ValueError('Restricted producer mismatch')
+    if manifest.get('patch_sha256') != digest(Path(__file__).with_name('xray-packet-boundary.patch').read_bytes()):
+        raise ValueError('Restricted patch mismatch')
+    return manifest
+
+
+def inspect(apk, native, metadata, revision=None):
+    if revision is None:
+        revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
+    manifest = verify_generated(native, metadata, revision)
     with zipfile.ZipFile(apk) as archive:
         packaged = archive.read('lib/arm64-v8a/libfc_restricted.so')
         if packaged != native.read_bytes() or digest(packaged) != manifest['binary_sha256']:
@@ -34,13 +55,21 @@ def inspect(apk, native, metadata):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--source-commit', required=True)
-    parser.add_argument('--out', type=Path, required=True)
-    parser.add_argument('--apksigner', type=Path, required=True)
+    parser.add_argument('--out', type=Path)
+    parser.add_argument('--apksigner', type=Path)
+    parser.add_argument('--check-generated', type=Path)
+    parser.add_argument('--android-only', action='store_true')
     args = parser.parse_args()
     head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
     if not re.fullmatch('[0-9a-f]{40}', args.source_commit) or head != args.source_commit:
         raise ValueError('Source commit mismatch')
     subprocess.run(['git', 'diff', '--exit-code', 'HEAD', '--', 'carrier', 'clients/android', 'pilot/android-restricted'], cwd=ROOT, check=True)
+    if args.check_generated:
+        print(json.dumps(verify_generated(args.check_generated / 'jniLibs/arm64-v8a/libfc_restricted.so',
+                                         args.check_generated / 'assets/restricted-build.json', head)))
+        return
+    if args.out is None or args.apksigner is None:
+        parser.error('--out and --apksigner required for APK acceptance')
     apk = ROOT / 'clients/android/app/build/outputs/apk/friends/app-friends-unsigned.apk'
     native = ROOT / 'clients/android/restricted-generated/jniLibs/arm64-v8a/libfc_restricted.so'
     native_manifest = inspect(apk, native, ROOT / 'clients/android/restricted-generated/assets/restricted-build.json')
@@ -57,7 +86,7 @@ def main():
     args.out.mkdir(parents=True, exist_ok=True)
     subprocess.run([sys.executable, str(ROOT / 'pilot/android-awg/verify-apk.py'), '--apk', str(apk), '--abis', 'arm64-v8a', '--report', str(args.out / 'normal-native.json')], check=True)
     gateway = args.out / 'bootstrap-broker'
-    if not gateway.is_file():
+    if not args.android_only and not gateway.is_file():
         raise ValueError('Gateway build missing')
     target = args.out / ('FamilyConnect-Test-' + version + '-unsigned.apk')
     if target.exists():
@@ -65,7 +94,9 @@ def main():
     shutil.copyfile(apk, target)
     receipt = dict(source_commit=head, version=version, version_code=entry['versionCode'], package=listing['applicationId'],
                    apk_sha256=digest(target.read_bytes()), size=target.stat().st_size, unsigned=True,
-                   restricted_native=native_manifest, gateway_sha256=digest(gateway.read_bytes()))
+                   restricted_native=native_manifest, android_only=args.android_only)
+    if not args.android_only:
+        receipt['gateway_sha256'] = digest(gateway.read_bytes())
     (args.out / 'verification.json').write_text(json.dumps(receipt, indent=2) + '\n')
     print(json.dumps(receipt))
 

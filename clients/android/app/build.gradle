@@ -18,8 +18,10 @@ android {
         minSdk 26
         targetSdk 35
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        versionCode 65
-        versionName '0.1.18-beta65'
+        versionCode 107
+        versionName '0.1.18-beta107'
+        buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'
+        buildConfigField 'String', 'PROVISIONING_SEAM_SOURCE', '""'
         manifestPlaceholders = [appLabel: 'family_connect', launcherActivity: 'com.familyconnect.app.MainActivity']
     }
     compileOptions {
@@ -31,6 +33,13 @@ android {
         androidTest { java.srcDir 'src/controlTest/java'; assets.srcDir '../../../tests/vectors' }
     }
     sourceSets { main { java.srcDir '../awg-generated/java'; jniLibs.srcDir '../awg-generated/jniLibs'; assets.srcDir '../awg-generated/assets' } }
+    sourceSets { main { jniLibs.srcDir providers.gradleProperty('fcRadioNative').getOrElse('../audio-generated/jniLibs'); assets.srcDir '../audio/assets' } }
+    sourceSets {
+        debug { java.srcDirs 'src/publicStartup/java', 'src/provisioningDisabled/java' }
+        release { java.srcDirs 'src/publicStartup/java', 'src/provisioningDisabled/java' }
+        friends { java.srcDirs 'src/publicStartup/java', 'src/provisioningDisabled/java' }
+        ownerDiagnostic { java.srcDirs 'src/publicStartup/java', 'src/provisioningDisabled/java' }
+    }
     sourceSets { debug { jniLibs.srcDir '../restricted-generated/jniLibs'; assets.srcDir '../restricted-generated/assets' } }
     sourceSets { friends { jniLibs.srcDir '../restricted-generated/jniLibs'; assets.srcDir '../restricted-generated/assets' } }
     sourceSets { ownerDiagnostic {
@@ -78,6 +87,10 @@ android {
     }
 }
 androidComponents {
+    beforeVariants(selector().withBuildType('friends')) { builder -> builder.minSdk = 31 }
+    onVariants(selector().withBuildType('friends')) { variant ->
+        variant.packaging.jniLibs.keepDebugSymbols.add('**/libfc_restricted.so')
+    }
     onVariants(selector().withBuildType('ownerDiagnostic')) { variant ->
         variant.packaging.jniLibs.keepDebugSymbols.add('**/libfc_restricted.so')
     }
@@ -92,6 +105,18 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.6.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+}
+
+def verifyFriendsRestrictedInputs = tasks.register('verifyFriendsRestrictedInputs', Exec) {
+    workingDir rootProject.file('../..')
+    commandLine providers.gradleProperty('fcBuildPython').getOrElse('python3'), 'pilot/android-restricted/package_ci.py',
+        '--source-commit', providers.exec { commandLine 'git', '-C', rootProject.file('../..'), 'rev-parse', 'HEAD' }.standardOutput.asText.get().trim(),
+        '--check-generated', rootProject.file('restricted-generated').absolutePath
+}
+tasks.configureEach { task ->
+    if (task.name == 'preFriendsBuild' && targetAbi == 'arm64-v8a' && !friendsCi) {
+        task.dependsOn verifyFriendsRestrictedInputs
+    }
 }
 
 // Keep four-ABI support. VPN identity and chat storage keys stay in Java.

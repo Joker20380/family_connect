@@ -1,0 +1,4 @@
+<resources>
+    <string name="ui_disconnecting">Disconnecting…</string>
+    <string name="ui_cleanup_required">Connection cleanup required</string>
+</resources>

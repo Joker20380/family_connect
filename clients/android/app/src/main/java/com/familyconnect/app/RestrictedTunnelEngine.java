@@ -30,14 +30,19 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     private volatile boolean revoked;
     private final AutomaticVpnOwner automaticOwner;
     private final long connectDeadline;
+    private final boolean restoring;
+    private boolean temporaryBootstrap;
 
     RestrictedTunnelEngine(Context context, BooleanSupplier cancelled, Consumer<Boolean> state) {
         this(context,cancelled,state,null,Long.MAX_VALUE);
     }
 
     RestrictedTunnelEngine(Context context, BooleanSupplier cancelled, Consumer<Boolean> state,AutomaticVpnOwner owner,long deadline) {
+        this(context,cancelled,state,owner,deadline,false);
+    }
+    RestrictedTunnelEngine(Context context, BooleanSupplier cancelled, Consumer<Boolean> state,AutomaticVpnOwner owner,long deadline,boolean restoring) {
         this.context=context; this.cancelled=cancelled; this.state=state;
-        automaticOwner=owner;connectDeadline=deadline;
+        automaticOwner=owner;connectDeadline=deadline;this.restoring=restoring;
     }
 
     public void up(String control) throws Exception {
@@ -63,29 +68,35 @@ final class RestrictedTunnelEngine implements TunnelEngine {
             service.revoked=()->{revoked=true; state.accept(false);};
         }
         File directory=new File(context.getNoBackupFilesDir(),"restricted");
+        long deadline=Math.min(connectDeadline,SystemClock.elapsedRealtime()+200000);
         if(context.getPackageName().equals("com.familyconnect.app.friends")) {
             try(ControlIdentity identity=new FriendsIdentityVault(context).load()) {
                 byte[] response;
-                synchronized(RestrictedVault.LOCK){response=FriendsRestricted.cache(context,identity).usable();}
+                response=FriendsRestricted.ready(context,identity,connectDeadline,cancelled,restoring);
                 Diagnostics.readiness(context,response!=null);
                 if(response==null)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
                 byte[] full=identity.material(),material=java.util.Arrays.copyOf(full,64);java.util.Arrays.fill(full,(byte)0);
-                try{checkAccess();handle=NativeRestricted.beginReady(response,material,ControlTrust.anchor(context),resolver,service);}
+                try{checkAccess();handle=NativeRestricted.beginReady(response,material,ControlTrust.anchor(context),resolver,deadline-SystemClock.elapsedRealtime(),service,SpeedProfile.read(context));}
                 finally{java.util.Arrays.fill(material,(byte)0);java.util.Arrays.fill(response,(byte)0);}
             }
         } else {
             if (!directory.isDirectory()) throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
             checkAccess();
-            handle=NativeRestricted.begin(directory.getAbsolutePath(),automaticOwner==null?control:"auto",resolver,service);
+            handle=NativeRestricted.begin(directory.getAbsolutePath(),automaticOwner==null?control:"auto",resolver,deadline-SystemClock.elapsedRealtime(),service);
         }
         if (handle<=0) throw new IllegalStateException("Restricted startup rejected");
-        long deadline=Math.min(connectDeadline,SystemClock.elapsedRealtime()+200000);
+        StartupDiagnostics.begin(context,handle);
         int phase;
         while ((phase=NativeRestricted.state(handle))==0 && SystemClock.elapsedRealtime()<deadline && !cancelled.getAsBoolean() && !authorizationDenied()) Thread.sleep(100);
         evidence();
         checkAccess();
         if (!control.isEmpty() && phase==4) return;
-        if (phase!=1) throw new ConnectivityOrchestrator.Rejected(phase==5?ConnectivityOrchestrator.Failure.AUTH:ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
+        if (phase!=1) {
+            ConnectivityOrchestrator.Rejected original=StartupDiagnostics.rejected(handle,phase==5?ConnectivityOrchestrator.Failure.AUTH:ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
+            ConnectivityOrchestrator.Rejected failure=new ConnectivityOrchestrator.Rejected(original.category,temporaryBootstrap);
+            if(original.getCause()!=null)failure.initCause(original.getCause());
+            throw failure;
+        }
         if(automaticOwner!=null)tun=automaticOwner.replace(automaticOwner.builder());
         else tun=service.new Builder().setSession("Family restricted diagnostic").setMtu(1280)
             .addAddress("10.79.0.2",32).addAddress("fd79:fc::2",128)
@@ -96,6 +107,9 @@ final class RestrictedTunnelEngine implements TunnelEngine {
         state.accept(true);
     }
 
+    private RestrictedHealthPolicy.Sample healthSample;
+    RestrictedHealthPolicy.Sample healthSample(){return healthSample;}
+
     boolean healthy() { return handle>0 && NativeRestricted.state(handle)==2 && (!context.getPackageName().equals("com.familyconnect.app.friends") || !FriendsRestricted.denied); }
 
     private boolean authorizationDenied() {
@@ -103,8 +117,8 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     }
 
     private void checkAccess() throws ConnectivityOrchestrator.Rejected {
-        if(authorizationDenied())throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.AUTH);
-        if(cancelled.getAsBoolean())throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.CANCELLED);
+        if(authorizationDenied())throw StartupDiagnostics.rejected(handle,ConnectivityOrchestrator.Failure.AUTH);
+        if(cancelled.getAsBoolean())throw StartupDiagnostics.rejected(handle,ConnectivityOrchestrator.Failure.CANCELLED);
     }
 
     ConnectivityOrchestrator.Failure connectionFailure() {
@@ -138,6 +152,9 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     }
 
     private void evidence(JSONObject snapshot) throws Exception {
+        healthSample=RestrictedHealthPolicy.sample(snapshot.toString(),SystemClock.elapsedRealtime(),authorizationDenied());
+        temporaryBootstrap=RestrictedRecovery.bootstrapRetryable(handle,snapshot.optInt("state",-1),cancelled.getAsBoolean(),authorizationDenied(),snapshot.toString());
+        StartupDiagnostics.capture(context,handle,snapshot);
         File output=new File(context.getFilesDir(),"restricted-evidence.jsonl");
         snapshot.put("authorization_denied",FriendsRestricted.denied);
         Diagnostics.nativeStats(context,snapshot);
@@ -156,6 +173,7 @@ final class RestrictedTunnelEngine implements TunnelEngine {
         if (handle>0) {
             try { evidence(); }catch(Exception ignored){}
             boolean stopped=NativeRestricted.stop(handle);
+            StartupDiagnostics.stopped(context,handle);
             Diagnostics.cleanup(context,stopped);
             if (!stopped) throw new IllegalStateException("Restricted cleanup failed");
             handle=0;

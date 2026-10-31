@@ -1,7 +1,7 @@
 // Shared by the actual client and the isolated chat runtime acceptance app.
 // Explicit source allowlist: never put the repository root on the Python path.
 def chatRoot = project.ext.chatCoreDirectory
-def chatSources = ['__init__.py', 'codec.py', 'chat.py', 'store.py', 'local.py', 'mailbox.py', 'delivery.py', 'admission.py', 'service_events.py']
+def chatSources = ['__init__.py', 'codec.py', 'chat.py', 'store.py', 'local.py', 'mailbox.py', 'delivery.py', 'admission.py', 'service_events.py', 'notices.py', 'routed.py']
 def generatedChat = layout.buildDirectory.dir('generated/chatPython')
 def stageChatPython = tasks.register('stageChatPython', Sync) {
     from(chatRoot) { include chatSources; into 'messenger' }

@@ -7,6 +7,6 @@ public final class TcpVpnService extends VpnService {
     final CompletableFuture<Void> stopped=new CompletableFuture<>();
     volatile Runnable revoked;
     @Override public void onCreate(){super.onCreate();ready.complete(this);}
-    @Override public void onRevoke(){Runnable callback=revoked;if(callback!=null)callback.run();super.onRevoke();}
+    @Override public void onRevoke(){ConnectionService.forgetRequest(this);Runnable callback=revoked;if(callback!=null)callback.run();super.onRevoke();}
     @Override public void onDestroy(){Runnable callback=revoked;if(callback!=null)callback.run();ready=new CompletableFuture<>();super.onDestroy();stopped.complete(null);}
 }

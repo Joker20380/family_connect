@@ -13,7 +13,21 @@ concurrency:
 permissions:
   contents: read
 jobs:
+  scope:
+    runs-on: ubuntu-latest
+    outputs:
+      android: ${{ steps.scope.outputs.android }}
+      windows: ${{ steps.scope.outputs.windows }}
+      linux: ${{ steps.scope.outputs.linux }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: scope
+        run: python3 scripts/client_ci_scope.py
   android:
+    needs: scope
+    if: needs.scope.outputs.android == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 75
     steps:
@@ -49,9 +63,18 @@ jobs:
         run: |
           python3 -m pip install pytest==9.1.1 -r device_identity/requirements.lock
           FC_TEST_GO="$(command -v go)" python3 -m pytest -q tests/test_mesh_product.py tests/test_restricted_correlation.py tests/test_directory_validation.py tests/test_restricted_test_window.py tests/test_friends_restricted.py 2>&1 | tee restricted-contracts.log
+          python3 -m pytest -q tests/test_android_public_release.py tests/test_restricted_release_payload.py tests/test_android_notification_release.py tests/test_orchestrator_android_contract.py tests/test_field_release.py -k 'not windows'
       - name: Build pinned unified Android VPN library
         shell: bash # Explicit bash enables pipefail: tee must not hide a failed native build.
         run: ANDROID_NDK_HOME="$ANDROID_HOME/ndk/28.2.13676358" python3 -u pilot/android-awg/build.py 2>&1 | tee android-awg-build.log
+      - name: Build pinned dynamic audio libraries and corresponding source
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y cmake ninja-build
+          git clone --quiet https://github.com/drowe67/codec2 "$RUNNER_TEMP/android-codec2"
+          git -C "$RUNNER_TEMP/android-codec2" checkout --detach 06d4c11e699b0351765f10398abb4f663a984f36
+          python3 clients/android/audio/build.py --source "$RUNNER_TEMP/android-codec2" --ndk "$ANDROID_HOME/ndk/28.2.13676358" --out clients/android/audio-generated --abi all
       - run: gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:lintDebug :app:assembleFriends :app:testFriendsUnitTest :app:lintFriends
         working-directory: clients/android
       - run: python3 pilot/android-awg/verify-apk.py
@@ -76,23 +99,25 @@ jobs:
         run: python3 pilot/android-awg/report_ci.py
       - name: Confirm control conformance on Android runtime
         run: python3 pilot/android-awg/report_control_ci.py
-      - name: Build pinned restricted native and gateway
+      - name: Build pinned restricted Android native
         shell: bash
         run: |
           git clone --quiet https://github.com/XTLS/Xray-core "$RUNNER_TEMP/restricted-xray"
           git -C "$RUNNER_TEMP/restricted-xray" checkout --detach d2758a023cd7f4174a5a5fa4ff66e487d4342ba0
           python3 pilot/android-restricted/build.py --xray "$RUNNER_TEMP/restricted-xray" --go "$(command -v go)" --ndk "$ANDROID_HOME/ndk/28.2.13676358" --out "$GITHUB_WORKSPACE/clients/android/restricted-generated"
           mkdir -p restricted-release
-          (cd carrier && go build -trimpath -o ../restricted-release/bootstrap-broker ./cmd/bootstrap-broker)
       - name: Build unsigned ARM64 Friends for offline signing
         run: gradle --no-daemon -PfcTargetAbi=arm64-v8a -PfcFriendsCi=false :app:assembleFriends :app:testFriendsUnitTest :app:lintFriends
         working-directory: clients/android
       - name: Verify exact restricted release payload
-        run: python3 pilot/android-restricted/package_ci.py --source-commit "$GITHUB_SHA" --out restricted-release --apksigner "$ANDROID_HOME/build-tools/35.0.0/apksigner"
+        run: python3 pilot/android-restricted/package_ci.py --source-commit "$GITHUB_SHA" --out restricted-release --apksigner "$ANDROID_HOME/build-tools/35.0.0/apksigner" --android-only
       - uses: actions/upload-artifact@v4
         with:
           name: FamilyConnect-Android-restricted-arm64
-          path: restricted-release/
+          path: |
+            restricted-release/
+            clients/android/audio-generated/corresponding-source/
+            clients/android/audio-generated/audio-build.json
           if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: always()
@@ -116,6 +141,8 @@ jobs:
             restricted-carrier-race.log
             restricted-contracts.log
   windows:
+    needs: scope
+    if: needs.scope.outputs.windows == 'true'
     runs-on: windows-latest
     timeout-minutes: 30
     steps:
@@ -200,6 +227,8 @@ jobs:
           name: windows-upgrade-lifecycle
           path: upgrade-service.jsonl
   linux:
+    needs: scope
+    if: needs.scope.outputs.linux == 'true'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4

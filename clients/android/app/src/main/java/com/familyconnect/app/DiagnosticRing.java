@@ -2,6 +2,8 @@ package com.familyconnect.app;
 
 import com.google.gson.*;
 import java.util.*;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 final class DiagnosticRing {
     static final int RECORD_LIMIT=256*1024,EXPORT_LIMIT=2*RECORD_LIMIT+1024;
@@ -11,7 +13,7 @@ final class DiagnosticRing {
         BROKER_DESCRIPTOR_READY, BOOT_CLOSED, SESSION_READY, STARTUP_REJECTED, CONTROL_UNAVAILABLE, STARTUP_FAILED,
         NATIVE_VALIDATION_FAILED, BOOTSTRAP_VALIDATION_FAILED, ATOMIC_IMPORT_FAILED, PERSISTENCE_FAILED,
         EXPIRED_ON_IMPORT, ORCHESTRATOR_NOT_USABLE, INTERNAL_ERROR, STALE_STATE, AUTHORIZATION_REJECTED, FETCH_FAILED, MISSING,
-        DNS_PROBE_OK, DNS_PROBE_FAILED, SIGNAL_WS_CLOSE, ICE_DISCONNECTED, ICE_FAILED, PEER_CONNECTION_FAILED,
+        DNS_PROBE_OK, DNS_PROBE_FAILED, DNS_TRAFFIC_PROGRESS, SIGNAL_WS_CLOSE, ICE_DISCONNECTED, ICE_FAILED, PEER_CONNECTION_FAILED,
         CARRIER_EOF, CARRIER_ERROR, FAMILY_TLS_EOF, FAMILY_TLS_ERROR, GATEWAY_CLOSE, HEARTBEAT_TIMEOUT, REMOTE_CLOSE,
         RECOVERY_CLEANUP_FAILED, RECOVERY_DESCRIPTOR_FAILED, RECOVERY_JOIN_FAILED, RECOVERY_CARRIER_FAILED,
         RELIABLE_HANDSHAKE_TIMEOUT, RELIABLE_FRAME_TIMEOUT, RELIABLE_RETRY_EXHAUSTED, UNKNOWN_INTERNAL }
@@ -21,6 +23,8 @@ final class DiagnosticRing {
     private final ArrayDeque<JsonObject> events=new ArrayDeque<>();
     private final JsonObject outcomes=new JsonObject(),counters=new JsonObject();
     private JsonObject restrictedSession=new JsonObject();
+    private JsonObject restrictedStartup=new JsonObject();
+    private long connectStartedAt;
     private final ArrayDeque<JsonObject> restrictedHistory=new ArrayDeque<>();
     private String connectionId=UUID.randomUUID().toString(),incidentId=UUID.randomUUID().toString();
     private String state="DISCONNECTED",network="UNKNOWN",readiness="UNKNOWN",bootstrap="UNKNOWN";
@@ -31,6 +35,7 @@ final class DiagnosticRing {
     synchronized void network(String value){network=Arrays.asList("CELLULAR","WIFI","ETHERNET","VPN","NONE").contains(value)?value:"UNKNOWN";}
     synchronized boolean event(ConnectivityOrchestrator.Event event,long now){
         if("connect_requested".equals(event.name)){
+            connectStartedAt=now;restrictedStartup=new JsonObject();
             connectionId=UUID.randomUUID().toString();incidentId=UUID.randomUUID().toString();retries=0;
             for(String key:new ArrayList<>(outcomes.keySet()))outcomes.remove(key);
             for(String key:new ArrayList<>(counters.keySet()))counters.remove(key);
@@ -44,6 +49,7 @@ final class DiagnosticRing {
         Code diagnostic=event.failure==null?Code.NONE:Code.valueOf(event.failure.name());
         if(diagnostic==Code.INTERNAL&&("restricted".equals(transport)||"restoration_failed".equals(event.name)&&restrictedSession.size()>0))diagnostic=Code.valueOf(RestrictedTrace.firstReason(restrictedSession));
         add(Component.ORCHESTRATOR,diagnostic,before,state,transport,event.elapsedMs,now);
+        if("recovery_wait".equals(event.name))events.getLast().addProperty("event",event.name);
         if(Arrays.asList("restoration_attempted","restoration_succeeded","restoration_failed","cleanup_failed").contains(event.name)){
             JsonObject recent=events.getLast();recent.addProperty("event",event.name);
             recent.addProperty("recovery_stage",event.name.equals("cleanup_failed")?"CLEANUP":"RECOVERY");
@@ -64,6 +70,7 @@ final class DiagnosticRing {
     }
     synchronized void vpn(boolean open,long now){vpn=open;add(Component.VPN,open?Code.VPN_CAPTURE_READY:Code.VPN_RELEASED,state,state,"none",0,now);}
     synchronized void dns(boolean good,long now){add(Component.DNS,good?Code.DNS_PROBE_OK:Code.DNS_PROBE_FAILED,state,state,"none",0,now);}
+    synchronized void dnsProgress(long now){add(Component.DNS,Code.DNS_TRAFFIC_PROGRESS,state,state,"restricted",0,now);}
     synchronized void nativeEvent(String event,long now){
         switch(event){
             case "bootstrap_cache_loaded": add(Component.BOOTSTRAP,Code.BOOT_CACHE_READY,state,state,"restricted",0,now);break;
@@ -80,7 +87,7 @@ final class DiagnosticRing {
         }
     }
     synchronized void counter(String name,long value){
-        if(Arrays.asList("dns","tcp","tcp_active","tcp_peak","udp_denied","ipv6_denied","protect_ok","protect_denied").contains(name)&&value>=0&&value<=9007199254740991L)counters.addProperty(name,value);
+        if(Arrays.asList("dns","tcp","tcp_active","tcp_peak","limit_denied","udp_denied","ipv6_denied","protect_ok","protect_denied").contains(name)&&value>=0&&value<=9007199254740991L)counters.addProperty(name,value);
     }
     synchronized void restricted(JsonObject source,int nativeState,boolean denied,long now){
         JsonObject safe=new JsonObject();
@@ -101,12 +108,17 @@ final class DiagnosticRing {
             safe.add("lifecycle",lifecycle);
         }
         if(same&&restrictedSession.has("terminal_observed_at_ms")){restrictedSession=safe;return;}
+        SpeedReceipt.project(source,safe);
+ MuxLifecycle.project(source,safe);
+        JsonObject reasons=SupportSnapshot.object(source,"protocol_error_reasons"),safeReasons=new JsonObject();
+        for(String reason:SupportSnapshot.REASONS)SupportSnapshot.number(reasons,safeReasons,reason);
+        if(safeReasons.size()>0)safe.add("protocol_error_reasons",safeReasons);
         enumField(source,safe,"terminal_reason","NONE","CANCELLED","DEADLINE","EOF","IO_CLOSED","FAMILY_REJECTED","MUX_PROTOCOL","RELIABLE_PROTOCOL","RELIABLE_EXHAUSTED","REMOTE_RESET","RELIABLE_CLOSED","NETWORK_TIMEOUT","NETWORK_ERROR","UNKNOWN");
         enumField(source,safe,"reliable_terminal","","closed","recovery_exhausted","protocol_violation","remote_reset","cancelled","carrier_closed","UNKNOWN");
         enumField(source,safe,"signaling_failure","NONE","UNKNOWN","read_error","read_timeout","invalid_json","close_code_1000","close_code_1001","close_code_1002","close_code_1003","close_code_1006","close_code_1007","close_code_1008","close_code_1009","close_code_1010","close_code_1011","close_code_1012","close_code_1013","close_code_1015");
         enumField(source,safe,"ice_failure","NONE","UNKNOWN","SUBSCRIBER_failed","SUBSCRIBER_disconnected","PUBLISHER_failed","PUBLISHER_disconnected");
         for(String field:new String[]{"subscriber_state","publisher_state"})enumField(source,safe,field,"new","connecting","connected","disconnected","failed","closed","UNKNOWN");
-        for(String field:new String[]{"terminal_at_ms","observed_at_ms","retransmissions","recovery_timeouts","received_frames","sent_frames","protocol_errors","dns_responses","dns_errors","tcp_open_ok","tcp_open_errors","sent_bytes","received_bytes","evidence_dropped"}){
+        for(String field:new String[]{"terminal_at_ms","observed_at_ms","retransmissions","recovery_timeouts","received_frames","sent_frames","protocol_errors","dns_responses","dns_errors","tcp_open_ok","tcp_open_errors","tcp_admission_waits","tcp_admission_rejected","tcp_admission_timeouts","tcp_admission_cancelled","tcp_admission_waiting","lease_admission_rejected","sent_bytes","received_bytes","evidence_dropped"}){
             JsonElement value=source.get(field);
             if(value!=null&&value.isJsonPrimitive()&&value.getAsJsonPrimitive().isNumber()){
                 try{long count=value.getAsBigDecimal().longValueExact();if(count>=0&&count<=9007199254740991L)safe.addProperty(field,count);}catch(ArithmeticException|NumberFormatException ignored){}
@@ -140,6 +152,26 @@ final class DiagnosticRing {
         String tag=text(restrictedSession,"session_tag");if(RestrictedTrace.tag(tag))recent.addProperty("session_tag",tag);
         if(!success)recent.addProperty("recovery_stage","CLEANUP");
     }
+    synchronized void startup(JsonElement input){
+        JsonObject safe=RestrictedStartup.project(input);if(safe==null||safe.get("started_unix_ms").getAsLong()<connectStartedAt)return;
+        if(restrictedStartup.has("attempt")){
+            long oldAttempt=restrictedStartup.get("attempt").getAsLong(),nextAttempt=safe.get("attempt").getAsLong();
+            if(nextAttempt<oldAttempt||nextAttempt==oldAttempt&&restrictedStartup.get("complete").getAsBoolean())return;
+        }
+        safe.addProperty("connection_id",connectionId);safe.addProperty("incident_id",incidentId);
+        restrictedStartup=safe;
+    }
+    synchronized void startupStats(JsonObject stats){startup(stats.get("owner_startup"));}
+    static void exportRecord(JsonObject bundle,String name,byte[] raw,String support)throws IOException{
+        if(raw.length>RECORD_LIMIT)throw new IOException("Diagnostic bound");
+        JsonObject record=JsonParser.parseString(new String(raw,StandardCharsets.UTF_8)).getAsJsonObject();
+        record.addProperty("device_support_id",support);bundle.add(name,record);
+    }
+    static byte[] exportBytes(JsonObject bundle)throws IOException{
+        byte[] encoded=bundle.toString().getBytes(StandardCharsets.UTF_8);
+        if(encoded.length>EXPORT_LIMIT)throw new IOException("Diagnostic bound");
+        return encoded;
+    }
     private static String text(JsonObject source,String field){
         JsonElement value=source.get(field);return value!=null&&value.isJsonPrimitive()&&value.getAsJsonPrimitive().isString()?value.getAsString():"";
     }
@@ -154,6 +186,13 @@ final class DiagnosticRing {
         event.addProperty("retry_count",retries);event.addProperty("app_version",version);
         if(events.size()==128)events.removeFirst();events.addLast(event);
     }
+    private JsonObject readinessFetch=new JsonObject();
+    synchronized String readinessConnection(){return connectionId;}
+    synchronized void readinessFetch(ReadinessFetchTrace trace){
+        readinessFetch=trace.json();
+        readinessFetch.addProperty("completed_connection_id",connectionId);
+        readinessFetch.addProperty("connection_changed",!connectionId.equals(readinessFetch.get("started_connection_id").getAsString()));
+    }
     synchronized JsonObject snapshot(){
         JsonObject result=new JsonObject();result.addProperty("schema",1);result.addProperty("device_support_id",supportId);
         result.add("transport_metadata",TransportPresentation.diagnostics());
@@ -162,7 +201,9 @@ final class DiagnosticRing {
         result.addProperty("state",state);result.addProperty("vpn_capture_open",vpn);result.addProperty("restricted_readiness",readiness);result.addProperty("bootstrap_directory",bootstrap);
         result.add("transport_outcomes",outcomes.deepCopy());result.add("counters",counters.deepCopy());
         result.add("restricted_session",restrictedSession.deepCopy());
+        result.add("restricted_startup",restrictedStartup.deepCopy());
+        result.add("readiness_fetch",readinessFetch.deepCopy());
         JsonArray history=new JsonArray();for(JsonObject session:restrictedHistory)history.add(session.deepCopy());result.add("restricted_history",history);
-        JsonArray recent=new JsonArray();for(JsonObject event:events)recent.add(event.deepCopy());result.add("events",recent);return result;
+        JsonArray recent=new JsonArray();for(JsonObject event:events)recent.add(event.deepCopy());result.add("events",recent);return DiagnosticRecordBudget.apply(result);
     }
 }

@@ -45,6 +45,13 @@ public class ConnectivityOrchestratorTest {
         Fixture fixture=new Fixture();fixture.connect();assertEquals(State.CONNECTED,fixture.core.state());
         assertEquals(Arrays.asList("awg"),fixture.attempts);assertEquals("awg",fixture.hint);assertEquals(1,fixture.count("time_to_connected"));
     }
+    @Test public void secondTemporaryLossDoesNotPermanentlyClearRequestedConnection(){
+        Fixture fixture=new Fixture();fixture.core.connect(new ArrayList<>(),null,null);
+        fixture.core.lost(Failure.NETWORK);
+        assertEquals(State.CONNECTED,fixture.core.state());assertEquals(2,fixture.opens);
+        fixture.core.lost(Failure.NETWORK);
+        assertEquals(State.RESTORING,fixture.core.state());assertEquals(2,fixture.opens);
+    }
     @Test public void alternateNeverStartsBootstrap(){
         Fixture fixture=new Fixture();fixture.failures.put("awg",Failure.TRANSPORT_UNAVAILABLE);fixture.connect();
         assertEquals(Arrays.asList("awg","tcp"),fixture.attempts);assertEquals("tcp",fixture.hint);assertEquals(1,fixture.count("fallback"));
@@ -77,12 +84,14 @@ public class ConnectivityOrchestratorTest {
             assertEquals(State.FAILED,fixture.core.state());assertEquals(Arrays.asList("awg"),fixture.attempts);assertTrue(fixture.guard);
         }
     }
-    @Test public void oneRestorationPassThenTerminalNoFlapping(){
+    @Test public void oneRestorationPassThenCooldownNoFlapping(){
         Fixture fixture=new Fixture();fixture.connect();fixture.failures.put("awg",Failure.NETWORK);fixture.core.lost(Failure.NETWORK);
         assertEquals("tcp",fixture.core.selected());assertEquals(1,fixture.count("restoration_succeeded"));assertTrue(fixture.guard);
         fixture.core.lost(Failure.NETWORK);int count=fixture.opens;
         for(int index=0;index<1000;index++)fixture.core.lost(Failure.NETWORK);
-        assertEquals(State.FAILED,fixture.core.state());assertEquals(count,fixture.opens);assertEquals(0,fixture.active);assertEquals(1,fixture.peak);
+        assertEquals(State.RESTORING,fixture.core.state());assertEquals(count,fixture.opens);assertEquals(0,fixture.active);assertEquals(1,fixture.peak);
+        fixture.time+=RECOVERY_BACKOFF_MS;fixture.core.retryIfDue();
+        assertEquals(State.CONNECTED,fixture.core.state());assertTrue(fixture.opens>count);assertEquals(1,fixture.peak);
     }
     @Test public void healthyPathHasNoProbeOrMigration(){
         Fixture fixture=new Fixture();fixture.failures.put("awg",Failure.NETWORK);fixture.connect();fixture.failures.clear();
@@ -108,8 +117,52 @@ public class ConnectivityOrchestratorTest {
         assertEquals(1,fixture.peak);assertTrue(fixture.guard);assertEquals(0,fixture.releases);
         assertEquals(1,fixture.count("restoration_succeeded"));
         fixture.core.lost(reason);
-        assertEquals(State.FAILED,fixture.core.state());assertEquals(2,fixture.opens);assertEquals(0,fixture.active);
+        assertEquals(State.RESTORING,fixture.core.state());assertEquals(2,fixture.opens);assertEquals(0,fixture.active);
         assertTrue(fixture.guard);assertEquals(1,fixture.count("restoration_failed"));
+        fixture.time+=RECOVERY_BACKOFF_MS;fixture.core.retryIfDue();
+        assertEquals(State.CONNECTED,fixture.core.state());assertEquals(3,fixture.opens);assertEquals(1,fixture.peak);
+    }
+    @Test public void exhaustedRecoverySeriesWaitsAndThenActuallyOpens(){
+        Fixture fixture=new Fixture();fixture.core.connect(new ArrayList<>(),null,null);
+        fixture.failures.put(RESTRICTED,Failure.NETWORK);fixture.core.lost(Failure.NETWORK);
+        assertEquals(State.RESTORING,fixture.core.state());assertEquals(2,fixture.opens);assertEquals(0,fixture.active);
+        long waiting=fixture.time;
+        for(int index=0;index<1000;index++)fixture.core.retryIfDue();
+        assertEquals(2,fixture.opens);assertEquals(waiting,fixture.time);
+        fixture.time+=RECOVERY_BACKOFF_MS-1;fixture.core.retryIfDue();assertEquals(2,fixture.opens);
+        fixture.failures.clear();fixture.time++;fixture.core.retryIfDue();
+        assertEquals(3,fixture.opens);assertEquals(State.CONNECTED,fixture.core.state());assertEquals(1,fixture.peak);
+    }
+    @Test public void failedSeriesBackoffIsCappedWithoutGrowingAttemptDeadline(){
+        Fixture fixture=new Fixture();fixture.core.connect(new ArrayList<>(),null,null);
+        fixture.failures.put(RESTRICTED,Failure.NETWORK);fixture.core.lost(Failure.NETWORK);
+        for(long delay:new long[]{30000,60000,120000,120000}){
+            int opens=fixture.opens;fixture.time+=delay-1;fixture.core.retryIfDue();assertEquals(opens,fixture.opens);
+            fixture.time++;fixture.core.retryIfDue();assertEquals(opens+1,fixture.opens);assertEquals(State.RESTORING,fixture.core.state());assertEquals(1,fixture.peak);
+        }
+    }
+    @Test public void cancelDuringBackoffPreventsStalePollOpening(){
+        Fixture fixture=new Fixture();fixture.core.connect(new ArrayList<>(),null,null);
+        fixture.failures.put(RESTRICTED,Failure.NETWORK);fixture.core.lost(Failure.NETWORK);
+        int count=fixture.opens;fixture.core.interrupt(Failure.CANCELLED);fixture.time+=MAX_RECOVERY_BACKOFF_MS;
+        fixture.core.retryIfDue();fixture.core.retryIfDue();fixture.core.lost(Failure.NETWORK);
+        assertEquals(State.DISCONNECTED,fixture.core.state());assertEquals(count,fixture.opens);assertEquals(1,fixture.releases);
+    }
+    @Test public void trustFailureDuringRecoveryStopsFutureSeries(){
+        for(Failure reason:Arrays.asList(Failure.AUTH,Failure.CONFIGURATION,Failure.INTERNAL)){
+            Fixture fixture=new Fixture();fixture.core.connect(new ArrayList<>(),null,null);
+            fixture.failures.put(RESTRICTED,Failure.NETWORK);fixture.core.lost(Failure.NETWORK);
+            fixture.failures.put(RESTRICTED,reason);fixture.time+=RECOVERY_BACKOFF_MS;fixture.core.retryIfDue();
+            int count=fixture.opens;fixture.time+=MAX_RECOVERY_BACKOFF_MS;fixture.core.retryIfDue();
+            assertEquals(State.FAILED,fixture.core.state());assertEquals(count,fixture.opens);assertTrue(fixture.guard);
+        }
+    }
+    @Test public void cancellationInsideRetryOpenCannotPublishReady(){
+        Fixture fixture=new Fixture();fixture.core.connect(new ArrayList<>(),null,null);
+        fixture.failures.put(RESTRICTED,Failure.NETWORK);fixture.core.lost(Failure.NETWORK);
+        fixture.failures.clear();fixture.cancelCandidate=RESTRICTED;fixture.cancelPhase="dedicated";
+        fixture.time+=RECOVERY_BACKOFF_MS;fixture.core.retryIfDue();
+        assertEquals(State.DISCONNECTED,fixture.core.state());assertEquals(0,fixture.count("restoration_succeeded"));assertEquals(0,fixture.active);
     }
     @Test public void restrictedRecoveryCannotBypassCleanupOrInterruption(){
         for(Failure interruption:new Failure[]{null,Failure.AUTH,Failure.CANCELLED}){
@@ -172,7 +225,7 @@ public class ConnectivityOrchestratorTest {
             public void closeCandidate(){}public void release(){}public void remember(String candidate){fail();}public void event(Event event){}
         };
         ConnectivityOrchestrator core=new ConnectivityOrchestrator(host);core.connect(Arrays.asList("wg","awg","tcp"),null,null);
-        assertEquals(State.FAILED,core.state());assertEquals(4,opens[0]);assertEquals(Long.valueOf(NORMAL_TIMEOUT_MS),budgets.get(0));
+        assertEquals(State.RESTORING,core.state());assertEquals(4,opens[0]);assertEquals(Long.valueOf(NORMAL_TIMEOUT_MS),budgets.get(0));
         assertTrue(budgets.get(3)<=RESTRICTED_TIMEOUT_MS);assertTrue(time[0]<=CONNECT_TIMEOUT_MS);
     }
     @Test public void crossThreadCancellationIsObservedWithoutWorkerQueue()throws Exception{

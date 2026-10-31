@@ -53,13 +53,14 @@ final class RouteMapView extends View {
         });
     }
     void compactPreview(){compact=true;motion=false;setBackground(TerminalUi.frame(getContext(),TerminalUi.SURFACE,TerminalUi.FRAME));setContentDescription(getContext().getString(R.string.dashboard_route));}
+    int compactHeight(int width){return Ui60Presentation.mapHeight(width,TerminalUi.dp(getContext(),6),(float)((north-south)/(east-west)));}
     private float longitudeX(double lon){return (float)((lon-west)/(east-west));}
     private float latitudeY(double lat){return (float)((north-lat)/(north-south));}
     private float nodeX(String code){return longitudeX(code.equals("nl")?5:38);}
     private float nodeY(String code){return latitudeY(code.equals("nl")?52:56);}
     void locate(android.location.Location location){
         if(origin==null){north=Math.min(90,Math.max(85,location.getLatitude()+4));south=Math.max(-90,Math.min(-60,location.getLatitude()-4));zoom=1;panX=panY=0;}
-        origin=new android.location.Location(location);dotsDirty=true;animateState();postInvalidateOnAnimation();
+        origin=new android.location.Location(location);dotsDirty=true;if(compact)requestLayout();animateState();postInvalidateOnAnimation();
     }
     private void clamp(){panX=Math.max(getWidth()*(1-zoom),Math.min(0,panX));panY=Math.max(getHeight()*.78f*(1-zoom),Math.min(0,panY));}
     @android.annotation.SuppressLint("ClickableViewAccessibility") // GestureDetector calls performClick for confirmed taps.
@@ -104,7 +105,7 @@ final class RouteMapView extends View {
             }
             dotsDirty=false;
         }
-        paint.setStyle(Paint.Style.STROKE);paint.setStrokeCap(Paint.Cap.ROUND);paint.setStrokeWidth(Math.max(1,Math.round(.65f*d)));paint.setColor(TerminalUi.MINT);
+        paint.setStyle(Paint.Style.STROKE);paint.setStrokeCap(Paint.Cap.ROUND);paint.setStrokeWidth(TerminalUi.stroke(getContext(),TerminalUi.STROKE_DETAIL));paint.setColor(TerminalUi.MINT);
         // One opacity for all land; pixel-aligned centers give equal raster coverage.
         float shimmer=motion?(float)Math.sin(2*Math.PI*phase):0;
         paint.setAlpha(120+Math.round(6*shimmer));
@@ -114,12 +115,13 @@ final class RouteMapView extends View {
     @Override protected void onDraw(Canvas c){
         float w=getWidth(),h=getHeight(),mapH=compact?Math.min(h,w*145f/360f):h*.78f,d=getResources().getDisplayMetrics().density;
         if(compact){
-            float inset=6*d;w=Math.min(w-2*inset,(h-2*inset)*360f/145f);mapH=w*145f/360f;
+            float inset=TerminalUi.dp(getContext(),6),aspect=(float)((north-south)/(east-west));
+            w=Math.max(0,Math.min(w-2*inset,(h-2*inset)/aspect));mapH=w*aspect;
             c.translate((getWidth()-w)/2,(h-mapH)/2);
         }
         int viewport=c.save();c.clipRect(0,0,w,mapH);
         try {
-        paint.setColor(TerminalUi.FRAME);paint.setAlpha(45);paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(.4f*d);
+        paint.setColor(TerminalUi.FRAME);paint.setAlpha(45);paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(TerminalUi.stroke(getContext(),TerminalUi.STROKE_FINE));
         float grid=16*d;
         for(float x=0;x<w;x+=grid)c.drawLine(x,0,x,mapH,paint);
         for(float y=0;y<mapH;y+=grid)c.drawLine(0,y,w,y,paint);

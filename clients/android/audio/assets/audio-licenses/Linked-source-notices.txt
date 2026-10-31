@@ -1,0 +1,471 @@
+codec2.c
+/*---------------------------------------------------------------------------*\
+
+  FILE........: codec2.c
+  AUTHOR......: David Rowe
+  DATE CREATED: 21/8/2010
+
+  Codec2 fully quantised encoder and decoder functions.  If you want use
+  codec2, the codec2_xxx functions are for you.
+
+\*---------------------------------------------------------------------------*/
+
+/*
+  Copyright (C) 2010 David Rowe
+
+  All rights reserved.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 2.1, as
+  published by the Free Software Foundation.  This program is
+  distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+  License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+
+codec2_fft.c
+/*
+ * codec2_fft.c
+ *
+ *  Created on: 24.09.2016
+ *      Author: danilo
+ */
+
+
+
+dump.c
+/*---------------------------------------------------------------------------*\
+
+  FILE........: dump.c
+  AUTHOR......: David Rowe
+  DATE CREATED: 25/8/09
+
+  Routines to dump data to text files for Octave analysis.
+
+\*---------------------------------------------------------------------------*/
+
+/*
+  All rights reserved.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 2.1, as
+  published by the Free Software Foundation.  This program is
+  distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+  License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+
+interp.c
+/*---------------------------------------------------------------------------*\
+
+  FILE........: interp.c
+  AUTHOR......: David Rowe
+  DATE CREATED: 9/10/09
+
+  Interpolation of 20ms frames to 10ms frames.
+
+\*---------------------------------------------------------------------------*/
+
+/*
+  Copyright (C) 2009 David Rowe
+
+  All rights reserved.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 2.1, as
+  published by the Free Software Foundation.  This program is
+  distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+  License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+
+kiss_fft.c
+/*
+Copyright (c) 2003-2010, Mark Borgerding
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice,
+this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation and/or
+other materials provided with the distribution.
+    * Neither the author nor the names of any contributors may be used to
+endorse or promote products derived from this software without specific prior
+written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+
+
+kiss_fftr.c
+/*
+Copyright (c) 2003-2004, Mark Borgerding
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice,
+this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation and/or
+other materials provided with the distribution.
+    * Neither the author nor the names of any contributors may be used to
+endorse or promote products derived from this software without specific prior
+written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+
+
+lpc.c
+/*---------------------------------------------------------------------------*\
+
+  FILE........: lpc.c
+  AUTHOR......: David Rowe
+  DATE CREATED: 30 Sep 1990 (!)
+
+  Linear Prediction functions written in C.
+
+\*---------------------------------------------------------------------------*/
+
+/*
+  Copyright (C) 2009-2012 David Rowe
+
+  All rights reserved.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 2.1, as
+  published by the Free Software Foundation.  This program is
+  distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+  License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, see <http://www.gnu.org/licenses/>.
+*/
+
+#define LPC_MAX_N 512  /* maximum no. of samples in frame */
+#define PI 3.141592654 /* mathematical constant */
+
+#define ALPHA 1.0
+#define BETA 0.94
+
+
+
+lsp.c
+/*---------------------------------------------------------------------------*\
+
+  FILE........: lsp.c
+  AUTHOR......: David Rowe
+  DATE CREATED: 24/2/93
+
+
+  This file contains functions for LPC to LSP conversion and LSP to
+  LPC conversion. Note that the LSP coefficients are not in radians
+  format but in the x domain of the unit circle.
+
+\*---------------------------------------------------------------------------*/
+
+/*
+  Copyright (C) 2009 David Rowe
+
+  All rights reserved.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 2.1, as
+  published by the Free Software Foundation.  This program is
+  distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+  License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+
+mbest.c
+/*---------------------------------------------------------------------------*\
+
+  FILE........: mbest.c
+  AUTHOR......: David Rowe
+  DATE CREATED: Jan 2017
+
+  Multistage vector quantiser search algorithm that keeps multiple
+  candidates from each stage.
+
+\*---------------------------------------------------------------------------*/
+
+/*
+  Copyright David Rowe 2017
+
+  All rights reserved.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 2.1, as
+  published by the Free Software Foundation.  This program is
+  distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+  License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+
+
+newamp1.c
+/*---------------------------------------------------------------------------*\
+
+  FILE........: newamp1.c
+  AUTHOR......: David Rowe
+  DATE CREATED: Jan 2017
+
+  Quantisation functions for the sinusoidal coder, using "newamp1"
+  algorithm that resamples variable rate L [Am} to a fixed rate K then
+  VQs.
+
+\*---------------------------------------------------------------------------*/
+
+/*
+  Copyright David Rowe 2017
+
+  All rights reserved.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 2.1, as
+  published by the Free Software Foundation.  This program is
+  distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+  License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+
+
+nlp.c
+/*---------------------------------------------------------------------------*\
+
+  FILE........: nlp.c
+  AUTHOR......: David Rowe
+  DATE CREATED: 23/3/93
+
+  Non Linear Pitch (NLP) estimation functions.
+
+\*---------------------------------------------------------------------------*/
+
+/*
+  Copyright (C) 2009 David Rowe
+
+  All rights reserved.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 2.1, as
+  published by the Free Software Foundation.  This program is
+  distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+  License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+
+pack.c
+/*
+  Copyright (C) 2010 Perens LLC <bruce@perens.com>
+
+  All rights reserved.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 2.1, as
+  published by the Free Software Foundation.  This program is
+  distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+  License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+
+phase.c
+/*---------------------------------------------------------------------------*\
+
+  FILE........: phase.c
+  AUTHOR......: David Rowe
+  DATE CREATED: 1/2/09
+
+  Functions for modelling and synthesising phase.
+
+\*---------------------------------------------------------------------------*/
+
+/*
+  Copyright (C) 2009 David Rowe
+
+  All rights reserved.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 2.1, as
+  published by the Free Software Foundation.  This program is
+  distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+  License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not,see <http://www.gnu.org/licenses/>.
+*/
+
+
+
+postfilter.c
+/*---------------------------------------------------------------------------*\
+
+  FILE........: postfilter.c
+  AUTHOR......: David Rowe
+  DATE CREATED: 13/09/09
+
+  Postfilter to improve sound quality for speech with high levels of
+  background noise.  Unlike mixed-excitation models requires no bits
+  to be transmitted to handle background noise.
+
+\*---------------------------------------------------------------------------*/
+
+/*
+  Copyright (C) 2009 David Rowe
+
+  All rights reserved.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 2.1, as
+  published by the Free Software Foundation.  This program is
+  distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+  License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+
+quantise.c
+/*---------------------------------------------------------------------------*\
+
+  FILE........: quantise.c
+  AUTHOR......: David Rowe
+  DATE CREATED: 31/5/92
+
+  Quantisation functions for the sinusoidal coder.
+
+\*---------------------------------------------------------------------------*/
+
+/*
+  All rights reserved.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 2.1, as
+  published by the Free Software Foundation.  This program is
+  distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+  License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+
+
+sine.c
+/*---------------------------------------------------------------------------*\
+
+  FILE........: sine.c
+  AUTHOR......: David Rowe
+  DATE CREATED: 19/8/2010
+
+  Sinusoidal analysis and synthesis functions.
+
+\*---------------------------------------------------------------------------*/
+
+/*
+  Copyright (C) 1990-2010 David Rowe
+
+  All rights reserved.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 2.1, as
+  published by the Free Software Foundation.  This program is
+  distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+  License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this program; if not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*---------------------------------------------------------------------------*\
+
+                                INCLUDES
+
+\*---------------------------------------------------------------------------*/

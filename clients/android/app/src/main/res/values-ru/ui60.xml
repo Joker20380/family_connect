@@ -1,0 +1,4 @@
+<resources>
+    <string name="ui_disconnecting">Отключение…</string>
+    <string name="ui_cleanup_required">Требуется завершить соединение</string>
+</resources>
