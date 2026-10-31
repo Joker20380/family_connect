@@ -57,7 +57,8 @@ jobs:
       - name: Restricted carrier race regression
         shell: bash
         run: |
-          mapfile -t packages < <(go list -deps -f '{{if .Module}}{{if eq .Module.Path "github.com/Joker20380/family_connect/carrier"}}{{.ImportPath}}{{end}}{{end}}' ./wholedevice ./restrictedowner ./startupdiag ./sessionprofile | sed '/^$/d')
+          go list -deps -f '{{if .Module}}{{if eq .Module.Path "github.com/Joker20380/family_connect/carrier"}}{{.ImportPath}}{{end}}{{end}}' ./wholedevice ./restrictedowner ./startupdiag ./sessionprofile | sed '/^$/d' > "$RUNNER_TEMP/android-carrier-packages"
+          mapfile -t packages < "$RUNNER_TEMP/android-carrier-packages"
           test "${#packages[@]}" -gt 0
           go test -race "${packages[@]}" 2>&1 | tee ../restricted-carrier-race.log
         working-directory: carrier

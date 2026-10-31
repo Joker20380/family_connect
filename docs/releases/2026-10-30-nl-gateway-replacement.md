@@ -33,7 +33,8 @@ CI rebuilds Android JNI from public source with provenance and Codec2 correspond
 materials; no gateway rebuild/deployment or unrelated desktop job for this Android-only change.
 Initial hosted CI41207389926 passes Android control JVM checks but stops on an unrelated
 server publisher root-only fixture. Android carrier regression now selects the JNI transitive
-dependencies with race checks; server validators/tests are unchanged. Hosted platform CI retry,
+dependencies with race checks; dependency-list errors fail the job before tests. Server validators/tests
+are unchanged. Hosted platform CI retry,
 downloaded artifact qualification, offline signing and owner runtime remain required before
 optional publication. The earlier private unsigned candidate is not the release.
 Fresh HTTPS/signature readback: public Android beta60/update sequence1, optional policy unchanged.
