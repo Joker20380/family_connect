@@ -1282,7 +1282,7 @@
       "unknown_channel_capacity": "NOT_GUESSED",
       "jvm_tests": 381,
       "jvm_suites": 64,
-      "focused_python_tests": 46,
+      "focused_python_tests": 51,
       "lint": "PASS",
       "instrumentation_compile": "PASS",
       "hosted_runtime": "PENDING",
@@ -1315,6 +1315,16 @@
         "friends_ui_assertions": "PASS",
         "failure": "APP_OWNED_IMAGES_REMOVED_BEFORE_EXPORT",
         "fix": "EMULATOR_ONLY_RETAIN_THROUGH_PULL_THEN_UNINSTALL_FINALLY",
+        "release_artifact": "NOT_BUILT"
+      },
+      "emulator_readiness_correction": {
+        "run": 41241889477,
+        "source": "b46969383a632629143e3911a15562901b7aa2e1",
+        "debug_vpn_storage": "PASS",
+        "failure": "ADB_DEVICE_OFFLINE_BEFORE_FRIENDS_UI",
+        "wait_seconds": 90,
+        "physical_devices": "REJECTED",
+        "test_gate_waived": false,
         "release_artifact": "NOT_BUILT"
       }
     }

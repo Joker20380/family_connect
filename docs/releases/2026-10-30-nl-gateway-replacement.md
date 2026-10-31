@@ -1334,3 +1334,10 @@ stale hiding. Export failed because connected-test cleanup removed app-owned scr
 files before adb pull. The disposable-only runner now uses the existing AGP leave-installed
 option, pulls exactly two synthetic images, then uninstalls both CI packages in finally.
 No physical-device access or runtime gate waiver.46 focused tests PASS; release still pending.
+
+### Android108 disposable emulator readiness gate
+
+Run41241889477 passed the debug VPN/storage tests, then adb reported the disposable
+emulator offline before Friends UI started. The CI-only runner now waits at most90s for
+one emulator to be online and boot-complete; physical/ambiguous targets still fail closed.
+No emulator restart or test retry/waiver.51 focused checks PASS;108 remains unpublished.

@@ -98,6 +98,54 @@ def test_emulator_runner_failures_remain_fatal_and_are_retained(tmp_path):
     assert len(reporter.report(tmp_path)['hints']) == 2
 
 
+@pytest.mark.parametrize('states', [
+    ['emulator-5554\toffline', 'emulator-5554\tdevice'],
+    ['', 'emulator-5554\tdevice'],
+])
+def test_ui_runner_waits_for_disposable_emulator_before_starting_tests(monkeypatch, states):
+    import subprocess
+    module_spec = importlib.util.spec_from_file_location('friends_ci', ROOT / 'pilot/android-awg/friends_ci.py')
+    helper = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(helper)
+    remaining = iter(states)
+    calls = []
+    def run(command, **kwargs):
+        calls.append(command)
+        output = 'List of devices attached\n' + next(remaining) + '\n' if command == ['adb', 'devices'] else '1\n'
+        return subprocess.CompletedProcess(command, 0, output, '')
+    monkeypatch.setattr(helper.subprocess, 'run', run)
+    monkeypatch.setattr(helper.time, 'sleep', lambda seconds: None)
+    assert helper.ready_emulator() == 'emulator-5554'
+    assert calls[-1] == ['adb', '-s', 'emulator-5554', 'shell', 'getprop', 'sys.boot_completed']
+    assert len(calls) == 3
+
+
+@pytest.mark.parametrize('devices', ['physical-device\tdevice', 'emulator-5554\tdevice\nemulator-5556\tdevice'])
+def test_ui_runner_refuses_physical_or_ambiguous_target(monkeypatch, devices):
+    import subprocess
+    module_spec = importlib.util.spec_from_file_location('friends_ci', ROOT / 'pilot/android-awg/friends_ci.py')
+    helper = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(helper)
+    monkeypatch.setattr(helper.subprocess, 'run', lambda command, **kwargs:
+                        subprocess.CompletedProcess(command, 0, 'List of devices attached\n' + devices, ''))
+    with pytest.raises(SystemExit, match='only one disposable emulator'):
+        helper.ready_emulator()
+
+
+def test_ui_runner_offline_wait_is_bounded(monkeypatch):
+    import subprocess
+    module_spec = importlib.util.spec_from_file_location('friends_ci', ROOT / 'pilot/android-awg/friends_ci.py')
+    helper = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(helper)
+    ticks = iter([0, 0, 91])
+    monkeypatch.setattr(helper.time, 'monotonic', lambda: next(ticks))
+    monkeypatch.setattr(helper.time, 'sleep', lambda seconds: None)
+    monkeypatch.setattr(helper.subprocess, 'run', lambda command, **kwargs:
+                        subprocess.CompletedProcess(command, 0, 'List of devices attached\nemulator-5554\toffline\n', ''))
+    with pytest.raises(SystemExit, match='within 90 seconds'):
+        helper.ready_emulator()
+
+
 def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
     reference = json.loads((ROOT / 'clients/shared/android106-reference.json').read_text())
     changes = {'clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java',

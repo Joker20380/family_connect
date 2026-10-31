@@ -2,13 +2,30 @@
 import os
 from pathlib import Path
 import subprocess
+import time
 
 ROOT = Path(__file__).resolve().parents[2]
+
+def ready_emulator():
+    deadline = time.monotonic() + 90
+    while time.monotonic() < deadline:
+        result = subprocess.run(["adb", "devices"], capture_output=True, text=True, timeout=10, check=True)
+        devices = [line.split() for line in result.stdout.splitlines()[1:] if line.strip()]
+        if len(devices) > 1 or any(not device[0].startswith("emulator-") for device in devices):
+            raise SystemExit("Expected only one disposable emulator")
+        if len(devices) == 1 and devices[0][1:] == ["device"]:
+            serial = devices[0][0]
+            boot = subprocess.run(["adb", "-s", serial, "shell", "getprop", "sys.boot_completed"],
+                                  capture_output=True, text=True, timeout=10)
+            if boot.returncode == 0 and boot.stdout.strip() == "1":
+                return serial
+        time.sleep(2)
+    raise SystemExit("Disposable emulator did not become ready within 90 seconds")
 
 def main():
     if os.environ.get("GITHUB_ACTIONS") != "true":
         raise SystemExit("Disposable GitHub emulator only")
-    serial = subprocess.check_output(["adb", "get-serialno"], text=True).strip()
+    serial = ready_emulator()
     if not serial.startswith("emulator-"):
         raise SystemExit("Refusing to install a CI-signed APK on a physical device")
     build = ROOT / "clients/android"
