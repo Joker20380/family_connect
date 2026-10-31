@@ -15,10 +15,19 @@ verified TLS, real challenge and signed device-status; no504. Current control-pl
 PASS. The earlier intermittent stall's root cause remains NOT_PROVEN, not declared repaired.
 Catalog4/signature/new NL endpoint and unchanged RU entry are reconciled read-only at
 11:55:13UTC. No republication or sequence5. Owner subsequently reports AWG/internet working;
-actual client NL egress and Disconnect cleanup remain unverified. TCP/Auto-MESH not yet run.
+owner now confirms the HTTPS egress address matches185.10.158.212 and reports Disconnect.
+This is owner-reported AWG egress PASS; resource cleanup is not yet verified. TCP/Auto-MESH not run.
 The missing NL load percentage is localized: fresh metrics, but the replacement provider's
 channel capacity is unverified. Android intentionally displays No data rather than treating
 CPU alone as total load. No guessed capacity, source/configuration change or APK update.
+Owner requests fixing repeated Tunnel is on notifications before further smoke tests.
+Source-only correction adds setOnlyAlertOnce(true) to the existing foreground notification:
+status updates, health warnings and Disconnect remain available; transport/retry logic unchanged.
+Regression fails before the fix;12 focused Android source-contract checks PASS afterward.
+No APK build/install/version change: Android106 on the phone is not patched by this source push.
+Phone re-alert/reconnect classification remains unproven; installed runtime verification pending.
+Panel1000GB describes traffic volume, not Mbps; channel capacity remains unknown. No server,
+monitoring configuration or catalog change. Canary stays PAUSED.
 
 New NL **185.10.158.212** has accepted AWG/TCP and now real production-bound MESH
 DNS/HTTPS/egress acceptance. Reused **FLEET_MESH_PROBE_1**; no second identity/invitation,
@@ -34,7 +43,7 @@ verified HTTPS streams, new NL egress and bounded cleanup. Three stable samples,
 Signed catalog **4** was published; initial authenticated NL readback returned the new endpoint,
 RU entry and probe assignment remain unchanged. Actual Android catalog parser PASS without
 APK update; Android106 owner AWG smoke is **IN_PROGRESS**, not completed by parser
-acceptance. Owner-reported internet success does not yet prove client egress or cleanup.
+acceptance. Owner-reported HTTPS egress now matches the new NL; cleanup is still unverified.
 Prepared routing artifact and mailbox/monitoring target updates are deployed.
 Fresh11:55:13UTC readback validates canonical profile/certificate/CRL, floor **27226**,
 RU/NL directory equality and actual SSH snapshot. Renewal evaluates NOOP; no material refresh
@@ -44,14 +53,15 @@ New NL remains active with integrated publisher rotation; no separate publisher 
 Old NL remains **FENCED**. No rollback/catalog rewrite or RU reboot was attempted.
 Paid ledger **0/0**, payments/revenue0, cohort0/10. **BETA-0-CANARY-1 PAUSED**;
 paid-canary, subscription events and Android stage0 stay off. Complete the current owner
-AWG endpoint/HTTPS/egress and Disconnect checks, then TCP and Auto/MESH once each in this
+notification installed-runtime and AWG cleanup checks, then TCP and Auto/MESH once each in this
 same operation. No further publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
 
-NEXT within this same operation: finish the already-started owner Android106 AWG check.
-Owner reports working internet; request verified-HTTPS public-egress readback, then Disconnect.
-Confirmed provider channel capacity is needed for the load percentage; do not guess it or
-turn informational monitoring into a VPN blocker. Keep catalog4 unchanged. Verify the new endpoint,
-HTTPS/egress and Disconnect cleanup; then TCP once and Auto/MESH once with current readiness
+NEXT within this same operation: verify the notification fix on an updated owner APK only
+after the existing no-Android-build restriction is explicitly lifted; source push is not rollout.
+Owner confirms new NL HTTPS egress and has disconnected. Runtime re-alerting and resource cleanup
+remain unverified. No transport changes. Provider1000GB is traffic volume, not channel Mbps;
+do not guess capacity or make informational monitoring a VPN blocker. Keep catalog4 unchanged.
+After notification/runtime and cleanup acceptance, test TCP once and Auto/MESH once with current readiness
 import/ACK. Keep normal freshness monitoring active while waiting. Only all owner/server
 gates permit NL_REPLACEMENT_LIVE. No new PLAN ID, probe identity, owner-canary use or
 automatic product-queue advance. On a post-publication failure, stop failed NL admission

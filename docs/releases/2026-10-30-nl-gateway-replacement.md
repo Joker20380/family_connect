@@ -1,6 +1,6 @@
 # NL production gateway replacement — 30 October 2026
 
-## Current result — RU acceptance PASS; owner NL smoke pending
+## Current result — notification source fix; owner NL smoke unfinished
 
 Observed 2026-10-31T12:07:52Z. Same NL-REPLACEMENT-20261030 continuation, not a product checkpoint.
 
@@ -15,10 +15,19 @@ verified TLS, real challenge and signed device-status; no504. Current control-pl
 PASS. The earlier intermittent stall's root cause remains NOT_PROVEN, not declared repaired.
 Catalog4/signature/new NL endpoint and unchanged RU entry are reconciled read-only at
 11:55:13UTC. No republication or sequence5. Owner subsequently reports AWG/internet working;
-actual client NL egress and Disconnect cleanup remain unverified. TCP/Auto-MESH not yet run.
+owner now confirms the HTTPS egress address matches185.10.158.212 and reports Disconnect.
+This is owner-reported AWG egress PASS; resource cleanup is not yet verified. TCP/Auto-MESH not run.
 The missing NL load percentage is localized: fresh metrics, but the replacement provider's
 channel capacity is unverified. Android intentionally displays No data rather than treating
 CPU alone as total load. No guessed capacity, source/configuration change or APK update.
+Owner requests fixing repeated Tunnel is on notifications before further smoke tests.
+Source-only correction adds setOnlyAlertOnce(true) to the existing foreground notification:
+status updates, health warnings and Disconnect remain available; transport/retry logic unchanged.
+Regression fails before the fix;12 focused Android source-contract checks PASS afterward.
+No APK build/install/version change: Android106 on the phone is not patched by this source push.
+Phone re-alert/reconnect classification remains unproven; installed runtime verification pending.
+Panel1000GB describes traffic volume, not Mbps; channel capacity remains unknown. No server,
+monitoring configuration or catalog change. Canary stays PAUSED.
 
 New NL **185.10.158.212** has accepted AWG/TCP and now real production-bound MESH
 DNS/HTTPS/egress acceptance. Reused **FLEET_MESH_PROBE_1**; no second identity/invitation,
@@ -34,7 +43,7 @@ verified HTTPS streams, new NL egress and bounded cleanup. Three stable samples,
 Signed catalog **4** was published; initial authenticated NL readback returned the new endpoint,
 RU entry and probe assignment remain unchanged. Actual Android catalog parser PASS without
 APK update; Android106 owner AWG smoke is **IN_PROGRESS**, not completed by parser
-acceptance. Owner-reported internet success does not yet prove client egress or cleanup.
+acceptance. Owner-reported HTTPS egress now matches the new NL; cleanup is still unverified.
 Prepared routing artifact and mailbox/monitoring target updates are deployed.
 Fresh11:55:13UTC readback validates canonical profile/certificate/CRL, floor **27226**,
 RU/NL directory equality and actual SSH snapshot. Renewal evaluates NOOP; no material refresh
@@ -44,8 +53,39 @@ New NL remains active with integrated publisher rotation; no separate publisher 
 Old NL remains **FENCED**. No rollback/catalog rewrite or RU reboot was attempted.
 Paid ledger **0/0**, payments/revenue0, cohort0/10. **BETA-0-CANARY-1 PAUSED**;
 paid-canary, subscription events and Android stage0 stay off. Complete the current owner
-AWG endpoint/HTTPS/egress and Disconnect checks, then TCP and Auto/MESH once each in this
+notification installed-runtime and AWG cleanup checks, then TCP and Auto/MESH once each in this
 same operation. No further publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
+
+### Repeated tunnel-on message — source fix qualified, not installed
+
+The owner confirms the address from the requested HTTPS egress check matches the new NL,
+then reports turning the tunnel off and asks to fix repeated notifications first. AWG egress
+is owner-reported PASS; resource cleanup is not independently verified. TCP/Auto-MESH remain
+NOT_RUN. No owner identity or server mutation is needed for this source correction.
+
+Manual health probes update notification ID1 after every result. Successful probes schedule15s;
+unsuccessful probes schedule5s after a check bounded at5s. The builder previously lacked
+only-alert-once. ConnectionService now sets setOnlyAlertOnce(true), preventing repeat alerts
+when the existing foreground notification is updated. It remains ongoing, with live status,
+health warnings, open-app and Disconnect controls. The channel remains LOW. Health probes,
+transport behavior, retries and real error state are unchanged; chat notifications are untouched.
+
+The regression source-contract test fails on the old builder and passes after the one-line
+fix.12 affected Android source-contract checks PASS; the unrelated Windows check is excluded.
+These checks do not prove runtime behavior on the owner's phone. No ADB device is available;
+notification-channel settings and service restart events were not observed. The reported
+10s interval alone does not prove reconnection. Installed notification acceptance is pending.
+
+No APK build, version bump, signing, upload or installation. The owner phone remains on the
+previously accepted Android106; a source push does not alter that installation. The earlier
+no-Android-build restriction remains in force pending explicit permission for an owner update.
+No server restart, identity change, catalog publication or paid operation. Catalog4 is retained,
+old NL remains fenced and canary PAUSED. Source rollback is a normal revert of this one-line
+change; there is no deployed artifact to roll back. Do not mark NL_REPLACEMENT_LIVE.
+
+The supplied provider panel lists4.84/1000GB under bandwidth: a traffic-volume counter/quota,
+not a link-speed measurement in Mbps. Its reset period and any fair-use terms are not proven
+by the panel excerpt. No capacity value is inferred; the existing unknown-load display remains.
 
 ### Owner AWG report and informational load display — 31 October12:07UTC
 

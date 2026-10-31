@@ -535,7 +535,7 @@
     "catalog_publication": "NOT_RUN",
     "owner_smoke": "NOT_RUN"
   },
-  "next_action": "VERIFY_CURRENT_OWNER_AWG_HTTPS_EGRESS_AND_DISCONNECT_THEN_TCP_AUTO_MESH_NO_RECONNECT_OR_REPUBLICATION",
+  "next_action": "AUTHORIZE_OWNER_APK_UPDATE_FOR_NOTIFICATION_FIX_THEN_VERIFY_RUNTIME_AWG_CLEANUP_TCP_AUTO_MESH",
   "checks": {
     "strict_json": "PASS",
     "targeted_privacy_secret_scan": "PASS",
@@ -1026,10 +1026,11 @@
     "awg": {
       "connect": "OWNER_REPORTED_WORKING",
       "internet": "OWNER_REPORTED_PASS",
-      "endpoint": "AWAITING_CURRENT_PHONE_HTTPS_EGRESS_READBACK",
+      "endpoint": "OWNER_CONFIRMED_NEW_NL_185.10.158.212",
       "retained_administrative_peer": "NO_HANDSHAKE_NOT_CURRENT_PHONE_ATTESTATION",
-      "https_egress": "PENDING",
-      "disconnect_cleanup": "NOT_RUN"
+      "https_egress": "OWNER_REPORTED_PASS",
+      "disconnect_cleanup": "NOT_INDEPENDENTLY_VERIFIED",
+      "disconnect": "OWNER_REPORTED_DISCONNECTED"
     },
     "tcp": "NOT_RUN",
     "auto_mesh": "NOT_RUN",
@@ -1045,7 +1046,10 @@
       "source_change": false,
       "configuration_change": false,
       "apk_update": false,
-      "transport_gate_blocker": false
+      "transport_gate_blocker": false,
+      "panel_traffic_volume_gb": 1000,
+      "panel_channel_speed_mbps": null,
+      "panel_reset_period": "NOT_ESTABLISHED"
     },
     "checks": {
       "focused_monitor_tests": "PASS_4",
@@ -1064,6 +1068,44 @@
       0,
       0
     ],
-    "canary": "PAUSED"
+    "canary": "PAUSED",
+    "notification_observation": {
+      "report": "TUNNEL_ON_MESSAGE_APPROXIMATELY_EVERY_10_SECONDS",
+      "classification": "UNCONFIRMED_CLIENT_NOTIFICATION_OR_RECONNECT",
+      "source_candidate": "PERIODIC_HEALTH_NOTIFY_WITHOUT_ONLY_ALERT_ONCE",
+      "same_notification_id": true,
+      "successful_probe_interval_seconds": 15,
+      "failed_probe_interval_seconds": 5,
+      "probe_deadline_seconds": 5,
+      "adb_device_available": false,
+      "actual_tunnel_restart": "NOT_PROVEN",
+      "current_notification_channel": "NOT_OBSERVED",
+      "next_evidence": "UPDATED_APK_RUNTIME_ALERTS_AND_SERVICE_CONTINUITY",
+      "source_change": true,
+      "apk_build": false,
+      "server_restart": false,
+      "notification_suppression": false
+    },
+    "notification_fix": {
+      "recorded_utc": "2026-10-31T12:21:34.262042+00:00",
+      "entry_main": "4d285f0bfd7a2a06ee1c4c5c129d69192bed2ea4",
+      "result": "SOURCE_QUALIFIED_NOT_BUILT_OR_INSTALLED",
+      "change": "FOREGROUND_STATUS_SET_ONLY_ALERT_ONCE_TRUE",
+      "source_sha256": "89be1622098c68cc2cbf7cc5c380b416aa5340ff480f7820a4913607fb5a024e",
+      "test_sha256": "811773a0a7035cbb4e2cf4561ac34338d26e4a7ac68c6e0c66b58d4d942aafb8",
+      "regression_before": "EXPECTED_FAIL_MISSING_ONLY_ALERT_ONCE",
+      "focused_tests": "PASS_12_ANDROID_SOURCE_CONTRACTS_1_UNRELATED_WINDOWS_DESELECTED",
+      "foreground_notification_visible": true,
+      "status_and_disconnect_preserved": true,
+      "transport_and_retry_unchanged": true,
+      "chat_notifications_unchanged": true,
+      "runtime_acceptance": "NOT_RUN_NO_ADB_DEVICE",
+      "apk_build": false,
+      "apk_install": false,
+      "app_version_change": false,
+      "server_changes": false,
+      "catalog_changes": false,
+      "existing_android_build_restriction": "NOT_LIFTED"
+    }
   }
 }

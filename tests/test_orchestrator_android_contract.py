@@ -12,6 +12,21 @@ def source(name):
     return (MAIN / (name + '.java')).read_text()
 
 
+def test_vpn_notification_refresh_does_not_repeat_alert_or_hide_controls():
+    service = source('ConnectionService')
+    notification = service.split('private Notification notification(){', 1)[1].split('private void notifyState()', 1)[0]
+    assert '.setOnlyAlertOnce(true)' in notification
+    assert '.setOngoing(true)' in notification
+    assert 'NotificationManager.IMPORTANCE_LOW' in notification
+    assert 'R.string.health_unavailable' in notification
+    assert 'R.string.on' in notification and 'R.string.connecting' in notification
+    assert '.setContentIntent(open)' in notification
+    assert '.setAction("disconnect")' in notification
+    assert 'getString(R.string.disconnect),stop' in notification
+    assert 'startForeground(1,notification())' in service
+    assert 'notify(1,notification())' in service
+
+
 def test_only_existing_service_owns_automatic_tuns():
     owner = source('AutomaticVpnOwner')
     assert 'TcpVpnService.ready.get' in owner

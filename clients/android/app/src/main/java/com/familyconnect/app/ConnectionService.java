@@ -302,7 +302,7 @@ public final class ConnectionService extends Service {
         PendingIntent stop=PendingIntent.getService(this,1,new Intent(this,ConnectionService.class).setAction("disconnect"),PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_UPDATE_CURRENT);
         return new Notification.Builder(this,"vpn").setSmallIcon(R.drawable.ic_shield).setContentTitle(getString(R.string.notification))
             .setContentText(automatic?getString(status.equals("on")?R.string.on:status.equals("restoring")?R.string.restoring:status.equals("failed")?R.string.unable_connect:R.string.connecting):activeTransport.toUpperCase(java.util.Locale.ROOT)+" · "+getString(status.equals("on")?(healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.on):R.string.connecting)).setContentIntent(open)
-            .setOngoing(true).addAction(new Notification.Action.Builder(null,getString(R.string.disconnect),stop).build()).build();
+            .setOngoing(true).setOnlyAlertOnce(true).addAction(new Notification.Action.Builder(null,getString(R.string.disconnect),stop).build()).build();
     }
     private void notifyState(){if(!closing)getSystemService(NotificationManager.class).notify(1,notification());}
     @Override public void onDestroy(){
