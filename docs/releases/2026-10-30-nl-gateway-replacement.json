@@ -1286,14 +1286,14 @@
       "lint": "PASS",
       "instrumentation_compile": "PASS",
       "hosted_runtime": "PASS",
-      "rendered_ui_review": "PENDING",
+      "rendered_ui_review": "PASS",
       "signed": true,
       "distributed": true,
       "installed": false,
       "public_version_code": 108,
-      "android_update_sequence": 2,
+      "android_update_sequence": 3,
       "gateway_catalog_sequence": 4,
-      "server_changes": false,
+      "server_changes": true,
       "registry_changes": false,
       "canary": "PAUSED",
       "phone_debugging": "NOT_USED",
@@ -1330,7 +1330,6 @@
       "source_commit": "3b10199de207595b75259ecf6313f1d2d828336f",
       "ci_run": 41243393838,
       "android_ci_job": 124661771185,
-      "rendered_review": "PASS",
       "rendered_images": [
         {
           "name": "dashboard-cpu-load.png",
@@ -1344,7 +1343,6 @@
         }
       ],
       "invitation_version_code": 108,
-      "public_android_sequence": 3,
       "unsigned_apk_sha256": "7f2600a8fa0b6ee71f6846f0345ae36b33af1c239d77d8530db3c118dd15dff6",
       "apk_sha256": "144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf",
       "apk_bytes": 56212840,
@@ -1371,7 +1369,8 @@
       "instrumentation_variant_skips": 24,
       "legacy_catalog_sha256": "35e300740f76a0e3481a97929805fcd6c8c2eddea2f2af349b0d51fe5f7a002f",
       "invitation_sha256": "65fb525e5e85b723a430343c81a05ab79cfa4242344b20752b0ceda5513d4754",
-      "catalog_expires_at": 1801259043
+      "catalog_expires_at": 1801259043,
+      "server_change_scope": "ANDROID_DOWNLOADS_CATALOG_INVITATION_ONLY"
     }
   }
 }
