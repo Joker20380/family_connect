@@ -40,7 +40,13 @@ accessibility-click helper did not confirm it. Subsequent cleanup/ownership chec
 no runtime PASS is claimed. Test-only correction targets the actual system button with
 a bounded touch and safe failure counters, retaining all revoke/cleanup assertions.
 Foreground notification flags are now checked before/after real tunnel traffic.
-Instrumentation compilation and35 focused checks PASS; hosted runtime retry remains pending.
+Instrumentation compilation and35 focused checks PASS before the hosted retry.
+Hosted run41210516955 confirms real WG/AWG/TCP/Auto lifecycle, system revoke and quiet
+foreground notification flags PASS. Two Friends UI harness assumptions remain stale relative
+to accepted106: independently scrolling dashboard workspaces and asynchronous audio preparation.
+Test-only corrections check fixed navigation/scroll bounds and await real playback before
+pause/seek; product UI/audio code is unchanged. Instrumentation compilation and36 focused
+checks PASS. Full hosted UI/release qualification remains pending; no APK signed or published.
 Fresh HTTPS/signature readback: public Android beta60/update sequence1, optional policy unchanged.
 Gateway catalog4 is separate and unchanged. No server/registry/admission change or mandatory update.
 Owner says an older version is quiet; notification regression cause remains unproven without

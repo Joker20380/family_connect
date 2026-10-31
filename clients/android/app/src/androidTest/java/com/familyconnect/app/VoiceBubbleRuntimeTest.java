@@ -36,10 +36,17 @@ public class VoiceBubbleRuntimeTest {
         }
         ChatAudio audio=new ChatAudio(c);AtomicReference<ChatThreadView> view=new AtomicReference<>();
         try {
+            ins.runOnMainSync(()->{try{audio.playMessage("preview",sample,()->{});}catch(Exception failure){throw new AssertionError(failure);}});
+            java.util.concurrent.atomic.AtomicBoolean prepared=new java.util.concurrent.atomic.AtomicBoolean();
+            long playbackDeadline=SystemClock.elapsedRealtime()+10000;
+            while(!prepared.get()&&SystemClock.elapsedRealtime()<playbackDeadline){
+                ins.runOnMainSync(()->{if(audio.selected("preview")&&audio.playing("preview")){audio.toggle("preview");prepared.set(true);}});
+                if(!prepared.get())SystemClock.sleep(50);
+            }
+            assertTrue("Async audio must prepare and start before pause/seek",prepared.get());
             ins.runOnMainSync(()->{
                 try {
-                    audio.playMessage("preview",sample,()->{});assertTrue(audio.selected("preview"));
-                    audio.toggle("preview");assertFalse(audio.playing("preview"));audio.seek("preview",.4f);
+                    assertTrue(audio.selected("preview"));assertFalse(audio.playing("preview"));audio.seek("preview",.4f);
                     LinearLayout root=new LinearLayout(c);root.setOrientation(LinearLayout.VERTICAL);root.setPadding(24,36,24,24);root.setBackgroundColor(TerminalUi.BACKGROUND);
                     TerminalUi.label(root,"Голосовые сообщения",22,TerminalUi.TEXT);
                     ChatThreadView chat=new ChatThreadView(c,"",v->{},v->{});chat.audio=audio;view.set(chat);
@@ -50,7 +57,7 @@ public class VoiceBubbleRuntimeTest {
                 }catch(Exception e){throw new AssertionError(e);}
             });
             ins.waitForIdleSync();SystemClock.sleep(500);
-            ins.runOnMainSync(()->{assertTrue(view.get().getWidth()>0);assertTrue(view.get().getHeight()>0);});
+            ins.runOnMainSync(()->{assertTrue("Paused audio seek must advance",audio.position("preview")>0);assertFalse(audio.playing("preview"));assertTrue(view.get().getWidth()>0);assertTrue(view.get().getHeight()>0);});
             // The real app keeps FLAG_SECURE. Render only this synthetic view.
             AtomicReference<Bitmap> rendered=new AtomicReference<>();
             ins.runOnMainSync(()->{

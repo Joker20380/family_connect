@@ -1189,8 +1189,8 @@
       "canonical_jvm_tests": 376,
       "canonical_jvm_suites": 63,
       "lint": "PASS",
-      "focused_python_tests": 35,
-      "hosted_platform_ci": "RUNTIME_CONSENT_HARNESS_RETRY_REQUIRED",
+      "focused_python_tests": 36,
+      "hosted_platform_ci": "UI_HARNESS_RETRY_REQUIRED",
       "native_source_build": "REQUIRED_FOR_PUBLIC_PROVENANCE",
       "private_candidate_is_release": false,
       "signing": false,
@@ -1217,7 +1217,14 @@
       "emulator_system_dialog_observed": true,
       "emulator_acceptance": "NOT_PASS",
       "instrumentation_compile": "PASS",
-      "test_only_fix": "SYSTEM_BUTTON_BOUND_TOUCH_AND_SAFE_FAILURE_COUNTERS"
+      "test_only_fix": "SYSTEM_BUTTON_BOUND_TOUCH_AND_SAFE_FAILURE_COUNTERS",
+      "latest_runtime_ci_run": 41210516955,
+      "latest_runtime_ci_source": "2161844cabf0c947277092d6559aafa4948f6d70",
+      "emulator_vpn_lifecycle": "PASS",
+      "emulator_system_revoke": "PASS",
+      "emulator_quiet_notification_flags": "PASS",
+      "emulator_friends_ui": "TWO_STALE_HARNESS_ASSUMPTIONS",
+      "ui_test_only_fix": "FIXED_NAVIGATION_SCROLL_BOUNDS_AND_ASYNC_PLAYBACK_WAIT"
     }
   }
 }

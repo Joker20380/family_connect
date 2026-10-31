@@ -31,8 +31,14 @@ public class DashboardLayoutRuntimeTest {
     }
 
     private void bounds(View root,View view){
-        assertFalse("Dashboard must not scroll",view instanceof ScrollView);
         if(view.getVisibility()!=View.VISIBLE)return;
+        if(view instanceof ScrollView){
+            Rect viewport=new Rect();view.getDrawingRect(viewport);((ViewGroup)root).offsetDescendantRectToMyCoords(view,viewport);
+            assertTrue("Scroll viewport must fit",viewport.top>=0&&viewport.bottom<=root.getHeight()&&viewport.left>=0&&viewport.right<=root.getWidth());
+            ScrollView scroll=(ScrollView)view;assertEquals("One scroll workspace",1,scroll.getChildCount());
+            View content=scroll.getChildAt(0);assertTrue("Scroll content measured",content.getHeight()>0);
+            bounds(content,content);return;
+        }
         if(view instanceof Button){
             Rect rect=new Rect();view.getDrawingRect(rect);((ViewGroup)root).offsetDescendantRectToMyCoords(view,rect);
             assertTrue("Control extends below viewport",rect.bottom<=root.getHeight());
@@ -53,7 +59,7 @@ public class DashboardLayoutRuntimeTest {
         try(FileOutputStream out=new FileOutputStream(new File(dir,name))){assertTrue(image.compress(Bitmap.CompressFormat.PNG,100,out));}
         catch(Exception failure){throw new AssertionError("Could not save UI rendering",failure);}finally{image.recycle();}
     }
-    @Test public void viewportHasNoScrollAndAllControlsFit() throws Exception {
+    @Test public void workspaceScrollsIndependentlyAndNavigationFits() throws Exception {
         Instrumentation instrument=InstrumentationRegistry.getInstrumentation();
         String pkg=instrument.getTargetContext().getPackageName();
         android.content.SharedPreferences preferences=instrument.getTargetContext().getSharedPreferences(FriendsActivity.class.getName(),0);
@@ -99,6 +105,14 @@ public class DashboardLayoutRuntimeTest {
             try{
                 render(activity,root,w,h,"dashboard-native.png");
                 render(activity,root,TerminalUi.dp(activity,320),TerminalUi.dp(activity,512),"dashboard-320x512.png");
+                View navigation=root.findViewWithTag("exit_navigation");assertNotNull("Navigation remains outside workspace",navigation);
+                assertSame("Navigation is a fixed root child",root,navigation.getParent());
+                ScrollView workspace=null;
+                for(int index=0;index<((ViewGroup)root).getChildCount();index++)if(((ViewGroup)root).getChildAt(index) instanceof ScrollView)workspace=(ScrollView)((ViewGroup)root).getChildAt(index);
+                assertNotNull("Dashboard has an independent workspace",workspace);
+                assertTrue("Workspace must not cover navigation",workspace.getBottom()<=navigation.getTop());
+                int navigationTop=navigation.getTop();workspace.scrollTo(0,workspace.getChildAt(0).getHeight());
+                assertEquals("Navigation must not scroll",navigationTop,navigation.getTop());workspace.scrollTo(0,0);
             }finally{root.measure(View.MeasureSpec.makeMeasureSpec(w,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(h,View.MeasureSpec.EXACTLY));root.layout(0,0,w,h);root.requestLayout();}
             // Draw both switch states without changing preferences or the real VPN.
             android.widget.LinearLayout states=new android.widget.LinearLayout(activity);states.setOrientation(1);states.setBackgroundColor(TerminalUi.BACKGROUND);

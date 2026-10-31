@@ -82,3 +82,15 @@ def test_runtime_consent_harness_targets_system_button_and_checks_quiet_notifica
     assert 'System VPN confirmation not found: roots=' in harness
     assert 'FLAG_ONLY_ALERT_ONCE' in harness and 'FLAG_ONGOING_EVENT' in harness
     assert 'quietNotification();traffic(type);quietNotification();' in harness
+
+
+def test_runtime_ui_checks_match_retained_async_and_scroll_contracts():
+    layout = (ROOT / 'clients/android/app/src/androidTest/java/com/familyconnect/app/DashboardLayoutRuntimeTest.java').read_text()
+    audio = (ROOT / 'clients/android/app/src/androidTest/java/com/familyconnect/app/VoiceBubbleRuntimeTest.java').read_text()
+    assert 'Dashboard must not scroll' not in layout
+    assert 'Navigation must not scroll' in layout
+    assert 'Scroll viewport must fit' in layout
+    assert 'Control touch height' in layout
+    assert 'audio.selected("preview")&&audio.playing("preview")' in audio
+    assert 'Async audio must prepare and start before pause/seek' in audio
+    assert 'Paused audio seek must advance' in audio
