@@ -1,40 +1,37 @@
 # Текущее состояние / Current state
 
-## NL availability restoration — 30 October
+## NL availability restoration — 31 October
 
-**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / RESTRICTED_TEST_IDENTITY_UNAVAILABLE.**
-The historical rollback is terminal **ABORTED / ROLLED_BACK_READERS_STOPPED** with
-`first_cause=DIRECTORY_INVALID` and separate `terminal_reason=PREVIOUS_LEAF_EXPIRED`.
-Two device and two invite additions are preserved; historical expected hashes and restricted
-state remain exact under the dedicated overlay contract. Both complete archives/ledgers
-PASS, old active owners removed. No old database restoration or expired reader resume.
+**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / MESH_DATA_PLANE_FAILED.**
+The owner-authorized permanent **FLEET_MESH_PROBE_1** now exists and is retained for reuse;
+the prior missing-test-identity blocker is resolved. Exactly one production device and one
+one-use invitation were created through the accepted enrollment path. Device/transport
+binding, invitation consumption exactly1, real readiness challenge/fetch, native signature
+validation/import and durable ACK/readback PASS. No owner/tester identity was used.
 
-The bounded publisher recovery created one fresh room (READY PASS), staged and published
-one directory through the accepted atomic store. Strict production directory/DirectoryPort
-validation PASS. One fresh renewal operation is now **COMMITTED**, CRL/floor **27225/27225**,
-current profile/certificate/CRL and synchronized RU/NL directory. Its initial
-`NEW_DIRECTORY_NOT_READY` was resolved by the authorized normal gateway start and explicit
-committed recovery of the same operation; no additional transaction or manual journal edits.
-Actual RU→new-NL forced-command snapshot exits0 with empty stderr; strict schema/signatures
-and non-mutating renewal NOOP PASS. Normal publisher produced its own fresh generation.
+Expired materials were refreshed without source changes: the already accepted bounded
+publisher worker supplied the prerequisite directory, followed by one normal renewal
+**COMMITTED** with no first cause. Current-at-readback certificate/CRL and floor are
+**27226/27226**; actual RU→new-NL SSH snapshot, synchronized directory and renewal NOOP PASS.
+Historical rollback remains ABORTED and its registry additions remain preserved.
 
-Remaining real acceptance blocker: no permitted production-bound synthetic MESH identity
-was found.98 scoped disposable profiles use independent trust, and four previously recorded
-custody locations remain absent. This is not an exhaustive claim about all database users.
-No owner/tester identity was substituted, no new client key/identity/grant was generated.
-MESH registration/DNS/HTTPS/egress therefore remain NOT_RUN; no catalog publication or
-Android106/owner smoke. An existing authorized synthetic identity is required to continue;
-creating one would require an explicit exception to the owner's no-new-identities rule.
+One real MESH attempt reached authenticated bootstrap and dedicated room creation, but
+failed at **GATEWAY_JOIN**: broker `gateway_failed`, exchange stage `create`; the client
+reported `bootstrap_protocol_rejected`. Dedicated READY/registration was not reached;
+DNS/HTTPS/NL-egress were NOT_RUN, not PASS. The lower-level join cause is not yet localized.
+Broker CLEANUP/COMPLETED and local process/interface cleanup PASS; no automatic retry or
+second identity. Probe remains non-revoked in encrypted private custody; invite exhausted.
 
-Safe hold: old NL FENCED; new185.10.158.212 AWG/TCP remain active with accepted synthetic
-data-plane evidence. Restricted gateway passed three stable samples/zero restarts, then
-was stopped because data-plane acceptance is incomplete. Its integrated publisher is also
-stopped; recovery entrypoint disabled and archived. Renewal/read-only sync definitions now
-use the accepted package and pinned new-host route; actual read-only sync PASS, timers stay
-paused at the acceptance gate. RU ordinary HTTP/public trusted HTTPS healthy, catalog3
-unchanged, paid ledger0/0. Current leaf/CRL expire2026-10-31T02:47:21Z: revalidate freshness
-before continuation and never start expired readers. **BETA-0-CANARY-1 stays PAUSED;
-paid-canary, subscription events and Android stage0 stay off.**
+Safe hold: old NL FENCED; new185.10.158.212 ordinary AWG/TCP remain active with earlier
+accepted data-plane evidence. Restricted gateway and integrated publisher were stopped
+after the failed attempt; three pre-stop samples had stable PID/zero restarts and no
+abnormal memory growth. Renewal/read-only sync timers remain paused. RU ordinary HTTP and
+trusted public HTTPS dispatch remain healthy with the original artifact. Catalog3 is
+byte-identical: no endpoint publication, APK change or owner smoke. Paid ledger0/0,
+payments/revenue0, cohort0/10. Leaf/CRL expire2026-10-31T13:32:00Z; directory expires
+2026-10-31T13:33:33.753314361Z. These are bounded observations, not scheduled freshness or
+running MESH acceptance. **BETA-0-CANARY-1 stays PAUSED; paid-canary, subscription events
+and Android stage0 stay off.**
 
 [Same-operation report and remaining gates](releases/2026-10-30-nl-gateway-replacement.md).
 

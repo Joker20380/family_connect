@@ -1,6 +1,136 @@
 # NL production gateway replacement — 30 October 2026
 
-## Current result — terminal rollback and renewal complete, client cutover held
+## Current result — permanent fleet probe enrolled, dedicated gateway join failed
+
+Observed 2026-10-31T09:50:12.264119+00:00. Continuation of the same operation; no new product checkpoint.
+
+**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / MESH_DATA_PLANE_FAILED.**
+The owner-authorized permanent **FLEET_MESH_PROBE_1** now exists and is retained for reuse;
+the prior missing-test-identity blocker is resolved. Exactly one production device and one
+one-use invitation were created through the accepted enrollment path. Device/transport
+binding, invitation consumption exactly1, real readiness challenge/fetch, native signature
+validation/import and durable ACK/readback PASS. No owner/tester identity was used.
+
+Expired materials were refreshed without source changes: the already accepted bounded
+publisher worker supplied the prerequisite directory, followed by one normal renewal
+**COMMITTED** with no first cause. Current-at-readback certificate/CRL and floor are
+**27226/27226**; actual RU→new-NL SSH snapshot, synchronized directory and renewal NOOP PASS.
+Historical rollback remains ABORTED and its registry additions remain preserved.
+
+One real MESH attempt reached authenticated bootstrap and dedicated room creation, but
+failed at **GATEWAY_JOIN**: broker `gateway_failed`, exchange stage `create`; the client
+reported `bootstrap_protocol_rejected`. Dedicated READY/registration was not reached;
+DNS/HTTPS/NL-egress were NOT_RUN, not PASS. The lower-level join cause is not yet localized.
+Broker CLEANUP/COMPLETED and local process/interface cleanup PASS; no automatic retry or
+second identity. Probe remains non-revoked in encrypted private custody; invite exhausted.
+
+Safe hold: old NL FENCED; new185.10.158.212 ordinary AWG/TCP remain active with earlier
+accepted data-plane evidence. Restricted gateway and integrated publisher were stopped
+after the failed attempt; three pre-stop samples had stable PID/zero restarts and no
+abnormal memory growth. Renewal/read-only sync timers remain paused. RU ordinary HTTP and
+trusted public HTTPS dispatch remain healthy with the original artifact. Catalog3 is
+byte-identical: no endpoint publication, APK change or owner smoke. Paid ledger0/0,
+payments/revenue0, cohort0/10. Leaf/CRL expire2026-10-31T13:32:00Z; directory expires
+2026-10-31T13:33:33.753314361Z. These are bounded observations, not scheduled freshness or
+running MESH acceptance. **BETA-0-CANARY-1 stays PAUSED; paid-canary, subscription events
+and Android stage0 stay off.**
+
+### Permanent probe enrollment and custody
+
+- Safe label: `FLEET_MESH_PROBE_1`; safe device reference: `fleet-646b53465a60`.
+- Public identity fingerprint SHA256: `30b63836c67b99bff6578933db9055d17a272c4abe74a6f6ea38375e3729acad`.
+- Transport public-key fingerprint SHA256: `0fcffb830108afcc970c0121d563ca97c79d1815cdcc9023668f9d0dfac29565`.
+- Created `2026-10-31T09:37:22.332482+00:00` through the existing production device-identity
+  implementation on the operator workstation; exactly one identity and transport key.
+  Private keys never sent to RU/NL. Private parent0700/files0600, no symlinks/hardlinks;
+  authenticated encrypted backup/readback PASS before enrollment and after retention.
+- Existing operator invitation API, actual HTTPS challenge/proof and enrollment PASS.
+  One device/one invitation added; device and transport binding PASS. Invitation use count1,
+  exhausted; not revoked because the accepted contract couples invite/device revocation.
+- Existing non-paid `all_activated` v2 authorization applies; no additional restricted-grant
+  row is required. No new validity model or migration. The schema has neither purpose nor
+  invitation-expiry fields: private purpose mapping is `internal_fleet_probe`, and enrollment
+  consumed the one-use invitation within the900-second operator window. The accepted v2
+  authorization has no finite expiry field; certificate lifetime remains bounded by the
+  current authority/profile, rather than inventing a30-day grant.
+- Registry delta: devices+1, invites+1, restricted grants+0. Paid subscriptions/events0/0,
+  payments/revenue0, paid cohort0/10. No referral, owner binding or user Android identity.
+- Actual readiness challenge/fetch, native production-trust validation/import, issuance of
+  one current probe certificate, ACK and durable receipt readback PASS. No owner identity.
+  The retained identity is non-revoked; no successful MESH timestamp is asserted.
+
+### Material refresh and exact artifacts
+
+The previous leaf/CRL had expired at02:47:21Z. Fresh readback rejected them as current;
+historical signature/binding validation remained intact. Normal publisher startup cannot
+consume that expired predecessor, so the already accepted bounded fixed-configuration
+recovery worker supplied the prerequisite directory. No new source correction, weakened
+validator, edited timestamps or new trust anchor. One recovery room READY and one atomic
+recovery promotion; normal integrated publisher then produced its own startup generation.
+
+- Recovery predecessor directory SHA256: `31ce04ac75168db1119bc299bd8bd4736c79232ae1fa799d448ac18edfa0f77a`.
+- Recovery fresh directory SHA256: `d9e2a1e1c1fecf5d117ea98f26cdf854d7674475748d421a19cf061fdbe5ea46`.
+  Issued `2026-10-31T09:27:47.254745431Z`; expires `2026-10-31T13:27:47.254745431Z`.
+  Staging/live production directory validators, contract/metadata and unchanged profile PASS.
+- One normal renewal operation, safe label `FLEET_NL_NORMAL_RENEWAL_1`: **COMMITTED**,
+  `commit_decided=true`, `first_cause=null`, both node owners cleaned. CRL/floor27226;
+  current profile/certificate/CRL signatures PASS at readback, leaf/CRL expire13:32:00Z.
+- Normal directory SHA256: `f852f050dbfd9a9553fe0d41dc5e829bfc61ec484147d989ff288b9fc851b6c2`; issued
+  `2026-10-31T09:33:35.793261965Z`, expires `2026-10-31T13:33:33.753314361Z`.
+  RU/NL exact directory equality PASS. Actual forced-command snapshot exit0/empty stderr,
+  strict schema/current material and non-mutating renewal NOOP PASS even after safe stop.
+- Existing renewal package unchanged: `2624c1ba1f49863f767ca9e9ea165a5c74c0c4f95a5ba84d2cac1d91d81d5dd1`.
+  Publisher recovery package unchanged: `7904fc9e457f74c414e85ac665622a49c9cf5c353affffee1fca301cea59024c`.
+  Running gateway hash verified: `f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef`.
+  Recovery configuration archived/disabled again; no active temporary write credential.
+
+### Actual MESH attempt and safe rollback
+
+One production-bound probe attempt: bootstrap cache/current material loaded, Telemost
+bootstrap connection and family authentication PASS on both sides. Server trace reached
+AUTHORIZED → ROOM_CREATION/ESTABLISHED → GATEWAY_JOIN/STARTED → GATEWAY_JOIN/FAILED
+(`RECOVERY_JOIN_FAILED`, broker `gateway_failed`). Exchange rejection: stage `create`.
+Client exited1 with `bootstrap_protocol_rejected` after136seconds; it did not reach a
+dedicated descriptor/READY/registration. The provider room was created, but gateway join
+failed. This is a real acceptance failure, not a missing identity or a READY-only pass;
+the evidence does not identify the lower-level Telemost/network/configuration cause.
+
+Four intended HTTPS streams, DNS queries and TLS-verified egress check were not reached.
+Server trace CLEANUP/COMPLETED PASS; client process exited, no TUN was created and local
+interfaces were unchanged. Restricted service was stopped after evidence capture; process
+cgroup empty. Integrated publisher stopped with it. Three pre-stop samples: stable PID,
+zero restarts, memory20,619,264 →20,332,544 →20,262,912bytes. No further MESH attempt made.
+
+Private operator-only harnesses were built from the exact retained282-member source capsule
+with a TLS-verified egress assertion; no production or Android artifact was rebuilt.
+Harness fingerprints: native import `2ba0f671043f491124c1508d150f7a5ab127e676d6d8e0c80977d0a3309dbac5`;
+MESH probe `344db2c25d978473a096f70e83d23fe8a9ee618f4ac1951e330bfc9fee0b5a02`;
+source inventory `9f3340d6a69af54759433e2196373270b4c5f78cc39461c8f6f374945d1a7a19`.
+Local helper import/API fixture mistakes were corrected before the affected action;
+they did not cause a second enrollment, renewal, gateway start or MESH attempt.
+
+Probe private custody retained and encrypted/readback-verified after disconnect; invitation
+exhausted, device non-revoked, no active session. Reuse this identity for subsequent checks.
+Old NL fencing freshly verified: eight product units inactive, persistent quarantine,
+product listeners/interfaces absent. New ordinary AWG/TCP and RU original HTTP stay active.
+Catalog3 byte-identical, routing artifact not deployed, RU endpoint unchanged. No client
+publication or owner smoke; no automatic return to old NL. Monitoring inventory cutover and
+publisher/renewal/read-only sync schedule activation remain gated by real MESH acceptance.
+
+Next action is dedicated gateway join diagnosis from retained private evidence, not another
+identity or catalog publication. Revalidate clock/freshness before any later reader start.
+The failure hold intentionally does not claim ongoing material freshness after the recorded
+expiry; all restricted readers and refresh schedules remain stopped/paused.
+
+### Verification scope for this continuation
+
+Production enrollment/readiness/ACK, current snapshot/renewal, exact artifact checks,
+authenticated encrypted custody and cleanup checks PASS. Actual MESH data-plane FAIL at
+gateway join; DNS/HTTPS/egress and owner smoke NOT_RUN. Documentation uses strict JSON,
+targeted privacy/secret scan, Markdown-link checks, isolated staging and whitespace checks;
+unrelated local work remains excluded. No Android/desktop/full historical suite.
+
+## Historical 30 October result — superseded by the current probe attempt
 
 Observed 2026-10-30T23:10:37+00:00. Same existing operation; no new product checkpoint.
 
