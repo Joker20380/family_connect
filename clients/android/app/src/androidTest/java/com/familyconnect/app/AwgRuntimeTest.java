@@ -66,24 +66,51 @@ public class AwgRuntimeTest {
     void revokeThroughSystemDialog()throws Exception{
         android.app.UiAutomation automation=InstrumentationRegistry.getInstrumentation().getUiAutomation();
         android.accessibilityservice.AccessibilityServiceInfo info=automation.getServiceInfo();
-        info.flags|=android.accessibilityservice.AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS|android.accessibilityservice.AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS;
+        info.flags|=android.accessibilityservice.AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS|android.accessibilityservice.AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS|android.accessibilityservice.AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
         automation.setServiceInfo(info);
         String testPackage=InstrumentationRegistry.getInstrumentation().getContext().getPackageName();
         // Each test must exercise a fresh system confirmation, even after another handover.
         shell("appops set "+testPackage+" ACTIVATE_VPN deny");
         shell("am start -W -n "+testPackage+"/"+RevokeVpnActivity.class.getName());
         long until=System.currentTimeMillis()+15000;boolean clicked=false;
+        int observedRoots=0,observedButtons=0,enabledButtons=0;
         while(System.currentTimeMillis()<until&&!clicked){
             java.util.List<android.view.accessibility.AccessibilityNodeInfo> roots=new java.util.ArrayList<>();
             roots.add(automation.getRootInActiveWindow());
             for(android.view.accessibility.AccessibilityWindowInfo window:automation.getWindows())roots.add(window.getRoot());
-            for(android.view.accessibility.AccessibilityNodeInfo root:roots)if(root!=null&&"com.android.vpndialogs".contentEquals(root.getPackageName())){
-                for(android.view.accessibility.AccessibilityNodeInfo node:root.findAccessibilityNodeInfosByViewId("android:id/button1"))
-                    if(node.isEnabled()&&node.performAction(android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK)){clicked=true;break;}
+            for(android.view.accessibility.AccessibilityNodeInfo root:roots)if(root!=null){
+                observedRoots++;
+                for(android.view.accessibility.AccessibilityNodeInfo node:root.findAccessibilityNodeInfosByViewId("android:id/button1")){
+                    if(!"com.android.vpndialogs".contentEquals(node.getPackageName()))continue;
+                    observedButtons++;
+                    if(!node.isEnabled()||!node.isVisibleToUser())continue;
+                    enabledButtons++;
+                    android.graphics.Rect bounds=new android.graphics.Rect();node.getBoundsInScreen(bounds);
+                    if(bounds.isEmpty())continue;
+                    long pressed=android.os.SystemClock.uptimeMillis();
+                    android.view.MotionEvent down=android.view.MotionEvent.obtain(pressed,pressed,android.view.MotionEvent.ACTION_DOWN,bounds.centerX(),bounds.centerY(),0);
+                    android.view.MotionEvent up=android.view.MotionEvent.obtain(pressed,pressed+100,android.view.MotionEvent.ACTION_UP,bounds.centerX(),bounds.centerY(),0);
+                    down.setSource(android.view.InputDevice.SOURCE_TOUCHSCREEN);up.setSource(android.view.InputDevice.SOURCE_TOUCHSCREEN);
+                    try{clicked=automation.injectInputEvent(down,true)&&automation.injectInputEvent(up,true);}
+                    finally{down.recycle();up.recycle();}
+                    if(clicked)break;
+                }
+                if(clicked)break;
             }
             if(!clicked)Thread.sleep(100);
         }
-        assertTrue("System VPN confirmation not found",clicked);
+        if(!clicked)automation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK);
+        assertTrue("System VPN confirmation not found: roots="+observedRoots+", buttons="+observedButtons+", enabled="+enabledButtons,clicked);
+    }
+    void quietNotification(){
+        android.app.NotificationManager manager=context.getSystemService(android.app.NotificationManager.class);
+        for(android.service.notification.StatusBarNotification posted:manager.getActiveNotifications())if(posted.getId()==1){
+            int flags=posted.getNotification().flags;
+            assertTrue("VPN notification may repeatedly alert",(flags&android.app.Notification.FLAG_ONLY_ALERT_ONCE)!=0);
+            assertTrue("VPN notification lost ongoing status",(flags&android.app.Notification.FLAG_ONGOING_EVENT)!=0);
+            return;
+        }
+        fail("VPN foreground notification missing");
     }
     @Test public void profilesDataSwitchCancelAndRevoke()throws Exception{
         assertTrue(android.os.Build.FINGERPRINT.contains("generic")||android.os.Build.MODEL.contains("sdk"));assertFalse(vpn());
@@ -97,7 +124,7 @@ public class AwgRuntimeTest {
             for(Transport type:new Transport[]{Transport.WG,Transport.AWG,Transport.WG,Transport.AWG}){
                 android.util.Log.i("FamilyConnect","Connect "+type);
                 context.startForegroundService(new Intent(context,ConnectionService.class).setAction("connect").putExtra("transport",type.id));
-                waitState("on");assertEquals(type.id,ConnectionService.activeTransport);traffic(type);
+                waitState("on");assertEquals(type.id,ConnectionService.activeTransport);quietNotification();traffic(type);quietNotification();
                 android.util.Log.i("FamilyConnect","Disconnect "+type);
                 context.startService(new Intent(context,ConnectionService.class).setAction("disconnect"));waitState("off");clean();
             }

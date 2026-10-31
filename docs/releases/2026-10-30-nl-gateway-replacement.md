@@ -37,6 +37,13 @@ dependencies with race checks; dependency-list errors fail the job before tests.
 are unchanged. Hosted platform CI retry,
 downloaded artifact qualification, offline signing and owner runtime remain required before
 optional publication. The earlier private unsigned candidate is not the release.
+Hosted retry41207764141 passes Android carrier/contracts, AWG/audio builds, JVM and lint,
+then fails emulator acceptance: system VPN confirmation was displayed but the old
+accessibility-click helper did not confirm it. Subsequent cleanup/ownership checks fail;
+no runtime PASS is claimed. Test-only correction targets the actual system button with
+a bounded touch and safe failure counters, retaining all revoke/cleanup assertions.
+Foreground notification flags are now checked before/after real tunnel traffic.
+Instrumentation compilation and35 focused checks PASS; hosted runtime retry remains pending.
 Fresh HTTPS/signature readback: public Android beta60/update sequence1, optional policy unchanged.
 Gateway catalog4 is separate and unchanged. No server/registry/admission change or mandatory update.
 Owner says an older version is quiet; notification regression cause remains unproven without

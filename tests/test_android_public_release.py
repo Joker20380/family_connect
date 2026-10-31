@@ -71,3 +71,14 @@ def test_workflow_exports_corresponding_source_without_building_gateway():
     assert './wholedevice ./restrictedowner ./startupdiag ./sessionprofile' in android
     assert 'go test -race "${packages[@]}"' in android
     assert 'go test -race ./...' not in android
+
+
+def test_runtime_consent_harness_targets_system_button_and_checks_quiet_notification():
+    harness = (ROOT / 'clients/android/app/src/androidTest/java/com/familyconnect/app/AwgRuntimeTest.java').read_text()
+    assert '"com.android.vpndialogs".contentEquals(node.getPackageName())' in harness
+    assert 'findAccessibilityNodeInfosByViewId("android:id/button1")' in harness
+    assert 'node.isVisibleToUser()' in harness
+    assert 'automation.injectInputEvent(down,true)' in harness
+    assert 'System VPN confirmation not found: roots=' in harness
+    assert 'FLAG_ONLY_ALERT_ONCE' in harness and 'FLAG_ONGOING_EVENT' in harness
+    assert 'quietNotification();traffic(type);quietNotification();' in harness

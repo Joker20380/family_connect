@@ -126,6 +126,15 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
+          name: FamilyConnect-Android-runtime-diagnostics
+          path: |
+            android-ci-summary.json
+            android-awg-runtime.log
+            clients/android/app/build/outputs/androidTest-results/connected/**/*.xml
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
           name: FamilyConnect-Android-debug
           path: |
             clients/android/app/build/outputs/apk/debug/*.apk

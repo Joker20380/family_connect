@@ -1189,8 +1189,8 @@
       "canonical_jvm_tests": 376,
       "canonical_jvm_suites": 63,
       "lint": "PASS",
-      "focused_python_tests": 34,
-      "hosted_platform_ci": "RETRY_REQUIRED_ANDROID_JOB_SCOPE_CORRECTED",
+      "focused_python_tests": 35,
+      "hosted_platform_ci": "RUNTIME_CONSENT_HARNESS_RETRY_REQUIRED",
       "native_source_build": "REQUIRED_FOR_PUBLIC_PROVENANCE",
       "private_candidate_is_release": false,
       "signing": false,
@@ -1208,7 +1208,16 @@
       "initial_ci_run": 41207389926,
       "initial_ci_failure": "UNRELATED_SERVER_PUBLISHER_ROOT_ONLY_FIXTURE",
       "initial_ci_android_control_jvm": "PASS",
-      "android_carrier_scope": "JNI_TRANSITIVE_CARRIER_DEPENDENCIES_RACE"
+      "android_carrier_scope": "JNI_TRANSITIVE_CARRIER_DEPENDENCIES_RACE",
+      "runtime_ci_run": 41207764141,
+      "runtime_ci_source": "bab2887d616477bbdfaf667421f681c98813ee0b",
+      "hosted_jvm_and_lint": "PASS",
+      "hosted_awg_audio_build": "PASS",
+      "emulator_first_failure": "SYSTEM_VPN_CONFIRMATION_NOT_FOUND",
+      "emulator_system_dialog_observed": true,
+      "emulator_acceptance": "NOT_PASS",
+      "instrumentation_compile": "PASS",
+      "test_only_fix": "SYSTEM_BUTTON_BOUND_TOUCH_AND_SAFE_FAILURE_COUNTERS"
     }
   }
 }
