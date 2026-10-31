@@ -9,7 +9,7 @@ explicit **Server CPU / CPU сервера** and a CPU-labelled country-list per
 channel is unknown. It never invents a link speed or calls CPU total/network utilization.
 Known-capacity aggregate/estimate behavior is retained; stale/missing/wrong-country samples
 still show No data, not zero. Tooltip retains observed RX/TX and marks unknown channel usage.
-381 JVM tests/64 suites, lint, instrumentation compilation and44 focused Python checks PASS.
+381 JVM tests/64 suites, lint, instrumentation compilation and45 focused Python checks PASS.
 Hosted UI/runtime qualification, signed108 artifact and publication remain pending.
 Public/invitation version107 and Android update sequence2 remain unchanged; gateway catalog4,
 server units, keys/admission and paid ledger are untouched. Canary PAUSED; no phone debugging.

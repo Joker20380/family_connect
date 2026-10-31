@@ -9,7 +9,7 @@ explicit **Server CPU / CPU сервера** and a CPU-labelled country-list per
 channel is unknown. It never invents a link speed or calls CPU total/network utilization.
 Known-capacity aggregate/estimate behavior is retained; stale/missing/wrong-country samples
 still show No data, not zero. Tooltip retains observed RX/TX and marks unknown channel usage.
-381 JVM tests/64 suites, lint, instrumentation compilation and44 focused Python checks PASS.
+381 JVM tests/64 suites, lint, instrumentation compilation and45 focused Python checks PASS.
 Hosted UI/runtime qualification, signed108 artifact and publication remain pending.
 Public/invitation version107 and Android update sequence2 remain unchanged; gateway catalog4,
 server units, keys/admission and paid ledger are untouched. Canary PAUSED; no phone debugging.
@@ -1303,7 +1303,7 @@ Five presentation JVM cases cover unknown capacity, both languages, estimate beh
 staleness/future timestamps, wrong country and zero/saturated CPU. The real dashboard test
 also injects synthetic fresh/stale samples, checks the progress/accessibility label and
 dropdown, and captures dashboard/dropdown CPU rendering without touching an account/VPN.
-381 JVM tests/64 suites and lint PASS;44 focused Python checks PASS; instrumentation compiles.
+381 JVM tests/64 suites and lint PASS;45 focused Python checks PASS; instrumentation compiles.
 Local checks use the ordinary multi-ABI development build and the accepted CI test variant;
 the normal ARM64 clean-source/provenance release guard remains unchanged. Initial local
 harness task/ABI selection errors were corrected, not bypassed in release packaging.
@@ -1313,3 +1313,7 @@ Hosted tests/visual inspection, exact downloaded artifact, offline signing and H
 remain required before publication. No gateway/monitoring deployment, reboot, capacity guess,
 registry write, new identity or paid action. Source rollback needs no production action;
 never overwrite immutable107 with108 bytes. Manual physical acceptance remains separate.
+
+CI visual gate: export only the two fixed synthetic CPU dashboard/dropdown PNGs from
+the disposable emulator after UI tests pass. The existing physical-device refusal remains.
+This enables actual rendering review before publication; no phone debugging or server change.

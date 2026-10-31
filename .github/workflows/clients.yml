@@ -126,6 +126,12 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
+          name: FamilyConnect-Android-ui
+          path: android-ci-ui/*.png
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
           name: FamilyConnect-Android-runtime-diagnostics
           path: |
             android-ci-summary.json

@@ -50,3 +50,4 @@ state-product-https/
 # Encrypted password databases and key files are private, even when encrypted.
 *.kdbx
 *.keyx
+android-ci-ui/

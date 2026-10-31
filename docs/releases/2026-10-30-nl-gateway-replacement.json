@@ -1282,7 +1282,7 @@
       "unknown_channel_capacity": "NOT_GUESSED",
       "jvm_tests": 381,
       "jvm_suites": 64,
-      "focused_python_tests": 44,
+      "focused_python_tests": 45,
       "lint": "PASS",
       "instrumentation_compile": "PASS",
       "hosted_runtime": "PENDING",
@@ -1296,7 +1296,8 @@
       "server_changes": false,
       "registry_changes": false,
       "canary": "PAUSED",
-      "phone_debugging": "NOT_USED"
+      "phone_debugging": "NOT_USED",
+      "ui_capture": "TWO_FIXED_SYNTHETIC_EMULATOR_PNGS_EXPORTED_FOR_REVIEW"
     }
   }
 }

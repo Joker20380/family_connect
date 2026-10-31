@@ -23,6 +23,12 @@ def main():
     subprocess.run(gradle + [":app:connectedFriendsAndroidTest",
         "-Pandroid.testInstrumentationRunnerArguments.fcInvitationCi=true",
         "-Pandroid.testInstrumentationRunnerArguments.class=" + ",".join("com.familyconnect.app." + c for c in classes)], cwd=build, check=True)
+    images = ROOT / "android-ci-ui"
+    images.mkdir(exist_ok=True)
+    for name in ("dashboard-cpu-load.png", "server-row-cpu-load.png"):
+        subprocess.run(["adb", "-s", serial, "pull",
+            "/sdcard/Android/data/com.familyconnect.app.friends/files/ui-acceptance/" + name,
+            str(images / name)], check=True)
 
 if __name__ == "__main__":
     main()

@@ -71,6 +71,17 @@ def test_server_load_ui_uses_one_fresh_country_bound_presentation():
     assert 'channel utilization unknown' in model
 
 
+def test_load_screenshots_export_only_from_disposable_emulator():
+    helper = (ROOT / 'pilot/android-awg/friends_ci.py').read_text()
+    assert 'os.environ.get("GITHUB_ACTIONS") != "true"' in helper
+    assert 'if not serial.startswith("emulator-"):' in helper
+    assert 'for name in ("dashboard-cpu-load.png", "server-row-cpu-load.png"):' in helper
+    assert '["adb", "-s", serial, "pull"' in helper
+    workflow = (ROOT / '.github/workflows/clients.yml').read_text()
+    assert 'name: FamilyConnect-Android-ui' in workflow
+    assert 'path: android-ci-ui/*.png' in workflow
+
+
 def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
     reference = json.loads((ROOT / 'clients/shared/android106-reference.json').read_text())
     changes = {'clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java',
