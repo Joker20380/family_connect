@@ -36,7 +36,7 @@
   "task": "NL-REPLACEMENT-20261030",
   "scope": "AVAILABILITY_RESTORATION_NOT_PRODUCT_CHECKPOINT",
   "status": "BLOCKED_NL_REPLACEMENT",
-  "blocker": "CONTROL_PLANE_READBACK_UNAVAILABLE",
+  "blocker": "RU_INTERMITTENT_UNRESOLVED",
   "initial_blocker": "BLOCKED_NEW_HOST_OS",
   "target": {
     "ipv4": "185.10.158.212",
@@ -233,15 +233,15 @@
     "observation_scope": "SUCCESSFUL_SERVER_GATES_BEFORE_LATE_RU_UNAVAILABILITY_NOT_CURRENT_RU_HEALTH"
   },
   "publication": {
-    "catalog": "PUBLISHED_INITIAL_READBACK_PASS_LATER_CONTROL_PLANE_UNAVAILABLE",
+    "catalog": "CATALOG4_RECONCILED_READ_ONLY_NO_NEW_PUBLICATION",
     "new_sequence": 4,
     "current_sequence": 4,
     "restricted_materials": "CURRENT_CANONICAL_READINESS_IMPORT_ACK_SNAPSHOT_PASS",
     "android106_new_endpoint": "ANDROID_PARSER_PASS_ACTUAL_DEVICE_OWNER_SMOKE_PENDING",
     "apk_update": false,
     "ru_endpoint_configuration": "UNCHANGED",
-    "monitoring_inventory": "NEW_NL_CONFIGURED_LAST_PUBLIC_SAMPLES_FRESH_LATER_RU_UNAVAILABLE",
-    "sequence_observation": "LAST_CONFIRMED_PUBLICATION_AND_AUTHENTICATED_READBACK_BEFORE_OUTAGE"
+    "monitoring_inventory": "NEW_NL_CONFIGURED_FRESH_PUBLIC_SAMPLES_OBSERVED_1120_UTC",
+    "sequence_observation": "FRESH_SIGNED_CATALOG_READBACK_2026_10_31_112656_UTC"
   },
   "protected_scope": {
     "canary": "PAUSED",
@@ -321,7 +321,8 @@
     "gateway_start_count_scope": "THIS_31_OCTOBER_CONTINUATION",
     "probe": "RETAINED_ENROLLED_NONREVOKED_DISCONNECTED",
     "canonical_material": "VALID_AT_READBACK_ONLY_SCHEDULES_PAUSED",
-    "directory_expiry_utc": "2026-10-31T13:33:33.753314361Z"
+    "directory_expiry_utc": "2026-10-31T13:33:33.753314361Z",
+    "observation_scope": "HISTORICAL_PRE_JOIN_STATE_SUPERSEDED_BY_RU_CONTROL_PLANE_CONTINUATION"
   },
   "publisher_recovery_continuation": {
     "entry_local_and_remote_main": "edadd7fe050147d05dc976af9530234a2b6896ff",
@@ -534,7 +535,7 @@
     "catalog_publication": "NOT_RUN",
     "owner_smoke": "NOT_RUN"
   },
-  "next_action": "RESTORE_RU_SSH_HTTPS_RECONCILE_CATALOG4_CURRENT_MATERIAL_SCHEDULES_THEN_OWNER_SMOKE_SAME_OPERATION",
+  "next_action": "OBTAIN_RU_PROVIDER_CONSOLE_RESOLVE_INTERMITTENT_HOST_GATE_RECONFIRM_CURRENT_STATE_THEN_OWNER_SMOKE_NO_REPUBLICATION",
   "checks": {
     "strict_json": "PASS",
     "targeted_privacy_secret_scan": "PASS",
@@ -593,7 +594,7 @@
     "data_plane": "NOT_RUN",
     "scope": "HISTORICAL_PRE_OWNER_EXCEPTION_SUPERSEDED_BY_FLEET_PROBE_CONTINUATION"
   },
-  "last_observed_utc": "2026-10-31T10:56:30.077114+00:00",
+  "last_observed_utc": "2026-10-31T11:27:24Z",
   "fleet_probe_continuation": {
     "entry_local_and_remote_main": "f978a4e2a19d612b9cd5f3a3a4e862324745260b",
     "observed_utc": "2026-10-31T09:50:12.264119+00:00",
@@ -866,6 +867,126 @@
       "authenticated_challenge": "HTTP_504",
       "final_full_ssh_readback": "TIMEOUT_120_SECONDS",
       "fresh_ru_health": "NOT_CONFIRMED"
+    },
+    "observation_scope": "HISTORICAL_JOIN_CUTOVER_AND_INITIAL_RU_OUTAGE_CURRENT_READBACK_IN_RU_CONTROL_PLANE_CONTINUATION"
+  },
+  "ru_control_plane_continuation": {
+    "entry_local_and_remote_main": "26b347c2673af89c4f04704d2334485ddd947cce",
+    "observed_utc": "2026-10-31T11:27:24Z",
+    "classification": "RU_INTERMITTENT_UNRESOLVED",
+    "root_cause": "NOT_PROVEN",
+    "provider_console": "UNAVAILABLE_TO_SESSION_NOT_RUN",
+    "host_observation_route": "STRICT_PINNED_SSH_NOT_CONSOLE",
+    "service_restarts": 0,
+    "service_reloads": 0,
+    "host_reboots": 0,
+    "configuration_changes": 0,
+    "source_changes": false,
+    "recovery_action": "NONE_ACCESS_RETURNED_WITHOUT_INTERVENTION",
+    "local_stall": {
+      "direct_backend": "TIMEOUT_5_SECONDS",
+      "proxy_challenge": "TIMEOUT_5_SECONDS",
+      "static_monitor_http": 200,
+      "cpu_iowait_percent": [
+        81,
+        96,
+        85
+      ],
+      "blocked_process_count": 5,
+      "causal_attribution": "NOT_PROVEN"
+    },
+    "resource_readback": {
+      "api_restarts": 0,
+      "api_fd_count": 5,
+      "api_memory_or_pid_limit_events": 0,
+      "api_oom_events": 0,
+      "proxy_restarts": 0,
+      "proxy_configuration_valid": true,
+      "kernel_oom_storage_conntrack_errors_in_bounded_window": 0,
+      "filesystem_used_percent": 75,
+      "inodes_used_percent": 9,
+      "conntrack_count": 870,
+      "conntrack_max": 65536,
+      "ntp_synchronized": true
+    },
+    "database": {
+      "quick_check": "PASS",
+      "foreign_key_check": "PASS",
+      "devices": 57,
+      "invites": 111,
+      "restricted_grants": 2,
+      "direct_writes": 0,
+      "ephemeral_api_challenge_records": "EXISTING_AUTHENTICATION_CONTRACT_ONLY"
+    },
+    "external_acceptance": {
+      "operator_consecutive_samples": 3,
+      "new_nl_consecutive_samples": 3,
+      "first_utc": "2026-10-31T11:23:33Z",
+      "last_utc": "2026-10-31T11:25:10Z",
+      "ssh_execution": "PASS",
+      "tls_8443": "PASS",
+      "real_challenge": "PASS",
+      "signed_device_status": "PASS",
+      "http_504_count": 0,
+      "max_ssh_seconds": 1.857,
+      "max_challenge_seconds_including_relay": 1.072,
+      "private_key_copied_to_nl": false,
+      "agent_forwarding": false
+    },
+    "localhost_recheck": {
+      "observed_utc": "2026-10-31T11:27:24Z",
+      "direct_backend": "CHALLENGE_AND_SIGNED_STATUS_PASS",
+      "proxy": "VERIFIED_TLS_CHALLENGE_AND_SIGNED_STATUS_PASS",
+      "max_http_seconds": 0.115,
+      "console_path_used": false
+    },
+    "catalog": {
+      "sequence": 4,
+      "sha256": "214cb6a3611b5c05117dd2ddfbfbb2f8add0603c680368a9299b34cd28214922",
+      "signature": "PASS",
+      "nl_endpoint": "185.10.158.212",
+      "ru_entry": "UNCHANGED",
+      "publications_this_continuation": 0,
+      "sequence5": false
+    },
+    "materials": {
+      "current_validation": "PASS",
+      "actual_ssh_snapshot": "PASS_EXIT0_NO_STDERR",
+      "ru_nl_directory_equal": true,
+      "crl": 27226,
+      "minimum_crl": 27226,
+      "leaf_crl_expiry_utc": "2026-10-31T13:32:00Z",
+      "directory_sha256": "77c55687463798ddce5257d7adf9c6df9245524a07e61eff9a2a6902eb55acf4",
+      "directory_expiry_utc": "2026-10-31T14:23:33.874307291Z",
+      "renewal_evaluation": "NOOP",
+      "refresh_operations": 0
+    },
+    "schedules": {
+      "renewal": "ACTIVE_WAITING",
+      "read_only_sync": "ACTIVE_WAITING",
+      "last_workers": "SUCCESS",
+      "publisher": "EXISTING_INTEGRATED_ROTATION_ACTIVE",
+      "legacy_sync": "INACTIVE",
+      "controller": "COMMITTED",
+      "active_node_owners": 0
+    },
+    "new_nl": "CRITICAL_UNITS_ACTIVE_EXACT_GATEWAY_ZERO_RESTARTS",
+    "old_nl": "ACCEPTED_FENCED_STATE_RETAINED_NOT_REINVESTIGATED",
+    "fleet_probe": "EXISTING_UNCHANGED_NON_REVOKED_NO_MESH_RETRY",
+    "paid_subscriptions": 0,
+    "paid_events": 0,
+    "canary": "PAUSED",
+    "owner_smoke": "NOT_RUN",
+    "owner_prompt_issued": false,
+    "validation_scope": "DOCUMENTATION_ONLY_NO_PRODUCT_BUILD_OR_FULL_HISTORICAL_SUITE",
+    "checks": {
+      "strict_json": "PASS",
+      "privacy_and_private_value_scan": "PASS",
+      "staged_markdown_links": "PASS_4_DOCUMENTS_470_LINKS",
+      "public_source_guard": "PASS_3162_INDEX_ENTRIES_0_BLOCKED",
+      "staged_scope": "PASS_5_EXISTING_DOCUMENTS",
+      "git_diff_check": "PASS",
+      "unrelated_work": "PRESERVED_INCLUDING_PRE_EXISTING_UNSTAGED_LINK_ERROR"
     }
   }
 }

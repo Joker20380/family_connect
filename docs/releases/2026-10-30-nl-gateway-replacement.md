@@ -1,16 +1,18 @@
 # NL production gateway replacement — 30 October 2026
 
-## Current result — join fixed and catalog published; final RU readback unavailable
+## Current result — catalog4 reconciled; intermittent RU/console gate unresolved
 
-Observed 2026-10-31T10:49:49.137394+00:00. Same NL-REPLACEMENT-20261030 continuation, not a product checkpoint.
+Observed 2026-10-31T11:27:24Z. Same NL-REPLACEMENT-20261030 continuation, not a product checkpoint.
 
-**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / CONTROL_PLANE_READBACK_UNAVAILABLE.**
-Dedicated gateway join is fixed and MESH data-plane PASS. Catalog4 publication and initial
-authenticated NL/RU readbacks PASS. A later availability failure now prevents final live
-readback: RU SSH/public HTTPS had timeouts from both the operator and new NL. Reachability
-is intermittent: a later SSH echo and monitoring GET returned, but authenticated API challenge
-returned HTTP504 and the bounded full SSH readback did not complete. The failing network/host
-hop is not localized. Do not issue the owner smoke prompt yet.
+**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / RU_INTERMITTENT_UNRESOLVED.**
+RU access returned without a service restart or reboot. Three consecutive bounded samples
+from both operator and new NL passed SSH execution, verified TLS, real fleet-probe challenge
+and signed device-status readback at11:23–11:25UTC. Catalog4/signature/new NL endpoint and
+unchanged RU entry were reconciled read-only at11:26:56UTC; no publication or sequence5.
+However, earlier RU localhost backend and proxy challenges timed out during81–96% I/O-wait,
+while static monitoring returned200. The root cause is not proven. Provider-console access
+is unavailable to this session; the requested independent console gate is NOT_RUN, not
+replaced by SSH. Owner smoke remains blocked pending that gate and RU stability confirmation.
 
 New NL **185.10.158.212** has accepted AWG/TCP and now real production-bound MESH
 DNS/HTTPS/egress acceptance. Reused **FLEET_MESH_PROBE_1**; no second identity/invitation,
@@ -27,15 +29,66 @@ Signed catalog **4** was published; initial authenticated NL readback returned t
 RU entry and probe assignment remain unchanged. Actual Android catalog parser PASS without
 APK update; Android106 device receipt/owner smoke remains **NOT_RUN**, not implied by parser
 acceptance. Prepared routing artifact and mailbox/monitoring target updates are deployed.
-At the last successful RU readback, canonical profile/certificate/CRL were current, floor
-**27226**, synchronized directory/actual SSH snapshot PASS and renewal NOOP. Normal renewal
-and read-only sync timers were active; their later execution cannot now be freshly verified.
+Fresh11:26:56UTC readback validates canonical profile/certificate/CRL, floor **27226**,
+RU/NL directory equality and actual SSH snapshot. Renewal evaluates NOOP; no material refresh
+is needed at that observation. Normal renewal/read-only sync timers are active/waiting,
+last workers succeeded, controller COMMITTED and neither node has an active operation owner.
 New NL remains active with integrated publisher rotation; no separate publisher timer.
 Old NL remains **FENCED**. No rollback/catalog rewrite or RU reboot was attempted.
 Paid ledger **0/0**, payments/revenue0, cohort0/10. **BETA-0-CANARY-1 PAUSED**;
-paid-canary, subscription events and Android stage0 stay off. Restore RU SSH/HTTPS access,
-reconcile the already published catalog and current material/schedules, then owner AWG/TCP/
-Auto-MESH smoke in this same operation. No blind publication retry. Not NL_REPLACEMENT_LIVE.
+paid-canary, subscription events and Android stage0 stay off. Obtain the RU provider console
+and resolve the remaining intermittent-host acceptance gate, then owner AWG/TCP/Auto-MESH
+smoke in this same operation. No blind publication retry. Not NL_REPLACEMENT_LIVE.
+
+### RU read-only reconciliation — 31 October11:20–11:27UTC
+
+Continuation from main `26b347c2673af89c4f04704d2334485ddd947cce`. No product source,
+binary, host configuration, service restart/reload, reboot, catalog, identity or invitation
+change. Real challenge/device-status checks reuse FLEET_MESH_PROBE_1; only the existing
+API's short-lived challenge records are exercised, not registry/device/grant mutation.
+
+- Provider web/serial/VNC console: **UNAVAILABLE_TO_SESSION / NOT_RUN**. No provider access
+  credential was found in the selected retained receipts; no provider identity is guessed.
+  Host and localhost observations below use strict pinned SSH, not a claimed console session.
+- At11:20UTC both external origins reached TCP22/443/8443 and SSH banner. Verified product
+  HTTPS is on8443;443 belongs to the pre-existing VPN transport, not the API. Its generic
+  IP-certificate TLS probe failed verification, so it is not counted as an API TLS failure.
+- RU localhost at11:23UTC: static monitoring200, direct backend challenge and proxied
+  challenge each exceeded the5s bound. Concurrent vmstat samples showed81/96/85% I/O-wait,
+  active swap I/O and5 blocked processes. This is a real local symptom, not proof of a
+  provider-only block, corrupt database, OOM, leaking process or specific resource limit.
+- API artifact remains `44a6b50f1a1ce00fd74f53e0d35c5937c6b5f5c2a561fc94b7a0150f39149204`;
+  same PID, NRestarts0,5 descriptors, no memory/pid-limit or OOM event. Exact isolated
+  proxy configuration validates; proxy restart count0. No matching failure in inspected
+  bounded proxy/API logs; absence of a log entry does not explain the earlier504.
+- Database read-only quick_check and foreign_key_check PASS. Registry counts unchanged:
+  57 devices,111 invites,2 restricted grants; paid subscriptions/events0/0. Root filesystem
+  75% used, inodes9%; clock synchronized, no OOM/storage/kernel/conntrack-full error found
+  in the bounded kernel window. Conntrack870/65536. No firewall/conntrack flush.
+- Three consecutive samples per external origin at11:23:33,11:24:22,11:25:10UTC PASS:
+  SSH command, trusted TLS, real challenge and signature-authenticated device-status.
+  Six samples total; no504; longest SSH1.857s and challenge round trip1.072s, including
+  relay overhead for the NL source. NL-origin SSH uses a local-key ProxyCommand; private
+  keys remain on the operator workstation, no agent forwarding or key copy to NL.
+- Subsequent bounded I/O sampling fell to1.0–3.8% I/O-wait; API rejected malformed requests
+  promptly as expected. At11:27:20–11:27:24UTC both direct localhost backend and local proxy
+  passed actual challenge plus signed device-status; maximum individual local HTTP time
+  0.115s. These successful windows do not prove the intermittent fault cannot recur.
+
+Read-only reconciliation at11:26:56UTC: exact catalog4 SHA256
+`214cb6a3611b5c05117dd2ddfbfbb2f8add0603c680368a9299b34cd28214922`, signature PASS,
+NL185.10.158.212 and RU entry unchanged. No catalog write or publication. Actual RU→new-NL
+forced SSH snapshot exit0/no stderr, strict schema/profile/certificate/CRL/directory PASS,
+CRL/floor27226, RU/NL directory equality. Leaf/CRL expire13:32UTC; directory14:23:33UTC;
+renewal NOOP, no refresh performed. Normal renewal and read-only sync timers active/waiting,
+last workers success, controller COMMITTED, no active node owners. New NL accepted binary
+and critical services remain active with0 restarts; no gateway-join or MESH probe repeated.
+Old NL fencing and paid/canary restrictions remain unchanged.
+
+**Remaining gate:** `RU_INTERMITTENT_UNRESOLVED`. Obtain the provider console and correlate
+host/network/storage evidence if the stall recurs; do not restart an apparently recovered
+service without evidence or reboot without the console/backup/narrow-repair gates.
+Owner AWG/TCP/Auto-MESH smoke NOT_RUN. No recovery or rollback action was applied.
 
 ### Diagnosis and smallest proven fix
 
@@ -123,7 +176,7 @@ Do not call this NL_REPLACEMENT_LIVE yet. If published NL fails before owner PAS
 failed NL admission via the supported catalog fallback; do not re-enable the old server
 or restore the old RU database. No rollback invoked; catalog publication itself was verified.
 
-### Late external availability blocker
+### Historical late external availability blocker — superseded by RU readback above
 
 After catalog4 publication/initial authenticated readback and successful actual snapshot,
 the final administrative verification encountered RU SSH banner timeouts. Public monitoring
@@ -135,7 +188,7 @@ and a120s full SSH verification did not complete. A static monitoring response a
 API acceptance. This is not a Telemost join regression; the affected network/host hop is unproven. No provider blame, OOM or
 application cause is inferred. No RU reboot, firewall change or neighbouring-service action.
 
-Current stop: **CONTROL_PLANE_READBACK_UNAVAILABLE**. Already published catalog4 and its
+At that observation the stop was **CONTROL_PLANE_READBACK_UNAVAILABLE**. Already published catalog4 and its
 initial PASS receipts are retained, not blindly republished or claimed rolled back. Latest
 RU schedules/ledger/journal cannot be freshly queried during the outage; their last accepted
 values remain explicitly time-bounded. New NL services/probe custody stay intact and old NL

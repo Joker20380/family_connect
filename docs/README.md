@@ -2,13 +2,15 @@
 
 ## Current operational restoration
 
-**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / CONTROL_PLANE_READBACK_UNAVAILABLE.**
-Dedicated gateway join is fixed and MESH data-plane PASS. Catalog4 publication and initial
-authenticated NL/RU readbacks PASS. A later availability failure now prevents final live
-readback: RU SSH/public HTTPS had timeouts from both the operator and new NL. Reachability
-is intermittent: a later SSH echo and monitoring GET returned, but authenticated API challenge
-returned HTTP504 and the bounded full SSH readback did not complete. The failing network/host
-hop is not localized. Do not issue the owner smoke prompt yet.
+**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / RU_INTERMITTENT_UNRESOLVED.**
+RU access returned without a service restart or reboot. Three consecutive bounded samples
+from both operator and new NL passed SSH execution, verified TLS, real fleet-probe challenge
+and signed device-status readback at11:23–11:25UTC. Catalog4/signature/new NL endpoint and
+unchanged RU entry were reconciled read-only at11:26:56UTC; no publication or sequence5.
+However, earlier RU localhost backend and proxy challenges timed out during81–96% I/O-wait,
+while static monitoring returned200. The root cause is not proven. Provider-console access
+is unavailable to this session; the requested independent console gate is NOT_RUN, not
+replaced by SSH. Owner smoke remains blocked pending that gate and RU stability confirmation.
 
 New NL **185.10.158.212** has accepted AWG/TCP and now real production-bound MESH
 DNS/HTTPS/egress acceptance. Reused **FLEET_MESH_PROBE_1**; no second identity/invitation,
@@ -25,15 +27,16 @@ Signed catalog **4** was published; initial authenticated NL readback returned t
 RU entry and probe assignment remain unchanged. Actual Android catalog parser PASS without
 APK update; Android106 device receipt/owner smoke remains **NOT_RUN**, not implied by parser
 acceptance. Prepared routing artifact and mailbox/monitoring target updates are deployed.
-At the last successful RU readback, canonical profile/certificate/CRL were current, floor
-**27226**, synchronized directory/actual SSH snapshot PASS and renewal NOOP. Normal renewal
-and read-only sync timers were active; their later execution cannot now be freshly verified.
+Fresh11:26:56UTC readback validates canonical profile/certificate/CRL, floor **27226**,
+RU/NL directory equality and actual SSH snapshot. Renewal evaluates NOOP; no material refresh
+is needed at that observation. Normal renewal/read-only sync timers are active/waiting,
+last workers succeeded, controller COMMITTED and neither node has an active operation owner.
 New NL remains active with integrated publisher rotation; no separate publisher timer.
 Old NL remains **FENCED**. No rollback/catalog rewrite or RU reboot was attempted.
 Paid ledger **0/0**, payments/revenue0, cohort0/10. **BETA-0-CANARY-1 PAUSED**;
-paid-canary, subscription events and Android stage0 stay off. Restore RU SSH/HTTPS access,
-reconcile the already published catalog and current material/schedules, then owner AWG/TCP/
-Auto-MESH smoke in this same operation. No blind publication retry. Not NL_REPLACEMENT_LIVE.
+paid-canary, subscription events and Android stage0 stay off. Obtain the RU provider console
+and resolve the remaining intermittent-host acceptance gate, then owner AWG/TCP/Auto-MESH
+smoke in this same operation. No blind publication retry. Not NL_REPLACEMENT_LIVE.
 
 [NL restoration report](releases/2026-10-30-nl-gateway-replacement.md) and
 [sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json).
