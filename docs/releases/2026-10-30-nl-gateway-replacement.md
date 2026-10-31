@@ -1,6 +1,156 @@
 # NL production gateway replacement — 30 October 2026
 
-## Current result — permanent fleet probe enrolled, dedicated gateway join failed
+## Current result — join fixed and catalog published; final RU readback unavailable
+
+Observed 2026-10-31T10:49:49.137394+00:00. Same NL-REPLACEMENT-20261030 continuation, not a product checkpoint.
+
+**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / CONTROL_PLANE_READBACK_UNAVAILABLE.**
+Dedicated gateway join is fixed and MESH data-plane PASS. Catalog4 publication and initial
+authenticated NL/RU readbacks PASS. A later availability failure now prevents final live
+readback: RU SSH/public HTTPS had timeouts from both the operator and new NL. Reachability
+is intermittent: a later SSH echo and monitoring GET returned, but authenticated API challenge
+returned HTTP504 and the bounded full SSH readback did not complete. The failing network/host
+hop is not localized. Do not issue the owner smoke prompt yet.
+
+New NL **185.10.158.212** has accepted AWG/TCP and now real production-bound MESH
+DNS/HTTPS/egress acceptance. Reused **FLEET_MESH_PROBE_1**; no second identity/invitation,
+owner identity, paid event or APK build. Probe retained non-revoked in encrypted custody.
+
+Join cause: **PRE_CONNECT_OPERATOR_CONTROL_MISSING**. The relative operator-control
+boundary was absent in the replacement service working directory. Restoring the exact
+retained seven-file boundary fixed pre-Connect configuration rejection; gateway source,
+binary, trust, signaling and service environment are unchanged. Direct Telemost join PASS,
+then the sole full MESH retry PASS: registration, Family TLS, three DNS queries, four
+verified HTTPS streams, new NL egress and bounded cleanup. Three stable samples, zero restarts.
+
+Signed catalog **4** was published; initial authenticated NL readback returned the new endpoint,
+RU entry and probe assignment remain unchanged. Actual Android catalog parser PASS without
+APK update; Android106 device receipt/owner smoke remains **NOT_RUN**, not implied by parser
+acceptance. Prepared routing artifact and mailbox/monitoring target updates are deployed.
+At the last successful RU readback, canonical profile/certificate/CRL were current, floor
+**27226**, synchronized directory/actual SSH snapshot PASS and renewal NOOP. Normal renewal
+and read-only sync timers were active; their later execution cannot now be freshly verified.
+New NL remains active with integrated publisher rotation; no separate publisher timer.
+Old NL remains **FENCED**. No rollback/catalog rewrite or RU reboot was attempted.
+Paid ledger **0/0**, payments/revenue0, cohort0/10. **BETA-0-CANARY-1 PAUSED**;
+paid-canary, subscription events and Android stage0 stay off. Restore RU SSH/HTTPS access,
+reconcile the already published catalog and current material/schedules, then owner AWG/TCP/
+Auto-MESH smoke in this same operation. No blind publication retry. Not NL_REPLACEMENT_LIVE.
+
+### Diagnosis and smallest proven fix
+
+Retained failed evidence was inspected before any new live attempt: no ROOM_RESOLVED,
+SIGNALING_CONNECTED, initial-hello, SERVER_HELLO or CARRIER evidence. Exact retained starter
+source revealed an earlier pre-Connect configuration check; therefore the original
+Connect-only boundary was incomplete. An operator-only harness reproduced
+`mux_profile_configuration` with zero network calls and zero room creations. The selector
+is relative to the service working directory; the replacement lacked its seven-file
+root-controlled operator boundary. Read-only export from the still-fenced old node recovered
+exact bytes; modes/boundary restored, no broad old-host configuration clone or policy change.
+The repaired local preflight reached the intended invalid-room sentinel, still without
+network or room creation. No product source changed and no gateway rebuild occurred.
+
+Accepted gateway remains SHA256
+`f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef`.
+Retained source capsule inventory SHA256
+`27b54a9dd167c3b6af639bb03864f4d7d121c0e8b96c90eccb45a198c936f117`.
+Restored control inventory SHA256
+`265498d55e01c267815de9c08d44b735fda41decfd6216f279f2f61691664679`.
+Private diagnostic harness includes eight safe-reason/redaction/cause-preservation cases,
+all PASS. Its binary SHA256 is
+`d7721526339b70c5dca107f9796aa8610409804389cec98e8973e594fc1b0829`;
+this is an operator diagnostic, not a replacement production artifact.
+
+### Direct join and one full retry
+
+Exactly one diagnostic room was created through the accepted provider. Exact Go REST
+transport: A/AAAA both resolve, selected IPv4, verified TLS/HTTP200 and required fields PASS.
+Media TCP/TLS selected IPv4 PASS; exact Origin WebSocket handshake101 PASS. Local peer/VP8
+setup, initial hello, SERVER_HELLO, ICE and pub/sub connection PASS; carrier ready in1617ms.
+No proxy, CA, time, IPv6 route or provider egress defect was found. No speculative UA,
+capabilities, signaling, Family TLS or forwarding edits. Diagnostic session/unit closed and
+private evidence archived; no retained diagnostic listener or temporary credential.
+
+Current materials had sufficient headroom: no additional renewal operation in this
+continuation. One exact gateway start produced a fresh normal publisher generation, then
+accepted read-only sync copied it to RU. Probe readiness challenge/fetch, native validation,
+import and durable ACK/readback PASS using the same identity and current certificate.
+The sole full MESH retry completed2026-10-31T10:24:51Z with exit0/empty stderr:
+bootstrap auth → dedicated room → gateway join → descriptor → registration/Family TLS →
+three DNS queries, four HTTPS streams with end-site TLS verification and exact new NL egress.
+No owner identity used. Local process/interface cleanup PASS. Server release completed
+20.7s after client exit through bounded reliable-frame exhaustion; later close/FAILED labels
+are teardown evidence, not an in-flight data-plane failure. All broker cleanup completed;
+no retained dedicated session or TUN. Probe is non-revoked, invitation exhausted; encrypted
+custody/readback PASS and last-success timestamp retained for fleet reuse.
+
+Three bounded post-MESH samples: stable gateway/ordinary-service PIDs, NRestarts0, no abnormal
+memory increase, OOM or kernel/storage errors. Canonical certificate/CRL expire
+2026-10-31T13:32:00Z at this observation; CRL/floor27226. Directory issued
+2026-10-31T10:23:35.872977678Z, expires2026-10-31T14:23:33.874307291Z, SHA256
+`77c55687463798ddce5257d7adf9c6df9245524a07e61eff9a2a6902eb55acf4`.
+Actual post-publication SSH snapshot exit0/empty stderr, strict schema/signatures and RU/NL
+directory equality PASS; normal renewal NOOP and prior transaction COMMITTED/no active owner.
+Normal renewal15min and read-only directory sync30s schedules active/waiting. Publisher
+uses accepted integrated3h rotation/4h lifetime, not a separate timer. Legacy credential-only
+timer was briefly included in schedule activation, but its existing condition prevented
+any service execution; it is now inactive/disabled. No legacy write or old-node contact.
+
+### Cutover and remaining owner gate
+
+Fresh encrypted RU application/infrastructure backup:54/40 files, six SQLite checks PASS;
+separate current route/artifact/unit metadata encrypted backup and authenticated readback.
+Previously qualified endpoint-routing HTTP artifact is now installed:47368bytes, SHA256
+`44a6b50f1a1ce00fd74f53e0d35c5937c6b5f5c2a561fc94b7a0150f39149204`.
+It supersedes the47091byte active artifact only for this accepted route deployment; only
+catalog-driven registration and chat-sync members differ. Original artifact/drop-ins kept
+for rollback. New NL SSH pin verified; actual forced registration using the existing fleet
+probe PASS. Mailbox bootstrap/ACK preserves its public identity; chat sync PASS. Monitoring
+now observes the new NL, with fresh RU/NL samples; old NL remains quarantined, not zero users.
+
+One offline signed, atomic, monotonic catalog publication **3→4**:
+`214cb6a3611b5c05117dd2ddfbfbb2f8add0603c680368a9299b34cd28214922`.
+Python signature/schema and actual Android Java parser PASS; no APK build/update. Real
+authenticated HTTPS configuration readbacks PASS for NL and RU. NL selects185.10.158.212;
+RU gateway entry/assignment unchanged, signing key/schema/AWG public-key/TCP credential
+contracts unchanged. Ordinary provisioning reuses the one fleet identity/transport key;
+no new device/invite or paid record. Android106 itself has not yet been exercised.
+
+AWG/TCP prior synthetic data-plane acceptance retained; current services active. Current
+Restricted/MESH server acceptance PASS; owner AWG/TCP/Auto-MESH all NOT_RUN. The late RU
+availability failure below must be resolved before the owner smoke prompt.
+Do not call this NL_REPLACEMENT_LIVE yet. If published NL fails before owner PASS, stop
+failed NL admission via the supported catalog fallback; do not re-enable the old server
+or restore the old RU database. No rollback invoked; catalog publication itself was verified.
+
+### Late external availability blocker
+
+After catalog4 publication/initial authenticated readback and successful actual snapshot,
+the final administrative verification encountered RU SSH banner timeouts. Public monitoring
+still returned fresh RU/NL samples at10:44:34/10:44:36UTC (RU CPU17.3%, NL8.8%); the next
+public HTTPS check stalled in TLS, then TCP connection establishment timed out. Independent
+checks from the new NL also time out to RU SSH/public HTTPS. A later monitoring GET and
+SSH echo intermittently returned, but the real authenticated challenge returned HTTP504,
+and a120s full SSH verification did not complete. A static monitoring response alone is not
+API acceptance. This is not a Telemost join regression; the affected network/host hop is unproven. No provider blame, OOM or
+application cause is inferred. No RU reboot, firewall change or neighbouring-service action.
+
+Current stop: **CONTROL_PLANE_READBACK_UNAVAILABLE**. Already published catalog4 and its
+initial PASS receipts are retained, not blindly republished or claimed rolled back. Latest
+RU schedules/ledger/journal cannot be freshly queried during the outage; their last accepted
+values remain explicitly time-bounded. New NL services/probe custody stay intact and old NL
+stays fenced. No owner smoke prompt until RU reachability, current catalog/materials and
+schedules are re-read. If rollback becomes required, regain the accepted control route and
+verify it; do not reactivate the old NL or invent a successful rollback.
+
+Focused route/catalog checks53 PASS; HTTP/evidence checks40 PASS/14 optional prerequisites
+skipped; exact retained HTTP candidate additionally17 PASS/14 identical optional skips.
+Skipped matrix requires native nginx or a separate pinned sync artifact; nginx and that
+artifact were not changed, and real public dispatch/SSH snapshot were separately verified.
+Strict JSON, private-value/secret scan, Markdown links, isolated staged scope and whitespace
+checks apply to this checkpoint. No Android/desktop build or historical full suite.
+
+## Historical first fleet attempt — gateway join failed, superseded
 
 Observed 2026-10-31T09:50:12.264119+00:00. Continuation of the same operation; no new product checkpoint.
 

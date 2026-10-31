@@ -2,36 +2,38 @@
 
 ## Current operational restoration
 
-**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / MESH_DATA_PLANE_FAILED.**
-The owner-authorized permanent **FLEET_MESH_PROBE_1** now exists and is retained for reuse;
-the prior missing-test-identity blocker is resolved. Exactly one production device and one
-one-use invitation were created through the accepted enrollment path. Device/transport
-binding, invitation consumption exactly1, real readiness challenge/fetch, native signature
-validation/import and durable ACK/readback PASS. No owner/tester identity was used.
+**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / CONTROL_PLANE_READBACK_UNAVAILABLE.**
+Dedicated gateway join is fixed and MESH data-plane PASS. Catalog4 publication and initial
+authenticated NL/RU readbacks PASS. A later availability failure now prevents final live
+readback: RU SSH/public HTTPS had timeouts from both the operator and new NL. Reachability
+is intermittent: a later SSH echo and monitoring GET returned, but authenticated API challenge
+returned HTTP504 and the bounded full SSH readback did not complete. The failing network/host
+hop is not localized. Do not issue the owner smoke prompt yet.
 
-Expired materials were refreshed without source changes: the already accepted bounded
-publisher worker supplied the prerequisite directory, followed by one normal renewal
-**COMMITTED** with no first cause. Current-at-readback certificate/CRL and floor are
-**27226/27226**; actual RU→new-NL SSH snapshot, synchronized directory and renewal NOOP PASS.
-Historical rollback remains ABORTED and its registry additions remain preserved.
+New NL **185.10.158.212** has accepted AWG/TCP and now real production-bound MESH
+DNS/HTTPS/egress acceptance. Reused **FLEET_MESH_PROBE_1**; no second identity/invitation,
+owner identity, paid event or APK build. Probe retained non-revoked in encrypted custody.
 
-One real MESH attempt reached authenticated bootstrap and dedicated room creation, but
-failed at **GATEWAY_JOIN**: broker `gateway_failed`, exchange stage `create`; the client
-reported `bootstrap_protocol_rejected`. Dedicated READY/registration was not reached;
-DNS/HTTPS/NL-egress were NOT_RUN, not PASS. The lower-level join cause is not yet localized.
-Broker CLEANUP/COMPLETED and local process/interface cleanup PASS; no automatic retry or
-second identity. Probe remains non-revoked in encrypted private custody; invite exhausted.
+Join cause: **PRE_CONNECT_OPERATOR_CONTROL_MISSING**. The relative operator-control
+boundary was absent in the replacement service working directory. Restoring the exact
+retained seven-file boundary fixed pre-Connect configuration rejection; gateway source,
+binary, trust, signaling and service environment are unchanged. Direct Telemost join PASS,
+then the sole full MESH retry PASS: registration, Family TLS, three DNS queries, four
+verified HTTPS streams, new NL egress and bounded cleanup. Three stable samples, zero restarts.
 
-Safe hold: old NL FENCED; new185.10.158.212 ordinary AWG/TCP remain active with earlier
-accepted data-plane evidence. Restricted gateway and integrated publisher were stopped
-after the failed attempt; three pre-stop samples had stable PID/zero restarts and no
-abnormal memory growth. Renewal/read-only sync timers remain paused. RU ordinary HTTP and
-trusted public HTTPS dispatch remain healthy with the original artifact. Catalog3 is
-byte-identical: no endpoint publication, APK change or owner smoke. Paid ledger0/0,
-payments/revenue0, cohort0/10. Leaf/CRL expire2026-10-31T13:32:00Z; directory expires
-2026-10-31T13:33:33.753314361Z. These are bounded observations, not scheduled freshness or
-running MESH acceptance. **BETA-0-CANARY-1 stays PAUSED; paid-canary, subscription events
-and Android stage0 stay off.**
+Signed catalog **4** was published; initial authenticated NL readback returned the new endpoint,
+RU entry and probe assignment remain unchanged. Actual Android catalog parser PASS without
+APK update; Android106 device receipt/owner smoke remains **NOT_RUN**, not implied by parser
+acceptance. Prepared routing artifact and mailbox/monitoring target updates are deployed.
+At the last successful RU readback, canonical profile/certificate/CRL were current, floor
+**27226**, synchronized directory/actual SSH snapshot PASS and renewal NOOP. Normal renewal
+and read-only sync timers were active; their later execution cannot now be freshly verified.
+New NL remains active with integrated publisher rotation; no separate publisher timer.
+Old NL remains **FENCED**. No rollback/catalog rewrite or RU reboot was attempted.
+Paid ledger **0/0**, payments/revenue0, cohort0/10. **BETA-0-CANARY-1 PAUSED**;
+paid-canary, subscription events and Android stage0 stay off. Restore RU SSH/HTTPS access,
+reconcile the already published catalog and current material/schedules, then owner AWG/TCP/
+Auto-MESH smoke in this same operation. No blind publication retry. Not NL_REPLACEMENT_LIVE.
 
 [NL restoration report](releases/2026-10-30-nl-gateway-replacement.md) and
 [sanitized receipt](releases/2026-10-30-nl-gateway-replacement.json).

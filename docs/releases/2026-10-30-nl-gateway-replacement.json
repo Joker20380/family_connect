@@ -36,7 +36,7 @@
   "task": "NL-REPLACEMENT-20261030",
   "scope": "AVAILABILITY_RESTORATION_NOT_PRODUCT_CHECKPOINT",
   "status": "BLOCKED_NL_REPLACEMENT",
-  "blocker": "MESH_DATA_PLANE_FAILED",
+  "blocker": "CONTROL_PLANE_READBACK_UNAVAILABLE",
   "initial_blocker": "BLOCKED_NEW_HOST_OS",
   "target": {
     "ipv4": "185.10.158.212",
@@ -219,27 +219,29 @@
     "production_health": "NOT_TRUSTED"
   },
   "acceptance": {
-    "new_host": "BASELINE_CHECKS_PASS_NOT_PRODUCT_ACCEPTANCE",
+    "new_host": "SERVER_ACCEPTANCE_PASS_OWNER_SMOKE_PENDING",
     "awg": "SYNTHETIC_HANDSHAKE_DNS_HTTPS_EGRESS_CLEANUP_PASS_IPV6_FAIL_CLOSED",
     "tcp": "SYNTHETIC_REALITY_DNS_HTTPS_EGRESS_CLEANUP_PASS",
-    "restricted_mesh": "FAIL_DEDICATED_GATEWAY_JOIN_GATEWAY_FAILED",
+    "restricted_mesh": "PRODUCTION_FLEET_PROBE_REGISTRATION_DNS_HTTPS_TLS_NL_EGRESS_CLEANUP_PASS",
     "snapshot": "ACTUAL_FORCED_SSH_EXIT_0_EMPTY_STDERR_CURRENT_MATERIAL_SCHEMA_PASS",
-    "renewal": "NORMAL_COMMITTED_NOOP_PASS_SCHEDULE_PAUSED",
-    "supporting_roles": "STARTED_PREFLIGHT_PASS_DATA_PLANE_PENDING",
+    "renewal": "NORMAL_COMMITTED_NOOP_PASS_TIMER_ACTIVE",
+    "supporting_roles": "MAILBOX_IDENTITY_AND_CHAT_SYNC_PASS_RETICULUM_RESTORED_MONITORING_FRESH",
     "firewall_nat_sysctl": "SCOPED_INGRESS_FORWARDING_NAT_VERIFIED",
     "ru_to_new_nl": "DIAGNOSTIC_INGRESS_PASS_RU_SYN_SEEN",
-    "stability": "THREE_PRE_STOP_SAMPLES_STABLE_PID_ZERO_RESTARTS_MEMORY_NOT_RISING_THEN_SAFE_STOP",
-    "owner_smoke": "NOT_RUN"
+    "stability": "THREE_POST_MESH_SAMPLES_STABLE_PID_ZERO_RESTARTS_NO_OOM_OR_ABNORMAL_MEMORY",
+    "owner_smoke": "NOT_RUN",
+    "observation_scope": "SUCCESSFUL_SERVER_GATES_BEFORE_LATE_RU_UNAVAILABILITY_NOT_CURRENT_RU_HEALTH"
   },
   "publication": {
-    "catalog": "NOT_PUBLISHED",
-    "new_sequence": null,
-    "current_sequence": 3,
-    "restricted_materials": "CANONICAL_PROMOTION_AND_ACCEPTED_RU_DIRECTORY_SYNC_PASS_SERVICE_HELD_STOPPED",
-    "android106_new_endpoint": "NOT_VERIFIED",
+    "catalog": "PUBLISHED_INITIAL_READBACK_PASS_LATER_CONTROL_PLANE_UNAVAILABLE",
+    "new_sequence": 4,
+    "current_sequence": 4,
+    "restricted_materials": "CURRENT_CANONICAL_READINESS_IMPORT_ACK_SNAPSHOT_PASS",
+    "android106_new_endpoint": "ANDROID_PARSER_PASS_ACTUAL_DEVICE_OWNER_SMOKE_PENDING",
     "apk_update": false,
     "ru_endpoint_configuration": "UNCHANGED",
-    "monitoring_inventory": "UNCHANGED"
+    "monitoring_inventory": "NEW_NL_CONFIGURED_LAST_PUBLIC_SAMPLES_FRESH_LATER_RU_UNAVAILABLE",
+    "sequence_observation": "LAST_CONFIRMED_PUBLICATION_AND_AUTHENTICATED_READBACK_BEFORE_OUTAGE"
   },
   "protected_scope": {
     "canary": "PAUSED",
@@ -251,13 +253,14 @@
       "events": 0
     },
     "paid_ledger_fresh_query": "PASS_0_SUBSCRIPTIONS_0_EVENTS",
-    "live_product_changes": "ONE_INTERNAL_PROBE_ENROLLED_CURRENT_MATERIAL_REFRESHED_MESH_FAILED_SAFE_STOP",
-    "ru_production_changes": "ONE_NORMAL_RENEWAL_COMMITTED_INTERNAL_PROBE_ENROLLED_READINESS_ACK_PASS_ORDINARY_HTTP_ACTIVE",
-    "renewal_timer": "PAUSED_ACCEPTANCE_GATE",
-    "restricted_sync_timers": "PAUSED_ACCEPTANCE_GATE",
-    "new_host_management_change": "AUTHORIZED_SSH_BASE_PACKAGES_AND_OS_UPGRADE"
+    "live_product_changes": "RESTORED_EXACT_OPERATOR_BOUNDARY_MESH_PASS_CATALOG4",
+    "ru_production_changes": "PREPARED_ROUTING_ARTIFACT_AND_MONITORING_DEPLOYED_CATALOG4_RU_ENDPOINT_UNCHANGED",
+    "renewal_timer": "ACTIVE_WAITING",
+    "restricted_sync_timers": "READONLY_DIRECTORY_ACTIVE_LEGACY_CREDENTIAL_SYNC_DISABLED",
+    "new_host_management_change": "AUTHORIZED_SSH_BASE_PACKAGES_AND_OS_UPGRADE",
+    "fresh_query_scope": "BEFORE_LATE_RU_REACHABILITY_FAILURE"
   },
-  "rollback": "PRE_PUBLICATION_SAFE_HOLD_OLD_NL_FENCED_NO_DATABASE_RESTORE",
+  "rollback": "NOT_ATTEMPTED_RU_UNREACHABLE_CATALOG4_INITIAL_READBACK_PASS_OLD_NL_FENCED",
   "restricted_recovery": {
     "manual_transactions_started": 1,
     "transaction_state": "ABORTED",
@@ -388,7 +391,7 @@
     "recovery_mode": "DISABLED_FIXED_CONFIGURATION_ARCHIVED"
   },
   "source_checkpoint": {
-    "status": "NOT_DEPLOYED",
+    "status": "DEPLOYED_ACCEPTED",
     "roles": [
       "ordinary_registration_catalog_target",
       "chat_sync_target",
@@ -403,9 +406,10 @@
     "matching_http_builds": 2,
     "candidate_size": 47368,
     "candidate_sha256": "44a6b50f1a1ce00fd74f53e0d35c5937c6b5f5c2a561fc94b7a0150f39149204",
-    "active_http_size": 47091,
-    "active_http_sha256": "dcd769986a1da7cb1662c0f73d18a88e9f73485a977db937ca5b1428c1fd1029",
-    "accepted_artifact_supersession": false
+    "active_http_size": 47368,
+    "active_http_sha256": "44a6b50f1a1ce00fd74f53e0d35c5937c6b5f5c2a561fc94b7a0150f39149204",
+    "accepted_artifact_supersession": true,
+    "previous_active_http_sha256": "dcd769986a1da7cb1662c0f73d18a88e9f73485a977db937ca5b1428c1fd1029"
   },
   "inactive_restoration": {
     "scope": "HISTORICAL_INACTIVE_STAGE_BEFORE_FENCING",
@@ -530,7 +534,7 @@
     "catalog_publication": "NOT_RUN",
     "owner_smoke": "NOT_RUN"
   },
-  "next_action": "DIAGNOSE_DEDICATED_GATEWAY_JOIN_REUSE_FLEET_MESH_PROBE_1_REVALIDATE_FRESHNESS_BEFORE_ACCEPTANCE_AND_CATALOG",
+  "next_action": "RESTORE_RU_SSH_HTTPS_RECONCILE_CATALOG4_CURRENT_MATERIAL_SCHEDULES_THEN_OWNER_SMOKE_SAME_OPERATION",
   "checks": {
     "strict_json": "PASS",
     "targeted_privacy_secret_scan": "PASS",
@@ -540,7 +544,13 @@
     "changed_markdown_links": "PASS",
     "staged_scope": "PASS_5_EXISTING_DOCUMENTS_UNRELATED_WORK_EXCLUDED",
     "git_diff_check": "PASS",
-    "publisher_package_member_hashes": "PASS"
+    "publisher_package_member_hashes": "PASS",
+    "focused_route_catalog_tests_passed": 53,
+    "http_evidence_tests_passed": 40,
+    "http_optional_skips": 14,
+    "exact_http_candidate_tests_passed": 17,
+    "exact_http_candidate_optional_skips": 14,
+    "android_catalog_parser": "PASS_WITHOUT_APK_BUILD"
   },
   "fresh_renewal": {
     "operation_label": "FRESH_NL_RENEWAL_1",
@@ -583,7 +593,7 @@
     "data_plane": "NOT_RUN",
     "scope": "HISTORICAL_PRE_OWNER_EXCEPTION_SUPERSEDED_BY_FLEET_PROBE_CONTINUATION"
   },
-  "last_observed_utc": "2026-10-31T09:50:12.264119+00:00",
+  "last_observed_utc": "2026-10-31T10:56:30.077114+00:00",
   "fleet_probe_continuation": {
     "entry_local_and_remote_main": "f978a4e2a19d612b9cd5f3a3a4e862324745260b",
     "observed_utc": "2026-10-31T09:50:12.264119+00:00",
@@ -733,6 +743,129 @@
     },
     "owner_smoke": "NOT_RUN",
     "old_nl": "FENCED",
-    "canary": "PAUSED"
+    "canary": "PAUSED",
+    "scope": "HISTORICAL_INITIAL_FLEET_ENROLLMENT_AND_FAILED_JOIN"
+  },
+  "gateway_join_continuation": {
+    "entry_local_and_remote_main": "c803a5c5343b69a02d5a545e07b825c5bc76a263",
+    "observed_utc": "2026-10-31T10:49:49.137394+00:00",
+    "status": "BLOCKED_NL_REPLACEMENT",
+    "cause": "PRE_CONNECT_OPERATOR_CONTROL_MISSING",
+    "safe_internal_error": "mux_profile_configuration",
+    "fix": "EXACT_RETAINED_SEVEN_FILE_OPERATOR_BOUNDARY_RESTORED",
+    "product_source_changed": false,
+    "gateway_rebuilt": false,
+    "retained_source_inventory_sha256": "27b54a9dd167c3b6af639bb03864f4d7d121c0e8b96c90eccb45a198c936f117",
+    "control_inventory_sha256": "265498d55e01c267815de9c08d44b735fda41decfd6216f279f2f61691664679",
+    "diagnostic": {
+      "scope": "PRIVATE_OPERATOR_HARNESS_ONLY",
+      "safe_reason_tests": 8,
+      "room_creations": 1,
+      "direct_join": "PASS",
+      "api_status": 200,
+      "websocket_status": 101,
+      "address_records": [
+        "A",
+        "AAAA"
+      ],
+      "selected_family": "IPv4",
+      "tls_verified": true,
+      "initial_hello": "PASS",
+      "server_hello": "OBSERVED",
+      "carrier_ready_ms": 1617,
+      "cleanup": "PASS",
+      "temporary_unit": "ARCHIVED"
+    },
+    "mesh": {
+      "identity": "FLEET_MESH_PROBE_1",
+      "new_identities": 0,
+      "new_invitations": 0,
+      "full_retries": 1,
+      "readiness_import_ack": "PASS",
+      "gateway_join": "PASS",
+      "descriptor": "PASS",
+      "registration": "PASS",
+      "family_tls": "PASS",
+      "dns_queries_passed": 3,
+      "https_streams_passed": 4,
+      "end_site_tls_verified": 4,
+      "new_nl_egress": "PASS",
+      "exit_code": 0,
+      "stderr_bytes": 0,
+      "cleanup": "PASS_BOUNDED_SERVER_RELEASE_AFTER_CLIENT_EXIT",
+      "server_release_delay_seconds": 20.7,
+      "active_session": false,
+      "last_successful_probe_at": "2026-10-31T10:24:51Z",
+      "custody": "RETAINED_NONREVOKED_ENCRYPTED_READBACK_PASS",
+      "invitation": "EXHAUSTED",
+      "owner_identity_used": false
+    },
+    "material": {
+      "normal_renewal_operations": 0,
+      "existing_state": "COMMITTED",
+      "snapshot": "PASS",
+      "renewal_evaluate": "NOOP",
+      "crl": 27226,
+      "minimum_crl": 27226,
+      "leaf_expires_at": "2026-10-31T13:32:00+00:00",
+      "directory_sha256": "77c55687463798ddce5257d7adf9c6df9245524a07e61eff9a2a6902eb55acf4",
+      "directory_issued_at": "2026-10-31T10:23:35.872977678Z",
+      "directory_expires_at": "2026-10-31T14:23:33.874307291Z",
+      "ru_nl_equal": true
+    },
+    "schedules": {
+      "renewal": "ACTIVE_WAITING_15_MINUTES",
+      "read_only_sync": "ACTIVE_WAITING_30_SECONDS",
+      "publisher": "INTEGRATED_ACTIVE_3_HOUR_ROTATION_4_HOUR_LIFETIME",
+      "legacy_sync": "DISABLED_CONDITION_PREVENTED_EXECUTION",
+      "pending_operation": false,
+      "temporary_write_credential": false,
+      "observation_scope": "LAST_SUCCESSFUL_READBACK_BEFORE_RU_OUTAGE"
+    },
+    "catalog": {
+      "sequence": 4,
+      "publications": 1,
+      "sha256": "214cb6a3611b5c05117dd2ddfbfbb2f8add0603c680368a9299b34cd28214922",
+      "previous_sha256": "9a9f6e0d930766555bddf54ac5c17b388cf8abf5fe5badcac1d6dc817e1ec5d2",
+      "python_validator": "PASS",
+      "android_parser": "PASS_NO_APK_BUILD",
+      "public_nl_readback": "PASS",
+      "public_ru_readback": "UNCHANGED",
+      "actual_android106_smoke": "NOT_RUN",
+      "latest_control_plane_readback": "UNAVAILABLE_AFTER_INITIAL_PASS"
+    },
+    "monitoring": "NEW_NL_FRESH_OLD_NL_QUARANTINED",
+    "old_nl": "FENCED",
+    "paid_ledger": {
+      "subscriptions": 0,
+      "events": 0,
+      "payments": 0,
+      "revenue": 0,
+      "cohort": "0/10"
+    },
+    "canary": "PAUSED",
+    "owner_smoke": {
+      "awg": "NOT_RUN",
+      "tcp": "NOT_RUN",
+      "mesh": "NOT_RUN"
+    },
+    "blocker": "CONTROL_PLANE_READBACK_UNAVAILABLE",
+    "late_availability": {
+      "operator_ssh": "BANNER_TIMEOUT",
+      "operator_https": "TLS_THEN_TCP_TIMEOUT",
+      "new_nl_to_ru_ssh": "TIMEOUT",
+      "new_nl_to_ru_https": "TIMEOUT",
+      "root_cause": "NETWORK_OR_HOST_HOP_UNLOCALIZED",
+      "last_public_ru_sample": "2026-10-31T10:44:34Z",
+      "last_public_nl_sample": "2026-10-31T10:44:36Z",
+      "latest_ru_state": "UNVERIFIED_DO_NOT_INFER_ZERO",
+      "owner_prompt_issued": false,
+      "blind_publication_retry": false,
+      "ru_reboot": false,
+      "reachability": "INTERMITTENT_SSH_ECHO_AND_MONITOR_GET_RETURNED",
+      "authenticated_challenge": "HTTP_504",
+      "final_full_ssh_readback": "TIMEOUT_120_SECONDS",
+      "fresh_ru_health": "NOT_CONFIRMED"
+    }
   }
 }
