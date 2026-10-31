@@ -1,20 +1,14 @@
 # Release distribution / Выпуски
 
-Android107 general release targets Android12+/ARM64 by explicit owner decision.
-Older Android support is not a release gate. Canonical source integration and376 JVM
-tests/lint PASS; hosted CI, offline signing and installed-runtime acceptance remain pending.
-Public updater/invitation remain beta60; accepted owner build remains106. No107 download
-has been published and no forced-update policy has changed.
-
-**31 October —107 candidate, not distributed / кандидат107, не опубликован.**
-RU: владелец разрешил общий MESH-выпуск. Кандидат107 сохраняет принятую106 и12 native-библиотек;
-исправляет повторные оповещения и обработку отказа микрофона.219 JVM-тестов и lint PASS.
-APK не подписан/не установлен; требуются CI и проверка
-обновления на телефоне без потери данных. Общий updater/приглашение остаются60, owner —106.
-EN:107 is an unsigned local candidate, not a public download or installed acceptance.
-Public updater/invitation stay60. CI, signing and device gates remain required; Android12+/ARM64 is owner-approved.
-Do not uninstall, clear data or reenroll. Canary paused.
+**31 October — beta107 publicly distributed, Android12+/ARM64.**
+The invitation page and both Android update catalogs now offer107 with MESH support and
+quiet foreground-notification updates. Hosted CI, signed APK and public HTTPS byte checks PASS.
+The owner authorized expedited general rollout without phone debugging; physical107 upgrade
+and owner runtime remain NOT_RUN. Updates are optional; install over the existing app, never
+uninstall, clear data or reenroll. Restricted admission is unchanged; canary stays PAUSED.
+RU: общий выпуск107 опубликован; Android12+, установка поверх без удаления данных.
 [Same-operation evidence](releases/2026-10-30-nl-gateway-replacement.md).
+
 
 
 **Private owner research84/code84,12.10 — not publicly distributed:**
@@ -102,11 +96,11 @@ Upgrade over existing app, never uninstall/clear data/reenroll. Tester62 is now 
 Tester long READY/ACK confirmed13:39UTC and rechecked14:55UTC; mobile reproduction pending.
 Production/default/updater/invitation remain60; immutable61 r2 remains unchanged.
 
-Android0.1.18-beta60 published 2026-10-03 after hosted CI, owner in-place acceptance and public HTTPS SHA256/signer verification. Windows0.2.15 and Linux0.2.11 distribution remains unchanged.
+Android0.1.18-beta107 published 2026-10-31 after hosted CI and public HTTPS SHA256/signer verification; physical-device acceptance remains NOT_RUN by explicit owner rollout decision. Windows0.2.15 and Linux0.2.11 distribution remains unchanged.
 
 | Channel | Distributed version | Notes |
 | --- | --- | --- |
-| Android updater / invitation | 0.1.18-beta60, code60, ARM64 | Same beta certificate; optional update; minimum1; FIELD admission separate |
+| Android updater / invitation | 0.1.18-beta107, code107, Android12+/ARM64 | Same certificate; optional; Android catalog sequence2/minimum1; MESH admission separate; owner runtime NOT_RUN |
 | Linux invitation | 0.2.11 AppImage + .deb (+ preview5b02e8cb9fde119f) | User installables; tar.gz stays advanced/manual |
 | Windows invitation / updater | 0.2.15 source2ffba77 (+ 0.2.14 compatibility fallback) | Independent signed catalog schema2/sequence11; no publisher signature; 0.2.14 kept for old Windows 10 |
 
@@ -134,14 +128,17 @@ SHA256 `3e610962da40510e0dce7a9d794f4352ba113e090e462f6d1c75d7712f965e6b`.
 [FamilyConnect-Setup-0.2.14-pilot-unsigned.exe](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.14-pilot-unsigned.exe), 49942347 bytes.
 SHA256 `7b1af167a55a977c357c47b94407916fe27d1b343d33ecb69c42b2d11b85e886`.
 
-[FamilyConnect-Test-0.1.18-beta60.apk](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta60.apk), 49412987 bytes.
-SHA256 `8ee59352e5f490aea74c3c8c8aeefd0d65bec0c261a044899d512ca376cf6104`.
+[FamilyConnect-Test-0.1.18-beta107.apk](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta107.apk),56212840 bytes.
+SHA256 `5e219e77d1a030b59c08a4e994213bc2fd4dc0689cd7fb3fb8365e81de737099`.
 Signer SHA256 `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
-Build source `5c740f2d05f725ee1bcbe63a41f886605d4c7ac4`; no publication rebuild or APK resigning.
+Build source `16c91fcc4d8347de490b95874c7a622fe258bdfb`; exact hosted artifact signed offline.
+[Codec2 source/build helper/JNI/licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta107-audio-source.tar.gz),7601671 bytes;
+SHA256 `249b86d49612b716d69e25d554579213a32cbb74d7167d652f6808f60f618a89`.
 [Signed Android catalog](https://185.251.89.19:8443/updates/android-friends-v2.json)
-uses android-field/schema1/sequence1, minimum1, mandatory_after0; expires2027-01-01 13:34:01UTC.
-Renew before expiry with a higher sequence and the existing offline root. beta59 remains unpublished.
-[FIELD publication evidence](releases/2026-10-03-field1-release-final.md#beta60-publication--2026-10-03).
+uses android-field/schema1/sequence2, minimum1, mandatory_after0; expires2027-01-29T15:40:15Z.
+Renew before expiry using a higher sequence and the existing offline root. No forced install.
+[Publication, checks and remaining physical-device gate](releases/2026-10-30-nl-gateway-replacement.md#android107-general-publication--31-october).
+
 
 [Discovery](https://185.251.89.19:8443/updates/android-friends.json) · [Android/Windows/Linux checks](releases/2026-09-26-server-list-crossplatform.ru.md) · [Windows0.2.14 checks](releases/2026-09-24-windows0214-installer.ru.md).
 
@@ -195,7 +192,7 @@ Python3.14's implicit-directory imports must not hide a broken isolated archive.
 The [client workflow](../.github/workflows/clients.yml) defines platform builds and
 release conditions. CI artifacts do not by themselves establish a release. Validate native
 UI/runtime and downloaded artifacts before signing/publishing. Windows cross-build alone
-is insufficient. The current release includes Android0.1.18-beta60, Linux0.2.11 and Windows0.2.15 Windows-channel release; see the [FIELD report](releases/2026-10-03-field1-release-final.md), [desktop cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and prior [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md).
+is insufficient. The current release includes Android0.1.18-beta107, Linux0.2.11 and Windows0.2.15 Windows-channel release; see the [FIELD report](releases/2026-10-03-field1-release-final.md), [desktop cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and prior [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md).
 
 Desktop catalogs use offline signing with increasing sequence numbers. Keep keys out of
 CI and servers; never replace an existing version/tag with different binaries.

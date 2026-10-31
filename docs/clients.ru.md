@@ -236,11 +236,11 @@ HTTP200, скачанные SHA256/подпись проверены; [отчё�
 До единственной мобильной попытки оператор проверяет свежие leases и READY/ACK;
 после разрыва немедленный экспорт. Не менять FIELD admission или public updater.
 
-**Актуально03.10: beta60/code60 опубликована**, принятый APK SHA8ee59352 и signer67a90d1
-не изменены. [Установка/обновление](getting-started.ru.md). Support ID регистрации:
-Настройки → О приложении / Диагностика → Копировать Support ID; передавать ID, не ключи.
-Обновлять поверх, без удаления/очистки. Существующий FIELD cohort owner+FC-YHQB-9VJN
-(2/cap3) не расширяется обновлением. Историческая подготовка ниже заменена [отчётом публикации](releases/2026-10-03-field1-release-final.md#beta60-publication--2026-10-03).
+**Актуально31.10: beta107/code107 опубликована, Android12+/ARM64.**
+MESH и тихое обновление текущего VPN-уведомления; CI и публичный подписанный APK проверены.
+Проверка107 на телефоне NOT_RUN: владелец разрешил ускоренный выпуск без отладки.
+Устанавливать поверх, без удаления данных/повторной регистрации; допуск не расширяется.
+[Скачать/обновить](getting-started.ru.md) · [Результат](releases/2026-10-30-nl-gateway-replacement.md#android107-general-publication--31-october).
 
 ## Исторические этапы подготовки
 
@@ -334,7 +334,7 @@ beta-сертификатом и **установлен поверх field52 н�
 [Результат attempt14](releases/2026-10-02-5n-prov1-attempt14.ru.md) ·
 [Provenance и SHA256 canary](releases/2026-10-02-5n-android-canary-build.ru.md).
 
-[Инструкция Friends beta](getting-started.ru.md): Android 8+, ARM64 beta60,
+[Инструкция Friends beta](getting-started.ru.md): Android12+, ARM64 beta107,
 доступ по приглашению, VPN, текст и голосовые. APK распространяется
 через страницу приглашения и HTTPS; в GitHub Releases и магазинах её пока нет.
 Для сборки используйте требования [client workflow](../.github/workflows/clients.yml).
@@ -415,7 +415,7 @@ sudo apt install python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 python3-cryptography net
 
 [Историческая инструкция первых клиентов](clients-legacy.ru.md) сохранена для раннего
 WireGuard-эксперимента; старые указания про Tk и Windows-обёртку больше не актуальны.
-# FIELD-1: публикация — 2026-10-03
+# История FIELD-1: публикация — 2026-10-03
 
 Android `0.1.18-beta60` / code60 подписан, принят на Redmi владельца и обязательными
 hosted gates и **опубликован без изменения байтов**. Публичный SHA256:

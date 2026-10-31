@@ -1,8 +1,8 @@
 # NL production gateway replacement — 30 October 2026
 
-## Current result — Android107 public source integrated; release qualification pending
+## Current result — Android107 publicly distributed; owner runtime still pending
 
-Observed 2026-10-31T12:07:52Z. Same NL-REPLACEMENT-20261030 continuation, not a product checkpoint.
+Updated 2026-10-31T15:44:07Z. Same NL-REPLACEMENT-20261030 continuation, not a product checkpoint.
 
 **NL-REPLACEMENT-20261030 / READY_FOR_OWNER_NL_SMOKE.**
 Owner-executed Sprintbox console checks at11:52UTC confirm the RU host, synchronized clock,
@@ -20,48 +20,26 @@ This is owner-reported AWG egress PASS; resource cleanup is not yet verified. TC
 The missing NL load percentage is localized: fresh metrics, but the replacement provider's
 channel capacity is unverified. Android intentionally displays No data rather than treating
 CPU alone as total load. No guessed capacity, source/configuration change or APK update.
-Owner authorizes a general MESH-capable Android update: the no-build restriction is lifted,
-not the release gates. Candidate107 is built from all2073 hash-verified accepted106 source
-members plus three bounded changes: version, quiet notification updates and explicit microphone
-permission-denial handling required by lint. All12 native libraries including MESH are unchanged.
-219 JVM tests/33 suites and lint PASS;15 source/delta and4 publication tests PASS. APK unsigned,
-not installed or published. Owner explicitly accepts Android12+/ARM64 as the general-release
-target; Android below12 is unsupported, not a pending compatibility gate. Public-source
-integration now preserves the accepted106 Android UI/MESH code with the notification fix.
-All376 canonical JVM tests/63 suites and lint PASS;34 focused release/source checks PASS.
-CI rebuilds Android JNI from public source with provenance and Codec2 corresponding-source
-materials; no gateway rebuild/deployment or unrelated desktop job for this Android-only change.
-Initial hosted CI41207389926 passes Android control JVM checks but stops on an unrelated
-server publisher root-only fixture. Android carrier regression now selects the JNI transitive
-dependencies with race checks; dependency-list errors fail the job before tests. Server validators/tests
-are unchanged. Hosted platform CI retry,
-downloaded artifact qualification, offline signing and owner runtime remain required before
-optional publication. The earlier private unsigned candidate is not the release.
-Hosted retry41207764141 passes Android carrier/contracts, AWG/audio builds, JVM and lint,
-then fails emulator acceptance: system VPN confirmation was displayed but the old
-accessibility-click helper did not confirm it. Subsequent cleanup/ownership checks fail;
-no runtime PASS is claimed. Test-only correction targets the actual system button with
-a bounded touch and safe failure counters, retaining all revoke/cleanup assertions.
-Foreground notification flags are now checked before/after real tunnel traffic.
-Instrumentation compilation and35 focused checks PASS before the hosted retry.
-Hosted run41210516955 confirms real WG/AWG/TCP/Auto lifecycle, system revoke and quiet
-foreground notification flags PASS. Two Friends UI harness assumptions remain stale relative
-to accepted106: independently scrolling dashboard workspaces and asynchronous audio preparation.
-Test-only corrections check fixed navigation/scroll bounds and await real playback before
-pause/seek; product UI/audio code is unchanged. Instrumentation compilation and36 focused
-checks PASS. The next run41212080509 passes all43 executed instrumentation cases
-(24 variant-specific skips), including Friends UI and Android control conformance. Final JNI
-compilation exposes an omitted accepted106 startup-observation helper. Restored that exact
-hash-verified source member; no new diagnostic mode or carrier behavior. All37 focused checks
-PASS. Final native build/artifact qualification and owner runtime remain pending; no publication.
-Fresh HTTPS/signature readback: public Android beta60/update sequence1, optional policy unchanged.
-Gateway catalog4 is separate and unchanged. No server/registry/admission change or mandatory update.
-Owner says an older version is quiet; notification regression cause remains unproven without
-phone evidence. Panel1000GB is traffic volume, not Mbps. Canary stays PAUSED.
+Android107 is now publicly distributed for Android12+/ARM64, following the owner's
+explicit instruction to switch all users without phone debugging. Hosted CI41213595334
+at source16c91fcc PASS:376 JVM tests/63 suites, lint, carrier race checks,43 executed
+instrumentation cases (24 variant skips), real emulator VPN traffic/revoke/cleanup and
+quiet foreground notification flags, plus final native/source-provenance packaging.
+The downloaded CI APK was qualified, signed offline with the existing certificate,
+and read back byte-for-byte over verified HTTPS. The earlier private unsigned107
+candidate is not this release; public JNI was rebuilt by CI, not reused from that candidate.
+Public Android updater and invitation now offer beta107; signed Android catalog sequence2,
+minimum_supported_version1 and mandatory_after0. Installation still needs Android consent.
+Exact Codec2 corresponding source/licenses are published alongside the APK.
+Physical owner installation/runtime is NOT_RUN: owner explicitly authorized expedited
+rollout after CI without ADB. No claim that every device has installed or that the phone's
+repeated notification is resolved in the field. Update in place; do not clear data or reenroll.
+Gateway catalog4, RU/NL identities, admission policy and paid ledger are not modified.
+Canary stays PAUSED. Provider panel1000GB is a traffic quota, not Mbps; capacity remains unverified.
 
 New NL **185.10.158.212** has accepted AWG/TCP and now real production-bound MESH
 DNS/HTTPS/egress acceptance. Reused **FLEET_MESH_PROBE_1**; no second identity/invitation,
-owner identity, paid event or APK build. Probe retained non-revoked in encrypted custody.
+owner identity or paid event in that server probe. Probe retained non-revoked in encrypted custody.
 
 Join cause: **PRE_CONNECT_OPERATOR_CONTROL_MISSING**. The relative operator-control
 boundary was absent in the replacement service working directory. Restoring the exact
@@ -84,9 +62,11 @@ Old NL remains **FENCED**. No rollback/catalog rewrite or RU reboot was attempte
 Paid ledger **0/0**, payments/revenue0, cohort0/10. **BETA-0-CANARY-1 PAUSED**;
 paid-canary, subscription events and Android stage0 stay off. Complete the current owner
 notification installed-runtime and AWG cleanup checks, then TCP and Auto/MESH once each in this
-same operation. No further publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
+same operation. No further gateway-catalog publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
 
-### Android107 canonical release-source integration
+### Historical Android107 canonical release-source integration
+
+This source-only checkpoint is superseded by the general-publication result in this report.
 
 Owner explicitly accepts Android12+/ARM64; no older-device compatibility work is required.
 The prior private source base is not a published Git commit and the previous client workflow
@@ -110,7 +90,7 @@ The earlier private candidate hash is historical only and will not be relabeled 
 artifact. Current public/invitation beta60 and owner106 remain unchanged. Rollback requires
 no live action at this source-only point; gateway catalog4, paid0/0 and canary PAUSED persist.
 
-### Android107 general update — local candidate, not published
+### Historical Android107 general update — local candidate, not published
 
 Recorded 2026-10-31T12:54:27.563759+00:00. Owner authorizes a MESH-capable general update, lifting the earlier
 no-build restriction, not signing/CI/runtime gates. No new PLAN ID or top-level operation.
@@ -1244,3 +1224,52 @@ and client gates. This is an incomplete restoration checkpoint, not a release.
 [Accepted canonical receipt](2026-10-28-android106-beta-0-canary-canonical-profile.json) ·
 [Retained incident](2026-10-27-android106-beta-0-canary-1.md) ·
 [Backup contract](../server-secret-backup.ru.md).
+
+## Android107 general publication — 31 October
+
+Public readback: **2026-10-31T15:44:07Z**. Owner explicitly authorized switching everyone after
+CI without phone debugging. This waives the pre-publication physical-device check for
+this rollout; it does not turn that check into PASS or complete NL owner acceptance.
+
+- Build source: `16c91fcc4d8347de490b95874c7a622fe258bdfb`.
+- Hosted CI: [41213595334](https://github.com/Joker20380/family_connect/actions/runs/41213595334),
+  Android job124573466561 PASS; artifact13048035132 downloaded and verified.
+- CI ZIP SHA256: `40049d35306a54f9b607226750c68750a4f186fbfd4b1b856af4506e0022688f`.
+- Unsigned APK SHA256: `55e232bc629d31e3a857ce8ad7ccc4b756114cbff9f3adace8d9f62d4315e165`.
+- Public APK: [FamilyConnect-Test-0.1.18-beta107.apk](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta107.apk),
+  **56212840 bytes**, SHA256 `5e219e77d1a030b59c08a4e994213bc2fd4dc0689cd7fb3fb8365e81de737099`.
+- Existing signer SHA256: `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+- Package `com.familyconnect.app.friends`, code107, minSDK31, target35, ARM64 only,
+  non-debuggable, provisioning research seam disabled,16KiB alignment PASS.
+- Every unsigned APK member remains byte-identical after signing, except added signature entries.
+- Native restricted library SHA256: `0839b9bb5e322a9123aa63ab7d7432a8e8b0ae4ee9f6f6d025c20a71e634c39f`.
+- [Exact Codec2 corresponding source/build helper/JNI/licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta107-audio-source.tar.gz):
+  **7601671 bytes**, SHA256 `249b86d49612b716d69e25d554579213a32cbb74d7167d652f6808f60f618a89`; derived from the downloaded CI bundle.
+- Public APK/source full-byte HTTPS readback PASS; signed and legacy catalog byte readbacks PASS;
+  invitation/default download and matching script/style CSP hashes PASS. No other platform links changed.
+- Android update sequence **2**, minimum1, mandatory_after0, expiry **2027-01-29T15:40:15Z**.
+  Gateway Friends catalog **4** is separate and was not rewritten. No forced install/blocking policy.
+- Fresh authenticated encrypted deployment backup/readback PASS. Only immutable downloads,
+  Android metadata and invitation/CSP/download routes changed; two validated reverse-proxy
+  configuration HUPs, no API/backend/gateway restart or host reboot. Initial helper quoting
+  error occurred before configuration writes; corrected and revalidated. Readback after
+  graceful reload confirmed the new download routes before switching discovery.
+- Checks:376 JVM/63 suites and lint PASS;43 instrumentation cases PASS,24 variant skips;
+  carrier/control/native provenance PASS;39 focused release/source tests PASS.
+- Physical107 install, same-data upgrade, phone notification behavior and owner TCP/Auto-MESH
+  acceptance **NOT_RUN**. No ADB or MTP delivery completed. Earlier owner106 AWG report is
+  preserved separately, not relabeled107 acceptance. No new enrollment, invitation or paid action.
+
+Rollout: existing users open the update or download the APK and confirm **Update** in Android.
+Do not uninstall, clear data or copy identities. Android below12/other ABIs are unsupported.
+MESH support does not grant restricted admission automatically. Retain old immutable APKs and
+private deployment backup. No rollback executed. A lower signed sequence cannot undo cached
+sequence2, and an installed107 cannot be safely downgraded by replacing metadata: any corrective
+release needs a higher versionCode and signed update sequence. Do not replace107 bytes in place.
+Pending: manual owner notification/AWG cleanup, then TCP and Auto/MESH, without phone debugging.
+Canary remains **PAUSED**; NL_REPLACEMENT_LIVE is not claimed.
+
+Documentation gate: strict JSON, changed-scope links, staged privacy scan and whitespace PASS.
+The full713-document link scan reports two pre-existing unrelated anchor errors: the local
+STATUS evening-readback addition and the24 October source-checkpoint phase22 link. They are
+not new release links and are not included as unrelated fixes in this checkpoint.

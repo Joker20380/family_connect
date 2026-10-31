@@ -228,12 +228,11 @@ invitation; verify unchanged Support ID FC-YHQB-9VJN. Before one mobile attempt,
 the operator must revalidate leases and fresh READY/ACK; export immediately after
 disconnect. FIELD admission and the public updater remain unchanged.
 
-**Current03.10: beta60/code60 is public**, with the same accepted APK SHA8ee59352
-and signer67a90d1. Use the [installation/update guide](getting-started.en.md).
-Settings → About / Diagnostics shows the registration-bound Support ID; copy it,
-not keys, for support. Install over the app, never clear/uninstall. Existing FIELD
-cohort owner+FC-YHQB-9VJN (2/cap3) is not expanded by updates. Historical preparation notes below are
-superseded by the [publication report](releases/2026-10-03-field1-release-final.md#beta60-publication--2026-10-03).
+**Current31.10: beta107/code107 is public, Android12+/ARM64.**
+MESH support and quiet ongoing VPN notifications; hosted CI and public signed artifact checks PASS.
+Physical107 owner runtime is NOT_RUN after explicit expedited rollout authorization.
+Install over the existing app, without clearing data or reenrollment; admission is unchanged.
+[Download/update](getting-started.en.md) · [Evidence](releases/2026-10-30-nl-gateway-replacement.md#android107-general-publication--31-october).
 
 ## Historical preparation checkpoints
 
@@ -326,7 +325,7 @@ not publicly distributed and not a FIELD release. Public beta51/invitation links
 remain unchanged and were not reverified. [Attempt14](releases/2026-10-02-5n-prov1-attempt14.ru.md)
 · [Canary provenance and SHA256](releases/2026-10-02-5n-android-canary-build.ru.md).
 
-Use the [friends beta guide](getting-started.en.md): Android 8+, ARM64 beta60,
+Use the [friends beta guide](getting-started.en.md): Android12+, ARM64 beta107,
 invitation-based access, VPN, text and voice messages. The APK is distributed through
 an invitation page and HTTPS download; it is not yet a GitHub or app-store release.
 The [client workflow](../.github/workflows/clients.yml) documents source-build requirements.
@@ -407,7 +406,7 @@ installation, UI, networking and recovery tests.
 
 [Historical initial-client guide](clients-legacy.en.md) is retained for the early direct
 WireGuard experiment; its old Tk/Windows-wrapper instructions are not current installation advice.
-# FIELD-1 publication notice — 2026-10-03
+# Historical FIELD-1 publication notice — 2026-10-03
 
 Android `0.1.18-beta60` / code60 is signed and accepted on the owner Redmi and by
 the required hosted gates, and **publicly distributed unchanged**. Public SHA256:

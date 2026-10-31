@@ -18,47 +18,26 @@ This is owner-reported AWG egress PASS; resource cleanup is not yet verified. TC
 The missing NL load percentage is localized: fresh metrics, but the replacement provider's
 channel capacity is unverified. Android intentionally displays No data rather than treating
 CPU alone as total load. No guessed capacity, source/configuration change or APK update.
-Owner authorizes a general MESH-capable Android update: the no-build restriction is lifted,
-not the release gates. Candidate107 is built from all2073 hash-verified accepted106 source
-members plus three bounded changes: version, quiet notification updates and explicit microphone
-permission-denial handling required by lint. All12 native libraries including MESH are unchanged.
-219 JVM tests/33 suites and lint PASS;15 source/delta and4 publication tests PASS. APK unsigned,
-not installed or published. Owner explicitly accepts Android12+/ARM64 as the general-release
-target; Android below12 is unsupported, not a pending compatibility gate. Public-source
-integration now preserves the accepted106 Android UI/MESH code with the notification fix.
-All376 canonical JVM tests/63 suites and lint PASS;34 focused release/source checks PASS.
-CI rebuilds Android JNI from public source with provenance and Codec2 corresponding-source
-materials; no gateway rebuild/deployment or unrelated desktop job for this Android-only change.
-Initial hosted CI41207389926 passes Android control JVM checks but stops on an unrelated
-server publisher root-only fixture. Android carrier regression now selects the JNI transitive
-dependencies with race checks; server validators/tests are unchanged. Hosted platform CI retry,
-downloaded artifact qualification, offline signing and owner runtime remain required before
-optional publication. The earlier private unsigned candidate is not the release.
-Hosted retry41207764141 passes Android carrier/contracts, AWG/audio builds, JVM and lint,
-then fails emulator acceptance: system VPN confirmation was displayed but the old
-accessibility-click helper did not confirm it. Subsequent cleanup/ownership checks fail;
-no runtime PASS is claimed. Test-only correction targets the actual system button with
-a bounded touch and safe failure counters, retaining all revoke/cleanup assertions.
-Foreground notification flags are now checked before/after real tunnel traffic.
-Instrumentation compilation and35 focused checks PASS before the hosted retry.
-Hosted run41210516955 confirms real WG/AWG/TCP/Auto lifecycle, system revoke and quiet
-foreground notification flags PASS. Two Friends UI harness assumptions remain stale relative
-to accepted106: independently scrolling dashboard workspaces and asynchronous audio preparation.
-Test-only corrections check fixed navigation/scroll bounds and await real playback before
-pause/seek; product UI/audio code is unchanged. Instrumentation compilation and36 focused
-checks PASS. The next run41212080509 passes all43 executed instrumentation cases
-(24 variant-specific skips), including Friends UI and Android control conformance. Final JNI
-compilation exposes an omitted accepted106 startup-observation helper. Restored that exact
-hash-verified source member; no new diagnostic mode or carrier behavior. All37 focused checks
-PASS. Final native build/artifact qualification and owner runtime remain pending; no publication.
-Fresh HTTPS/signature readback: public Android beta60/update sequence1, optional policy unchanged.
-Gateway catalog4 is separate and unchanged. No server/registry/admission change or mandatory update.
-Owner says an older version is quiet; notification regression cause remains unproven without
-phone evidence. Panel1000GB is traffic volume, not Mbps. Canary stays PAUSED.
+Android107 is now publicly distributed for Android12+/ARM64, following the owner's
+explicit instruction to switch all users without phone debugging. Hosted CI41213595334
+at source16c91fcc PASS:376 JVM tests/63 suites, lint, carrier race checks,43 executed
+instrumentation cases (24 variant skips), real emulator VPN traffic/revoke/cleanup and
+quiet foreground notification flags, plus final native/source-provenance packaging.
+The downloaded CI APK was qualified, signed offline with the existing certificate,
+and read back byte-for-byte over verified HTTPS. The earlier private unsigned107
+candidate is not this release; public JNI was rebuilt by CI, not reused from that candidate.
+Public Android updater and invitation now offer beta107; signed Android catalog sequence2,
+minimum_supported_version1 and mandatory_after0. Installation still needs Android consent.
+Exact Codec2 corresponding source/licenses are published alongside the APK.
+Physical owner installation/runtime is NOT_RUN: owner explicitly authorized expedited
+rollout after CI without ADB. No claim that every device has installed or that the phone's
+repeated notification is resolved in the field. Update in place; do not clear data or reenroll.
+Gateway catalog4, RU/NL identities, admission policy and paid ledger are not modified.
+Canary stays PAUSED. Provider panel1000GB is a traffic quota, not Mbps; capacity remains unverified.
 
 New NL **185.10.158.212** has accepted AWG/TCP and now real production-bound MESH
 DNS/HTTPS/egress acceptance. Reused **FLEET_MESH_PROBE_1**; no second identity/invitation,
-owner identity, paid event or APK build. Probe retained non-revoked in encrypted custody.
+owner identity or paid event in that server probe. Probe retained non-revoked in encrypted custody.
 
 Join cause: **PRE_CONNECT_OPERATOR_CONTROL_MISSING**. The relative operator-control
 boundary was absent in the replacement service working directory. Restoring the exact
@@ -81,7 +60,7 @@ Old NL remains **FENCED**. No rollback/catalog rewrite or RU reboot was attempte
 Paid ledger **0/0**, payments/revenue0, cohort0/10. **BETA-0-CANARY-1 PAUSED**;
 paid-canary, subscription events and Android stage0 stay off. Complete the current owner
 notification installed-runtime and AWG cleanup checks, then TCP and Auto/MESH once each in this
-same operation. No further publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
+same operation. No further gateway-catalog publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
 
 [Same-operation report and remaining gates](releases/2026-10-30-nl-gateway-replacement.md).
 

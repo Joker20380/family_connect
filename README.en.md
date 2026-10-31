@@ -2,15 +2,16 @@
 
 **MESH (Media Encapsulated Secure Hop)** names Family Connect's secure media
 transport, independently of its current VP8/RTP carrier and Telemost provider.
-It is not decentralized mesh networking. The naming candidate targets the
-existing Android media path, not an implemented Windows/Linux media client.
+It is not decentralized mesh networking. Android107 includes the existing
+media path; Windows/Linux media clients remain incomplete.
 [Architecture](docs/architecture.md#mesh-product-model) ·
 [Transport, compatibility and limits](carrier/README.md#mesh-product-contract) ·
 [Current status](docs/STATUS.md). The earlier Stage5 notes below are historical,
 not current implementation or release claims.
 
-Targeted Android beta65 trial: [installation, verified download and readiness gates](docs/clients.en.md).
-Invitation/default updater remains beta60; access is not expanded.
+Public Android **beta107 / Android12+ / ARM64**: [download and update in place](docs/getting-started.en.md).
+Invitation/default updater now offer MESH-capable107 with quiet status notifications.
+CI/signature/HTTPS checks PASS; physical owner107 runtime is pending. Admission is unchanged.
 
 **Stage5 priority update:** Android → Telemost VP8 → Linux EU Gateway → Internet.
 Reticulum control/recovery remains; Windows Home Gateway is a secondary feature.

@@ -1,9 +1,11 @@
+import base64
 import hashlib
 import importlib.util
 import json
 from pathlib import Path
 
 import pytest
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 
 from scripts.client_ci_scope import platforms
 
@@ -29,6 +31,31 @@ def test_public_release_keeps_provisioning_disabled_and_requires_native_provenan
     assert 'src/provisioningResearch' not in gradle
     assert 'verifyFriendsRestrictedInputs' in gradle
     assert '--check-generated' in gradle
+
+
+def test_public_invitation_offers_qualified_android107_and_audio_source():
+    landing = (ROOT / 'deploy/friends/invite/index.html').read_text()
+    android = next(line for line in landing.splitlines() if line.lstrip().startswith('android:{'))
+    assert 'Beta107 · Android 12+ · ARM64 · MESH' in android
+    assert '/downloads/FamilyConnect-Test-0.1.18-beta107.apk' in android
+    assert '/downloads/FamilyConnect-Android-0.1.18-beta107-audio-source.tar.gz' in android
+    assert 'beta60' not in android
+
+
+def test_public_android107_catalog_is_signed_and_remains_optional():
+    envelope = json.loads((ROOT / 'updates/android-friends-v2.json').read_bytes())
+    payload = base64.b64decode(envelope['payload'], validate=True)
+    anchor = base64.b64decode((ROOT / 'clients/desktop/update.pub').read_text().strip(), validate=True)
+    Ed25519PublicKey.from_public_bytes(anchor).verify(
+        base64.b64decode(envelope['signature'], validate=True), b'family-connect/android-update/v1\0' + payload)
+    catalog = json.loads(payload)
+    assert catalog['sequence'] == 2
+    assert catalog['version_code'] == 107 and catalog['version'] == '0.1.18-beta107'
+    assert catalog['minimum_supported_version'] == 1 and catalog['mandatory_after'] == 0
+    assert catalog['size'] == 56212840
+    assert catalog['sha256'] == '5e219e77d1a030b59c08a4e994213bc2fd4dc0689cd7fb3fb8365e81de737099'
+    assert catalog['url'] == 'https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta107.apk'
+    assert 0 < catalog['expires_at'] - catalog['issued_at'] <= 90 * 86400
 
 
 def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
