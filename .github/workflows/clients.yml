@@ -56,7 +56,10 @@ jobs:
         working-directory: clients/android/control-tests
       - name: Restricted carrier race regression
         shell: bash
-        run: go test -race ./... 2>&1 | tee ../restricted-carrier-race.log
+        run: |
+          mapfile -t packages < <(go list -deps -f '{{if .Module}}{{if eq .Module.Path "github.com/Joker20380/family_connect/carrier"}}{{.ImportPath}}{{end}}{{end}}' ./wholedevice ./restrictedowner ./startupdiag ./sessionprofile | sed '/^$/d')
+          test "${#packages[@]}" -gt 0
+          go test -race "${packages[@]}" 2>&1 | tee ../restricted-carrier-race.log
         working-directory: carrier
       - name: Restricted diagnostic and readiness contracts
         shell: bash

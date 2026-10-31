@@ -1190,7 +1190,7 @@
       "canonical_jvm_suites": 63,
       "lint": "PASS",
       "focused_python_tests": 34,
-      "hosted_platform_ci": "PENDING_SOURCE_PUSH",
+      "hosted_platform_ci": "RETRY_REQUIRED_ANDROID_JOB_SCOPE_CORRECTED",
       "native_source_build": "REQUIRED_FOR_PUBLIC_PROVENANCE",
       "private_candidate_is_release": false,
       "signing": false,
@@ -1203,7 +1203,12 @@
       "gateway_rebuild": false,
       "gateway_catalog_writes": 0,
       "registry_writes": 0,
-      "canary": "PAUSED"
+      "canary": "PAUSED",
+      "source_commit": "37d16edf522bd485788c2bb507b6b86e92ff9465",
+      "initial_ci_run": 41207389926,
+      "initial_ci_failure": "UNRELATED_SERVER_PUBLISHER_ROOT_ONLY_FIXTURE",
+      "initial_ci_android_control_jvm": "PASS",
+      "android_carrier_scope": "JNI_TRANSITIVE_CARRIER_DEPENDENCIES_RACE"
     }
   }
 }

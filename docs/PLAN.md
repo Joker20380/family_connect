@@ -31,8 +31,11 @@ integration now preserves the accepted106 Android UI/MESH code with the notifica
 All376 canonical JVM tests/63 suites and lint PASS;34 focused release/source checks PASS.
 CI rebuilds Android JNI from public source with provenance and Codec2 corresponding-source
 materials; no gateway rebuild/deployment or unrelated desktop job for this Android-only change.
-Hosted platform CI, downloaded artifact qualification, offline signing and owner runtime remain
-required before optional publication. The earlier private unsigned candidate is not the release.
+Initial hosted CI41207389926 passes Android control JVM checks but stops on an unrelated
+server publisher root-only fixture. Android carrier regression now selects the JNI transitive
+dependencies with race checks; server validators/tests are unchanged. Hosted platform CI retry,
+downloaded artifact qualification, offline signing and owner runtime remain required before
+optional publication. The earlier private unsigned candidate is not the release.
 Fresh HTTPS/signature readback: public Android beta60/update sequence1, optional policy unchanged.
 Gateway catalog4 is separate and unchanged. No server/registry/admission change or mandatory update.
 Owner says an older version is quiet; notification regression cause remains unproven without

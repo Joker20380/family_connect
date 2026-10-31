@@ -65,3 +65,7 @@ def test_workflow_exports_corresponding_source_without_building_gateway():
     assert 'audio-generated/corresponding-source/' in android
     assert '--android-only' in android
     assert 'go build -trimpath -o ../restricted-release/bootstrap-broker' not in android
+    assert 'go list -deps' in android
+    assert './wholedevice ./restrictedowner ./startupdiag ./sessionprofile' in android
+    assert 'go test -race "${packages[@]}"' in android
+    assert 'go test -race ./...' not in android
