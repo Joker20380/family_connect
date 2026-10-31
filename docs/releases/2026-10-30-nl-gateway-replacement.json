@@ -1307,7 +1307,16 @@
         "friends_ui": "NOT_QUALIFIED",
         "release_artifact": "NOT_BUILT"
       },
-      "runner_evidence": "BOTH_RUNNERS_CAPTURED_PIPEFAIL_NO_GATE_WAIVER"
+      "runner_evidence": "BOTH_RUNNERS_CAPTURED_PIPEFAIL_NO_GATE_WAIVER",
+      "ui_export_correction": {
+        "run": 41240164389,
+        "source": "563e885bf99f69d49597fbb848b50f2338064f58",
+        "debug_runtime": "PASS",
+        "friends_ui_assertions": "PASS",
+        "failure": "APP_OWNED_IMAGES_REMOVED_BEFORE_EXPORT",
+        "fix": "EMULATOR_ONLY_RETAIN_THROUGH_PULL_THEN_UNINSTALL_FINALLY",
+        "release_artifact": "NOT_BUILT"
+      }
     }
   }
 }

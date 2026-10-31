@@ -77,6 +77,8 @@ def test_load_screenshots_export_only_from_disposable_emulator():
     assert 'if not serial.startswith("emulator-"):' in helper
     assert 'for name in ("dashboard-cpu-load.png", "server-row-cpu-load.png"):' in helper
     assert '["adb", "-s", serial, "pull"' in helper
+    assert '"-Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true"' in helper
+    assert helper.index('"pull"') < helper.index('finally:') < helper.index('"uninstall"')
     workflow = (ROOT / '.github/workflows/clients.yml').read_text()
     assert 'name: FamilyConnect-Android-ui' in workflow
     assert 'path: android-ci-ui/*.png' in workflow

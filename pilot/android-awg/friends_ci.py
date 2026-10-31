@@ -20,15 +20,20 @@ def main():
     classes = ["AppLanguageRuntimeTest", "AppUpdateRuntimeTest", "DashboardLayoutRuntimeTest",
                "DialRuntimeTest", "RouteMapRuntimeTest", "ChatNotificationRuntimeTest",
                "ChatScrollRuntimeTest", "VoiceBubbleRuntimeTest", "VoiceHoldRuntimeTest", "VoiceRuntimeTest", "InvitationRuntimeTest"]
-    subprocess.run(gradle + [":app:connectedFriendsAndroidTest",
-        "-Pandroid.testInstrumentationRunnerArguments.fcInvitationCi=true",
-        "-Pandroid.testInstrumentationRunnerArguments.class=" + ",".join("com.familyconnect.app." + c for c in classes)], cwd=build, check=True)
-    images = ROOT / "android-ci-ui"
-    images.mkdir(exist_ok=True)
-    for name in ("dashboard-cpu-load.png", "server-row-cpu-load.png"):
-        subprocess.run(["adb", "-s", serial, "pull",
-            "/sdcard/Android/data/com.familyconnect.app.friends/files/ui-acceptance/" + name,
-            str(images / name)], check=True)
+    try:
+        subprocess.run(gradle + [":app:connectedFriendsAndroidTest",
+            "-Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true",
+            "-Pandroid.testInstrumentationRunnerArguments.fcInvitationCi=true",
+            "-Pandroid.testInstrumentationRunnerArguments.class=" + ",".join("com.familyconnect.app." + c for c in classes)], cwd=build, check=True)
+        images = ROOT / "android-ci-ui"
+        images.mkdir(exist_ok=True)
+        for name in ("dashboard-cpu-load.png", "server-row-cpu-load.png"):
+            subprocess.run(["adb", "-s", serial, "pull",
+                "/sdcard/Android/data/com.familyconnect.app.friends/files/ui-acceptance/" + name,
+                str(images / name)], check=True)
+    finally:
+        for package in ("com.familyconnect.app.friends.test", "com.familyconnect.app.friends"):
+            subprocess.run(["adb", "-s", serial, "uninstall", package], timeout=60, check=False)
 
 if __name__ == "__main__":
     main()

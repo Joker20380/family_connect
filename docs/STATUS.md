@@ -17,6 +17,11 @@ The retained report contains no failing testcase; the runner's outer error was n
 Both emulator runner streams are now captured with pipefail and bounded diagnostic hints;
 no assertion is waived.46 focused local checks PASS. Re-run exact-source qualification;
 Android107/sequence2 remains public and no108 artifact has been signed or published.
+Run41240164389 confirms debug and Friends UI assertions PASS, including measured CPU and
+stale hiding. Export failed because connected-test cleanup removed app-owned screenshot
+files before adb pull. The disposable-only runner now uses the existing AGP leave-installed
+option, pulls exactly two synthetic images, then uninstalls both CI packages in finally.
+No physical-device access or runtime gate waiver.46 focused tests PASS; release still pending.
 Public/invitation version107 and Android update sequence2 remain unchanged; gateway catalog4,
 server units, keys/admission and paid ledger are untouched. Canary PAUSED; no phone debugging.
 
