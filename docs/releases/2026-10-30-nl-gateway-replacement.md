@@ -1317,3 +1317,12 @@ never overwrite immutable107 with108 bytes. Manual physical acceptance remains s
 CI visual gate: export only the two fixed synthetic CPU dashboard/dropdown PNGs from
 the disposable emulator after UI tests pass. The existing physical-device refusal remains.
 This enables actual rendering review before publication; no phone debugging or server change.
+
+### Android108 hosted runner evidence follow-up
+
+Hosted run41238328961 did not qualify a release: JVM/lint and disposable debug runtime
+passed, but the enclosing emulator step failed before Friends UI evidence was exported.
+The retained report contains no failing testcase; the runner's outer error was not retained.
+Both emulator runner streams are now captured with pipefail and bounded diagnostic hints;
+no assertion is waived.46 focused local checks PASS. Re-run exact-source qualification;
+Android107/sequence2 remains public and no108 artifact has been signed or published.

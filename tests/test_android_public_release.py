@@ -82,6 +82,20 @@ def test_load_screenshots_export_only_from_disposable_emulator():
     assert 'path: android-ci-ui/*.png' in workflow
 
 
+def test_emulator_runner_failures_remain_fatal_and_are_retained(tmp_path):
+    workflow = (ROOT / '.github/workflows/clients.yml').read_text()
+    for runner, log in [('run.py', 'android-emulator-runner.log'),
+                        ('friends_ci.py', 'android-friends-runtime.log')]:
+        assert f"bash -o pipefail -c 'python3 -u pilot/android-awg/{runner} 2>&1 | tee {log}'" in workflow
+        assert f'            {log}\n' in workflow
+    module_spec = importlib.util.spec_from_file_location('android_ci_report', ROOT / 'pilot/android-awg/report_ci.py')
+    reporter = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(reporter)
+    (tmp_path / 'android-emulator-runner.log').write_text('subprocess.TimeoutExpired: bounded synthetic log capture\n')
+    (tmp_path / 'android-friends-runtime.log').write_text('subprocess.CalledProcessError: synthetic UI runner\n')
+    assert len(reporter.report(tmp_path)['hints']) == 2
+
+
 def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
     reference = json.loads((ROOT / 'clients/shared/android106-reference.json').read_text())
     changes = {'clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java',

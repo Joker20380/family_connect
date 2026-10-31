@@ -11,6 +11,12 @@ Known-capacity aggregate/estimate behavior is retained; stale/missing/wrong-coun
 still show No data, not zero. Tooltip retains observed RX/TX and marks unknown channel usage.
 381 JVM tests/64 suites, lint, instrumentation compilation and45 focused Python checks PASS.
 Hosted UI/runtime qualification, signed108 artifact and publication remain pending.
+Hosted run41238328961 did not qualify a release: JVM/lint and disposable debug runtime
+passed, but the enclosing emulator step failed before Friends UI evidence was exported.
+The retained report contains no failing testcase; the runner's outer error was not retained.
+Both emulator runner streams are now captured with pipefail and bounded diagnostic hints;
+no assertion is waived.46 focused local checks PASS. Re-run exact-source qualification;
+Android107/sequence2 remains public and no108 artifact has been signed or published.
 Public/invitation version107 and Android update sequence2 remain unchanged; gateway catalog4,
 server units, keys/admission and paid ledger are untouched. Canary PAUSED; no phone debugging.
 

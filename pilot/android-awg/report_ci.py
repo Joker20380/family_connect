@@ -27,12 +27,13 @@ def report(root):
                         message=clean(failure.get('message') or (lines[0] if lines else '')),
                         frames=[clean(frame) for frame in frames]))
     hints = []
-    for name in ('android-tcp-runner.log', 'android-awg-runtime.log'):
+    for name in ('android-tcp-runner.log', 'android-awg-runtime.log',
+                 'android-emulator-runner.log', 'android-friends-runtime.log'):
         path=root/name
         if not path.is_file(): continue
         lines=path.read_text(errors='replace').splitlines()
         for line in lines:
-            if any(marker in line for marker in ('FAILED', 'AssertionError', 'Caused by:', 'What went wrong', 'tests completed', 'ProcessException', 'TimeoutError')):
+            if any(marker in line for marker in ('FAILED', 'AssertionError', 'Caused by:', 'What went wrong', 'tests completed', 'ProcessException', 'TimeoutError', 'TimeoutExpired', 'CalledProcessError')):
                 hints.append(clean(line))
     return dict(instrumentation_cases=len(suites),failures=failures[:12],hints=hints[-12:])
 

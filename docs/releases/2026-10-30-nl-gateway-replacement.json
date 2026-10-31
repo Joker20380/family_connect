@@ -1282,7 +1282,7 @@
       "unknown_channel_capacity": "NOT_GUESSED",
       "jvm_tests": 381,
       "jvm_suites": 64,
-      "focused_python_tests": 45,
+      "focused_python_tests": 46,
       "lint": "PASS",
       "instrumentation_compile": "PASS",
       "hosted_runtime": "PENDING",
@@ -1297,7 +1297,17 @@
       "registry_changes": false,
       "canary": "PAUSED",
       "phone_debugging": "NOT_USED",
-      "ui_capture": "TWO_FIXED_SYNTHETIC_EMULATOR_PNGS_EXPORTED_FOR_REVIEW"
+      "ui_capture": "TWO_FIXED_SYNTHETIC_EMULATOR_PNGS_EXPORTED_FOR_REVIEW",
+      "hosted_ci_attempt": {
+        "run": 41238328961,
+        "source": "d6882a1fd5f1f4b817d47d4e1ef4f4ffb35cbf7e",
+        "result": "FAILED_EMULATOR_RUNNER_OUTER_ERROR_NOT_RETAINED",
+        "jvm_lint": "PASS",
+        "debug_runtime": "PASS",
+        "friends_ui": "NOT_QUALIFIED",
+        "release_artifact": "NOT_BUILT"
+      },
+      "runner_evidence": "BOTH_RUNNERS_CAPTURED_PIPEFAIL_NO_GATE_WAIVER"
     }
   }
 }

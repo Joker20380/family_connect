@@ -96,8 +96,8 @@ jobs:
           target: google_apis
           disable-animations: true
           script: |
-            python3 -u pilot/android-awg/run.py
-            python3 -u pilot/android-awg/friends_ci.py
+            bash -o pipefail -c 'python3 -u pilot/android-awg/run.py 2>&1 | tee android-emulator-runner.log'
+            bash -o pipefail -c 'python3 -u pilot/android-awg/friends_ci.py 2>&1 | tee android-friends-runtime.log'
       - name: Publish bounded Android runtime summary
         if: always()
         run: python3 pilot/android-awg/report_ci.py
@@ -136,6 +136,8 @@ jobs:
           path: |
             android-ci-summary.json
             android-awg-runtime.log
+            android-emulator-runner.log
+            android-friends-runtime.log
             clients/android/app/build/outputs/androidTest-results/connected/**/*.xml
           if-no-files-found: warn
       - uses: actions/upload-artifact@v4
