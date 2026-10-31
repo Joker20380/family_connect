@@ -2,7 +2,7 @@
 
 ## Current result — RU acceptance PASS; owner NL smoke pending
 
-Observed 2026-10-31T11:55:42Z. Same NL-REPLACEMENT-20261030 continuation, not a product checkpoint.
+Observed 2026-10-31T12:07:52Z. Same NL-REPLACEMENT-20261030 continuation, not a product checkpoint.
 
 **NL-REPLACEMENT-20261030 / READY_FOR_OWNER_NL_SMOKE.**
 Owner-executed Sprintbox console checks at11:52UTC confirm the RU host, synchronized clock,
@@ -14,7 +14,11 @@ Three consecutive samples from each of operator and new NL at11:54–11:55UTC pa
 verified TLS, real challenge and signed device-status; no504. Current control-plane gates
 PASS. The earlier intermittent stall's root cause remains NOT_PROVEN, not declared repaired.
 Catalog4/signature/new NL endpoint and unchanged RU entry are reconciled read-only at
-11:55:13UTC. No republication or sequence5. Owner AWG/TCP/Auto-MESH smoke remains NOT_RUN.
+11:55:13UTC. No republication or sequence5. Owner subsequently reports AWG/internet working;
+actual client NL egress and Disconnect cleanup remain unverified. TCP/Auto-MESH not yet run.
+The missing NL load percentage is localized: fresh metrics, but the replacement provider's
+channel capacity is unverified. Android intentionally displays No data rather than treating
+CPU alone as total load. No guessed capacity, source/configuration change or APK update.
 
 New NL **185.10.158.212** has accepted AWG/TCP and now real production-bound MESH
 DNS/HTTPS/egress acceptance. Reused **FLEET_MESH_PROBE_1**; no second identity/invitation,
@@ -29,8 +33,9 @@ verified HTTPS streams, new NL egress and bounded cleanup. Three stable samples,
 
 Signed catalog **4** was published; initial authenticated NL readback returned the new endpoint,
 RU entry and probe assignment remain unchanged. Actual Android catalog parser PASS without
-APK update; Android106 device receipt/owner smoke remains **NOT_RUN**, not implied by parser
-acceptance. Prepared routing artifact and mailbox/monitoring target updates are deployed.
+APK update; Android106 owner AWG smoke is **IN_PROGRESS**, not completed by parser
+acceptance. Owner-reported internet success does not yet prove client egress or cleanup.
+Prepared routing artifact and mailbox/monitoring target updates are deployed.
 Fresh11:55:13UTC readback validates canonical profile/certificate/CRL, floor **27226**,
 RU/NL directory equality and actual SSH snapshot. Renewal evaluates NOOP; no material refresh
 is needed at that observation. Normal renewal/read-only sync timers are active/waiting,
@@ -38,9 +43,31 @@ last workers succeeded, controller COMMITTED and neither node has an active oper
 New NL remains active with integrated publisher rotation; no separate publisher timer.
 Old NL remains **FENCED**. No rollback/catalog rewrite or RU reboot was attempted.
 Paid ledger **0/0**, payments/revenue0, cohort0/10. **BETA-0-CANARY-1 PAUSED**;
-paid-canary, subscription events and Android stage0 stay off. Proceed to owner Android106
-AWG Connect once, then TCP and Auto/MESH with endpoint/HTTPS/egress and Disconnect checks
-in this same operation. No further publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
+paid-canary, subscription events and Android stage0 stay off. Complete the current owner
+AWG endpoint/HTTPS/egress and Disconnect checks, then TCP and Auto/MESH once each in this
+same operation. No further publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
+
+### Owner AWG report and informational load display — 31 October12:07UTC
+
+Owner reports that AWG/internet works, but server load is missing. This is a partial owner
+result, not final client acceptance: current-phone endpoint/HTTPS egress and Disconnect are
+still pending; TCP and Auto/MESH have not run. A read-only check of the retained administrative
+peer mapping found no handshake for that mapping. It does not attest the currently used
+phone identity or prove which endpoint the current session selected. No identity was changed
+or enrolled; no client address, key or raw device reference is published.
+
+The load-display cause is proven independently of VPN health. Public HTTPS monitoring returns
+fresh RU and NL samples. NL reports CPU/traffic, but capacity_mbps and load_percent are null,
+reason capacity-unknown, basis replacement-provider-capacity-unverified. This was an intentional
+replacement-host setting, not a stale monitor or missing gateway. The accepted monitor and
+Android ServerLoad contract require a known channel capacity before calculating total load;
+the UI therefore shows No data. Do not copy the old provider's estimate or substitute CPU
+for overall load. Obtain the new NL tariff's channel capacity before changing this setting.
+No source/configuration/restart/catalog/APK change was made. Four focused monitor tests PASS,
+including unknown-capacity handling. This informational display does not block transport smoke.
+
+Same paid0/0/canary-PAUSED restrictions. Continue with the active AWG session's HTTPS egress
+readback, then cleanup and TCP/Auto-MESH once each. Catalog4 remains unchanged.
 
 ### Provider-console acceptance — 31 October11:52–11:55UTC
 

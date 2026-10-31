@@ -237,7 +237,7 @@
     "new_sequence": 4,
     "current_sequence": 4,
     "restricted_materials": "CURRENT_CANONICAL_READINESS_IMPORT_ACK_SNAPSHOT_PASS",
-    "android106_new_endpoint": "ANDROID_PARSER_PASS_ACTUAL_DEVICE_OWNER_SMOKE_PENDING",
+    "android106_new_endpoint": "PARSER_PASS_OWNER_AWG_REPORTED_WORKING_ACTUAL_CLIENT_ENDPOINT_VERIFICATION_PENDING",
     "apk_update": false,
     "ru_endpoint_configuration": "UNCHANGED",
     "monitoring_inventory": "NEW_NL_CONFIGURED_PUBLIC_RU_NL_SAMPLES_CURRENT_AT_CONSOLE_READBACK",
@@ -535,7 +535,7 @@
     "catalog_publication": "NOT_RUN",
     "owner_smoke": "NOT_RUN"
   },
-  "next_action": "OWNER_ANDROID106_AWG_ONCE_THEN_TCP_THEN_AUTO_MESH_VERIFY_ENDPOINT_DATA_PLANE_AND_CLEANUP_NO_REPUBLICATION",
+  "next_action": "VERIFY_CURRENT_OWNER_AWG_HTTPS_EGRESS_AND_DISCONNECT_THEN_TCP_AUTO_MESH_NO_RECONNECT_OR_REPUBLICATION",
   "checks": {
     "strict_json": "PASS",
     "targeted_privacy_secret_scan": "PASS",
@@ -594,7 +594,7 @@
     "data_plane": "NOT_RUN",
     "scope": "HISTORICAL_PRE_OWNER_EXCEPTION_SUPERSEDED_BY_FLEET_PROBE_CONTINUATION"
   },
-  "last_observed_utc": "2026-10-31T11:55:42Z",
+  "last_observed_utc": "2026-10-31T12:07:52Z",
   "fleet_probe_continuation": {
     "entry_local_and_remote_main": "f978a4e2a19d612b9cd5f3a3a4e862324745260b",
     "observed_utc": "2026-10-31T09:50:12.264119+00:00",
@@ -992,7 +992,7 @@
     "paid_subscriptions": 0,
     "paid_events": 0,
     "canary": "PAUSED",
-    "owner_smoke": "NOT_RUN",
+    "owner_smoke": "IN_PROGRESS_OWNER_AWG_REPORTED_INTERNET_PASS_EGRESS_AND_CLEANUP_PENDING",
     "owner_prompt_issued": true,
     "validation_scope": "DOCUMENTATION_ONLY_NO_PRODUCT_BUILD_OR_FULL_HISTORICAL_SUITE",
     "checks": {
@@ -1019,5 +1019,51 @@
       "temporary_credentials_created": 0,
       "failure_cause_inference": "NO_APPLICATION_OR_PROVIDER_CAUSE_INFERRED_FROM_JOURNAL_TIMEOUT"
     }
+  },
+  "owner_acceptance_continuation": {
+    "observed_utc": "2026-10-31T12:07:52Z",
+    "entry_main": "b8a2338893ffc0794834445ca27e56f729088214",
+    "awg": {
+      "connect": "OWNER_REPORTED_WORKING",
+      "internet": "OWNER_REPORTED_PASS",
+      "endpoint": "AWAITING_CURRENT_PHONE_HTTPS_EGRESS_READBACK",
+      "retained_administrative_peer": "NO_HANDSHAKE_NOT_CURRENT_PHONE_ATTESTATION",
+      "https_egress": "PENDING",
+      "disconnect_cleanup": "NOT_RUN"
+    },
+    "tcp": "NOT_RUN",
+    "auto_mesh": "NOT_RUN",
+    "load_display": {
+      "result": "CAPACITY_UNKNOWN_BY_ACCEPTED_CONTRACT",
+      "public_https": "PASS",
+      "nl_sample_fresh": true,
+      "capacity_mbps": null,
+      "load_percent": null,
+      "cpu_and_traffic_available": true,
+      "capacity_basis": "replacement-provider-capacity-unverified",
+      "required_input": "VERIFIED_NEW_NL_PROVIDER_TARIFF_CHANNEL_CAPACITY",
+      "source_change": false,
+      "configuration_change": false,
+      "apk_update": false,
+      "transport_gate_blocker": false
+    },
+    "checks": {
+      "focused_monitor_tests": "PASS_4",
+      "strict_json": "PASS",
+      "privacy_scan": "PASS",
+      "markdown_links": "PASS_4_DOCUMENTS_470_LINKS",
+      "staged_scope": "PASS_5_EXISTING_DOCUMENTS",
+      "diff_check": "PASS",
+      "public_source_guard": "PASS_3162_INDEX_ENTRIES_0_BLOCKED"
+    },
+    "catalog_sequence": 4,
+    "publications": 0,
+    "new_identities": 0,
+    "new_invitations": 0,
+    "paid_subscriptions_events": [
+      0,
+      0
+    ],
+    "canary": "PAUSED"
   }
 }

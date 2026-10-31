@@ -14,7 +14,11 @@ Three consecutive samples from each of operator and new NL at11:54–11:55UTC pa
 verified TLS, real challenge and signed device-status; no504. Current control-plane gates
 PASS. The earlier intermittent stall's root cause remains NOT_PROVEN, not declared repaired.
 Catalog4/signature/new NL endpoint and unchanged RU entry are reconciled read-only at
-11:55:13UTC. No republication or sequence5. Owner AWG/TCP/Auto-MESH smoke remains NOT_RUN.
+11:55:13UTC. No republication or sequence5. Owner subsequently reports AWG/internet working;
+actual client NL egress and Disconnect cleanup remain unverified. TCP/Auto-MESH not yet run.
+The missing NL load percentage is localized: fresh metrics, but the replacement provider's
+channel capacity is unverified. Android intentionally displays No data rather than treating
+CPU alone as total load. No guessed capacity, source/configuration change or APK update.
 
 New NL **185.10.158.212** has accepted AWG/TCP and now real production-bound MESH
 DNS/HTTPS/egress acceptance. Reused **FLEET_MESH_PROBE_1**; no second identity/invitation,
@@ -29,8 +33,9 @@ verified HTTPS streams, new NL egress and bounded cleanup. Three stable samples,
 
 Signed catalog **4** was published; initial authenticated NL readback returned the new endpoint,
 RU entry and probe assignment remain unchanged. Actual Android catalog parser PASS without
-APK update; Android106 device receipt/owner smoke remains **NOT_RUN**, not implied by parser
-acceptance. Prepared routing artifact and mailbox/monitoring target updates are deployed.
+APK update; Android106 owner AWG smoke is **IN_PROGRESS**, not completed by parser
+acceptance. Owner-reported internet success does not yet prove client egress or cleanup.
+Prepared routing artifact and mailbox/monitoring target updates are deployed.
 Fresh11:55:13UTC readback validates canonical profile/certificate/CRL, floor **27226**,
 RU/NL directory equality and actual SSH snapshot. Renewal evaluates NOOP; no material refresh
 is needed at that observation. Normal renewal/read-only sync timers are active/waiting,
@@ -38,13 +43,14 @@ last workers succeeded, controller COMMITTED and neither node has an active oper
 New NL remains active with integrated publisher rotation; no separate publisher timer.
 Old NL remains **FENCED**. No rollback/catalog rewrite or RU reboot was attempted.
 Paid ledger **0/0**, payments/revenue0, cohort0/10. **BETA-0-CANARY-1 PAUSED**;
-paid-canary, subscription events and Android stage0 stay off. Proceed to owner Android106
-AWG Connect once, then TCP and Auto/MESH with endpoint/HTTPS/egress and Disconnect checks
-in this same operation. No further publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
+paid-canary, subscription events and Android stage0 stay off. Complete the current owner
+AWG endpoint/HTTPS/egress and Disconnect checks, then TCP and Auto/MESH once each in this
+same operation. No further publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
 
-NEXT within this same operation: owner Android106 AWG Connect once. Console/local API
-and three external samples per origin are now PASS. Keep catalog4 unchanged and monitor
-the earlier unresolved intermittent-host cause. Verify the new endpoint,
+NEXT within this same operation: finish the already-started owner Android106 AWG check.
+Owner reports working internet; request verified-HTTPS public-egress readback, then Disconnect.
+Confirmed provider channel capacity is needed for the load percentage; do not guess it or
+turn informational monitoring into a VPN blocker. Keep catalog4 unchanged. Verify the new endpoint,
 HTTPS/egress and Disconnect cleanup; then TCP once and Auto/MESH once with current readiness
 import/ACK. Keep normal freshness monitoring active while waiting. Only all owner/server
 gates permit NL_REPLACEMENT_LIVE. No new PLAN ID, probe identity, owner-canary use or
