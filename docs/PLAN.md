@@ -4,32 +4,19 @@
 
 ### Authorized operational exception — NL-REPLACEMENT-20261030
 
-**Android108 load-display continuation — source qualified, not distributed.**
-Owner requests visible server load. Fresh public NL metrics contain CPU/RX/TX, but no
-verified channel capacity; the old aggregate-only UI therefore shows No data.108 displays
-explicit **Server CPU / CPU сервера** and a CPU-labelled country-list percentage when the
-channel is unknown. It never invents a link speed or calls CPU total/network utilization.
-Known-capacity aggregate/estimate behavior is retained; stale/missing/wrong-country samples
-still show No data, not zero. Tooltip retains observed RX/TX and marks unknown channel usage.
-381 JVM tests/64 suites, lint, instrumentation compilation and45 focused Python checks PASS.
-Hosted UI/runtime qualification, signed108 artifact and publication remain pending.
-Hosted run41238328961 did not qualify a release: JVM/lint and disposable debug runtime
-passed, but the enclosing emulator step failed before Friends UI evidence was exported.
-The retained report contains no failing testcase; the runner's outer error was not retained.
-Both emulator runner streams are now captured with pipefail and bounded diagnostic hints;
-no assertion is waived.46 focused local checks PASS. Re-run exact-source qualification;
-Android107/sequence2 remains public and no108 artifact has been signed or published.
-Run41240164389 confirms debug and Friends UI assertions PASS, including measured CPU and
-stale hiding. Export failed because connected-test cleanup removed app-owned screenshot
-files before adb pull. The disposable-only runner now uses the existing AGP leave-installed
-option, pulls exactly two synthetic images, then uninstalls both CI packages in finally.
-No physical-device access or runtime gate waiver.46 focused tests PASS; release still pending.
-Run41241889477 passed the debug VPN/storage tests, then adb reported the disposable
-emulator offline before Friends UI started. The CI-only runner now waits at most90s for
-one emulator to be online and boot-complete; physical/ambiguous targets still fail closed.
-No emulator restart or test retry/waiver.51 focused checks PASS;108 remains unpublished.
-Public/invitation version107 and Android update sequence2 remain unchanged; gateway catalog4,
-server units, keys/admission and paid ledger are untouched. Canary PAUSED; no phone debugging.
+**Android108 load-display continuation — publicly distributed; phone acceptance pending.**
+The dashboard and country list show explicitly labelled **Server CPU / CPU сервера**
+when fresh CPU metrics exist but channel capacity is unknown. No link speed is invented;
+CPU is not total/channel utilization. Known-capacity aggregate behavior stays unchanged,
+and stale/missing measurements show No data rather than zero. RX/TX remain in the tooltip.
+Hosted CI41243393838 at source3b10199 PASS, including actual emulator VPN/UI checks,
+381 JVM tests/64 suites, lint and exact-source ARM64 packaging. Both synthetic CPU renders
+were downloaded and visually checked.51 focused local tests PASS. Existing offline signer,
+16K alignment and verified-HTTPS exact APK/source/catalog/invitation readbacks PASS.
+Public updater and invitation now offer108; Android catalog sequence3, minimum1,
+mandatory_after0. Updating needs Android consent: install in place without clearing data.
+Physical108 installation/runtime is NOT_RUN; no phone debugging or reenrollment.
+Gateway catalog4, server identities/admission and paid ledger are unchanged; canary PAUSED.
 
 **NL-REPLACEMENT-20261030 / READY_FOR_OWNER_NL_SMOKE.**
 Owner-executed Sprintbox console checks at11:52UTC confirm the RU host, synchronized clock,
@@ -44,10 +31,10 @@ Catalog4/signature/new NL endpoint and unchanged RU entry are reconciled read-on
 11:55:13UTC. No republication or sequence5. Owner subsequently reports AWG/internet working;
 owner now confirms the HTTPS egress address matches185.10.158.212 and reports Disconnect.
 This is owner-reported AWG egress PASS; resource cleanup is not yet verified. TCP/Auto-MESH not run.
-The missing NL load percentage is localized: fresh metrics, but the replacement provider's
-channel capacity is unverified. Android intentionally displays No data rather than treating
-CPU alone as total load. No guessed capacity, source/configuration change or APK update.
-Android107 is now publicly distributed for Android12+/ARM64, following the owner's
+Earlier load diagnosis: fresh NL metrics were hidden by107 when channel capacity was
+unknown. The108 publication now shows explicitly labelled CPU instead; channel capacity
+remains unverified, with no invented speed or server-monitoring contract change.
+Historical107 publication (superseded by108): Android107 was publicly distributed for Android12+/ARM64, following the owner's
 explicit instruction to switch all users without phone debugging. Hosted CI41213595334
 at source16c91fcc PASS:376 JVM tests/63 suites, lint, carrier race checks,43 executed
 instrumentation cases (24 variant skips), real emulator VPN traffic/revoke/cleanup and
@@ -55,7 +42,7 @@ quiet foreground notification flags, plus final native/source-provenance packagi
 The downloaded CI APK was qualified, signed offline with the existing certificate,
 and read back byte-for-byte over verified HTTPS. The earlier private unsigned107
 candidate is not this release; public JNI was rebuilt by CI, not reused from that candidate.
-Public Android updater and invitation now offer beta107; signed Android catalog sequence2,
+At that publication the updater and invitation offered beta107; signed Android catalog sequence2,
 minimum_supported_version1 and mandatory_after0. Installation still needs Android consent.
 Exact Codec2 corresponding source/licenses are published alongside the APK.
 Physical owner installation/runtime is NOT_RUN: owner explicitly authorized expedited
@@ -91,12 +78,12 @@ paid-canary, subscription events and Android stage0 stay off. Complete the curre
 notification installed-runtime and AWG cleanup checks, then TCP and Auto/MESH once each in this
 same operation. No further gateway-catalog publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
 
-NEXT within this same operation: qualify exact-source Android108 load presentation in hosted
-CI and inspect the rendered CPU fallback, then download/verify/sign the new immutable APK
-before any update publication.107 remains public until those gates pass. No invented channel
-capacity, monitoring/VPN restart or identity/admission change. After installation, confirm
-notification behavior and AWG cleanup, then TCP and Auto/MESH; no ADB required.
-No new PLAN ID or automatic queue advance. Old NL stays fenced; canary stays paused.
+NEXT within this same operation: owner installs public108 in place without USB debugging,
+checks visible server CPU and notification behavior, completes AWG cleanup, then tests TCP
+and Auto/MESH with current readiness import/ACK. Public108 is not proof of installation.
+No further Android or gateway-catalog publication is required for those checks.
+Canary PAUSED; no new identity, PLAN ID, paid action or automatic queue advance.
+Only complete server and owner gates permit NL_REPLACEMENT_LIVE.
 [Current evidence and rollback](releases/2026-10-30-nl-gateway-replacement.md).
 Earlier provider/network observations below are retained context, not the restoration path.
 

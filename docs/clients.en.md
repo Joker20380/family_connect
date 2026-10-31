@@ -228,11 +228,12 @@ invitation; verify unchanged Support ID FC-YHQB-9VJN. Before one mobile attempt,
 the operator must revalidate leases and fresh READY/ACK; export immediately after
 disconnect. FIELD admission and the public updater remain unchanged.
 
-**Current31.10: beta107/code107 is public, Android12+/ARM64.**
+**Current31.10: beta108/code108 is public, Android12+/ARM64.**
+Measured server CPU is visible on the dashboard and country list when channel capacity is unknown.
 MESH support and quiet ongoing VPN notifications; hosted CI and public signed artifact checks PASS.
-Physical107 owner runtime is NOT_RUN after explicit expedited rollout authorization.
+Physical108 owner runtime is NOT_RUN after explicit expedited rollout authorization.
 Install over the existing app, without clearing data or reenrollment; admission is unchanged.
-[Download/update](getting-started.en.md) · [Evidence](releases/2026-10-30-nl-gateway-replacement.md#android107-general-publication--31-october).
+[Download/update](getting-started.en.md) · [Evidence](releases/2026-10-30-nl-gateway-replacement.md#android108-general-publication--31-october).
 
 ## Historical preparation checkpoints
 
@@ -325,7 +326,7 @@ not publicly distributed and not a FIELD release. Public beta51/invitation links
 remain unchanged and were not reverified. [Attempt14](releases/2026-10-02-5n-prov1-attempt14.ru.md)
 · [Canary provenance and SHA256](releases/2026-10-02-5n-android-canary-build.ru.md).
 
-Use the [friends beta guide](getting-started.en.md): Android12+, ARM64 beta107,
+Use the [friends beta guide](getting-started.en.md): Android12+, ARM64 beta108,
 invitation-based access, VPN, text and voice messages. The APK is distributed through
 an invitation page and HTTPS download; it is not yet a GitHub or app-store release.
 The [client workflow](../.github/workflows/clients.yml) documents source-build requirements.

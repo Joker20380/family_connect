@@ -54,14 +54,15 @@ restricted service-only delivery and the Windows messenger counterpart remain op
 **MESH (Media Encapsulated Secure Hop)** is Family Connect's secure media
 transport. Its current carrier is VP8/RTP and its current media provider is
 Telemost; the product name does not depend on that provider. It is not a
-decentralized or multi-hop mesh network. Android107 includes this media path;
+decentralized or multi-hop mesh network. Android108 includes this media path;
 desktop media integration remains incomplete. See the
 [transport model and limits](carrier/README.md#mesh-product-contract) and
 [current status](docs/STATUS.md) and release details below.
 
-Public Android **beta107 / Android12+ / ARM64**: [download and update in place](docs/getting-started.en.md).
-Invitation/default updater now offer MESH-capable107 with quiet status notifications.
-CI/signature/HTTPS checks PASS; physical owner107 runtime is pending. Admission is unchanged.
+Public Android **beta108 / Android12+ / ARM64**: [download and update in place](docs/getting-started.en.md).
+Invitation/default updater now offer MESH-capable108 with quiet status notifications.
+The dashboard and country list show measured server CPU when channel capacity is unknown.
+CI/signature/HTTPS checks PASS; physical owner108 runtime is pending. Admission is unchanged.
 
 **Resilient connectivity for families and personal devices.**
 
@@ -87,7 +88,7 @@ lifecycle. Automatic orchestration across normal and restricted transports is
 
 | Platform | Latest documented distribution and limits |
 | --- | --- |
-| Android12+ / ARM64 | **0.1.18-beta107 / code107**; MESH-capable public update, quiet VPN status notifications; CI PASS, physical107 owner runtime pending. |
+| Android12+ / ARM64 | **0.1.18-beta108 / code108**; MESH-capable public update, quiet VPN status notifications; CI PASS, physical108 owner runtime pending. |
 | Linux | **0.2.11**, GTK 4/libadwaita; AppImage and DEB, legacy archive retained for advanced/manual use and updater compatibility. System dependencies and VPN helpers still require setup. |
 | Windows 10 1809+ / 11 x64 | **0.2.15**; invitation activation, independent signed update catalog; installer has no trusted publisher signature. 0.2.14 remains a compatibility fallback; affected Windows 10 device acceptance is pending. |
 | macOS / iOS | No client release; iOS is later work, after real beta evidence. |

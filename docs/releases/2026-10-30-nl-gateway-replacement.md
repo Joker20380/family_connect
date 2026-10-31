@@ -1,21 +1,20 @@
 # NL production gateway replacement — 30 October 2026
 
-## Current result — Android107 publicly distributed; owner runtime still pending
+## Current result — Android108 publicly distributed; owner runtime still pending
 
-**Android108 load-display continuation — source qualified, not distributed.**
-Owner requests visible server load. Fresh public NL metrics contain CPU/RX/TX, but no
-verified channel capacity; the old aggregate-only UI therefore shows No data.108 displays
-explicit **Server CPU / CPU сервера** and a CPU-labelled country-list percentage when the
-channel is unknown. It never invents a link speed or calls CPU total/network utilization.
-Known-capacity aggregate/estimate behavior is retained; stale/missing/wrong-country samples
-still show No data, not zero. Tooltip retains observed RX/TX and marks unknown channel usage.
-381 JVM tests/64 suites, lint, instrumentation compilation and45 focused Python checks PASS.
-Hosted UI/runtime qualification, signed108 artifact and publication remain pending.
-Public/invitation version107 and Android update sequence2 remain unchanged; gateway catalog4,
-server units, keys/admission and paid ledger are untouched. Canary PAUSED; no phone debugging.
-
-
-Updated 2026-10-31T15:44:07Z. Same NL-REPLACEMENT-20261030 continuation, not a product checkpoint.
+**Android108 load-display continuation — publicly distributed; phone acceptance pending.**
+The dashboard and country list show explicitly labelled **Server CPU / CPU сервера**
+when fresh CPU metrics exist but channel capacity is unknown. No link speed is invented;
+CPU is not total/channel utilization. Known-capacity aggregate behavior stays unchanged,
+and stale/missing measurements show No data rather than zero. RX/TX remain in the tooltip.
+Hosted CI41243393838 at source3b10199 PASS, including actual emulator VPN/UI checks,
+381 JVM tests/64 suites, lint and exact-source ARM64 packaging. Both synthetic CPU renders
+were downloaded and visually checked.51 focused local tests PASS. Existing offline signer,
+16K alignment and verified-HTTPS exact APK/source/catalog/invitation readbacks PASS.
+Public updater and invitation now offer108; Android catalog sequence3, minimum1,
+mandatory_after0. Updating needs Android consent: install in place without clearing data.
+Physical108 installation/runtime is NOT_RUN; no phone debugging or reenrollment.
+Gateway catalog4, server identities/admission and paid ledger are unchanged; canary PAUSED.
 
 **NL-REPLACEMENT-20261030 / READY_FOR_OWNER_NL_SMOKE.**
 Owner-executed Sprintbox console checks at11:52UTC confirm the RU host, synchronized clock,
@@ -30,10 +29,10 @@ Catalog4/signature/new NL endpoint and unchanged RU entry are reconciled read-on
 11:55:13UTC. No republication or sequence5. Owner subsequently reports AWG/internet working;
 owner now confirms the HTTPS egress address matches185.10.158.212 and reports Disconnect.
 This is owner-reported AWG egress PASS; resource cleanup is not yet verified. TCP/Auto-MESH not run.
-The missing NL load percentage is localized: fresh metrics, but the replacement provider's
-channel capacity is unverified. Android intentionally displays No data rather than treating
-CPU alone as total load. No guessed capacity, source/configuration change or APK update.
-Android107 is now publicly distributed for Android12+/ARM64, following the owner's
+Earlier load diagnosis: fresh NL metrics were hidden by107 when channel capacity was
+unknown. The108 publication now shows explicitly labelled CPU instead; channel capacity
+remains unverified, with no invented speed or server-monitoring contract change.
+Historical107 publication (superseded by108): Android107 was publicly distributed for Android12+/ARM64, following the owner's
 explicit instruction to switch all users without phone debugging. Hosted CI41213595334
 at source16c91fcc PASS:376 JVM tests/63 suites, lint, carrier race checks,43 executed
 instrumentation cases (24 variant skips), real emulator VPN traffic/revoke/cleanup and
@@ -41,7 +40,7 @@ quiet foreground notification flags, plus final native/source-provenance packagi
 The downloaded CI APK was qualified, signed offline with the existing certificate,
 and read back byte-for-byte over verified HTTPS. The earlier private unsigned107
 candidate is not this release; public JNI was rebuilt by CI, not reused from that candidate.
-Public Android updater and invitation now offer beta107; signed Android catalog sequence2,
+At that publication the updater and invitation offered beta107; signed Android catalog sequence2,
 minimum_supported_version1 and mandatory_after0. Installation still needs Android consent.
 Exact Codec2 corresponding source/licenses are published alongside the APK.
 Physical owner installation/runtime is NOT_RUN: owner explicitly authorized expedited
@@ -1341,3 +1340,26 @@ Run41241889477 passed the debug VPN/storage tests, then adb reported the disposa
 emulator offline before Friends UI started. The CI-only runner now waits at most90s for
 one emulator to be online and boot-complete; physical/ambiguous targets still fail closed.
 No emulator restart or test retry/waiver.51 focused checks PASS;108 remains unpublished.
+
+## Android108 general publication — 31 October
+
+Verified public readback: **2026-10-31T21:46:51Z**. Same NL-REPLACEMENT-20261030 continuation.
+Explicit CPU display fixes the missing NL indicator without inventing provider capacity.
+Fresh/stale/country-binding/zero/saturation logic and real dashboard/dropdown assertions PASS.
+Two exact synthetic PNGs visually reviewed; no user screen or identity was captured.
+CI41243393838/source3b10199, native provenance,381 JVM tests/64 suites, lint and51 focused
+local tests PASS. Earlier runner/export failures remain historical evidence above; no gate waived.
+
+- APK: beta108/code108, Android12+/ARM64, **56212840 bytes**.
+- APK SHA256: `144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf`.
+- Signer SHA256: `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`; same existing offline signer.
+- Corresponding audio source SHA256: `249b86d49612b716d69e25d554579213a32cbb74d7167d652f6808f60f618a89`; **7601671 bytes**.
+- Signed Android catalog: **sequence3**, minimum1, mandatory_after0; signature/current validity PASS.
+- Public APK/source downloads, both Android manifests and invitation/CSP: exact verified HTTPS PASS.
+- Encrypted pre-publication backup/readback PASS; two bounded proxy configuration HUPs, no API/gateway restart.
+- Gateway catalog4, RU/NL identities, registry/admission and paid0/0 unchanged. Canary PAUSED.
+- Phone108 install, notifications/load field check and remaining owner TCP/Auto-MESH: NOT_RUN.
+
+Rollback not executed. Preserve immutable107 and108; do not replace an existing APK or
+decrease update sequence. A client correction requires a higher version and sequence.
+Installation remains user-consented, not proof that every device updated. No ADB used.

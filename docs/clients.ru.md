@@ -236,11 +236,12 @@ HTTP200, скачанные SHA256/подпись проверены; [отчё�
 До единственной мобильной попытки оператор проверяет свежие leases и READY/ACK;
 после разрыва немедленный экспорт. Не менять FIELD admission или public updater.
 
-**Актуально31.10: beta107/code107 опубликована, Android12+/ARM64.**
+**Актуально31.10: beta108/code108 опубликована, Android12+/ARM64.**
+CPU сервера виден на главном экране и в списке стран, даже если скорость канала неизвестна.
 MESH и тихое обновление текущего VPN-уведомления; CI и публичный подписанный APK проверены.
-Проверка107 на телефоне NOT_RUN: владелец разрешил ускоренный выпуск без отладки.
+Проверка108 на телефоне NOT_RUN: владелец разрешил ускоренный выпуск без отладки.
 Устанавливать поверх, без удаления данных/повторной регистрации; допуск не расширяется.
-[Скачать/обновить](getting-started.ru.md) · [Результат](releases/2026-10-30-nl-gateway-replacement.md#android107-general-publication--31-october).
+[Скачать/обновить](getting-started.ru.md) · [Результат](releases/2026-10-30-nl-gateway-replacement.md#android108-general-publication--31-october).
 
 ## Исторические этапы подготовки
 
@@ -334,7 +335,7 @@ beta-сертификатом и **установлен поверх field52 н�
 [Результат attempt14](releases/2026-10-02-5n-prov1-attempt14.ru.md) ·
 [Provenance и SHA256 canary](releases/2026-10-02-5n-android-canary-build.ru.md).
 
-[Инструкция Friends beta](getting-started.ru.md): Android12+, ARM64 beta107,
+[Инструкция Friends beta](getting-started.ru.md): Android12+, ARM64 beta108,
 доступ по приглашению, VPN, текст и голосовые. APK распространяется
 через страницу приглашения и HTTPS; в GitHub Releases и магазинах её пока нет.
 Для сборки используйте требования [client workflow](../.github/workflows/clients.yml).

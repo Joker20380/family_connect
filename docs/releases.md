@@ -1,18 +1,13 @@
 # Release distribution / Выпуски
 
-**Candidate108:** explicit CPU load when channel capacity is unknown; source/tests qualified,
-not signed/distributed. Public107 below remains unchanged until108 release gates pass.
-
-**31 October — beta107 publicly distributed, Android12+/ARM64.**
-The invitation page and both Android update catalogs now offer107 with MESH support and
-quiet foreground-notification updates. Hosted CI, signed APK and public HTTPS byte checks PASS.
-The owner authorized expedited general rollout without phone debugging; physical107 upgrade
-and owner runtime remain NOT_RUN. Updates are optional; install over the existing app, never
-uninstall, clear data or reenroll. Restricted admission is unchanged; canary stays PAUSED.
-RU: общий выпуск107 опубликован; Android12+, установка поверх без удаления данных.
-[Same-operation evidence](releases/2026-10-30-nl-gateway-replacement.md).
-
-
+**31 October — beta108 publicly distributed, Android12+/ARM64.**
+Explicit server CPU percentage is visible even without a verified channel capacity.
+MESH and quiet foreground notifications are retained. Hosted CI, visual review, existing
+signer and public HTTPS byte readback PASS. Android update catalog sequence3 is optional.
+Install over the existing app; never clear data or reenroll. Physical108 runtime NOT_RUN.
+RU: выпуск108 показывает «CPU сервера»; обновление поверх, без отладки телефона.
+Admission and gateway catalog4 remain unchanged; canary stays PAUSED.
+[Evidence](releases/2026-10-30-nl-gateway-replacement.md#android108-general-publication--31-october).
 
 **Private owner research84/code84,12.10 — not publicly distributed:**
 installed in place11:47:34UTC; APK SHA256

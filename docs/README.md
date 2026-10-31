@@ -2,17 +2,19 @@
 
 ## Current operational restoration
 
-**Android108 load-display continuation — source qualified, not distributed.**
-Owner requests visible server load. Fresh public NL metrics contain CPU/RX/TX, but no
-verified channel capacity; the old aggregate-only UI therefore shows No data.108 displays
-explicit **Server CPU / CPU сервера** and a CPU-labelled country-list percentage when the
-channel is unknown. It never invents a link speed or calls CPU total/network utilization.
-Known-capacity aggregate/estimate behavior is retained; stale/missing/wrong-country samples
-still show No data, not zero. Tooltip retains observed RX/TX and marks unknown channel usage.
-381 JVM tests/64 suites, lint, instrumentation compilation and45 focused Python checks PASS.
-Hosted UI/runtime qualification, signed108 artifact and publication remain pending.
-Public/invitation version107 and Android update sequence2 remain unchanged; gateway catalog4,
-server units, keys/admission and paid ledger are untouched. Canary PAUSED; no phone debugging.
+**Android108 load-display continuation — publicly distributed; phone acceptance pending.**
+The dashboard and country list show explicitly labelled **Server CPU / CPU сервера**
+when fresh CPU metrics exist but channel capacity is unknown. No link speed is invented;
+CPU is not total/channel utilization. Known-capacity aggregate behavior stays unchanged,
+and stale/missing measurements show No data rather than zero. RX/TX remain in the tooltip.
+Hosted CI41243393838 at source3b10199 PASS, including actual emulator VPN/UI checks,
+381 JVM tests/64 suites, lint and exact-source ARM64 packaging. Both synthetic CPU renders
+were downloaded and visually checked.51 focused local tests PASS. Existing offline signer,
+16K alignment and verified-HTTPS exact APK/source/catalog/invitation readbacks PASS.
+Public updater and invitation now offer108; Android catalog sequence3, minimum1,
+mandatory_after0. Updating needs Android consent: install in place without clearing data.
+Physical108 installation/runtime is NOT_RUN; no phone debugging or reenrollment.
+Gateway catalog4, server identities/admission and paid ledger are unchanged; canary PAUSED.
 
 **NL-REPLACEMENT-20261030 / READY_FOR_OWNER_NL_SMOKE.**
 Owner-executed Sprintbox console checks at11:52UTC confirm the RU host, synchronized clock,
@@ -27,10 +29,10 @@ Catalog4/signature/new NL endpoint and unchanged RU entry are reconciled read-on
 11:55:13UTC. No republication or sequence5. Owner subsequently reports AWG/internet working;
 owner now confirms the HTTPS egress address matches185.10.158.212 and reports Disconnect.
 This is owner-reported AWG egress PASS; resource cleanup is not yet verified. TCP/Auto-MESH not run.
-The missing NL load percentage is localized: fresh metrics, but the replacement provider's
-channel capacity is unverified. Android intentionally displays No data rather than treating
-CPU alone as total load. No guessed capacity, source/configuration change or APK update.
-Android107 is now publicly distributed for Android12+/ARM64, following the owner's
+Earlier load diagnosis: fresh NL metrics were hidden by107 when channel capacity was
+unknown. The108 publication now shows explicitly labelled CPU instead; channel capacity
+remains unverified, with no invented speed or server-monitoring contract change.
+Historical107 publication (superseded by108): Android107 was publicly distributed for Android12+/ARM64, following the owner's
 explicit instruction to switch all users without phone debugging. Hosted CI41213595334
 at source16c91fcc PASS:376 JVM tests/63 suites, lint, carrier race checks,43 executed
 instrumentation cases (24 variant skips), real emulator VPN traffic/revoke/cleanup and
@@ -38,7 +40,7 @@ quiet foreground notification flags, plus final native/source-provenance packagi
 The downloaded CI APK was qualified, signed offline with the existing certificate,
 and read back byte-for-byte over verified HTTPS. The earlier private unsigned107
 candidate is not this release; public JNI was rebuilt by CI, not reused from that candidate.
-Public Android updater and invitation now offer beta107; signed Android catalog sequence2,
+At that publication the updater and invitation offered beta107; signed Android catalog sequence2,
 minimum_supported_version1 and mandatory_after0. Installation still needs Android consent.
 Exact Codec2 corresponding source/licenses are published alongside the APK.
 Physical owner installation/runtime is NOT_RUN: owner explicitly authorized expedited

@@ -9,10 +9,10 @@ No manual service setup is needed. Affected Windows10 device acceptance is pendi
 ## First activation
 
 Android12+, ARM64; access is invitation-only. Installing the APK does not grant access.
-The invitation page and in-app updater both provide beta107. Updating does not enable restricted FIELD access.
+The invitation page and in-app updater both provide beta108. Updating does not enable restricted FIELD access.
 
-Beta107 includes MESH and quiet ongoing VPN-notification updates. Android below12 is unsupported.
-CI/signature/public-download checks PASS; physical107 runtime remains unverified. The owner
+Beta108 includes MESH and quiet ongoing VPN-notification updates. Android below12 is unsupported.
+CI/signature/public-download checks PASS; physical108 runtime remains unverified. The owner
 authorized general rollout without USB debugging. No Mi account or ADB is required to install.
 MESH still requires accepted admission and current readiness material, not an old cached READY.
 
@@ -27,11 +27,11 @@ MESH still requires accepted admission and current readiness material, not an ol
 
 ## Update an existing app
 
-[Download beta107 — 56.2 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta107.apk).
-Version `0.1.18-beta107`, code107, ARM64,56212840 bytes; SHA256:
+[Download beta108 — 56.2 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk).
+Version `0.1.18-beta108`, code108, ARM64,56212840 bytes; SHA256:
 
 ```text
-5e219e77d1a030b59c08a4e994213bc2fd4dc0689cd7fb3fb8365e81de737099
+144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf
 ```
 
 The app also checks for updates. Open the APK and select **Update** in Android’s system
@@ -41,9 +41,9 @@ do not copy another device’s profiles or keys.
 
 The [older universal beta13](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.12-beta13.apk)
 remains available for other architectures,240.5 MB. It lacks current features and is not
-an equivalent alternative to107.
+an equivalent alternative to108.
 
-[Exact audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta107-audio-source.tar.gz)
+[Exact audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta108-audio-source.tar.gz)
 are available with the release. Installation requires Android confirmation; it is not forced.
 
 ## Text and voice
@@ -71,7 +71,7 @@ not established. [Notification and announcement guide (RU)](testing/messenger-no
 - Update failure: record the error and versions; do not erase data to bypass a signature mismatch.
 
 Report model, Android/app version and network type. Exclude invitations, keys, profiles
-and messages. [Beta107 validation/publication](releases/2026-10-30-nl-gateway-replacement.md#android107-general-publication--31-october).
+and messages. [Beta108 validation/publication](releases/2026-10-30-nl-gateway-replacement.md#android108-general-publication--31-october).
 
 ## Desktop clients
 
@@ -82,7 +82,7 @@ current availability counts.
 
 ## Server load display
 
-Public107 hides aggregate load when channel capacity is unknown even with fresh CPU metrics.
-Candidate108 adds an explicit Server CPU display in that case; it is not distributed yet.
-CPU is not channel utilization or the remaining monthly traffic quota. Missing/stale
-measurements still show No data. [Release status](releases.md).
+Beta108 shows **Server CPU** on the dashboard and **CPU N%** in the server list when
+channel capacity is unknown. CPU is not channel utilization or the monthly traffic quota.
+Known-capacity servers retain their aggregate indicator; stale/missing samples show No data.
+[Release status](releases.md).
