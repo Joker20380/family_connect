@@ -35,8 +35,8 @@
   "schema": 1,
   "task": "NL-REPLACEMENT-20261030",
   "scope": "AVAILABILITY_RESTORATION_NOT_PRODUCT_CHECKPOINT",
-  "status": "BLOCKED_NL_REPLACEMENT",
-  "blocker": "RU_INTERMITTENT_UNRESOLVED",
+  "status": "READY_FOR_OWNER_NL_SMOKE",
+  "blocker": null,
   "initial_blocker": "BLOCKED_NEW_HOST_OS",
   "target": {
     "ipv4": "185.10.158.212",
@@ -240,8 +240,8 @@
     "android106_new_endpoint": "ANDROID_PARSER_PASS_ACTUAL_DEVICE_OWNER_SMOKE_PENDING",
     "apk_update": false,
     "ru_endpoint_configuration": "UNCHANGED",
-    "monitoring_inventory": "NEW_NL_CONFIGURED_FRESH_PUBLIC_SAMPLES_OBSERVED_1120_UTC",
-    "sequence_observation": "FRESH_SIGNED_CATALOG_READBACK_2026_10_31_112656_UTC"
+    "monitoring_inventory": "NEW_NL_CONFIGURED_PUBLIC_RU_NL_SAMPLES_CURRENT_AT_CONSOLE_READBACK",
+    "sequence_observation": "FRESH_SIGNED_CATALOG_READBACK_2026_10_31_115513_UTC"
   },
   "protected_scope": {
     "canary": "PAUSED",
@@ -260,7 +260,7 @@
     "new_host_management_change": "AUTHORIZED_SSH_BASE_PACKAGES_AND_OS_UPGRADE",
     "fresh_query_scope": "BEFORE_LATE_RU_REACHABILITY_FAILURE"
   },
-  "rollback": "NOT_ATTEMPTED_RU_UNREACHABLE_CATALOG4_INITIAL_READBACK_PASS_OLD_NL_FENCED",
+  "rollback": "NOT_NEEDED_CURRENT_CONTROL_PLANE_AND_CATALOG4_VERIFIED_OLD_NL_FENCED",
   "restricted_recovery": {
     "manual_transactions_started": 1,
     "transaction_state": "ABORTED",
@@ -535,7 +535,7 @@
     "catalog_publication": "NOT_RUN",
     "owner_smoke": "NOT_RUN"
   },
-  "next_action": "OBTAIN_RU_PROVIDER_CONSOLE_RESOLVE_INTERMITTENT_HOST_GATE_RECONFIRM_CURRENT_STATE_THEN_OWNER_SMOKE_NO_REPUBLICATION",
+  "next_action": "OWNER_ANDROID106_AWG_ONCE_THEN_TCP_THEN_AUTO_MESH_VERIFY_ENDPOINT_DATA_PLANE_AND_CLEANUP_NO_REPUBLICATION",
   "checks": {
     "strict_json": "PASS",
     "targeted_privacy_secret_scan": "PASS",
@@ -594,7 +594,7 @@
     "data_plane": "NOT_RUN",
     "scope": "HISTORICAL_PRE_OWNER_EXCEPTION_SUPERSEDED_BY_FLEET_PROBE_CONTINUATION"
   },
-  "last_observed_utc": "2026-10-31T11:27:24Z",
+  "last_observed_utc": "2026-10-31T11:55:42Z",
   "fleet_probe_continuation": {
     "entry_local_and_remote_main": "f978a4e2a19d612b9cd5f3a3a4e862324745260b",
     "observed_utc": "2026-10-31T09:50:12.264119+00:00",
@@ -872,11 +872,11 @@
   },
   "ru_control_plane_continuation": {
     "entry_local_and_remote_main": "26b347c2673af89c4f04704d2334485ddd947cce",
-    "observed_utc": "2026-10-31T11:27:24Z",
+    "observed_utc": "2026-10-31T11:55:42Z",
     "classification": "RU_INTERMITTENT_UNRESOLVED",
     "root_cause": "NOT_PROVEN",
-    "provider_console": "UNAVAILABLE_TO_SESSION_NOT_RUN",
-    "host_observation_route": "STRICT_PINNED_SSH_NOT_CONSOLE",
+    "provider_console": "OWNER_EXECUTED_HOST_DATABASE_AND_LOCAL_API_PASS",
+    "host_observation_route": "OWNER_PROVIDER_CONSOLE_PLUS_SEPARATE_PINNED_SSH_KERNEL_FOLLOWUP",
     "service_restarts": 0,
     "service_reloads": 0,
     "host_reboots": 0,
@@ -905,9 +905,21 @@
       "kernel_oom_storage_conntrack_errors_in_bounded_window": 0,
       "filesystem_used_percent": 75,
       "inodes_used_percent": 9,
-      "conntrack_count": 870,
+      "conntrack_count": 443,
       "conntrack_max": 65536,
-      "ntp_synchronized": true
+      "ntp_synchronized": true,
+      "kernel_source": "DMESG_LAST_HOUR_RING_NOT_JOURNALD",
+      "kernel_window_complete": true,
+      "vmstat_iowait_percent": [
+        2,
+        1,
+        0
+      ],
+      "vmstat_blocked_processes": [
+        0,
+        0,
+        0
+      ]
     },
     "database": {
       "quick_check": "PASS",
@@ -921,24 +933,27 @@
     "external_acceptance": {
       "operator_consecutive_samples": 3,
       "new_nl_consecutive_samples": 3,
-      "first_utc": "2026-10-31T11:23:33Z",
-      "last_utc": "2026-10-31T11:25:10Z",
+      "first_utc": "2026-10-31T11:54:03Z",
+      "last_utc": "2026-10-31T11:55:42Z",
       "ssh_execution": "PASS",
       "tls_8443": "PASS",
       "real_challenge": "PASS",
       "signed_device_status": "PASS",
       "http_504_count": 0,
-      "max_ssh_seconds": 1.857,
-      "max_challenge_seconds_including_relay": 1.072,
+      "max_ssh_seconds": 3.265,
+      "max_challenge_seconds_including_relay": 1.044,
       "private_key_copied_to_nl": false,
-      "agent_forwarding": false
+      "agent_forwarding": false,
+      "max_signed_status_seconds_including_relay": 1.09
     },
     "localhost_recheck": {
-      "observed_utc": "2026-10-31T11:27:24Z",
-      "direct_backend": "CHALLENGE_AND_SIGNED_STATUS_PASS",
-      "proxy": "VERIFIED_TLS_CHALLENGE_AND_SIGNED_STATUS_PASS",
-      "max_http_seconds": 0.115,
-      "console_path_used": false
+      "observed_utc": "2026-10-31T11:52:57.580411+00:00",
+      "direct_backend": "ACTUAL_CHALLENGE_PASS",
+      "proxy": "VERIFIED_TLS_ACTUAL_CHALLENGE_PASS",
+      "max_challenge_seconds": 0.082,
+      "monitor_seconds": 9.565,
+      "console_path_used": true,
+      "prior_signed_status_pass_retained": true
     },
     "catalog": {
       "sequence": 4,
@@ -959,7 +974,8 @@
       "directory_sha256": "77c55687463798ddce5257d7adf9c6df9245524a07e61eff9a2a6902eb55acf4",
       "directory_expiry_utc": "2026-10-31T14:23:33.874307291Z",
       "renewal_evaluation": "NOOP",
-      "refresh_operations": 0
+      "refresh_operations": 0,
+      "observed_utc": "2026-10-31T11:55:13Z"
     },
     "schedules": {
       "renewal": "ACTIVE_WAITING",
@@ -977,7 +993,7 @@
     "paid_events": 0,
     "canary": "PAUSED",
     "owner_smoke": "NOT_RUN",
-    "owner_prompt_issued": false,
+    "owner_prompt_issued": true,
     "validation_scope": "DOCUMENTATION_ONLY_NO_PRODUCT_BUILD_OR_FULL_HISTORICAL_SUITE",
     "checks": {
       "strict_json": "PASS",
@@ -987,6 +1003,21 @@
       "staged_scope": "PASS_5_EXISTING_DOCUMENTS",
       "git_diff_check": "PASS",
       "unrelated_work": "PRESERVED_INCLUDING_PRE_EXISTING_UNSTAGED_LINK_ERROR"
+    },
+    "current_acceptance": "PASS_READY_FOR_OWNER_SMOKE",
+    "console_continuation_entry_main": "e3151642b01a7320186c4809aadda1c7808d609f",
+    "console_diagnostics": {
+      "first_helper_result": "TIMEOUT_SUBSTAGE_NOT_RECORDED",
+      "instrumentation": "PRIVATE_DIAGNOSTIC_ONLY_PARTIAL_RESULTS_AND_SAFE_STAGE_LABELS",
+      "instrumentation_tests": "PASS",
+      "only_failed_substage": "KERNEL_LOG_JOURNALCTL",
+      "journalctl_timeout_seconds": 8.283,
+      "kernel_followup": "DMESG_COMPLETE_LAST_HOUR_NO_FAILURE_MATCH",
+      "kernel_followup_route": "PINNED_SSH_NOT_CONSOLE",
+      "kernel_followup_seconds": 0.037,
+      "helper_cleanup": "REMOVED_HASH_GUARDED",
+      "temporary_credentials_created": 0,
+      "failure_cause_inference": "NO_APPLICATION_OR_PROVIDER_CAUSE_INFERRED_FROM_JOURNAL_TIMEOUT"
     }
   }
 }

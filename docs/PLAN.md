@@ -4,15 +4,17 @@
 
 ### Authorized operational exception — NL-REPLACEMENT-20261030
 
-**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / RU_INTERMITTENT_UNRESOLVED.**
-RU access returned without a service restart or reboot. Three consecutive bounded samples
-from both operator and new NL passed SSH execution, verified TLS, real fleet-probe challenge
-and signed device-status readback at11:23–11:25UTC. Catalog4/signature/new NL endpoint and
-unchanged RU entry were reconciled read-only at11:26:56UTC; no publication or sequence5.
-However, earlier RU localhost backend and proxy challenges timed out during81–96% I/O-wait,
-while static monitoring returned200. The root cause is not proven. Provider-console access
-is unavailable to this session; the requested independent console gate is NOT_RUN, not
-replaced by SSH. Owner smoke remains blocked pending that gate and RU stability confirmation.
+**NL-REPLACEMENT-20261030 / READY_FOR_OWNER_NL_SMOKE.**
+Owner-executed Sprintbox console checks at11:52UTC confirm the RU host, synchronized clock,
+database integrity, unchanged API/SSH processes and real local backend/proxy challenges PASS.
+The diagnostic timeout is localized to journalctl, not the challenge endpoint. A bounded
+kernel-ring follow-up at11:54UTC covers the last hour: no OOM, storage, conntrack-full or
+lockup match. No service restart/reload, host reboot or product configuration change.
+Three consecutive samples from each of operator and new NL at11:54–11:55UTC pass SSH,
+verified TLS, real challenge and signed device-status; no504. Current control-plane gates
+PASS. The earlier intermittent stall's root cause remains NOT_PROVEN, not declared repaired.
+Catalog4/signature/new NL endpoint and unchanged RU entry are reconciled read-only at
+11:55:13UTC. No republication or sequence5. Owner AWG/TCP/Auto-MESH smoke remains NOT_RUN.
 
 New NL **185.10.158.212** has accepted AWG/TCP and now real production-bound MESH
 DNS/HTTPS/egress acceptance. Reused **FLEET_MESH_PROBE_1**; no second identity/invitation,
@@ -29,21 +31,20 @@ Signed catalog **4** was published; initial authenticated NL readback returned t
 RU entry and probe assignment remain unchanged. Actual Android catalog parser PASS without
 APK update; Android106 device receipt/owner smoke remains **NOT_RUN**, not implied by parser
 acceptance. Prepared routing artifact and mailbox/monitoring target updates are deployed.
-Fresh11:26:56UTC readback validates canonical profile/certificate/CRL, floor **27226**,
+Fresh11:55:13UTC readback validates canonical profile/certificate/CRL, floor **27226**,
 RU/NL directory equality and actual SSH snapshot. Renewal evaluates NOOP; no material refresh
 is needed at that observation. Normal renewal/read-only sync timers are active/waiting,
 last workers succeeded, controller COMMITTED and neither node has an active operation owner.
 New NL remains active with integrated publisher rotation; no separate publisher timer.
 Old NL remains **FENCED**. No rollback/catalog rewrite or RU reboot was attempted.
 Paid ledger **0/0**, payments/revenue0, cohort0/10. **BETA-0-CANARY-1 PAUSED**;
-paid-canary, subscription events and Android stage0 stay off. Obtain the RU provider console
-and resolve the remaining intermittent-host acceptance gate, then owner AWG/TCP/Auto-MESH
-smoke in this same operation. No blind publication retry. Not NL_REPLACEMENT_LIVE.
+paid-canary, subscription events and Android stage0 stay off. Proceed to owner Android106
+AWG Connect once, then TCP and Auto/MESH with endpoint/HTTPS/egress and Disconnect checks
+in this same operation. No further publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
 
-NEXT within this same operation: obtain provider-console access for the independent RU
-host check; do not infer a provider, database or OOM cause from the transient I/O pressure.
-Keep reconciled catalog4 unchanged; reconfirm stable control-plane/material gates. Then
-owner Android106 AWG Connect once, verify new endpoint,
+NEXT within this same operation: owner Android106 AWG Connect once. Console/local API
+and three external samples per origin are now PASS. Keep catalog4 unchanged and monitor
+the earlier unresolved intermittent-host cause. Verify the new endpoint,
 HTTPS/egress and Disconnect cleanup; then TCP once and Auto/MESH once with current readiness
 import/ACK. Keep normal freshness monitoring active while waiting. Only all owner/server
 gates permit NL_REPLACEMENT_LIVE. No new PLAN ID, probe identity, owner-canary use or

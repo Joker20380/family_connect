@@ -1,18 +1,20 @@
 # NL production gateway replacement — 30 October 2026
 
-## Current result — catalog4 reconciled; intermittent RU/console gate unresolved
+## Current result — RU acceptance PASS; owner NL smoke pending
 
-Observed 2026-10-31T11:27:24Z. Same NL-REPLACEMENT-20261030 continuation, not a product checkpoint.
+Observed 2026-10-31T11:55:42Z. Same NL-REPLACEMENT-20261030 continuation, not a product checkpoint.
 
-**NL-REPLACEMENT-20261030 / BLOCKED_NL_REPLACEMENT / RU_INTERMITTENT_UNRESOLVED.**
-RU access returned without a service restart or reboot. Three consecutive bounded samples
-from both operator and new NL passed SSH execution, verified TLS, real fleet-probe challenge
-and signed device-status readback at11:23–11:25UTC. Catalog4/signature/new NL endpoint and
-unchanged RU entry were reconciled read-only at11:26:56UTC; no publication or sequence5.
-However, earlier RU localhost backend and proxy challenges timed out during81–96% I/O-wait,
-while static monitoring returned200. The root cause is not proven. Provider-console access
-is unavailable to this session; the requested independent console gate is NOT_RUN, not
-replaced by SSH. Owner smoke remains blocked pending that gate and RU stability confirmation.
+**NL-REPLACEMENT-20261030 / READY_FOR_OWNER_NL_SMOKE.**
+Owner-executed Sprintbox console checks at11:52UTC confirm the RU host, synchronized clock,
+database integrity, unchanged API/SSH processes and real local backend/proxy challenges PASS.
+The diagnostic timeout is localized to journalctl, not the challenge endpoint. A bounded
+kernel-ring follow-up at11:54UTC covers the last hour: no OOM, storage, conntrack-full or
+lockup match. No service restart/reload, host reboot or product configuration change.
+Three consecutive samples from each of operator and new NL at11:54–11:55UTC pass SSH,
+verified TLS, real challenge and signed device-status; no504. Current control-plane gates
+PASS. The earlier intermittent stall's root cause remains NOT_PROVEN, not declared repaired.
+Catalog4/signature/new NL endpoint and unchanged RU entry are reconciled read-only at
+11:55:13UTC. No republication or sequence5. Owner AWG/TCP/Auto-MESH smoke remains NOT_RUN.
 
 New NL **185.10.158.212** has accepted AWG/TCP and now real production-bound MESH
 DNS/HTTPS/egress acceptance. Reused **FLEET_MESH_PROBE_1**; no second identity/invitation,
@@ -29,18 +31,62 @@ Signed catalog **4** was published; initial authenticated NL readback returned t
 RU entry and probe assignment remain unchanged. Actual Android catalog parser PASS without
 APK update; Android106 device receipt/owner smoke remains **NOT_RUN**, not implied by parser
 acceptance. Prepared routing artifact and mailbox/monitoring target updates are deployed.
-Fresh11:26:56UTC readback validates canonical profile/certificate/CRL, floor **27226**,
+Fresh11:55:13UTC readback validates canonical profile/certificate/CRL, floor **27226**,
 RU/NL directory equality and actual SSH snapshot. Renewal evaluates NOOP; no material refresh
 is needed at that observation. Normal renewal/read-only sync timers are active/waiting,
 last workers succeeded, controller COMMITTED and neither node has an active operation owner.
 New NL remains active with integrated publisher rotation; no separate publisher timer.
 Old NL remains **FENCED**. No rollback/catalog rewrite or RU reboot was attempted.
 Paid ledger **0/0**, payments/revenue0, cohort0/10. **BETA-0-CANARY-1 PAUSED**;
-paid-canary, subscription events and Android stage0 stay off. Obtain the RU provider console
-and resolve the remaining intermittent-host acceptance gate, then owner AWG/TCP/Auto-MESH
-smoke in this same operation. No blind publication retry. Not NL_REPLACEMENT_LIVE.
+paid-canary, subscription events and Android stage0 stay off. Proceed to owner Android106
+AWG Connect once, then TCP and Auto/MESH with endpoint/HTTPS/egress and Disconnect checks
+in this same operation. No further publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
 
-### RU read-only reconciliation — 31 October11:20–11:27UTC
+### Provider-console acceptance — 31 October11:52–11:55UTC
+
+Continuation from main `e3151642b01a7320186c4809aadda1c7808d609f`. Provider console was
+opened and commands executed by the owner; no console credentials were collected. RU host
+match, NTP, API/SSH active with unchanged processes and zero restarts PASS. Available memory
+about923MiB, root free7.58GB, free inodes3.32million; no failed Family Connect unit.
+Three other failed units were not modified.
+
+The first console helper hid the failing command behind TimeoutExpired. A private diagnostic-only
+correction preserves partial results and safe stage names; timeout/redaction/console-gate tests PASS.
+The second console run localized the8.283s timeout to bounded journalctl kernel-log reading.
+Read-only database quick_check/foreign_key_check, existing probe binding and paid0/0 PASS.
+Actual local backend challenge200 in0.046s and verified-TLS local proxy challenge200 in0.082s.
+Monitoring GET also200 but9.565s including setup; it is not substituted for API acceptance.
+No product source, gateway, Android, registry, configuration, identity or catalog change.
+
+At11:54:30UTC a separately identified pinned-SSH follow-up read the kernel ring directly,
+without journald:0.037s, retained coverage of the last hour,579 messages, no OOM/storage/
+conntrack-full/lockup match. This follow-up is not represented as a console execution.
+API artifact/argv and isolated proxy config/hash unchanged; proxy config test PASS, zero
+restarts/OOM. Three vmstat interval samples:2/1/0% I/O-wait, zero blocked processes,
+no swap-out; conntrack443/65536. This does not prove the cause of the historical stall.
+
+Fresh consecutive operator and new-NL samples at11:54:03,11:54:53,11:55:42UTC all PASS:
+SSH execution, verified TLS, real existing-probe challenge and signed device-status,
+six samples, no504. Maximum SSH3.265s, challenge1.044s including relay overhead,
+signed status1.090s. No MESH/gateway-join retry, enrollment or owner identity use.
+Console plus external/current-state acceptance is now PASS without service recovery action;
+historical failure classification remains RU_INTERMITTENT_UNRESOLVED/root cause NOT_PROVEN.
+
+Read-only11:55:13UTC reconciliation: exact catalog4/signature, new NL185.10.158.212, RU entry
+unchanged, no catalog5 or republication. Current canonical profile/certificate/CRL/directory,
+CRL/floor27226, RU/NL directory equality and actual SSH snapshot exit0/empty stderr PASS.
+Leaf/CRL expire13:32UTC; directory14:23:33UTC. Normal renewal NOOP: no refresh performed.
+Normal renewal/read-only sync active/waiting; prior transaction COMMITTED, both owners absent,
+integrated publisher active, legacy sync disabled. New NL critical units and exact gateway
+unchanged, zero restarts. Old NL accepted fencing retained, probe non-revoked, paid0/0,
+canary PAUSED. Temporary console helper removed after hash-guarded readback; private evidence
+retained. No temporary SSH/write credential was created.
+
+**Remaining gate:** owner Android106 AWG once, Disconnect cleanup; TCP once, cleanup;
+Auto/MESH once with current readiness import/ACK, DNS/HTTPS/NL egress, cleanup. No owner
+test is inferred from server acceptance. Keep catalog4 unchanged and normal monitoring active.
+
+### Historical RU read-only reconciliation — 31 October11:20–11:27UTC
 
 Continuation from main `26b347c2673af89c4f04704d2334485ddd947cce`. No product source,
 binary, host configuration, service restart/reload, reboot, catalog, identity or invitation
@@ -85,10 +131,10 @@ last workers success, controller COMMITTED, no active node owners. New NL accept
 and critical services remain active with0 restarts; no gateway-join or MESH probe repeated.
 Old NL fencing and paid/canary restrictions remain unchanged.
 
-**Remaining gate:** `RU_INTERMITTENT_UNRESOLVED`. Obtain the provider console and correlate
-host/network/storage evidence if the stall recurs; do not restart an apparently recovered
-service without evidence or reboot without the console/backup/narrow-repair gates.
-Owner AWG/TCP/Auto-MESH smoke NOT_RUN. No recovery or rollback action was applied.
+At this earlier observation the remaining gate was `RU_INTERMITTENT_UNRESOLVED` and
+provider-console execution was pending. The subsequent console and current-state acceptance
+above supersedes that access gate, not the unresolved historical root cause. Owner smoke
+was NOT_RUN; no recovery or rollback action was applied.
 
 ### Diagnosis and smallest proven fix
 
