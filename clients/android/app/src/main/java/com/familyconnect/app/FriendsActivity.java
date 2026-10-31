@@ -374,15 +374,12 @@ public final class FriendsActivity extends LocalizedActivity {
     private String loadTarget(){return ConnectionService.status.equals("off")?country:activeCountry;}
     private void renderLoad(){
         if(loadLabel==null)return;
-        ServerLoad sample=serverLoads.get(loadTarget());
-        if(sample!=null&&(!sample.country.equals(loadTarget())||!sample.fresh(System.currentTimeMillis()/1000.0)))sample=null;
         boolean ru=getResources().getConfiguration().getLocales().get(0).getLanguage().equals("ru");
-        String text=(ru?"Нагрузка сервера":"Server load")+" · ";
-        Double percent=sample==null?null:sample.percent;
-        text+=percent==null?(ru?"Нет данных":"No data"):(sample.estimated?"≈ ":"")+Math.round(percent)+"%";
+        ServerLoadPresentation load=ServerLoadPresentation.from(serverLoads.get(loadTarget()),loadTarget(),System.currentTimeMillis()/1000.0,ru);
+        String text=load.label();Double percent=load.percent;
         loadLabel.setText(text);loadBar.setContentDescription(text);loadBar.setProgress(percent==null?0:(int)Math.round(percent*10));
         loadBar.setProgressTintList(android.content.res.ColorStateList.valueOf(percent!=null&&percent>=90?Color.rgb(239,132,116):percent!=null&&percent>=70?TerminalUi.AMBER:TerminalUi.MINT));
-        loadLabel.setTooltipText(sample==null?text:String.format(java.util.Locale.ROOT,"CPU %.0f%% · ↓ %.1f / ↑ %.1f Mbps",sample.cpu,sample.rx,sample.tx)+(sample.estimated?(ru?" · расчёт по исходящему каналу 200 Мбит/с":" · estimated using 200 Mbps egress"):""));
+        loadLabel.setTooltipText(load.details);
     }
     private void refreshServerLoads(){if(!loadResumed||isDestroyed()||loadPending)return;loadNext=0;refreshLoad();}
     private void refreshLoad(){
@@ -411,9 +408,10 @@ public final class FriendsActivity extends LocalizedActivity {
         TextView name=collapsed?new TerminalUi.InlineLabel(c):new TextView(c);name.setText(ru?R.string.gateway_russia:R.string.gateway_netherlands);TerminalUi.textStyle(name,collapsed?12:14,collapsed?TerminalUi.MINT:TerminalUi.TEXT);name.setGravity(Gravity.CENTER_VERTICAL);
         row.addView(name,new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,1));
         if(collapsed){((TerminalUi.InlineLabel)name).label(name.getText()+"  ▾");name.setMinHeight(Math.max(TerminalUi.dp(c,48),(int)Math.ceil(name.getPaint().getFontMetrics().bottom-name.getPaint().getFontMetrics().top)));return row;}
-        ServerLoad sample=serverLoads.get(code);if(sample!=null&&!sample.fresh(System.currentTimeMillis()/1000.0))sample=null;
-        Double percent=sample==null?null:sample.percent;boolean locRu=getResources().getConfiguration().getLocales().get(0).getLanguage().equals("ru");
-        TextView load=new TextView(c);load.setText(percent==null?(locRu?"Нет данных":"No data"):(sample.estimated?"≈ ":"")+Math.round(percent)+"%");
+        boolean locRu=getResources().getConfiguration().getLocales().get(0).getLanguage().equals("ru");
+        ServerLoadPresentation presentation=ServerLoadPresentation.from(serverLoads.get(code),code,System.currentTimeMillis()/1000.0,locRu);
+        Double percent=presentation.percent;
+        TextView load=new TextView(c);load.setText(presentation.value);load.setTooltipText(presentation.details);
         int color=percent==null?TerminalUi.MUTED:percent>=90?Color.rgb(239,132,116):percent>=70?TerminalUi.AMBER:TerminalUi.MINT;
         TerminalUi.textStyle(load,13,color);load.setGravity(Gravity.CENTER_VERTICAL|Gravity.END);
         row.addView(load,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));

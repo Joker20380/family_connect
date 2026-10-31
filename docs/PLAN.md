@@ -4,6 +4,18 @@
 
 ### Authorized operational exception — NL-REPLACEMENT-20261030
 
+**Android108 load-display continuation — source qualified, not distributed.**
+Owner requests visible server load. Fresh public NL metrics contain CPU/RX/TX, but no
+verified channel capacity; the old aggregate-only UI therefore shows No data.108 displays
+explicit **Server CPU / CPU сервера** and a CPU-labelled country-list percentage when the
+channel is unknown. It never invents a link speed or calls CPU total/network utilization.
+Known-capacity aggregate/estimate behavior is retained; stale/missing/wrong-country samples
+still show No data, not zero. Tooltip retains observed RX/TX and marks unknown channel usage.
+381 JVM tests/64 suites, lint, instrumentation compilation and44 focused Python checks PASS.
+Hosted UI/runtime qualification, signed108 artifact and publication remain pending.
+Public/invitation version107 and Android update sequence2 remain unchanged; gateway catalog4,
+server units, keys/admission and paid ledger are untouched. Canary PAUSED; no phone debugging.
+
 **NL-REPLACEMENT-20261030 / READY_FOR_OWNER_NL_SMOKE.**
 Owner-executed Sprintbox console checks at11:52UTC confirm the RU host, synchronized clock,
 database integrity, unchanged API/SSH processes and real local backend/proxy challenges PASS.
@@ -64,12 +76,12 @@ paid-canary, subscription events and Android stage0 stay off. Complete the curre
 notification installed-runtime and AWG cleanup checks, then TCP and Auto/MESH once each in this
 same operation. No further gateway-catalog publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
 
-NEXT within this same operation: owner installs public107 in place without USB debugging,
-confirms notification behavior and AWG cleanup, then tests TCP and Auto/MESH once each with
-current readiness import/ACK. Public Android107 is available, not confirmed installed.
-No further Android or gateway-catalog publication is needed for these checks. Keep normal
-freshness monitoring active. Only all owner/server gates permit NL_REPLACEMENT_LIVE.
-No new PLAN ID, identity, paid action or automatic queue advance. Never reactivate old NL.
+NEXT within this same operation: qualify exact-source Android108 load presentation in hosted
+CI and inspect the rendered CPU fallback, then download/verify/sign the new immutable APK
+before any update publication.107 remains public until those gates pass. No invented channel
+capacity, monitoring/VPN restart or identity/admission change. After installation, confirm
+notification behavior and AWG cleanup, then TCP and Auto/MESH; no ADB required.
+No new PLAN ID or automatic queue advance. Old NL stays fenced; canary stays paused.
 [Current evidence and rollback](releases/2026-10-30-nl-gateway-replacement.md).
 Earlier provider/network observations below are retained context, not the restoration path.
 

@@ -59,6 +59,33 @@ public class DashboardLayoutRuntimeTest {
         try(FileOutputStream out=new FileOutputStream(new File(dir,name))){assertTrue(image.compress(Bitmap.CompressFormat.PNG,100,out));}
         catch(Exception failure){throw new AssertionError("Could not save UI rendering",failure);}finally{image.recycle();}
     }
+    private void verifyLoadRendering(FriendsActivity activity,View root,int width,int height) throws ReflectiveOperationException {
+        java.lang.reflect.Field samplesField=FriendsActivity.class.getDeclaredField("serverLoads");samplesField.setAccessible(true);
+        java.util.Map<String,ServerLoad> samples=(java.util.Map<String,ServerLoad>)samplesField.get(activity);
+        java.util.Map<String,ServerLoad> previous=new java.util.HashMap<>(samples);
+        java.lang.reflect.Method refresh=FriendsActivity.class.getDeclaredMethod("renderLoad");refresh.setAccessible(true);
+        java.lang.reflect.Field labelField=FriendsActivity.class.getDeclaredField("loadLabel");labelField.setAccessible(true);
+        java.lang.reflect.Field barField=FriendsActivity.class.getDeclaredField("loadBar");barField.setAccessible(true);
+        android.widget.TextView label=(android.widget.TextView)labelField.get(activity);
+        android.widget.ProgressBar bar=(android.widget.ProgressBar)barField.get(activity);
+        try{
+            double now=System.currentTimeMillis()/1000.0;
+            for(String country:new String[]{"ru","nl"})samples.put(country,new ServerLoad(country,now,13.8,12.5,7.3,null,false));
+            refresh.invoke(activity);
+            assertTrue("Unknown channel capacity must show measured CPU",label.getText().toString().contains("CPU"));
+            assertTrue(label.getText().toString().contains("14%"));assertEquals(138,bar.getProgress());
+            assertEquals(label.getText().toString(),bar.getContentDescription().toString());
+            java.lang.reflect.Method rowMethod=FriendsActivity.class.getDeclaredMethod("serverRow",String.class,View.class,ViewGroup.class,boolean.class);rowMethod.setAccessible(true);
+            android.widget.LinearLayout parent=new android.widget.LinearLayout(activity);
+            View row=(View)rowMethod.invoke(activity,"nl",null,parent,false);
+            assertTrue("Dropdown must label CPU rather than total load",containsText(row,"CPU 14%"));
+            render(activity,root,width,height,"dashboard-cpu-load.png");
+            render(activity,row,TerminalUi.dp(activity,280),TerminalUi.dp(activity,56),"server-row-cpu-load.png");
+            for(String country:new String[]{"ru","nl"})samples.put(country,new ServerLoad(country,now-60,13.8,12.5,7.3,null,false));
+            refresh.invoke(activity);
+            assertFalse("Stale CPU must not remain visible",label.getText().toString().contains("14%"));assertEquals(0,bar.getProgress());
+        }finally{samples.clear();samples.putAll(previous);refresh.invoke(activity);}
+    }
     @Test public void workspaceScrollsIndependentlyAndNavigationFits() throws Exception {
         Instrumentation instrument=InstrumentationRegistry.getInstrumentation();
         String pkg=instrument.getTargetContext().getPackageName();
@@ -97,6 +124,7 @@ public class DashboardLayoutRuntimeTest {
                     assertNotNull("Selected label must exist",picker.getSelectedView());
                     assertTrue("Selected label must be measured",picker.getSelectedView().getMeasuredWidth()>TerminalUi.dp(activity,60));
                 }
+                verifyLoadRendering(activity,root,w,h);
             }catch(ReflectiveOperationException e){throw new AssertionError(e);}
 
             assertNull("No duplicate route button",findButton(root,activity.getString(R.string.dashboard_route)));

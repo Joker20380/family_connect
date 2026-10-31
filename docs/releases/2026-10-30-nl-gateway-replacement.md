@@ -2,6 +2,19 @@
 
 ## Current result — Android107 publicly distributed; owner runtime still pending
 
+**Android108 load-display continuation — source qualified, not distributed.**
+Owner requests visible server load. Fresh public NL metrics contain CPU/RX/TX, but no
+verified channel capacity; the old aggregate-only UI therefore shows No data.108 displays
+explicit **Server CPU / CPU сервера** and a CPU-labelled country-list percentage when the
+channel is unknown. It never invents a link speed or calls CPU total/network utilization.
+Known-capacity aggregate/estimate behavior is retained; stale/missing/wrong-country samples
+still show No data, not zero. Tooltip retains observed RX/TX and marks unknown channel usage.
+381 JVM tests/64 suites, lint, instrumentation compilation and44 focused Python checks PASS.
+Hosted UI/runtime qualification, signed108 artifact and publication remain pending.
+Public/invitation version107 and Android update sequence2 remain unchanged; gateway catalog4,
+server units, keys/admission and paid ledger are untouched. Canary PAUSED; no phone debugging.
+
+
 Updated 2026-10-31T15:44:07Z. Same NL-REPLACEMENT-20261030 continuation, not a product checkpoint.
 
 **NL-REPLACEMENT-20261030 / READY_FOR_OWNER_NL_SMOKE.**
@@ -1273,3 +1286,30 @@ Documentation gate: strict JSON, changed-scope links, staged privacy scan and wh
 The full713-document link scan reports two pre-existing unrelated anchor errors: the local
 STATUS evening-readback addition and the24 October source-checkpoint phase22 link. They are
 not new release links and are not included as unrelated fixes in this checkpoint.
+
+## Android108 visible server CPU — source qualification
+
+Same NL-REPLACEMENT-20261030 operation, following the owner's request for visible load.
+The public endpoint already carries fresh CPU and transfer rates; replacement NL capacity
+is null.1000GB is a monthly traffic quota and cannot supply Mbps or a saturation percentage.
+The server-side monitor and aggregate contract remain unchanged. A shared pure presentation
+helper now chooses measured CPU only when aggregate load is unknown, explicitly labels it
+in RU/EN on the dashboard and country dropdown, and uses it for the progress/color indicator.
+Missing, stale or wrong-country samples are not displayed. Known aggregate percentages and
+their approximation marker remain. The misleading hard-coded200Mbps tooltip is removed;
+actual traffic rates remain available without pretending the provider limit is known.
+
+Five presentation JVM cases cover unknown capacity, both languages, estimate behavior,
+staleness/future timestamps, wrong country and zero/saturated CPU. The real dashboard test
+also injects synthetic fresh/stale samples, checks the progress/accessibility label and
+dropdown, and captures dashboard/dropdown CPU rendering without touching an account/VPN.
+381 JVM tests/64 suites and lint PASS;44 focused Python checks PASS; instrumentation compiles.
+Local checks use the ordinary multi-ABI development build and the accepted CI test variant;
+the normal ARM64 clean-source/provenance release guard remains unchanged. Initial local
+harness task/ABI selection errors were corrected, not bypassed in release packaging.
+
+Version108 is a candidate only. Public APK/invitation107 and Android catalog2 stay unchanged.
+Hosted tests/visual inspection, exact downloaded artifact, offline signing and HTTPS checks
+remain required before publication. No gateway/monitoring deployment, reboot, capacity guess,
+registry write, new identity or paid action. Source rollback needs no production action;
+never overwrite immutable107 with108 bytes. Manual physical acceptance remains separate.

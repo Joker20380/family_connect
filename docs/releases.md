@@ -1,5 +1,8 @@
 # Release distribution / Выпуски
 
+**Candidate108:** explicit CPU load when channel capacity is unknown; source/tests qualified,
+not signed/distributed. Public107 below remains unchanged until108 release gates pass.
+
 **31 October — beta107 publicly distributed, Android12+/ARM64.**
 The invitation page and both Android update catalogs now offer107 with MESH support and
 quiet foreground-notification updates. Hosted CI, signed APK and public HTTPS byte checks PASS.

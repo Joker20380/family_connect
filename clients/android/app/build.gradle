@@ -18,8 +18,8 @@ android {
         minSdk 26
         targetSdk 35
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        versionCode 107
-        versionName '0.1.18-beta107'
+        versionCode 108
+        versionName '0.1.18-beta108'
         buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'
         buildConfigField 'String', 'PROVISIONING_SEAM_SOURCE', '""'
         manifestPlaceholders = [appLabel: 'family_connect', launcherActivity: 'com.familyconnect.app.MainActivity']

@@ -535,7 +535,7 @@
     "catalog_publication": "NOT_RUN",
     "owner_smoke": "NOT_RUN"
   },
-  "next_action": "OWNER_MANUAL_ANDROID107_IN_PLACE_INSTALL_NOTIFICATION_AWG_CLEANUP_THEN_TCP_AUTO_MESH_NO_ADB",
+  "next_action": "QUALIFY_ANDROID108_CPU_LOAD_DISPLAY_CI_AND_RENDERING_THEN_SIGN_VERIFY_PUBLICATION",
   "checks": {
     "strict_json": "PASS",
     "targeted_privacy_secret_scan": "PASS",
@@ -1272,6 +1272,31 @@
         "unrelated_local_edits": "PRESERVED"
       }
     },
-    "publication_kind": "ANDROID_UPDATE_ONLY_GATEWAY_CATALOG_UNCHANGED"
+    "publication_kind": "ANDROID_UPDATE_ONLY_GATEWAY_CATALOG_UNCHANGED",
+    "android108_load_display": {
+      "recorded_utc": "2026-10-31T20:16:02.710210+00:00",
+      "version_code": 108,
+      "result": "SOURCE_QUALIFIED_NOT_DISTRIBUTED",
+      "fallback": "EXPLICIT_MEASURED_CPU_NOT_TOTAL_LOAD",
+      "fresh_country_binding": "PRESERVED",
+      "unknown_channel_capacity": "NOT_GUESSED",
+      "jvm_tests": 381,
+      "jvm_suites": 64,
+      "focused_python_tests": 44,
+      "lint": "PASS",
+      "instrumentation_compile": "PASS",
+      "hosted_runtime": "PENDING",
+      "rendered_ui_review": "PENDING",
+      "signed": false,
+      "distributed": false,
+      "installed": false,
+      "public_version_code": 107,
+      "android_update_sequence": 2,
+      "gateway_catalog_sequence": 4,
+      "server_changes": false,
+      "registry_changes": false,
+      "canary": "PAUSED",
+      "phone_debugging": "NOT_USED"
+    }
   }
 }

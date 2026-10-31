@@ -25,7 +25,7 @@ def test_android_changes_do_not_start_desktop_suites():
 
 def test_public_release_keeps_provisioning_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 107' in gradle and "versionName '0.1.18-beta107'" in gradle
+    assert 'versionCode 108' in gradle and "versionName '0.1.18-beta108'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 31 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
@@ -58,9 +58,23 @@ def test_public_android107_catalog_is_signed_and_remains_optional():
     assert 0 < catalog['expires_at'] - catalog['issued_at'] <= 90 * 86400
 
 
+def test_server_load_ui_uses_one_fresh_country_bound_presentation():
+    source = (ROOT / 'clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java').read_text()
+    assert 'ServerLoadPresentation.from(serverLoads.get(loadTarget()),loadTarget(),' in source
+    assert 'ServerLoadPresentation.from(serverLoads.get(code),code,' in source
+    assert 'loadBar.setContentDescription(text)' in source
+    assert 'load.setText(presentation.value)' in source
+    assert '200 Мбит/с' not in source
+    model = (ROOT / 'clients/android/app/src/main/java/com/familyconnect/app/ServerLoadPresentation.java').read_text()
+    assert '!sample.country.equals(country)||!sample.fresh(now)' in model
+    assert 'cpuOnly?sample.cpu:sample.percent' in model
+    assert 'channel utilization unknown' in model
+
+
 def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
     reference = json.loads((ROOT / 'clients/shared/android106-reference.json').read_text())
-    changes = {'clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java',
+    changes = {'clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java',
+               'clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ChatAudio.java'}
     for name, expected in reference['android_ui_and_handlers'].items():
         if name not in changes:

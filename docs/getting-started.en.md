@@ -79,3 +79,10 @@ and messages. [Beta107 validation/publication](releases/2026-10-30-nl-gateway-re
 operator-assisted dependency and VPN-helper setup. Desktop messenger parity with Android
 is not claimed. Direct invitations and referral claims use separate pools; limits are not
 current availability counts.
+
+## Server load display
+
+Public107 hides aggregate load when channel capacity is unknown even with fresh CPU metrics.
+Candidate108 adds an explicit Server CPU display in that case; it is not distributed yet.
+CPU is not channel utilization or the remaining monthly traffic quota. Missing/stale
+measurements still show No data. [Release status](releases.md).
