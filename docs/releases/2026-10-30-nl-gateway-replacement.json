@@ -2736,7 +2736,7 @@
     }
   },
   "android109_ui_repair_20261101": {
-    "state": "SOURCE_CANDIDATE_NOT_DISTRIBUTED",
+    "state": "SIGNED_QUALIFIED_NOT_PUBLISHED",
     "version": "0.1.18-beta109",
     "version_code": 109,
     "authorization": "NEW_APK_AND_ANDROID_SEQUENCE4_AFTER_FINAL108_CANARY",
@@ -2762,15 +2762,27 @@
       "python": 52,
       "windows_deselected": 1,
       "hidden_panel_red_failures": 2,
-      "emulator": "PARTIAL_PASS_RELEASE_GATE_PENDING_NEW_CI",
-      "hosted_release_ci": "PENDING",
+      "emulator": "PASS",
+      "hosted_release_ci": "FULL_MATRIX_PASS",
       "physical109": "NOT_RUN"
     },
     "artifact": {
-      "state": "NOT_BUILT",
-      "sha256": null,
-      "bytes": null,
-      "signer": "EXISTING_OFFLINE_SIGNER_REQUIRED"
+      "result": "SIGNED_VERIFIED_NOT_INSTALLED",
+      "source": "600ae52bfac673ca0323bd7c96d6cdd369593624",
+      "ci_run": 41289980872,
+      "unsigned_sha256": "8b06f595f4b5eac733d528479768e8088b7f92ae60e2062b6f3606e4e5ec9991",
+      "signed_sha256": "2d602aa74e134fd0104fa0900ef28e6086a6eace8f0255f521e09ec48f9edca3",
+      "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+      "size": 56216936,
+      "version_name": "0.1.18-beta109",
+      "version_code": 109,
+      "package": "com.familyconnect.app.friends",
+      "alignment_16k": "PASS",
+      "unchanged_unsigned_payload": "PASS",
+      "signature": "PASS",
+      "private_key_exported": false,
+      "installed": false,
+      "distributed": false
     },
     "current_distribution": {
       "version": "0.1.18-beta108",
@@ -3255,14 +3267,18 @@
       "version_changed": false,
       "scope_script_changed": false,
       "workflow_changed": false,
-      "status": "PREPARED_NOT_YET_PUSHED",
-      "source_commit": null,
-      "run_id": null,
-      "hosted_scope": "PENDING",
-      "matrix": "PENDING",
+      "status": "FULL_MATRIX_AND_SIGNED_ARTIFACT_PASS",
+      "source_commit": "600ae52bfac673ca0323bd7c96d6cdd369593624",
+      "run_id": 41289980872,
+      "hosted_scope": {
+        "android": true,
+        "windows": true,
+        "linux": true
+      },
+      "matrix": "PASS",
       "general_desktop_release": "EXPECTED_SKIPPED",
-      "artifact": "NOT_QUALIFIED",
-      "signing": "NOT_RUN",
+      "artifact": "QUALIFIED",
+      "signing": "PASS",
       "publication": "NOT_RUN",
       "phone_actions": "NOT_RUN",
       "retained_marker": true,
@@ -3276,6 +3292,513 @@
         "compatibility": "success",
         "android": "skipped",
         "release": "skipped"
+      },
+      "remote_verified": true,
+      "jobs": [
+        {
+          "name": "scope",
+          "id": 124799023917,
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run python3 scripts/client_ci_scope.py",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "name": "android",
+          "id": 124799045759,
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-java@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-python@v5",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run android-actions/setup-android@v3",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-go@v5",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'ndk;28.2.13676358'",
+              "conclusion": "success"
+            },
+            {
+              "name": "JVM control conformance",
+              "conclusion": "success"
+            },
+            {
+              "name": "Restricted carrier race regression",
+              "conclusion": "success"
+            },
+            {
+              "name": "Restricted diagnostic and readiness contracts",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build pinned unified Android VPN library",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build pinned dynamic audio libraries and corresponding source",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:lintDebug :app:assembleFriends :app:testFriendsUnitTest :app:lintFriends",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run python3 pilot/android-awg/verify-apk.py",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run python3 -m pip install cryptography==46.0.7",
+              "conclusion": "success"
+            },
+            {
+              "name": "Enable emulator KVM",
+              "conclusion": "success"
+            },
+            {
+              "name": "Real WG AWG TCP and Auto lifecycle on Android emulator",
+              "conclusion": "success"
+            },
+            {
+              "name": "Publish bounded Android runtime summary",
+              "conclusion": "success"
+            },
+            {
+              "name": "Confirm control conformance on Android runtime",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build pinned restricted Android native",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build unsigned ARM64 Friends for offline signing",
+              "conclusion": "success"
+            },
+            {
+              "name": "Verify exact restricted release payload",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-go@v5",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-python@v5",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-java@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "name": "windows",
+          "id": 124799045760,
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-go@v5",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-dotnet@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run New-Item -ItemType Directory -Force clients/windows/dist | Out-Null",
+              "conclusion": "success"
+            },
+            {
+              "name": "Defender scan when available",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install application and service",
+              "conclusion": "success"
+            },
+            {
+              "name": "Load signed driver without routes",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check broker activation API",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check TCP profile broker storage and replacement",
+              "conclusion": "success"
+            },
+            {
+              "name": "Upgrade running service and preserve existing data",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check user interface",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check installed invitation URI and existing window",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check compact and scaled window layouts",
+              "conclusion": "success"
+            },
+            {
+              "name": "Save Windows UI preview",
+              "conclusion": "success"
+            },
+            {
+              "name": "Uninstall application and service",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-dotnet@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-go@v5",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "name": "linux",
+          "id": 124799045821,
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Prepare Python 3.12 and verify real desktop imports",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run sudo apt-get install -y libqrencode4 libzbar0 python3-cryptography xvfb dbus-x11",
+              "conclusion": "success"
+            },
+            {
+              "name": "Targeted desktop dependency regressions",
+              "conclusion": "success"
+            },
+            {
+              "name": "Mandatory desktop pytest",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a \"$RUNNER_TEMP/fc-desktop-env/bin/python\" clients/desktop/app.py --smoke",
+              "conclusion": "success"
+            },
+            {
+              "name": "Deterministic normal poll versus Disconnect (real GTK)",
+              "conclusion": "success"
+            },
+            {
+              "name": "Messenger UX keyboard, emoji and session regressions (real GTK)",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a -s \"-screen 0 2560x2160x24\" \"$RUNNER_TEMP/fc-desktop-env/bin/python\" clients/desktop/layout_check.py",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a \"$RUNNER_TEMP/fc-desktop-env/bin/python\" clients/desktop/map_check.py",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check invitation delivery to existing Linux instance",
+              "conclusion": "success"
+            },
+            {
+              "name": "Check Friends invitation window",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a \"$RUNNER_TEMP/fc-desktop-env/bin/python\" clients/desktop/recovery_check.py",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a \"$RUNNER_TEMP/fc-desktop-env/bin/python\" clients/desktop/tcp_install_check.py",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install appimagetool",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build Linux AppImage, DEB and legacy archive",
+              "conclusion": "success"
+            },
+            {
+              "name": "Verify DEB metadata, desktop integration and content audit",
+              "conclusion": "success"
+            },
+            {
+              "name": "Smoke packaged launcher from the DEB",
+              "conclusion": "success"
+            },
+            {
+              "name": "AppImage extract smoke",
+              "conclusion": "success"
+            },
+            {
+              "name": "Publish Linux artifact hashes",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "name": "windows-compatibility",
+          "id": 124800045752,
+          "conclusion": "success",
+          "steps": [
+            {
+              "name": "Set up job",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/download-artifact@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install identical release artifact over unusable leftover host",
+              "conclusion": "success"
+            },
+            {
+              "name": "Broker works without a separately installed NET 10 runtime",
+              "conclusion": "success"
+            },
+            {
+              "name": "Upgrade running service and preserve data",
+              "conclusion": "success"
+            },
+            {
+              "name": "Remove service and application",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "name": "release",
+          "id": 124802279184,
+          "conclusion": "skipped",
+          "steps": []
+        }
+      ],
+      "artifact_id": 13076449037,
+      "artifact_zip_sha256": "3c816fbf0b4ef603a712d0337af87b0220739ea15611351208c6685a43c96dcc",
+      "qualification": {
+        "result": "DOWNLOADED_UNSIGNED_ARTIFACT_PASS",
+        "source": "600ae52bfac673ca0323bd7c96d6cdd369593624",
+        "ci_run": 41289980872,
+        "full_matrix": "PASS",
+        "expected_general_release_skip": true,
+        "source_inventory": {
+          "carrier/tcpforward/admission.go": "4fd75e573c36d616a529c85ec63e7a53c2383c5daff937613f82e1f816d9875e",
+          "carrier/tcpforward/mux.go": "3afd44bdaf673928c5ea6a34d787ffa0668530c71fae1362ae3020d53df13345",
+          "carrier/tcpforward/slot_release_test.go": "29d3681804996bdb4e3607454461070866423e90278064f5f850a26d7b54d66a",
+          "clients/android/app/src/androidTest/java/com/familyconnect/app/AwgRuntimeTest.java": "3644e20e90a463c20d83c2b8e35ab95b57c08b90c9d380d0a6c3f98fa832e559",
+          "clients/android/app/src/androidTest/java/com/familyconnect/app/RevokeVpnActivity.java": "43b384469825de52fbf1aa8569db464d2b6b0af787648b9d61a9ac9693d28bc9",
+          "pilot/android-awg/run.py": "2df1cab31b249e9ac06965a96b5815e69169cb95894eb40d40fce99106e9cdce",
+          "clients/desktop/smiley_catalog.json": "adc4f9da77d24213f2b89c3568174b9473287727c0fbcac50eba1fb732705924"
+        },
+        "marker_runtime_assets": "ABSENT",
+        "routing_paid_backend": "UNCHANGED_FROM_333e6c4",
+        "elf_minimum_load_alignment": {
+          "lib/arm64-v8a/libchaquopy_java.so": 16384,
+          "lib/arm64-v8a/libcodec2.so": 16384,
+          "lib/arm64-v8a/libcrypto_chaquopy.so": 16384,
+          "lib/arm64-v8a/libcrypto_python.so": 16384,
+          "lib/arm64-v8a/libexit_audio.so": 16384,
+          "lib/arm64-v8a/libfc-awg.so": 16384,
+          "lib/arm64-v8a/libfc_restricted.so": 16384,
+          "lib/arm64-v8a/libpython3.10.so": 16384,
+          "lib/arm64-v8a/libsqlite3_chaquopy.so": 16384,
+          "lib/arm64-v8a/libsqlite3_python.so": 16384,
+          "lib/arm64-v8a/libssl_chaquopy.so": 16384,
+          "lib/arm64-v8a/libssl_python.so": 16384
+        },
+        "zip_alignment_16k": "PASS",
+        "apk_sha256": "8b06f595f4b5eac733d528479768e8088b7f92ae60e2062b6f3606e4e5ec9991",
+        "size": 56197917,
+        "package": "com.familyconnect.app.friends",
+        "version_code": 109,
+        "min_sdk": 31,
+        "abi": "arm64-v8a",
+        "native_sha256": {
+          "lib/arm64-v8a/libchaquopy_java.so": "9733e423b6c82a6ef2432fc650c26323e1c898c5039ccfbfda8691359539c1f5",
+          "lib/arm64-v8a/libcodec2.so": "f52b55b329410ff622e5853077774db23b5f59a8ab4dc948de61f235c214019b",
+          "lib/arm64-v8a/libcrypto_chaquopy.so": "e316322aafee29c518084f478c1f84fb6048dc489dd5aad8d0822fbece416483",
+          "lib/arm64-v8a/libcrypto_python.so": "c6b20b0ed4be44731123a4e0ccb0958abb14d467826a42a1999e0cdbf9c7afd7",
+          "lib/arm64-v8a/libexit_audio.so": "c29ac883e25ef4c0d21fcdcdaef5db29a571568b6dc3995f8fb631f412a27a57",
+          "lib/arm64-v8a/libfc-awg.so": "71e03e6165d6470add391a5d63a398cefd52e79b45815fce9de92cd089370a70",
+          "lib/arm64-v8a/libfc_restricted.so": "6e32fe6a8c3fa53f8f9ab17baec28ba6cff50074c5732899c146320fbb967460",
+          "lib/arm64-v8a/libpython3.10.so": "194781d8bba9ad0db34725390957bb73a71c0ab2c9c1d449b94cd80680bb149e",
+          "lib/arm64-v8a/libsqlite3_chaquopy.so": "626ef9b3e6eb661df9513f7f79f6a0d197bcfb0b43f813663ed9d5e7fcace172",
+          "lib/arm64-v8a/libsqlite3_python.so": "fa355dda67c86b62f67026b7b5a8ec17732ee30e9e8280b86362b4e2a886548b",
+          "lib/arm64-v8a/libssl_chaquopy.so": "70b94a18ae17a1b103cc0f52b3f5fa3f7740c6899eddb6fa3b1f16ba8051025b",
+          "lib/arm64-v8a/libssl_python.so": "6c780070647187d8e4fca72f46e7be90ddb0e38000d2f5681c218fe12583ce5c"
+        },
+        "corresponding_source": "PASS",
+        "signature": "EXPECTED_UNSIGNED",
+        "installed": false,
+        "published": false
+      },
+      "visual_runtime_review": {
+        "result": "PASS",
+        "source": "600ae52bfac673ca0323bd7c96d6cdd369593624",
+        "ci_run": 41289980872,
+        "instrumentation_cases": 67,
+        "executed": 43,
+        "existing_variant_skips": 24,
+        "failures": 0,
+        "errors": 0,
+        "owner_phone": "NOT_RUN",
+        "rendered_images": [
+          {
+            "name": "dashboard-failed-controls.png",
+            "sha256": "3e8080a8c9a91ae60767457a3eb2d2d405cc213e905fd8614722952477818df2",
+            "review": "Failure state retains visible Netherlands/Auto selectors and server CPU; no full-screen terminal occlusion."
+          },
+          {
+            "name": "dashboard-cpu-load.png",
+            "sha256": "62326e6a33fea16b32487be56c76c4ab24f4dbfe884e869f8852e85b8a2d8329",
+            "review": "VPN-off dashboard shows CPU and visible country/Auto selectors."
+          },
+          {
+            "name": "server-row-cpu-load.png",
+            "sha256": "c012a30eaa636c3ab145ccc653e956d2a3dd9a670c90f964eb72618b0a182dfc",
+            "review": "Netherlands row shows CPU14% without clipping."
+          }
+        ]
       }
     }
   }

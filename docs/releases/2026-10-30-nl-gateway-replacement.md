@@ -23,23 +23,40 @@ Local Ubuntu24.04/Python3.12 acceptance: smileys49 PASS, mandatory desktop1230 P
 skips/0 failures/0 errors, dependency60 PASS, JVM contour2 PASS; GTK, Disconnect poll50,
 messenger27, smiley9, layout24, map/invitation/recovery/TCP and DEB/AppImage/package smokes PASS.
 Minimal-container libXtst/TUN differences were corrected; initial logs retained, no test waiver.
-**NEXT: owner-authorized CI-only marker, exact-source full Client builds matrix.**
-The manual workflow_dispatch blocker is superseded. The single retained audit marker
-`carrier/ci/beta109-full-matrix-qualification.txt` uses the existing carrier COMMON scope;
-local scope check returns android/windows/linux=true without changing workflow or scope logic.
-It is not imported, Go source, runtime configuration or an APK asset; runtime/packaging source,
-VERSION, Android code, server/backend and routing remain unchanged. Marker is not removed
-after qualification. Push-run41288231677/source333e6c4 completed SUCCESS: Linux/Windows/
-compatibility PASS, Android scope SKIPPED; that run is not the final Android candidate.
-After marker push, verify remote SHA and hosted scope output, then observe exactly that new
-full-matrix run to terminal. General desktop release job is expected SKIPPED (no v-tag or
-Release-prefixed commit). No second marker, blind rerun, gate waiver or new PLAN ID.
-Only after full PASS: exact-source artifact qualification, offline signing and immutable109
-publication/sequence4; otherwise STOP at scope, CI or artifact/signing/publication failure.
-No109 signing/publication/sequence4/owner-phone action; no Linux publication. Accepted
-public108/sequence3, catalog4, paid baseline108, owner entitlement, ledger1/4 and cohort1/10
-remain unchanged. Canary COMPLETED_WITH_DEVIATIONS, final108 internet/84s READY PASS;
-no canary replay, paid event, CRL, backend restart or gateway operation.
+**Full-matrix qualification PASS; beta109 signed, not yet published.**
+Retained CI-only marker `carrier/ci/beta109-full-matrix-qualification.txt` was pushed as
+`600ae52bfac673ca0323bd7c96d6cdd369593624` and remote-verified. Sole candidate Client builds
+run41289980872 completed SUCCESS; hosted scope android/windows/linux=true. Android, Linux,
+Windows and Windows compatibility all PASS. General desktop release is correctly SKIPPED
+(no v-tag/Release prefix); the Android job supplies the exact-source release artifact.
+No rerun, second marker, new PLAN ID or production-source change was used to force scope.
+Android gates PASS: JVM/control, carrier race, readiness/contracts, unified VPN/audio native,
+debug/friends Gradle/tests/lint, APK checks, emulator AWG/TCP/Auto, interactive system VPN
+consent with exact com.android.vpndialogs/enabled button/actual click, ownership transfer,
+revoke/cleanup, language/dashboard and ARM64 packaging. Downloaded runtime XML has67 cases:
+43 executed PASS,24 existing variant skips,0 failures/errors; no gate waiver was added.
+Three downloaded UI captures were inspected: CPU display and country/transport selectors
+remain visible in off/failure states. This is emulator evidence, not owner109 acceptance.
+Linux mandatory pytest, smiley parity, dependency/GTK/Disconnect/messenger/layout/map/
+invitation/recovery/TCP and AppImage/DEB/archive/launcher gates PASS. Windows build, Defender
+step when available, install/driver/broker/TCP/upgrade/data/UI/invitation/layout/uninstall and
+the separate identical-artifact compatibility job PASS. No desktop publication is claimed.
+Downloaded ARM64 artifact13076449037 ZIP SHA256
+`3c816fbf0b4ef603a712d0337af87b0220739ea15611351208c6685a43c96dcc` PASS.
+Manifest: com.familyconnect.app.friends,0.1.18-beta109/code109,ARM64,min31,target35.
+All12 native libraries and APK ZIP pass16K alignment. Exact source includes the TCP slot
+release fix, system-consent harness and reviewed Android108 smiley baseline; catalog4 routing
+and paid backend source are unchanged. Marker bytes/names are absent from every APK member.
+Corresponding source/licenses and unsigned signing input verified. Offline signed APK:
+SHA256 `2d602aa74e134fd0104fa0900ef28e6086a6eace8f0255f521e09ec48f9edca3`,56216936 bytes;
+unsigned SHA256 `8b06f595f4b5eac733d528479768e8088b7f92ae60e2062b6f3606e4e5ec9991`.
+Existing signer `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`
+unchanged; APK signature, signed alignment and unchanged unsigned payload PASS.
+**NEXT: guarded immutable109 publication, Android sequence4 and invitation109, followed by
+verified HTTPS readback.** No109 publication/sequence4/owner-phone action yet. Public108/
+sequence3, catalog4, paid baseline108, entitlement through2026-12-01T07:09:19Z, ledger1/4,
+cohort1/10 and revenue0 remain accepted. Canary COMPLETED_WITH_DEVIATIONS, final108 internet/
+84s READY PASS; no canary replay, paid event, CRL, backend restart or gateway operation.
 
 Exact audit: ChatThreadView.java old SHA256
 `51d31ad5f07b4c9f0e6a4ab1d32e1cdceb735c406403fd0ca991e7263e203e9a` → reviewed SHA256
