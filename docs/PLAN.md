@@ -2,7 +2,7 @@
 
 ## Current engineering priority / Текущий critical path
 
-**1 November — owner beta109 UI and Auto→AWG runtime PASS; cleanup pending.**
+**1 November — owner beta109 targeted Auto→AWG checks PASS; server TX retained.**
 `DESKTOP_SMILEY_BASELINE_STALE_AFTER_REVIEWED_ANDROID107_CHANGE`: exactly one stale
 Android106 pin, ChatThreadView.java; current file is byte-identical to accepted public108.
 Reviewed voice-preview/recording visibility and message styling only; all49 faces, aliases,
@@ -58,18 +58,18 @@ ledger1/4, cohort1/10, revenue0, registry identities/invites/grants and renewal/
 unchanged. Read-only before/after fingerprints match; no backend restart or database write.
 Only Android downloads, discovery catalogs and invitation were published; no forced update.
 Canary remains COMPLETED_WITH_DEVIATIONS, final108 internet/84s READY PASS; never replay it.
-**Owner109 installation confirmed; targeted field acceptance IN_PROGRESS.** Fresh owner
+**Owner109 installation confirmed.** Fresh owner
 confirmation: «109 УСТАНОВЛЕНА». Read-only09:31UTC observation confirms exact0.1.18-beta109/
 code109 from the latest authenticated readiness ACK, with no conflicting latest version.
 Existing private owner binding matches the same non-revoked identity; entitlement remains
 active through2026-12-01T07:09:19Z, ledger1/4 and cohort1/10. No database or canary write.
 **Owner-reported data/UI PASS:** existing data remains present, server CPU is visible and
 transport selection is available both before and after the requested single Force stop/reopen.
-This closes only the targeted data/CPU/selector/reopen checks, not transport or cleanup acceptance.
+These data/CPU/selector/reopen checks are owner-reported; transport/cleanup evidence follows.
 Read-only pre-Connect snapshot09:39UTC matches the existing owner binding/exact109 and ledger1/4;
 the09:37:30UTC challenge/fetch/import ACK is READY with current material. It predates the
 requested Connect and must not be presented as Connect latency or Internet/VPN-owner proof.
-**Auto109 selected AWG — runtime PASS, cleanup pending.** Owner reports one Auto Connect,
+**Auto109 selected AWG — runtime PASS.** Owner reports one Auto Connect,
 AWG selected,3 seconds to connected, Internet working and system VPN indicator present.
 Read-only new-NL185.10.158.212 observation matches the existing bound peer: recent handshake,
 bidirectional traffic over12s, service active/NRestarts0. No test session or server mutation.
@@ -79,9 +79,24 @@ not a measurement of tap-to-READY. The3s value is owner-reported tap-to-connecte
 Auto's normal-profile priority before restricted fallback permits AWG; this is not MESH
 data-path acceptance. No MESH109, whitelist109, independent HTTPS/egress or client OS-owner
 inspection PASS is inferred. Earlier canary deviations are not erased by this AWG result.
-NEXT: one Disconnect, then confirm off/no VPN indicator/no VPN notification and selectors
-available; perform read-only cleanup readback. No second Connect or forced fallback in this
-single smoke. Paid baseline108, ledger1/4, cohort1/10 and entitlement remain unchanged.
+**Owner109 targeted Disconnect cleanup — owner-confirmed PASS.** The fresh reply
+«все нормально» answers the explicit Disconnect checklist: application off, VPN indicator gone,
+notification gone and transport selector available. This is owner field evidence, not an
+independent Android OS/ADB owner inspection. No extra Connect or forced MESH attempt requested.
+Read-only cleanup: the initial12s sample has RX0/TX1400 bytes and no new handshake;
+that residual server TX is retained, not labelled immediate complete silence. One fixed60s
+follow-up ending09:55:03UTC has RX0/TX8865 and no new handshake. No client return
+traffic is observed, but server-originated TX persists; full server quiescence/resource release
+is NOT_PROVEN. No retry-until-zero or client reconnect. The registered AWG peer/old handshake
+are expected persistent state, not proof of a retained client tunnel. No peer/certificate deletion.
+Fresh authenticated exact109 observation, existing binding and active entitlement are preserved;
+ledger1/4, cohort1/10, paid baseline108 and gateway catalog4 remain unchanged. Readiness ACKs
+are control-plane material evidence and do not prove a live VPN while the application is off.
+Result: **OWNER109_TARGETED_AUTO_AWG_OWNER_PASS_SERVER_TX_RETAINED**; install/data/CPU/selector/reopen,
+one Auto→AWG Connect/Internet and one Disconnect/owner-reported cleanup are accepted in scope.
+MESH109 field traffic and exact tap-to-READY remain unmeasured; earlier canary deviations retained.
+No further phone action for this smoke. Paid-baseline109 promotion and controlled cohort
+expansion are separate gates, NOT_RUN here; no READY_FOR_COHORT_3 claim or automatic enrollment.
 No paid event, CRL operation or cohort expansion is authorized by this publication.
 
 **Current beta109 qualification — TCPFORWARD_PRODUCT_SLOT_RELEASE_DEFECT (1 November).**
@@ -850,7 +865,7 @@ D02.1-R остаётся PARTIAL/NOT_RUN; D01 открыт. Дальнейшие
 
 | ID | Результат | Зависимость | Статус | Критерий завершения |
 |---|---|---|---|---|
-| ANDROID-CONTROLLED-BETA | Controlled paid Android beta readiness | exact signed106/reference; owner FIELD-1 PASS; canonical read-only lookup | PREPARATION DONE / LAUNCH BLOCKED | [14 launch gates](releases/2026-10-27-android106-controlled-beta-readiness.md): full in-place preservation/three launches, paid state/payment/expiry, delivery/recovery, legal/opt-in cohort/monitoring/stop evidence.49 backend +20 JVM PASS bounded; not full upgrade or paid-launch PASS. No desktop/full-green-CI dependency; no automatic source edits/deployment. |
+| ANDROID-CONTROLLED-BETA | Controlled paid Android beta readiness | exact signed109/source600ae52; full CI41289980872 PASS; existing bound owner | BETA109 TARGETED OWNER CHECKS PASS / SERVER TX RETAINED / COHORT HELD | [Current receipt](releases/2026-10-30-nl-gateway-replacement.md#android109-general-publication--1-november): install/data/CPU/selector/reopen, Auto→AWG Internet and owner Disconnect cleanup PASS; bounded RX0/no new handshake, server TX persists. Full server cleanup/MESH109/exact tap-to-READY not proven; paid canary remains COMPLETED_WITH_DEVIATIONS. Paid baseline108/cohort1/10 unchanged; baseline promotion and [launch gates](releases/2026-10-27-android106-controlled-beta-readiness.md#minimal-controlled-launch-gate), including legal/explicit opt-in/monitoring/stop ownership, remain separate; no automatic enrollment/deployment. |
 | CHAT-UX-1 | Первый продуктовый desktop messenger UX checkpoint | explicit owner request; installed Ubuntu26.04 .7; штатный prepare-chat | IMPLEMENTED / REVIEW; validation PARTIAL | [Report](releases/2026-10-26-chat-ux-1.md). Одно GTK окно/ChatClient, adaptive dialogs/bubbles, fixed4096-byte composer/native emoji, bounded onboarding; backend unchanged. GTK27, desktop1226, exact package/AWG/TCP/integrity/12 screenshots PASS; mandatory full57 FAIL unsuppressed, no overall acceptance PASS. Built .8 sourceb094595/candidate0bf09cee…, system43266d97… unchanged; owner install/publication/L04.2/full L05 NOT_RUN. STOP for review. |
 | U2604-COMPAT | Отдельный Ubuntu26.04/CPython3.14 source/system/package candidate | exact lock compatibility probe; explicit owner request; frozen .5 immutable | CHECKPOINT PASS (compatibility scope; review pending) | [Report](releases/2026-10-26-linux-ubuntu2604-python314-compat.md). Exact .7 candidate c79b4feb…/system43266d97…, manifests [3,14], imports/DEB/AppImage/pkexec/READY/rollback/tamper/barriers/state PASS. Full suites executed unsuppressed: local3257/55/104; general CI not PASS, residual debt retained. No workstation/private identity/gateway/live VPN. STOP for review. |
 | LOCAL-OWNER-UPGRADE | Установка совместимого candidate на workstation владельца | отдельный review U2604-COMPAT и разрешение владельца | Исторический ABI blocker .5; установленная .7 теперь read-only verified | CHAT-UX-1 подтверждает только installed .7 manifest/dpkg и owner context prepare-chat, не воспроизводит acceptance/upgrade. Новая .8 владельцу NOT_RUN; сначала review CHAT-UX-1. Остальные installed checks не объявлены выполненными и не запускаются автоматически. |

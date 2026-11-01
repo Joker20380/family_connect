@@ -6,7 +6,9 @@
 - Publication gate **READY_FOR_BETA109_OWNER_UPDATE** completed. Public/invitation109,
   Android sequence4; owner installation109 is confirmed by owner report and authenticated
   version ACK. Owner data/CPU/selector/reopen and Auto-selected AWG runtime PASS;
-  Disconnect cleanup pending. Restricted MESH109 data path is not exercised by this result.
+  Owner confirms Disconnect/notification/selector cleanup; no incoming traffic/new handshake.
+  Server TX remains; full server cleanup is not independently proven.
+  Restricted MESH109 data path is not exercised by this result.
 - Exact artifact source: `600ae52bfac673ca0323bd7c96d6cdd369593624`; full Client builds
   [41289980872](https://github.com/Joker20380/family_connect/actions/runs/41289980872) SUCCESS.
   Android/Linux/Windows/compatibility PASS; general desktop release expected SKIPPED.
@@ -46,7 +48,9 @@
   Server second-resolution challenge/fetch/ACK timestamps are distinct from the reported3s
   UI latency; exact tap-to-READY and independent client OS-owner/HTTPS/egress proof are absent.
   Auto orders normal profiles before restricted fallback, so AWG selection is not itself a
-  defect. NEXT: one Disconnect/cleanup readback; no second Connect or forced MESH attempt.
+  defect. Owner now confirms the requested Disconnect checklist; no second Connect or
+  forced MESH attempt. Fixed60s readback has RX0/TX8865 and no new handshake; server TX
+  persists. No full server quiescence or independent Android OS-owner inspection claimed.
   Paid baseline108, entitlement, ledger1/4 and cohort1/10 remain unchanged. No paid/CRL writes.
   Existing canary COMPLETED_WITH_DEVIATIONS remains final; latency above90s would be retained
   as CONNECT_LATENCY_DEVIATION_RETAINED, not another paid canary or entitlement invalidation.
@@ -61,7 +65,7 @@
 The original smiley-baseline checkpoint supersedes its older pending/STOP notes; publication
 above is the later distribution transition. The canary remains COMPLETED_WITH_DEVIATIONS.
 
-**1 November — owner beta109 UI and Auto→AWG runtime PASS; cleanup pending.**
+**1 November — owner beta109 targeted Auto→AWG checks PASS; server TX retained.**
 `DESKTOP_SMILEY_BASELINE_STALE_AFTER_REVIEWED_ANDROID107_CHANGE`: exactly one stale
 Android106 pin, ChatThreadView.java; current file is byte-identical to accepted public108.
 Reviewed voice-preview/recording visibility and message styling only; all49 faces, aliases,
@@ -117,18 +121,18 @@ ledger1/4, cohort1/10, revenue0, registry identities/invites/grants and renewal/
 unchanged. Read-only before/after fingerprints match; no backend restart or database write.
 Only Android downloads, discovery catalogs and invitation were published; no forced update.
 Canary remains COMPLETED_WITH_DEVIATIONS, final108 internet/84s READY PASS; never replay it.
-**Owner109 installation confirmed; targeted field acceptance IN_PROGRESS.** Fresh owner
+**Owner109 installation confirmed.** Fresh owner
 confirmation: «109 УСТАНОВЛЕНА». Read-only09:31UTC observation confirms exact0.1.18-beta109/
 code109 from the latest authenticated readiness ACK, with no conflicting latest version.
 Existing private owner binding matches the same non-revoked identity; entitlement remains
 active through2026-12-01T07:09:19Z, ledger1/4 and cohort1/10. No database or canary write.
 **Owner-reported data/UI PASS:** existing data remains present, server CPU is visible and
 transport selection is available both before and after the requested single Force stop/reopen.
-This closes only the targeted data/CPU/selector/reopen checks, not transport or cleanup acceptance.
+These data/CPU/selector/reopen checks are owner-reported; transport/cleanup evidence follows.
 Read-only pre-Connect snapshot09:39UTC matches the existing owner binding/exact109 and ledger1/4;
 the09:37:30UTC challenge/fetch/import ACK is READY with current material. It predates the
 requested Connect and must not be presented as Connect latency or Internet/VPN-owner proof.
-**Auto109 selected AWG — runtime PASS, cleanup pending.** Owner reports one Auto Connect,
+**Auto109 selected AWG — runtime PASS.** Owner reports one Auto Connect,
 AWG selected,3 seconds to connected, Internet working and system VPN indicator present.
 Read-only new-NL185.10.158.212 observation matches the existing bound peer: recent handshake,
 bidirectional traffic over12s, service active/NRestarts0. No test session or server mutation.
@@ -138,9 +142,24 @@ not a measurement of tap-to-READY. The3s value is owner-reported tap-to-connecte
 Auto's normal-profile priority before restricted fallback permits AWG; this is not MESH
 data-path acceptance. No MESH109, whitelist109, independent HTTPS/egress or client OS-owner
 inspection PASS is inferred. Earlier canary deviations are not erased by this AWG result.
-NEXT: one Disconnect, then confirm off/no VPN indicator/no VPN notification and selectors
-available; perform read-only cleanup readback. No second Connect or forced fallback in this
-single smoke. Paid baseline108, ledger1/4, cohort1/10 and entitlement remain unchanged.
+**Owner109 targeted Disconnect cleanup — owner-confirmed PASS.** The fresh reply
+«все нормально» answers the explicit Disconnect checklist: application off, VPN indicator gone,
+notification gone and transport selector available. This is owner field evidence, not an
+independent Android OS/ADB owner inspection. No extra Connect or forced MESH attempt requested.
+Read-only cleanup: the initial12s sample has RX0/TX1400 bytes and no new handshake;
+that residual server TX is retained, not labelled immediate complete silence. One fixed60s
+follow-up ending09:55:03UTC has RX0/TX8865 and no new handshake. No client return
+traffic is observed, but server-originated TX persists; full server quiescence/resource release
+is NOT_PROVEN. No retry-until-zero or client reconnect. The registered AWG peer/old handshake
+are expected persistent state, not proof of a retained client tunnel. No peer/certificate deletion.
+Fresh authenticated exact109 observation, existing binding and active entitlement are preserved;
+ledger1/4, cohort1/10, paid baseline108 and gateway catalog4 remain unchanged. Readiness ACKs
+are control-plane material evidence and do not prove a live VPN while the application is off.
+Result: **OWNER109_TARGETED_AUTO_AWG_OWNER_PASS_SERVER_TX_RETAINED**; install/data/CPU/selector/reopen,
+one Auto→AWG Connect/Internet and one Disconnect/owner-reported cleanup are accepted in scope.
+MESH109 field traffic and exact tap-to-READY remain unmeasured; earlier canary deviations retained.
+No further phone action for this smoke. Paid-baseline109 promotion and controlled cohort
+expansion are separate gates, NOT_RUN here; no READY_FOR_COHORT_3 claim or automatic enrollment.
 No paid event, CRL operation or cohort expansion is authorized by this publication.
 
 Exact audit: ChatThreadView.java old SHA256

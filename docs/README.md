@@ -1,12 +1,15 @@
 # Documentation
 
-**1 November — READY_FOR_BETA109_OWNER_UPDATE.** Beta109/code109 is published;
+**1 November — owner109 targeted Auto→AWG checks PASS; server TX retained.** Beta109 is published;
 Android update sequence4 and invitation109 verified over HTTPS. Full matrix41289980872/
-source600ae52, offline signer,16K alignment and exact bytes PASS. The repair keeps country/
-transport controls visible after failure and corrects Disconnect/Cancel actions. Owner109
-physical acceptance is pending; update over108 without clearing data or reenrollment, then
-report «109 УСТАНОВЛЕНА» without connecting. Public108 remains immutable. Gateway catalog4,
-paid baseline108, entitlement, ledger1/4 and cohort1/10 are unchanged; no canary replay.
+source600ae52, offline signer,16K alignment and exact bytes PASS. Owner confirms in-place
+installation/data preservation, CPU display, selector before/after one Force stop/reopen,
+Auto→AWG Internet in3s and Disconnect/VPN-indicator/notification/selector cleanup. New-NL
+handshake/traffic observed. After Disconnect, fixed60s RX0/no new handshake, but server TX
+persists; full server cleanup is not proven. No independent Android OS-owner inspection,
+MESH109 field traffic or exact tap-to-READY claim. No further phone action for this smoke. Public108 remains immutable; gateway catalog4, paid baseline108,
+entitlement, ledger1/4 and cohort1/10 are unchanged. Canary deviations remain; no replay,
+paid event, baseline promotion or cohort expansion. This is not READY_FOR_COHORT_3.
 [Publication evidence](releases/2026-10-30-nl-gateway-replacement.md#android109-general-publication--1-november).
 
 Earlier dated checkpoints below retain their original observations; they are not current NEXTs.

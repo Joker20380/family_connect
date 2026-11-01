@@ -2736,7 +2736,7 @@
     }
   },
   "android109_ui_repair_20261101": {
-    "state": "OWNER109_AUTO_AWG_RUNTIME_PASS_CLEANUP_PENDING",
+    "state": "OWNER109_TARGETED_AUTO_AWG_OWNER_PASS_SERVER_TX_RETAINED",
     "version": "0.1.18-beta109",
     "version_code": 109,
     "authorization": "NEW_APK_AND_ANDROID_SEQUENCE4_AFTER_FINAL108_CANARY",
@@ -2764,7 +2764,7 @@
       "hidden_panel_red_failures": 2,
       "emulator": "PASS",
       "hosted_release_ci": "FULL_MATRIX_PASS",
-      "physical109": "OWNER_UI_AUTO_SELECTED_AWG_INTERNET_PASS_CLEANUP_PENDING"
+      "physical109": "TARGETED_AUTO_AWG_UI_INTERNET_OWNER_CLEANUP_PASS"
     },
     "artifact": {
       "result": "PUBLIC_VERIFIED_OWNER_INSTALLED",
@@ -3267,7 +3267,7 @@
       "version_changed": false,
       "scope_script_changed": false,
       "workflow_changed": false,
-      "status": "OWNER109_AUTO_AWG_RUNTIME_PASS_CLEANUP_PENDING",
+      "status": "OWNER109_TARGETED_AUTO_AWG_OWNER_PASS_SERVER_TX_RETAINED",
       "source_commit": "600ae52bfac673ca0323bd7c96d6cdd369593624",
       "run_id": 41289980872,
       "hosted_scope": {
@@ -3280,7 +3280,7 @@
       "artifact": "QUALIFIED",
       "signing": "PASS",
       "publication": "VERIFIED_HTTPS_PASS",
-      "phone_actions": "ONE_AUTO_CONNECT_CONFIRMED_AWG_SELECTED",
+      "phone_actions": "ONE_AUTO_CONNECT_ONE_DISCONNECT_COMPLETED",
       "retained_marker": true,
       "required_terminal_failure": "STOP_NEW_FULL_CI_FAILURE",
       "required_scope_failure": "FULL_MATRIX_SCOPE_NOT_ACTIVATED",
@@ -3800,7 +3800,7 @@
           }
         ]
       },
-      "owner109_acceptance": "IN_PROGRESS_AUTO_AWG_PASS",
+      "owner109_acceptance": "PASS_TARGETED_AUTO_AWG_OWNER_SCOPE",
       "publication_receipt": {
         "observed_at": 1793524297,
         "version_code": 109,
@@ -3893,7 +3893,7 @@
         "database_writes": false,
         "canary_replayed": false
       },
-      "owner109_next": "ONE_DISCONNECT_THEN_OWNER_AND_READONLY_CLEANUP_NO_RECONNECT",
+      "owner109_next": "NO_MORE_PHONE_ACTIONS_BASELINE_AND_COHORT_GATES_SEPARATE",
       "owner109_ui": {
         "evidence": "OWNER_TESTER_REPORT",
         "existing_data": "PASS",
@@ -4008,9 +4008,108 @@
         "server_readiness_timestamp_resolution_seconds": 1,
         "selected_transport_scope": "AUTO_AWG_ONLY_NOT_RESTRICTED_MESH",
         "canary_deviations": "RETAINED",
-        "disconnect": "NOT_RUN",
-        "cleanup": "PENDING",
+        "disconnect": "OWNER_CONFIRMED",
+        "cleanup": "OWNER_CONFIRMED_SERVER_RX_ZERO_TX_RETAINED",
         "phone_os_owner_inspection": "NOT_PERFORMED"
+      },
+      "owner109_disconnect_cleanup": {
+        "owner_reply": "все нормально",
+        "reply_context": "EXPLICIT_ONE_DISCONNECT_VPN_ICON_NOTIFICATION_TRANSPORT_CHECKLIST",
+        "owner_evidence": {
+          "app_off": "CONFIRMED",
+          "vpn_indicator": "GONE",
+          "notification": "GONE",
+          "transport_selector": "AVAILABLE",
+          "disconnect_count": 1
+        },
+        "client_os_inspection": "NOT_PERFORMED",
+        "initial_readback": {
+          "observed_utc": "2026-11-01T09:53:18.608533+00:00",
+          "endpoint": "185.10.158.212",
+          "peer_loaded": true,
+          "handshake_epoch": 1793526716,
+          "handshake_age_seconds": 82.6,
+          "handshake_recent": true,
+          "rx_delta_bytes": 0,
+          "tx_delta_bytes": 1400,
+          "bidirectional_traffic": false,
+          "no_new_handshake": true,
+          "sample_seconds": 12.0,
+          "persistent_registered_peer_retained": true,
+          "peer_deleted": false,
+          "service_active": true,
+          "automatic_restarts": 0,
+          "server_mutations": 0,
+          "client_ip_recorded": false,
+          "phase": "disconnected",
+          "binding": "EXISTING_OWNER_BINDING_MATCH",
+          "paid": [
+            1,
+            4
+          ],
+          "cohort": "1/10",
+          "paid_baseline": 108,
+          "client_os_inspection": "NOT_PERFORMED",
+          "operator_test_sessions_created": 0,
+          "cleanup_conclusion": "REQUIRES_OWNER_REPORT_AND_QUIESCENCE_NOT_PEER_DELETION"
+        },
+        "fixed_60_second_followup": {
+          "observed_utc": "2026-11-01T09:55:03.518421+00:00",
+          "endpoint": "185.10.158.212",
+          "peer_loaded": true,
+          "handshake_epoch": 1793526716,
+          "handshake_age_seconds": 187.5,
+          "handshake_recent": false,
+          "rx_delta_bytes": 0,
+          "tx_delta_bytes": 8865,
+          "bidirectional_traffic": false,
+          "no_new_handshake": true,
+          "sample_seconds": 60.0,
+          "persistent_registered_peer_retained": true,
+          "peer_deleted": false,
+          "service_active": true,
+          "automatic_restarts": 0,
+          "server_mutations": 0,
+          "client_ip_recorded": false,
+          "phase": "disconnected-tail",
+          "binding": "EXISTING_OWNER_BINDING_MATCH",
+          "paid": [
+            1,
+            4
+          ],
+          "cohort": "1/10",
+          "paid_baseline": 108,
+          "client_os_inspection": "NOT_PERFORMED",
+          "operator_test_sessions_created": 0,
+          "cleanup_conclusion": "REQUIRES_OWNER_REPORT_AND_QUIESCENCE_NOT_PEER_DELETION"
+        },
+        "server_cleanup": "BOUNDED_RX_ZERO_NO_NEW_HANDSHAKE_TX_RETAINED",
+        "full_server_quiescence": "NOT_PROVEN",
+        "server_resources_released": "NOT_INDEPENDENTLY_PROVEN",
+        "persistent_peer": "EXPECTED_NOT_DELETED_NOT_A_LIVE_CLIENT_TUNNEL_PROOF",
+        "authenticated_version": "EXACT109",
+        "binding": "EXISTING_OWNER_BINDING_MATCH",
+        "entitlement": "ACTIVE",
+        "paid_until_utc": "2026-12-01T07:09:19Z",
+        "paid": [
+          1,
+          4
+        ],
+        "cohort": "1/10",
+        "paid_baseline": 108,
+        "gateway_catalog_sequence": 4,
+        "android_update_sequence": 4,
+        "database_writes": false,
+        "canary_replayed": false,
+        "production_mutations": 0,
+        "certificates_deleted": false,
+        "additional_connect_attempts": 0,
+        "mesh_transport": "NOT_EXERCISED",
+        "exact_tap_to_ready_seconds": null,
+        "canary_deviations": "RETAINED",
+        "paid_baseline109_promotion": "NOT_RUN",
+        "cohort_expansion": "NOT_RUN",
+        "ready_for_cohort_3": false
       }
     }
   }
