@@ -42,7 +42,9 @@ def command(argv, *, timeout=90, check=True, env=None):
 
 def mesh_result(raw):
     events=[load(line) for line in raw.splitlines() if line.startswith(b'{')]
-    if (not any(event.get('event')=='family_auth' and event.get('accepted') is True for event in events)
+    required=('bootstrap_normal_control_unavailable','bootstrap_cache_loaded','bootstrap_closed_before_dedicated')
+    if (any(not any(event.get('event')==name for event in events) for name in required)
+            or not any(event.get('event')=='family_auth' and event.get('accepted') is True for event in events)
             or not any(event.get('event')=='mux_result' and event.get('status')=='PASS' for event in events)
             or len([event for event in events if event.get('event')=='mux_https' and event.get('passed') is True])!=4
             or len([event for event in events if event.get('event')=='mux_dns' and event.get('passed') is True])!=3
@@ -194,8 +196,13 @@ class Harness:
         config=directory/'mux.json'
         write_private(config,canonical(dict(mode='public',seconds=0,port=0)))
         environment=dict(PATH=os.environ.get('PATH','/usr/bin:/bin'),HOME=str(directory),FC_REHEARSAL_TARGET_IPV4=self.target)
-        raw=command([str(self.probe),'-family-config',self.config['mesh_profile'],'-broker-url','https://'+self.target+':18444',
-            '-mux-config',str(config),'-duration','180s'],timeout=200,env=environment).stdout
+        cache=directory/'bootstrap.json'
+        prepared=command([str(self.probe),'-family-config',self.config['mesh_profile'],'-broker-url','https://'+self.target+':18444',
+            '-bootstrap-cache',str(cache),'-bootstrap-refresh','-duration','180s'],timeout=200,env=environment).stdout
+        if not any(load(line).get('event')=='bootstrap_cache_stored' for line in prepared.splitlines() if line.startswith(b'{')):
+            fail('operator_mesh_directory_unconfirmed')
+        raw=command([str(self.probe),'-family-config',self.config['mesh_profile'],'-broker-url','https://127.0.0.1:1',
+            '-bootstrap-cache',str(cache),'-mux-config',str(config),'-duration','180s'],timeout=200,env=environment).stdout
         return mesh_result(raw)
 
 

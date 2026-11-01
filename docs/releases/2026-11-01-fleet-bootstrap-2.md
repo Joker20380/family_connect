@@ -1,5 +1,29 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+## Exact MESH bootstrap flow localized and physically diagnosed
+
+Further inspection of the accepted canonical `cmd/bootstrap-broker` shows HTTP serves only
+the authenticated bootstrap directory; room creation is carried over Telemost bootstrap, not
+the HTTP room API. Thus the interim f21aac9 direct-broker fix was insufficient despite its
+source/package tests passing. No false VERIFIED or full acceptance receipt was issued.
+Corrected operator flow first refreshes the mTLS-authenticated directory, then invokes the
+native's guarded cached-bootstrap path with its required blocked loopback control endpoint.
+This does not bypass target/TLS/identity binding: the directory comes from the exact permitted
+VPS, the Family gate binds the expected gateway, and external egress must equal that VPS.
+The canonical native and its282-file source provenance remain unchanged.
+
+Trial05 operator-only diagnostic using temporary operator probe custody passed directory
+refresh, bootstrap Family authentication, bootstrap close-before-dedicated, dedicated Family
+TLS, four HTTPS streams, all three DNS checks and exact expected egress. Native exit0 and
+`mux_result=PASS`; only allowlisted events/booleans were returned, no URLs or private payloads.
+This diagnostic signs no acceptance and cannot transition the node. Trial05 drain/retirement
+is in progress. No production RU/NL/catalog/user/paid/phone operations occurred.
+Full fleet324 PASS, including exact two-step argv, failed-refresh rejection and required
+bootstrap events. Added an offline exact-native mTLS-directory/guard qualification harness;
+it needs the next frozen package and deliberately cannot claim Telemost/data-plane acceptance.
+Next: freeze/requalify, then fresh complete acceptance against that bound source, not the
+instrumented diagnostic. Console recovery remains unverified; no role reboot requested.
+
 ## Corrected broker pair qualified — frozen sourcef21aac9
 
 Exact source `f21aac9a36b8ab97a14b88c28c57ff9b11242b2f` is pushed and remote-verified.

@@ -48,6 +48,7 @@ def test_fresh_material_factory_and_role_contracts():
 def test_mesh_safe_result_requires_all_native_evidence():
     events=[dict(event='family_auth',accepted=True),dict(event='mux_result',status='PASS'),
             dict(event='fleet_probe_egress',passed=True,expected_rehearsal_egress=True)]
+    events += [dict(event=name) for name in ('bootstrap_normal_control_unavailable','bootstrap_cache_loaded','bootstrap_closed_before_dedicated')]
     events += [dict(event='mux_https',passed=True) for index in range(4)]
     events += [dict(event='mux_dns',passed=True) for index in range(3)]
     raw=b'\n'.join(canonical(event) for event in events)
@@ -57,7 +58,8 @@ def test_mesh_safe_result_requires_all_native_evidence():
             mesh_result(b'\n'.join(canonical(event) for position,event in enumerate(events) if position!=index))
 
 
-def test_mesh_uses_authenticated_broker_not_diagnostic_bootstrap(tmp_path,monkeypatch):
+@pytest.mark.parametrize('prepared',[True,False])
+def test_mesh_refreshes_authenticated_directory_before_telemost_bootstrap(tmp_path,monkeypatch,prepared):
     import base64
     from device_identity import friends
     from fleet import operator_harness as module
@@ -76,13 +78,24 @@ def test_mesh_uses_authenticated_broker_not_diagnostic_bootstrap(tmp_path,monkey
     calls=[]
     def command(argv,**options):
         calls.append((argv,options))
+        if '-bootstrap-refresh' in argv:
+            return SimpleNamespace(stdout=canonical(dict(event='bootstrap_cache_stored' if prepared else 'unexpected')))
         return SimpleNamespace(stdout=b'bound-native-output')
     monkeypatch.setattr(module,'command',command)
     monkeypatch.setattr(module,'mesh_result',lambda raw:raw)
-    assert harness.mesh(tmp_path)==b'bound-native-output'
-    assert calls==[([str(harness.probe),'-family-config',harness.config['mesh_profile'],
-        '-broker-url','https://8.8.8.8:18444','-mux-config',str(tmp_path/'mux.json'),'-duration','180s'],
-        dict(timeout=200,env=dict(PATH=module.os.environ.get('PATH','/usr/bin:/bin'),HOME=str(tmp_path),FC_REHEARSAL_TARGET_IPV4='8.8.8.8')))]
+    if not prepared:
+        with pytest.raises(FleetError,match='operator_mesh_directory_unconfirmed'):harness.mesh(tmp_path)
+        assert len(calls)==1
+    else:
+        assert harness.mesh(tmp_path)==b'bound-native-output'
+        assert len(calls)==2
+        assert calls[1][0]==[str(harness.probe),'-family-config',harness.config['mesh_profile'],
+            '-broker-url','https://127.0.0.1:1','-bootstrap-cache',str(tmp_path/'bootstrap.json'),
+            '-mux-config',str(tmp_path/'mux.json'),'-duration','180s']
+    assert calls[0][0]==[str(harness.probe),'-family-config',harness.config['mesh_profile'],
+        '-broker-url','https://8.8.8.8:18444','-bootstrap-cache',str(tmp_path/'bootstrap.json'),'-bootstrap-refresh','-duration','180s']
+    assert all(options==dict(timeout=200,env=dict(PATH=module.os.environ.get('PATH','/usr/bin:/bin'),
+        HOME=str(tmp_path),FC_REHEARSAL_TARGET_IPV4='8.8.8.8')) for argv,options in calls)
     assert not (tmp_path/'bootstrap.json').exists()
     assert clients['mesh-profile.json'] not in canonical(calls)
 

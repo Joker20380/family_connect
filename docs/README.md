@@ -1,7 +1,7 @@
 # Documentation
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**FLEET-BOOTSTRAP-2 — corrected source/package qualification PASS; trial05 started.**
+**FLEET-BOOTSTRAP-2 — MESH diagnostic PASS; exact bootstrap flow corrected.**
 Existing task only, no new PLAN ID or production activation. Owner wants two Amsterdam servers;
 first production NL remains excluded. Reserved VPS stays Ubuntu24.04/x86_64, not reinstalled/deleted.
 Frozen deployable source `f21aac9a36b8ab97a14b88c28c57ff9b11242b2f` is pushed and remote-verified.
@@ -17,10 +17,12 @@ Signed permit, exact SSH/target/agent/bundle/key bindings, production exclusions
 private material encryption, local/external separation and append-only evidence guards remain.
 Separate publisher token passed API validation. Trials01–04 are RETIRED; original probe custody
 is retained and disposable operator clients removed only after signed retirement receipts.
-Trial04 local health and AWG/TCP external PASS. Its MESH diagnostic-bootstrap invocation failed
-before data-plane testing; the source-bound operator now uses canonical authenticated broker
-create/claim/cancel. Negative receipt retained, never promoted. No full VERIFIED/ACTIVE claimed.
-Next: finish trial05 three-role acceptance; B upgrade/rollback and separately guarded reboot.
+Trial04 AWG/TCP PASS. Further canonical-source inspection showed its HTTP endpoint only serves
+the authenticated bootstrap directory, not room creation. The interim direct-broker fix was
+insufficient. Correct flow: refresh the mTLS directory, then guarded cached Telemost bootstrap.
+Trial05 operator-only diagnostic proves bootstrap/Family TLS/DNS/four HTTPS/expected egress PASS;
+it is not a signed full acceptance or VERIFIED state. Trial05 drain/retirement is in progress.
+Full fleet324 PASS. Refreeze/requalify the corrected flow before fresh final acceptance.
 Recovery console remains unverified; no role reboot request until availability is recorded.
 Admitted: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor. Disabled:
 mailbox/chat-services, production renewal/restricted-sync, registry/control-plane database.
