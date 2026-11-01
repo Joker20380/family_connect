@@ -1,0 +1,251 @@
+{
+  "agent_sha256": "837f885b278b52b1808fbc3178b7b9e21d1f41eed9428da5f715fc36a411c23a",
+  "bundle_id": "gw-e215192b1e491de45ae1fa103fd9ba94",
+  "catalog_publications": 0,
+  "changed_boot_verified_by_bound_runtime": true,
+  "external_acceptance": {
+    "after_reboot": {
+      "active_service_count": 6,
+      "bundle_id": "gw-e215192b1e491de45ae1fa103fd9ba94",
+      "cleanup": "PASS",
+      "expires_at": 1793575557,
+      "issued_at": 1793575257,
+      "local_health_sha256": "20d9f055c7286fcbd0a71d1dddaff6556f35ba477f940db2560a91751595d74c",
+      "maximum_restarts": 0,
+      "receipt_sha256": "c583ec1ccfb6b0f494876584830ca64f0ec8e482187786e61757178f4921db12",
+      "roles": {
+        "awg": {
+          "dns": "PASS",
+          "egress": "PASS",
+          "handshake": "PASS",
+          "https": "PASS"
+        },
+        "mesh": {
+          "dns": "PASS",
+          "egress": "PASS",
+          "family_tls": "PASS",
+          "four_https_streams": "PASS",
+          "join": "PASS",
+          "ready": "PASS",
+          "registration": "PASS",
+          "room": "PASS"
+        },
+        "tcp": {
+          "authentication": "PASS",
+          "egress": "PASS",
+          "https": "PASS"
+        }
+      },
+      "uptime_seconds": 323.81
+    },
+    "before_reboot": {
+      "active_service_count": 6,
+      "bundle_id": "gw-e215192b1e491de45ae1fa103fd9ba94",
+      "cleanup": "PASS",
+      "expires_at": 1793575122,
+      "issued_at": 1793574822,
+      "local_health_sha256": "edaa574478f9a28d5fde79f91b3779eff2a2dfe7ce3ff7392ce0a71abcd1f465",
+      "maximum_restarts": 0,
+      "receipt_sha256": "5e3dc511c99da08fa4e1587a5b65d588cb97ec2ad92f2951b0ef172b4645437c",
+      "roles": {
+        "awg": {
+          "dns": "PASS",
+          "egress": "PASS",
+          "handshake": "PASS",
+          "https": "PASS"
+        },
+        "mesh": {
+          "dns": "PASS",
+          "egress": "PASS",
+          "family_tls": "PASS",
+          "four_https_streams": "PASS",
+          "join": "PASS",
+          "ready": "PASS",
+          "registration": "PASS",
+          "room": "PASS"
+        },
+        "tcp": {
+          "authentication": "PASS",
+          "egress": "PASS",
+          "https": "PASS"
+        }
+      },
+      "uptime_seconds": 17376.18
+    }
+  },
+  "final_state": "RETIRED",
+  "fresh_verification_nonce": true,
+  "instance_id": "fleet-rehearsal-nl-disposable-07",
+  "operations": [
+    {
+      "action": "preflight",
+      "elapsed_seconds": 3.933,
+      "error": null,
+      "issued_at": 1793574531,
+      "operation_id": "host472-v7-preflight-a-d4b38ad0df204d6eb3ef8e86d9815cd9",
+      "receipt_sha256": "9c3f30602cde867df394a7fed5d198934cfbc860499717ebe6fea69c284fdf11",
+      "result": "PASS",
+      "rollback": null,
+      "state": null
+    },
+    {
+      "action": "enroll",
+      "elapsed_seconds": 83.033,
+      "error": null,
+      "issued_at": 1793574622,
+      "operation_id": "host472-v7-enroll-a-76e12413c415426f81f55781955d7d62",
+      "receipt_sha256": "7bd139ea188c26282b15b5570d671eec859346a7742fa937a562202d4619c7c3",
+      "result": "PASS",
+      "rollback": null,
+      "state": "PREFLIGHTED"
+    },
+    {
+      "action": "deliver-materials",
+      "elapsed_seconds": 43.718,
+      "error": null,
+      "issued_at": 1793574668,
+      "operation_id": "host472-v7-deliver-materials-a-7f1ecd8d1fcc4890af9194ee3c12d16b",
+      "receipt_sha256": "92dba4c1995a3f6353427b828ca4b4e8a0621e0128e2be94d58974a315b9cba4",
+      "result": "PASS",
+      "rollback": null,
+      "state": "PREFLIGHTED"
+    },
+    {
+      "action": "stage",
+      "elapsed_seconds": 42.097,
+      "error": null,
+      "issued_at": 1793574713,
+      "operation_id": "host472-v7-stage-a-4a7693319e5d4f61b011a63e972478a7",
+      "receipt_sha256": "17d38707a5d351f704e3638e52707659fc598397ed784f197a49373ebad95d5b",
+      "result": "PASS",
+      "rollback": null,
+      "state": "STAGED"
+    },
+    {
+      "action": "start-verification",
+      "elapsed_seconds": 51.227,
+      "error": null,
+      "issued_at": 1793574767,
+      "operation_id": "host472-v7-start-verification-a-8a6220f04bb74b2499d54e34ce248705",
+      "receipt_sha256": "16ed07343926db53b0762678eb6974110dcf87dd594156011312d07f66ff6dbd",
+      "result": "AWAITING_EXTERNAL_ACCEPTANCE",
+      "rollback": null,
+      "state": "AWAITING_EXTERNAL_ACCEPTANCE"
+    },
+    {
+      "action": "complete-verification",
+      "elapsed_seconds": 43.851,
+      "error": null,
+      "issued_at": 1793574869,
+      "operation_id": "host472-v7-complete-verification-a-7d194f59a77044069149d025f0259cc3",
+      "receipt_sha256": "b702e133ca5524c08afd28597a1e165ddf862ef2048b9a7d9e73f49399a2b513",
+      "result": "PASS",
+      "rollback": null,
+      "state": "VERIFIED"
+    },
+    {
+      "action": "activate-local",
+      "elapsed_seconds": 47.259,
+      "error": null,
+      "issued_at": 1793574919,
+      "operation_id": "host472-v7-activate-local-a-a1e6caa298594ce7a78d2b2bf1c1656f",
+      "receipt_sha256": "deb77f127f933a53cd9f8c1a41317a851cd102bcfb6ce563d25462ff177029b4",
+      "result": "PASS",
+      "rollback": null,
+      "state": "ACTIVE"
+    },
+    {
+      "action": "reboot-verify",
+      "elapsed_seconds": 49.452,
+      "error": null,
+      "issued_at": 1793574972,
+      "operation_id": "host472-v7-reboot-verify-a-ff737636cf27457788fbcc891d4b2be5",
+      "receipt_sha256": "b9ea817be356ebcd884fb107b2212aff48a18425d26ef07de62bb0a5d41db791",
+      "result": "PASS",
+      "rollback": null,
+      "state": "ACTIVE"
+    },
+    {
+      "action": "status",
+      "elapsed_seconds": 83.325,
+      "error": null,
+      "issued_at": 1793575118,
+      "operation_id": "host472-v7-status-a-f300e3269aa540cfaa910c5f4c37a0b9",
+      "receipt_sha256": "ca07d6a40f519fbb782953928e20ca7d713556c216ed2d9fbbb6aeb02766a294",
+      "result": "PASS",
+      "rollback": null,
+      "state": "ACTIVE"
+    },
+    {
+      "action": "reboot-verify",
+      "elapsed_seconds": 62.502,
+      "error": null,
+      "issued_at": 1793575204,
+      "operation_id": "host472-v7-reboot-verify-a-a1163aafbfd540668dfc01e2bcea53aa",
+      "receipt_sha256": "af329694a9e964309d5b5dc3f9a8864c9b262caa9be900868bc3e796df2e1ec2",
+      "result": "AWAITING_EXTERNAL_ACCEPTANCE",
+      "rollback": null,
+      "state": "AWAITING_EXTERNAL_ACCEPTANCE"
+    },
+    {
+      "action": "complete-verification",
+      "elapsed_seconds": 60.922,
+      "error": null,
+      "issued_at": 1793575321,
+      "operation_id": "host472-v7-complete-verification-a-badb2c0300924901ad469abdebfac215",
+      "receipt_sha256": "40b007898663314617ae4056def576732446b500bf726111d498b91058bbbcf8",
+      "result": "PASS",
+      "rollback": null,
+      "state": "VERIFIED"
+    },
+    {
+      "action": "activate-local",
+      "elapsed_seconds": 61.105,
+      "error": null,
+      "issued_at": 1793575384,
+      "operation_id": "host472-v7-activate-local-a-e8b640b34e1447269e749e01559de075",
+      "receipt_sha256": "36ec787ccf7bc1fa0ea0c4e57f291001779859c35fd1d08c4ea831738cfcc955",
+      "result": "PASS",
+      "rollback": null,
+      "state": "ACTIVE"
+    },
+    {
+      "action": "drain",
+      "elapsed_seconds": 59.558,
+      "error": null,
+      "issued_at": 1793575459,
+      "operation_id": "host472-v7-drain-a-4396fb697e164f6eb5df50c4e9d806cb",
+      "receipt_sha256": "d361fa8d226dd92ff286981188ce2debdd9beb6375899c337c5911f13ea1e074",
+      "result": "PASS",
+      "rollback": null,
+      "state": "DRAINING"
+    },
+    {
+      "action": "retire",
+      "elapsed_seconds": 62.211,
+      "error": null,
+      "issued_at": 1793575524,
+      "operation_id": "host472-v7-retire-a-d61d92449259436d8c659527c33ddfd6",
+      "receipt_sha256": "4ec98e338cc3d3ac2c2aeafcdf64ec06459cf95cb2ced17870e3cfd3bd30d611",
+      "result": "PASS",
+      "rollback": null,
+      "state": "RETIRED"
+    }
+  ],
+  "operator_client_cleanup": "PASS",
+  "paid_events": 0,
+  "phone_actions": 0,
+  "platform": "Ubuntu24.04/x86_64",
+  "pre_reboot_boot_sha256": "bc049ae703a5a223725727a5fd73d031ef1db27d7fbae2847c5c3fd572e36e18",
+  "production_activation": "NOT_RUN",
+  "production_writes": 0,
+  "reboot_persistence": "PASS",
+  "recovery_console": "OWNER_CONFIRMED_VNC_ACCESS",
+  "recovery_fallback_used": false,
+  "schema": 1,
+  "scope": "DISPOSABLE_FLEET_REHEARSAL_PHYSICAL_REBOOT_EVIDENCE",
+  "source_commit": "d3416ea4abacfafc843411f765fb8037722b55d0",
+  "ssh_trust": "OWNER_ACCEPTED_TOFU_NOT_INDEPENDENTLY_VERIFIED",
+  "target_label": "reserved-nl-vps-472",
+  "user_invitations": 0
+}

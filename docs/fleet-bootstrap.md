@@ -5,6 +5,11 @@ authorized for source preparation and one separately supplied disposable target.
 RU/NL are excluded. The following FLEET-BOOTSTRAP-1 acceptance remains historical; its
 synthetic archive is not a real VPN bundle and its live-mutation guard remains in place.
 
+Latest bounded host result: [physical role reboot and retirement PASS](releases/2026-11-02-fleet-bootstrap-2-reboot.md),
+following the accepted A/B/explicit rollback rehearsal. Source and bundle contracts are unchanged.
+The owner confirmed VNC availability; SSH trust is still owner-accepted TOFU, not independent
+fingerprint verification. This evidence is not production admission or a relaxation of the guards below.
+
 ### Rehearsal source guard boundary
 
 `fleet.permit` binds one independently pinned public IPv4, `fleet-rehearsal-*` instance,

@@ -1,36 +1,40 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**READY_FOR_FLEET_BOOTSTRAP_2_HOST — source PASS; physical A→B→A and retirement PASS.**
+**READY_FOR_FLEET_BOOTSTRAP_2_HOST — source PASS; A→B→A, role reboot and retirement PASS.**
 Existing FLEET-BOOTSTRAP-2 only; no new PLAN ID or production activation. Owner wants two
 Amsterdam servers; first production NL remains excluded. Reserved disposable VPS remains
 Ubuntu24.04/x86_64; no reinstall/deletion or production/catalog admission is implied.
-Frozen deployable source `d3416ea4abacfafc843411f765fb8037722b55d0` is pushed and remote-verified.
+Frozen deployable source `d3416ea4abacfafc843411f765fb8037722b55d0` remains unchanged and pushed.
 A/B each reproduce archive/manifest/signature/SHA inventory twice byte-identically. Their only
 member difference is reviewed monitoring revision metadata; native binaries, roles, ports,
 material slots/schema and protocol contracts match. Exact four natives and282-file MESH source
 provenance/licenses remain bound. Private signer, packages and material remain outside Git.
 Offline Ubuntu24.04 native/config/unit/nft/material/A-B/rollback/boot/retirement qualification PASS.
 Exact-native synthetic loopback REALITY/HTTPS and offline MESH mTLS-directory/guard checks PASS.
-Fresh fleet324 + console156 =480 PASS; paid170 PASS; Django check PASS; migration drift NONE.
+Retained unchanged-source qualification: fleet324 + console156 =480 PASS; paid170 PASS;
+Django check PASS; migration drift NONE. This continuation changes evidence/docs, not runtime.
 Signed permit, exact SSH/target/agent/bundle/key bindings, production exclusions, immutable
 releases, encrypted material, two-phase external acceptance and append-only evidence remain.
-Trials01–06 RETIRED; signed retirement precedes disposal of their operator client files.
-Original FLEET_MESH_PROBE_1 custody retained; separate publisher token works and remains private.
-Trial06 completed real A→B upgrade→A explicit rollback, each with a distinct signed external
-AWG/TCP/MESH PASS receipt, fresh node verification and local activation. Six services active,
-zero restarts at all three acceptances. Full DNS/HTTPS/expected egress and operator cleanup PASS.
+Trials01–07 RETIRED; signed retirement precedes disposal of their operator client files.
+Original FLEET_MESH_PROBE_1 custody retained; separate publisher token remains private.
+Trial06 completed real A→B upgrade→A explicit rollback with signed AWG/TCP/MESH acceptance.
+Trial07 completed one guarded physical reboot of A, preserving node identity and bundle.
+All six services recovered automatically with zero restarts; no manual role restart was used.
+Fresh, distinct external acceptance before/after reboot passed AWG/TCP/MESH, DNS/HTTPS/egress
+and operator cleanup. Each receipt was accepted while fresh, then the node was activated locally.
 Final drain/retirement PASS; disposable node secrets and three operator clients removed.
 Reserved VPS is retained; no temporary rehearsal role is left active or published to users.
-Physical role reboot remains NOT_RUN: provider VNC/Console recovery is not yet confirmed.
-Next in this same task: confirm console access and independently verify the SSH host key,
-then separately perform a fresh guarded role-reboot rehearsal. Do not start queued activation.
+Owner confirmed VNC access and authorized the reboot; no manual recovery was requested.
+SSH trust remains owner-accepted TOFU with unchanged strict pin, NOT independent verification.
+That trust limitation is retained for future admission; no production-ready trust claim is made.
+The physical reboot test is finished. No queued activation starts automatically.
 Admitted: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor. Disabled:
 mailbox/chat-services, production renewal/restricted-sync, registry/control-plane database.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
 Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.
-SSH trust remains owner-accepted TOFU, not independent provider verification.
-[Checkpoint](releases/2026-11-01-fleet-bootstrap-2.md) ·
+[Reboot checkpoint](releases/2026-11-02-fleet-bootstrap-2-reboot.md) ·
+[Reboot evidence](releases/2026-11-02-fleet-bootstrap-2-reboot.receipt.json) ·
 [Qualified hashes](releases/2026-11-01-fleet-bootstrap-2-ready.receipt.json) ·
 [Physical A/B receipts](releases/2026-11-01-fleet-bootstrap-2-host-ab.receipt.json) · [Runbook](fleet-bootstrap.md).
 Older checkpoint NEXTs below are historical, not simultaneous active work.

@@ -1,5 +1,9 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+**Continuation,2 November:** [physical role reboot and final retirement PASS](2026-11-02-fleet-bootstrap-2-reboot.md).
+The reboot NOT_RUN statements below describe the retained1 November checkpoint, not the current state.
+The deployable source/pair is unchanged; independent SSH fingerprint verification remains unprovided.
+
 ## Trial06 physical A→B→A PASS; retirement completed
 
 The final d3416ea pair completed actual disposable Ubuntu24.04/x86_64 rehearsal. Each phase
