@@ -6,6 +6,7 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+import time
 
 UNIT = 'family-connect-friends-http-candidate.service'
 DESTINATION = 'org.freedesktop.systemd1'
@@ -206,6 +207,32 @@ def observe(expected_exec, expected_running=None, *, bus=None, read_process=proc
     second['process'] = second_process
     return {'schema': 1, 'result': 'OBSERVED', 'unit': UNIT, 'service': second,
         'jobs': final_jobs, 'restarts': 0}
+
+
+def wait_started(expected_exec, *, timeout=15, interval=.2, read=observe, record=lambda value: None,
+                 clock=time.monotonic, pause=time.sleep):
+    require(type(timeout) in (int, float) and 0 < timeout <= 60
+        and type(interval) in (int, float) and 0 < interval <= timeout, 'startup', 'INVALID_WAIT_BOUNDS')
+    deadline = clock() + timeout
+    transient = {'SERVICE_CHANGED_DURING_READ', 'JOBS_CHANGED_DURING_READ', 'NO_MAIN_PID', 'PROC_UNAVAILABLE'}
+    while True:
+        try:
+            result = read(expected_exec)
+        except ObservationError as error:
+            record(dict(result='OBSERVATION_BLOCKED', stage=error.stage, code=error.code))
+            if error.code not in transient:
+                raise
+        else:
+            record(result)
+            service = result['service']
+            require(service['NRestarts'] == 0, 'startup', 'AUTOMATIC_RESTART_OBSERVED')
+            if (service['effective_execstart_matches'] and service['running_argv_matches']
+                    and service['ActiveState'] == 'active' and service['SubState'] == 'running'
+                    and not service['NeedDaemonReload'] and result['jobs']['count'] == 0):
+                return result
+        remaining = deadline - clock()
+        require(remaining > 0, 'startup', 'STARTUP_NOT_STABLE')
+        pause(min(interval, remaining))
 
 
 def main(argv=None):

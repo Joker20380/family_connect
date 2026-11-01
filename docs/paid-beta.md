@@ -18,17 +18,30 @@ No retrospective claim of an independently captured handshake, phone trace, per-
 readiness trace or all notification lifecycle cases. Prior raw observations remain below.
 New NL185.10.158.212/catalog4, old NL FENCED and FLEET_MESH_PROBE_1 retained; accepted
 infrastructure is not rebuilt or replayed. Last readback paid0/0, cohort0/10, canary PAUSED.
-**Baseline108 source implemented, NOT_DEPLOYED:** generic PAID_ANDROID_* constants,
-confirm_android_baseline and ANDROID_BASELINE_REQUIRED; latest exact108 name/code required,
-all latest-timestamp ACK ties checked, newer108 ACK supersedes older106/107 support evidence.
-Canary/CRL/operator callers updated; non-cohort106/107, identities/invites/grants, cohort10,
-schema, routing and publisher unchanged. No migration or Android/catalog publication.
-Source tests:197 paid/baseline/canary tests PASS;183 backend/CRL/package/publisher tests PASS
-with21 optional supplied-artifact/nginx cases skipped;28 registration and75 isolated
-PostgreSQL operator-console tests PASS (483 passed total). Next: deterministic current-source HTTP/private canary
-packages and controlled exact RU HTTP baseline deployment with a fresh private recovery point.
-Production paid baseline still106; READY_FOR_BETA0_CANARY_1 is NOT_YET_MET.
-Canary writes NOT_RUN; fresh owner ГОТОВ is still required after deployment/readiness.
+**Baseline108 source/package PASS; deployment ROLLED_BACK, production106 restored.**
+Sourceaccc4ff implements generic PAID_ANDROID_* / confirm_android_baseline /
+ANDROID_BASELINE_REQUIRED, latest exact108 and all tied observations; newer108 ACK supersedes
+older106/107. Canary/CRL/operator callers updated; no schema or non-cohort admission change.
+HTTP8e74997c… and same-source private canaryfa43f88d… each build twice identically, manifest/
+inventory/help PASS. Against actual production44a6b50f…, only paid_beta.py differs: current
+routing, registration/chat-sync and publisher bytes are identical, with no member loss.
+Fresh private SQLite/config/artifact backup, isolated restore/integrity/FK, exact ExecStart,
+systemd idle and existing-bound108 lookup PASS before the authorized restart.
+One candidate restart issued; immediate post-start argv guard rejected the sample.
+One bounded rollback issued. Read-only reconciliation confirms exact previous artifact/argv/
+listener, NRestarts0, healthy API, unchanged registry/schema/routes/publisher/admission.
+No DB restore, schema deletion, identity change or paid activation. Paid0/0, cohort0/10.
+04:28UTC real non-cohort verified-HTTPS challenge/fetch/native material validation PASS;
+CRL=floor27233, directory valid, catalog4 signature and RU/new-NL routes PASS on restored106.
+Guard now waits boundedly for exact startup state, records observations before judgment and
+still rejects persistent mismatch/automatic restarts. The failing instantaneous argv details
+were not retained; no product crash or specific PID-race cause is claimed.
+Tests:483 focused source tests +5 exact HTTP package tests +79 startup/observer tests PASS;
+21 optional historical-artifact/nginx/interoperability cases skipped, no full/platform suite.
+Candidate/rollback/binding retained; schedules untouched; canary writes NOT_RUN.
+Next: obtain authorization for one additional candidate restart after fresh recovery guards.
+The original one-restart budget is consumed; no automatic second rollout attempt.
+READY_FOR_BETA0_CANARY_1 is NOT_YET_MET; fresh ГОТОВ follows successful deployment only.
 
 New paid activation stays **NOT_RUN** until NL owner108 AWG/TCP/Auto-MESH and cleanup PASS,
 the generic exact108 backend/canary contract passes focused tests and deterministic package gates,
@@ -50,7 +63,8 @@ The generic contract must require latest exact108 name/code, reject missing/conf
 old-version evidence and wrong APK hash, and allow newer108 ACK over older support observations.
 Preserve non-cohort106/107 admission byte/semantic behavior, identities/invites/grants, existing
 schema,10-slot limit, publisher, registration/chat-sync and current catalog4 endpoint routes.
-No new wire protocol. Source is implemented/tested; deterministic artifacts and production deployment remain pending.
+No new wire protocol. Deterministic artifacts PASS; the attempted deployment was rolled back.
+Production106 is restored; another candidate restart requires explicit additional authorization.
 See [live continuation](releases/2026-10-27-android106-beta-0-canary-1.md#current-continuation--baseline108-target-live-canary-not_run-1-november)
 and [artifact/source inventory](releases/2026-10-30-nl-gateway-replacement.md#1-november--beta108-owner-evidence-and-fresh-preflight).
 
@@ -210,7 +224,7 @@ No production receipt has been imported into PostgreSQL in this checkpoint.
 
 ## Scope and prerequisites
 
-The following108 contract is implemented in source, not yet deployed. Do not enroll
+The following108 contract is implemented/packaged; its first deployment was rolled back. Do not enroll
 before the108 production transition above is complete. Existing paid schema needs no migration.
 
 - At most10 distinct, already activated Friends devices; retained expired/revoked

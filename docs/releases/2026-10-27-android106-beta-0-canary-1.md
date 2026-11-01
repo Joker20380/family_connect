@@ -11,17 +11,30 @@ No retrospective claim of an independently captured handshake, phone trace, per-
 readiness trace or all notification lifecycle cases. Prior raw observations remain below.
 New NL185.10.158.212/catalog4, old NL FENCED and FLEET_MESH_PROBE_1 retained; accepted
 infrastructure is not rebuilt or replayed. Last readback paid0/0, cohort0/10, canary PAUSED.
-**Baseline108 source implemented, NOT_DEPLOYED:** generic PAID_ANDROID_* constants,
-confirm_android_baseline and ANDROID_BASELINE_REQUIRED; latest exact108 name/code required,
-all latest-timestamp ACK ties checked, newer108 ACK supersedes older106/107 support evidence.
-Canary/CRL/operator callers updated; non-cohort106/107, identities/invites/grants, cohort10,
-schema, routing and publisher unchanged. No migration or Android/catalog publication.
-Source tests:197 paid/baseline/canary tests PASS;183 backend/CRL/package/publisher tests PASS
-with21 optional supplied-artifact/nginx cases skipped;28 registration and75 isolated
-PostgreSQL operator-console tests PASS (483 passed total). Next: deterministic current-source HTTP/private canary
-packages and controlled exact RU HTTP baseline deployment with a fresh private recovery point.
-Production paid baseline still106; READY_FOR_BETA0_CANARY_1 is NOT_YET_MET.
-Canary writes NOT_RUN; fresh owner ГОТОВ is still required after deployment/readiness.
+**Baseline108 source/package PASS; deployment ROLLED_BACK, production106 restored.**
+Sourceaccc4ff implements generic PAID_ANDROID_* / confirm_android_baseline /
+ANDROID_BASELINE_REQUIRED, latest exact108 and all tied observations; newer108 ACK supersedes
+older106/107. Canary/CRL/operator callers updated; no schema or non-cohort admission change.
+HTTP8e74997c… and same-source private canaryfa43f88d… each build twice identically, manifest/
+inventory/help PASS. Against actual production44a6b50f…, only paid_beta.py differs: current
+routing, registration/chat-sync and publisher bytes are identical, with no member loss.
+Fresh private SQLite/config/artifact backup, isolated restore/integrity/FK, exact ExecStart,
+systemd idle and existing-bound108 lookup PASS before the authorized restart.
+One candidate restart issued; immediate post-start argv guard rejected the sample.
+One bounded rollback issued. Read-only reconciliation confirms exact previous artifact/argv/
+listener, NRestarts0, healthy API, unchanged registry/schema/routes/publisher/admission.
+No DB restore, schema deletion, identity change or paid activation. Paid0/0, cohort0/10.
+04:28UTC real non-cohort verified-HTTPS challenge/fetch/native material validation PASS;
+CRL=floor27233, directory valid, catalog4 signature and RU/new-NL routes PASS on restored106.
+Guard now waits boundedly for exact startup state, records observations before judgment and
+still rejects persistent mismatch/automatic restarts. The failing instantaneous argv details
+were not retained; no product crash or specific PID-race cause is claimed.
+Tests:483 focused source tests +5 exact HTTP package tests +79 startup/observer tests PASS;
+21 optional historical-artifact/nginx/interoperability cases skipped, no full/platform suite.
+Candidate/rollback/binding retained; schedules untouched; canary writes NOT_RUN.
+Next: obtain authorization for one additional candidate restart after fresh recovery guards.
+The original one-restart budget is consumed; no automatic second rollout attempt.
+READY_FOR_BETA0_CANARY_1 is NOT_YET_MET; fresh ГОТОВ follows successful deployment only.
 
 The filename retains the historical android106 name; this operation now targets exact
 **0.1.18-beta108 / versionCode108**, not a new PLAN ID. See the
@@ -2197,3 +2210,51 @@ working-tree changes and private/historical evidence remain untouched and unstag
 **Historical NEXT at55c6a24 — obtain the remaining live procedure.**
 Only OWNER_CANARY_1 is eligible; no customer payment/enrollment, alternate identity,
 CP2 redeployment, Linux/Windows work or new top-level PLAN ID.
+
+### Baseline108 packages, bounded rollout and verified rollback —1 November
+
+Accepted source `accc4ffb0af35e8e5360ba2442f706b03b46bc76` (ordinary push/remote SHA verified).
+HTTP SHA256 `8e74997c0760e7953898f130241260864a438d72c5a47d46332549c3c6c3a1cf`;
+private bound canary SHA256 `fa43f88df9a1f6f0ff71a37e29d5e8adc60b439eff5f0a00e35d5a205a7b5455`.
+Both built twice byte-identically from the same committed source. Source inventory, per-file
+manifest hashes, closed-package imports and isolated help PASS;5 tests exercise that exact
+HTTP archive. Existing private owner binding is retained; no Support ID or key is packaged.
+HTTP contains no private state. No Android build/sign/release/catalog change.
+
+Fresh actual-production comparison against44a6b50f… confirms identical member inventory;
+only control/friends/paid_beta.py changes. The actual current endpoint-routing dispatcher,
+registration/chat-sync/publisher implementation and all other HTTP members remain byte-identical.
+This is not the obsolete CP2 HTTP artifact. Catalog4/new NL185.10.158.212 and RU route retained.
+Private SQLite backup/isolated restore/integrity/FK PASS; exact config/artifact/unit backup retained.
+Registry57devices/111invites/2grants and paid0/0, cohort0/10; systemd idle, effective full
+ExecStart, candidate hash and existing bound exact108 read-only lookup PASS before restart.
+
+One authorized candidate restart was issued. Immediate post-start observer returned
+ARGV_MISMATCH; the bounded rollback issued exactly one restart to the retained pre-deploy
+artifact. Its immediate guard also rejected a sample before a success receipt was written.
+Subsequent independent read-only reconciliation proves the exact prior artifact/argv owns
+the listener, NRestarts0, health PASS and preserved registry/schema/config/routing/publisher/
+admission fingerprints. It confirms recovery, not successful baseline108 deployment.
+No raw failing argv snapshot was retained, so a particular transient/PID race or product
+failure is not proven. The private failure receipts and both restart reservations remain.
+
+Recovery artifact SHA256 `44a6b50f1a1ce00fd74f53e0d35c5937c6b5f5c2a561fc94b7a0150f39149204`
+is serving again with baseline106.04:28UTC real non-cohort HTTPS challenge/fetch and retained
+native material import PASS; current CRL=floor27233 and directory valid. Catalog4 signature
+and RU/NL endpoint readback PASS. No new identity, enrollment, MESH server probe or ACK
+substitution. No DB restore or paid schema deletion; schedules were never paused or modified.
+
+Corrected startup harness uses bounded wait_started with observation recording before
+classification; ordinary startup process/argv transitions may settle, while persistent
+wrong argv, unknown observation errors and automatic restarts remain failures.79 focused
+startup/observer/ExecStart tests PASS, including persistent mismatch and transient samples;
+fixed guard also validated the restored live process read-only. Initial source tests483 PASS,
+exact archive tests5 PASS;21 optional supplied-artifact/nginx cases skipped explicitly.
+
+Result: **BASELINE108_SOURCE_PACKAGE_PASS / DEPLOYMENT_ROLLED_BACK / PRODUCTION106_HEALTHY**.
+Canary subscriptions/events0/0, cohort0/10, writes NOT_RUN, no activation or final recovery
+period started. NL_REPLACEMENT_LIVE owner acceptance stands independently. Candidate and
+existing private binding retained. The one candidate-restart allowance and one rollback
+are consumed; require explicit authorization for an additional candidate restart, with a
+fresh recovery point and corrected guard. Do not replay consumed reservations or declare
+READY_FOR_BETA0_CANARY_1. Fresh owner ГОТОВ is still needed only after successful deployment.
