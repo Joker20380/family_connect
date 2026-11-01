@@ -1,6 +1,14 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
+**2 November owner request:** enable the reserved VPS as a second simultaneous Amsterdam node.
+Activation is NOT_RUN: the accepted Android109/catalog schema2 and backend country selection
+support one RU and one NL, not two NL nodes. Offline signed synthetic checks confirm rejection;
+the production maintenance controller also binds exactly RU/NL. Do not replace the working NL,
+weaken catalog validation or promote expiring rehearsal material. Production multi-node admission
+needs an explicit compatible design/qualification before deployment; no new PLAN ID is created.
+[Activation constraint and measured timing](releases/2026-11-02-fleet-bootstrap-2-activation-check.md).
+
 **READY_FOR_FLEET_BOOTSTRAP_2_HOST — source PASS; A→B→A, role reboot and retirement PASS.**
 Existing FLEET-BOOTSTRAP-2 only; no new PLAN ID or production activation. Owner wants two
 Amsterdam servers; first production NL remains excluded. Reserved disposable VPS remains

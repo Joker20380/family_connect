@@ -1,0 +1,46 @@
+{
+  "accepted_android109_source": "600ae52bfac673ca0323bd7c96d6cdd369593624",
+  "activation": "NOT_RUN",
+  "android_catalog_parser_sha256": "c476bc2237947606c641d79a547082bb4a83e5577571e83e8069b3c3077e967b",
+  "android_check": "SOURCE_EQUAL_TO_ACCEPTED_109_NOT_NEW_ANDROID_RUNTIME_TEST",
+  "blocker": "SINGLE_GATEWAY_PER_COUNTRY_CONTRACT",
+  "catalog_publications": 0,
+  "network_access": "NONE",
+  "paid_events": 0,
+  "phone_actions": 0,
+  "production_writes": 0,
+  "schema": 1,
+  "scope": "OFFLINE_SECOND_NL_ACTIVATION_CHECK",
+  "shared_catalog_tests": {
+    "deselected": 5,
+    "passed": 36
+  },
+  "source_commit": "ebbcfc37488fb88cce14c7b18520a73e5df669c2",
+  "synthetic_cases": {
+    "one_ru_one_nl": {
+      "backend_country_selection": "ACCEPTED",
+      "shared_client_contract": "ACCEPTED"
+    },
+    "one_ru_two_nl": {
+      "backend_country_selection": "REJECTED",
+      "shared_client_contract": "REJECTED"
+    },
+    "two_nl": {
+      "backend_country_selection": "REJECTED",
+      "shared_client_contract": "REJECTED"
+    }
+  },
+  "timing": {
+    "first_recorded_host_preflight": 1793555216,
+    "last_rehearsal_retirement": 1793575524,
+    "last_run_first_active_at": 1793574919,
+    "last_run_preflight_completed_at": 1793574531,
+    "last_run_preflight_seconds": 3.933,
+    "last_run_retired_at": 1793575524,
+    "last_run_to_active_between_receipts_seconds": 388,
+    "last_run_total_between_receipts_seconds": 993,
+    "note": "WALL_CLOCK_WITH_OS_UPGRADE_SOURCE_REPAIR_TESTS_AND_INPUT_WAIT_NOT_PURE_INSTALL_TIME",
+    "recorded_preparation_wall_seconds": 20308
+  },
+  "user_invitations": 0
+}
