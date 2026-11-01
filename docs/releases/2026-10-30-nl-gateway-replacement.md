@@ -30,22 +30,21 @@ No retrospective claim of an independently captured handshake, phone trace, per-
 readiness trace or all notification lifecycle cases. Prior raw observations remain below.
 New NL185.10.158.212/catalog4, old NL FENCED and FLEET_MESH_PROBE_1 retained; accepted
 infrastructure is not rebuilt or replayed. Last readback paid0/0, cohort0/10, canary PAUSED.
-**BETA-0-CANARY-1 live — stage0 APPLIED on baseline108.**
-Fresh owner ГОТОВ received; the earlier PAUSED/NOT_RUN notes below are historical.
-Stage0 starts 2026-11-01T05:20:55+00:00; natural expiry 2026-11-01T05:30:55+00:00 (600s).
-Owner reports MESH108 РАБОТАЕТ before the90s Connect deadline. Fresh authenticated READY
-ACK108 at05:23:57UTC and a newly issued paid-bounded certificate expire exactly05:30:55UTC.
-Server proof arrived182s after activation, not within90s; the earlier certificate remains retained.
-Actual active transport display clarification is pending; no independent TLS/session proof claimed.
-Existing OWNER_CANARY_1 binding; exact authenticated0.1.18-beta108/code108; internal_canary,
-amount0/revenue0. Paid subscriptions/events1/1, cohort1/10, subscription version1, paid_allow=true.
-Fresh private SQLite/config/artifact backup and isolated restore/integrity/FK PASS before activation.
-Canonical material and CRL=floor27233 valid; baseline certificates retained, not manually deleted.
-Renewal/read-only-sync timers temporarily paused for the bounded canary; restore during cleanup.
-Detached read-only observation active. No additional service restart, Android/catalog publication,
-infrastructure replay or non-cohort changes. Natural expiry/CRL/final recovery are not yet PASS.
-Continue the existing runbook: natural600s → observation120s → stage1/CRL900s → observation180s
-→ final2592000s recovery, subject to the retained-certificate not-before guard.
+**BETA-0-CANARY-1 live — NATURAL_EXPIRY_BACKEND_PASS on baseline108.**
+Readback 2026-11-01T05:31:30+00:00: stage0 expired naturally at05:30:55UTC after600s.
+Paid subscriptions/events1/1, cohort1/10, version1; paid_allow=false, restricted grant DENIED.
+No explicit expire event, ledger edit, certificate deletion or service restart caused expiry.
+Legacy identity/invite/grant remain valid. Newly issued paid-bounded material has expired;
+the one retained baseline certificate is still valid and must be classified separately.
+Owner reported MESH108 РАБОТАЕТ before the90s Connect deadline. Fresh authenticated READY
+ACK108/import and paid-bounded certificate were observed182s after activation, not within90s.
+No independent claim about which certificate the active tunnel used; transport-label clarification
+and physical post-expiry outcome are pending. Do not label cached-session behavior a PASS yet.
+Observe until 2026-11-01T05:32:55+00:00 (120s), then one Disconnect/reconnect classification.
+Stage1/explicit expiry/exact CRL/final30-day recovery NOT_RUN. The detached observer remains
+read-only. Renewal/read-only-sync timers are temporarily paused for the bounded canary;
+resume during cleanup. Canonical CRL27233/catalog4, deployed HTTP8e74997c… and binding retained.
+No Android rebuild/release, infrastructure replay, new PLAN ID or non-cohort access changes.
 
 **Baseline108 production deployment PASS — READY_FOR_BETA0_CANARY_1.**
 Latest readback 2026-11-01T04:59:14.654212+00:00; supersedes the two rolled-back attempts below.
@@ -1833,3 +1832,14 @@ activation; it is not reported as a <=90s server-proof PASS. Natural expiry rema
 The unbound exact-payload CRL helper was built twice byte-identically from sourceaccc4ff;
 SHA256 `d0c22b95728016e0976c47c0acf5b31845ab7346939ec417782034cbe4e0d0a2`.
 Exact inventory/manifest hashes/imports/help PASS; operational permit and CRL writes NOT_RUN.
+
+### Stage0 natural expiry — backend readback
+
+At 2026-11-01T05:31:30+00:00: NATURAL_EXPIRY_BACKEND_PASS. The600s period ended05:30:55UTC;
+effective_state=expired, paid_allow=false, version1/events1, subscriptions1/cohort1 of10.
+Read-only paid-aware restricted grant evaluation denies the bound owner; legacy identity,
+invite and grant remain valid. No explicit-expire event or database edit was used to expire it.
+New paid-bounded certificates are expired; one earlier baseline certificate remains valid.
+This is backend/material expiry, not an assertion of phone disconnect or revoked cached sessions.
+The120s post-expiry observation ends 2026-11-01T05:32:55+00:00; one physical reconnect classification
+is pending before stage1. Exact CRL generation/delivery and final30-day recovery remain NOT_RUN.

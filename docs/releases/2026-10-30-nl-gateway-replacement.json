@@ -1,7 +1,7 @@
 {
   "android108_owner_acceptance_20261101": {
-    "observed_utc": "2026-11-01T05:24:37+00:00",
-    "state": "BETA0_CANARY1_STAGE0_ACTIVE_BASELINE108",
+    "observed_utc": "2026-11-01T05:31:30+00:00",
+    "state": "BETA0_CANARY1_NATURAL_EXPIRED_OBSERVATION_BASELINE108",
     "owner_reports": [
       "ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS",
       "ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS"
@@ -671,8 +671,8 @@
       },
       "startup_guard": "BOUNDED_EXACT_PROCESS_LISTENER_HTTP_READINESS_WITH_PRIVATE_OBSERVATIONS",
       "failed_instantaneous_argv_details": "NOT_CAPTURED_NO_SPECIFIC_ROOT_CAUSE_CLAIM",
-      "next": "NATURAL_EXPIRY_AND_ACTIVE_TRANSPORT_OBSERVATION",
-      "canary": "STAGE0_ACTIVE",
+      "next": "POST_EXPIRY_PHONE_RECONNECT_CLASSIFICATION",
+      "canary": "NATURAL_EXPIRED_OBSERVATION",
       "authorized_retry": {
         "owner_authorization": "EXPLICIT_ONE_ADDITIONAL_CANDIDATE_RESTART",
         "preflight": {
@@ -950,7 +950,29 @@
         "period_start_utc": "2026-11-01T05:20:55+00:00",
         "paid_until_utc": "2026-11-01T05:30:55+00:00"
       },
-      "natural_expiry": "PENDING",
+      "natural_expiry": {
+        "observed_at": 1793511090,
+        "version": 1,
+        "event_count": 1,
+        "cohort": true,
+        "effective_state": "expired",
+        "paid_allow": false,
+        "paid_until": 1793511055,
+        "entitlement_until": null,
+        "result": "NATURAL_EXPIRY_BACKEND_PASS",
+        "subscriptions": 1,
+        "cohort_limit": 10,
+        "explicit_expire_events": 0,
+        "grant_policy": "DENIED",
+        "legacy_identity_invite_grant": "PRESERVED_VALID",
+        "crl": 27233,
+        "paid_certificates": "EXPIRED",
+        "baseline_valid_certificates": 1,
+        "baseline_latest_not_after": 1793516821,
+        "post_expiry_observation_until": 1793511175,
+        "phone_reconnect": "NOT_YET_REQUESTED",
+        "schedules": "PAUSED_FOR_BOUNDED_CANARY"
+      },
       "stage1": "NOT_RUN",
       "crl": "NOT_RUN",
       "final_recovery": "NOT_RUN",
