@@ -1,6 +1,6 @@
 {
   "android108_owner_acceptance_20261101": {
-    "observed_utc": "2026-11-01T03:47:32.274129+00:00",
+    "observed_utc": "2026-11-01T04:59:14.654212+00:00",
     "state": "NL_REPLACEMENT_LIVE_BASELINE108_DEPLOYED_READY_FOR_BETA0_CANARY_1",
     "owner_reports": [
       "ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS",
@@ -229,12 +229,11 @@
       "cohort_limit": 10,
       "canary": "PAUSED_NOT_RUN"
     },
-    "nl_replacement_live": "NOT_YET_MET",
-    "paid_baseline_deployed": 106,
-    "paid_baseline108_source_artifact_deployment": "PENDING_AFTER_OWNER_NL_ACCEPTANCE",
-    "production_mutations": 0,
-    "restarts": 0,
-    "rollback": "NOT_RUN",
+    "nl_replacement_live": "PASS",
+    "paid_baseline_deployed": 108,
+    "paid_baseline108_source_artifact_deployment": "PASS",
+    "restarts": 5,
+    "rollback": "TWO_PRIOR_ATTEMPTS_ROLLED_BACK_LATEST_ATTEMPT_NOT_USED",
     "awg108_followup": {
       "owner_report": "AWG108_WORKS",
       "nl_sample": {
@@ -900,6 +899,22 @@
         "canary_writes": "NOT_RUN",
         "next": "WAITING_FRESH_OWNER_GOTOV"
       }
+    },
+    "initial_readonly_checkpoint_summary": {
+      "observed_utc": "2026-11-01T03:47:32.274129+00:00",
+      "nl_replacement_live": "NOT_YET_MET",
+      "paid_baseline_deployed": 106,
+      "paid_baseline108_source_artifact_deployment": "PENDING_AFTER_OWNER_NL_ACCEPTANCE",
+      "production_mutations": 0,
+      "restarts": 0,
+      "rollback": "NOT_RUN"
+    },
+    "production_change_scope": {
+      "http_baseline": "106_TO_108",
+      "paid_writes": "NOT_RUN",
+      "android_update_sequence": 3,
+      "gateway_catalog_sequence": 4,
+      "identities_invites_grants": "PRESERVED"
     }
   },
   "registry_overlay_correction": {
