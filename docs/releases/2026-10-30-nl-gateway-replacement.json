@@ -2736,7 +2736,7 @@
     }
   },
   "android109_ui_repair_20261101": {
-    "state": "OWNER109_UI_PASS_CONNECT_CLEANUP_PENDING",
+    "state": "OWNER109_AUTO_AWG_RUNTIME_PASS_CLEANUP_PENDING",
     "version": "0.1.18-beta109",
     "version_code": 109,
     "authorization": "NEW_APK_AND_ANDROID_SEQUENCE4_AFTER_FINAL108_CANARY",
@@ -2764,7 +2764,7 @@
       "hidden_panel_red_failures": 2,
       "emulator": "PASS",
       "hosted_release_ci": "FULL_MATRIX_PASS",
-      "physical109": "OWNER_REPORTED_DATA_CPU_SELECTOR_REOPEN_PASS_TRANSPORT_PENDING"
+      "physical109": "OWNER_UI_AUTO_SELECTED_AWG_INTERNET_PASS_CLEANUP_PENDING"
     },
     "artifact": {
       "result": "PUBLIC_VERIFIED_OWNER_INSTALLED",
@@ -3267,7 +3267,7 @@
       "version_changed": false,
       "scope_script_changed": false,
       "workflow_changed": false,
-      "status": "OWNER109_UI_PASS_CONNECT_CLEANUP_PENDING",
+      "status": "OWNER109_AUTO_AWG_RUNTIME_PASS_CLEANUP_PENDING",
       "source_commit": "600ae52bfac673ca0323bd7c96d6cdd369593624",
       "run_id": 41289980872,
       "hosted_scope": {
@@ -3280,7 +3280,7 @@
       "artifact": "QUALIFIED",
       "signing": "PASS",
       "publication": "VERIFIED_HTTPS_PASS",
-      "phone_actions": "OWNER_INSTALLATION_AND_TARGETED_UI_CONFIRMED",
+      "phone_actions": "ONE_AUTO_CONNECT_CONFIRMED_AWG_SELECTED",
       "retained_marker": true,
       "required_terminal_failure": "STOP_NEW_FULL_CI_FAILURE",
       "required_scope_failure": "FULL_MATRIX_SCOPE_NOT_ACTIVATED",
@@ -3800,7 +3800,7 @@
           }
         ]
       },
-      "owner109_acceptance": "IN_PROGRESS_UI_PASS",
+      "owner109_acceptance": "IN_PROGRESS_AUTO_AWG_PASS",
       "publication_receipt": {
         "observed_at": 1793524297,
         "version_code": 109,
@@ -3893,7 +3893,7 @@
         "database_writes": false,
         "canary_replayed": false
       },
-      "owner109_next": "ONE_NL_AUTO_MESH_CONNECT_TIMING_INTERNET_VPN_INDICATOR_THEN_READONLY_READBACK",
+      "owner109_next": "ONE_DISCONNECT_THEN_OWNER_AND_READONLY_CLEANUP_NO_RECONNECT",
       "owner109_ui": {
         "evidence": "OWNER_TESTER_REPORT",
         "existing_data": "PASS",
@@ -3942,6 +3942,75 @@
         "connect_to_ready_seconds": null,
         "connect_attempts": 0,
         "database_writes": false
+      },
+      "owner109_auto_connect": {
+        "observed_utc": "2026-11-01T09:44:21.763500+00:00",
+        "endpoint": "185.10.158.212",
+        "peer_loaded": true,
+        "handshake_epoch": 1793526226,
+        "handshake_age_seconds": 35.7,
+        "handshake_recent": true,
+        "rx_delta_bytes": 8428,
+        "tx_delta_bytes": 10570,
+        "bidirectional_traffic": true,
+        "no_new_handshake": true,
+        "sample_seconds": 12.0,
+        "persistent_registered_peer_retained": true,
+        "peer_deleted": false,
+        "service_active": true,
+        "automatic_restarts": 0,
+        "server_mutations": 0,
+        "client_ip_recorded": false,
+        "phase": "connected",
+        "binding": "EXISTING_OWNER_BINDING_MATCH",
+        "paid": [
+          1,
+          4
+        ],
+        "cohort": "1/10",
+        "paid_baseline": 108,
+        "client_os_inspection": "NOT_PERFORMED",
+        "operator_test_sessions_created": 0,
+        "owner_selected_mode": "AUTO",
+        "owner_selected_transport": "AWG",
+        "owner_connect_seconds": 3,
+        "owner_internet": "PASS",
+        "owner_vpn_indicator": "PRESENT",
+        "mesh_transport": "NOT_EXERCISED",
+        "https_specific_egress": "NOT_INDEPENDENTLY_MEASURED",
+        "connect_attempts": 1,
+        "owner_click_to_connected_seconds": 3,
+        "connect_to_ready_seconds": null,
+        "latency_measurement": "OWNER_REPORTED_UI_CONNECTED_NOT_SERVER_CLICK_TIMESTAMP",
+        "latest_readiness": {
+          "challenge_at": 1793526149,
+          "fetch_at": 1793526149,
+          "ack_at": 1793526149,
+          "ack": {
+            "result": "READY",
+            "provisioning": "PRESENT_VALID",
+            "bootstrap": "PRESENT_VALID",
+            "orchestrator_usable": true,
+            "minimum_crl": 27236,
+            "expires_at": 1793535772,
+            "observed_at": 1793526149,
+            "phase": "import",
+            "app_version": "0.1.18-beta109",
+            "version_code": 109,
+            "failure_reason": "NONE"
+          },
+          "challenge_to_ack_seconds": 0,
+          "fetch_to_ack_seconds": 0,
+          "material_valid_at_snapshot": true,
+          "new_since_baseline": true,
+          "ack_changed_since_baseline": true
+        },
+        "server_readiness_timestamp_resolution_seconds": 1,
+        "selected_transport_scope": "AUTO_AWG_ONLY_NOT_RESTRICTED_MESH",
+        "canary_deviations": "RETAINED",
+        "disconnect": "NOT_RUN",
+        "cleanup": "PENDING",
+        "phone_os_owner_inspection": "NOT_PERFORMED"
       }
     }
   }

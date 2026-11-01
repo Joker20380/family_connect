@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**1 November — owner beta109 data/UI PASS; Auto/MESH and cleanup pending.**
+**1 November — owner beta109 UI and Auto→AWG runtime PASS; cleanup pending.**
 `DESKTOP_SMILEY_BASELINE_STALE_AFTER_REVIEWED_ANDROID107_CHANGE`: exactly one stale
 Android106 pin, ChatThreadView.java; current file is byte-identical to accepted public108.
 Reviewed voice-preview/recording visibility and message styling only; all49 faces, aliases,
@@ -67,11 +67,19 @@ This closes only the targeted data/CPU/selector/reopen checks, not transport or 
 Read-only pre-Connect snapshot09:39UTC matches the existing owner binding/exact109 and ledger1/4;
 the09:37:30UTC challenge/fetch/import ACK is READY with current material. It predates the
 requested Connect and must not be presented as Connect latency or Internet/VPN-owner proof.
-NEXT: Netherlands → Auto/MESH, Connect exactly once; record click-to-connected time, selected
-transport, VPN indicator and Internet result, then retain the connection for read-only readback.
-One Disconnect and tunnel/VPN-owner/notification/selector cleanup follow after that readback.
-Assisted Connect/Disconnect and their measurements remain NOT_RUN. Paid baseline stays108;
-no paid event, CRL operation, entitlement change or canary replay accompanies this smoke.
+**Auto109 selected AWG — runtime PASS, cleanup pending.** Owner reports one Auto Connect,
+AWG selected,3 seconds to connected, Internet working and system VPN indicator present.
+Read-only new-NL185.10.158.212 observation matches the existing bound peer: recent handshake,
+bidirectional traffic over12s, service active/NRestarts0. No test session or server mutation.
+New authenticated109 challenge/fetch/READY import ACK09:42:29UTC follows the pre-Connect
+snapshot; provisioning/bootstrap are PRESENT_VALID. Server timestamps share one integer second,
+not a measurement of tap-to-READY. The3s value is owner-reported tap-to-connected latency.
+Auto's normal-profile priority before restricted fallback permits AWG; this is not MESH
+data-path acceptance. No MESH109, whitelist109, independent HTTPS/egress or client OS-owner
+inspection PASS is inferred. Earlier canary deviations are not erased by this AWG result.
+NEXT: one Disconnect, then confirm off/no VPN indicator/no VPN notification and selectors
+available; perform read-only cleanup readback. No second Connect or forced fallback in this
+single smoke. Paid baseline108, ledger1/4, cohort1/10 and entitlement remain unchanged.
 No paid event, CRL operation or cohort expansion is authorized by this publication.
 
 ## NL availability restoration — 31 October
