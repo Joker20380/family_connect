@@ -18,7 +18,10 @@ def unique(pairs):
   result[key]=value
  return result
 
-def configuration_catalog(country):
+def configuration_catalog(country,device=None):
+ from control.friends.gateway_routing import configuration
+ assigned=configuration(access,ROOT,country,device)
+ if assigned is not None:return assigned
  raw=(ROOT/'catalog.json').read_bytes()
  if len(raw)>16384:raise ValueError('Oversized catalog')
  catalog=json.loads(raw,object_pairs_hook=unique)
@@ -91,7 +94,7 @@ class Handler(BaseHTTPRequestHandler):
     result=request(access,value)
    else:
     country=self.path.rsplit('/',1)[1];record=access.complete(value,country)
-    catalog,host=configuration_catalog(country)
+    catalog,host=configuration_catalog(country,record['device'])
     if country=='ru':command=['/usr/bin/python3','/opt/apps/family_connect/friends-awg/awg-gateway.py','register']
     else:command=['/usr/bin/ssh','-i','/opt/apps/family_connect/friends-awg/registration-key','-o','IdentitiesOnly=yes','-o','BatchMode=yes','-o','ConnectTimeout=5','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/opt/apps/family_connect/friends-awg/known_hosts','root@'+host,'register']
     reply=subprocess.run(command,input=json.dumps(record).encode(),capture_output=True,timeout=15)
@@ -116,8 +119,22 @@ def main():
  parser.add_argument('--port',type=int,default=18084)
  parser.add_argument('--readiness-ack',metavar='CORRELATION_ID')
  parser.add_argument('--material',type=Path)
+ parser.add_argument('--gateway-routing-request',type=Path)
  args=parser.parse_args()
  ROOT=args.root.resolve();access=Access(ROOT/'access.db');chat_access=ChatAccess(access)
+ if args.gateway_routing_request is not None:
+  from control.friends.gateway_routing import administer,canonical,parse,private_read,require
+  try:
+   import os
+   require(os.geteuid()==0 and args.readiness_ack is None and args.material is None)
+   require(args.root.is_absolute() and str(ROOT)==str(args.root))
+   request_path=args.gateway_routing_request
+   require(request_path.is_absolute())
+   request=parse(private_read(request_path.parent,request_path.name,8192).decode())
+   result=administer(access,ROOT,request)
+  except Exception:
+   print(canonical(dict(result='REJECTED',cause='ROUTING_REQUEST_REJECTED')).decode());raise SystemExit(1) from None
+  print(canonical(result).decode());return
  if args.readiness_ack is not None:
   from scripts.read_readiness_ack import inspect
   if args.material is None:parser.error('--material required for ACK readback')

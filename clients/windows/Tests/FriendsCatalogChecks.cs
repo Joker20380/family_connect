@@ -27,5 +27,38 @@ internal static class FriendsCatalogChecks
             count++;
         }
         Console.WriteLine($"Friends catalog: {count} shared verification/materialization vectors passed.");
+        AssignedCatalogs();
+    }
+
+    private static void AssignedCatalogs()
+    {
+        using var document = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "fixtures", "friends-multinode-v2.json")));
+        var fixture = document.RootElement;
+        var anchor = Convert.FromBase64String(fixture.GetProperty("anchor").GetString()!);
+        var wireguard = Convert.FromBase64String(fixture.GetProperty("wireguard_key").GetString()!);
+        var device = fixture.GetProperty("device").GetString()!;
+        long floor = 0;
+        string? hash = null;
+        int count = 0;
+        foreach (var sample in fixture.GetProperty("cases").EnumerateArray())
+        {
+            var reply = sample.GetProperty("reply");
+            var sequence = sample.GetProperty("sequence").GetInt64();
+            var accepted = FriendsCatalog.Verify(reply, anchor, device, "nl", wireguard, floor, hash);
+            using var tcp = JsonDocument.Parse(accepted.Tcp);
+            var host = sample.GetProperty("host").GetString()!;
+            if (accepted.Sequence != sequence || tcp.RootElement.GetProperty("server").GetString() != host
+                || !accepted.Awg.Contains("Endpoint = " + host + ":"))
+                throw new Exception("Assigned physical gateway mismatch");
+            bool rejected = false;
+            try { FriendsCatalog.Verify(reply, anchor, device, "nl", wireguard, sequence + 1); }
+            catch (FormatException) { rejected = true; }
+            if (!rejected) throw new Exception("Assigned catalog downgrade accepted");
+            floor = accepted.Sequence;
+            hash = accepted.CatalogHash;
+            count++;
+        }
+        if (count != 3 || floor != 6) throw new Exception("Missing assignment/rollback vectors");
+        Console.WriteLine("Friends multi-node: 3 assigned catalogs and 3 downgrade rejections passed.");
     }
 }
