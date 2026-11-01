@@ -1,7 +1,7 @@
 {
   "android108_owner_acceptance_20261101": {
-    "observed_utc": "2026-11-01T05:32:58+00:00",
-    "state": "BETA0_CANARY1_AWAITING_POST_EXPIRY_RECONNECT_CLASSIFICATION",
+    "observed_utc": "2026-11-01T05:36:00+00:00",
+    "state": "BETA0_CANARY1_STAGE1_ACTIVE_BASELINE108",
     "owner_reports": [
       "ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS",
       "ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS"
@@ -451,7 +451,7 @@
       "deployment": "PASS",
       "production_baseline": 108,
       "migration": "NOT_REQUIRED",
-      "paid_writes": "STAGE0_APPLIED",
+      "paid_writes": "STAGE0_AND_STAGE1_APPLIED",
       "artifacts": {
         "source_commit": "accc4ffb0af35e8e5360ba2442f706b03b46bc76",
         "http": {
@@ -671,8 +671,8 @@
       },
       "startup_guard": "BOUNDED_EXACT_PROCESS_LISTENER_HTTP_READINESS_WITH_PRIVATE_OBSERVATIONS",
       "failed_instantaneous_argv_details": "NOT_CAPTURED_NO_SPECIFIC_ROOT_CAUSE_CLAIM",
-      "next": "POST_EXPIRY_PHONE_RECONNECT_CLASSIFICATION",
-      "canary": "AWAITING_POST_EXPIRY_RECONNECT_CLASSIFICATION",
+      "next": "STAGE1_SECOND_CONNECT_PROOF_THEN_EXPLICIT_EXPIRE",
+      "canary": "STAGE1_ACTIVE",
       "authorized_retry": {
         "owner_authorization": "EXPLICIT_ONE_ADDITIONAL_CANDIDATE_RESTART",
         "preflight": {
@@ -970,10 +970,33 @@
         "baseline_valid_certificates": 1,
         "baseline_latest_not_after": 1793516821,
         "post_expiry_observation_until": 1793511175,
-        "phone_reconnect": "REQUESTED_ONE_EXPLICIT_MESH_CONNECT",
+        "phone_reconnect": "OWNER_REPORT_DENIED",
         "schedules": "PAUSED_FOR_BOUNDED_CANARY"
       },
-      "stage1": "NOT_RUN",
+      "stage1": {
+        "alias": "OWNER_CANARY_1",
+        "purpose": "internal_canary",
+        "amount_minor": 0,
+        "observed_at": 1793511360,
+        "activation_active": true,
+        "cohort": true,
+        "effective_state": "active",
+        "paid_allow": true,
+        "entitlement_until": 1793512260,
+        "version": 2,
+        "paid_until": 1793512260,
+        "event_count": 2,
+        "event_type": "payment",
+        "result": "APPLIED",
+        "duplicate": false,
+        "phase": "stage1",
+        "started": 1793511360,
+        "package_sha256": "566cb7c85140681d9966e4dadd893bfa293b202140ecdef8dc217bf6155af15e",
+        "subscriptions": 1,
+        "cohort_limit": 10,
+        "baseline": 108,
+        "started_utc": "2026-11-01T05:36:00+00:00"
+      },
       "crl": "NOT_RUN",
       "final_recovery": "NOT_RUN",
       "schedules": "PAUSED_FOR_BOUNDED_CANARY",
@@ -1033,9 +1056,28 @@
         "version": 1,
         "event_count": 1,
         "paid_allow": false,
-        "owner_reconnect": "REQUESTED_ONE_EXPLICIT_MESH_CONNECT",
+        "owner_reconnect": "OWNER_REPORT_DENIED",
         "baseline_unexpired_count": 1,
         "paid_bounded_certificates_expired": 2
+      },
+      "post_natural_expiry_owner": {
+        "phase": "post_natural_expiry",
+        "owner_report": "не подключается",
+        "reconnect_classified": true,
+        "reconnect_denied": true,
+        "requested_transport": "explicit_MESH",
+        "prior_active_transport": "NOT_REPORTED",
+        "cached_certificate_bypass_observed": false,
+        "evidence_kind": "OWNER_FIELD_REPORT",
+        "independent_phone_trace": "NOT_CAPTURED"
+      },
+      "stage1_connect": {
+        "state": "REQUESTED",
+        "transport": "EXPLICIT_MESH",
+        "connect_deadline": 1793511450,
+        "owner_result": "PENDING",
+        "fresh_ack": "PENDING",
+        "paid_bounded_certificate": "PENDING"
       }
     }
   },

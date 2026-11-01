@@ -18,22 +18,21 @@ No retrospective claim of an independently captured handshake, phone trace, per-
 readiness trace or all notification lifecycle cases. Prior raw observations remain below.
 New NL185.10.158.212/catalog4, old NL FENCED and FLEET_MESH_PROBE_1 retained; accepted
 infrastructure is not rebuilt or replayed. Last readback paid0/0, cohort0/10, canary PAUSED.
-**BETA-0-CANARY-1 live — NATURAL_EXPIRY_BACKEND_PASS on baseline108.**
-Readback 2026-11-01T05:31:30+00:00: stage0 expired naturally at05:30:55UTC after600s.
-Paid subscriptions/events1/1, cohort1/10, version1; paid_allow=false, restricted grant DENIED.
-No explicit expire event, ledger edit, certificate deletion or service restart caused expiry.
-Legacy identity/invite/grant remain valid. Newly issued paid-bounded material has expired;
-the one retained baseline certificate is still valid and must be classified separately.
-Owner reported MESH108 РАБОТАЕТ before the90s Connect deadline. Fresh authenticated READY
-ACK108/import and paid-bounded certificate were observed182s after activation, not within90s.
-No independent claim about which certificate the active tunnel used; transport-label clarification
-and physical post-expiry outcome are pending. Do not label cached-session behavior a PASS yet.
-The120s backend observation completed at05:32:58UTC; denial remains effective, version1/events1.
-One Disconnect → explicit MESH (not Auto) → one Connect requested; owner outcome pending.
-Stage1/explicit expiry/exact CRL/final30-day recovery NOT_RUN. The detached observer remains
-read-only. Renewal/read-only-sync timers are temporarily paused for the bounded canary;
-resume during cleanup. Canonical CRL27233/catalog4, deployed HTTP8e74997c… and binding retained.
-No Android rebuild/release, infrastructure replay, new PLAN ID or non-cohort access changes.
+**BETA-0-CANARY-1 live — stage1 APPLIED on baseline108.**
+Owner reports the requested post-expiry MESH reconnect does not connect. Natural600s backend
+expiry and120s observation are complete; no cached-certificate bypass was reported in this attempt.
+The earlier active transport/tunnel certificate was not independently captured; no broader claim.
+Stage1 starts 2026-11-01T05:36:00+00:00, paid_until 2026-11-01T05:51:00+00:00 (900s).
+Paid subscriptions/events1/2, cohort1/10, version2, paid_allow=true; internal_canary, amount0/revenue0.
+Same OWNER_CANARY_1 binding, latest authenticated exact108 and current canonical material valid.
+One explicit MESH Connect requested by 2026-11-01T05:37:30+00:00; fresh paid-bounded certificate/ACK pending.
+Existing certificates retained. Stage1 activation preserves non-paid tables; no identity/invite/grant
+edit, infrastructure replay, HTTP restart, catalog4 or Android update sequence3 change.
+After second Connect proof: explicit expiry, one exact-payload CRL delivery,180s observation,
+post-CRL reconnect denial and final2592000s recovery subject to the retained-certificate guard.
+Explicit expiry/CRL/final recovery are NOT_RUN; canary overall IN_PROGRESS, not an acceptance PASS.
+Detached read-only stage1 observation active. Renewal/read-only-sync timers remain temporarily
+paused for this bounded canary and must be resumed during cleanup. Deployed HTTP8e74997c… retained.
 
 **Baseline108 production deployment PASS — READY_FOR_BETA0_CANARY_1.**
 Latest readback 2026-11-01T04:59:14.654212+00:00; supersedes the two rolled-back attempts below.
