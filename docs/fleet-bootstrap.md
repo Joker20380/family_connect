@@ -22,6 +22,14 @@ physical runtime implementation; synthetic callback tests are not VPN acceptance
 uses a separate rehearsal scope/database and cannot consume synthetic proofs. These are
 preparatory source interfaces, not yet the deployable/operator handoff.
 
+The native-only [binding inventory](../fleet/inventory/deployable-gateway-v1.json) records
+accepted binaries and public source/receipt hashes. It does not admit the unfinished role
+installer or monitoring implementation. The receiver independently validates all signed
+archive members before installing prerequisite OS packages; unsupported OS/architecture,
+missing TUN, excluded local addresses and existing legacy Family Connect installs fail
+before writes. Current exact test counts and remaining handoff gates are in the
+[preparation receipt](releases/2026-11-01-fleet-bootstrap-2.receipt.json).
+
 FLEET-BOOTSTRAP-1 is source/synthetic only. No production transport issuance,
 catalog publication, paid operation or SSH mutation is authorized by this foundation.
 See the [checkpoint](releases/2026-11-01-fleet-bootstrap-1.md).

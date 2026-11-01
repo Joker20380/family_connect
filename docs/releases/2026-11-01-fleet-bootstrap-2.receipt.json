@@ -1,0 +1,115 @@
+{
+  "bundle_a": null,
+  "bundle_b": null,
+  "checkpoint": "FLEET-BOOTSTRAP-2",
+  "django_live_integration": "PENDING",
+  "entry_main": "45d50b7ce39f05b789a44a760156d5fbbc23a345",
+  "guard_source": "54a172fb4ad59be04e078f9e314d3434c3860974",
+  "mutations": {
+    "catalog_publications": 0,
+    "disposable_host": 0,
+    "paid_events": 0,
+    "phone_actions": 0,
+    "production_ru_nl": 0,
+    "user_invitations": 0
+  },
+  "native_help": {
+    "architecture": "x86_64",
+    "network": "disabled",
+    "os": "ubuntu-24.04",
+    "result": "PASS"
+  },
+  "native_inputs": [
+    {
+      "id": "awg-engine",
+      "receipt": "docs/releases/2026-09-13-awg31-managed-recovery.json",
+      "sha256": "e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f",
+      "size": 5156251,
+      "source_commit": "b5928efb6ca19f0153958460c3d141f04abc5c2e",
+      "source_inventory_sha256": "ed12d9fd17c130ad6b22908e85f1620ee3f040241cd7276d83a17e58cfce8fe0"
+    },
+    {
+      "id": "awg-tools",
+      "receipt": "docs/releases/2026-09-13-awg31-managed-recovery.json",
+      "sha256": "906d6795af1dd4adee7b11bf1e7fa133d4795c8a8d6e2099b34a026f810a3278",
+      "size": 137736,
+      "source_commit": "ee0f0a9aa34ff0a0da4b3433b9512781cfe02843",
+      "source_inventory_sha256": "090d9e861430f4dc88a404e83a0e9eeb6e5e74a68800f3e9ecad506f6c7f8021"
+    },
+    {
+      "id": "tcp-xray",
+      "receipt": "docs/releases/2026-10-25-linux-system-runtime-l03-1.md",
+      "sha256": "4f7a4436f86798bbb5c875014e352021a1673710a45e170ccc507c5f59341940",
+      "size": 46755260,
+      "source_commit": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+      "source_inventory_sha256": "5ddeed50c27a92f1288917fea3635815771eb42933aee6f5bd8707c46aeaeec1"
+    },
+    {
+      "id": "mesh-gateway",
+      "receipt": "docs/releases/2026-10-28-android106-beta-0-canary-canonical-profile.json",
+      "sha256": "f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef",
+      "size": 17925498,
+      "source_commit": "c9c0a4de55f455e0788e7b519383c0cb0743fc96",
+      "source_inventory_sha256": "c0abab0eee8ea797fcaee5abfbeeea6050b800d09b326b3a8fe61cae5a6edab1"
+    }
+  ],
+  "next_checkpoint": "FLEET-ACTIVATION-1_NOT_STARTED",
+  "operator_handoff": "NOT_READY",
+  "physical_tests": {
+    "awg": "NOT_RUN",
+    "drain": "NOT_RUN",
+    "enrollment": "NOT_RUN",
+    "mesh": "NOT_RUN",
+    "preflight": "NOT_RUN",
+    "reboot": "NOT_RUN",
+    "retire": "NOT_RUN",
+    "rollback": "NOT_RUN",
+    "stage": "NOT_RUN",
+    "tcp": "NOT_RUN",
+    "upgrade": "NOT_RUN"
+  },
+  "preserved": {
+    "android_sequence": 4,
+    "cohort": 1,
+    "cohort_limit": 10,
+    "gateway_catalog": 4,
+    "ledger_events": 4,
+    "ledger_subscriptions": 1,
+    "owner_entitlement": "UNCHANGED_BY_THIS_CHECKPOINT",
+    "paid_baseline": 108,
+    "public_android": 109,
+    "revenue": 0
+  },
+  "private_rehearsal_signer": "NOT_CREATED",
+  "qualification": "NOT_A_DEPLOYABLE_BUNDLE_OR_LIVE_ACCEPTANCE",
+  "role_runtime": "PENDING",
+  "schema": 1,
+  "seeder_source": "8e94d30f43330a7ce31afe5bf28a398911d452f6",
+  "status": "IN_PROGRESS_SOURCE_PREPARATION",
+  "target": "NOT_PROVIDED",
+  "tests": {
+    "combined": 273,
+    "console": 129,
+    "django_check": "PASS",
+    "errors": 0,
+    "existing_static_warnings": 33,
+    "failures": 0,
+    "fleet": 144,
+    "migration_drift": "NONE",
+    "paid_backend_package": 170
+  },
+  "timings_seconds": {
+    "activate": null,
+    "data_plane": null,
+    "injected_rollback": null,
+    "operator_interaction": null,
+    "plan": null,
+    "preflight": null,
+    "reboot_recovery": null,
+    "retire": null,
+    "stage": null,
+    "successful_upgrade": null,
+    "unattended_total": null,
+    "verify": null
+  }
+}

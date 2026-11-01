@@ -1,0 +1,166 @@
+{
+  "artifacts": [
+    {
+      "architecture": "x86_64",
+      "argv": [
+        "RELEASE/bin/amneziawg-go",
+        "-f",
+        "fcrh0"
+      ],
+      "capabilities": [
+        "CAP_NET_ADMIN"
+      ],
+      "group": "root",
+      "health": "REHEARSAL_HEALTH/awg",
+      "id": "awg-engine",
+      "license": "MIT",
+      "listeners": [
+        "udp:51827"
+      ],
+      "path": "bin/amneziawg-go",
+      "receipt": "docs/releases/2026-09-13-awg31-managed-recovery.json",
+      "roles": [
+        "awg"
+      ],
+      "runtime": "static",
+      "secret_slots": [
+        "awg-material"
+      ],
+      "sha256": "e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f",
+      "size": 5156251,
+      "source_commit": "b5928efb6ca19f0153958460c3d141f04abc5c2e",
+      "source_inventory_sha256": "ed12d9fd17c130ad6b22908e85f1620ee3f040241cd7276d83a17e58cfce8fe0",
+      "source_reference": "pilot/awg31/Dockerfile",
+      "state": [
+        "STATE/rehearsal-only"
+      ],
+      "unit": "fc-rehearsal-awg.service",
+      "user": "root"
+    },
+    {
+      "architecture": "x86_64",
+      "argv": [
+        "RELEASE/bin/awg",
+        "setconf",
+        "fcrh0",
+        "CONFIG/awg.conf"
+      ],
+      "capabilities": [
+        "CAP_NET_ADMIN"
+      ],
+      "group": "root",
+      "health": "REHEARSAL_HEALTH/awg",
+      "id": "awg-tools",
+      "license": "GPL-2.0",
+      "listeners": [],
+      "path": "bin/awg",
+      "receipt": "docs/releases/2026-09-13-awg31-managed-recovery.json",
+      "roles": [
+        "awg"
+      ],
+      "runtime": "glibc>=2.34",
+      "secret_slots": [
+        "awg-material"
+      ],
+      "sha256": "906d6795af1dd4adee7b11bf1e7fa133d4795c8a8d6e2099b34a026f810a3278",
+      "size": 137736,
+      "source_commit": "ee0f0a9aa34ff0a0da4b3433b9512781cfe02843",
+      "source_inventory_sha256": "090d9e861430f4dc88a404e83a0e9eeb6e5e74a68800f3e9ecad506f6c7f8021",
+      "source_reference": "pilot/awg31/Dockerfile",
+      "state": [
+        "STATE/rehearsal-only"
+      ],
+      "unit": "fc-rehearsal-awg.service",
+      "user": "root"
+    },
+    {
+      "architecture": "x86_64",
+      "argv": [
+        "RELEASE/bin/xray",
+        "run",
+        "-config",
+        "CONFIG/tcp.json"
+      ],
+      "capabilities": [],
+      "group": "fc-rehearsal",
+      "health": "REHEARSAL_HEALTH/tcp",
+      "id": "tcp-xray",
+      "license": "MPL-2.0",
+      "listeners": [
+        "tcp:4443"
+      ],
+      "path": "bin/xray",
+      "receipt": "docs/releases/2026-10-25-linux-system-runtime-l03-1.md",
+      "roles": [
+        "tcp"
+      ],
+      "runtime": "static",
+      "secret_slots": [
+        "tcp-material"
+      ],
+      "sha256": "4f7a4436f86798bbb5c875014e352021a1673710a45e170ccc507c5f59341940",
+      "size": 46755260,
+      "source_commit": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+      "source_inventory_sha256": "5ddeed50c27a92f1288917fea3635815771eb42933aee6f5bd8707c46aeaeec1",
+      "source_reference": "pilot/tcp/Dockerfile",
+      "state": [
+        "STATE/rehearsal-only"
+      ],
+      "unit": "fc-rehearsal-tcp.service",
+      "user": "fc-rehearsal"
+    },
+    {
+      "architecture": "x86_64",
+      "argv": [
+        "RELEASE/bin/gateway",
+        "-family-config",
+        "CONFIG/profile/gateway.json",
+        "-listen",
+        "0.0.0.0:18444",
+        "-duration",
+        "4h",
+        "-directory-export",
+        "STATE/ready.json"
+      ],
+      "capabilities": [],
+      "group": "fc-rehearsal",
+      "health": "REHEARSAL_HEALTH/mesh",
+      "id": "mesh-gateway",
+      "license": "Family Connect source-available; retained upstream notices per accepted receipt",
+      "listeners": [
+        "tcp:18444"
+      ],
+      "path": "bin/gateway",
+      "receipt": "docs/releases/2026-10-28-android106-beta-0-canary-canonical-profile.json",
+      "roles": [
+        "mesh",
+        "profile-reader",
+        "publisher",
+        "snapshot"
+      ],
+      "runtime": "glibc>=2.34",
+      "secret_slots": [
+        "mesh-material"
+      ],
+      "sha256": "f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef",
+      "size": 17925498,
+      "source_commit": "c9c0a4de55f455e0788e7b519383c0cb0743fc96",
+      "source_inventory_sha256": "c0abab0eee8ea797fcaee5abfbeeea6050b800d09b326b3a8fe61cae5a6edab1",
+      "source_reference": "SOURCE/canonical-gateway-source-manifest.json",
+      "state": [
+        "STATE/rehearsal-only"
+      ],
+      "unit": "fc-rehearsal-mesh.service",
+      "user": "fc-rehearsal"
+    }
+  ],
+  "disabled_roles": {
+    "load-monitor": "New rehearsal runtime binding pending; not admitted by this native-only inventory.",
+    "mailbox": "Gateway chat-services disabled; no mailbox/Reticulum hosted by this rehearsal.",
+    "monitoring": "New rehearsal runtime binding pending; not admitted by this native-only inventory.",
+    "renewal": "No production renewal authority or journal; rehearsal material expires within permit lifetime.",
+    "restricted-sync": "No production control-plane connection; one-time private rehearsal material delivery only."
+  },
+  "schema": 1,
+  "scope": "BOUND_REHEARSAL_INPUTS"
+}

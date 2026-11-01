@@ -7,6 +7,10 @@ the raw UUID starts with `fc`; the production invitation parser is unchanged. Mi
 regression checks preservation and idempotency, not new user/paid admission. Disposable
 fleet live receipts and dashboard changes remain gated by the
 [rehearsal checkpoint](../docs/releases/2026-11-01-fleet-bootstrap-2.md).
+Full isolated console/fleet validation now passes273 tests (129 console and144 fleet),
+with33 existing static-directory warnings; Django check and migration drift checks pass.
+Actual rehearsal receipt ingestion/dashboard extension is still pending; the web process
+has not acquired SSH execution, production credentials or any new paid operation.
 
 ## FLEET-BOOTSTRAP-1 · source/synthetic only
 

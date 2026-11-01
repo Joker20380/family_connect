@@ -86,6 +86,15 @@ def test_fixed_ssh_argv_and_redacted_errors(remote):
     assert '"operation_id":"stage-one"' in options['input']
 
 
+def test_known_hosts_cannot_change_after_initial_pin(remote):
+    adapter, calls = remote
+    adapter.preflight_at = 1001
+    adapter.known_hosts.write_text('8.8.8.8 ssh-ed25519 changed-key\n')
+    with pytest.raises(FleetError, match='pin_changed'):
+        adapter.execute('stage','stage-pin-changed')
+    assert len(calls) == 1
+
+
 @pytest.mark.parametrize('operation', ['../escape', 'id;id', 'id\nshutdown', '--force-live'])
 def test_operation_injection_rejected(remote, operation):
     adapter, calls = remote
@@ -135,3 +144,14 @@ def test_target_reverifies_uploaded_bundle(remote, tmp_path, tamper):
             verified_upload(files, adapter.bundle_key, adapter.manifest['bundle_id'], root)
     else:
         assert verified_upload(files, adapter.bundle_key, adapter.manifest['bundle_id'], root)[0] == adapter.manifest
+
+
+def test_bootstrap_verifies_members_before_package_install(remote):
+    from fleet.remote_bootstrap import verify_bundle_payload
+    adapter, calls = remote
+    request = dict(operation=dict(bundle_id=adapter.manifest['bundle_id']), bundle_key=public_hex(adapter.bundle_key),
+        bundle={path.name:base64.b64encode(path.read_bytes()).decode() for path in adapter.bundle.iterdir()})
+    verify_bundle_payload(request)
+    request['bundle']['fc-gateway-'+adapter.manifest['bundle_id']+'.tar.zst'] = base64.b64encode(b'changed').decode()
+    with pytest.raises(ValueError, match='archive_hash'):
+        verify_bundle_payload(request)

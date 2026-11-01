@@ -1,15 +1,20 @@
 """Fixed SSH receiver. Verify the signed permit before any target filesystem write."""
 
 import base64
+import ctypes
 import hashlib
+import io
 import ipaddress
 import json
 import os
 from pathlib import Path
+import platform
 import re
 import shutil
+import stat
 import subprocess
 import sys
+import tarfile
 import time
 
 
@@ -66,7 +71,8 @@ def check(request):
     if len(agent) > 2*1024*1024 or hashlib.sha256(agent).hexdigest() != body['agent_sha256']:
         raise ValueError('remote_agent_hash')
     addresses = json.loads(subprocess.check_output(['ip', '-j', 'address', 'show'], timeout=5))
-    if body['ipv4'] not in {entry['local'] for interface in addresses for entry in interface.get('addr_info', [])}:
+    found = {entry['local'] for interface in addresses for entry in interface.get('addr_info', [])}
+    if body['ipv4'] not in found or found & {'185.251.89.19','185.10.158.212','186.246.45.246','186.246.51.201'}:
         raise ValueError('remote_host_binding')
     fingerprints = []
     for path in Path('/etc/ssh').glob('ssh_host_*_key.pub'):
@@ -77,6 +83,19 @@ def check(request):
         raise ValueError('ssh_fingerprint_mismatch')
     if os.geteuid() != 0:
         raise ValueError('root_required')
+    release = dict(line.split('=',1) for line in Path('/etc/os-release').read_text().splitlines() if '=' in line)
+    if release.get('ID','').strip('"') != 'ubuntu' or release.get('VERSION_ID','').strip('"') != '24.04':
+        raise ValueError('unsupported_os')
+    if platform.machine() != 'x86_64':
+        raise ValueError('unsupported_architecture')
+    tun = Path('/dev/net/tun')
+    if not tun.exists() or not stat.S_ISCHR(tun.stat().st_mode):
+        raise ValueError('missing_tun')
+    if Path('/opt/apps/family_connect').exists():
+        raise ValueError('existing_family_connect_installation')
+    existing = Path('/var/lib/family-connect/instance.json')
+    if existing.exists() and json.loads(existing.read_bytes()).get('instance_id') != body['instance_id']:
+        raise ValueError('private_identity_conflict')
     return agent
 
 
@@ -90,8 +109,69 @@ def secure_directory(path):
         raise ValueError('remote_operation_mode')
 
 
+def verify_bundle_payload(request):
+    bundle_id = request['operation']['bundle_id']
+    archive_name = 'fc-gateway-'+bundle_id+'.tar.zst'
+    files = request['bundle']
+    if set(files) != {'manifest.json','manifest.sig','sha256.json',archive_name}:
+        raise ValueError('remote_bundle_files')
+    decoded = {name:base64.b64decode(value, validate=True) for name,value in files.items()}
+    payload = decoded['manifest.json']
+    openssl_verify(bytes.fromhex(request['bundle_key']),
+                   base64.b64decode(decoded['manifest.sig'], validate=True), payload)
+    manifest = json.loads(payload)
+    fields = ('schema','source_commit','scope','supported_os','architecture','roles','secret_slots','members')
+    if set(manifest) != set(fields) | {'bundle_id','archive_sha256'} or payload != canonical(manifest):
+        raise ValueError('remote_manifest_contract')
+    core = {name:manifest[name] for name in fields}
+    if (manifest['schema'] != 1 or manifest['scope'] != 'rehearsal'
+            or manifest['supported_os'] != ['ubuntu-24.04'] or manifest['architecture'] != 'x86_64'
+            or manifest['bundle_id'] != bundle_id
+            or bundle_id != 'gw-'+hashlib.sha256(canonical(core)).hexdigest()[:32]):
+        raise ValueError('remote_manifest_binding')
+    archive = decoded[archive_name]
+    if len(archive) > 128*1024*1024 or hashlib.sha256(archive).hexdigest() != manifest['archive_sha256']:
+        raise ValueError('remote_archive_hash')
+    expected_hashes = {name:hashlib.sha256(decoded[name]).hexdigest() for name in (archive_name,'manifest.json','manifest.sig')}
+    if json.loads(decoded['sha256.json']) != expected_hashes:
+        raise ValueError('remote_hash_inventory')
+    library = ctypes.CDLL('libzstd.so.1')
+    library.ZSTD_decompress.argtypes = (ctypes.c_void_p,ctypes.c_size_t,ctypes.c_void_p,ctypes.c_size_t)
+    library.ZSTD_decompress.restype = ctypes.c_size_t
+    library.ZSTD_isError.argtypes = (ctypes.c_size_t,)
+    library.ZSTD_isError.restype = ctypes.c_uint
+    output = ctypes.create_string_buffer(128*1024*1024)
+    size = library.ZSTD_decompress(output,len(output),archive,len(archive))
+    if library.ZSTD_isError(size) or size > len(output):
+        raise ValueError('remote_archive_codec')
+    members = manifest['members']
+    if not isinstance(members,list) or not 1 <= len(members) <= 1024:
+        raise ValueError('remote_member_count')
+    expected = {item['path']:item for item in members}
+    if len(expected) != len(members) or list(expected) != sorted(expected):
+        raise ValueError('remote_member_order')
+    seen = []
+    with tarfile.open(fileobj=io.BytesIO(output.raw[:size]),mode='r:') as stream:
+        for member in stream:
+            name = member.name
+            if (not member.isreg() or name not in expected or name in seen or name.startswith('/')
+                    or any(part in ('','.','..') for part in name.split('/'))
+                    or member.size > 64*1024*1024 or member.uid != 0 or member.gid != 0 or member.mtime != 0):
+                raise ValueError('remote_archive_member')
+            declared = expected[name]
+            if (declared['target'] != 'RELEASE/'+name or member.mode not in (0o444,0o555)
+                    or declared['mode'] != member.mode or declared['size'] != member.size
+                    or declared['owner'] != 'root' or declared['group'] != 'root'
+                    or hashlib.sha256(stream.extractfile(member).read()).hexdigest() != declared['sha256']):
+                raise ValueError('remote_member_hash_or_mode')
+            seen.append(name)
+    if seen != list(expected):
+        raise ValueError('remote_member_inventory')
+
+
 def receive(request):
     agent = check(request)
+    verify_bundle_payload(request)
     body = request['permit']['body']
     directory = Path('/var/lib/family-connect-rehearsal') / body['instance_id']
     secure_directory(directory)

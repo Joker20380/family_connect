@@ -2,8 +2,10 @@
 
 import base64
 import io
+import os
 from pathlib import Path
 import shlex
+import stat
 import subprocess
 import time
 import zipfile
@@ -45,12 +47,31 @@ class RemoteInstaller:
         self.clock = clock
         self.host = host
         self.fingerprint = fingerprint
+        self.known_hosts = Path(known_hosts).absolute()
+        self.pin_digest = None
+        self.check_pin()
+        self.pin_digest = digest(self.known_hosts.read_bytes())
         self.manifest, self.contents = verify_bundle(bundle, bundle_key)
         if self.manifest['scope'] != 'rehearsal':
             fail('rehearsal_bundle_required')
         self.authorize('preflight')
-        self.ssh = preflight.SSH(host, user, known_hosts, fingerprint, runner=runner)
+        self.ssh = preflight.SSH(host, user, self.known_hosts, fingerprint, runner=runner)
         self.preflight_at = None
+
+    def check_pin(self):
+        path = self.known_hosts
+        if any(character.isspace() for character in str(path)):
+            fail('ssh_pin_path')
+        for parent in (path, *path.parents):
+            metadata = parent.lstat()
+            sticky_root = parent.is_dir() and metadata.st_uid == 0 and metadata.st_mode & stat.S_ISVTX
+            if (parent.is_symlink() or metadata.st_uid not in (0, os.geteuid())
+                    or metadata.st_mode & 0o022 and not sticky_root):
+                fail('ssh_pin_ownership')
+        if not path.is_file() or path.stat().st_nlink != 1:
+            fail('ssh_pin_file')
+        if self.pin_digest is not None and digest(path.read_bytes()) != self.pin_digest:
+            fail('ssh_fingerprint_pin_changed')
 
     def authorize(self, action):
         return permit.verify(self.permit, self.permit_key, host=self.host, fingerprint=self.fingerprint,
@@ -59,6 +80,7 @@ class RemoteInstaller:
 
     def preflight(self, instance, ports, *, dry_run=False):
         self.authorize('preflight')
+        self.check_pin()
         if dry_run:
             return dict(scope=permit.SCOPE, action='preflight', dry_run=True, remote_writes=0)
         if instance['instance_id'] != self.permit['body']['instance_id'] or instance['ipv4'] != self.host:
@@ -92,6 +114,7 @@ class RemoteInstaller:
         return self.call(command, request)
 
     def call(self, command, request):
+        self.check_pin()
         try:
             result = self.ssh.runner(self.ssh.argv + [command], input=canonical(request).decode(),
                                      capture_output=True, text=True, timeout=660)
