@@ -1,7 +1,7 @@
 """Verify the frozen Android catalog and copy only its exact GIF bytes."""
 import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 import re
 import shutil
 
@@ -37,7 +37,8 @@ def verify(root=ROOT):
         if path.is_symlink() or not path.is_file() or not 1 <= path.stat().st_size <= 32768:
             raise ValueError('Unsafe smiley asset')
     for name, digest in catalog['android_sources'].items():
-        if Path(name).is_absolute() or '..' in Path(name).parts or re.search(r'[\x00-\x1f\x7f]', name):
+        source = PureWindowsPath(name)
+        if source.anchor or '..' in source.parts or re.search(r'[\x00-\x1f\x7f]', name):
             raise ValueError('Unsafe Android smiley source path')
         if hashlib.sha256((root / name).read_bytes()).hexdigest() != digest:
             raise ValueError(f'Android smiley implementation changed: {name}')

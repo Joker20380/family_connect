@@ -12,12 +12,14 @@ Reviewed voice-preview/recording visibility and message styling only; all49 face
 GIFs, provenance, picker/insertion/foreground behavior and the other four source pins retained.
 Catalog advances to Android108 with only that source digest changed. Full-file SHA fencing
 remains; mismatch diagnostics name the safe relative path. Android production source unchanged.
+Follow-up diagnostic validation uses host-independent Windows path parsing, rejecting POSIX
+roots, Windows roots/drives and either traversal separator; no source pin or asset changes.
 Existing CI41285992226/source4a7bf20 is terminal FAILURE: Android, Windows and compatibility
 PASS; Linux failed only the stale baseline. Android includes JVM/control, carrier race,
 readiness, native/audio, Gradle/tests/lint, APK verification, emulator AWG/TCP/Auto/system
 consent, permission handover/revoke/cleanup, language/dashboard, ARM64 and unsigned packaging.
 Its APK is not the final exact-source109 candidate. TCPFORWARD product fix remains accepted.
-Local Ubuntu24.04/Python3.12 acceptance: smileys45 PASS, mandatory desktop1226 PASS/182 existing
+Local Ubuntu24.04/Python3.12 acceptance: smileys49 PASS, mandatory desktop1230 PASS/182 existing
 skips/0 failures/0 errors, dependency60 PASS, JVM contour2 PASS; GTK, Disconnect poll50,
 messenger27, smiley9, layout24, map/invitation/recovery/TCP and DEB/AppImage/package smokes PASS.
 Minimal-container libXtst/TUN differences were corrected; initial logs retained, no test waiver.

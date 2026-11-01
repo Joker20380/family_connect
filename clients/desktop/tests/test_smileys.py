@@ -92,7 +92,10 @@ def test_source_mutation_rejected_with_safe_path(catalog_tree, name):
     assert str(catalog_tree) not in str(failure.value)
 
 
-@pytest.mark.parametrize('name', ['/private/source.java', '../source.java', 'source\n.java'])
+@pytest.mark.parametrize('name', [
+    '/private/source.java', '../source.java', 'source\n.java',
+    r'\private\source.java', r'C:\private\source.java', 'C:source.java', r'..\source.java',
+])
 def test_unsafe_source_path_not_disclosed(catalog_tree, name):
     catalog = json.loads((catalog_tree / CATALOG).read_text())
     catalog['android_sources'] = {name: '0' * 64}

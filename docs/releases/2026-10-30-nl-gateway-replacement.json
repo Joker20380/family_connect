@@ -3138,10 +3138,10 @@
       },
       "local_acceptance": {
         "environment": "ISOLATED_UBUNTU_24_04_PYTHON_3_12_3_GTK_4_14_ADW_1_5_CI_LOCKFILES",
-        "smileys": 45,
+        "smileys": 49,
         "dependency": 60,
         "mandatory": {
-          "passed": 1226,
+          "passed": 1230,
           "skipped": 182,
           "failures": 0,
           "errors": 0
@@ -3201,6 +3201,14 @@
           "smiley-gtk.log": "c9411ecff467c514c168df363295d03f91b8025cd5f48559eb358b6bcb109e06",
           "smileys.log": "7c9ee0d226e866ab90cd65ecb2aec5e57bcd3817c036bd8d815b3d1dfcb054fb",
           "tcp-install.log": "1774aeb5e751a9802ec0ff068f636023cfa72ec7cd65404be0827c06770a8d10"
+        },
+        "portable_path_followup": {
+          "result": "PASS",
+          "root_and_drive_parsing": "HOST_INDEPENDENT_PURE_WINDOWS_PATH",
+          "mutation_cases": 7,
+          "source_pins_and_assets": "UNCHANGED",
+          "prior_gui_and_package_inputs": "UNCHANGED",
+          "log_sha256": "5967e091c0ba731f7045889d7193ba58dbf38574b4ae7d51c1c6c8e45bdc568b"
         }
       },
       "final_workflow_dispatch": {
