@@ -3,9 +3,51 @@
 **READY_FOR_FLEET_BOOTSTRAP_2_HOST**
 
 All selected source/package gates PASS. This is not live-host or production acceptance.
-Supported target: **Ubuntu24.04/x86_64**. No disposable host has been supplied; no live
-permit or disposable live transport material has been generated. No VPS was contacted.
+Supported target: **Ubuntu24.04/x86_64**. At source/package qualification, no disposable
+host had been supplied, no live permit/material had been generated and no VPS was contacted.
+The later read-only host preflight is recorded separately below; it does not change source PASS.
 The existing FLEET-BOOTSTRAP-2 remains open for its physical gates, with no new PLAN ID.
+
+## Disposable-host access and preflight continuation
+
+Owner supplied one disposable Netherlands host and explicitly chose the previous interactive
+SSH public-key installation procedure after difficulty with the provider console. The owner
+entered the password only in a local terminal and successfully installed one public key.
+Host-key trust is **OWNER_INTERACTIVE_TOFU_ACCEPTED_PIN_MATCH**, not independent provider
+verification. The accepted single-host known_hosts file is mode0600; no existing pin was
+replaced, no password was collected, and no private SSH key was copied to the target.
+
+One read-only preflight at2026-11-01T17:46:56Z used the existing `RemoteInstaller` and fixed
+probe, strict host-key checking, key-only authentication and a separate private authority's
+signed15-minute permit allowing **only `preflight`**. It binds this target, exact accepted
+fingerprint, A/B IDs, agent ZIP and bundle signer. No mutation permit was issued. Operator
+execution used the existing Ubuntu24.04 qualification image with pinned cryptography46.0.7;
+only the selected SSH key, single-host pin, public bundle key, signed A and private output
+directory were mounted, not product credentials or the bundle signing private key.
+
+- Authenticated SSH: PASS, exit0, empty stderr; observed target address matches the permit.
+- Host: Ubuntu22.04/x86_64, kernel5.15.0-46-generic,2CPU,1927MiB RAM,42892MiB free under `/opt`.
+- TUN, synchronized time, resolver/HTTPS, systemd, AppArmor support and role-port availability: PASS.
+- Firewall backend: iptables-nft; no pending reboot; no enrollment instance file observed.
+- Preflight: **REJECTED / `unsupported_os`**. The supported baseline remains Ubuntu24.04;
+  no guard, package, runtime, port or secret contract was changed to admit22.04 or26.04.
+- Provider-console recovery: unverified; owner reported a console connection failure.
+  IPv6 was not supplied or independently inventoried; this is not a claim that it is absent.
+- Operator-installed packages, OS upgrades, service starts, enrollment and transport-material
+  delivery: NOT_RUN. The only reported configuration change is the owner's prior SSH-key addition.
+
+[Sanitized preflight receipt](2026-11-01-fleet-bootstrap-2-host-preflight.receipt.json) contains
+the target digest, public provenance and safe observations, not the target address, credentials,
+SSH-key contents or raw private permit. Full evidence and the separate authority key remain
+in ignored private storage. This is not local role health or external data-plane acceptance.
+Next within this checkpoint: prepare a supported Ubuntu24.04 host with a usable recovery path,
+then issue a fresh bounded permit and rerun preflight. Do not automatically upgrade/reinstall
+the OS, restart services or treat accepted TOFU as independently verified provider identity.
+Source/package test counts and immutable A/B are unchanged; this continuation is documentation
+and read-only observation only, not a new source/runtime test run or a physical acceptance PASS.
+Continuation checks PASS: strict JSON and private-receipt binding, private file modes,
+staged scope/privacy scan, consistent current blocks,4Markdown files/486local links,
+and staged/working-tree `git diff --check`. Unrelated local changes remain unstaged.
 
 ## Source and immutable packages
 
@@ -138,7 +180,8 @@ Public Android109, Android sequence4, gateway catalog4, paid baseline108, owner 
 ledger1/4, cohort1/10 and revenue0 are unchanged by this work. No product version or installer
 was rebuilt/released. No FLEET-ACTIVATION-1 or other queued task starts automatically.
 
-Request only: disposable VPS IPv4; SSH user; provider; region; independently verified
+The original host-input checklist was: disposable VPS IPv4; SSH user; provider; region; independently verified
 `SHA256:` host-key fingerprint; accepted single-host known_hosts path; SSH key path or
 confirmed SSH-agent context; provider console availability; VPS resources; optional IPv6.
-No password in chat. Do not start the live rehearsal without these values.
+No password in chat. The continuation above records supplied inputs and their trust limitations;
+it does not authorize deployment or waive unsupported-OS and recovery gates.

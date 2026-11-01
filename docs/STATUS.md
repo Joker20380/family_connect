@@ -12,9 +12,14 @@ Full fleet237 + console156 =393 PASS; paid/backend/package170 PASS; Django check
 migration drift NONE. Append-only sanitized live-receipt import and Russian dashboard ready.
 Roles: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor.
 Disabled: mailbox/chat-services, production renewal/restricted-sync, registry/control DB.
-No disposable host supplied, no live permit/materials generated, no real probe identity read.
-Next within this task: obtain the ten private host inputs; only then schedule the guarded
-physical rehearsal. Actual services/data planes/reboot remain NOT_RUN, not accepted PASS.
+Disposable NL host supplied; owner installed the SSH public key interactively. Strict pinned
+key-only login PASS; trust is owner-accepted TOFU, not independent provider verification.
+A separate15-minute signed preflight-only permit admitted one read-only observation:
+Ubuntu22.04/x86_64,2CPU,1927MiB RAM,42892MiB free; rejected with `unsupported_os`.
+No installer/OS/service changes; no enrollment, live material or real probe identity access.
+Provider-console recovery remains unverified. Next: qualify a supported Ubuntu24.04 host and
+recovery access, then rerun signed preflight; no automatic OS upgrade or service activation.
+Actual services/data planes/reboot remain NOT_RUN, not accepted PASS.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
 Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.
 [Checkpoint](releases/2026-11-01-fleet-bootstrap-2.md) ·
