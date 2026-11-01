@@ -207,6 +207,14 @@ def ingress(runtime, enabled, tls=False):
 def test_final_artifact_closure(runtime):
     artifact = runtime['artifact']
     with zipfile.ZipFile(artifact / ARCHIVE) as archive:
+        required = {'control/friends/chat_sync.py', 'control/friends/chat_publishers.py',
+                    'provisioning/friends_catalog.py', 'control/friends/paid_beta.py'}
+        assert required <= set(archive.namelist())
+        baseline = archive.read('control/friends/paid_beta.py')
+        assert b'PAID_ANDROID_VERSION_CODE = 108' in baseline
+        assert b'confirm_android106' not in baseline
+        assert b'configuration_catalog' in archive.read('friends_http.py')
+        assert b'186.246.45.246' not in archive.read('friends_http.py')
         for name in archive.namelist():
             if name.endswith('.py') and name != '__main__.py':
                 assert archive.read(name) == (artifact / 'app' / name).read_bytes()

@@ -4,7 +4,7 @@ Substep of **ANDROID-CONTROLLED-BETA**, over the accepted
 [PAID-ENTITLEMENT-MVP](../docs/paid-beta.md). Django5.2 LTS + PostgreSQL17,
 custom Django Admin, dashboard/accessible SVG charts, device lookup/readbacks,
 manual-payment metadata, preview/confirm/reconcile, cohort metadata, incidents,
-append-only audit, aggregate analytics and fixed Android106 release metadata.
+append-only audit, aggregate analytics and exact Android108 paid-baseline release metadata.
 **Локальные демо-операции + production-снимки только для чтения. Не production service и не paid launch.**
 
 
@@ -189,7 +189,7 @@ it into tickets, commits, public receipts or release notes. Fresh checkouts use
 `createsuperuser` above. Do not regenerate `.env` against an existing PG volume.
 
 Startup applies PostgreSQL migrations, initializes50 synthetic Friends identities
-(49 report exact106; one intentionally reports84), refreshes projections and
+(49 newly seeded devices report exact108; one intentionally reports84), refreshes projections and
 collects local static assets. It **does not enroll any device in paid beta**.
 Re-running `seed_demo` validates/reuses the same fixture without creating new
 identities or payment events after the one-time guarded12→50 fixture expansion.
@@ -240,7 +240,7 @@ There are no free-form diagnostic uploads or payment-provider webhooks.
 1. Sign in. Use **Devices & readbacks** to view fixtures or POST a synthetic Support
    ID/canonical reference. Refresh explicitly; readbacks are timestamped and marked
    stale after60 seconds. Even a recent projection is not a current MESH decision.
-2. In **Cohort metadata**, explicitly record synthetic opt-in and verified exact106
+2. In **Cohort metadata**, explicitly record synthetic opt-in and verified exact108
    handoff for the chosen fixture. This does not grant any entitlement.
 3. Record synthetic operational metadata with explicit purpose: `customer_payment`
    (positive minor units, EUR/USD) or `internal_canary` (strictly zero minor units,
@@ -359,3 +359,7 @@ missing/conflicting receipts, unknown outcomes, stale previews, or exposure of
 private inputs. No real field identity, payment, enrollment or deployment is
 authorized. NEXT remains only actual Android controlled-beta launch blockers;
 Linux/Windows/desktop/full repository suite are not prerequisites.
+
+Existing synthetic observations are not rewritten by this baseline update. New fixtures use
+PAID_ANDROID_VERSION/PAID_ANDROID_VERSION_CODE; older106/107 observations are rejected for
+new paid enrollment, not revoked or upgraded. No Django or production registry migration.

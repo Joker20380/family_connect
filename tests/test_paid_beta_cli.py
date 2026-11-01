@@ -23,7 +23,7 @@ def test_cli_utc_commands_and_private_receipts(registry, monkeypatch, capsys):
     assert snapshot(access) == before
     base = ['activate', '--support-id', support, '--event-id', 'event-cli-0001', '--reference', 'private-reference',
             '--period-start', '2027-01-15T08:00:00Z', '--paid-until', '2027-01-16T08:00:00Z',
-            '--apk-sha256', paid_beta.APK_SHA256]
+            '--apk-sha256', paid_beta.PAID_ANDROID_APK_SHA256]
     assert invoke(*base)[1]['event']['new_state'] == 'active'
     assert invoke(*base)[1]['duplicate']
     assert invoke('status', '--support-id', support)[1]['effective_state'] == 'active'

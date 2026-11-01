@@ -9,22 +9,26 @@ not permission to deploy, collect payment or enroll the existing field user.
 
 ## Current baseline transition —108 target, production still106 (1 November)
 
-**AWG108 follow-up through03:57UTC:** owner reports working and confirms phone HTTPS
-egress185.10.158.212 (**OWNER_HTTPS_NL_EGRESS_PASS**). The retained bound peer still has
-no fresh NL handshake/traffic; prior RU comparison was also inactive. Server-session
-attribution is unresolved, not a full AWG PASS or a proven product failure.
-Owner subsequently confirms Disconnect and notification disappearance. Two20s server
-readbacks show no new bound-peer handshake/traffic;3 TCP conntrack entries are retained,
-not deleted or declared fully released. No independent Android OS ownership inspection.
-Owner now confirms TCP108 works after the Netherlands TCP/internet/HTTPS egress check:
-**TCP108_OWNER_RUNTIME_HTTPS_NL_EGRESS_PASS**. Read-only04:09:32UTC confirms the retained
-TCP user configured/registered on new NL and active Reality listener443/NRestarts0.
-No established connection is visible at that instant; per-user statistics are disabled.
-Registration is not active-session attribution. Configuration unchanged; no telemetry enabled.
-Next one TCP Disconnect and read-only cleanup; AWG session/full cleanup proof remains OPEN.
-No repeat Connect or manual deletion; Auto/MESH still NOT_RUN.
-Existing binding and latest ACK108 retained; paid0/0, cohort0/10, canary PAUSED_NOT_RUN.
-No source/package/deployment or identity change; NL_REPLACEMENT_LIVE remains unmet.
+**Owner timing correction / NL_REPLACEMENT_LIVE:** owner confirms all requested checks
+were already completed successfully and explicitly asks to continue coding. Accept the
+owner-reported beta108 NL AWG/TCP/Auto-MESH runtime and disconnect/cleanup smoke; do not
+require another Connect to reproduce a session after the test has ended. Earlier passive
+snapshots were later than the physical tests: absence of traffic is not a failed test.
+No retrospective claim of an independently captured handshake, phone trace, per-stage
+readiness trace or all notification lifecycle cases. Prior raw observations remain below.
+New NL185.10.158.212/catalog4, old NL FENCED and FLEET_MESH_PROBE_1 retained; accepted
+infrastructure is not rebuilt or replayed. Last readback paid0/0, cohort0/10, canary PAUSED.
+**Baseline108 source implemented, NOT_DEPLOYED:** generic PAID_ANDROID_* constants,
+confirm_android_baseline and ANDROID_BASELINE_REQUIRED; latest exact108 name/code required,
+all latest-timestamp ACK ties checked, newer108 ACK supersedes older106/107 support evidence.
+Canary/CRL/operator callers updated; non-cohort106/107, identities/invites/grants, cohort10,
+schema, routing and publisher unchanged. No migration or Android/catalog publication.
+Source tests:197 paid/baseline/canary tests PASS;183 backend/CRL/package/publisher tests PASS
+with21 optional supplied-artifact/nginx cases skipped;28 registration and75 isolated
+PostgreSQL operator-console tests PASS (483 passed total). Next: deterministic current-source HTTP/private canary
+packages and controlled exact RU HTTP baseline deployment with a fresh private recovery point.
+Production paid baseline still106; READY_FOR_BETA0_CANARY_1 is NOT_YET_MET.
+Canary writes NOT_RUN; fresh owner ГОТОВ is still required after deployment/readiness.
 
 New paid activation stays **NOT_RUN** until NL owner108 AWG/TCP/Auto-MESH and cleanup PASS,
 the generic exact108 backend/canary contract passes focused tests and deterministic package gates,
@@ -41,12 +45,12 @@ Separate evidence: `ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS`,
 `ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS`, and reviewed
 `ANDROID108_WHITELIST_TRANSPORT_EVIDENCE_INHERITED_FROM_107_UI_ONLY_DELTA`.
 The latter inherits transport implementation evidence, not a physical108 whitelist test.
-Notification lifecycle and separate owner108 transport cleanup are not yet accepted.
+Owner confirms the earlier transport/cleanup smoke; notification lifecycle is not generalized beyond reported checks.
 The generic contract must require latest exact108 name/code, reject missing/conflicting/latest
 old-version evidence and wrong APK hash, and allow newer108 ACK over older support observations.
 Preserve non-cohort106/107 admission byte/semantic behavior, identities/invites/grants, existing
 schema,10-slot limit, publisher, registration/chat-sync and current catalog4 endpoint routes.
-No new wire protocol. Source/artifact/deployment gates are still pending, not reported PASS.
+No new wire protocol. Source is implemented/tested; deterministic artifacts and production deployment remain pending.
 See [live continuation](releases/2026-10-27-android106-beta-0-canary-1.md#current-continuation--baseline108-target-live-canary-not_run-1-november)
 and [artifact/source inventory](releases/2026-10-30-nl-gateway-replacement.md#1-november--beta108-owner-evidence-and-fresh-preflight).
 
@@ -206,26 +210,26 @@ No production receipt has been imported into PostgreSQL in this checkpoint.
 
 ## Scope and prerequisites
 
-The following106 contract is the legacy deployed state, not permission for new enrollment
-before the108 transition above is complete.
+The following108 contract is implemented in source, not yet deployed. Do not enroll
+before the108 production transition above is complete. Existing paid schema needs no migration.
 
 - At most10 distinct, already activated Friends devices; retained expired/revoked
   rows still occupy slots. No automatic enrollment, trial, grace or new identity.
-- Only exact signed `0.1.18-beta106-recovery`, versionCode106,
+- Only exact signed `0.1.18-beta108`, versionCode108,
   `com.familyconnect.app.friends`, APK SHA256
-  `242855c43e889e708234ce2f687fa02d37bccb1eee408904f09216b6abd8f020`,
-  56093664 bytes; signing certificate SHA256
+  `144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf`,
+  56212840 bytes; signing certificate SHA256
   `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
-  [Exact retained APK, reference and saved105](releases/2026-10-27-android106-controlled-beta-readiness.md).
-- New106 installations must already have their existing Friends identity activated
+  [Verified public108 artifact/source evidence](releases/2026-10-30-nl-gateway-replacement.md).
+- New108 installations must already have their existing Friends identity activated
   through the normal flow before paid enrollment; this CLI never installs,
   activates a device, issues an invite or changes keys. Devices on older versions
   are excluded, not remotely upgraded. Public updater/catalog remains unchanged.
 - Operator checks private handoff bytes/signature and device version, opt-in,
   approved terms and a confirmed manual payment. No acquiring/provider API.
   `--apk-sha256` is an explicit operator attestation, NOT remote signer attestation.
-  Latest authenticated support/readiness version observation must also say exact106;
-  a newer106 ACK can supersede stale84 support data. Missing/ambiguous/non106 evidence
+  Latest authenticated support/readiness version observation must also say exact108;
+  a newer108 ACK supersedes older106/107 support data. Missing/ambiguous/non108 evidence
   denies enrollment. Same-timestamp conflicting observations deny enrollment.
 - Use the existing canonical Friends registry, not a copied or new identity DB.
   Keep registry/backup/audit receipts private; restrict filesystem/operator access.
@@ -281,7 +285,7 @@ python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" activate \
   --support-id "$SUPPORT_ID" --event-id "$PAYMENT_EVENT_ID" \
   --period-start "$PERIOD_START_UTC" --paid-until "$PAID_UNTIL_UTC" \
   --reference "$OPAQUE_REFERENCE" \
-  --apk-sha256 242855c43e889e708234ce2f687fa02d37bccb1eee408904f09216b6abd8f020
+  --apk-sha256 144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf
 python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" grace \
   --support-id "$SUPPORT_ID" --event-id "$GRACE_EVENT_ID" \
   --grace-until "$GRACE_UNTIL_UTC" --reference "$OPAQUE_REFERENCE"
@@ -296,7 +300,7 @@ python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" revoke \
   symlink DB paths are rejected. Take a consistent private backup before a future
   authorized production migration; never restore an old DB over live identities.
 - Activate is the only enrollment operation. It requires a confirmed payment,
-  `period_start <= server_now < paid_until`, matching106 evidence, active device
+  `period_start <= server_now < paid_until`, matching108 evidence, active device
   and invite, no existing MESH grant revocation, and an available cohort slot.
 - A renewal/grace cannot shorten a previous paid/grace boundary. Grace is only an
   explicit operator event on an enrolled device. Expire denies new readiness now
@@ -357,8 +361,8 @@ Do not roll back to a pre-paid backend with a nonempty cohort: it ignores paid r
 and reopens all_activated access. Never delete paid rows to regain legacy admission,
 clear data, reissue identity or silently extend paid periods. Preserve audit and
 working non-cohort users; stop new enrollment/payment/distribution, use an
-authorized paid-aware corrective server build and rehearse rollback first. APK106
-is not changed by this server checkpoint; saved105 is not permission for Android
+authorized paid-aware corrective server build and rehearse rollback first. Android artifacts
+are not changed by this server checkpoint; retained older APKs are not permission for Android
 downgrade/uninstall. Server/client recovery remains a separate launch gate.
 
 Stop on wrong/duplicate charge application, unexpected non-cohort denial, identity

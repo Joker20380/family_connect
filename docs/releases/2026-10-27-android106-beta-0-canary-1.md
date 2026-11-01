@@ -2,22 +2,26 @@
 
 ## Current continuation — baseline108 target, live canary NOT_RUN (1 November)
 
-**AWG108 follow-up through03:57UTC:** owner reports working and confirms phone HTTPS
-egress185.10.158.212 (**OWNER_HTTPS_NL_EGRESS_PASS**). The retained bound peer still has
-no fresh NL handshake/traffic; prior RU comparison was also inactive. Server-session
-attribution is unresolved, not a full AWG PASS or a proven product failure.
-Owner subsequently confirms Disconnect and notification disappearance. Two20s server
-readbacks show no new bound-peer handshake/traffic;3 TCP conntrack entries are retained,
-not deleted or declared fully released. No independent Android OS ownership inspection.
-Owner now confirms TCP108 works after the Netherlands TCP/internet/HTTPS egress check:
-**TCP108_OWNER_RUNTIME_HTTPS_NL_EGRESS_PASS**. Read-only04:09:32UTC confirms the retained
-TCP user configured/registered on new NL and active Reality listener443/NRestarts0.
-No established connection is visible at that instant; per-user statistics are disabled.
-Registration is not active-session attribution. Configuration unchanged; no telemetry enabled.
-Next one TCP Disconnect and read-only cleanup; AWG session/full cleanup proof remains OPEN.
-No repeat Connect or manual deletion; Auto/MESH still NOT_RUN.
-Existing binding and latest ACK108 retained; paid0/0, cohort0/10, canary PAUSED_NOT_RUN.
-No source/package/deployment or identity change; NL_REPLACEMENT_LIVE remains unmet.
+**Owner timing correction / NL_REPLACEMENT_LIVE:** owner confirms all requested checks
+were already completed successfully and explicitly asks to continue coding. Accept the
+owner-reported beta108 NL AWG/TCP/Auto-MESH runtime and disconnect/cleanup smoke; do not
+require another Connect to reproduce a session after the test has ended. Earlier passive
+snapshots were later than the physical tests: absence of traffic is not a failed test.
+No retrospective claim of an independently captured handshake, phone trace, per-stage
+readiness trace or all notification lifecycle cases. Prior raw observations remain below.
+New NL185.10.158.212/catalog4, old NL FENCED and FLEET_MESH_PROBE_1 retained; accepted
+infrastructure is not rebuilt or replayed. Last readback paid0/0, cohort0/10, canary PAUSED.
+**Baseline108 source implemented, NOT_DEPLOYED:** generic PAID_ANDROID_* constants,
+confirm_android_baseline and ANDROID_BASELINE_REQUIRED; latest exact108 name/code required,
+all latest-timestamp ACK ties checked, newer108 ACK supersedes older106/107 support evidence.
+Canary/CRL/operator callers updated; non-cohort106/107, identities/invites/grants, cohort10,
+schema, routing and publisher unchanged. No migration or Android/catalog publication.
+Source tests:197 paid/baseline/canary tests PASS;183 backend/CRL/package/publisher tests PASS
+with21 optional supplied-artifact/nginx cases skipped;28 registration and75 isolated
+PostgreSQL operator-console tests PASS (483 passed total). Next: deterministic current-source HTTP/private canary
+packages and controlled exact RU HTTP baseline deployment with a fresh private recovery point.
+Production paid baseline still106; READY_FOR_BETA0_CANARY_1 is NOT_YET_MET.
+Canary writes NOT_RUN; fresh owner ГОТОВ is still required after deployment/readiness.
 
 The filename retains the historical android106 name; this operation now targets exact
 **0.1.18-beta108 / versionCode108**, not a new PLAN ID. See the

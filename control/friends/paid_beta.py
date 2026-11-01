@@ -10,8 +10,9 @@ import sqlite3
 
 from . import support_ids
 
-APK_SHA256 = '242855c43e889e708234ce2f687fa02d37bccb1eee408904f09216b6abd8f020'
-VERSION = '0.1.18-beta106-recovery'
+PAID_ANDROID_APK_SHA256 = '144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf'
+PAID_ANDROID_VERSION = '0.1.18-beta108'
+PAID_ANDROID_VERSION_CODE = 108
 COHORT_LIMIT = 10
 MAX_TIME = 253402300799
 TABLES = {'paid_beta_subscriptions', 'paid_beta_events'}
@@ -140,25 +141,29 @@ def resolve_device(database, support):
     return rows[0]
 
 
-def confirm_android106(database, device):
+def confirm_android_baseline(database, device):
     support = database.execute('SELECT platform,app_version,version_code,last_seen FROM device_support WHERE device=?', (device,)).fetchone()
-    require(support is not None and support['platform'] == 'android', 'ANDROID106_REQUIRED')
+    require(support is not None and support['platform'] == 'android', 'ANDROID_BASELINE_REQUIRED')
     observations = []
     if support['last_seen'] is not None:
         observations.append((support['last_seen'], support['app_version'], support['version_code']))
     if database.execute("SELECT 1 FROM sqlite_master WHERE name='restricted_readiness_results'").fetchone():
-        record = database.execute('SELECT ack,ack_at FROM restricted_readiness_results WHERE device=? AND ack IS NOT NULL '
-            'ORDER BY ack_at DESC LIMIT 1', (device,)).fetchone()
-        if record is not None and record['ack_at'] is not None:
+        records = database.execute('SELECT ack,ack_at FROM restricted_readiness_results WHERE device=? AND ack IS NOT NULL '
+            'AND ack_at=(SELECT MAX(ack_at) FROM restricted_readiness_results WHERE device=? AND ack IS NOT NULL)',
+            (device, device)).fetchall()
+        for record in records:
+            if support['last_seen'] is not None and record['ack_at'] < support['last_seen']:
+                continue
             try:
                 ack = json.loads(record['ack'])
-                observations.append((record['ack_at'], ack['app_version'], ack['version_code']))
+                require(type(ack) is dict, 'INVALID_VERSION_OBSERVATION')
+                observations.append((record['ack_at'], ack.get('app_version'), ack.get('version_code')))
             except (ValueError, TypeError, KeyError):
                 raise PaidBetaError('INVALID_VERSION_OBSERVATION') from None
-    require(observations, 'ANDROID106_REQUIRED')
+    require(observations, 'ANDROID_BASELINE_REQUIRED')
     latest = max(item[0] for item in observations)
-    require(all(version == VERSION and type(code) is int and code == 106
-                for seen, version, code in observations if seen == latest), 'ANDROID106_REQUIRED')
+    require(all(version == PAID_ANDROID_VERSION and type(code) is int and code == PAID_ANDROID_VERSION_CODE
+                for seen, version, code in observations if seen == latest), 'ANDROID_BASELINE_REQUIRED')
 
 
 def status(database, support, now):
@@ -185,7 +190,7 @@ def apply_event(database, support, event_type, event_id, reference, *, now, peri
     if event_type == 'payment':
         instant(period_start)
         instant(paid_until)
-        require(period_start < paid_until and grace_until is None and apk_sha256 == APK_SHA256, 'PAYMENT_BOUNDS_OR_APK_INVALID')
+        require(period_start < paid_until and grace_until is None and apk_sha256 == PAID_ANDROID_APK_SHA256, 'PAYMENT_BOUNDS_OR_APK_INVALID')
     elif event_type == 'grace':
         instant(grace_until)
         require(period_start is paid_until is apk_sha256 is None, 'GRACE_BOUNDS_INVALID')
@@ -210,7 +215,7 @@ def apply_event(database, support, event_type, event_id, reference, *, now, peri
     require(effective is None or effective.state != 'revoked', 'REVOCATION_TERMINAL')
     if event_type in ('payment', 'grace'):
         require(not device['revoked'] and device['invite_revoked'] == 0, 'ACTIVE_IDENTITY_REQUIRED')
-        confirm_android106(database, device['device'])
+        confirm_android_baseline(database, device['device'])
         if database.execute("SELECT 1 FROM sqlite_master WHERE name='restricted_grants'").fetchone():
             grant = database.execute('SELECT revoked FROM restricted_grants WHERE device=?', (device['device'],)).fetchone()
             require(grant is None or not grant['revoked'], 'EXISTING_MESH_REVOCATION')

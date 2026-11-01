@@ -350,7 +350,7 @@ def test_preconditions_fail_closed(operation, mutation):
             other, support = activated_device(operation.service.access)
             with paid_beta.connection(operation.service.access.path, write=True) as database:
                 paid_beta.apply_event(database, support, 'payment', 'fixture-other-cohort', 'fixture', now=operation.now,
-                    period_start=operation.now, paid_until=operation.now + 100, apk_sha256=paid_beta.APK_SHA256)
+                    period_start=operation.now, paid_until=operation.now + 100, apk_sha256=paid_beta.PAID_ANDROID_APK_SHA256)
         else:
             with operation.service.access.db() as database:
                 database.execute(statements[mutation])

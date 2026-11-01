@@ -131,7 +131,7 @@ def test_projection_cannot_grant_entitlement_or_override_version(console, operat
     fake['version_observation']['version_code'] = 106
     DeviceProjection.objects.filter(pk=device.pk).update(readback=fake)
     result = workflow.prepare(console, operation(device=device).pk)
-    assert result.status == 'REJECTED' and result.failure_code == 'ANDROID106_REQUIRED'
+    assert result.status == 'REJECTED' and result.failure_code == 'ANDROID_BASELINE_REQUIRED'
     assert counts() == (0, 0)
     restored = workflow.refresh(device.pk)
     assert not restored.readback['status']['cohort']

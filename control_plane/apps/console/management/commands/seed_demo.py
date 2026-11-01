@@ -28,10 +28,10 @@ class Command(BaseCommand):
         actions = {'add_paymentrecord', 'confirm_payment', 'add_operationrequest', 'preview_operation', 'execute_operation',
                    'add_cohortmetadata', 'change_cohortmetadata', 'add_incident', 'change_incident', 'control_operations'}
         operator.permissions.set([permission for permission in permissions if permission.codename.startswith('view_') or permission.codename in actions])
-        values = dict(version_code=106, package_id='com.familyconnect.app.friends', size=56093664,
-            sha256=paid_beta.APK_SHA256, signer_sha256='67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a',
-            channel='private verified handoff only')
-        release, _ = ReleaseMetadata.objects.get_or_create(version_name=paid_beta.VERSION, defaults=values)
+        values = dict(version_code=paid_beta.PAID_ANDROID_VERSION_CODE, package_id='com.familyconnect.app.friends', size=56212840,
+            sha256=paid_beta.PAID_ANDROID_APK_SHA256, signer_sha256='67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a',
+            channel='public beta; exact paid baseline')
+        release, _ = ReleaseMetadata.objects.get_or_create(version_name=paid_beta.PAID_ANDROID_VERSION, defaults=values)
         if any(getattr(release, name) != value for name, value in values.items()):
             raise CommandError('Accepted release metadata differs; operator review required')
-        self.stdout.write('Демо готово: 50 identities, 49 наблюдений106 и одна старая версия. Новых подписок и паролей не создано.')
+        self.stdout.write('Демо готово: 50 identities; новые fixtures используют текущий paid baseline. Существующие наблюдения, подписки и пароли не изменены.')

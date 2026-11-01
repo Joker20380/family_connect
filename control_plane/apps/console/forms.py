@@ -60,7 +60,7 @@ class OperationForm(forms.Form):
     period_start = UTCInstant(label='Начало периода')
     paid_until = UTCInstant(label='Оплачено до')
     grace_until = UTCInstant(label='Льготный период до')
-    attest_exact_apk = forms.BooleanField(required=False, label='Я проверил передачу точного подписанного APK106 (демо-подтверждение)')
+    attest_exact_apk = forms.BooleanField(required=False, label=f'Я проверил передачу точного подписанного APK{paid_beta.PAID_ANDROID_VERSION_CODE} (демо-подтверждение)')
 
     def clean(self):
         values = super().clean()

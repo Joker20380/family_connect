@@ -72,14 +72,14 @@ def test_synthetic_backup_restore_expiry_and_restart(runtime, tmp_path):
     access, device = runtime['access'], runtime['canary']
     now = int(time.time())
     with access.db() as database:
-        database.execute('UPDATE device_support SET platform=?,app_version=?,version_code=106,last_seen=? WHERE device=?',
-            ('android', paid_beta.VERSION, now, device.reference))
+        database.execute('UPDATE device_support SET platform=?,app_version=?,version_code=108,last_seen=? WHERE device=?',
+            ('android', paid_beta.PAID_ANDROID_VERSION, now, device.reference))
         support = database.execute('SELECT support_id FROM device_support WHERE device=?', (device.reference,)).fetchone()[0]
     (runtime['state'] / 'admission.json').write_text('{"version":2,"eligibility":"all_activated"}')
     expires = now + 8
     with paid_beta.connection(access.path, write=True) as database:
         paid_beta.apply_event(database, support, 'payment', 'synthetic-recovery-001', 'synthetic-reference', now=now,
-            period_start=now, paid_until=expires, apk_sha256=paid_beta.APK_SHA256)
+            period_start=now, paid_until=expires, apk_sha256=paid_beta.PAID_ANDROID_APK_SHA256)
     backup = tmp_path / 'synthetic-backup.db'
     with sqlite3.connect(access.path.resolve().as_uri() + '?mode=ro', uri=True) as source, sqlite3.connect(backup) as target:
         source.backup(target)

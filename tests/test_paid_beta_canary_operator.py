@@ -36,6 +36,20 @@ def test_transient_lookup_is_readonly_and_sanitized(registry):
     assert snapshot(access) == before
 
 
+def test_canary_apply_uses_exact108_hash(registry, monkeypatch):
+    access, _, _ = registry
+    original = paid_beta.apply_event
+    hashes = []
+
+    def observed(*args, **kwargs):
+        hashes.append(kwargs.get('apk_sha256'))
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(paid_beta, 'apply_event', observed)
+    assert canary.apply(access.path, KEY, envelope(registry), NOW)['paid_allow']
+    assert hashes == ['144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf']
+
+
 def test_four_bounded_stages_delegate_and_recover_without_identity_change(registry):
     access, device, selector = registry
     before = snapshot(access)
@@ -416,7 +430,7 @@ def test_recovery_does_not_enable_forbidden_actions(registry, action):
 
 @pytest.mark.parametrize('change,reason', [
     ('revoked', 'ACTIVE_IDENTITY_REQUIRED'), ('invite_revoked', 'ACTIVE_IDENTITY_REQUIRED'),
-    ('version', 'ANDROID106_REQUIRED'), ('terminal_revoke', 'REVOCATION_TERMINAL'),
+    ('version', 'ANDROID_BASELINE_REQUIRED'), ('terminal_revoke', 'REVOCATION_TERMINAL'),
     ('explicit_expire', 'NATURAL_EXPIRY_REQUIRED'), ('missing_certificates', 'CERTIFICATE_INVENTORY_REQUIRED'),
     ('other_member', 'OTHER_COHORT_MEMBER')])
 def test_recovery_eligibility_and_history_fail_closed(registry, change, reason):

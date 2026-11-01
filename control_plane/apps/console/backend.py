@@ -102,8 +102,8 @@ def add_member(database, device, number):
     support_ids.registered(database, device)
     database.execute('INSERT INTO control_plane_devices VALUES (?,?)', (device, f'Демо {number:02d}'))
     database.execute('UPDATE device_support SET platform=?,app_version=?,version_code=?,last_seen=? WHERE device=?',
-        ('android', paid_beta.VERSION if number != 12 else '0.1.18-beta84',
-         106 if number != 12 else 84, int(time.time()), device))
+        ('android', paid_beta.PAID_ANDROID_VERSION if number != 12 else '0.1.18-beta84',
+         paid_beta.PAID_ANDROID_VERSION_CODE if number != 12 else 84, int(time.time()), device))
 
 
 def members():
@@ -144,7 +144,7 @@ def readback(device):
 def apply(database, intent, now):
     values = {name: intent[name] for name in ('period_start', 'paid_until', 'grace_until') if intent[name] is not None}
     if intent['action'] == 'activate':
-        values['apk_sha256'] = paid_beta.APK_SHA256
+        values['apk_sha256'] = paid_beta.PAID_ANDROID_APK_SHA256
     return paid_beta.apply_event(database, selector(database, intent['device']),
         'payment' if intent['action'] == 'activate' else intent['action'], intent['event_id'], intent['reference'], now=now, **values)
 

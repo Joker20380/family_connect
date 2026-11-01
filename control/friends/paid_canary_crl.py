@@ -236,7 +236,7 @@ class Operation:
                 and subscription['last_event_id'] == events[-1]['event_id'])
         effective = paid_beta.effective_subscription_state(database, device, now)
         require(effective.state == 'expired' and effective.allowed is False)
-        paid_beta.confirm_android106(database, device)
+        paid_beta.confirm_android_baseline(database, device)
         grant = service._legacy_grant(database, device, now)
         require(grant['family'] == trust['family'] and grant['revision'] >= trust['minimum_revision'])
         try:

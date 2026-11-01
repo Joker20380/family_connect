@@ -12,14 +12,14 @@ from device_identity.device import DeviceIdentity
 NOW = 1800000000
 
 
-def activated_device(access, *, code=106):
+def activated_device(access, *, code=108):
     device = DeviceIdentity.generate()
     challenge = access.challenge(device.public_identity, device.wireguard_public_key, 'activate', access.invite())
     access.complete(device.prove_transport_key(challenge['challenge']), 'activate')
     with access.db() as database:
         support = support_ids.registered(database, device.reference)
         database.execute('UPDATE device_support SET platform=?,app_version=?,version_code=?,last_seen=? WHERE device=?',
-            ('android', paid_beta.VERSION if code == 106 else '0.1.18-beta84', code, NOW, device.reference))
+            ('android', paid_beta.PAID_ANDROID_VERSION if code == 108 else '0.1.18-beta84', code, NOW, device.reference))
     return device, support
 
 
@@ -36,7 +36,7 @@ def registry(tmp_path):
 def event(registry, kind='payment', event_id='event-00000001', *, now=NOW, **values):
     access, _, support = registry
     if kind == 'payment':
-        values = dict(period_start=now, paid_until=now + 3600, apk_sha256=paid_beta.APK_SHA256) | values
+        values = dict(period_start=now, paid_until=now + 3600, apk_sha256=paid_beta.PAID_ANDROID_APK_SHA256) | values
     with paid_beta.connection(access.path, write=True) as database:
         return paid_beta.apply_event(database, support, kind, event_id, 'synthetic-receipt', now=now, **values)
 
@@ -100,7 +100,7 @@ def test_payment_atomic_hash_only_audit_and_replay(registry):
     assert duplicate['duplicate'] and duplicate['event'] == first['event']
     with paid_beta.connection(access.path, write=True) as database:
         late = paid_beta.apply_event(database, support, 'payment', 'event-00000001', 'synthetic-receipt', now=NOW + 9999,
-            period_start=NOW, paid_until=NOW + 3600, apk_sha256=paid_beta.APK_SHA256)
+            period_start=NOW, paid_until=NOW + 3600, apk_sha256=paid_beta.PAID_ANDROID_APK_SHA256)
     assert late['duplicate'] and snapshot(access) == before
     assert first['event']['reference_hash'] == hashlib.sha256(b'synthetic-receipt').hexdigest()
     assert first['event']['previous_state'] is None and first['event']['new_state'] == 'active'
@@ -127,7 +127,7 @@ def test_reused_event_id_conflict_has_no_mutation(registry, change):
                 paid_beta.apply_event(database, support, 'revoke', 'event-00000001', 'synthetic-receipt', now=NOW)
             else:
                 paid_beta.apply_event(database, support, 'payment', 'event-00000001', 'other' if change == 'reference' else 'synthetic-receipt',
-                    now=NOW, period_start=NOW, paid_until=NOW + (7200 if change == 'paid_until' else 3600), apk_sha256=paid_beta.APK_SHA256)
+                    now=NOW, period_start=NOW, paid_until=NOW + (7200 if change == 'paid_until' else 3600), apk_sha256=paid_beta.PAID_ANDROID_APK_SHA256)
     assert snapshot(access) == before
 
 
@@ -198,7 +198,7 @@ def test_expire_grace_reactivate_revoke_terminal_and_no_automatic_trial(registry
         assert paid_beta.status(database, support, NOW)['effective_state'] == 'grace'
     with paid_beta.connection(access.path, write=True) as database:
         paid_beta.apply_event(database, support, 'payment', 'payment-00000002', 'receipt', now=NOW,
-            period_start=NOW, paid_until=NOW + 10000, apk_sha256=paid_beta.APK_SHA256)
+            period_start=NOW, paid_until=NOW + 10000, apk_sha256=paid_beta.PAID_ANDROID_APK_SHA256)
     event(registry, 'revoke', 'revoke-00000001')
     before = snapshot(access)
     for kind, values in [('payment', {}), ('grace', dict(grace_until=NOW + 20000)), ('expire', {})]:
@@ -215,7 +215,7 @@ def test_expire_grace_reactivate_revoke_terminal_and_no_automatic_trial(registry
     "UPDATE device_support SET version_code=84,app_version='0.1.18-beta84'",
     "UPDATE device_support SET platform='linux'", 'UPDATE device_support SET last_seen=NULL',
 ])
-def test_existing_active_android106_only(registry, mutation):
+def test_existing_active_android_baseline_only(registry, mutation):
     access, _, _ = registry
     with access.db() as database:
         database.execute(mutation)

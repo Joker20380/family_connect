@@ -201,13 +201,13 @@ def test_exact_http_synthetic_material_and_registry_recovery(runtime, tmp_path, 
     device, access = runtime['canary'], runtime['access']
     now = int(time.time())
     with access.db() as database:
-        database.execute('UPDATE device_support SET platform=?,app_version=?,version_code=106,last_seen=? WHERE device=?',
-            ('android', paid_beta.VERSION, now, device.reference))
+        database.execute('UPDATE device_support SET platform=?,app_version=?,version_code=108,last_seen=? WHERE device=?',
+            ('android', paid_beta.PAID_ANDROID_VERSION, now, device.reference))
         support = database.execute('SELECT support_id FROM device_support WHERE device=?', (device.reference,)).fetchone()[0]
     (runtime['state'] / 'admission.json').write_text('{"version":2,"eligibility":"all_activated"}')
     with paid_beta.connection(access.path, write=True) as database:
         paid_beta.apply_event(database, support, 'payment', 'synthetic-recovery-001', 'synthetic-reference', now=now,
-            period_start=now, paid_until=now + 600, apk_sha256=paid_beta.APK_SHA256)
+            period_start=now, paid_until=now + 600, apk_sha256=paid_beta.PAID_ANDROID_APK_SHA256)
     identity = runtime['identities']['canary']
     with running(runtime):
         status, raw = request(runtime['backend'], '/friends/restricted-readiness/challenge', body=identity)

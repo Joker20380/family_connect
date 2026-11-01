@@ -119,7 +119,7 @@ def lookup(path, selector, key, now):
     with paid_beta.connection(path) as database:
         device = paid_beta.resolve_device(database, selector)
         require(not device['revoked'] and device['invite_revoked'] == 0, 'ACTIVE_IDENTITY_REQUIRED')
-        paid_beta.confirm_android106(database, device['device'])
+        paid_beta.confirm_android_baseline(database, device['device'])
         cohort_guard(database, device['device'])
         token = token_for(key, device['device'])
         envelope = dict(schema=1, alias=ALIAS, device_token=token, safe_ref='dev_' + token[:12], permit=None)
@@ -183,7 +183,7 @@ def apply(path, key, envelope, now):
         preserved = preserved_tables(database)
         values = {}
         if permit['action'] in ('activate', 'recover'):
-            values = dict(period_start=permit['period_start'], paid_until=permit['paid_until'], apk_sha256=paid_beta.APK_SHA256)
+            values = dict(period_start=permit['period_start'], paid_until=permit['paid_until'], apk_sha256=paid_beta.PAID_ANDROID_APK_SHA256)
         reference = (RECOVERY_REFERENCE if recovery else 'internal-canary:') + permit['event_id']
         try:
             raw = paid_beta.apply_event(database, selector, 'expire' if permit['action'] == 'expire' else 'payment',
