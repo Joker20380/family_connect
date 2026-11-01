@@ -46,10 +46,19 @@ Three still-valid owner certificates are revoked, including the retained baselin
 no certificate rows are manually deleted. No other device identity/invite/grant is edited.
 Temporary forced-command credential removed on NL and private credential removed on RU;
 maintenance configuration restored byte-exactly. Existing canonical locator/publisher retained.
-Post-CRL180s observation and owner reconnect denial remain pending; final2592000s recovery
-NOT_RUN and subject to the existing retained-certificate not-before guard. Overall not PASS.
-Renewal/read-only-sync timers remain paused only through the bounded CRL observation, then
-must resume for the recovery wait. No HTTP restart, catalog4/Android sequence3 change or infra replay.
+Post-CRL180s backend observation PASS (202s): paid denied, latest exact108,
+CRL=floor27234 and matching exact payload on RU/NL; registry57/111/2 retained. All three
+revocations belong to this owner. Owner reports «не подключается» after the requested single
+Disconnect/Connect: post-CRL reconnect denial confirmed as field evidence, not a phone trace.
+Renewal/read-only-sync timers resumed at05:52UTC; active timers and successful worker status
+confirmed. Temporary credentials removed; original maintenance configuration restored.
+**WAITING_FINAL_RECOVERY_NOT_BEFORE: 2026-11-01T07:07:31+00:00.** Existing retained-certificate
+guard still prevents the normal final2592000s activation; final event NOT_RUN, ledger remains1/3,
+cohort1/10. The guard counts retained certificate rows even after revocation: no manual deletion,
+no guard bypass or new canary run. Owner post-CRL reconnect-denial gate is now satisfied.
+After the time guard, continue the same bound operation with final30-day recovery and beta108 Connect.
+Canary overall NOT_COMPLETE; delayed Connect/selector UX defect remains open. No HTTP restart,
+catalog4/Android sequence3 change, infrastructure replay or expansion beyond owner.
 
 **Baseline108 production deployment PASS — READY_FOR_BETA0_CANARY_1.**
 Latest readback 2026-11-01T04:59:14.654212+00:00; supersedes the two rolled-back attempts below.

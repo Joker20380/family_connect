@@ -44,10 +44,19 @@ Three still-valid owner certificates are revoked, including the retained baselin
 no certificate rows are manually deleted. No other device identity/invite/grant is edited.
 Temporary forced-command credential removed on NL and private credential removed on RU;
 maintenance configuration restored byte-exactly. Existing canonical locator/publisher retained.
-Post-CRL180s observation and owner reconnect denial remain pending; final2592000s recovery
-NOT_RUN and subject to the existing retained-certificate not-before guard. Overall not PASS.
-Renewal/read-only-sync timers remain paused only through the bounded CRL observation, then
-must resume for the recovery wait. No HTTP restart, catalog4/Android sequence3 change or infra replay.
+Post-CRL180s backend observation PASS (202s): paid denied, latest exact108,
+CRL=floor27234 and matching exact payload on RU/NL; registry57/111/2 retained. All three
+revocations belong to this owner. Owner reports «не подключается» after the requested single
+Disconnect/Connect: post-CRL reconnect denial confirmed as field evidence, not a phone trace.
+Renewal/read-only-sync timers resumed at05:52UTC; active timers and successful worker status
+confirmed. Temporary credentials removed; original maintenance configuration restored.
+**WAITING_FINAL_RECOVERY_NOT_BEFORE: 2026-11-01T07:07:31+00:00.** Existing retained-certificate
+guard still prevents the normal final2592000s activation; final event NOT_RUN, ledger remains1/3,
+cohort1/10. The guard counts retained certificate rows even after revocation: no manual deletion,
+no guard bypass or new canary run. Owner post-CRL reconnect-denial gate is now satisfied.
+After the time guard, continue the same bound operation with final30-day recovery and beta108 Connect.
+Canary overall NOT_COMPLETE; delayed Connect/selector UX defect remains open. No HTTP restart,
+catalog4/Android sequence3 change, infrastructure replay or expansion beyond owner.
 
 **Baseline108 production deployment PASS — READY_FOR_BETA0_CANARY_1.**
 Latest readback 2026-11-01T04:59:14.654212+00:00; supersedes the two rolled-back attempts below.
@@ -1899,3 +1908,27 @@ One restricted forced-command SSH credential is removed after commit; original a
 bytes and maintenance configuration restored. Publisher/canonical locator remain unchanged.
 Post-CRL180s and owner reconnect denial are pending at this checkpoint. Final30-day recovery
 has not run; retain all certificate rows and enforce their existing recovery not-before guard.
+
+### Post-CRL observation and safe recovery wait — 1 November
+
+Fresh readback at 2026-11-01T05:51:58+00:00 completes202s after exact CRL commit:
+paid_allow=false, version/events3, subscriptions1, cohort1/10, latest authenticated exact108.
+Registry counts remain57 devices/111 invites/2 grants. All three revoked serials belong to the
+bound owner, not unrelated users. RU and canonical NL readback match exact CRL27234/floor27234
+and the accepted payload hash; directory valid and original maintenance configuration restored.
+After the requested single phone Disconnect/Connect, the owner replies «не подключается».
+Post-CRL reconnect denial is accepted as owner field evidence, independently of the backend
+observation. No independent phone/TLS trace or cached-certificate choice is claimed.
+
+Existing renewal/read-only-sync schedules resumed05:52UTC with unchanged configuration;
+both timers active, worker Result=success/ExecMainStatus=0. One-time credentials are absent.
+Normal maintenance may subsequently advance CRL numbers; do not replay this exact canary CRL.
+
+`WAITING_FINAL_RECOVERY_NOT_BEFORE`: 2026-11-01T07:07:31+00:00 (08:07:31 Europe/Brussels).
+This is the maximum retained owner-certificate expiry plus the accepted30s safety margin.
+The existing final-activation guard counts still-unexpired rows even when revoked; this is not
+a demand for zero certificates before stage0. No certificate deletion, database edit, new paid
+period or fresh infrastructure gate is used to bypass it. Final2592000s recovery is NOT_RUN;
+resume the same OWNER_CANARY_1 operation after the time guard; owner CRL denial is confirmed.
+The initial failed/locked selector then delayed successful Connect remains an Android UX defect,
+not a full canary acceptance PASS. No Android rebuild/publication or additional HTTP restart.

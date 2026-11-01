@@ -1,7 +1,7 @@
 {
   "android108_owner_acceptance_20261101": {
-    "observed_utc": "2026-11-01T05:48:36+00:00",
-    "state": "BETA0_CANARY1_EXACT_CRL_COMMITTED_BASELINE108",
+    "observed_utc": "2026-11-01T05:51:58+00:00",
+    "state": "WAITING_FINAL_RECOVERY_NOT_BEFORE",
     "owner_reports": [
       "ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS",
       "ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS"
@@ -671,8 +671,8 @@
       },
       "startup_guard": "BOUNDED_EXACT_PROCESS_LISTENER_HTTP_READINESS_WITH_PRIVATE_OBSERVATIONS",
       "failed_instantaneous_argv_details": "NOT_CAPTURED_NO_SPECIFIC_ROOT_CAUSE_CLAIM",
-      "next": "POST_CRL180_THEN_OWNER_RECONNECT_DENIAL",
-      "canary": "POST_CRL_OBSERVATION",
+      "next": "FINAL_RECOVERY_AFTER_EXISTING_TIME_GUARD",
+      "canary": "WAITING_FINAL_RECOVERY_NOT_BEFORE",
       "authorized_retry": {
         "owner_authorization": "EXPLICIT_ONE_ADDITIONAL_CANDIDATE_RESTART",
         "preflight": {
@@ -997,10 +997,18 @@
         "baseline": 108,
         "started_utc": "2026-11-01T05:36:00+00:00"
       },
-      "crl": "NOT_RUN",
-      "final_recovery": "NOT_RUN",
-      "schedules": "PAUSED_FOR_BOUNDED_CANARY",
-      "canary_result": "IN_PROGRESS",
+      "crl": "EXACT_PAYLOAD_COMMITTED_ONCE",
+      "final_recovery": {
+        "state": "WAITING_FINAL_RECOVERY_NOT_BEFORE",
+        "not_before": 1793516851,
+        "not_before_utc": "2026-11-01T07:07:31+00:00",
+        "activation": "NOT_RUN",
+        "duration_seconds": 2592000,
+        "owner_reconnect_denial": "OWNER_REPORT_DENIED",
+        "certificate_rows": "RETAINED_UNMODIFIED"
+      },
+      "schedules": "RESUMED_HEALTHY",
+      "canary_result": "WAITING_FINAL_RECOVERY_NOT_BEFORE",
       "revenue": 0,
       "stage0_material_proof": {
         "owner_report": "MESH108_WORKS",
@@ -1135,8 +1143,86 @@
         "publisher": "UNCHANGED",
         "private_credential": "REMOVED"
       },
-      "post_crl180": "PENDING",
-      "post_crl_owner": "PENDING"
+      "post_crl180": {
+        "result": "POST_CRL_BACKEND_READBACK_PASS",
+        "observed_at": 1793512318,
+        "crl_number": 27234,
+        "minimum_crl": 27234,
+        "payload_sha256": "4c9c81d84bd03b5a5fdbb4b7e27e2b6a4a0247772fe64f6767f44ae34edba462",
+        "paid_allow": false,
+        "version": 3,
+        "events": 3,
+        "registry_counts": {
+          "devices": 57,
+          "invites": 111,
+          "restricted_grants": 2,
+          "paid_beta_subscriptions": 1,
+          "paid_beta_events": 3
+        },
+        "revocations_owner_only": true,
+        "revocation_count": 3,
+        "latest_android": "EXACT108",
+        "final_recovery_not_before": 1793516851,
+        "observation_seconds": 202
+      },
+      "post_crl_owner": {
+        "observed_at": 1793512438,
+        "source": "OWNER_FIELD_REPORT",
+        "reconnect_denied": true,
+        "reconnect_classified": true,
+        "result": "НЕ ПОДКЛЮЧАЕТСЯ",
+        "independent_phone_trace": "NOT_CAPTURED"
+      },
+      "post_crl_nl": {
+        "result": "POST_CRL_NL_EXACT_READBACK_PASS",
+        "crl_number": 27234,
+        "minimum_crl": 27234,
+        "directory": "VALID",
+        "maintenance_configuration": "RESTORED_EXACT",
+        "observed_at": 1793512319
+      },
+      "schedule_resume": {
+        "result": "EXISTING_SCHEDULES_RESUMED",
+        "observed_at": 1793512320,
+        "timers": {
+          "family-connect-credential-renewal": "active",
+          "family-connect-restricted-directory-sync": "active"
+        },
+        "configuration": "UNCHANGED"
+      },
+      "schedule_health": {
+        "result": "RESUMED_SCHEDULES_HEALTHY",
+        "observed_at": 1793512369,
+        "schedules": {
+          "family-connect-credential-renewal": {
+            ".timer": {
+              "ActiveState": "active",
+              "SubState": "waiting",
+              "Result": "success"
+            },
+            ".service": {
+              "ActiveState": "inactive",
+              "SubState": "dead",
+              "Result": "success",
+              "ExecMainStatus": "0"
+            }
+          },
+          "family-connect-restricted-directory-sync": {
+            ".timer": {
+              "ActiveState": "active",
+              "SubState": "waiting",
+              "Result": "success"
+            },
+            ".service": {
+              "ActiveState": "inactive",
+              "SubState": "dead",
+              "Result": "success",
+              "ExecMainStatus": "0"
+            }
+          }
+        },
+        "temporary_private_key": "ABSENT"
+      }
     }
   },
   "registry_overlay_correction": {
