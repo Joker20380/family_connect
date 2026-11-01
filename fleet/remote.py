@@ -40,10 +40,22 @@ def build_agent(source_members=None):
     return output.getvalue()
 
 
+def bundle_agent(contents):
+    members = {name.removeprefix('runtime/'): content for name, content in contents.items()
+               if name.startswith('runtime/fleet/')}
+    agent = build_agent(members)
+    if load(contents.get('metadata/agent.json', b'{}')) != dict(sha256=digest(agent)):
+        fail('deployable_agent_binding')
+    try:
+        receiver = members['fleet/remote_bootstrap.py'].decode('utf-8')
+    except UnicodeError:
+        fail('agent_source_inventory')
+    return agent, receiver
+
+
 class RemoteInstaller:
     def __init__(self, *, host, user, known_hosts, fingerprint, authorization, permit_key,
                  bundle, bundle_key, runner=subprocess.run, clock=time.time):
-        self.agent = build_agent()
         self.permit = authorization
         self.permit_key = permit_key
         self.bundle_key = bundle_key
@@ -59,6 +71,7 @@ class RemoteInstaller:
         self.manifest, self.contents = verify_bundle(bundle, bundle_key)
         if self.manifest['scope'] != 'rehearsal':
             fail('rehearsal_bundle_required')
+        self.agent, self.receiver = bundle_agent(self.contents)
         self.authorize('preflight')
         self.ssh = preflight.SSH(host, user, self.known_hosts, fingerprint, runner=runner)
         self.preflight_at = None
@@ -110,8 +123,7 @@ class RemoteInstaller:
         files = {path.name: base64.b64encode(path.read_bytes()).decode() for path in self.bundle.iterdir() if path.is_file()}
         request = dict(permit=self.permit, permit_key=public_hex(self.permit_key), bundle_key=public_hex(self.bundle_key),
                        agent=base64.b64encode(self.agent).decode(), operation=operation, bundle=files, upload_only=True)
-        source = Path(__file__).with_name('remote_bootstrap.py').read_text()
-        command = ('' if self.user=='root' else 'sudo -n ') + 'python3 -I -B -c ' + shlex.quote(source)
+        command = ('' if self.user=='root' else 'sudo -n ') + 'python3 -I -B -c ' + shlex.quote(self.receiver)
         uploaded = self.call(command, request)
         if uploaded != dict(agent_sha256=digest(self.agent), mode='0500', scope=permit.SCOPE):
             fail('remote_upload_readback')

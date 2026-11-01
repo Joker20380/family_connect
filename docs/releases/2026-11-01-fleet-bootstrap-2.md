@@ -1,5 +1,28 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+## Operator preflight repair after private input
+
+Owner supplied the separate publisher token through the hidden local helper. Custody mode0600
+and the exact rehearsal input schema pass; provider validity is not yet claimed. A fresh
+four-hour signed permit retains the frozen A/B, agent and signing-key binding, the accepted
+single-host SSH pin and every production/user/catalog/paid exclusion.
+
+Fresh host preflight passed. The following material-delivery attempt failed at its own
+read-only preflight, before material generation or target mutation: the CLI intentionally
+passes an empty port-absence list after enrollment, but the standalone probe rejected it.
+The failed operation `host472-deliver-materials-a-6ea66c2b802c4a44bbe934f2f759a5b2` and its
+private intent/receipt are retained. It is not an unknown remote mutation or a failed tunnel.
+
+The operator probe now accepts that empty set while retaining strict port type/range/count
+validation and every other host gate. The operator also obtains its target agent and receiver
+from the signature-verified selected bundle, not the mutable operator checkout; missing,
+changed or misbound sources/metadata fail closed. This preserves the original exact target
+agent and enrolled A/B bindings while permitting an operator-only repair. No target runtime,
+native artifact, material schema or signing key changes. There is no skip/force option.
+Focused probe/remote29PASS; complete fleet266PASS. The accepted console156/paid170 results
+are retained. Material generation/delivery and physical acceptance remain pending this
+repair's source checkpoint; no production host, catalog, user or payment operation occurred.
+
 ## Owner-authorized node registration — 1 November18:47UTC
 
 The owner requests completing this checkpoint and ultimately retaining two Amsterdam

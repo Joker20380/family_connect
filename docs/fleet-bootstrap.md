@@ -19,6 +19,14 @@ Cryptography46.0.7/cffi2.1.1/pycparser3.0 are loaded from exact signed offline w
 CPython3.12, not from an unpinned target Python package. Their extracted inventory is
 root-owned, immutable and rechecked on every agent invocation.
 
+The operator reconstructs the agent and fixed receiver from the selected, signature-verified
+bundle's `runtime/fleet/` members, checking `metadata/agent.json` and the permit hash again.
+There is no working-tree agent fallback. An operator preflight repair therefore does not
+silently replace an already enrolled node's exact agent or require reissuing its identity.
+The read-only host probe accepts an explicitly empty port-absence set for post-enrollment
+operations; enrollment/preflight still require the exact rehearsal ports to be free. Other
+host checks remain mandatory, and live listener ownership is checked by local role health.
+
 `fleet.rehearsal_state` retains operation bindings, first failure and rollback receipts;
 changed replay or interrupted operations are fenced. It requires a separately qualified
 physical runtime implementation; synthetic callback tests are not VPN acceptance. Enrollment

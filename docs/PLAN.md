@@ -23,10 +23,11 @@ verification; owner confirms Reinstall OS option, provider console itself remain
 Owner requests two Amsterdam servers; first production NL remains excluded and untouched.
 Frozen runtime/A/B unchanged. Signed node enrollment and durable readback PASS; node-local
 Ed25519/X25519 keys remain on target. Runtime state PREFLIGHTED, no staged/active release.
-Live input gate: DISPOSABLE_TELEMOST_PUBLISHER_INPUT_NOT_SUPPLIED. No production OAuth reuse.
-Private terminal helper ready; fleet252PASS (15new), prior console156/paid170 retained.
-Next within this task: separate publisher input, fresh permit, encrypted delivery and physical
-rehearsal. No transport material or real probe identity accessed; no production activation.
+Separate publisher input saved privately; format/mode PASS, provider validity not yet tested.
+Post-enrollment empty-port preflight defect corrected in operator tooling; exact target agent
+and receiver now come from the verified frozen bundle. No guard bypass or production OAuth reuse.
+Complete fleet266PASS; prior console156/paid170 retained. Next: encrypted material delivery
+and physical rehearsal. No transport material or real probe identity accessed yet; no activation.
 Role services/data planes and rehearsal reboot persistence remain NOT_RUN, not accepted PASS.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
 Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.

@@ -29,7 +29,7 @@ def collect(request):
     ipaddress.IPv4Address(request['ipv4'])
     if request['ipv6'] is not None:
         ipaddress.IPv6Address(request['ipv6'])
-    if not request['ports'] or len(request['ports'])>32 or any(type(port) is not int or not 1<=port<=65535 for port in request['ports']):
+    if len(request['ports'])>32 or any(type(port) is not int or not 1<=port<=65535 for port in request['ports']):
         raise ValueError('probe_ports')
     os_release=dict(line.split('=',1) for line in Path('/etc/os-release').read_text().splitlines() if '=' in line)
     memory=dict(line.split(':',1) for line in Path('/proc/meminfo').read_text().splitlines())

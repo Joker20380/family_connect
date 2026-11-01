@@ -10,7 +10,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from fleet.bundle import build
 from fleet.contracts import FleetError, canonical, digest
 from fleet.permit import sign
-from fleet.remote import RemoteInstaller, build_agent, public_hex
+from fleet.remote import RemoteInstaller, build_agent, bundle_agent, public_hex
 from fleet.remote_bootstrap import openssl_verify
 from fleet.tests.test_permit import authority
 
@@ -25,6 +25,16 @@ def remote(authority, tmp_path):
     specification = dict(source_commit='a'*40, scope='rehearsal', roles=['awg'], secret_slots=[],
         members=[dict(path='bin/fixture', source='fixture', sha256=digest(content), mode=0o555,
                       restart_group='awg', secret_slots=[])])
+    sources = {str(path.relative_to(Path(__file__).parents[2])): path.read_bytes()
+               for path in Path(__file__).parents[1].glob('*.py')}
+    members = {'runtime/'+name: raw for name, raw in sources.items()}
+    members['metadata/agent.json'] = canonical(dict(sha256=digest(build_agent(sources))))
+    for name, raw in members.items():
+        destination = root/name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(raw)
+        specification['members'].append(dict(path=name, source=name, sha256=digest(raw), mode=0o444,
+                                             restart_group='awg', secret_slots=[]))
     bundle = tmp_path/'bundle'
     manifest = build(root, specification, key, bundle)
     body = authorization['body']
@@ -55,6 +65,33 @@ def test_agent_deterministic_and_no_private_members():
         assert 'fleet/remote_agent.py' in archive.namelist()
         assert all(name.endswith('.py') and not name.startswith('/') and '..' not in name for name in archive.namelist())
         assert archive.namelist() == sorted(archive.namelist())
+
+
+def test_agent_and_receiver_come_from_verified_bundle_not_operator_tree():
+    members = {'fleet/__init__.py': b'', 'fleet/remote_agent.py': b'FROZEN = True\n',
+               'fleet/remote_bootstrap.py': b'FROZEN_RECEIVER = True\n'}
+    expected = build_agent(members)
+    contents = {'runtime/'+name: raw for name, raw in members.items()}
+    contents['metadata/agent.json'] = canonical(dict(sha256=digest(expected)))
+    agent, receiver = bundle_agent(contents)
+    assert agent == expected and agent != build_agent()
+    assert receiver == 'FROZEN_RECEIVER = True\n'
+
+
+@pytest.mark.parametrize('tamper', ['missing', 'hash', 'source', 'path'])
+def test_unbound_bundle_agent_rejected(remote, tamper):
+    adapter, unused = remote
+    contents = dict(adapter.contents)
+    if tamper == 'missing':
+        del contents['metadata/agent.json']
+    elif tamper == 'hash':
+        contents['metadata/agent.json'] = canonical(dict(sha256='0'*64))
+    elif tamper == 'source':
+        contents['runtime/fleet/remote_agent.py'] += b'\nchanged = True\n'
+    else:
+        contents['runtime/fleet/../outside.py'] = b''
+    with pytest.raises(FleetError):
+        bundle_agent(contents)
 
 
 def test_dry_run_no_remote_writes_and_fresh_preflight_required(remote):
