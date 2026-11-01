@@ -1,0 +1,130 @@
+{
+  "package": {
+    "agent_sha256": "9533ccf648d5cb66b5df26a266721d7e6d186f83cba2b0b2144db6c09abff2ad",
+    "bundle_signer_sha256": "d327d9fd0a3088c8b80ee00bc32ce5cd7f8ee61c6dbdd68d2bb292741a54daf6",
+    "bundles": {
+      "A": {
+        "archive_sha256": "c9e238e3078a5feaa6e2bd49290a039f60a83cce000569403496f5be17c1b034",
+        "bundle_id": "gw-2b980c465e2522221b31b77b7eb2629d",
+        "manifest_sha256": "6de69edf289ac26aeaa13b4d50fd6a46eaf4b9e0240ac5394df950634028449b",
+        "sha256_inventory_sha256": "5ebbaf0e15bee1c354ed30111503359d6949c87d5982c76fd64356b46ec8afdc",
+        "signature_sha256": "b33b235ff86b760138304913d3c885e74fecfb1dbd13b8e743a95c6cbf62e229"
+      },
+      "B": {
+        "archive_sha256": "6442720987a030b58b816ca588caf2ce3d574ec00f5575d7a7a7091b84174285",
+        "bundle_id": "gw-96ca597f9bffcc53b63e76901b141aaa",
+        "manifest_sha256": "0a7e0a766ea0cf5fc668cb2b1508b0fd4aadd958d93f186aee3683d01e1b0c82",
+        "sha256_inventory_sha256": "2278097037af0026c1c7302ff84dd25197e57fee0595c6c28c393bb10f257e97",
+        "signature_sha256": "3df7c5f1bdf723cbb37815e4f3f290188013925a06505cfa2ef176d8f6b3205e"
+      }
+    },
+    "catalog_publications": 0,
+    "disabled_roles": [
+      "mailbox",
+      "chat-services",
+      "renewal",
+      "restricted-sync",
+      "registry",
+      "control-plane-database"
+    ],
+    "operator_probe": {
+      "compiler_image": "sha256:ab3d6955bbc813a0f3fdf220c1d817dd89c0b3f283777db8ece4a32fe7858edd",
+      "patch_sha256": "de941c4fb2500da3cf5a89207f31a0b6fef7baecc38b610d94b8206234f7c315",
+      "purpose": "OPERATOR_ONLY_DISPOSABLE_TARGET_EGRESS",
+      "sha256": "7875df5e84b208261a8835565723394d8e1b829b35c1b8a2ec6fa913f8f15f8a",
+      "size": 17313802,
+      "source_inventory_sha256": "d06df9b0d9b73408c9e3b1fba03d630136a10fb3c843269ff6f6f7d7e4bf916e"
+    },
+    "paid_events": 0,
+    "permit_source_sha256": "47b1dfe7ee90221a452a762595ce9017e5d4c51e8ddd1195238cc567ff9eaacc",
+    "phone_actions": 0,
+    "production_writes": 0,
+    "remote_agent_source_sha256": "04e43c21631434ff32286345bb94b7c038e2d27e45058d08ee945b9246f071dd",
+    "reproducibility": "PASS",
+    "roles": [
+      "awg",
+      "tcp",
+      "mesh",
+      "profile-reader",
+      "publisher",
+      "snapshot",
+      "monitoring",
+      "load-monitor"
+    ],
+    "schema": 1,
+    "scope": "SOURCE_PACKAGE_ONLY",
+    "source_commit": "0c248fb79942c0996f1df7265455ea4914061f0f",
+    "target_reverification": "PASS",
+    "user_invitations": 0
+  },
+  "physical_acceptance": "NOT_RUN_FOR_NEW_PAIR",
+  "prior_trial": {
+    "activation": "NOT_RUN",
+    "drain": "PASS",
+    "external_awg": "PASS",
+    "external_mesh": "NOT_RUN",
+    "external_tcp": "FAIL",
+    "operator_disposable_client_cleanup": "PASS",
+    "original_probe_custody": "PRESERVED",
+    "retirement": "PASS",
+    "state": "RETIRED"
+  },
+  "production_activation": "NOT_AUTHORIZED_BY_REHEARSAL",
+  "qualification": {
+    "ab_installation": "PASS",
+    "awg_handshake": "NOT_RUN",
+    "b_upgrade": "PASS",
+    "boot_firewall_restore_simulation": "PASS",
+    "catalog_publications": 0,
+    "explicit_rollback": "PASS",
+    "injected_b_failure_rollback_a": "PASS",
+    "material_delivery_fake_root": "PASS",
+    "mesh_data_plane": "NOT_RUN",
+    "native_help_version_config_test": "PASS",
+    "nft_syntax_coexistence_rollback": "PASS",
+    "paid_events": 0,
+    "phone_actions": 0,
+    "pinned_python_dependencies": "PASS",
+    "platform": "Ubuntu24.04/x86_64",
+    "production_writes": 0,
+    "qualification_source_sha256": "3901dc0c039951ea91dd98237e52c193791d6eff450218211011d06a9e4af148",
+    "real_systemd_start": "NOT_RUN",
+    "reboot_persistence": "NOT_RUN",
+    "reboot_request_cancellation_simulation": "PASS",
+    "retirement": "PASS",
+    "schema": 1,
+    "scope": "ISOLATED_SOURCE_PACKAGE_QUALIFICATION",
+    "service_account_modes": "PASS",
+    "source_commit": "0c248fb79942c0996f1df7265455ea4914061f0f",
+    "target_reverification": "PASS",
+    "tcp_tunnel": "NOT_RUN",
+    "two_phase_synthetic_acceptance": "PASS",
+    "unit_verification": "PASS",
+    "user_invitations": 0
+  },
+  "reality_qualification": {
+    "catalog_publications": 0,
+    "loopback_https": "PASS",
+    "native_sha256": "4f7a4436f86798bbb5c875014e352021a1673710a45e170ccc507c5f59341940",
+    "node_acceptance": "NOT_RUN",
+    "node_writes": 0,
+    "paid_events": 0,
+    "phone_actions": 0,
+    "platform": "Ubuntu24.04/x86_64",
+    "production_writes": 0,
+    "qualification_source_sha256": "e159f263fe850692c49e953d4dcbc1c609e0c36ce325fb6d202ea73d5962a2fa",
+    "schema": 1,
+    "scope": "SYNTHETIC_LOOPBACK_REALITY_QUALIFICATION",
+    "sni": "www.cloudflare.com",
+    "source_commit": "0c248fb79942c0996f1df7265455ea4914061f0f",
+    "user_invitations": 0
+  },
+  "tests": {
+    "combined": 478,
+    "console": 156,
+    "django_check": "PASS",
+    "fleet": 322,
+    "migration_drift": "NONE",
+    "paid_backend_package": 170
+  }
+}

@@ -206,7 +206,10 @@ REALITY's authenticated target handshake; see [upstream6356](https://github.com/
 Do not change production SNI or weaken TLS verification to work around it. After the offline
 bundle qualification, run `scripts/qualify-fleet-reality.py --package PRIVATE_PACKAGE --output
 NEW_PRIVATE_RECEIPT` in an isolated Ubuntu24.04 container with public DNS, no host network and
-no private authority/probe/publisher inputs. It verifies the signed package and current source,
+no private authority/probe/publisher inputs. Use an executable isolated temporary filesystem
+for the verified native test binary (for example Docker `--tmpfs /tmp:rw,exec,nosuid,nodev,mode=1777`)
+and an explicit resolver such as `--dns 9.9.9.9`; do not alter host DNS or service protections.
+It verifies the signed package and current source,
 generates throwaway credentials, binds the server only to loopback and proves HTTPS through
 the exact native client/server. This is synthetic source qualification, not node acceptance.
 

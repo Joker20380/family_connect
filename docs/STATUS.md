@@ -1,48 +1,33 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**FLEET-BOOTSTRAP-2 — trial03 safely RETIRED; compatible REALITY target under qualification.**
-Existing task only; no new PLAN ID or production activation. Owner wants two Amsterdam servers;
+**FLEET-BOOTSTRAP-2 — source/package qualification PASS; fresh trial04 next.**
+Existing task only, no new PLAN ID or production activation. Owner wants two Amsterdam servers;
 first production NL remains excluded. Reserved VPS stays Ubuntu24.04/x86_64, not reinstalled/deleted.
-Last qualified frozen source `925916f27f7ba455ea379572e2ff2154cf10686f`; previous immutable A/B pairs
-are retained. Exact four natives/licenses and282-file canonical MESH source remain unchanged.
-Separate test-account publisher token is accepted (HTTP201). MESH now starts and exports READY;
-second node trial passed enrollment, material delivery, retired-owner handoff and stage A.
-Local acceptance correctly rejected its directory deadline:2 seconds beyond the material/permit
-boundary. No external PASS or activation was fabricated. Automatic rollback, drain and retirement
-PASS; both trial identities are terminal, with original probe custody and immutable evidence kept.
-Source now uses bounded15-minute service lifetimes with a120-second launch reserve checked on
-EVERY start, including reboot. The signed four-hour permit/material ceiling remains unchanged.
-Preparation restores only the exact bound owned nft table after boot and creates the owned /run
-parent before AWG; it verifies forwarding/config/pointer and refuses drift without global flushing.
-A fixed permit-bound `reboot-verify --request-reboot` phase requires ACTIVE plus fresh signed
-external acceptance and unchanged local health; durable one-shot scheduling is idempotent and
-pending reboot cancellation is part of stop/drain/retire. Normal reboot-verify still demands a
-changed boot and opens a NEW external-acceptance challenge, never self-asserting data-plane PASS.
-Safe status diagnostics expose only typed service/file metadata and ready-lifetime timestamps;
-no credential bodies, environment values, room URLs or raw journals are returned.
-Full fleet316 + console156 =472 PASS; paid170 PASS; Django check PASS/drift NONE.
-A/B double-build and Ubuntu24.04 native/config/unit/nft qualification PASS, including boot-table
-restoration and reboot-request cancellation simulations. Trial03 reached real local-health PASS
-and external AWG handshake/DNS/HTTPS/egress PASS. TCP did not pass; no VERIFIED/ACTIVE claim.
-Trial03 drain, retirement and disposable operator-client cleanup PASS; reserved VPS is retained.
-TCP failure reproduced with exact native Xray and fresh synthetic loopback credentials. Microsoft
-SNI fails with authenticated-handshake incompletion despite direct TLS1.3 PASS, matching the
-known upstream target incompatibility. Cloudflare SNI passes the same pinned native TLS test.
-Source now fixes the explicit rehearsal-only SNI/destination to www.cloudflare.com:443; no
-native binary, production destination, UUID/key custody, port or slot schema is changed.
-A source qualification script adds signed-bundle-bound synthetic loopback REALITY/HTTPS,
-without node acceptance claims; its isolated container uses an explicit public DNS resolver.
-Operator AWG route-priority/transport-DNS fixes are retained. Full fleet322 PASS; unchanged
-console156/paid170 and Django check/drift evidence retained. Next: freeze/requalify final A/B
-with this contract, then a fresh trial04. MESH/A-B/reboot physical acceptance remains NOT_RUN.
+Frozen deployable source `0c248fb79942c0996f1df7265455ea4914061f0f` is pushed and remote-verified.
+A/B double-build byte identity PASS; exact four native artifacts, licenses and282-file MESH capsule
+remain bound. Only reviewed monitoring revision metadata differs between A and B. Old packages
+and trial receipts remain immutable. Private signer/archives/materials remain outside Git.
+Offline Ubuntu24.04 native/config/unit/nft, fake-root material delivery, two-phase verification,
+failed-B rollback, successful B, explicit rollback, boot-table restore, reboot-request cancellation
+and retirement qualification PASS. Added exact-native synthetic loopback REALITY/HTTPS PASS
+with explicit Cloudflare SNI; no node data-plane or reboot evidence is inferred from simulation.
+Full fleet322 + console156 =478 PASS; paid170 PASS; Django check PASS; migration drift NONE.
+Signed permit, exact SSH/target/agent/bundle/key bindings, production exclusions, immutable releases,
+private material encryption, local/external separation and append-only evidence guards remain.
+The separate publisher token passed API validation. Trials01/02/03 are safely RETIRED; original
+FLEET_MESH_PROBE_1 custody is retained and disposable operator clients removed after receipts.
+Trial03 reached real local-health PASS and external AWG handshake/DNS/HTTPS/egress PASS. TCP
+failed with the old Microsoft contract; the pinned-native target incompatibility is now isolated
+and corrected without replacing binaries. No full VERIFIED/ACTIVE, upgrade or reboot was claimed.
+Next: fresh trial04 enrollment/materials and external AWG/TCP/MESH acceptance against the new pair.
 Admitted: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor. Disabled:
 mailbox/chat-services, production renewal/restricted-sync, registry/control-plane database.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
 Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.
 SSH trust remains owner-accepted TOFU, not independent provider verification; console unverified.
 [Checkpoint](releases/2026-11-01-fleet-bootstrap-2.md) ·
-[Qualified hashes](releases/2026-11-01-fleet-bootstrap-2-lifetime.receipt.json) · [Runbook](fleet-bootstrap.md).
+[Qualified hashes](releases/2026-11-01-fleet-bootstrap-2-reality.receipt.json) · [Runbook](fleet-bootstrap.md).
 Older checkpoint NEXTs below are historical, not simultaneous active work.
 <!-- /FLEET-BOOTSTRAP-2 current -->
 

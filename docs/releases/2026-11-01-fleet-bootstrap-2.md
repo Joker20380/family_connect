@@ -1,5 +1,25 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+## Compatible REALITY pair qualified — frozen source0c248fb
+
+Source `0c248fb79942c0996f1df7265455ea4914061f0f` is pushed and remote main verified.
+Each signed A/B archive, manifest, signature and SHA256 inventory reproduces twice byte-for-byte.
+Within this pair only monitoring revision metadata differs; exact four native binaries, ports,
+roles and material slots match. Both use the explicit corrected Cloudflare REALITY contract.
+All predecessor packages are retained, never overwritten. Public [safe qualification evidence](2026-11-01-fleet-bootstrap-2-reality.receipt.json)
+records all IDs/hashes and the unchanged rehearsal public signing fingerprint.
+
+Offline Ubuntu24.04/x86_64 qualification PASS, including guarded boot-table restore, two-phase
+synthetic acceptance, B failure/rollback, successful B, explicit rollback and retirement. Added
+signed-package/source-bound exact-native synthetic loopback REALITY/HTTPS PASS. Its first
+container invocation rejected execution on a noexec tmpfs; the fixture was corrected to an
+executable isolated tmpfs without changing source/binary/service protections. It mounts no
+publisher token, authority private key or probe identity and does not claim node acceptance.
+Fresh full fleet322 + console156 =478 PASS, paid170 PASS, Django check PASS, migration drift NONE.
+Namespace-local operator policy-routing check PASS. Private test DB/network removed; other
+containers untouched. Next is trial04 against these exact packages, with fresh material and
+source-bound operator harness, not production admission. All production/user/paid/phone writes0.
+
 ## Trial03 retired; REALITY target incompatibility isolated
 
 Trial03 drain PASS (`host472-v3-drain-a-a11ae4a9129649139aa7b377073949b6`, receipt
