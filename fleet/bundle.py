@@ -42,7 +42,7 @@ def nonsecret(path, content):
 def check_core(core):
     exact(core, CORE_FIELDS)
     if (type(core['schema']) is not int or core['schema'] != 1 or not typed(core['source_commit'], 'commit')
-            or core['scope'] not in ('synthetic', 'candidate') or core['supported_os'] != ['ubuntu-24.04']
+            or core['scope'] not in ('synthetic', 'candidate', 'rehearsal') or core['supported_os'] != ['ubuntu-24.04']
             or core['architecture'] != 'x86_64' or not typed(core['roles'], 'roles') or not core['roles']
             or not typed(core['secret_slots'], 'ids')):
         fail('manifest_contract')
@@ -55,7 +55,7 @@ def check_core(core):
         exact(member, MEMBER_FIELDS)
         path = safe_path(member['path'])
         if (member['target'] != 'RELEASE/' + path or not typed(member['sha256'], 'hash')
-                or type(member['size']) is not int or not 0 <= member['size'] <= MEMBER_LIMIT
+                or type(member['size']) is not int or not 0 <= member['size'] <= (64*1024*1024 if core['scope']=='rehearsal' else MEMBER_LIMIT)
                 or type(member['mode']) is not int or member['mode'] not in (0o444, 0o555)
                 or member['owner'] != 'root' or member['group'] != 'root'
                 or member['restart_group'] not in core['roles']
@@ -100,7 +100,7 @@ def codec(data, decompress=False):
             raise FleetError('archive_codec') from error
 
 
-def source_bytes(root, relative):
+def source_bytes(root, relative, limit=MEMBER_LIMIT):
     safe_path(relative)
     path = root
     for component in relative.split('/'):
@@ -108,7 +108,7 @@ def source_bytes(root, relative):
         if path.is_symlink():
             fail('source_symlink')
     metadata = path.stat()
-    if not stat.S_ISREG(metadata.st_mode) or metadata.st_nlink != 1 or metadata.st_size > MEMBER_LIMIT:
+    if not stat.S_ISREG(metadata.st_mode) or metadata.st_nlink != 1 or metadata.st_size > limit:
         fail('source_type_or_bound')
     return path.read_bytes()
 
@@ -119,7 +119,8 @@ def build(root, specification, signing_key, output):
     members = []
     for entry in specification['members']:
         exact(entry, ('path', 'source', 'sha256', 'mode', 'restart_group', 'secret_slots'))
-        content = source_bytes(Path(root).resolve(), entry['source'])
+        content = source_bytes(Path(root).resolve(), entry['source'],
+                               64*1024*1024 if specification['scope']=='rehearsal' else MEMBER_LIMIT)
         path = safe_path(entry['path'])
         nonsecret(path, content)
         if path in contents or digest(content) != entry['sha256']:
@@ -173,13 +174,14 @@ def verify(directory, public_key, expected_bundle=None):
         fail('hash_inventory')
     raw = codec(archive, decompress=True)
     contents = {}
+    member_limit = 64*1024*1024 if core['scope']=='rehearsal' else MEMBER_LIMIT
     try:
         with tarfile.open(fileobj=io.BytesIO(raw), mode='r:') as stream:
             for info in stream:
                 safe_path(info.name)
-                if not info.isreg() or info.name in contents or info.size > MEMBER_LIMIT or len(contents) >= 1024:
+                if not info.isreg() or info.name in contents or info.size > member_limit or len(contents) >= 1024:
                     fail('archive_member_type')
-                contents[info.name] = stream.extractfile(info).read(MEMBER_LIMIT + 1)
+                contents[info.name] = stream.extractfile(info).read(member_limit + 1)
         if set(contents) != {member['path'] for member in core['members']}:
             fail('archive_member_set')
         for member in core['members']:

@@ -5,6 +5,23 @@ authorized for source preparation and one separately supplied disposable target.
 RU/NL are excluded. The following FLEET-BOOTSTRAP-1 acceptance remains historical; its
 synthetic archive is not a real VPN bundle and its live-mutation guard remains in place.
 
+### Rehearsal source guard boundary
+
+`fleet.permit` binds one independently pinned public IPv4, `fleet-rehearsal-*` instance,
+provider/region, exact A/B bundle IDs, agent digest and bundle authority digest for at most
+four hours. Catalog, production identity import, user and paid operations are always false.
+`fleet.remote` uses a fixed SSH receiver and JSON stdin, no inventory shell commands or
+password/agent/port forwarding. OpenSSL verifies the permit in memory before target upload;
+the receiver checks actual local addresses and host keys, exact agent bytes/mode, then the
+agent re-verifies the bundle. Missing ordinary runtime packages may be installed only in
+the permitted stage after those guards, never during read-only preflight.
+
+`fleet.rehearsal_state` retains operation bindings, first failure and rollback receipts;
+changed replay or interrupted operations are fenced. It requires a separately qualified
+physical runtime implementation; synthetic callback tests are not VPN acceptance. Enrollment
+uses a separate rehearsal scope/database and cannot consume synthetic proofs. These are
+preparatory source interfaces, not yet the deployable/operator handoff.
+
 FLEET-BOOTSTRAP-1 is source/synthetic only. No production transport issuance,
 catalog publication, paid operation or SSH mutation is authorized by this foundation.
 See the [checkpoint](releases/2026-11-01-fleet-bootstrap-1.md).

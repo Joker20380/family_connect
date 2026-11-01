@@ -7,8 +7,9 @@
 Dependency: accepted FLEET-BOOTSTRAP-1 sourcea3fc3bf and receipt; synthetic-only bundle is
 not a production VPN distribution. Owner authorizes one disposable Ubuntu24.04/x86_64
 rehearsal, not production RU/NL, catalog/paid changes or phone actions. No host supplied.
-Current: canonical synthetic seeder fix → exact role provenance → bounded signed permit /
-remote adapter → reproducible deployable A/B bundles → operator host handoff → live gates.
+Seeder correction committed/pushed; full console/fleet255 PASS and paid170 PASS.
+Permit/SSH/reverification/enrollment guard source is implemented; real role runtime,
+qualified A/B bundles and Django live integration still precede operator host handoff.
 Completion requires actual AWG/TCP/MESH, upgrade/rollback/reboot and RETIRED evidence;
 without host, finish source/package preparation before READY_FOR_FLEET_BOOTSTRAP_2_HOST.
 Public109/sequence4/catalog4/paid baseline108/entitlement/ledger1/4/cohort1/10 unchanged.

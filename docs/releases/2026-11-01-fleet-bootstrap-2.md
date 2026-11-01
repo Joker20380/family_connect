@@ -28,8 +28,28 @@ migration drift NONE. Production invitation parser unchanged.
 
 ## Source/package gates
 
-Exact deployable role binding, private rehearsal signer, signed bounded permit, remote
-adapter, A/B bundle qualification and Django rehearsal evidence integration are pending.
+Seeder correction pushed and remote-verified as `8e94d30f43330a7ce31afe5bf28a398911d452f6`.
+The signed four-hour permit, target exclusions, SSH receiver, target-side reverification,
+scope-separated enrollment and durable rehearsal operation controller are implemented.
+These are guarded source primitives, **not a qualified runnable deployment**: no accepted
+role installer/health runtime or deployable A/B bundle has been admitted yet. The receiver
+fails closed without a signed, fully bound role runtime. No live CLI is advertised yet.
+The prior `SSH.mutate` / sandbox-only boundaries remain intact.
+
+Guard acceptance: isolated full console + fleet **255 PASS**,33 existing static-directory
+warnings, Django check PASS and migration drift NONE; additional target-tamper/provenance
+tests are recorded in the subsequent source checkpoint. Existing paid regression170 PASS.
+Rehearsal-only member ceiling64MiB accommodates accepted Xray46755260 bytes; the128MiB
+aggregate bound and the original32MiB synthetic/candidate member ceiling are unchanged.
+
+Native provenance audit found exact accepted AWG engine/tools, Xray and canonical gateway
+bytes; all four help/version checks execute in a network-disabled Ubuntu24.04 image.
+The canonical gateway's retained282-file source capsule matches its accepted manifest,
+not an assumed checkout of current carrier. AWG upstream pins were fetched exactly and
+Xray's exact upstream commit is retained locally. This is not transport health acceptance.
+
+Full deployable role binding, private rehearsal signer, A/B bundle qualification, real
+role installation/health hooks and Django rehearsal evidence integration remain pending.
 Observed role hashes alone are insufficient; unbound binaries fail `UNBOUND_ROLE_ARTIFACT`.
 No generic live bypass will be added. Only one independently pinned disposable
 Ubuntu24.04/x86_64 target may receive root-level changes after all source/package gates.
