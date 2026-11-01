@@ -2031,3 +2031,12 @@ APK or lower a signed sequence. Any later rollback retains device data and uses 
 Final canary recovery remains NOT_RUN before07:07:31UTC; last read-only status1/3, cohort1/10,
 latest authenticated108, healthy schedules and current canonical material. No new paid event,
 backend restart, identity/invite/grant change, certificate deletion or gateway publication.
+
+**Beta109 CI follow-up:** candidatebe37c93 was pushed and remote-verified. Readiness
+CI41280655230 failed an outdated source-location assertion: the accepted bootstrap helper,
+not FriendsRestricted itself, now calls product.imported. Local reproduction found the same
+single failure; the fixture now verifies delegation, synchronized product import, READY gating,
+restart and authenticated ACK without weakening any production check.115 focused readiness/
+HTTP tests PASS,4 optional cases skipped; no product/wire/auth change. Emulator coverage also
+requires the visible status label to retain its history action. A new exact-source Android CI
+candidate is required; the earlier pending run/artifact is not accepted for publication.

@@ -96,6 +96,8 @@ public class DashboardLayoutRuntimeTest {
         java.lang.reflect.Method refresh=FriendsActivity.class.getDeclaredMethod("render");refresh.setAccessible(true);
         java.lang.reflect.Field dialField=FriendsActivity.class.getDeclaredField("dial");dialField.setAccessible(true);
         TerminalUi.Dial dial=(TerminalUi.Dial)dialField.get(activity);
+        java.lang.reflect.Field statusField=FriendsActivity.class.getDeclaredField("status");statusField.setAccessible(true);
+        View statusLabel=(View)statusField.get(activity);
         ConnectionTerminal.Snapshot previous=ConnectionTerminal.VPN.snapshot();boolean previousFailed=ConnectionService.failed;
         try{
             long attempt=ConnectionTerminal.VPN.begin(ConnectionTerminal.Stage.TELEMOST);
@@ -109,7 +111,10 @@ public class DashboardLayoutRuntimeTest {
                     assertEquals(state,"failed".equals(state)||"off".equals(state),selector.isEnabled());
                 }
                 assertEquals(activity.getString("off".equals(state)?R.string.connect:"connecting".equals(state)?android.R.string.cancel:R.string.disconnect),dial.getContentDescription());
-                if("failed".equals(state))render(activity,root,width,height,"dashboard-failed-controls.png");
+                if("failed".equals(state)){
+                    assertTrue("Failure history remains reachable",statusLabel.isShown()&&statusLabel.hasOnClickListeners());
+                    render(activity,root,width,height,"dashboard-failed-controls.png");
+                }
             }
             ConnectionService.status="failed";busyField.setBoolean(activity,true);refresh.invoke(activity);
             for(String fieldName:new String[]{"countries","transports"}){

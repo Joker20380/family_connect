@@ -25,6 +25,15 @@ Final canary recovery remains NOT_RUN before07:07:31UTC; last read-only status1/
 latest authenticated108, healthy schedules and current canonical material. No new paid event,
 backend restart, identity/invite/grant change, certificate deletion or gateway publication.
 
+**Beta109 CI follow-up:** candidatebe37c93 was pushed and remote-verified. Readiness
+CI41280655230 failed an outdated source-location assertion: the accepted bootstrap helper,
+not FriendsRestricted itself, now calls product.imported. Local reproduction found the same
+single failure; the fixture now verifies delegation, synchronized product import, READY gating,
+restart and authenticated ACK without weakening any production check.115 focused readiness/
+HTTP tests PASS,4 optional cases skipped; no product/wire/auth change. Emulator coverage also
+requires the visible status label to retain its history action. A new exact-source Android CI
+candidate is required; the earlier pending run/artifact is not accepted for publication.
+
 **1 November — current owner acceptance continuation (supersedes older pending-phone notes).**
 `ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS`: owner/tester reports real mobile-whitelist
 operation on public107 in Arkhangelsk region. `ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS`:

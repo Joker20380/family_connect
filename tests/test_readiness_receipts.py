@@ -152,7 +152,12 @@ def test_source_guards_no_exported_diagnostics_or_ui_requirement():
     storage = (java / 'ReadinessReceiptStore.java').read_text()
     assert 'getNoBackupFilesDir()' in storage and 'getFD().sync()' in storage and 'file.failWrite' in storage
     runtime = (java / 'FriendsRestricted.java').read_text()
-    assert 'cache.accept(response)' not in runtime and 'product.imported(response' in runtime and 'product.restart(' in runtime
+    bootstrap = (java / 'RestrictedBootstrap.java').read_text()
+    assert 'cache.accept(response)' not in runtime and 'cache.accept(response)' not in bootstrap
+    assert 'RestrictedBootstrap.refresh(cache,product,receipt,' in runtime and 'product.restart(' in runtime
+    assert 'synchronized(lock){result=product.imported(response,receipt,now.getAsLong());}' in bootstrap
+    assert 'result.code()!=ReadinessImportResult.Code.READY' in bootstrap
+    assert 'product.publish(result,' in runtime and '.readinessAck(identity,payload)' in runtime
 
 
 def test_closed_http_challenge_fetch_ack_and_isolated_readback(runtime):
