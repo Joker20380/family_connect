@@ -1222,6 +1222,25 @@
           }
         },
         "temporary_private_key": "ABSENT"
+      },
+      "blocked_transport_followup": {
+        "owner_report": "CANNOT_CONNECT_OR_CHANGE_TRANSPORT",
+        "classification": "ANDROID_UI_DEFECT_NOT_EXPECTED_PAID_DENIAL",
+        "bound_read_only_status": {
+          "alias": "OWNER_CANARY_1",
+          "observed_at": 1793512738,
+          "effective_state": "expired",
+          "paid_allow": false,
+          "version": 3,
+          "event_count": 3,
+          "cohort": true
+        },
+        "source_review": "REACHABLE_FAILED_STATE_WITH_SELECTORS_DISABLED_AND_SERVICE_CLEANUP_PENDING",
+        "phone_trace": "NOT_CAPTURED",
+        "workaround": "FORCE_STOP_AND_REOPEN_WITHOUT_CLEARING_DATA_OR_CACHE",
+        "workaround_result": "PENDING_OWNER",
+        "installed_android": "UNCHANGED_BETA108",
+        "additional_paid_mutations": "NONE"
       }
     }
   },

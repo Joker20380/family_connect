@@ -45,6 +45,17 @@ no guard bypass or new canary run. Owner post-CRL reconnect-denial gate is now s
 After the time guard, continue the same bound operation with final30-day recovery and beta108 Connect.
 Canary overall NOT_COMPLETE; delayed Connect/selector UX defect remains open. No HTTP restart,
 catalog4/Android sequence3 change, infrastructure replay or expansion beyond owner.
+**Owner UI follow-up:** after the post-CRL denial, the owner still cannot select a transport.
+Expected paid/MESH rejection does not justify a blocked transport selector. Fresh bound read-only
+status remains expired/version3/events3; no new server restriction or paid mutation was applied.
+Source review finds a reachable failed-state trap: selectors accept only off/on, while failed
+is labelled Connect; the automatic engine can stop polling without releasing the service owner.
+This is source-path evidence, not a captured phone trace. Merely enabling selectors before
+tunnel cleanup would be unsafe. Phone workaround requested: Android app settings → Force stop →
+reopen, without clearing storage/cache, uninstalling, reenrollment or new identity/invitation.
+Force-stop/reopen result is pending; it resets local UI/service state, not the paid entitlement.
+No need to wait for final paid recovery merely to regain local transport selection. Do not
+repeat MESH Connect before recovery. Installed108 is unchanged; no UI repair/runtime PASS claimed.
 
 **Baseline108 production deployment PASS — READY_FOR_BETA0_CANARY_1.**
 Latest readback 2026-11-01T04:59:14.654212+00:00; supersedes the two rolled-back attempts below.

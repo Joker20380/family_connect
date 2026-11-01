@@ -38,6 +38,17 @@ no guard bypass or new canary run. Owner post-CRL reconnect-denial gate is now s
 After the time guard, continue the same bound operation with final30-day recovery and beta108 Connect.
 Canary overall NOT_COMPLETE; delayed Connect/selector UX defect remains open. No HTTP restart,
 catalog4/Android sequence3 change, infrastructure replay or expansion beyond owner.
+**Owner UI follow-up:** after the post-CRL denial, the owner still cannot select a transport.
+Expected paid/MESH rejection does not justify a blocked transport selector. Fresh bound read-only
+status remains expired/version3/events3; no new server restriction or paid mutation was applied.
+Source review finds a reachable failed-state trap: selectors accept only off/on, while failed
+is labelled Connect; the automatic engine can stop polling without releasing the service owner.
+This is source-path evidence, not a captured phone trace. Merely enabling selectors before
+tunnel cleanup would be unsafe. Phone workaround requested: Android app settings → Force stop →
+reopen, without clearing storage/cache, uninstalling, reenrollment or new identity/invitation.
+Force-stop/reopen result is pending; it resets local UI/service state, not the paid entitlement.
+No need to wait for final paid recovery merely to regain local transport selection. Do not
+repeat MESH Connect before recovery. Installed108 is unchanged; no UI repair/runtime PASS claimed.
 
 **Baseline108 production deployment PASS — READY_FOR_BETA0_CANARY_1.**
 Latest readback 2026-11-01T04:59:14.654212+00:00; supersedes the two rolled-back attempts below.
@@ -2527,3 +2538,24 @@ period or fresh infrastructure gate is used to bypass it. Final2592000s recovery
 resume the same OWNER_CANARY_1 operation after the time guard; owner CRL denial is confirmed.
 The initial failed/locked selector then delayed successful Connect remains an Android UX defect,
 not a full canary acceptance PASS. No Android rebuild/publication or additional HTTP restart.
+
+### Owner blocked-selector follow-up — 1 November
+
+After the accepted post-CRL denial, the owner reports that the terminal/connection UI also
+prevents changing transport. The paid-denial field result remains valid; selector lock is a
+separate product defect and is not reclassified as expected canary behavior.
+
+Read-only bound status still has expired/version3/events3/paid_allow=false. No additional
+paid mutation, restriction, CRL, deployment or service restart was applied in this diagnosis.
+Source review: FriendsActivity.render enables selectors only in off/on, labels failed as
+Connect, but toggle first disconnects any non-off state. ConnectionService.startAutomatic and
+automaticHealth can finish a terminal failed attempt with no further poll while retaining the
+engine/service owner. This identifies a reachable cleanup/UI inconsistency, not a proven trace
+of the owner's exact failure. A safe source repair must preserve cleanup-before-new-owner;
+simply allowing transport changes while resources remain owned is not an acceptable fix.
+
+Immediate phone workaround requested: Android Settings → Apps → Family Connect → Force stop,
+then reopen. Do not clear cache/storage, uninstall, reenroll or replace existing identities.
+Await the owner's confirmation that transport selection returns. This cannot restore the paid
+MESH entitlement: final recovery remains guarded until07:07:31UTC. No Android source/version,
+APK or catalog changed, and no installed UI-fix or physical workaround PASS is claimed.
