@@ -58,6 +58,28 @@ def ready_observation(config, directory, bundle_id, instance_id):
         return dict(result='UNAVAILABLE')
 
 
+def network_observation():
+    try:
+        ruleset=json.loads(command(['nft','-j','list','ruleset']))
+        chains=[entry['chain'] for entry in ruleset['nftables'] if 'chain' in entry]
+        foreign_forward=[item for item in chains if item.get('hook')=='forward' and item.get('table')!='family_connect_rehearsal']
+        route=json.loads(command(['ip','-j','route','get','9.9.9.9','from','10.203.217.2','iif','fcrh0']) or '[]')
+        link=json.loads(command(['ip','-j','-s','link','show','dev','fcrh0']) or '[]')
+        counters={}
+        if len(link)==1:
+            for direction in ('rx','tx'):
+                values=link[0].get('stats64',{}).get(direction,{})
+                counters[direction]={name:values[name] for name in ('bytes','packets','errors','dropped') if type(values.get(name)) is int}
+        return dict(result='OBSERVED',foreign_forward_chains=len(foreign_forward),
+            foreign_forward_drop_policies=sum(item.get('policy')=='drop' for item in foreign_forward),
+            forwarded_route_present=len(route)==1 and route[0].get('type','unicast')=='unicast',interface_counters=counters,
+            tcp_destination_tls13=command(['openssl','s_client','-connect','www.microsoft.com:443','-servername','www.microsoft.com',
+                '-verify_hostname','www.microsoft.com','-verify_return_error','-tls1_3','-brief'],successful=True),
+            forwarding=command(['sysctl','-n','net.ipv4.ip_forward'])=='1')
+    except (ValueError,KeyError,TypeError):
+        return dict(result='UNAVAILABLE')
+
+
 def observations(bundle_id, instance_id):
     if (not re.fullmatch(r'gw-[0-9a-f]{32}', bundle_id)
             or not re.fullmatch(r'fleet-rehearsal-[a-z0-9-]+', instance_id)):
@@ -98,7 +120,8 @@ def observations(bundle_id, instance_id):
         states[role] = {name:value for name,value in values.items() if name in fields
                         and re.fullmatch('[a-z0-9_-]{1,48}',value)}
     return dict(files=files, services=states, remote_writes=0,
-                ready_lifetime=ready_observation(config,paths['run-directory'],bundle_id,instance_id))
+                ready_lifetime=ready_observation(config,paths['run-directory'],bundle_id,instance_id),
+                network=network_observation())
 
 
 def collect(request):

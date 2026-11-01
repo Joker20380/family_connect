@@ -111,3 +111,22 @@ def test_ready_lifetime_observation_never_returns_join_url_or_identity(monkeypat
     result=probe.ready_observation(Path('/config'),Path('/run'),bundle,instance)
     assert result==dict(result='OBSERVED',issued_at=900,expires_at=1004,material_expires_at=1000,exceeds_material_deadline=True)
     assert 'PRIVATE' not in str(result)
+def test_network_observation_excludes_raw_rules_addresses_and_identifiers(monkeypatch):
+    import json
+    from fleet import probe
+    def command(argv,**options):
+        if argv[0]=='openssl':
+            assert '-verify_return_error' in argv and '-tls1_3' in argv
+            return True
+        if argv[0]=='nft':
+            return json.dumps({'nftables':[{'chain':{'hook':'forward','table':'private-name','policy':'drop'}},
+                {'chain':{'hook':'forward','table':'family_connect_rehearsal','policy':'accept'}},
+                {'rule':{'secret':'must-not-return','address':'192.0.2.13'}}]})
+        if argv[:3]==['ip','-j','route']:return '[{"type":"unicast","prefsrc":"192.0.2.13"}]'
+        if argv[0]=='ip':return '[{"stats64":{"rx":{"bytes":123,"packets":2,"private":9}}}]'
+        return '1'
+    monkeypatch.setattr(probe,'command',command)
+    value=probe.network_observation()
+    assert value['foreign_forward_drop_policies']==1 and value['forwarded_route_present'] and value['forwarding']
+    assert value['interface_counters']['rx']=={'bytes':123,'packets':2}
+    assert all(text not in json.dumps(value) for text in ('private-name','must-not-return','192.0.2.13'))

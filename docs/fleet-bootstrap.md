@@ -129,8 +129,10 @@ host preflight; there is no arbitrary command, force, insecure or skip-health op
    local B failure restores A's pointer/config/owned firewall. A signed negative external
    B receipt also rolls back; an untrusted/absent receipt cannot fabricate a PASS.
    Explicit `rollback` to accepted A repeats the two-phase external gate.
-9. A provider-console-controlled reboot is a later physical action; the CLI does not reboot
-   hosts. `reboot-verify` requires a changed boot ID and unchanged enrollment, then fresh
+9. With recovery-console availability recorded, `reboot-verify --request-reboot` schedules
+   one fixed delayed reboot only from ACTIVE with fresh external acceptance and unchanged
+   local health. A provider-console-controlled reboot remains an alternative physical action.
+   `reboot-verify` requires a changed boot ID and unchanged enrollment, then fresh
    two-party verification. `drain`, `retire` stop only owned units, restore prior forwarding,
    delete only the owned nft table/sysctl file and remove disposable secret files.
 

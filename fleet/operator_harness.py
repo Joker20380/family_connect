@@ -1,6 +1,7 @@
 """Operator-only fixed probes. No invitations, payments or node-side PASS signer."""
 
 import base64
+import ipaddress
 import os
 from pathlib import Path
 import shutil
@@ -75,9 +76,20 @@ class Harness:
             fail('operator_must_not_be_target_node')
 
     def web(self, prefix):
-        command(['curl','--silent','--show-error','--fail','--max-time','45',*prefix,'https://example.com/'])
-        egress=command(['curl','--silent','--show-error','--fail','--max-time','45',*prefix,
-                        'https://www.cloudflare.com/cdn-cgi/trace']).stdout.decode()
+        def request(host, resource):
+            options=list(prefix)
+            if prefix==['--interface','10.203.217.2']:
+                response=command(['dig','-b','10.203.217.2','@9.9.9.9',host,'A','+short']).stdout.decode()
+                addresses=[]
+                for line in response.splitlines():
+                    try:address=ipaddress.IPv4Address(line)
+                    except ValueError:continue
+                    if address.is_global:addresses.append(str(address))
+                if not addresses:fail('operator_awg_https_dns')
+                options+=['--resolve',host+':443:'+addresses[0]]
+            return command(['curl','--silent','--show-error','--fail','--max-time','45',*options,'https://'+host+resource])
+        request('example.com','/')
+        egress=request('www.cloudflare.com','/cdn-cgi/trace').stdout.decode()
         if 'ip='+self.target not in egress.splitlines():
             fail('operator_egress_mismatch')
 
@@ -90,7 +102,9 @@ class Harness:
         key32(value['peer_private_key'])
         if command(['ip','link','show','dev','fcrhp0'],check=False).returncode==0:
             fail('operator_awg_interface_busy')
-        if command(['ip','route','show','table','50027'],check=False).stdout.strip() or b'50027' in command(['ip','rule','show']).stdout:
+        rules=command(['ip','rule','show']).stdout
+        if (command(['ip','route','show','table','50027'],check=False).stdout.strip() or b'50027' in rules
+                or any(line.split(b':',1)[0].strip()==b'12027' for line in rules.splitlines())):
             fail('operator_awg_route_busy')
         config=directory/'awg.conf'
         text=('[Interface]\nPrivateKey = '+value['peer_private_key']+'\nJc = 4\nJmin = 40\nJmax = 70\n'
@@ -113,7 +127,7 @@ class Harness:
             command(['ip','link','set','dev','fcrhp0','mtu','1280','up'])
             command(['ip','route','add','default','dev','fcrhp0','table','50027'])
             route=True
-            command(['ip','rule','add','priority','50027','from','10.203.217.2','table','50027'])
+            command(['ip','rule','add','priority','12027','from','10.203.217.2','table','50027'])
             rule=True
             dns=command(['dig','-b','10.203.217.2','@9.9.9.9','example.com','A','+short']).stdout
             if not dns.strip():
@@ -126,7 +140,7 @@ class Harness:
             clean=True
             try:
                 if rule:
-                    clean &= command(['ip','rule','del','priority','50027','from','10.203.217.2','table','50027'],check=False).returncode==0
+                    clean &= command(['ip','rule','del','priority','12027','from','10.203.217.2','table','50027'],check=False).returncode==0
                 if route:
                     clean &= command(['ip','route','del','default','dev','fcrhp0','table','50027'],check=False).returncode==0
             finally:

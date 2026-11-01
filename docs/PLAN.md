@@ -25,7 +25,15 @@ Safe status diagnostics expose only typed service/file metadata and ready-lifeti
 no credential bodies, environment values, room URLs or raw journals are returned.
 Full fleet316 + console156 =472 PASS; paid170 PASS; Django check PASS/drift NONE.
 A/B double-build and Ubuntu24.04 native/config/unit/nft qualification PASS, including boot-table
-restoration and reboot-request cancellation simulations. Next: fresh physical trial03. AWG/TCP/MESH external acceptance, A/B upgrade and role reboot acceptance remain NOT_RUN.
+restoration and reboot-request cancellation simulations. Trial03 reached real local-health PASS
+and AWAITING_EXTERNAL_ACCEPTANCE; all six units active with zero restarts and bounded READY.
+Operator AWG handshake/DNS/HTTPS/egress PASS after fixing client policy priority and HTTPS DNS.
+The initial harness priority50027 ran after Linux main32766; priority12027 now precedes it.
+AWG HTTPS resolves fixed names through its own tunnel, retaining strict TLS hostname validation.
+TCP external acceptance is still failing and under diagnosis; MESH external tests remain NOT_RUN.
+No full receipt was accepted, no ACTIVE/upgrade/reboot was claimed. Node A/B and agent stay exact;
+operator-only fixes do not overwrite signed deployment artifacts. Full current fleet322 PASS;
+last unchanged console156/paid170 and Django check/drift results are retained.
 Admitted: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor. Disabled:
 mailbox/chat-services, production renewal/restricted-sync, registry/control-plane database.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.

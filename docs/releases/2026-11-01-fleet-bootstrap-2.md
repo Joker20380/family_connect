@@ -1,5 +1,26 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+## Trial03 — real local health and AWG PASS; TCP diagnosis
+
+Exact source925916f A is enrolled/staged with fresh disposable material. Local health PASS:
+all six units active, zero restarts, READY lifetime within material bounds. Durable state is
+AWAITING_EXTERNAL_ACCEPTANCE, not VERIFIED or ACTIVE. No node-generated data-plane PASS.
+Initial operator DNS failed despite a current AWG handshake. Read-only node observations showed
+forwarding enabled, a valid forwarded route, no foreign forward chains and zero incoming tunnel
+packets. Root cause was the operator rule priority50027, after Linux main32766. Corrected12027
+precedes main and rejects an occupied priority; cleanup removes only that exact owned rule.
+Namespace-local route lookup and regression tests verify the correction. HTTPS now resolves
+its two fixed hostnames via the AWG-bound resolver and supplies curl --resolve; CA/hostname
+verification stays enabled. No credentials, ports, node firewall or native binary were changed.
+Fresh signed operator receipt `c07eaae159ce5596f8cffb547d7a7a3ca9999722df0eb2e588c40d6019296684`
+contains AWG handshake/DNS/HTTPS/egress PASS, but TCP fails and MESH remains NOT_RUN. Overall
+acceptance is FAIL and has not been imported as VERIFIED. TCP diagnosis remains in this task.
+Bounded read-only diagnostics expose forwarding/foreign-policy counts, interface counters and
+the fixed accepted REALITY destination TLS1.3 result, never raw rules, addresses or credentials.
+Full fleet322 PASS; unchanged console156/paid170 and Django check/drift evidence retained.
+Frozen node bundles/agent remain source925916f; these are explicitly operator-only corrections.
+Production RU/NL/catalog/invitations/paid/phone writes remain0.
+
 ## Lifetime/boot pair qualified — frozen source925916f
 
 Source `925916f27f7ba455ea379572e2ff2154cf10686f` is pushed and remote main verified.
