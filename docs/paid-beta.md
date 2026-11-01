@@ -38,7 +38,7 @@ revocations belong to this owner. Owner reports «не подключается�
 Disconnect/Connect: post-CRL reconnect denial confirmed as field evidence, not a phone trace.
 Renewal/read-only-sync timers resumed at05:52UTC; active timers and successful worker status
 confirmed. Temporary credentials removed; original maintenance configuration restored.
-**Final30-day recovery APPLIED — owner beta108 Connect pending.**
+**Final30-day recovery APPLIED — owner beta108 Connect/internet and READY proof PASS.**
 The existing time/certificate guard passed naturally; no certificate rows were deleted or
 expiry values changed. Same OWNER_CANARY_1 binding, accepted baseline108 and sourceaccc4ff.
 Activation at 2026-11-01T07:09:19+00:00; exact2592000s paid period ends 2026-12-01T07:09:19+00:00.
@@ -48,9 +48,19 @@ built twice byte-identically; unchanged HTTP candidate/trust/directory and lates
 Only the final payment event was applied. No new CRL, gateway deployment, HTTP restart or
 identity/invite/grant mutation. Earlier temporary credentials remain removed and normal schedules
 were already resumed; the final activation does not pause them again.
-Final phone108 Connect and new authenticated certificate/readiness proof are PENDING; canary
-overall NOT_COMPLETE. Keep owner on108 until that proof; beta109 publication/sequence4 remains
-gated. Delayed earlier Connect/selector defect is retained, not retrospectively marked PASS.
+**Final owner recovery verified:** owner reports «подключился работает» on beta108.
+Fresh bound read-only evidence: challenge/fetch at07:10:42UTC, authenticated exact108 import
+READY ACK at07:10:43UTC,84s after final activation (final90s gate PASS). Current material is
+PRESENT_VALID, orchestrator usable, failure NONE, minimum CRL27235 after normal maintenance.
+One new valid certificate expires09:52:11UTC, within the paid period ending1 December07:09:19UTC.
+Readback at07:14:44UTC: active/paid_allow=true, ledger1/4, cohort1/10, registry57/111/2;
+both normal timers active with successful workers, exact HTTP8e74997c… active/NRestarts0.
+Temporary credential cleanup/configuration restoration remains the previously verified result;
+no credential or schedule was reintroduced. No extra activation, CRL, restart or identity edit.
+Canary sequence COMPLETED_WITH_DEVIATIONS, owner recovery PASS: earlier stage0/stage1
+90s server-proof misses and the Android selector defect remain recorded, not a blanket PASS.
+No additional phone TLS/DNS trace is claimed. The final108 prerequisite for authorized109
+publication is met; exact-source CI/artifact/signing/public-readback gates still apply.
 **Owner UI follow-up / unreleased source fix:** owner confirms transport selection returned
 after Android Force stop/reopen, without clearing data/cache. This is workaround field evidence,
 not a repaired installed108 or an AWG/TCP internet acceptance claim.

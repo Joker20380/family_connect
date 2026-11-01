@@ -999,7 +999,7 @@
       },
       "crl": "EXACT_PAYLOAD_COMMITTED_ONCE",
       "final_recovery": {
-        "state": "APPLIED_WAITING_OWNER108_CONNECT",
+        "state": "APPLIED_OWNER_RECOVERY_VERIFIED",
         "activation": {
           "alias": "OWNER_CANARY_1",
           "purpose": "internal_canary",
@@ -1026,13 +1026,77 @@
         },
         "duration_seconds": 2592000,
         "paid_until_utc": "2026-12-01T07:09:19+00:00",
-        "owner_connect": "PENDING",
-        "material_proof": "PENDING",
+        "owner_connect": "OWNER_REPORTED_CONNECT_INTERNET_PASS",
+        "material_proof": "FRESH_AUTHENTICATED108_READY_AND_PAID_BOUNDED_CERTIFICATE_PASS",
         "certificate_rows": "RETAINED_UNMODIFIED",
-        "not_before_guard": "PASS_WITHOUT_BYPASS"
+        "not_before_guard": "PASS_WITHOUT_BYPASS",
+        "readback": {
+          "observed_at": 1793517284,
+          "version": 4,
+          "event_count": 4,
+          "cohort": true,
+          "effective_state": "active",
+          "paid_allow": true,
+          "paid_until": 1796108959,
+          "entitlement_until": 1796108959,
+          "latest_android_baseline": "EXACT108",
+          "activation_at": 1793516959,
+          "new_certificates": [
+            {
+              "expires": 1793526731,
+              "paid_bounded": true,
+              "currently_valid": true
+            }
+          ],
+          "readiness": [
+            {
+              "challenge_at": 1793517042,
+              "fetch_at": 1793517042,
+              "ack_at": 1793517043,
+              "ack": {
+                "result": "READY",
+                "provisioning": "PRESENT_VALID",
+                "bootstrap": "PRESENT_VALID",
+                "orchestrator_usable": true,
+                "minimum_crl": 27235,
+                "expires_at": 1793526731,
+                "observed_at": 1793517042,
+                "phase": "import",
+                "app_version": "0.1.18-beta108",
+                "version_code": 108,
+                "failure_reason": "NONE"
+              },
+              "seconds_since_activation": 84
+            }
+          ],
+          "registry_counts": {
+            "devices": 57,
+            "invites": 111,
+            "restricted_grants": 2,
+            "paid_beta_subscriptions": 1,
+            "paid_beta_events": 4
+          },
+          "schedules": {
+            "family-connect-credential-renewal": {
+              "timer": "active",
+              "worker_result": "success"
+            },
+            "family-connect-restricted-directory-sync": {
+              "timer": "active",
+              "worker_result": "success"
+            }
+          },
+          "http": {
+            "ActiveState": "active",
+            "NRestarts": "0"
+          },
+          "http_artifact_sha256": "8e74997c0760e7953898f130241260864a438d72c5a47d46332549c3c6c3a1cf"
+        },
+        "final_connect_deadline_seconds": 90,
+        "final_ack_seconds": 84
       },
       "schedules": "RESUMED_HEALTHY",
-      "canary_result": "NOT_COMPLETE_FINAL_OWNER108_PROOF_PENDING",
+      "canary_result": "COMPLETED_WITH_DEVIATIONS_OWNER_RECOVERED",
       "revenue": 0,
       "stage0_material_proof": {
         "owner_report": "MESH108_WORKS",
@@ -1289,7 +1353,12 @@
           "publication": "NOT_RUN",
           "automatic_build_ci": "SKIPPED_FOR_SOURCE_ONLY_PUSH"
         }
-      }
+      },
+      "remaining_deviations": [
+        "STAGE0_90S_SERVER_PROOF_NOT_MET",
+        "STAGE1_90S_SERVER_PROOF_NOT_MET",
+        "ANDROID108_TRANSPORT_SELECTOR_UX_DEFECT_REPAIR109_NOT_DISTRIBUTED"
+      ]
     }
   },
   "registry_overlay_correction": {
@@ -2719,8 +2788,9 @@
       "events": 4,
       "cohort": 1,
       "limit": 10,
-      "final_recovery": "APPLIED_OWNER108_PROOF_PENDING",
-      "not_before_utc": "2026-11-01T07:07:31Z"
+      "final_recovery": "OWNER108_CONNECT_INTERNET_READY_CERTIFICATE_PASS",
+      "not_before_utc": "2026-11-01T07:07:31Z",
+      "result": "COMPLETED_WITH_DEVIATIONS"
     },
     "first_source_commit": "be37c9380ea6213681a512a28a71541a575a8e50",
     "readiness_harness_followup": {
