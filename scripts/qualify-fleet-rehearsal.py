@@ -48,6 +48,10 @@ def qualify(package, output):
     key=Ed25519PublicKey.from_public_bytes((package/'bundle.pub').read_bytes())
     bundles={name:verify(package/(name+'-first'),key) for name in ('A','B')}
     receipt=load((package/'receipt.json').read_bytes())
+    repository=Path(__file__).resolve().parents[1]
+    for name,content in bundles['A'][1].items():
+        if name.startswith('runtime/fleet/'):
+            assert (repository/name.removeprefix('runtime/')).read_bytes()==content
     assert set(bundles['A'][1])==set(bundles['B'][1])
     changed=[name for name in bundles['A'][1] if bundles['A'][1][name]!=bundles['B'][1][name]]
     assert changed==['metadata/revision.json']
@@ -62,6 +66,15 @@ def qualify(package, output):
         workspace=Path(temporary)
         dependencies=python_dependencies(bundles['A'][1],workspace)
         assert python_dependencies(bundles['B'][1],workspace)==dependencies
+        damaged=dict(bundles['A'][1])
+        wheel=load(damaged['metadata/python-dependencies.json'])['wheels'][0]['path']
+        damaged[wheel]=b'damaged-wheel-not-installed'
+        try:
+            python_dependencies(damaged,workspace)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError('damaged wheel admitted')
         observed=command(['/usr/bin/python3','-I','-B','-c',
             "import sys;sys.path.insert(0,sys.argv[1]);import cryptography,cffi,pycparser;print(cryptography.__version__,cffi.__version__,pycparser.__version__)",str(dependencies)])
         assert observed.strip()==b'46.0.7 2.1.1 3.00'
@@ -87,6 +100,7 @@ def qualify(package, output):
         scenario(workspace,bundles,receipt)
     result=dict(schema=1,scope='ISOLATED_SOURCE_PACKAGE_QUALIFICATION',source_commit=receipt['source_commit'],
         platform='Ubuntu24.04/x86_64',target_reverification='PASS',pinned_python_dependencies='PASS',
+        qualification_source_sha256=digest(Path(__file__).read_bytes()),
         native_help_version_config_test='PASS',unit_verification='PASS',nft_syntax_coexistence_rollback='PASS',
         material_delivery_fake_root='PASS',two_phase_synthetic_acceptance='PASS',ab_installation='PASS',
         injected_b_failure_rollback_a='PASS',b_upgrade='PASS',explicit_rollback='PASS',retirement='PASS',

@@ -21,11 +21,15 @@ def public_hex(key):
     return key.public_bytes(serialization.Encoding.Raw, serialization.PublicFormat.Raw).hex()
 
 
-def build_agent():
+def build_agent(source_members=None):
     root = Path(__file__).parent
     if not (root/'remote_agent.py').is_file():
         fail('qualified_remote_agent_required')
-    members = {str(path.relative_to(root.parent)): path.read_bytes() for path in sorted(root.glob('*.py'))}
+    members = ({str(path.relative_to(root.parent)): path.read_bytes() for path in sorted(root.glob('*.py'))}
+               if source_members is None else dict(source_members))
+    if (not {'fleet/__init__.py','fleet/remote_agent.py','fleet/remote_bootstrap.py'} <= set(members)
+            or any(not name.startswith('fleet/') or name.count('/')!=1 or not name.endswith('.py') for name in members)):
+        fail('agent_source_inventory')
     members['__main__.py'] = b'from fleet.remote_agent import main\nmain()\n'
     output = io.BytesIO()
     with zipfile.ZipFile(output, 'w', compression=zipfile.ZIP_STORED) as archive:

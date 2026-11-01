@@ -10,7 +10,7 @@ from .materials import public_hex
 SCOPE='DISPOSABLE_FLEET_REHEARSAL_EVIDENCE'
 KINDS=('artifact','permit','enrollment','intent','completion','local-health','external-acceptance','reboot','retirement')
 STATES=('PREFLIGHTED','STAGED','AWAITING_EXTERNAL_ACCEPTANCE','VERIFIED','ACTIVE','DRAINING','FAILED','QUARANTINED','RETIRED')
-RESULTS=('NOT_RUN','PASS','FAIL','RUNNING','AWAITING_EXTERNAL_ACCEPTANCE')
+RESULTS=('NOT_RUN','PASS','FAIL','RUNNING','UNKNOWN','RECOVERED','AWAITING_EXTERNAL_ACCEPTANCE')
 FIELDS=('schema','scope','kind','instance_id','operation_id','bundle_id','previous_bundle','actual_bundle',
         'state','result','provider','region','target_sha256','source_receipt_sha256','source_commit',
         'archive_sha256','manifest_sha256','signature_sha256','local_health','external','duration_ms',
@@ -57,3 +57,39 @@ def verify(receipt, authority):
     if body['signer']!=digest(bytes.fromhex(public_hex(authority))):
         fail('rehearsal_evidence_signer')
     return body
+
+
+def project(kind, source, permit, authority, *, operation_id, bundle_id, issued_at):
+    from .permit import verify as verify_permit
+    context=permit['body']
+    verify_permit(permit,authority.public_key(),host=context['ipv4'],fingerprint=context['ssh_fingerprint'],
+        bundle_id=bundle_id,action='preflight',agent_sha256=context['agent_sha256'],
+        bundle_signer_sha256=context['bundle_signer_sha256'],now=context['issued_at'])
+    if kind not in KINDS or type(source) is not dict:
+        fail('rehearsal_evidence_projection')
+    value=source.get('body',source)
+    if value.get('instance_id',context['instance_id'])!=context['instance_id']:
+        fail('rehearsal_evidence_instance')
+    external={role:'NOT_RUN' for role in ('awg','tcp','mesh')}
+    if kind=='external-acceptance':
+        from .acceptance import SCOPE as acceptance_scope, STEPS
+        if value.get('scope')!=acceptance_scope or value.get('bundle_id')!=bundle_id:
+            fail('rehearsal_evidence_acceptance_scope')
+        authority.public_key().verify(base64.b64decode(source['signature'],validate=True),canonical(value))
+        for role,steps in STEPS.items():
+            exact(value['roles'][role],steps)
+            external[role]='PASS' if all(value['roles'][role][step]=='PASS' for step in steps) and value['cleanup']=='PASS' else 'FAIL'
+    result=value.get('result','RUNNING' if kind=='intent' else 'NOT_RUN')
+    body=dict(schema=1,scope=SCOPE,kind=kind,instance_id=context['instance_id'],operation_id=operation_id,
+        bundle_id=bundle_id,previous_bundle=value.get('previous_bundle'),actual_bundle=value.get('actual_bundle'),
+        state=value.get('state_after','PREFLIGHTED'),result=result,provider=context['provider'],region=context['region'],
+        target_sha256=digest(context['ipv4'].encode()),source_receipt_sha256=digest(canonical(source)),
+        source_commit=value.get('source_commit') if kind=='artifact' else None,
+        archive_sha256=value.get('archive_sha256') if kind=='artifact' else None,
+        manifest_sha256=value.get('manifest_sha256') if kind=='artifact' else None,
+        signature_sha256=value.get('signature_sha256') if kind=='artifact' else None,
+        local_health='PASS' if kind=='local-health' and value.get('scope')=='LOCAL_NODE_HEALTH_ONLY' else 'NOT_RUN',
+        external=external,duration_ms=round(value.get('elapsed_seconds',0)*1000),rollback=value.get('rollback') or 'NOT_RUN',
+        reboot=result if kind=='reboot' else 'NOT_RUN',retirement=result if kind=='retirement' else 'NOT_RUN',
+        issued_at=issued_at,signer=digest(bytes.fromhex(public_hex(authority.public_key()))))
+    return sign(body,authority)

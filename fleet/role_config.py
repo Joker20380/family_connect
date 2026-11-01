@@ -125,7 +125,8 @@ def mesh_config(raw, *, instance_id, now, permit_expires_at):
     except Exception:
         fail('mesh_profile_rejected')
     return canonical(credentials), dict(gateway=credentials['gateway'], family=credentials['family'],
-                                       expires_at=int(leaf.not_valid_after_utc.timestamp()), crl_number=1)
+                                       expires_at=int(min(authority.not_valid_after_utc.timestamp(),leaf.not_valid_after_utc.timestamp(),
+                                                          revocations.next_update_utc.timestamp())), crl_number=1)
 
 
 def publisher_config(raw):

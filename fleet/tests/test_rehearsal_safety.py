@@ -124,3 +124,33 @@ def test_bundle_templates_match_exact_renderer():
         assert template==content
     assert (root/'nftables.nft.in').read_bytes().replace(b'{{UPLINK}}',b'eth0')==nftables('eth0')
     assert (root/'sysctl.conf.in').read_bytes()==SYSCTL
+
+
+@pytest.mark.parametrize('path,mode',[('publisher.env',0o640),('tcp.json',0o600),('profile/gateway.json',0o644)])
+def test_config_exact_modes_are_health_preconditions(runtime,path,mode):
+    target=runtime.manifest['bundle_id']
+    runtime.stage(target)
+    runtime.configure(target)
+    (runtime.configuration/target/path).chmod(mode)
+    with pytest.raises(FleetError):
+        runtime.verify_configuration(target)
+
+
+def test_readonly_release_directory_is_a_health_precondition(runtime):
+    target=runtime.manifest['bundle_id']
+    runtime.stage(target)
+    (runtime.releases/target/'bin').chmod(0o755)
+    with pytest.raises(FleetError,match='release_directory_mode'):
+        runtime.verify_release(target)
+
+
+def test_evidence_projection_never_persists_raw_extra_fields(authority):
+    from fleet.evidence import project, verify
+    key,permit,unused=authority
+    source=dict(result='PASS',state_after='ACTIVE',elapsed_seconds=1.25,token='fixture-private-token',
+                private_key='fixture-private-key',join_url='https://private.invalid/fixture')
+    receipt=project('completion',source,permit,key,operation_id='operation-one',bundle_id=permit['body']['bundle_a'],issued_at=1001)
+    body=verify(receipt,key.public_key())
+    assert body['duration_ms']==1250 and body['source_receipt_sha256']==digest(canonical(source))
+    assert b'fixture-private' not in canonical(receipt) and b'private.invalid' not in canonical(receipt)
+    assert b'8.8.8.8' not in canonical(receipt)

@@ -116,7 +116,8 @@ def prepare(commit, artifact_root, key_path, output):
         fail('synthetic_signing_key_forbidden')
     output.mkdir(mode=0o700)
     probe=operator_probe(canonical_source,sources['fleet/operator_probe.patch'],output)
-    agent=build_agent()
+    agent=build_agent({name:content for name,content in sources.items()
+                       if name.startswith('fleet/') and name.count('/')==1 and name.endswith('.py')})
     write_private(output/'agent.pyz',agent,mode=0o500)
     write_private(output/'bundle.pub',bytes.fromhex(public_hex(key.public_key())),mode=0o444)
     contents={artifact['path']:source_bytes(artifact_root/'bound-inputs',artifact['path'],64*1024*1024) for artifact in native['artifacts']}

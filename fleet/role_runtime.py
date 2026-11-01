@@ -158,6 +158,8 @@ class Runtime:
 
     def verify_release(self, bundle_id):
         release = checked(self.releases/bundle_id, directory=True, owner=self.uid)
+        if stat.S_IMODE(release.stat().st_mode)!=0o555:
+            fail('release_directory_mode')
         manifest = load(read_private(release/'release.json', modes=(0o444,), owner=self.uid))
         if manifest['bundle_id'] != bundle_id:
             fail('release_binding')
@@ -165,6 +167,8 @@ class Runtime:
         actual = set()
         for path in release.rglob('*'):
             checked(path, directory=path.is_dir(), owner=self.uid)
+            if path.is_dir() and stat.S_IMODE(path.stat().st_mode)!=0o555:
+                fail('release_directory_mode')
             if path.is_file():
                 actual.add(str(path.relative_to(release)))
         if actual != expected:
@@ -259,8 +263,9 @@ class Runtime:
         for name, content in templates.items():
             files['units/'+name] = (content,0o444)
         metadata = dict(schema=1, instance_id=self.permit['instance_id'], bundle_id=bundle_id,
-            material_expires_at=receipt['expires_at'], revision=load(self.contents['metadata/revision.json'])['revision'],
-            awg=awg_binding, mesh=mesh_binding, files={name:digest(content) for name,(content,mode) in files.items()})
+            material_expires_at=min(receipt['expires_at'],mesh_binding['expires_at']), revision=load(self.contents['metadata/revision.json'])['revision'],
+            awg=awg_binding, mesh=mesh_binding, files={name:digest(content) for name,(content,mode) in files.items()},
+            modes={name:mode for name,(content,mode) in files.items()}, service_gid=service_gid)
         for name, (content, mode) in files.items():
             self.write(config/name,content,mode,service_gid if mode==0o640 else None)
         self.write(config/'metadata.json',canonical(metadata),0o644)
@@ -291,9 +296,16 @@ class Runtime:
             fail('configuration_expired')
         for name, expected in metadata['files'].items():
             safe_path(name)
-            content = read_private(config/name,modes=(0o444,0o600,0o640),owner=self.uid)
-            if digest(content) != expected:
+            mode=metadata['modes'][name]
+            content = read_private(config/name,modes=(mode,),owner=self.uid)
+            group=metadata['service_gid'] if mode==0o640 else self.root_gid
+            if digest(content) != expected or (config/name).stat().st_gid!=group:
                 fail('configuration_drift')
+        profile=load(read_private(config/'profile/gateway.json',modes=(0o640,),owner=self.uid))
+        unused,binding=mesh_config(canonical(dict(scope='DISPOSABLE_FLEET_REHEARSAL',instance_id=self.permit['instance_id'],credentials=profile)),
+                                  instance_id=self.permit['instance_id'],now=self.clock(),permit_expires_at=self.permit['expires_at'])
+        if binding!=metadata['mesh']:
+            fail('configuration_mesh_binding')
         return metadata
 
     def pointer(self):
