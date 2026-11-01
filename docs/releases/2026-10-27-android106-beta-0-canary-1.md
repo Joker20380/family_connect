@@ -2635,3 +2635,15 @@ restart and authenticated ACK without weakening any production check.115 focused
 HTTP tests PASS,4 optional cases skipped; no product/wire/auth change. Emulator coverage also
 requires the visible status label to retain its history action. A new exact-source Android CI
 candidate is required; the earlier pending run/artifact is not accepted for publication.
+
+**Beta109 emulator qualification follow-up:** sourcee6817b5 is pushed/remote-verified;
+readiness CI41281001187 PASS. Client CI41281001188 passed compilation/JVM/lint/native setup
+and the new Friends dashboard visibility/history-action assertions, but overall acceptance
+FAIL: the language recreation test expected Russian and observed the previous English text.
+The downloaded diagnostics ZIP matches its GitHub digest. Test review finds that matching
+English text could finish the first iteration before a new Activity resumed; the next language
+change could overlap that pending recreation. The harness now requires a distinct, resumed,
+non-finishing/non-destroyed Activity with the requested locale within15s. Production language,
+VPN, authentication and release gates are unchanged; no retry-until-green or skipped assertion.
+51 focused Python checks PASS; exact-source hosted emulator/native packaging is pending again.
+No qualified release APK, signature, publication, installation or Android sequence4 yet.

@@ -228,3 +228,12 @@ def test_runtime_ui_checks_match_retained_async_and_scroll_contracts():
     assert 'audio.selected("preview")&&audio.playing("preview")' in audio
     assert 'Async audio must prepare and start before pause/seek' in audio
     assert 'Paused audio seek must advance' in audio
+
+
+def test_language_runtime_waits_for_recreated_activity_not_old_matching_text():
+    source = (ROOT / 'clients/android/app/src/androidTest/java/com/familyconnect/app/AppLanguageRuntimeTest.java').read_text()
+    assert 'previous.set(activity)' in source
+    assert 'activity!=previous.get()' in source
+    assert '!activity.isFinishing()&&!activity.isDestroyed()' in source
+    assert 'language.equals(activity.getResources().getConfiguration().getLocales().get(0).getLanguage())' in source
+    assert 'SystemClock.elapsedRealtime()+15000' in source

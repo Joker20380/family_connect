@@ -2656,16 +2656,17 @@
       "clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java": "64f3adf0d8befc1fc2eca2a7e9afd40a56acf14f9bc7c48a3d7dab9c3c0fc799",
       "clients/android/app/src/test/java/com/familyconnect/app/ConnectionTerminalTest.java": "73ca1141e8da7bae72190fc28f7cad83d5c4e91507e0ebdfd18db00d299f0eb7",
       "pilot/android-awg/friends_ci.py": "2d32490a9413b8e8292d11db8f670da5c8bfce6c18cb5c101250e0a3e2a4856f",
-      "tests/test_android_public_release.py": "0d3eeaebb299553a22fbb5d4442417f8dc2d0997af08fbbffce8fb7b8d740c76",
+      "tests/test_android_public_release.py": "4dcd87f84d39f1fa4e8d7351e83f94fca78032f40f2b6b91648dee0d8fd5b3d3",
       "tests/test_orchestrator_android_contract.py": "dfe0dc05c6c9b7b842ed3227ae5c4d0a6ec32d1b16e47e5e071e6e97a94e7fed",
-      "tests/test_readiness_receipts.py": "3e770b3871d688478906b4febbdead50d6f760eb45cd9bceb02d12dad35a26d8"
+      "tests/test_readiness_receipts.py": "3e770b3871d688478906b4febbdead50d6f760eb45cd9bceb02d12dad35a26d8",
+      "clients/android/app/src/androidTest/java/com/familyconnect/app/AppLanguageRuntimeTest.java": "255b196af0f310b66cc73898a4035abd46aa52615c74437b1fbab85b256970b0"
     },
     "tests": {
       "jvm": 56,
-      "python": 50,
+      "python": 51,
       "windows_deselected": 1,
       "hidden_panel_red_failures": 2,
-      "emulator": "PENDING",
+      "emulator": "PARTIAL_PASS_RELEASE_GATE_PENDING_NEW_CI",
       "hosted_release_ci": "PENDING",
       "physical109": "NOT_RUN"
     },
@@ -2704,7 +2705,21 @@
       "local_pass": 115,
       "optional_skipped": 4,
       "production_changes": "NONE",
-      "exact_source_ci": "PENDING"
+      "exact_source_ci": {
+        "run": 41281001187,
+        "source": "e6817b53a02ef8a13e08ca59e2bdad9abf3f31df",
+        "result": "PASS"
+      }
+    },
+    "emulator_followup": {
+      "run": 41281001188,
+      "source": "e6817b53a02ef8a13e08ca59e2bdad9abf3f31df",
+      "result": "FAIL",
+      "failed_test": "AppLanguageRuntimeTest.languageSurvivesRecreationAndAllScreensUseSharedSelection",
+      "new_dashboard_controls": "PASS_IN_DISPOSABLE_EMULATOR",
+      "diagnostics_sha256": "6dd0f013859dbf0bb1dfabb6ea9aae54064963421c928cf8d2645f96c6174f0b",
+      "repair": "WAIT_FOR_DISTINCT_RESUMED_ACTIVITY_AND_REQUESTED_LOCALE",
+      "production_language_changed": false
     }
   }
 }

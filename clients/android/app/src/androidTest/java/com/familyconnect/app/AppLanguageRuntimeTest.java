@@ -23,9 +23,17 @@ public class AppLanguageRuntimeTest {
         SystemClock.sleep(700);
         try{
             for(String language:new String[]{"en","ru"}){
-                ins.runOnMainSync(()->{FriendsActivity a=current();assertNotNull(a);AppLanguage.select(a,language);a.getIntent().putExtra("tab",3);a.recreate();});
-                AtomicReference<String> text=new AtomicReference<>();long until=SystemClock.elapsedRealtime()+5000;
-                while(SystemClock.elapsedRealtime()<until){ins.runOnMainSync(()->{FriendsActivity a=current();if(a!=null)text.set(a.getString(R.string.dashboard_settings));});if((language.equals("en")?"Settings":"Настройки").equals(text.get()))break;SystemClock.sleep(100);}
+                AtomicReference<FriendsActivity> previous=new AtomicReference<>();
+                ins.runOnMainSync(()->{FriendsActivity activity=current();assertNotNull(activity);previous.set(activity);AppLanguage.select(activity,language);activity.getIntent().putExtra("tab",3);activity.recreate();});
+                AtomicReference<String> text=new AtomicReference<>();long until=SystemClock.elapsedRealtime()+15000;
+                while(SystemClock.elapsedRealtime()<until){
+                    ins.runOnMainSync(()->{
+                        FriendsActivity activity=current();
+                        if(activity!=null&&activity!=previous.get()&&!activity.isFinishing()&&!activity.isDestroyed()
+                                &&language.equals(activity.getResources().getConfiguration().getLocales().get(0).getLanguage()))text.set(activity.getString(R.string.dashboard_settings));
+                    });
+                    if((language.equals("en")?"Settings":"Настройки").equals(text.get()))break;SystemClock.sleep(100);
+                }
                 assertEquals(language.equals("en")?"Settings":"Настройки",text.get());assertEquals(language,AppLanguage.selected(c));
                 assertEquals(language,AppLanguage.wrap(c).getResources().getConfiguration().getLocales().get(0).getLanguage());
             }
