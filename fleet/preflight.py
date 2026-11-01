@@ -59,10 +59,13 @@ class SSH:
                      '-o','GlobalKnownHostsFile=/dev/null','-o','UserKnownHostsFile='+str(path),user+'@'+str(address)]
         self.runner = runner
 
-    def probe(self, instance, ports):
+    def probe(self, instance, ports, *, bundle_id=None):
         source = Path(__file__).with_name('probe.py').read_text()
+        request = dict(ipv4=instance['ipv4'],ipv6=instance['ipv6'],ports=ports)
+        if bundle_id is not None:
+            request.update(bundle_id=bundle_id,instance_id=instance['instance_id'])
         result = self.runner(self.argv + ['python3 -I -c ' + shlex.quote(source)],
-                             input=canonical(dict(ipv4=instance['ipv4'],ipv6=instance['ipv6'],ports=ports)).decode(),
+                             input=canonical(request).decode(),
                              capture_output=True,text=True,timeout=90)
         if result.returncode:
             fail('ssh_probe_failed')

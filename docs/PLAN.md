@@ -3,7 +3,7 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**READY_FOR_FLEET_BOOTSTRAP_2_HOST — source/package and host OS/preflight PASS; role gates NOT_RUN.**
+**FLEET-BOOTSTRAP-2 — materials/stage PASS; first role start FAIL, automatic rollback PASS.**
 Existing task: **FLEET-BOOTSTRAP-2**, no new PLAN ID; finish its gates before further activation.
 Frozen deployable source: `0ecfefeaf907bd87e34e3e5356808c376aab082e`; final A/B are signed and each built twice,
 byte-identical archive/manifest/signature/hash inventory. Exact native/source/license
@@ -21,14 +21,17 @@ Encrypted management backup verified; SSH pin/config/authorized keys retained. P
 reinstall and26.04 upgrade NOT_RUN. Trust remains owner-accepted TOFU, not independent provider
 verification; owner confirms Reinstall OS option, provider console itself remains unverified.
 Owner requests two Amsterdam servers; first production NL remains excluded and untouched.
-Frozen runtime/A/B unchanged. Signed node enrollment and durable readback PASS; node-local
-Ed25519/X25519 keys remain on target. Runtime state PREFLIGHTED, no staged/active release.
-Separate publisher input saved privately; format/mode PASS, provider validity not yet tested.
-Post-enrollment empty-port preflight defect corrected in operator tooling; exact target agent
-and receiver now come from the verified frozen bundle. No guard bypass or production OAuth reuse.
-Complete fleet266PASS; prior console156/paid170 retained. Next: encrypted material delivery
-and physical rehearsal. No transport material or real probe identity accessed yet; no activation.
-Role services/data planes and rehearsal reboot persistence remain NOT_RUN, not accepted PASS.
+Frozen runtime/A/B unchanged. Signed enrollment, encrypted disposable material delivery and
+stage A PASS. Node-local Ed25519/X25519 private keys stay on target; the approved operator
+probe identity was used only in local private custody, never copied to the VPS. The separate
+publisher token passes custody/schema checks and its test-account API request returned201;
+this is not MESH data-plane acceptance. First start A failed: MESH exit1/restarts3, no ready export.
+Automatic rollback PASS; durable state FAILED, unfenced, actual bundle null, staged A retained.
+No blind retry. Bounded read-only status diagnostics expose only service states and file metadata,
+not config contents, environment, journal messages or credentials. Offline synthetic0600/0640
+profiles pass exact native loading through SEED_RUN; physical MESH failure is under investigation.
+Complete fleet272PASS; prior console156/paid170 retained. External AWG/TCP/MESH acceptance,
+A/B upgrade, role reboot persistence and retirement remain NOT_RUN. No production activation.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
 Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.
 [Checkpoint](releases/2026-11-01-fleet-bootstrap-2.md) ·

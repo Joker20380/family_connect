@@ -103,7 +103,12 @@ def dispatch(args):
                     roles=remote.manifest['roles'],source_commit=remote.manifest['source_commit'],remote_writes=0)
     remote.authorize(args.action)
     if args.action=='status':
-        return execute_known(remote,'status',args.operation_id)
+        result = execute_known(remote,'status',args.operation_id)
+        try:
+            result['diagnostics'] = remote.diagnostics(dict(instance_id=args.instance,ipv4=args.host,ipv6=args.ipv6))
+        except Exception:
+            result['diagnostics'] = dict(result='UNAVAILABLE',remote_writes=0)
+        return result
     instance=dict(instance_id=args.instance,ipv4=args.host,ipv6=args.ipv6)
     ports=list(PORTS.values()) if args.action in ('preflight','enroll') else []
     report=remote.preflight(instance,ports)

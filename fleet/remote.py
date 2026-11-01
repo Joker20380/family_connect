@@ -130,6 +130,16 @@ class RemoteInstaller:
         request['upload_only'] = False
         return self.call(command, request)
 
+    def diagnostics(self, instance):
+        self.authorize('preflight')
+        self.check_pin()
+        if instance['instance_id'] != self.permit['body']['instance_id'] or instance['ipv4'] != self.host:
+            fail('rehearsal_instance_binding')
+        report = self.ssh.probe(instance, [], bundle_id=self.manifest['bundle_id'])
+        evidence = report.pop('diagnostics')
+        preflight.accept(report, instance)
+        return evidence
+
     def call(self, command, request):
         self.check_pin()
         try:

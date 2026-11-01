@@ -1,5 +1,37 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+## First physical A start — failure safely rolled back
+
+Following the operator preflight correction, encrypted material delivery and stage A passed.
+Fresh disposable AWG/TCP/MESH materials are bound to this instance, enrollment and A/B pair.
+The approved FLEET_MESH_PROBE_1 identity was read only in operator custody; none of its private
+bytes went to the node or Git. A separate test-account publisher request returned HTTP201;
+no participant joined that diagnostic conference and no room URL/token was logged or published.
+It proves the token's create permission, not transport acceptance or full provider integration.
+
+| Operation | Result | Private receipt SHA256 |
+| --- | --- | --- |
+| `host472-deliver-materials-a-fbd8230614084af89f4bb8eb59a9f0ad` | PASS | `8b646d5697fdab7f137588d755977c18d5c919fd181a053d5d4c3c19108d0d4c` |
+| `host472-stage-a-36856dcc31804c99938f778c620b38b6` | PASS | `cb3ba995f4f5b94ff5d85b873284acaccddd54f15251601469a9d09ed87cb650` |
+| `host472-start-verification-a-1cd47db215f34c8289e1f661a1194506` | FAIL, rollback PASS | `09c72bd245aaba21231ba3320cce222948c89eb13d2d6eb31d6bc92460c9711b` |
+| `host472-status-a-cc881105f501460ca53337612e22f214` | PASS, durable FAILED/unfenced | `0c05fa9c711fee5cafcd4d7bb85a2e2161c2e5daa138118b4d202df8866701c1` |
+
+Configuration validation completed (Xray config-test, nft syntax, static systemd verification).
+After rollback, MESH reports exit1/restarts3 and no ready export; AWG/TCP/prepare report
+successful startup followed by stop. Snapshot was terminated. Current pointer is absent,
+actual bundle null, A remains staged, accepted list empty, verification nonce absent.
+These are local startup observations, not AWG/TCP/MESH external acceptance. No blind retry.
+
+Operator status diagnostics now report bounded service/file metadata, including canonical
+profile ownership/permissions and extended-metadata counts, without raw logs or secret reads.
+The target profile is root:service0640 beneath root:service0750, with no extra inode flags or
+extended attributes; ancestor ownership/modes match the canonical contract. Exact native
+offline synthetic0600/0640 loading reaches SEED_RUN, then deliberately fails network access.
+Physical MESH startup remains under investigation; no inferred success or invented root cause.
+Focused35PASS and full fleet272PASS. Console156/paid170 remain the accepted prior results.
+Frozen runtime/A/B/agent/signing authority unchanged. No production RU/NL writes, catalog
+publications, user invitations, paid events or phone actions. Upgrade/reboot/retire pending.
+
 ## Operator preflight repair after private input
 
 Owner supplied the separate publisher token through the hidden local helper. Custody mode0600

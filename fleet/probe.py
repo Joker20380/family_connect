@@ -1,10 +1,12 @@
 """Standalone read-only host probe transported over authenticated SSH."""
 
 import ipaddress
+import fcntl
 import json
 import os
 from pathlib import Path
 import platform
+import re
 import shutil
 import socket
 import stat
@@ -23,9 +25,56 @@ def command(argv, *, successful=False):
         return False if successful else ''
 
 
+def observations(bundle_id, instance_id):
+    if (not re.fullmatch(r'gw-[0-9a-f]{32}', bundle_id)
+            or not re.fullmatch(r'fleet-rehearsal-[a-z0-9-]+', instance_id)):
+        raise ValueError('probe_diagnostic_binding')
+    config = Path('/etc/family-connect/rehearsal')/bundle_id
+    paths = {name: config/name for name in ('metadata.json','validated.json','awg.conf','tcp.json',
+                                            'profile','profile/gateway.json','publisher.env','firewall.nft')}
+    paths['configuration'] = config
+    paths.update({'filesystem-root':Path('/'),'etc-parent':Path('/etc'),
+                  'family-parent':config.parent.parent,'rehearsal-parent':config.parent})
+    paths['run-directory'] = Path('/run/family-connect-rehearsal')/instance_id
+    paths['ready-export'] = paths['run-directory']/'ready.json'
+    files = {}
+    for name, path in paths.items():
+        try:
+            info = path.lstat()
+            files[name] = dict(present=True, mode=oct(stat.S_IMODE(info.st_mode)), uid=info.st_uid,
+                               gid=info.st_gid, symlink=stat.S_ISLNK(info.st_mode), links=info.st_nlink)
+            if name in ('filesystem-root','etc-parent','family-parent','rehearsal-parent',
+                        'configuration','profile','profile/gateway.json'):
+                try:
+                    files[name]['extended_attribute_count'] = len(os.listxattr(path,follow_symlinks=False))
+                    descriptor = os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+                    try:
+                        flags = int.from_bytes(fcntl.ioctl(descriptor,0x80086601,bytes(8)),sys.byteorder)
+                        files[name]['unexpected_inode_flags'] = flags & ~(0x80000 | (0x1000 if stat.S_ISDIR(info.st_mode) else 0))
+                    finally:
+                        os.close(descriptor)
+                except OSError:
+                    files[name]['extended_metadata'] = 'UNAVAILABLE'
+        except FileNotFoundError:
+            files[name] = dict(present=False)
+    states = {}
+    fields = ('LoadState','ActiveState','SubState','Result','ExecMainCode','ExecMainStatus','NRestarts')
+    for role in ('prepare','awg','tcp','mesh','snapshot','monitoring'):
+        raw = command(['systemctl','show','fc-rehearsal-'+role+'.service','--property='+','.join(fields)])
+        values = dict(line.split('=',1) for line in raw.splitlines() if '=' in line)
+        states[role] = {name:value for name,value in values.items() if name in fields
+                        and re.fullmatch('[a-z0-9_-]{1,48}',value)}
+    return dict(files=files, services=states, remote_writes=0)
+
+
 def collect(request):
-    if set(request) != {'ipv4', 'ipv6', 'ports'} or type(request['ports']) is not list:
+    fields = {'ipv4', 'ipv6', 'ports'}
+    if set(request) not in (fields, fields | {'bundle_id','instance_id'}) or type(request['ports']) is not list:
         raise ValueError('probe_request')
+    if 'bundle_id' in request and (type(request['bundle_id']) is not str or type(request['instance_id']) is not str
+            or not re.fullmatch(r'gw-[0-9a-f]{32}',request['bundle_id'])
+            or not re.fullmatch(r'fleet-rehearsal-[a-z0-9-]+',request['instance_id'])):
+        raise ValueError('probe_diagnostic_binding')
     ipaddress.IPv4Address(request['ipv4'])
     if request['ipv6'] is not None:
         ipaddress.IPv6Address(request['ipv6'])
@@ -56,7 +105,7 @@ def collect(request):
     if instance_file.exists():
         existing=json.loads(instance_file.read_bytes()).get('instance_id','unknown')
     tun=Path('/dev/net/tun')
-    return dict(os=os_release.get('ID','').strip('"'),version=os_release.get('VERSION_ID','').strip('"'),
+    report = dict(os=os_release.get('ID','').strip('"'),version=os_release.get('VERSION_ID','').strip('"'),
         architecture=platform.machine(),kernel=platform.release(),cpu=os.cpu_count() or 0,
         ram_mb=int(memory['MemTotal'].split()[0])//1024,disk_mb=shutil.disk_usage('/opt').free//1024//1024,
         time_sync=command(['timedatectl','show','--property=NTPSynchronized','--value'])=='yes',
@@ -68,6 +117,9 @@ def collect(request):
         security='apparmor-supported' if command(['aa-status','--enabled'],successful=True) and Path('/sys/module/apparmor/parameters/enabled').exists() and Path('/sys/module/apparmor/parameters/enabled').read_text().strip()=='Y' else 'unsupported',
         ports_available=bool(listeners) and not set(request['ports']) & ports,
         pending_reboot=Path('/var/run/reboot-required').exists(),existing_instance=existing)
+    if 'bundle_id' in request:
+        report['diagnostics'] = observations(request['bundle_id'],request['instance_id'])
+    return report
 
 
 if __name__=='__main__':

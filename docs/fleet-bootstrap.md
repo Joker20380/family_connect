@@ -27,6 +27,13 @@ The read-only host probe accepts an explicitly empty port-absence set for post-e
 operations; enrollment/preflight still require the exact rehearsal ports to be free. Other
 host checks remain mandatory, and live listener ownership is checked by local role health.
 
+`status` first reads the durable journal and may add a separately permit-authorized read-only
+host observation. Its fixed paths expose only ownership/modes/link counts and counts of
+extended metadata; its fixed units expose whitelisted state/exit/restart fields. It never
+reads config contents, environment values or raw journal messages. Unavailable diagnostics
+do not discard the durable operation result. A failed start with successful rollback is not
+an unknown outcome and must not be blindly replayed; localize the failure before a new intent.
+
 `fleet.rehearsal_state` retains operation bindings, first failure and rollback receipts;
 changed replay or interrupted operations are fenced. It requires a separately qualified
 physical runtime implementation; synthetic callback tests are not VPN acceptance. Enrollment
