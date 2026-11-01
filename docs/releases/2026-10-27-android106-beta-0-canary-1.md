@@ -11,6 +11,20 @@ No retrospective claim of an independently captured handshake, phone trace, per-
 readiness trace or all notification lifecycle cases. Prior raw observations remain below.
 New NL185.10.158.212/catalog4, old NL FENCED and FLEET_MESH_PROBE_1 retained; accepted
 infrastructure is not rebuilt or replayed. Last readback paid0/0, cohort0/10, canary PAUSED.
+**BETA-0-CANARY-1 live — stage0 APPLIED on baseline108.**
+Fresh owner ГОТОВ received; the earlier PAUSED/NOT_RUN notes below are historical.
+Stage0 starts 2026-11-01T05:20:55+00:00; natural expiry 2026-11-01T05:30:55+00:00 (600s).
+One Auto Connect requested by 2026-11-01T05:22:25+00:00 (90s); paid-bounded certificate proof pending.
+Existing OWNER_CANARY_1 binding; exact authenticated0.1.18-beta108/code108; internal_canary,
+amount0/revenue0. Paid subscriptions/events1/1, cohort1/10, subscription version1, paid_allow=true.
+Fresh private SQLite/config/artifact backup and isolated restore/integrity/FK PASS before activation.
+Canonical material and CRL=floor27233 valid; baseline certificates retained, not manually deleted.
+Renewal/read-only-sync timers temporarily paused for the bounded canary; restore during cleanup.
+Detached read-only observation active. No additional service restart, Android/catalog publication,
+infrastructure replay or non-cohort changes. Natural expiry/CRL/final recovery are not yet PASS.
+Continue the existing runbook: natural600s → observation120s → stage1/CRL900s → observation180s
+→ final2592000s recovery, subject to the retained-certificate not-before guard.
+
 **Baseline108 production deployment PASS — READY_FOR_BETA0_CANARY_1.**
 Latest readback 2026-11-01T04:59:14.654212+00:00; supersedes the two rolled-back attempts below.
 Owner explicitly authorized one further candidate restart. Fresh separate private SQLite/
@@ -31,9 +45,8 @@ Source483 + exact-package5 + startup111 focused tests retained PASS;21 optional 
 Exact pre-deploy rollback artifact retained; no database restore or paid schema deletion.
 Prior two rollbacks remain historical evidence, not the current serving state. Total issued:
 3 candidate restarts and2 rollback restarts across separately authorized attempts.
-Canary remains PAUSED; activation/expiry/CRL/recovery writes NOT_RUN.
-Next under existing BETA-0-CANARY-1: open beta108 without Connect and await fresh owner ГОТОВ.
-The restart authorization is not that canary-ready response; no stage0 before fresh ГОТОВ.
+At deployment acceptance canary writes were NOT_RUN. Fresh owner ГОТОВ has now been
+received; stage0 is APPLIED as recorded in the current live checkpoint above.
 
 The filename retains the historical android106 name; this operation now targets exact
 **0.1.18-beta108 / versionCode108**, not a new PLAN ID. See the
@@ -2378,3 +2391,22 @@ PLAN ID or infrastructure replay. Protocol unchanged:600s natural period,90s Con
 revenue0. Baseline certificates need not be zero and must not be manually deleted.
 Stage0/paid-bounded Connect/natural expiry/stage1/explicit expiry/CRL delivery/final recovery
 have **NOT_RUN**. Await the fresh response before any paid mutation or phone Connect instruction.
+
+## BETA-0-CANARY-1 stage0 live —1 November
+
+Fresh owner ГОТОВ authorizes the accepted runbook with the existing OWNER_CANARY_1 binding.
+Before activation: paid0/0 and cohort0/10, exact108 authenticated observation, canonical material
+valid, CRL=floor27233, catalog4, fresh private backup and isolated restore/integrity/FK PASS.
+One valid baseline certificate was retained; it is not a stage0 blocker and was not deleted.
+Only renewal/read-only-sync timers are paused for the bounded canary; no HTTP restart.
+
+Stage0 APPLIED at 2026-11-01T05:20:55+00:00, paid_until 2026-11-01T05:30:55+00:00.
+Paid subscriptions/events1/1, cohort1/10, version1, internal_canary, amount0/revenue0.
+One Auto Connect requested within90s; new paid-bounded certificate and current READY ACK pending.
+The detached observer is read-only, records natural expiry and the120s observation window;
+it does not activate another stage or classify missing phone evidence as a PASS.
+The private stage-specific capsule was built twice byte-identically from accepted source
+`accc4ffb0af35e8e5360ba2442f706b03b46bc76`, SHA256 `c6888a230f5e2928be3026730fbc1591588052d2c8dd5d05b5cfa527f4821e73`.
+No private binding, event identifier, device rows or certificates are included in this report.
+Existing identities/invites/grants, non-cohort access, deployed HTTP8e74997c… and catalog4 retained.
+Stage1, explicit expiry, exact-payload CRL and final30-day recovery NOT_RUN at this checkpoint.

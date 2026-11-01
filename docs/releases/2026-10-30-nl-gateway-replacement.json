@@ -1,7 +1,7 @@
 {
   "android108_owner_acceptance_20261101": {
-    "observed_utc": "2026-11-01T04:59:14.654212+00:00",
-    "state": "NL_REPLACEMENT_LIVE_BASELINE108_DEPLOYED_READY_FOR_BETA0_CANARY_1",
+    "observed_utc": "2026-11-01T05:20:55+00:00",
+    "state": "BETA0_CANARY1_STAGE0_ACTIVE_BASELINE108",
     "owner_reports": [
       "ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS",
       "ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS"
@@ -451,7 +451,7 @@
       "deployment": "PASS",
       "production_baseline": 108,
       "migration": "NOT_REQUIRED",
-      "paid_writes": "NOT_RUN",
+      "paid_writes": "STAGE0_APPLIED",
       "artifacts": {
         "source_commit": "accc4ffb0af35e8e5360ba2442f706b03b46bc76",
         "http": {
@@ -671,8 +671,8 @@
       },
       "startup_guard": "BOUNDED_EXACT_PROCESS_LISTENER_HTTP_READINESS_WITH_PRIVATE_OBSERVATIONS",
       "failed_instantaneous_argv_details": "NOT_CAPTURED_NO_SPECIFIC_ROOT_CAUSE_CLAIM",
-      "next": "WAITING_FRESH_OWNER_GOTOV",
-      "canary": "PAUSED_READY_WAITING_FRESH_OWNER_GOTOV",
+      "next": "STAGE0_OWNER_CONNECT_PAID_BOUNDED_PROOF",
+      "canary": "STAGE0_ACTIVE",
       "authorized_retry": {
         "owner_authorization": "EXPLICIT_ONE_ADDITIONAL_CANDIDATE_RESTART",
         "preflight": {
@@ -915,6 +915,48 @@
       "android_update_sequence": 3,
       "gateway_catalog_sequence": 4,
       "identities_invites_grants": "PRESERVED"
+    },
+    "canary_live": {
+      "owner_ready": "FRESH_GOTOV_RECEIVED",
+      "baseline": 108,
+      "binding": "OWNER_CANARY_1_RETAINED",
+      "stage0": {
+        "alias": "OWNER_CANARY_1",
+        "purpose": "internal_canary",
+        "amount_minor": 0,
+        "observed_at": 1793510455,
+        "activation_active": true,
+        "cohort": true,
+        "effective_state": "active",
+        "paid_allow": true,
+        "entitlement_until": 1793511055,
+        "version": 1,
+        "paid_until": 1793511055,
+        "event_count": 1,
+        "event_type": "payment",
+        "result": "APPLIED",
+        "duplicate": false,
+        "period_start": 1793510455,
+        "connect_deadline": 1793510545,
+        "natural_seconds": 600,
+        "post_expiry_seconds": 120,
+        "subscriptions": 1,
+        "cohort_limit": 10,
+        "baseline": "0.1.18-beta108",
+        "latest_authenticated_version": 108,
+        "baseline_certificates": "PRESERVED",
+        "watcher": "STARTED_READ_ONLY",
+        "package_sha256": "c6888a230f5e2928be3026730fbc1591588052d2c8dd5d05b5cfa527f4821e73",
+        "period_start_utc": "2026-11-01T05:20:55+00:00",
+        "paid_until_utc": "2026-11-01T05:30:55+00:00"
+      },
+      "natural_expiry": "PENDING",
+      "stage1": "NOT_RUN",
+      "crl": "NOT_RUN",
+      "final_recovery": "NOT_RUN",
+      "schedules": "PAUSED_FOR_BOUNDED_CANARY",
+      "canary_result": "IN_PROGRESS",
+      "revenue": 0
     }
   },
   "registry_overlay_correction": {
