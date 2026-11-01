@@ -21,7 +21,10 @@ infrastructure is not rebuilt or replayed. Last readback paid0/0, cohort0/10, ca
 **BETA-0-CANARY-1 live — stage0 APPLIED on baseline108.**
 Fresh owner ГОТОВ received; the earlier PAUSED/NOT_RUN notes below are historical.
 Stage0 starts 2026-11-01T05:20:55+00:00; natural expiry 2026-11-01T05:30:55+00:00 (600s).
-One Auto Connect requested by 2026-11-01T05:22:25+00:00 (90s); paid-bounded certificate proof pending.
+Owner reports MESH108 РАБОТАЕТ before the90s Connect deadline. Fresh authenticated READY
+ACK108 at05:23:57UTC and a newly issued paid-bounded certificate expire exactly05:30:55UTC.
+Server proof arrived182s after activation, not within90s; the earlier certificate remains retained.
+Actual active transport display clarification is pending; no independent TLS/session proof claimed.
 Existing OWNER_CANARY_1 binding; exact authenticated0.1.18-beta108/code108; internal_canary,
 amount0/revenue0. Paid subscriptions/events1/1, cohort1/10, subscription version1, paid_allow=true.
 Fresh private SQLite/config/artifact backup and isolated restore/integrity/FK PASS before activation.

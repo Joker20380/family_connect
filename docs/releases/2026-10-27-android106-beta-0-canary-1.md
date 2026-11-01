@@ -14,7 +14,10 @@ infrastructure is not rebuilt or replayed. Last readback paid0/0, cohort0/10, ca
 **BETA-0-CANARY-1 live — stage0 APPLIED on baseline108.**
 Fresh owner ГОТОВ received; the earlier PAUSED/NOT_RUN notes below are historical.
 Stage0 starts 2026-11-01T05:20:55+00:00; natural expiry 2026-11-01T05:30:55+00:00 (600s).
-One Auto Connect requested by 2026-11-01T05:22:25+00:00 (90s); paid-bounded certificate proof pending.
+Owner reports MESH108 РАБОТАЕТ before the90s Connect deadline. Fresh authenticated READY
+ACK108 at05:23:57UTC and a newly issued paid-bounded certificate expire exactly05:30:55UTC.
+Server proof arrived182s after activation, not within90s; the earlier certificate remains retained.
+Actual active transport display clarification is pending; no independent TLS/session proof claimed.
 Existing OWNER_CANARY_1 binding; exact authenticated0.1.18-beta108/code108; internal_canary,
 amount0/revenue0. Paid subscriptions/events1/1, cohort1/10, subscription version1, paid_allow=true.
 Fresh private SQLite/config/artifact backup and isolated restore/integrity/FK PASS before activation.
@@ -2410,3 +2413,18 @@ The private stage-specific capsule was built twice byte-identically from accepte
 No private binding, event identifier, device rows or certificates are included in this report.
 Existing identities/invites/grants, non-cohort access, deployed HTTP8e74997c… and catalog4 retained.
 Stage1, explicit expiry, exact-payload CRL and final30-day recovery NOT_RUN at this checkpoint.
+
+### Stage0 paid-bounded material observed
+
+Owner reports MESH108 РАБОТАЕТ; the reply was received before the05:22:25UTC Connect deadline.
+Authenticated challenge/fetch/import READY ACK at05:23:57UTC reports exact0.1.18-beta108/code108,
+revision9, CRL floor27233, PRESENT_VALID provisioning/bootstrap and orchestrator_usable=true.
+The newly issued certificate expires at1793511055 (05:30:55UTC), exactly stage0 paid_until.
+The existing unbounded baseline certificate is retained. This is new paid-bounded material proof,
+not proof that the active tunnel switched certificate or that every packet used MESH. The owner
+was asked to read the active transport label without reconnecting. Server proof was182s after
+activation; it is not reported as a <=90s server-proof PASS. Natural expiry remains pending.
+
+The unbound exact-payload CRL helper was built twice byte-identically from sourceaccc4ff;
+SHA256 `d0c22b95728016e0976c47c0acf5b31845ab7346939ec417782034cbe4e0d0a2`.
+Exact inventory/manifest hashes/imports/help PASS; operational permit and CRL writes NOT_RUN.

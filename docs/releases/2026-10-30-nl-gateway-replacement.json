@@ -1,6 +1,6 @@
 {
   "android108_owner_acceptance_20261101": {
-    "observed_utc": "2026-11-01T05:20:55+00:00",
+    "observed_utc": "2026-11-01T05:24:37+00:00",
     "state": "BETA0_CANARY1_STAGE0_ACTIVE_BASELINE108",
     "owner_reports": [
       "ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS",
@@ -671,7 +671,7 @@
       },
       "startup_guard": "BOUNDED_EXACT_PROCESS_LISTENER_HTTP_READINESS_WITH_PRIVATE_OBSERVATIONS",
       "failed_instantaneous_argv_details": "NOT_CAPTURED_NO_SPECIFIC_ROOT_CAUSE_CLAIM",
-      "next": "STAGE0_OWNER_CONNECT_PAID_BOUNDED_PROOF",
+      "next": "NATURAL_EXPIRY_AND_ACTIVE_TRANSPORT_OBSERVATION",
       "canary": "STAGE0_ACTIVE",
       "authorized_retry": {
         "owner_authorization": "EXPLICIT_ONE_ADDITIONAL_CANDIDATE_RESTART",
@@ -956,7 +956,53 @@
       "final_recovery": "NOT_RUN",
       "schedules": "PAUSED_FOR_BOUNDED_CANARY",
       "canary_result": "IN_PROGRESS",
-      "revenue": 0
+      "revenue": 0,
+      "stage0_material_proof": {
+        "owner_report": "MESH108_WORKS",
+        "owner_reply_observed_no_later_than": 1793510525,
+        "owner_reply_within_connect_deadline": true,
+        "challenge_fetch_ack": {
+          "challenge_at": 1793510637,
+          "fetch_at": 1793510637,
+          "expires": 1793511055,
+          "ack_at": 1793510637,
+          "ack": {
+            "result": "READY",
+            "provisioning": "PRESENT_VALID",
+            "bootstrap": "PRESENT_VALID",
+            "orchestrator_usable": true,
+            "revision": 9,
+            "minimum_crl": 27233,
+            "expires_at": 1793511055,
+            "observed_at": 1793510637,
+            "phase": "import",
+            "app_version": "0.1.18-beta108",
+            "version_code": 108,
+            "failure_reason": "NONE"
+          }
+        },
+        "new_paid_bounded_certificates": 1,
+        "new_certificate_expires": 1793511055,
+        "server_proof_after_activation_seconds": 182,
+        "server_proof_within_90s": false,
+        "baseline_certificates": "RETAINED",
+        "active_transport": "AWAITING_OWNER_DISPLAY_CLARIFICATION",
+        "active_tunnel_certificate": "NOT_INDEPENDENTLY_OBSERVED",
+        "independent_tls_session": "NOT_CLAIMED"
+      },
+      "crl_helper": {
+        "source_commit": "accc4ffb0af35e8e5360ba2442f706b03b46bc76",
+        "binding": "UNBOUND_NO_OPERATIONAL_PERMIT",
+        "sha256": "d0c22b95728016e0976c47c0acf5b31845ab7346939ec417782034cbe4e0d0a2",
+        "size": 138585,
+        "members": 24,
+        "manifest_sha256": "e1b5bf96e0b7944c6029e3b0f7649bf2368a1b1a4c79a7a5f09ada2bdc00e382",
+        "deterministic": "PASS",
+        "inventory_hashes": "PASS",
+        "imports": "PASS",
+        "help": "PASS",
+        "production_use": "NOT_RUN"
+      }
     }
   },
   "registry_overlay_correction": {
