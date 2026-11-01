@@ -8,6 +8,67 @@ host had been supplied, no live permit/material had been generated and no VPS wa
 The later read-only host preflight is recorded separately below; it does not change source PASS.
 The existing FLEET-BOOTSTRAP-2 remains open for its physical gates, with no new PLAN ID.
 
+## Authorized disposable-host OS preparation — 1 November18:30UTC
+
+**HOST_OS_PREPARATION_PASS.** After the initial unsupported-OS rejection, the owner explicitly
+authorized preparing only the new disposable host and confirmed that the provider panel has
+a Reinstall OS option. No provider reinstallation was performed. The approved work was the
+official Ubuntu22.04→24.04 transition, not an upgrade to26.04 or a role deployment.
+
+The separate, fixed-target private maintenance helper signs each bounded OS action under
+`OWNER_AUTHORIZED_DISPOSABLE_OS_PREPARATION`; the existing fleet deployment permit, remote
+agent, state machine, supported OS check and immutable A/B were not modified or bypassed to
+install roles. Each action checks root, the accepted SSH fingerprint, actual target addresses,
+production exclusions and absence of an installed Family Connect instance. Fixed stages have
+root-owned journals/immutable scripts and exclusive per-operation logs; an uncertain launch
+is reconciled, not blindly repeated. No generic live CLI or arbitrary inventory command exists.
+
+- Before changes,49management-backup members were streamed into authenticated encrypted
+  private custody and decrypted for readback. Private SSH keys were not included. Configs,
+  backups, raw requests/logs, credentials and private signing keys remain outside Git.
+- Jammy base packages and the official Noble transition completed; the upgrader offered24.04
+  and the final observed OS is Ubuntu24.04/x86_64, kernel6.8.0-147-generic.
+- Two actual OS reboots have distinct observed boot IDs and strict pinned key-only SSH after
+  each. GRUB/initrd/virtio/ext4 prerequisites passed. These are OS boot checks, **not** proof of
+  rehearsal service persistence: no role was installed or started.
+- The first launcher response was uncertain after its systemd start wait timed out; the
+  journal proved the unit was running, so it was not relaunched. Later, needrestart attempted
+  to restart that unit; the existing-log guard rejected a replay. A clean dpkg audit and a
+  separate base-reconciliation operation completed with list-only needrestart behavior.
+- A pre-reboot check found no `/vmlinuz` alias and fenced that attempt before reboot. The
+  actual `/boot/vmlinuz`, matching initrd/GRUB and driver configuration were verified before
+  a separately identified successful reboot. Both failed/uncertain observations are retained.
+- SSH temporarily refused connections while Noble packages were being configured. Bounded
+  read-only observations recovered access with the same pin; no upgrade command was replayed.
+- After the Noble reboot, the first new preflight correctly rejected missing DNS/HTTPS/time
+  capabilities. The installed but inactive systemd-resolved service was enabled, time sync
+  restarted, and final package checks completed. No replacement external DNS was invented.
+- Final observed resources:2CPU,1919MiB RAM,42408MiB free under `/opt`; dpkg audit clean,
+  no failed units and no pending reboot. SSH configuration and authorized_keys hashes match
+  the encrypted pre-change backup exactly. Ordinary host DNS/HTTPS, NTP, TUN, AppArmor,
+  systemd, nft-compatible backend and rehearsal port availability all PASS.
+- At18:30:22UTC a **fresh signed preflight-only permit** passed the unchanged `RemoteInstaller`
+  with the exact frozen agent and A/B binding. This is host qualification, not local role
+  health, external VPN acceptance, `VERIFIED`, enrollment or activation.
+
+[Sanitized OS-preparation receipt](2026-11-01-fleet-bootstrap-2-host-os-preparation.receipt.json)
+binds the final private preflight, successful OS-operation observations and signed custody
+receipt by hashes.44signed maintenance requests and the authenticated encrypted backup were
+verified locally. Source/runtime tests were not rerun for this host-only/docs continuation;
+the previously accepted393fleet/console and170paid/backend/package results remain unchanged.
+Continuation validation PASS: strict JSON, custody/preflight hash binding, private file modes,
+staged scope/privacy scan, unchanged frozen runtime, consistent current blocks,
+4Markdown files/487local links, and staged/working-tree `git diff --check`.
+
+Recovery remains provider-assisted repair or the owner-confirmed reinstall option if the
+disposable OS becomes unusable; that would require renewed host-key acceptance and fresh
+qualification, not a silent pin replacement. Reinstall availability is owner-reported, not a
+tested provider-console session. SSH trust remains explicit owner-accepted TOFU, not an
+independently verified provider identity. No role mutation permit, enrollment, transport
+material delivery, probe identity access, catalog publication or automatic next task occurred.
+Production RU/NL writes/user invitations/paid events/phone actions remain0. Next is a separately
+authorized permit-bound role rehearsal within this same checkpoint, not automatic activation.
+
 ## Disposable-host access and preflight continuation
 
 Owner supplied one disposable Netherlands host and explicitly chose the previous interactive
@@ -40,9 +101,9 @@ directory were mounted, not product credentials or the bundle signing private ke
 the target digest, public provenance and safe observations, not the target address, credentials,
 SSH-key contents or raw private permit. Full evidence and the separate authority key remain
 in ignored private storage. This is not local role health or external data-plane acceptance.
-Next within this checkpoint: prepare a supported Ubuntu24.04 host with a usable recovery path,
-then issue a fresh bounded permit and rerun preflight. Do not automatically upgrade/reinstall
-the OS, restart services or treat accepted TOFU as independently verified provider identity.
+At this earlier preflight, the next gate was supported Ubuntu24.04 preparation and recovery
+availability, followed by a fresh signed preflight. The later explicitly authorized OS work
+above resolves the OS gate; it does not turn TOFU into independently verified provider identity.
 Source/package test counts and immutable A/B are unchanged; this continuation is documentation
 and read-only observation only, not a new source/runtime test run or a physical acceptance PASS.
 Continuation checks PASS: strict JSON and private-receipt binding, private file modes,

@@ -1,7 +1,7 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**READY_FOR_FLEET_BOOTSTRAP_2_HOST — source/package gates PASS; live gates NOT_RUN.**
+**READY_FOR_FLEET_BOOTSTRAP_2_HOST — source/package and host OS/preflight PASS; role gates NOT_RUN.**
 Existing task: **FLEET-BOOTSTRAP-2**, no new PLAN ID and no automatic next task.
 Frozen deployable source: `0ecfefeaf907bd87e34e3e5356808c376aab082e`; final A/B are signed and each built twice,
 byte-identical archive/manifest/signature/hash inventory. Exact native/source/license
@@ -12,14 +12,15 @@ Full fleet237 + console156 =393 PASS; paid/backend/package170 PASS; Django check
 migration drift NONE. Append-only sanitized live-receipt import and Russian dashboard ready.
 Roles: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor.
 Disabled: mailbox/chat-services, production renewal/restricted-sync, registry/control DB.
-Disposable NL host supplied; owner installed the SSH public key interactively. Strict pinned
-key-only login PASS; trust is owner-accepted TOFU, not independent provider verification.
-A separate15-minute signed preflight-only permit admitted one read-only observation:
-Ubuntu22.04/x86_64,2CPU,1927MiB RAM,42892MiB free; rejected with `unsupported_os`.
-No installer/OS/service changes; no enrollment, live material or real probe identity access.
-Provider-console recovery remains unverified. Next: qualify a supported Ubuntu24.04 host and
-recovery access, then rerun signed preflight; no automatic OS upgrade or service activation.
-Actual services/data planes/reboot remain NOT_RUN, not accepted PASS.
+Owner-authorized disposable NL OS preparation COMPLETE: Ubuntu22.04→24.04/x86_64,
+kernel6.8.0-147-generic,2CPU,1919MiB RAM,42408MiB free. Two OS reboots verified;
+dpkg audit clean, no failed units/pending reboot; DNS/HTTPS/time/TUN and signed preflight PASS.
+Encrypted management backup verified; SSH pin/config/authorized keys retained. Provider OS
+reinstall and26.04 upgrade NOT_RUN. Trust remains owner-accepted TOFU, not independent provider
+verification; owner confirms Reinstall OS option, provider console itself remains unverified.
+Frozen runtime/A/B unchanged; no enrollment, live material or real probe identity access.
+Next within this task: separately authorized permit-bound role rehearsal, not automatic activation.
+Role services/data planes and rehearsal reboot persistence remain NOT_RUN, not accepted PASS.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
 Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.
 [Checkpoint](releases/2026-11-01-fleet-bootstrap-2.md) ·

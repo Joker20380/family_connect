@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "task": "FLEET-BOOTSTRAP-2",
+  "scope": "SANITIZED_DISPOSABLE_HOST_OS_PREPARATION",
+  "status": "HOST_OS_PREPARATION_PASS",
+  "source_package_status": "READY_FOR_FLEET_BOOTSTRAP_2_HOST",
+  "frozen_deployable_source": "0ecfefeaf907bd87e34e3e5356808c376aab082e",
+  "source_main_before": "8dc4ded56f1c250fdb0dd1627ea7642751c80d17",
+  "instance_id": "fleet-rehearsal-nl-disposable-01",
+  "target_ipv4_sha256": "7b4281421fe3cecd1ed487953d37e9ca292db10f04ae85ef37faa0c0822f7803",
+  "observed_at": "2026-11-01T18:30:22+00:00",
+  "owner_authorized": "NEW_DISPOSABLE_HOST_UBUNTU_22_04_TO_24_04_ONLY",
+  "provider_console_verified": false,
+  "provider_reinstall_option": "OWNER_CONFIRMED_AVAILABLE_NOT_EXECUTED",
+  "host_key_trust": "OWNER_INTERACTIVE_TOFU_ACCEPTED_PIN_MATCH",
+  "independent_provider_identity_verified": false,
+  "provider_os_reinstall": false,
+  "upgrade_to_26_04": false,
+  "from_os": "Ubuntu 22.04.1 LTS",
+  "host_observation": {
+    "architecture": "x86_64",
+    "cpu": 2,
+    "existing_instance": null,
+    "firewall": "iptables-nft",
+    "https": true,
+    "kernel": "6.8.0-147-generic",
+    "os": "ubuntu",
+    "pending_reboot": false,
+    "ports_available": true,
+    "resolver": true,
+    "security": "apparmor-supported",
+    "systemd": true,
+    "time_sync": true,
+    "tun": true,
+    "version": "24.04",
+    "ram_mib": 1919,
+    "opt_free_mib": 42408
+  },
+  "signed_os_requests_verified": 44,
+  "os_request_scope": "OWNER_AUTHORIZED_DISPOSABLE_OS_PREPARATION",
+  "authority_public_key_sha256": "298832ccef35f58c4208327086864c4017b1f135b4c0249c5c8cbfccefd3f2cf",
+  "encrypted_management_backup_readback": "PASS",
+  "encrypted_backup_sha256": "d99fa17d0aeb7e6f1519a6223cdc641e5db0cca112c577cb5c7e289dd879261e",
+  "backup_does_not_include_private_ssh_keys": true,
+  "sshd_config_unchanged": true,
+  "authorized_keys_unchanged": true,
+  "completed_os_reboots": 2,
+  "boot_id_sha256": [
+    "c37b8761fdf9c39130d85c67b91e27a1c85c885307b50d0bf7a54bc2ac5b9f00",
+    "ba52f8f63609f6ea95b4b17b162142ae14c74a330177f7954d4eed689ba51513",
+    "ec5e8786dcc645ea1d9838116a569bbdbafecf25bcd98cb1b4159f4a967b64d6"
+  ],
+  "stages": {
+    "base-reconcile": {
+      "exit_code": 0,
+      "completed_at": "2026-11-01T18:05:43+00:00",
+      "private_observation_sha256": "acbc2f6a5a75f35119c1c2bee81999670b201636fc1d55caae0c332f64127569"
+    },
+    "reboot-jammy-checked": {
+      "exit_code": 0,
+      "completed_at": "2026-11-01T18:09:29+00:00",
+      "private_observation_sha256": "990b2a34ec72e6c7a8ea3c578041db6b6529eff155f09cc52b735761c751c3a7"
+    },
+    "release": {
+      "exit_code": 0,
+      "completed_at": "2026-11-01T18:23:15+00:00",
+      "private_observation_sha256": "f3dec063d07622c1f633868289587bca591894a7ac95e0a828cde55f73b57be2"
+    },
+    "reboot-noble": {
+      "exit_code": 0,
+      "completed_at": "2026-11-01T18:24:38+00:00",
+      "private_observation_sha256": "2cb446677079debcfd307589336b5cfb60f2cc219ed07e151a12dbb0b6e94132"
+    },
+    "resolver": {
+      "exit_code": 0,
+      "completed_at": "2026-11-01T18:27:13+00:00",
+      "private_observation_sha256": "3bff8879ef9e8781f4e1a52c8dad8ea67e452fe5e351322857fff09d05b806c6"
+    },
+    "finalize": {
+      "exit_code": 0,
+      "completed_at": "2026-11-01T18:27:40+00:00",
+      "private_observation_sha256": "8382a6f411ee73385c33649e5474b6520f1726684d22c64c68b3d604521fc3ed"
+    }
+  },
+  "dpkg_audit": "PASS",
+  "failed_units": 0,
+  "pending_reboot": false,
+  "recovered_preparation_events": [
+    "INITIAL_UNIT_START_TIMEOUT_RECONCILED_WITHOUT_RELAUNCH",
+    "NEEDRESTART_SERVICE_REPLAY_REJECTED_BY_EXISTING_LOG_GUARD_THEN_EXPLICIT_BASE_RECONCILIATION",
+    "ROOT_VMLINUZ_ABSENT_REBOOT_FENCED_THEN_OBSERVED_BOOT_VMLINUZ_VALIDATED",
+    "TEMPORARY_SSH_UNAVAILABILITY_DURING_UPGRADE_SAME_PIN_RETURNED",
+    "DISABLED_RESOLVER_AFTER_NOBLE_ENABLED_AND_TIME_SYNC_RESTORED"
+  ],
+  "final_preflight_operation_id": "post-os-preflight-0bd08d4daeda46bd8f32a7fbe796a12c",
+  "final_preflight_result": "PASS",
+  "final_preflight_private_receipt_sha256": "5a2d47a6d704f5d7dd28b253c9948895d8f4fdadf5a5e5668a0c62ce79c27bff",
+  "final_preflight_permit_sha256": "7617a1b72a5bb36aa705c1f649d416976970c2e998f95b14650dc3079c1b6ba9",
+  "final_preflight_allowed_actions": [
+    "preflight"
+  ],
+  "agent_sha256": "0d5db7baae392254678af14c055f9a99cec837efc052dc219b13e7bfde773bc1",
+  "bundle_a": "gw-f93d6eb5613b913cb29f2ba168765e77",
+  "bundle_b": "gw-215af561736b8c73b072085c31ffba70",
+  "fleet_runtime_source_changed": false,
+  "private_host_helper_sha256": "dd816a8973b8dc1b5ba9dacdd526daa2e78622558266bf4fa9c1574b06516e07",
+  "operator_os_writes_on_disposable_host": true,
+  "rehearsal_enrollment": "NOT_RUN",
+  "material_delivery": "NOT_RUN",
+  "role_service_start": "NOT_RUN",
+  "external_acceptance": "NOT_RUN",
+  "rehearsal_reboot_persistence": "NOT_RUN",
+  "production_writes": 0,
+  "catalog_publications": 0,
+  "user_invitations": 0,
+  "paid_events": 0,
+  "phone_actions": 0,
+  "custody_receipt_sha256": "be49a61b6c6fe59783e51c19dd8358e5b82401a7ae5021026bc6f7dc0f23b6d1"
+}
