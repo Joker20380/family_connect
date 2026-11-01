@@ -1,127 +1,144 @@
-# FLEET-BOOTSTRAP-2 — disposable physical gateway rehearsal
+# FLEET-BOOTSTRAP-2 — source/package handoff
 
-Owner-authorized1 November2026; **IN_PROGRESS / SOURCE PREPARATION**.
-Entry main: `45d50b7ce39f05b789a44a760156d5fbbc23a345`.
-Accepted bootstrap foundation source: `a3fc3bf1c11a686ea444ad36d576c05ac5e24810`.
-Current incomplete preparation code source: `39dcadb4d6a85b079c2deebb596453fc632fac9a`
-(pushed and remote-verified; not a deployable artifact source acceptance).
-That synthetic archive is not a deployable AWG/TCP/MESH distribution and will not be
-installed as one. [Runbook](../fleet-bootstrap.md).
+**READY_FOR_FLEET_BOOTSTRAP_2_HOST**
 
-No disposable host has been selected or supplied. No production SSH session, target
-write, catalog publication, user invitation, paid event or phone action is performed.
-Public109/Android sequence4, gateway catalog4, paid baseline108, entitlement,
-ledger1/4, cohort1/10, revenue0 and production RU/NL state are preserved.
-FLEET-ACTIVATION-1 is not authorized by this checkpoint.
+All selected source/package gates PASS. This is not live-host or production acceptance.
+Supported target: **Ubuntu24.04/x86_64**. No disposable host has been supplied; no live
+permit or disposable live transport material has been generated. No VPS was contacted.
+The existing FLEET-BOOTSTRAP-2 remains open for its physical gates, with no new PLAN ID.
 
-## Phase0 — synthetic fixture correction
+## Source and immutable packages
 
-Classification: `SYNTHETIC_SEEDER_INVITE_PREFIX_COLLISION`.
-The legacy12→50 synthetic seeder passed bare UUID hex to the existing invitation parser.
-A value starting `fc` lost two hex digits during prefix normalization. The seeder now
-formats all32 hex digits as the canonical `FC-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX`
-representation using a private helper. No UUID retry and no production parser change.
-Deterministic regression forces the collision and checks all12 prior device rows,
-subscriptions/events/invitations, exactly38 new synthetic identities, unique invitation
-hashes and byte-identical repeated seeding. Isolated PostgreSQL/full console + fleet:
-**208 PASS**, zero failures/errors,33 existing missing-static-directory warnings.
-Existing paid/backend/canary/package regression: **170 PASS**. Django check PASS;
-migration drift NONE. Production invitation parser unchanged.
+- Continuation entry main: `1c1cd52b48f9aab008eb9cc52d8b634c2c484e4a`.
+- Accepted foundation: `a3fc3bf1c11a686ea444ad36d576c05ac5e24810`.
+- Superseded incomplete preparation: `39dcadb4d6a85b079c2deebb596453fc632fac9a`.
+- Frozen deployable source: `0ecfefeaf907bd87e34e3e5356808c376aab082e` (pushed, remote main verified).
+- Source commits and accepted evidence are retained; no history rewriting or release tag.
+- Native-only v1 remains intact. [Deployable v2](../../fleet/inventory/deployable-gateway-v2.json)
+  preserves exact AWG engine/tools, Xray and canonical gateway artifact/source/license bindings.
+- Exact282-file canonical MESH capsule reverified. No FLEET_MESH_PROBE_1 private identity
+  was opened, copied or included. Monitoring is new bound standard-library source, not an
+  observed unbound binary. Its exact unchanged source was introduced in4f73a5a.
 
-## Source/package gates
+| Artifact | A | B |
+| --- | --- | --- |
+| Bundle ID | `gw-f93d6eb5613b913cb29f2ba168765e77` | `gw-215af561736b8c73b072085c31ffba70` |
+| Archive SHA256 | `ecf24da19723822edff315f03e65f8665b3a2b85809b1b914fca8a23ceacacd3` | `46a0c4891fece4b00e604e893ad7a45a68f33b35e3602cd8dc619392a4c5d1ca` |
+| Manifest SHA256 | `68d8b5a3f2032dbc13487d86009b99bd3f9f5d40ec49919230535207a03e7d63` | `39e197c0a37cb54658790a9a53c0a5bce61a046b345b5094cc6b6ca7e351c77f` |
+| Signature-file SHA256 | `8693042420d380d06226d007a48d6ede12a5b4ef3ca44f74158dca397886c14f` | `9418c7ee807994bc1c1a461b15d6f41d4ba9f65e7b8f21f3fc4a871f69b3fc58` |
+| SHA256-inventory SHA256 | `f5b9969f408e652fb9ace607458074252185eda34fba5236d537502a603791f1` | `41f0fb8301cff99d85be1ad9e2698145f8501470c63af0a32f867addbd11259e` |
 
-Latest source regression: fleet237 + full console156 =393 PASS; paid/backend170 PASS.
-The isolated package test exposed strict-umask directory modes; explicit owned-directory
-modes and a regression now fix it. Existing AWG interfaces are neither adopted nor
-deleted. Server-key health and unknown SSH-result reconciliation are explicit gates.
-Earlier private package attempts are superseded, not accepted host inputs; final exact
-A/B source/container qualification is still running in this checkpoint.
+Each bundle was built twice and verified independently: archive, manifest, signature and
+SHA256 inventory are byte-identical per bundle. A/B differ **only** in
+`metadata/revision.json` (explicit revision/monitoring marker). Native binaries, transport
+contracts, role identities, ports and material/slot schema are identical.
 
-Continuation1 November: signed X25519/HKDF/ChaCha20-Poly1305 material envelopes,
-separate encryption-key enrollment binding, nonce reservation and private slot custody
-now have source tests. Verification is split into durable `start-verification` and
-`complete-verification`; the node cannot promote local health to physical acceptance.
-Missing external evidence preserves `AWAITING_EXTERNAL_ACCEPTANCE`; invalid activation
-does not promote that state. Fleet source tests170 PASS (including26 new material and
-acceptance tests); the Ubuntu24.04 isolated nftables syntax check passes. These results
-are not the full preparation gate, a deployable bundle or a live-host handoff. Role
-runtime, A/B packaging, operator wiring and append-only console imports remain under
-implementation in this same checkpoint. No deployment or version/catalog change.
+Bundle signer public-key SHA256: `d327d9fd0a3088c8b80ee00bc32ce5cd7f8ee61c6dbdd68d2bb292741a54daf6`.
+This is a fresh private rehearsal signer outside Git, not the public synthetic seed or
+product release key. Archives, signatures, source capsules and private key remain in
+ignored private artifact storage. Earlier be31646/102d2aa/a6ba912 private builds are
+superseded preparation attempts and must not be selected for the host handoff.
 
-Append-only rehearsal evidence import is now source-integrated: one strict signed
-sanitized schema and `import_fleet_rehearsal --kind` cover artifact, permit, enrollment,
-intent/completion, local health, external acceptance, reboot and retirement. Identical
-imports are idempotent; changed event identities and raw private fields are rejected.
-PostgreSQL UPDATE/DELETE triggers and the Russian read-only summary have27 focused
-tests PASS. Django check PASS; migration drift NONE. The web process does not hold
-SSH/signing/material-decryption authority. This remains source-only evidence integration.
+Permit source SHA256: `47b1dfe7ee90221a452a762595ce9017e5d4c51e8ddd1195238cc567ff9eaacc`.
+Agent source SHA256: `04e43c21631434ff32286345bb94b7c038e2d27e45058d08ee945b9246f071dd`.
+Exact deployed agent ZIP SHA256: `0d5db7baae392254678af14c055f9a99cec837efc052dc219b13e7bfde773bc1`.
+The permit must bind the latter ZIP digest and this exact bundle signer fingerprint.
 
-Seeder correction pushed and remote-verified as `8e94d30f43330a7ce31afe5bf28a398911d452f6`.
-The signed four-hour permit, target exclusions, SSH receiver, target-side reverification,
-scope-separated enrollment and durable rehearsal operation controller are implemented.
-These are guarded source primitives, **not a qualified runnable deployment**: no accepted
-role installer/health runtime or deployable A/B bundle has been admitted yet. The receiver
-fails closed without a signed, fully bound role runtime. No live CLI is advertised yet.
-The prior `SSH.mutate` / sandbox-only boundaries remain intact.
+## Implemented boundaries
 
-Guard source pushed/remote-verified as `54a172fb4ad59be04e078f9e314d3434c3860974`.
-Latest isolated full console + fleet **273 PASS** (129 console,144 fleet), zero failures
-or errors,33 existing static-directory warnings. Django check PASS; migration drift NONE.
-Existing paid regression170 PASS; paid/backend/product sources are unchanged in this work.
-Target verification now checks signed archive/member hashes and modes in memory before
-installing even ordinary runtime prerequisites. Actual OS/architecture/TUN and excluded
-local addresses are checked again before target filesystem writes.
-The operator's accepted known-hosts file is also rechecked before every SSH call; unsafe
-ownership/link ancestry and a pin changed after initial verification are rejected.
-Rehearsal-only member ceiling64MiB accommodates accepted Xray46755260 bytes; the128MiB
-aggregate bound and the original32MiB synthetic/candidate member ceiling are unchanged.
+- Admitted: awg, tcp, mesh, profile-reader, publisher, snapshot, monitoring, load-monitor.
+- Explicitly disabled: mailbox/chat-services; production renewal/restricted-sync;
+  production registry/control-plane database. Disabled roles are explicit health-contract
+  exclusions, not unimplemented admitted roles.
+- Root operation boundary; immutable versioned releases and fsynced atomic current pointer;
+  separate configuration/state/secrets; retained predecessor; exact service users/modes,
+  argv/capabilities/limits and absolute permit-expiry service/timer. Strict umask077 covered.
+- Owned nftables table only, syntax checked, no global flush; exact predecessor rollback;
+  dedicated sysctl file and previous forwarding restoration. Foreign tables/files/interfaces
+  are not adopted or deleted. Unknown outcomes are reconciled by durable operation binding.
+- Separate node-generated X25519 material key, signed enrollment binding, X25519/HKDF/AEAD
+  envelope, signed authority, instance/host/A+B/key/expiry binding and one-time nonce.
+  Secrets never enter bundle, argv, safe receipts, journal or Django. Pinned offline wheels:
+  cryptography46.0.7/cffi2.1.1/pycparser3.0 for target CPython3.12.
+- Local health checks exact native process/argv, listeners, AWG server/peer/address/MTU,
+  profile signatures/floor/CRL/expiry/directory, restart counts, firewall/sysctl and resources.
+  It explicitly cannot assert external data-plane PASS.
+- Durable start-verification → AWAITING_EXTERNAL_ACCEPTANCE → complete-verification → VERIFIED.
+  Operator receipt binds unpredictable post-start nonce and current local-health digest;
+  signed <=300-second lifetime, replay/forgery/drift rejection; activate-local requires VERIFIED.
+- Operator AWG/TCP and newly source-bound MESH probe, no user/payment API. The MESH probe
+  rebuild is byte-identical and binds egress to the later permit target, not production IP.
+- Append-only sanitized evidence imports, idempotency/conflict checks and DB UPDATE/DELETE
+  triggers; Russian dashboard covers bundles/state/operations/health/duration/rollback/reboot/retire.
+  Web requests have no SSH, signing or material-decryption authority.
 
-Native provenance audit found exact accepted AWG engine/tools, Xray and canonical gateway
-bytes; all four help/version checks execute in a network-disabled Ubuntu24.04 image.
-The canonical gateway's retained282-file source capsule matches its accepted manifest,
-not an assumed checkout of current carrier. AWG upstream pins were fetched exactly and
-Xray's exact upstream commit is retained locally. This is not transport health acceptance.
-The native-only binding inventory is
-[`deployable-gateway-v1.json`](../../fleet/inventory/deployable-gateway-v1.json).
-Its scope is `BOUND_REHEARSAL_INPUTS`, not a whole deployable bundle qualification:
-load-monitor/monitoring runtime binding remains pending; production renewal/sync journals
-are excluded, and mailbox/chat-services are not enabled. Exact source/receipt/hash admission
-has12 focused tests. A retained operator-only MESH probe binary was found by accepted hash;
-its private identity has not been read, imported, copied or used.
+## Qualification results
 
-Full deployable role binding, private rehearsal signer, A/B bundle qualification, real
-role installation/health hooks and Django rehearsal evidence integration remain pending.
-Observed role hashes alone are insufficient; unbound binaries fail `UNBOUND_ROLE_ARTIFACT`.
-No generic live bypass will be added. Only one independently pinned disposable
-Ubuntu24.04/x86_64 target may receive root-level changes after all source/package gates.
+| Gate | Final result |
+| --- | --- |
+| Full fleet suite, pinned Ubuntu24.04 container |237 PASS |
+| Full console suite, isolated PostgreSQL/control lockfile image |156 PASS |
+| Combined console/fleet |393 PASS,0 failures/errors |
+| Existing paid/backend/package regression, control + identity locks |170 PASS |
+| Django system check / migration drift | PASS / NONE |
+| A and B each built twice, all four files compared | PASS |
+| Target receiver and agent bundle reverification, both bundles | PASS |
+| Native four help/version paths and exact Xray config-test | PASS |
+| Systemd static verification, dedicated account and0600/0640 ownership | PASS |
+| nft syntax, neighbor coexistence, predecessor restore and owned cleanup | PASS |
+| Synthetic envelope delivery and real versioned fake-root layout | PASS |
+| Two-phase synthetic receipts; B failure→A; B success; explicit rollback; retirement | PASS |
+| Strict JSON, privacy/secret scan, staged scope, whitespace | PASS |
+| Markdown links | PASS in committed task scope |
 
-## Live results and timings
+There are34 existing console warnings for the absent test static directory; no test errors.
+Console and fleet are full runs in their respective pinned isolated environments, not a
+claim that unrelated platform/release/physical suites ran. Unrelated pre-existing working
+changes remain unstaged, including a historical STATUS link with a missing anchor in an
+untracked report; that unrelated feed is not part of the committed handoff link gate.
 
-Host preflight/enrollment/stage/AWG/TCP/MESH/upgrade/rollback/reboot/drain/retire: **NOT_RUN**.
-All timing measurements: **NOT_MEASURED**. Private ACTIVE is never catalog publication.
-The next operator boundary is `READY_FOR_FLEET_BOOTSTRAP_2_HOST` only after preparation
-is complete, or a localized genuine blocker. No host absence is used to skip preparation.
+Isolated qualification image:
+`sha256:3fe0baf04e0df8629100edabfd9e532a780867e7df7333f54cba81f63f1f7b74`.
+The [Dockerfile](../../scripts/fleet-rehearsal.Dockerfile) pins Ubuntu's base digest. Runs used
+network-none, namespace-local NET_ADMIN, read-only source/package mounts, no private signer
+or identity custody mount. [Qualification harness](../../scripts/qualify-fleet-rehearsal.py)
+source SHA256: `bdf6ac4f13edaf80029cdc2e53ed9d21c03cdc13d47bce74ce6666ed0ccda208`.
+The full safe result is embedded in the [receipt](2026-11-01-fleet-bootstrap-2.receipt.json).
 
-## Remaining source work — not an owner handoff
+The first container attempt exposed an ordinary nft fixture formatting error and strict
+umask directory mismatch; both were localized, fixed and requalified. They are not retained
+as blockers or hidden physical failures. Cache reuse requires the exact public source,
+patch, compiler and two previously reproduced operator binary hashes; it is not reuse of
+an unbound observed monitoring/runtime binary.
 
-Continuation source transition: bound AWG/TCP/MESH role runtime, exact rehearsal
-templates, owned firewall/sysctl rollback, private material factory, operator CLI
-and two-phase recovery are implemented. Ubuntu24.04 fleet217 PASS; full console156
-PASS. The operator MESH probe rebuild is byte-identical, uses a permit-target egress
-binding, and has not contacted Telemost. Pinned Python46.0.7 cryptography wheels are
-bound for offline target loading rather than relying on an unpinned distro package.
-This is a source checkpoint, not installation, public distribution or physical PASS.
-The remaining bullets below describe the original preparation queue; final package
-qualification must supersede them before handoff. Production mutations remain0.
+## Operator commands and remaining physical gates
 
-- Implement and qualify the bound real role installer, service/config/firewall/sysctl
-  templates, physical health orchestration and bounded retirement cleanup.
-- Wire node-local enrollment/material exchange and the private operator acceptance harness;
-  keep the probe identity outside both bundle and node.
-- Build/sign A/B twice from a frozen exact source and retain complete source/license inputs.
-- Add sanitized live-receipt ingestion and the Russian rehearsal summary to Django.
-- Complete the operator CLI and repeat focused integration/security/package qualification.
+Ready: `prepare`, `plan`, `preflight`, `enroll`, `deliver-materials`, `stage`,
+`start-verification`, `run-acceptance`, `complete-verification`, `activate-local`, `status`,
+`upgrade`, `rollback`, `reboot-verify`, `drain`, `retire` through
+[`scripts/fleet-rehearsal`](../../scripts/fleet-rehearsal). See the [runbook](../fleet-bootstrap.md)
+for required permit/pins, custody paths, envelope creation, evidence export/import and recovery.
 
-No genuine external blocker has been established. No deployable bundle A/B or physical
-data-plane PASS is claimed. `READY_FOR_FLEET_BOOTSTRAP_2_HOST` is **NOT_REACHED**.
-[Sanitized preparation receipt](2026-11-01-fleet-bootstrap-2.receipt.json).
+**NOT_RUN:** real systemd service start, AWG handshake/DNS/HTTPS/egress, TCP tunnel/auth/egress,
+MESH Telemost room/join/READY/registration/Family TLS/DNS/four HTTPS streams/egress/cleanup,
+live upgrade/rollback, reboot persistence and live retirement. Their timings are NOT_MEASURED.
+Source/container qualification does not substitute for those signed two-party host receipts.
+A source push is not installation, public distribution, catalog publication or production rollout.
+
+Live rollback path: stop the attempted B, atomically restore accepted A and its config/owned
+firewall, run local health; final external acceptance remains a distinct receipt. A failed
+rollback/retirement fences mutations; provider-console recovery/disposal must not bypass it.
+Drain/retire delete only owned disposable material after a final custody receipt; retained
+read-only releases are nonsecret. SSD/COW/snapshot forensic erasure requires provider disposal.
+
+## Unchanged production and private host inputs
+
+Production RU/NL writes0; catalog publications0; user invitations0; paid events0; phone actions0.
+Public Android109, Android sequence4, gateway catalog4, paid baseline108, owner entitlement,
+ledger1/4, cohort1/10 and revenue0 are unchanged by this work. No product version or installer
+was rebuilt/released. No FLEET-ACTIVATION-1 or other queued task starts automatically.
+
+Request only: disposable VPS IPv4; SSH user; provider; region; independently verified
+`SHA256:` host-key fingerprint; accepted single-host known_hosts path; SSH key path or
+confirmed SSH-agent context; provider console availability; VPS resources; optional IPv6.
+No password in chat. Do not start the live rehearsal without these values.

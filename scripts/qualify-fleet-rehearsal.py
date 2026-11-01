@@ -10,6 +10,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from types import SimpleNamespace
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 
@@ -102,7 +103,7 @@ def qualify(package, output):
         platform='Ubuntu24.04/x86_64',target_reverification='PASS',pinned_python_dependencies='PASS',
         qualification_source_sha256=digest(Path(__file__).read_bytes()),
         native_help_version_config_test='PASS',unit_verification='PASS',nft_syntax_coexistence_rollback='PASS',
-        material_delivery_fake_root='PASS',two_phase_synthetic_acceptance='PASS',ab_installation='PASS',
+        material_delivery_fake_root='PASS',service_account_modes='PASS',two_phase_synthetic_acceptance='PASS',ab_installation='PASS',
         injected_b_failure_rollback_a='PASS',b_upgrade='PASS',explicit_rollback='PASS',retirement='PASS',
         real_systemd_start='NOT_RUN',awg_handshake='NOT_RUN',tcp_tunnel='NOT_RUN',mesh_data_plane='NOT_RUN',
         reboot_persistence='NOT_RUN',production_writes=0,catalog_publications=0,user_invitations=0,paid_events=0,phone_actions=0)
@@ -128,6 +129,9 @@ def scenario(workspace,bundles,package_receipt):
     directory.mkdir(mode=0o700)
     runtime=Runtime(manifest=bundles['A'][0],contents=bundles['A'][1],authorization=permit,authority=authority.public_key(),
         directory=directory,root=root,executor=IsolatedExecutor(),clock=lambda:now+1)
+    account=Runtime.service_account(SimpleNamespace(root=Path('/'),command=lambda *argv:command(list(argv))))
+    assert account[0]>0 and account[1]>0
+    runtime.service_account=lambda:account
     binding={name:body[name] for name in ('instance_id','logical_gateway','provider','region','ipv4')}
     binding.update(bundle_id=body['bundle_a'],roles=bundles['A'][0]['roles'])
     store=EnrollmentStore(workspace/'operator.sqlite',authority,scope='rehearsal',clock=lambda:now)
@@ -164,8 +168,10 @@ def scenario(workspace,bundles,package_receipt):
     assert operate('start-verification')['result']=='AWAITING_EXTERNAL_ACCEPTANCE'
     assert operate('complete-verification')['result']=='AWAITING_EXTERNAL_ACCEPTANCE'
     config=runtime.configuration/body['bundle_a']
+    assert (config/'profile/gateway.json').stat().st_gid==account[1]
+    assert (config/'profile/gateway.json').stat().st_mode & 0o777==0o640
+    assert (config/'publisher.env').stat().st_mode & 0o777==0o600
     command([str(runtime.releases/body['bundle_a']/'bin/xray'),'run','-test','-config',str(config/'tcp.json')])
-    command(['useradd','--system','--user-group','--shell','/usr/sbin/nologin','fc-rehearsal'])
     with tempfile.TemporaryDirectory() as temporary:
         files=[]
         for source in (config/'units').iterdir():

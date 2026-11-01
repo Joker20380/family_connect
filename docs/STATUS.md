@@ -1,21 +1,25 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**FLEET-BOOTSTRAP-2 — IN_PROGRESS / SOURCE-PACKAGE PREPARATION.**
-Continuation: bound runtime, encrypted materials, operator CLI and two-phase acceptance
-have237 fleet tests PASS; full console156 PASS. Final private A/B qualification follows.
-Dependency: accepted FLEET-BOOTSTRAP-1 sourcea3fc3bf and receipt; synthetic-only bundle is
-not a production VPN distribution. Owner authorizes one disposable Ubuntu24.04/x86_64
-rehearsal, not production RU/NL, catalog/paid changes or phone actions. No host supplied.
-Seeder correction committed/pushed; full console/fleet273 PASS and paid170 PASS.
-Native AWG/TCP/MESH inputs are hash/source-bound; no deployable A/B bundle yet.
-Permit/SSH/reverification/enrollment guards are retained; real role runtime and append-only
-Django integration are implemented. Qualified A/B bundles still precede host handoff.
-Completion requires actual AWG/TCP/MESH, upgrade/rollback/reboot and RETIRED evidence;
-without host, finish source/package preparation before READY_FOR_FLEET_BOOTSTRAP_2_HOST.
-Public109/sequence4/catalog4/paid baseline108/entitlement/ledger1/4/cohort1/10 unchanged.
-[Checkpoint](releases/2026-11-01-fleet-bootstrap-2.md) · [Runbook](fleet-bootstrap.md).
-Older checkpoint NEXTs below are historical, not concurrent active work.
+**READY_FOR_FLEET_BOOTSTRAP_2_HOST — source/package gates PASS; live gates NOT_RUN.**
+Existing task: **FLEET-BOOTSTRAP-2**, no new PLAN ID and no automatic next task.
+Frozen deployable source: `0ecfefeaf907bd87e34e3e5356808c376aab082e`; final A/B are signed and each built twice,
+byte-identical archive/manifest/signature/hash inventory. Exact native/source/license
+bindings and the282-file canonical MESH capsule are retained. Ubuntu24.04/x86_64
+isolated qualification PASS: native config/help, units, nft coexistence, encrypted
+materials, two-phase synthetic acceptance, B failure→A, B success, rollback and retire.
+Full fleet237 + console156 =393 PASS; paid/backend/package170 PASS; Django check PASS,
+migration drift NONE. Append-only sanitized live-receipt import and Russian dashboard ready.
+Roles: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor.
+Disabled: mailbox/chat-services, production renewal/restricted-sync, registry/control DB.
+No disposable host supplied, no live permit/materials generated, no real probe identity read.
+Next within this task: obtain the ten private host inputs; only then schedule the guarded
+physical rehearsal. Actual services/data planes/reboot remain NOT_RUN, not accepted PASS.
+Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
+Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.
+[Checkpoint](releases/2026-11-01-fleet-bootstrap-2.md) ·
+[Hashes/receipt](releases/2026-11-01-fleet-bootstrap-2.receipt.json) · [Runbook](fleet-bootstrap.md).
+Older checkpoint NEXTs below are historical, not simultaneous active work.
 <!-- /FLEET-BOOTSTRAP-2 current -->
 
 <!-- FLEET-BOOTSTRAP-1 current -->
