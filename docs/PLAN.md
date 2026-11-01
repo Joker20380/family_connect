@@ -36,9 +36,15 @@ single Disconnect/notification event, not every notification lifecycle or indepe
 inspected Android VPN ownership. Two20s server samples show no new bound-peer handshake/traffic;
 three retained TCP ESTABLISHED conntrack entries remain, so full resource-release is not claimed.
 No test session was created by the operator; static registration/peer is intentionally retained.
-Next: Netherlands TCP Connect once after owner-confirmed disconnection; AWG session attribution
-and full cleanup evidence remain OPEN for final NL acceptance, not silently waived by TCP smoke.
-Auto/MESH and paid writes remain NOT_RUN. No second AWG Connect or manual state deletion.
+Owner now replies **TCP108 РАБОТАЕТ** to the Netherlands TCP/internet/HTTPS egress check:
+accept **TCP108_OWNER_RUNTIME_HTTPS_NL_EGRESS_PASS**, not a remotely attributed phone session.
+Read-only04:09:32UTC: retained bound TCP user is configured and registered on new NL;
+the exact active service owns443, Reality configured, NRestarts0 and configuration unchanged.
+No established TCP443 connection is visible at that instant; per-user statistics are not enabled.
+Do not infer active owner traffic from registration or turn on telemetry/restart the service.
+Next: one TCP Disconnect, confirm VPN icon/notification outcome, then read-only cleanup.
+AWG session/full cleanup evidence remains OPEN; Auto/MESH and paid writes remain NOT_RUN.
+No second Connect or manual state deletion; NL acceptance is not advanced by missing evidence.
 NL_REPLACEMENT_LIVE and READY_FOR_BETA0_CANARY_1
 are **NOT_YET_MET**. Production paid baseline remains106; stage0 on108 is prohibited
 until the generic exact108 contract is deployed and the owner freshly answers ГОТОВ.

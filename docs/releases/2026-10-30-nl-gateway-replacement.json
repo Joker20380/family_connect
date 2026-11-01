@@ -1,7 +1,7 @@
 {
   "android108_owner_acceptance_20261101": {
     "observed_utc": "2026-11-01T03:47:32.274129+00:00",
-    "state": "AWG108_OWNER_DISCONNECTED_NOTIFICATION_GONE_NEXT_TCP_FULL_AWG_GATE_OPEN",
+    "state": "TCP108_OWNER_RUNTIME_HTTPS_NL_EGRESS_PASS_AWAITING_SINGLE_DISCONNECT_NL_GATE_OPEN",
     "owner_reports": [
       "ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS",
       "ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS"
@@ -11,7 +11,7 @@
     "notification_lifecycle": "AWG_SINGLE_DISCONNECT_OWNER_PASS_OTHER_SCENARIOS_NOT_TESTED",
     "owner_transport_smoke": {
       "awg108": "OWNER_HTTPS_NL_EGRESS_PASS_SERVER_SESSION_NOT_OBSERVED",
-      "tcp108": "NOT_RUN",
+      "tcp108": "OWNER_RUNTIME_HTTPS_NL_EGRESS_PASS_SERVER_SESSION_NOT_OBSERVED_CLEANUP_PENDING",
       "auto_mesh108": "NOT_RUN",
       "disconnect_cleanup": "OWNER_DISCONNECT_NOTIFICATION_PASS_BOUND_PEER_QUIESCENT_FULL_CLEANUP_UNPROVEN"
     },
@@ -376,6 +376,53 @@
         ],
         "canary": "PAUSED_NOT_RUN"
       }
+    },
+    "tcp108_followup": {
+      "owner_field_result": "TCP108_OWNER_RUNTIME_HTTPS_NL_EGRESS_PASS",
+      "read_only_observation": {
+        "observed_at": "2026-11-01T04:09:32.080396+00:00",
+        "host": "185.10.158.212",
+        "bound_user_configured": true,
+        "bound_user_registered": true,
+        "service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "NRestarts": "0"
+        },
+        "exact_service_owns_tcp443": true,
+        "transport_security": "reality",
+        "active_tcp443_connections_aggregate": 0,
+        "aggregate_is_not_bound_owner_session": true,
+        "user_statistics_enabled": false,
+        "stats_configuration_present": false,
+        "user_stats_policy_enabled": false,
+        "stats_api_enabled": false,
+        "configuration_unchanged": true,
+        "owner_report": "TCP108_WORKS_WITH_HTTPS_NEW_NL_EGRESS",
+        "latest_observations": [
+          {
+            "version_name": "0.1.18-beta108",
+            "version_code": 108,
+            "source": "readiness_ack"
+          }
+        ],
+        "paid": [
+          0,
+          0
+        ],
+        "cohort": "0/10",
+        "canary": "PAUSED_NOT_RUN",
+        "operator_created_sessions": 0,
+        "disconnect": "NOT_YET_REQUESTED",
+        "production_mutations": "NONE"
+      },
+      "client_endpoint_trace": "NOT_COLLECTED",
+      "server_session_attribution": "NOT_OBSERVED_SINGLE_SNAPSHOT_NO_USER_STATS",
+      "next": "ONE_TCP_DISCONNECT_VPN_ICON_NOTIFICATION_THEN_READ_ONLY_CLEANUP",
+      "old_nl_fence": "RETAINED_ACCEPTED_PREFLIGHT_NOT_REDEPLOYED",
+      "awg_final_gate": "OPEN",
+      "support_id_search": "NOT_RUN",
+      "nl_replacement_live": "NOT_YET_MET"
     }
   },
   "registry_overlay_correction": {

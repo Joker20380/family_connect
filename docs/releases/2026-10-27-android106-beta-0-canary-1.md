@@ -9,8 +9,13 @@ attribution is unresolved, not a full AWG PASS or a proven product failure.
 Owner subsequently confirms Disconnect and notification disappearance. Two20s server
 readbacks show no new bound-peer handshake/traffic;3 TCP conntrack entries are retained,
 not deleted or declared fully released. No independent Android OS ownership inspection.
-Next one TCP Connect after owner-confirmed disconnection; AWG session/full cleanup proof
-remain open for final NL acceptance. No second AWG Connect; Auto/MESH still NOT_RUN.
+Owner now confirms TCP108 works after the Netherlands TCP/internet/HTTPS egress check:
+**TCP108_OWNER_RUNTIME_HTTPS_NL_EGRESS_PASS**. Read-only04:09:32UTC confirms the retained
+TCP user configured/registered on new NL and active Reality listener443/NRestarts0.
+No established connection is visible at that instant; per-user statistics are disabled.
+Registration is not active-session attribution. Configuration unchanged; no telemetry enabled.
+Next one TCP Disconnect and read-only cleanup; AWG session/full cleanup proof remains OPEN.
+No repeat Connect or manual deletion; Auto/MESH still NOT_RUN.
 Existing binding and latest ACK108 retained; paid0/0, cohort0/10, canary PAUSED_NOT_RUN.
 No source/package/deployment or identity change; NL_REPLACEMENT_LIVE remains unmet.
 

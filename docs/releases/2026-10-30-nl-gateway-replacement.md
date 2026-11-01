@@ -34,9 +34,15 @@ single Disconnect/notification event, not every notification lifecycle or indepe
 inspected Android VPN ownership. Two20s server samples show no new bound-peer handshake/traffic;
 three retained TCP ESTABLISHED conntrack entries remain, so full resource-release is not claimed.
 No test session was created by the operator; static registration/peer is intentionally retained.
-Next: Netherlands TCP Connect once after owner-confirmed disconnection; AWG session attribution
-and full cleanup evidence remain OPEN for final NL acceptance, not silently waived by TCP smoke.
-Auto/MESH and paid writes remain NOT_RUN. No second AWG Connect or manual state deletion.
+Owner now replies **TCP108 РАБОТАЕТ** to the Netherlands TCP/internet/HTTPS egress check:
+accept **TCP108_OWNER_RUNTIME_HTTPS_NL_EGRESS_PASS**, not a remotely attributed phone session.
+Read-only04:09:32UTC: retained bound TCP user is configured and registered on new NL;
+the exact active service owns443, Reality configured, NRestarts0 and configuration unchanged.
+No established TCP443 connection is visible at that instant; per-user statistics are not enabled.
+Do not infer active owner traffic from registration or turn on telemetry/restart the service.
+Next: one TCP Disconnect, confirm VPN icon/notification outcome, then read-only cleanup.
+AWG session/full cleanup evidence remains OPEN; Auto/MESH and paid writes remain NOT_RUN.
+No second Connect or manual state deletion; NL acceptance is not advanced by missing evidence.
 NL_REPLACEMENT_LIVE and READY_FOR_BETA0_CANARY_1
 are **NOT_YET_MET**. Production paid baseline remains106; stage0 on108 is prohibited
 until the generic exact108 contract is deployed and the owner freshly answers ГОТОВ.
@@ -1555,3 +1561,30 @@ no repeated AWG Connect. Existing OWNER_CANARY_1 binding/latest ACK108 retained,
 cohort0/10, canary PAUSED_NOT_RUN, production paid baseline106. No production mutation,
 service restart, package/deployment/catalog change or rollback. Existing artifacts retained.
 Strict JSON/privacy/local-link/staged-scope/whitespace checks; no platform/full historical suite.
+
+### TCP108 owner runtime/HTTPS egress — single Disconnect pending
+
+Owner replies **TCP108 РАБОТАЕТ** to the request to select Netherlands/TCP, Connect once,
+check internet and open HTTPS api.ipify.org expecting185.10.158.212, then remain connected.
+Accept **TCP108_OWNER_RUNTIME_HTTPS_NL_EGRESS_PASS** as owner field evidence. This is not
+an independent packet capture, client endpoint readback or server-attributed phone session.
+The previously verified catalog4 selects the new NL endpoint and old NL remains fenced in
+the accepted preflight; no fallback to old NL is reported. Do not claim a new phone trace.
+
+Read-only04:09:32UTC retains the existing OWNER_CANARY_1 binding without Support ID search.
+On new NL, the exact bound TCP account is present in the configured and live VLESS inbound;
+Reality is configured, the active service owns443, NRestarts0, and config bytes are unchanged
+during observation. The single socket snapshot has0 established connections on that listener.
+Per-user traffic statistics/policy/API are not enabled. These facts prove registration/service
+availability, not active user traffic or a product failure. No telemetry was enabled, no
+service restarted and no temporary client, account or test session created.
+
+Latest authenticated observation remains exact0.1.18-beta108/versionCode108 readiness ACK;
+it is not a fresh TCP-session attestation. Subscriptions/events remain0/0, cohort0/10,
+canary PAUSED_NOT_RUN and production paid baseline106. Existing catalog4/Android sequence3
+and artifacts retained; no source/package/deployment, identity or production-state mutation.
+Next: owner one TCP Disconnect with VPN icon/notification outcome, then bounded cleanup;
+Auto/MESH is NOT_RUN. Earlier AWG attribution/full cleanup gates remain OPEN, so neither
+NL_REPLACEMENT_LIVE nor paid readiness is claimed. No repeat Connect or manual deletion.
+Validation: strict JSON, privacy scan, local Markdown links, staged scope and whitespace;
+documentation-only checkpoint, no Linux/Windows/full historical suite.
