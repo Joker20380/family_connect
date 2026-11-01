@@ -1,37 +1,34 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**FLEET-BOOTSTRAP-2 — trial04 AWG/TCP PASS; operator MESH launch corrected.**
+**FLEET-BOOTSTRAP-2 — corrected source/package qualification PASS; trial05 started.**
 Existing task only, no new PLAN ID or production activation. Owner wants two Amsterdam servers;
 first production NL remains excluded. Reserved VPS stays Ubuntu24.04/x86_64, not reinstalled/deleted.
-Frozen deployable source `0c248fb79942c0996f1df7265455ea4914061f0f` is pushed and remote-verified.
+Frozen deployable source `f21aac9a36b8ab97a14b88c28c57ff9b11242b2f` is pushed and remote-verified.
 A/B double-build byte identity PASS; exact four native artifacts, licenses and282-file MESH capsule
 remain bound. Only reviewed monitoring revision metadata differs between A and B. Old packages
 and trial receipts remain immutable. Private signer/archives/materials remain outside Git.
 Offline Ubuntu24.04 native/config/unit/nft, fake-root material delivery, two-phase verification,
 failed-B rollback, successful B, explicit rollback, boot-table restore, reboot-request cancellation
-and retirement qualification PASS. Added exact-native synthetic loopback REALITY/HTTPS PASS
-with explicit Cloudflare SNI; no node data-plane or reboot evidence is inferred from simulation.
-Full fleet322 + console156 =478 PASS; paid170 PASS; Django check PASS; migration drift NONE.
+and retirement qualification PASS. Exact-native synthetic loopback REALITY/HTTPS PASS;
+no node data-plane or reboot evidence is inferred from simulation.
+Fresh fleet323 + console156 =479 PASS; paid170 PASS; Django check PASS; migration drift NONE.
 Signed permit, exact SSH/target/agent/bundle/key bindings, production exclusions, immutable releases,
 private material encryption, local/external separation and append-only evidence guards remain.
-The separate publisher token passed API validation. Trials01/02/03 are safely RETIRED; original
-FLEET_MESH_PROBE_1 custody is retained and disposable operator clients removed after receipts.
-Trial03 reached real local-health PASS and external AWG handshake/DNS/HTTPS/egress PASS. TCP
-failed with the old Microsoft contract; the pinned-native target incompatibility is now isolated
-and corrected without replacing binaries. No full VERIFIED/ACTIVE, upgrade or reboot was claimed.
-Trial04 local health and external AWG/TCP PASS; MESH rejected the diagnostic bootstrap-cache
-mode before testing the data plane. Removed that flag: the canonical probe must use the
-authenticated broker create/claim/cancel lifecycle. Exact argv regression and fleet323 PASS.
-The negative receipt is retained, never submitted as VERIFIED. Trial04 drain/retirement PASS.
-Next: freeze/requalify the corrected operator source and run fresh three-role acceptance.
+Separate publisher token passed API validation. Trials01–04 are RETIRED; original probe custody
+is retained and disposable operator clients removed only after signed retirement receipts.
+Trial04 local health and AWG/TCP external PASS. Its MESH diagnostic-bootstrap invocation failed
+before data-plane testing; the source-bound operator now uses canonical authenticated broker
+create/claim/cancel. Negative receipt retained, never promoted. No full VERIFIED/ACTIVE claimed.
+Next: finish trial05 three-role acceptance; B upgrade/rollback and separately guarded reboot.
+Recovery console remains unverified; no role reboot request until availability is recorded.
 Admitted: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor. Disabled:
 mailbox/chat-services, production renewal/restricted-sync, registry/control-plane database.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
 Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.
-SSH trust remains owner-accepted TOFU, not independent provider verification; console unverified.
+SSH trust remains owner-accepted TOFU, not independent provider verification.
 [Checkpoint](releases/2026-11-01-fleet-bootstrap-2.md) ·
-[Qualified hashes](releases/2026-11-01-fleet-bootstrap-2-reality.receipt.json) · [Runbook](fleet-bootstrap.md).
+[Qualified hashes](releases/2026-11-01-fleet-bootstrap-2-mesh.receipt.json) · [Runbook](fleet-bootstrap.md).
 Older checkpoint NEXTs below are historical, not simultaneous active work.
 <!-- /FLEET-BOOTSTRAP-2 current -->
 

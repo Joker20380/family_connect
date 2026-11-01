@@ -1,5 +1,23 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+## Corrected broker pair qualified — frozen sourcef21aac9
+
+Exact source `f21aac9a36b8ab97a14b88c28c57ff9b11242b2f` is pushed and remote-verified.
+A/B archive/manifest/signature/inventory each built twice byte-identically. Exact natives,
+roles/ports/slots remain shared; only monitoring revision metadata differs between A and B.
+[Safe evidence](2026-11-01-fleet-bootstrap-2-mesh.receipt.json) binds every hash and the unchanged
+private-rehearsal signer's public fingerprint. Original packages and receipts remain immutable.
+Offline Ubuntu24.04/x86_64 and synthetic loopback REALITY/HTTPS qualifications PASS. Initial
+qualification-container capabilities/read-only root prevented fixture service-account creation;
+the isolated disposable container was corrected, without changing target runtime protections.
+Fresh fleet323 + console156 =479 PASS; paid170 PASS; Django check PASS; migration drift NONE.
+The first console command selected a nonexistent test directory; corrected to the complete
+`control_plane/tests` suite. Test database/network removed, unrelated containers untouched.
+Trial04 is RETIRED and its three operator client files removed after verified receipt. Trial05
+starts against the corrected exact pair. Full MESH/live upgrade/rollback/reboot acceptance is
+not inferred. Provider-console availability is still unverified; no role reboot is requested.
+Production RU/NL/catalog/user/paid/phone writes0; no production or user-facing release changes.
+
 ## Trial04 AWG/TCP PASS; MESH operator invocation corrected
 
 Trial04 reached AWAITING_EXTERNAL_ACCEPTANCE with local health PASS and all six units active.
