@@ -10,7 +10,7 @@ def ready():
         running_argv_matches=True, ActiveState='active', SubState='running', NeedDaemonReload=False), jobs=dict(count=0))
 
 
-def run(samples, *, timeout=1):
+def run(samples, *, timeout=1, readiness=None):
     moment = [0]
     recorded = []
     observations = iter(samples)
@@ -26,7 +26,7 @@ def run(samples, *, timeout=1):
         moment[0] += seconds
 
     result = wait_started(['synthetic-python', 'synthetic-http.pyz'], timeout=timeout, interval=.5,
-                          read=read, record=recorded.append, clock=lambda: moment[0], pause=pause)
+                          read=read, readiness=readiness, record=recorded.append, clock=lambda: moment[0], pause=pause)
     return result, recorded, moment[0]
 
 
@@ -71,6 +71,39 @@ def test_startup_wait_rejects_automatic_restart_without_retry():
 def test_startup_wait_does_not_retry_unrecognized_error():
     with pytest.raises(ObservationError, match='INVALID_TYPED_RESPONSE'):
         run([ObservationError('decode', 'INVALID_TYPED_RESPONSE')])
+
+
+def test_startup_wait_exact_process_does_not_imply_listener_and_http_ready():
+    responses = iter([False, False, True])
+    result, recorded, elapsed = run([ready(), ready(), ready()], readiness=lambda observation: next(responses))
+    assert result == ready() and len(recorded) == 3 and elapsed == 1
+
+
+def test_startup_wait_persistent_unready_listener_reaches_deadline():
+    with pytest.raises(ObservationError, match='STARTUP_NOT_STABLE'):
+        run([ready(), ready(), ready()], readiness=lambda observation: False)
+
+
+def test_startup_wait_does_not_probe_wrong_process():
+    wrong = ready()
+    wrong['service']['running_argv_matches'] = False
+    calls = []
+    run([wrong, ready()], readiness=lambda observation: calls.append(observation) is None)
+    assert calls == [ready()]
+
+
+def test_startup_wait_readiness_failure_is_not_silenced():
+    def failed(observation):
+        raise ObservationError('listener', 'LISTENER_OWNER_MISMATCH')
+
+    with pytest.raises(ObservationError, match='LISTENER_OWNER_MISMATCH'):
+        run([ready()], readiness=failed)
+
+
+@pytest.mark.parametrize('value', [None, 1, 'ready', {}])
+def test_startup_wait_requires_boolean_readiness(value):
+    with pytest.raises(ObservationError, match='INVALID_READINESS_RESULT'):
+        run([ready()], readiness=lambda observation: value)
 
 
 @pytest.mark.parametrize('timeout,interval', [(0, .2), (61, .2), (True, .2), (1, 0), (1, 2)])

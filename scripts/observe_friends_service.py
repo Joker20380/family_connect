@@ -7,6 +7,8 @@ import re
 import subprocess
 import sys
 import time
+import urllib.error
+import urllib.request
 
 UNIT = 'family-connect-friends-http-candidate.service'
 DESTINATION = 'org.freedesktop.systemd1'
@@ -209,7 +211,52 @@ def observe(expected_exec, expected_running=None, *, bus=None, read_process=proc
         'jobs': final_jobs, 'restarts': 0}
 
 
-def wait_started(expected_exec, *, timeout=15, interval=.2, read=observe, record=lambda value: None,
+def http_ready(observation, *, port=18086, run=subprocess.run, open_url=urllib.request.urlopen,
+               record=lambda value: None):
+    require(type(port) is int and 0 < port < 65536, 'listener', 'INVALID_PORT')
+    pid = observation['service']['MainPID']
+    require(valid(pid, 'u') and pid > 0, 'listener', 'NO_MAIN_PID')
+    response = run(['ss', '-Hlntp', 'sport = :' + str(port)], stdout=subprocess.PIPE,
+                   stderr=subprocess.DEVNULL, timeout=5, check=False)
+    require(response.returncode == 0 and isinstance(response.stdout, bytes)
+        and len(response.stdout) <= 65536, 'listener', 'LISTENER_READ_FAILED')
+    raw = response.stdout
+    owners = {int(value) for value in re.findall(rb'\bpid=(\d+)\b', raw)}
+    record(dict(result='LISTENER_OBSERVED', expected_pid=pid, owners=sorted(owners),
+                present=bool(raw.strip()), response_sha256=hashlib.sha256(raw).hexdigest()))
+    if not raw.strip():
+        return False
+    require(owners == {pid} and all(re.search(rb'\bpid=' + str(pid).encode() + rb'\b', line)
+        for line in raw.splitlines() if line.strip()), 'listener', 'LISTENER_OWNER_MISMATCH')
+    for route in ('/friends/challenge', '/friends/chat/challenge', '/friends/restricted-readiness/challenge'):
+        request = urllib.request.Request('http://127.0.0.1:' + str(port) + route, data=b'{}',
+                                         headers={'Content-Type': 'application/json'})
+        try:
+            with open_url(request, timeout=2) as response:
+                status, raw = response.status, response.read(4097)
+        except urllib.error.HTTPError as error:
+            with error:
+                status, raw = error.code, error.read(4097)
+        except (ConnectionError, TimeoutError):
+            record(dict(result='HTTP_NOT_READY', route=route))
+            return False
+        except urllib.error.URLError as error:
+            if isinstance(error.reason, (ConnectionError, TimeoutError)):
+                record(dict(result='HTTP_NOT_READY', route=route))
+                return False
+            raise
+        record(dict(result='HTTP_OBSERVED', route=route, status=status,
+                    response_sha256=hashlib.sha256(raw).hexdigest()))
+        require(status == 400 and len(raw) <= 4096, 'http', 'HEALTH_RESPONSE_MISMATCH')
+        try:
+            body = json.loads(raw, object_pairs_hook=unique_object, parse_constant=reject_constant)
+        except (ValueError, UnicodeError, RecursionError):
+            raise ObservationError('http', 'HEALTH_RESPONSE_MISMATCH') from None
+        require(body == {'error': 'invalid-request'}, 'http', 'HEALTH_RESPONSE_MISMATCH')
+    return True
+
+
+def wait_started(expected_exec, *, timeout=15, interval=.2, read=observe, readiness=None, record=lambda value: None,
                  clock=time.monotonic, pause=time.sleep):
     require(type(timeout) in (int, float) and 0 < timeout <= 60
         and type(interval) in (int, float) and 0 < interval <= timeout, 'startup', 'INVALID_WAIT_BOUNDS')
@@ -229,7 +276,10 @@ def wait_started(expected_exec, *, timeout=15, interval=.2, read=observe, record
             if (service['effective_execstart_matches'] and service['running_argv_matches']
                     and service['ActiveState'] == 'active' and service['SubState'] == 'running'
                     and not service['NeedDaemonReload'] and result['jobs']['count'] == 0):
-                return result
+                accepted = True if readiness is None else readiness(result)
+                require(type(accepted) is bool, 'startup', 'INVALID_READINESS_RESULT')
+                if accepted:
+                    return result
         remaining = deadline - clock()
         require(remaining > 0, 'startup', 'STARTUP_NOT_STABLE')
         pause(min(interval, remaining))
