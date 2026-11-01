@@ -1,5 +1,31 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+## Trial03 retired; REALITY target incompatibility isolated
+
+Trial03 drain PASS (`host472-v3-drain-a-a11ae4a9129649139aa7b377073949b6`, receipt
+`84355a3f9d5e2a1468051817af64c2a78d41322dffaff4a888328a1740b5c922`) and retirement PASS
+(`host472-v3-retire-a-c18685df36094bb9bad82757dd92d363`, receipt
+`b739c11e265ceb9f9c4bd4f2670359bd8d7dcc183cef30e18b542c9ff3ed382b`). Disposable operator
+client files were removed only after that signed receipt verified; original probe not mounted.
+The reserved VPS, releases and journals remain. No activation or complete external PASS.
+
+Exact native Xray with fresh synthetic loopback credentials reproduces the TCP failure with
+Microsoft SNI, independently of this VPS and independently of AF_NETLINK availability. Its
+safe server error category is authenticated handshake incompletion. Direct TLS1.3 to the same
+destination from the disposable node passes. This is consistent with the known exact-version
+[target incompatibility](https://github.com/XTLS/Xray-core/issues/6356); we did not enable REALITY
+`show` or print authentication material to determine a record length. Switching only the
+synthetic SNI/destination to Cloudflare yields actual HTTPS PASS with the same pinned native;
+the isolated container needs explicit public DNS for its separate outbound test lookup.
+
+The rehearsal-only source contract now uses `www.cloudflare.com:443`; old packages/materials
+are immutable and cannot be reused with changed SNI. New A/B must share the same corrected
+contract and fresh enrollment/materials. No native hash, production SNI, transport port or slot
+schema changes. Added a package/source-bound synthetic loopback qualification to reproduce the
+native client/server TLS check without a node, signer, probe identity or publisher token.
+Full fleet322 PASS; prior unchanged console156/paid170 and Django check/drift results retained.
+Next: freeze/rebuild/requalify before trial04. Production RU/NL/catalog/user/paid/phone writes0.
+
 ## Trial03 — real local health and AWG PASS; TCP diagnosis
 
 Exact source925916f A is enrolled/staged with fresh disposable material. Local health PASS:

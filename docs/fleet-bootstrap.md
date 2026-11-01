@@ -200,6 +200,16 @@ SSH, decrypts envelopes or holds signing/transport keys. It cannot issue users o
 
 ## Source/container qualification
 
+The rehearsal-only REALITY contract uses `www.cloudflare.com:443` and matching SNI. The exact
+accepted Xray26.3.27 binary is unchanged. Microsoft SNI can complete direct TLS1.3 while failing
+REALITY's authenticated target handshake; see [upstream6356](https://github.com/XTLS/Xray-core/issues/6356).
+Do not change production SNI or weaken TLS verification to work around it. After the offline
+bundle qualification, run `scripts/qualify-fleet-reality.py --package PRIVATE_PACKAGE --output
+NEW_PRIVATE_RECEIPT` in an isolated Ubuntu24.04 container with public DNS, no host network and
+no private authority/probe/publisher inputs. It verifies the signed package and current source,
+generates throwaway credentials, binds the server only to loopback and proves HTTPS through
+the exact native client/server. This is synthetic source qualification, not node acceptance.
+
 `scripts/qualify-fleet-rehearsal.py` is permitted only inside an isolated root Ubuntu24.04
 container. Run it with network disabled and only namespace-local NET_ADMIN, read-only source
 and package mounts, and a private output mount. It checks exact native help/version/Xray

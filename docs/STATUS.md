@@ -1,10 +1,10 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**FLEET-BOOTSTRAP-2 — corrected lifetime/boot A/B qualified; fresh disposable trial authorized.**
+**FLEET-BOOTSTRAP-2 — trial03 safely RETIRED; compatible REALITY target under qualification.**
 Existing task only; no new PLAN ID or production activation. Owner wants two Amsterdam servers;
 first production NL remains excluded. Reserved VPS stays Ubuntu24.04/x86_64, not reinstalled/deleted.
-Qualified frozen source `925916f27f7ba455ea379572e2ff2154cf10686f`; previous immutable A/B pairs
+Last qualified frozen source `925916f27f7ba455ea379572e2ff2154cf10686f`; previous immutable A/B pairs
 are retained. Exact four natives/licenses and282-file canonical MESH source remain unchanged.
 Separate test-account publisher token is accepted (HTTP201). MESH now starts and exports READY;
 second node trial passed enrollment, material delivery, retired-owner handoff and stage A.
@@ -24,14 +24,18 @@ no credential bodies, environment values, room URLs or raw journals are returned
 Full fleet316 + console156 =472 PASS; paid170 PASS; Django check PASS/drift NONE.
 A/B double-build and Ubuntu24.04 native/config/unit/nft qualification PASS, including boot-table
 restoration and reboot-request cancellation simulations. Trial03 reached real local-health PASS
-and AWAITING_EXTERNAL_ACCEPTANCE; all six units active with zero restarts and bounded READY.
-Operator AWG handshake/DNS/HTTPS/egress PASS after fixing client policy priority and HTTPS DNS.
-The initial harness priority50027 ran after Linux main32766; priority12027 now precedes it.
-AWG HTTPS resolves fixed names through its own tunnel, retaining strict TLS hostname validation.
-TCP external acceptance is still failing and under diagnosis; MESH external tests remain NOT_RUN.
-No full receipt was accepted, no ACTIVE/upgrade/reboot was claimed. Node A/B and agent stay exact;
-operator-only fixes do not overwrite signed deployment artifacts. Full current fleet322 PASS;
-last unchanged console156/paid170 and Django check/drift results are retained.
+and external AWG handshake/DNS/HTTPS/egress PASS. TCP did not pass; no VERIFIED/ACTIVE claim.
+Trial03 drain, retirement and disposable operator-client cleanup PASS; reserved VPS is retained.
+TCP failure reproduced with exact native Xray and fresh synthetic loopback credentials. Microsoft
+SNI fails with authenticated-handshake incompletion despite direct TLS1.3 PASS, matching the
+known upstream target incompatibility. Cloudflare SNI passes the same pinned native TLS test.
+Source now fixes the explicit rehearsal-only SNI/destination to www.cloudflare.com:443; no
+native binary, production destination, UUID/key custody, port or slot schema is changed.
+A source qualification script adds signed-bundle-bound synthetic loopback REALITY/HTTPS,
+without node acceptance claims; its isolated container uses an explicit public DNS resolver.
+Operator AWG route-priority/transport-DNS fixes are retained. Full fleet322 PASS; unchanged
+console156/paid170 and Django check/drift evidence retained. Next: freeze/requalify final A/B
+with this contract, then a fresh trial04. MESH/A-B/reboot physical acceptance remains NOT_RUN.
 Admitted: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor. Disabled:
 mailbox/chat-services, production renewal/restricted-sync, registry/control-plane database.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.

@@ -10,7 +10,7 @@ from fleet.contracts import FleetError, canonical
 from fleet.material_factory import generate, raw_public
 from fleet.operator_harness import mesh_result, run
 from fleet.rehearsal_cli import COMMANDS, parser
-from fleet.role_config import awg_config, mesh_config, publisher_config, tcp_config
+from fleet.role_config import SNI, awg_config, mesh_config, publisher_config, tcp_config
 
 
 @pytest.mark.parametrize('action',[action for action in COMMANDS if action!='prepare'])
@@ -38,6 +38,11 @@ def test_fresh_material_factory_and_role_contracts():
     other,unused=generate('fleet-rehearsal-test',public,private,publisher,issued_at=1000,expires_at=1300)
     assert other['awg-material']!=slots['awg-material'] and other['tcp-material']!=slots['tcp-material']
     assert clients['mesh-profile.json'] not in slots.values()
+    assert SNI=='www.cloudflare.com'
+    from fleet.contracts import load
+    rejected=load(slots['tcp-material'])
+    rejected.update(sni='www.microsoft.com',destination='www.microsoft.com:443')
+    with pytest.raises(FleetError,match='tcp_scope_or_destination'):tcp_config(canonical(rejected))
 
 
 def test_mesh_safe_result_requires_all_native_evidence():

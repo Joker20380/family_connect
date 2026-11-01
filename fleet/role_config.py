@@ -21,7 +21,7 @@ ADDRESS = '10.203.217.1/30'
 PEER_ADDRESS = '10.203.217.2/32'
 PORTS = dict(awg=51827, tcp=4443, mesh=18444, monitoring=19727)
 MTU = 1280
-SNI = 'www.microsoft.com'
+SNI = 'www.cloudflare.com'
 
 
 def key32(value):

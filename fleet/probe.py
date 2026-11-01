@@ -73,8 +73,8 @@ def network_observation():
         return dict(result='OBSERVED',foreign_forward_chains=len(foreign_forward),
             foreign_forward_drop_policies=sum(item.get('policy')=='drop' for item in foreign_forward),
             forwarded_route_present=len(route)==1 and route[0].get('type','unicast')=='unicast',interface_counters=counters,
-            tcp_destination_tls13=command(['openssl','s_client','-connect','www.microsoft.com:443','-servername','www.microsoft.com',
-                '-verify_hostname','www.microsoft.com','-verify_return_error','-tls1_3','-brief'],successful=True),
+            tcp_destination_tls13=command(['openssl','s_client','-connect','www.cloudflare.com:443','-servername','www.cloudflare.com',
+                '-verify_hostname','www.cloudflare.com','-verify_return_error','-tls1_3','-brief'],successful=True),
             forwarding=command(['sysctl','-n','net.ipv4.ip_forward'])=='1')
     except (ValueError,KeyError,TypeError):
         return dict(result='UNAVAILABLE')
