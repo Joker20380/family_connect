@@ -1,7 +1,7 @@
 {
   "android108_owner_acceptance_20261101": {
     "observed_utc": "2026-11-01T03:47:32.274129+00:00",
-    "state": "AWG108_OWNER_REPORTED_WORKING_SERVER_SESSION_NOT_OBSERVED",
+    "state": "AWG108_OWNER_HTTPS_NL_EGRESS_PASS_AWAITING_DISCONNECT_SESSION_ATTRIBUTION_OPEN",
     "owner_reports": [
       "ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS",
       "ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS"
@@ -10,7 +10,7 @@
     "physical_beta108_whitelist_test": "NOT_CLAIMED",
     "notification_lifecycle": "NOT_RUN",
     "owner_transport_smoke": {
-      "awg108": "OWNER_REPORTED_WORKING_SERVER_SESSION_NOT_OBSERVED",
+      "awg108": "OWNER_HTTPS_NL_EGRESS_PASS_SERVER_SESSION_NOT_OBSERVED",
       "tcp108": "NOT_RUN",
       "auto_mesh108": "NOT_RUN",
       "disconnect_cleanup": "NOT_RUN"
@@ -309,11 +309,23 @@
         "notification_lifecycle": "NOT_RUN",
         "canary": "PAUSED_NOT_RUN"
       },
-      "client_https_egress": "AWAITING_EXPLICIT_CONFIRMATION",
-      "next": "CONFIRM_CURRENT_SELECTION_HTTPS_AND_CORRELATE_BOUND_PEER_WITHOUT_REPEAT_CONNECT",
+      "client_https_egress": "OWNER_CONFIRMED_185.10.158.212",
+      "next": "ONE_DISCONNECT_VPN_ICON_NOTIFICATION_AND_CLEANUP_READBACK_NO_REPEAT_CONNECT",
       "binding": "UNCHANGED",
       "support_id_search": "NOT_RUN",
-      "production_mutations": 0
+      "production_mutations": 0,
+      "latest_nl_resample": {
+        "observed_utc": "2026-11-01T03:57:11.316561+00:00",
+        "endpoint": "185.10.158.212",
+        "handshake_recent": false,
+        "handshake_age_seconds": 56487.3,
+        "rx_delta_bytes": 0,
+        "tx_delta_bytes": 0,
+        "sample_seconds": 12.0,
+        "service_active": true,
+        "automatic_restarts": 0
+      },
+      "server_session_attribution": "UNRESOLVED_NOT_WAIVED"
     }
   },
   "registry_overlay_correction": {

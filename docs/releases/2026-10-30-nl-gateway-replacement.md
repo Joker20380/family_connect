@@ -26,9 +26,12 @@ OWNER_CANARY_1 binding on new NL finds no fresh handshake and zero RX/TX delta o
 the03:54UTC RU comparison also has no handshake/traffic. Latest authenticated ACK remains108.
 This is **OWNER_REPORTED_WORKING / SERVER_SESSION_NOT_OBSERVED**, not full AWG108 PASS
 or proof of a product failure/wrong identity. No rebinding or Support ID search.
-Next: leave the current connection unchanged, confirm Netherlands/AWG and client HTTPS
-egress185.10.158.212 without a second Connect; then one Disconnect and notification/cleanup
-readback after the session gate is reconciled. TCP and Auto/MESH remain NOT_RUN.
+Owner now confirms the phone HTTPS egress equals185.10.158.212: **OWNER_HTTPS_NL_EGRESS_PASS**.
+The03:57UTC bound-peer resample still has no fresh handshake and RX/TX delta0/0;
+server-session attribution remains unresolved, not waived by the correct public address.
+Next: one Disconnect, confirm VPN icon/notification outcome and read back cleanup.
+No repeat Connect. TCP/Auto-MESH remain NOT_RUN; do not claim full AWG acceptance
+or advance their smoke until cleanup and the remaining session evidence are reconciled.
 NL_REPLACEMENT_LIVE and READY_FOR_BETA0_CANARY_1
 are **NOT_YET_MET**. Production paid baseline remains106; stage0 on108 is prohibited
 until the generic exact108 contract is deployed and the owner freshly answers ГОТОВ.
@@ -1502,3 +1505,21 @@ new test session, restart, deployment or rollback. Existing artifacts and rollba
 The existing JSON receipt retains sanitized NL/RU samples; no private selector/key/client IP.
 Documentation-only checks: strict JSON, privacy/secret scan, local links, staged scope,
 preservation of pre-existing uncommitted work and git diff --check; no platform/full suite.
+
+### AWG108 HTTPS egress confirmed — one Disconnect next
+
+Owner confirms the requested phone HTTPS IP check equals185.10.158.212 while reporting
+the108 AWG connection working. Record **OWNER_HTTPS_NL_EGRESS_PASS**: owner field evidence
+for HTTPS/new NL egress, not remote TLS attestation or automatic proof of the bound AWG session.
+The03:57:11UTC resample still finds the retained bound peer loaded but no fresh handshake,
+handshake age56487.3s and RX/TX delta0/0 over12s. Latest authenticated ACK remains exact108,
+service active/NRestarts0, paid subscriptions/events0/0 and cohort0/10.
+
+Do not keep the phone connected indefinitely or invent a session PASS. Next action is one
+Disconnect and explicit VPN-icon/notification result, then bounded server cleanup readback.
+No repeated Connect, private selector lookup/rebinding, identity change, peer deletion,
+service restart, deployment, catalog mutation or paid write. A retained notification is an
+independent UX defect; session attribution and cleanup remain distinct acceptance gates.
+TCP/Auto-MESH not run; full AWG/NL_REPLACEMENT_LIVE and paid readiness remain unaccepted.
+Canary PAUSED_NOT_RUN, production paid baseline106; existing rollout/rollback artifacts retained.
+Strict JSON/privacy/local-link/staged-scope/whitespace checks apply to this docs-only checkpoint.

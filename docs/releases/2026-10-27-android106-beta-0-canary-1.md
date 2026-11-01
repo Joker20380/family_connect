@@ -2,10 +2,12 @@
 
 ## Current continuation — baseline108 target, live canary NOT_RUN (1 November)
 
-**AWG108 follow-up03:53–03:54UTC:** owner reports working, but the retained bound
-peer has no fresh NL handshake/traffic; RU comparison is also inactive. Keep owner report
-separate from server-session/HTTPS-egress acceptance. Confirm current Netherlands/AWG and
-HTTPS egress without another Connect; no Disconnect/notification/cleanup PASS yet.
+**AWG108 follow-up through03:57UTC:** owner reports working and confirms phone HTTPS
+egress185.10.158.212 (**OWNER_HTTPS_NL_EGRESS_PASS**). The retained bound peer still has
+no fresh NL handshake/traffic; prior RU comparison was also inactive. Server-session
+attribution is unresolved, not a full AWG PASS or a proven product failure.
+Next one Disconnect with VPN icon/notification check and server cleanup readback;
+no repeat Connect. TCP/Auto-MESH still NOT_RUN; remaining session evidence is not waived.
 Existing binding and latest ACK108 retained; paid0/0, cohort0/10, canary PAUSED_NOT_RUN.
 No source/package/deployment or identity change; NL_REPLACEMENT_LIVE remains unmet.
 

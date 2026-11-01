@@ -28,9 +28,12 @@ OWNER_CANARY_1 binding on new NL finds no fresh handshake and zero RX/TX delta o
 the03:54UTC RU comparison also has no handshake/traffic. Latest authenticated ACK remains108.
 This is **OWNER_REPORTED_WORKING / SERVER_SESSION_NOT_OBSERVED**, not full AWG108 PASS
 or proof of a product failure/wrong identity. No rebinding or Support ID search.
-Next: leave the current connection unchanged, confirm Netherlands/AWG and client HTTPS
-egress185.10.158.212 without a second Connect; then one Disconnect and notification/cleanup
-readback after the session gate is reconciled. TCP and Auto/MESH remain NOT_RUN.
+Owner now confirms the phone HTTPS egress equals185.10.158.212: **OWNER_HTTPS_NL_EGRESS_PASS**.
+The03:57UTC bound-peer resample still has no fresh handshake and RX/TX delta0/0;
+server-session attribution remains unresolved, not waived by the correct public address.
+Next: one Disconnect, confirm VPN icon/notification outcome and read back cleanup.
+No repeat Connect. TCP/Auto-MESH remain NOT_RUN; do not claim full AWG acceptance
+or advance their smoke until cleanup and the remaining session evidence are reconciled.
 NL_REPLACEMENT_LIVE and READY_FOR_BETA0_CANARY_1
 are **NOT_YET_MET**. Production paid baseline remains106; stage0 on108 is prohibited
 until the generic exact108 contract is deployed and the owner freshly answers ГОТОВ.
