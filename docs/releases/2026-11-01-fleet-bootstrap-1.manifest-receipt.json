@@ -1,0 +1,237 @@
+{
+  "schema": 1,
+  "scope": "SYNTHETIC_PUBLIC_TEST_KEY_ONLY",
+  "signed_payload_encoding": "fleet.contracts.canonical(manifest)",
+  "manifest": {
+    "architecture": "x86_64",
+    "archive_sha256": "f2f218df82c3c84e9f82cc14364ff30feb75281e73fa37f1c40b245ef6b18ec2",
+    "bundle_id": "gw-074b2076b9ed20bba1c107091f0d08e6",
+    "members": [
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "LICENSE",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "cfe0da6ed33d20d2b6a97ab5363e204660f0c9987469724c92938a846a1afcb4",
+        "size": 1778,
+        "target": "RELEASE/LICENSE"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/__init__.py",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "387ecee187ac246cbdf1260a4566d878048ae38ce11e5785c8561174888c690e",
+        "size": 85,
+        "target": "RELEASE/fleet/__init__.py"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/__main__.py",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "eabbe50b3339e10423aa4c53012a053a048fa206bb2ad3af967f21bc87ebe93f",
+        "size": 4305,
+        "target": "RELEASE/fleet/__main__.py"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/bundle.py",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "286139a93880d5321c96af70d4455e77dddb2917bf1f6ad0d821f70c79a402ff",
+        "size": 10440,
+        "target": "RELEASE/fleet/bundle.py"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/contracts.py",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "59138ad3829f18db50be1201598ed481ab41de5521b14ba5e2ecf76e22cc9f0e",
+        "size": 8084,
+        "target": "RELEASE/fleet/contracts.py"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/enrollment.py",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "cb7613b1e2fd14773969cffce60afbe594f531b8916019ca4974eb6cbbed2068",
+        "size": 7216,
+        "target": "RELEASE/fleet/enrollment.py"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/health.py",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "2c2c3982b81183bad1754a2837596095ca8b9c551c6746e8727bbfbd999af1ed",
+        "size": 2298,
+        "target": "RELEASE/fleet/health.py"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/installer.py",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "a703aaa5acae0401d8a9ebc5835c8f503846f98a909221a77c6e084989dd3eae",
+        "size": 14976,
+        "target": "RELEASE/fleet/installer.py"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/preflight.py",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "0e90625f55200587f8080449401cc849d36cd96e7474bcea717cfcda086b242d",
+        "size": 3635,
+        "target": "RELEASE/fleet/preflight.py"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/probe.py",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "5064a8f7d2afc9dbe6471e44f7a0e66cd37c354885e1917bc15c7e7f56ac0435",
+        "size": 3745,
+        "target": "RELEASE/fleet/probe.py"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/render.py",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "1da4679d44380e4071cbfecc29bb06506ec2f6897602366ac0322a189921c74e",
+        "size": 1316,
+        "target": "RELEASE/fleet/render.py"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/requirements.lock",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "b37904c5be13b7971ebbd8ca93fabbc9db41ca4ef7e33406c9df29c3fed7fc6d",
+        "size": 48,
+        "target": "RELEASE/fleet/requirements.lock"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/simulate.py",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "15c498dc26f2bc8b4bc6587c5e1ee2d60789595a25fcfb896b3517f91e2888d1",
+        "size": 7904,
+        "target": "RELEASE/fleet/simulate.py"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/templates/configuration.schema.json",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "925eaf587dd200e2ce3222a74a428fb1f66c66a21f4c6407585356e7c33b43cf",
+        "size": 772,
+        "target": "RELEASE/fleet/templates/configuration.schema.json"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/templates/family-connect-role.service.in",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "7d266f501a5be97690f6cbcdc3374f2f146eab91ec0c018645b4ccc6d979c03f",
+        "size": 495,
+        "target": "RELEASE/fleet/templates/family-connect-role.service.in"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/templates/firewall.nft.in",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "24d8fb902c7fa3bfa31b85a27b9139d43b8568ee9df2e1a2aa6feb47941a93be",
+        "size": 400,
+        "target": "RELEASE/fleet/templates/firewall.nft.in"
+      },
+      {
+        "group": "root",
+        "mode": 292,
+        "owner": "root",
+        "path": "fleet/templates/forwarding.conf",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "a56d607de0217ef478581a904e49f4540b054ec48a0d191d223e7e3727c87862",
+        "size": 53,
+        "target": "RELEASE/fleet/templates/forwarding.conf"
+      },
+      {
+        "group": "root",
+        "mode": 365,
+        "owner": "root",
+        "path": "scripts/fleetctl",
+        "restart_group": "monitoring",
+        "secret_slots": [],
+        "sha256": "272b6e1d4a418d1d58fe126beabd917325ec4a2955af13ff69c27705cb775a64",
+        "size": 161,
+        "target": "RELEASE/scripts/fleetctl"
+      }
+    ],
+    "roles": [
+      "awg",
+      "tcp",
+      "mesh",
+      "profile-reader",
+      "publisher",
+      "renewal",
+      "snapshot",
+      "restricted-sync",
+      "mailbox",
+      "load-monitor",
+      "monitoring"
+    ],
+    "schema": 1,
+    "scope": "synthetic",
+    "secret_slots": [
+      "awg-material",
+      "tcp-reality-material",
+      "mesh-material",
+      "monitoring-material"
+    ],
+    "source_commit": "a3fc3bf1c11a686ea444ad36d576c05ac5e24810",
+    "supported_os": [
+      "ubuntu-24.04"
+    ]
+  },
+  "signature_base64": "GdZHZJTyoF6CImkXmJuQY9u3HVTG0Ac8X5zt13ORzBF99EAllk1XTcGIfw5X8JCa833oHS0CxHRmOFcUjGJ6Cw==",
+  "signer_public_base64": "6kpsY+KcUgq+9VB7Ey7F+ZVHdq6+vnuSQh7qaRRG0iw="
+}

@@ -1,0 +1,108 @@
+{
+  "archive_sha256": "f2f218df82c3c84e9f82cc14364ff30feb75281e73fa37f1c40b245ef6b18ec2",
+  "build_twice_identical": true,
+  "bundle_id": "gw-074b2076b9ed20bba1c107091f0d08e6",
+  "cli": [
+    "plan",
+    "preflight",
+    "stage",
+    "verify",
+    "activate",
+    "status",
+    "rollback"
+  ],
+  "enrollment": "POSSESSION_AND_SIGNED_RECEIPT_PASS",
+  "hash_inventory_sha256": "81d85d1ec72dc959b1b08a877065b2655f9d84acbfd39958a874fe55e911f5b7",
+  "health_checks": 40,
+  "host_report": "EXPLICIT_SYNTHETIC_FIXTURE_NOT_OS_ATTESTATION",
+  "manifest_sha256": "451a4161e6dcd2d9db7b2aa5cb76832b1730eccd8c49ca0bdfb80e4803c2d4bd",
+  "member_count": 18,
+  "ownership": "CURRENT_UID_SYNTHETIC_MAPPING",
+  "paid_events": 0,
+  "phone_actions": 0,
+  "production_writes": 0,
+  "roles": [
+    "awg",
+    "tcp",
+    "mesh",
+    "profile-reader",
+    "publisher",
+    "renewal",
+    "snapshot",
+    "restricted-sync",
+    "mailbox",
+    "load-monitor",
+    "monitoring"
+  ],
+  "rollback": "EMPTY_INACTIVE_BOOTSTRAP",
+  "signature_sha256": "13f975ea89ef417733dc22c7b50182d359c66169d4ff6728fcffca1a6f4a2e18",
+  "signer_public_sha256": "fe812c12f3ab4ce6ac5db69ac352f906cb1b11ef43fb33e252ef7ff552263889",
+  "signing_scope": "EXPLICIT_PUBLIC_SYNTHETIC_TEST_KEY",
+  "source_commit": "a3fc3bf1c11a686ea444ad36d576c05ac5e24810",
+  "status": "SYNTHETIC_FILESYSTEM_ACCEPTANCE_PASS",
+  "toolchain": {
+    "cryptography": "46.0.7",
+    "python": "3.14.4",
+    "zstd": "*** Zstandard CLI (64-bit) v1.5.7, by Yann Collet ***"
+  },
+  "user_invitations": 0,
+  "vpn_dataplane": "NOT_RUN",
+  "checkpoint": "FLEET-BOOTSTRAP-1",
+  "checkpoint_status": "FLEET_BOOTSTRAP_1_SOURCE_READY",
+  "acceptance": {
+    "fleet_host": {
+      "passed": 79,
+      "skipped": 0
+    },
+    "fleet_ubuntu24_container": {
+      "passed": 79,
+      "skipped": 0
+    },
+    "django_fleet": {
+      "passed": 10
+    },
+    "paid_backend_canary_package": {
+      "passed": 170,
+      "skipped": 0
+    },
+    "django_check": "PASS",
+    "migration_drift": "NONE",
+    "combined_console_fleet": {
+      "passed": 206,
+      "failed": 1,
+      "skipped": 0,
+      "warnings": 33,
+      "retained_failure": "test_legacy_12_to_50_preserves_identities_and_paid_events",
+      "classification": "PREEXISTING_SYNTHETIC_BARE_UUID_FC_PREFIX",
+      "fleet_failures": 0
+    }
+  },
+  "supported_target_contract": [
+    "ubuntu-24.04/x86_64"
+  ],
+  "unqualified_targets": [
+    "ubuntu-26.04/x86_64"
+  ],
+  "scope_limits": [
+    "NO_PRODUCTION_ROLE_BINARY_DISTRIBUTION",
+    "NO_LIVE_SSH_MUTATIONS",
+    "NO_PRODUCTION_TRANSPORT_ISSUANCE",
+    "NO_CATALOG_PUBLICATION",
+    "NO_VPN_DATAPLANE_ACCEPTANCE",
+    "TIMING_TARGETS_NOT_MEASURED"
+  ],
+  "preserved": {
+    "public_android": 109,
+    "android_sequence": 4,
+    "gateway_catalog": 4,
+    "paid_android_baseline": 108,
+    "subscriptions": 1,
+    "events": 4,
+    "cohort": 1,
+    "cohort_limit": 10,
+    "revenue": 0,
+    "owner_entitlement": "UNCHANGED",
+    "old_nl": "FENCED",
+    "replacement_nl": "ACTIVE"
+  }
+}

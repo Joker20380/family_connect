@@ -1,13 +1,21 @@
 # Documentation
 
 <!-- FLEET-BOOTSTRAP-1 current -->
-**FLEET-BOOTSTRAP-1 — IN_PROGRESS / SOURCE-SYNTHETIC ONLY.**
-Owner authorized deterministic bundles, physical-instance enrollment, operator CLI and
-Django fleet intents. Production writes/user invitations/paid events/phone actions0;
-external cohort held1/10, paid baseline108 and all existing entitlements unchanged.
-Owner109 targeted result is closed in scope; no further server-TX investigation.
-NEXT: strict contracts → signed bundle → safe local installer/enrollment → Django → acceptance.
-[Runbook](fleet-bootstrap.md) · [Checkpoint](releases/2026-11-01-fleet-bootstrap-1.md).
+**FLEET_BOOTSTRAP_1_SOURCE_READY — SOURCE/SYNTHETIC FOUNDATION ONLY.**
+Frozen artifact source: `a3fc3bf1c11a686ea444ad36d576c05ac5e24810` (remote-verified).
+Strict physical-instance contracts, deterministic signed bundle, atomic sandbox installer,
+one-use enrollment, role-health gates and Russian Django inventory/operator audit implemented.
+Two identical builds and end-to-end CLI simulation PASS; fleet79, Django fleet10 and existing
+focused paid/backend/canary/package170 PASS; Django check/migration drift PASS. The broader
+console/fleet run is206 PASS/1 pre-existing synthetic-seeder UUID-prefix failure, retained.
+Not live provisioning/data-plane acceptance: remote writes and catalog publication remain
+closed; real-role binary provenance/adapters/physical health are live-rehearsal entry gates.
+Production writes/user invitations/paid events/phone actions0. Public109/sequence4, catalog4,
+paid baseline108, entitlement, ledger1/4/cohort1/10/revenue0 and NL fencing/routes preserved.
+Owner109 result is closed; no server-TX investigation or external cohort expansion.
+NEXT: **FLEET-BOOTSTRAP-2, separately authorized disposable VM/VPS rehearsal — NOT_STARTED.**
+[Runbook](fleet-bootstrap.md) · [Checkpoint](releases/2026-11-01-fleet-bootstrap-1.md) ·
+[Receipt](releases/2026-11-01-fleet-bootstrap-1.receipt.json).
 Earlier Android/NL checkpoints below are retained evidence, not simultaneous active NEXTs.
 <!-- /FLEET-BOOTSTRAP-1 current -->
 
