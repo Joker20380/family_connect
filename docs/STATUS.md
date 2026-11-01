@@ -30,34 +30,29 @@ No retrospective claim of an independently captured handshake, phone trace, per-
 readiness trace or all notification lifecycle cases. Prior raw observations remain below.
 New NL185.10.158.212/catalog4, old NL FENCED and FLEET_MESH_PROBE_1 retained; accepted
 infrastructure is not rebuilt or replayed. Last readback paid0/0, cohort0/10, canary PAUSED.
-**Baseline108 source/package PASS; additional authorized deployment ROLLED_BACK.**
-Production paid baseline106 is restored; this latest result supersedes the first attempt below.
-Owner explicitly authorized one additional candidate restart. Fresh separate private SQLite/
-config/artifact backup and isolated restore/integrity/FK PASS; no consumed reservation reused.
-Candidate HTTP8e74997c… / sourceaccc4ff and private canaryfa43f88d… are unchanged and retained.
-Only paid_beta.py differs from actual production44a6b50f…; current route members, registration/
-chat-sync/publisher remain byte-identical. Exact effective ExecStart/hash/help/bound108 lookup PASS.
-The additional restart reached exact running/effective argv, active/running, NRestarts0/jobs0.
-The next instantaneous listener-owner check rejected the startup sample before HTTP readiness;
-one bounded rollback restored the exact previous artifact. Raw listener output was not retained,
-so delayed bind versus another listener condition is not independently established.
-The deploy harness incorrectly treated process readiness as listener readiness. Corrected gate
-waits boundedly for exact process AND exact listener owner AND all three HTTP health responses.
-Absent listener/initial connection refusal can settle; foreign owner, bad health response,
-persistent unready state and automatic restarts fail closed. Listener/HTTP observations are
-recorded before classification.111 focused tests PASS, including an actual delayed local listener.
-Corrected full gate also PASS read-only on restored production; no further restart performed.
-04:51UTC real non-cohort verified-HTTPS challenge/fetch/native material validation PASS;
-CRL=floor27233, directory current, catalog4 signature and RU/new-NL routes PASS.
-Registry/schema/admission/publisher/config fingerprints preserved; paid0/0, cohort0/10,
-latest authenticated owner108 and retained private candidate-canary lookup PASS.
-Renewal/read-only sync schedules active, last success; no DB restore, schema deletion, identity
-change, Android/catalog publication, enrollment, MESH server probe or paid activation.
-Total across both authorized attempts:2 candidate restarts and2 bounded rollback restarts.
-No unused candidate-restart authorization remains. Candidate and exact rollback retained.
-Next: explicit authorization for one further candidate restart with fresh recovery guards and
-the tested complete startup gate. READY_FOR_BETA0_CANARY_1 remains NOT_YET_MET; do not request
-or consume ГОТОВ until deployment succeeds. Canary PAUSED / writes NOT_RUN.
+**Baseline108 production deployment PASS — READY_FOR_BETA0_CANARY_1.**
+Latest readback 2026-11-01T04:59:14.654212+00:00; supersedes the two rolled-back attempts below.
+Owner explicitly authorized one further candidate restart. Fresh separate private SQLite/
+config/artifact backup and isolated restore/integrity/FK PASS; consumed reservations not reused.
+Exact candidate HTTP8e74997c… from sourceaccc4ff is now serving; private bound canaryfa43f88d…
+retained from the same source. Only paid_beta.py differs from pre-deploy44a6b50f…: current
+route members, registration/chat-sync/publisher bytes and admission/config fingerprints preserved.
+Effective/running ExecStart, candidate hash, service-user help and existing bound108 lookup PASS.
+One controlled restart in this attempt; exact candidate process owns the listener, health PASS,
+NRestarts0, rollback NOT_USED. Tested full process/listener/HTTP startup gate825f47b applied.
+Real non-cohort verified-HTTPS challenge/fetch/native material validation PASS on baseline108;
+CRL=floor27233, directory current, catalog4 signature and RU/new-NL endpoints PASS.
+Registry/schema/identities/invites/grants preserved; no migration or non-cohort106/107 revocation.
+Paid subscriptions/events0/0, cohort0/10; latest authenticated owner exact0.1.18-beta108/code108
+and private bound read-only canary lookup PASS. Renewal/read-only sync active, last success.
+No Android build/sign/release, update sequence3/catalog4 change, enrollment or MESH server probe.
+Source483 + exact-package5 + startup111 focused tests retained PASS;21 optional cases skipped.
+Exact pre-deploy rollback artifact retained; no database restore or paid schema deletion.
+Prior two rollbacks remain historical evidence, not the current serving state. Total issued:
+3 candidate restarts and2 rollback restarts across separately authorized attempts.
+Canary remains PAUSED; activation/expiry/CRL/recovery writes NOT_RUN.
+Next under existing BETA-0-CANARY-1: open beta108 without Connect and await fresh owner ГОТОВ.
+The restart authorization is not that canary-ready response; no stage0 before fresh ГОТОВ.
 
 **Android108 public release evidence — 31 October (physical follow-up above).**
 The dashboard and country list show explicitly labelled **Server CPU / CPU сервера**

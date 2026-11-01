@@ -1,7 +1,7 @@
 {
   "android108_owner_acceptance_20261101": {
     "observed_utc": "2026-11-01T03:47:32.274129+00:00",
-    "state": "NL_REPLACEMENT_LIVE_BASELINE108_PACKAGE_PASS_DEPLOYMENT_ROLLED_BACK_PRODUCTION106_HEALTHY",
+    "state": "NL_REPLACEMENT_LIVE_BASELINE108_DEPLOYED_READY_FOR_BETA0_CANARY_1",
     "owner_reports": [
       "ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS",
       "ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS"
@@ -449,8 +449,8 @@
       "source_commit": "accc4ffb0af35e8e5360ba2442f706b03b46bc76",
       "source": "PASS",
       "artifact": "PASS",
-      "deployment": "ADDITIONAL_AUTHORIZED_ATTEMPT_ROLLED_BACK",
-      "production_baseline": 106,
+      "deployment": "PASS",
+      "production_baseline": 108,
       "migration": "NOT_REQUIRED",
       "paid_writes": "NOT_RUN",
       "artifacts": {
@@ -663,16 +663,17 @@
         "optional_skipped": 21
       },
       "restart_budget": {
-        "candidate_restarts": 2,
+        "candidate_restarts": 3,
         "rollback_restarts": 2,
-        "additional_candidate_restart_authorized": 1,
-        "additional_candidate_restart_used": 1,
-        "unused_candidate_authorizations": 0
+        "additional_candidate_restarts_authorized": 2,
+        "additional_candidate_restarts_used": 2,
+        "unused_candidate_authorizations": 0,
+        "latest_attempt_rollback_used": false
       },
       "startup_guard": "BOUNDED_EXACT_PROCESS_LISTENER_HTTP_READINESS_WITH_PRIVATE_OBSERVATIONS",
       "failed_instantaneous_argv_details": "NOT_CAPTURED_NO_SPECIFIC_ROOT_CAUSE_CLAIM",
-      "next": "ADDITIONAL_CANDIDATE_RESTART_AUTHORIZATION_REQUIRED",
-      "canary": "PAUSED_NOT_RUN",
+      "next": "WAITING_FRESH_OWNER_GOTOV",
+      "canary": "PAUSED_READY_WAITING_FRESH_OWNER_GOTOV",
       "authorized_retry": {
         "owner_authorization": "EXPLICIT_ONE_ADDITIONAL_CANDIDATE_RESTART",
         "preflight": {
@@ -778,6 +779,126 @@
         "corrected_startup_tests": 111,
         "further_restarts": 0,
         "canary_writes": "NOT_RUN"
+      },
+      "successful_deployment": {
+        "owner_authorization": "EXPLICIT_ONE_FURTHER_CANDIDATE_RESTART",
+        "observer_commit": "825f47b8dadb9b23cc6b193f822d92ec216f83da",
+        "receipts": {
+          "predeploy": {
+            "result": "PREDEPLOY_BACKUP_RESTORE_AND_CURRENT_SOURCE_DELTA_PASS",
+            "source_commit": "accc4ffb0af35e8e5360ba2442f706b03b46bc76",
+            "current_http_sha256": "44a6b50f1a1ce00fd74f53e0d35c5937c6b5f5c2a561fc94b7a0150f39149204",
+            "candidate_http_sha256": "8e74997c0760e7953898f130241260864a438d72c5a47d46332549c3c6c3a1cf",
+            "changed_members": [
+              "control/friends/paid_beta.py"
+            ],
+            "member_inventory_preserved": true,
+            "routing_registration_chat_sync_publisher_bytes": "UNCHANGED",
+            "backup_restore": "PASS",
+            "integrity": "PASS",
+            "foreign_keys": "PASS",
+            "paid": [
+              0,
+              0
+            ],
+            "cohort": "0/10",
+            "catalog_sequence": 4,
+            "route_fingerprints": {
+              "ru": "730a989764cdd9fdc6742f226e6b45d17aeaafef57055b4f3217566b6f796650",
+              "nl": "6c0a3e5df6389c7fe7c2d7037374f3bbceed6efce285a78ae88c9be983414c75"
+            },
+            "counts": {
+              "devices": 57,
+              "invites": 111,
+              "restricted_grants": 2
+            },
+            "systemd_idle": true,
+            "effective_argv": "EXACT_ACTIVE",
+            "service_restarts": 0,
+            "rollback_artifact": "RETAINED_EXACT_CURRENT",
+            "source_or_config_writes": 0,
+            "observed_utc": "2026-11-01T04:56:29.624837+00:00"
+          },
+          "stage": {
+            "result": "CANDIDATE_STAGED_EFFECTIVE_EXECSTART_VALIDATED",
+            "candidate_sha256": "8e74997c0760e7953898f130241260864a438d72c5a47d46332549c3c6c3a1cf",
+            "existing_bound_lookup": "PASS",
+            "restarts": 0,
+            "observed_utc": "2026-11-01T04:57:09.366013+00:00"
+          },
+          "restart": {
+            "result": "BASELINE108_STARTED_INTERNAL_GATES_PASS_EXTERNAL_FETCH_PENDING",
+            "candidate_sha256": "8e74997c0760e7953898f130241260864a438d72c5a47d46332549c3c6c3a1cf",
+            "controlled_restarts": 1,
+            "automatic_restarts": 0,
+            "rollback_count": 0,
+            "exact_process_listener": "PASS",
+            "health": "PASS",
+            "registry_schema_counts_fingerprints": "PRESERVED",
+            "route_publisher_admission_fingerprints": "PRESERVED",
+            "paid": [
+              0,
+              0
+            ],
+            "cohort": "0/10",
+            "latest_authenticated_version": 108,
+            "canary_lookup": "PASS",
+            "canary_writes": "NOT_RUN",
+            "observed_utc": "2026-11-01T04:57:33.219803+00:00"
+          },
+          "probe": {
+            "result": "BASELINE108_PRODUCTION_NON_COHORT_CHALLENGE_FETCH_PASS",
+            "observed_utc": "2026-11-01T04:57:57.831103+00:00",
+            "tls_verified": true,
+            "challenge": "PASS",
+            "fetch": "PASS",
+            "material_import": "PASS",
+            "crl_equals_minimum": true,
+            "crl": 27233,
+            "directory": "CURRENT_VALID",
+            "catalog_signature": "PASS",
+            "catalog_sequence": 4,
+            "nl_endpoint": "185.10.158.212",
+            "ru_endpoint": "185.251.89.19",
+            "new_identity": false,
+            "mesh_server_probe": "NOT_RUN",
+            "paid_activation": "NOT_RUN"
+          },
+          "final": {
+            "result": "BASELINE108_FINAL_READ_ONLY_PASS",
+            "paid": [
+              0,
+              0
+            ],
+            "cohort": "0/10",
+            "canary_lookup": "PASS",
+            "canary_writes": "NOT_RUN",
+            "observed_utc": "2026-11-01T04:59:13.261893+00:00"
+          },
+          "final-readback": {
+            "result": "BASELINE108_POST_FETCH_FINAL_INVARIANTS_PASS",
+            "current_http_sha256": "8e74997c0760e7953898f130241260864a438d72c5a47d46332549c3c6c3a1cf",
+            "production_baseline": 108,
+            "paid": [
+              0,
+              0
+            ],
+            "cohort": "0/10",
+            "counts": {
+              "devices": 57,
+              "invites": 111,
+              "restricted_grants": 2
+            },
+            "renewal_sync_schedules": "ACTIVE_LAST_SUCCESS",
+            "canary": "PAUSED_NOT_RUN",
+            "rollback_used": false,
+            "rollback_artifact": "RETAINED_EXACT_PREDEPLOY",
+            "observed_utc": "2026-11-01T04:59:14.654212+00:00"
+          }
+        },
+        "ready": "READY_FOR_BETA0_CANARY_1",
+        "canary_writes": "NOT_RUN",
+        "next": "WAITING_FRESH_OWNER_GOTOV"
       }
     }
   },
