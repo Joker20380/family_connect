@@ -3,14 +3,14 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**FLEET-BOOTSTRAP-2 — failed trial safely RETIRED; MESH unit fix awaiting package requalification.**
+**FLEET-BOOTSTRAP-2 — corrected A/B source/package requalified; first trial safely RETIRED.**
 Existing task: **FLEET-BOOTSTRAP-2**, no new PLAN ID; finish its gates before further activation.
-Frozen deployable source: `0ecfefeaf907bd87e34e3e5356808c376aab082e`; final A/B are signed and each built twice,
+Frozen deployable source: `900e1859d5b4317e1faab2675425bed78ab85c12`; corrected A/B signed and each built twice,
 byte-identical archive/manifest/signature/hash inventory. Exact native/source/license
 bindings and the282-file canonical MESH capsule are retained. Ubuntu24.04/x86_64
 isolated qualification PASS: native config/help, units, nft coexistence, encrypted
 materials, two-phase synthetic acceptance, B failure→A, B success, rollback and retire.
-Full fleet237 + console156 =393 PASS; paid/backend/package170 PASS; Django check PASS,
+Fresh full fleet295 + console156 =451 PASS; paid/backend/package170 PASS; Django check PASS,
 migration drift NONE. Append-only sanitized live-receipt import and Russian dashboard ready.
 Roles: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor.
 Disabled: mailbox/chat-services, production renewal/restricted-sync, registry/control DB.
@@ -34,13 +34,13 @@ CAP_NET_ADMIN; all other restrictions remain. No node data-plane PASS is inferre
 A new signed A/B pair and fresh enrollment are required. Source adds verified retired-owner
 handoff only after matching signed enrollment/custody, terminal unfenced retirement journal,
 secret/resource absence and an exclusive owner lock; predecessor evidence/releases are retained.
-Fresh fleet295 + console156 =451PASS; Django check PASS/drift NONE. Paid170 retained.
-New package requalification and
-external AWG/TCP/MESH acceptance, A/B upgrade and role reboot gates remain pending.
+New A/B and Ubuntu qualification PASS, including native config-test, units, nft, encrypted
+delivery, synthetic two-phase acceptance, B failure/success/rollback and retirement.
+Next: fresh enrollment and physical AWG/TCP/MESH acceptance, A/B upgrade and role reboot.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
 Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.
 [Checkpoint](releases/2026-11-01-fleet-bootstrap-2.md) ·
-[Hashes/receipt](releases/2026-11-01-fleet-bootstrap-2.receipt.json) · [Runbook](fleet-bootstrap.md).
+[Hashes/receipt](releases/2026-11-01-fleet-bootstrap-2-netlink.receipt.json) · [Runbook](fleet-bootstrap.md).
 Older checkpoint NEXTs below are historical, not simultaneous active work.
 <!-- /FLEET-BOOTSTRAP-2 current -->
 

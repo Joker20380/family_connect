@@ -1,5 +1,37 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+## Corrected pair requalified — frozen source900e185
+
+Source `900e1859d5b4317e1faab2675425bed78ab85c12` is pushed and remote main verified.
+Corrected A/B are built twice each with byte-identical archive, manifest, signature and SHA256
+inventory. Their sole within-pair difference remains `metadata/revision.json`; exact natives,
+ports, roles, secret slots and material schema are unchanged. Prior immutable A/B remain retained.
+Public [requalification evidence](2026-11-01-fleet-bootstrap-2-netlink.receipt.json) contains
+only safe hashes/results. Private archives/signatures/signing key remain ignored.
+
+| Item | Corrected A | Corrected B |
+| --- | --- | --- |
+| ID | `gw-ff5a79a9e88250c16309ad88d9848707` | `gw-a74138aaf796264dcd1f5b4a9c7bb755` |
+| Archive SHA256 | `33d86d2b475fe74a588c6f7045ddcd6ab88e49d33270a39ac1db0ea31aac010f` | `00159a4492fc512964dfba72f042117a00e72b822fb4eea80e7c168af3c40181` |
+| Manifest SHA256 | `e7b9e8cc282217c7e387781b922ffe0c59a0c9771a0591b530a4c6f17b995aaa` | `aa89b0196e811368e1d61d60c190daeee9b7bb4b1abc3f1823a71d463efb4b91` |
+| Signature-file SHA256 | `d01e0cca941c897b73bb4248125c23e6c1087361f48ce82801824834a8e93a33` | `aecb80572521dae145870cdc295fd5179cba9e12f21ac2c197a8b32c0a38f8fa` |
+
+Signer fingerprint remains `d327d9fd0a3088c8b80ee00bc32ce5cd7f8ee61c6dbdd68d2bb292741a54daf6`.
+New exact agent digest: `3c1da691e367431ded82d7251dee1bb1b096944f660b18412156913d9a23eee5`.
+Permit/remote-agent source hashes remain unchanged; the archive binds the corrected modules.
+Fresh full fleet295 + console156 =451PASS, paid/backend/package170PASS, Django check PASS,
+migration drift NONE. Ubuntu24.04/x86_64 isolated qualification PASS: exact native paths,
+systemd static checks, nft coexistence/rollback, material delivery, A/B pointer installation,
+two-phase synthetic external receipts, injected B failure→A, B success, explicit rollback, retire.
+This does not assert physical transport or reboot acceptance. Existing34 console static-path
+warnings remain non-errors. Original FLEET_MESH_PROBE_1 custody is preserved; the retired
+trial's three operator disposable client-material files were overwritten/unlinked after its
+verified final retirement receipt. The VPS itself remains reserved, not deleted or reinstalled.
+
+New physical enrollment/permit must bind this pair and a new instance, never rewrite the old
+retired identity. Production writes/catalog publications/user invitations/paid events/phone
+actions remain0. No second production server or catalog admission is claimed.
+
 ## MESH interface-discovery fix and safe trial retirement
 
 The separate token is accepted by the official conference-create API (HTTP201). The exact

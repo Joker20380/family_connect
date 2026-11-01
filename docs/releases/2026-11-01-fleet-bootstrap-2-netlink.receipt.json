@@ -1,0 +1,107 @@
+{
+  "package": {
+    "agent_sha256": "3c1da691e367431ded82d7251dee1bb1b096944f660b18412156913d9a23eee5",
+    "bundle_signer_sha256": "d327d9fd0a3088c8b80ee00bc32ce5cd7f8ee61c6dbdd68d2bb292741a54daf6",
+    "bundles": {
+      "A": {
+        "archive_sha256": "33d86d2b475fe74a588c6f7045ddcd6ab88e49d33270a39ac1db0ea31aac010f",
+        "bundle_id": "gw-ff5a79a9e88250c16309ad88d9848707",
+        "manifest_sha256": "e7b9e8cc282217c7e387781b922ffe0c59a0c9771a0591b530a4c6f17b995aaa",
+        "sha256_inventory_sha256": "3f4318f555f337dc2027fd7fe9abf2d7e1badee30a84fdb5152b345f772b9e7e",
+        "signature_sha256": "d01e0cca941c897b73bb4248125c23e6c1087361f48ce82801824834a8e93a33"
+      },
+      "B": {
+        "archive_sha256": "00159a4492fc512964dfba72f042117a00e72b822fb4eea80e7c168af3c40181",
+        "bundle_id": "gw-a74138aaf796264dcd1f5b4a9c7bb755",
+        "manifest_sha256": "aa89b0196e811368e1d61d60c190daeee9b7bb4b1abc3f1823a71d463efb4b91",
+        "sha256_inventory_sha256": "39ae583f1e8c420f96a03d2f05cbcc70231b1562089ab22109b3d273983d7f95",
+        "signature_sha256": "aecb80572521dae145870cdc295fd5179cba9e12f21ac2c197a8b32c0a38f8fa"
+      }
+    },
+    "catalog_publications": 0,
+    "disabled_roles": [
+      "mailbox",
+      "chat-services",
+      "renewal",
+      "restricted-sync",
+      "registry",
+      "control-plane-database"
+    ],
+    "operator_probe": {
+      "compiler_image": "sha256:ab3d6955bbc813a0f3fdf220c1d817dd89c0b3f283777db8ece4a32fe7858edd",
+      "patch_sha256": "de941c4fb2500da3cf5a89207f31a0b6fef7baecc38b610d94b8206234f7c315",
+      "purpose": "OPERATOR_ONLY_DISPOSABLE_TARGET_EGRESS",
+      "sha256": "7875df5e84b208261a8835565723394d8e1b829b35c1b8a2ec6fa913f8f15f8a",
+      "size": 17313802,
+      "source_inventory_sha256": "d06df9b0d9b73408c9e3b1fba03d630136a10fb3c843269ff6f6f7d7e4bf916e"
+    },
+    "paid_events": 0,
+    "permit_source_sha256": "47b1dfe7ee90221a452a762595ce9017e5d4c51e8ddd1195238cc567ff9eaacc",
+    "phone_actions": 0,
+    "production_writes": 0,
+    "remote_agent_source_sha256": "04e43c21631434ff32286345bb94b7c038e2d27e45058d08ee945b9246f071dd",
+    "reproducibility": "PASS",
+    "roles": [
+      "awg",
+      "tcp",
+      "mesh",
+      "profile-reader",
+      "publisher",
+      "snapshot",
+      "monitoring",
+      "load-monitor"
+    ],
+    "schema": 1,
+    "scope": "SOURCE_PACKAGE_ONLY",
+    "source_commit": "900e1859d5b4317e1faab2675425bed78ab85c12",
+    "target_reverification": "PASS",
+    "user_invitations": 0
+  },
+  "physical_acceptance": "NOT_RUN_FOR_NEW_PAIR",
+  "prior_trial": {
+    "operator_disposable_client_cleanup": "PASS",
+    "original_probe_custody": "PRESERVED",
+    "retirement": "PASS",
+    "rollback": "PASS",
+    "state": "RETIRED"
+  },
+  "production_activation": "NOT_AUTHORIZED_BY_REHEARSAL",
+  "qualification": {
+    "ab_installation": "PASS",
+    "awg_handshake": "NOT_RUN",
+    "b_upgrade": "PASS",
+    "catalog_publications": 0,
+    "explicit_rollback": "PASS",
+    "injected_b_failure_rollback_a": "PASS",
+    "material_delivery_fake_root": "PASS",
+    "mesh_data_plane": "NOT_RUN",
+    "native_help_version_config_test": "PASS",
+    "nft_syntax_coexistence_rollback": "PASS",
+    "paid_events": 0,
+    "phone_actions": 0,
+    "pinned_python_dependencies": "PASS",
+    "platform": "Ubuntu24.04/x86_64",
+    "production_writes": 0,
+    "qualification_source_sha256": "bdf6ac4f13edaf80029cdc2e53ed9d21c03cdc13d47bce74ce6666ed0ccda208",
+    "real_systemd_start": "NOT_RUN",
+    "reboot_persistence": "NOT_RUN",
+    "retirement": "PASS",
+    "schema": 1,
+    "scope": "ISOLATED_SOURCE_PACKAGE_QUALIFICATION",
+    "service_account_modes": "PASS",
+    "source_commit": "900e1859d5b4317e1faab2675425bed78ab85c12",
+    "target_reverification": "PASS",
+    "tcp_tunnel": "NOT_RUN",
+    "two_phase_synthetic_acceptance": "PASS",
+    "unit_verification": "PASS",
+    "user_invitations": 0
+  },
+  "tests": {
+    "combined": 451,
+    "console": 156,
+    "django_check": "PASS",
+    "fleet": 295,
+    "migration_drift": "NONE",
+    "paid_backend_package": 170
+  }
+}
