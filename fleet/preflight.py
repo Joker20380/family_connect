@@ -53,6 +53,7 @@ class SSH:
         if result.returncode or len(fields) < 2 or not fingerprint.startswith('SHA256:') or fields[1] != fingerprint:
             fail('ssh_fingerprint_mismatch')
         self.argv = ['ssh','-F','/dev/null','-T','-o','BatchMode=yes','-o','StrictHostKeyChecking=yes',
+                     '-o','UpdateHostKeys=no','-o','CheckHostIP=yes',
                      '-o','PasswordAuthentication=no','-o','KbdInteractiveAuthentication=no','-o','ForwardAgent=no',
                      '-o','ClearAllForwardings=yes','-o','ControlMaster=no','-o','ConnectTimeout=10',
                      '-o','GlobalKnownHostsFile=/dev/null','-o','UserKnownHostsFile='+str(path),user+'@'+str(address)]

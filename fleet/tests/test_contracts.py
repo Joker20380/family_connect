@@ -54,3 +54,14 @@ def test_transition():
 
 def test_duplicate_json():
     with pytest.raises(FleetError):load('{"schema":1,"schema":1}')
+
+
+def test_conflicting_active_identity():
+    data=sample()
+    data['instances'][0].update(state='ACTIVE',actual_bundle='test-v1',enrollment_state='ENROLLED',health_state='PASS',deployment_identity='d'*64)
+    data['logical_gateways'][0]['active_instance']='nl-test-001'
+    assert inventory(data)
+    other=copy.deepcopy(data['instances'][0]);other.update(instance_id='ru-test-001',logical_gateway='ru')
+    data['instances'].append(other)
+    data['logical_gateways'].append(dict(id='ru',country='RU',transports=['awg'],desired_state='ACTIVE',active_instance='ru-test-001',fallback_instances=[],catalog_generation=4))
+    with pytest.raises(FleetError):inventory(data)

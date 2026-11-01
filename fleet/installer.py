@@ -11,6 +11,7 @@ import time
 from . import health, preflight
 from .bundle import verify
 from .contracts import canonical, digest, fail, load, transition, typed, validate
+from .enrollment import verify_receipt
 
 
 def fsync_directory(path):
@@ -36,7 +37,7 @@ def atomic_json(path, value):
 
 
 class SandboxInstaller:
-    def __init__(self, root, instance, bundle, public_key):
+    def __init__(self, root, instance, bundle, public_key, enrollment=None, enrollment_key=None):
         validate('instance', instance)
         path = Path(root).absolute()
         if (path == Path('/') or not path.is_relative_to(Path(tempfile.gettempdir()).resolve())
@@ -46,6 +47,8 @@ class SandboxInstaller:
         self.instance = instance
         self.bundle = Path(bundle)
         self.key = public_key
+        self.enrollment = enrollment
+        self.enrollment_key = enrollment_key
         self.manifest, self.contents = verify(bundle, public_key, instance['desired_bundle'])
         if self.manifest['scope'] != 'synthetic' or set(self.manifest['roles']) != set(instance['roles']):
             fail('synthetic_scope_or_roles')
@@ -54,6 +57,10 @@ class SandboxInstaller:
         self.state_path = path/'var/lib/family-connect/instance.json'
         self.operations = path/'var/lib/family-connect/operations'
         self.configuration = path/'etc/family-connect'
+        if (path/'.fleet-sandbox').exists():
+            self.secure_tree()
+            if load((path/'.fleet-sandbox').read_bytes()) != dict(instance_id=instance['instance_id'],logical_gateway=instance['logical_gateway']):
+                fail('sandbox_instance_binding')
 
     def plan(self):
         return dict(scope='synthetic', instance_id=self.instance['instance_id'], bundle_id=self.manifest['bundle_id'],
@@ -199,10 +206,22 @@ class SandboxInstaller:
                         logical_gateway=self.instance['logical_gateway'], bundle_id=target, roles=self.manifest['roles'])
                     atomic_json(self.configuration/(target+'.json'),configuration)
                 elif action in ('verify','activate'):
+                    if not state['preflight'] or not 0 <= time.time()-state['preflight']['observed_at'] <= 600:
+                        fail('fresh_preflight_required')
                     if state.get('candidate') != target:
                         fail('candidate_binding')
                     if self.instance['enrollment_state'] != 'ENROLLED' or not self.instance['deployment_identity']:
                         fail('instance_enrollment_required')
+                    if self.enrollment is None or self.enrollment_key is None:
+                        fail('instance_receipt_required')
+                    enrolled_bundle=self.enrollment['body']['binding']['bundle_id']
+                    if enrolled_bundle!=target and enrolled_bundle not in state['accepted']:
+                        fail('instance_receipt_bundle')
+                    binding=dict(instance_id=self.instance['instance_id'],logical_gateway=self.instance['logical_gateway'],
+                        bundle_id=enrolled_bundle,provider=self.instance['provider'],region=self.instance['region'],
+                        ipv4=self.instance['ipv4'],roles=self.instance['roles'])
+                    if verify_receipt(self.enrollment,self.enrollment_key,binding)!=self.instance['deployment_identity']:
+                        fail('instance_identity_mismatch')
                     self.check_release(self.manifest)
                     self.slots()
                     configuration = load((self.configuration/(target+'.json')).read_bytes())

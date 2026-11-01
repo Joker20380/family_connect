@@ -40,6 +40,23 @@ def proof_payload(binding, challenge, public_key):
                           challenge=challenge, public_key=public_key))
 
 
+def verify_receipt(receipt, authority, binding):
+    binding_check(binding)
+    exact(receipt, ('body','signature'))
+    body=receipt['body']
+    exact(body, ('schema','scope','binding','public_key','enrolled_at','transport_issuance'))
+    if (type(body['schema']) is not int or body['schema']!=1 or body['scope']!='synthetic'
+            or body['binding']!=binding or not typed(body['public_key'],'hash')
+            or type(body['enrolled_at']) is not int or not 0<=body['enrolled_at']<=time.time()+60
+            or body['transport_issuance'] is not False):
+        fail('instance_receipt_binding')
+    try:
+        authority.verify(base64.b64decode(receipt['signature'],validate=True),canonical(body))
+    except (ValueError,InvalidSignature):
+        fail('instance_receipt_signature')
+    return digest(bytes.fromhex(body['public_key']))
+
+
 class EnrollmentStore:
     def __init__(self, path, authority, clock=time.time):
         self.path = Path(path)

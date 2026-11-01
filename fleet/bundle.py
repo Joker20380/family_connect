@@ -21,7 +21,7 @@ LIMIT = 128 * 1024 * 1024
 MEMBER_LIMIT = 32 * 1024 * 1024
 MEMBER_FIELDS = ('path', 'sha256', 'size', 'target', 'mode', 'owner', 'group', 'restart_group', 'secret_slots')
 CORE_FIELDS = ('schema', 'source_commit', 'scope', 'supported_os', 'architecture', 'roles', 'secret_slots', 'members')
-FORBIDDEN = ('.key', '.pem', '.sqlite', '.sqlite3', '.db', '.env', '.journal')
+FORBIDDEN = ('.key', '.pem', '.crt', '.crl', '.der', '.p12', '.pfx', '.sqlite', '.sqlite3', '.db', '.env', '.journal')
 
 
 def safe_path(value):
@@ -34,7 +34,7 @@ def safe_path(value):
 
 def nonsecret(path, content):
     if (path.endswith(FORBIDDEN) or any(part in ('secrets', 'state', 'journals', 'credentials') for part in path.split('/'))
-            or len(content) in (32, 64) or b'PRIVATE KEY' in content
+            or len(content) in (32, 64) or re.search(rb'-----BEGIN (?:RSA |EC |OPENSSH |ENCRYPTED )?(?:PRIVATE KEY|CERTIFICATE|X509 CRL)-----', content)
             or re.search(rb'(?i)(?:password|private_key|token)\s*[=:]\s*["\']?[A-Za-z0-9+/]{16}', content)):
         fail('secret_or_state_member')
 

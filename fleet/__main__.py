@@ -17,6 +17,8 @@ def main():
     parser.add_argument('--host')
     parser.add_argument('--bundle', required=True)
     parser.add_argument('--public-key', required=True)
+    parser.add_argument('--enrollment-receipt')
+    parser.add_argument('--enrollment-key')
     parser.add_argument('--sandbox-root')
     parser.add_argument('--operation-id')
     parser.add_argument('--host-report')
@@ -52,7 +54,9 @@ def main():
         else:
             if not arguments.sandbox_root:
                 fail('live_rehearsal_required')
-            installer=SandboxInstaller(arguments.sandbox_root,instance,arguments.bundle,key)
+            enrollment=load(Path(arguments.enrollment_receipt).read_bytes()) if arguments.enrollment_receipt else None
+            enrollment_key=Ed25519PublicKey.from_public_bytes(Path(arguments.enrollment_key).read_bytes()) if arguments.enrollment_key else None
+            installer=SandboxInstaller(arguments.sandbox_root,instance,arguments.bundle,key,enrollment,enrollment_key)
             if arguments.action=='status':
                 result=installer.status()
             else:
@@ -60,7 +64,7 @@ def main():
                 checks=load(Path(arguments.health_report).read_bytes()) if arguments.health_report else None
                 result=installer.execute(arguments.action,arguments.operation_id,report=report,health_report=checks)
         print(canonical(result).decode())
-    except (FleetError,OSError,ValueError,TypeError,KeyError,StopIteration) as error:
+    except Exception as error:
         print(canonical(dict(result='FAIL',code=str(error) if isinstance(error,FleetError) else 'invalid_input')).decode())
         raise SystemExit(1)
 

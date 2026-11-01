@@ -1,4 +1,5 @@
 import copy
+import base64
 import json
 import os
 from pathlib import Path
@@ -7,6 +8,7 @@ from types import SimpleNamespace
 
 import pytest
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+from cryptography.hazmat.primitives import serialization
 
 from fleet import health, preflight
 from fleet.bundle import build
@@ -27,8 +29,16 @@ def host_report():
 @pytest.fixture
 def installer(bundle,tmp_path):
     root,spec,key,directory,manifest=bundle
-    node=instance();node.update(desired_bundle=manifest['bundle_id'],enrollment_state='ENROLLED',deployment_identity='b'*64)
-    return SandboxInstaller(tmp_path/'host',node,directory,key.public_key())
+    node=instance();node.update(desired_bundle=manifest['bundle_id'],enrollment_state='ENROLLED')
+    store=EnrollmentStore(tmp_path/'enroll.sqlite3',key)
+    binding=dict(instance_id=node['instance_id'],logical_gateway=node['logical_gateway'],bundle_id=manifest['bundle_id'],
+        provider=node['provider'],region=node['region'],ipv4=node['ipv4'],roles=node['roles'])
+    token,challenge=store.issue(binding)
+    public=generate_node_key(tmp_path/'node.key')
+    node_key=Ed25519PrivateKey.from_private_bytes((tmp_path/'node.key').read_bytes())
+    receipt=store.enroll(token,binding,public,node_key.sign(proof_payload(binding,challenge['challenge'],public)))
+    node['deployment_identity']=digest(bytes.fromhex(public))
+    return SandboxInstaller(tmp_path/'host',node,directory,key.public_key(),receipt,key.public_key())
 
 
 def checks(installer):
@@ -111,7 +121,7 @@ def test_upgrade_rollback_previous(installer,bundle,tmp_path):
     spec['members'][0]['sha256']=digest((root/'runtime').read_bytes())
     new=build(root,spec,key,tmp_path/'upgrade')
     node=dict(installer.instance,desired_bundle=new['bundle_id'])
-    upgraded=SandboxInstaller(installer.root,node,tmp_path/'upgrade',key.public_key())
+    upgraded=SandboxInstaller(installer.root,node,tmp_path/'upgrade',key.public_key(),installer.enrollment,installer.enrollment_key)
     upgraded.execute('preflight','upgrade-preflight',report=host_report())
     upgraded.execute('stage','upgrade-stage')
     assert upgraded.current.resolve().name==original
@@ -127,6 +137,25 @@ def test_upgrade_rollback_previous(installer,bundle,tmp_path):
 def test_root_symlink_rejected(installer,tmp_path):
     installer.root.symlink_to(tmp_path/'outside')
     with pytest.raises(FleetError):installer.initialize(host_report())
+
+
+def test_instance_cannot_inherit_predecessor_journal(installer):
+    stage(installer)
+    changed=dict(installer.instance,instance_id='nl-test-002')
+    with pytest.raises(FleetError):SandboxInstaller(installer.root,changed,installer.bundle,installer.key)
+
+
+def test_unsigned_enrollment_cannot_activate(installer):
+    stage(installer)
+    installer.enrollment['signature']=base64.b64encode(bytes(64)).decode()
+    with pytest.raises(FleetError):installer.execute('verify','untrusted-identity',health_report=checks(installer))
+
+
+def test_staged_tamper_rejected(installer):
+    stage(installer)
+    path=installer.releases/installer.manifest['bundle_id']/'bin/runtime'
+    path.chmod(0o755);path.write_bytes(b'modified')
+    with pytest.raises(FleetError):installer.execute('verify','tampered',health_report=checks(installer))
 
 
 def test_health_binding_and_all_roles():

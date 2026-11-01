@@ -1,0 +1,14 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<h1>Серверы · FLEET-BOOTSTRAP-1</h1>
+<p>Только локальный синтетический контур. Web создаёт intents; SSH и публикация отключены.</p>
+<p><a href="{% url 'admin:fleet_console_gatewayartifact_changelist' %}">Артефакты</a> · <a href="{% url 'admin:fleet_console_deploymentoperation_changelist' %}">Операции</a></p>
+<table><tr><th>Шлюз / экземпляр</th><th>Провайдер / регион / IP</th><th>Желаемый / фактический bundle</th><th>Состояние / здоровье</th><th>Последнее наблюдение</th></tr>
+{% for instance in instances %}<tr>
+<td>{{ instance.logical_gateway }} / {{ instance.instance_id }}</td><td>{{ instance.provider }} / {{ instance.region }} / {{ instance.ipv4 }} {{ instance.ipv6|default_if_none:"" }}</td>
+<td>{{ instance.desired_bundle }} / {{ instance.actual_bundle|default_if_none:"—" }}</td><td>{{ instance.get_state_display }} / {{ instance.get_health_state_display }}</td>
+<td>{% with check=instance.health_checks.first %}{% if check %}{{ check.observed_at }}; CPU {{ check.cpu|default_if_none:"—" }}%; RAM {{ check.ram|default_if_none:"—" }}%; диск {{ check.disk|default_if_none:"—" }}%; сессии {{ check.active_sessions|default_if_none:"не измерены" }}; перезапуски {{ check.restart_count|default_if_none:"—" }}; сертификат {{ check.certificate_expiry|default_if_none:"—" }}; directory {{ check.directory_expiry|default_if_none:"—" }}; AWG/TCP/MESH проверки: {{ check.checks }}{% else %}Нет данных{% endif %}{% endwith %}</td>
+</tr>{% empty %}<tr><td colspan="5">Экземпляры не импортированы. Production автоматически не обнаруживается.</td></tr>{% endfor %}</table>
+<h2>Создать операторский intent</h2><form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">Записать intent · не выполнять SSH</button></form>
+<h2>История операций</h2><ul>{% for operation in operations %}<li>{{ operation.started_at }} — {{ operation.instance }} — {{ operation.get_action_display }} — {{ operation.get_state_display }}</li>{% empty %}<li>Операций нет</li>{% endfor %}</ul>
+{% endblock %}

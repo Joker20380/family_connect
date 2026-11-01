@@ -1,5 +1,28 @@
 # CONTROL-PLANE · русская локальная панель и наблюдаемость
 
+## FLEET-BOOTSTRAP-1 · source/synthetic only
+
+The separate `fleet_console` app adds physical instances, logical routes, signed-artifact
+metadata, hash-only enrollment metadata, immutable deployment intents/completions and
+health observations. `/fleet/` and Russian read-only admin lists expose servers/artifacts/
+operations. A protected form creates intents only; **the web process never executes SSH**.
+Existing paid admission/subscriptions remain the sole authority and are not changed.
+
+Apply fleet migrations only to the disposable local test database in this checkpoint.
+PostgreSQL triggers reject UPDATE/DELETE of audit artifacts, token metadata, operations and
+health records. Completion is a separate append-only row referencing its immutable intent.
+`InstanceHealthCheck.observation` links the existing `ServerObservation` without modifying
+or deleting historical snapshots. Unknown metrics/receipt fields are rejected.
+
+Operator commands: `manage.py import_fleet_synthetic --inventory FILE --bundle DIRECTORY
+--public-key FILE`, `manage.py fleet_intent OPERATION_ID`, `manage.py fleet_complete
+OPERATION_ID --operator USER --receipt FILE [--health FILE]`. Registration metadata is
+accepted only through `fleet_enrollment_receipt INSTANCE --operator USER --receipt FILE
+--authority-key FILE`; only a verified signed instance receipt can enable activation intents.
+Raw enrollment tokens and private node keys never enter the web/admin model.
+No production public endpoint, subscriptions, invitations or catalog publication are added.
+See [bootstrap runbook](../docs/fleet-bootstrap.md) and [source receipt](../docs/releases/2026-11-01-fleet-bootstrap-1.md).
+
 Substep of **ANDROID-CONTROLLED-BETA**, over the accepted
 [PAID-ENTITLEMENT-MVP](../docs/paid-beta.md). Django5.2 LTS + PostgreSQL17,
 custom Django Admin, dashboard/accessible SVG charts, device lookup/readbacks,

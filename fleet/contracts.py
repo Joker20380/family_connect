@@ -84,7 +84,10 @@ def typed(value, kind):
         return type(value) is int and 0 <= value < 2**53
     if kind == 'receipt':
         return (type(value) is dict and set(value) <= {'result', 'evidence_sha256', 'scope'}
-                and all(typed(item, 'hash' if key == 'evidence_sha256' else 'id') for key, item in value.items()))
+                and all(typed(item, 'hash') if key == 'evidence_sha256' else
+                        item in ('synthetic', 'production_readonly') if key == 'scope' else
+                        item in ('PASS', 'FAIL', 'INTENT', 'SUCCEEDED', 'FAILED', 'operator_intent')
+                        for key, item in value.items()))
     domains = {'state': STATES, 'health': ('UNKNOWN', 'PASS', 'FAIL'),
                'enrollment': ('NEW', 'ENROLLED', 'CANCELLED'),
                'action': ('plan', 'preflight', 'stage', 'verify', 'activate', 'drain', 'quarantine', 'rollback', 'status'),

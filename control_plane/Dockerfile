@@ -5,6 +5,7 @@ COPY control_plane/requirements.lock /tmp/requirements.lock
 RUN pip install --no-cache-dir --require-hashes -r /tmp/requirements.lock
 COPY control/friends/*.py /app/control/friends/
 COPY device_identity/*.py /app/device_identity/
+COPY fleet /app/fleet
 COPY control_plane/manage.py control_plane/pyproject.toml /app/control_plane/
 COPY control_plane/fc_control_plane /app/control_plane/fc_control_plane
 COPY control_plane/apps /app/control_plane/apps

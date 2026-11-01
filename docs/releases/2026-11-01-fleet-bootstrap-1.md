@@ -32,7 +32,14 @@ The existing client lease engine is not reused as a physical-instance state mach
   Combined source/unit tests:67 PASS, including unsupported-host-before-writes, dry-run,
   stage replay, verified activation, failed activation evidence, upgrade rollback, all-role
   health binding, SSH fingerprint, enrollment expiry/cancel/replay and identity binding.
-- Django models/UI and final combined acceptance: pending.
+- Django fleet models, Russian read-only admin and operator intents implemented. The web
+  process cannot execute SSH; append-only completion/enrollment receipts are imported by
+  the separate operator. Signed enrollment possession is required before activation.
+  PostgreSQL audit triggers reject update/delete, including queryset bypass attempts.
+  Existing ServerObservation snapshots remain intact with optional instance-health links.
+  Disposable container/PostgreSQL acceptance:199 PASS (128 console +71 fleet), no skips;
+  Django check and migration drift PASS.33 existing-style static-directory test warnings;
+  initial new-template test setup was repaired without changing production static policy.
 - Final synthetic acceptance and rehearsal runbook: pending.
 
 ## Next boundary
