@@ -1,0 +1,109 @@
+{
+  "package": {
+    "agent_sha256": "7cc621f4d06382656d3fdf06afba7762a27d51b964a21433d62ceb5130b55772",
+    "bundle_signer_sha256": "d327d9fd0a3088c8b80ee00bc32ce5cd7f8ee61c6dbdd68d2bb292741a54daf6",
+    "bundles": {
+      "A": {
+        "archive_sha256": "b3dafb2b70f2bed5496856f0ceee9fb910f306552279324ef3e07c9bb9830a3d",
+        "bundle_id": "gw-e14f078372ab064db5a6dab8fd1c02fd",
+        "manifest_sha256": "e146e8a7b1217a737141fa0af146dc39dbf7c38761d25145321d643ad8cd7083",
+        "sha256_inventory_sha256": "46e0acb806065e2b4b49858cba548489fbde645014ecdbd1546ac2807effa0c6",
+        "signature_sha256": "edbdcc8a2e7824a502c50fc95da1cf8f965a505636289433d27da2e3a8245a19"
+      },
+      "B": {
+        "archive_sha256": "c801ae81d436f36acb6e94f7ac2af9dcf39ce12cdcc72a48771514cf6eb2460e",
+        "bundle_id": "gw-bc668803043061d4415f2329ae2be8c2",
+        "manifest_sha256": "e3b1f66511b8a7730c5a21e3eadca0c1776a1e23584c6bb32d4846ea3f18d58c",
+        "sha256_inventory_sha256": "a35bb52c8c825cbe4e66398881cd7586a6f28ac90cae15f9201263d8b9a1b065",
+        "signature_sha256": "6ae094e9ffdd98bb41ac1bdceada7597c994277c75d04bd1ebbc9e0fcc5c35e4"
+      }
+    },
+    "catalog_publications": 0,
+    "disabled_roles": [
+      "mailbox",
+      "chat-services",
+      "renewal",
+      "restricted-sync",
+      "registry",
+      "control-plane-database"
+    ],
+    "operator_probe": {
+      "compiler_image": "sha256:ab3d6955bbc813a0f3fdf220c1d817dd89c0b3f283777db8ece4a32fe7858edd",
+      "patch_sha256": "de941c4fb2500da3cf5a89207f31a0b6fef7baecc38b610d94b8206234f7c315",
+      "purpose": "OPERATOR_ONLY_DISPOSABLE_TARGET_EGRESS",
+      "sha256": "7875df5e84b208261a8835565723394d8e1b829b35c1b8a2ec6fa913f8f15f8a",
+      "size": 17313802,
+      "source_inventory_sha256": "d06df9b0d9b73408c9e3b1fba03d630136a10fb3c843269ff6f6f7d7e4bf916e"
+    },
+    "paid_events": 0,
+    "permit_source_sha256": "47b1dfe7ee90221a452a762595ce9017e5d4c51e8ddd1195238cc567ff9eaacc",
+    "phone_actions": 0,
+    "production_writes": 0,
+    "remote_agent_source_sha256": "04e43c21631434ff32286345bb94b7c038e2d27e45058d08ee945b9246f071dd",
+    "reproducibility": "PASS",
+    "roles": [
+      "awg",
+      "tcp",
+      "mesh",
+      "profile-reader",
+      "publisher",
+      "snapshot",
+      "monitoring",
+      "load-monitor"
+    ],
+    "schema": 1,
+    "scope": "SOURCE_PACKAGE_ONLY",
+    "source_commit": "925916f27f7ba455ea379572e2ff2154cf10686f",
+    "target_reverification": "PASS",
+    "user_invitations": 0
+  },
+  "physical_acceptance": "NOT_RUN_FOR_NEW_PAIR",
+  "prior_trial": {
+    "operator_disposable_client_cleanup": "PASS",
+    "original_probe_custody": "PRESERVED",
+    "retirement": "PASS",
+    "rollback": "PASS",
+    "state": "RETIRED"
+  },
+  "production_activation": "NOT_AUTHORIZED_BY_REHEARSAL",
+  "qualification": {
+    "ab_installation": "PASS",
+    "awg_handshake": "NOT_RUN",
+    "b_upgrade": "PASS",
+    "boot_firewall_restore_simulation": "PASS",
+    "catalog_publications": 0,
+    "explicit_rollback": "PASS",
+    "injected_b_failure_rollback_a": "PASS",
+    "material_delivery_fake_root": "PASS",
+    "mesh_data_plane": "NOT_RUN",
+    "native_help_version_config_test": "PASS",
+    "nft_syntax_coexistence_rollback": "PASS",
+    "paid_events": 0,
+    "phone_actions": 0,
+    "pinned_python_dependencies": "PASS",
+    "platform": "Ubuntu24.04/x86_64",
+    "production_writes": 0,
+    "qualification_source_sha256": "3901dc0c039951ea91dd98237e52c193791d6eff450218211011d06a9e4af148",
+    "real_systemd_start": "NOT_RUN",
+    "reboot_persistence": "NOT_RUN",
+    "reboot_request_cancellation_simulation": "PASS",
+    "retirement": "PASS",
+    "schema": 1,
+    "scope": "ISOLATED_SOURCE_PACKAGE_QUALIFICATION",
+    "service_account_modes": "PASS",
+    "source_commit": "925916f27f7ba455ea379572e2ff2154cf10686f",
+    "target_reverification": "PASS",
+    "tcp_tunnel": "NOT_RUN",
+    "two_phase_synthetic_acceptance": "PASS",
+    "unit_verification": "PASS",
+    "user_invitations": 0
+  },
+  "tests": {
+    "combined": 472,
+    "console": 156,
+    "django_check": "PASS",
+    "fleet": 316,
+    "migration_drift": "NONE",
+    "paid_backend_package": 170
+  }
+}

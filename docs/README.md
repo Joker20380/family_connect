@@ -1,10 +1,10 @@
 # Documentation
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**FLEET-BOOTSTRAP-2 — second trial safely RETIRED; lifetime/boot corrections under qualification.**
+**FLEET-BOOTSTRAP-2 — corrected lifetime/boot A/B qualified; fresh disposable trial authorized.**
 Existing task only; no new PLAN ID or production activation. Owner wants two Amsterdam servers;
 first production NL remains excluded. Reserved VPS stays Ubuntu24.04/x86_64, not reinstalled/deleted.
-Last qualified frozen source `900e1859d5b4317e1faab2675425bed78ab85c12` and both old A/B pairs
+Qualified frozen source `925916f27f7ba455ea379572e2ff2154cf10686f`; previous immutable A/B pairs
 are retained. Exact four natives/licenses and282-file canonical MESH source remain unchanged.
 Separate test-account publisher token is accepted (HTTP201). MESH now starts and exports READY;
 second node trial passed enrollment, material delivery, retired-owner handoff and stage A.
@@ -22,15 +22,15 @@ changed boot and opens a NEW external-acceptance challenge, never self-asserting
 Safe status diagnostics expose only typed service/file metadata and ready-lifetime timestamps;
 no credential bodies, environment values, room URLs or raw journals are returned.
 Full fleet316 + console156 =472 PASS; paid170 PASS; Django check PASS/drift NONE.
-Next: freeze/rebuild corrected deterministic A/B, repeat Ubuntu qualification, then fresh physical
-trial. AWG/TCP/MESH external acceptance, A/B upgrade and role reboot acceptance remain NOT_RUN.
+A/B double-build and Ubuntu24.04 native/config/unit/nft qualification PASS, including boot-table
+restoration and reboot-request cancellation simulations. Next: fresh physical trial03. AWG/TCP/MESH external acceptance, A/B upgrade and role reboot acceptance remain NOT_RUN.
 Admitted: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor. Disabled:
 mailbox/chat-services, production renewal/restricted-sync, registry/control-plane database.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
 Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.
 SSH trust remains owner-accepted TOFU, not independent provider verification; console unverified.
 [Checkpoint](releases/2026-11-01-fleet-bootstrap-2.md) ·
-[Previous qualified hashes](releases/2026-11-01-fleet-bootstrap-2-netlink.receipt.json) · [Runbook](fleet-bootstrap.md).
+[Qualified hashes](releases/2026-11-01-fleet-bootstrap-2-lifetime.receipt.json) · [Runbook](fleet-bootstrap.md).
 Older checkpoint NEXTs below are historical, not simultaneous active work.
 <!-- /FLEET-BOOTSTRAP-2 current -->
 

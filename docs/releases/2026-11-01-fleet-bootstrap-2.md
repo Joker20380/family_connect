@@ -1,5 +1,20 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+## Lifetime/boot pair qualified — frozen source925916f
+
+Source `925916f27f7ba455ea379572e2ff2154cf10686f` is pushed and remote main verified.
+Both A/B archives, manifests, signatures and SHA256 inventories reproduce byte-for-byte twice.
+Only `metadata/revision.json` differs between A and B; native/role/port/slot contracts stay fixed.
+[Safe package/qualification receipt](2026-11-01-fleet-bootstrap-2-lifetime.receipt.json) records
+the exact IDs, hashes, signing fingerprint and agent binding; all prior packages remain immutable.
+Ubuntu24.04/x86_64 qualification PASS, including exact native help/config-test, unit verification,
+namespace-local nft syntax/coexistence/rollback/boot restoration, encrypted fake-root delivery,
+two-phase synthetic acceptance, failed-B recovery, B upgrade, explicit rollback and retirement.
+Reboot request cancellation simulation PASS; actual services, tunnels and reboot are NOT_RUN
+for this pair. Fresh source tests: fleet316 + console156 =472 PASS, paid170 PASS, Django check
+PASS, migration drift NONE. Trial02 is safely RETIRED and its disposable operator clients removed.
+Next authorized action is a new signed trial03 on the reserved disposable VPS, not production.
+
 ## Second trial — READY reached, deadline guard correctly rejected
 
 The900e185 pair passed fresh enrollment, encrypted delivery, verified retired-owner handoff
