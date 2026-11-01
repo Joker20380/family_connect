@@ -2749,14 +2749,17 @@
       "clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java": "64f3adf0d8befc1fc2eca2a7e9afd40a56acf14f9bc7c48a3d7dab9c3c0fc799",
       "clients/android/app/src/test/java/com/familyconnect/app/ConnectionTerminalTest.java": "73ca1141e8da7bae72190fc28f7cad83d5c4e91507e0ebdfd18db00d299f0eb7",
       "pilot/android-awg/friends_ci.py": "2d32490a9413b8e8292d11db8f670da5c8bfce6c18cb5c101250e0a3e2a4856f",
-      "tests/test_android_public_release.py": "4dcd87f84d39f1fa4e8d7351e83f94fca78032f40f2b6b91648dee0d8fd5b3d3",
+      "tests/test_android_public_release.py": "38f216b106283709a44065e908392cc7cf25a03c4f8aabf6c3f0d8f433305ecf",
       "tests/test_orchestrator_android_contract.py": "dfe0dc05c6c9b7b842ed3227ae5c4d0a6ec32d1b16e47e5e071e6e97a94e7fed",
       "tests/test_readiness_receipts.py": "3e770b3871d688478906b4febbdead50d6f760eb45cd9bceb02d12dad35a26d8",
-      "clients/android/app/src/androidTest/java/com/familyconnect/app/AppLanguageRuntimeTest.java": "255b196af0f310b66cc73898a4035abd46aa52615c74437b1fbab85b256970b0"
+      "clients/android/app/src/androidTest/java/com/familyconnect/app/AppLanguageRuntimeTest.java": "255b196af0f310b66cc73898a4035abd46aa52615c74437b1fbab85b256970b0",
+      "clients/android/app/src/androidTest/java/com/familyconnect/app/AwgRuntimeTest.java": "3644e20e90a463c20d83c2b8e35ab95b57c08b90c9d380d0a6c3f98fa832e559",
+      "clients/android/app/src/androidTest/java/com/familyconnect/app/RevokeVpnActivity.java": "43b384469825de52fbf1aa8569db464d2b6b0af787648b9d61a9ac9693d28bc9",
+      "pilot/android-awg/run.py": "2df1cab31b249e9ac06965a96b5815e69169cb95894eb40d40fce99106e9cdce"
     },
     "tests": {
       "jvm": 56,
-      "python": 51,
+      "python": 52,
       "windows_deselected": 1,
       "hidden_panel_red_failures": 2,
       "emulator": "PARTIAL_PASS_RELEASE_GATE_PENDING_NEW_CI",
@@ -2800,8 +2803,8 @@
       "optional_skipped": 4,
       "production_changes": "NONE",
       "exact_source_ci": {
-        "run": 41281001187,
-        "source": "e6817b53a02ef8a13e08ca59e2bdad9abf3f31df",
+        "run": 41282459790,
+        "source": "1d9fb0ccf8abfeff38da57b40950a4a3dc984b31",
         "result": "PASS"
       }
     },
@@ -2814,6 +2817,20 @@
       "diagnostics_sha256": "6dd0f013859dbf0bb1dfabb6ea9aae54064963421c928cf8d2645f96c6174f0b",
       "repair": "WAIT_FOR_DISTINCT_RESUMED_ACTIVITY_AND_REQUESTED_LOCALE",
       "production_language_changed": false
+    },
+    "consent_harness_followup": {
+      "run": 41282459786,
+      "source": "1d9fb0ccf8abfeff38da57b40950a4a3dc984b31",
+      "result": "FAIL",
+      "first_failure": "AUTO_SYSTEM_VPN_CONFIRMATION_BUTTON_NOT_FOUND",
+      "diagnostics_sha256": "4528ed217c7c81665b9ce2b21b7f04ef5d69ad8ad748e7e806c0cbf647f3ebb6",
+      "debug_sha256": "3827a9b5a3da42907fc2e81aa820e28dd1d002bc51c663d4a5a71887813ed77f",
+      "cause": "UNRESOLVED_MISSING_INTERACTIVE_PRECONDITION_AND_INSUFFICIENT_LOGCAT",
+      "change": "TEST_ONLY_WAKE_UNLOCK_PRECONDITION_AND_BOUNDED_DIAGNOSTICS",
+      "release_gate": "REQUIRES_NEW_EXACT_SOURCE_CI",
+      "production_source_changed": false,
+      "local_gradle": "BLOCKED_BY_PREEXISTING_PYTHON_BUILD_CACHE_SYMLINK",
+      "selected_test_javac": "PASS_CURRENT_CHANGED_TEST_SOURCES_CACHED_API_CLASSPATH_NO_APK"
     }
   }
 }

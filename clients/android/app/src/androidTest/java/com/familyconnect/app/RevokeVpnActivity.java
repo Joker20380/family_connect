@@ -5,6 +5,6 @@ import android.net.VpnService;
 import android.os.Bundle;
 /** Disposable test-APK activity: asks Android to transfer VPN permission. */
 public final class RevokeVpnActivity extends Activity {
- @Override public void onCreate(Bundle saved){super.onCreate(saved);Intent permission=VpnService.prepare(this);if(permission==null)finish();else startActivityForResult(permission,1);}
+ @Override public void onCreate(Bundle saved){super.onCreate(saved);getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);Intent permission=VpnService.prepare(this);if(permission==null)finish();else startActivityForResult(permission,1);}
  @Override protected void onActivityResult(int request,int result,Intent data){super.onActivityResult(request,result,data);finish();}
 }

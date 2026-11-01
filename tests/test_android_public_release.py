@@ -214,6 +214,24 @@ def test_runtime_consent_harness_targets_system_button_and_checks_quiet_notifica
     assert 'quietNotification();traffic(type);quietNotification();' in harness
 
 
+def test_runtime_consent_requires_awake_unlocked_emulator_without_bypassing_dialog():
+    harness = (ROOT / 'clients/android/app/src/androidTest/java/com/familyconnect/app/AwgRuntimeTest.java').read_text()
+    consent = harness.split('void revokeThroughSystemDialog()', 1)[1].split('void quietNotification()', 1)[0]
+    assert consent.index('shell("input keyevent 224")') < consent.index('shell("am start -W -n ')
+    assert 'shell("wm dismiss-keyguard")' in consent
+    assert 'assertTrue("System VPN consent requires an interactive display",power.isInteractive())' in consent
+    assert 'assertFalse("System VPN consent blocked by keyguard",keyguard.isKeyguardLocked())' in consent
+    assert 'android.os.SystemClock.elapsedRealtime()+15000' in consent
+    assert 'system_roots=' in consent and 'interactive=' in consent and 'locked=' in consent
+    assert 'ACTIVATE_VPN allow' not in consent
+    assert 'assertTrue("System VPN confirmation not found:' in consent and ',clicked);' in consent
+    activity = (ROOT / 'clients/android/app/src/androidTest/java/com/familyconnect/app/RevokeVpnActivity.java').read_text()
+    assert 'FLAG_KEEP_SCREEN_ON' in activity
+    assert 'VpnService.prepare(this)' in activity and 'startActivityForResult(permission,1)' in activity
+    runner = (ROOT / 'pilot/android-awg/run.py').read_text()
+    assert "'logcat','-d','-b','main','-b','system','-b','crash','-t','2000'" in runner
+
+
 def test_runtime_ui_checks_match_retained_async_and_scroll_contracts():
     layout = (ROOT / 'clients/android/app/src/androidTest/java/com/familyconnect/app/DashboardLayoutRuntimeTest.java').read_text()
     audio = (ROOT / 'clients/android/app/src/androidTest/java/com/familyconnect/app/VoiceBubbleRuntimeTest.java').read_text()

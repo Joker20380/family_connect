@@ -64,6 +64,15 @@ public class AwgRuntimeTest {
         }
     }
     void revokeThroughSystemDialog()throws Exception{
+        assertTrue(android.os.Build.FINGERPRINT.contains("generic")||android.os.Build.MODEL.contains("sdk"));
+        android.os.PowerManager power=context.getSystemService(android.os.PowerManager.class);
+        android.app.KeyguardManager keyguard=context.getSystemService(android.app.KeyguardManager.class);
+        shell("input keyevent 224");
+        shell("wm dismiss-keyguard");
+        long awakeUntil=android.os.SystemClock.elapsedRealtime()+15000;
+        while((!power.isInteractive()||keyguard.isKeyguardLocked())&&android.os.SystemClock.elapsedRealtime()<awakeUntil)Thread.sleep(100);
+        assertTrue("System VPN consent requires an interactive display",power.isInteractive());
+        assertFalse("System VPN consent blocked by keyguard",keyguard.isKeyguardLocked());
         android.app.UiAutomation automation=InstrumentationRegistry.getInstrumentation().getUiAutomation();
         android.accessibilityservice.AccessibilityServiceInfo info=automation.getServiceInfo();
         info.flags|=android.accessibilityservice.AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS|android.accessibilityservice.AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS|android.accessibilityservice.AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
@@ -72,14 +81,15 @@ public class AwgRuntimeTest {
         // Each test must exercise a fresh system confirmation, even after another handover.
         shell("appops set "+testPackage+" ACTIVATE_VPN deny");
         shell("am start -W -n "+testPackage+"/"+RevokeVpnActivity.class.getName());
-        long until=System.currentTimeMillis()+15000;boolean clicked=false;
-        int observedRoots=0,observedButtons=0,enabledButtons=0;
-        while(System.currentTimeMillis()<until&&!clicked){
+        long until=android.os.SystemClock.elapsedRealtime()+15000;boolean clicked=false;
+        int observedRoots=0,systemRoots=0,observedButtons=0,enabledButtons=0;
+        while(android.os.SystemClock.elapsedRealtime()<until&&!clicked){
             java.util.List<android.view.accessibility.AccessibilityNodeInfo> roots=new java.util.ArrayList<>();
             roots.add(automation.getRootInActiveWindow());
             for(android.view.accessibility.AccessibilityWindowInfo window:automation.getWindows())roots.add(window.getRoot());
             for(android.view.accessibility.AccessibilityNodeInfo root:roots)if(root!=null){
                 observedRoots++;
+                if("com.android.vpndialogs".contentEquals(root.getPackageName()))systemRoots++;
                 for(android.view.accessibility.AccessibilityNodeInfo node:root.findAccessibilityNodeInfosByViewId("android:id/button1")){
                     if(!"com.android.vpndialogs".contentEquals(node.getPackageName()))continue;
                     observedButtons++;
@@ -100,7 +110,7 @@ public class AwgRuntimeTest {
             if(!clicked)Thread.sleep(100);
         }
         if(!clicked)automation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK);
-        assertTrue("System VPN confirmation not found: roots="+observedRoots+", buttons="+observedButtons+", enabled="+enabledButtons,clicked);
+        assertTrue("System VPN confirmation not found: roots="+observedRoots+", system_roots="+systemRoots+", buttons="+observedButtons+", enabled="+enabledButtons+", interactive="+power.isInteractive()+", locked="+keyguard.isKeyguardLocked(),clicked);
     }
     void quietNotification(){
         android.app.NotificationManager manager=context.getSystemService(android.app.NotificationManager.class);

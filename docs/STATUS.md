@@ -46,6 +46,22 @@ VPN, authentication and release gates are unchanged; no retry-until-green or ski
 51 focused Python checks PASS; exact-source hosted emulator/native packaging is pending again.
 No qualified release APK, signature, publication, installation or Android sequence4 yet.
 
+**Beta109 system-consent harness checkpoint:** source1d9fb0c readiness CI41282459790 PASS;
+client CI41282459786 FAIL at the debug Auto system-VPN consent test (no confirmation button
+found), followed by retained-VPN/ownership failures. Friends language/dashboard and ARM64
+release packaging did not run in this attempt. Both downloaded diagnostics and debug ZIPs
+match GitHub SHA256. The available logcat capture contains boot output rather than the failure;
+it does not establish why the dialog was absent. Do not label this a confirmed product fix.
+The disposable test now wakes/unlocks the emulator and asserts that precondition before opening
+the same system dialog; its test-only Activity keeps the display awake. Exact system package,
+button, injected touch, revoke and cleanup assertions remain mandatory, with bounded monotonic
+timeouts and screen/keyguard/window counters on failure. Logcat collection now tails main/system/
+crash buffers rather than consuming the kernel boot prefix. No production permission, transport,
+VPN lifecycle, paid baseline108 or gateway catalog4 change.52 focused Python tests PASS;
+new exact-source hosted runtime/native/artifact acceptance is required, not waived or retried
+blindly. Public/invitation remains108, sequence3;109 signing/publication/installation NOT_RUN.
+Final108 owner recovery is verified; no canary operation is replayed for this CI checkpoint.
+
 **1 November — current owner acceptance continuation (supersedes older pending-phone notes).**
 `ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS`: owner/tester reports real mobile-whitelist
 operation on public107 in Arkhangelsk region. `ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS`:

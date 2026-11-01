@@ -73,6 +73,24 @@ Canary sequence COMPLETED_WITH_DEVIATIONS, owner recovery PASS: earlier stage0/s
 90s server-proof misses and the Android selector defect remain recorded, not a blanket PASS.
 No additional phone TLS/DNS trace is claimed. The final108 prerequisite for authorized109
 publication is met; exact-source CI/artifact/signing/public-readback gates still apply.
+
+## Beta109 system-consent harness checkpoint — 1 November
+
+**Beta109 system-consent harness checkpoint:** source1d9fb0c readiness CI41282459790 PASS;
+client CI41282459786 FAIL at the debug Auto system-VPN consent test (no confirmation button
+found), followed by retained-VPN/ownership failures. Friends language/dashboard and ARM64
+release packaging did not run in this attempt. Both downloaded diagnostics and debug ZIPs
+match GitHub SHA256. The available logcat capture contains boot output rather than the failure;
+it does not establish why the dialog was absent. Do not label this a confirmed product fix.
+The disposable test now wakes/unlocks the emulator and asserts that precondition before opening
+the same system dialog; its test-only Activity keeps the display awake. Exact system package,
+button, injected touch, revoke and cleanup assertions remain mandatory, with bounded monotonic
+timeouts and screen/keyguard/window counters on failure. Logcat collection now tails main/system/
+crash buffers rather than consuming the kernel boot prefix. No production permission, transport,
+VPN lifecycle, paid baseline108 or gateway catalog4 change.52 focused Python tests PASS;
+new exact-source hosted runtime/native/artifact acceptance is required, not waived or retried
+blindly. Public/invitation remains108, sequence3;109 signing/publication/installation NOT_RUN.
+Final108 owner recovery is verified; no canary operation is replayed for this CI checkpoint.
 **Owner UI follow-up / unreleased source fix:** owner confirms transport selection returned
 after Android Force stop/reopen, without clearing data/cache. This is workaround field evidence,
 not a repaired installed108 or an AWG/TCP internet acceptance claim.
