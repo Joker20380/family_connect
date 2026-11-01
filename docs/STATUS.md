@@ -18,9 +18,19 @@ Local Ubuntu24.04/Python3.12 acceptance: smileys49 PASS, mandatory desktop1230 P
 skips/0 failures/0 errors, dependency60 PASS, JVM contour2 PASS; GTK, Disconnect poll50,
 messenger27, smiley9, layout24, map/invitation/recovery/TCP and DEB/AppImage/package smokes PASS.
 Minimal-container libXtst/TUN differences were corrected; initial logs retained, no test waiver.
-**NEXT: exact-source Client builds workflow_dispatch, all three platforms.** No final dispatch
-has been started: connected tooling has no dispatch action and local GitHub CLI authentication
-is unavailable. A normal desktop-only push is not Android release evidence. No new PLAN ID.
+**NEXT: owner-authorized CI-only marker, exact-source full Client builds matrix.**
+The manual workflow_dispatch blocker is superseded. The single retained audit marker
+`carrier/ci/beta109-full-matrix-qualification.txt` uses the existing carrier COMMON scope;
+local scope check returns android/windows/linux=true without changing workflow or scope logic.
+It is not imported, Go source, runtime configuration or an APK asset; runtime/packaging source,
+VERSION, Android code, server/backend and routing remain unchanged. Marker is not removed
+after qualification. Push-run41288231677/source333e6c4 completed SUCCESS: Linux/Windows/
+compatibility PASS, Android scope SKIPPED; that run is not the final Android candidate.
+After marker push, verify remote SHA and hosted scope output, then observe exactly that new
+full-matrix run to terminal. General desktop release job is expected SKIPPED (no v-tag or
+Release-prefixed commit). No second marker, blind rerun, gate waiver or new PLAN ID.
+Only after full PASS: exact-source artifact qualification, offline signing and immutable109
+publication/sequence4; otherwise STOP at scope, CI or artifact/signing/publication failure.
 No109 signing/publication/sequence4/owner-phone action; no Linux publication. Accepted
 public108/sequence3, catalog4, paid baseline108, owner entitlement, ledger1/4 and cohort1/10
 remain unchanged. Canary COMPLETED_WITH_DEVIATIONS, final108 internet/84s READY PASS;

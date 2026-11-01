@@ -1,0 +1,5 @@
+Beta109 full-matrix release qualification trigger.
+
+This tracked marker has no runtime or packaging behavior.
+Its path is intentionally inside the existing common client-CI scope so the exact-source
+Android, Linux, Windows, and compatibility jobs run together.
