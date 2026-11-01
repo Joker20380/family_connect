@@ -37,8 +37,10 @@ def verify(root=ROOT):
         if path.is_symlink() or not path.is_file() or not 1 <= path.stat().st_size <= 32768:
             raise ValueError('Unsafe smiley asset')
     for name, digest in catalog['android_sources'].items():
+        if Path(name).is_absolute() or '..' in Path(name).parts or re.search(r'[\x00-\x1f\x7f]', name):
+            raise ValueError('Unsafe Android smiley source path')
         if hashlib.sha256((root / name).read_bytes()).hexdigest() != digest:
-            raise ValueError('Android smiley implementation changed')
+            raise ValueError(f'Android smiley implementation changed: {name}')
     return catalog
 
 

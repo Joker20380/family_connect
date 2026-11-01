@@ -3072,6 +3072,166 @@
       "stop": "STOP_NEW_FULL_CI_FAILURE",
       "diagnostics": "BOUNDED_FAILURE_SUMMARY_AND_JOB_LOG_READBACK_RETAINED",
       "ready_for_cohort_3": false
+    },
+    "smiley_baseline_qualification_20261101": {
+      "classification": "DESKTOP_SMILEY_BASELINE_STALE_AFTER_REVIEWED_ANDROID107_CHANGE",
+      "reviewed_change_commit": "37d16edf522bd485788c2bb507b6b86e92ff9465",
+      "accepted108_source": "3b10199de207595b75259ecf6313f1d2d828336f",
+      "mismatches": [
+        {
+          "path": "clients/android/app/src/main/java/com/familyconnect/app/ChatThreadView.java",
+          "old_sha256": "51d31ad5f07b4c9f0e6a4ab1d32e1cdceb735c406403fd0ca991e7263e203e9a",
+          "new_sha256": "a02c2f36ee8f8a91df929748c6535b9af6ce757a463ea086e078be14951d5328"
+        }
+      ],
+      "other_pins_unchanged": true,
+      "faces_aliases_gifs_inventory_provenance_unchanged": true,
+      "exact_picker_insertion_foreground_methods_unchanged": true,
+      "current_file_identical_to_accepted108": true,
+      "reviewed_non_smiley_changes": [
+        "voice preview callback/button",
+        "recording-state preview visibility",
+        "message bubble styling",
+        "text minimum height",
+        "metadata text size10to12"
+      ],
+      "baseline": "Android108",
+      "full_file_review_fence": "RETAINED",
+      "android_source_changes": false,
+      "existing_ci": {
+        "run": 41285992226,
+        "source": "4a7bf20b648e335fbdd9a8099916080f71741552",
+        "workflow": "FAILURE",
+        "jobs": {
+          "scope": "success",
+          "windows": "success",
+          "linux": "failure",
+          "android": "success",
+          "windows-compatibility": "success",
+          "release": "skipped"
+        },
+        "runtime_artifact_id": 13075842988,
+        "runtime_sha256": "faf4d6cb8698964a073fa060ba11e84594e885961f3b95a07c078617f91f86db",
+        "instrumentation": {
+          "records": 67,
+          "passed": 43,
+          "preexisting_variant_skips": 24,
+          "failures": 0
+        },
+        "rerun": false,
+        "final_release_artifact": false,
+        "android_gates": {
+          "JVM control conformance": "success",
+          "Restricted carrier race regression": "success",
+          "Restricted diagnostic and readiness contracts": "success",
+          "Build pinned unified Android VPN library": "success",
+          "Build pinned dynamic audio libraries and corresponding source": "success",
+          "Run gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:lintDebug :app:assembleFriends :app:testFriendsUnitTest :app:lintFriends": "success",
+          "Run python3 pilot/android-awg/verify-apk.py": "success",
+          "Real WG AWG TCP and Auto lifecycle on Android emulator": "success",
+          "Publish bounded Android runtime summary": "success",
+          "Confirm control conformance on Android runtime": "success",
+          "Build pinned restricted Android native": "success",
+          "Build unsigned ARM64 Friends for offline signing": "success",
+          "Verify exact restricted release payload": "success"
+        }
+      },
+      "local_acceptance": {
+        "environment": "ISOLATED_UBUNTU_24_04_PYTHON_3_12_3_GTK_4_14_ADW_1_5_CI_LOCKFILES",
+        "smileys": 45,
+        "dependency": 60,
+        "mandatory": {
+          "passed": 1226,
+          "skipped": 182,
+          "failures": 0,
+          "errors": 0
+        },
+        "jvm_contour": 2,
+        "disconnect_poll": 50,
+        "messenger_ux": 27,
+        "smiley_gtk": 9,
+        "layout": 24,
+        "downstream_steps": {
+          "smileys": "PASS",
+          "dependencies": "PASS",
+          "mandatory": "PASS",
+          "app-smoke": "PASS",
+          "disconnect-poll": "PASS",
+          "messenger-ux": "PASS",
+          "smiley-gtk": "PASS",
+          "layout": "PASS",
+          "map": "PASS",
+          "invitation-delivery": "PASS",
+          "friends-invitation": "PASS",
+          "recovery": "PASS",
+          "tcp-install": "PASS",
+          "package": "PASS",
+          "deb-layout": "PASS",
+          "deb-smoke": "PASS",
+          "appimage-smoke": "PASS",
+          "artifact-hashes": "PASS"
+        },
+        "environment_corrections": [
+          "libXtst6 installed for real key injection",
+          "real TUN device exposed to isolated container, no NET_ADMIN"
+        ],
+        "initial_logs_retained": true,
+        "added_skips_or_waivers": false,
+        "logs": {
+          "app-smoke.log": "9b24a58614e539420e5b17c6aef8a16e12caf0cf43132f70f593334ce7b34fd9",
+          "appimage-smoke.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "artifact-hashes.log": "16c4330371c7a48db03cceba1c541edba2af4f4258c122c04b20e7aaa2ae05db",
+          "deb-layout.log": "e08f17140a0075c76234408c904d7901a646ee92004d5dcb587e27427239a493",
+          "deb-smoke.log": "e98a78f822f095e83373bb50783d6655c154c46fc2516f579d83c15b09f8392e",
+          "dependencies.log": "03ba1728e985fe63487cef4e82803b396c90fa36c41fd7276f10c14e54aa35d4",
+          "disconnect-poll.log": "c33e7b20e9dfb8a669b3d24f429806fbd2172f74ecdc425e22159620409fd925",
+          "environment-xtest.log": "50bd38a1d2f4d4537e8e6262c1a7f5377a1be6a33a5232722aaf808d0179aad0",
+          "environment.log": "d39f77ff041e6fcc84eb5cb058b2ee6caf4a1875a2fcf0cb10bd869fc5b484ee",
+          "friends-invitation.log": "25c8c2c35f54b9ac9107d448c543dd1401129b5968d7bb3c7d46b965375c550b",
+          "invitation-delivery.log": "7ab0b39ac1c4b18ecc44724eb49597b6f376750f532e15d863ad7a2c8c599c01",
+          "jvm.log": "ca940f578e8c856f161ec86579192cd4c76a450dd91ece0d927fad5a0a1c6533",
+          "layout.log": "1a442ea96637839f1808ab58269f11b6edf9d125512f767dfa2016679f9349e4",
+          "mandatory-ci-tun.log": "3208a5865db5a5d64233d9ef3662ac54cd129aaf9e0843b8369dd4cc724ce617",
+          "mandatory.log": "37871beef7d2c7ee148924bba20cf02949f169c38637b979d9ecec49ee52ad93",
+          "map.log": "9009760b05243767fd14a4c06312a316fae51a9fe76ca2396ef852ed187910eb",
+          "messenger-ux-after-environment.log": "6eff97c4c296874c8dcf948acb86874304c4bce92f7d0edaf58410cd54e573b1",
+          "messenger-ux.log": "83d7ca28c95f29f237b953af696e3258df44695b04d85f40d7a73eb0adaaa721",
+          "package.log": "264bcccd0a1c91fa4b0405eabec31b788cd67a2d08b3789355a2d718d4e2f193",
+          "recovery.log": "ae24a30994d884d6be44a58df03e730f6357fffb13456c05170cffb48156a2d1",
+          "smiley-gtk.log": "c9411ecff467c514c168df363295d03f91b8025cd5f48559eb358b6bcb109e06",
+          "smileys.log": "7c9ee0d226e866ab90cd65ecb2aec5e57bcd3817c036bd8d815b3d1dfcb054fb",
+          "tcp-install.log": "1774aeb5e751a9802ec0ff068f636023cfa72ec7cd65404be0827c06770a8d10"
+        }
+      },
+      "final_workflow_dispatch": {
+        "status": "NOT_STARTED",
+        "required_platforms": [
+          "android",
+          "windows",
+          "linux"
+        ],
+        "blocker": "CONNECTED_TOOL_HAS_NO_DISPATCH_ACTION_LOCAL_CLI_AUTHENTICATION_UNAVAILABLE"
+      },
+      "beta109": {
+        "signed": false,
+        "published": false,
+        "owner_installed": false,
+        "qualified": false
+      },
+      "preserved": {
+        "public_android": 108,
+        "android_update_sequence": 3,
+        "gateway_catalog_sequence": 4,
+        "paid_baseline": 108,
+        "ledger": "1/4",
+        "cohort": "1/10",
+        "revenue": 0,
+        "entitlement_until": "2026-12-01T07:09:19Z",
+        "canary": "COMPLETED_WITH_DEVIATIONS",
+        "final108_connect_internet": "PASS",
+        "final108_ready_seconds": 84,
+        "production_operations": "NONE"
+      }
     }
   }
 }

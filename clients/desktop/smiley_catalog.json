@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "baseline": "Android106",
+  "baseline": "Android108",
   "android_sources": {
     "clients/android/app/src/main/java/com/familyconnect/app/ChatSmileys.java": "61341d9df916766da008bdaebdf92e0a66c76a50b6fbee570fd3041f453dc142",
     "clients/android/app/src/main/java/com/familyconnect/app/ChatSmileyTextView.java": "d65f5fc443001d0f8f8690446d9c9c5a0fd11e5128fb86a7e1eeb7cbfd68f521",
-    "clients/android/app/src/main/java/com/familyconnect/app/ChatThreadView.java": "51d31ad5f07b4c9f0e6a4ab1d32e1cdceb735c406403fd0ca991e7263e203e9a",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatThreadView.java": "a02c2f36ee8f8a91df929748c6535b9af6ce757a463ea086e078be14951d5328",
     "clients/android/app/src/main/java/com/familyconnect/app/ChatGifContour.java": "a790f9105bbc8cb800803cd832c99f680863e8baca956348ebf0224ac2a3395a",
     "clients/android/app/src/main/assets/chat/icq-classic/provenance.json": "20596cb004c8f46ceadc61ba1e51a603d6d00b18008a9a0c538c1916f42b3242"
   },

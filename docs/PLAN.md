@@ -2,6 +2,30 @@
 
 ## Current engineering priority / Текущий critical path
 
+**1 November — current beta109 qualification: reviewed smiley baseline restored.**
+`DESKTOP_SMILEY_BASELINE_STALE_AFTER_REVIEWED_ANDROID107_CHANGE`: exactly one stale
+Android106 pin, ChatThreadView.java; current file is byte-identical to accepted public108.
+Reviewed voice-preview/recording visibility and message styling only; all49 faces, aliases,
+GIFs, provenance, picker/insertion/foreground behavior and the other four source pins retained.
+Catalog advances to Android108 with only that source digest changed. Full-file SHA fencing
+remains; mismatch diagnostics name the safe relative path. Android production source unchanged.
+Existing CI41285992226/source4a7bf20 is terminal FAILURE: Android, Windows and compatibility
+PASS; Linux failed only the stale baseline. Android includes JVM/control, carrier race,
+readiness, native/audio, Gradle/tests/lint, APK verification, emulator AWG/TCP/Auto/system
+consent, permission handover/revoke/cleanup, language/dashboard, ARM64 and unsigned packaging.
+Its APK is not the final exact-source109 candidate. TCPFORWARD product fix remains accepted.
+Local Ubuntu24.04/Python3.12 acceptance: smileys45 PASS, mandatory desktop1226 PASS/182 existing
+skips/0 failures/0 errors, dependency60 PASS, JVM contour2 PASS; GTK, Disconnect poll50,
+messenger27, smiley9, layout24, map/invitation/recovery/TCP and DEB/AppImage/package smokes PASS.
+Minimal-container libXtst/TUN differences were corrected; initial logs retained, no test waiver.
+**NEXT: exact-source Client builds workflow_dispatch, all three platforms.** No final dispatch
+has been started: connected tooling has no dispatch action and local GitHub CLI authentication
+is unavailable. A normal desktop-only push is not Android release evidence. No new PLAN ID.
+No109 signing/publication/sequence4/owner-phone action; no Linux publication. Accepted
+public108/sequence3, catalog4, paid baseline108, owner entitlement, ledger1/4 and cohort1/10
+remain unchanged. Canary COMPLETED_WITH_DEVIATIONS, final108 internet/84s READY PASS;
+no canary replay, paid event, CRL, backend restart or gateway operation.
+
 **Current beta109 qualification — TCPFORWARD_PRODUCT_SLOT_RELEASE_DEFECT (1 November).**
 Accepted production state remains NL_REPLACEMENT_LIVE/catalog4, public108/Android sequence3,
 paid baseline108, owner entitlement through2026-12-01T07:09:19Z, ledger1/4, cohort1/10,

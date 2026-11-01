@@ -21,6 +21,14 @@ def test_exact_android_catalog_and_assets():
         assert hashlib.sha256((ROOT / ASSETS / face['asset']).read_bytes()).hexdigest() == face['sha256']
 
 
+def test_reviewed_android108_source_baseline():
+    catalog = verify()
+    assert catalog['baseline'] == 'Android108'
+    assert catalog['android_sources'][
+        'clients/android/app/src/main/java/com/familyconnect/app/ChatThreadView.java'
+    ] == 'a02c2f36ee8f8a91df929748c6535b9af6ce757a463ea086e078be14951d5328'
+
+
 @pytest.mark.parametrize('boundary', [' ', '\n', '\t', '\r', '\v', '\f', '\x1c', '\u2003', '\u2028', '\u2029'])
 def test_android_whitespace(boundary):
     assert whitespace(boundary)
@@ -66,6 +74,31 @@ def catalog_tree(tmp_path):
         shutil.copyfile(ROOT / name, target)
     shutil.copytree(ROOT / ASSETS, tmp_path / ASSETS, dirs_exist_ok=True)
     return tmp_path
+
+
+@pytest.mark.parametrize('name', [
+    'clients/android/app/src/main/java/com/familyconnect/app/ChatSmileys.java',
+    'clients/android/app/src/main/java/com/familyconnect/app/ChatSmileyTextView.java',
+    'clients/android/app/src/main/java/com/familyconnect/app/ChatThreadView.java',
+    'clients/android/app/src/main/java/com/familyconnect/app/ChatGifContour.java',
+    'clients/android/app/src/main/assets/chat/icq-classic/provenance.json',
+])
+def test_source_mutation_rejected_with_safe_path(catalog_tree, name):
+    source = catalog_tree / name
+    source.write_bytes(source.read_bytes() + b'\n')
+    with pytest.raises(ValueError) as failure:
+        verify(catalog_tree)
+    assert str(failure.value) == f'Android smiley implementation changed: {name}'
+    assert str(catalog_tree) not in str(failure.value)
+
+
+@pytest.mark.parametrize('name', ['/private/source.java', '../source.java', 'source\n.java'])
+def test_unsafe_source_path_not_disclosed(catalog_tree, name):
+    catalog = json.loads((catalog_tree / CATALOG).read_text())
+    catalog['android_sources'] = {name: '0' * 64}
+    (catalog_tree / CATALOG).write_text(json.dumps(catalog))
+    with pytest.raises(ValueError, match='^Unsafe Android smiley source path$'):
+        verify(catalog_tree)
 
 
 @pytest.mark.parametrize('mutation', ['missing', 'modified', 'renamed', 'extra', 'symlink'])

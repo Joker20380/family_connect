@@ -1,5 +1,61 @@
 # NL production gateway replacement — 30 October 2026
 
+## Beta109 reviewed smiley-baseline qualification — 1 November
+
+This checkpoint supersedes older pending/STOP notes in this report; the historical canary
+remains COMPLETED_WITH_DEVIATIONS and no production state changes in this checkpoint.
+
+**1 November — current beta109 qualification: reviewed smiley baseline restored.**
+`DESKTOP_SMILEY_BASELINE_STALE_AFTER_REVIEWED_ANDROID107_CHANGE`: exactly one stale
+Android106 pin, ChatThreadView.java; current file is byte-identical to accepted public108.
+Reviewed voice-preview/recording visibility and message styling only; all49 faces, aliases,
+GIFs, provenance, picker/insertion/foreground behavior and the other four source pins retained.
+Catalog advances to Android108 with only that source digest changed. Full-file SHA fencing
+remains; mismatch diagnostics name the safe relative path. Android production source unchanged.
+Existing CI41285992226/source4a7bf20 is terminal FAILURE: Android, Windows and compatibility
+PASS; Linux failed only the stale baseline. Android includes JVM/control, carrier race,
+readiness, native/audio, Gradle/tests/lint, APK verification, emulator AWG/TCP/Auto/system
+consent, permission handover/revoke/cleanup, language/dashboard, ARM64 and unsigned packaging.
+Its APK is not the final exact-source109 candidate. TCPFORWARD product fix remains accepted.
+Local Ubuntu24.04/Python3.12 acceptance: smileys45 PASS, mandatory desktop1226 PASS/182 existing
+skips/0 failures/0 errors, dependency60 PASS, JVM contour2 PASS; GTK, Disconnect poll50,
+messenger27, smiley9, layout24, map/invitation/recovery/TCP and DEB/AppImage/package smokes PASS.
+Minimal-container libXtst/TUN differences were corrected; initial logs retained, no test waiver.
+**NEXT: exact-source Client builds workflow_dispatch, all three platforms.** No final dispatch
+has been started: connected tooling has no dispatch action and local GitHub CLI authentication
+is unavailable. A normal desktop-only push is not Android release evidence. No new PLAN ID.
+No109 signing/publication/sequence4/owner-phone action; no Linux publication. Accepted
+public108/sequence3, catalog4, paid baseline108, owner entitlement, ledger1/4 and cohort1/10
+remain unchanged. Canary COMPLETED_WITH_DEVIATIONS, final108 internet/84s READY PASS;
+no canary replay, paid event, CRL, backend restart or gateway operation.
+
+Exact audit: ChatThreadView.java old SHA256
+`51d31ad5f07b4c9f0e6a4ab1d32e1cdceb735c406403fd0ca991e7263e203e9a` → reviewed SHA256
+`a02c2f36ee8f8a91df929748c6535b9af6ce757a463ea086e078be14951d5328`.
+The old bytes match the catalog's accepted106 pin; the delta was introduced by
+37d16edf522bd485788c2bb507b6b86e92ff9465 for107, and current bytes match public108 source3b10199.
+Changes: preview callback/button and READY visibility, bubble colors,48dp message minimum
+height and metadata text10→12. Faces still invokes showSmileys; the FACES loop,
+ChatSmileyTextView picker, insertSmiley token and whitespace boundaries, foreground
+activation methods are byte-identical. Rendered messages retain ChatSmileyTextView and
+foreground activation. ChatSmileys/ChatSmileyTextView/ChatGifContour/provenance pins match;
+no asset added/removed/renamed and all GIF bytes/digests match.
+
+Mutation tests reject all five pinned files, including whitespace-only changes; errors identify
+only the relative source path. Unsafe absolute/traversal/control-character paths are rejected
+without disclosure. Existing missing/modified/renamed/extra/symlink asset and both packaging
+entrypoint tests PASS. No substring-only replacement of the full-file review gate.
+
+Old CI runtime archive13075842988 SHA256
+`faf4d6cb8698964a073fa060ba11e84594e885961f3b95a07c078617f91f86db` verified before inspection:
+67 instrumentation records,43 executed PASS/24 pre-existing variant-specific skips,
+zero failures. AWG/TCP/Auto, system-dialog handover/revoke, language/dashboard cases actually
+executed; the consent helper asserts interactive/unlocked, exact com.android.vpndialogs,
+enabled visible button and actual injected click, followed by ownership/cleanup assertions.
+No test skips added. The desktop tag-only release job was SKIPPED, not an Android failure
+or permission to publish desktop artifacts. Final109 qualification must use a new full-matrix
+workflow_dispatch at the correction SHA, not this old APK or desktop-only push CI.
+
 ## Current result — Android108 owner runtime/UI accepted; transport smoke pending
 
 **1 November — current owner acceptance continuation (supersedes older pending-phone notes).**
