@@ -1,6 +1,6 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
-**1 November — owner beta109 installed; targeted field acceptance pending.**
+**1 November — owner beta109 data/UI PASS; Auto/MESH and cleanup pending.**
 `DESKTOP_SMILEY_BASELINE_STALE_AFTER_REVIEWED_ANDROID107_CHANGE`: exactly one stale
 Android106 pin, ChatThreadView.java; current file is byte-identical to accepted public108.
 Reviewed voice-preview/recording visibility and message styling only; all49 faces, aliases,
@@ -61,11 +61,17 @@ confirmation: «109 УСТАНОВЛЕНА». Read-only09:31UTC observation conf
 code109 from the latest authenticated readiness ACK, with no conflicting latest version.
 Existing private owner binding matches the same non-revoked identity; entitlement remains
 active through2026-12-01T07:09:19Z, ledger1/4 and cohort1/10. No database or canary write.
-This confirms installation/version/server identity, not preserved local chats or UI/transport
-acceptance. NEXT without Connect: check existing data, CPU and transport selector, then one
-Android Force stop/reopen and confirm selector still visible. Assisted Connect/Disconnect,
-READY latency, Internet, VPN-owner and notification cleanup remain NOT_RUN in this workflow.
-Paid baseline108 remains unchanged; do not infer full109 acceptance from the version ACK.
+**Owner-reported data/UI PASS:** existing data remains present, server CPU is visible and
+transport selection is available both before and after the requested single Force stop/reopen.
+This closes only the targeted data/CPU/selector/reopen checks, not transport or cleanup acceptance.
+Read-only pre-Connect snapshot09:39UTC matches the existing owner binding/exact109 and ledger1/4;
+the09:37:30UTC challenge/fetch/import ACK is READY with current material. It predates the
+requested Connect and must not be presented as Connect latency or Internet/VPN-owner proof.
+NEXT: Netherlands → Auto/MESH, Connect exactly once; record click-to-connected time, selected
+transport, VPN indicator and Internet result, then retain the connection for read-only readback.
+One Disconnect and tunnel/VPN-owner/notification/selector cleanup follow after that readback.
+Assisted Connect/Disconnect and their measurements remain NOT_RUN. Paid baseline stays108;
+no paid event, CRL operation, entitlement change or canary replay accompanies this smoke.
 No paid event, CRL operation or cohort expansion is authorized by this publication.
 
 ## Current continuation — baseline108 canary completed with deviations (1 November)

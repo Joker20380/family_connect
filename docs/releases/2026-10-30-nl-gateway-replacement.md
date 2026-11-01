@@ -4,8 +4,8 @@
 ## Android109 general publication — 1 November
 
 - Publication gate **READY_FOR_BETA109_OWNER_UPDATE** completed. Public/invitation109,
-  Android sequence4; owner installation109 is now confirmed by owner report and authenticated
-  version ACK. Targeted UI/transport/cleanup acceptance remains pending.
+  Android sequence4; owner installation109 is confirmed by owner report and authenticated
+  version ACK. Owner data/CPU/selector/one Force stop-reopen PASS; transport/cleanup pending.
 - Exact artifact source: `600ae52bfac673ca0323bd7c96d6cdd369593624`; full Client builds
   [41289980872](https://github.com/Joker20380/family_connect/actions/runs/41289980872) SUCCESS.
   Android/Linux/Windows/compatibility PASS; general desktop release expected SKIPPED.
@@ -36,10 +36,13 @@
   routing, paid baseline108, ledger1/4, cohort1/10 and registry fingerprints are unchanged.
   Renewal/read-only-sync active/last success, entitlement until2026-12-01T07:09:19Z preserved.
   No backend/gateway restart, certificate/CRL operation, paid event or phone debugging.
-- Owner reports «109 УСТАНОВЛЕНА»; latest authenticated ACK confirms exact109, existing
-  non-revoked bound identity and active entitlement are preserved. Local-data/CPU/selector/
-  one Force stop/reopen checks are next, without Connect. Assisted Auto/internet/cleanup
-  acceptance is still NOT_RUN; a version ACK alone is not physical transport acceptance.
+- Owner confirms installation109 and preservation of existing data, visible server CPU,
+  transport selection before and after one Force stop/reopen. These are owner-reported UI
+  checks, separate from server evidence of exact109/bound identity/active entitlement.
+  Pre-Connect snapshot retains current READY material but does not establish Connect latency.
+  NEXT: one Netherlands Auto/MESH Connect, elapsed-time/transport/VPN-indicator/Internet
+  observation, read-only readback, then one Disconnect and cleanup. Transport and cleanup
+  remain NOT_RUN; neither paid canary nor payment/subscription/CRL operations are repeated.
   Existing canary COMPLETED_WITH_DEVIATIONS remains final; latency above90s would be retained
   as CONNECT_LATENCY_DEVIATION_RETAINED, not another paid canary or entitlement invalidation.
 - Publication regression checks:26 public-Android/catalog-signing tests PASS; strict JSON,
@@ -53,7 +56,7 @@
 The original smiley-baseline checkpoint supersedes its older pending/STOP notes; publication
 above is the later distribution transition. The canary remains COMPLETED_WITH_DEVIATIONS.
 
-**1 November — owner beta109 installed; targeted field acceptance pending.**
+**1 November — owner beta109 data/UI PASS; Auto/MESH and cleanup pending.**
 `DESKTOP_SMILEY_BASELINE_STALE_AFTER_REVIEWED_ANDROID107_CHANGE`: exactly one stale
 Android106 pin, ChatThreadView.java; current file is byte-identical to accepted public108.
 Reviewed voice-preview/recording visibility and message styling only; all49 faces, aliases,
@@ -114,11 +117,17 @@ confirmation: «109 УСТАНОВЛЕНА». Read-only09:31UTC observation conf
 code109 from the latest authenticated readiness ACK, with no conflicting latest version.
 Existing private owner binding matches the same non-revoked identity; entitlement remains
 active through2026-12-01T07:09:19Z, ledger1/4 and cohort1/10. No database or canary write.
-This confirms installation/version/server identity, not preserved local chats or UI/transport
-acceptance. NEXT without Connect: check existing data, CPU and transport selector, then one
-Android Force stop/reopen and confirm selector still visible. Assisted Connect/Disconnect,
-READY latency, Internet, VPN-owner and notification cleanup remain NOT_RUN in this workflow.
-Paid baseline108 remains unchanged; do not infer full109 acceptance from the version ACK.
+**Owner-reported data/UI PASS:** existing data remains present, server CPU is visible and
+transport selection is available both before and after the requested single Force stop/reopen.
+This closes only the targeted data/CPU/selector/reopen checks, not transport or cleanup acceptance.
+Read-only pre-Connect snapshot09:39UTC matches the existing owner binding/exact109 and ledger1/4;
+the09:37:30UTC challenge/fetch/import ACK is READY with current material. It predates the
+requested Connect and must not be presented as Connect latency or Internet/VPN-owner proof.
+NEXT: Netherlands → Auto/MESH, Connect exactly once; record click-to-connected time, selected
+transport, VPN indicator and Internet result, then retain the connection for read-only readback.
+One Disconnect and tunnel/VPN-owner/notification/selector cleanup follow after that readback.
+Assisted Connect/Disconnect and their measurements remain NOT_RUN. Paid baseline stays108;
+no paid event, CRL operation, entitlement change or canary replay accompanies this smoke.
 No paid event, CRL operation or cohort expansion is authorized by this publication.
 
 Exact audit: ChatThreadView.java old SHA256
