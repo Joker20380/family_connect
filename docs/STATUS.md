@@ -1,36 +1,34 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**FLEET-BOOTSTRAP-2 — MESH diagnostic PASS; exact bootstrap flow corrected.**
-Existing task only, no new PLAN ID or production activation. Owner wants two Amsterdam servers;
-first production NL remains excluded. Reserved VPS stays Ubuntu24.04/x86_64, not reinstalled/deleted.
-Frozen deployable source `f21aac9a36b8ab97a14b88c28c57ff9b11242b2f` is pushed and remote-verified.
-A/B double-build byte identity PASS; exact four native artifacts, licenses and282-file MESH capsule
-remain bound. Only reviewed monitoring revision metadata differs between A and B. Old packages
-and trial receipts remain immutable. Private signer/archives/materials remain outside Git.
-Offline Ubuntu24.04 native/config/unit/nft, fake-root material delivery, two-phase verification,
-failed-B rollback, successful B, explicit rollback, boot-table restore, reboot-request cancellation
-and retirement qualification PASS. Exact-native synthetic loopback REALITY/HTTPS PASS;
-no node data-plane or reboot evidence is inferred from simulation.
-Fresh fleet323 + console156 =479 PASS; paid170 PASS; Django check PASS; migration drift NONE.
-Signed permit, exact SSH/target/agent/bundle/key bindings, production exclusions, immutable releases,
-private material encryption, local/external separation and append-only evidence guards remain.
-Separate publisher token passed API validation. Trials01–04 are RETIRED; original probe custody
-is retained and disposable operator clients removed only after signed retirement receipts.
-Trial04 AWG/TCP PASS. Further canonical-source inspection showed its HTTP endpoint only serves
-the authenticated bootstrap directory, not room creation. The interim direct-broker fix was
-insufficient. Correct flow: refresh the mTLS directory, then guarded cached Telemost bootstrap.
-Trial05 operator-only diagnostic proves bootstrap/Family TLS/DNS/four HTTPS/expected egress PASS;
-it is not a signed full acceptance or VERIFIED state. Trial05 drain/retirement is in progress.
-Full fleet324 PASS. Refreeze/requalify the corrected flow before fresh final acceptance.
-Recovery console remains unverified; no role reboot request until availability is recorded.
+**READY_FOR_FLEET_BOOTSTRAP_2_HOST — source/package gates PASS; trial06 underway.**
+Existing FLEET-BOOTSTRAP-2 only; no new PLAN ID or production activation. Owner wants two
+Amsterdam servers; first production NL remains excluded. Reserved disposable VPS remains
+Ubuntu24.04/x86_64; no reinstall/deletion or production/catalog admission is implied.
+Frozen deployable source `d3416ea4abacfafc843411f765fb8037722b55d0` is pushed and remote-verified.
+A/B each reproduce archive/manifest/signature/SHA inventory twice byte-identically. Their only
+member difference is reviewed monitoring revision metadata; native binaries, roles, ports,
+material slots/schema and protocol contracts match. Exact four natives and282-file MESH source
+provenance/licenses remain bound. Private signer, packages and material remain outside Git.
+Offline Ubuntu24.04 native/config/unit/nft/material/A-B/rollback/boot/retirement qualification PASS.
+Exact-native synthetic loopback REALITY/HTTPS and offline MESH mTLS-directory/guard checks PASS.
+Fresh fleet324 + console156 =480 PASS; paid170 PASS; Django check PASS; migration drift NONE.
+Signed permit, exact SSH/target/agent/bundle/key bindings, production exclusions, immutable
+releases, encrypted material, two-phase external acceptance and append-only evidence remain.
+Trials01–05 RETIRED; signed retirement precedes disposal of their operator client files.
+Original FLEET_MESH_PROBE_1 custody retained; separate publisher token validated and kept private.
+Trial04 AWG/TCP PASS; trial05 MESH diagnostic PASS. Correct final operator flow refreshes the
+mTLS directory before native guarded Telemost bootstrap; no HTTP room API shortcut remains.
+Diagnostics and prior negative receipts are not VERIFIED or signed full acceptance.
+Trial06 now checks the complete bound A/B pair; upgrade/explicit rollback/reboot remain physical
+checks until their own receipts exist. Recovery console is unverified: no role reboot request.
 Admitted: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor. Disabled:
 mailbox/chat-services, production renewal/restricted-sync, registry/control-plane database.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
 Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.
 SSH trust remains owner-accepted TOFU, not independent provider verification.
 [Checkpoint](releases/2026-11-01-fleet-bootstrap-2.md) ·
-[Qualified hashes](releases/2026-11-01-fleet-bootstrap-2-mesh.receipt.json) · [Runbook](fleet-bootstrap.md).
+[Qualified hashes](releases/2026-11-01-fleet-bootstrap-2-ready.receipt.json) · [Runbook](fleet-bootstrap.md).
 Older checkpoint NEXTs below are historical, not simultaneous active work.
 <!-- /FLEET-BOOTSTRAP-2 current -->
 

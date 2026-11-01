@@ -75,7 +75,8 @@ def qualify(package, output):
         context=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
         context.minimum_version=context.maximum_version=ssl.TLSVersion.TLSv1_3
         context.load_cert_chain(root/'certificate.pem',root/'key.pem')
-        context.load_verify_locations(root/'authority.pem')
+        context.load_verify_locations(cadata=load(clients['mesh-profile.json'])['certificate'])
+        context.verify_flags|=ssl.VERIFY_X509_PARTIAL_CHAIN
         context.verify_mode=ssl.CERT_REQUIRED
         context.set_alpn_protocols(['http/1.1'])
         server=HTTPServer(('127.0.0.1',0),Handler)
@@ -85,16 +86,22 @@ def qualify(package, output):
         endpoint='https://127.0.0.1:'+str(server.server_port)
         prefix=[str(probe),'-family-config',str(profile),'-duration','5s']
         try:
-            refreshed=command([*prefix,'-broker-url',endpoint,'-bootstrap-cache',str(root/'cache.json'),'-bootstrap-refresh'])
+            refreshed=command([*prefix,'-broker-url',endpoint,'-bootstrap-cache',str(root/'cache.json'),'-bootstrap-refresh'],check=False)
+            if refreshed.returncode:
+                code=refreshed.stderr.strip().removeprefix(b'room broker: ')
+                allowed=(b'credentials_rejected',b'control_unavailable',b'control_response',b'control_rejected',b'directory_rejected',
+                    b'cache_unavailable',b'cache_busy_or_unprotected',b'cache_write',b'invalid bootstrap options',b'invalid harness options',b'invalid_endpoint')
+                safe=code.decode() if code in allowed else 'unclassified'
+                fail('mesh_directory_fixture_'+safe)
             if (load(refreshed.stdout)['event']!='bootstrap_cache_stored'
                     or load(read_private(root/'cache.json'))!=load(directory)):
                 fail('mesh_directory_fixture_rejected')
             rejected=command([*prefix,'-broker-url',endpoint,'-mux-config',str(root/'mux.json')],check=False)
-            if rejected.returncode!=1 or rejected.stderr.strip()!=b'control_rejected':
+            if rejected.returncode!=1 or rejected.stderr.strip()!=b'room broker: control_rejected':
                 fail('mesh_directory_only_endpoint_not_enforced')
             guarded=command([*prefix,'-broker-url','https://127.0.0.1:1','-bootstrap-cache',str(root/'missing.json'),
                 '-mux-config',str(root/'mux.json')],check=False)
-            if (guarded.returncode!=1 or guarded.stderr.strip()!=b'cache_unavailable'
+            if (guarded.returncode!=1 or guarded.stderr.strip()!=b'room broker: cache_unavailable'
                     or load(guarded.stdout)['event']!='bootstrap_normal_control_unavailable'):
                 fail('mesh_guarded_bootstrap_entry_rejected')
         finally:

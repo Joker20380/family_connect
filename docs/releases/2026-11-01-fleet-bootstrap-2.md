@@ -1,5 +1,32 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+## READY_FOR_FLEET_BOOTSTRAP_2_HOST — frozensourced3416ea
+
+Final deployable source `d3416ea4abacfafc843411f765fb8037722b55d0` is pushed and remote-verified.
+[Final package receipt](2026-11-01-fleet-bootstrap-2-ready.receipt.json) records A/B IDs, archive,
+manifest, signature-file and SHA inventory hashes, rehearsal public signer fingerprint, permit
+and agent source hashes, roles, exclusions and all three exact-source qualification results.
+Both A and B reproduce twice byte-for-byte; their sole difference is monitoring revision
+metadata. All private artifacts remain ignored; no native/protocol/material schema changed.
+
+Full fleet324 + console156 =480 PASS; paid/backend/package170 PASS; Django check PASS and
+migration drift NONE. Isolated test DB/network removed; other application containers untouched.
+Ubuntu24.04/x86_64 offline systemd/static/nft/material/A-B/rollback/boot/retirement PASS;
+synthetic exact-native REALITY HTTPS PASS; offline exact-native MESH directory/guard PASS.
+The MESH fixture now pins its fresh synthetic client certificate for mutual TLS, maintaining
+the native single-leaf gateway certificate contract. Its initial trust-store setup and expected
+error prefix were corrected; target trust, native binary and protocol guards were not weakened.
+No external Telemost traffic, real probe identity or publisher credential enters that fixture.
+
+Trial05 was drained/retired successfully, final receipt SHA256
+`ab2f2886613a5275c6420db35d567528e21e60a92a10f44b918f6498d57609d0`;
+three operator client files removed after signature verification, original probe preserved.
+Trial06 is authorized against the final pair for full signed A/B/explicit rollback checks.
+Source-ready is not physical acceptance or production admission. Recovery console remains
+unverified; no role reboot request until its availability is recorded. Production RU/NL,
+catalog, users, payments and phones remain untouched. Existing owner-accepted SSH trust is
+TOFU, not independent provider verification. No new PLAN task or deployment audience is added.
+
 ## Exact MESH bootstrap flow localized and physically diagnosed
 
 Further inspection of the accepted canonical `cmd/bootstrap-broker` shows HTTP serves only
