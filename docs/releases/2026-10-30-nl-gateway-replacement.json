@@ -1,7 +1,7 @@
 {
   "android108_owner_acceptance_20261101": {
-    "observed_utc": "2026-11-01T05:31:30+00:00",
-    "state": "BETA0_CANARY1_NATURAL_EXPIRED_OBSERVATION_BASELINE108",
+    "observed_utc": "2026-11-01T05:32:58+00:00",
+    "state": "BETA0_CANARY1_AWAITING_POST_EXPIRY_RECONNECT_CLASSIFICATION",
     "owner_reports": [
       "ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS",
       "ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS"
@@ -672,7 +672,7 @@
       "startup_guard": "BOUNDED_EXACT_PROCESS_LISTENER_HTTP_READINESS_WITH_PRIVATE_OBSERVATIONS",
       "failed_instantaneous_argv_details": "NOT_CAPTURED_NO_SPECIFIC_ROOT_CAUSE_CLAIM",
       "next": "POST_EXPIRY_PHONE_RECONNECT_CLASSIFICATION",
-      "canary": "NATURAL_EXPIRED_OBSERVATION",
+      "canary": "AWAITING_POST_EXPIRY_RECONNECT_CLASSIFICATION",
       "authorized_retry": {
         "owner_authorization": "EXPLICIT_ONE_ADDITIONAL_CANDIDATE_RESTART",
         "preflight": {
@@ -970,7 +970,7 @@
         "baseline_valid_certificates": 1,
         "baseline_latest_not_after": 1793516821,
         "post_expiry_observation_until": 1793511175,
-        "phone_reconnect": "NOT_YET_REQUESTED",
+        "phone_reconnect": "REQUESTED_ONE_EXPLICIT_MESH_CONNECT",
         "schedules": "PAUSED_FOR_BOUNDED_CANARY"
       },
       "stage1": "NOT_RUN",
@@ -1024,6 +1024,18 @@
         "imports": "PASS",
         "help": "PASS",
         "production_use": "NOT_RUN"
+      },
+      "post_expiry120": {
+        "result": "POST_EXPIRY120S_BACKEND_OBSERVATION_COMPLETE",
+        "observed_at": 1793511178,
+        "paid_until": 1793511055,
+        "elapsed_after_expiry": 123,
+        "version": 1,
+        "event_count": 1,
+        "paid_allow": false,
+        "owner_reconnect": "REQUESTED_ONE_EXPLICIT_MESH_CONNECT",
+        "baseline_unexpired_count": 1,
+        "paid_bounded_certificates_expired": 2
       }
     }
   },

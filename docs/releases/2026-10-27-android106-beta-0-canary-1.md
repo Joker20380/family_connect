@@ -21,7 +21,8 @@ Owner reported MESH108 РАБОТАЕТ before the90s Connect deadline. Fresh au
 ACK108/import and paid-bounded certificate were observed182s after activation, not within90s.
 No independent claim about which certificate the active tunnel used; transport-label clarification
 and physical post-expiry outcome are pending. Do not label cached-session behavior a PASS yet.
-Observe until 2026-11-01T05:32:55+00:00 (120s), then one Disconnect/reconnect classification.
+The120s backend observation completed at05:32:58UTC; denial remains effective, version1/events1.
+One Disconnect → explicit MESH (not Auto) → one Connect requested; owner outcome pending.
 Stage1/explicit expiry/exact CRL/final30-day recovery NOT_RUN. The detached observer remains
 read-only. Renewal/read-only-sync timers are temporarily paused for the bounded canary;
 resume during cleanup. Canonical CRL27233/catalog4, deployed HTTP8e74997c… and binding retained.
@@ -2438,3 +2439,11 @@ New paid-bounded certificates are expired; one earlier baseline certificate rema
 This is backend/material expiry, not an assertion of phone disconnect or revoked cached sessions.
 The120s post-expiry observation ends 2026-11-01T05:32:55+00:00; one physical reconnect classification
 is pending before stage1. Exact CRL generation/delivery and final30-day recovery remain NOT_RUN.
+
+### Post-expiry120s observation complete
+
+Readback05:32:58UTC (123s after expiry): paid_allow=false, version1/events1, cohort1/10.
+Two paid-bounded certificates issued during the period have expired; the baseline certificate
+is retained and still valid. The read-only observer reports no errors. One Disconnect followed
+by one Connect using the explicit MESH entry was requested; physical outcome is pending.
+No stage1 activation, explicit-expire event, CRL generation/delivery or recovery has run.
