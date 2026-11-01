@@ -1,6 +1,7 @@
 """Local one-time synthetic enrollment. No public endpoint or transport issuance."""
 
 import base64
+from contextlib import contextmanager
 import os
 from pathlib import Path
 import secrets
@@ -81,8 +82,14 @@ class EnrollmentStore:
                 CREATE TRIGGER IF NOT EXISTS audit_no_delete BEFORE DELETE ON audit BEGIN SELECT RAISE(ABORT,'immutable'); END;
             ''')
 
+    @contextmanager
     def connect(self):
-        return sqlite3.connect(self.path, timeout=5)
+        database=sqlite3.connect(self.path, timeout=5)
+        try:
+            with database:
+                yield database
+        finally:
+            database.close()
 
     def issue(self, binding, lifetime=600):
         binding_check(binding)

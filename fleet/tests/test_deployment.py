@@ -1,9 +1,11 @@
 import copy
+from concurrent.futures import ThreadPoolExecutor
 import base64
 import json
 import os
 from pathlib import Path
 import subprocess
+import threading
 from types import SimpleNamespace
 
 import pytest
@@ -112,6 +114,18 @@ def test_failed_activation_retains_evidence(installer):
     assert not installer.current.exists()
 
 
+def test_failed_rollback_retains_first_failure_and_fences_writes(installer,monkeypatch):
+    stage(installer);installer.execute('verify','verify',health_report=checks(installer))
+    def fail_switch(target):raise OSError('synthetic sensitive error details')
+    monkeypatch.setattr(installer,'switch',fail_switch)
+    with pytest.raises(OSError):installer.execute('activate','failed-rollback')
+    evidence=load((installer.operations/'failed-rollback.json').read_bytes())
+    assert evidence['first_failure']=='operation_failed' and evidence['rollback_failed'] is True
+    assert 'sensitive' not in canonical(evidence).decode()
+    with pytest.raises(FleetError,match='rollback_recovery_required'):
+        installer.execute('activate','must-not-continue')
+
+
 def test_upgrade_rollback_previous(installer,bundle,tmp_path):
     activate(installer)
     original=installer.manifest['bundle_id']
@@ -125,6 +139,9 @@ def test_upgrade_rollback_previous(installer,bundle,tmp_path):
     upgraded.execute('preflight','upgrade-preflight',report=host_report())
     upgraded.execute('stage','upgrade-stage')
     assert upgraded.current.resolve().name==original
+    upgraded.execute('rollback','cancel-unactivated-upgrade')
+    assert upgraded.current.resolve().name==original
+    upgraded.execute('stage','restage-upgrade')
     upgraded.execute('verify','upgrade-verify',health_report=checks(upgraded))
     upgraded.execute('activate','upgrade-activate')
     assert upgraded.current.resolve().name==new['bundle_id']
@@ -134,9 +151,22 @@ def test_upgrade_rollback_previous(installer,bundle,tmp_path):
     assert (upgraded.releases/new['bundle_id']).is_dir()
 
 
+def test_rollback_before_first_activation_rejected(installer):
+    stage(installer)
+    with pytest.raises(FleetError,match='rollback_evidence_required'):
+        installer.execute('rollback','premature-rollback')
+    assert installer.status()['state']=='STAGED'
+
+
 def test_root_symlink_rejected(installer,tmp_path):
     installer.root.symlink_to(tmp_path/'outside')
     with pytest.raises(FleetError):installer.initialize(host_report())
+
+
+def test_root_parent_traversal_rejected(installer):
+    escaped=Path('/tmp/../opt/fleet-synthetic-must-not-write')
+    with pytest.raises(FleetError,match='isolated_temporary_root_required'):
+        SandboxInstaller(escaped,installer.instance,installer.bundle,installer.key)
 
 
 def test_instance_cannot_inherit_predecessor_journal(installer):
@@ -204,6 +234,23 @@ def test_enrollment_success_replay_and_hash_only(enrollment):
     assert token.encode() not in store.path.read_bytes()
 
 
+def test_concurrent_enrollment_only_one_success(enrollment):
+    store,binding,token,challenge,public,signature,authority=enrollment
+    boundary=threading.Barrier(2,timeout=5)
+    def attempt():
+        boundary.wait()
+        try:
+            store.enroll(token,binding,public,signature)
+            return 'accepted'
+        except FleetError:
+            return 'rejected'
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        futures=[executor.submit(attempt) for index in range(2)]
+        assert sorted(future.result(timeout=10) for future in futures)==['accepted','rejected']
+    with pytest.raises(FleetError):store.enroll(token,binding,public,signature)
+    assert token.encode() not in store.path.read_bytes()
+
+
 @pytest.mark.parametrize('field,value',[('instance_id','other'),('logical_gateway','ru'),('bundle_id','wrong'),
     ('provider','other'),('region','other'),('ipv4','192.0.2.11'),('roles',['tcp'])])
 def test_enrollment_wrong_binding(enrollment,field,value):
@@ -235,3 +282,22 @@ def test_templates_do_not_flush_or_inject():
     assert b'flush ruleset' not in result['firewall/instance.nft']
     assert b'@' not in result['systemd/family-connect-awg.service']
     with pytest.raises(FleetError):templates('awg',dict(interface='evil;shutdown',uplink='eth0',subnet='10.90.0.0/24'))
+
+
+@pytest.mark.parametrize('returncode,accepted',[(0,True),(1,False)])
+def test_probe_silent_command_uses_exit_status(monkeypatch,returncode,accepted):
+    from fleet.probe import command
+    monkeypatch.setattr(subprocess,'run',lambda *args,**kwargs:SimpleNamespace(stdout='',returncode=returncode))
+    assert command(['aa-status','--enabled'],successful=True) is accepted
+
+
+def test_error_output_redacts_untrusted_input(tmp_path):
+    marker='synthetic-sensitive-value-not-for-output'
+    path=tmp_path/'inventory.json'
+    path.write_text(json.dumps(dict(token=marker)))
+    result=subprocess.run(['python3','-m','fleet','plan','--inventory',str(path),'--instance',marker,
+        '--bundle',str(tmp_path),'--public-key',str(tmp_path/'absent.key')],capture_output=True,text=True,timeout=5)
+    assert result.returncode==1
+    assert marker not in result.stdout+result.stderr
+    assert str(tmp_path) not in result.stdout+result.stderr
+    assert json.loads(result.stdout)['result']=='FAIL'

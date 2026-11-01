@@ -59,9 +59,14 @@ def create_intent(actor, instance_id, action):
     previous=instance.actual_bundle
     if action=='rollback':
         accepted=DeploymentOperation.objects.filter(instance=instance,action='activate',state='SUCCEEDED').first()
-        if not accepted:
+        if not accepted or instance.actual_bundle_id!=accepted.target_bundle_id:
             raise ValidationError('Нет сохранённой activation receipt для отката.')
-        previous=accepted.previous_bundle
+        if instance.state in ('PREFLIGHTED','STAGED','VERIFIED') and instance.desired_bundle_id!=instance.actual_bundle_id:
+            previous=instance.actual_bundle
+        elif instance.state in ('ACTIVE','DRAINING','QUARANTINED','FAILED'):
+            previous=accepted.previous_bundle
+        else:
+            raise ValidationError('Откат уже выполнен или переход не разрешён.')
     return DeploymentOperation.objects.create(requested_by=actor,instance=instance,action=action,previous_bundle=previous,
         target_bundle=instance.desired_bundle,safe_receipt=dict(scope='synthetic',result='operator_intent'))
 
@@ -78,7 +83,7 @@ def record_completion(actor, intent_id, receipt, health_report=None):
             raise ValidationError('Повторный receipt конфликтует с сохранённым.')
         return existing
     try:
-        if (set(receipt) - {'operation_id','request','state','first_failure','previous_bundle','scope','result','rollback_pointer'}
+        if (set(receipt) - {'operation_id','request','state','first_failure','previous_bundle','scope','result','rollback_pointer','rollback_failed'}
                 or receipt['operation_id'] != str(intent.operation_id) or receipt['scope'] != 'synthetic'
                 or receipt['request']['instance'] != instance.pk or receipt['request']['target'] != intent.target_bundle_id
                 or receipt['request']['action'] != intent.action or receipt['state'] not in ('SUCCEEDED','FAILED')

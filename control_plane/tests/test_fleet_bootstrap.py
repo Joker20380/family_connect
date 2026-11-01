@@ -91,6 +91,11 @@ def test_completion_sequence_and_idempotency(fleet_node,fleet_operator):
     record_completion(fleet_operator,intent.pk,receipt(intent,'ACTIVE'))
     fleet_node.refresh_from_db();fleet_node.logical_gateway.refresh_from_db()
     assert fleet_node.actual_bundle_id=='test-v1' and fleet_node.logical_gateway.active_instance_id==fleet_node.pk
+    other=GatewayArtifact.objects.create(bundle_id='test-v2',source_commit='a'*40,manifest_sha256='d'*64,
+        archive_sha256='e'*64,signature='A'*86+'==',signature_verified=True,supported_os=['ubuntu-24.04'],architectures=['x86_64'],roles=['awg'])
+    GatewayInstance.objects.filter(pk=fleet_node.pk).update(state='STAGED',desired_bundle=other)
+    rollback=create_intent(fleet_operator,fleet_node.pk,'rollback')
+    assert rollback.previous_bundle_id=='test-v1'
 
 
 def test_completion_wrong_binding(fleet_node,fleet_operator):

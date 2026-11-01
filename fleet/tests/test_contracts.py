@@ -2,7 +2,7 @@ import copy
 
 import pytest
 
-from fleet.contracts import FleetError, inventory, load, transition, validate
+from fleet.contracts import FleetError, STATES, TRANSITIONS, inventory, load, transition, validate
 
 
 def instance():
@@ -50,6 +50,17 @@ def test_transition():
     for previous,target in [('STAGED','ACTIVE'), ('RETIRED','ACTIVE'), ('STAGED','VERIFIED')]:
         with pytest.raises(FleetError):transition(previous,target)
     assert transition('STAGED','VERIFIED',health_pass=True) == 'VERIFIED'
+
+
+def test_complete_transition_graph():
+    for previous in STATES:
+        for target in STATES:
+            if target in TRANSITIONS[previous]:
+                assert transition(previous,target,health_pass=True)==target
+                if target in ('VERIFIED','ACTIVE'):
+                    with pytest.raises(FleetError):transition(previous,target,health_pass=False)
+            else:
+                with pytest.raises(FleetError):transition(previous,target,health_pass=True)
 
 
 def test_duplicate_json():

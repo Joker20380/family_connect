@@ -40,7 +40,7 @@ class SandboxInstaller:
     def __init__(self, root, instance, bundle, public_key, enrollment=None, enrollment_key=None):
         validate('instance', instance)
         path = Path(root).absolute()
-        if (path == Path('/') or not path.is_relative_to(Path(tempfile.gettempdir()).resolve())
+        if ('..' in path.parts or path == Path('/') or not path.is_relative_to(Path(tempfile.gettempdir()).resolve())
                 or any(parent.is_symlink() for parent in [path] + list(path.parents))):
             fail('isolated_temporary_root_required')
         self.root = path
@@ -172,6 +172,8 @@ class SandboxInstaller:
         if not self.state_path.exists():
             fail('preflight_required')
         with self.locked():
+            if any(load(path.read_bytes()).get('rollback_failed') for path in self.operations.glob('*.json')):
+                fail('rollback_recovery_required')
             request = dict(action=action, instance=self.instance['instance_id'], target=self.manifest['bundle_id'],
                 report_digest=digest(canonical(report)), health_digest=digest(canonical(health_report)))
             journal = self.operations/(operation_id+'.json')
@@ -246,7 +248,14 @@ class SandboxInstaller:
                         state['actual_bundle'] = target
                         state['accepted'][target] = self.manifest
                 elif action == 'rollback':
-                    previous = state['previous_bundle']
+                    if state['actual_bundle'] not in state['accepted']:
+                        fail('rollback_evidence_required')
+                    if state.get('candidate') != state['actual_bundle']:
+                        previous = state['actual_bundle']
+                    else:
+                        if state['state'] not in ('ACTIVE','DRAINING','QUARANTINED','FAILED'):
+                            fail('rollback_state')
+                        previous = state['previous_bundle']
                     if previous:
                         self.check_release(state['accepted'][previous])
                     self.switch(previous)
@@ -259,10 +268,13 @@ class SandboxInstaller:
                 atomic_json(self.state_path,state)
                 operation.update(state='SUCCEEDED', result=self.status())
             except Exception as error:
-                if action == 'activate':
-                    self.switch(before['actual_bundle'])
                 operation.update(state='FAILED', first_failure=str(error) if type(error).__name__=='FleetError' else 'operation_failed',
                                  rollback_pointer=before['actual_bundle'])
+                if action == 'activate':
+                    try:
+                        self.switch(before['actual_bundle'])
+                    except Exception:
+                        operation['rollback_failed']=True
                 atomic_json(journal, operation)
                 raise
             atomic_json(journal,operation)
