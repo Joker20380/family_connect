@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "python": "3.12",
+  "architecture": "x86_64",
+  "wheels": [
+    {
+      "path": "dependencies/cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "sha256": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf",
+      "size": 221822,
+      "license": "MIT",
+      "source": "https://pypi.org/project/cffi/2.1.1/"
+    },
+    {
+      "path": "dependencies/cryptography-46.0.7-cp311-abi3-manylinux_2_34_x86_64.whl",
+      "sha256": "42a1e5f98abb6391717978baf9f90dc28a743b7d9be7f0751a6f56a75d14065b",
+      "size": 4459756,
+      "license": "Apache-2.0 OR BSD-3-Clause",
+      "source": "https://pypi.org/project/cryptography/46.0.7/"
+    },
+    {
+      "path": "dependencies/pycparser-3.0-py3-none-any.whl",
+      "sha256": "b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992",
+      "size": 48172,
+      "license": "BSD-3-Clause",
+      "source": "https://pypi.org/project/pycparser/3.0/"
+    }
+  ]
+}

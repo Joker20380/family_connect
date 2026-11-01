@@ -1,0 +1,38 @@
+[Unit]
+Description=Disposable Family Connect rehearsal tcp
+After=fc-rehearsal-awg.service
+Requires=fc-rehearsal-awg.service
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=fc-rehearsal
+Group=fc-rehearsal
+WorkingDirectory=/opt/family-connect/current
+ExecStartPre=/usr/bin/python3 -I -B /opt/family-connect/current/runtime/expiry_guard.py /etc/family-connect/rehearsal/{{BUNDLE_ID}}/metadata.json
+ExecStart=/opt/family-connect/current/bin/xray run -config /etc/family-connect/rehearsal/{{BUNDLE_ID}}/tcp.json
+Restart=on-failure
+RestartSec=3
+TimeoutStartSec=45
+TimeoutStopSec=30
+KillMode=control-group
+UMask=0077
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+LockPersonality=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+StandardOutput=null
+StandardError=null
+RuntimeMaxSec={{LIFETIME_SECONDS}}
+
+[Install]
+WantedBy=multi-user.target

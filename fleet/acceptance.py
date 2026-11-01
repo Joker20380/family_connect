@@ -32,7 +32,7 @@ def validate(body, now):
     exact(body['roles'],STEPS)
     for role, steps in STEPS.items():
         exact(body['roles'][role],steps)
-        if any(value not in ('PASS','FAIL') for value in body['roles'][role].values()):
+        if any(value not in ('PASS','FAIL','NOT_RUN') for value in body['roles'][role].values()):
             fail('acceptance_safe_result')
     if body['cleanup'] not in ('PASS','FAIL'):
         fail('acceptance_cleanup')
@@ -45,7 +45,7 @@ def sign(body, authority, *, now=None):
     return dict(body=body, signature=base64.b64encode(authority.sign(canonical(body))).decode())
 
 
-def verify(receipt, authority, challenge, *, now=None):
+def verify(receipt, authority, challenge, *, now=None, require_pass=True):
     current = time.time() if now is None else now
     exact(receipt,('body','signature'))
     body = receipt['body']
@@ -60,6 +60,6 @@ def verify(receipt, authority, challenge, *, now=None):
     if (body['issued_at'] < challenge['started_at'] or body['expires_at'] > challenge['expires_at']
             or body['signer'] != digest(bytes.fromhex(public_hex(authority)))):
         fail('acceptance_window_or_signer')
-    if body['cleanup']!='PASS' or any(value!='PASS' for role in body['roles'].values() for value in role.values()):
+    if require_pass and (body['cleanup']!='PASS' or any(value!='PASS' for role in body['roles'].values() for value in role.values())):
         fail('acceptance_not_passed')
     return digest(canonical(receipt))

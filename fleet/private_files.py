@@ -72,9 +72,19 @@ def write_private(path, content, *, mode=0o600, uid=None, gid=None, replace=Fals
 
 def remove_private(path, *, owner=None):
     path = checked(path, owner=owner)
-    descriptor = os.open(path, os.O_WRONLY | os.O_NOFOLLOW)
-    with os.fdopen(descriptor, 'wb') as output:
-        output.flush()
-        os.fsync(output.fileno())
+    metadata = path.stat()
+    if metadata.st_mode & stat.S_IWUSR:
+        descriptor = os.open(path, os.O_WRONLY | os.O_NOFOLLOW)
+        with os.fdopen(descriptor, 'wb') as output:
+            actual = os.fstat(output.fileno())
+            if (actual.st_dev, actual.st_ino, actual.st_nlink) != (metadata.st_dev, metadata.st_ino, 1):
+                fail('private_file_changed')
+            remaining = actual.st_size
+            while remaining:
+                amount = min(remaining,65536)
+                output.write(bytes(amount))
+                remaining -= amount
+            output.flush()
+            os.fsync(output.fileno())
     path.unlink()
     fsync_directory(path.parent)

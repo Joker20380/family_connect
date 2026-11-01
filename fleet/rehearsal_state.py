@@ -13,6 +13,10 @@ from .installer import atomic_json
 from .permit import replay_binding, SCOPE
 
 
+def local_digest(evidence):
+    return digest(canonical({name:value for name,value in evidence.items() if name!='observations'}))
+
+
 class RehearsalState:
     def __init__(self, directory, authorization, runtime, clock=time.time):
         self.directory = Path(directory)
@@ -59,9 +63,17 @@ class RehearsalState:
                 if previous['result'] == 'RUNNING':
                     fail('interrupted_operation_requires_recovery')
                 return previous
-            if any(load(path.read_bytes()).get('result') == 'RUNNING' for path in self.directory.glob('*.json')
-                   if path.name != 'state.json'):
-                fail('interrupted_operation_requires_recovery')
+            interrupted=[(path,load(path.read_bytes())) for path in self.directory.glob('*.json')
+                         if path.name!='state.json' and load(path.read_bytes()).get('result')=='RUNNING']
+            recovery=None
+            if interrupted:
+                parameters=request['parameters']
+                if (len(interrupted)!=1 or action!='drain' or type(parameters) is not dict
+                        or set(parameters)!={'recover_operation_id','recover_binding'}
+                        or parameters['recover_operation_id']!=interrupted[0][1]['operation_id']
+                        or parameters['recover_binding']!=interrupted[0][1]['binding']):
+                    fail('interrupted_operation_requires_recovery')
+                recovery=interrupted[0]
             state = self.status()
             if state['fenced'] or state['state'] == 'RETIRED':
                 fail('rehearsal_mutations_fenced')
@@ -73,8 +85,14 @@ class RehearsalState:
             atomic_json(journal, receipt)
             original = copy.deepcopy(state)
             self.switching = False
+            self.rollback_target = original['actual_bundle']
             try:
-                result = self.apply(state, action, target, request['parameters'], request['operation_id'])
+                if recovery:
+                    self.runtime.drain()
+                    state['state']='DRAINING'
+                    result=dict(recovered_operation_id=recovery[1]['operation_id'],recovery='STOPPED_NOT_RETRIED')
+                else:
+                    result = self.apply(state, action, target, request['parameters'], request['operation_id'])
                 receipt['result'] = 'AWAITING_EXTERNAL_ACCEPTANCE' if state['state']=='AWAITING_EXTERNAL_ACCEPTANCE' else 'PASS'
                 if result is not None:
                     receipt['evidence'] = result
@@ -82,7 +100,7 @@ class RehearsalState:
                 receipt['first_failure'] = 'rehearsal_'+action.replace('-', '_')+'_failed'
                 receipt['result'] = 'FAIL'
                 if self.switching:
-                    predecessor = original['actual_bundle']
+                    predecessor = self.rollback_target
                     try:
                         self.runtime.stop()
                         self.runtime.switch(predecessor)
@@ -90,7 +108,9 @@ class RehearsalState:
                             self.runtime.start(predecessor)
                             self.runtime.accept(predecessor, fresh=True)
                         state.update(original)
-                        state['state'] = 'ACTIVE' if predecessor else 'FAILED'
+                        state['state'] = 'ACTIVE' if predecessor in original['accepted'] else 'VERIFIED' if original['state']=='VERIFIED' else 'FAILED'
+                        state['actual_bundle'] = predecessor
+                        state['verification'] = None
                         receipt['rollback'] = 'PASS'
                     except Exception:
                         state['fenced'] = True
@@ -104,6 +124,9 @@ class RehearsalState:
             receipt['elapsed_seconds'] = round(self.clock()-started, 3)
             atomic_json(self.directory/'state.json', state)
             atomic_json(journal, receipt)
+            if recovery and receipt['result']=='PASS':
+                recovery[1].update(result='RECOVERED',first_failure='interrupted_operation',recovered_by=request['operation_id'])
+                atomic_json(recovery[0],recovery[1])
             return receipt
 
     def apply(self, state, action, target, parameters, operation_id):
@@ -126,9 +149,14 @@ class RehearsalState:
             if set(parameters)!={'receipt'}:
                 fail('verification_parameters')
             challenge = state['verification']
-            receipt_hash = acceptance.verify(parameters['receipt'],self.runtime.authority,challenge,now=self.clock())
+            receipt_hash = acceptance.verify(parameters['receipt'],self.runtime.authority,challenge,now=self.clock(),require_pass=False)
+            external = parameters['receipt']['body']
+            if external['cleanup']!='PASS' or any(value!='PASS' for role in external['roles'].values() for value in role.values()):
+                self.switching = True
+                self.rollback_target = state['previous_bundle']
+                fail('external_acceptance_failed')
             evidence = self.runtime.accept(target,fresh=True)
-            if digest(canonical(evidence))!=challenge['local_health_sha256']:
+            if local_digest(evidence)!=challenge['local_health_sha256']:
                 fail('verification_local_health_drift')
             state['health'] = dict(bundle_id=target,digest=challenge['local_health_sha256'],observed_at=int(self.clock()),
                                    external_receipt_sha256=receipt_hash,external_expires_at=parameters['receipt']['body']['expires_at'])
@@ -147,7 +175,7 @@ class RehearsalState:
             state['identity'] = identity
             if target not in state['staged']:
                 state['staged'] = [*state['staged'], target]
-            if state['state'] != 'ACTIVE':
+            if state['state'] not in ('ACTIVE','VERIFIED'):
                 state['state'] = 'STAGED'
             return
         if action == 'start-verification':
@@ -155,6 +183,7 @@ class RehearsalState:
                 fail('verify_state')
             self.switching = True
             self.runtime.configure(target)
+            self.runtime.stop()
             self.runtime.switch(target)
             self.runtime.start(target)
             return self.await_acceptance(state,target,operation_id)
@@ -163,7 +192,7 @@ class RehearsalState:
                     or not 0 <= self.clock()-state['health']['observed_at'] <= 300
                     or not self.clock() < state['health']['external_expires_at']):
                 fail('verified_health_required')
-            if digest(canonical(self.runtime.accept(target, fresh=True)))!=state['health']['digest']:
+            if local_digest(self.runtime.accept(target, fresh=True))!=state['health']['digest']:
                 fail('activation_health_drift')
             state['state'] = 'ACTIVE'
             state['actual_bundle'] = target
@@ -184,8 +213,7 @@ class RehearsalState:
             if state['state'] != 'ACTIVE' or target != state['actual_bundle']:
                 fail('reboot_state')
             self.runtime.reboot_check(target, state['identity'])
-            self.runtime.accept(target, fresh=True)
-            return
+            return self.await_acceptance(state,target,operation_id)
         if action == 'drain':
             if state['state'] not in ('ACTIVE','AWAITING_EXTERNAL_ACCEPTANCE','VERIFIED','STAGED','FAILED'):
                 fail('drain_state')
@@ -205,7 +233,7 @@ class RehearsalState:
         started = int(self.clock())
         challenge = dict(instance_id=state['instance_id'],bundle_id=target,operation_id=operation_id,
             verification_nonce=secrets.token_hex(32),ipv4=self.permit['body']['ipv4'],
-            local_health_sha256=digest(canonical(evidence)),started_at=started,expires_at=self.permit['body']['expires_at'])
+            local_health_sha256=local_digest(evidence),started_at=started,expires_at=self.permit['body']['expires_at'])
         state['previous_bundle'] = state['actual_bundle']
         state['actual_bundle'] = target
         state['verification'] = challenge

@@ -46,6 +46,7 @@ class RemoteInstaller:
         self.bundle = Path(bundle)
         self.clock = clock
         self.host = host
+        self.user = user
         self.fingerprint = fingerprint
         self.known_hosts = Path(known_hosts).absolute()
         self.pin_digest = None
@@ -100,13 +101,13 @@ class RemoteInstaller:
         permit.replay_binding(None, self.permit, operation)
         if dry_run:
             return dict(scope=permit.SCOPE, action=action, dry_run=True, remote_writes=0)
-        if self.preflight_at is None or not 0 <= self.clock()-self.preflight_at <= 300:
+        if action!='status' and (self.preflight_at is None or not 0 <= self.clock()-self.preflight_at <= 300):
             fail('fresh_remote_preflight_required')
         files = {path.name: base64.b64encode(path.read_bytes()).decode() for path in self.bundle.iterdir() if path.is_file()}
         request = dict(permit=self.permit, permit_key=public_hex(self.permit_key), bundle_key=public_hex(self.bundle_key),
                        agent=base64.b64encode(self.agent).decode(), operation=operation, bundle=files, upload_only=True)
         source = Path(__file__).with_name('remote_bootstrap.py').read_text()
-        command = 'python3 -I -B -c ' + shlex.quote(source)
+        command = ('' if self.user=='root' else 'sudo -n ') + 'python3 -I -B -c ' + shlex.quote(source)
         uploaded = self.call(command, request)
         if uploaded != dict(agent_sha256=digest(self.agent), mode='0500', scope=permit.SCOPE):
             fail('remote_upload_readback')

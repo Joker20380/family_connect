@@ -61,6 +61,10 @@ def dispatch(request):
             fail('UNBOUND_ROLE_ARTIFACT')
         from .provenance import validate
         inventory = validate(load(contents['metadata/deployable.json']))
+        if inventory['schema']!=2 or inventory['scope']!='DEPLOYABLE_REHEARSAL':
+            fail('deployable_inventory_required')
+        if load(contents.get('metadata/agent.json',b'{}'))!=dict(sha256=digest(agent.read_bytes())):
+            fail('deployable_agent_binding')
         for artifact in inventory['artifacts']:
             content = contents.get(artifact['path'])
             if content is None or digest(content) != artifact['sha256'] or len(content) != artifact['size']:

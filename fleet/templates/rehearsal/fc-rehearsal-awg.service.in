@@ -1,0 +1,44 @@
+[Unit]
+Description=Disposable Family Connect rehearsal awg
+After=fc-rehearsal-prepare.service
+Requires=fc-rehearsal-prepare.service
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/opt/family-connect/current
+ExecStartPre=/usr/bin/python3 -I -B /opt/family-connect/current/runtime/expiry_guard.py /etc/family-connect/rehearsal/{{BUNDLE_ID}}/metadata.json
+ExecStart=/opt/family-connect/current/bin/amneziawg-go -f fcrh0
+Restart=on-failure
+RestartSec=3
+TimeoutStartSec=45
+TimeoutStopSec=30
+KillMode=control-group
+UMask=0077
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+LockPersonality=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+CapabilityBoundingSet=CAP_NET_ADMIN
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+StandardOutput=null
+StandardError=null
+RuntimeMaxSec={{LIFETIME_SECONDS}}
+ReadWritePaths=/run/family-connect-rehearsal
+RuntimeDirectory=wireguard
+ReadWritePaths=/run/wireguard
+DevicePolicy=closed
+DeviceAllow=/dev/net/tun rw
+ExecStartPost=/usr/bin/python3 -I -B /opt/family-connect/current/runtime/awg_setup.py /etc/family-connect/rehearsal/{{BUNDLE_ID}}/awg.conf
+
+[Install]
+WantedBy=multi-user.target

@@ -94,7 +94,9 @@ def test_upgrade_failure_rollback_reboot_and_retirement(state):
     complete(state,'-rollback')
     assert state.execute(request(state,'activate-local','-rollback'))['result']=='PASS'
     assert state.runtime.current == original
-    assert state.execute(request(state,'reboot-verify'))['result'] == 'PASS'
+    assert state.execute(request(state,'reboot-verify'))['result'] == 'AWAITING_EXTERNAL_ACCEPTANCE'
+    complete(state,'-reboot')
+    assert state.execute(request(state,'activate-local','-reboot'))['result']=='PASS'
     assert state.execute(request(state,'drain'))['result'] == 'PASS'
     assert state.runtime.stopped
     assert state.execute(request(state,'retire'))['result'] == 'PASS'

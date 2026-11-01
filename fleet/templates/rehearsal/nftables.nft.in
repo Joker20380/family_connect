@@ -1,0 +1,23 @@
+table inet family_connect_rehearsal {
+ chain input {
+  type filter hook input priority 0; policy accept;
+  iifname "lo" accept
+  ct state established,related accept
+  udp dport 51827 accept
+  tcp dport { 4443, 18444 } accept
+  tcp dport 19727 drop
+ }
+ chain forward {
+  type filter hook forward priority 0; policy accept;
+  iifname "fcrh0" ip saddr != 10.203.217.2 drop
+  iifname "fcrh0" ip daddr { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 127.0.0.0/8, 169.254.0.0/16 } drop
+  iifname "fcrh0" oifname "{{UPLINK}}" accept
+  iifname "fcrh0" drop
+  oifname "fcrh0" ct state established,related accept
+  oifname "fcrh0" drop
+ }
+ chain postrouting {
+  type nat hook postrouting priority srcnat; policy accept;
+  ip saddr 10.203.217.0/30 oifname "{{UPLINK}}" masquerade
+ }
+}

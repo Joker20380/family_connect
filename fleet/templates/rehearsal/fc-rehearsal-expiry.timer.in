@@ -1,0 +1,9 @@
+[Unit]
+Description=Absolute disposable rehearsal deadline
+[Timer]
+OnCalendar={{EXPIRY_UTC}}
+AccuracySec=1s
+Persistent=true
+Unit=fc-rehearsal-expiry.service
+[Install]
+WantedBy=timers.target

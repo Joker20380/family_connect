@@ -11,7 +11,7 @@ from .contracts import canonical, digest, exact, fail, typed
 
 SCOPE = 'DISPOSABLE_FLEET_REHEARSAL'
 ACTIONS = ('preflight', 'enroll', 'deliver-materials', 'stage', 'start-verification',
-           'complete-verification', 'activate-local', 'status', 'upgrade', 'rollback',
+           'complete-verification', 'run-acceptance', 'activate-local', 'status', 'upgrade', 'rollback',
            'reboot-verify', 'drain', 'retire')
 EXCLUDED = frozenset(('185.251.89.19', '185.10.158.212', '186.246.45.246', '186.246.51.201'))
 FIELDS = ('schema', 'scope', 'permit_id', 'instance_id', 'logical_gateway', 'ipv4',

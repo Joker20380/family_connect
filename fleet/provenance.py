@@ -13,7 +13,8 @@ FIELDS = ('id', 'path', 'sha256', 'size', 'source_commit', 'source_inventory_sha
 
 def validate(inventory):
     exact(inventory, ('schema', 'scope', 'artifacts', 'disabled_roles'))
-    if inventory['schema'] != 1 or type(inventory['schema']) is not int or inventory['scope'] != 'BOUND_REHEARSAL_INPUTS':
+    if type(inventory['schema']) is not int or (inventory['schema'],inventory['scope']) not in (
+            (1,'BOUND_REHEARSAL_INPUTS'),(2,'DEPLOYABLE_REHEARSAL')):
         fail('UNBOUND_ROLE_ARTIFACT')
     if type(inventory['artifacts']) is not list or not inventory['artifacts']:
         fail('UNBOUND_ROLE_ARTIFACT')
@@ -51,6 +52,12 @@ def validate(inventory):
     if type(inventory['disabled_roles']) is not dict or any(not typed(name, 'id') or type(reason) is not str
                                                          for name, reason in inventory['disabled_roles'].items()):
         fail('UNBOUND_ROLE_ARTIFACT')
+    if inventory['schema']==2:
+        from .role_config import DISABLED, ROLES
+        admitted={role for artifact in inventory['artifacts'] for role in artifact['roles']}
+        if (admitted!=set(ROLES) or set(inventory['disabled_roles'])!=set(DISABLED)
+                or not {'awg-engine','awg-tools','tcp-xray','mesh-gateway','rehearsal-monitoring'}<=identifiers):
+            fail('deployable_role_contract')
     return inventory
 
 

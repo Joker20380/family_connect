@@ -1,0 +1,12 @@
+[Unit]
+Description=Stop expired disposable rehearsal
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=/usr/bin/systemctl stop fc-rehearsal-monitoring.service fc-rehearsal-snapshot.service fc-rehearsal-mesh.service fc-rehearsal-tcp.service fc-rehearsal-awg.service fc-rehearsal-prepare.service
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_UNIX

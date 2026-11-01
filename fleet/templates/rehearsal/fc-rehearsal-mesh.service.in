@@ -1,0 +1,43 @@
+[Unit]
+Description=Disposable Family Connect rehearsal mesh
+After=fc-rehearsal-tcp.service
+Requires=fc-rehearsal-tcp.service
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=fc-rehearsal
+Group=fc-rehearsal
+WorkingDirectory=/opt/family-connect/current
+ExecStartPre=/usr/bin/python3 -I -B /opt/family-connect/current/runtime/expiry_guard.py /etc/family-connect/rehearsal/{{BUNDLE_ID}}/metadata.json
+ExecStart=/opt/family-connect/current/bin/gateway -family-config /etc/family-connect/rehearsal/{{BUNDLE_ID}}/profile/gateway.json -listen 0.0.0.0:18444 -duration {{LIFETIME_SECONDS}}s -directory-export /run/family-connect-rehearsal/{{INSTANCE_ID}}/ready.json
+Restart=on-failure
+RestartSec=3
+TimeoutStartSec=45
+TimeoutStopSec=30
+KillMode=control-group
+UMask=0077
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+LockPersonality=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+StandardOutput=null
+StandardError=null
+RuntimeMaxSec={{LIFETIME_SECONDS}}
+EnvironmentFile=/etc/family-connect/rehearsal/{{BUNDLE_ID}}/publisher.env
+ReadWritePaths=/run/family-connect-rehearsal/{{INSTANCE_ID}}
+RuntimeDirectory=family-connect-rehearsal/{{INSTANCE_ID}}
+RuntimeDirectoryMode=0700
+RuntimeDirectoryPreserve=yes
+
+[Install]
+WantedBy=multi-user.target

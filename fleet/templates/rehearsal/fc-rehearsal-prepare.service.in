@@ -1,0 +1,38 @@
+[Unit]
+Description=Disposable Family Connect rehearsal prepare
+After=network-online.target
+Requires=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+WorkingDirectory=/opt/family-connect/current
+ExecStartPre=/usr/bin/python3 -I -B /opt/family-connect/current/runtime/expiry_guard.py /etc/family-connect/rehearsal/{{BUNDLE_ID}}/metadata.json
+ExecStart=/usr/bin/test -r /etc/family-connect/rehearsal/{{BUNDLE_ID}}/metadata.json
+Restart=no
+RestartSec=3
+TimeoutStartSec=45
+TimeoutStopSec=30
+KillMode=control-group
+UMask=0077
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+LockPersonality=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+StandardOutput=null
+StandardError=null
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

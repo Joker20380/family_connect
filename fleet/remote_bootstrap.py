@@ -16,6 +16,7 @@ import subprocess
 import sys
 import tarfile
 import time
+import zipfile
 
 
 def canonical(value):
@@ -152,6 +153,7 @@ def verify_bundle_payload(request):
     if len(expected) != len(members) or list(expected) != sorted(expected):
         raise ValueError('remote_member_order')
     seen = []
+    verified = {}
     with tarfile.open(fileobj=io.BytesIO(output.raw[:size]),mode='r:') as stream:
         for member in stream:
             name = member.name
@@ -166,13 +168,78 @@ def verify_bundle_payload(request):
                     or hashlib.sha256(stream.extractfile(member).read()).hexdigest() != declared['sha256']):
                 raise ValueError('remote_member_hash_or_mode')
             seen.append(name)
+            verified[name] = stream.extractfile(member).read()
     if seen != list(expected):
         raise ValueError('remote_member_inventory')
+    return verified
+
+
+def python_dependencies(contents, directory):
+    metadata = json.loads(contents['metadata/python-dependencies.json'])
+    if metadata['python'] != '3.12' or sys.version_info[:2] != (3, 12):
+        raise ValueError('remote_python_version')
+    destination = directory / ('python-' + hashlib.sha256(canonical(metadata)).hexdigest())
+    expected = {}
+    for record in metadata['wheels']:
+        content = contents[record['path']]
+        if hashlib.sha256(content).hexdigest() != record['sha256']:
+            raise ValueError('remote_dependency_binding')
+        with zipfile.ZipFile(io.BytesIO(content)) as wheel:
+            for member in wheel.infolist():
+                if member.is_dir():
+                    continue
+                path = Path(member.filename)
+                if (path.is_absolute() or any(part in ('.', '..') for part in path.parts)
+                        or str(path) != member.filename or member.file_size > 32*1024*1024
+                        or stat.S_ISLNK(member.external_attr >> 16) or member.filename in expected):
+                    raise ValueError('remote_dependency_path')
+                expected[member.filename] = wheel.read(member)
+    if not destination.exists():
+        pending = destination.with_name(destination.name + '.pending')
+        if pending.exists() or pending.is_symlink():
+            raise ValueError('remote_dependency_interrupted')
+        pending.mkdir(mode=0o700)
+        for name, content in expected.items():
+            target = pending/name
+            target.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+            with target.open('xb') as stream:
+                stream.write(content)
+                stream.flush()
+                os.fsync(stream.fileno())
+            target.chmod(0o444)
+        for path in sorted((path for path in pending.rglob('*') if path.is_dir()), key=lambda path:len(path.parts), reverse=True)+[pending]:
+            descriptor=os.open(path,os.O_RDONLY|os.O_DIRECTORY)
+            os.fsync(descriptor)
+            os.close(descriptor)
+            path.chmod(0o500)
+        os.rename(pending,destination)
+        descriptor=os.open(directory,os.O_RDONLY|os.O_DIRECTORY)
+        os.fsync(descriptor)
+        os.close(descriptor)
+    if destination.is_symlink() or destination.stat().st_uid != 0 or stat.S_IMODE(destination.stat().st_mode)!=0o500:
+        raise ValueError('remote_dependency_root')
+    observed = set()
+    for path in destination.rglob('*'):
+        info=path.lstat()
+        if path.is_symlink() or info.st_uid!=0:
+            raise ValueError('remote_dependency_ownership')
+        if path.is_dir():
+            if stat.S_IMODE(info.st_mode)!=0o500:
+                raise ValueError('remote_dependency_directory_mode')
+            continue
+        name=str(path.relative_to(destination))
+        if (name not in expected or not stat.S_ISREG(info.st_mode) or info.st_nlink!=1
+                or stat.S_IMODE(info.st_mode)!=0o444 or path.read_bytes()!=expected[name]):
+            raise ValueError('remote_dependency_tamper')
+        observed.add(name)
+    if observed!=set(expected):
+        raise ValueError('remote_dependency_inventory')
+    return destination
 
 
 def receive(request):
     agent = check(request)
-    verify_bundle_payload(request)
+    contents = verify_bundle_payload(request)
     body = request['permit']['body']
     directory = Path('/var/lib/family-connect-rehearsal') / body['instance_id']
     secure_directory(directory)
@@ -192,20 +259,22 @@ def receive(request):
     response = dict(agent_sha256=body['agent_sha256'], mode='0500', scope=body['scope'])
     if request['upload_only'] is True:
         return response
-    probe = subprocess.run(['python3', '-I', '-B', '-c', 'import cryptography'], capture_output=True, timeout=10)
-    if probe.returncode or any(shutil.which(name) is None for name in ('zstd', 'nft', 'ip', 'curl')):
-        if request['operation']['action'] != 'stage':
+    if any(shutil.which(name) is None for name in ('zstd', 'nft', 'ip', 'curl')):
+        if request['operation']['action'] not in ('enroll', 'stage'):
             raise ValueError('remote_runtime_dependency_required')
         environment = dict(PATH='/usr/sbin:/usr/bin:/sbin:/bin', LC_ALL='C', DEBIAN_FRONTEND='noninteractive')
         for argv in (['apt-get', 'update', '-qq'], ['apt-get', 'install', '-y', '--no-install-recommends',
-                     'python3-cryptography', 'zstd', 'nftables', 'iproute2', 'curl', 'ca-certificates']):
+                     'zstd', 'nftables', 'iproute2', 'curl', 'ca-certificates']):
             check(request)
             result = subprocess.run(argv, env=environment, capture_output=True, timeout=180)
             if result.returncode:
                 raise ValueError('remote_runtime_package_install_failed')
     payload = dict(request)
     del payload['agent']
-    result = subprocess.run(['python3', '-I', '-B', str(target)], input=canonical(payload), capture_output=True, timeout=600)
+    dependencies=python_dependencies(contents,directory)
+    launcher="import sys,runpy;sys.path.insert(0,sys.argv.pop(1));runpy.run_path(sys.argv[1],run_name='__main__')"
+    check(request)
+    result = subprocess.run(['python3', '-I', '-B', '-c', launcher, str(dependencies), str(target)], input=canonical(payload), capture_output=True, timeout=600)
     if result.returncode:
         raise ValueError('remote_agent_failed')
     return json.loads(result.stdout)

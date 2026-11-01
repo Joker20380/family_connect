@@ -97,6 +97,16 @@ is complete, or a localized genuine blocker. No host absence is used to skip pre
 
 ## Remaining source work — not an owner handoff
 
+Continuation source transition: bound AWG/TCP/MESH role runtime, exact rehearsal
+templates, owned firewall/sysctl rollback, private material factory, operator CLI
+and two-phase recovery are implemented. Ubuntu24.04 fleet217 PASS; full console156
+PASS. The operator MESH probe rebuild is byte-identical, uses a permit-target egress
+binding, and has not contacted Telemost. Pinned Python46.0.7 cryptography wheels are
+bound for offline target loading rather than relying on an unpinned distro package.
+This is a source checkpoint, not installation, public distribution or physical PASS.
+The remaining bullets below describe the original preparation queue; final package
+qualification must supersede them before handoff. Production mutations remain0.
+
 - Implement and qualify the bound real role installer, service/config/firewall/sysctl
   templates, physical health orchestration and bounded retirement cleanup.
 - Wire node-local enrollment/material exchange and the private operator acceptance harness;

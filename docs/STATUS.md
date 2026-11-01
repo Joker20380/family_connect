@@ -2,15 +2,15 @@
 
 <!-- FLEET-BOOTSTRAP-2 current -->
 **FLEET-BOOTSTRAP-2 — IN_PROGRESS / SOURCE-PACKAGE PREPARATION.**
-Continuation: material envelopes and two-phase external acceptance have170 fleet
-source tests PASS; source/package handoff is not yet qualified. No live host used.
+Continuation: bound runtime, encrypted materials, operator CLI and two-phase acceptance
+have217 fleet tests PASS; full console156 PASS. Private A/B qualification follows.
 Dependency: accepted FLEET-BOOTSTRAP-1 sourcea3fc3bf and receipt; synthetic-only bundle is
 not a production VPN distribution. Owner authorizes one disposable Ubuntu24.04/x86_64
 rehearsal, not production RU/NL, catalog/paid changes or phone actions. No host supplied.
 Seeder correction committed/pushed; full console/fleet273 PASS and paid170 PASS.
 Native AWG/TCP/MESH inputs are hash/source-bound; no deployable A/B bundle yet.
-Permit/SSH/reverification/enrollment guard source is implemented; real role runtime,
-qualified A/B bundles and Django live integration still precede operator host handoff.
+Permit/SSH/reverification/enrollment guards are retained; real role runtime and append-only
+Django integration are implemented. Qualified A/B bundles still precede host handoff.
 Completion requires actual AWG/TCP/MESH, upgrade/rollback/reboot and RETIRED evidence;
 without host, finish source/package preparation before READY_FOR_FLEET_BOOTSTRAP_2_HOST.
 Public109/sequence4/catalog4/paid baseline108/entitlement/ledger1/4/cohort1/10 unchanged.

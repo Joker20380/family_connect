@@ -1,0 +1,39 @@
+--- a/cmd/telemost-binary/mux.go
++++ b/cmd/telemost-binary/mux.go
+@@ -118,7 +118,15 @@
+ 	if failure != nil {
+ 		return failure
+ 	}
+-	return muxDNSProof(ctx, mux, emit)
++	if err := muxDNSProof(ctx, mux, emit); err != nil { return err }
++ stream, err := mux.OpenTCP(ctx, tcpforward.OpenRequest{Host: "www.cloudflare.com", Port: 443})
++ if err != nil { return err }
++ defer stream.Close()
++ result := map[string]any{"event": "fleet_probe_egress"}
++ err = tcpHTTPS(ctx, stream, tcpConfig{Host: "www.cloudflare.com", Port: 443, Path: "/cdn-cgi/trace"}, result)
++ result["passed"] = err == nil
++ if emitErr := emit(result); emitErr != nil { return emitErr }
++ return err
+ }
+ 
+ func muxQuery(name string, kind dnsmessage.Type) ([]byte, error) {
+--- a/cmd/telemost-binary/tcp.go
++++ b/cmd/telemost-binary/tcp.go
+@@ -201,7 +201,16 @@
+ 	}
+ 	defer response.Body.Close()
+ 	digest := sha256.New()
+-	count, err := io.Copy(digest, io.LimitReader(response.Body, 16<<20+1))
++	var body bytes.Buffer
++ count, err := io.Copy(io.MultiWriter(digest, &body), io.LimitReader(response.Body, 16<<20+1))
++ if config.Host == "www.cloudflare.com" && config.Path == "/cdn-cgi/trace" {
++  target := os.Getenv("FC_REHEARSAL_TARGET_IPV4")
++  if net.ParseIP(target) == nil || target == "" { return errors.New("rehearsal egress binding missing") }
++  expected := false
++  for _, line := range strings.Split(body.String(), "\n") { if line == "ip="+target { expected = true } }
++  result["expected_rehearsal_egress"] = expected
++  if !expected { return errors.New("fleet egress mismatch") }
++ }
+ 	if err != nil || count > 16<<20 {
+ 		return errors.New("HTTPS body truncated or oversized")
+ 	}
