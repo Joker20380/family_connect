@@ -2,6 +2,42 @@
 
 ## Current continuation — baseline108 canary completed with deviations (1 November)
 
+**Current beta109 qualification — TCPFORWARD_PRODUCT_SLOT_RELEASE_DEFECT (1 November).**
+Accepted production state remains NL_REPLACEMENT_LIVE/catalog4, public108/Android sequence3,
+paid baseline108, owner entitlement through2026-12-01T07:09:19Z, ledger1/4, cohort1/10,
+customer revenue0. Canary COMPLETED_WITH_DEVIATIONS; final108 Connect/internet and84s READY
+PASS. Earlier stage0/stage1 deadlines and selector defect remain recorded. No canary operation
+is pending or replayed; no paid event, CRL, certificate deletion, backend restart or phone action.
+Client CI41284629022/source9603e87 failed first at Restricted carrier race regression:
+tcpforward TestBatchMixedPeerBulkAndSlotRelease/both, batch_test.go:163, TCP OPEN: stream_limit.
+JVM/control and the other reported carrier race packages passed. Android instrumentation,
+native build/release packaging did not run; the system-consent change is NOT_REACHED, neither
+PASS nor FAIL. No qualified109 APK exists. Public108 remains authoritative.
+Accepted108 source3b10199 and9603e87 have identical complete carrier trees, all34 tcpforward
+source/test files, go.mod/go.sum and Client builds workflow. Both workflows pin Go1.26.1 and
+the same dependency-selected go test -race invocation. Local reproduction uses Go1.26.1.
+The exact failing command passed once; that alone is not accepted as proof. A deterministic
+endpoint gate delivers the server CLOSE ACK but holds SendContext return: client Close succeeds,
+then a valid next OPEN is rejected while the server still counts the completed stream. The
+new test is RED on the unchanged implementation, proving a production lifetime/order defect,
+not an Android-harness regression or a premature OPEN in the original test.
+The correction waits only for already-terminal stream retirement or a removed stream's closing
+worker before server admission; worker release now signals the same mutex-protected condition.
+Live-stream quota exhaustion still returns stream_limit. No limit, wire protocol, retry policy,
+sleep-only barrier, test skip or race removal. Source correction is not a deployed gateway change.
+Focused acceptance PASS: exact failing subtest, all mixed-peer cases, full tcpforward -race,
+reliablestream/familysession -race, and20 bounded repeated runs of the mixed-peer, forced ACK
+ordering and closing-worker tests. Nine forced-order cases cover batching on either/both peers,
+concurrent peer/bulk streams and shutdown; owned workers join, active/socket/pending counters and
+retained bytes drain to0. Existing stream-limit/lease/FIFO tests pass with unchanged limits.
+An initial supplemental worker stress fixture lacked the client Reset-completion boundary;
+it was corrected with a condition-driven ActiveStreams=0 barrier, not a sleep or blind rerun.
+NEXT: one new full exact-source Client builds run from the corrected main, not a rerun of41284629022.
+Signing/publication/sequence4 and owner109 field acceptance remain NOT_RUN. No phone actions
+until qualified109 publication; paid baseline108 and cohort1/10 remain unchanged. On a new
+full CI failure stop publication and retain diagnostics. No desktop release tag/publication is
+authorized by this checkpoint; the existing desktop-publishing job is not an Android acceptance.
+
 **Owner timing correction / NL_REPLACEMENT_LIVE:** owner confirms all requested checks
 were already completed successfully and explicitly asks to continue coding. Accept the
 owner-reported beta108 NL AWG/TCP/Auto-MESH runtime and disconnect/cleanup smoke; do not

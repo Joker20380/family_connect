@@ -39,6 +39,58 @@ func (mux *Mux) rejectAdmissionLocked(lease bool) {
 	}
 }
 
+func (mux *Mux) removeAdmissionLocked(waiter *admissionWaiter) {
+	for index, current := range mux.admission {
+		if current == waiter {
+			copy(mux.admission[index:], mux.admission[index+1:])
+			mux.admission[len(mux.admission)-1] = nil
+			mux.admission = mux.admission[:len(mux.admission)-1]
+			break
+		}
+	}
+	mux.signalLocked()
+}
+
+func (mux *Mux) awaitReleasedSlotLocked(lease bool) bool {
+	var waiter *admissionWaiter
+	defer func() {
+		if waiter != nil {
+			mux.removeAdmissionLocked(waiter)
+		}
+	}()
+	for mux.ctx.Err() == nil {
+		available := mux.slotAvailableLocked(lease)
+		jobs := mux.jobSlots(lease)
+		if available && len(jobs) < cap(jobs) {
+			return true
+		}
+		releasing := available
+		for _, stream := range mux.streams {
+			if stream.lease == lease && stream.terminal != nil {
+				releasing = true
+			}
+		}
+		if !releasing {
+			return true
+		}
+		if waiter == nil {
+			waiter = &admissionWaiter{lease: lease}
+			mux.admission = append(mux.admission, waiter)
+			mux.stats.AdmissionWaits++
+			mux.signalLocked()
+		}
+		changed := mux.changed
+		mux.mu.Unlock()
+		select {
+		case <-changed:
+		case <-mux.ctx.Done():
+		}
+		mux.mu.Lock()
+	}
+	mux.stats.AdmissionCancelled++
+	return false
+}
+
 func (mux *Mux) admitLocked(ctx context.Context, lease bool, deadline <-chan time.Time) error {
 	pending := 0
 	for _, waiter := range mux.admission {
@@ -62,17 +114,7 @@ func (mux *Mux) admitLocked(ctx context.Context, lease bool, deadline <-chan tim
 	waiter := &admissionWaiter{lease: lease}
 	mux.admission = append(mux.admission, waiter)
 	mux.stats.AdmissionWaits++
-	defer func() {
-		for index, current := range mux.admission {
-			if current == waiter {
-				copy(mux.admission[index:], mux.admission[index+1:])
-				mux.admission[len(mux.admission)-1] = nil
-				mux.admission = mux.admission[:len(mux.admission)-1]
-				break
-			}
-		}
-		mux.signalLocked()
-	}()
+	defer mux.removeAdmissionLocked(waiter)
 	for {
 		if ctx.Err() != nil || mux.ctx.Err() != nil {
 			mux.stats.AdmissionCancelled++

@@ -470,6 +470,9 @@ func (mux *Mux) dispatchLocked(frame muxFrame) {
 		}
 		lease := leaseRequest(request) && mux.config.LeaseRenewal != nil
 		jobs := mux.jobSlots(lease)
+		if !mux.awaitReleasedSlotLocked(lease) {
+			return
+		}
 		if !mux.slotAvailableLocked(lease) || len(jobs) >= cap(jobs) {
 			mux.stats.OpenErrors++
 			mux.rejectAdmissionLocked(lease)
@@ -572,7 +575,12 @@ func (mux *Mux) dispatchLocked(frame muxFrame) {
 
 func (mux *Mux) forward(stream *MuxStream, request OpenRequest) {
 	defer mux.workers.Done()
-	defer func() { <-mux.jobSlots(stream.lease) }()
+	defer func() {
+		mux.mu.Lock()
+		<-mux.jobSlots(stream.lease)
+		mux.signalLocked()
+		mux.mu.Unlock()
+	}()
 	if canonicalHost(request.Host) == LeaseRenewalHost && request.Port == 1 && mux.config.LeaseRenewal != nil {
 		mux.mu.Lock()
 		for mux.leaseOpen && stream.terminal == nil && stream.ctx.Err() == nil {

@@ -2831,6 +2831,217 @@
       "production_source_changed": false,
       "local_gradle": "BLOCKED_BY_PREEXISTING_PYTHON_BUILD_CACHE_SYMLINK",
       "selected_test_javac": "PASS_CURRENT_CHANGED_TEST_SOURCES_CACHED_API_CLASSPATH_NO_APK"
+    },
+    "tcpforward_qualification_20261101": {
+      "classification": "TCPFORWARD_PRODUCT_SLOT_RELEASE_DEFECT",
+      "accepted_android108_source": "3b10199de207595b75259ecf6313f1d2d828336f",
+      "source_base": "9603e87322d9e5c039f79ff3ed837012fd54bd0d",
+      "carrier_tree_accepted_and_base": "6f948e43237497e2de9dc47883dae073fc53810e",
+      "ci_workflow_blob_accepted_and_base": "edd94e3764d45f107fb046a503262bde707fd523",
+      "toolchain": {
+        "local": "go1.26.1 linux/amd64",
+        "ci_pin": "1.26.1",
+        "module_go": "1.24.0",
+        "race": true
+      },
+      "failed_ci": {
+        "run": 41284629022,
+        "source": "9603e87322d9e5c039f79ff3ed837012fd54bd0d",
+        "result": "FAILURE",
+        "first_failed_step": "Restricted carrier race regression",
+        "test": "TestBatchMixedPeerBulkAndSlotRelease/both",
+        "error": "TCP OPEN: stream_limit",
+        "line": "batch_test.go:163",
+        "system_consent": "NOT_REACHED",
+        "android_release_package": "NOT_REACHED"
+      },
+      "exact_reproduction": "PASS_ONCE_NOT_PROOF",
+      "deterministic_reproduction": "RED_AFTER_SUCCESSFUL_CLOSE_WITH_ACK_SEND_RETURN_HELD",
+      "local_acceptance": "PASS",
+      "bounded_stress_count": 20,
+      "owned_workers": "JOINED",
+      "final_active_streams": 0,
+      "final_active_sockets": 0,
+      "final_retained_bytes": 0,
+      "limits": {
+        "MuxMaxStreams": 64,
+        "default_streams": 16,
+        "MuxMaxPendingOpens": 32,
+        "MuxWindow": 65536,
+        "changed": false
+      },
+      "inventory": {
+        "carrier/tcpforward/MUX.md": {
+          "accepted108_and_9603_sha256": "8edf3212a0aa563761f03e129acb174585b315d4286566dfd9ec02ff72a0b8ca",
+          "candidate_sha256": "8edf3212a0aa563761f03e129acb174585b315d4286566dfd9ec02ff72a0b8ca"
+        },
+        "carrier/tcpforward/README.md": {
+          "accepted108_and_9603_sha256": "b04dcd3fc46fbb5b8288bd7102f1f80d75ed8339e0825eae4a72ba3704f585c9",
+          "candidate_sha256": "b04dcd3fc46fbb5b8288bd7102f1f80d75ed8339e0825eae4a72ba3704f585c9"
+        },
+        "carrier/tcpforward/admission.go": {
+          "accepted108_and_9603_sha256": "e66ff964da8a643ce9862601bfb58a2b3a92b4cd514194044cbacc297e93b3a5",
+          "candidate_sha256": "4fd75e573c36d616a529c85ec63e7a53c2383c5daff937613f82e1f816d9875e"
+        },
+        "carrier/tcpforward/admission_test.go": {
+          "accepted108_and_9603_sha256": "ea131a60d5a24bf9dc759bb9f80346719ffdfedc7b59ab087b0436d4c28f09f1",
+          "candidate_sha256": "ea131a60d5a24bf9dc759bb9f80346719ffdfedc7b59ab087b0436d4c28f09f1"
+        },
+        "carrier/tcpforward/batch_test.go": {
+          "accepted108_and_9603_sha256": "9cd3b8c60b99def676093d85e408de28d6c64c85e33f60f62827ace37692760c",
+          "candidate_sha256": "9cd3b8c60b99def676093d85e408de28d6c64c85e33f60f62827ace37692760c"
+        },
+        "carrier/tcpforward/client.go": {
+          "accepted108_and_9603_sha256": "1cd20ffa5938af1c2702bb1be69d5ead3d35caf7c1cafb85a7308f143d6a16d0",
+          "candidate_sha256": "1cd20ffa5938af1c2702bb1be69d5ead3d35caf7c1cafb85a7308f143d6a16d0"
+        },
+        "carrier/tcpforward/destination.go": {
+          "accepted108_and_9603_sha256": "fcada0a21f47ff938b8f85170557463540877d78d54b8c119e062ea3b9ea67ab",
+          "candidate_sha256": "fcada0a21f47ff938b8f85170557463540877d78d54b8c119e062ea3b9ea67ab"
+        },
+        "carrier/tcpforward/destination_test.go": {
+          "accepted108_and_9603_sha256": "547b7ed6bafb3c3777a4a6fee59247cb17386bce8507a9176724fd116d5ebc11",
+          "candidate_sha256": "547b7ed6bafb3c3777a4a6fee59247cb17386bce8507a9176724fd116d5ebc11"
+        },
+        "carrier/tcpforward/dns_containment_test.go": {
+          "accepted108_and_9603_sha256": "72d4ad4efd99293fefd8d71b9da84f887bcc8870abf5f424a66bc8b5e8d83ae2",
+          "candidate_sha256": "72d4ad4efd99293fefd8d71b9da84f887bcc8870abf5f424a66bc8b5e8d83ae2"
+        },
+        "carrier/tcpforward/forward_test.go": {
+          "accepted108_and_9603_sha256": "5c9d64d882da74897a22a69e93d08dd4469d02e3b2a39b89599cfc3ab98942b9",
+          "candidate_sha256": "5c9d64d882da74897a22a69e93d08dd4469d02e3b2a39b89599cfc3ab98942b9"
+        },
+        "carrier/tcpforward/gateway.go": {
+          "accepted108_and_9603_sha256": "a25938d0a7f763976c6bc7d5c6caeb9bb95d6aee9f805e375bd0899fb78a7057",
+          "candidate_sha256": "a25938d0a7f763976c6bc7d5c6caeb9bb95d6aee9f805e375bd0899fb78a7057"
+        },
+        "carrier/tcpforward/integration_test.go": {
+          "accepted108_and_9603_sha256": "be7b9c36f7c92318645754e9b103e81922dc8b526741cd97bd712f852a045688",
+          "candidate_sha256": "be7b9c36f7c92318645754e9b103e81922dc8b526741cd97bd712f852a045688"
+        },
+        "carrier/tcpforward/lifecycle101_pair_test.go": {
+          "accepted108_and_9603_sha256": "68847f5218ad0c7658413fd682f7951d79db08391f0b403b7be85aa2d359b57f",
+          "candidate_sha256": "68847f5218ad0c7658413fd682f7951d79db08391f0b403b7be85aa2d359b57f"
+        },
+        "carrier/tcpforward/lifecycle101_test.go": {
+          "accepted108_and_9603_sha256": "c4a257b033772bfebd24b6bd58c99727ed3b451de4b0462f3f5bee4c132baed7",
+          "candidate_sha256": "c4a257b033772bfebd24b6bd58c99727ed3b451de4b0462f3f5bee4c132baed7"
+        },
+        "carrier/tcpforward/mesh_performance_test.go": {
+          "accepted108_and_9603_sha256": "67a9f301b65d684bf29bb8649855a7b4ce2292a07166ca52b293a0ccb9fa11c3",
+          "candidate_sha256": "67a9f301b65d684bf29bb8649855a7b4ce2292a07166ca52b293a0ccb9fa11c3"
+        },
+        "carrier/tcpforward/mux.go": {
+          "accepted108_and_9603_sha256": "51fed6af0070aed210fd8f0157cb2ee5858fb365648570a2fc887a81c54ac9fe",
+          "candidate_sha256": "3afd44bdaf673928c5ea6a34d787ffa0668530c71fae1362ae3020d53df13345"
+        },
+        "carrier/tcpforward/mux_bounds_test.go": {
+          "accepted108_and_9603_sha256": "55c68dc3e9021321694f180c72c851e2a32f60589ce3509d321a5eaa5d094bf1",
+          "candidate_sha256": "55c68dc3e9021321694f180c72c851e2a32f60589ce3509d321a5eaa5d094bf1"
+        },
+        "carrier/tcpforward/mux_diagnostic_test.go": {
+          "accepted108_and_9603_sha256": "e0db709cd5d4f4082461c795045b96e638db5d1c7f5111b7edc5322a11f1f5d7",
+          "candidate_sha256": "e0db709cd5d4f4082461c795045b96e638db5d1c7f5111b7edc5322a11f1f5d7"
+        },
+        "carrier/tcpforward/mux_dns.go": {
+          "accepted108_and_9603_sha256": "2052fa4d4f64a8ff63a13e5b5eb4c1a7b5c2b581e9117a7001a1ac6679058f37",
+          "candidate_sha256": "2052fa4d4f64a8ff63a13e5b5eb4c1a7b5c2b581e9117a7001a1ac6679058f37"
+        },
+        "carrier/tcpforward/mux_integration_test.go": {
+          "accepted108_and_9603_sha256": "27d87019ed11f88fb6b3f88c28bba05d74ea83ad78f098ccddc17addf054b6dd",
+          "candidate_sha256": "27d87019ed11f88fb6b3f88c28bba05d74ea83ad78f098ccddc17addf054b6dd"
+        },
+        "carrier/tcpforward/mux_lifecycle.go": {
+          "accepted108_and_9603_sha256": "295b47115b56048401bd20428080c660fa8405938ecdabad05162c92c8fcec60",
+          "candidate_sha256": "295b47115b56048401bd20428080c660fa8405938ecdabad05162c92c8fcec60"
+        },
+        "carrier/tcpforward/mux_lifecycle_test.go": {
+          "accepted108_and_9603_sha256": "e18f38134620717a33a2267e4acfab03a4d6e5ff514adac1fd1b50ba95dcaf90",
+          "candidate_sha256": "e18f38134620717a33a2267e4acfab03a4d6e5ff514adac1fd1b50ba95dcaf90"
+        },
+        "carrier/tcpforward/mux_profile_test.go": {
+          "accepted108_and_9603_sha256": "dd32c282e46ec898124a3400b61a7dcca09d91e244ad6b88a10fbb3a1c9f47e8",
+          "candidate_sha256": "dd32c282e46ec898124a3400b61a7dcca09d91e244ad6b88a10fbb3a1c9f47e8"
+        },
+        "carrier/tcpforward/mux_protocol.go": {
+          "accepted108_and_9603_sha256": "3199d0a8851a833b222938f63980918f493ba1086d6d150bae4a0b49d8950e2d",
+          "candidate_sha256": "3199d0a8851a833b222938f63980918f493ba1086d6d150bae4a0b49d8950e2d"
+        },
+        "carrier/tcpforward/mux_stream.go": {
+          "accepted108_and_9603_sha256": "8573ea24124f8d6d3fc519e72edafe4862415aaaa44701d46e6ee0d27aaa5076",
+          "candidate_sha256": "8573ea24124f8d6d3fc519e72edafe4862415aaaa44701d46e6ee0d27aaa5076"
+        },
+        "carrier/tcpforward/mux_test.go": {
+          "accepted108_and_9603_sha256": "1eae8164d4e59523b311ef82c4ca2ef354f8db8f80153ebddff5d4e7e0a04480",
+          "candidate_sha256": "1eae8164d4e59523b311ef82c4ca2ef354f8db8f80153ebddff5d4e7e0a04480"
+        },
+        "carrier/tcpforward/owner_crossed_reset_test.go": {
+          "accepted108_and_9603_sha256": "95e74fa6730d9ac47b4bc3c94c4f9e15c3f865ff68438259da10cf00af187bbd",
+          "candidate_sha256": "95e74fa6730d9ac47b4bc3c94c4f9e15c3f865ff68438259da10cf00af187bbd"
+        },
+        "carrier/tcpforward/owner_late_control_test.go": {
+          "accepted108_and_9603_sha256": "890aaf220aa0d2dbf130380ac02dad0ef67705176d513678e1c6ce45b97b7b00",
+          "candidate_sha256": "890aaf220aa0d2dbf130380ac02dad0ef67705176d513678e1c6ce45b97b7b00"
+        },
+        "carrier/tcpforward/owner_late_eof_test.go": {
+          "accepted108_and_9603_sha256": "9858df9fe6b22f2a3ef7daf52fbb46965934f3e37548726d9092ebe043b5016f",
+          "candidate_sha256": "9858df9fe6b22f2a3ef7daf52fbb46965934f3e37548726d9092ebe043b5016f"
+        },
+        "carrier/tcpforward/policy.go": {
+          "accepted108_and_9603_sha256": "d5a613b067d6a8e7f9e72f949e22efa541dc9fe91c87c2d7fa5a30cd1ae12efd",
+          "candidate_sha256": "d5a613b067d6a8e7f9e72f949e22efa541dc9fe91c87c2d7fa5a30cd1ae12efd"
+        },
+        "carrier/tcpforward/protocol.go": {
+          "accepted108_and_9603_sha256": "ad7d351228f2aa68e3dfc4aebaef069a71c60aad4c419d3ebe988db33dd283b9",
+          "candidate_sha256": "ad7d351228f2aa68e3dfc4aebaef069a71c60aad4c419d3ebe988db33dd283b9"
+        },
+        "carrier/tcpforward/protocol_reasons_test.go": {
+          "accepted108_and_9603_sha256": "d4293d0b8d81c73c93c2dbe5974a6258f93ea5e052190a5f602a252a2eac92ed",
+          "candidate_sha256": "d4293d0b8d81c73c93c2dbe5974a6258f93ea5e052190a5f602a252a2eac92ed"
+        },
+        "carrier/tcpforward/services_test.go": {
+          "accepted108_and_9603_sha256": "f32bc3ee202568941741e0a1c3ed912e3617b395a51fd47bf6e19c0a168d312e",
+          "candidate_sha256": "f32bc3ee202568941741e0a1c3ed912e3617b395a51fd47bf6e19c0a168d312e"
+        },
+        "carrier/tcpforward/speed_integration_test.go": {
+          "accepted108_and_9603_sha256": "c4bbcd994a044b26e607e306d42c3106457d7f64ea71b317d9e2bbdc5f3832cd",
+          "candidate_sha256": "c4bbcd994a044b26e607e306d42c3106457d7f64ea71b317d9e2bbdc5f3832cd"
+        },
+        "carrier/tcpforward/slot_release_test.go": {
+          "accepted108_and_9603_sha256": null,
+          "candidate_sha256": "29d3681804996bdb4e3607454461070866423e90278064f5f850a26d7b54d66a"
+        }
+      },
+      "logs": {
+        "exact-reproduction.log": "bedbc526df436007851ec85b8248e6dd6e792865b0c455ab6d0c6569d1aa7111",
+        "deterministic-red.log": "c2493c28eaa4f6f17453d6af78067e4d88376e3b03c6e5495db7defccb760dff",
+        "deterministic-green.log": "318b30287abd70d64250bb4de2c4909de81b956d1d23eac6c998d27be21cdd06",
+        "worker-release.log": "c2ffad191e157ad0b8aa2006dccf69d2ff637574d3e5bb895e6186455da8b9be",
+        "corrected-subtest.log": "bf081118bb4f6db639dd661ca92907b603025a07dc7c2bb0781f6494ff5835ff",
+        "corrected-mixed.log": "cc2dc3c6957583615232ec295cc2225646c4ed3b2590218526495b43984b7786",
+        "tcpforward-final-race.log": "f5849c4095b4ef797a98afbdf776694f52fbdb7180542bcd7ad936cd31d39b7e",
+        "session-race.log": "e9ea6a434f03956a39ba59b13d58638d0c6ecad0aa1be627241dca1335685f82",
+        "stress-race-corrected-barrier.log": "d8582046c4d5fa4acdb53f1898073b99f4627b1d00f7189e49b763150a55c4f3"
+      },
+      "initial_supplemental_stress": {
+        "result": "TEST_FIXTURE_ORDERING_FAILURE",
+        "reason": "RESET_IS_ASYNCHRONOUS_CLIENT_SLOT_NOT_YET_RELEASED",
+        "correction": "WAIT_FOR_CLIENT_ACTIVE_STREAMS_ZERO_USING_CHANGED_CONDITION",
+        "sha256": "864ae36e94f4582bfe3b6dd44326c54921355469972b6a434ec91b21d71737ef"
+      },
+      "corrected_ci": {
+        "result": "PENDING_NEW_EXACT_SOURCE_RUN",
+        "run": null,
+        "source": null
+      },
+      "artifact": "NOT_QUALIFIED",
+      "publication": "NOT_RUN",
+      "owner109": "NOT_RUN",
+      "production_mutations": "NONE",
+      "paid_baseline": 108,
+      "gateway_catalog_sequence": 4,
+      "android_update_sequence": 3,
+      "cohort": "1/10"
     }
   }
 }
