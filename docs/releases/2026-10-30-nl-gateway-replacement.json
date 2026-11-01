@@ -1,4 +1,241 @@
 {
+  "android108_owner_acceptance_20261101": {
+    "observed_utc": "2026-11-01T03:47:32.274129+00:00",
+    "state": "AWAITING_OWNER_AWG108_CONNECT",
+    "owner_reports": [
+      "ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS",
+      "ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS"
+    ],
+    "whitelist_evidence": "ANDROID108_WHITELIST_TRANSPORT_EVIDENCE_INHERITED_FROM_107_UI_ONLY_DELTA",
+    "physical_beta108_whitelist_test": "NOT_CLAIMED",
+    "notification_lifecycle": "NOT_RUN",
+    "owner_transport_smoke": {
+      "awg108": "NOT_RUN",
+      "tcp108": "NOT_RUN",
+      "auto_mesh108": "NOT_RUN",
+      "disconnect_cleanup": "NOT_RUN"
+    },
+    "public_artifact": {
+      "result": "PUBLIC_BETA108_VERIFIED_HTTPS_PASS",
+      "observed_at": 1793504764,
+      "version_name": "0.1.18-beta108",
+      "version_code": 108,
+      "apk_sha256": "144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf",
+      "bytes": 56212840,
+      "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+      "source": "3b10199de207595b75259ecf6313f1d2d828336f",
+      "ci_run": 41243393838,
+      "android_update_sequence": 3,
+      "signature": "PASS",
+      "apk_manifest": "PASS",
+      "ci": "PASS",
+      "native_provenance": "PASS",
+      "rebuilt": false,
+      "signed": false,
+      "published": false
+    },
+    "source_delta": {
+      "beta107": "16c91fcc4d8347de490b95874c7a622fe258bdfb",
+      "beta108": "3b10199de207595b75259ecf6313f1d2d828336f",
+      "inventory": [
+        {
+          "status": "M",
+          "path": ".github/workflows/clients.yml",
+          "beta107_blob": "73c1dece391915e6e80489c11a9d0eac145a86ad",
+          "beta108_blob": "edd94e3764d45f107fb046a503262bde707fd523"
+        },
+        {
+          "status": "M",
+          "path": ".gitignore",
+          "beta107_blob": "2e44d1c622793fb9f62ae0d0f3dde1bd6277bcc3",
+          "beta108_blob": "00d9b53e45cb83d29c34071c70978efbbb7d0574"
+        },
+        {
+          "status": "M",
+          "path": "README.en.md",
+          "beta107_blob": "1f75d43ea59521e6cffa8576bdf3f49498a5b63e",
+          "beta108_blob": "f3be4a6684f2037aa7c3ebbd8592473b31dee491"
+        },
+        {
+          "status": "M",
+          "path": "README.md",
+          "beta107_blob": "e17f465ef3c540301714adc288da49ec03b6d448",
+          "beta108_blob": "6d4735cdba0868bd774ea34d936b1280a1f0cc8f"
+        },
+        {
+          "status": "M",
+          "path": "README.ru.md",
+          "beta107_blob": "f68958ffb54eb977da6c45c50e8ecb7e7dce044f",
+          "beta108_blob": "062494a07563738b8024d7e78a9f8c2bd5aceeb1"
+        },
+        {
+          "status": "M",
+          "path": "clients/android/app/build.gradle",
+          "beta107_blob": "5acd5daa02e60bffd1d18821ab7b75753e169441",
+          "beta108_blob": "19f045f0912b2cfa95109f8028f2333da6124799"
+        },
+        {
+          "status": "M",
+          "path": "clients/android/app/src/androidTest/java/com/familyconnect/app/DashboardLayoutRuntimeTest.java",
+          "beta107_blob": "6d3884cf8f59a2ae5da4d5f3104479246ae9988d",
+          "beta108_blob": "d2b007be686033f3f5494ffce29f2c477b1242df"
+        },
+        {
+          "status": "M",
+          "path": "clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java",
+          "beta107_blob": "fc0515e29cb76d9dabfc3225df92dc5088d04210",
+          "beta108_blob": "8d765fac5dad8763dd36def38e94b98aa2c4261e"
+        },
+        {
+          "status": "A",
+          "path": "clients/android/app/src/main/java/com/familyconnect/app/ServerLoadPresentation.java",
+          "beta107_blob": null,
+          "beta108_blob": "dd6ffd1c63599f22b6c8dbef7cd8ad890eac13b1"
+        },
+        {
+          "status": "A",
+          "path": "clients/android/app/src/test/java/com/familyconnect/app/ServerLoadPresentationTest.java",
+          "beta107_blob": null,
+          "beta108_blob": "6175968ba118a843803dcc9203a1ca61bcdca97d"
+        },
+        {
+          "status": "M",
+          "path": "deploy/friends/invite/index.html",
+          "beta107_blob": "7a4c915684322aad7613ee57bdada9d32012c2f5",
+          "beta108_blob": "9d45c696a7954c70c470b583a62fd3e1c252c40d"
+        },
+        {
+          "status": "M",
+          "path": "docs/PLAN.md",
+          "beta107_blob": "4a54d367053a299f5809e99a617cfd8d5b6e579d",
+          "beta108_blob": "02531753bd2e977dbfcd430bed56f53821ac07fd"
+        },
+        {
+          "status": "M",
+          "path": "docs/README.md",
+          "beta107_blob": "91afa62046a9b599f5330de6e9d06b3919a8bb65",
+          "beta108_blob": "1a3f9d54ad87a5919c29bc194ba93c10752bc36f"
+        },
+        {
+          "status": "M",
+          "path": "docs/STATUS.md",
+          "beta107_blob": "db9e35b0cb3d087bb530139c63c16d3a73fc22ad",
+          "beta108_blob": "430c31302c450a36cce1443490194b82bd1269fe"
+        },
+        {
+          "status": "M",
+          "path": "docs/clients.en.md",
+          "beta107_blob": "a2bbb8f2b901ee0d99475cd68765e234a46d2510",
+          "beta108_blob": "5bf23da8158e07072afbc9e40aa27919cf0814e9"
+        },
+        {
+          "status": "M",
+          "path": "docs/clients.ru.md",
+          "beta107_blob": "73256ee565359641f3c65bdbeea11edecd913da1",
+          "beta108_blob": "ecb1b16e28ec860b628138713d817b4a503a1ddf"
+        },
+        {
+          "status": "M",
+          "path": "docs/clients/EXISTING_USERS_PRIVATE_BETA.md",
+          "beta107_blob": "c2fa6efd1535dece2bc4569c966c3a19e4617711",
+          "beta108_blob": "c6576defe3c773ffda0428ce4af9764e42d16a2a"
+        },
+        {
+          "status": "M",
+          "path": "docs/clients/OWNER_RECOVERY_CANDIDATE.md",
+          "beta107_blob": "2c685da97400e80755f65afb4a28dd3b673ea831",
+          "beta108_blob": "f988acdb2e9ef0a756fe388bc3a083fc06ce1fa7"
+        },
+        {
+          "status": "M",
+          "path": "docs/getting-started.en.md",
+          "beta107_blob": "8a241ee7a031c700b93480d2a0429799a7c38145",
+          "beta108_blob": "ce297182288cc8cdc70029f23529f092076eb695"
+        },
+        {
+          "status": "M",
+          "path": "docs/getting-started.ru.md",
+          "beta107_blob": "3a0f85252d97c0cdb002c7776b87e95a120c310a",
+          "beta108_blob": "0f566c314fb92a396796b93156e9da6ffcbb86e9"
+        },
+        {
+          "status": "M",
+          "path": "docs/releases.md",
+          "beta107_blob": "3612e4fe2c7f08152eaa9d1290918f02f0ac52a5",
+          "beta108_blob": "d9c2064ddaff1f3bc427c0a79afa2f8626d0bc84"
+        },
+        {
+          "status": "M",
+          "path": "docs/releases/2026-10-30-nl-gateway-replacement.json",
+          "beta107_blob": "eade7003ebe211064a0812792c8c66997a5f68bf",
+          "beta108_blob": "2df8b2979ad1af8b55e4d1bdbe7cf35c25cc109d"
+        },
+        {
+          "status": "M",
+          "path": "docs/releases/2026-10-30-nl-gateway-replacement.md",
+          "beta107_blob": "6c1b78c93ad8681a34a02ac5c7051630e83bb30b",
+          "beta108_blob": "49d1514f07206e01a722f8fa74fa2ecbf843a87c"
+        },
+        {
+          "status": "M",
+          "path": "pilot/android-awg/friends_ci.py",
+          "beta107_blob": "17cb03f6fe9e623c31c92af5b94c22a6d9e6d94d",
+          "beta108_blob": "738e9fde3b0c93a9d49763c501c3478f89eb7e7c"
+        },
+        {
+          "status": "M",
+          "path": "pilot/android-awg/report_ci.py",
+          "beta107_blob": "ecf75c8405ccabf9daeb4f0e5e46d60758f7013d",
+          "beta108_blob": "3a026328ef7b0149ee342a64b4c31b79ed546174"
+        },
+        {
+          "status": "M",
+          "path": "tests/test_android_public_release.py",
+          "beta107_blob": "22923acc1dc8b02b975f2fe91be4b40bac5a84a3",
+          "beta108_blob": "203838b1f9cc009f9ce70fa638f8d090cc1a7574"
+        },
+        {
+          "status": "M",
+          "path": "updates/android-friends-v2.json",
+          "beta107_blob": "8a70a972ed319c840dd6a0baa4153944fef66ced",
+          "beta108_blob": "f8de29dd7b09943fef530bfce31fb3b32e9310ae"
+        }
+      ],
+      "production_transport_changed": false,
+      "native_binary_equivalence": "NOT_CLAIMED"
+    },
+    "preflight": {
+      "ru_api_ssh": "PASS_OPERATOR_AND_NEW_NL",
+      "catalog_sequence": 4,
+      "catalog_signature": "PASS",
+      "nl_endpoint": "185.10.158.212",
+      "ru_entry": "UNCHANGED",
+      "old_nl": "FENCED",
+      "new_nl": "AWG_TCP_RESTRICTED_ACTIVE",
+      "canonical_profile_certificate_crl_directory": "CURRENT_VALID",
+      "crl": 27233,
+      "minimum_crl": 27233,
+      "renewal_sync": "ACTIVE_LAST_WORKERS_SUCCESS",
+      "fleet_mesh_probe_1": "RETAINED_NON_REVOKED",
+      "owner_binding": "OWNER_CANARY_1_RETAINED",
+      "latest_owner_observation": {
+        "source": "readiness_ack",
+        "version_name": "0.1.18-beta108",
+        "version_code": 108
+      },
+      "subscriptions": 0,
+      "events": 0,
+      "cohort": 0,
+      "cohort_limit": 10,
+      "canary": "PAUSED_NOT_RUN"
+    },
+    "nl_replacement_live": "NOT_YET_MET",
+    "paid_baseline_deployed": 106,
+    "paid_baseline108_source_artifact_deployment": "PENDING_AFTER_OWNER_NL_ACCEPTANCE",
+    "production_mutations": 0,
+    "restarts": 0,
+    "rollback": "NOT_RUN"
+  },
   "registry_overlay_correction": {
     "scope": "HISTORICAL_ROLLBACK_TERMINALIZATION_ONLY",
     "focused_tests_passed": 231,

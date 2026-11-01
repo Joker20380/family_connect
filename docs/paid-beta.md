@@ -7,6 +7,32 @@ backend with **empty cohort/events**, not paid launch approval. Commands below
 describe a future authorized operator action,
 not permission to deploy, collect payment or enroll the existing field user.
 
+## Current baseline transition —108 target, production still106 (1 November)
+
+New paid activation stays **NOT_RUN** until NL owner108 AWG/TCP/Auto-MESH and cleanup PASS,
+the generic exact108 backend/canary contract passes focused tests and deterministic package gates,
+and the authorized controlled Friends HTTP deployment succeeds. This is the existing
+ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1 path, not a new project or task.
+Target APK manifest: `0.1.18-beta108`, versionCode108,56212840 bytes, SHA256
+`144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf`; certificate SHA256
+`67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a` unchanged.
+Public HTTPS/APK signature/source3b10199/CI41243393838 PASS; Android sequence3/catalog4 retained.
+Existing OWNER_CANARY_1 is bound; latest authenticated readiness ACK is exact108; paid0/0,
+cohort0/10. No stage0 authorization from this observation alone.
+
+Separate evidence: `ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS`,
+`ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS`, and reviewed
+`ANDROID108_WHITELIST_TRANSPORT_EVIDENCE_INHERITED_FROM_107_UI_ONLY_DELTA`.
+The latter inherits transport implementation evidence, not a physical108 whitelist test.
+Notification lifecycle and separate owner108 transport cleanup are not yet accepted.
+The generic contract must require latest exact108 name/code, reject missing/conflicting/latest
+old-version evidence and wrong APK hash, and allow newer108 ACK over older support observations.
+Preserve non-cohort106/107 admission byte/semantic behavior, identities/invites/grants, existing
+schema,10-slot limit, publisher, registration/chat-sync and current catalog4 endpoint routes.
+No new wire protocol. Source/artifact/deployment gates are still pending, not reported PASS.
+See [live continuation](releases/2026-10-27-android106-beta-0-canary-1.md#current-continuation--baseline108-target-live-canary-not_run-1-november)
+and [artifact/source inventory](releases/2026-10-30-nl-gateway-replacement.md#1-november--beta108-owner-evidence-and-fresh-preflight).
+
 ## Owner canary operator — source-ready, live not run
 
 ### Exact-payload CRL source boundary
@@ -162,6 +188,9 @@ No production receipt has been imported into PostgreSQL in this checkpoint.
 [Local upgrade, tests and remaining live gate](releases/2026-10-27-android106-beta-0-canary-1.md).
 
 ## Scope and prerequisites
+
+The following106 contract is the legacy deployed state, not permission for new enrollment
+before the108 transition above is complete.
 
 - At most10 distinct, already activated Friends devices; retained expired/revoked
   rows still occupy slots. No automatic enrollment, trial, grace or new identity.

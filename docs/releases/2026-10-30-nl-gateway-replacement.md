@@ -1,8 +1,33 @@
 # NL production gateway replacement — 30 October 2026
 
-## Current result — Android108 publicly distributed; owner runtime still pending
+## Current result — Android108 owner runtime/UI accepted; transport smoke pending
 
-**Android108 load-display continuation — publicly distributed; phone acceptance pending.**
+**1 November — current owner acceptance continuation (supersedes older pending-phone notes).**
+`ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS`: owner/tester reports real mobile-whitelist
+operation on public107 in Arkhangelsk region. `ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS`:
+owner reports an in-place108 installation, successful launch/runtime and visible server CPU
+on the dashboard and country list. These are field reports, not notification-lifecycle or
+separate108 AWG/TCP/Auto-MESH acceptance, universal installation or a physical108 whitelist test.
+`ANDROID108_WHITELIST_TRANSPORT_EVIDENCE_INHERITED_FROM_107_UI_ONLY_DELTA`: reviewed
+accepted107 source16c91fcc → public108 source3b10199; production changes are CPU presentation
+and version metadata only; supporting changes are tests, CI diagnostics and publication/docs.
+Carrier/Telemost/AWG/TCP/readiness/VPN lifecycle/JNI/trust/routing implementation is unchanged.
+Verified-HTTPS APK manifest reads **0.1.18-beta108 / versionCode108**; exact SHA256, size,
+signer and CI41243393838/source provenance PASS. Android update sequence3 retained.
+Fresh03:44–03:47UTC read-only preflight PASS: RU API/SSH, catalog4 signature/new NL
+185.10.158.212/unchanged RU entry, old NL FENCED, new AWG/TCP/Restricted active, current
+profile/certificate/CRL/directory, CRL=floor27233, healthy renewal/read-only sync.
+Existing OWNER_CANARY_1 binding retained; latest authenticated readiness ACK is exact108.
+Paid subscriptions/events **0/0**, cohort **0/10**; canary **PAUSED / NOT_RUN**.
+Current order under existing IDs: **ANDROID108 physical transport/cleanup acceptance →
+NL_REPLACEMENT_LIVE → BETA0 baseline106→108 source/package/deployment → BETA-0-CANARY-1**.
+Next interaction: beta108 Netherlands AWG Connect once, then verified Disconnect/cleanup;
+TCP and Auto/MESH follow separately. NL_REPLACEMENT_LIVE and READY_FOR_BETA0_CANARY_1
+are **NOT_YET_MET**. Production paid baseline remains106; stage0 on108 is prohibited
+until the generic exact108 contract is deployed and the owner freshly answers ГОТОВ.
+No Android build/signing, catalog publication, infrastructure recovery or service restart.
+
+**Android108 public release evidence — 31 October (physical follow-up above).**
 The dashboard and country list show explicitly labelled **Server CPU / CPU сервера**
 when fresh CPU metrics exist but channel capacity is unknown. No link speed is invented;
 CPU is not total/channel utilization. Known-capacity aggregate behavior stays unchanged,
@@ -13,7 +38,8 @@ were downloaded and visually checked.51 focused local tests PASS. Existing offli
 16K alignment and verified-HTTPS exact APK/source/catalog/invitation readbacks PASS.
 Public updater and invitation now offer108; Android catalog sequence3, minimum1,
 mandatory_after0. Updating needs Android consent: install in place without clearing data.
-Physical108 installation/runtime is NOT_RUN; no phone debugging or reenrollment.
+At publication physical108 runtime was NOT_RUN; the1 November owner report above supersedes it.
+No phone debugging or reenrollment.
 Gateway catalog4, server identities/admission and paid ledger are unchanged; canary PAUSED.
 
 **NL-REPLACEMENT-20261030 / READY_FOR_OWNER_NL_SMOKE.**
@@ -72,9 +98,10 @@ last workers succeeded, controller COMMITTED and neither node has an active oper
 New NL remains active with integrated publisher rotation; no separate publisher timer.
 Old NL remains **FENCED**. No rollback/catalog rewrite or RU reboot was attempted.
 Paid ledger **0/0**, payments/revenue0, cohort0/10. **BETA-0-CANARY-1 PAUSED**;
-paid-canary, subscription events and Android stage0 stay off. Complete the current owner
-notification installed-runtime and AWG cleanup checks, then TCP and Auto/MESH once each in this
-same operation. No further gateway-catalog publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
+paid-canary, subscription events and Android stage0 stay off. Complete the1 November108
+AWG Connect/Disconnect and notification check, then TCP and Auto/MESH once each with cleanup.
+A retained notification is a separate UX defect, not an automatic TCP/MESH smoke blocker.
+No further gateway-catalog publication. Not NL_REPLACEMENT_LIVE until all owner gates PASS.
 
 ### Historical Android107 canonical release-source integration
 
@@ -1363,3 +1390,81 @@ local tests PASS. Earlier runner/export failures remain historical evidence abov
 Rollback not executed. Preserve immutable107 and108; do not replace an existing APK or
 decrease update sequence. A client correction requires a higher version and sequence.
 Installation remains user-consented, not proof that every device updated. No ADB used.
+
+## 1 November — beta108 owner evidence and fresh preflight
+
+**1 November — current owner acceptance continuation (supersedes older pending-phone notes).**
+`ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS`: owner/tester reports real mobile-whitelist
+operation on public107 in Arkhangelsk region. `ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS`:
+owner reports an in-place108 installation, successful launch/runtime and visible server CPU
+on the dashboard and country list. These are field reports, not notification-lifecycle or
+separate108 AWG/TCP/Auto-MESH acceptance, universal installation or a physical108 whitelist test.
+`ANDROID108_WHITELIST_TRANSPORT_EVIDENCE_INHERITED_FROM_107_UI_ONLY_DELTA`: reviewed
+accepted107 source16c91fcc → public108 source3b10199; production changes are CPU presentation
+and version metadata only; supporting changes are tests, CI diagnostics and publication/docs.
+Carrier/Telemost/AWG/TCP/readiness/VPN lifecycle/JNI/trust/routing implementation is unchanged.
+Verified-HTTPS APK manifest reads **0.1.18-beta108 / versionCode108**; exact SHA256, size,
+signer and CI41243393838/source provenance PASS. Android update sequence3 retained.
+Fresh03:44–03:47UTC read-only preflight PASS: RU API/SSH, catalog4 signature/new NL
+185.10.158.212/unchanged RU entry, old NL FENCED, new AWG/TCP/Restricted active, current
+profile/certificate/CRL/directory, CRL=floor27233, healthy renewal/read-only sync.
+Existing OWNER_CANARY_1 binding retained; latest authenticated readiness ACK is exact108.
+Paid subscriptions/events **0/0**, cohort **0/10**; canary **PAUSED / NOT_RUN**.
+Current order under existing IDs: **ANDROID108 physical transport/cleanup acceptance →
+NL_REPLACEMENT_LIVE → BETA0 baseline106→108 source/package/deployment → BETA-0-CANARY-1**.
+Next interaction: beta108 Netherlands AWG Connect once, then verified Disconnect/cleanup;
+TCP and Auto/MESH follow separately. NL_REPLACEMENT_LIVE and READY_FOR_BETA0_CANARY_1
+are **NOT_YET_MET**. Production paid baseline remains106; stage0 on108 is prohibited
+until the generic exact108 contract is deployed and the owner freshly answers ГОТОВ.
+No Android build/signing, catalog publication, infrastructure recovery or service restart.
+
+### Exact public artifact and delta boundary
+
+- Public APK: [FamilyConnect-Test-0.1.18-beta108.apk](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk).
+- Extracted signed APK manifest: `0.1.18-beta108`, versionCode108, `com.familyconnect.app.friends`.
+- SHA256 `144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf`;56212840 bytes.
+- Certificate SHA256 `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`; unchanged signer, APK signature PASS.
+- Source `3b10199de207595b75259ecf6313f1d2d828336f`; [CI41243393838](https://github.com/Joker20380/family_connect/actions/runs/41243393838) freshly confirmed successful at that exact source.
+- Android catalog sequence3 signature/current validity and exact public bytes PASS; gateway catalog4 retained.
+- The complete27-path source delta, before/after Git blob IDs and sanitized readbacks are in the [existing JSON receipt](2026-10-30-nl-gateway-replacement.json).
+
+Production Java changes are only FriendsActivity load-label/country-row rendering and new
+ServerLoadPresentation formatting; build.gradle changes versionCode/versionName only.
+Test additions cover CPU display/freshness. CI changes retain emulator logs, bounded disposable
+emulator readiness and screenshot export; they do not alter production carrier/native build flags.
+All carrier, Telemost, AWG, TCP, readiness, VPN lifecycle, JNI/native networking, certificate/trust
+and routing source is unchanged. This is implementation-equivalence evidence, not binary identity
+of independently built native libraries or a claim that a particular field tester installed108.
+
+### Live scope and remaining gates
+
+Authenticated status/challenge and SSH PASS from operator and new NL; no504 in these bounded
+samples. This does not prove the historical intermittent RU stall's root cause was repaired.
+Current profile/gateway certificate/CRL and directory validate, RU/NL directory bytes match,
+CRL and minimum_crl both27233; leaf/CRL expire07:07:01UTC and directory07:07:25UTC.
+Normal renewal evaluates NOOP; timers active/waiting, last renewal/sync workers successful,
+controller COMMITTED and no operation owner. New NL exact accepted gateway binary and zero
+automatic restarts; old NL product listeners/interfaces absent with persistent fencing.
+FLEET_MESH_PROBE_1 remains non-revoked; only authenticated status was checked, not another MESH
+server probe. Registry counts57 devices/111 invites/2 grants; no identity/invite/grant write.
+The existing OWNER_CANARY_1 HMAC binding resolves read-only, without searching Support ID;
+its latest authenticated observation is readiness ACK `0.1.18-beta108`/108. A legacy retained
+admin binding was excluded from owner attribution; only the canary binding evidence is accepted.
+
+Owner108 AWG, TCP and Auto/MESH Connect/Disconnect/cleanup are still NOT_RUN in this continuation.
+The earlier pre108 AWG result is not silently upgraded to108. Record notification disappearance
+or persistence honestly after the one AWG Disconnect; a remaining notification is a separate UX
+defect. Require selected new endpoint, real HTTPS/NL egress, server session and cleanup evidence;
+MESH additionally requires exact108 observation, current readiness/import/ACK/READY/registration/
+Family TLS/DNS and no stale profile/cache substitution. No extra catalog sequence is authorized.
+
+Production paid backend is still the106 contract; baseline108 source change, focused tests,
+twice-identical current-routing HTTP/canary packages, private backup/isolated restore and the
+authorized single exact Friends HTTP restart are PENDING after NL owner acceptance.
+Non-cohort106/107 access, identities/invites, publisher and catalog4 routing must be preserved.
+No rollout or rollback occurred here; keep the current exact deployed artifact for the later
+bounded rollback. No new top-level task, CONTROL-PLANE-3, Android rebuild or publication.
+
+Validation for this documentation checkpoint: strict JSON, complete changed-source inventory,
+added-content privacy/secret scan, local Markdown targets, staged scope and whitespace.
+No Linux/Windows/full historical suite; no product source changed in this checkpoint.

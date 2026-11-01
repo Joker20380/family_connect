@@ -1,5 +1,36 @@
 # ANDROID-CONTROLLED-BETA / BETA-0-CANARY-1
 
+## Current continuation — baseline108 target, live canary NOT_RUN (1 November)
+
+The filename retains the historical android106 name; this operation now targets exact
+**0.1.18-beta108 / versionCode108**, not a new PLAN ID. See the
+[current NL/Android evidence](2026-10-30-nl-gateway-replacement.md#1-november--beta108-owner-evidence-and-fresh-preflight).
+`ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS` and
+`ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS` are accepted separate owner/tester reports.
+`ANDROID108_WHITELIST_TRANSPORT_EVIDENCE_INHERITED_FROM_107_UI_ONLY_DELTA` is supported
+by the reviewed accepted-source inventory; no claim of a physical108 whitelist field test.
+Public APK manifest/hash/size/signer/source/CI PASS; Android catalog3 and gateway catalog4 retained.
+Fresh read-only preflight PASS; OWNER_CANARY_1 existing binding retained and latest authenticated
+readiness ACK is exact108. Paid subscriptions/events0/0, cohort0/10; stage0/paid writes NOT_RUN.
+NL owner108 AWG/TCP/Auto-MESH plus cleanup and notification outcome remain pending.
+
+Existing accepted order: physical108 transport acceptance → NL_REPLACEMENT_LIVE → generic
+paid baseline106→108 source/tests/deterministic packages → controlled production deployment →
+READY_FOR_BETA0_CANARY_1 → fresh owner ГОТОВ → this existing live canary runbook.
+The currently deployed paid contract is still106; do not use it to start108 stage0.
+An old CP2 HTTP package is not the new candidate: retain current endpoint routing,
+registration/chat-sync, publisher and paid-aware behavior. No migrations or revocation of
+non-cohort106/107. Private binding/identities/Support ID/keys/raw device rows stay out of Git.
+
+Authorization is now conditional continuation, not an indefinite pause: after all above gates
+and fresh ГОТОВ, continue the existing operation. Natural period600s, Connect deadline90s,
+post-expiry120s, CRL phase900s, post-CRL180s, final recovery2592000s; internal_canary,
+amount0/revenue0. Use current canonical profile/exact-payload CRL route and retained binding.
+Do not require zero baseline certificates or manually delete them. Preserve the accepted
+natural-expiry/second-activation/explicit-expire/one-CRL/final-recovery sequence and cleanup.
+No readiness claim, live result, new package or deployment is implied by this evidence checkpoint.
+No rollback run; production/artifacts/schedules remain unchanged. Earlier sections are history.
+
 ## Availability restoration attempt: network localization — 30 October
 
 Owner authorizes restoring service availability and suspects provider code changes.
