@@ -336,10 +336,10 @@ final class TerminalUi {
         private String state="off",health="";
         Dial(Context context){super(context);setClickable(true);setFocusable(true);describe();}
         @Override public CharSequence getAccessibilityClassName(){return Button.class.getName();}
-        private void describe(){setContentDescription(getContext().getString(state.equals("off")||state.equals("failed")?R.string.connect:state.equals("on")?R.string.disconnect:android.R.string.cancel));}
+        private void describe(){setContentDescription(getContext().getString(Ui60Presentation.action(state)));}
         void setMotion(boolean enabled){motion=enabled;animateState();invalidate();}
         private void animateState(){
-            boolean run=motion&&android.animation.ValueAnimator.areAnimatorsEnabled()&&isAttachedToWindow()&&getWindowVisibility()==VISIBLE&&isShown()&&hasWindowFocus()&&!state.equals("off");
+            boolean run=motion&&android.animation.ValueAnimator.areAnimatorsEnabled()&&isAttachedToWindow()&&getWindowVisibility()==VISIBLE&&isShown()&&hasWindowFocus()&&(state.equals("on")||Ui60Presentation.pending(state));
             if(run&&sweep==null){sweep=android.animation.ValueAnimator.ofFloat(0,360);sweep.setDuration(9000);sweep.setRepeatCount(-1);sweep.setInterpolator(new android.view.animation.LinearInterpolator());sweep.addUpdateListener(a->{phase=(float)a.getAnimatedValue();invalidate();});sweep.start();}
             else if(!run&&sweep!=null){sweep.cancel();sweep=null;phase=0;}
         }

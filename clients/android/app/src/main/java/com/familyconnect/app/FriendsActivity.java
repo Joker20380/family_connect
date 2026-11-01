@@ -265,7 +265,7 @@ public final class FriendsActivity extends LocalizedActivity {
         text(messageRoute,getString(R.string.message_configured_route,ChatRuntime.configuredRoute()));
         dial.update(value,ConnectionService.healthStatus);dial.setEnabled(!busy);
         text(status,getString(Ui60Presentation.status(value,ConnectionService.failed)));
-        text(connect,getString(off||value.equals("failed")?R.string.connect:on?R.string.disconnect:android.R.string.cancel));connect.setChecked(on);connect.setPending(!off&&!on);boolean enabled=getPreferences(MODE_PRIVATE).getBoolean("activated",false);connect.setEnabled(!busy);text(activate,getString(enabled?R.string.referral_title:R.string.friends_activate));activate.setEnabled(!busy);
+        text(connect,getString(Ui60Presentation.action(value)));connect.setChecked(on);connect.setPending(Ui60Presentation.pending(value));boolean enabled=getPreferences(MODE_PRIVATE).getBoolean("activated",false);connect.setEnabled(!busy);text(activate,getString(enabled?R.string.referral_title:R.string.friends_activate));activate.setEnabled(!busy);
         String shownCountry=off?country:activeCountry;
         String shownTransport=off?transport:ConnectionService.activeTransport;
         String transportLabel=shownTransport.equals("auto")?"Auto":shownTransport.equals("awg")?"AWG 3.1":shownTransport.equals("restricted")||shownTransport.equals("telemost")?TransportPresentation.MESH:"TCP REALITY";
@@ -275,9 +275,9 @@ public final class FriendsActivity extends LocalizedActivity {
         if(routeDial!=null){routeDial.setMotion(motion);routeDial.update(value,ConnectionService.healthStatus);routeDial.setEnabled(!busy);}
         if(dashboardMap!=null)dashboardMap.update(shownCountry,value,ConnectionService.healthStatus,false);
         if(routeMap!=null){routeMap.update(shownCountry,value,ConnectionService.healthStatus,motion);text(routeStatus,getString(off?R.string.route_selected:R.string.route_active)+" · "+summary+"\n"+getString(R.string.route_core)+": "+getString(off?R.string.route_waiting:on?R.string.on:R.string.connecting)+"\n"+getString(R.string.route_check)+": "+getString(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:off?R.string.route_waiting:R.string.health_checking));text(routeDetail,detail.getText().toString());}
-        countries.setEnabled(!busy&&(off||on));check.setEnabled(!busy&&on);transports.setEnabled(!busy&&(off||on));
+        countries.setEnabled(Ui60Presentation.canSelectRoute(value,busy));check.setEnabled(!busy&&on);transports.setEnabled(Ui60Presentation.canSelectRoute(value,busy));
         if(ConnectionService.failed)text(detail,getString(R.string.failed));
-        if(reconnect&&off&&!busy){reconnect=false;toggle();}
+        if(Ui60Presentation.canReconnect(value,busy,reconnect)){reconnect=false;toggle();}
     }
     private String pendingInvitation="";
     private void handleInvitation(){

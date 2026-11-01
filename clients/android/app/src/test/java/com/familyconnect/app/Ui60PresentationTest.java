@@ -4,6 +4,26 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public final class Ui60PresentationTest {
+    @Test public void failedRouteCanBeSelectedWithoutUnlockingTransitions(){
+        for(String state:new String[]{"off","on","failed"})assertTrue(state,Ui60Presentation.canSelectRoute(state,false));
+        for(String state:new String[]{"connecting","restoring","disconnecting","cleanup-required","tun-created",null})assertFalse(state,Ui60Presentation.canSelectRoute(state,false));
+        for(String state:new String[]{"off","on","failed"})assertFalse(state,Ui60Presentation.canSelectRoute(state,true));
+    }
+    @Test public void failedAndCleanupActionsAreDisconnectNotConnect(){
+        assertEquals(R.string.connect,Ui60Presentation.action("off"));
+        for(String state:new String[]{"on","failed","cleanup-required"})assertEquals(state,R.string.disconnect,Ui60Presentation.action(state));
+        for(String state:new String[]{"connecting","restoring","disconnecting","tun-created",null})assertEquals(state,android.R.string.cancel,Ui60Presentation.action(state));
+    }
+    @Test public void terminalFailureIsNotPresentedAsPending(){
+        for(String state:new String[]{"off","on","failed","cleanup-required"})assertFalse(state,Ui60Presentation.pending(state));
+        for(String state:new String[]{"connecting","restoring","disconnecting","tun-created"})assertTrue(state,Ui60Presentation.pending(state));
+    }
+    @Test public void queuedRouteWaitsForCompletedCleanupAndIdleUi(){
+        for(String state:new String[]{"on","failed","connecting","restoring","disconnecting","cleanup-required",null})assertFalse(state,Ui60Presentation.canReconnect(state,false,true));
+        assertFalse(Ui60Presentation.canReconnect("off",true,true));
+        assertFalse(Ui60Presentation.canReconnect("off",false,false));
+        assertTrue(Ui60Presentation.canReconnect("off",false,true));
+    }
     @Test public void batteryBarUsesOnlyValidObservedPercent(){
         assertEquals(0f,Ui60Presentation.batteryFraction("0%"),0f);
         assertEquals(.42f,Ui60Presentation.batteryFraction("42%"),0f);

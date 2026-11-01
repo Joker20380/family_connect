@@ -19,6 +19,19 @@ last8+first_failure через существующий `DiagnosticRing`; `scrip
 
 ## Android
 
+### Unreleased failed-state controls — 1 November
+
+`Ui60Presentation` defines route-selection, button-action, pending-animation and queued-reconnect
+gates shared by `FriendsActivity` and `TerminalUi.Dial`. FAILED retains the fail-closed VPN until
+the user disconnects or explicitly selects a replacement route. Selection in FAILED uses the
+existing Disconnect → service cleanup/owner release → off → queued reconnect sequence.
+Busy/transitional/cleanup-required states never start or select a replacement; failed cleanup
+keeps the guard. Failed/cleanup-required buttons and accessible dials say Disconnect, not Connect.
+`Ui60PresentationTest`, `ConnectivityOrchestratorTest` and `test_orchestrator_android_contract.py`
+cover this binding and cleanup-before-replacement. Source only: installed/public108 unchanged;
+future approved release still requires Android CI and physical interaction/cleanup acceptance.
+
+
 Private58 hook fix03.10 supersedes the earlier build-only notes: debug-source
 `DiagnosticLauncher` resolves the installed package launch Intent and bounds missing
 launcher/start exceptions. `OrchestratorDiagnosticActivity` checks durable deny-flag

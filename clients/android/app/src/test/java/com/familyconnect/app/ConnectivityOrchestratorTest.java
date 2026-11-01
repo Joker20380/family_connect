@@ -84,6 +84,27 @@ public class ConnectivityOrchestratorTest {
             assertEquals(State.FAILED,fixture.core.state());assertEquals(Arrays.asList("awg"),fixture.attempts);assertTrue(fixture.guard);
         }
     }
+    @Test public void failedRouteSwitchReleasesGuardOnlyOnExplicitDisconnect(){
+        Fixture fixture=new Fixture();fixture.failures.put("awg",Failure.AUTH);fixture.connect();
+        assertEquals(State.FAILED,fixture.core.state());assertFalse(fixture.core.needsPolling());
+        assertTrue(fixture.guard);assertEquals(0,fixture.releases);assertEquals(1,fixture.opens);
+        fixture.core.disconnect();assertEquals(State.DISCONNECTED,fixture.core.state());
+        assertFalse(fixture.guard);assertEquals(1,fixture.releases);assertEquals(0,fixture.active);
+        fixture.core.connect(Arrays.asList("tcp"),"tcp",null);
+        assertEquals(State.CONNECTED,fixture.core.state());assertEquals("tcp",fixture.core.selected());
+        assertEquals(Arrays.asList("awg","tcp"),fixture.attempts);assertEquals(1,fixture.peak);
+    }
+    @Test public void failedCleanupCannotStartSelectedReplacement(){
+        Fixture fixture=new Fixture();fixture.connect();
+        fixture.cleanupFailure=true;fixture.core.lost(Failure.AUTH);fixture.core.disconnect();
+        assertEquals(State.FAILED,fixture.core.state());assertTrue(fixture.guard);assertEquals(0,fixture.releases);
+        assertEquals(1,fixture.active);
+        fixture.core.connect(Arrays.asList("tcp"),"tcp",null);assertEquals(1,fixture.opens);
+        fixture.cleanupFailure=false;fixture.core.disconnect();
+        assertEquals(State.DISCONNECTED,fixture.core.state());assertEquals(1,fixture.releases);assertEquals(0,fixture.active);
+        fixture.core.connect(Arrays.asList("tcp"),"tcp",null);
+        assertEquals(State.CONNECTED,fixture.core.state());assertEquals("tcp",fixture.core.selected());assertEquals(1,fixture.peak);
+    }
     @Test public void oneRestorationPassThenCooldownNoFlapping(){
         Fixture fixture=new Fixture();fixture.connect();fixture.failures.put("awg",Failure.NETWORK);fixture.core.lost(Failure.NETWORK);
         assertEquals("tcp",fixture.core.selected());assertEquals(1,fixture.count("restoration_succeeded"));assertTrue(fixture.guard);

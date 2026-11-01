@@ -1235,12 +1235,36 @@
           "event_count": 3,
           "cohort": true
         },
-        "source_review": "REACHABLE_FAILED_STATE_WITH_SELECTORS_DISABLED_AND_SERVICE_CLEANUP_PENDING",
+        "source_review": "FAIL_CLOSED_RETENTION_INTENTIONAL_UI_SELECTORS_ACTION_AND_PENDING_STATE_INCONSISTENT",
         "phone_trace": "NOT_CAPTURED",
         "workaround": "FORCE_STOP_AND_REOPEN_WITHOUT_CLEARING_DATA_OR_CACHE",
-        "workaround_result": "PENDING_OWNER",
+        "workaround_result": "OWNER_CONFIRMED_SELECTION_RESTORED",
         "installed_android": "UNCHANGED_BETA108",
-        "additional_paid_mutations": "NONE"
+        "additional_paid_mutations": "NONE",
+        "source_fix": {
+          "state": "SOURCE_ONLY_NOT_INSTALLED",
+          "base_commit": "11ac8903d95289c7809a7848a2e6fc4237c6c9f6",
+          "files": {
+            "clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java": "72b1fa73bff9236c619d9c399340b8b8892fa6b515c53f079ab1338a3a01f0eb",
+            "clients/android/app/src/main/java/com/familyconnect/app/TerminalUi.java": "a7ba76489e0605a63b38b1113445dc149b89a871db2aad3529af8b6121b6bc41",
+            "clients/android/app/src/main/java/com/familyconnect/app/Ui60Presentation.java": "47f67af0f36f4219f092bcc5f5b7fa5c17f51725a8e60fb865649cb168f4b744",
+            "clients/android/app/src/test/java/com/familyconnect/app/Ui60PresentationTest.java": "fd7054c5516c763651e685167de96251a83e7e1f92b8df93d204d72cff9d42d8",
+            "clients/android/app/src/test/java/com/familyconnect/app/ConnectivityOrchestratorTest.java": "6f0840c88d0f2e0b96e7f21ce2a20c1f5821d873cd4aa2d729876888a6e2e1f6",
+            "tests/test_orchestrator_android_contract.py": "5400e0988d5481d2630cd3f8f1220ca8abad46d6049f1fcaf328d7112d860632"
+          },
+          "behavior": "EXPLICIT_FAILED_ROUTE_SELECTION_DISCONNECTS_THEN_RECONNECTS_ONLY_AFTER_CLEANUP_OFF",
+          "fail_closed": "PRESERVED",
+          "paid_policy": "UNCHANGED",
+          "regression_red": 2,
+          "python_passed": 17,
+          "jvm_passed": 55,
+          "jvm_method": "CURRENT_SOURCE_JAVAC_JUNIT_WITH_CURRENT_XML_RESOURCE_ID_FIXTURE",
+          "android_ci": "NOT_RUN_NO_REBUILD_REQUEST",
+          "physical_ui": "NOT_RUN",
+          "apk": "NOT_BUILT",
+          "publication": "NOT_RUN",
+          "automatic_build_ci": "SKIPPED_FOR_SOURCE_ONLY_PUSH"
+        }
       }
     }
   },

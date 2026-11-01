@@ -1,6 +1,14 @@
 package com.familyconnect.app;
 
 final class Ui60Presentation {
+    static boolean canSelectRoute(String state,boolean busy){return !busy&&("off".equals(state)||"on".equals(state)||"failed".equals(state));}
+    static boolean canReconnect(String state,boolean busy,boolean requested){return requested&&!busy&&"off".equals(state);}
+    static boolean pending(String state){return !"off".equals(state)&&!"on".equals(state)&&!"failed".equals(state)&&!"cleanup-required".equals(state);}
+    static int action(String state){
+        if("off".equals(state))return R.string.connect;
+        if("on".equals(state)||"failed".equals(state)||"cleanup-required".equals(state))return R.string.disconnect;
+        return android.R.string.cancel;
+    }
     static int status(String state,boolean failed){
         if("disconnecting".equals(state))return R.string.ui_disconnecting;
         if("cleanup-required".equals(state))return R.string.ui_cleanup_required;

@@ -54,6 +54,33 @@ def test_failed_guard_precedes_engine_cleanup_and_does_not_skip_it():
     assert 'State.FAILED' in finish and 'host.closeCandidate()' in finish
 
 
+def test_failed_route_selection_is_available_but_reconnect_waits_for_cleanup():
+    activity = source('FriendsActivity')
+    render = activity.split('private void render(){', 1)[1].split('private void ', 1)[0]
+    assert 'countries.setEnabled(Ui60Presentation.canSelectRoute(value,busy))' in render
+    assert 'transports.setEnabled(Ui60Presentation.canSelectRoute(value,busy))' in render
+    assert 'Ui60Presentation.canReconnect(value,busy,reconnect)' in render
+    assert 'reconnect=false;toggle()' in render
+    for picker in ('countries', 'transports'):
+        listener = activity.split(picker + '.setOnItemSelectedListener(', 1)[1].split('});', 1)[0]
+        assert '!ConnectionService.status.equals("off")' in listener
+        assert 'reconnect=true;disconnect()' in listener
+    toggle = activity.split('private void toggle(){', 1)[1].split('private void ', 1)[0]
+    assert '!ConnectionService.status.equals("off")' in toggle
+    assert 'reconnect=false;disconnect();return;' in toggle
+    cleanup = source('ConnectionService').split('@Override public void onDestroy()', 1)[1]
+    assert 'if(cleanup()){ControlOperations.APP.release(operationOwner);claimed=false;status="off";}' in cleanup
+
+
+def test_failed_connection_controls_match_disconnect_action_without_pending_animation():
+    activity = source('FriendsActivity')
+    assert 'text(connect,getString(Ui60Presentation.action(value)))' in activity
+    assert 'connect.setPending(Ui60Presentation.pending(value))' in activity
+    dial = source('TerminalUi').split('static final class Dial', 1)[1]
+    assert 'getString(Ui60Presentation.action(state))' in dial
+    assert '(state.equals("on")||Ui60Presentation.pending(state))' in dial
+
+
 def test_automatic_tcp_assigns_dual_stack_sources_without_bypass():
     tcp = source('AutomaticNormalEngine').split('if(transport==Transport.TCP)', 1)[1].split('Config config=', 1)[0]
     assert '.addAddress(source,32)' in tcp
