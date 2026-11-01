@@ -31,9 +31,14 @@ or proof of a product failure/wrong identity. No rebinding or Support ID search.
 Owner now confirms the phone HTTPS egress equals185.10.158.212: **OWNER_HTTPS_NL_EGRESS_PASS**.
 The03:57UTC bound-peer resample still has no fresh handshake and RX/TX delta0/0;
 server-session attribution remains unresolved, not waived by the correct public address.
-Next: one Disconnect, confirm VPN icon/notification outcome and read back cleanup.
-No repeat Connect. TCP/Auto-MESH remain NOT_RUN; do not claim full AWG acceptance
-or advance their smoke until cleanup and the remaining session evidence are reconciled.
+Owner confirms **AWG108 disconnected; VPN notification disappeared**. This accepts that
+single Disconnect/notification event, not every notification lifecycle or independently
+inspected Android VPN ownership. Two20s server samples show no new bound-peer handshake/traffic;
+three retained TCP ESTABLISHED conntrack entries remain, so full resource-release is not claimed.
+No test session was created by the operator; static registration/peer is intentionally retained.
+Next: Netherlands TCP Connect once after owner-confirmed disconnection; AWG session attribution
+and full cleanup evidence remain OPEN for final NL acceptance, not silently waived by TCP smoke.
+Auto/MESH and paid writes remain NOT_RUN. No second AWG Connect or manual state deletion.
 NL_REPLACEMENT_LIVE and READY_FOR_BETA0_CANARY_1
 are **NOT_YET_MET**. Production paid baseline remains106; stage0 on108 is prohibited
 until the generic exact108 contract is deployed and the owner freshly answers ГОТОВ.

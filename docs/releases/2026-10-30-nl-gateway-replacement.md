@@ -29,9 +29,14 @@ or proof of a product failure/wrong identity. No rebinding or Support ID search.
 Owner now confirms the phone HTTPS egress equals185.10.158.212: **OWNER_HTTPS_NL_EGRESS_PASS**.
 The03:57UTC bound-peer resample still has no fresh handshake and RX/TX delta0/0;
 server-session attribution remains unresolved, not waived by the correct public address.
-Next: one Disconnect, confirm VPN icon/notification outcome and read back cleanup.
-No repeat Connect. TCP/Auto-MESH remain NOT_RUN; do not claim full AWG acceptance
-or advance their smoke until cleanup and the remaining session evidence are reconciled.
+Owner confirms **AWG108 disconnected; VPN notification disappeared**. This accepts that
+single Disconnect/notification event, not every notification lifecycle or independently
+inspected Android VPN ownership. Two20s server samples show no new bound-peer handshake/traffic;
+three retained TCP ESTABLISHED conntrack entries remain, so full resource-release is not claimed.
+No test session was created by the operator; static registration/peer is intentionally retained.
+Next: Netherlands TCP Connect once after owner-confirmed disconnection; AWG session attribution
+and full cleanup evidence remain OPEN for final NL acceptance, not silently waived by TCP smoke.
+Auto/MESH and paid writes remain NOT_RUN. No second AWG Connect or manual state deletion.
 NL_REPLACEMENT_LIVE and READY_FOR_BETA0_CANARY_1
 are **NOT_YET_MET**. Production paid baseline remains106; stage0 on108 is prohibited
 until the generic exact108 contract is deployed and the owner freshly answers ГОТОВ.
@@ -1523,3 +1528,30 @@ independent UX defect; session attribution and cleanup remain distinct acceptanc
 TCP/Auto-MESH not run; full AWG/NL_REPLACEMENT_LIVE and paid readiness remain unaccepted.
 Canary PAUSED_NOT_RUN, production paid baseline106; existing rollout/rollback artifacts retained.
 Strict JSON/privacy/local-link/staged-scope/whitespace checks apply to this docs-only checkpoint.
+
+### AWG108 Disconnect — notification disappeared; cleanup evidence bounded
+
+Owner replies disconnected/notification disappeared to the single-Disconnect request.
+Accept that individual physical Disconnect/notification event; do not extrapolate to all
+notification lifecycle cases, TCP/MESH cleanup or an independent OS-level duplicate-owner check.
+No ADB, phone logs, raw identity, client IP or Support ID was requested.
+
+Read-only04:02:04 and04:03:31UTC samples each span20s: existing bound peer has no new/fresh
+handshake and zero RX/TX delta. Ordinary AWG service active/NRestarts0. Conntrack inspection
+finds3 TCP ESTABLISHED entries for the retained bound tunnel address; maximum remaining
+timeout375011s at the latter sample. They were not deleted. Static registered peer remains
+intentionally loaded; no observer test session was created. Do not label retained conntrack
+entries as a current phone tunnel or claim that every server resource has been released.
+
+State: **OWNER_DISCONNECT_NOTIFICATION_PASS / BOUND_PEER_QUIESCENT / FULL_CLEANUP_UNPROVEN**.
+The missing active-session attribution remains open. It is not evidence of a new UX defect,
+an altered identity or a failed disconnect. Proceed with the requested independent TCP smoke
+after owner-confirmed disconnection; this does not close the AWG mandatory gate or authorize
+NL_REPLACEMENT_LIVE/paid canary. Earlier prose holding all smoke for attribution is superseded
+by this explicit separation of safe transport switching from final evidence acceptance.
+
+Next Netherlands TCP Connect once, internet/HTTPS/new NL egress and subsequent one Disconnect;
+no repeated AWG Connect. Existing OWNER_CANARY_1 binding/latest ACK108 retained, paid0/0,
+cohort0/10, canary PAUSED_NOT_RUN, production paid baseline106. No production mutation,
+service restart, package/deployment/catalog change or rollback. Existing artifacts retained.
+Strict JSON/privacy/local-link/staged-scope/whitespace checks; no platform/full historical suite.

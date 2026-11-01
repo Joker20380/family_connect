@@ -13,8 +13,11 @@ not permission to deploy, collect payment or enroll the existing field user.
 egress185.10.158.212 (**OWNER_HTTPS_NL_EGRESS_PASS**). The retained bound peer still has
 no fresh NL handshake/traffic; prior RU comparison was also inactive. Server-session
 attribution is unresolved, not a full AWG PASS or a proven product failure.
-Next one Disconnect with VPN icon/notification check and server cleanup readback;
-no repeat Connect. TCP/Auto-MESH still NOT_RUN; remaining session evidence is not waived.
+Owner subsequently confirms Disconnect and notification disappearance. Two20s server
+readbacks show no new bound-peer handshake/traffic;3 TCP conntrack entries are retained,
+not deleted or declared fully released. No independent Android OS ownership inspection.
+Next one TCP Connect after owner-confirmed disconnection; AWG session/full cleanup proof
+remain open for final NL acceptance. No second AWG Connect; Auto/MESH still NOT_RUN.
 Existing binding and latest ACK108 retained; paid0/0, cohort0/10, canary PAUSED_NOT_RUN.
 No source/package/deployment or identity change; NL_REPLACEMENT_LIVE remains unmet.
 
