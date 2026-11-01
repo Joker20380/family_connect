@@ -195,7 +195,7 @@ class Harness:
         write_private(config,canonical(dict(mode='public',seconds=0,port=0)))
         environment=dict(PATH=os.environ.get('PATH','/usr/bin:/bin'),HOME=str(directory),FC_REHEARSAL_TARGET_IPV4=self.target)
         raw=command([str(self.probe),'-family-config',self.config['mesh_profile'],'-broker-url','https://'+self.target+':18444',
-            '-bootstrap-cache',str(directory/'bootstrap.json'),'-mux-config',str(config),'-duration','180s'],timeout=200,env=environment).stdout
+            '-mux-config',str(config),'-duration','180s'],timeout=200,env=environment).stdout
         return mesh_result(raw)
 
 

@@ -1,5 +1,21 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+## Trial04 AWG/TCP PASS; MESH operator invocation corrected
+
+Trial04 reached AWAITING_EXTERNAL_ACCEPTANCE with local health PASS and all six units active.
+Signed operator receipt SHA256 `dcbf99aba4d41c7bf6f39016aa1484d326670dbea24dfaaeef85ee21549f0b06`
+records AWG handshake/DNS/HTTPS/egress and TCP authentication/HTTPS/egress PASS. MESH is NOT_RUN,
+overall acceptance FAIL; no VERIFIED/ACTIVE was claimed. The invocation mistakenly supplied
+`-bootstrap-cache`, which selects canonical diagnostic recovery and requires a blocked loopback
+control endpoint. This is not a token failure. Removing that flag selects authenticated broker
+create/claim, dedicated room and deferred cancellation without changing native code or identity.
+An exact-argv synthetic regression covers the broker path and excludes credentials from argv.
+Full fleet323 PASS; unchanged console156/paid170 and Django check/drift results retained.
+Trial04 drain/retirement PASS, receipt SHA256
+`57c831c98fd558f6a373152ca41e5a96592a7b7039b166e55e75525055b896ce`.
+The three disposable operator clients were removed after verifying the signed retirement.
+Production RU/NL/catalog/user/paid/phone writes0; probe identity and publisher token stay private.
+
 ## Compatible REALITY pair qualified — frozen source0c248fb
 
 Source `0c248fb79942c0996f1df7265455ea4914061f0f` is pushed and remote main verified.

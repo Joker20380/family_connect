@@ -1,7 +1,7 @@
 # Documentation
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**FLEET-BOOTSTRAP-2 — source/package qualification PASS; fresh trial04 next.**
+**FLEET-BOOTSTRAP-2 — trial04 AWG/TCP PASS; operator MESH launch corrected.**
 Existing task only, no new PLAN ID or production activation. Owner wants two Amsterdam servers;
 first production NL remains excluded. Reserved VPS stays Ubuntu24.04/x86_64, not reinstalled/deleted.
 Frozen deployable source `0c248fb79942c0996f1df7265455ea4914061f0f` is pushed and remote-verified.
@@ -20,7 +20,11 @@ FLEET_MESH_PROBE_1 custody is retained and disposable operator clients removed a
 Trial03 reached real local-health PASS and external AWG handshake/DNS/HTTPS/egress PASS. TCP
 failed with the old Microsoft contract; the pinned-native target incompatibility is now isolated
 and corrected without replacing binaries. No full VERIFIED/ACTIVE, upgrade or reboot was claimed.
-Next: fresh trial04 enrollment/materials and external AWG/TCP/MESH acceptance against the new pair.
+Trial04 local health and external AWG/TCP PASS; MESH rejected the diagnostic bootstrap-cache
+mode before testing the data plane. Removed that flag: the canonical probe must use the
+authenticated broker create/claim/cancel lifecycle. Exact argv regression and fleet323 PASS.
+The negative receipt is retained, never submitted as VERIFIED. Trial04 drain/retirement PASS.
+Next: freeze/requalify the corrected operator source and run fresh three-role acceptance.
 Admitted: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor. Disabled:
 mailbox/chat-services, production renewal/restricted-sync, registry/control-plane database.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.

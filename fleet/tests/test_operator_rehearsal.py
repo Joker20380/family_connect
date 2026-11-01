@@ -57,6 +57,36 @@ def test_mesh_safe_result_requires_all_native_evidence():
             mesh_result(b'\n'.join(canonical(event) for position,event in enumerate(events) if position!=index))
 
 
+def test_mesh_uses_authenticated_broker_not_diagnostic_bootstrap(tmp_path,monkeypatch):
+    import base64
+    from device_identity import friends
+    from fleet import operator_harness as module
+    from fleet.contracts import digest
+    private=Ed25519PrivateKey.generate()
+    public=raw_public(X25519PrivateKey.generate())+raw_public(private)
+    publisher=canonical(dict(scope='DISPOSABLE_FLEET_REHEARSAL',token='synthetic-token'))
+    unused,clients=generate('fleet-rehearsal-test',public,private,publisher,issued_at=1000,expires_at=1300)
+    monkeypatch.setattr(friends,'load_friends_identity',lambda directory,create:SimpleNamespace(public_identity=base64.b64encode(public)))
+    monkeypatch.setattr(module,'PROBE_IDENTITY_SHA256',digest(public))
+    monkeypatch.setattr(module,'read_private',lambda filename:clients['mesh-profile.json'])
+    harness=object.__new__(module.Harness)
+    harness.config={'probe_identity':str(tmp_path/'identity'),'mesh_profile':str(tmp_path/'profile.json')}
+    harness.probe=tmp_path/'operator-probe'
+    harness.target='8.8.8.8'
+    calls=[]
+    def command(argv,**options):
+        calls.append((argv,options))
+        return SimpleNamespace(stdout=b'bound-native-output')
+    monkeypatch.setattr(module,'command',command)
+    monkeypatch.setattr(module,'mesh_result',lambda raw:raw)
+    assert harness.mesh(tmp_path)==b'bound-native-output'
+    assert calls==[([str(harness.probe),'-family-config',harness.config['mesh_profile'],
+        '-broker-url','https://8.8.8.8:18444','-mux-config',str(tmp_path/'mux.json'),'-duration','180s'],
+        dict(timeout=200,env=dict(PATH=module.os.environ.get('PATH','/usr/bin:/bin'),HOME=str(tmp_path),FC_REHEARSAL_TARGET_IPV4='8.8.8.8')))]
+    assert not (tmp_path/'bootstrap.json').exists()
+    assert clients['mesh-profile.json'] not in canonical(calls)
+
+
 def test_synthetic_operator_harness_signs_only_after_probes_and_cleanup():
     key=Ed25519PrivateKey.generate()
     challenge=dict(instance_id='fleet-rehearsal-test',bundle_id='gw-'+'a'*32,operation_id='verification-one',
