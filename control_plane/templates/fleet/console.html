@@ -1,6 +1,10 @@
 {% extends "admin/base_site.html" %}
 {% block content %}
 <h1>Серверы · FLEET-BOOTSTRAP-1</h1>
+<h2>FLEET-BOOTSTRAP-2 · подписанные rehearsal receipts</h2>
+<p>Только append-only импорт. Web не запускает SSH, не получает private keys и не выпускает материалы. IP показан только безопасным SHA256.</p>
+<table><tr><th>Экземпляр / провайдер / регион</th><th>Target SHA256</th><th>Желаемый / фактический bundle</th><th>Состояние / операция / длительность</th><th>Local health / external AWG, TCP, MESH</th><th>Rollback / reboot / retirement</th></tr>
+{% for node in rehearsals %}<tr><td>{{ node.instance_id }} / {{ node.provider }} / {{ node.region }}</td><td>{{ node.target_sha256 }}</td><td>{{ node.bundle_id }} / {{ node.actual_bundle|default_if_none:"—" }}</td><td>{{ node.state }} / {{ node.operation_id }} / {{ node.duration_ms }} мс</td><td>{{ node.local_health }} / {{ node.external.awg }}, {{ node.external.tcp }}, {{ node.external.mesh }}</td><td>{{ node.rollback }} / {{ node.reboot }} / {{ node.retirement }}</td></tr>{% empty %}<tr><td colspan="6">Rehearsal receipts не импортированы. Live acceptance не заявлен.</td></tr>{% endfor %}</table>
 <p>Только локальный синтетический контур. Web создаёт intents; SSH и публикация отключены.</p>
 <p><a href="{% url 'admin:fleet_console_gatewayartifact_changelist' %}">Артефакты</a> · <a href="{% url 'admin:fleet_console_deploymentoperation_changelist' %}">Операции</a></p>
 <table><tr><th>Шлюз / экземпляр</th><th>Провайдер / регион / IP</th><th>Желаемый / фактический bundle</th><th>Состояние / здоровье</th><th>Последнее наблюдение</th></tr>

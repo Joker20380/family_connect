@@ -65,6 +65,33 @@ class GatewayArtifact(Immutable):
         verbose_name_plural = 'Артефакты'
 
 
+class RehearsalEvidence(Immutable):
+    instance_id = models.CharField(max_length=96, validators=[IDENTIFIER])
+    operation_id = models.CharField(max_length=96, validators=[IDENTIFIER])
+    kind = models.CharField(max_length=32)
+    receipt_sha256 = models.CharField(max_length=64, validators=[HASH])
+    receipt = models.JSONField()
+    imported_at = models.DateTimeField(default=timezone.now)
+
+    def clean(self):
+        from fleet.contracts import canonical, digest, exact
+        from fleet.evidence import validate
+        try:
+            exact(self.receipt, ('body','signature'))
+            if not typed(self.receipt['signature'],'signature'):
+                raise ValueError('signature')
+            body = validate(self.receipt['body'])
+            if (body['instance_id'] != self.instance_id or body['operation_id'] != self.operation_id
+                    or body['kind'] != self.kind or digest(canonical(self.receipt)) != self.receipt_sha256):
+                raise ValueError('binding')
+        except (ValueError, KeyError, TypeError):
+            raise ValidationError('Rehearsal evidence отклонён: неверный безопасный контракт.')
+
+    class Meta:
+        ordering = ['id']
+        constraints = [models.UniqueConstraint(fields=('instance_id','kind','operation_id'), name='fleet_rehearsal_event_unique')]
+
+
 class LogicalGateway(Validated):
     id = models.CharField('Логический шлюз', primary_key=True, max_length=96, validators=[IDENTIFIER])
     country = models.CharField('Страна', max_length=2, validators=[RegexValidator(r'^[A-Z]{2}$')])

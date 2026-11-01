@@ -6,6 +6,7 @@ from django.views.decorators.http import require_http_methods
 
 from .models import GatewayInstance, DeploymentOperation
 from .workflow import create_intent
+from .rehearsal import summary
 
 
 class IntentForm(forms.Form):
@@ -25,4 +26,5 @@ def console(request):
         except ValidationError as error:
             form.add_error(None,error)
     instances=GatewayInstance.objects.select_related('logical_gateway','desired_bundle','actual_bundle').prefetch_related('health_checks')
-    return render(request,'fleet/console.html',dict(instances=instances,operations=DeploymentOperation.objects.all()[:50],form=form))
+    return render(request,'fleet/console.html',dict(instances=instances,operations=DeploymentOperation.objects.all()[:50],form=form,
+                                                   rehearsals=summary()))

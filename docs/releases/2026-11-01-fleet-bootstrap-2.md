@@ -41,6 +41,14 @@ are not the full preparation gate, a deployable bundle or a live-host handoff. R
 runtime, A/B packaging, operator wiring and append-only console imports remain under
 implementation in this same checkpoint. No deployment or version/catalog change.
 
+Append-only rehearsal evidence import is now source-integrated: one strict signed
+sanitized schema and `import_fleet_rehearsal --kind` cover artifact, permit, enrollment,
+intent/completion, local health, external acceptance, reboot and retirement. Identical
+imports are idempotent; changed event identities and raw private fields are rejected.
+PostgreSQL UPDATE/DELETE triggers and the Russian read-only summary have27 focused
+tests PASS. Django check PASS; migration drift NONE. The web process does not hold
+SSH/signing/material-decryption authority. This remains source-only evidence integration.
+
 Seeder correction pushed and remote-verified as `8e94d30f43330a7ce31afe5bf28a398911d452f6`.
 The signed four-hour permit, target exclusions, SSH receiver, target-side reverification,
 scope-separated enrollment and durable rehearsal operation controller are implemented.
