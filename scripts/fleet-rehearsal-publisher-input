@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+"""Store owner-supplied disposable publisher input locally; never contact a host."""
+
+import getpass
+import os
+from pathlib import Path
+import re
+import resource
+import sys
+import warnings
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from fleet.contracts import canonical
+from fleet.private_files import checked, write_private
+
+SCOPE = 'DISPOSABLE_FLEET_REHEARSAL'
+DIRECTORY = ROOT / 'state-client-build/fleet-bootstrap-2/publisher-input'
+
+
+def store(directory, prompt):
+    parent = checked(directory.parent, directory=True, owner=os.geteuid())
+    if parent.stat().st_mode & 0o077:
+        raise ValueError('private parent required')
+    if not directory.exists():
+        directory.mkdir(mode=0o700)
+    checked(directory, directory=True, owner=os.geteuid())
+    if directory.stat().st_mode & 0o077:
+        raise ValueError('private directory required')
+    destination = directory / 'publisher-material.json'
+    if destination.exists() or destination.is_symlink():
+        raise ValueError('existing input retained')
+    with warnings.catch_warnings():
+        warnings.simplefilter('error', getpass.GetPassWarning)
+        token = prompt('Отдельный тестовый OAuth-токен Телемоста (ввод скрыт): ')
+    if not re.fullmatch(r'[A-Za-z0-9_.-]{16,4096}', token):
+        raise ValueError('publisher input rejected')
+    write_private(destination, canonical(dict(scope=SCOPE, token=token)), uid=os.geteuid(), gid=os.getegid())
+    return dict(scope=SCOPE, action='publisher-input', result='STORED', slot='publisher-material',
+                network_requests=0, remote_writes=0, credential_validity='NOT_CHECKED')
+
+
+def main():
+    try:
+        resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+        os.umask(0o077)
+        if len(sys.argv) != 1 or not sys.stdin.isatty() or not sys.stderr.isatty():
+            raise ValueError('interactive input required')
+        print('Только новый токен для тестового узла. Не используйте токен рабочего сервера.', file=sys.stderr)
+        receipt = store(DIRECTORY, getpass.getpass)
+    except (Exception, KeyboardInterrupt):
+        print(canonical(dict(scope=SCOPE, action='publisher-input', result='REJECTED',
+                             error='private_interactive_input_required')).decode())
+        return 1
+    print(canonical(receipt).decode())
+    return 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

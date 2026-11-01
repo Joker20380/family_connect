@@ -1,0 +1,35 @@
+{
+  "body": {
+    "actual_bundle": null,
+    "archive_sha256": null,
+    "bundle_id": "gw-f93d6eb5613b913cb29f2ba168765e77",
+    "duration_ms": 15,
+    "external": {
+      "awg": "NOT_RUN",
+      "mesh": "NOT_RUN",
+      "tcp": "NOT_RUN"
+    },
+    "instance_id": "fleet-rehearsal-nl-disposable-01",
+    "issued_at": 1793558844,
+    "kind": "enrollment",
+    "local_health": "NOT_RUN",
+    "manifest_sha256": null,
+    "operation_id": "host472-register-enroll-04b564f90f1248df8a1e870cb0a25e08",
+    "previous_bundle": null,
+    "provider": "trainhosting",
+    "reboot": "NOT_RUN",
+    "region": "amsterdam",
+    "result": "PASS",
+    "retirement": "NOT_RUN",
+    "rollback": "NOT_RUN",
+    "schema": 1,
+    "scope": "DISPOSABLE_FLEET_REHEARSAL_EVIDENCE",
+    "signature_sha256": null,
+    "signer": "298832ccef35f58c4208327086864c4017b1f135b4c0249c5c8cbfccefd3f2cf",
+    "source_commit": null,
+    "source_receipt_sha256": "842a3dc8d5607a50180fb5890d7cd8d17d3811b67359740a4c958b4830d32944",
+    "state": "PREFLIGHTED",
+    "target_sha256": "7b4281421fe3cecd1ed487953d37e9ca292db10f04ae85ef37faa0c0822f7803"
+  },
+  "signature": "Gnr8rG3aeRii2YjnXZxzx6kUyPKv2QtIoaJoKfMNa7Hl9f+fxWhFLIqkehd5UncoSKxTP2J1Va31Vz2q2uyGBA=="
+}

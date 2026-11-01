@@ -2,7 +2,7 @@
 
 <!-- FLEET-BOOTSTRAP-2 current -->
 **READY_FOR_FLEET_BOOTSTRAP_2_HOST — source/package and host OS/preflight PASS; role gates NOT_RUN.**
-Existing task: **FLEET-BOOTSTRAP-2**, no new PLAN ID and no automatic next task.
+Existing task: **FLEET-BOOTSTRAP-2**, no new PLAN ID; finish its gates before further activation.
 Frozen deployable source: `0ecfefeaf907bd87e34e3e5356808c376aab082e`; final A/B are signed and each built twice,
 byte-identical archive/manifest/signature/hash inventory. Exact native/source/license
 bindings and the282-file canonical MESH capsule are retained. Ubuntu24.04/x86_64
@@ -18,8 +18,13 @@ dpkg audit clean, no failed units/pending reboot; DNS/HTTPS/time/TUN and signed 
 Encrypted management backup verified; SSH pin/config/authorized keys retained. Provider OS
 reinstall and26.04 upgrade NOT_RUN. Trust remains owner-accepted TOFU, not independent provider
 verification; owner confirms Reinstall OS option, provider console itself remains unverified.
-Frozen runtime/A/B unchanged; no enrollment, live material or real probe identity access.
-Next within this task: separately authorized permit-bound role rehearsal, not automatic activation.
+Owner requests two Amsterdam servers; first production NL remains excluded and untouched.
+Frozen runtime/A/B unchanged. Signed node enrollment and durable readback PASS; node-local
+Ed25519/X25519 keys remain on target. Runtime state PREFLIGHTED, no staged/active release.
+Live input gate: DISPOSABLE_TELEMOST_PUBLISHER_INPUT_NOT_SUPPLIED. No production OAuth reuse.
+Private terminal helper ready; fleet252PASS (15new), prior console156/paid170 retained.
+Next within this task: separate publisher input, fresh permit, encrypted delivery and physical
+rehearsal. No transport material or real probe identity accessed; no production activation.
 Role services/data planes and rehearsal reboot persistence remain NOT_RUN, not accepted PASS.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
 Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.

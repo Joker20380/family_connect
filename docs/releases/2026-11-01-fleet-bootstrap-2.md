@@ -1,5 +1,59 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+## Owner-authorized node registration — 1 November18:47UTC
+
+The owner requests completing this checkpoint and ultimately retaining two Amsterdam
+servers. The working first NL server remains untouched; only the supplied new VPS is
+authorized for rehearsal. No new PLAN ID, production identity or catalog admission was
+created. Permanent second-server provisioning is not equivalent to a disposable rehearsal
+and must not reuse its temporary keys. The reserved VPS will not be destroyed automatically.
+
+A new one-hour, signed permit admitted only `preflight`, `enroll`, `status`, bound to the
+exact target, owner-accepted SSH pin, frozen agent, bundle signer and A/B IDs. All production,
+catalog, user and paid capability flags remain false. Provider/region are owner-supplied
+`trainhosting`/`amsterdam`; independent provider identity and console verification are not
+claimed. The existing known_hosts, target exclusions and second bundle verification were
+used unchanged. The bootstrap installed only its guarded prerequisites/agent; no role started.
+
+- Fresh host preflight PASS at18:43:03UTC.
+- Enrollment PASS at18:44:59UTC, operation
+  `host472-register-enroll-04b564f90f1248df8a1e870cb0a25e08`, elapsed101.415seconds.
+- Separate node-local Ed25519 ownership and X25519 encryption-key proofs verified. Private
+  node keys never left the target. Signed enrollment/material bindings remain in private
+  custody; no real `FLEET_MESH_PROBE_1` private identity was opened or copied.
+- Durable remote readback PASS at18:46:13UTC: both proof and commit completed successfully,
+  no RUNNING/unknown operations, no fence, state `PREFLIGHTED`, staged releases empty,
+  actual bundle null. Enrollment is recorded separately from the runtime's stage state.
+- [Sanitized signed enrollment evidence](2026-11-01-fleet-bootstrap-2-host-enrollment.receipt.json)
+  is ready for the append-only import path; no production Django database was touched.
+
+The localized next-input gate is **DISPOSABLE_TELEMOST_PUBLISHER_INPUT_NOT_SUPPLIED**.
+No separately supplied publisher material exists in this checkpoint's private input custody.
+Reusing production OAuth or inventing a provider credential is not permitted. Material
+delivery precedes staging in the accepted state machine; staging early would prevent normal
+delivery, so no stage/start action was attempted. This is a live credential-input gate,
+**not** a failed or missing source/package artifact. A/B and the exact agent remain unchanged.
+
+The new operator-only [hidden input helper](../../scripts/fleet-rehearsal-publisher-input)
+stores a separately acquired test token locally without argv/stdout/network exposure, rejects
+unsafe custody/overwrite/echo fallback and never claims provider validity. The
+[runbook](../fleet-bootstrap.md#private-publisher-input-and-retained-host-capacity) documents
+separate OAuth consent and terminal input. No actual token was supplied during this run.
+Focused helper15PASS; complete fleet252PASS (237existing+15new). Accepted console156 and
+paid/backend/package170 results are retained, not rerun or represented as fresh runs for
+this operator-only change. Source/runtime/bundle hashes remain the accepted frozen values.
+Strict JSON, safe evidence signature/custody binding, exact agent hash and retained signed
+A/B double-build equality PASS. Staged scope8files; public-source guard3340entries/0blocks;
+5Markdown files/507links and `git diff --check` PASS. Unrelated local changes are excluded.
+
+Next: owner supplies the separate OAuth input privately; then issue a fresh bounded mutation
+permit, deliver materials and execute the existing two-phase physical gates. Services,
+external AWG/TCP/MESH acceptance, upgrade/rollback, rehearsal reboot and retirement remain
+NOT_RUN. Production RU/NL writes0, catalog publications0, user invitations0, paid events0,
+phone actions0; Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0
+are unchanged. Earlier OS-preparation text below records its own narrower authorization and
+is historical, not a claim that registration remains unstarted.
+
 **READY_FOR_FLEET_BOOTSTRAP_2_HOST**
 
 All selected source/package gates PASS. This is not live-host or production acceptance.

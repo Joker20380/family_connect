@@ -112,6 +112,39 @@ files. Overwrite cannot guarantee forensic erasure on SSD/COW/provider snapshots
 the disposable VPS and provider snapshots after the final safe receipt. No production
 backup, profile or identity is imported, overwritten or removed.
 
+### Private publisher input and retained host capacity
+
+The disposable publisher OAuth token must be supplied independently of production. A new
+token cannot be inferred from SSH access, generated offline or replaced with a synthetic
+fixture. Do not read/copy the working gateway's provider environment or use its token.
+
+For the operator, create a separate test OAuth application through
+[Yandex OAuth](https://oauth.yandex.ru/), granting only `telemost-api:conferences.create` for
+the publisher's conference creation. Set its Redirect URI to
+`https://oauth.yandex.ru/verification_code`, then open
+`https://oauth.yandex.ru/authorize?response_type=token&client_id=YOUR_TEST_CLIENT_ID`
+in the browser and approve that test application. Use its actual ClientID; do not change or
+revoke the production application. See the official [Telemost access guide](https://yandex.ru/dev/telemost/doc/ru/access)
+and [manual token instructions](https://yandex.ru/dev/id/doc/ru/tokens/debug-token).
+
+From the repository root, run `python3 scripts/fleet-rehearsal-publisher-input` and paste the
+test token at the hidden terminal prompt, not into chat, argv, an environment variable or a
+shell command. The helper makes no network request and does not install/start anything.
+It writes only ignored `state-client-build/fleet-bootstrap-2/publisher-input/publisher-material.json`
+under0700 custody with0600 file permissions. Existing files, symlinks, noninteractive input
+and echo fallback are rejected. Its safe JSON receipt deliberately reports credential
+validity `NOT_CHECKED`; only later real publisher acceptance proves provider access.
+Revoke this separate test application's access after retirement; never revoke production access.
+
+The owner now requests keeping capacity for two Amsterdam servers. This does not turn a
+four-hour rehearsal permit into production authorization or allow the temporary material to
+be promoted. Finish the existing checkpoint's physical verification, rollback, reboot and
+retirement gates first, with provider-backed cleanup/reprovisioning before permanent use.
+Do not destroy the reserved VPS automatically or clone the first server's identity. The
+working Amsterdam host remains excluded. Catalog/public client selection and a persistent
+second gateway are not accepted merely because SSH, enrollment or local activation passes.
+No new top-level PLAN ID is introduced here.
+
 ## Append-only rehearsal evidence
 
 The operator exporter `scripts/fleet-rehearsal-evidence --kind KIND --source PRIVATE_JSON
