@@ -1,7 +1,7 @@
 {
   "android108_owner_acceptance_20261101": {
     "observed_utc": "2026-11-01T03:47:32.274129+00:00",
-    "state": "AWAITING_OWNER_AWG108_CONNECT",
+    "state": "AWG108_OWNER_REPORTED_WORKING_SERVER_SESSION_NOT_OBSERVED",
     "owner_reports": [
       "ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS",
       "ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS"
@@ -10,7 +10,7 @@
     "physical_beta108_whitelist_test": "NOT_CLAIMED",
     "notification_lifecycle": "NOT_RUN",
     "owner_transport_smoke": {
-      "awg108": "NOT_RUN",
+      "awg108": "OWNER_REPORTED_WORKING_SERVER_SESSION_NOT_OBSERVED",
       "tcp108": "NOT_RUN",
       "auto_mesh108": "NOT_RUN",
       "disconnect_cleanup": "NOT_RUN"
@@ -234,7 +234,87 @@
     "paid_baseline108_source_artifact_deployment": "PENDING_AFTER_OWNER_NL_ACCEPTANCE",
     "production_mutations": 0,
     "restarts": 0,
-    "rollback": "NOT_RUN"
+    "rollback": "NOT_RUN",
+    "awg108_followup": {
+      "owner_report": "AWG108_WORKS",
+      "nl_sample": {
+        "result": "BOUND_OWNER_AWG_NEW_NL_OBSERVATION",
+        "observed_utc": "2026-11-01T03:53:15.352477+00:00",
+        "endpoint": "185.10.158.212",
+        "existing_owner_binding": "OWNER_CANARY_1",
+        "peer_loaded": true,
+        "handshake_recent": false,
+        "handshake_age_seconds": 56251.3,
+        "rx_delta_bytes": 0,
+        "tx_delta_bytes": 0,
+        "bidirectional_traffic": false,
+        "sample_seconds": 12.0,
+        "service_active": true,
+        "automatic_restarts": 0,
+        "client_ip_recorded": false,
+        "private_key_access": false,
+        "server_mutations": 0,
+        "latest_observations": [
+          {
+            "version_name": "0.1.18-beta108",
+            "version_code": 108,
+            "source": "readiness_ack"
+          }
+        ],
+        "paid": [
+          0,
+          0
+        ],
+        "cohort": 0,
+        "cohort_limit": 10,
+        "owner_report": "AWG108_WORKS",
+        "client_https_egress": "AWAITING_EXPLICIT_CONFIRMATION",
+        "disconnect_cleanup": "NOT_RUN",
+        "notification_lifecycle": "NOT_RUN",
+        "canary": "PAUSED_NOT_RUN"
+      },
+      "ru_comparison": {
+        "result": "BOUND_OWNER_AWG_OBSERVATION",
+        "observed_utc": "2026-11-01T03:54:28.673770+00:00",
+        "endpoint": "185.251.89.19",
+        "existing_owner_binding": "OWNER_CANARY_1",
+        "peer_loaded": true,
+        "handshake_recent": false,
+        "handshake_age_seconds": null,
+        "rx_delta_bytes": 0,
+        "tx_delta_bytes": 0,
+        "bidirectional_traffic": false,
+        "sample_seconds": 12.0,
+        "service_active": true,
+        "automatic_restarts": 0,
+        "client_ip_recorded": false,
+        "private_key_access": false,
+        "server_mutations": 0,
+        "latest_observations": [
+          {
+            "version_name": "0.1.18-beta108",
+            "version_code": 108,
+            "source": "readiness_ack"
+          }
+        ],
+        "paid": [
+          0,
+          0
+        ],
+        "cohort": 0,
+        "cohort_limit": 10,
+        "owner_report": "AWG108_WORKS",
+        "client_https_egress": "AWAITING_EXPLICIT_CONFIRMATION",
+        "disconnect_cleanup": "NOT_RUN",
+        "notification_lifecycle": "NOT_RUN",
+        "canary": "PAUSED_NOT_RUN"
+      },
+      "client_https_egress": "AWAITING_EXPLICIT_CONFIRMATION",
+      "next": "CONFIRM_CURRENT_SELECTION_HTTPS_AND_CORRELATE_BOUND_PEER_WITHOUT_REPEAT_CONNECT",
+      "binding": "UNCHANGED",
+      "support_id_search": "NOT_RUN",
+      "production_mutations": 0
+    }
   },
   "registry_overlay_correction": {
     "scope": "HISTORICAL_ROLLBACK_TERMINALIZATION_ONLY",

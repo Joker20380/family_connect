@@ -21,8 +21,15 @@ Existing OWNER_CANARY_1 binding retained; latest authenticated readiness ACK is 
 Paid subscriptions/events **0/0**, cohort **0/10**; canary **PAUSED / NOT_RUN**.
 Current order under existing IDs: **ANDROID108 physical transport/cleanup acceptance →
 NL_REPLACEMENT_LIVE → BETA0 baseline106→108 source/package/deployment → BETA-0-CANARY-1**.
-Next interaction: beta108 Netherlands AWG Connect once, then verified Disconnect/cleanup;
-TCP and Auto/MESH follow separately. NL_REPLACEMENT_LIVE and READY_FOR_BETA0_CANARY_1
+Owner now reports **AWG108 works**. The03:53UTC readback of the retained
+OWNER_CANARY_1 binding on new NL finds no fresh handshake and zero RX/TX delta over12s;
+the03:54UTC RU comparison also has no handshake/traffic. Latest authenticated ACK remains108.
+This is **OWNER_REPORTED_WORKING / SERVER_SESSION_NOT_OBSERVED**, not full AWG108 PASS
+or proof of a product failure/wrong identity. No rebinding or Support ID search.
+Next: leave the current connection unchanged, confirm Netherlands/AWG and client HTTPS
+egress185.10.158.212 without a second Connect; then one Disconnect and notification/cleanup
+readback after the session gate is reconciled. TCP and Auto/MESH remain NOT_RUN.
+NL_REPLACEMENT_LIVE and READY_FOR_BETA0_CANARY_1
 are **NOT_YET_MET**. Production paid baseline remains106; stage0 on108 is prohibited
 until the generic exact108 contract is deployed and the owner freshly answers ГОТОВ.
 No Android build/signing, catalog publication, infrastructure recovery or service restart.
@@ -1451,7 +1458,7 @@ The existing OWNER_CANARY_1 HMAC binding resolves read-only, without searching S
 its latest authenticated observation is readiness ACK `0.1.18-beta108`/108. A legacy retained
 admin binding was excluded from owner attribution; only the canary binding evidence is accepted.
 
-Owner108 AWG, TCP and Auto/MESH Connect/Disconnect/cleanup are still NOT_RUN in this continuation.
+At entry, owner108 AWG/TCP/Auto-MESH and cleanup were NOT_RUN; the AWG update below supersedes that entry state.
 The earlier pre108 AWG result is not silently upgraded to108. Record notification disappearance
 or persistence honestly after the one AWG Disconnect; a remaining notification is a separate UX
 defect. Require selected new endpoint, real HTTPS/NL egress, server session and cleanup evidence;
@@ -1468,3 +1475,30 @@ bounded rollback. No new top-level task, CONTROL-PLANE-3, Android rebuild or pub
 Validation for this documentation checkpoint: strict JSON, complete changed-source inventory,
 added-content privacy/secret scan, local Markdown targets, staged scope and whitespace.
 No Linux/Windows/full historical suite; no product source changed in this checkpoint.
+
+### AWG108 owner response — server session attribution still pending
+
+Owner replies that it works to the requested108/Netherlands/AWG Connect-and-internet check.
+Accept this as owner-reported working, not independent HTTPS/NL egress or cleanup evidence.
+At03:53:15UTC the exact retained OWNER_CANARY_1 HMAC binding resolves uniquely to its existing,
+non-revoked device; latest authenticated readiness ACK is `0.1.18-beta108`/108. Its peer is
+registered/loaded on185.10.158.212, but the12-second read-only sample has RX/TX deltas0/0
+and handshake age56251.3s. Thus no current owner server session is observed on new NL.
+At03:54:28UTC the same bound peer on RU has no handshake and zero12-second RX/TX deltas;
+this does not establish RU fallback. Both AWG services active, automatic restarts0.
+
+Result: **OWNER_REPORTED_WORKING / SERVER_SESSION_NOT_OBSERVED**. Do not substitute another
+active user's peer, infer that the binding changed, rebind/re-enroll, search Support ID,
+or label a product failure solely from this bounded observation. The exact device/tunnel
+attribution and client verified-HTTPS egress remain open. Do not request another Connect
+or Disconnect yet: confirm the current Netherlands/AWG selection and open the HTTPS egress
+check while that connection remains unchanged, then correlate a fresh bound-peer observation.
+Do not collect a differing client IP; an equality/mismatch report is sufficient.
+
+AWG notification/Disconnect/cleanup, TCP and Auto/MESH are NOT_RUN. NL_REPLACEMENT_LIVE
+and READY_FOR_BETA0_CANARY_1 remain unmet; production paid baseline still106. Ledger0/0,
+cohort0/10, canary PAUSED_NOT_RUN. No APK/catalog/source/identity/service/schedule changes,
+new test session, restart, deployment or rollback. Existing artifacts and rollback path retained.
+The existing JSON receipt retains sanitized NL/RU samples; no private selector/key/client IP.
+Documentation-only checks: strict JSON, privacy/secret scan, local links, staged scope,
+preservation of pre-existing uncommitted work and git diff --check; no platform/full suite.

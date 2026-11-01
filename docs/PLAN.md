@@ -23,8 +23,15 @@ Existing OWNER_CANARY_1 binding retained; latest authenticated readiness ACK is 
 Paid subscriptions/events **0/0**, cohort **0/10**; canary **PAUSED / NOT_RUN**.
 Current order under existing IDs: **ANDROID108 physical transport/cleanup acceptance →
 NL_REPLACEMENT_LIVE → BETA0 baseline106→108 source/package/deployment → BETA-0-CANARY-1**.
-Next interaction: beta108 Netherlands AWG Connect once, then verified Disconnect/cleanup;
-TCP and Auto/MESH follow separately. NL_REPLACEMENT_LIVE and READY_FOR_BETA0_CANARY_1
+Owner now reports **AWG108 works**. The03:53UTC readback of the retained
+OWNER_CANARY_1 binding on new NL finds no fresh handshake and zero RX/TX delta over12s;
+the03:54UTC RU comparison also has no handshake/traffic. Latest authenticated ACK remains108.
+This is **OWNER_REPORTED_WORKING / SERVER_SESSION_NOT_OBSERVED**, not full AWG108 PASS
+or proof of a product failure/wrong identity. No rebinding or Support ID search.
+Next: leave the current connection unchanged, confirm Netherlands/AWG and client HTTPS
+egress185.10.158.212 without a second Connect; then one Disconnect and notification/cleanup
+readback after the session gate is reconciled. TCP and Auto/MESH remain NOT_RUN.
+NL_REPLACEMENT_LIVE and READY_FOR_BETA0_CANARY_1
 are **NOT_YET_MET**. Production paid baseline remains106; stage0 on108 is prohibited
 until the generic exact108 contract is deployed and the owner freshly answers ГОТОВ.
 No Android build/signing, catalog publication, infrastructure recovery or service restart.

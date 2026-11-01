@@ -9,6 +9,13 @@ not permission to deploy, collect payment or enroll the existing field user.
 
 ## Current baseline transition —108 target, production still106 (1 November)
 
+**AWG108 follow-up03:53–03:54UTC:** owner reports working, but the retained bound
+peer has no fresh NL handshake/traffic; RU comparison is also inactive. Keep owner report
+separate from server-session/HTTPS-egress acceptance. Confirm current Netherlands/AWG and
+HTTPS egress without another Connect; no Disconnect/notification/cleanup PASS yet.
+Existing binding and latest ACK108 retained; paid0/0, cohort0/10, canary PAUSED_NOT_RUN.
+No source/package/deployment or identity change; NL_REPLACEMENT_LIVE remains unmet.
+
 New paid activation stays **NOT_RUN** until NL owner108 AWG/TCP/Auto-MESH and cleanup PASS,
 the generic exact108 backend/canary contract passes focused tests and deterministic package gates,
 and the authorized controlled Friends HTTP deployment succeeds. This is the existing

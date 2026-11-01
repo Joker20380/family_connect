@@ -2,6 +2,13 @@
 
 ## Current continuation — baseline108 target, live canary NOT_RUN (1 November)
 
+**AWG108 follow-up03:53–03:54UTC:** owner reports working, but the retained bound
+peer has no fresh NL handshake/traffic; RU comparison is also inactive. Keep owner report
+separate from server-session/HTTPS-egress acceptance. Confirm current Netherlands/AWG and
+HTTPS egress without another Connect; no Disconnect/notification/cleanup PASS yet.
+Existing binding and latest ACK108 retained; paid0/0, cohort0/10, canary PAUSED_NOT_RUN.
+No source/package/deployment or identity change; NL_REPLACEMENT_LIVE remains unmet.
+
 The filename retains the historical android106 name; this operation now targets exact
 **0.1.18-beta108 / versionCode108**, not a new PLAN ID. See the
 [current NL/Android evidence](2026-10-30-nl-gateway-replacement.md#1-november--beta108-owner-evidence-and-fresh-preflight).
