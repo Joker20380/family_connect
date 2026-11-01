@@ -3,6 +3,8 @@
 Owner-authorized1 November2026; **IN_PROGRESS / SOURCE PREPARATION**.
 Entry main: `45d50b7ce39f05b789a44a760156d5fbbc23a345`.
 Accepted bootstrap foundation source: `a3fc3bf1c11a686ea444ad36d576c05ac5e24810`.
+Current incomplete preparation code source: `39dcadb4d6a85b079c2deebb596453fc632fac9a`
+(pushed and remote-verified; not a deployable artifact source acceptance).
 That synthetic archive is not a deployable AWG/TCP/MESH distribution and will not be
 installed as one. [Runbook](../fleet-bootstrap.md).
 

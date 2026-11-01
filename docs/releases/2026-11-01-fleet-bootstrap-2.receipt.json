@@ -84,6 +84,8 @@
   "qualification": "NOT_A_DEPLOYABLE_BUNDLE_OR_LIVE_ACCEPTANCE",
   "role_runtime": "PENDING",
   "schema": 1,
+  "source_commit": "39dcadb4d6a85b079c2deebb596453fc632fac9a",
+  "source_status": "INCOMPLETE_PREPARATION_NOT_DEPLOYABLE",
   "seeder_source": "8e94d30f43330a7ce31afe5bf28a398911d452f6",
   "status": "IN_PROGRESS_SOURCE_PREPARATION",
   "target": "NOT_PROVIDED",
