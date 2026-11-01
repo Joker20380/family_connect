@@ -98,6 +98,10 @@ def prepare(commit, artifact_root, key_path, output):
     maps=load((artifact_root/'bound-inputs/source-inventories.json').read_bytes())
     check_inputs(native,artifact_root/'bound-inputs',maps)
     canonical_source=capsule(artifact_root,maps)
+    monitor=next(artifact for artifact in inventory['artifacts'] if artifact['id']=='rehearsal-monitoring')
+    maps['rehearsal-monitoring']=dict(source_commit=monitor['source_commit'],files={'fleet/monitoring.py':digest(sources['fleet/monitoring.py'])})
+    if digest(canonical(maps['rehearsal-monitoring']))!=monitor['source_inventory_sha256']:
+        fail('monitor_source_inventory_binding')
     key_path=key_path.absolute()
     repository=Path(subprocess.check_output(['git','rev-parse','--show-toplevel']).decode().strip())
     if key_path.is_relative_to(repository) and subprocess.run(['git','check-ignore','-q',str(key_path)],capture_output=True).returncode:
@@ -179,7 +183,8 @@ def prepare(commit, artifact_root, key_path, output):
             sha256_inventory_sha256=digest(outputs[0]['sha256.json']))
     receipt=dict(schema=1,scope='SOURCE_PACKAGE_ONLY',source_commit=commit,bundles=results,
         bundle_signer_sha256=digest(bytes.fromhex(public_hex(key.public_key()))),agent_sha256=digest(agent),
-        permit_source_sha256=digest(sources['fleet/permit.py']),roles=list(ROLES),disabled_roles=list(DISABLED),
+        permit_source_sha256=digest(sources['fleet/permit.py']),remote_agent_source_sha256=digest(sources['fleet/remote_agent.py']),
+        roles=list(ROLES),disabled_roles=list(DISABLED),
         operator_probe=probe,reproducibility='PASS',target_reverification='PASS',production_writes=0,
         catalog_publications=0,user_invitations=0,paid_events=0,phone_actions=0)
     write_private(output/'receipt.json',canonical(receipt))
