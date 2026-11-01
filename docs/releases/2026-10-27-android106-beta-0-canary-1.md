@@ -31,13 +31,19 @@ revocations belong to this owner. Owner reports «не подключается�
 Disconnect/Connect: post-CRL reconnect denial confirmed as field evidence, not a phone trace.
 Renewal/read-only-sync timers resumed at05:52UTC; active timers and successful worker status
 confirmed. Temporary credentials removed; original maintenance configuration restored.
-**WAITING_FINAL_RECOVERY_NOT_BEFORE: 2026-11-01T07:07:31+00:00.** Existing retained-certificate
-guard still prevents the normal final2592000s activation; final event NOT_RUN, ledger remains1/3,
-cohort1/10. The guard counts retained certificate rows even after revocation: no manual deletion,
-no guard bypass or new canary run. Owner post-CRL reconnect-denial gate is now satisfied.
-After the time guard, continue the same bound operation with final30-day recovery and beta108 Connect.
-Canary overall NOT_COMPLETE; delayed Connect/selector UX defect remains open. No HTTP restart,
-catalog4/Android sequence3 change, infrastructure replay or expansion beyond owner.
+**Final30-day recovery APPLIED — owner beta108 Connect pending.**
+The existing time/certificate guard passed naturally; no certificate rows were deleted or
+expiry values changed. Same OWNER_CANARY_1 binding, accepted baseline108 and sourceaccc4ff.
+Activation at 2026-11-01T07:09:19+00:00; exact2592000s paid period ends 2026-12-01T07:09:19+00:00.
+Subscriptions/events1/4, cohort1/10, version4, active/paid_allow=true; internal_canary,
+amount0/revenue0. Exact private final capsule SHA256 `78ba99793d8779b83702e5478b38501ad17c61e6061fe274fb6e247caa5dc7e2`,
+built twice byte-identically; unchanged HTTP candidate/trust/directory and latest108 prechecks PASS.
+Only the final payment event was applied. No new CRL, gateway deployment, HTTP restart or
+identity/invite/grant mutation. Earlier temporary credentials remain removed and normal schedules
+were already resumed; the final activation does not pause them again.
+Final phone108 Connect and new authenticated certificate/readiness proof are PENDING; canary
+overall NOT_COMPLETE. Keep owner on108 until that proof; beta109 publication/sequence4 remains
+gated. Delayed earlier Connect/selector defect is retained, not retrospectively marked PASS.
 **Owner UI follow-up / unreleased source fix:** owner confirms transport selection returned
 after Android Force stop/reopen, without clearing data/cache. This is workaround field evidence,
 not a repaired installed108 or an AWG/TCP internet acceptance claim.
@@ -2623,9 +2629,9 @@ Rollout: accept exact CI artifact, verify source/manifest/native provenance, sig
 the existing signer, then publish immutable109 and optional Android sequence4 only after final108
 canary recovery. Until publication, rollback is simply retaining public108; never overwrite an
 APK or lower a signed sequence. Any later rollback retains device data and uses a higher sequence.
-Final canary recovery remains NOT_RUN before07:07:31UTC; last read-only status1/3, cohort1/10,
-latest authenticated108, healthy schedules and current canonical material. No new paid event,
-backend restart, identity/invite/grant change, certificate deletion or gateway publication.
+Final canary recovery is APPLIED as recorded below; final phone108 proof is still pending.
+Candidate109 remains unpublished; no backend restart, identity/invite/grant change, certificate
+deletion or gateway publication.
 
 **Beta109 CI follow-up:** candidatebe37c93 was pushed and remote-verified. Readiness
 CI41280655230 failed an outdated source-location assertion: the accepted bootstrap helper,
@@ -2647,3 +2653,19 @@ non-finishing/non-destroyed Activity with the requested locale within15s. Produc
 VPN, authentication and release gates are unchanged; no retry-until-green or skipped assertion.
 51 focused Python checks PASS; exact-source hosted emulator/native packaging is pending again.
 No qualified release APK, signature, publication, installation or Android sequence4 yet.
+
+## Final30-day recovery activation — 1 November
+
+**Final30-day recovery APPLIED — owner beta108 Connect pending.**
+The existing time/certificate guard passed naturally; no certificate rows were deleted or
+expiry values changed. Same OWNER_CANARY_1 binding, accepted baseline108 and sourceaccc4ff.
+Activation at 2026-11-01T07:09:19+00:00; exact2592000s paid period ends 2026-12-01T07:09:19+00:00.
+Subscriptions/events1/4, cohort1/10, version4, active/paid_allow=true; internal_canary,
+amount0/revenue0. Exact private final capsule SHA256 `78ba99793d8779b83702e5478b38501ad17c61e6061fe274fb6e247caa5dc7e2`,
+built twice byte-identically; unchanged HTTP candidate/trust/directory and latest108 prechecks PASS.
+Only the final payment event was applied. No new CRL, gateway deployment, HTTP restart or
+identity/invite/grant mutation. Earlier temporary credentials remain removed and normal schedules
+were already resumed; the final activation does not pause them again.
+Final phone108 Connect and new authenticated certificate/readiness proof are PENDING; canary
+overall NOT_COMPLETE. Keep owner on108 until that proof; beta109 publication/sequence4 remains
+gated. Delayed earlier Connect/selector defect is retained, not retrospectively marked PASS.
