@@ -1,7 +1,7 @@
 {
   "android108_owner_acceptance_20261101": {
-    "observed_utc": "2026-11-01T05:36:00+00:00",
-    "state": "BETA0_CANARY1_STAGE1_ACTIVE_BASELINE108",
+    "observed_utc": "2026-11-01T05:48:36+00:00",
+    "state": "BETA0_CANARY1_EXACT_CRL_COMMITTED_BASELINE108",
     "owner_reports": [
       "ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS",
       "ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS"
@@ -451,7 +451,7 @@
       "deployment": "PASS",
       "production_baseline": 108,
       "migration": "NOT_REQUIRED",
-      "paid_writes": "STAGE0_AND_STAGE1_APPLIED",
+      "paid_writes": "STAGE0_STAGE1_EXPLICIT_EXPIRE_APPLIED",
       "artifacts": {
         "source_commit": "accc4ffb0af35e8e5360ba2442f706b03b46bc76",
         "http": {
@@ -671,8 +671,8 @@
       },
       "startup_guard": "BOUNDED_EXACT_PROCESS_LISTENER_HTTP_READINESS_WITH_PRIVATE_OBSERVATIONS",
       "failed_instantaneous_argv_details": "NOT_CAPTURED_NO_SPECIFIC_ROOT_CAUSE_CLAIM",
-      "next": "STAGE1_SECOND_CONNECT_PROOF_THEN_EXPLICIT_EXPIRE",
-      "canary": "STAGE1_ACTIVE",
+      "next": "POST_CRL180_THEN_OWNER_RECONNECT_DENIAL",
+      "canary": "POST_CRL_OBSERVATION",
       "authorized_retry": {
         "owner_authorization": "EXPLICIT_ONE_ADDITIONAL_CANDIDATE_RESTART",
         "preflight": {
@@ -1072,13 +1072,71 @@
         "independent_phone_trace": "NOT_CAPTURED"
       },
       "stage1_connect": {
-        "state": "REQUESTED",
-        "transport": "EXPLICIT_MESH",
-        "connect_deadline": 1793511450,
-        "owner_result": "PENDING",
-        "fresh_ack": "PENDING",
-        "paid_bounded_certificate": "PENDING"
-      }
+        "state": "OWNER_REPORTED_DELAYED_CONNECTION",
+        "owner_result": "CONNECTED_AFTER_INITIAL_FAILURE",
+        "internet": "NOT_SEPARATELY_REPORTED",
+        "ux_defect": "TRANSIENT_CONNECT_FAILURE_AND_TRANSPORT_SELECTOR_LOCKED",
+        "fresh_ack": "EXACT108_READY",
+        "first_ack_at": 1793511511,
+        "first_ack_delay_seconds": 151,
+        "server_proof_within90": false,
+        "paid_bounded_certificates": 2,
+        "certificate_expires": 1793512260
+      },
+      "explicit_expiry": {
+        "alias": "OWNER_CANARY_1",
+        "purpose": "internal_canary",
+        "amount_minor": 0,
+        "observed_at": 1793511939,
+        "activation_active": true,
+        "cohort": true,
+        "effective_state": "expired",
+        "paid_allow": false,
+        "entitlement_until": null,
+        "version": 3,
+        "paid_until": 1793512260,
+        "event_count": 3,
+        "event_type": "expire",
+        "result": "APPLIED",
+        "duplicate": false,
+        "phase": "expire",
+        "started": 1793511939,
+        "package_sha256": "02604985326baaf6bfbd1e1ce2164562edac7388741c6d69af99eca84f0f4a0d",
+        "subscriptions": 1,
+        "cohort_limit": 10,
+        "baseline": 108,
+        "started_utc": "2026-11-01T05:45:39+00:00"
+      },
+      "exact_crl": {
+        "state": "COMMITTED",
+        "previous_crl_number": 27233,
+        "generated_crl_number": 27234,
+        "payload_sha256": "4c9c81d84bd03b5a5fdbb4b7e27e2b6a4a0247772fe64f6767f44ae34edba462",
+        "payload_size": 483,
+        "request_sha256": "7aec8455f19ce45909c266fa0cd4a56385a69e7bc89b68d7d53a1a3c183bd3ea",
+        "generation_count": 1,
+        "delivery_attempts": 1,
+        "this_update": 1793512044,
+        "next_update": 1793512944,
+        "expected_revoked_count": 3,
+        "unrelated_revocation_count": 2,
+        "schema": 1,
+        "operation_safe_label": "OWNER_CANARY_1",
+        "result": "PASS",
+        "observed_at": 1793512116,
+        "gateway_minimum_crl": 27234,
+        "directory_validation": "PASS",
+        "local_commit": "PASS"
+      },
+      "temporary_access_cleanup": {
+        "result": "CRL_TEMPORARY_ACCESS_CLEANUP_PASS",
+        "credential": "REMOVED",
+        "canonical_configuration": "RESTORED_EXACT",
+        "publisher": "UNCHANGED",
+        "private_credential": "REMOVED"
+      },
+      "post_crl180": "PENDING",
+      "post_crl_owner": "PENDING"
     }
   },
   "registry_overlay_correction": {

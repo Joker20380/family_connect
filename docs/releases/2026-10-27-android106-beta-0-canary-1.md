@@ -11,21 +11,24 @@ No retrospective claim of an independently captured handshake, phone trace, per-
 readiness trace or all notification lifecycle cases. Prior raw observations remain below.
 New NL185.10.158.212/catalog4, old NL FENCED and FLEET_MESH_PROBE_1 retained; accepted
 infrastructure is not rebuilt or replayed. Last readback paid0/0, cohort0/10, canary PAUSED.
-**BETA-0-CANARY-1 live — stage1 APPLIED on baseline108.**
-Owner reports the requested post-expiry MESH reconnect does not connect. Natural600s backend
-expiry and120s observation are complete; no cached-certificate bypass was reported in this attempt.
-The earlier active transport/tunnel certificate was not independently captured; no broader claim.
-Stage1 starts 2026-11-01T05:36:00+00:00, paid_until 2026-11-01T05:51:00+00:00 (900s).
-Paid subscriptions/events1/2, cohort1/10, version2, paid_allow=true; internal_canary, amount0/revenue0.
-Same OWNER_CANARY_1 binding, latest authenticated exact108 and current canonical material valid.
-One explicit MESH Connect requested by 2026-11-01T05:37:30+00:00; fresh paid-bounded certificate/ACK pending.
-Existing certificates retained. Stage1 activation preserves non-paid tables; no identity/invite/grant
-edit, infrastructure replay, HTTP restart, catalog4 or Android update sequence3 change.
-After second Connect proof: explicit expiry, one exact-payload CRL delivery,180s observation,
-post-CRL reconnect denial and final2592000s recovery subject to the retained-certificate guard.
-Explicit expiry/CRL/final recovery are NOT_RUN; canary overall IN_PROGRESS, not an acceptance PASS.
-Detached read-only stage1 observation active. Renewal/read-only-sync timers remain temporarily
-paused for this bounded canary and must be resumed during cleanup. Deployed HTTP8e74997c… retained.
+**BETA-0-CANARY-1 live — explicit expiry and exact CRL COMMITTED on baseline108.**
+Owner first reports failed connection/locked transport selector, then «подключился».
+Record delayed connection recovery and a separate Android UX defect; internet verification is
+not separately reported. Fresh authenticated108 import READY ACK at05:38:31UTC and two stage1
+certificates expire exactly05:51:00UTC. First fresh ACK is151s after stage1 activation:
+the90s server-proof gate is NOT_MET, not retrospectively marked PASS. No phone TLS trace claimed.
+Explicit expire APPLIED at 2026-11-01T05:45:39+00:00: subscriptions/events1/3,
+cohort1/10, version3, paid_allow=false; purpose internal_canary, amount0/revenue0.
+Exact CRL27234 committed at 2026-11-01T05:48:36+00:00, floor27234, directory validation PASS.
+One generation, one delivery; exact NL accepted payload matches the RU committed payload.
+Three still-valid owner certificates are revoked, including the retained baseline certificate;
+no certificate rows are manually deleted. No other device identity/invite/grant is edited.
+Temporary forced-command credential removed on NL and private credential removed on RU;
+maintenance configuration restored byte-exactly. Existing canonical locator/publisher retained.
+Post-CRL180s observation and owner reconnect denial remain pending; final2592000s recovery
+NOT_RUN and subject to the existing retained-certificate not-before guard. Overall not PASS.
+Renewal/read-only-sync timers remain paused only through the bounded CRL observation, then
+must resume for the recovery wait. No HTTP restart, catalog4/Android sequence3 change or infra replay.
 
 **Baseline108 production deployment PASS — READY_FOR_BETA0_CANARY_1.**
 Latest readback 2026-11-01T04:59:14.654212+00:00; supersedes the two rolled-back attempts below.
@@ -2463,3 +2466,31 @@ Private stage1 capsule built twice byte-identically from sourceaccc4ff;
 SHA256 `566cb7c85140681d9966e4dadd893bfa293b202140ecdef8dc217bf6155af15e`. No private binding or event identifier is published.
 No additional deployment, restart, migration, infrastructure gate or non-cohort policy change.
 Explicit expiry, exact CRL delivery and final30-day recovery NOT_RUN at this checkpoint.
+
+### Stage1 delayed recovery, explicit expire and exact CRL — 1 November
+
+The owner reports initial failure with disabled transport selection and then a successful
+connection. Record recovered connection separately from the unresolved UX symptom and unreported
+internet check. Authenticated exact108 READY first arrives151s after stage1 activation;
+do not claim the90s fresh-server-proof deadline passed. Both new stage1 certificates are bounded
+to05:51UTC. Existing earlier106/107 observations do not override these latest108 ACKs.
+
+Explicit expiry at 2026-11-01T05:45:39+00:00 creates the third event/version3, paid_allow=false,
+subscriptions/events1/3, cohort1/10. Bound operator capsule SHA256 `02604985326baaf6bfbd1e1ce2164562edac7388741c6d69af99eca84f0f4a0d`.
+Exact CRL27234: generation_count1, delivery_attempts1, COMMITTED at 2026-11-01T05:48:36+00:00; floor27234 and
+validated directory match on accepted NL readback and RU commit. Payload SHA256
+`4c9c81d84bd03b5a5fdbb4b7e27e2b6a4a0247772fe64f6767f44ae34edba462`; request SHA256 `7aec8455f19ce45909c266fa0cd4a56385a69e7bc89b68d7d53a1a3c183bd3ea`.
+The three added revocations are this owner's still-valid certificates; the helper's two
+additional-to-target revocations are not evidence of two unrelated users being revoked.
+
+The first prepare attempt fails before generation because the current deployment has a
+group-writable ancestor. The same permit then uses ephemeral private mount-namespace aliases
+of the exact database directory/material/existing writer lock, verified by device/inode equality.
+No production permissions, source guards, live paths or writer lock are replaced; aliases vanish
+with the helper process. No second CRL generation or request replay occurs.
+The bound canonical maintenance capsule is built twice byte-identically from sourceaccc4ff;
+SHA256 `7961ad6bdf11ad9925b3759038eb1198c09e8e397a7e245cd1d018f0b246aa88`.
+One restricted forced-command SSH credential is removed after commit; original authorization
+bytes and maintenance configuration restored. Publisher/canonical locator remain unchanged.
+Post-CRL180s and owner reconnect denial are pending at this checkpoint. Final30-day recovery
+has not run; retain all certificate rows and enforce their existing recovery not-before guard.
