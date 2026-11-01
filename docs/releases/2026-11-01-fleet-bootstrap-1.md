@@ -22,7 +22,10 @@ The existing client lease engine is not reused as a physical-instance state mach
 ## Source checkpoints
 
 - Strict fleet schemas/state graph:13 focused tests PASS. No live transition executed.
-- Bundle/signature, CLI/atomic installer, enrollment and Django: pending.
+- Bundle/signature:35 combined contract/bundle tests PASS, including two byte-identical
+  archives/manifests/signatures/hash inventories, traversal/link/duplicate/mode/target and
+  signed-malicious archive rejection. Explicit generated test key only; no live signing key.
+- CLI/atomic installer, enrollment and Django: pending.
 - Final synthetic acceptance and rehearsal runbook: pending.
 
 ## Next boundary
