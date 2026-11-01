@@ -1,5 +1,42 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+## MESH interface-discovery fix and safe trial retirement
+
+The separate token is accepted by the official conference-create API (HTTP201). The exact
+accepted native gateway was then exercised operator-side using fresh synthetic short-lived
+profiles, not the approved private client probe: denying AF_NETLINK reproduces
+`SEED_CONNECT / seed_join_failed`, no ready export, exit1; allowing it produces a valid ready
+export and exit0/normal deadline cleanup. These bounded diagnostic sessions are not node
+AWG/TCP/MESH acceptance. Their private receipts contain only typed safe outcomes.
+
+The MESH systemd template incorrectly excluded AF_NETLINK, needed by interface discovery.
+The source correction adds only that family to MESH; its capability bounding set stays empty.
+AWG's existing permission is retained, and TCP/snapshot/monitoring gain no network families.
+No native artifact, port, protocol, identity or material schema is changed. Old signed A/B
+archives and target units were not overwritten; a newly frozen and qualified A/B pair is required.
+
+The failed physical trial was drained and retired using its original signed runtime/permit:
+
+| Operation | Result | Private receipt SHA256 |
+| --- | --- | --- |
+| `host472-drain-a-2743c71d5fb34f5aa879d5b53cff19cd` | PASS / DRAINING | `a46bc06cc2ba113fdcc86dbdf82eeb219e76619788f9a56f0f2558f94d0159ee` |
+| `host472-retire-a-a67cc08af8bc46a8bf4d09d5221589fd` | PASS / RETIRED | `fd8a1e5ddf96ed4e10a8d7dfd925d585f45959eab6868503edf336cc1af80f14` |
+
+Retirement removes only the failed trial's keys/materials/configuration/units/network state;
+it does not delete/reinstall the VPS. Immutable releases and durable receipts remain. To
+re-enroll a fresh instance with corrected packages, source now supports ownership handoff
+only after verifying the predecessor's same-authority enrollment and same-node signed final
+custody, same host/provider/region, unfenced RETIRED state and successful retirement journal,
+and absence of keys, slots, active pointer, units, config, run directory, sysctl and owned nft
+table. An exclusive root-owned owner lock serializes staging; old evidence is preserved and
+its hashes are saved before the atomic owner update. No takeover of a failed/fenced/live owner
+or replay of an old enrollment is allowed. Tests cover handoff, idempotency and rejection paths.
+
+Focused runtime tests pass; full fleet295 + fresh isolated console156 =451PASS. Django check
+PASS, migration drift NONE. This source transition awaits deterministic package rebuild and
+Ubuntu qualification before new node writes; the paid170 rerun is pending. Production RU/NL/catalog/user/paid/phone
+state is unchanged; the first NL remains untouched and the second VPS remains reserved.
+
 ## First physical A start — failure safely rolled back
 
 Following the operator preflight correction, encrypted material delivery and stage A passed.

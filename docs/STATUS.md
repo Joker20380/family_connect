@@ -1,7 +1,7 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**FLEET-BOOTSTRAP-2 — materials/stage PASS; first role start FAIL, automatic rollback PASS.**
+**FLEET-BOOTSTRAP-2 — failed trial safely RETIRED; MESH unit fix awaiting package requalification.**
 Existing task: **FLEET-BOOTSTRAP-2**, no new PLAN ID; finish its gates before further activation.
 Frozen deployable source: `0ecfefeaf907bd87e34e3e5356808c376aab082e`; final A/B are signed and each built twice,
 byte-identical archive/manifest/signature/hash inventory. Exact native/source/license
@@ -24,12 +24,17 @@ stage A PASS. Node-local Ed25519/X25519 private keys stay on target; the approve
 probe identity was used only in local private custody, never copied to the VPS. The separate
 publisher token passes custody/schema checks and its test-account API request returned201;
 this is not MESH data-plane acceptance. First start A failed: MESH exit1/restarts3, no ready export.
-Automatic rollback PASS; durable state FAILED, unfenced, actual bundle null, staged A retained.
-No blind retry. Bounded read-only status diagnostics expose only service states and file metadata,
-not config contents, environment, journal messages or credentials. Offline synthetic0600/0640
-profiles pass exact native loading through SEED_RUN; physical MESH failure is under investigation.
-Complete fleet272PASS; prior console156/paid170 retained. External AWG/TCP/MESH acceptance,
-A/B upgrade, role reboot persistence and retirement remain NOT_RUN. No production activation.
+Automatic rollback, subsequent drain and retirement PASS; disposable node keys/materials and
+owned runtime resources removed, VPS retained. No blind retry or immutable unit/config edit.
+Exact native operator diagnostics reproduce SEED_CONNECT failure with AF_NETLINK denied and
+READY/normal cleanup with it allowed. Source units now admit MESH interface discovery without
+CAP_NET_ADMIN; all other restrictions remain. No node data-plane PASS is inferred.
+A new signed A/B pair and fresh enrollment are required. Source adds verified retired-owner
+handoff only after matching signed enrollment/custody, terminal unfenced retirement journal,
+secret/resource absence and an exclusive owner lock; predecessor evidence/releases are retained.
+Fresh fleet295 + console156 =451PASS; Django check PASS/drift NONE. Paid170 retained.
+New package requalification and
+external AWG/TCP/MESH acceptance, A/B upgrade and role reboot gates remain pending.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
 Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.
 [Checkpoint](releases/2026-11-01-fleet-bootstrap-2.md) ·

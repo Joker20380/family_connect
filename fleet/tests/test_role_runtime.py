@@ -13,7 +13,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
 from cryptography.x509.oid import NameOID
 
-from fleet.contracts import FleetError, canonical, digest
+from fleet.contracts import FleetError, canonical, digest, load
 from fleet.private_files import read_private, write_private
 from fleet.rehearsal_templates import SYSCTL, UNIT_NAMES, nftables, units
 from fleet.role_config import SNI, awg_config, mesh_config, tcp_config
@@ -134,6 +134,112 @@ def test_configure_paths_modes_and_fixed_argv(runtime):
     for argv,data in runtime.executor.calls:
         assert not any('synthetic-offline-token' in value or 'PrivateKey =' in value for value in argv)
     runtime.configure(target)
+
+
+def test_mesh_interface_discovery_allowed_without_network_admin_capability():
+    rendered=units('gw-'+'a'*32,'fleet-rehearsal-test',300)
+    mesh=rendered['fc-rehearsal-mesh.service']
+    assert b'RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK\n' in mesh
+    assert b'CapabilityBoundingSet=\n' in mesh
+    for name in ('tcp','snapshot','monitoring'):
+        assert b'AF_NETLINK' not in rendered['fc-rehearsal-'+name+'.service']
+
+
+@pytest.fixture
+def predecessor(runtime):
+    runtime.stage(runtime.manifest['bundle_id'])
+    instance='fleet-rehearsal-retired'
+    directory=runtime.directory.parent/instance
+    directory.mkdir(mode=0o700)
+    (directory/'operations').mkdir(mode=0o700)
+    node=Ed25519PrivateKey.generate()
+    public=node.public_key().public_bytes(serialization.Encoding.Raw,serialization.PublicFormat.Raw)
+    owner=dict(instance_id=instance,identity=digest(public))
+    binding={name:runtime.permit[name] for name in ('logical_gateway','ipv4','provider','region')}
+    binding.update(instance_id=instance,bundle_id='gw-'+'c'*32,roles=['awg','tcp','mesh'])
+    body=dict(schema=1,scope='rehearsal',binding=binding,public_key=public.hex(),enrolled_at=1000,transport_issuance=False)
+    enrollment=dict(body=body,signature=base64.b64encode(runtime.test_signer.sign(canonical(body))).decode())
+    custody=dict(scope='DISPOSABLE_FLEET_REHEARSAL_FINAL_CUSTODY',instance_id=instance,
+                 actual_bundle=None,disposition='SECRET_ERASURE_PENDING')
+    records={'enrollment.json':enrollment,
+        'final-custody.json':dict(body=custody,signature=base64.b64encode(node.sign(canonical(custody))).decode()),
+        'operations/state.json':dict(owner,state='RETIRED',fenced=False,actual_bundle=None),
+        'operations/retire.json':dict(instance_id=instance,action='retire',result='PASS',state_after='RETIRED')}
+    for name,value in records.items():
+        write_private(directory/name,canonical(value))
+    write_private(runtime.configuration/'owner.json',canonical(owner),replace=True)
+    return runtime,directory,owner
+
+
+def test_retired_owner_handoff_is_verified_atomic_and_preserves_predecessor(predecessor):
+    runtime,directory,previous=predecessor
+    before={str(path.relative_to(directory)):path.read_bytes() for path in directory.rglob('*') if path.is_file()}
+    runtime.stage(runtime.manifest['bundle_id'])
+    evidence=load(read_private(runtime.directory/'predecessor.json'))
+    assert evidence['previous']==previous
+    assert load(read_private(runtime.configuration/'owner.json'))['instance_id']==runtime.permit['instance_id']
+    runtime.stage(runtime.manifest['bundle_id'])
+    assert before=={str(path.relative_to(directory)):path.read_bytes() for path in directory.rglob('*') if path.is_file()}
+
+
+@pytest.mark.parametrize('state,fenced',[('FAILED',False),('DRAINING',False),('QUARANTINED',True),('RETIRED',True)])
+def test_nonretired_or_fenced_owner_cannot_be_adopted(predecessor,state,fenced):
+    runtime,directory,previous=predecessor
+    record=load(read_private(directory/'operations/state.json'))
+    record.update(state=state,fenced=fenced)
+    write_private(directory/'operations/state.json',canonical(record),replace=True)
+    with pytest.raises(FleetError,match='retired_predecessor_state'):
+        runtime.stage(runtime.manifest['bundle_id'])
+    assert load(read_private(runtime.configuration/'owner.json'))==previous
+
+
+@pytest.mark.parametrize('resource',['identity.key','material.key','slots','slots.pending','config','unit','pointer','sysctl','firewall','interface'])
+def test_retired_owner_with_remaining_resources_is_rejected(predecessor,resource):
+    runtime,directory,previous=predecessor
+    if resource=='config':
+        (runtime.configuration/'old-config').mkdir()
+    elif resource=='unit':
+        (runtime.path('/etc/systemd/system')/'fc-rehearsal-mesh.service').symlink_to('/missing')
+    elif resource=='pointer':
+        runtime.current.symlink_to('releases/'+runtime.manifest['bundle_id'])
+    elif resource=='sysctl':
+        runtime.sysctl.write_bytes(SYSCTL)
+    elif resource=='firewall':
+        runtime.executor.table=b'table inet family_connect_rehearsal {}'
+    elif resource=='interface':
+        original=runtime.executor.run
+        runtime.executor.run=lambda argv,**kwargs: SimpleNamespace(returncode=0,stdout=b'') if argv==['ip','link','show','dev','fcrh0'] else original(argv,**kwargs)
+    else:
+        write_private(directory/resource,b'synthetic-not-delivered')
+    with pytest.raises(FleetError,match='retired_predecessor_resources'):
+        runtime.stage(runtime.manifest['bundle_id'])
+    assert load(read_private(runtime.configuration/'owner.json'))==previous
+
+
+@pytest.mark.parametrize('attack',['custody-signature','enrollment-signature','missing-retirement','identity'])
+def test_retired_owner_requires_signed_binding_and_final_receipts(predecessor,attack):
+    runtime,directory,previous=predecessor
+    if attack=='missing-retirement':
+        (directory/'operations/retire.json').unlink()
+    elif attack=='identity':
+        write_private(runtime.configuration/'owner.json',canonical(dict(previous,identity='0'*64)),replace=True)
+    else:
+        name='final-custody.json' if attack=='custody-signature' else 'enrollment.json'
+        record=load(read_private(directory/name));record['signature']=base64.b64encode(bytes(64)).decode()
+        write_private(directory/name,canonical(record),replace=True)
+    with pytest.raises(FleetError):
+        runtime.stage(runtime.manifest['bundle_id'])
+
+
+@pytest.mark.parametrize('field,value',[('ipv4','9.9.9.9'),('provider','another-provider'),('region','another-region')])
+def test_retired_owner_on_another_host_or_provider_cannot_be_adopted(predecessor,field,value):
+    runtime,directory,previous=predecessor
+    receipt=load(read_private(directory/'enrollment.json'))
+    receipt['body']['binding'][field]=value
+    receipt['signature']=base64.b64encode(runtime.test_signer.sign(canonical(receipt['body']))).decode()
+    write_private(directory/'enrollment.json',canonical(receipt),replace=True)
+    with pytest.raises(FleetError,match='retired_predecessor_binding'):
+        runtime.stage(runtime.manifest['bundle_id'])
 
 
 def test_switch_restore_and_owned_retire(runtime):

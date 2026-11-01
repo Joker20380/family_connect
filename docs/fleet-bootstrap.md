@@ -34,6 +34,14 @@ reads config contents, environment values or raw journal messages. Unavailable d
 do not discard the durable operation result. A failed start with successful rollback is not
 an unknown outcome and must not be blindly replayed; localize the failure before a new intent.
 
+MESH needs AF_NETLINK for interface discovery; it remains unprivileged with an empty capability
+bounding set. Never patch a signed release or its immutable config/unit in place. A corrected
+bundle pair requires new qualification and a new enrollment. Reusing the reserved disposable
+host is allowed only after successful retirement: staging verifies matching predecessor
+enrollment/custody signatures, terminal unfenced journal state and absence of owned live
+resources/secrets under an exclusive owner lock, retaining predecessor evidence and releases.
+Failed, fenced, unsigned or still-live predecessors cannot be adopted; there is no force path.
+
 `fleet.rehearsal_state` retains operation bindings, first failure and rollback receipts;
 changed replay or interrupted operations are fenced. It requires a separately qualified
 physical runtime implementation; synthetic callback tests are not VPN acceptance. Enrollment

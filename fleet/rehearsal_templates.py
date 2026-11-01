@@ -72,7 +72,7 @@ def units(bundle_id, instance_id, lifetime, expires_at=None):
                 'ProtectKernelTunables=yes\nProtectKernelModules=yes\nProtectControlGroups=yes\n'
                 'LockPersonality=yes\nRestrictSUIDSGID=yes\nRestrictRealtime=yes\n'
                 'CapabilityBoundingSet='+('CAP_NET_ADMIN' if name=='awg' else '')+'\n'
-                'RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6'+(' AF_NETLINK' if name=='awg' else '')+'\n'
+                'RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6'+(' AF_NETLINK' if name in ('awg','mesh') else '')+'\n'
                 'StandardOutput=null\nStandardError=null\n')
         if oneshot:
             unit += 'RemainAfterExit=yes\n'

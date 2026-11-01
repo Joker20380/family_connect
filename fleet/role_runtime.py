@@ -2,6 +2,7 @@
 
 import os
 import base64
+import fcntl
 from pathlib import Path
 import pwd
 import re
@@ -11,7 +12,8 @@ import subprocess
 import tempfile
 import time
 
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+from cryptography.exceptions import InvalidSignature
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
 
 from .bundle import safe_path
@@ -187,11 +189,74 @@ class Runtime:
                          '/etc/family-connect/rehearsal','/run/family-connect-rehearsal'):
             path = self.path(absolute)
             self.mkdir(path, mode=0o755)
+        lock = self.configuration/'owner.lock'
+        if not lock.exists():
+            try:
+                self.write(lock,b'')
+            except FileExistsError:
+                pass
+        read_private(lock,owner=self.uid,limit=0)
+        descriptor=os.open(lock,os.O_RDONLY|os.O_NOFOLLOW)
+        try:
+            fcntl.flock(descriptor,fcntl.LOCK_EX)
+            self.stage_owned(bundle_id)
+        finally:
+            os.close(descriptor)
+
+    def retired_predecessor(self, previous):
+        exact(previous,('instance_id','identity'))
+        if (not re.fullmatch(r'fleet-rehearsal-[a-z0-9-]+',str(previous['instance_id']))
+                or previous['instance_id']==self.permit['instance_id']):
+            fail('rehearsal_install_owner_conflict')
+        directory=checked(self.directory.parent/previous['instance_id'],directory=True,owner=self.uid)
+        enrollment=load(read_private(directory/'enrollment.json',owner=self.uid))
+        binding=enrollment['body']['binding']
+        identity=verify_receipt(enrollment,self.authority,binding,scope='rehearsal')
+        if (identity!=previous['identity'] or binding['instance_id']!=previous['instance_id']
+                or any(binding[name]!=self.permit[name] for name in ('ipv4','logical_gateway','provider','region'))):
+            fail('retired_predecessor_binding')
+        state=load(read_private(directory/'operations/state.json',owner=self.uid))
+        if (state.get('state')!='RETIRED' or state.get('fenced') is not False
+                or state.get('instance_id')!=previous['instance_id'] or state.get('identity')!=identity):
+            fail('retired_predecessor_state')
+        journals=[load(read_private(path,owner=self.uid)) for path in (directory/'operations').glob('*.json') if path.name!='state.json']
+        if not any(record.get('action')=='retire' and record.get('result')=='PASS'
+                   and record.get('state_after')=='RETIRED' and record.get('instance_id')==previous['instance_id'] for record in journals):
+            fail('retired_predecessor_receipt')
+        custody=load(read_private(directory/'final-custody.json',owner=self.uid))
+        if (custody['body'].get('scope')!='DISPOSABLE_FLEET_REHEARSAL_FINAL_CUSTODY'
+                or custody['body'].get('instance_id')!=previous['instance_id']):
+            fail('retired_predecessor_custody')
+        try:
+            Ed25519PublicKey.from_public_bytes(bytes.fromhex(enrollment['body']['public_key'])).verify(
+                base64.b64decode(custody['signature'],validate=True),canonical(custody['body']))
+        except (ValueError,InvalidSignature):
+            fail('retired_predecessor_signature')
+        resources=[directory/name for name in ('identity.key','material.key','slots','slots.pending')]
+        resources += [self.current,self.sysctl,self.path('/run/family-connect-rehearsal')/previous['instance_id']]
+        resources += [self.path('/etc/systemd/system')/name for name in
+                      (*['fc-rehearsal-'+role+'.service' for role in UNIT_NAMES],'fc-rehearsal-expiry.timer','fc-rehearsal-expiry.service')]
+        if (any(path.exists() or path.is_symlink() for path in resources)
+                or set(path.name for path in self.configuration.iterdir())-{'owner.json','owner.lock'}
+                or self.command('nft','-s','list','table','inet',TABLE,check=False).returncode==0
+                or self.command('ip','link','show','dev','fcrh0',check=False).returncode==0):
+            fail('retired_predecessor_resources')
+        evidence=canonical(dict(previous=previous,enrollment_sha256=digest(canonical(enrollment)),
+                                state_sha256=digest(canonical(state)),custody_sha256=digest(canonical(custody))))
+        receipt=self.directory/'predecessor.json'
+        if receipt.exists():
+            if read_private(receipt,owner=self.uid)!=evidence:
+                fail('retired_predecessor_changed')
+        else:
+            self.write(receipt,evidence)
+
+    def stage_owned(self, bundle_id):
         owner=self.configuration/'owner.json'
         owner_binding=canonical(dict(instance_id=self.permit['instance_id'],identity=self.enrolled_identity()))
         if owner.exists():
             if read_private(owner,owner=self.uid)!=owner_binding:
-                fail('rehearsal_install_owner_conflict')
+                self.retired_predecessor(load(read_private(owner,owner=self.uid)))
+                self.write(owner,owner_binding,replace=True)
         elif any(self.releases.iterdir()):
             fail('rehearsal_unowned_releases')
         else:
