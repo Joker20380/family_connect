@@ -1,0 +1,13 @@
+table inet fc_instance {
+    chain forwarding {
+        type filter hook forward priority 0; policy accept;
+        iifname "@INTERFACE@" accept
+        oifname "@INTERFACE@" ct state established,related accept
+    }
+}
+table ip fc_instance_nat {
+    chain postrouting {
+        type nat hook postrouting priority srcnat; policy accept;
+        ip saddr @SUBNET@ oifname "@UPLINK@" masquerade
+    }
+}

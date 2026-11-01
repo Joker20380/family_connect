@@ -25,7 +25,14 @@ The existing client lease engine is not reused as a physical-instance state mach
 - Bundle/signature:35 combined contract/bundle tests PASS, including two byte-identical
   archives/manifests/signatures/hash inventories, traversal/link/duplicate/mode/target and
   signed-malicious archive rejection. Explicit generated test key only; no live signing key.
-- CLI/atomic installer, enrollment and Django: pending.
+- CLI/atomic installer and enrollment implemented: isolated temporary roots only, explicit
+  SSH fingerprint/read-only host probe, live mutation closed; atomic staging/pointer swaps,
+  exact previous-bundle rollback, durable operation fencing and generated node identity.
+  One-use enrollment uses hash-only tokens/600s TTL and possession proofs; no user invitations.
+  Combined source/unit tests:67 PASS, including unsupported-host-before-writes, dry-run,
+  stage replay, verified activation, failed activation evidence, upgrade rollback, all-role
+  health binding, SSH fingerprint, enrollment expiry/cancel/replay and identity binding.
+- Django models/UI and final combined acceptance: pending.
 - Final synthetic acceptance and rehearsal runbook: pending.
 
 ## Next boundary

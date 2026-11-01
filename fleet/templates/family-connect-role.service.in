@@ -1,0 +1,21 @@
+[Unit]
+Description=Family Connect physical instance role @ROLE@
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=family-connect
+Group=family-connect
+ExecStart=/opt/family-connect/current/bin/@ROLE@ --config /etc/family-connect/roles/@ROLE@.json
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/family-connect /run/family-connect
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
