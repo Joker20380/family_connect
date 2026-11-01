@@ -55,7 +55,10 @@ def capsule(artifact_root, maps):
     fail('EXACT_CANONICAL_MESH_CAPSULE_MISSING_OR_CORRUPT')
 
 
-def operator_probe(source, patch, output):
+def operator_probe(source, patch, output, *, expected, cache=None):
+    if (expected['source_inventory_sha256']!=digest(canonical({name:digest(content) for name,content in source.items()}))
+            or expected['patch_sha256']!=digest(patch) or expected['compiler_image']!=GO_IMAGE):
+        fail('operator_probe_source_binding')
     source_root=output/'operator-source'
     source_root.mkdir(mode=0o700)
     for name,content in source.items():
@@ -66,6 +69,16 @@ def operator_probe(source, patch, output):
     if applied.returncode:
         fail('operator_probe_patch_binding')
     subprocess.run(['git','apply','-'],cwd=source_root,input=patch,capture_output=True,check=True)
+    if cache is not None and cache.exists():
+        if load(source_bytes(cache,'receipt.json'))!=expected:
+            fail('operator_probe_cache_receipt')
+        for revision in ('first','second'):
+            name='operator-probe-'+revision
+            content=source_bytes(cache,name,64*1024*1024)
+            if digest(content)!=expected['sha256'] or len(content)!=expected['size']:
+                fail('operator_probe_cache_binding')
+            write_private(output/name,content,mode=0o500)
+        return expected
     log=output/'operator-build.log'
     binaries=[]
     with log.open('wb') as stream:
@@ -82,6 +95,8 @@ def operator_probe(source, patch, output):
     metadata=dict(sha256=digest(binaries[0]),size=len(binaries[0]),compiler_image=GO_IMAGE,
         source_inventory_sha256=digest(canonical({name:digest(content) for name,content in source.items()})),
         patch_sha256=digest(patch),purpose='OPERATOR_ONLY_DISPOSABLE_TARGET_EGRESS')
+    if metadata!=expected:
+        fail('operator_probe_rebuild_binding')
     return metadata
 
 
@@ -115,7 +130,8 @@ def prepare(commit, artifact_root, key_path, output):
     if raw_private in tuple(bytes([value])*32 for value in range(256)):
         fail('synthetic_signing_key_forbidden')
     output.mkdir(mode=0o700)
-    probe=operator_probe(canonical_source,sources['fleet/operator_probe.patch'],output)
+    probe=operator_probe(canonical_source,sources['fleet/operator_probe.patch'],output,
+        expected=load(sources['fleet/inventory/operator-probe.json']),cache=artifact_root/'operator-qualification')
     agent=build_agent({name:content for name,content in sources.items()
                        if name.startswith('fleet/') and name.count('/')==1 and name.endswith('.py')})
     write_private(output/'agent.pyz',agent,mode=0o500)

@@ -3,7 +3,7 @@
 <!-- FLEET-BOOTSTRAP-2 current -->
 **FLEET-BOOTSTRAP-2 — IN_PROGRESS / SOURCE-PACKAGE PREPARATION.**
 Continuation: bound runtime, encrypted materials, operator CLI and two-phase acceptance
-have217 fleet tests PASS; full console156 PASS. Private A/B qualification follows.
+have237 fleet tests PASS; full console156 PASS. Final private A/B qualification follows.
 Dependency: accepted FLEET-BOOTSTRAP-1 sourcea3fc3bf and receipt; synthetic-only bundle is
 not a production VPN distribution. Owner authorizes one disposable Ubuntu24.04/x86_64
 rehearsal, not production RU/NL, catalog/paid changes or phone actions. No host supplied.

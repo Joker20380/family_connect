@@ -87,7 +87,7 @@ def qualify(package, output):
             command([str(path),'version' if name=='xray' else '-h' if name=='gateway' else '--version'])
         nft=nftables('eth0')
         command(['nft','-c','-f','-'],content=nft)
-        command(['nft','-f','-'],content=b'table inet fc_qualification_neighbor { chain sentinel { } }\n')
+        command(['nft','-f','-'],content=b'table inet fc_qualification_neighbor {\n chain sentinel {\n }\n}\n')
         neighbor=command(['nft','-s','list','table','inet','fc_qualification_neighbor'])
         command(['nft','-f','-'],content=nft)
         predecessor=command(['nft','-s','list','table','inet',TABLE])
@@ -159,6 +159,7 @@ def scenario(workspace,bundles,package_receipt):
         signed=sign_acceptance(data,authority,now=now+1)
         assert operate('complete-verification',revision,dict(receipt=signed))['result']=='PASS'
         assert operate('activate-local',revision)['result']=='PASS'
+    runtime.stage(body['bundle_a'])
     assert operate('stage')['result']=='PASS'
     assert operate('start-verification')['result']=='AWAITING_EXTERNAL_ACCEPTANCE'
     assert operate('complete-verification')['result']=='AWAITING_EXTERNAL_ACCEPTANCE'

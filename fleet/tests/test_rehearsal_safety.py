@@ -1,4 +1,5 @@
 import http.client
+import os
 import threading
 from pathlib import Path
 from types import SimpleNamespace
@@ -154,3 +155,35 @@ def test_evidence_projection_never_persists_raw_extra_fields(authority):
     assert body['duration_ms']==1250 and body['source_receipt_sha256']==digest(canonical(source))
     assert b'fixture-private' not in canonical(receipt) and b'private.invalid' not in canonical(receipt)
     assert b'8.8.8.8' not in canonical(receipt)
+
+
+def test_restrictive_operator_umask_preserves_exact_service_directories(runtime):
+    previous=os.umask(0o077)
+    try:
+        target=runtime.manifest['bundle_id']
+        runtime.stage(target)
+        runtime.configure(target)
+        assert (runtime.configuration/target).stat().st_mode & 0o777==0o750
+        assert (runtime.configuration/target/'profile').stat().st_mode & 0o777==0o750
+        assert (runtime.configuration/target/'units').stat().st_mode & 0o777==0o755
+        runtime.stage(target)
+    finally:
+        os.umask(previous)
+
+
+def test_existing_awg_interface_is_never_adopted_or_removed(runtime):
+    target=runtime.manifest['bundle_id']
+    runtime.stage(target)
+    runtime.configure(target)
+    runtime.switch(target)
+    original=runtime.executor.run
+    def execute(argv,**kwargs):
+        if argv==['ip','link','show','dev','fcrh0']:
+            return SimpleNamespace(returncode=0,stdout=b'',stderr=b'')
+        return original(argv,**kwargs)
+    runtime.executor.run=execute
+    with pytest.raises(FleetError,match='awg_interface_preexisting'):
+        runtime.start(target)
+    with pytest.raises(FleetError,match='retire_interface_still_present'):
+        runtime.retire()
+    assert not any(argv[:3]==['ip','link','delete'] for argv,unused in runtime.executor.calls)

@@ -1,0 +1,8 @@
+{
+  "compiler_image": "sha256:ab3d6955bbc813a0f3fdf220c1d817dd89c0b3f283777db8ece4a32fe7858edd",
+  "patch_sha256": "de941c4fb2500da3cf5a89207f31a0b6fef7baecc38b610d94b8206234f7c315",
+  "purpose": "OPERATOR_ONLY_DISPOSABLE_TARGET_EGRESS",
+  "sha256": "7875df5e84b208261a8835565723394d8e1b829b35c1b8a2ec6fa913f8f15f8a",
+  "size": 17313802,
+  "source_inventory_sha256": "d06df9b0d9b73408c9e3b1fba03d630136a10fb3c843269ff6f6f7d7e4bf916e"
+}

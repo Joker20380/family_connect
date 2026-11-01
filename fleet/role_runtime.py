@@ -69,6 +69,7 @@ class Runtime:
         checked(path.parent, directory=True)
         path.mkdir(mode=mode)
         os.chown(path, self.uid, self.root_gid if gid is None else gid)
+        path.chmod(mode)
         fsync_directory(path.parent)
 
     def write(self, path, content, mode=0o600, gid=None, replace=False):
@@ -389,6 +390,8 @@ class Runtime:
         if self.pointer() != bundle_id:
             fail('start_pointer_binding')
         self.verify_configuration(bundle_id)
+        if self.command('ip','link','show','dev','fcrh0',check=False).returncode==0:
+            fail('awg_interface_preexisting')
         for name in ('ready.json','ready.json.lock'):
             path=self.run_directory/name
             if path.exists() or path.is_symlink():
@@ -455,6 +458,9 @@ class Runtime:
         import base64
         if len(peers)!=1 or digest(base64.b64decode(peers[0],validate=True)) != config['awg']['peer_sha256']:
             fail('awg_peer_inventory')
+        public=self.command(str(self.current/'bin/awg'),'show','fcrh0','public-key').stdout.strip()
+        if digest(base64.b64decode(public,validate=True))!=config['awg']['server_sha256']:
+            fail('awg_server_identity')
         if self.command(str(self.current/'bin/awg'),'show','fcrh0','listen-port').stdout.strip()!=b'51827':
             fail('awg_listen_port')
         allowed=self.command(str(self.current/'bin/awg'),'show','fcrh0','allowed-ips').stdout.decode().split()
@@ -572,7 +578,8 @@ class Runtime:
                 remove_private(path,owner=self.uid)
         self.switch(None)
         self.command('systemctl','daemon-reload')
-        self.command('ip','link','delete','fcrh0',check=False)
+        if current and self.command('ip','link','show','dev','fcrh0',check=False).returncode==0:
+            fail('retire_interface_still_present')
         if self.run_directory.exists():
             checked(self.run_directory,directory=True,owner=self.service_account()[0])
             if set(path.name for path in self.run_directory.iterdir())-{'ready.json','ready.json.lock'}:

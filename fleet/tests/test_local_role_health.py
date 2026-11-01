@@ -1,8 +1,11 @@
 import datetime
+import base64
 import io
 from types import SimpleNamespace
 
 import pytest
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
 
 from fleet.contracts import FleetError, canonical, load
 from fleet.private_files import write_private
@@ -27,7 +30,10 @@ def healthy(runtime,monkeypatch):
         unit=(runtime.configuration/target/'units'/('fc-rehearsal-'+role+'.service')).read_text()
         argv=next(line.removeprefix('ExecStart=').split() for line in unit.splitlines() if line.startswith('ExecStart='))
         (directory/'cmdline').write_bytes(b'\x00'.join(argument.encode() for argument in argv)+b'\x00')
-    peer=load((runtime.directory/'slots/awg-material').read_bytes())['peer_public_key']
+    awg=load((runtime.directory/'slots/awg-material').read_bytes())
+    peer=awg['peer_public_key']
+    public=base64.b64encode(X25519PrivateKey.from_private_bytes(base64.b64decode(awg['server_private_key'])).public_key().public_bytes(
+        serialization.Encoding.Raw,serialization.PublicFormat.Raw))
     original=runtime.executor.run
     fault={'kind':None}
     def execute(argv,*,input=None,check=True):
@@ -42,9 +48,11 @@ def healthy(runtime,monkeypatch):
         if argv[:4]==['ip','-j','address','show']:
             output=canonical([dict(mtu=1280,addr_info=[dict(local='10.203.217.1',prefixlen=30)])])
         if argv[0].endswith('/bin/awg') and argv[1:3]==['show','fcrh0']:
-            output={'peers':peer.encode(),'listen-port':b'51827','allowed-ips':(peer+' 10.203.217.2/32').encode()}[argv[3]]
+            output={'peers':peer.encode(),'public-key':public,'listen-port':b'51827','allowed-ips':(peer+' 10.203.217.2/32').encode()}[argv[3]]
             if fault['kind']=='peer' and argv[3]=='peers':
                 output+=b' '+peer.encode()
+            if fault['kind']=='server-key' and argv[3]=='public-key':
+                output=peer.encode()
         if output is not None:
             return SimpleNamespace(returncode=0,stdout=output,stderr=b'')
         return original(argv,input=input,check=check)
@@ -65,7 +73,7 @@ def test_local_health_never_asserts_external_pass(healthy):
     assert b'join_url' not in canonical(result) and b'offline-fixture' not in canonical(result)
 
 
-@pytest.mark.parametrize('failure',['restarts','listener','peer','binary','argv','expired-monitor','expired-material'])
+@pytest.mark.parametrize('failure',['restarts','listener','peer','server-key','binary','argv','expired-monitor','expired-material'])
 def test_each_local_health_drift_rejects(healthy,failure):
     runtime,fault,processes,observations=healthy
     fault['kind']=failure

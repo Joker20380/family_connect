@@ -67,6 +67,8 @@ class IsolatedExecutor:
         code=0
         if argv==['ip','-j','route','show','default']:
             output=b'[{"dev":"eth0"}]'
+        elif argv==['ip','link','show','dev','fcrh0']:
+            code=1
         elif argv[:3]==['nft','-s','list']:
             output=self.table or b''
             code=0 if self.table else 1

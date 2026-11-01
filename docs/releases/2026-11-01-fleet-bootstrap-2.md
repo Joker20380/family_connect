@@ -30,6 +30,13 @@ migration drift NONE. Production invitation parser unchanged.
 
 ## Source/package gates
 
+Latest source regression: fleet237 + full console156 =393 PASS; paid/backend170 PASS.
+The isolated package test exposed strict-umask directory modes; explicit owned-directory
+modes and a regression now fix it. Existing AWG interfaces are neither adopted nor
+deleted. Server-key health and unknown SSH-result reconciliation are explicit gates.
+Earlier private package attempts are superseded, not accepted host inputs; final exact
+A/B source/container qualification is still running in this checkpoint.
+
 Continuation1 November: signed X25519/HKDF/ChaCha20-Poly1305 material envelopes,
 separate encryption-key enrollment binding, nonce reservation and private slot custody
 now have source tests. Verification is split into durable `start-verification` and

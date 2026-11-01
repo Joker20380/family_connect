@@ -47,7 +47,8 @@ def awg_config(raw):
             'Jc = 4\nJmin = 40\nJmax = 70\nS1 = 81\nS2 = 93\nS3 = 17\nS4 = 23\n'
             'H1 = 1010123\nH2 = 2020234\nH3 = 3030345\nH4 = 4040456\n\n'
             '[Peer]\nPublicKey = '+value['peer_public_key']+'\nAllowedIPs = '+PEER_ADDRESS+'\n')
-    return text.encode(), dict(peer_sha256=digest(peer), port=PORTS['awg'], address=ADDRESS, mtu=MTU)
+    return text.encode(), dict(peer_sha256=digest(peer), server_sha256=digest(private.public_key().public_bytes(
+        serialization.Encoding.Raw,serialization.PublicFormat.Raw)),port=PORTS['awg'], address=ADDRESS, mtu=MTU)
 
 
 def tcp_config(raw):

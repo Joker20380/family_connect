@@ -13,22 +13,141 @@ four hours. Catalog, production identity import, user and paid operations are al
 `fleet.remote` uses a fixed SSH receiver and JSON stdin, no inventory shell commands or
 password/agent/port forwarding. OpenSSL verifies the permit in memory before target upload;
 the receiver checks actual local addresses and host keys, exact agent bytes/mode, then the
-agent re-verifies the bundle. Missing ordinary runtime packages may be installed only in
-the permitted stage after those guards, never during read-only preflight.
+agent re-verifies the bundle. Missing ordinary OS tools may be installed only during
+permitted enrollment/staging after those guards, never during read-only preflight.
+Cryptography46.0.7/cffi2.1.1/pycparser3.0 are loaded from exact signed offline wheels for
+CPython3.12, not from an unpinned target Python package. Their extracted inventory is
+root-owned, immutable and rechecked on every agent invocation.
 
 `fleet.rehearsal_state` retains operation bindings, first failure and rollback receipts;
 changed replay or interrupted operations are fenced. It requires a separately qualified
 physical runtime implementation; synthetic callback tests are not VPN acceptance. Enrollment
-uses a separate rehearsal scope/database and cannot consume synthetic proofs. These are
-preparatory source interfaces, not yet the deployable/operator handoff.
+uses a separate rehearsal scope/database and cannot consume synthetic proofs. The exact
+verified `runtime/roles.py` entrypoint selects the bound role implementation; no fallback
+to the old synthetic CLI is allowed.
 
 The native-only [binding inventory](../fleet/inventory/deployable-gateway-v1.json) records
-accepted binaries and public source/receipt hashes. It does not admit the unfinished role
-installer or monitoring implementation. The receiver independently validates all signed
+accepted binaries and public source/receipt hashes. The separate
+[deployable inventory](../fleet/inventory/deployable-gateway-v2.json) admits awg, tcp, mesh,
+profile-reader, publisher, snapshot, monitoring and load-monitor. Mailbox/chat-services,
+production renewal/restricted-sync and registry/control-plane database are explicitly
+disabled, not implicitly missing. Monitoring is new bound standard-library source:
+read-only `127.0.0.1:19727/status`, no telemetry or mutation API. The receiver validates all signed
 archive members before installing prerequisite OS packages; unsupported OS/architecture,
 missing TUN, excluded local addresses and existing legacy Family Connect installs fail
 before writes. Current exact test counts and remaining handoff gates are in the
 [preparation receipt](releases/2026-11-01-fleet-bootstrap-2.receipt.json).
+
+## Rehearsal operator handoff
+
+Preparation and a later live rehearsal are distinct gates. Never select production RU/NL,
+use the excluded hosts, publish a catalog, issue an invitation or perform a payment action.
+The dated receipt is authoritative for the qualified source SHA, A/B IDs, public signer
+fingerprint, archive/manifest/signature hashes and tests. Earlier private builds are
+superseded attempts, not alternatives to the final bound pair.
+
+`scripts/fleet-rehearsal prepare --source-commit COMMIT --artifact-root PRIVATE_INPUTS
+--private-key PRIVATE_REHEARSAL_KEY --output NEW_PRIVATE_DIRECTORY` builds A and B twice.
+Use canonical absolute paths without symlink ancestors. Private inputs include the exact
+four native files, accepted source inventories, the282-file canonical MESH capsule,
+upstream AWG/Xray source and pinned Python wheels. All are retained outside Git; only
+safe receipts/hashes and source are committed. A new private Ed25519 bundle key is created
+with0600 ownership if absent. Published synthetic signing seeds are explicitly rejected.
+A/B differ only in `metadata/revision.json`; native/config/material/role contracts match.
+The separately rebuilt operator-only probe is not a node role or a copied private identity.
+
+Only after the ten private host inputs are supplied may an operator issue the four-hour
+signed permit using `fleet.permit.sign`. A separate private rehearsal authority signs the
+permit, enrollment/material bindings and external acceptance; Django receives public keys
+only. Never reuse the product release signer. Record provider-console recovery availability
+before host work, and independently pin the single-host known_hosts file.
+
+Host commands share `--permit`, `--permit-key`, `--bundle` (the A-first/B-first four-file
+directory), `--bundle-key`, `--known-hosts`, `--fingerprint`, `--host`, `--user`, `--instance`,
+`--operation-id`; optionally `--ssh-key` or the confirmed SSH-agent context. All key options
+are paths, never key values. A non-root SSH account needs noninteractive sudo for the fixed
+receiver, not a password sent in chat. Every mutation rechecks permit/window/pins and a fresh
+host preflight; there is no arbitrary command, force, insecure or skip-health option.
+
+1. `plan`, `preflight`: read-only planning/host qualification; Ubuntu24.04/x86_64 only.
+2. `enroll --authority-key PATH --operator-state PRIVATE_DIRECTORY`: node-local Ed25519
+   ownership and separately generated X25519 encryption key; only public proofs leave it.
+3. `deliver-materials --input PRIVATE_PLAN --create-materials --authority-key PATH
+   --operator-state PRIVATE_DIRECTORY`: create fresh disposable transport material after
+   enrollment; the private plan has `probe_identity` and `publisher_material` custody paths.
+   The approved probe is opened only at this later live step, with `create=False`, never
+   copied to the node. The publisher input must be a separately supplied disposable token.
+   Alternatively deliver the already authenticated encrypted envelope with `--input PATH`.
+4. `stage`: immutable `/opt/family-connect/releases/<bundle_id>/`; config/secrets remain in
+   `/etc/family-connect/rehearsal/` and `/var/lib/family-connect-rehearsal/<instance_id>/`.
+5. `start-verification`: validate config and units, atomically switch `current`, start roles,
+   check local health, persist `AWAITING_EXTERNAL_ACCEPTANCE` with unpredictable nonce.
+   Absence of an external receipt is not failure and does not trigger rollback.
+6. `run-acceptance --authority-key PATH --input PRIVATE_HARNESS_CONFIG --output RECEIPT`:
+   operator-only AWG/TCP/MESH probes outside the node, root required for the isolated AWG
+   interface/policy route. Configuration names exact `native_directory`, `operator_probe`,
+   `awg_peer`, `tcp_client`, `mesh_profile`, `probe_identity` paths. No identity/token bytes
+   appear in argv, stdout, receipts or Django. Cleanup runs before the authority signs.
+7. `complete-verification --input RECEIPT`: verify signature, instance/bundle/nonce/operation,
+   <=300-second receipt lifetime, cleanup and repeated local-health digest. Only then
+   `activate-local` is allowed. Local ACTIVE still does not publish anything.
+8. Stage B, then `upgrade` → external acceptance → completion → activation. An injected
+   local B failure restores A's pointer/config/owned firewall. A signed negative external
+   B receipt also rolls back; an untrusted/absent receipt cannot fabricate a PASS.
+   Explicit `rollback` to accepted A repeats the two-phase external gate.
+9. A provider-console-controlled reboot is a later physical action; the CLI does not reboot
+   hosts. `reboot-verify` requires a changed boot ID and unchanged enrollment, then fresh
+   two-party verification. `drain`, `retire` stop only owned units, restore prior forwarding,
+   delete only the owned nft table/sysctl file and remove disposable secret files.
+
+`status` reads durable operation receipts. Any timeout, broken SSH channel, nonzero receiver
+exit or malformed response is UNKNOWN until reconciled by exact operation ID/request binding.
+Never blindly retry. If the remote journal is RUNNING, `drain --recover-operation-id ID`
+uses the observed binding to stop, not rerun, that operation. A failed rollback/retirement
+fences mutations as QUARANTINED: retain evidence and use the provider console for recovery
+or disposal rather than bypassing guards. Old read-only releases remain available for audit.
+
+Retirement fsyncs a final signed custody receipt before zero-overwrite/unlink of disposable
+files. Overwrite cannot guarantee forensic erasure on SSD/COW/provider snapshots; destroy
+the disposable VPS and provider snapshots after the final safe receipt. No production
+backup, profile or identity is imported, overwritten or removed.
+
+## Append-only rehearsal evidence
+
+The operator exporter `scripts/fleet-rehearsal-evidence --kind KIND --source PRIVATE_JSON
+--permit PRIVATE_PERMIT --authority-key PRIVATE_KEY --operation-id ID --bundle-id BUNDLE
+--output SAFE_RECEIPT` projects only fixed safe fields and source hashes. Supported kinds:
+artifact, permit, enrollment, intent, completion, local-health, external-acceptance, reboot,
+retirement. Supply a distinct operation ID for each A/B artifact. For nested operation
+evidence, select the local-health/external-acceptance object into a private input file first.
+An intent is an intention, not proof of execution. UNKNOWN remains UNKNOWN.
+
+Import with `python manage.py import_fleet_rehearsal --kind KIND --receipt SAFE_RECEIPT
+--public-key AUTHORITY_PUBLIC_KEY`. Identical reimports are idempotent; changed same-event
+receipts and UPDATE/DELETE are rejected by model checks and PostgreSQL append-only triggers.
+The Russian summary shows provider/region, target hash (not raw IP), bundles, operation/state,
+local/external role health, duration, rollback/reboot/retirement. The web process never executes
+SSH, decrypts envelopes or holds signing/transport keys. It cannot issue users or payments.
+
+## Source/container qualification
+
+`scripts/qualify-fleet-rehearsal.py` is permitted only inside an isolated root Ubuntu24.04
+container. Run it with network disabled and only namespace-local NET_ADMIN, read-only source
+and package mounts, and a private output mount. It checks exact native help/version/Xray
+config-test, signed A/B target reverification, offline wheels, rendered systemd units,
+`nft -c`, neighboring-table preservation and owned-table rollback. It delivers synthetic
+encrypted material into a fake root and exercises actual versioned filesystem installation,
+two-phase signed synthetic acceptance, B failure→A, B success, explicit rollback and retirement.
+Only command execution/service observations are isolated fixtures; no physical PASS is inferred.
+Actual systemd starts, AWG handshake, TCP/MESH data planes and reboot persistence remain NOT_RUN.
+The pinned base and test dependencies are in
+[`scripts/fleet-rehearsal.Dockerfile`](../scripts/fleet-rehearsal.Dockerfile). Build using
+a minimal context containing only that Dockerfile and `fleet/requirements.lock`, not
+the repository's private state. Do not mount private signing keys or identity custody into
+the qualification container; only the public bundle key, signed packages and safe source
+are needed. Never replace `--network none` with host networking for this source gate.
+
+## Historical FLEET-BOOTSTRAP-1 foundation
 
 FLEET-BOOTSTRAP-1 is source/synthetic only. No production transport issuance,
 catalog publication, paid operation or SSH mutation is authorized by this foundation.
@@ -184,7 +303,7 @@ hashes are observations, not complete redistributable/source-provenance qualific
 Symbolic root ownership maps to the current UID in the sandbox; real root/service-user ownership,
 systemd hardening, firewall coexistence and reboot persistence remain live-rehearsal gates.
 
-## Next: separately authorized FLEET-BOOTSTRAP-2
+## Historical foundation handoff checklist
 
 Do not start this procedure automatically, and never select existing RU/NL as its target.
 

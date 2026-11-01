@@ -3,6 +3,8 @@ from pathlib import Path
 from fleet.contracts import canonical, digest, load
 from fleet.provenance import validate
 from fleet.role_config import DISABLED, ROLES
+import pytest
+from fleet.contracts import FleetError
 
 
 def test_v2_preserves_native_source_bindings_and_exact_roles():
@@ -30,3 +32,12 @@ def test_python_dependencies_are_exact_architecture_and_license_bound():
     for record in dependencies['wheels']:
         assert record['path'].startswith('dependencies/') and record['path'].endswith('.whl')
         assert len(record['sha256'])==64 and record['size']>0 and record['license']
+
+
+@pytest.mark.parametrize('field',['patch_sha256','source_inventory_sha256'])
+def test_operator_cache_requires_exact_reviewed_source_before_use(tmp_path,field):
+    from fleet.package import GO_IMAGE, operator_probe
+    expected=dict(patch_sha256=digest(b'patch'),source_inventory_sha256=digest(canonical({})),compiler_image=GO_IMAGE)
+    expected[field]='a'*64
+    with pytest.raises(FleetError,match='operator_probe_source_binding'):
+        operator_probe({},b'patch',tmp_path,expected=expected,cache=tmp_path/'cache')
