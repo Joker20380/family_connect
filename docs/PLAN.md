@@ -4,6 +4,8 @@
 
 <!-- FLEET-BOOTSTRAP-2 current -->
 **FLEET-BOOTSTRAP-2 — IN_PROGRESS / SOURCE-PACKAGE PREPARATION.**
+Continuation: material envelopes and two-phase external acceptance have170 fleet
+source tests PASS; source/package handoff is not yet qualified. No live host used.
 Dependency: accepted FLEET-BOOTSTRAP-1 sourcea3fc3bf and receipt; synthetic-only bundle is
 not a production VPN distribution. Owner authorizes one disposable Ubuntu24.04/x86_64
 rehearsal, not production RU/NL, catalog/paid changes or phone actions. No host supplied.

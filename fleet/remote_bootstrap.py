@@ -58,8 +58,9 @@ def check(request):
             or any(body[field] is not False for field in ('catalog_publication', 'production_identity_import',
                                                         'user_operations', 'paid_operations'))
             or request['operation']['action'] not in body['allowed_actions']
-            or request['operation']['action'] not in ('stage', 'verify', 'activate-local', 'upgrade', 'rollback',
-                                                    'reboot-verify', 'drain', 'retire')
+            or request['operation']['action'] not in ('enroll', 'deliver-materials', 'stage', 'start-verification',
+                'complete-verification', 'activate-local', 'status', 'upgrade', 'rollback',
+                'reboot-verify', 'drain', 'retire')
             or request['operation']['bundle_id'] not in (body['bundle_a'], body['bundle_b'])):
         raise ValueError('rehearsal_permit_binding')
     address = ipaddress.IPv4Address(body['ipv4'])

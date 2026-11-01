@@ -1,10 +1,13 @@
 """Durable rehearsal operations; transports are accepted only by physical hooks."""
 
 from contextlib import contextmanager
+import copy
 import fcntl
 from pathlib import Path
+import secrets
 import time
 
+from . import acceptance
 from .contracts import canonical, digest, fail, load
 from .installer import atomic_json
 from .permit import replay_binding, SCOPE
@@ -34,7 +37,7 @@ class RehearsalState:
         if not path.exists():
             return dict(instance_id=self.permit['body']['instance_id'], state='PREFLIGHTED',
                         actual_bundle=None, previous_bundle=None, accepted=[], staged=[], health=None,
-                        fenced=False, identity=None)
+                        fenced=False, identity=None, verification=None)
         state = load(path.read_bytes())
         if state['instance_id'] != self.permit['body']['instance_id']:
             fail('private_identity_conflict')
@@ -46,6 +49,9 @@ class RehearsalState:
         if target not in (self.permit['body']['bundle_a'], self.permit['body']['bundle_b']):
             fail('rehearsal_bundle_binding')
         with self.lock():
+            if action == 'status':
+                return dict(state=self.status(), operations=[load(path.read_bytes()) for path in sorted(self.directory.glob('*.json'))
+                            if path.name != 'state.json'])
             journal = self.directory/(request['operation_id']+'.json')
             if journal.exists():
                 previous = load(journal.read_bytes())
@@ -65,14 +71,17 @@ class RehearsalState:
                 previous_bundle=state['actual_bundle'], binding=binding, result='RUNNING',
                 first_failure=None, rollback=None, elapsed_seconds=0, state_before=state['state'])
             atomic_json(journal, receipt)
-            original = dict(state)
+            original = copy.deepcopy(state)
+            self.switching = False
             try:
-                self.apply(state, action, target, request['parameters'])
-                receipt['result'] = 'PASS'
+                result = self.apply(state, action, target, request['parameters'], request['operation_id'])
+                receipt['result'] = 'AWAITING_EXTERNAL_ACCEPTANCE' if state['state']=='AWAITING_EXTERNAL_ACCEPTANCE' else 'PASS'
+                if result is not None:
+                    receipt['evidence'] = result
             except Exception:
                 receipt['first_failure'] = 'rehearsal_'+action.replace('-', '_')+'_failed'
                 receipt['result'] = 'FAIL'
-                if action in ('verify', 'activate-local', 'upgrade', 'rollback'):
+                if self.switching:
                     predecessor = original['actual_bundle']
                     try:
                         self.runtime.stop()
@@ -97,8 +106,36 @@ class RehearsalState:
             atomic_json(journal, receipt)
             return receipt
 
-    def apply(self, state, action, target, parameters):
-        if type(parameters) is not dict or parameters:
+    def apply(self, state, action, target, parameters, operation_id):
+        if type(parameters) is not dict:
+            fail('rehearsal_parameters_not_supported')
+        if action == 'enroll':
+            if state['state']!='PREFLIGHTED':
+                fail('enrollment_state')
+            return self.runtime.enroll(parameters)
+        if action == 'deliver-materials':
+            if state['state']!='PREFLIGHTED' or set(parameters)!={'envelope'}:
+                fail('material_state')
+            return self.runtime.material_store().deliver(parameters['envelope'],
+                permit_expires_at=self.permit['body']['expires_at'],now=self.clock())
+        if action == 'complete-verification':
+            if state['state']!='AWAITING_EXTERNAL_ACCEPTANCE' or state['verification']['bundle_id']!=target:
+                fail('verification_state')
+            if not parameters:
+                return state['verification']
+            if set(parameters)!={'receipt'}:
+                fail('verification_parameters')
+            challenge = state['verification']
+            receipt_hash = acceptance.verify(parameters['receipt'],self.runtime.authority,challenge,now=self.clock())
+            evidence = self.runtime.accept(target,fresh=True)
+            if digest(canonical(evidence))!=challenge['local_health_sha256']:
+                fail('verification_local_health_drift')
+            state['health'] = dict(bundle_id=target,digest=challenge['local_health_sha256'],observed_at=int(self.clock()),
+                                   external_receipt_sha256=receipt_hash,external_expires_at=parameters['receipt']['body']['expires_at'])
+            state['state'] = 'VERIFIED'
+            state['verification'] = None
+            return dict(local_health=evidence,external_acceptance=parameters['receipt'])
+        if parameters:
             fail('rehearsal_parameters_not_supported')
         if action == 'stage':
             if state['state'] not in ('PREFLIGHTED', 'STAGED', 'VERIFIED', 'ACTIVE', 'FAILED'):
@@ -113,21 +150,21 @@ class RehearsalState:
             if state['state'] != 'ACTIVE':
                 state['state'] = 'STAGED'
             return
-        if action == 'verify':
+        if action == 'start-verification':
             if state['state'] != 'STAGED' or target not in state['staged']:
                 fail('verify_state')
+            self.switching = True
             self.runtime.configure(target)
             self.runtime.switch(target)
             self.runtime.start(target)
-            evidence = self.runtime.accept(target, fresh=True)
-            state['health'] = dict(bundle_id=target, digest=digest(canonical(evidence)), observed_at=int(self.clock()))
-            state['state'] = 'VERIFIED'
-            return
+            return self.await_acceptance(state,target,operation_id)
         if action == 'activate-local':
             if (state['state'] != 'VERIFIED' or state['health'] is None or state['health']['bundle_id'] != target
-                    or not 0 <= self.clock()-state['health']['observed_at'] <= 300):
+                    or not 0 <= self.clock()-state['health']['observed_at'] <= 300
+                    or not self.clock() < state['health']['external_expires_at']):
                 fail('verified_health_required')
-            self.runtime.accept(target, fresh=True)
+            if digest(canonical(self.runtime.accept(target, fresh=True)))!=state['health']['digest']:
+                fail('activation_health_drift')
             state['state'] = 'ACTIVE'
             state['actual_bundle'] = target
             state['accepted'] = sorted(set(state['accepted']) | {target})
@@ -137,16 +174,12 @@ class RehearsalState:
                 fail('upgrade_state')
             if action == 'rollback' and target not in state['accepted']:
                 fail('rollback_predecessor_not_accepted')
+            self.switching = True
             self.runtime.configure(target)
             self.runtime.stop()
             self.runtime.switch(target)
             self.runtime.start(target)
-            evidence = self.runtime.accept(target, fresh=True)
-            state['previous_bundle'] = state['actual_bundle']
-            state['actual_bundle'] = target
-            state['accepted'] = sorted(set(state['accepted']) | {target})
-            state['health'] = dict(bundle_id=target, digest=digest(canonical(evidence)), observed_at=int(self.clock()))
-            return
+            return self.await_acceptance(state,target,operation_id)
         if action == 'reboot-verify':
             if state['state'] != 'ACTIVE' or target != state['actual_bundle']:
                 fail('reboot_state')
@@ -154,7 +187,7 @@ class RehearsalState:
             self.runtime.accept(target, fresh=True)
             return
         if action == 'drain':
-            if state['state'] != 'ACTIVE':
+            if state['state'] not in ('ACTIVE','AWAITING_EXTERNAL_ACCEPTANCE','VERIFIED','STAGED','FAILED'):
                 fail('drain_state')
             self.runtime.drain()
             state['state'] = 'DRAINING'
@@ -166,3 +199,15 @@ class RehearsalState:
             state['state'] = 'RETIRED'
             return
         fail('rehearsal_action')
+
+    def await_acceptance(self, state, target, operation_id):
+        evidence = self.runtime.accept(target,fresh=True)
+        started = int(self.clock())
+        challenge = dict(instance_id=state['instance_id'],bundle_id=target,operation_id=operation_id,
+            verification_nonce=secrets.token_hex(32),ipv4=self.permit['body']['ipv4'],
+            local_health_sha256=digest(canonical(evidence)),started_at=started,expires_at=self.permit['body']['expires_at'])
+        state['previous_bundle'] = state['actual_bundle']
+        state['actual_bundle'] = target
+        state['verification'] = challenge
+        state['state'] = 'AWAITING_EXTERNAL_ACCEPTANCE'
+        return dict(challenge=challenge,local_health=evidence)

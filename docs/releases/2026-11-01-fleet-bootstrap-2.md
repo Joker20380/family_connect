@@ -30,6 +30,17 @@ migration drift NONE. Production invitation parser unchanged.
 
 ## Source/package gates
 
+Continuation1 November: signed X25519/HKDF/ChaCha20-Poly1305 material envelopes,
+separate encryption-key enrollment binding, nonce reservation and private slot custody
+now have source tests. Verification is split into durable `start-verification` and
+`complete-verification`; the node cannot promote local health to physical acceptance.
+Missing external evidence preserves `AWAITING_EXTERNAL_ACCEPTANCE`; invalid activation
+does not promote that state. Fleet source tests170 PASS (including26 new material and
+acceptance tests); the Ubuntu24.04 isolated nftables syntax check passes. These results
+are not the full preparation gate, a deployable bundle or a live-host handoff. Role
+runtime, A/B packaging, operator wiring and append-only console imports remain under
+implementation in this same checkpoint. No deployment or version/catalog change.
+
 Seeder correction pushed and remote-verified as `8e94d30f43330a7ce31afe5bf28a398911d452f6`.
 The signed four-hour permit, target exclusions, SSH receiver, target-side reverification,
 scope-separated enrollment and durable rehearsal operation controller are implemented.
