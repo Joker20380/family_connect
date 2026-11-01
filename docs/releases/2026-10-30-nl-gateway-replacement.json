@@ -2736,7 +2736,7 @@
     }
   },
   "android109_ui_repair_20261101": {
-    "state": "READY_FOR_BETA109_OWNER_UPDATE",
+    "state": "OWNER109_INSTALLED_TARGETED_ACCEPTANCE_PENDING",
     "version": "0.1.18-beta109",
     "version_code": 109,
     "authorization": "NEW_APK_AND_ANDROID_SEQUENCE4_AFTER_FINAL108_CANARY",
@@ -2764,10 +2764,10 @@
       "hidden_panel_red_failures": 2,
       "emulator": "PASS",
       "hosted_release_ci": "FULL_MATRIX_PASS",
-      "physical109": "NOT_RUN"
+      "physical109": "INSTALLATION_CONFIRMED_UI_TRANSPORT_PENDING"
     },
     "artifact": {
-      "result": "PUBLIC_VERIFIED_NOT_INSTALLED",
+      "result": "PUBLIC_VERIFIED_OWNER_INSTALLED",
       "source": "600ae52bfac673ca0323bd7c96d6cdd369593624",
       "ci_run": 41289980872,
       "unsigned_sha256": "8b06f595f4b5eac733d528479768e8088b7f92ae60e2062b6f3606e4e5ec9991",
@@ -2781,8 +2781,9 @@
       "unchanged_unsigned_payload": "PASS",
       "signature": "PASS",
       "private_key_exported": false,
-      "installed": false,
-      "distributed": true
+      "installed": true,
+      "distributed": true,
+      "installation_scope": "OWNER_ONLY"
     },
     "current_distribution": {
       "version": "0.1.18-beta109",
@@ -3266,7 +3267,7 @@
       "version_changed": false,
       "scope_script_changed": false,
       "workflow_changed": false,
-      "status": "READY_FOR_BETA109_OWNER_UPDATE",
+      "status": "OWNER109_INSTALLED_TARGETED_ACCEPTANCE_PENDING",
       "source_commit": "600ae52bfac673ca0323bd7c96d6cdd369593624",
       "run_id": 41289980872,
       "hosted_scope": {
@@ -3279,7 +3280,7 @@
       "artifact": "QUALIFIED",
       "signing": "PASS",
       "publication": "VERIFIED_HTTPS_PASS",
-      "phone_actions": "NOT_RUN",
+      "phone_actions": "OWNER_INSTALLATION_CONFIRMED",
       "retained_marker": true,
       "required_terminal_failure": "STOP_NEW_FULL_CI_FAILURE",
       "required_scope_failure": "FULL_MATRIX_SCOPE_NOT_ACTIVATED",
@@ -3799,7 +3800,7 @@
           }
         ]
       },
-      "owner109_acceptance": "PENDING",
+      "owner109_acceptance": "IN_PROGRESS_INSTALLATION_ONLY",
       "publication_receipt": {
         "observed_at": 1793524297,
         "version_code": 109,
@@ -3865,7 +3866,34 @@
         "repository_wide_preexisting_unrelated_anchor_errors": 2,
         "user_changes_preserved_unstaged": true,
         "git_diff_check": "PASS"
-      }
+      },
+      "owner109_installation": {
+        "paid": [
+          1,
+          4
+        ],
+        "entitlement": "ACTIVE",
+        "paid_until_utc": "2026-12-01T07:09:19Z",
+        "identity": "EXISTING_NON_REVOKED",
+        "latest_at": 1793525274,
+        "latest": [
+          {
+            "version": "0.1.18-beta109",
+            "version_code": 109,
+            "source": "readiness_ack"
+          }
+        ],
+        "binding": "EXISTING_OWNER_BINDING_MATCH",
+        "observed_utc": "2026-11-01T09:31:21.257704+00:00",
+        "authenticated_version": "EXACT109",
+        "owner_installation": "OWNER_REPORTED109",
+        "local_data_preservation": "PENDING_OWNER_CHECK",
+        "ui": "NOT_RUN",
+        "transport": "NOT_RUN",
+        "database_writes": false,
+        "canary_replayed": false
+      },
+      "owner109_next": "LOCAL_DATA_CPU_SELECTOR_THEN_ONE_FORCE_STOP_REOPEN_NO_CONNECT"
     }
   }
 }

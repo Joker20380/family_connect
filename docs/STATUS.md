@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**1 November — beta109 published; owner update/field acceptance pending.**
+**1 November — owner beta109 installed; targeted field acceptance pending.**
 `DESKTOP_SMILEY_BASELINE_STALE_AFTER_REVIEWED_ANDROID107_CHANGE`: exactly one stale
 Android106 pin, ChatThreadView.java; current file is byte-identical to accepted public108.
 Reviewed voice-preview/recording visibility and message styling only; all49 faces, aliases,
@@ -56,10 +56,16 @@ ledger1/4, cohort1/10, revenue0, registry identities/invites/grants and renewal/
 unchanged. Read-only before/after fingerprints match; no backend restart or database write.
 Only Android downloads, discovery catalogs and invitation were published; no forced update.
 Canary remains COMPLETED_WITH_DEVIATIONS, final108 internet/84s READY PASS; never replay it.
-**Phone actions NOT_RUN; owner109 installation/field acceptance PENDING.** Next: update over108
-without uninstall/data clear/reenrollment, do not connect, and report «109 УСТАНОВЛЕНА».
-Only after that fresh response: identity/data/entitlement, CPU/selector, one Force stop/reopen,
-Auto/MESH Connect/READY timing/internet, one Disconnect/owner+notification cleanup/selector.
+**Owner109 installation confirmed; targeted field acceptance IN_PROGRESS.** Fresh owner
+confirmation: «109 УСТАНОВЛЕНА». Read-only09:31UTC observation confirms exact0.1.18-beta109/
+code109 from the latest authenticated readiness ACK, with no conflicting latest version.
+Existing private owner binding matches the same non-revoked identity; entitlement remains
+active through2026-12-01T07:09:19Z, ledger1/4 and cohort1/10. No database or canary write.
+This confirms installation/version/server identity, not preserved local chats or UI/transport
+acceptance. NEXT without Connect: check existing data, CPU and transport selector, then one
+Android Force stop/reopen and confirm selector still visible. Assisted Connect/Disconnect,
+READY latency, Internet, VPN-owner and notification cleanup remain NOT_RUN in this workflow.
+Paid baseline108 remains unchanged; do not infer full109 acceptance from the version ACK.
 No paid event, CRL operation or cohort expansion is authorized by this publication.
 
 ## NL availability restoration — 31 October

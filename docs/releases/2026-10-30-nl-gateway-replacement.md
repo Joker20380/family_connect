@@ -3,8 +3,9 @@
 
 ## Android109 general publication — 1 November
 
-- State: **READY_FOR_BETA109_OWNER_UPDATE**. Public/invitation109, Android sequence4;
-  installed owner version remains108 until a fresh installation confirmation.
+- Publication gate **READY_FOR_BETA109_OWNER_UPDATE** completed. Public/invitation109,
+  Android sequence4; owner installation109 is now confirmed by owner report and authenticated
+  version ACK. Targeted UI/transport/cleanup acceptance remains pending.
 - Exact artifact source: `600ae52bfac673ca0323bd7c96d6cdd369593624`; full Client builds
   [41289980872](https://github.com/Joker20380/family_connect/actions/runs/41289980872) SUCCESS.
   Android/Linux/Windows/compatibility PASS; general desktop release expected SKIPPED.
@@ -35,8 +36,10 @@
   routing, paid baseline108, ledger1/4, cohort1/10 and registry fingerprints are unchanged.
   Renewal/read-only-sync active/last success, entitlement until2026-12-01T07:09:19Z preserved.
   No backend/gateway restart, certificate/CRL operation, paid event or phone debugging.
-- Owner109 acceptance **NOT_RUN**. Update in place, preserve identity/data/entitlement, then
-  wait for «109 УСТАНОВЛЕНА» before targeted CPU/selector/reopen/Auto/cleanup checks.
+- Owner reports «109 УСТАНОВЛЕНА»; latest authenticated ACK confirms exact109, existing
+  non-revoked bound identity and active entitlement are preserved. Local-data/CPU/selector/
+  one Force stop/reopen checks are next, without Connect. Assisted Auto/internet/cleanup
+  acceptance is still NOT_RUN; a version ACK alone is not physical transport acceptance.
   Existing canary COMPLETED_WITH_DEVIATIONS remains final; latency above90s would be retained
   as CONNECT_LATENCY_DEVIATION_RETAINED, not another paid canary or entitlement invalidation.
 - Publication regression checks:26 public-Android/catalog-signing tests PASS; strict JSON,
@@ -50,7 +53,7 @@
 The original smiley-baseline checkpoint supersedes its older pending/STOP notes; publication
 above is the later distribution transition. The canary remains COMPLETED_WITH_DEVIATIONS.
 
-**1 November — beta109 published; owner update/field acceptance pending.**
+**1 November — owner beta109 installed; targeted field acceptance pending.**
 `DESKTOP_SMILEY_BASELINE_STALE_AFTER_REVIEWED_ANDROID107_CHANGE`: exactly one stale
 Android106 pin, ChatThreadView.java; current file is byte-identical to accepted public108.
 Reviewed voice-preview/recording visibility and message styling only; all49 faces, aliases,
@@ -106,10 +109,16 @@ ledger1/4, cohort1/10, revenue0, registry identities/invites/grants and renewal/
 unchanged. Read-only before/after fingerprints match; no backend restart or database write.
 Only Android downloads, discovery catalogs and invitation were published; no forced update.
 Canary remains COMPLETED_WITH_DEVIATIONS, final108 internet/84s READY PASS; never replay it.
-**Phone actions NOT_RUN; owner109 installation/field acceptance PENDING.** Next: update over108
-without uninstall/data clear/reenrollment, do not connect, and report «109 УСТАНОВЛЕНА».
-Only after that fresh response: identity/data/entitlement, CPU/selector, one Force stop/reopen,
-Auto/MESH Connect/READY timing/internet, one Disconnect/owner+notification cleanup/selector.
+**Owner109 installation confirmed; targeted field acceptance IN_PROGRESS.** Fresh owner
+confirmation: «109 УСТАНОВЛЕНА». Read-only09:31UTC observation confirms exact0.1.18-beta109/
+code109 from the latest authenticated readiness ACK, with no conflicting latest version.
+Existing private owner binding matches the same non-revoked identity; entitlement remains
+active through2026-12-01T07:09:19Z, ledger1/4 and cohort1/10. No database or canary write.
+This confirms installation/version/server identity, not preserved local chats or UI/transport
+acceptance. NEXT without Connect: check existing data, CPU and transport selector, then one
+Android Force stop/reopen and confirm selector still visible. Assisted Connect/Disconnect,
+READY latency, Internet, VPN-owner and notification cleanup remain NOT_RUN in this workflow.
+Paid baseline108 remains unchanged; do not infer full109 acceptance from the version ACK.
 No paid event, CRL operation or cohort expansion is authorized by this publication.
 
 Exact audit: ChatThreadView.java old SHA256
