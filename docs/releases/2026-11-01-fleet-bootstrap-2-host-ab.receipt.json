@@ -1,0 +1,303 @@
+{
+  "agent_sha256": "837f885b278b52b1808fbc3178b7b9e21d1f41eed9428da5f715fc36a411c23a",
+  "bundles": {
+    "A": "gw-e215192b1e491de45ae1fa103fd9ba94",
+    "B": "gw-36869058b13a713f6f5b28d23d5c73f2"
+  },
+  "catalog_publications": 0,
+  "external_acceptance": {
+    "baseline_a": {
+      "active_service_count": 6,
+      "bundle_id": "gw-e215192b1e491de45ae1fa103fd9ba94",
+      "cleanup": "PASS",
+      "expires_at": 1793569849,
+      "issued_at": 1793569549,
+      "local_health_sha256": "a6f70ef37e213ff54b5e15b80e123506a7230f694cbc7b99aeed0e87fee68ec7",
+      "maximum_restarts": 0,
+      "receipt_sha256": "d586b3c5cdc99f5b96438e02649470804e45b84e1f56bc82dc12faf0f27d14c9",
+      "roles": {
+        "awg": {
+          "dns": "PASS",
+          "egress": "PASS",
+          "handshake": "PASS",
+          "https": "PASS"
+        },
+        "mesh": {
+          "dns": "PASS",
+          "egress": "PASS",
+          "family_tls": "PASS",
+          "four_https_streams": "PASS",
+          "join": "PASS",
+          "ready": "PASS",
+          "registration": "PASS",
+          "room": "PASS"
+        },
+        "tcp": {
+          "authentication": "PASS",
+          "egress": "PASS",
+          "https": "PASS"
+        }
+      }
+    },
+    "rollback_a": {
+      "active_service_count": 6,
+      "bundle_id": "gw-e215192b1e491de45ae1fa103fd9ba94",
+      "cleanup": "PASS",
+      "expires_at": 1793570394,
+      "issued_at": 1793570094,
+      "local_health_sha256": "16e74a62c1da371992433f777113bc0387251cff637a9a362c89748de3b54b34",
+      "maximum_restarts": 0,
+      "receipt_sha256": "c5dd22ee471404671b1aac464be1c6630ce4c199a5cba99c363eb1635815fea4",
+      "roles": {
+        "awg": {
+          "dns": "PASS",
+          "egress": "PASS",
+          "handshake": "PASS",
+          "https": "PASS"
+        },
+        "mesh": {
+          "dns": "PASS",
+          "egress": "PASS",
+          "family_tls": "PASS",
+          "four_https_streams": "PASS",
+          "join": "PASS",
+          "ready": "PASS",
+          "registration": "PASS",
+          "room": "PASS"
+        },
+        "tcp": {
+          "authentication": "PASS",
+          "egress": "PASS",
+          "https": "PASS"
+        }
+      }
+    },
+    "upgrade_b": {
+      "active_service_count": 6,
+      "bundle_id": "gw-36869058b13a713f6f5b28d23d5c73f2",
+      "cleanup": "PASS",
+      "expires_at": 1793570113,
+      "issued_at": 1793569813,
+      "local_health_sha256": "2f4b2878e297530895d0224d07407925ae1d990dfb814fb654056b37991d4073",
+      "maximum_restarts": 0,
+      "receipt_sha256": "622263e2448d90a80523273836e3b71d9274957426010994372187909f4f96b6",
+      "roles": {
+        "awg": {
+          "dns": "PASS",
+          "egress": "PASS",
+          "handshake": "PASS",
+          "https": "PASS"
+        },
+        "mesh": {
+          "dns": "PASS",
+          "egress": "PASS",
+          "family_tls": "PASS",
+          "four_https_streams": "PASS",
+          "join": "PASS",
+          "ready": "PASS",
+          "registration": "PASS",
+          "room": "PASS"
+        },
+        "tcp": {
+          "authentication": "PASS",
+          "egress": "PASS",
+          "https": "PASS"
+        }
+      }
+    }
+  },
+  "final_state": "RETIRED",
+  "instance_id": "fleet-rehearsal-nl-disposable-06",
+  "operations": [
+    {
+      "action": "preflight",
+      "elapsed_seconds": 4.23,
+      "error": null,
+      "issued_at": 1793569232,
+      "operation_id": "host472-v6-preflight-a-121fa15199c440d19e56dad3d4e8f627",
+      "receipt_sha256": "94aca13fd1d933863df580582e2fdbab41e45e7c961d11fb5a66ede3ca2c4258",
+      "result": "PASS",
+      "rollback": null,
+      "state": null
+    },
+    {
+      "action": "enroll",
+      "elapsed_seconds": 95.379,
+      "error": null,
+      "issued_at": 1793569330,
+      "operation_id": "host472-v6-enroll-a-cd92df6e9a09452787330084a8a74bee",
+      "receipt_sha256": "82a07cbd3593ca746de2fe634a95fdd94e5da27fe882e706043fa6d380ae4d77",
+      "result": "PASS",
+      "rollback": null,
+      "state": "PREFLIGHTED"
+    },
+    {
+      "action": "deliver-materials",
+      "elapsed_seconds": 50.502,
+      "error": null,
+      "issued_at": 1793569384,
+      "operation_id": "host472-v6-deliver-materials-a-6608ca987da7424a9bdbe0d38aa4ff85",
+      "receipt_sha256": "b2f195d15b2218ec197dc9dd1ffae8f7606fcf740bf2774fc321d7ebdc818358",
+      "result": "PASS",
+      "rollback": null,
+      "state": "PREFLIGHTED"
+    },
+    {
+      "action": "stage",
+      "elapsed_seconds": 54.961,
+      "error": null,
+      "issued_at": 1793569442,
+      "operation_id": "host472-v6-stage-a-6dc8bda6b8f445ada1c330edfeb77ab3",
+      "receipt_sha256": "272bcfea3e132a90a6517328d5f6f8ea809558011f5f41692108c69575e9d34c",
+      "result": "PASS",
+      "rollback": null,
+      "state": "STAGED"
+    },
+    {
+      "action": "start-verification",
+      "elapsed_seconds": 56.674,
+      "error": null,
+      "issued_at": 1793569501,
+      "operation_id": "host472-v6-start-verification-a-91e32bc5019549b09e397b9b70ab8cb4",
+      "receipt_sha256": "667e68426b68db6f2ac6024e17c0efdf6d3859319d035d86f43e973b13d21402",
+      "result": "AWAITING_EXTERNAL_ACCEPTANCE",
+      "rollback": null,
+      "state": "AWAITING_EXTERNAL_ACCEPTANCE"
+    },
+    {
+      "action": "complete-verification",
+      "elapsed_seconds": 48.045,
+      "error": null,
+      "issued_at": 1793569599,
+      "operation_id": "host472-v6-complete-verification-a-5136e590cbac49d8bca719cf81385894",
+      "receipt_sha256": "3a3254c3b1440dbbae18a93827af545fe3e0e125c5449f9eb8964f359ea14093",
+      "result": "PASS",
+      "rollback": null,
+      "state": "VERIFIED"
+    },
+    {
+      "action": "activate-local",
+      "elapsed_seconds": 48.215,
+      "error": null,
+      "issued_at": 1793569650,
+      "operation_id": "host472-v6-activate-local-a-fae48c69a3b0423495c604432b81b176",
+      "receipt_sha256": "9b6057784db6996765d8628cf76f516ea61a7b4fac88953ad9764603edd6a2b2",
+      "result": "PASS",
+      "rollback": null,
+      "state": "ACTIVE"
+    },
+    {
+      "action": "stage",
+      "elapsed_seconds": 51.989,
+      "error": null,
+      "issued_at": 1793569705,
+      "operation_id": "host472-v6-stage-b-df4629eb87ea469495d047c18a6c3c52",
+      "receipt_sha256": "dbb19f8e9d2f56dbd19368e328bf565e62c5df2b47601342b9c0f1ccaadfa257",
+      "result": "PASS",
+      "rollback": null,
+      "state": "ACTIVE"
+    },
+    {
+      "action": "upgrade",
+      "elapsed_seconds": 53.425,
+      "error": null,
+      "issued_at": 1793569761,
+      "operation_id": "host472-v6-upgrade-b-14a4a651c0b14fd181e0f2337bc6394d",
+      "receipt_sha256": "95f6c907b1663aa474265ad8cfdd4a2239a1bafa1431976966d1754493c02ffa",
+      "result": "AWAITING_EXTERNAL_ACCEPTANCE",
+      "rollback": null,
+      "state": "AWAITING_EXTERNAL_ACCEPTANCE"
+    },
+    {
+      "action": "complete-verification",
+      "elapsed_seconds": 72.868,
+      "error": null,
+      "issued_at": 1793569889,
+      "operation_id": "host472-v6-complete-verification-b-1dae11ef8c594d6a859d182b9a30ca73",
+      "receipt_sha256": "0949947f9b00700ba8b1f8c2a4781a89bf36f4ae5c70e981c652926dbfd5505a",
+      "result": "PASS",
+      "rollback": null,
+      "state": "VERIFIED"
+    },
+    {
+      "action": "activate-local",
+      "elapsed_seconds": 76.726,
+      "error": null,
+      "issued_at": 1793569970,
+      "operation_id": "host472-v6-activate-local-b-5967f181aeea46eb89f71ca3df1b2d27",
+      "receipt_sha256": "89a34654faeb588f14606095074a6ca420407b942c5f06b42e5d9d462cb1e050",
+      "result": "PASS",
+      "rollback": null,
+      "state": "ACTIVE"
+    },
+    {
+      "action": "rollback",
+      "elapsed_seconds": 67.963,
+      "error": null,
+      "issued_at": 1793570042,
+      "operation_id": "host472-v6-rollback-a-310ef46b8f7f4ac798c81884d36b8ab0",
+      "receipt_sha256": "591a95f9ac9ac54e5014b58ae3c3ea41d8f9e97028ce0273b16dc6f5db01cfa3",
+      "result": "AWAITING_EXTERNAL_ACCEPTANCE",
+      "rollback": null,
+      "state": "AWAITING_EXTERNAL_ACCEPTANCE"
+    },
+    {
+      "action": "complete-verification",
+      "elapsed_seconds": 55.694,
+      "error": null,
+      "issued_at": 1793570154,
+      "operation_id": "host472-v6-complete-verification-a-aba1d57167cb4e34b75a93dfc945fc15",
+      "receipt_sha256": "d509abbef9d69ae8c928603699c3b5c3083e4a130543934202f46858d485f36e",
+      "result": "PASS",
+      "rollback": null,
+      "state": "VERIFIED"
+    },
+    {
+      "action": "activate-local",
+      "elapsed_seconds": 51.212,
+      "error": null,
+      "issued_at": 1793570210,
+      "operation_id": "host472-v6-activate-local-a-b584e1eb170c4d0bac29545dfb9532b6",
+      "receipt_sha256": "7614c32a3d630f89f02cb7cc5d6f42ec18e5b8d7bbd697fb464588d09cfb87fb",
+      "result": "PASS",
+      "rollback": null,
+      "state": "ACTIVE"
+    },
+    {
+      "action": "drain",
+      "elapsed_seconds": 48.948,
+      "error": null,
+      "issued_at": 1793570264,
+      "operation_id": "host472-v6-drain-a-b7de43239c184a2f841ef150d568339d",
+      "receipt_sha256": "b8a2ac8ffc634ae96d9153be7f8919e8b58205ac8bbd24bf7f104863e3af0955",
+      "result": "PASS",
+      "rollback": null,
+      "state": "DRAINING"
+    },
+    {
+      "action": "retire",
+      "elapsed_seconds": 50.671,
+      "error": null,
+      "issued_at": 1793570319,
+      "operation_id": "host472-v6-retire-a-749a8643fb9e4762b383910c1c23ba59",
+      "receipt_sha256": "1bbf1f0932cd300f54ca0854701787c9c767a95a8d51289859fd0d92c8315f46",
+      "result": "PASS",
+      "rollback": null,
+      "state": "RETIRED"
+    }
+  ],
+  "operator_client_cleanup": "PASS",
+  "paid_events": 0,
+  "phone_actions": 0,
+  "platform": "Ubuntu24.04/x86_64",
+  "production_activation": "NOT_RUN",
+  "production_writes": 0,
+  "reboot_persistence": "NOT_RUN",
+  "recovery_console": "UNVERIFIED",
+  "schema": 1,
+  "scope": "DISPOSABLE_FLEET_REHEARSAL_PHYSICAL_EVIDENCE",
+  "source_commit": "d3416ea4abacfafc843411f765fb8037722b55d0",
+  "ssh_trust": "OWNER_ACCEPTED_TOFU_NOT_INDEPENDENTLY_VERIFIED",
+  "target_label": "reserved-nl-vps-472",
+  "user_invitations": 0
+}

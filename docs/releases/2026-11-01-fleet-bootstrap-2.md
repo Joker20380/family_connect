@@ -1,5 +1,41 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+## Trial06 physical A→B→A PASS; retirement completed
+
+The final d3416ea pair completed actual disposable Ubuntu24.04/x86_64 rehearsal. Each phase
+started the exact permitted bundle, issued a distinct unpredictable verification nonce, then
+received an operator-signed external PASS and rechecked local health before VERIFIED and
+local ACTIVE. This is not a synthetic-only claim or production/catalog activation.
+
+| Phase | AWG | TCP REALITY | MESH | Local health | External receipt SHA256 |
+| --- | --- | --- | --- | --- | --- |
+| Baseline A | PASS | PASS | PASS | 6 services,0 restarts | `d586b3c5cdc99f5b96438e02649470804e45b84e1f56bc82dc12faf0f27d14c9` |
+| Upgrade B | PASS | PASS | PASS | 6 services,0 restarts | `622263e2448d90a80523273836e3b71d9274957426010994372187909f4f96b6` |
+| Explicit rollback A | PASS | PASS | PASS | 6 services,0 restarts | `c5dd22ee471404671b1aac464be1c6630ce4c199a5cba99c363eb1635815fea4` |
+
+AWG proves handshake/DNS/HTTPS/expected egress; TCP proves authentication/HTTPS/expected egress.
+MESH proves authenticated directory/bootstrap, room/join/READY/registration/Family TLS, DNS,
+four HTTPS streams and expected egress; each operator receipt reports cleanup PASS. All three
+receipts expire300 seconds after issue and were accepted while fresh. Archival signature and
+challenge checks do not extend their validity. [Sanitized physical evidence](2026-11-01-fleet-bootstrap-2-host-ab.receipt.json)
+records operation IDs, receipt/local-health digests, exact bundle/source/agent bindings, states
+and measured per-operation durations, without credentials, room URLs, client IPs or packet data.
+
+Final drain and retirement PASS; terminal retirement receipt SHA256
+`1bbf1f0932cd300f54ca0854701787c9c767a95a8d51289859fd0d92c8315f46`.
+Disposable node resources/material were retired; the three operator client files were removed
+only after verifying that signed completion. Original probe custody is retained and was never
+copied to the target. Releases and journals remain; the reserved VPS was not deleted/reinstalled.
+No rehearsal role is left active. Production RU/NL/catalog/user/paid/phone writes0; public109,
+sequence4/catalog4/paid108, entitlement, ledger1/4/cohort1/10/revenue0 remain unchanged by this work.
+
+**Physical role reboot remains NOT_RUN.** Earlier OS-preparation reboots are not role evidence.
+Provider VNC/Console availability is still unverified, and SSH trust is owner-accepted TOFU,
+not independent provider verification. Next requires confirming that recovery access and host
+key before a fresh guarded reboot rehearsal; no queued production activation starts implicitly.
+Source/package status remains READY_FOR_FLEET_BOOTSTRAP_2_HOST with480 console/fleet and170
+paid/backend/package tests PASS, Django check PASS, migration drift NONE and all qualifications PASS.
+
 ## READY_FOR_FLEET_BOOTSTRAP_2_HOST — frozensourced3416ea
 
 Final deployable source `d3416ea4abacfafc843411f765fb8037722b55d0` is pushed and remote-verified.

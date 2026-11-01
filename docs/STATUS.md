@@ -1,7 +1,7 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**READY_FOR_FLEET_BOOTSTRAP_2_HOST — source/package gates PASS; trial06 underway.**
+**READY_FOR_FLEET_BOOTSTRAP_2_HOST — source PASS; physical A→B→A and retirement PASS.**
 Existing FLEET-BOOTSTRAP-2 only; no new PLAN ID or production activation. Owner wants two
 Amsterdam servers; first production NL remains excluded. Reserved disposable VPS remains
 Ubuntu24.04/x86_64; no reinstall/deletion or production/catalog admission is implied.
@@ -15,20 +15,24 @@ Exact-native synthetic loopback REALITY/HTTPS and offline MESH mTLS-directory/gu
 Fresh fleet324 + console156 =480 PASS; paid170 PASS; Django check PASS; migration drift NONE.
 Signed permit, exact SSH/target/agent/bundle/key bindings, production exclusions, immutable
 releases, encrypted material, two-phase external acceptance and append-only evidence remain.
-Trials01–05 RETIRED; signed retirement precedes disposal of their operator client files.
-Original FLEET_MESH_PROBE_1 custody retained; separate publisher token validated and kept private.
-Trial04 AWG/TCP PASS; trial05 MESH diagnostic PASS. Correct final operator flow refreshes the
-mTLS directory before native guarded Telemost bootstrap; no HTTP room API shortcut remains.
-Diagnostics and prior negative receipts are not VERIFIED or signed full acceptance.
-Trial06 now checks the complete bound A/B pair; upgrade/explicit rollback/reboot remain physical
-checks until their own receipts exist. Recovery console is unverified: no role reboot request.
+Trials01–06 RETIRED; signed retirement precedes disposal of their operator client files.
+Original FLEET_MESH_PROBE_1 custody retained; separate publisher token works and remains private.
+Trial06 completed real A→B upgrade→A explicit rollback, each with a distinct signed external
+AWG/TCP/MESH PASS receipt, fresh node verification and local activation. Six services active,
+zero restarts at all three acceptances. Full DNS/HTTPS/expected egress and operator cleanup PASS.
+Final drain/retirement PASS; disposable node secrets and three operator clients removed.
+Reserved VPS is retained; no temporary rehearsal role is left active or published to users.
+Physical role reboot remains NOT_RUN: provider VNC/Console recovery is not yet confirmed.
+Next in this same task: confirm console access and independently verify the SSH host key,
+then separately perform a fresh guarded role-reboot rehearsal. Do not start queued activation.
 Admitted: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor. Disabled:
 mailbox/chat-services, production renewal/restricted-sync, registry/control-plane database.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
 Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.
 SSH trust remains owner-accepted TOFU, not independent provider verification.
 [Checkpoint](releases/2026-11-01-fleet-bootstrap-2.md) ·
-[Qualified hashes](releases/2026-11-01-fleet-bootstrap-2-ready.receipt.json) · [Runbook](fleet-bootstrap.md).
+[Qualified hashes](releases/2026-11-01-fleet-bootstrap-2-ready.receipt.json) ·
+[Physical A/B receipts](releases/2026-11-01-fleet-bootstrap-2-host-ab.receipt.json) · [Runbook](fleet-bootstrap.md).
 Older checkpoint NEXTs below are historical, not simultaneous active work.
 <!-- /FLEET-BOOTSTRAP-2 current -->
 
