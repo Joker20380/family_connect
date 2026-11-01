@@ -1,12 +1,13 @@
 # Установка клиентов
 
-**1 November: beta109 is an authorized source candidate, not a download yet.**
-The repair keeps country/transport controls visible after a failed connection, corrects
-Disconnect/Cancel actions and retains error history through the status label. Hosted Android
-acceptance and signing/publication are pending. Public/invitation APK remains beta108;
-keep the owner on108 until the existing canary's final30-day recovery and final108 Connect.
-No data clearing, reenrollment or gateway catalog change. Android sequence4 is authorized only
-after those gates; current sequence is3. See the [current report](releases/2026-10-30-nl-gateway-replacement.md).
+**1 November — READY_FOR_BETA109_OWNER_UPDATE.** Beta109/code109 is published;
+Android update sequence4 and invitation109 verified over HTTPS. Full matrix41289980872/
+source600ae52, offline signer,16K alignment and exact bytes PASS. The repair keeps country/
+transport controls visible after failure and corrects Disconnect/Cancel actions. Owner109
+physical acceptance is pending; update over108 without clearing data or reenrollment, then
+report «109 УСТАНОВЛЕНА» without connecting. Public108 remains immutable. Gateway catalog4,
+paid baseline108, entitlement, ledger1/4 and cohort1/10 are unchanged; no canary replay.
+[Publication evidence](releases/2026-10-30-nl-gateway-replacement.md#android109-general-publication--1-november).
 
 ## CHAT-UX-1 — внутренний UI checkpoint,26.10
 
@@ -244,12 +245,12 @@ HTTP200, скачанные SHA256/подпись проверены; [отчё�
 До единственной мобильной попытки оператор проверяет свежие leases и READY/ACK;
 после разрыва немедленный экспорт. Не менять FIELD admission или public updater.
 
-**Актуально31.10: beta108/code108 опубликована, Android12+/ARM64.**
-CPU сервера виден на главном экране и в списке стран, даже если скорость канала неизвестна.
-MESH и тихое обновление текущего VPN-уведомления; CI и публичный подписанный APK проверены.
-Проверка108 на телефоне NOT_RUN: владелец разрешил ускоренный выпуск без отладки.
+**Актуально1.11: beta109/code109 опубликована, Android12+/ARM64.**
+CPU сервера остаётся виден, выбор транспорта после ошибки исправлен. Полная CI-матрица,
+подпись и HTTPS PASS; проверка109 владельцем ожидается. Финальное восстановление108 принято,
+paid baseline108 и существующий доступ остаются без изменений.
 Устанавливать поверх, без удаления данных/повторной регистрации; допуск не расширяется.
-[Скачать/обновить](getting-started.ru.md) · [Результат](releases/2026-10-30-nl-gateway-replacement.md#android108-general-publication--31-october).
+[Скачать/обновить](getting-started.ru.md) · [Результат](releases/2026-10-30-nl-gateway-replacement.md#android109-general-publication--1-november).
 
 ## Исторические этапы подготовки
 
@@ -343,7 +344,7 @@ beta-сертификатом и **установлен поверх field52 н�
 [Результат attempt14](releases/2026-10-02-5n-prov1-attempt14.ru.md) ·
 [Provenance и SHA256 canary](releases/2026-10-02-5n-android-canary-build.ru.md).
 
-[Инструкция Friends beta](getting-started.ru.md): Android12+, ARM64 beta108,
+[Инструкция Friends beta](getting-started.ru.md): Android12+, ARM64 beta109,
 доступ по приглашению, VPN, текст и голосовые. APK распространяется
 через страницу приглашения и HTTPS; в GitHub Releases и магазинах её пока нет.
 Для сборки используйте требования [client workflow](../.github/workflows/clients.yml).

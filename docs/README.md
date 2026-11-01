@@ -1,5 +1,16 @@
 # Documentation
 
+**1 November — READY_FOR_BETA109_OWNER_UPDATE.** Beta109/code109 is published;
+Android update sequence4 and invitation109 verified over HTTPS. Full matrix41289980872/
+source600ae52, offline signer,16K alignment and exact bytes PASS. The repair keeps country/
+transport controls visible after failure and corrects Disconnect/Cancel actions. Owner109
+physical acceptance is pending; update over108 without clearing data or reenrollment, then
+report «109 УСТАНОВЛЕНА» without connecting. Public108 remains immutable. Gateway catalog4,
+paid baseline108, entitlement, ledger1/4 and cohort1/10 are unchanged; no canary replay.
+[Publication evidence](releases/2026-10-30-nl-gateway-replacement.md#android109-general-publication--1-november).
+
+Earlier dated checkpoints below retain their original observations; they are not current NEXTs.
+
 **Current beta109 qualification — TCPFORWARD_PRODUCT_SLOT_RELEASE_DEFECT (1 November).**
 Accepted production state remains NL_REPLACEMENT_LIVE/catalog4, public108/Android sequence3,
 paid baseline108, owner entitlement through2026-12-01T07:09:19Z, ledger1/4, cohort1/10,

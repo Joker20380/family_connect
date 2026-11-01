@@ -9,11 +9,12 @@ No manual service setup is needed. Affected Windows10 device acceptance is pendi
 ## First activation
 
 Android12+, ARM64; access is invitation-only. Installing the APK does not grant access.
-The invitation page and in-app updater both provide beta108. Updating does not enable restricted FIELD access.
+The invitation page and in-app updater both provide beta109. Updating does not enable restricted FIELD access.
 
-Beta108 includes MESH and quiet ongoing VPN-notification updates. Android below12 is unsupported.
-CI/signature/public-download checks PASS; physical108 runtime remains unverified. The owner
-authorized general rollout without USB debugging. No Mi account or ADB is required to install.
+Beta109 includes MESH and quiet ongoing VPN-notification updates. Android below12 is unsupported.
+Full Android/Linux/Windows/compatibility CI, signature and verified-HTTPS checks PASS.
+Beta109 repairs transport selection after failure; owner109 physical acceptance is pending.
+Paid baseline remains108 and existing entitlement is preserved. No Mi account or ADB is needed.
 MESH still requires accepted admission and current readiness material, not an old cached READY.
 
 1. Ask a participant for their link/QR from **Settings → Invite a friend**. Keep it private.
@@ -27,11 +28,11 @@ MESH still requires accepted admission and current readiness material, not an ol
 
 ## Update an existing app
 
-[Download beta108 — 56.2 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk).
-Version `0.1.18-beta108`, code108, ARM64,56212840 bytes; SHA256:
+[Download beta109 — 56.2 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta109.apk).
+Version `0.1.18-beta109`, code109, ARM64,56216936 bytes; SHA256:
 
 ```text
-144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf
+2d602aa74e134fd0104fa0900ef28e6086a6eace8f0255f521e09ec48f9edca3
 ```
 
 The app also checks for updates. Open the APK and select **Update** in Android’s system
@@ -41,10 +42,15 @@ do not copy another device’s profiles or keys.
 
 The [older universal beta13](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.12-beta13.apk)
 remains available for other architectures,240.5 MB. It lacks current features and is not
-an equivalent alternative to108.
+an equivalent alternative to109.
 
-[Exact audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta108-audio-source.tar.gz)
+[Exact audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta109-audio-source.tar.gz)
 are available with the release. Installation requires Android confirmation; it is not forced.
+
+Owner checkpoint: update over108 via **Settings → Check for updates → Install beta109**.
+Do not uninstall, clear data or reenroll. After launch do not connect; report **109 УСТАНОВЛЕНА**.
+Android sequence4 is optional. [Public108 rollback evidence](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk)
+remains immutable; no paid event or canary replay accompanies this update.
 
 ## Text and voice
 
@@ -71,7 +77,7 @@ not established. [Notification and announcement guide (RU)](testing/messenger-no
 - Update failure: record the error and versions; do not erase data to bypass a signature mismatch.
 
 Report model, Android/app version and network type. Exclude invitations, keys, profiles
-and messages. [Beta108 validation/publication](releases/2026-10-30-nl-gateway-replacement.md#android108-general-publication--31-october).
+and messages. [Beta109 validation/publication](releases/2026-10-30-nl-gateway-replacement.md#android109-general-publication--1-november).
 
 ## Desktop clients
 
@@ -82,7 +88,7 @@ current availability counts.
 
 ## Server load display
 
-Beta108 shows **Server CPU** on the dashboard and **CPU N%** in the server list when
+Beta109 shows **Server CPU** on the dashboard and **CPU N%** in the server list when
 channel capacity is unknown. CPU is not channel utilization or the monthly traffic quota.
 Known-capacity servers retain their aggregate indicator; stale/missing samples show No data.
 [Release status](releases.md).

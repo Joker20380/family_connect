@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**1 November — current beta109 qualification: reviewed smiley baseline restored.**
+**1 November — beta109 published; owner update/field acceptance pending.**
 `DESKTOP_SMILEY_BASELINE_STALE_AFTER_REVIEWED_ANDROID107_CHANGE`: exactly one stale
 Android106 pin, ChatThreadView.java; current file is byte-identical to accepted public108.
 Reviewed voice-preview/recording visibility and message styling only; all49 faces, aliases,
@@ -18,7 +18,7 @@ Local Ubuntu24.04/Python3.12 acceptance: smileys49 PASS, mandatory desktop1230 P
 skips/0 failures/0 errors, dependency60 PASS, JVM contour2 PASS; GTK, Disconnect poll50,
 messenger27, smiley9, layout24, map/invitation/recovery/TCP and DEB/AppImage/package smokes PASS.
 Minimal-container libXtst/TUN differences were corrected; initial logs retained, no test waiver.
-**Full-matrix qualification PASS; beta109 signed, not yet published.**
+**Full-matrix qualification and offline signing PASS.**
 Retained CI-only marker `carrier/ci/beta109-full-matrix-qualification.txt` was pushed as
 `600ae52bfac673ca0323bd7c96d6cdd369593624` and remote-verified. Sole candidate Client builds
 run41289980872 completed SUCCESS; hosted scope android/windows/linux=true. Android, Linux,
@@ -47,11 +47,20 @@ SHA256 `2d602aa74e134fd0104fa0900ef28e6086a6eace8f0255f521e09ec48f9edca3`,562169
 unsigned SHA256 `8b06f595f4b5eac733d528479768e8088b7f92ae60e2062b6f3606e4e5ec9991`.
 Existing signer `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`
 unchanged; APK signature, signed alignment and unchanged unsigned payload PASS.
-**NEXT: guarded immutable109 publication, Android sequence4 and invitation109, followed by
-verified HTTPS readback.** No109 publication/sequence4/owner-phone action yet. Public108/
-sequence3, catalog4, paid baseline108, entitlement through2026-12-01T07:09:19Z, ledger1/4,
-cohort1/10 and revenue0 remain accepted. Canary COMPLETED_WITH_DEVIATIONS, final108 internet/
-84s READY PASS; no canary replay, paid event, CRL, backend restart or gateway operation.
+**READY_FOR_BETA109_OWNER_UPDATE — immutable109 published and HTTPS-verified.**
+Public and invitation versions are0.1.18-beta109/code109; Android update sequence4 is optional
+(minimum supported code1, mandatory_after0). Signed APK matches the qualified source600ae52
+and CI41289980872 byte-for-byte over verified HTTPS. Public108 remains immutable/downloadable.
+Gateway catalog4/signature/routes, paid baseline108, entitlement through2026-12-01T07:09:19Z,
+ledger1/4, cohort1/10, revenue0, registry identities/invites/grants and renewal/sync remain
+unchanged. Read-only before/after fingerprints match; no backend restart or database write.
+Only Android downloads, discovery catalogs and invitation were published; no forced update.
+Canary remains COMPLETED_WITH_DEVIATIONS, final108 internet/84s READY PASS; never replay it.
+**Phone actions NOT_RUN; owner109 installation/field acceptance PENDING.** Next: update over108
+without uninstall/data clear/reenrollment, do not connect, and report «109 УСТАНОВЛЕНА».
+Only after that fresh response: identity/data/entitlement, CPU/selector, one Force stop/reopen,
+Auto/MESH Connect/READY timing/internet, one Disconnect/owner+notification cleanup/selector.
+No paid event, CRL operation or cohort expansion is authorized by this publication.
 
 ## NL availability restoration — 31 October
 

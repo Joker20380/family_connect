@@ -59,7 +59,7 @@ desktop media integration remains incomplete. See the
 [transport model and limits](carrier/README.md#mesh-product-contract) and
 [current status](docs/STATUS.md) and release details below.
 
-Public Android **beta108 / Android12+ / ARM64**: [download and update in place](docs/getting-started.en.md).
+Public Android **beta109 / Android12+ / ARM64**: [download and update in place](docs/getting-started.en.md).
 Invitation/default updater now offer MESH-capable108 with quiet status notifications.
 The dashboard and country list show measured server CPU when channel capacity is unknown.
 CI/signature/HTTPS checks PASS; physical owner108 runtime is pending. Admission is unchanged.
@@ -88,7 +88,7 @@ lifecycle. Automatic orchestration across normal and restricted transports is
 
 | Platform | Latest documented distribution and limits |
 | --- | --- |
-| Android12+ / ARM64 | **0.1.18-beta108 / code108**; MESH-capable public update, quiet VPN status notifications; CI PASS, physical108 owner runtime pending. |
+| Android12+ / ARM64 | **0.1.18-beta109 / code109**; MESH-capable update with repaired transport controls; full matrix/signature/HTTPS PASS, owner109 field acceptance pending; paid baseline remains108. |
 | Linux | **0.2.11**, GTK 4/libadwaita; AppImage and DEB, legacy archive retained for advanced/manual use and updater compatibility. System dependencies and VPN helpers still require setup. |
 | Windows 10 1809+ / 11 x64 | **0.2.15**; invitation activation, independent signed update catalog; installer has no trusted publisher signature. 0.2.14 remains a compatibility fallback; affected Windows 10 device acceptance is pending. |
 | macOS / iOS | No client release; iOS is later work, after real beta evidence. |

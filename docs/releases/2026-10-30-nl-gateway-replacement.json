@@ -2736,7 +2736,7 @@
     }
   },
   "android109_ui_repair_20261101": {
-    "state": "SIGNED_QUALIFIED_NOT_PUBLISHED",
+    "state": "READY_FOR_BETA109_OWNER_UPDATE",
     "version": "0.1.18-beta109",
     "version_code": 109,
     "authorization": "NEW_APK_AND_ANDROID_SEQUENCE4_AFTER_FINAL108_CANARY",
@@ -2767,7 +2767,7 @@
       "physical109": "NOT_RUN"
     },
     "artifact": {
-      "result": "SIGNED_VERIFIED_NOT_INSTALLED",
+      "result": "PUBLIC_VERIFIED_NOT_INSTALLED",
       "source": "600ae52bfac673ca0323bd7c96d6cdd369593624",
       "ci_run": 41289980872,
       "unsigned_sha256": "8b06f595f4b5eac733d528479768e8088b7f92ae60e2062b6f3606e4e5ec9991",
@@ -2782,19 +2782,18 @@
       "signature": "PASS",
       "private_key_exported": false,
       "installed": false,
-      "distributed": false
+      "distributed": true
     },
     "current_distribution": {
-      "version": "0.1.18-beta108",
-      "version_code": 108,
-      "android_sequence": 3,
+      "version": "0.1.18-beta109",
+      "version_code": 109,
+      "android_sequence": 4,
       "gateway_catalog": 4
     },
-    "publication_gate": "FINAL108_CANARY_RECOVERY_AND_OWNER_CONNECT_PLUS_EXACT_HOSTED_ARTIFACT_ACCEPTANCE",
+    "publication_gate": "FULL_MATRIX_EXACT_SOURCE_SIGNING_AND_PUBLIC_HTTPS_PASS",
     "unchanged": [
       "paid_baseline108",
       "fail_closed_policy",
-      "transport_native_implementation",
       "owner_binding",
       "gateway_catalog4"
     ],
@@ -3267,7 +3266,7 @@
       "version_changed": false,
       "scope_script_changed": false,
       "workflow_changed": false,
-      "status": "FULL_MATRIX_AND_SIGNED_ARTIFACT_PASS",
+      "status": "READY_FOR_BETA109_OWNER_UPDATE",
       "source_commit": "600ae52bfac673ca0323bd7c96d6cdd369593624",
       "run_id": 41289980872,
       "hosted_scope": {
@@ -3279,7 +3278,7 @@
       "general_desktop_release": "EXPECTED_SKIPPED",
       "artifact": "QUALIFIED",
       "signing": "PASS",
-      "publication": "NOT_RUN",
+      "publication": "VERIFIED_HTTPS_PASS",
       "phone_actions": "NOT_RUN",
       "retained_marker": true,
       "required_terminal_failure": "STOP_NEW_FULL_CI_FAILURE",
@@ -3799,6 +3798,73 @@
             "review": "Netherlands row shows CPU14% without clipping."
           }
         ]
+      },
+      "owner109_acceptance": "PENDING",
+      "publication_receipt": {
+        "observed_at": 1793524297,
+        "version_code": 109,
+        "sequence": 4,
+        "signed_catalog_sha256": "2a12d159f283bd631c744d739084e38a3bca696cb4b4370696905d24a7decda3",
+        "legacy_catalog_sha256": "67323465d59a79e7097bdd76d975720ba8c80ce674b0900fd851bfd629c67d0d",
+        "invite_sha256": "3c8ee4e7fa1667edf5b61c4d17af70e013a9baf30f44399dfb3bf53bd905d1ab",
+        "apk_sha256": "2d602aa74e134fd0104fa0900ef28e6086a6eace8f0255f521e09ec48f9edca3",
+        "signature": "PASS",
+        "tls": "PASS",
+        "invite_csp": "PASS",
+        "optional": true,
+        "minimum_supported_code": 1,
+        "mandatory_after": 0,
+        "expires_at": 1801300037,
+        "hardware_installation": "NOT_RUN",
+        "gateway_catalog": "NOT_MODIFIED"
+      },
+      "public_downloads": {
+        "FamilyConnect-Test-0.1.18-beta109.apk": {
+          "sha256": "2d602aa74e134fd0104fa0900ef28e6086a6eace8f0255f521e09ec48f9edca3",
+          "size": 56216936,
+          "tls_verified": true,
+          "http": 200
+        },
+        "FamilyConnect-Android-0.1.18-beta109-audio-source.tar.gz": {
+          "sha256": "249b86d49612b716d69e25d554579213a32cbb74d7167d652f6808f60f618a89",
+          "size": 7601671,
+          "tls_verified": true,
+          "http": 200
+        }
+      },
+      "publication_invariants": {
+        "gateway_catalog": 4,
+        "paid_baseline": 108,
+        "ledger": [
+          1,
+          4
+        ],
+        "cohort": "1/10",
+        "revenue": 0,
+        "entitlement_until": "2026-12-01T07:09:19Z",
+        "backend_process_artifact_argv": "UNCHANGED",
+        "registry_fingerprints": "UNCHANGED",
+        "schedules": "ACTIVE_LAST_SUCCESS",
+        "public108": "EXACT_HTTPS_BYTES_PASS",
+        "rollback": "NOT_USED",
+        "backup_authenticated_readback": "PASS",
+        "database_writes": 0,
+        "backend_restarts": 0,
+        "phone_actions": "NOT_RUN"
+      },
+      "publication_validation": {
+        "public_android_and_catalog_signing_tests": 26,
+        "tests_result": "PASS",
+        "strict_json": "PASS",
+        "privacy_secret_scan": "PASS",
+        "public_source_guard_blocked_files": 0,
+        "staged_scope": "PUBLICATION_RECEIPTS_GUIDES_CATALOG_INVITATION_ASSERTIONS_ONLY",
+        "staged_markdown_files": 14,
+        "staged_markdown_links": 787,
+        "staged_markdown_errors": 0,
+        "repository_wide_preexisting_unrelated_anchor_errors": 2,
+        "user_changes_preserved_unstaged": true,
+        "git_diff_check": "PASS"
       }
     }
   }

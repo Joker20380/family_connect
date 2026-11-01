@@ -1,11 +1,56 @@
 # NL production gateway replacement — 30 October 2026
 
+
+## Android109 general publication — 1 November
+
+- State: **READY_FOR_BETA109_OWNER_UPDATE**. Public/invitation109, Android sequence4;
+  installed owner version remains108 until a fresh installation confirmation.
+- Exact artifact source: `600ae52bfac673ca0323bd7c96d6cdd369593624`; full Client builds
+  [41289980872](https://github.com/Joker20380/family_connect/actions/runs/41289980872) SUCCESS.
+  Android/Linux/Windows/compatibility PASS; general desktop release expected SKIPPED.
+  Later release receipts/catalog assertions are not a different APK build or source claim.
+- [Signed APK109](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta109.apk):
+  package com.familyconnect.app.friends,0.1.18-beta109/code109,Android12+/ARM64,56216936 bytes;
+  SHA256 `2d602aa74e134fd0104fa0900ef28e6086a6eace8f0255f521e09ec48f9edca3`.
+  Existing signer `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`;
+  signature, unchanged unsigned payload, ELF/ZIP16K alignment and verified-HTTPS bytes PASS.
+- Exact unsigned APK SHA256 `8b06f595f4b5eac733d528479768e8088b7f92ae60e2062b6f3606e4e5ec9991`;
+  CI artifact13076449037 ZIP SHA256 `3c816fbf0b4ef603a712d0337af87b0220739ea15611351208c6685a43c96dcc`.
+  Required TCP slot-release fix, consent harness and Android108 smiley baseline included.
+  The retained CI marker exists only in source provenance, not APK/native runtime resources.
+- [Exact application/native build source](https://github.com/Joker20380/family_connect/tree/600ae52bfac673ca0323bd7c96d6cdd369593624)
+  and [audio corresponding source/licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta109-audio-source.tar.gz)
+  are published. Audio archive SHA256 `249b86d49612b716d69e25d554579213a32cbb74d7167d652f6808f60f618a89`,7601671 bytes; HTTPS exact bytes PASS.
+- Signed Android catalog sequence4, invitation109/CSP and legacy discovery readback PASS.
+  Optional update: minimum supported code1, mandatory_after0. No forced update or108 revocation.
+- [Immutable public108](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk)
+  remains56212840 bytes, SHA256 `144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf`;
+  verified HTTPS before/after exact-byte checks PASS. It is retained evidence, not an automatic
+  downgrade instruction. Prior configuration backup authenticated/restore-readback PASS;
+  rollback NOT_USED. Any future signed-catalog rollback must preserve monotonic sequence and
+  Android versionCode; never overwrite108/109 or erase device data.
+- Publication only adds immutable downloads and updates Android discovery/invitation; reverse
+  proxy configuration reload only. Friends HTTP artifact/process/argv, catalog4 SHA256
+  `214cb6a3611b5c05117dd2ddfbfbb2f8add0603c680368a9299b34cd28214922`, NL185.10.158.212/RU
+  routing, paid baseline108, ledger1/4, cohort1/10 and registry fingerprints are unchanged.
+  Renewal/read-only-sync active/last success, entitlement until2026-12-01T07:09:19Z preserved.
+  No backend/gateway restart, certificate/CRL operation, paid event or phone debugging.
+- Owner109 acceptance **NOT_RUN**. Update in place, preserve identity/data/entitlement, then
+  wait for «109 УСТАНОВЛЕНА» before targeted CPU/selector/reopen/Auto/cleanup checks.
+  Existing canary COMPLETED_WITH_DEVIATIONS remains final; latency above90s would be retained
+  as CONNECT_LATENCY_DEVIATION_RETAINED, not another paid canary or entitlement invalidation.
+- Publication regression checks:26 public-Android/catalog-signing tests PASS; strict JSON,
+  privacy/secret scan, staged scope and whitespace PASS. Exact staged Markdown:14 files,
+  787 links,0 errors. Repository-wide link audit retains two unrelated pre-existing missing
+  anchors (including an unstaged user edit); those changes remain untouched and excluded.
+
+
 ## Beta109 reviewed smiley-baseline qualification — 1 November
 
-This checkpoint supersedes older pending/STOP notes in this report; the historical canary
-remains COMPLETED_WITH_DEVIATIONS and no production state changes in this checkpoint.
+The original smiley-baseline checkpoint supersedes its older pending/STOP notes; publication
+above is the later distribution transition. The canary remains COMPLETED_WITH_DEVIATIONS.
 
-**1 November — current beta109 qualification: reviewed smiley baseline restored.**
+**1 November — beta109 published; owner update/field acceptance pending.**
 `DESKTOP_SMILEY_BASELINE_STALE_AFTER_REVIEWED_ANDROID107_CHANGE`: exactly one stale
 Android106 pin, ChatThreadView.java; current file is byte-identical to accepted public108.
 Reviewed voice-preview/recording visibility and message styling only; all49 faces, aliases,
@@ -23,7 +68,7 @@ Local Ubuntu24.04/Python3.12 acceptance: smileys49 PASS, mandatory desktop1230 P
 skips/0 failures/0 errors, dependency60 PASS, JVM contour2 PASS; GTK, Disconnect poll50,
 messenger27, smiley9, layout24, map/invitation/recovery/TCP and DEB/AppImage/package smokes PASS.
 Minimal-container libXtst/TUN differences were corrected; initial logs retained, no test waiver.
-**Full-matrix qualification PASS; beta109 signed, not yet published.**
+**Full-matrix qualification and offline signing PASS.**
 Retained CI-only marker `carrier/ci/beta109-full-matrix-qualification.txt` was pushed as
 `600ae52bfac673ca0323bd7c96d6cdd369593624` and remote-verified. Sole candidate Client builds
 run41289980872 completed SUCCESS; hosted scope android/windows/linux=true. Android, Linux,
@@ -52,11 +97,20 @@ SHA256 `2d602aa74e134fd0104fa0900ef28e6086a6eace8f0255f521e09ec48f9edca3`,562169
 unsigned SHA256 `8b06f595f4b5eac733d528479768e8088b7f92ae60e2062b6f3606e4e5ec9991`.
 Existing signer `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`
 unchanged; APK signature, signed alignment and unchanged unsigned payload PASS.
-**NEXT: guarded immutable109 publication, Android sequence4 and invitation109, followed by
-verified HTTPS readback.** No109 publication/sequence4/owner-phone action yet. Public108/
-sequence3, catalog4, paid baseline108, entitlement through2026-12-01T07:09:19Z, ledger1/4,
-cohort1/10 and revenue0 remain accepted. Canary COMPLETED_WITH_DEVIATIONS, final108 internet/
-84s READY PASS; no canary replay, paid event, CRL, backend restart or gateway operation.
+**READY_FOR_BETA109_OWNER_UPDATE — immutable109 published and HTTPS-verified.**
+Public and invitation versions are0.1.18-beta109/code109; Android update sequence4 is optional
+(minimum supported code1, mandatory_after0). Signed APK matches the qualified source600ae52
+and CI41289980872 byte-for-byte over verified HTTPS. Public108 remains immutable/downloadable.
+Gateway catalog4/signature/routes, paid baseline108, entitlement through2026-12-01T07:09:19Z,
+ledger1/4, cohort1/10, revenue0, registry identities/invites/grants and renewal/sync remain
+unchanged. Read-only before/after fingerprints match; no backend restart or database write.
+Only Android downloads, discovery catalogs and invitation were published; no forced update.
+Canary remains COMPLETED_WITH_DEVIATIONS, final108 internet/84s READY PASS; never replay it.
+**Phone actions NOT_RUN; owner109 installation/field acceptance PENDING.** Next: update over108
+without uninstall/data clear/reenrollment, do not connect, and report «109 УСТАНОВЛЕНА».
+Only after that fresh response: identity/data/entitlement, CPU/selector, one Force stop/reopen,
+Auto/MESH Connect/READY timing/internet, one Disconnect/owner+notification cleanup/selector.
+No paid event, CRL operation or cohort expansion is authorized by this publication.
 
 Exact audit: ChatThreadView.java old SHA256
 `51d31ad5f07b4c9f0e6a4ab1d32e1cdceb735c406403fd0ca991e7263e203e9a` → reviewed SHA256

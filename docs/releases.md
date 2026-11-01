@@ -1,14 +1,15 @@
 # Release distribution / Выпуски
 
-**1 November: beta109 is an authorized source candidate, not a download yet.**
-The repair keeps country/transport controls visible after a failed connection, corrects
-Disconnect/Cancel actions and retains error history through the status label. Hosted Android
-acceptance and signing/publication are pending. Public/invitation APK remains beta108;
-keep the owner on108 until the existing canary's final30-day recovery and final108 Connect.
-No data clearing, reenrollment or gateway catalog change. Android sequence4 is authorized only
-after those gates; current sequence is3. See the [current report](releases/2026-10-30-nl-gateway-replacement.md).
+**1 November — READY_FOR_BETA109_OWNER_UPDATE.** Beta109/code109 is published;
+Android update sequence4 and invitation109 verified over HTTPS. Full matrix41289980872/
+source600ae52, offline signer,16K alignment and exact bytes PASS. The repair keeps country/
+transport controls visible after failure and corrects Disconnect/Cancel actions. Owner109
+physical acceptance is pending; update over108 without clearing data or reenrollment, then
+report «109 УСТАНОВЛЕНА» without connecting. Public108 remains immutable. Gateway catalog4,
+paid baseline108, entitlement, ledger1/4 and cohort1/10 are unchanged; no canary replay.
+[Publication evidence](releases/2026-10-30-nl-gateway-replacement.md#android109-general-publication--1-november).
 
-**31 October — beta108 publicly distributed, Android12+/ARM64.**
+**Historical31 October — beta108 publication checkpoint (superseded by109 above).**
 Explicit server CPU percentage is visible even without a verified channel capacity.
 MESH and quiet foreground notifications are retained. Hosted CI, visual review, existing
 signer and public HTTPS byte readback PASS. Android update catalog sequence3 is optional.
@@ -198,7 +199,7 @@ Python3.14's implicit-directory imports must not hide a broken isolated archive.
 The [client workflow](../.github/workflows/clients.yml) defines platform builds and
 release conditions. CI artifacts do not by themselves establish a release. Validate native
 UI/runtime and downloaded artifacts before signing/publishing. Windows cross-build alone
-is insufficient. The current release includes Android0.1.18-beta107, Linux0.2.11 and Windows0.2.15 Windows-channel release; see the [FIELD report](releases/2026-10-03-field1-release-final.md), [desktop cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and prior [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md).
+is insufficient. The current release includes Android0.1.18-beta109, Linux0.2.11 and Windows0.2.15 Windows-channel release; see the [FIELD report](releases/2026-10-03-field1-release-final.md), [desktop cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and prior [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md).
 
 Desktop catalogs use offline signing with increasing sequence numbers. Keep keys out of
 CI and servers; never replace an existing version/tag with different binaries.

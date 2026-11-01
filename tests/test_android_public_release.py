@@ -33,28 +33,28 @@ def test_public_release_keeps_provisioning_disabled_and_requires_native_provenan
     assert '--check-generated' in gradle
 
 
-def test_public_invitation_offers_qualified_android108_and_audio_source():
+def test_public_invitation_offers_qualified_android109_and_audio_source():
     landing = (ROOT / 'deploy/friends/invite/index.html').read_text()
     android = next(line for line in landing.splitlines() if line.lstrip().startswith('android:{'))
-    assert 'Beta108 · Android 12+ · ARM64 · MESH' in android
-    assert '/downloads/FamilyConnect-Test-0.1.18-beta108.apk' in android
-    assert '/downloads/FamilyConnect-Android-0.1.18-beta108-audio-source.tar.gz' in android
+    assert 'Beta109 · Android 12+ · ARM64 · MESH' in android
+    assert '/downloads/FamilyConnect-Test-0.1.18-beta109.apk' in android
+    assert '/downloads/FamilyConnect-Android-0.1.18-beta109-audio-source.tar.gz' in android
     assert 'beta60' not in android
 
 
-def test_public_android108_catalog_is_signed_and_remains_optional():
+def test_public_android109_catalog_is_signed_and_remains_optional():
     envelope = json.loads((ROOT / 'updates/android-friends-v2.json').read_bytes())
     payload = base64.b64decode(envelope['payload'], validate=True)
     anchor = base64.b64decode((ROOT / 'clients/desktop/update.pub').read_text().strip(), validate=True)
     Ed25519PublicKey.from_public_bytes(anchor).verify(
         base64.b64decode(envelope['signature'], validate=True), b'family-connect/android-update/v1\0' + payload)
     catalog = json.loads(payload)
-    assert catalog['sequence'] == 3
-    assert catalog['version_code'] == 108 and catalog['version'] == '0.1.18-beta108'
+    assert catalog['sequence'] == 4
+    assert catalog['version_code'] == 109 and catalog['version'] == '0.1.18-beta109'
     assert catalog['minimum_supported_version'] == 1 and catalog['mandatory_after'] == 0
-    assert catalog['size'] == 56212840
-    assert catalog['sha256'] == '144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf'
-    assert catalog['url'] == 'https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk'
+    assert catalog['size'] == 56216936
+    assert catalog['sha256'] == '2d602aa74e134fd0104fa0900ef28e6086a6eace8f0255f521e09ec48f9edca3'
+    assert catalog['url'] == 'https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta109.apk'
     assert 0 < catalog['expires_at'] - catalog['issued_at'] <= 90 * 86400
 
 

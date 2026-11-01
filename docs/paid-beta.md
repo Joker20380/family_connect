@@ -1,13 +1,24 @@
 # Android controlled beta — manual paid entitlement (Beta-0)
 
+**1 November — READY_FOR_BETA109_OWNER_UPDATE.** Beta109/code109 is published;
+Android update sequence4 and invitation109 verified over HTTPS. Full matrix41289980872/
+source600ae52, offline signer,16K alignment and exact bytes PASS. The repair keeps country/
+transport controls visible after failure and corrects Disconnect/Cancel actions. Owner109
+physical acceptance is pending; update over108 without clearing data or reenrollment, then
+report «109 УСТАНОВЛЕНА» without connecting. Public108 remains immutable. Gateway catalog4,
+paid baseline108, entitlement, ledger1/4 and cohort1/10 are unchanged; no canary replay.
+[Publication evidence](releases/2026-10-30-nl-gateway-replacement.md#android109-general-publication--1-november).
+
+Earlier dated checkpoints below retain their original observations; they are not current NEXTs.
+
 Subscope of **ANDROID-CONTROLLED-BETA / PAID-ENTITLEMENT-MVP**, not a new PLAN ID.
 [Checkpoint and evidence](releases/2026-10-27-android106-paid-entitlement-mvp.md).
-Original source checkpoint was **NOT_DEPLOYED**; CP2 now serves the exact paid-aware
-backend with **empty cohort/events**, not paid launch approval. Commands below
-describe a future authorized operator action,
-not permission to deploy, collect payment or enroll the existing field user.
+Original source checkpoint was **NOT_DEPLOYED**. Current paid baseline108 is deployed;
+the completed owner canary leaves ledger1/4, cohort1/10 and revenue0. Publication109 does not
+change that baseline or authorize another paid event. Commands below are operator reference,
+not permission to replay the canary, collect payment or enroll an external tester.
 
-## Current baseline transition —108 target, production still106 (1 November)
+## Historical baseline transition —108 target from106 (1 November)
 
 **Owner timing correction / NL_REPLACEMENT_LIVE:** owner confirms all requested checks
 were already completed successfully and explicitly asks to continue coding. Accept the
@@ -124,7 +135,7 @@ Preserve non-cohort106/107 admission byte/semantic behavior, identities/invites/
 schema,10-slot limit, publisher, registration/chat-sync and current catalog4 endpoint routes.
 No new wire protocol. Deterministic artifacts PASS; the attempted deployment was rolled back.
 Production106 is restored; another candidate restart requires explicit additional authorization.
-See [live continuation](releases/2026-10-27-android106-beta-0-canary-1.md#current-continuation--baseline108-target-live-canary-not_run-1-november)
+See [live continuation](releases/2026-10-27-android106-beta-0-canary-1.md#current-continuation--baseline108-canary-completed-with-deviations-1-november)
 and [artifact/source inventory](releases/2026-10-30-nl-gateway-replacement.md#1-november--beta108-owner-evidence-and-fresh-preflight).
 
 ## Owner canary operator — source-ready, live not run

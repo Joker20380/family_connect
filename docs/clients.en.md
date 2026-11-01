@@ -1,12 +1,13 @@
 # Client installation
 
-**1 November: beta109 is an authorized source candidate, not a download yet.**
-The repair keeps country/transport controls visible after a failed connection, corrects
-Disconnect/Cancel actions and retains error history through the status label. Hosted Android
-acceptance and signing/publication are pending. Public/invitation APK remains beta108;
-keep the owner on108 until the existing canary's final30-day recovery and final108 Connect.
-No data clearing, reenrollment or gateway catalog change. Android sequence4 is authorized only
-after those gates; current sequence is3. See the [current report](releases/2026-10-30-nl-gateway-replacement.md).
+**1 November — READY_FOR_BETA109_OWNER_UPDATE.** Beta109/code109 is published;
+Android update sequence4 and invitation109 verified over HTTPS. Full matrix41289980872/
+source600ae52, offline signer,16K alignment and exact bytes PASS. The repair keeps country/
+transport controls visible after failure and corrects Disconnect/Cancel actions. Owner109
+physical acceptance is pending; update over108 without clearing data or reenrollment, then
+report «109 УСТАНОВЛЕНА» without connecting. Public108 remains immutable. Gateway catalog4,
+paid baseline108, entitlement, ledger1/4 and cohort1/10 are unchanged; no canary replay.
+[Publication evidence](releases/2026-10-30-nl-gateway-replacement.md#android109-general-publication--1-november).
 
 ## CHAT-UX-1 — internal UI checkpoint,26 October
 
@@ -236,12 +237,12 @@ invitation; verify unchanged Support ID FC-YHQB-9VJN. Before one mobile attempt,
 the operator must revalidate leases and fresh READY/ACK; export immediately after
 disconnect. FIELD admission and the public updater remain unchanged.
 
-**Current31.10: beta108/code108 is public, Android12+/ARM64.**
-Measured server CPU is visible on the dashboard and country list when channel capacity is unknown.
-MESH support and quiet ongoing VPN notifications; hosted CI and public signed artifact checks PASS.
-Physical108 owner runtime is NOT_RUN after explicit expedited rollout authorization.
+**Current1.11: beta109/code109 is public, Android12+/ARM64.**
+Measured server CPU remains visible on the dashboard and country list; transport controls after
+failure are repaired. Full matrix/signature/HTTPS PASS. Owner109 physical acceptance is pending;
+existing108 final recovery passed, and paid baseline108/entitlement remain unchanged.
 Install over the existing app, without clearing data or reenrollment; admission is unchanged.
-[Download/update](getting-started.en.md) · [Evidence](releases/2026-10-30-nl-gateway-replacement.md#android108-general-publication--31-october).
+[Download/update](getting-started.en.md) · [Evidence](releases/2026-10-30-nl-gateway-replacement.md#android109-general-publication--1-november).
 
 ## Historical preparation checkpoints
 
@@ -334,7 +335,7 @@ not publicly distributed and not a FIELD release. Public beta51/invitation links
 remain unchanged and were not reverified. [Attempt14](releases/2026-10-02-5n-prov1-attempt14.ru.md)
 · [Canary provenance and SHA256](releases/2026-10-02-5n-android-canary-build.ru.md).
 
-Use the [friends beta guide](getting-started.en.md): Android12+, ARM64 beta108,
+Use the [friends beta guide](getting-started.en.md): Android12+, ARM64 beta109,
 invitation-based access, VPN, text and voice messages. The APK is distributed through
 an invitation page and HTTPS download; it is not yet a GitHub or app-store release.
 The [client workflow](../.github/workflows/clients.yml) documents source-build requirements.
