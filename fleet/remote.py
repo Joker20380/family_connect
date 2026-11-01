@@ -126,5 +126,8 @@ class RemoteInstaller:
         except (OSError, subprocess.TimeoutExpired):
             fail('remote_transport_failure')
         if result.returncode:
-            fail('remote_operation_rejected')
-        return load(result.stdout)
+            fail('remote_transport_failure')
+        try:
+            return load(result.stdout)
+        except Exception:
+            fail('remote_transport_failure')

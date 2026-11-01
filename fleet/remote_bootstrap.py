@@ -254,6 +254,9 @@ def receive(request):
             output.write(agent)
             output.flush()
             os.fsync(output.fileno())
+        descriptor=os.open(directory,os.O_RDONLY|os.O_DIRECTORY)
+        os.fsync(descriptor)
+        os.close(descriptor)
     if hashlib.sha256(target.read_bytes()).hexdigest() != body['agent_sha256']:
         raise ValueError('remote_agent_readback')
     response = dict(agent_sha256=body['agent_sha256'], mode='0500', scope=body['scope'])

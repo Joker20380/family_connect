@@ -76,7 +76,7 @@ def test_fixed_ssh_argv_and_redacted_errors(remote):
         assert setting in argv
     assert argv[argv.index('-F')+1] == '/dev/null'
     adapter.preflight_at = 1001
-    with pytest.raises(FleetError, match='remote_operation_rejected') as failure:
+    with pytest.raises(FleetError, match='remote_transport_failure') as failure:
         adapter.execute('stage','stage-one')
     assert 'secret' not in str(failure.value)
     command, options = calls[-1]
