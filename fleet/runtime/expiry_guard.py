@@ -10,7 +10,8 @@ def main():
     if not re.fullmatch(r'/etc/family-connect/rehearsal/gw-[0-9a-f]{32}/metadata.json',path):
         raise SystemExit(1)
     metadata=json.loads(Path(path).read_bytes())
-    if not time.time()<metadata['material_expires_at']:
+    lifetime=metadata.get('runtime_lifetime_seconds')
+    if type(lifetime) is not int or not 300<=lifetime<=900 or not time.time()+lifetime+120<metadata['material_expires_at']:
         raise SystemExit(1)
 
 

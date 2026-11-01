@@ -97,3 +97,17 @@ def test_observations_do_not_read_secret_contents_or_emit_arbitrary_service_data
     assert result['services']['mesh']==dict(ActiveState='failed',NRestarts='3')
     assert result['files']['profile/gateway.json']['extended_attribute_count']==1
     assert 'SECRET' not in str(result) and 'private-attribute' not in str(result)
+
+
+def test_ready_lifetime_observation_never_returns_join_url_or_identity(monkeypatch):
+    bundle='gw-'+'a'*32;instance='fleet-rehearsal-test'
+    monkeypatch.setattr(Path,'lstat',lambda self: SimpleNamespace(st_uid=996))
+    def read(path,**kwargs):
+        if path.name=='metadata.json':
+            return dict(bundle_id=bundle,instance_id=instance,material_expires_at=1000)
+        return dict(version=1,issued_at='1970-01-01T00:15:00Z',expires_at='1970-01-01T00:16:44Z',
+                    family='PRIVATE_IDENTITY',seeds=[dict(join_url='PRIVATE_JOIN_URL')])
+    monkeypatch.setattr(probe,'observation_json',read)
+    result=probe.ready_observation(Path('/config'),Path('/run'),bundle,instance)
+    assert result==dict(result='OBSERVED',issued_at=900,expires_at=1004,material_expires_at=1000,exceeds_material_deadline=True)
+    assert 'PRIVATE' not in str(result)

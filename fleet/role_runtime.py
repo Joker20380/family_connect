@@ -319,7 +319,9 @@ class Runtime:
         if len(route) != 1:
             fail('rehearsal_default_route')
         firewall = nftables(route[0]['dev'])
-        lifetime = int(self.permit['expires_at']-self.clock())
+        lifetime = min(900,int(min(receipt['expires_at'],mesh_binding['expires_at'])-self.clock())-240)
+        if lifetime<300:
+            fail('configuration_start_window')
         templates = units(bundle_id, self.permit['instance_id'], lifetime, self.permit['expires_at'])
         self.mkdir(config, 0o750, service_gid)
         self.mkdir(config/'profile', 0o750, service_gid)
@@ -329,6 +331,7 @@ class Runtime:
         for name, content in templates.items():
             files['units/'+name] = (content,0o444)
         metadata = dict(schema=1, instance_id=self.permit['instance_id'], bundle_id=bundle_id,
+            runtime_lifetime_seconds=lifetime,
             material_expires_at=min(receipt['expires_at'],mesh_binding['expires_at']), revision=load(self.contents['metadata/revision.json'])['revision'],
             awg=awg_binding, mesh=mesh_binding, files={name:digest(content) for name,(content,mode) in files.items()},
             modes={name:mode for name,(content,mode) in files.items()}, service_gid=service_gid)
@@ -481,6 +484,7 @@ class Runtime:
         return owned
 
     def stop(self):
+        self.cancel_reboot()
         owned=[name for name in self.owned_units() if name!='fc-rehearsal-expiry.service']
         if owned:
             result=self.command('systemctl','stop',*owned,check=False)
@@ -557,6 +561,50 @@ class Runtime:
         previous = read_private(self.directory/'boot-before',owner=self.uid)
         if previous == self.path('/proc/sys/kernel/random/boot_id').read_bytes():
             fail('reboot_not_observed')
+        request=self.directory/'reboot-request.json'
+        if request.exists() or request.is_symlink():
+            value=load(read_private(request,owner=self.uid))
+            current=self.path('/proc/sys/kernel/random/boot_id').read_bytes()
+            if (value['bundle_id']!=bundle_id or value['identity']!=identity or value['status'] not in ('PENDING','COMPLETED')
+                    or value['boot_sha256']==digest(current)):
+                fail('reboot_request_binding')
+            value.update(status='COMPLETED',observed_boot_sha256=digest(current))
+            self.write(request,canonical(value),replace=True)
+
+    def request_reboot(self, bundle_id, identity):
+        if self.enrolled_identity()!=identity or self.pointer()!=bundle_id:
+            fail('reboot_identity_or_bundle')
+        metadata=self.verify_configuration(bundle_id)
+        if self.clock()+1200>=metadata['material_expires_at']:
+            fail('reboot_material_window')
+        request=self.directory/'reboot-request.json'
+        if request.exists() or request.is_symlink():
+            fail('reboot_already_requested')
+        unit='fc-rehearsal-reboot-'+self.permit['instance_id']
+        for suffix in ('.timer','.service'):
+            state=self.command('systemctl','show',unit+suffix,'--property=LoadState','--value',check=False)
+            if state.stdout.strip()!=b'not-found':
+                fail('reboot_unit_conflict')
+        self.command('/usr/sbin/sshd','-t')
+        boot=self.path('/proc/sys/kernel/random/boot_id').read_bytes()
+        self.write(request,canonical(dict(bundle_id=bundle_id,identity=identity,boot_sha256=digest(boot),status='PENDING')))
+        self.command('systemd-run','--unit='+unit,'--on-active=10s','--timer-property=AccuracySec=1s',
+                     '--property=Type=oneshot','/usr/bin/systemctl','reboot')
+        return dict(reboot='SCHEDULED',bundle_id=bundle_id,boot_sha256=digest(boot))
+
+    def cancel_reboot(self):
+        request=self.directory/'reboot-request.json'
+        if not request.exists() and not request.is_symlink():
+            return
+        value=load(read_private(request,owner=self.uid))
+        if value['status']!='PENDING' or value['boot_sha256']!=digest(self.path('/proc/sys/kernel/random/boot_id').read_bytes()):
+            return
+        unit='fc-rehearsal-reboot-'+self.permit['instance_id']
+        self.command('systemctl','stop',unit+'.timer',unit+'.service',check=False)
+        if self.command('systemctl','is-active','--quiet',unit+'.timer',unit+'.service',check=False).returncode==0:
+            fail('reboot_cancellation_failed')
+        value['status']='CANCELLED'
+        self.write(request,canonical(value),replace=True)
 
     def drain(self):
         self.stop()

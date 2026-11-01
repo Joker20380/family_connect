@@ -8,7 +8,7 @@ import secrets
 import time
 
 from . import acceptance
-from .contracts import canonical, digest, fail, load
+from .contracts import FleetError, canonical, digest, fail, load
 from .installer import atomic_json
 from .permit import replay_binding, SCOPE
 
@@ -96,8 +96,13 @@ class RehearsalState:
                 receipt['result'] = 'AWAITING_EXTERNAL_ACCEPTANCE' if state['state']=='AWAITING_EXTERNAL_ACCEPTANCE' else 'PASS'
                 if result is not None:
                     receipt['evidence'] = result
-            except Exception:
+            except Exception as error:
                 receipt['first_failure'] = 'rehearsal_'+action.replace('-', '_')+'_failed'
+                allowed=('role_service_unhealthy','role_listener_owner','role_process_hash','role_process_argv',
+                    'awg_interface_health','awg_peer_inventory','awg_server_identity','awg_listen_port',
+                    'awg_allowed_peer_inventory','forwarding_health','firewall_health','mesh_directory_expired',
+                    'monitoring_health','configuration_start_window','role_command_unavailable','role_command_failed')
+                receipt['safe_failure_code']=str(error) if isinstance(error,FleetError) and str(error) in allowed else 'UNCLASSIFIED'
                 receipt['result'] = 'FAIL'
                 if self.switching:
                     predecessor = self.rollback_target
@@ -163,6 +168,14 @@ class RehearsalState:
             state['state'] = 'VERIFIED'
             state['verification'] = None
             return dict(local_health=evidence,external_acceptance=parameters['receipt'])
+        if action=='reboot-verify' and parameters:
+            if (parameters!={'phase':'request'} or state['state']!='ACTIVE' or target!=state['actual_bundle']
+                    or not state['health'] or not 0<=self.clock()-state['health']['observed_at']<=300
+                    or not self.clock()<state['health']['external_expires_at']):
+                fail('reboot_request_precondition')
+            if local_digest(self.runtime.accept(target,fresh=True))!=state['health']['digest']:
+                fail('reboot_health_drift')
+            return self.runtime.request_reboot(target,state['identity'])
         if parameters:
             fail('rehearsal_parameters_not_supported')
         if action == 'stage':

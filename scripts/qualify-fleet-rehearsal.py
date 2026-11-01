@@ -31,6 +31,7 @@ from fleet.rehearsal_templates import TABLE, nftables
 from fleet.remote_agent import verified_upload
 from fleet.remote_bootstrap import python_dependencies, verify_bundle_payload
 from fleet.role_runtime import Runtime
+from fleet.runtime.boot_prepare import prepare as prepare_boot
 from fleet.tests.test_role_runtime import IsolatedExecutor
 
 
@@ -105,6 +106,7 @@ def qualify(package, output):
         native_help_version_config_test='PASS',unit_verification='PASS',nft_syntax_coexistence_rollback='PASS',
         material_delivery_fake_root='PASS',service_account_modes='PASS',two_phase_synthetic_acceptance='PASS',ab_installation='PASS',
         injected_b_failure_rollback_a='PASS',b_upgrade='PASS',explicit_rollback='PASS',retirement='PASS',
+        boot_firewall_restore_simulation='PASS',reboot_request_cancellation_simulation='PASS',
         real_systemd_start='NOT_RUN',awg_handshake='NOT_RUN',tcp_tunnel='NOT_RUN',mesh_data_plane='NOT_RUN',
         reboot_persistence='NOT_RUN',production_writes=0,catalog_publications=0,user_invitations=0,paid_events=0,phone_actions=0)
     write_private(output,canonical(result))
@@ -180,6 +182,21 @@ def scenario(workspace,bundles,package_receipt):
             files.append(str(preview))
         command(['systemd-analyze','verify',*files])
     complete('A')
+    command(['nft','-f','-'],content=b'table inet fc_boot_neighbor {\n chain sentinel {\n }\n}\n')
+    neighbor=command(['nft','-s','list','table','inet','fc_boot_neighbor'])
+    command(['nft','-f','-'],content=(config/'firewall.nft').read_bytes())
+    expected=command(['nft','-s','list','table','inet',TABLE])
+    applied=directory/('network-'+body['bundle_a']+'.json')
+    original=applied.read_bytes()
+    write_private(applied,canonical(dict(sha256=digest(expected))),replace=True)
+    command(['nft','delete','table','inet',TABLE])
+    prepare_boot('/etc/family-connect/rehearsal/'+body['bundle_a']+'/metadata.json',root=root,now=lambda:now+1)
+    assert command(['nft','-s','list','table','inet',TABLE])==expected
+    assert command(['nft','-s','list','table','inet','fc_boot_neighbor'])==neighbor
+    prepare_boot('/etc/family-connect/rehearsal/'+body['bundle_a']+'/metadata.json',root=root,now=lambda:now+1)
+    command(['nft','delete','table','inet',TABLE])
+    command(['nft','delete','table','inet','fc_boot_neighbor'])
+    write_private(applied,original,replace=True)
     runtime.manifest,runtime.contents=bundles['B']
     assert operate('stage','B')['result']=='PASS'
     start=runtime.start
@@ -197,7 +214,9 @@ def scenario(workspace,bundles,package_receipt):
     assert operate('rollback')['result']=='AWAITING_EXTERNAL_ACCEPTANCE'
     complete('A')
     assert runtime.pointer()==body['bundle_a']
+    assert operate('reboot-verify',parameters=dict(phase='request'))['result']=='PASS'
     assert operate('drain')['result']=='PASS'
+    assert load((directory/'reboot-request.json').read_bytes())['status']=='CANCELLED'
     assert operate('retire')['result']=='PASS'
     assert state.status()['state']=='RETIRED' and runtime.pointer() is None
     assert not (directory/'slots').exists() and not (directory/'material.key').exists() and not (directory/'identity.key').exists()

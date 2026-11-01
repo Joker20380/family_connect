@@ -30,6 +30,7 @@ RestrictSUIDSGID=yes
 RestrictRealtime=yes
 CapabilityBoundingSet=
 RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+Environment=LC_ALL=C
 StandardOutput=null
 StandardError=null
 RemainAfterExit=yes

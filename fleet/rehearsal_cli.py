@@ -46,6 +46,8 @@ def parser():
             command.add_argument('--input',required=True)
         if action=='drain':
             command.add_argument('--recover-operation-id')
+        if action=='reboot-verify':
+            command.add_argument('--request-reboot',action='store_true')
     return root
 
 
@@ -150,6 +152,8 @@ def dispatch(args):
                         target=args.host,challenge=status['verification'])
         return run(harness,authority)
     parameters={}
+    if args.action=='reboot-verify' and args.request_reboot:
+        parameters=dict(phase='request')
     if args.action in ('deliver-materials','complete-verification'):
         parameters['envelope' if args.action=='deliver-materials' else 'receipt']=load(read_private(args.input,owner=os.geteuid()))
         if args.action=='deliver-materials' and args.create_materials:

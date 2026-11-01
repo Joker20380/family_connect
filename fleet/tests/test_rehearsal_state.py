@@ -34,6 +34,7 @@ def state(authority, tmp_path):
     runtime.configure = lambda target: runtime.calls.append(('configure', target))
     runtime.enrolled_identity = lambda: 'a'*64
     runtime.reboot_check = lambda target, identity: runtime.calls.append(('reboot', target))
+    runtime.request_reboot = lambda target, identity: runtime.calls.append(('schedule-reboot',target)) or dict(reboot='SCHEDULED')
     runtime.drain = stop
     runtime.retire = lambda: runtime.calls.append(('retire', None))
     return RehearsalState(tmp_path/'state', permit, runtime, clock=lambda: 1001)
@@ -73,6 +74,31 @@ def test_stage_replay_and_active_boundary(state):
     rejected = state.execute(request(state,'activate-local'))
     assert rejected['result'] == 'FAIL'
     assert state.status()['state'] != 'ACTIVE'
+
+
+def test_reboot_request_requires_fresh_external_acceptance_and_is_not_replayed(state):
+    active(state)
+    operation=request(state,'reboot-verify','-request')
+    operation['parameters']={'phase':'request'}
+    result=state.execute(operation)
+    assert result['result']=='PASS' and result['evidence']['reboot']=='SCHEDULED'
+    assert state.status()['state']=='ACTIVE'
+    assert state.execute(operation)==result
+    assert sum(name=='schedule-reboot' for name,target in state.runtime.calls)==1
+    state.clock=lambda:1400
+    operation['operation_id']='stale-reboot-request'
+    assert state.execute(operation)['result']=='FAIL'
+    assert sum(name=='schedule-reboot' for name,target in state.runtime.calls)==1
+
+
+def test_reboot_request_rejects_unverified_state_and_local_health_drift(state):
+    operation=request(state,'reboot-verify','-early');operation['parameters']={'phase':'request'}
+    assert state.execute(operation)['result']=='FAIL'
+    active(state)
+    state.runtime.accept=lambda target,fresh:dict(changed=True)
+    operation['operation_id']='reboot-health-drift'
+    assert state.execute(operation)['result']=='FAIL'
+    assert not any(name=='schedule-reboot' for name,target in state.runtime.calls)
 
 
 def test_upgrade_failure_rollback_reboot_and_retirement(state):

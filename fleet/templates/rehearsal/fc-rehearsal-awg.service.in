@@ -30,6 +30,7 @@ RestrictSUIDSGID=yes
 RestrictRealtime=yes
 CapabilityBoundingSet=CAP_NET_ADMIN
 RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+Environment=LC_ALL=C
 StandardOutput=null
 StandardError=null
 RuntimeMaxSec={{LIFETIME_SECONDS}}

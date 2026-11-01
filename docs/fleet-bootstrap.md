@@ -28,9 +28,10 @@ operations; enrollment/preflight still require the exact rehearsal ports to be f
 host checks remain mandatory, and live listener ownership is checked by local role health.
 
 `status` first reads the durable journal and may add a separately permit-authorized read-only
-host observation. Its fixed paths expose only ownership/modes/link counts and counts of
-extended metadata; its fixed units expose whitelisted state/exit/restart fields. It never
-reads config contents, environment values or raw journal messages. Unavailable diagnostics
+host observation. Its fixed paths expose ownership/modes/link counts, counts of extended
+metadata and whitelisted ready-lifetime timestamps; its fixed units expose state/exit/restart
+fields. Credential files are not read; no config bodies, room URLs, environment values or raw
+journal messages are returned. Unavailable diagnostics
 do not discard the durable operation result. A failed start with successful rollback is not
 an unknown outcome and must not be blindly replayed; localize the failure before a new intent.
 
@@ -41,6 +42,16 @@ host is allowed only after successful retirement: staging verifies matching pred
 enrollment/custody signatures, terminal unfenced journal state and absence of owned live
 resources/secrets under an exclusive owner lock, retaining predecessor evidence and releases.
 Failed, fenced, unsigned or still-live predecessors cannot be adopted; there is no force path.
+
+Each role run is bounded to at most15 minutes within the signed four-hour permit. Every start
+requires120 seconds of additional material headroom; late starts fail closed. Reboot preparation
+restores only the absent verified owned nft table, checks forwarding and recreates the owned
+/run parent. Existing table/config drift is not overwritten. No global nft flush or sysctl reset.
+After ACTIVE with fresh external acceptance, `reboot-verify --request-reboot` can schedule one
+fixed delayed reboot, durably bound to the current boot/bundle/identity. It is not a generic SSH
+command. Interrupted outcomes require journal reconciliation, never a blind request replay.
+Stop/drain/retire cancels a pending same-boot request. A normal `reboot-verify` after restart
+requires a changed boot and starts another external-acceptance cycle before reactivation.
 
 `fleet.rehearsal_state` retains operation bindings, first failure and rollback receipts;
 changed replay or interrupted operations are fenced. It requires a separately qualified

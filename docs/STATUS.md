@@ -1,44 +1,36 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**FLEET-BOOTSTRAP-2 — corrected A/B source/package requalified; first trial safely RETIRED.**
-Existing task: **FLEET-BOOTSTRAP-2**, no new PLAN ID; finish its gates before further activation.
-Frozen deployable source: `900e1859d5b4317e1faab2675425bed78ab85c12`; corrected A/B signed and each built twice,
-byte-identical archive/manifest/signature/hash inventory. Exact native/source/license
-bindings and the282-file canonical MESH capsule are retained. Ubuntu24.04/x86_64
-isolated qualification PASS: native config/help, units, nft coexistence, encrypted
-materials, two-phase synthetic acceptance, B failure→A, B success, rollback and retire.
-Fresh full fleet295 + console156 =451 PASS; paid/backend/package170 PASS; Django check PASS,
-migration drift NONE. Append-only sanitized live-receipt import and Russian dashboard ready.
-Roles: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor.
-Disabled: mailbox/chat-services, production renewal/restricted-sync, registry/control DB.
-Owner-authorized disposable NL OS preparation COMPLETE: Ubuntu22.04→24.04/x86_64,
-kernel6.8.0-147-generic,2CPU,1919MiB RAM,42408MiB free. Two OS reboots verified;
-dpkg audit clean, no failed units/pending reboot; DNS/HTTPS/time/TUN and signed preflight PASS.
-Encrypted management backup verified; SSH pin/config/authorized keys retained. Provider OS
-reinstall and26.04 upgrade NOT_RUN. Trust remains owner-accepted TOFU, not independent provider
-verification; owner confirms Reinstall OS option, provider console itself remains unverified.
-Owner requests two Amsterdam servers; first production NL remains excluded and untouched.
-Frozen runtime/A/B unchanged. Signed enrollment, encrypted disposable material delivery and
-stage A PASS. Node-local Ed25519/X25519 private keys stay on target; the approved operator
-probe identity was used only in local private custody, never copied to the VPS. The separate
-publisher token passes custody/schema checks and its test-account API request returned201;
-this is not MESH data-plane acceptance. First start A failed: MESH exit1/restarts3, no ready export.
-Automatic rollback, subsequent drain and retirement PASS; disposable node keys/materials and
-owned runtime resources removed, VPS retained. No blind retry or immutable unit/config edit.
-Exact native operator diagnostics reproduce SEED_CONNECT failure with AF_NETLINK denied and
-READY/normal cleanup with it allowed. Source units now admit MESH interface discovery without
-CAP_NET_ADMIN; all other restrictions remain. No node data-plane PASS is inferred.
-A new signed A/B pair and fresh enrollment are required. Source adds verified retired-owner
-handoff only after matching signed enrollment/custody, terminal unfenced retirement journal,
-secret/resource absence and an exclusive owner lock; predecessor evidence/releases are retained.
-New A/B and Ubuntu qualification PASS, including native config-test, units, nft, encrypted
-delivery, synthetic two-phase acceptance, B failure/success/rollback and retirement.
-Next: fresh enrollment and physical AWG/TCP/MESH acceptance, A/B upgrade and role reboot.
+**FLEET-BOOTSTRAP-2 — second trial safely RETIRED; lifetime/boot corrections under qualification.**
+Existing task only; no new PLAN ID or production activation. Owner wants two Amsterdam servers;
+first production NL remains excluded. Reserved VPS stays Ubuntu24.04/x86_64, not reinstalled/deleted.
+Last qualified frozen source `900e1859d5b4317e1faab2675425bed78ab85c12` and both old A/B pairs
+are retained. Exact four natives/licenses and282-file canonical MESH source remain unchanged.
+Separate test-account publisher token is accepted (HTTP201). MESH now starts and exports READY;
+second node trial passed enrollment, material delivery, retired-owner handoff and stage A.
+Local acceptance correctly rejected its directory deadline:2 seconds beyond the material/permit
+boundary. No external PASS or activation was fabricated. Automatic rollback, drain and retirement
+PASS; both trial identities are terminal, with original probe custody and immutable evidence kept.
+Source now uses bounded15-minute service lifetimes with a120-second launch reserve checked on
+EVERY start, including reboot. The signed four-hour permit/material ceiling remains unchanged.
+Preparation restores only the exact bound owned nft table after boot and creates the owned /run
+parent before AWG; it verifies forwarding/config/pointer and refuses drift without global flushing.
+A fixed permit-bound `reboot-verify --request-reboot` phase requires ACTIVE plus fresh signed
+external acceptance and unchanged local health; durable one-shot scheduling is idempotent and
+pending reboot cancellation is part of stop/drain/retire. Normal reboot-verify still demands a
+changed boot and opens a NEW external-acceptance challenge, never self-asserting data-plane PASS.
+Safe status diagnostics expose only typed service/file metadata and ready-lifetime timestamps;
+no credential bodies, environment values, room URLs or raw journals are returned.
+Full fleet316 + console156 =472 PASS; paid170 PASS; Django check PASS/drift NONE.
+Next: freeze/rebuild corrected deterministic A/B, repeat Ubuntu qualification, then fresh physical
+trial. AWG/TCP/MESH external acceptance, A/B upgrade and role reboot acceptance remain NOT_RUN.
+Admitted: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor. Disabled:
+mailbox/chat-services, production renewal/restricted-sync, registry/control-plane database.
 Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
 Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.
+SSH trust remains owner-accepted TOFU, not independent provider verification; console unverified.
 [Checkpoint](releases/2026-11-01-fleet-bootstrap-2.md) ·
-[Hashes/receipt](releases/2026-11-01-fleet-bootstrap-2-netlink.receipt.json) · [Runbook](fleet-bootstrap.md).
+[Previous qualified hashes](releases/2026-11-01-fleet-bootstrap-2-netlink.receipt.json) · [Runbook](fleet-bootstrap.md).
 Older checkpoint NEXTs below are historical, not simultaneous active work.
 <!-- /FLEET-BOOTSTRAP-2 current -->
 

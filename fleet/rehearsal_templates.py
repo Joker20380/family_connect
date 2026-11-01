@@ -48,7 +48,7 @@ def units(bundle_id, instance_id, lifetime, expires_at=None):
     config = '/etc/family-connect/rehearsal/'+bundle_id
     state = '/run/family-connect-rehearsal/'+instance_id
     commands = {
-        'prepare': '/usr/bin/test -r '+config+'/metadata.json',
+        'prepare': '/usr/bin/python3 -I -B '+CURRENT+'/runtime/boot_prepare.py '+config+'/metadata.json',
         'awg': CURRENT+'/bin/amneziawg-go -f fcrh0',
         'tcp': CURRENT+'/bin/xray run -config '+config+'/tcp.json',
         'mesh': CURRENT+'/bin/gateway -family-config '+config+'/profile/gateway.json -listen 0.0.0.0:18444'
@@ -71,13 +71,17 @@ def units(bundle_id, instance_id, lifetime, expires_at=None):
                 'NoNewPrivileges=yes\nProtectSystem=strict\nProtectHome=yes\nPrivateTmp=yes\n'
                 'ProtectKernelTunables=yes\nProtectKernelModules=yes\nProtectControlGroups=yes\n'
                 'LockPersonality=yes\nRestrictSUIDSGID=yes\nRestrictRealtime=yes\n'
-                'CapabilityBoundingSet='+('CAP_NET_ADMIN' if name=='awg' else '')+'\n'
-                'RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6'+(' AF_NETLINK' if name in ('awg','mesh') else '')+'\n'
+                'CapabilityBoundingSet='+('CAP_NET_ADMIN' if name in ('prepare','awg') else '')+'\n'
+                'RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6'+(' AF_NETLINK' if name in ('prepare','awg','mesh') else '')+'\n'
+                'Environment=LC_ALL=C\n'
                 'StandardOutput=null\nStandardError=null\n')
         if oneshot:
             unit += 'RemainAfterExit=yes\n'
         else:
             unit += 'RuntimeMaxSec='+str(lifetime)+'\n'
+        if name == 'prepare':
+            unit += ('RuntimeDirectory=family-connect-rehearsal\nRuntimeDirectoryMode=0755\n'
+                     'RuntimeDirectoryPreserve=yes\n')
         if name == 'awg':
             unit += ('ReadWritePaths=/run/family-connect-rehearsal\nRuntimeDirectory=wireguard\n'
                      'ReadWritePaths=/run/wireguard\nDevicePolicy=closed\nDeviceAllow=/dev/net/tun rw\n'

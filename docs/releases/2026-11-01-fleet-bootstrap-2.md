@@ -1,5 +1,49 @@
 # FLEET-BOOTSTRAP-2 — source/package handoff
 
+## Second trial — READY reached, deadline guard correctly rejected
+
+The900e185 pair passed fresh enrollment, encrypted delivery, verified retired-owner handoff
+and stage on instance `fleet-rehearsal-nl-disposable-02`. MESH started without restarts and
+created its0600 ready export. Local verification failed and rollback passed: the bounded
+read-only observation records directory expiry1793577311 versus material deadline1793577309,
+an actual2-second overflow, not an invalid OAuth token. No room URL or credentials are returned.
+
+| Operation | Result | Private receipt SHA256 |
+| --- | --- | --- |
+| `host472-v2-enroll-a-b6a97c6d49a448aaa6ba42fb93209142` | PASS | `d8b70dfed360e04a5d2efdd62ab21572aacb8bb301de77ae673ab0b781876f3a` |
+| `host472-v2-deliver-materials-a-143512e6c32843ee852b2687713e4735` | PASS | `65dff3359663cce4f9ae148e963cfce05b42242b1b9693605456401d35901574` |
+| `host472-v2-stage-a-9b1da2f8b0c64d329f4ec4ff39f7625f` | PASS | `dfa098dab30b841e3c7c36d1b971c6a9bb0ba9d5ec30d15aaa6504ead8ea3274` |
+| `host472-v2-start-verification-a-cda11e31b3ad4e54a128c9ff0ed95d8f` | FAIL / rollback PASS | `cdf020e8f8a9a95ff8094b20039d1318473459082b45260cf5965699318c5417` |
+| `host472-v2-status-a-fbd0f12bf858467988382fe0b0bb03ed` | PASS / bounded expiry observation | `7a2d0601aee243216906258d920aca762bdc8cdedf39fecf8dba4a5cb6d1b780` |
+| `host472-v2-drain-a-114ab38940c941a789132df4d32a60a3` | PASS | `e15bdd38ae6dada192c51834efbd50b47a796f62a486604bee1e0311239c6ab5` |
+| `host472-v2-retire-a-d7df488f66ae4025949e34f679713602` | PASS / RETIRED | `6c16e172bde5347ff4ab612a682e217007c2658cd19d321ee64564a6e430f86f` |
+
+The native duration began after configuration but previously consumed the entire remaining
+permit window. Source now limits each service run to at most900 seconds, reserves240 seconds
+when deriving a shorter run, and requires another120 seconds of material headroom on every
+unit start. Near-expiry starts fail closed rather than extending the signed four-hour boundary.
+No immutable deployed config or old package is edited. Fresh qualification/enrollment is required.
+
+Review also identified missing boot restoration: the old preparation unit only checked a file,
+while /run and nft state are volatile. A standard-library boot helper now verifies root-owned
+metadata/validation hashes, exact activation pointer, firewall hash and dedicated sysctl file;
+it restores only an absent owned table, verifies normalized readback and rejects existing drift.
+Preparation creates only its dedicated /run parent and has CAP_NET_ADMIN/AF_NETLINK for this
+job. MESH stays unprivileged. The qualification adds real namespace-local nft restore/coexistence
+simulation, without claiming an actual host reboot or systemd start.
+
+`reboot-verify --request-reboot` schedules one fixed delayed systemctl reboot only after ACTIVE,
+fresh external acceptance and matching local health, with durable request binding before the
+command. Same operation replay does not reschedule; a second request is rejected. Stop/drain/
+retire cancels a pending same-boot timer. Post-boot verification requires changed boot/identity/
+bundle checks and a fresh two-party acceptance cycle. No generic shell or bypass flag is added.
+Safe failure receipts retain only a small allowlist of local failure codes, never exception text.
+Both failed trial journals, signed packages and receipts are retained; the VPS is not destroyed.
+Fresh source checks: fleet316 + console156 =472 PASS, paid170 PASS, Django check PASS and migration drift NONE.
+Trial02 disposable operator AWG/TCP/MESH files were removed only after its signed retirement
+receipt verified; original FLEET_MESH_PROBE_1 custody was not mounted during cleanup.
+Production RU/NL/catalog/user/paid/phone state remains unchanged. Physical acceptance is NOT_RUN.
+
 ## Corrected pair requalified — frozen source900e185
 
 Source `900e1859d5b4317e1faab2675425bed78ab85c12` is pushed and remote main verified.

@@ -67,6 +67,11 @@ class IsolatedExecutor:
         code=0
         if argv==['ip','-j','route','show','default']:
             output=b'[{"dev":"eth0"}]'
+        elif argv[0]=='systemctl' and argv[-2:]==['--property=LoadState','--value']:
+            output=b'not-found\n'
+            code=1
+        elif argv[:3]==['systemctl','is-active','--quiet']:
+            code=1
         elif argv==['ip','link','show','dev','fcrh0']:
             code=1
         elif argv[:3]==['nft','-s','list']:
@@ -141,8 +146,51 @@ def test_mesh_interface_discovery_allowed_without_network_admin_capability():
     mesh=rendered['fc-rehearsal-mesh.service']
     assert b'RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK\n' in mesh
     assert b'CapabilityBoundingSet=\n' in mesh
+    prepare=rendered['fc-rehearsal-prepare.service']
+    assert b'RuntimeDirectory=family-connect-rehearsal\n' in prepare
+    assert b'RuntimeDirectoryMode=0755\n' in prepare and b'boot_prepare.py' in prepare
     for name in ('tcp','snapshot','monitoring'):
         assert b'AF_NETLINK' not in rendered['fc-rehearsal-'+name+'.service']
+
+
+def test_runtime_lifetime_reserves_configuration_and_start_delay(runtime):
+    target=runtime.manifest['bundle_id']
+    runtime.stage(target);runtime.configure(target)
+    metadata=runtime.verify_configuration(target)
+    assert metadata['runtime_lifetime_seconds']==900
+    assert runtime.clock()+metadata['runtime_lifetime_seconds']+120<metadata['material_expires_at']
+
+
+def test_scheduled_reboot_is_bound_durable_and_cancellable(runtime):
+    target=runtime.manifest['bundle_id']
+    runtime.stage(target);runtime.configure(target);runtime.switch(target)
+    boot=runtime.path('/proc/sys/kernel/random/boot_id');boot.parent.mkdir(parents=True)
+    boot.write_bytes(b'boot-before')
+    receipt=runtime.request_reboot(target,runtime.enrolled_identity())
+    assert receipt['reboot']=='SCHEDULED'
+    pending=load(read_private(runtime.directory/'reboot-request.json'))
+    assert pending['status']=='PENDING' and pending['boot_sha256']==digest(b'boot-before')
+    schedules=[argv for argv,unused in runtime.executor.calls if argv[0]=='systemd-run']
+    assert len(schedules)==1 and schedules[0][-2:]==['/usr/bin/systemctl','reboot']
+    with pytest.raises(FleetError,match='reboot_already_requested'):
+        runtime.request_reboot(target,runtime.enrolled_identity())
+    runtime.stop()
+    assert load(read_private(runtime.directory/'reboot-request.json'))['status']=='CANCELLED'
+
+
+def test_reboot_completion_requires_changed_boot_and_same_identity(runtime):
+    target=runtime.manifest['bundle_id']
+    runtime.stage(target);runtime.configure(target);runtime.switch(target)
+    boot=runtime.path('/proc/sys/kernel/random/boot_id');boot.parent.mkdir(parents=True)
+    boot.write_bytes(b'boot-before');write_private(runtime.directory/'boot-before',b'boot-before')
+    runtime.request_reboot(target,runtime.enrolled_identity())
+    with pytest.raises(FleetError,match='reboot_not_observed'):
+        runtime.reboot_check(target,runtime.enrolled_identity())
+    boot.write_bytes(b'boot-after')
+    with pytest.raises(FleetError,match='reboot_identity_or_bundle'):
+        runtime.reboot_check(target,'f'*64)
+    runtime.reboot_check(target,runtime.enrolled_identity())
+    assert load(read_private(runtime.directory/'reboot-request.json'))['status']=='COMPLETED'
 
 
 @pytest.fixture

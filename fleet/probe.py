@@ -2,6 +2,7 @@
 
 import ipaddress
 import fcntl
+import datetime
 import json
 import os
 from pathlib import Path
@@ -23,6 +24,38 @@ def command(argv, *, successful=False):
         return result.stdout.strip() if result.returncode==0 else ''
     except (OSError,subprocess.TimeoutExpired):
         return False if successful else ''
+
+
+def observation_json(path, *, owner, mode, limit):
+    metadata=path.lstat()
+    if (not stat.S_ISREG(metadata.st_mode) or metadata.st_uid!=owner or metadata.st_nlink!=1
+            or stat.S_IMODE(metadata.st_mode)!=mode or metadata.st_size>limit):
+        raise ValueError('observation_file_boundary')
+    descriptor=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+    with os.fdopen(descriptor,'rb') as source:
+        current=os.fstat(source.fileno())
+        if (current.st_dev,current.st_ino,current.st_size,current.st_nlink)!=(metadata.st_dev,metadata.st_ino,metadata.st_size,1):
+            raise ValueError('observation_file_changed')
+        return json.loads(source.read(limit+1))
+
+
+def ready_observation(config, directory, bundle_id, instance_id):
+    try:
+        metadata=observation_json(config/'metadata.json',owner=0,mode=0o644,limit=65536)
+        if metadata['bundle_id']!=bundle_id or metadata['instance_id']!=instance_id:
+            raise ValueError('observation_binding')
+        ready=observation_json(directory/'ready.json',owner=directory.lstat().st_uid,mode=0o600,limit=8192)
+        issued=int(datetime.datetime.fromisoformat(ready['issued_at']).timestamp())
+        expires=int(datetime.datetime.fromisoformat(ready['expires_at']).timestamp())
+        material_expiry=metadata['material_expires_at']
+        if type(material_expiry) is not int or ready['version']!=1:
+            raise ValueError('observation_schema')
+        return dict(result='OBSERVED',issued_at=issued,expires_at=expires,material_expires_at=material_expiry,
+                    exceeds_material_deadline=expires>material_expiry)
+    except FileNotFoundError:
+        return dict(result='ABSENT')
+    except (OSError,ValueError,KeyError,TypeError,OverflowError):
+        return dict(result='UNAVAILABLE')
 
 
 def observations(bundle_id, instance_id):
@@ -64,7 +97,8 @@ def observations(bundle_id, instance_id):
         values = dict(line.split('=',1) for line in raw.splitlines() if '=' in line)
         states[role] = {name:value for name,value in values.items() if name in fields
                         and re.fullmatch('[a-z0-9_-]{1,48}',value)}
-    return dict(files=files, services=states, remote_writes=0)
+    return dict(files=files, services=states, remote_writes=0,
+                ready_lifetime=ready_observation(config,paths['run-directory'],bundle_id,instance_id))
 
 
 def collect(request):
