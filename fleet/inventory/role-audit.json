@@ -1,0 +1,137 @@
+{
+  "schema": 1,
+  "scope": "READONLY_ROLE_AUDIT_NOT_DEPLOYABLE_INVENTORY",
+  "roles": {
+    "awg": {
+      "observed_units": 2,
+      "unit_hashes": [
+        "46b04571f038ec5961f61d2e3c552a71dfd3fe680819c4e78361133e6dbceb45"
+      ],
+      "artifact_hashes": [
+        "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+        "8e536367a391661f003d0725afc13f69c45a9e43bb1763b61fd21ce0b998035a"
+      ],
+      "issuance": "NOT_RUN",
+      "source_binding": "REHEARSAL_REQUIRES_EXACT_RECEIPT"
+    },
+    "tcp": {
+      "observed_units": 2,
+      "unit_hashes": [
+        "b59be3c131ba2e6c81acd4cf18c0be3730e81fd9df1c6d8631b9a03a49fec867"
+      ],
+      "artifact_hashes": [
+        "4f7a4436f86798bbb5c875014e352021a1673710a45e170ccc507c5f59341940"
+      ],
+      "issuance": "NOT_RUN",
+      "source_binding": "REHEARSAL_REQUIRES_EXACT_RECEIPT"
+    },
+    "mesh": {
+      "observed_units": 1,
+      "unit_hashes": [
+        "306aef9328bac4ae2fca2d2b4b6f17d1f87315d192e5f5b6e7906a6c20ae5f68"
+      ],
+      "artifact_hashes": [
+        "f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef"
+      ],
+      "issuance": "NOT_RUN",
+      "source_binding": "REHEARSAL_REQUIRES_EXACT_RECEIPT"
+    },
+    "profile-reader": {
+      "observed_units": 2,
+      "unit_hashes": [
+        "b400bf9f1f3e2943728b2c9303499bcd126336cfc134aa31039e1e0e5d27beb6"
+      ],
+      "artifact_hashes": [
+        "30bbf64f6b27b56d5f9822d7282df506139b3850dd3450a701e152c3795db89b"
+      ],
+      "issuance": "NOT_RUN",
+      "source_binding": "REHEARSAL_REQUIRES_EXACT_RECEIPT"
+    },
+    "publisher": {
+      "observed_units": 1,
+      "unit_hashes": [
+        "306aef9328bac4ae2fca2d2b4b6f17d1f87315d192e5f5b6e7906a6c20ae5f68"
+      ],
+      "artifact_hashes": [
+        "f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef"
+      ],
+      "issuance": "NOT_RUN",
+      "source_binding": "REHEARSAL_REQUIRES_EXACT_RECEIPT"
+    },
+    "renewal": {
+      "observed_units": 4,
+      "unit_hashes": [
+        "242fe66694fd3dbe1e6ff95bf3fbee4767f60711471b1e519e607dc5315fe255",
+        "b628ffad3a6ac52f0b3a65a377f22e0735235449f707e4abf70eafcfa84e7edf",
+        "ed0a197396d419696e50d5d34572276a12963059fa453f5b416828e9ef9da561"
+      ],
+      "artifact_hashes": [
+        "8b12b62b40e11e24b9e5a0cdf35eeae5820fddd609edba6219016efa4d4e51f7"
+      ],
+      "issuance": "NOT_RUN",
+      "source_binding": "REHEARSAL_REQUIRES_EXACT_RECEIPT"
+    },
+    "snapshot": {
+      "observed_units": 2,
+      "unit_hashes": [
+        "b400bf9f1f3e2943728b2c9303499bcd126336cfc134aa31039e1e0e5d27beb6"
+      ],
+      "artifact_hashes": [
+        "30bbf64f6b27b56d5f9822d7282df506139b3850dd3450a701e152c3795db89b"
+      ],
+      "issuance": "NOT_RUN",
+      "source_binding": "REHEARSAL_REQUIRES_EXACT_RECEIPT"
+    },
+    "restricted-sync": {
+      "observed_units": 4,
+      "unit_hashes": [
+        "b400bf9f1f3e2943728b2c9303499bcd126336cfc134aa31039e1e0e5d27beb6",
+        "e80469d5a93385f17c97525b8762b4f2b35798bb9876f7e0bfc1acf902e801e2"
+      ],
+      "artifact_hashes": [
+        "30bbf64f6b27b56d5f9822d7282df506139b3850dd3450a701e152c3795db89b",
+        "7fc3035b37cf8947f8d50aee62d4bfe09dee860bbf13f3196c88cbd878ef22b6"
+      ],
+      "issuance": "NOT_RUN",
+      "source_binding": "REHEARSAL_REQUIRES_EXACT_RECEIPT"
+    },
+    "mailbox": {
+      "observed_units": 2,
+      "unit_hashes": [
+        "ef3c61556981acfc586c3d0da3e608ecfc4c0c4aac2cf1f3f2f3bc374326b183",
+        "ff35aab79f74ef615b8399580ba0f251ffd0f32ab3ccf558d55f38479a335311"
+      ],
+      "artifact_hashes": [
+        "018e56ca0e5eda7c05aa77877c9e5f3c7e0fe14e727253585421679ab9a879f5",
+        "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41"
+      ],
+      "issuance": "NOT_RUN",
+      "source_binding": "REHEARSAL_REQUIRES_EXACT_RECEIPT"
+    },
+    "load-monitor": {
+      "observed_units": 2,
+      "unit_hashes": [
+        "0ee75ff493882ed8724b512ae4e59caf6a66d7410dbff33ac4f5b55e16eae229",
+        "9db78e50a83af3ddc8cd443359662756c9a6522640ed2673a168bb51ff2453ee"
+      ],
+      "artifact_hashes": [
+        "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+        "6677a46446dbfa83fa5c6530923bf499cad433cf54903ddac1c81ab95829c899",
+        "ea74ec19074d707728cc8c8a4d2074e17fc0de3fe8c9dccdbbe8013a695623de"
+      ],
+      "issuance": "NOT_RUN",
+      "source_binding": "REHEARSAL_REQUIRES_EXACT_RECEIPT"
+    },
+    "monitoring": {
+      "observed_units": 2,
+      "unit_hashes": [
+        "1a03b681fe8e8a94aa412b4a0f6e13913c3131b9c44b8c8c4169853c4d7e0b5e"
+      ],
+      "artifact_hashes": [
+        "b0fa1bfe29207b44bf2040a4c2c3c7e059a26e3c5b63dfbbcc40a185c6ead7d9"
+      ],
+      "issuance": "NOT_RUN",
+      "source_binding": "REHEARSAL_REQUIRES_EXACT_RECEIPT"
+    }
+  }
+}

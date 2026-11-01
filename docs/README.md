@@ -1,5 +1,16 @@
 # Documentation
 
+<!-- FLEET-BOOTSTRAP-1 current -->
+**FLEET-BOOTSTRAP-1 — IN_PROGRESS / SOURCE-SYNTHETIC ONLY.**
+Owner authorized deterministic bundles, physical-instance enrollment, operator CLI and
+Django fleet intents. Production writes/user invitations/paid events/phone actions0;
+external cohort held1/10, paid baseline108 and all existing entitlements unchanged.
+Owner109 targeted result is closed in scope; no further server-TX investigation.
+NEXT: strict contracts → signed bundle → safe local installer/enrollment → Django → acceptance.
+[Runbook](fleet-bootstrap.md) · [Checkpoint](releases/2026-11-01-fleet-bootstrap-1.md).
+Earlier Android/NL checkpoints below are retained evidence, not simultaneous active NEXTs.
+<!-- /FLEET-BOOTSTRAP-1 current -->
+
 **1 November — owner109 targeted Auto→AWG checks PASS; server TX retained.** Beta109 is published;
 Android update sequence4 and invitation109 verified over HTTPS. Full matrix41289980872/
 source600ae52, offline signer,16K alignment and exact bytes PASS. Owner confirms in-place

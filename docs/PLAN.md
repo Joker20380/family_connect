@@ -2,6 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
+<!-- FLEET-BOOTSTRAP-1 current -->
+**FLEET-BOOTSTRAP-1 — IN_PROGRESS / SOURCE-SYNTHETIC ONLY.**
+Owner authorized deterministic bundles, physical-instance enrollment, operator CLI and
+Django fleet intents. Production writes/user invitations/paid events/phone actions0;
+external cohort held1/10, paid baseline108 and all existing entitlements unchanged.
+Owner109 targeted result is closed in scope; no further server-TX investigation.
+NEXT: strict contracts → signed bundle → safe local installer/enrollment → Django → acceptance.
+[Runbook](fleet-bootstrap.md) · [Checkpoint](releases/2026-11-01-fleet-bootstrap-1.md).
+Earlier Android/NL checkpoints below are retained evidence, not simultaneous active NEXTs.
+<!-- /FLEET-BOOTSTRAP-1 current -->
+
 **1 November — owner beta109 targeted Auto→AWG checks PASS; server TX retained.**
 `DESKTOP_SMILEY_BASELINE_STALE_AFTER_REVIEWED_ANDROID107_CHANGE`: exactly one stale
 Android106 pin, ChatThreadView.java; current file is byte-identical to accepted public108.
