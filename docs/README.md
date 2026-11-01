@@ -1,5 +1,19 @@
 # Documentation
 
+<!-- FLEET-BOOTSTRAP-2 current -->
+**FLEET-BOOTSTRAP-2 — IN_PROGRESS / SOURCE-PACKAGE PREPARATION.**
+Dependency: accepted FLEET-BOOTSTRAP-1 sourcea3fc3bf and receipt; synthetic-only bundle is
+not a production VPN distribution. Owner authorizes one disposable Ubuntu24.04/x86_64
+rehearsal, not production RU/NL, catalog/paid changes or phone actions. No host supplied.
+Current: canonical synthetic seeder fix → exact role provenance → bounded signed permit /
+remote adapter → reproducible deployable A/B bundles → operator host handoff → live gates.
+Completion requires actual AWG/TCP/MESH, upgrade/rollback/reboot and RETIRED evidence;
+without host, finish source/package preparation before READY_FOR_FLEET_BOOTSTRAP_2_HOST.
+Public109/sequence4/catalog4/paid baseline108/entitlement/ledger1/4/cohort1/10 unchanged.
+[Checkpoint](releases/2026-11-01-fleet-bootstrap-2.md) · [Runbook](fleet-bootstrap.md).
+Older checkpoint NEXTs below are historical, not concurrent active work.
+<!-- /FLEET-BOOTSTRAP-2 current -->
+
 <!-- FLEET-BOOTSTRAP-1 current -->
 **FLEET_BOOTSTRAP_1_SOURCE_READY — SOURCE/SYNTHETIC FOUNDATION ONLY.**
 Frozen artifact source: `a3fc3bf1c11a686ea444ad36d576c05ac5e24810` (remote-verified).

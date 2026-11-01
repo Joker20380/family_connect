@@ -1,5 +1,10 @@
 # Deterministic physical gateway bootstrap
 
+**Current work:** [FLEET-BOOTSTRAP-2](releases/2026-11-01-fleet-bootstrap-2.md) is explicitly
+authorized for source preparation and one separately supplied disposable target. Production
+RU/NL are excluded. The following FLEET-BOOTSTRAP-1 acceptance remains historical; its
+synthetic archive is not a real VPN bundle and its live-mutation guard remains in place.
+
 FLEET-BOOTSTRAP-1 is source/synthetic only. No production transport issuance,
 catalog publication, paid operation or SSH mutation is authorized by this foundation.
 See the [checkpoint](releases/2026-11-01-fleet-bootstrap-1.md).

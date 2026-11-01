@@ -1,8 +1,10 @@
 from copy import deepcopy
 from datetime import timedelta
 import hashlib
+import itertools
 import json
 import sqlite3
+import uuid
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -196,7 +198,8 @@ def test_emergency_stop_csrf_rbac_and_backend_boundary(console, client, operatio
     assert workflow.execute(console, request.pk, 'unused-on-receipt-readback').status == 'APPLIED'
 
 
-def test_legacy_12_to_50_preserves_identities_and_paid_events(console, operation):
+@pytest.mark.parametrize('force_prefix_collision', [False, True])
+def test_legacy_12_to_50_preserves_identities_and_paid_events(console, operation, monkeypatch, force_prefix_collision):
     request = workflow.prepare(console, operation().pk)
     workflow.execute(console, request.pk, workflow.confirmation_token(console, request))
     from control.friends import paid_beta
@@ -208,11 +211,26 @@ def test_legacy_12_to_50_preserves_identities_and_paid_events(console, operation
         database.execute("UPDATE control_plane_fixture SET version='CONTROL-PLANE-0-SYNTHETIC-v1'")
         identities = list(database.execute('SELECT * FROM devices ORDER BY device'))
         events = list(database.execute('SELECT * FROM paid_beta_events'))
+        subscriptions = list(database.execute('SELECT * FROM paid_beta_subscriptions'))
+        invitations = list(database.execute('SELECT * FROM invites ORDER BY device'))
+    if force_prefix_collision:
+        sequence = itertools.count(1)
+        monkeypatch.setattr(backend.uuid, 'uuid4', lambda: uuid.UUID(int=(0xfc << 120) + next(sequence)))
     backend.seed_fixture()
+    first = backend.checked_path().read_bytes()
     backend.seed_fixture()
+    assert backend.checked_path().read_bytes() == first
     with backend.registry() as database:
         assert len(backend.members()) == 50
+        assert len(identities) == 12
+        current = {row['device'] for row in database.execute('SELECT device FROM devices')}
+        assert len(current - {row['device'] for row in identities}) == 38
         assert [tuple(row) for row in database.execute('SELECT * FROM paid_beta_events')] == [tuple(row) for row in events]
+        assert [tuple(row) for row in database.execute('SELECT * FROM paid_beta_subscriptions')] == [tuple(row) for row in subscriptions]
         for original in identities:
             assert tuple(database.execute('SELECT * FROM devices WHERE device=?', (original['device'],)).fetchone()) == tuple(original)
+        for original in invitations:
+            assert tuple(database.execute('SELECT * FROM invites WHERE device=?', (original['device'],)).fetchone()) == tuple(original)
+        hashes = [row[0] for row in database.execute('SELECT hash FROM invites')]
+        assert len(hashes) == len(set(hashes)) == 50
         assert database.execute('SELECT count(*) FROM paid_beta_subscriptions').fetchone()[0] == 1

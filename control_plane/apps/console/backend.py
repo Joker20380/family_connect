@@ -57,6 +57,11 @@ def registry(*, write=False):
         raise BackendError('SYNTHETIC_BACKEND_UNAVAILABLE') from None
 
 
+def _fixture_invitation_code():
+    raw = uuid.uuid4().hex.upper()
+    return 'FC-' + '-'.join(raw[offset:offset + 4] for offset in range(0, 32, 4))
+
+
 def seed_fixture():
     if any(parent.is_symlink() for parent in (ROOT, *ROOT.parents)):
         raise BackendError('SYNTHETIC_FIXTURE_REQUIRED')
@@ -73,7 +78,7 @@ def seed_fixture():
                         database.execute('INSERT INTO devices(device,public,wg,tcp,revoked) VALUES (?,?,?,?,0)',
                             (identity.reference, identity.public_identity, identity.wireguard_public_key, str(uuid.uuid4())))
                         database.execute('INSERT INTO invites(hash,device,revoked) VALUES (?,?,0)',
-                            (Access.code_hash(uuid.uuid4().hex), identity.reference))
+                            (Access.code_hash(_fixture_invitation_code()), identity.reference))
                         add_member(database, identity.reference, number)
                     database.execute('UPDATE control_plane_fixture SET version=?', (FIXTURE_VERSION,))
                     database.execute("UPDATE control_plane_devices SET label=replace(label,'Synthetic ','Демо ')")

@@ -1,5 +1,13 @@
 # CONTROL-PLANE · русская локальная панель и наблюдаемость
 
+## FLEET-BOOTSTRAP-2 · preparation
+
+The legacy12→50 synthetic seeder uses canonical `FC-` invitation formatting even when
+the raw UUID starts with `fc`; the production invitation parser is unchanged. Migration
+regression checks preservation and idempotency, not new user/paid admission. Disposable
+fleet live receipts and dashboard changes remain gated by the
+[rehearsal checkpoint](../docs/releases/2026-11-01-fleet-bootstrap-2.md).
+
 ## FLEET-BOOTSTRAP-1 · source/synthetic only
 
 The separate `fleet_console` app adds physical instances, logical routes, signed-artifact
