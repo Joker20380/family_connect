@@ -2,6 +2,29 @@
 
 ## NL availability restoration — 31 October
 
+**1 November — beta109 UI repair authorized; source candidate, not distributed.**
+Owner explicitly authorizes a new Android APK and update sequence4 after the current canary.
+Candidate version is **0.1.18-beta109 / code109**; public, invitation and installed owner
+version remain exact beta108, Android sequence3. Gateway catalog4 and paid baseline108 stay
+unchanged. Do not install109 before final recovery and the owner's final108 Connect.
+Additional source review reproduced a second UI cause: the terminal pane hid the entire
+country/transport panel after failure, even with enabled controls. Stable failed/off states
+now show route controls; cleanup-required shows disabled selectors and Disconnect. Active
+connection/cleanup transitions retain the terminal. Error history remains available by tapping
+the status label. Fail-closed ownership, authentication and cleanup-before-reconnect are retained.
+Two JVM assertions reproduced the hidden-panel defect before the fix. Focused checks now PASS:
+56 selected JVM tests and50 Python release/contract tests; one unrelated Windows check excluded.
+Disposable-emulator acceptance now checks actual selector visibility/enabling, dial actions,
+busy/cleanup states and a failed-state screenshot. Hosted build/lint/native/emulator acceptance,
+offline signing, public readback and physical109 acceptance are PENDING, not PASS.
+Rollout: accept exact CI artifact, verify source/manifest/native provenance, sign offline with
+the existing signer, then publish immutable109 and optional Android sequence4 only after final108
+canary recovery. Until publication, rollback is simply retaining public108; never overwrite an
+APK or lower a signed sequence. Any later rollback retains device data and uses a higher sequence.
+Final canary recovery remains NOT_RUN before07:07:31UTC; last read-only status1/3, cohort1/10,
+latest authenticated108, healthy schedules and current canonical material. No new paid event,
+backend restart, identity/invite/grant change, certificate deletion or gateway publication.
+
 **1 November — current owner acceptance continuation (supersedes older pending-phone notes).**
 `ANDROID107_WHITELIST_FIELD_ARCHANGELSK_PASS`: owner/tester reports real mobile-whitelist
 operation on public107 in Arkhangelsk region. `ANDROID108_OWNER_INSTALL_RUNTIME_UI_PASS`:

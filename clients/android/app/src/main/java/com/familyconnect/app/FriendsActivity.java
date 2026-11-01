@@ -113,6 +113,7 @@ public final class FriendsActivity extends LocalizedActivity {
         detail=TerminalUi.compactLabel(panel,"",12,TerminalUi.MUTED);detail.setMaxLines(2);detail.setVisibility(android.view.View.GONE);
         detail.setEllipsize(android.text.TextUtils.TruncateAt.END);detail.setGravity(Gravity.CENTER);
         vpnTerminal=new ConnectionTerminalView(this,ConnectionTerminal.VPN,false,this::disconnect,true);connectionWorkspace.addView(vpnTerminal,new LinearLayout.LayoutParams(-1,-1));
+        status.setOnClickListener(view->vpnTerminal.showHistory());status.setTooltipText(getString(R.string.connection_terminal_vpn));
         chatTerminal=new ConnectionTerminalView(this,ConnectionTerminal.CHAT,true,()->{ConnectionTerminal.CHAT.end(ConnectionTerminal.CHAT.snapshot().attempt,ConnectionTerminal.Stage.CANCELLED,false);stopService(new Intent(this,ChatDeliveryService.class));ChatRuntime.stop();},true);connectionWorkspace.addView(chatTerminal,new LinearLayout.LayoutParams(-1,-1));
         detail.addTextChangedListener(new android.text.TextWatcher(){
             public void beforeTextChanged(CharSequence s,int start,int count,int after){}

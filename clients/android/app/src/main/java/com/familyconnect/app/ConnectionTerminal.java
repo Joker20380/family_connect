@@ -23,9 +23,8 @@ final class ConnectionTerminal {
     private void append(Stage stage){if(!lines.isEmpty()&&lines.get(lines.size()-1)==stage)return;if(lines.size()==12)lines.remove(0);lines.add(stage);}
     synchronized Snapshot snapshot(){return new Snapshot(attempt,lines,finished,success);}
     static int homePane(String vpnState,Snapshot vpn){
-        if("on".equals(vpnState))return 0;
-        if(!"off".equals(vpnState)&&vpn.attempt>0)return 1;
-        return vpn.finished&&!vpn.success&&!vpn.lines.contains(Stage.CANCELLED)?1:0;
+        if("on".equals(vpnState)||"off".equals(vpnState)||"failed".equals(vpnState)||"cleanup-required".equals(vpnState))return 0;
+        return vpn.attempt>0?1:0;
     }
     static int pane(String vpnState,Snapshot vpn,Snapshot chat){
         if("on".equals(vpnState))return 0;

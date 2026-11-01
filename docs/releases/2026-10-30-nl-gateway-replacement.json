@@ -2641,5 +2641,60 @@
       "catalog_expires_at": 1801259043,
       "server_change_scope": "ANDROID_DOWNLOADS_CATALOG_INVITATION_ONLY"
     }
+  },
+  "android109_ui_repair_20261101": {
+    "state": "SOURCE_CANDIDATE_NOT_DISTRIBUTED",
+    "version": "0.1.18-beta109",
+    "version_code": 109,
+    "authorization": "NEW_APK_AND_ANDROID_SEQUENCE4_AFTER_FINAL108_CANARY",
+    "base_commit": "2c9a9d571d910df9350c999ee8d8b940f2cf46de",
+    "source_inventory": {
+      "clients/android/app/build.gradle": "9fad045e3c997c1d9f200b2f656832f585976d564411dbad18a46a0095d700c0",
+      "clients/android/app/src/androidTest/java/com/familyconnect/app/DashboardLayoutRuntimeTest.java": "d35a86dcd80116f87beff463f756cc90fcbf88bde2effbcabb9fe3c48fd7609e",
+      "clients/android/app/src/main/java/com/familyconnect/app/ConnectionTerminal.java": "6aedb6c35dd9119d9005e5e6f328ef7b7c23eb1d9e0e6f2e007a34ce0913d582",
+      "clients/android/app/src/main/java/com/familyconnect/app/ConnectionTerminalView.java": "e2e543655f0e9191ebc037e239852df3f7407e44c02260a60d42134a3cf91804",
+      "clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java": "64f3adf0d8befc1fc2eca2a7e9afd40a56acf14f9bc7c48a3d7dab9c3c0fc799",
+      "clients/android/app/src/test/java/com/familyconnect/app/ConnectionTerminalTest.java": "73ca1141e8da7bae72190fc28f7cad83d5c4e91507e0ebdfd18db00d299f0eb7",
+      "pilot/android-awg/friends_ci.py": "2d32490a9413b8e8292d11db8f670da5c8bfce6c18cb5c101250e0a3e2a4856f",
+      "tests/test_android_public_release.py": "0d3eeaebb299553a22fbb5d4442417f8dc2d0997af08fbbffce8fb7b8d740c76",
+      "tests/test_orchestrator_android_contract.py": "dfe0dc05c6c9b7b842ed3227ae5c4d0a6ec32d1b16e47e5e071e6e97a94e7fed"
+    },
+    "tests": {
+      "jvm": 56,
+      "python": 50,
+      "windows_deselected": 1,
+      "hidden_panel_red_failures": 2,
+      "emulator": "PENDING",
+      "hosted_release_ci": "PENDING",
+      "physical109": "NOT_RUN"
+    },
+    "artifact": {
+      "state": "NOT_BUILT",
+      "sha256": null,
+      "bytes": null,
+      "signer": "EXISTING_OFFLINE_SIGNER_REQUIRED"
+    },
+    "current_distribution": {
+      "version": "0.1.18-beta108",
+      "version_code": 108,
+      "android_sequence": 3,
+      "gateway_catalog": 4
+    },
+    "publication_gate": "FINAL108_CANARY_RECOVERY_AND_OWNER_CONNECT_PLUS_EXACT_HOSTED_ARTIFACT_ACCEPTANCE",
+    "unchanged": [
+      "paid_baseline108",
+      "fail_closed_policy",
+      "transport_native_implementation",
+      "owner_binding",
+      "gateway_catalog4"
+    ],
+    "canary": {
+      "subscriptions": 1,
+      "events": 3,
+      "cohort": 1,
+      "limit": 10,
+      "final_recovery": "NOT_RUN",
+      "not_before_utc": "2026-11-01T07:07:31Z"
+    }
   }
 }

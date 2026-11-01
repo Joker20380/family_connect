@@ -17,11 +17,19 @@ public class ConnectionTerminalTest {
         assertEquals(0,ConnectionTerminal.homePane("off",vpn.snapshot()));
         long old=vpn.begin(ConnectionTerminal.Stage.PREPARING);
         for(String state:new String[]{"connecting","reconnecting","restoring"})assertEquals(1,ConnectionTerminal.homePane(state,vpn.snapshot()));
-        vpn.end(old,ConnectionTerminal.Stage.FAILED,false);assertEquals(1,ConnectionTerminal.homePane("off",vpn.snapshot()));
+        vpn.end(old,ConnectionTerminal.Stage.FAILED,false);assertEquals(0,ConnectionTerminal.homePane("off",vpn.snapshot()));
         long current=vpn.begin(ConnectionTerminal.Stage.PREPARING);vpn.end(current,ConnectionTerminal.Stage.VPN_READY,true);
         vpn.end(old,ConnectionTerminal.Stage.FAILED,false);assertEquals(0,ConnectionTerminal.homePane("on",vpn.snapshot()));
         vpn.end(vpn.begin(ConnectionTerminal.Stage.PREPARING),ConnectionTerminal.Stage.CANCELLED,false);
         assertEquals(0,ConnectionTerminal.homePane("off",vpn.snapshot()));
+    }
+    @Test public void terminalFailureCannotHideRouteControlsAndHistorySurvives(){
+        ConnectionTerminal model=new ConnectionTerminal();long attempt=model.begin(ConnectionTerminal.Stage.TELEMOST);
+        model.end(attempt,ConnectionTerminal.Stage.AUTH,false);
+        for(String state:new String[]{"failed","cleanup-required","off","on"})assertEquals(state,0,ConnectionTerminal.homePane(state,model.snapshot()));
+        assertEquals(1,ConnectionTerminal.homePane("disconnecting",model.snapshot()));
+        assertEquals(ConnectionTerminal.Stage.AUTH,model.snapshot().lines.get(1));
+        assertTrue(model.snapshot().finished);assertFalse(model.snapshot().success);
     }
     @Test public void cancelledReturnsInactivePane(){
         ConnectionTerminal vpn=new ConnectionTerminal(),chat=new ConnectionTerminal();

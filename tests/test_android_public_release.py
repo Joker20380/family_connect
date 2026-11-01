@@ -25,7 +25,7 @@ def test_android_changes_do_not_start_desktop_suites():
 
 def test_public_release_keeps_provisioning_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 108' in gradle and "versionName '0.1.18-beta108'" in gradle
+    assert 'versionCode 109' in gradle and "versionName '0.1.18-beta109'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 31 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
@@ -75,7 +75,7 @@ def test_load_screenshots_export_only_from_disposable_emulator():
     helper = (ROOT / 'pilot/android-awg/friends_ci.py').read_text()
     assert 'os.environ.get("GITHUB_ACTIONS") != "true"' in helper
     assert 'if not serial.startswith("emulator-"):' in helper
-    assert 'for name in ("dashboard-cpu-load.png", "server-row-cpu-load.png"):' in helper
+    assert 'for name in ("dashboard-cpu-load.png", "server-row-cpu-load.png", "dashboard-failed-controls.png"):' in helper
     assert '["adb", "-s", serial, "pull"' in helper
     assert '"-Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true"' in helper
     assert helper.index('"pull"') < helper.index('finally:') < helper.index('"uninstall"')
@@ -148,12 +148,18 @@ def test_ui_runner_offline_wait_is_bounded(monkeypatch):
 
 def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
     reference = json.loads((ROOT / 'clients/shared/android106-reference.json').read_text())
+    reviewed_ui109 = {
+        'ConnectionTerminal.java': '6aedb6c35dd9119d9005e5e6f328ef7b7c23eb1d9e0e6f2e007a34ce0913d582',
+        'ConnectionTerminalView.java': 'e2e543655f0e9191ebc037e239852df3f7407e44c02260a60d42134a3cf91804',
+        'TerminalUi.java': 'a7ba76489e0605a63b38b1113445dc149b89a871db2aad3529af8b6121b6bc41',
+        'Ui60Presentation.java': '47f67af0f36f4219f092bcc5f5b7fa5c17f51725a8e60fb865649cb168f4b744',
+    }
     changes = {'clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ChatAudio.java'}
     for name, expected in reference['android_ui_and_handlers'].items():
         if name not in changes:
-            assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == expected, name
+            assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == reviewed_ui109.get(Path(name).name, expected), name
 
 
 def test_accepted_jni_startup_observation_helper_is_in_public_source():
@@ -215,6 +221,10 @@ def test_runtime_ui_checks_match_retained_async_and_scroll_contracts():
     assert 'Navigation must not scroll' in layout
     assert 'Scroll viewport must fit' in layout
     assert 'Control touch height' in layout
+    assert 'verifyFailureControls(activity,root,w,h)' in layout
+    assert 'selector.isShown()' in layout and 'selector.isEnabled()' in layout
+    assert '"dashboard-failed-controls.png"' in layout
+    assert 'Synthetic failure requires an empty CI device' in layout
     assert 'audio.selected("preview")&&audio.playing("preview")' in audio
     assert 'Async audio must prepare and start before pause/seek' in audio
     assert 'Paused audio seek must advance' in audio

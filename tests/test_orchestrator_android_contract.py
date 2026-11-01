@@ -81,6 +81,15 @@ def test_failed_connection_controls_match_disconnect_action_without_pending_anim
     assert '(state.equals("on")||Ui60Presentation.pending(state))' in dial
 
 
+def test_terminal_failure_keeps_controls_visible_and_history_accessible():
+    terminal = source('ConnectionTerminal').split('static int homePane(', 1)[1].split('static int pane(', 1)[0]
+    for state in ('off', 'on', 'failed', 'cleanup-required'):
+        assert '"' + state + '".equals(vpnState)' in terminal
+    assert 'vpn.finished' not in terminal
+    assert 'status.setOnClickListener(view->vpnTerminal.showHistory())' in source('FriendsActivity')
+    assert 'void showHistory()' in source('ConnectionTerminalView')
+
+
 def test_automatic_tcp_assigns_dual_stack_sources_without_bypass():
     tcp = source('AutomaticNormalEngine').split('if(transport==Transport.TCP)', 1)[1].split('Config config=', 1)[0]
     assert '.addAddress(source,32)' in tcp

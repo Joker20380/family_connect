@@ -86,6 +86,49 @@ public class DashboardLayoutRuntimeTest {
             assertFalse("Stale CPU must not remain visible",label.getText().toString().contains("14%"));assertEquals(0,bar.getProgress());
         }finally{samples.clear();samples.putAll(previous);refresh.invoke(activity);}
     }
+    private void verifyFailureControls(FriendsActivity activity,View root,int width,int height) throws ReflectiveOperationException {
+        if(!"true".equals(InstrumentationRegistry.getArguments().getString("fcInvitationCi")))return;
+        assertFalse("Synthetic failure requires an empty CI device",activity.getPreferences(0).getBoolean("activated",false));
+        assertEquals("off",ConnectionService.status);
+        java.lang.reflect.Field busyField=FriendsActivity.class.getDeclaredField("busy");busyField.setAccessible(true);
+        java.lang.reflect.Field reconnectField=FriendsActivity.class.getDeclaredField("reconnect");reconnectField.setAccessible(true);
+        assertFalse(busyField.getBoolean(activity));assertFalse(reconnectField.getBoolean(activity));
+        java.lang.reflect.Method refresh=FriendsActivity.class.getDeclaredMethod("render");refresh.setAccessible(true);
+        java.lang.reflect.Field dialField=FriendsActivity.class.getDeclaredField("dial");dialField.setAccessible(true);
+        TerminalUi.Dial dial=(TerminalUi.Dial)dialField.get(activity);
+        ConnectionTerminal.Snapshot previous=ConnectionTerminal.VPN.snapshot();boolean previousFailed=ConnectionService.failed;
+        try{
+            long attempt=ConnectionTerminal.VPN.begin(ConnectionTerminal.Stage.TELEMOST);
+            ConnectionTerminal.VPN.end(attempt,ConnectionTerminal.Stage.AUTH,false);ConnectionService.failed=true;
+            for(String state:new String[]{"failed","cleanup-required","off","connecting"}){
+                ConnectionService.status=state;refresh.invoke(activity);
+                for(String fieldName:new String[]{"countries","transports"}){
+                    java.lang.reflect.Field field=FriendsActivity.class.getDeclaredField(fieldName);field.setAccessible(true);
+                    View selector=(View)field.get(activity);
+                    assertEquals(state,!"connecting".equals(state),selector.isShown());
+                    assertEquals(state,"failed".equals(state)||"off".equals(state),selector.isEnabled());
+                }
+                assertEquals(activity.getString("off".equals(state)?R.string.connect:"connecting".equals(state)?android.R.string.cancel:R.string.disconnect),dial.getContentDescription());
+                if("failed".equals(state))render(activity,root,width,height,"dashboard-failed-controls.png");
+            }
+            ConnectionService.status="failed";busyField.setBoolean(activity,true);refresh.invoke(activity);
+            for(String fieldName:new String[]{"countries","transports"}){
+                java.lang.reflect.Field field=FriendsActivity.class.getDeclaredField(fieldName);field.setAccessible(true);
+                assertFalse(((View)field.get(activity)).isEnabled());
+            }
+            assertEquals(ConnectionTerminal.Stage.AUTH,ConnectionTerminal.VPN.snapshot().lines.get(1));
+        }finally{
+            ConnectionService.status="off";ConnectionService.failed=previousFailed;busyField.setBoolean(activity,false);
+            for(String fieldName:new String[]{"attempt","finished","success"}){
+                java.lang.reflect.Field field=ConnectionTerminal.class.getDeclaredField(fieldName);field.setAccessible(true);
+                if("attempt".equals(fieldName))field.setLong(ConnectionTerminal.VPN,previous.attempt);
+                else field.setBoolean(ConnectionTerminal.VPN,"finished".equals(fieldName)?previous.finished:previous.success);
+            }
+            java.lang.reflect.Field linesField=ConnectionTerminal.class.getDeclaredField("lines");linesField.setAccessible(true);
+            java.util.List<ConnectionTerminal.Stage> lines=(java.util.List<ConnectionTerminal.Stage>)linesField.get(ConnectionTerminal.VPN);
+            lines.clear();lines.addAll(previous.lines);refresh.invoke(activity);
+        }
+    }
     @Test public void workspaceScrollsIndependentlyAndNavigationFits() throws Exception {
         Instrumentation instrument=InstrumentationRegistry.getInstrumentation();
         String pkg=instrument.getTargetContext().getPackageName();
@@ -125,6 +168,7 @@ public class DashboardLayoutRuntimeTest {
                     assertTrue("Selected label must be measured",picker.getSelectedView().getMeasuredWidth()>TerminalUi.dp(activity,60));
                 }
                 verifyLoadRendering(activity,root,w,h);
+                verifyFailureControls(activity,root,w,h);
             }catch(ReflectiveOperationException e){throw new AssertionError(e);}
 
             assertNull("No duplicate route button",findButton(root,activity.getString(R.string.dashboard_route)));

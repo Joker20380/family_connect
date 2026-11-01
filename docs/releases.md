@@ -1,5 +1,13 @@
 # Release distribution / Выпуски
 
+**1 November: beta109 is an authorized source candidate, not a download yet.**
+The repair keeps country/transport controls visible after a failed connection, corrects
+Disconnect/Cancel actions and retains error history through the status label. Hosted Android
+acceptance and signing/publication are pending. Public/invitation APK remains beta108;
+keep the owner on108 until the existing canary's final30-day recovery and final108 Connect.
+No data clearing, reenrollment or gateway catalog change. Android sequence4 is authorized only
+after those gates; current sequence is3. See the [current report](releases/2026-10-30-nl-gateway-replacement.md).
+
 **31 October — beta108 publicly distributed, Android12+/ARM64.**
 Explicit server CPU percentage is visible even without a verified channel capacity.
 MESH and quiet foreground notifications are retained. Hosted CI, visual review, existing
