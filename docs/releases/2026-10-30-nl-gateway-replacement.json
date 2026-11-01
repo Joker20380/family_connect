@@ -3030,9 +3030,36 @@
         "sha256": "864ae36e94f4582bfe3b6dd44326c54921355469972b6a434ec91b21d71737ef"
       },
       "corrected_ci": {
-        "result": "PENDING_NEW_EXACT_SOURCE_RUN",
-        "run": null,
-        "source": null
+        "result": "FULL_CI_GATE_FAILED",
+        "run": 41285992226,
+        "source": "4a7bf20b648e335fbdd9a8099916080f71741552",
+        "observed_utc": "2026-11-01T07:48:31.250330+00:00",
+        "workflow_status": "in_progress",
+        "workflow_conclusion": null,
+        "scope": "PASS",
+        "android_passed": [
+          "JVM control conformance",
+          "Restricted carrier race regression",
+          "Restricted diagnostic and readiness contracts"
+        ],
+        "android_status": "in_progress",
+        "system_consent": "NOT_REACHED_AT_SNAPSHOT",
+        "language_dashboard": "NOT_REACHED_AT_SNAPSHOT",
+        "arm64_release": "NOT_REACHED_AT_SNAPSHOT",
+        "failed_job": {
+          "name": "linux",
+          "id": 124787317664,
+          "step": "Mandatory desktop pytest",
+          "error": "ValueError: Android smiley implementation changed",
+          "tests": "clients/desktop/tests/test_smileys.py",
+          "failed": 4,
+          "passed": 1208,
+          "skipped": 182,
+          "fixture_errors": 5
+        },
+        "source_push_remote_verified": true,
+        "rerun": false,
+        "workflow_changed": false
       },
       "artifact": "NOT_QUALIFIED",
       "publication": "NOT_RUN",
@@ -3041,7 +3068,10 @@
       "paid_baseline": 108,
       "gateway_catalog_sequence": 4,
       "android_update_sequence": 3,
-      "cohort": "1/10"
+      "cohort": "1/10",
+      "stop": "STOP_NEW_FULL_CI_FAILURE",
+      "diagnostics": "BOUNDED_FAILURE_SUMMARY_AND_JOB_LOG_READBACK_RETAINED",
+      "ready_for_cohort_3": false
     }
   }
 }

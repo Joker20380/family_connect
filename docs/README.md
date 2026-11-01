@@ -30,11 +30,22 @@ concurrent peer/bulk streams and shutdown; owned workers join, active/socket/pen
 retained bytes drain to0. Existing stream-limit/lease/FIFO tests pass with unchanged limits.
 An initial supplemental worker stress fixture lacked the client Reset-completion boundary;
 it was corrected with a condition-driven ActiveStreams=0 barrier, not a sleep or blind rerun.
-NEXT: one new full exact-source Client builds run from the corrected main, not a rerun of41284629022.
-Signing/publication/sequence4 and owner109 field acceptance remain NOT_RUN. No phone actions
-until qualified109 publication; paid baseline108 and cohort1/10 remain unchanged. On a new
-full CI failure stop publication and retain diagnostics. No desktop release tag/publication is
-authorized by this checkpoint; the existing desktop-publishing job is not an Android acceptance.
+**STOP_NEW_FULL_CI_FAILURE:** narrow correction4a7bf20b648e335fbdd9a8099916080f71741552
+is pushed and remote-verified. Exactly one new Client builds run41285992226 was triggered;
+41284629022 was not rerun. In the new run, scope/JVM control/carrier race/restricted readiness
+PASS. Existing scope selection enables all platforms for shared carrier changes; no workflow
+filter or mandatory gate was weakened. Linux job124787317664 completed FAILURE at Mandatory
+desktop pytest: ValueError: Android smiley implementation changed, in desktop smiley/catalog
+and packaging-entrypoint tests (4 failed,1208 passed,182 skipped,5 fixture errors).
+Snapshot2026-11-01T07:48:31Z: overall workflow still in_progress, Android and Windows still
+running; this is an observed failed mandatory job, not a claim that the workflow has completed.
+Android native build was running; system consent, language/dashboard, emulator lifecycle and
+ARM64 release packaging were NOT_REACHED at this snapshot, not PASS or FAIL. Diagnostics are
+retained with exact run/source/job identity. No blind retry, additional CI trigger, unrelated
+desktop repair, artifact acceptance, signing, publication or phone workflow after this stop.
+Public108/Android sequence3, gateway catalog4, paid baseline108 and owner entitlement/ledger1/4/
+cohort1/10 remain unchanged. Canary is not repeated. No qualified109 release or READY_FOR_COHORT_3.
+No desktop release tag/publication is authorized; its publishing job is not Android qualification.
 
 **1 November — beta109 UI repair authorized; source candidate, not distributed.**
 Owner explicitly authorizes a new Android APK and update sequence4 after the current canary.
