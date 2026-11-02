@@ -81,6 +81,15 @@ public class DashboardLayoutRuntimeTest {
             assertTrue("Dropdown must label CPU rather than total load",containsText(row,"CPU 14%"));
             render(activity,root,width,height,"dashboard-cpu-load.png");
             render(activity,row,TerminalUi.dp(activity,280),TerminalUi.dp(activity,56),"server-row-cpu-load.png");
+            java.lang.reflect.Field countriesField=FriendsActivity.class.getDeclaredField("countries");countriesField.setAccessible(true);
+            android.widget.Spinner countries=(android.widget.Spinner)countriesField.get(activity);
+            assertEquals("Both explicit gateways and legacy choices remain visible",4,countries.getCount());
+            for(int index=2;index<4;index++){
+                View gatewayRow=countries.getAdapter().getView(index,null,parent);
+                assertTrue("Exact Amsterdam label",containsText(gatewayRow,activity.getString(index==2?R.string.gateway_amsterdam_1:R.string.gateway_amsterdam_2)));
+                assertFalse("Country CPU is not a physical gateway measurement",containsText(gatewayRow,"CPU 14%"));
+                render(activity,gatewayRow,TerminalUi.dp(activity,280),TerminalUi.dp(activity,56),"server-amsterdam-"+(index-1)+".png");
+            }
             for(String country:new String[]{"ru","nl"})samples.put(country,new ServerLoad(country,now-60,13.8,12.5,7.3,null,false));
             refresh.invoke(activity);
             assertFalse("Stale CPU must not remain visible",label.getText().toString().contains("14%"));assertEquals(0,bar.getProgress());

@@ -6,6 +6,10 @@ trap {
     exit 1
 }
 Set-Location $PSScriptRoot
+[xml]$project=Get-Content FamilyConnect.csproj -Raw
+$versions=@($project.Project.PropertyGroup.Version | Where-Object { $_ })
+if($versions.Count -ne 1 -or $versions[0] -notmatch '^\d+\.\d+\.\d+$'){throw 'One exact project version is required'}
+$version=[string]$versions[0]
 function Check-Exit { if($LASTEXITCODE -ne 0){throw "Build command failed: $LASTEXITCODE"} }
 if($SignedRelease -and $SigningThumbprint -notmatch '^[0-9a-fA-F]{40}$') { throw 'A trusted code-signing certificate is required for signed releases.' }
 New-Item -ItemType Directory -Force build,dist | Out-Null
@@ -64,7 +68,7 @@ Copy-Item $bcLicense.FullName build/publish/licenses/BouncyCastle.txt
 Copy-Item ../../docs/windows-native.ru.md,../../docs/windows-native.en.md build/publish/
 $iscc="${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
 if(-not(Test-Path $iscc)){throw 'Install Inno Setup 6 on the build machine.'}
-$argsList=@('setup.iss')
+$argsList=@("/DAppVersion=$version",'setup.iss')
 if($SignedRelease){
     $signTool=(Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe"|Sort-Object FullName|Select-Object -Last 1).FullName
     if(-not $signTool){throw 'Windows SDK SignTool required'}
@@ -80,7 +84,7 @@ if($SignedRelease){
 & $iscc @argsList
 Check-Exit
 if($SignedRelease){
-    $sig=Get-AuthenticodeSignature 'dist/FamilyConnect-Setup-0.2.15-signed.exe'
+    $sig=Get-AuthenticodeSignature "dist/FamilyConnect-Setup-$version-signed.exe"
     if($sig.Status -ne 'Valid' -or $sig.SignerCertificate.Thumbprint -ne $SigningThumbprint){throw 'Installer signature verification failed'}
 }
 Get-ChildItem dist/*.exe|ForEach-Object { $h=Get-FileHash $_ -Algorithm SHA256; "$($h.Hash.ToLower())  $($_.Name)" }|Set-Content dist/SHA256SUMS

@@ -13,6 +13,8 @@ Source Android110/Windows0.2.16 reserved; Linux full internal.12 built/audited,
 isolated runtime smoke PASS. No installer/catalog publication or owner install yet.
 Exact DEB/AppImage/pre-start smoke and packaged GTK PASS. Real Nginx/HTTP53 PASS;
 hosted candidate's two-unit readiness wait fixed/5 PASS; await its exact CI rerun.
+Reject the89f4e8 Windows installer (still labelled0.2.15); rebuild with project-bound
+metadata/filename. Android explicit-row emulator assertions must pass before release.
 exact platform CI/package/UI acceptance → signed catalog + matching backend with
 protected-state readback → verified client distribution/installation. Preserve
 legacy assignments and paid state; explicit nodes support AWG/TCP, not second MESH.

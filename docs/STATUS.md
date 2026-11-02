@@ -16,6 +16,8 @@ Exact DEB/AppImage and AWG/TCP pre-start smoke PASS; packaged RU/EN GTK4 PASS.
 Real Nginx/HTTP53 PASS; matching ingress fragment prepared, not deployed.
 Hosted Linux boot-wait race fixed,5 regressions PASS; rerun pending. Read-only RU
 preflight confirms protected state/catalog unchanged; no production writes here.
+Windows candidate installer version mismatch caught before publication; one-source
+version binding fixed. Android explicit-row instrumentation added; exact CI pending.
 [Selection source and delivery gates](releases/2026-11-02-gateway-selection.md).
 
 **2 November — SECOND_NL_ORDINARY_LIVE (AWG3.1/TCP REALITY).**

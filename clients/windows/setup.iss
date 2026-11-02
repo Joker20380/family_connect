@@ -1,10 +1,13 @@
 #ifndef BuildLabel
 #define BuildLabel "pilot-unsigned"
 #endif
+#ifndef AppVersion
+#error AppVersion must be supplied by build.ps1 from FamilyConnect.csproj
+#endif
 [Setup]
 AppId={{68D949A5-515C-4328-901F-C870A270FD01}
 AppName=family_connect
-AppVersion=0.2.15
+AppVersion={#AppVersion}
 AppPublisher=family_connect
 DefaultDirName={autopf}\Family Connect
 DefaultGroupName=family_connect
@@ -14,7 +17,7 @@ PrivilegesRequired=admin
 MinVersion=10.0.17763
 SetupLogging=yes
 OutputDir=dist
-OutputBaseFilename=FamilyConnect-Setup-0.2.15-{#BuildLabel}
+OutputBaseFilename=FamilyConnect-Setup-{#AppVersion}-{#BuildLabel}
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern

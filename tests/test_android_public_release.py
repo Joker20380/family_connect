@@ -75,7 +75,7 @@ def test_load_screenshots_export_only_from_disposable_emulator():
     helper = (ROOT / 'pilot/android-awg/friends_ci.py').read_text()
     assert 'os.environ.get("GITHUB_ACTIONS") != "true"' in helper
     assert 'if not serial.startswith("emulator-"):' in helper
-    assert 'for name in ("dashboard-cpu-load.png", "server-row-cpu-load.png", "dashboard-failed-controls.png"):' in helper
+    assert 'for name in ("dashboard-cpu-load.png", "server-row-cpu-load.png", "dashboard-failed-controls.png", "server-amsterdam-1.png", "server-amsterdam-2.png"):' in helper
     assert '["adb", "-s", serial, "pull"' in helper
     assert '"-Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true"' in helper
     assert helper.index('"pull"') < helper.index('finally:') < helper.index('"uninstall"')

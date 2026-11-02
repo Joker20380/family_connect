@@ -99,6 +99,15 @@ catalog or public selection ingress installed. No production write in this phase
 
 ## Rollout boundary
 
+Windows source89f4e8 native build/compatibility passed, but downloaded artifact
+13137401420 is rejected for distribution: its installer still declared0.2.15
+despite the application0.2.16. ZIP digest130d173d21f951c2904b3f9a499356f25b66e24b541a273a3c80a256c6c68927
+is verified; these bytes are retained privately and MUST NOT replace public0.2.15.
+`build.ps1` now passes the single project version to required Inno metadata/filename
+and signed-artifact checks. Native rebuild remains mandatory; local source guards25
+PASS. Android instrumentation additionally renders/asserts both explicit rows and
+rejects showing country-level CPU as a node measurement; exact emulator run pending.
+
 Source versions reserved for this change: Android0.1.18-beta110/code110 and
 Windows0.2.16. They are not yet signed/published/installed. Linux complete internal
 Ubuntu26.04/Python3.14 candidate0.2.12~l03.2.12 is built from efc13f1 (not installed),
