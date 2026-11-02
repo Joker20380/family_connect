@@ -30,6 +30,9 @@ Linux.12 not accepted installed/public; L08 and ownership guards are not bypasse
 Windows invitation/mirror16 and both actual CSP routes verified over HTTPS;6 browser
 scenarios and12 signing/publication regressions PASS. Publication needed3 Nginx
 reloads/0 backend restarts; protected rows unchanged. Real Nginx/HTTP55 PASS/1 skip.
+Read-only public verifier now also binds Android signed/legacy discovery and full
+APK bytes: current109/sequence4 and Windows16/sequence12 HTTPS PASS;49 focused
+publication/signing/source tests PASS. This does not qualify or publish Android110.
 [Selection source and delivery gates](releases/2026-11-02-gateway-selection.md).
 
 **2 November — SECOND_NL_ORDINARY_LIVE (AWG3.1/TCP REALITY).**

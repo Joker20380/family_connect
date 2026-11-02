@@ -38,6 +38,14 @@ full mirror HTTPS bytes match the signed installer hash/size. Existing15 remains
 `scripts/verify_public_invitation.py` independently verifies the actual response
 CSP, exact reviewed HTML, public signed catalog and full mirror bytes: PASS.
 Local browser invitation6 scenarios and publication/signing regressions12 PASS.
+The read-only verifier now also checks Android signed-source equality/signature,
+lease/identity/ABI/signer/optional-update policy, exact legacy discovery agreement,
+invitation link and full APK hash/size. Current public109/sequence4 and Windows16/
+sequence12 both pass actual HTTPS acceptance;49 focused regressions PASS. This is
+retained public109 evidence, not acceptance/publication of pending110. No production
+mutation is performed by the verifier. The unrelated pre-existing uncommitted
+STATUS link to the October27 evening anchor remains outside this patch; changed
+delivery links and whitespace are checked separately.
 
 Publication failures are retained: initial CSP-count precondition failed before
 any remote write (confirmed by journal/file readback). A stale pre-existing `/i/`

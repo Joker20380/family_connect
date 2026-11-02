@@ -25,6 +25,9 @@ operation; never erase the marker, reconnect automatically or reuse completed in
 legacy assignments and paid state; explicit nodes support AWG/TCP, not second MESH.
 Do not remove the L08 full-package guard to force the installed internal Linux
 candidate through its legacy updater. [Evidence](releases/2026-11-02-gateway-selection.md).
+Distribution gate includes both actual CSP routes and signed Android/Windows full
+download hashes. Read-only current109/Windows16 acceptance and49 regressions PASS;
+repeat against exact110 after qualified immutable publication, not before.
 
 **2 November — SECOND_NL_ORDINARY_LIVE (AWG3.1/TCP REALITY).**
 The owner-authorized second Amsterdam node185.10.158.196 is admitted for new device

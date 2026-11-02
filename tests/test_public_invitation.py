@@ -6,7 +6,7 @@ import json
 import pytest
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
-from scripts.verify_public_invitation import policy, verify_catalog, verify_page, verify_stream
+from scripts.verify_public_invitation import BASE, policy, verify_android_catalog, verify_catalog, verify_page, verify_stream
 
 
 HTML = b'<style>body {color: black}</style><script>const version="0.2.16";</script>'
@@ -57,3 +57,45 @@ def test_catalog_signature_lease_and_exact_publication():
     from cryptography.exceptions import InvalidSignature
     with pytest.raises(InvalidSignature):
         verify_catalog(raw, raw, Ed25519PrivateKey.generate().public_key().public_bytes_raw(), 150)
+
+
+def android_fixture(changes=None):
+    key = Ed25519PrivateKey.generate()
+    data = dict(schema=1, channel='android-field', sequence=5, package='com.familyconnect.app.friends',
+                abi='arm64-v8a', version_code=110, version='0.1.18-beta110', size=2048, sha256='a' * 64,
+                url=BASE + '/downloads/FamilyConnect-Test-0.1.18-beta110.apk', issued_at=100, expires_at=200,
+                minimum_supported_version=1, mandatory_after=0,
+                signer_fingerprint='67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a')
+    data.update(changes or {})
+    payload = json.dumps(data).encode()
+    raw = json.dumps(dict(payload=base64.b64encode(payload).decode(), signature=base64.b64encode(
+        key.sign(b'family-connect/android-update/v1\0' + payload)).decode())).encode()
+    fields = ('schema', 'package', 'abi', 'version_code', 'version', 'url', 'size', 'sha256')
+    legacy = json.dumps({field: data[field] for field in fields}).encode()
+    return raw, legacy, key.public_key().public_bytes_raw()
+
+
+def test_android_discovery_matches_signature_legacy_and_reviewed_bytes():
+    raw, legacy, public = android_fixture()
+    assert verify_android_catalog(raw, raw, legacy, public, 150)[0]['version_code'] == 110
+    for changed in (b'{}', legacy.replace(b'110', b'109')):
+        with pytest.raises(ValueError, match='Legacy'):
+            verify_android_catalog(raw, raw, changed, public, 150)
+    with pytest.raises(ValueError, match='source'):
+        verify_android_catalog(raw + b' ', raw, legacy, public, 150)
+    from cryptography.exceptions import InvalidSignature
+    with pytest.raises(InvalidSignature):
+        verify_android_catalog(raw, raw, legacy, Ed25519PrivateKey.generate().public_key().public_bytes_raw(), 150)
+
+
+@pytest.mark.parametrize('changes', [
+    {'version_code': True}, {'version': '0.1.18-beta109'}, {'schema': 2}, {'sequence': 0},
+    {'package': 'com.other.app'}, {'abi': 'x86_64'}, {'channel': 'other'}, {'signer_fingerprint': 'a' * 64},
+    {'expires_at': 150}, {'issued_at': 151}, {'expires_at': 100 + 91 * 86400},
+    {'minimum_supported_version': 111}, {'mandatory_after': 201},
+    {'url': 'https://example.invalid/file.apk'}, {'size': 150_000_001}, {'sha256': '../file'},
+])
+def test_android_rejects_wrong_binding_or_lease_even_when_signed(changes):
+    raw, legacy, public = android_fixture(changes)
+    with pytest.raises(ValueError):
+        verify_android_catalog(raw, raw, legacy, public, 150)

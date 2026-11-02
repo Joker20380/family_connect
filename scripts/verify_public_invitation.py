@@ -1,4 +1,4 @@
-"""Read-only HTTPS acceptance of both invitation routes and the Windows mirror."""
+"""Read-only HTTPS acceptance of invitations and signed Windows/Android downloads."""
 import base64
 import hashlib
 import json
@@ -67,6 +67,38 @@ def verify_stream(stream, expected):
     return dict(size=size, sha256=digest.hexdigest())
 
 
+def verify_android_catalog(raw, expected, legacy_raw, public_key, now):
+    if len(raw) > 16384 or len(legacy_raw) > 8192 or raw != expected:
+        raise ValueError('Public Android catalog differs from signed source or exceeds bounds')
+    envelope = json.loads(raw)
+    payload = base64.b64decode(envelope['payload'], validate=True)
+    Ed25519PublicKey.from_public_bytes(public_key).verify(
+        base64.b64decode(envelope['signature'], validate=True), b'family-connect/android-update/v1\0' + payload)
+    data = json.loads(payload)
+    integers = ('schema', 'sequence', 'version_code', 'size', 'issued_at', 'expires_at',
+                'minimum_supported_version', 'mandatory_after')
+    if any(type(data.get(field)) is not int for field in integers):
+        raise ValueError('Invalid Android integer field')
+    if (data['schema'] != 1 or data['channel'] != 'android-field' or
+            data['package'] != 'com.familyconnect.app.friends' or data['abi'] != 'arm64-v8a' or
+            data['signer_fingerprint'] != '67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a' or
+            not 1 <= data['sequence'] < 10**15 or not 1 <= data['version_code'] <= 2147483647 or
+            not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+-beta' + str(data['version_code']), data['version'])):
+        raise ValueError('Invalid Android identity')
+    if (not data['issued_at'] <= now < data['expires_at'] <= data['issued_at'] + 90 * 86400 or
+            not 1 <= data['minimum_supported_version'] <= data['version_code'] or
+            data['mandatory_after'] != 0 and not data['issued_at'] <= data['mandatory_after'] < data['expires_at']):
+        raise ValueError('Invalid Android lease/policy')
+    name = 'FamilyConnect-Test-' + data['version'] + '.apk'
+    if (data['url'] != BASE + '/downloads/' + name or not 1024 <= data['size'] <= 150_000_000 or
+            not re.fullmatch('[0-9a-f]{64}', data['sha256'])):
+        raise ValueError('Invalid Android artifact binding')
+    fields = ('schema', 'package', 'abi', 'version_code', 'version', 'url', 'size', 'sha256')
+    if json.loads(legacy_raw) != {field: data[field] for field in fields}:
+        raise ValueError('Legacy Android discovery differs from signed catalog')
+    return data, name
+
+
 def main():
     expected = (ROOT / 'deploy/friends/invite/index.html').read_bytes()
     for route in ('/i/', '/invite/'):
@@ -79,8 +111,21 @@ def main():
         raise ValueError('Invitation does not advertise current signed Windows version')
     with urllib.request.urlopen(BASE + '/downloads/' + name, timeout=120) as response:
         artifact = verify_stream(response, data['artifact'])
+    with urllib.request.urlopen(BASE + '/updates/android-friends-v2.json', timeout=30) as response:
+        android_raw = response.read(16385)
+    with urllib.request.urlopen(BASE + '/updates/android-friends.json', timeout=30) as response:
+        legacy_raw = response.read(8193)
+    android, android_name = verify_android_catalog(
+        android_raw, (ROOT / 'updates/android-friends-v2.json').read_bytes(), legacy_raw,
+        base64.b64decode((ROOT / 'clients/desktop/update.pub').read_bytes().strip()), int(time.time()))
+    if ('/downloads/' + android_name).encode() not in expected:
+        raise ValueError('Invitation does not advertise current signed Android version')
+    with urllib.request.urlopen(BASE + '/downloads/' + android_name, timeout=120) as response:
+        android_artifact = verify_stream(response, android)
     print(json.dumps(dict(result='PASS', routes=['/i/', '/invite/'], csp='PASS',
-                         windows_version=data['version'], sequence=data['sequence'], artifact=artifact), sort_keys=True))
+                         windows_version=data['version'], sequence=data['sequence'], artifact=artifact,
+                         android_version=android['version'], android_sequence=android['sequence'],
+                         android_artifact=android_artifact), sort_keys=True))
 
 
 if __name__ == '__main__':
