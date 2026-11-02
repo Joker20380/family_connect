@@ -1,7 +1,7 @@
 {
-  "native_source_digest": "2292c24503ed0b275d2c296100dbca4572973cf3dce41d12e22645154ca9c833",
+  "native_source_digest": "f0e48d7cd3bd68a02759a5ff29967492ab170e171942d502864f0e03a07c23fe",
   "rns_source_digest": "66128235484f01b82bfd2e4ad604a486428706fc48020abbf84211554edef26e",
-  "source_checkpoint": "L04.2-R3 source 2d125137b28e096187433608022daa1590d7a6f0 readiness-cause-preservation-bounded-retry",
+  "source_checkpoint": "FLEET-BOOTSTRAP-2 selection source 22069b2a6c0478bce3c2e3a3e07d2ee407a74fb3; reviewed native adaptations pinned in android106-reference.json; no transport source change",
   "source_files": {
     "README.txt": "81006876b899607be39dea31e3e00d0be88bea7b431e59fc7f1f278b050f6881",
     "compat/awg-helper.py": "e60a4fbd0b601cab890736ca4f317f66675b371ce7b8b14336f27b32b6a5d618",
@@ -44,8 +44,8 @@
     "lib/provisioning/chat_bridge.py": "6964d7e5085360c40a423c3a70e73447ad5e4deceb278a882d573674c2d0a868",
     "lib/provisioning/chat_bridge_protocol.py": "3c9121b8968d6a0a0933d4f122fd4aeda08d1f587249b473b8cf2c5c5c70f801",
     "lib/provisioning/chat_direct.py": "97003a243d74c1560fb5219590acf8a76bb4b628b5a1cebb34dd80e63cbd3203",
-    "lib/provisioning/friends.py": "91bfe963d59c5aaec2d6a271e3de9b5273c7ce894a32636993c5ee0da2d7025d",
-    "lib/provisioning/friends_catalog.py": "12d64b9a0c25f2e11ebfaee86bf6eab110a931668190732cf05c0cb1a26a64ec",
+    "lib/provisioning/friends.py": "2af222b1c9809bc707dfffe16cd1c7781b38485b7d12ae00d8a9c46d6874aef9",
+    "lib/provisioning/friends_catalog.py": "61009a01a7d0369cf1501c14942c348dc20a46c2f11f591f1919aa37b1efeac4",
     "lib/provisioning/support.py": "c798218d3e43d098bc1910c4b91c17798402ab5b4f447d620fac0ae728d594a4",
     "lib/system_runtime.py": "895431aaf3efd3acd4ec716d3fd5f8ba9e93bd5cecc7ad6ed0ca7a1db4ddf906",
     "lib/update.pub": "d0ae60e61af6ac5018428aaad89e362ec0f75d7468633a26c22906356228d281",

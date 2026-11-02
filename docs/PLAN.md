@@ -7,6 +7,8 @@
 Continue the existing FLEET-BOOTSTRAP-2 ID; do not start unrelated desktop backlog.
 Source contract/API/isolated replay floors and Android/Linux/Windows selection are
 implemented and locally checked; no installed/public delivery claim. Completion:
+Native Windows DPAPI/access CI, desktop1229 and native compatibility71 now PASS;
+bounded stale-source-reference and test-wrapper repairs retain all release guards.
 exact platform CI/package/UI acceptance → signed catalog + matching backend with
 protected-state readback → verified client distribution/installation. Preserve
 legacy assignments and paid state; explicit nodes support AWG/TCP, not second MESH.

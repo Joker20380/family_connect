@@ -6,7 +6,9 @@ visible choices on Android/Linux/Windows, not only new-device backend assignment
 Source schema3/target-bound proof, isolated durable floors, operator import and all
 three selectors implemented; existing assignments remain unchanged. Local Python361
 PASS/25 existing environment skips; GTK52 PASS, JVM/C# protocol PASS. Native Windows
-CI, exact packages, signed catalog/backend rollout and client installation remain
+control/DPAPI and ordinary-access CI PASS. Package-gate repairs: full desktop1229
+PASS/185 environment skips, native configuration/Auto71 PASS, release contracts53
+PASS. Exact packages, signed catalog/backend rollout and client installation remain
 unaccepted. Current installed/public versions are unchanged; L08 is not bypassed.
 [Selection source and delivery gates](releases/2026-11-02-gateway-selection.md).
 

@@ -42,10 +42,34 @@ verified package/backend rollout receipts are recorded here.
 - GTK display-backed selection and disconnect tests:52 PASS. RU/EN selected-node
   renders captured with isolated HOME/network disabled; no workstation install.
 - Android JVM control suite PASS, including shared schema3 positive/negative vectors.
-- C# protocol/conformance PASS on Linux; native Windows DPAPI and Windows GUI
-  acceptance still require Windows CI. Linux compilation is not Windows acceptance.
+- Native Windows control/DPAPI CI41431840282, ordinary user access41431840217,
+  AWG41431840299 and TCP41431840245 PASS on source22069b2. Desktop visual CI41431840205
+  PASS. These do not assert acceptance of a new distributed installer.
 - Synthetic vectors use an explicitly public deterministic test signing seed and
   documentation-network endpoints. No production key/profile is in the fixtures.
+
+## Package-gate repair
+
+The first source CI was not green: Android's accepted-source guard did not yet
+record the reviewed selection handlers/resources; the desktop three-gateway
+negative test wrapped the former three-argument validator and failed before
+inspecting its catalog. Exact reviewed hashes are now explicit, and the wrapper
+passes/asserts legacy schema2. Neither production validation nor a test is skipped.
+Focused release contracts53 PASS/40 native-environment skips/1 unrelated Windows
+deselection; full desktop1229 PASS/185 environment-gated skips. With the rebuilt
+native worker, configuration/Auto compatibility71 PASS, zero skips.
+
+The full-runtime builder also found four stale shared-reference hashes. Their
+bytes are already accepted commits a11eb8f (recovery lock), c309bff (canonical
+profile DAC), and4a7bf20 (beta109 stream retirement), not changes introduced here.
+Bounded desktop adaptations and companion source/test hashes advance explicitly;
+the historical Android106 inventory is retained unchanged. Go1.26.1 native race
+tests/build PASS, source inventory f0e48d7cd3bd68a02759a5ff29967492ab170e171942d502864f0e03a07c23fe.
+The system reference advances only that inventory and two reviewed provisioning
+files; other111 pinned system sources and RNS digest remain unchanged.
+Local preparation failures (missing builder git/gcc, old Python tar API and host
+umask002) are isolated packaging-environment failures, not accepted artifacts.
+No failed output is reused or published. Full package/service smoke is still pending.
 
 ## Rollout boundary
 

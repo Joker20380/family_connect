@@ -154,12 +154,23 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'TerminalUi.java': 'a7ba76489e0605a63b38b1113445dc149b89a871db2aad3529af8b6121b6bc41',
         'Ui60Presentation.java': '47f67af0f36f4219f092bcc5f5b7fa5c17f51725a8e60fb865649cb168f4b744',
     }
+    reviewed_gateway_selection = {
+        'ControlFriendsCatalog.java': '04f2fad75383465fd338c2ae2bad8ca9712cbb8ff9f26385c2b45ef4a8394cf2',
+        'FriendsAccessAndroid.java': '8ee37ad8f38e6413cdb8b32f6f6b76e3dcdff609bcb6a1e3a7032b6088327b35',
+        'FriendsConfigurationVault.java': '4d76d775ddf03fd6892e66152f75629ee4825d618de37d613255f60cb94d5fec',
+    }
+    reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection}
+    reviewed_resources = {
+        'clients/android/app/src/main/res/values-ru/strings.xml': 'a011acd236eaeb6acb87bfc74f856789444d098af169c7e53ac7a64c6b769349',
+        'clients/android/app/src/main/res/values/strings.xml': 'fc7d672391101b79eb8da36c2a5498993c893a4cf0268f789c0f793646da4ab6',
+    }
     changes = {'clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ChatAudio.java'}
     for name, expected in reference['android_ui_and_handlers'].items():
         if name not in changes:
-            assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == reviewed_ui109.get(Path(name).name, expected), name
+            reviewed = reviewed_resources.get(name, reviewed_handlers.get(Path(name).name, expected))
+            assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == reviewed, name
 
 
 def test_accepted_jni_startup_observation_helper_is_in_public_source():

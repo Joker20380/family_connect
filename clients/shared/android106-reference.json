@@ -884,8 +884,24 @@
   },
   "desktop_adaptations": {
     "carrier/bootstrap/directory.go": {
-      "sha256": "4b515dfa3739bb876566d4fd7240908769bb3408521c4939587b8ce4ad36595b",
-      "reason": "Move unchanged Unix lock implementation to platform file. Windows in-memory provisioned path compiles; Unix plaintext cache is explicitly unavailable on Windows (broker DPAPI remains authoritative)."
+      "sha256": "80da75685a5dd717d2fe3e694a8e420fa6f7498aed3f5dc32fcaef6700530440",
+      "source_commit": "a11eb8f2614ed7dff85522c437c54862daedaf74",
+      "reason": "Reviewed expired-predecessor recovery lock split, on top of the retained Unix/Windows lock separation; no directory trust relaxation or Windows plaintext fallback."
+    },
+    "carrier/roombroker/control.go": {
+      "sha256": "0c2c4b7dd38699180ff88ee330586f27ab37452b09b0e9e22f8800778cd62c22",
+      "source_commit": "c309bff9f267bf5250495a3c1ca8e777af52cec8",
+      "reason": "Reviewed canonical profile reader with exact 0640 ownership/path checks; legacy 0600 unchanged."
+    },
+    "carrier/tcpforward/admission.go": {
+      "sha256": "4fd75e573c36d616a529c85ec63e7a53c2383c5daff937613f82e1f816d9875e",
+      "source_commit": "4a7bf20b648e335fbdd9a8099916080f71741552",
+      "reason": "Accepted beta109 completed-stream slot retirement fix; preserve cancellation and admission limits."
+    },
+    "carrier/tcpforward/mux.go": {
+      "sha256": "3afd44bdaf673928c5ea6a34d787ffa0668530c71fae1362ae3020d53df13345",
+      "source_commit": "4a7bf20b648e335fbdd9a8099916080f71741552",
+      "reason": "Accepted beta109 completed-stream slot retirement fix; preserve cancellation and admission limits."
     }
   },
   "desktop_test_changes": {
@@ -893,6 +909,18 @@
       "sha256": "8d32aced655bdd0705b4c19256868162bf39fd5f5114e1f8270cc583bfbaf480",
       "reason": "Root-only regression test, absent from accepted capsule: arrival-driven gap waits beyond accepted104/105 750ms deadline instead of obsolete150ms. Production source stays identical.",
       "before_sha256": "65636092111d013f5f7e5ffac4c9522d52ab266c48a2733eaf5592f3b0dae411"
+    },
+    "carrier/bootstrap/recovery_linux_test.go": {
+      "sha256": "85e8cb62e1b04a6adf439ba473fd695a01a0842fd3e7f6f6a71e0b41622984ce",
+      "reason": "Companion/regression of the bounded November source-reference advancement; no source modification."
+    },
+    "carrier/roombroker/canonical_profile_linux_test.go": {
+      "sha256": "933cf1eec7bf5ad03e2853726a5d1b864fe2d552345aa930ec3b488d6c7601c0",
+      "reason": "Companion/regression of the bounded November source-reference advancement; no source modification."
+    },
+    "carrier/tcpforward/slot_release_test.go": {
+      "sha256": "29d3681804996bdb4e3607454461070866423e90278064f5f850a26d7b54d66a",
+      "reason": "Companion/regression of the bounded November source-reference advancement; no source modification."
     }
   },
   "desktop_platform_sources": {
@@ -907,6 +935,18 @@
     "carrier/bootstrap/cache_lock_windows_test.go": {
       "sha256": "cedac45dc3f87f3c0b655b7619c41184bbdf7f74f92846e860cb915ee94321db",
       "reason": "Platform split for desktop compilation; no weakening of Unix mode/no-follow/flock checks and no Windows plaintext fallback."
+    },
+    "carrier/bootstrap/recovery_linux.go": {
+      "sha256": "02b04cf50e83c5e541ae83697b679cf43d531881fda2ee216c11c609f08744b1",
+      "reason": "Companion/regression of the bounded November source-reference advancement; no source modification."
+    },
+    "carrier/roombroker/canonical_profile_linux.go": {
+      "sha256": "7024eb86f2a94978e8dbae4747db0822eb2bebb87e68871e0182dd318abc0f23",
+      "reason": "Companion/regression of the bounded November source-reference advancement; no source modification."
+    },
+    "carrier/roombroker/canonical_profile_other.go": {
+      "sha256": "35f7524533ccebbb1a087b4c28bed6987ee47d45766e6f216a3da57ef02d1976",
+      "reason": "Companion/regression of the bounded November source-reference advancement; no source modification."
     }
   }
 }

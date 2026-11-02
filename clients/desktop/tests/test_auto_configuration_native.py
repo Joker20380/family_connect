@@ -47,9 +47,10 @@ def test_signed_three_gateway_model_catalog_reaches_legacy_list_rejection(monkey
     Ed25519PublicKey.from_public_bytes(anchor).verify(base64.b64decode(envelope['signature']), DOMAIN + raw)
     inspected = []
     original = friends_catalog._catalog
-    def checked(payload, floor, previous_hash):
+    def checked(payload, floor, previous_hash, *, schema=2):
         inspected.append(json.loads(payload)['gateways'])
-        return original(payload, floor, previous_hash)
+        assert schema == 2
+        return original(payload, floor, previous_hash, schema=schema)
     monkeypatch.setattr(friends_catalog, '_catalog', checked)
     with pytest.raises(ValueError, match='Invalid Friends catalog floor'):
         friends_catalog.verify_catalog(envelope, anchor)
