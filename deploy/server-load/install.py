@@ -9,6 +9,10 @@ import subprocess
 
 ROOT=Path('/opt/apps/family_connect/server-load')
 def run(*args):return subprocess.run(args,check=True,capture_output=True,text=True)
+def prepare_root():
+    if ROOT.is_symlink():raise ValueError('Monitor root must not be a symlink')
+    ROOT.mkdir(mode=0o755,exist_ok=True)
+    ROOT.chmod(0o755)
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('country',choices=['ru','nl'])
     parser.add_argument('--interface');args=parser.parse_args()
@@ -16,7 +20,7 @@ def main():
     try:user=pwd.getpwnam('fc-load')
     except KeyError:
         run('useradd','--system','--no-create-home','--shell','/usr/sbin/nologin','fc-load');user=pwd.getpwnam('fc-load')
-    ROOT.mkdir(mode=0o755,exist_ok=True)
+    prepare_root()
     state=ROOT/'state';state.mkdir(mode=0o700,exist_ok=True);os.chown(state,user.pw_uid,user.pw_gid)
     public=ROOT/'snapshot';public.mkdir(mode=0o755,exist_ok=True);os.chown(public,user.pw_uid,user.pw_gid)
     source=Path(__file__).with_name('monitor.py');target=ROOT/'monitor.py'

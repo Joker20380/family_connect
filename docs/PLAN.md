@@ -5,11 +5,12 @@
 <!-- FLEET-BOOTSTRAP-2 current -->
 **Owner follow-up: two Amsterdam entries and per-node load, provisional5Gbps each.**
 Continue FLEET-BOOTSTRAP-2 only. Linux selector/strict node telemetry source ready;
-1251 tests PASS/183 environment skips and real GTK RU/EN2 PASS. NEXT: deploy only
-read-only monitoring on both accepted NL nodes and the RU aggregator, verify fresh
-node-bound HTTPS metrics with5000Mbps explicitly marked operator-assumed; build
-new immutable internal .13 full DEB/AppImage/system and pass exact package gates
-before guarded owner installation. No VPN/backend restart, assignment/paid-state
+1251 tests PASS/183 environment skips and real GTK RU/EN2 PASS. Independent monitoring
+on both NL nodes and RU aggregation now LIVE/HTTPS PASS with5000Mbps explicitly
+operator-assumed. Initial NL2 monitor-only DAC failure repaired and retained; no
+VPN service restart. Exact new .13 full DEB/AppImage/system/integrity/pre-start gates
+PASS. NEXT: packaged rendering/interaction, then guarded owner installation after
+disconnect/GUI closure. No VPN/backend restart, assignment/paid-state
 mutation, second-node MESH claim or public release is authorized by this follow-up.
 [Task receipt](releases/2026-11-02-linux-node-load.md). Earlier .12 installation remains
 accepted evidence, not proof that this new UI/telemetry change is delivered.

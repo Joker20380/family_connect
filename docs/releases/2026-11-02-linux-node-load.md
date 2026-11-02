@@ -1,5 +1,36 @@
 # Linux two-node load — 2 November 2026
 
+## Current delivery result
+
+**LIVE_NODE_TELEMETRY_HTTPS_PASS; owner Linux package pending.** Both Amsterdam
+nodes now supply independent fresh samples bound to their exact IDs, with provisional
+5000Mbps duplex capacity and operator-assumed provenance. Verified public HTTPS
+acceptance observed first-node CPU/load12.3% and second-node0.6%; these are one
+snapshot, not constants. The legacy country NL sample aliases the first node only.
+RU capacity remains200Mbps/egress/provider estimate. No device assignment or
+paid-state mutation and no VPN/backend restart; only monitor services changed.
+Non-monitor service identities/PIDs/restart state were unchanged at all three
+activation boundaries (first NL6, second NL2, RU4 observed services).
+
+The new second-node monitor initially could not traverse its own0700 directory
+created under private umask. Bounded node acceptance failed before RU activation;
+automatic monitor restarts and diagnostic records are retained. The monitor was
+stopped; only its dedicated root directory became0755, with its private state
+remaining0700. Fixed installer now establishes the public traversal mode explicitly
+and rejects a symlink root. Regression2 plus monitor11 PASS. The original NL
+activation intents were not replayed: a new RU-only operation first rechecked
+both node samples, then activated aggregation and verified actual HTTPS.
+Forced-command/from-host restrictions remain; the existing monitoring public key
+was added only to NL2, and the retained approved RSA host pin was added to the RU
+monitor's known-hosts file. Private backups and diagnostic details remain local.
+
+Source64182449b7370ac429b942a64ebca5563f91b32a produced full internal
+0.2.12~l03.2.13; source_dirty=false. Exact artifact integrity, real isolated system
+install/rollback, DEB, AppImage and both AWG/TCP pre-start guards PASS. No transport
+source rebuild was needed; accepted native/RNS/normal bytes were reverified, and
+the system bundle was rebuilt for the telemetry backend delta. Packaged renders
+and owner installation are still separate pending gates; installed .12 is unchanged.
+
 ## Scope and source checkpoint
 
 Owner requests two Amsterdam choices instead of the duplicate legacy assigned-NL

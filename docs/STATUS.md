@@ -1,16 +1,22 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**2 November — owner-requested two-node load follow-up, SOURCE_READY / delivery pending.**
+**2 November — owner-requested two-node load follow-up, LIVE_METRICS / owner package pending.**
 Owner requests exactly two Amsterdam choices and provisional5000Mbps capacity on
 each node. Linux AWG/TCP picker removes the duplicate assigned-NL choice; Auto/MESH
 retain country routing and do not imply second-node MESH. Independent fresh,
 gateway-bound metrics never substitute country/other-node data. Source tests1251
 PASS/183 environment skips; real-display GTK RU/EN2 PASS. Initial full test attempts
 retained: missing GI in the venv, then8 fixture-mode failures under inherited umask002;
-locked venv plus system GI and umask022 pass without weakening guards. New full
-internal .13 package, monitored-node configuration/deployment and owner install are
-pending; installed .12/public Linux0.2.11 unchanged at this checkpoint.
+locked venv plus system GI and umask022 pass without weakening guards. Both NL nodes
+now publish independent bound samples with operator-assumed5000Mbps duplex capacity;
+RU aggregation and verified HTTPS PASS. Only monitor services changed; non-monitor
+service PIDs/restart states unchanged. NL2's initial dedicated monitor directory was
+0700 under private umask; failed readiness/automatic monitor retries retained.
+Stopped that monitor, corrected only its directory to0755, kept private state0700,
+and resumed only pending RU activation. Installer regression2 plus monitor11 PASS.
+Exact .13 full DEB/AppImage/system/integrity/pre-start AWG/TCP gates PASS; packaged
+render and owner install pending. Installed .12/public Linux0.2.11 unchanged here.
 [Load follow-up and gates](releases/2026-11-02-linux-node-load.md).
 
 **2 November — explicit two-Amsterdam client selection IN_PROGRESS.** Owner requests
