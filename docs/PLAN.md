@@ -20,12 +20,14 @@ Exact Android110 source05d8919/run41449895463 emulator/native/package acceptance
 downloaded bytes/provenance/16K and both Amsterdam row captures verified.
 Android110 signed with the existing certificate and published immutably with optional
 catalog5/invitation; full public HTTPS bytes/CSP PASS. Windows16/Android110 delivery
-complete, owner110 installation not claimed. NEXT within this task: verified Linux
-full-package install after owner workstation reboot. Linux attempt
-refused at the sticky MESH ownership gate before system apply; exact .9 rollback
-READY,2562 user entries unchanged. NEXT Linux precondition: owner workstation
-reboot, then confirm volatile marker/ownership cleared and use a fresh install
-operation; never erase the marker, reconnect automatically or reuse completed intents. Preserve
+complete, owner110 installation not claimed. Linux full-package owner installation
+now PASS after workstation reboot and a fresh operation: exact .12 DEB/system pair,
+candidate imports/READY and installed GTK startup PASS;3169 protected entries unchanged.
+Earlier sticky-owner refusal/.9 rollback retained; no marker removal, L08 bypass or
+automatic connection. Public Linux remains0.2.11. NEXT within this task: owner-visible
+Amsterdam1/2 and explicitly initiated AWG/TCP/Disconnect acceptance on installed .12;
+do not claim physical selection or full transport acceptance from a startup smoke.
+NL combined load/per-node telemetry remains a separate unrepaired limitation. Preserve
 legacy assignments and paid state; explicit nodes support AWG/TCP, not second MESH.
 Do not remove the L08 full-package guard to force the installed internal Linux
 candidate through its legacy updater. [Evidence](releases/2026-11-02-gateway-selection.md).

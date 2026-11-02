@@ -1,6 +1,51 @@
 # Explicit Amsterdam selection — 2 November 2026
 
+## Linux owner installation after reboot — current result
+
+**INSTALLED_PAIR_READY_NO_CONNECTION.** After the owner-controlled workstation
+reboot at14:48CET and explicit disconnect/GUI-closed confirmation, a fresh operation
+installed the exact reviewed Ubuntu26.04/Python3.14/x86_64 DEB
+`0.2.12~l03.2.12`, source `efc13f1c7f2750cb7640dd2b8b90aed15c92c6e3`.
+DEB SHA256 `cde8416c07ef87ec2ef5441e17a33b93f72be8aad2e1675c7203d542ea975972`
+and the retained rollback .9 bytes were checked before installation. The previous
+completed install/rollback intents were not reused. User chat and root background
+owners stopped normally; no FC tunnel or active transport marker remained, and
+ownership checks passed. No lock deletion/truncation or fabricated cleanup.
+
+The user package and exact embedded system component were installed using the
+ordinary system authorization prompts. Candidate
+`a4959628c5fa2838894e657616b90e5e46008b2ace0e6dd9cfffc987be1be0a6`
+imports PASS; system
+`d5fc9df50a66292b7cd1b10c81a2521352d7648c0bd2b5037af2c457b1617eb7`
+and `--candidate-status` READY. All3169 protected user/config entries match the
+fresh quiesced snapshot, including modes/ownership and hashed symlink targets
+without following them. This fresh snapshot explicitly covers user config/data/
+state/cache and root-owned AWG/TCP configuration; its count is not an addition or
+removal claim against the earlier2562-entry snapshot.
+Private fingerprints/logs and the system installer's root-only rollback backup stay local.
+
+Installed GTK startup smoke PASS on the owner display with isolated D-Bus, no
+renderer overrides and no connection. The first Xvfb smoke did not start the app
+because `xvfb-run` is absent; that environment failure is retained, not a product PASS.
+Actual owner selection/tunnel/Disconnect checks are still pending. No server,
+catalog, installer publication, enrollment, paid mutation or phone action occurred.
+Public Linux remains0.2.11; L08 is not bypassed. Do not start another upgrade just
+because the retained rollback section below names .9.
+
+Rollback, if separately needed: disconnect/close, confirm idle ownership, restore
+the reviewed .9 full DEB and its matching embedded system through the normal setup
+guard; verify imports/READY and protected-state equality before use. A .9 DEB alone
+is not enough now that the root component has changed. Do not replay old intents.
+
+The reported missing NL load is separate: the verified public telemetry response
+contains NL CPU but unverified channel capacity (`capacity_mbps: null`,
+`reason: capacity-unknown`). The legacy Linux combined percentage is therefore
+absent; no per-node Amsterdam metrics are supplied by this installation. Never
+fabricate capacity or label country-level CPU as a measurement of each explicit node.
+
 ## Linux owner attempt and safe rollback
+
+Historical checkpoint, superseded by the successful post-reboot installation above.
 
 The owner closed the GUI/disconnected VPN after the local prompt. The fixed user
 chat/root background units were stopped normally; no active Family Connect tunnel
@@ -66,7 +111,8 @@ paid/device/invite/grant row fingerprints and gateway catalog4 unchanged; new
 invitations0, paid mutations0, device moves0, phone actions0. This publication does
 not install an app or connect a client. Older artifacts stay immutable; a future
 catalog recovery must advance sequence, never replace110 or lower signed floors.
-The workstation Linux upgrade remains safely rolled back pending owner reboot.
+At that publication checkpoint Linux was still rolled back pending owner reboot;
+the subsequent successful owner installation is recorded at the top of this report.
 
 Windows0.2.16 is qualified from exact source5ae821d / run41439156032,
 native Windows and compatibility jobs PASS. The immutable distribution workflow
@@ -266,7 +312,7 @@ rejects showing country-level CPU as a node measurement; exact emulator run pend
 Source versions reserved for this change: Android0.1.18-beta110/code110 and
 Windows0.2.16. Windows is published with signed catalog12; Android110 is signed and
 published with optional catalog5. Linux complete internal
-Ubuntu26.04/Python3.14 candidate0.2.12~l03.2.12 is built from efc13f1 (not installed),
+Ubuntu26.04/Python3.14 candidate0.2.12~l03.2.12 is built from efc13f1 (now owner-installed),
 with DEB/AppImage byte/member audit PASS and system-component isolated systemd259
 install/rollback/identity-preservation smoke PASS. Exact DEB/AppImage smoke and
 packaged RU/EN GTK renders also PASS.
@@ -275,10 +321,11 @@ DEB cde8416c07ef87ec2ef5441e17a33b93f72be8aad2e1675c7203d542ea975972;
 AppImage1fb37e03b01e8aaf7d598f9907e27e6bee8500fa37d272018abcc49287fb2d2c.
 The bundled legacy six-file tar is NOT a supported update for internal candidates.
 
-Not yet delivered: reviewed full Linux DEB/AppImage installation after workstation reboot.
+Owner full Linux DEB/paired-system installation after workstation reboot is verified above;
+owner AppImage installation and physical selection/tunnel checks are not claimed.
 Android110 and Windows0.2.16 downloads/update catalogs/invitations and backend are verified above.
-Public Linux0.2.11 and restored owner Linux
-0.2.12~l03.2.9 remain unchanged. L08 migration is not bypassed; the existing internal
+Public Linux0.2.11 remains unchanged; owner Linux is now0.2.12~l03.2.12.
+L08 migration is not bypassed; the existing internal
 Linux updater cannot install a legacy six-file archive as a full runtime update.
 
 Before claiming the new choices appear for users: qualify exact client artifacts,

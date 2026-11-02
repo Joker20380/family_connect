@@ -10,8 +10,10 @@ Android110 is published: [APK](https://185.251.89.19:8443/downloads/FamilyConnec
 optional signed catalog5, existing signer; SHA256
 `159034142f0430445caf6420c7d491866f7802a7a3eb615a4d4bfb7908641861`,56221032bytes.
 Update over109 without clearing data; owner installation is not yet confirmed.
-Complete Linux0.2.12~l03.2.12 Ubuntu26.04/Python3.14 is qualified; its install attempt
-safely rolled back to .9/READY. Reboot the workstation, not a VPS, before retrying.
+Complete Linux0.2.12~l03.2.12 Ubuntu26.04/Python3.14 is now installed on the owner's
+workstation after reboot: exact full DEB/system pair, imports/READY and GTK startup
+PASS;3169 protected entries unchanged, no automatic connection. Earlier .9 rollback
+is retained evidence. Public Linux stays0.2.11; physical AWG/TCP selection checks remain.
 Internal Linux needs the complete package, not the legacy six-file updater archive.
 [Qualification](releases/2026-11-02-gateway-selection.md).
 

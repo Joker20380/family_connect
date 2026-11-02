@@ -26,12 +26,18 @@ and immutable Android110/optional catalog5/invitation publication PASS; complete
 public HTTPS APK/hash and both CSP routes PASS. Owner110 installation not claimed.
 Android109 remains immutable.1 Nginx reload/0 backend restarts, protected rows unchanged.
 Retained failed attempts are not erased.
-Linux.12 owner install was attempted after normal disconnect/GUI closure; paired
-system setup refused before apply because MESH cleanup has an unconfirmed sticky
-`vpn` marker. Exact prior .9 DEB restored, candidate/system READY and all2562 protected
-user entries unchanged. No root system replacement or reconnect; marker retained.
-Owner workstation reboot is required before a fresh full-package attempt (not VPS).
-Linux.12 not accepted installed/public; L08 and ownership guards are not bypassed.
+Linux.12 owner full-package installation now PASS after the14:48CET workstation
+reboot and a fresh authorized operation. Exact efc13f1 DEB and paired system
+d5fc9df5 installed; candidate a4959628 imports PASS, system READY. All3169 protected
+user/config entries unchanged, including symlink targets; root/user owners stopped
+normally, no active FC interfaces, no automatic reconnect or server changes.
+Installed GTK startup PASS on the owner display with isolated D-Bus and no renderer
+overrides; first Xvfb attempt NOT_STARTED because xvfb-run is absent, retained.
+Earlier sticky-owner refusal and exact .9 rollback/2562 unchanged entries remain
+historical evidence, not the current installation. No marker deletion or L08 bypass.
+Public Linux stays0.2.11; owner physical Amsterdam1/2 AWG/TCP/cleanup checks remain
+pending. NL CPU is available, but unknown capacity suppresses legacy combined load;
+per-node telemetry is not supplied or repaired by this installation.
 Windows invitation/mirror16 and both actual CSP routes verified over HTTPS;6 browser
 scenarios and12 signing/publication regressions PASS. Publication needed3 Nginx
 reloads/0 backend restarts; protected rows unchanged. Real Nginx/HTTP55 PASS/1 skip.

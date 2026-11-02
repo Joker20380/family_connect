@@ -1,6 +1,6 @@
 # Release distribution / Выпуски
 
-**2 November — Android110 and Windows0.2.16 published; Linux awaits workstation reboot.**
+**2 November — Android110 and Windows0.2.16 published; Linux internal.12 owner-installed.**
 [Windows installer](https://github.com/Joker20380/family_connect/releases/download/windows-v0.2.16/FamilyConnect-Setup-0.2.16-pilot-unsigned.exe)
 adds Amsterdam1/2 for AWG/TCP; native CI, immutable release and public HTTPS hash
 PASS. SHA256 `491a731edbf80887122844bebcccb8741e701b03816202f9a9b77c77855e8a65`,
@@ -9,9 +9,10 @@ Android110 exact CI41449895463/source05d8919, existing signer and full public HT
 bytes PASS; optional Android sequence5. [Download110](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta110.apk),
 56221032bytes, SHA256 `159034142f0430445caf6420c7d491866f7802a7a3eb615a4d4bfb7908641861`.
 Amsterdam1/2 support AWG/TCP; owner installation/physical selection not claimed.
-Complete Linux0.2.12~l03.2.12 Ubuntu26.04/Python3.14 package/isolated runtime/GTK PASS,
-attempt safely rolled back to exact owner.9/READY at the sticky MESH ownership guard;
-workstation reboot required. Public0.2.11 remains. Do not bypass L08 with
+Complete Linux0.2.12~l03.2.12 Ubuntu26.04/Python3.14 full DEB/system is installed on the
+owner workstation after reboot; imports/READY and installed GTK startup PASS,
+3169 protected entries unchanged, no connection. Earlier sticky-owner refusal/.9
+rollback retained; physical node selection remains pending. Public0.2.11 remains. Do not bypass L08 with
 the six-file archive. [Qualification](releases/2026-11-02-gateway-selection.md).
 
 **1 November — READY_FOR_BETA109_OWNER_UPDATE.** Beta109/code109 is published;
