@@ -26,6 +26,21 @@ The same qualified .12 bytes remain the candidate; L08 is not bypassed.
 
 ## Delivery continuation
 
+**Android110 exact qualification PASS.** Source05d8919b94dfc55a089c7ea772cda0c6d65a87c7,
+Client builds41449895463 completed SUCCESS after the two localized UI repairs.
+Transport/Auto/system-consent, Friends language/settings/explicit rows, control
+conformance, pinned native, Gradle/tests/lint and unsigned ARM64 packaging PASS.
+Runtime XML:67 cases,43 executed PASS/24 existing variant skips,0 failures/errors.
+Artifact13146090183 ZIPa3fbcd9fcc2edc0d14bd35703c064a3673d57ee55c72e6f919d119ef307e77ae
+downloaded and hash-checked. Unsigned APKf63e5efaf31a79da2b8b899b753616bcd37979b92574374cfd848eb3b060bbd7,
+56,201,769bytes; com.familyconnect.app.friends/code110/min31/target35/ARM64.
+All12 native libraries' ELF and APK ZIP16K alignment PASS. Exact AWG/restricted/audio
+source pins, builder hashes, embedded payload, corresponding audio source/licenses
+verified. No private diagnostic/provisioning seam enabled. Both downloaded Amsterdam
+row captures visibly retain distinct names and `No data`, not a fabricated per-node
+CPU measurement; failed-state controls remain visible. Signing/publication is the
+next gate; this is not owner110 installation or a physical transport acceptance.
+
 Windows0.2.16 is qualified from exact source5ae821d / run41439156032,
 native Windows and compatibility jobs PASS. The immutable distribution workflow
 pins artifact13138243140, ZIP digestcccbbe7a… and installer491a731e…/49955605bytes;

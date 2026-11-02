@@ -84,7 +84,19 @@
     "source_commit": "05d8919b94dfc55a089c7ea772cda0c6d65a87c7",
     "retained_transport_ci_run": 41443304002,
     "transport_debug_lifecycle": "PASS",
-    "acceptance": "FRIENDS_LANGUAGE_AND_ROW_REPAIR_PENDING_CI",
+    "acceptance": "EXACT_CI_AND_DOWNLOADED_PACKAGE_PASS",
+    "arm64_artifact_id": 13146090183,
+    "arm64_zip_sha256": "a3fbcd9fcc2edc0d14bd35703c064a3673d57ee55c72e6f919d119ef307e77ae",
+    "unsigned_apk_sha256": "f63e5efaf31a79da2b8b899b753616bcd37979b92574374cfd848eb3b060bbd7",
+    "unsigned_apk_size": 56201769,
+    "instrumentation_executed_pass": 43,
+    "instrumentation_variant_skips": 24,
+    "instrumentation_failures_errors": 0,
+    "native_libraries": 12,
+    "zip_elf_16k": "PASS",
+    "source_license_inventory": "PASS",
+    "amsterdam_row_visuals": "PASS",
+    "signed": false,
     "published_version": "0.1.18-beta109"
   }
 }

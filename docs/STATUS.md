@@ -18,9 +18,11 @@ Full Linux internal.12 from efc13f1: exact DEB/AppImage/system/pre-start smoke P
 packaged RU/EN GTK4 PASS; hosted candidate41438372471 PASS. Corrected Windows0.2.16
 installer/hash/native compatibility41439156032 PASS; immutable Windows0.2.16
 publication41442681710 and public HTTPS/hash PASS, signed Windows catalog12.
-Android110 debug transport lifecycle now PASS; two Friends UI failures are repaired
-(stale language callback and collapsed/expanded label assertion),43 source tests PASS,
-corrected exact-source05d8919 emulator41449895463 pending. Public Android109 unchanged.
+Android110 exact-source05d8919 CI41449895463 PASS: transport lifecycle, Friends
+language/rows, native ARM64 packaging,43 executed instrumentation cases/24 variant
+skips/0 failures. Exact downloaded APK/source/licenses/12 native libraries/16K
+alignment and both Amsterdam row captures PASS. Offline signing/publication pending;
+public Android109 unchanged. Retained failed attempts are not erased.
 Linux.12 owner install was attempted after normal disconnect/GUI closure; paired
 system setup refused before apply because MESH cleanup has an unconfirmed sticky
 `vpn` marker. Exact prior .9 DEB restored, candidate/system READY and all2562 protected

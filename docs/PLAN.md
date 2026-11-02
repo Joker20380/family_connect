@@ -16,8 +16,10 @@ Backend + signed schema3 sequence1 + Nginx routes LIVE, protected-state readback
 and public HTTPS PASS. Initial cold-listener rollback reconciled; all evidence retained.
 Windows0.2.16 immutable publication41442681710 and public hash PASS; signed
 independent Windows sequence12 and invitation/mirror16 fully HTTPS-verified.
-NEXT within this task: corrected Android110 language/row emulator/package acceptance,
-remaining distribution and verified Linux full-package install. Linux attempt
+Exact Android110 source05d8919/run41449895463 emulator/native/package acceptance PASS;
+downloaded bytes/provenance/16K and both Amsterdam row captures verified.
+NEXT within this task: offline signing, immutable Android110 distribution and
+verified Linux full-package install. Linux attempt
 refused at the sticky MESH ownership gate before system apply; exact .9 rollback
 READY,2562 user entries unchanged. NEXT Linux precondition: owner workstation
 reboot, then confirm volatile marker/ownership cleared and use a fresh install
