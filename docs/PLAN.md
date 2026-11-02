@@ -11,6 +11,8 @@ Native Windows DPAPI/access CI, desktop1229 and native compatibility71 now PASS;
 bounded stale-source-reference and test-wrapper repairs retain all release guards.
 Source Android110/Windows0.2.16 reserved; Linux full internal.12 built/audited,
 isolated runtime smoke PASS. No installer/catalog publication or owner install yet.
+Exact DEB/AppImage/pre-start smoke and packaged GTK PASS. Real Nginx/HTTP53 PASS;
+fix hosted candidate's two-unit readiness wait before claiming its CI acceptance.
 exact platform CI/package/UI acceptance → signed catalog + matching backend with
 protected-state readback → verified client distribution/installation. Preserve
 legacy assignments and paid state; explicit nodes support AWG/TCP, not second MESH.

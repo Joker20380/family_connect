@@ -71,6 +71,24 @@ Local preparation failures (missing builder git/gcc, old Python tar API and host
 umask002) are isolated packaging-environment failures, not accepted artifacts.
 No failed output is reused or published. Full package/service smoke is still pending.
 
+The exact Linux.12 system/DEB/AppImage, plus AWG/TCP pre-start failure cleanup,
+now pass isolated Ubuntu26.04/systemd259/Python3.14 smoke. Packaged (not checkout)
+GTK selection passes RU/EN at100% and200% scale:4 PASS. No workstation install.
+Hosted candidate41436331524 failed at its container boot wait: `systemctl is-active`
+with two names can succeed when only one is active. This CI-harness race remains
+to fix; it does not invalidate or replace the separately recorded local evidence.
+
+Ingress closure is now explicit: the packaged `gateway-selection-location.conf`
+allows POST only for the two exact node routes, with an8KiB body limit and bounded
+proxy timeouts. Deployment must substitute the observed active loopback upstream,
+never start a competing backend. Real isolated Nginx + HTTP tests53 PASS/1 optional
+sync-archive skip include alternating target proofs, wrong-purpose/replay rejection,
+unknown/suffixed routes and GET rejection. The old test fixture is brought into
+line with the already-existing diagnostics route; production diagnostics unchanged.
+HTTP archive fce2340051ecc574156ee2b7eb50f87b443679b95bf69ee3f62c6c189de1ebf5
+imports in isolation. Versus served f33dee20, only access proof purposes, gateway
+routing/selection, catalog parsing and the dispatcher differ; paid module unchanged.
+
 ## Rollout boundary
 
 Source versions reserved for this change: Android0.1.18-beta110/code110 and

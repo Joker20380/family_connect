@@ -100,9 +100,10 @@ def running(runtime):
 def nginx_sections():
     source = (ROOT / 'deploy/friends/install-access.py').read_text()
     ordinary = source[source.index('        location ~ ^/friends/'):source.index("\n'''", source.index('        location ~ ^/friends/'))]
-    old = 'referral/(issue|claim)|device/(status|support)|notices/publish)'
+    old = 'referral/(issue|claim)|device/(status|support|diagnostics)|notices/publish)'
     assert ordinary.count(old) == 1
-    ordinary = ordinary.replace(old, 'referral/(issue|claim)|device/(status|support)|notices/(publish|device/(role|publish|list|edit)))')
+    ordinary = ordinary.replace(old, 'referral/(issue|claim)|device/(status|support|diagnostics)|notices/(publish|device/(role|publish|list|edit)))')
+    ordinary += (ROOT / 'deploy/friends/gateway-selection-location.conf').read_text()
     tree = ast.parse((ROOT / 'deploy/server-load/publish.py').read_text())
     status = next(ast.literal_eval(node.value) for node in tree.body
                   if isinstance(node, ast.Assign) and node.targets[0].id == 'section')
@@ -388,6 +389,17 @@ def test_actual_nginx_handler_matrix(runtime, enabled):
         for route in ('challenge', 'chat/challenge', 'activate', 'configuration/ru', 'referral/claim', 'notices/device/role'):
             assert request(frontend, '/friends/' + route)[0] == 400
             assert request(frontend, '/friends/' + route, 'GET')[0] == 405
+        for target in ('nl-amsterdam-1', 'nl-amsterdam-2'):
+            path = '/friends/gateway-configuration/' + target
+            assert request(frontend, path)[0] == 400
+            assert request(frontend, path, 'GET')[0] == 405
+            device = runtime['canary']
+            challenge = runtime['access'].challenge(device.public_identity, device.wireguard_public_key, 'nl')
+            assert request(frontend, path, body=device.prove_transport_key(challenge['challenge']))[0] == 403
+            for suffix in ('/', '/extra', '-other'):
+                assert request(frontend, path + suffix)[0] == 404
+        for target in ('nl', 'nl-amsterdam-3', 'NL-AMSTERDAM-1'):
+            assert request(frontend, '/friends/gateway-configuration/' + target)[0] == 404
         path = '/friends/restricted-readiness/challenge'
         assert request(frontend, path)[0] == (400 if enabled else 404)
         assert request(frontend, path, 'GET')[0] == (405 if enabled else 404)

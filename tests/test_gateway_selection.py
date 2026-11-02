@@ -1,5 +1,6 @@
 import base64
 import copy
+import contextlib
 import http.client
 import importlib.util
 import json
@@ -143,7 +144,8 @@ def test_revoked_device_cannot_select_another_node(node_selection):
         configuration(node.access, node.root, GATEWAY_CHOICES[1], node.identity.reference)
 
 
-def test_loopback_http_proof_binds_exact_target_and_routes_registration(node_selection, monkeypatch):
+@pytest.mark.parametrize('proxy', [False, True])
+def test_loopback_http_proof_binds_exact_target_and_routes_registration(node_selection, monkeypatch, proxy):
     node = node_selection
     administer(node.access, node.root, node.request)
     spec = importlib.util.spec_from_file_location('selection_http', ROOT / 'deploy/friends/access-api.py')
@@ -158,12 +160,12 @@ def test_loopback_http_proof_binds_exact_target_and_routes_registration(node_sel
         assert all(value not in ' '.join(command) for value in record.values())
         commands.append(command)
         return SimpleNamespace(returncode=0, stdout=canonical(dict(public_key=record['public_key'], address='10.83.0.2/32', transport='amneziawg-3.1')))
-    monkeypatch.setattr(module.subprocess, 'run', register)
+    monkeypatch.setattr(module, 'subprocess', SimpleNamespace(run=register))
     server = ThreadingHTTPServer(('127.0.0.1', 0), module.Handler)
     thread = threading.Thread(target=server.serve_forever)
     thread.start()
     def post(path, body):
-        client = http.client.HTTPConnection('127.0.0.1', server.server_port, timeout=5)
+        client = http.client.HTTPConnection('127.0.0.1', frontend, timeout=5)
         try:
             client.request('POST', path, canonical(body), {'Content-Type': 'application/json'})
             reply = client.getresponse()
@@ -171,17 +173,20 @@ def test_loopback_http_proof_binds_exact_target_and_routes_registration(node_sel
         finally:
             client.close()
     try:
-        for target, host in zip(GATEWAY_CHOICES * 2, ('192.0.2.20', '192.0.2.21') * 2):
-            status, challenge = post('/friends/challenge', dict(public_identity=node.identity.public_identity,
-                wireguard_public_key=node.identity.wireguard_public_key, purpose='gateway:' + target, invitation=''))
-            assert status == 200
-            proof = node.identity.prove_transport_key(challenge['challenge'])
-            other = GATEWAY_CHOICES[1] if target == GATEWAY_CHOICES[0] else GATEWAY_CHOICES[0]
-            assert post('/friends/gateway-configuration/' + other, proof)[0] == 403
-            status, reply = post('/friends/gateway-configuration/' + target, proof)
-            assert status == 200 and commands[-1][-2] == 'root@' + host
-            assert verify(reply, ANCHOR, node.identity.reference, target, node.identity._wireguard_key.private_bytes_raw()).gateway_id == target
-            assert post('/friends/gateway-configuration/' + target, proof)[0] == 403
+        from tests.test_friends_http_runtime import ingress
+        boundary = ingress(dict(temporary=node.root, backend=server.server_port), False) if proxy else contextlib.nullcontext(server.server_port)
+        with boundary as frontend:
+            for target, host in zip(GATEWAY_CHOICES * 2, ('192.0.2.20', '192.0.2.21') * 2):
+                status, challenge = post('/friends/challenge', dict(public_identity=node.identity.public_identity,
+                    wireguard_public_key=node.identity.wireguard_public_key, purpose='gateway:' + target, invitation=''))
+                assert status == 200
+                proof = node.identity.prove_transport_key(challenge['challenge'])
+                other = GATEWAY_CHOICES[1] if target == GATEWAY_CHOICES[0] else GATEWAY_CHOICES[0]
+                assert post('/friends/gateway-configuration/' + other, proof)[0] == 403
+                status, reply = post('/friends/gateway-configuration/' + target, proof)
+                assert status == 200 and commands[-1][-2] == 'root@' + host
+                assert verify(reply, ANCHOR, node.identity.reference, target, node.identity._wireguard_key.private_bytes_raw()).gateway_id == target
+                assert post('/friends/gateway-configuration/' + target, proof)[0] == 403
         assert len(commands) == 4
         assert assigned(node.access, node.root, 'nl', node.identity.reference)[1] == '192.0.2.20'
     finally:
