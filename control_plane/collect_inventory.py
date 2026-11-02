@@ -7,33 +7,59 @@ from pathlib import Path
 import secrets
 import subprocess
 
-HOSTS = {'gateway-ru': '185.251.89.19', 'gateway-nl': '186.246.45.246'}
+if __package__:
+    from .apps.console.collector import ACTIVE_SOURCES, SOURCES
+else:
+    from apps.console.collector import ACTIVE_SOURCES, SOURCES
+
+HOSTS = {source: SOURCES[source]['host'] for source in ACTIVE_SOURCES}
 BASE = Path(__file__).resolve().parent
+
+
+def ssh_command(source, known_hosts=None):
+    if source not in HOSTS:
+        raise ValueError('Inactive inventory source')
+    command = ['ssh', '-o', 'BatchMode=yes', '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=10']
+    if known_hosts is not None:
+        path = Path(known_hosts).expanduser().absolute()
+        if not path.is_file() or path.is_symlink() or any(character.isspace() for character in str(path)):
+            raise ValueError('Expected an existing approved known-hosts file')
+        command += ['-o', 'UserKnownHostsFile=' + str(path)]
+    return command + ['root@' + HOSTS[source], 'python3 -B -']
 
 
 def main():
     parser = argparse.ArgumentParser(description='Read-only инвентаризация разрешённых шлюзов; без remote файлов и команд изменения')
     parser.add_argument('source', choices=HOSTS)
+    parser.add_argument('--known-hosts', type=Path, help='Существующий файл проверенных SSH host pins; доверие не добавляется автоматически')
     args = parser.parse_args()
+    try:
+        command = ssh_command(args.source, args.known_hosts)
+    except ValueError:
+        parser.error('Требуется существующий файл проверенных host pins без симлинка или пробелов в пути')
     local = BASE / '.local'
     key_path = local / 'inventory-hmac.key'
     if any(parent.is_symlink() for parent in (key_path, *key_path.parents)):
         parser.error('Симлинки запрещены')
     local.mkdir(mode=0o700, exist_ok=True)
-    if not key_path.exists():
+    if SOURCES[args.source]['registry'] and not key_path.exists():
         descriptor = os.open(key_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
         with os.fdopen(descriptor, 'wb') as handle:
             handle.write(secrets.token_bytes(32))
-    if key_path.stat().st_mode & 0o077 or key_path.stat().st_size != 32:
-        parser.error('Ключ HMAC должен содержать 32 байта и иметь права 0600')
+    key_expression = 'None'
+    if SOURCES[args.source]['registry']:
+        if key_path.stat().st_mode & 0o077 or key_path.stat().st_size != 32:
+            parser.error('Ключ HMAC должен содержать 32 байта и иметь права 0600')
+        key_expression = f'bytes.fromhex({key_path.read_bytes().hex()!r})'
     source = (BASE / 'apps/console/collector.py').read_text()
-    source += f'\nprint(json.dumps(collect({args.source!r}, bytes.fromhex({key_path.read_bytes().hex()!r})), allow_nan=False))\n'
+    source += f'\nprint(json.dumps(collect({args.source!r}, {key_expression}), allow_nan=False))\n'
     try:
-        result = subprocess.run(['ssh', '-o', 'BatchMode=yes', '-o', 'StrictHostKeyChecking=yes', '-o', 'ConnectTimeout=10',
-            'root@' + HOSTS[args.source], 'python3 -B -'], input=source.encode(), capture_output=True, timeout=45)
+        result = subprocess.run(command, input=source.encode(), capture_output=True, timeout=45)
         if result.returncode:
             parser.error('Read-only сбор не выполнен. Проверьте SSH доступ; предыдущие снимки не заменены.')
         data = json.loads(result.stdout)
+        if type(data) is not dict or data.get('source') != args.source or data.get('scope') != 'production':
+            raise ValueError('Wrong source binding')
         raw = json.dumps(data, ensure_ascii=False, allow_nan=False, indent=2).encode()
     except (OSError, ValueError, subprocess.TimeoutExpired):
         parser.error('Снимок не получен; предыдущие данные не изменены.')

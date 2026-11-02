@@ -14,6 +14,18 @@ SERVICES = ('family-connect-friends-http-candidate.service', 'family-connect-fri
     'family-connect-friends-tcp.service', 'family-connect-server-load.service',
     'family-connect-restricted-bootstrap.service', 'family-connect-reticulum.service',
     'family-connect-mailbox.service', 'wg-quick@fcams.service')
+ORDINARY_SERVICES = ('family-connect-friends-awg.service', 'family-connect-friends-tcp.service',
+    'family-connect-server-load.service')
+SOURCES = {
+    'gateway-ru': dict(label='Россия · управление', host='185.251.89.19', registry=True,
+        required_services=('family-connect-friends-http-candidate.service', 'family-connect-server-load.service')),
+    'gateway-nl': dict(label='Прежний NL · архив', host=None, registry=False, required_services=()),
+    'nl-amsterdam-1': dict(label='Амстердам 1', host='185.10.158.212', registry=False,
+        required_services=ORDINARY_SERVICES),
+    'nl-amsterdam-2': dict(label='Амстердам 2', host='185.10.158.196', registry=False,
+        required_services=ORDINARY_SERVICES),
+}
+ACTIVE_SOURCES = tuple(source for source, value in SOURCES.items() if value['host'] is not None)
 
 
 def instant(epoch):
@@ -53,12 +65,16 @@ def registry_rows(path, key):
         database.close()
 
 
-def collect(source, key, path=REGISTRY):
-    if source not in ('gateway-ru', 'gateway-nl') or len(key) != 32:
+def collect(source, key=None, path=REGISTRY):
+    if source not in ACTIVE_SOURCES:
+        raise ValueError('INVALID_COLLECTOR_INPUT')
+    registry = SOURCES[source]['registry']
+    if registry and (type(key) is not bytes or len(key) != 32):
         raise ValueError('INVALID_COLLECTOR_INPUT')
     data = dict(schema=1, scope='production', source=source,
-        observed_at=datetime.now(timezone.utc).isoformat(), registry_status='unavailable', devices=[])
-    if path.is_file() and not path.is_symlink():
+        observed_at=datetime.now(timezone.utc).isoformat(),
+        registry_status='unavailable' if registry else 'not_collected', devices=[])
+    if registry and path.is_file() and not path.is_symlink():
         try:
             data['devices'] = registry_rows(path, key)
             data['registry_status'] = 'ok'

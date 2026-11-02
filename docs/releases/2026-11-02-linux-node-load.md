@@ -1,5 +1,9 @@
 # Linux two-node load — 2 November 2026
 
+3 November owner decision: interactive owner connection checks are deferred to field
+feedback and no longer block automated development. This is not physical transport
+acceptance or permission to force user sessions. [Current continuation](2026-11-03-fleet-observability.md).
+
 ## Current delivery result
 
 **INSTALLED_GTK_AND_LIVE_METRICS_PASS.** Both Amsterdam

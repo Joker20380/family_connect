@@ -1,6 +1,12 @@
 # Documentation
 
 <!-- FLEET-BOOTSTRAP-2 current -->
+**3 November — autonomous multi-node observability.** Owner hands-on checks no longer
+block development; field acceptance remains unproven. Current bounded continuation
+separates RU/AMS1/AMS2 inventory, preserves legacy NL history and keeps absent/stale
+data distinct from health. Automated source/console and real read-only collection
+checks PASS; local console rollout in progress. [Current receipt](releases/2026-11-03-fleet-observability.md).
+
 **Latest continuation — explicit Amsterdam1/2 selection.** Backend schema3/API and
 Windows0.2.16 distribution/update catalog12/invitation are LIVE and HTTPS-verified.
 Linux full0.2.12~l03.2.13 Ubuntu26.04/Python3.14 is now owner-installed: imports/READY,

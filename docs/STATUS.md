@@ -1,6 +1,22 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
+**3 November — autonomous fleet observability continuation.** Owner removes the
+interactive owner-test gate and requests continued automated development; .13 physical
+AWG/TCP/Disconnect acceptance is DEFERRED_TO_FIELD, not PASS. No forced user testing,
+assignment migration, invitations or automatic VPN switching follows from this decision.
+Current bounded step: distinguish RU/Amsterdam1/Amsterdam2 in operator inventory;
+old gateway-nl remains archive-only. Source/locked PostgreSQL tests PASS:30 operator/
+packaging tests,45 targeted Django tests and162 full console tests; check/drift PASS.
+Both NL nodes return real read-only service/host observations; no registry or HMAC key
+is collected/sent to NL. Stale/missing/future/unknown/failed observations never imply
+VPN readiness. Local timer pins reused, no new trust; its three-source collection
+succeeds but local import currently fails because the console stack is stopped.
+NEXT within this task: rebuild/start only the loopback operator console and verify
+bound imports, preserving existing local state. No production VPN/backend restart,
+public release, second-node MESH or automatic failover is claimed.
+[Current report](releases/2026-11-03-fleet-observability.md).
+
 **2 November — owner-requested two-node load follow-up, LIVE_METRICS / .13 INSTALLED.**
 Owner requests exactly two Amsterdam choices and provisional5000Mbps capacity on
 each node. Linux AWG/TCP picker removes the duplicate assigned-NL choice; Auto/MESH
@@ -24,7 +40,8 @@ installed GTK startup and installed-parser HTTPS samples PASS. All3171 protected
 entries unchanged through install and smoke; no automatic connection. At final
 readback AMS1/AMS2 load16.3%/4.7%, both5000Mbps operator-assumed, not a speed test.
 Retain exact .12 full pair for guarded rollback. Public Linux0.2.11 and all signed
-catalogs/downloads unchanged. Owner-initiated AWG/TCP/Disconnect checks remain pending.
+catalogs/downloads unchanged. Physical AWG/TCP/Disconnect checks are deferred to
+field feedback by the3 November owner decision above, not a development stop or PASS.
 [Load follow-up and gates](releases/2026-11-02-linux-node-load.md).
 
 **Earlier2 November — explicit two-Amsterdam delivery; Linux superseded by .13 above.** Owner requests

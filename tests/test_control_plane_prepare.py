@@ -6,6 +6,20 @@ import stat
 
 import pytest
 
+from control_plane import prepare_local
+
+
+def test_context_contains_fleet_runtime_without_private_state_or_binaries():
+    names = {path.relative_to(prepare_local.REPOSITORY).as_posix() for path in prepare_local.source_paths()}
+    assert {'fleet/contracts.py', 'fleet/health.py', 'fleet/runtime/roles.py',
+        'fleet/inventory/deployable-gateway-v2.json', 'fleet/templates/firewall.nft.in',
+        'fleet/templates/forwarding.conf', 'fleet/templates/configuration.schema.json',
+        'fleet/requirements.lock', 'fleet/operator_probe.patch',
+        'control_plane/apps/console/server_inventory.py'} <= names
+    assert all('.local' not in name.split('/') and 'state-client-build' not in name.split('/')
+        and '.env' not in name.split('/') and not name.endswith(('.key', '.db', '.sqlite3', '.deb')) for name in names)
+    assert all(path.is_file() for path in prepare_local.source_paths())
+
 
 @pytest.mark.parametrize('mask', [0o022, 0o077])
 def test_source_context_readable_without_exposing_private_configuration(tmp_path, monkeypatch, mask):

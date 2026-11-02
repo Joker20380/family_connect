@@ -5,5 +5,5 @@ Description=Family Connect local production-readonly inventory
 Type=oneshot
 UMask=0077
 ExecStart="@PYTHON@" "@ROOT@/control_plane/monitor_inventory.py"
-TimeoutStartSec=260
+TimeoutStartSec=380
 NoNewPrivileges=true

@@ -8,7 +8,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from .observability_models import InventorySnapshot, InventoryDevice, ServerObservation
-from .collector import SERVICES
+from .collector import SERVICES, SOURCES
 
 
 class SnapshotError(ValueError):
@@ -53,11 +53,13 @@ def strict_load(raw):
 def ingest(data):
     fields(data, 'schema scope source observed_at registry_status devices server')
     require(type(data['schema']) is int and data['schema'] == 1 and data['scope'] == 'production')
-    require(data['source'] in ('gateway-ru', 'gateway-nl'))
+    require(isinstance(data['source'], str) and data['source'] in SOURCES)
     observed = timestamp(data['observed_at'])
     require(data['registry_status'] in ('ok', 'unavailable', 'not_collected'))
     require(type(data['devices']) is list and len(data['devices']) <= 10000)
     require(data['registry_status'] == 'ok' or not data['devices'])
+    if data['source'] in ('nl-amsterdam-1', 'nl-amsterdam-2'):
+        require(data['registry_status'] == 'not_collected' and not data['devices'])
     seen, devices = set(), []
     for entry in data['devices']:
         fields(entry, 'pseudonym activated revoked version_code version_source last_seen')

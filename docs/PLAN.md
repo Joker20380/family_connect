@@ -3,6 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- FLEET-BOOTSTRAP-2 current -->
+**3 November — continue autonomously; no interactive owner-test prerequisite.**
+Owner requests automated development and later user field feedback. Keep .13 physical
+acceptance DEFERRED_TO_FIELD, not PASS; do not expand a cohort or switch users' VPNs.
+Selected bounded continuation of FLEET-BOOTSTRAP-2: multi-node operator observability
+before recovery policy. Dependencies: admitted ordinary AMS1/AMS2 and strict inventory
+import; do not repurpose the fenced rehearsal runtime or declare second-node MESH.
+Completion gate: separate source-bound nodes, archive-only legacy NL, missing/stale/
+future/unknown/failed states, no NL registry read, automated PostgreSQL/RBAC/isolation
+tests and real read-only collection. Source gates PASS:30 + targeted45/full162;
+check/migration drift PASS. Next: finish the local loopback-console rebuild/import
+readback after retaining its state; remote transport/policy/catalog changes remain out.
+[Evidence and rollout](releases/2026-11-03-fleet-observability.md).
+
 **Owner follow-up: two Amsterdam entries and per-node load, provisional5Gbps each.**
 Continue FLEET-BOOTSTRAP-2 only. Linux selector/strict node telemetry source ready;
 1251 tests PASS/183 environment skips and real GTK RU/EN2 PASS. Independent monitoring
@@ -12,8 +25,8 @@ VPN service restart. Exact new .13 full DEB/AppImage/system/integrity/pre-start 
 PASS; packaged GTK RU/EN scale1/2 four cases and inspected screenshots PASS.
 .13 full owner installation now PASS: imports/READY, installed GTK and real HTTPS
 parser readback; all3171 protected entries unchanged, no automatic connection.
-NEXT: owner opens .13 and checks the two Amsterdam rows/load; any physical AWG/TCP
-connection/Disconnect is owner-initiated. No new implementation/backlog is started.
+The earlier owner-operated connection/Disconnect NEXT is superseded by the3 November
+instruction above. Physical acceptance is deferred, not retrospectively granted.
 No VPN/backend restart, assignment/paid-state
 mutation, second-node MESH claim or public release is authorized by this follow-up.
 [Task receipt](releases/2026-11-02-linux-node-load.md). .12 is the retained full-pair

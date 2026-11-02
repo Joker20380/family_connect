@@ -14,11 +14,14 @@ from django.views.decorators.http import require_POST
 from . import workflow
 from .models import DeviceProjection, InventorySnapshot, InventoryDevice, TechnicalSample, OperationSwitch
 from .views import staff
+from .collector import SOURCES
+from .server_inventory import server_cards
 
 
 class Filters(forms.Form):
     scope = forms.ChoiceField(label='Контур', choices=[('production', 'Рабочие серверы · только чтение'), ('synthetic', 'Синтетическое демо')])
-    source = forms.ChoiceField(label='Источник', required=False, choices=[('', 'Все'), ('gateway-ru', 'Шлюз RU'), ('gateway-nl', 'Шлюз NL'), ('demo-v1', 'Демо-телеметрия')])
+    source = forms.ChoiceField(label='Источник', required=False,
+        choices=[('', 'Все')] + [(source, value['label']) for source, value in SOURCES.items()] + [('demo-v1', 'Демо-телеметрия')])
     start = forms.DateField(label='С даты (UTC)', widget=forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}))
     end = forms.DateField(label='По дату (UTC)', widget=forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}))
     query = forms.RegexField(label='Псевдоним устройства', regex=r'^[0-9a-f]{4,64}$', required=False, max_length=64,
@@ -92,9 +95,11 @@ def telemetry_data(form, device=None):
 @staff('view_inventorysnapshot')
 def overview(request):
     form = filters(request)
-    snapshots, data, versions = [], None, []
+    snapshots, data, versions, servers = [], None, [], []
     if form.is_valid():
         snapshots = [annotate_age(item) for item in latest_snapshots(form).select_related('server')]
+        if form.cleaned_data['scope'] == 'production':
+            servers = server_cards(snapshots, timezone.now(), form.cleaned_data['source'])
         data = telemetry_data(form)
         rows = InventoryDevice.objects.filter(snapshot__in=[item.pk for item in snapshots])
         if form.cleaned_data['query']:
@@ -103,7 +108,8 @@ def overview(request):
         maximum = max([row['count'] for row in versions] + [1])
         for row in versions:
             row['width'] = round(100 * row['count'] / maximum)
-    return render(request, 'console/observability.html', {'form': form, 'snapshots': snapshots, 'data': data, 'versions': versions})
+    return render(request, 'console/observability.html', {'form': form, 'snapshots': snapshots,
+        'servers': servers, 'data': data, 'versions': versions})
 
 
 @staff('view_inventorydevice')
@@ -133,14 +139,15 @@ def inventory_device(request, pseudonym):
 
 @staff('view_serverobservation')
 def server(request, source):
-    if source not in ('gateway-ru', 'gateway-nl'):
+    if source not in SOURCES:
         from django.http import Http404
         raise Http404
     form = filters(request)
     snapshots = []
     if form.is_valid():
         snapshots = [annotate_age(item) for item in snapshot_query(form).filter(source=source).select_related('server')[:100]]
-    return render(request, 'console/server.html', dict(source=source, form=form, snapshots=snapshots))
+    return render(request, 'console/server.html', dict(source=source, source_label=SOURCES[source]['label'],
+        retired=SOURCES[source]['host'] is None, form=form, snapshots=snapshots))
 
 
 @staff('view_technicalsample')

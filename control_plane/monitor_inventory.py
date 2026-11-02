@@ -1,4 +1,5 @@
 """One bounded read-only SSH collection cycle and local PostgreSQL import."""
+import argparse
 from datetime import datetime, timezone
 import fcntl
 import hashlib
@@ -8,15 +9,20 @@ from pathlib import Path
 import subprocess
 import sys
 
+if __package__:
+    from .apps.console.collector import ACTIVE_SOURCES
+else:
+    from apps.console.collector import ACTIVE_SOURCES
+
 BASE = Path(__file__).resolve().parent
-SOURCES = ('gateway-ru', 'gateway-nl')
+SOURCES = ACTIVE_SOURCES
 
 
 def instant():
     return datetime.now(timezone.utc).isoformat()
 
 
-def cycle(base=BASE, run=subprocess.run):
+def cycle(base=BASE, run=subprocess.run, known_hosts=None):
     local = base / '.local'
     local.mkdir(mode=0o700, exist_ok=True)
     if any(parent.is_symlink() for parent in (local, *local.parents)):
@@ -29,7 +35,10 @@ def cycle(base=BASE, run=subprocess.run):
             result = dict(source=source, attempted_at=instant(), status='FAILED', error='COLLECTION_FAILED')
             snapshot = None
             try:
-                collected = run([sys.executable, str(base / 'collect_inventory.py'), source],
+                command = [sys.executable, str(base / 'collect_inventory.py')]
+                if known_hosts is not None:
+                    command += ['--known-hosts', str(known_hosts)]
+                collected = run(command + [source],
                     capture_output=True, check=True, timeout=60)
                 candidate = Path(collected.stdout.decode().strip())
                 if (candidate.parent != local or not candidate.name.startswith(source + '-')
@@ -67,8 +76,11 @@ def cycle(base=BASE, run=subprocess.run):
 
 
 def main():
+    parser = argparse.ArgumentParser(description='Один read-only цикл наблюдения действующих узлов')
+    parser.add_argument('--known-hosts', type=Path, help='Существующий файл проверенных SSH host pins для всех узлов')
+    args = parser.parse_args()
     try:
-        receipt = cycle()
+        receipt = cycle(known_hosts=args.known_hosts)
     except BlockingIOError:
         print('Наблюдение уже выполняется; повторный запуск пропущен.')
         return 0

@@ -19,6 +19,13 @@ def source_paths():
     paths.extend((BASE / 'static').rglob('*.css'))
     paths.extend((REPOSITORY / 'control/friends').glob('*.py'))
     paths.extend((REPOSITORY / 'device_identity').glob('*.py'))
+    fleet = REPOSITORY / 'fleet'
+    paths.extend(fleet.glob('*.py'))
+    paths.extend((fleet / 'runtime').glob('*.py'))
+    paths.extend((fleet / 'inventory').glob('*.json'))
+    paths.extend((fleet / 'templates').rglob('*.in'))
+    paths.extend(fleet / name for name in ('requirements.lock', 'operator_probe.patch',
+        'templates/forwarding.conf', 'templates/configuration.schema.json'))
     return sorted(paths)
 
 

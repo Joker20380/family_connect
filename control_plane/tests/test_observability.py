@@ -108,8 +108,8 @@ def test_collector_only_reads_fixed_services_and_marks_absence(tmp_path, monkeyp
         commands.append(command)
         return SimpleNamespace(stdout='LoadState=not-found\nActiveState=inactive\n')
     monkeypatch.setattr(collector.subprocess, 'run', run)
-    data = collector.collect('gateway-nl', b's' * 32, tmp_path / 'missing.db')
-    assert data['registry_status'] == 'unavailable' and data['devices'] == []
+    data = collector.collect('nl-amsterdam-1', None, tmp_path / 'missing.db')
+    assert data['registry_status'] == 'not_collected' and data['devices'] == []
     assert all(value == 'not_found' for value in data['server']['services'].values())
     assert len(commands) == len(collector.SERVICES)
     assert all(command[:2] == ['systemctl', 'show'] for command in commands)
@@ -117,7 +117,8 @@ def test_collector_only_reads_fixed_services_and_marks_absence(tmp_path, monkeyp
         collector.collect('unapproved', b's' * 32)
 
 
-@pytest.mark.parametrize('path', ['/observability/', '/inventory/', '/servers/gateway-ru/', '/telemetry.json', '/stop/'])
+@pytest.mark.parametrize('path', ['/observability/', '/inventory/', '/servers/gateway-ru/',
+    '/servers/nl-amsterdam-1/', '/servers/nl-amsterdam-2/', '/servers/gateway-nl/', '/telemetry.json', '/stop/'])
 def test_observability_authentication_and_russian(console, client, path):
     assert client.get(path).status_code == 302
     client.force_login(console)
@@ -171,6 +172,54 @@ def test_observation_rows_are_immutable(console, model):
     call_command('seed_observability', verbosity=0)
     with pytest.raises(DatabaseError), transaction.atomic():
         model.objects.all().delete()
+
+
+def test_two_nodes_are_isolated_and_legacy_history_cannot_fill_missing_node(console, client):
+    legacy = snapshot()
+    legacy['source'] = 'gateway-nl'
+    inventory.ingest(legacy)
+    first = snapshot()
+    first.update(source='nl-amsterdam-1', registry_status='not_collected', devices=[])
+    first['server']['load_1m'] = 0.25
+    inventory.ingest(first)
+    client.force_login(console)
+    page = client.get('/observability/')
+    cards = {card['source']: card for card in page.context['servers']}
+    assert cards['nl-amsterdam-1']['state'] == 'observed_active'
+    assert cards['nl-amsterdam-2']['state'] == 'no_data'
+    assert cards['nl-amsterdam-2']['snapshot'] is None
+    assert cards['gateway-nl']['state'] == 'retired'
+    text = page.content.decode()
+    assert 'Амстердам 1' in text and 'Амстердам 2' in text
+    assert 'Нет данных. Доступность и нулевая нагрузка не подтверждены.' in text
+    assert 'Архивный узел' in client.get('/servers/gateway-nl/').content.decode()
+    assert len(client.get('/servers/nl-amsterdam-2/').context['snapshots']) == 0
+    second = deepcopy(first)
+    second['source'] = 'nl-amsterdam-2'
+    second['server']['load_1m'] = 0.75
+    second['server']['services']['family-connect-friends-tcp.service'] = 'failed'
+    inventory.ingest(second)
+    page = client.get('/observability/?source=nl-amsterdam-2')
+    assert len(page.context['servers']) == 1
+    card = page.context['servers'][0]
+    assert card['state'] == 'degraded' and card['snapshot'].server.load_1m == 0.75
+    assert InventorySnapshot.objects.count() == 3
+    assert InventoryDevice.objects.count() == 1
+    assert PaymentRecord.objects.count() == OperationRequest.objects.count() == 0
+    assert client.get('/observability/?scope=synthetic').context['servers'] == []
+
+
+@pytest.mark.parametrize('source', ['nl-amsterdam-1', 'nl-amsterdam-2'])
+def test_node_inventory_cannot_import_user_registry(console, source):
+    data = snapshot()
+    data['source'] = source
+    with pytest.raises(inventory.SnapshotError):
+        inventory.ingest(data)
+    assert not InventorySnapshot.objects.exists()
+    data.update(devices=[], registry_status='not_collected')
+    saved = inventory.ingest(data)
+    assert saved.source == source and saved.devices.count() == 0
+    assert inventory.ingest(data).pk == saved.pk
 
 
 def test_emergency_stop_csrf_rbac_and_backend_boundary(console, client, operation):

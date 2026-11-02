@@ -52,8 +52,10 @@ append-only audit, aggregate analytics and exact Android108 paid-baseline releas
   backend остаётся10. Старые12 identities и их события сохраняются при расширении.
 - `/observability/`: контур, источник, период до91 дня, знаменатели, диаграммы,
   версии, свежесть; `/inventory/`: реальные устройства, поиск HMAC-псевдонима,
-  пагинация25, история устройства; `/servers/gateway-ru/` и `/servers/gateway-nl/`:
+  пагинация25, история устройства; `/servers/gateway-ru/`, `/servers/nl-amsterdam-1/`
+  и `/servers/nl-amsterdam-2/`:
   точечные нагрузка/память/диск/uptime/systemd и история снимков.
+  `/servers/gateway-nl/` сохраняет только прежнюю историю, не алиас нового узла.
 - Данные разных контуров не суммируются. Демо-телеметрия маркируется явно:
   7 дней ×50 устройств ×4 метрики =1400 измерений. Повтор команды не добавляет
   данные и не создаёт оплаты или подписки:
@@ -74,7 +76,9 @@ Production-телеметрия клиента пока **не собирает�
 
 В Django не монтируются SSH credentials, production registry или его копия.
 Отдельный локальный `collect_inventory.py` передаёт проверенный collector по SSH
-stdin (`BatchMode`, `StrictHostKeyChecking`, фиксированные два разрешённых адреса).
+stdin (`BatchMode`, `StrictHostKeyChecking`, фиксированные RU185.251.89.19,
+AMS1 185.10.158.212 и AMS2 185.10.158.196). Старый gateway-nl больше не опрашивается
+и не переименовывается в новый источник. Общий allowlist находится в collector.
 На шлюзе: только SQLite `mode=ro`/`query_only`/read transaction, `/proc`/disk stats
 и `systemctl show` для фиксированного перечня Family Connect служб. Без изменений
 service/policy/schema, миграций, файлов collector на сервере или чтения приватных
@@ -83,14 +87,26 @@ service/policy/schema, миграций, файлов collector на серве�
 
 ```sh
 python3 control_plane/collect_inventory.py gateway-ru
-python3 control_plane/collect_inventory.py gateway-nl
+python3 control_plane/collect_inventory.py nl-amsterdam-1
+python3 control_plane/collect_inventory.py nl-amsterdam-2
 # Вместо пути ниже — точный файл, выведенный collector (локальный, приватный).
 docker compose --project-directory control_plane -f control_plane/compose.yaml exec -T console python manage.py import_inventory < control_plane/.local/ИМЯ_СНИМКА.json
 ```
 
+Если pins находятся не в стандартном known_hosts, передайте `--known-hosts ПУТЬ`
+в collector или `monitor_inventory.py`; для цикла файл должен содержать уже
+проверенные pins всех трёх адресов. Новый trust автоматически не принимается;
+отсутствующий/симлинк-файл отклоняется, StrictHostKeyChecking не отключается.
+Одна ошибка узла не мешает опросить следующий и не подменяет его данные.
+Сервисный бюджет380s покрывает три пары collection/import по60s с запасом20s;
+после изменения локального unit нужен daemon-reload. При остановленной панели
+receipt показывает IMPORT_FAILED, а не успешный импорт или отсутствие нагрузки.
+
 Collector сохраняет `.local/gateway-*.json` (0600). Идентификатор устройства заменён
 HMAC-SHA256: локальный случайный ключ `.local/inventory-hmac.key` (0600) передаётся
-только в памяти по SSH, не хранится на шлюзе. Не меняйте ключ для «обновления»:
+только в памяти по SSH на RU, не хранится на шлюзе. Для обоих NL реестр не читается,
+HMAC-ключ не создаётся и не передаётся; devices пуст, registry_status=not_collected.
+Импорт отклоняет устройство/реестр в снимке нового NL-узла. Не меняйте ключ для «обновления»:
 это разорвёт историю псевдонимов. Support ID/canonical references/public/WG keys
 не входят в экспорт. Снимки, HMAC-ключ, скриншоты и `.env` остаются вне Git.
 Не публикуйте снимки: псевдонимизация не делает их общедоступными данными.
@@ -101,7 +117,13 @@ HMAC-SHA256: локальный случайный ключ `.local/inventory-hm
 изменение/удаление наблюдений. Веб-формы импорта и редактирования отсутствуют даже
 для superuser. CP1 сам не имеет scheduler; CP2 добавляет внешний локальный timer
 ниже. Web UI не выполняет live SSH polling и не получает SSH credentials.
-Старше5 минут — «устарело», недоступный реестр — «недоступно», а не0 устройств.
+Карточки всех трёх действующих источников видны даже без снимков. Отсутствие —
+«нет данных», старше5 минут — «устарело», время более15 секунд в будущем — неизвестно.
+Отсутствующая обязательная служба/unknown не становится active; failed/inactive/
+not_found/deactivating/activating не означают успешную готовность. Даже все наблюдаемые
+службы active не являются сквозной проверкой VPN и не запускают переключение.
+Недоступный реестр — «недоступно», а не0 устройств. Архивный NL никогда не заполняет
+пустую карточку нового узла и не входит в активный цикл.
 Период в фильтре выбирает последние снимки каждого источника в этом периоде;
 история устройства/сервера ограничена100 наблюдениями и явно подписана.
 Systemd active/низкая нагрузка не являются проверкой MESH Connect или SLO.
@@ -239,6 +261,10 @@ are transitively pinned with hashes. Runtime does not mount the checkout or any
 production directory. Local named volumes retain PG workflow and synthetic
 registry independently. Django does not contact authorized gateway hosts; the
 separate operator-only read-only collector described below does.
+
+The allowlisted build context includes the fleet Python runtime, public inventories,
+templates, pinned dependency lock and reviewed operator patch required by the Dockerfile.
+It does not traverse fleet state, private capsules or binaries.
 
 Only the console's HTTP port is published, on **127.0.0.1**. PostgreSQL has no
 published port and uses an internal Docker network. The console additionally uses
