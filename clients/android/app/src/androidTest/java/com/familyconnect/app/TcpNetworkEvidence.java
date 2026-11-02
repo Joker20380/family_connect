@@ -5,6 +5,23 @@ import java.net.*;
 import org.json.*;
 
 final class TcpNetworkEvidence {
+    static void awaitDefaultVpn(Context context)throws Exception{
+        ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
+        long deadline=android.os.SystemClock.elapsedRealtime()+15000;
+        while(android.os.SystemClock.elapsedRealtime()<deadline){
+            Network network=manager.getActiveNetwork();
+            NetworkCapabilities capabilities=manager.getNetworkCapabilities(network);
+            LinkProperties properties=manager.getLinkProperties(network);
+            if(network!=null&&capabilities!=null&&capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)&&properties!=null){
+                boolean source=properties.getLinkAddresses().stream().anyMatch(address->address.getAddress().getHostAddress().equals("10.79.0.2"));
+                boolean ipv4=properties.getRoutes().stream().anyMatch(route->route.isDefaultRoute()&&route.getDestination().getAddress() instanceof Inet4Address);
+                boolean ipv6=properties.getRoutes().stream().anyMatch(route->route.isDefaultRoute()&&route.getDestination().getAddress() instanceof Inet6Address);
+                if(source&&ipv4&&ipv6)return;
+            }
+            Thread.sleep(100);
+        }
+        throw new AssertionError("TCP default VPN routes not published: "+snapshot(context));
+    }
     static JSONObject snapshot(Context context)throws Exception{
         ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
         JSONObject result=new JSONObject();Network active=manager.getActiveNetwork();

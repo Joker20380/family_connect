@@ -17,6 +17,7 @@ public class TcpRuntimeTest {
  void start(String transport)throws Exception{context.startForegroundService(new Intent(context,ConnectionService.class).setAction("connect").putExtra("transport",transport));helper.waitState("on");}
  void stop()throws Exception{context.startService(new Intent(context,ConnectionService.class).setAction("disconnect"));helper.waitState("off");helper.clean();assertEquals(0,NativeTcp.connections(0));}
  void traffic()throws Exception{
+  TcpNetworkEvidence.awaitDefaultVpn(context);
   for(int family=0;family<2;family++)for(int i=0;i<3;i++){
    String nonce="/"+UUID.randomUUID();
    long began=android.os.SystemClock.elapsedRealtime();

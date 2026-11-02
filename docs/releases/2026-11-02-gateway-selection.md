@@ -9,6 +9,15 @@ publication and independent update-catalog sequence12 are not yet confirmed.
 Android110 in that run failed its TCP emulator data test with ENETUNREACH;
 the failure is retained and must be localized before signing/publication.
 
+The retained synthetic TcpPrimary receipt localizes the failure: service status
+was `on` with health `checking`, VPN120/tun0 already had both routes and the TCP
+source, but Android's UID default remained non-VPN Ethernet101. The very first
+connect failed in5ms, before writing any HTTP bytes. The instrumentation now waits
+at most15s for the expected dual-stack TCP VPN to become the actual UID default.
+No process/socket Network binding, HTTP retry, relaxed predicate or production
+runtime change: all18 REALITY requests, DNS and switch/cancel/revoke gates remain.
+Exact corrected emulator acceptance is pending, not inferred from source review.
+
 Continuation of **FLEET-BOOTSTRAP-2**, explicitly requested by the owner. This is
 source integration, not an installed or publicly distributed client release.
 The existing ordinary admission remains the deployed baseline until separately
