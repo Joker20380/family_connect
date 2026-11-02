@@ -64,6 +64,15 @@ network routes and firewall observations in that simulation are fixtures, not se
 data-plane acceptance. The failed live preparation must be reconciled/preserved before a
 new bound preparation; it is not treated as an installed or running node.
 
+The separate `scripts/accept_friends_standby.py` operator-container harness consumes fresh
+disposable probe credentials on stdin, validates profiles with the existing client parser,
+checks all three native hashes, and checks AWG3.1 handshake/DNS/HTTPS/egress and REALITY
+auth/DNS/HTTPS/egress. It has no MESH/publication path. Probe argv contains only fixed native
+commands and private file paths; errors never echo credentials. Operator interface/routes/
+processes are removed in finally paths. Target-side addition/removal of the disposable peer
+is separate and must be receipted before any admission. Source contour:37 PASS, no skips.
+The harness source is not itself a live acceptance result.
+
 Next authorized work is its corrected bound unpublished preparation, local health and external
 AWG/TCP acceptance, then separately guarded routing/backend admission. Existing production
 MESH and renewal remain on the first NL; simultaneous second-node MESH/renewal integration

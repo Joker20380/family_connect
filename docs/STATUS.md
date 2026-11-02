@@ -12,7 +12,7 @@ Public Linux0.2.11 tagged parser accepts all3 new vectors; Windows0.2.15 parsers
 MESH routing and production renewal remain unchanged; second-node admission is not complete.
 Owner now explicitly accepts the existing TOFU pin without another provider-console comparison;
 strict single-host SSH checking remains. Read-only new-node preflight PASS; first-install
-ordinary AWG/TCP source30 new tests PASS. First prepare stopped before service start on
+ordinary AWG/TCP installer/operator-probe source37 new tests PASS. First prepare stopped before service start on
 ancestor permissions; corrected source and exact-native offline install/unit/DAC checks PASS.
 [Second-node preparation and trust decision](releases/2026-11-02-second-nl-ordinary.md).
 [Multi-node source and qualification](releases/2026-11-02-fleet-multinode-source.md) ·

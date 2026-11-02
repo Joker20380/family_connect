@@ -224,3 +224,41 @@ def test_start_failure_stops_owned_services(node, monkeypatch):
     with pytest.raises(ValueError):
         node.start()
     assert calls == ['start-intent', 'sysctl.conf', 'STOP']
+
+
+@pytest.fixture
+def probe():
+    spec = importlib.util.spec_from_file_location('standby_probe', SOURCE.parents[2] / 'scripts/accept_friends_standby.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+@pytest.fixture
+def probe_input(node):
+    return dict(target='1.1.1.1', private_key=base64.b64encode(bytes([7]) * 32).decode(),
+                tcp_id='11111111-1111-4111-8111-111111111111', template=node.material('1.1.1.1')[2])
+
+
+def test_external_probe_uses_same_strict_client_parser(node, probe, probe_input):
+    awg, tcp = probe.configuration(probe_input)
+    assert b'DNS =' not in awg and b'Address =' not in awg
+    assert b'Endpoint = 1.1.1.1:51823' in awg
+    config = json.loads(tcp)
+    assert config['inbounds'][0]['listen'] == '127.0.0.1'
+    assert config['outbounds'][0]['settings']['vnext'][0]['port'] == 443
+    assert probe.NATIVE == node.NATIVE
+
+
+@pytest.mark.parametrize('change', ['host', 'old_nl', 'private_key', 'tcp_id', 'hook', 'extra'])
+def test_external_probe_rejects_unbound_or_injected_input(probe, probe_input, change):
+    if change == 'host':
+        probe_input['target'] = '8.8.8.8'
+    elif change == 'old_nl':
+        probe_input['target'] = '185.10.158.212'
+    elif change == 'hook':
+        probe_input['template']['awg'] += 'PostUp = arbitrary\n'
+    else:
+        probe_input[change] = 'invalid'
+    with pytest.raises(ValueError):
+        probe.configuration(probe_input)
