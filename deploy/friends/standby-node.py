@@ -136,6 +136,16 @@ def units():
     return dict(zip(UNITS, (tcp.encode(), awg.encode())))
 
 
+def application_root():
+    for parent in (*reversed(ROOT.parents), ROOT):
+        if not parent.exists():
+            parent.mkdir(mode=0o755)
+            parent.chmod(0o755)
+        require(not parent.is_symlink() and parent.is_dir() and parent.stat().st_uid == 0)
+        require(stat.S_IMODE(parent.stat().st_mode) & 0o022 == 0)
+        require(stat.S_IMODE(parent.stat().st_mode) & 0o005 == 0o005)
+
+
 def preflight(target):
     require(os.geteuid() == 0 and target not in EXCLUDED)
     addresses = json.loads(command(['ip', '-j', '-4', 'address']))
@@ -173,9 +183,7 @@ def prepare(manifest, directory):
         command(['useradd', '--system', '--no-create-home', '--shell', '/usr/sbin/nologin', 'fc-friends'])
         account = pwd.getpwnam('fc-friends')
     require(account.pw_shell == '/usr/sbin/nologin' and account.pw_uid != 0)
-    ROOT.mkdir(mode=0o755, parents=True, exist_ok=True)
-    for parent in (ROOT, *ROOT.parents):
-        require(not parent.is_symlink() and parent.stat().st_uid == 0)
+    application_root()
     awg_root, tcp_root = ROOT / 'friends-awg', ROOT / 'friends-tcp'
     awg_root.mkdir(mode=0o700)
     tcp_root.mkdir(mode=0o750)

@@ -140,6 +140,36 @@ def test_private_write_modes_and_no_overwrite(node, tmp_path):
     assert target.read_bytes() == b'secret'
 
 
+def test_application_root_does_not_inherit_private_umask(node, monkeypatch):
+    directories = {}
+    class Directory:
+        def __init__(self, name, parent=None):
+            self.name = name
+            self.parents = () if parent is None else (parent, *parent.parents)
+        def exists(self):
+            return self.name in directories
+        def mkdir(self, mode):
+            directories[self.name] = mode & ~0o077
+        def chmod(self, mode):
+            directories[self.name] = mode
+        def is_symlink(self):
+            return False
+        def is_dir(self):
+            return self.exists()
+        def stat(self):
+            return SimpleNamespace(st_uid=0, st_mode=directories[self.name])
+    parent = Directory('/opt')
+    directories['/opt'] = 0o755
+    root = Directory('/opt/apps/family_connect', Directory('/opt/apps', parent))
+    monkeypatch.setattr(node, 'ROOT', root)
+    node.application_root()
+    assert directories == {'/opt': 0o755, '/opt/apps': 0o755, '/opt/apps/family_connect': 0o755}
+    directories['/opt/apps'] = 0o700
+    with pytest.raises(ValueError):
+        node.application_root()
+    assert directories['/opt/apps'] == 0o700
+
+
 def test_prepare_interruption_never_blindly_restarts(node, manifest, tmp_path):
     node.STATE.mkdir()
     (node.STATE / 'intent.json').write_bytes(node.canonical(manifest))

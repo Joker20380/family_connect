@@ -50,8 +50,21 @@ passed. Full phase0/Linux preview were still running at observation, not claimed
 
 ## Deployment boundary
 
-At this source checkpoint the new helper has not yet been installed or started on the
-node. Next authorized work is its bound unpublished preparation, local health and external
+The first bound preparation was transferred but stopped before creating any unit or starting
+a service: the private umask made newly created application ancestors0700, correctly denying
+the TCP service user access. Readback localized the failure to that DAC boundary; forwarding
+remained0 and both units remained absent. No automatic prepare retry was attempted.
+
+The correction explicitly sets0755 on newly created, exact application ancestors, checks
+existing ancestor ownership/modes without changing them, and adds an umask regression.
+The focused source contour now has30 PASS. A separate network-disabled Ubuntu24.04 root
+container ran the exact accepted native Xray config test as `fc-friends`, systemd-analyze
+verification and positive TCP/negative AWG secret access checks: PASS. Systemd manager,
+network routes and firewall observations in that simulation are fixtures, not service or
+data-plane acceptance. The failed live preparation must be reconciled/preserved before a
+new bound preparation; it is not treated as an installed or running node.
+
+Next authorized work is its corrected bound unpublished preparation, local health and external
 AWG/TCP acceptance, then separately guarded routing/backend admission. Existing production
 MESH and renewal remain on the first NL; simultaneous second-node MESH/renewal integration
 is not implemented or claimed here. No synthetic or retired permit is repurposed.
