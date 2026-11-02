@@ -20,7 +20,9 @@ installer/hash/native compatibility41439156032 PASS; immutable Windows0.2.16
 publication41442681710 and public HTTPS/hash PASS, signed Windows catalog12.
 Android110 TCP default-network readiness repair is under emulator qualification;
 public Android109 unchanged. Linux.12 not owner-installed/public, L08 not bypassed.
-Invitation Windows link still15 pending mirror/CSP update. Real Nginx/HTTP55 PASS/1 skip.
+Windows invitation/mirror16 and both actual CSP routes verified over HTTPS;6 browser
+scenarios and12 signing/publication regressions PASS. Publication needed3 Nginx
+reloads/0 backend restarts; protected rows unchanged. Real Nginx/HTTP55 PASS/1 skip.
 [Selection source and delivery gates](releases/2026-11-02-gateway-selection.md).
 
 **2 November — SECOND_NL_ORDINARY_LIVE (AWG3.1/TCP REALITY).**

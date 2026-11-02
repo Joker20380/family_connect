@@ -10,8 +10,8 @@ OUTPUT.mkdir(parents=True, exist_ok=True)
 source = (ROOT / 'deploy/friends/invite/index.html').read_text()
 
 URLS = {
-    'apk': '/downloads/FamilyConnect-Test-0.1.18-beta51.apk',
-    'win15': '/downloads/FamilyConnect-Setup-0.2.15-pilot-unsigned.exe',
+    'apk': '/downloads/FamilyConnect-Test-0.1.18-beta109.apk',
+    'win16': '/downloads/FamilyConnect-Setup-0.2.16-pilot-unsigned.exe',
     'win14': '/downloads/FamilyConnect-Setup-0.2.14-pilot-unsigned.exe',
     'appimage': '/downloads/FamilyConnect-0.2.11-x86_64.AppImage',
     'deb': '/downloads/FamilyConnect_0.2.11_amd64.deb',
@@ -107,7 +107,7 @@ try:
     # Windows + valid
     p, dom = probe('windows-valid', tok, UAS['windows'])
     check(p.text.get('primary') == 'Скачать для Windows', 'windows primary label')
-    check(p.ids.get('primary', {}).get('href') == URLS['win15'], 'windows primary 0.2.15 href')
+    check(p.ids.get('primary', {}).get('href') == URLS['win16'], 'windows primary 0.2.16 href')
     check('hidden' not in p.ids.get('open', {}), 'windows open visible')
     check(p.ids.get('open-link', {}).get('href') == 'familyconnect://invite/' + tok, 'windows open uri')
     assert_all_urls(dom, 'windows')

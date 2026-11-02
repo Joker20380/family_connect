@@ -8,8 +8,21 @@ pins artifact13138243140, ZIP digestcccbbe7a… and installer491a731e…/4995560
 publication41442681710 is PASS. The49,955,605-byte GitHub release installer was
 downloaded over verified HTTPS and matches491a731e… exactly. Independent Windows
 catalog sequence12 is signed offline against the existing public anchor and
-committed for publication; the legacy Linux/shared catalog remains unchanged.
-The invitation mirror/link is still0.2.15 until its separate delivery is verified.
+published and downloaded byte-identically; the legacy Linux/shared catalog remains
+unchanged. The production mirror and both invitation routes now advertise0.2.16;
+full mirror HTTPS bytes match the signed installer hash/size. Existing15 remains.
+`scripts/verify_public_invitation.py` independently verifies the actual response
+CSP, exact reviewed HTML, public signed catalog and full mirror bytes: PASS.
+Local browser invitation6 scenarios and publication/signing regressions12 PASS.
+
+Publication failures are retained: initial CSP-count precondition failed before
+any remote write (confirmed by journal/file readback). A stale pre-existing `/i/`
+CSP differed from `/invite/`; correcting only the latter did not pass public
+verification. Both now bind the actual script/style. The new immutable download
+also required an exact Nginx location; initial404 is retained, final full-byte
+readback PASS.3 Nginx reloads,0 backend restarts, protected DB row digests unchanged.
+Rollback uses the private pre-publication HTML/config snapshot; installed clients
+retain identity, and any later Windows catalog rollback must use a higher sequence.
 Android110 in that run failed its TCP emulator data test with ENETUNREACH;
 the failure is retained and must be localized before signing/publication.
 
@@ -21,11 +34,13 @@ at most15s for the expected dual-stack TCP VPN to become the actual UID default.
 No process/socket Network binding, HTTP retry, relaxed predicate or production
 runtime change: all18 REALITY requests, DNS and switch/cancel/revoke gates remain.
 Exact corrected emulator acceptance is pending, not inferred from source review.
+Corrected source62cd213 / run41443304002 first attempt failed in emulator setup
+before instrumentation (0 cases); one bounded infrastructure retry is running.
+Android source/signing regressions31 PASS/1 optional external-tool integration skip.
 
-Continuation of **FLEET-BOOTSTRAP-2**, explicitly requested by the owner. This is
-source integration, not an installed or publicly distributed client release.
-The existing ordinary admission remains the deployed baseline until separately
-verified package/backend rollout receipts are recorded here.
+Continuation of **FLEET-BOOTSTRAP-2**, explicitly requested by the owner. Backend
+and Windows distribution are LIVE. Android/Linux installed delivery is not claimed;
+the subsequent sections retain source/package evidence and its acceptance scope.
 
 ## Contract
 
@@ -162,18 +177,20 @@ PASS. Android instrumentation additionally renders/asserts both explicit rows an
 rejects showing country-level CPU as a node measurement; exact emulator run pending.
 
 Source versions reserved for this change: Android0.1.18-beta110/code110 and
-Windows0.2.16. They are not yet signed/published/installed. Linux complete internal
+Windows0.2.16. Windows is now published with signed catalog12; Android is not signed
+or published. Linux complete internal
 Ubuntu26.04/Python3.14 candidate0.2.12~l03.2.12 is built from efc13f1 (not installed),
 with DEB/AppImage byte/member audit PASS and system-component isolated systemd259
-install/rollback/identity-preservation smoke PASS. DEB/AppImage smoke is pending.
+install/rollback/identity-preservation smoke PASS. Exact DEB/AppImage smoke and
+packaged RU/EN GTK renders also PASS.
 System build d5fc9df50a66292b7cd1b10c81a2521352d7648c0bd2b5037af2c457b1617eb7;
 DEB cde8416c07ef87ec2ef5441e17a33b93f72be8aad2e1675c7203d542ea975972;
 AppImage1fb37e03b01e8aaf7d598f9907e27e6bee8500fa37d272018abcc49287fb2d2c.
 The bundled legacy six-file tar is NOT a supported update for internal candidates.
 
-Not yet delivered to clients: Android APK, Windows installer/update catalog and
-the reviewed full Linux DEB/AppImage. Backend/catalog/ingress rollout is recorded above.
-Public Android109/Linux0.2.11/Windows0.2.15 and installed owner Linux
+Not yet delivered: Android110 APK and reviewed full Linux DEB/AppImage installation.
+Windows0.2.16 installer/update catalog/invitation and backend are verified above.
+Public Android109/Linux0.2.11 and installed owner Linux
 0.2.12~l03.2.9 remain unchanged. L08 migration is not bypassed; the existing internal
 Linux updater cannot install a legacy six-file archive as a full runtime update.
 
@@ -182,7 +199,7 @@ publish only immutable increasing versions/catalog sequences, verify delivered
 bytes and install the reviewed Linux package without losing identity/state. Retain
 the deployed selection catalog/HTTP runtime and their protected-state/readback
 and rollback receipts. Keep existing sticky routing intact. Until then,
-the current clients continue to show the old country selector.
+clients that have not installed the new package continue to show the old selector.
 
 References: [current state](../STATUS.md), [existing task](../PLAN.md),
 [ordinary live baseline](2026-11-02-second-nl-ordinary-live.md),

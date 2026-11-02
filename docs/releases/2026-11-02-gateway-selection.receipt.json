@@ -59,12 +59,18 @@
     "publication_run": 41442681710,
     "public_https_hash": "PASS",
     "update_sequence": 12,
+    "public_catalog": "PASS",
+    "public_mirror": "PASS",
+    "invitation_version": "0.2.16",
+    "invitation_actual_csp": "PASS_BOTH_ROUTES",
+    "publication_nginx_reloads": 3,
+    "publication_backend_restarts": 0,
     "published": true
   },
   "android": {
     "candidate_version": "0.1.18-beta110",
-    "ci_run": 41439156032,
-    "acceptance": "TCP_DEFAULT_NETWORK_FAILURE_REPAIR_PENDING_CI",
+    "ci_run": 41443304002,
+    "acceptance": "TCP_READINESS_REPAIR_INFRASTRUCTURE_RETRY_PENDING",
     "published_version": "0.1.18-beta109"
   }
 }
