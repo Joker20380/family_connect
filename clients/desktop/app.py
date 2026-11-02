@@ -1,6 +1,7 @@
 """Native Linux GTK 4 client. Keys and network operations stay in the backend."""
 APP_VERSION='0.2.11'
 TRANSPORTS=(('awg','AWG 3.1'),('tcp','TCP REALITY'))
+GATEWAY_TARGETS=('nl','ru','nl-amsterdam-1','nl-amsterdam-2')
 STATE_LABELS={'DISCONNECTED':('VPN выключен','VPN is off'),'CONNECTING':('Подключение…','Connecting…'),
     'CONNECTED':('Туннель включён','Tunnel is on'),'RESTORING':('Восстанавливаем соединение…','Restoring connection…'),
     'STOPPING':('Отключение…','Disconnecting…'),'FAILED':('Не удалось подключиться','Unable to connect')}
@@ -478,7 +479,7 @@ class App:
         self.mesh_state=None;self.auto_state=None;self.service_starting=False;self.service_cancel_requested=False
         self.mesh_identity_available=False
         self.transports=TRANSPORTS;self.route_options={}
-        self.all_loads={};self.country_name_labels={'nl':[],'ru':[]};self.country_load_labels={'nl':[],'ru':[]}
+        self.all_loads={};self.country_name_labels={target:[] for target in GATEWAY_TARGETS};self.country_load_labels={target:[] for target in GATEWAY_TARGETS}
         self.detail_text='';self.update_plan=None;self.updater=None;self.render_source=0;self.fit_source=0;self.fit_clock=None;self.fitted_height=None
         self.render_count=0;self.widget_changes=0;self.rendering=False
         self.load_pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
@@ -531,6 +532,7 @@ class App:
                 saved=json.loads(raw)
                 if not isinstance(saved,dict):raise ValueError('Invalid route settings')
                 self.route_options=saved;self.country.set_selected(1 if saved.get('country')=='ru' else 0);self.protocol.set_selected(1 if saved.get('transport')=='tcp' else 0)
+                if saved.get('gateway_id') in GATEWAY_TARGETS[2:]:self.country.set_selected(GATEWAY_TARGETS.index(saved['gateway_id']))
                 self.mesh_profile.set_selected(1 if saved.get('mesh_profile')=='P1' else 0)
             except (OSError,ValueError):pass
         self.country.connect('notify::selected',self.route_changed);self.protocol.connect('notify::selected',self.route_changed)
@@ -640,7 +642,7 @@ class App:
             if self.managed_state() is not None and (self.transport_id() in ('auto','mesh') or mesh['owned']):
                 text=STATE_LABELS[mesh['state']][0 if self.ru else 1]
             self.set_value(self.status,'label',text)
-            self.set_value(self.hint,'label',self.country_label('nl' if self.country.get_selected()==0 else 'ru')+' · '+self.transport_label())
+            self.set_value(self.hint,'label',self.country_label(self.route_target())+' · '+self.transport_label())
             connected=self.active is True
             available=(self.mesh_identity_available or self.friends_registered) if self.transport_id() in ('auto','mesh') else self.friends_registered or bool(self.items)
             can_toggle=(not self.busy and available and self.active is not None) or self.service_starting
@@ -697,9 +699,14 @@ class App:
         if before!=self.widget_changes:self.request_fit()
         return GLib.SOURCE_REMOVE
     def load_key(self):
+        if self.friends_registered and self.route_target() in GATEWAY_TARGETS[2:]:return None
         return ("country:"+("ru" if self.country.get_selected()==1 else "nl")) if self.friends_registered else self.selected_id
+    def route_target(self):
+        index=self.country.get_selected()
+        return GATEWAY_TARGETS[index] if 0<=index<len(GATEWAY_TARGETS) else 'nl'
     def country_label(self,code):
-        return (('Нидерланды' if self.ru else 'Netherlands') if code=='nl' else ('Россия' if self.ru else 'Russia'))
+        if code in GATEWAY_TARGETS[2:]:return ('Амстердам ' if self.ru else 'Amsterdam ')+code[-1]
+        return (('Нидерланды · назначенный' if self.ru else 'Netherlands · assigned') if code=='nl' else ('Россия' if self.ru else 'Russia'))
     def transport_label(self):
         index=self.protocol.get_selected()
         return self.transports[index][1] if 0<=index<len(self.transports) else self.transports[0][1]
@@ -754,13 +761,13 @@ class App:
             return 'Нет данных' if self.ru else 'No data'
         return (('≈ ' if sample.get('estimated') else '')+f'{value:.0f}%')
     def build_country_picker(self):
-        model=Gtk.StringList.new(['nl','ru'])
+        model=Gtk.StringList.new(list(GATEWAY_TARGETS))
         dropdown=Gtk.DropDown.new(model)
         factory=Gtk.SignalListItemFactory()
         def setup(_factory,item):
             row=Gtk.Box(spacing=8)
             flag=Gtk.Box();flag.set_size_request(22,14);flag.set_valign(Gtk.Align.CENTER)
-            name=Gtk.Label(xalign=0);name.set_hexpand(True);name.set_ellipsize(Pango.EllipsizeMode.END);name.set_max_width_chars(10)
+            name=Gtk.Label(xalign=0);name.set_hexpand(True);name.set_ellipsize(Pango.EllipsizeMode.END);name.set_max_width_chars(22)
             load=Gtk.Label(xalign=1);load.add_css_class('fc-caption')
             row.append(flag);row.append(name);row.append(load);load.set_visible(False);item.set_child(row)
         def popup_setup(_factory,item):
@@ -768,7 +775,7 @@ class App:
         def bind(_factory,item):
             code=item.get_item().get_string();row=item.get_child()
             flag=row.get_first_child();name=flag.get_next_sibling();load=name.get_next_sibling()
-            flag.set_css_classes(['fc-flag','fc-flag-'+code])
+            flag.set_css_classes(['fc-flag','fc-flag-'+('ru' if code=='ru' else 'nl')])
             name.set_text(self.country_label(code));load.set_text(self.load_text(code,self.all_loads.get(code)))
             if name not in self.country_name_labels[code]:self.country_name_labels[code].append(name)
             if load not in self.country_load_labels[code]:self.country_load_labels[code].append(load)
@@ -782,7 +789,7 @@ class App:
         popup=Gtk.SignalListItemFactory();popup.connect('setup',popup_setup);popup.connect('bind',bind);popup.connect('unbind',unbind)
         dropdown.set_factory(factory);dropdown.set_list_factory(popup);return dropdown
     def refresh_country_labels(self):
-        for code in ('nl','ru'):
+        for code in GATEWAY_TARGETS:
             for name in list(self.country_name_labels[code]):
                 if name.get_text()!=self.country_label(code):name.set_text(self.country_label(code))
             for load in list(self.country_load_labels[code]):
@@ -1166,7 +1173,8 @@ class App:
         if self.rendering:return
         self.revision+=1;self.load_next=0
         self.route_options.update(country='ru' if self.country.get_selected()==1 else 'nl',transport=self.transport_id(),
-                                  mesh_profile='P1' if self.mesh_profile.get_selected()==1 else 'P0')
+                                  mesh_profile='P1' if self.mesh_profile.get_selected()==1 else 'P0',
+                                  gateway_id=self.route_target() if self.route_target() in GATEWAY_TARGETS[2:] else None)
         if self.route_path:
             try:
                 from updates import atomic
@@ -1201,6 +1209,9 @@ class App:
             if not self.busy:(self.stop_auto if self.managed_transport()=='auto' else self.stop_mesh)()
             return
         if self.busy or active is None:return
+        if not active and self.route_target() in GATEWAY_TARGETS[2:] and self.transport_id() not in ('awg','tcp'):
+            self.set_detail('Выбор конкретного Амстердама доступен с AWG или TCP; MESH использует отдельный шлюз.' if self.ru else 'Choose AWG or TCP for a specific Amsterdam server; MESH uses a separate gateway.')
+            return
         self.recovery.stop();driver=self.driver
         if not active and self.transport_id()=='auto':
             if not (self.mesh_identity_available or self.friends_registered) or not self.friends_owner_class:return
@@ -1222,7 +1233,7 @@ class App:
             self.submit(start,'mesh-started');return
         if not active and self.friends_registered and self.friends_owner_class:
             self.connection_action='CONNECTING'
-            country='ru' if self.country.get_selected()==1 else 'nl';transport=self.transport_id()
+            country=self.route_target();transport=self.transport_id()
             owner=self.friends_owner_class(Path.home()/'.local/share/family-connect/friends-identity',Path(__file__).with_name('update.pub'))
             def action():
                 owner.connect(country,driver,transport=transport)

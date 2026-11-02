@@ -4,4 +4,5 @@
 <ItemGroup><None Include="../../../tests/vectors/control-awg31-v1/*" Link="control-awg31-v1/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest"/></ItemGroup>
 <ItemGroup><None Include="../../../tests/fixtures/windows-xhttp-v2.json" Link="fixtures/windows-xhttp-v2.json" CopyToOutputDirectory="PreserveNewest"/></ItemGroup>
 <ItemGroup><None Include="../../../tests/vectors/friends-multinode-v2.json" Link="fixtures/friends-multinode-v2.json" CopyToOutputDirectory="PreserveNewest"/></ItemGroup>
+<ItemGroup><None Include="../../../tests/vectors/friends-selection-v3.json" Link="fixtures/friends-selection-v3.json" CopyToOutputDirectory="PreserveNewest"/></ItemGroup>
 </Project>

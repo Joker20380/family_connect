@@ -1,6 +1,15 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
+**2 November — explicit two-Amsterdam client selection IN_PROGRESS.** Owner requests
+visible choices on Android/Linux/Windows, not only new-device backend assignment.
+Source schema3/target-bound proof, isolated durable floors, operator import and all
+three selectors implemented; existing assignments remain unchanged. Local Python361
+PASS/25 existing environment skips; GTK52 PASS, JVM/C# protocol PASS. Native Windows
+CI, exact packages, signed catalog/backend rollout and client installation remain
+unaccepted. Current installed/public versions are unchanged; L08 is not bypassed.
+[Selection source and delivery gates](releases/2026-11-02-gateway-selection.md).
+
 **2 November — SECOND_NL_ORDINARY_LIVE (AWG3.1/TCP REALITY).**
 The owner-authorized second Amsterdam node185.10.158.196 is admitted for new device
 assignments on Android109, Linux0.2.11 and Windows0.2.15 with unchanged schema2 clients.

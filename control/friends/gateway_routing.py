@@ -250,6 +250,9 @@ def administer(access, root, request):
     """Local operator entry; HTTP has no route to this function and receives no request file."""
     require(type(request) is dict and type(request.get('schema')) is int and request['schema'] == 1)
     action = request.get('action')
+    if action == 'install-selection':
+        from .gateway_selection import install as install_selection
+        return install_selection(access, root, request)
     common = {'schema', 'action', 'operation_id', 'policy_sha256'}
     fields = {'install': common | {'legacy_sha256'},
               'replace-policy': common | {'previous_policy_sha256'},

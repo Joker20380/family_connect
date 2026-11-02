@@ -41,7 +41,7 @@ class Handler(BaseHTTPRequestHandler):
   raw=json.dumps(value,ensure_ascii=False,separators=(',',':')).encode();self.send_response(status);self.send_header('Content-Type','application/json');self.send_header('Cache-Control','no-store');self.send_header('Content-Length',str(len(raw)));self.end_headers();self.wfile.write(raw)
  def do_POST(self):
   self.connection.settimeout(5)
-  if self.path not in ('/friends/challenge','/friends/activate','/friends/restricted-readiness','/friends/restricted-readiness/challenge','/friends/restricted-readiness/ack-challenge','/friends/restricted-readiness/ack','/friends/configuration/ru','/friends/configuration/nl','/friends/chat/challenge','/friends/chat/register','/friends/referral/issue','/friends/referral/claim','/friends/device/status','/friends/device/support','/friends/device/diagnostics','/friends/notices/publish','/friends/notices/device/role','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit'):self.reply(404,{'error':'not-found'});return
+  if self.path not in ('/friends/challenge','/friends/activate','/friends/restricted-readiness','/friends/restricted-readiness/challenge','/friends/restricted-readiness/ack-challenge','/friends/restricted-readiness/ack','/friends/configuration/ru','/friends/configuration/nl','/friends/gateway-configuration/nl-amsterdam-1','/friends/gateway-configuration/nl-amsterdam-2','/friends/chat/challenge','/friends/chat/register','/friends/referral/issue','/friends/referral/claim','/friends/device/status','/friends/device/support','/friends/device/diagnostics','/friends/notices/publish','/friends/notices/device/role','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit'):self.reply(404,{'error':'not-found'});return
   if not slots.acquire(blocking=False):self.reply(429,{'error':'busy'});return
   phase='http_parse'
   try:
@@ -94,14 +94,20 @@ class Handler(BaseHTTPRequestHandler):
     from control.friends.support_ids import request
     result=request(access,value)
    else:
-    country=self.path.rsplit('/',1)[1];record=access.complete(value,country)
-    catalog,host=configuration_catalog(country,record['device'])
+    target=self.path.rsplit('/',1)[1];explicit=self.path.startswith('/friends/gateway-configuration/')
+    country='nl' if explicit else target
+    record=access.complete(value,'gateway:'+target if explicit else country)
+    if explicit:
+     from control.friends.gateway_selection import configuration
+     catalog,host=configuration(access,ROOT,target,record['device'])
+    else:catalog,host=configuration_catalog(country,record['device'])
     if country=='ru':command=['/usr/bin/python3','/opt/apps/family_connect/friends-awg/awg-gateway.py','register']
     else:command=['/usr/bin/ssh','-i','/opt/apps/family_connect/friends-awg/registration-key','-o','IdentitiesOnly=yes','-o','BatchMode=yes','-o','ConnectTimeout=5','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/opt/apps/family_connect/friends-awg/known_hosts','root@'+host,'register']
     reply=subprocess.run(command,input=json.dumps(record).encode(),capture_output=True,timeout=15)
     if reply.returncode:raise RuntimeError('Gateway unavailable')
     assigned=json.loads(reply.stdout);assert assigned['public_key']==record['public_key'] and assigned['transport']=='amneziawg-3.1'
     result={'device':record['device'],'country':country,'address':assigned['address'],'tcp_id':record['tcp_id'],'catalog':catalog}
+    if explicit:result['gateway_id']=target
    self.reply(200,result)
   except Exhausted:self.reply(410,{'error':'referral-pool-exhausted'})
   except RateLimited:self.reply(429,{'error':'referral-rate-limited'})

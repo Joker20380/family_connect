@@ -91,19 +91,23 @@ internal sealed class Broker:ServiceBase
                 return new(true,state,Code:FriendsOwner.Referral(sid,stop.Token));
             case "friends-connect-tcp-ru":
             case "friends-connect-tcp-nl":
+            case "friends-connect-tcp-nl-amsterdam-1":
+            case "friends-connect-tcp-nl-amsterdam-2":
                 if(state!="off")return new(false,state,Error:"busy");
                 if(request.Activation is not null)return new(false,state,Error:"unsupported-action");
                 if(!Directory.Exists(Path.Combine(AppContext.BaseDirectory,"tcp")))return new(false,"off",Error:"tcp-engine-missing");
-                var friendsGrant=FriendsOwner.Tcp(sid,request.Action.EndsWith("-ru",StringComparison.Ordinal)?"ru":"nl",stop.Token);
+                var friendsGrant=FriendsOwner.Tcp(sid,request.Action["friends-connect-tcp-".Length..],stop.Token);
                 tcp.Start(sid,friendsGrant);
                 return new(true,"pending",Transport:"tcp");
 
             case "friends-connect-awg-ru":
             case "friends-connect-awg-nl":
+            case "friends-connect-awg-nl-amsterdam-1":
+            case "friends-connect-awg-nl-amsterdam-2":
                 if(state!="off")return new(false,state,Error:"busy");
                 if(request.Activation is not null)return new(false,state,Error:"unsupported-action");
                 if(!File.Exists(Path.Combine(AppContext.BaseDirectory,"awg","fc-awg.exe")))return new(false,"off",Error:"awg-engine-missing");
-                tcp.StartFriendsAwg(sid,FriendsOwner.Awg(sid,request.Action.EndsWith("-ru",StringComparison.Ordinal)?"ru":"nl",stop.Token),request.Action.EndsWith("-ru",StringComparison.Ordinal)?"ru":"nl");
+                tcp.StartFriendsAwg(sid,FriendsOwner.Awg(sid,request.Action["friends-connect-awg-".Length..],stop.Token),request.Action.EndsWith("-ru",StringComparison.Ordinal)?"ru":"nl");
                 return new(true,"pending",Transport:"awg");
 
             case "connect-auto":

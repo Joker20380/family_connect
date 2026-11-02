@@ -41,6 +41,27 @@ internal static class FriendsConfigurationVaultChecks
             });
             string path=FriendsConfigurationVault.ConfigPath(root,alice);var saved=File.ReadAllBytes(path);
             if(System.Text.Encoding.UTF8.GetString(saved).Contains("tcp_id"))throw new Exception("Plaintext cache");
+            using(var choices=JsonDocument.Parse(File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory,"fixtures","friends-selection-v3.json")))){
+                var selectedAnchor=Convert.FromBase64String(choices.RootElement.GetProperty("anchor").GetString()!);
+                string? selectedHash=null;
+                foreach(string target in new[]{"nl-amsterdam-1","nl-amsterdam-2","nl-amsterdam-1"}){
+                    var node=JsonNode.Parse(choices.RootElement.GetProperty("cases")[0].GetProperty("reply").GetRawText())!;
+                    node["device"]=identity.Reference;node["gateway_id"]=target;
+                    var reply=JsonSerializer.SerializeToElement(node);
+                    var selected=FriendsConfigurationVault.Accept(root,alice,identity,selectedAnchor,target,(floor,hash)=>{
+                        if(floor!=(selectedHash is null?0:1)||hash!=selectedHash)throw new Exception("Selected gateway floor lost");
+                        return reply;
+                    });
+                    selectedHash=selected.CatalogHash;
+                    if(selected.GatewayId!=target)throw new Exception("Selected gateway binding lost");
+                }
+                if(!saved.SequenceEqual(File.ReadAllBytes(path)))throw new Exception("Legacy configuration changed by explicit selection");
+                string selectionPath=path+".gateways";var selectedSaved=File.ReadAllBytes(selectionPath);
+                Reject(()=>FriendsConfigurationVault.Accept(root,alice,identity,selectedAnchor,"nl-amsterdam-2",(_,_)=>throw new IOException("network denied")));
+                if(!selectedSaved.SequenceEqual(File.ReadAllBytes(selectionPath)))throw new Exception("Selection floor reset on network failure");
+                File.Delete(selectionPath);
+                Reject(()=>FriendsConfigurationVault.Accept(root,alice,identity,selectedAnchor,"nl-amsterdam-2",(_,_)=>throw new Exception("Selection cache recreated")));
+            }
             Reject(()=>FriendsConfigurationVault.Accept(root,alice,identity,anchor,"nl",(_,_)=>Reply("nl","valid_flags")));
             if(!saved.SequenceEqual(File.ReadAllBytes(path)))throw new Exception("Rejected replacement modified cache");
             Reject(()=>FriendsConfigurationVault.Accept(root,alice,identity,anchor,"nl",(_,_)=>throw new IOException("network denied")));

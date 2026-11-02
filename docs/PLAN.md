@@ -3,6 +3,16 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- FLEET-BOOTSTRAP-2 current -->
+**Owner-selected continuation: visible Amsterdam 1 / Amsterdam 2 on all clients.**
+Continue the existing FLEET-BOOTSTRAP-2 ID; do not start unrelated desktop backlog.
+Source contract/API/isolated replay floors and Android/Linux/Windows selection are
+implemented and locally checked; no installed/public delivery claim. Completion:
+exact platform CI/package/UI acceptance → signed catalog + matching backend with
+protected-state readback → verified client distribution/installation. Preserve
+legacy assignments and paid state; explicit nodes support AWG/TCP, not second MESH.
+Do not remove the L08 full-package guard to force the installed internal Linux
+candidate through its legacy updater. [Evidence](releases/2026-11-02-gateway-selection.md).
+
 **2 November — SECOND_NL_ORDINARY_LIVE (AWG3.1/TCP REALITY).**
 The owner-authorized second Amsterdam node185.10.158.196 is admitted for new device
 assignments on Android109, Linux0.2.11 and Windows0.2.15 with unchanged schema2 clients.

@@ -221,11 +221,14 @@ class FriendsClient:
         Returns (response, verified profile). Both contain device credentials and
         belong in protected storage, never in a UI result or diagnostic log.
         """
-        if type(country) is not str or country not in ('ru', 'nl'):
+        from .friends_catalog import GATEWAY_CHOICES
+        if type(country) is not str or country not in ('ru', 'nl') + GATEWAY_CHOICES:
             raise FriendsError('invalid_input')
         from .friends_catalog import verify
         from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, NoEncryption
-        response = self._post('/friends/configuration/' + country, self._proof(country))
+        explicit = country in GATEWAY_CHOICES
+        response = self._post(('/friends/gateway-configuration/' if explicit else '/friends/configuration/') + country,
+                              self._proof('gateway:' + country if explicit else country))
         try:
             private = self.device._wireguard_key.private_bytes(Encoding.Raw, PrivateFormat.Raw, NoEncryption())
             verified = verify(response, anchor, self.device.reference, country, private,

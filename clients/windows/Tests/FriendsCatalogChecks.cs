@@ -28,6 +28,28 @@ internal static class FriendsCatalogChecks
         }
         Console.WriteLine($"Friends catalog: {count} shared verification/materialization vectors passed.");
         AssignedCatalogs();
+        SelectedGateways();
+    }
+
+    private static void SelectedGateways()
+    {
+        using var document=JsonDocument.Parse(File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory,"fixtures","friends-selection-v3.json")));
+        var fixture=document.RootElement;
+        var anchor=Convert.FromBase64String(fixture.GetProperty("anchor").GetString()!);
+        var key=Convert.FromBase64String(fixture.GetProperty("wireguard_key").GetString()!);
+        foreach(var sample in fixture.GetProperty("cases").EnumerateArray()){
+            FriendsConfiguration? accepted=null;
+            string target=sample.GetProperty("target").GetString()!;
+            try { accepted=FriendsCatalog.Verify(sample.GetProperty("reply"),anchor,fixture.GetProperty("device").GetString()!,target,key,sample.GetProperty("floor").GetInt64(),sample.TryGetProperty("previous_hash",out var hash)?hash.GetString():null); }
+            catch(FormatException) { }
+            if((accepted is not null)!=sample.GetProperty("valid").GetBoolean())throw new Exception("Selection vector mismatch: "+sample.GetProperty("name").GetString());
+            if(accepted is not null){
+                if(accepted.GatewayId!=target||accepted.Country!="nl")throw new Exception("Gateway/country binding");
+                FriendsCatalog.NativeTcp(accepted,fixture.GetProperty("wireguard_key").GetString()!);
+                FriendsCatalog.NativeAwg(accepted);
+            }
+        }
+        Console.WriteLine("Friends explicit selection: shared positive/negative vectors passed.");
     }
 
     private static void AssignedCatalogs()

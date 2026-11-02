@@ -14,6 +14,7 @@ from clients.desktop import profile_config
 
 DOMAIN = b'family-connect/invited-test/v1\0'
 MAX_SEQUENCE = 9007199254740991
+GATEWAY_CHOICES = ('nl-amsterdam-1', 'nl-amsterdam-2')
 
 
 def require(ok):
@@ -54,6 +55,7 @@ class FriendsConfiguration:
     # These contain device credentials: callers must keep them out of logs and IPC.
     tcp: str
     awg: str
+    gateway_id: str | None = None
 
     def __repr__(self):
         return f'FriendsConfiguration(country={self.country!r}, sequence={self.sequence})'
@@ -68,9 +70,7 @@ def verify(reply, anchor, device, country, wireguard_key, *, floor=0, previous_h
     from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
     try:
         require(type(floor) is int and 0 <= floor <= MAX_SEQUENCE)
-        require(country in ('ru', 'nl') and type(anchor) is bytes and len(anchor) == 32)
-        fields(reply, 'device country address tcp_id catalog')
-        require(reply['device'] == device and reply['country'] == country)
+        require(country in ('ru', 'nl') + GATEWAY_CHOICES and type(anchor) is bytes and len(anchor) == 32)
         e = reply['catalog']; fields(e, 'payload signature')
         require(len(json.dumps(e).encode()) <= 16384)
         require(type(e['payload']) is str)
@@ -82,11 +82,11 @@ def verify(reply, anchor, device, country, wireguard_key, *, floor=0, previous_h
         raise ValueError('Invalid Friends configuration') from None
 
 
-def _catalog(raw, floor, previous_hash):
+def _catalog(raw, floor, previous_hash, *, schema=2):
     require(type(raw) is bytes and 0 < len(raw) <= 8192)
     require(type(floor) is int and 0 <= floor <= MAX_SEQUENCE)
     value = parse(raw.decode("utf-8")); fields(value, 'schema sequence access gateways')
-    require(type(value['schema']) is int and value['schema'] == 2 and value['access'] == 'invite-test')
+    require(schema in (2, 3) and type(value['schema']) is int and value['schema'] == schema and value['access'] == 'invite-test')
     sequence = value['sequence']
     require(type(sequence) is int and max(1, floor) <= sequence <= MAX_SEQUENCE)
     digest = hashlib.sha256(raw).hexdigest()
@@ -98,8 +98,12 @@ def _catalog(raw, floor, previous_hash):
     profiles = {}
     sample = base64.b64encode(bytes([1])*32).decode()
     for gateway in gateways:
-        fields(gateway, 'country tcp awg')
-        region = gateway['country']; require(type(region) is str and region in ('ru', 'nl') and region not in profiles)
+        fields(gateway, 'country tcp awg' + (' gateway_id' if schema == 3 else ''))
+        region = gateway['country']; require(type(region) is str and region in ('ru', 'nl'))
+        target = gateway['gateway_id'] if schema == 3 else region
+        require(type(target) is str and target not in profiles)
+        if schema == 3:
+            require(region == 'nl' and target in GATEWAY_CHOICES)
         tcp = gateway['tcp']; fields(tcp, 'type server port id public_key server_name short_id')
         require(tcp['id'] == 'DEVICE_CREDENTIAL')
         parsed = profile_config.parse_tcp(json.dumps({**tcp, 'id': '11111111-1111-4111-8111-111111111111'}))
@@ -117,7 +121,9 @@ def _catalog(raw, floor, previous_hash):
         host = parts['Peer']['Endpoint'].rsplit(':', 1)[0]
         endpoint = ipaddress.IPv4Address(host)
         require(str(endpoint) == host and not endpoint.is_loopback and 0 < int(host.split('.')[0]) < 224)
-        profiles[region] = (tcp, awg)
+        if schema == 3:
+            require(host == parsed['server'] and all(profile[0]['server'] != host for profile in profiles.values()))
+        profiles[target] = (tcp, awg)
     return sequence, digest, profiles
 
 
@@ -127,7 +133,7 @@ class FriendsCatalogFloor:
     catalog_hash: str
 
 
-def verify_catalog(envelope, anchor, *, floor=0, previous_hash=None):
+def verify_catalog(envelope, anchor, *, floor=0, previous_hash=None, schema=2):
     """Verify only a public common template/floor, never a device authorization."""
     from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
     try:
@@ -138,7 +144,7 @@ def verify_catalog(envelope, anchor, *, floor=0, previous_hash=None):
         raw = base64.b64decode(envelope['payload'], validate=True)
         require(0 < len(raw) <= 8192 and base64.b64encode(raw).decode() == envelope['payload'])
         Ed25519PublicKey.from_public_bytes(anchor).verify(key(envelope['signature'], 64), DOMAIN + raw)
-        sequence, digest, _profiles = _catalog(raw, floor, previous_hash)
+        sequence, digest, _profiles = _catalog(raw, floor, previous_hash, schema=schema)
         return FriendsCatalogFloor(sequence, digest)
     except Exception:
         raise ValueError('Invalid Friends catalog floor') from None
@@ -151,16 +157,20 @@ def _verified_profile(reply, raw, device, country, wireguard_key, *, floor=0, pr
     authenticates the response/catalog/floors. There is no offline authorization here.
     """
     try:
-        require(type(floor) is int and 0 <= floor <= MAX_SEQUENCE and country in ('ru', 'nl'))
-        fields(reply, 'device country address tcp_id catalog')
-        require(reply['device'] == device and reply['country'] == country)
+        require(type(floor) is int and 0 <= floor <= MAX_SEQUENCE and country in ('ru', 'nl') + GATEWAY_CHOICES)
+        explicit = country in GATEWAY_CHOICES
+        region = 'nl' if explicit else country
+        fields(reply, 'device country address tcp_id catalog' + (' gateway_id' if explicit else ''))
+        require(reply['device'] == device and reply['country'] == region)
+        if explicit:
+            require(reply['gateway_id'] == country)
         fields(reply['catalog'], 'payload signature')
         require(type(raw) is bytes and 0 < len(raw) <= 8192)
         require(reply['catalog']['payload'] == base64.b64encode(raw).decode())
-        sequence, digest, profiles = _catalog(raw, floor, previous_hash)
+        sequence, digest, profiles = _catalog(raw, floor, previous_hash, schema=3 if explicit else 2)
         address = reply['address']; require(type(address) is str)
         ip = ipaddress.IPv4Interface(address)
-        network = ipaddress.IPv4Network('10.84.0.0/16' if country == 'ru' else '10.83.0.0/16')
+        network = ipaddress.IPv4Network('10.84.0.0/16' if region == 'ru' else '10.83.0.0/16')
         require(str(ip) == address and ip.network.prefixlen == 32 and ip.ip in network)
         require(ip.ip not in (network.network_address, network.network_address+1, network.broadcast_address))
         credential = reply['tcp_id']; require(type(credential) is str and str(uuid.UUID(credential)) == credential and uuid.UUID(credential).int != 0)
@@ -168,6 +178,6 @@ def _verified_profile(reply, raw, device, country, wireguard_key, *, floor=0, pr
         tcp, awg = profiles[country]
         tcp = json.dumps({**tcp, 'id': credential}, separators=(',', ':'))
         awg = profile_config.validate(awg.replace('LOCAL_DEVICE_KEY', base64.b64encode(wireguard_key).decode()).replace('ASSIGNED_ADDRESS', address), allow_awg=True, allow_awg31=True)
-        return FriendsConfiguration(country, sequence, digest, address, tcp, awg)
+        return FriendsConfiguration(region, sequence, digest, address, tcp, awg, country if explicit else None)
     except Exception:
         raise ValueError('Invalid Friends configuration') from None

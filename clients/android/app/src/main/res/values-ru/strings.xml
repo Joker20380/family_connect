@@ -38,6 +38,10 @@
     <string name="choose_gateway">Сервер</string>
     <string name="gateway_russia">Россия</string>
     <string name="gateway_netherlands">Нидерланды</string>
+    <string name="gateway_assigned">Нидерланды · назначенный</string>
+    <string name="gateway_amsterdam_1">Амстердам 1</string>
+    <string name="gateway_amsterdam_2">Амстердам 2</string>
+    <string name="gateway_ordinary_only">Выберите AWG или TCP для конкретного Амстердама. MESH использует отдельный шлюз.</string>
     <string name="gateway_default">По умолчанию</string>
     <string name="gateway_unavailable">Сначала получите действующую подписанную конфигурацию через Reticulum.</string>
     <string name="friends_access">Тест по приглашению · без срока окончания</string>

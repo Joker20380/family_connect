@@ -12,6 +12,7 @@ from device_identity.friends import load_friends_identity
 from device_identity.device import _private_directory
 from .friends import FriendsClient, FriendsError
 from .friends_store import FriendsConfigurationStore
+from .friends_catalog import GATEWAY_CHOICES
 
 
 class FriendsOwner:
@@ -37,19 +38,19 @@ class FriendsOwner:
         with self.http_factory() as http:return FriendsClient(http,device).referral()
 
     def configuration(self,country,driver=None):
-        store=self._store()
-        if driver is not None and hasattr(driver, 'normal_catalog'):
+        store=self._store(selection=country in GATEWAY_CHOICES)
+        if country not in GATEWAY_CHOICES and driver is not None and hasattr(driver, 'normal_catalog'):
             store.merge_catalog_floor(driver.normal_catalog())
         with self.http_factory() as http:
             client=FriendsClient(http,store.device)
             return store.accept(country,lambda floor,digest:client.configuration(country,store.anchor,floor=floor,previous_hash=digest)[0])
 
-    def _store(self):
+    def _store(self, *, selection=False):
         device=self._device()
         raw=self.anchor_path.read_bytes()
         if len(raw)>128:raise ValueError('Invalid packaged anchor')
         anchor=base64.b64decode(raw.strip(),validate=True)
-        return FriendsConfigurationStore(self.path,device,anchor)
+        return FriendsConfigurationStore(self.path,device,anchor,selection=selection)
 
     def connect(self,country,driver,*,transport="tcp"):
         from .friends_application import FriendsApplication

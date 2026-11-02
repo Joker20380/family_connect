@@ -36,6 +36,9 @@ public final class FriendsActivity extends LocalizedActivity {
     private HomeBrand homeBrand;
     private TextView homeActiveTransport,homeBattery;
     private String country,activeCountry;
+    private static final String[] TARGETS={"ru","nl","nl-amsterdam-1","nl-amsterdam-2"};
+    private int targetIndex(){int index=java.util.Arrays.asList(TARGETS).indexOf(country);return index<0?1:index;}
+    private String targetLabel(String target){return getString(target.equals("nl-amsterdam-1")?R.string.gateway_amsterdam_1:target.equals("nl-amsterdam-2")?R.string.gateway_amsterdam_2:target.equals("ru")?R.string.gateway_russia:R.string.gateway_assigned);}
     private LiveNetworkPanel telemetry;
     private RouteMapView routeMap, dashboardMap;
     private RouteLocation dashboardLocation;
@@ -51,13 +54,14 @@ public final class FriendsActivity extends LocalizedActivity {
     private final Runnable refresh=new Runnable(){public void run(){render();handler.postDelayed(this,500);}};
     @Override public void onCreate(Bundle state){
         super.onCreate(state);getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE);transport=getPreferences(MODE_PRIVATE).getString("transport","auto");country=getPreferences(MODE_PRIVATE).getString("country","nl");
+        String selectedGateway=getPreferences(MODE_PRIVATE).getString("gateway_id","");if(ControlFriendsCatalog.explicit(selectedGateway))country=selectedGateway;
         motion=getPreferences(MODE_PRIVATE).getBoolean("motion",true);activeCountry=getPreferences(MODE_PRIVATE).getString("session_country",country);
         countries=new Spinner(this){@Override public boolean performClick(){refreshServerLoads();return super.performClick();}};
         countries.setContentDescription(getString(R.string.terminal_country));
         serverAdapter=new ServerAdapter();countries.setAdapter(serverAdapter);
         countries.setBackgroundColor(Color.TRANSPARENT);countries.setPadding(0,0,0,0);
         countries.setPopupBackgroundDrawable(TerminalUi.frame(this,TerminalUi.SURFACE,TerminalUi.FRAME));
-        countries.setSelection(country.equals("nl")?1:0);
+        countries.setSelection(targetIndex());
         String[] transportLabels=new String[TRANSPORTS.length];for(int i=0;i<TRANSPORTS.length;i++)transportLabels[i]=TRANSPORTS[i][1];
         transports=new Spinner(this);TerminalUi.inlinePicker(transports,transportLabels);
         transports.setContentDescription(getString(R.string.terminal_transport));transports.setSelection(transport.equals("auto")?0:transport.equals("awg")?1:transport.equals("tcp")?2:3);
@@ -65,8 +69,8 @@ public final class FriendsActivity extends LocalizedActivity {
             public void onNothingSelected(AdapterView<?> parent){}
             public void onItemSelected(AdapterView<?> parent,android.view.View view,int position,long id){
                 if(!parent.isShown())return;
-                String next=position==1?"nl":"ru";if(next.equals(country))return;
-                country=next;getPreferences(MODE_PRIVATE).edit().putString("country",country).apply();detail.setText("");
+                String next=TARGETS[position];if(next.equals(country))return;
+                country=next;getPreferences(MODE_PRIVATE).edit().putString("country",country.equals("ru")?"ru":"nl").putString("gateway_id",ControlFriendsCatalog.explicit(country)?country:"").apply();detail.setText("");
                 if(!initializing&&!ConnectionService.status.equals("off")){reconnect=true;disconnect();}render();
             }
         });
@@ -147,7 +151,7 @@ public final class FriendsActivity extends LocalizedActivity {
     }
     private void showRoute(){
 
-        countries.setSelection(country.equals("nl")?1:0);transports.setSelection(transport.equals("auto")?0:transport.equals("awg")?1:transport.equals("tcp")?2:3);
+        countries.setSelection(targetIndex());transports.setSelection(transport.equals("auto")?0:transport.equals("awg")?1:transport.equals("tcp")?2:3);
 
         LinearLayout page=dialogContent();page.setPadding(TerminalUi.dp(this,12),TerminalUi.dp(this,8),TerminalUi.dp(this,12),TerminalUi.dp(this,8));
         TerminalUi.dashboardHeader(page);
@@ -270,12 +274,13 @@ public final class FriendsActivity extends LocalizedActivity {
         String shownCountry=off?country:activeCountry;
         String shownTransport=off?transport:ConnectionService.activeTransport;
         String transportLabel=shownTransport.equals("auto")?"Auto":shownTransport.equals("awg")?"AWG 3.1":shownTransport.equals("restricted")||shownTransport.equals("telemost")?TransportPresentation.MESH:"TCP REALITY";
-        String summary=getString(shownCountry.equals("nl")?R.string.gateway_netherlands:R.string.gateway_russia)+"  /  "+transportLabel;
-        text(routeCaption,summary);telemetry.connection(getString(shownCountry.equals("nl")?R.string.gateway_netherlands:R.string.gateway_russia),transportLabel,getString(off?R.string.off:on?(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.health_checking):R.string.connecting));if(connectionPane==0&&on)telemetry.sample();else telemetry.pause();renderLoad();
+        String summary=targetLabel(shownCountry)+"  /  "+transportLabel;
+        text(routeCaption,summary);telemetry.connection(targetLabel(shownCountry),transportLabel,getString(off?R.string.off:on?(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.health_checking):R.string.connecting));if(connectionPane==0&&on)telemetry.sample();else telemetry.pause();renderLoad();
+        String shownRegion=shownCountry.equals("ru")?"ru":"nl";
         telemetry.deviceBattery(battery);
         if(routeDial!=null){routeDial.setMotion(motion);routeDial.update(value,ConnectionService.healthStatus);routeDial.setEnabled(!busy);}
-        if(dashboardMap!=null)dashboardMap.update(shownCountry,value,ConnectionService.healthStatus,false);
-        if(routeMap!=null){routeMap.update(shownCountry,value,ConnectionService.healthStatus,motion);text(routeStatus,getString(off?R.string.route_selected:R.string.route_active)+" · "+summary+"\n"+getString(R.string.route_core)+": "+getString(off?R.string.route_waiting:on?R.string.on:R.string.connecting)+"\n"+getString(R.string.route_check)+": "+getString(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:off?R.string.route_waiting:R.string.health_checking));text(routeDetail,detail.getText().toString());}
+        if(dashboardMap!=null)dashboardMap.update(shownRegion,value,ConnectionService.healthStatus,false);
+        if(routeMap!=null){routeMap.update(shownRegion,value,ConnectionService.healthStatus,motion);text(routeStatus,getString(off?R.string.route_selected:R.string.route_active)+" · "+summary+"\n"+getString(R.string.route_core)+": "+getString(off?R.string.route_waiting:on?R.string.on:R.string.connecting)+"\n"+getString(R.string.route_check)+": "+getString(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:off?R.string.route_waiting:R.string.health_checking));text(routeDetail,detail.getText().toString());}
         countries.setEnabled(Ui60Presentation.canSelectRoute(value,busy));check.setEnabled(!busy&&on);transports.setEnabled(Ui60Presentation.canSelectRoute(value,busy));
         if(ConnectionService.failed)text(detail,getString(R.string.failed));
         if(Ui60Presentation.canReconnect(value,busy,reconnect)){reconnect=false;toggle();}
@@ -336,6 +341,7 @@ public final class FriendsActivity extends LocalizedActivity {
         Intent permission=VpnService.prepare(this);if(permission!=null)startActivityForResult(permission,11);else prepareConnect();
     }
     private void prepareConnect(){
+        if(ControlFriendsCatalog.explicit(country)&&!(transport.equals("awg")||transport.equals("tcp"))){detail.setText(R.string.gateway_ordinary_only);return;}
         if(Build.VERSION.SDK_INT>=33&&checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=android.content.pm.PackageManager.PERMISSION_GRANTED){requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},12);return;}
         connectNow();
     }
@@ -391,7 +397,7 @@ public final class FriendsActivity extends LocalizedActivity {
                 if(value!=null){serverLoads.clear();serverLoads.putAll(value);}if(serverAdapter!=null)serverAdapter.notifyDataSetChanged();renderLoad();});});
     }
     private final class ServerAdapter extends BaseAdapter {
-        private final String[] codes={"ru","nl"};
+        private final String[] codes=TARGETS;
         public int getCount(){return codes.length;}
         public Object getItem(int position){return codes[position];}
         public long getItemId(int position){return position;}
@@ -406,7 +412,7 @@ public final class FriendsActivity extends LocalizedActivity {
         boolean ru=code.equals("ru");
         ImageView flag=new ImageView(c);flag.setImageResource(ru?R.drawable.ic_flag_ru:R.drawable.ic_flag_nl);flag.setAdjustViewBounds(true);
         LinearLayout.LayoutParams flagParams=new LinearLayout.LayoutParams(TerminalUi.dp(c,24),TerminalUi.dp(c,16));flagParams.rightMargin=TerminalUi.dp(c,10);row.addView(flag,flagParams);
-        TextView name=collapsed?new TerminalUi.InlineLabel(c):new TextView(c);name.setText(ru?R.string.gateway_russia:R.string.gateway_netherlands);TerminalUi.textStyle(name,collapsed?12:14,collapsed?TerminalUi.MINT:TerminalUi.TEXT);name.setGravity(Gravity.CENTER_VERTICAL);
+        TextView name=collapsed?new TerminalUi.InlineLabel(c):new TextView(c);name.setText(targetLabel(code));TerminalUi.textStyle(name,collapsed?12:14,collapsed?TerminalUi.MINT:TerminalUi.TEXT);name.setGravity(Gravity.CENTER_VERTICAL);
         row.addView(name,new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,1));
         if(collapsed){((TerminalUi.InlineLabel)name).label(name.getText()+"  ▾");name.setMinHeight(Math.max(TerminalUi.dp(c,48),(int)Math.ceil(name.getPaint().getFontMetrics().bottom-name.getPaint().getFontMetrics().top)));return row;}
         boolean locRu=getResources().getConfiguration().getLocales().get(0).getLanguage().equals("ru");

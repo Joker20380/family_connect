@@ -2,6 +2,7 @@
   "control/friends/__init__.py",
   "control/friends/access.py",
   "control/friends/gateway_routing.py",
+  "control/friends/gateway_selection.py",
   "control/friends/support_ids.py",
   "control/friends/diagnostics.py",
   "control/friends/chat.py",

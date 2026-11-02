@@ -13,18 +13,22 @@ import javax.crypto.SecretKey;
 
 /** One app process, no backups or implicit recreation. Separate enrollment state; never replaces the control journal. */
 final class FriendsConfigurationVault implements ControlJournal.Storage {
-    private static final String ALIAS = "family-connect-friends-configuration-v1";
+    private final String alias;
     private final AtomicFile file;
     FriendsConfigurationVault(Context context) {
-        file = new AtomicFile(new File(context.getNoBackupFilesDir(), "friends-configuration.enc"));
+        this(context,false);
+    }
+    FriendsConfigurationVault(Context context,boolean selection) {
+        alias = selection ? "family-connect-friends-gateway-configuration-v1" : "family-connect-friends-configuration-v1";
+        file = new AtomicFile(new File(context.getNoBackupFilesDir(), selection ? "friends-gateway-configuration.enc" : "friends-configuration.enc"));
     }
     private static KeyStore keys() throws Exception {
         KeyStore keys = KeyStore.getInstance("AndroidKeyStore"); keys.load(null); return keys;
     }
-    private static SecretKey key() throws Exception {
+    private SecretKey key() throws Exception {
         KeyStore keys = keys();
-        if (!keys.containsAlias(ALIAS)) throw new IOException("Control journal wrapping key unavailable");
-        return (SecretKey) keys.getKey(ALIAS, null);
+        if (!keys.containsAlias(alias)) throw new IOException("Control journal wrapping key unavailable");
+        return (SecretKey) keys.getKey(alias, null);
     }
     public byte[] read() throws Exception {
         synchronized (ControlJournal.OWNER) {
@@ -42,11 +46,11 @@ final class FriendsConfigurationVault implements ControlJournal.Storage {
     public void create(byte[] raw) throws Exception {
         synchronized (ControlJournal.OWNER) {
             KeyStore keys = keys();
-            if (keys.containsAlias(ALIAS) || file.getBaseFile().exists() || new File(file.getBaseFile()+".bak").exists() || new File(file.getBaseFile()+".new").exists())
+            if (keys.containsAlias(alias) || file.getBaseFile().exists() || new File(file.getBaseFile()+".bak").exists() || new File(file.getBaseFile()+".new").exists())
                 throw new IOException("Control journal already exists");
             if (raw.length == 0 || raw.length > 16384) throw new IOException("Invalid control journal size");
             KeyGenerator generator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
-            generator.init(new KeyGenParameterSpec.Builder(ALIAS, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+            generator.init(new KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
                 .setBlockModes(KeyProperties.BLOCK_MODE_GCM).setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE).setKeySize(256).build());
             persist(generator.generateKey(), raw); // Retain alias on failure: explicit recovery required.
         }

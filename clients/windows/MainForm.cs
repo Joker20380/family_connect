@@ -10,6 +10,8 @@ internal sealed class MainForm:Form
     FriendsForm accessPage=null!;
     LiveNetworkPanel? telemetry;
     string Country=>country.SelectedIndex==1?"ru":"nl";string? transport,lastError;
+    string Target=>country.SelectedIndex switch{2=>"nl-amsterdam-1",3=>"nl-amsterdam-2",_=>Country};
+    string TargetLabel(int index)=>index switch{1=>T("Россия","Russia"),2=>T("Амстердам 1","Amsterdam 1"),3=>T("Амстердам 2","Amsterdam 2"),_=>T("Нидерланды · назначенный","Netherlands · assigned")};
     readonly ComboBox mode=new ModernComboBox(){DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
     bool TcpSelected=>mode.SelectedIndex==0;
     bool AwgSelected=>mode.SelectedIndex==1;
@@ -101,12 +103,12 @@ internal sealed class MainForm:Form
         update.BackColor=BackColor;language.BackColor=BackColor;
         mode.Items.AddRange(new object[]{"TCP REALITY","AWG 3.1"});mode.SelectedIndex=1;
         mode.Margin=new Padding(0,4,0,8);mode.BackColor=Color.FromArgb(7,32,24);mode.ForeColor=ForeColor;
-        country.Items.AddRange(new object[]{T("Нидерланды","Netherlands"),T("Россия","Russia")});country.SelectedIndex=0;
+        country.Items.AddRange(Enumerable.Range(0,4).Select(index=>(object)TargetLabel(index)).ToArray());country.SelectedIndex=0;
         country.BackColor=mode.BackColor;country.ForeColor=ForeColor;
         country.FlagBands=CountryFlag;country.Detail=CountryLoad;
         foreach(var picker in new[]{country,mode}){picker.ItemHeight=30;picker.Font=Font;}
-        if(saveLanguage)try{using var p=Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\family_connect");country.SelectedIndex=(p?.GetValue("Country") as string)=="ru"?1:0;mode.SelectedIndex=(p?.GetValue("Transport") as string)=="tcp"?0:1;}catch{}
-        void SaveSelection(){revision++;loadNext=DateTime.MinValue;if(saveLanguage)try{using var p=Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\family_connect");p.SetValue("Country",Country);p.SetValue("Transport",TcpSelected?"tcp":"awg");}catch{}PaintState();}
+        if(saveLanguage)try{using var p=Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\family_connect");country.SelectedIndex=(p?.GetValue("Gateway") as string) switch{"nl-amsterdam-1"=>2,"nl-amsterdam-2"=>3,_=>(p?.GetValue("Country") as string)=="ru"?1:0};mode.SelectedIndex=(p?.GetValue("Transport") as string)=="tcp"?0:1;}catch{}
+        void SaveSelection(){revision++;loadNext=DateTime.MinValue;if(saveLanguage)try{using var p=Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\family_connect");p.SetValue("Country",Country);p.SetValue("Gateway",FriendsCatalog.Explicit(Target)?Target:"");p.SetValue("Transport",TcpSelected?"tcp":"awg");}catch{}PaintState();}
         country.SelectedIndexChanged+=(_,_)=>SaveSelection();mode.SelectedIndexChanged+=(_,_)=>SaveSelection();
         dial.Height=260;
         accessPage=new FriendsForm(ru,r=>call(r));accessPage.RegistrationChanged+=()=>{friendsReady=true;PaintState();};
@@ -439,10 +441,7 @@ internal sealed class MainForm:Form
     {
         content.SuspendLayout();
         try{
-        if(country.Items.Count==2){
-            if((country.Items[0] as string)!=T("Нидерланды","Netherlands"))country.Items[0]=T("Нидерланды","Netherlands");
-            if((country.Items[1] as string)!=T("Россия","Russia"))country.Items[1]=T("Россия","Russia");
-        }
+        for(int index=0;index<country.Items.Count;index++)if((country.Items[index] as string)!=TargetLabel(index))country.Items[index]=TargetLabel(index);
         ((ModernButton)connect).SwitchOn=state=="on";connect.Invalidate();
         status.ForeColor=state=="on"?Color.FromArgb(152,247,216):Color.FromArgb(218,255,242);
         status.Text=NeedsInvitation?T("Нужно приглашение","Invitation required"):state switch{
@@ -450,7 +449,7 @@ internal sealed class MainForm:Form
             "inactive"=>friendsReady?T("Готов к подключению","Ready to connect"):T("Получить доступ","Get access"),"other-user"=>T("VPN занят другим пользователем","VPN used by another user"),
             "pending"=>lastError=="tcp-reconnecting"?T("Восстанавливаем подключение…","Reconnecting…"):T("Подключение меняется…","Connection changing…"),_=>T("Статус недоступен","Status unavailable")};
         enroll.Text=T("Активировать по приглашению","Activate with invitation");
-        description.Text=(Country=="nl"?T("Нидерланды","Netherlands"):T("Россия","Russia"))+" · "+(TcpSelected?"TCP REALITY":"AWG 3.1");
+        description.Text=TargetLabel(country.SelectedIndex)+" · "+(TcpSelected?"TCP REALITY":"AWG 3.1");
         connect.Text=state=="on"?T("Отключить","Disconnect"):state=="pending"&&(automatic||transport is "tcp" or "awg")?T("Отменить подключение","Cancel connection"):T("Подключить","Connect");
         connect.Enabled=!busy&&(state=="on"||(state=="pending"&&(automatic||transport is "tcp" or "awg"))||((state is "off" or "inactive")&&(friendsReady||(AutoSelected?(awgReady||tcpReady||state=="off"):AwgSelected?awgReady:TcpSelected?tcpReady:state=="off"))));
         dial.UpdateState(state=="on",busy||state=="pending",ru,connect.Enabled);telemetry?.Connection(ru,status.Text);
@@ -475,8 +474,9 @@ internal sealed class MainForm:Form
         loadBar.AccessibleName=loadLabel.Text;
         loadTip.SetToolTip(loadLabel,sample is null?loadLabel.Text:$"CPU {sample.Cpu:F0}% · ↓ {sample.Rx:F1} / ↑ {sample.Tx:F1} Mbps"+(sample.Estimated?T(" · оценка по 200 Мбит/с исходящего канала"," · estimated using 200 Mbps egress"):""));
     }
-    Color[]? CountryFlag(int index)=>index switch{0=>new[]{Color.FromArgb(174,28,40),Color.White,Color.FromArgb(33,70,139)},1=>new[]{Color.White,Color.FromArgb(0,57,166),Color.FromArgb(213,43,30)},_=>null};
+    Color[]? CountryFlag(int index)=>index switch{0 or 2 or 3=>new[]{Color.FromArgb(174,28,40),Color.White,Color.FromArgb(33,70,139)},1=>new[]{Color.White,Color.FromArgb(0,57,166),Color.FromArgb(213,43,30)},_=>null};
     string? CountryLoad(int index){
+        if(index>=2)return T("Нет данных","No data");
         var code=index==1?"ru":"nl";
         if(!allLoads.TryGetValue(code,out var sample)||!sample.Fresh)return T("Нет данных","No data");
         return sample.Percent is double p?(sample.Estimated?"≈ ":"")+Math.Round(p)+"%":T("Нет данных","No data");
@@ -491,7 +491,7 @@ internal sealed class MainForm:Form
                 var loads=await ServerLoad.FetchAll();
                 if(!IsDisposed&&!Disposing&&started==revision&&selected==mode.SelectedIndex){
                     allLoads.Clear();foreach(var pair in loads)allLoads[pair.Key]=pair.Value;
-                    loadSample=allLoads.TryGetValue(Country,out var current)?current:null;
+                    loadSample=!FriendsCatalog.Explicit(Target)&&allLoads.TryGetValue(Country,out var current)?current:null;
                     loadRevision=started;loadMode=selected;country.RefreshContent();
                 }
             }else{
@@ -513,7 +513,7 @@ internal sealed class MainForm:Form
             item.Value.ForeColor=(item.Key==page||(page=="access"&&item.Key=="settings"))?Color.FromArgb(255,173,70):Color.FromArgb(153,196,181);
         }
     }
-    string ConnectionAction()=>state=="on"||(state=="pending"&&(automatic||transport is "tcp" or "awg"))?"disconnect":friendsReady?"friends-connect-"+(TcpSelected?"tcp":"awg")+"-"+Country:AutoSelected?"connect-auto":AwgSelected?"connect-awg":TcpSelected?"connect-tcp":"connect";
+    string ConnectionAction()=>state=="on"||(state=="pending"&&(automatic||transport is "tcp" or "awg"))?"disconnect":friendsReady?"friends-connect-"+(TcpSelected?"tcp":"awg")+"-"+Target:AutoSelected?"connect-auto":AwgSelected?"connect-awg":TcpSelected?"connect-tcp":"connect";
     string ErrorText(string? error)=>error switch{
         "activation-invalid"=>T("Активация недействительна, истекла или выдана другому устройству.","Activation is invalid, expired or belongs to another device."),
         "activation-required"=>T("Откройте файл активации выбранного подключения.","Open the activation file for the selected connection."),

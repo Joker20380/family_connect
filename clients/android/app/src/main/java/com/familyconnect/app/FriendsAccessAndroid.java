@@ -62,7 +62,7 @@ final class FriendsAccessAndroid {
     }
     private JsonObject directPostObserved(String path,JsonObject body,String requestId)throws Exception{
         remaining(5000);
-        require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/(status|support|diagnostics)|notices/device/(role|publish|list|edit))"));
+        require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|gateway-configuration/nl-amsterdam-[12]|chat/(challenge|register)|referral/(issue|claim)|device/(status|support|diagnostics)|notices/device/(role|publish|list|edit))"));
         boolean viaVpn=ReadinessBootstrapRoute.allowed(path)&&"on".equals(ConnectionService.status)&&"ok".equals(ConnectionService.healthStatus);
         if(fetchTrace!=null){fetchTrace.request(path,direct&&!viaVpn?ReadinessFetchTrace.Route.HTTPS_UNDERLAY:ReadinessFetchTrace.Route.HTTPS_VPN);fetchTrace.stage(ReadinessFetchTrace.Stage.OPEN_NETWORK);}
         HttpsURLConnection connection=direct&&!viaVpn?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path,fetchTrace):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();
@@ -264,8 +264,10 @@ final class FriendsAccessAndroid {
         }
     }
     private String materialize(JsonObject reply,ControlIdentity identity,String country,String transport,long floor)throws Exception{
-        fields(reply,"device country address tcp_id catalog");require(text(reply.get("device")).equals(identity.reference())&&text(reply.get("country")).equals(country));
-        ControlFriendsCatalog catalog=ControlFriendsCatalog.verify(reply.getAsJsonObject("catalog").toString().getBytes(StandardCharsets.UTF_8),ControlTrust.anchor(context),floor);
+        boolean explicit=ControlFriendsCatalog.explicit(country);
+        fields(reply,"device country address tcp_id catalog"+(explicit?" gateway_id":""));require(text(reply.get("device")).equals(identity.reference())&&text(reply.get("country")).equals(explicit?"nl":country));
+        if(explicit)require(text(reply.get("gateway_id")).equals(country));
+        ControlFriendsCatalog catalog=ControlFriendsCatalog.verify(reply.getAsJsonObject("catalog").toString().getBytes(StandardCharsets.UTF_8),ControlTrust.anchor(context),floor,explicit?3:2);
         String id=text(reply.get("tcp_id"));require(id.matches("[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}")&&!id.equals("00000000-0000-0000-0000-000000000000"));
         if(transport.equals("tcp"))return TcpProfile.validate(catalog.profiles.get(country).replace("DEVICE_CREDENTIAL",id));
         require(transport.equals("awg"));String address=text(reply.get("address")),prefix=country.equals("ru")?"10.84.":"10.83.";
@@ -275,19 +277,35 @@ final class FriendsAccessAndroid {
         byte[] key=identity.wireguardPrivateKey();try{return ProfileValidator.validate(catalog.awgProfiles.get(country).replace("LOCAL_DEVICE_KEY",Base64.getEncoder().encodeToString(key)).replace("ASSIGNED_ADDRESS",address),Transport.AWG);}finally{Arrays.fill(key,(byte)0);}
     }
     String profile(String country,String transport)throws Exception{
-        require(country.equals("ru")||country.equals("nl"));require(transport.equals("awg")||transport.equals("tcp"));
+        boolean explicit=ControlFriendsCatalog.explicit(country);
+        require(country.equals("ru")||country.equals("nl")||explicit);require(transport.equals("awg")||transport.equals("tcp"));
+        synchronized(ControlJournal.OWNER){
         try(ControlIdentity identity=identity(false)){
-            FriendsConfigurationVault vault=new FriendsConfigurationVault(context);boolean exists=present("friends-configuration.enc","family-connect-friends-configuration-v1");
+            FriendsConfigurationVault vault=new FriendsConfigurationVault(context,explicit);boolean exists=present(explicit?"friends-gateway-configuration.enc":"friends-configuration.enc",explicit?"family-connect-friends-gateway-configuration-v1":"family-connect-friends-configuration-v1");
             JsonObject cache=exists?parse(vault.read()).getAsJsonObject():new JsonObject();JsonObject prior=cache.has(country)?cache.getAsJsonObject(country):null;
             long floor=0;
-            if(prior!=null){materialize(prior,identity,country,transport,0);floor=ControlFriendsCatalog.verify(prior.getAsJsonObject("catalog").toString().getBytes(StandardCharsets.UTF_8),ControlTrust.anchor(context),0).sequence;}
+            String previousHash=null;
+            if(explicit){
+                require(cache.size()<=2);
+                for(String target:cache.keySet()){
+                    require(ControlFriendsCatalog.explicit(target));
+                    JsonObject saved=cache.getAsJsonObject(target);materialize(saved,identity,target,transport,0);
+                    var verified=ControlFriendsCatalog.verify(saved.getAsJsonObject("catalog").toString().getBytes(StandardCharsets.UTF_8),ControlTrust.anchor(context),0,3);
+                    if(verified.sequence>floor){floor=verified.sequence;previousHash=verified.digest;}
+                    else if(verified.sequence==floor)require(verified.digest.equals(previousHash));
+                }
+            }else if(prior!=null){materialize(prior,identity,country,transport,0);floor=ControlFriendsCatalog.verify(prior.getAsJsonObject("catalog").toString().getBytes(StandardCharsets.UTF_8),ControlTrust.anchor(context),0).sequence;}
             JsonObject reply;
-            try{reply=post("/friends/configuration/"+country,proof(identity,country,""));}
-            catch(IOException unavailable){if(prior!=null)return materialize(prior,identity,country,transport,floor);throw unavailable;}
+            try{reply=post((explicit?"/friends/gateway-configuration/":"/friends/configuration/")+country,proof(identity,explicit?"gateway:"+country:country,""));}
+            catch(IOException unavailable){if(!explicit&&prior!=null)return materialize(prior,identity,country,transport,floor);throw unavailable;}
+            if(explicit){
+                ControlFriendsCatalog.verifySelection(reply,ControlTrust.anchor(context),identity.reference(),country,floor,previousHash);
+            }
             String profile=materialize(reply,identity,country,transport,floor);cache.add(country,reply);
             byte[] raw=cache.toString().getBytes(StandardCharsets.UTF_8);try{if(exists)vault.write(raw);else vault.create(raw);}finally{Arrays.fill(raw,(byte)0);}
-            FriendsRestricted.prewarm(context);
+            if(!explicit)FriendsRestricted.prewarm(context);
             return profile;
+        }
         }
     }
     boolean cachedProvisioningUsable() throws Exception {
@@ -306,6 +324,7 @@ final class FriendsAccessAndroid {
         }
     }
     Map<Transport,String> normalProfiles(String country)throws Exception{
+        require(country.equals("ru")||country.equals("nl"));
         profile(country,"awg");remaining(1);
         try(ControlIdentity identity=identity(false)){
             JsonObject reply=parse(new FriendsConfigurationVault(context).read()).getAsJsonObject().getAsJsonObject(country);

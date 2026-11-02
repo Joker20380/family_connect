@@ -11,7 +11,7 @@ from contextlib import contextmanager
 
 from device_identity.device import _private_directory, _read_key, _create_key, _FRIENDS_MARKER
 from device_identity.friends import _exists
-from .friends_catalog import parse, fields, verify, verify_catalog, require
+from .friends_catalog import GATEWAY_CHOICES, parse, fields, verify, verify_catalog, require
 
 _NAME = 'friends.configuration.json'
 _MARKER = b'FC-FRIENDS-CONFIGURATION-1\n'
@@ -21,8 +21,12 @@ _FLOOR_MARKER = b'FC-FRIENDS-CATALOG-FLOOR-1\n'
 
 
 class FriendsConfigurationStore:
-    def __init__(self, path, device, anchor):
+    def __init__(self, path, device, anchor, *, selection=False):
         self.path, self.device, self.anchor = path, device, anchor
+        self.name = 'friends.gateway-configuration.json' if selection else _NAME
+        self.floor_name = 'friends.gateway-catalog-floor.json' if selection else _FLOOR
+        self.schema = 3 if selection else 2
+        self.targets = GATEWAY_CHOICES if selection else ('ru', 'nl')
 
     @contextmanager
     def _locked(self):
@@ -41,17 +45,16 @@ class FriendsConfigurationStore:
             finally:
                 os.close(lock)
 
-    @staticmethod
-    def _read(directory):
-        exists = _exists(directory, _NAME); marked = _exists(directory, _NAME+'.initialized')
+    def _read(self, directory):
+        exists = _exists(directory, self.name); marked = _exists(directory, self.name+'.initialized')
         require(exists == marked)
         if not exists:
             return {}
-        require(_read_key(directory, _NAME+'.initialized', len(_MARKER)) == _MARKER)
-        info = os.stat(_NAME, dir_fd=directory, follow_symlinks=False)
+        require(_read_key(directory, self.name+'.initialized', len(_MARKER)) == _MARKER)
+        info = os.stat(self.name, dir_fd=directory, follow_symlinks=False)
         require(0 < info.st_size <= _LIMIT)
-        data = parse(_read_key(directory, _NAME, info.st_size).decode('utf-8'))
-        require(type(data) is dict and 1 <= len(data) <= 2 and set(data) <= {'ru', 'nl'})
+        data = parse(_read_key(directory, self.name, info.st_size).decode('utf-8'))
+        require(type(data) is dict and 1 <= len(data) <= 2 and set(data) <= set(self.targets))
         return data
 
     def _verify(self, reply, country, floor=0, previous_hash=None):
@@ -59,20 +62,20 @@ class FriendsConfigurationStore:
                       self.device._wireguard_key.private_bytes_raw(), floor=floor, previous_hash=previous_hash)
 
     def _catalog_floor(self, directory):
-        exists, marked = _exists(directory, _FLOOR), _exists(directory, _FLOOR+'.initialized')
+        exists, marked = _exists(directory, self.floor_name), _exists(directory, self.floor_name+'.initialized')
         require(exists or not marked)
         if marked:
-            require(_read_key(directory, _FLOOR+'.initialized', len(_FLOOR_MARKER)) == _FLOOR_MARKER)
+            require(_read_key(directory, self.floor_name+'.initialized', len(_FLOOR_MARKER)) == _FLOOR_MARKER)
         if not exists:
             return None
-        size = os.stat(_FLOOR, dir_fd=directory, follow_symlinks=False).st_size
+        size = os.stat(self.floor_name, dir_fd=directory, follow_symlinks=False).st_size
         require(0 < size <= 16384)
-        record = parse(_read_key(directory, _FLOOR, size).decode('utf-8'))
+        record = parse(_read_key(directory, self.floor_name, size).decode('utf-8'))
         fields(record, 'schema device catalog')
         require(type(record['schema']) is int and record['schema'] == 1 and record['device'] == self.device.reference)
-        verify_catalog(record['catalog'], self.anchor)
+        verify_catalog(record['catalog'], self.anchor, schema=self.schema)
         if not marked:
-            _create_key(directory, _FLOOR+'.initialized', _FLOOR_MARKER)
+            _create_key(directory, self.floor_name+'.initialized', _FLOOR_MARKER)
         return record['catalog']
 
     def _current(self, directory, additional=None):
@@ -81,7 +84,7 @@ class FriendsConfigurationStore:
         saved = self._catalog_floor(directory)
         for envelope in (saved, additional):
             if envelope is not None:
-                entries.append((envelope, verify_catalog(envelope, self.anchor)))
+                entries.append((envelope, verify_catalog(envelope, self.anchor, schema=self.schema)))
         floor = max((entry.sequence for _, entry in entries), default=0)
         highest = [(envelope, entry) for envelope, entry in entries if entry.sequence == floor]
         require(len({entry.catalog_hash for _, entry in highest}) <= 1)
@@ -111,13 +114,13 @@ class FriendsConfigurationStore:
                     output.write(raw)
                     output.flush()
                     os.fsync(output.fileno())
-                os.replace(temporary, _FLOOR, src_dir_fd=directory, dst_dir_fd=directory)
+                os.replace(temporary, self.floor_name, src_dir_fd=directory, dst_dir_fd=directory)
                 os.fsync(directory)
             finally:
                 if _exists(directory, temporary):
                     os.unlink(temporary, dir_fd=directory)
             checked = self._catalog_floor(directory)
-            readback = verify_catalog(checked, self.anchor)
+            readback = verify_catalog(checked, self.anchor, schema=self.schema)
             require(checked == highest and (readback.sequence, readback.catalog_hash) == (floor.sequence, floor.catalog_hash))
 
     def accept(self, country, fetch):
@@ -126,7 +129,7 @@ class FriendsConfigurationStore:
         Never returns a stale profile after HTTP denial or malformed new configuration.
         Caller runs off the GUI thread. A single lock protects both countries' floor.
         """
-        require(country in ('ru', 'nl'))
+        require(country in self.targets)
         with self._locked() as directory:
             cache, (_envelope, accepted_floor), _saved = self._current(directory)
             floor = accepted_floor.sequence if accepted_floor else 0
@@ -137,14 +140,14 @@ class FriendsConfigurationStore:
             import json
             raw = json.dumps(cache, separators=(',', ':'), allow_nan=False).encode()
             require(len(raw) <= _LIMIT)
-            if not _exists(directory, _NAME+'.initialized'):
-                _create_key(directory, _NAME+'.initialized', _MARKER)
+            if not _exists(directory, self.name+'.initialized'):
+                _create_key(directory, self.name+'.initialized', _MARKER)
             temporary = '.friends-config-'+secrets.token_hex(16)
             fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=directory)
             try:
                 with os.fdopen(fd, 'wb') as stream:
                     stream.write(raw); stream.flush(); os.fsync(stream.fileno())
-                os.replace(temporary, _NAME, src_dir_fd=directory, dst_dir_fd=directory)
+                os.replace(temporary, self.name, src_dir_fd=directory, dst_dir_fd=directory)
                 os.fsync(directory)
             finally:
                 if _exists(directory, temporary):os.unlink(temporary, dir_fd=directory)

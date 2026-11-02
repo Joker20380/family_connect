@@ -42,13 +42,14 @@ internal static class FriendsConfigurationVault
     {
         lock (Gate)
         {
-            if (country is not ("ru" or "nl")) throw new FormatException("Invalid country");
+            bool selection = FriendsCatalog.Explicit(country);
+            if (country is not ("ru" or "nl") && !selection) throw new FormatException("Invalid country");
             var directory = new DirectoryInfo(root);
             if (!directory.Exists || (directory.Attributes & FileAttributes.ReparsePoint) != 0) throw new IOException("Unsafe configuration root");
-            string path = ConfigPath(root, sid), marker = path+".initialized";
+            string path = ConfigPath(root, sid) + (selection ? ".gateways" : ""), marker = path+".initialized";
             bool exists = Present(path), marked = Present(marker);
             if (exists != marked) throw new IOException("Configuration recovery required");
-            var entropy = SHA256.HashData(Encoding.UTF8.GetBytes("family-connect/friends-configuration/v1\0"+sid));
+            var entropy = SHA256.HashData(Encoding.UTF8.GetBytes((selection ? "family-connect/friends-gateway-configuration/v1\0" : "family-connect/friends-configuration/v1\0")+sid));
             byte[]? raw = null; var key = identity.WireguardPrivateKey();
             try
             {
@@ -62,6 +63,7 @@ internal static class FriendsConfigurationVault
                     var saved = ControlProtocol.Parse(raw); ControlProtocol.Require(saved.ValueKind == JsonValueKind.Object);
                     foreach (var item in saved.EnumerateObject())
                     {
+                        ControlProtocol.Require(selection ? FriendsCatalog.Explicit(item.Name) : item.Name is "ru" or "nl");
                         var profile = FriendsCatalog.Verify(item.Value, anchor, identity.Reference, item.Name, key);
                         cache.Add(item.Name, item.Value);
                         if (profile.Sequence > floor) { floor = profile.Sequence; hash = profile.CatalogHash; }

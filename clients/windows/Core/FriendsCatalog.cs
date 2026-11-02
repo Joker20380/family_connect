@@ -6,7 +6,7 @@ using static FamilyConnect.ControlProtocol;
 namespace FamilyConnect;
 
 // Device credentials stay with the protected owner, never the UI/diagnostic reply.
-internal sealed class FriendsConfiguration(string country, long sequence, string hash, string address, string tcp, string awg)
+internal sealed class FriendsConfiguration(string country, long sequence, string hash, string address, string tcp, string awg, string? gatewayId = null)
 {
     internal string Country { get; } = country;
     internal long Sequence { get; } = sequence;
@@ -14,11 +14,13 @@ internal sealed class FriendsConfiguration(string country, long sequence, string
     internal string Address { get; } = address;
     internal string Tcp { get; } = tcp;
     internal string Awg { get; } = awg;
+    internal string? GatewayId { get; } = gatewayId;
     public override string ToString() => $"FriendsConfiguration({Country}, {Sequence})";
 }
 
 internal static class FriendsCatalog
 {
+    internal static bool Explicit(string target) => target is "nl-amsterdam-1" or "nl-amsterdam-2";
     const long MaxSequence = 9007199254740991;
     const string Sample = "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE=";
     static string S(JsonElement e, string name) => Text(e.GetProperty(name));
@@ -96,16 +98,19 @@ internal static class FriendsCatalog
     {
         try
         {
-            Require(country is "ru" or "nl" && floor >= 0 && floor <= MaxSequence && wireguardKey.Length == 32);
+            bool selectedGateway = Explicit(country);
+            string region = selectedGateway ? "nl" : country;
+            Require((country is "ru" or "nl" || selectedGateway) && floor >= 0 && floor <= MaxSequence && wireguardKey.Length == 32);
             // Reparse even injected/locally loaded JsonElements to reject nested duplicate properties.
             reply = Parse(Encoding.UTF8.GetBytes(reply.GetRawText()));
-            Fields(reply, "device country address tcp_id catalog"); Require(S(reply, "device") == device && S(reply, "country") == country);
+            Fields(reply, "device country address tcp_id catalog" + (selectedGateway ? " gateway_id" : "")); Require(S(reply, "device") == device && S(reply, "country") == region);
+            if (selectedGateway) Require(S(reply, "gateway_id") == country);
             var envelope = reply.GetProperty("catalog"); Fields(envelope, "payload signature");
             Require(Encoding.UTF8.GetByteCount(envelope.GetRawText()) <= 16384);
             var payload = Base64(S(envelope, "payload"), true); Require(payload.Length > 0 && payload.Length <= 8192);
             Require(Signature(anchor, Base64(S(envelope, "signature"), true), "family-connect/invited-test/v1", payload));
             var value = Parse(payload); Fields(value, "schema sequence access gateways");
-            Require(Integer(value.GetProperty("schema")) == 2 && S(value, "access") == "invite-test");
+            Require(Integer(value.GetProperty("schema")) == (selectedGateway ? 3 : 2) && S(value, "access") == "invite-test");
             long sequence = Integer(value.GetProperty("sequence"), 1); Require(sequence >= floor && sequence <= MaxSequence);
             string hash = Hash(payload);
             if (previousHash is not null) Require(Matches(previousHash, "[0-9a-f]{64}") && (sequence != floor || hash == previousHash));
@@ -113,18 +118,25 @@ internal static class FriendsCatalog
             var profiles = new Dictionary<string, JsonElement>();
             foreach (var item in gateways.EnumerateArray())
             {
-                Fields(item, "country tcp awg"); var region = S(item, "country"); Require(region is "ru" or "nl" && profiles.TryAdd(region, item));
-                Tcp(item.GetProperty("tcp")); Awg(S(item, "awg"));
+                Fields(item, "country tcp awg" + (selectedGateway ? " gateway_id" : "")); var location = S(item, "country");
+                string target = selectedGateway ? S(item, "gateway_id") : location;
+                Require(location is "ru" or "nl" && (!selectedGateway || (location == "nl" && Explicit(target))));
+                Tcp(item.GetProperty("tcp")); var (_, peer) = Awg(S(item, "awg"));
+                if (selectedGateway) {
+                    string host = S(item.GetProperty("tcp"), "server");
+                    Require(peer["Endpoint"].Split(':')[0] == host && profiles.Values.All(existing => S(existing.GetProperty("tcp"), "server") != host));
+                }
+                Require(profiles.TryAdd(target, item));
             }
             string address = S(reply, "address"), credential = S(reply, "tcp_id");
             Require(address.EndsWith("/32")); var ip = Ip(address[..^3]); var bytes = IPAddress.Parse(ip).GetAddressBytes();
-            Require(bytes[0] == 10 && bytes[1] == (country == "ru" ? 84 : 83));
+            Require(bytes[0] == 10 && bytes[1] == (region == "ru" ? 84 : 83));
             Require(!(bytes[2] == 0 && bytes[3] <= 1) && !(bytes[2] == 255 && bytes[3] == 255));
             Require(Guid.TryParseExact(credential, "D", out var id) && id != Guid.Empty && id.ToString("D") == credential);
             var selected = profiles[country];
             string tcp = selected.GetProperty("tcp").GetRawText().Replace("DEVICE_CREDENTIAL", credential);
             string awg = S(selected, "awg").Replace("LOCAL_DEVICE_KEY", Convert.ToBase64String(wireguardKey)).Replace("ASSIGNED_ADDRESS", address);
-            return new(country, sequence, hash, address, tcp, awg);
+            return new(region, sequence, hash, address, tcp, awg, selectedGateway ? country : null);
         }
         catch (Exception e) when (e is not OutOfMemoryException) { throw new FormatException("Invalid Friends configuration"); }
     }
