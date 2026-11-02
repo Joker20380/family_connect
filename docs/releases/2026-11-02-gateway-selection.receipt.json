@@ -45,6 +45,17 @@
     "isolated_system_deb_appimage_prestart": "PASS",
     "packaged_gtk_ru_en_100_200": "PASS",
     "installed_on_owner": false,
+    "owner_install_result": "ROLLED_BACK_PENDING_OWNER_REBOOT",
+    "paired_setup_refusal": "MESH_CLEANUP_UNCONFIRMED_STICKY_OWNER",
+    "root_system_replaced": false,
+    "restored_version": "0.2.12~l03.2.9",
+    "restored_candidate": "6f312d1e7c783ea42a39ca164d93d74b0ec4faf5bac53e24c12551cedd052a5b",
+    "restored_deb_sha256": "e79bca1bb70a1b8d6db1ba44436cb9216c8fa7bf769fb3d919a1f2c8c96eaf62",
+    "restored_system_pair": "READY",
+    "protected_user_entries": 2562,
+    "protected_user_state_unchanged": true,
+    "sticky_marker_preserved": true,
+    "vpn_connects": 0,
     "published": false
   },
   "windows": {
@@ -69,7 +80,9 @@
   },
   "android": {
     "candidate_version": "0.1.18-beta110",
-    "ci_run": 41443304002,
+    "ci_run": 41449895463,
+    "source_commit": "05d8919b94dfc55a089c7ea772cda0c6d65a87c7",
+    "retained_transport_ci_run": 41443304002,
     "transport_debug_lifecycle": "PASS",
     "acceptance": "FRIENDS_LANGUAGE_AND_ROW_REPAIR_PENDING_CI",
     "published_version": "0.1.18-beta109"

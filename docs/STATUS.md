@@ -20,8 +20,13 @@ installer/hash/native compatibility41439156032 PASS; immutable Windows0.2.16
 publication41442681710 and public HTTPS/hash PASS, signed Windows catalog12.
 Android110 debug transport lifecycle now PASS; two Friends UI failures are repaired
 (stale language callback and collapsed/expanded label assertion),43 source tests PASS,
-corrected emulator pending. Public Android109 unchanged. Linux.12 not accepted
-owner-installed/public, L08 not bypassed.
+corrected exact-source05d8919 emulator41449895463 pending. Public Android109 unchanged.
+Linux.12 owner install was attempted after normal disconnect/GUI closure; paired
+system setup refused before apply because MESH cleanup has an unconfirmed sticky
+`vpn` marker. Exact prior .9 DEB restored, candidate/system READY and all2562 protected
+user entries unchanged. No root system replacement or reconnect; marker retained.
+Owner workstation reboot is required before a fresh full-package attempt (not VPS).
+Linux.12 not accepted installed/public; L08 and ownership guards are not bypassed.
 Windows invitation/mirror16 and both actual CSP routes verified over HTTPS;6 browser
 scenarios and12 signing/publication regressions PASS. Publication needed3 Nginx
 reloads/0 backend restarts; protected rows unchanged. Real Nginx/HTTP55 PASS/1 skip.

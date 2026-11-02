@@ -4,7 +4,9 @@
 **Latest continuation — explicit Amsterdam1/2 selection.** Backend schema3/API and
 Windows0.2.16 distribution/update catalog12/invitation are LIVE and HTTPS-verified.
 Linux full0.2.12~l03.2.12 Ubuntu26.04/Python3.14 package is qualified, not yet
-owner-installed; L08 is not bypassed. Android110 emulator qualification remains
+owner-installed: attempted paired setup safely refused at the sticky MESH ownership
+gate, exact .9 rollback READY and user state unchanged. Workstation reboot is needed
+before a fresh install attempt; L08 is not bypassed. Android110 emulator qualification remains
 pending; public109 unchanged. [Current delivery receipt](releases/2026-11-02-gateway-selection.md).
 The following ordinary-admission baseline is retained evidence, not the latest
 client-publication status or a competing NEXT.

@@ -1,5 +1,29 @@
 # Explicit Amsterdam selection — 2 November 2026
 
+## Linux owner attempt and safe rollback
+
+The owner closed the GUI/disconnected VPN after the local prompt. The fixed user
+chat/root background units were stopped normally; no active Family Connect tunnel
+was present. Exact qualified .12 DEB installed and its candidate imports passed.
+Paired `--setup-system` refused in ownership acquisition, before applying the root
+system component: `MESH cleanup is unconfirmed; retain the sticky marker`.
+The unheld volatile transport lock still records `vpn`; it is not proof of cleanup.
+No lock removal/truncation, fabricated finish, guard bypass or VPN reconnect occurred.
+
+Exact previous .9 DEB (e79bca1bb70a1b8d6db1ba44436cb9216c8fa7bf769fb3d919a1f2c8c96eaf62)
+was restored through the local privileged prompt. Installed candidate6f312d1e…
+imports PASS and existing system pair READY. All2562 protected user entries,
+including symlink targets without following them, match the pre-attempt snapshot.
+No profiles/identity/chat data were changed, no root runtime was replaced. The
+GUI/background units remain stopped; no automatic connection is authorized.
+
+Result: **ROLLED_BACK_PENDING_OWNER_REBOOT**, not an installed .12 acceptance.
+Next prerequisite is an owner-controlled reboot of the workstation, **not either
+VPS**, to clear the volatile ownership state safely. After that, recheck ownership,
+processes/interfaces/journals and candidate pair before a new full-package operation.
+Completed install/rollback intents are retained and must not be blindly replayed.
+The same qualified .12 bytes remain the candidate; L08 is not bypassed.
+
 ## Delivery continuation
 
 Windows0.2.16 is qualified from exact source5ae821d / run41439156032,

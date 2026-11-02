@@ -17,7 +17,11 @@ and public HTTPS PASS. Initial cold-listener rollback reconciled; all evidence r
 Windows0.2.16 immutable publication41442681710 and public hash PASS; signed
 independent Windows sequence12 and invitation/mirror16 fully HTTPS-verified.
 NEXT within this task: corrected Android110 language/row emulator/package acceptance,
-remaining distribution and verified Linux full-package install. Preserve
+remaining distribution and verified Linux full-package install. Linux attempt
+refused at the sticky MESH ownership gate before system apply; exact .9 rollback
+READY,2562 user entries unchanged. NEXT Linux precondition: owner workstation
+reboot, then confirm volatile marker/ownership cleared and use a fresh install
+operation; never erase the marker, reconnect automatically or reuse completed intents. Preserve
 legacy assignments and paid state; explicit nodes support AWG/TCP, not second MESH.
 Do not remove the L08 full-package guard to force the installed internal Linux
 candidate through its legacy updater. [Evidence](releases/2026-11-02-gateway-selection.md).
