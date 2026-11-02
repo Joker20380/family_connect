@@ -10,7 +10,10 @@ Routing regression287 PASS (25 environment-dependent skips), new routing tests46
 Android JVM174 PASS; native Windows conformance/DPAPI, ordinary-user and visual checks PASS.
 Public Linux0.2.11 tagged parser accepts all3 new vectors; Windows0.2.15 parsers are unchanged.
 MESH routing and production renewal remain unchanged; second-node admission is not complete.
-Independent provider-console SSH fingerprint comparison is still required before live work.
+Owner now explicitly accepts the existing TOFU pin without another provider-console comparison;
+strict single-host SSH checking remains. Read-only new-node preflight PASS; first-install
+ordinary AWG/TCP source29 new tests PASS, combined contour316 PASS/25 existing skips.
+[Second-node preparation and trust decision](releases/2026-11-02-second-nl-ordinary.md).
 [Multi-node source and qualification](releases/2026-11-02-fleet-multinode-source.md) ·
 [Original constraint and measured timing](releases/2026-11-02-fleet-bootstrap-2-activation-check.md).
 
