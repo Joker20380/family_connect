@@ -1,5 +1,12 @@
 # Установка клиентов
 
+**Подготовка выбора Амстердама — 2 ноября 2026.** Android110 и Windows0.2.16
+с отдельными пунктами «Амстердам 1/2» пока проходят проверку, ещё не опубликованы.
+Полный Linux-кандидат0.2.12~l03.2.12 для Ubuntu26.04/Python3.14 собран, но ещё
+не установлен владельцу. Текущие публичные ссылки не заменены этими кандидатами.
+Внутренний Linux обновляется полным проверенным пакетом, не шестью файлами legacy
+updater. [Статус проверки](releases/2026-11-02-gateway-selection.md).
+
 **1 November — READY_FOR_BETA109_OWNER_UPDATE.** Beta109/code109 is published;
 Android update sequence4 and invitation109 verified over HTTPS. Full matrix41289980872/
 source600ae52, offline signer,16K alignment and exact bytes PASS. The repair keeps country/

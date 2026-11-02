@@ -10,6 +10,8 @@ control/DPAPI and ordinary-access CI PASS. Package-gate repairs: full desktop122
 PASS/185 environment skips, native configuration/Auto71 PASS, release contracts53
 PASS. Exact packages, signed catalog/backend rollout and client installation remain
 unaccepted. Current installed/public versions are unchanged; L08 is not bypassed.
+Source-only next versions: Android110/Windows0.2.16. Full Linux internal.12 built
+from efc13f1; artifact audit and isolated system-runtime smoke PASS, no owner install.
 [Selection source and delivery gates](releases/2026-11-02-gateway-selection.md).
 
 **2 November — SECOND_NL_ORDINARY_LIVE (AWG3.1/TCP REALITY).**

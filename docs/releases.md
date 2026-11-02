@@ -1,5 +1,12 @@
 # Release distribution / Выпуски
 
+**2 November — Amsterdam selection candidates, not published.** Source Android110
+and Windows0.2.16 are under native CI; complete internal Linux0.2.12~l03.2.12 is
+built/audited for Ubuntu26.04/Python3.14, isolated runtime installation/rollback PASS.
+Installed owner Linux.9 and public Android109/Linux0.2.11/Windows0.2.15 remain
+unchanged. No new download/checksum is advertised as available; do not bypass L08
+with the six-file archive. [Qualification](releases/2026-11-02-gateway-selection.md).
+
 **1 November — READY_FOR_BETA109_OWNER_UPDATE.** Beta109/code109 is published;
 Android update sequence4 and invitation109 verified over HTTPS. Full matrix41289980872/
 source600ae52, offline signer,16K alignment and exact bytes PASS. The repair keeps country/

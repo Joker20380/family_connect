@@ -73,6 +73,16 @@ No failed output is reused or published. Full package/service smoke is still pen
 
 ## Rollout boundary
 
+Source versions reserved for this change: Android0.1.18-beta110/code110 and
+Windows0.2.16. They are not yet signed/published/installed. Linux complete internal
+Ubuntu26.04/Python3.14 candidate0.2.12~l03.2.12 is built from efc13f1 (not installed),
+with DEB/AppImage byte/member audit PASS and system-component isolated systemd259
+install/rollback/identity-preservation smoke PASS. DEB/AppImage smoke is pending.
+System build d5fc9df50a66292b7cd1b10c81a2521352d7648c0bd2b5037af2c457b1617eb7;
+DEB cde8416c07ef87ec2ef5441e17a33b93f72be8aad2e1675c7203d542ea975972;
+AppImage1fb37e03b01e8aaf7d598f9907e27e6bee8500fa37d272018abcc49287fb2d2c.
+The bundled legacy six-file tar is NOT a supported update for internal candidates.
+
 Not yet delivered: new signed live selection catalog, matching backend archive,
 Android APK, Windows installer/update catalog, or reviewed full Linux DEB/AppImage.
 Public Android109/Linux0.2.11/Windows0.2.15 and installed owner Linux

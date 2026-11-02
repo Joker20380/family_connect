@@ -1,5 +1,12 @@
 # Client installation
 
+**Amsterdam selection preparation — 2 November 2026.** Android110 and Windows0.2.16
+with separate Amsterdam1/2 choices are under qualification, not published. Complete
+Linux candidate0.2.12~l03.2.12 for Ubuntu26.04/Python3.14 is built, not yet installed
+on the owner's workstation. Existing public download links are unchanged. Internal
+Linux candidates require the complete verified package, not a legacy six-file
+updater archive. [Qualification](releases/2026-11-02-gateway-selection.md).
+
 **1 November — READY_FOR_BETA109_OWNER_UPDATE.** Beta109/code109 is published;
 Android update sequence4 and invitation109 verified over HTTPS. Full matrix41289980872/
 source600ae52, offline signer,16K alignment and exact bytes PASS. The repair keeps country/
