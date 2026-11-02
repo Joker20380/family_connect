@@ -65,12 +65,18 @@ def test_real_picker_has_two_nodes_with_distinct_metrics_and_exact_connection(mo
         if render:
             from gi.repository import Gsk
             paintable = module.Gtk.WidgetPaintable.new(application.window.get_content())
-            snapshot = module.Gtk.Snapshot()
-            paintable.snapshot(snapshot, application.window.get_width(), application.window.get_height())
+            deadline = time.monotonic() + 3
+            node = None
+            while node is None and time.monotonic() < deadline:
+                pump()
+                snapshot = module.Gtk.Snapshot()
+                paintable.snapshot(snapshot, application.window.get_width(), application.window.get_height())
+                node = snapshot.to_node()
+            assert application.window.get_mapped() and node is not None
             renderer = Gsk.Renderer.new_for_surface(application.window.get_surface())
             try:
                 destination = Path(render) / ('selection-' + ('ru' if ru else 'en') + '-' + os.environ.get('GDK_SCALE', '1') + '.png')
-                assert renderer.render_texture(snapshot.to_node(), None).save_to_png(str(destination))
+                assert renderer.render_texture(node, None).save_to_png(str(destination))
             finally:
                 renderer.unrealize()
         monkeypatch.setattr(application, 'transport_id', lambda: 'auto')

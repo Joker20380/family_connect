@@ -16,7 +16,10 @@ service PIDs/restart states unchanged. NL2's initial dedicated monitor directory
 Stopped that monitor, corrected only its directory to0755, kept private state0700,
 and resumed only pending RU activation. Installer regression2 plus monitor11 PASS.
 Exact .13 full DEB/AppImage/system/integrity/pre-start AWG/TCP gates PASS; packaged
-render and owner install pending. Installed .12/public Linux0.2.11 unchanged here.
+GTK RU/EN scale1/2 four cases PASS and screenshots inspected. Initial frame-readiness
+and too-small scale2 display attempts retained; bounded capture wait and correctly
+sized virtual display repair the harness only. Owner install pending; installed
+.12/public Linux0.2.11 unchanged here.
 [Load follow-up and gates](releases/2026-11-02-linux-node-load.md).
 
 **2 November — explicit two-Amsterdam client selection IN_PROGRESS.** Owner requests

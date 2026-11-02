@@ -28,8 +28,23 @@ Source64182449b7370ac429b942a64ebca5563f91b32a produced full internal
 0.2.12~l03.2.13; source_dirty=false. Exact artifact integrity, real isolated system
 install/rollback, DEB, AppImage and both AWG/TCP pre-start guards PASS. No transport
 source rebuild was needed; accepted native/RNS/normal bytes were reverified, and
-the system bundle was rebuilt for the telemetry backend delta. Packaged renders
-and owner installation are still separate pending gates; installed .12 is unchanged.
+the system bundle was rebuilt for the telemetry backend delta. Exact packaged
+GTK RU/EN interaction/render at scale1/2 PASS (four cases); the node label, distinct
+synthetic23%/7% and5000Mbps tooltip are verified. Screenshots inspected. The first
+capture encountered an unmapped render node; a bounded frame wait fixes the test
+harness, not product code. The initial scale2 virtual display provided only512
+logical pixels vertically; the final2560x2160 physical display verifies full layout.
+Earlier diagnostics/captures are retained. Owner installation remains pending;
+installed .12 is unchanged.
+
+| Artifact | Bytes | SHA256 |
+| --- | ---: | --- |
+| `FamilyConnect_0.2.12~l03.2.13_amd64.deb` | 56157812 | `2e8381104cf6f05bbb638954e6e39342d3328b2397d37b6b6a7c6a9b68ae1dfc` |
+| `FamilyConnect-0.2.12~l03.2.13-x86_64.AppImage` | 58128888 | `452d595d932078a50724e9691f4c137d110e387d7db46bb06c6921a93cceea9d` |
+
+Candidate `0d23476c3cd10ad4605534da4e9de5ffef97736f897be2237dfba633a28fcfa4`;
+paired system `1428321b7743b6b624675552545b33fb32f04518b3ea05889acd385bd6dd157d`.
+These are internal owner artifacts, not public downloads or signed update entries.
 
 ## Scope and source checkpoint
 
@@ -49,7 +64,7 @@ node metrics never fall back to another node or the country sample. The RU legac
 NL alias remains first-Amsterdam-only, even when that node is temporarily absent.
 
 Capacity5000Mbps is operator-assumed, not a measured speed or provider guarantee.
-The planned duplex-channel percentage uses max(RX,TX)/5000; displayed utilization
+The duplex-channel percentage uses max(RX,TX)/5000; displayed utilization
 is max(CPU,channel percentage), not RX+TX. Both live throughput directions remain
 measured independently. The UI marks the capacity-dependent value as an estimate.
 The earlier missing NL combined load came from capacity=null; per-node samples were
@@ -72,9 +87,10 @@ also absent and the old Linux explicit-node load path deliberately returned none
 
 ## Delivery and rollback gates
 
-NOT_RUN: live monitor configuration, verified public per-node samples, full .13
-DEB/AppImage/system qualification and guarded owner installation. Do not label the
-source checkpoint delivered or ask the legacy six-file updater to install it.
+PASS: live monitor configuration, verified public per-node samples, full .13
+DEB/AppImage/system qualification and packaged GTK interaction/rendering.
+PENDING: guarded owner installation and owner-initiated physical connections.
+Do not ask the legacy six-file updater to install this internal full candidate.
 
 Only the monitoring services may be installed/restarted for this request. Preserve
 existing forced-command SSH restrictions and accepted pins; back up monitor source,
