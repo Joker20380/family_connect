@@ -8,6 +8,9 @@ Linux and Windows. Compatible AWG/TCP assignment source now retains schema2 and 
 devices to their previous signed catalog; new assignments can use the second physical NL.
 Rollback is forward-only with a newer catalog sequence. No client runtime/anchor/schema change,
 no new PLAN ID, no live deployment or catalog publication in this source transition.
+Routing regression287 PASS (25 environment-dependent skips), new routing tests46 PASS,
+Android JVM174 PASS; native Windows conformance/DPAPI, ordinary-user and visual checks PASS.
+Public Linux0.2.11 tagged parser accepts all3 new vectors; Windows0.2.15 parsers are unchanged.
 MESH routing and production renewal remain unchanged; second-node admission is not complete.
 Independent provider-console SSH fingerprint comparison is still required before live work.
 [Multi-node source and qualification](releases/2026-11-02-fleet-multinode-source.md) ·

@@ -19,9 +19,10 @@ def unique(pairs):
  return result
 
 def configuration_catalog(country,device=None):
- from control.friends.gateway_routing import configuration
- assigned=configuration(access,ROOT,country,device)
- if assigned is not None:return assigned
+ if device is not None:
+  from control.friends.gateway_routing import configuration
+  assigned=configuration(access,ROOT,country,device)
+  if assigned is not None:return assigned
  raw=(ROOT/'catalog.json').read_bytes()
  if len(raw)>16384:raise ValueError('Oversized catalog')
  catalog=json.loads(raw,object_pairs_hook=unique)

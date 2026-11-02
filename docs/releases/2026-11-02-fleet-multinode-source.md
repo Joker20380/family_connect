@@ -74,21 +74,27 @@ IPs and a deterministic test-only signer, never the production or rehearsal priv
 The unchanged Python, Android Java and Windows C# verifiers each accept both physical nodes
 and a forward-only return catalog, and reject lower sequence values.
 
-- Python routing/client/HTTP/owner/store suite:204 PASS,14 existing conditional integration
-  skips (nginx matrix and separately supplied restricted-sync archive),0 failures/errors.
-  New routing tests:46 PASS, no skips. Production host access is not part of this run.
+- Expanded Python routing/client/HTTP/owner/store/restricted/publisher suite:287 PASS,
+  25 existing conditional integration skips,0 failures/errors. The skips require nginx(13),
+  a separate restricted-sync archive(1), the locked Go toolchain(4) or the private served
+  archive(7). New routing tests:46 PASS, no skips. The earlier selection was204 PASS/14 skips.
+  No production host access is part of these runs.
 - Android JVM contour:174 tests PASS,0 skipped/failures/errors, including the new common vectors.
 - Windows C# core on Linux: existing conformance checks and3 assigned catalogs +3 downgrade
   refusals PASS. The two existing Windows DPAPI suites skip on Linux; this is not native
-  Windows/DPAPI or Windows UI acceptance. Hosted Windows verification remains pending.
+  Windows/DPAPI or Windows UI acceptance. The later hosted acceptance below is separate.
 - The isolated HTTP test uses real device proofs and an actual loopback HTTP listener, but a
   synthetic registration executor. Both target choices, proof replay rejection, credential-free
   argv and absence of an admin HTTP route are checked; no SSH connection is made.
 - Failure-injected DB commits roll back both assignment and journal; changed operation replays,
   revoked/unregistered devices and file/signature corruption are rejected.
 - The closed HTTP package builds twice byte-identically, with33 packaged source/output members.
-  Archive SHA256: `6e12d8321b9bf054f2875867a5e62ab0ec7c3536cd8f60a96a01c0d2375103a0`.
+  Final archive SHA256: `f33dee20e5069353914def7ae3a338631fbc4a5af7bf48af1d6fddbe5662b669`.
   Both copies remain in ignored private artifact storage; neither has been deployed.
+  The earlier `6e12d832…` archive is superseded by the catalog-only compatibility correction.
+- Additional paid/credential/package regression:327 PASS,22 existing isolated-root-DAC skips,
+  no failures/errors. Packaged root-only CLI install/replay/status and changed-operation
+  rejection also passed in a separate network-disabled, disposable root container.
 - Staged scope, strict changed JSON and whitespace PASS;501 local Markdown links across the
   four changed documents PASS; public-source guard3360 entries,0 blocked files.
 
@@ -96,6 +102,33 @@ The first operator-image run lacked httpx; rerunning under the existing control/
 image resolved the environment mismatch. A new pytest parameter initially used the reserved
 name `request`; it was corrected, not skipped. The Android copy harness was corrected to use
 the invoking UID and ordinary copies with dropped capabilities, without weakening test gates.
+An expanded source review found that legacy catalog-only callers do not initialize a database.
+The compatibility correction performs assignment lookup only when an authenticated device is
+supplied. HTTP configuration requests always supply the device returned by proof verification;
+they cannot select the legacy helper path through an extra request field. Existing NL-replacement
+tests and the new real HTTP proof/target-binding tests pass together after this correction.
+
+## Hosted and published-client checks
+
+Initial source `de061397a5b5b50a26f9845f9cc9fbd04d42aa2a` triggered these completed jobs:
+
+- [Windows control conformance41364788967](https://github.com/Joker20380/family_connect/actions/runs/41364788967):
+  PASS on Windows Server2025. Job125022547053 explicitly passed the new3 catalog/3 downgrade
+  cases, DPAPI identity create/resume/concurrency/SID binding and configuration save/resume/
+  global-floor checks. These are native checks, not the Linux skip result.
+- [Windows ordinary-user access41364788888](https://github.com/Joker20380/family_connect/actions/runs/41364788888),
+  [desktop visual41364788882](https://github.com/Joker20380/family_connect/actions/runs/41364788882) and
+  [Android wire contract41364788901](https://github.com/Joker20380/family_connect/actions/runs/41364788901): PASS.
+- The three Windows catalog/TCP/AWG parser sources are byte-identical to the public
+  `windows-v0.2.15` tag, commit `89d2f6b126d709038b4bdb85f619c8ce6d91193e`.
+- The actual public Linux `v0.2.11` parser source, commit
+  `3f390a735c6efe1582974922d9a93e24ba895637`, was extracted into a separate network-disabled
+  container and accepted all3 new signed catalog vectors. This is tagged-source compatibility,
+  not a new Linux GUI/VPN runtime or public-installer rollout claim.
+
+The later correction changes only the backend catalog-only helper; the Java/C# parsers and
+these native client test inputs are unchanged. Broader Client builds, Linux preview and full
+phase0 jobs were still running at observation; they are not reported as completed PASS here.
 
 ## Production gate and preserved state
 
