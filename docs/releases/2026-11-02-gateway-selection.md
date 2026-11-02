@@ -76,7 +76,9 @@ now pass isolated Ubuntu26.04/systemd259/Python3.14 smoke. Packaged (not checkou
 GTK selection passes RU/EN at100% and200% scale:4 PASS. No workstation install.
 Hosted candidate41436331524 failed at its container boot wait: `systemctl is-active`
 with two names can succeed when only one is active. This CI-harness race remains
-to fix; it does not invalidate or replace the separately recorded local evidence.
+recorded. The wait now checks each service independently and fails explicitly on
+timeout;5 deterministic shell regressions PASS (both-ready, either-delayed and
+either-missing). Hosted rerun is pending. Local evidence is not relabelled as CI.
 
 Ingress closure is now explicit: the packaged `gateway-selection-location.conf`
 allows POST only for the two exact node routes, with an8KiB body limit and bounded
@@ -88,6 +90,12 @@ line with the already-existing diagnostics route; production diagnostics unchang
 HTTP archive fce2340051ecc574156ee2b7eb50f87b443679b95bf69ee3f62c6c189de1ebf5
 imports in isolation. Versus served f33dee20, only access proof purposes, gateway
 routing/selection, catalog parsing and the dispatcher differ; paid module unchanged.
+
+Read-only RU preflight: served HTTP remains f33dee20, original catalog4 hash unchanged,
+policy generation2 and57 first-NL assignments retained. Devices57, invites111,
+restricted grants2, paid subscription1/events4 and all protected row digests match
+the previous admission baseline. Both maintenance timers active; no selection
+catalog or public selection ingress installed. No production write in this phase.
 
 ## Rollout boundary
 

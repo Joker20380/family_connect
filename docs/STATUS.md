@@ -14,6 +14,8 @@ Source-only next versions: Android110/Windows0.2.16. Full Linux internal.12 buil
 from efc13f1; artifact audit and isolated system-runtime smoke PASS, no owner install.
 Exact DEB/AppImage and AWG/TCP pre-start smoke PASS; packaged RU/EN GTK4 PASS.
 Real Nginx/HTTP53 PASS; matching ingress fragment prepared, not deployed.
+Hosted Linux boot-wait race fixed,5 regressions PASS; rerun pending. Read-only RU
+preflight confirms protected state/catalog unchanged; no production writes here.
 [Selection source and delivery gates](releases/2026-11-02-gateway-selection.md).
 
 **2 November — SECOND_NL_ORDINARY_LIVE (AWG3.1/TCP REALITY).**

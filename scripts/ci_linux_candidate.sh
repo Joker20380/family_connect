@@ -44,10 +44,16 @@ run_container() (
     --mount "type=bind,src=$source_root/tests/fixtures/desktop-friends-catalog-v2.json,dst=/fixture/catalog.json,readonly" \
     fc-l032-system:ci /sbin/init
   trap 'docker stop --timeout 30 "$name"; docker rm "$name"' EXIT
+  ready=0
   for attempt in $(seq 1 60); do
-    if docker exec "$name" systemctl is-active dbus systemd-resolved >/dev/null 2>&1; then break; fi
+    if docker exec "$name" systemctl is-active --quiet dbus &&
+       docker exec "$name" systemctl is-active --quiet systemd-resolved; then ready=1; break; fi
     sleep 1
   done
+  if [ "$ready" != 1 ]; then
+    docker exec "$name" systemctl status dbus systemd-resolved --no-pager >&2 || true
+    exit 1
+  fi
   docker exec -e FC_L031_HOST_NETNS="$(stat -Lc %i /proc/self/ns/net)" \
     -e FC_L032_HOST_NETNS="$(stat -Lc %i /proc/self/ns/net)" "$name" \
     /usr/bin/python3 -I -S /evidence/smoke.py "$@"
