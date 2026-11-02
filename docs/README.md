@@ -1,6 +1,14 @@
 # Documentation
 
 <!-- FLEET-BOOTSTRAP-2 current -->
+**Latest continuation — explicit Amsterdam1/2 selection.** Backend schema3/API and
+Windows0.2.16 distribution/update catalog12/invitation are LIVE and HTTPS-verified.
+Linux full0.2.12~l03.2.12 Ubuntu26.04/Python3.14 package is qualified, not yet
+owner-installed; L08 is not bypassed. Android110 emulator qualification remains
+pending; public109 unchanged. [Current delivery receipt](releases/2026-11-02-gateway-selection.md).
+The following ordinary-admission baseline is retained evidence, not the latest
+client-publication status or a competing NEXT.
+
 **2 November — SECOND_NL_ORDINARY_LIVE (AWG3.1/TCP REALITY).**
 The owner-authorized second Amsterdam node185.10.158.196 is admitted for new device
 assignments on Android109, Linux0.2.11 and Windows0.2.15 with unchanged schema2 clients.
