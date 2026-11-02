@@ -203,12 +203,12 @@ public final class FriendsActivity extends LocalizedActivity {
         String selectedLanguage=AppLanguage.selected(this);
         String languageName=selectedLanguage.equals("ru")?"Русский":selectedLanguage.equals("en")?"English":getString(R.string.language_system);
         TerminalUi.label(panel,getString(R.string.language),12,TerminalUi.AMBER);
-        Spinner languagePicker=new Spinner(this);TerminalUi.picker(languagePicker,new String[]{getString(R.string.language_system),"Русский","English"});
+        Spinner languagePicker=new Spinner(this);languagePicker.setTag("app_language");TerminalUi.picker(languagePicker,new String[]{getString(R.string.language_system),"Русский","English"});
         String[] languageCodes={"system","ru","en"};languagePicker.setSelection(java.util.Arrays.asList(languageCodes).indexOf(selectedLanguage));panel.addView(languagePicker);
         languagePicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onNothingSelected(AdapterView<?> parent){}
             public void onItemSelected(AdapterView<?> parent,android.view.View view,int position,long id){
-                if(!parent.isShown()||languageCodes[position].equals(AppLanguage.selected(FriendsActivity.this)))return;
+                if(isFinishing()||isDestroyed()||!parent.isShown()||!selectedLanguage.equals(AppLanguage.selected(FriendsActivity.this))||languageCodes[position].equals(AppLanguage.selected(FriendsActivity.this)))return;
                 AppLanguage.select(FriendsActivity.this,languageCodes[position]);getIntent().putExtra("tab",3);recreate();
             }
         });

@@ -18,8 +18,10 @@ Full Linux internal.12 from efc13f1: exact DEB/AppImage/system/pre-start smoke P
 packaged RU/EN GTK4 PASS; hosted candidate41438372471 PASS. Corrected Windows0.2.16
 installer/hash/native compatibility41439156032 PASS; immutable Windows0.2.16
 publication41442681710 and public HTTPS/hash PASS, signed Windows catalog12.
-Android110 TCP default-network readiness repair is under emulator qualification;
-public Android109 unchanged. Linux.12 not owner-installed/public, L08 not bypassed.
+Android110 debug transport lifecycle now PASS; two Friends UI failures are repaired
+(stale language callback and collapsed/expanded label assertion),43 source tests PASS,
+corrected emulator pending. Public Android109 unchanged. Linux.12 not accepted
+owner-installed/public, L08 not bypassed.
 Windows invitation/mirror16 and both actual CSP routes verified over HTTPS;6 browser
 scenarios and12 signing/publication regressions PASS. Publication needed3 Nginx
 reloads/0 backend restarts; protected rows unchanged. Real Nginx/HTTP55 PASS/1 skip.

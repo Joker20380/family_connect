@@ -35,7 +35,15 @@ No process/socket Network binding, HTTP retry, relaxed predicate or production
 runtime change: all18 REALITY requests, DNS and switch/cancel/revoke gates remain.
 Exact corrected emulator acceptance is pending, not inferred from source review.
 Corrected source62cd213 / run41443304002 first attempt failed in emulator setup
-before instrumentation (0 cases); one bounded infrastructure retry is running.
+before instrumentation (0 cases). Its single infrastructure retry passed the debug
+WG/AWG/TCP/Auto lifecycle gate, then failed two Friends UI checks. The explicit
+row check incorrectly expected the collapsed label without its disclosure arrow;
+it now asserts the collapsed arrow and the exact expanded label separately.
+Language recreation also exposed an old settings Spinner callback capable of
+reverting a newer language selection. The production callback now rejects a stale
+captured selection; instrumentation injects that old callback before recreation
+and retains the15s new-activity/locale assertion. Source regressions43 PASS;
+exact corrected native emulator acceptance is pending. No APK is signed/released.
 Android source/signing regressions31 PASS/1 optional external-tool integration skip.
 
 Continuation of **FLEET-BOOTSTRAP-2**, explicitly requested by the owner. Backend

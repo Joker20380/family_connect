@@ -266,3 +266,6 @@ def test_language_runtime_waits_for_recreated_activity_not_old_matching_text():
     assert '!activity.isFinishing()&&!activity.isDestroyed()' in source
     assert 'language.equals(activity.getResources().getConfiguration().getLocales().get(0).getLanguage())' in source
     assert 'SystemClock.elapsedRealtime()+15000' in source
+    assert 'Old settings callback cannot undo a newer language selection' in source
+    activity = (ROOT / 'clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java').read_text()
+    assert '!selectedLanguage.equals(AppLanguage.selected(FriendsActivity.this))' in activity

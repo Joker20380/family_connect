@@ -70,7 +70,8 @@
   "android": {
     "candidate_version": "0.1.18-beta110",
     "ci_run": 41443304002,
-    "acceptance": "TCP_READINESS_REPAIR_INFRASTRUCTURE_RETRY_PENDING",
+    "transport_debug_lifecycle": "PASS",
+    "acceptance": "FRIENDS_LANGUAGE_AND_ROW_REPAIR_PENDING_CI",
     "published_version": "0.1.18-beta109"
   }
 }

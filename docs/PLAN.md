@@ -16,7 +16,7 @@ Backend + signed schema3 sequence1 + Nginx routes LIVE, protected-state readback
 and public HTTPS PASS. Initial cold-listener rollback reconciled; all evidence retained.
 Windows0.2.16 immutable publication41442681710 and public hash PASS; signed
 independent Windows sequence12 and invitation/mirror16 fully HTTPS-verified.
-NEXT within this task: corrected Android110 exact emulator/package acceptance,
+NEXT within this task: corrected Android110 language/row emulator/package acceptance,
 remaining distribution and verified Linux full-package install. Preserve
 legacy assignments and paid state; explicit nodes support AWG/TCP, not second MESH.
 Do not remove the L08 full-package guard to force the installed internal Linux

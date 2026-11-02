@@ -24,7 +24,16 @@ public class AppLanguageRuntimeTest {
         try{
             for(String language:new String[]{"en","ru"}){
                 AtomicReference<FriendsActivity> previous=new AtomicReference<>();
-                ins.runOnMainSync(()->{FriendsActivity activity=current();assertNotNull(activity);previous.set(activity);AppLanguage.select(activity,language);activity.getIntent().putExtra("tab",3);activity.recreate();});
+                ins.runOnMainSync(()->{
+                    FriendsActivity activity=current();assertNotNull(activity);previous.set(activity);
+                    android.widget.Spinner picker=activity.getWindow().getDecorView().findViewWithTag("app_language");
+                    AppLanguage.select(activity,language);
+                    if(picker!=null){
+                        picker.getOnItemSelectedListener().onItemSelected(picker,picker.getSelectedView(),picker.getSelectedItemPosition(),picker.getSelectedItemId());
+                        assertEquals("Old settings callback cannot undo a newer language selection",language,AppLanguage.selected(c));
+                    }
+                    activity.getIntent().putExtra("tab",3);activity.recreate();
+                });
                 AtomicReference<String> text=new AtomicReference<>();long until=SystemClock.elapsedRealtime()+15000;
                 while(SystemClock.elapsedRealtime()<until){
                     ins.runOnMainSync(()->{
