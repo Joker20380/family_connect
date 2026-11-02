@@ -1,6 +1,6 @@
 # Try Family Connect
 
-Windows0.2.15 targets Windows10 1809+ /11 x64 and bundles .NET.
+Windows0.2.16 targets Windows10 1809+ /11 x64 and bundles .NET.
 After a failed0.2.13 installation, run the new installer over the remaining files.
 No manual service setup is needed. Affected Windows10 device acceptance is pending.
 
@@ -9,11 +9,11 @@ No manual service setup is needed. Affected Windows10 device acceptance is pendi
 ## First activation
 
 Android12+, ARM64; access is invitation-only. Installing the APK does not grant access.
-The invitation page and in-app updater both provide beta109. Updating does not enable restricted FIELD access.
+The invitation page and in-app updater both provide beta110. Updating does not enable restricted FIELD access.
 
-Beta109 includes MESH and quiet ongoing VPN-notification updates. Android below12 is unsupported.
-Full Android/Linux/Windows/compatibility CI, signature and verified-HTTPS checks PASS.
-Beta109 repairs transport selection after failure; owner109 physical acceptance is pending.
+Beta110 includes MESH and quiet ongoing VPN-notification updates. Android below12 is unsupported.
+Exact Android CI41449895463, existing signer and full verified-HTTPS hash checks PASS.
+Beta110 adds explicit Amsterdam1 and Amsterdam2 choices for AWG/TCP; owner110 installation is not yet confirmed.
 Paid baseline remains108 and existing entitlement is preserved. No Mi account or ADB is needed.
 MESH still requires accepted admission and current readiness material, not an old cached READY.
 
@@ -28,11 +28,11 @@ MESH still requires accepted admission and current readiness material, not an ol
 
 ## Update an existing app
 
-[Download beta109 — 56.2 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta109.apk).
-Version `0.1.18-beta109`, code109, ARM64,56216936 bytes; SHA256:
+[Download beta110 — 56.2 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta110.apk).
+Version `0.1.18-beta110`, code110, ARM64,56221032 bytes; SHA256:
 
 ```text
-2d602aa74e134fd0104fa0900ef28e6086a6eace8f0255f521e09ec48f9edca3
+159034142f0430445caf6420c7d491866f7802a7a3eb615a4d4bfb7908641861
 ```
 
 The app also checks for updates. Open the APK and select **Update** in Android’s system
@@ -42,14 +42,14 @@ do not copy another device’s profiles or keys.
 
 The [older universal beta13](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.12-beta13.apk)
 remains available for other architectures,240.5 MB. It lacks current features and is not
-an equivalent alternative to109.
+an equivalent alternative to110.
 
-[Exact audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta109-audio-source.tar.gz)
+[Exact audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta110-audio-source.tar.gz)
 are available with the release. Installation requires Android confirmation; it is not forced.
 
-Owner checkpoint: update over108 via **Settings → Check for updates → Install beta109**.
-Do not uninstall, clear data or reenroll. After launch do not connect; report **109 УСТАНОВЛЕНА**.
-Android sequence4 is optional. [Public108 rollback evidence](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk)
+Owner checkpoint: update over109 via **Settings → Check for updates → Install beta110**.
+Do not uninstall, clear data or reenroll. After launch do not connect; report **110 УСТАНОВЛЕНА**.
+Android sequence5 is optional. [Public108 rollback evidence](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk)
 remains immutable; no paid event or canary replay accompanies this update.
 
 ## Text and voice
@@ -77,18 +77,22 @@ not established. [Notification and announcement guide (RU)](testing/messenger-no
 - Update failure: record the error and versions; do not erase data to bypass a signature mismatch.
 
 Report model, Android/app version and network type. Exclude invitations, keys, profiles
-and messages. [Beta109 validation/publication](releases/2026-10-30-nl-gateway-replacement.md#android109-general-publication--1-november).
+and messages. [Beta110 validation/publication](releases/2026-11-02-gateway-selection.md).
 
 ## Desktop clients
 
-[Linux0.2.11 / Windows0.2.15 previews](clients.en.md) also accept invitation links. Linux needs
+[Linux0.2.11 / Windows0.2.16 previews](clients.en.md) also accept invitation links. Linux needs
 operator-assisted dependency and VPN-helper setup. Desktop messenger parity with Android
 is not claimed. Direct invitations and referral claims use separate pools; limits are not
 current availability counts.
 
 ## Server load display
 
-Beta109 shows **Server CPU** on the dashboard and **CPU N%** in the server list when
+Beta110 shows **Server CPU** on the dashboard and **CPU N%** in the server list when
 channel capacity is unknown. CPU is not channel utilization or the monthly traffic quota.
 Known-capacity servers retain their aggregate indicator; stale/missing samples show No data.
 [Release status](releases.md).
+
+Explicit Amsterdam1/2 choices support AWG/TCP, not a second MESH gateway.
+Netherlands keeps the assigned server; no existing device moves automatically.
+Explicit nodes without measurements show No data, never an inferred country CPU reading.

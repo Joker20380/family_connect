@@ -7,8 +7,9 @@ Linux full0.2.12~l03.2.12 Ubuntu26.04/Python3.14 package is qualified, not yet
 owner-installed: attempted paired setup safely refused at the sticky MESH ownership
 gate, exact .9 rollback READY and user state unchanged. Workstation reboot is needed
 before a fresh install attempt; L08 is not bypassed. Android110 exact CI41449895463,
-downloaded ARM64 package/source/16K and both Amsterdam UI rows PASS. Offline signing
-and publication pending; public109 unchanged. [Current delivery receipt](releases/2026-11-02-gateway-selection.md).
+downloaded ARM64 package/source/16K and both Amsterdam UI rows PASS. Android110 is
+signed/published with optional catalog5 and verified HTTPS bytes/CSP;109 retained.
+Owner110 installation not claimed. [Current delivery receipt](releases/2026-11-02-gateway-selection.md).
 The following ordinary-admission baseline is retained evidence, not the latest
 client-publication status or a competing NEXT.
 

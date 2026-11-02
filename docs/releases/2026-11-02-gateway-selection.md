@@ -38,8 +38,35 @@ All12 native libraries' ELF and APK ZIP16K alignment PASS. Exact AWG/restricted/
 source pins, builder hashes, embedded payload, corresponding audio source/licenses
 verified. No private diagnostic/provisioning seam enabled. Both downloaded Amsterdam
 row captures visibly retain distinct names and `No data`, not a fabricated per-node
-CPU measurement; failed-state controls remain visible. Signing/publication is the
-next gate; this is not owner110 installation or a physical transport acceptance.
+CPU measurement; failed-state controls remain visible. The subsequent accepted
+signing/publication gate is recorded below; this is not owner110 installation or
+a physical transport acceptance.
+
+**Android110 publication PASS.** Existing offline certificate
+`67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`
+retained. Signed APK `159034142f0430445caf6420c7d491866f7802a7a3eb615a4d4bfb7908641861`,
+56,221,032bytes; signature/alignment and every unsigned member's bytes PASS.
+Initial local verification expected identical ZIP names and refused the normal
+three added META-INF signature members. Reconciled that exact signed output:
+no removed/changed unsigned member, only FAMILY-C.RSA/FAMILY-C.SF/MANIFEST.MF,
+apksigner certificate/verification PASS; no resign or output replacement. The
+catalog wrapper also needed the already-trusted JDK on PATH; its first failure
+created no catalog and did not alter an APK. Private key remained in memory only.
+
+Immutable110 APK and corresponding audio source published,109 retained. Audio
+archive SHA256 `249b86d49612b716d69e25d554579213a32cbb74d7167d652f6808f60f618a89`,
+7,601,671bytes; exact full HTTPS source-archive readback PASS.
+Signed optional Android catalog5 (minimum1, mandatory_after0), legacy discovery and
+both invitation routes updated. Full APK download hash/size, catalogs/signature,
+actual CSP and reviewed HTML PASS over verified HTTPS;49 source/publication/signing
+regressions and6 invitation browser scenarios PASS. Changed public Markdown10 files/
+609 links PASS; strict JSON and scoped diff whitespace PASS. One Nginx reload, no
+backend restart or database restore. Protected
+paid/device/invite/grant row fingerprints and gateway catalog4 unchanged; new
+invitations0, paid mutations0, device moves0, phone actions0. This publication does
+not install an app or connect a client. Older artifacts stay immutable; a future
+catalog recovery must advance sequence, never replace110 or lower signed floors.
+The workstation Linux upgrade remains safely rolled back pending owner reboot.
 
 Windows0.2.16 is qualified from exact source5ae821d / run41439156032,
 native Windows and compatibility jobs PASS. The immutable distribution workflow
@@ -61,6 +88,11 @@ retained public109 evidence, not acceptance/publication of pending110. No produc
 mutation is performed by the verifier. The unrelated pre-existing uncommitted
 STATUS link to the October27 evening anchor remains outside this patch; changed
 delivery links and whitespace are checked separately.
+
+### Retained intermediate failures and source checks
+
+Pending statements in this subsection describe the earlier attempts, not current
+NEXTs; final delivery and the remaining Linux precondition are recorded above.
 
 Publication failures are retained: initial CSP-count precondition failed before
 any remote write (confirmed by journal/file readback). A stale pre-existing `/i/`
@@ -191,7 +223,7 @@ catalog or public selection ingress installed. No production write in this phase
 
 ## Rollout boundary
 
-**Backend selection is now LIVE; client publication is still pending.** Exact HTTP
+**Retained backend-only checkpoint, superseded by delivery above.** Exact HTTP
 fce23400 and separate signed schema3 selection sequence1 are installed. Root-private
 legacy catalog4, generation2 and all57 sticky assignments are unchanged. Public
 system-CA-verified HTTPS confirms both routes, legacy ordinary/restricted malformed
@@ -218,9 +250,9 @@ test is claimed; ordinary native-node acceptance remains the earlier live baseli
 Corrected Windows0.2.16 exact installer13138243140: native build/compatibility
 CI41439156032 PASS; downloaded ZIP digest and installer SHA256/size verified.
 Installer491a731edbf80887122844bebcccb8741e701b03816202f9a9b77c77855e8a65,
-49,955,605 bytes. Render shows0.2.16. It is not yet published. Hosted Linux candidate
+49,955,605 bytes. Render shows0.2.16; final publication is recorded above. Hosted Linux candidate
 41438372471 also PASS after the boot-wait repair; its CI artifact is separate from
-the frozen local.12 package. Android110 is still running its emulator gates.
+the frozen local.12 package. Final Android110 qualification/publication is recorded above.
 
 Windows source89f4e8 native build/compatibility passed, but downloaded artifact
 13137401420 is rejected for distribution: its installer still declared0.2.15
@@ -232,8 +264,8 @@ PASS. Android instrumentation additionally renders/asserts both explicit rows an
 rejects showing country-level CPU as a node measurement; exact emulator run pending.
 
 Source versions reserved for this change: Android0.1.18-beta110/code110 and
-Windows0.2.16. Windows is now published with signed catalog12; Android is not signed
-or published. Linux complete internal
+Windows0.2.16. Windows is published with signed catalog12; Android110 is signed and
+published with optional catalog5. Linux complete internal
 Ubuntu26.04/Python3.14 candidate0.2.12~l03.2.12 is built from efc13f1 (not installed),
 with DEB/AppImage byte/member audit PASS and system-component isolated systemd259
 install/rollback/identity-preservation smoke PASS. Exact DEB/AppImage smoke and
@@ -243,9 +275,9 @@ DEB cde8416c07ef87ec2ef5441e17a33b93f72be8aad2e1675c7203d542ea975972;
 AppImage1fb37e03b01e8aaf7d598f9907e27e6bee8500fa37d272018abcc49287fb2d2c.
 The bundled legacy six-file tar is NOT a supported update for internal candidates.
 
-Not yet delivered: Android110 APK and reviewed full Linux DEB/AppImage installation.
-Windows0.2.16 installer/update catalog/invitation and backend are verified above.
-Public Android109/Linux0.2.11 and installed owner Linux
+Not yet delivered: reviewed full Linux DEB/AppImage installation after workstation reboot.
+Android110 and Windows0.2.16 downloads/update catalogs/invitations and backend are verified above.
+Public Linux0.2.11 and restored owner Linux
 0.2.12~l03.2.9 remain unchanged. L08 migration is not bypassed; the existing internal
 Linux updater cannot install a legacy six-file archive as a full runtime update.
 

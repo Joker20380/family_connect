@@ -1,13 +1,17 @@
 # Release distribution / Выпуски
 
-**2 November — Windows0.2.16 published; Android/Linux delivery pending.**
+**2 November — Android110 and Windows0.2.16 published; Linux awaits workstation reboot.**
 [Windows installer](https://github.com/Joker20380/family_connect/releases/download/windows-v0.2.16/FamilyConnect-Setup-0.2.16-pilot-unsigned.exe)
 adds Amsterdam1/2 for AWG/TCP; native CI, immutable release and public HTTPS hash
 PASS. SHA256 `491a731edbf80887122844bebcccb8741e701b03816202f9a9b77c77855e8a65`,
 49955605bytes; independent signed Windows catalog sequence12. No publisher signature.
-Android110 exact emulator correction remains under qualification; public109 stays.
+Android110 exact CI41449895463/source05d8919, existing signer and full public HTTPS
+bytes PASS; optional Android sequence5. [Download110](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta110.apk),
+56221032bytes, SHA256 `159034142f0430445caf6420c7d491866f7802a7a3eb615a4d4bfb7908641861`.
+Amsterdam1/2 support AWG/TCP; owner installation/physical selection not claimed.
 Complete Linux0.2.12~l03.2.12 Ubuntu26.04/Python3.14 package/isolated runtime/GTK PASS,
-not yet installed; owner Linux.9 and public0.2.11 remain. Do not bypass L08 with
+attempt safely rolled back to exact owner.9/READY at the sticky MESH ownership guard;
+workstation reboot required. Public0.2.11 remains. Do not bypass L08 with
 the six-file archive. [Qualification](releases/2026-11-02-gateway-selection.md).
 
 **1 November — READY_FOR_BETA109_OWNER_UPDATE.** Beta109/code109 is published;
@@ -209,7 +213,7 @@ Python3.14's implicit-directory imports must not hide a broken isolated archive.
 The [client workflow](../.github/workflows/clients.yml) defines platform builds and
 release conditions. CI artifacts do not by themselves establish a release. Validate native
 UI/runtime and downloaded artifacts before signing/publishing. Windows cross-build alone
-is insufficient. The current release includes Android0.1.18-beta109, Linux0.2.11 and Windows0.2.15 Windows-channel release; see the [FIELD report](releases/2026-10-03-field1-release-final.md), [desktop cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and prior [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md).
+is insufficient. The current public releases are Android0.1.18-beta110, Linux0.2.11 and Windows0.2.16; see [current delivery](releases/2026-11-02-gateway-selection.md). The [FIELD report](releases/2026-10-03-field1-release-final.md), [desktop cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md) are historical evidence.
 
 Desktop catalogs use offline signing with increasing sequence numbers. Keep keys out of
 CI and servers; never replace an existing version/tag with different binaries.

@@ -6,8 +6,12 @@ Windows0.2.13+ discovers it through Check for updates (signed catalog12);0.2.12
 and earlier need one manual in-place installation without deleting data. Explicit
 Amsterdam1/2 choices support AWG/TCP. The installer has no publisher signature.
 SHA256 `491a731edbf80887122844bebcccb8741e701b03816202f9a9b77c77855e8a65`.
-Android110 is still under emulator qualification; public109 remains. Complete Linux
-0.2.12~l03.2.12 Ubuntu26.04/Python3.14 package is qualified, not yet owner-installed.
+Android110 is published: [APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta110.apk),
+optional signed catalog5, existing signer; SHA256
+`159034142f0430445caf6420c7d491866f7802a7a3eb615a4d4bfb7908641861`,56221032bytes.
+Update over109 without clearing data; owner installation is not yet confirmed.
+Complete Linux0.2.12~l03.2.12 Ubuntu26.04/Python3.14 is qualified; its install attempt
+safely rolled back to .9/READY. Reboot the workstation, not a VPS, before retrying.
 Internal Linux needs the complete package, not the legacy six-file updater archive.
 [Qualification](releases/2026-11-02-gateway-selection.md).
 
@@ -248,12 +252,12 @@ invitation; verify unchanged Support ID FC-YHQB-9VJN. Before one mobile attempt,
 the operator must revalidate leases and fresh READY/ACK; export immediately after
 disconnect. FIELD admission and the public updater remain unchanged.
 
-**Current1.11: beta109/code109 is public, Android12+/ARM64.**
-Measured server CPU remains visible on the dashboard and country list; transport controls after
-failure are repaired. Full matrix/signature/HTTPS PASS. Owner109 physical acceptance is pending;
-existing108 final recovery passed, and paid baseline108/entitlement remain unchanged.
+**Current2.11: beta110/code110 is public, Android12+/ARM64.**
+Explicit Amsterdam1/2 choices support AWG/TCP; the assigned Netherlands entry stays.
+Exact Android CI/signature/HTTPS PASS; owner110 installation and physical selection
+are not claimed. Paid baseline108/entitlement remain unchanged.
 Install over the existing app, without clearing data or reenrollment; admission is unchanged.
-[Download/update](getting-started.en.md) · [Evidence](releases/2026-10-30-nl-gateway-replacement.md#android109-general-publication--1-november).
+[Download/update](getting-started.en.md) · [Evidence](releases/2026-11-02-gateway-selection.md).
 
 ## Historical preparation checkpoints
 
@@ -346,7 +350,7 @@ not publicly distributed and not a FIELD release. Public beta51/invitation links
 remain unchanged and were not reverified. [Attempt14](releases/2026-10-02-5n-prov1-attempt14.ru.md)
 · [Canary provenance and SHA256](releases/2026-10-02-5n-android-canary-build.ru.md).
 
-Use the [friends beta guide](getting-started.en.md): Android12+, ARM64 beta109,
+Use the [friends beta guide](getting-started.en.md): Android12+, ARM64 beta110,
 invitation-based access, VPN, text and voice messages. The APK is distributed through
 an invitation page and HTTPS download; it is not yet a GitHub or app-store release.
 The [client workflow](../.github/workflows/clients.yml) documents source-build requirements.

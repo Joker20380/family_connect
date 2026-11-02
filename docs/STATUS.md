@@ -21,8 +21,11 @@ publication41442681710 and public HTTPS/hash PASS, signed Windows catalog12.
 Android110 exact-source05d8919 CI41449895463 PASS: transport lifecycle, Friends
 language/rows, native ARM64 packaging,43 executed instrumentation cases/24 variant
 skips/0 failures. Exact downloaded APK/source/licenses/12 native libraries/16K
-alignment and both Amsterdam row captures PASS. Offline signing/publication pending;
-public Android109 unchanged. Retained failed attempts are not erased.
+alignment and both Amsterdam row captures PASS. Existing-certificate offline signing
+and immutable Android110/optional catalog5/invitation publication PASS; complete
+public HTTPS APK/hash and both CSP routes PASS. Owner110 installation not claimed.
+Android109 remains immutable.1 Nginx reload/0 backend restarts, protected rows unchanged.
+Retained failed attempts are not erased.
 Linux.12 owner install was attempted after normal disconnect/GUI closure; paired
 system setup refused before apply because MESH cleanup has an unconfirmed sticky
 `vpn` marker. Exact prior .9 DEB restored, candidate/system READY and all2562 protected
@@ -33,8 +36,8 @@ Windows invitation/mirror16 and both actual CSP routes verified over HTTPS;6 bro
 scenarios and12 signing/publication regressions PASS. Publication needed3 Nginx
 reloads/0 backend restarts; protected rows unchanged. Real Nginx/HTTP55 PASS/1 skip.
 Read-only public verifier now also binds Android signed/legacy discovery and full
-APK bytes: current109/sequence4 and Windows16/sequence12 HTTPS PASS;49 focused
-publication/signing/source tests PASS. This does not qualify or publish Android110.
+APK bytes: current110/sequence5 and Windows16/sequence12 HTTPS PASS;49 focused
+publication/signing/source tests PASS. No automatic phone installation/connection.
 [Selection source and delivery gates](releases/2026-11-02-gateway-selection.md).
 
 **2 November — SECOND_NL_ORDINARY_LIVE (AWG3.1/TCP REALITY).**

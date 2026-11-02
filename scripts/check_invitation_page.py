@@ -10,7 +10,7 @@ OUTPUT.mkdir(parents=True, exist_ok=True)
 source = (ROOT / 'deploy/friends/invite/index.html').read_text()
 
 URLS = {
-    'apk': '/downloads/FamilyConnect-Test-0.1.18-beta109.apk',
+    'apk': '/downloads/FamilyConnect-Test-0.1.18-beta110.apk',
     'win16': '/downloads/FamilyConnect-Setup-0.2.16-pilot-unsigned.exe',
     'win14': '/downloads/FamilyConnect-Setup-0.2.14-pilot-unsigned.exe',
     'appimage': '/downloads/FamilyConnect-0.2.11-x86_64.AppImage',

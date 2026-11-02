@@ -96,7 +96,24 @@
     "zip_elf_16k": "PASS",
     "source_license_inventory": "PASS",
     "amsterdam_row_visuals": "PASS",
-    "signed": false,
-    "published_version": "0.1.18-beta109"
+    "signed": true,
+    "apk_sha256": "159034142f0430445caf6420c7d491866f7802a7a3eb615a4d4bfb7908641861",
+    "apk_size": 56221032,
+    "signer_fingerprint": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+    "unsigned_payload_unchanged": true,
+    "signing_verification_reconciliation": "EXPECTED_META_INF_SIGNATURE_MEMBERS_ONLY_NO_RESIGN",
+    "source_archive_sha256": "249b86d49612b716d69e25d554579213a32cbb74d7167d652f6808f60f618a89",
+    "signed_catalog_sha256": "94135eccc9f89942896930cd2d08354d5e118ef83031b8d27f227c96a7da921a",
+    "update_sequence": 5,
+    "minimum_supported_code": 1,
+    "mandatory_after": 0,
+    "public_https_full_bytes": "PASS",
+    "invitation_actual_csp": "PASS_BOTH_ROUTES",
+    "publication_nginx_reloads": 1,
+    "publication_backend_restarts": 0,
+    "protected_rows_unchanged": true,
+    "published_version": "0.1.18-beta110",
+    "owner_installed": false,
+    "physical_selection_acceptance": "NOT_RUN"
   }
 }

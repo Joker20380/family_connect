@@ -18,8 +18,10 @@ Windows0.2.16 immutable publication41442681710 and public hash PASS; signed
 independent Windows sequence12 and invitation/mirror16 fully HTTPS-verified.
 Exact Android110 source05d8919/run41449895463 emulator/native/package acceptance PASS;
 downloaded bytes/provenance/16K and both Amsterdam row captures verified.
-NEXT within this task: offline signing, immutable Android110 distribution and
-verified Linux full-package install. Linux attempt
+Android110 signed with the existing certificate and published immutably with optional
+catalog5/invitation; full public HTTPS bytes/CSP PASS. Windows16/Android110 delivery
+complete, owner110 installation not claimed. NEXT within this task: verified Linux
+full-package install after owner workstation reboot. Linux attempt
 refused at the sticky MESH ownership gate before system apply; exact .9 rollback
 READY,2562 user entries unchanged. NEXT Linux precondition: owner workstation
 reboot, then confirm volatile marker/ownership cleared and use a fresh install
@@ -28,8 +30,8 @@ legacy assignments and paid state; explicit nodes support AWG/TCP, not second ME
 Do not remove the L08 full-package guard to force the installed internal Linux
 candidate through its legacy updater. [Evidence](releases/2026-11-02-gateway-selection.md).
 Distribution gate includes both actual CSP routes and signed Android/Windows full
-download hashes. Read-only current109/Windows16 acceptance and49 regressions PASS;
-repeat against exact110 after qualified immutable publication, not before.
+download hashes. Read-only current110/Windows16 acceptance and49 regressions PASS;
+no new enrollment, forced update, phone connection or paid mutation.
 
 **2 November — SECOND_NL_ORDINARY_LIVE (AWG3.1/TCP REALITY).**
 The owner-authorized second Amsterdam node185.10.158.196 is admitted for new device

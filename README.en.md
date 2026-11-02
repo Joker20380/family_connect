@@ -9,7 +9,7 @@ media path; Windows/Linux media clients remain incomplete.
 [Current status](docs/STATUS.md). The earlier Stage5 notes below are historical,
 not current implementation or release claims.
 
-Public Android **beta109 / Android12+ / ARM64**: [download and update in place](docs/getting-started.en.md).
+Public Android **beta110 / Android12+ / ARM64**: [download and update in place](docs/getting-started.en.md).
 Invitation/default updater now offer MESH-capable108 with quiet status notifications.
 The dashboard and country list show measured server CPU when channel capacity is unknown.
 CI/signature/HTTPS checks PASS; physical owner108 runtime is pending. Admission is unchanged.
