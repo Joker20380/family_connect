@@ -1,5 +1,10 @@
 # Second Amsterdam ordinary-node preparation
 
+Subsequent result: [ordinary AWG/TCP production admission](2026-11-02-second-nl-ordinary-live.md).
+The preparation boundary below is historical; the new node is now admitted for new assignments,
+while existing devices and MESH remain on the first NL. See the later report for reconciled
+failures, exact publication state and rollback rather than treating this as another active NEXT.
+
 ## Authorization and trust
 
 Continuation of FLEET-BOOTSTRAP-2, not a new PLAN ID. The owner requests a second

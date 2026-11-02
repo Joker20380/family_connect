@@ -1,60 +1,45 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**2 November owner authorization:** implement and admit the second Amsterdam node for Android,
-Linux and Windows. Compatible AWG/TCP assignment source now retains schema2 and pins existing
-devices to their previous signed catalog; new assignments can use the second physical NL.
-Rollback is forward-only with a newer catalog sequence. No client runtime/anchor/schema change,
-no new PLAN ID, no live deployment or catalog publication in this source transition.
-Routing regression287 PASS (25 environment-dependent skips), new routing tests46 PASS,
-Android JVM174 PASS; native Windows conformance/DPAPI, ordinary-user and visual checks PASS.
-Public Linux0.2.11 tagged parser accepts all3 new vectors; Windows0.2.15 parsers are unchanged.
-MESH routing and production renewal remain unchanged; second-node admission is not complete.
-Owner now explicitly accepts the existing TOFU pin without another provider-console comparison;
-strict single-host SSH checking remains. Read-only new-node preflight PASS; first-install
-ordinary AWG/TCP installer/operator-probe source37 new tests PASS. First prepare stopped before service start on
-ancestor permissions; corrected source and exact-native offline install/unit/DAC checks PASS.
-[Second-node preparation and trust decision](releases/2026-11-02-second-nl-ordinary.md).
-[Multi-node source and qualification](releases/2026-11-02-fleet-multinode-source.md) ·
-[Original constraint and measured timing](releases/2026-11-02-fleet-bootstrap-2-activation-check.md).
+**2 November — SECOND_NL_ORDINARY_LIVE (AWG3.1/TCP REALITY).**
+The owner-authorized second Amsterdam node185.10.158.196 is admitted for new device
+assignments on Android109, Linux0.2.11 and Windows0.2.15 with unchanged schema2 clients.
+All57 existing devices remain assigned to first NL185.10.158.212; no existing device moved.
+MESH/readiness/renewal still use the first NL. Second-node MESH/renewal and a manual
+client two-NL selector are not implemented or claimed. Existing FLEET-BOOTSTRAP-2 only.
 
-**READY_FOR_FLEET_BOOTSTRAP_2_HOST — source PASS; A→B→A, role reboot and retirement PASS.**
-Existing FLEET-BOOTSTRAP-2 only; no new PLAN ID or production activation. Owner wants two
-Amsterdam servers; first production NL remains excluded. Reserved disposable VPS remains
-Ubuntu24.04/x86_64; no reinstall/deletion or production/catalog admission is implied.
-Frozen deployable source `d3416ea4abacfafc843411f765fb8037722b55d0` remains unchanged and pushed.
-A/B each reproduce archive/manifest/signature/SHA inventory twice byte-identically. Their only
-member difference is reviewed monitoring revision metadata; native binaries, roles, ports,
-material slots/schema and protocol contracts match. Exact four natives and282-file MESH source
-provenance/licenses remain bound. Private signer, packages and material remain outside Git.
-Offline Ubuntu24.04 native/config/unit/nft/material/A-B/rollback/boot/retirement qualification PASS.
-Exact-native synthetic loopback REALITY/HTTPS and offline MESH mTLS-directory/guard checks PASS.
-Retained unchanged-source qualification: fleet324 + console156 =480 PASS; paid170 PASS;
-Django check PASS; migration drift NONE. This continuation changes evidence/docs, not runtime.
-Signed permit, exact SSH/target/agent/bundle/key bindings, production exclusions, immutable
-releases, encrypted material, two-phase external acceptance and append-only evidence remain.
-Trials01–07 RETIRED; signed retirement precedes disposal of their operator client files.
-Original FLEET_MESH_PROBE_1 custody retained; separate publisher token remains private.
-Trial06 completed real A→B upgrade→A explicit rollback with signed AWG/TCP/MESH acceptance.
-Trial07 completed one guarded physical reboot of A, preserving node identity and bundle.
-All six services recovered automatically with zero restarts; no manual role restart was used.
-Fresh, distinct external acceptance before/after reboot passed AWG/TCP/MESH, DNS/HTTPS/egress
-and operator cleanup. Each receipt was accepted while fresh, then the node was activated locally.
-Final drain/retirement PASS; disposable node secrets and three operator clients removed.
-Reserved VPS is retained; no temporary rehearsal role is left active or published to users.
-Owner confirmed VNC access and authorized the reboot; no manual recovery was requested.
-SSH trust remains owner-accepted TOFU with unchanged strict pin, NOT independent verification.
-That trust limitation is retained for future admission; no production-ready trust claim is made.
-The physical reboot test is finished. No queued activation starts automatically.
-Admitted: awg/tcp/mesh/profile-reader/publisher/snapshot/monitoring/load-monitor. Disabled:
-mailbox/chat-services, production renewal/restricted-sync, registry/control-plane database.
-Production RU/NL writes, catalog publications, user invitations, paid events, phone actions0.
-Public Android109/sequence4/catalog4/paid108/entitlement/ledger1/4/cohort1/10/revenue0 unchanged.
-[Reboot checkpoint](releases/2026-11-02-fleet-bootstrap-2-reboot.md) ·
-[Reboot evidence](releases/2026-11-02-fleet-bootstrap-2-reboot.receipt.json) ·
-[Qualified hashes](releases/2026-11-01-fleet-bootstrap-2-ready.receipt.json) ·
-[Physical A/B receipts](releases/2026-11-01-fleet-bootstrap-2-host-ab.receipt.json) · [Runbook](fleet-bootstrap.md).
-Older checkpoint NEXTs below are historical, not simultaneous active work.
+Both new ordinary services are enabled/active, NRestarts0. Real external AWG handshake/
+DNS/HTTPS/egress, REALITY auth/DNS/HTTPS/egress, pinned RU registration and probe cleanup PASS.
+Original catalog4 is byte-identical; offline-signed per-device sequence5 is enabled for new
+assignments, sequence6 is reserved for forward rollback. No public installer/update catalog
+or client version changed. HTTP f33dee20… is serving; only dispatcher/routing module differ
+from the actual paid108 predecessor. Protected registry/paid rows remain unchanged:
+devices57, invites111, restricted grants2, ledger1/4; entitlement/cohort1/10/revenue0 retained.
+RU backend/registration and new-node writes are authorized and nonzero for this admission;
+first-NL services unchanged, invitations0, paid-event mutations0, phone actions0.
+
+Owner accepted the existing TOFU SSH pin without another VNC comparison. Strict host checking
+remains; no independent-provider verification claim or relaxation of rehearsal permits.
+First preparation's directory-mode failure and the initial lower-priority HTTP override were
+reconciled;3 controlled HTTP restarts include1 verified rollback, with no database restore.
+A wildcard-listener check/order defect is recorded in the report, not erased: corrected
+process-bound health and final registry readback PASS, with an in-process admission guard.
+New source52 PASS; final focused regression339 PASS/25 existing environment skips; exact-native
+Ubuntu24.04 config/unit/service-user-DAC simulation PASS. Retained Android JVM174 and native
+Windows/visual/client-build checks PASS. Broader current full-CI PASS is not claimed.
+[Live scope, failures and rollback](releases/2026-11-02-second-nl-ordinary-live.md) ·
+[Sanitized receipt](releases/2026-11-02-second-nl-ordinary-live.receipt.json) ·
+[Compatible routing source](releases/2026-11-02-fleet-multinode-source.md).
+
+**Retained completed rehearsal evidence, not an active NEXT:** source readiness,
+A→B→A, physical role reboot and retirement PASS; trials01–07 RETIRED. Frozen rehearsal
+source d3416ea4abacfafc843411f765fb8037722b55d0 and its deterministic signed A/B artifacts
+are unchanged. Retained fleet/console480 and paid170 PASS, Django check/migration drift PASS.
+The disposable runtime/permit/remote/material/acceptance guards were not repurposed for
+permanent use. No new production-layout reboot or second production MESH acceptance claim.
+[Reboot evidence](releases/2026-11-02-fleet-bootstrap-2-reboot.md) ·
+[Qualified rehearsal hashes](releases/2026-11-01-fleet-bootstrap-2-ready.receipt.json) ·
+[Runbook](fleet-bootstrap.md). Older NEXTs below are historical, not concurrent active work.
 <!-- /FLEET-BOOTSTRAP-2 current -->
 
 <!-- FLEET-BOOTSTRAP-1 current -->

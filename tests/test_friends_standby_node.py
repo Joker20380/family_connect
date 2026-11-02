@@ -262,3 +262,58 @@ def test_external_probe_rejects_unbound_or_injected_input(probe, probe_input, ch
         probe_input[change] = 'invalid'
     with pytest.raises(ValueError):
         probe.configuration(probe_input)
+
+
+@pytest.mark.parametrize('host', ['0.0.0.0', '*', '[::]'])
+def test_listener_wildcard_spellings_keep_exact_process_binding(host):
+    from scripts.friends_standby_health import listener_owners
+    line = 'tcp LISTEN 0 4096 ' + host + ':443 *:* users:(("xray",pid=123,fd=4))'
+    assert listener_owners(line, 'tcp', 443, {'123'}, {'0.0.0.0', '*', '[::]'}) == [host]
+    with pytest.raises(ValueError):
+        listener_owners(line, 'tcp', 443, {'999'}, {'0.0.0.0', '*', '[::]'})
+
+
+@pytest.mark.parametrize('line', ['', 'tcp LISTEN 0 4096 *:443 *:*',
+    'tcp LISTEN 0 4096 127.0.0.1:443 *:* users:(("xray",pid=123,fd=4))',
+    'tcp LISTEN 0 4096 *:4443 *:* users:(("xray",pid=123,fd=4))'])
+def test_listener_missing_owner_wrong_scope_or_port_rejected(line):
+    from scripts.friends_standby_health import listener_owners
+    with pytest.raises(ValueError):
+        listener_owners(line, 'tcp', 443, {'123'}, {'0.0.0.0', '*', '[::]'})
+
+
+def test_absent_health_fences_admission():
+    from scripts.friends_standby_health import require_ready
+    with pytest.raises((KeyError, ValueError)):
+        require_ready({}, {}, {}, target='1.1.1.1', now=1000)
+
+
+@pytest.mark.parametrize('change', ['valid', 'stale', 'future', 'failed', 'host', 'restart', 'cleanup'])
+def test_admission_requires_fresh_complete_independent_observations(change):
+    from scripts.friends_standby_health import require_ready
+    units = {name: dict(ActiveState='active', NRestarts='0', UnitFileState='enabled') for name in (
+        'family-connect-friends-awg.service', 'family-connect-friends-tcp.service')}
+    health = dict(result='LOCAL_ORDINARY_HEALTH_PASS', target='1.1.1.1', observed_at=1000, units=units,
+                  native_hashes='PASS', forwarding_nat='PASS', awg_address='PASS', listener_ownership='PASS')
+    external = dict(target='1.1.1.1', exit=0, external=dict(awg='HANDSHAKE_DNS_HTTPS_EGRESS_PASS',
+                    tcp='AUTH_DNS_HTTPS_EGRESS_PASS', operator_cleanup='PASS'),
+                    cleanup=dict(receipt=dict(result='TARGET_CLEANUP_PASS')))
+    registration = dict(probe=dict(result='PINNED_RU_TO_NEW_NL_REGISTRATION_PASS'),
+                        cleanup=dict(result='REGISTRATION_PROBE_CLEANUP_PASS'))
+    if change == 'stale':
+        health['observed_at'] = 879
+    elif change == 'future':
+        health['observed_at'] = 1001
+    elif change == 'failed':
+        health['listener_ownership'] = 'FAIL'
+    elif change == 'host':
+        external['target'] = '8.8.8.8'
+    elif change == 'restart':
+        units['family-connect-friends-awg.service']['NRestarts'] = '1'
+    elif change == 'cleanup':
+        registration['cleanup']['result'] = 'FAIL'
+    if change == 'valid':
+        require_ready(health, external, registration, target='1.1.1.1', now=1000)
+    else:
+        with pytest.raises(ValueError):
+            require_ready(health, external, registration, target='1.1.1.1', now=1000)
