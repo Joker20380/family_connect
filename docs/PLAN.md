@@ -14,8 +14,10 @@ Linux full internal.12 exact package/isolated smoke/GTK PASS; hosted candidate
 rejected89f4e8 installer retained privately, never replaces public0.2.15.
 Backend + signed schema3 sequence1 + Nginx routes LIVE, protected-state readback
 and public HTTPS PASS. Initial cold-listener rollback reconciled; all evidence retained.
-NEXT within this task: Android110 exact emulator/package acceptance, immutable
-client distribution/signed update catalogs and verified Linux full-package install. Preserve
+Windows0.2.16 immutable publication41442681710 and public hash PASS; signed
+independent Windows sequence12. Invitation mirror/link remains pending.
+NEXT within this task: corrected Android110 exact emulator/package acceptance,
+remaining distribution and verified Linux full-package install. Preserve
 legacy assignments and paid state; explicit nodes support AWG/TCP, not second MESH.
 Do not remove the L08 full-package guard to force the installed internal Linux
 candidate through its legacy updater. [Evidence](releases/2026-11-02-gateway-selection.md).

@@ -16,9 +16,11 @@ and2 regressions accepted, final switch PASS.3 manual restarts,1 Nginx reload,
 invitations0/paid mutations0/phone actions0; native gateway services untouched.
 Full Linux internal.12 from efc13f1: exact DEB/AppImage/system/pre-start smoke PASS,
 packaged RU/EN GTK4 PASS; hosted candidate41438372471 PASS. Corrected Windows0.2.16
-installer/hash/native compatibility41439156032 PASS. Android110 emulator pending.
-No client publication/owner install yet; installed/public versions unchanged,
-L08 not bypassed. Real Nginx/HTTP55 PASS/1 optional sync-archive skip.
+installer/hash/native compatibility41439156032 PASS; immutable Windows0.2.16
+publication41442681710 and public HTTPS/hash PASS, signed Windows catalog12.
+Android110 TCP default-network readiness repair is under emulator qualification;
+public Android109 unchanged. Linux.12 not owner-installed/public, L08 not bypassed.
+Invitation Windows link still15 pending mirror/CSP update. Real Nginx/HTTP55 PASS/1 skip.
 [Selection source and delivery gates](releases/2026-11-02-gateway-selection.md).
 
 **2 November — SECOND_NL_ORDINARY_LIVE (AWG3.1/TCP REALITY).**

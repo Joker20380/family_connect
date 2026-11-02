@@ -5,7 +5,11 @@
 Windows0.2.16 is qualified from exact source5ae821d / run41439156032,
 native Windows and compatibility jobs PASS. The immutable distribution workflow
 pins artifact13138243140, ZIP digestcccbbe7a… and installer491a731e…/49955605bytes;
-publication and independent update-catalog sequence12 are not yet confirmed.
+publication41442681710 is PASS. The49,955,605-byte GitHub release installer was
+downloaded over verified HTTPS and matches491a731e… exactly. Independent Windows
+catalog sequence12 is signed offline against the existing public anchor and
+committed for publication; the legacy Linux/shared catalog remains unchanged.
+The invitation mirror/link is still0.2.15 until its separate delivery is verified.
 Android110 in that run failed its TCP emulator data test with ENETUNREACH;
 the failure is retained and must be localized before signing/publication.
 

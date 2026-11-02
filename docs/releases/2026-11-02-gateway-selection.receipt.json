@@ -56,12 +56,15 @@
     "installer_sha256": "491a731edbf80887122844bebcccb8741e701b03816202f9a9b77c77855e8a65",
     "installer_size": 49955605,
     "native_build_compatibility": "PASS",
-    "published": false
+    "publication_run": 41442681710,
+    "public_https_hash": "PASS",
+    "update_sequence": 12,
+    "published": true
   },
   "android": {
     "candidate_version": "0.1.18-beta110",
     "ci_run": 41439156032,
-    "acceptance": "PENDING",
+    "acceptance": "TCP_DEFAULT_NETWORK_FAILURE_REPAIR_PENDING_CI",
     "published_version": "0.1.18-beta109"
   }
 }

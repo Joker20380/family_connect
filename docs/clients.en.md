@@ -1,11 +1,15 @@
 # Client installation
 
-**Amsterdam selection preparation — 2 November 2026.** Android110 and Windows0.2.16
-with separate Amsterdam1/2 choices are under qualification, not published. Complete
-Linux candidate0.2.12~l03.2.12 for Ubuntu26.04/Python3.14 is built, not yet installed
-on the owner's workstation. Existing public download links are unchanged. Internal
-Linux candidates require the complete verified package, not a legacy six-file
-updater archive. [Qualification](releases/2026-11-02-gateway-selection.md).
+**Amsterdam selection — 2 November 2026.** Windows0.2.16 is published:
+[download installer](https://github.com/Joker20380/family_connect/releases/download/windows-v0.2.16/FamilyConnect-Setup-0.2.16-pilot-unsigned.exe).
+Windows0.2.13+ discovers it through Check for updates (signed catalog12);0.2.12
+and earlier need one manual in-place installation without deleting data. Explicit
+Amsterdam1/2 choices support AWG/TCP. The installer has no publisher signature.
+SHA256 `491a731edbf80887122844bebcccb8741e701b03816202f9a9b77c77855e8a65`.
+Android110 is still under emulator qualification; public109 remains. Complete Linux
+0.2.12~l03.2.12 Ubuntu26.04/Python3.14 package is qualified, not yet owner-installed.
+Internal Linux needs the complete package, not the legacy six-file updater archive.
+[Qualification](releases/2026-11-02-gateway-selection.md).
 
 **1 November — READY_FOR_BETA109_OWNER_UPDATE.** Beta109/code109 is published;
 Android update sequence4 and invitation109 verified over HTTPS. Full matrix41289980872/
