@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "scope": "EXPLICIT_ORDINARY_GATEWAY_SELECTION",
+  "backend": {
+    "result": "LIVE",
+    "source_commit": "25a4ea83198c73b04ebbe0ad72bf4d1aadf8bdc1",
+    "http_sha256": "fce2340051ecc574156ee2b7eb50f87b443679b95bf69ee3f62c6c189de1ebf5",
+    "predecessor_sha256": "f33dee20e5069353914def7ae3a338631fbc4a5af7bf48af1d6fddbe5662b669",
+    "selection_catalog_sha256": "2658d9e0c676a067508c1dd6036abcd3a7f5e9b35a199c9d007aa2425031f60a",
+    "selection_sequence": 1,
+    "selection_namespace": "schema3_explicit_gateway",
+    "legacy_catalog_sha256": "214cb6a3611b5c05117dd2ddfbfbb2f8add0603c680368a9299b34cd28214922",
+    "legacy_catalog_sequence": 4,
+    "policy_generation": 2,
+    "manual_restarts": 3,
+    "rollback_count": 1,
+    "first_attempt": "HTTP_LISTENER_STARTUP_RACE",
+    "rollback_reconciliation": "PASS",
+    "bounded_readiness": "PASS",
+    "public_tls_ingress": "PASS",
+    "database_restore_count": 0,
+    "production_writes": "AUTHORIZED_NONZERO"
+  },
+  "protected_state": {
+    "row_digests_unchanged": true,
+    "devices": 57,
+    "invites": 111,
+    "restricted_grants": 2,
+    "paid_subscriptions": 1,
+    "paid_events": 4,
+    "existing_first_nl_assignments": 57,
+    "invitations_created": 0,
+    "paid_events_mutated": 0,
+    "device_moves": 0,
+    "phone_actions": 0,
+    "native_gateway_services_changed": false
+  },
+  "linux": {
+    "version": "0.2.12~l03.2.12",
+    "source_commit": "efc13f1c7f2750cb7640dd2b8b90aed15c92c6e3",
+    "platform": "Ubuntu26.04_Python3.14_x86_64",
+    "deb_sha256": "cde8416c07ef87ec2ef5441e17a33b93f72be8aad2e1675c7203d542ea975972",
+    "appimage_sha256": "1fb37e03b01e8aaf7d598f9907e27e6bee8500fa37d272018abcc49287fb2d2c",
+    "system_build_id": "d5fc9df50a66292b7cd1b10c81a2521352d7648c0bd2b5037af2c457b1617eb7",
+    "isolated_system_deb_appimage_prestart": "PASS",
+    "packaged_gtk_ru_en_100_200": "PASS",
+    "installed_on_owner": false,
+    "published": false
+  },
+  "windows": {
+    "version": "0.2.16",
+    "source_commit": "5ae821d3c91345df9a18691c0e3421d9789b3e67",
+    "ci_run": 41439156032,
+    "artifact_id": 13138243140,
+    "zip_sha256": "cccbbe7a2294cae924301437a806eb329137e95cb9df146dfa3eef7bbc5662af",
+    "installer_sha256": "491a731edbf80887122844bebcccb8741e701b03816202f9a9b77c77855e8a65",
+    "installer_size": 49955605,
+    "native_build_compatibility": "PASS",
+    "published": false
+  },
+  "android": {
+    "candidate_version": "0.1.18-beta110",
+    "ci_run": 41439156032,
+    "acceptance": "PENDING",
+    "published_version": "0.1.18-beta109"
+  }
+}

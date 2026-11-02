@@ -9,14 +9,13 @@ Source contract/API/isolated replay floors and Android/Linux/Windows selection a
 implemented and locally checked; no installed/public delivery claim. Completion:
 Native Windows DPAPI/access CI, desktop1229 and native compatibility71 now PASS;
 bounded stale-source-reference and test-wrapper repairs retain all release guards.
-Source Android110/Windows0.2.16 reserved; Linux full internal.12 built/audited,
-isolated runtime smoke PASS. No installer/catalog publication or owner install yet.
-Exact DEB/AppImage/pre-start smoke and packaged GTK PASS. Real Nginx/HTTP53 PASS;
-hosted candidate's two-unit readiness wait fixed/5 PASS; await its exact CI rerun.
-Reject the89f4e8 Windows installer (still labelled0.2.15); rebuild with project-bound
-metadata/filename. Android explicit-row emulator assertions must pass before release.
-exact platform CI/package/UI acceptance → signed catalog + matching backend with
-protected-state readback → verified client distribution/installation. Preserve
+Linux full internal.12 exact package/isolated smoke/GTK PASS; hosted candidate
+41438372471 PASS. Corrected Windows0.2.16 native/compatibility41439156032 PASS;
+rejected89f4e8 installer retained privately, never replaces public0.2.15.
+Backend + signed schema3 sequence1 + Nginx routes LIVE, protected-state readback
+and public HTTPS PASS. Initial cold-listener rollback reconciled; all evidence retained.
+NEXT within this task: Android110 exact emulator/package acceptance, immutable
+client distribution/signed update catalogs and verified Linux full-package install. Preserve
 legacy assignments and paid state; explicit nodes support AWG/TCP, not second MESH.
 Do not remove the L08 full-package guard to force the installed internal Linux
 candidate through its legacy updater. [Evidence](releases/2026-11-02-gateway-selection.md).

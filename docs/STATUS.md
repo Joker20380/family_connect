@@ -8,16 +8,17 @@ three selectors implemented; existing assignments remain unchanged. Local Python
 PASS/25 existing environment skips; GTK52 PASS, JVM/C# protocol PASS. Native Windows
 control/DPAPI and ordinary-access CI PASS. Package-gate repairs: full desktop1229
 PASS/185 environment skips, native configuration/Auto71 PASS, release contracts53
-PASS. Exact packages, signed catalog/backend rollout and client installation remain
-unaccepted. Current installed/public versions are unchanged; L08 is not bypassed.
-Source-only next versions: Android110/Windows0.2.16. Full Linux internal.12 built
-from efc13f1; artifact audit and isolated system-runtime smoke PASS, no owner install.
-Exact DEB/AppImage and AWG/TCP pre-start smoke PASS; packaged RU/EN GTK4 PASS.
-Real Nginx/HTTP53 PASS; matching ingress fragment prepared, not deployed.
-Hosted Linux boot-wait race fixed,5 regressions PASS; rerun pending. Read-only RU
-preflight confirms protected state/catalog unchanged; no production writes here.
-Windows candidate installer version mismatch caught before publication; one-source
-version binding fixed. Android explicit-row instrumentation added; exact CI pending.
+PASS. Backend fce23400 + signed schema3 selection sequence1 and exact Nginx routes
+are LIVE/HTTPS-verified; legacy catalog4/policy2/all57 assignments remain unchanged.
+Cold-listener readiness race caused1 rollback; journal reconciled, bounded helper
+and2 regressions accepted, final switch PASS.3 manual restarts,1 Nginx reload,
+0 DB restores. Production writes authorized/nonzero; protected rows unchanged,
+invitations0/paid mutations0/phone actions0; native gateway services untouched.
+Full Linux internal.12 from efc13f1: exact DEB/AppImage/system/pre-start smoke PASS,
+packaged RU/EN GTK4 PASS; hosted candidate41438372471 PASS. Corrected Windows0.2.16
+installer/hash/native compatibility41439156032 PASS. Android110 emulator pending.
+No client publication/owner install yet; installed/public versions unchanged,
+L08 not bypassed. Real Nginx/HTTP55 PASS/1 optional sync-archive skip.
 [Selection source and delivery gates](releases/2026-11-02-gateway-selection.md).
 
 **2 November — SECOND_NL_ORDINARY_LIVE (AWG3.1/TCP REALITY).**

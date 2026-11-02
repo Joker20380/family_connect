@@ -99,6 +99,37 @@ catalog or public selection ingress installed. No production write in this phase
 
 ## Rollout boundary
 
+**Backend selection is now LIVE; client publication is still pending.** Exact HTTP
+fce23400 and separate signed schema3 selection sequence1 are installed. Root-private
+legacy catalog4, generation2 and all57 sticky assignments are unchanged. Public
+system-CA-verified HTTPS confirms both routes, legacy ordinary/restricted malformed
+requests, GET/unknown/suffixed-route rejection. Catalog4 is verified on the node,
+not via `/friends/catalog.json` (that public URL returns404).
+
+First activation encountered a cold HTTP listener after systemd reported an active
+PID. Its rollback restored f33dee20/old Nginx, but the same premature probe left a
+fenced journal. Read-only reconciliation confirmed old runtime/ports/config and
+protected rows, then appended `ROLLBACK_RECONCILED`; no receipt was erased. The
+next explicit attempt uses the existing bounded durable readiness helper: new
+delayed-start and never-ready regressions PASS; full Nginx/HTTP55 PASS/1 optional
+sync-archive skip. Final activation/HTTPS PASS. Total3 manual HTTP restarts,
+1 reconciled rollback,1 Nginx reload,0 database restores. Append-only selection
+event is retained; its retry is verified idempotent, not inserted twice.
+
+Production writes are authorized/nonzero for artifact/catalog import and API/ingress
+activation; native gateway services are untouched. Protected row digests unchanged:
+devices57/invites111/restricted2/paid1 subscription+4 events; invitations0, paid
+mutations0, device moves0, phone actions0. No authenticated physical selection/tunnel
+test is claimed; ordinary native-node acceptance remains the earlier live baseline.
+[Safe receipt](2026-11-02-gateway-selection.receipt.json).
+
+Corrected Windows0.2.16 exact installer13138243140: native build/compatibility
+CI41439156032 PASS; downloaded ZIP digest and installer SHA256/size verified.
+Installer491a731edbf80887122844bebcccb8741e701b03816202f9a9b77c77855e8a65,
+49,955,605 bytes. Render shows0.2.16. It is not yet published. Hosted Linux candidate
+41438372471 also PASS after the boot-wait repair; its CI artifact is separate from
+the frozen local.12 package. Android110 is still running its emulator gates.
+
 Windows source89f4e8 native build/compatibility passed, but downloaded artifact
 13137401420 is rejected for distribution: its installer still declared0.2.15
 despite the application0.2.16. ZIP digest130d173d21f951c2904b3f9a499356f25b66e24b541a273a3c80a256c6c68927
@@ -118,17 +149,17 @@ DEB cde8416c07ef87ec2ef5441e17a33b93f72be8aad2e1675c7203d542ea975972;
 AppImage1fb37e03b01e8aaf7d598f9907e27e6bee8500fa37d272018abcc49287fb2d2c.
 The bundled legacy six-file tar is NOT a supported update for internal candidates.
 
-Not yet delivered: new signed live selection catalog, matching backend archive,
-Android APK, Windows installer/update catalog, or reviewed full Linux DEB/AppImage.
+Not yet delivered to clients: Android APK, Windows installer/update catalog and
+the reviewed full Linux DEB/AppImage. Backend/catalog/ingress rollout is recorded above.
 Public Android109/Linux0.2.11/Windows0.2.15 and installed owner Linux
 0.2.12~l03.2.9 remain unchanged. L08 migration is not bypassed; the existing internal
 Linux updater cannot install a legacy six-file archive as a full runtime update.
 
 Before claiming the new choices appear for users: qualify exact client artifacts,
 publish only immutable increasing versions/catalog sequences, verify delivered
-bytes and install the reviewed Linux package without losing identity/state. Import
-the signed selection catalog and matching HTTP runtime with protected-state
-readback and a scoped rollback. Keep existing sticky routing intact. Until then,
+bytes and install the reviewed Linux package without losing identity/state. Retain
+the deployed selection catalog/HTTP runtime and their protected-state/readback
+and rollback receipts. Keep existing sticky routing intact. Until then,
 the current clients continue to show the old country selector.
 
 References: [current state](../STATUS.md), [existing task](../PLAN.md),

@@ -487,6 +487,39 @@ def test_probe_receipt_survives_failed_gate_and_rollback(runtime):
     assert all(record['generation'] == 'restricted-enabled-test' for record in records)
 
 
+def test_bounded_readiness_wait_records_cold_start_before_accepting(runtime):
+    import threading
+    processes = []
+    def start():
+        processes.append(subprocess.Popen(runtime['command'], env=runtime['environment'], cwd=runtime['temporary'],
+                                          stdout=subprocess.DEVNULL, stderr=subprocess.PIPE))
+    timer = threading.Timer(.3, start)
+    evidence = Evidence(runtime['temporary'] / 'cold-start-evidence', 'cold-start')
+    timer.start()
+    try:
+        wait_backend('http://127.0.0.1:' + str(runtime['backend']), evidence, seconds=5)
+        records = [json.loads(path.read_text()) for path in sorted(evidence.directory.glob('*.json'))]
+        assert any(record['transport_error'] == 'connection' for record in records)
+        assert records[-1]['status'] == 400 and records[-1]['transport_error'] is None
+        assert all(record['generation'] == 'cold-start' for record in records)
+    finally:
+        timer.cancel(); timer.join(timeout=10)
+        for process in processes:
+            process.terminate(); process.communicate(timeout=5)
+        evidence.close()
+
+
+def test_bounded_readiness_timeout_preserves_failed_observation(runtime):
+    evidence = Evidence(runtime['temporary'] / 'never-ready-evidence', 'never-ready')
+    try:
+        with pytest.raises(ProbeFailed, match='readiness timeout'):
+            wait_backend('http://127.0.0.1:' + str(runtime['backend']), evidence, seconds=0)
+        records = [json.loads(path.read_text()) for path in evidence.directory.glob('*.json')]
+        assert len(records) == 1 and records[0]['transport_error'] == 'connection'
+    finally:
+        evidence.close()
+
+
 def test_exact_future_https_gate_verifies_tls(runtime, monkeypatch):
     with running(runtime), ingress(runtime, True, tls=True) as frontend:
         evidence = Evidence(runtime['temporary'] / 'https-evidence', 'attempt4-fixture')
