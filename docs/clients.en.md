@@ -10,12 +10,15 @@ Android110 is published: [APK](https://185.251.89.19:8443/downloads/FamilyConnec
 optional signed catalog5, existing signer; SHA256
 `159034142f0430445caf6420c7d491866f7802a7a3eb615a4d4bfb7908641861`,56221032bytes.
 Update over109 without clearing data; owner installation is not yet confirmed.
-Complete Linux0.2.12~l03.2.12 Ubuntu26.04/Python3.14 is now installed on the owner's
-workstation after reboot: exact full DEB/system pair, imports/READY and GTK startup
-PASS;3169 protected entries unchanged, no automatic connection. Earlier .9 rollback
-is retained evidence. Public Linux stays0.2.11; physical AWG/TCP selection checks remain.
+Complete Linux0.2.12~l03.2.13 Ubuntu26.04/Python3.14 is now installed on the owner's
+workstation: exact full DEB/system pair, imports/READY, GTK and separate live node
+metrics PASS;3171 protected entries unchanged, no automatic connection. AWG/TCP has
+two Amsterdam nodes without duplicate NL, plus Russia. Each NL node uses assumed
+5000Mbps capacity (≈ denotes an estimate, not a speed test); Auto/MESH stays country-based.
+The .12 full pair is retained for guarded rollback. Public Linux stays0.2.11;
+physical AWG/TCP selection/Disconnect checks remain pending.
 Internal Linux needs the complete package, not the legacy six-file updater archive.
-[Qualification](releases/2026-11-02-gateway-selection.md).
+[Linux qualification and checksums](releases/2026-11-02-linux-node-load.md).
 
 **1 November — READY_FOR_BETA109_OWNER_UPDATE.** Beta109/code109 is published;
 Android update sequence4 and invitation109 verified over HTTPS. Full matrix41289980872/

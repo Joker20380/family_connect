@@ -1,6 +1,11 @@
 # Explicit Amsterdam selection — 2 November 2026
 
-## Linux owner installation after reboot — current result
+Linux follow-up is now installed .13 with independent two-node load:
+[current Linux receipt](2026-11-02-linux-node-load.md). The .12 result below is
+retained accepted history/rollback evidence; its missing-load limitation is fixed
+by .13 plus live monitoring, not by retroactively changing .12 bytes.
+
+## Linux owner installation after reboot — earlier .12 result
 
 **INSTALLED_PAIR_READY_NO_CONNECTION.** After the owner-controlled workstation
 reboot at14:48CET and explicit disconnect/GUI-closed confirmation, a fresh operation

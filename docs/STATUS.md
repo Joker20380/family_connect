@@ -1,7 +1,7 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**2 November — owner-requested two-node load follow-up, LIVE_METRICS / owner package pending.**
+**2 November — owner-requested two-node load follow-up, LIVE_METRICS / .13 INSTALLED.**
 Owner requests exactly two Amsterdam choices and provisional5000Mbps capacity on
 each node. Linux AWG/TCP picker removes the duplicate assigned-NL choice; Auto/MESH
 retain country routing and do not imply second-node MESH. Independent fresh,
@@ -18,11 +18,16 @@ and resumed only pending RU activation. Installer regression2 plus monitor11 PAS
 Exact .13 full DEB/AppImage/system/integrity/pre-start AWG/TCP gates PASS; packaged
 GTK RU/EN scale1/2 four cases PASS and screenshots inspected. Initial frame-readiness
 and too-small scale2 display attempts retained; bounded capture wait and correctly
-sized virtual display repair the harness only. Owner install pending; installed
-.12/public Linux0.2.11 unchanged here.
+sized virtual display repair the harness only. Fresh guarded full-package upgrade
+from .12 to0.2.12~l03.2.13 PASS: candidate0d23476c/system1428321b, imports/READY,
+installed GTK startup and installed-parser HTTPS samples PASS. All3171 protected
+entries unchanged through install and smoke; no automatic connection. At final
+readback AMS1/AMS2 load16.3%/4.7%, both5000Mbps operator-assumed, not a speed test.
+Retain exact .12 full pair for guarded rollback. Public Linux0.2.11 and all signed
+catalogs/downloads unchanged. Owner-initiated AWG/TCP/Disconnect checks remain pending.
 [Load follow-up and gates](releases/2026-11-02-linux-node-load.md).
 
-**2 November — explicit two-Amsterdam client selection IN_PROGRESS.** Owner requests
+**Earlier2 November — explicit two-Amsterdam delivery; Linux superseded by .13 above.** Owner requests
 visible choices on Android/Linux/Windows, not only new-device backend assignment.
 Source schema3/target-bound proof, isolated durable floors, operator import and all
 three selectors implemented; existing assignments remain unchanged. Local Python361

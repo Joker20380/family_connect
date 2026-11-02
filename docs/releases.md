@@ -1,6 +1,6 @@
 # Release distribution / Выпуски
 
-**2 November — Android110 and Windows0.2.16 published; Linux internal.12 owner-installed.**
+**2 November — Android110 and Windows0.2.16 published; Linux internal.13 owner-installed.**
 [Windows installer](https://github.com/Joker20380/family_connect/releases/download/windows-v0.2.16/FamilyConnect-Setup-0.2.16-pilot-unsigned.exe)
 adds Amsterdam1/2 for AWG/TCP; native CI, immutable release and public HTTPS hash
 PASS. SHA256 `491a731edbf80887122844bebcccb8741e701b03816202f9a9b77c77855e8a65`,
@@ -9,11 +9,14 @@ Android110 exact CI41449895463/source05d8919, existing signer and full public HT
 bytes PASS; optional Android sequence5. [Download110](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta110.apk),
 56221032bytes, SHA256 `159034142f0430445caf6420c7d491866f7802a7a3eb615a4d4bfb7908641861`.
 Amsterdam1/2 support AWG/TCP; owner installation/physical selection not claimed.
-Complete Linux0.2.12~l03.2.12 Ubuntu26.04/Python3.14 full DEB/system is installed on the
-owner workstation after reboot; imports/READY and installed GTK startup PASS,
-3169 protected entries unchanged, no connection. Earlier sticky-owner refusal/.9
-rollback retained; physical node selection remains pending. Public0.2.11 remains. Do not bypass L08 with
-the six-file archive. [Qualification](releases/2026-11-02-gateway-selection.md).
+Complete Linux0.2.12~l03.2.13 Ubuntu26.04/Python3.14 full DEB/system is installed on the
+owner workstation; imports/READY, installed GTK and real separate node metrics PASS,
+3171 protected entries unchanged, no connection. Duplicate manual NL removed;
+each Amsterdam node uses provisional5000Mbps capacity, explicitly an estimate.
+DEB SHA256 `2e8381104cf6f05bbb638954e6e39342d3328b2397d37b6b6a7c6a9b68ae1dfc`,56157812bytes.
+.12 full pair retained for guarded rollback; physical node selection remains pending.
+Public0.2.11 and invitation/download catalogs remain unchanged. Do not bypass L08 with
+the six-file archive. [Linux qualification](releases/2026-11-02-linux-node-load.md).
 
 **1 November — READY_FOR_BETA109_OWNER_UPDATE.** Beta109/code109 is published;
 Android update sequence4 and invitation109 verified over HTTPS. Full matrix41289980872/

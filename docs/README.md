@@ -3,14 +3,16 @@
 <!-- FLEET-BOOTSTRAP-2 current -->
 **Latest continuation — explicit Amsterdam1/2 selection.** Backend schema3/API and
 Windows0.2.16 distribution/update catalog12/invitation are LIVE and HTTPS-verified.
-Linux full0.2.12~l03.2.12 Ubuntu26.04/Python3.14 is now owner-installed after the
-workstation reboot and a fresh full-package/system operation: imports/READY and
-installed GTK startup PASS,3169 protected entries unchanged, no connection.
-Earlier sticky-owner refusal/.9 rollback retained; L08 is not bypassed. Public Linux
+Linux full0.2.12~l03.2.13 Ubuntu26.04/Python3.14 is now owner-installed: imports/READY,
+installed GTK and live separate AMS1/AMS2 load PASS;3171 protected entries unchanged,
+no connection. Manual AWG/TCP removes duplicate NL; each node uses provisional
+5000Mbps, explicitly an estimate, not a speed test. .12 retained for full-pair rollback;
+earlier sticky-owner refusal/.9 rollback remain history. L08 is not bypassed.
+[Current Linux load receipt](releases/2026-11-02-linux-node-load.md). Public Linux
 stays0.2.11; physical selection/transport checks remain pending. Android110 exact CI41449895463,
 downloaded ARM64 package/source/16K and both Amsterdam UI rows PASS. Android110 is
 signed/published with optional catalog5 and verified HTTPS bytes/CSP;109 retained.
-Owner110 installation not claimed. [Current delivery receipt](releases/2026-11-02-gateway-selection.md).
+Owner110 installation not claimed. [Cross-platform delivery receipt](releases/2026-11-02-gateway-selection.md).
 The following ordinary-admission baseline is retained evidence, not the latest
 client-publication status or a competing NEXT.
 

@@ -10,12 +10,16 @@ on both NL nodes and RU aggregation now LIVE/HTTPS PASS with5000Mbps explicitly
 operator-assumed. Initial NL2 monitor-only DAC failure repaired and retained; no
 VPN service restart. Exact new .13 full DEB/AppImage/system/integrity/pre-start gates
 PASS; packaged GTK RU/EN scale1/2 four cases and inspected screenshots PASS.
-NEXT: guarded owner installation after disconnect/GUI closure. No VPN/backend restart, assignment/paid-state
+.13 full owner installation now PASS: imports/READY, installed GTK and real HTTPS
+parser readback; all3171 protected entries unchanged, no automatic connection.
+NEXT: owner opens .13 and checks the two Amsterdam rows/load; any physical AWG/TCP
+connection/Disconnect is owner-initiated. No new implementation/backlog is started.
+No VPN/backend restart, assignment/paid-state
 mutation, second-node MESH claim or public release is authorized by this follow-up.
-[Task receipt](releases/2026-11-02-linux-node-load.md). Earlier .12 installation remains
-accepted evidence, not proof that this new UI/telemetry change is delivered.
+[Task receipt](releases/2026-11-02-linux-node-load.md). .12 is the retained full-pair
+rollback, not the current installed version. Public Linux remains0.2.11.
 
-**Owner-selected continuation: visible Amsterdam 1 / Amsterdam 2 on all clients.**
+**Earlier delivery: visible Amsterdam1/2 on all clients; Linux NEXT superseded above.**
 Continue the existing FLEET-BOOTSTRAP-2 ID; do not start unrelated desktop backlog.
 Source contract/API/isolated replay floors and Android/Linux/Windows selection are
 implemented and locally checked; no installed/public delivery claim. Completion:

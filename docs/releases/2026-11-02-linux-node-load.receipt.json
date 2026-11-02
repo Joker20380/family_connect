@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "result": "INSTALLED_GTK_AND_LIVE_METRICS_PASS",
+  "task": "FLEET-BOOTSTRAP-2",
+  "internal_version": "0.2.12~l03.2.13",
+  "source_commit": "64182449b7370ac429b942a64ebca5563f91b32a",
+  "source_dirty": false,
+  "candidate_build_id": "0d23476c3cd10ad4605534da4e9de5ffef97736f897be2237dfba633a28fcfa4",
+  "system_build_id": "1428321b7743b6b624675552545b33fb32f04518b3ea05889acd385bd6dd157d",
+  "artifacts": {
+    "FamilyConnect_0.2.12~l03.2.13_amd64.deb": {
+      "size": 56157812,
+      "sha256": "2e8381104cf6f05bbb638954e6e39342d3328b2397d37b6b6a7c6a9b68ae1dfc"
+    },
+    "FamilyConnect-0.2.12~l03.2.13-x86_64.AppImage": {
+      "size": 58128888,
+      "sha256": "452d595d932078a50724e9691f4c137d110e387d7db46bb06c6921a93cceea9d"
+    }
+  },
+  "checks": {
+    "desktop_monitor_candidate_contracts": {"passed": 1251, "skipped": 183},
+    "monitor_installer_regressions": {"passed": 13},
+    "packaged_gtk_ru_en_scale_1_2": {"passed": 4},
+    "exact_artifact_integrity": "PASS",
+    "isolated_system_deb_appimage_awg_tcp_prestart": "PASS",
+    "candidate_imports": "PASS",
+    "installed_system": "READY",
+    "installed_gtk_startup": "PASS",
+    "installed_parser_verified_https": "PASS"
+  },
+  "protected_entries": 3171,
+  "protected_state_unchanged": true,
+  "automatic_connection": false,
+  "owner_physical_connection_acceptance": "PENDING",
+  "node_capacity_mbps": {"nl-amsterdam-1": 5000, "nl-amsterdam-2": 5000},
+  "capacity_basis": "operator-assumed-capacity",
+  "capacity_direction": "duplex",
+  "monitor_rollout": "LIVE",
+  "vpn_or_backend_restarts_for_load_rollout": 0,
+  "public_linux_version": "0.2.11",
+  "public_release_created": false,
+  "signed_update_catalogs_changed": false,
+  "rollback": {
+    "version": "0.2.12~l03.2.12",
+    "deb_sha256": "cde8416c07ef87ec2ef5441e17a33b93f72be8aad2e1675c7203d542ea975972",
+    "system_build_id": "d5fc9df50a66292b7cd1b10c81a2521352d7648c0bd2b5037af2c457b1617eb7",
+    "requires_guarded_full_pair": true
+  }
+}

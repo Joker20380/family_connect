@@ -2,7 +2,7 @@
 
 ## Current delivery result
 
-**LIVE_NODE_TELEMETRY_HTTPS_PASS; owner Linux package pending.** Both Amsterdam
+**INSTALLED_GTK_AND_LIVE_METRICS_PASS.** Both Amsterdam
 nodes now supply independent fresh samples bound to their exact IDs, with provisional
 5000Mbps duplex capacity and operator-assumed provenance. Verified public HTTPS
 acceptance observed first-node CPU/load12.3% and second-node0.6%; these are one
@@ -34,8 +34,8 @@ synthetic23%/7% and5000Mbps tooltip are verified. Screenshots inspected. The fir
 capture encountered an unmapped render node; a bounded frame wait fixes the test
 harness, not product code. The initial scale2 virtual display provided only512
 logical pixels vertically; the final2560x2160 physical display verifies full layout.
-Earlier diagnostics/captures are retained. Owner installation remains pending;
-installed .12 is unchanged.
+Earlier diagnostics/captures are retained. Owner installation and final readback
+are now complete as recorded below.
 
 | Artifact | Bytes | SHA256 |
 | --- | ---: | --- |
@@ -46,14 +46,44 @@ Candidate `0d23476c3cd10ad4605534da4e9de5ffef97736f897be2237dfba633a28fcfa4`;
 paired system `1428321b7743b6b624675552545b33fb32f04518b3ea05889acd385bd6dd157d`.
 These are internal owner artifacts, not public downloads or signed update entries.
 
+## Owner installation and final readback
+
+Fresh .12→.13 full-package operation: reviewed DEB hash and retained .12 rollback
+bytes verified, GUI/transport idle, user/root background owners stopped normally.
+Ordinary system authorization installed the user package and matching embedded
+system. Candidate imports PASS; `--candidate-status` READY. All3171 protected
+entries were unchanged through installation and GTK smoke: user config/data/state/
+cache plus root AWG/TCP configuration, modes/owners and hashed symlink targets
+without following them. This is a fresh snapshot, not a count-delta claim against
+the earlier .12 operation. No marker deletion, ownership bypass or automatic VPN.
+
+Installed GTK startup on the owner display with isolated D-Bus PASS; no renderer
+overrides. The installed backend independently fetched verified public HTTPS and
+accepted both exact node samples: AMS1 load16.3%, AMS2 load4.7%, each5000Mbps with
+operator-assumed provenance. These are observed samples, not fixed percentages.
+Private operation records/fingerprints remain local. Physical owner AWG/TCP
+connections and Disconnect acceptance remain pending; no such connection was made.
+The build-time manifest's installed=false/acceptance=NOT_RUN is immutable build
+metadata, superseded for delivery by this report and the sanitized receipt.
+
+Rollback if needed: disconnect, close GUI, stop idle background owners normally,
+verify fresh protected fingerprints and restore the retained full .12 DEB SHA256
+`cde8416c07ef87ec2ef5441e17a33b93f72be8aad2e1675c7203d542ea975972`
+and its embedded system `d5fc9df50a66292b7cd1b10c81a2521352d7648c0bd2b5037af2c457b1617eb7`
+through normal guarded setup. Require imports/READY and unchanged protected state;
+never replay a completed install intent or use only the six-file archive.
+
+[Sanitized delivery receipt](2026-11-02-linux-node-load.receipt.json).
+
 ## Scope and source checkpoint
 
 Owner requests two Amsterdam choices instead of the duplicate legacy assigned-NL
 entry, working load for each node, and provisional5Gbps capacity for both.
-Existing FLEET-BOOTSTRAP-2 only; public Linux0.2.11, installed internal.12,
-Android110/sequence5 and Windows0.2.16/sequence12 remain unchanged at this checkpoint.
-Internal Linux0.2.12~l03.2.13 is reserved for a new full-package delivery, not a
-replacement of already-qualified .12 bytes. No Windows/Android release is claimed.
+Existing FLEET-BOOTSTRAP-2 only; public Linux0.2.11, Android110/sequence5 and
+Windows0.2.16/sequence12 remain unchanged. Installed Linux is now0.2.12~l03.2.13,
+a new full-package delivery, not a replacement of already-qualified .12 bytes.
+No public Linux or new Windows/Android release is claimed. Invitation versions,
+public download links and signed catalogs are unchanged.
 
 Linux AWG/TCP has Amsterdam1, Russia, Amsterdam2; Auto/MESH retain country-based
 routing without offering second-node MESH. Switching back restores the chosen
@@ -82,14 +112,20 @@ also absent and the old Linux explicit-node load path deliberately returned none
 - Real-display GTK RU/EN2 PASS: three total manual rows, exact node passed to
   connection callback, distinct percentages/capacity tooltip and Auto/MESH boundary.
   A first test fixture lacked the parser's country field; corrected without relaxing
-  product validation. Rendering/package acceptance remains separate.
+  product validation. Exact package/render acceptance is recorded separately above.
 - Backend telemetry-only source pin updated; native transport source unchanged.
+- Final artifact/installed-receipt consistency, new documentation links and
+  whitespace PASS. The broader nine-document/700-link scan retains one existing
+  historical STATUS anchor failure: `2026-10-27-vpn-health.md#evening-readback--1736utc`.
+  The pre-edit STATUS/PLAN snapshot reproduces the same failure; unrelated owner
+  documentation/untracked history is preserved, not silently repaired or called PASS.
 
 ## Delivery and rollback gates
 
 PASS: live monitor configuration, verified public per-node samples, full .13
-DEB/AppImage/system qualification and packaged GTK interaction/rendering.
-PENDING: guarded owner installation and owner-initiated physical connections.
+DEB/AppImage/system qualification, packaged GTK interaction/rendering, guarded
+owner installation, installed startup and live node metrics.
+PENDING: owner-initiated physical connections and Disconnect acceptance.
 Do not ask the legacy six-file updater to install this internal full candidate.
 
 Only the monitoring services may be installed/restarted for this request. Preserve
@@ -99,6 +135,6 @@ those files/service changes if acceptance fails; never restart the VPN/backend t
 repair telemetry. The accepted NL2 pin is RSA from the retained owner-approved
 known-hosts file; an unrecognized ED25519 key scan was not accepted or used.
 
-Owner package update requires disconnect/closed GUI, idle services/ownership and
-fresh protected-state fingerprints. Keep .12 full DEB and matching embedded system
-for a guarded rollback; no data deletion, marker removal or automatic connection.
+Any later owner package update requires disconnect/closed GUI, idle services/
+ownership and fresh protected-state fingerprints. Keep .12 full DEB and matching
+embedded system for guarded rollback; no data deletion, marker removal or automatic connection.
