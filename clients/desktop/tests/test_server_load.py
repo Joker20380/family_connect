@@ -32,3 +32,30 @@ def test_verified_server_loads_returns_both_and_skips_missing():
     assert set(values)=={'nl','ru'} and values['nl']['percent']==80 and values['ru']['percent']==10
     missing=verified_server_loads(json.dumps(dict(schema=1,gateways={'nl':both['gateways']['nl']})).encode(),1010)
     assert set(missing)=={'nl'}
+
+
+def node_payload(**changes):
+    first=dict(country='nl',gateway_id='nl-amsterdam-1',observed_at=1000,cpu_percent=23,
+               rx_mbps=2500,tx_mbps=1000,capacity_mbps=5000,capacity_direction='duplex',
+               capacity_basis='operator-assumed-capacity')
+    first.update(changes)
+    second=dict(first,gateway_id='nl-amsterdam-2',cpu_percent=7,rx_mbps=5,tx_mbps=2)
+    return json.dumps(dict(schema=1,gateways={},nodes={'nl-amsterdam-1':first,'nl-amsterdam-2':second})).encode()
+
+
+def test_distinct_node_metrics_and_operator_capacity():
+    values=verified_server_loads(node_payload(),1010)
+    assert set(values)=={'nl-amsterdam-1','nl-amsterdam-2'}
+    assert values['nl-amsterdam-1']['percent']==50
+    assert values['nl-amsterdam-2']['percent']==7
+    assert values['nl-amsterdam-1']['capacity']==5000
+    assert values['nl-amsterdam-1']['estimated']
+    assert values['nl-amsterdam-1']['capacity_basis']=='operator-assumed-capacity'
+
+
+@pytest.mark.parametrize('changes',[dict(gateway_id='nl-amsterdam-2'),dict(country='ru'),dict(observed_at=900)])
+def test_node_binding_and_freshness_do_not_fall_back_to_country(changes):
+    values=verified_server_loads(node_payload(**changes),1010)
+    assert 'nl-amsterdam-1' not in values
+    with pytest.raises((ValueError,KeyError)):
+        verified_server_load(payload(),'nl-amsterdam-1',1010)

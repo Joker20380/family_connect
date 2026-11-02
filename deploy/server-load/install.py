@@ -10,7 +10,8 @@ import subprocess
 ROOT=Path('/opt/apps/family_connect/server-load')
 def run(*args):return subprocess.run(args,check=True,capture_output=True,text=True)
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('country',choices=['ru','nl']);args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('country',choices=['ru','nl'])
+    parser.add_argument('--interface');args=parser.parse_args()
     assert os.geteuid()==0
     try:user=pwd.getpwnam('fc-load')
     except KeyError:
@@ -20,7 +21,7 @@ def main():
     public=ROOT/'snapshot';public.mkdir(mode=0o755,exist_ok=True);os.chown(public,user.pw_uid,user.pw_gid)
     source=Path(__file__).with_name('monitor.py');target=ROOT/'monitor.py'
     shutil.copyfile(source,target);target.chmod(0o644)
-    interface=json.loads((ROOT.parent/'friends-awg/settings.json').read_text())['external']
+    interface=args.interface or json.loads((ROOT.parent/'friends-awg/settings.json').read_text())['external']
     assert interface.replace('-','').replace('_','').isalnum()
     config=dict(country=args.country,interface=interface,capacity_mbps=None,snapshot=str(public/'snapshot.json'))
     paths=[str(public)];bind=''
@@ -40,7 +41,7 @@ def main():
     # Capacity is operator-provided. Never guess or overwrite a configured value.
     if path.exists():
         previous=json.loads(path.read_text())
-        for field in ('capacity_mbps','capacity_direction','capacity_basis','capacity_source','remote_host'):
+        for field in ('capacity_mbps','capacity_direction','capacity_basis','capacity_source','remote_host','gateway_id','nodes'):
             if field in previous:config[field]=previous[field]
     path.write_text(json.dumps(config,indent=2)+'\n');path.chmod(0o644)
     unit=Path('/etc/systemd/system/family-connect-server-load.service')
@@ -70,5 +71,5 @@ ReadWritePaths='''+' '.join(paths)+'\n'+bind+'''[Install]
 WantedBy=multi-user.target
 ''')
     run('systemctl','daemon-reload');run('systemctl','enable','family-connect-server-load.service');run('systemctl','restart','family-connect-server-load.service')
-    print(args.country+': read-only monitor installed; capacity remains unconfigured')
+    print(args.country+': read-only monitor installed; configured capacity preserved')
 if __name__=='__main__':main()

@@ -3,6 +3,17 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- FLEET-BOOTSTRAP-2 current -->
+**Owner follow-up: two Amsterdam entries and per-node load, provisional5Gbps each.**
+Continue FLEET-BOOTSTRAP-2 only. Linux selector/strict node telemetry source ready;
+1251 tests PASS/183 environment skips and real GTK RU/EN2 PASS. NEXT: deploy only
+read-only monitoring on both accepted NL nodes and the RU aggregator, verify fresh
+node-bound HTTPS metrics with5000Mbps explicitly marked operator-assumed; build
+new immutable internal .13 full DEB/AppImage/system and pass exact package gates
+before guarded owner installation. No VPN/backend restart, assignment/paid-state
+mutation, second-node MESH claim or public release is authorized by this follow-up.
+[Task receipt](releases/2026-11-02-linux-node-load.md). Earlier .12 installation remains
+accepted evidence, not proof that this new UI/telemetry change is delivered.
+
 **Owner-selected continuation: visible Amsterdam 1 / Amsterdam 2 on all clients.**
 Continue the existing FLEET-BOOTSTRAP-2 ID; do not start unrelated desktop backlog.
 Source contract/API/isolated replay floors and Android/Linux/Windows selection are

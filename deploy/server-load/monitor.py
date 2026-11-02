@@ -41,7 +41,10 @@ def atomic(path, value):
     os.replace(temporary,path)
 
 
-def remote(config):
+NODE_IDS = ('nl-amsterdam-1', 'nl-amsterdam-2')
+
+
+def remote(config, gateway_id=None):
     host=config.get('remote_host','186.246.45.246')
     if str(ipaddress.IPv4Address(host))!=host:raise ValueError('Invalid remote address')
     result=subprocess.run(['/usr/bin/ssh','-T','-i',config['key'],
@@ -52,7 +55,28 @@ def remote(config):
     value=json.loads(result.stdout)
     if value['country']!='nl' or not -15<=time.time()-value['observed_at']<=45:
         raise ValueError('Stale sample')
+    if gateway_id is not None and value.get('gateway_id')!=gateway_id:
+        raise ValueError('Wrong gateway sample')
     return value
+
+
+def public_samples(config, local):
+    result=dict(schema=1,gateways={'ru':local})
+    nodes=config.get('nodes')
+    if nodes is None:
+        try:result['gateways']['nl']=remote(config)
+        except (OSError,ValueError,KeyError,subprocess.SubprocessError):pass
+        return result
+    if (not isinstance(nodes,dict) or not nodes or not set(nodes)<=set(NODE_IDS) or
+            any(not isinstance(host,str) for host in nodes.values()) or len(set(nodes.values()))!=len(nodes)):
+        raise ValueError('Invalid node inventory')
+    result['nodes']={}
+    for gateway_id, host in nodes.items():
+        try:result['nodes'][gateway_id]=remote(dict(config,remote_host=host),gateway_id)
+        except (OSError,ValueError,KeyError,subprocess.SubprocessError):continue
+    if NODE_IDS[0] in result['nodes']:
+        result['gateways']['nl']=result['nodes'][NODE_IDS[0]]
+    return result
 
 
 def main():
@@ -64,11 +88,12 @@ def main():
         try:value=utilization(before,after,config['country'],config['capacity_mbps'],time.time(),config.get('capacity_direction','duplex'),config.get('capacity_basis','configured'))
         except ValueError:
             before=after;continue
+        gateway_id=config.get('gateway_id')
+        if gateway_id is not None:
+            if gateway_id not in NODE_IDS or config['country']!='nl':raise ValueError('Invalid node identity')
+            value['gateway_id']=gateway_id
         before=after;atomic(config['snapshot'],value)
         if config.get('public'):
-            values={'ru':value}
-            try:values['nl']=remote(config)
-            except (OSError,ValueError,KeyError,subprocess.SubprocessError):pass
-            atomic(config['public'],dict(schema=1,gateways=values))
+            atomic(config['public'],public_samples(config,value))
 
 if __name__=='__main__':main()

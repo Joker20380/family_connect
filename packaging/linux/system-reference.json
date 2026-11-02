@@ -1,7 +1,7 @@
 {
   "native_source_digest": "f0e48d7cd3bd68a02759a5ff29967492ab170e171942d502864f0e03a07c23fe",
   "rns_source_digest": "66128235484f01b82bfd2e4ad604a486428706fc48020abbf84211554edef26e",
-  "source_checkpoint": "FLEET-BOOTSTRAP-2 selection source 22069b2a6c0478bce3c2e3a3e07d2ee407a74fb3; reviewed native adaptations pinned in android106-reference.json; no transport source change",
+  "source_checkpoint": "FLEET-BOOTSTRAP-2 node-bound telemetry and two-node manual picker; backend telemetry parser updated; native adaptations unchanged and pinned in android106-reference.json",
   "source_files": {
     "README.txt": "81006876b899607be39dea31e3e00d0be88bea7b431e59fc7f1f278b050f6881",
     "compat/awg-helper.py": "e60a4fbd0b601cab890736ca4f317f66675b371ce7b8b14336f27b32b6a5d618",
@@ -19,7 +19,7 @@
     "lib/auto_runtime.py": "784d03c98ffa792eff3b06be5e85d615386370524d6cf7b43fdb131f087c63e9",
     "lib/auto_service.py": "a88a92d8259c676cdeb9d4f6c32d7f24c1547299b0029ab737c1d6078e03bfde",
     "lib/awg_lifecycle.py": "8096dfe6a8986865b02ec919aa58a0aec05c5b3836c6335204e6d758bc062f83",
-    "lib/backend.py": "12ab9f4b9b3938c652eb58271d126c73509c1f47cd71e44bb4c81bcd68766a0d",
+    "lib/backend.py": "1ea0270304ac85f6a7ace31fee33134e4277af83a41f97b1fef2d6eac6d2fa0a",
     "lib/chat_direct_host.py": "7d230a832e170d3174f462613cdf4117fd00fc0b859a7970463fe84eb45d5347",
     "lib/clients/desktop/profile_config.py": "0c72f3353aa4be1ada9c6bfc6c29475ba3c1ae9f8ce2860dbfb0d5fd3a3ec83a",
     "lib/device_identity/__init__.py": "3cd56edaf5fbfde9c88df7078dc55be15bf23cfc830727ee410bc8f31dc9990f",

@@ -787,11 +787,14 @@ def read_profile(path, *, allow_awg=False, allow_awg31=False):
 
 def verified_server_load(payload,country,now):
     """Telemetry is informational; stale/unknown capacity is never zero load."""
-    if country not in ('ru','nl') or len(payload)>8192:raise ValueError('Invalid load sample')
+    node=country in ('nl-amsterdam-1','nl-amsterdam-2')
+    if (country not in ('ru','nl') and not node) or len(payload)>8192:raise ValueError('Invalid load sample')
     value=json.loads(payload)
     if value.get('schema')!=1:raise ValueError('Invalid load schema')
-    sample=value['gateways'][country]
-    if sample['country']!=country:raise ValueError('Wrong gateway')
+    sample=value['nodes' if node else 'gateways'][country]
+    if not isinstance(sample,dict):raise ValueError('Invalid gateway sample')
+    if sample['country']!=('nl' if node else country):raise ValueError('Wrong gateway')
+    if node and sample.get('gateway_id')!=country:raise ValueError('Wrong gateway identity')
     def number(key,minimum=0,maximum=1e12):
         n=sample[key]
         if type(n) not in (int,float) or not math.isfinite(n) or not minimum<=n<=maximum:
@@ -806,7 +809,8 @@ def verified_server_load(payload,country,now):
     if direction not in ('duplex','egress'):raise ValueError('Invalid capacity direction')
     used=tx if direction=='egress' else max(rx,tx)
     percent=min(100,max(cpu,100*used/capacity)) if capacity else None
-    return dict(country=country,observed_at=observed,cpu=cpu,rx=rx,tx=tx,percent=percent,estimated=sample.get('capacity_basis')=='provider-default-estimate',capacity=capacity,direction=direction)
+    basis=sample.get('capacity_basis','configured')
+    return dict(country=country,observed_at=observed,cpu=cpu,rx=rx,tx=tx,percent=percent,estimated=basis in ('provider-default-estimate','operator-assumed-capacity'),capacity=capacity,direction=direction,capacity_basis=basis)
 
 
 def verified_server_loads(payload,now):
@@ -814,10 +818,15 @@ def verified_server_loads(payload,now):
     if len(payload)>8192:raise ValueError('Invalid load sample')
     value=json.loads(payload)
     if value.get('schema')!=1:raise ValueError('Invalid load schema')
+    if not isinstance(value.get('nodes',{}),dict):raise ValueError('Invalid node samples')
     result={}
     for country in ('ru','nl'):
         if country not in value.get('gateways',{}):continue
         try:result[country]=verified_server_load(payload,country,now)
+        except (ValueError,KeyError):continue
+    for gateway_id in ('nl-amsterdam-1','nl-amsterdam-2'):
+        if gateway_id not in value.get('nodes',{}):continue
+        try:result[gateway_id]=verified_server_load(payload,gateway_id,now)
         except (ValueError,KeyError):continue
     return result
 
@@ -1362,6 +1371,7 @@ class Linux:
 
     def server_load(self,ident):
         if ident in ('country:ru','country:nl'):country=ident.split(':')[1]
+        elif ident in ('gateway:nl-amsterdam-1','gateway:nl-amsterdam-2'):country=ident.split(':')[1]
         else:
             records=self._awg_records()
             if hasattr(self,'_tcp_records'):records.update(self._tcp_records())

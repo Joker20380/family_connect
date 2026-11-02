@@ -1,6 +1,18 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
+**2 November — owner-requested two-node load follow-up, SOURCE_READY / delivery pending.**
+Owner requests exactly two Amsterdam choices and provisional5000Mbps capacity on
+each node. Linux AWG/TCP picker removes the duplicate assigned-NL choice; Auto/MESH
+retain country routing and do not imply second-node MESH. Independent fresh,
+gateway-bound metrics never substitute country/other-node data. Source tests1251
+PASS/183 environment skips; real-display GTK RU/EN2 PASS. Initial full test attempts
+retained: missing GI in the venv, then8 fixture-mode failures under inherited umask002;
+locked venv plus system GI and umask022 pass without weakening guards. New full
+internal .13 package, monitored-node configuration/deployment and owner install are
+pending; installed .12/public Linux0.2.11 unchanged at this checkpoint.
+[Load follow-up and gates](releases/2026-11-02-linux-node-load.md).
+
 **2 November — explicit two-Amsterdam client selection IN_PROGRESS.** Owner requests
 visible choices on Android/Linux/Windows, not only new-device backend assignment.
 Source schema3/target-bound proof, isolated durable floors, operator import and all

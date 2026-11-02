@@ -1,7 +1,9 @@
 """Native Linux GTK 4 client. Keys and network operations stay in the backend."""
 APP_VERSION='0.2.11'
 TRANSPORTS=(('awg','AWG 3.1'),('tcp','TCP REALITY'))
-GATEWAY_TARGETS=('nl','ru','nl-amsterdam-1','nl-amsterdam-2')
+GATEWAY_TARGETS=('nl-amsterdam-1','ru','nl-amsterdam-2')
+EXPLICIT_GATEWAYS=('nl-amsterdam-1','nl-amsterdam-2')
+LOAD_TARGETS=('nl','ru',*EXPLICIT_GATEWAYS)
 STATE_LABELS={'DISCONNECTED':('VPN выключен','VPN is off'),'CONNECTING':('Подключение…','Connecting…'),
     'CONNECTED':('Туннель включён','Tunnel is on'),'RESTORING':('Восстанавливаем соединение…','Restoring connection…'),
     'STOPPING':('Отключение…','Disconnecting…'),'FAILED':('Не удалось подключиться','Unable to connect')}
@@ -431,9 +433,9 @@ class StatsPanel(TerminalCard):
     def _refresh_servers(self,loads):
         self._last_loads=loads
         parts=[]
-        for code in ('nl','ru'):
+        for code in (*EXPLICIT_GATEWAYS,'ru'):
             sample=loads.get(code) if isinstance(loads,dict) else None
-            label='NL' if code=='nl' else 'RU'
+            label=('AMS '+code[-1]) if code in EXPLICIT_GATEWAYS else 'RU'
             value=sample.get('percent') if isinstance(sample,dict) else None
             if type(value) in (int,float) and math.isfinite(value):parts.append(label+' '+f'{value:.0f}%')
             else:parts.append(label+' —')
@@ -478,8 +480,8 @@ class App:
         self.recovery=RecoveryPolicy();self.operation_generation=None
         self.mesh_state=None;self.auto_state=None;self.service_starting=False;self.service_cancel_requested=False
         self.mesh_identity_available=False
-        self.transports=TRANSPORTS;self.route_options={}
-        self.all_loads={};self.country_name_labels={target:[] for target in GATEWAY_TARGETS};self.country_load_labels={target:[] for target in GATEWAY_TARGETS}
+        self.transports=TRANSPORTS;self.route_options={};self.last_manual_gateway=EXPLICIT_GATEWAYS[0]
+        self.all_loads={};self.country_name_labels={target:[] for target in LOAD_TARGETS};self.country_load_labels={target:[] for target in LOAD_TARGETS}
         self.detail_text='';self.update_plan=None;self.updater=None;self.render_source=0;self.fit_source=0;self.fit_clock=None;self.fitted_height=None
         self.render_count=0;self.widget_changes=0;self.rendering=False
         self.load_pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
@@ -532,7 +534,8 @@ class App:
                 saved=json.loads(raw)
                 if not isinstance(saved,dict):raise ValueError('Invalid route settings')
                 self.route_options=saved;self.country.set_selected(1 if saved.get('country')=='ru' else 0);self.protocol.set_selected(1 if saved.get('transport')=='tcp' else 0)
-                if saved.get('gateway_id') in GATEWAY_TARGETS[2:]:self.country.set_selected(GATEWAY_TARGETS.index(saved['gateway_id']))
+                if saved.get('gateway_id') in EXPLICIT_GATEWAYS:
+                    self.last_manual_gateway=saved['gateway_id'];self.country.set_selected(GATEWAY_TARGETS.index(saved['gateway_id']))
                 self.mesh_profile.set_selected(1 if saved.get('mesh_profile')=='P1' else 0)
             except (OSError,ValueError):pass
         self.country.connect('notify::selected',self.route_changed);self.protocol.connect('notify::selected',self.route_changed)
@@ -626,6 +629,7 @@ class App:
     def set_value(self,widget,prop,value):
         if widget.get_property(prop)!=value:widget.set_property(prop,value);self.widget_changes+=1
     def paint(self):
+        self.configure_gateway_picker()
         self.language_button.set_label('Язык: Русский → English' if self.ru else 'Language: English → Русский')
         if not self.closed and not self.render_source:self.render_source=GLib.idle_add(self.render)
     def render(self):
@@ -699,14 +703,26 @@ class App:
         if before!=self.widget_changes:self.request_fit()
         return GLib.SOURCE_REMOVE
     def load_key(self):
-        if self.friends_registered and self.route_target() in GATEWAY_TARGETS[2:]:return None
-        return ("country:"+("ru" if self.country.get_selected()==1 else "nl")) if self.friends_registered else self.selected_id
+        target=self.route_target()
+        return (('gateway:' if target in EXPLICIT_GATEWAYS else 'country:')+target) if self.friends_registered else self.selected_id
     def route_target(self):
-        index=self.country.get_selected()
-        return GATEWAY_TARGETS[index] if 0<=index<len(GATEWAY_TARGETS) else 'nl'
+        item=self.country.get_selected_item()
+        return item.get_string() if item is not None else 'nl'
     def country_label(self,code):
-        if code in GATEWAY_TARGETS[2:]:return ('Амстердам ' if self.ru else 'Amsterdam ')+code[-1]
+        if code in EXPLICIT_GATEWAYS:return ('Амстердам ' if self.ru else 'Amsterdam ')+code[-1]
         return (('Нидерланды · назначенный' if self.ru else 'Netherlands · assigned') if code=='nl' else ('Россия' if self.ru else 'Russia'))
+    def configure_gateway_picker(self):
+        targets=('nl','ru') if self.transport_id() in ('auto','mesh') else GATEWAY_TARGETS
+        model=self.country.get_model()
+        if tuple(model.get_string(index) for index in range(model.get_n_items()))==targets:return
+        previous=self.route_target()
+        if previous in EXPLICIT_GATEWAYS:self.last_manual_gateway=previous
+        selected='ru' if previous=='ru' else self.last_manual_gateway if targets==GATEWAY_TARGETS else 'nl'
+        rendering=self.rendering;self.rendering=True
+        try:
+            self.country.set_model(Gtk.StringList.new(list(targets)))
+            self.country.set_selected(targets.index(selected))
+        finally:self.rendering=rendering
     def transport_label(self):
         index=self.protocol.get_selected()
         return self.transports[index][1] if 0<=index<len(self.transports) else self.transports[0][1]
@@ -789,7 +805,7 @@ class App:
         popup=Gtk.SignalListItemFactory();popup.connect('setup',popup_setup);popup.connect('bind',bind);popup.connect('unbind',unbind)
         dropdown.set_factory(factory);dropdown.set_list_factory(popup);return dropdown
     def refresh_country_labels(self):
-        for code in GATEWAY_TARGETS:
+        for code in LOAD_TARGETS:
             for name in list(self.country_name_labels[code]):
                 if name.get_text()!=self.country_label(code):name.set_text(self.country_label(code))
             for load in list(self.country_load_labels[code]):
@@ -801,7 +817,7 @@ class App:
             sample=None
         value=sample['percent'] if sample else None
         available=type(value) in (int,float) and math.isfinite(value) and 0<=value<=100
-        title=('Нагрузка сервера' if self.ru else 'Server load')+(' · '+sample['country'].upper() if sample else '')
+        title=('Нагрузка сервера' if self.ru else 'Server load')+(' · '+self.country_label(sample['country']) if sample else '')
         text=((('≈ ' if sample.get('estimated') else '')+f'{value:.0f}%') if available else ('Нет данных' if self.ru else 'No data'))
         self.set_value(self.load_label,'label',title+' · '+text)
         self.load_bar.set_fraction(value/100 if available else 0)
@@ -810,7 +826,9 @@ class App:
         if sample:
             detail+=f"\nCPU {sample['cpu']:.0f}% · ↓ {sample['rx']:.1f} / ↑ {sample['tx']:.1f} Mbps"
             if sample.get('estimated'):
-                detail+='\n'+(('Оценка: исходящий канал '+str(sample['capacity'])+' Мбит/с по общим условиям провайдера.') if self.ru else ('Estimate: '+str(sample['capacity'])+' Mbps egress, provider default.'))
+                if sample.get('capacity_basis')=='operator-assumed-capacity':
+                    detail+='\n'+(('Заданная оценка ёмкости: '+str(sample['capacity'])+' Мбит/с; не измерение скорости.') if self.ru else ('Assumed capacity: '+str(sample['capacity'])+' Mbps; not a speed measurement.'))
+                else:detail+='\n'+(('Оценка: исходящий канал '+str(sample['capacity'])+' Мбит/с по общим условиям провайдера.') if self.ru else ('Estimate: '+str(sample['capacity'])+' Mbps egress, provider default.'))
             if value is None:detail+='\n'+('Ёмкость канала ещё не задана.' if self.ru else 'Channel capacity is not configured yet.')
         self.load_bar.set_tooltip_text(detail);self.load_label.set_tooltip_text(detail)
         for css,enabled in [('warning',available and 70<=value<90),('critical',available and value>=90)]:
@@ -827,7 +845,7 @@ class App:
             return GLib.SOURCE_CONTINUE
         if not hasattr(self.driver,'server_load'):return GLib.SOURCE_CONTINUE
         self.load_pending=True;driver=self.driver
-        if hasattr(driver,'server_loads') and ident.startswith('country:'):
+        if hasattr(driver,'server_loads') and ident.startswith(('country:','gateway:')):
             future=self.load_pool.submit(driver.server_loads)
             future.add_done_callback(lambda f:GLib.idle_add(self.complete_loads,f,ident))
         else:
@@ -847,7 +865,7 @@ class App:
         if ident!=self.load_key():self.load_next=0;return GLib.SOURCE_REMOVE
         try:self.all_loads=future.result() or {}
         except Exception:self.all_loads={}
-        country=ident.split(':')[1] if ident.startswith('country:') else None
+        country=ident.split(':')[1] if ident.startswith(('country:','gateway:')) else None
         self.load_sample=self.all_loads.get(country) if country else None
         self.load_ident=ident;self.refresh_country_labels();self.stats.set_servers(self.all_loads);self.render_server_load();return GLib.SOURCE_REMOVE
     def request_fit(self):
@@ -1171,10 +1189,12 @@ class App:
         return GLib.SOURCE_CONTINUE
     def route_changed(self,*_):
         if self.rendering:return
+        self.configure_gateway_picker()
+        if self.route_target() in EXPLICIT_GATEWAYS:self.last_manual_gateway=self.route_target()
         self.revision+=1;self.load_next=0
         self.route_options.update(country='ru' if self.country.get_selected()==1 else 'nl',transport=self.transport_id(),
                                   mesh_profile='P1' if self.mesh_profile.get_selected()==1 else 'P0',
-                                  gateway_id=self.route_target() if self.route_target() in GATEWAY_TARGETS[2:] else None)
+                                  gateway_id=self.last_manual_gateway if self.route_target()!='ru' else None)
         if self.route_path:
             try:
                 from updates import atomic
@@ -1209,7 +1229,7 @@ class App:
             if not self.busy:(self.stop_auto if self.managed_transport()=='auto' else self.stop_mesh)()
             return
         if self.busy or active is None:return
-        if not active and self.route_target() in GATEWAY_TARGETS[2:] and self.transport_id() not in ('awg','tcp'):
+        if not active and self.route_target() in EXPLICIT_GATEWAYS and self.transport_id() not in ('awg','tcp'):
             self.set_detail('Выбор конкретного Амстердама доступен с AWG или TCP; MESH использует отдельный шлюз.' if self.ru else 'Choose AWG or TCP for a specific Amsterdam server; MESH uses a separate gateway.')
             return
         self.recovery.stop();driver=self.driver
