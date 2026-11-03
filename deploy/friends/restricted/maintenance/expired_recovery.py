@@ -30,12 +30,17 @@ class HistoricalPredecessor:
     def snapshot(self):
         return parse(self.encoded)
 
+    @property
+    def material(self):
+        return self.snapshot, self.trust, self.issuer, self.crl, self.leaf
+
 
 @dataclass(frozen=True)
 class RecoveryAuthorization:
     request: dict
     authority: dict
     predecessor: HistoricalPredecessor
+    secondary: object = None
 
 
 def fields(value, names):
@@ -133,6 +138,8 @@ def floors(predecessor):
 
 
 def request_check(request, validator, now, *, accepted_at=None):
+    if type(request) is dict and request.get('schema') == 4:
+        return fleet_request_check(request,validator,now,accepted_at=accepted_at)
     fields(request, 'schema purpose operation_id predecessor predecessor_sha256 scope floors checkpoint expected grant_scope updates successor_payload created_at expires_at')
     require(type(request['schema']) is int and request['schema'] == 3 and request['purpose'] == PURPOSE, 'RECOVERY_PURPOSE')
     require(type(request['operation_id']) is str and re.fullmatch('[a-z0-9-]{16,96}', request['operation_id']), 'OPERATION_ID')
@@ -175,6 +182,40 @@ def request_check(request, validator, now, *, accepted_at=None):
     return predecessor
 
 
+def projection(request, slot):
+    require(slot in ('NL','NL2'), 'RECOVERY_SCOPE')
+    value = {name:item for name,item in request.items() if name not in ('gateway_ids','secondary')}
+    value.update(schema=3,expected={'RU':request['expected']['RU'],'NL':request['expected'][slot]},
+        checkpoint={name:item for name,item in request['checkpoint'].items() if name != 'secondary_snapshot_sha256'})
+    if slot == 'NL2':
+        value.update(request['secondary'])
+        value['scope'] = dict(family=request['scope']['family'],gateway=request['gateway_ids'][slot])
+        value['checkpoint']['snapshot_sha256'] = request['checkpoint']['secondary_snapshot_sha256']
+    return value
+
+
+def fleet_request_check(request, validator, now, *, accepted_at=None):
+    import gateway_set
+    fields(request, 'schema purpose operation_id predecessor predecessor_sha256 scope floors checkpoint expected grant_scope updates successor_payload created_at expires_at gateway_ids secondary')
+    require(validator.all_activated and type(request['schema']) is int and request['schema'] == 4, 'RECOVERY_PURPOSE')
+    identities = gateway_set.membership(request['gateway_ids'])
+    fields(request['expected'], 'RU NL NL2')
+    require(all(type(value) is dict and value.get('gateway_ids') == identities
+                and value.get('gateway_slot') == slot and value.get('admission_mode') == 'all_activated'
+                and value.get('role') == ('RU' if slot == 'RU' else 'NL')
+                for slot,value in request['expected'].items()), 'RECOVERY_SCOPE')
+    fields(request['checkpoint'], 'operation_id plan_sha256 snapshot_sha256 secondary_snapshot_sha256')
+    require(all(type(request['checkpoint'][name]) is str and re.fullmatch('[0-9a-f]{64}',request['checkpoint'][name])
+                for name in ('plan_sha256','snapshot_sha256','secondary_snapshot_sha256')), 'RECOVERY_CHECKPOINT_UNCONFIRMED')
+    fields(request['secondary'], 'predecessor predecessor_sha256 floors successor_payload')
+    primary = request_check(projection(request,'NL'),validator,now,accepted_at=accepted_at)
+    secondary = request_check(projection(request,'NL2'),validator,now,accepted_at=accepted_at)
+    gateway_set.shared(primary.material,secondary.material,identities)
+    require(request['successor_payload']['authority'] == request['secondary']['successor_payload']['authority'],
+            'RECOVERY_ISSUER')
+    return primary
+
+
 def sign(request, validator, signer, now):
     require(signer.public_key().public_bytes_raw() == validator.anchor, 'TRUST_ROOT_KEY_MISMATCH')
     request_check(request, validator, now)
@@ -182,7 +223,13 @@ def sign(request, validator, signer, now):
     authority = dict(payload=base64.b64encode(payload).decode(),
                      signature=base64.b64encode(signer.sign(ISSUER_DOMAIN + payload)).decode())
     validator.delegation_parser(authority, validator.anchor, now)
-    payload = canonical(dict(request=request, authority=authority))
+    value = dict(request=request, authority=authority)
+    if request['schema'] == 4:
+        payload = canonical(request['secondary']['successor_payload'])
+        value['secondary_authority'] = dict(payload=base64.b64encode(payload).decode(),
+            signature=base64.b64encode(signer.sign(ISSUER_DOMAIN+payload)).decode())
+        validator.delegation_parser(value['secondary_authority'],validator.anchor,now)
+    payload = canonical(value)
     return canonical(dict(payload=base64.b64encode(payload).decode(),
                           signature=base64.b64encode(signer.sign(DOMAIN + payload)).decode()))
 
@@ -198,13 +245,19 @@ def verify(raw, validator, operation, now, *, accepted_at=None):
         except Exception:
             raise Rejected('RECOVERY_SIGNATURE_INVALID') from None
         value = parse(payload)
-        fields(value, 'request authority')
+        fields(value, 'request authority secondary_authority' if value.get('request',{}).get('schema') == 4 else 'request authority')
         request = value['request']
         predecessor = request_check(request, validator, now, accepted_at=accepted_at)
         require(request['operation_id'] == operation, 'RECOVERY_OPERATION_MISMATCH')
         trust, _ = validator.delegation_parser(value['authority'], validator.anchor, now)
         require(trust == request['successor_payload'], 'RECOVERY_SUCCESSOR_INVALID')
-        return RecoveryAuthorization(request, value['authority'], predecessor)
+        secondary = None
+        if request['schema'] == 4:
+            trust,_ = validator.delegation_parser(value['secondary_authority'],validator.anchor,now)
+            require(trust == request['secondary']['successor_payload'], 'RECOVERY_SUCCESSOR_INVALID')
+            secondary = RecoveryAuthorization(projection(request,'NL2'),value['secondary_authority'],
+                historical(canonical(request['secondary']['predecessor']),validator.anchor,all_activated=True))
+        return RecoveryAuthorization(request, value['authority'], predecessor, secondary)
     except Rejected:
         raise
     except Exception:

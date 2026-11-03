@@ -26,8 +26,12 @@ Validation:358 selected user-space/native/package checks plus independent-sequen
 approval test PASS;326 root checks PASS, including90 repeated fleet cases;0 skips.
 Sourcee96334d pushed/remote-verified; exact committed-source package reproducibility and
 12 canonical root/profile construction checks PASS, not installed.
-This is not activation: whole-fleet expired-authority recovery remains fail-closed.
-Next: finish that recovery contract and qualify the production writer,
+Whole-fleet expired-authority recovery is now implemented and its60-case selection PASS;
+the other359 user-space/native/package cases PASS. Isolated-root387 PASS includes151
+repeated fleet cases:655 distinct selected cases PASS,0 skips. One offline-signed schema4 request
+binds the common checkpoint and all three node states; two independent identities and
+one CRL are preserved. Explicit outage approval/roll-forward and strict expiry remain.
+This is not activation. Next: qualify the exact-source package and install the production writer,
 then permanent distinct AMS2 identity/runtime;
 real READY/TLS/DNS/HTTPS/egress and rejection/cleanup acceptance; only then selector
 activation, exact new-version CI, offline signing and verified public update delivery.

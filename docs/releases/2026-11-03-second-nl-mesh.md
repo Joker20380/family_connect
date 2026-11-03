@@ -11,6 +11,51 @@ asks to finish MESH2 using the separately supplied credential. This supersedes t
 question-only interpretation in the earlier [picker report](2026-11-03-android-node-picker.md).
 No claim that source publication enables MESH on an installed client.
 
+## Expired-authority fleet recovery —3 November
+
+Completed the source contract that remained open below. A schema4 offline request binds
+both root-signed historical snapshots and successor delegations, their independent replay
+floors, distinct identities, one shared CA/CRL, the last committed fleet checkpoint and
+the exact current RU/AMS1/AMS2 state. One root-signed bundle covers the entire operation;
+the root key stays offline. Pair-only signatures cannot authorize a fleet. Historical
+validation does not make expired credentials live-valid: every candidate still passes
+strict current-time validation. Existing grants, private keys and identity bindings remain.
+
+The same controller performs thirteen acquire/quiesce/prepare/stage/promote steps across
+three nodes. All commit receipts must match; both fresh gateway directories must reach
+RU before its API resumes. Recovery requires explicit outage approval, a confirmed fleet
+checkpoint and explicit roll-forward after interruption. A failed/unreachable secondary
+cannot produce a successful partial commit. An unreachable node before acquisition is
+not stopped or modified; already owned readers are fenced. Expired signed approval does
+not become reusable on resume, and there is no automatic fallback to expired profiles.
+
+Validation:60 recovery tests PASS, covering all nineteen controller interruption points,
+seven secondary transport-failure points and reconnection, mismatched readback, malformed/
+partial/swapped signatures, wrong operation, stale state/checkpoint, missing outage approval,
+expired approval during partial publication, unchanged-secondary checkpoint fallback,
+independent delegation sequences and retained client revocations/CRL entries. The real
+runtime CLI request/apply/resume and offline signer FD entry point are included. The other
+359 selected user-space/native/package checks PASS, including the accepted beta111 native
+compatibility check. Private evidence: `state-client-build/mesh2-expired-recovery-20261103/`.
+Network-disabled read-only root-container selection387 PASS, including151 fleet cases
+repeated from user space;655 distinct selected cases PASS,0 skips. Canonical ownership,
+DAC, source pinning and packaged profile construction checks use synthetic profiles and
+a synthetic package containing these sources, never production private material.
+Initial test-fixture failures are retained: pre-acquisition node ownership, a mocked-clock
+identity selecting real nanoseconds, and a client certificate allowed to expire before its
+revocation was materialized. Corrected the fixtures, not production security assertions.
+
+Read-only RU audit still reports the existing pair-only pinned source, active renewal and
+directory timers and active candidate API with0 restarts. No server files/services, private
+publisher credential, Android version/signature/catalog or invitation page changed.
+Remaining gates: exact committed-source package qualification and coordinated installation,
+fresh permanent AMS2 runtime/custody, real traffic/rejection/cancel/slow-link/cleanup checks,
+selector activation and new immutable Android>111/catalog>6. Preserve primary/ordinary
+services and their private rollback evidence; never downgrade a serving fleet to a pair-only
+writer. Source-only work requires no production rollback. Public versions remain
+Android111/catalog6, Windows0.2.16/catalog12, Linux0.2.11; owner-local Linux0.2.12~l03.2.13.
+This section supersedes the expired-recovery source gap below, not the live acceptance gate.
+
 ## Shared-authority follow-up —3 November17:20UTC
 
 The leaf/CRL checkpoint `7d3fac77a765cc7e9f28fbe6a6e688c9bb2d2047` is committed,
@@ -39,7 +84,7 @@ covered in user space.595 distinct selected cases PASS,0 skips; repeated cases a
 counted twice. The accepted beta111 native compatibility check is included. Source
 packages in these tests are synthetic fixtures, not installed production artifacts.
 
-**Remaining acceptance gap:** recovery when the fleet's root-signed authority has
+**Acceptance gap at this checkpoint (source contract now completed above):** recovery when the fleet's root-signed authority has
 already expired is still rejected before writes. Planned renewal and expired-authority
 recovery are different operations; the former does not prove the latter. Finish this
 contract before replacing the production writer, then run permanent AMS2 and real
@@ -60,9 +105,9 @@ pinned API SHA256 `4779cb3be76b2efdeb45efadf75d8e320a0aedfc602540ff0fc4cc48ae478
 isolated root container, including both gateway slots and tamper rejection. These are
 repeat validations, not12 additional distinct cases. Archive and private receipts remain
 under `state-client-build/mesh2-renewal-20261103/`; nothing was installed or distributed.
-Existing unrelated working-tree changes remain untouched. Next selected work remains
-whole-fleet expired-authority recovery, not an unrelated queued task or immediate APK
-publication. Production activation and Android update are still unfinished.
+Existing unrelated working-tree changes remain untouched. That checkpoint's next work was
+whole-fleet expired-authority recovery, now implemented above; it did not select an unrelated
+queued task or immediate APK publication. Production activation and Android update remain unfinished.
 
 ## Coordinated renewal source —3 November17:10UTC
 

@@ -35,8 +35,24 @@ authority renewal now supports one schema2 request with both gateway successors 
 one common issuer CA, signed offline using the existing signer with `--all-activated`.
 It requires operator maintenance approval and updates both delegation files/profiles
 under the same transaction. Explicit append-only registry-overlay recovery also checks
-both gateways. Recovery after authority expiry is still unsupported/fail-closed;
-completion of that contract and three-node runtime acceptance remain mandatory.
+both gateways. Recovery after authority expiry now uses a schema4 request containing
+both historical snapshots/successor delegations, the exact three-node state and a shared
+confirmed checkpoint, including `secondary_snapshot_sha256`. There must already be a
+committed fleet checkpoint; an unconfirmed or pair-only archive cannot authorize recovery.
+Use the same controller schema2 and `--mode expired-request`, with explicit operation,
+private `--grant-scope` (an empty list for empty activated grants) and `--request-output`.
+Move only the public request to the offline signer; run its existing `--expired-recovery
+--all-activated --confirm-authority-renewal` flow with the root key supplied by FD, never
+copied to a server. The resulting single signed bundle binds both authority successors.
+Apply using `--mode expired-apply --authority-bundle <private-file>
+--approve-maintenance-outage` and the exact operation. After interruption, inspect durable
+state and use `--mode expired-resume` explicitly with the same bundle/operation; scheduled
+renewal must not retry it. Approval expiry remains enforced during resume. A stale/expired
+approval leaves publication incomplete and owned readers fenced; do not clear the journal,
+lower floors, revert to expired profiles or restart services to bypass recovery checks.
+An unreachable node not yet acquired remains untouched. RU resumes only after matching
+three-node receipts and fresh directories from both gateways. Three-node production
+installation/data-plane acceptance remains mandatory; this source contract is not rollout.
 
 ## Historical rehearsal runbook
 

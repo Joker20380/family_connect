@@ -26,16 +26,20 @@ class ProductionController:
         require(marker.exists() and (self.root/'plan.json').exists(), 'RECOVERY_CHECKPOINT_UNCONFIRMED')
         record = parse(read_private(marker))
         require(record['state'] == 'COMMITTED' and record['commit_decided'], 'OTHER_OPERATION_RECOVERY_REQUIRED')
+        self.check_admission(record['before'])
         plan = parse(read_private(self.root/'plan.json'))
         plan_hash = digest(canonical(plan))
-        require(plan['operation_id'] == record['operation_id']
+        require(set(record['reconciliation']) == set(self.nodes) and plan['operation_id'] == record['operation_id']
                 and all(value['plan_sha256'] == plan_hash for value in record['reconciliation'].values()),
                 'RECOVERY_CHECKPOINT_UNCONFIRMED')
-        return dict(operation_id=record['operation_id'], plan_sha256=plan_hash,
-                    snapshot_sha256=digest(canonical(plan['candidate'])))
+        checkpoint = dict(operation_id=record['operation_id'], plan_sha256=plan_hash,
+                          snapshot_sha256=digest(canonical(plan['candidate'])))
+        if self.multiple:
+            require(plan['gateway_ids'] == record['before']['RU']['gateway_ids'], 'GATEWAY_SET_BINDING')
+            checkpoint['secondary_snapshot_sha256'] = digest(canonical(plan['secondary']['candidate']))
+        return checkpoint
 
     def recovery_state(self, operation):
-        require(not self.multiple, 'FLEET_AUTHORITY_HANDOFF_REQUIRED')
         from expired_recovery import historical
         checkpoint = self.recovery_checkpoint()
         authority = self.nodes['RU'].call('public-authority', operation)
@@ -52,11 +56,20 @@ class ProductionController:
                    for role, node in self.nodes.items()}
         self.check_admission(current)
         require(current['NL']['files']['gateway.json'] == gateway['profile_sha256'], 'RECOVERY_STALE_APPROVAL')
+        if self.multiple:
+            secondary = self.nodes['NL2'].call('public-gateway',operation)
+            other = historical(canonical(dict(predecessor.snapshot,authority=authority['secondary_authority'],
+                certificate=secondary['certificate'])),self.validator.anchor,all_activated=True)
+            identities = current['RU']['gateway_ids']
+            gateway_set.shared(predecessor.material,other.material,identities)
+            gateway_set.bound_profile(predecessor.material,gateway,identities['NL'])
+            gateway_set.bound_profile(other.material,secondary,identities['NL2'])
+            require(current['NL2']['files']['gateway.json'] == secondary['profile_sha256'], 'RECOVERY_STALE_APPROVAL')
+            gateway = dict(gateway,secondary=secondary,secondary_snapshot=other.snapshot)
         return predecessor, gateway, current, checkpoint
 
     def recovery_request(self, operation, grant_scope):
-        require(not self.multiple, 'FLEET_AUTHORITY_HANDOFF_REQUIRED')
-        from expired_recovery import PURPOSE, UPDATES, floors
+        from expired_recovery import PURPOSE, UPDATES, floors, historical
         require(type(operation) is str and re.fullmatch('[a-z0-9-]{16,96}', operation), 'OPERATION_ID')
         require(type(grant_scope) is list and all(type(device) is str for device in grant_scope), 'RECOVERY_GRANT_SCOPE')
         with self.operation.lock():
@@ -67,15 +80,21 @@ class ProductionController:
             if path.exists():
                 request = parse(read_private(path))
                 require(request['grant_scope'] == sorted(grant_scope), 'RECOVERY_REPLAY_MISMATCH')
+                require((request['schema'] == 4) == self.multiple, 'GATEWAY_SET_BINDING')
+                self.check_admission(request['expected'])
                 return request
             require(len(list(requests.iterdir())) < 256, 'OPERATION_HISTORY_CAPACITY')
-            predecessor, _, current, checkpoint = self.recovery_state(operation)
+            predecessor, gateway, current, checkpoint = self.recovery_state(operation)
             now = int(self.clock())
             require(predecessor.trust['expires_at'] <= now, 'RECOVERY_NOT_REQUIRED')
             request = dict(schema=3, purpose=PURPOSE, operation_id=operation, predecessor=predecessor.snapshot,
                 predecessor_sha256=digest(predecessor.encoded), scope={name:predecessor.trust[name] for name in ('family', 'gateway')},
                 floors=floors(predecessor), checkpoint=checkpoint, expected=current, grant_scope=sorted(grant_scope),
                 updates=UPDATES, successor_payload=None, created_at=now, expires_at=now+86400)
+            if self.multiple:
+                other = historical(canonical(gateway['secondary_snapshot']),self.validator.anchor,all_activated=True)
+                request.update(schema=4,gateway_ids=current['RU']['gateway_ids'],secondary=dict(
+                    predecessor=other.snapshot,predecessor_sha256=digest(other.encoded),floors=floors(other),successor_payload=None))
             request = self.nodes['RU'].call('recovery-authority-request', operation, request)
             require({role:node.call('inspect', operation) for role,node in self.nodes.items()} == current,
                     'RECOVERY_STALE_APPROVAL')
@@ -83,7 +102,6 @@ class ProductionController:
             return request
 
     def run_expired(self, operation, bundle, *, approval=None, resume=False):
-        require(not self.multiple, 'FLEET_AUTHORITY_HANDOFF_REQUIRED')
         from expired_recovery import verify
         require(type(operation) is str and re.fullmatch('[a-z0-9-]{16,96}', operation), 'OPERATION_ID')
         with self.operation.lock():
@@ -95,11 +113,13 @@ class ProductionController:
             if completed.exists():
                 receipt = parse(read_private(completed))
                 require(receipt['bundle_sha256'] == binding, 'RECOVERY_REPLAY_MISMATCH')
-                return dict(result='COMMITTED', operation_id=operation, idempotent=True,
-                            current={role:node.call('inspect', operation) for role,node in self.nodes.items()})
+                current = {role:node.call('inspect', operation) for role,node in self.nodes.items()}
+                self.check_admission(current)
+                return dict(result='COMMITTED', operation_id=operation, idempotent=True, current=current)
             marker = self.root/'transaction.json'
             record = parse(read_private(marker)) if marker.exists() else None
             if record and record.get('mode') == 'expired' and record['operation_id'] == operation:
+                self.check_admission(record['before'])
                 require(record['bundle_sha256'] == binding, 'RECOVERY_REPLAY_MISMATCH')
                 if record['state'] == 'COMMITTED':
                     atomic(completed, canonical(dict(bundle_sha256=binding, operation_id=operation)))
@@ -109,12 +129,16 @@ class ProductionController:
                 require(not resume, 'RECOVERY_OPERATION_MISMATCH')
                 require(record is not None and record['state'] == 'COMMITTED', 'OTHER_OPERATION_RECOVERY_REQUIRED')
                 authorization = verify(bundle, self.validator, operation, int(self.clock()))
+                require((authorization.secondary is not None) == self.multiple, 'GATEWAY_SET_BINDING')
                 request = authorization.request
                 require(read_private(self.root/'recovery-requests'/(operation+'.json')) == canonical(request),
                         'RECOVERY_STALE_APPROVAL')
                 predecessor, gateway, current, checkpoint = self.recovery_state(operation)
                 require(predecessor.encoded == authorization.predecessor.encoded and current == request['expected']
                         and checkpoint == request['checkpoint'], 'RECOVERY_STALE_APPROVAL')
+                if self.multiple:
+                    require(canonical(gateway['secondary_snapshot']) == authorization.secondary.predecessor.encoded,
+                            'RECOVERY_STALE_APPROVAL')
                 gate = maintenance_gate(operation, current, int(self.clock()), approval=approval)
                 require(gate['result'] == 'RENEWAL_READY', 'MAINTENANCE_APPROVAL_REQUIRED')
                 record = dict(schema=1, mode='expired', operation_id=operation, state='ACQUIRING', cursor=0,
@@ -143,20 +167,28 @@ class ProductionController:
         operation = record['operation_id']
         if record['state'] == 'CLEANING':
             return self.cleanup(record)
-        steps = [('RU','acquire'), ('NL','acquire'), ('RU','quiesce'), ('NL','quiesce'),
-                 ('RU','prepare-expired'), ('RU','stage'), ('NL','stage'), ('RU','promote'), ('NL','promote')]
+        self.check_admission(record['before'])
+        steps = ([(role,action) for action in ('acquire','quiesce') for role in self.nodes]
+                 + [('RU','prepare-expired')]
+                 + [(role,action) for action in ('stage','promote') for role in self.nodes])
         while record['cursor'] < len(steps):
             role, action = steps[record['cursor']]
             payload = None
             if action == 'acquire':
                 payload = record['before'][role]
             elif action == 'prepare-expired':
+                require(all(node.call('stopped',operation)['stopped'] for node in self.nodes.values()), 'READERS_NOT_QUIESCED')
                 payload = dict(gateway=record['gateway'], bundle=record['bundle'])
             elif action == 'stage':
                 payload = parse(read_private(self.root/'plan.json'))
             response = self.nodes[role].call(action, operation, payload)
             if action == 'prepare-expired':
                 require(response['operation_id'] == operation and response['previous'] == record['previous'], 'PLAN_BINDING')
+                if self.multiple:
+                    from expired_recovery import verify
+                    authorization = verify(base64.b64decode(record['bundle'],validate=True),self.validator,operation,int(self.clock()))
+                    gateway_set.validate(response,self.validator,int(self.clock()),record['before']['RU']['gateway_ids'],
+                                         authorization=authorization)
                 atomic(self.root/'plan.json', canonical(response))
             if action == 'stage':
                 require(response['plan_sha256'] == digest(canonical(payload)), 'STAGE_RECEIPT_MISMATCH')
@@ -164,7 +196,7 @@ class ProductionController:
             self.save(record, 'RECOVERY_STEP_'+str(record['cursor']))
         if not record['commit_decided']:
             receipts = {role:node.call('readback', operation) for role,node in self.nodes.items()}
-            require(receipts['RU'] == receipts['NL'] and receipts['RU']['plan_sha256']
+            require(all(value == receipts['RU'] for value in receipts.values()) and receipts['RU']['plan_sha256']
                     == digest(read_private(self.root/'plan.json')), 'RU_NL_MISMATCH')
             record['reconciliation'] = receipts
             record['commit_decided'] = True

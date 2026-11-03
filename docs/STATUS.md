@@ -37,9 +37,17 @@ Current validation:358 user-space/native/package checks plus one independent-seq
 approval test PASS;326 isolated root checks PASS, including90 repeated fleet cases.
 Sourcee96334d pushed/remote-verified; two exact committed-source renewal packages are
 byte-identical and12 canonical root/profile-source checks PASS against that package.
-No production deployment. Expired-authority recovery for a whole fleet remains explicitly
-rejected; this is not yet a fully accepted production maintenance replacement.
-Remaining: complete fleet expired-authority recovery, qualify/install the coordinated writer,
+Follow-up implements whole-fleet recovery after authority expiry: one offline-signed
+schema4 request binds both historical snapshots, three current node states, shared
+checkpoint and distinct gateway successors. Explicit outage approval and explicit
+roll-forward remain mandatory; expired approval cannot resume a partial publication.
+Final recovery selection60 PASS; the other359 user-space/native/package checks PASS.
+Isolated root selection387 PASS, including151 repeated fleet cases:655 distinct cases,
+0 skips across the final selections; no production keys/data enter the root container.
+Revoked clients/CRL entries, independent delegation sequences, keys and admissions remain
+unchanged. Runtime CLI/offline FD signer, nineteen interruption points, secondary RPC
+failure/reconnection and malformed/stale approval rejection are covered. No deployment.
+Remaining: exact-source package qualification/install of the coordinated writer,
 permanent AMS2 runtime and live acceptance, then selector and immutable Android>111/catalog>6.
 [Current integration and rollout boundary](releases/2026-11-03-second-nl-mesh.md).
 

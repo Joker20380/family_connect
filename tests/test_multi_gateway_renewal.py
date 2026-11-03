@@ -336,16 +336,16 @@ def test_incomplete_directory_receipt_cannot_resume_ru(fleet):
 
 
 @pytest.mark.parametrize('operation',['expired-request','expired-apply'])
-def test_unsupported_authority_recovery_is_explicitly_fenced_without_writes(fleet,operation):
+def test_authority_recovery_requires_a_confirmed_checkpoint_before_remote_writes(fleet,operation):
     before = inspected(fleet)
-    with pytest.raises(Rejected,match='FLEET_AUTHORITY_HANDOFF_REQUIRED'):
+    with pytest.raises(Rejected,match='RECOVERY_CHECKPOINT_UNCONFIRMED|OTHER_OPERATION_RECOVERY_REQUIRED'):
         if operation == 'expired-request':
             fleet.controller.recovery_request('test-fleet-authority-request',[])
         else:
             fleet.controller.run_expired('test-fleet-authority-request',b'unsupported')
     assert inspected(fleet) == before
     assert not (fleet.controller.root/'transaction.json').exists()
-    assert not (fleet.controller.root/'recovery-requests').exists()
+    assert all(not (node.state/'owner.json').exists() and node.barrier.starts == 0 for node in fleet.nodes.values())
 
 
 @pytest.mark.parametrize('mode',['evaluate','scheduled'])

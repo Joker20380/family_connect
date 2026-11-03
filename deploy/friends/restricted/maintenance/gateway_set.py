@@ -105,7 +105,7 @@ def bound_profile(validated, gateway, identity):
     certificate_binding(validated,identity)
 
 
-def validate(plan, validator, now, identities, *, recovery=False):
+def validate(plan, validator, now, identities, *, recovery=False, authorization=None):
     require(plan['schema'] == 2 and plan['gateway_ids'] == membership(identities)
             and type(plan['secondary']) is dict
             and set(plan['secondary']) == {'previous','candidate','nl_profile_sha256'}
@@ -113,6 +113,17 @@ def validate(plan, validator, now, identities, *, recovery=False):
             and re.fullmatch('[0-9a-f]{64}',plan['secondary']['nl_profile_sha256']), 'GATEWAY_PLAN_SCHEMA')
     validation_time = plan['grant_plan']['issued_at'] if recovery else now
     secondary = plan['secondary']
+    if authorization is not None:
+        from expired_recovery import transition
+        require(authorization.secondary is not None and authorization.request['gateway_ids'] == identities,
+                'RECOVERY_SCOPE')
+        require(canonical(plan['previous']) == authorization.predecessor.encoded
+                and canonical(secondary['previous']) == authorization.secondary.predecessor.encoded,
+                'RECOVERY_PREDECESSOR_DIGEST')
+        shared(authorization.predecessor.material,authorization.secondary.predecessor.material,identities)
+        shared(transition(validator,authorization,plan['candidate'],now),
+               transition(validator,authorization.secondary,secondary['candidate'],now),identities)
+        return
     validator.transition(canonical(secondary['previous']),canonical(secondary['candidate']),validation_time,
                          revoke=True,expired_leaf_predecessor=True)
     for phase in ('previous','candidate'):
@@ -122,10 +133,15 @@ def validate(plan, validator, now, identities, *, recovery=False):
         shared(primary,other,identities)
 
 
-def prepare(plan, gateway, manifest, identities, validator, signer, now, *, successor_manifest=None):
+def prepare(plan, gateway, manifest, identities, validator, signer, now, *, successor_manifest=None, authorization=None):
     previous = dict(plan['previous'],authority=manifest,certificate=gateway['certificate'])
-    old = validator.validate(canonical(previous),now,expired_leaf_predecessor=True)
-    primary = validator.validate(canonical(plan['previous']),now,expired_leaf_predecessor=True)
+    if authorization is None:
+        old = validator.validate(canonical(previous),now,expired_leaf_predecessor=True)
+        primary = validator.validate(canonical(plan['previous']),now,expired_leaf_predecessor=True)
+    else:
+        require(authorization.secondary is not None and canonical(previous) == authorization.secondary.predecessor.encoded
+                and canonical(plan['previous']) == authorization.predecessor.encoded, 'RECOVERY_PREDECESSOR_DIGEST')
+        old,primary = authorization.secondary.predecessor.material,authorization.predecessor.material
     shared(primary,old,identities)
     bound_profile(old,gateway,identities['NL2'])
     _,_,_,_,leaf = old

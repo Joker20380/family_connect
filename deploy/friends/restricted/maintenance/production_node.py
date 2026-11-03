@@ -170,7 +170,8 @@ class ProductionNode:
 
     def _recovery_evidence(self, checkpoint, owned_operation=None):
         from expired_recovery import fields
-        fields(checkpoint, 'operation_id plan_sha256 snapshot_sha256')
+        fields(checkpoint, 'operation_id plan_sha256 snapshot_sha256 secondary_snapshot_sha256'
+               if self.gateway_ids else 'operation_id plan_sha256 snapshot_sha256')
         import re
         require(re.fullmatch('[a-z0-9-]{16,96}', checkpoint['operation_id']) is not None, 'OPERATION_ID')
         if (self.state/'owner.json').exists():
@@ -188,13 +189,18 @@ class ProductionNode:
             require(digest(raw) == manifest.get(name), 'RECOVERY_CHECKPOINT_UNCONFIRMED')
             saved[name] = parse(raw)
         plan = saved['plan.json']
+        if self.gateway_ids:
+            require(plan['schema'] == 2 and plan['gateway_ids'] == self.gateway_ids
+                    and digest(canonical(plan['secondary']['candidate'])) == checkpoint['secondary_snapshot_sha256']
+                    and set(saved['reconciliation.json']) == {'RU',*self.gateway_ids}, 'RECOVERY_CHECKPOINT_UNCONFIRMED')
         require(digest(canonical(plan)) == checkpoint['plan_sha256']
                 and digest(canonical(plan['candidate'])) == checkpoint['snapshot_sha256']
                 and all(item['plan_sha256'] == checkpoint['plan_sha256']
                         for item in saved['reconciliation.json'].values()), 'RECOVERY_CHECKPOINT_UNCONFIRMED')
+        local = gateway_set.selected(plan,self.gateway_slot)
         for name in self.names():
             expected = saved['files.json'].get(name, {}).get('after',
-                plan['ru_expected']['files'].get(name) if self.role == 'RU' else plan['nl_profile_sha256'])
+                plan['ru_expected']['files'].get(name) if self.role == 'RU' else local['nl_profile_sha256'])
             require(expected is not None and digest(self.read(name)[0]) == expected,
                     'RECOVERY_CHECKPOINT_UNCONFIRMED')
         if self.role == 'RU':
@@ -219,6 +225,8 @@ class ProductionNode:
         require(self.role == 'RU', 'NODE_ROLE')
         with self.operation.lock():
             require(operation_id == request['operation_id'], 'RECOVERY_OPERATION_MISMATCH')
+            require((request.get('schema') == 4) == bool(self.gateway_ids)
+                    and request.get('gateway_ids') == self.gateway_ids, 'GATEWAY_SET_BINDING')
             evidence = self.recovery_evidence(request['checkpoint'])
             require(evidence['current'] == request['expected']['RU'], 'RECOVERY_STALE_APPROVAL')
             old = historical(canonical(request['predecessor']), self.validator.anchor, all_activated=self.validator.all_activated)
@@ -226,6 +234,11 @@ class ProductionNode:
             require(old.snapshot['authority'] == json.loads(self.read('issuer.json')[0])
                     and old.snapshot['crl'].encode() == self.read('revocations.pem')[0]
                     and old.snapshot['grants'] == self.database.snapshot()['restricted_grants'], 'RECOVERY_STALE_APPROVAL')
+            secondary = None
+            if self.gateway_ids:
+                secondary = historical(canonical(request['secondary']['predecessor']),self.validator.anchor,all_activated=True)
+                require(secondary.snapshot['authority'] == json.loads(self.read('issuer-NL2.json')[0]), 'RECOVERY_STALE_APPROVAL')
+                gateway_set.shared(old.material,secondary.material,self.gateway_ids)
             signer = load_pem_private_key(self.read('issuer.key')[0], None)
             require(spki(signer.public_key()) == spki(old.issuer.public_key()), 'ISSUER_SIGNING_KEY_MISMATCH')
             now = int(self.clock())
@@ -238,6 +251,10 @@ class ProductionNode:
             issuer = builder.sign(signer, None)
             request = dict(request, successor_payload=dict(old.trust, sequence=old.trust['sequence'] + 1,
                 issued_at=start, expires_at=start + self.validator.authority_validity, authority=issuer.public_bytes(Encoding.PEM).decode()))
+            if secondary is not None:
+                request['secondary'] = dict(request['secondary'],successor_payload=dict(secondary.trust,
+                    sequence=secondary.trust['sequence']+1,issued_at=start,expires_at=start+self.validator.authority_validity,
+                    authority=issuer.public_bytes(Encoding.PEM).decode()))
             request_check(request, self.validator, now)
             from expired_recovery import RecoveryAuthorization
             authorization = RecoveryAuthorization(request, {}, old)
@@ -455,8 +472,6 @@ class ProductionNode:
 
     def prepare(self, operation_id, gateway, *, authority_handoff=None, expired_handoff=None):
         require(self.role == 'RU', 'NODE_ROLE')
-        require(not self.gateway_ids or expired_handoff is None,
-                'FLEET_AUTHORITY_HANDOFF_REQUIRED')
         require(bool(self.gateway_ids) == ('secondary' in gateway), 'GATEWAY_SET_BINDING')
         with self.operation.lock():
             owner = self.owner(operation_id)
@@ -486,6 +501,8 @@ class ProductionNode:
                 from expired_recovery import verify
                 require(authority_handoff is None, 'RECOVERY_PURPOSE')
                 authorization = verify(expired_handoff, self.validator, operation_id, now)
+                require((authorization.secondary is not None) == bool(self.gateway_ids)
+                        and authorization.request.get('gateway_ids') == self.gateway_ids, 'GATEWAY_SET_BINDING')
                 require(authorization.predecessor.encoded == previous
                         and authorization.request['expected']['RU'] == owner['expected_state'], 'RECOVERY_STALE_APPROVAL')
                 trust,issuer,leaf = (authorization.predecessor.trust, authorization.predecessor.issuer,
@@ -506,6 +523,8 @@ class ProductionNode:
             if authorization is not None:
                 self._recovery_evidence(authorization.request['checkpoint'], operation_id)
                 envelope = authorization.authority
+                if self.gateway_ids:
+                    secondary_successor = authorization.secondary.authority
                 trust,issuer = self.validator.delegation_parser(envelope,self.validator.anchor,now)
             require(trust['expires_at'] >= now + VALIDITY['leaf'], 'OFFLINE_AUTHORITY_RENEWAL_REQUIRED')
             grant_plan = (self.database.plan(issuer,now,readers_quiesced=self.barrier.stopped)
@@ -531,7 +550,7 @@ class ProductionNode:
             if self.gateway_ids:
                 plan.update(schema=2,gateway_ids=self.gateway_ids,secondary=gateway_set.prepare(plan,
                     gateway['secondary'],json.loads(self.read('issuer-NL2.json')[0]),self.gateway_ids,
-                    self.validator,signer,now,successor_manifest=secondary_successor))
+                    self.validator,signer,now,successor_manifest=secondary_successor,authorization=authorization))
             if authorization is not None:
                 plan['expired_recovery'] = dict(bundle=base64.b64encode(expired_handoff).decode(), accepted_at=now)
             self.validate(plan)
@@ -545,13 +564,13 @@ class ProductionNode:
     def validate(self, plan, *, recovery=False):
         extra = {'expired_recovery'} if 'expired_recovery' in plan else set()
         if self.gateway_ids:
-            require(not extra, 'FLEET_AUTHORITY_HANDOFF_REQUIRED')
-            extra = {'secondary','gateway_ids'}
+            extra |= {'secondary','gateway_ids'}
         require(set(plan) == {'schema','operation_id','previous','candidate','grant_plan','ru_expected','nl_profile_sha256'} | extra
                 and type(plan['schema']) is int and plan['schema'] == (2 if self.gateway_ids else 1), 'PLAN_SCHEMA')
         now = int(self.clock())
         previous,candidate = canonical(plan['previous']),canonical(plan['candidate'])
         validation_time = plan['grant_plan']['issued_at'] if recovery else now
+        authorization = None
         if 'expired_recovery' in plan:
             from expired_recovery import transition
             authorization = self.recovery_authorization(plan, durable=recovery)
@@ -567,15 +586,18 @@ class ProductionNode:
         require({entry.serial_number for entry in new}
                 == {entry.serial_number for entry in old} | set(plan['grant_plan']['predecessors']), 'UNEXPECTED_REVOCATION_CHANGE')
         if self.gateway_ids:
-            gateway_set.validate(plan,self.validator,now,self.gateway_ids,recovery=recovery)
+            gateway_set.validate(plan,self.validator,now,self.gateway_ids,recovery=recovery,authorization=authorization)
         return self.validator.validate(canonical(gateway_set.selected(plan,self.gateway_slot)['candidate']),now)
 
     def recovery_authorization(self, plan, *, durable):
         from expired_recovery import fields, verify
         evidence = plan['expired_recovery']
         fields(evidence, 'bundle accepted_at')
-        return verify(base64.b64decode(evidence['bundle'], validate=True), self.validator, plan['operation_id'],
-                      int(self.clock()), accepted_at=evidence['accepted_at'] if durable else None)
+        authorization = verify(base64.b64decode(evidence['bundle'], validate=True), self.validator, plan['operation_id'],
+                               int(self.clock()), accepted_at=evidence['accepted_at'] if durable else None)
+        require((authorization.secondary is not None) == bool(self.gateway_ids)
+                and authorization.request.get('gateway_ids') == self.gateway_ids, 'GATEWAY_SET_BINDING')
+        return authorization
 
     def stage(self, operation_id, plan):
         with self.operation.lock():
@@ -585,7 +607,7 @@ class ProductionNode:
             self.validate(plan)
             if 'expired_recovery' in plan:
                 authorization = self.recovery_authorization(plan, durable=False)
-                require(owner['expected_state'] == authorization.request['expected'][self.role], 'RECOVERY_STALE_APPROVAL')
+                require(owner['expected_state'] == authorization.request['expected'][self.gateway_slot], 'RECOVERY_STALE_APPROVAL')
             require(self.inspect() == owner['expected_state'], 'STALE_NODE_STATE')
             if self.role == 'RU':
                 require(owner['expected_state'] == plan['ru_expected'], 'PLAN_BINDING')
