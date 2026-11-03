@@ -8,12 +8,12 @@ No manual service setup is needed. Affected Windows10 device acceptance is pendi
 
 ## First activation
 
-Android12+, ARM64; access is invitation-only. Installing the APK does not grant access.
-The invitation page and in-app updater both provide beta110. Updating does not enable restricted FIELD access.
+Android8.1+, ARM64; access is invitation-only. Installing the APK does not grant access.
+The invitation page and in-app updater both provide beta111. Updating does not enable restricted FIELD access.
 
-Beta110 includes MESH and quiet ongoing VPN-notification updates. Android below12 is unsupported.
-Exact Android CI41449895463, existing signer and full verified-HTTPS hash checks PASS.
-Beta110 adds explicit Amsterdam1 and Amsterdam2 choices for AWG/TCP; owner110 installation is not yet confirmed.
+Beta111 includes MESH and quiet ongoing VPN-notification updates. Android8.1/API27 is the minimum; Android8.0 and older are unsupported.
+Exact Android CI41618639307 attempt2, existing signer and full verified-HTTPS hash checks PASS.
+Beta111 retains explicit Amsterdam1 and Amsterdam2 choices for AWG/TCP; Huawei/owner111 installation is not yet confirmed.
 Paid baseline remains108 and existing entitlement is preserved. No Mi account or ADB is needed.
 MESH still requires accepted admission and current readiness material, not an old cached READY.
 
@@ -28,11 +28,11 @@ MESH still requires accepted admission and current readiness material, not an ol
 
 ## Update an existing app
 
-[Download beta110 — 56.2 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta110.apk).
-Version `0.1.18-beta110`, code110, ARM64,56221032 bytes; SHA256:
+[Download beta111 — 50.3 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta111.apk).
+Version `0.1.18-beta111`, code111, ARM64,50265448 bytes; SHA256:
 
 ```text
-159034142f0430445caf6420c7d491866f7802a7a3eb615a4d4bfb7908641861
+32d5f4f1d050be83dc192ae632cc0603cb4150b3c00df3b594bc22cef9105607
 ```
 
 The app also checks for updates. Open the APK and select **Update** in Android’s system
@@ -42,14 +42,15 @@ do not copy another device’s profiles or keys.
 
 The [older universal beta13](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.12-beta13.apk)
 remains available for other architectures,240.5 MB. It lacks current features and is not
-an equivalent alternative to110.
+an equivalent alternative to111.
 
-[Exact audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta110-audio-source.tar.gz)
+[Exact audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta111-audio-source.tar.gz)
 are available with the release. Installation requires Android confirmation; it is not forced.
 
-Owner checkpoint: update over109 via **Settings → Check for updates → Install beta110**.
-Do not uninstall, clear data or reenroll. After launch do not connect; report **110 УСТАНОВЛЕНА**.
-Android sequence5 is optional. [Public108 rollback evidence](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk)
+Update over the existing app via **Settings → Check for updates → Install beta111**.
+If the old updater fails, download the APK above in a browser. Do not uninstall, clear
+data or reenroll. Android sequence6 is optional; installation and operation on the
+affected Huawei still need confirmation. [Public108 rollback evidence](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk)
 remains immutable; no paid event or canary replay accompanies this update.
 
 ## Text and voice
@@ -57,8 +58,10 @@ remains immutable; no paid event or canary replay accompanies this update.
 Add a contact and verify the full key/fingerprint through a trusted channel. The arrow
 sends text; long-press your own text message to edit. Hold the microphone to record,
 release to send. Swipe up to lock recording, then use the arrow to send or cross to
-cancel. Swipe left while holding to cancel. Recording requires Android10+ and is limited
-to60s/128KiB. After granting microphone access, hold again to start. At the limit,
+cancel. Swipe left while holding to cancel. Recording is limited to60s/128KiB.
+Android8.1–9 uses Codec2 (default3200bit/s); confirm Codec2 support with your contact
+first. Normal Opus recording requires Android10+. After granting microphone access,
+hold again to start. At the limit,
 recording stops and waits for sending. Leaving the app cancels an unsent recording.
 Use the current version on both phones for the same interface.
 
@@ -77,7 +80,7 @@ not established. [Notification and announcement guide (RU)](testing/messenger-no
 - Update failure: record the error and versions; do not erase data to bypass a signature mismatch.
 
 Report model, Android/app version and network type. Exclude invitations, keys, profiles
-and messages. [Beta110 validation/publication](releases/2026-11-02-gateway-selection.md).
+and messages. [Beta111 validation/publication](releases/2026-11-03-android-update-incident.md#beta111-publication-and-readback).
 
 ## Desktop clients
 
@@ -88,7 +91,7 @@ current availability counts.
 
 ## Server load display
 
-Beta110 shows **Server CPU** on the dashboard and **CPU N%** in the server list when
+Beta111 shows **Server CPU** on the dashboard and **CPU N%** in the server list when
 channel capacity is unknown. CPU is not channel utilization or the monthly traffic quota.
 Known-capacity servers retain their aggregate indicator; stale/missing samples show No data.
 [Release status](releases.md).

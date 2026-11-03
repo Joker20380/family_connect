@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**3 November — Android111 PUBLISHED; affected Huawei recovery still OPEN.**
+Exact source40e6c6c / Client builds41618639307 attempt2, API27/API35 runtime and
+downloaded ARM64/native/UI gates PASS. Existing product signer retained. Signed111
+APK50,265,448 bytes, SHA256 `32d5f4f1d050be83dc192ae632cc0603cb4150b3c00df3b594bc22cef9105607`;
+minimum Android8.1/API27. The actual signed archive is accepted by the API27 package
+parser. Public APK, optional signed Android catalog6 (`min_sdk:27`), both invitation
+routes/CSP and corresponding audio source verified over HTTPS. Previous110 bytes
+remain unchanged; Windows0.2.16/catalog12, Linux public0.2.11/owner internal.13 unchanged.
+One nginx reload, zero backend restarts, invitations/paid mutations/phone actions0;
+protected product rows and gateway catalog4 unchanged. Source/API compatibility and
+delivery are complete, not real Huawei/ARM64/MESH or product-signed handset-upgrade
+acceptance. Next evidence: install111 over the existing app without clearing data,
+confirm retained identity and ordinary VPN/voice on the affected Huawei. No automatic
+fleet successor or admission expansion. Earlier candidate checkpoints below are history.
+[Release/readback/rollback](releases/2026-11-03-android-update-incident.md#beta111-publication-and-readback).
+
 **3 November — beta111 platform/artifact qualification PASS; NOT RELEASED.**
 Source40e6c6c is pushed and remote-verified. Client builds41618639307 attempt2 passed
 both API35 and27 transport/control/Friends gates and final ARM64 packaging. Downloaded

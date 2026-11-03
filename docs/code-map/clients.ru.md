@@ -19,7 +19,7 @@ last8+first_failure через существующий `DiagnosticRing`; `scrip
 
 ## Android
 
-### Android 8.1 compatibility candidate — 3 November
+### Android 8.1 compatibility release111 — 3 November
 
 `AppUpdate` parses signed `min_sdk` (legacy catalogs default31), checks SDK support
 and reserves100% for a length/SHA-verified transfer. `AppUpdateUi` rejects incompatible
@@ -28,8 +28,9 @@ SDK floor from verified APK metadata; publisher/discovery retain signature guard
 `VoiceCompatibility` and `RadioSettings` select existing Codec2 below API29, retaining
 peer confirmation in `ChatActivity`; Opus recording remains Android10+.
 `AndroidCompatibilityRuntimeTest` checks native audio/capture and mode UI on disposable
-Friends emulators. CI now includes API27 alongside35. This is source qualification,
-not public compatibility: published110 still requires12+ and must not be replaced.
+Friends emulators. CI includes API27 alongside35; exact111 passes both and is publicly
+distributed with optional signed catalog6. Actual Huawei/ARM64 field recovery is still
+unconfirmed; immutable110 remains available but requires12+ and must not be replaced.
 [Exact tests, historical65 proof and pending gates](../releases/2026-11-03-android-update-incident.md#authorized-compatibility-implementation-and-historical-proof).
 
 ### Unreleased failed-state controls — 1 November

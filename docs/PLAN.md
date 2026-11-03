@@ -2,6 +2,18 @@
 
 ## Current engineering priority / Текущий critical path
 
+**ANDROID-UPDATE-FIELD-1 — compatibility release delivered; field confirmation pending.**
+Beta111/minSDK27/ARM64 is signed with the existing certificate and publicly distributed;
+optional Android catalog6 and both invitation routes/CSP/full HTTPS bytes PASS. Platform
+CI41618639307 attempt2 on40e6c6c, native/artifact/UI and API27 signed-archive parsing PASS.
+No further release step is queued for111. Remaining incident completion gate: actual
+Huawei OS/ABI/installed version, in-place111 installation, preserved identity/data and
+ordinary transport/voice behavior. Emulator proofs do not close that field gate.
+No uninstall/reset/downgrade, user-profile reuse, admission change or unrelated fleet work.
+If another release is needed, use a new immutable version and increasing catalog;110
+remains downloadable but cannot repair Android8.1. Earlier candidate steps below are history.
+[Exact delivery and remaining checks](releases/2026-11-03-android-update-incident.md#beta111-publication-and-readback).
+
 **ANDROID-UPDATE-FIELD-1 next gate — qualified111 offline signing and delivery.**
 Source40e6c6c Client builds41618639307 attempt2 PASS, both API35/API27 complete runtime
 matrices and final ARM64 artifact verified, visual review and protected-storage restart

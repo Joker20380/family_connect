@@ -1,5 +1,11 @@
 # Documentation
 
+**3 November — Android111 published for Android8.1+/ARM64.** Exact API27/API35 CI,
+existing signer, optional catalog6, invitation/CSP and full public HTTPS bytes PASS.
+Actual Huawei installation and retained-data operation remain pending; this does not
+start another fleet task. [Release/readback/rollback](releases/2026-11-03-android-update-incident.md#beta111-publication-and-readback)
+· [RU update guide](getting-started.ru.md) · [EN update guide](getting-started.en.md).
+
 <!-- FLEET-BOOTSTRAP-2 current -->
 **3 November — isolated native data-plane canary:** disposable AWG3.1/REALITY
 client/gateway/origin topology, negative authentication controls and real DNS/HTTPS

@@ -1,23 +1,22 @@
 # Client installation
 
-**3 November — Android 8.1 compatibility, beta111 candidate.** This version is not
-published yet: API27/API35 and data-preserving upgrade checks are in progress.
-Public beta110 at the links below requires Android12+; a browser install cannot
-bypass this requirement. Do not uninstall or clear app data. Candidate111 keeps
-the same ARM64 package; Android8–9 recording uses Codec2 with confirmed peer
-support, while Opus recording requires Android10+.
-[Current checks and release status](releases/2026-11-03-android-update-incident.md#beta111-release-continuation).
+**3 November — beta111 published, Android8.1+/ARM64.** The invitation page and
+in-app updater offer111 with optional signed catalog6. API27/API35 CI, the existing
+signer and public HTTPS bytes are verified. Installation and operation on the actual
+Huawei remain unconfirmed. Update in place; do not uninstall or clear data.
+Android8.1–9 uses Codec2 with confirmed peer support; Opus recording requires Android10+.
+[Acceptance, delivery and remaining checks](releases/2026-11-03-android-update-incident.md#beta111-publication-and-readback).
 
-**Amsterdam selection — 2 November 2026.** Windows0.2.16 is published:
+**Current releases — 3 November 2026.** Windows0.2.16 is published:
 [download installer](https://github.com/Joker20380/family_connect/releases/download/windows-v0.2.16/FamilyConnect-Setup-0.2.16-pilot-unsigned.exe).
 Windows0.2.13+ discovers it through Check for updates (signed catalog12);0.2.12
 and earlier need one manual in-place installation without deleting data. Explicit
 Amsterdam1/2 choices support AWG/TCP. The installer has no publisher signature.
 SHA256 `491a731edbf80887122844bebcccb8741e701b03816202f9a9b77c77855e8a65`.
-Android110 is published: [APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta110.apk),
-optional signed catalog5, existing signer; SHA256
-`159034142f0430445caf6420c7d491866f7802a7a3eb615a4d4bfb7908641861`,56221032bytes.
-Update over109 without clearing data; owner installation is not yet confirmed.
+Android111 is published: [APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta111.apk),
+optional signed catalog6, existing signer; SHA256
+`32d5f4f1d050be83dc192ae632cc0603cb4150b3c00df3b594bc22cef9105607`,50265448bytes.
+Update over the existing version without clearing data; owner installation is not yet confirmed.
 Complete Linux0.2.12~l03.2.13 Ubuntu26.04/Python3.14 is now installed on the owner's
 workstation: exact full DEB/system pair, imports/READY, GTK and separate live node
 metrics PASS;3171 protected entries unchanged, no automatic connection. AWG/TCP has
@@ -265,12 +264,12 @@ invitation; verify unchanged Support ID FC-YHQB-9VJN. Before one mobile attempt,
 the operator must revalidate leases and fresh READY/ACK; export immediately after
 disconnect. FIELD admission and the public updater remain unchanged.
 
-**Current2.11: beta110/code110 is public, Android12+/ARM64.**
+**Current3.11: beta111/code111 is public, Android8.1+/ARM64.**
 Explicit Amsterdam1/2 choices support AWG/TCP; the assigned Netherlands entry stays.
-Exact Android CI/signature/HTTPS PASS; owner110 installation and physical selection
+Exact Android CI/signature/HTTPS PASS; owner111 installation and physical selection
 are not claimed. Paid baseline108/entitlement remain unchanged.
 Install over the existing app, without clearing data or reenrollment; admission is unchanged.
-[Download/update](getting-started.en.md) · [Evidence](releases/2026-11-02-gateway-selection.md).
+[Download/update](getting-started.en.md) · [Evidence](releases/2026-11-03-android-update-incident.md#beta111-publication-and-readback).
 
 ## Historical preparation checkpoints
 
@@ -363,7 +362,7 @@ not publicly distributed and not a FIELD release. Public beta51/invitation links
 remain unchanged and were not reverified. [Attempt14](releases/2026-10-02-5n-prov1-attempt14.ru.md)
 · [Canary provenance and SHA256](releases/2026-10-02-5n-android-canary-build.ru.md).
 
-Use the [friends beta guide](getting-started.en.md): Android12+, ARM64 beta110,
+Use the [friends beta guide](getting-started.en.md): Android8.1+, ARM64 beta111,
 invitation-based access, VPN, text and voice messages. The APK is distributed through
 an invitation page and HTTPS download; it is not yet a GitHub or app-store release.
 The [client workflow](../.github/workflows/clients.yml) documents source-build requirements.

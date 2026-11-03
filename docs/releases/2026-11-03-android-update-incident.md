@@ -333,3 +333,61 @@ has happened; public/invitation110/catalog5 and desktop versions remain unchange
 Do not uninstall/clear data or replace110 bytes. Physical Huawei/ARM64/MESH and actual
 product-signed preserved-data upgrade remain NOT_RUN; unrelated broader CI failures
 listed earlier are not represented as fixed by this platform PASS.
+
+## Beta111 publication and readback
+
+**PUBLISHED,3 November2026; affected-phone recovery remains OPEN.** The accepted
+40e6c6c/CI41618639307 attempt2 input is signed offline through the protected local
+vault with the existing product certificate. No key/password is exported to disk,
+server, CI or Git. All unsigned APK entries are byte-identical after signing;
+package/version/minimum SDK/ABI/signature/16K alignment PASS. The exact signed ARM64
+archive is also accepted by Android8.1/API27's package parser with code111/minSDK27
+and one signer. This is archive acceptance, not ARM64 execution on the x86_64 emulator.
+
+- [APK111](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta111.apk):
+  **50,265,448 bytes**, SHA256 `32d5f4f1d050be83dc192ae632cc0603cb4150b3c00df3b594bc22cef9105607`.
+- Product certificate SHA256: `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+- [Signed Android catalog6](https://185.251.89.19:8443/updates/android-friends-v2.json):
+  SHA256 `ca3e6c630d086379ab79055e1b83ac7217165ee9461033b19ce0ca3f817a41df`,
+  `min_sdk:27`, minimum supported code1, mandatory-after0; optional, no forced install.
+- [Corresponding audio source/licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta111-audio-source.tar.gz):
+  7,601,671 bytes, SHA256 `249b86d49612b716d69e25d554579213a32cbb74d7167d652f6808f60f618a89`.
+  Archive reused only after every member matched the exact accepted111 CI source.
+
+The server publication uses a fresh guarded baseline and an exclusive recovery journal,
+adds immutable APK/source routes, updates invitation111 and its exact script/style CSP,
+then publishes matching legacy/signed catalogs. One nginx reload; zero backend restarts,
+new invitations, paid mutations or phone actions. Protected product rows and gateway
+catalog4 remain unchanged. Readback confirms all five published files and nginx config.
+`scripts/verify_public_invitation.py` PASS checks both `/i/` and `/invite/`, exact HTML/CSP,
+Android signature/sequence/full APK bytes, and unchanged Windows0.2.16/catalog12/full
+installer bytes. Additional full HTTPS reads verify111 audio source and retained110 APK.
+No regional-network or affected-phone recovery claim follows from operator HTTPS access.
+
+Publication metadata regression selection88 PASS. A local preparation retry corrected
+the apksigner Java PATH before catalog creation; no server mutation occurred on that
+failed preparation. Earlier failed CI attempts and broader unrelated CI failures remain
+documented above. The current source release, public download, updater and invitation
+all identify111; actual handset installation is NOT_RUN. Linux public0.2.11/owner
+0.2.12~l03.2.13 and Windows0.2.16/catalog12 remain unchanged.
+
+Recovery journal: `185.251.89.19:/root/fc-android111-publication-20261103`, including
+pre-publication HTML/nginx/catalog backups and immutable completion receipt. Before
+catalog publication, guarded failure restores invitation/routes without altering the
+catalog; no rollback was needed. After catalog6 exposure, never reissue5 or substitute
+different111 bytes: use a newly signed higher sequence and, for an APK repair, code112+.
+Retain110 for historical/manual recovery only; it does not run on8.1. Never uninstall,
+clear data, replace identities or use another signing certificate to recover an update.
+
+Remaining incident gate: confirm the Huawei's actual Android/ABI/old beta; install111
+over the existing app (browser APK if the old updater fails); verify retained activation,
+keys/history and ordinary VPN behavior. On Android8.1–9 voice uses existing Codec2 with
+peer confirmation; normal Opus recording still needs10+. Actual Huawei/ARM64/MESH and
+product-signed old-to-new preserved-data operation remain unverified. No unrelated fleet
+successor, automatic live canary or admission expansion starts from this release.
+
+Changed public-guide/report links and whitespace checks PASS. The required whole-docs
+scan covers729 files/4511 links and still reports two pre-existing historical anchor
+errors: STATUS's October27 `evening-readback--1736utc` and the October24 source
+checkpoint's October23 `linux-user-chat-admission-and-existing-exit-handoff-24-10-phase22`.
+These unrelated historical entries are preserved, not silently repaired or reported PASS.
