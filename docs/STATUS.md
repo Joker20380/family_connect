@@ -1,13 +1,31 @@
 # Текущее состояние / Current state
 
+**3 November MESH2 production → Android update — current owner-selected order.**
+Owner now explicitly requests enabling the second server, then delivering the update.
+This supersedes the slow-link-first pause below; include the already checked slow-link
+and Android picker changes in that delivery. Read-only RU/AMS2 audit confirms the
+canonical renewal writer still targets only AMS1 and AMS2 has no permanent MESH runtime.
+New source adds two pinned, independently validated gateway snapshots and node-scoped
+directory synchronization under the existing RU maintenance lock. A failed secondary
+cannot overwrite or stop primary directory distribution. Shared CA/CRL, distinct signed
+identities, certificate identity/role/revocation, directory freshness/conflict and
+source/package boundaries are checked. This is not multi-gateway renewal or deployment.
+Focused58 tests PASS; broader maintenance/package/snapshot164 PASS plus the separately
+enabled accepted-source native compatibility check PASS (165 distinct selected tests).
+Exact142ee46 Android CI41672473840 reached API27 at16:38UTC; final artifact gate pending.
+No production writes/restarts, token transmission, version/catalog or invitation changes.
+Remaining: one coordinated renewal/revocation/fencing writer for both gateways, permanent
+AMS2 runtime and live acceptance, then qualified selector and immutable Android>111/catalog>6.
+[Current integration and rollout boundary](releases/2026-11-03-second-nl-mesh.md).
+
 **3 November15:59UTC — refreshed read-only health.** Registry60/56 non-revoked/4 revoked;
 recent180s AWG peers RU0/AMS1 6/AMS2 1. RU sampled CPU37–71%, follow-up13–54%,
 disk78%; legacy Docker worker still unhealthy, host worker active. No deployment,
 repair or client acceptance. [Updated snapshot](releases/2026-11-03-vpn-health.md#1559utc-refresh).
 
-**3 November MESH-SLOW-LINK-1 — current owner-selected task; SOURCE CHECKED, NOT DEPLOYED.**
-Owner reports repeated MESH disconnects at low speed and selects connection quality
-before MESH2. Reproduced premature closure on transient ICE and fixed1s retries
+**3 November MESH-SLOW-LINK-1 — SOURCE CHECKED, pending combined MESH2 rollout.**
+Owner reported repeated MESH disconnects at low speed and initially selected connection
+quality before MESH2; the latest order above supersedes that pause. Reproduced premature closure on transient ICE and fixed1s retries
 exhausting at9s. Candidate preserves established media through recoverable ICE loss,
 uses bounded RTT/backoff and gradual send-window admission; Android recovers correlated
 DATA-age/terminal peer failures. Auth/revocation, protocol rejection,20s DATA-age and
@@ -44,7 +62,7 @@ acceptance, coordinated client/gateway rollout and immutable Android delivery.
 Android111/catalog6, Windows0.2.16/catalog12, Linux public0.2.11/owner0.2.12~l03.2.13
 remain unchanged. [Tests, limits and rollout](releases/2026-11-03-mesh-slow-link.md).
 
-**3 November FLEET-BOOTSTRAP-2 — second-node MESH PAUSED for selected link-quality work.**
+**3 November FLEET-BOOTSTRAP-2 — second-node MESH RESUMED; production gates remain open.**
 Owner confirms the separately supplied token and asks to finish the integration.
 Correction: AMS2 already passed real MESH/reboot rehearsal; its temporary runtime was
 retired, not rejected as incapable. Separate publisher input remains in private custody.

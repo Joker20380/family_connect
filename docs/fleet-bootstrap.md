@@ -1,6 +1,32 @@
 # Deterministic physical gateway bootstrap
 
-**Current work:** [FLEET-BOOTSTRAP-2](releases/2026-11-01-fleet-bootstrap-2.md) is explicitly
+## Current production MESH2 handoff
+
+Owner selected permanent Amsterdam2 MESH, then Android delivery on3 November.
+See [current integration gates](releases/2026-11-03-second-nl-mesh.md); the rehearsal
+permissions, identities and four-hour permits below are not permanent authorization.
+
+The source-only directory evaluator accepts optional `--gateway-routes <private-file>`
+in addition to the existing `--config`, `--ssh-key` and `--known-hosts`. The canonical
+JSON file has `schema:1` and `gateways` with exactly `nl-amsterdam-1` and
+`nl-amsterdam-2`. Each entry contains `gateway` (the root-signed identity reference)
+and `ssh` (`key`, `known_hosts`, `target`). Primary SSH values must exactly match the
+existing configured target/CLI pins. Paths are absolute and the route file is private0600
+under0700 custody. Use only verified, distinct hosts and independently issued identities;
+never copy production keys into documentation or a rehearsal bundle.
+
+Without `--directory-only`, this path is read-only. With it, only already provisioned
+node-scoped directory files are synchronized. It does not initialize directories, issue
+credentials, change grants or replace the renewal controller. Exit75 means at least one
+node failed inspection/needs maintenance; inspect per-node causes and preserve existing
+files rather than retrying with primary material. Do not enable a permanent second
+runtime until a coordinated writer fences and reconciles both nodes for every shared
+CRL/authority change, and real data-plane/rejection/cleanup gates pass. Installations
+must repin the exact qualified source package; do not edit an installed pinned module.
+
+## Historical rehearsal runbook
+
+**Rehearsal scope:** [FLEET-BOOTSTRAP-2](releases/2026-11-01-fleet-bootstrap-2.md) is explicitly
 authorized for source preparation and one separately supplied disposable target. Production
 RU/NL are excluded. The following FLEET-BOOTSTRAP-1 acceptance remains historical; its
 synthetic archive is not a real VPN bundle and its live-mutation guard remains in place.

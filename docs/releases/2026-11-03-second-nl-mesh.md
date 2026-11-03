@@ -2,13 +2,56 @@
 
 ## Current result
 
-**PAUSED FOR MESH-SLOW-LINK-1; backend and Android routing/storage source slices checked, NOT DEPLOYED.**
-The later owner report of repeated slow-link drops selects
-[connection-quality work](2026-11-03-mesh-slow-link.md) before further MESH2 integration.
+**RESUMED: permanent MESH2 first, then Android update; SOURCE CHECKPOINT, NOT DEPLOYED.**
+The latest owner request explicitly selects second-server activation followed by the update.
+The intervening [connection-quality work](2026-11-03-mesh-slow-link.md) is source-checked
+and must be included with the picker fix in the resulting release, not published as111.
 No permanent second-node runtime or new APK has been deployed. Owner explicitly
 asks to finish MESH2 using the separately supplied credential. This supersedes the
 question-only interpretation in the earlier [picker report](2026-11-03-android-node-picker.md).
 No claim that source publication enables MESH on an installed client.
+
+## Resumed production preparation
+
+Read-only SSH confirms the current RU node configuration at
+`/var/lib/fc-profile-control/pinned-venv-cutover/node.json` uses the source-pinned
+`renewal-overlay-e822b391a43d` API and only the AMS1 snapshot route. Credential-renewal
+and directory-sync timers remain active. AMS2 retains its ordinary AWG/TCP directories;
+no permanent restricted service/directory was found. Historical failed transient units
+were not restarted or mistaken for the current timer result. No deployment was attempted.
+
+The new optional `scheduled_evaluate.py --gateway-routes` source path supports exactly
+Amsterdam1/2 with separately pinned SSH destinations and expected signed identities.
+It preserves the existing primary CLI route and rejects duplicate identities/hosts.
+Both snapshots must have the current shared Family/CA/revision/CRL, valid gateway leaf
+role/key/identity, a non-revoked serial and a valid replay floor. The secondary root-signed
+delegation must be distinct and current. Each directory is validated for its own node,
+time and monotonic publication; same-time changed contents and older directories fail
+closed. Subsecond instants are retained. Provider URLs/certificates/keys are not printed.
+
+Directory-only mode writes only the corresponding existing directory file under the
+RU maintenance lock. An in-flight maintenance owner prevents reads/writes. A failed
+node keeps its previous file while the healthy node can synchronize; the overall result
+is non-success (`GATEWAY_CHECK_REQUIRED`, exit75), never fallback to the first node.
+Near-expiry credential warnings remain in per-node receipts. This mode does not issue
+certificates, publish CRLs, restart services or perform the missing multi-node transaction.
+It is not installed or configured on production and does not make an old pair-only
+renewal controller safe for an active second MESH gateway.
+
+Validation in the locked control/identity environment:
+- 58 focused route/snapshot/directory tests PASS.
+- 164 broader maintenance, package and profile-snapshot tests PASS,1 explicit native
+ fixture skip. That check then separately PASSed with the retained exact beta111 carrier
+ source and locked Go toolchain: existing identity delivery through two renewals, including
+ 75-day authority age. Total165 distinct selected tests PASS; no outstanding skip.
+- Closed renewal package preserves source hashes and reproducibility, imports the new
+ path against its pinned API, and retains legacy CLI/RU–NL renewal checks.
+- No physical Telemost/Family data-plane acceptance is claimed by these synthetic tests.
+
+Private logs: `state-client-build/mesh2-production-20261103/`. At16:38UTC exact142ee46
+Client builds41672473840 had passed the Android15 runtime stage and was running the
+Android8.1 lifecycle stage; unsigned final ARM64 artifact acceptance remained pending.
+Linux GTK interaction and phase0 setup failures remain separate, not waived or repaired.
 
 ## Reconciled evidence
 

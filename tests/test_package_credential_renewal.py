@@ -70,7 +70,9 @@ def test_renewal_package_pins_every_source_and_shared_profile_module(source, tmp
                                 capture_output=True, check=True)
         assert result.stdout and not result.stderr
     probe = ('import sys;sys.path.insert(0,sys.argv[1]);sys.path.insert(0,sys.argv[2]);'
-             'import node,renewal_health;from control.friends import profile_store;'
+             'import node,renewal_health,scheduled_evaluate;from control.friends import profile_store;'
+             'from control.friends.restricted import PROTOCOL,clock_nanoseconds,directory,timestamp_ns;'
+             'assert scheduled_evaluate.GATEWAYS==("nl-amsterdam-1","nl-amsterdam-2");'
              'assert "finalize-fenced-rollback" in node.ACTIONS;'
              'assert "rollback-registry-overlay" in node.ACTIONS;'
              'assert hasattr(node.ProductionNode,"rollback_registry_overlay");'

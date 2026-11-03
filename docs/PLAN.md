@@ -2,13 +2,28 @@
 
 ## Current engineering priority / Текущий critical path
 
+**MESH2 production → Android update — SELECTED / IN PROGRESS.**
+Latest owner request («включай второй сервер и делаем обновление после этого») resumes
+FLEET-BOOTSTRAP-2 MESH2 before client publication. Dependencies and completion gates are
+the second-node task below; the already checked MESH-SLOW-LINK-1 and picker sources must
+be included in the resulting Android delivery. No automatic unrelated fleet successor.
+Completed new source slice: pinned two-node snapshot/directory inspection and independent
+directory publication under the RU maintenance lock;58 focused tests and164 broader
+maintenance/package/snapshot tests PASS plus the accepted-source native check PASS.
+This does not implement the multi-node credential transaction and is not activation.
+Next: coordinated renewal/CRL/fencing and permanent distinct AMS2 identity/runtime;
+real READY/TLS/DNS/HTTPS/egress and rejection/cleanup acceptance; only then selector
+activation, exact new-version CI, offline signing and verified public update delivery.
+All deployed versions stay unchanged until those gates pass.
+[Current evidence](releases/2026-11-03-second-nl-mesh.md).
+
 **3 November15:59UTC health refresh complete.** Read-only three-host measurements;
 RU disk/legacy worker follow-ups remain open. No repair or successor started; current
 engineering priority unchanged. [Snapshot](releases/2026-11-03-vpn-health.md#1559utc-refresh).
 
-**MESH-SLOW-LINK-1 — OWNER-SELECTED / source qualified, rollout pending.**
-Latest request selects repeated MESH drops on low-speed connections, superseding the
-immediate MESH2 continuation. Dependencies: existing ReliableStream/VP8/Pion transport,
+**MESH-SLOW-LINK-1 — source qualified, included in pending MESH2/client rollout.**
+The earlier slow-link request paused MESH2; the latest owner-selected order above resumes
+it before publication. Dependencies: existing ReliableStream/VP8/Pion transport,
 Android recovery classifier and current Family authorization/fail-closed contracts.
 Reproduce before changing policy; distinguish local modeling from actual handset cause.
 Completed: transient ICE preservation with terminal failure/cancellation retained;
@@ -37,11 +52,11 @@ real shaped-link Family TLS/DNS/HTTPS and fail-closed/cancel/revoke checks; revi
 gateway rollback/promotion plus new immutable Android>111/catalog>6 and public readback.
 Do not change grants, extend certificate lifetime, hide failed probes or claim the
 installed111/gateway runtime was repaired by a source push. No public version change
-yet. MESH2 remains authorized but deferred; no automatic fleet successor.
+yet. MESH2 is resumed in the selected order above; no automatic fleet successor.
 [Evidence and completion boundary](releases/2026-11-03-mesh-slow-link.md).
 
-**FLEET-BOOTSTRAP-2 second-node MESH — AUTHORIZED / PAUSED FOR MESH-SLOW-LINK-1.**
-Latest owner instruction («токен… всё настроили… доделаем») selects production MESH2;
+**FLEET-BOOTSTRAP-2 second-node MESH — AUTHORIZED / RESUMED BEFORE ANDROID DELIVERY.**
+Owner instruction («токен… всё настроили… доделаем»), reiterated by the latest request, selects production MESH2;
 this supersedes the earlier question-only boundary and ordinary-only admission scope.
 Do not ask for the already retained separate publisher credential. Dependencies:
 accepted native/reboot rehearsal, existing two-node ordinary admission, primary Family
