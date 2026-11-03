@@ -800,3 +800,15 @@ after acceptance. Rollback before activation is simply leaving9d41f1dc installed
 later runtime rollback must restore its matching locator/config binding, not credentials,
 replay floors, product databases or the retired pair writer. Linux CI's two selector
 expectation failures remain open; no mandatory release gate is waived.
+
+### Linux mandatory GUI gate repair
+
+The two hosted failures reproduce unchanged in an isolated GTK/Xvfb/D-Bus container:
+the test still expects country alias `nl`, although AWG/TCP now select explicit nodes.
+The corrected test covers both Amsterdam1/2 for both transports, retains every stale
+completion/owner/operation-generation/up-down assertion, and checks the exact selected
+node passed to connect. Production UI code is unchanged. Full poll/Disconnect plus
+gateway-selector GUI files:54 PASS (existing315 deprecation warnings),0 skips. Initial
+container extraction with capabilities dropped rejected archive ownership restoration;
+retry uses `--no-same-owner`, without weakening container isolation. Hosted CI is still
+required; this is not a new Linux installation or a waived release gate.

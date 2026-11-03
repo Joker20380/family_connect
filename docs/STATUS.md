@@ -18,8 +18,10 @@ secondary-only runtime upgrade, then actual-provider repeated-session/cleanup ga
 Immediate reconnect is still OPEN; local RESET completion is not remote delivery.
 Common fleet remains the sole writer; never restore the retired pair writer. Runtime
 MESH2 remains active/boot-disabled on9d41f1dc; backend overlay built-only. Public Android
-111/catalog6, Windows0.2.16 and Linux0.2.11 unchanged. Linux CI selector-expectation
-failures remain recorded, not waived. Unrelated local documentation is preserved.
+111/catalog6, Windows0.2.16 and Linux0.2.11 unchanged. Linux GUI's stale country-alias
+expectation is corrected for both explicit Amsterdam nodes;54 real GTK cases PASS
+in isolated Xvfb/D-Bus, after reproducing both baseline failures. Hosted CI remains
+required; no installed Linux change. Unrelated local documentation is preserved.
 [Projection, gates and rollback](releases/2026-11-03-second-nl-mesh.md#close-and-idle-production-projection).
 <!-- /MESH2 canonical installation 20261103 -->
 

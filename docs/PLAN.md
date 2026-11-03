@@ -18,8 +18,9 @@ with timely remote cleanup and no intervening restart. Individual egress passes 
 not reconnect acceptance. Keep the common writer, canonical locator/publisher binding,
 identity and replay floors intact; no generic-main gateway or pair-writer rollback.
 Backend migration/readiness, boot enablement, selector and immutable Android delivery
-remain gated afterward. No version/catalog/runtime change yet; Linux CI failures are
-not waived. No unrelated queue successor is selected.
+remain gated afterward. No version/catalog/runtime change yet; the Linux GUI selector
+expectation is corrected and54 isolated real GTK cases PASS, with hosted CI required.
+No mandatory gate is waived. No unrelated queue successor is selected.
 [Evidence](releases/2026-11-03-second-nl-mesh.md#close-and-idle-production-projection).
 <!-- /MESH2 canonical installation 20261103 -->
 

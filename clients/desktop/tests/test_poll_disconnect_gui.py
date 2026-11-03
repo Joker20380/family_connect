@@ -333,9 +333,12 @@ def test_non_connection_submit_is_not_cancelled(normal_connect_app, occupied_wor
     assert control.calls == control.helpers == [] and journal() == dict(generation=0, pending=None)
 
 
-def test_old_connect_completion_cannot_replace_new_disconnect(normal_connect_app, normal_owner):
+@pytest.mark.parametrize('gateway', ['nl-amsterdam-1', 'nl-amsterdam-2'])
+def test_old_connect_completion_cannot_replace_new_disconnect(normal_connect_app, normal_owner, gateway):
     control = normal_connect_app
     application = control.application
+    application.country.set_selected(module.GATEWAY_TARGETS.index(gateway))
+    assert application.route_target() == gateway
     application.toggle_vpn()
     connected = control.completions.get(timeout=5)
     application.complete(*connected)
@@ -353,7 +356,7 @@ def test_old_connect_completion_cannot_replace_new_disconnect(normal_connect_app
     application.complete(*connected)
     assert gui_snapshot(application) == disconnected
     assert not application.active and not normal_owner.active
-    assert control.calls == [('nl', control.transport)] and control.helpers == ['up', 'down']
+    assert control.calls == [(gateway, control.transport)] and control.helpers == ['up', 'down']
     assert journal() == dict(generation=3, pending=None)
 
 
