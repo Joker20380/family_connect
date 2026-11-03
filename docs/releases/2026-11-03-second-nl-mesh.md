@@ -97,6 +97,16 @@ AMS2 the non-root `nobody` account passes isolated runtime/import/DAC inspection
 with identical pins; default3.14 rejects the3.12 environment. This verifies runtime
 access, not the still-unprovisioned final gateway account/profile/forced command.
 
+Runtime compatibility source `ae2737f375fc48c4e026a87166a221e978fbbf1c` pushed and
+remote main verified. The exact committed launcher matches the AMS2-qualified bytes.
+Two exact-source unbound snapshot packages are identical (26 members,171092 bytes),
+SHA256 `4373585a7a16499ee0cae95fca2beb644f799153345ab4677ae0f2a927e18657`, manifest
+SHA256 `7ce941497a16a9b88d0a685c02d9ca6bb6cbc3ad5feb108718fb5e1f7fab6e16`.
+The package is staged alongside the candidate gateway on AMS2, not installed as an
+SSH command. Actual Python3.12 `-I -B` help and rejection of config/profile/write-action
+overrides PASS. Final AMS2 readback: AWG/TCP active,0 restarts; restricted-bootstrap
+`LoadState=not-found`, inactive. No provider token was transmitted in this continuation.
+
 Public versions, primary runtime and controller remain unchanged. Next: provision the
 canonical secondary profile/account/forced snapshot and renewal routes, establish the
 single coordinated writer and fleet checkpoint, then live provider data-plane/rejection/

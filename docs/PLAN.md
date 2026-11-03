@@ -25,6 +25,8 @@ pins:123 selected Python checks and265 isolated-root Python3.12 cases PASS, plus
 package checks (2 repeated); actual AMS2 runtime/pin probe PASS. Next remains permanent
 canonical profile/forced routes, common writer and real provider acceptance, then Android;
 prepared artifacts/identity are not an active second MESH service.
+Sourceae2737f pushed/remote-verified; exact snapshot package reproducibility and AMS2
+CLI/rejection readback PASS. Bootstrap remains absent/inactive; no release was published.
 
 **3 November supplied Krasnodar diagnostics reviewed.** Two beta111 MESH closures match
 retry exhaustion despite fresh ACKs. Keep exact-source rollout and handset acceptance

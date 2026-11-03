@@ -31,6 +31,9 @@ Python3.12 profile/snapshot/fleet-recovery cases PASS, plus5 package checks (2 r
 Actual AMS2 non-root runtime/pin probes PASS; implicit downgrade rejected. Canonical
 profile/forced-route installation, writer cutover and live provider acceptance remain;
 no MESH2 service, selector or Android release activated.
+Sourceae2737f pushed/remote-verified. Its two exact snapshot packages are identical;
+AMS2 verifies their hash, CLI and argument-override rejection. The bootstrap unit is
+still absent/inactive; ordinary AWG/TCP remain active with0 restarts.
 
 **3 November Krasnodar supplied trace — two beta111 retry-exhaustion closures confirmed.**
 Current Wi-Fi history shows successful MESH sessions followed by RELIABLE_RETRY_EXHAUSTED
