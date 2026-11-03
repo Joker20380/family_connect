@@ -19,6 +19,16 @@ last8+first_failure через существующий `DiagnosticRing`; `scrip
 
 ## Android
 
+### Transport-specific gateway picker — 3 November, source only
+
+`GatewayPicker` defines separate explicit AWG/TCP nodes and country-based Auto/MESH
+choices. `FriendsActivity` keeps the last manual node across mode changes and recreation,
+without persisting a selection or connecting during initialization. `GatewayPickerTest`
+and `DashboardLayoutRuntimeTest` cover the model and real spinner callbacks on API27/35.
+Public beta111 still contains the previous four-entry picker; this source change does
+not alter installed APKs or add per-node load telemetry.
+[Source/runtime checks and delivery boundary](../releases/2026-11-03-android-node-picker.md).
+
 ### Android 8.1 compatibility release111 — 3 November
 
 `AppUpdate` parses signed `min_sdk` (legacy catalogs default31), checks SDK support

@@ -35,9 +35,14 @@ public final class FriendsActivity extends LocalizedActivity {
     private boolean motion;
     private HomeBrand homeBrand;
     private TextView homeActiveTransport,homeBattery;
-    private String country,activeCountry;
-    private static final String[] TARGETS={"ru","nl","nl-amsterdam-1","nl-amsterdam-2"};
-    private int targetIndex(){int index=java.util.Arrays.asList(TARGETS).indexOf(country);return index<0?1:index;}
+    private String country,activeCountry,lastManualGateway;
+    private String[] gatewayTargets;
+    private int targetIndex(){int index=java.util.Arrays.asList(gatewayTargets).indexOf(country);return index<0?0:index;}
+    private void saveRoute(){getPreferences(MODE_PRIVATE).edit().putString("country",country.equals("ru")?"ru":"nl").putString("gateway_id",lastManualGateway).putString("transport",transport).apply();}
+    private void configureGatewayPicker(){
+        country=GatewayPicker.target(country,lastManualGateway,transport);
+        gatewayTargets=GatewayPicker.targets(transport);serverAdapter.notifyDataSetChanged();countries.setSelection(targetIndex());
+    }
     private String targetLabel(String target){return getString(target.equals("nl-amsterdam-1")?R.string.gateway_amsterdam_1:target.equals("nl-amsterdam-2")?R.string.gateway_amsterdam_2:target.equals("ru")?R.string.gateway_russia:R.string.gateway_assigned);}
     private LiveNetworkPanel telemetry;
     private RouteMapView routeMap, dashboardMap;
@@ -54,7 +59,8 @@ public final class FriendsActivity extends LocalizedActivity {
     private final Runnable refresh=new Runnable(){public void run(){render();handler.postDelayed(this,500);}};
     @Override public void onCreate(Bundle state){
         super.onCreate(state);getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE);transport=getPreferences(MODE_PRIVATE).getString("transport","auto");country=getPreferences(MODE_PRIVATE).getString("country","nl");
-        String selectedGateway=getPreferences(MODE_PRIVATE).getString("gateway_id","");if(ControlFriendsCatalog.explicit(selectedGateway))country=selectedGateway;
+        String selectedGateway=getPreferences(MODE_PRIVATE).getString("gateway_id","");lastManualGateway=ControlFriendsCatalog.explicit(selectedGateway)?selectedGateway:"nl-amsterdam-1";
+        country=GatewayPicker.target(country,lastManualGateway,transport);gatewayTargets=GatewayPicker.targets(transport);
         motion=getPreferences(MODE_PRIVATE).getBoolean("motion",true);activeCountry=getPreferences(MODE_PRIVATE).getString("session_country",country);
         countries=new Spinner(this){@Override public boolean performClick(){refreshServerLoads();return super.performClick();}};
         countries.setContentDescription(getString(R.string.terminal_country));
@@ -69,8 +75,8 @@ public final class FriendsActivity extends LocalizedActivity {
             public void onNothingSelected(AdapterView<?> parent){}
             public void onItemSelected(AdapterView<?> parent,android.view.View view,int position,long id){
                 if(!parent.isShown())return;
-                String next=TARGETS[position];if(next.equals(country))return;
-                country=next;getPreferences(MODE_PRIVATE).edit().putString("country",country.equals("ru")?"ru":"nl").putString("gateway_id",ControlFriendsCatalog.explicit(country)?country:"").apply();detail.setText("");
+                String next=(String)parent.getItemAtPosition(position);if(next.equals(country))return;
+                country=next;if(ControlFriendsCatalog.explicit(country))lastManualGateway=country;saveRoute();detail.setText("");
                 if(!initializing&&!ConnectionService.status.equals("off")){reconnect=true;disconnect();}render();
             }
         });
@@ -79,7 +85,7 @@ public final class FriendsActivity extends LocalizedActivity {
             public void onItemSelected(AdapterView<?> parent,android.view.View view,int position,long id){
                 if(!parent.isShown())return;
                 String next=position>=0&&position<TRANSPORTS.length?TRANSPORTS[position][0]:"awg";if(next.equals(transport))return;
-                transport=next;getPreferences(MODE_PRIVATE).edit().putString("transport",transport).apply();
+                transport=next;configureGatewayPicker();saveRoute();
                 if(!initializing&&!ConnectionService.status.equals("off")){reconnect=true;disconnect();}render();
             }
         });
@@ -397,13 +403,11 @@ public final class FriendsActivity extends LocalizedActivity {
                 if(value!=null){serverLoads.clear();serverLoads.putAll(value);}if(serverAdapter!=null)serverAdapter.notifyDataSetChanged();renderLoad();});});
     }
     private final class ServerAdapter extends BaseAdapter {
-        private final String[] codes=TARGETS;
-        public int getCount(){return codes.length;}
-        public Object getItem(int position){return codes[position];}
+        public int getCount(){return gatewayTargets.length;}
+        public Object getItem(int position){return gatewayTargets[position];}
         public long getItemId(int position){return position;}
-        public boolean hasStableIds(){return true;}
-        public android.view.View getView(int position,android.view.View recycled,android.view.ViewGroup parent){return serverRow(codes[position],recycled,parent,true);}
-        public android.view.View getDropDownView(int position,android.view.View recycled,android.view.ViewGroup parent){return serverRow(codes[position],recycled,parent,false);}
+        public android.view.View getView(int position,android.view.View recycled,android.view.ViewGroup parent){return serverRow(gatewayTargets[position],recycled,parent,true);}
+        public android.view.View getDropDownView(int position,android.view.View recycled,android.view.ViewGroup parent){return serverRow(gatewayTargets[position],recycled,parent,false);}
     }
     private android.view.View serverRow(String code,android.view.View recycled,android.view.ViewGroup parent,boolean collapsed){
         android.content.Context c=parent.getContext();LinearLayout row=(LinearLayout)recycled;

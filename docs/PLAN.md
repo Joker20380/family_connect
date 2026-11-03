@@ -2,6 +2,23 @@
 
 ## Current engineering priority / Текущий critical path
 
+**FLEET-BOOTSTRAP-2 Android picker parity — SOURCE COMPLETE, delivery pending.**
+Owner defers Telegram, asks to resume the main plan, then selects the remaining Android
+duplicate-server UI defect before the fleet successor. Dependencies: existing signed
+gateway-selection contract and Linux's transport-specific picker behavior; no backend
+assignment, profile, identity or MESH admission changes. Completed gate: exactly two
+Amsterdam nodes plus Russia for AWG/TCP, country-only Auto/MESH, remembered manual node,
+no connection on initialization/selection while off, recreation and RU/EN layout checks
+on API27/API35.403+398 JVM,38 Python and4+4 runtime tests PASS; lint0 errors/56 warnings.
+Source fix only: public111/catalog6 remains immutable. User-visible delivery still needs
+a new version, exact release/platform/native gates, existing-key offline signing and
+public catalog/APK readback. No publication or physical handset acceptance here.
+Telegram follow-up is DEFERRED_BY_OWNER, not a prerequisite or a solved defect. After
+the selected delivery scope, the fleet candidate is dedicated canary credential custody,
+bounded registration/revocation and existing-user conservation, then real per-node probes;
+no automatic failover or production mutation follows merely from this queue.
+[Android source/runtime receipt](releases/2026-11-03-android-node-picker.md).
+
 **3 November service inspection complete (read-only).** Three current hosts checked;
 no implementation/fleet successor selected. RU disk78% and legacy unhealthy Docker
 worker remain operational follow-ups, not repaired or newly authorized work.

@@ -456,3 +456,11 @@ only as an unconfirmed background-failure hypothesis. Do not clear data, reinsta
 bypass the VPN. No device test or source/runtime/server change was performed. Documentation
 content/whitespace checks only; public beta111/catalog6 and existing rollout/rollback
 paths remain unchanged. Affected-handset recovery remains OPEN.
+
+### Owner deferral
+
+The owner explicitly asks to leave the isolated Telegram issue and continue the main
+plan. Telegram triage is DEFERRED_BY_OWNER, not fixed or an acceptance PASS. No UDP
+extension, handset reset or transport change is selected. The next user report instead
+selects [Android's duplicate node picker](2026-11-03-android-node-picker.md); this is a
+separate UI correction, not evidence about Telegram. Public beta111/catalog6 unchanged.

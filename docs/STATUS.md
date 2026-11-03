@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**3 November Android node picker — source/runtime checks PASS, NOT DISTRIBUTED.**
+Owner defers the isolated Telegram symptom, then reports Android still shows the legacy
+assigned-NL choice alongside Amsterdam1/2. The Linux-only correction had not reached
+Android. Friends now shows Amsterdam1/Russia/Amsterdam2 for AWG/TCP and Netherlands/
+Russia for Auto/MESH; the remembered manual node survives mode changes and recreation.
+Initialization does not persist route changes or connect, and active-session routing is
+retained.403 debug/398 Friends JVM tests,38 focused Python tests and API27/API35 UI4+4
+PASS; lint0 errors/56 warnings. Only disposable CI-signed emulator APKs installed.
+Public beta111/catalog6, other platform versions and server policy remain unchanged;
+the installed111 is not repaired by this source push. New immutable Android delivery
+and physical confirmation remain pending. Per-node telemetry is not changed here.
+Telegram is DEFERRED_BY_OWNER, not fixed. Fleet production-canary preparation remains
+the main queue's next candidate, not started during this UI correction.
+[Scope, tests and delivery boundary](releases/2026-11-03-android-node-picker.md).
+
 **3 November13:15UTC — read-only service snapshot.** Registry60 devices/56 non-revoked/4
 revoked; recent AWG handshakes3min RU0/AMS1 5/AMS2 1 (peers, not unique people).
 AMS1 sampled TX16.008Mbps; no sampled CPU saturation. RU disk78%, legacy Docker
