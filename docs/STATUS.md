@@ -1,5 +1,11 @@
 # Текущее состояние / Current state
 
+**3 November13:15UTC — read-only service snapshot.** Registry60 devices/56 non-revoked/4
+revoked; recent AWG handshakes3min RU0/AMS1 5/AMS2 1 (peers, not unique people).
+AMS1 sampled TX16.008Mbps; no sampled CPU saturation. RU disk78%, legacy Docker
+peer-worker unhealthy while host worker active. No changes/restarts/publication;
+Android111/catalog6 and desktop versions unchanged. [Snapshot](releases/2026-11-03-vpn-health.md).
+
 **3 November Telegram follow-up — apparently isolated handset issue, cause OPEN.**
 Owner reports Telegram works for them and other users in the MESH discussion; only the
 affected Huawei is reported failing. This weakens a general MESH incompatibility

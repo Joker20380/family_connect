@@ -2,6 +2,11 @@
 
 ## Current engineering priority / Текущий critical path
 
+**3 November service inspection complete (read-only).** Three current hosts checked;
+no implementation/fleet successor selected. RU disk78% and legacy unhealthy Docker
+worker remain operational follow-ups, not repaired or newly authorized work.
+[Measurements and limits](releases/2026-11-03-vpn-health.md). Existing incident priority unchanged.
+
 **ANDROID-UPDATE-FIELD-1 clarification — isolated Telegram triage, no transport rewrite.**
 Owner reports their Telegram and other users' Telegram work; the affected Huawei appears
 to be the exception. Narrow the next step to the failing operation, foreground/background
