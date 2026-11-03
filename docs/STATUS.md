@@ -1,18 +1,21 @@
 # Текущее состояние / Current state
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November20:27UTC — permanent AMS2 MESH running; first common fleet renewal COMMITTED.**
-Fresh canonical identity and the retained separate publisher credential are installed;
-the RU/AMS1/AMS2 writer and two-directory synchronization are active. Primary gateway
-binary/identity and ordinary AWG/TCP are unchanged. Real provider bootstrap, dedicated
-Family TLS,4 HTTPS streams,3 DNS probes and expected AMS2 public egress PASS. Wrong-node
-seed refresh rejects. This is not completed rollout: immediate repeat after the first
-operator probe waited on its retained lease and failed at challenge timeout. One bounded
-secondary-only restart cleared that synthetic lease; later egress acceptance passed.
-Lease cleanup/reconnect acceptance remains open; do not label this a harness-only defect.
-The secondary unit is running but not enabled at boot. Backend readiness overlay built,
-not installed; Android111/catalog6 and client picker remain unchanged. Next: cleanup and
-backend acceptance, then qualified selector/immutable Android delivery.
+**3 November21:28UTC — MESH2 active; reconnect acceptance still OPEN, source correction only.**
+The common RU/AMS1/AMS2 writer is COMMITTED; renewal/directory timers were read back
+active/waiting with successful last executions. Earlier real Family TLS,4 HTTPS/3 DNS
+and AMS2 egress PASS remain valid, not a repeated-session acceptance. Natural lease
+expiry/resource cleanup was subsequently observed without a service restart. A forced
+async-writer test proves final reliable RESET could be discarded on immediate carrier
+close. Source now waits for its local write within the existing100ms bound, with
+legacy/completion modes and stalled-writer rejection tested. Not installed on a gateway.
+Live candidate probes are NOT PASS: one bootstrap cleanup outlasted the descriptor,
+another rejected during bootstrap, another failed seed connect. An unchanged-stream
+baseline also failed dedicated Family authentication at the gateway's30s deadline;
+this does not explain away the candidate cleanup delay. No further server restart,
+identity replacement, policy relaxation or release. Secondary boot enablement, backend
+overlay/migration, selector and immutable Android delivery remain pending. Public
+Android111/catalog6 readback matches; Windows0.2.16 and Linux0.2.11 unchanged.
 [Live receipt and rollback boundary](releases/2026-11-03-second-nl-mesh.md#permanent-fleet-activation-and-live-data-plane).
 <!-- /MESH2 canonical installation 20261103 -->
 

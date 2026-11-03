@@ -3,15 +3,18 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November20:27UTC MESH2: common fleet writer COMMITTED; live data-plane positive PASS.**
-Permanent distinct AMS2 runtime is active, with retained separate publisher credential,
-genuine directory and coordinated RU/AMS1/AMS2 renewal. Provider bootstrap/Family TLS,
-4 HTTPS/3 DNS probes and expected AMS2 egress PASS; wrong-node refresh rejects. Immediate
-repeat exposed retained-lease/challenge timeout; cleanup/reconnect acceptance remains open.
-One explicit secondary-only cleanup restart was performed; do not call the failure fixed.
-Secondary boot enablement, backend readiness overlay, selector and Android delivery remain.
-Backend artifact is built only; public111/catalog6 unchanged. Continue this selected task,
-not a queued successor. [Evidence](releases/2026-11-03-second-nl-mesh.md#permanent-fleet-activation-and-live-data-plane).
+**3 November21:28UTC MESH2: active common fleet; repeat-session gate still OPEN.**
+Natural lease expiry/resource cleanup observed without another restart; both writer
+timers active/waiting. Deterministic queued-writer regression proves final RESET could
+be dropped; bounded local-write completion is corrected/tested in source only.
+Candidate live probes still fail (post-descriptor cleanup delay, bootstrap rejection,
+seed connect); unchanged-stream baseline also reaches dedicated Family TLS deadline.
+Next: isolate cleanup and handshake causes, qualify repeated actual-provider sessions
+without restart, then backend readiness/migration, boot enablement and client delivery.
+No ownership preemption, timeout/lease bypass or release gate waiver. Earlier positive
+4 HTTPS/3 DNS/AMS2 egress is not repeated-session acceptance. Public111/catalog6,
+selector and gateway binaries unchanged. Continue this task only.
+[Evidence](releases/2026-11-03-second-nl-mesh.md#bounded-reset-write-source-checkpoint).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **Export24 read-only server correlation remains partial.** Registration/invitation

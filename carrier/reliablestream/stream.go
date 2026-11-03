@@ -217,7 +217,10 @@ func (stream *Stream) run(ctx context.Context) {
 		<-writerDone
 		if packet.target != (epoch{}) && terminal != ErrReset {
 			resetContext, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
-			_ = stream.endpoint.SendContext(resetContext, encode(packet))
+			resetContext, completion := localwrite.Observe(resetContext, nil)
+			if stream.endpoint.SendContext(resetContext, encode(packet)) == nil {
+				_ = completion.Wait()
+			}
 			cancel()
 		}
 		stream.endpoint.Close()

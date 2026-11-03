@@ -646,3 +646,61 @@ signing, immutable publication and public download/catalog readback. Operational
 must keep the common writer or use its explicit fleet recovery; do not reinstate the old
 two-node writer against the committed three-node state. All private receipts are under
 `state-client-build/mesh2-cutover-20261103/` or root-only server staging, outside Git/CI.
+
+## Bounded RESET write source checkpoint
+
+3 November21:28UTC. After the successful20:24 egress probe, AMS2 emitted
+`EXPIRED/lifetime_expired` and `dedicated_resources_closed` around20:34 without
+another restart. This proves eventual cleanup, not immediate reconnect. RU renewal
+and directory timers were read back active/waiting, last oneshots successful.
+Intermittent SSH banner/post-authentication timeouts remain recorded; larger inspection
+commands were not assumed to have completed. No mutation was blindly replayed.
+
+`reliablestream.Close` sent its final RESET through an asynchronous carrier queue and
+immediately closed the carrier. A deterministic queued endpoint fails before the fix
+in both legacy-data and completed-data modes: the RESET has no completion registration.
+The correction observes the actual local write before closing the endpoint, using the
+existing100ms deadline. A stalled writer remains bounded and cannot start an expired
+RESET. This is local-write confirmation, not a remote acknowledgement or guaranteed
+delivery through packet loss. No wire, retry, lease, admission or ownership change.
+
+Validation:20 race repetitions of the new close cases PASS; complete race packages
+`reliablestream`, `localwrite`, `familysession`, `roombroker` PASS. The first combined
+command also named nonexistent `./bootstrapbroker` and exited1; corrected
+`./cmd/bootstrap-broker` PASS. Selected close/queue/cancellation/cleanup cases in
+`bootstrap` and `telemost` PASS. An earlier private Family-close experiment first failed
+on a local TLS close-notify error; after asserting actual peer closure, both unchanged
+and reordered variants passed3 race repetitions. That experiment does not justify
+changing Family TLS close order and no such change is included.
+
+Actual-provider qualification remains FAIL/INCOMPLETE, all attempts retained privately:
+
+-20:59:56 candidate start: Family authentication and descriptor received, then no
+  `bootstrap_closed_before_dedicated`; returned `descriptor_expired` after136.545s.
+  Gateway failed its unclaimed dedicated Family session. Cleanup-delay cause still open.
+-21:06 candidate: bootstrap protocol rejection before descriptor; no data-plane probe.
+-21:12:51 unchanged-stream baseline with the same private watchdog: bootstrap closed,
+  dedicated carrier connected, then Family authentication failed after63.059s overall.
+  Server trace starts Family TLS21:13:18.492 and closes21:13:48.495, its30s deadline;
+  carrier-established trace is later21:13:32.798. This is evidence of a consumed
+  pre-peer handshake budget, not proof of a complete fix or certificate diagnosis.
+-21:19:22 candidate: seed connect failed after7.329s; no descriptor/Family/data plane.
+
+Watchdog arms only after descriptor delivery; neither later attempt reproduced that
+delay, so no goroutine dump was produced. The queued-RESET correction is not installed
+and does not close these live gates. Synthetic leaf issuance refreshed only the same
+private probe identity; product registration/grants/assignments were verified unchanged.
+The30min follow-up leaf expires21:28:02UTC and must not be reused after expiry.
+
+Backend readiness overlay remains built-only (`e2ed4ca6…bfd9`), no DB migration or HTTP
+activation. Its focused suite first had one timestamp-sensitive existing UI-recorder
+failure, then101 PASS/3 optional skips unchanged; that failure is not hidden. Newer
+source/overlay does not mean deployed. Public Android111/catalog6 HTTPS bytes match
+the repository catalog (`ca3e6c63…1df`); no new version, tag, signing or public install.
+AMS2 remains active/boot-disabled on `9d41f1dc…6bc1`; AMS1 and ordinary AWG/TCP remain
+unchanged. Source rollback is a normal revert, not replacement of immutable artifacts.
+Operational rollback retains the committed common fleet writer and both canonical
+identities; use explicit fleet recovery, never restore the old pair writer or product DB.
+Remaining gates: repeat actual-provider connect/cleanup without restart, backend
+readiness/migration, secondary boot enablement, exact new-version Android CI/API27/API35,
+offline signing and immutable catalog/download verification. No queued successor starts.
