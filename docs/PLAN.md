@@ -18,6 +18,14 @@ Finish exact committed-source readback, canonical secondary provisioning and one
 writer, then real data-plane/rejection/cleanup acceptance and Android delivery. No activation,
 catalog change or unrelated queue successor is implied. [Evidence](releases/2026-11-03-second-nl-mesh.md#production-gateway-projection-and-ams2-prerequisites).
 
+19:02UTC: exacteb0b5e6 build/readback and dormant AMS2 artifact/CLI staging complete.
+Public111↔candidate Family/VP8 compatibility and all six paced asymmetric cases PASS.
+Explicit3.12 snapshot-launcher compatibility is qualified without changing default3.14
+pins:123 selected Python checks and265 isolated-root Python3.12 cases PASS, plus5
+package checks (2 repeated); actual AMS2 runtime/pin probe PASS. Next remains permanent
+canonical profile/forced routes, common writer and real provider acceptance, then Android;
+prepared artifacts/identity are not an active second MESH service.
+
 **3 November supplied Krasnodar diagnostics reviewed.** Two beta111 MESH closures match
 retry exhaustion despite fresh ACKs. Keep exact-source rollout and handset acceptance
 gates; no fix/deployment performed by this analysis and no queue reordering.

@@ -57,6 +57,53 @@ the new runtime dormant; do not remove or overwrite its retained custody. No pro
 cutover has occurred, so no service rollback is required. Later cutover must retain the
 exact old executable/configuration and respect shared CRL/profile replay floors.
 
+### Exact source and runtime compatibility —3 November19:02UTC
+
+Projection source `eb0b5e68e49deed699983cf8ca3a6188a7bf82ca` pushed and remote main
+verified. Two builds from its freshly materialized290-file source/vector inventory match
+the prototype SHA256 `9d41f1dc1a716c0ecb6d85d0613b6cc35a173b7399fbb2b8d75d871c577a6bc1`.
+Both new performance/adaptive-window regressions also PASS on that exact materialization.
+The binary and exactfcb3116 renewal capsule are staged separately at
+`/var/lib/fc-profile-control/mesh2-eb0b5e68e49d/` on AMS2. Source/package hashes, native
+`--help` and Python renewal CLI checks PASS; no configuration, unit, key route or service
+was installed/started. AWG/TCP PID/restart snapshots stayed identical.
+
+Additional exact-candidate race qualification uses public111's unchanged128 production
+carrier files at40e6c6c, its original VP8 subprocess helper and only the added reviewed
+Family process harness. Candidate→candidate, candidate→111,111→candidate and111→111
+all PASS mutually verified Family TLS with256KiB byte-exact UDP echo. Independently,
+all four real Pion VP8/RTP/DTLS pairings PASS207 byte-exact exchanges per pair. Six
+wall-clock paced cases PASS at256/64,512/128 and1000/250kbit with windows8/32; roughly
+59/36/25s per case. Family selection12 tests/subtests and VP8 selection5 PASS,0 skips.
+These are local process/network tests, not live provider/handset acceptance or a promise
+of configured line-rate throughput. An overstrict initial harness comparison expected
+the new VP8 test runner in111; readback verified the original111 helper instead. Runtime
+production sources remained unchanged; no baseline APK was installed or modified.
+
+The old snapshot launcher hard-coded Python3.14. Added explicit `python_minor: "3.12"`
+for the Ubuntu24.04 secondary, while omission retains3.14 and its existing pin shape.
+Unreviewed minors, diagnostic-version fallback, mismatched executable/venv/import minor,
+changed dependency versions, unsafe permissions and reused primary-runtime pins reject.
+The snapshot capsule alone now declares minimum3.12; maintenance's3.13 floor is unchanged.
+No installed primary launcher/configuration or service was changed.
+
+Validation:123 selected Python cases PASS (98 launcher,5 package,20 prior projection);
+265 profile/canonical-source/snapshot/multi-gateway/expired-recovery cases PASS on real
+Python3.12.3 in a network-disabled, read-only-source root container. Only synthetic state
+and two hash-verified source-only archives entered that container. Its first collection
+lacked the desktop parser source; that dependency was added, not skipped.5 updated
+package cases additionally PASS there, including2 repeated snapshot cases. On actual
+AMS2 the non-root `nobody` account passes isolated runtime/import/DAC inspection twice
+with identical pins; default3.14 rejects the3.12 environment. This verifies runtime
+access, not the still-unprovisioned final gateway account/profile/forced command.
+
+Public versions, primary runtime and controller remain unchanged. Next: provision the
+canonical secondary profile/account/forced snapshot and renewal routes, establish the
+single coordinated writer and fleet checkpoint, then live provider data-plane/rejection/
+cleanup acceptance before selector or Android publication. Dormant artifacts and private
+identity are retained for this work; rollback remains leaving them inactive, not deleting
+custody or reverting shared replay floors. No release tag or signing catalog changed.
+
 ## Current result
 
 **RESUMED: permanent MESH2 first, then Android update; SOURCE CHECKPOINT, NOT DEPLOYED.**

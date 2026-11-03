@@ -37,6 +37,7 @@ def test_snapshot_deterministic_committed_source_and_safe_import(source, tmp_pat
         manifest = json.loads(archive.read('source-manifest.json'))
         assert manifest['source_commit'] == subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=source).decode().strip()
         assert manifest['entrypoint'] == 'control.friends.profile_snapshot'
+        assert manifest['python_minimum'] == '3.12'
         assert manifest['binding'] == 'unbound' and manifest['operation_permit'] is None
         assert manifest['production_configuration'] == 'absent'
         assert {'LICENSE', 'THIRD_PARTY_NOTICES.md', 'control/friends/profile_store.py'} <= set(manifest['files'])

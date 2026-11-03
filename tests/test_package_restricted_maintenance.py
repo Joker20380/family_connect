@@ -50,6 +50,7 @@ def test_deterministic_committed_package_and_complete_hashes(source, tmp_path, b
         assert manifest['binding'] == ('single_operation' if bound else 'unbound')
         assert manifest['operation_permit'] == permit
         assert manifest['production_configuration'] == 'absent'
+        assert manifest['python_minimum'] == '3.13'
         assert json.loads(archive.read('operation-permit.json')) == permit
         assert receipt['manifest_sha256'] == hashlib.sha256(manifest_raw).hexdigest()
         assert set(archive.namelist()) == set(manifest['files']) | {'source-manifest.json'}

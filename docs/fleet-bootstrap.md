@@ -17,6 +17,15 @@ sources (including `FC_EXPECT_SEED_OBSERVABILITY=1`), and verify identical candi
 builds before selecting a runtime. See the [current evidence and baseline test
 limitations](releases/2026-11-03-second-nl-mesh.md#production-gateway-projection-and-ams2-prerequisites).
 
+For the Ubuntu24.04 secondary runtime only, snapshot-launcher configuration may explicitly
+set `python_minor: "3.12"`. Omission still requires3.14; `python_version` stays diagnostic
+and cannot choose a runtime. Executable/link/ancestor pins, dependency inventories, exact
+versions and isolated import paths remain mandatory. The read-only snapshot capsule now
+declares minimum3.12 after isolated-root qualification; other maintenance capsules retain
+their3.13 minimum. Probe the actual service reader and record its exact runtime pins before
+installing a forced command. This option neither migrates existing runtimes nor authorizes
+reuse of a3.14 pin on3.12 or installation/start of the gateway.
+
 The source-only directory evaluator accepts optional `--gateway-routes <private-file>`
 in addition to the existing `--config`, `--ssh-key` and `--known-hosts`. The canonical
 JSON file has `schema:1` and `gateways` with exactly `nl-amsterdam-1` and

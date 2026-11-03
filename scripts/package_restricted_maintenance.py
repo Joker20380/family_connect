@@ -45,7 +45,8 @@ def build_capsule(output, ref, *, sources, entrypoint, permit=None, repository=R
                 content[str(parent) + '/'] = b''
     manifest = dict(schema=1, source_commit=source, entrypoint=entrypoint,
         binding='unbound' if permit is None else 'single_operation',
-        operation_permit=permit, production_configuration='absent', python_minimum='3.13',
+        operation_permit=permit, production_configuration='absent',
+        python_minimum='3.12' if entrypoint == 'control.friends.profile_snapshot' else '3.13',
         dependencies=['control/requirements.lock', 'device_identity/requirements.lock'],
         fixed_config_convention='root_owned_external_only', source_projections=projections,
         files={name: hashlib.sha256(raw).hexdigest() for name, raw in sorted(content.items())})

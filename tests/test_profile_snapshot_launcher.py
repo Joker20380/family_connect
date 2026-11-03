@@ -157,6 +157,90 @@ def test_diagnostic_version_never_changes_argv(fixture):
         build(fixture)
 
 
+@pytest.fixture
+def python312(fixture):
+    executable = fixture.executable.with_name('python3.12')
+    fixture.executable.rename(executable)
+    fixture.executable = executable
+    fixture.config.update(python_executable=str(executable), python_minor='3.12')
+    (fixture.root / 'lib/python3.14').rename(fixture.root / 'lib/python3.12')
+    configuration = fixture.root / 'pyvenv.cfg'
+    configuration.write_text(configuration.read_text().replace('3.14.4', '3.12.3'))
+    original = fixture.run
+
+    def run(argv, **kwargs):
+        result = original(argv, **kwargs)
+        value = json.loads(result.stdout.decode().replace('python3.14', 'python3.12'))
+        value['version'] = [3, 12, 3]
+        result.stdout = json.dumps(value).encode()
+        return result
+
+    fixture.run = run
+    return fixture
+
+
+def test_python312_requires_explicit_minor(python312):
+    raw, pins = build(python312)
+    assert pins['executable']['pin']['runtime']['version'] == [3, 12, 3]
+    assert pins['argv'] == [str(python312.executable), '-I', '-B', str(python312.package)]
+    assert raw.startswith(f'#!{python312.executable} -I\n'.encode())
+    assert build(python312, expected_executable_pin=pins['executable']['pin']) == (raw, pins)
+    del python312.config['python_minor']
+    python312.config['python_version'] = '3.12.3'
+    with pytest.raises(launcher.LauncherError):
+        build(python312)
+
+
+@pytest.mark.parametrize('value', [None, 312, 3.12, True, [], {}, '3.11', '3.13', '3.15',
+                                 '3.12.3', 'Python 3.12', '3.12;id', '3.12\n'])
+def test_minor_contract_rejects_unreviewed_runtime(fixture, value):
+    fixture.config['python_minor'] = value
+    with pytest.raises(launcher.LauncherError, match=launcher.VERSION):
+        build(fixture)
+    assert not fixture.calls
+
+
+@pytest.mark.parametrize('target', ['venv', 'probe', 'imports', 'dependency', 'writable'])
+def test_python312_retains_runtime_boundaries(python312, target):
+    if target == 'venv':
+        configuration = python312.root / 'pyvenv.cfg'
+        configuration.write_text(configuration.read_text().replace('3.12.3', '3.14.4'))
+    elif target == 'writable':
+        (python312.root / 'lib/python3.12/site-packages/RNS/__init__.py').chmod(0o666)
+    else:
+        original = python312.run
+
+        def run(argv, **kwargs):
+            result = original(argv, **kwargs)
+            value = json.loads(result.stdout)
+            if target == 'probe':
+                value['version'] = [3, 14, 4]
+            elif argv[-1] == launcher.RUNTIME_PROBE:
+                if target == 'imports':
+                    value['path'].append(str(python312.root / 'lib/python3.14/site-packages'))
+                else:
+                    value['dependencies']['rns']['version'] = '1.5.0'
+            result.stdout = json.dumps(value).encode()
+            return result
+
+        python312.run = run
+    with pytest.raises(launcher.LauncherError):
+        build(python312)
+
+
+def test_explicit_default_minor_preserves_existing_pins(fixture):
+    original = build(fixture)
+    fixture.config['python_minor'] = '3.14'
+    assert build(fixture) == original
+
+
+def test_python312_does_not_accept_primary_runtime_pins(python312):
+    _, pins = build(python312)
+    pins['executable']['pin']['runtime']['version'] = [3, 14, 4]
+    with pytest.raises(launcher.LauncherError):
+        build(python312, expected_executable_pin=pins['executable']['pin'])
+
+
 def test_extra_arguments_cannot_be_supplied(fixture):
     fixture.config['arguments'] = ['-c', 'arbitrary']
     with pytest.raises(launcher.LauncherError, match=launcher.INVALID):

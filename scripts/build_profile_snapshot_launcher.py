@@ -23,6 +23,7 @@ UNSAFE = 'BLOCKED_SNAPSHOT_RUNTIME_UNSAFE'
 DEPENDENCIES = {'rns': ('RNS', '1.5.1'), 'cryptography': ('cryptography', '46.0.7'),
                 'pyserial': ('serial', '3.5')}
 ORIGINAL_COMMAND = 'restricted-sync'
+PYTHON_NAME = r'python(?:3(?:\.(?:12|14))?)?'
 OPTIONS = ('restrict', 'no-agent-forwarding', 'no-port-forwarding', 'no-pty',
            'no-user-rc', 'no-X11-forwarding')
 PROBE = ('import json,os,pathlib,platform,sys;'
@@ -140,7 +141,7 @@ def secure_ancestors(path, account):
 
 def entrypoint_pin(value, account):
     entrypoint = absolute(value)
-    require(re.fullmatch(r'python(?:3(?:\.14)?)?', entrypoint.name))
+    require(re.fullmatch(PYTHON_NAME, entrypoint.name))
     current = entrypoint
     links = []
     ancestors = {}
@@ -165,8 +166,14 @@ def entrypoint_pin(value, account):
     raise LauncherError(UNSAFE)
 
 
-def inspect_executable(value, account, *, expected_pin=None, run=subprocess.run):
+def selected_minor(value):
+    require(type(value) is str and value in ('3.12', '3.14'), VERSION)
+    return value
+
+
+def inspect_executable(value, account, *, expected_pin=None, run=subprocess.run, python_minor='3.14'):
     try:
+        python_minor = selected_minor(python_minor)
         path = absolute(value)
         pin = entrypoint_pin(value, account)
         require(expected_pin is None or pin == expected_pin)
@@ -178,7 +185,8 @@ def inspect_executable(value, account, *, expected_pin=None, run=subprocess.run)
                 {'executable', 'version', 'implementation', 'executable_access'}, VERSION)
         require(type(runtime['version']) is list and len(runtime['version']) == 3 and
                 all(type(number) is int for number in runtime['version']) and
-                runtime['version'][:2] == [3, 14] and runtime['implementation'] == 'CPython', VERSION)
+                runtime['version'][:2] == [int(part) for part in python_minor.split('.')]
+                and runtime['implementation'] == 'CPython', VERSION)
         require(runtime['executable'] == pin['target'] and runtime['executable_access'] is True, VERSION)
         require(entrypoint_pin(value, account) == pin, UNSAFE)
         return dict(pin=pin, runtime=runtime)
@@ -188,7 +196,8 @@ def inspect_executable(value, account, *, expected_pin=None, run=subprocess.run)
         raise LauncherError(INVALID) from None
 
 
-def venv_inventory(entrypoint, account):
+def venv_inventory(entrypoint, account, *, python_minor='3.14'):
+    python_minor = selected_minor(python_minor)
     root = absolute(entrypoint).parent.parent
     require(Path(entrypoint).parent.name == 'bin', UNSAFE)
     secure_ancestors(root / 'pyvenv.cfg', account)
@@ -197,9 +206,9 @@ def venv_inventory(entrypoint, account):
     parser = configparser.ConfigParser(interpolation=None)
     parser.read_string('[venv]\n' + (root / 'pyvenv.cfg').read_text())
     require(parser.get('venv', 'include-system-site-packages').lower() == 'false' and
-            parser.get('venv', 'version').startswith('3.14.') and
+            parser.get('venv', 'version').startswith(python_minor + '.') and
             Path(parser.get('venv', 'home')).is_absolute(), UNSAFE)
-    site_packages = root / 'lib' / 'python3.14' / 'site-packages'
+    site_packages = root / 'lib' / ('python' + python_minor) / 'site-packages'
     secure_ancestors(site_packages / 'inventory', account)
     files = {}
     directories = {}
@@ -221,24 +230,27 @@ def venv_inventory(entrypoint, account):
                 inventory_sha256=inventory_hash, file_count=len(files)), files
 
 
-def validate_runtime(runtime, inventory, files, entrypoint):
+def validate_runtime(runtime, inventory, files, entrypoint, *, python_minor='3.14'):
+    python_minor = selected_minor(python_minor)
     require(type(runtime) is dict and set(runtime) == {'executable', 'prefix', 'base_prefix', 'version',
             'implementation', 'user_site', 'user_path', 'path', 'isolated', 'no_bytecode',
             'pythonpath', 'dependencies'}, UNSAFE)
     require(type(runtime['version']) is list and len(runtime['version']) == 3 and
             all(type(number) is int for number in runtime['version']) and
-            runtime['version'][:2] == [3, 14] and runtime['implementation'] == 'CPython', VERSION)
+            runtime['version'][:2] == [int(part) for part in python_minor.split('.')]
+            and runtime['implementation'] == 'CPython', VERSION)
     root = Path(inventory['root'])
     require(runtime['executable'] == entrypoint and Path(runtime['prefix']).resolve() == root and
             Path(runtime['base_prefix']).resolve() != root, UNSAFE)
     require(runtime['user_site'] is False and runtime['isolated'] == 1 and
             runtime['no_bytecode'] is True and runtime['pythonpath'] is None, UNSAFE)
     base = absolute(runtime['base_prefix'], UNSAFE).resolve(strict=True)
-    allowed = {str(base / 'lib' / 'python314.zip'), str(base / 'lib' / 'python3.14'),
-               str(base / 'lib' / 'python3.14' / 'lib-dynload'),
-               str(root / 'lib' / 'python3.14' / 'site-packages')}
+    library = 'python' + python_minor
+    allowed = {str(base / 'lib' / ('python' + python_minor.replace('.', '') + '.zip')),
+               str(base / 'lib' / library), str(base / 'lib' / library / 'lib-dynload'),
+               str(root / 'lib' / library / 'site-packages')}
     require(type(runtime['path']) is list and set(runtime['path']) <= allowed and
-            str(root / 'lib' / 'python3.14' / 'site-packages') in runtime['path'] and
+            str(root / 'lib' / library / 'site-packages') in runtime['path'] and
             runtime['user_path'] not in runtime['path'], UNSAFE)
     require(type(runtime['dependencies']) is dict and set(runtime['dependencies']) == set(DEPENDENCIES), UNSAFE)
     for name, dependency in runtime['dependencies'].items():
@@ -251,19 +263,20 @@ def validate_runtime(runtime, inventory, files, entrypoint):
                 Path(dependency['record']).parent.name.endswith('.dist-info'), UNSAFE)
 
 
-def inspect_runtime(value, account, *, expected_pin=None, run=subprocess.run):
+def inspect_runtime(value, account, *, expected_pin=None, run=subprocess.run, python_minor='3.14'):
     try:
+        python_minor = selected_minor(python_minor)
         entrypoint_pin(value, account)
-        inventory, files = venv_inventory(value, account)
+        inventory, files = venv_inventory(value, account, python_minor=python_minor)
         require(expected_pin is None or inventory == expected_pin['venv'], UNSAFE)
         executable = inspect_executable(value, account,
-            expected_pin=expected_pin['executable'] if expected_pin else None, run=run)
+            expected_pin=expected_pin['executable'] if expected_pin else None, run=run, python_minor=python_minor)
         result = run([value, '-I', '-B', '-c', RUNTIME_PROBE], capture_output=True, timeout=30,
                      cwd='/', env={'PATH': '/usr/bin:/bin', 'LANG': 'C'}, preexec_fn=account.enter)
         require(result.returncode == 0 and not result.stderr and len(result.stdout) <= 16384, UNSAFE)
         runtime = strict_json(result.stdout)
-        validate_runtime(runtime, inventory, files, value)
-        require(venv_inventory(value, account)[0] == inventory and
+        validate_runtime(runtime, inventory, files, value, python_minor=python_minor)
+        require(venv_inventory(value, account, python_minor=python_minor)[0] == inventory and
                 entrypoint_pin(value, account) == executable['pin'], UNSAFE)
         pin = dict(executable=executable['pin'], venv=inventory, runtime=runtime)
         require(expected_pin is None or pin == expected_pin, UNSAFE)
@@ -276,7 +289,7 @@ def inspect_runtime(value, account, *, expected_pin=None, run=subprocess.run):
 
 def expected_argv(python_executable, snapshot_package):
     executable = absolute(python_executable)
-    require(re.fullmatch(r'python(?:3(?:\.14)?)?', executable.name))
+    require(re.fullmatch(PYTHON_NAME, executable.name))
     return [str(executable), '-I', '-B', str(absolute(snapshot_package, ARGV))]
 
 
@@ -335,10 +348,12 @@ def validate_launcher(raw, argv, *, read_only):
 
 def build(configuration, account, *, read_only=False, expected_executable_pin=None, run=subprocess.run):
     require(type(configuration) is dict and {'python_executable', 'snapshot_package', 'snapshot_sha256'} <= set(configuration)
-            and set(configuration) <= {'python_executable', 'python_version', 'snapshot_package', 'snapshot_sha256'})
+            and set(configuration) <= {'python_executable', 'python_version', 'python_minor',
+                                      'snapshot_package', 'snapshot_sha256'})
     require('python_version' not in configuration or type(configuration['python_version']) is str)
     executable = inspect_runtime(configuration['python_executable'], account,
-                                 expected_pin=expected_executable_pin, run=run)
+                                 expected_pin=expected_executable_pin, run=run,
+                                 python_minor=selected_minor(configuration.get('python_minor', '3.14')))
     try:
         package = absolute(configuration['snapshot_package'], ARGV)
         require(package.suffix == '.pyz', ARGV)

@@ -21,6 +21,17 @@ controller, selector, Android version or catalog switched. Next: exact committed
 readback, permanent canonical AMS2 provisioning and coordinated writer/live acceptance;
 then the immutable Android update. [Evidence](releases/2026-11-03-second-nl-mesh.md#production-gateway-projection-and-ams2-prerequisites).
 
+**19:02UTC follow-up:** exacteb0b5e6 source pushed/remote-verified and reproduced twice;
+gateway/renewal artifacts staged on AMS2 with successful native/Python CLI checks, not active.
+All four Family TLS pairings with public111 and all four real Pion VP8 pairings PASS;
+six paced/asymmetric256/64,512/128,1000/250kbit cases PASS under race detection.
+The pinned snapshot launcher now supports explicit Python3.12 for AMS2; default3.14 and
+its existing pins remain unchanged.123 selected Python checks PASS;265 isolated-root
+Python3.12 profile/snapshot/fleet-recovery cases PASS, plus5 package checks (2 repeated).
+Actual AMS2 non-root runtime/pin probes PASS; implicit downgrade rejected. Canonical
+profile/forced-route installation, writer cutover and live provider acceptance remain;
+no MESH2 service, selector or Android release activated.
+
 **3 November Krasnodar supplied trace — two beta111 retry-exhaustion closures confirmed.**
 Current Wi-Fi history shows successful MESH sessions followed by RELIABLE_RETRY_EXHAUSTED
 at17:16:44/17:19:34UTC, eight retries around9.4s with fresh ACKs; TLS failures follow.
