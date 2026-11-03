@@ -6,7 +6,8 @@ import java.io.*;
 
 final class ReadinessReceiptStore implements RestrictedCache.Storage {
     private final AtomicFile file;
-    ReadinessReceiptStore(Context context){file=new AtomicFile(new File(context.getNoBackupFilesDir(),"restricted-readiness-result-v1.json"));}
+    ReadinessReceiptStore(Context context){this(context,null);}
+    ReadinessReceiptStore(Context context,String gateway){file=new AtomicFile(new File(context.getNoBackupFilesDir(),"restricted-readiness-result-v1"+RestrictedGateway.namespace(gateway)+".json"));}
     public byte[] read()throws Exception{
         synchronized(RestrictedVault.LOCK){
             try(InputStream input=file.openRead();ByteArrayOutputStream output=new ByteArrayOutputStream()){

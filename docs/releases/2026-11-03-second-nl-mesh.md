@@ -2,7 +2,7 @@
 
 ## Current result
 
-**IN PROGRESS; first backend source slice qualified, NOT DEPLOYED.** Owner explicitly
+**IN PROGRESS; backend and Android routing/storage source slices checked, NOT DEPLOYED.** Owner explicitly
 asks to finish MESH2 using the separately supplied credential. This supersedes the
 question-only interpretation in the earlier [picker report](2026-11-03-android-node-picker.md).
 No claim that source publication enables MESH on an installed client.
@@ -67,6 +67,54 @@ Initial failures exposed an expired-readback regression and an incorrect test ex
 for the cryptography exception; both corrected. An interim header-based prototype was
 discarded before publication because the readiness relay does not forward that header.
 
+## Android source checkpoint
+
+Backend commit `e7d2739f2f1c15632532e0c6e47c4184beb8dd51` is pushed and remote-verified.
+The Android follow-up adds `RestrictedGateway` target validation and response unwrapping
+outside the existing HTTPS/relay selection policy. Primary/legacy requests are unchanged;
+secondary requests cannot silently accept a primary, unwrapped or malformed response.
+No redirect, proof retry, enrollment route or authorization bypass is added.
+
+Secondary readiness uses its own encrypted file, AndroidKeyStore key and AEAD associated
+data; primary filenames/aliases remain exactly the same. Receipt files, refresh futures,
+restart reconciliation, observations and denial flags are also separate. Existing
+`RestrictedCache` checks are retained independently; no reset or relaxed antirollback
+comparison permits switching nodes. `AutomaticConnection` propagates an explicit node
+to `RestrictedTunnelEngine`, readiness fetch/ACK, cache and native delivery setup.
+Default Auto/chat paths still use primary readiness. UI admission is deliberately NOT
+enabled: the country-only MESH picker and ordinary-only explicit-node UI guard remain
+until permanent runtime/renewal and real connection acceptance are complete.
+
+Validation:
+
+- JVM **410 debug +405 Friends PASS**, including target wrapping, wrong-node/legacy
+  response rejection, relay preservation, no retry, endpoint bounds and separate cache
+  replay/denial floors. Friends lint **0 errors/56 warnings**; APK/test APK build PASS.
+- **88 Python contract/closed-artifact checks PASS**, including the exact pinned offline
+  sync/HTTP/native ACK fixture previously skipped. Current fixtures bind backend commit
+  e7d2739 and the packager's required Go1.26.0. The initial invocation lacked fixture
+  environment variables. The generic fixture preparer also cannot rebuild the old HTTP
+  fixture with today's additional gateway-location template; the already retained exact
+  historical artifact was SHA-verified and supplied instead. No history pin or test was
+  weakened, and the unrelated historical packager behavior was not changed.
+- Disposable read-only-overlay emulators **API27 and API35 prepare/recover PASS** in
+  separate instrumentation processes with force-stop between them. Real AndroidKeyStore
+  stores both synthetic values independently; primary aliases remain compatible;
+  substituting ciphertext, losing the secondary file or key fails closed and cannot
+  regenerate/reset it. Primary ciphertext stays byte-identical. Owned synthetic files
+  and aliases are removed after recovery; raw instrumentation status0 confirmed, not
+  an assumption skip. No user keys or profiles were imported into these tests.
+- UI regression API27 **4/4 PASS**; API35 first **3/4**, failing the existing messenger-tab
+  open timeout, then **4/4 PASS** after app force-stop without source changes. Activity
+  launch was accepted and no Java crash was captured; root cause is not established.
+  First failure is retained, not erased by the repeat or claimed repaired.
+
+Only locally CI-signed x86_64 development APKs using the unchanged111 version metadata
+were installed on disposable overlays. Their signer differs from the base emulator
+installation, so reinstall used only those disposable overlays; immutable public111
+and real installations are untouched. These artifacts must never be distributed as111.
+This is neither an API27/API35 full transport matrix nor new-platform release acceptance.
+
 ## Mandatory remaining gates
 
 1. Permanent secondary profile and distinct identity, canonical custody and pinned runtime;
@@ -74,8 +122,8 @@ discarded before publication because the readiness relay does not forward that h
 2. Coordinated renewal, directory sync, shared CRL/revocation propagation and fencing;
    no secondary gateway left accepting stale material after a primary maintenance event.
    Test interruption/restart/reconciliation and independent failure isolation.
-3. Client route propagation, per-node encrypted readiness/receipt namespaces and independent
-   rollback floors, including restart, switching, cancellation and legacy cache preservation.
+3. Live acceptance of the implemented client routing/storage slice, including active-session
+   switching, cancellation, restoration and legacy cache preservation; qualify UI activation.
    Never silently substitute primary readiness for a request targeting the second node.
 4. Real external MESH READY/registration/TLS/DNS/HTTPS/AMS2 egress plus rejection/cleanup,
    current-user and ordinary-path conservation, then enable the qualified selector.

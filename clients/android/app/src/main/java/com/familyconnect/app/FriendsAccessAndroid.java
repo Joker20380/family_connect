@@ -92,21 +92,27 @@ final class FriendsAccessAndroid {
         return identity.proveTransportKey(text(challenge.get("challenge")));
     }
     byte[] restrictedReadiness(ControlIdentity identity,OwnerPrewarmReceipt receipt)throws Exception{
+        return restrictedReadiness(identity,receipt,null);
+    }
+    byte[] restrictedReadiness(ControlIdentity identity,OwnerPrewarmReceipt receipt,String gateway)throws Exception{
         try(ProvisioningTestGate.Permit permit=ProvisioningTestGate.enter(context)){
             permit.requireAvailable();
             ReadinessBootstrapRoute route=new ReadinessBootstrapRoute(this::post,this::relayPost);
             try{
-                byte[] result=FriendsReadinessProtocol.fetch(route::post,identity,receipt);
+                byte[] result=FriendsReadinessProtocol.fetch(RestrictedGateway.route(route::post,gateway),identity,receipt);
                 if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.COMPLETE);
                 return result;
             }catch(Exception failure){if(fetchTrace!=null)fetchTrace.failed(failure);throw failure;}
         }finally{closeReadinessRelay();}
     }
     void readinessAck(ControlIdentity identity,JsonObject receipt)throws Exception{
+        readinessAck(identity,receipt,null);
+    }
+    void readinessAck(ControlIdentity identity,JsonObject receipt,String gateway)throws Exception{
         try(ProvisioningTestGate.Permit permit=ProvisioningTestGate.enter(context)){
             permit.requireAvailable();
             ReadinessBootstrapRoute route=new ReadinessBootstrapRoute(this::post,this::relayPost);
-            FriendsReadinessProtocol.acknowledge(route::post,identity,receipt);
+            FriendsReadinessProtocol.acknowledge(RestrictedGateway.route(route::post,gateway),identity,receipt);
         }finally{closeReadinessRelay();}
     }
     private JsonObject relayPost(String path,JsonObject body,String requestId)throws Exception{

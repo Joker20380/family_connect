@@ -10,7 +10,14 @@ environment skips: bounded node-targeted readiness, signed distinct gateway bind
 shared identity/entitlement/CRL and node-bound challenge/import acknowledgements. Legacy
 requests and primary storage remain compatible. This is SOURCE ONLY, not a working
 production second MESH. Fresh permanent runtime, coordinated renewal/revocation/fencing,
-isolated client caches/routing and exact new Android delivery remain mandatory gates.
+and exact new Android delivery remain mandatory gates. Android source now isolates
+encrypted readiness/receipt stores, in-flight refresh, denial and replay state per node;
+the selected target reaches readiness and native connection setup without changing
+the primary wire/storage contract.410 debug+405 Friends JVM and88 packaged/contract
+Python tests PASS, lint0 errors/56 warnings; API27/API35 storage prepare/recover PASS.
+UI27 passes4/4; UI35 first3/4 (chat-open timeout), then4/4 after force-stop; cause not
+established and first failure retained. Only disposable CI APKs installed. The MESH
+picker remains country-only until live acceptance; this is not production qualification.
 No production writes/restarts, token transmission, new invitations or public artifacts.
 Android111/catalog6, Windows0.2.16/catalog12 and Linux public0.2.11 are unchanged;
 owner Linux stays0.2.12~l03.2.13. Do not expose an unqualified MESH2 choice.

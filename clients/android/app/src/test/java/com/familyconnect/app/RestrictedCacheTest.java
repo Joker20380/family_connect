@@ -109,6 +109,23 @@ public class RestrictedCacheTest {
         rejected(cache,conflict.toString().getBytes(StandardCharsets.UTF_8));
         assertArrayEquals(accepted,cache(storage,1000).usable());
     }
+    @Test public void gatewayNamespacesRetainIndependentRollbackAndDenialFloors()throws Exception{
+        java.util.Map<String,Memory> stores=new java.util.HashMap<>();
+        Memory primary=stores.computeIfAbsent(RestrictedGateway.namespace(null),ignored->new Memory());
+        Memory secondary=stores.computeIfAbsent(RestrictedGateway.namespace(RestrictedGateway.SECONDARY),ignored->new Memory());
+        assertSame(primary,stores.get(RestrictedGateway.namespace(RestrictedGateway.PRIMARY)));
+        byte[] first=response(1000,2000,5,7,2,"primary");
+        byte[] second=response(1000,2000,3,4,1,"secondary");
+        cache(primary,1000).accept(first);cache(secondary,1000).accept(second);
+        rejected(cache(primary,1001),second);
+        rejected(cache(secondary,1001),response(1001,2000,3,3,1,"stale-secondary"));
+        assertArrayEquals(first,cache(primary,1001).usable());
+        assertArrayEquals(second,cache(secondary,1001).usable());
+        cache(secondary,1001).denied();
+        assertNull(cache(secondary,1002).usable());
+        rejected(cache(secondary,1002),second);
+        assertArrayEquals(first,cache(primary,1002).usable());
+    }
     static class Memory implements RestrictedCache.Storage {
         byte[] raw;boolean fail;
         public byte[] read(){return raw==null?null:raw.clone();}

@@ -13,8 +13,13 @@ Completed source slice: node-targeted readiness over existing HTTPS/relay paths,
 independent signed gateway identity with the same Family authority, shared entitlements
 and CRL, cross-node challenge/receipt rejection, legacy compatibility;265 PASS/2 optional
 environment skips including packaged HTTP and native delivery verification.
+Android source slice also implements separate encrypted caches, receipts, in-flight
+refresh/denial state and target propagation to the native engine.410+405 JVM and88
+packaged/contract Python checks PASS; API27/API35 persisted-storage restart gates PASS.
+UI27 4/4; UI35 first3/4 (chat-open timeout), repeat4/4; first failure remains evidence,
+not a diagnosed repair. No selector activation, native MESH2 runtime or new release yet.
 Next within this selected task: coordinated renewal/CRL/revocation fencing and fresh
-production runtime; per-node encrypted client caches and end-to-end target propagation;
+production runtime; client live acceptance and qualified selector activation;
 real READY/Family TLS/DNS/HTTPS/AMS2 egress and negative/cleanup tests; new immutable
 Android version with exact CI/signing/public readback, including the picker fix.
 Do not clone AMS1 private identity, change grants/assignments, disable replay floors or

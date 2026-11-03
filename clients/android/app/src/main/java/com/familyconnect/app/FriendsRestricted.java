@@ -15,46 +15,62 @@ final class FriendsRestricted {
         Selection(boolean attempted,byte[] response,boolean availabilityFailure){this.attempted=attempted;this.response=response==null?null:response.clone();this.availabilityFailure=availabilityFailure;}
         byte[] copy(boolean restoring)throws ConnectivityOrchestrator.Rejected{return RestrictedBootstrap.select(response,availabilityFailure,restoring);}
     }
-    private static CompletableFuture<Selection> running;
-    private static final AtomicBoolean reconciled=new AtomicBoolean();
-    static volatile String refresh="NOT_ATTEMPTED";
-    static volatile boolean denied;
-    private static volatile OwnerPrewarmReceipt observation;
+    private static final class Scope {
+        CompletableFuture<Selection> running;
+        final AtomicBoolean reconciled=new AtomicBoolean();
+        volatile String refresh="NOT_ATTEMPTED";
+        volatile boolean denied;
+        volatile OwnerPrewarmReceipt observation;
+    }
+    private static final Scope primary=new Scope(),secondary=new Scope();
+    private static Scope scope(String gateway){return RestrictedGateway.PRIMARY.equals(RestrictedGateway.target(gateway))?primary:secondary;}
+    static boolean denied(String gateway){return scope(gateway).denied;}
     static RestrictedCache cache(Context context,ControlIdentity identity)throws Exception{
+        return cache(context,identity,null);
+    }
+    static RestrictedCache cache(Context context,ControlIdentity identity,String gateway)throws Exception{
         byte[] publicIdentity=identity.publicIdentity(),anchor=ControlTrust.anchor(context);
-        return RestrictedCache.detailed(new RestrictedVault(context),raw->{NativeRestricted.load();int code=NativeRestricted.validationCode(raw,publicIdentity,anchor);return code==0?ReadinessImportResult.Code.READY:code==2?ReadinessImportResult.Code.BOOTSTRAP_VALIDATION_FAILED:ReadinessImportResult.Code.NATIVE_VALIDATION_FAILED;});
+        return RestrictedCache.detailed(new RestrictedVault(context,gateway),raw->{NativeRestricted.load();int code=NativeRestricted.validationCode(raw,publicIdentity,anchor);return code==0?ReadinessImportResult.Code.READY:code==2?ReadinessImportResult.Code.BOOTSTRAP_VALIDATION_FAILED:ReadinessImportResult.Code.NATIVE_VALIDATION_FAILED;});
     }
     static byte[] ready(Context context,ControlIdentity identity,long deadline,java.util.function.BooleanSupplier cancelled)throws Exception{
         return ready(context,identity,deadline,cancelled,false);
     }
     static byte[] ready(Context context,ControlIdentity identity,long deadline,java.util.function.BooleanSupplier cancelled,boolean restoring)throws Exception{
-        check(deadline,cancelled);
-        Selection selected=await(start(context,true),deadline,cancelled);
-        check(deadline,cancelled);
+        return ready(context,identity,deadline,cancelled,restoring,null);
+    }
+    static byte[] ready(Context context,ControlIdentity identity,long deadline,java.util.function.BooleanSupplier cancelled,boolean restoring,String gateway)throws Exception{
+        Scope current=scope(gateway);
+        check(deadline,cancelled,current);
+        Selection selected=await(start(context,true,gateway),deadline,cancelled,current);
+        check(deadline,cancelled,current);
         if(!selected.attempted){
-            selected=await(start(context,true),deadline,cancelled);
-            check(deadline,cancelled);
+            selected=await(start(context,true,gateway),deadline,cancelled,current);
+            check(deadline,cancelled,current);
         }
         return selected.copy(restoring);
     }
-    private static void check(long deadline,java.util.function.BooleanSupplier cancelled)throws ConnectivityOrchestrator.Rejected{
-        if(denied)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.AUTH);
+    private static void check(long deadline,java.util.function.BooleanSupplier cancelled,Scope current)throws ConnectivityOrchestrator.Rejected{
+        if(current.denied)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.AUTH);
         if(cancelled.getAsBoolean())throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.CANCELLED);
         if(android.os.SystemClock.elapsedRealtime()>=deadline)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.NETWORK);
     }
-    private static Selection await(CompletableFuture<Selection> pending,long deadline,java.util.function.BooleanSupplier cancelled)throws Exception{
+    private static Selection await(CompletableFuture<Selection> pending,long deadline,java.util.function.BooleanSupplier cancelled,Scope current)throws Exception{
         while(true){
-            check(deadline,cancelled);
+            check(deadline,cancelled,current);
             try{return pending.get(Math.min(100,Math.max(1,deadline-android.os.SystemClock.elapsedRealtime())),TimeUnit.MILLISECONDS);}
             catch(TimeoutException waiting){}
         }
     }
     static void prewarm(Context source){
-        if(source.getPackageName().equals("com.familyconnect.app.friends"))start(source,false);
+        prewarm(source,null);
     }
-    private static synchronized CompletableFuture<Selection> start(Context source,boolean required){
-        if(running!=null&&!running.isDone())return running;
-        CompletableFuture<Selection> pending=new CompletableFuture<>();running=pending;
+    static void prewarm(Context source,String gateway){
+        if(source.getPackageName().equals("com.familyconnect.app.friends"))start(source,false,gateway);
+    }
+    private static synchronized CompletableFuture<Selection> start(Context source,boolean required,String requested){
+        String gateway=RestrictedGateway.target(requested);Scope current=scope(gateway);
+        if(current.running!=null&&!current.running.isDone())return current.running;
+        CompletableFuture<Selection> pending=new CompletableFuture<>();current.running=pending;
         Context context=source.getApplicationContext();
         String startedConnection=Diagnostics.readinessConnection(context);
         new Thread(()->{
@@ -66,36 +82,36 @@ final class FriendsRestricted {
             ReadinessProduct product=null;
             try(ProvisioningTestGate.Permit permit=ProvisioningTestGate.enter(context);
                     ControlIdentity identity=new FriendsIdentityVault(context).load()){
-                RestrictedCache cache=cache(context,identity);
-                product=new ReadinessProduct(cache,new ReadinessReceiptStore(context),BuildConfig.VERSION_NAME,BuildConfig.VERSION_CODE);
-                if(!permit.blocked()&&reconciled.compareAndSet(false,true)){
+                RestrictedCache cache=cache(context,identity,gateway);
+                product=new ReadinessProduct(cache,new ReadinessReceiptStore(context,gateway),BuildConfig.VERSION_NAME,BuildConfig.VERSION_CODE);
+                if(!permit.blocked()&&current.reconciled.compareAndSet(false,true)){
                     ReadinessImportResult restored;OwnerPrewarmReceipt previous;
                     synchronized(RestrictedVault.LOCK){restored=product.restart(System.currentTimeMillis()/1000);previous=cache.context();}
                     Diagnostics.readinessResult(context,restored.code());
                     if(previous==null)product.record(restored);
-                    else product.publish(restored,payload->new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+15000).readinessAck(identity,payload));
+                    else product.publish(restored,payload->new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+15000).readinessAck(identity,payload,gateway));
                 }
                 if(!permit.blocked())synchronized(RestrictedVault.LOCK){if(!cache.attempt(System.currentTimeMillis()/1000,required))return;}
                 attempted=true;
-                refresh="IN_PROGRESS";
-                observation=receipt;ReadinessImportResult result;
+                current.refresh="IN_PROGRESS";
+                current.observation=receipt;ReadinessImportResult result;
                 RestrictedBootstrap.Selection startup=RestrictedBootstrap.refresh(cache,product,receipt,
-                    ()->{permit.requireAvailable();return new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+30000,trace).restrictedReadiness(identity,receipt);},
+                    ()->{permit.requireAvailable();return new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+30000,trace).restrictedReadiness(identity,receipt,gateway);},
                     RestrictedVault.LOCK,()->System.currentTimeMillis()/1000);
-                result=startup.result;selected=startup.response;refresh=startup.status;
+                result=startup.result;selected=startup.response;current.refresh=startup.status;
                 synchronized(RestrictedVault.LOCK){trace.cache(cache.diagnostic(System.currentTimeMillis()/1000));}
-                trace.complete(result.code(),selected!=null,refresh.equals("SUCCESS"),System.currentTimeMillis());
+                trace.complete(result.code(),selected!=null,current.refresh.equals("SUCCESS"),System.currentTimeMillis());
                 Diagnostics.readinessFetch(context,trace);
                 availabilityFailure=startup.availabilityFailure;
-                if(startup.authorizationRejected)denied=true;
-                else if(result.code()==ReadinessImportResult.Code.READY)denied=false;
+                if(startup.authorizationRejected)current.denied=true;
+                else if(result.code()==ReadinessImportResult.Code.READY)current.denied=false;
                 Diagnostics.readinessResult(context,result.code());
                 if(permit.blocked())product.record(result);
-                else product.publish(result,payload->new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+15000).readinessAck(identity,payload));
-            }catch(Exception | LinkageError failure){availabilityFailure=false;if(selected!=null){Arrays.fill(selected,(byte)0);selected=null;}refresh="UNAVAILABLE";
+                else product.publish(result,payload->new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+15000).readinessAck(identity,payload,gateway));
+            }catch(Exception | LinkageError failure){availabilityFailure=false;if(selected!=null){Arrays.fill(selected,(byte)0);selected=null;}current.refresh="UNAVAILABLE";
                 trace.failed(failure);trace.complete(ReadinessImportResult.Code.INTERNAL_ERROR,false,false,System.currentTimeMillis());Diagnostics.readinessFetch(context,trace);
                 ReadinessImportResult result=new ReadinessImportResult(receipt,ReadinessImportResult.Code.INTERNAL_ERROR,null,System.currentTimeMillis()/1000,"import",BuildConfig.VERSION_NAME,BuildConfig.VERSION_CODE);
-                if(product==null)product=new ReadinessProduct(null,new ReadinessReceiptStore(context),BuildConfig.VERSION_NAME,BuildConfig.VERSION_CODE);
+                if(product==null)product=new ReadinessProduct(null,new ReadinessReceiptStore(context,gateway),BuildConfig.VERSION_NAME,BuildConfig.VERSION_CODE);
                 product.record(result);Diagnostics.readinessResult(context,result.code());
             }
             finally{pending.complete(new Selection(attempted,selected,availabilityFailure));if(selected!=null)Arrays.fill(selected,(byte)0);}
@@ -103,8 +119,12 @@ final class FriendsRestricted {
         return pending;
     }
     static String summary(Context context){
+        return summary(context,null);
+    }
+    static String summary(Context context,String gateway){
         try(ControlIdentity identity=new FriendsIdentityVault(context).load()){
-            synchronized(RestrictedVault.LOCK){OwnerPrewarmReceipt receipt=observation;return cache(context,identity).summary()+"\nrefresh: "+refresh+(receipt==null?"":"\nowner_acceptance: "+receipt.summary());}
+            Scope current=scope(gateway);
+            synchronized(RestrictedVault.LOCK){OwnerPrewarmReceipt receipt=current.observation;return cache(context,identity,gateway).summary()+"\nrefresh: "+current.refresh+(receipt==null?"":"\nowner_acceptance: "+receipt.summary());}
         }catch(Exception failure){return "NOT READY — identity unavailable";}
     }
 }

@@ -78,7 +78,7 @@ final class AutomaticConnection implements TunnelEngine,ConnectivityOrchestrator
     public void open(String id,long deadline) throws Exception {
         orchestrator.check(deadline);ConnectionService.activeTransport=id;
         if(ConnectivityOrchestrator.RESTRICTED.equals(id)) {
-            RestrictedTunnelEngine restricted=new RestrictedTunnelEngine(context,()->interrupted!=null,up->{},owner,deadline,orchestrator.state()==ConnectivityOrchestrator.State.RESTORING);
+            RestrictedTunnelEngine restricted=new RestrictedTunnelEngine(context,()->interrupted!=null,up->{},owner,deadline,orchestrator.state()==ConnectivityOrchestrator.State.RESTORING,country!=null&&ControlFriendsCatalog.explicit(country)?country:null);
             candidate=restricted;restricted.up("");ConnectionService.vpnSource="10.79.0.2";
         } else {
             if(debug&&context.getSharedPreferences("orchestrator-diagnostic",Context.MODE_PRIVATE).getBoolean("deny_"+id,false))

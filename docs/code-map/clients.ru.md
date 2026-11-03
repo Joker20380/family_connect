@@ -19,6 +19,21 @@ last8+first_failure через существующий `DiagnosticRing`; `scrip
 
 ## Android
 
+### Per-node MESH readiness — 3 November, source only
+
+`RestrictedGateway` keeps the legacy primary wire contract and storage namespace,
+wraps secondary requests through the same HTTPS/relay routes, and checks the returned
+node before exposing the inner native-compatible delivery. `RestrictedVault` uses
+separate AndroidKeyStore aliases/AAD/files; `ReadinessReceiptStore` and `FriendsRestricted`
+scope receipts, refresh futures, restart reconciliation and denial state to the node.
+`AutomaticConnection` passes an explicit target to `RestrictedTunnelEngine`; default
+Auto/chat paths continue using primary readiness. No cache-floor weakening or identity
+reset. `RestrictedGatewayTest`, `RestrictedCacheTest` and the opt-in disposable
+`RestrictedGatewayStorageRuntimeTest` cover targeting, replay floors, process restart,
+cross-node ciphertext substitution and lost-file/key refusal on API27/API35.
+The picker remains unchanged until production MESH2/renewal acceptance; no new APK
+distribution or second-node traffic claim. [Current gates](../releases/2026-11-03-second-nl-mesh.md).
+
 ### Transport-specific gateway picker — 3 November, source only
 
 `GatewayPicker` defines separate explicit AWG/TCP nodes and country-based Auto/MESH
