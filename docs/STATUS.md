@@ -2,7 +2,9 @@
 
 **3 November — Android update incident OPEN (St Petersburg).** Owner reports
 download100% followed by “download or verification failed”; Android confirmed,
-owner now confirms old Android, exact OS/model/installed beta still unknown.
+owner identifies Huawei nova3 and tentatively Android8.1/API27; exact installed
+OS/ABI/beta still unverified. On8.1, public110 is incompatible, including browser
+installation. Manufacturer specifications confirm this model shipped with8.1.
 Compatibility assessment only: shared app minimum and native build targets are
 API26, while public Friends overrides to31; lowering the release floor alone is
 not runtime acceptance. No legacy implementation or release started.

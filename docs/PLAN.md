@@ -13,8 +13,12 @@ Owner follow-up confirms old Android and asks for a legacy-support effort estima
 not a new release. Shared minimum/native compiler targets26 versus Friends31 make
 backward compatibility a bounded investigation, not necessarily a new application;
 actual native imports, lifecycle, update and feature behavior still require testing.
-Next: obtain affected Android OS/model/installed beta, distinguish SDK/archive/signer from
-transfer/storage failure, then reproduce and repair the matching branch. Completion
+Model now reported: Huawei nova3, probably Android8.1/API27. Assess API27 explicitly;
+do not carry the earlier Android10/11 effort estimate over unchanged. Installed
+OS/ABI/beta are still unverified; direct110 installation cannot solve API27
+incompatibility. Next diagnostic gate: API27 native/API/lifecycle and in-place-update
+compatibility, with standard voice recording's API29 requirement kept explicit.
+Distinguish SDK/archive/signer from transfer/storage failure. Completion
 requires relevant regression/runtime acceptance and, for a new APK, exact platform
 CI/artifact/offline-signing/publication gates plus actual delivery evidence. Do not
 claim resolution from a local source change or weaken validation. No fleet successor

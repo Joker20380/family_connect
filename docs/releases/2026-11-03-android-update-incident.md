@@ -95,3 +95,22 @@ OS/model information. Merely reducing `minSdk` and publishing is not sufficient:
 VPN start/stop/reconnect, native loading, app startup, notifications, available voice
 features and in-place signed update/data preservation must be checked. Versions and
 rollout/rollback state remain unchanged; this is still an open incident.
+
+## Device model follow-up
+
+The reported model is Huawei nova3, with Android8.1 stated tentatively. No contact
+name or private message is retained here. [Huawei's model specifications](https://consumer.huawei.com/hk/phones/nova3/specs/)
+list EMUI8.2 based on Android8.1 and Kirin970 with Cortex-A73/A53 cores. This supports
+an API27 compatibility investigation; it does not read back the actual installed
+OS, supported process ABIs or app version from the affected handset.
+
+If Android8.1 is installed,110's minimum31 prevents installation even from a browser.
+Do not recommend uninstalling or clearing data to work around this requirement.
+The earlier1–2-day estimate was conditional on Android10/11 ARM64 and does not apply
+unchanged. For API27, allow several working days provisionally, subject to the first
+native/API/runtime checks; no delivery date is committed. Initial priority is app
+startup, VPN/native compatibility, reconnect/background lifecycle and preserved-data
+updates. Standard Opus recording separately requires API29 in the current source;
+full voice parity must be adapted/qualified or explicitly limited, not assumed.
+Prefer one compatible APK if dependency gates permit. No client code/version,
+catalog, production state or rollback state changes in this assessment.
