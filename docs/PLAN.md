@@ -2,6 +2,14 @@
 
 ## Current engineering priority / Текущий critical path
 
+**ANDROID-UPDATE-FIELD-1 field follow-up — Telegram triage selected, not a new release.**
+Owner reports111 now works but Telegram fails with VPN. Installation/operation recovery
+is reported, not an all-feature acceptance. First distinguish whole-app connectivity
+from media/calls and establish selected node/transport, Telegram proxy and direct baseline.
+No Telegram-only exclusion found; MESH's deliberate UDP/IPv6 limits are conditional,
+not a diagnosed cause on this phone. Preserve full-tunnel/fail-closed policy and identities;
+do not change routing, suppress tests or publish another APK on an unverified hypothesis.
+
 **ANDROID-UPDATE-FIELD-1 — compatibility release delivered; field confirmation pending.**
 Beta111/minSDK27/ARM64 is signed with the existing certificate and publicly distributed;
 optional Android catalog6 and both invitation routes/CSP/full HTTPS bytes PASS. Platform

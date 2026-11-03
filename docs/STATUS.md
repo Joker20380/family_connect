@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**3 November field follow-up — update/operation reported recovered; Telegram issue OPEN.**
+Owner reports «все заработало» after111, but relays that Telegram does not work with
+the VPN. This is user-reported recovery, not independently verified handset/version,
+identity/voice/MESH acceptance. Whether chats, media or calls fail, selected node/transport,
+Telegram proxy and direct-without-VPN behavior are unknown. Read-only source review:
+no Telegram-specific application exclusion; ordinary VPN captures both default routes.
+MESH explicitly denies non-DNS UDP and IPv6, which is a conditional explanation only;
+the reported transport is not established.111 did not alter normal VPN/native transport
+source versus110. Next: identify failure scope and mode before any transport/server fix.
+No new build, publication, production mutation or diagnostic user-data collection.
+
 **3 November — Android111 PUBLISHED; affected Huawei recovery still OPEN.**
 Exact source40e6c6c / Client builds41618639307 attempt2, API27/API35 runtime and
 downloaded ARM64/native/UI gates PASS. Existing product signer retained. Signed111

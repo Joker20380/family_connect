@@ -391,3 +391,28 @@ scan covers729 files/4511 links and still reports two pre-existing historical an
 errors: STATUS's October27 `evening-readback--1736utc` and the October24 source
 checkpoint's October23 `linux-user-chat-admission-and-existing-exit-handoff-24-10-phase22`.
 These unrelated historical entries are preserved, not silently repaired or reported PASS.
+
+## Field follow-up: Telegram with VPN
+
+The owner subsequently reports «все заработало» and relays that Telegram does not work
+with the VPN. Record this as **reported update/operation recovery**, not independently
+verified OS/ABI/version, complete data preservation or acceptance of all transports.
+The Telegram symptom remains OPEN: chats versus media/calls, selected node/transport,
+in-app proxy and behavior without the VPN have not yet been supplied.
+
+Read-only source review finds no Telegram package-specific exclusion or bypass in the
+Android VPN builders. Ordinary AWG/TCP/Auto paths request IPv4 and IPv6 default routes.
+The actual MESH packet policy (`carrier/wholedevice/session.go`, `Session.Allow`) accepts
+IPv4 TCP and DNS UDP53, rejects other UDP and IPv6. That can affect a Telegram UDP call
+or IPv6 connection **if MESH is the active path**, but does not prove the cause of this
+report or mean Telegram chats are categorically unsupported. Normal AWG/TCP/native
+transport source is unchanged between the accepted110 and111 sources;111's relevant
+changes are SDK/update preflight and app-local voice compatibility. This does not rule
+out an older-OS network behavior issue.
+
+Next bounded diagnosis: establish which Telegram operations fail and the active path;
+check whether Telegram already has its own proxy, reopen it after VPN establishment,
+and compare ordinary AWG/TCP on the same node without altering account data. Any such
+checks are proposed, not run on the user's device. Do not collect chats, invitations,
+profiles, proxy secrets or keys. No server probing, policy mutation, new release or
+unrelated fleet work was performed for this follow-up. Public111/catalog6 unchanged.
