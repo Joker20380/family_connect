@@ -157,7 +157,8 @@ def test_source_guards_no_exported_diagnostics_or_ui_requirement():
     assert 'RestrictedBootstrap.refresh(cache,product,receipt,' in runtime and 'product.restart(' in runtime
     assert 'synchronized(lock){result=product.imported(response,receipt,now.getAsLong());}' in bootstrap
     assert 'result.code()!=ReadinessImportResult.Code.READY' in bootstrap
-    assert 'product.publish(result,' in runtime and '.readinessAck(identity,payload)' in runtime
+    assert 'product.publish(result,' in runtime and 'product.publish(restored,' in runtime
+    assert runtime.count('.readinessAck(identity,payload,gateway)') == 2
 
 
 def test_closed_http_challenge_fetch_ack_and_isolated_readback(runtime):

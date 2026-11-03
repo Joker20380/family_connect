@@ -11,8 +11,14 @@ baseline fails12/12; candidate completes12/12 byte-exactly, including loss and8/
 Real local Pion VP8 survives two temporary packet outages and terminates persistent loss
 (accelerated ICE timers); not a Telemost/handset claim. Dependency-selected native race
 gate669 test/subtest PASS,45 explicit optional skips; Android411+406 JVM PASS,
-lint0 errors/56 warnings;66 focused Python PASS. No server/APK deployment or version
-change. Remaining: pinned native/platform builds, mixed deployed-peer/live shaped-link
+lint0 errors/56 warnings;66 focused Python PASS. Pinned ARM64 and Linux gateway builds
+from55e872c PASS, including16K Android alignment; neither is installed. CI exposed
+the prior node-scope integration's omitted standalone JVM sources and stale ACK source
+assertion; corrected without removing checks. Standalone JVM187 and wire Python119 PASS.
+Exact55e872c Android CI stopped at JVM compilation (API27/API35 NOT_REACHED); unrelated
+Linux interaction and phase0 fixture/stack failures remain recorded, not waived.
+No server/APK deployment or version change. Remaining: exact-source platform CI,
+mixed deployed-peer/live shaped-link
 acceptance, coordinated client/gateway rollout and immutable Android delivery.
 Android111/catalog6, Windows0.2.16/catalog12, Linux public0.2.11/owner0.2.12~l03.2.13
 remain unchanged. [Tests, limits and rollout](releases/2026-11-03-mesh-slow-link.md).

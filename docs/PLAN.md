@@ -12,8 +12,12 @@ RTT-aware bounded retries and gradual sender admission without a wire/config-sch
 change; narrow Android recovery classification.12/12 serialized slow-link cases fail
 on baseline and pass after correction; real Pion VP8 transient-loss recovery/persistent
 failure PASS. Native dependency-selected race669 test/subtest PASS/45 optional skips,
-Android411+406 JVM, lint0 errors/56 warnings,66 Python PASS.
-Remaining gates: exact pinned Android/native/platform build, mixed old/new peers,
+Android411+406 JVM, lint0 errors/56 warnings,66 Python PASS. Pinned55e872c ARM64/gateway
+builds and16K alignment PASS, not installed. Corrected standalone JVM source includes
+and gateway-bound ACK source guard;187 standalone JVM/119 wire Python PASS. First CI
+Android attempt stopped at that compile omission; API27/API35 were NOT_REACHED.
+Linux interaction and phase0 fixture/stack failures remain separate unresolved gates.
+Remaining gates: exact-source Android/platform CI and artifact qualification, mixed old/new peers,
 real shaped-link Family TLS/DNS/HTTPS and fail-closed/cancel/revoke checks; reviewed
 gateway rollback/promotion plus new immutable Android>111/catalog>6 and public readback.
 Do not change grants, extend certificate lifetime, hide failed probes or claim the

@@ -72,10 +72,41 @@ user identity was used.
   to exercise the entire retry budget; separate default-config tests retain the20s
   absolute dead-path/unconsumed-data limit. No security gate or failed case was skipped.
 
+## Native build and CI integration checkpoint
+
+Source correction committed/pushed as
+`55e872c161b0e95c9b7eb7290aae6ab8d0538e1c`; remote main matched that SHA.
+Build source tree: `b0b9ba430a1ef5ff271eca80e058483a3a83506b`.
+
+- ARM64 native library built with the existing Android builder, Go1.26.1/NDK28.2,
+  approved Xray pin `d2758a023cd7f4174a5a5fa4ff66e487d4342ba0` and unchanged pinned
+  gVisor. Manifest source revision/tree match; production tags, not diagnostic-only.
+  SHA256 `10c6b7820675610003ff01135c74ec16d09cfb83f6dfc8bc13a4ba26c597264b`;
+  all ELF PT_LOAD segments align to0x4000. Not packaged into a public APK or installed.
+- Linux amd64 static `bootstrap-broker` built from the same source;
+  SHA256 `289c351fb4bcc35e0d87947cc7d2a1d8ee5783677f363f42c4e6add507f7fe5f`.
+  No server copy, service restart or profile-control pin change.
+- Exact-source Readiness wire41659881609 and Client builds41659881608 FAILED in
+  standalone JVM compilation: its explicit source list omitted `RestrictedGateway`
+  and its `ReadinessBootstrapRoute` dependency introduced by the prior Android slice.
+  Android native/API27/API35/release gates were NOT_REACHED, not accepted or skipped
+  as successful. Windows and Windows compatibility jobs passed; the Linux job failed
+  at deterministic normal-poll versus Disconnect interaction after earlier checks passed.
+- phase0 run41659881651 FAILED in source-pinned release fixture provisioning and
+  isolated failover stack build. Downstream tests were NOT_REACHED. These separate
+  Linux/phase0 failures are retained; no unrelated code or mandatory gates were weakened.
+- Added both missing JVM sources and their existing tests to the standalone module.
+  Its187 tests and golden classpath generation PASS. Wire checking then exposed a
+  stale two-argument ACK assertion; it now requires the selected gateway in both
+  fresh-import and restored-import publication paths. No production ACK logic changed.
+  With the locked Go toolchain and generated Java classpath,119 Python wire/handler/
+  receipt checks PASS with zero skips. Initial failed logs remain in private evidence.
+  This locally repairs the CI prerequisites; a new exact-source CI run is still required.
+
 ## Remaining gates, rollout and rollback
 
-1. Build source-pinned Android ARM64 and gateway native artifacts with the existing
-   pinned toolchains; run mandatory exact-source platform CI, including API27/API35,
+1. Local source-pinned Android ARM64 and gateway builds passed as recorded above.
+   Run mandatory exact-source platform CI, including API27/API35,
    native alignment/provenance and existing identity/storage/lifecycle checks.
 2. Exercise mixed deployed/candidate peers, real Family TLS/DNS/HTTPS at bounded low
    rate/loss/latency and normal throughput. Check repeated loss, cancellation, lifetime,
