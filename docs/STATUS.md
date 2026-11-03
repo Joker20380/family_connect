@@ -13,6 +13,8 @@ the installed111 is not repaired by this source push. New immutable Android deli
 and physical confirmation remain pending. Per-node telemetry is not changed here.
 Telegram is DEFERRED_BY_OWNER, not fixed. Fleet production-canary preparation remains
 the main queue's next candidate, not started during this UI correction.
+Node2 MESH is an unfinished production integration, not a diagnosed hardware inability:
+only AWG/TCP was admitted there; MESH readiness/directory/renewal still use first NL.
 [Scope, tests and delivery boundary](releases/2026-11-03-android-node-picker.md).
 
 **3 November13:15UTC — read-only service snapshot.** Registry60 devices/56 non-revoked/4

@@ -58,3 +58,20 @@ native/artifact gates, existing-certificate offline signing, increasing signed A
 catalog and full public HTTPS readback. No production rollback is needed for this source
 checkpoint; the current APK/catalog and existing identities remain untouched. Affected
 phone installation and actual server selection remain unverified until that delivery.
+
+## Why second-node MESH is not offered
+
+The owner asks why Amsterdam2 does not support MESH. More precisely, it has not been
+admitted as a production MESH exit: the [second-node admission](2026-11-02-second-nl-ordinary-live.md)
+explicitly covers AWG3.1/TCP REALITY only and leaves MESH readiness, directory distribution
+and renewal on first NL. That is a deployment/integration boundary, not evidence of
+a hardware or provider inability. Android's explicit-node path also remains AWG/TCP-only.
+
+Enabling it requires the second gateway's MESH runtime and securely managed credentials,
+binding it into the existing bootstrap/broker/directory and authorization/renewal paths,
+then end-to-end MESH traffic, expiration/revocation and failure checks without disturbing
+existing users. This does not imply duplicating the writable authorization authority or
+copying user profiles. A selector change alone cannot supply these server-side pieces.
+This turn only clarifies the boundary from source and recorded admission evidence; no
+fresh live MESH audit, implementation, runtime test, credential operation or deployment.
+Documentation links/whitespace checked; versions and rollback paths remain unchanged.

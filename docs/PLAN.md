@@ -17,6 +17,9 @@ Telegram follow-up is DEFERRED_BY_OWNER, not a prerequisite or a solved defect. 
 the selected delivery scope, the fleet candidate is dedicated canary credential custody,
 bounded registration/revocation and existing-user conservation, then real per-node probes;
 no automatic failover or production mutation follows merely from this queue.
+Owner's question about node2 MESH clarifies the existing ordinary-only admission scope;
+it does not select a second MESH rollout. Runtime/admission/discovery/renewal and real
+end-to-end acceptance are required before exposing that choice, not just a UI edit.
 [Android source/runtime receipt](releases/2026-11-03-android-node-picker.md).
 
 **3 November service inspection complete (read-only).** Three current hosts checked;
