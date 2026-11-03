@@ -865,3 +865,54 @@ internal candidate41728661787 fails its accepted-source package gate; no overall
 or Linux candidate PASS claim. Public Android111/catalog6, Windows0.2.16/catalog12 and
 Linux0.2.11 remain unchanged. Backend overlay remains built-only; selection/publication
 is still gated on repeated actual-provider acceptance and exact-version release CI.
+
+
+## Bounded RESET repeat source
+
+Installed2fc16577 alone did not solve remote cleanup.22:19:32 probe passed Family TLS/
+4 HTTPS/3 DNS in34.727s but lacked its egress check: Go overlay absolute paths used the
+physical checkout while Go used its logical PWD. No egress acceptance is claimed for
+that run. Building with physical PWD activates the two probe-only CLI overlays and
+verifies the marker in the executable.22:21:41 exact-carrier repeat then failed at120.016s;
+server challenge/context_deadline confirms retained ownership. First resources closed
+22:29:40 after authorization_changed, not timely peer release.
+
+A private diagnostic client added only500ms post-write grace.22:29:41 Family/4 HTTPS/
+3 DNS/expected AMS2 egress PASS44.613s; immediate repeat22:30:26 fails120.015s. It was
+not shipped. Its resources closed22:36:13 during scheduled common renewal, not peer
+cleanup. Coordinator's scheduled22:35:48 operation completed COMMITTED with no first
+cause; secondary restarted22:36:40, new seed22:36:42, PID591182/NRestarts0. AWG6206/
+TCP6146 unchanged. The retry experiment's first read-only seed refresh overlapped that
+maintenance and returned control_unavailable; no traffic run occurred. A new normal
+30-minute leaf for the same synthetic identity expires23:09:48, with no registry/grant
+mutation, and a fresh genuine seed was fetched after confirmed writer completion.
+
+A second private prototype sends five identical RESETs spaced100ms apart, awaiting
+local-write completion for each, before carrier teardown. Three consecutive runs:
+22:40:31/53.345s,22:41:24/39.314s,22:42:03/39.290s all PASS Family TLS,4 HTTPS/3 DNS and
+Cloudflare-verified AMS2 egress. Each records ten successful local RESET writes across
+bootstrap/dedicated closes. Server PID591182 is unchanged across all three; dedicated
+resources close22:41:24.312,22:42:03.641,22:42:42.893 before the next connect. Existing
+terminal mapping emits FAILED/gateway_session_failed on peer reset; do not relabel this
+as a graceful CLOSED event. No takeover/restart/identity replacement was used between
+these runs. Exact SFU packet-loss location is not proven by these observations.
+
+Production source converts that experiment to a hard500ms total budget, at most five
+identical RESETs,100ms local-write cap and100ms spacing. A failed/stalled local write
+stops retries, avoiding extra queued work. The old100ms total bound changes explicitly;
+wire format, epochs, DATA retries/windows, admission and lease ownership do not change.
+Close remains abort, NOT reliable FIN/drain or proof of remote delivery under total
+loss. New first-reset/first-four-reset loss cases fail on baseline; total-loss test also
+fails its attempt-count assertion. After correction, five focused race repetitions PASS
+and seven full package race regressions PASS: reliable/localwrite/Family/room broker/
+bootstrap/Telemost/gateway command. All-loss coverage retains bounded local cleanup
+without inventing remote cleanup; existing stalled-writer test forbids retry buildup.
+
+These successful provider runs use the private prototype, not the newly bounded exact
+shipping implementation. Next is committed-source projection/compatibility and exact
+live acceptance; neither new Android nor new server retry code is installed yet.
+Installed gateway remains2fc16577 with its matching canonical binding. Rollback boundary
+is unchanged. Public Android catalog HTTPS readback is byte-identicalca3e6c63…/sequence6.
+Client builds41728661709/70f63b8 completed SUCCESS for scoped Linux/Windows/compatibility;
+Android and release skipped, not new-Android acceptance. Separate Linux candidate
+packaging failure remains recorded. Private prototypes/logs/profiles remain outside Git.

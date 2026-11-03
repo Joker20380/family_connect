@@ -7,21 +7,22 @@ in that window. Packet receipt/old-room identity not proven. No changes by this 
 [Evidence](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November22:19UTC — MESH2 close/idle corrections INSTALLED; live repeat gate pending.**
-Exact projectiona4b6496 built twice identically:2fc16577…; narrow canonical/P1 policies
-and production100ms RTP gap retained.17 projection tests, seven native race packages,
-public111 Family/VP8 four-way compatibility and all six paced-link cases PASS. Secondary
-upgraded22:17:37 with matching canonical locator/snapshot/node bindings; new seed and
-actual executable verified. MESH PID582708,0 restarts, still boot-disabled; AWG6206/TCP6146
-and the private profile are unchanged. Common writer briefly paused with timed safety
-resume, then resumed22:18:58; three-node evaluate NOOP, no RU state change or primary
-restart. No retired pair writer or replay-floor rollback. Next: actual-provider repeated
-sessions and remote cleanup without restart, then backend/selector/immutable Android.
-Linux stale-alias test corrected for both nodes;54 isolated GTK cases and hosted Linux
-job126240977565 PASS. Full client run41728661709 remains in progress; separate Linux
-candidate packaging workflow fails and is not claimed green. Public Android111/catalog6,
-Windows0.2.16 and Linux0.2.11 unchanged; backend overlay remains built-only.
-[Deployment and rollback](releases/2026-11-03-second-nl-mesh.md#closeidle-secondary-runtime-upgrade).
+**3 November22:47UTC — repeated RESET candidate solves three consecutive MESH2 probes.**
+Installed canonical gateway remains2fc16577 (close-local-write + idle-RTP corrections).
+A single RESET, even with500ms grace, still retained the remote owner and blocked the
+next bootstrap challenge. A private client sending five spaced identical RESETs instead
+passes three consecutive actual-provider sessions: each Family TLS,4 HTTPS/3 DNS and
+verified AMS2 egress. Resources close before each next connect with unchanged PID591182;
+no restart or owner takeover between those three probes. Terminal classification remains
+the existing gateway_session_failed on reset, not a claimed graceful CLOSED event.
+The production source now bounds this retry burst by500ms total,100ms per local write,
+at most five attempts; failed local writes stop retries. Five focused race repetitions
+and seven package race regressions PASS. This source is not yet projected/deployed or
+in an Android release; exact build/compatibility/product-probe gates are next.
+An earlier automatic common-fleet renewal22:36 completed COMMITTED and restarted MESH,
+not AWG/TCP; it is not counted as peer cleanup. Common timers are healthy. Android111/
+catalog6 remains byte-identical; backend/selector/new Android delivery remain gated.
+[Evidence, protocol limit and rollback](releases/2026-11-03-second-nl-mesh.md#bounded-reset-repeat-source).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **3 November export24 server correlation — PARTIAL, cause still OPEN.** Second API36

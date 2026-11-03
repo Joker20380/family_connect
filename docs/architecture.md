@@ -273,6 +273,12 @@ Core TCP streams + DNS wire queries -> Mux -> Family TLS 1.3
 | [5N-RB-1](releases/2026-09-28-webrtc-5n-room-broker.ru.md) | Official Telemost API, server-side OAuth only; gateway joins first/READY, physical Android obtains automatic descriptor and joins; Family TLS + four verified HTTPS200; no manually supplied room URL. |
 | [5N.6](releases/2026-09-30-webrtc-eu6-android-full-device.ru.md) | Cached BOOT-1 → dedicated → existing Android VPN/TUN; ordinary Chrome2 sites,14 concurrent TCP/98 Family DNS,543.7s light smoke, protected underlay, UDP/IPv6 rejection and VPN-retained session failure. No traffic forwarding/manual room URL. |
 
+**3 November close-source update:** ReliableStream abort repeats the same addressed
+RESET at most five times within500ms total, with100ms per-write caps and spacing;
+failed local writes stop retries. This supersedes REL-1's historical100ms total reset
+budget, not its wire/epoch contract. It is still not reliable FIN or guaranteed remote
+cleanup under total loss. [Source versus runtime evidence](releases/2026-11-03-second-nl-mesh.md#bounded-reset-repeat-source).
+
 **Room Broker itself is PASS.** Its accepted temporary control ingress used SSH
 forwarding + adb reverse. The real media/data path used Telemost, not that
 forwarding. It did not prove initial setup on a whitelist network with the Family

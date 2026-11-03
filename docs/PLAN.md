@@ -8,19 +8,20 @@ not an established HyperOS defect; no implementation/deployment authorized by th
 [Evidence and limits](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November22:19UTC — FLEET-BOOTSTRAP-2 MESH2 runtime upgraded; repeat gate OPEN.**
-Exacta4b6496 canonical/P1 projection, deterministic2fc16577 builds, seven native race
-packages and public111 Family/VP8/paced compatibility PASS. Controlled secondary-only
-upgrade and fresh directory/executable readback PASS; private profile/AWG/TCP unchanged.
-Common fleet timers resumed; post-upgrade three-node evaluate NOOP. No primary restart,
-identity change, floor rollback or retired pair writer. MESH2 remains boot-disabled.
-Now verify actual-provider repeated sessions and timely remote cleanup with unchanged
-PID; do not turn local RESET completion or a single egress pass into reconnect acceptance.
-Backend migration/readiness, boot enablement, selector and immutable Android stay gated.
-54 isolated GTK tests and hosted Linux client job PASS after stale-alias correction;
-full hosted run unfinished and separate Linux candidate packaging failure retained.
-Public111/catalog6 unchanged. No unrelated successor or weakened completion gate.
-[Evidence and rollback](releases/2026-11-03-second-nl-mesh.md#closeidle-secondary-runtime-upgrade).
+**3 November22:47UTC — FLEET-BOOTSTRAP-2 close retry source ready; exact rollout next.**
+Installed2fc16577 alone does not pass reconnect. A private five-RESET prototype passes
+three actual-provider Family/HTTPS/DNS/AMS2-egress sessions and prompt resource cleanup
+under unchanged PID591182. Single-send500ms grace failed; local completion alone is
+not delivery confirmation. Shipping source now uses at most five spaced identical
+RESETs within500ms total with100ms individual-write caps; local-write failure stops
+retries. Five focused race repeats and seven package regressions PASS. No new wire
+format, reliable FIN guarantee, data retry budget, ownership policy or replay-floor change.
+Next: commit-bound canonical projection, deterministic builds, public111 compatibility
+and repeated live tests of the exact bounded implementation, then backend readiness,
+boot enablement, selector and immutable Android. No public version/catalog change yet.
+The22:36 scheduled common renewal COMMITTED is distinct from peer cleanup. Do not
+waive exact release CI or start an unrelated successor.
+[Evidence](releases/2026-11-03-second-nl-mesh.md#bounded-reset-repeat-source).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **Export24 read-only server correlation remains partial.** Registration/invitation

@@ -150,6 +150,28 @@ func (stream *Stream) Close() error {
 	return nil
 }
 
+func (stream *Stream) sendReset(packet frame) {
+	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	defer cancel()
+	for range 5 {
+		writeContext, stop := context.WithTimeout(ctx, 100*time.Millisecond)
+		writeContext, completion := localwrite.Observe(writeContext, nil)
+		err := stream.endpoint.SendContext(writeContext, encode(packet))
+		if err == nil {
+			err = completion.Wait()
+		}
+		stop()
+		if err != nil {
+			return
+		}
+		select {
+		case <-ctx.Done():
+			return
+		case <-time.After(100 * time.Millisecond):
+		}
+	}
+}
+
 func (stream *Stream) run(ctx context.Context) {
 	completionEnabled := localwrite.Enabled(ctx)
 	type queuedFrame struct {
@@ -216,12 +238,7 @@ func (stream *Stream) run(ctx context.Context) {
 		stream.cancel()
 		<-writerDone
 		if packet.target != (epoch{}) && terminal != ErrReset {
-			resetContext, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
-			resetContext, completion := localwrite.Observe(resetContext, nil)
-			if stream.endpoint.SendContext(resetContext, encode(packet)) == nil {
-				_ = completion.Wait()
-			}
-			cancel()
+			stream.sendReset(packet)
 		}
 		stream.endpoint.Close()
 		<-readerDone

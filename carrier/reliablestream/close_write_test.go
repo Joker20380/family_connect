@@ -117,4 +117,9 @@ func TestCloseQueuedResetRemainsBounded(test *testing.T) {
 	if queued.ctx.Err() != context.DeadlineExceeded || queued.write.Begin() {
 		test.Fatal("expired reset can still start after carrier shutdown")
 	}
+	select {
+	case <-point.queued:
+		test.Fatal("stalled local writer must not accumulate reset retries")
+	default:
+	}
 }
