@@ -1,6 +1,12 @@
 # Documentation
 
 <!-- FLEET-BOOTSTRAP-2 current -->
+**3 November — isolated native data-plane canary:** disposable AWG3.1/REALITY
+client/gateway/origin topology, negative authentication controls and real DNS/HTTPS
+traffic PASS;37 guards and cleanup PASS. No production credentials or user sessions;
+not Amsterdam node acceptance. [Current qualification](releases/2026-11-03-fleet-data-plane-canary.md)
+· [Runbook](../pilot/fleet-canary/README.md).
+
 **3 November — independent TCP probes and advisory recovery:** exact RU/AMS1/AMS2
 endpoints, no SSH/credentials, immutable local history, bounded stabilization and
 fail-closed recommendations. Local rollout from9870e12 PASS; three real timed samples

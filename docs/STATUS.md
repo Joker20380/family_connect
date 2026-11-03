@@ -1,6 +1,20 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
+**3 November — isolated native data-plane canary qualification PASS.**
+The next authorized substep exercises real AWG3.1/REALITY packets in disposable
+client/gateway/origin containers with new synthetic keys. Existing production users,
+profiles, credentials, assignments and services remain untouched. This is qualification
+of a canary harness, not Amsterdam1/2 live acceptance.37 unit guards PASS; genuine
+AWG fresh handshake/DNS/TLS HTTPS/NAT and REALITY auth/remote DNS/HTTPS PASS twice
+with fresh keys on the same exact source/image.
+Wrong identity/server key and direct-bypass controls reject; controlled origin sees
+exactly2 application requests,2 DNS queries. Client and all run resources cleaned up.
+Initial capability spelling, Xray config-extension and fixture nft syntax failures
+are retained, cleanup PASS; no production parser or guard weakened. No user keys,
+production mutations, client release, MESH or failover. Qualified image and repeat gates in
+[the current report](releases/2026-11-03-fleet-data-plane-canary.md).
+
 **3 November — independent network evidence and advisory recovery, LOCAL ROLLOUT PASS.**
 Owner authorizes the next bounded step. Credential-free TCP observations now bind RU8443,
 AMS1/AMS2:443 independently of SSH/inventory failures; legacy NL is never probed.

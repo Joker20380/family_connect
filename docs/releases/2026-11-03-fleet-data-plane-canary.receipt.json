@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "task": "FLEET-BOOTSTRAP-2",
+  "result": "ISOLATED_NATIVE_DATA_PLANE_PASS",
+  "scope": "disposable_synthetic_topology",
+  "image_id": "sha256:541e3a7f23782b8f07a47f8bae95350fe8d1cac2dfe1bc9bd5d7bd3b564e35b1",
+  "source_sha256": {
+    "pilot/fleet_canary.py": "560fab51a97314ae8fcd2a54f2156d915aebb922f28f269f00ced40d1bf3e513",
+    "pilot/fleet-canary/Dockerfile": "9360115f32d7395565383490c072f11b049fe52f127e3f76bf52dd6920bcb545",
+    "scripts/test_fleet_canary.py": "95497bc6caf8df6ebaa582e0b76460b501ccea8487b13cb7a3befbcf15ac4cc9"
+  },
+  "native_sha256": {
+    "awg": "906d6795af1dd4adee7b11bf1e7fa133d4795c8a8d6e2099b34a026f810a3278",
+    "amneziawg-go": "e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f",
+    "xray": "4f7a4436f86798bbb5c875014e352021a1673710a45e170ccc507c5f59341940"
+  },
+  "unit_tests_passed": 37,
+  "native_runs_passed": 2,
+  "qualified_runs": [
+    {"started_at": "2026-11-03T07:45:05.332453+00:00", "finished_at": "2026-11-03T07:45:19.331113+00:00"},
+    {"started_at": "2026-11-03T07:46:40.697655+00:00", "finished_at": "2026-11-03T07:46:54.766147+00:00"}
+  ],
+  "checks": {
+    "direct_bypass": "REJECTED",
+    "tcp_wrong_identity": "REJECTED",
+    "tcp_wrong_server_key": "REJECTED",
+    "tcp_valid": "DNS_TLS_HTTPS_EGRESS_PASS",
+    "awg_wrong_server_key": "REJECTED",
+    "awg_valid": "HANDSHAKE_DNS_TLS_HTTPS_NAT_PASS",
+    "post_cleanup_bypass": "REJECTED",
+    "operator_cleanup": "PASS",
+    "all_container_network_cleanup": "PASS"
+  },
+  "origin_counts_each_run": {"dns": 2, "https": 2},
+  "failed_attempts_retained": 5,
+  "cleanup_all_attempts": "PASS",
+  "production_credentials_read": false,
+  "production_writes": 0,
+  "production_node_acceptance": "NOT_RUN",
+  "public_internet_acceptance": "NOT_RUN",
+  "client_session_changes": 0,
+  "automatic_recovery_enabled": false,
+  "canary_timer_installed": false,
+  "public_release_created": false,
+  "versions": {
+    "installed_linux": "0.2.12~l03.2.13",
+    "public_linux": "0.2.11",
+    "public_android": 110,
+    "android_catalog_sequence": 5,
+    "public_windows": "0.2.16",
+    "windows_catalog_sequence": 12
+  }
+}

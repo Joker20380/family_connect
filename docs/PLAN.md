@@ -3,6 +3,23 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- FLEET-BOOTSTRAP-2 current -->
+**Selected step COMPLETE — isolated native data-plane canary qualification (3 November).**
+Owner's «давай дальше» selects the next bounded substep. Dependencies: independent
+probe/advisory step complete, accepted native AWG3.1/Xray hashes and isolated Docker
+runtime. Previous admission test credentials were removed; never reuse retired or
+owner/user material. Qualify the canary first with fresh synthetic identities and a
+controlled DNS/TLS origin, not by enrolling users or granting production readiness.
+Gate: actual AWG handshake/DNS/verified HTTPS/NAT and REALITY auth/remote DNS/HTTPS,
+negative identity/server-key/direct-bypass controls, exact image/source/native hashes,
+no host namespaces/private mounts/public ports, bounded commands and verified cleanup
+on success/failure. No production changes, client update or automatic recovery.
+Qualification PASS:37 deterministic guards plus real native positive/negative traffic
+and verified cleanup. This is a controlled-origin laboratory proof, not public Internet
+or Amsterdam availability. Next candidate: dedicated production test-identity custody,
+bounded registration/revocation and conservation gates; no borrowing user profiles.
+That separate production mutation task is not automatically started by this queue.
+[Current qualification and remaining production boundary](releases/2026-11-03-fleet-data-plane-canary.md).
+
 **Selected step COMPLETE — independent probes and bounded advisory recovery (3 November).**
 Owner's «делай» authorizes this next substep of FLEET-BOOTSTRAP-2, not a new unrelated
 task. Dependencies: completed exact three-source inventory/local rollout fromc95cc86,
