@@ -2,6 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
+**ANDROID-UPDATE-FIELD-1 next gate — qualified111 offline signing and delivery.**
+Source40e6c6c Client builds41618639307 attempt2 PASS, both API35/API27 complete runtime
+matrices and final ARM64 artifact verified, visual review and protected-storage restart
+PASS. Attempt1's automatic-TCP IPv6 timeout remains documented; no source/test weakening
+or hidden retry. Release remains blocked until the existing signer, signed catalog
+sequence greater than5, immutable publication and public byte/readback gates pass.
+Public110/sequence5 unchanged. Physical Huawei/ARM64/MESH and real preserved-data
+product upgrade remain pending; do not substitute emulator acceptance for those checks.
+
 **ANDROID-UPDATE-FIELD-1 continuation — beta111 qualification authorized.** The owner
 requests proceeding. New source version111/minimum27 is a candidate only; no replacing
 published110, catalog downgrade, user reset or unrelated fleet successor. Platform CI
@@ -12,8 +21,8 @@ observed. Public delivery stays110/sequence5 until the applicable release gates 
 Source99c155d pushed/remote-verified; exact111 Client builds41613303779 FAILED on two
 API27 test assumptions; API35 passed, API27 Friends/final ARM64 package not reached.
 Repair retains real kernel MTU and encrypted selection/manifest guards; both repaired
-tests PASS on27 and35,88 focused Python PASS. Next: repeat the complete platform run
-on the repaired source, then verify that run's ARM64 artifacts. No release/signing yet.
+tests PASS on27 and35,88 focused Python PASS. The repaired source40e6c6c and its exact
+ARM64 artifact now pass the complete platform gate above. No release/signing yet.
 Local111 assemble/lint,395 JVM/88 Python, API27 UI17 PASS/5 explicit skips and synthetic
 CI-signed110→111 preserved-data upgrade PASS; product-signed Huawei proof remains pending.
 The previous code110 candidate evidence below is historical qualification, not a release.

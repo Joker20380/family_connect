@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**3 November — beta111 platform/artifact qualification PASS; NOT RELEASED.**
+Source40e6c6c is pushed and remote-verified. Client builds41618639307 attempt2 passed
+both API35 and27 transport/control/Friends gates and final ARM64 packaging. Downloaded
+artifact13225731676 SHA256/provenance/package111/minimum27/target35/ARM64,12 native
+libraries,16K alignment and corresponding source/licenses PASS. Runtime matrix:
+API35 46 PASS/27 explicit skips; API27 44 PASS/29 skips; zero failures. JVM400 debug/
+395 Friends PASS; protected-storage process restart and visual review PASS on both.
+Attempt1's API35 automatic-TCP IPv6 timeout is retained, not erased or bypassed;
+unchanged-source attempt2 passes the complete gate. Root cause of that intermittent
+failure is not established. This is emulator acceptance, not physical Huawei/MESH
+or a product-signed old-to-new handset upgrade. Next: existing-key offline APK signing,
+increasing signed Android catalog and immutable delivery/public readback. Public110/
+sequence5 and desktop versions remain unchanged; no production mutation yet.
+[Qualified candidate evidence](releases/2026-11-03-android-update-incident.md#beta111-exact-source-platform-and-artifact-acceptance).
+
 **3 November continuation — beta111 source selected, NOT RELEASED.** Owner authorizes
 continuing ANDROID-UPDATE-FIELD-1 through qualification. Reserve new immutable code111/
 `0.1.18-beta111`, minimum27/ARM64; public/invitation110 and signed sequence5 stay unchanged.
@@ -11,7 +26,7 @@ LinkProperties MTU and unavailable InputStream.readAllBytes); API35 passed, API2
 Friends/final ARM64 packaging were not reached. The bounded test repair checks the
 actual kernel tunnel MTU and streams the unchanged manifest-pinned asset. Both repaired
 tests PASS on API27 and35 (four runtime executions);88 focused Python checks PASS.
-A new exact-source platform run is required; no failure is waived. Local disposable111 build/lint and
+The repaired exact-source platform run now passes as recorded above; no failure is waived. Local disposable111 build/lint and
 395 JVM/88 focused Python checks PASS. API27 UI/update/audio17 PASS/5 explicit skips.
 Synthetic CI-signed110→111 in-place upgrade preserves UID/protected identity/journal/
 outbox and recovers the interrupted write in a new process; fixture cleanup PASS.

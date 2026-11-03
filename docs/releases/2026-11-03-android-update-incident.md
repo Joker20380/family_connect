@@ -284,3 +284,52 @@ Next gate is a fresh complete platform CI run on this repaired source, followed 
 verification of its exact ARM64 artifact and existing offline-signing/publication gates.
 Version111 remains reserved, not released. Public/invitation110 and catalog5 remain
 unchanged; no rollout or runtime rollback. Actual product-signed Huawei recovery is OPEN.
+
+## Beta111 exact-source platform and artifact acceptance
+
+Source `40e6c6c88c1d51c96736ded125a1b8060bdd4d26` is committed, pushed and remote-verified.
+[Client builds41618639307 attempt2](https://github.com/Joker20380/family_connect/actions/runs/41618639307/attempts/2)
+PASS includes API35 and27 real WG/AWG/TCP/Auto lifecycle, encrypted control selection,
+process-restart storage recovery, Friends UI/audio and final unsigned ARM64 packaging.
+The400 debug and395 Friends JVM tests pass. UI review confirms synthetic load rendering,
+Amsterdam1/2 labels, and Codec2 on8.1 versus normal Opus on15; these screenshots do not
+assert current production node load.
+
+| Runtime | Cases | PASS | Explicit skips | Failures |
+| --- | ---: | ---: | ---: | ---: |
+| API35 debug | 51 | 28 | 23 | 0 |
+| API35 Friends | 22 | 18 | 4 | 0 |
+| API27 debug | 51 | 27 | 24 | 0 |
+| API27 Friends | 22 | 17 | 5 | 0 |
+
+Variant/opt-in skips are retained, including live/product-signed update checks and
+unsupported Opus recording below29. Attempt1 failed before27 on an API35 automatic-TCP
+IPv6 connect timeout; its diagnostics ZIP13222209779 has SHA256
+`247acdae8f32d81769aa76eb75388bb1df4cb228fcb34a9aa9bfa98697dd338b`.
+The two repaired test cases passed and ran after that failure. A single full failed-job
+rerun on the unchanged source passes; the intermittent timeout's cause is not proven.
+No timeout increase, test omission, forced success or product change was used.
+
+Downloaded artifacts from the accepted second attempt are checked against GitHub digests:
+
+| Artifact | ID | ZIP SHA256 |
+| --- | --- | --- |
+| ARM64 release | 13225731676 | `a0fc47c4d4bd20ce3d892f74dd2ccff07bedf4d860b4e0ede0894c8035fbf667` |
+| Runtime matrix | 13225641948 | `1fcbea1dca705fd3c2ca16c42b97a48a0a66b9edd805cc7c2c06028640cca654` |
+| UI | 13225666835 | `392ea719d3c2d196d8ebbaca6602e35af1fa7637552281643c8e5d002dd11d68` |
+| Debug/JVM/storage evidence | 13225468995 | `1a9eca1ba3c24e427be5a141554b7572e27d1c1357af81b0be94926ec5149f64` |
+
+Unsigned APK: `FamilyConnect-Test-0.1.18-beta111-unsigned.apk`,50,246,229 bytes,
+SHA256 `16876be250d69c8632de0c24c0ebbb6e497ac9ca584ad94d61ad770a94019b94`.
+Package `com.familyconnect.app.friends`, code111/minSDK27/target35/ARM64-only,
+non-debuggable, deliberately unsigned. APK/native source commit/tree, AWG/Xray/Codec2
+pins, all12 native libraries, ZIP/ELF16K alignment and corresponding source/license
+payloads verified. These are the accepted signing inputs, not distributable binaries.
+
+Next: sign that exact input with the existing product certificate using the local
+protected vault, then sign an increasing Android catalog and publish immutable111.
+No signing secret is in CI/server/Git. At this checkpoint no product signing or rollout
+has happened; public/invitation110/catalog5 and desktop versions remain unchanged.
+Do not uninstall/clear data or replace110 bytes. Physical Huawei/ARM64/MESH and actual
+product-signed preserved-data upgrade remain NOT_RUN; unrelated broader CI failures
+listed earlier are not represented as fixed by this platform PASS.
