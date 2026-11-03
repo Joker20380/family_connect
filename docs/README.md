@@ -3,8 +3,9 @@
 <!-- FLEET-BOOTSTRAP-2 current -->
 **3 November — independent TCP probes and advisory recovery:** exact RU/AMS1/AMS2
 endpoints, no SSH/credentials, immutable local history, bounded stabilization and
-fail-closed recommendations. TCP reachability is not VPN readiness; automatic repair
-and client switching remain disabled. [Current gates and rollout](releases/2026-11-03-fleet-network-probes.md).
+fail-closed recommendations. Local rollout from9870e12 PASS; three real timed samples
+per source and readback verified. TCP reachability is not VPN readiness; automatic
+repair and client switching remain disabled. [Current gates and rollout](releases/2026-11-03-fleet-network-probes.md).
 
 **3 November — autonomous multi-node observability.** Owner hands-on checks no longer
 block development; field acceptance remains unproven. Current bounded continuation

@@ -82,11 +82,55 @@ This future gate is a design boundary, not a scheduled or automatically started 
 - Documentation links/whitespace: new links PASS; the broader5-file/524-link scan
   retains the existing STATUS historical27 October anchor error, not a full docs PASS.
 - Initial direct TCP observation: all3 reachable; no VPN/authenticated handshake PASS.
-- Local runtime rollout NOT_YET_RUN at this source checkpoint; source bytes are not
-  assumed deployed. Credentials/private evidence/build outputs remain outside Git.
+- Local runtime was NOT_YET_RUN at the source checkpoint; subsequently verified
+  below. Credentials/private evidence/build outputs remain outside Git.
 
 Versions unchanged: installed Linux `0.2.12~l03.2.13`, public Linux `0.2.11`, public
 Android110/catalog5 and Windows `0.2.16`/catalog12. No client build/install/publication.
+
+## Verified local rollout
+
+Source `9870e129ba7e24f16560a5d47e0da187b259da9b` pushed and remote SHA verified.
+Local image `sha256:55119faec980ca2ce58bf3f1846c01f649a2e8a31ca6fccdfb84ffd1b0474285`:
+184 packaged source/lock hashes match, checked in a read-only network-none container;
+the running console uses that exact image. Local health PASS and binding remains
+only `127.0.0.1:8765`. Migration0007 applied to the local PG database only. Existing
+`.env` bytes/volumes retained; private pre-migration PG dump retained. Payment and
+operation row hashes unchanged; synthetic model counts remain3 payments/7 operations/
+50 devices/3 cohort records. These are not real-user/payment success statistics.
+
+The existing inventory timer was paused during the local build/start and restored;
+only the local console was restarted. Independent user service/timer installed from
+the source templates and active,95s budget,60s after completion. Initial direct
+observations and the recurring service send no credentials or transport payloads.
+No production VPN/backend service restart or configuration/assignment write occurred.
+
+Readback at `2026-11-03T07:23:36.734921+00:00`:
+
+| Source | Actual completion times (UTC, oldest → newest) | Outcome / advisory |
+| --- | --- | --- |
+| gateway-ru | 07:21:03,07:22:11,07:23:21 | reachable ×3 / observe |
+| nl-amsterdam-1 | 07:21:05,07:22:13,07:23:23 | reachable ×3 / observe |
+| nl-amsterdam-2 | 07:21:07,07:22:15,07:23:25 | reachable ×3 / observe |
+
+All three sources also have fresh observed_active service evidence. The spans exceed
+90s without invented/backdated samples; early readbacks correctly showed stabilizing.
+Read-only RequestFactory rendering through the existing permission-guarded views
+verified three independent cards, explicit no-switching notices and the node detail
+page. This render is not a new browser login/authentication acceptance; RBAC is covered
+by the PostgreSQL tests. `automatic_action=false`, `vpn_readiness=not_checked` throughout.
+No second-node MESH, authenticated traffic, field acceptance or continuous uptime PASS.
+The workstation must remain awake; losing this vantage yields missing/stale evidence,
+not a remote failure diagnosis. No full production endpoint monitoring service is deployed.
+
+Locked PostgreSQL final suite suffix `9a94533d`:69 targeted/186 full PASS; initial
+suite `6a1d19ca` also PASS before the additional source-filter regression assertion.
+Operator73 PASS. The documentation checker has no help switch: an initial `--help`
+invocation failed before checking files; the subsequent explicit-path scan retains
+only the previously recorded historical anchor error. No failing tests were hidden.
+
+Local evidence/backup/logs: ignored `state-client-build/fleet-network-probe-20261103/`.
+[Sanitized receipt](2026-11-03-fleet-network-probes.receipt.json).
 
 ## Local rollout and rollback
 
@@ -104,3 +148,8 @@ in-flight read-only cycle. Preserve history and receipts. Keep the existing inve
 timer, private secrets and data volumes. If needed, restart the prior local console
 image, leaving additive migration0007/table/history intact; no `down -v`, automatic
 DB restore or destructive schema reversal. No production/client rollback is needed.
+The retained previous image is
+`sha256:0862dbdbb9a0f9d545cb4c71d2990f83cfe1126b1967078509e9f8f06b81c2fe`,
+also tagged locally `fc-control-plane-0-console:before-network-probes-20261103`.
+No rollback was needed. This bounded step is complete; the isolated authenticated
+per-transport/data-plane canary is the next candidate, not automatically started.

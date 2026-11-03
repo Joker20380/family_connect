@@ -1,7 +1,7 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
-**3 November — independent network evidence and advisory recovery, source checkpoint.**
+**3 November — independent network evidence and advisory recovery, LOCAL ROLLOUT PASS.**
 Owner authorizes the next bounded step. Credential-free TCP observations now bind RU8443,
 AMS1/AMS2:443 independently of SSH/inventory failures; legacy NL is never probed.
 Append-only local records and a conservative three-sample/90-second advisory policy
@@ -9,8 +9,15 @@ distinguish missing/stale/conflicting data, path failure, service failure and st
 No state grants VPN readiness or calls fleet admission, repair, restart or reassignment.
 Direct read-only TCP reachability observed on all three endpoints; no authenticated
 AWG/REALITY/MESH or end-to-end traffic acceptance. Source tests73 PASS, PostgreSQL
-targeted69/full186 PASS, check/drift PASS; local rollout results follow in
-[the current report](releases/2026-11-03-fleet-network-probes.md). No client versions change.
+targeted69/full186 PASS, check/drift PASS. Source9870e12 is pushed and installed in
+the local loopback console;184 packaged hashes match. Additive migration0007,
+private PG backup, unchanged secrets and payment/operation hashes/counts verified.
+Separate network timer active; three real timed observations per source at07:21–07:23UTC
+all reachable, advisory=observe with fresh services; prior insufficient samples correctly
+stabilizing. Permission-guarded view rendering and both local timers PASS. This bounded
+step is complete; VPN data-plane canary remains a separately scoped next candidate,
+not started. No automatic action or client version changes.
+[Current evidence and rollback](releases/2026-11-03-fleet-network-probes.md).
 
 **3 November — autonomous fleet observability continuation.** Owner removes the
 interactive owner-test gate and requests continued automated development; .13 physical
