@@ -179,7 +179,19 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'ChatActivity.java': '34aec6a30af77ece7753ee65ac592fd97a2fb3af8d19721de3edfb14e623e488',
         'RadioSettings.java': 'dcda8f1f9e8e326642e738323f93b51e197623b08470fb977d3dc9ddec46c022',
     }
-    reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81}
+    reviewed_gateway_readiness = {
+        'AutomaticConnection.java': '9f17835d1f9cc60fff5d37c87f533d3b60661d8ed40ac4f75c1da19032f252e0',
+        'FriendsAccessAndroid.java': '6d756a58410953a0587a62d3d6c93455af9adce97896d46f1f86f2813fa8f117',
+        'FriendsRestricted.java': '3b66d4452c8d2f550d60e5e34a8cb232218616208e816a36e1f8b38e04edc670',
+        'ReadinessReceiptStore.java': '09549b755e43ebfe970593f5ee64bee52566549bbc4f82be936bcd2bf8473d90',
+        'RestrictedTunnelEngine.java': '0b9bcd34f9f7829a832c9b091ac6fde6a7a24480448c73ad4b99e676c1586470',
+        'RestrictedVault.java': '160fff98281d78fd769c88fbcdd8ffce5e05a64e6e4c0e28e0165d45bee1f432',
+    }
+    reviewed_slow_link_recovery = {
+        'RestrictedRecovery.java': '18c572db0f92e2cc0bbf054f64d21e008336a8d96ea9fb9f530b591fb1e3c028',
+    }
+    reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81,
+                         **reviewed_gateway_readiness, **reviewed_slow_link_recovery}
     reviewed_resources = {
         'clients/android/app/src/main/res/values-ru/strings.xml': 'd46ebfadc2f6814a9db5ca8bc0835cd500b615eda0ad4cf76a6b042bd8e7f294',
         'clients/android/app/src/main/res/values/strings.xml': '53f68508b47e50d7e7b4554b3eb93cfbb03380b6ee8056befa134996c2308135',

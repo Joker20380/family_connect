@@ -103,6 +103,25 @@ Build source tree: `b0b9ba430a1ef5ff271eca80e058483a3a83506b`.
   receipt checks PASS with zero skips. Initial failed logs remain in private evidence.
   This locally repairs the CI prerequisites; a new exact-source CI run is still required.
 
+### Follow-up contract qualification
+
+Standalone source-list/ACK-guard repair committed/pushed as
+`ed54f3311930bc822489f4597f7d53f17bc28beb`; remote main SHA verified.
+Readiness wire41668105208 PASS. Client builds41668105524 passes JVM/native race,
+then stops in `Restricted diagnostic and readiness contracts`: the exact-hash guard
+still expects six handlers before the node-scoped readiness change and recovery before
+the low-link correction. The reviewed deltas retain primary storage/wire compatibility,
+gateway-bound acknowledgements and protected readiness, and add narrow network recovery.
+The guard now pins these seven exact reviewed source hashes instead of excluding files
+or computing expected hashes dynamically.260 matching diagnostic/readiness/release
+checks PASS;2 Windows-only tests deselected exactly as in Android CI. No UI/runtime
+acceptance is inferred from this reference update; API27/API35 are still pending.
+
+Stronger bidirectional wall-clock Family TLS qualification is in progress. The first
+256/64kbit/s run exposes a remaining startup-flight failure not covered by the earlier
+one-way rate model. Its failures remain evidence; no new gateway/client runtime is
+qualified for rollout while that correction is under test.
+
 ## Remaining gates, rollout and rollback
 
 1. Local source-pinned Android ARM64 and gateway builds passed as recorded above.

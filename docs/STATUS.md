@@ -22,6 +22,12 @@ the prior node-scope integration's omitted standalone JVM sources and stale ACK 
 assertion; corrected without removing checks. Standalone JVM187 and wire Python119 PASS.
 Exact55e872c Android CI stopped at JVM compilation (API27/API35 NOT_REACHED); unrelated
 Linux interaction and phase0 fixture/stack failures remain recorded, not waived.
+Follow-uped54f33 is pushed/remote-verified; Readiness wire41668105208 PASS. Android
+CI41668105524 then reached the source-reference guard, which still pinned pre-change
+gateway/readiness/recovery handlers. Reviewed exact new handler hashes are now pinned;
+260 diagnostic/readiness/release contract tests PASS (2 unrelated Windows deselections).
+New wall-clock bidirectional qualification exposed a remaining256/64kbit/s failure;
+the initial-window correction is under test, not accepted for production.
 No server/APK deployment or version change. Remaining: exact-source platform CI,
 mixed deployed-peer/live shaped-link
 acceptance, coordinated client/gateway rollout and immutable Android delivery.

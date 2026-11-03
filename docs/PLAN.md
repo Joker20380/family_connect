@@ -21,6 +21,10 @@ builds and16K alignment PASS, not installed. Corrected standalone JVM source inc
 and gateway-bound ACK source guard;187 standalone JVM/119 wire Python PASS. First CI
 Android attempt stopped at that compile omission; API27/API35 were NOT_REACHED.
 Linux interaction and phase0 fixture/stack failures remain separate unresolved gates.
+Follow-uped54f33 Readiness wire CI PASS; reviewed gateway/recovery handler pins corrected
+after the Android source-reference gate stopped the next run.260 matching contract
+tests PASS. Bidirectional256/64kbit/s wall-clock transfer exposed a remaining startup
+flight-size failure; correction and stronger runtime regression checks are in progress.
 Remaining gates: exact-source Android/platform CI and artifact qualification, mixed old/new peers,
 real shaped-link Family TLS/DNS/HTTPS and fail-closed/cancel/revoke checks; reviewed
 gateway rollback/promotion plus new immutable Android>111/catalog>6 and public readback.
