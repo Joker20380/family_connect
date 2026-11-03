@@ -5,11 +5,11 @@ Owner now explicitly requests enabling the second server, then delivering the up
 This supersedes the slow-link-first pause below; include the already checked slow-link
 and Android picker changes in that delivery. Read-only RU/AMS2 audit confirms the
 canonical renewal writer still targets only AMS1 and AMS2 has no permanent MESH runtime.
-New source adds two pinned, independently validated gateway snapshots and node-scoped
+The earlier source slice added two pinned, independently validated gateway snapshots and node-scoped
 directory synchronization under the existing RU maintenance lock. A failed secondary
 cannot overwrite or stop primary directory distribution. Shared CA/CRL, distinct signed
 identities, certificate identity/role/revocation, directory freshness/conflict and
-source/package boundaries are checked. This is not multi-gateway renewal or deployment.
+source/package boundaries are checked; that earlier slice was read-only/directory-only.
 Final maintenance/package/snapshot selection168 PASS,0 skips, including the accepted-source
 native compatibility check and gateway certificate revision-floor regressions.
 Source checkpointc902e79 and revision-floor correction0775711 pushed/remote-verified;
@@ -19,8 +19,16 @@ source/tree/hash, minSDK27/target35, production tags and all12 library16K alignm
 This is an unsigned111-metadata candidate, not a new release or permission to replace111.
 Overall workflow fails on the separate Linux GTK job; release job skipped.
 No production writes/restarts, token transmission, version/catalog or invitation changes.
-Remaining: one coordinated renewal/revocation/fencing writer for both gateways, permanent
-AMS2 runtime and live acceptance, then qualified selector and immutable Android>111/catalog>6.
+Follow-up source now implements one coordinated RU–AMS1–AMS2 leaf/shared-CRL transaction:
+explicit pinned membership, separate gateway leaves/keys, three matching commit receipts,
+per-node fresh directories before RU resume, rollback/roll-forward and durable fencing.
+Pair-only controllers reject opted-in fleet nodes; the old pair mode remains supported.
+Current validation:334 locked user-space/native/package checks plus236 isolated root-DAC
+checks PASS,0 skips;66 three-node transaction/runtime tests are included in that selection.
+This is not yet production-ready: multi-gateway offline authority handoff/expired-authority
+and registry-overlay recovery remain explicitly rejected, not silently reduced to one node.
+Remaining: complete those recovery contracts, qualify/install the exact coordinated writer,
+permanent AMS2 runtime and live acceptance, then selector and immutable Android>111/catalog>6.
 [Current integration and rollout boundary](releases/2026-11-03-second-nl-mesh.md).
 
 **3 November15:59UTC — refreshed read-only health.** Registry60/56 non-revoked/4 revoked;

@@ -33,8 +33,10 @@ def main():
         mode = config.get('admission_mode', 'legacy')
         require(mode in ('legacy', 'all_activated'), 'ADMISSION_MODE')
         anchor = base64.b64decode(config['anchor'],validate=True)
-        require(type(config['ssh_routes']) is dict and set(config['ssh_routes']) == {'RU','NL'}, 'OPERATOR_CONFIG')
-        nodes = {role:SshNode(role,config['node_sources'][role],route=config['ssh_routes'][role]) for role in ('RU','NL')}
+        require(type(config['ssh_routes']) is dict and set(config['ssh_routes']) in ({'RU','NL'},{'RU','NL','NL2'})
+                and set(config['node_sources']) == set(config['ssh_routes']), 'OPERATOR_CONFIG')
+        nodes = {role:SshNode('NL' if role == 'NL2' else role,config['node_sources'][role],route=route)
+                 for role,route in config['ssh_routes'].items()}
         validator = Validator(anchor,delegation,all_activated=mode == 'all_activated')
         controller = ProductionController(Path(config['state']),nodes,validator)
         if args.action == 'authority-request':
@@ -43,9 +45,8 @@ def main():
             atomic(args.output,canonical(request))
             result = dict(result='OFFLINE_AUTHORITY_SIGNING_REQUEST_READY',sha256=digest(canonical(request)))
         elif args.action == 'evaluate':
-            snapshot,_,_,revocations_changed = controller.read(args.operation)
-            result = evaluate(validator.validate(canonical(snapshot),int(time.time()),expired_leaf_predecessor=True),
-                              int(time.time()),revocations_changed,all_activated=validator.all_activated)
+            snapshot,gateway,_,revocations_changed = controller.read(args.operation)
+            result = controller.decision(snapshot,gateway,revocations_changed)
             if result['result'] != 'NOOP':
                 result['result'] = 'MAINTENANCE_REQUIRED'
         elif args.action == 'recover':

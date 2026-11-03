@@ -8,13 +8,17 @@ from credential_renewal import (Rejected, atomic, canonical, digest, evaluate, p
 from maintenance_policy import maintenance_gate
 from production_transport import DurableOperation
 from offline_handoff import verify as verify_handoff
+import gateway_set
 
 
 class ProductionController:
     def __init__(self, root, nodes, validator, *, clock=time.time, fault=lambda stage:None):
         self.root,self.nodes,self.validator,self.clock,self.fault = Path(root),nodes,validator,clock,fault
         private_directory(self.root)
-        require(set(nodes) == {'RU','NL'}, 'NODE_SET')
+        require(set(nodes) in ({'RU','NL'},{'RU','NL','NL2'}), 'NODE_SET')
+        self.nodes = {role:nodes[role] for role in ('RU','NL','NL2') if role in nodes}
+        self.gateway_slots = tuple(role for role in self.nodes if role != 'RU')
+        self.multiple = len(self.gateway_slots) > 1
         self.operation = DurableOperation(self.root)
 
     def recovery_checkpoint(self):
@@ -31,6 +35,7 @@ class ProductionController:
                     snapshot_sha256=digest(canonical(plan['candidate'])))
 
     def recovery_state(self, operation):
+        require(not self.multiple, 'FLEET_AUTHORITY_HANDOFF_REQUIRED')
         from expired_recovery import historical
         checkpoint = self.recovery_checkpoint()
         authority = self.nodes['RU'].call('public-authority', operation)
@@ -50,6 +55,7 @@ class ProductionController:
         return predecessor, gateway, current, checkpoint
 
     def recovery_request(self, operation, grant_scope):
+        require(not self.multiple, 'FLEET_AUTHORITY_HANDOFF_REQUIRED')
         from expired_recovery import PURPOSE, UPDATES, floors
         require(type(operation) is str and re.fullmatch('[a-z0-9-]{16,96}', operation), 'OPERATION_ID')
         require(type(grant_scope) is list and all(type(device) is str for device in grant_scope), 'RECOVERY_GRANT_SCOPE')
@@ -77,6 +83,7 @@ class ProductionController:
             return request
 
     def run_expired(self, operation, bundle, *, approval=None, resume=False):
+        require(not self.multiple, 'FLEET_AUTHORITY_HANDOFF_REQUIRED')
         from expired_recovery import verify
         require(type(operation) is str and re.fullmatch('[a-z0-9-]{16,96}', operation), 'OPERATION_ID')
         with self.operation.lock():
@@ -174,12 +181,51 @@ class ProductionController:
         require(all(value[1][name] == gateway[name] for name in ('family','gateway','minimum_revision')), 'GATEWAY_BINDING')
         current = {role:node.call('inspect',operation) for role,node in self.nodes.items()}
         self.check_admission(current)
+        if self.multiple:
+            secondary = self.nodes['NL2'].call('public-gateway',operation)
+            other = dict(snapshot,authority=authority['secondary_authority'],certificate=secondary['certificate'])
+            validated = self.validator.validate(canonical(other),int(self.clock()),expired_leaf_predecessor=True)
+            identities = current['RU']['gateway_ids']
+            gateway_set.shared(value,validated,identities)
+            gateway_set.bound_profile(value,gateway,identities['NL'])
+            gateway_set.bound_profile(validated,secondary,identities['NL2'])
+            require(current['NL']['files']['gateway.json'] == gateway['profile_sha256']
+                    and current['NL2']['files']['gateway.json'] == secondary['profile_sha256'], 'STALE_NODE_STATE')
+            gateway = dict(gateway,secondary=secondary,secondary_snapshot=other)
         return snapshot,gateway,current,authority['pending_revocations'] > 0
 
     def check_admission(self, current):
         expected = 'all_activated' if self.validator.all_activated else 'legacy'
         require(all(value.get('admission_mode', 'legacy') == expected for value in current.values()),
                 'ADMISSION_MODE_MISMATCH')
+        require(set(current) == set(self.nodes), 'NODE_SET')
+        if self.multiple:
+            identities = gateway_set.membership(current['RU'].get('gateway_ids'))
+            require(self.validator.all_activated and all(value.get('gateway_ids') == identities
+                    and value.get('gateway_slot') == role for role,value in current.items()), 'GATEWAY_SET_BINDING')
+        else:
+            require(all('gateway_ids' not in value for value in current.values()), 'GATEWAY_SET_REQUIRED')
+
+    def decision(self, previous, gateway, changed):
+        now = int(self.clock())
+        result = evaluate(self.validator.validate(canonical(previous),now,expired_leaf_predecessor=True),
+                          now,changed,all_activated=self.validator.all_activated)
+        if self.multiple:
+            other = evaluate(self.validator.validate(canonical(gateway['secondary_snapshot']),now,
+                expired_leaf_predecessor=True),now,changed,all_activated=self.validator.all_activated)
+            result['due'] = sorted(set(result['due']) | set(other['due']))
+            result['alerts'] = sorted(set(result['alerts']) | set(other['alerts']))
+            result['headroom'] = {name:min(value,other['headroom'][name]) for name,value in result['headroom'].items()}
+            if other['result'] != 'NOOP':
+                result['result'] = other['result']
+        return result
+
+    def publish_directories(self, operation):
+        for slot in self.gateway_slots:
+            directory = self.nodes[slot].call('public-directory',operation)
+            payload = dict(directory,gateway_slot=slot) if self.multiple else directory
+            published = self.nodes['RU'].call('publish-directory',operation,payload)
+            require(published['sha256'] == directory['sha256'], 'DIRECTORY_RECONCILIATION_FAILED')
 
     def save(self, record, state):
         record['state'] = state
@@ -204,6 +250,7 @@ class ProductionController:
     def run(self, operation, *, approval=None, inventory=None, scheduled=False, authority_handoff=None,
             approved_leaf_crl_schedule=False):
         require(type(operation) is str and re.fullmatch('[a-z0-9-]{16,96}',operation), 'OPERATION_ID')
+        require(not self.multiple or authority_handoff is None, 'FLEET_AUTHORITY_HANDOFF_REQUIRED')
         marker = self.root/'transaction.json'
         if marker.exists():
             previous_record = parse(read_private(marker))
@@ -212,8 +259,7 @@ class ProductionController:
                 with self.operation.lock():
                     return self.recover(previous_record)
         previous,gateway,current,revocations_changed = self.read(operation)
-        decision = evaluate(self.validator.validate(canonical(previous),int(self.clock()),expired_leaf_predecessor=True),
-                            int(self.clock()),revocations_changed,all_activated=self.validator.all_activated)
+        decision = self.decision(previous,gateway,revocations_changed)
         if authority_handoff is not None and self.validator.all_activated:
             verify_handoff(authority_handoff,self.validator,previous['authority'],operation,int(self.clock()))
             decision['due'] = sorted(set(decision['due']) | {'authority'})
@@ -242,6 +288,8 @@ class ProductionController:
             record = dict(schema=1,operation_id=operation,state='ACQUIRING',first_cause=None,
                 before_sha256=digest(canonical(current)),before=current,previous=previous,
                 acquired=[],quiesced=[],commit_decided=False,gate=gate)
+            if self.multiple:
+                record['previous_secondary'] = gateway['secondary_snapshot']
             self.save(record,'ACQUIRING')
             try:
                 for role,node in self.nodes.items():
@@ -258,6 +306,9 @@ class ProductionController:
                 require(plan['operation_id'] == operation and plan['previous'] == previous, 'PLAN_BINDING')
                 self.validator.transition(canonical(previous),canonical(plan['candidate']),int(self.clock()),revoke=True,
                                           expired_leaf_predecessor=True)
+                if self.multiple:
+                    gateway_set.validate(plan,self.validator,int(self.clock()),current['RU']['gateway_ids'])
+                    require(plan['secondary']['previous'] == record['previous_secondary'], 'PLAN_BINDING')
                 if scheduled_scope:
                     require(plan['candidate']['grants'] == previous['grants']
                             and plan['candidate']['authority'] == previous['authority']
@@ -272,7 +323,8 @@ class ProductionController:
                     node.call('promote',operation)
                     self.save(record,role+'_PROMOTED')
                 receipts = {role:node.call('readback',operation) for role,node in self.nodes.items()}
-                require(receipts['RU'] == receipts['NL'] and receipts['RU']['plan_sha256'] == digest(canonical(plan)), 'RU_NL_MISMATCH')
+                require(all(value == receipts['RU'] for value in receipts.values())
+                        and receipts['RU']['plan_sha256'] == digest(canonical(plan)), 'RU_NL_MISMATCH')
                 record['reconciliation'] = receipts
                 record['commit_decided'] = True
                 self.save(record,'COMMIT_DECIDED')
@@ -287,11 +339,9 @@ class ProductionController:
         for role,node in self.nodes.items():
             node.call('commit-decision',operation,record['reconciliation'])
         self.save(record,'DECISION_REPLICATED')
-        for role in ('NL','RU'):
+        for role in (*self.gateway_slots,'RU'):
             if role == 'RU':
-                directory = self.nodes['NL'].call('public-directory',operation)
-                published = self.nodes['RU'].call('publish-directory',operation,directory)
-                require(published['sha256'] == directory['sha256'], 'DIRECTORY_RECONCILIATION_FAILED')
+                self.publish_directories(operation)
             self.nodes[role].call('resume',operation)
             self.save(record,role+'_RESUMED')
         self.save(record,'CLEANING')
@@ -320,6 +370,9 @@ class ProductionController:
         require(digest(canonical(record['before'])) == record['before_sha256'], 'ROLLBACK_READBACK_MISMATCH')
         plan = parse(read_private(self.root/'plan.json'))
         require(plan['operation_id'] == record['operation_id'] and plan['previous'] == record['previous'], 'PLAN_BINDING')
+        if self.multiple:
+            require(plan['gateway_ids'] == record['before']['RU']['gateway_ids']
+                    and plan['secondary']['previous'] == record['previous_secondary'], 'PLAN_BINDING')
         for role,node in self.nodes.items():
             actual,expected = node.call('inspect',record['operation_id']),dict(record['before'][role])
             if role == 'RU' and preserve_registry_overlay:
@@ -327,7 +380,7 @@ class ProductionController:
                 expected.pop('database_sha256')
             require(actual == expected, 'ROLLBACK_READBACK_MISMATCH')
             require(node.call('stopped',record['operation_id'])['stopped'], 'READERS_NOT_QUIESCED')
-            if role == 'NL' or not preserve_registry_overlay:
+            if role != 'RU' or not preserve_registry_overlay:
                 require(node.call('rollback-readback',record['operation_id'])['result'] == 'PREVIOUS_SNAPSHOT_RESTORED',
                         'ROLLBACK_READBACK_MISMATCH')
         binding = dict(operation_id=record['operation_id'],before_sha256=record['before_sha256'],
@@ -362,7 +415,8 @@ class ProductionController:
                 payload['registry_overlay_receipt_sha256'] = overlay['receipt_sha256']
             receipt = node.call('finalize-fenced-rollback',record['operation_id'],payload)
             require(receipt['result'] == 'ROLLED_BACK_READERS_STOPPED' and receipt['operation_id'] == record['operation_id']
-                    and receipt['role'] == role and all(receipt[name] == value for name,value in payload.items())
+                    and receipt['role'] == ('NL' if role != 'RU' else 'RU')
+                    and all(receipt[name] == value for name,value in payload.items())
                     and receipt['rollback_verified'] is True and receipt['readers_resumed'] is False
                     and receipt['readers_state'] == 'STOPPED', 'ROLLBACK_TERMINAL_RECEIPT_INVALID')
         record.update(terminal_result='ROLLED_BACK_READERS_STOPPED',rollback_verified=True,previous_material_current=False,
@@ -377,6 +431,8 @@ class ProductionController:
 
     def recover(self, record, *, preserve_registry_overlay=False):
         require(record.get('mode') != 'expired', 'OPERATOR_RECOVERY_REQUIRED')
+        self.check_admission(record['before'])
+        require(not self.multiple or not preserve_registry_overlay, 'FLEET_REGISTRY_RECOVERY_REQUIRED')
         operation = record['operation_id']
         record['first_cause'] = record['first_cause'] or 'CONTROLLER_INTERRUPTED'
         if record['state'] == 'CLEANING':
@@ -390,6 +446,9 @@ class ProductionController:
                 return self.finish(record)
             now = int(self.clock())
             _,_,_,_,leaf = self.validator.validate(canonical(record['previous']),now,expired_leaf_predecessor=True)
+            if self.multiple:
+                other = self.validator.validate(canonical(record['previous_secondary']),now,expired_leaf_predecessor=True)
+                leaf = min(leaf,other[4],key=lambda value:value.not_valid_after_utc)
             if preserve_registry_overlay or record.get('fenced_rollback',{}).get('registry_overlay_receipt_sha256'):
                 try:
                     self.validator.validate(canonical(record['previous']),int(self.clock()))
@@ -410,16 +469,17 @@ class ProductionController:
             self.save(record,'ROLLED_BACK')
             try:
                 self.validator.validate(canonical(record['previous']),int(self.clock()))
+                if self.multiple:
+                    self.validator.validate(canonical(record['previous_secondary']),int(self.clock()))
             except Rejected as error:
                 if str(error) != 'LEAF_EXPIRED_OR_FUTURE':
                     raise
                 return self.finalize_fenced_rollback(record,leaf,int(self.clock()))
             require('fenced_rollback' not in record, 'FENCED_ROLLBACK_CANNOT_RESUME')
-            for role in ('NL','RU'):
+            for role in (*self.gateway_slots,'RU'):
                 if role == 'RU':
-                    directory = self.nodes['NL'].call('public-directory',operation)
-                    self.nodes['RU'].call('publish-directory',operation,directory)
-                self.nodes[role].call('restore',operation,record['previous'])
+                    self.publish_directories(operation)
+                self.nodes[role].call('restore',operation,record['previous_secondary'] if role == 'NL2' else record['previous'])
             self.save(record,'CLEANING')
             return self.cleanup(record)
         except Exception:

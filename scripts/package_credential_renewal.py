@@ -31,7 +31,7 @@ API_ADDITIONS = ('control/friends/profile_store.py', 'control/requirements.lock'
 MODULES = ('credential_renewal.py', 'expired_recovery.py', 'grant_cutover.py', 'maintenance_policy.py',
            'node.py', 'offline_handoff.py', 'production_controller.py', 'production_node.py',
            'production_transport.py', 'renewal_cli.py', 'renewal_health.py', 'runtime_controller.py',
-           'scheduled_evaluate.py')
+           'scheduled_evaluate.py','gateway_set.py')
 SOURCES = tuple(sorted(set(API_MEMBERS) | set(API_ADDITIONS) | {DIRECTORY + '/' + name for name in MODULES}))
 
 

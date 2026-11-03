@@ -43,13 +43,19 @@ def main():
         require(args.mode.startswith('expired-') or (args.grant_scope is None and args.request_output is None),
                 'RECOVERY_EXPLICIT_MODE_REQUIRED')
         config = parse(read_private(args.config))
-        require(set(config) == {'schema','node_config','coordinator_state','nl_source_sha256',
-            'ssh','approved_leaf_crl_schedule'} and type(config['schema']) is int and config['schema'] == 1
+        require(set(config) - {'secondary'} == {'schema','node_config','coordinator_state','nl_source_sha256',
+            'ssh','approved_leaf_crl_schedule'} and type(config['schema']) is int and config['schema'] in (1,2)
+            and ('secondary' in config) == (config['schema'] == 2)
             and type(config['approved_leaf_crl_schedule']) is bool, 'CONTROLLER_CONFIG')
         node, source = construct(Path(config['node_config']),**({'fenced_recovery':True} if args.fenced_recovery else {}))
         require(node.role == 'RU', 'NODE_ROLE')
         nodes = {'RU': LocalNode(node, source),
                  'NL': SshNode('NL', config['nl_source_sha256'], forced=config['ssh'])}
+        require(bool(node.gateway_ids) == (config['schema'] == 2), 'GATEWAY_SET_REQUIRED')
+        if config['schema'] == 2:
+            secondary = config['secondary']
+            require(type(secondary) is dict and set(secondary) == {'source_sha256','ssh'}, 'CONTROLLER_CONFIG')
+            nodes['NL2'] = SshNode('NL',secondary['source_sha256'],forced=secondary['ssh'])
         controller = ProductionController(Path(config['coordinator_state']), nodes, node.validator)
         operation = args.operation or ('scheduled-' + str(int(time.time())) + '-' + secrets.token_hex(8))
         if args.mode.startswith('expired-'):
@@ -72,9 +78,8 @@ def main():
                 approval = MaintenanceAuthorization(operation,digest(canonical(current)),now,now+900)
                 result = controller.run_expired(operation,bundle,approval=approval,resume=args.mode == 'expired-resume')
         elif args.mode == 'evaluate':
-            snapshot, _, _, changed = controller.read(operation)
-            result = evaluate(node.validator.validate(canonical(snapshot), int(time.time()),
-                expired_leaf_predecessor=True), int(time.time()), changed,all_activated=node.validator.all_activated)
+            snapshot, gateway, _, changed = controller.read(operation)
+            result = controller.decision(snapshot,gateway,changed)
             result.update(files_changed=0, remote_writes=0, restarts=0)
         elif args.mode == 'recover':
             record = parse(read_private(controller.root / 'transaction.json'))

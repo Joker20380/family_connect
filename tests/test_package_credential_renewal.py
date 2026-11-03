@@ -41,7 +41,7 @@ def test_renewal_package_pins_every_source_and_shared_profile_module(source, tmp
         manifest = json.load(archive.extractfile('source-manifest.json'))
         assert manifest['production_configuration'] == 'absent' and manifest['operation_permit'] is None
         assert manifest['source_commit'] == subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=source).decode().strip()
-        assert len(manifest['source_files']) == 13
+        assert len(manifest['source_files']) == 14
         assert manifest['source_sha256'] == package.digest(package.encode(manifest['source_files']))
         assert set(archive.getnames()) == set(manifest['files']) | {'source-manifest.json'}
         for member in archive.getmembers():
@@ -70,14 +70,15 @@ def test_renewal_package_pins_every_source_and_shared_profile_module(source, tmp
                                 capture_output=True, check=True)
         assert result.stdout and not result.stderr
     probe = ('import sys;sys.path.insert(0,sys.argv[1]);sys.path.insert(0,sys.argv[2]);'
-             'import node,renewal_health,scheduled_evaluate;from control.friends import profile_store;'
+             'import node,renewal_health,scheduled_evaluate,gateway_set;from control.friends import profile_store;'
+             'assert gateway_set.membership({"NL":"a"*32,"NL2":"b"*32})["NL2"]=="b"*32;'
              'from control.friends.restricted import PROTOCOL,clock_nanoseconds,directory,timestamp_ns;'
              'assert scheduled_evaluate.GATEWAYS==("nl-amsterdam-1","nl-amsterdam-2");'
              'assert "finalize-fenced-rollback" in node.ACTIONS;'
              'assert "rollback-registry-overlay" in node.ACTIONS;'
              'assert hasattr(node.ProductionNode,"rollback_registry_overlay");'
              'assert hasattr(node.ProductionNode,"finalize_fenced_rollback");'
-             'assert profile_store.__file__.startswith(sys.argv[2]+"/");assert len(node.NODE_MODULES)==7')
+             'assert profile_store.__file__.startswith(sys.argv[2]+"/");assert len(node.NODE_MODULES)==8')
     subprocess.run([sys.executable, '-I', '-B', '-c', probe, str(extracted / 'renewal'), str(extracted / 'api.pyz')],
                    capture_output=True, check=True)
     with pytest.raises(FileExistsError):

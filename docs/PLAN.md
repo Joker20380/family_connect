@@ -13,8 +13,14 @@ selection168 PASS,0 skips, including accepted-source native compatibility and ce
 revision-floor regression. Source checkpointc902e79 and correction0775711 pushed/remote-verified,
 not installed. Exact142ee46 Android CI now PASS on API27/API35; downloaded unsigned
 ARM64/source/native/16K checks PASS. It retains111 metadata and cannot replace public111.
-This does not implement the multi-node credential transaction and is not activation.
-Next: coordinated renewal/CRL/fencing and permanent distinct AMS2 identity/runtime;
+Follow-up source adds the multi-node leaf/shared-CRL transaction with explicit membership,
+three-node commit equality, separate directory reconciliation and fault/restart recovery.
+Validation:334 user-space/native/package and236 isolated root checks PASS,0 skips,
+including66 new three-node/runtime tests; no production deployment.
+This is not activation: fleet offline authority handoff/expired-authority recovery and
+registry-overlay recovery are still explicit fail-closed boundaries, not accepted paths.
+Next: finish those shared-authority/recovery contracts and qualify the production writer,
+then permanent distinct AMS2 identity/runtime;
 real READY/TLS/DNS/HTTPS/egress and rejection/cleanup acceptance; only then selector
 activation, exact new-version CI, offline signing and verified public update delivery.
 All deployed versions stay unchanged until those gates pass.

@@ -15,6 +15,7 @@ from credential_renewal import (DAY, MAX_BYTES, THRESHOLD, VALIDITY, Rejected, V
 from grant_cutover import GrantDatabase, prepare_crl, validate_grant_plan
 from production_transport import DurableOperation, SystemdBarrier
 from offline_handoff import verify as verify_handoff
+import gateway_set
 
 
 def pinned(path, allowed_owners):
@@ -34,10 +35,17 @@ def pinned(path, allowed_owners):
 
 class ProductionNode:
     def __init__(self, role, live, state, validator, *, database=None, barrier=None, clock=time.time, fault=lambda stage:None,
-                 profile_uid=None, policy_paths=None, profile_store=None, service_units=None):
+                 profile_uid=None, policy_paths=None, profile_store=None, service_units=None,
+                 gateway_ids=None, gateway_slot=None):
         require(role in ('RU','NL'), 'NODE_ROLE')
         self.role,self.live,self.state,self.validator = role,Path(live),Path(state),validator
         self.database,self.clock,self.fault,self.profile_uid = database,clock,fault,profile_uid
+        self.gateway_ids = gateway_set.membership(gateway_ids) if gateway_ids is not None else None
+        require(self.gateway_ids is None or validator.all_activated, 'GATEWAY_SET_ADMISSION')
+        require((self.gateway_ids is None and gateway_slot is None)
+                or (self.gateway_ids is not None and gateway_slot in (('RU',) if role == 'RU' else ('NL','NL2'))),
+                'GATEWAY_SLOT_INVALID')
+        self.gateway_slot = gateway_slot or role
         self.operation = DurableOperation(self.state)
         self.profile_store = profile_store
         require(profile_store is None or role == 'NL', 'PROFILE_STORE_ROLE')
@@ -48,13 +56,17 @@ class ProductionNode:
         require(not self.live.is_symlink() and self.live.is_dir(), 'LIVE_DIRECTORY_INVALID')
 
     def names(self):
-        return ('issuer.json','revocations.pem') if self.role == 'RU' else ('gateway.json',)
+        return (('issuer.json','revocations.pem','issuer-NL2.json') if self.gateway_ids else
+                ('issuer.json','revocations.pem')) if self.role == 'RU' else ('gateway.json',)
+
+    def live_path(self, name):
+        return self.live/'gateways'/'nl-amsterdam-2'/'issuer.json' if name == 'issuer-NL2.json' else self.live/name
 
     def read(self, name):
         require(name in (*self.names(),'issuer.key'), 'PATH_NOT_ALLOWLISTED')
         if name == 'gateway.json' and self.profile_store is not None:
             return self.profile_store.read(), self.profile_store.locator.profile_metadata
-        return pinned(self.live/name,{os.geteuid(),self.profile_uid})
+        return pinned(self.live_path(name),{os.geteuid(),self.profile_uid})
 
     @contextmanager
     def profile_lock(self):
@@ -81,6 +93,8 @@ class ProductionNode:
     def inspect(self):
         files = {name:digest(self.read(name)[0]) for name in self.names()}
         value = dict(files=files,role=self.role,session_inventory='UNKNOWN')
+        if self.gateway_ids:
+            value.update(gateway_ids=self.gateway_ids,gateway_slot=self.gateway_slot)
         if self.validator.all_activated:
             value['admission_mode'] = 'all_activated'
         if self.policy_paths:
@@ -105,12 +119,16 @@ class ProductionNode:
         import json
         raw = self.read('revocations.pem')[0]
         crl = x509.load_pem_x509_crl(raw)
-        return dict(authority=json.loads(self.read('issuer.json')[0]),crl=raw.decode(),
+        value = dict(authority=json.loads(self.read('issuer.json')[0]),crl=raw.decode(),
                     grants=self.database.snapshot()['restricted_grants'],
                     pending_revocations=self.database.pending_revocations(crl,int(self.clock())))
+        if self.gateway_ids:
+            value['secondary_authority'] = json.loads(self.read('issuer-NL2.json')[0])
+        return value
 
     def authority_request(self, operation_id):
         require(self.role == 'RU', 'NODE_ROLE')
+        require(not self.gateway_ids, 'FLEET_AUTHORITY_HANDOFF_REQUIRED')
         with self.operation.lock():
             path = self.state/'authority-request.json'
             if path.exists():
@@ -428,6 +446,9 @@ class ProductionNode:
 
     def prepare(self, operation_id, gateway, *, authority_handoff=None, expired_handoff=None):
         require(self.role == 'RU', 'NODE_ROLE')
+        require(not self.gateway_ids or (authority_handoff is None and expired_handoff is None),
+                'FLEET_AUTHORITY_HANDOFF_REQUIRED')
+        require(bool(self.gateway_ids) == ('secondary' in gateway), 'GATEWAY_SET_BINDING')
         with self.operation.lock():
             owner = self.owner(operation_id)
             require(owner['state'] == 'QUIESCED' and self.barrier.stopped(), 'READERS_NOT_QUIESCED')
@@ -437,6 +458,9 @@ class ProductionNode:
                 plan = parse(read_private(saved))
                 require(plan['operation_id'] == operation_id and plan['nl_profile_sha256'] == gateway['profile_sha256'],
                         'PREPARE_ALREADY_EXISTS')
+                if self.gateway_ids:
+                    require(plan['secondary']['nl_profile_sha256'] == gateway['secondary']['profile_sha256'],
+                            'PREPARE_ALREADY_EXISTS')
                 self.validate(plan,recovery=True)
                 return plan
             import json
@@ -489,6 +513,10 @@ class ProductionNode:
                                        grants=grant_plan['after_grants']))
             plan = dict(schema=1,operation_id=operation_id,previous=parse(previous),candidate=parse(candidate),
                 grant_plan=grant_plan,ru_expected=owner['expected_state'],nl_profile_sha256=gateway['profile_sha256'])
+            if self.gateway_ids:
+                plan.update(schema=2,gateway_ids=self.gateway_ids,secondary=gateway_set.prepare(plan,
+                    gateway['secondary'],json.loads(self.read('issuer-NL2.json')[0]),self.gateway_ids,
+                    self.validator,signer,now))
             if authorization is not None:
                 plan['expired_recovery'] = dict(bundle=base64.b64encode(expired_handoff).decode(), accepted_at=now)
             self.validate(plan)
@@ -501,12 +529,15 @@ class ProductionNode:
 
     def validate(self, plan, *, recovery=False):
         extra = {'expired_recovery'} if 'expired_recovery' in plan else set()
+        if self.gateway_ids:
+            require(not extra, 'FLEET_AUTHORITY_HANDOFF_REQUIRED')
+            extra = {'secondary','gateway_ids'}
         require(set(plan) == {'schema','operation_id','previous','candidate','grant_plan','ru_expected','nl_profile_sha256'} | extra
-                and plan['schema'] == 1, 'PLAN_SCHEMA')
+                and type(plan['schema']) is int and plan['schema'] == (2 if self.gateway_ids else 1), 'PLAN_SCHEMA')
         now = int(self.clock())
         previous,candidate = canonical(plan['previous']),canonical(plan['candidate'])
         validation_time = plan['grant_plan']['issued_at'] if recovery else now
-        if extra:
+        if 'expired_recovery' in plan:
             from expired_recovery import transition
             authorization = self.recovery_authorization(plan, durable=recovery)
             require(previous == authorization.predecessor.encoded, 'RECOVERY_PREDECESSOR_DIGEST')
@@ -520,7 +551,9 @@ class ProductionNode:
         new = x509.load_pem_x509_crl(plan['candidate']['crl'].encode())
         require({entry.serial_number for entry in new}
                 == {entry.serial_number for entry in old} | set(plan['grant_plan']['predecessors']), 'UNEXPECTED_REVOCATION_CHANGE')
-        return self.validator.validate(candidate,now)
+        if self.gateway_ids:
+            gateway_set.validate(plan,self.validator,now,self.gateway_ids,recovery=recovery)
+        return self.validator.validate(canonical(gateway_set.selected(plan,self.gateway_slot)['candidate']),now)
 
     def recovery_authorization(self, plan, *, durable):
         from expired_recovery import fields, verify
@@ -546,14 +579,15 @@ class ProductionNode:
                          else canonical(plan['candidate']['authority']),
                          'revocations.pem':plan['candidate']['crl'].encode()}
             else:
+                local = gateway_set.selected(plan,self.gateway_slot)
                 gateway = self.public_gateway()
-                require(gateway['profile_sha256'] == plan['nl_profile_sha256']
-                        and gateway['certificate'] == plan['previous']['certificate']
-                        and gateway['revocations'] == plan['previous']['crl'], 'STALE_NODE_STATE')
+                require(gateway['profile_sha256'] == local['nl_profile_sha256']
+                        and gateway['certificate'] == local['previous']['certificate']
+                        and gateway['revocations'] == local['previous']['crl'], 'STALE_NODE_STATE')
                 import json
                 profile = json.loads(self.read('gateway.json')[0])
-                profile.update(authority=self.validator.validate(canonical(plan['candidate']),int(self.clock()))[1]['authority'],
-                               certificate=plan['candidate']['certificate'],revocations=plan['candidate']['crl'])
+                profile.update(authority=self.validator.validate(canonical(local['candidate']),int(self.clock()))[1]['authority'],
+                               certificate=local['candidate']['certificate'],revocations=local['candidate']['crl'])
                 from control.friends.profile_store import ProfileError, renewal_target
                 try:
                     target = renewal_target(self.read('gateway.json')[0], canonical(profile), self.clock(),
@@ -600,8 +634,8 @@ class ProductionNode:
         finally:
             os.close(descriptor)
         self.fault('before-rename-'+name)
-        os.replace(temporary,self.live/name)
-        for directory in (self.live,self.state):
+        os.replace(temporary,self.live_path(name))
+        for directory in (self.live_path(name).parent,self.state):
             descriptor = os.open(directory,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
             try:
                 os.fsync(descriptor)
@@ -735,7 +769,8 @@ class ProductionNode:
             owner = self.owner(operation_id)
             require(owner['state'] in ('PROMOTED','COMMIT_DECIDED','RESUMED'), 'TRANSACTION_STATE')
             local = self.readback(operation_id)
-            require(set(reconciliation) == {'RU','NL'} and all(value == local for value in reconciliation.values()),
+            require(set(reconciliation) == ({'RU',*self.gateway_ids} if self.gateway_ids else {'RU','NL'})
+                    and all(value == local for value in reconciliation.values()),
                     'RU_NL_RECONCILIATION_FAILED')
             if owner['state'] == 'RESUMED':
                 require(parse(read_private(self.state/'reconciliation.json')) == reconciliation, 'RECONCILIATION_CHANGED')
@@ -751,8 +786,7 @@ class ProductionNode:
             require(all(value == local for value in parse(read_private(self.state/'reconciliation.json')).values()),
                     'RU_NL_RECONCILIATION_FAILED')
             if self.role == 'RU':
-                accepted = parse(read_private(self.state/'directory-accepted.json'))
-                require(digest(pinned(self.live/'directory.json',{os.geteuid()})[0]) == accepted['sha256'], 'DIRECTORY_READBACK_MISMATCH')
+                self.accepted_directories(operation_id)
             self.barrier.resume(commit_decided=True,equality_verified=True)
             return self.operation.advance(owner,'RESUMED')
 
@@ -780,29 +814,53 @@ class ProductionNode:
         with self.operation.lock():
             owner = self.owner(operation_id)
             require(owner['state'] in ('COMMIT_DECIDED','RESUMED','ROLLED_BACK','ABORTED'), 'TRANSACTION_STATE')
-            require(set(payload) == {'directory','sha256'}, 'DIRECTORY_RESPONSE_SCHEMA')
+            require(set(payload) == ({'directory','sha256','gateway_slot'} if self.gateway_ids else {'directory','sha256'}),
+                    'DIRECTORY_RESPONSE_SCHEMA')
+            slot = payload.get('gateway_slot','NL')
+            require(slot in (self.gateway_ids or {'NL'}), 'GATEWAY_SLOT_INVALID')
+            destination = self.directory_destination(slot)
             raw = base64.b64decode(payload['directory'],validate=True)
             require(digest(raw) == payload['sha256'], 'DIRECTORY_HASH_MISMATCH')
             from control.friends.restricted import directory, clock_nanoseconds, DirectoryValidationError
-            trust,_ = self.validator.delegation_parser(self.public_authority()['authority'],self.validator.anchor,int(self.clock()))
+            authority = self.public_authority()
+            manifest = authority['secondary_authority'] if slot == 'NL2' else authority['authority']
+            trust,_ = self.validator.delegation_parser(manifest,self.validator.anchor,int(self.clock()))
+            require(not self.gateway_ids or trust['gateway'] == self.gateway_ids[slot], 'GATEWAY_SET_BINDING')
             try:
                 directory(raw,trust['family'],trust['gateway'],now_ns=clock_nanoseconds(self.clock))
             except DirectoryValidationError as error:
                 raise Rejected('DIRECTORY_'+error.predicate.upper()) from None
             if owner['state'] in ('RESUMED','ABORTED'):
-                require(pinned(self.live/'directory.json',{os.geteuid()})[0] == raw, 'DIRECTORY_CHANGED_AFTER_RESUME')
+                require(pinned(destination,{os.geteuid()})[0] == raw, 'DIRECTORY_CHANGED_AFTER_RESUME')
                 return dict(result='UNCHANGED',sha256=digest(raw))
             require(self.barrier.stopped(), 'READERS_NOT_QUIESCED')
+            pinned(destination,{os.geteuid()})
             path = self.state/'directory.pending'
             atomic(path,raw)
-            os.replace(path,self.live/'directory.json')
-            descriptor = os.open(self.live,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+            os.replace(path,destination)
+            descriptor = os.open(destination.parent,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
             try:
                 os.fsync(descriptor)
             finally:
                 os.close(descriptor)
-            atomic(self.state/'directory-accepted.json',canonical(dict(sha256=digest(raw),operation_id=operation_id)))
+            receipt = dict(sha256=digest(raw),operation_id=operation_id)
+            if self.gateway_ids:
+                receipt = parse(read_private(self.state/'directory-accepted.json')) if (self.state/'directory-accepted.json').exists() else dict(operation_id=operation_id,directories={})
+                require(receipt['operation_id'] == operation_id, 'DIRECTORY_RECONCILIATION_FAILED')
+                receipt['directories'][slot] = digest(raw)
+            atomic(self.state/'directory-accepted.json',canonical(receipt))
             return dict(result='PUBLISHED',sha256=digest(raw))
+
+    def directory_destination(self, slot):
+        return self.live/'gateways'/'nl-amsterdam-2'/'directory.json' if slot == 'NL2' else self.live/'directory.json'
+
+    def accepted_directories(self, operation_id):
+        accepted = parse(read_private(self.state/'directory-accepted.json'))
+        require(accepted['operation_id'] == operation_id, 'DIRECTORY_RECONCILIATION_FAILED')
+        directories = accepted['directories'] if self.gateway_ids else {'NL':accepted['sha256']}
+        require(set(directories) == set(self.gateway_ids or {'NL'}), 'DIRECTORY_RECONCILIATION_FAILED')
+        require(all(digest(pinned(self.directory_destination(slot),{os.geteuid()})[0]) == expected
+                    for slot,expected in directories.items()), 'DIRECTORY_READBACK_MISMATCH')
 
     def restore(self, operation_id, previous):
         with self.operation.lock():
@@ -818,8 +876,7 @@ class ProductionNode:
                 require(actual['certificate'] == previous['certificate'] and actual['revocations'] == previous['crl']
                         and actual['authority'] == trust['authority'], 'ROLLBACK_READBACK_MISMATCH')
             if self.role == 'RU':
-                accepted = parse(read_private(self.state/'directory-accepted.json'))
-                require(digest(pinned(self.live/'directory.json',{os.geteuid()})[0]) == accepted['sha256'], 'DIRECTORY_READBACK_MISMATCH')
+                self.accepted_directories(operation_id)
             self.barrier.resume(commit_decided=True,equality_verified=True)
             return self.operation.advance(owner,'ABORTED')
 

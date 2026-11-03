@@ -11,6 +11,58 @@ asks to finish MESH2 using the separately supplied credential. This supersedes t
 question-only interpretation in the earlier [picker report](2026-11-03-android-node-picker.md).
 No claim that source publication enables MESH on an installed client.
 
+## Coordinated renewal source —3 November17:10UTC
+
+Implemented an opt-in three-node transaction rather than a second independent writer.
+All node configurations carry the same distinct `gateway_ids` map (`NL`, `NL2`) and
+their own `gateway_slot`; wire RPC roles remain `RU`/`NL`. Runtime controller schema2
+adds a separately pinned secondary SSH/source route and retains the existing RU state
+directory/lock. Legacy pair mode remains available only for non-fleet configurations.
+A pair-only controller refuses opted-in fleet nodes before acquisition or service stops.
+
+RU prepares one shared CRL/grant plan and two gateway-specific leaf successors. Both
+signed delegations bind the same Family/CA/revision floor, distinct gateway identities
+and keys; certificate role/SAN/revocation and profile replay floors are checked before
+mutation. Only a due secondary leaf can renew without unnecessary primary/CRL changes.
+Stage/promote/readback/commit require all three identical plan/CRL receipts. Both
+gateways resume first; their independently validated fresh directories must be read
+back on RU before its API resumes. Revocation advances one shared CRL sequence.
+
+Tests cover interruption before/after commit, missing/wrong secondary receipts,
+secondary RPC failures and reconnection, stale/incorrect gateway material, immutable
+keys/identities, incomplete directory receipts and expired-secondary fenced rollback.
+An unreachable secondary after commit leaves RU fenced until reconciliation succeeds;
+no automatic fallback substitutes primary credentials for the second gateway.
+
+**Incomplete production gate:** multi-gateway offline authority handoff and expired
+authority recovery, plus historical registry-overlay recovery, explicitly fail closed.
+They are not claimed as implemented by this leaf/CRL slice. Do not deploy this slice
+alone or switch the active pair writer to schema2 yet. No permanent runtime, selector,
+server configuration, Android version, signature or public catalog changed.
+Public versions remain Android111/catalog6, Windows0.2.16/catalog12, Linux0.2.11;
+owner-local Linux0.2.12~l03.2.13 is not a public rollout.
+
+Private validation evidence: `state-client-build/mesh2-renewal-20261103/`.
+An initial broad invocation incorrectly included root-DAC tests as UID1000; those
+permission assertions were not relaxed. Root suites moved to a network-disabled,
+read-only container with sanitized source and synthetic profiles. Initial container
+setup omitted the client Python imports and retained exact snapshot archive; both
+fixtures were supplied without changing their assertions or production material.
+Final checks: **334 PASS** in the locked control/identity user-space environment,
+including66 multi-gateway transaction/runtime tests and the accepted beta111 native
+compatibility validator; **236 PASS** in the isolated root container, including source
+pinning/canonical profile construction for both gateway slots. **570 PASS,0 skips**
+across the disjoint final selections. Package fixtures are synthetic source commits,
+not a released production artifact. Whitespace checks PASS.
+
+Rollout remains gated by complete shared-authority/recovery acceptance, source-pinned
+package qualification, fresh permanent identity/runtime and real READY/TLS/DNS/HTTPS,
+egress, negative/revoke/cancel/shaped-link and cleanup checks. Only then enable selector
+visibility and build a new immutable Android version above111/catalog sequence above6.
+Rollback must preserve the current pair services/configuration and private backup
+evidence; do not downgrade an active fleet to a pair-only writer while AMS2 serves MESH.
+No rollback is needed for this source-only checkpoint because nothing was installed.
+
 ## Resumed production preparation
 
 Read-only SSH confirms the current RU node configuration at

@@ -72,7 +72,8 @@ def transaction(fixture, action='reconcile_current_floor', payload=None, persist
 
 
 @pytest.mark.parametrize('bridge', [None, 'valid', 'retained-tamper', 'current-tamper'])
-def test_packaged_renewal_construct_uses_exact_api_and_canonical_route(canonical, tmp_path, bridge):
+@pytest.mark.parametrize('slot', [None, 'NL', 'NL2'])
+def test_packaged_renewal_construct_uses_exact_api_and_canonical_route(canonical, tmp_path, bridge, slot):
     package = Path(os.environ['FC_TEST_RENEWAL_PACKAGE'])
     extracted = tmp_path / 'packaged'
     extracted.mkdir(mode=0o700)
@@ -90,6 +91,8 @@ def test_packaged_renewal_construct_uses_exact_api_and_canonical_route(canonical
         source_files=manifest['source_files'], source_sha256=manifest['source_sha256'],
         admission_mode='all_activated', profile_locator=str(canonical.fixed_locator),
         profile_locator_sha256=store.digest(canonical.fixed_locator.read_bytes()))
+    if slot:
+        configuration.update(gateway_ids={'NL':'a'*32,'NL2':'b'*32},gateway_slot=slot)
     config = private_file(extracted / 'node.json', store.encode(configuration))
     original_config = config.read_bytes()
     source = extracted / 'renewal'
@@ -125,6 +128,9 @@ assert str(instance.profile_store.locator.profile)==sys.argv[4]
 assert str(instance.directory_path())==sys.argv[5]
 assert str(instance.profile_store.locator.lock)==sys.argv[6]
 assert instance.barrier.units==('synthetic-gateway.service',)
+config=json.loads(Path(sys.argv[2]).read_bytes())
+assert instance.gateway_ids==config.get('gateway_ids')
+assert instance.gateway_slot==config.get('gateway_slot','NL')
 assert identity==sys.argv[7]
 '''
     result = subprocess.run([sys.executable, '-I', '-B', '-c', probe, str(source), str(config),

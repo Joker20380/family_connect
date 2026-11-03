@@ -24,6 +24,16 @@ runtime until a coordinated writer fences and reconciles both nodes for every sh
 CRL/authority change, and real data-plane/rejection/cleanup gates pass. Installations
 must repin the exact qualified source package; do not edit an installed pinned module.
 
+The follow-up leaf/CRL writer is source-only. Node configuration opts in with identical
+`gateway_ids: {NL: <primary-reference>, NL2: <secondary-reference>}` and `gateway_slot`
+(`RU`, `NL` or `NL2`); both remote nodes retain wire role `NL`. RU stores the secondary
+delegation/directory below `gateways/nl-amsterdam-2/`, not in the primary files. Controller
+schema2 requires `secondary: {source_sha256: <exact-package-hash>, ssh: <pinned-route>}`
+in addition to the existing fields and uses the same single coordinator state/lock.
+Do not configure a separate CRL writer or enable this on production yet: fleet offline
+authority/expired-authority and registry-overlay recovery are not implemented by this
+slice. Unsupported paths fail closed; three-node runtime acceptance remains mandatory.
+
 ## Historical rehearsal runbook
 
 **Rehearsal scope:** [FLEET-BOOTSTRAP-2](releases/2026-11-01-fleet-bootstrap-2.md) is explicitly
