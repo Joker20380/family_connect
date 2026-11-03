@@ -194,3 +194,11 @@ catalogs stay as listed above. Source rollback can revert this bounded patch wit
 modifying stored identities or production; a future public rollback must be a higher
 version, never uninstall/clear data or downgrade the catalog. Private logs, screenshots,
 APKs and native hashes stay ignored under `state-client-build/android81-20261103/`.
+
+Source checkpoint `446260eebce3bc7b006f993dfa42444cdc1c85c7` is committed and pushed
+to `origin/main`; remote branch SHA matches. Exact-source
+[Client builds41610914956](https://github.com/Joker20380/family_connect/actions/runs/41610914956)
+is IN_PROGRESS at this readback, not CI acceptance or publication. Five other
+source workflows are also in progress. Existing unrelated dirty documentation and
+private evidence are preserved outside this commit. Documentation links and whitespace
+checks pass for the changed report/code map; no physical device remains connected.

@@ -18,6 +18,7 @@ download progress and existing Codec2 fallback below29 with peer confirmation.
 Local395 JVM/60 Python PASS; lint0 errors/57 warnings; API27 UI/update/audio17 PASS/
 5 skips, protected storage roundtrip and synthetic reinstall/recovery PASS; API35
 19 PASS/4 skips. Additive API27 CI retains existing35/native/control gates.
+Source446260e pushed/remote SHA verified; Client builds41610914956 IN_PROGRESS.
 Next gate for this incident: exact-source platform CI and ARM64 native/MESH/lifecycle
 qualification, then a new immutable version and product-signed preserved-data upgrade;
 current source/debug candidate remains code110 and must never replace published110.

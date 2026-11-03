@@ -13,7 +13,8 @@ voice uses existing Codec2 with peer confirmation; Opus recording remains10+.
 Local395 JVM/60 Python PASS; lint0 errors,57 warnings. API27 final UI/update/audio
 selection17 PASS/5 explicit skips, storage roundtrip and separate-process synthetic
 in-place reinstall/recovery PASS. Same candidate API35 selection19 PASS/4 skips.
-API27 native transport lifecycle is added to CI alongside35, but exact-source CI,
+API27 native transport lifecycle is added to CI alongside35. Source446260e is pushed
+and remote SHA verified; Client builds41610914956 is IN_PROGRESS, not acceptance.
 ARM64/MESH acceptance and a real product-signed old-to-new upgrade are still pending.
 Only disposable x86_64 CI-signed candidate APKs built/installed; source still code110,
 NOT publishable under that immutable version. No production/signing/catalog writes.
