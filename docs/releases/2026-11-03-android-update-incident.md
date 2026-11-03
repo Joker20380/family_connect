@@ -256,3 +256,31 @@ immutable product beta65→111 ARM64/Huawei acceptance. The local APK is not for
 SHA256 `582ba34b083a78e505a06cc53d8a9c054f2f1925699cf869e9c27ebf2b598686`.
 Receipt/screenshots/logs remain ignored under `state-client-build/android81-release-20261103/`.
 No product signing or public distribution has occurred; public110/sequence5 unchanged.
+
+### Hosted API27 failures and bounded test repair
+
+[Client builds41613303779](https://github.com/Joker20380/family_connect/actions/runs/41613303779)
+on99c155d FAILED, not accepted. API35 debug51 cases yielded28 PASS/23 explicit skips;
+API35 Friends22 yielded18 PASS/4 skips. API27 debug51 yielded25 PASS/24 skips/2 failures.
+API27 Friends and final ARM64 packaging were NOT_REACHED. The retained API35 Friends
+XML must not be counted as API27 evidence. Artifact13222275099 runtime diagnostics
+SHA256 is `ca0498375acd70754410711e61e951c161355eff87a82b1a17f6606ba0537f0f`.
+
+Both failures are test API assumptions, repaired without changing product behavior:
+`AutoTcpAddressRuntimeTest` now always checks the real tunnel interface kernel MTU1280,
+and also checks LinkProperties MTU when nonzero (Android8.1 reports unknown0).
+`ControlSelectionRuntimeTest` reads its asset through a buffered stream instead of
+the unavailable InputStream.readAllBytes; manifest SHA, encrypted selection, restart
+and rollback assertions remain intact. No test is skipped to hide these failures.
+
+Both repaired tests PASS on isolated API27 and35 (four runtime executions), with88
+focused Python regression checks PASS. Initial local retries exposed a missing
+disposable-build flag and a stale generated Python environment symlink; correct CI
+flags and regeneration of that disposable build output resolved setup, not by weakening
+checks. Logs are retained privately under `state-client-build/android81-release-20261103/`.
+Both emulators are stopped; no handset, production account or service was used.
+
+Next gate is a fresh complete platform CI run on this repaired source, followed by
+verification of its exact ARM64 artifact and existing offline-signing/publication gates.
+Version111 remains reserved, not released. Public/invitation110 and catalog5 remain
+unchanged; no rollout or runtime rollback. Actual product-signed Huawei recovery is OPEN.

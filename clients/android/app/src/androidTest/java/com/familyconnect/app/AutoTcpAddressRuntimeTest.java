@@ -37,7 +37,10 @@ public class AutoTcpAddressRuntimeTest {
             assertTrue("Auto TCP IPv6 source missing",link.getLinkAddresses().stream().anyMatch(address->address.getAddress().equals(ipv6)&&address.getPrefixLength()==128));
             assertTrue(link.getRoutes().stream().anyMatch(route->route.isDefaultRoute()&&route.getDestination().getAddress() instanceof java.net.Inet4Address));
             assertTrue(link.getRoutes().stream().anyMatch(route->route.isDefaultRoute()&&route.getDestination().getAddress() instanceof java.net.Inet6Address));
-            assertEquals(1280,link.getMtu());
+            java.net.NetworkInterface tunnel=java.net.NetworkInterface.getByName(link.getInterfaceName());
+            assertNotNull("Auto TCP interface missing",tunnel);
+            assertEquals("Kernel tunnel MTU",1280,tunnel.getMTU());
+            if(link.getMtu()!=0)assertEquals("Reported tunnel MTU",1280,link.getMtu());
             assertTrue(link.getDnsServers().contains(java.net.InetAddress.getByName("1.1.1.1")));
         } finally {
             try { engine.down(); } finally { owner.close(); }

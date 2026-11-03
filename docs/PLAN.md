@@ -9,7 +9,11 @@ must run on the exact111 source, with both API35 and27 transport/control/Friends
 Verify downloaded ARM64 package/native provenance/SDK, preserve signer and protected
 state across in-place upgrade; retain actual Huawei/ARM64 field checks as pending until
 observed. Public delivery stays110/sequence5 until the applicable release gates pass.
-Source99c155d pushed/remote-verified; exact111 Client builds41613303779 IN_PROGRESS.
+Source99c155d pushed/remote-verified; exact111 Client builds41613303779 FAILED on two
+API27 test assumptions; API35 passed, API27 Friends/final ARM64 package not reached.
+Repair retains real kernel MTU and encrypted selection/manifest guards; both repaired
+tests PASS on27 and35,88 focused Python PASS. Next: repeat the complete platform run
+on the repaired source, then verify that run's ARM64 artifacts. No release/signing yet.
 Local111 assemble/lint,395 JVM/88 Python, API27 UI17 PASS/5 explicit skips and synthetic
 CI-signed110→111 preserved-data upgrade PASS; product-signed Huawei proof remains pending.
 The previous code110 candidate evidence below is historical qualification, not a release.
@@ -30,10 +34,11 @@ download progress and existing Codec2 fallback below29 with peer confirmation.
 Local395 JVM/60 Python PASS; lint0 errors/57 warnings; API27 UI/update/audio17 PASS/
 5 skips, protected storage roundtrip and synthetic reinstall/recovery PASS; API35
 19 PASS/4 skips. Additive API27 CI retains existing35/native/control gates.
-Source446260e pushed/remote SHA verified; Client builds41610914956 IN_PROGRESS.
+Source446260e pushed/remote SHA verified; Client builds41610914956 superseded/cancelled.
 Next gate for this incident: exact-source platform CI and ARM64 native/MESH/lifecycle
 qualification, then a new immutable version and product-signed preserved-data upgrade;
-current source/debug candidate remains code110 and must never replace published110.
+the initial source/debug code110 candidate must never replace published110; current
+source reserves111 as recorded above.
 Standard Opus recording still requires29; no voice parity or handset recovery claim.
 Distinguish SDK/archive/signer from transfer/storage failure. Completion
 requires relevant regression/runtime acceptance and, for a new APK, exact platform

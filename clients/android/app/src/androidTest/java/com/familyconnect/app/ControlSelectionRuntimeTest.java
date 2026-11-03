@@ -17,8 +17,11 @@ import static org.junit.Assert.*;
 public class ControlSelectionRuntimeTest {
     private static final String ALIAS="family-connect-control-journal-v1";
     private byte[] load(String name)throws Exception {
-        try(var in=InstrumentationRegistry.getInstrumentation().getContext().getAssets().open("control-selection-v1/"+name)) {
-            return in.readAllBytes();
+        try(var input=InstrumentationRegistry.getInstrumentation().getContext().getAssets().open("control-selection-v1/"+name);
+            var output=new java.io.ByteArrayOutputStream()) {
+            byte[] buffer=new byte[4096];int count;
+            while((count=input.read(buffer))!=-1)output.write(buffer,0,count);
+            return output.toByteArray();
         }
     }
     private static final class Host implements ControlApplication.Host {

@@ -6,7 +6,12 @@ continuing ANDROID-UPDATE-FIELD-1 through qualification. Reserve new immutable c
 The earlier code110 compatibility candidate is never publishable. Its Client builds
 41610914956 passed API35 runtime/control and reached API27, then was superseded/cancelled
 by the111 source push; it is not a complete PASS. Source99c155d is pushed/remote-verified;
-exact111 Client builds41613303779 is IN_PROGRESS. Local disposable111 build/lint and
+exact111 Client builds41613303779 FAILED at two API27 debug test assumptions (unknown
+LinkProperties MTU and unavailable InputStream.readAllBytes); API35 passed, API27
+Friends/final ARM64 packaging were not reached. The bounded test repair checks the
+actual kernel tunnel MTU and streams the unchanged manifest-pinned asset. Both repaired
+tests PASS on API27 and35 (four runtime executions);88 focused Python checks PASS.
+A new exact-source platform run is required; no failure is waived. Local disposable111 build/lint and
 395 JVM/88 focused Python checks PASS. API27 UI/update/audio17 PASS/5 explicit skips.
 Synthetic CI-signed110→111 in-place upgrade preserves UID/protected identity/journal/
 outbox and recovers the interrupted write in a new process; fixture cleanup PASS.
@@ -34,10 +39,11 @@ Local395 JVM/60 Python PASS; lint0 errors,57 warnings. API27 final UI/update/aud
 selection17 PASS/5 explicit skips, storage roundtrip and separate-process synthetic
 in-place reinstall/recovery PASS. Same candidate API35 selection19 PASS/4 skips.
 API27 native transport lifecycle is added to CI alongside35. Source446260e is pushed
-and remote SHA verified; Client builds41610914956 is IN_PROGRESS, not acceptance.
+and remote SHA verified; Client builds41610914956 was superseded/cancelled, not acceptance.
 ARM64/MESH acceptance and a real product-signed old-to-new upgrade are still pending.
-Only disposable x86_64 CI-signed candidate APKs built/installed; source still code110,
-NOT publishable under that immutable version. No production/signing/catalog writes.
+Only disposable x86_64 CI-signed candidate APKs built/installed; that initial source
+used code110 and was NOT publishable. Current candidate is111 as recorded above.
+No production/signing/catalog writes.
 Public110/catalog5 signatures, full HTTPS bytes and server hash match; regional
 network health and affected-phone recovery are not proven. Android110/sequence5,
 Windows0.2.16/sequence12, public Linux0.2.11 and owner Linux0.2.12~l03.2.13 unchanged.
