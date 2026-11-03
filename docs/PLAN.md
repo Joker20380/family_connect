@@ -2,18 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
-**ANDROID-UPDATE-FIELD-1 clarification — Telegram over MESH, no bypass.**
-Owner names MESH as the repair target. Proposed order: reproduce long-lived IPv4 TCP
-chat connectivity, inspect bounded stream admission/open/reset/session-loss diagnostics,
-then repair a demonstrated fault with regression coverage. Missing generic UDP alone
-does not diagnose total Telegram failure. Full call compatibility may require a bounded,
-authenticated client/gateway datagram extension with destination guards, negotiated
-capabilities, packet boundaries, expiration and loss/backpressure tests; it is not a
-filter-only change or an automatically started successor. IPv6 must remain captured and
-blocked until supported. Acceptance requires actual Telegram chat/media/call behavior
-over MESH on API27 and a current Android, plus no-bypass/session-loss checks; synthetic
-transport tests alone are insufficient. This is a repair plan, not implementation or
-acceptance. Beta111/catalog6 remain public; no deployment or rollback was performed.
+**ANDROID-UPDATE-FIELD-1 clarification — isolated Telegram triage, no transport rewrite.**
+Owner reports their Telegram and other users' Telegram work; the affected Huawei appears
+to be the exception. Narrow the next step to the failing operation, foreground/background
+behavior, Telegram proxy/version, active node/path and network comparison. A working
+comparison must match the relevant conditions; current reports do not prove an OS defect.
+Only pursue source changes after a demonstrated fault; the earlier generic UDP extension
+discussion is not selected work. No reset/uninstall, Telegram bypass, server mutation or
+new APK for an unverified hypothesis. Close this symptom only with affected-handset
+recovery evidence. Beta111/catalog6 remain public; no runtime checks or deployment here.
 
 **ANDROID-UPDATE-FIELD-1 field follow-up — Telegram triage selected, not a new release.**
 Owner reports111 now works but Telegram fails with VPN. Installation/operation recovery

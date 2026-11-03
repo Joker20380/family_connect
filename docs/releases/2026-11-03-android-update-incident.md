@@ -442,3 +442,17 @@ checks have not run; this turn only reviewed source and updated the repair plan.
 runtime change, build, signing, server policy change or deployment. Public beta111 /
 catalog6 and the publication/readback/rollback paths above remain unchanged. A later
 binary repair must use a new immutable version and increasing signed catalog.
+
+### Working-user comparison narrows the incident
+
+The owner subsequently reports Telegram works for them and other users; only the
+affected Huawei appears to fail. This is reported comparative evidence, not a matched
+device/network/version test. It weakens a general MESH incompatibility explanation and
+supersedes transport expansion as the proposed immediate response. Generic UDP support
+is not selected work for this incident. First identify the failing operation and whether
+failure is foreground or background-related, then compare proxy settings, Telegram
+version, active VPN path and Wi-Fi/mobile conditions. Battery restrictions are relevant
+only as an unconfirmed background-failure hypothesis. Do not clear data, reinstall or
+bypass the VPN. No device test or source/runtime/server change was performed. Documentation
+content/whitespace checks only; public beta111/catalog6 and existing rollout/rollback
+paths remain unchanged. Affected-handset recovery remains OPEN.
