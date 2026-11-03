@@ -8,18 +8,19 @@ not an established HyperOS defect; no implementation/deployment authorized by th
 [Evidence and limits](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November21:28UTC MESH2: active common fleet; repeat-session gate still OPEN.**
-Natural lease expiry/resource cleanup observed without another restart; both writer
-timers active/waiting. Deterministic queued-writer regression proves final RESET could
-be dropped; bounded local-write completion is corrected/tested in source only.
-Candidate live probes still fail (post-descriptor cleanup delay, bootstrap rejection,
-seed connect); unchanged-stream baseline also reaches dedicated Family TLS deadline.
-Next: isolate cleanup and handshake causes, qualify repeated actual-provider sessions
-without restart, then backend readiness/migration, boot enablement and client delivery.
-No ownership preemption, timeout/lease bypass or release gate waiver. Earlier positive
-4 HTTPS/3 DNS/AMS2 egress is not repeated-session acceptance. Public111/catalog6,
-selector and gateway binaries unchanged. Continue this task only.
-[Evidence](releases/2026-11-03-second-nl-mesh.md#bounded-reset-write-source-checkpoint).
+**3 November21:53UTC MESH2: source fixes qualified; deployed repeat-session gate OPEN.**
+Final RESET local-write completion47b76f4 and idle RTP gap expiry are corrected with
+deterministic/race coverage; real local Pion validates the reader deadline. Live
+RESET-only probes pass individual Family/HTTPS/DNS/AMS2 egress, not immediate repeat:
+same-owner challenge still times out. Do not infer server receipt from a local write.
+Next: project these narrow changes onto the accepted canonical/P1 gateway capsule,
+qualify exact builds and controlled runtime, then repeat actual-provider connect and
+cleanup without restart. Keep the earlier bootstrap cleanup/handshake failures open
+until explained by evidence. Then backend readiness/migration, boot enablement,
+selector and immutable Android delivery with exact CI. Source47b76f4 full CI has two
+Linux selector-expectation failures; no gate may be called green or waived. Public111/
+catalog6 and gateway binaries unchanged. No ownership preemption or unrelated successor.
+[Evidence](releases/2026-11-03-second-nl-mesh.md#idle-rtp-gap-source-correction).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **Export24 read-only server correlation remains partial.** Registration/invitation

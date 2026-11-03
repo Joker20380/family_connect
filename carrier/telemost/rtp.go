@@ -81,6 +81,26 @@ func (b *reorderBuffer) drop(packet *rtp.Packet, result string) {
 	b.trace.Boundary(sessiontrace.Boundary{Direction: "rx", Stage: "rtp_received", Result: result, FrameKnown: true, MediaTrack: b.mediaTrack, Timestamp: packet.Timestamp, FirstRTP: packet.SequenceNumber, LastRTP: packet.SequenceNumber, Packets: 1})
 }
 
+func (b *reorderBuffer) deadline() time.Time {
+	if b.gapSince.IsZero() {
+		return time.Time{}
+	}
+	return b.gapSince.Add(reorderGapTimeout)
+}
+
+func (b *reorderBuffer) expire(now time.Time, deliver func(*rtp.Packet)) {
+	if b.gapSince.IsZero() || now.Before(b.deadline()) {
+		return
+	}
+	b.skipToOldest()
+	b.drain(deliver)
+	if len(b.pkts) == 0 {
+		b.gapSince = time.Time{}
+	} else {
+		b.gapSince = now
+	}
+}
+
 func (b *reorderBuffer) drain(deliver func(*rtp.Packet)) {
 	for {
 		pkt, ok := b.pkts[b.nextSeq]

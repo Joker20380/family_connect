@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"runtime"
 	"strings"
@@ -12,6 +13,7 @@ import (
 
 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/gorilla/websocket"
+	"github.com/pion/interceptor"
 	"github.com/pion/rtp"
 	"github.com/pion/webrtc/v4"
 	"github.com/pion/webrtc/v4/pkg/media"
@@ -753,9 +755,14 @@ func capabilitiesOffer() map[string]any {
 	}
 }
 
+type vp8PacketReader interface {
+	Read([]byte) (int, interceptor.Attributes, error)
+	SetReadDeadline(time.Time) error
+}
+
 // readVP8Track consumes an incoming VP8 track, reassembles RTP into VP8 frames
 // and feeds carried fragments to the reassembler.
-func (s *Session) readVP8Track(track *webrtc.TrackRemote) {
+func (s *Session) readVP8Track(track vp8PacketReader) {
 	var state vp8FrameState
 	reorder := newReorderBuffer()
 	reorder.trace = s.cfg.Trace
@@ -767,9 +774,45 @@ func (s *Session) readVP8Track(track *webrtc.TrackRemote) {
 	reorder.mediaTrack, state.mediaTrack = observer.track, observer.track
 	defer observer.flush("incomplete")
 	buf := make([]byte, 65536)
+	deliver := func(ordered *rtp.Packet) {
+		correlated.packet(&ordered.Header, ordered.Payload, "ok")
+		s.statsMu.Lock()
+		if state.haveLastSeq && ordered.SequenceNumber != state.lastSeq+1 {
+			s.mediaStats.SequenceGaps++
+		}
+		s.statsMu.Unlock()
+		frame := state.process(ordered)
+		if frame == nil {
+			return
+		}
+		s.statsMu.Lock()
+		s.mediaStats.FramesReceived++
+		s.statsMu.Unlock()
+		if frag, ok := decodeVP8Frame(frame); ok {
+			point := fragmentBoundary(frag)
+			point.Stage, point.Direction, point.Result = "vp8_reassembled", "rx", "ok"
+			point.FrameKnown, point.Timestamp, point.LastRTP = true, ordered.Timestamp, ordered.SequenceNumber
+			point.MediaTrack = observer.track
+			s.cfg.Trace.Boundary(point)
+			s.statsMu.Lock()
+			s.mediaStats.BinaryFrames++
+			s.statsMu.Unlock()
+			s.reassembler.ingest(frag)
+		}
+	}
 	for {
+		deadline := reorder.deadline()
+		if err := track.SetReadDeadline(deadline); err != nil {
+			s.traceCarrierReadEnd("SUBSCRIBER", err)
+			return
+		}
 		n, _, err := track.Read(buf)
 		if err != nil {
+			var timeout net.Error
+			if !deadline.IsZero() && errors.As(err, &timeout) && timeout.Timeout() {
+				reorder.expire(time.Now(), deliver)
+				continue
+			}
 			s.traceCarrierReadEnd("SUBSCRIBER", err)
 			return
 		}
@@ -784,31 +827,6 @@ func (s *Session) readVP8Track(track *webrtc.TrackRemote) {
 			s.mediaStats.EmptyRTP++
 		}
 		s.statsMu.Unlock()
-		reorder.push(pkt, func(ordered *rtp.Packet) {
-			correlated.packet(&ordered.Header, ordered.Payload, "ok")
-			s.statsMu.Lock()
-			if state.haveLastSeq && ordered.SequenceNumber != state.lastSeq+1 {
-				s.mediaStats.SequenceGaps++
-			}
-			s.statsMu.Unlock()
-			frame := state.process(ordered)
-			if frame == nil {
-				return
-			}
-			s.statsMu.Lock()
-			s.mediaStats.FramesReceived++
-			s.statsMu.Unlock()
-			if frag, ok := decodeVP8Frame(frame); ok {
-				point := fragmentBoundary(frag)
-				point.Stage, point.Direction, point.Result = "vp8_reassembled", "rx", "ok"
-				point.FrameKnown, point.Timestamp, point.LastRTP = true, ordered.Timestamp, ordered.SequenceNumber
-				point.MediaTrack = observer.track
-				s.cfg.Trace.Boundary(point)
-				s.statsMu.Lock()
-				s.mediaStats.BinaryFrames++
-				s.statsMu.Unlock()
-				s.reassembler.ingest(frag)
-			}
-		})
+		reorder.push(pkt, deliver)
 	}
 }

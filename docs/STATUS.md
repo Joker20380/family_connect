@@ -7,22 +7,24 @@ in that window. Packet receipt/old-room identity not proven. No changes by this 
 [Evidence](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November21:28UTC — MESH2 active; reconnect acceptance still OPEN, source correction only.**
-The common RU/AMS1/AMS2 writer is COMMITTED; renewal/directory timers were read back
-active/waiting with successful last executions. Earlier real Family TLS,4 HTTPS/3 DNS
-and AMS2 egress PASS remain valid, not a repeated-session acceptance. Natural lease
-expiry/resource cleanup was subsequently observed without a service restart. A forced
-async-writer test proves final reliable RESET could be discarded on immediate carrier
-close. Source now waits for its local write within the existing100ms bound, with
-legacy/completion modes and stalled-writer rejection tested. Not installed on a gateway.
-Live candidate probes are NOT PASS: one bootstrap cleanup outlasted the descriptor,
-another rejected during bootstrap, another failed seed connect. An unchanged-stream
-baseline also failed dedicated Family authentication at the gateway's30s deadline;
-this does not explain away the candidate cleanup delay. No further server restart,
-identity replacement, policy relaxation or release. Secondary boot enablement, backend
-overlay/migration, selector and immutable Android delivery remain pending. Public
-Android111/catalog6 readback matches; Windows0.2.16 and Linux0.2.11 unchanged.
-[Live receipt and rollback boundary](releases/2026-11-03-second-nl-mesh.md#permanent-fleet-activation-and-live-data-plane).
+**3 November21:53UTC — MESH2 active; two transport defects corrected in source, NOT deployed.**
+Bounded final RESET local-write completion is pushed as47b76f4. Two subsequent real
+operator probes pass Family TLS,4 HTTPS/3 DNS and AMS2 egress, but immediate repeat
+still fails at the retained-owner challenge deadline. Local RESET write success is
+not remote release; the first session ended later at `authorization_changed`.
+An independent reproduced receiver defect stranded complete RTP frames after a gap
+when no next packet arrived. The existing750ms gap deadline now wakes the actual
+Pion reader; wrap-around and next-gap budgets are preserved. Five focused race repeats,
+three real local Pion idle-gap repeats and full telemost/bootstrap race packages PASS.
+This is not yet evidence that deployed reconnect is fixed. Neither transport correction
+is in the accepted production projection/runtime. Next: exact projection/build and
+live repeated-session/cleanup acceptance, then backend/selector/immutable Android.
+Common writer timers remain active/waiting with successful last oneshots; a separate
+latest coordinator-file read timed out and is not claimed. AMS2 active/boot-disabled,
+no operator restart in this slice. Public Android111/catalog6, Windows0.2.16 and Linux
+0.2.11 unchanged. Source CI47b76f4 carrier gates PASS, but Linux GUI has two selector
+expectation failures; full matrix is not green. No waiver or public delivery.
+[Evidence and rollback boundary](releases/2026-11-03-second-nl-mesh.md#idle-rtp-gap-source-correction).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **3 November export24 server correlation — PARTIAL, cause still OPEN.** Second API36

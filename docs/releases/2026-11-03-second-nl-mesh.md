@@ -675,16 +675,16 @@ changing Family TLS close order and no such change is included.
 
 Actual-provider qualification remains FAIL/INCOMPLETE, all attempts retained privately:
 
--20:59:56 candidate start: Family authentication and descriptor received, then no
+- 20:59:56 candidate start: Family authentication and descriptor received, then no
   `bootstrap_closed_before_dedicated`; returned `descriptor_expired` after136.545s.
   Gateway failed its unclaimed dedicated Family session. Cleanup-delay cause still open.
--21:06 candidate: bootstrap protocol rejection before descriptor; no data-plane probe.
--21:12:51 unchanged-stream baseline with the same private watchdog: bootstrap closed,
+- 21:06 candidate: bootstrap protocol rejection before descriptor; no data-plane probe.
+- 21:12:51 unchanged-stream baseline with the same private watchdog: bootstrap closed,
   dedicated carrier connected, then Family authentication failed after63.059s overall.
   Server trace starts Family TLS21:13:18.492 and closes21:13:48.495, its30s deadline;
   carrier-established trace is later21:13:32.798. This is evidence of a consumed
   pre-peer handshake budget, not proof of a complete fix or certificate diagnosis.
--21:19:22 candidate: seed connect failed after7.329s; no descriptor/Family/data plane.
+- 21:19:22 candidate: seed connect failed after7.329s; no descriptor/Family/data plane.
 
 Watchdog arms only after descriptor delivery; neither later attempt reproduced that
 delay, so no goroutine dump was produced. The queued-RESET correction is not installed
@@ -704,3 +704,64 @@ identities; use explicit fleet recovery, never restore the old pair writer or pr
 Remaining gates: repeat actual-provider connect/cleanup without restart, backend
 readiness/migration, secondary boot enablement, exact new-version Android CI/API27/API35,
 offline signing and immutable catalog/download verification. No queued successor starts.
+
+## Idle RTP gap source correction
+
+3 November21:53UTC. RESET correction47b76f494b66a4f7508bb3ae08d8ffd1c7b5d137
+was pushed and its remote main SHA verified. Five additional focused race repetitions
+PASS. A fresh30min leaf for the same synthetic identity expires21:58:05UTC; no new
+product registration, grants or assignments. Private probes force normal control
+unavailable and use the genuine secondary directory/provider, not a direct-room bypass.
+
+- 21:29:16 probe: Family TLS,4 HTTPS/3 DNS and AMS2 egress PASS,46.819s overall.
+- 21:30:37 repeat: FAIL after120.018s, server confirms challenge/context_deadline;
+  no new dedicated descriptor. No restart or ownership takeover was used.
+- 21:39:27 server emits FAILED/authorization_changed then dedicated_resources_closed
+  for the retained first session. This was not immediate peer-close or a demonstrated
+  lifetime-expired event. PID554442/NRestarts0 unchanged across these observations.
+- 21:39:45 probe: Family TLS,4 HTTPS/3 DNS and AMS2 egress PASS,43.307s overall.
+  Private instrumentation confirms both final RESET local writes returned success.
+  It does not confirm receipt at the server. No post-descriptor watchdog dump occurred.
+
+A private fault test drops RESET after successful local completion and reproduces
+remote-session retention in5 race repetitions. This proves the local-write guarantee
+is insufficient under loss, not where the live RESET was lost. Runtime sender/receiver
+evidence is still required; previous cleanup-delay and handshake failures remain open.
+
+Receiver review found a separate concrete defect: `reorderBuffer` checked its750ms
+gap timeout only on the next RTP push. A complete final carrier frame behind a missing
+packet could remain buffered indefinitely if the sender stopped. Two production-loop
+tests (normal sequence and wrap-around), with only the track-reader parameter extracted
+to an interface, fail on unchanged behavior at2s. The correction arms Pion's actual RTP
+read deadline for the current gap and releases available packets when it expires,
+without waiting for another network packet. A subsequent gap gets its own full750ms;
+empty/recovered buffers clear the read deadline. Existing sequence/window bounds,
+frame validation, Family authentication, lease ownership and policy are unchanged.
+
+Acceptance:5 repeated race runs of new idle-gap and existing RTP-reorder cases PASS;
+3 repeated real local Pion RTP/DTLS tests with deliberately omitted sequence101 and
+no packet after102 PASS. Full `go test -race -p=1 ./telemost ./bootstrap` PASS (35.759s/
+3.531s); the idle-gap cases also PASS with `fc_perf_diagnostic`. Local Pion is not
+real-provider or phone acceptance. The production capsule
+projection helper/patch and deployed gateway do not yet contain either new transport
+correction; a generic-main gateway must not replace the accepted canonical/P1 runtime.
+
+CI41721843205/source47b76f4: JVM control, restricted carrier race and readiness contracts
+PASS; native Android support-library build PASS. At observation, Android runtime/release
+steps were unfinished; Windows primary job PASS. Linux fails the real GTK poll/Disconnect
+gate:48 PASS/2 FAIL in `test_old_connect_completion_cannot_replace_new_disconnect`
+(AWG/TCP), expecting country alias `nl` while actual selected node is `nl-amsterdam-1`.
+No Linux code/test/workflow is changed or gate weakened in this source slice. Subsequent
+source pushes may supersede an in-flight run; neither this run nor local tests count as
+accepted exact-version release CI. No111 binary/catalog replacement or new tag.
+
+Final small RU readback: renewal/directory timers active/waiting, oneshots inactive with
+Result=success/ExecMainStatus0. A separate coordinator-file read timed out; retain the
+prior confirmed COMMITTED transaction, do not invent latest transaction evidence.
+AMS2 remains active/boot-disabled, backend overlay built-only, public versions unchanged.
+The last synthetic session's remote cleanup remains to be checked; do not claim it from
+the local process exit. Raw profiles, journals, watchdogs and source experiments remain
+private. Rollback stays a normal source revert plus explicit common-fleet recovery for
+runtime changes; no product DB restore, old pair writer or identity cloning. Next is
+exact production projection/build/live cleanup acceptance, then backend/selector/Android
+release gates already listed above, not a different queued task.
