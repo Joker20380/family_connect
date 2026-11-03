@@ -9,6 +9,9 @@ must run on the exact111 source, with both API35 and27 transport/control/Friends
 Verify downloaded ARM64 package/native provenance/SDK, preserve signer and protected
 state across in-place upgrade; retain actual Huawei/ARM64 field checks as pending until
 observed. Public delivery stays110/sequence5 until the applicable release gates pass.
+Source99c155d pushed/remote-verified; exact111 Client builds41613303779 IN_PROGRESS.
+Local111 assemble/lint,395 JVM/88 Python, API27 UI17 PASS/5 explicit skips and synthetic
+CI-signed110→111 preserved-data upgrade PASS; product-signed Huawei proof remains pending.
 The previous code110 candidate evidence below is historical qualification, not a release.
 
 **Selected incident ANDROID-UPDATE-FIELD-1 — OPEN,3 November.** The owner's

@@ -234,3 +234,25 @@ upgrade with identity/journal/outbox preservation. Existing signing/catalog/immu
 publication guards remain; actual Huawei recovery and product-signed field upgrade are
 not declared PASS from an emulator. Rollback before publication is source-only; after
 publication use a higher version/sequence, preserve old artifacts and never clear data.
+
+### Versioned local upgrade PASS; hosted qualification pending
+
+Source `99c155dd7ab64e38be607b01d8d7b73384da8448` is pushed with matching remote SHA.
+Its [Client builds41613303779](https://github.com/Joker20380/family_connect/actions/runs/41613303779)
+is IN_PROGRESS. The earlier446260e run passed API35 runtime/control and reached API27,
+then normal branch concurrency cancelled it for111; it is superseded, not a full PASS.
+
+Local exact111 source assembles with the existing disposable CI signer and reused
+accepted audio natives;395 JVM and88 focused Python tests PASS, lint/assemble PASS.
+On the isolated API27 emulator, a110 CI-signed predecessor creates the synthetic
+protected identity/journal/outbox and an interrupted write. After force-stop,
+`adb install -r` upgrades to111, retaining the package UID. The recovery test runs
+in a distinct process, verifies the same protected state and cleans all its fixture
+material. A further22 UI/update/audio cases yield17 PASS/5 documented opt-in or
+unsupported-feature skips. No new enrollment, live service or user identity is used.
+
+This is a real versionCode increase in a **synthetic x86_64 CI-signed test**, not an
+immutable product beta65→111 ARM64/Huawei acceptance. The local APK is not for users:
+SHA256 `582ba34b083a78e505a06cc53d8a9c054f2f1925699cf869e9c27ebf2b598686`.
+Receipt/screenshots/logs remain ignored under `state-client-build/android81-release-20261103/`.
+No product signing or public distribution has occurred; public110/sequence5 unchanged.
