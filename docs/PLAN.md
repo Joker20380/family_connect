@@ -8,8 +8,9 @@ FLEET-BOOTSTRAP-2 MESH2 before client publication. Dependencies and completion g
 the second-node task below; the already checked MESH-SLOW-LINK-1 and picker sources must
 be included in the resulting Android delivery. No automatic unrelated fleet successor.
 Completed new source slice: pinned two-node snapshot/directory inspection and independent
-directory publication under the RU maintenance lock;58 focused tests and164 broader
-maintenance/package/snapshot tests PASS plus the accepted-source native check PASS.
+directory publication under the RU maintenance lock; final maintenance/package/snapshot
+selection168 PASS,0 skips, including accepted-source native compatibility and certificate
+revision-floor regression. Source checkpointc902e79 pushed/remote-verified, not installed.
 This does not implement the multi-node credential transaction and is not activation.
 Next: coordinated renewal/CRL/fencing and permanent distinct AMS2 identity/runtime;
 real READY/TLS/DNS/HTTPS/egress and rejection/cleanup acceptance; only then selector

@@ -10,9 +10,11 @@ directory synchronization under the existing RU maintenance lock. A failed secon
 cannot overwrite or stop primary directory distribution. Shared CA/CRL, distinct signed
 identities, certificate identity/role/revocation, directory freshness/conflict and
 source/package boundaries are checked. This is not multi-gateway renewal or deployment.
-Focused58 tests PASS; broader maintenance/package/snapshot164 PASS plus the separately
-enabled accepted-source native compatibility check PASS (165 distinct selected tests).
-Exact142ee46 Android CI41672473840 reached API27 at16:38UTC; final artifact gate pending.
+Final maintenance/package/snapshot selection168 PASS,0 skips, including the accepted-source
+native compatibility check and gateway certificate revision-floor regressions.
+Source checkpointc902e79 pushed and remote-verified; no deployment.
+Exact142ee46 Android CI41672473840 passed API35/API27 and pinned native build by16:46UTC;
+unsigned ARM64 packaging was running and final artifact gate remained pending.
 No production writes/restarts, token transmission, version/catalog or invitation changes.
 Remaining: one coordinated renewal/revocation/fencing writer for both gateways, permanent
 AMS2 runtime and live acceptance, then qualified selector and immutable Android>111/catalog>6.

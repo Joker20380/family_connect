@@ -250,6 +250,24 @@ def test_revoked_gateway_leaf_is_never_published(fleet):
     assert readback(fleet) == before
 
 
+@pytest.mark.parametrize('revision,accepted',[('2',True),('0',False),('invalid',False)])
+def test_gateway_leaf_revision_obeys_minimum_not_exact_equality(fleet,revision,accepted):
+    gateway_id = sync.GATEWAYS[1]
+    original = x509.load_pem_x509_certificate(fleet.snapshots[gateway_id]['profile']['certificate'].encode())
+    attributes = [x509.NameAttribute(attribute.oid,'revision='+revision)
+                  if attribute.oid == NameOID.ORGANIZATIONAL_UNIT_NAME and attribute.value.startswith('revision=')
+                  else attribute for attribute in original.subject]
+    replacement = (x509.CertificateBuilder().subject_name(x509.Name(attributes)).issuer_name(original.issuer)
+        .public_key(original.public_key()).serial_number(x509.random_serial_number())
+        .not_valid_before(original.not_valid_before_utc).not_valid_after(original.not_valid_after_utc))
+    for extension in original.extensions:
+        replacement = replacement.add_extension(extension.value,extension.critical)
+    certificate = replacement.sign(fleet.service.signing_key,None)
+    fleet.snapshots[gateway_id]['profile']['certificate'] = certificate.public_bytes(Encoding.PEM).decode()
+    result = sync.inspect_gateways(fleet.fleet_node,fleet.routes)
+    assert result['gateways'][gateway_id]['result'] == ('NOOP' if accepted else 'FAIL_CLOSED')
+
+
 def test_cli_uses_explicit_routes_and_returns_partial_failure(fleet,monkeypatch,capsys,tmp_path):
     path = tmp_path/'routes.json'
     atomic(path,canonical(dict(schema=1,gateways=fleet.routes)))

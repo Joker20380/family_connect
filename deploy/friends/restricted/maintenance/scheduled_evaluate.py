@@ -88,8 +88,10 @@ def inspect_gateway(node, remote, authority, manifest, expected_gateway, now, *,
     require(type(profile['minimum_crl']) is int and 0 < profile['minimum_crl'] <= sequence, 'GATEWAY_CRL_FLOOR')
     require(crl.get_revoked_certificate_by_serial_number(leaf.serial_number) is None, 'GATEWAY_REVOKED')
     claims = [attribute.value for attribute in leaf.subject.get_attributes_for_oid(NameOID.ORGANIZATIONAL_UNIT_NAME)]
-    require(len(claims) == 4 and set(claims) == {'protocol='+PROTOCOL,'family='+trust['family'],
-            'role=gateway','revision='+str(trust['minimum_revision'])}
+    revisions = [claim.removeprefix('revision=') for claim in claims if claim.startswith('revision=')]
+    require(len(claims) == 4 and len(revisions) == 1 and re.fullmatch('[0-9]{1,19}',revisions[0])
+            and trust['minimum_revision'] <= int(revisions[0]) <= 2**63-1
+            and set(claims) == {'protocol='+PROTOCOL,'family='+trust['family'],'role=gateway','revision='+revisions[0]}
             and [attribute.value for attribute in leaf.subject.get_attributes_for_oid(NameOID.SERIAL_NUMBER)]
                 == [expected_gateway], 'GATEWAY_CERTIFICATE_BINDING')
     require(not leaf.extensions.get_extension_for_class(x509.BasicConstraints).value.ca

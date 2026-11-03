@@ -53,6 +53,16 @@ Client builds41672473840 had passed the Android15 runtime stage and was running 
 Android8.1 lifecycle stage; unsigned final ARM64 artifact acceptance remained pending.
 Linux GTK interaction and phase0 setup failures remain separate, not waived or repaired.
 
+Follow-up source review aligns leaf revision validation with native Family TLS: a leaf
+revision above the configured minimum is valid; below-floor/malformed revisions are not.
+Final combined locked selection: **168 PASS,0 skips**, including the accepted beta111
+native delivery validator. Initial optional skip and earlier logs remain retained.
+Checkpoint `c902e79db115199c98a19708fd46e34e245b5c89` is pushed and remote main verified.
+At16:46UTC Android job126044369850 had passed API35/API27 and the pinned native build;
+unsigned ARM64 packaging was running. No final artifact or public release acceptance is
+inferred from intermediate CI steps. This candidate still has111 version metadata and
+must not replace the immutable published111 APK.
+
 ## Reconciled evidence
 
 - [Physical rehearsal and reboot](2026-11-02-fleet-bootstrap-2-reboot.md) already proved
