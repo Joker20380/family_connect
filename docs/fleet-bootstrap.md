@@ -6,6 +6,17 @@ Owner selected permanent Amsterdam2 MESH, then Android delivery on3 November.
 See [current integration gates](releases/2026-11-03-second-nl-mesh.md); the rehearsal
 permissions, identities and four-hour permits below are not permanent authorization.
 
+The production gateway is the accepted canonical/P1 capsule, not generic main. Use
+`python -m scripts.slow_link_gateway_source --accepted-source PRIVATE_SOURCE
+--accepted-manifest PRIVATE_MANIFEST --output NEW_PRIVATE_DIRECTORY --ref COMMIT`
+to materialize the reviewed transport projection from an exact committed patch and
+the pinned282-file inventory. This creates sources only; it does not build, deploy,
+issue credentials or start services. Keep the accepted capsule private. Reproduce
+the baseline binary, preserve its Go/build-tag/CGO contract, test the projected
+sources (including `FC_EXPECT_SEED_OBSERVABILITY=1`), and verify identical candidate
+builds before selecting a runtime. See the [current evidence and baseline test
+limitations](releases/2026-11-03-second-nl-mesh.md#production-gateway-projection-and-ams2-prerequisites).
+
 The source-only directory evaluator accepts optional `--gateway-routes <private-file>`
 in addition to the existing `--config`, `--ssh-key` and `--known-hosts`. The canonical
 JSON file has `schema:1` and `gateways` with exactly `nl-amsterdam-1` and

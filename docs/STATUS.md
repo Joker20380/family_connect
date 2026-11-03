@@ -1,5 +1,26 @@
 # Текущее состояние / Current state
 
+**3 November export24 server correlation — PARTIAL, cause still OPEN.** Second API36
+device matched privately on RU; device/invitation not revoked, no stored online snapshot.
+Client18:29–18:34UTC fails before MESH; HTTP unit current activation18:35:46UTC is
+later, not proof of outage overlap. SSH follow-up timeouts block historical journal/
+request correlation. No production changes. [Readback](releases/2026-11-03-krasnodar-diagnostics.md#export24-server-correlation).
+
+**3 November18:47UTC MESH2 continuation — production gateway projection checked; not activated.**
+The live gateway is the accepted canonical/P1 four-member source capsule, not generic main.
+The narrow slow-link projection preserves its admission, chat, identity and canonical-profile
+code, and retains performance instrumentation with the actual adaptive send window.
+Baseline rebuild matches the installed binary; two candidate builds match.20 Python checks
+and production-tag native race677 test/subtest PASS/49 optional skips. Broader runs exposed
+pre-existing slot-release timing failures and untagged diagnostic-test assumptions, reproduced
+on the unchanged baseline; these are not silently waived or reported as all-green.
+A fresh, distinct AMS2 identity/delegation is retained privately and signed offline using the
+existing control root. AMS2 Python3.12.3/pinned dependencies are staged separately, not active;
+AWG/TCP PIDs/restart counts unchanged,0 units created/started. No gateway binary/service,
+controller, selector, Android version or catalog switched. Next: exact committed projection
+readback, permanent canonical AMS2 provisioning and coordinated writer/live acceptance;
+then the immutable Android update. [Evidence](releases/2026-11-03-second-nl-mesh.md#production-gateway-projection-and-ams2-prerequisites).
+
 **3 November Krasnodar supplied trace — two beta111 retry-exhaustion closures confirmed.**
 Current Wi-Fi history shows successful MESH sessions followed by RELIABLE_RETRY_EXHAUSTED
 at17:16:44/17:19:34UTC, eight retries around9.4s with fresh ACKs; TLS failures follow.

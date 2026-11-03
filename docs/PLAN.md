@@ -2,6 +2,22 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Export24 read-only server correlation remains partial.** Registration/invitation
+not revoked; online snapshot absent. Historical HTTP journal/request correlation is
+unfinished due SSH timeouts; do not attribute failure to Android16 or a server restart.
+[Readback and remaining check](releases/2026-11-03-krasnodar-diagnostics.md#export24-server-correlation).
+
+**3 November18:47UTC MESH2 continuation — runtime preparation, not activation.**
+The accepted canonical/P1 gateway now has a bounded slow-link source projection, retaining
+four-member policy, chat and profile custody instead of replacing it with generic main.
+Baseline binary reproduced; candidate deterministic.20 Python checks and production-tag
+race677 PASS/49 optional skips; unrelated baseline slot-release/untagged diagnostic failures
+are recorded separately. Fresh distinct AMS2 identity/delegation prepared offline; isolated
+Python3.12.3 runtime/dependencies staged with no service starts or ordinary-service changes.
+Finish exact committed-source readback, canonical secondary provisioning and one coordinated
+writer, then real data-plane/rejection/cleanup acceptance and Android delivery. No activation,
+catalog change or unrelated queue successor is implied. [Evidence](releases/2026-11-03-second-nl-mesh.md#production-gateway-projection-and-ams2-prerequisites).
+
 **3 November supplied Krasnodar diagnostics reviewed.** Two beta111 MESH closures match
 retry exhaustion despite fresh ACKs. Keep exact-source rollout and handset acceptance
 gates; no fix/deployment performed by this analysis and no queue reordering.

@@ -1,5 +1,62 @@
 # FLEET-BOOTSTRAP-2 — second Amsterdam MESH integration
 
+## Production gateway projection and AMS2 prerequisites
+
+3 November18:47UTC continuation; **SOURCE/PREPARATION CHECKPOINT, NOT MESH2 ACTIVATION**.
+The installed gateway is the282-member accepted canonical/P1 source capsule. Building
+generic main would omit its four-member speed policy, diagnostic instrumentation and
+other accepted runtime integration. `scripts/slow_link_gateway_source.py` verifies the
+entire accepted inventory and manifest, applies only the five reviewed patch members,
+and imports fourteen tests plus the timestamp vector from exact142ee46. It rejects
+modified/missing/extra/linked source members, changed patches and wider source changes.
+The source output is private, exclusive and unbound; it contains no operational permit
+or configuration. Existing startup, identity/admission, chat and profile-reader sources
+remain byte-identical. Performance accounting now reports the adaptive send allowance;
+the slow-consumer fixture fills its actual four-frame initial window, with unchanged
+backpressure/close assertions and new growth/loss counter coverage.
+
+- Accepted manifest SHA256: `27b54a9dd167c3b6af639bb03864f4d7d121c0e8b96c90eccb45a198c936f117`.
+- Baseline rebuild equals installed SHA256: `f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef`.
+- Two prototype candidate builds equal SHA256: `9d41f1dc1a716c0ecb6d85d0613b6cc35a173b7399fbb2b8d75d871c577a6bc1`.
+- Same Go1.26.1/linux-amd64/CGO1/`fc_perf_diagnostic`/trimpath/buildvcs=false contract.
+-20 Python projection/source checks PASS. Production-tag race selection across
+  ReliableStream, Telemost, RoomBroker, FamilySession, bootstrap, bootstrap-broker and
+  TCPForward:677 tests/subtests PASS,49 optional skips,0 failures.
+- The first non-race production-tag selection passed all seven packages. A repeated
+  JSON run reports675 PASS/49 skips and a slot-release failure (two test/subtest failures).
+  Thirty repetitions on the unchanged baseline reproduce the same admission/batch slot
+  timing problem:123 PASS/27 test/subtest failures. No TCPForward production source changed.
+  Untagged diagnostic export/counter failures also reproduce on the baseline. The initial
+  prototype invocation additionally lacked the timestamp fixture and the existing
+  `FC_EXPECT_SEED_OBSERVABILITY=1` harness flag; both were supplied, not bypassed.
+  These results are not an all-green historical suite or a waived release gate.
+
+Fresh AMS2 identity/private key and a sequence1 secondary delegation are retained only
+in local0700/0600 custody. Delegation uses the existing Family/CA/revision floor and
+existing offline control-root signer; no primary/rehearsal identity was cloned and no
+root key was transmitted. No secondary leaf/profile was installed or published yet.
+
+AMS2 now has a separate dormant `/opt/apps/family_connect/friends-restricted-runtime/venv`:
+Python3.12.3, rns1.5.1, cryptography46.0.7, pyserial3.5, cffi2.1.1, pycparser3.0.
+Installation used a hash-checked offline wheel bundle, exact hashed requirements and
+`pip check`; import/version probes PASS. Archive SHA256:
+`689ee9136a754349991d0ab15bb37dc44e71f0f51e4f0961ab74e5d59e0c99e9`.
+Private input/receipt staging is `/var/lib/fc-profile-control/mesh2-python-20261103/`.
+AWG/TCP remain active with identical PIDs/restart counts;0 units created/started.
+Primary MESH remains active with0 restarts. RU/AMS1 configs, renewal writers, provider
+environment and gateway binaries were not changed. Private local evidence stays under
+`state-client-build/mesh2-cutover-20261103/`, outside Git and CI.
+
+Remaining: exact committed projection/readback, secondary canonical custody/profile and
+forced snapshot/renewal route, common writer cutover and committed fleet checkpoint,
+real READY/FamilyTLS/DNS/HTTPS/expected egress plus negative/cleanup/slow-link acceptance,
+then selector activation and a new immutable Android version. Android111/catalog6,
+Windows0.2.16/catalog12 and public Linux0.2.11 remain unchanged. No installer/tag changed.
+Rollback at this checkpoint means retaining the old active writer/gateway and leaving
+the new runtime dormant; do not remove or overwrite its retained custody. No production
+cutover has occurred, so no service rollback is required. Later cutover must retain the
+exact old executable/configuration and respect shared CRL/profile replay floors.
+
 ## Current result
 
 **RESUMED: permanent MESH2 first, then Android update; SOURCE CHECKPOINT, NOT DEPLOYED.**
