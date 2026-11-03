@@ -126,6 +126,7 @@ func TestReliableStreamOverVP8MissingRTPWithFreshACK(test *testing.T) {
 			leftEndpoint, rightEndpoint := framedReliablePair()
 			leftEndpoint.dropUntil = scenario.dropUntil
 			config := reliablestream.DefaultConfig()
+			config.RTO, config.MaxAge = 100*time.Millisecond, 4*time.Second
 			left, err := reliablestream.New(sessiontrace.With(ctx, recorder), leftEndpoint, config)
 			if err != nil {
 				test.Fatal(err)
@@ -146,7 +147,7 @@ func TestReliableStreamOverVP8MissingRTPWithFreshACK(test *testing.T) {
 					test.Fatal("expected genuine stream exhaustion", err)
 				}
 				failure := recorder.Snapshot().FirstFailure
-				if failure == nil || failure.Reason != "RELIABLE_RETRY_EXHAUSTED" || failure.ReliableRetries != 8 || failure.ReliablePending != 8 || failure.ReliableSacked != 0 || failure.ReliableACKReceived == 0 || failure.ReliableProgressAgeMS < 8000 || failure.ReliableACKAgeMS > uint64(2*config.RTO/time.Millisecond) {
+				if failure == nil || failure.Reason != "RELIABLE_RETRY_EXHAUSTED" || failure.ReliableRetries != 8 || failure.ReliablePending != 8 || failure.ReliableSacked != 0 || failure.ReliableACKReceived == 0 || failure.ReliableProgressAgeMS < uint64(8*config.RTO/time.Millisecond) || failure.ReliableACKAgeMS > uint64(2*config.RTO/time.Millisecond) {
 					test.Fatal("missing fresh ACK/no-progress evidence", failure)
 				}
 				if left.Stats().Terminal != "recovery_exhausted" || left.Stats().SACKReceived == 0 {

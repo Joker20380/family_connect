@@ -198,13 +198,15 @@ func TestWindowBoundsRetryAndStale(test *testing.T) {
 	if _, err := right.input(bad, now); err != nil || len(right.buffer) != 0 || right.stats.Stale != 1 {
 		test.Fatal("stale frame accepted")
 	}
+	left.config.MaxAge = time.Minute
 	for attempt := 1; attempt <= left.config.MaxRetries; attempt++ {
-		packets, err := left.tick(now.Add(time.Duration(attempt) * left.config.RTO))
+		now = now.Add(left.retryInterval(left.sent[0]))
+		packets, err := left.tick(now)
 		if err != nil || len(packets) != 9 {
 			test.Fatal("retry batch", err, len(packets))
 		}
 	}
-	if _, err := left.tick(now.Add(9 * left.config.RTO)); !errors.Is(err, ErrExhausted) {
+	if _, err := left.tick(now.Add(left.retryInterval(left.sent[0]))); !errors.Is(err, ErrExhausted) {
 		test.Fatal("retry exhaustion")
 	}
 	if _, err := right.input(left.packet(resetFrame), now); !errors.Is(err, ErrReset) {

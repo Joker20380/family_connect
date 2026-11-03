@@ -213,6 +213,21 @@ never substitutes for VP8. The recorded room admitted both guests immediately;
 waiting-room polling remains unimplemented and unverified for rooms requiring it.
 Errors never print API bodies, credentials or SDP.
 
+### Transient ICE disruption
+
+An established carrier now retains its session through Pion's recoverable
+`disconnected` state. Initial establishment still requires both peers ready; live
+PeerConnection states remain visible in statistics. Sends remain bounded by the
+existing queue and caller deadlines, and cancellation/authorization are not deferred.
+`failed` or `closed` remains immediately terminal. Explicit ICE settings retain Pion's
+5s disconnected, additional25s failed and2s keepalive defaults. Other layers can still
+terminate earlier, including ReliableStream's20s per-block maximum age.
+Transient ICE/peer events retain their state with reason `NONE`, so they do not replace
+a later real first failure. Android recognizes correlated DATA-age exhaustion and
+either ordering of the terminal ICE/PeerConnection callbacks as network recovery,
+without reclassifying authentication, protocol, unknown or local cancellation failures.
+[Slow-link candidate and qualification boundary](../docs/releases/2026-11-03-mesh-slow-link.md).
+
 JSONL contains build revision/dirty flag, OS/arch, Go/Pion versions, setup time,
 per-size/batch RTT mean/max and exact-byte result, aggregate CPU seconds, heap and
 peak RSS, disconnect/reconnect counts. Useful throughput counts both payload

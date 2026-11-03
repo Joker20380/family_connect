@@ -1,6 +1,23 @@
 # Текущее состояние / Current state
 
-**3 November FLEET-BOOTSTRAP-2 — second-node MESH explicitly selected, IN PROGRESS.**
+**3 November MESH-SLOW-LINK-1 — current owner-selected task; SOURCE CHECKED, NOT DEPLOYED.**
+Owner reports repeated MESH disconnects at low speed and selects connection quality
+before MESH2. Reproduced premature closure on transient ICE and fixed1s retries
+exhausting at9s. Candidate preserves established media through recoverable ICE loss,
+uses bounded RTT/backoff and gradual send-window admission; Android recovers correlated
+DATA-age/terminal peer failures. Auth/revocation, protocol rejection,20s DATA-age and
+fail-closed routing remain enforced. Same serialized256/512/1000kbit/s,600ms RTT model:
+baseline fails12/12; candidate completes12/12 byte-exactly, including loss and8/32 windows.
+Real local Pion VP8 survives two temporary packet outages and terminates persistent loss
+(accelerated ICE timers); not a Telemost/handset claim. Dependency-selected native race
+gate669 test/subtest PASS,45 explicit optional skips; Android411+406 JVM PASS,
+lint0 errors/56 warnings;66 focused Python PASS. No server/APK deployment or version
+change. Remaining: pinned native/platform builds, mixed deployed-peer/live shaped-link
+acceptance, coordinated client/gateway rollout and immutable Android delivery.
+Android111/catalog6, Windows0.2.16/catalog12, Linux public0.2.11/owner0.2.12~l03.2.13
+remain unchanged. [Tests, limits and rollout](releases/2026-11-03-mesh-slow-link.md).
+
+**3 November FLEET-BOOTSTRAP-2 — second-node MESH PAUSED for selected link-quality work.**
 Owner confirms the separately supplied token and asks to finish the integration.
 Correction: AMS2 already passed real MESH/reboot rehearsal; its temporary runtime was
 retired, not rejected as incapable. Separate publisher input remains in private custody.

@@ -22,7 +22,6 @@ func TestTypedLifecycleFirstFailureAndPrivacy(test *testing.T) {
 			session.recordSignalingReadFailure(&websocket.CloseError{Code: 4008, Text: "secret-room-token timeout"})
 		}, "SIGNAL_WS_CLOSE"},
 		{func(session *Session) { session.recordSignalingReadFailure(context.DeadlineExceeded) }, "HEARTBEAT_TIMEOUT"},
-		{func(session *Session) { session.traceICE("SUBSCRIBER", webrtc.ICEConnectionStateDisconnected) }, "ICE_DISCONNECTED"},
 		{func(session *Session) { session.traceICE("PUBLISHER", webrtc.ICEConnectionStateFailed) }, "ICE_FAILED"},
 		{func(session *Session) { session.traceCarrierReadEnd("SUBSCRIBER", io.EOF) }, "CARRIER_EOF"},
 		{func(session *Session) { session.traceCarrierReadEnd("PUBLISHER", errors.New("secret carrier error")) }, "CARRIER_ERROR"},

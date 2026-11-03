@@ -2,7 +2,26 @@
 
 ## Current engineering priority / Текущий critical path
 
-**FLEET-BOOTSTRAP-2 second-node MESH — AUTHORIZED / IN PROGRESS.**
+**MESH-SLOW-LINK-1 — OWNER-SELECTED / source qualified, rollout pending.**
+Latest request selects repeated MESH drops on low-speed connections, superseding the
+immediate MESH2 continuation. Dependencies: existing ReliableStream/VP8/Pion transport,
+Android recovery classifier and current Family authorization/fail-closed contracts.
+Reproduce before changing policy; distinguish local modeling from actual handset cause.
+Completed: transient ICE preservation with terminal failure/cancellation retained;
+RTT-aware bounded retries and gradual sender admission without a wire/config-schema
+change; narrow Android recovery classification.12/12 serialized slow-link cases fail
+on baseline and pass after correction; real Pion VP8 transient-loss recovery/persistent
+failure PASS. Native dependency-selected race669 test/subtest PASS/45 optional skips,
+Android411+406 JVM, lint0 errors/56 warnings,66 Python PASS.
+Remaining gates: exact pinned Android/native/platform build, mixed old/new peers,
+real shaped-link Family TLS/DNS/HTTPS and fail-closed/cancel/revoke checks; reviewed
+gateway rollback/promotion plus new immutable Android>111/catalog>6 and public readback.
+Do not change grants, extend certificate lifetime, hide failed probes or claim the
+installed111/gateway runtime was repaired by a source push. No public version change
+yet. MESH2 remains authorized but deferred; no automatic fleet successor.
+[Evidence and completion boundary](releases/2026-11-03-mesh-slow-link.md).
+
+**FLEET-BOOTSTRAP-2 second-node MESH — AUTHORIZED / PAUSED FOR MESH-SLOW-LINK-1.**
 Latest owner instruction («токен… всё настроили… доделаем») selects production MESH2;
 this supersedes the earlier question-only boundary and ordinary-only admission scope.
 Do not ask for the already retained separate publisher credential. Dependencies:

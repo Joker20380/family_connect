@@ -56,26 +56,39 @@ consumption**, not arrival. Selective bits mark buffered blocks without releasin
 their sender-window slots. Therefore a slow TLS reader cannot cause unlimited
 receive buffering even if SACKs keep arriving.
 
-The sender permits `next - cumulativeACK < min(sendWindow, peerReceiveWindow)`.
+The sender permits `next - cumulativeACK < min(sendWindow, peerReceiveWindow, sendAllowance)`.
 Full window blocks SendContext; there is no internal producer queue. Configurable
-defaults: payload16KiB, sender8, receiver16, RTO1s, maximum8 retransmissions/block,
+defaults: payload16KiB, sender8, receiver16, initial/minimum RTO1s, maximum8 retransmissions/block,
 maximum20s from first send. MaxAge also bounds a SACKed but unconsumed block.
 Negotiation chooses the smaller maximum payload. Larger TLS writes are split;
 only contiguous reassembled bytes reach the TLS bridge. This is not stop-and-wait.
+
+The local allowance begins at at most8 blocks even for the32-block P1/P2 profiles.
+One fully consumed allowance earns at most one additional slot, up to the negotiated
+limits, while smoothed RTT remains below MaxAge/4. Timeout halves the allowance once
+per outstanding flight, retaining every pending block and its original deadline.
+Repeated/SACK-only ACKs cannot grow the allowance or release unconsumed data.
+The advertised windows and on-wire OPEN/DATA/ACK/RESET format are unchanged.
 
 SACK is also gap notification: missing bits below a later received block identify
 holes. Only unsatisfied, non-SACKed blocks retry after their own RTO; no go-back-N
 or resend-all. ACK loss may necessarily cause harmless duplicate DATA. A current
 cumulative/SACK refresh once per RTO repairs lost final ACKs even when all DATA was
 SACKed and no additional DATA exists. No PING/PONG or NACK protocol is needed.
-The first implementation uses configurable fixed RTO, not a claim of adaptive RTT
-estimation. It is independent of the old2s application benchmark RTT.
+RTT is estimated from the first unretried negotiation and new, unretransmitted DATA
+acknowledgements, including first SACK receipt. Duplicate ACKs, already-SACKed blocks
+and retransmitted DATA cannot train the estimator (Karn ambiguity). Smoothed RTT and
+variation use1/8 and1/4 weights; base RTO is at least the configured RTO. Each timed-out
+block backs off exponentially, capped at4 times that base,10s and MaxAge. Fast head-gap
+recovery remains single-shot and does not itself count as an RTO backoff. ACK refresh
+still uses the configured RTO, independently of sender congestion or slow consumption.
 
-No catch-up retransmission flood: one retry per outstanding block per RTO, bounded
-by the sender window. MaxRetries/MaxAge exhaustion is observable and terminal.
+No catch-up retransmission flood: at most one retry per outstanding block per current
+retry interval, bounded by the sender window. MaxRetries/MaxAge exhaustion is observable and terminal.
 Carrier writes have a2s maximum deadline (or smaller MaxAge); a stalled queue
 aborts rather than accumulating unlimited pending calls. WebRTC retains media
-congestion control; this adapter adds reliability/flow control only.
+congestion control; this adapter adds bounded reliability and ACK-driven admission,
+not a measured-bandwidth guarantee. An indefinitely dead path still closes.
 
 ## Bounds and shutdown
 

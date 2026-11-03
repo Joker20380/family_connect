@@ -58,39 +58,46 @@ type Stats struct {
 }
 
 type pending struct {
-	data    []byte
-	first   time.Time
-	last    time.Time
-	retries int
-	sacked  bool
+	data     []byte
+	first    time.Time
+	last     time.Time
+	retries  int
+	timeouts int
+	sacked   bool
 }
 
 type engine struct {
-	config       Config
-	local        epoch
-	remote       epoch
-	remoteWindow int
-	remoteSize   int
-	started      time.Time
-	lastOpen     time.Time
-	lastRefresh  time.Time
-	next         uint64
-	base         uint64
-	receive      uint64
-	sent         map[uint64]*pending
-	buffer       map[uint64][]byte
-	gaps         map[uint64]time.Time
-	stats        Stats
-	lastACK      time.Time
-	lastProgress time.Time
-	ackSeen      bool
-	ackBase      uint64
-	ackMask      uint32
-	failureTrace sessiontrace.Event
+	config        Config
+	local         epoch
+	remote        epoch
+	remoteWindow  int
+	remoteSize    int
+	started       time.Time
+	lastOpen      time.Time
+	openAttempts  int
+	smoothedRTT   time.Duration
+	rttVariation  time.Duration
+	sendAllowance int
+	ackCredit     uint64
+	recoveryUntil uint64
+	lastRefresh   time.Time
+	next          uint64
+	base          uint64
+	receive       uint64
+	sent          map[uint64]*pending
+	buffer        map[uint64][]byte
+	gaps          map[uint64]time.Time
+	stats         Stats
+	lastACK       time.Time
+	lastProgress  time.Time
+	ackSeen       bool
+	ackBase       uint64
+	ackMask       uint32
+	failureTrace  sessiontrace.Event
 }
 
 func newEngine(config Config, local epoch, now time.Time) *engine {
-	return &engine{config: config, local: local, started: now, sent: make(map[uint64]*pending), buffer: make(map[uint64][]byte), gaps: make(map[uint64]time.Time)}
+	return &engine{config: config, local: local, started: now, sendAllowance: min(8, config.SendWindow), sent: make(map[uint64]*pending), buffer: make(map[uint64][]byte), gaps: make(map[uint64]time.Time)}
 }
 
 func (state *engine) packet(kind byte) frame {
@@ -147,6 +154,9 @@ func (state *engine) input(packet frame, now time.Time) ([]frame, error) {
 			return []frame{state.opening(packet.source)}, nil
 		}
 		if state.remote == (epoch{}) {
+			if state.openAttempts == 1 {
+				state.observeRTT(now.Sub(state.lastOpen))
+			}
 			state.remote, state.remoteWindow, state.remoteSize = packet.source, packet.window, packet.payload
 			return []frame{state.opening(packet.source), state.ack()}, nil
 		}
@@ -183,13 +193,31 @@ func (state *engine) input(packet frame, now time.Time) ([]frame, error) {
 		if packet.ack > state.base {
 			state.lastProgress = now
 		}
+		var sample time.Duration
 		for seq, block := range state.sent {
+			acknowledged := seq < packet.ack || packet.bits&(1<<(seq-packet.ack)) != 0
+			if acknowledged && !block.sacked && block.retries == 0 {
+				elapsed := now.Sub(block.first)
+				if elapsed > 0 && (sample == 0 || elapsed < sample) {
+					sample = elapsed
+				}
+			}
 			if seq < packet.ack {
 				state.stats.BufferedBytes -= len(block.data)
 				delete(state.sent, seq)
 			} else if packet.bits&(1<<(seq-packet.ack)) != 0 {
 				block.sacked = true
 			}
+		}
+		state.observeRTT(sample)
+		if packet.ack > state.base && state.smoothedRTT < state.config.MaxAge/4 {
+			state.ackCredit += packet.ack - state.base
+			if state.ackCredit >= uint64(state.sendAllowance) {
+				state.ackCredit = 0
+				state.sendAllowance = min(state.sendAllowance+1, state.config.SendWindow, state.remoteWindow)
+			}
+		} else if state.smoothedRTT >= state.config.MaxAge/4 {
+			state.ackCredit = 0
 		}
 		state.base = packet.ack
 		state.depths()
@@ -242,7 +270,7 @@ func (state *engine) input(packet frame, now time.Time) ([]frame, error) {
 }
 
 func (state *engine) writable() bool {
-	return state.remote != (epoch{}) && state.next-state.base < uint64(min(state.config.SendWindow, state.remoteWindow))
+	return state.remote != (epoch{}) && state.next-state.base < uint64(min(state.config.SendWindow, state.remoteWindow, state.sendAllowance))
 }
 
 func (state *engine) send(data []byte, now time.Time) (frame, error) {
@@ -317,6 +345,33 @@ func (state *engine) fastRetransmit(sequence uint64, block *pending, now time.Ti
 	return confirmed >= 3
 }
 
+func (state *engine) observeRTT(sample time.Duration) {
+	if sample <= 0 {
+		return
+	}
+	sample = min(sample, state.config.MaxAge)
+	if state.smoothedRTT == 0 {
+		state.smoothedRTT, state.rttVariation = sample, sample/2
+		return
+	}
+	difference := state.smoothedRTT - sample
+	if difference < 0 {
+		difference = -difference
+	}
+	state.rttVariation = (3*state.rttVariation + difference) / 4
+	state.smoothedRTT = (7*state.smoothedRTT + sample) / 8
+}
+
+func (state *engine) retryInterval(block *pending) time.Duration {
+	interval := max(state.config.RTO, state.smoothedRTT+4*state.rttVariation)
+	ceiling := min(4*interval, 10*time.Second, state.config.MaxAge)
+	interval = min(interval, ceiling)
+	for attempt := 0; attempt < block.timeouts && interval < ceiling; attempt++ {
+		interval = min(2*interval, ceiling)
+	}
+	return interval
+}
+
 func (state *engine) tick(now time.Time) ([]frame, error) {
 	if state.remote == (epoch{}) {
 		if now.Sub(state.started) >= state.config.MaxAge {
@@ -324,6 +379,7 @@ func (state *engine) tick(now time.Time) ([]frame, error) {
 		}
 		if state.lastOpen.IsZero() || now.Sub(state.lastOpen) >= state.config.RTO {
 			state.lastOpen = now
+			state.openAttempts++
 			return []frame{state.opening(epoch{})}, nil
 		}
 		return nil, nil
@@ -338,12 +394,17 @@ func (state *engine) tick(now time.Time) ([]frame, error) {
 		if now.Sub(block.first) >= state.config.MaxAge {
 			return nil, state.exhausted("RELIABLE_FRAME_TIMEOUT", block, now)
 		}
-		timedOut := now.Sub(block.last) >= state.config.RTO
+		timedOut := now.Sub(block.last) >= state.retryInterval(block)
 		if block.sacked || (!timedOut && !state.fastRetransmit(seq, block, now)) {
 			continue
 		}
 		if timedOut {
 			state.stats.Timeouts++
+			block.timeouts++
+			if state.base >= state.recoveryUntil {
+				state.sendAllowance = max(1, state.sendAllowance/2)
+				state.ackCredit, state.recoveryUntil = 0, state.next
+			}
 		}
 		if block.retries >= state.config.MaxRetries {
 			return nil, state.exhausted("RELIABLE_RETRY_EXHAUSTED", block, now)

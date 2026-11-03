@@ -20,6 +20,7 @@ func TestFreshACKWithoutProgressDoesNotResetRetryBudget(test *testing.T) {
 		test.Run(name, func(test *testing.T) {
 			states := connectedEngines()
 			sender, receiver := states[0], states[1]
+			sender.config.MaxAge = time.Minute
 			now := sender.started
 			payload := []byte("bounded-test-block")
 			for index := 0; index < sender.config.SendWindow; index++ {
@@ -33,15 +34,18 @@ func TestFreshACKWithoutProgressDoesNotResetRetryBudget(test *testing.T) {
 					}
 				}
 			}
+			if _, err := sender.input(receiver.ack(), now); err != nil {
+				test.Fatal(err)
+			}
 			for attempt := 1; attempt <= sender.config.MaxRetries+1; attempt++ {
-				tickAt := now.Add(time.Duration(attempt) * sender.config.RTO)
+				tickAt := sender.sent[0].last.Add(sender.retryInterval(sender.sent[0]))
 				if _, err := sender.input(receiver.ack(), tickAt.Add(-200*time.Millisecond)); err != nil {
 					test.Fatal(err)
 				}
 				packets, err := sender.tick(tickAt)
 				if attempt > sender.config.MaxRetries {
 					trace := sender.failureTrace
-					if !errors.Is(err, ErrExhausted) || trace.Reason != "RELIABLE_RETRY_EXHAUSTED" || trace.ReliableRetries != 8 || trace.ReliablePending != 8 || trace.ReliableSacked != 0 || trace.ReliableACKAgeMS != 200 || trace.ReliableProgressAgeMS != 9000 {
+					if !errors.Is(err, ErrExhausted) || trace.Reason != "RELIABLE_RETRY_EXHAUSTED" || trace.ReliableRetries != 8 || trace.ReliablePending != 8 || trace.ReliableSacked != 0 || trace.ReliableACKAgeMS != 200 || trace.ReliableProgressAgeMS != uint64(tickAt.Sub(now)/time.Millisecond) {
 						test.Fatal("fresh ACK hid persistent missing DATA", err, trace)
 					}
 					return

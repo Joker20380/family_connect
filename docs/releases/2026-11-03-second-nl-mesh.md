@@ -2,7 +2,10 @@
 
 ## Current result
 
-**IN PROGRESS; backend and Android routing/storage source slices checked, NOT DEPLOYED.** Owner explicitly
+**PAUSED FOR MESH-SLOW-LINK-1; backend and Android routing/storage source slices checked, NOT DEPLOYED.**
+The later owner report of repeated slow-link drops selects
+[connection-quality work](2026-11-03-mesh-slow-link.md) before further MESH2 integration.
+No permanent second-node runtime or new APK has been deployed. Owner explicitly
 asks to finish MESH2 using the separately supplied credential. This supersedes the
 question-only interpretation in the earlier [picker report](2026-11-03-android-node-picker.md).
 No claim that source publication enables MESH on an installed client.

@@ -66,7 +66,7 @@ final class RestrictedRecovery {
             JsonObject first=lifecycle.getAsJsonObject("first_failure");
             if("recovery_exhausted".equals(reliable)&&"CARRIER".equals(RestrictedTrace.text(first,"stage"))
                 &&"FAILED".equals(RestrictedTrace.text(first,"state"))
-                &&"RELIABLE_RETRY_EXHAUSTED".equals(RestrictedTrace.text(first,"reason")))return Failure.NETWORK;
+                &&RestrictedTrace.allowed(RestrictedTrace.text(first,"reason"),"RELIABLE_RETRY_EXHAUSTED|RELIABLE_FRAME_TIMEOUT"))return Failure.NETWORK;
             if(!"carrier_closed".equals(reliable)||!lifecycle.has("first_close"))return Failure.INTERNAL;
             JsonObject close=lifecycle.getAsJsonObject("first_close");
             String source=RestrictedTrace.text(close,"close_source");
@@ -78,6 +78,10 @@ final class RestrictedRecovery {
                 &&(!first.has("close_code")||RestrictedTrace.allowed(first.get("close_code").getAsString(),"1000|1001|1006|1011|1012|1013")))return Failure.NETWORK;
             if("ICE".equals(RestrictedTrace.text(first,"stage"))
                 &&RestrictedTrace.allowed(RestrictedTrace.text(first,"reason"),"ICE_FAILED|ICE_DISCONNECTED")
+                &&RestrictedTrace.allowed(source,"SUBSCRIBER_DISCONNECTED|PUBLISHER_DISCONNECTED"))return Failure.NETWORK;
+            if("PEER_CONNECTION".equals(RestrictedTrace.text(first,"stage"))
+                &&"failed".equals(RestrictedTrace.text(first,"state"))
+                &&"PEER_CONNECTION_FAILED".equals(RestrictedTrace.text(first,"reason"))
                 &&RestrictedTrace.allowed(source,"SUBSCRIBER_DISCONNECTED|PUBLISHER_DISCONNECTED"))return Failure.NETWORK;
             if("FAMILY_CREDENTIAL_EXPIRY".equals(source)
                 &&"FAMILY_TLS".equals(RestrictedTrace.text(first,"stage")))return Failure.NETWORK;

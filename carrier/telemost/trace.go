@@ -33,9 +33,6 @@ func (s *Session) traceEvidence(event Evidence) {
 			if event.State == "failed" {
 				reason = "PEER_CONNECTION_FAILED"
 			}
-			if event.State == "disconnected" {
-				reason = "CARRIER_ERROR"
-			}
 		}
 		trace.Record(sessiontrace.Event{Stage: "PEER_CONNECTION", State: event.State, Target: event.Target, Reason: reason})
 	}
@@ -44,9 +41,6 @@ func (s *Session) traceEvidence(event Evidence) {
 func (s *Session) traceICE(target string, state webrtc.ICEConnectionState) {
 	reason := "NONE"
 	if !s.closed.Load() {
-		if state == webrtc.ICEConnectionStateDisconnected {
-			reason = "ICE_DISCONNECTED"
-		}
 		if state == webrtc.ICEConnectionStateFailed {
 			reason = "ICE_FAILED"
 		}

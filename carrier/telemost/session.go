@@ -25,10 +25,13 @@ import (
 const (
 	defaultSTUNURL = "stun:stun.rtc.yandex.net:3478"
 
-	wsReadTimeout      = 60 * time.Second
-	wsWriteTimeout     = 15 * time.Second
-	wsHandshakeTimeout = 15 * time.Second
-	wsReadLimit        = 8 << 20
+	wsReadTimeout          = 60 * time.Second
+	wsWriteTimeout         = 15 * time.Second
+	wsHandshakeTimeout     = 15 * time.Second
+	wsReadLimit            = 8 << 20
+	iceDisconnectedTimeout = 5 * time.Second
+	iceFailedTimeout       = 25 * time.Second
+	iceKeepaliveInterval   = 2 * time.Second
 
 	// vp8SendInterval paces consecutive data frames so the SFU is not
 	// overwhelmed by back-to-back writes.
@@ -371,7 +374,7 @@ func (s *Session) SendContext(ctx context.Context, payload []byte) error {
 	if len(payload) > MaxMessageSize {
 		return ErrMessageTooLarge
 	}
-	if !s.subReady.Load() || !s.pubReady.Load() || (s.mode == ModeDataChannel && s.dcOpen() == nil) {
+	if !s.established() && (!s.subReady.Load() || !s.pubReady.Load()) || (s.mode == ModeDataChannel && s.dcOpen() == nil) {
 		return errors.New("telemost: carrier not ready")
 	}
 	msgID := s.msgID.Add(1)
@@ -581,6 +584,7 @@ func newWebRTCAPI(networks ...*underlay.Network) (*webrtc.API, error) {
 
 func diagnosticWebRTCAPI(network *underlay.Network, diagnostic interceptor.Factory) (*webrtc.API, error) {
 	settings := webrtc.SettingEngine{}
+	settings.SetICETimeouts(iceDisconnectedTimeout, iceFailedTimeout, iceKeepaliveInterval)
 	if network != nil {
 		settings.SetNet(network)
 	}
@@ -697,6 +701,15 @@ func drainTrack(track *webrtc.TrackRemote) {
 	}
 }
 
+func (s *Session) established() bool {
+	select {
+	case <-s.connected:
+		return true
+	default:
+		return false
+	}
+}
+
 func (s *Session) maybeConnected() {
 	switch s.mode {
 	case ModeVP8:
@@ -717,8 +730,12 @@ func (s *Session) onSubscriberState(state webrtc.PeerConnectionState) {
 		s.recordEvidence(Evidence{Stage: "SUBSCRIBER_CONNECTED"})
 		s.subReady.Store(true)
 		s.maybeConnected()
-	case webrtc.PeerConnectionStateDisconnected,
-		webrtc.PeerConnectionStateFailed,
+	case webrtc.PeerConnectionStateDisconnected:
+		s.subReady.Store(false)
+		if !s.closed.Load() {
+			s.disconnects.Add(1)
+		}
+	case webrtc.PeerConnectionStateFailed,
 		webrtc.PeerConnectionStateClosed:
 		s.subReady.Store(false)
 		if !s.closed.Load() {
@@ -735,8 +752,12 @@ func (s *Session) onPublisherState(state webrtc.PeerConnectionState) {
 		s.recordEvidence(Evidence{Stage: "PUBLISHER_CONNECTED"})
 		s.pubReady.Store(true)
 		s.maybeConnected()
-	case webrtc.PeerConnectionStateDisconnected,
-		webrtc.PeerConnectionStateFailed,
+	case webrtc.PeerConnectionStateDisconnected:
+		s.pubReady.Store(false)
+		if !s.closed.Load() {
+			s.disconnects.Add(1)
+		}
+	case webrtc.PeerConnectionStateFailed,
 		webrtc.PeerConnectionStateClosed:
 		s.pubReady.Store(false)
 		if !s.closed.Load() {

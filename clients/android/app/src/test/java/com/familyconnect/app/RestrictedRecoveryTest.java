@@ -26,15 +26,35 @@ public class RestrictedRecoveryTest {
     private static JsonObject first(JsonObject snapshot){return diagnostic(snapshot).getAsJsonObject("lifecycle").getAsJsonObject("first_failure");}
     private static Failure failure(JsonObject snapshot){return RestrictedRecovery.failure(3,false,false,snapshot.toString());}
 
-    @Test public void onlyProvenRetryExhaustionIsRecoverable() {
+    @Test public void onlyProvenDataRecoveryExhaustionIsRecoverable() {
         for(String terminal:new String[]{"IO_CLOSED","EOF","RELIABLE_EXHAUSTED"}) {
             JsonObject snapshot=snapshot();diagnostic(snapshot).addProperty("terminal_reason",terminal);
-            assertEquals(Failure.NETWORK,failure(snapshot));
+            for(String reason:new String[]{"RELIABLE_RETRY_EXHAUSTED","RELIABLE_FRAME_TIMEOUT"}) {
+                first(snapshot).addProperty("reason",reason);
+                assertEquals(Failure.NETWORK,failure(snapshot));
+            }
         }
         for(String reason:RestrictedTrace.REASONS.split("\\|")) {
-            if(reason.equals("RELIABLE_RETRY_EXHAUSTED"))continue;
+            if(reason.equals("RELIABLE_RETRY_EXHAUSTED")||reason.equals("RELIABLE_FRAME_TIMEOUT"))continue;
             JsonObject snapshot=snapshot();first(snapshot).addProperty("reason",reason);
             assertEquals(reason,Failure.INTERNAL,failure(snapshot));
+        }
+    }
+    @Test public void terminalPeerFailureRecoversRegardlessOfIceCallbackOrdering() {
+        for(String source:new String[]{"SUBSCRIBER_DISCONNECTED","PUBLISHER_DISCONNECTED"}) {
+            JsonObject snapshot=snapshot();diagnostic(snapshot).addProperty("reliable_terminal","carrier_closed");
+            first(snapshot).addProperty("stage","PEER_CONNECTION");first(snapshot).addProperty("state","failed");
+            first(snapshot).addProperty("reason","PEER_CONNECTION_FAILED");
+            JsonObject close=first(snapshot).deepCopy();close.addProperty("sequence",22);
+            close.addProperty("stage","CARRIER");close.addProperty("state","CLOSED");
+            close.addProperty("reason","CARRIER_ERROR");close.addProperty("close_source",source);
+            diagnostic(snapshot).getAsJsonObject("lifecycle").add("first_close",close);
+            assertEquals(Failure.NETWORK,failure(snapshot));
+            for(String state:new String[]{"disconnected","connecting","connected","closed"}) {
+                first(snapshot).addProperty("state",state);assertEquals(Failure.INTERNAL,failure(snapshot));
+            }
+            first(snapshot).addProperty("state","failed");close.addProperty("close_source","RECEIVE_QUEUE_FULL");
+            assertEquals(Failure.INTERNAL,failure(snapshot));
         }
     }
     @Test public void authorityAndCancellationOverrideNetworkAndHealthyStates() {

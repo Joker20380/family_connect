@@ -1,5 +1,10 @@
 # Documentation
 
+**3 November — MESH slow-link stability candidate, source only.** Current owner-selected
+priority ahead of MESH2: reproduced transient ICE teardown and retry-driven congestion;
+bounded recovery/admission passes local native, Android JVM and rate-model checks.
+No production/APK change. [Current gates and limitations](releases/2026-11-03-mesh-slow-link.md).
+
 **3 November — Android111 published for Android8.1+/ARM64.** Exact API27/API35 CI,
 existing signer, optional catalog6, invitation/CSP and full public HTTPS bytes PASS.
 Actual Huawei installation and retained-data operation remain pending; this does not
