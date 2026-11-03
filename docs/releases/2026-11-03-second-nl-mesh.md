@@ -812,3 +812,56 @@ gateway-selector GUI files:54 PASS (existing315 deprecation warnings),0 skips. I
 container extraction with capabilities dropped rejected archive ownership restoration;
 retry uses `--no-same-owner`, without weakening container isolation. Hosted CI is still
 required; this is not a new Linux installation or a waived release gate.
+
+
+## Close/idle secondary runtime upgrade
+
+Projectiona4b64966cde3006c68ec9d9071dcc457a6aebf1f and GUI correction70f63b84d507db2d16cd2354db8f5a654e611745
+are pushed and remote-SHA verified. Exact292-file materialization built twice (second
+with forced rebuild) to SHA256 `2fc165776a7bffa5a2f15fdd0bf36cb15caaf69d33070e4cb34a7685e2386558`.
+Gateway-command production-tag race PASS in addition to the six carrier packages.
+Mixed public111/current Family TLS and actual local Pion VP8 four pairings each PASS;
+six asymmetric paced256/64,512/128,1000/250kbit window8/32 cases PASS with exercised
+DATA loss/retransmission and byte-exact262144-byte transfer. Local Pion idle deadline
+also PASS. This is compatibility/lab acceptance, not a handset/provider claim.
+
+Direct RU SSH repeatedly timed out, including banner exchange. Strictly pinned access
+through the authorized primary Amsterdam host succeeded; no host-key/auth relaxation.
+A private short-path multiplexed connection avoids repeated setup. A first long control
+socket path was rejected locally before establishing the master. Dormant secondary
+upload initially used an unsupported `dd` flag; readback confirmed no file, then an
+exclusive guarded upload succeeded and remote SHA matched. No active binary changed
+in either failed staging attempt.
+
+22:17:32UTC common renewal/directory timers paused with an8-minute automatic resume
+safety timer. Confirmed COMMITTED coordinator, no active owner and CRL headroom10122s.
+22:17:37 secondary upgrade PASS: new immutable tools path
+`/usr/local/lib/fc-profile-tools/mesh2-a4b64966cde3/gateway`; existing executable retained.
+Canonical locator publisher contract and its snapshot/node configuration bindings are
+updated consistently. New locator SHA256
+`34ef7bc49ea72476823f6ef1c8eb1516447c868be73ce1d451590aefd24b1dc8`.
+Fresh provider seed, service-account CLI, unit validation and actual `/proc` executable
+SHA PASS. MESH PID582708/NRestarts0, active and still boot-disabled. AWG6206/TCP6146
+and their restart counts, private profile bytes and original gateway binary unchanged.
+No primary MESH, normal VPN, HTTP backend, grant/assignment or product-state change.
+
+22:18:58UTC common timers resumed and safety timer stopped. Exact RU inspection equals
+pre-upgrade state. Three-node coordinator evaluate returns NOOP, due[], headroom leaf6127s/
+CRL10038s, files_changed0/remote_writes0/restarts0. Existing LEAF_T_MINUS_120M advisory
+retained; remote alert delivery UNAVAILABLE. New30-minute leaf for the same synthetic
+probe identity expires22:47:11; no product registration/grant/assignment change.
+Actual-provider repeated-connect and remote cleanup acceptance is now running, not PASS.
+
+Rollback is secondary-only restoration of the retained previous unit, locator and
+snapshot/node configuration bytes/metadata plus old9d41f1dc executable, under a new
+coordinated writer window. Backups/receipts live in root-only
+`/var/lib/fc-profile-control/mesh2-close-idle-a4b64966cde3`. Do not restore profiles,
+credentials, databases, floors or the retired pair writer. The upgrade script contains
+bounded failure rollback; it was not needed during the successful activation.
+
+Client builds41728661709/70f63b8: hosted Linux job126240977565 PASS; Windows in progress,
+Android skipped by change scope, not accepted for a new Android release. Separate Linux
+internal candidate41728661787 fails its accepted-source package gate; no overall CI
+or Linux candidate PASS claim. Public Android111/catalog6, Windows0.2.16/catalog12 and
+Linux0.2.11 remain unchanged. Backend overlay remains built-only; selection/publication
+is still gated on repeated actual-provider acceptance and exact-version release CI.

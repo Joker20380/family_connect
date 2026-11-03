@@ -7,22 +7,21 @@ in that window. Packet receipt/old-room identity not proven. No changes by this 
 [Evidence](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November — MESH2 close/idle fixes projected and locally qualified; NOT deployed.**
-The accepted canonical/P1 capsule now receives only the bounded RESET local-write
-completion and idle RTP reader wakeup, retaining its existing100ms reorder gap budget,
-window policy and pacing instrumentation (generic main uses750ms). Eight reviewed
-members total; sixteen pinned test inputs.17 projection guards and six production-tag
-native race packages PASS. No identity/admission/chat/profile behavior changed.
-Next: exact committed deterministic builds, public111 compatibility and controlled
-secondary-only runtime upgrade, then actual-provider repeated-session/cleanup gates.
-Immediate reconnect is still OPEN; local RESET completion is not remote delivery.
-Common fleet remains the sole writer; never restore the retired pair writer. Runtime
-MESH2 remains active/boot-disabled on9d41f1dc; backend overlay built-only. Public Android
-111/catalog6, Windows0.2.16 and Linux0.2.11 unchanged. Linux GUI's stale country-alias
-expectation is corrected for both explicit Amsterdam nodes;54 real GTK cases PASS
-in isolated Xvfb/D-Bus, after reproducing both baseline failures. Hosted CI remains
-required; no installed Linux change. Unrelated local documentation is preserved.
-[Projection, gates and rollback](releases/2026-11-03-second-nl-mesh.md#close-and-idle-production-projection).
+**3 November22:19UTC — MESH2 close/idle corrections INSTALLED; live repeat gate pending.**
+Exact projectiona4b6496 built twice identically:2fc16577…; narrow canonical/P1 policies
+and production100ms RTP gap retained.17 projection tests, seven native race packages,
+public111 Family/VP8 four-way compatibility and all six paced-link cases PASS. Secondary
+upgraded22:17:37 with matching canonical locator/snapshot/node bindings; new seed and
+actual executable verified. MESH PID582708,0 restarts, still boot-disabled; AWG6206/TCP6146
+and the private profile are unchanged. Common writer briefly paused with timed safety
+resume, then resumed22:18:58; three-node evaluate NOOP, no RU state change or primary
+restart. No retired pair writer or replay-floor rollback. Next: actual-provider repeated
+sessions and remote cleanup without restart, then backend/selector/immutable Android.
+Linux stale-alias test corrected for both nodes;54 isolated GTK cases and hosted Linux
+job126240977565 PASS. Full client run41728661709 remains in progress; separate Linux
+candidate packaging workflow fails and is not claimed green. Public Android111/catalog6,
+Windows0.2.16 and Linux0.2.11 unchanged; backend overlay remains built-only.
+[Deployment and rollback](releases/2026-11-03-second-nl-mesh.md#closeidle-secondary-runtime-upgrade).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **3 November export24 server correlation — PARTIAL, cause still OPEN.** Second API36

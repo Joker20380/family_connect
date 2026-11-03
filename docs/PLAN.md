@@ -8,20 +8,19 @@ not an established HyperOS defect; no implementation/deployment authorized by th
 [Evidence and limits](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November — FLEET-BOOTSTRAP-2 MESH2 close/idle production projection ready.**
-Bounded RESET completion and idle RTP wakeup are narrowly projected onto the accepted
-canonical/P1 capsule; production100ms gap/window/pacing behavior is retained rather
-than importing unrelated generic-main changes.17 guards and six production-tag native
-race packages PASS. Next: commit-bound deterministic builds and public111 compatibility,
-then controlled secondary-only runtime upgrade and repeated actual-provider sessions
-with timely remote cleanup and no intervening restart. Individual egress passes are
-not reconnect acceptance. Keep the common writer, canonical locator/publisher binding,
-identity and replay floors intact; no generic-main gateway or pair-writer rollback.
-Backend migration/readiness, boot enablement, selector and immutable Android delivery
-remain gated afterward. No version/catalog/runtime change yet; the Linux GUI selector
-expectation is corrected and54 isolated real GTK cases PASS, with hosted CI required.
-No mandatory gate is waived. No unrelated queue successor is selected.
-[Evidence](releases/2026-11-03-second-nl-mesh.md#close-and-idle-production-projection).
+**3 November22:19UTC — FLEET-BOOTSTRAP-2 MESH2 runtime upgraded; repeat gate OPEN.**
+Exacta4b6496 canonical/P1 projection, deterministic2fc16577 builds, seven native race
+packages and public111 Family/VP8/paced compatibility PASS. Controlled secondary-only
+upgrade and fresh directory/executable readback PASS; private profile/AWG/TCP unchanged.
+Common fleet timers resumed; post-upgrade three-node evaluate NOOP. No primary restart,
+identity change, floor rollback or retired pair writer. MESH2 remains boot-disabled.
+Now verify actual-provider repeated sessions and timely remote cleanup with unchanged
+PID; do not turn local RESET completion or a single egress pass into reconnect acceptance.
+Backend migration/readiness, boot enablement, selector and immutable Android stay gated.
+54 isolated GTK tests and hosted Linux client job PASS after stale-alias correction;
+full hosted run unfinished and separate Linux candidate packaging failure retained.
+Public111/catalog6 unchanged. No unrelated successor or weakened completion gate.
+[Evidence and rollback](releases/2026-11-03-second-nl-mesh.md#closeidle-secondary-runtime-upgrade).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **Export24 read-only server correlation remains partial.** Registration/invitation
