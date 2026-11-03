@@ -15,9 +15,11 @@ MANIFEST_SHA256 = '27b54a9dd167c3b6af639bb03864f4d7d121c0e8b96c90eccb45a198c936f
 BASELINE_BINARY_SHA256 = 'f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef'
 TRANSPORT_SOURCE = '142ee464f12cd93f3aa82c2f6b1a5a912f196481'
 PATCH = 'deploy/friends/restricted/slow-link-gateway.patch'
-PATCH_SHA256 = '77f28de2b08ef0ee50390eb72fa92b2ea5a9ec7644c8a59549d4db48fd08d9a6'
+PATCH_SHA256 = '0375e10d45e2b6b186bdcea4be4667ac4ea36e2b636c4a4e08ef7e0daeaacaa4'
 CHANGED = frozenset(('reliablestream/engine.go', 'reliablestream/performance.go',
-                     'reliablestream/performance_test.go', 'telemost/session.go', 'telemost/trace.go'))
+                     'reliablestream/performance_test.go', 'reliablestream/stream.go',
+                     'telemost/rtp.go', 'telemost/session.go', 'telemost/signaling.go',
+                     'telemost/trace.go'))
 TESTS = ('reliablestream/adaptive_retry_test.go', 'reliablestream/engine_test.go',
          'reliablestream/slow_link_test.go', 'reliablestream/stream_test.go',
          'reliablestream/trace_test.go', 'reliablestream/throughput_comparison_test.go',
@@ -25,6 +27,10 @@ TESTS = ('reliablestream/adaptive_retry_test.go', 'reliablestream/engine_test.go
          'telemost/trace_test.go', 'telemost/transient_disconnect_test.go',
          'telemost/receive_stall_test.go', 'telemost/local_process_test.go',
          'familysession/process_link_test.go', 'tcpforward/mesh_performance_test.go')
+CORRECTION_TESTS = {
+    'reliablestream/close_write_test.go': '47b76f494b66a4f7508bb3ae08d8ffd1c7b5d137',
+    'telemost/rtp_idle_test.go': '36ce71365e3393419073430eebf6824baed140be',
+}
 VECTOR = 'tests/vectors/bootstrap-timestamps.json'
 
 
@@ -98,12 +104,15 @@ def materialize(source, manifest, output, ref, *, repository=ROOT):
     files = project(accepted(source, manifest), committed(repository, revision, PATCH))
     for name in TESTS:
         files[name] = committed(repository, TRANSPORT_SOURCE, 'carrier/' + name)
+    for name, test_revision in CORRECTION_TESTS.items():
+        files[name] = committed(repository, test_revision, 'carrier/' + name)
     content = {'carrier/' + name: raw for name, raw in files.items()}
     content[VECTOR] = committed(repository, TRANSPORT_SOURCE, VECTOR)
     receipt = dict(schema=1, source_commit=revision, transport_source_commit=TRANSPORT_SOURCE,
                    accepted_manifest_sha256=MANIFEST_SHA256, baseline_binary_sha256=BASELINE_BINARY_SHA256,
                    patch_sha256=PATCH_SHA256, changed_members=sorted(CHANGED),
-                   test_inputs=list(TESTS) + [VECTOR], production_configuration='absent',
+                   test_inputs=list(TESTS) + list(CORRECTION_TESTS) + [VECTOR],
+                   correction_test_sources=dict(CORRECTION_TESTS), production_configuration='absent',
                    operation_permit=None, files={name: digest(raw) for name, raw in sorted(content.items())})
     output.mkdir(mode=0o700, parents=False, exist_ok=False)
     for name, raw in content.items():

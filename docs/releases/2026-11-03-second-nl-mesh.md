@@ -769,3 +769,34 @@ Rollback stays a normal source revert plus explicit common-fleet recovery for
 runtime changes; no product DB restore, old pair writer or identity cloning. Next is
 exact production projection/build/live cleanup acceptance, then backend/selector/Android
 release gates already listed above, not a different queued task.
+
+
+## Close and idle production projection
+
+3 November continuation, source-only checkpoint. The production projection now includes
+47b76f4 bounded final RESET local-write completion and36ce713 idle RTP reader wakeup.
+Review found the accepted capsule retains a100ms gap timeout and drop-on-window-overflow,
+whereas generic main uses750ms and a different window drain policy. This narrow rollout
+preserves the production100ms budget/window policy and its packet-pacing observation;
+it does not silently import the other main-branch differences. Earlier750ms source
+qualification describes main, not the previously deployed capsule. Eight patch members
+are allowed in total; all other accepted source is inventory/hash protected. Two new
+test files come from their exact source commits alongside the fourteen142ee46 inputs.
+
+17 projection guards PASS; exact accepted inventory projection PASS (291 carrier files
+plus one timestamp vector). The first hand-assembled single-context patch was rejected
+before output; regenerated full-context patch applies cleanly without relaxed checks.
+Production-tag race packages reliablestream/localwrite/telemost/bootstrap/familysession/
+roombroker PASS. These are prototype-source checks, not exact committed binary or live
+acceptance. Private logs/source remain under the existing mesh2-cutover state directory.
+No production file, writer, profile, selector, version, installer or catalog changed.
+
+Remaining: exact committed deterministic builds, public111 mixed-version Family/VP8
+and paced-link checks; controlled secondary-only upgrade preserving canonical publisher
+binding and common-fleet coordination; repeated actual-provider sessions and timely
+remote cleanup without restart. RESET is still best-effort remote delivery. Backend
+migration/readiness, boot enablement, selector and new immutable Android follow only
+after acceptance. Rollback before activation is simply leaving9d41f1dc installed; a
+later runtime rollback must restore its matching locator/config binding, not credentials,
+replay floors, product databases or the retired pair writer. Linux CI's two selector
+expectation failures remain open; no mandatory release gate is waived.

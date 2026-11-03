@@ -109,8 +109,11 @@ def test_committed_patch_and_test_scope():
     raw = (Path(__file__).resolve().parents[1] / source.PATCH).read_bytes()
     assert hashlib.sha256(raw).hexdigest() == source.PATCH_SHA256
     assert {line[6:].decode() for line in raw.splitlines() if line.startswith(b'+++ b/')} == source.CHANGED
-    assert all(name.endswith('_test.go') for name in source.TESTS)
+    assert all(name.endswith('_test.go') for name in (*source.TESTS, *source.CORRECTION_TESTS))
     assert not any(name.startswith(('roombroker/', 'cmd/')) for name in source.CHANGED)
+    assert b'+const reorderGapTimeout = 100 * time.Millisecond' in raw
+    assert b'-\t\tfor sequence, queued := range b.pkts {' not in raw
+    assert b'-\t\t\t\tif s.cfg.PacketPacing != nil {' not in raw
 
 
 def test_materialization_uses_only_committed_inputs(accepted, patch, monkeypatch, tmp_path):
@@ -126,7 +129,14 @@ def test_materialization_uses_only_committed_inputs(accepted, patch, monkeypatch
     output = tmp_path / 'output'
     receipt = source.materialize(*accepted, output, 'HEAD')
     assert calls[0] == (revision, source.PATCH)
-    assert all(ref == source.TRANSPORT_SOURCE for ref, _ in calls[1:])
+    assert calls[1:] == [
+        *((source.TRANSPORT_SOURCE, 'carrier/' + name) for name in source.TESTS),
+        *((ref, 'carrier/' + name) for name, ref in source.CORRECTION_TESTS.items()),
+        (source.TRANSPORT_SOURCE, source.VECTOR),
+    ]
+    assert receipt['correction_test_sources'] == source.CORRECTION_TESTS
+    for name in source.CORRECTION_TESTS:
+        assert (output / 'carrier' / name).read_bytes() == b'fixture\n'
     assert receipt['operation_permit'] is None and receipt['production_configuration'] == 'absent'
     assert (output / 'carrier/policy.go').read_bytes() == b'package policy\n'
     assert (output / 'source-manifest.json').stat().st_mode & 0o777 == 0o600

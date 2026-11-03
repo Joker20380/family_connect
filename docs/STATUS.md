@@ -7,27 +7,20 @@ in that window. Packet receipt/old-room identity not proven. No changes by this 
 [Evidence](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November21:53UTC — MESH2 active; two transport defects corrected in source, NOT deployed.**
-Bounded final RESET local-write completion is pushed as47b76f4. Two subsequent real
-operator probes pass Family TLS,4 HTTPS/3 DNS and AMS2 egress, but immediate repeat
-still fails at the retained-owner challenge deadline. Local RESET write success is
-not remote release; the first session ended later at `authorization_changed`.
-An independent reproduced receiver defect stranded complete RTP frames after a gap
-when no next packet arrived. The existing750ms gap deadline now wakes the actual
-Pion reader; wrap-around and next-gap budgets are preserved. Five focused race repeats,
-three real local Pion idle-gap repeats and full telemost/bootstrap race packages PASS.
-This is not yet evidence that deployed reconnect is fixed. Neither transport correction
-is in the accepted production projection/runtime. Next: exact projection/build and
-live repeated-session/cleanup acceptance, then backend/selector/immutable Android.
-Common writer timers remain active/waiting with successful last oneshots; a separate
-latest coordinator-file read timed out and is not claimed. AMS2 active/boot-disabled,
-no operator restart in this slice. Public Android111/catalog6, Windows0.2.16 and Linux
-0.2.11 unchanged. Source CI47b76f4 carrier gates PASS, but Linux GUI has two selector
-expectation failures; full matrix is not green. No waiver or public delivery.
-Final secondary readback confirms the last synthetic session's resources closed at
-21:49:58 after `authorization_changed`, not immediate peer release. MESH PID554442,
-AWG6206/TCP6146 remain active with0 restarts. Source36ce713 pushed/remote-verified.
-[Evidence and rollback boundary](releases/2026-11-03-second-nl-mesh.md#idle-rtp-gap-source-correction).
+**3 November — MESH2 close/idle fixes projected and locally qualified; NOT deployed.**
+The accepted canonical/P1 capsule now receives only the bounded RESET local-write
+completion and idle RTP reader wakeup, retaining its existing100ms reorder gap budget,
+window policy and pacing instrumentation (generic main uses750ms). Eight reviewed
+members total; sixteen pinned test inputs.17 projection guards and six production-tag
+native race packages PASS. No identity/admission/chat/profile behavior changed.
+Next: exact committed deterministic builds, public111 compatibility and controlled
+secondary-only runtime upgrade, then actual-provider repeated-session/cleanup gates.
+Immediate reconnect is still OPEN; local RESET completion is not remote delivery.
+Common fleet remains the sole writer; never restore the retired pair writer. Runtime
+MESH2 remains active/boot-disabled on9d41f1dc; backend overlay built-only. Public Android
+111/catalog6, Windows0.2.16 and Linux0.2.11 unchanged. Linux CI selector-expectation
+failures remain recorded, not waived. Unrelated local documentation is preserved.
+[Projection, gates and rollback](releases/2026-11-03-second-nl-mesh.md#close-and-idle-production-projection).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **3 November export24 server correlation — PARTIAL, cause still OPEN.** Second API36

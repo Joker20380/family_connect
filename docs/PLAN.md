@@ -8,21 +8,19 @@ not an established HyperOS defect; no implementation/deployment authorized by th
 [Evidence and limits](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November21:53UTC MESH2: source fixes qualified; deployed repeat-session gate OPEN.**
-Final RESET local-write completion47b76f4 and idle RTP gap expiry are corrected with
-deterministic/race coverage; real local Pion validates the reader deadline. Live
-RESET-only probes pass individual Family/HTTPS/DNS/AMS2 egress, not immediate repeat:
-same-owner challenge still times out. Do not infer server receipt from a local write.
-Next: project these narrow changes onto the accepted canonical/P1 gateway capsule,
-qualify exact builds and controlled runtime, then repeat actual-provider connect and
-cleanup without restart. Keep the earlier bootstrap cleanup/handshake failures open
-until explained by evidence. Then backend readiness/migration, boot enablement,
-selector and immutable Android delivery with exact CI. Source47b76f4 full CI has two
-Linux selector-expectation failures; no gate may be called green or waived. Public111/
-catalog6 and gateway binaries unchanged. No ownership preemption or unrelated successor.
-Source36ce713 pushed/remote-verified. Final synthetic resources closed21:49:58 after
-authorization_changed with unchanged MESH/AWG/TCP PIDs; immediate-reconnect gate remains.
-[Evidence](releases/2026-11-03-second-nl-mesh.md#idle-rtp-gap-source-correction).
+**3 November — FLEET-BOOTSTRAP-2 MESH2 close/idle production projection ready.**
+Bounded RESET completion and idle RTP wakeup are narrowly projected onto the accepted
+canonical/P1 capsule; production100ms gap/window/pacing behavior is retained rather
+than importing unrelated generic-main changes.17 guards and six production-tag native
+race packages PASS. Next: commit-bound deterministic builds and public111 compatibility,
+then controlled secondary-only runtime upgrade and repeated actual-provider sessions
+with timely remote cleanup and no intervening restart. Individual egress passes are
+not reconnect acceptance. Keep the common writer, canonical locator/publisher binding,
+identity and replay floors intact; no generic-main gateway or pair-writer rollback.
+Backend migration/readiness, boot enablement, selector and immutable Android delivery
+remain gated afterward. No version/catalog/runtime change yet; Linux CI failures are
+not waived. No unrelated queue successor is selected.
+[Evidence](releases/2026-11-03-second-nl-mesh.md#close-and-idle-production-projection).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **Export24 read-only server correlation remains partial.** Registration/invitation
