@@ -14,6 +14,20 @@ from offline_handoff import DOMAIN, verify
 
 
 def sign(request, anchor, key_bytes, validator, now):
+    if request.get('schema') == 2:
+        import gateway_set
+        require(validator.all_activated and set(request) == {'schema','operation_id','gateway_ids','requests'}
+                and type(request['requests']) is dict and set(request['requests']) == {'NL','NL2'}, 'HANDOFF_REQUEST_SCHEMA')
+        identities = gateway_set.membership(request['gateway_ids'])
+        require(all(value['schema'] == 1 and value['operation_id'] == request['operation_id']
+                    for value in request['requests'].values()), 'HANDOFF_BINDING')
+        previous = {slot:value['previous_authority'] for slot,value in request['requests'].items()}
+        gateway_set.authorities(previous,validator,identities,now)
+        bundles = {slot:base64.b64encode(sign(value,anchor,key_bytes,validator,now)).decode()
+                   for slot,value in request['requests'].items()}
+        output = canonical(dict(schema=1,gateway_ids=identities,bundles=bundles))
+        gateway_set.verify_handoff(output,validator,previous,identities,request['operation_id'],now)
+        return output
     require(set(request) == {'schema','operation_id','previous_authority','successor_payload','request_expires_at'}
             and request['schema'] == 1 and now < request['request_expires_at'] <= now+DAY, 'HANDOFF_REQUEST_SCHEMA')
     if len(key_bytes) == 32:

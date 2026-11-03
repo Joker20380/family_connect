@@ -128,12 +128,12 @@ class ProductionNode:
 
     def authority_request(self, operation_id):
         require(self.role == 'RU', 'NODE_ROLE')
-        require(not self.gateway_ids, 'FLEET_AUTHORITY_HANDOFF_REQUIRED')
         with self.operation.lock():
             path = self.state/'authority-request.json'
             if path.exists():
                 request = parse(read_private(path))
                 require(request['operation_id'] == operation_id, 'OFFLINE_HANDOFF_ALREADY_PENDING')
+                require(request.get('gateway_ids') == self.gateway_ids, 'GATEWAY_SET_BINDING')
                 return request
             require(not (self.state/'owner.json').exists(), 'OPERATION_BUSY')
             import json
@@ -154,6 +154,9 @@ class ProductionNode:
                              authority=certificate.public_bytes(Encoding.PEM).decode())
             request = dict(schema=1,operation_id=operation_id,previous_authority=envelope,successor_payload=successor,
                            request_expires_at=now+86400)
+            if self.gateway_ids:
+                request = gateway_set.authority_request(request,json.loads(self.read('issuer-NL2.json')[0]),
+                                                       self.validator,self.gateway_ids,now)
             atomic(path,canonical(request))
             return request
 
@@ -331,7 +334,13 @@ class ProductionNode:
         require(digest(canonical(before)) == plan['grant_plan']['before_sha256'] == owner['expected_state']['database_sha256'],
                 'ROLLBACK_EXPECTED_DATABASE_BINDING_MISMATCH')
         now = int(self.clock())
-        _,_,_,_,leaf = self.validator.validate(canonical(plan['previous']),now,expired_leaf_predecessor=True)
+        previous = self.validator.validate(canonical(plan['previous']),now,expired_leaf_predecessor=True)
+        leaf = previous[4]
+        if self.gateway_ids:
+            require(plan['gateway_ids'] == self.gateway_ids, 'GATEWAY_SET_BINDING')
+            secondary = self.validator.validate(canonical(plan['secondary']['previous']),now,expired_leaf_predecessor=True)
+            gateway_set.shared(previous,secondary,self.gateway_ids)
+            leaf = min(leaf,secondary[4],key=lambda value:value.not_valid_after_utc)
         require(leaf.not_valid_before_utc <= utc(now) and leaf.not_valid_after_utc <= utc(now), 'PREVIOUS_LEAF_NOT_EXPIRED')
         actual,expected = self.inspect(),dict(owner['expected_state'])
         actual.pop('database_sha256')
@@ -446,7 +455,7 @@ class ProductionNode:
 
     def prepare(self, operation_id, gateway, *, authority_handoff=None, expired_handoff=None):
         require(self.role == 'RU', 'NODE_ROLE')
-        require(not self.gateway_ids or (authority_handoff is None and expired_handoff is None),
+        require(not self.gateway_ids or expired_handoff is None,
                 'FLEET_AUTHORITY_HANDOFF_REQUIRED')
         require(bool(self.gateway_ids) == ('secondary' in gateway), 'GATEWAY_SET_BINDING')
         with self.operation.lock():
@@ -485,8 +494,14 @@ class ProductionNode:
             require(all(gateway[name] == trust[name] for name in ('family','gateway','minimum_revision')), 'GATEWAY_BINDING')
             signer = load_pem_private_key(self.read('issuer.key')[0],None)
             require(hmac.compare_digest(spki(signer.public_key()),spki(issuer.public_key())), 'ISSUER_SIGNING_KEY_MISMATCH')
+            secondary_successor = None
             if authority_handoff is not None:
-                envelope = verify_handoff(authority_handoff,self.validator,envelope,operation_id,now)
+                if self.gateway_ids:
+                    authorities = gateway_set.verify_handoff(authority_handoff,self.validator,
+                        {'NL':envelope,'NL2':json.loads(self.read('issuer-NL2.json')[0])},self.gateway_ids,operation_id,now)
+                    envelope,secondary_successor = authorities['NL'],authorities['NL2']
+                else:
+                    envelope = verify_handoff(authority_handoff,self.validator,envelope,operation_id,now)
                 trust,issuer = self.validator.delegation_parser(envelope,self.validator.anchor,now)
             if authorization is not None:
                 self._recovery_evidence(authorization.request['checkpoint'], operation_id)
@@ -516,7 +531,7 @@ class ProductionNode:
             if self.gateway_ids:
                 plan.update(schema=2,gateway_ids=self.gateway_ids,secondary=gateway_set.prepare(plan,
                     gateway['secondary'],json.loads(self.read('issuer-NL2.json')[0]),self.gateway_ids,
-                    self.validator,signer,now))
+                    self.validator,signer,now,successor_manifest=secondary_successor))
             if authorization is not None:
                 plan['expired_recovery'] = dict(bundle=base64.b64encode(expired_handoff).decode(), accepted_at=now)
             self.validate(plan)
@@ -578,6 +593,11 @@ class ProductionNode:
                 files = {'issuer.json':self.read('issuer.json')[0] if plan['candidate']['authority'] == plan['previous']['authority']
                          else canonical(plan['candidate']['authority']),
                          'revocations.pem':plan['candidate']['crl'].encode()}
+                if self.gateway_ids:
+                    local = plan['secondary']
+                    files['issuer-NL2.json'] = (self.read('issuer-NL2.json')[0]
+                        if local['candidate']['authority'] == local['previous']['authority']
+                        else canonical(local['candidate']['authority']))
             else:
                 local = gateway_set.selected(plan,self.gateway_slot)
                 gateway = self.public_gateway()

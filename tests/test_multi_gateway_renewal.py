@@ -1,4 +1,6 @@
 import base64
+import copy
+import importlib.util
 import json
 import os
 
@@ -11,7 +13,8 @@ from cryptography.x509.oid import ExtendedKeyUsageOID, NameOID
 from control.friends.restricted import DOMAIN, PROTOCOL, utc
 from device_identity.device import DeviceIdentity
 from test_activated_maintenance import (
-    Barrier, Cluster, ProductionController, ProductionNode, Rejected, Rpc, atomic, canonical, pem_key, proof,
+    Barrier, Cluster, DAY, MAINTENANCE, MaintenanceAuthorization, ProductionController, ProductionNode,
+    Rejected, Rpc, atomic, canonical, digest, pem_key, proof,
 )
 
 
@@ -332,15 +335,11 @@ def test_incomplete_directory_receipt_cannot_resume_ru(fleet):
     assert fleet.nodes['RU'].barrier.stopped() and fleet.nodes['RU'].barrier.starts == 0
 
 
-@pytest.mark.parametrize('operation',['authority-request','authority-handoff','expired-request','expired-apply'])
+@pytest.mark.parametrize('operation',['expired-request','expired-apply'])
 def test_unsupported_authority_recovery_is_explicitly_fenced_without_writes(fleet,operation):
     before = inspected(fleet)
     with pytest.raises(Rejected,match='FLEET_AUTHORITY_HANDOFF_REQUIRED'):
-        if operation == 'authority-request':
-            fleet.nodes['RU'].authority_request('test-fleet-authority-request')
-        elif operation == 'authority-handoff':
-            fleet.controller.run('test-fleet-authority-request',authority_handoff=b'unsupported')
-        elif operation == 'expired-request':
+        if operation == 'expired-request':
             fleet.controller.recovery_request('test-fleet-authority-request',[])
         else:
             fleet.controller.run_expired('test-fleet-authority-request',b'unsupported')
@@ -393,3 +392,179 @@ def test_runtime_opt_in_uses_one_coordinator_and_two_pinned_nl_routes(fleet,tmp_
         result = json.loads(capsys.readouterr().out)
         assert result['result'] == ('NOOP' if mode == 'evaluate' else 'COMMITTED'),result
         assert routes == ['NL','NL2']
+
+
+def offline_sign(fleet,request):
+    specification = importlib.util.spec_from_file_location('fleet_offline_signer',MAINTENANCE.parent/'offline/sign_authority.py')
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    return module.sign(request,fleet.service.anchor,fleet.root_key.private_bytes_raw(),fleet.validator,fleet.now)
+
+
+def authority_handoff(fleet):
+    fleet.now += 60*DAY
+    assert fleet.scheduled('before-authority')['result'] == 'COMMITTED'
+    operation = 'test-fleet-authority-renewal'
+    request = fleet.nodes['RU'].authority_request(operation)
+    assert request['gateway_ids'] == fleet.identities and set(request['requests']) == {'NL','NL2'}
+    assert fleet.nodes['RU'].authority_request(operation) == request
+    return operation,request,offline_sign(fleet,request)
+
+
+def approve(fleet,operation):
+    return MaintenanceAuthorization(operation,digest(canonical(inspected(fleet))),fleet.now,fleet.now+900)
+
+
+def test_planned_offline_authority_renewal_preserves_both_keys_and_shared_ca(fleet):
+    operation,request,bundle = authority_handoff(fleet)
+    before = profiles(fleet)
+    result = fleet.controller.run(operation,authority_handoff=bundle,approval=approve(fleet,operation))
+    assert result['result'] == 'COMMITTED',result
+    after = profiles(fleet)
+    assert after['NL']['authority'] == after['NL2']['authority'] != before['NL']['authority']
+    for slot in ('NL','NL2'):
+        assert {name:value for name,value in after[slot].items() if name != 'authority'} == {
+            name:value for name,value in before[slot].items() if name != 'authority'}
+        path = fleet.nodes['RU'].live_path('issuer.json' if slot == 'NL' else 'issuer-NL2.json')
+        trust,issuer = fleet.validator.delegation_parser(json.loads(path.read_bytes()),fleet.service.anchor,fleet.now)
+        assert trust['gateway'] == fleet.identities[slot] and trust['sequence'] == 2
+        assert trust['expires_at']-trust['issued_at'] == 90*DAY
+    fleet.now += 15000
+    assert fleet.scheduled('after-authority')['result'] == 'COMMITTED'
+    fleet.snapshot()
+
+
+def test_authority_sequences_remain_independent_and_operator_approval_is_required(fleet):
+    path = fleet.nodes['RU'].live_path('issuer-NL2.json')
+    payload = json.loads(base64.b64decode(json.loads(path.read_bytes())['payload']))
+    payload['sequence'] = 7
+    encoded = canonical(payload)
+    atomic(path,canonical(dict(payload=base64.b64encode(encoded).decode(),
+        signature=base64.b64encode(fleet.root_key.sign(DOMAIN+encoded)).decode())))
+    operation,request,bundle = authority_handoff(fleet)
+    before = inspected(fleet)
+    result = fleet.controller.run(operation,authority_handoff=bundle,scheduled=True,approved_leaf_crl_schedule=True)
+    assert result['result'] == 'MAINTENANCE_REQUIRED',result
+    assert inspected(fleet) == before
+    result = fleet.controller.run(operation,authority_handoff=bundle,approval=approve(fleet,operation))
+    assert result['result'] == 'COMMITTED',result
+    trust,_ = fleet.validator.delegation_parser(json.loads(path.read_bytes()),fleet.service.anchor,fleet.now)
+    assert trust['sequence'] == 8
+    assert json.loads(base64.b64decode(json.loads((fleet.nodes['RU'].live/'issuer.json').read_bytes())['payload']))['sequence'] == 2
+
+
+@pytest.mark.parametrize('defect',['missing','extra','swapped','primary_only','wrong_membership','wrong_operation','expired'])
+def test_offline_handoff_rejects_partial_or_misbound_authority_before_stopping(fleet,defect):
+    operation,request,bundle = authority_handoff(fleet)
+    value = json.loads(bundle)
+    if defect == 'missing':
+        del value['bundles']['NL2']
+    elif defect == 'extra':
+        value['bundles']['NL3'] = value['bundles']['NL']
+    elif defect == 'swapped':
+        value['bundles']['NL2'] = value['bundles']['NL']
+    elif defect == 'primary_only':
+        value = json.loads(base64.b64decode(value['bundles']['NL']))
+    elif defect == 'wrong_membership':
+        value['gateway_ids']['NL2'] = 'e'*32
+    elif defect == 'wrong_operation':
+        operation += '-different'
+    else:
+        fleet.now += DAY
+    before = inspected(fleet)
+    with pytest.raises((Rejected,ValueError)):
+        fleet.controller.run(operation,authority_handoff=canonical(value),approval=approve(fleet,operation))
+    assert inspected(fleet) == before
+    assert all(not node.barrier.stopped() for node in fleet.nodes.values())
+
+
+@pytest.mark.parametrize('defect',['operation','missing','gateway','family','different_ca'])
+def test_offline_signer_refuses_incoherent_pair_request(fleet,defect):
+    operation,request,bundle = authority_handoff(fleet)
+    request = copy.deepcopy(request)
+    secondary = request['requests']['NL2']
+    if defect == 'operation':
+        secondary['operation_id'] += '-other'
+    elif defect == 'missing':
+        del request['requests']['NL2']
+    elif defect == 'different_ca':
+        secondary['successor_payload']['authority'] = profiles(fleet)['NL2']['authority']
+    else:
+        secondary['successor_payload'][defect] = 'e'*32
+    with pytest.raises(Rejected):
+        offline_sign(fleet,request)
+
+
+@pytest.mark.parametrize('stage',['RU_STAGED','NL2_STAGED','RU_PROMOTED','NL2_PROMOTED','COMMIT_DECIDED','NL2_RESUMED'])
+def test_authority_handoff_interruption_reconciles_both_signed_delegations(fleet,stage):
+    operation,request,bundle = authority_handoff(fleet)
+    before = inspected(fleet)
+    def interrupt(state):
+        if state == stage:
+            raise KeyboardInterrupt()
+    fleet.controller.fault = interrupt
+    with pytest.raises(KeyboardInterrupt):
+        fleet.controller.run(operation,authority_handoff=bundle,approval=approve(fleet,operation))
+    fleet.controller.fault = lambda state: None
+    result = fleet.scheduled('authority-restart')
+    if stage in ('COMMIT_DECIDED','NL2_RESUMED'):
+        assert result['result'] == 'COMMITTED',result
+        assert profiles(fleet)['NL']['authority'] == profiles(fleet)['NL2']['authority']
+        assert inspected(fleet) != before
+    else:
+        assert result['result'] == 'ABORTED',result
+        assert inspected(fleet) == before
+    fleet.snapshot()
+    assert all(not node.barrier.stopped() for node in fleet.nodes.values())
+
+
+@pytest.mark.parametrize('point',['stage-issuer-NL2.json','after-rename-issuer.json','after-rename-issuer-NL2.json'])
+def test_mid_authority_write_rolls_back_both_delegations(fleet,point):
+    operation,request,bundle = authority_handoff(fleet)
+    before = inspected(fleet)
+    failed = []
+    def failure(state):
+        if state == point and not failed:
+            failed.append(state)
+            raise OSError('synthetic authority write failure')
+    fleet.nodes['RU'].fault = failure
+    result = fleet.controller.run(operation,authority_handoff=bundle,approval=approve(fleet,operation))
+    assert result['result'] == 'ABORTED' and failed == [point],result
+    assert inspected(fleet) == before
+    assert all(not node.barrier.stopped() for node in fleet.nodes.values())
+
+
+@pytest.mark.parametrize('defect',[None,'historical_change','secondary_changed','not_expired'])
+def test_explicit_registry_overlay_recovery_preserves_only_valid_additions(fleet,defect):
+    from test_registry_overlay import additions
+    change_leaf(fleet,'NL2',expires=fleet.now+1000)
+    def interrupt(state):
+        if state == 'NL2_PROMOTED':
+            raise KeyboardInterrupt()
+    fleet.controller.fault = interrupt
+    with pytest.raises(KeyboardInterrupt):
+        fleet.scheduled()
+    fleet.controller.fault = lambda state: None
+    record = json.loads((fleet.controller.root/'transaction.json').read_bytes())
+    for node in fleet.nodes.values():
+        node.rollback(record['operation_id'])
+    fleet.controller.save(record,'ROLLED_BACK')
+    additions(fleet,devices=1,invites=1)
+    if defect != 'not_expired':
+        fleet.now += 1001
+    if defect == 'historical_change':
+        with fleet.service.access.db() as database:
+            database.execute('UPDATE devices SET revoked=1 WHERE device=?',(fleet.device.reference,))
+    elif defect == 'secondary_changed':
+        profile = profiles(fleet)['NL2']
+        profile['minimum_crl'] += 1
+        atomic(fleet.nodes['NL2'].live/'gateway.json',canonical(profile))
+    before = inspected(fleet)
+    result = fleet.controller.recover(record,preserve_registry_overlay=True)
+    assert result['result'] == ('RECOVERY_REQUIRED' if defect else 'ROLLED_BACK_READERS_STOPPED'),result
+    assert inspected(fleet) == before
+    assert all(node.barrier.stopped() and node.barrier.starts == 0 for node in fleet.nodes.values())
+    if defect is None:
+        terminal = json.loads((fleet.controller.root/'transaction.json').read_bytes())
+        assert terminal['registry_devices_added'] == terminal['registry_invites_added'] == 1
+        assert fleet.controller.recover(terminal,preserve_registry_overlay=True)['result'] == 'ROLLED_BACK_READERS_STOPPED'

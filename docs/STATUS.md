@@ -23,11 +23,15 @@ Follow-up source now implements one coordinated RU–AMS1–AMS2 leaf/shared-CRL
 explicit pinned membership, separate gateway leaves/keys, three matching commit receipts,
 per-node fresh directories before RU resume, rollback/roll-forward and durable fencing.
 Pair-only controllers reject opted-in fleet nodes; the old pair mode remains supported.
-Current validation:334 locked user-space/native/package checks plus236 isolated root-DAC
-checks PASS,0 skips;66 three-node transaction/runtime tests are included in that selection.
-This is not yet production-ready: multi-gateway offline authority handoff/expired-authority
-and registry-overlay recovery remain explicitly rejected, not silently reduced to one node.
-Remaining: complete those recovery contracts, qualify/install the exact coordinated writer,
+Checkpoint7d3fac7 pushed/remote-verified. Follow-up also implements offline planned
+authority renewal for both signed gateway delegations in that same transaction, with
+unchanged issuer/gateway keys, independent sequences, explicit outage approval and shared
+CA readback. Explicit append-only registry-overlay recovery now checks both gateways.
+Current validation:358 user-space/native/package checks plus one independent-sequence/
+approval test PASS;326 isolated root checks PASS, including90 repeated fleet cases.
+No production deployment. Expired-authority recovery for a whole fleet remains explicitly
+rejected; this is not yet a fully accepted production maintenance replacement.
+Remaining: complete fleet expired-authority recovery, qualify/install the coordinated writer,
 permanent AMS2 runtime and live acceptance, then selector and immutable Android>111/catalog>6.
 [Current integration and rollout boundary](releases/2026-11-03-second-nl-mesh.md).
 

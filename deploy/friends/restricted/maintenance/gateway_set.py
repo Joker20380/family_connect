@@ -1,3 +1,4 @@
+import base64
 import re
 
 from cryptography import x509
@@ -16,6 +17,38 @@ def membership(value):
 
 def selected(plan, slot):
     return plan['secondary'] if slot == 'NL2' else plan
+
+
+def authorities(envelopes, validator, identities, now):
+    identities = membership(identities)
+    require(type(envelopes) is dict and set(envelopes) == set(identities), 'GATEWAY_AUTHORITY_BINDING')
+    parsed = {slot:validator.delegation_parser(envelope,validator.anchor,now) for slot,envelope in envelopes.items()}
+    require(all(parsed[slot][0]['gateway'] == identity for slot,identity in identities.items())
+            and all(parsed['NL'][0][name] == parsed['NL2'][0][name]
+                    for name in ('family','authority','minimum_revision')), 'GATEWAY_AUTHORITY_BINDING')
+    return parsed
+
+
+def authority_request(primary, secondary, validator, identities, now):
+    parsed = authorities({'NL':primary['previous_authority'],'NL2':secondary},validator,identities,now)
+    successor = dict(primary['successor_payload'],gateway=identities['NL2'],sequence=parsed['NL2'][0]['sequence']+1)
+    other = dict(primary,previous_authority=secondary,successor_payload=successor)
+    return dict(schema=2,operation_id=primary['operation_id'],gateway_ids=membership(identities),
+                requests={'NL':primary,'NL2':other})
+
+
+def verify_handoff(raw, validator, previous, identities, operation, now):
+    from offline_handoff import verify
+    value = parse(raw)
+    require(type(value) is dict and set(value) == {'schema','gateway_ids','bundles'}
+            and type(value['schema']) is int and value['schema'] == 1
+            and value['gateway_ids'] == membership(identities)
+            and type(value['bundles']) is dict and set(value['bundles']) == set(identities), 'FLEET_HANDOFF_SCHEMA')
+    authorities(previous,validator,identities,now)
+    successor = {slot:verify(base64.b64decode(value['bundles'][slot],validate=True),validator,
+        previous[slot],operation,now) for slot in identities}
+    authorities(successor,validator,identities,now)
+    return successor
 
 
 def shared(primary, secondary, identities):
@@ -87,17 +120,17 @@ def validate(plan, validator, now, identities, *, recovery=False):
         primary = validator.validate(canonical(plan[phase]),validation_time,**options)
         other = validator.validate(canonical(secondary[phase]),validation_time,**options)
         shared(primary,other,identities)
-    require(plan['previous']['authority'] == plan['candidate']['authority']
-            and secondary['previous']['authority'] == secondary['candidate']['authority'], 'FLEET_AUTHORITY_HANDOFF_REQUIRED')
 
 
-def prepare(plan, gateway, manifest, identities, validator, signer, now):
+def prepare(plan, gateway, manifest, identities, validator, signer, now, *, successor_manifest=None):
     previous = dict(plan['previous'],authority=manifest,certificate=gateway['certificate'])
     old = validator.validate(canonical(previous),now,expired_leaf_predecessor=True)
     primary = validator.validate(canonical(plan['previous']),now,expired_leaf_predecessor=True)
     shared(primary,old,identities)
     bound_profile(old,gateway,identities['NL2'])
-    _,trust,issuer,_,leaf = old
+    _,_,_,_,leaf = old
+    candidate_manifest = manifest if successor_manifest is None else successor_manifest
+    trust,issuer = validator.delegation_parser(candidate_manifest,validator.anchor,now)
     successor = gateway['certificate']
     if int(leaf.not_valid_after_utc.timestamp()) - now <= THRESHOLD['leaf']:
         issued = max(now-5,int(issuer.not_valid_before_utc.timestamp()))
@@ -108,5 +141,5 @@ def prepare(plan, gateway, manifest, identities, validator, signer, now):
         for extension in leaf.extensions:
             builder = builder.add_extension(extension.value,extension.critical)
         successor = builder.sign(signer,None).public_bytes(Encoding.PEM).decode()
-    candidate = dict(plan['candidate'],authority=manifest,certificate=successor)
+    candidate = dict(plan['candidate'],authority=candidate_manifest,certificate=successor)
     return dict(previous=previous,candidate=candidate,nl_profile_sha256=gateway['profile_sha256'])

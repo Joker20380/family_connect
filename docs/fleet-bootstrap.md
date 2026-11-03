@@ -30,9 +30,13 @@ The follow-up leaf/CRL writer is source-only. Node configuration opts in with id
 delegation/directory below `gateways/nl-amsterdam-2/`, not in the primary files. Controller
 schema2 requires `secondary: {source_sha256: <exact-package-hash>, ssh: <pinned-route>}`
 in addition to the existing fields and uses the same single coordinator state/lock.
-Do not configure a separate CRL writer or enable this on production yet: fleet offline
-authority/expired-authority and registry-overlay recovery are not implemented by this
-slice. Unsupported paths fail closed; three-node runtime acceptance remains mandatory.
+Do not configure a separate CRL writer or enable this on production yet. Planned offline
+authority renewal now supports one schema2 request with both gateway successors and
+one common issuer CA, signed offline using the existing signer with `--all-activated`.
+It requires operator maintenance approval and updates both delegation files/profiles
+under the same transaction. Explicit append-only registry-overlay recovery also checks
+both gateways. Recovery after authority expiry is still unsupported/fail-closed;
+completion of that contract and three-node runtime acceptance remain mandatory.
 
 ## Historical rehearsal runbook
 

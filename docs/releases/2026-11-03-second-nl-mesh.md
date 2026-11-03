@@ -11,6 +11,43 @@ asks to finish MESH2 using the separately supplied credential. This supersedes t
 question-only interpretation in the earlier [picker report](2026-11-03-android-node-picker.md).
 No claim that source publication enables MESH on an installed client.
 
+## Shared-authority follow-up —3 November17:20UTC
+
+The leaf/CRL checkpoint `7d3fac77a765cc7e9f28fbe6a6e688c9bb2d2047` is committed,
+pushed and remote main verified. Follow-up source now supports **planned** offline
+authority renewal before expiry for the whole fleet. RU produces one request with
+two independent delegation successors referencing the exact same renewed issuer CA.
+The offline-only signer validates both scopes and returns two signed handoffs; the
+root key never enters the server package. Both handoffs must match the operation,
+predecessors, membership and common successor CA. Missing/swapped/partial handoffs,
+wrong Family/gateway/operation, expired bundles and incoherent CA requests are rejected.
+Delegation sequences may differ and each advances by one; issuer/gateway keys and
+admissions remain unchanged. Planned authority renewal still requires explicit operator
+maintenance approval; the leaf/CRL schedule cannot silently approve that outage.
+
+Both RU delegation files and both gateway profiles participate in the same durable
+transaction. Tests include faults between individual authority-file writes, rollback
+before commit, roll-forward after commit and a subsequent ordinary leaf/CRL cycle.
+Explicit registry-overlay recovery now also handles an expired secondary leaf when
+the primary leaf is still valid. It preserves only validated append-only device/invite
+additions, retains all historical/restricted-state checks, verifies both gateway
+snapshots and leaves every reader stopped. It does not silently change historical rows.
+
+Checks:358 selected user-space/native/package cases PASS, plus one independent-sequence/
+operator-approval case PASS;326 isolated-root cases PASS, including90 fleet cases also
+covered in user space.595 distinct selected cases PASS,0 skips; repeated cases are not
+counted twice. The accepted beta111 native compatibility check is included. Source
+packages in these tests are synthetic fixtures, not installed production artifacts.
+
+**Remaining acceptance gap:** recovery when the fleet's root-signed authority has
+already expired is still rejected before writes. Planned renewal and expired-authority
+recovery are different operations; the former does not prove the latter. Finish this
+contract before replacing the production writer, then run permanent AMS2 and real
+data-plane acceptance before Android publication. Existing ordinary AWG/TCP and primary
+MESH services, installed/public versions and catalogs were not changed in this turn.
+The preceding slice's unsupported planned-handoff/registry-overlay boundaries below
+describe that checkpoint only and are superseded by this section.
+
 ## Coordinated renewal source —3 November17:10UTC
 
 Implemented an opt-in three-node transaction rather than a second independent writer.

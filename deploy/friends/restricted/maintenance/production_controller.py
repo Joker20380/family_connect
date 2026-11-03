@@ -227,6 +227,13 @@ class ProductionController:
             published = self.nodes['RU'].call('publish-directory',operation,payload)
             require(published['sha256'] == directory['sha256'], 'DIRECTORY_RECONCILIATION_FAILED')
 
+    def verify_authority_handoff(self, raw, previous, gateway, current, operation):
+        if self.multiple:
+            return gateway_set.verify_handoff(raw,self.validator,
+                {'NL':previous['authority'],'NL2':gateway['secondary_snapshot']['authority']},
+                current['RU']['gateway_ids'],operation,int(self.clock()))
+        return verify_handoff(raw,self.validator,previous['authority'],operation,int(self.clock()))
+
     def save(self, record, state):
         record['state'] = state
         atomic(self.root/'transaction.json',canonical(record))
@@ -250,7 +257,6 @@ class ProductionController:
     def run(self, operation, *, approval=None, inventory=None, scheduled=False, authority_handoff=None,
             approved_leaf_crl_schedule=False):
         require(type(operation) is str and re.fullmatch('[a-z0-9-]{16,96}',operation), 'OPERATION_ID')
-        require(not self.multiple or authority_handoff is None, 'FLEET_AUTHORITY_HANDOFF_REQUIRED')
         marker = self.root/'transaction.json'
         if marker.exists():
             previous_record = parse(read_private(marker))
@@ -261,7 +267,7 @@ class ProductionController:
         previous,gateway,current,revocations_changed = self.read(operation)
         decision = self.decision(previous,gateway,revocations_changed)
         if authority_handoff is not None and self.validator.all_activated:
-            verify_handoff(authority_handoff,self.validator,previous['authority'],operation,int(self.clock()))
+            self.verify_authority_handoff(authority_handoff,previous,gateway,current,operation)
             decision['due'] = sorted(set(decision['due']) | {'authority'})
             decision['result'] = 'RENEWAL_REQUIRED'
         if decision['result'] == 'NOOP':
@@ -278,7 +284,7 @@ class ProductionController:
         if 'authority' in decision['due'] and authority_handoff is None:
             return dict(result='OFFLINE_AUTHORITY_RENEWAL_REQUIRED',mutations=0)
         if authority_handoff is not None:
-            verify_handoff(authority_handoff,self.validator,previous['authority'],operation,int(self.clock()))
+            self.verify_authority_handoff(authority_handoff,previous,gateway,current,operation)
         with self.operation.lock():
             fresh,gateway,fresh_state,fresh_revocations_changed = self.read(operation)
             require(fresh == previous and fresh_state == current and fresh_revocations_changed == revocations_changed, 'STALE_OPERATION')
@@ -432,7 +438,6 @@ class ProductionController:
     def recover(self, record, *, preserve_registry_overlay=False):
         require(record.get('mode') != 'expired', 'OPERATOR_RECOVERY_REQUIRED')
         self.check_admission(record['before'])
-        require(not self.multiple or not preserve_registry_overlay, 'FLEET_REGISTRY_RECOVERY_REQUIRED')
         operation = record['operation_id']
         record['first_cause'] = record['first_cause'] or 'CONTROLLER_INTERRUPTED'
         if record['state'] == 'CLEANING':
@@ -452,6 +457,8 @@ class ProductionController:
             if preserve_registry_overlay or record.get('fenced_rollback',{}).get('registry_overlay_receipt_sha256'):
                 try:
                     self.validator.validate(canonical(record['previous']),int(self.clock()))
+                    if self.multiple:
+                        self.validator.validate(canonical(record['previous_secondary']),int(self.clock()))
                 except Rejected as error:
                     if str(error) != 'LEAF_EXPIRED_OR_FUTURE':
                         raise

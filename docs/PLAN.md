@@ -15,11 +15,12 @@ not installed. Exact142ee46 Android CI now PASS on API27/API35; downloaded unsig
 ARM64/source/native/16K checks PASS. It retains111 metadata and cannot replace public111.
 Follow-up source adds the multi-node leaf/shared-CRL transaction with explicit membership,
 three-node commit equality, separate directory reconciliation and fault/restart recovery.
-Validation:334 user-space/native/package and236 isolated root checks PASS,0 skips,
-including66 new three-node/runtime tests; no production deployment.
-This is not activation: fleet offline authority handoff/expired-authority recovery and
-registry-overlay recovery are still explicit fail-closed boundaries, not accepted paths.
-Next: finish those shared-authority/recovery contracts and qualify the production writer,
+Checkpoint7d3fac7 pushed/remote-verified; follow-up adds planned offline shared-authority
+handoff and explicit registry-overlay recovery across both signed gateway identities.
+Validation:358 selected user-space/native/package checks plus independent-sequence/
+approval test PASS;326 root checks PASS, including90 repeated fleet cases;0 skips.
+This is not activation: whole-fleet expired-authority recovery remains fail-closed.
+Next: finish that recovery contract and qualify the production writer,
 then permanent distinct AMS2 identity/runtime;
 real READY/TLS/DNS/HTTPS/egress and rejection/cleanup acceptance; only then selector
 activation, exact new-version CI, offline signing and verified public update delivery.
