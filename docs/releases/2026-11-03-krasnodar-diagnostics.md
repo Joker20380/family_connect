@@ -1,5 +1,34 @@
 # Krasnodar supplied diagnostics — 3 November 2026
 
+## Export24 server correlation
+
+Separate second API36 phone, beta111, cellular. Read-only RU lookup matched the supplied
+Support ID without printing or committing identifiers. Device revoked=0, invitation
+revoked=0, no field-support audit rows. No stored online diagnostics snapshot for this
+Support ID; this does not distinguish disabled consent, failed delivery or retention.
+Support metadata last_seen18:26:27UTC/version60 is not installed-version proof: the
+client export explicitly reports111. Two certificate records have expiry20:05:02UTC
+and22:35:24UTC; issuance times and receipt on this phone are not established. No explicit
+restricted_grants row; eligibility can be derived in all_activated mode, so absence
+alone is not an access-denial diagnosis. Effective deployed policy was not read back.
+
+Client18:29:49UTC AUTHORIZATION_REJECTED is followed by four pre-session failures
+18:30–18:34UTC. Latest fetch shows cache MISSING, HTTPS CHALLENGE/CONNECT_TLS_WRITE
+TIMEOUT without HTTP status, and RNS RELAY_OPEN UNAVAILABLE. No MESH session started.
+Current HTTP candidate is active, activation timestamp18:35:46UTC (21:35:46MSK),
+after these attempts. That timestamp alone proves neither an overlapping outage nor
+the reason for activation. Unit stdout/stderr are null; historical systemd/proxy
+evidence must be checked before claiming receipt/nonreceipt of the failing requests.
+
+Initial SSH/database read succeeded. Subsequent banner/command timeouts prevented
+historical journal, readiness receipt and effective policy readback. Correlation is
+PARTIAL; original authorization rejection and network timeout causes remain open.
+No server changes/restarts/permission changes, release or phone actions by this task.
+Versions unchanged; rollback not applicable. Retry bounded historical evidence reads
+once SSH is available; do not reset device identity or weaken authentication.
+
+## Original export22 analysis
+
 Read-only analysis of owner-supplied diagnostic export22. Original stays outside Git;
 no user/connection identifiers, keys, raw traces or profiles committed. Location is
 owner-provided, not established by the file. No server access or mutations in this task.
