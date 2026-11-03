@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+<!-- MESH2 canonical installation 20261103 -->
+**3 November19:51UTC — permanent AMS2 canonical custody installed, still inactive.**
+Distinct gateway leaf issued by the existing RU issuer in place; no issuer/private client
+key exported. Root-controlled profile/locator, isolated service account, pinned runtime,
+fixed snapshot/renewal route and disabled bootstrap unit installed. Real RU→AMS2 pinned
+SSH public inspection PASS; command override, sudo argument override and reader-write
+checks PASS. Initial install stopped on an overly restrictive newly-created tools-parent
+mode; corrected only that new parent and resumed, without starting services. AWG/TCP
+unchanged. No provider credential installed, primary runtime/writer/selector/catalog changed.
+Next: coordinated pair→fleet writer cutover and real provider/data-plane acceptance, then
+new immutable Android delivery. [Receipt](releases/2026-11-03-second-nl-mesh.md#permanent-canonical-secondary-installation).
+<!-- /MESH2 canonical installation 20261103 -->
+
 **3 November export24 server correlation — PARTIAL, cause still OPEN.** Second API36
 device matched privately on RU; device/invitation not revoked, no stored online snapshot.
 Client18:29–18:34UTC fails before MESH; HTTP unit current activation18:35:46UTC is

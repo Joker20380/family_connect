@@ -1,5 +1,46 @@
 # FLEET-BOOTSTRAP-2 — second Amsterdam MESH integration
 
+## Permanent canonical secondary installation
+
+3 November19:51UTC: **INSTALLED / INACTIVE**, not a production acceptance PASS.
+The new AMS2 identity received its own75-minute bootstrap leaf from the current RU
+issuer, using only public identity/delegation input. The issuer key stayed on RU;
+the existing offline-signed secondary delegation and shared CRL floor27259 validated.
+Neither existing identity, grants, assignments, CA nor revocation state changed.
+
+On185.10.158.196, the permanent root-controlled profile and locator are installed under
+`/etc/fc-canonical-mesh2/`. The dedicated reader/publisher account has UID/GID993;
+profile0640 and parent0750 are root-controlled, the directory publisher parent is01770,
+and lock/transaction custody remains root0700 outside the publisher directory. No fake
+directory was created. Gateway9d41f1dc… and snapshot4373585a… are installed in the fixed
+root-owned tools directory; the qualified renewal package remains private/root-owned.
+
+Actual final-account Python3.12 runtime/dependency/package pinning PASS. A fixed forced
+SSH launcher accepts only `restricted-sync`; the existing RU sync public key has no
+shell, forwarding, PTY or user-rc authority. The RU private SSH key did not leave RU.
+The target uses the already accepted AMS2 host pin, with strict checking. The narrow
+sudo helper takes no arguments and uses one pinned node configuration/source package.
+Actual RU→AMS2 `inspect` and public-gateway RPC PASS, with no private key in responses.
+SSH command override and sudo argument override reject; final reader can read required
+public/profile routes but cannot write profiles, locator, snapshot configuration or
+executables, or read private node-control files.
+
+First install stopped before launcher/unit creation: umask077 made the newly-created
+tools ancestor0700, so the real-account package probe correctly rejected it. Readback
+confirmed the cause. Only that newly-created ancestor was changed to0755; continuation
+then passed construction, canonical boundary, runtime and systemd verification. The
+failed first attempt remains in private evidence, not erased or reported as first-pass.
+
+The bootstrap unit is installed but disabled/inactive; provider credential is absent.
+Ordinary AWG/TCP PIDs/restart counts are unchanged. AMS1 runtime/profile/forced route and
+the RU active pair controller are unchanged. No selector, Android version or catalog
+change. Private receipts/scripts/keys remain ignored under `state-client-build`.
+Rollback at this checkpoint is to leave the new unit disabled/inactive and exclude it
+from the active pair configuration; do not delete custody or lower any replay floor.
+Next: coordinated single-writer cutover, genuine provider directories and first confirmed
+fleet checkpoint; real READY/Family TLS/DNS/HTTPS/AMS2 egress and negative/cleanup gates;
+only afterward enable selection and publish the new immutable Android build.
+
 ## Production gateway projection and AMS2 prerequisites
 
 3 November18:47UTC continuation; **SOURCE/PREPARATION CHECKPOINT, NOT MESH2 ACTIVATION**.

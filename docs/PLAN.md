@@ -2,6 +2,16 @@
 
 ## Current engineering priority / Текущий critical path
 
+<!-- MESH2 canonical installation 20261103 -->
+**3 November19:51UTC MESH2: permanent canonical secondary installed, inactive.**
+Fresh distinct leaf, root-controlled profile/locator and final service account installed;
+real pinned RU→AMS2 RPC, DAC and forced-command rejection checks PASS. No service start,
+provider credential installation or first-node/writer/selector/client-publication change.
+Continue the selected task with coordinated pair→fleet writer integration, fresh genuine
+directories and live acceptance before selector/immutable Android delivery. Installation
+is not activation or completion. [Evidence](releases/2026-11-03-second-nl-mesh.md#permanent-canonical-secondary-installation).
+<!-- /MESH2 canonical installation 20261103 -->
+
 **Export24 read-only server correlation remains partial.** Registration/invitation
 not revoked; online snapshot absent. Historical HTTP journal/request correlation is
 unfinished due SSH timeouts; do not attribute failure to Android16 or a server restart.
