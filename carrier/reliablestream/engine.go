@@ -97,7 +97,7 @@ type engine struct {
 }
 
 func newEngine(config Config, local epoch, now time.Time) *engine {
-	return &engine{config: config, local: local, started: now, sendAllowance: min(8, config.SendWindow), sent: make(map[uint64]*pending), buffer: make(map[uint64][]byte), gaps: make(map[uint64]time.Time)}
+	return &engine{config: config, local: local, started: now, sendAllowance: min(4, config.SendWindow), sent: make(map[uint64]*pending), buffer: make(map[uint64][]byte), gaps: make(map[uint64]time.Time)}
 }
 
 func (state *engine) packet(kind byte) frame {

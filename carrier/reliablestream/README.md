@@ -63,7 +63,7 @@ maximum20s from first send. MaxAge also bounds a SACKed but unconsumed block.
 Negotiation chooses the smaller maximum payload. Larger TLS writes are split;
 only contiguous reassembled bytes reach the TLS bridge. This is not stop-and-wait.
 
-The local allowance begins at at most8 blocks even for the32-block P1/P2 profiles.
+The local allowance begins at at most4 blocks even for the32-block P1/P2 profiles.
 One fully consumed allowance earns at most one additional slot, up to the negotiated
 limits, while smoothed RTT remains below MaxAge/4. Timeout halves the allowance once
 per outstanding flight, retaining every pending block and its original deadline.

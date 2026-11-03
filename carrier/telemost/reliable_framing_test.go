@@ -114,6 +114,7 @@ func (point *framedReliableEndpoint) Close() error {
 }
 
 func TestReliableStreamOverVP8MissingRTPWithFreshACK(test *testing.T) {
+	const initialWindow = 4
 	for _, scenario := range []struct {
 		name      string
 		dropUntil int
@@ -137,7 +138,7 @@ func TestReliableStreamOverVP8MissingRTPWithFreshACK(test *testing.T) {
 				test.Fatal(err)
 			}
 			defer right.Close()
-			for index := 0; index < config.SendWindow; index++ {
+			for index := 0; index < initialWindow; index++ {
 				if err := left.SendContext(ctx, bytes.Repeat([]byte{byte(index + 1)}, config.Payload)); err != nil {
 					test.Fatal(err)
 				}
@@ -147,7 +148,7 @@ func TestReliableStreamOverVP8MissingRTPWithFreshACK(test *testing.T) {
 					test.Fatal("expected genuine stream exhaustion", err)
 				}
 				failure := recorder.Snapshot().FirstFailure
-				if failure == nil || failure.Reason != "RELIABLE_RETRY_EXHAUSTED" || failure.ReliableRetries != 8 || failure.ReliablePending != 8 || failure.ReliableSacked != 0 || failure.ReliableACKReceived == 0 || failure.ReliableProgressAgeMS < uint64(8*config.RTO/time.Millisecond) || failure.ReliableACKAgeMS > uint64(2*config.RTO/time.Millisecond) {
+				if failure == nil || failure.Reason != "RELIABLE_RETRY_EXHAUSTED" || failure.ReliableRetries != 8 || failure.ReliablePending != initialWindow || failure.ReliableSacked != 0 || failure.ReliableACKReceived == 0 || failure.ReliableProgressAgeMS < uint64(8*config.RTO/time.Millisecond) || failure.ReliableACKAgeMS > uint64(2*config.RTO/time.Millisecond) {
 					test.Fatal("missing fresh ACK/no-progress evidence", failure)
 				}
 				if left.Stats().Terminal != "recovery_exhausted" || left.Stats().SACKReceived == 0 {
@@ -157,11 +158,11 @@ func TestReliableStreamOverVP8MissingRTPWithFreshACK(test *testing.T) {
 				leftEndpoint.peer.receiveMu.Lock()
 				assembly := leftEndpoint.peer.assembler.delivery()
 				leftEndpoint.peer.receiveMu.Unlock()
-				if flow.SendBase != 0 || flow.SendNext != 8 || flow.Pending != 8 || flow.HeadRetries != 8 || flow.ACKBase != 0 || flow.ACKMask&254 != 254 || failure.Delivery.Flow.Pending != 8 || assembly.Pending == nil || assembly.Pending.Mask&1 != 0 || assembly.Pending.DataKnown {
+				if flow.SendBase != 0 || flow.SendNext != initialWindow || flow.Pending != initialWindow || flow.HeadRetries != 8 || flow.ACKBase != 0 || flow.ACKMask&14 != 14 || failure.Delivery.Flow.Pending != initialWindow || assembly.Pending == nil || assembly.Pending.Mask&1 != 0 || assembly.Pending.DataKnown {
 					test.Fatal("cross-layer retained hole evidence missing", flow, assembly)
 				}
 			} else {
-				for index := 0; index < config.SendWindow; index++ {
+				for index := 0; index < initialWindow; index++ {
 					data, err := right.Recv(ctx)
 					if err != nil || !bytes.Equal(data, bytes.Repeat([]byte{byte(index + 1)}, config.Payload)) {
 						test.Fatal("ordered byte-exact delivery failed", index, err)

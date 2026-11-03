@@ -49,6 +49,7 @@ func connectedEngines() [2]*engine {
 	right := newEngine(config, epoch{2}, now)
 	left.remote, left.remoteWindow, left.remoteSize = right.local, config.ReceiveWindow, config.Payload
 	right.remote, right.remoteWindow, right.remoteSize = left.local, config.ReceiveWindow, config.Payload
+	left.sendAllowance, right.sendAllowance = config.SendWindow, config.SendWindow
 	return [2]*engine{left, right}
 }
 

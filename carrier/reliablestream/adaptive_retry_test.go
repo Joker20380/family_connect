@@ -93,7 +93,7 @@ func TestSendAllowanceGrowsOnlyOnConsumptionAndCutsOncePerFlight(test *testing.T
 	receiver := newEngine(config, epoch{2}, sender.started)
 	sender.remote, sender.remoteWindow, sender.remoteSize = receiver.local, 32, config.Payload
 	receiver.remote, receiver.remoteWindow, receiver.remoteSize = sender.local, 32, config.Payload
-	for index := 0; index < 8; index++ {
+	for index := 0; index < 4; index++ {
 		packet, err := sender.send([]byte{byte(index)}, sender.started)
 		if err != nil {
 			test.Fatal(err)
@@ -110,16 +110,16 @@ func TestSendAllowanceGrowsOnlyOnConsumptionAndCutsOncePerFlight(test *testing.T
 			test.Fatal(err)
 		}
 	}
-	if sender.sendAllowance != 8 || sender.writable() {
+	if sender.sendAllowance != 4 || sender.writable() {
 		test.Fatal("SACK inflated the sender or released unconsumed bytes")
 	}
-	for range 8 {
+	for range 4 {
 		_, acknowledgement := receiver.consume()
 		if _, err := sender.input(acknowledgement, sender.started); err != nil {
 			test.Fatal(err)
 		}
 	}
-	if sender.sendAllowance != 9 || !sender.writable() {
+	if sender.sendAllowance != 5 || !sender.writable() {
 		test.Fatal("completed flight did not grow the allowance gradually")
 	}
 	for sender.writable() {
@@ -130,10 +130,10 @@ func TestSendAllowanceGrowsOnlyOnConsumptionAndCutsOncePerFlight(test *testing.T
 	if _, err := sender.tick(sender.started.Add(time.Second)); err != nil {
 		test.Fatal(err)
 	}
-	if sender.sendAllowance != 4 || len(sender.sent) != 9 || sender.writable() {
+	if sender.sendAllowance != 2 || len(sender.sent) != 5 || sender.writable() {
 		test.Fatal("timeout cut repeatedly or discarded outstanding bytes")
 	}
-	if _, err := sender.tick(sender.started.Add(3 * time.Second)); err != nil || sender.sendAllowance != 4 {
+	if _, err := sender.tick(sender.started.Add(3 * time.Second)); err != nil || sender.sendAllowance != 2 {
 		test.Fatal("the same stalled flight cut the allowance again", err)
 	}
 }
@@ -149,4 +149,13 @@ func TestRTTBackoffStaysWithinConfiguredBounds(test *testing.T) {
 			}
 		}
 	}
+}
+
+func TestColdStartKeepsOrdinaryThroughputBounded(test *testing.T) {
+	warm := throughputSimulation(test, throughputCase{name: "warm"})
+	cold := throughputSimulation(test, throughputCase{name: "cold", coldStart: true})
+	if !cold.BytesIdentical || cold.Retransmits != 0 || cold.VirtualMS > 2*warm.VirtualMS || cold.SendHighWater != DefaultConfig().SendWindow {
+		test.Fatalf("cold start stayed throttled or lost bytes: warm=%+v cold=%+v", warm, cold)
+	}
+	test.Logf("1MiB ordinary model: cold=%dms warm=%dms; zero retransmissions, final window=%d", cold.VirtualMS, warm.VirtualMS, cold.SendHighWater)
 }

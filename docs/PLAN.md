@@ -23,9 +23,13 @@ Android attempt stopped at that compile omission; API27/API35 were NOT_REACHED.
 Linux interaction and phase0 fixture/stack failures remain separate unresolved gates.
 Follow-uped54f33 Readiness wire CI PASS; reviewed gateway/recovery handler pins corrected
 after the Android source-reference gate stopped the next run.260 matching contract
-tests PASS. Bidirectional256/64kbit/s wall-clock transfer exposed a remaining startup
-flight-size failure; correction and stronger runtime regression checks are in progress.
-Remaining gates: exact-source Android/platform CI and artifact qualification, mixed old/new peers,
+tests PASS. Bidirectional256/64kbit/s wall-clock transfer exposed an eight-block startup
+failure; four-block initial admission now passes six paced UDP/Family TLS cases, with
+unchanged expiry/retry/security bounds. Public111-source/current compatibility passes
+four Family TLS and four local Pion VP8 combinations. Final native race672 PASS/48
+explicit optional skips; cold-start ordinary model reaches the full negotiated window.
+Remaining gates: fresh final-source native builds, exact Android/platform CI and artifact qualification,
+actual deployed-peer acceptance,
 real shaped-link Family TLS/DNS/HTTPS and fail-closed/cancel/revoke checks; reviewed
 gateway rollback/promotion plus new immutable Android>111/catalog>6 and public readback.
 Do not change grants, extend certificate lifetime, hide failed probes or claim the

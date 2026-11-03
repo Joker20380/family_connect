@@ -71,16 +71,16 @@ func TestAdapterBackpressureCancellation(test *testing.T) {
 	left, right := streamPair(test, nil)
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
-	for index := 0; index < 8; index++ {
+	for index := 0; index < 4; index++ {
 		if err := left.SendContext(ctx, []byte{byte(index)}); err != nil {
 			test.Fatal(err)
 		}
 	}
 	blocked := make(chan error, 1)
-	go func() { blocked <- left.SendContext(ctx, []byte{8}) }()
+	go func() { blocked <- left.SendContext(ctx, []byte{4}) }()
 	select {
 	case <-blocked:
-		test.Fatal("ninth frame was not backpressured")
+		test.Fatal("fifth frame was not backpressured before initial consumption")
 	case <-time.After(40 * time.Millisecond):
 	}
 	data, err := right.Recv(ctx)

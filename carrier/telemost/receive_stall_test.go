@@ -163,10 +163,21 @@ func blockStall(t *testing.T, point *stallEndpoint, stream *reliablestream.Strea
 	return unblock, sent
 }
 
+func warmStallWindow(test *testing.T, sender, receiver *reliablestream.Stream) {
+	test.Helper()
+	for range 4 + 5 + 6 + 7 {
+		exchangeStall(test, sender, receiver, []byte("warm-window"))
+		if !waitStall(test, "warm-up consumption", func() bool { return sender.Stats().Flow.Pending == 0 }) {
+			test.Fatal("warm-up ACK missing")
+		}
+	}
+}
+
 func TestReceiveStallControlAndSlowConsumer(t *testing.T) {
 	_, _, left, right := stallPair(t)
 	exchangeStall(t, left, right, []byte("left-control"))
 	exchangeStall(t, right, left, []byte("right-control"))
+	warmStallWindow(t, right, left)
 	baseline := left.Stats().DataReceived
 	for index := 0; index < 8; index++ {
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
@@ -397,6 +408,7 @@ func TestReceiveStallPersistentBlockBounded(t *testing.T) {
 func TestReceiveStallCoalescedACK(t *testing.T) {
 	point, _, left, right := stallPair(t)
 	exchangeStall(t, left, right, []byte("warm"))
+	warmStallWindow(t, right, left)
 	unblock, sent := blockStall(t, point, left)
 	baseline := left.Stats().DataReceived
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)

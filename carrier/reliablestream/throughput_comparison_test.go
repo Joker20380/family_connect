@@ -18,6 +18,7 @@ type throughputCase struct {
 	ackDropUntil  int
 	consumeFromMS int
 	duplicateACK  bool
+	coldStart     bool
 }
 
 type throughputFlight struct {
@@ -79,6 +80,11 @@ func TestThroughputComparison(test *testing.T) {
 func throughputSimulation(test *testing.T, scenario throughputCase) throughputResult {
 	test.Helper()
 	states := connectedEngines()
+	if scenario.coldStart {
+		for _, state := range states {
+			state.sendAllowance = newEngine(state.config, state.local, state.started).sendAllowance
+		}
+	}
 	const blockCount = 64
 	source := make([]byte, blockCount*DefaultConfig().Payload)
 	for index := range source {

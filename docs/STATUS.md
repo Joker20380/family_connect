@@ -26,10 +26,16 @@ Follow-uped54f33 is pushed/remote-verified; Readiness wire41668105208 PASS. Andr
 CI41668105524 then reached the source-reference guard, which still pinned pre-change
 gateway/readiness/recovery handlers. Reviewed exact new handler hashes are now pinned;
 260 diagnostic/readiness/release contract tests PASS (2 unrelated Windows deselections).
-New wall-clock bidirectional qualification exposed a remaining256/64kbit/s failure;
-the initial-window correction is under test, not accepted for production.
+Wall-clock bidirectional qualification exposed a remaining256/64kbit/s failure with
+the first eight-block startup allowance. Reducing initial admission to four blocks
+passes all six256/512/1000kbit/s cases with quarter-rate return path,600ms RTT and
+initial DATA loss, retaining20s age/eight-retry limits.256KiB in each direction is
+byte-exact. Beta111-source/current combinations pass both Family TLS and actual local
+Pion VP8; these are local separate-layer checks, not handset/provider acceptance.
+Final dependency-selected native race672 test/subtest PASS/48 explicit optional skips.
+The new native source still needs fresh pinned builds/CI and live gateway qualification.
 No server/APK deployment or version change. Remaining: exact-source platform CI,
-mixed deployed-peer/live shaped-link
+deployed-peer/live shaped-link
 acceptance, coordinated client/gateway rollout and immutable Android delivery.
 Android111/catalog6, Windows0.2.16/catalog12, Linux public0.2.11/owner0.2.12~l03.2.13
 remain unchanged. [Tests, limits and rollout](releases/2026-11-03-mesh-slow-link.md).

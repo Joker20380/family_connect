@@ -466,6 +466,20 @@ func TestMeshSendCompletionIsNotRemoteACK(test *testing.T) {
 	client, server, _, stats := meshPerfStack(test, ctx, "reliable", time.Millisecond)
 	defer client.Close()
 	defer server.Close()
+	for range 4 + 5 + 6 + 7 {
+		if err := client.SendContext(ctx, []byte("warm")); err != nil {
+			test.Fatal(err)
+		}
+		if data, err := server.Recv(ctx); err != nil || string(data) != "warm" {
+			test.Fatal("warm-up delivery", err)
+		}
+		for stats[0]().Flow.Pending != 0 {
+			if err := ctx.Err(); err != nil {
+				test.Fatal("warm-up consumption", err)
+			}
+			runtime.Gosched()
+		}
+	}
 	for index := 0; index < 8; index++ {
 		if err := client.SendContext(ctx, []byte{byte(index)}); err != nil {
 			test.Fatal(err)

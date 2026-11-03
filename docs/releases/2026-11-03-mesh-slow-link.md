@@ -27,7 +27,7 @@ assignments, product database, server policy, invitation pages or update catalog
   negotiation/new DATA acknowledgements, applies smoothed RTT/variation and bounded
   per-block timeout backoff. Retransmitted/already-SACKed/duplicate/stale/invalid ACK
   observations cannot train RTT. Existing fast head-gap recovery and ACK refresh remain.
-- Large configured windows begin with at most8 in-flight blocks, grow gradually on
+- Large configured windows begin with at most4 in-flight blocks, grow gradually on
   cumulative consumption, and halve once per timed-out flight. SACK does not free slots;
   shrinking never deletes outstanding bytes or restarts their age deadline. Original
   wire format, advertised window ceilings, buffer limits,20s default MaxAge and eight
@@ -117,20 +117,74 @@ or computing expected hashes dynamically.260 matching diagnostic/readiness/relea
 checks PASS;2 Windows-only tests deselected exactly as in Android CI. No UI/runtime
 acceptance is inferred from this reference update; API27/API35 are still pending.
 
-Stronger bidirectional wall-clock Family TLS qualification is in progress. The first
-256/64kbit/s run exposes a remaining startup-flight failure not covered by the earlier
-one-way rate model. Its failures remain evidence; no new gateway/client runtime is
-qualified for rollout while that correction is under test.
+Reviewed source-reference update committed/pushed as
+`c5a6737d9aca5514baa416e28710c11704f3c6cb`; remote main SHA verified.
+Its Readiness wire41670501132 PASS. This test/docs-only push does not trigger the
+Client builds source-path filter; the next carrier source push must obtain that gate.
+
+## Bidirectional runtime correction and compatibility
+
+The stronger wall-clock test uses two isolated native processes, real loopback UDP,
+ReliableStream and mutually verified Family TLS1.3 with the existing mux ALPN. Only
+disposable generated identities/CA are passed through private process pipes. It sends
+eight32KiB messages in each direction, checks every byte, then closes both processes.
+This is not a virtual-time engine-only test and does not contact a provider/user.
+
+- Each direction has a bounded64-packet test queue; serialization includes UDP headers
+  and15% modeled media overhead. Rates are256/512/1000kbit/s forward and one-quarter
+  in reverse,300ms one-way propagation. Each direction drops the first transmission
+  of every17th DATA sequence. Windows8/32 yield six cases. Pacing/loss are injected
+  before loopback UDP, not into an external Telemost call or an Android TUN.
+- The first eight-block candidate failed both256/64kbit/s cases with recovery exhaustion;
+  512/128 and1000/250 passed. The earlier one-way model had no concurrent reverse bulk
+  traffic and therefore did not establish this gate. Failure logs are retained.
+- Bound initial admission to four blocks instead of eight, leaving advertised windows,
+  subsequent ACK-driven growth, congestion cuts,20s MaxAge and eight retries unchanged.
+  All six cases now pass under the race detector:256KiB byte-exact each direction;
+  approximately59/36/26s per corresponding rate, including test/process overhead.
+  A separate256/64 window8 repeat also passes. This is a stability result, not a
+  promise of the configured line rate as application throughput or zero retransmits.
+- Source baseline is public111's `40e6c6c88c1d51c96736ded125a1b8060bdd4d26`.
+  Its production carrier sources are exported unchanged; only the same new test helper
+  is added to the disposable Family test build. Candidate→candidate, candidate→baseline,
+  baseline→candidate and baseline→baseline all pass mutually verified Family TLS and
+  byte-exact256KiB echo over UDP. No baseline handset APK is installed by this check.
+- The same four pairings independently pass the existing real Pion VP8/RTP/DTLS
+  two-process matrix:207 byte-exact exchanges per pair, lengths1..65536 and repeated
+  1/16KiB traffic, with actual RTP boundary evidence. These are separate Family and
+  media compatibility tests, not a combined live Family-over-Telemost acceptance.
+- Final dependency-selected native race gate:672 test/subtest PASS,48 explicit optional
+  skips, zero failures. The three new skips are the opt-in paced matrix, baseline VP8
+  matrix and private process helper; the first two are explicitly exercised above.
+  Original auth/expiry/cancel/negative/cleanup tests remain in the native gate.
+- The one-way serialized model still passes12/12 from fresh engine state. New startup
+  backpressure/growth checks assert4→5, one congestion cut to2 and unchanged deadlines.
+  Mature-window unit fixtures explicitly retain full-window coverage; actual adapter
+  stall/coalescing/send-completion tests warm the sender through acknowledged traffic
+  and still assert eight unconsumed blocks. Initial VP8 gap tests now assert four
+  pending blocks but still require all eight retries and fresh ACK/no-progress evidence.
+- Ordinary1MiB no-loss virtual-time comparison: cold startup1240ms versus mature1040ms,
+  zero retries, both reaching full default window8. This bounds startup cost in the
+  model; it is not a physical throughput benchmark or a new permanent speed cap.
+
+Reproduction entry points: `TestFamilyProcessCompatibility` with
+`FC_FAMILY_BASELINE_BINARY` pointing at the isolated baseline test executable;
+`FC_FAMILY_PACED_LINK=1` with `TestFamilyProcessPacedLink`; and
+`TestLocalMixedVersionVP8` with `FC_TELEMOST_BASELINE_BINARY`. Default tests never
+download an old binary, change host networking, contact production or use retained
+provider credentials. Private evidence remains under the task directory above.
 
 ## Remaining gates, rollout and rollback
 
-1. Local source-pinned Android ARM64 and gateway builds passed as recorded above.
-   Run mandatory exact-source platform CI, including API27/API35,
+1. Earlier55e872c native builds passed, but do not qualify the final four-block source.
+   Rebuild pinned Android ARM64/gateway artifacts and run exact-source platform CI, including API27/API35,
    native alignment/provenance and existing identity/storage/lifecycle checks.
-2. Exercise mixed deployed/candidate peers, real Family TLS/DNS/HTTPS at bounded low
+2. Mixed-source local Family/media compatibility passed as recorded above. Exercise
+   actual deployed/candidate peers and live Family TLS/DNS/HTTPS at bounded low
    rate/loss/latency and normal throughput. Check repeated loss, cancellation, lifetime,
    revocation and cleanup; preserve evidence for failures. Rates below256kbit/s, long
-   outages and the affected handset/provider path are not qualified here.
+   outages and the affected handset/provider path are not qualified here. The modeled
+   reverse64kbit/s check is local only and does not qualify arbitrary64kbit/s access links.
 3. Promote the gateway candidate only with source/profile-control pins and a retained
    accepted binary/manifest rollback. Both endpoints benefit from their own sender
    correction; a new client alone does not repair an old gateway's downstream sender.

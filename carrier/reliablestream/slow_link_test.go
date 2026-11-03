@@ -13,7 +13,8 @@ func TestSerializedSlowLinkDelivery(test *testing.T) {
 		for _, rate := range []int{256000, 512000, 1000000} {
 			for _, loss := range []bool{false, true} {
 				test.Run(fmt.Sprintf("window%d/rate%d/loss%t", window, rate, loss), func(test *testing.T) {
-					states := connectedEngines()
+					started := time.Unix(100, 0)
+					states := [2]*engine{newEngine(DefaultConfig(), epoch{1}, started), newEngine(DefaultConfig(), epoch{2}, started)}
 					for _, state := range states {
 						state.remote = epoch{}
 						state.config.SendWindow, state.config.ReceiveWindow = window, window

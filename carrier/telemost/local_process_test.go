@@ -17,11 +17,30 @@ import (
 	"github.com/pion/webrtc/v4"
 )
 
-func TestLocalTwoProcessVP8(t *testing.T) {
+func TestLocalTwoProcessVP8(test *testing.T) {
+	runLocalTwoProcessVP8(test, os.Args[0], os.Args[0])
+}
+
+func TestLocalMixedVersionVP8(test *testing.T) {
+	baseline := os.Getenv("FC_TELEMOST_BASELINE_BINARY")
+	if baseline == "" {
+		test.Skip("requires a separately built baseline test binary")
+	}
+	for _, pair := range []struct{ name, probe, echo string }{
+		{"current-baseline", os.Args[0], baseline},
+		{"baseline-current", baseline, os.Args[0]},
+		{"baseline-baseline", baseline, baseline},
+	} {
+		test.Run(pair.name, func(test *testing.T) { runLocalTwoProcessVP8(test, pair.probe, pair.echo) })
+	}
+}
+
+func runLocalTwoProcessVP8(test *testing.T, probeBinary, echoBinary string) {
+	test.Helper()
 	ctx, cancel := context.WithTimeout(context.Background(), 45*time.Second)
 	defer cancel()
-	initiator := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestLocalEndpointHelper$")
-	responder := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestLocalEndpointHelper$")
+	initiator := exec.CommandContext(ctx, probeBinary, "-test.run=^TestLocalEndpointHelper$")
+	responder := exec.CommandContext(ctx, echoBinary, "-test.run=^TestLocalEndpointHelper$")
 	initiator.Env = append(os.Environ(), "FC_TEST_LOCAL_ENDPOINT=probe")
 	responder.Env = append(os.Environ(), "FC_TEST_LOCAL_ENDPOINT=echo")
 	initiatorIn, _ := initiator.StdinPipe()
@@ -32,39 +51,39 @@ func TestLocalTwoProcessVP8(t *testing.T) {
 	initiator.Stderr = &initiatorErrors
 	responder.Stderr = &responderErrors
 	if err := initiator.Start(); err != nil {
-		t.Fatal(err)
+		test.Fatal(err)
 	}
 	defer func() { _ = initiator.Process.Kill(); _ = initiator.Wait() }()
 	if err := responder.Start(); err != nil {
-		t.Fatal(err)
+		test.Fatal(err)
 	}
 	defer func() { _ = responder.Process.Kill(); _ = responder.Wait() }()
 	offer, err := frame.ReadFrame(initiatorOut)
 	if err != nil {
-		t.Fatal(err)
+		test.Fatal(err)
 	}
 	if err := frame.WriteFrame(responderIn, offer); err != nil {
-		t.Fatal(err)
+		test.Fatal(err)
 	}
 	answer, err := frame.ReadFrame(responderOut)
 	if err != nil {
-		t.Fatal(err)
+		test.Fatal(err)
 	}
 	if err := frame.WriteFrame(initiatorIn, answer); err != nil {
-		t.Fatal(err)
+		test.Fatal(err)
 	}
 	result, err := frame.ReadFrame(initiatorOut)
 	if err != nil || result.Opcode != frame.OpStatusResp || string(result.Payload) != "207 byte-for-byte checks" {
-		t.Fatalf("local check failed: %v; probe=%s echo=%s", err, initiatorErrors.String(), responderErrors.String())
+		test.Fatalf("local check failed: %v; probe=%s echo=%s", err, initiatorErrors.String(), responderErrors.String())
 	}
 	_ = frame.WriteFrame(responderIn, frame.Frame{Version: frame.Version, Opcode: frame.OpClose})
 	if err := initiator.Wait(); err != nil {
-		t.Fatal(err, initiatorErrors.String())
+		test.Fatal(err, initiatorErrors.String())
 	}
 	if err := responder.Wait(); err != nil {
-		t.Fatal(err, responderErrors.String())
+		test.Fatal(err, responderErrors.String())
 	}
-	t.Log("PRELIMINARY ONLY: two local processes, real Pion VP8 RTP/DTLS, 7 sizes + 100x1KiB + 100x16KiB; NOT Telemost acceptance")
+	test.Log("PRELIMINARY ONLY: two local processes, real Pion VP8 RTP/DTLS, 7 sizes + 100x1KiB + 100x16KiB; NOT Telemost acceptance")
 }
 
 func TestLocalEndpointHelper(t *testing.T) {
