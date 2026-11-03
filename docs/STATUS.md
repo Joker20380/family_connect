@@ -1,5 +1,11 @@
 # Текущее состояние / Current state
 
+**3 November Krasnodar supplied trace — two beta111 retry-exhaustion closures confirmed.**
+Current Wi-Fi history shows successful MESH sessions followed by RELIABLE_RETRY_EXHAUSTED
+at17:16:44/17:19:34UTC, eight retries around9.4s with fresh ACKs; TLS failures follow.
+Recovery then hits readiness/bootstrap failures. This supports the selected slow-link
+retry defect, not provider attribution or a deployed fix. [Analysis](releases/2026-11-03-krasnodar-diagnostics.md).
+
 **3 November MESH2 production → Android update — current owner-selected order.**
 Owner now explicitly requests enabling the second server, then delivering the update.
 This supersedes the slow-link-first pause below; include the already checked slow-link

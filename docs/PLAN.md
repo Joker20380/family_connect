@@ -2,6 +2,11 @@
 
 ## Current engineering priority / Текущий critical path
 
+**3 November supplied Krasnodar diagnostics reviewed.** Two beta111 MESH closures match
+retry exhaustion despite fresh ACKs. Keep exact-source rollout and handset acceptance
+gates; no fix/deployment performed by this analysis and no queue reordering.
+[Evidence and uncertainties](releases/2026-11-03-krasnodar-diagnostics.md).
+
 **MESH2 production → Android update — SELECTED / IN PROGRESS.**
 Latest owner request («включай второй сервер и делаем обновление после этого») resumes
 FLEET-BOOTSTRAP-2 MESH2 before client publication. Dependencies and completion gates are
