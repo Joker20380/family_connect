@@ -1,5 +1,13 @@
 # Client installation
 
+**3 November — Android 8.1 compatibility, beta111 candidate.** This version is not
+published yet: API27/API35 and data-preserving upgrade checks are in progress.
+Public beta110 at the links below requires Android12+; a browser install cannot
+bypass this requirement. Do not uninstall or clear app data. Candidate111 keeps
+the same ARM64 package; Android8–9 recording uses Codec2 with confirmed peer
+support, while Opus recording requires Android10+.
+[Current checks and release status](releases/2026-11-03-android-update-incident.md#beta111-release-continuation).
+
 **Amsterdam selection — 2 November 2026.** Windows0.2.16 is published:
 [download installer](https://github.com/Joker20380/family_connect/releases/download/windows-v0.2.16/FamilyConnect-Setup-0.2.16-pilot-unsigned.exe).
 Windows0.2.13+ discovers it through Check for updates (signed catalog12);0.2.12

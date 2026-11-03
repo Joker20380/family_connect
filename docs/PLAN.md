@@ -2,6 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
+**ANDROID-UPDATE-FIELD-1 continuation — beta111 qualification authorized.** The owner
+requests proceeding. New source version111/minimum27 is a candidate only; no replacing
+published110, catalog downgrade, user reset or unrelated fleet successor. Platform CI
+must run on the exact111 source, with both API35 and27 transport/control/Friends gates.
+Verify downloaded ARM64 package/native provenance/SDK, preserve signer and protected
+state across in-place upgrade; retain actual Huawei/ARM64 field checks as pending until
+observed. Public delivery stays110/sequence5 until the applicable release gates pass.
+The previous code110 candidate evidence below is historical qualification, not a release.
+
 **Selected incident ANDROID-UPDATE-FIELD-1 — OPEN,3 November.** The owner's
 Android100%-then-verification-error report supersedes the fleet queue. Dependencies:
 current immutable110 APK and signed catalog5; preserve signing, hash and downgrade

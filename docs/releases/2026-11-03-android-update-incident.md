@@ -202,3 +202,35 @@ is IN_PROGRESS at this readback, not CI acceptance or publication. Five other
 source workflows are also in progress. Existing unrelated dirty documentation and
 private evidence are preserved outside this commit. Documentation links and whitespace
 checks pass for the changed report/code map; no physical device remains connected.
+
+## Beta111 release continuation
+
+The owner requests proceeding. Source reserves code111/`0.1.18-beta111`, minimum27,
+target35 and unchanged ARM64/package/signing identity. **Candidate only: not yet built
+from accepted hosted CI, product-signed, installed on a handset or distributed.**
+Public/invitation110, Android sequence5 and all desktop versions remain unchanged.
+Public download links intentionally continue to point at110 until an accepted111 exists.
+
+At the continuation readback,446260e's Client builds41610914956 had passed source,
+restricted race/contracts, native build and Gradle/JVM/lint gates and was running the
+API35 emulator. It was not a complete PASS; version111 needs a new exact-source run.
+Readiness wire contract41610914917 passed. Other triggered workflows expose pre-existing
+failures: Messenger41610914915 has22 failures because tests omit mandatory Session
+platform/version arguments introduced in107; phase0/Linux-control historical fixture
+packaging applies the current HTTP builder to older source without the newer ingress
+file. These are not disguised as green, repaired by weakening checks, or proof of an
+Android8.1 regression. No unrelated production behavior is changed in this task.
+
+The retained110 unsigned ARM64 APK's12 native libraries were read-only inspected against
+Android NDK API27 system exports: no unresolved strong imported symbol in the combined
+packaged/system export set. This is a reference static compatibility audit, not proof
+of dynamic loading, dependency-namespace order, VPN traffic or exact111 native behavior.
+Private receipt: `state-client-build/android81-release-20261103/arm64-api27-reference.json`.
+The unchanged source/native pins and eventual111 bytes still require normal qualification.
+
+Planned next checks are the exact111 platform run (API35 and27), downloaded unsigned
+package/provenance/SDK/native/alignment verification, and a synthetic versioned in-place
+upgrade with identity/journal/outbox preservation. Existing signing/catalog/immutable
+publication guards remain; actual Huawei recovery and product-signed field upgrade are
+not declared PASS from an emulator. Rollback before publication is source-only; after
+publication use a higher version/sequence, preserve old artifacts and never clear data.

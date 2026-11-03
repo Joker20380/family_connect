@@ -25,7 +25,7 @@ def test_android_changes_do_not_start_desktop_suites():
 
 def test_public_release_keeps_provisioning_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 110' in gradle and "versionName '0.1.18-beta110'" in gradle
+    assert 'versionCode 111' in gradle and "versionName '0.1.18-beta111'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle

@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**3 November continuation — beta111 source selected, NOT RELEASED.** Owner authorizes
+continuing ANDROID-UPDATE-FIELD-1 through qualification. Reserve new immutable code111/
+`0.1.18-beta111`, minimum27/ARM64; public/invitation110 and signed sequence5 stay unchanged.
+The earlier code110 compatibility candidate is never publishable. Its Client builds
+41610914956 passed source/race/JVM/native build gates and reached API35 runtime, but
+has not completed; the versioned candidate requires its own full platform CI.
+Read-only strong-import audit of all12 retained110 ARM64 libraries against API27 NDK
+exports finds no unresolved symbols; this is reference static evidence, not candidate
+runtime acceptance. Broader existing CI failures remain explicit: historical HTTP
+fixture packaging expects a newer ingress file;22 Messenger tests omit the runtime
+platform/version introduced in107. No unrelated production changes or test bypasses.
+Next: exact111 platform CI, candidate artifact/SDK/signer checks, synthetic versioned
+in-place upgrade and release gates. Actual Huawei/ARM64 field recovery stays OPEN.
+[Continuation evidence](releases/2026-11-03-android-update-incident.md#beta111-release-continuation).
+
 **3 November — Android update incident OPEN; compatibility source candidate.**
 Owner authorizes restoring support for the reported Huawei nova3/likely Android8.1;
 actual handset OS/ABI/installed beta remain unverified. Repository history and retained
