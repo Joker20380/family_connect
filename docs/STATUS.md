@@ -24,7 +24,8 @@ including API35/API27 and unsigned ARM64 packaging. Downloaded candidate APK/nat
 source/tree/hash, minSDK27/target35, production tags and all12 library16K alignments PASS.
 This is an unsigned111-metadata candidate, not a new release or permission to replace111.
 Overall workflow fails on the separate Linux GTK job; release job skipped.
-No production writes/restarts, token transmission, version/catalog or invitation changes.
+That CI/read-only checkpoint made no production writes/restarts, token transmission,
+version/catalog or invitation changes.
 Follow-up source now implements one coordinated RU–AMS1–AMS2 leaf/shared-CRL transaction:
 explicit pinned membership, separate gateway leaves/keys, three matching commit receipts,
 per-node fresh directories before RU resume, rollback/roll-forward and durable fencing.
@@ -46,8 +47,12 @@ Isolated root selection387 PASS, including151 repeated fleet cases:655 distinct 
 0 skips across the final selections; no production keys/data enter the root container.
 Revoked clients/CRL entries, independent delegation sequences, keys and admissions remain
 unchanged. Runtime CLI/offline FD signer, nineteen interruption points, secondary RPC
-failure/reconnection and malformed/stale approval rejection are covered. No deployment.
-Remaining: exact-source package qualification/install of the coordinated writer,
+failure/reconnection and malformed/stale approval rejection are covered.
+Sourcefcb3116 pushed/remote-verified. Exact-source archives are byte-identical;12 canonical
+root/package checks PASS. The package is staged separately on RU/AMS1, not active;
+new source validates both canonical installations. RU read-only evaluation returns NOOP
+with0 operational writes/restarts; active node/controller configs unchanged, timers/API active.
+Remaining: coordinated writer activation with fresh secondary configuration,
 permanent AMS2 runtime and live acceptance, then selector and immutable Android>111/catalog>6.
 [Current integration and rollout boundary](releases/2026-11-03-second-nl-mesh.md).
 

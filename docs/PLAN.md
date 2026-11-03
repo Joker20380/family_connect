@@ -31,7 +31,10 @@ the other359 user-space/native/package cases PASS. Isolated-root387 PASS include
 repeated fleet cases:655 distinct selected cases PASS,0 skips. One offline-signed schema4 request
 binds the common checkpoint and all three node states; two independent identities and
 one CRL are preserved. Explicit outage approval/roll-forward and strict expiry remain.
-This is not activation. Next: qualify the exact-source package and install the production writer,
+Sourcefcb3116 pushed/remote-verified; exact committed package is reproducible and12 canonical
+root checks PASS. Separate dormant staging on RU/AMS1 validates the real canonical inputs;
+RU read-only evaluation NOOP with0 operational writes/restarts. Active configs unchanged.
+This is not activation. Next: coordinated writer cutover with the fresh secondary configuration,
 then permanent distinct AMS2 identity/runtime;
 real READY/TLS/DNS/HTTPS/egress and rejection/cleanup acceptance; only then selector
 activation, exact new-version CI, offline signing and verified public update delivery.

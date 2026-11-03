@@ -45,16 +45,50 @@ Initial test-fixture failures are retained: pre-acquisition node ownership, a mo
 identity selecting real nanoseconds, and a client certificate allowed to expire before its
 revocation was materialized. Corrected the fixtures, not production security assertions.
 
-Read-only RU audit still reports the existing pair-only pinned source, active renewal and
-directory timers and active candidate API with0 restarts. No server files/services, private
-publisher credential, Android version/signature/catalog or invitation page changed.
-Remaining gates: exact committed-source package qualification and coordinated installation,
+Read-only RU audit still reports the existing active pair-only pinned source, active renewal
+and directory timers and active candidate API with0 restarts. Dormant staging is recorded
+below; active services/profiles, private publisher credential, Android version/signature/
+catalog and invitation page remain unchanged.
+Remaining gates: coordinated activation with fresh secondary configuration,
 fresh permanent AMS2 runtime/custody, real traffic/rejection/cancel/slow-link/cleanup checks,
 selector activation and new immutable Android>111/catalog>6. Preserve primary/ordinary
 services and their private rollback evidence; never downgrade a serving fleet to a pair-only
 writer. Source-only work requires no production rollback. Public versions remain
 Android111/catalog6, Windows0.2.16/catalog12, Linux0.2.11; owner-local Linux0.2.12~l03.2.13.
 This section supersedes the expired-recovery source gap below, not the live acceptance gate.
+
+### Exact package and dormant production staging
+
+Source `fcb311641457165405dc85fa070aaa4b1464e185` committed, pushed and remote main
+verified. Two archives built independently from that exact commit are byte-identical:
+archive SHA256 `85d47242fc178178aa3371a6ea849c63b59d3c38363ac9d4d2fbc0b6b5068fc9`,
+module-set SHA256 `e9fd31754bdf50c95842a1644f86ddb328b839ec1e0c9454daf08d3e9d17f0cc`,
+API SHA256 `1f1d2c8e56119c58a44fd3edf7cedf167f6761b7c81a6023e8b600a6049720e4`.
+12 canonical root/profile/source checks PASS against the exact package; these repeat
+existing cases, not12 additional distinct tests. Package has no production configuration
+or operation permit. Private archive/receipts remain in the evidence directory above.
+
+The archive is staged separately on RU and AMS1 at
+`/var/lib/fc-profile-control/mesh2-fcb3116414571654/`. Every archive member is regular,
+path-bounded and SHA-verified before extraction; staged directories/files are0700/0600.
+Separate `node-candidate.json` files preserve existing live paths, custody, admission and
+units while pinning the new module/API bytes. Exact-package node construction/inspection
+PASS against both real canonical installations. No live profile or active config is replaced.
+The local staging helper initially failed syntax checking before contacting either host;
+its quoting was corrected before staging, with no partial first upload.
+
+RU's separate `controller-readonly.json` is deliberately still schema1 and points at the
+existing forced AMS1 route/source. Evaluation with the staged controller returns **NOOP**,
+no due items/alerts, files_changed0, remote_writes0, restarts0. This proves read-only
+compatibility with the active pair, not a three-node cutover or scheduled-cycle acceptance.
+Active node/controller configuration hashes remain unchanged; renewal/directory timers
+and candidate API remain active, API restarts0. No AMS2 files or services are touched.
+
+Staging rollback is simply to leave these unreferenced candidates unused; all active
+launchers, forced routes, timers and their prior source pins remain in place. Preserve
+the candidate receipts and original private configuration for the later coordinated
+cutover. Do not point a serving fleet back at the pair writer. Permanent AMS2 activation,
+real data-plane acceptance and Android publication remain unfinished.
 
 ## Shared-authority follow-up —3 November17:20UTC
 
