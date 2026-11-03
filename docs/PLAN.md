@@ -21,6 +21,8 @@ and repeated live tests of the exact bounded implementation, then backend readin
 boot enablement, selector and immutable Android. No public version/catalog change yet.
 The22:36 scheduled common renewal COMMITTED is distinct from peer cleanup. Do not
 waive exact release CI or start an unrelated successor.
+Sourcebd67843 is pushed/remote-verified; reviewed production projection and17 guards
+are ready. Materialize the committed projection before exact binary/compatibility work.
 [Evidence](releases/2026-11-03-second-nl-mesh.md#bounded-reset-repeat-source).
 <!-- /MESH2 canonical installation 20261103 -->
 

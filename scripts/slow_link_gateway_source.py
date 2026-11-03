@@ -15,7 +15,7 @@ MANIFEST_SHA256 = '27b54a9dd167c3b6af639bb03864f4d7d121c0e8b96c90eccb45a198c936f
 BASELINE_BINARY_SHA256 = 'f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef'
 TRANSPORT_SOURCE = '142ee464f12cd93f3aa82c2f6b1a5a912f196481'
 PATCH = 'deploy/friends/restricted/slow-link-gateway.patch'
-PATCH_SHA256 = '0375e10d45e2b6b186bdcea4be4667ac4ea36e2b636c4a4e08ef7e0daeaacaa4'
+PATCH_SHA256 = 'cd6405673580bcccf251b2a7b56389269083a77f81b787f82648ac68b84002dd'
 CHANGED = frozenset(('reliablestream/engine.go', 'reliablestream/performance.go',
                      'reliablestream/performance_test.go', 'reliablestream/stream.go',
                      'telemost/rtp.go', 'telemost/session.go', 'telemost/signaling.go',
@@ -28,7 +28,8 @@ TESTS = ('reliablestream/adaptive_retry_test.go', 'reliablestream/engine_test.go
          'telemost/receive_stall_test.go', 'telemost/local_process_test.go',
          'familysession/process_link_test.go', 'tcpforward/mesh_performance_test.go')
 CORRECTION_TESTS = {
-    'reliablestream/close_write_test.go': '47b76f494b66a4f7508bb3ae08d8ffd1c7b5d137',
+    'reliablestream/close_write_test.go': 'bd67843f980ede602cf3aeeefa5f31e23ac6711a',
+    'reliablestream/close_delivery_test.go': 'bd67843f980ede602cf3aeeefa5f31e23ac6711a',
     'telemost/rtp_idle_test.go': '36ce71365e3393419073430eebf6824baed140be',
 }
 VECTOR = 'tests/vectors/bootstrap-timestamps.json'

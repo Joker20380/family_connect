@@ -19,6 +19,9 @@ The production source now bounds this retry burst by500ms total,100ms per local 
 at most five attempts; failed local writes stop retries. Five focused race repetitions
 and seven package race regressions PASS. This source is not yet projected/deployed or
 in an Android release; exact build/compatibility/product-probe gates are next.
+Sourcebd67843 pushed/remote-verified after one transient DNS failure. The canonical
+projection now imports its two close tests while retaining the same eight-member
+production boundary and100ms RTP gap policy;17 projection guards PASS.
 An earlier automatic common-fleet renewal22:36 completed COMMITTED and restarted MESH,
 not AWG/TCP; it is not counted as peer cleanup. Common timers are healthy. Android111/
 catalog6 remains byte-identical; backend/selector/new Android delivery remain gated.

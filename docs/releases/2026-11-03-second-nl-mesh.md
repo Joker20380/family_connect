@@ -916,3 +916,15 @@ is unchanged. Public Android catalog HTTPS readback is byte-identicalca3e6c63…
 Client builds41728661709/70f63b8 completed SUCCESS for scoped Linux/Windows/compatibility;
 Android and release skipped, not new-Android acceptance. Separate Linux candidate
 packaging failure remains recorded. Private prototypes/logs/profiles remain outside Git.
+
+### Bounded repeat projection checkpoint
+
+Sourcebd67843f980ede602cf3aeeefa5f31e23ac6711a is pushed/remote-verified. First push failed
+on temporary GitHub DNS resolution; ordinary non-force retry succeeded, with no history
+rewrite. Projection now includes the bounded repeat while preserving the same eight
+reviewed source members, accepted pacing instrumentation and100ms RTP gap policy. Two
+close test inputs pinbd67843 and idle-RTP coverage remains pinned36ce713.17 projection
+guards and exact accepted-inventory patching PASS. During editing, the patch hash guard
+correctly rejected the intermediate patch before its helper pin was updated; no output
+or runtime change resulted. Exact committed builds/compatibility and live acceptance of
+this bounded implementation remain next; the installed gateway is still2fc16577.

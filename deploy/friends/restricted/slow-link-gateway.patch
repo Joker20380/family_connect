@@ -373,22 +373,48 @@
  		if state == webrtc.ICEConnectionStateFailed {
  			reason = "ICE_FAILED"
  		}
-diff --git a/reliablestream/stream.go b/reliablestream/stream.go
-index c24947f..a684326 100644
 --- a/reliablestream/stream.go
 +++ b/reliablestream/stream.go
-@@ -217,7 +217,10 @@ func (stream *Stream) run(ctx context.Context) {
+@@ -155,6 +155,28 @@
+ 	stream.cancel()
+ 	<-stream.done
+ 	return nil
++}
++
++func (stream *Stream) sendReset(packet frame) {
++	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
++	defer cancel()
++	for range 5 {
++		writeContext, stop := context.WithTimeout(ctx, 100*time.Millisecond)
++		writeContext, completion := localwrite.Observe(writeContext, nil)
++		err := stream.endpoint.SendContext(writeContext, encode(packet))
++		if err == nil {
++			err = completion.Wait()
++		}
++		stop()
++		if err != nil {
++			return
++		}
++		select {
++		case <-ctx.Done():
++			return
++		case <-time.After(100 * time.Millisecond):
++		}
++	}
+ }
+ 
+ func (stream *Stream) run(ctx context.Context) {
+@@ -232,9 +254,7 @@
+ 		stream.cancel()
  		<-writerDone
  		if packet.target != (epoch{}) && terminal != ErrReset {
- 			resetContext, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+-			resetContext, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 -			_ = stream.endpoint.SendContext(resetContext, encode(packet))
-+			resetContext, completion := localwrite.Observe(resetContext, nil)
-+			if stream.endpoint.SendContext(resetContext, encode(packet)) == nil {
-+				_ = completion.Wait()
-+			}
- 			cancel()
+-			cancel()
++			stream.sendReset(packet)
  		}
  		stream.endpoint.Close()
+ 		<-readerDone
 --- a/telemost/rtp.go
 +++ b/telemost/rtp.go
 @@ -10,6 +10,7 @@
