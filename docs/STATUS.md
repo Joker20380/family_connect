@@ -33,7 +33,11 @@ initial DATA loss, retaining20s age/eight-retry limits.256KiB in each direction 
 byte-exact. Beta111-source/current combinations pass both Family TLS and actual local
 Pion VP8; these are local separate-layer checks, not handset/provider acceptance.
 Final dependency-selected native race672 test/subtest PASS/48 explicit optional skips.
-The new native source still needs fresh pinned builds/CI and live gateway qualification.
+Final source142ee46 is pushed/remote-verified. Fresh ARM64 and Linux gateway builds
+PASS; manifest source/tree/hash and16K Android alignment verified. They are not installed.
+Exact Client builds41672473840 is still running at16:19UTC; API27/API35 acceptance
+and live gateway qualification remain pending. phase0 still fails before tests in
+release-fixture provisioning/failover-stack construction; no gate is waived.
 No server/APK deployment or version change. Remaining: exact-source platform CI,
 deployed-peer/live shaped-link
 acceptance, coordinated client/gateway rollout and immutable Android delivery.

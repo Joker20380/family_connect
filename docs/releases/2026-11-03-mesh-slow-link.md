@@ -174,10 +174,35 @@ Reproduction entry points: `TestFamilyProcessCompatibility` with
 download an old binary, change host networking, contact production or use retained
 provider credentials. Private evidence remains under the task directory above.
 
+## Final source and native build checkpoint
+
+Four-block startup correction, compatibility/regression harnesses and documentation
+committed/pushed as `142ee464f12cd93f3aa82c2f6b1a5a912f196481`; remote main matched.
+Exact build tree: `c191991c39332635e37a40617a1baf5bee3a5bd3`.
+
+- Fresh ARM64 `libfc_restricted.so` SHA256:
+  `8f2ef06266276cceb44e3345986760e49a84b682abb6b71c2a80d3d42e367d2c`.
+  The manifest's source revision/tree, binary hash, ABI and empty production build tags
+  match; diagnostic-only is false. All PT_LOAD segments align to0x4000. Same pinned
+  Go1.26.1/NDK28.2/Xray/gVisor inputs as the earlier build; corresponding licenses retained.
+- Fresh static Linux amd64 `bootstrap-broker` SHA256:
+  `f1199129f1002f7385b86f14adffafba8264df7280fa8605e4aa4becdeed1cc5`.
+  This verifies a source build, not a drop-in replacement for the deployed gateway.
+  Existing production P1/admission policy, local patches, canonical profiles and
+  controller/source pins must be reconciled before any approved runtime promotion.
+- At16:19UTC, exact-source Client builds41672473840 is in progress (Android native
+  race step); API27/API35/final Android packaging are not yet accepted.
+  phase0 run41672473758 again fails at source-pinned release fixture provisioning
+  and isolated failover stack construction, before downstream tests. No failure is waived.
+
+No APK/version/catalog/tag/signature/invitation update, installation, live credentials
+or server mutation occurs in this checkpoint. Public111/catalog6 remains unchanged;
+the final native libraries and gateway executable are retained privately, not deployed.
+
 ## Remaining gates, rollout and rollback
 
-1. Earlier55e872c native builds passed, but do not qualify the final four-block source.
-   Rebuild pinned Android ARM64/gateway artifacts and run exact-source platform CI, including API27/API35,
+1. Final142ee46 pinned Android ARM64/gateway builds passed; earlier55e872c artifacts
+   are superseded candidates. Finish exact-source platform CI, including API27/API35,
    native alignment/provenance and existing identity/storage/lifecycle checks.
 2. Mixed-source local Family/media compatibility passed as recorded above. Exercise
    actual deployed/candidate peers and live Family TLS/DNS/HTTPS at bounded low

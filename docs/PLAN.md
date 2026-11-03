@@ -28,7 +28,10 @@ failure; four-block initial admission now passes six paced UDP/Family TLS cases,
 unchanged expiry/retry/security bounds. Public111-source/current compatibility passes
 four Family TLS and four local Pion VP8 combinations. Final native race672 PASS/48
 explicit optional skips; cold-start ordinary model reaches the full negotiated window.
-Remaining gates: fresh final-source native builds, exact Android/platform CI and artifact qualification,
+Final142ee46 source and remote SHA verified; fresh pinned ARM64/gateway builds and16K
+alignment PASS, not installed. Exact Client builds41672473840 is in progress at16:19UTC;
+phase0 still stops in release-fixture/failover-stack setup before its tests.
+Remaining gates: exact Android/platform CI and artifact qualification,
 actual deployed-peer acceptance,
 real shaped-link Family TLS/DNS/HTTPS and fail-closed/cancel/revoke checks; reviewed
 gateway rollback/promotion plus new immutable Android>111/catalog>6 and public readback.
