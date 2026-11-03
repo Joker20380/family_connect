@@ -1,5 +1,41 @@
 # Krasnodar supplied diagnostics — 3 November 2026
 
+## Export26 primary journal
+
+Read-only AMS1 journal inspection,3 November. Existing source routing/public111 still
+uses primary MESH; secondary activation is a separate workstream. Journal archive
+19:39:30–20:18:42UTC covers the attempt; adjacent archive/current file checked too.
+Initial SSH timed out; retry succeeded. Default journal JSON omitted large MESSAGEs;
+final --all read19:59–20:15 includes long messages with remote allowlist filtering,
+no raw logs/provider URLs/user identifiers exported. Final query returned0.
+
+-20:00:40.996 systemd Stopping;20:00:41.189 Stopped;20:01:30.354 Started;
+20:01:32.586 bootstrap_seed_ready. Release record separately documents the common
+fleet transaction's primary/HTTP stop/start. This inspection caused no restart.
+-Client starts20:07:20, uses valid cached material after refresh failure, then fails
+SEED_ADMISSION/DEADLINE at20:08:12. Latest20:15 fetch retains cache age1946s, selected
+CACHE, directory expiry22:35:43UTC. Export25 already had this directory expiry before
+the restart. Age/expiry validity does not prove an old media-room endpoint is live.
+-No unit records in20:05–20:08 window; no successful bootstrap_family_open/auth for
+this attempt observed. Next bootstrap_family_open20:14:04/auth20:14:09, descriptor
+issued20:14:14, then gateway_session_failed20:14:44. Do not attribute that uncorrelated
+exchange to this phone; its client history does not report that success.
+
+Strong hypothesis: client cached the pre-restart directory and could not refresh it,
+then joined an obsolete bootstrap room without the gateway. Source SeedManager creates
+a room on startup, and admission precedes Family authentication. However historical
+room bytes were not recovered/compared, and pre-auth OPEN/ACCEPT packet receipts are
+not logged per client. Therefore cannot prove whether its OPEN arrived or ACCEPT left,
+exclude seed contention/media loss, or call the hypothesis a completed root cause.
+No evidence here establishes a HyperOS-specific failure or expired client credentials.
+
+No production writes/restarts, phone changes, builds/publication or acceptance claim.
+Public111/catalog6 unchanged; rollback not applicable. Remaining: exact cached-versus-
+restart directory correlation and fresh-directory field comparison; resilient recovery
+when cryptographically valid cached bootstrap addresses stop serving. Do not reset
+identity or weaken signature/expiry/revocation checks. Earlier retry-exhaustion
+incidents remain distinct and are not explained by this later restart.
+
 ## Export24 server correlation
 
 Separate second API36 phone, beta111, cellular. Read-only RU lookup matched the supplied

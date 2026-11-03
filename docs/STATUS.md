@@ -1,5 +1,11 @@
 # Текущее состояние / Current state
 
+**Export26 primary journal correlation — stale bootstrap cache hypothesis strengthened.**
+AMS1 stopped20:00:41UTC, started20:01:30, seed ready20:01:32. Client20:07 uses a
+pre-restart valid cache and times out at SEED_ADMISSION; no Family-open/auth record
+in that window. Packet receipt/old-room identity not proven. No changes by this check.
+[Evidence](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
+
 <!-- MESH2 canonical installation 20261103 -->
 **3 November21:28UTC — MESH2 active; reconnect acceptance still OPEN, source correction only.**
 The common RU/AMS1/AMS2 writer is COMMITTED; renewal/directory timers were read back

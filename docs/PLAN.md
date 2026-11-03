@@ -2,6 +2,11 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Export26 journal check complete; root cause not fully closed.** Primary restart
+precedes cached seed-admission timeout. Investigate stale bootstrap-room recovery,
+not an established HyperOS defect; no implementation/deployment authorized by this check.
+[Evidence and limits](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
+
 <!-- MESH2 canonical installation 20261103 -->
 **3 November21:28UTC MESH2: active common fleet; repeat-session gate still OPEN.**
 Natural lease expiry/resource cleanup observed without another restart; both writer
