@@ -416,3 +416,29 @@ and compare ordinary AWG/TCP on the same node without altering account data. Any
 checks are proposed, not run on the user's device. Do not collect chats, invitations,
 profiles, proxy secrets or keys. No server probing, policy mutation, new release or
 unrelated fleet work was performed for this follow-up. Public111/catalog6 unchanged.
+
+### MESH repair scope clarification
+
+The owner now asks specifically about fixing Telegram over MESH. This identifies the
+requested repair target, not a reproduced failure or verified handset trace. Current
+`Session.Allow` accepts IPv4 TCP and UDP53 only; `Session.Handle` treats admitted UDP
+as DNS. The multiplexing protocol has TCP streams and bounded DNS transactions, not
+an arbitrary UDP relay. Removing the UDP admission rejection alone therefore cannot
+provide working calls. Telegram chats use TCP, so generic UDP absence does not explain
+all possible connecting/chat failures; call fallback behavior is also not yet tested.
+
+The next proposed source task is reproducible TCP connectivity/lifecycle diagnosis,
+including stream saturation, open failures and session loss, without collecting message
+contents, account data or proxy secrets. Any demonstrated TCP defect needs regression
+coverage. Broader UDP compatibility requires a bounded authenticated datagram extension
+on client and gateway, compatible capability negotiation, preserved destination guards,
+packet boundaries/expiration and loss/backpressure tests. Existing ordered transport
+can still delay traffic during loss recovery; UDP support alone is not a call-quality
+guarantee. Do not bypass Telegram around the VPN or let unsupported IPv6 escape.
+
+Completion requires real Telegram chat/media/call checks on Android8.1 and a current
+Android with MESH, plus transport regression and no-bypass/session-loss checks. These
+checks have not run; this turn only reviewed source and updated the repair plan. No
+runtime change, build, signing, server policy change or deployment. Public beta111 /
+catalog6 and the publication/readback/rollback paths above remain unchanged. A later
+binary repair must use a new immutable version and increasing signed catalog.

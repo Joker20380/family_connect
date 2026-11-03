@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**3 November Telegram clarification — MESH repair scope, diagnosis still OPEN.**
+Owner asks specifically how to fix Telegram over MESH, not bypass it. Source confirms
+IPv4 TCP plus DNS-only UDP; generic UDP is absent from both packet admission and the
+gateway multiplexing protocol. This is not proof of the handset's failure cause:
+Telegram chat connectivity must be investigated on TCP independently of UDP calls.
+Next bounded step is TCP failure reproduction and sanitized connection/limit/lifecycle
+diagnostics; full UDP support would require a separately tested client/gateway datagram
+extension, not just changing `Session.Allow`. Keep IPv6 captured/blocked until supported,
+all application traffic inside MESH and existing destination/admission guards intact.
+No implementation, handset test, server change or new release in this clarification;
+public beta111/catalog6 and the existing rollback procedure remain unchanged.
+
 **3 November field follow-up — update/operation reported recovered; Telegram issue OPEN.**
 Owner reports «все заработало» after111, but relays that Telegram does not work with
 the VPN. This is user-reported recovery, not independently verified handset/version,
