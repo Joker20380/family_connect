@@ -29,6 +29,8 @@ unchanged issuer/gateway keys, independent sequences, explicit outage approval a
 CA readback. Explicit append-only registry-overlay recovery now checks both gateways.
 Current validation:358 user-space/native/package checks plus one independent-sequence/
 approval test PASS;326 isolated root checks PASS, including90 repeated fleet cases.
+Sourcee96334d pushed/remote-verified; two exact committed-source renewal packages are
+byte-identical and12 canonical root/profile-source checks PASS against that package.
 No production deployment. Expired-authority recovery for a whole fleet remains explicitly
 rejected; this is not yet a fully accepted production maintenance replacement.
 Remaining: complete fleet expired-authority recovery, qualify/install the coordinated writer,

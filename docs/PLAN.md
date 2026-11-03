@@ -19,6 +19,8 @@ Checkpoint7d3fac7 pushed/remote-verified; follow-up adds planned offline shared-
 handoff and explicit registry-overlay recovery across both signed gateway identities.
 Validation:358 selected user-space/native/package checks plus independent-sequence/
 approval test PASS;326 root checks PASS, including90 repeated fleet cases;0 skips.
+Sourcee96334d pushed/remote-verified; exact committed-source package reproducibility and
+12 canonical root/profile construction checks PASS, not installed.
 This is not activation: whole-fleet expired-authority recovery remains fail-closed.
 Next: finish that recovery contract and qualify the production writer,
 then permanent distinct AMS2 identity/runtime;

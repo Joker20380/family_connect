@@ -48,6 +48,22 @@ MESH services, installed/public versions and catalogs were not changed in this t
 The preceding slice's unsupported planned-handoff/registry-overlay boundaries below
 describe that checkpoint only and are superseded by this section.
 
+### Exact source/package readback
+
+Source `e96334deb3f654d95a3a37de2e69a2276f1fb395` committed, pushed and remote main
+verified. Two independently packaged archives from that exact committed source are
+byte-identical, with absent production configuration and no operation permit.
+Archive SHA256 `88fba405c5494aece6a1ef8cdf4b264fd00a0fcdc69de411652af6bdf3eb445c`;
+module-set SHA256 `cfab7cab89411fd440979c000683883860a573d5ea9fb2dfc84f57c15da923c9`;
+pinned API SHA256 `4779cb3be76b2efdeb45efadf75d8e320a0aedfc602540ff0fc4cc48ae478d8c`.
+12 canonical profile/source-construction cases PASS against this exact archive in the
+isolated root container, including both gateway slots and tamper rejection. These are
+repeat validations, not12 additional distinct cases. Archive and private receipts remain
+under `state-client-build/mesh2-renewal-20261103/`; nothing was installed or distributed.
+Existing unrelated working-tree changes remain untouched. Next selected work remains
+whole-fleet expired-authority recovery, not an unrelated queued task or immediate APK
+publication. Production activation and Android update are still unfinished.
+
 ## Coordinated renewal source —3 November17:10UTC
 
 Implemented an opt-in three-node transaction rather than a second independent writer.
