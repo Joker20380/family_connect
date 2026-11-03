@@ -8,22 +8,20 @@ not an established HyperOS defect; no implementation/deployment authorized by th
 [Evidence and limits](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November22:47UTC — FLEET-BOOTSTRAP-2 close retry source ready; exact rollout next.**
-Installed2fc16577 alone does not pass reconnect. A private five-RESET prototype passes
-three actual-provider Family/HTTPS/DNS/AMS2-egress sessions and prompt resource cleanup
-under unchanged PID591182. Single-send500ms grace failed; local completion alone is
-not delivery confirmation. Shipping source now uses at most five spaced identical
-RESETs within500ms total with100ms individual-write caps; local-write failure stops
-retries. Five focused race repeats and seven package regressions PASS. No new wire
-format, reliable FIN guarantee, data retry budget, ownership policy or replay-floor change.
-Next: commit-bound canonical projection, deterministic builds, public111 compatibility
-and repeated live tests of the exact bounded implementation, then backend readiness,
-boot enablement, selector and immutable Android. No public version/catalog change yet.
-The22:36 scheduled common renewal COMMITTED is distinct from peer cleanup. Do not
-waive exact release CI or start an unrelated successor.
-Sourcebd67843 is pushed/remote-verified; reviewed production projection and17 guards
-are ready. Materialize the committed projection before exact binary/compatibility work.
-[Evidence](releases/2026-11-03-second-nl-mesh.md#bounded-reset-repeat-source).
+**3 November23:05UTC — FLEET-BOOTSTRAP-2 exact MESH2 reconnect gate PASS; product delivery pending.**
+Canonical projectiond2c2a45 is pushed/remote-verified and deployed to AMS2 as566cbc96…b219.
+Two identical builds, seven production-tag race packages, public111 Family/VP8 compatibility
+and six paced asymmetric cases PASS. Three actual-provider exact-carrier sessions pass
+Family TLS/HTTPS/DNS/AMS2 egress with prompt cleanup under unchanged PID602868. Common
+writer is resumed/healthy; AWG/TCP and private profile are unchanged. The guarded first
+activation rolled back; the separate corrected window verifies actual executable/seed.
+Next within this task: additive backend readiness migration and acceptance, client
+routing/storage live acceptance and qualified boot/selector activation, then new immutable
+Android with exact CI/API27/API35, offline signing and public readback. Do not substitute
+CLI evidence for handset/product proof or prototype evidence for the exact build. Android
+111/catalog6 stays public; no version bump or installer publication yet. CI41734068017
+Android is still in progress; scoped Linux/Windows/compatibility PASS. No unrelated successor.
+[Evidence and rollback](releases/2026-11-03-second-nl-mesh.md#exact-bounded-reset-runtime-and-reconnect-acceptance).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **Export24 read-only server correlation remains partial.** Registration/invitation

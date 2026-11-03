@@ -928,3 +928,76 @@ guards and exact accepted-inventory patching PASS. During editing, the patch has
 correctly rejected the intermediate patch before its helper pin was updated; no output
 or runtime change resulted. Exact committed builds/compatibility and live acceptance of
 this bounded implementation remain next; the installed gateway is still2fc16577.
+
+## Exact bounded RESET runtime and reconnect acceptance
+
+3 November23:05UTC (4 November locally). Exact projection source
+`d2c2a45b9f898e51416bef1e52d2f4f474a76f9b` is pushed and remote main verified.
+Its293-file materialization preserves the accepted eight-member boundary. Two clean
+gateway builds, including a forced rebuild, match SHA256
+`566cbc96621c348e188aa50ffa54d6cf7bfce6274f8a214d3b0c227e743bb219`.
+Seven production-tag race packages PASS: reliable15.748s, localwrite1.023s,
+Family26.029s, room broker1.454s, bootstrap3.570s, Telemost56.706s and command2.279s.
+All four public111/current Family pairings and four actual Pion VP8 pairings PASS;
+all six256/64,512/128,1000/250kbit paced cases (windows8/32) and idle-RTP deadline PASS.
+The probe uses that exact carrier plus only two private CLI egress-observation overlays,
+built from physical PWD with the marker checked; probe SHA256
+`7ea4ad28b1180dbf1d4ff14e054295b8af41230161bf1e355b183ac2b2e88391`.
+
+Initial SSH multiplex socket disappeared before the pause command. Readback confirmed
+no new window or safety timer, both common timers active: no mutation was inferred.
+A foreground pinned multiplex session restored transport. The22:59:35 coordinated
+window stopped only the common timers with an8-minute automatic-resume safeguard.
+The secondary activation's immediate `/proc/PID/exe` hash assertion failed after start;
+the guarded handler restored the previous unit/locator/config, retained both immutable
+binaries, and restarted2fc16577. Readback confirms previous hash/PID601757 and an explicit
+rollback receipt. This failed attempt is not counted as acceptance. RU inspection stayed
+unchanged; controller NOOP and timer resume22:59:49 completed. No private profile or
+ordinary service changed. The exact transient executable was not captured, so its
+identity/cause is not claimed as proven.
+
+A fresh window23:01:29 uses bounded startup observation rather than asserting the
+executable hash immediately. It still requires the exact candidate executable and a
+fresh valid seed within100s; no hash or canonical guard is bypassed. Secondary upgrade
+completes23:01:35 at `/usr/local/lib/fc-profile-tools/mesh2-d2c2a45b9f89/gateway`,
+PID602868/NRestarts0. Locator SHA256
+`de1220595d7b3e673d65871830f5c6f13df7bacfbb96a5fd42509ae5255cd12f` matches snapshot and
+node-fleet bindings. Profile bytes unchanged; AWG6206/TCP6146 remain active/enabled with
+zero restarts. MESH remains active/boot-disabled pending the remaining product gate.
+RU before/after inspection matches, three-node evaluation returns NOOP/due[]/alerts[],
+leaf and CRL7470s with files_changed0/remote_writes0/restarts0. Both common timers resume
+23:01:46 and the safety timer is stopped. The retired pair writer stays retired.
+
+Three consecutive real-provider probes of the bounded exact implementation, with normal
+control intentionally unavailable after a genuine seed refresh, PASS:
+
+| Start UTC | Seconds | Family | HTTPS | DNS | Expected AMS2 egress | Resources closed UTC |
+| --- | ---: | --- | ---: | ---: | --- | --- |
+|23:02:09.948|42.200|PASS|4/4|3/3|PASS|23:02:51.791|
+|23:02:52.148|43.595|PASS|4/4|3/3|PASS|23:03:35.390|
+|23:03:35.743|37.986|PASS|4/4|3/3|PASS|23:04:13.391|
+
+Gateway journal has exactly three bootstrap and dedicated Family admissions, three
+ACTIVE sessions, three dedicated-resource closes, zero bootstrap rejections and only
+PID602868 throughout. No restart, ownership preemption or identity replacement between
+these attempts. Each close precedes the next attempt. Existing terminal mapping emits
+FAILED/gateway_session_failed for peer RESET; this is not relabelled graceful CLOSED.
+All forwards/probes terminate. Synthetic identity, profile and raw provider logs remain
+private. This is exact CLI/provider reconnect acceptance, not an Android handset/product
+test and not a guarantee under total RESET loss or prolonged low-bandwidth field use.
+
+Rollback for this secondary version requires a coordinated common-writer window and
+the root-only `mesh2-reset-repeat-d2c2a45b9f89-r2` backup/receipt set, restoring matching
+2fc16577 unit, locator, snapshot and node bindings, then exact executable/fresh-seed
+checks and common-writer resume. Do not restore private profiles, DB/CRL history or
+the retired pair writer. Earlier failed-window backups remain separate evidence.
+
+Backend preflight confirms live HTTP stillfce2340, active/PID480966/NRestarts0, secondary
+issuer/directory present and additive `gateway_binding` column still absent. The
+e2ed4ca6 overlay remains built-only; no DB or HTTP activation yet. Public Android111/
+catalog6, Windows0.2.16/catalog12, Linux0.2.11 and owner Linux0.2.12~l03.2.13 unchanged.
+CI41734068017/sourcebd67843: Linux/Windows/compatibility PASS; Android build/JVM/lint/
+carrier contracts PASS but emulator/release stages still running at this checkpoint.
+No new-version CI, signing, public artifact or selector acceptance is claimed. Next is
+backend migration/readiness, client routing/storage live acceptance and qualified boot/
+selector activation, then immutable Android delivery under the existing release gates.

@@ -7,25 +7,24 @@ in that window. Packet receipt/old-room identity not proven. No changes by this 
 [Evidence](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November22:47UTC — repeated RESET candidate solves three consecutive MESH2 probes.**
-Installed canonical gateway remains2fc16577 (close-local-write + idle-RTP corrections).
-A single RESET, even with500ms grace, still retained the remote owner and blocked the
-next bootstrap challenge. A private client sending five spaced identical RESETs instead
-passes three consecutive actual-provider sessions: each Family TLS,4 HTTPS/3 DNS and
-verified AMS2 egress. Resources close before each next connect with unchanged PID591182;
-no restart or owner takeover between those three probes. Terminal classification remains
-the existing gateway_session_failed on reset, not a claimed graceful CLOSED event.
-The production source now bounds this retry burst by500ms total,100ms per local write,
-at most five attempts; failed local writes stop retries. Five focused race repetitions
-and seven package race regressions PASS. This source is not yet projected/deployed or
-in an Android release; exact build/compatibility/product-probe gates are next.
-Sourcebd67843 pushed/remote-verified after one transient DNS failure. The canonical
-projection now imports its two close tests while retaining the same eight-member
-production boundary and100ms RTP gap policy;17 projection guards PASS.
-An earlier automatic common-fleet renewal22:36 completed COMMITTED and restarted MESH,
-not AWG/TCP; it is not counted as peer cleanup. Common timers are healthy. Android111/
-catalog6 remains byte-identical; backend/selector/new Android delivery remain gated.
-[Evidence, protocol limit and rollback](releases/2026-11-03-second-nl-mesh.md#bounded-reset-repeat-source).
+**3 November23:05UTC — exact bounded RESET retry installed on MESH2; three reconnects PASS.**
+Committed projectiond2c2a45 builds twice to566cbc96…b219. Production-tag race across
+seven packages, public111 Family/VP8 pairings and six paced asymmetric cases PASS.
+AMS2 alone now runs that exact gateway with its matching canonical locator; existing
+profile unchanged, AWG6206/TCP6146 unchanged. Common-fleet writer resumed, three-node
+evaluation NOOP with zero writes/restarts and no due maintenance. The first activation
+rolled back after an immediate executable-hash check; a fresh coordinated window uses
+bounded startup observation and verifies the exact running binary plus fresh seed.
+Three exact-carrier actual-provider runs pass Family TLS,4 HTTPS/3 DNS and AMS2 egress
+in42.200s/43.595s/37.986s. Each dedicated resource closes before the next connection;
+PID602868/NRestarts0 stays unchanged. Existing terminal mapping is gateway_session_failed
+on peer RESET, not graceful CLOSED. No takeover, identity reset or replay-floor change.
+This closes the exact CLI reconnect slice, not handset/product acceptance. MESH2 is still
+boot-disabled; backend overlay/migration, product readiness, selector and new immutable
+Android remain pending. Android111/catalog6, Linux and Windows public versions unchanged.
+Source CI41734068017: Linux/Windows/compatibility PASS; Android still in progress, not
+release acceptance. No new APK or public catalog was written.
+[Exact rollout, failed attempt and rollback](releases/2026-11-03-second-nl-mesh.md#exact-bounded-reset-runtime-and-reconnect-acceptance).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **3 November export24 server correlation — PARTIAL, cause still OPEN.** Second API36
