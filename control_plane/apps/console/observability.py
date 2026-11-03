@@ -12,10 +12,11 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from . import workflow
-from .models import DeviceProjection, InventorySnapshot, InventoryDevice, TechnicalSample, OperationSwitch
+from .models import DeviceProjection, InventorySnapshot, InventoryDevice, TechnicalSample, OperationSwitch, NetworkProbe
 from .views import staff
 from .collector import SOURCES
-from .server_inventory import server_cards
+from .server_inventory import server_cards, observation_state
+from .recovery_policy import assess
 
 
 class Filters(forms.Form):
@@ -92,6 +93,17 @@ def telemetry_data(form, device=None):
     return dict(scope=form.cleaned_data['scope'], metrics=metrics, series=series)
 
 
+def network_assessment(form, source, service_state, now):
+    if form.cleaned_data['scope'] != 'production' or SOURCES[source]['host'] is None:
+        return None
+    if form.cleaned_data['source'] and form.cleaned_data['source'] != source:
+        return None
+    start, end = bounds(form)
+    samples = list(NetworkProbe.objects.filter(source=source, scope='production',
+        observed_at__gte=start, observed_at__lt=end).order_by('-observed_at')[:3])
+    return assess(source, samples, service_state, now)
+
+
 @staff('view_inventorysnapshot')
 def overview(request):
     form = filters(request)
@@ -99,7 +111,10 @@ def overview(request):
     if form.is_valid():
         snapshots = [annotate_age(item) for item in latest_snapshots(form).select_related('server')]
         if form.cleaned_data['scope'] == 'production':
-            servers = server_cards(snapshots, timezone.now(), form.cleaned_data['source'])
+            now = timezone.now()
+            servers = server_cards(snapshots, now, form.cleaned_data['source'])
+            for card in servers:
+                card['network'] = network_assessment(form, card['source'], card['state'], now)
         data = telemetry_data(form)
         rows = InventoryDevice.objects.filter(snapshot__in=[item.pk for item in snapshots])
         if form.cleaned_data['query']:
@@ -144,10 +159,13 @@ def server(request, source):
         raise Http404
     form = filters(request)
     snapshots = []
+    network = None
     if form.is_valid():
         snapshots = [annotate_age(item) for item in snapshot_query(form).filter(source=source).select_related('server')[:100]]
+        now = timezone.now()
+        network = network_assessment(form, source, observation_state(source, snapshots[0] if snapshots else None, now), now)
     return render(request, 'console/server.html', dict(source=source, source_label=SOURCES[source]['label'],
-        retired=SOURCES[source]['host'] is None, form=form, snapshots=snapshots))
+        retired=SOURCES[source]['host'] is None, form=form, snapshots=snapshots, network=network))
 
 
 @staff('view_technicalsample')

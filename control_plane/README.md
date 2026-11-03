@@ -74,6 +74,20 @@ Production-телеметрия клиента пока **не собирает�
 
 ### Read-only production inventory
 
+Independent network evidence is described in
+[the 3 November probe runbook](../docs/releases/2026-11-03-fleet-network-probes.md).
+`probe_network.py` opens and immediately closes one TCP connection to each fixed
+RU8443/AMS1:443/AMS2:443 endpoint, without SSH, credentials, client payloads or a UDP
+"connect succeeded" readiness shortcut. Separate service/timer templates run every
+60 seconds after completion. Each connect is bounded by5s, each local import by20s;
+the whole unit has95s. Overlapping cycles are locked out. A failed local import
+does not stop the other probes or become a failed endpoint observation.
+The history is append-only and shown using the existing operator read permissions,
+source/scope/date filters. No public ingestion or recovery HTTP endpoint is added.
+Three consistent observations spanning≥90s are needed for an advisory; mixed
+results, stale/missing services, future timestamps or gaps hold/stabilize. The
+advisory never grants fleet admission or changes a running user connection.
+
 В Django не монтируются SSH credentials, production registry или его копия.
 Отдельный локальный `collect_inventory.py` передаёт проверенный collector по SSH
 stdin (`BatchMode`, `StrictHostKeyChecking`, фиксированные RU185.251.89.19,

@@ -3,6 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- FLEET-BOOTSTRAP-2 current -->
+**Selected now — independent probes and bounded advisory recovery (3 November).**
+Owner's «делай» authorizes this next substep of FLEET-BOOTSTRAP-2, not a new unrelated
+task. Dependencies: completed exact three-source inventory/local rollout fromc95cc86,
+approved fixed ordinary endpoints and existing read-only local operator roles.
+Gate: credential-free probes independent of SSH; strict source/endpoint/vantage/time
+binding; immutable history; three observations over≥90s with freshness/gap guards;
+mixed results and missing evidence hold; no inferred UDP/VPN readiness, no automatic
+repair/admission/reassignment; deterministic policy tests, PostgreSQL isolation/RBAC,
+real bounded observations and local-only timer/readback. Source73/targeted69/full186
+PASS; check/drift PASS. Runtime gates are recorded in the current report.
+The earlier “next candidate” paragraph below is now historical for this bounded step.
+[Independent probes, limits and rollout](releases/2026-11-03-fleet-network-probes.md).
+
 **3 November — continue autonomously; no interactive owner-test prerequisite.**
 Owner requests automated development and later user field feedback. Keep .13 physical
 acceptance DEFERRED_TO_FIELD, not PASS; do not expand a cohort or switch users' VPNs.

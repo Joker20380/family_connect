@@ -50,6 +50,27 @@ class ServerObservation(models.Model):
         verbose_name_plural = 'наблюдения серверов'
 
 
+class NetworkProbe(models.Model):
+    source = models.CharField(max_length=32)
+    scope = models.CharField(max_length=12)
+    probe = models.CharField(max_length=24)
+    vantage = models.CharField(max_length=32)
+    address = models.GenericIPAddressField(protocol='IPv4')
+    port = models.PositiveIntegerField()
+    observed_at = models.DateTimeField()
+    imported_at = models.DateTimeField(auto_now_add=True)
+    outcome = models.CharField(max_length=16)
+    duration_ms = models.FloatField()
+    digest = models.CharField(max_length=64, unique=True)
+
+    class Meta:
+        ordering = ['-observed_at']
+        constraints = [models.UniqueConstraint(fields=['source', 'observed_at'], name='unique_network_probe_time'),
+            models.CheckConstraint(condition=models.Q(scope='production', probe='tcp_connect',
+                vantage='operator-workstation', outcome__in=['reachable', 'refused', 'timeout', 'network_error'],
+                duration_ms__gte=0, duration_ms__lte=60000), name='network_probe_domain')]
+
+
 class TechnicalSample(models.Model):
     METRICS = [('activation', 'Успешность активации'), ('mesh_connect', 'Успешность подключения MESH'),
         ('crash', 'Сбой в сессии'), ('api_latency_ms', 'Задержка API, мс')]

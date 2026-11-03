@@ -1,6 +1,17 @@
 # Текущее состояние / Current state
 
 <!-- FLEET-BOOTSTRAP-2 current -->
+**3 November — independent network evidence and advisory recovery, source checkpoint.**
+Owner authorizes the next bounded step. Credential-free TCP observations now bind RU8443,
+AMS1/AMS2:443 independently of SSH/inventory failures; legacy NL is never probed.
+Append-only local records and a conservative three-sample/90-second advisory policy
+distinguish missing/stale/conflicting data, path failure, service failure and stabilization.
+No state grants VPN readiness or calls fleet admission, repair, restart or reassignment.
+Direct read-only TCP reachability observed on all three endpoints; no authenticated
+AWG/REALITY/MESH or end-to-end traffic acceptance. Source tests73 PASS, PostgreSQL
+targeted69/full186 PASS, check/drift PASS; local rollout results follow in
+[the current report](releases/2026-11-03-fleet-network-probes.md). No client versions change.
+
 **3 November — autonomous fleet observability continuation.** Owner removes the
 interactive owner-test gate and requests continued automated development; .13 physical
 AWG/TCP/Disconnect acceptance is DEFERRED_TO_FIELD, not PASS. No forced user testing,

@@ -1,0 +1,9 @@
+[Unit]
+Description=Family Connect independent TCP observation (no recovery actions)
+
+[Service]
+Type=oneshot
+UMask=0077
+ExecStart="@PYTHON@" "@ROOT@/control_plane/probe_network.py"
+TimeoutStartSec=95
+NoNewPrivileges=true

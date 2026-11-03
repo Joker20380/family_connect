@@ -1,0 +1,3 @@
+{% if network %}<h3>Независимая TCP-проба</h3><p>{{ network.label }}</p>
+{% if network.latest %}<p><code>{{ network.latest.address }}:{{ network.latest.port }}</code> · {{ network.latest.observed_at|date:'Y-m-d H:i:s' }} UTC · {{ network.latest.outcome }} · {{ network.latest.duration_ms }} мс</p>{% endif %}
+<p class="muted">Путь с рабочего места оператора, без SSH и учётных данных. Открытый порт не подтверждает серверную identity, AWG, REALITY, MESH или интернет через VPN. Автовосстановление и переключение пользователей отключены.</p>{% endif %}

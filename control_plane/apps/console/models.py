@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from .labels import LABELS, label
-from .observability_models import InventorySnapshot, InventoryDevice, ServerObservation, TechnicalSample, OperationSwitch
+from .observability_models import InventorySnapshot, InventoryDevice, ServerObservation, TechnicalSample, OperationSwitch, NetworkProbe
 
 
 class DeviceProjection(models.Model):

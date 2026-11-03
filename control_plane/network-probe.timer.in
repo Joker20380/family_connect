@@ -1,0 +1,11 @@
+[Unit]
+Description=Family Connect independent TCP observation schedule
+
+[Timer]
+OnStartupSec=30
+OnUnitInactiveSec=60
+AccuracySec=5
+Unit=family-connect-network-probe.service
+
+[Install]
+WantedBy=timers.target
