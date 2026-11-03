@@ -5,7 +5,9 @@
 block development; field acceptance remains unproven. Current bounded continuation
 separates RU/AMS1/AMS2 inventory, preserves legacy NL history and keeps absent/stale
 data distinct from health. Automated source/console and real read-only collection
-checks PASS; local console rollout in progress. [Current receipt](releases/2026-11-03-fleet-observability.md).
+checks PASS; local loopback console updated,177 source/lock hashes checked and all
+three fresh sources imported. Timer active; no client switching or public release.
+[Current receipt](releases/2026-11-03-fleet-observability.md).
 
 **Latest continuation — explicit Amsterdam1/2 selection.** Backend schema3/API and
 Windows0.2.16 distribution/update catalog12/invitation are LIVE and HTTPS-verified.

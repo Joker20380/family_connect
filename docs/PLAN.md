@@ -12,8 +12,12 @@ import; do not repurpose the fenced rehearsal runtime or declare second-node MES
 Completion gate: separate source-bound nodes, archive-only legacy NL, missing/stale/
 future/unknown/failed states, no NL registry read, automated PostgreSQL/RBAC/isolation
 tests and real read-only collection. Source gates PASS:30 + targeted45/full162;
-check/migration drift PASS. Next: finish the local loopback-console rebuild/import
-readback after retaining its state; remote transport/policy/catalog changes remain out.
+check/migration drift PASS. Local loopback-console rollout and source/lock177-hash
+audit PASS, three fresh imports and archive-only history verified, timer active;
+secrets/volumes retained and private PG backup made. Observability step complete.
+Next candidate: independent readiness evidence and bounded recovery-policy design;
+systemd observations alone must not trigger client reassignment. No automatic
+transition into that next task or remote transport/policy/catalog activation here.
 [Evidence and rollout](releases/2026-11-03-fleet-observability.md).
 
 **Owner follow-up: two Amsterdam entries and per-node load, provisional5Gbps each.**

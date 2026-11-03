@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "task": "FLEET-BOOTSTRAP-2",
+  "result": "LOCAL_THREE_SOURCE_OBSERVABILITY_PASS",
+  "source_commit": "c95cc86aa5d507b17aac5ae70325420e68153f83",
+  "image_id": "sha256:0862dbdbb9a0f9d545cb4c71d2990f83cfe1126b1967078509e9f8f06b81c2fe",
+  "packaged_hashes_matched": 177,
+  "checks": {
+    "operator_collector_packaging": {"passed": 30},
+    "django_observability_subset": {"passed": 45},
+    "django_full_console": {"passed": 162},
+    "django_check": "PASS",
+    "migration_drift": "NONE",
+    "readonly_live_node_collection": "PASS",
+    "local_loopback_health": "PASS",
+    "three_source_imports": "PASS"
+  },
+  "active_sources": ["gateway-ru", "nl-amsterdam-1", "nl-amsterdam-2"],
+  "archive_only_sources": ["gateway-nl"],
+  "nl_registry_collection": false,
+  "fresh_service_observation_is_vpn_acceptance": false,
+  "local_timer_active": true,
+  "local_timer_timeout_seconds": 380,
+  "local_secrets_preserved": true,
+  "local_data_volumes_retained": true,
+  "local_database_backup_retained_privately": true,
+  "local_model_counts_unchanged_across_import": true,
+  "new_ssh_trust": false,
+  "production_writes": 0,
+  "production_vpn_or_backend_restarts": 0,
+  "client_assignment_changes": 0,
+  "automatic_failover_enabled": false,
+  "owner_physical_acceptance": "DEFERRED_TO_FIELD",
+  "public_release_created": false,
+  "versions": {
+    "installed_linux": "0.2.12~l03.2.13",
+    "public_linux": "0.2.11",
+    "public_android": 110,
+    "public_windows": "0.2.16"
+  }
+}

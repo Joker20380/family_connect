@@ -11,7 +11,7 @@ Selected step: source-bound observation of the three current operational endpoin
 before recovery policy. This is not automatic failover, independent recovery,
 second-node MESH, production-console exposure or client release work.
 
-**SOURCE_AND_READ_ONLY_COLLECTION_PASS; local console rollout pending.**
+**LOCAL_THREE_SOURCE_OBSERVABILITY_PASS.**
 The old collector knew only RU and obsolete gateway-nl186.246.45.246. It now has
 one shared source catalog for RU185.251.89.19, AMS1 185.10.158.212 and AMS2
 185.10.158.196. Legacy gateway-nl remains importable/readable history with no live
@@ -67,19 +67,50 @@ key discovery or new trust approval was used.
 
 A local user-service drop-in selects those pins and380s timeout; prior unit retained
 privately, timer restored. All three collections now succeed, but their imports
-report IMPORT_FAILED because the local console stack is stopped. This is the next
-bounded rollout step, not a request for owner VPN testing. Private snapshots,
+initially reported IMPORT_FAILED because the local console stack was stopped.
+That failure is retained and resolved by the local rollout below. Private snapshots,
 receipts, pinned-host file and diagnostic logs stay outside Git.
+
+The loopback console was rebuilt from source
+`c95cc86aa5d507b17aac5ae70325420e68153f83` with the corrected allowlisted fleet
+build context. Previous context and a private local PostgreSQL dump retained;
+existing .env is byte-identical and named data volumes retained, no volume reset.
+Local payment/operation/device counts are unchanged across the import cycle.
+Image `sha256:0862dbdbb9a0f9d545cb4c71d2990f83cfe1126b1967078509e9f8f06b81c2fe`:
+all177 packaged source/lock hashes match the build manifest; changed runtime files
+also match in the running container. Health returns synthetic/ok; the only published
+binding is127.0.0.1:8765. No admin credential, role override or public exposure added.
+
+Final readback: RU, AMS1 and AMS2 have independent fresh imported snapshots and
+observed-active required services. NL registry collection remains disabled. Retained
+gateway-nl is archive-only. The existing one-minute local timer is active, with
+three-source imports successful; no production write/VPN/backend restart occurred.
+This is operator observability, not a connection/throughput/automatic-recovery PASS.
+
+Verification failures are retained: the first readback wrapper had a syntax error;
+while the timer was paused, later snapshots correctly became stale and the gate
+refused them. Restored normal fresh collection, without relaxing the5-minute bound.
+The runtime's /tmp tmpfs hid the image's dependency lock during a full-file audit;
+the read-only/network-none image audit verified that lock and all source hashes
+without changing package bytes. These were verification-context repairs, not new
+product releases. New docs links/whitespace PASS; the broader docs check retains the
+pre-existing STATUS historical anchor error for27 October, unchanged by this task.
+
+[Sanitized receipt](2026-11-03-fleet-observability.receipt.json).
 
 ## Remaining work and rollback
 
-Finish the local loopback-only console rebuild/start with retained local state,
-then verify exact source identity in all three imported snapshots and archive-only
-legacy history. No public hosting, remote backend restart or user connection test.
+The local observability gate is complete. Independent readiness probes and a bounded
+recovery policy are the next candidate; these source observations alone must never
+authorize automatic endpoint reassignment. Field acceptance remains deferred.
 
 For observer rollback: stop only the local read-only timer, preserve receipts,
 remove only this task's user-service drop-in and review current approved targets
 before resuming. Do not silently restart polling of the retired source. No client,
 production database, VPN service or signed-catalog rollback is needed for this step.
+For local-console rollback, stop only its console service and keep PostgreSQL/data
+volumes/.env and backups; do not use down -v or automatically restore a database.
+The prior source context and private local PG dump remain available for a separately
+bounded restore if required. No such rollback was needed for the successful rollout.
 Field acceptance and independent recovery remain unproven; no second task starts
 automatically from this checkpoint.

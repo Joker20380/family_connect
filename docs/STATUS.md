@@ -10,11 +10,15 @@ old gateway-nl remains archive-only. Source/locked PostgreSQL tests PASS:30 oper
 packaging tests,45 targeted Django tests and162 full console tests; check/drift PASS.
 Both NL nodes return real read-only service/host observations; no registry or HMAC key
 is collected/sent to NL. Stale/missing/future/unknown/failed observations never imply
-VPN readiness. Local timer pins reused, no new trust; its three-source collection
-succeeds but local import currently fails because the console stack is stopped.
-NEXT within this task: rebuild/start only the loopback operator console and verify
-bound imports, preserving existing local state. No production VPN/backend restart,
-public release, second-node MESH or automatic failover is claimed.
+VPN readiness. Local console rollout now PASS fromc95cc86:177 packaged source/lock
+hashes match, loopback-only health PASS, all three fresh sources imported with exact
+bindings, legacy NL archive-only. Local secrets/volumes retained, PG backup private;
+local payment/operation/device counts unchanged across import. Timer active with
+reused approved SSH pins and380s budget. Initial stopped-console import errors and
+verification-wrapper/mount-context failures retained, not acceptance PASS.
+This bounded observability step is complete. Recovery policy/independent probes are
+the next candidate, not implemented or activated here. No production VPN/backend
+restart, public release, second-node MESH or automatic failover is claimed.
 [Current report](releases/2026-11-03-fleet-observability.md).
 
 **2 November — owner-requested two-node load follow-up, LIVE_METRICS / .13 INSTALLED.**
