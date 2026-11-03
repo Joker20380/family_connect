@@ -9,7 +9,11 @@ guards, user identities/data and all published versions. Initial read-only diagn
 PASS for full public bytes/catalog/signer/server hash and Android15 archive parsing;
 not a reproduction on the affected phones. Confirmed missing pre-download API31
 compatibility gate is a hypothesis for this incident, not the established cause.
-Next: obtain affected Android OS/installed beta, distinguish SDK/archive/signer from
+Owner follow-up confirms old Android and asks for a legacy-support effort estimate,
+not a new release. Shared minimum/native compiler targets26 versus Friends31 make
+backward compatibility a bounded investigation, not necessarily a new application;
+actual native imports, lifecycle, update and feature behavior still require testing.
+Next: obtain affected Android OS/model/installed beta, distinguish SDK/archive/signer from
 transfer/storage failure, then reproduce and repair the matching branch. Completion
 requires relevant regression/runtime acceptance and, for a new APK, exact platform
 CI/artifact/offline-signing/publication gates plus actual delivery evidence. Do not

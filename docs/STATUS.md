@@ -2,7 +2,11 @@
 
 **3 November — Android update incident OPEN (St Petersburg).** Owner reports
 download100% followed by “download or verification failed”; Android confirmed,
-affected OS/installed beta not yet known. Read-only diagnosis takes priority over
+owner now confirms old Android, exact OS/model/installed beta still unknown.
+Compatibility assessment only: shared app minimum and native build targets are
+API26, while public Friends overrides to31; lowering the release floor alone is
+not runtime acceptance. No legacy implementation or release started.
+Read-only diagnosis takes priority over
 the queued fleet continuation. Public110/catalog5 signatures, full HTTPS APK
 56,221,032bytes/SHA256, server file and package metadata agree. Android15 parses
 the same signed APK with both `.apk` and updater `.part` suffixes. Confirmed

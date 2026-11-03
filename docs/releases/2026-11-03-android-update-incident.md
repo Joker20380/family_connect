@@ -70,3 +70,28 @@ client state were not changed; all immutable artifacts/catalogs remain intact.
 
 Private local probes and downloaded bytes remain ignored under
 `state-client-build/android-update-20261103/`. Only this sanitized report enters Git.
+
+## Follow-up: legacy Android effort assessment
+
+The owner confirms “old Android” and asks how much work supporting it would take;
+exact OS, model/ABI and installed beta remain unknown. No implementation/release
+is started by this assessment. Initial source evidence is encouraging but is not
+compatibility acceptance:
+
+- `clients/android/app/build.gradle` retains shared minimum26/Android8; only the
+  public Friends variant overrides it to31/Android12.
+- Current AWG, restricted ARM64 and audio native build scripts target Android26.
+  That does not prove their linked dependencies/imports run on every older OS.
+- Java already guards several newer APIs; voice capture explicitly requires29/
+  Android10. Public restricted packaging is ARM64, so a32-bit OS is a separate
+  native/packaging scope even on a64-bit-capable processor.
+
+Prefer assessing one backward-compatible application rather than maintaining a
+separate fork. For Android10/11 ARM64, a preliminary planning allowance is1–2
+working days including focused automated/runtime/release checks, assuming no native
+dependency blocker; this is not a measured duration or delivery commitment.
+Android8/9,32-bit systems and older phones need a separate estimate after exact
+OS/model information. Merely reducing `minSdk` and publishing is not sufficient:
+VPN start/stop/reconnect, native loading, app startup, notifications, available voice
+features and in-place signed update/data preservation must be checked. Versions and
+rollout/rollback state remain unchanged; this is still an open incident.
