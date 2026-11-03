@@ -1,5 +1,10 @@
 # Текущее состояние / Current state
 
+**3 November15:59UTC — refreshed read-only health.** Registry60/56 non-revoked/4 revoked;
+recent180s AWG peers RU0/AMS1 6/AMS2 1. RU sampled CPU37–71%, follow-up13–54%,
+disk78%; legacy Docker worker still unhealthy, host worker active. No deployment,
+repair or client acceptance. [Updated snapshot](releases/2026-11-03-vpn-health.md#1559utc-refresh).
+
 **3 November MESH-SLOW-LINK-1 — current owner-selected task; SOURCE CHECKED, NOT DEPLOYED.**
 Owner reports repeated MESH disconnects at low speed and selects connection quality
 before MESH2. Reproduced premature closure on transient ICE and fixed1s retries

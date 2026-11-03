@@ -1,5 +1,38 @@
 # Read-only service snapshot — 3 November 2026
 
+## 15:59UTC refresh
+
+Repeated at15:58–16:00UTC /16:58–17:00 Brussels; same read-only scope and hosts.
+Registry unchanged60/56 non-revoked/4 revoked. Support seen24h/7d now6/20, not online users.
+
+| Metric | RU | AMS1 | AMS2 |
+| --- | --- | --- | --- |
+| Load1/5/15min,2 CPUs each | 1.70/1.18/1.19 | 0.39/0.63/0.83 | 0.00/0.03/0.00 |
+| RAM used/total MiB | 1197/1962 | 791/1914 | 410/1919 |
+| Available RAM MiB | 765 | 1123 | 1509 |
+| Disk used/free | 78%/6.4GiB | 16%/39GiB | 13%/40GiB |
+| Configured AWG peers | 18 | 47 | 2 |
+| Recent handshake180s/900s/24h | 0/0/4 | 6/6/16 | 1/1/2 |
+| Five-second RX/TX Mbps | 0/0 | 0/0.001 | 0/0 |
+| Cumulative RX/TX GiB | 0.471/5.848 | 2.236/34.018 | 0.428/0.776 |
+
+CPU us+sy samples: RU37–71%, subsequent five samples13–54%; AMS1 22–27%,
+AMS2 4–14%. No sustained saturation demonstrated. RU IO wait1–2%, follow-up0–3%,
+swap873MiB with sampled si/so0; IO PSI some/full avg60=2.72/1.69. AMS IO PSI0.00.
+All previously listed core services active; RU legacy Docker peer-worker still
+unhealthy, host worker active, product API/control healthy. Friends TCP sockets0;
+RU8443 HTTPS sockets4, not VPN users. MESH sessions not separately counted.
+Seven recent AWG peers are not seven unique people or guaranteed concurrent sessions.
+AMS1 cumulative TX grew approximately3.071GiB since the earlier snapshot; neither
+this counter difference nor the five-second idle sample measures maximum throughput.
+
+No settings/restarts/releases/tests through user VPN tunnels; public versions remain
+Android111/catalog6, Windows0.2.16/catalog12, Linux public0.2.11/owner internal.13.
+MESH slow-link source work is not deployed by this check. No rollout/rollback needed.
+RU disk and legacy-worker follow-ups remain; preserved all unrelated working changes.
+
+## Earlier13:15UTC snapshot
+
 Observed13:14–13:17UTC (14:14–14:17 Brussels). Requested operational inspection,
 not a release or end-to-end acceptance. Current source catalog selects RU185.251.89.19,
 AMS1 185.10.158.212 and AMS2 185.10.158.196; old NL is archive-only.

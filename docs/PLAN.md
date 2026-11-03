@@ -2,6 +2,10 @@
 
 ## Current engineering priority / Текущий critical path
 
+**3 November15:59UTC health refresh complete.** Read-only three-host measurements;
+RU disk/legacy worker follow-ups remain open. No repair or successor started; current
+engineering priority unchanged. [Snapshot](releases/2026-11-03-vpn-health.md#1559utc-refresh).
+
 **MESH-SLOW-LINK-1 — OWNER-SELECTED / source qualified, rollout pending.**
 Latest request selects repeated MESH drops on low-speed connections, superseding the
 immediate MESH2 continuation. Dependencies: existing ReliableStream/VP8/Pion transport,
