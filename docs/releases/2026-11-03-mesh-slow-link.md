@@ -1,9 +1,19 @@
 # MESH-SLOW-LINK-1 — slow-link stability candidate
 
+**16:50UTC follow-up:** exact142ee46 Android CI job126044369850/run41672473840 PASS,
+including API27/API35 and final unsigned ARM64 packaging. Downloaded artifact13250802064
+source/tree/native hash, package/minSDK27/target35, unsigned status and all12 libraries'
+16K alignment verified. APK SHA256
+`ad15a285bc5393b0d2f66db845e65b40120841dacf67a98474d006d4a50c99a5`,50248193bytes.
+This candidate retains111 metadata and cannot replace the public111 APK. Overall workflow
+fails on the separate Linux GTK job; no deployment or live Telemost acceptance is claimed.
+Owner now selects permanent MESH2 before the new Android release.
+[Complete artifact receipt and remaining gates](2026-11-03-second-nl-mesh.md#android-ciartifact-readback-1650utc).
+
 ## Scope and state
 
-Owner reports that MESH repeatedly disconnects at low speed. This selects link quality
-ahead of the authorized but unfinished MESH2 integration. **SOURCE CHECKED; NOT RELEASED
+Owner reported that MESH repeatedly disconnects at low speed and initially selected link
+quality before MESH2. The latest owner-selected order is recorded above. **SOURCE CHECKED; NOT RELEASED
 OR DEPLOYED.** No handset trace was supplied, so these reproduced defects are plausible
 contributors, not a proven explanation of every reported field disconnect.
 

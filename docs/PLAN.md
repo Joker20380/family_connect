@@ -10,7 +10,9 @@ be included in the resulting Android delivery. No automatic unrelated fleet succ
 Completed new source slice: pinned two-node snapshot/directory inspection and independent
 directory publication under the RU maintenance lock; final maintenance/package/snapshot
 selection168 PASS,0 skips, including accepted-source native compatibility and certificate
-revision-floor regression. Source checkpointc902e79 pushed/remote-verified, not installed.
+revision-floor regression. Source checkpointc902e79 and correction0775711 pushed/remote-verified,
+not installed. Exact142ee46 Android CI now PASS on API27/API35; downloaded unsigned
+ARM64/source/native/16K checks PASS. It retains111 metadata and cannot replace public111.
 This does not implement the multi-node credential transaction and is not activation.
 Next: coordinated renewal/CRL/fencing and permanent distinct AMS2 identity/runtime;
 real READY/TLS/DNS/HTTPS/egress and rejection/cleanup acceptance; only then selector
@@ -45,9 +47,10 @@ unchanged expiry/retry/security bounds. Public111-source/current compatibility p
 four Family TLS and four local Pion VP8 combinations. Final native race672 PASS/48
 explicit optional skips; cold-start ordinary model reaches the full negotiated window.
 Final142ee46 source and remote SHA verified; fresh pinned ARM64/gateway builds and16K
-alignment PASS, not installed. Exact Client builds41672473840 is in progress at16:19UTC;
-phase0 still stops in release-fixture/failover-stack setup before its tests.
-Remaining gates: exact Android/platform CI and artifact qualification,
+alignment PASS, not installed. Exact Client builds41672473840 Android job and downloaded
+artifact checks now PASS; overall workflow fails on Linux GTK. phase0 still stops in
+release-fixture/failover-stack setup before its tests.
+Remaining gates: exact new-version Android release CI and artifact qualification,
 actual deployed-peer acceptance,
 real shaped-link Family TLS/DNS/HTTPS and fail-closed/cancel/revoke checks; reviewed
 gateway rollback/promotion plus new immutable Android>111/catalog>6 and public readback.

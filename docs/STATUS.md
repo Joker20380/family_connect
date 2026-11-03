@@ -12,9 +12,12 @@ identities, certificate identity/role/revocation, directory freshness/conflict a
 source/package boundaries are checked. This is not multi-gateway renewal or deployment.
 Final maintenance/package/snapshot selection168 PASS,0 skips, including the accepted-source
 native compatibility check and gateway certificate revision-floor regressions.
-Source checkpointc902e79 pushed and remote-verified; no deployment.
-Exact142ee46 Android CI41672473840 passed API35/API27 and pinned native build by16:46UTC;
-unsigned ARM64 packaging was running and final artifact gate remained pending.
+Source checkpointc902e79 and revision-floor correction0775711 pushed/remote-verified;
+no deployment. Exact142ee46 Android job126044369850 in CI41672473840 is now PASS,
+including API35/API27 and unsigned ARM64 packaging. Downloaded candidate APK/native
+source/tree/hash, minSDK27/target35, production tags and all12 library16K alignments PASS.
+This is an unsigned111-metadata candidate, not a new release or permission to replace111.
+Overall workflow fails on the separate Linux GTK job; release job skipped.
 No production writes/restarts, token transmission, version/catalog or invitation changes.
 Remaining: one coordinated renewal/revocation/fencing writer for both gateways, permanent
 AMS2 runtime and live acceptance, then qualified selector and immutable Android>111/catalog>6.
@@ -55,10 +58,10 @@ Pion VP8; these are local separate-layer checks, not handset/provider acceptance
 Final dependency-selected native race672 test/subtest PASS/48 explicit optional skips.
 Final source142ee46 is pushed/remote-verified. Fresh ARM64 and Linux gateway builds
 PASS; manifest source/tree/hash and16K Android alignment verified. They are not installed.
-Exact Client builds41672473840 is still running at16:19UTC; API27/API35 acceptance
-and live gateway qualification remain pending. phase0 still fails before tests in
+Exact Client builds41672473840 Android job is now PASS with downloaded artifact checks
+recorded above; live gateway qualification remains pending. phase0 still fails before tests in
 release-fixture provisioning/failover-stack construction; no gate is waived.
-No server/APK deployment or version change. Remaining: exact-source platform CI,
+No server/APK deployment or version change. Remaining: exact new-version release CI,
 deployed-peer/live shaped-link
 acceptance, coordinated client/gateway rollout and immutable Android delivery.
 Android111/catalog6, Windows0.2.16/catalog12, Linux public0.2.11/owner0.2.12~l03.2.13

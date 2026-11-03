@@ -63,6 +63,31 @@ unsigned ARM64 packaging was running. No final artifact or public release accept
 inferred from intermediate CI steps. This candidate still has111 version metadata and
 must not replace the immutable published111 APK.
 
+### Android CI/artifact readback —16:50UTC
+
+Exact source142ee46 Android job126044369850 in run41672473840 is **completed/success**,
+including API27/API35 runtime, pinned native build and final unsigned Friends packaging.
+The overall workflow is **failure** on its Linux GTK job; Windows/compatibility PASS,
+release job skipped. This is not an all-platform or public-release PASS.
+
+Downloaded artifact13250802064, ZIP57292031bytes,
+SHA256 `b0ae3a199d91e8084a00eaa900f404c1f5600db496f482b7649b40decd37f947`.
+Unsigned APK50248193bytes,
+SHA256 `ad15a285bc5393b0d2f66db845e65b40120841dacf67a98474d006d4a50c99a5`;
+CI native SHA256 `4681dd3d594ff1c237b82f0340995b6428c8cb2ca7a09d7bae5620ca0a7d5bdf`.
+Receipt/source/tree/native payload, production tags, pinned Xray, package identity,
+ARM64-only, minSDK27/target35, unsigned status and all12 native libraries'16K PT_LOAD
+alignment verified locally. The CI native hash differs from the separately retained
+local build; each matches its own source-bound manifest. Bitwise cross-host reproducibility
+is not claimed. First local badging assertion expected `sdkVersion`; aapt2 reports
+`minSdkVersion`. Corrected the reader without modifying APK bytes; both outcomes retained.
+
+**Not distributable as111:** it still has beta111/code111 metadata and different bytes
+from the immutable public111. No signing, installation, tag/catalog/invitation publication
+or server update was performed. Production MESH2 acceptance and a fresh higher-version
+client build/delivery remain required. Source changes through0775711 were pushed and
+remote main verified; existing unrelated working-tree changes remain untouched.
+
 ## Reconciled evidence
 
 - [Physical rehearsal and reboot](2026-11-02-fleet-bootstrap-2-reboot.md) already proved
