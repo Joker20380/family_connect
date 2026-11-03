@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**3 November — Android update incident OPEN (St Petersburg).** Owner reports
+download100% followed by “download or verification failed”; Android confirmed,
+affected OS/installed beta not yet known. Read-only diagnosis takes priority over
+the queued fleet continuation. Public110/catalog5 signatures, full HTTPS APK
+56,221,032bytes/SHA256, server file and package metadata agree. Android15 parses
+the same signed APK with both `.apk` and updater `.part` suffixes. Confirmed
+compatibility gap:110 requires Android12/API31, but discovery checks only ARM64
+and package, not OS; an incompatible archive produces the same generic failure.
+This is a possible cause, not confirmed on the reported phones. One initial HTTPS
+download timed out; the full repeat passed, not regional-network acceptance.
+No client changes, release, installation or production writes. Android110/sequence5,
+Windows0.2.16/sequence12, public Linux0.2.11 and owner Linux0.2.12~l03.2.13 unchanged.
+[Incident evidence, safe workaround and remaining checks](releases/2026-11-03-android-update-incident.md).
+
 <!-- FLEET-BOOTSTRAP-2 current -->
 **3 November — isolated native data-plane canary qualification PASS.**
 The next authorized substep exercises real AWG3.1/REALITY packets in disposable
