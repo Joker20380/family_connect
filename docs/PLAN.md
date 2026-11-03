@@ -2,6 +2,27 @@
 
 ## Current engineering priority / Текущий critical path
 
+**FLEET-BOOTSTRAP-2 second-node MESH — AUTHORIZED / IN PROGRESS.**
+Latest owner instruction («токен… всё настроили… доделаем») selects production MESH2;
+this supersedes the earlier question-only boundary and ordinary-only admission scope.
+Do not ask for the already retained separate publisher credential. Dependencies:
+accepted native/reboot rehearsal, existing two-node ordinary admission, primary Family
+authority and current renewal/profile-control contracts. Retired rehearsal instances,
+permits and leaf material cannot be reused as permanent production authorization.
+Completed source slice: node-targeted readiness over existing HTTPS/relay paths,
+independent signed gateway identity with the same Family authority, shared entitlements
+and CRL, cross-node challenge/receipt rejection, legacy compatibility;265 PASS/2 optional
+environment skips including packaged HTTP and native delivery verification.
+Next within this selected task: coordinated renewal/CRL/revocation fencing and fresh
+production runtime; per-node encrypted client caches and end-to-end target propagation;
+real READY/Family TLS/DNS/HTTPS/AMS2 egress and negative/cleanup tests; new immutable
+Android version with exact CI/signing/public readback, including the picker fix.
+Do not clone AMS1 private identity, change grants/assignments, disable replay floors or
+publish a selector before runtime acceptance. No automatic fleet-canary successor.
+Completion is functional production operation plus client delivery, NOT this source
+checkpoint. Telegram remains DEFERRED_BY_OWNER. All current public versions unchanged.
+[Integration evidence and rollback boundary](releases/2026-11-03-second-nl-mesh.md).
+
 **FLEET-BOOTSTRAP-2 Android picker parity — SOURCE COMPLETE, delivery pending.**
 Owner defers Telegram, asks to resume the main plan, then selects the remaining Android
 duplicate-server UI defect before the fleet successor. Dependencies: existing signed

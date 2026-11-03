@@ -28,6 +28,13 @@ DOMAIN = b'family-connect/restricted-issuer/v1\0'
 PROTOCOL = 'family-connect-5n3-test-v1'
 MAX_RESPONSE = 65536
 MAX_TEST_LIFETIME = 14400
+PRIMARY_GATEWAY = 'nl-amsterdam-1'
+SECONDARY_GATEWAY = 'nl-amsterdam-2'
+
+
+def gateway_target(value):
+    require(value is None or (type(value) is str and value in (PRIMARY_GATEWAY, SECONDARY_GATEWAY)))
+    return PRIMARY_GATEWAY if value is None else value
 
 
 class ChallengeUnavailable(RuntimeError):
@@ -84,7 +91,8 @@ def activated_grant(database, device, family, minimum_revision):
     return result
 
 
-def from_env(access):
+def from_env(access, gateway_id=None):
+    target = gateway_target(gateway_id)
     root = Path(os.environ['FC_FRIENDS_RESTRICTED_DIR'])
     require(root.is_absolute())
     anchor = base64.b64decode(bounded_file(root / 'anchor.pub', 128).strip(), validate=True)
@@ -92,22 +100,47 @@ def from_env(access):
     eligible_devices, all_activated = admission_policy(bounded_file(root / 'admission.json', 16384))
     lifetime = os.environ.get('FC_FRIENDS_RESTRICTED_DELIVERY_LIFETIME', '3600')
     require(lifetime in ('3600', '14400'))
-    return RestrictedReadiness(access, manifest=parse(bounded_file(root / 'issuer.json', 16384)),
+    manifest = parse(bounded_file(root / 'issuer.json', 16384))
+    material = root
+    if target != PRIMARY_GATEWAY:
+        material = root / 'gateways' / target
+        require(not material.parent.is_symlink() and not material.is_symlink())
+        now = int(access.clock())
+        primary, _ = delegation(manifest, anchor, now)
+        manifest = parse(bounded_file(material / 'issuer.json', 16384))
+        selected, _ = delegation(manifest, anchor, now)
+        require(all(selected[name] == primary[name] for name in ('family', 'authority', 'minimum_revision')))
+        require(selected['gateway'] != primary['gateway'])
+    return RestrictedReadiness(access, manifest=manifest,
                               anchor=anchor, signing_key=load_pem_private_key(bounded_file(root / 'issuer.key', 4096, True), None),
-                              seed_source=lambda: bounded_file(root / 'directory.json', 8192),
+                              seed_source=lambda: bounded_file(material / 'directory.json', 8192),
                               crl_source=lambda: bounded_file(root / 'revocations.pem', 16384), eligible_devices=eligible_devices,
                               all_activated=all_activated,
-                              delivery_lifetime=int(lifetime))
+                              delivery_lifetime=int(lifetime), gateway_id=target)
 
 
-def request(access, action, value, request_id=None):
+def request(access, action, value, request_id=None, gateway_id=None):
+    targeted = type(value) is dict and 'gateway_id' in value
+    if targeted:
+        fields(value, 'gateway_id request')
+        require(gateway_id is None and type(value['request']) is dict and type(value['gateway_id']) is str)
+        gateway_id, value = value['gateway_id'], value['request']
+    result = _request(access, action, value, request_id, gateway_id)
+    if targeted:
+        result = dict(gateway_id=gateway_id, response=result)
+        require(len(json.dumps(result, separators=(',', ':')).encode()) <= MAX_RESPONSE)
+    return result
+
+
+def _request(access, action, value, request_id, gateway_id):
+    gateway_target(gateway_id)
     if action == 'challenge':
         fields(value, 'public_identity wireguard_public_key')
         key(value['public_identity'], 64)
         key(value['wireguard_public_key'], 32)
     try:
         try:
-            service = from_env(access)
+            service = from_env(access) if gateway_id is None else from_env(access, gateway_id)
         except Exception as error:
             if action == 'challenge':
                 raise challenge_failure('authority', error) from None
@@ -255,7 +288,7 @@ def migrate(access):
 
 
 class RestrictedReadiness:
-    def __init__(self, access, *, manifest, anchor, signing_key, seed_source, crl_source, eligible_devices=None, delivery_lifetime=3600, all_activated=False):
+    def __init__(self, access, *, manifest, anchor, signing_key, seed_source, crl_source, eligible_devices=None, delivery_lifetime=3600, all_activated=False, gateway_id=None):
         require(type(delivery_lifetime) is int and delivery_lifetime in (3600, MAX_TEST_LIFETIME))
         require(type(all_activated) is bool and (not all_activated or eligible_devices is None))
         self.access, self.manifest, self.anchor = access, manifest, anchor
@@ -263,6 +296,14 @@ class RestrictedReadiness:
         self.eligible_devices = None if eligible_devices is None else frozenset(eligible_devices)
         self.delivery_lifetime = delivery_lifetime
         self.all_activated = all_activated
+        self.gateway_id = gateway_target(gateway_id)
+
+    def gateway_binding(self, trust):
+        return '' if self.gateway_id == PRIMARY_GATEWAY else self.gateway_id + ':' + trust['gateway']
+
+    def challenge_purpose(self, purpose, trust):
+        binding = self.gateway_binding(trust)
+        return purpose + ':' + binding if binding else purpose
 
     def _enroll(self, database, device, public, wg, trust, now):
         if self.all_activated:
@@ -348,12 +389,13 @@ class RestrictedReadiness:
                 expiry = min(now + CHALLENGE_TTL, row['expires'] if row['expires'] is not None else trust['expires_at'], trust['expires_at'])
                 stage = 'challenge_store'
                 database.execute('INSERT INTO challenges VALUES (?,?,?,?,?,?,?,0)',
-                                 (digest, device, public_identity, wireguard_public_key, 'restricted', None, expiry))
+                                 (digest, device, public_identity, wireguard_public_key,
+                                  self.challenge_purpose('restricted', trust), None, expiry))
                 database.execute('INSERT INTO restricted_challenges VALUES (?,?,?,?)',
                                  (digest, row['revision'], row['family'], expiry))
                 if request_id is not None:
                     stage = 'correlation_store'
-                    readiness_receipts.challenge(database, request_id, digest, device, now)
+                    readiness_receipts.challenge(database, request_id, digest, device, now, self.gateway_binding(trust))
                 stage = 'commit'
         except (Rejected, ChallengeUnavailable):
             raise
@@ -374,7 +416,8 @@ class RestrictedReadiness:
             row = self._grant(database, device, now)
             challenge = database.execute('SELECT c.*, r.revision, r.family FROM challenges c '
                                          'JOIN restricted_challenges r ON c.nonce=r.nonce WHERE c.nonce=?', (digest,)).fetchone()
-            if (challenge is None or challenge['used'] or challenge['expires'] <= now or challenge['purpose'] != 'restricted'
+            if (challenge is None or challenge['used'] or challenge['expires'] <= now
+                    or challenge['purpose'] != self.challenge_purpose('restricted', trust)
                     or challenge['device'] != device or challenge['public'] != proof['public_identity']
                     or challenge['wg'] != proof['wireguard_public_key'] or row['public'] != proof['public_identity']
                     or row['wg'] != proof['wireguard_public_key'] or row['family'] != trust['family']

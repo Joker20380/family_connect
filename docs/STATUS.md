@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**3 November FLEET-BOOTSTRAP-2 — second-node MESH explicitly selected, IN PROGRESS.**
+Owner confirms the separately supplied token and asks to finish the integration.
+Correction: AMS2 already passed real MESH/reboot rehearsal; its temporary runtime was
+retired, not rejected as incapable. Separate publisher input remains in private custody.
+Read-only AMS2 check: ordinary AWG/TCP active,0 restarts; permanent MESH service absent.
+First integration slice now passes265 backend/HTTP/relay/native checks,2 optional
+environment skips: bounded node-targeted readiness, signed distinct gateway binding,
+shared identity/entitlement/CRL and node-bound challenge/import acknowledgements. Legacy
+requests and primary storage remain compatible. This is SOURCE ONLY, not a working
+production second MESH. Fresh permanent runtime, coordinated renewal/revocation/fencing,
+isolated client caches/routing and exact new Android delivery remain mandatory gates.
+No production writes/restarts, token transmission, new invitations or public artifacts.
+Android111/catalog6, Windows0.2.16/catalog12 and Linux public0.2.11 are unchanged;
+owner Linux stays0.2.12~l03.2.13. Do not expose an unqualified MESH2 choice.
+[Current scope, tests and remaining gates](releases/2026-11-03-second-nl-mesh.md).
+
 **3 November Android node picker — source/runtime checks PASS, NOT DISTRIBUTED.**
 Owner defers the isolated Telegram symptom, then reports Android still shows the legacy
 assigned-NL choice alongside Amsterdam1/2. The Linux-only correction had not reached
