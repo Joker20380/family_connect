@@ -79,6 +79,8 @@ def verify_android_catalog(raw, expected, legacy_raw, public_key, now):
                 'minimum_supported_version', 'mandatory_after')
     if any(type(data.get(field)) is not int for field in integers):
         raise ValueError('Invalid Android integer field')
+    if type(data.get('min_sdk', 31)) is not int or not 26 <= data.get('min_sdk', 31) <= 10000:
+        raise ValueError('Invalid Android minimum SDK')
     if (data['schema'] != 1 or data['channel'] != 'android-field' or
             data['package'] != 'com.familyconnect.app.friends' or data['abi'] != 'arm64-v8a' or
             data['signer_fingerprint'] != '67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a' or

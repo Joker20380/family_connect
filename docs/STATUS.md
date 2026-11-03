@@ -1,22 +1,24 @@
 # Текущее состояние / Current state
 
-**3 November — Android update incident OPEN (St Petersburg).** Owner reports
-download100% followed by “download or verification failed”; Android confirmed,
-owner identifies Huawei nova3 and tentatively Android8.1/API27; exact installed
-OS/ABI/beta still unverified. On8.1, public110 is incompatible, including browser
-installation. Manufacturer specifications confirm this model shipped with8.1.
-Compatibility assessment only: shared app minimum and native build targets are
-API26, while public Friends overrides to31; lowering the release floor alone is
-not runtime acceptance. No legacy implementation or release started.
-Read-only diagnosis takes priority over
-the queued fleet continuation. Public110/catalog5 signatures, full HTTPS APK
-56,221,032bytes/SHA256, server file and package metadata agree. Android15 parses
-the same signed APK with both `.apk` and updater `.part` suffixes. Confirmed
-compatibility gap:110 requires Android12/API31, but discovery checks only ARM64
-and package, not OS; an incompatible archive produces the same generic failure.
-This is a possible cause, not confirmed on the reported phones. One initial HTTPS
-download timed out; the full repeat passed, not regional-network acceptance.
-No client changes, release, installation or production writes. Android110/sequence5,
+**3 November — Android update incident OPEN; compatibility source candidate.**
+Owner authorizes restoring support for the reported Huawei nova3/likely Android8.1;
+actual handset OS/ABI/installed beta remain unverified. Repository history and retained
+signed beta65 confirm minimum26, same package and product certificate. Public107
+introduced the Friends minimum31. On an actual API27 emulator, the package parser
+accepts65 and rejects110: browser installation cannot solve that SDK mismatch.
+Existing client restored to a candidate minimum27, not a separate app or downgrade.
+Updater checks signed APK-derived `min_sdk` before download, preserves all signature/
+hash/version guards and separates verified transfer from APK checking. Android8–9
+voice uses existing Codec2 with peer confirmation; Opus recording remains10+.
+Local395 JVM/60 Python PASS; lint0 errors,57 warnings. API27 final UI/update/audio
+selection17 PASS/5 explicit skips, storage roundtrip and separate-process synthetic
+in-place reinstall/recovery PASS. Same candidate API35 selection19 PASS/4 skips.
+API27 native transport lifecycle is added to CI alongside35, but exact-source CI,
+ARM64/MESH acceptance and a real product-signed old-to-new upgrade are still pending.
+Only disposable x86_64 CI-signed candidate APKs built/installed; source still code110,
+NOT publishable under that immutable version. No production/signing/catalog writes.
+Public110/catalog5 signatures, full HTTPS bytes and server hash match; regional
+network health and affected-phone recovery are not proven. Android110/sequence5,
 Windows0.2.16/sequence12, public Linux0.2.11 and owner Linux0.2.12~l03.2.13 unchanged.
 [Incident evidence, safe workaround and remaining checks](releases/2026-11-03-android-update-incident.md).
 

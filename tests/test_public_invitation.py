@@ -93,9 +93,15 @@ def test_android_discovery_matches_signature_legacy_and_reviewed_bytes():
     {'package': 'com.other.app'}, {'abi': 'x86_64'}, {'channel': 'other'}, {'signer_fingerprint': 'a' * 64},
     {'expires_at': 150}, {'issued_at': 151}, {'expires_at': 100 + 91 * 86400},
     {'minimum_supported_version': 111}, {'mandatory_after': 201},
+    {'min_sdk': None}, {'min_sdk': True}, {'min_sdk': '27'}, {'min_sdk': 25}, {'min_sdk': 10001},
     {'url': 'https://example.invalid/file.apk'}, {'size': 150_000_001}, {'sha256': '../file'},
 ])
 def test_android_rejects_wrong_binding_or_lease_even_when_signed(changes):
     raw, legacy, public = android_fixture(changes)
     with pytest.raises(ValueError):
         verify_android_catalog(raw, raw, legacy, public, 150)
+
+
+def test_android_signed_sdk_is_optional_for_old_catalogs_and_bound_for_new_ones():
+    raw, legacy, public = android_fixture({'min_sdk': 27})
+    assert verify_android_catalog(raw, raw, legacy, public, 150)[0]['min_sdk'] == 27

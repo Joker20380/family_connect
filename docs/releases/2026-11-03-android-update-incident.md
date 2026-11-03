@@ -2,13 +2,18 @@
 
 ## Scope and status
 
-**OPEN; read-only initial diagnosis, not a fix or rollout.** The owner reports that
+**OPEN; local compatibility source candidate, not a public fix or rollout.** The owner reports that
 Android users in St Petersburg reach100% and then see “Не удалось скачать или
 проверить обновление”. Their Android OS, installed beta and exact failing exception
-are not available. This incident takes priority over the queued fleet continuation.
+were initially unavailable; the follow-up identifies Huawei nova3, probably Android8.1.
+Exact installed OS/ABI/beta still require readback. This incident takes priority over
+the queued fleet continuation. The owner subsequently authorized compatibility work
+and requested checking earlier compatible builds; see the implementation section below.
 
-No source/runtime/catalog changes, signing, installation, user-data access, production
-writes or service restarts. Android public/invitation110, signed catalog sequence5;
+Initial investigation made no source/runtime changes. The subsequent source candidate
+is built and installed only on disposable emulators, without product signing, user-data
+access, public catalog changes, production writes or service restarts.
+Android public/invitation110, signed catalog sequence5;
 Windows0.2.16/sequence12; public Linux0.2.11, owner-installed0.2.12~l03.2.13 unchanged.
 
 ## Verified observations
@@ -37,7 +42,7 @@ Windows0.2.16/sequence12; public Linux0.2.11, owner-installed0.2.12~l03.2.13 unc
   repeat succeeded, the latter in21.95s. Do not erase those failures or infer that
   the St Petersburg route is healthy from this workstation's successful repeat.
 
-## Source findings and unresolved cause
+## Initial source findings and unresolved cause
 
 `AppUpdateUi.download` catches transfer, disk/sync/rename and APK verification errors
 under one generic message. `AppUpdate.receive` reports100% when the expected byte
@@ -52,7 +57,7 @@ Other possibilities, including installed signer mismatch, local storage failure 
 transfer failure, have not been excluded on those phones. Do not remove checksum,
 certificate or version checks, lower SDK requirements, or republish110 speculatively.
 
-## Safe workaround and next checks
+## Initial safe workaround and next checks
 
 For Android12+ ARM64, download the already-published
 [signed110 APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta110.apk)
@@ -114,3 +119,78 @@ updates. Standard Opus recording separately requires API29 in the current source
 full voice parity must be adapted/qualified or explicitly limited, not assumed.
 Prefer one compatible APK if dependency gates permit. No client code/version,
 catalog, production state or rollback state changes in this assessment.
+
+## Authorized compatibility implementation and historical proof
+
+This section supersedes the assessment-only status above, not its retained evidence.
+The owner authorized implementation, then correctly recalled the older compatible
+build. We restore the existing application; no separate package, downgrade or new
+identity is required.
+
+- Retained beta65: `com.familyconnect.app.friends`, code65, minimum26/Android8.0,
+  target35, SHA256 `dfbdb5352b8c707fb77ff3d7392d8217f898aa8e999b6a0f52fad8172185778e`.
+  `apksigner` verifies the same product certificate as110. Historical source includes
+  minimum26; commit `37d16edf522bd485788c2bb507b6b86e92ff9465` introduces public107's
+  Friends minimum31. Private owner106 was already31; this is not a claim that every
+  intervening private build supported8.0.
+- A disposable Android8.1/API27 emulator runs Android's actual archive parser against
+  both immutable signed APKs:65 returns the expected package/code/minimum and one
+  signer;110 returns null. This reproduces the compatibility failure without claiming
+  to have inspected the affected Huawei or installed ARM64 APKs on x86_64.
+- Candidate Friends minimum is27, scoped to the reported8.1 device, not a new promise
+  of8.0 or32-bit support. No transport, identity, enrollment or server policy changes.
+- New signed catalog payloads carry `min_sdk` derived from the verified APK's actual
+  `aapt dump badging` `sdkVersion` value. Missing legacy metadata conservatively means31.
+  Discovery/download/verification refuse unsupported SDKs without weakening package,
+  Ed25519/APK signer, checksum, size, anti-rollback or downgrade checks. Transfer stays
+  below100% until length/SHA verification; archive checking has a separate UI state.
+  Read-only metadata extraction against the real signed65 also passes; no key is loaded.
+- Android8–9 recording uses the existing native Codec2 path (default3200bit/s), not an
+  unsupported Opus encoder. Existing explicit radio choices and peer-support consent
+  remain. Opus recording requires10+; modern defaults are unchanged. RU/EN explain this.
+
+### Local qualification, failures and limitations
+
+All APKs here are disposable **CI/debug-signed x86_64 source candidates**, still
+code110/`0.1.18-beta110`, never product releases. Native audio libraries are reused
+from the retained accepted110 debug artifact, with local hash evidence. No private
+signing key, user profiles or handset are used.
+
+- Friends JVM:395 tests PASS. Focused release/catalog/source Python:60 tests PASS.
+  Friends assemble and lint PASS; lint reports0 errors and57 warnings.
+- API27 final UI/update/audio selection:22 cases,17 PASS/5 explicit skips. Includes
+  startup/navigation/settings/routes, notification channels/privacy, voice UI,
+  native Codec2 encode/decode/playback/capture and APK-verification rejection paths.
+  Skips: existing active-device background delivery, unsupported Opus recording and
+  three opt-in live/product-signed updater checks. None is counted as acceptance.
+- API27 storage roundtrip PASS. Separate-process prepare → force-stop → same-version
+  `adb install -r` → recover PASS, preserving synthetic protected identity/journal/
+  outbox and recovering an interrupted AtomicFile write. Recovery uses a different
+  process and cleans the fixture. This is not beta65→new product-signed upgrade proof.
+- API35 same candidate UI/update/audio/storage selection:23 cases,19 PASS/4 explicit
+  skips (active-device delivery and the three opt-in updater checks). Modern Opus
+  capture/playback passes. Both emulators are stopped; synthetic evidence remains local.
+- Initial API27 runs exposed two test-only assumptions: AtomicFile uses `.bak` rather
+  than modern `.new`, and WindowInspector is API29+. Tests now assert recovery on both
+  implementations and inspect resumed Activity windows. No assertion is removed to
+  mask product failure; repeated storage/UI checks pass. Early failure logs retained.
+- Reviewed source hash pins are updated only for these updater/voice/resource changes;
+  accepted UI/MESH reference guards remain. CI adds API27 native transport lifecycle,
+  storage/control conformance and Friends tests **in addition to**, not instead of35,
+  preserving separate logs/screenshots. This new exact-source CI has not yet passed.
+
+### Remaining release gate and rollback
+
+Pending: exact-source Android platform CI including API27 native transport/control,
+ARM64 restricted/MESH runtime qualification, and a product-signed old-to-new in-place
+upgrade preserving identity/data. Actual Huawei/region field recovery remains unknown;
+local emulator UI/audio checks are not VPN/production acceptance. An eventual release
+must use a new version greater than110, exact downloaded/verified CI artifacts, offline
+signing and catalog sequence greater than5, plus corresponding guides/public readback.
+Never distribute these CI-signed APKs or replace110's immutable bytes.
+
+No rollout or runtime rollback is performed: installed/public/invitation versions and
+catalogs stay as listed above. Source rollback can revert this bounded patch without
+modifying stored identities or production; a future public rollback must be a higher
+version, never uninstall/clear data or downgrade the catalog. Private logs, screenshots,
+APKs and native hashes stay ignored under `state-client-build/android81-20261103/`.

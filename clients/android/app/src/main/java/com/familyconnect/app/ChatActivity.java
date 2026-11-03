@@ -492,7 +492,6 @@ public final class ChatActivity extends LocalizedActivity {
     }
     private boolean startVoice(){
         if(!visible||busy||peer==null||thread==null||!screen.equals("conversation")||recordingVoice||voiceSending)return false;
-        if(android.os.Build.VERSION.SDK_INT<29){notice.setText(R.string.chat_voice_unsupported);return false;}
         if(checkSelfPermission(android.Manifest.permission.RECORD_AUDIO)!=android.content.pm.PackageManager.PERMISSION_GRANTED){requestPermissions(new String[]{android.Manifest.permission.RECORD_AUDIO},81);return false;}
         int selected=RadioSettings.mode(this);String confirmation="peer-"+peer.get("address").getAsString();
         if(selected!=16&&!RadioSettings.preferences(this).getBoolean(confirmation,false)){

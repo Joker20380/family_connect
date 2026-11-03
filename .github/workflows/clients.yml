@@ -103,6 +103,26 @@ jobs:
         run: python3 pilot/android-awg/report_ci.py
       - name: Confirm control conformance on Android runtime
         run: python3 pilot/android-awg/report_control_ci.py
+      - name: Preserve Android 15 runtime evidence before legacy acceptance
+        run: |
+          mkdir -p android-runtime-matrix/api35
+          cp android-*.log android-ci-summary.json android-control-storage-result.json android-runtime-matrix/api35/
+          cp -R clients/android/app/build/outputs/androidTest-results/connected android-runtime-matrix/api35/
+      - name: Android 8.1 transport lifecycle and Friends compatibility
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 27
+          arch: x86_64
+          target: default
+          disable-animations: true
+          script: |
+            bash -o pipefail -c 'python3 -u pilot/android-awg/run.py 2>&1 | tee android-legacy-emulator-runner.log'
+            bash -o pipefail -c 'python3 -u pilot/android-awg/friends_ci.py --legacy 2>&1 | tee android-legacy-friends-runtime.log'
+      - name: Publish bounded Android 8.1 runtime summary
+        if: always()
+        run: python3 pilot/android-awg/report_ci.py
+      - name: Confirm control conformance on Android 8.1 runtime
+        run: python3 pilot/android-awg/report_control_ci.py
       - name: Build pinned restricted Android native
         shell: bash
         run: |
@@ -127,7 +147,7 @@ jobs:
         if: always()
         with:
           name: FamilyConnect-Android-ui
-          path: android-ci-ui/*.png
+          path: android-ci-ui/**/*.png
           if-no-files-found: warn
       - uses: actions/upload-artifact@v4
         if: always()
@@ -138,6 +158,8 @@ jobs:
             android-awg-runtime.log
             android-emulator-runner.log
             android-friends-runtime.log
+            android-legacy-*.log
+            android-runtime-matrix/
             clients/android/app/build/outputs/androidTest-results/connected/**/*.xml
           if-no-files-found: warn
       - uses: actions/upload-artifact@v4

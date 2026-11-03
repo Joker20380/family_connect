@@ -7,6 +7,7 @@
     <string name="chat_local_only">Локальная история · доставка не настроена</string>
     <string name="radio_title">ГОЛОСОВОЙ ПРОФИЛЬ</string>
     <string name="radio_normal">Обычный · Opus</string>
+    <string name="radio_legacy_notice">На Android 8–9 голос записывается в Codec2; по умолчанию — 3200 бит/с. Отправляйте только контактам с подтверждённой поддержкой Codec2. Для записи Opus нужен Android 10 или новее.</string>
     <string name="radio_notice">«Рация» — цифровой Codec2, не аналоговый канал. Экспериментальный режим: только для контактов с подтверждённой поддержкой Codec2. По умолчанию — Opus.</string>
     <string name="radio_confirm">Контакт поддерживает Codec2</string>
     <string name="radio_confirm_body">Убедитесь, что клиент получателя поддерживает Codec2. Это не меняет identity или проверку доверия контакту.</string>

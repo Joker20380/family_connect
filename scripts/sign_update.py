@@ -35,8 +35,10 @@ def android_payload(args, now):
     badging=subprocess.check_output([args.aapt,'dump','badging',str(path)],text=True)
     expected=f"package: name='com.familyconnect.app.friends' versionCode='{code}' versionName='{args.version}'"
     if not badging.startswith(expected) or 'application-debuggable' in badging:raise ValueError('APK identity')
+    sdk=re.findall(r"^sdkVersion:'([^']*)'$",badging,re.MULTILINE)
+    if len(sdk)!=1 or not re.fullmatch(r'[0-9]{1,5}',sdk[0]) or not 26<=int(sdk[0])<=10000:raise ValueError('APK minimum Android SDK')
     return dict(schema=1,channel='android-field',sequence=args.sequence,package='com.familyconnect.app.friends',abi='arm64-v8a',
-        version=args.version,version_code=code,url=f'https://185.251.89.19:8443/downloads/{name}',size=path.stat().st_size,
+        version=args.version,version_code=code,min_sdk=int(sdk[0]),url=f'https://185.251.89.19:8443/downloads/{name}',size=path.stat().st_size,
         sha256=hashlib.sha256(path.read_bytes()).hexdigest(),signer_fingerprint=ANDROID_SIGNER,
         minimum_supported_version=args.minimum_supported_code,mandatory_after=args.mandatory_after,
         release_notes='FIELD release with private local diagnostics; restricted access remains individually admitted.',issued_at=now,expires_at=now+90*86400)

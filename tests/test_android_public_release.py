@@ -26,7 +26,7 @@ def test_android_changes_do_not_start_desktop_suites():
 def test_public_release_keeps_provisioning_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
     assert 'versionCode 110' in gradle and "versionName '0.1.18-beta110'" in gradle
-    assert "withBuildType('friends')) { builder -> builder.minSdk = 31 }" in gradle
+    assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
     assert 'verifyFriendsRestrictedInputs' in gradle
@@ -75,13 +75,26 @@ def test_load_screenshots_export_only_from_disposable_emulator():
     helper = (ROOT / 'pilot/android-awg/friends_ci.py').read_text()
     assert 'os.environ.get("GITHUB_ACTIONS") != "true"' in helper
     assert 'if not serial.startswith("emulator-"):' in helper
-    assert 'for name in ("dashboard-cpu-load.png", "server-row-cpu-load.png", "dashboard-failed-controls.png", "server-amsterdam-1.png", "server-amsterdam-2.png"):' in helper
+    assert 'for name in ("dashboard-cpu-load.png", "server-row-cpu-load.png", "dashboard-failed-controls.png", "server-amsterdam-1.png", "server-amsterdam-2.png", "android-compatibility-voice.png"):' in helper
     assert '["adb", "-s", serial, "pull"' in helper
     assert '"-Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true"' in helper
     assert helper.index('"pull"') < helper.index('finally:') < helper.index('"uninstall"')
     workflow = (ROOT / '.github/workflows/clients.yml').read_text()
     assert 'name: FamilyConnect-Android-ui' in workflow
-    assert 'path: android-ci-ui/*.png' in workflow
+    assert 'path: android-ci-ui/**/*.png' in workflow
+
+
+def test_android81_acceptance_preserves_modern_gates_and_native_lifecycle():
+    workflow = (ROOT / '.github/workflows/clients.yml').read_text()
+    assert 'api-level: 35' in workflow and 'api-level: 27' in workflow
+    assert workflow.count('python3 -u pilot/android-awg/run.py 2>&1 | tee ') == 2
+    assert workflow.count('run: python3 pilot/android-awg/report_control_ci.py') == 2
+    assert 'android-runtime-matrix/api35' in workflow
+    assert "bash -o pipefail -c 'python3 -u pilot/android-awg/friends_ci.py --legacy 2>&1 | tee android-legacy-friends-runtime.log'" in workflow
+    helper = (ROOT / 'pilot/android-awg/friends_ci.py').read_text()
+    assert 'if args.legacy and sdk != 27:' in helper
+    assert 'if sdk >= 33:' in helper
+    assert 'AndroidCompatibilityRuntimeTest' in helper
 
 
 def test_emulator_runner_failures_remain_fatal_and_are_retained(tmp_path):
@@ -95,7 +108,8 @@ def test_emulator_runner_failures_remain_fatal_and_are_retained(tmp_path):
     module_spec.loader.exec_module(reporter)
     (tmp_path / 'android-emulator-runner.log').write_text('subprocess.TimeoutExpired: bounded synthetic log capture\n')
     (tmp_path / 'android-friends-runtime.log').write_text('subprocess.CalledProcessError: synthetic UI runner\n')
-    assert len(reporter.report(tmp_path)['hints']) == 2
+    (tmp_path / 'android-legacy-friends-runtime.log').write_text('subprocess.CalledProcessError: synthetic API27 runner\n')
+    assert len(reporter.report(tmp_path)['hints']) == 3
 
 
 @pytest.mark.parametrize('states', [
@@ -159,10 +173,18 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'FriendsAccessAndroid.java': '8ee37ad8f38e6413cdb8b32f6f6b76e3dcdff609bcb6a1e3a7032b6088327b35',
         'FriendsConfigurationVault.java': '4d76d775ddf03fd6892e66152f75629ee4825d618de37d613255f60cb94d5fec',
     }
-    reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection}
+    reviewed_android81 = {
+        'AppUpdate.java': '45aa84d5195cd74095523af61dc28f8d5a3c132e2172dc08604066d6ad95b31e',
+        'AppUpdateUi.java': '716ef54432385e932717dd34ce2c5c0d7acc644f2c5fe568c74b4de0abe71046',
+        'ChatActivity.java': '34aec6a30af77ece7753ee65ac592fd97a2fb3af8d19721de3edfb14e623e488',
+        'RadioSettings.java': 'dcda8f1f9e8e326642e738323f93b51e197623b08470fb977d3dc9ddec46c022',
+    }
+    reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81}
     reviewed_resources = {
-        'clients/android/app/src/main/res/values-ru/strings.xml': 'a011acd236eaeb6acb87bfc74f856789444d098af169c7e53ac7a64c6b769349',
-        'clients/android/app/src/main/res/values/strings.xml': 'fc7d672391101b79eb8da36c2a5498993c893a4cf0268f789c0f793646da4ab6',
+        'clients/android/app/src/main/res/values-ru/strings.xml': 'd46ebfadc2f6814a9db5ca8bc0835cd500b615eda0ad4cf76a6b042bd8e7f294',
+        'clients/android/app/src/main/res/values/strings.xml': '53f68508b47e50d7e7b4554b3eb93cfbb03380b6ee8056befa134996c2308135',
+        'clients/android/app/src/main/res/values-ru/exit_radio.xml': 'bb5198a35cf336c3b364bb5ecd65285a948614a4f60b3d1434cec0e7d9b7608b',
+        'clients/android/app/src/main/res/values/exit_radio.xml': 'f0147662d5ca508fba482cca46906a2198b2f7f4ae72d692a61631123ad07404',
     }
     changes = {'clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java',

@@ -164,6 +164,8 @@
     <string name="update_available">Version %1$s is available · %2$d MB</string>
     <string name="update_downloading">Downloading · %1$d%%</string>
     <string name="update_checking">Checking for updates…</string>
+    <string name="update_verifying">Checking the downloaded app and its signature…</string>
+    <string name="update_android_unsupported">This update requires a newer Android version. Your installed app has not been changed.</string>
     <string name="update_cancelled">Cancelled. You can try again.</string>
     <string name="update_unsupported">This update is for the ARM64 test app.</string>
     <string name="update_current">You have the latest version.</string>

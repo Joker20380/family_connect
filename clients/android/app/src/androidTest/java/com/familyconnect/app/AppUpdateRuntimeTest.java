@@ -28,7 +28,7 @@ public class AppUpdateRuntimeTest {
         android.content.pm.PackageInfo info=context().getPackageManager().getPackageInfo(context().getPackageName(),0);
         MessageDigest digest=MessageDigest.getInstance("SHA-256");try(InputStream in=new FileInputStream(file)){byte[] b=new byte[65536];int n;while((n=in.read(b))!=-1)digest.update(b,0,n);}
         String json="{\"schema\":1,\"package\":\"com.familyconnect.app.friends\",\"abi\":\"arm64-v8a\",\"version_code\":"+info.versionCode+",\"version\":\""+info.versionName+"\",\"size\":"+file.length()+",\"sha256\":\""+AppUpdate.hex(digest.digest())+"\",\"url\":\""+AppUpdate.BASE+"/downloads/FamilyConnect-Test-"+info.versionName+".apk\"}";
-        return AppUpdate.parse(json.getBytes(StandardCharsets.UTF_8));
+        return AppUpdate.parse(json.replace("\"schema\":1","\"schema\":1,\"min_sdk\":"+info.applicationInfo.minSdkVersion).getBytes(StandardCharsets.UTF_8));
     }
     @Test public void verifiesInstalledSignerAndRejectsDowngradeAndInvalidArchive()throws Exception{
         Context c=context();File source=new File(c.getApplicationInfo().sourceDir);AppUpdate update=metadata(source);

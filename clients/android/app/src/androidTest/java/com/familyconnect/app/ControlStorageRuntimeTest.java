@@ -60,7 +60,7 @@ public class ControlStorageRuntimeTest {
             // Android AtomicFile must retain the previous base after an interrupted write.
             AtomicFile disk=new AtomicFile(file("journal"));
             try(FileOutputStream pending=disk.startWrite()){pending.write(new byte[]{1,2,3});pending.getFD().sync();}
-            assertTrue(new File(file("journal")+".new").exists());
+            assertTrue("Interrupted write must retain recovery material",new File(file("journal")+".new").exists()||new File(file("journal")+".bak").exists());
         }
     }
     private void recover()throws Exception{
@@ -69,6 +69,7 @@ public class ControlStorageRuntimeTest {
             assertEquals(1000,before.get("last_now").getAsLong());
             assertEquals(1,before.getAsJsonArray("outbox").size());
             assertFalse("Interrupted temporary file retained",new File(file("journal")+".new").exists());
+            assertFalse("Recovered backup retained",new File(file("journal")+".bak").exists());
             ControlTransaction core=new ControlTransaction(journal,NO_APPLY,()->1000);
             assertEquals("IDLE",core.recover());
             assertEquals(before,journal.read());

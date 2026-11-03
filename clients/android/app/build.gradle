@@ -87,7 +87,7 @@ android {
     }
 }
 androidComponents {
-    beforeVariants(selector().withBuildType('friends')) { builder -> builder.minSdk = 31 }
+    beforeVariants(selector().withBuildType('friends')) { builder -> builder.minSdk = 27 }
     onVariants(selector().withBuildType('friends')) { variant ->
         variant.packaging.jniLibs.keepDebugSymbols.add('**/libfc_restricted.so')
     }

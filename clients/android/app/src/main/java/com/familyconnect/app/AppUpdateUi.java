@@ -29,14 +29,14 @@ final class AppUpdateUi {
     private void act(){if(busy)return;if(ready!=null){install();return;}if(candidate==null)check();else download();}
     private long installedCode()throws Exception{PackageInfo p=activity.getPackageManager().getPackageInfo(activity.getPackageName(),0);return code(p);}
     private static long code(PackageInfo p){return Build.VERSION.SDK_INT>=28?p.getLongVersionCode():p.versionCode;}
-    private void check(){busy=true;cancelled=false;message=R.string.update_checking;render();worker.execute(()->{
+    private void check(){candidate=null;busy=true;cancelled=false;message=R.string.update_checking;render();worker.execute(()->{
         try{android.content.SharedPreferences prefs=activity.getSharedPreferences("app-updates",Context.MODE_PRIVATE);
             AndroidUpdateManifest manifest=AndroidUpdateManifest.verify(AppUpdate.fetchManifest(),System.currentTimeMillis()/1000,prefs.getLong("sequence",0),prefs.getString("digest",""));
             if(!prefs.edit().putLong("sequence",manifest.sequence).putString("digest",manifest.digest).commit())throw new IOException("Update state");
-            AppUpdate found=manifest.update;long current=installedCode();boolean supported=Arrays.asList(Build.SUPPORTED_ABIS).contains("arm64-v8a")&&activity.getPackageName().equals("com.familyconnect.app.friends");post(()->{busy=false;if(cancelled){message=R.string.update_cancelled;}else if(!supported){message=R.string.update_unsupported;}else if(found.code<=current){message=R.string.update_current;}else{candidate=found;message=R.string.update_available;if(foreground)notice(manifest.required(current,System.currentTimeMillis()/1000));}foreground=false;render();});}
+            AppUpdate found=manifest.update;long current=installedCode();boolean supported=Arrays.asList(Build.SUPPORTED_ABIS).contains("arm64-v8a")&&activity.getPackageName().equals("com.familyconnect.app.friends");post(()->{busy=false;if(cancelled){message=R.string.update_cancelled;}else if(!supported){message=R.string.update_unsupported;}else if(found.code<=current){message=R.string.update_current;}else if(!found.supportsSdk(Build.VERSION.SDK_INT)){message=R.string.update_android_unsupported;}else{candidate=found;message=R.string.update_available;if(foreground)notice(manifest.required(current,System.currentTimeMillis()/1000));}foreground=false;render();});}
         catch(Exception e){post(()->{busy=false;message=cancelled?R.string.update_cancelled:R.string.update_check_failed;render();});}
     });}
-    private void download(){busy=true;cancelled=false;percent=0;message=R.string.update_downloading;render();AppUpdate update=candidate;worker.execute(()->{
+    private void download(){if(!candidate.supportsSdk(Build.VERSION.SDK_INT)){candidate=null;message=R.string.update_android_unsupported;render();return;}busy=true;cancelled=false;percent=0;message=R.string.update_downloading;render();AppUpdate update=candidate;worker.execute(()->{
         File part=null;HttpsURLConnection connection=null;
         try{
             part=File.createTempFile("update-",".part",activity.getCacheDir());connection=AppUpdate.open(update.url);
@@ -44,13 +44,14 @@ final class AppUpdateUi {
             try(InputStream in=connection.getInputStream();FileOutputStream out=new FileOutputStream(part)){
                 update.receive(in,out,p->{if(cancelled||closed)throw new InterruptedIOException();post(()->{percent=p;render();});});out.getFD().sync();
             }
-            if(cancelled||closed)throw new InterruptedIOException();verifyApk(activity,part,update,installedCode());
+            if(cancelled||closed)throw new InterruptedIOException();post(()->{message=R.string.update_verifying;render();});verifyApk(activity,part,update,installedCode());
             File target=new File(activity.getCacheDir(),"update-"+update.sha256+".apk");if(!part.renameTo(target))throw new IOException();part=null;
             post(()->{busy=false;ready=target;message=R.string.update_ready;render();});
         }catch(Exception e){post(()->{busy=false;message=cancelled?R.string.update_cancelled:R.string.update_download_failed;render();});}
         finally{if(connection!=null)connection.disconnect();if(part!=null)part.delete();}
     });}
     static void verifyApk(Context context,File file,AppUpdate update,long installed)throws Exception{
+        if(!update.supportsSdk(Build.VERSION.SDK_INT))throw new SecurityException("Android SDK requirement");
         PackageManager pm=context.getPackageManager();int flags=Build.VERSION.SDK_INT>=28?PackageManager.GET_SIGNING_CERTIFICATES:PackageManager.GET_SIGNATURES;
         PackageInfo apk=pm.getPackageArchiveInfo(file.getAbsolutePath(),flags),own=pm.getPackageInfo(context.getPackageName(),flags);
         if(apk==null||!context.getPackageName().equals(apk.packageName)||code(apk)!=update.code||code(apk)<=installed||!update.version.equals(apk.versionName))throw new SecurityException("APK identity");

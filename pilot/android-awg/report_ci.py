@@ -28,7 +28,8 @@ def report(root):
                         frames=[clean(frame) for frame in frames]))
     hints = []
     for name in ('android-tcp-runner.log', 'android-awg-runtime.log',
-                 'android-emulator-runner.log', 'android-friends-runtime.log'):
+                 'android-emulator-runner.log', 'android-friends-runtime.log',
+                 'android-legacy-emulator-runner.log', 'android-legacy-friends-runtime.log'):
         path=root/name
         if not path.is_file(): continue
         lines=path.read_text(errors='replace').splitlines()

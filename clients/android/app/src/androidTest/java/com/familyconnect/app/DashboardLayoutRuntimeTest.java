@@ -30,6 +30,11 @@ public class DashboardLayoutRuntimeTest {
         assumeTrue(InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName().endsWith(".friends"));
     }
 
+    private java.util.List<View> activityWindows(){
+        java.util.List<View> windows=new java.util.ArrayList<>();
+        for(Activity activity:ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED))windows.add(activity.getWindow().getDecorView());
+        return windows;
+    }
     private void bounds(View root,View view){
         if(view.getVisibility()!=View.VISIBLE)return;
         if(view instanceof ScrollView){
@@ -229,15 +234,13 @@ public class DashboardLayoutRuntimeTest {
             findButton(sample,"➤").performClick();assertEquals("Send preserves original token text","Привет :)",sent.get());
             for(int height:new int[]{512,320}){int width=TerminalUi.dp(activity,320),pixels=TerminalUi.dp(activity,height);sample.measure(View.MeasureSpec.makeMeasureSpec(width,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(pixels,View.MeasureSpec.EXACTLY));sample.layout(0,0,width,pixels);Rect composerBounds=new Rect();sample.composer.getDrawingRect(composerBounds);sample.offsetDescendantRectToMyCoords(sample.composer,composerBounds);assertTrue("Composer fits resized viewport",composerBounds.bottom<=pixels&&composerBounds.top>=0);if(height==512)save(activity,sample,width,pixels,"conversation-synthetic.png");}
             sample.setForeground(false);
-            if(android.os.Build.VERSION.SDK_INT>=29){
-                Button settings=findButton(root,activity.getString(R.string.dashboard_settings_short));assertNotNull(settings);settings.performClick();
-            }
+            Button settings=findButton(root,activity.getString(R.string.dashboard_settings_short));assertNotNull(settings);settings.performClick();
         });
-        if(android.os.Build.VERSION.SDK_INT>=29){
+        {
             SystemClock.sleep(400);
             instrument.runOnMainSync(()->{
                 FriendsActivity activity=found.get();
-                for(View window:android.view.inspector.WindowInspector.getGlobalWindowViews()){
+                for(View window:activityWindows()){
                     if(window==activity.getWindow().getDecorView()&&window.isShown()&&window.getWidth()>0){
                         save(activity,window,window.getWidth(),window.getHeight(),"settings-native.png");
                         Button close=findButton(window,activity.getString(R.string.dashboard_status));if(close!=null)close.performClick();
@@ -251,7 +254,7 @@ public class DashboardLayoutRuntimeTest {
             SystemClock.sleep(400);
             instrument.runOnMainSync(()->{
                 FriendsActivity activity=found.get();boolean captured=false;
-                for(View window:android.view.inspector.WindowInspector.getGlobalWindowViews()){
+                for(View window:activityWindows()){
                     RouteMapView visibleMap=findMap(window);
                     if(window==found.get().getWindow().getDecorView()&&window.isShown()&&visibleMap!=null){
                         assertTrue("Route must occupy the full viewport",window.getHeight()>=activity.findViewById(android.R.id.content).getHeight());
@@ -268,7 +271,7 @@ public class DashboardLayoutRuntimeTest {
             SystemClock.sleep(400);
             instrument.runOnMainSync(()->{
                 FriendsActivity activity=found.get();
-                for(View window:android.view.inspector.WindowInspector.getGlobalWindowViews()){
+                for(View window:activityWindows()){
                     RouteMapView visibleMap=findMap(window);
                     if(window==found.get().getWindow().getDecorView()&&window.isShown()&&visibleMap!=null){
                         assertTrue("Tapping NL must display region information",containsText(window,activity.getString(R.string.route_preview,activity.getString(R.string.gateway_netherlands))));
@@ -300,7 +303,7 @@ public class DashboardLayoutRuntimeTest {
         SystemClock.sleep(700);
         instrument.runOnMainSync(()->{
             boolean routeFound=false;
-            for(View window:android.view.inspector.WindowInspector.getGlobalWindowViews()){
+            for(View window:activityWindows()){
                 RouteMapView visibleMap=findMap(window);
                 if(window==found.get().getWindow().getDecorView()&&window.isShown()&&visibleMap!=null){assertTabs(window,found.get(),2);findButton(window,found.get().getString(R.string.dashboard_settings_short)).performClick();routeFound=true;}
             }
@@ -309,7 +312,7 @@ public class DashboardLayoutRuntimeTest {
         SystemClock.sleep(400);
         instrument.runOnMainSync(()->{
             boolean settingsFound=false;
-            for(View window:android.view.inspector.WindowInspector.getGlobalWindowViews()){
+            for(View window:activityWindows()){
                 Button settings=findButton(window,found.get().getString(R.string.dashboard_settings_short));
                 if(window.isShown()&&settings!=null&&settings.isSelected()){assertTabs(window,found.get(),3);findButton(window,found.get().getString(R.string.dashboard_status)).performClick();settingsFound=true;}
             }

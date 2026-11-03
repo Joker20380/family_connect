@@ -7,6 +7,7 @@
     <string name="chat_local_only">Local history · delivery is not configured</string>
     <string name="radio_title">VOICE PROFILE</string>
     <string name="radio_normal">Normal · Opus</string>
+    <string name="radio_legacy_notice">On Android 8–9, voice recording uses Codec2; the default is 3200 bit/s. Send only to peers whose Codec2 support you have confirmed. Opus recording requires Android 10 or newer.</string>
     <string name="radio_notice">Radio uses digital Codec2, not an analogue channel. Experimental: send only to peers whose Codec2 support you have confirmed. Opus remains the default.</string>
     <string name="radio_confirm">This contact supports Codec2</string>
     <string name="radio_confirm_body">Confirm support on the recipient’s client before sending Radio audio. This does not change their identity or trust verification.</string>

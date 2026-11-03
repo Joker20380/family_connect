@@ -9,15 +9,19 @@ guards, user identities/data and all published versions. Initial read-only diagn
 PASS for full public bytes/catalog/signer/server hash and Android15 archive parsing;
 not a reproduction on the affected phones. Confirmed missing pre-download API31
 compatibility gate is a hypothesis for this incident, not the established cause.
-Owner follow-up confirms old Android and asks for a legacy-support effort estimate,
-not a new release. Shared minimum/native compiler targets26 versus Friends31 make
-backward compatibility a bounded investigation, not necessarily a new application;
-actual native imports, lifecycle, update and feature behavior still require testing.
-Model now reported: Huawei nova3, probably Android8.1/API27. Assess API27 explicitly;
-do not carry the earlier Android10/11 effort estimate over unchanged. Installed
-OS/ABI/beta are still unverified; direct110 installation cannot solve API27
-incompatibility. Next diagnostic gate: API27 native/API/lifecycle and in-place-update
-compatibility, with standard voice recording's API29 requirement kept explicit.
+Owner subsequently authorizes compatibility work and points to earlier builds.
+Retained signed65 is minimum26 with the same package/certificate; public107 raised
+Friends to31. API27 package-parser reproduction accepts65 and rejects110. No fork
+or downgrade is needed; actual handset OS/ABI/beta remain unverified. Completed
+bounded source step: candidate minimum27, signed APK-derived SDK preflight, verified
+download progress and existing Codec2 fallback below29 with peer confirmation.
+Local395 JVM/60 Python PASS; lint0 errors/57 warnings; API27 UI/update/audio17 PASS/
+5 skips, protected storage roundtrip and synthetic reinstall/recovery PASS; API35
+19 PASS/4 skips. Additive API27 CI retains existing35/native/control gates.
+Next gate for this incident: exact-source platform CI and ARM64 native/MESH/lifecycle
+qualification, then a new immutable version and product-signed preserved-data upgrade;
+current source/debug candidate remains code110 and must never replace published110.
+Standard Opus recording still requires29; no voice parity or handset recovery claim.
 Distinguish SDK/archive/signer from transfer/storage failure. Completion
 requires relevant regression/runtime acceptance and, for a new APK, exact platform
 CI/artifact/offline-signing/publication gates plus actual delivery evidence. Do not

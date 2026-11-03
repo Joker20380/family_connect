@@ -17,11 +17,12 @@ def test_android_signed_metadata_checks_artifact_and_signer(tmp_path, monkeypatc
     def output(command, **kwargs):
         if command[0] == 'apksigner':
             return f'Signer #1 certificate SHA-256 digest: {sign_update.ANDROID_SIGNER}\n'
-        return "package: name='com.familyconnect.app.friends' versionCode='59' versionName='0.1.18-beta59'"
+        return "package: name='com.familyconnect.app.friends' versionCode='59' versionName='0.1.18-beta59'\nsdkVersion:'27'\ntargetSdkVersion:'35'\n"
     monkeypatch.setattr(subprocess, 'check_output', output)
     data = sign_update.android_payload(args, 1000)
     assert data['minimum_supported_version'] == 1 and data['mandatory_after'] == 0
     assert data['version_code'] == 59 and data['size'] == 2048
+    assert data['min_sdk'] == 27
     args.minimum_supported_code = 60
     with pytest.raises(ValueError):
         sign_update.android_payload(args, 1000)
@@ -37,6 +38,20 @@ def test_publisher_rejects_unsigned_catalog():
     spec.loader.exec_module(module)
     with pytest.raises((KeyError, ValueError)):
         module.verify_signed(json.dumps({'schema': 1}).encode(), {})
+
+
+@pytest.mark.parametrize('sdk_line', ['', "sdkVersion:'25'\n", "sdkVersion:'27'\nsdkVersion:'31'\n", "sdkVersion:'preview'\n", "sdkVersion:'27'\nsdkVersion:'preview'\n"])
+def test_android_signing_refuses_missing_or_ambiguous_sdk(tmp_path, monkeypatch, sdk_line):
+    args = SimpleNamespace(version='0.1.18-beta111', sequence=6, minimum_supported_code=1,
+                           mandatory_after=0, artifacts=tmp_path, apksigner='apksigner', aapt='aapt')
+    (tmp_path / 'FamilyConnect-Test-0.1.18-beta111.apk').write_bytes(b'a' * 2048)
+    def output(command, **kwargs):
+        if command[0] == 'apksigner':
+            return f'Signer #1 certificate SHA-256 digest: {sign_update.ANDROID_SIGNER}\n'
+        return "package: name='com.familyconnect.app.friends' versionCode='111' versionName='0.1.18-beta111'\n" + sdk_line
+    monkeypatch.setattr(subprocess, 'check_output', output)
+    with pytest.raises(ValueError, match='minimum Android SDK'):
+        sign_update.android_payload(args, 1000)
 
 
 def test_public_manifest_and_export_have_no_private_controls():

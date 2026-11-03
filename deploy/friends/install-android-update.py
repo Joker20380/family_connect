@@ -12,6 +12,7 @@ def verify_signed(raw, legacy, previous=None):
     anchor=base64.b64decode('0NdiJ/7kjveUMEEFNr7or8tMZNQHHzNq4rrfzp6/6i0=')
     Ed25519PublicKey.from_public_bytes(anchor).verify(base64.b64decode(envelope['signature'],validate=True),b'family-connect/android-update/v1\0'+payload)
     data=json.loads(payload);now=int(time.time())
+    if type(data.get('min_sdk',31)) is not int or not 26<=data.get('min_sdk',31)<=10000:raise ValueError('signed Android SDK')
     if any(data.get(key)!=legacy[key] for key in ('schema','package','abi','version_code','version','url','size','sha256')):raise ValueError('legacy/signed mismatch')
     if data['channel']!='android-field' or data['signer_fingerprint']!='67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a':raise ValueError('signed identity')
     if not data['issued_at']<=now<data['expires_at']<=data['issued_at']+90*86400:raise ValueError('signed lease')
