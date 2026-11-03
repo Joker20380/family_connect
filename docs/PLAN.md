@@ -3,13 +3,15 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November19:51UTC MESH2: permanent canonical secondary installed, inactive.**
-Fresh distinct leaf, root-controlled profile/locator and final service account installed;
-real pinned RU→AMS2 RPC, DAC and forced-command rejection checks PASS. No service start,
-provider credential installation or first-node/writer/selector/client-publication change.
-Continue the selected task with coordinated pair→fleet writer integration, fresh genuine
-directories and live acceptance before selector/immutable Android delivery. Installation
-is not activation or completion. [Evidence](releases/2026-11-03-second-nl-mesh.md#permanent-canonical-secondary-installation).
+**3 November20:27UTC MESH2: common fleet writer COMMITTED; live data-plane positive PASS.**
+Permanent distinct AMS2 runtime is active, with retained separate publisher credential,
+genuine directory and coordinated RU/AMS1/AMS2 renewal. Provider bootstrap/Family TLS,
+4 HTTPS/3 DNS probes and expected AMS2 egress PASS; wrong-node refresh rejects. Immediate
+repeat exposed retained-lease/challenge timeout; cleanup/reconnect acceptance remains open.
+One explicit secondary-only cleanup restart was performed; do not call the failure fixed.
+Secondary boot enablement, backend readiness overlay, selector and Android delivery remain.
+Backend artifact is built only; public111/catalog6 unchanged. Continue this selected task,
+not a queued successor. [Evidence](releases/2026-11-03-second-nl-mesh.md#permanent-fleet-activation-and-live-data-plane).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **Export24 read-only server correlation remains partial.** Registration/invitation
@@ -17,7 +19,7 @@ not revoked; online snapshot absent. Historical HTTP journal/request correlation
 unfinished due SSH timeouts; do not attribute failure to Android16 or a server restart.
 [Readback and remaining check](releases/2026-11-03-krasnodar-diagnostics.md#export24-server-correlation).
 
-**3 November18:47UTC MESH2 continuation — runtime preparation, not activation.**
+**Earlier preparation checkpoint —3 November18:47UTC (superseded by live state above).**
 The accepted canonical/P1 gateway now has a bounded slow-link source projection, retaining
 four-member policy, chat and profile custody instead of replacing it with generic main.
 Baseline binary reproduced; candidate deterministic.20 Python checks and production-tag

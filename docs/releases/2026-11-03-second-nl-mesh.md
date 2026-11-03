@@ -1,5 +1,8 @@
 # FLEET-BOOTSTRAP-2 — second Amsterdam MESH integration
 
+Current: [permanent fleet activation and live data-plane](#permanent-fleet-activation-and-live-data-plane).
+Earlier checkpoints below retain their original timing, not simultaneous active NEXTs.
+
 ## Permanent canonical secondary installation
 
 3 November19:51UTC: **INSTALLED / INACTIVE**, not a production acceptance PASS.
@@ -558,6 +561,88 @@ Linux public0.2.11 and owner-installed0.2.12~l03.2.13 unchanged. No APK or clien
 changed, no release tag/catalog/invitation publication, no production writes/restarts.
 Existing [111 delivery/rollback](2026-11-03-android-update-incident.md#beta111-publication-and-readback)
 and [ordinary admission](2026-11-02-second-nl-ordinary-live.md) remain in force.
-Current slice needs no runtime rollback because it is not installed. A later rollout
+This earlier source slice needed no runtime rollback because it was not installed. A later rollout
 must retain the previous exact API package, additive migration receipt and renewal
 configuration; do not restore product DB or roll published catalogs backwards.
+
+## Permanent fleet activation and live data-plane
+
+**3 November20:27UTC — active runtime and committed writer, acceptance still incomplete.**
+Permanent AMS2 uses the distinct canonical identity, isolated Python3.12 runtime and
+production-preserving slow-link gateway documented above. Its root-only `provider.env`
+now holds the independently supplied retained publisher token. Original local material
+was labelled `DISPOSABLE_FLEET_REHEARSAL` and remains unchanged; permanent use follows
+the owner's subsequent explicit request to use that retained token and finish MESH2,
+not reuse of a retired rehearsal permit, gateway identity or certificate. No primary
+provider environment was copied. Provider conference/seed creation succeeded.
+
+The existing RU writer was quiesced before switching to exactfcb3116 schema2 fleet
+configuration. AMS1's fixed helper now uses the same reviewed renewal source with its
+existing canonical profile/locator. Its old launcher, gateway executable and identity
+remain unchanged. AMS2 has an independent pinned forced route. RU carries the secondary
+signed delegation and a genuine directory fetched over that route. The new renewal and
+directory unit drop-ins select one common writer and two explicitly bound directory
+routes; both timers were restored active. The disabled legacy sync timer stays disabled.
+
+`mesh2-first-fleet-20261103` reached **COMMITTED**, `commit_decided=true`, no first cause,
+after acquiring/quiescing RU, NL and NL2. It renewed the short initial secondary leaf;
+the common CRL remained floor27259 because it was not due. Follow-up fleet evaluation
+was NOOP,0 writes/restarts, with roughly9123s headroom. HTTP and primary MESH underwent
+one controlled stop/start for that transaction; ordinary AWG/TCP were not restarted.
+The secondary bootstrap is currently active but still disabled for boot. No automatic
+pair rollback is safe after a committed fleet checkpoint: preserve common authority,
+CRL/profile floors, both identities and committed transaction state.
+
+Actual private synthetic device-role probe, issued by the existing RU issuer in place
+without product registration/grant/assignment writes, used the real authenticated seed
+directory and then an unavailable ordinary control address. Provider VP8 bootstrap,
+Family admission and bootstrap-close-before-dedicated all succeeded. Dedicated MESH
+passed4 HTTPS streams and3 DNS probes. A second positive probe after the explicitly
+recorded cleanup restart also verified Cloudflare's observed public egress exactly
+equals the second Amsterdam node. Only the equality boolean is in the public receipt;
+raw trace, ephemeral rooms, identity/profile and client key stay in ignored private state.
+Wrong-gateway seed refresh rejects without creating a cache. Forced SSH command override,
+sudo argument override and publisher-write-to-canonical-profile probes also reject.
+
+**Failures and remaining cleanup gate:** an immediate follow-up after the first successful
+probe failed `bootstrap_protocol_rejected`; gateway evidence is challenge-stage
+`context_deadline` while the same synthetic identity still owned its previous lease.
+The CLI bootstrap path has no direct room-cancel call; however production closure also
+requires investigation, so this is not declared a harness-only cause or repaired behavior.
+Normal broker lease lifetime is10min; ownership must not be bypassed/preempted to make
+the test green. One secondary-only restart explicitly cleared the synthetic session
+after writer quiescence, then timers were restored. Its first preflight found an active
+directory oneshot and stopped; readback confirmed it finished before the corrected retry.
+Two direct-broker probe attempts returned `control_rejected` with no created lease:
+port18444 serves the authenticated seed directory, not the direct room-control API.
+The subsequent correct seed-fallback egress probe passed. Expiry/resource cleanup and
+normal reconnect still need independent acceptance, without service restarts.
+
+Two installation checks stopped safely: the strict atomic helper refused `provider.env`
+under the intentional01770 publisher directory, before writing it; reconciled absence
+and installed only a root0600 file with O_EXCL/fsync. AMS1 post-write validation imported
+a snapshot module absent from the renewal API capsule; byte-exact helper/config readback,
+unchanged profile and real forced RPC/fleet transaction subsequently verified the change.
+Neither failure was erased or retried blindly.
+
+Backend candidate is **built, not installed**: SHA256
+`e2ed4ca6b41e134516a7fa33210cc71e80bc62c09efc370d56ecd4c6d4e6bfd9`,
+two reproducible builds, identical zip membership; only `control/friends/restricted.py`
+and `control/friends/readiness_receipts.py` differ from livefce2340 and match exacte7d2739.
+Every other member remains byte-identical, including paid/ordinary dispatch. CLI check
+passes. First focused run:100 PASS,3 optional skips,1 failure in the time-sensitive
+owner-product receipt test; it is retained for triage, not called a green suite.
+Unmodified repeat:101 PASS,3 optional skips. The fixture timestamps its receipt before
+constructing the observer; crossing a wall-clock second can violate its opened-at guard.
+No production time guard was relaxed and no unrelated runtime patch was applied.
+Additive `gateway_binding` migration, guarded activation and listener/product readiness
+remain pending. Do not restore a live product database as a code rollback.
+
+Android still111/catalog6; no new APK, version/tag/catalog or MESH picker activation.
+Public Windows0.2.16/catalog12 and Linux0.2.11 remain unchanged. Remaining selected work:
+cleanup/reconnect gate; backend migration/readiness acceptance; secondary boot enablement;
+Android selector/new-version CI including API27/API35, artifact verification, offline
+signing, immutable publication and public download/catalog readback. Operational recovery
+must keep the common writer or use its explicit fleet recovery; do not reinstate the old
+two-node writer against the committed three-node state. All private receipts are under
+`state-client-build/mesh2-cutover-20261103/` or root-only server staging, outside Git/CI.

@@ -1,16 +1,19 @@
 # Текущее состояние / Current state
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November19:51UTC — permanent AMS2 canonical custody installed, still inactive.**
-Distinct gateway leaf issued by the existing RU issuer in place; no issuer/private client
-key exported. Root-controlled profile/locator, isolated service account, pinned runtime,
-fixed snapshot/renewal route and disabled bootstrap unit installed. Real RU→AMS2 pinned
-SSH public inspection PASS; command override, sudo argument override and reader-write
-checks PASS. Initial install stopped on an overly restrictive newly-created tools-parent
-mode; corrected only that new parent and resumed, without starting services. AWG/TCP
-unchanged. No provider credential installed, primary runtime/writer/selector/catalog changed.
-Next: coordinated pair→fleet writer cutover and real provider/data-plane acceptance, then
-new immutable Android delivery. [Receipt](releases/2026-11-03-second-nl-mesh.md#permanent-canonical-secondary-installation).
+**3 November20:27UTC — permanent AMS2 MESH running; first common fleet renewal COMMITTED.**
+Fresh canonical identity and the retained separate publisher credential are installed;
+the RU/AMS1/AMS2 writer and two-directory synchronization are active. Primary gateway
+binary/identity and ordinary AWG/TCP are unchanged. Real provider bootstrap, dedicated
+Family TLS,4 HTTPS streams,3 DNS probes and expected AMS2 public egress PASS. Wrong-node
+seed refresh rejects. This is not completed rollout: immediate repeat after the first
+operator probe waited on its retained lease and failed at challenge timeout. One bounded
+secondary-only restart cleared that synthetic lease; later egress acceptance passed.
+Lease cleanup/reconnect acceptance remains open; do not label this a harness-only defect.
+The secondary unit is running but not enabled at boot. Backend readiness overlay built,
+not installed; Android111/catalog6 and client picker remain unchanged. Next: cleanup and
+backend acceptance, then qualified selector/immutable Android delivery.
+[Live receipt and rollback boundary](releases/2026-11-03-second-nl-mesh.md#permanent-fleet-activation-and-live-data-plane).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **3 November export24 server correlation — PARTIAL, cause still OPEN.** Second API36
@@ -19,7 +22,7 @@ Client18:29–18:34UTC fails before MESH; HTTP unit current activation18:35:46UT
 later, not proof of outage overlap. SSH follow-up timeouts block historical journal/
 request correlation. No production changes. [Readback](releases/2026-11-03-krasnodar-diagnostics.md#export24-server-correlation).
 
-**3 November18:47UTC MESH2 continuation — production gateway projection checked; not activated.**
+**Earlier preparation checkpoint —3 November18:47UTC (superseded by live state above).**
 The live gateway is the accepted canonical/P1 four-member source capsule, not generic main.
 The narrow slow-link projection preserves its admission, chat, identity and canonical-profile
 code, and retains performance instrumentation with the actual adaptive send window.
