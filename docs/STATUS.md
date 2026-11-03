@@ -24,6 +24,9 @@ latest coordinator-file read timed out and is not claimed. AMS2 active/boot-disa
 no operator restart in this slice. Public Android111/catalog6, Windows0.2.16 and Linux
 0.2.11 unchanged. Source CI47b76f4 carrier gates PASS, but Linux GUI has two selector
 expectation failures; full matrix is not green. No waiver or public delivery.
+Final secondary readback confirms the last synthetic session's resources closed at
+21:49:58 after `authorization_changed`, not immediate peer release. MESH PID554442,
+AWG6206/TCP6146 remain active with0 restarts. Source36ce713 pushed/remote-verified.
 [Evidence and rollback boundary](releases/2026-11-03-second-nl-mesh.md#idle-rtp-gap-source-correction).
 <!-- /MESH2 canonical installation 20261103 -->
 

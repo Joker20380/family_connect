@@ -20,6 +20,8 @@ until explained by evidence. Then backend readiness/migration, boot enablement,
 selector and immutable Android delivery with exact CI. Source47b76f4 full CI has two
 Linux selector-expectation failures; no gate may be called green or waived. Public111/
 catalog6 and gateway binaries unchanged. No ownership preemption or unrelated successor.
+Source36ce713 pushed/remote-verified. Final synthetic resources closed21:49:58 after
+authorization_changed with unchanged MESH/AWG/TCP PIDs; immediate-reconnect gate remains.
 [Evidence](releases/2026-11-03-second-nl-mesh.md#idle-rtp-gap-source-correction).
 <!-- /MESH2 canonical installation 20261103 -->
 

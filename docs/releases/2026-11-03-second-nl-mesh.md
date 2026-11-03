@@ -759,9 +759,13 @@ Final small RU readback: renewal/directory timers active/waiting, oneshots inact
 Result=success/ExecMainStatus0. A separate coordinator-file read timed out; retain the
 prior confirmed COMMITTED transaction, do not invent latest transaction evidence.
 AMS2 remains active/boot-disabled, backend overlay built-only, public versions unchanged.
-The last synthetic session's remote cleanup remains to be checked; do not claim it from
-the local process exit. Raw profiles, journals, watchdogs and source experiments remain
-private. Rollback stays a normal source revert plus explicit common-fleet recovery for
+Final secondary readback confirms the last synthetic session emits
+FAILED/authorization_changed21:49:58.581 followed by dedicated_resources_closed
+21:49:58.591. This is eventual remote cleanup, not immediate disconnect acceptance.
+MESH PID554442, AWG6206 and TCP6146 remain active with0 restarts; only MESH is
+boot-disabled. Source36ce71365e3393419073430eebf6824baed140be is pushed and remote main
+SHA verified. Raw profiles, journals, watchdogs and source experiments remain private.
+Rollback stays a normal source revert plus explicit common-fleet recovery for
 runtime changes; no product DB restore, old pair writer or identity cloning. Next is
 exact production projection/build/live cleanup acceptance, then backend/selector/Android
 release gates already listed above, not a different queued task.
