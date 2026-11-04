@@ -21,6 +21,10 @@ MESH lists exactly Amsterdam1/2; AWG/TCP and Auto retain their separate choices.
 Friends407 JVM PASS, lint0 errors/56 existing warnings, exact112 API27/API35 UI4/4 each.
 Android/public-release/challenge/orchestrator contracts61 PASS/0 skips. Sourcecd0a2f8 is
 pushed/remote-verified; exact112 CI41802908693 is IN_PROGRESS, desktop jobs correctly skipped.
+Follow-up09:06: disposable API27 CI-signed111→112 preserves UID/protected identity/journal;
+four upgrade/per-node storage phases PASS. Production receipt inventory has primary
+2 READY/1 native rejection and no secondary requests/ACKs since installation; not a
+secondary product PASS. No physical Android device is connected locally.
 Prior41734068017 transport-source CI is SUCCESS, not a112 release gate. Normal targeted
 client acceptance, qualified boot activation, ARM64 verification, offline
 signing and public publication remain. Public/invitation Android111/catalog6 is byte-identical;

@@ -17,8 +17,12 @@ Android target-specific READY/ACK is still unproven. Candidate112 now selects ei
 Amsterdam node, retaining mode-specific Auto/AWG/TCP behavior and separate caches.
 Local112 JVM412+407, contracts61, API27/API35 UI4+4 and lint PASS.
 Public/invitation111/catalog6 unchanged.
-Sourcecd0a2f8 is pushed/remote-verified; exact112 Android CI41802908693 is IN_PROGRESS;
-desktop jobs are scope-skipped. Next within this ID: finish exact112 API27/API35/native CI
+Sourcecd0a2f8 is pushed/remote-verified; exact112 Android CI41802908693 is IN_PROGRESS,
+desktop jobs are scope-skipped.
+API27 synthetic111→112 identity/journal/UID preservation and per-node restart checks PASS.
+Real secondary READY/ACK remains absent in read-only production inventory; no connected
+physical device and no operator-generated substitute. Product gate stays OPEN.
+Next within this ID: finish exact112 API27/API35/native CI
 and downloaded ARM64 verification, normal targeted product acceptance/qualified boot activation, existing-key
 offline signing, increasing catalog and immutable public/invitation readback. Prior CI
 41734068017 passed but must not stand in for exact112 CI. No unrelated successor or field
