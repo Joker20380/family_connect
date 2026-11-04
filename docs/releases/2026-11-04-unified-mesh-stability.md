@@ -54,6 +54,57 @@ exact three-line production delta; unchanged UI and other handler pins remain.
 Both real predecessor inventories and the narrow production projection also
 validate locally; committed materialization/builds follow the source checkpoint.
 
+## Exact common build and qualification
+
+Source checkpoint `a597d2ad203ccbb894df07c7fafdf33a71d40b12` is pushed and
+remote-SHA verified. The297-member common capsule has manifest SHA256
+`c0007c082072e2968598f62ff88f4b395d7c0a7ccc9fb1d5fdaed261255f8545`.
+Go1.26.1/CGO1, `fc_perf_diagnostic`, `-trimpath -buildvcs=false` reproduces the
+accepted secondary `5bcb32ea` exactly. Two common builds are byte-identical:
+`70e6c0fc1b920ad308e24667be94f674c34979dab6aa518e1a8194fff7c131b6`.
+
+Production-tag selections, with fresh disposable Family credentials where needed:
+
+| Gate | PASS test/subtest events | Skips |
+| --- | ---: | ---: |
+| Core ReliableStream/media/Family/broker/trace race |428|28|
+| Bootstrap race,3 repetitions excluding two inherited assertions |297|3|
+| Idle/ACK/loss/transient/RESET/cleanup race,10 repetitions |710|10|
+| Negative auth/ownership/deadline and real Python seed serialization,5 repetitions |75|0|
+| Mixed115 Family TLS and six paced links |12|0|
+| Mixed115 real Pion DTLS/RTP,3 repetitions |15|0|
+| Public113 native mixed Family/Pion,3 repetitions |27|0|
+| Candidate116 native mixed Family/Pion,3 repetitions |27|0|
+| Isolated root canonical-reader boundary,3 repetitions |75|0|
+
+Paced links exercise256/512/1000kbit/s,8/32-frame windows, asymmetric reverse rate,
+injected DATA loss and byte-exact262144-byte transfers in each direction. Mixed
+tests use exact published113 sourced2882cd, installed115 source86c5f9d and116
+sourcea597d2a, both endpoint directions. These are local-process protocol tests,
+not Android/provider acceptance. Canonical root tests run against synthetic
+temporary profiles on NL2, verify read/no-write boundaries, and remove the isolated
+harness; no production profile or service is altered by that check.
+
+Retained non-green evidence: first untagged suite has421 PASS/28 skips and two
+performance-export failures because the diagnostic build tag was omitted. The
+correct production-tag selection passes. The original ProductIdentity diagnostic
+assertions fail on both unchanged secondary and candidate (seven failure events
+each); negative authorization boundaries themselves pass. The inherited busy
+test's direct error equality remains timing-sensitive: candidate4/5 failures
+with the same wrapped `bootstrap_protocol_rejected` reason, predecessor first5/5
+passes; repeated predecessor evidence is retained separately. These tests are not
+silently relabelled PASS. No admission/error/retry policy is relaxed.
+Local root/live/provider/subprocess skips are not physical acceptance; separate
+root and paced/publication selections exercise their otherwise skipped gates.
+
+The identical binary is staged on both nodes; read-only preflight confirms exact
+old executable, locator/config pins, service-user execution and >10000s credential
+headroom. Services still run their old executables at this qualification checkpoint.
+Guarded common-writer pause, NL2 canary then NL1 activation and final readback follow.
+Android Client builds41905046530 is in progress on exacta597d2a. Readiness contract
+41905046756 passes; separate phase041905046579 and Linux control41905046527 fail.
+No whole-CI or Android release PASS is claimed.
+
 ## Android version boundary
 
 Candidate source becomes `0.1.18-beta116`/code116, retaining API27 compatibility,

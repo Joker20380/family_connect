@@ -1,14 +1,16 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
-**4 November — owner selects unified MESH on NL1/NL2; qualification IN PROGRESS.**
+**4 November — unified MESH gateway qualified; guarded activation NEXT.**
 20:05UTC readback confirms the old8769eadf/5bcb32ea runtime split. Seven production
 files differ: primary lacks secondary's adaptive retries/transient-ICE/RTP-gap/RESET
 improvements. Target is one canonical binary/hash for both nodes, not shared identities.
-Pinned reconciliation helper/previous helper tests59 PASS. Candidate Android116 source
-adds idle cleanup; not built/signed/installed/public. Owner115 last observed OFF;
-public113/catalog7 and desktops unchanged. No server mutation at this checkpoint.
-Continue exact shared build/compatibility/slow-link gates, guarded NL2→NL1 delivery,
+Sourcea597d2a pushed/verified. Common70e6c0fc build reproduces twice; production-tag
+race, public113/owner115/candidate116 mixed peers, six paced links and isolated root
+canonical gates pass, with inherited assertion failures retained separately.
+Same bytes staged/preflighted on both nodes; old runtimes still active. Android116
+CI41905046530 pending, not signed/installed/public. Owner115 last observed OFF;
+public113/catalog7 and desktops unchanged. Continue guarded NL2→NL1 delivery,
 independent equal-hash readback and qualified116/consented physical checks. Do not publish
 or claim stability from equal binaries. [Current gates/rollback](releases/2026-11-04-unified-mesh-stability.md).
 
