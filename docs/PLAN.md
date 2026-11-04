@@ -8,16 +8,18 @@ not an established HyperOS defect; no implementation/deployment authorized by th
 [Evidence and limits](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**4 November08:40UTC — FLEET-BOOTSTRAP-2 backend installed; Android112 candidate next release gate.**
+**4 November08:56UTC — FLEET-BOOTSTRAP-2 backend installed; Android112 candidate CI running.**
 Node-scoped HTTPe2ed4ca6 and empty-default `gateway_binding` migration are installed with
 all original rows/assignments/grants preserved; common-fleet writer restored/healthy.
 128 exact-package Python/native/nginx checks PASS; external rejection/readback PASS.
 MESH2 exact provider/reconnect gate remains accepted, active but boot-disabled; a normal
 Android target-specific READY/ACK is still unproven. Candidate112 now selects either MESH
 Amsterdam node, retaining mode-specific Auto/AWG/TCP behavior and separate caches.
-Local112 JVM412+407, API27/API35 UI4+4 and lint PASS. Public/invitation111/catalog6 unchanged.
-Next within this ID: committed112 platform/API27/API35/native CI and downloaded ARM64
-verification, normal targeted product acceptance/qualified boot activation, existing-key
+Local112 JVM412+407, contracts61, API27/API35 UI4+4 and lint PASS.
+Public/invitation111/catalog6 unchanged.
+Sourcecd0a2f8 is pushed/remote-verified; exact112 Android CI41802908693 is IN_PROGRESS;
+desktop jobs are scope-skipped. Next within this ID: finish exact112 API27/API35/native CI
+and downloaded ARM64 verification, normal targeted product acceptance/qualified boot activation, existing-key
 offline signing, increasing catalog and immutable public/invitation readback. Prior CI
 41734068017 passed but must not stand in for exact112 CI. No unrelated successor or field
 PASS, and no operator-generated receipt may substitute for a real product READY/ACK.

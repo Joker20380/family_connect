@@ -7,19 +7,22 @@ in that window. Packet receipt/old-room identity not proven. No changes by this 
 [Evidence](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**4 November08:40UTC — node-scoped MESH2 HTTP installed; Android112 candidate qualified locally.**
+**4 November08:56UTC — node-scoped MESH2 HTTP installed; Android112 candidate CI running.**
 HTTPe2ed4ca6 overlays only two exacte7d2739 modules on the accepted live package. Additive
 `gateway_binding` migration passes SQLite integrity and preserves all existing row values,
-accounts/grants/assignments. PID2156034 is active; ordinary services unchanged. Both signed
-nodes/shared CRL validate. Common writer resumes08:33:05 with three-node NOOP and unchanged
+accounts/grants/assignments. Final HTTP PID2174093 verifies the exact argv/hash; ordinary
+services are active. Both signed nodes/shared CRL validate. Common writer resumes08:33:05
+with three-node NOOP and unchanged
 maintenance inspection. External normal-TLS malformed/unknown/invalid-node rejection checks
 PASS; no real Android READY/ACK is claimed. MESH2 remains active/boot-disabled.
 Exact HTTP qualification128 PASS/0 skips includes native delivery and real isolated nginx.
 Android112/code112 is built only as a local CI-signed x86_64 test candidate, not distributed:
 MESH lists exactly Amsterdam1/2; AWG/TCP and Auto retain their separate choices. Debug412/
 Friends407 JVM PASS, lint0 errors/56 existing warnings, exact112 API27/API35 UI4/4 each.
-Prior41734068017 transport-source CI is SUCCESS, not a112 release gate. New-source CI,
-normal targeted client acceptance, qualified boot activation, ARM64 verification, offline
+Android/public-release/challenge/orchestrator contracts61 PASS/0 skips. Sourcecd0a2f8 is
+pushed/remote-verified; exact112 CI41802908693 is IN_PROGRESS, desktop jobs correctly skipped.
+Prior41734068017 transport-source CI is SUCCESS, not a112 release gate. Normal targeted
+client acceptance, qualified boot activation, ARM64 verification, offline
 signing and public publication remain. Public/invitation Android111/catalog6 is byte-identical;
 Windows and Linux versions unchanged. No new signing/tag/catalog or handset installation.
 [Rollout, candidate, failed fixture attempt and rollback](releases/2026-11-04-mesh2-android112.md).
