@@ -17,7 +17,23 @@ LIFECYCLE_SOURCE = 'f66b533831304136b72f2b9923483090dfcc4c2d'
 PATCH = 'deploy/friends/restricted/mesh-cleanup-gateway.patch'
 PATCH_SHA256 = '5bfa7380a98b5e892672ae0d36473b83a9cd3d5166989408d0be94db37d3897c'
 CHANGED = frozenset(('bootstrap/protocol.go', 'familysession/session.go', 'telemost/session.go'))
-TESTS = ('bootstrap/auth_test.go', 'telemost/head_loss_test.go', 'telemost/owned_lifetime_test.go')
+TESTS = ('bootstrap/auth_test.go', 'telemost/owned_lifetime_test.go')
+TEST_OVERLAY = 'telemost/head_loss_test.go'
+
+
+def head_loss_constructor(raw):
+    replacements = (
+        (b'fault string) (*headLossEndpoint, *headLossEndpoint) {\n\ttest.Helper()\n',
+         b'fault string, constructors ...func(context.Context, Config) (*Session, error)) (*headLossEndpoint, *headLossEndpoint) {\n'
+         b'\ttest.Helper()\n\tconstructor := New\n\tif len(constructors) > 0 {\n\t\tconstructor = constructors[0]\n\t}\n'),
+        (b'session, err := New(sessiontrace.With(ctx, trace), Config{RoomURL: "local-test"})',
+         b'session, err := constructor(sessiontrace.With(ctx, trace), Config{RoomURL: "local-test"})'),
+    )
+    for before, after in replacements:
+        if raw.count(before) != 1:
+            raise ValueError('Accepted head-loss test constructor mismatch')
+        raw = raw.replace(before, after)
+    return raw
 
 
 def accepted(source, baseline='secondary', manifest=None):
@@ -67,6 +83,7 @@ def materialize(source, output, ref, *, baseline='secondary', manifest=None, rep
     files = project(accepted(source, baseline, manifest), committed(repository, revision, PATCH))
     if baseline == 'primary':
         files[predecessor.VECTOR] = committed(repository, predecessor.TRANSPORT_SOURCE, predecessor.VECTOR)
+    files['carrier/' + TEST_OVERLAY] = head_loss_constructor(files['carrier/' + TEST_OVERLAY])
     for name in TESTS:
         files['carrier/' + name] = committed(repository, LIFECYCLE_SOURCE, 'carrier/' + name)
     receipt = dict(schema=1, source_commit=revision, lifecycle_source_commit=LIFECYCLE_SOURCE,
@@ -74,6 +91,7 @@ def materialize(source, output, ref, *, baseline='secondary', manifest=None, rep
                    accepted_manifest_sha256=predecessor.MANIFEST_SHA256 if baseline == 'primary' else MANIFEST_SHA256,
                    baseline_binary_sha256=predecessor.BASELINE_BINARY_SHA256 if baseline == 'primary' else BASELINE_BINARY_SHA256,
                    patch_sha256=PATCH_SHA256, changed_members=sorted(CHANGED), test_inputs=list(TESTS),
+                   test_overlays=[TEST_OVERLAY],
                    production_configuration='absent', operation_permit=None,
                    files={name: digest(raw) for name, raw in sorted(files.items())})
     output.mkdir(mode=0o700, parents=False, exist_ok=False)

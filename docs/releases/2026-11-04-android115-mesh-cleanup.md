@@ -61,7 +61,8 @@ mutation is issued by this inspection; paths/configuration are retained privatel
 
 The new projection pins each complete predecessor independently and applies only
 bootstrap/protocol.go, familysession/session.go and telemost/session.go lifecycle
-changes. It imports three test-only files from exactf66b533; existing P1 policy,
+changes. It imports two test-only files from exactf66b533 and adapts only the existing
+head-loss fixture constructor; existing P1 policy,
 diagnostic instrumentation, framing, performance behavior and canonical readers stay
 unchanged on each node. Primary is not silently upgraded to the secondary baseline.
 Both real inventories and three-file patch applications validate. The first dry patch
@@ -71,3 +72,11 @@ line was removed from the patch, not added to production. No candidate was deplo
 Projection/source-boundary tests34 PASS/0 skips. Exact committed materialization,
 baseline/candidate reproduction and production-tag runtime checks follow; this source
 checkpoint alone does not authorize claiming installation or physical acceptance.
+
+The first primary candidate builds reproducibly, but its Telemost tests fail to compile:
+importing the entire newer head-loss fixture references a framing constant absent from
+primary. Production code is not changed to satisfy that test. The corrected source
+projection preserves the predecessor fixture and applies only the constructor seam;
+the failed qualification and original source output remain retained, not deployed.
+Corrected projection/source-boundary checks35 PASS/0 skips; runtime qualification repeats
+from a new committed source output rather than modifying the failed private capsule.

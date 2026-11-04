@@ -13,6 +13,8 @@ unchanged; no unrelated successor or automatic public rollout.
 Canonical projection source gate: independently pin NL1/NL2 predecessors and preserve
 their different transport/performance policies;34 source checks pass. Exact candidate
 reproduction and production-tag qualification precede the guarded runtime step.
+Preserve each predecessor's test framing assumptions: corrected constructor-only test
+overlay passes35 source checks; the first primary test compile failure is retained.
 
 **Current selected continuation — FLEET-BOOTSTRAP-2 startup/cleanup source correction DONE.**
 Dependencies: accepted114 DNS candidate, paired owner/gateway readback and preserved

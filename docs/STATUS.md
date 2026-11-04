@@ -9,6 +9,8 @@ invitation/updater113/catalog7 unchanged; no server or phone mutation at this ch
 Read-only fleet inventory preserves distinct primary/secondary binary baselines;
 the narrow three-file canonical projection passes34 source checks. Builds, runtime
 delivery and physical acceptance remain pending; no generic-main gateway replacement.
+Test-fixture compatibility correction passes35 checks; retain the earlier compile
+failure and qualify fresh committed outputs before delivery.
 
 **4 November — selected MESH startup/cleanup source correction DONE; delivery OPEN.**
 One controlled114 reconnect fails at SEED_ADMISSION/DEADLINE. Exact old-session NL1

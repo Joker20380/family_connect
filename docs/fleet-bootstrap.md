@@ -9,8 +9,9 @@ Primary additionally requires `--accepted-manifest PRIVATE_MANIFEST`. The two pi
 predecessors differ: primary is the282-member canonical/P1 capsule (`f8ff5178…` binary),
 secondary is the293-member reset-repeat capsule (`566cbc96…`). Do not promote the
 secondary's performance changes onto primary as part of this lifecycle correction.
-Only bootstrap/session lifecycle sources change; three committed test inputs are
-imported separately. Both inventories, patch, immutable source refs and output custody
+Only bootstrap/session lifecycle sources change; two committed test inputs and a narrow
+test-constructor overlay preserve each predecessor's framing assertions. Inventories,
+patch, immutable source refs and output custody
 are checked; no configuration or operation permit is included. Qualify and reproduce
 each candidate independently before runtime delivery.
 [Selected115/runtime qualification](releases/2026-11-04-android115-mesh-cleanup.md).

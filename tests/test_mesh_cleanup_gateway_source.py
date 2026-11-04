@@ -7,6 +7,10 @@ import pytest
 
 from scripts import mesh_cleanup_gateway_source as source
 
+HEAD_LOSS = (b'func headLossPair(test *testing.T, ctx context.Context, head uint64, fault string) (*headLossEndpoint, *headLossEndpoint) {\n'
+             b'\ttest.Helper()\n'
+             b'\tsession, err := New(sessiontrace.With(ctx, trace), Config{RoomURL: "local-test"})\n}\n')
+
 
 @pytest.fixture
 def accepted(tmp_path, monkeypatch):
@@ -14,6 +18,8 @@ def accepted(tmp_path, monkeypatch):
     (directory / 'carrier').mkdir(parents=True)
     (directory / 'carrier/engine.go').write_bytes(b'package engine\n')
     (directory / 'carrier/policy.go').write_bytes(b'package policy\n')
+    (directory / 'carrier/telemost').mkdir()
+    (directory / 'carrier/telemost/head_loss_test.go').write_bytes(HEAD_LOSS)
     raw = json.dumps({'files': {name: source.digest(content)
                               for name, content in source.inventory(directory).items()}}).encode()
     (directory / 'source-manifest.json').write_bytes(raw)
@@ -31,7 +37,7 @@ def patch(monkeypatch):
 
 @pytest.mark.parametrize('change', ['extra', 'modified', 'missing', 'symlink', 'hardlink', 'fifo', 'manifest'])
 def test_predecessor_inventory_is_exact(accepted, change):
-    assert len(source.accepted(accepted)) == 2
+    assert len(source.accepted(accepted)) == 3
     member = accepted / 'carrier/engine.go'
     if change == 'extra':
         (accepted / 'extra.key').write_text('synthetic')
@@ -102,6 +108,15 @@ def test_reviewed_patch_and_imported_tests_are_narrow():
     assert not any(name.startswith(('roombroker/', 'cmd/')) for name in source.CHANGED)
 
 
+def test_head_loss_overlay_preserves_predecessor_framing_assertions():
+    marker = b'\nconst existingFrameTimeout = 123\n'
+    patched = source.head_loss_constructor(HEAD_LOSS + marker)
+    assert patched.endswith(marker) and b'constructor := New' in patched
+    assert b'reorderGapTimeout' not in patched
+    with pytest.raises(ValueError, match='constructor mismatch'):
+        source.head_loss_constructor(patched)
+
+
 def test_materialization_is_committed_private_and_exclusive(accepted, patch, monkeypatch, tmp_path):
     calls = []
     revision = 'a' * 40
@@ -117,6 +132,7 @@ def test_materialization_is_committed_private_and_exclusive(accepted, patch, mon
     assert calls == [(revision, source.PATCH)] + [(source.LIFECYCLE_SOURCE, 'carrier/' + name) for name in source.TESTS]
     assert receipt['operation_permit'] is None and receipt['production_configuration'] == 'absent'
     assert (output / 'carrier/policy.go').read_bytes() == b'package policy\n'
+    assert (output / 'carrier/telemost/head_loss_test.go').read_bytes() == source.head_loss_constructor(HEAD_LOSS)
     assert output.stat().st_mode & 0o777 == 0o700
     assert all(path.stat().st_mode & 0o777 == 0o600 for path in output.rglob('*') if path.is_file())
     with pytest.raises(FileExistsError):
