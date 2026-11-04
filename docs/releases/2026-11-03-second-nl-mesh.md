@@ -1001,3 +1001,7 @@ carrier contracts PASS but emulator/release stages still running at this checkpo
 No new-version CI, signing, public artifact or selector acceptance is claimed. Next is
 backend migration/readiness, client routing/storage live acceptance and qualified boot/
 selector activation, then immutable Android delivery under the existing release gates.
+
+4 November follow-up: node-scoped HTTP and additive migration are installed; Android112
+is a separate candidate, not a public release. See the
+[current rollout, qualification and remaining gates](2026-11-04-mesh2-android112.md).

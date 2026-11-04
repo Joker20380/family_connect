@@ -7,24 +7,22 @@ in that window. Packet receipt/old-room identity not proven. No changes by this 
 [Evidence](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November23:05UTC — exact bounded RESET retry installed on MESH2; three reconnects PASS.**
-Committed projectiond2c2a45 builds twice to566cbc96…b219. Production-tag race across
-seven packages, public111 Family/VP8 pairings and six paced asymmetric cases PASS.
-AMS2 alone now runs that exact gateway with its matching canonical locator; existing
-profile unchanged, AWG6206/TCP6146 unchanged. Common-fleet writer resumed, three-node
-evaluation NOOP with zero writes/restarts and no due maintenance. The first activation
-rolled back after an immediate executable-hash check; a fresh coordinated window uses
-bounded startup observation and verifies the exact running binary plus fresh seed.
-Three exact-carrier actual-provider runs pass Family TLS,4 HTTPS/3 DNS and AMS2 egress
-in42.200s/43.595s/37.986s. Each dedicated resource closes before the next connection;
-PID602868/NRestarts0 stays unchanged. Existing terminal mapping is gateway_session_failed
-on peer RESET, not graceful CLOSED. No takeover, identity reset or replay-floor change.
-This closes the exact CLI reconnect slice, not handset/product acceptance. MESH2 is still
-boot-disabled; backend overlay/migration, product readiness, selector and new immutable
-Android remain pending. Android111/catalog6, Linux and Windows public versions unchanged.
-Source CI41734068017: Linux/Windows/compatibility PASS; Android still in progress, not
-release acceptance. No new APK or public catalog was written.
-[Exact rollout, failed attempt and rollback](releases/2026-11-03-second-nl-mesh.md#exact-bounded-reset-runtime-and-reconnect-acceptance).
+**4 November08:40UTC — node-scoped MESH2 HTTP installed; Android112 candidate qualified locally.**
+HTTPe2ed4ca6 overlays only two exacte7d2739 modules on the accepted live package. Additive
+`gateway_binding` migration passes SQLite integrity and preserves all existing row values,
+accounts/grants/assignments. PID2156034 is active; ordinary services unchanged. Both signed
+nodes/shared CRL validate. Common writer resumes08:33:05 with three-node NOOP and unchanged
+maintenance inspection. External normal-TLS malformed/unknown/invalid-node rejection checks
+PASS; no real Android READY/ACK is claimed. MESH2 remains active/boot-disabled.
+Exact HTTP qualification128 PASS/0 skips includes native delivery and real isolated nginx.
+Android112/code112 is built only as a local CI-signed x86_64 test candidate, not distributed:
+MESH lists exactly Amsterdam1/2; AWG/TCP and Auto retain their separate choices. Debug412/
+Friends407 JVM PASS, lint0 errors/56 existing warnings, exact112 API27/API35 UI4/4 each.
+Prior41734068017 transport-source CI is SUCCESS, not a112 release gate. New-source CI,
+normal targeted client acceptance, qualified boot activation, ARM64 verification, offline
+signing and public publication remain. Public/invitation Android111/catalog6 is byte-identical;
+Windows and Linux versions unchanged. No new signing/tag/catalog or handset installation.
+[Rollout, candidate, failed fixture attempt and rollback](releases/2026-11-04-mesh2-android112.md).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **3 November export24 server correlation — PARTIAL, cause still OPEN.** Second API36

@@ -19,7 +19,7 @@ last8+first_failure через существующий `DiagnosticRing`; `scrip
 
 ## Android
 
-### Per-node MESH readiness — 3 November, source only
+### Per-node MESH readiness — Android112 candidate
 
 `RestrictedGateway` keeps the legacy primary wire contract and storage namespace,
 wraps secondary requests through the same HTTPS/relay routes, and checks the returned
@@ -31,18 +31,19 @@ Auto/chat paths continue using primary readiness. No cache-floor weakening or id
 reset. `RestrictedGatewayTest`, `RestrictedCacheTest` and the opt-in disposable
 `RestrictedGatewayStorageRuntimeTest` cover targeting, replay floors, process restart,
 cross-node ciphertext substitution and lost-file/key refusal on API27/API35.
-The picker remains unchanged until production MESH2/renewal acceptance; no new APK
-distribution or second-node traffic claim. [Current gates](../releases/2026-11-03-second-nl-mesh.md).
+The second gateway/common writer and node-scoped HTTP backend are installed. Android112
+exposes both MESH targets; it is not yet public or a handset traffic acceptance claim.
+[Current gates](../releases/2026-11-04-mesh2-android112.md).
 
-### Transport-specific gateway picker — 3 November, source only
+### Transport-specific gateway picker — Android112 candidate
 
-`GatewayPicker` defines separate explicit AWG/TCP nodes and country-based Auto/MESH
-choices. `FriendsActivity` keeps the last manual node across mode changes and recreation,
+`GatewayPicker` defines explicit AWG/TCP nodes plus Russia, two Amsterdam-only MESH nodes
+and country-based Auto choices. `FriendsActivity` retains the manual node across modes and recreation,
 without persisting a selection or connecting during initialization. `GatewayPickerTest`
 and `DashboardLayoutRuntimeTest` cover the model and real spinner callbacks on API27/35.
 Public beta111 still contains the previous four-entry picker; this source change does
 not alter installed APKs or add per-node load telemetry.
-[Source/runtime checks and delivery boundary](../releases/2026-11-03-android-node-picker.md).
+[Source/runtime checks and delivery boundary](../releases/2026-11-04-mesh2-android112.md).
 
 ### Android 8.1 compatibility release111 — 3 November
 

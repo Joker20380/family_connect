@@ -8,20 +8,20 @@ not an established HyperOS defect; no implementation/deployment authorized by th
 [Evidence and limits](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**3 November23:05UTC — FLEET-BOOTSTRAP-2 exact MESH2 reconnect gate PASS; product delivery pending.**
-Canonical projectiond2c2a45 is pushed/remote-verified and deployed to AMS2 as566cbc96…b219.
-Two identical builds, seven production-tag race packages, public111 Family/VP8 compatibility
-and six paced asymmetric cases PASS. Three actual-provider exact-carrier sessions pass
-Family TLS/HTTPS/DNS/AMS2 egress with prompt cleanup under unchanged PID602868. Common
-writer is resumed/healthy; AWG/TCP and private profile are unchanged. The guarded first
-activation rolled back; the separate corrected window verifies actual executable/seed.
-Next within this task: additive backend readiness migration and acceptance, client
-routing/storage live acceptance and qualified boot/selector activation, then new immutable
-Android with exact CI/API27/API35, offline signing and public readback. Do not substitute
-CLI evidence for handset/product proof or prototype evidence for the exact build. Android
-111/catalog6 stays public; no version bump or installer publication yet. CI41734068017
-Android is still in progress; scoped Linux/Windows/compatibility PASS. No unrelated successor.
-[Evidence and rollback](releases/2026-11-03-second-nl-mesh.md#exact-bounded-reset-runtime-and-reconnect-acceptance).
+**4 November08:40UTC — FLEET-BOOTSTRAP-2 backend installed; Android112 candidate next release gate.**
+Node-scoped HTTPe2ed4ca6 and empty-default `gateway_binding` migration are installed with
+all original rows/assignments/grants preserved; common-fleet writer restored/healthy.
+128 exact-package Python/native/nginx checks PASS; external rejection/readback PASS.
+MESH2 exact provider/reconnect gate remains accepted, active but boot-disabled; a normal
+Android target-specific READY/ACK is still unproven. Candidate112 now selects either MESH
+Amsterdam node, retaining mode-specific Auto/AWG/TCP behavior and separate caches.
+Local112 JVM412+407, API27/API35 UI4+4 and lint PASS. Public/invitation111/catalog6 unchanged.
+Next within this ID: committed112 platform/API27/API35/native CI and downloaded ARM64
+verification, normal targeted product acceptance/qualified boot activation, existing-key
+offline signing, increasing catalog and immutable public/invitation readback. Prior CI
+41734068017 passed but must not stand in for exact112 CI. No unrelated successor or field
+PASS, and no operator-generated receipt may substitute for a real product READY/ACK.
+[Current evidence and rollback](releases/2026-11-04-mesh2-android112.md).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **Export24 read-only server correlation remains partial.** Registration/invitation

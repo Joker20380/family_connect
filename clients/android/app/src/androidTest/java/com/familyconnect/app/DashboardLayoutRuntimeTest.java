@@ -65,7 +65,8 @@ public class DashboardLayoutRuntimeTest {
                     scenario.onActivity(activity->picker(activity,"transports").setSelection(transportIndex));
                     instrument.waitForIdleSync();SystemClock.sleep(200);instrument.waitForIdleSync();
                     scenario.onActivity(activity->{
-                        if(transportIndex==0||transportIndex==3)assertGatewayPicker(activity,"nl","nl","ru");
+                        if(transportIndex==0)assertGatewayPicker(activity,"nl","nl","ru");
+                        else if(transportIndex==3)assertGatewayPicker(activity,"nl-amsterdam-2","nl-amsterdam-1","nl-amsterdam-2");
                         else assertGatewayPicker(activity,"nl-amsterdam-2","nl-amsterdam-1","ru","nl-amsterdam-2");
                         assertEquals("nl-amsterdam-2",preferences.getString("gateway_id",""));
                     });
@@ -89,6 +90,22 @@ public class DashboardLayoutRuntimeTest {
                 scenario.onActivity(activity->{
                     assertGatewayPicker(activity,"nl-amsterdam-1","nl-amsterdam-1","ru","nl-amsterdam-2");
                     assertEquals("nl-amsterdam-1",preferences.getString("gateway_id",""));
+                    assertEquals(previousSession,ConnectionService.sessionId);
+                    picker(activity,"transports").setSelection(3);
+                });
+                instrument.waitForIdleSync();SystemClock.sleep(200);instrument.waitForIdleSync();
+                scenario.recreate();instrument.waitForIdleSync();
+                scenario.onActivity(activity->{
+                    assertGatewayPicker(activity,"nl-amsterdam-1","nl-amsterdam-1","nl-amsterdam-2");
+                    picker(activity,"countries").setSelection(1);
+                });
+                instrument.waitForIdleSync();SystemClock.sleep(200);instrument.waitForIdleSync();
+                scenario.recreate();instrument.waitForIdleSync();
+                scenario.onActivity(activity->{
+                    assertGatewayPicker(activity,"nl-amsterdam-2","nl-amsterdam-1","nl-amsterdam-2");
+                    assertEquals("telemost",preferences.getString("transport",""));
+                    assertEquals("nl",preferences.getString("country",""));
+                    assertEquals("nl-amsterdam-2",preferences.getString("gateway_id",""));
                     assertEquals(previousSession,ConnectionService.sessionId);
                 });
             }

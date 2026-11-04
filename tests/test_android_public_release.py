@@ -23,9 +23,9 @@ def test_android_changes_do_not_start_desktop_suites():
     assert not any(platforms(['docs/STATUS.md']).values())
 
 
-def test_public_release_keeps_provisioning_disabled_and_requires_native_provenance():
+def test_android112_candidate_keeps_provisioning_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 111' in gradle and "versionName '0.1.18-beta111'" in gradle
+    assert 'versionCode 112' in gradle and "versionName '0.1.18-beta112'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
@@ -193,8 +193,8 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
     reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81,
                          **reviewed_gateway_readiness, **reviewed_slow_link_recovery}
     reviewed_resources = {
-        'clients/android/app/src/main/res/values-ru/strings.xml': 'd46ebfadc2f6814a9db5ca8bc0835cd500b615eda0ad4cf76a6b042bd8e7f294',
-        'clients/android/app/src/main/res/values/strings.xml': '53f68508b47e50d7e7b4554b3eb93cfbb03380b6ee8056befa134996c2308135',
+        'clients/android/app/src/main/res/values-ru/strings.xml': 'e078961e19b6f89c952db8f06443e76d5c4eb1b239f2eff7f10f4684bf4ee0ad',
+        'clients/android/app/src/main/res/values/strings.xml': '01dc5642139e9836feb444f5c1b6d8023f362e729c88a00e2d17fe6b7e003656',
         'clients/android/app/src/main/res/values-ru/exit_radio.xml': 'bb5198a35cf336c3b364bb5ecd65285a948614a4f60b3d1434cec0e7d9b7608b',
         'clients/android/app/src/main/res/values/exit_radio.xml': 'f0147662d5ca508fba482cca46906a2198b2f7f4ae72d692a61631123ad07404',
     }

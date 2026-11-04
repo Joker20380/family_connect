@@ -1,5 +1,10 @@
 # Release distribution / Выпуски
 
+**4 November — Android112 candidate, not published.** The node-scoped MESH2 HTTP backend
+is installed;112 adds the two-node MESH picker. Local JVM and API27/API35 UI gates PASS,
+but exact release CI/signing/product acceptance remain pending. Public/invitation
+Android stays111/catalog6. [Current state and rollback](releases/2026-11-04-mesh2-android112.md).
+
 **3 November — Android111 and Windows0.2.16 published; Linux internal.13 owner-installed.**
 [Windows installer](https://github.com/Joker20380/family_connect/releases/download/windows-v0.2.16/FamilyConnect-Setup-0.2.16-pilot-unsigned.exe)
 adds Amsterdam1/2 for AWG/TCP; native CI, immutable release and public HTTPS hash

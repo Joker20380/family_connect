@@ -347,7 +347,7 @@ public final class FriendsActivity extends LocalizedActivity {
         Intent permission=VpnService.prepare(this);if(permission!=null)startActivityForResult(permission,11);else prepareConnect();
     }
     private void prepareConnect(){
-        if(ControlFriendsCatalog.explicit(country)&&!(transport.equals("awg")||transport.equals("tcp"))){detail.setText(R.string.gateway_ordinary_only);return;}
+        if(ControlFriendsCatalog.explicit(country)&&!GatewayPicker.manual(transport)){detail.setText(R.string.gateway_manual_only);return;}
         if(Build.VERSION.SDK_INT>=33&&checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=android.content.pm.PackageManager.PERMISSION_GRANTED){requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},12);return;}
         connectNow();
     }

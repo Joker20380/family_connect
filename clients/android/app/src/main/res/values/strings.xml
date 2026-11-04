@@ -41,7 +41,7 @@
     <string name="gateway_assigned">Netherlands · assigned</string>
     <string name="gateway_amsterdam_1">Amsterdam 1</string>
     <string name="gateway_amsterdam_2">Amsterdam 2</string>
-    <string name="gateway_ordinary_only">Choose AWG or TCP for a specific Amsterdam server. MESH uses a separate gateway.</string>
+    <string name="gateway_manual_only">Choose AWG, TCP or MESH for a specific Amsterdam server.</string>
     <string name="gateway_default">Default</string>
     <string name="gateway_unavailable">Receive a valid signed configuration through Reticulum first.</string>
     <string name="friends_access">Test by invitation · no expiry</string>
