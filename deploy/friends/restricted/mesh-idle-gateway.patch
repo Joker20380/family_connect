@@ -1,0 +1,49 @@
+diff --git a/reliablestream/engine.go b/reliablestream/engine.go
+index 36c8e85..e2ba972 100644
+--- a/reliablestream/engine.go
++++ b/reliablestream/engine.go
+@@ -73,6 +73,7 @@ type engine struct {
+ 	remoteWindow  int
+ 	remoteSize    int
+ 	started       time.Time
++	established   time.Time
+ 	lastOpen      time.Time
+ 	openAttempts  int
+ 	smoothedRTT   time.Duration
+@@ -158,6 +159,7 @@ func (state *engine) input(packet frame, now time.Time) ([]frame, error) {
+ 				state.observeRTT(now.Sub(state.lastOpen))
+ 			}
+ 			state.remote, state.remoteWindow, state.remoteSize = packet.source, packet.window, packet.payload
++			state.established = now
+ 			return []frame{state.opening(packet.source), state.ack()}, nil
+ 		}
+ 		if packet.window != state.remoteWindow || packet.payload != state.remoteSize {
+@@ -384,6 +386,15 @@ func (state *engine) tick(now time.Time) ([]frame, error) {
+ 		}
+ 		return nil, nil
+ 	}
++	if len(state.sent) == 0 {
++		lastACK := state.lastACK
++		if lastACK.IsZero() {
++			lastACK = state.established
++		}
++		if !lastACK.IsZero() && now.Sub(lastACK) >= state.config.MaxAge {
++			return nil, state.exhausted("RELIABLE_IDLE_TIMEOUT", nil, now)
++		}
++	}
+ 	var output []frame
+ 	if now.Sub(state.lastRefresh) >= state.config.RTO {
+ 		state.lastRefresh = now
+diff --git a/sessiontrace/trace.go b/sessiontrace/trace.go
+index 5492a5f..7e78df0 100644
+--- a/sessiontrace/trace.go
++++ b/sessiontrace/trace.go
+@@ -79,7 +79,7 @@ func Allowed(value, choices string) bool {
+ const Stages = "AUTHORIZED|ROOM_CREATION|DESCRIPTOR|GATEWAY_JOIN|SIGNALING|WEBSOCKET|ICE|PEER_CONNECTION|CARRIER|CARRIER_ACTIVITY|FAMILY_TLS|GATEWAY_SESSION|HEARTBEAT|LIVENESS|LOCAL_CLOSE|REMOTE_CLOSE|RECOVERY|CLEANUP"
+ const States = "STARTED|ESTABLISHED|ISSUED|TX|RX|FAILED|CLOSED|COMPLETED|ATTEMPTED|NOT_ATTEMPTED|new|checking|connecting|connected|completed|disconnected|failed|closed"
+ const CloseSources = "UNKNOWN|UPPER_CLOSE|PARENT_CANCELLED|PARENT_DEADLINE|RECEIVE_QUEUE_FULL|SUBSCRIBER_DISCONNECTED|PUBLISHER_DISCONNECTED|SIGNAL_WRITE|SIGNAL_READ|CONFERENCE_ENDED|SUBSCRIBER_NEGOTIATION|SUBSCRIBER_ICE_CONFIG|PUBLISHER_ICE_CONFIG|PUBLISHER_ANSWER|PUBLISHER_NEGOTIATION|ICE_PENDING_LIMIT|REMOTE_ICE|QUEUED_ICE|HEARTBEAT_WRITE|DATA_CHANNEL_WRITE|VP8_WRITE|RELIABLE_EXHAUSTION|BROKER_LIFETIME|BROKER_UNUSED|BROKER_AUTHORIZATION|FAMILY_CONTRACT|FAMILY_CONTEXT|FAMILY_WRITE|FAMILY_READ|FAMILY_UPPER_CLOSE|FAMILY_CREDENTIAL_EXPIRY"
+-const Reasons = "NONE|SIGNAL_WS_CLOSE|ICE_DISCONNECTED|ICE_FAILED|PEER_CONNECTION_FAILED|CARRIER_EOF|CARRIER_ERROR|FAMILY_TLS_EOF|FAMILY_TLS_ERROR|GATEWAY_CLOSE|HEARTBEAT_TIMEOUT|REMOTE_CLOSE|RECOVERY_CLEANUP_FAILED|RECOVERY_DESCRIPTOR_FAILED|RECOVERY_JOIN_FAILED|RECOVERY_CARRIER_FAILED|RELIABLE_HANDSHAKE_TIMEOUT|RELIABLE_FRAME_TIMEOUT|RELIABLE_RETRY_EXHAUSTED|UNKNOWN_INTERNAL"
++const Reasons = "NONE|SIGNAL_WS_CLOSE|ICE_DISCONNECTED|ICE_FAILED|PEER_CONNECTION_FAILED|CARRIER_EOF|CARRIER_ERROR|FAMILY_TLS_EOF|FAMILY_TLS_ERROR|GATEWAY_CLOSE|HEARTBEAT_TIMEOUT|REMOTE_CLOSE|RECOVERY_CLEANUP_FAILED|RECOVERY_DESCRIPTOR_FAILED|RECOVERY_JOIN_FAILED|RECOVERY_CARRIER_FAILED|RELIABLE_HANDSHAKE_TIMEOUT|RELIABLE_FRAME_TIMEOUT|RELIABLE_IDLE_TIMEOUT|RELIABLE_RETRY_EXHAUSTED|UNKNOWN_INTERNAL"
+ const BrokerReasons = "cancelled|lifetime_expired|authorization_changed|unused_expired|gateway_session_failed|gateway_failed|gateway_ready_timeout|provider_failure|provider_response|provider_cancelled|provider_timeout|provider_transport|provider_request|provider_bad_request|provider_unauthorized|provider_forbidden|provider_rate_limited|provider_unavailable|provider_status|provider_body|provider_json|provider_id|provider_join_url|unknown"
+ 
+ func (recorder *Recorder) Record(event Event) {

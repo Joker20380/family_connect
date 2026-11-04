@@ -23,9 +23,9 @@ def test_android_changes_do_not_start_desktop_suites():
     assert not any(platforms(['docs/STATUS.md']).values())
 
 
-def test_android115_candidate_keeps_provisioning_disabled_and_requires_native_provenance():
+def test_android116_candidate_keeps_provisioning_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 115' in gradle and "versionName '0.1.18-beta115'" in gradle
+    assert 'versionCode 116' in gradle and "versionName '0.1.18-beta116'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
@@ -191,8 +191,14 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
     reviewed_slow_link_recovery = {
         'RestrictedRecovery.java': '18c572db0f92e2cc0bbf054f64d21e008336a8d96ea9fb9f530b591fb1e3c028',
     }
+    reviewed_idle_ack_recovery = {
+        'DiagnosticRing.java': '20ad8811578eda5b4dc3d2a56a5316752e07cf25837dc1f144d12491024d8101',
+        'RestrictedTrace.java': '4810d2c168bd9b01d1a59516a6d9f79b278e91eb016ebef413b597fc174b1e41',
+        'RestrictedRecovery.java': '5fc3a518a74c1e05de1d99216ee9196e400fad3338994b8150caaa207cb75a00',
+    }
     reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81,
-                         **reviewed_gateway_readiness, **reviewed_slow_link_recovery}
+                         **reviewed_gateway_readiness, **reviewed_slow_link_recovery,
+                         **reviewed_idle_ack_recovery}
     reviewed_resources = {
         'clients/android/app/src/main/res/values-ru/strings.xml': '89b334900a7febe2e50bfe06d593673961c320704a16ead76c09d9baa22ea279',
         'clients/android/app/src/main/res/values/strings.xml': '85e40c0044eaec9ebe8fb6f77d0a026ddc6bead90fb044237abd23b305fd2c39',
