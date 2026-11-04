@@ -1,8 +1,9 @@
 # Documentation
 
-**4 November — Android114 DNS candidate preparation.** Exact-source qualification and
-owner in-place verification are selected; no114 APK or installation yet. Public/invitation/
-updater/owner remain113/catalog7. [Current gates and version state](releases/2026-11-04-android114-dns.md).
+**4 November — Android114 DNS candidate built, not installed.** Exact-source downloaded
+APK/native/runtime/UI checks PASS; terminal hosted CI status, offline signing and owner
+DNS/HTTPS acceptance remain pending. Public/invitation/updater/owner113/catalog7 unchanged.
+[Current gates and version state](releases/2026-11-04-android114-dns.md).
 
 **4 November — Android113 published, signed catalog7, owner112→113 installed.** Same
 Russia/Netherlands/Netherlands2 list in all modes; per-node green square load meters,

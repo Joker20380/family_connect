@@ -1,12 +1,16 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
-**4 November — Android114 DNS delivery selected, PREPARING.** Source candidate114/code114
-contains cf9d576's bounded datagram fix. Exact114 hosted platform/artifact qualification,
-offline signing and owner in-place DNS/HTTPS acceptance are next, not yet PASS. Public,
-invitation, updater and owner remain113/catalog7. No server change or public publication.
-Source cf9d576 phase0 fails in the already-known historical HTTP fixture preparation;
-full pytest/failover did not run. [Current114 gates and rollback](releases/2026-11-04-android114-dns.md).
+**4 November16:19UTC — Android114 built/artifact-checked, final CI status PENDING.**
+Exact source3d3bf26/run41860466848 attempt1: Android carrier/native/JVM/API27/API35 steps
+report success, but the job/workflow still reports IN_PROGRESS; no terminal CI PASS inferred.
+Four downloaded artifact digests,12 ARM64 libraries, source/licenses/16K and UI review PASS.
+JVM418+413 PASS; runtime optional skips retained. Local Python48, Friends413/lint and synthetic
+113→114 retained-state upgrade PASS. Unsigned APK50,260,153 bytes/SHA256c438a871…3e0de8f.
+Signing/owner installation/DNS-HTTPS acceptance remain pending; public/invitation/updater/
+owner113/catalog7 unchanged. No server change or public publication. Current phase0 again
+fails before full suites in fixture preparation; no full-suite PASS is claimed.
+[Exact114 gates and rollback](releases/2026-11-04-android114-dns.md).
 
 Retained source-only checkpoint, superseded by114 delivery above:
 **4 November — Android113 MESH DNS source fix; live incident still OPEN.** Renewed app
@@ -17,7 +21,7 @@ idle UDP flows retain all16 slots for10s. New Android datagram dispatch releases
 per completed query, keeping16 in-flight operations, DNS wire semantics and IPv6 containment.
 Source cf9d576 pushed/remote-verified. Pinned packet/race regression including64 sequential
 flows and paired requests, focused carrier/44 Python checks and local ARM64/16K build PASS.
-Exact hosted Client builds41857785568 is IN_PROGRESS, not release acceptance.
+Predecessor Client builds41857785568 was cancelled by114; not release acceptance.
 This is source-only, not a phone fix or stability PASS: NL2 frame exhaustion and earlier
 mixed-network startup failure are separate open problems. Public/invitation/owner113/catalog7
 unchanged; no APK signing/install, server restart or policy change. Temporary probe removed.

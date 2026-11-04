@@ -3,9 +3,12 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- Android113 MESH incident 20261104 -->
-**Current continuation — Android114 owner DNS candidate.** Prepare exact114/code114,
-qualify platform CI and downloaded artifacts, sign offline, then upgrade113 in place and
-test ordinary DNS/HTTPS. Public113/catalog7 is retained. Dependencies: cf9d576, existing
+**Current continuation — Android114 owner DNS candidate, artifact checks complete.**
+Source3d3bf26/CI41860466848 attempt1 has successful Android test/build steps and verified
+downloads, but job/workflow final status remains IN_PROGRESS at16:19UTC. Wait for terminal
+success; do not sign from step results alone. Then sign offline, upgrade113 in place and
+test ordinary DNS/HTTPS. Local synthetic113→114 state recovery PASS; physical delivery not
+done. Public/invitation/owner113/catalog7 retained. Dependencies: cf9d576, existing
 signer, exact platform gates and explicit phone support consent. Completion is a verified
 owner candidate with negative results retained, not a blanket MESH stability claim.
 No unrelated framing/underlay patch, server policy or public distribution in this step.
@@ -19,7 +22,7 @@ Explicit app USB consent renewed; paired A/AAAA/TCP tests show intermittent UDP 
 not universal A-answer suppression. Pinned packet regression reproduces idle-flow exhaustion:
 query17 drops after16 completed queries. Android per-datagram bounded dispatch is implemented
 and locally regression-tested; source cf9d576 is pushed, local ARM64/16K build passes.
-Client builds41857785568 is IN_PROGRESS, no public APK changed. Next: qualify exact source
+Predecessor Client builds41857785568 cancelled by114, no public APK changed. Next: qualify exact source
 in hosted Android/native CI, then a separately versioned delivery/physical DNS gate. Preserve
 the distinct remaining startup/network-selection and correlated NL2 framing-loss diagnosis;
 this DNS fix does not establish their cause or close sustained stability. Retain identity/P1.
