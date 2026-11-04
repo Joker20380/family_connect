@@ -2,6 +2,11 @@
 
 ## Current engineering priority / Текущий critical path
 
+**4 November09:10UTC operational readback:** three VPN nodes active; RU TLS-renewal
+timeout needs separately selected diagnosis, current TLS validates. Legacy worker/disk
+follow-ups remain. No priority change or repair authorization.
+[Read-only snapshot](releases/2026-11-04-vpn-health.md).
+
 **Export26 journal check complete; root cause not fully closed.** Primary restart
 precedes cached seed-admission timeout. Investigate stale bootstrap-room recovery,
 not an established HyperOS defect; no implementation/deployment authorized by this check.

@@ -1,5 +1,10 @@
 # Текущее состояние / Current state
 
+**4 November09:10UTC — read-only VPN check:** all three AWG/TCP nodes active;
+eight recent peer handshakes, not unique users. RU TLS renewal timed out, but external
+TLS currently validates; legacy Docker worker unhealthy, host worker active.
+No repair/deployment or end-to-end acceptance. [Snapshot](releases/2026-11-04-vpn-health.md).
+
 **Export26 primary journal correlation — stale bootstrap cache hypothesis strengthened.**
 AMS1 stopped20:00:41UTC, started20:01:30, seed ready20:01:32. Client20:07 uses a
 pre-restart valid cache and times out at SEED_ADMISSION; no Family-open/auth record
