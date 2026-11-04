@@ -125,6 +125,34 @@ func (session *Session) Allow(protocol, host string, port uint16) bool {
 	return false
 }
 
+func (session *Session) admitFlow(slots chan struct{}) bool {
+	session.mu.Lock()
+	defer session.mu.Unlock()
+	if session.closed || session.Failed() {
+		return false
+	}
+	select {
+	case slots <- struct{}{}:
+	default:
+		session.Counters.LimitDenied.Add(1)
+		return false
+	}
+	session.workers.Add(1)
+	active := session.Counters.Active.Add(1)
+	for peak := session.Counters.Peak.Load(); active > peak; peak = session.Counters.Peak.Load() {
+		if session.Counters.Peak.CompareAndSwap(peak, active) {
+			break
+		}
+	}
+	return true
+}
+
+func (session *Session) releaseFlow(slots chan struct{}) {
+	session.Counters.Active.Add(-1)
+	<-slots
+	session.workers.Done()
+}
+
 func (session *Session) Handle(connection net.Conn, protocol, host string, port uint16) {
 	defer connection.Close()
 	if !session.Allow(protocol, host, port) {
@@ -134,28 +162,10 @@ func (session *Session) Handle(connection net.Conn, protocol, host string, port 
 	if protocol == "udp" || port == 53 {
 		slots = session.dnsSlots
 	}
-	session.mu.Lock()
-	if session.closed || session.Failed() {
-		session.mu.Unlock()
+	if !session.admitFlow(slots) {
 		return
 	}
-	select {
-	case slots <- struct{}{}:
-	default:
-		session.mu.Unlock()
-		session.Counters.LimitDenied.Add(1)
-		return
-	}
-	session.workers.Add(1)
-	session.mu.Unlock()
-	defer session.workers.Done()
-	defer func() { <-slots; session.Counters.Active.Add(-1) }()
-	active := session.Counters.Active.Add(1)
-	for peak := session.Counters.Peak.Load(); active > peak; peak = session.Counters.Peak.Load() {
-		if session.Counters.Peak.CompareAndSwap(peak, active) {
-			break
-		}
-	}
+	defer session.releaseFlow(slots)
 	ctx, cancel := context.WithCancel(session.ctx)
 	defer cancel()
 	stop := context.AfterFunc(ctx, func() { connection.Close() })

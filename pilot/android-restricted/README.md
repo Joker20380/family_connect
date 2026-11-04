@@ -33,6 +33,13 @@ Packet stack — существующий pinned Xray TUN/gVisor, **не нов�
 `xray-packet-boundary.patch` открывает имеющийся ConnectionHandler/LinkEndpoint
 boundary, ограничивает pending TCP/UDP и устраняет UDP close/send race.
 Изменения MPL source включены в assets рядом с Xray/gVisor/carrier licenses.
+
+Android DNS использует optional datagram callback этого же boundary: отдельный bounded
+query на каждый пакет вместо UDP pseudo-connection, живущего10s после ответа. Лимит16
+относится к незавершённым запросам; завершённые не блокируют новые source ports. A/AAAA,
+DNS payload и IPv6 fail-closed не меняются. `build.py` до native build запускает pinned
+packet `go test -race -count=3`; регрессии проверяют64 последовательных source ports и
+парные пакеты на одном порту. [Причина и граница доставки](../../docs/releases/2026-11-04-android113-mesh-reconnect.md#renewed-consent-wire-comparison-and-source-fix).
 Normal `libfc-awg` не пересобирается этим скриптом и не подменяется.
 
 ## Порядок и fail-closed

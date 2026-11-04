@@ -43,6 +43,8 @@ def main():
         subprocess.run([args.go, 'mod', 'edit', '-modfile='+str(module),
                         '-replace=github.com/xtls/xray-core='+str(xray),
                         '-replace=github.com/Joker20380/family_connect/carrier='+str(ROOT / 'carrier')], cwd=source, check=True)
+        subprocess.run([args.go, 'test', '-race', '-count=3', '-timeout=90s', '-modfile='+str(module),
+                        '-ldflags=-checklinkname=0', './packet'], cwd=source, check=True)
         output = args.out / 'jniLibs/arm64-v8a/libfc_restricted.so'
         output.parent.mkdir(parents=True)
         compiler = args.ndk / 'toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android26-clang'

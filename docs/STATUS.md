@@ -1,15 +1,17 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
-**4 November14:56UTC — Android113 MESH incident investigated, NOT_FIXED.** Fresh READY
-and Wi-Fi reconnect succeed; ordinary-UID verified IPv4 HTTPS exits through Netherlands2.
-Hostname HTTPS fails with IPv6-only DNS answers; the A-result loss cause is unproven.
-Exact NL2 frame timeout14:45:04 precedes client failure; automatic restoration succeeds,
-not sustained stability. Earlier cellular-bound refresh/15s startup failure is distinct.
-Both MESH/HTTP services are active;14:10 renewal COMMITTED, no server repair/restart here.
-Public/invitation/owner113/catalog7 unchanged. No new APK or product-code fix. Temporary
-probes removed; last accepted phone snapshot CONNECTED. At14:56 app USB support is disabled
-while ADB remains available: current state/further controlled checks need renewed consent.
+**4 November — Android113 MESH DNS source fix; live incident still OPEN.** Renewed app
+consent works; unchanged113 is CONNECTED on Wi-Fi. Ordinary-UID wire tests isolate intermittent
+UDP DNS loss: A times out while AAAA/TCP A work; Android hostname results remain inconsistent.
+The pinned packet engine deterministically drops query17 after16 completed requests because
+idle UDP flows retain all16 slots for10s. New Android datagram dispatch releases capacity
+per completed query, keeping16 in-flight operations, DNS wire semantics and IPv6 containment.
+Pinned packet/race regression including64 sequential flows and paired requests PASS;
+carrier/contract qualification and exact hosted CI are recorded in the incident report.
+This is source-only, not a phone fix or stability PASS: NL2 frame exhaustion and earlier
+mixed-network startup failure are separate open problems. Public/invitation/owner113/catalog7
+unchanged; no APK signing/install, server restart or policy change. Temporary probe removed.
 [Evidence, limitations and next gate](releases/2026-11-04-android113-mesh-reconnect.md).
 <!-- /Android113 MESH incident 20261104 -->
 

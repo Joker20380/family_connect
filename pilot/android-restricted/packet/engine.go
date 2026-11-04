@@ -20,6 +20,10 @@ func (handler adapter) HandleConnection(connection xnet.Conn, destination xnet.D
 	handler.session.Handle(connection, strings.ToLower(destination.Network.String()), destination.Address.String(), uint16(destination.Port))
 }
 
+func (handler adapter) HandleDatagram(payload []byte, destination xnet.Destination, respond func([]byte) error) {
+	handler.session.HandleDNSDatagram(payload, destination.Address.String(), uint16(destination.Port), respond)
+}
+
 func Start(ctx context.Context, endpoint stack.LinkEndpoint, session *wholedevice.Session) (tun.Stack, error) {
 	engine, err := tun.NewEndpointStack(ctx, endpoint, adapter{session})
 	if err != nil {

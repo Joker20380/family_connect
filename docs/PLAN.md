@@ -5,12 +5,14 @@
 <!-- Android113 MESH incident 20261104 -->
 **4 November owner incident — FLEET-BOOTSTRAP-2 MESH reconnect diagnosis, still OPEN.**
 This report supersedes the completed picker task as the selected bounded priority.
-Fresh113 readiness and Wi-Fi startup work, but hostname HTTPS and sustained transport
-acceptance fail. Exact NL2 RELIABLE_FRAME_TIMEOUT and automatic recovery are correlated;
-literal IPv4 HTTPS egress passes, IPv6-only hostname result does not. No product fix yet.
-Dependencies: renewed explicit app USB support (disabled14:56; ADB available), retained
-identity/profile and existing read-only server evidence. Next: paired A/AAAA and underlying
-network/resolver reproduction, then exact framing-loss diagnosis and focused regressions.
+Fresh113 readiness and Wi-Fi startup work, but DNS and sustained transport acceptance fail.
+Explicit app USB consent renewed; paired A/AAAA/TCP tests show intermittent UDP DNS loss,
+not universal A-answer suppression. Pinned packet regression reproduces idle-flow exhaustion:
+query17 drops after16 completed queries. Android per-datagram bounded dispatch is implemented
+and locally regression-tested; no public APK changed. Next: qualify this exact source in
+hosted Android/native CI, then a separately versioned delivery/physical DNS gate. Preserve
+the distinct remaining startup/network-selection and correlated NL2 framing-loss diagnosis;
+this DNS fix does not establish their cause or close sustained stability. Retain identity/P1.
 Completion requires normal DNS/hostname HTTPS and stable reconnect, not only CONNECTED
 or IP-literal success. Preserve admission, leak containment, signatures and immutable113;
 no speculative timeout/policy change or unrelated successor. Public113/catalog7 unchanged.

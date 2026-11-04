@@ -1,8 +1,8 @@
 # Android113 — hybrid server picker and per-node load
 
-**Later owner incident14:56UTC:** MESH reconnect/IPv4 egress observed, but hostname HTTPS
-and sustained stability are NOT_FIXED; app USB consent is now disabled. No new product
-deployment. [Current investigation and next gate](2026-11-04-android113-mesh-reconnect.md).
+**Later owner incident:** MESH DNS source fix follows renewed USB consent and a deterministic
+idle-UDP-flow exhaustion regression. Public/installed113 is unchanged; hostname HTTPS and
+sustained stability are not accepted. [Current source/qualification and next gate](2026-11-04-android113-mesh-reconnect.md).
 
 **Delivery complete4 November2026:** product-signed113 is installed over owner112;
 public APK, invitation and optional updater catalog7 are verified. The preparation

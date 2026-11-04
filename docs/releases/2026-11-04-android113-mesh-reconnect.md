@@ -4,16 +4,18 @@
 
 Owner reports that MESH no longer connects after113 publication. This selects a bounded
 FLEET-BOOTSTRAP-2 investigation, not another release or general MESH acceptance.
-**NOT_FIXED:** Wi-Fi reconnect reaches CONNECTED and an ordinary application verifies IPv4
-HTTPS egress through Netherlands2, but hostname HTTPS fails and a correlated carrier
-failure/recovery occurs. A green connection indicator is not working DNS/HTTPS acceptance.
+**SOURCE_FIX_ONLY, live incident still OPEN:** Wi-Fi reconnect reaches CONNECTED and an
+ordinary application verifies IPv4 HTTPS egress through Netherlands2, but DNS failures and
+a correlated carrier failure/recovery occur. Renewed USB consent enables a bounded wire
+comparison and a deterministic packet-level DNS fix below. No corrected APK is installed.
+A green connection indicator is not working DNS/HTTPS or sustained stability acceptance.
 
 Public/invitation/owner stays0.1.18-beta113/code113; optional catalog7 is byte-identical
-at14:56UTC. No product installation/source change, signing, server restart, admission/
+at14:56UTC. No product installation, signing, server restart, admission/
 policy change, profile reset or data clearing. Temporary probes are removed after runs.
-At14:56 ADB is available but the app explicitly refuses snapshots with USB support disabled.
-No bypass is attempted. The last accepted snapshot is CONNECTED; current state after
-permission loss is not inferred. Further controlled phone checks need renewed app consent.
+At14:56 the app refuses snapshots with USB support disabled; no bypass is attempted.
+The owner subsequently renews consent: snapshots work again and confirm CONNECTED on Wi-Fi,
+unchanged113/P1. The source fix does not change the currently running app.
 
 ## Services and renewal
 
@@ -85,22 +87,74 @@ loss/timeout, Android resolver caching, network selection and response handling 
 separation. Do not claim general Internet acceptance from an IP-literal request or change
 DNS semantics without a reviewed contract and positive/negative regression tests.
 
+## Renewed consent: wire comparison and source fix
+
+The disposable ordinary-UID probe uses only the active VPN and its advertised10.79.0.1
+resolver: no protected socket, physical-network binding or product credentials. Before/after
+snapshots retain the same native session and CONNECTED state. Probe removed after execution.
+
+| Request | Result |
+| --- | --- |
+| UDP A, www.cloudflare.com | Timeout8,005ms |
+| UDP AAAA, same name | Two AAAA records,272ms |
+| TCP A, same name | Two A records,127ms |
+| Paired UDP AAAA+A on one port | Both replies,513ms |
+| UDP A/AAAA, TCP A, paired UDP for example.com | All replies,234–436ms |
+| Android resolver/HTTPS, www.cloudflare.com | Two A/two AAAA; HTTPS200,978ms |
+| Android resolver/HTTPS, example.com | UnknownHostException despite preceding wire replies |
+
+This rules out universal A suppression or a consistently IPv6-only upstream. Intermittent
+UDP loss is established; Android resolver caching remains a possible additional factor.
+The exact missing live packet was not traced through every internal boundary.
+
+The unchanged pinned Xray/gVisor fixture establishes a concrete local defect:16 completed
+UDP DNS requests on different source ports leave16 idle flows until the10s flow deadline.
+The17th request is silently dropped at the packet boundary before wholedevice/Mux admission;
+wholedevice shows active16/dns16/limit_denied0. This red test uses no external resolver,
+provider or phone. The normal Android resolver's short-lived UDP sockets can hit this cap.
+
+The fix opens an optional datagram callback in the existing pinned packet boundary and
+routes Android DNS packets directly to bounded wholedevice queries, instead of retaining
+idle UDP pseudo-connections. Query bytes are owned before asynchronous dispatch; replies
+retain their original source/destination and DNS contents. The same16-slot budget now
+counts in-flight queries, not completed requests waiting for nonexistent UDP close events.
+No higher flow limit, timeout increase, AAAA filtering, IPv6 enablement or fallback resolver.
+TCP DNS, ordinary TCP, other packet consumers and generic Mux DNS semantics stay unchanged.
+The existing MPL patch/notice delivery remains required; no dependency pin changes.
+
+Qualification:
+
+- Pre-fix pinned packet regression: query17 fails, retained as red evidence.
+- Patched packet tests: `go test -race -count=10` PASS, including64 sequential source ports,
+  paired same-port replies and existing TCP/UDP-denial/session-failure coverage.
+- Wholedevice, restrictedchat, restrictedowner and desktopmesh: race/count5 PASS. New tests
+  cover copied packet ownership,16 pending queries, cancellation/close, output errors,
+  rejected sizes/IPv6/non-DNS destinations and no direct-network fallback.
+- Python release-payload/MESH/correlation contracts:44 PASS.
+- The initial broad count5 TCP-forward run reaches its180s harness deadline in existing
+  speed-profile tests; retained as a failed run, not a complete-suite PASS. Subsequent focused
+  DNS/hostname HTTPS race/count5 PASS; full TCP-forward race/count1 PASS in35.8s.
+- Native build now runs pinned packet race/count3 tests before cross-compiling, so future
+  hosted Android builds must exercise this path rather than only shared carrier tests.
+
 ## Next gate and evidence
 
-Renew explicit app USB support, then correlate A/AAAA wire queries and Android results on
-one underlying network/native session; reproduce resolver/network selection and the exact
-NL2 frame-loss sequence. Completion needs ordinary hostname DNS/HTTPS and stable reconnect,
+Exact hosted source CI and a new immutable version are required before offline signing,
+in-place installation and ordinary-app DNS/HTTPS acceptance. Do not re-sign/re-publish113.
+Separately reproduce underlying-network/resolver selection and the exact NL2 frame-loss
+sequence; the DNS fix alone does not explain those failures. Completion needs stable reconnect,
 preserving IPv6/DNS leak containment, identity, admission and bounds. A client fix still
 requires exact platform/native CI, offline signing and in-place/public acceptance. Never
 replace113 with different bytes or start an unrelated queued task automatically.
 
-This turn changes documentation only. Temporary SDK35/JDK probe compilation succeeds with
+This follow-up changes DNS source/tests/build gating and documentation. Temporary SDK35/JDK probe compilation succeeds with
 one source8/bootstrap warning and deprecated-API note; it is not product CI. Raw private
 evidence stays in ignored `state-client-build/android113-mesh-incident-20261104/`; no device,
 session, support identity, keys or raw journals enter Git. No product deployment needs
-rollback; do not restore databases or uninstall the product to address this incident.
+rollback; source can be reverted normally before any delivery. Do not restore databases
+or uninstall the product to address this incident.
 
 Scoped PLAN/release/incident links and whitespace PASS. Full documentation scan retains
 only the same two historical anchor errors as before this incident (October27 STATUS and
-October24 source-checkpoint links); no new broken link is introduced. Product suites are
-not rerun for this documentation-only checkpoint; live negative results remain failures.
+October24 source-checkpoint links); live negative results remain failures. Exact hosted
+CI, corrected installed/public version and physical post-fix acceptance are still pending.
