@@ -1,8 +1,9 @@
 # Documentation
 
-**4 November — Android114 DNS candidate built, not installed.** Exact-source downloaded
-APK/native/runtime/UI checks PASS; terminal hosted CI status, offline signing and owner
-DNS/HTTPS acceptance remain pending. Public/invitation/updater/owner113/catalog7 unchanged.
+**4 November — Android114 DNS candidate signed and owner-installed.** Exact platform CI,
+downloaded APK/native/runtime/UI, offline signing and in-place113→114 readback PASS. Physical
+DNS/HTTPS awaits renewed USB consent inside the app; no stability PASS. Public/invitation/
+updater113/catalog7 retained, owner114. No public distribution or server change.
 [Current gates and version state](releases/2026-11-04-android114-dns.md).
 
 **4 November — Android113 published, signed catalog7, owner112→113 installed.** Same

@@ -1,9 +1,10 @@
 # Release distribution / Выпуски
 
-**4 November — Android114 DNS candidate built/artifact-checked, not distributed.** Exact
-source3d3bf26/CI41860466848 has successful Android steps; final CI status remains pending.
-Unsigned APK/native/runtime/UI checks PASS; signing/owner upgrade/physical DNS gate not done.
-Public/invitation/updater/owner113/catalog7 unchanged. [Receipt](releases/2026-11-04-android114-dns.md).
+**4 November — Android114 DNS candidate signed and owner-installed, not public.** Exact
+source3d3bf26/CI41860466848 attempt1, APK/native/runtime/UI, offline existing-key signing and
+owner113→114 in-place readback PASS. Physical DNS/HTTPS awaits renewed app USB consent;
+stability remains OPEN. Public/invitation/updater113/catalog7; owner114.
+[Receipt](releases/2026-11-04-android114-dns.md).
 
 **4 November — Android113 published, owner-installed, invitation/updater113/catalog7.**
 Unified country/node picker, per-node green/orange square meters and selected-row checkmark;

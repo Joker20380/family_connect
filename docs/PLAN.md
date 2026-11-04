@@ -3,13 +3,15 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- Android113 MESH incident 20261104 -->
-**Current continuation — Android114 owner DNS candidate, artifact checks complete.**
-Source3d3bf26/CI41860466848 attempt1 has successful Android test/build steps and verified
-downloads, but job/workflow final status remains IN_PROGRESS at16:19UTC. Wait for terminal
-success; do not sign from step results alone. Then sign offline, upgrade113 in place and
-test ordinary DNS/HTTPS. Local synthetic113→114 state recovery PASS; physical delivery not
-done. Public/invitation/owner113/catalog7 retained. Dependencies: cf9d576, existing
-signer, exact platform gates and explicit phone support consent. Completion is a verified
+**Current continuation — Android114 owner DNS candidate installed; physical gate OPEN.**
+Source3d3bf26/CI41860466848 attempt1 terminal SUCCESS, downloaded artifacts/UI, offline
+existing-key signing and owner113→114 in-place installation/readback PASS. Local synthetic
+state recovery PASS. At16:27UTC the updated app refuses snapshots because its process-local
+USB consent reset. Next dependency: owner re-enables USB support inside Family Connect;
+then consented reconnect and ordinary-UID64-query/A/AAAA/TCP/paired DNS plus hostname HTTPS.
+Do not bypass consent or count CONNECTED as acceptance. Public/invitation/updater113/catalog7,
+owner114. Source/signing/platform dependencies are satisfied; the remaining prerequisite
+is explicit phone support consent. Completion is a verified
 owner candidate with negative results retained, not a blanket MESH stability claim.
 No unrelated framing/underlay patch, server policy or public distribution in this step.
 [114 version state, gates and rollback](releases/2026-11-04-android114-dns.md).
