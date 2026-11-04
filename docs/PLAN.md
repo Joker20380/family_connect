@@ -13,7 +13,7 @@ not an established HyperOS defect; no implementation/deployment authorized by th
 [Evidence and limits](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**4 November08:56UTC — FLEET-BOOTSTRAP-2 backend installed; Android112 candidate CI running.**
+**4 November09:16UTC — FLEET-BOOTSTRAP-2 backend installed; Android112 refresh correction.**
 Node-scoped HTTPe2ed4ca6 and empty-default `gateway_binding` migration are installed with
 all original rows/assignments/grants preserved; common-fleet writer restored/healthy.
 128 exact-package Python/native/nginx checks PASS; external rejection/readback PASS.
@@ -22,6 +22,10 @@ Android target-specific READY/ACK is still unproven. Candidate112 now selects ei
 Amsterdam node, retaining mode-specific Auto/AWG/TCP behavior and separate caches.
 Local112 JVM412+407, contracts61, API27/API35 UI4+4 and lint PASS.
 Public/invitation111/catalog6 unchanged.
+Follow-up fixes foreground primary-only prewarm for selected MESH2 while preserving
+primary Auto/chat refresh.62 Python,414+409 JVM, lint and exact API27/API35 UI4/4 each PASS;
+no new public version.
+The changed candidate needs its own committed-source CI;cd0a2f8 is superseded as release source.
 Sourcecd0a2f8 is pushed/remote-verified; exact112 Android CI41802908693 is IN_PROGRESS,
 desktop jobs are scope-skipped.
 API27 synthetic111→112 identity/journal/UID preservation and per-node restart checks PASS.

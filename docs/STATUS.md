@@ -12,7 +12,7 @@ in that window. Packet receipt/old-room identity not proven. No changes by this 
 [Evidence](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**4 November08:56UTC — node-scoped MESH2 HTTP installed; Android112 candidate CI running.**
+**4 November09:16UTC — MESH2 HTTP installed; Android112 foreground-refresh correction.**
 HTTPe2ed4ca6 overlays only two exacte7d2739 modules on the accepted live package. Additive
 `gateway_binding` migration passes SQLite integrity and preserves all existing row values,
 accounts/grants/assignments. Final HTTP PID2174093 verifies the exact argv/hash; ordinary
@@ -24,6 +24,11 @@ Exact HTTP qualification128 PASS/0 skips includes native delivery and real isola
 Android112/code112 is built only as a local CI-signed x86_64 test candidate, not distributed:
 MESH lists exactly Amsterdam1/2; AWG/TCP and Auto retain their separate choices. Debug412/
 Friends407 JVM PASS, lint0 errors/56 existing warnings, exact112 API27/API35 UI4/4 each.
+Follow-up source corrects primary-only foreground prewarm: MESH2 now refreshes its own
+scope while preserving primary Auto/chat refresh. Red source regression→62 Python PASS,
+414+409 JVM PASS, lint0 errors/56 warnings, CI-signed x86_64 assembly and API27/API35 UI4/4
+each PASS. No signing or
+server policy change. This follow-up requires its own CI; priorcd0a2f8 is not the final candidate.
 Android/public-release/challenge/orchestrator contracts61 PASS/0 skips. Sourcecd0a2f8 is
 pushed/remote-verified; exact112 CI41802908693 is IN_PROGRESS, desktop jobs correctly skipped.
 Follow-up09:06: disposable API27 CI-signed111→112 preserves UID/protected identity/journal;

@@ -10,6 +10,11 @@ final class GatewayPicker {
         return manual(transport)?new String[]{"nl-amsterdam-1","ru","nl-amsterdam-2"}:new String[]{"nl","ru"};
     }
 
+    static String[] readinessTargets(String target,String transport){
+        return "telemost".equals(transport)&&RestrictedGateway.SECONDARY.equals(target)
+            ?new String[]{RestrictedGateway.PRIMARY,RestrictedGateway.SECONDARY}:new String[]{RestrictedGateway.PRIMARY};
+    }
+
     static String target(String country,String gateway,String transport){
         if("ru".equals(country)&&!"telemost".equals(transport))return "ru";
         if(!manual(transport))return "nl";

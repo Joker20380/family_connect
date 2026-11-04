@@ -46,4 +46,21 @@ public class GatewayPickerTest {
         assertEquals("nl",GatewayPicker.targets("auto")[0]);
         assertEquals("nl-amsterdam-1",GatewayPicker.targets("telemost")[0]);
     }
+
+    @Test public void selectedSecondaryMeshRefreshesBothItsOwnCacheAndThePrimaryChatCache(){
+        assertArrayEquals(new String[]{"nl-amsterdam-1","nl-amsterdam-2"},GatewayPicker.readinessTargets("nl-amsterdam-2","telemost"));
+        for(String target:new String[]{"nl-amsterdam-1","nl","ru","unknown",null}){
+            assertArrayEquals(new String[]{"nl-amsterdam-1"},GatewayPicker.readinessTargets(target,"telemost"));
+        }
+        for(String transport:new String[]{"auto","awg","tcp","unknown",null}){
+            assertArrayEquals(new String[]{"nl-amsterdam-1"},GatewayPicker.readinessTargets("nl-amsterdam-2",transport));
+        }
+    }
+
+    @Test public void readinessChoicesCannotMutateOtherScopesOrLaterSelections(){
+        GatewayPicker.readinessTargets("nl-amsterdam-2","telemost")[0]="ru";
+        GatewayPicker.readinessTargets("nl-amsterdam-1","telemost")[0]="nl-amsterdam-2";
+        assertArrayEquals(new String[]{"nl-amsterdam-1","nl-amsterdam-2"},GatewayPicker.readinessTargets("nl-amsterdam-2","telemost"));
+        assertArrayEquals(new String[]{"nl-amsterdam-1"},GatewayPicker.readinessTargets("nl-amsterdam-1","telemost"));
+    }
 }

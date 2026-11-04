@@ -30,7 +30,7 @@ public final class FriendsActivity extends LocalizedActivity {
     private ServerAdapter serverAdapter;
     private boolean loadPending,loadResumed;private long loadNext;
     private final Runnable loadRefresh=new Runnable(){public void run(){refreshLoad();if(loadResumed)handler.postDelayed(this,3000);}};
-    private final Runnable restrictedRefresh=new Runnable(){public void run(){if(!loadResumed)return;if(getPreferences(MODE_PRIVATE).getBoolean("activated",false))FriendsRestricted.prewarm(FriendsActivity.this);handler.postDelayed(this,60000);}};
+    private final Runnable restrictedRefresh=new Runnable(){public void run(){if(!loadResumed)return;if(getPreferences(MODE_PRIVATE).getBoolean("activated",false))prewarmReadiness();handler.postDelayed(this,60000);}};
     private AppUpdateUi appUpdate;
     private boolean motion;
     private HomeBrand homeBrand;
@@ -39,6 +39,9 @@ public final class FriendsActivity extends LocalizedActivity {
     private String[] gatewayTargets;
     private int targetIndex(){int index=java.util.Arrays.asList(gatewayTargets).indexOf(country);return index<0?0:index;}
     private void saveRoute(){getPreferences(MODE_PRIVATE).edit().putString("country",country.equals("ru")?"ru":"nl").putString("gateway_id",lastManualGateway).putString("transport",transport).apply();}
+    private void prewarmReadiness(){
+        for(String gateway:GatewayPicker.readinessTargets(country,transport))FriendsRestricted.prewarm(this,gateway);
+    }
     private void configureGatewayPicker(){
         country=GatewayPicker.target(country,lastManualGateway,transport);
         gatewayTargets=GatewayPicker.targets(transport);serverAdapter.notifyDataSetChanged();countries.setSelection(targetIndex());
@@ -312,7 +315,7 @@ public final class FriendsActivity extends LocalizedActivity {
             catch(FriendsAccessAndroid.Denied denied){message=R.string.friends_invite_rejected;}catch(Exception failure){}
             final String registered=device;final int result=message;
             runOnUiThread(()->{if(isDestroyed())return;busy=false;
-                if(!registered.isEmpty()){pendingInvitation="";getPreferences(MODE_PRIVATE).edit().putBoolean("activated",true).putString("device",registered).apply();FriendsRestricted.prewarm(this);}
+                if(!registered.isEmpty()){pendingInvitation="";getPreferences(MODE_PRIVATE).edit().putBoolean("activated",true).putString("device",registered).apply();prewarmReadiness();}
                 detail.setText(result);render();if(connectAfter&&!registered.isEmpty())toggle();
             });
         });

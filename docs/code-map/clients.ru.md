@@ -33,6 +33,9 @@ reset. `RestrictedGatewayTest`, `RestrictedCacheTest` and the opt-in disposable
 cross-node ciphertext substitution and lost-file/key refusal on API27/API35.
 The second gateway/common writer and node-scoped HTTP backend are installed. Android112
 exposes both MESH targets; it is not yet public or a handset traffic acceptance claim.
+`GatewayPicker.readinessTargets` keeps primary foreground prewarm for Auto/chat and adds
+the selected secondary in MESH mode. The existing timer and activation callback share
+this selection; separate scopes/caches/ACKs remain in `FriendsRestricted`.
 [Current gates](../releases/2026-11-04-mesh2-android112.md).
 
 ### Transport-specific gateway picker — Android112 candidate

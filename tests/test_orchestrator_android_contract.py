@@ -12,6 +12,19 @@ def source(name):
     return (MAIN / (name + '.java')).read_text()
 
 
+def test_selected_mesh_readiness_refresh_keeps_primary_chat_and_scopes_secondary():
+    activity = source('FriendsActivity')
+    refresh = activity.split('private final Runnable restrictedRefresh=', 1)[1].split(';\n', 1)[0]
+    assert 'prewarmReadiness()' in refresh
+    assert 'getBoolean("activated",false)' in refresh
+    assert 'handler.postDelayed(this,60000)' in refresh
+    prewarm = activity.split('private void prewarmReadiness(){', 1)[1].split('\n    }', 1)[0]
+    assert 'GatewayPicker.readinessTargets(country,transport)' in prewarm
+    assert 'FriendsRestricted.prewarm(this,gateway)' in prewarm
+    assert 'putBoolean("activated",true).putString("device",registered).apply();prewarmReadiness();' in activity
+    assert 'handler.removeCallbacks(restrictedRefresh)' in activity
+
+
 def test_vpn_notification_refresh_does_not_repeat_alert_or_hide_controls():
     service = source('ConnectionService')
     notification = service.split('private Notification notification(){', 1)[1].split('private void notifyState()', 1)[0]
