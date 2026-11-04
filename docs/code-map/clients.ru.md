@@ -36,6 +36,12 @@ exposes both MESH targets; it is not yet public or a handset traffic acceptance 
 `GatewayPicker.readinessTargets` keeps primary foreground prewarm for Auto/chat and adds
 the selected secondary in MESH mode. The existing timer and activation callback share
 this selection; separate scopes/caches/ACKs remain in `FriendsRestricted`.
+Operator `scripts/read_readiness_ack.py` can read an explicit node/device's receipt
+under all-activated admission and require its reported version code. Device selection
+comes from a private0600 file, not output/argv; missing scope never falls back or
+selects the latest user. `tests/test_read_readiness_ack.py` covers readonly source and
+packaged execution, wrong node/device/version, revocation/expiry and safe failure.
+ACK receipt inspection is not an APK attestation or handset traffic acceptance.
 [Current gates](../releases/2026-11-04-mesh2-android112.md).
 
 ### Transport-specific gateway picker — Android112 candidate

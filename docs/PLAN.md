@@ -13,7 +13,7 @@ not an established HyperOS defect; no implementation/deployment authorized by th
 [Evidence and limits](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**4 November10:12UTC — FLEET-BOOTSTRAP-2: Android112 CI/artifacts PASS, product gate OPEN.**
+**4 November10:27UTC — FLEET-BOOTSTRAP-2: Android112/ACK-reader qualified, product gate OPEN.**
 Continue the selected MESH2→Android delivery only; no unrelated successor. MESH2 gateway,
 common-fleet writer and node-scoped HTTP/migration are installed. Runtime provider/
 reconnect acceptance remains valid; MESH2 is still boot-disabled pending the product gate.
@@ -29,12 +29,18 @@ Four artifact ZIPs match source/run/GitHub digests; unsigned ARM64beta112/code11
 minSDK27/target35, twelve native libraries/source/licenses and16K alignment PASS.
 Exact JVM414+409 PASS/0 skips; API35 debug/Friends28/19 PASS (25/4 skips), API27
 debug/Friends27/18 PASS (26/5 skips); required picker/language/legacy audio execute.
-Downloaded screenshots reviewed on both APIs; no handset claim. Next within this ID:
+Downloaded screenshots reviewed on both APIs; no handset claim. Operator readback now
+supports explicit node/device and reported-version112 filtering without requiring the
+retired sole-owner policy;125 selected checks PASS/0 skips/one separate historical
+pipeline deselected. No deployed HTTP/APK change. Read-only10:24 inventory still has
+zero secondary challenges/fetches/ACKs; ADB has no connected device. Next within this ID:
 normal targeted product READY/ACK, Family TLS/DNS/HTTPS/AMS2 egress and negative/cleanup
 acceptance, qualified boot activation, then existing-key offline signing and increasing
 immutable publication. No signing, boot enablement or public112 delivery in this checkpoint.
 There is no connected physical Android and no observed secondary normal-client ACK;
 operator receipts or emulator fixtures must not substitute for that OPEN gate.
+The next live step requires an available authorized Android with its existing identity;
+do not infer a recipient, reenroll a user or create a substitute grant to bypass it.
 [Current evidence and rollback](releases/2026-11-04-mesh2-android112.md).
 <!-- /MESH2 canonical installation 20261103 -->
 

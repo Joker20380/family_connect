@@ -12,7 +12,7 @@ in that window. Packet receipt/old-room identity not proven. No changes by this 
 [Evidence](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**4 November10:12UTC — Android112 exact CI/artifacts qualified; product gate OPEN.**
+**4 November10:27UTC — Android112 qualified; targeted ACK reader ready, product gate OPEN.**
 MESH2 node-scoped HTTPe2ed4ca6/additive migration remain installed; existing accounts,
 keys/grants/assignments are preserved. Last service readback08:56 verifies both MESH
 nodes active/boot-disabled, accepted AMS2 binary566cbc96, common writer COMMITTED with
@@ -37,8 +37,15 @@ API35 debug/Friends28/19 PASS (25/4 skips), API27 debug/Friends27/18 PASS (26/5 
 Picker/language/legacy audio execute; existing opt-in/variant/API skips are retained,
 not counted as acceptance. CI screenshots reviewed for both APIs; synthetic CPU data
 and distinct Amsterdam rows render, Android8.1 offers Codec2 rather than unsupported Opus.
-Read-only post-install receipt inventory has primary2 READY/1 native rejection but no
-secondary requests/ACKs. No physical Android is connected; real secondary READY/ACK and
+Operator ACK reader now accepts an explicit node, private device-reference file and
+exact reported version code under the existing all-activated policy. Legacy sole-owner
+behavior and revocation/expiry/node-binding checks remain; no identity inference or
+ACK generation.125 selected Python PASS/0 skips/one separate historical pipeline
+deselected, including isolated packaged entrypoint and byte-unchanged DB checks.
+At10:24 read-only inventory confirms all-activated: primary14 challenges/fetches/ACKs,
+6 READY/8 native rejection; versions111×5/60×8/109×1 are separate aggregates, not a
+failure attribution. Secondary still0 requests/ACKs. No physical Android is connected;
+real secondary READY/ACK and
 qualified boot activation remain OPEN. Public111/catalog6 and invitation/CSP TLS checks
 PASS unchanged; Windows/Linux distribution unchanged. No112 publication.
 [Evidence, exact CI/artifact acceptance and rollback](releases/2026-11-04-mesh2-android112.md).

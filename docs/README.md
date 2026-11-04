@@ -1,9 +1,11 @@
 # Documentation
 
 **4 November — MESH2 HTTP live; Android112 candidate only.** Node-scoped readiness and
-additive migration preserve existing accounts/assignments. Local112 JVM/API27/API35 UI
-checks pass for the two-node MESH picker. Public111/catalog6 stays unchanged; exact112
-release/product gates remain. [Current rollout and rollback](releases/2026-11-04-mesh2-android112.md).
+additive migration preserve existing accounts/assignments. Exact112 CI/API27/API35 and
+downloaded ARM64/source/alignment checks PASS; targeted node/device/version ACK-reader
+checks PASS. Public111/catalog6 stays unchanged; live Android product acceptance,
+qualified boot activation and signing/publication remain.
+[Current rollout and rollback](releases/2026-11-04-mesh2-android112.md).
 
 **3 November — MESH slow-link stability candidate, source only.** Current owner-selected
 priority ahead of MESH2: reproduced transient ICE teardown and retry-driven congestion;
