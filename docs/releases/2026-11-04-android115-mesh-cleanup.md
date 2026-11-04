@@ -49,3 +49,25 @@ product DB, keys, profiles or signed floors. Android downgrade is not a data-pre
 rollback: retain data and issue a higher versionCode if a client repair is needed.
 Each build/install/runtime result and remaining acceptance gate is appended here before
 claiming completion. Private evidence and signing material stay outside Git and CI.
+
+## Canonical source projection checkpoint
+
+Fresh17:48UTC read-only inventory finds different live predecessors: NL1 has
+`f8ff517804c8cc425b172c821630274ce39ccfa9a3e79328db3e8a626f45ebef`, NL2 has
+`566cbc96621c348e188aa50ffa54d6cf7bfce6274f8a214d3b0c227e743bb219`.
+Both are active/boot-disabled with NRestarts0. All ordinary AWG/TCP services and RU
+HTTP are active; the single RU renewal and directory timers are active. No runtime
+mutation is issued by this inspection; paths/configuration are retained privately.
+
+The new projection pins each complete predecessor independently and applies only
+bootstrap/protocol.go, familysession/session.go and telemost/session.go lifecycle
+changes. It imports three test-only files from exactf66b533; existing P1 policy,
+diagnostic instrumentation, framing, performance behavior and canonical readers stay
+unchanged on each node. Primary is not silently upgraded to the secondary baseline.
+Both real inventories and three-file patch applications validate. The first dry patch
+check rejected context absent from the older capsule; its unchanged diagnostic-context
+line was removed from the patch, not added to production. No candidate was deployed.
+
+Projection/source-boundary tests34 PASS/0 skips. Exact committed materialization,
+baseline/candidate reproduction and production-tag runtime checks follow; this source
+checkpoint alone does not authorize claiming installation or physical acceptance.

@@ -2,6 +2,19 @@
 
 ## Current production MESH2 handoff
 
+For the selected4 November MESH cleanup delivery, use the separate narrow
+`python -m scripts.mesh_cleanup_gateway_source --baseline primary|secondary
+--accepted-source PRIVATE_SOURCE --output NEW_PRIVATE_DIRECTORY --ref COMMIT`.
+Primary additionally requires `--accepted-manifest PRIVATE_MANIFEST`. The two pinned
+predecessors differ: primary is the282-member canonical/P1 capsule (`f8ff5178…` binary),
+secondary is the293-member reset-repeat capsule (`566cbc96…`). Do not promote the
+secondary's performance changes onto primary as part of this lifecycle correction.
+Only bootstrap/session lifecycle sources change; three committed test inputs are
+imported separately. Both inventories, patch, immutable source refs and output custody
+are checked; no configuration or operation permit is included. Qualify and reproduce
+each candidate independently before runtime delivery.
+[Selected115/runtime qualification](releases/2026-11-04-android115-mesh-cleanup.md).
+
 Owner selected permanent Amsterdam2 MESH, then Android delivery on3 November.
 See [current integration gates](releases/2026-11-03-second-nl-mesh.md); the rehearsal
 permissions, identities and four-hour permits below are not permanent authorization.

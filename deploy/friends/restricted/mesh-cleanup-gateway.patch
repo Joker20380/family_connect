@@ -1,0 +1,89 @@
+diff --git a/bootstrap/protocol.go b/bootstrap/protocol.go
+index d1c17aa..d63cfdf 100644
+--- a/bootstrap/protocol.go
++++ b/bootstrap/protocol.go
+@@ -215,6 +215,15 @@ func OpenServer(ctx context.Context, endpoint familysession.PacketEndpoint, path
+ 	}
+ 	broker.ExchangeEvent(ctx, "authenticated", "ok")
+ 	event("bootstrap_family_auth")
++	ctx, cancelExchange := context.WithCancel(ctx)
++	defer cancelExchange()
++	go func() {
++		select {
++		case <-secured.Done():
++			cancelExchange()
++		case <-ctx.Done():
++		}
++	}()
+ 	err = exchange(ctx, secured, broker, roombroker.SessionAuthorizer(path, secured.ConnectionState()), func(failure ExchangeFailure) {
+ 		for _, observe := range failures {
+ 			if observe != nil {
+@@ -253,7 +262,7 @@ func Recover(ctx context.Context, directory Directory, raw []byte, event func(st
+ 	if len(networks) > 0 {
+ 		config.Underlay = networks[0]
+ 	}
+-	carrier, err := telemost.New(ctx, config)
++	carrier, err := telemost.NewOwned(ctx, config)
+ 	if err != nil {
+ 		startupdiag.Failure(ctx, "SEED_CREATE", err)
+ 		return roombroker.Descriptor{}, roombroker.Code("bootstrap_carrier")
+@@ -292,8 +301,9 @@ func recoverCarrier(ctx context.Context, carrier familysession.PacketEndpoint, r
+ 	}
+ 	defer session.Close()
++	reading, stopReading := context.WithCancel(context.WithoutCancel(ctx))
+ 	readerDone := make(chan struct{})
+-	go func() { defer close(readerDone); readLease(ctx, session) }()
+-	defer func() { cancel(); carrier.Close(); <-readerDone }()
++	go func() { defer close(readerDone); readLease(reading, session) }()
++	defer func() { stopReading(); carrier.Close(); <-readerDone }()
+ 	closeAdmission := context.AfterFunc(admission, func() { session.Close() })
+ 	secured, err := familysession.Open(ctx, session, raw, false)
+ 	closeAdmission()
+diff --git a/familysession/session.go b/familysession/session.go
+index 98f2dc5..1a30984 100644
+--- a/familysession/session.go
++++ b/familysession/session.go
+@@ -185,6 +185,7 @@ type stream struct {
+ 	peer     net.Conn
+ 	endpoint PacketEndpoint
+ 	cancel   context.CancelFunc
++	done     <-chan struct{}
+ 	once     sync.Once
+ 	workers  sync.WaitGroup
+ }
+@@ -192,7 +193,7 @@ type stream struct {
+ func bridge(ctx context.Context, endpoint PacketEndpoint) *stream {
+ 	ctx, cancel := context.WithCancel(ctx)
+ 	local, peer := net.Pipe()
+-	connection := &stream{Conn: local, peer: peer, endpoint: endpoint, cancel: cancel}
++	connection := &stream{Conn: local, peer: peer, endpoint: endpoint, cancel: cancel, done: ctx.Done()}
+ 	connection.workers.Add(2)
+ 	go func() {
+ 		defer connection.workers.Done()
+@@ -311,6 +312,8 @@ func (session *Session) ConnectionState() tls.ConnectionState {
+ 	return session.connection.ConnectionState()
+ }
+ 
++func (session *Session) Done() <-chan struct{} { return session.stream.done }
++
+ func (session *Session) SecurityDeadline() time.Time { return session.expiry }
+ 
+ func (session *Session) SendContext(ctx context.Context, payload []byte) (failure error) {
+diff --git a/telemost/session.go b/telemost/session.go
+index 3f8f6b0..ddfb12d 100644
+--- a/telemost/session.go
++++ b/telemost/session.go
+@@ -182,6 +182,13 @@ type Session struct {
+ 	wg sync.WaitGroup
+ }
+ 
++func NewOwned(ctx context.Context, cfg Config) (*Session, error) {
++	if err := ctx.Err(); err != nil {
++		return nil, err
++	}
++	return New(context.WithoutCancel(ctx), cfg)
++}
++
+ // New creates an unconnected Session.
+ func New(ctx context.Context, cfg Config) (*Session, error) {
+ 	if cfg.Trace == nil {

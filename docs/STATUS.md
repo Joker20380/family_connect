@@ -6,6 +6,9 @@ Candidate115 source includes f66b533; exact CI/artifact/signing, canonical gatew
 projection/runtime and physical gates are pending, not PASS. Owner114 and public/
 invitation/updater113/catalog7 unchanged; no server or phone mutation at this checkpoint.
 [Current delivery and rollback gates](releases/2026-11-04-android115-mesh-cleanup.md).
+Read-only fleet inventory preserves distinct primary/secondary binary baselines;
+the narrow three-file canonical projection passes34 source checks. Builds, runtime
+delivery and physical acceptance remain pending; no generic-main gateway replacement.
 
 **4 November — selected MESH startup/cleanup source correction DONE; delivery OPEN.**
 One controlled114 reconnect fails at SEED_ADMISSION/DEADLINE. Exact old-session NL1

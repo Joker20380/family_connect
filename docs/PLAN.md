@@ -10,6 +10,9 @@ under existing fleet custody and verify paired cleanup/reconnect/DNS/HTTPS. Pres
 active ownership and all identity, timeout and renewal protections. Public113/catalog7
 unchanged; no unrelated successor or automatic public rollout.
 [Required completion/rollback gates](releases/2026-11-04-android115-mesh-cleanup.md).
+Canonical projection source gate: independently pin NL1/NL2 predecessors and preserve
+their different transport/performance policies;34 source checks pass. Exact candidate
+reproduction and production-tag qualification precede the guarded runtime step.
 
 **Current selected continuation — FLEET-BOOTSTRAP-2 startup/cleanup source correction DONE.**
 Dependencies: accepted114 DNS candidate, paired owner/gateway readback and preserved
