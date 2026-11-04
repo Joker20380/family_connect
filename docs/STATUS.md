@@ -12,11 +12,11 @@ in that window. Packet receipt/old-room identity not proven. No changes by this 
 [Evidence](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**4 November10:27UTC — Android112 qualified; targeted ACK reader ready, product gate OPEN.**
+**4 November11:02UTC — signed Android112 installed on owner phone; live MESH2 blocked by HTTP502.**
 MESH2 node-scoped HTTPe2ed4ca6/additive migration remain installed; existing accounts,
 keys/grants/assignments are preserved. Last service readback08:56 verifies both MESH
 nodes active/boot-disabled, accepted AMS2 binary566cbc96, common writer COMMITTED with
-active timers. No server/policy or signing change in this continuation.
+active timers. No new server/policy change in this continuation.
 Android source2b7d672 is pushed/remote-verified: selected MESH2 now refreshes its own
 readiness scope while retaining primary Auto/chat prewarm.62 Python and414+409 JVM
 PASS/0 skips; lint0 errors/56 existing warnings; exact API27/API35 UI4/4 each PASS.
@@ -44,10 +44,20 @@ ACK generation.125 selected Python PASS/0 skips/one separate historical pipeline
 deselected, including isolated packaged entrypoint and byte-unchanged DB checks.
 At10:24 read-only inventory confirms all-activated: primary14 challenges/fetches/ACKs,
 6 READY/8 native rejection; versions111×5/60×8/109×1 are separate aggregates, not a
-failure attribution. Secondary still0 requests/ACKs. No physical Android is connected;
-real secondary READY/ACK and
-qualified boot activation remain OPEN. Public111/catalog6 and invitation/CSP TLS checks
-PASS unchanged; Windows/Linux distribution unchanged. No112 publication.
+failure attribution. Secondary had0 requests/ACKs at that historical readback.
+At10:45 the exact accepted ARM64 artifact is signed offline with the existing production
+key:50,273,640bytes, SHA2564791d811…74776; signature/payload/16K checks PASS. At10:50
+ADB installs112 over111 on the authorized Android12/API31 ARM64 phone without uninstall
+or data clear. UID, first-install time and subsequently observed support identity match.
+This is a controlled owner installation, not public rollout or full stored-data acceptance.
+After the user re-enables app USB consent and selects MESH2, normal connection fails at
+readiness CHALLENGE/HTTPS_UNDERLAY with HTTP502, before native readiness/Family traffic.
+Independent normal-TLS HTTPS probes also return502. Root cause/repair and real secondary
+READY/ACK/egress/negative acceptance remain OPEN; do not blame the phone or count this
+as product PASS. Latest phone cleanup readback is DISCONNECTED/VPN capture closed.
+Temporary read-only UI helper is removed; MIUI's denied ADB taps were not bypassed.
+Qualified boot activation remains OPEN. Public111/catalog6, invitation and Windows/Linux
+distribution are unchanged by this task; no112 public APK/catalog/tag publication.
 [Evidence, exact CI/artifact acceptance and rollback](releases/2026-11-04-mesh2-android112.md).
 <!-- /MESH2 canonical installation 20261103 -->
 

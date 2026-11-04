@@ -1,9 +1,10 @@
 # Release distribution / Выпуски
 
-**4 November — Android112 candidate, not published.** The node-scoped MESH2 HTTP backend
+**4 November — Android112 signed/owner-installed, not publicly published.** The node-scoped MESH2 HTTP backend
 is installed;112 adds the two-node MESH picker. Exact CI41808770801, API27/API35 and
-downloaded ARM64/source/alignment gates PASS; signing and live product acceptance
-remain pending. Public/invitation
+downloaded ARM64/source/alignment gates PASS. Existing-key signing and in-place owner
+phone111→112 install PASS; UID/first-install/support identity retained. Live MESH2
+readiness gets HTTP502, so product acceptance and public delivery remain pending. Public/invitation
 Android stays111/catalog6. [Current state and rollback](releases/2026-11-04-mesh2-android112.md).
 
 **3 November — Android111 and Windows0.2.16 published; Linux internal.13 owner-installed.**

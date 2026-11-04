@@ -13,13 +13,13 @@ not an established HyperOS defect; no implementation/deployment authorized by th
 [Evidence and limits](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**4 November10:27UTC — FLEET-BOOTSTRAP-2: Android112/ACK-reader qualified, product gate OPEN.**
+**4 November11:02UTC — FLEET-BOOTSTRAP-2: owner112 installed; live readiness HTTP502 to diagnose.**
 Continue the selected MESH2→Android delivery only; no unrelated successor. MESH2 gateway,
 common-fleet writer and node-scoped HTTP/migration are installed. Runtime provider/
 reconnect acceptance remains valid; MESH2 is still boot-disabled pending the product gate.
 Android2b7d672 fixes selected-node foreground readiness refresh while preserving primary
 Auto/chat.62 Python,414+409 JVM, lint, API27/API35 UI4/4 each and synthetic111→112 storage
-preservation PASS. Public/invitation111/catalog6 unchanged; no signer/catalog/tag change.
+preservation PASS. Public/invitation111/catalog6 unchanged; no catalog/tag change.
 Exact CI41806139859 failed in the framing fixture before APK; older41802908693 cancelled.
 Test-only idle-expiry correction is locally qualified (12 repeated framing matrices;
 exact CI14 packages,686 PASS/48 existing optional skips/one package with no tests).
@@ -29,18 +29,21 @@ Four artifact ZIPs match source/run/GitHub digests; unsigned ARM64beta112/code11
 minSDK27/target35, twelve native libraries/source/licenses and16K alignment PASS.
 Exact JVM414+409 PASS/0 skips; API35 debug/Friends28/19 PASS (25/4 skips), API27
 debug/Friends27/18 PASS (26/5 skips); required picker/language/legacy audio execute.
-Downloaded screenshots reviewed on both APIs; no handset claim. Operator readback now
+Downloaded screenshots reviewed on both APIs. Operator readback now
 supports explicit node/device and reported-version112 filtering without requiring the
 retired sole-owner policy;125 selected checks PASS/0 skips/one separate historical
-pipeline deselected. No deployed HTTP/APK change. Read-only10:24 inventory still has
-zero secondary challenges/fetches/ACKs; ADB has no connected device. Next within this ID:
-normal targeted product READY/ACK, Family TLS/DNS/HTTPS/AMS2 egress and negative/cleanup
-acceptance, qualified boot activation, then existing-key offline signing and increasing
-immutable publication. No signing, boot enablement or public112 delivery in this checkpoint.
-There is no connected physical Android and no observed secondary normal-client ACK;
-operator receipts or emulator fixtures must not substitute for that OPEN gate.
-The next live step requires an available authorized Android with its existing identity;
-do not infer a recipient, reenroll a user or create a substitute grant to bypass it.
+pipeline deselected. Read-only10:24 inventory had zero secondary challenges/fetches/ACKs.
+Exact accepted112 is now signed offline with the existing key and installed over111 on
+the authorized Android12/API31 phone at10:50. UID/first-install/support identity match;
+no uninstall, data clear or reenrollment. Controlled owner installation precedes its real
+product gate; it does not authorize public distribution or substitute synthetic evidence.
+User-selected MESH2 fails before native readiness at CHALLENGE/HTTPS_UNDERLAY HTTP502;
+independent HTTPS probes reproduce502. Phone cleanup: DISCONNECTED/VPN capture closed.
+Next within this ID: diagnose/recover this observed control-plane failure, then normal
+targeted READY/ACK, Family TLS/DNS/HTTPS/AMS2 egress and negative/cleanup acceptance;
+qualified boot activation and increasing immutable public publication only after PASS.
+No new backend deployment, grant/policy change, boot enablement or public112 delivery.
+Do not infer a recipient, reenroll the existing phone or generate operator ACKs.
 [Current evidence and rollback](releases/2026-11-04-mesh2-android112.md).
 <!-- /MESH2 canonical installation 20261103 -->
 

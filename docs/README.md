@@ -1,10 +1,12 @@
 # Documentation
 
-**4 November — MESH2 HTTP live; Android112 candidate only.** Node-scoped readiness and
+**4 November — Android112 signed and owner-installed; live MESH2 acceptance OPEN.** Node-scoped readiness and
 additive migration preserve existing accounts/assignments. Exact112 CI/API27/API35 and
 downloaded ARM64/source/alignment checks PASS; targeted node/device/version ACK-reader
-checks PASS. Public111/catalog6 stays unchanged; live Android product acceptance,
-qualified boot activation and signing/publication remain.
+checks PASS. Controlled111→112 phone upgrade retains UID/first-install/support identity.
+Normal MESH2 startup receives HTTP502 before readiness; independent HTTPS reproduces it.
+Public111/catalog6 stays unchanged; failure diagnosis, live product acceptance,
+qualified boot activation and public publication remain.
 [Current rollout and rollback](releases/2026-11-04-mesh2-android112.md).
 
 **3 November — MESH slow-link stability candidate, source only.** Current owner-selected
