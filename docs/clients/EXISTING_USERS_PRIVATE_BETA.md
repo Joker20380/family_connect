@@ -1,11 +1,15 @@
 # Existing-users private Android update / Частное обновление Android
 
 <!-- Unified MESH Android116 20261104 -->
-**117 is a qualified unsigned correction candidate, not an available update.** Owner still116;
-public113/catalog7/download links unchanged. RU:117 ещё не установлен и не опубликован.
+**117 is signed and installed only on the owner phone.** Existing product signer,
+in-place116→117 and exact byte/UID/first-install/Support ID retention pass. Signed APK
+SHA256:`a2f637879787eec0db74efbea271f1242ee37ce9c1069618816e4a0ba4bf8802`.
+Public113/catalog7/download links unchanged; physical traffic acceptance is running.
+RU:117 установлен владельцу без удаления данных; остальным пока доступен113.
+Не удалять приложение и не регистрироваться заново.117 не опубликован.
 [ICE-route correction and remaining gates](../releases/2026-11-04-mesh-protected-ice-route.md).
 
-**4 November — unified gateways, owner-only116.** Both NL MESH runtimes have
+**Earlier4 November checkpoint — unified gateways, owner-only116.** Both NL MESH runtimes have
 identical verified bytes; existing client113/115 and candidate116 protocol checks pass.
 Signed116 is installed only on owner with retained data. Public/invitation/updater
 remains113/catalog7; other users are not assumed upgraded. No116 public download link.

@@ -8,12 +8,14 @@ Read-only physical116 Android history correlates cellular loss21:05:48.860UTC wi
 loss while the Wi-Fi/VPN network survives. Local real-Pion reproduction confirms all-
 interface candidate gathering despite protected sockets;117 narrows host/STUN candidates
 to the protected UDP route without sending a probe payload. Negative protection gates
-remain fail-closed; no retry/deadline/auth/wire change. Installed116/public113 and equal
-NL70e6c0fc remain unchanged. Source5a0f6e0 pushed; disposable API27 Java-storage
+remain fail-closed; no retry/deadline/auth/wire change. Public113 and equal NL70e6c0fc
+remain unchanged. Source5a0f6e0 pushed; disposable API27 Java-storage
 116→117 retention passes. Exact Client builds41917441995 attempt1/API27/API35 and
 downloaded ARM64/source/ABI/16K/licenses/UI gates pass; unsigned APK07d88bef qualified.
-Separate phase0/Linux-control fixture failures remain. Next: protected signing/install,
-then paired physical traffic and unrelated-network-loss checks on both nodes. Old exact
+Separate phase0/Linux-control fixture failures remain. Existing-key signed117/a2f63787
+installed over116 with exact bytes, UID/first-install/Support ID retained. Fresh consent
+and one normal Connect reach NL1 CONNECTED at22:17:08UTC; exact117 readiness ACK verified.
+Next: paired physical traffic/cleanup and unrelated-network-loss checks on both nodes. Old exact
 candidate/interface attribution and sustained acceptance remain open. No public rollout
 or unrelated successor. [Current gates](releases/2026-11-04-mesh-protected-ice-route.md).
 

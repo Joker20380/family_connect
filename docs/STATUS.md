@@ -1,7 +1,7 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
-**4 November — protected ICE-route correction; exact Android117 qualified, unsigned.**
+**4 November22:17UTC — protected ICE-route Android117 installed; traffic gate running.**
 Read-only Android system history places cellular NETWORK_DISCONNECTED at21:05:48.860UTC,
 coincident with116's ACK loss; VPN/Wi-Fi remains present. The old selected candidate's
 interface was not recorded, so this is correlated evidence, not complete attribution.
@@ -15,10 +15,13 @@ Unsigned117 APK07d88bef is50,262,297 bytes. Separate phase0/Linux-control fixtur
 fail; no whole-CI PASS. Both live nodes still have equal70e6c0fc/NRestarts0 at readback;
 current PIDs1293513/1184264 differ from the earlier delivery, not an uptime proof.
 Disposable API27 Java-storage116→117 retention passes; no product key/phone mutation.
-117 remains pending protected signing/install and physical acceptance. Installed
-owner116, public113/catalog7, identical NL70e6c0fc and desktop versions remain unchanged.
-Next stays within this incident: exact117 qualification, then paired physical traffic
-and unrelated-network-loss checks. Do not infer field acceptance from local tests.
+Existing-key signed117 APK a2f63787 is installed over116 with exact byte readback,
+same UID/first-install and Support ID, no uninstall/data clear/reenrollment. Renewed
+app consent works. One normal Connect reaches CONNECTED/native2/NONE at22:17:08UTC;
+the exact117 readiness ACK binds it to NL1. Traffic/paired acceptance is still running.
+Owner117, public113/catalog7, identical NL70e6c0fc; desktop versions unchanged.
+Next stays within this incident: paired physical traffic/cleanup and unrelated-network-
+loss checks. Do not infer field acceptance from CONNECTED or local tests.
 [Evidence, tests and remaining gates](releases/2026-11-04-mesh-protected-ice-route.md).
 
 Earlier delivery checkpoint:

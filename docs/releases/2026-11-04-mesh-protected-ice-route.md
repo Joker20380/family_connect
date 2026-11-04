@@ -3,11 +3,11 @@
 ## Scope and current boundary
 
 Continuation of the owner-selected MESH stability incident, not another queued task.
-Android0.1.18-beta117/code117 is built and qualified, still unsigned; installed owner remains signed116
-(`3ee68c6211b2e438a3250504674a3b8e676c597b6cc00863b9fb0cabe0a56aba`).
+Android0.1.18-beta117/code117 is qualified, signed and installed over116 on the owner
+phone; signed SHA256`a2f637879787eec0db74efbea271f1242ee37ce9c1069618816e4a0ba4bf8802`.
 Public/invitation/updater stays113/catalog7; public links/checksums are not changed.
-Linux/Windows releases are unchanged. No signing, installation or publication in this
-qualification checkpoint. Both NL gateways retain the same running70e6c0fc executable from
+Linux/Windows releases are unchanged. No public publication. Both NL gateways retain
+the same running70e6c0fc executable from
 [the unified delivery](2026-11-04-unified-mesh-stability.md); no server mutation here.
 
 ## New system evidence and limits
@@ -105,6 +105,33 @@ release ARM64 native artifact or a physical phone check. Fixture SHA256:
 `c16d09adf1df5e15fda16535fe3924661569e7d0284eed6c1b86a4261bd89137`.
 Fresh disposable signing key only; no product-key access. The owned emulator is stopped.
 Receipt/build logs remain private in`state-client-build/mesh-ice-route-20261104/`.
+
+## Owner117 signing and retained installation
+
+Only the qualified exact-source ARM64 artifact is signed through the protected local
+vault workflow. Signed APK:50,281,888 bytes, SHA256
+`a2f637879787eec0db74efbea271f1242ee37ce9c1069618816e4a0ba4bf8802`;
+unchanged product signer fingerprint
+`67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+Unsigned payload identity and ZIP16K verification pass. No key export, CI/server key
+access or public catalog mutation. A copied local post-sign verifier still expected
+versionCode116 and rejected the already signed117 before installation; correcting
+that local expectation verifies the **same signed bytes**, without signing again or
+reopening the product key. The initial validator failure is retained, not a product
+runtime failure or a silently replaced artifact.
+
+Exact116 installed hash is checked before `adb install -r`; exact117 APK bytes,
+version and same UID/first-install are independently read back after it. No uninstall,
+data clear or reenrollment. Fresh user-enabled app support consent confirms unchanged
+Support ID and initially DISCONNECTED/capture closed. One normal support Connect then
+reaches CONNECTED/native2/NONE at22:17:08UTC. Exact117 readiness ACK is READY/usable
+only for NL1. Gateway PID1293513/NRestarts0; no server restart is issued. This establishes
+start/target only, not DNS/HTTPS or sustained stability; bounded traffic is in progress.
+Private receipts are in`android117-delivery/` and`physical117/` beneath the work root.
+Public catalog HTTPS readback retains113/sequence7 and SHA256
+`2283a89ffa05e6ad439858f111f7272993b4e46e652c9efa11b44158b9f01b30`.
+
+## Remaining physical and publication gates
 
 1. Finish targeted native/race, protected bidirectional VP8 and existing transient-loss
    coverage; retain failures/skips. Check release provenance/contracts and diff hygiene.

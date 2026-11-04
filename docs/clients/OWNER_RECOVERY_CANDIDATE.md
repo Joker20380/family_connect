@@ -1,12 +1,16 @@
 # Owner recovery106 — private candidate / закрытый кандидат
 
 <!-- Unified MESH Android116 20261104 -->
-**117 is a qualified unsigned ICE-route candidate; owner remains116.** Exact CI, artifact
-and synthetic retention pass; protected signing/install and physical traffic remain open.
-RU:117 пока не устанавливать из непроверенных сборок; публичное обновление остаётся113.
+**117 is signed and installed over116 on the owner phone.** Exact CI/artifacts and
+synthetic retention pass; same product signer, installed bytes, UID/first-install and
+Support ID verified. Signed APK SHA256:
+`a2f637879787eec0db74efbea271f1242ee37ce9c1069618816e4a0ba4bf8802`.
+One normal Connect reaches readiness-verified NL1; physical traffic acceptance running.
+RU: на телефоне владельца117, публичное обновление остаётся113. Данные сохранены;
+переустановка с удалением или повторная регистрация не нужны.117 не опубликован.
 [Correction and remaining checks](../releases/2026-11-04-mesh-protected-ice-route.md).
 
-**4 November — owner116 installed; public remains113.** Same product signer,
+**Earlier4 November checkpoint — owner116 installed; public remains113.** Same product signer,
 in-place115→116 and installed-byte readback pass; no data clear or reenrollment.
 Both NL gateways now run identical70e6c0fc. Android8.1/API27 and Android15/API35 CI
 pass; physical116/NL1 traffic fails46/64 despite observed automatic recovery.
