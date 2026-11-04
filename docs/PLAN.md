@@ -2,6 +2,10 @@
 
 ## Current engineering priority / Текущий critical path
 
+**4 November12:15UTC read-only load/client refresh:** no observed saturation;
+seven recent AWG peers, AMS1 TCP sockets11 then9, no unique-user claim. No repair
+or queue advancement. [Measurements](releases/2026-11-04-vpn-health.md#1215utc-refresh).
+
 **4 November09:10UTC operational readback:** three VPN nodes active; RU TLS-renewal
 timeout needs separately selected diagnosis, current TLS validates. Legacy worker/disk
 follow-ups remain. No priority change or repair authorization.

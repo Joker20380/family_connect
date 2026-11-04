@@ -1,5 +1,10 @@
 # Текущее состояние / Current state
 
+**4 November12:15UTC — VPN load refresh:** AWG/TCP active on all three nodes;
+CPU RU12–31%, AMS1 10–16%, AMS2 7–11% in short samples. Recent AWG peers1/5/1;
+AMS1 xray TCP sockets11 then9, not unique users. No changes or end-to-end acceptance.
+[Read-only measurements](releases/2026-11-04-vpn-health.md#1215utc-refresh).
+
 **4 November09:10UTC — read-only VPN check:** all three AWG/TCP nodes active;
 eight recent peer handshakes, not unique users. RU TLS renewal timed out, but external
 TLS currently validates; legacy Docker worker unhealthy, host worker active.

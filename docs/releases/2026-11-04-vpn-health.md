@@ -1,5 +1,35 @@
 # VPN read-only health — 4 November 2026
 
+## 12:15UTC refresh
+
+Read-only sampling12:15:35–12:15:45UTC (13:15 Brussels), all nodes2 vCPUs.
+
+| Metric | RU | AMS1 | AMS2 |
+| --- | --- | --- | --- |
+| CPU us+sy, three one-second samples | 12–31% | 10–16% | 7–11% |
+| Load1/5/15 | 1.77/1.40/1.55 | 0.68/0.68/0.54 | 0.55/0.46/0.37 |
+| RAM used/total MiB | 1174/1962 | 784/1914 | 447/1919 |
+| RAM available MiB | 788 | 1129 | 1471 |
+| Disk used/free | 77%/6.5G | 16%/39G | 13%/40G |
+| AWG configured peers | 19 | 47 | 4 |
+| AWG handshakes180s/900s/24h | 1/1/2 | 5/7/18 | 1/1/3 |
+| Established TCP443/8446 sockets | 0 | 11 | 0 |
+
+AMS1 follow-up confirms xray owns listener443; established sockets then9 on443,
+0 on8446. Connections fluctuate and are not unique authenticated clients; do not
+sum TCP sockets and AWG peers as people. Seven recent AWG peers are also not a
+deduplicated user count. MESH application session count remains unmeasured.
+AWG/TCP services active on all nodes. No sustained saturation demonstrated by this
+brief sample. RU swap911MiB, one sampled swap-in4KiB/s, swap-out0, IO wait1–4%;
+no demonstrated swap thrashing. RU disk remains a monitoring concern.
+
+No production changes, restarts, rollout or rollback. TLS renewal not rechecked in
+this refresh. Entry checkpoint now records owner112 MESH2 traffic but stability gate
+NOT PASSED; public111/catalog6 unchanged in that checkpoint, not independently
+revalidated by this check. Existing implementation work and queue are preserved.
+
+## Earlier09:07UTC snapshot
+
 Observed 09:07–09:10 UTC. AWG/TCP active on RU, AMS1 and AMS2; RU HTTP
 candidate/host peer worker and both Amsterdam bootstrap services active.
 
