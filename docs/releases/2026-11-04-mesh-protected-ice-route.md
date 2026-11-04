@@ -177,6 +177,73 @@ the pre117 checks, not the earlier20:28UTC delivery processes. No gateway mutati
 this117 qualification. Raw session/readiness/device data stays local under
 `state-client-build/mesh-ice-route-20261104/physical117/acceptance/` and`reconnect/`.
 
+## Physical117 / NL2 and diagnostic target attribution
+
+The owner selects Netherlands2 and connects in the app. The22:29:58UTC phone snapshot
+shows117/CONNECTED/native2/NONE, unchanged Support ID and a new native session. No
+extra Connect, server-selection command or preference modification is issued for it.
+Read-only exact-session journal correlation finds zero matching records on NL1 and
+86 on NL2 at the first lookup; NL2 authorization, Family TLS and gateway session are
+established. After traffic the same session has174 matching NL2 records and none on
+NL1, without a terminal close/failure. NL2 remains PID1184264/NRestarts0, executable
+70e6c0fc; both running-node hashes are independently checked22:31:09UTC.
+
+The first local verification helper incorrectly treated the snapshot's last global
+`readiness_fetch` as the selected node. It found a valid117 READY ACK on NL1 and stopped
+before installing/running a traffic probe. This is a **test-harness attribution defect**,
+not evidence that the owner chose the wrong node or that MESH fell back to NL1.
+`GatewayPicker.readinessTargets` prepares both primary and secondary for NL2;
+`FriendsRestricted` runs node-scoped prewarming and `DiagnosticRing.readinessFetch`
+retains only the last completed fetch. Therefore background preparation of NL1 can
+replace this field while an unchanged, authenticated NL2 session remains connected.
+A second local helper also stopped before probe installation when that global fetch
+changed; the unchanged native session and Support ID were independently confirmed.
+Both guard failures and their original snapshots are retained, not counted as network
+test failures or retried Connect attempts. No application source/policy is changed.
+
+Corrected local validation requires the **exact authenticated native session** in NL2's
+journal and not NL1's, unchanged session/Support ID on the phone, current owner-bound
+node-specific READY receipts, and actual normal-TLS egress to NL2. Read-only receipt
+lookup validates current gateway bindings and finds117 READY/usable ACKs for NL2 at
+22:34:24UTC and NL1 at22:34:26UTC. These are valid per-node preparation receipts, not a
+claim that the last global fetch identifies the active node or exact session's import.
+The earlier NL1 checks also had paired exact-session journal and egress confirmation;
+their positive results do not rely solely on the global fetch field.
+
+At22:36:38UTC, corrected ordinary-UID validation passes64/64 sequential UDP DNS replies
+from64 source ports, all8 DNS wire cases, both Android hostname HTTPS checks and both
+hostname/IPv4-literal HTTPS200 egress checks identifying NL2. One native session is
+retained throughout; temporary probe removed, product data untouched. DNS errors0 and
+ICE/signaling failure NONE. Protocol errors9 are9 expected crossings, actual violations0/
+unclassified0;19 retransmissions,19 recovery-timeout counters, one TCP-open error and
+3890 dropped mux-history events (no dropped incidents) remain recorded.
+Ten post-traffic samples from22:36:59 to22:40:13UTC retain that same session (195.959s
+including read overhead); it also matches the22:29:58UTC initial owner readback,
+providing10m14s sampled continuity without observed automatic reconnection. This is
+ordinary background traffic, not zero-traffic idle or a long-duration soak. At the final
+sample: DNS errors0, ICE/signaling failure NONE,9 expected crossings/zero actual
+violations/unclassified,21 retransmissions/21 recovery-timeout counters, one TCP-open
+error and5397 dropped mux-history events (5415 before disconnect), no dropped incidents.
+
+One normal Disconnect is requested22:40:29.176UTC. Exact NL2 session CLEANUP completes
+22:40:30.227UTC,1.050s later; phone DISCONNECTED/capture closed is observed22:40:34.602UTC.
+NL2 PID1184264/NRestarts0 unchanged; no server restart, force-stop, data clear or owner
+eviction. One normal Connect then reaches CONNECTED/native2/NONE at22:41:29UTC with a
+new native session and the same Support ID. Independent exact-session journal checks
+again find it on NL2 only; its current owner/node READY receipt is independently valid.
+At22:43:11UTC the second ordinary-UID run passes all64/64 UDP requests,8 wire DNS cases,
+2 Android hostname HTTPS and2 exact-NL2 normal-TLS egress checks, without session change.
+Temporary probe removed; owner left CONNECTED on NL2. No failed-connect retry loop,
+server restart, auth exception, timeout change or implicit public rollout.
+Final phone readback retains the reconnected session/native2/NONE, DNS errors0 and
+ICE/signaling failure NONE. Four protocol-error counters are four expected crossings,
+actual violations0/unclassified0;14 retransmissions,11 recovery-timeout counters,
+one TCP-open error and2156 dropped mux-history events (no dropped incidents) retained.
+Post-traffic gateway readback has60 exact-session NL2 records and none on NL1, no
+terminal close/failure; both PIDs/NRestarts remain unchanged.
+Raw evidence stays local under`physical117/nl2-acceptance/` and`nl2-reconnect/` beneath
+the work root. Original attribution guard failures remain separately retained.
+
 ## Remaining physical and publication gates
 
 1. COMPLETE: targeted native/race, protected bidirectional VP8 and existing transient-loss
@@ -190,10 +257,12 @@ this117 qualification. Raw session/readiness/device data stays local under
 4. Run bounded paired same-session ordinary-UID DNS/HTTPS/egress and cleanup/reconnect
    on both NL nodes, including a controlled unrelated-underlay-loss scenario only when
    its network-control authorization and restoration are explicit. No failure-loop probes.
-   NL1 first-session traffic, normal cleanup and fresh-session reconnect traffic pass.
-   NL2 physical selection/traffic and unrelated-loss checks are still open. The consented
-   USB helper supports status/connect/disconnect/P0/P1/P2, not node selection; no private
-   preference modification, input-permission bypass or invented server command is used.
+   COMPLETE for ordinary physical traffic, bounded observation, normal cleanup and
+   fresh-session reconnect on **both** NL nodes. Controlled slow/lossy-link, unrelated-
+   network-loss and longer stability remain OPEN; no network controls were changed.
+   NL2 selection was performed by the owner; no private preference modification,
+   input-permission bypass or invented server command is used. Node attribution must
+   use the authenticated session and egress, not the last global prewarm fetch.
 5. Public distribution and sustained stability remain OPEN until their separate gates
    pass. Server binaries stay equal; do not redeploy gateways merely for this client fix.
 

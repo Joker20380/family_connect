@@ -1,7 +1,7 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
-**4 November22:25UTC — Android117 installed; NL1 traffic/cleanup/reconnect PASS, stability OPEN.**
+**4 November22:43UTC — Android117 both-NL traffic/cleanup/reconnect PASS, sustained stability OPEN.**
 Read-only Android system history places cellular NETWORK_DISCONNECTED at21:05:48.860UTC,
 coincident with116's ACK loss; VPN/Wi-Fi remains present. The old selected candidate's
 interface was not recorded, so this is correlated evidence, not complete attribution.
@@ -22,12 +22,20 @@ app consent works. Exact117 readiness binds each of two sessions to NL1. Both pa
 ordinary-UID64/64 UDP,8 wire DNS cases,2 Android hostname HTTPS and2 exact-egress checks
 without session changes. First session retains sampled continuity for5m56s; normal
 Disconnect yields gateway cleanup in1.024s, followed by one successful normal reconnect.
-NL1 PID1293513/NRestarts0 unchanged; temporary probes removed, owner left CONNECTED.
+NL1 PID1293513/NRestarts0 unchanged; its temporary probes removed.
 Nonzero retry/expected late-stream counters are retained, not hidden as zero errors.
+Owner-selected NL2 now also passes two ordinary-UID64/64 UDP/DNS/HTTPS/exact-egress
+runs,10m14s sampled first-session continuity and normal cleanup1.050s/reconnect.
+Exact authenticated session appears on NL2 only; PID1184264/NRestarts0 unchanged.
+Last-global-readiness attribution was a local test-helper error: NL2 prewarms both nodes.
+Two pre-probe guard failures retained; corrected validation uses exact session/egress
+and separately verified current owner/node READY receipts, not the last global fetch.
+No application/source/policy change for this harness correction. Probes removed;
+owner left CONNECTED on NL2 with the same reconnected session, Support ID retained.
 Owner117, public113/catalog7, identical NL70e6c0fc; desktop versions unchanged.
-Next stays within this incident: select Netherlands2 in the app for paired physical
-traffic/cleanup, then authorized/restorable unrelated-network-loss and longer stability
-checks. USB support has no node-selection operation; no consent/input bypass is used.
+Next stays within this incident: authorized/restorable unrelated-network-loss,
+controlled slow/lossy-link and longer stability checks. Both-node ordinary physical
+traffic/cleanup/reconnect is complete; no consent/input or network-control bypass.
 No public117 rollout or blanket low-speed/long-duration stability PASS.
 [Evidence, tests and remaining gates](releases/2026-11-04-mesh-protected-ice-route.md).
 

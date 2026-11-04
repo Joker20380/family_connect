@@ -4,13 +4,14 @@
 **117 is signed and installed only on the owner phone.** Existing product signer,
 in-place116→117 and exact byte/UID/first-install/Support ID retention pass. Signed APK
 SHA256:`a2f637879787eec0db74efbea271f1242ee37ce9c1069618816e4a0ba4bf8802`.
-Public113/catalog7/download links unchanged. Two NL1 sessions pass64/64 UDP and
-DNS/HTTPS/exact-egress checks; normal cleanup/reconnect pass. NL2 physical and longer
-stability checks remain open; this is not public-release acceptance.
+Public113/catalog7/download links unchanged. Two sessions on each NL node pass64/64 UDP
+and DNS/HTTPS/exact-egress checks; normal cleanup/reconnect pass on both. Longer,
+slow/lossy-link and unrelated-network-loss checks remain open, not public-release acceptance.
 RU:117 установлен владельцу без удаления данных; остальным пока доступен113.
 Не удалять приложение и не регистрироваться заново.117 не опубликован.
-RU: проверка «Нидерланды» и переподключения прошла; «Нидерланды2» ещё нужно проверить
-на телефоне, а длительную стабильность и обрывы физической сети пока не объявляем исправленными.
+RU: обычная проверка и переподключение прошли на «Нидерланды» и «Нидерланды2».
+Телефон оставлен на втором узле. Длительную стабильность, слабую связь и обрывы
+физической сети пока не объявляем исправленными.
 [ICE-route correction and remaining gates](../releases/2026-11-04-mesh-protected-ice-route.md).
 
 **Earlier4 November checkpoint — unified gateways, owner-only116.** Both NL MESH runtimes have

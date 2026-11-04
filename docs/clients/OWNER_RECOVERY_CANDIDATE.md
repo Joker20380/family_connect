@@ -7,11 +7,14 @@ Support ID verified. Signed APK SHA256:
 `a2f637879787eec0db74efbea271f1242ee37ce9c1069618816e4a0ba4bf8802`.
 Two readiness-verified NL1 sessions pass64/64 UDP, DNS/HTTPS and exact-egress checks.
 First session has5m56s sampled continuity; normal cleanup1.024s and reconnect pass.
-Owner left CONNECTED; probes removed. NL2 physical/loss/long-duration gates remain open.
+NL2 also passes two64/64 UDP/DNS/HTTPS/exact-egress runs,10m14s sampled continuity and
+normal cleanup1.050s/reconnect. Owner left CONNECTED on NL2; probes removed. Actual
+node is bound by exact authenticated session/egress, not last background prewarm fetch.
+Slow/lossy-link, unrelated-network-loss and long-duration gates remain open.
 RU: на телефоне владельца117, публичное обновление остаётся113. Данные сохранены;
 переустановка с удалением или повторная регистрация не нужны.117 не опубликован.
-RU: следующий шаг — выбрать в MESH «Нидерланды2» на телефоне и подключиться для такой
-же проверки. Разрешённая USB-поддержка не умеет менять выбранный сервер.
+RU: оба нидерландских узла прошли обычную проверку и переподключение; сейчас подключён
+«Нидерланды2». Следующий этап — контролируемые потери/слабая сеть и длительная проверка.
 [Correction and remaining checks](../releases/2026-11-04-mesh-protected-ice-route.md).
 
 **Earlier4 November checkpoint — owner116 installed; public remains113.** Same product signer,

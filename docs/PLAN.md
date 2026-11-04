@@ -17,10 +17,15 @@ installed over116 with exact bytes, UID/first-install/Support ID retained. Fresh
 and two normal connections reach exact-readiness-verified NL1. Both sessions pass
 64/64 UDP,8 DNS wire cases,2 Android HTTPS and2 exact-egress checks without a session
 change. First session has5m56s sampled continuity; normal gateway cleanup1.024s and
-one normal reconnect pass. Owner left CONNECTED, probes removed, gateway PID unchanged.
-Next: user selects Netherlands2 in the app (USB support cannot select nodes), then paired
-physical traffic/cleanup there; authorized/restorable unrelated-network-loss and longer
-stability checks remain open. Old exact candidate/interface attribution is still limited.
+one normal reconnect pass. NL2 now passes the same two-session64/64/DNS/HTTPS/egress
+checks,10m14s sampled continuity and normal cleanup1.050s/reconnect. Both gateway PIDs
+unchanged, probes removed; owner left CONNECTED on NL2. Use exact authenticated
+session/egress for node attribution, not last global readiness_fetch: both nodes prewarm
+and can replace that diagnostic field. Current owner/node READY receipts independently
+verified; two local pre-probe attribution guard failures retained, no product-source change.
+Next: authorized/restorable unrelated-network-loss, controlled slow/lossy-link and longer
+stability checks. Both-node ordinary traffic/cleanup/reconnect is complete. Old exact
+candidate/interface attribution is still limited.
 No public rollout or unrelated successor. [Current gates](releases/2026-11-04-mesh-protected-ice-route.md).
 
 Earlier unified116 delivery checkpoint:
