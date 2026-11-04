@@ -1,5 +1,11 @@
 # Documentation
 
+**Current4 November — Android117 protected ICE-route source candidate.** Physical116
+cellular loss coincides with ACK stall despite Wi-Fi/VPN continuity; a local all-interface
+ICE defect is reproduced and narrowed to the protected route. Native race239 PASS/6
+optional skips, repeated media/recovery6 PASS, contracts46 PASS. Not yet built/installed;
+owner116/public113 and equal gateway70e6c0fc remain. [Current evidence and gates](releases/2026-11-04-mesh-protected-ice-route.md).
+
 **4 November20:29UTC — both NL gateways run identical MESH70e6c0fc.** Guarded delivery
 and independent running-hash/fresh-seed checks pass; profiles and ordinary services
 unchanged, common writer resumed. Android116 exact CI/API27/API35 and downloaded

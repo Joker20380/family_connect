@@ -1,6 +1,21 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
+**4 November — protected ICE-route correction; Android117 source candidate.**
+Read-only Android system history places cellular NETWORK_DISCONNECTED at21:05:48.860UTC,
+coincident with116's ACK loss; VPN/Wi-Fi remains present. The old selected candidate's
+interface was not recorded, so this is correlated evidence, not complete attribution.
+Reproduced code defect: Pion gathers all IPv4 interfaces, including non-default paths,
+although socket protection does not select one interface. New protected UDP route lookup
+sends no data and restricts host/STUN candidates to that source address; denied/closed/
+cancelled protection fails closed. No timeout, retries, auth, wire or server change.
+117 is source-only pending exact build/CI/sign/install and physical acceptance. Installed
+owner116, public113/catalog7, identical NL70e6c0fc and desktop versions remain unchanged.
+Next stays within this incident: exact117 qualification, then paired physical traffic
+and unrelated-network-loss checks. Do not infer field acceptance from local tests.
+[Evidence, tests and remaining gates](releases/2026-11-04-mesh-protected-ice-route.md).
+
+Earlier delivery checkpoint:
 **4 November21:07UTC — identical MESH/owner116 delivered; physical traffic FAIL.**
 Guarded NL2→NL1 delivery completes with the same70e6c0fc executable, independently
 verified through running processes: NL1 PID1219052, NL2 PID1150135, zero restarts.

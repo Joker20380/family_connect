@@ -19,14 +19,15 @@ var ErrDenied = errors.New("underlay socket denied")
 
 type Network struct {
 	*stdnet.Net
-	ctx       context.Context
-	protect   func(int) bool
-	resolver  *net.Resolver
-	Protected atomic.Uint64
-	Rejected  atomic.Uint64
-	DNS       atomic.Uint64
-	protectMu sync.RWMutex
-	closed    bool
+	ctx         context.Context
+	protect     func(int) bool
+	resolver    *net.Resolver
+	routeTarget string
+	Protected   atomic.Uint64
+	Rejected    atomic.Uint64
+	DNS         atomic.Uint64
+	protectMu   sync.RWMutex
+	closed      bool
 }
 
 func New(ctx context.Context, resolverAddress string, protect func(int) bool) (*Network, error) {
@@ -38,7 +39,7 @@ func New(ctx context.Context, resolverAddress string, protect func(int) bool) (*
 	if err != nil {
 		return nil, err
 	}
-	network := &Network{Net: base, ctx: ctx, protect: protect}
+	network := &Network{Net: base, ctx: ctx, protect: protect, routeTarget: resolverAddress}
 	network.resolver = &net.Resolver{PreferGo: true, StrictErrors: true, Dial: func(ctx context.Context, protocol, _ string) (net.Conn, error) {
 		if protocol != "udp" && protocol != "tcp" {
 			return nil, ErrDenied
@@ -48,6 +49,19 @@ func New(ctx context.Context, resolverAddress string, protect func(int) bool) (*
 		return dialer.DialContext(ctx, protocol+"4", resolverAddress)
 	}}
 	return network, nil
+}
+
+func (network *Network) RouteIPv4() (net.IP, error) {
+	connection, err := network.Dial("udp4", network.routeTarget)
+	if err != nil {
+		return nil, ErrDenied
+	}
+	defer connection.Close()
+	local, ok := connection.LocalAddr().(*net.UDPAddr)
+	if !ok || local.IP.To4() == nil || local.IP.IsUnspecified() || local.IP.IsMulticast() {
+		return nil, ErrDenied
+	}
+	return append(net.IP(nil), local.IP.To4()...), nil
 }
 
 func (network *Network) control(protocol, _ string, raw syscall.RawConn) error {

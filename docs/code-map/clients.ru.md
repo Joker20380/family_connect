@@ -19,6 +19,15 @@ last8+first_failure через существующий `DiagnosticRing`; `scrip
 
 ## Android
 
+### Protected ICE route — Android117 source candidate
+
+`carrier/underlay.Network.RouteIPv4` derives the protected UDP source address without
+transmitting a payload. `telemost.webRTCSettings` restricts host/STUN candidates to that
+address for protected clients; unprotected server settings retain IPv4 behavior.
+`underlay_test.go` covers real Pion multi-address/STUN and bidirectional VP8, plus denied,
+closed and cancelled protection. No Java binding, wire, retry or auth policy change.
+[Correlated116 system evidence and117 delivery gates](../releases/2026-11-04-mesh-protected-ice-route.md).
+
 ### Unified server picker — Android113
 
 `GatewayPicker` now derives one ordered list from Russia plus the admitted gateway

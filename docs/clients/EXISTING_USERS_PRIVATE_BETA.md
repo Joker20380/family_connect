@@ -1,6 +1,10 @@
 # Existing-users private Android update / Частное обновление Android
 
 <!-- Unified MESH Android116 20261104 -->
+**117 is a source-only correction candidate, not an available update.** Owner still116;
+public113/catalog7/download links unchanged. RU:117 ещё не установлен и не опубликован.
+[ICE-route correction and remaining gates](../releases/2026-11-04-mesh-protected-ice-route.md).
+
 **4 November — unified gateways, owner-only116.** Both NL MESH runtimes have
 identical verified bytes; existing client113/115 and candidate116 protocol checks pass.
 Signed116 is installed only on owner with retained data. Public/invitation/updater

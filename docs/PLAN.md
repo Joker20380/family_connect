@@ -3,7 +3,18 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- Android113 MESH incident 20261104 -->
-**Selected task — unified MESH stability on both NL nodes, Android116 candidate.**
+**Selected task — unified MESH stability; Android117 protected ICE-route candidate.**
+Read-only physical116 Android history correlates cellular loss21:05:48.860UTC with ACK
+loss while the Wi-Fi/VPN network survives. Local real-Pion reproduction confirms all-
+interface candidate gathering despite protected sockets;117 narrows host/STUN candidates
+to the protected UDP route without sending a probe payload. Negative protection gates
+remain fail-closed; no retry/deadline/auth/wire change. Installed116/public113 and equal
+NL70e6c0fc remain unchanged. Next: exact117 CI/artifact/platform/upgrade/signing gates,
+then paired physical traffic and unrelated-network-loss checks on both nodes. Old exact
+candidate/interface attribution and sustained acceptance remain open. No public rollout
+or unrelated successor. [Current gates](releases/2026-11-04-mesh-protected-ice-route.md).
+
+Earlier unified116 delivery checkpoint:
 Owner explicitly requires the same implementation on both gateways, superseding prior
 preservation of distinct transport behavior. Preserve distinct credentials, canonical
 paths and ordinary services. Current shared-source helper validates both predecessors

@@ -113,3 +113,37 @@ func TestHTTPSAndClosedOwnerCannotBypassProtection(test *testing.T) {
 		test.Fatal("released owner accepted socket")
 	}
 }
+
+func TestRouteIPv4UsesProtectionWithoutSendingTraffic(test *testing.T) {
+	listener, err := net.ListenUDP("udp4", &net.UDPAddr{IP: net.IPv4(127, 0, 0, 1)})
+	if err != nil {
+		test.Fatal(err)
+	}
+	defer listener.Close()
+	network, err := New(context.Background(), "127.0.0.1:53", func(fd int) bool { return fd > 0 })
+	if err != nil {
+		test.Fatal(err)
+	}
+	defer network.Close()
+	network.routeTarget = listener.LocalAddr().String()
+	address, err := network.RouteIPv4()
+	if err != nil || !address.Equal(net.IPv4(127, 0, 0, 1)) {
+		test.Fatal("protected route selection failed", err)
+	}
+	if network.Protected.Load() != 1 || network.DNS.Load() != 0 {
+		test.Fatal("route lookup bypassed protection or resolved a hostname")
+	}
+	if err := listener.SetReadDeadline(time.Now().Add(50 * time.Millisecond)); err != nil {
+		test.Fatal(err)
+	}
+	buffer := make([]byte, 1)
+	if _, _, err := listener.ReadFromUDP(buffer); err == nil {
+		test.Fatal("route selection sent an unsolicited packet")
+	} else if failure, ok := err.(net.Error); !ok || !failure.Timeout() {
+		test.Fatal("unexpected listener failure", err)
+	}
+	network.Close()
+	if _, err := network.RouteIPv4(); err == nil {
+		test.Fatal("released underlay still provided a route")
+	}
+}

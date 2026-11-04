@@ -590,17 +590,10 @@ func newWebRTCAPI(networks ...*underlay.Network) (*webrtc.API, error) {
 }
 
 func diagnosticWebRTCAPI(network *underlay.Network, diagnostic interceptor.Factory) (*webrtc.API, error) {
-	settings := webrtc.SettingEngine{}
-	settings.SetICETimeouts(iceDisconnectedTimeout, iceFailedTimeout, iceKeepaliveInterval)
-	if network != nil {
-		settings.SetNet(network)
+	settings, err := webRTCSettings(network)
+	if err != nil {
+		return nil, err
 	}
-	logger := logging.NewDefaultLoggerFactory()
-	logger.Writer = io.Discard
-	settings.LoggerFactory = logger
-	settings.SetNetworkTypes([]webrtc.NetworkType{webrtc.NetworkTypeUDP4})
-	settings.SetIPFilter(func(ip net.IP) bool { return ip.To4() != nil })
-
 	mediaEngine := &webrtc.MediaEngine{}
 	if err := mediaEngine.RegisterDefaultCodecs(); err != nil {
 		return nil, fmt.Errorf("telemost: register codecs: %w", err)
@@ -617,6 +610,28 @@ func diagnosticWebRTCAPI(network *underlay.Network, diagnostic interceptor.Facto
 		webrtc.WithMediaEngine(mediaEngine),
 		webrtc.WithInterceptorRegistry(registry),
 	), nil
+}
+
+func webRTCSettings(network *underlay.Network) (webrtc.SettingEngine, error) {
+	settings := webrtc.SettingEngine{}
+	settings.SetICETimeouts(iceDisconnectedTimeout, iceFailedTimeout, iceKeepaliveInterval)
+	if network != nil {
+		settings.SetNet(network)
+	}
+	logger := logging.NewDefaultLoggerFactory()
+	logger.Writer = io.Discard
+	settings.LoggerFactory = logger
+	settings.SetNetworkTypes([]webrtc.NetworkType{webrtc.NetworkTypeUDP4})
+	settings.SetIPFilter(func(ip net.IP) bool { return ip.To4() != nil })
+	if network != nil {
+		route, err := network.RouteIPv4()
+		if err != nil {
+			return settings, fmt.Errorf("telemost: protected ICE route: %w", err)
+		}
+		settings.SetIPFilter(func(ip net.IP) bool { return ip.To4() != nil && ip.Equal(route) })
+	}
+
+	return settings, nil
 }
 
 // setupTransport attaches the mode-specific local media/data to the publisher.
