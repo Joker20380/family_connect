@@ -1,9 +1,11 @@
 # Documentation
 
-**4 November — Android114 DNS candidate signed and owner-installed.** Exact platform CI,
-downloaded APK/native/runtime/UI, offline signing and in-place113→114 readback PASS. Physical
-DNS/HTTPS awaits renewed USB consent inside the app; no stability PASS. Public/invitation/
-updater113/catalog7 retained, owner114. No public distribution or server change.
+**4 November17:00UTC — Android114 owner DNS/HTTPS gate PASS; startup stability OPEN.**
+Renewed consent,64 distinct UDP queries/64 valid replies, A/AAAA/TCP/paired cases and
+hostname HTTPS with verified Netherlands/NL1 egress pass in one native session. Earlier
+HELLO timeouts and the first probe's port-reuse negative are retained. Probe removed;
+owner CONNECTED. Exact CI/signing/install gates remain accepted. Public/invitation/
+updater113/catalog7 retained, owner114; no public distribution or server mutation.
 [Current gates and version state](releases/2026-11-04-android114-dns.md).
 
 **4 November — Android113 published, signed catalog7, owner112→113 installed.** Same

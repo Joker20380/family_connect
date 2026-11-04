@@ -1,9 +1,11 @@
 # Release distribution / Выпуски
 
-**4 November — Android114 DNS candidate signed and owner-installed, not public.** Exact
-source3d3bf26/CI41860466848 attempt1, APK/native/runtime/UI, offline existing-key signing and
-owner113→114 in-place readback PASS. Physical DNS/HTTPS awaits renewed app USB consent;
-stability remains OPEN. Public/invitation/updater113/catalog7; owner114.
+**4 November17:00UTC — Android114 owner DNS/HTTPS accepted, not public.** Exact source3d3bf26/
+CI41860466848 attempt1, artifacts, offline signing and in-place readback PASS. Renewed
+consent permits64 distinct UDP flows/64 replies, A/AAAA/TCP/paired DNS and normal-TLS
+hostname HTTPS/verified NL1 egress in one session. Earlier HELLO failures and the first
+probe's port-reuse negative remain recorded; sustained/reconnect stability stays OPEN.
+Probe removed, owner CONNECTED. Public/invitation/updater113/catalog7; owner114 unchanged.
 [Receipt](releases/2026-11-04-android114-dns.md).
 
 **4 November — Android113 published, owner-installed, invitation/updater113/catalog7.**

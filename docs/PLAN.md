@@ -3,17 +3,21 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- Android113 MESH incident 20261104 -->
-**Current continuation — Android114 owner DNS candidate installed; physical gate OPEN.**
-Source3d3bf26/CI41860466848 attempt1 terminal SUCCESS, downloaded artifacts/UI, offline
-existing-key signing and owner113→114 in-place installation/readback PASS. Local synthetic
-state recovery PASS. At16:27UTC the updated app refuses snapshots because its process-local
-USB consent reset. Next dependency: owner re-enables USB support inside Family Connect;
-then consented reconnect and ordinary-UID64-query/A/AAAA/TCP/paired DNS plus hostname HTTPS.
-Do not bypass consent or count CONNECTED as acceptance. Public/invitation/updater113/catalog7,
-owner114. Source/signing/platform dependencies are satisfied; the remaining prerequisite
-is explicit phone support consent. Completion is a verified
-owner candidate with negative results retained, not a blanket MESH stability claim.
-No unrelated framing/underlay patch, server policy or public distribution in this step.
+**Current continuation — Android114 bounded owner DNS candidate gate DONE; incident OPEN.**
+Source3d3bf26/CI41860466848 attempt1, downloaded artifacts/UI, offline existing-key signing,
+in-place install/readback and synthetic state recovery PASS. Renewed consent is verified.
+At17:00UTC ordinary-UID64 distinct UDP flows/64 replies,8 A/AAAA/TCP/paired cases, Android
+hostname HTTPS and verified NL1 egress PASS in one native session. Probe removed; owner
+remains CONNECTED at17:00:53. The first probe's recycled-port negative is retained, not
+counted as64-flow acceptance; only the corrected test-only probe satisfies that gate.
+Two earlier HELLO_RECEIVE startup failures remain OPEN. Read-only gateway evidence is
+time-correlated, not an exact ownership attribution; a service generation change overlaps
+the retry, and the subsequent start works. Completion here is a verified owner DNS
+candidate with negative results retained, not sustained/reconnect/low-speed acceptance.
+Public/invitation/updater113/catalog7, owner114. No product patch, server mutation or public
+distribution in this check. Next only when selected: pair the exact bootstrap exchange
+with admission/old-session cleanup, then qualify stable reconnect; do not preempt ownership,
+weaken timeouts or start an unrelated queued successor from these symptoms.
 [114 version state, gates and rollback](releases/2026-11-04-android114-dns.md).
 
 Retained diagnosis/source checkpoint:

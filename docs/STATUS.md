@@ -1,17 +1,20 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
-**4 November16:27UTC — Android114 signed and owner113→114 installed in place.**
-Exact source3d3bf26/CI41860466848 attempt1 completed SUCCESS; native/JVM/API27/API35,
-downloaded source/licenses/16K and actual UI review PASS. Existing-key offline signing PASS;
-signed APK50,281,888 bytes/SHA25653b824ce…7cb97ac matches installed readback. UID and first
-install retained; no uninstall/data clear/reenrollment. Local Python48, Friends413/lint and
-synthetic retained-state upgrade PASS. Physical DNS/HTTPS NOT_RUN: updated app explicitly
-refuses USB support until owner renews its process-local consent. No bypass/connect attempt
-or probe installation. Next: enable USB support inside Family Connect, then ordinary-UID
-DNS/HTTPS acceptance; separate framing/startup stability remains OPEN. Public/invitation/
-updater113/catalog7 retained, owner114; no server change or public publication. Phase0 fixture
-failures remain separate, not a full-suite PASS.
+**4 November17:00UTC — Android114 owner DNS/HTTPS acceptance PASS; MESH stability OPEN.**
+Renewed app USB consent works. Ordinary-UID64 distinct UDP flows return64 valid replies;
+all8 A/AAAA/TCP/paired cases and both Android hostname HTTPS checks pass. Hostname and
+IPv4-literal HTTPS200 confirm the exact readiness-verified Netherlands/NL1 egress, not NL2.
+One native session throughout;17:00:53 CONNECTED/native2/NONE, temporary probe removed.
+First burst test is retained as invalid for the64-flow gate: Android reused one closed
+port, so only63 queries were sent; corrected test-only socket retention passes64/64.
+Two earlier starts fail at HELLO_RECEIVE (~120s). Time-correlated NL1 challenge failures
+and a service stop/start are evidence, not a proven per-device root cause. A third start
+after the observed generation change succeeds; no server mutation is issued by this check.
+Next only when selected: paired bootstrap ownership/cleanup and stable reconnect diagnosis;
+do not equate this DNS gate with sustained or low-speed stability. Exact source3d3bf26/CI,
+offline signing, installed APK readback and retained-state gates remain accepted. Owner114,
+public/invitation/updater113/catalog7 unchanged; no public publication or full phase0 PASS.
 [Exact114 gates and rollback](releases/2026-11-04-android114-dns.md).
 
 Retained source-only checkpoint, superseded by114 delivery above:
