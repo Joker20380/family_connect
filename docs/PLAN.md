@@ -8,6 +8,10 @@ acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-he
 
 <!-- Android113 MESH incident 20261104 -->
 **Selected next gate — exact Android118 diagnostic qualification and controlled owner delivery.**
+First CI41931735646/sourcea03bdec stops at release contracts; stale117 version/diagnostic
+pins are locally reproduced and strictly updated. New Go/Java class-parity and unchanged
+recovery pins retain the security boundary. Contract-only edits now select Android CI.
+Synthetic API27 Java-storage117→118 passes; exact ARM64/UI/platform qualification is pending.
 Package the additive signaling-read classification from234af08 under version118; never
 replace signed117 bytes. Require exact-source platform CI, downloaded source/native/
 ABI/API27/API35/UI checks, existing offline signer and retained-data verification before

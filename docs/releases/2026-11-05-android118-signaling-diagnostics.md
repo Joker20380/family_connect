@@ -47,6 +47,36 @@ the original trace source. It is retained, not silently repaired or used for del
 The prior dirty-tree Friends provenance rejection is also retained; the clean exact
 source build must satisfy that guard normally.
 
+## First qualification and correction
+
+Sourcea03bdeca639153b2a8bcea93db67dbcd3f0b9849 is pushed and remote-SHA verified.
+Client builds41931735646 attempt1 fails at Restricted diagnostic and readiness contracts,
+before native ARM64 packaging or signing. Its preceding carrier race and204 diagnostic/
+readiness tests pass. Local reproduction of the subsequent release selection gives
+57 passes, one Windows deselection and two failures: the candidate contract still expects
+117 and the strict reviewed-handler pins still expect the pre-classification diagnostics.
+These expectations are updated explicitly to118 and the two reviewed diagnostic hashes;
+the immutable historical reference and every unrelated handler pin remain intact.
+A contract verifies identical native/Java finite classes and the unchanged recovery hash.
+Contract-only edits now trigger/select Android CI; no release test is removed or disabled.
+Fresh exact-source platform qualification is still required; the failed run is retained.
+The corrected local CI selections pass204 diagnostic/readiness tests and60 release
+tests, with the same one Windows deselection as the workflow. No diagnostic test is
+deselected in the final first selection. Whitespace and new local document links pass.
+
+Separately, disposable API27 x86_64 Java-storage117→118 retention passes: same UID,
+distinct processes, identity/journal/outbox and atomic-interruption recovery. Candidate
+fixture SHA256`29ac3ac4b4442c5472e50fbfbdb19509cac8ef10407949bdfa7fa12c143c1b76`.
+The fixture uses sourcea03bdec, the unchanged storage-test source, existing local generated
+inputs and fresh disposable signing keys; it is not the release ARM64 payload. No product
+key, private phone data or physical phone mutation is involved. The owned emulator is
+stopped in cleanup. Evidence remains under`state-client-build/android118-signaling-20261105/`.
+
+The full documentation checker reports746 files/4638 links and two existing missing
+anchors: the dirty STATUS historical27 October health link and the23 October desktop
+phase22 link from the24 October source report. New118 links and whitespace are checked
+separately; no all-docs PASS is claimed and unrelated historical content is not changed.
+
 ## Remaining stability work and rollback
 
 There is no promised number of versions: identifying/reproducing/correcting the actual

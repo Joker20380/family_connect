@@ -3,9 +3,9 @@ on:
   push:
     branches: ['**']
     tags: ['v*', 'diag-owner-*']
-    paths: ['clients/**', 'carrier/**', 'pilot/android-restricted/**', '.github/workflows/clients.yml', 'scripts/ci_desktop_env.sh', 'control/requirements.lock', 'provisioning/requirements.lock', 'device_identity/requirements.lock', 'messenger/requirements.lock', 'scripts/ci_release_fixtures.py', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
+    paths: ['clients/**', 'carrier/**', 'pilot/android-restricted/**', '.github/workflows/clients.yml', 'tests/test_android_public_release.py', 'scripts/ci_desktop_env.sh', 'control/requirements.lock', 'provisioning/requirements.lock', 'device_identity/requirements.lock', 'messenger/requirements.lock', 'scripts/ci_release_fixtures.py', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
   pull_request:
-    paths: ['clients/**', 'carrier/**', 'pilot/android-restricted/**', '.github/workflows/clients.yml', 'scripts/ci_desktop_env.sh', 'control/requirements.lock', 'provisioning/requirements.lock', 'device_identity/requirements.lock', 'messenger/requirements.lock', 'scripts/ci_release_fixtures.py', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
+    paths: ['clients/**', 'carrier/**', 'pilot/android-restricted/**', '.github/workflows/clients.yml', 'tests/test_android_public_release.py', 'scripts/ci_desktop_env.sh', 'control/requirements.lock', 'provisioning/requirements.lock', 'device_identity/requirements.lock', 'messenger/requirements.lock', 'scripts/ci_release_fixtures.py', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
   workflow_dispatch:
 concurrency:
   group: family-connect-clients-${{ github.ref }}

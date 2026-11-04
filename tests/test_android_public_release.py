@@ -2,6 +2,7 @@ import base64
 import hashlib
 import importlib.util
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -19,18 +20,34 @@ spec.loader.exec_module(audio)
 def test_android_changes_do_not_start_desktop_suites():
     assert platforms(['clients/android/app/build.gradle', 'pilot/android-restricted/build.py']) == {
         'android': True, 'windows': False, 'linux': False}
+    assert platforms(['tests/test_android_public_release.py']) == {
+        'android': True, 'windows': False, 'linux': False}
     assert all(platforms(['carrier/wholedevice/session.go']).values())
     assert not any(platforms(['docs/STATUS.md']).values())
 
 
-def test_android117_candidate_keeps_provisioning_disabled_and_requires_native_provenance():
+def test_android118_candidate_keeps_provisioning_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 117' in gradle and "versionName '0.1.18-beta117'" in gradle
+    assert 'versionCode 118' in gradle and "versionName '0.1.18-beta118'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
     assert 'verifyFriendsRestrictedInputs' in gradle
     assert '--check-generated' in gradle
+
+
+def test_signaling_read_classes_match_without_changing_legacy_recovery():
+    native = (ROOT / 'carrier/sessiontrace/trace.go').read_text()
+    android = ROOT / 'clients/android/app/src/main/java/com/familyconnect/app'
+    java = (android / 'RestrictedTrace.java').read_text()
+    native_classes = re.search(r'SignalingReadErrorClasses = "([^"]+)"', native).group(1)
+    java_classes = re.search(r'SIGNALING_READ_ERROR_CLASSES="([^"]+)"', java).group(1)
+    assert native_classes == java_classes
+    assert len(set(native_classes.split('|'))) == 12
+    assert 'ReadErrorClass' in native and 'read_error_class,omitempty' in native
+    assert 'signaling_read_error' in (android / 'DiagnosticRing.java').read_text()
+    assert hashlib.sha256((android / 'RestrictedRecovery.java').read_bytes()).hexdigest() == (
+        '5fc3a518a74c1e05de1d99216ee9196e400fad3338994b8150caaa207cb75a00')
 
 
 def test_public_invitation_offers_qualified_android113_and_audio_source():
@@ -196,9 +213,13 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'RestrictedTrace.java': '4810d2c168bd9b01d1a59516a6d9f79b278e91eb016ebef413b597fc174b1e41',
         'RestrictedRecovery.java': '5fc3a518a74c1e05de1d99216ee9196e400fad3338994b8150caaa207cb75a00',
     }
+    reviewed_signaling_read_diagnostics = {
+        'DiagnosticRing.java': 'd6f0f8888164384c2c07627a283a00a9e2383e1488a177816b4f1352f92d0c68',
+        'RestrictedTrace.java': '34a50256ffd04d98cb29274be2c5b800a18a7756c47f5da4568e3bc5a5418561',
+    }
     reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81,
                          **reviewed_gateway_readiness, **reviewed_slow_link_recovery,
-                         **reviewed_idle_ack_recovery}
+                         **reviewed_idle_ack_recovery, **reviewed_signaling_read_diagnostics}
     reviewed_resources = {
         'clients/android/app/src/main/res/values-ru/strings.xml': '89b334900a7febe2e50bfe06d593673961c320704a16ead76c09d9baa22ea279',
         'clients/android/app/src/main/res/values/strings.xml': '85e40c0044eaec9ebe8fb6f77d0a026ddc6bead90fb044237abd23b305fd2c39',

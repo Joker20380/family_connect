@@ -9,8 +9,12 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 **5 November — Android118 diagnostic candidate SOURCE; owner117/public113 unchanged.**
 The next selected gate packages234af08's finite signaling-read classes as a new immutable
 version118, without changing retries, timeouts, authorization, media wire or server code.
-Exact-source platform CI/downloaded ARM64/source/API27/API35/UI and retained-data gates
-are pending; no118 signing, installation or publication yet. Both NL gateways retain the
+First sourcea03bdec/run41931735646 fails at release contracts, before an ARM64 APK.
+Local reproduction identifies stale117/version and diagnostic-file hash expectations;
+strict118 pins and Android-only CI selection for that contract are corrected, not bypassed.
+Synthetic API27 Java-storage117→118 retention passes with disposable keys. Exact-source
+platform CI/downloaded ARM64/source/API27/API35/UI and physical retained-data gates
+remain pending; no118 signing, installation or publication yet. Both NL gateways retain the
 same70e6c0fc implementation.117's failed sustained observation is not retroactively fixed.
 [118 qualification, delivery and remaining gates](releases/2026-11-05-android118-signaling-diagnostics.md).
 
