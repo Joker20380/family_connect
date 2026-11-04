@@ -229,3 +229,58 @@ unchanged. Public RU/EN links are intentionally not changed for this owner-only 
 Retain gateway rollback custody described above; an Android repair needs a higher
 versionCode, not data-clearing downgrade. Paired cleanup/reconnect and sustained/low-speed
 acceptance remain open at this delivery checkpoint.
+
+## Physical115 paired acceptance — manual cleanup PASS, traffic FAIL
+
+Renewed consent permits one bounded start and one deliberate disconnect/reconnect on
+the owner phone. Exact-device/version/readiness-attempt readback confirms usable READY/
+ACK_RECEIVED on Netherlands/NL1 for both starts; NL2 is not accepted from these checks.
+At19:25 both gateways still run the qualified8769eadf/5bcb32ea binaries and common RU
+timers are active. Their service generations and RU HTTP PID differ from18:37; this turn
+does not initiate a restart or attribute that intervening change. The NL1 PID1143052,
+active since19:12:06UTC, remains identical across the measured start/cleanup/reconnect
+and subsequent failure. A server restart does not explain the successful reconnect.
+
+- Initial start is observed CONNECTED/native2/NONE at19:23:53UTC. Ordinary-UID probes
+  pass64 distinct UDP source ports/64 replies, all8 A/AAAA/TCP/paired DNS cases, both
+  Android hostname HTTPS200 checks, and normal-TLS hostname/IPv4-literal egress matching
+  the readiness-verified NL1. Same native session throughout; receipt19:26:30UTC.
+- Disconnect call19:27:03.171UTC; exact old-session cleanup completes19:27:04.158UTC.
+  About0.987s is a client-call/server-journal wall-clock comparison, not packet latency.
+  Local OFF/capture-closed is observed19:27:07.501UTC, immediately followed by reconnect.
+  Remote cleanup precedes it. Close-time FAMILY_TLS_ERROR/GATEWAY_CLOSE labels are
+  retained alongside cleanup; they are not hidden or mistaken for a new-start failure.
+- Fresh authenticated open/auth/handoff is followed by CONNECTED at19:27:36.930UTC
+  (29.428s after the reconnect call, including polling). Native session identity changes
+  as expected. This is a bounded manual cleanup/reconnect PASS, not sustained stability.
+- The next64-flow burst receives47 replies in80.202s and crosses a native generation.
+  Same-session guard rejects it. The subsequent detailed DNS/HTTPS/egress stages do not
+  run, so post-reconnect traffic acceptance is FAIL, not partially claimed as PASS.
+  Temporary ordinary-UID probe is removed even on this failure.
+
+Exact-session failure correlation:
+
+| Side | First failure / preceding evidence |
+| --- | --- |
+| NL1 |19:28:19.477UTC `RELIABLE_RETRY_EXHAUSTED`;8 pending,8 head retries,9.514s since ACK/progress, oldest frame9.741s. |
+| Android115 |Subscriber disconnected19:28:16.723UTC; first terminal19:28:29.654UTC `RELIABLE_FRAME_TIMEOUT`,10 pending,~20.071s frame age/~19.908s without ACK/progress; terminal IO_CLOSED. |
+
+These identify a media/reliable-progress failure distinct from the measured manual
+cleanup defect, not its complete root cause. No actual mux violations, DNS errors or
+protocol errors are reported for that failed native session. Later automatic recovery
+also loses a carrier with signaling read_error; final startup is HELLO_RECEIVE/CLOSED_PIPE.
+The gateway records a further challenge/device_busy rejection at19:30:30UTC, but the
+last failed startup has no valid session tag: do not claim complete ownership attribution.
+Do not remedy this evidence by merely increasing retry/security deadlines or preempting
+the active owner. A deterministic media/ACK-stall and recovery-ownership reproduction
+must precede a further source correction and fresh exact candidate qualification.
+
+At19:35 the phone is FAILED with capture still open. Authorized normal Disconnect then
+releases capture; fresh19:39:10UTC readback confirms115 DISCONNECTED, capture closed and
+no temporary probe package. No additional manual retry, forced application stop, data
+clear, server mutation, rollback or new candidate occurs after the failed check.
+Normal-TLS public catalog readback19:34UTC is byte-identical113/catalog7, SHA256
+`2283a89ffa05e6ad439858f111f7272993b4e46e652c9efa11b44158b9f01b30`.
+Owner115 remains installed, but general distribution is not selected or accepted.
+Post-reconnect traffic, sustained/low-speed stability,115/NL2 and physical Huawei gates
+remain open; a successful first session does not supersede the later negative result.

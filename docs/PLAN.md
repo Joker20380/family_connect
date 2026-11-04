@@ -3,6 +3,18 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- Android113 MESH incident 20261104 -->
+**Current result — Android115/gateway delivery DONE; physical traffic gate FAILED/OPEN.**
+Bounded NL1 manual cleanup/reconnect passes with exact-session correlation and unchanged
+gateway process. First-session DNS/HTTPS passes; subsequent64-flow probe receives47 and
+crosses a native generation, so neither reconnect traffic nor sustained stability passes.
+Gateway ACK/progress starvation and client frame timeout are localized, not fully explained;
+later device_busy ownership remains unproven. Owner115 normally disconnected/capture closed.
+Do not publish115 or weaken retry/admission deadlines. Next only when selected: deterministic
+media-stall/ACK-starvation and recovery-ownership reproduction on the accepted client and
+distinct gateway profiles, then a bounded correction with fresh qualification. No unrelated
+successor. [Exact result and remaining gate](releases/2026-11-04-android115-mesh-cleanup.md#physical115-paired-acceptance--manual-cleanup-pass-traffic-fail).
+
+Earlier installation checkpoint:
 **Current selected gate — Android115 owner delivery DONE; paired physical checks IN PROGRESS.**
 Exact-source candidate is signed with the existing product key and installed114→115;
 installed bytes/UID/first-install readback pass. Renewed USB consent is verified19:22UTC.

@@ -1,10 +1,11 @@
 # Release distribution / Выпуски
 
-**4 November19:21UTC — MESH cleanup gateways delivered; Android115 installed on owner phone.**
-Exact-source CI attempt2/API27/API35/artifact gates and existing-key offline signing pass.
-114→115 is in place; installed bytes, UID and first-install readback pass. Paired physical
-cleanup/reconnect/DNS/HTTPS is in progress after renewed consent. Public/invitation/updater
-113/catalog7 and desktop releases stay unchanged; no general distribution of115.
+**4 November19:39UTC — Android115 owner delivery retained; physical traffic acceptance fails.**
+Existing-key114→115 installed-byte/UID/first-install checks pass. Exact manual session
+cleanup/reconnect and first-session DNS/HTTPS pass, but the next burst returns47/64 with
+a native-generation change and paired reliable timeouts. Owner normally disconnected;
+probe removed. Public/invitation/updater113/catalog7 and desktop releases stay unchanged.
+No general distribution of115 or silent acceptance of the failed traffic gate.
 [Checks and version boundaries](releases/2026-11-04-android115-mesh-cleanup.md).
 
 **4 November — MESH startup/cleanup source checkpoint only.** No release, gateway

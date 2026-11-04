@@ -1,9 +1,10 @@
 # Documentation
 
-**4 November19:21UTC — gateway cleanup delivered; Android115 owner update installed.**
-Exact-source CI/API27/API35/artifact gates, existing-key signing and114→115 installed-byte/
-UID/first-install checks pass. Public/invitation/updater113/catalog7 unchanged. Renewed USB
-consent is verified; paired MESH cleanup/reconnect/DNS/HTTPS remains in progress, not PASS.
+**4 November19:39UTC — owner115 delivered; manual cleanup passes, reconnect traffic fails.**
+First NL1 DNS/HTTPS passes; exact manual cleanup is~0.99s and authenticated reconnect works.
+The following burst returns47/64 across a native-session change. Paired reliable ACK/frame
+timeouts are retained; overall stability remains open. Owner normally disconnected, probe
+removed. Public/invitation/updater113/catalog7 unchanged;115 is not generally distributed.
 [Current qualification, delivery and rollback](releases/2026-11-04-android115-mesh-cleanup.md).
 
 **4 November — MESH startup/cleanup source correction, not deployed.** Controlled114

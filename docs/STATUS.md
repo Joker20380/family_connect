@@ -1,6 +1,21 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
+**4 November19:39UTC — owner115 manual cleanup PASS; post-reconnect traffic FAIL.**
+First NL1 session passes64 distinct UDP flows, DNS/HTTPS and verified egress. Manual
+disconnect releases the exact server session in about0.99s before reconnect, with the
+same gateway process; new authenticated connection is observed after29.43s. Subsequent
+burst returns47/64 across a native-session change, so traffic/stability acceptance fails.
+Paired first failures: gateway RELIABLE_RETRY_EXHAUSTED after9.514s ACK/progress stall;
+client RELIABLE_FRAME_TIMEOUT after~20s, preceded by subscriber disconnection. Further
+automatic recovery ends HELLO_RECEIVE/CLOSED_PIPE; a device_busy bootstrap is retained
+without complete ownership attribution. Normal disconnect confirms capture closed;
+temporary probe removed. Owner115 is DISCONNECTED. Public113/catalog7 unchanged.
+No retry/deadline weakening, new APK or server mutation in this check. Next, only when
+selected: reproduce the media/ACK stall and recovery ownership before another correction.
+[Paired evidence and exact acceptance boundary](releases/2026-11-04-android115-mesh-cleanup.md#physical115-paired-acceptance--manual-cleanup-pass-traffic-fail).
+
+Earlier installation checkpoint:
 **4 November19:21UTC — Android115 signed and installed in place; physical checks OPEN.**
 Existing product signer and unchanged payload verified; installed APK bytes match
 `ee97f88e5d4d98c00cbee9283b334dbecb8ac1efc1431b795868596114ade061`.
