@@ -9,8 +9,9 @@ Fresh113 readiness and Wi-Fi startup work, but DNS and sustained transport accep
 Explicit app USB consent renewed; paired A/AAAA/TCP tests show intermittent UDP DNS loss,
 not universal A-answer suppression. Pinned packet regression reproduces idle-flow exhaustion:
 query17 drops after16 completed queries. Android per-datagram bounded dispatch is implemented
-and locally regression-tested; no public APK changed. Next: qualify this exact source in
-hosted Android/native CI, then a separately versioned delivery/physical DNS gate. Preserve
+and locally regression-tested; source cf9d576 is pushed, local ARM64/16K build passes.
+Client builds41857785568 is IN_PROGRESS, no public APK changed. Next: qualify exact source
+in hosted Android/native CI, then a separately versioned delivery/physical DNS gate. Preserve
 the distinct remaining startup/network-selection and correlated NL2 framing-loss diagnosis;
 this DNS fix does not establish their cause or close sustained stability. Retain identity/P1.
 Completion requires normal DNS/hostname HTTPS and stable reconnect, not only CONNECTED

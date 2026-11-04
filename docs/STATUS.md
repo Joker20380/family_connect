@@ -7,11 +7,14 @@ UDP DNS loss: A times out while AAAA/TCP A work; Android hostname results remain
 The pinned packet engine deterministically drops query17 after16 completed requests because
 idle UDP flows retain all16 slots for10s. New Android datagram dispatch releases capacity
 per completed query, keeping16 in-flight operations, DNS wire semantics and IPv6 containment.
-Pinned packet/race regression including64 sequential flows and paired requests PASS;
-carrier/contract qualification and exact hosted CI are recorded in the incident report.
+Source cf9d576 pushed/remote-verified. Pinned packet/race regression including64 sequential
+flows and paired requests, focused carrier/44 Python checks and local ARM64/16K build PASS.
+Exact hosted Client builds41857785568 is IN_PROGRESS, not release acceptance.
 This is source-only, not a phone fix or stability PASS: NL2 frame exhaustion and earlier
 mixed-network startup failure are separate open problems. Public/invitation/owner113/catalog7
 unchanged; no APK signing/install, server restart or policy change. Temporary probe removed.
+15:28UTC phone remains CONNECTED on the same native session as the wire probe; no post-fix
+phone acceptance is possible from this still-old binary.
 [Evidence, limitations and next gate](releases/2026-11-04-android113-mesh-reconnect.md).
 <!-- /Android113 MESH incident 20261104 -->
 

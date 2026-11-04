@@ -137,6 +137,26 @@ Qualification:
 - Native build now runs pinned packet race/count3 tests before cross-compiling, so future
   hosted Android builds must exercise this path rather than only shared carrier tests.
 
+Source **cf9d576c11e2bf1e12d16030d4bbbfb15e6f9fcb** is committed, pushed and remote-SHA
+verified. Local exact-source normal ARM64 build (Go1.26.0/NDK28.2.13676358) passes its new
+host packet/race gate. ELF AArch64 shared library, all four LOAD alignments16,384 and
+embedded MPL patch identity PASS. This is a native library only, not an APK or installation:
+
+- Native SHA256: `7d15a2738c28b58bde99a382134c2940ec1b2f36ed8d9f2c3b4a163b445c1c8d`.
+- Patch SHA256: `770f8f359faf0630a271f103bcd31033eb46d30aeb531b5933c15058c624b420`.
+- Source tree: `6566bc43e301da76145671bf21c92ca20887bed9`.
+
+[Client builds41857785568](https://github.com/Joker20380/family_connect/actions/runs/41857785568)
+and phase041857785734 start for this exact source. Client qualification is IN_PROGRESS;
+Android is building its unified VPN library, not yet at API27/API35/native delivery gates.
+The earlier113 CI receipt does not qualify this fix. No signing or distribution until the
+new immutable version's exact gates and artifact checks pass.
+
+15:28UTC final readback: unchanged113/P1 CONNECTED on Wi-Fi, native state2/NONE and the same
+private native tag as the wire probe. Disposable package absence verified. No product
+installation, support connect/disconnect, phone network-setting change or server mutation
+in this renewed-consent follow-up. This readback is not corrected-binary acceptance.
+
 ## Next gate and evidence
 
 Exact hosted source CI and a new immutable version are required before offline signing,
