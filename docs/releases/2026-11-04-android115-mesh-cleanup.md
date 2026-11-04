@@ -203,3 +203,29 @@ checkpoint signing waits for the protected local vault password dialog:115 is no
 installed or public. Owner114 and public113/catalog7 remain. Next: existing-key offline
 signing, in-place owner readback, renewed app consent, then paired cleanup/reconnect and
 ordinary-UID DNS/HTTPS. Sustained/low-speed stability and physical Huawei remain open.
+
+## Owner115 offline signing and in-place delivery — 19:21UTC
+
+The earlier signing process ended at protected vault input without a signed output.
+On owner continuation, a fresh protected local signing operation completes. The existing
+product certificate SHA256 remains
+`67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`;
+no private key is exported to persistent plaintext, CI or servers. Exact qualified input,
+package/version/ABI, certificate, ZIP16K and unchanged unsigned payload are verified.
+
+Signed immutable owner candidate: `FamilyConnect-Test-0.1.18-beta115.apk`,50,281,888bytes,
+SHA256 `ee97f88e5d4d98c00cbee9283b334dbecb8ac1efc1431b795868596114ade061`.
+The installed predecessor is first read back as exact114 SHA256
+`53b824cebc963dfcb2478c8bf53262d0093cd530f020ea2d3588474227cb97ac`.
+Ordinary `adb install -r` completes19:21:32UTC; fresh installed115 APK bytes match the
+signed candidate. Package UID and first-install timestamp are preserved. No uninstall,
+data clear, reenrollment, signing-key rotation or profile/DB restoration occurs.
+
+Owner renews in-app USB support; authorized snapshot19:22:38UTC confirms115,
+DISCONNECTED and capture closed. Bounded paired MESH and ordinary-UID DNS/HTTPS checks
+start separately; installation is not physical traffic or stability acceptance.
+Public/invitation/updater stays113/catalog7; Linux0.2.11 and Windows0.2.16/catalog12 stay
+unchanged. Public RU/EN links are intentionally not changed for this owner-only candidate.
+Retain gateway rollback custody described above; an Android repair needs a higher
+versionCode, not data-clearing downgrade. Paired cleanup/reconnect and sustained/low-speed
+acceptance remain open at this delivery checkpoint.

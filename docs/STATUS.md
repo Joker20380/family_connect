@@ -1,6 +1,15 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
+**4 November19:21UTC — Android115 signed and installed in place; physical checks OPEN.**
+Existing product signer and unchanged payload verified; installed APK bytes match
+`ee97f88e5d4d98c00cbee9283b334dbecb8ac1efc1431b795868596114ade061`.
+114→115 preserves UID/first-install without uninstall, data clear or reenrollment.
+App USB consent renewed and verified19:22UTC; initial state DISCONNECTED/capture closed.
+Paired MESH cleanup/reconnect/DNS/HTTPS is now in progress, not accepted. Public113/catalog7
+and desktop releases unchanged. [Signed delivery and remaining gates](releases/2026-11-04-android115-mesh-cleanup.md#owner115-offline-signing-and-in-place-delivery--1921utc).
+
+Earlier qualification checkpoint:
 **4 November — Android115 qualified; existing-key signing awaits local vault unlock.**
 Exact-source CI41880315713 attempt2/API27/API35, downloaded artifact hashes, provenance,
 ABI/16K/licenses,831 JVM cases and reviewed RU/EN picker screens pass. Separate disposable

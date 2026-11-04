@@ -1,10 +1,10 @@
 # Release distribution / Выпуски
 
-**4 November — MESH cleanup gateways delivered; Android115 qualified, signing pending.**
-Exact-source CI attempt2/API27/API35 and downloaded native/artifact/UI checks pass; the
-failed first attempt remains recorded. Separate disposable114→115 storage recovery passes.
-Existing-key signing waits for local vault unlock; no115 signed APK/install/publication yet.
-Owner114, public/invitation/updater113/catalog7 and desktop releases stay unchanged.
+**4 November19:21UTC — MESH cleanup gateways delivered; Android115 installed on owner phone.**
+Exact-source CI attempt2/API27/API35/artifact gates and existing-key offline signing pass.
+114→115 is in place; installed bytes, UID and first-install readback pass. Paired physical
+cleanup/reconnect/DNS/HTTPS is in progress after renewed consent. Public/invitation/updater
+113/catalog7 and desktop releases stay unchanged; no general distribution of115.
 [Checks and version boundaries](releases/2026-11-04-android115-mesh-cleanup.md).
 
 **4 November — MESH startup/cleanup source checkpoint only.** No release, gateway

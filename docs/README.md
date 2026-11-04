@@ -1,10 +1,9 @@
 # Documentation
 
-**4 November — gateway cleanup delivered; Android115 qualified, signing awaits vault unlock.**
-Exact-source CI attempt2/API27/API35, artifact/native/UI checks and separate disposable
-storage upgrade pass. Gateway18:37 readback is unchanged. Android115 is not signed,
-installed or public; owner114 and public113/catalog7 remain. Physical checks require
-renewed in-app USB consent after delivery.
+**4 November19:21UTC — gateway cleanup delivered; Android115 owner update installed.**
+Exact-source CI/API27/API35/artifact gates, existing-key signing and114→115 installed-byte/
+UID/first-install checks pass. Public/invitation/updater113/catalog7 unchanged. Renewed USB
+consent is verified; paired MESH cleanup/reconnect/DNS/HTTPS remains in progress, not PASS.
 [Current qualification, delivery and rollback](releases/2026-11-04-android115-mesh-cleanup.md).
 
 **4 November — MESH startup/cleanup source correction, not deployed.** Controlled114

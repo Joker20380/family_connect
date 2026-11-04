@@ -3,6 +3,14 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- Android113 MESH incident 20261104 -->
+**Current selected gate — Android115 owner delivery DONE; paired physical checks IN PROGRESS.**
+Exact-source candidate is signed with the existing product key and installed114→115;
+installed bytes/UID/first-install readback pass. Renewed USB consent is verified19:22UTC.
+Continue bounded MESH start, selected-node DNS/HTTPS and paired disconnect/cleanup/reconnect.
+Do not infer traffic/stability from CONNECTED or start a general rollout. Public113/catalog7
+unchanged. [Delivery receipt and gate](releases/2026-11-04-android115-mesh-cleanup.md#owner115-offline-signing-and-in-place-delivery--1921utc).
+
+Earlier qualification checkpoint:
 **Current selected gate — Android115 qualification DONE; signing/install/physical OPEN.**
 Exact-source attempt2 and downloaded native/runtime/UI gates pass; disposable API27
 114→115 storage recovery passes. Both qualified gateways remain active. Continue only
