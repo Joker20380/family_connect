@@ -244,6 +244,93 @@ terminal close/failure; both PIDs/NRestarts remain unchanged.
 Raw evidence stays local under`physical117/nl2-acceptance/` and`nl2-reconnect/` beneath
 the work root. Original attribution guard failures remain separately retained.
 
+## Failed sustained observation and additive signaling diagnosis
+
+Owner selected the next stability step after both-node ordinary acceptance. A bounded
+20-minute observation began22:49UTC using the existing reconnected117/NL2 session,
+not a new Connect. The first ordinary-UID round passed8 wire DNS cases,2 Android
+hostname HTTPS checks and2 normal-TLS exact-NL2 egress checks. Scheduled rounds were
+five minutes apart; no server/network/radio setting or bandwidth/loss control changed.
+The test stopped after91.621s at its first failed state guard:22:50:57UTC readback was
+RESTORING/native3/IO_CLOSED. **SOAK_NOT_ACCEPTED: one of five rounds, not a20-minute PASS.**
+The temporary ordinary-UID probe was removed in the failure cleanup; product data stayed
+untouched. No manual reconnect, force-stop, owner eviction or failure-loop probe followed.
+
+The retained phone first failure is22:50:46.330UTC, WEBSOCKET/CLOSED/SIGNAL_WS_CLOSE,
+CloseReason READ_ERROR with no close code; first carrier close is SIGNAL_READ at the
+same timestamp. `signaling_failure=read_error`, `ice_failure=NONE`, reliable terminal
+`carrier_closed`. Thus this incident does not reproduce116's preceding ICE-disconnect
+signature. At the failed readback: DNS errors0;13 expected crossings, zero actual mux
+violations/unclassified,37 retransmissions,33 recovery timeouts,6727 dropped mux-history
+events and zero dropped incidents. These counters are retained, not described as no errors.
+The exact old session is found only on NL2. Its gateway RELIABLE_FRAME_TIMEOUT occurs
+22:51:06.411UTC and final cleanup22:51:06.925UTC. Subsequent recovery reaches CONNECTED
+22:51:23.662UTC,35.694s after RESTORING; the success event follows at22:51:23.709UTC.
+This is recovery to a **new** session, not uninterrupted delivery or seamless migration.
+
+Read-only Android network logs record a default-network Wi-Fi event22:50:55.321UTC and
+cellular disconnection22:50:58.775UTC. They are later nearby transitions, not proof that
+the failed WebSocket used cellular or that a particular transition caused its error.
+A bracketed phone clock read at23:00UTC is within-64 to-39ms of the executor clock;
+it does not reconstruct the failed socket's route. The old error category merges
+multiple distinct causes, including typed network errors, read-limit errors and JSON
+type errors. No precise remote-provider/network root cause is asserted from`read_error`.
+
+At23:00:30UTC the phone remains117/CONNECTED/capture open/native2/NONE, with the same
+recovered session observed22:55UTC and the same Support ID. That exact session has
+authenticated Family/gateway establishment on NL2 only and no recorded terminal close.
+Both gateways remain active with the same70e6c0fc executable, original observation PIDs
+1293513/1184264 and NRestarts0. Temporary probe absent. No deployment or policy change.
+
+The source-only diagnostic correction adds optional`read_error_class` to native evidence
+and the bounded first-failure trace, plus`signaling_read_error` to the native report and
+Android projection. Twelve fixed classes distinguish timeout, WebSocket close error
+(including synthetic closes, not necessarily an observed close frame), JSON syntax/type,
+read limit, reset, abort, locally closed socket, EOF/truncation, other network and unknown
+error. Classification uses typed/wrapped errors, never matching arbitrary remote text.
+Raw error strings, addresses, URLs and payloads are not exported. Missing/unknown injected
+classes are omitted. Legacy`signaling_failure`, CloseReason, termination, recovery/auth,
+retry/deadlines and wire behavior remain unchanged. This improves the next observation;
+it does **not** repair or retroactively identify the physical117 failure.
+
+Validation and retained failures:
+
+- Default-production Go1.26.1`-race`: entire sessiontrace/sessiondiag packages three
+  repetitions,57 test passes including subtests; selected signaling/evidence/first-failure
+  and protected bidirectional VP8 tests five repetitions,140 passes including subtests.
+  No skips/failures in these final runs. Real local WebSocket reader tests cover malformed
+  JSON, wrong JSON type and read limit, preserving terminal closure. Wrapped-error privacy,
+  first-failure rollover and report allowlisting are checked.
+- The first schema check correctly rejected the new optional field. The explicit additive
+  schema expectation is updated; the frozen beta66 reference remains unchanged. The first
+  failing log is retained, not omitted from the qualification history.
+- Android debug JVM:39 tests across diagnostic ring, trace, bounded records, support
+  snapshot and recovery suites pass without skips/failures. Go/Java class allowlists
+  match exactly; formatting and diff-whitespace checks pass. This is not an exact signed
+  Friends candidate, emulator/physical acceptance or a release build.
+- Friends unit-test invocation stopped at`verifyFriendsRestrictedInputs` because native/
+  Android source was uncommitted. That release provenance guard is not disabled. Unit
+  validation uses the ordinary debug task, not a claimed Friends release PASS.
+- Optional`fc_owner_diagnostic` build fails because its existing Snapshot lacks FirstClose.
+  A read-only Go overlay of HEAD's original trace source reproduces the same build failure;
+  it is not fixed as unrelated work. No whole-suite/whole-CI green claim.
+
+No version bump, signing, installation, catalog update or new public artifact occurred.
+Installed117/a2f63787 and both gateway binaries stay as documented; public113/catalog7
+and desktop versions remain unchanged. Source rollback is an ordinary reverting change,
+not a device/server mutation. Existing signed assets and gateway rollback custody remain
+available; do not uninstall, clear data or blindly restart/roll back to hide this result.
+Raw snapshots, system/journal evidence and failed/final test logs remain ignored under
+`state-client-build/mesh-stability-soak-20261104/`; no identifiers or raw evidence enter Git.
+
+Next gate remains this incident: qualify the additional diagnostic source in a new immutable
+candidate through exact-source platform CI, downloaded native/source/ABI/API27/API35 checks
+and same-signer retained-data delivery before another consented controlled physical run.
+The prior117 qualification does not qualify changed source. Controlled slow/lossy and
+unrelated-underlay-loss checks were not reached in this continuation; longer stability
+remains failed/open. No unrelated PLAN successor or public rollout is authorized by this
+source checkpoint.
+
 ## Remaining physical and publication gates
 
 1. COMPLETE: targeted native/race, protected bidirectional VP8 and existing transient-loss
@@ -259,7 +346,8 @@ the work root. Original attribution guard failures remain separately retained.
    its network-control authorization and restoration are explicit. No failure-loop probes.
    COMPLETE for ordinary physical traffic, bounded observation, normal cleanup and
    fresh-session reconnect on **both** NL nodes. Controlled slow/lossy-link, unrelated-
-   network-loss and longer stability remain OPEN; no network controls were changed.
+   network-loss remain OPEN; the subsequent20-minute stability attempt explicitly FAILS
+   at22:50UTC as recorded above. No network controls were changed.
    NL2 selection was performed by the owner; no private preference modification,
    input-permission bypass or invented server command is used. Node attribution must
    use the authenticated session and egress, not the last global prewarm fetch.

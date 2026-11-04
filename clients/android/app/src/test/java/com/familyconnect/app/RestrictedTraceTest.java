@@ -5,6 +5,16 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class RestrictedTraceTest {
+    @Test public void signalingReadClassesPreserveLegacyCloseReason(){
+        for(String errorClass:(RestrictedTrace.SIGNALING_READ_ERROR_CLASSES+"||secret-url").split("\\|",-1)){
+            JsonObject source=event(1,"SIGNAL_WS_CLOSE");source.addProperty("close_reason","READ_ERROR");source.addProperty("read_error_class",errorClass);
+            JsonObject safe=RestrictedTrace.event(source,TAG);
+            assertEquals("SIGNAL_WS_CLOSE",safe.get("reason").getAsString());assertEquals("READ_ERROR",safe.get("close_reason").getAsString());
+            if(RestrictedTrace.allowed(errorClass,RestrictedTrace.SIGNALING_READ_ERROR_CLASSES))assertEquals(errorClass,safe.get("read_error_class").getAsString());
+            else assertFalse(safe.has("read_error_class"));
+            assertFalse(safe.toString().contains("secret"));
+        }
+    }
 	@Test public void leaseReceiptsAreBoundedAndRetainGeneration(){
 		JsonObject source=event(1,"NONE");source.addProperty("stage","GATEWAY_SESSION");source.addProperty("state","ESTABLISHED");
 		source.addProperty("lease_action","confirmed");source.addProperty("lease_sequence",2);source.addProperty("lease_deadline_ms",1791705374000L);

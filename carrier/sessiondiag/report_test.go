@@ -13,9 +13,28 @@ import (
 
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/reliablestream"
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/Joker20380/family_connect/carrier/tcpforward"
 	"github.com/Joker20380/family_connect/carrier/telemost"
 )
+
+func TestSignalingReadErrorProjection(test *testing.T) {
+	for _, class := range append(strings.Split(sessiontrace.SignalingReadErrorClasses, "|"), "", "secret-url") {
+		media := telemost.Stats{Evidence: []telemost.Evidence{{Stage: "WS_FAIL", State: "read_error", ReadErrorClass: class}}}
+		report := Capture("", io.ErrClosedPipe, time.Time{}, reliablestream.Stats{}, media, tcpforward.MuxStats{})
+		expected := class
+		if class == "secret-url" {
+			expected = ""
+		}
+		if report.SignalingFailure != "read_error" || report.SignalingReadError != expected {
+			test.Fatal("lost typed cause or leaked untrusted class")
+		}
+		raw, err := json.Marshal(report)
+		if err != nil || strings.Contains(string(raw), "secret") || expected == "" && strings.Contains(string(raw), "signaling_read_error") {
+			test.Fatal("unsafe or fabricated read error evidence")
+		}
+	}
+}
 
 func TestAdmissionCountersCaptured(test *testing.T) {
 	report := Capture("fixture", nil, time.Time{}, reliablestream.Stats{}, telemost.Stats{}, tcpforward.MuxStats{

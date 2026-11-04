@@ -7,6 +7,26 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Selected continuation — Android117 sustained observation FAIL; signaling diagnosis source checkpoint.**
+The20-minute NL2 test ends after91.621s; one ordinary-UID DNS/HTTPS/egress round passes,
+then exact-session first failure is client WEBSOCKET READ_ERROR/SIGNAL_READ. No preceding
+ICE failure is recorded. Gateway reliable expiry/cleanup follows; normal automatic
+recovery takes35.694s. No operator reconnect, network fault injection or server restart.
+Nearby network transitions do not prove the failed socket's underlay or exact read error.
+Finite additive read-error classes are implemented/tested through native evidence,
+first-failure trace and Android projection, preserving all legacy recovery/security rules.
+No new APK/version/server delivery/publication. Owner117/public113/catalog7 and equal
+NL70e6c0fc remain unchanged. The recovered exact NL2 session is verified23:00UTC;
+Support ID retained and probe removed. Ordinary both-node acceptance remains historical
+PASS, but sustained stability is explicitly FAIL, not completed by automatic recovery.
+Next within this incident: exact-source candidate/CI/API27/API35 and retained-data
+qualification for the extra diagnosis before another consented controlled field run;
+correct the observed transport cause only after reproduction. Slow/lossy and unrelated-
+network-loss gates remain OPEN. Keep the optional diagnostic-tag baseline compile failure
+and dirty-tree Friends provenance rejection visible; no timeout/auth/provenance bypass.
+[Current failed-soak evidence and gates](releases/2026-11-04-mesh-protected-ice-route.md#failed-sustained-observation-and-additive-signaling-diagnosis).
+
+Earlier22:43UTC ordinary-traffic checkpoint:
 **Selected task — unified MESH stability; Android117 protected ICE-route candidate.**
 Read-only physical116 Android history correlates cellular loss21:05:48.860UTC with ACK
 loss while the Wi-Fi/VPN network survives. Local real-Pion reproduction confirms all-

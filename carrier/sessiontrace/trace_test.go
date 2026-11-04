@@ -53,9 +53,9 @@ func TestFirstFailureBoundPrivacyAndSnapshots(test *testing.T) {
 
 func TestCloseAndBrokerDetailsAreAllowlisted(test *testing.T) {
 	trace := New(strings.Repeat("ab", 32), nil)
-	trace.Record(Event{Stage: "GATEWAY_SESSION", State: "FAILED", Reason: "GATEWAY_CLOSE", CloseReason: "secret-token", BrokerReason: "secret-token", CloseCode: 99999})
+	trace.Record(Event{Stage: "GATEWAY_SESSION", State: "FAILED", Reason: "GATEWAY_CLOSE", CloseReason: "secret-token", BrokerReason: "secret-token", ReadErrorClass: "secret-token", CloseCode: 99999})
 	value := trace.Snapshot().Events[0]
-	if value.CloseReason != "" || value.BrokerReason != "unknown" || value.CloseCode != 0 {
+	if value.CloseReason != "" || value.BrokerReason != "unknown" || value.CloseCode != 0 || value.ReadErrorClass != "" {
 		test.Fatal("untrusted close details escaped")
 	}
 	trace.Record(Event{Stage: "ROOM_CREATION", State: "FAILED", Reason: "RECOVERY_DESCRIPTOR_FAILED", BrokerReason: "provider_timeout"})

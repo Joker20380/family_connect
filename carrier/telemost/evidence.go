@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
@@ -15,7 +17,7 @@ import (
 
 func (s *Session) recordSignalingReadFailure(err error) {
 	reason := "SIGNAL_WS_CLOSE"
-	event := Evidence{Stage: "WS_FAIL", State: "read_error"}
+	event := Evidence{Stage: "WS_FAIL", State: "read_error", ReadErrorClass: signalingReadErrorClass(err)}
 	var networkError net.Error
 	var closeError *websocket.CloseError
 	var syntaxError *json.SyntaxError
@@ -34,7 +36,7 @@ func (s *Session) recordSignalingReadFailure(err error) {
 		event.Stage = "SIGNALING_PROTOCOL_FAIL"
 		event.State = "invalid_json"
 	}
-	trace := sessiontrace.Event{Stage: "WEBSOCKET", State: "CLOSED", Reason: reason, CloseReason: "READ_ERROR"}
+	trace := sessiontrace.Event{Stage: "WEBSOCKET", State: "CLOSED", Reason: reason, CloseReason: "READ_ERROR", ReadErrorClass: event.ReadErrorClass}
 	if closeError != nil {
 		trace.CloseCode = closeError.Code
 		if len(event.ReasonKeywords) > 0 {
@@ -53,6 +55,39 @@ func (s *Session) recordSignalingReadFailure(err error) {
 	s.recordEvidence(event)
 }
 
+func signalingReadErrorClass(err error) string {
+	var networkError net.Error
+	var closeError *websocket.CloseError
+	var syntaxError *json.SyntaxError
+	var typeError *json.UnmarshalTypeError
+	switch {
+	case errors.As(err, &networkError) && networkError.Timeout():
+		return "TIMEOUT"
+	case errors.As(err, &closeError):
+		return "WEBSOCKET_CLOSE"
+	case errors.As(err, &syntaxError):
+		return "INVALID_JSON"
+	case errors.As(err, &typeError):
+		return "INVALID_JSON_TYPE"
+	case errors.Is(err, websocket.ErrReadLimit):
+		return "READ_LIMIT"
+	case errors.Is(err, syscall.ECONNRESET):
+		return "CONNECTION_RESET"
+	case errors.Is(err, syscall.ECONNABORTED):
+		return "CONNECTION_ABORTED"
+	case errors.Is(err, net.ErrClosed):
+		return "LOCAL_CLOSED"
+	case errors.Is(err, io.EOF):
+		return "EOF"
+	case errors.Is(err, io.ErrUnexpectedEOF):
+		return "UNEXPECTED_EOF"
+	case errors.As(err, &networkError):
+		return "NETWORK_ERROR"
+	default:
+		return "OTHER"
+	}
+}
+
 type Evidence struct {
 	UTC            string   `json:"utc"`
 	Stage          string   `json:"stage"`
@@ -63,6 +98,7 @@ type Evidence struct {
 	Protocol       string   `json:"protocol,omitempty"`
 	TURNUsed       *bool    `json:"turn_used,omitempty"`
 	ReasonKeywords []string `json:"reason_keywords,omitempty"`
+	ReadErrorClass string   `json:"read_error_class,omitempty"`
 }
 
 type MediaStats struct {

@@ -5,6 +5,19 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class DiagnosticRingTest {
+    @Test public void signalingReadClassesAreAdditiveAndAllowlisted(){
+        for(String errorClass:(RestrictedTrace.SIGNALING_READ_ERROR_CLASSES+"||secret-url").split("\\|",-1)){
+            DiagnosticRing ring=ring();JsonObject input=new JsonObject();
+            input.addProperty("terminal_reason","IO_CLOSED");input.addProperty("signaling_failure","read_error");
+            input.addProperty("signaling_read_error",errorClass);input.addProperty("raw_error","secret-address");
+            ring.restricted(input,3,false,1);
+            JsonObject safe=ring.snapshot().getAsJsonObject("restricted_session");
+            assertEquals("read_error",safe.get("signaling_failure").getAsString());
+            if(RestrictedTrace.allowed(errorClass,RestrictedTrace.SIGNALING_READ_ERROR_CLASSES))assertEquals(errorClass,safe.get("signaling_read_error").getAsString());
+            else assertFalse(safe.has("signaling_read_error"));
+            assertFalse(safe.toString().contains("secret"));
+        }
+    }
     @Test public void additiveMeshMetadataPreservesLegacyEventsAndExportSchema(){
         DiagnosticRing ring=ring();ring.readiness(true,1);
         JsonObject snapshot=ring.snapshot();

@@ -11,6 +11,8 @@ import (
 
 const Limit = 192
 
+const SignalingReadErrorClasses = "TIMEOUT|WEBSOCKET_CLOSE|INVALID_JSON|INVALID_JSON_TYPE|READ_LIMIT|CONNECTION_RESET|CONNECTION_ABORTED|LOCAL_CLOSED|EOF|UNEXPECTED_EOF|NETWORK_ERROR|OTHER"
+
 type Event struct {
 	Delivery              *Delivery `json:"delivery,omitempty"`
 	SessionTag            string    `json:"session_tag"`
@@ -22,6 +24,7 @@ type Event struct {
 	Target                string    `json:"target,omitempty"`
 	CloseCode             int       `json:"close_code,omitempty"`
 	CloseReason           string    `json:"close_reason,omitempty"`
+	ReadErrorClass        string    `json:"read_error_class,omitempty"`
 	BrokerReason          string    `json:"broker_reason,omitempty"`
 	CloseSource           string    `json:"close_source,omitempty"`
 	LeaseDeadlineMS       int64     `json:"lease_deadline_ms,omitempty"`
@@ -100,6 +103,9 @@ func (recorder *Recorder) Record(event Event) {
 	recorder.correlationEvent(event)
 	if !Allowed(event.CloseReason, "|ping|timeout|duplicate|expired|inactivity|shutdown|restart|invalid|ack|idle|session|READ_ERROR|READ_TIMEOUT|INVALID_MESSAGE|WRITE_ERROR") {
 		event.CloseReason = ""
+	}
+	if !Allowed(event.ReadErrorClass, SignalingReadErrorClasses) {
+		event.ReadErrorClass = ""
 	}
 	if event.BrokerReason != "" && !Allowed(event.BrokerReason, BrokerReasons) {
 		event.BrokerReason = "unknown"

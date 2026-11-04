@@ -30,6 +30,7 @@ type Report struct {
 	ObservedAtMS         int64                          `json:"observed_at_ms"`
 	ReliableTerminal     string                         `json:"reliable_terminal"`
 	SignalingFailure     string                         `json:"signaling_failure"`
+	SignalingReadError   string                         `json:"signaling_read_error,omitempty"`
 	ICEFailure           string                         `json:"ice_failure"`
 	EvidenceDropped      uint64                         `json:"evidence_dropped"`
 	SubscriberState      string                         `json:"subscriber_state"`
@@ -129,6 +130,10 @@ func Capture(setupID string, err error, terminalAt time.Time, reliable reliables
 		}
 		if event.Stage == "WS_FAIL" || event.Stage == "SIGNALING_PROTOCOL_FAIL" {
 			report.SignalingFailure = choice(event.State, "read_error", "read_timeout", "invalid_json", "close_code_1000", "close_code_1001", "close_code_1002", "close_code_1003", "close_code_1006", "close_code_1007", "close_code_1008", "close_code_1009", "close_code_1010", "close_code_1011", "close_code_1012", "close_code_1013", "close_code_1015")
+			report.SignalingReadError = ""
+			if sessiontrace.Allowed(event.ReadErrorClass, sessiontrace.SignalingReadErrorClasses) {
+				report.SignalingReadError = event.ReadErrorClass
+			}
 		}
 	}
 	return report

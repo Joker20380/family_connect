@@ -6,6 +6,27 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**4 November23:00UTC — Android117 sustained observation FAIL; typed signaling diagnostics SOURCE ONLY.**
+The selected20-minute NL2 observation stops after91.621s, with one successful ordinary-
+UID DNS/HTTPS/egress round. First phone failure22:50:46.330UTC is WEBSOCKET READ_ERROR /
+SIGNAL_READ, not a preceding ICE failure; gateway reliable expiry and cleanup follow.
+Automatic recovery reaches CONNECTED after35.694s without an operator reconnect.
+No packet loss, radio change or server mutation was injected. Nearby system network
+transitions are correlation only;117 cannot distinguish reset, JSON type/read-limit or
+other read errors, and does not identify the failed WebSocket's underlay. Root cause OPEN.
+Additive finite error classes now pass native/default-production race and Android JVM
+projection/recovery checks; legacy reasons, retry/auth/deadlines and fail-closed behavior
+are unchanged. This is diagnostic source, not a stability fix or a new installed build.
+Optional owner-diagnostic-tag compilation still fails on pre-existing missing FirstClose;
+baseline reproduces it. Friends provenance guard rejects the dirty tree as designed;
+no release gate is bypassed. Full qualification/publication remains OPEN.
+Read-only23:00UTC checks confirm recovered117/native2/NONE on NL2, retained Support ID,
+probe absent, both existing gateway PIDs/NRestarts0 and identical70e6c0fc unchanged.
+Owner117/public113/catalog7/desktops unchanged. Next is exact-source qualification of
+the additional diagnosis and a controlled repeat, not public rollout or another PLAN task.
+[Failed soak, source checks and remaining gates](releases/2026-11-04-mesh-protected-ice-route.md#failed-sustained-observation-and-additive-signaling-diagnosis).
+
+Earlier ordinary-traffic checkpoint (not sustained acceptance):
 **4 November22:43UTC — Android117 both-NL traffic/cleanup/reconnect PASS, sustained stability OPEN.**
 Read-only Android system history places cellular NETWORK_DISCONNECTED at21:05:48.860UTC,
 coincident with116's ACK loss; VPN/Wi-Fi remains present. The old selected candidate's

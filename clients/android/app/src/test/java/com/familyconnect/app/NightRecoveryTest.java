@@ -20,6 +20,18 @@ public class NightRecoveryTest {
     @Test public void observedNightWebsocketCloseIsTemporaryNotInternal() {
         assertEquals(Failure.NETWORK,RestrictedRecovery.failure(3,false,false,websocket().toString()));
     }
+    @Test public void additiveReadClassDoesNotChangeRecoveryOrAuthorization(){
+        for(String errorClass:RestrictedTrace.SIGNALING_READ_ERROR_CLASSES.split("\\|")){
+            JsonObject snapshot=websocket(),diagnostic=snapshot.getAsJsonObject("packet").getAsJsonObject("diagnostic");
+            diagnostic.addProperty("signaling_read_error",errorClass);
+            JsonObject first=diagnostic.getAsJsonObject("lifecycle").getAsJsonObject("first_failure");first.addProperty("read_error_class",errorClass);
+            assertEquals(Failure.NETWORK,RestrictedRecovery.failure(3,false,false,snapshot.toString()));
+            assertEquals(Failure.AUTH,RestrictedRecovery.failure(3,false,true,snapshot.toString()));
+            assertEquals(Failure.CANCELLED,RestrictedRecovery.failure(3,true,false,snapshot.toString()));
+            first.addProperty("close_code",1008);
+            assertEquals(Failure.INTERNAL,RestrictedRecovery.failure(3,false,false,snapshot.toString()));
+        }
+    }
     @Test public void policyAndProtocolClosureDoNotBecomeNetwork() {
         JsonObject snapshot=websocket(),diagnostic=snapshot.getAsJsonObject("packet").getAsJsonObject("diagnostic");
         JsonObject first=diagnostic.getAsJsonObject("lifecycle").getAsJsonObject("first_failure");
