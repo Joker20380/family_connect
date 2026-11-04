@@ -15,6 +15,9 @@ their different transport/performance policies;34 source checks pass. Exact cand
 reproduction and production-tag qualification precede the guarded runtime step.
 Preserve each predecessor's test framing assumptions: corrected constructor-only test
 overlay passes35 source checks; the first primary test compile failure is retained.
+Exact gateway build/lifecycle gate is recorded; retain known baseline failures separately.
+Next within this selected task: guarded runtime preflight/delivery and successful115
+hosted/runtime artifacts before signing. The failed first Android attempt is not waived.
 
 **Current selected continuation — FLEET-BOOTSTRAP-2 startup/cleanup source correction DONE.**
 Dependencies: accepted114 DNS candidate, paired owner/gateway readback and preserved

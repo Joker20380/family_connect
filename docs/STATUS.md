@@ -11,6 +11,10 @@ the narrow three-file canonical projection passes34 source checks. Builds, runti
 delivery and physical acceptance remain pending; no generic-main gateway replacement.
 Test-fixture compatibility correction passes35 checks; retain the earlier compile
 failure and qualify fresh committed outputs before delivery.
+Both gateway baselines reproduce exactly; each cleanup candidate reproduces twice and
+passes5 lifecycle/auth race repetitions. An unchanged secondary broker timing failure
+is reproduced on its predecessor and retained. Android115 CI attempt1 fails before
+instrumentation; one same-source retry is pending. Nothing installed/signed yet.
 
 **4 November — selected MESH startup/cleanup source correction DONE; delivery OPEN.**
 One controlled114 reconnect fails at SEED_ADMISSION/DEADLINE. Exact old-session NL1

@@ -80,3 +80,39 @@ projection preserves the predecessor fixture and applies only the constructor se
 the failed qualification and original source output remain retained, not deployed.
 Corrected projection/source-boundary checks35 PASS/0 skips; runtime qualification repeats
 from a new committed source output rather than modifying the failed private capsule.
+
+## Exact gateway build qualification
+
+Committed projection `3a2584b2d1d2c74359404c6fd28eb8d4c1511e95` preserves the respective
+predecessors. Both baseline rebuilds equal the running executable hashes above. Each
+candidate is built twice with Go1.26.1/linux-amd64/CGO1/`fc_perf_diagnostic`, trimpath and
+buildvcs=false; each pair is byte-identical:
+
+| Runtime | Candidate SHA256 |
+| --- | --- |
+| NL1 | `8769eadfa88850c41fc0d90a9dcc4749f2e949de36dfd95bb606c32c404b3c30` |
+| NL2 | `5bcb32ea138325fbe3c788e2500d5054073ffc8df589e1cd1e83ed31c0946638` |
+
+Fresh private capsules retain their exact source inventories; only the reviewed three
+production members differ. Canonical reader/startup, entitlement/P1, crypto and directory
+policy are not replaced with generic main. Production-tag race checks with disposable
+Family fixtures and `FC_EXPECT_SEED_OBSERVABILITY=1`:
+
+- Each candidate's lifecycle and negative-authentication selection passes5 repetitions:
+  85 test/subtest passes, zero failures/skips per node. Includes active-owner preservation,
+  disconnected seed-slot reuse, RESET cancellation/deadline and seven identity cases.
+- Primary seven-package selection:654 passes,28 optional skips, zero failures. It excludes
+  exactly the two inherited auth/busy assertion tests already reproduced on unchanged main.
+- Secondary selection:729 passes,31 optional skips and one failure in the unchanged
+  `TestLeaseLostResponseReconciliation` (`TCP OPEN: stream_limit`). Exact unchanged
+  secondary predecessor reproduces4 failures/26 passes over30 attempts. No room-broker
+  source is changed. Focused remaining broker selection:109 passes/20 optional skips.
+- Failed attempts remain evidence, not an all-green full-suite claim or weakened gate.
+  Live-provider/isolated-root/helper optional skips do not count as runtime acceptance.
+
+Android115 source `86c5f9d46eba66ba981caa83936c37d1f86b14f9`, Client builds41880315713
+attempt1 fails at emulator startup with zero instrumentation cases; the build/native/JVM
+steps passed but signing is prohibited. One failed-job rerun is requested for the same
+source. Readiness-wire41880315810 passes. Phase041880315853 and Linux control41880315891
+fail in release-fixture/isolated-stack preparation; no full release-suite PASS is claimed.
+At this checkpoint no candidate runtime, APK or public catalog has been installed.
