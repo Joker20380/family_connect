@@ -23,9 +23,9 @@ def test_android_changes_do_not_start_desktop_suites():
     assert not any(platforms(['docs/STATUS.md']).values())
 
 
-def test_android114_candidate_keeps_provisioning_disabled_and_requires_native_provenance():
+def test_android115_candidate_keeps_provisioning_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 114' in gradle and "versionName '0.1.18-beta114'" in gradle
+    assert 'versionCode 115' in gradle and "versionName '0.1.18-beta115'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle

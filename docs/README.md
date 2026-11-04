@@ -1,5 +1,9 @@
 # Documentation
 
+**4 November — Android115/gateway cleanup delivery selected, qualification pending.**
+Source115 is not installed or public; owner114 and public113/catalog7 remain.
+[Current qualification, delivery and rollback](releases/2026-11-04-android115-mesh-cleanup.md).
+
 **4 November — MESH startup/cleanup source correction, not deployed.** Controlled114
 reconnect fails; phone is normally disconnected afterward. Three local lifecycle
 regressions identify RESET teardown races and a retained authenticated bootstrap waiter;

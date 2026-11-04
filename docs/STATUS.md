@@ -1,6 +1,12 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
+**4 November — owner selects Android115 + gateway cleanup qualification/delivery.**
+Candidate115 source includes f66b533; exact CI/artifact/signing, canonical gateway
+projection/runtime and physical gates are pending, not PASS. Owner114 and public/
+invitation/updater113/catalog7 unchanged; no server or phone mutation at this checkpoint.
+[Current delivery and rollback gates](releases/2026-11-04-android115-mesh-cleanup.md).
+
 **4 November — selected MESH startup/cleanup source correction DONE; delivery OPEN.**
 One controlled114 reconnect fails at SEED_ADMISSION/DEADLINE. Exact old-session NL1
 readback shows cleanup about10.1s after Disconnect, after reliable exhaustion rather

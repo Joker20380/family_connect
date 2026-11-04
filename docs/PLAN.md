@@ -3,6 +3,14 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- Android113 MESH incident 20261104 -->
+**Selected next gate — Android115 + canonical gateway cleanup delivery IN PROGRESS.**
+Dependencies: f66b533 source regression and accepted114 identity/DNS candidate. Qualify
+exact Android/native artifacts and the narrow private gateway projection, then deliver
+under existing fleet custody and verify paired cleanup/reconnect/DNS/HTTPS. Preserve
+active ownership and all identity, timeout and renewal protections. Public113/catalog7
+unchanged; no unrelated successor or automatic public rollout.
+[Required completion/rollback gates](releases/2026-11-04-android115-mesh-cleanup.md).
+
 **Current selected continuation — FLEET-BOOTSTRAP-2 startup/cleanup source correction DONE.**
 Dependencies: accepted114 DNS candidate, paired owner/gateway readback and preserved
 single-owner admission. The controlled reconnect fails at SEED_ADMISSION; the exact
