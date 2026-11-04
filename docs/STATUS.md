@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+<!-- Android113 MESH incident 20261104 -->
+**4 November14:56UTC — Android113 MESH incident investigated, NOT_FIXED.** Fresh READY
+and Wi-Fi reconnect succeed; ordinary-UID verified IPv4 HTTPS exits through Netherlands2.
+Hostname HTTPS fails with IPv6-only DNS answers; the A-result loss cause is unproven.
+Exact NL2 frame timeout14:45:04 precedes client failure; automatic restoration succeeds,
+not sustained stability. Earlier cellular-bound refresh/15s startup failure is distinct.
+Both MESH/HTTP services are active;14:10 renewal COMMITTED, no server repair/restart here.
+Public/invitation/owner113/catalog7 unchanged. No new APK or product-code fix. Temporary
+probes removed; last accepted phone snapshot CONNECTED. At14:56 app USB support is disabled
+while ADB remains available: current state/further controlled checks need renewed consent.
+[Evidence, limitations and next gate](releases/2026-11-04-android113-mesh-reconnect.md).
+<!-- /Android113 MESH incident 20261104 -->
+
 <!-- Android113 unified picker 20261104 -->
 **4 November — Android113 hybrid picker published; owner112→113 installed in place.**
 One Russia/Netherlands/Netherlands2 list in Auto/AWG/TCP/MESH; correct per-node load,

@@ -2,6 +2,21 @@
 
 ## Current engineering priority / Текущий critical path
 
+<!-- Android113 MESH incident 20261104 -->
+**4 November owner incident — FLEET-BOOTSTRAP-2 MESH reconnect diagnosis, still OPEN.**
+This report supersedes the completed picker task as the selected bounded priority.
+Fresh113 readiness and Wi-Fi startup work, but hostname HTTPS and sustained transport
+acceptance fail. Exact NL2 RELIABLE_FRAME_TIMEOUT and automatic recovery are correlated;
+literal IPv4 HTTPS egress passes, IPv6-only hostname result does not. No product fix yet.
+Dependencies: renewed explicit app USB support (disabled14:56; ADB available), retained
+identity/profile and existing read-only server evidence. Next: paired A/AAAA and underlying
+network/resolver reproduction, then exact framing-loss diagnosis and focused regressions.
+Completion requires normal DNS/hostname HTTPS and stable reconnect, not only CONNECTED
+or IP-literal success. Preserve admission, leak containment, signatures and immutable113;
+no speculative timeout/policy change or unrelated successor. Public113/catalog7 unchanged.
+[Incident evidence and qualification boundary](releases/2026-11-04-android113-mesh-reconnect.md).
+<!-- /Android113 MESH incident 20261104 -->
+
 <!-- Android113 unified picker 20261104 -->
 **4 November — owner-selected FLEET-BOOTSTRAP-2 hybrid Android picker delivered.**
 Dependencies: existing signed node registry, per-node readiness and telemetry. Unified
