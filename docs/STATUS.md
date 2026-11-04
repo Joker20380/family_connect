@@ -6,6 +6,15 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**5 November — Android118 diagnostic candidate SOURCE; owner117/public113 unchanged.**
+The next selected gate packages234af08's finite signaling-read classes as a new immutable
+version118, without changing retries, timeouts, authorization, media wire or server code.
+Exact-source platform CI/downloaded ARM64/source/API27/API35/UI and retained-data gates
+are pending; no118 signing, installation or publication yet. Both NL gateways retain the
+same70e6c0fc implementation.117's failed sustained observation is not retroactively fixed.
+[118 qualification, delivery and remaining gates](releases/2026-11-05-android118-signaling-diagnostics.md).
+
+Previous source-only diagnostic checkpoint:
 **4 November23:00UTC — Android117 sustained observation FAIL; typed signaling diagnostics SOURCE ONLY.**
 The selected20-minute NL2 observation stops after91.621s, with one successful ordinary-
 UID DNS/HTTPS/egress round. First phone failure22:50:46.330UTC is WEBSOCKET READ_ERROR /

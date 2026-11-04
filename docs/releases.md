@@ -1,5 +1,11 @@
 # Release distribution / Выпуски
 
+**5 November — Android118 diagnostic candidate, source only.** Exact platform CI,
+downloaded ARM64/source/API27/API35/UI, signing and retained-data delivery are pending.
+This adds error classification, not an accepted stability fix. Installed owner117 and
+public/invitation/updater113/catalog7 remain unchanged; no new public URL/checksum.
+[Current118 qualification](releases/2026-11-05-android118-signaling-diagnostics.md).
+
 **4 November20:29UTC — unified MESH gateway delivered to both NL nodes.** Both running
 processes match70e6c0fc; fresh seeds, separate profiles and common writer checks pass.
 Android116 exact CI/API27/API35 and downloaded artifact/UI qualification PASS;

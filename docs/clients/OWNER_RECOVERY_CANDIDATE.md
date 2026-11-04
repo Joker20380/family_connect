@@ -1,6 +1,15 @@
 # Owner recovery106 — private candidate / закрытый кандидат
 
 <!-- Unified MESH Android116 20261104 -->
+**118 is a source diagnostic candidate, not installed or publicly available.** It adds
+typed signaling-read evidence after117's failed sustained test; it does not claim to fix
+the disconnect. Exact CI/artifact/UI/signing/retained-data gates are pending. Owner117,
+public113/catalog7 and download links/checksums remain unchanged; do not reinstall.
+RU: готовится118 для точного определения причины обрыва. На телефоне пока117, публично113.
+Это ещё не исправление стабильности; удалять приложение или данные не нужно.
+[118 qualification and delivery](../releases/2026-11-05-android118-signaling-diagnostics.md).
+
+Earlier117 ordinary acceptance (subsequent sustained test failed):
 **117 is signed and installed over116 on the owner phone.** Exact CI/artifacts and
 synthetic retention pass; same product signer, installed bytes, UID/first-install and
 Support ID verified. Signed APK SHA256:

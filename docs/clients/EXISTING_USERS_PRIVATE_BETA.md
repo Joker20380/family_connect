@@ -1,6 +1,15 @@
 # Existing-users private Android update / Частное обновление Android
 
 <!-- Unified MESH Android116 20261104 -->
+**118 is a source-only diagnostic candidate.** It is not a new public update or an
+accepted stability correction. Owner remains117; public113/catalog7/download links and
+checksums are unchanged. Exact-source118 CI/artifact/UI and same-signer retained-data
+delivery must pass first. No uninstall, data clear or reenrollment is needed.
+RU:118 готовится для диагностики обрыва; пока не установлен и не опубликован.
+У владельца117, для остальных113. Данные не удалять и повторно не регистрироваться.
+[118 gates and rollback](../releases/2026-11-05-android118-signaling-diagnostics.md).
+
+Earlier117 ordinary acceptance (subsequent sustained test failed):
 **117 is signed and installed only on the owner phone.** Existing product signer,
 in-place116→117 and exact byte/UID/first-install/Support ID retention pass. Signed APK
 SHA256:`a2f637879787eec0db74efbea271f1242ee37ce9c1069618816e4a0ba4bf8802`.

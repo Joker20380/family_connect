@@ -7,6 +7,18 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Selected next gate — exact Android118 diagnostic qualification and controlled owner delivery.**
+Package the additive signaling-read classification from234af08 under version118; never
+replace signed117 bytes. Require exact-source platform CI, downloaded source/native/
+ABI/API27/API35/UI checks, existing offline signer and retained-data verification before
+owner installation. Repeat field diagnosis only with valid app consent; do not bypass an
+expired grant. No public distribution or server mutation. Owner117/public113/catalog7
+and identical NL70e6c0fc remain unchanged while this gate is pending. Completion of this
+diagnostic candidate is not a stability fix: cause/reproduction/correction, both-node
+slow/lossy checks and sustained30–60-minute acceptance still need evidence.
+[Current118 gates](releases/2026-11-05-android118-signaling-diagnostics.md).
+
+Previous failed-observation/source checkpoint:
 **Selected continuation — Android117 sustained observation FAIL; signaling diagnosis source checkpoint.**
 The20-minute NL2 test ends after91.621s; one ordinary-UID DNS/HTTPS/egress round passes,
 then exact-session first failure is client WEBSOCKET READ_ERROR/SIGNAL_READ. No preceding
