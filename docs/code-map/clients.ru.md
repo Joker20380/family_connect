@@ -19,6 +19,21 @@ last8+first_failure через существующий `DiagnosticRing`; `scrip
 
 ## Android
 
+### Unified server picker — Android113 candidate
+
+`GatewayPicker` now derives one ordered list from Russia plus the admitted gateway
+registry, retaining the physical selection across every mode. `AutomaticConnection`
+rejects Russia's unsupported MESH fallback; `FriendsAccessAndroid.normalProfiles` uses
+the existing schema3 explicit-node vault for NL Auto. Secondary Auto/MESH readiness
+remains node-scoped. `ServerLoad.parseAll` validates each status `nodes` binding without
+country fallback; `ServerLoadPresentation` shares the85% threshold/segment model with
+`ServerLoadMeter` and the selected-server bar. Missing/stale/CPU-only semantics remain.
+`FriendsActivity.serverRow` uses the owner-selected hybrid flat list: right-aligned
+squares/percentage, green selected fill and `ic_check`, not cards or radio circles.
+`GatewayPickerTest`, load model tests and API27/API35 dashboard/language instrumentation
+cover selection, refusal, meter geometry and rendering. No113 production install yet.
+[Current UI candidate](../releases/2026-11-04-android113-server-picker.md).
+
 ### Per-node MESH readiness — Android112 candidate
 
 `RestrictedGateway` keeps the legacy primary wire contract and storage namespace,

@@ -1,5 +1,13 @@
 # Client installation
 
+**In development: Android113, not installed or published.** Every mode uses the same
+Russia, Netherlands, Netherlands2 server list. Rows show each node's load with green
+squares, orange from85%, and grey when fresh data is unavailable. Russia remains visible
+in MESH but cannot connect with it yet; use AWG/TCP/Auto for Russia. Mode changes do not
+silently change servers. The flat list marks the selected server with a green tint
+and a checkmark, not a separate card. Download links below still point to public111.
+[113 checks and delivery boundary](releases/2026-11-04-android113-server-picker.md).
+
 **3 November — beta111 published, Android8.1+/ARM64.** The invitation page and
 in-app updater offer111 with optional signed catalog6. API27/API35 CI, the existing
 signer and public HTTPS bytes are verified. Installation and operation on the actual

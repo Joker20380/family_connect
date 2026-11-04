@@ -330,11 +330,12 @@ final class FriendsAccessAndroid {
         }
     }
     Map<Transport,String> normalProfiles(String country)throws Exception{
-        require(country.equals("ru")||country.equals("nl"));
+        boolean explicit=ControlFriendsCatalog.explicit(country);
+        require(country.equals("ru")||country.equals("nl")||explicit);
         profile(country,"awg");remaining(1);
         try(ControlIdentity identity=identity(false)){
-            JsonObject reply=parse(new FriendsConfigurationVault(context).read()).getAsJsonObject().getAsJsonObject(country);
-            ControlFriendsCatalog catalog=ControlFriendsCatalog.verify(reply.getAsJsonObject("catalog").toString().getBytes(StandardCharsets.UTF_8),ControlTrust.anchor(context),0);
+            JsonObject reply=parse(new FriendsConfigurationVault(context,explicit).read()).getAsJsonObject().getAsJsonObject(country);
+            ControlFriendsCatalog catalog=ControlFriendsCatalog.verify(reply.getAsJsonObject("catalog").toString().getBytes(StandardCharsets.UTF_8),ControlTrust.anchor(context),0,explicit?3:2);
             Map<Transport,String> profiles=new LinkedHashMap<>();
             if(catalog.awgProfiles.containsKey(country))profiles.put(Transport.AWG,materialize(reply,identity,country,"awg",catalog.sequence));
             if(catalog.profiles.containsKey(country))profiles.put(Transport.TCP,materialize(reply,identity,country,"tcp",catalog.sequence));

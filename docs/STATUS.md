@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+<!-- Android113 unified picker 20261104 -->
+**4 November — Android113 hybrid picker: local source/UI gates PASS, not installed.**
+Owner selects the same Russia/Netherlands/Netherlands2 list across Auto/AWG/TCP/MESH,
+per-node load and green square meters, orange from85%. Russia/MESH stays visible but
+explicitly unavailable; no hidden Netherlands fallback. Auto keeps the selected NL node.
+Owner chose flat rows, right-aligned squares/percentage, green selected fill and checkmark;
+large fonts/narrow screens move the load below the name without losing its meaning.
+Public/invitation111/catalog6 and owner112 unchanged. Final JVM418+413 and Python22 PASS,
+0 skips; API27/API35 picker/dashboard/language4/4 each PASS, RU/EN renders reviewed.
+Lint0 errors/56 existing warnings. Source checkpoint only; exact release CI remains pending.
+Transport instability and renewal-race gates remain open, not superseded by UI acceptance.
+[Scope, checks and delivery boundary](releases/2026-11-04-android113-server-picker.md).
+<!-- /Android113 unified picker 20261104 -->
+
 **4 November12:21UTC — requested RU disk cleanup complete:** archived host journals
 older than14 days removed; ~2.10GiB freed, disk77%→70%, available6.5→8.6GiB.
 AWG/TCP/HTTP/host worker active with unchanged PIDs; no restart or version change.

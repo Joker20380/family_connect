@@ -44,6 +44,14 @@ public class AppLanguageRuntimeTest {
                     if((language.equals("en")?"Settings":"Настройки").equals(text.get()))break;SystemClock.sleep(100);
                 }
                 assertEquals(language.equals("en")?"Settings":"Настройки",text.get());assertEquals(language,AppLanguage.selected(c));
+                ins.runOnMainSync(()->{
+                    FriendsActivity activity=current();assertNotNull(activity);
+                    assertEquals(language.equals("ru")?"Россия":"Russia",activity.getString(R.string.gateway_russia));
+                    assertEquals(language.equals("ru")?"Нидерланды":"Netherlands",activity.getString(R.string.gateway_amsterdam_1));
+                    assertEquals(language.equals("ru")?"Нидерланды 2":"Netherlands 2",activity.getString(R.string.gateway_amsterdam_2));
+                    try{new DashboardLayoutRuntimeTest().verifyPickerLanguage(activity,language);}
+                    catch(ReflectiveOperationException failure){throw new AssertionError(failure);}
+                });
                 assertEquals(language,AppLanguage.wrap(c).getResources().getConfiguration().getLocales().get(0).getLanguage());
             }
             for(Class<?> screen:new Class<?>[]{FriendsActivity.class,MainActivity.class,ChatActivity.class,ReferralActivity.class})assertTrue(LocalizedActivity.class.isAssignableFrom(screen));

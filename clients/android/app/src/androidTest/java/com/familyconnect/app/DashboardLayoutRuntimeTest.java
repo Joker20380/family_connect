@@ -42,7 +42,7 @@ public class DashboardLayoutRuntimeTest {
         for(int index=0;index<expected.length;index++)assertEquals(expected[index],servers.getItemAtPosition(index));
         assertEquals(target,servers.getSelectedItem());assertEquals("off",ConnectionService.status);
     }
-    @Test public void gatewayChoicesFollowTransportAndRetainManualNodeWithoutConnecting() throws Exception {
+    @Test public void gatewayChoicesStayIdenticalAndRetainEveryNodeWithoutConnecting() throws Exception {
         assumeTrue("true".equals(InstrumentationRegistry.getArguments().getString("fcInvitationCi")));
         Instrumentation instrument=InstrumentationRegistry.getInstrumentation();
         android.content.SharedPreferences preferences=instrument.getTargetContext().getSharedPreferences(FriendsActivity.class.getName(),0);
@@ -57,7 +57,7 @@ public class DashboardLayoutRuntimeTest {
                 instrument.waitForIdleSync();
                 scenario.onActivity(activity->{
                     assertSame(preferences,activity.getPreferences(0));
-                    assertGatewayPicker(activity,"nl-amsterdam-2","nl-amsterdam-1","ru","nl-amsterdam-2");
+                    assertGatewayPicker(activity,"nl-amsterdam-2","ru","nl-amsterdam-1","nl-amsterdam-2");
                     assertEquals("nl",preferences.getString("country",""));assertEquals("tcp",preferences.getString("transport",""));
                     assertEquals("nl-amsterdam-2",preferences.getString("gateway_id",""));
                 });
@@ -65,30 +65,36 @@ public class DashboardLayoutRuntimeTest {
                     scenario.onActivity(activity->picker(activity,"transports").setSelection(transportIndex));
                     instrument.waitForIdleSync();SystemClock.sleep(200);instrument.waitForIdleSync();
                     scenario.onActivity(activity->{
-                        if(transportIndex==0)assertGatewayPicker(activity,"nl","nl","ru");
-                        else if(transportIndex==3)assertGatewayPicker(activity,"nl-amsterdam-2","nl-amsterdam-1","nl-amsterdam-2");
-                        else assertGatewayPicker(activity,"nl-amsterdam-2","nl-amsterdam-1","ru","nl-amsterdam-2");
+                        assertGatewayPicker(activity,"nl-amsterdam-2","ru","nl-amsterdam-1","nl-amsterdam-2");
                         assertEquals("nl-amsterdam-2",preferences.getString("gateway_id",""));
                     });
                 }
-                scenario.onActivity(activity->picker(activity,"countries").setSelection(1));
+                scenario.onActivity(activity->picker(activity,"countries").setSelection(0));
                 instrument.waitForIdleSync();SystemClock.sleep(200);instrument.waitForIdleSync();
                 scenario.recreate();instrument.waitForIdleSync();
                 scenario.onActivity(activity->{
-                    assertGatewayPicker(activity,"ru","nl-amsterdam-1","ru","nl-amsterdam-2");
+                    assertGatewayPicker(activity,"ru","ru","nl-amsterdam-1","nl-amsterdam-2");
                     assertEquals("ru",preferences.getString("country",""));assertEquals("nl-amsterdam-2",preferences.getString("gateway_id",""));
+                    picker(activity,"transports").setSelection(3);
+                });
+                instrument.waitForIdleSync();SystemClock.sleep(200);instrument.waitForIdleSync();
+                scenario.onActivity(activity->{
+                    assertGatewayPicker(activity,"ru","ru","nl-amsterdam-1","nl-amsterdam-2");
+                    try{
+                        java.lang.reflect.Method connect=FriendsActivity.class.getDeclaredMethod("prepareConnect");connect.setAccessible(true);connect.invoke(activity);
+                        assertTrue(containsText(activity.getWindow().getDecorView(),activity.getString(R.string.gateway_mesh_unavailable)));
+                    }catch(ReflectiveOperationException failure){throw new AssertionError(failure);}
+                    assertEquals(previousSession,ConnectionService.sessionId);assertEquals("off",ConnectionService.status);
                     picker(activity,"transports").setSelection(0);
                 });
                 instrument.waitForIdleSync();SystemClock.sleep(200);instrument.waitForIdleSync();
-                scenario.onActivity(activity->{assertGatewayPicker(activity,"ru","nl","ru");picker(activity,"countries").setSelection(0);});
+                scenario.onActivity(activity->{assertGatewayPicker(activity,"ru","ru","nl-amsterdam-1","nl-amsterdam-2");picker(activity,"countries").setSelection(1);});
                 instrument.waitForIdleSync();SystemClock.sleep(200);instrument.waitForIdleSync();
-                scenario.onActivity(activity->{assertGatewayPicker(activity,"nl","nl","ru");picker(activity,"transports").setSelection(2);});
-                instrument.waitForIdleSync();SystemClock.sleep(200);instrument.waitForIdleSync();
-                scenario.onActivity(activity->{assertGatewayPicker(activity,"nl-amsterdam-2","nl-amsterdam-1","ru","nl-amsterdam-2");picker(activity,"countries").setSelection(0);});
+                scenario.onActivity(activity->{assertGatewayPicker(activity,"nl-amsterdam-1","ru","nl-amsterdam-1","nl-amsterdam-2");picker(activity,"transports").setSelection(2);});
                 instrument.waitForIdleSync();SystemClock.sleep(200);instrument.waitForIdleSync();
                 scenario.recreate();instrument.waitForIdleSync();
                 scenario.onActivity(activity->{
-                    assertGatewayPicker(activity,"nl-amsterdam-1","nl-amsterdam-1","ru","nl-amsterdam-2");
+                    assertGatewayPicker(activity,"nl-amsterdam-1","ru","nl-amsterdam-1","nl-amsterdam-2");
                     assertEquals("nl-amsterdam-1",preferences.getString("gateway_id",""));
                     assertEquals(previousSession,ConnectionService.sessionId);
                     picker(activity,"transports").setSelection(3);
@@ -96,13 +102,13 @@ public class DashboardLayoutRuntimeTest {
                 instrument.waitForIdleSync();SystemClock.sleep(200);instrument.waitForIdleSync();
                 scenario.recreate();instrument.waitForIdleSync();
                 scenario.onActivity(activity->{
-                    assertGatewayPicker(activity,"nl-amsterdam-1","nl-amsterdam-1","nl-amsterdam-2");
-                    picker(activity,"countries").setSelection(1);
+                    assertGatewayPicker(activity,"nl-amsterdam-1","ru","nl-amsterdam-1","nl-amsterdam-2");
+                    picker(activity,"countries").setSelection(2);
                 });
                 instrument.waitForIdleSync();SystemClock.sleep(200);instrument.waitForIdleSync();
                 scenario.recreate();instrument.waitForIdleSync();
                 scenario.onActivity(activity->{
-                    assertGatewayPicker(activity,"nl-amsterdam-2","nl-amsterdam-1","nl-amsterdam-2");
+                    assertGatewayPicker(activity,"nl-amsterdam-2","ru","nl-amsterdam-1","nl-amsterdam-2");
                     assertEquals("telemost",preferences.getString("transport",""));
                     assertEquals("nl",preferences.getString("country",""));
                     assertEquals("nl-amsterdam-2",preferences.getString("gateway_id",""));
@@ -161,7 +167,7 @@ public class DashboardLayoutRuntimeTest {
         android.widget.ProgressBar bar=(android.widget.ProgressBar)barField.get(activity);
         try{
             double now=System.currentTimeMillis()/1000.0;
-            for(String country:new String[]{"ru","nl"})samples.put(country,new ServerLoad(country,now,13.8,12.5,7.3,null,false));
+            for(String country:new String[]{"ru","nl","nl-amsterdam-1","nl-amsterdam-2"})samples.put(country,new ServerLoad(country,now,13.8,12.5,7.3,null,false));
             refresh.invoke(activity);
             assertTrue("Unknown channel capacity must show measured CPU",label.getText().toString().contains("CPU"));
             assertTrue(label.getText().toString().contains("14%"));assertEquals(138,bar.getProgress());
@@ -179,16 +185,71 @@ public class DashboardLayoutRuntimeTest {
                 String gatewayLabel=activity.getString(index==1?R.string.gateway_amsterdam_1:R.string.gateway_amsterdam_2);
                 String gateway="nl-amsterdam-"+index;
                 View collapsedRow=(View)rowMethod.invoke(activity,gateway,null,parent,true);
-                assertTrue("Collapsed Amsterdam label retains disclosure arrow",containsText(collapsedRow,gatewayLabel+"  ▾"));
+                assertTrue("Collapsed country label retains disclosure arrow",containsText(collapsedRow,gatewayLabel+"  ▾"));
                 View gatewayRow=(View)rowMethod.invoke(activity,gateway,null,parent,false);
-                assertTrue("Exact Amsterdam label",containsText(gatewayRow,gatewayLabel));
-                assertFalse("Country CPU is not a physical gateway measurement",containsText(gatewayRow,"CPU 14%"));
-                render(activity,gatewayRow,TerminalUi.dp(activity,280),TerminalUi.dp(activity,56),"server-amsterdam-"+index+".png");
+                assertTrue("Exact country/node label",containsText(gatewayRow,gatewayLabel));
+                assertTrue("Explicit node CPU measurement is visible",containsText(gatewayRow,"CPU 14%"));
+                assertNotNull(gatewayRow.findViewWithTag("server_load_meter"));
+                boolean selected=gateway.equals(countries.getSelectedItem());
+                assertEquals(selected,gatewayRow.isActivated());
+                assertEquals(selected?View.VISIBLE:View.INVISIBLE,gatewayRow.findViewWithTag("server_selected").getVisibility());
+                assertEquals(selected,gatewayRow.getContentDescription().toString().contains(activity.getString(R.string.gateway_selected)));
+                double percent=index==1?84:85;
+                samples.put(gateway,new ServerLoad(gateway,now,percent,12.5,7.3,percent,false));
+                gatewayRow=(View)rowMethod.invoke(activity,gateway,null,parent,false);
+                ServerLoadPresentation presentation=ServerLoadPresentation.from(samples.get(gateway),gateway,now,false);
+                assertEquals(index==1?ServerLoadMeter.GREEN:ServerLoadMeter.ORANGE,ServerLoadMeter.color(presentation));
+                assertTrue(containsText(gatewayRow,(int)percent+"%"));
+                render(activity,gatewayRow,TerminalUi.dp(activity,312),TerminalUi.dp(activity,64),"server-netherlands-"+index+".png");
+                View meter=gatewayRow.findViewWithTag("server_load_meter");
+                assertTrue(meter.getWidth()>=TerminalUi.dp(activity,76));assertTrue(meter.getHeight()>=TerminalUi.dp(activity,6));
+                View recycled=(View)rowMethod.invoke(activity,gateway,gatewayRow,parent,true);
+                assertNull("Collapsed row must not retain the dropdown check",recycled.findViewWithTag("server_selected"));
+                assertNull(recycled.findViewWithTag("server_load_meter"));assertFalse(recycled.isActivated());
             }
-            for(String country:new String[]{"ru","nl"})samples.put(country,new ServerLoad(country,now-60,13.8,12.5,7.3,null,false));
+            android.widget.LinearLayout list=new android.widget.LinearLayout(activity);list.setOrientation(android.widget.LinearLayout.VERTICAL);list.setBackgroundColor(TerminalUi.SURFACE);
+            for(String target:GatewayPicker.targets("auto"))list.addView((View)rowMethod.invoke(activity,target,null,list,false),new android.widget.LinearLayout.LayoutParams(-1,TerminalUi.dp(activity,64)));
+            render(activity,list,TerminalUi.dp(activity,312),TerminalUi.dp(activity,192),"server-list.png");
+            for(String country:new String[]{"ru","nl","nl-amsterdam-1","nl-amsterdam-2"})samples.put(country,new ServerLoad(country,now-60,13.8,12.5,7.3,null,false));
             refresh.invoke(activity);
             assertFalse("Stale CPU must not remain visible",label.getText().toString().contains("14%"));assertEquals(0,bar.getProgress());
+            assertEquals(TerminalUi.MUTED,ServerLoadMeter.color(ServerLoadPresentation.from(samples.get("nl-amsterdam-2"),"nl-amsterdam-2",now,false)));
+            View unknown=(View)rowMethod.invoke(activity,"nl-amsterdam-2",null,parent,false);
+            assertTrue("Unknown load is not zero",containsText(unknown,"—"));
         }finally{samples.clear();samples.putAll(previous);refresh.invoke(activity);}
+    }
+    void verifyPickerLanguage(FriendsActivity activity,String language) throws ReflectiveOperationException {
+        if(!"true".equals(InstrumentationRegistry.getArguments().getString("fcInvitationCi")))return;
+        assertFalse(activity.getPreferences(0).getBoolean("activated",false));assertEquals("off",ConnectionService.status);
+        java.lang.reflect.Field samplesField=FriendsActivity.class.getDeclaredField("serverLoads");samplesField.setAccessible(true);
+        java.util.Map<String,ServerLoad> samples=(java.util.Map<String,ServerLoad>)samplesField.get(activity);
+        java.util.Map<String,ServerLoad> previous=new java.util.HashMap<>(samples);
+        java.lang.reflect.Method rowMethod=FriendsActivity.class.getDeclaredMethod("serverRow",String.class,View.class,ViewGroup.class,boolean.class);rowMethod.setAccessible(true);
+        try{
+            double now=System.currentTimeMillis()/1000.0;
+            String[] targets=GatewayPicker.targets("auto");double[] percentages={24,58,87};
+            for(int index=0;index<targets.length;index++)samples.put(targets[index],new ServerLoad(targets[index],now,10,12,7,percentages[index],false));
+            for(boolean large:new boolean[]{false,true}){
+                android.content.res.Configuration configuration=new android.content.res.Configuration(activity.getResources().getConfiguration());
+                configuration.fontScale=large?1.3f:1f;
+                android.content.Context context=activity.createConfigurationContext(configuration);
+                android.widget.LinearLayout list=new android.widget.LinearLayout(context);list.setOrientation(android.widget.LinearLayout.VERTICAL);list.setBackgroundColor(TerminalUi.SURFACE);
+                for(String target:targets)list.addView((View)rowMethod.invoke(activity,target,null,list,false),new android.widget.LinearLayout.LayoutParams(-1,-2));
+                int width=TerminalUi.dp(context,large?264:312);
+                list.measure(View.MeasureSpec.makeMeasureSpec(width,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED));
+                render(activity,list,width,list.getMeasuredHeight(),"server-list-"+language+(large?"-large":"")+".png");
+                assertPickerTextFits(list);
+            }
+        }finally{samples.clear();samples.putAll(previous);}
+    }
+    private void assertPickerTextFits(View view){
+        if(view instanceof android.widget.TextView){
+            android.widget.TextView text=(android.widget.TextView)view;
+            assertNotNull(text.getLayout());assertTrue(text.getMeasuredWidth()>text.getCompoundPaddingLeft()+text.getCompoundPaddingRight());
+            assertTrue("Server row text must not clip vertically",text.getLayout().getHeight()<=text.getHeight()-text.getCompoundPaddingTop()-text.getCompoundPaddingBottom());
+            for(int line=0;line<text.getLineCount();line++)assertEquals("Server names remain complete",0,text.getLayout().getEllipsisCount(line));
+        }
+        if(view instanceof ViewGroup)for(int index=0;index<((ViewGroup)view).getChildCount();index++)assertPickerTextFits(((ViewGroup)view).getChildAt(index));
     }
     private void verifyFailureControls(FriendsActivity activity,View root,int width,int height) throws ReflectiveOperationException {
         if(!"true".equals(InstrumentationRegistry.getArguments().getString("fcInvitationCi")))return;

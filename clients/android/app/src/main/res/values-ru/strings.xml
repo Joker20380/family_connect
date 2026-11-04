@@ -39,9 +39,10 @@
     <string name="gateway_russia">Россия</string>
     <string name="gateway_netherlands">Нидерланды</string>
     <string name="gateway_assigned">Нидерланды · назначенный</string>
-    <string name="gateway_amsterdam_1">Амстердам 1</string>
-    <string name="gateway_amsterdam_2">Амстердам 2</string>
-    <string name="gateway_manual_only">Выберите AWG, TCP или MESH для конкретного Амстердама.</string>
+    <string name="gateway_amsterdam_1">Нидерланды</string>
+    <string name="gateway_amsterdam_2">Нидерланды 2</string>
+    <string name="gateway_mesh_unavailable">MESH на сервере «Россия» пока недоступен. Выберите AWG, TCP или Auto — сервер останется прежним.</string>
+    <string name="gateway_mesh_unavailable_short">MESH пока недоступен</string>
     <string name="gateway_default">По умолчанию</string>
     <string name="gateway_unavailable">Сначала получите действующую подписанную конфигурацию через Reticulum.</string>
     <string name="friends_access">Тест по приглашению · без срока окончания</string>

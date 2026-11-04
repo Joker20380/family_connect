@@ -54,7 +54,7 @@ def main():
         if args.legacy:
             images = images / "api27"
         images.mkdir(parents=True, exist_ok=True)
-        for name in ("dashboard-cpu-load.png", "server-row-cpu-load.png", "dashboard-failed-controls.png", "server-amsterdam-1.png", "server-amsterdam-2.png", "android-compatibility-voice.png"):
+        for name in ("dashboard-cpu-load.png", "server-row-cpu-load.png", "dashboard-failed-controls.png", "server-netherlands-1.png", "server-netherlands-2.png", "server-list.png", "server-list-en.png", "server-list-ru.png", "server-list-en-large.png", "server-list-ru-large.png", "android-compatibility-voice.png"):
             subprocess.run(["adb", "-s", serial, "pull",
                 "/sdcard/Android/data/com.familyconnect.app.friends/files/ui-acceptance/" + name,
                 str(images / name)], check=True)

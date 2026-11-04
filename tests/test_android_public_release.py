@@ -23,9 +23,9 @@ def test_android_changes_do_not_start_desktop_suites():
     assert not any(platforms(['docs/STATUS.md']).values())
 
 
-def test_android112_candidate_keeps_provisioning_disabled_and_requires_native_provenance():
+def test_android113_candidate_keeps_provisioning_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 112' in gradle and "versionName '0.1.18-beta112'" in gradle
+    assert 'versionCode 113' in gradle and "versionName '0.1.18-beta113'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
@@ -63,7 +63,7 @@ def test_server_load_ui_uses_one_fresh_country_bound_presentation():
     assert 'ServerLoadPresentation.from(serverLoads.get(loadTarget()),loadTarget(),' in source
     assert 'ServerLoadPresentation.from(serverLoads.get(code),code,' in source
     assert 'loadBar.setContentDescription(text)' in source
-    assert 'load.setText(presentation.value)' in source
+    assert 'load.setText(presentation.percent==null?"—":presentation.value)' in source
     assert '200 Мбит/с' not in source
     model = (ROOT / 'clients/android/app/src/main/java/com/familyconnect/app/ServerLoadPresentation.java').read_text()
     assert '!sample.country.equals(country)||!sample.fresh(now)' in model
@@ -75,7 +75,7 @@ def test_load_screenshots_export_only_from_disposable_emulator():
     helper = (ROOT / 'pilot/android-awg/friends_ci.py').read_text()
     assert 'os.environ.get("GITHUB_ACTIONS") != "true"' in helper
     assert 'if not serial.startswith("emulator-"):' in helper
-    assert 'for name in ("dashboard-cpu-load.png", "server-row-cpu-load.png", "dashboard-failed-controls.png", "server-amsterdam-1.png", "server-amsterdam-2.png", "android-compatibility-voice.png"):' in helper
+    assert 'for name in ("dashboard-cpu-load.png", "server-row-cpu-load.png", "dashboard-failed-controls.png", "server-netherlands-1.png", "server-netherlands-2.png", "server-list.png", "server-list-en.png", "server-list-ru.png", "server-list-en-large.png", "server-list-ru-large.png", "android-compatibility-voice.png"):' in helper
     assert '["adb", "-s", serial, "pull"' in helper
     assert '"-Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true"' in helper
     assert helper.index('"pull"') < helper.index('finally:') < helper.index('"uninstall"')
@@ -169,6 +169,7 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'Ui60Presentation.java': '47f67af0f36f4219f092bcc5f5b7fa5c17f51725a8e60fb865649cb168f4b744',
     }
     reviewed_gateway_selection = {
+        'ServerLoad.java': 'eea65b43cbb53f338c516e91b0f84531ce48ecd62ed1253b5d49b9fa3962cf41',
         'ControlFriendsCatalog.java': '04f2fad75383465fd338c2ae2bad8ca9712cbb8ff9f26385c2b45ef4a8394cf2',
         'FriendsAccessAndroid.java': '8ee37ad8f38e6413cdb8b32f6f6b76e3dcdff609bcb6a1e3a7032b6088327b35',
         'FriendsConfigurationVault.java': '4d76d775ddf03fd6892e66152f75629ee4825d618de37d613255f60cb94d5fec',
@@ -180,8 +181,8 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'RadioSettings.java': 'dcda8f1f9e8e326642e738323f93b51e197623b08470fb977d3dc9ddec46c022',
     }
     reviewed_gateway_readiness = {
-        'AutomaticConnection.java': '9f17835d1f9cc60fff5d37c87f533d3b60661d8ed40ac4f75c1da19032f252e0',
-        'FriendsAccessAndroid.java': '6d756a58410953a0587a62d3d6c93455af9adce97896d46f1f86f2813fa8f117',
+        'AutomaticConnection.java': '599419b0dabed171117a271405bb50d040803ee35c8f940c396c0e638be3f9b5',
+        'FriendsAccessAndroid.java': '3c243fb137cb79c3889bcb4641bd903cf2c71023cd86ee0232902eb3b90590f7',
         'FriendsRestricted.java': '3b66d4452c8d2f550d60e5e34a8cb232218616208e816a36e1f8b38e04edc670',
         'ReadinessReceiptStore.java': '09549b755e43ebfe970593f5ee64bee52566549bbc4f82be936bcd2bf8473d90',
         'RestrictedTunnelEngine.java': '0b9bcd34f9f7829a832c9b091ac6fde6a7a24480448c73ad4b99e676c1586470',
@@ -193,8 +194,8 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
     reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81,
                          **reviewed_gateway_readiness, **reviewed_slow_link_recovery}
     reviewed_resources = {
-        'clients/android/app/src/main/res/values-ru/strings.xml': 'e078961e19b6f89c952db8f06443e76d5c4eb1b239f2eff7f10f4684bf4ee0ad',
-        'clients/android/app/src/main/res/values/strings.xml': '01dc5642139e9836feb444f5c1b6d8023f362e729c88a00e2d17fe6b7e003656',
+        'clients/android/app/src/main/res/values-ru/strings.xml': '89b334900a7febe2e50bfe06d593673961c320704a16ead76c09d9baa22ea279',
+        'clients/android/app/src/main/res/values/strings.xml': '85e40c0044eaec9ebe8fb6f77d0a026ddc6bead90fb044237abd23b305fd2c39',
         'clients/android/app/src/main/res/values-ru/exit_radio.xml': 'bb5198a35cf336c3b364bb5ecd65285a948614a4f60b3d1434cec0e7d9b7608b',
         'clients/android/app/src/main/res/values/exit_radio.xml': 'f0147662d5ca508fba482cca46906a2198b2f7f4ae72d692a61631123ad07404',
     }

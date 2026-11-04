@@ -1,5 +1,11 @@
 # Release distribution / Выпуски
 
+**4 November — Android113 source/UI candidate, not distributed.** Unified country/node
+picker and per-node green/orange square load meters; threshold85%. Local CI-signed
+emulator artifacts are not phone installers. Owner112/public111/catalog6 unchanged;
+no new production signature, update URL or public checksum.
+[Checks and remaining gates](releases/2026-11-04-android113-server-picker.md).
+
 **4 November — Android112 signed/owner-installed, not publicly published.** The node-scoped MESH2 HTTP backend
 is installed;112 adds the two-node MESH picker. Exact CI41808770801, API27/API35 and
 downloaded ARM64/source/alignment gates PASS. Existing-key signing and in-place owner

@@ -50,4 +50,13 @@ public class ServerLoadPresentationTest {
         assertEquals("CPU 0%",ServerLoadPresentation.from(sample(0,null,false),"nl",1045,false).value);
         assertEquals("CPU 100%",ServerLoadPresentation.from(sample(100,null,false),"nl",985,false).value);
     }
+    @Test public void squareMeterWarnsAt85AndNeverInventsMissingLoad(){
+        ServerLoadPresentation missing=ServerLoadPresentation.from(null,"nl",1010,false);
+        assertFalse(missing.warning());assertEquals(0,missing.filledSegments());
+        assertEquals(0,ServerLoadPresentation.from(sample(0,0.0,false),"nl",1010,false).filledSegments());
+        for(double percent:new double[]{1,50,84,84.99})assertFalse(ServerLoadPresentation.from(sample(percent,percent,false),"nl",1010,false).warning());
+        for(double percent:new double[]{85,90,100})assertTrue(ServerLoadPresentation.from(sample(percent,percent,false),"nl",1010,false).warning());
+        assertEquals(9,ServerLoadPresentation.from(sample(85,85.0,false),"nl",1010,false).filledSegments());
+        assertEquals(10,ServerLoadPresentation.from(sample(100,100.0,false),"nl",1010,false).filledSegments());
+    }
 }

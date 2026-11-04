@@ -70,6 +70,7 @@ public final class FriendsActivity extends LocalizedActivity {
         serverAdapter=new ServerAdapter();countries.setAdapter(serverAdapter);
         countries.setBackgroundColor(Color.TRANSPARENT);countries.setPadding(0,0,0,0);
         countries.setPopupBackgroundDrawable(TerminalUi.frame(this,TerminalUi.SURFACE,TerminalUi.FRAME));
+        countries.setDropDownWidth(Math.min(TerminalUi.dp(this,340),getResources().getDisplayMetrics().widthPixels-TerminalUi.dp(this,48)));
         countries.setSelection(targetIndex());
         String[] transportLabels=new String[TRANSPORTS.length];for(int i=0;i<TRANSPORTS.length;i++)transportLabels[i]=TRANSPORTS[i][1];
         transports=new Spinner(this);TerminalUi.inlinePicker(transports,transportLabels);
@@ -350,11 +351,12 @@ public final class FriendsActivity extends LocalizedActivity {
         Intent permission=VpnService.prepare(this);if(permission!=null)startActivityForResult(permission,11);else prepareConnect();
     }
     private void prepareConnect(){
-        if(ControlFriendsCatalog.explicit(country)&&!GatewayPicker.manual(transport)){detail.setText(R.string.gateway_manual_only);return;}
+        if(!GatewayPicker.available(country,transport)){detail.setText(R.string.gateway_mesh_unavailable);return;}
         if(Build.VERSION.SDK_INT>=33&&checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=android.content.pm.PackageManager.PERMISSION_GRANTED){requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},12);return;}
         connectNow();
     }
     private void connectNow(){
+        if(!GatewayPicker.available(country,transport)){detail.setText(R.string.gateway_mesh_unavailable);render();return;}
         if("auto".equals(transport)||"telemost".equals(transport)){
             activeCountry=country;getPreferences(MODE_PRIVATE).edit().putString("session_country",country).apply();
             ConnectionService.status="connecting";ConnectionService.failed=false;
@@ -394,7 +396,7 @@ public final class FriendsActivity extends LocalizedActivity {
         ServerLoadPresentation load=ServerLoadPresentation.from(serverLoads.get(loadTarget()),loadTarget(),System.currentTimeMillis()/1000.0,ru);
         String text=load.label();Double percent=load.percent;
         loadLabel.setText(text);loadBar.setContentDescription(text);loadBar.setProgress(percent==null?0:(int)Math.round(percent*10));
-        loadBar.setProgressTintList(android.content.res.ColorStateList.valueOf(percent!=null&&percent>=90?Color.rgb(239,132,116):percent!=null&&percent>=70?TerminalUi.AMBER:TerminalUi.MINT));
+        loadBar.setProgressTintList(android.content.res.ColorStateList.valueOf(ServerLoadMeter.color(load)));
         loadLabel.setTooltipText(load.details);
     }
     private void refreshServerLoads(){if(!loadResumed||isDestroyed()||loadPending)return;loadNext=0;refreshLoad();}
@@ -416,20 +418,40 @@ public final class FriendsActivity extends LocalizedActivity {
         android.content.Context c=parent.getContext();LinearLayout row=(LinearLayout)recycled;
         if(row==null){row=new LinearLayout(c);row.setOrientation(LinearLayout.HORIZONTAL);row.setGravity(Gravity.CENTER_VERTICAL);}
         else row.removeAllViews();
+        row.setPadding(0,0,0,0);row.setMinimumHeight(0);row.setBackgroundColor(Color.TRANSPARENT);row.setContentDescription(null);row.setActivated(false);
         boolean ru=code.equals("ru");
         ImageView flag=new ImageView(c);flag.setImageResource(ru?R.drawable.ic_flag_ru:R.drawable.ic_flag_nl);flag.setAdjustViewBounds(true);
         LinearLayout.LayoutParams flagParams=new LinearLayout.LayoutParams(TerminalUi.dp(c,24),TerminalUi.dp(c,16));flagParams.rightMargin=TerminalUi.dp(c,10);row.addView(flag,flagParams);
         TextView name=collapsed?new TerminalUi.InlineLabel(c):new TextView(c);name.setText(targetLabel(code));TerminalUi.textStyle(name,collapsed?12:14,collapsed?TerminalUi.MINT:TerminalUi.TEXT);name.setGravity(Gravity.CENTER_VERTICAL);
-        row.addView(name,new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,1));
+        LinearLayout title=new LinearLayout(c);title.setOrientation(LinearLayout.VERTICAL);title.addView(name);
+        row.addView(title,new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,1));
         if(collapsed){((TerminalUi.InlineLabel)name).label(name.getText()+"  ▾");name.setMinHeight(Math.max(TerminalUi.dp(c,48),(int)Math.ceil(name.getPaint().getFontMetrics().bottom-name.getPaint().getFontMetrics().top)));return row;}
         boolean locRu=getResources().getConfiguration().getLocales().get(0).getLanguage().equals("ru");
         ServerLoadPresentation presentation=ServerLoadPresentation.from(serverLoads.get(code),code,System.currentTimeMillis()/1000.0,locRu);
-        Double percent=presentation.percent;
-        TextView load=new TextView(c);load.setText(presentation.value);load.setTooltipText(presentation.details);
-        int color=percent==null?TerminalUi.MUTED:percent>=90?Color.rgb(239,132,116):percent>=70?TerminalUi.AMBER:TerminalUi.MINT;
-        TerminalUi.textStyle(load,13,color);load.setGravity(Gravity.CENTER_VERTICAL|Gravity.END);
-        row.addView(load,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
-        row.setMinimumHeight(TerminalUi.dp(c,48));row.setPadding(TerminalUi.dp(c,12),TerminalUi.dp(c,6),TerminalUi.dp(c,12),TerminalUi.dp(c,6));return row;
+        if(!GatewayPicker.available(code,transport)){
+            TextView unavailable=new TextView(c);unavailable.setText(R.string.gateway_mesh_unavailable_short);
+            TerminalUi.textStyle(unavailable,11,TerminalUi.MUTED);title.addView(unavailable);
+        }
+        LinearLayout utilization=new LinearLayout(c);utilization.setOrientation(LinearLayout.VERTICAL);utilization.setGravity(Gravity.END);
+        TextView load=new TextView(c);load.setText(presentation.percent==null?"—":presentation.value);load.setTooltipText(presentation.details);
+        TerminalUi.textStyle(load,12,ServerLoadMeter.color(presentation));load.setGravity(Gravity.CENTER_VERTICAL|Gravity.END);
+        utilization.addView(load);
+        LinearLayout.LayoutParams meterParams=new LinearLayout.LayoutParams(TerminalUi.dp(c,78),TerminalUi.dp(c,8));meterParams.topMargin=TerminalUi.dp(c,3);
+        utilization.addView(new ServerLoadMeter(c,presentation),meterParams);
+        boolean stacked=c.getResources().getConfiguration().fontScale>1.15f||c.getResources().getConfiguration().screenWidthDp<340;
+        LinearLayout.LayoutParams loadParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        if(stacked){loadParams.topMargin=TerminalUi.dp(c,6);loadParams.gravity=Gravity.END;title.addView(utilization,loadParams);flagParams.gravity=Gravity.TOP;flagParams.topMargin=TerminalUi.dp(c,4);}
+        else{loadParams.leftMargin=TerminalUi.dp(c,10);row.addView(utilization,loadParams);}
+        boolean selected=code.equals(country);row.setActivated(selected);
+        ImageView check=new ImageView(c);check.setImageResource(R.drawable.ic_check);check.setColorFilter(TerminalUi.MINT);check.setTag("server_selected");
+        check.setImportantForAccessibility(android.view.View.IMPORTANT_FOR_ACCESSIBILITY_NO);check.setVisibility(selected?android.view.View.VISIBLE:android.view.View.INVISIBLE);
+        LinearLayout.LayoutParams checkParams=new LinearLayout.LayoutParams(TerminalUi.dp(c,20),TerminalUi.dp(c,20));checkParams.leftMargin=TerminalUi.dp(c,8);
+        if(stacked){checkParams.gravity=Gravity.TOP;checkParams.topMargin=TerminalUi.dp(c,4);}row.addView(check,checkParams);
+        row.setContentDescription(targetLabel(code)+" · "+presentation.label()+(selected?" · "+getString(R.string.gateway_selected):"")+(GatewayPicker.available(code,transport)?"":" · "+getString(R.string.gateway_mesh_unavailable_short)));
+        android.graphics.drawable.LayerDrawable background=new android.graphics.drawable.LayerDrawable(new android.graphics.drawable.Drawable[]{
+            new android.graphics.drawable.ColorDrawable(selected?0xff183b33:TerminalUi.SURFACE),new android.graphics.drawable.ColorDrawable(0xff29443e)});
+        background.setLayerHeight(1,TerminalUi.dp(c,1));background.setLayerGravity(1,Gravity.BOTTOM);row.setBackground(background);
+        row.setMinimumHeight(TerminalUi.dp(c,64));row.setPadding(TerminalUi.dp(c,12),TerminalUi.dp(c,10),TerminalUi.dp(c,12),TerminalUi.dp(c,10));return row;
     }
     @Override protected void onResume(){super.onResume();SupportAutomation.attach(this::supportCommand);if(getPreferences(MODE_PRIVATE).getBoolean("activated",false)){ChatNotifications.request(this);ChatDeliveryService.start(this);}if(dashboardLocation!=null&&dashboardLocation.permitted())dashboardLocation.start();if(appUpdate!=null){appUpdate.render();appUpdate.onForeground(this::showSettings);}loadResumed=true;handler.post(loadRefresh);handler.post(restrictedRefresh);handler.post(refresh);if(routeLocation!=null&&routeLocation.permitted())routeLocation.start();}
     @Override protected void onPause(){SupportAutomation.detach();if(dashboardLocation!=null)dashboardLocation.stop();loadResumed=false;handler.removeCallbacks(loadRefresh);handler.removeCallbacks(restrictedRefresh);handler.removeCallbacks(refresh);if(telemetry!=null)telemetry.pause();if(routeLocation!=null)routeLocation.stop();super.onPause();}

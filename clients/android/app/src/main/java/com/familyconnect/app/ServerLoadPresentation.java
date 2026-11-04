@@ -26,4 +26,6 @@ final class ServerLoadPresentation {
     }
 
     String label(){return title+" · "+(value.startsWith("CPU ")?value.substring(4):value);}
+    boolean warning(){return percent!=null&&percent>=85;}
+    int filledSegments(){return percent==null?0:Math.max(0,Math.min(10,(int)Math.ceil(percent/10)));}
 }
