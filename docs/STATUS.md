@@ -1,6 +1,20 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
+**4 November — idle ACK cleanup source PASS; physical MESH stability still OPEN.**
+Local blackhole tests reproduce a dead-idle session retaining Family/broker ownership
+on main and both qualified gateway predecessors. Source now expires missing ACKs in an
+empty send window using existing20s MaxAge; live quiet ACKs preserve the session.
+Replacement waits for real cleanup; no owner eviction, retry increase or wire change.
+Six red regressions each become green on main; full five-package race272 PASS/22 optional
+skips, repeated targeted180/39/63 PASS, Python45 and JVM419+414/lint PASS. Original
+physical media loss and later device_busy attribution are not solved by this result.
+No phone/server/signing/version/publication changes. Last owner115 state is OFF at19:39;
+public113/catalog7 unchanged. Next only when selected: distinct gateway/exact Android
+qualification, then consented paired quiet/loss/reconnect/traffic evidence. No unrelated task.
+[Source correction, retained failures and delivery gates](releases/2026-11-04-mesh-idle-ack-cleanup.md).
+
+Earlier physical checkpoint:
 **4 November19:39UTC — owner115 manual cleanup PASS; post-reconnect traffic FAIL.**
 First NL1 session passes64 distinct UDP flows, DNS/HTTPS and verified egress. Manual
 disconnect releases the exact server session in about0.99s before reconnect, with the

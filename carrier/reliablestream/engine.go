@@ -73,6 +73,7 @@ type engine struct {
 	remoteWindow  int
 	remoteSize    int
 	started       time.Time
+	established   time.Time
 	lastOpen      time.Time
 	openAttempts  int
 	smoothedRTT   time.Duration
@@ -158,6 +159,7 @@ func (state *engine) input(packet frame, now time.Time) ([]frame, error) {
 				state.observeRTT(now.Sub(state.lastOpen))
 			}
 			state.remote, state.remoteWindow, state.remoteSize = packet.source, packet.window, packet.payload
+			state.established = now
 			return []frame{state.opening(packet.source), state.ack()}, nil
 		}
 		if packet.window != state.remoteWindow || packet.payload != state.remoteSize {
@@ -383,6 +385,15 @@ func (state *engine) tick(now time.Time) ([]frame, error) {
 			return []frame{state.opening(epoch{})}, nil
 		}
 		return nil, nil
+	}
+	if len(state.sent) == 0 {
+		lastACK := state.lastACK
+		if lastACK.IsZero() {
+			lastACK = state.established
+		}
+		if !lastACK.IsZero() && now.Sub(lastACK) >= state.config.MaxAge {
+			return nil, state.exhausted("RELIABLE_IDLE_TIMEOUT", nil, now)
+		}
 	}
 	var output []frame
 	if now.Sub(state.lastRefresh) >= state.config.RTO {

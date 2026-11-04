@@ -66,7 +66,7 @@ final class RestrictedRecovery {
             JsonObject first=lifecycle.getAsJsonObject("first_failure");
             if("recovery_exhausted".equals(reliable)&&"CARRIER".equals(RestrictedTrace.text(first,"stage"))
                 &&"FAILED".equals(RestrictedTrace.text(first,"state"))
-                &&RestrictedTrace.allowed(RestrictedTrace.text(first,"reason"),"RELIABLE_RETRY_EXHAUSTED|RELIABLE_FRAME_TIMEOUT"))return Failure.NETWORK;
+                &&RestrictedTrace.allowed(RestrictedTrace.text(first,"reason"),"RELIABLE_RETRY_EXHAUSTED|RELIABLE_FRAME_TIMEOUT|RELIABLE_IDLE_TIMEOUT"))return Failure.NETWORK;
             if(!"carrier_closed".equals(reliable)||!lifecycle.has("first_close"))return Failure.INTERNAL;
             JsonObject close=lifecycle.getAsJsonObject("first_close");
             String source=RestrictedTrace.text(close,"close_source");

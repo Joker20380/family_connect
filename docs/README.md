@@ -1,5 +1,11 @@
 # Documentation
 
+**4 November — idle ACK cleanup source correction; not deployed.** Dead quiet sessions
+retain ownership on main and both canonical predecessors. The bounded source fix uses
+existing MaxAge, preserves healthy quiet peers and cleanup-before-reacquisition. Local
+race/JVM/lint/contracts pass; the original physical media failure remains unexplained.
+Owner115/public113/catalog7 unchanged. [Reproduction and delivery gates](releases/2026-11-04-mesh-idle-ack-cleanup.md).
+
 **4 November19:39UTC — owner115 delivered; manual cleanup passes, reconnect traffic fails.**
 First NL1 DNS/HTTPS passes; exact manual cleanup is~0.99s and authenticated reconnect works.
 The following burst returns47/64 across a native-session change. Paired reliable ACK/frame

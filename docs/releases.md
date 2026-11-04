@@ -1,5 +1,11 @@
 # Release distribution / Выпуски
 
+**4 November — MESH idle ACK cleanup: source checkpoint, no release.** Local regression
+and guarded recovery tests pass; no new APK, gateway projection/deployment or catalog
+change. Owner115 last observed OFF; public/invitation/updater113/catalog7 unchanged.
+Initial physical media loss and sustained stability remain open.
+[Exact source evidence and delivery boundary](releases/2026-11-04-mesh-idle-ack-cleanup.md).
+
 **4 November19:39UTC — Android115 owner delivery retained; physical traffic acceptance fails.**
 Existing-key114→115 installed-byte/UID/first-install checks pass. Exact manual session
 cleanup/reconnect and first-session DNS/HTTPS pass, but the next burst returns47/64 with

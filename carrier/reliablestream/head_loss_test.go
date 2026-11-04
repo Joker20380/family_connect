@@ -76,7 +76,11 @@ func TestHeadLossAndDuplicateVirtualClock(test *testing.T) {
 				if err != nil || len(acks) != 1 || acks[0].ack != head+8 || len(receiver.buffer) != 0 || receiver.stats.Duplicates != 2 {
 					test.Fatal("consumed duplicate redelivered")
 				}
-				if _, err = sender.tick(now.Add(sender.config.MaxAge)); err != nil || sender.base != head+8 || !sender.writable() {
+				now = now.Add(sender.config.MaxAge)
+				if _, err = sender.input(receiver.ack(), now.Add(-sender.config.RTO)); err != nil {
+					test.Fatal("quiet peer ACK refresh", err)
+				}
+				if _, err = sender.tick(now); err != nil || sender.base != head+8 || !sender.writable() {
 					test.Fatal("permanent gap/exhaustion", err)
 				}
 			})

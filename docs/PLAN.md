@@ -3,6 +3,21 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- Android113 MESH incident 20261104 -->
+**Selected continuation — idle ACK ownership correction SOURCE PASS; runtime gate OPEN.**
+Main and both canonical predecessor sources reproduce six dead-idle regressions:
+no pending DATA meant no peer-loss expiry, retaining Family/broker ownership. New idle
+liveness uses existing20s MaxAge, preserves periodic-ACK quiet peers and waits for full
+old-owner cleanup. Main race/JVM/lint/contracts pass with retained optional skips and
+the explicitly corrected head-loss fixture; no retry/wire/auth weakening. Initial115
+media loss and the later physical device_busy holder are still unproven. No deployment,
+new version or public artifact. Owner115 last observed OFF; public113/catalog7 unchanged.
+Next only when selected: separately qualify the narrow canonical gateway projections
+and exact new Android candidate, then consented paired quiet/loss/reconnect/DNS/HTTPS.
+Do not infer full MESH stability, deploy main gateways, replace115 binaries, publish or
+start an unrelated queued task from this source result.
+[Evidence, exact test counts and remaining gates](releases/2026-11-04-mesh-idle-ack-cleanup.md).
+
+Earlier physical checkpoint:
 **Current result — Android115/gateway delivery DONE; physical traffic gate FAILED/OPEN.**
 Bounded NL1 manual cleanup/reconnect passes with exact-session correlation and unchanged
 gateway process. First-session DNS/HTTPS passes; subsequent64-flow probe receives47 and

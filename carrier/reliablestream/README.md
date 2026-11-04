@@ -92,6 +92,16 @@ not a measured-bandwidth guarantee. An indefinitely dead path still closes.
 
 ## Bounds and shutdown
 
+- Idle liveness also uses the existing `MaxAge` bound (20s by default). When no
+  DATA remains outstanding, absence of valid non-stale ACK refreshes for that
+  interval terminates with `RELIABLE_IDLE_TIMEOUT`. Before the first ACK, the
+  interval starts at completed negotiation, not at stream creation. Repeated
+  OPENs and foreign/obsolete ACKs cannot extend it. A quiet live peer keeps the
+  session through its existing periodic ACKs; no new wire message or application
+  replay is introduced. Pending DATA retains its existing age/retry rules.
+  This source change closes a dead-idle ownership gap; it does not explain the
+  initial physical Android115 media loss or constitute deployed acceptance.
+  [Reproduction, qualification and delivery boundary](../../docs/releases/2026-11-04-mesh-idle-ack-cleanup.md).
 - Local beta62 diagnostic candidate records exact handshake, outstanding-frame-age
   or retry-budget exhaustion in sessiontrace **before** sending RESET/closing the
   carrier, so later TLS/cleanup errors cannot hide the initiating failure. Failure
@@ -116,10 +126,11 @@ not a measured-bandwidth guarantee. An indefinitely dead path still closes.
 - Two owned goroutines: one state/IO loop, one carrier reader with a1-slot channel.
   All public waiters select cancellation/terminal state. Close joins both workers.
 - Context cancellation, carrier/WS/PC termination, TLS termination, local Close,
-  remote RESET and retry exhaustion abort the stream and clear retained buffers.
-  RESET is best-effort with100ms send budget. It is an abort, not a reliable FIN or
-  a graceful drain promise. If RESET is lost, outstanding peer work exhausts or
-  its parent context expires. There is no automatic reconnect/replay.
+  remote RESET, idle ACK expiry and retry exhaustion abort the stream and clear
+  retained buffers. RESET is best-effort: at most five sends within500ms total,
+  with100ms per-write caps. It is an abort, not a reliable FIN or graceful drain.
+  If RESET is lost, peer DATA or idle ACK liveness expires, or its parent context
+  ends. There is no automatic reconnect/replay within ReliableStream.
 
 Stats include DATA/ACK/SACK, retransmitted bytes, duplicates/stale frames, gaps,
 per-gap detect/recover timing and sequence, queue high-water, retained bytes,

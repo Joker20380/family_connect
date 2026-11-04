@@ -26,19 +26,33 @@ public class RestrictedRecoveryTest {
     private static JsonObject first(JsonObject snapshot){return diagnostic(snapshot).getAsJsonObject("lifecycle").getAsJsonObject("first_failure");}
     private static Failure failure(JsonObject snapshot){return RestrictedRecovery.failure(3,false,false,snapshot.toString());}
 
-    @Test public void onlyProvenDataRecoveryExhaustionIsRecoverable() {
+    @Test public void onlyProvenReliableExhaustionIsRecoverable() {
         for(String terminal:new String[]{"IO_CLOSED","EOF","RELIABLE_EXHAUSTED"}) {
             JsonObject snapshot=snapshot();diagnostic(snapshot).addProperty("terminal_reason",terminal);
-            for(String reason:new String[]{"RELIABLE_RETRY_EXHAUSTED","RELIABLE_FRAME_TIMEOUT"}) {
+            for(String reason:new String[]{"RELIABLE_RETRY_EXHAUSTED","RELIABLE_FRAME_TIMEOUT","RELIABLE_IDLE_TIMEOUT"}) {
                 first(snapshot).addProperty("reason",reason);
                 assertEquals(Failure.NETWORK,failure(snapshot));
             }
         }
         for(String reason:RestrictedTrace.REASONS.split("\\|")) {
-            if(reason.equals("RELIABLE_RETRY_EXHAUSTED")||reason.equals("RELIABLE_FRAME_TIMEOUT"))continue;
+            if(reason.equals("RELIABLE_RETRY_EXHAUSTED")||reason.equals("RELIABLE_FRAME_TIMEOUT")||reason.equals("RELIABLE_IDLE_TIMEOUT"))continue;
             JsonObject snapshot=snapshot();first(snapshot).addProperty("reason",reason);
             assertEquals(reason,Failure.INTERNAL,failure(snapshot));
         }
+    }
+    @Test public void idleTimeoutWithoutPendingDataUsesGuardedNetworkRecovery() {
+        JsonObject snapshot=snapshot();
+        first(snapshot).addProperty("reason","RELIABLE_IDLE_TIMEOUT");
+        first(snapshot).remove("reliable_retries");first(snapshot).remove("reliable_pending");
+        first(snapshot).addProperty("reliable_ack_age_ms",20000);
+        assertEquals(Failure.NETWORK,failure(snapshot));
+        assertEquals(Failure.AUTH,RestrictedRecovery.failure(3,false,true,snapshot.toString()));
+        assertEquals(Failure.CANCELLED,RestrictedRecovery.failure(3,true,false,snapshot.toString()));
+        diagnostic(snapshot).addProperty("reliable_terminal","carrier_closed");
+        assertEquals(Failure.INTERNAL,failure(snapshot));
+        diagnostic(snapshot).addProperty("reliable_terminal","recovery_exhausted");
+        diagnostic(snapshot).addProperty("correlation_status","UNKNOWN");
+        assertEquals(Failure.INTERNAL,failure(snapshot));
     }
     @Test public void terminalPeerFailureRecoversRegardlessOfIceCallbackOrdering() {
         for(String source:new String[]{"SUBSCRIBER_DISCONNECTED","PUBLISHER_DISCONNECTED"}) {
