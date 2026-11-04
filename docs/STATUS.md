@@ -12,11 +12,11 @@ in that window. Packet receipt/old-room identity not proven. No changes by this 
 [Evidence](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**4 November11:02UTC — signed Android112 installed on owner phone; live MESH2 blocked by HTTP502.**
+**4 November11:49UTC — owner112 MESH2 traffic proven; sustained stability gate NOT PASSED.**
 MESH2 node-scoped HTTPe2ed4ca6/additive migration remain installed; existing accounts,
-keys/grants/assignments are preserved. Last service readback08:56 verifies both MESH
+keys/grants/assignments are preserved. Historical service readback08:56 verifies both MESH
 nodes active/boot-disabled, accepted AMS2 binary566cbc96, common writer COMMITTED with
-active timers. No new server/policy change in this continuation.
+active timers. Later guarded recovery is recorded below; no admission-policy change.
 Android source2b7d672 is pushed/remote-verified: selected MESH2 now refreshes its own
 readiness scope while retaining primary Auto/chat prewarm.62 Python and414+409 JVM
 PASS/0 skips; lint0 errors/56 existing warnings; exact API27/API35 UI4/4 each PASS.
@@ -52,16 +52,36 @@ or data clear. UID, first-install time and subsequently observed support identit
 This is a controlled owner installation, not public rollout or full stored-data acceptance.
 After the user re-enables app USB consent and selects MESH2, normal connection fails at
 readiness CHALLENGE/HTTPS_UNDERLAY with HTTP502, before native readiness/Family traffic.
-Independent normal-TLS HTTPS probes also return502. Root cause/repair and real secondary
-READY/ACK/egress/negative acceptance remain OPEN; do not blame the phone or count this
-as product PASS. Latest phone cleanup readback is DISCONNECTED/VPN capture closed.
+Independent normal-TLS HTTPS probes reproduced502. This failed attempt is not product
+PASS. That failed attempt's cleanup readback is DISCONNECTED/VPN capture closed.
 Temporary read-only UI helper is removed; MIUI's denied ADB taps were not bypassed.
 RU inspection identifies a failed pre-preparation renewal: STALE_NODE_STATE, all three
 roles acquired, no commit or candidate artifacts; only the database observation changed.
 HTTP is stopped by that transaction, not an APK/native MESH failure. A bounded explicit
 unprepared-reconciliation tool passes193 focused checks (one unchanged optional native
-toolchain check skipped); no live metadata recovery yet.
-Qualified boot activation remains OPEN. Public111/catalog6, invitation and Windows/Linux
+toolchain check skipped), then17 reconciliation/entrypoint checks PASS/0 skips.
+Corrected exact tool passes live dry run. Guarded metadata reconciliation and the pinned
+controller recover the failed operation to ABORTED with the product DB unchanged;
+ordinary RU AWG/TCP state/PIDs unchanged. Normal three-node renewal reaches COMMITTED
+at11:29:40, no first cause; both timers active. Fresh readback: HTTP active, both MESH
+nodes active/boot-disabled. Public catalog111/6 hash and TLS rechecked unchanged11:34.
+The first wrapper's import error and recovery CLI's expected75/ABORTED are retained;
+neither reconciliation nor recovery was blindly repeated. No database/profile rollback.
+Normal scheduled acquisition/quiesce race still needs a root fix, not repeated manual
+rebasing. The user's subsequent normal MESH/Amsterdam2 connection succeeds. Read-only
+known-device receipts independently confirm node2 ACK_RECEIVED/READY/usable/version112;
+primary prewarm also has its own READY and must not be mistaken for the selected exit.
+An ordinary-UID probe confirms active VPN, DNS, normal-TLS HTTPS200 and Amsterdam2 egress.
+The first probe's UnknownHostException remains a failed sample; its cause is not established.
+Controlled disconnect closes VPN capture; reconnect reaches CONNECTED/READY in35.7s and
+repeats the full DNS/HTTPS/egress PASS. Temporary probe removed. A subsequent snapshot is
+RESTORING/IO_CLOSED/read_error; the same-session gateway trace has RELIABLE_FRAME_TIMEOUT
+and cleanup, without a process restart. Automatic recovery establishes Family TLS again
+and returns CONNECTED/READY, but a follow-up DNS succeeds while HTTPS fails with IOException.
+Final UI state is CONNECTED, not proof of healthy traffic. Root cause is not yet established.
+Paired diagnosis, full negative/server-cleanup/low-speed acceptance, acquisition-race correction and qualified
+boot activation remain OPEN; this is not a blanket stability or public-rollout PASS.
+Public111/catalog6, invitation and Windows/Linux
 distribution are unchanged by this task; no112 public APK/catalog/tag publication.
 [Evidence, exact CI/artifact acceptance and rollback](releases/2026-11-04-mesh2-android112.md).
 <!-- /MESH2 canonical installation 20261103 -->

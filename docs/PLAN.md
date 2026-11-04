@@ -13,7 +13,7 @@ not an established HyperOS defect; no implementation/deployment authorized by th
 [Evidence and limits](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**4 November11:02UTC — FLEET-BOOTSTRAP-2: owner112 installed; live readiness HTTP502 to diagnose.**
+**4 November11:49UTC — FLEET-BOOTSTRAP-2: owner112 MESH2 traffic proven; stability NOT PASSED.**
 Continue the selected MESH2→Android delivery only; no unrelated successor. MESH2 gateway,
 common-fleet writer and node-scoped HTTP/migration are installed. Runtime provider/
 reconnect acceptance remains valid; MESH2 is still boot-disabled pending the product gate.
@@ -37,19 +37,31 @@ Exact accepted112 is now signed offline with the existing key and installed over
 the authorized Android12/API31 phone at10:50. UID/first-install/support identity match;
 no uninstall, data clear or reenrollment. Controlled owner installation precedes its real
 product gate; it does not authorize public distribution or substitute synthetic evidence.
-User-selected MESH2 fails before native readiness at CHALLENGE/HTTPS_UNDERLAY HTTP502;
+The first user-selected MESH2 attempt fails before native readiness at CHALLENGE/HTTPS_UNDERLAY HTTP502;
 independent HTTPS probes reproduce502. Phone cleanup: DISCONNECTED/VPN capture closed.
-Next within this ID: diagnose/recover this observed control-plane failure, then normal
-targeted READY/ACK, Family TLS/DNS/HTTPS/AMS2 egress and negative/cleanup acceptance;
+The observed control-plane failure is recovered at11:29:40. Subsequent known-device112
+node2 ACK_RECEIVED/READY/usable and ordinary-UID DNS/normal-TLS HTTPS200/AMS2 egress PASS.
+Disconnect closes VPN capture; reconnect in35.7s repeats the same egress PASS. The initial
+probe's UnknownHostException remains recorded, not diagnosed or erased by the repeats.
+Subsequent IO_CLOSED/read_error and paired gateway RELIABLE_FRAME_TIMEOUT defeat a
+sustained-stability PASS. Auto recovery establishes Family TLS/CONNECTED again, but the
+next HTTPS probe fails with IOException despite DNS success. No gateway process restart.
+Next within this ID: diagnose the paired transport failure before further publication,
+then remaining negative/server-cleanup/low-speed acceptance and the
+normal renewal acquisition-race root fix;
 qualified boot activation and increasing immutable public publication only after PASS.
-No new backend deployment, grant/policy change, boot enablement or public112 delivery.
+No new backend archive, grant/policy change, boot enablement or public112 delivery.
 Do not infer a recipient, reenroll the existing phone or generate operator ACKs.
-Observed502 cause: common renewal stopped HTTP and remains RECOVERY_REQUIRED after
-pre-preparation database drift. The explicit no-DB-write reconciliation tool passes193
-focused checks/one unchanged optional native skip. Next use the existing pinned recovery
-and verify common renewal/readiness after guarded reconciliation; do not simply
-restart the fenced HTTP unit or remove its operation marker. The acquisition race still
-needs a root-cause correction after recovery; this tool is not an automatic retry.
+Observed502 cause: common renewal stopped HTTP and entered RECOVERY_REQUIRED after
+pre-preparation database drift. Explicit reconciliation passes193 focused checks/one
+unchanged optional native skip, then17 corrected entrypoint/reconciliation checks.
+Live guarded reconciliation and pinned recovery finish ABORTED with the DB unchanged;
+subsequent common renewal COMMITTED, HTTP/both MESH nodes active, timers restored.
+Both MESH nodes remain boot-disabled. The acquisition race still needs a root-cause
+correction; this tool is not an automatic retry. The user selects MESH/Amsterdam2 through
+the normal UI; no private-state write or MIUI input bypass. Temporary ordinary-UID probe
+is removed; the final phone state is CONNECTED on112 but healthy traffic is not confirmed
+after the latest probe failure. Full publication is not yet accepted.
 [Current evidence and rollback](releases/2026-11-04-mesh2-android112.md).
 <!-- /MESH2 canonical installation 20261103 -->
 

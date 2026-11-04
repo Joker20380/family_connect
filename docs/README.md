@@ -1,12 +1,17 @@
 # Documentation
 
-**4 November — Android112 signed and owner-installed; live MESH2 acceptance OPEN.** Node-scoped readiness and
+**4 November — Android112 owner MESH2 traffic proven; sustained stability NOT PASSED.** Node-scoped readiness and
 additive migration preserve existing accounts/assignments. Exact112 CI/API27/API35 and
 downloaded ARM64/source/alignment checks PASS; targeted node/device/version ACK-reader
 checks PASS. Controlled111→112 phone upgrade retains UID/first-install/support identity.
-Normal MESH2 startup receives HTTP502 before readiness; independent HTTPS reproduces it.
-Public111/catalog6 stays unchanged; failure diagnosis, live product acceptance,
-qualified boot activation and public publication remain.
+The HTTP502 is traced to an unprepared renewal failure; guarded recovery and a new
+three-node renewal complete11:29UTC without restoring the DB. Public111/catalog6 stays
+unchanged. Real known-device112 node2 READY/ACK, ordinary-UID DNS/HTTPS/AMS2 egress and
+disconnect/reconnect pass, followed by a real transport failure and automatic recovery.
+The first DNS and latest HTTPS probes fail; paired gateway framing timeout is recorded,
+not a complete root-cause attribution. Remaining diagnosis, negative/server-cleanup/
+low-speed checks, the acquisition-race root fix, qualified boot
+activation and public publication are not claimed complete.
 [Current rollout and rollback](releases/2026-11-04-mesh2-android112.md).
 
 **3 November — MESH slow-link stability candidate, source only.** Current owner-selected

@@ -3,8 +3,12 @@
 **4 November — Android112 signed/owner-installed, not publicly published.** The node-scoped MESH2 HTTP backend
 is installed;112 adds the two-node MESH picker. Exact CI41808770801, API27/API35 and
 downloaded ARM64/source/alignment gates PASS. Existing-key signing and in-place owner
-phone111→112 install PASS; UID/first-install/support identity retained. Live MESH2
-readiness gets HTTP502, so product acceptance and public delivery remain pending. Public/invitation
+phone111→112 install PASS; UID/first-install/support identity retained. The subsequent
+readiness HTTP502 is recovered through guarded renewal reconciliation, not an APK change;
+normal three-node renewal COMMITTED11:29UTC. Real owner112 node2 READY/ACK, DNS/HTTPS/AMS2
+egress and disconnect/reconnect pass, but subsequent transport/HTTPS failures block
+sustained-stability acceptance. Paired trace diagnosis, negative/server-cleanup/low-speed
+and acquisition-race gates remain open. Public/invitation
 Android stays111/catalog6. [Current state and rollback](releases/2026-11-04-mesh2-android112.md).
 
 **3 November — Android111 and Windows0.2.16 published; Linux internal.13 owner-installed.**
