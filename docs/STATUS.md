@@ -9,7 +9,12 @@ Owner chose flat rows, right-aligned squares/percentage, green selected fill and
 large fonts/narrow screens move the load below the name without losing its meaning.
 Public/invitation111/catalog6 and owner112 unchanged. Final JVM418+413 and Python22 PASS,
 0 skips; API27/API35 picker/dashboard/language4/4 each PASS, RU/EN renders reviewed.
-Lint0 errors/56 existing warnings. Source checkpoint only; exact release CI remains pending.
+Lint0 errors/56 existing warnings. Owner subsequently requests publication. Exact source
+d2882cd/CI41833086774 attempt2 passes Android/native/API27/API35; attempt1 failed before
+instrumentation and remains evidence. Four downloaded artifacts match GitHub digests;
+ARM64/code113/minSDK27,12 native libraries/source/licenses and16K alignment PASS.
+Synthetic API27 CI-signed112→113 retains UID/identity/journal/outbox. Offline product
+signing is awaiting the protected local-vault dialog; phone/public publication NOT_DONE.
 Transport instability and renewal-race gates remain open, not superseded by UI acceptance.
 [Scope, checks and delivery boundary](releases/2026-11-04-android113-server-picker.md).
 <!-- /Android113 unified picker 20261104 -->

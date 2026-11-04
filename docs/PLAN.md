@@ -13,8 +13,11 @@ Dependencies: current signed gateway catalog, per-node readiness and existing te
 Owner-approved hybrid: flat rows, right-aligned meter, soft selected fill and checkmark;
 large-font/narrow-screen layout preserves names. Source candidate113; final JVM418+413,
 Python22, API27/API35 UI4/4 each PASS/0 skips; lint0 errors/56 existing warnings.
-Local source/UI completion gate met; checkpoint includes docs and ordinary source push.
-Phone/public delivery remains separate and requires exact CI/signing/acceptance. Public111/catalog6,
+Local source/UI completion gate met and d2882cd is pushed. Owner now authorizes113 release.
+Exact Android CI41833086774 attempt2 and downloaded ARM64/native/runtime/UI artifacts PASS;
+attempt1 emulator-action failure retained, no gate bypass. Synthetic112→113 storage upgrade PASS.
+Next: protected offline signing, in-place acceptance, guarded optional publication and full
+HTTPS readback. The local signing dialog is pending; no new signed/public APK yet. Public111/catalog6,
 owner112 and open transport/renewal blockers remain unchanged. No automatic successor.
 [Current implementation and gates](releases/2026-11-04-android113-server-picker.md).
 <!-- /Android113 unified picker 20261104 -->

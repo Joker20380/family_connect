@@ -84,3 +84,51 @@ No server or installed client is changed by this source/UI checkpoint. To withdr
 revert the focused source changes in a new commit; do not reset published history,
 rewrite112 binaries or restore private databases/profiles. If113 is installed later,
 use a qualified forward corrective version rather than uninstall/data-clear/downgrade.
+
+## Owner-requested release preparation
+
+The owner's subsequent «выпускай» authorizes preparing and publishing the optional113
+client update, not changing server admission, transport policy or declaring MESH stable.
+The exact committed build input is `d2882cde4c50b15085b925007c04c48f4de61bf0`.
+Client workflow41833086774 attempt1 passes JVM/native construction and contracts but
+fails the Android15 emulator action before any instrumentation cases execute. No
+qualified ARM64 release payload is produced by that attempt. A bounded retry uses the
+same commit and unchanged gates; failure evidence is retained, not relabelled PASS.
+Linux and Windows jobs are skipped by Android-only scope, not newly accepted releases.
+
+Additional local API27 CI-signed112→113 in-place upgrade PASS: application UID,
+nonexportable identity/journal wrapping keys, interrupted atomic-write recovery and
+durable outbox survive across distinct processes. This is synthetic storage acceptance,
+not product-signed phone operation or proof of live MESH stability.
+
+The release remains pending exact CI/artifact review, offline signing, installed-client
+acceptance and guarded public APK/catalog/invitation readback. Current public111/catalog6
+and owner112 remain unchanged at this preparation checkpoint. Existing MESH stability
+and renewal-race work remains open; this UI update does not change its acceptance status.
+The required full documentation baseline scan has738 files/4569 links and two pre-existing
+historical anchor errors (STATUS's October27 evening link and the October24 source
+checkpoint's October23 phase22 link); no unrelated historical repair is folded in.
+
+### Exact CI and downloaded artifact qualification
+
+At13:35UTC, workflow41833086774 attempt2 is successful on the unchanged d2882cd source.
+All required Android stages execute, including both API levels, restricted native and
+production-configuration ARM64 packaging. The first failed attempt remains distinct.
+All four attempt2 ZIPs match their GitHub artifact digests and source/run; stale attempt1
+debug/runtime artifacts are explicitly excluded. UI renders on both APIs are reviewed;
+the server-list percentages are synthetic and contain no product identities.
+
+- Unsigned Friends0.1.18-beta113/code113, ARM64, minSDK27/target35:50,254,721 bytes,
+  SHA256 `1b77a8ff91cb5718ddd42766e5c546b6f6a51bfb6c9031b43f0bef23bf496062`.
+- JNI/source receipts,12 libraries, ELF/ZIP16K alignment, audio source/licenses and
+  absence of the diagnostic provisioning entrypoint PASS; APK is not debuggable.
+- Exact JVM debug418/Friends413 PASS/0 skips. API35 debug28/Friends19 PASS,25/4 existing
+  opt-in/variant skips; API27 debug27/Friends18 PASS,26/5 existing opt-in/API skips.
+  Required picker, language, storage and legacy-audio cases execute; skips are not PASS.
+- Offline signing is requested through the accepted protected-vault reader; no key or
+  password is exported. At this checkpoint it awaits the local dialog. No product-signed
+  113 APK, phone update, public catalog7 or public113 link is claimed.
+
+Private qualification/download receipts remain in ignored
+`state-client-build/android113-release-20261104/`. The unsigned artifact is qualified for
+the next signing step, not a public installer or sustained-MESH acceptance.
