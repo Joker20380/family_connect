@@ -56,6 +56,11 @@ Independent normal-TLS HTTPS probes also return502. Root cause/repair and real s
 READY/ACK/egress/negative acceptance remain OPEN; do not blame the phone or count this
 as product PASS. Latest phone cleanup readback is DISCONNECTED/VPN capture closed.
 Temporary read-only UI helper is removed; MIUI's denied ADB taps were not bypassed.
+RU inspection identifies a failed pre-preparation renewal: STALE_NODE_STATE, all three
+roles acquired, no commit or candidate artifacts; only the database observation changed.
+HTTP is stopped by that transaction, not an APK/native MESH failure. A bounded explicit
+unprepared-reconciliation tool passes193 focused checks (one unchanged optional native
+toolchain check skipped); no live metadata recovery yet.
 Qualified boot activation remains OPEN. Public111/catalog6, invitation and Windows/Linux
 distribution are unchanged by this task; no112 public APK/catalog/tag publication.
 [Evidence, exact CI/artifact acceptance and rollback](releases/2026-11-04-mesh2-android112.md).

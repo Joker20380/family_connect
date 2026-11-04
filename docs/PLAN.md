@@ -44,6 +44,12 @@ targeted READY/ACK, Family TLS/DNS/HTTPS/AMS2 egress and negative/cleanup accept
 qualified boot activation and increasing immutable public publication only after PASS.
 No new backend deployment, grant/policy change, boot enablement or public112 delivery.
 Do not infer a recipient, reenroll the existing phone or generate operator ACKs.
+Observed502 cause: common renewal stopped HTTP and remains RECOVERY_REQUIRED after
+pre-preparation database drift. The explicit no-DB-write reconciliation tool passes193
+focused checks/one unchanged optional native skip. Next use the existing pinned recovery
+and verify common renewal/readiness after guarded reconciliation; do not simply
+restart the fenced HTTP unit or remove its operation marker. The acquisition race still
+needs a root-cause correction after recovery; this tool is not an automatic retry.
 [Current evidence and rollback](releases/2026-11-04-mesh2-android112.md).
 <!-- /MESH2 canonical installation 20261103 -->
 
