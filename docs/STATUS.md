@@ -1,5 +1,10 @@
 # Текущее состояние / Current state
 
+**4 November22:54UTC — read-only VPN snapshot:** all AWG/TCP and both NL bootstrap
+services active. CPU RU13–23%, AMS1 8–34%, AMS2 8–17%; RU disk70%/8.5GiB free.
+Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime changes.
+[Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
+
 <!-- Android113 MESH incident 20261104 -->
 **4 November22:43UTC — Android117 both-NL traffic/cleanup/reconnect PASS, sustained stability OPEN.**
 Read-only Android system history places cellular NETWORK_DISCONNECTED at21:05:48.860UTC,

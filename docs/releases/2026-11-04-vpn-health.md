@@ -1,5 +1,31 @@
 # VPN read-only health — 4 November 2026
 
+## 22:54UTC refresh
+
+Read-only snapshot22:53:54–22:54:06UTC (23:54 Brussels).
+
+| Metric | RU | AMS1 | AMS2 |
+| --- | --- | --- | --- |
+| CPU us+sy, three one-second samples | 13–23% | 8–34% | 8–17% |
+| Load1/5/15 | 1.27/1.19/1.09 | 1.20/0.72/0.59 | 0.56/0.37/0.27 |
+| RAM used/total MiB | 1203/1962 | 784/1914 | 480/1919 |
+| Available RAM MiB | 759 | 1130 | 1438 |
+| Disk used/free | 70%/8.5G | 17%/39G | 14%/40G |
+| Configured AWG peers | 19 | 47 | 5 |
+| AWG handshakes180s/24h | 0/2 | 2/17 | 0/4 |
+| Established TCP443/8446 | 0/0 | 145/0 | 0/0 |
+
+AWG/TCP active on all three, both NL bootstrap services active, NRestarts0 in
+sampled units. RU has no active bootstrap; no RU MESH availability is inferred.
+Two recent AWG peers and145 TCP sockets are not unique users; MESH application
+sessions not counted. Short CPU samples show no sustained overload; RU swap913MiB
+with sampled si/so0 and IO wait0–5%. RU retains8.5GiB free after earlier cleanup.
+External RU8443 TLS validates (verify0), root HTTP404 is not an application PASS.
+No settings/restarts/deletion/rollout; rollback not applicable. TLS-renewal job and
+legacy Docker worker not rechecked. Entry checkpoint records installed owner117,
+public113 and sustained MESH stability OPEN; this inspection neither verifies release
+bytes nor closes that gate. No client end-to-end test or unique-person count.
+
 ## 12:15UTC refresh
 
 Read-only sampling12:15:35–12:15:45UTC (13:15 Brussels), all nodes2 vCPUs.
