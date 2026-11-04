@@ -10,8 +10,9 @@ interface candidate gathering despite protected sockets;117 narrows host/STUN ca
 to the protected UDP route without sending a probe payload. Negative protection gates
 remain fail-closed; no retry/deadline/auth/wire change. Installed116/public113 and equal
 NL70e6c0fc remain unchanged. Source5a0f6e0 pushed; disposable API27 Java-storage
-116→117 retention passes. Exact Client builds41917441995 is in progress, not accepted.
-Next: exact117 CI/artifact/platform/signing gates,
+116→117 retention passes. Exact Client builds41917441995 attempt1/API27/API35 and
+downloaded ARM64/source/ABI/16K/licenses/UI gates pass; unsigned APK07d88bef qualified.
+Separate phase0/Linux-control fixture failures remain. Next: protected signing/install,
 then paired physical traffic and unrelated-network-loss checks on both nodes. Old exact
 candidate/interface attribution and sustained acceptance remain open. No public rollout
 or unrelated successor. [Current gates](releases/2026-11-04-mesh-protected-ice-route.md).

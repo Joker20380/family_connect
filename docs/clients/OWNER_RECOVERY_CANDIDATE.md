@@ -1,8 +1,8 @@
 # Owner recovery106 — private candidate / закрытый кандидат
 
 <!-- Unified MESH Android116 20261104 -->
-**117 is a source-only ICE-route candidate; owner remains116.** Exact CI, artifact,
-retention/signing/install and physical traffic gates are required before claiming delivery.
+**117 is a qualified unsigned ICE-route candidate; owner remains116.** Exact CI, artifact
+and synthetic retention pass; protected signing/install and physical traffic remain open.
 RU:117 пока не устанавливать из непроверенных сборок; публичное обновление остаётся113.
 [Correction and remaining checks](../releases/2026-11-04-mesh-protected-ice-route.md).
 

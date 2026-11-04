@@ -1,7 +1,7 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
-**4 November — protected ICE-route correction; Android117 source candidate.**
+**4 November — protected ICE-route correction; exact Android117 qualified, unsigned.**
 Read-only Android system history places cellular NETWORK_DISCONNECTED at21:05:48.860UTC,
 coincident with116's ACK loss; VPN/Wi-Fi remains present. The old selected candidate's
 interface was not recorded, so this is correlated evidence, not complete attribution.
@@ -9,9 +9,13 @@ Reproduced code defect: Pion gathers all IPv4 interfaces, including non-default 
 although socket protection does not select one interface. New protected UDP route lookup
 sends no data and restricts host/STUN candidates to that source address; denied/closed/
 cancelled protection fails closed. No timeout, retries, auth, wire or server change.
-Source5a0f6e0 pushed/remote-verified; exact Client builds41917441995 is in progress.
+Source5a0f6e0 pushed/remote-verified; exact Client builds41917441995 attempt1 passes.
+Downloaded ARM64/source/ABI/16K/licenses, API27/API35,833 JVM cases and8 UI images pass.
+Unsigned117 APK07d88bef is50,262,297 bytes. Separate phase0/Linux-control fixture jobs
+fail; no whole-CI PASS. Both live nodes still have equal70e6c0fc/NRestarts0 at readback;
+current PIDs1293513/1184264 differ from the earlier delivery, not an uptime proof.
 Disposable API27 Java-storage116→117 retention passes; no product key/phone mutation.
-117 remains pending exact release build/CI/sign/install and physical acceptance. Installed
+117 remains pending protected signing/install and physical acceptance. Installed
 owner116, public113/catalog7, identical NL70e6c0fc and desktop versions remain unchanged.
 Next stays within this incident: exact117 qualification, then paired physical traffic
 and unrelated-network-loss checks. Do not infer field acceptance from local tests.

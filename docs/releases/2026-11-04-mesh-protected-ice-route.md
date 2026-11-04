@@ -3,11 +3,11 @@
 ## Scope and current boundary
 
 Continuation of the owner-selected MESH stability incident, not another queued task.
-Android source is0.1.18-beta117/code117; installed owner remains signed116
+Android0.1.18-beta117/code117 is built and qualified, still unsigned; installed owner remains signed116
 (`3ee68c6211b2e438a3250504674a3b8e676c597b6cc00863b9fb0cabe0a56aba`).
 Public/invitation/updater stays113/catalog7; public links/checksums are not changed.
 Linux/Windows releases are unchanged. No signing, installation or publication in this
-source checkpoint. Both NL gateways retain the same running70e6c0fc executable from
+qualification checkpoint. Both NL gateways retain the same running70e6c0fc executable from
 [the unified delivery](2026-11-04-unified-mesh-stability.md); no server mutation here.
 
 ## New system evidence and limits
@@ -67,8 +67,35 @@ seamlessly when its actual physical network disappears.
 ## Delivery gates and rollback
 
 Source commit`5a0f6e0375e8a27c009956378e72c96a37385ad6` is pushed to the existing
-`main` upstream with equal remote SHA. Exact Client builds`41917441995` attempt1 is
-in progress at this checkpoint; no platform acceptance claim yet.
+`main` upstream with equal remote SHA. Exact Client builds`41917441995` attempt1 and
+Android job`126880803015` pass. Readiness41917442025 passes. Separate phase041917442194
+fails at failover stack construction and release-fixture provisioning; Linux control
+41917441984 fails at release-fixture provisioning. These steps also failed for116;
+their underlying errors are not reanalyzed here. No whole-repository CI-green claim.
+
+Downloaded archives are bound to5a0f6e0/run41917441995 and their GitHub digests:
+
+| Artifact | ID | ZIP SHA256 |
+| --- | --- | --- |
+| ARM64 |13367556375|`707e1a296e63e712d1fce4b3596a9c00b6f3f8b7fd122bef419435963c2bca1d`|
+| Debug/JVM |13367661185|`f0f120516a2ca3d2337f0605d5daf4d911efd72e7142fc347845fae969c6704c`|
+| Runtime |13366663348|`9742a285fd37c66e5fde708f5798ae4a0cd3e864d4779f8b273591845d57dd63`|
+| UI |13366862803|`80a6c31751180ffe5c8b898c00dbb90899379fe86faa91c05b30d77dcbc75097`|
+
+Unsigned ARM64 APK:50,262,297 bytes, SHA256
+`07d88bef1f5aafbc9da0664d0c77454f56f84061206bb3e21ffec8beebb50eea`.
+Package/version/minSDK27/target35/nondebuggable,12 native libraries, exact source/tree,
+JNI/ABI/ELF16K/ZIP16K, source/licenses and disabled-provisioning checks pass.
+JVM:419 debug+414 Friends pass without skips. API35:28 debug pass/25 skips and19 Friends
+pass/4 skips; API27:27/26 and18/5 respectively. These runtime tests are not physical
+restricted-MESH acceptance. Eight downloaded UI images actually reviewed: RU/EN three
+nodes, large text, green/orange87% squares, CPU distinction, failure controls and legacy
+Codec2 compatibility text fit. Two extra117↔116 real-Pion mixed runs:8 PASS, no skips.
+
+Later read-only server checks confirm both running executable hashes still70e6c0fc,
+active/NRestarts0, with PIDs1293513 and1184264. Those PIDs differ from the earlier
+delivery; this readback is not proof of uninterrupted uptime since20:28UTC. This task
+does not restart services or change the common writer, profiles, identities or policy.
 
 Independent synthetic API27 storage upgrade116→117 passes with the same disposable
 UID and distinct processes: identity, journal/outbox and atomic-interruption recovery.
