@@ -363,7 +363,7 @@ func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Director
 	ctx = sessiontrace.With(ctx, trace)
 	sessiontrace.StartDiagnosticControl(ctx, trace, "client")
 	trace.Add("GATEWAY_JOIN", "STARTED", "NONE")
-	carrier, err := telemost.New(ctx, telemost.Config{RoomURL: descriptor.JoinURL, DisplayName: "Family restricted device", Mode: telemost.ModeVP8, Underlay: network})
+	carrier, err := telemost.NewOwned(ctx, telemost.Config{RoomURL: descriptor.JoinURL, DisplayName: "Family restricted device", Mode: telemost.ModeVP8, Underlay: network})
 	if err != nil {
 		startupdiag.Failure(ctx, "DEDICATED_CREATE", err)
 		return nil, err

@@ -85,6 +85,11 @@ client/server DATA directions and both identifiers must match. This is routing,
 not authentication or cryptography. Family TLS provides the security boundary.
 No competing exchange is queued or started. Others boundedly observe
 `seed_busy_or_unavailable` at admission timeout and may explicitly retry later.
+An authenticated exchange waiting for an earlier active setup also ends when its
+Family stream closes; it must not retain the seed slot until the120-second deadline
+after its caller has gone away. This cancellation does not preempt that active setup.
+The client drains secure-stream RESET writes before closing its owned carrier and
+lease reader; all existing admission/authentication deadlines still apply.
 No packet from a different lease enters the admitted byte stream. Malicious SFU
 or participants can still deny service; confidentiality/integrity/authorization
 do not rely on room secrecy. SFU slot selection can cause bounded failure, not a

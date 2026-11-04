@@ -182,6 +182,13 @@ type Session struct {
 	wg sync.WaitGroup
 }
 
+func NewOwned(ctx context.Context, cfg Config) (*Session, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	return New(context.WithoutCancel(ctx), cfg)
+}
+
 // New creates an unconnected Session.
 func New(ctx context.Context, cfg Config) (*Session, error) {
 	if cfg.Trace == nil {

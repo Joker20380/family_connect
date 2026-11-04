@@ -71,12 +71,16 @@ type headLossEndpoint struct {
 	dropDelivery bool
 }
 
-func headLossPair(test *testing.T, ctx context.Context, head uint64, fault string) (*headLossEndpoint, *headLossEndpoint) {
+func headLossPair(test *testing.T, ctx context.Context, head uint64, fault string, constructors ...func(context.Context, Config) (*Session, error)) (*headLossEndpoint, *headLossEndpoint) {
 	test.Helper()
+	constructor := New
+	if len(constructors) > 0 {
+		constructor = constructors[0]
+	}
 	points := make([]*headLossEndpoint, 2)
 	for index := range points {
 		trace := sessiontrace.New(strings.Repeat("a", 64), nil)
-		session, err := New(sessiontrace.With(ctx, trace), Config{RoomURL: "local-test"})
+		session, err := constructor(sessiontrace.With(ctx, trace), Config{RoomURL: "local-test"})
 		if err != nil {
 			test.Fatal(err)
 		}

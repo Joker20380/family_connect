@@ -1,5 +1,12 @@
 # Release distribution / Выпуски
 
+**4 November — MESH startup/cleanup source checkpoint only.** No release, gateway
+deployment, installation or catalog change. Owner114 remains installed; public,
+invitation and updater113/catalog7 unchanged. The controlled reconnect fails and the
+phone is normally disconnected afterward. Locally reproduced lifecycle fixes require
+qualified client and gateway delivery before physical acceptance.
+[Source evidence, checks and next gate](releases/2026-11-04-mesh-startup-cleanup.md).
+
 **4 November17:00UTC — Android114 owner DNS/HTTPS accepted, not public.** Exact source3d3bf26/
 CI41860466848 attempt1, artifacts, offline signing and in-place readback PASS. Renewed
 consent permits64 distinct UDP flows/64 replies, A/AAAA/TCP/paired DNS and normal-TLS

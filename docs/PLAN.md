@@ -3,7 +3,25 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- Android113 MESH incident 20261104 -->
-**Current continuation — Android114 bounded owner DNS candidate gate DONE; incident OPEN.**
+**Current selected continuation — FLEET-BOOTSTRAP-2 startup/cleanup source correction DONE.**
+Dependencies: accepted114 DNS candidate, paired owner/gateway readback and preserved
+single-owner admission. The controlled reconnect fails at SEED_ADMISSION; the exact
+old session releases after reliable exhaustion, while a separate unidentified exchange
+holds the seed. These observations are not a complete per-device bootstrap attribution.
+Reproduced cancellation/RESET ordering and disconnected-waiter defects are corrected
+locally; new tests require prompt exchange/seed reuse without preempting the old owner.
+Bounded source gate: red/partial-fix/green receipts retained; new regressions pass10 race
+repetitions. Full-suite acceptance is not PASS: two inherited auth/busy assertion failures
+are reproduced on unchanged HEAD and explicitly separated from the focused checks. No timeout,
+authorization, retry or fleet-policy weakening. Current owner114 is last DISCONNECTED
+after the bounded failed physical check; old17:00 DNS acceptance stays session-scoped.
+Delivery/stability gate remains OPEN: qualify exact native client and gateway source,
+then separately select immutable client/gateway delivery and paired reconnect/cleanup,
+DNS/HTTPS and low-speed checks. Do not start that successor automatically from this
+source checkpoint. Public/invitation/updater113/catalog7 and installed114 unchanged.
+[Current evidence, source gate and remaining delivery](releases/2026-11-04-mesh-startup-cleanup.md).
+
+Retained previous gate — Android114 bounded owner DNS candidate DONE; incident OPEN.
 Source3d3bf26/CI41860466848 attempt1, downloaded artifacts/UI, offline existing-key signing,
 in-place install/readback and synthetic state recovery PASS. Renewed consent is verified.
 At17:00UTC ordinary-UID64 distinct UDP flows/64 replies,8 A/AAAA/TCP/paired cases, Android

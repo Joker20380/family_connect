@@ -1,5 +1,12 @@
 # Documentation
 
+**4 November — MESH startup/cleanup source correction, not deployed.** Controlled114
+reconnect fails; phone is normally disconnected afterward. Three local lifecycle
+regressions identify RESET teardown races and a retained authenticated bootstrap waiter;
+active ownership and deadlines stay intact. Exact paired evidence, race checks, the
+inherited test failures and client/gateway delivery boundary:
+[current startup/cleanup receipt](releases/2026-11-04-mesh-startup-cleanup.md).
+
 **4 November17:00UTC — Android114 owner DNS/HTTPS gate PASS; startup stability OPEN.**
 Renewed consent,64 distinct UDP queries/64 valid replies, A/AAAA/TCP/paired cases and
 hostname HTTPS with verified Netherlands/NL1 egress pass in one native session. Earlier

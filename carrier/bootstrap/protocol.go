@@ -215,6 +215,15 @@ func OpenServer(ctx context.Context, endpoint familysession.PacketEndpoint, path
 	}
 	broker.ExchangeEvent(ctx, "authenticated", "ok")
 	event("bootstrap_family_auth")
+	ctx, cancelExchange := context.WithCancel(ctx)
+	defer cancelExchange()
+	go func() {
+		select {
+		case <-secured.Done():
+			cancelExchange()
+		case <-ctx.Done():
+		}
+	}()
 	err = exchange(ctx, secured, broker, roombroker.SessionAuthorizer(path, secured.ConnectionState()), func(failure ExchangeFailure) {
 		for _, observe := range failures {
 			if observe != nil {
@@ -253,7 +262,7 @@ func Recover(ctx context.Context, directory Directory, raw []byte, event func(st
 	if len(networks) > 0 {
 		config.Underlay = networks[0]
 	}
-	carrier, err := telemost.New(ctx, config)
+	carrier, err := telemost.NewOwned(ctx, config)
 	if err != nil {
 		startupdiag.Failure(ctx, "SEED_CREATE", err)
 		return roombroker.Descriptor{}, roombroker.Code("bootstrap_carrier")
@@ -292,9 +301,10 @@ func recoverCarrier(ctx context.Context, carrier familysession.PacketEndpoint, r
 	}
 	defer session.Close()
 	ctx = startupdiag.Bootstrap(ctx, hex.EncodeToString(session.server[:]))
+	reading, stopReading := context.WithCancel(context.WithoutCancel(ctx))
 	readerDone := make(chan struct{})
-	go func() { defer close(readerDone); readLease(ctx, session) }()
-	defer func() { cancel(); carrier.Close(); <-readerDone }()
+	go func() { defer close(readerDone); readLease(reading, session) }()
+	defer func() { stopReading(); carrier.Close(); <-readerDone }()
 	closeAdmission := context.AfterFunc(admission, func() { session.Close() })
 	secured, err := familysession.Open(ctx, session, raw, false)
 	closeAdmission()

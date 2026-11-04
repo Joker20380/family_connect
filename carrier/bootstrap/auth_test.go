@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -144,6 +145,131 @@ func TestAuthenticatedBusyExchangeReportsChallengeReason(test *testing.T) {
 	}
 	if calls.Load() != 0 {
 		test.Fatal("second device room created")
+	}
+}
+
+func TestDisconnectedAuthenticatedWaitDoesNotRetainBootstrap(test *testing.T) {
+	for _, throughCarrier := range []bool{false, true} {
+		name := "secure-close"
+		if throughCarrier {
+			name = "cancel-bootstrap"
+		}
+		test.Run(name, func(test *testing.T) { checkDisconnectedWait(test, throughCarrier) })
+	}
+}
+
+func checkDisconnectedWait(test *testing.T, throughCarrier bool) {
+	test.Helper()
+	path := gatewayProfile(test)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	var credentials familysession.Credentials
+	raw := fixture(test, "valid")
+	if json.Unmarshal(raw, &credentials) != nil {
+		test.Fatal("invalid disposable fixture")
+	}
+	pairing, err := tls.X509KeyPair([]byte(credentials.Certificate), []byte(credentials.PrivateKey))
+	if err != nil {
+		test.Fatal(err)
+	}
+	certificate, err := x509.ParseCertificate(pairing.Certificate[0])
+	if err != nil {
+		test.Fatal(err)
+	}
+	identity := roombroker.Identity{Family: credentials.Family, Device: certificate.Subject.SerialNumber}
+	copy(identity.PublicKey[:], certificate.PublicKey.(ed25519.PublicKey))
+	authorize := func(context.Context) (roombroker.Identity, error) { return identity, nil }
+	back := &delayedCleanupGateway{claimed: make(chan struct{}), active: make(chan error, 1), release: make(chan struct{}), closed: make(chan struct{})}
+	limits := roombroker.DefaultLimits()
+	limits.Recheck = time.Millisecond
+	broker, err := roombroker.New(providerFunc(func(context.Context) (roombroker.Room, error) {
+		return roombroker.Room{ID: "held", JoinURL: "https://telemost.yandex.ru/j/dedicated-test"}, nil
+	}), starterFunc(func(context.Context, context.Context, roombroker.Room, string, roombroker.Identity) (roombroker.Gateway, error) {
+		return back, nil
+	}), limits, nil)
+	if err != nil {
+		test.Fatal(err)
+	}
+	defer broker.Close()
+	if err := broker.CaptureOwnership(64, time.Now().Add(time.Minute)); err != nil {
+		test.Fatal(err)
+	}
+	id, err := broker.Challenge(ctx, authorize)
+	if err != nil {
+		test.Fatal(err)
+	}
+	if _, err := broker.Create(ctx, id, authorize); err != nil {
+		test.Fatal(err)
+	}
+	if err := broker.Claim(ctx, id, authorize); err != nil {
+		test.Fatal(err)
+	}
+	close(back.claimed)
+	if err := <-back.active; err != nil {
+		test.Fatal(err)
+	}
+	client, server := pair()
+	server.done, server.once = make(chan struct{}), &sync.Once{}
+	defer client.Close()
+	defer server.Close()
+	finished := make(chan struct{})
+	finish := sync.OnceFunc(func() { close(finished) })
+	serve := func(ctx context.Context, endpoint familysession.PacketEndpoint) {
+		defer finish()
+		OpenServer(ctx, endpoint, path, broker, func(string) {})
+	}
+	var disconnect func()
+	if throughCarrier {
+		carrierDone := make(chan struct{})
+		go func() { defer close(carrierDone); ServeCarrier(ctx, server, serve) }()
+		defer func() { cancel(); server.Close(); <-carrierDone }()
+		clientContext, stopClient := context.WithCancel(ctx)
+		clientDone := make(chan struct{})
+		go func() { defer close(clientDone); recoverCarrier(clientContext, client, raw, func(string) {}) }()
+		defer func() { stopClient(); <-clientDone }()
+		disconnect = func() { stopClient(); <-clientDone }
+	} else {
+		go serve(ctx, server)
+		secured, err := familysession.Open(ctx, client, raw, false)
+		if err != nil {
+			test.Fatal(err)
+		}
+		defer secured.Close()
+		disconnect = func() { secured.Close() }
+	}
+	for waiting := false; !waiting; {
+		for _, event := range broker.OwnershipSnapshot().Events {
+			waiting = waiting || event.Action == "wait"
+		}
+		if ctx.Err() != nil {
+			test.Fatal("new authenticated exchange never waited on active ownership")
+		}
+		time.Sleep(time.Millisecond)
+	}
+	disconnect()
+	select {
+	case <-finished:
+	case <-time.After(500 * time.Millisecond):
+		test.Fatal("disconnected authenticated waiter retained the bootstrap exchange")
+	}
+	if _, err := broker.Challenge(ctx, authorize); err != roombroker.Code("device_busy") {
+		test.Fatal("closing the waiter released or replaced the active owner", err)
+	}
+	select {
+	case <-back.closed:
+		test.Fatal("closing the waiter preempted the active gateway")
+	default:
+	}
+	if throughCarrier {
+		replacement := &pipe{in: client.in, out: client.out, done: make(chan struct{}), once: &sync.Once{}}
+		defer replacement.Close()
+		admission, stop := context.WithTimeout(ctx, 500*time.Millisecond)
+		defer stop()
+		lease, err := connectLease(admission, replacement)
+		if err != nil {
+			test.Fatal("disconnected waiter retained the shared seed admission slot", err)
+		}
+		lease.Close()
 	}
 }
 

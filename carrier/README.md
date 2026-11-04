@@ -54,6 +54,24 @@ renaming it or its event IDs is not necessary for this product change.
 [Naming ADR](../docs/adr/002-mesh-product-name.md) ·
 [MESH 1/2/3 roadmap](../docs/PLAN.md#mesh-roadmap)
 
+### Client cancellation ownership
+
+Client bootstrap and dedicated connections use `telemost.NewOwned`: their upper
+Family/ReliableStream layer owns carrier teardown. Cancelling the operation still
+immediately cancels authentication, data and admission, but does not independently
+destroy the media transport before the existing bounded RESET writes finish. The
+caller must close this carrier on every startup-failure and session-cleanup path;
+`NewOwned` rejects an already-cancelled owner. Ordinary `telemost.New`, gateway seed
+lifetimes, underlay socket protection and security deadlines remain unchanged.
+
+Bootstrap's lease reader remains alive only until the secure stream closes, then is
+explicitly cancelled and joined. `familysession.Session.Done` signals stream shutdown;
+the server binds its bootstrap exchange to it, releasing a disconnected waiter's
+seed slot without cancelling or replacing the previous active gateway session.
+No timeout, admission limit, wire format or RESET retry budget changes. RESET delivery
+is still best-effort; packet loss can prevent remote notification. This source fix
+requires separately qualified client and gateway delivery, not just a source push.
+
 ## Historical carrier acceptance — 5N.1–5N.5
 
 The following dated evidence retains its original technical names and limited

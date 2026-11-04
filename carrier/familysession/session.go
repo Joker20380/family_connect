@@ -185,6 +185,7 @@ type stream struct {
 	peer     net.Conn
 	endpoint PacketEndpoint
 	cancel   context.CancelFunc
+	done     <-chan struct{}
 	once     sync.Once
 	workers  sync.WaitGroup
 }
@@ -192,7 +193,7 @@ type stream struct {
 func bridge(ctx context.Context, endpoint PacketEndpoint) *stream {
 	ctx, cancel := context.WithCancel(ctx)
 	local, peer := net.Pipe()
-	connection := &stream{Conn: local, peer: peer, endpoint: endpoint, cancel: cancel}
+	connection := &stream{Conn: local, peer: peer, endpoint: endpoint, cancel: cancel, done: ctx.Done()}
 	connection.workers.Add(2)
 	go func() {
 		defer connection.workers.Done()
@@ -310,6 +311,8 @@ func (session *Session) ReliabilityStats() reliablestream.Stats { return session
 func (session *Session) ConnectionState() tls.ConnectionState {
 	return session.connection.ConnectionState()
 }
+
+func (session *Session) Done() <-chan struct{} { return session.stream.done }
 
 func (session *Session) SecurityDeadline() time.Time { return session.expiry }
 

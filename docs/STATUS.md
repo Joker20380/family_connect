@@ -1,6 +1,26 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
+**4 November — selected MESH startup/cleanup source correction DONE; delivery OPEN.**
+One controlled114 reconnect fails at SEED_ADMISSION/DEADLINE. Exact old-session NL1
+readback shows cleanup about10.1s after Disconnect, after reliable exhaustion rather
+than prompt RESET; a separate unidentified bootstrap holds challenge until120s.
+No service restart or policy mutation is issued. Last phone readback after the failed
+bounded check is DISCONNECTED/capture closed, superseding the17:00 connected state.
+Local regressions reproduce three lifecycle defects: parent cancellation kills the
+client carrier before bounded RESET; a disconnected authenticated waiter retains its
+exchange; bootstrap reader teardown independently closes the RESET route too early.
+Source fixes preserve active ownership, wire format, admission/security deadlines and
+retry limits. The physical logs do not prove every earlier failure has these causes.
+New regressions pass10 race repetitions; relevant race results, retained red cases and
+two baseline test failures are in the receipt. Full suite is not PASS. No new version,
+APK installation, gateway deployment or public publication:
+owner114, public/invitation/updater113/catalog7, desktops unchanged. Next delivery gate,
+only when selected: exact-source native/gateway qualification, immutable client update
+and guarded server delivery, then paired cleanup/reconnect and DNS/HTTPS acceptance.
+[Current source correction, checks and rollback](releases/2026-11-04-mesh-startup-cleanup.md).
+
+Earlier bounded acceptance (not current phone state):
 **4 November17:00UTC — Android114 owner DNS/HTTPS acceptance PASS; MESH stability OPEN.**
 Renewed app USB consent works. Ordinary-UID64 distinct UDP flows return64 valid replies;
 all8 A/AAAA/TCP/paired cases and both Android hostname HTTPS checks pass. Hostname and
