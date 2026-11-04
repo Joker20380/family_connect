@@ -5,9 +5,19 @@ import pytest
 
 from test_activated_maintenance import Cluster, activate, proof
 from credential_renewal import Rejected, atomic, canonical, parse, read_private
-from scripts.reconcile_unprepared_renewal import reconcile
+from scripts.reconcile_unprepared_renewal import main, reconcile
 from control.friends.restricted import iso
 from test_multi_gateway_renewal import fleet
+
+
+def test_operator_entrypoint_imports_pinned_runtime(tmp_path, monkeypatch, capsys):
+    from test_activated_maintenance import MAINTENANCE
+    monkeypatch.setattr('sys.argv', ['reconcile', '--runtime', str(MAINTENANCE),
+                        '--config', str(tmp_path / 'absent.json'), '--operation', 'test-operator-entrypoint'])
+    with pytest.raises(SystemExit) as failure:
+        main()
+    assert failure.value.code == 1
+    assert json.loads(capsys.readouterr().out)['result'] == 'FAIL_CLOSED'
 
 
 def issue_certificate(cluster):

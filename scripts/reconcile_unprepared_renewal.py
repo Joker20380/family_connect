@@ -90,7 +90,8 @@ def main():
     from credential_renewal import Rejected, parse, read_private, require
     from node import construct
     from production_controller import ProductionController
-    from production_transport import LocalNode, SshNode
+    from production_transport import SshNode
+    from runtime_controller import LocalNode
 
     try:
         config = parse(read_private(arguments.config))
