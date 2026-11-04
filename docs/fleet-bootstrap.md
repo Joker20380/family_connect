@@ -2,6 +2,10 @@
 
 ## Current production MESH2 handoff
 
+Cleanup runtime delivery completed4 November18:07UTC on both nodes, preserving their
+different baselines, profiles and ordinary services. Common writer resumed; do not repeat
+the rollout from a stale source checkpoint. See the [exact runtime receipt and rollback](releases/2026-11-04-android115-mesh-cleanup.md#gateway-delivery-and-independent-readback--1807utc).
+
 For the selected4 November MESH cleanup delivery, use the separate narrow
 `python -m scripts.mesh_cleanup_gateway_source --baseline primary|secondary
 --accepted-source PRIVATE_SOURCE --output NEW_PRIVATE_DIRECTORY --ref COMMIT`.

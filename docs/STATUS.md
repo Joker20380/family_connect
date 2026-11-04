@@ -1,6 +1,16 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
+**4 November18:07UTC — both gateway cleanup runtimes delivered; Android115 pending CI.**
+NL1/NL2 run their independently qualified8769eadf/5bcb32ea binaries with new seeds,
+NRestarts0 and unchanged boot-disabled state. Profile bytes, ordinary AWG/TCP PIDs,
+RU HTTP and RU config are unchanged. Common writer evaluation NOOP; both timers resumed.
+Rollback not used. Normal-TLS public113/catalog7 readback is byte-identical. Owner114
+remains installed;115 is not qualified/signed/installed. Next selected gate: successful
+Android115 attempt2/artifact/signing/install, then consented physical cleanup/reconnect.
+[Exact runtime receipts and rollback](releases/2026-11-04-android115-mesh-cleanup.md#gateway-delivery-and-independent-readback--1807utc).
+
+Earlier source/qualification checkpoints:
 **4 November — owner selects Android115 + gateway cleanup qualification/delivery.**
 Candidate115 source includes f66b533; exact CI/artifact/signing, canonical gateway
 projection/runtime and physical gates are pending, not PASS. Owner114 and public/

@@ -116,3 +116,37 @@ steps passed but signing is prohibited. One failed-job rerun is requested for th
 source. Readiness-wire41880315810 passes. Phase041880315853 and Linux control41880315891
 fail in release-fixture/isolated-stack preparation; no full release-suite PASS is claimed.
 At this checkpoint no candidate runtime, APK or public catalog has been installed.
+
+## Gateway delivery and independent readback — 18:07UTC
+
+Both candidates are staged separately and pass service-user `-help`, current executable/
+locator/config pins, canonical-reader checks and credential headroom (>9300s) before
+service mutation. The primary's additional legacy publisher contract entry is preserved;
+only its matching current executable entry changes. The common RU writer is paused with
+an eight-minute automatic-resume watchdog after a confirmed COMMITTED checkpoint and
+no owned operation. Each node's operation lock is held through guarded runtime change.
+
+- NL2 completes18:06:21UTC with the exact qualified `5bcb32ea…` candidate.
+- NL1 completes18:06:28UTC with the exact qualified `8769eadf…` candidate.
+- Each node has one controlled MESH stop/start, a newly published seed, canonical
+  publisher validation, NRestarts0 and unchanged boot-disabled state. Locator pins,
+  referencing node/snapshot config and the effective ExecStart are updated together.
+  Profiles are byte-identical; old executables and exact private backups are retained.
+- RU inspection is unchanged; coordinated post-upgrade evaluation returns NOOP.
+  Both renewal/directory timers resume active and the temporary watchdog is stopped.
+  No renewal transaction, authority/key issuance, DB migration or profile rollback occurs.
+- Independent18:07 readback confirms both running executable hashes. All six ordinary
+  AWG/TCP service PIDs/states and RU HTTP PID/state remain identical to the preflight;
+  RU node/controller config bytes remain unchanged. No backend restart is hidden here.
+- Normal-TLS HTTPS200 returns byte-identical public113/catalog7, SHA256
+  `2283a89ffa05e6ad439858f111f7272993b4e46e652c9efa11b44158b9f01b30`.
+
+Rollback was not used. For either node, retain its own predecessor binary and guarded
+backups under `/var/lib/fc-profile-control/mesh-cleanup-3a2584b2-20261104/`; restore only
+that node's recorded locator/config/ExecStart/executable under the common writer window
+and node operation lock, then validate a fresh seed and resume the common writer. Do not
+restore profile/DB state or replace primary with the secondary baseline.
+
+This is gateway runtime delivery, not client/physical acceptance. Owner remains114;
+Android115 is not yet qualified/signed/installed, and public/invitation/updater stay113.
+Client CI attempt2 and then consented paired reconnect/DNS/HTTPS remain the selected gates.

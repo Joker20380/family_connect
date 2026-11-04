@@ -3,6 +3,15 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- Android113 MESH incident 20261104 -->
+**Current selected gate — gateway cleanup delivery DONE; Android115/physical checks OPEN.**
+Both exact runtime candidates are active, new-seed/canonical checks pass, common writer
+resumed, profiles and ordinary services preserved. Do not repeat the deployment.
+Continue the same115 CI attempt2; signing requires terminal platform/runtime and exact
+artifact acceptance. Then in-place owner installation and consented paired cleanup/
+DNS/HTTPS checks. Public113/catalog7 remains; no unrelated successor or general rollout.
+[Runtime receipt and remaining gates](releases/2026-11-04-android115-mesh-cleanup.md#gateway-delivery-and-independent-readback--1807utc).
+
+Earlier selected source/build checkpoints:
 **Selected next gate — Android115 + canonical gateway cleanup delivery IN PROGRESS.**
 Dependencies: f66b533 source regression and accepted114 identity/DNS candidate. Qualify
 exact Android/native artifacts and the narrow private gateway projection, then deliver

@@ -1,7 +1,8 @@
 # Release distribution / Выпуски
 
-**4 November — Android115 MESH cleanup candidate source; not yet built or installed.**
-Exact-source client and canonical gateway qualification/delivery are selected. Owner114,
+**4 November18:07UTC — MESH cleanup gateways delivered; Android115 not qualified/installed.**
+Both canonical runtime hashes/new seeds verified; ordinary services and profiles retained.
+Android CI attempt2 follows a failed emulator startup; signing remains guarded. Owner114,
 public/invitation/updater113/catalog7 and desktop releases stay unchanged.
 [Checks and version boundaries](releases/2026-11-04-android115-mesh-cleanup.md).
 

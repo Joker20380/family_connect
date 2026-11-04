@@ -1,7 +1,8 @@
 # Documentation
 
-**4 November — Android115/gateway cleanup delivery selected, qualification pending.**
-Source115 is not installed or public; owner114 and public113/catalog7 remain.
+**4 November18:07UTC — both gateway cleanup runtimes delivered; Android115 CI pending.**
+Exact hashes/new seeds verified, profiles and ordinary services preserved, common writer
+resumed. Android115 is not installed or public; owner114 and public113/catalog7 remain.
 [Current qualification, delivery and rollback](releases/2026-11-04-android115-mesh-cleanup.md).
 
 **4 November — MESH startup/cleanup source correction, not deployed.** Controlled114
