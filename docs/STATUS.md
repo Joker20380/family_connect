@@ -1,5 +1,10 @@
 # Текущее состояние / Current state
 
+**4 November12:21UTC — requested RU disk cleanup complete:** archived host journals
+older than14 days removed; ~2.10GiB freed, disk77%→70%, available6.5→8.6GiB.
+AWG/TCP/HTTP/host worker active with unchanged PIDs; no restart or version change.
+[Scope and irreversible deletion receipt](releases/2026-11-04-ru-disk-cleanup.md).
+
 **4 November12:15UTC — VPN load refresh:** AWG/TCP active on all three nodes;
 CPU RU12–31%, AMS1 10–16%, AMS2 7–11% in short samples. Recent AWG peers1/5/1;
 AMS1 xray TCP sockets11 then9, not unique users. No changes or end-to-end acceptance.

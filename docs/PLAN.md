@@ -2,6 +2,11 @@
 
 ## Current engineering priority / Текущий critical path
 
+**4 November12:21UTC — owner-selected RU disk cleanup DONE:** old archived host
+journals vacuumed with14-day retention, ~2.10GiB recovered; runtime PIDs unchanged.
+No implementation priority change; monitor growth, do not auto-prune Docker/state.
+[Receipt](releases/2026-11-04-ru-disk-cleanup.md).
+
 **4 November12:15UTC read-only load/client refresh:** no observed saturation;
 seven recent AWG peers, AMS1 TCP sockets11 then9, no unique-user claim. No repair
 or queue advancement. [Measurements](releases/2026-11-04-vpn-health.md#1215utc-refresh).
