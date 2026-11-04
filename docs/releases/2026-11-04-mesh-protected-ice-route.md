@@ -125,25 +125,75 @@ version and same UID/first-install are independently read back after it. No unin
 data clear or reenrollment. Fresh user-enabled app support consent confirms unchanged
 Support ID and initially DISCONNECTED/capture closed. One normal support Connect then
 reaches CONNECTED/native2/NONE at22:17:08UTC. Exact117 readiness ACK is READY/usable
-only for NL1. Gateway PID1293513/NRestarts0; no server restart is issued. This establishes
-start/target only, not DNS/HTTPS or sustained stability; bounded traffic is in progress.
+only for NL1. Gateway PID1293513/NRestarts0; no server restart is issued. This initial
+checkpoint establishes start/target only; the later physical results follow below.
 Private receipts are in`android117-delivery/` and`physical117/` beneath the work root.
 Public catalog HTTPS readback retains113/sequence7 and SHA256
 `2283a89ffa05e6ad439858f111f7272993b4e46e652c9efa11b44158b9f01b30`.
 
+## Physical117 / NL1 bounded traffic and cleanup
+
+The first exact-readiness-bound NL1 connection passes ordinary-UID traffic at22:19:09UTC:
+64/64 sequential UDP DNS replies from64 distinct source ports, all8 A/AAAA/TCP/paired
+wire cases, both Android hostname HTTPS checks and both hostname/IPv4-literal normal-TLS
+HTTPS200 egress checks. Both egress results identify NL1, not NL2. One native session is
+retained throughout, with CONNECTED/native2/NONE guards before and after each probe.
+The temporary probe is uninstalled afterward; product data is untouched.
+
+Ten further snapshots from22:19:50 to22:23:04UTC retain that same native session, including
+the initial22:17:08UTC connection: at least5m56s sampled continuity, no observed automatic
+reconnection. The bounded observation lasts195.893s including read overhead. This is
+ordinary background traffic without test-generated probes, **not** proof of zero traffic
+or a long-duration soak. Wi-Fi/cellular settings and network controls are not changed;
+unrelated-underlay-loss acceptance is NOT_RUN, not inferred from elapsed time.
+
+At the last observation: DNS errors0, ICE/signaling failure NONE. Protocol errors11
+are all classified as expected late-stream crossings (actual violations0/unclassified0),
+not concealed as zero errors or attributed as a tunnel failure. One TCP-open error,
+16 retransmissions and15 recovery-timeout counters are retained. Bounded mux event
+history reports3752 dropped events (3757 at pre-disconnect read), no dropped incidents;
+this is not a complete per-frame trace. The session remains live through these counters.
+
+One normal Disconnect is requested22:23:12.469UTC. Exact-session gateway CLEANUP completes
+22:23:13.494UTC,1.024s after request; phone DISCONNECTED/capture closed is observed
+22:23:17.687UTC. FAMILY_TLS_ERROR/GATEWAY_CLOSE records occur during that requested
+teardown, after the first close, not as pre-disconnect media loss. Same gateway
+PID1293513/NRestarts0; no service restart, force-stop, active-owner eviction or data clear.
+One subsequent normal Connect reaches CONNECTED/native2/NONE at22:24:08UTC with a new
+native session and readiness attempt, same Support ID. Its separate exact117 READY ACK
+again binds to NL1. At22:25:35UTC, all64/64 UDP flows,8 wire cases,2 Android hostname
+HTTPS and2 exact-NL1 egress checks pass again within this new session. No failed-connect
+retry loop, gateway restart or `device_busy` workaround. Probe removed; owner left
+CONNECTED. Paired gateway readback22:25:37UTC retains PID1293513/NRestarts0 and the same
+established session. Neither successful run proves all applications or all networks.
+Final phone readback retains the reconnected session, native2/NONE, DNS errors0 and
+ICE/signaling failure NONE. Its9 protocol-error counters are9 expected crossings with
+zero actual violations/unclassified;9 retransmissions,8 recovery-timeout counters,
+one TCP-open error and2257 dropped mux-history events are retained, not discarded.
+
+Independent read-only `/proc/PID/exe` checks at22:21:55UTC confirm both nodes still run
+exact70e6c0fc bytes: NL1 PID1293513, NL2 PID1184264, active/NRestarts0. These PIDs match
+the pre117 checks, not the earlier20:28UTC delivery processes. No gateway mutation in
+this117 qualification. Raw session/readiness/device data stays local under
+`state-client-build/mesh-ice-route-20261104/physical117/acceptance/` and`reconnect/`.
+
 ## Remaining physical and publication gates
 
-1. Finish targeted native/race, protected bidirectional VP8 and existing transient-loss
-   coverage; retain failures/skips. Check release provenance/contracts and diff hygiene.
-2. Push source117, then inspect exact platform CI and downloaded ARM64 artifacts,
-   source/ABI/16K/licenses/API27/API35/UI and in-place retained-data gates. No replacing
-   already published113 or already signed116 with different bytes.
-3. Sign only accepted assets with the existing offline product key via the protected
-   local vault workflow. Install over116 without uninstall/data clearing/reenrollment;
-   confirm exact package and retained identity with renewed app consent when necessary.
+1. COMPLETE: targeted native/race, protected bidirectional VP8 and existing transient-loss
+   coverage, release provenance/contracts and diff hygiene; failures/skips retained.
+2. COMPLETE: source117 pushed and exact platform CI/downloaded ARM64 artifacts,
+   source/ABI/16K/licenses/API27/API35/UI and retained-data gates checked. Published113
+   and signed116 bytes are preserved, not replaced.
+3. COMPLETE: accepted assets signed with the existing offline product key via the
+   protected local workflow; exact117 installed over116 without data clearing or
+   reenrollment. Package and retained identity verified with renewed app consent.
 4. Run bounded paired same-session ordinary-UID DNS/HTTPS/egress and cleanup/reconnect
    on both NL nodes, including a controlled unrelated-underlay-loss scenario only when
    its network-control authorization and restoration are explicit. No failure-loop probes.
+   NL1 first-session traffic, normal cleanup and fresh-session reconnect traffic pass.
+   NL2 physical selection/traffic and unrelated-loss checks are still open. The consented
+   USB helper supports status/connect/disconnect/P0/P1/P2, not node selection; no private
+   preference modification, input-permission bypass or invented server command is used.
 5. Public distribution and sustained stability remain OPEN until their separate gates
    pass. Server binaries stay equal; do not redeploy gateways merely for this client fix.
 

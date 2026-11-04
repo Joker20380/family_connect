@@ -1,7 +1,7 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
-**4 November22:17UTC — protected ICE-route Android117 installed; traffic gate running.**
+**4 November22:25UTC — Android117 installed; NL1 traffic/cleanup/reconnect PASS, stability OPEN.**
 Read-only Android system history places cellular NETWORK_DISCONNECTED at21:05:48.860UTC,
 coincident with116's ACK loss; VPN/Wi-Fi remains present. The old selected candidate's
 interface was not recorded, so this is correlated evidence, not complete attribution.
@@ -14,14 +14,21 @@ Downloaded ARM64/source/ABI/16K/licenses, API27/API35,833 JVM cases and8 UI imag
 Unsigned117 APK07d88bef is50,262,297 bytes. Separate phase0/Linux-control fixture jobs
 fail; no whole-CI PASS. Both live nodes still have equal70e6c0fc/NRestarts0 at readback;
 current PIDs1293513/1184264 differ from the earlier delivery, not an uptime proof.
-Disposable API27 Java-storage116→117 retention passes; no product key/phone mutation.
+Disposable API27 Java-storage116→117 retention passes without product key/phone mutation
+by that fixture.
 Existing-key signed117 APK a2f63787 is installed over116 with exact byte readback,
 same UID/first-install and Support ID, no uninstall/data clear/reenrollment. Renewed
-app consent works. One normal Connect reaches CONNECTED/native2/NONE at22:17:08UTC;
-the exact117 readiness ACK binds it to NL1. Traffic/paired acceptance is still running.
+app consent works. Exact117 readiness binds each of two sessions to NL1. Both pass
+ordinary-UID64/64 UDP,8 wire DNS cases,2 Android hostname HTTPS and2 exact-egress checks
+without session changes. First session retains sampled continuity for5m56s; normal
+Disconnect yields gateway cleanup in1.024s, followed by one successful normal reconnect.
+NL1 PID1293513/NRestarts0 unchanged; temporary probes removed, owner left CONNECTED.
+Nonzero retry/expected late-stream counters are retained, not hidden as zero errors.
 Owner117, public113/catalog7, identical NL70e6c0fc; desktop versions unchanged.
-Next stays within this incident: paired physical traffic/cleanup and unrelated-network-
-loss checks. Do not infer field acceptance from CONNECTED or local tests.
+Next stays within this incident: select Netherlands2 in the app for paired physical
+traffic/cleanup, then authorized/restorable unrelated-network-loss and longer stability
+checks. USB support has no node-selection operation; no consent/input bypass is used.
+No public117 rollout or blanket low-speed/long-duration stability PASS.
 [Evidence, tests and remaining gates](releases/2026-11-04-mesh-protected-ice-route.md).
 
 Earlier delivery checkpoint:

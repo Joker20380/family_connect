@@ -14,10 +14,14 @@ remain unchanged. Source5a0f6e0 pushed; disposable API27 Java-storage
 downloaded ARM64/source/ABI/16K/licenses/UI gates pass; unsigned APK07d88bef qualified.
 Separate phase0/Linux-control fixture failures remain. Existing-key signed117/a2f63787
 installed over116 with exact bytes, UID/first-install/Support ID retained. Fresh consent
-and one normal Connect reach NL1 CONNECTED at22:17:08UTC; exact117 readiness ACK verified.
-Next: paired physical traffic/cleanup and unrelated-network-loss checks on both nodes. Old exact
-candidate/interface attribution and sustained acceptance remain open. No public rollout
-or unrelated successor. [Current gates](releases/2026-11-04-mesh-protected-ice-route.md).
+and two normal connections reach exact-readiness-verified NL1. Both sessions pass
+64/64 UDP,8 DNS wire cases,2 Android HTTPS and2 exact-egress checks without a session
+change. First session has5m56s sampled continuity; normal gateway cleanup1.024s and
+one normal reconnect pass. Owner left CONNECTED, probes removed, gateway PID unchanged.
+Next: user selects Netherlands2 in the app (USB support cannot select nodes), then paired
+physical traffic/cleanup there; authorized/restorable unrelated-network-loss and longer
+stability checks remain open. Old exact candidate/interface attribution is still limited.
+No public rollout or unrelated successor. [Current gates](releases/2026-11-04-mesh-protected-ice-route.md).
 
 Earlier unified116 delivery checkpoint:
 Owner explicitly requires the same implementation on both gateways, superseding prior
