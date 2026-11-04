@@ -1,7 +1,7 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
-**4 November — identical MESH deployed; Android116 qualification PASS.**
+**4 November21:07UTC — identical MESH/owner116 delivered; physical traffic FAIL.**
 Guarded NL2→NL1 delivery completes with the same70e6c0fc executable, independently
 verified through running processes: NL1 PID1219052, NL2 PID1150135, zero restarts.
 Fresh seeds/canonical contracts pass; node identity/profile bytes and ordinary AWG/TCP/RU
@@ -11,11 +11,20 @@ Sourcea597d2a and qualification880fcb3 pushed/verified. Reproducible builds, pro
 race,113/115/116 mixed native peers, six paced links and isolated root gates pass;
 inherited fixture failures retained. Android116 CI41905046530 attempt1/API27/API35,
 downloaded artifact digests, source/ABI/16K/licenses,833 JVM cases and8 reviewed UI
-images pass. Unsigned APK754b1298; not signed or installed. Owner115 last observed OFF.
+images pass. Existing-key signed APK3ee68c62 is installed115→116 with exact byte
+readback, same UID/first-install and no data clear/reenrollment; separate synthetic
+API27 storage upgrade passes. Fresh app consent works. First116/NL1 connection is
+observed21:05UTC, but64-flow burst returns46 replies and crosses a native session.
+Both ends hit pending-DATA RELIABLE_FRAME_TIMEOUT after~20s without ACK progress;
+client ICE/peer disconnection precedes it. Normal automatic recovery succeeds in26.292s
+after cleanup, same outer connection/gateway PID; this does not make traffic PASS.
+Normal disconnect confirmed21:07:51UTC, capture closed, temporary probe absent.
 HTTPS readback confirms public113/catalog7 unchanged; desktops unchanged.
-Next within this task: protected existing-key signing/in-place116, then consented paired
-phone stability/cleanup/egress checks; initial media loss and busy-holder attribution
-remain open. Equal binaries are not a full stability PASS; no public rollout.
+Next within this task: isolate/reproduce the ICE/underlay ACK loss before changing
+transport behavior, then paired traffic/cleanup/egress on both nodes. Detailed DNS/HTTPS
+and NL2 physical checks NOT_RUN. Original media loss remains open; new-session three
+unknown_stream counters are retained, not attributed as its cause. No public rollout
+or full stability PASS, no retry/deadline/auth weakening.
 [Exact delivery, checks and rollback](releases/2026-11-04-unified-mesh-stability.md).
 
 Earlier source checkpoint:

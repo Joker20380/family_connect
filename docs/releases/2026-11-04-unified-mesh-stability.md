@@ -2,8 +2,10 @@
 
 **Current:** both NL gateways run identical70e6c0fc; guarded delivery and independent
 canonical/seed/profile/process checks PASS. Android116 exact CI and downloaded
-artifact/UI qualification PASS, still unsigned. Owner115/public113/catalog7 unchanged.
-Physical stability acceptance OPEN; protected signing/in-place116 is the next gate.
+artifact/UI qualification PASS. Existing-key signed116 installed in place on owner;
+public113/catalog7 unchanged. Physical116/NL1 burst FAIL46/64 across recovery;
+automatic restoration succeeds26.292s but sustained stability remains OPEN.
+Owner normally disconnected21:07:51UTC, temporary probe removed.
 
 ## Selected scope
 
@@ -157,9 +159,9 @@ DNS/HTTPS evidence on each node. Do not mark full stability from deployment alon
 
 Candidate source becomes `0.1.18-beta116`/code116, retaining API27 compatibility,
 the115 DNS/cleanup fixes and adding idle ACK expiry with guarded Android recovery.
-It is **built and qualified, but not signed, installed or distributed**. Owner remains the
-previously signed115, last observed OFF/capture closed19:39:10UTC; no fresh phone
-readback in this source step. Public/invitation/updater113/catalog7 remains
+It is **built, qualified, signed and installed on owner, not publicly distributed**.
+The installed116 checksum and retained-state evidence follow below. Public/invitation/
+updater113/catalog7 remains
 immutable. Linux0.2.11 and Windows0.2.16/catalog12 are unchanged. No new download
 link is published; the qualified unsigned checksum is recorded below.
 
@@ -193,8 +195,81 @@ skips remain explicit. Eight fresh screenshots are visually reviewed: RU/EN and
 large-text three-node lists, green/orange load squares, failed controls, CPU-only
 labels and legacy Codec2 text. These are emulator results, not a physical Huawei test.
 Separate phase0/control fixture failures remain recorded; this is not whole-CI PASS.
-Protected existing-key signing and in-place owner delivery remain undone. No public
-catalog/installer/invitation update or new download link is authorized by this result.
+At this qualification checkpoint, signing/in-place delivery remained undone; the
+next section records their later completion. No public catalog/installer/invitation
+update or new download link is authorized by this result.
+
+## Protected signing and owner115→116 delivery
+
+Existing local vault is unlocked through the protected dialog; no password or key
+is placed in chat, logs, Git, CI or servers. The exact qualified unsigned payload
+is signed once with the existing product certificate
+`67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+Signed116 is50,281,888 bytes, SHA256
+`3ee68c6211b2e438a3250504674a3b8e676c597b6cc00863b9fb0cabe0a56aba`;
+signature,16K alignment and unchanged unsigned entries all verify.
+
+A fresh disposable API27 emulator proves115→116 storage retention with a separate
+throwaway signer: same UID, distinct process, identity/journal/outbox and atomic
+interruption recovery. Baseline local115 matches its previous accepted fixture;
+the Java storage sources are unchanged. This x86 storage-only fixture is not
+substituted for the separately qualified release ARM64 native payload. Emulator
+is stopped after the check; its private state and temporary key stay ignored.
+
+Physical115 is read back and matches acceptedee97f88e. Initial delivery-helper
+preflight fails closed before any installation intent because a mechanical version
+replacement accidentally changed digits inside that expected checksum. The exact
+prior signing-receipt pin is restored; actual115 bytes were always correct. The
+retained failed check is not represented as an APK or phone failure.
+
+Normal `adb install -r` then installs116 without uninstall, data clear or reenrollment.
+Application UID and first-install time remain equal; a fresh installed APK pull
+matches signed3ee68c62 exactly. Fresh app USB consent is independently confirmed,
+initial116 state DISCONNECTED/capture closed. One controlled normal Connect is
+observed CONNECTED/native2/NONE21:05:01UTC. Paired traffic and cleanup checks begin;
+this does not yet claim DNS, egress, recovery or sustained stability acceptance.
+Private delivery/evidence: `state-client-build/mesh-unified-20261104/physical116/`.
+Public113/catalog7 and desktop versions remain unchanged; no public116 download link.
+
+## Physical116 paired evidence — traffic FAIL, automatic recovery observed
+
+The readiness receipt binds the exact116 attempt to NL1; NL2 physical traffic is
+not exercised. Initial session becomes CONNECTED21:05:01UTC on the unchanged
+NL1 PID1219052. Temporary ordinary-UID burst sends64 requests from64 distinct UDP
+ports, receives46, and reports the Android network unchanged. The before/after
+native-session guard fails: this is **not** a64-flow PASS. Detailed DNS/HTTPS/egress
+probes do not run after that failure; the temporary package is removed in `finally`.
+
+Exact first-session evidence:
+
+- Client peer disconnection21:05:53.812UTC and ICE disconnection21:05:54.650 precede
+  the reliable failure. This does not by itself distinguish physical underlay loss,
+  ICE path loss or provider behavior; no causal claim beyond that ordering.
+- Gateway21:06:08.602: `RELIABLE_FRAME_TIMEOUT`, pending3, oldest20087ms,
+  ACK age19670ms, progress age20589ms, head retries5.
+- Client21:06:08.909: `RELIABLE_FRAME_TIMEOUT`, pending7, oldest20079ms,
+  ACK/progress age20398ms, head retries5. Both have pending DATA; the new idle-only
+  expiry is not the triggering branch. Old-session protocol/DNS error counters are0.
+- Gateway completes original-session cleanup21:06:09.123UTC, about0.52s after its
+  first failure, without process restart or forced owner eviction.
+- Client records `restoration_attempted`21:06:10.067, `cleanup_completed`21:06:10.247,
+  then `restoration_succeeded`21:06:36.359:26.292s, a new native session under the
+  same outer connection, CONNECTED/native2/NONE. No extra manual Connect is issued.
+  Automatic recovery is observed, but neither seamless traffic nor sustained
+  stability follows from that state. New session reports three `unknown_stream`
+  counters; they are retained separately, not assigned as the earlier loss cause.
+
+Failure readback is retained before a normal application Disconnect. At21:07:51UTC,
+owner116 is DISCONNECTED/capture closed and no temporary probe remains. Support ID,
+UID and first-install continuity are verified without exposing their values. No
+force-stop, app data reset, server restart or policy mutation is used in acceptance.
+No public116 publication follows this failed traffic gate.
+
+Remaining selected engineering gate: isolate the actual ICE/UDP ACK loss and a
+local/restricted reproduction before another transport correction; retain current
+authentication, deadlines and retry limits. Then repeat same-session traffic,
+quiet/reconnect/cleanup and normal-TLS egress checks on each node. The identical
+runtime requirement is achieved; the original physical stability problem is not.
 
 ## Required gates and order
 

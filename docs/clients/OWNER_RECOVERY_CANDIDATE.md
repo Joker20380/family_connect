@@ -1,5 +1,16 @@
 # Owner recovery106 — private candidate / закрытый кандидат
 
+<!-- Unified MESH Android116 20261104 -->
+**4 November — owner116 installed; public remains113.** Same product signer,
+in-place115→116 and installed-byte readback pass; no data clear or reenrollment.
+Both NL gateways now run identical70e6c0fc. Android8.1/API27 and Android15/API35 CI
+pass; physical116/NL1 traffic fails46/64 despite observed automatic recovery.
+Owner is normally disconnected after the check; sustained stability remains open.
+RU: на телефоне владельца116; у остальных обновление по-прежнему113/catalog7.
+Не удалять приложение и не регистрироваться заново.116 пока не публиковался.
+[Exact versions, checks and rollback](../releases/2026-11-04-unified-mesh-stability.md).
+<!-- /Unified MESH Android116 20261104 -->
+
 **31 October — beta108 publicly distributed, Android12+/ARM64.**
 Explicit server CPU percentage is visible even without a verified channel capacity.
 MESH and quiet foreground notifications are retained. Hosted CI, visual review, existing

@@ -3,8 +3,9 @@
 **4 November20:29UTC — unified MESH gateway delivered to both NL nodes.** Both running
 processes match70e6c0fc; fresh seeds, separate profiles and common writer checks pass.
 Android116 exact CI/API27/API35 and downloaded artifact/UI qualification PASS;
-unsigned754b1298, not installed/public. Owner115/public113/catalog7 unchanged.
-No public release or sustained phone-stability PASS.
+signed3ee68c62 installed in place on owner; public113/catalog7 unchanged.
+Physical116/NL1 traffic FAIL46/64; automatic recovery observed, not sustained PASS.
+Owner normally disconnected; no public116 release.
 [Exact scope, delivery, compatibility and rollback](releases/2026-11-04-unified-mesh-stability.md).
 
 **4 November — MESH idle ACK cleanup: source checkpoint, no release.** Local regression

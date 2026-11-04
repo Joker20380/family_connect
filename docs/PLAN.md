@@ -13,9 +13,14 @@ after guarded20:28UTC NL2→NL1 delivery. Independent equal-hash/fresh-seed/prof
 checks pass; common writer NOOP/timers active, ordinary services untouched. Exact
 compatibility/slow-link/negative/canonical gates pass with inherited assertions retained.
 Gateway delivery complete; exact116 CI/API27/API35, downloaded source/artifacts and
-UI qualification pass. No signed116 or Android release/physical PASS.
-Continue protected existing-key signing/in-place install and fresh consented paired
-node traffic/cleanup checks; do not bypass the local signing vault or app USB consent.
+UI qualification pass. Signed3ee68c62 installed115→116; synthetic API27 retention,
+physical same-UID/first-install and exact installed bytes pass. Fresh app consent
+confirmed, but first116/NL1 burst fails46/64 across a native-session change. Paired
+pending-DATA timeouts follow client ICE disconnect; automatic cleanup/recovery succeeds
+in26.292s. Owner116 normally disconnected21:07:51, probe removed. Next: isolate and
+reproduce ICE/underlay ACK loss, then a narrow proven correction and repeat paired
+traffic/cleanup gates. Detailed DNS/HTTPS and NL2 physical NOT_RUN; do not increase
+timeouts/retries or claim public/sustained acceptance from equal binaries or recovery.
 Initial media loss and exact physical busy-holder attribution remain open. No unrelated
 successor or automatic public rollout. [Completion/rollback gates](releases/2026-11-04-unified-mesh-stability.md).
 

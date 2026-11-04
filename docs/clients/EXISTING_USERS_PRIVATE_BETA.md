@@ -1,5 +1,17 @@
 # Existing-users private Android update / Частное обновление Android
 
+<!-- Unified MESH Android116 20261104 -->
+**4 November — unified gateways, owner-only116.** Both NL MESH runtimes have
+identical verified bytes; existing client113/115 and candidate116 protocol checks pass.
+Signed116 is installed only on owner with retained data. Public/invitation/updater
+remains113/catalog7; other users are not assumed upgraded. No116 public download link.
+RU: серверы обновлены одинаково;116 установлен владельцу поверх115. Остальным пока
+доступен113. Не удалять приложение и не очищать данные. Реальная стабильность ещё
+не принята: проверка116/NL1 дала46/64 ответа при смене сессии, хотя автоматическое
+восстановление сработало. После проверки VPN штатно отключён.
+[Delivery and acceptance boundaries](../releases/2026-11-04-unified-mesh-stability.md).
+<!-- /Unified MESH Android116 20261104 -->
+
 **31 October — beta108 publicly distributed, Android12+/ARM64.**
 Explicit server CPU percentage is visible even without a verified channel capacity.
 MESH and quiet foreground notifications are retained. Hosted CI, visual review, existing
