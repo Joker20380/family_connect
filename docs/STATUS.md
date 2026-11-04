@@ -1,6 +1,14 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
+**4 November — Android114 DNS delivery selected, PREPARING.** Source candidate114/code114
+contains cf9d576's bounded datagram fix. Exact114 hosted platform/artifact qualification,
+offline signing and owner in-place DNS/HTTPS acceptance are next, not yet PASS. Public,
+invitation, updater and owner remain113/catalog7. No server change or public publication.
+Source cf9d576 phase0 fails in the already-known historical HTTP fixture preparation;
+full pytest/failover did not run. [Current114 gates and rollback](releases/2026-11-04-android114-dns.md).
+
+Retained source-only checkpoint, superseded by114 delivery above:
 **4 November — Android113 MESH DNS source fix; live incident still OPEN.** Renewed app
 consent works; unchanged113 is CONNECTED on Wi-Fi. Ordinary-UID wire tests isolate intermittent
 UDP DNS loss: A times out while AAAA/TCP A work; Android hostname results remain inconsistent.

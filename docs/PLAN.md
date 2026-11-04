@@ -3,6 +3,15 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- Android113 MESH incident 20261104 -->
+**Current continuation — Android114 owner DNS candidate.** Prepare exact114/code114,
+qualify platform CI and downloaded artifacts, sign offline, then upgrade113 in place and
+test ordinary DNS/HTTPS. Public113/catalog7 is retained. Dependencies: cf9d576, existing
+signer, exact platform gates and explicit phone support consent. Completion is a verified
+owner candidate with negative results retained, not a blanket MESH stability claim.
+No unrelated framing/underlay patch, server policy or public distribution in this step.
+[114 version state, gates and rollback](releases/2026-11-04-android114-dns.md).
+
+Retained diagnosis/source checkpoint:
 **4 November owner incident — FLEET-BOOTSTRAP-2 MESH reconnect diagnosis, still OPEN.**
 This report supersedes the completed picker task as the selected bounded priority.
 Fresh113 readiness and Wi-Fi startup work, but DNS and sustained transport acceptance fail.

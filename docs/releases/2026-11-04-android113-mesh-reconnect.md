@@ -1,5 +1,8 @@
 # Android113 MESH reconnect incident — 4 November2026
 
+**Selected continuation:** [Android114 owner DNS build and in-place qualification](2026-11-04-android114-dns.md).
+The source/diagnosis checkpoints below remain evidence, not another active delivery task.
+
 ## Current result and scope
 
 Owner reports that MESH no longer connects after113 publication. This selects a bounded
