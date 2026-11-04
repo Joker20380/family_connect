@@ -1,9 +1,10 @@
 # Release distribution / Выпуски
 
-**4 November — unified MESH and Android116: source checkpoint, not a release.**
-Common gateway qualification and guarded two-node delivery selected; no server change
-yet.116 not built/signed/installed/public; owner115/public113/catalog7 unchanged.
-[Exact scope, compatibility and rollback gates](releases/2026-11-04-unified-mesh-stability.md).
+**4 November20:29UTC — unified MESH gateway delivered to both NL nodes.** Both running
+processes match70e6c0fc; fresh seeds, separate profiles and common writer checks pass.
+Android116 CI pending, not signed/installed/public; owner115/public113/catalog7 unchanged.
+No public release or sustained phone-stability PASS.
+[Exact scope, delivery, compatibility and rollback](releases/2026-11-04-unified-mesh-stability.md).
 
 **4 November — MESH idle ACK cleanup: source checkpoint, no release.** Local regression
 and guarded recovery tests pass; no new APK, gateway projection/deployment or catalog

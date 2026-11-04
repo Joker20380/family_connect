@@ -1,18 +1,20 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
-**4 November — unified MESH gateway qualified; guarded activation NEXT.**
-20:05UTC readback confirms the old8769eadf/5bcb32ea runtime split. Seven production
-files differ: primary lacks secondary's adaptive retries/transient-ICE/RTP-gap/RESET
-improvements. Target is one canonical binary/hash for both nodes, not shared identities.
-Sourcea597d2a pushed/verified. Common70e6c0fc build reproduces twice; production-tag
-race, public113/owner115/candidate116 mixed peers, six paced links and isolated root
-canonical gates pass, with inherited assertion failures retained separately.
-Same bytes staged/preflighted on both nodes; old runtimes still active. Android116
-CI41905046530 pending, not signed/installed/public. Owner115 last observed OFF;
-public113/catalog7 and desktops unchanged. Continue guarded NL2→NL1 delivery,
-independent equal-hash readback and qualified116/consented physical checks. Do not publish
-or claim stability from equal binaries. [Current gates/rollback](releases/2026-11-04-unified-mesh-stability.md).
+**4 November20:29UTC — identical MESH runtime active on NL1 and NL2.**
+Guarded NL2→NL1 delivery completes with the same70e6c0fc executable, independently
+verified through running processes: NL1 PID1219052, NL2 PID1150135, zero restarts.
+Fresh seeds/canonical contracts pass; node identity/profile bytes and ordinary AWG/TCP/RU
+HTTP processes unchanged. Common writer evaluates NOOP and both timers resume; boot
+state remains disabled. Node-specific rollback binaries/custody retained.
+Sourcea597d2a and qualification880fcb3 pushed/verified. Reproducible builds, production-tag
+race,113/115/116 mixed native peers, six paced links and isolated root gates pass;
+inherited fixture failures retained. Android116 CI41905046530 pending, not signed or
+installed. Owner115 last observed OFF. HTTPS readback confirms public113/catalog7
+unchanged; desktops unchanged. Next within this task: qualify116 and consented paired
+phone stability/cleanup/egress checks; initial media loss and busy-holder attribution
+remain open. Equal binaries are not a full stability PASS; no public rollout.
+[Exact delivery, checks and rollback](releases/2026-11-04-unified-mesh-stability.md).
 
 Earlier source checkpoint:
 **4 November — idle ACK cleanup source PASS; physical MESH stability still OPEN.**

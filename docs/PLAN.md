@@ -8,10 +8,12 @@ Owner explicitly requires the same implementation on both gateways, superseding 
 preservation of distinct transport behavior. Preserve distinct credentials, canonical
 paths and ordinary services. Current shared-source helper validates both predecessors
 and promotes the secondary slow-link implementation plus2bc4258 idle cleanup.
-Sourcea597d2a pushed; common70e6c0fc reproducible, exact compatibility/slow-link/negative
-and canonical gates pass with inherited assertion failures retained. Both nodes staged
-and preflighted, old runtimes active. Android116 CI pending; no deployment/release PASS.
-Continue guarded NL2 then NL1 install and equal executable-hash readback; qualify116 before
+Sourcea597d2a/qualification880fcb3 pushed; common70e6c0fc is now active on both nodes
+after guarded20:28UTC NL2→NL1 delivery. Independent equal-hash/fresh-seed/profile/PID
+checks pass; common writer NOOP/timers active, ordinary services untouched. Exact
+compatibility/slow-link/negative/canonical gates pass with inherited assertions retained.
+Gateway delivery complete; Android116 CI pending, no Android release/physical PASS.
+Continue exact116 qualification before
 protected signing/in-place install and consented paired node traffic/cleanup checks.
 Initial media loss and exact physical busy-holder attribution remain open. No unrelated
 successor or automatic public rollout. [Completion/rollback gates](releases/2026-11-04-unified-mesh-stability.md).

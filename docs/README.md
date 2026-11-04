@@ -1,10 +1,10 @@
 # Documentation
 
-**4 November — unified MESH + Android116 qualification selected.** One exact canonical
-binary is targeted for both NL gateways, preserving node-specific identities and pins.
-Current runtime drift is confirmed; source reconciliation checks pass. No deployment
-yet;116 is source-only, owner115/public113/catalog7 unchanged.
-[Current gates and rollback](releases/2026-11-04-unified-mesh-stability.md).
+**4 November20:29UTC — both NL gateways run identical MESH70e6c0fc.** Guarded delivery
+and independent running-hash/fresh-seed checks pass; profiles and ordinary services
+unchanged, common writer resumed. Android116 CI pending; owner115/public113/catalog7
+unchanged. Real phone stability remains open, not inferred from equal binaries.
+[Exact delivery, current gates and rollback](releases/2026-11-04-unified-mesh-stability.md).
 
 **4 November — idle ACK cleanup source correction; not deployed.** Dead quiet sessions
 retain ownership on main and both canonical predecessors. The bounded source fix uses

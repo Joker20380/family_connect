@@ -1,5 +1,9 @@
 # Unified MESH runtime and Android116 — 4 November 2026
 
+**Current20:29UTC:** both NL gateways run identical70e6c0fc; guarded delivery and
+independent canonical/seed/profile/process checks PASS. Android116 CI remains
+pending; owner115/public113/catalog7 unchanged. Physical stability acceptance OPEN.
+
 ## Selected scope
 
 Owner explicitly selects stability work and the same MESH implementation on both
@@ -92,7 +96,8 @@ assertions fail on both unchanged secondary and candidate (seven failure events
 each); negative authorization boundaries themselves pass. The inherited busy
 test's direct error equality remains timing-sensitive: candidate4/5 failures
 with the same wrapped `bootstrap_protocol_rejected` reason, predecessor first5/5
-passes; repeated predecessor evidence is retained separately. These tests are not
+passes, then17 failures/13 passes over30 race repetitions on unchanged source.
+These tests are not
 silently relabelled PASS. No admission/error/retry policy is relaxed.
 Local root/live/provider/subprocess skips are not physical acceptance; separate
 root and paced/publication selections exercise their otherwise skipped gates.
@@ -104,6 +109,43 @@ Guarded common-writer pause, NL2 canary then NL1 activation and final readback f
 Android Client builds41905046530 is in progress on exacta597d2a. Readiness contract
 41905046756 passes; separate phase041905046579 and Linux control41905046527 fail.
 No whole-CI or Android release PASS is claimed.
+
+## Guarded runtime delivery —20:28–20:29UTC
+
+Qualification checkpoint `880fcb3d6d9bb2ae14a78b10ff98be9ffbe5d7ed` is pushed
+and remote-verified before activation. Common RU writer pauses with9820s credential
+headroom and an8-minute automatic-resume watchdog. NL2 activates20:28:04UTC;
+independent canary check passes20:28:27 before NL1 activates20:28:34. Independent
+post-checks pass20:28:56/58 and a separate three-host inventory confirms:
+
+| Node | Running `/proc/PID/exe` SHA256 | PID / restarts |
+| --- | --- | --- |
+| NL1 |`70e6c0fc1b920ad308e24667be94f674c34979dab6aa518e1a8194fff7c131b6`|1219052 /0|
+| NL2 |`70e6c0fc1b920ad308e24667be94f674c34979dab6aa518e1a8194fff7c131b6`|1150135 /0|
+
+Both use `/usr/local/lib/fc-profile-tools/unified-a597d2a/gateway`, active and
+boot-disabled as before. Each node receives one controlled MESH stop/start, new
+executable/locator/snapshot pins and a fresh unexpired seed. Exact profile bytes,
+node-specific identities/paths, publisher policy and ordinary-service states/PIDs
+remain unchanged. RU configuration/HTTP also remains unchanged; nothing touches
+neighbouring services. Independent readback validates current canonical directory
+contracts, not just the deployment command's exit code.
+
+Common-writer evaluate returns `NOOP`; renewal and directory timers resume active,
+the temporary watchdog is cancelled. Old binaries remain at their node-specific
+cleanup-3a2584b2-primary/secondary paths with original8769eadf/5bcb32ea hashes.
+Per-node rollback custody is `/var/lib/fc-profile-control/mesh-unified-a597d2a-20261104/`:
+before-locator/config/snapshot/unit bytes, metadata and guarded operation receipts.
+No rollback is needed; never restore identity/database state when reverting runtime.
+
+Normal-TLS HTTPS readback of the Android catalog remains byte-identical, SHA256
+`2283a89ffa05e6ad439858f111f7272993b4e46e652c9efa11b44158b9f01b30`
+(public113/sequence7). No public installer/catalog/invitation change, new signature,
+phone installation or phone input is performed. The running-byte mismatch is closed;
+the original physical media loss and exact busy-holder attribution are still open.
+Remaining selected work: exact116 CI/artifact qualification, protected signing and
+in-place delivery when permitted, then fresh consented paired quiet/loss/reconnect/
+DNS/HTTPS evidence on each node. Do not mark full stability from deployment alone.
 
 ## Android version boundary
 
