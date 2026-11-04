@@ -1,10 +1,11 @@
 # Release distribution / Выпуски
 
-**4 November — Android113 source/UI candidate, not distributed.** Unified country/node
-picker and per-node green/orange square load meters; threshold85%. Local CI-signed
-emulator artifacts are not phone installers. Owner112/public111/catalog6 unchanged;
-no new production signature, update URL or public checksum.
-[Checks and remaining gates](releases/2026-11-04-android113-server-picker.md).
+**4 November — Android113 published, owner-installed, invitation/updater113/catalog7.**
+Unified country/node picker, per-node green/orange square meters and selected-row checkmark;
+threshold85%. Exact Android/API27/API35/native CI, offline signing, owner112→113 installation
+and full HTTPS readback PASS. ARM64/minSDK27; update is optional, existing signer retained.
+Owner VPN needs manual reconnect; Russia/MESH unavailable, sustained MESH and renewal-race
+gates remain open. [Checks, artifacts and rollback](releases/2026-11-04-android113-server-picker.md).
 
 **4 November — Android112 signed/owner-installed, not publicly published.** The node-scoped MESH2 HTTP backend
 is installed;112 adds the two-node MESH picker. Exact CI41808770801, API27/API35 and
@@ -237,7 +238,7 @@ Python3.14's implicit-directory imports must not hide a broken isolated archive.
 The [client workflow](../.github/workflows/clients.yml) defines platform builds and
 release conditions. CI artifacts do not by themselves establish a release. Validate native
 UI/runtime and downloaded artifacts before signing/publishing. Windows cross-build alone
-is insufficient. The current public releases are Android0.1.18-beta111, Linux0.2.11 and Windows0.2.16; see [current Android delivery](releases/2026-11-03-android-update-incident.md#beta111-publication-and-readback) and [desktop delivery](releases/2026-11-02-gateway-selection.md). The [FIELD report](releases/2026-10-03-field1-release-final.md), [desktop cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md) are historical evidence.
+is insufficient. The current public releases are Android0.1.18-beta113, Linux0.2.11 and Windows0.2.16; see [current Android delivery](releases/2026-11-04-android113-server-picker.md#publication-and-readback) and [desktop delivery](releases/2026-11-02-gateway-selection.md). The [FIELD report](releases/2026-10-03-field1-release-final.md), [desktop cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md) are historical evidence.
 
 Desktop catalogs use offline signing with increasing sequence numbers. Keep keys out of
 CI and servers; never replace an existing version/tag with different binaries.

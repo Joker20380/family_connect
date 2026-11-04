@@ -1,5 +1,10 @@
 # Android113 — hybrid server picker and per-node load
 
+**Delivery complete4 November2026:** product-signed113 is installed over owner112;
+public APK, invitation and optional updater catalog7 are verified. The preparation
+checkpoints below retain their original state; [the publication receipt](#publication-and-readback)
+is current. Owner VPN needs manual reconnect after installation; MESH stability remains open.
+
 ## Scope and distribution boundary
 
 The owner's4 November request selects this bounded FLEET-BOOTSTRAP-2 UI follow-up:
@@ -132,3 +137,95 @@ the server-list percentages are synthetic and contain no product identities.
 Private qualification/download receipts remain in ignored
 `state-client-build/android113-release-20261104/`. The unsigned artifact is qualified for
 the next signing step, not a public installer or sustained-MESH acceptance.
+
+## Product signing and owner in-place check
+
+The protected local vault completed signing after exact CI/artifact qualification.
+No private key was exported to disk, Git, CI or server. APK entries remain byte-identical
+to the qualified unsigned input except signing material; ZIP16K verification passes.
+The same established product certificate permits update over the existing installation.
+
+| Item | Accepted identity |
+| --- | --- |
+| Build input | `d2882cde4c50b15085b925007c04c48f4de61bf0`; CI41833086774 attempt2 |
+| Package/version | `com.familyconnect.app.friends`;0.1.18-beta113/code113 |
+| Platform | ARM64; Android8.1+/minSDK27, target35 |
+| Product APK |50,273,696 bytes; SHA256 `6078d0610272c5eb1b8008d330f9e646163b90b89df180b4bd56fd8ae4edc094` |
+| Certificate SHA256 | `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a` |
+| Audio corresponding source |7,601,671 bytes; SHA256 `249b86d49612b716d69e25d554579213a32cbb74d7167d652f6808f60f618a89` |
+| Signed Android catalog |sequence7, minimum-supported-code1, mandatory-after0; SHA256 `2283a89ffa05e6ad439858f111f7272993b4e46e652c9efa11b44158b9f01b30` |
+| Invitation HTML |SHA256 `1ee8ab65b0209bc70e610a76931cbeff2bb7213af036dcdea24fb57787d67e6f` |
+
+Audio source is byte-identical to111 only after comparing every archive member against
+the accepted113 corresponding-source directory, with duplicate/path/member-set checks.
+It is published at a new immutable113 URL; no old binary/source is replaced.
+
+The authorized physical Android12/API31 owner phone is updated with `adb install -r`,
+not uninstall or data clearing. Before112/after113 UID and full first-install timestamp
+match. Reading back the installed APK gives the exact product hash above. The activated
+dashboard returns without reenrollment; primary NL selection is preserved, now named
+«Нидерланды», MESH mode remains selected, and fresh server load26% is visible.
+The temporary read-only UI probe is removed. Product profiles/keys/DB are never extracted.
+
+Limitations are explicit: support permission has expired; physical private-key/identity
+readback is NOT_RUN, not inferred from unchanged UID. Synthetic API27 upgrade separately
+proves identity/journal/outbox retention. Android denies ordinary input injection; no
+permission bypass is attempted. The previously active VPN is OFF after APK replacement;
+the owner is told to reconnect manually. No post-update egress, real Auto failover or
+sustained MESH acceptance is claimed. Exact CI renders/interactions cover the new list;
+physical acceptance here covers installation, retained selection and the loaded dashboard.
+
+## Publication and readback
+
+At13:56–14:00UTC, guarded publication and independent readback confirm:
+
+- [Android113 APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta113.apk)
+  and [corresponding audio source](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta113-audio-source.tar.gz)
+  are immutable and match their full HTTPS byte counts/SHA256 values.
+- Signed `/updates/android-friends-v2.json` and legacy discovery both advertise113;
+  the offline signature/lease, minSDK27, optional sequence7 and artifact binding verify.
+- Both `/i/` and `/invite/` match the new source HTML and exact CSP; the complete
+  Windows0.2.16 installer still matches catalog12, hash `491a731edbf80887122844bebcccb8741e701b03816202f9a9b77c77855e8a65`.
+- Previous111 download is retained and fully rehashed:50,265,448 bytes,
+  SHA256 `32d5f4f1d050be83dc192ae632cc0603cb4150b3c00df3b594bc22cef9105607`.
+- Before/after protected product rows and signed gateway catalog4 match. One nginx
+  HUP reload, zero backend restarts, new invitations or paid mutations. No fleet
+  admission, grant, profile, database restore or neighbouring-service change.
+- Linux public0.2.11 and Windows public0.2.16/catalog12 remain unchanged. Built, signed,
+  installed-owner and publicly advertised Android versions are now all113; no claim
+  that other users or the Huawei have installed113. Paid baseline108 is unchanged.
+
+Publication metadata/signature/source regression selection:54 Python tests PASS/0 skips
+(`test_android_public_release`, `test_android_notification_release`, `test_public_invitation`).
+RU/EN guides, current release pointers and two actual CI screenshots are updated together.
+Their24/58/87% values are synthetic; they are not the earlier visual references or live load.
+Raw APKs, vault/readback/phone evidence and protected-row hashes remain in ignored
+`state-client-build/android113-release-20261104/`; only public catalogs, safe sources,
+tests, documentation and sanitized screenshots belong in Git.
+
+Final full documentation scan:738 files/4575 links; the same two pre-existing anchor
+errors as the baseline, no new error. Scoped changed guides/PLAN/report check passes;
+STATUS is also included in the full comparison, not silently omitted. Whitespace check
+passes. The historical October27 STATUS anchor and October24 source-checkpoint anchor
+remain unrelated documentation debt; this is not a claim that the full scan is clean.
+
+### Rollout, withdrawal and remaining checks
+
+Existing users: Settings → Check for updates → install beta113 over the current app;
+if the old updater fails, download the APK in a browser. Do not uninstall, clear data
+or reenroll. Reconnect VPN after the update if necessary. Each device retains its own
+activation; APK availability does not grant MESH admission.
+
+Server recovery journal: `/root/fc-android113-publication-20261104` on the authorized RU
+gateway. It contains exact prior invitation/config/discovery bytes, intent and completion
+receipts. Local `publish-android113.py status` reconciles that original journal; never
+replay publish after an uncertain result. Withdraw advertisement/routes only through a
+guarded restore and nginx validation; leave immutable111/113 downloads and product data
+untouched. Catalog rollback to sequence6 is rejected by clients that saw7: a corrective
+catalog must use a higher sequence, and a corrected APK a new versionCode with the same
+certificate. Do not downgrade installed113, rewrite a published binary or restore a DB.
+
+Open work: manual owner reconnect/post-update network check, physical Huawei113 acceptance,
+real Auto target/failover checks, paired low-speed/recovery MESH diagnosis and renewal-race
+closure before broader MESH acceptance. This optional UI release is not a stability fix
+and does not automatically start the next queued task.

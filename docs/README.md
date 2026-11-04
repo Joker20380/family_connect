@@ -1,10 +1,10 @@
 # Documentation
 
-**4 November — Android113 unified server picker candidate.** Same Russia/Netherlands/
-Netherlands2 list across modes, node-bound load, green square meters/orange from85%.
-Russia/MESH is explicitly unavailable, not hidden or silently routed elsewhere.
-Source/UI checks only; owner112 and public111/catalog6 unchanged.
-[Implementation and delivery boundary](releases/2026-11-04-android113-server-picker.md).
+**4 November — Android113 published, signed catalog7, owner112→113 installed.** Same
+Russia/Netherlands/Netherlands2 list in all modes; per-node green square load meters,
+orange from85%, selected-row tint/checkmark. Exact CI/signing/HTTPS and in-place UI checks
+PASS. Russia/MESH unavailable; MESH stability and renewal race stay open. Owner VPN needs
+manual reconnect after the update. [Delivery and remaining checks](releases/2026-11-04-android113-server-picker.md).
 
 **4 November — Android112 owner MESH2 traffic proven; sustained stability NOT PASSED.** Node-scoped readiness and
 additive migration preserve existing accounts/assignments. Exact112 CI/API27/API35 and

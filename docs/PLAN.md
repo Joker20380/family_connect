@@ -3,23 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- Android113 unified picker 20261104 -->
-**4 November owner-selected follow-up — FLEET-BOOTSTRAP-2 hybrid Android server picker.**
-For this change, the latest UI request takes priority over continuing112 transport
-diagnosis: one stable physical-server list in every mode, Russia/Netherlands/Netherlands2
-names, correctly bound per-node load and green/orange square indicators (85% threshold).
-Do not hide Russia in MESH or pretend that it supports MESH; preserve explicit refusal
-and prevent Auto from changing the selected country silently. No new fleet admission.
-Dependencies: current signed gateway catalog, per-node readiness and existing telemetry.
-Owner-approved hybrid: flat rows, right-aligned meter, soft selected fill and checkmark;
-large-font/narrow-screen layout preserves names. Source candidate113; final JVM418+413,
-Python22, API27/API35 UI4/4 each PASS/0 skips; lint0 errors/56 existing warnings.
-Local source/UI completion gate met and d2882cd is pushed. Owner now authorizes113 release.
-Exact Android CI41833086774 attempt2 and downloaded ARM64/native/runtime/UI artifacts PASS;
-attempt1 emulator-action failure retained, no gate bypass. Synthetic112→113 storage upgrade PASS.
-Next: protected offline signing, in-place acceptance, guarded optional publication and full
-HTTPS readback. The local signing dialog is pending; no new signed/public APK yet. Public111/catalog6,
-owner112 and open transport/renewal blockers remain unchanged. No automatic successor.
-[Current implementation and gates](releases/2026-11-04-android113-server-picker.md).
+**4 November — owner-selected FLEET-BOOTSTRAP-2 hybrid Android picker delivered.**
+Dependencies: existing signed node registry, per-node readiness and telemetry. Unified
+three-server list, selected-node persistence and green/orange85% load meters implemented;
+Russia/MESH explicitly unavailable, no silent Netherlands fallback, no new fleet admission.
+Completion: source d2882cd pushed; exact Android/native/API27/API35 CI41833086774 attempt2,
+downloaded artifacts, offline existing-key signing, synthetic112→113 retained-state upgrade,
+owner product-signed in-place installation/UI and full public HTTPS readback PASS.
+Public/invitation/owner113, optional signed catalog7; old111 retained. Metadata54 Python PASS.
+Owner VPN needs manual reconnect after update because Android denies input; no bypass.
+Physical Auto target/failover and Huawei113 checks remain open, not inferred from UI acceptance.
+Next only when selected: return to paired MESH low-speed/recovery and renewal-race diagnosis;
+this UI release does not close those gates or authorize general MESH rollout. No automatic successor.
+[Release, validation and rollback](releases/2026-11-04-android113-server-picker.md).
 <!-- /Android113 unified picker 20261104 -->
 
 **4 November12:21UTC — owner-selected RU disk cleanup DONE:** old archived host

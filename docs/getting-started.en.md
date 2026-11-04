@@ -9,11 +9,15 @@ No manual service setup is needed. Affected Windows10 device acceptance is pendi
 ## First activation
 
 Android8.1+, ARM64; access is invitation-only. Installing the APK does not grant access.
-The invitation page and in-app updater both provide beta111. Updating does not enable restricted FIELD access.
+The invitation page and in-app updater both provide beta113. Updating does not enable restricted FIELD access.
 
-Beta111 includes MESH and quiet ongoing VPN-notification updates. Android8.1/API27 is the minimum; Android8.0 and older are unsupported.
-Exact Android CI41618639307 attempt2, existing signer and full verified-HTTPS hash checks PASS.
-Beta111 retains explicit Amsterdam1 and Amsterdam2 choices for AWG/TCP; Huawei/owner111 installation is not yet confirmed.
+Beta113 includes MESH and quiet ongoing VPN-notification updates. Android8.1/API27 is the minimum; Android8.0 and older are unsupported.
+Exact Android CI41833086774 attempt2, existing signer and full verified-HTTPS hash checks PASS.
+Every mode now lists Russia, Netherlands and Netherlands2, with per-node load squares:
+green below85%, orange from85%, grey/dash when unavailable. Selected rows have a green tint
+and checkmark. Russia cannot use MESH; choose AWG/TCP/Auto. Owner112→113 installation and
+dashboard/load checks PASS; sustained MESH stability and physical Huawei113 acceptance remain open.
+![Android113 English server list; synthetic load values](assets/android113-server-picker-en.png)
 Paid baseline remains108 and existing entitlement is preserved. No Mi account or ADB is needed.
 MESH still requires accepted admission and current readiness material, not an old cached READY.
 
@@ -28,28 +32,28 @@ MESH still requires accepted admission and current readiness material, not an ol
 
 ## Update an existing app
 
-[Download beta111 — 50.3 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta111.apk).
-Version `0.1.18-beta111`, code111, ARM64,50265448 bytes; SHA256:
+[Download beta113 — 50.3 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta113.apk).
+Version `0.1.18-beta113`, code113, ARM64,50273696 bytes; SHA256:
 
 ```text
-32d5f4f1d050be83dc192ae632cc0603cb4150b3c00df3b594bc22cef9105607
+6078d0610272c5eb1b8008d330f9e646163b90b89df180b4bd56fd8ae4edc094
 ```
 
-The app also checks for updates. Open the APK and select **Update** in Android’s system
+The app also checks for updates. An update restarts the VPN; tap Connect again if needed. Open the APK and select **Update** in Android’s system
 prompt. Do not uninstall or clear data: activation, keys and history must be kept.
 A CI debug APK may use a different signature. Each other device needs its own activation;
 do not copy another device’s profiles or keys.
 
 The [older universal beta13](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.12-beta13.apk)
 remains available for other architectures,240.5 MB. It lacks current features and is not
-an equivalent alternative to111.
+an equivalent alternative to113.
 
-[Exact audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta111-audio-source.tar.gz)
+[Exact audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta113-audio-source.tar.gz)
 are available with the release. Installation requires Android confirmation; it is not forced.
 
-Update over the existing app via **Settings → Check for updates → Install beta111**.
+Update over the existing app via **Settings → Check for updates → Install beta113**.
 If the old updater fails, download the APK above in a browser. Do not uninstall, clear
-data or reenroll. Android sequence6 is optional; installation and operation on the
+data or reenroll. Android sequence7 is optional; installation and operation on the
 affected Huawei still need confirmation. [Public108 rollback evidence](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk)
 remains immutable; no paid event or canary replay accompanies this update.
 
@@ -80,7 +84,7 @@ not established. [Notification and announcement guide (RU)](testing/messenger-no
 - Update failure: record the error and versions; do not erase data to bypass a signature mismatch.
 
 Report model, Android/app version and network type. Exclude invitations, keys, profiles
-and messages. [Beta111 validation/publication](releases/2026-11-03-android-update-incident.md#beta111-publication-and-readback).
+and messages. [Beta113 validation/publication](releases/2026-11-04-android113-server-picker.md#publication-and-readback).
 
 ## Desktop clients
 
@@ -91,11 +95,15 @@ current availability counts.
 
 ## Server load display
 
-Beta111 shows **Server CPU** on the dashboard and **CPU N%** in the server list when
+Beta113 shows **Server CPU** on the dashboard and **CPU N%** in the server list when
 channel capacity is unknown. CPU is not channel utilization or the monthly traffic quota.
-Known-capacity servers retain their aggregate indicator; stale/missing samples show No data.
+Known-capacity servers retain their combined CPU/channel indicator; stale/missing samples show No data.
 [Release status](releases.md).
 
-Explicit Amsterdam1/2 choices support AWG/TCP, not a second MESH gateway.
-Netherlands keeps the assigned server; no existing device moves automatically.
-Explicit nodes without measurements show No data, never an inferred country CPU reading.
+Auto/AWG/TCP/MESH share Russia, Netherlands and Netherlands2. Switching mode keeps the
+chosen node. Both NL nodes have MESH paths, subject to admission/readiness; Russia/MESH
+is explicitly unavailable. This release does not claim sustained MESH stability.
+Each row uses that node's measurements: green squares below85%, orange from85%, grey
+and a dash without fresh data, never an inferred country CPU value. CPU-only and estimated
+capacity values remain labelled; the two NL channel capacities are assumed5000Mbps,
+not a measured connection speed.

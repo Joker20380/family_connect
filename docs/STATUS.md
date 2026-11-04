@@ -1,22 +1,22 @@
 # Текущее состояние / Current state
 
 <!-- Android113 unified picker 20261104 -->
-**4 November — Android113 hybrid picker: local source/UI gates PASS, not installed.**
-Owner selects the same Russia/Netherlands/Netherlands2 list across Auto/AWG/TCP/MESH,
-per-node load and green square meters, orange from85%. Russia/MESH stays visible but
-explicitly unavailable; no hidden Netherlands fallback. Auto keeps the selected NL node.
-Owner chose flat rows, right-aligned squares/percentage, green selected fill and checkmark;
-large fonts/narrow screens move the load below the name without losing its meaning.
-Public/invitation111/catalog6 and owner112 unchanged. Final JVM418+413 and Python22 PASS,
-0 skips; API27/API35 picker/dashboard/language4/4 each PASS, RU/EN renders reviewed.
-Lint0 errors/56 existing warnings. Owner subsequently requests publication. Exact source
-d2882cd/CI41833086774 attempt2 passes Android/native/API27/API35; attempt1 failed before
-instrumentation and remains evidence. Four downloaded artifacts match GitHub digests;
-ARM64/code113/minSDK27,12 native libraries/source/licenses and16K alignment PASS.
-Synthetic API27 CI-signed112→113 retains UID/identity/journal/outbox. Offline product
-signing is awaiting the protected local-vault dialog; phone/public publication NOT_DONE.
-Transport instability and renewal-race gates remain open, not superseded by UI acceptance.
-[Scope, checks and delivery boundary](releases/2026-11-04-android113-server-picker.md).
+**4 November — Android113 hybrid picker published; owner112→113 installed in place.**
+One Russia/Netherlands/Netherlands2 list in Auto/AWG/TCP/MESH; correct per-node load,
+green squares below85%, orange from85%, selected-row tint/checkmark and responsive layout.
+Russia/MESH remains visible but explicitly unavailable; no hidden country fallback.
+Exact source d2882cd/CI41833086774 attempt2 PASS; attempt1 failed before instrumentation
+and remains evidence. JVM418+413, local Python22 and release metadata54 PASS/0 skips;
+API27/API35 required runtime cases execute; existing optional skips are recorded separately.
+Downloaded native/source/licenses/16K checks and offline existing-key signing PASS.
+Public APK/invitation113/catalog7 (optional/minimum1), ARM64/minSDK27; owner signed112→113
+retains UID/first-install/selected node and mode, dashboard/live load visible. Installed APK
+matches50,273,696 bytes/SHA2566078d061…4edc094. Synthetic upgrade retains identity/journal/outbox;
+physical key readback NOT_RUN. Full HTTPS APK/source/catalog/CSP readback PASS; old111 retained.
+One nginx reload, no backend restart; protected rows, gateway catalog and desktop releases
+unchanged. Owner VPN is OFF after update: manual reconnect required, Android input denied;
+no permission bypass. Sustained MESH stability, renewal race and Huawei113 checks remain open.
+[Exact hashes, evidence and rollback](releases/2026-11-04-android113-server-picker.md).
 <!-- /Android113 unified picker 20261104 -->
 
 **4 November12:21UTC — requested RU disk cleanup complete:** archived host journals

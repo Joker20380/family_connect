@@ -59,10 +59,11 @@ desktop media integration remains incomplete. See the
 [transport model and limits](carrier/README.md#mesh-product-contract) and
 [current status](docs/STATUS.md) and release details below.
 
-Public Android **beta111 / Android8.1+ / ARM64**: [download and update in place](docs/getting-started.en.md).
-Invitation/default updater now offer111 with Android8.1 compatibility and quiet status notifications.
-The dashboard and country list show measured server CPU when channel capacity is unknown.
-CI/signature/HTTPS checks PASS; physical Huawei/owner111 runtime is pending. Admission is unchanged.
+Public Android **beta113 / Android8.1+ / ARM64**: [download and update in place](docs/getting-started.en.md).
+Invitation/default updater offer113: one Russia/Netherlands/Netherlands2 list in every mode,
+per-node load squares (green below85%, orange from85%) and a selected-row checkmark.
+Exact CI/signature/HTTPS and owner112→113 installation/UI checks PASS. Russia/MESH remains
+unavailable; sustained MESH stability is still open. No admission or entitlement change.
 
 **Resilient connectivity for families and personal devices.**
 
@@ -88,7 +89,7 @@ lifecycle. Automatic orchestration across normal and restricted transports is
 
 | Platform | Latest documented distribution and limits |
 | --- | --- |
-| Android8.1+ / ARM64 | **0.1.18-beta111 / code111**; explicit Amsterdam1/2 selection for AWG/TCP; exact Android CI/signature/HTTPS PASS, Huawei/owner111 installation not confirmed; paid baseline remains108. |
+| Android8.1+ / ARM64 | **0.1.18-beta113 / code113**; unified three-server picker and per-node load in every mode; signed optional catalog7; CI/HTTPS and owner in-place installation/UI PASS. Russia/MESH unavailable; MESH stability and Huawei113 acceptance open; paid baseline108 unchanged. |
 | Linux | **0.2.11**, GTK 4/libadwaita; AppImage and DEB, legacy archive retained for advanced/manual use and updater compatibility. System dependencies and VPN helpers still require setup. |
 | Windows 10 1809+ / 11 x64 | **0.2.16**; explicit Amsterdam1/2 for AWG/TCP, invitation activation, independent signed update catalog12; installer has no trusted publisher signature. Prior installers remain immutable; affected Windows 10 device acceptance is pending. |
 | macOS / iOS | No client release; iOS is later work, after real beta evidence. |

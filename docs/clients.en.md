@@ -1,30 +1,32 @@
 # Client installation
 
-**In development: Android113, not installed or published.** Every mode uses the same
-Russia, Netherlands, Netherlands2 server list. Rows show each node's load with green
-squares, orange from85%, and grey when fresh data is unavailable. Russia remains visible
-in MESH but cannot connect with it yet; use AWG/TCP/Auto for Russia. Mode changes do not
-silently change servers. The flat list marks the selected server with a green tint
-and a checkmark, not a separate card. Download links below still point to public111.
-[113 checks and delivery boundary](releases/2026-11-04-android113-server-picker.md).
+**4 November — Android113 published and installed in place on the owner phone.** Every mode
+uses Russia, Netherlands and Netherlands2. Rows show each node's load with green squares,
+orange from85%, grey/dash without fresh data; a green tint and checkmark identify selection.
+Russia remains visible but unavailable in MESH; use AWG/TCP/Auto for Russia. Mode changes
+do not silently select another server. Existing signer, exact CI and public HTTPS verified;
+owner UID/first-install and selected node/mode retained, live load displayed. This does not
+close sustained MESH stability or Huawei113 acceptance. Update in place, never clear data.
+After the owner update VPN is off; manual reconnect is required because Android denies
+automated input. [Checks and limitations](releases/2026-11-04-android113-server-picker.md).
 
-**3 November — beta111 published, Android8.1+/ARM64.** The invitation page and
-in-app updater offer111 with optional signed catalog6. API27/API35 CI, the existing
+**Previous release, 3 November — beta111 published, Android8.1+/ARM64.** The invitation page and
+in-app updater then offered111 with optional signed catalog6. API27/API35 CI, the existing
 signer and public HTTPS bytes are verified. Installation and operation on the actual
 Huawei remain unconfirmed. Update in place; do not uninstall or clear data.
 Android8.1–9 uses Codec2 with confirmed peer support; Opus recording requires Android10+.
 [Acceptance, delivery and remaining checks](releases/2026-11-03-android-update-incident.md#beta111-publication-and-readback).
 
-**Current releases — 3 November 2026.** Windows0.2.16 is published:
+**Current releases — 4 November 2026.** Windows0.2.16 is published:
 [download installer](https://github.com/Joker20380/family_connect/releases/download/windows-v0.2.16/FamilyConnect-Setup-0.2.16-pilot-unsigned.exe).
 Windows0.2.13+ discovers it through Check for updates (signed catalog12);0.2.12
 and earlier need one manual in-place installation without deleting data. Explicit
 Amsterdam1/2 choices support AWG/TCP. The installer has no publisher signature.
 SHA256 `491a731edbf80887122844bebcccb8741e701b03816202f9a9b77c77855e8a65`.
-Android111 is published: [APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta111.apk),
-optional signed catalog6, existing signer; SHA256
-`32d5f4f1d050be83dc192ae632cc0603cb4150b3c00df3b594bc22cef9105607`,50265448bytes.
-Update over the existing version without clearing data; owner installation is not yet confirmed.
+Android113 is published: [APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta113.apk),
+optional signed catalog7, existing signer; SHA256
+`6078d0610272c5eb1b8008d330f9e646163b90b89df180b4bd56fd8ae4edc094`,50273696bytes.
+Update over the existing version without clearing data; owner112→113 installation/UI verified; VPN reconnect is manual.
 Complete Linux0.2.12~l03.2.13 Ubuntu26.04/Python3.14 is now installed on the owner's
 workstation: exact full DEB/system pair, imports/READY, GTK and separate live node
 metrics PASS;3171 protected entries unchanged, no automatic connection. AWG/TCP has
@@ -272,12 +274,12 @@ invitation; verify unchanged Support ID FC-YHQB-9VJN. Before one mobile attempt,
 the operator must revalidate leases and fresh READY/ACK; export immediately after
 disconnect. FIELD admission and the public updater remain unchanged.
 
-**Current3.11: beta111/code111 is public, Android8.1+/ARM64.**
-Explicit Amsterdam1/2 choices support AWG/TCP; the assigned Netherlands entry stays.
-Exact Android CI/signature/HTTPS PASS; owner111 installation and physical selection
-are not claimed. Paid baseline108/entitlement remain unchanged.
-Install over the existing app, without clearing data or reenrollment; admission is unchanged.
-[Download/update](getting-started.en.md) · [Evidence](releases/2026-11-03-android-update-incident.md#beta111-publication-and-readback).
+**Current4.11: beta113/code113 is public, Android8.1+/ARM64.**
+All modes share Russia/Netherlands/Netherlands2 and per-node square load meters.
+Exact CI/signature/HTTPS and owner in-place installation/UI PASS; sustained MESH stability
+remains open. Russia/MESH is unavailable. Paid baseline108/entitlement unchanged.
+Install over the app, without clearing data or reenrollment; reconnect VPN if needed.
+[Download/update](getting-started.en.md) · [Evidence](releases/2026-11-04-android113-server-picker.md).
 
 ## Historical preparation checkpoints
 
@@ -370,7 +372,7 @@ not publicly distributed and not a FIELD release. Public beta51/invitation links
 remain unchanged and were not reverified. [Attempt14](releases/2026-10-02-5n-prov1-attempt14.ru.md)
 · [Canary provenance and SHA256](releases/2026-10-02-5n-android-canary-build.ru.md).
 
-Use the [friends beta guide](getting-started.en.md): Android8.1+, ARM64 beta111,
+Use the [friends beta guide](getting-started.en.md): Android8.1+, ARM64 beta113,
 invitation-based access, VPN, text and voice messages. The APK is distributed through
 an invitation page and HTTPS download; it is not yet a GitHub or app-store release.
 The [client workflow](../.github/workflows/clients.yml) documents source-build requirements.

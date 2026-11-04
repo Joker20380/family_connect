@@ -1,5 +1,13 @@
 # Product images
 
+`android113-server-picker-ru.png` and `android113-server-picker-en.png`: unchanged native
+Android API35 UI renders from exact source d2882cd, workflow41833086774 attempt2,
+artifact13327137775, captured4 November2026 and visually reviewed before publication.
+Hybrid flat list; green selected row/checkmark and right-aligned load squares, orange at85%.
+Values24/58/87% are synthetic fixtures, not measured fleet load. No product identities,
+invitations, contacts or keys; not the earlier AI reference board. The narrow emulator
+uses the responsive stacked-load layout. [Release](../releases/2026-11-04-android113-server-picker.md).
+
 `android-beta38-home.png` is the unchanged native View.draw render from beta38/code38, captured on the connected Android phone on 2026-09-23. It is a historical beta38 capture; the current Android update is beta50. Country and protocol are selectable in the connection panel beneath the battery. VPN is off in the capture; the device was reconnected after tests. The image contains no invitation, contact, device identity or private key. It remains on the landing page with an explicit version/date caption, not as a beta50 screenshot.
 
 [Build and verification record](../releases/2026-09-23-public-client-status.ru.md).

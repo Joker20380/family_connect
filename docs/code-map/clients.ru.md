@@ -19,7 +19,7 @@ last8+first_failure через существующий `DiagnosticRing`; `scrip
 
 ## Android
 
-### Unified server picker — Android113 candidate
+### Unified server picker — Android113
 
 `GatewayPicker` now derives one ordered list from Russia plus the admitted gateway
 registry, retaining the physical selection across every mode. `AutomaticConnection`
@@ -31,8 +31,9 @@ country fallback; `ServerLoadPresentation` shares the85% threshold/segment model
 `FriendsActivity.serverRow` uses the owner-selected hybrid flat list: right-aligned
 squares/percentage, green selected fill and `ic_check`, not cards or radio circles.
 `GatewayPickerTest`, load model tests and API27/API35 dashboard/language instrumentation
-cover selection, refusal, meter geometry and rendering. No113 production install yet.
-[Current UI candidate](../releases/2026-11-04-android113-server-picker.md).
+cover selection, refusal, meter geometry and rendering. Exact113 is signed, installed
+in place on the owner phone and published with optional catalog7; MESH stability is separate.
+[Release evidence](../releases/2026-11-04-android113-server-picker.md).
 
 ### Per-node MESH readiness — Android112 candidate
 
