@@ -12,34 +12,27 @@ in that window. Packet receipt/old-room identity not proven. No changes by this 
 [Evidence](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**4 November09:16UTC — MESH2 HTTP installed; Android112 foreground-refresh correction.**
-HTTPe2ed4ca6 overlays only two exacte7d2739 modules on the accepted live package. Additive
-`gateway_binding` migration passes SQLite integrity and preserves all existing row values,
-accounts/grants/assignments. Final HTTP PID2174093 verifies the exact argv/hash; ordinary
-services are active. Both signed nodes/shared CRL validate. Common writer resumes08:33:05
-with three-node NOOP and unchanged
-maintenance inspection. External normal-TLS malformed/unknown/invalid-node rejection checks
-PASS; no real Android READY/ACK is claimed. MESH2 remains active/boot-disabled.
-Exact HTTP qualification128 PASS/0 skips includes native delivery and real isolated nginx.
-Android112/code112 is built only as a local CI-signed x86_64 test candidate, not distributed:
-MESH lists exactly Amsterdam1/2; AWG/TCP and Auto retain their separate choices. Debug412/
-Friends407 JVM PASS, lint0 errors/56 existing warnings, exact112 API27/API35 UI4/4 each.
-Follow-up source corrects primary-only foreground prewarm: MESH2 now refreshes its own
-scope while preserving primary Auto/chat refresh. Red source regression→62 Python PASS,
-414+409 JVM PASS, lint0 errors/56 warnings, CI-signed x86_64 assembly and API27/API35 UI4/4
-each PASS. No signing or
-server policy change. This follow-up requires its own CI; priorcd0a2f8 is not the final candidate.
-Android/public-release/challenge/orchestrator contracts61 PASS/0 skips. Sourcecd0a2f8 is
-pushed/remote-verified; exact112 CI41802908693 is IN_PROGRESS, desktop jobs correctly skipped.
-Follow-up09:06: disposable API27 CI-signed111→112 preserves UID/protected identity/journal;
-four upgrade/per-node storage phases PASS. Production receipt inventory has primary
-2 READY/1 native rejection and no secondary requests/ACKs since installation; not a
-secondary product PASS. No physical Android device is connected locally.
-Prior41734068017 transport-source CI is SUCCESS, not a112 release gate. Normal targeted
-client acceptance, qualified boot activation, ARM64 verification, offline
-signing and public publication remain. Public/invitation Android111/catalog6 is byte-identical;
-Windows and Linux versions unchanged. No new signing/tag/catalog or handset installation.
-[Rollout, candidate, failed fixture attempt and rollback](releases/2026-11-04-mesh2-android112.md).
+**4 November09:34UTC — Android112 prewarm fixed; CI fixture repair qualified locally.**
+MESH2 node-scoped HTTPe2ed4ca6/additive migration remain installed; existing accounts,
+keys/grants/assignments are preserved. Last service readback08:56 verifies both MESH
+nodes active/boot-disabled, accepted AMS2 binary566cbc96, common writer COMMITTED with
+active timers. No server/policy or signing change in this continuation.
+Android source2b7d672 is pushed/remote-verified: selected MESH2 now refreshes its own
+readiness scope while retaining primary Auto/chat prewarm.62 Python and414+409 JVM
+PASS/0 skips; lint0 errors/56 existing warnings; exact API27/API35 UI4/4 each PASS.
+Exact synthetic API27 CI-signed111→112 upgrade retains UID/identity/journal/outbox;
+per-node storage/restart/refusal checks PASS. Not handset/ARM64/product READY evidence.
+CI41806139859 failed before APK construction in the framing healed-gap test; older
+41802908693 is cancelled/superseded. Local5/12 reproduction identifies the test endpoint's
+missing idle RTP expiry (production already has it). Test-only correction keeps all
+loss/negative checks and retry/time bounds:12 full framing repetitions PASS, exact
+14-package race selection686 PASS/48 existing optional skips, one package without tests.
+Fresh committed-source CI/ARM64 verification remains required; failed evidence retained.
+Read-only post-install receipt inventory has primary2 READY/1 native rejection but no
+secondary requests/ACKs. No physical Android is connected; real secondary READY/ACK and
+qualified boot activation remain OPEN. Public111/catalog6 and invitation/CSP TLS checks
+PASS unchanged; Windows/Linux distribution unchanged. No112 publication.
+[Evidence, CI failure, test repair and rollback](releases/2026-11-04-mesh2-android112.md).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **3 November export24 server correlation — PARTIAL, cause still OPEN.** Second API36

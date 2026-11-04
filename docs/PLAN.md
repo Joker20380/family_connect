@@ -13,29 +13,22 @@ not an established HyperOS defect; no implementation/deployment authorized by th
 [Evidence and limits](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**4 November09:16UTC — FLEET-BOOTSTRAP-2 backend installed; Android112 refresh correction.**
-Node-scoped HTTPe2ed4ca6 and empty-default `gateway_binding` migration are installed with
-all original rows/assignments/grants preserved; common-fleet writer restored/healthy.
-128 exact-package Python/native/nginx checks PASS; external rejection/readback PASS.
-MESH2 exact provider/reconnect gate remains accepted, active but boot-disabled; a normal
-Android target-specific READY/ACK is still unproven. Candidate112 now selects either MESH
-Amsterdam node, retaining mode-specific Auto/AWG/TCP behavior and separate caches.
-Local112 JVM412+407, contracts61, API27/API35 UI4+4 and lint PASS.
-Public/invitation111/catalog6 unchanged.
-Follow-up fixes foreground primary-only prewarm for selected MESH2 while preserving
-primary Auto/chat refresh.62 Python,414+409 JVM, lint and exact API27/API35 UI4/4 each PASS;
-no new public version.
-The changed candidate needs its own committed-source CI;cd0a2f8 is superseded as release source.
-Sourcecd0a2f8 is pushed/remote-verified; exact112 Android CI41802908693 is IN_PROGRESS,
-desktop jobs are scope-skipped.
-API27 synthetic111→112 identity/journal/UID preservation and per-node restart checks PASS.
-Real secondary READY/ACK remains absent in read-only production inventory; no connected
-physical device and no operator-generated substitute. Product gate stays OPEN.
-Next within this ID: finish exact112 API27/API35/native CI
-and downloaded ARM64 verification, normal targeted product acceptance/qualified boot activation, existing-key
-offline signing, increasing catalog and immutable public/invitation readback. Prior CI
-41734068017 passed but must not stand in for exact112 CI. No unrelated successor or field
-PASS, and no operator-generated receipt may substitute for a real product READY/ACK.
+**4 November09:34UTC — FLEET-BOOTSTRAP-2: Android112 candidate, exact CI repair.**
+Continue the selected MESH2→Android delivery only; no unrelated successor. MESH2 gateway,
+common-fleet writer and node-scoped HTTP/migration are installed. Runtime provider/
+reconnect acceptance remains valid; MESH2 is still boot-disabled pending the product gate.
+Android2b7d672 fixes selected-node foreground readiness refresh while preserving primary
+Auto/chat.62 Python,414+409 JVM, lint, API27/API35 UI4/4 each and synthetic111→112 storage
+preservation PASS. Public/invitation111/catalog6 unchanged; no signer/catalog/tag change.
+Exact CI41806139859 failed in the framing fixture before APK; older41802908693 cancelled.
+Test-only idle-expiry correction is locally qualified (12 repeated framing matrices;
+exact CI14 packages,686 PASS/48 existing optional skips/one package with no tests).
+No production timeout/retry change and no failed run relabeled PASS. Next within this ID:
+push the qualified test correction, finish its exact platform/API27/API35/native CI,
+verify downloaded ARM64/source/alignment, normal targeted product READY/ACK and qualified
+boot activation, then existing-key offline signing and increasing immutable publication.
+There is no connected physical Android and no observed secondary normal-client ACK;
+operator receipts or emulator fixtures must not substitute for that OPEN gate.
 [Current evidence and rollback](releases/2026-11-04-mesh2-android112.md).
 <!-- /MESH2 canonical installation 20261103 -->
 

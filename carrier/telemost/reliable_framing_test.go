@@ -19,6 +19,7 @@ import (
 type framedReliableEndpoint struct {
 	peer       *framedReliableEndpoint
 	incoming   chan []byte
+	changed    chan struct{}
 	done       chan struct{}
 	once       sync.Once
 	sendMu     sync.Mutex
@@ -38,7 +39,7 @@ type framedReliableEndpoint struct {
 func framedReliablePair() (*framedReliableEndpoint, *framedReliableEndpoint) {
 	points := make([]*framedReliableEndpoint, 2)
 	for index := range points {
-		point := &framedReliableEndpoint{incoming: make(chan []byte, 64), done: make(chan struct{}), sender: uint32(index + 1), sequence: 65530, reorder: newReorderBuffer()}
+		point := &framedReliableEndpoint{incoming: make(chan []byte, 64), changed: make(chan struct{}, 1), done: make(chan struct{}), sender: uint32(index + 1), sequence: 65530, reorder: newReorderBuffer()}
 		point.assembler = newReassembler(point.sender, func(data []byte) {
 			select {
 			case point.incoming <- data:
@@ -83,34 +84,88 @@ func (point *framedReliableEndpoint) SendContext(ctx context.Context, data []byt
 				point.droppedRTP++
 				continue
 			}
-			point.peer.reorder.push(packet, func(ordered *rtp.Packet) {
-				frame := point.peer.frame.process(ordered)
-				if frame == nil {
-					return
-				}
-				if fragment, valid := decodeVP8Frame(frame); valid {
-					point.peer.assembler.ingest(fragment)
-				}
-			})
+			point.peer.reorder.push(packet, point.peer.deliver)
 		}
+	}
+	select {
+	case point.peer.changed <- struct{}{}:
+	default:
 	}
 	return nil
 }
 
+func (point *framedReliableEndpoint) deliver(ordered *rtp.Packet) {
+	frame := point.frame.process(ordered)
+	if frame == nil {
+		return
+	}
+	if fragment, valid := decodeVP8Frame(frame); valid {
+		point.assembler.ingest(fragment)
+	}
+}
+
 func (point *framedReliableEndpoint) Recv(ctx context.Context) ([]byte, error) {
-	select {
-	case data := <-point.incoming:
-		return data, nil
-	case <-point.done:
-		return nil, reliablestream.ErrClosed
-	case <-ctx.Done():
-		return nil, ctx.Err()
+	for {
+		point.receiveMu.Lock()
+		deadline := point.reorder.deadline()
+		point.receiveMu.Unlock()
+		var timer *time.Timer
+		var expiry <-chan time.Time
+		if !deadline.IsZero() {
+			timer = time.NewTimer(time.Until(deadline))
+			expiry = timer.C
+		}
+		var data []byte
+		var err error
+		received := false
+		select {
+		case data = <-point.incoming:
+			received = true
+		case <-point.done:
+			err = reliablestream.ErrClosed
+		case <-ctx.Done():
+			err = ctx.Err()
+		case <-point.changed:
+		case now := <-expiry:
+			point.receiveMu.Lock()
+			point.reorder.expire(now, point.deliver)
+			point.receiveMu.Unlock()
+		}
+		if timer != nil {
+			timer.Stop()
+		}
+		if received || err != nil {
+			return data, err
+		}
 	}
 }
 
 func (point *framedReliableEndpoint) Close() error {
 	point.once.Do(func() { close(point.done) })
 	return nil
+}
+
+func TestFramedReliableEndpointExpiresGapWithoutAnotherPacket(test *testing.T) {
+	left, right := framedReliablePair()
+	defer left.Close()
+	defer right.Close()
+	left.dropUntil = 1
+	ctx, cancel := context.WithTimeout(context.Background(), 2*reorderGapTimeout)
+	defer cancel()
+	head := make([]byte, reliablestream.HeaderSize+reliablestream.DefaultConfig().Payload)
+	copy(head, "FRS1")
+	head[4] = 2
+	if err := left.SendContext(ctx, head); err != nil {
+		test.Fatal(err)
+	}
+	wanted := []byte("after-idle-gap")
+	if err := left.SendContext(ctx, wanted); err != nil {
+		test.Fatal(err)
+	}
+	actual, err := right.Recv(ctx)
+	if err != nil || !bytes.Equal(actual, wanted) {
+		test.Fatalf("quiet receiver did not expire RTP gap: %v", err)
+	}
 }
 
 func TestReliableStreamOverVP8MissingRTPWithFreshACK(test *testing.T) {
@@ -169,7 +224,7 @@ func TestReliableStreamOverVP8MissingRTPWithFreshACK(test *testing.T) {
 					}
 				}
 				if err := left.SendContext(ctx, []byte("window-reopened")); err != nil {
-					test.Fatal(err)
+					test.Fatalf("window reopen failed: %v; sender=%+v receiver=%+v first_failure=%+v", err, left.Stats(), right.Stats(), recorder.Snapshot().FirstFailure)
 				}
 				data, err := right.Recv(ctx)
 				if err != nil || string(data) != "window-reopened" || recorder.Snapshot().FirstFailure != nil {
