@@ -12,9 +12,10 @@ Sourcea597d2a/qualification880fcb3 pushed; common70e6c0fc is now active on both 
 after guarded20:28UTC NL2→NL1 delivery. Independent equal-hash/fresh-seed/profile/PID
 checks pass; common writer NOOP/timers active, ordinary services untouched. Exact
 compatibility/slow-link/negative/canonical gates pass with inherited assertions retained.
-Gateway delivery complete; Android116 CI pending, no Android release/physical PASS.
-Continue exact116 qualification before
-protected signing/in-place install and consented paired node traffic/cleanup checks.
+Gateway delivery complete; exact116 CI/API27/API35, downloaded source/artifacts and
+UI qualification pass. No signed116 or Android release/physical PASS.
+Continue protected existing-key signing/in-place install and fresh consented paired
+node traffic/cleanup checks; do not bypass the local signing vault or app USB consent.
 Initial media loss and exact physical busy-holder attribution remain open. No unrelated
 successor or automatic public rollout. [Completion/rollback gates](releases/2026-11-04-unified-mesh-stability.md).
 

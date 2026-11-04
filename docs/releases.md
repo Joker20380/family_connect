@@ -2,7 +2,8 @@
 
 **4 November20:29UTC — unified MESH gateway delivered to both NL nodes.** Both running
 processes match70e6c0fc; fresh seeds, separate profiles and common writer checks pass.
-Android116 CI pending, not signed/installed/public; owner115/public113/catalog7 unchanged.
+Android116 exact CI/API27/API35 and downloaded artifact/UI qualification PASS;
+unsigned754b1298, not installed/public. Owner115/public113/catalog7 unchanged.
 No public release or sustained phone-stability PASS.
 [Exact scope, delivery, compatibility and rollback](releases/2026-11-04-unified-mesh-stability.md).
 

@@ -1,7 +1,7 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
-**4 November20:29UTC — identical MESH runtime active on NL1 and NL2.**
+**4 November — identical MESH deployed; Android116 qualification PASS.**
 Guarded NL2→NL1 delivery completes with the same70e6c0fc executable, independently
 verified through running processes: NL1 PID1219052, NL2 PID1150135, zero restarts.
 Fresh seeds/canonical contracts pass; node identity/profile bytes and ordinary AWG/TCP/RU
@@ -9,9 +9,11 @@ HTTP processes unchanged. Common writer evaluates NOOP and both timers resume; b
 state remains disabled. Node-specific rollback binaries/custody retained.
 Sourcea597d2a and qualification880fcb3 pushed/verified. Reproducible builds, production-tag
 race,113/115/116 mixed native peers, six paced links and isolated root gates pass;
-inherited fixture failures retained. Android116 CI41905046530 pending, not signed or
-installed. Owner115 last observed OFF. HTTPS readback confirms public113/catalog7
-unchanged; desktops unchanged. Next within this task: qualify116 and consented paired
+inherited fixture failures retained. Android116 CI41905046530 attempt1/API27/API35,
+downloaded artifact digests, source/ABI/16K/licenses,833 JVM cases and8 reviewed UI
+images pass. Unsigned APK754b1298; not signed or installed. Owner115 last observed OFF.
+HTTPS readback confirms public113/catalog7 unchanged; desktops unchanged.
+Next within this task: protected existing-key signing/in-place116, then consented paired
 phone stability/cleanup/egress checks; initial media loss and busy-holder attribution
 remain open. Equal binaries are not a full stability PASS; no public rollout.
 [Exact delivery, checks and rollback](releases/2026-11-04-unified-mesh-stability.md).

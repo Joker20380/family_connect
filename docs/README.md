@@ -2,8 +2,9 @@
 
 **4 November20:29UTC — both NL gateways run identical MESH70e6c0fc.** Guarded delivery
 and independent running-hash/fresh-seed checks pass; profiles and ordinary services
-unchanged, common writer resumed. Android116 CI pending; owner115/public113/catalog7
-unchanged. Real phone stability remains open, not inferred from equal binaries.
+unchanged, common writer resumed. Android116 exact CI/API27/API35 and downloaded
+artifacts/UI qualify; not signed/installed. Owner115/public113/catalog7 unchanged.
+Real phone stability remains open, not inferred from equal binaries.
 [Exact delivery, current gates and rollback](releases/2026-11-04-unified-mesh-stability.md).
 
 **4 November — idle ACK cleanup source correction; not deployed.** Dead quiet sessions

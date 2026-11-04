@@ -1,8 +1,9 @@
 # Unified MESH runtime and Android116 — 4 November 2026
 
-**Current20:29UTC:** both NL gateways run identical70e6c0fc; guarded delivery and
-independent canonical/seed/profile/process checks PASS. Android116 CI remains
-pending; owner115/public113/catalog7 unchanged. Physical stability acceptance OPEN.
+**Current:** both NL gateways run identical70e6c0fc; guarded delivery and independent
+canonical/seed/profile/process checks PASS. Android116 exact CI and downloaded
+artifact/UI qualification PASS, still unsigned. Owner115/public113/catalog7 unchanged.
+Physical stability acceptance OPEN; protected signing/in-place116 is the next gate.
 
 ## Selected scope
 
@@ -138,6 +139,11 @@ Per-node rollback custody is `/var/lib/fc-profile-control/mesh-unified-a597d2a-2
 before-locator/config/snapshot/unit bytes, metadata and guarded operation receipts.
 No rollback is needed; never restore identity/database state when reverting runtime.
 
+At20:33:36/37UTC, more than five minutes after both activations, independent
+checks still find the same PIDs/hash, zero restarts, fresh valid directories,
+unchanged profiles and ordinary services. Separate final fleet inventory is
+retained. This bounded service observation is not sustained phone/traffic evidence.
+
 Normal-TLS HTTPS readback of the Android catalog remains byte-identical, SHA256
 `2283a89ffa05e6ad439858f111f7272993b4e46e652c9efa11b44158b9f01b30`
 (public113/sequence7). No public installer/catalog/invitation change, new signature,
@@ -151,11 +157,44 @@ DNS/HTTPS evidence on each node. Do not mark full stability from deployment alon
 
 Candidate source becomes `0.1.18-beta116`/code116, retaining API27 compatibility,
 the115 DNS/cleanup fixes and adding idle ACK expiry with guarded Android recovery.
-It is **not yet built, signed, installed or distributed**. Owner remains the
+It is **built and qualified, but not signed, installed or distributed**. Owner remains the
 previously signed115, last observed OFF/capture closed19:39:10UTC; no fresh phone
 readback in this source step. Public/invitation/updater113/catalog7 remains
 immutable. Linux0.2.11 and Windows0.2.16/catalog12 are unchanged. No new download
-link or installer checksum exists until exact artifacts pass qualification.
+link is published; the qualified unsigned checksum is recorded below.
+
+## Android116 exact qualification —20:54UTC
+
+Client builds41905046530 **attempt1 succeeds** on sourcea597d2a; Android job
+126837410230 passes native/race/contracts, JVM/lint and API35/API27 instrumentation.
+The four downloaded ZIPs match GitHub metadata digests and exact source/run bindings:
+
+| Artifact | GitHub ID | ZIP SHA256 |
+| --- | ---: | --- |
+| ARM64 |13362476454|`948810f1f77e82d3bf8d74ef63182abd871f9ae58393b63b5544a63f58d5c63c`|
+| Debug/JVM |13361758196|`d9c60f74be09bb97666a731b4fc41077739958d303db959c04f5b56369419297`|
+| Runtime |13362491418|`988fcbf8310556de14e21795e05de5fc6b9dce45211183942b850605fb459d1e`|
+| UI |13362431564|`ca3b2df8349408a60cf45761b14d410fc40d19b2590a7dbabb312f4ceeb8cdd4`|
+
+Qualified unsigned Friends0.1.18-beta116/code116,50,260,237 bytes, SHA256
+`754b1298a8b6f9bfc9f4bddc6c8662df0fa0917cea81046737cac20826b9b473`.
+Package `com.familyconnect.app.friends`, ARM64, minSDK27/target35, non-debuggable;
+12 native libraries, source/tree/JNI receipts, ELF/ZIP16K alignment, audio sources/
+licenses and disabled provisioning verify. Debug419 and Friends414 JVM cases pass
+without failures/skips. Runtime evidence:
+
+| Runtime | Debug passed/skipped | Friends passed/skipped |
+| --- | ---: | ---: |
+| API35 / Android15 |28/25|19/4|
+| API27 / Android8.1 |27/26|18/5|
+
+Required picker, language, voice and legacy compatibility cases execute; conditional
+skips remain explicit. Eight fresh screenshots are visually reviewed: RU/EN and
+large-text three-node lists, green/orange load squares, failed controls, CPU-only
+labels and legacy Codec2 text. These are emulator results, not a physical Huawei test.
+Separate phase0/control fixture failures remain recorded; this is not whole-CI PASS.
+Protected existing-key signing and in-place owner delivery remain undone. No public
+catalog/installer/invitation update or new download link is authorized by this result.
 
 ## Required gates and order
 
