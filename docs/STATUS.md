@@ -12,7 +12,7 @@ in that window. Packet receipt/old-room identity not proven. No changes by this 
 [Evidence](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**4 November09:34UTC — Android112 prewarm fixed; CI fixture repair qualified locally.**
+**4 November10:12UTC — Android112 exact CI/artifacts qualified; product gate OPEN.**
 MESH2 node-scoped HTTPe2ed4ca6/additive migration remain installed; existing accounts,
 keys/grants/assignments are preserved. Last service readback08:56 verifies both MESH
 nodes active/boot-disabled, accepted AMS2 binary566cbc96, common writer COMMITTED with
@@ -27,12 +27,21 @@ CI41806139859 failed before APK construction in the framing healed-gap test; old
 missing idle RTP expiry (production already has it). Test-only correction keeps all
 loss/negative checks and retry/time bounds:12 full framing repetitions PASS, exact
 14-package race selection686 PASS/48 existing optional skips, one package without tests.
-Fresh committed-source CI/ARM64 verification remains required; failed evidence retained.
+Correctionbe75101 is pushed/remote-verified. Exact CI41808770801 succeeds on Android,
+Linux, Windows and Windows compatibility; failed/cancelled runs remain evidence.
+Four downloaded artifact ZIPs match GitHub SHA256 and source/run. Unsigned ARM64
+beta112/code112 (minSDK27/target35), all12 native libraries/source manifests/licenses,
+ELF/ZIP16K alignment and no diagnostic provisioning entrypoint PASS. APK50,251,561bytes,
+SHA2562fe1fd25…1bd95e; not a signed/public installer. Exact JVM414+409 PASS/0 skips;
+API35 debug/Friends28/19 PASS (25/4 skips), API27 debug/Friends27/18 PASS (26/5 skips).
+Picker/language/legacy audio execute; existing opt-in/variant/API skips are retained,
+not counted as acceptance. CI screenshots reviewed for both APIs; synthetic CPU data
+and distinct Amsterdam rows render, Android8.1 offers Codec2 rather than unsupported Opus.
 Read-only post-install receipt inventory has primary2 READY/1 native rejection but no
 secondary requests/ACKs. No physical Android is connected; real secondary READY/ACK and
 qualified boot activation remain OPEN. Public111/catalog6 and invitation/CSP TLS checks
 PASS unchanged; Windows/Linux distribution unchanged. No112 publication.
-[Evidence, CI failure, test repair and rollback](releases/2026-11-04-mesh2-android112.md).
+[Evidence, exact CI/artifact acceptance and rollback](releases/2026-11-04-mesh2-android112.md).
 <!-- /MESH2 canonical installation 20261103 -->
 
 **3 November export24 server correlation — PARTIAL, cause still OPEN.** Second API36

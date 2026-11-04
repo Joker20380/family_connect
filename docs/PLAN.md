@@ -13,7 +13,7 @@ not an established HyperOS defect; no implementation/deployment authorized by th
 [Evidence and limits](releases/2026-11-03-krasnodar-diagnostics.md#export26-primary-journal).
 
 <!-- MESH2 canonical installation 20261103 -->
-**4 November09:34UTC — FLEET-BOOTSTRAP-2: Android112 candidate, exact CI repair.**
+**4 November10:12UTC — FLEET-BOOTSTRAP-2: Android112 CI/artifacts PASS, product gate OPEN.**
 Continue the selected MESH2→Android delivery only; no unrelated successor. MESH2 gateway,
 common-fleet writer and node-scoped HTTP/migration are installed. Runtime provider/
 reconnect acceptance remains valid; MESH2 is still boot-disabled pending the product gate.
@@ -23,10 +23,16 @@ preservation PASS. Public/invitation111/catalog6 unchanged; no signer/catalog/ta
 Exact CI41806139859 failed in the framing fixture before APK; older41802908693 cancelled.
 Test-only idle-expiry correction is locally qualified (12 repeated framing matrices;
 exact CI14 packages,686 PASS/48 existing optional skips/one package with no tests).
-No production timeout/retry change and no failed run relabeled PASS. Next within this ID:
-push the qualified test correction, finish its exact platform/API27/API35/native CI,
-verify downloaded ARM64/source/alignment, normal targeted product READY/ACK and qualified
-boot activation, then existing-key offline signing and increasing immutable publication.
+No production timeout/retry change and no failed run relabeled PASS. Correctionbe75101
+is pushed/remote-verified; exact CI41808770801 succeeds on all four platform jobs.
+Four artifact ZIPs match source/run/GitHub digests; unsigned ARM64beta112/code112,
+minSDK27/target35, twelve native libraries/source/licenses and16K alignment PASS.
+Exact JVM414+409 PASS/0 skips; API35 debug/Friends28/19 PASS (25/4 skips), API27
+debug/Friends27/18 PASS (26/5 skips); required picker/language/legacy audio execute.
+Downloaded screenshots reviewed on both APIs; no handset claim. Next within this ID:
+normal targeted product READY/ACK, Family TLS/DNS/HTTPS/AMS2 egress and negative/cleanup
+acceptance, qualified boot activation, then existing-key offline signing and increasing
+immutable publication. No signing, boot enablement or public112 delivery in this checkpoint.
 There is no connected physical Android and no observed secondary normal-client ACK;
 operator receipts or emulator fixtures must not substitute for that OPEN gate.
 [Current evidence and rollback](releases/2026-11-04-mesh2-android112.md).
