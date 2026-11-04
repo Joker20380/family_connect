@@ -1,8 +1,10 @@
 # Documentation
 
-**4 November18:07UTC — both gateway cleanup runtimes delivered; Android115 CI pending.**
-Exact hashes/new seeds verified, profiles and ordinary services preserved, common writer
-resumed. Android115 is not installed or public; owner114 and public113/catalog7 remain.
+**4 November — gateway cleanup delivered; Android115 qualified, signing awaits vault unlock.**
+Exact-source CI attempt2/API27/API35, artifact/native/UI checks and separate disposable
+storage upgrade pass. Gateway18:37 readback is unchanged. Android115 is not signed,
+installed or public; owner114 and public113/catalog7 remain. Physical checks require
+renewed in-app USB consent after delivery.
 [Current qualification, delivery and rollback](releases/2026-11-04-android115-mesh-cleanup.md).
 
 **4 November — MESH startup/cleanup source correction, not deployed.** Controlled114

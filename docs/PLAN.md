@@ -3,6 +3,15 @@
 ## Current engineering priority / Текущий critical path
 
 <!-- Android113 MESH incident 20261104 -->
+**Current selected gate — Android115 qualification DONE; signing/install/physical OPEN.**
+Exact-source attempt2 and downloaded native/runtime/UI gates pass; disposable API27
+114→115 storage recovery passes. Both qualified gateways remain active. Continue only
+protected local existing-key signing, in-place owner install/readback and consented paired
+cleanup/reconnect/DNS/HTTPS. Signing waits for local vault unlock; app USB support must
+be renewed, never bypassed. Owner114/public113 remain until confirmed delivery. No public
+rollout or unrelated successor. [Exact checks and remaining gates](releases/2026-11-04-android115-mesh-cleanup.md#android115-hosted-and-local-artifact-qualification).
+
+Earlier runtime checkpoint:
 **Current selected gate — gateway cleanup delivery DONE; Android115/physical checks OPEN.**
 Both exact runtime candidates are active, new-seed/canonical checks pass, common writer
 resumed, profiles and ordinary services preserved. Do not repeat the deployment.

@@ -150,3 +150,56 @@ restore profile/DB state or replace primary with the secondary baseline.
 This is gateway runtime delivery, not client/physical acceptance. Owner remains114;
 Android115 is not yet qualified/signed/installed, and public/invitation/updater stay113.
 Client CI attempt2 and then consented paired reconnect/DNS/HTTPS remain the selected gates.
+
+## Android115 hosted and local artifact qualification
+
+Exact source `86c5f9d46eba66ba981caa83936c37d1f86b14f9`, Client builds41880315713
+attempt2/job126759635946 completes successfully. The first attempt's zero-case failure
+is retained; successful retry is not evidence for its precise startup cause. Native
+race/contracts, lint, JVM and both API35/API27 emulator gates pass. Download selection
+pins the successful attempt's artifact IDs/timestamps; similarly named failed-attempt
+artifacts are retained and are not substituted:
+
+| Artifact | ID | Downloaded ZIP SHA256 |
+| --- | --- | --- |
+| ARM64 release/source | 13351263470 | `b86b98ff4efb9714c55e09fc3ee296b6c7c14d4fdf1ccacec5509fa695b03cf8` |
+| Debug/JVM/runtime | 13351033714 | `5678c8012a15ad7778983b1efb0642aff75e4caed683d553e522bf67e087f2aa` |
+| Runtime matrix | 13352002067 | `2c31d12ae0a92aaa4d321d7552c56a1145078e0a8cadb232e5625935d0e929d2` |
+| UI screenshots | 13352611893 | `754f720b1d7648d43fc7efd6db2b4400099e5af4f560c8ff27a7a44546d8daf8` |
+
+Unsigned ARM64 APK:50,260,905bytes, SHA256
+`dce9c4c556ddcb5de7c616f1fe1b819e5133f8826b2f31d2748a088d7a21549c`.
+Local verification confirms friends/code115/minSDK27/target35, nondebuggable/unsigned,
+12 ARM64 native libraries, ZIP/ELF16K alignment, pinned corresponding source/licenses,
+normal restricted build tags and exact source/tree/builder/native hashes.
+
+JVM:418 debug +413 Friends passes, zero failures/skips. Runtime test cases:
+
+| Android | Debug pass/skip | Friends pass/skip |
+| --- | --- | --- |
+| API35 | 28/25 | 19/4 |
+| API27 | 27/26 | 18/5 |
+
+No runtime failures. Required picker/language/native-radio/recording-capability cases
+execute; conditional skips do not count as exercised features. Eight downloaded
+screenshots are inspected: RU/EN names, enlarged lists, selected-row checkmark/tint,
+green squares/orange87%, CPU-only fallback, failure controls and API27 Codec2 notice.
+These are CI fixtures, not live load or physical Huawei evidence.
+
+Separate disposable API27 storage114→115 upgrade passes with the same UID, distinct
+processes, retained identity/journal/outbox and interrupted atomic-write recovery. It
+uses a local x86_64 Java-storage fixture whose tracked Android/messenger/vector sources
+equal the candidate, and a disposable signer; it is not a product-signed ARM64 runtime
+or physical identity readback. The CI debug archive contains only the final ARM64
+Friends APK, so it is not misrepresented as the x86_64 storage fixture. Initial local
+fixture setup errors (reusing a one-line password file for two signer prompts, then
+expecting an all-ABI Friends artifact) are retained and corrected without altering the
+release APK or product source. The temporary emulator is stopped after acceptance.
+
+Independent18:37UTC fleet readback matches18:07 runtime hashes/PIDs/config; common RU
+timers remain active, ordinary services unchanged. No further deployment/restart occurs.
+Phone ADB is authorized, but the provider rejects support access as disabled. At this
+checkpoint signing waits for the protected local vault password dialog:115 is not signed,
+installed or public. Owner114 and public113/catalog7 remain. Next: existing-key offline
+signing, in-place owner readback, renewed app consent, then paired cleanup/reconnect and
+ordinary-UID DNS/HTTPS. Sustained/low-speed stability and physical Huawei remain open.

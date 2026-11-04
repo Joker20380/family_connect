@@ -1,6 +1,17 @@
 # Текущее состояние / Current state
 
 <!-- Android113 MESH incident 20261104 -->
+**4 November — Android115 qualified; existing-key signing awaits local vault unlock.**
+Exact-source CI41880315713 attempt2/API27/API35, downloaded artifact hashes, provenance,
+ABI/16K/licenses,831 JVM cases and reviewed RU/EN picker screens pass. Separate disposable
+API27 Java-storage114→115 recovery passes; it is not product-signed ARM64 traffic acceptance.
+Both gateway runtimes remain unchanged/active at18:37UTC; common writer timers active.
+Owner still114, public/invitation/updater113/catalog7 unchanged. No115 APK is signed or
+installed at this checkpoint. App USB support is disabled; do not bypass it. Remaining:
+local protected signing, in-place install/readback, renewed consent and paired reconnect/
+DNS/HTTPS. [Exact qualification and caveats](releases/2026-11-04-android115-mesh-cleanup.md#android115-hosted-and-local-artifact-qualification).
+
+Earlier runtime checkpoint:
 **4 November18:07UTC — both gateway cleanup runtimes delivered; Android115 pending CI.**
 NL1/NL2 run their independently qualified8769eadf/5bcb32ea binaries with new seeds,
 NRestarts0 and unchanged boot-disabled state. Profile bytes, ordinary AWG/TCP PIDs,
