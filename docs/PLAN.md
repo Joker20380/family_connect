@@ -9,7 +9,9 @@ loss while the Wi-Fi/VPN network survives. Local real-Pion reproduction confirms
 interface candidate gathering despite protected sockets;117 narrows host/STUN candidates
 to the protected UDP route without sending a probe payload. Negative protection gates
 remain fail-closed; no retry/deadline/auth/wire change. Installed116/public113 and equal
-NL70e6c0fc remain unchanged. Next: exact117 CI/artifact/platform/upgrade/signing gates,
+NL70e6c0fc remain unchanged. Source5a0f6e0 pushed; disposable API27 Java-storage
+116→117 retention passes. Exact Client builds41917441995 is in progress, not accepted.
+Next: exact117 CI/artifact/platform/signing gates,
 then paired physical traffic and unrelated-network-loss checks on both nodes. Old exact
 candidate/interface attribution and sustained acceptance remain open. No public rollout
 or unrelated successor. [Current gates](releases/2026-11-04-mesh-protected-ice-route.md).

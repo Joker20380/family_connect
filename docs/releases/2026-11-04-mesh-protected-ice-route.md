@@ -66,6 +66,19 @@ seamlessly when its actual physical network disappears.
 
 ## Delivery gates and rollback
 
+Source commit`5a0f6e0375e8a27c009956378e72c96a37385ad6` is pushed to the existing
+`main` upstream with equal remote SHA. Exact Client builds`41917441995` attempt1 is
+in progress at this checkpoint; no platform acceptance claim yet.
+
+Independent synthetic API27 storage upgrade116→117 passes with the same disposable
+UID and distinct processes: identity, journal/outbox and atomic-interruption recovery.
+The Java storage test source is unchanged betweena597d2a and5a0f6e0. This is a local
+x86_64 Java-storage fixture retaining prior generated native inputs, **not** the
+release ARM64 native artifact or a physical phone check. Fixture SHA256:
+`c16d09adf1df5e15fda16535fe3924661569e7d0284eed6c1b86a4261bd89137`.
+Fresh disposable signing key only; no product-key access. The owned emulator is stopped.
+Receipt/build logs remain private in`state-client-build/mesh-ice-route-20261104/`.
+
 1. Finish targeted native/race, protected bidirectional VP8 and existing transient-loss
    coverage; retain failures/skips. Check release provenance/contracts and diff hygiene.
 2. Push source117, then inspect exact platform CI and downloaded ARM64 artifacts,

@@ -9,7 +9,9 @@ Reproduced code defect: Pion gathers all IPv4 interfaces, including non-default 
 although socket protection does not select one interface. New protected UDP route lookup
 sends no data and restricts host/STUN candidates to that source address; denied/closed/
 cancelled protection fails closed. No timeout, retries, auth, wire or server change.
-117 is source-only pending exact build/CI/sign/install and physical acceptance. Installed
+Source5a0f6e0 pushed/remote-verified; exact Client builds41917441995 is in progress.
+Disposable API27 Java-storage116→117 retention passes; no product key/phone mutation.
+117 remains pending exact release build/CI/sign/install and physical acceptance. Installed
 owner116, public113/catalog7, identical NL70e6c0fc and desktop versions remain unchanged.
 Next stays within this incident: exact117 qualification, then paired physical traffic
 and unrelated-network-loss checks. Do not infer field acceptance from local tests.
