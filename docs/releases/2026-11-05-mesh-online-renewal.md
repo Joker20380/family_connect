@@ -58,6 +58,34 @@ This is the core continuity part of G4, not its complete emergency/Android/live 
 no PASS is implied before its result exists. Source changes after it require explicit
 artifact reconciliation, not renaming old evidence.
 
+The frozen run is now started from `d968ddd55935ef7b37340262e3ea2729afdf7cd2`:
+archive `online-d968ddd.tar.gz` SHA256
+`849232db0d36252afceab0feabc7550700079569b333602d2c535dbc8d376350`, manifest
+`d1540f8878197dcc7717b8c5964474e59a6ab0679c9860624599ed5518651f86`, separate driver
+`caeccf70210221cf371ff54a0e775d2ad05e9cab2d4dfa8ed0f176af675684d1`.
+Production gateway bytes remain382dcf26298bad8ccbfc2ca5664e297215b2ab1d7a1338f594536285651f1e7d;
+the driver digest is not that gateway digest. Container `fc-mesh-soak-d968ddd` is isolated
+with `--network none`; its frozen test source lives in `/run/frozen-source`.
+`frozen-d968ddd-long/soak/progress.json` and `frozen-d968ddd-long.log` retain progress.
+At19:06UTC: WAITING_FOR_RENEWAL_1, zero renewals, first due2026-11-05T21:28:53Z;
+each original stream had431 successful samples and9482 echo bytes received. This is
+only a running observation, not either renewal, crossing or G4 PASS. Expected duration
+is about6h40m, extending into6 November; emergency, explicit lease-bound evidence and
+Android full-path results must still be joined for complete G4.
+
+Affected frozen-source native `-race -count=3`: bootstrap, wholedevice,
+internal/qualification and cmd/bootstrap-broker PASS with zero skips. The bootstrap
+run has actual ProductStore fixtures and the frozen `restricted-sync.pyz` Python
+publication gate enabled (`FC_TEST_PYTHON`, `FC_TEST_SYNC_ARTIFACT`). Logs:
+`d968ddd-{bootstrap,wholedevice,qualification,bootstrap-broker}-race.log`.
+An earlier invocation used the wrong working directory for the timestamp-vector test;
+its failure is retained in `d968ddd-bootstrap-wrong-cwd.log`, then the complete bootstrap
+selection was repeated from `carrier/bootstrap`. No test assertion/gate was removed.
+The two short duration/rotation preflights passed (`soak-preflight-working.log`,2 PASS,
+88.28s), but do not qualify the long run. A separate frozen d968ddd package/core/release-
+rejection regression is running in `fc-mesh-integration-d968ddd`; its result is not yet
+claimed by this checkpoint.
+
 ## Android shared-runtime transport preparation
 
 Continuation from5043d72; no Android version/production trust change. `wholedevice`

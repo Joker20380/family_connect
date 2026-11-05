@@ -12,6 +12,10 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Running evidence, not a new task:** monitor `fc-mesh-soak-d968ddd` and its retained
+progress receipt through the real due/expiry times; do not replace them with a model.
+Finish actual API27/API35 HTTP/cache/owner and remaining G2/full-G4 boundaries before A.
+
 **Frozen5043d72 delta:** G1 and the exercised G2 process/RPC cases pass on the immutable
 candidate. Keep actual successor expiry and the full Android HTTP/cache/owner path open.
 Run the bounded current-source long harness across two renewals and old crypto bounds;

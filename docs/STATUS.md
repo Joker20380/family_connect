@@ -11,6 +11,13 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Long core run started, not accepted:** frozen d968ddd/archive849232db… and separate
+drivercaeccf70… run in the network-none disposable stand. At19:06UTC both original
+TLS/mux streams had431 successful TCP/DNS/verified-HTTPS samples; no restart or renewal
+had occurred yet. First due21:28:53UTC, expected crypto-bound crossing on6 November.
+Mandatory artifact-enabled bootstrap plus wholedevice/qualification/command `-race`
+count3 PASS, zero skips. G3 HTTP/cache/owner remains unexecuted; B remains gated.
+
 **Frozen G2 fix5043d72 qualified for the exercised process/RPC scope.** Selected
 root/package/core/API regression347 PASS/1 optional skip,1059.78s; the omitted native
 compatibility gate was separately1 PASS on the same frozen source. No full-CI claim.
