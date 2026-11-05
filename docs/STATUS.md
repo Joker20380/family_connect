@@ -6,7 +6,7 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
-**5 November00:17UTC — unattended checks running; one118 outage attributed to scheduled renewal.**
+**5 November00:55UTC — bounded overnight checks complete; maintenance outage confirmed, full acceptance OPEN.**
 New30-minute observation initially passes8 DNS/2 HTTPS/2 NL2-egress checks, then phone
 reliable exhaustion follows exact-session gateway parent cancellation. Independent
 systemd records show RU credential renewal stopping both MESH nodes00:12:56/58UTC,
@@ -15,7 +15,10 @@ restarting00:13:25/27 and COMMITTED00:13:37; common70e6c0fc unchanged. New PIDs
 Phone automatically reconnects00:14:40 with capture retained, no operator reconnect.
 This is not uninterrupted stability and does not explain the earlier117 WebSocket or
 118 paired-DNS failure. No policy/expiry bypass, timer pause, APK/public/server change.
-Observation and focused native/media/weak-link tests continue; owner118/public113/catalog7.
+Original30-minute gate remains FAIL after session replacement. Subsequent sampled
+post-recovery continuity lasts38m37.883s on NL2; across10 rounds80 DNS/20 HTTPS/20 exact-egress
+checks pass. Final118/native2/NONE, retained Support ID/capture and probe cleanup verified.
+Both active gateways retain the same70e6c0fc binary; no physical NL1/weak-link acceptance.
 [Current overnight checks and remaining gates](releases/2026-11-05-mesh-overnight-checks.md).
 
 00:34UTC isolated checkpoint: packet DNS stress, native/media race, explicit paced
@@ -23,7 +26,14 @@ Observation and focused native/media/weak-link tests continue; owner118/public11
 authenticated-loss/concurrent-bulk regression passes20 race repetitions, without changing
 production behavior or claiming the handset timeout fixed. Correctly isolated root renewal/
 publication suite397 PASS/5 optional skips; earlier harness prerequisite failures retained.
-Phone observation,150ms model and accepted118 credential compatibility continue.
+The150ms model and two accepted118 native credential cases also pass:399 executed Python
+cases, three historical exact-snapshot skips retained. Final protocol counters include66
+unknown_stream, zero dns_unmatched/DNS errors; earlier paired-DNS/WebSocket causes OPEN.
+Source/test ff9c602 is pushed/remote-verified. CI Client builds41942402171 fails one Android
+invitation UI assertion; Linux/Windows/Windows compatibility pass. phase0 41942402154 fails
+fixture/stack setup. No full-CI green or release claim. Public113/catalog7 signature and full
+APK hash independently verified; owner118/public/desktops unchanged. Next: authenticated
+renewal without this outage, retained DNS/WebSocket diagnosis and both-node physical gates.
 
 Previous118 delivery checkpoint:
 **5 November00:06UTC — Android118 owner delivery PASS; traffic gate FAIL, DNS7/8 pass.**

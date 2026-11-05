@@ -13,8 +13,8 @@ One118 interruption is now attributed to the existing approved leaf/CRL maintena
 RU COMMITTED rotation stops both gateways, exact NL2 parent cancellation precedes phone
 reliable exhaustion, then normal recovery succeeds. Keep this separate from117's
 WebSocket failure and118's paired-DNS timeout; never use NRestarts0 as uninterrupted
-process proof. Native binary equality remains70e6c0fc. Current30-minute observation
-continues as diagnostic evidence, not an uninterrupted PASS after session replacement.
+process proof. Native binary equality remains70e6c0fc. Completed30-minute observation
+is diagnostic evidence, not an uninterrupted PASS after session replacement.
 Run focused DNS/media/protection/weak-link regressions, correlate paired DNS before any
 correction, and keep actual handset/consent limitations visible. Owner118/public113/catalog7
 unchanged; no ad-hoc deadline/expiry relaxation or indefinite renewal pause.
@@ -23,8 +23,15 @@ unchanged; no ad-hoc deadline/expiry relaxation or indefinite renewal pause.
 Completed00:34UTC: isolated DNS packet stress, production/media race, explicit paced
 link matrix,40ms offline matrix and397 root renewal/publication cases; new paired-DNS
 authenticated-loss/bulk regression passes20 times under race. This is coverage, not
-the missing handset root-cause/fix. Finish ongoing observation/150ms/native compatibility;
-retain skipped provenance gates and both-node physical weak-link limitations explicitly.
+the missing handset root-cause/fix. Final00:55UTC:150ms matrix and two native compatibility
+cases pass (399 Python cases executed; three exact historical fixtures skipped). NL2
+post-recovery session is sampled healthy38m37.883s; total80 DNS/20 HTTPS/20 egress checks
+pass, while the original maintenance-interrupted gate stays FAIL. Probe removed and both
+server binaries verified equal. New sourceff9c602 is pushed, not deployed; CI Android
+invitation assertion and phase0 fixture/stack failures remain visible, not full-CI PASS.
+Next within this incident: authenticated renewal transition without dropping the tunnel;
+then retained paired-DNS/WebSocket attribution and physical slow/lossy/sustained gates on
+both NL nodes. No timeout/expiry weakening, unrelated successor or new public release.
 
 Previous118 delivery/first-traffic checkpoint:
 **Selected next gate — diagnose118 paired-DNS loss; qualification/delivery complete, traffic FAIL.**
