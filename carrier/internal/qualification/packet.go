@@ -117,7 +117,10 @@ func (channel *Endpoint) Stats() telemost.Stats {
 	return telemost.Stats{Mode: "isolated-packet", BytesSent: channel.sent.Load(), BytesReceived: channel.received.Load()}
 }
 
-type Provider struct{ Address string }
+type Provider struct {
+	Address     string
+	DialContext func(context.Context, string, string) (net.Conn, error)
+}
 
 type request struct{ Operation, Room string }
 
@@ -126,7 +129,11 @@ func (provider Provider) request(ctx context.Context, operation, room string) (n
 	if err != nil || !address.Addr().IsLoopback() || address.Port() == 0 {
 		return nil, nil, fmt.Errorf("loopback relay required")
 	}
-	connection, err := (&net.Dialer{}).DialContext(ctx, "tcp", provider.Address)
+	dial := provider.DialContext
+	if dial == nil {
+		dial = (&net.Dialer{}).DialContext
+	}
+	connection, err := dial(ctx, "tcp", provider.Address)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -175,11 +182,19 @@ func (provider Provider) Connect(lifetime, ready context.Context, room roombroke
 }
 
 func (provider Provider) Seed(lifetime, ready context.Context, room roombroker.Room) (familysession.PacketEndpoint, error) {
-	return provider.Connect(lifetime, ready, room)
+	channel, err := provider.Connect(lifetime, ready, room)
+	if err != nil {
+		return nil, err
+	}
+	return channel, nil
 }
 
 func (provider Provider) Gateway(lifetime, ready context.Context, room roombroker.Room) (roombroker.GatewayCarrier, error) {
-	return provider.Connect(lifetime, ready, room)
+	channel, err := provider.Connect(lifetime, ready, room)
+	if err != nil {
+		return nil, err
+	}
+	return channel, nil
 }
 
 type relayPeer struct {

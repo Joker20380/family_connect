@@ -11,6 +11,14 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**G3 transport preparation, not Android acceptance.** The existing whole-device runtime
+now accepts explicit packet connectors while retaining bootstrap admission, Family TLS,
+mux, owner cleanup and credential maintenance. Normal Android builds still select Telemost;
+only a separately labelled `fc_local_core` x86_64 qualification build uses the loopback
+relay through the existing protected underlay. Real shared-runtime traffic and denied
+protection checks pass; release payload checks reject this provider/tag/artifact.
+Actual Android HTTP/encrypted-cache/owner delivery and G4 are still NOT_RUN; B not started.
+
 **G2 stale-process receipt defect found and fixed in source; qualification continuing.**
 Frozen9369e65 incorrectly completed online renewal when a gateway was killed/replaced
 after publication but its old valid RPC receipt was returned. New pre-delivery confirmation

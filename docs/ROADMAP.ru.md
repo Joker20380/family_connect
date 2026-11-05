@@ -32,6 +32,9 @@ G1 isolated core PASS, адресная выборка138 PASS/0 SKIP. G2/G3/G4 
 Новая G2-проверка обнаружила принятие receipt уже погибшего gateway. Source-исправление
 добавляет фактический reader-readback до delivery-ready; parallel cleanup сохраняет
 SSH120/1395s+lateness. Квалификация этого кандидата продолжается, без поставки.
+Для G3 выделен общий whole-device transport seam; отдельный x86_64 test-only build
+подключает packet relay через штатный protect, release-проверки его отвергают.
+Это подготовка контура, не Android HTTP/cache/owner PASS и не начало Б.
 
 **Один действующий следующий шаг: закончить G1–G4 того же MESH incident.** После этого:
 

@@ -338,6 +338,17 @@ func OpenCached(ctx context.Context, path, cachePath string, network *underlay.N
 }
 
 func OpenProvisioned(ctx context.Context, raw, directoryRaw []byte, network *underlay.Network, event func(string)) (*Session, error) {
+	return openProvisioned(ctx, raw, directoryRaw, network, event, nil)
+}
+
+func OpenProvisionedWithTransport(ctx context.Context, raw, directoryRaw []byte, network *underlay.Network, event func(string), transport PacketTransport) (*Session, error) {
+	if transport.Seed == nil || transport.Dedicated == nil {
+		return nil, ErrClosed
+	}
+	return openProvisioned(ctx, raw, directoryRaw, network, event, &transport)
+}
+
+func openProvisioned(ctx context.Context, raw, directoryRaw []byte, network *underlay.Network, event func(string), transport *PacketTransport) (*Session, error) {
 	if network == nil || event == nil {
 		return nil, ErrClosed
 	}
@@ -351,12 +362,22 @@ func OpenProvisioned(ctx context.Context, raw, directoryRaw []byte, network *und
 		startupdiag.Failure(ctx, "DIRECTORY", err)
 		return nil, err
 	}
-	return openDirectory(ctx, raw, directory, network, event)
+	return openDirectoryWithTransport(ctx, raw, directory, network, event, transport)
 }
 
 func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Directory, network *underlay.Network, event func(string)) (*Session, error) {
+	return openDirectoryWithTransport(ctx, raw, directory, network, event, nil)
+}
+
+func openDirectoryWithTransport(ctx context.Context, raw []byte, directory bootstrap.Directory, network *underlay.Network, event func(string), transport *PacketTransport) (*Session, error) {
 	event("bootstrap_cache_loaded")
-	descriptor, err := bootstrap.Recover(ctx, directory, raw, event, network)
+	var descriptor roombroker.Descriptor
+	var err error
+	if transport == nil {
+		descriptor, err = bootstrap.Recover(ctx, directory, raw, event, network)
+	} else {
+		descriptor, err = bootstrap.RecoverWithConnector(ctx, directory, raw, event, transport.Seed)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -370,9 +391,23 @@ func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Director
 	ctx = sessiontrace.With(ctx, trace)
 	sessiontrace.StartDiagnosticControl(ctx, trace, "client")
 	trace.Add("GATEWAY_JOIN", "STARTED", "NONE")
-	carrier, err := telemost.NewOwned(ctx, telemost.Config{RoomURL: descriptor.JoinURL, DisplayName: "Family restricted device", Mode: telemost.ModeVP8, Underlay: network})
-	if err != nil {
-		startupdiag.Failure(ctx, "DEDICATED_CREATE", err)
+	connect, finish := context.WithTimeout(ctx, 45*time.Second)
+	defer finish()
+	var carrier roombroker.GatewayCarrier
+	if transport == nil {
+		carrier, err = connectTelemost(ctx, connect, descriptor, network)
+	} else {
+		carrier, err = transport.Dedicated(ctx, connect, roombroker.Room{JoinURL: descriptor.JoinURL})
+	}
+	if err != nil || carrier == nil {
+		if carrier != nil {
+			carrier.Close()
+		}
+		if err == nil {
+			err = ErrClosed
+		}
+		startupdiag.Failure(ctx, "DEDICATED_CONNECT", err)
+		trace.Add("GATEWAY_JOIN", "FAILED", "RECOVERY_JOIN_FAILED")
 		return nil, err
 	}
 	success := false
@@ -381,13 +416,6 @@ func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Director
 			carrier.Close()
 		}
 	}()
-	connect, finish := context.WithTimeout(ctx, 45*time.Second)
-	defer finish()
-	if err = carrier.Connect(connect); err != nil {
-		startupdiag.Failure(ctx, "DEDICATED_CONNECT", err)
-		trace.Add("GATEWAY_JOIN", "FAILED", "RECOVERY_JOIN_FAILED")
-		return nil, err
-	}
 	trace.Add("GATEWAY_JOIN", "ESTABLISHED", "NONE")
 	stopHandshake := context.AfterFunc(connect, func() { carrier.Close() })
 	defer stopHandshake()
@@ -446,6 +474,19 @@ func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Director
 			"carrier_receive_queue": media.ReceiveQueueDepth}
 	}
 	return session, nil
+}
+
+func connectTelemost(ctx, ready context.Context, descriptor roombroker.Descriptor, network *underlay.Network) (roombroker.GatewayCarrier, error) {
+	carrier, err := telemost.NewOwned(ctx, telemost.Config{RoomURL: descriptor.JoinURL, DisplayName: "Family restricted device", Mode: telemost.ModeVP8, Underlay: network})
+	if err != nil {
+		startupdiag.Failure(ctx, "DEDICATED_CREATE", err)
+		return nil, err
+	}
+	if err := carrier.Connect(ready); err != nil {
+		carrier.Close()
+		return nil, err
+	}
+	return carrier, nil
 }
 
 func (session *Session) Snapshot() map[string]any {

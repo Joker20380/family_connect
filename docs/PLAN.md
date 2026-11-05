@@ -12,6 +12,11 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**G3 preparation delta:** the shared whole-device transport seam and explicitly labelled,
+release-rejected Android qualification build are ready for the isolated HTTP/cache/owner
+path. This is not G3 PASS; run the actual API27/API35 path and current-package long G4,
+alongside the remaining G2 boundaries, before accepting A or starting B.
+
 **G2 current delta:** qualify the fresh pre-delivery reader confirmation fixing acceptance
 of a valid receipt from an already-dead gateway. Preserve eight bounded RPC rounds via
 parallel cleanup and1395s+lateness. Continue remaining G2 expiry/G3 Android/G4 long-runtime

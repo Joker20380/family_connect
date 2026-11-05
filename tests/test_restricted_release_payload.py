@@ -12,7 +12,8 @@ module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 
 
-@pytest.mark.parametrize('fault', ['', 'native', 'manifest', 'source', 'dex', 'revision', 'tags', 'producer', 'patch'])
+@pytest.mark.parametrize('fault', ['', 'native', 'manifest', 'source', 'dex', 'revision', 'tags', 'producer', 'patch',
+                                   'local-core-tag', 'local-core-provider', 'local-core-diagnostic', 'local-core-abi'])
 def test_exact_native_and_diagnostic_contract(tmp_path, fault):
     native = tmp_path / 'native.so'
     native.write_bytes(b'synthetic native')
@@ -28,6 +29,14 @@ def test_exact_native_and_diagnostic_contract(tmp_path, fault):
         manifest['source_revision'] = 'c' * 40
     if fault == 'tags':
         manifest['build_tags'] = ['fc_owner_diagnostic']
+    if fault == 'local-core-tag':
+        manifest['build_tags'] = ['fc_local_core']
+    if fault == 'local-core-provider':
+        manifest['provider'] = 'isolated-local-core'
+    if fault == 'local-core-diagnostic':
+        manifest['diagnostic_only'] = True
+    if fault == 'local-core-abi':
+        manifest['abi'] = 'x86_64'
     if fault == 'producer':
         manifest['builder_sha256'] = '0' * 64
     if fault == 'patch':

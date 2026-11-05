@@ -4,6 +4,13 @@ This is a separate source/runtime package, not a replacement for the accepted
 maintenance API archive. Default quiesced operation and its approval rules are
 unchanged. Source qualification does not authorize deployment or schedule changes.
 
+The Android `fc_local_core` qualification build is a separate x86_64 artifact, never
+the release native library. Its build-tagged connector reuses `wholedevice` bootstrap,
+Family TLS/mux and credential maintenance through protected loopback packet sockets.
+Normal Android builds retain Telemost and exclude the qualification dependency; the
+release payload verifier rejects the local provider/tag/diagnostic markers. A native
+build or shared-runtime test alone does not qualify Android HTTP/cache/owner delivery.
+
 Build from a committed revision with `python -m scripts.package_online_renewal
 --ref <commit> --go <absolute-go-binary> --output <new-archive>`. The builder reads
 only committed regular files; it builds the Linux/amd64 gateway with the selected

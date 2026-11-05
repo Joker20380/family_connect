@@ -19,7 +19,9 @@ def main():
     parser.add_argument('--go', required=True)
     parser.add_argument('--ndk', type=Path, required=True)
     parser.add_argument('--out', type=Path, required=True)
-    parser.add_argument('--owner-diagnostic', action='store_true')
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--owner-diagnostic', action='store_true')
+    mode.add_argument('--local-core-qualification', action='store_true')
     args = parser.parse_args()
     revision_source = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
     subprocess.run(['git', 'diff', '--exit-code', 'HEAD', '--', 'carrier', 'clients/android', 'pilot/android-restricted'], cwd=ROOT, check=True)
@@ -45,16 +47,18 @@ def main():
                         '-replace=github.com/Joker20380/family_connect/carrier='+str(ROOT / 'carrier')], cwd=source, check=True)
         subprocess.run([args.go, 'test', '-race', '-count=3', '-timeout=90s', '-modfile='+str(module),
                         '-ldflags=-checklinkname=0', './packet'], cwd=source, check=True)
-        output = args.out / 'jniLibs/arm64-v8a/libfc_restricted.so'
+        abi, architecture, compiler_name = ('x86_64', 'amd64', 'x86_64-linux-android27-clang') if args.local_core_qualification else ('arm64-v8a', 'arm64', 'aarch64-linux-android26-clang')
+        tags = ['fc_local_core'] if args.local_core_qualification else ['fc_owner_diagnostic'] if args.owner_diagnostic else []
+        output = args.out / 'jniLibs' / abi / 'libfc_restricted.so'
         output.parent.mkdir(parents=True)
-        compiler = args.ndk / 'toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android26-clang'
-        environment = os.environ | {'GOOS': 'android', 'GOARCH': 'arm64', 'CGO_ENABLED': '1', 'CC': str(compiler),
+        compiler = args.ndk / 'toolchains/llvm/prebuilt/linux-x86_64/bin' / compiler_name
+        environment = os.environ | {'GOOS': 'android', 'GOARCH': architecture, 'CGO_ENABLED': '1', 'CC': str(compiler),
                                     'CGO_LDFLAGS': '-Wl,-z,max-page-size=16384'}
         environment.pop('YANDEX_TELEMOST_OAUTH_TOKEN', None)
         environment.pop('FC_TELEMOST_ROOM', None)
         environment.pop('GOFLAGS', None)
-        if args.owner_diagnostic:
-            environment['GOFLAGS'] = '-tags=fc_owner_diagnostic'
+        if tags:
+            environment['GOFLAGS'] = '-tags='+','.join(tags)
         subprocess.run([args.go, 'build', '-modfile='+str(module), '-trimpath', '-ldflags=-checklinkname=0', '-buildmode=c-shared', '-o', str(output), './native'], cwd=source, env=environment, check=True)
         assets = args.out / 'assets/restricted-licenses'
         assets.mkdir(parents=True)
@@ -65,12 +69,12 @@ def main():
         shutil.copy2(source / 'xray-packet-boundary.patch', assets / 'Xray-modifications.patch')
         manifest = {'xray_revision': REVISION, 'gvisor_version': 'v0.0.0-20260122175437-89a5d21be8f0',
                     'patch_sha256': hashlib.sha256((source / 'xray-packet-boundary.patch').read_bytes()).hexdigest(),
-                    'binary_sha256': hashlib.sha256(output.read_bytes()).hexdigest(), 'diagnostic_only': args.owner_diagnostic}
+                    'binary_sha256': hashlib.sha256(output.read_bytes()).hexdigest(), 'diagnostic_only': bool(tags)}
         manifest['owner_diagnostic_fault_schema'] = 1 if args.owner_diagnostic else 0
         manifest.update(metadata_schema=2, source_revision=revision_source,
                         source_tree=subprocess.check_output(['git', 'rev-parse', 'HEAD^{tree}'], cwd=ROOT, text=True).strip(),
-                        abi='arm64-v8a', provider='telemost',
-                        build_tags=['fc_owner_diagnostic'] if args.owner_diagnostic else [],
+                        abi=abi, provider='isolated-local-core' if args.local_core_qualification else 'telemost',
+                        build_tags=tags,
                         builder_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
         (args.out / 'assets/restricted-build.json').write_text(json.dumps(manifest, indent=2)+'\n')
         print(json.dumps(manifest))

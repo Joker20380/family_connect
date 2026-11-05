@@ -1,5 +1,40 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Android shared-runtime transport preparation
+
+Continuation from5043d72; no Android version/production trust change. `wholedevice`
+keeps one bootstrap admission/Family TLS/broker bind/mux/SessionMaintenance implementation.
+Its explicit `PacketTransport` seam changes only seed/dedicated packet connection.
+`OpenProvisioned` and ordinary Android builds retain the existing Telemost route.
+The separate `fc_local_core` build connects to127.0.0.1:19091 through the supplied
+`underlay.Network.DialContext`; it does not bypass Android protect/bind. There is no
+production runtime flag, directory setter, synthetic READY or alternative writer.
+Only the build-tagged `qualificationtransport` bridge imports the local provider.
+
+`build.py --local-core-qualification` emits x86_64/provider=isolated-local-core,
+diagnostic_only=true and the exact tag; it is mutually exclusive with owner diagnostics.
+Normal builds clear inherited GOFLAGS and keep arm64/Telemost. Existing release payload
+verification rejects each local-core marker independently:13 PASS, `android-core-release-rejection.log`.
+No release gate was disabled and no existing generated Android payload was replaced.
+
+Working-source checks under `state-client-build/mesh-core-runtime-20261105/`:
+- `android-transport-race-1.log`: wholedevice and qualification `go test -race` PASS;
+  fixture-dependent test was subsequently executed explicitly, not counted as accepted here.
+- `wholedevice-transport-runtime-2.log`: all3 tests PASS with disposable ProductStore
+  profiles and real SeedManager/Family/broker/mux/echo/cleanup, plus rejected protect.
+  The first log retains a qualification-adapter typed-nil interface panic on denied dial;
+  Seed/Gateway adapters now return a genuinely nil interface on connection failure.
+- `android-packet-working.log`: existing native packet `-race -count=3` PASS.
+- Both default Telemost and `fc_local_core` Android27 x86_64 JNI shared objects compile;
+  `android-default-deps.txt` contains neither qualificationtransport nor internal/qualification.
+  These are working-source build probes, not frozen Android acceptance artifacts.
+
+**G3 remains NOT_RUN:** no emulator HTTP→validation→encrypted cache→connection owner→
+active native renewal has been executed by these tests. The local connector seam is only
+the missing client-side transport prerequisite. G4/current-package two-renewal wall-clock
+acceptance and remaining G2 cases remain open. B remains NOT_STARTED. Nothing installed,
+published, changed in production, or tested on the owner's phone.
+
 ## G2 process handoff and stale receipt continuation
 
 Entry79421ec1cbd3fd9c457a65ddde7e8fbbde74eb8a; G1 frozen9369e65 evidence below remains

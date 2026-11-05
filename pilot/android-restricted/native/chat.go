@@ -32,7 +32,7 @@ import (
 var chatMu sync.Mutex
 var chatSequence int64
 var chatLeases = map[int64]*restrictedowner.Chat{}
-var openChatSession = wholedevice.OpenProvisioned
+var openChatSession = openProvisionedSession
 var chatTLS = &tls.Config{MinVersion: tls.VersionTLS12}
 var chatAPIOrigin = "https://185.251.89.19:8443"
 

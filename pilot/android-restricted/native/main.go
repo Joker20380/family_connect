@@ -190,7 +190,7 @@ func begin(directory, control, resolver string, profile, seed, anchor []byte, bu
 		}
 		var session *wholedevice.Session
 		if control == "provisioned" {
-			session, err = wholedevice.OpenProvisioned(ctx, profile, seed, network, owned.event)
+			session, err = openProvisionedSession(ctx, profile, seed, network, owned.event)
 		} else if control == "auto" {
 			session, err = wholedevice.OpenCached(ctx, path, cache, network, owned.event)
 		} else {
