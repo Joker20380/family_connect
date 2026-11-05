@@ -15,7 +15,7 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 Separate default-off controller/node/current API/HTTP/native package is implemented;
 accepted maintenance archive unchanged. Real packaged CLI→SSH→three handlers now exercises
 COMMIT/replay, six controller SIGKILL boundaries and six lost/corrupt response cases.
-Containing scoped selection110 PASS; root regression373 PASS/1 optional SKIP, with that
+Frozen source/package8c876e3 scoped selection114 PASS/0 SKIP; root regression373 PASS/1 optional SKIP, with that
 native compatibility check separately1 PASS. These selections overlap; do not sum them.
 Artifact-enabled bootstrap/command race/count3 PASS, zero skips; Family/broker race PASS
 with7 optional skip events. No full-CI claim. Reader errors and later retry causes are explicit.
@@ -23,6 +23,8 @@ The real gateway observer exits at the unchanged15s provider timeout on this iso
 this fixture has no READY/traffic acceptance. Full G1/G2/G3/G4 remain NOT_RUN/incomplete.
 Next: supply the long-lived isolated native path and complete packaged G1–G4. Only after a
 separate accepted A checkpoint, execute bounded ANDROID-APP-VPN. Phase B is not started.
+Archive SHA256a27502d752eefe05306a189dce6a8630107d5980eca1477ffa9401a9283ffaea;
+this is an incomplete-A implementation checkpoint, not the required accepted A checkpoint.
 No production/phone/publication changes; APK118/updater113 remain unchanged.
 [Contract](../deploy/friends/restricted/maintenance/ONLINE_RUNTIME.md) ·
 [Same incident evidence](releases/2026-11-05-mesh-online-renewal.md#online-runtime-package-continuation).

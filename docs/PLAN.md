@@ -14,7 +14,7 @@ acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-he
 <!-- Android113 MESH incident 20261104 -->
 **Online runtime package continuation — A IN PROGRESS, B gated.** Separate opt-in package
 and controller/node capability/actual-reader boundary implemented. Packaged SSH COMMIT/replay,
-six real controller kills and six RPC faults pass in a containing110-test selection; root
+six real controller kills and six RPC faults pass in the frozen8c876e3 package selection114 PASS/0 SKIP; root
 regression373 PASS/1 SKIP plus the skipped native check separately PASS (overlapping counts).
 These are observer-window tests, not a READY traffic stand or full G1–G4. The fixture's
 unchanged15s provider timeout is an explicit unfinished runtime boundary, not an entrypoint

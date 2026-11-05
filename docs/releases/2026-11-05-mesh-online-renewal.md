@@ -114,6 +114,47 @@ hide this limit. Complete the reusable long-lived native stand before accepting 
 must not mask the gap. All raw archives/keys/state/logs remain ignored under
 `state-client-build/mesh-online-package-20261105/`. No release or deployment action occurred.
 
+### Frozen8c876e3 result — source/package checkpoint, not acceptance
+
+Source`8c876e3f7865e71e3d40b9b1e80ce5be1e4cdcb3` committed/pushed; remote/main matched.
+The final source archive includes its own entrypoint/configuration contract documentation.
+`FC_TEST_ONLINE_PACKAGE` selected these exact immutable archive bytes for the containing
+suite, not a rebuilt fixture capsule: **114 PASS, zero fail/skip,281.93s**
+(`frozen-8c876e3-final.log`). The suite also rebuilds from that same committed revision
+after dirtying a disposable clone and requires byte-for-byte identical archives.
+Runtime binaries/sources never import the working checkout. This supersedes the earlier
+110-check source-fixture result for this scope; do not add overlapping counts.
+
+| Final candidate identity | SHA256 |
+| --- | --- |
+| `online-8c876e3.tar.gz` | a27502d752eefe05306a189dce6a8630107d5980eca1477ffa9401a9283ffaea |
+| Manifest | f205636dd8215a6323acf8aa1b0bed589675682ba92f9b4314db704f8873d0b5 |
+| Renewal source inventory | 391b5d06d120c1e547e5dae4d69bfccbaac2d9535bb8c4dcc9e039860a09b7de |
+| API | cdbc1c3878b96b4eff37a02d03184fed85f32912f7ed109936fa8828aed87ef7 |
+| HTTP | ba4601699f2410dbdca272f567c08ae2c0ee3e9fe556e91038462f595ee072b4 |
+| Gateway | 0e8d914cceba6712aba1e68b1dda53f98340ffe32215f02e7c142f9cb6ddf882 |
+
+Native, Android, control and identity source trees are unchanged fromc54e7b3; the fresh
+native race/sync evidence above retains that exact provenance. No Android delivery tests
+were rerun here and no new Android artifact exists. Frozen package setup first failed
+twice with91 PASS/23 fixture setup ERROR (`frozen-8c876e3.log` and
+`frozen-8c876e3-configured.log`): Git clone's upload-pack rejects the differently owned
+readonly `/src/.git` and does not inherit the command-scoped safe-directory setting.
+The corrected disposable-container invocation explicitly trusts only `/src/.git` in its
+temporary global Git config, retaining the exact `/src` command-scoped allowance. No host
+Git configuration, source guard or test assertion was relaxed. All failed logs are retained.
+
+The final source/package is **not** an accepted A checkpoint: full G1/G2/G3/G4 statuses
+and missing traffic/Android boundaries in the table remain unchanged. Phase B has no
+source/package/artifact checkpoint: UI, storage, routing and recovery for AWG/TCP/MESH/Auto
+are NOT_RUN/NOT_STARTED under this task, intentionally gated by A. No unqualified combination
+is release-ready. APK118/updater113, accepted maintenance archive and previous999s evidence
+are unchanged. Rollback remains source/candidate selection only, not a production action.
+One next step is the long-lived isolated gateway/packet stand through packaged G1–G4;
+then independent accepted A, bounded B, exact release artifacts and separately authorized
+delivery/live/field gates. Paired-DNS/WebSocket, weak network, screen-off and mobile
+allowlists stay OPEN; paid canary, limits, roster and enrollment are not changed.
+
 ## Continuation from354513d — G1 implementation checkpoint
 
 HEAD matched354513dd9f8a9558b800963664eb9ea053e457ab; no subsequent source delta. All
