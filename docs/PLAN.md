@@ -20,6 +20,12 @@ correction, and keep actual handset/consent limitations visible. Owner118/public
 unchanged; no ad-hoc deadline/expiry relaxation or indefinite renewal pause.
 [Overnight evidence and exact gates](releases/2026-11-05-mesh-overnight-checks.md).
 
+Completed00:34UTC: isolated DNS packet stress, production/media race, explicit paced
+link matrix,40ms offline matrix and397 root renewal/publication cases; new paired-DNS
+authenticated-loss/bulk regression passes20 times under race. This is coverage, not
+the missing handset root-cause/fix. Finish ongoing observation/150ms/native compatibility;
+retain skipped provenance gates and both-node physical weak-link limitations explicitly.
+
 Previous118 delivery/first-traffic checkpoint:
 **Selected next gate — diagnose118 paired-DNS loss; qualification/delivery complete, traffic FAIL.**
 First CI41931735646/sourcea03bdec stops at release contracts; stale117 version/diagnostic

@@ -51,6 +51,71 @@ func TestMuxAuthenticatedLossReorderDuplicate(test *testing.T) {
 	}
 }
 
+func TestMuxPairedDNSAuthenticatedLossDuringBulk(test *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	clientSession, serverSession := authenticatedPair(test, ctx)
+	port := muxFixture(test, muxEcho)
+	client, err := NewMux(ctx, clientSession, false, MuxConfig{})
+	if err != nil {
+		test.Fatal(err)
+	}
+	test.Cleanup(func() { client.Close() })
+	server, err := NewMux(ctx, serverSession, true, MuxConfig{Policy: Policy{TestOnlyLoopbackPort: port}})
+	if err != nil {
+		test.Fatal(err)
+	}
+	test.Cleanup(func() { server.Close() })
+	server.exchange = dnsAnswer
+	bulk := muxOpen(test, ctx, client, port)
+	results := make(chan error, MuxMaxDNS+1)
+	start := make(chan struct{})
+	go func() {
+		<-start
+		results <- exactMux(bulk, bytes.Repeat([]byte("paired DNS with bulk"), 20000))
+	}()
+	for index := 0; index < MuxMaxDNS; index++ {
+		kind := dnsmessage.TypeA
+		if index%2 != 0 {
+			kind = dnsmessage.TypeAAAA
+		}
+		query := dnsQuestion(test, kind)
+		binary.BigEndian.PutUint16(query, uint16(42+index/2))
+		go func() {
+			<-start
+			response, err := client.QueryDNS(ctx, query)
+			if err == nil && !matchesDNS(query, response) {
+				err = ErrDNS
+			}
+			results <- err
+		}()
+	}
+	close(start)
+	for range MuxMaxDNS + 1 {
+		select {
+		case err := <-results:
+			if err != nil {
+				test.Fatal(err)
+			}
+		case <-ctx.Done():
+			test.Fatal(ctx.Err())
+		}
+	}
+	for _, mux := range []*Mux{client, server} {
+		stats := mux.Stats()
+		if stats.DNSRequests != MuxMaxDNS || stats.DNSResponses != MuxMaxDNS || stats.DNSTimeouts != 0 || stats.DNSErrors != 0 || stats.ProtocolErrorReasons.DNSUnmatched != 0 {
+			test.Fatal("DNS request/response isolation", stats)
+		}
+	}
+	if clientSession.ReliabilityStats().Retransmissions+serverSession.ReliabilityStats().Retransmissions == 0 {
+		test.Fatal("loss fixture not exercised")
+	}
+	sibling := muxOpen(test, ctx, client, port)
+	if err := exactMux(sibling, []byte("same-session progress after paired DNS")); err != nil {
+		test.Fatal(err)
+	}
+}
+
 func TestMuxConnectFailuresDoNotKillSibling(test *testing.T) {
 	for _, failure := range []error{syscall.ECONNREFUSED, context.DeadlineExceeded, context.Canceled} {
 		test.Run(failure.Error(), func(test *testing.T) {

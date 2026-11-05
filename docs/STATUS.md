@@ -18,6 +18,13 @@ This is not uninterrupted stability and does not explain the earlier117 WebSocke
 Observation and focused native/media/weak-link tests continue; owner118/public113/catalog7.
 [Current overnight checks and remaining gates](releases/2026-11-05-mesh-overnight-checks.md).
 
+00:34UTC isolated checkpoint: packet DNS stress, native/media race, explicit paced
+256/512/1000kbit loss/retransmission matrix and40ms offline matrix PASS. New paired-DNS
+authenticated-loss/concurrent-bulk regression passes20 race repetitions, without changing
+production behavior or claiming the handset timeout fixed. Correctly isolated root renewal/
+publication suite397 PASS/5 optional skips; earlier harness prerequisite failures retained.
+Phone observation,150ms model and accepted118 credential compatibility continue.
+
 Previous118 delivery checkpoint:
 **5 November00:06UTC — Android118 owner delivery PASS; traffic gate FAIL, DNS7/8 pass.**
 This checkpoint packages234af08's finite signaling-read classes as a new immutable

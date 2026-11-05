@@ -49,15 +49,45 @@ an exhaustive historical restart inventory. Exact current-session evidence and t
 separate RU renewal journal cover this interruption. The earlier117 WebSocket read error
 and118 paired-DNS timeout are not reclassified as renewal failures without evidence.
 
+## Completed isolated regressions
+
+The following are local checks, not substitutes for physical handset/provider acceptance.
+Counts include repeated runs and subtests; they are not summed as distinct product cases.
+
+| Check | Result |
+| --- | --- |
+| TCP/DNS mux, reliable stream, protected underlay, whole-device and diagnostic packages; race, three repetitions | 990 PASS; three optional performance skips |
+| Focused real-Pion/RTP/signaling and receive-stall checks; race, three repetitions | 216 PASS |
+| Patched pinned-Xray/gVisor DNS packet boundary; race,100 repetitions | 200 PASS |
+| All packet-boundary tests; race,10 repetitions | 30 PASS |
+| Explicit paced subprocess link,256/512/1000kbit, windows8/32, reverse rate one quarter, drops/retransmissions; race, twice | 12 scenarios PASS,14 including parent tests |
+| Pion ICE outage/recovery and head-loss cases; race, three repetitions | 42 PASS; three credential-dependent live-provider skips |
+| Explicit offline performance matrix,40ms modeled delay; race | 28 scenarios PASS,29 including parent |
+| New paired A/AAAA DNS under authenticated loss/reordering/duplication and concurrent TCP bulk; race,20 repetitions | 20 PASS |
+| Credential/maintenance/multi-gateway/recovery/publication Python tests in isolated root container | 397 PASS,5 optional provenance/native skips |
+
+The new source regression uses distinct IDs per A/AAAA pair, shared wire IDs within
+each pair,16 concurrent requests, byte-exact bulk echo, exercised retransmissions,
+zero DNS mismatch/error/timeout and subsequent progress on the same authenticated
+session. It adds coverage, not a reproduction or correction of the handset timeout.
+The earlier20-run all-identical-ID characterization also passes and is retained separately.
+
+The initial paced command omitted its opt-in and skipped that matrix; the explicit
+enabled run above is the evidence. Python prerequisites are also retained honestly:
+the first user-space run fails root ownership requirements; the first container run
+fails because `/tmp` is writable by others and `/usr/bin/python3` is absent. The corrected
+disposable container uses a root-owned non-writable-by-others test parent and the normal
+Python interpreter path. All27 control/identity lockfile pins match. No product permission
+checks are mocked, removed or relaxed. Source is read-only, network is disabled and only
+synthetic state is created; production profiles/databases are not mounted.
+
 ## Checks still running at this checkpoint
 
 - Thirty-minute observation continues across automatic recovery, retaining each failure
   and each session transition; subsequent traffic success cannot turn the original
   uninterrupted-session gate into PASS.
-- Focused production/default-tag native race checks cover TCP/DNS mux, reliable stream,
-  protected underlay, whole-device capture and safe diagnostic projection.
-- Focused real-Pion/RTP/signaling checks and explicit paced-link qualification follow;
-  optional skipped tests do not count as executed physical/provider tests.
+- A150ms modeled-delay matrix and two credential compatibility cases using exact
+  accepted118 source13e0b37 follow; skipped tests do not count as executed gates.
 - Paired-DNS timeout attribution, old WebSocket cause, physical weak-link and both-node
   sustained gates remain OPEN. No new correction is claimed merely from diagnosis.
 
