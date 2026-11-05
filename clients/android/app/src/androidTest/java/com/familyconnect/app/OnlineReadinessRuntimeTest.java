@@ -95,6 +95,61 @@ public class OnlineReadinessRuntimeTest {
         }
         fixtureControl("release"+Build.VERSION.SDK_INT);status("REAL_COOLDOWN_PARTIAL_RELEASED",gateway,null);
     }
+    private void awaitImportBlocked()throws Exception{
+        long deadline=SystemClock.elapsedRealtime()+5000;
+        while(SystemClock.elapsedRealtime()<deadline){
+            for(java.util.Map.Entry<Thread,StackTraceElement[]> entry:Thread.getAllStackTraces().entrySet()){
+                if(!entry.getKey().getName().equals("friends-readiness")||entry.getKey().getState()!=Thread.State.BLOCKED)continue;
+                for(StackTraceElement frame:entry.getValue())
+                    if(frame.getClassName().equals(RestrictedBootstrap.class.getName())&&frame.getMethodName().equals("refresh"))return;
+            }
+            Thread.sleep(20);
+        }
+        fail("Real HTTP completion must reach the existing cache import monitor");
+    }
+    private void ownerRace(ControlIdentity identity,String gateway,long lease,long serviceOwner,long originalExpiry,Intent connect)throws Exception{
+        fixtureControl("connected"+Build.VERSION.SDK_INT);
+        long deadline=SystemClock.elapsedRealtime()+600000;
+        while(!"READINESS_HELD".equals(fixtureControl("state").get("state").getAsString())){
+            assertTrue("Normal owner must refresh after real cache cooldown",SystemClock.elapsedRealtime()<deadline);
+            assertEquals(serviceOwner,ConnectionService.sessionId);assertEquals("on",ConnectionService.status);echo(lease);Thread.sleep(500);
+        }
+        long replacement;
+        synchronized(RestrictedVault.LOCK){
+            fixtureControl("response"+Build.VERSION.SDK_INT);
+            awaitImportBlocked();status("HTTP_COMPLETED_IMPORT_PENDING",gateway,null);
+            NativeRestricted.chatRelease(lease);
+            context.startService(new Intent(context,ConnectionService.class).setAction("disconnect"));
+            deadline=SystemClock.elapsedRealtime()+10000;
+            while(!"off".equals(ConnectionService.status)&&SystemClock.elapsedRealtime()<deadline)Thread.sleep(50);
+            assertEquals("off",ConnectionService.status);assertNotEquals(serviceOwner,ConnectionService.sessionId);
+            status("OLD_OWNER_CLOSED_BEFORE_IMPORT",gateway,null);
+            long closed=ConnectionService.sessionId;
+            context.startForegroundService(connect);
+            deadline=SystemClock.elapsedRealtime()+10000;
+            while(ConnectionService.sessionId==closed&&SystemClock.elapsedRealtime()<deadline)Thread.sleep(50);
+            assertNotEquals(closed,ConnectionService.sessionId);assertNotEquals(serviceOwner,ConnectionService.sessionId);
+            assertNotEquals("on",ConnectionService.status);replacement=ConnectionService.sessionId;
+            status("NEW_EXPLICIT_OWNER_WAITING_FOR_IMPORT",gateway,null);
+        }
+        deadline=SystemClock.elapsedRealtime()+180000;
+        while(!"on".equals(ConnectionService.status)){
+            assertFalse("Replacement owner must not fail",ConnectionService.failed);
+            assertTrue("Replacement connect deadline",SystemClock.elapsedRealtime()<deadline);Thread.sleep(100);
+        }
+        assertEquals(replacement,ConnectionService.sessionId);
+        byte[] successor=cached(identity,gateway);assertNotNull(successor);
+        try{
+            assertTrue(NativeRestricted.validateDelivery(successor,identity.publicIdentity(),ControlTrust.anchor(context)));
+            JsonObject response=JsonParser.parseString(new String(successor,StandardCharsets.UTF_8)).getAsJsonObject();
+            assertTrue(response.get("expires_at").getAsLong()>originalExpiry);
+            long next=borrow(successor,identity,new AutomaticVpnOwner(context));assertTrue(next>0);
+            try{assertEquals(2,NativeRestricted.chatState(next));echo(next);Thread.sleep(6000);echo(next);
+                assertEquals(replacement,ConnectionService.sessionId);assertEquals("on",ConnectionService.status);}
+            finally{NativeRestricted.chatRelease(next);}
+        }finally{Arrays.fill(successor,(byte)0);}
+        status("OWNER_RACE_VALID_SUCCESSOR_NEW_EXPLICIT_OWNER",gateway,null);
+    }
     private void servicePath(ControlIdentity identity,String gateway,byte[] predecessor,JsonObject settings)throws Exception{
         AutomaticVpnOwner resolver=new AutomaticVpnOwner(context);
         JsonObject original=JsonParser.parseString(new String(predecessor,StandardCharsets.UTF_8)).getAsJsonObject();
@@ -126,6 +181,9 @@ public class OnlineReadinessRuntimeTest {
             String other=gateway.equals(RestrictedGateway.PRIMARY)?RestrictedGateway.SECONDARY:RestrictedGateway.PRIMARY;
             FriendsRestricted.prewarm(context,other);
             if(settings.has("scenario")){
+                if("owner-race".equals(settings.get("scenario").getAsString())){
+                    ownerRace(identity,gateway,lease,serviceOwner,originalExpiry,connect);return;
+                }
                 assertEquals("partial",settings.get("scenario").getAsString());
                 partialPublication(identity,gateway,lease,serviceOwner,originalExpiry,originalCrl);
             }

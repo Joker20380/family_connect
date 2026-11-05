@@ -32,6 +32,7 @@ def main():
     parser.add_argument('--evidence', type=Path, required=True)
     parser.add_argument('--snapshot', type=Path, required=True)
     parser.add_argument('--api', type=int, choices=(27, 35), required=True)
+    parser.add_argument('--scenario', choices=('partial', 'owner-race'), default='partial')
     args = parser.parse_args()
     os.umask(0o077)
     args.root.mkdir(mode=0o700)
@@ -47,7 +48,8 @@ def main():
     stand = CoreStand(args.root, extracted, driver, duration='45m', rotation='15m', android_tls=True)
     lock = threading.RLock()
     connected, released = set(), set()
-    receipt = dict(scope='actual-Android-partial-publication-not-full-G3', source=stand.manifest['source_commit'],
+    release_response = threading.Event()
+    receipt = dict(scope='actual-Android-'+args.scenario+'-not-full-G3', source=stand.manifest['source_commit'],
                    archive_sha256=package.digest(args.archive.read_bytes()), driver_sha256=package.digest(driver.read_bytes()),
                    state='STARTING', requests=[], connected=[], released=[])
 
@@ -65,6 +67,9 @@ def main():
                 assert time.time()-receipt['partial_at'] >= 305
                 released.add(action[-2:])
                 receipt['released'] = sorted(released)
+            elif action == 'response'+str(args.api):
+                assert args.scenario == 'owner-race' and receipt['state'] == 'READINESS_HELD'
+                release_response.set()
             else:
                 assert action == 'state'
             save()
@@ -73,9 +78,20 @@ def main():
     def observe(path, status, raw):
         if path != '/friends/restricted-readiness':
             return
+        metadata = readiness_metadata(raw)
+        hold = False
         with lock:
-            receipt['requests'].append(dict(wall=time.time(), state=receipt['state'], status=status, **readiness_metadata(raw)))
+            receipt['requests'].append(dict(wall=time.time(), state=receipt['state'], status=status, **metadata))
+            if args.scenario == 'owner-race' and receipt['state'] == 'SUCCESSOR_PUBLISHED' and metadata['gateway'] == 'nl-amsterdam-2':
+                assert status == 200 and metadata['expires'] is not None
+                receipt.update(state='READINESS_HELD', response_held_at=time.time())
+                hold = True
             save()
+        if hold:
+            assert release_response.wait(10), 'Android must acquire its real cache lock before releasing HTTP'
+            with lock:
+                receipt.update(state='HTTP_RELEASED', response_released_at=time.time())
+                save()
 
     stand.http_control, stand.http_observer = control, observe
     try:
@@ -85,7 +101,7 @@ def main():
                    'access=Access(sys.argv[2]);print(json.dumps(access.invite()))')
         invitations = json.loads(subprocess.check_output([sys.executable, '-I', '-B', '-c', program,
             str(extracted/'api.pyz'), str(args.root/'access.db')], cwd=args.root, timeout=10))
-        settings = dict(anchor=base64.b64encode(stand.fleet.service.anchor).decode(), scenario='partial',
+        settings = dict(anchor=base64.b64encode(stand.fleet.service.anchor).decode(), scenario=args.scenario,
                         apis={str(args.api): dict(gateway='nl-amsterdam-2', invitation=invitations)})
         private_file(args.evidence/'android-inputs.json', package.encode(settings))
         private_file(args.evidence/'core-ca.pem', stand.ca.read_bytes())
@@ -97,14 +113,20 @@ def main():
                 begin = receipt['state'] == 'HTTP_READY' and connected == {str(args.api)}
                 resume = receipt['state'] == 'PARTIAL' and released == {str(args.api)}
             if begin:
-                stand.rpc_fault('NL2', 'publish', 'drop-before')
+                if args.scenario == 'partial':
+                    stand.rpc_fault('NL2', 'publish', 'drop-before')
                 code, result = stand.run('online')
                 journal = json.loads((args.root/'coordinator/transaction.json').read_bytes())
-                assert code != 0 and journal['decision'] == 'COMMIT', result
-                assert not journal['published'], journal['published']
+                assert journal['decision'] == 'COMMIT', result
                 with lock:
-                    receipt.update(state='PARTIAL', partial_at=time.time(), blocked=result,
-                                   plan_sha256=journal['plan_sha256'], published=journal['published'])
+                    if args.scenario == 'partial':
+                        assert code != 0 and not journal['published'], result
+                        receipt.update(state='PARTIAL', partial_at=time.time(), blocked=result,
+                                       plan_sha256=journal['plan_sha256'], published=journal['published'])
+                    else:
+                        assert code == 0 and result['result'] == 'COMMITTED', result
+                        receipt.update(state='SUCCESSOR_PUBLISHED', result=result, published_at=time.time(),
+                                       plan_sha256=journal['plan_sha256'], successor_bounds=bounds(stand))
                     save()
             if resume:
                 code, result = stand.run('resume')
@@ -120,6 +142,7 @@ def main():
         receipt.update(state='FAILED', failure_type=type(error).__name__, failure=str(error))
         raise
     finally:
+        release_response.set()
         stand.close()
         receipt['cleanup'] = 'processes-waited'
         save()

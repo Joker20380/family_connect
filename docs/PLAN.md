@@ -12,6 +12,12 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Owner-race qualification continues on the same frozen runtime.** API27 exercises
+actual HTTP → delayed cache import → closed owner → new explicit owner/native traffic.
+Finish the sequential GPU API35 case, retain the runner postcondition failure separately,
+then qualify partial-publication new Connect, legacy peer and too-late delivery. G2/G4
+wall-clock jobs remain authoritative; B still waits for an independently accepted A.
+
 **Both API27/API35 positive partial-publication deliveries now pass on GPU.** Preserve
 their exact artifact/bounds receipt. Next within G3: actual delayed HTTP completion
 after Disconnect/owner replacement, then remaining new-connect/legacy/late-delivery

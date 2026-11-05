@@ -11,6 +11,16 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**22:25UTC API27 real late-completion/owner race exercised; A remains open.** The normal
+owner fetch reaches the real encrypted-cache import monitor after verified HTTP. While
+that import is delayed, explicit Disconnect completes and a new explicit Connect takes
+a different owner; the validated successor then reaches that new native session and
+verified mux traffic succeeds. This is delayed application completion, not an HTTP
+socket surviving Disconnect. Instrumentation PASS339s; the runner exited1 only because
+its final assertion omitted the new narrow PASS enum. That assertion is fixed with
+targeted21 PASS; the original exit/log remain unmodified. API35 runs sequentially on
+NVIDIA/KVM. No A acceptance, split tunneling, production or publication change.
+
 **22:00UTC API27 and API35 positive delivery PASS, full A still open.** Sequential
 NVIDIA/KVM runs650s and669s now both prove HTTP/cache → normal service owner → renewed
 native credentials after real partial publication/cooldown, without reconnect. Both

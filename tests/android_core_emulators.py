@@ -13,6 +13,13 @@ import urllib.request
 import zipfile
 
 
+SUCCESS_SCOPES = frozenset(('PASS_POSITIVE_PATH_ONLY', 'PASS_OWNER_RACE_ONLY'))
+
+
+def require_success(record):
+    assert record['result'] in SUCCESS_SCOPES, record.get('failure', record['result'])
+
+
 @contextmanager
 def emulator_slot(directory):
     with (directory/'android-emulator.lock').open('a') as lock:
@@ -168,7 +175,8 @@ def run(args):
                     stdout=log, stderr=subprocess.STDOUT, timeout=12000)
             log = (args.work/f'api{api}-runtime.log').read_text()
             assert result.returncode == 0 and 'OK (1 test)' in log, 'HTTP/cache/owner runtime failed; retained log'
-            record.update(result='PASS_POSITIVE_PATH_ONLY', finished=time.time())
+            scope = 'PASS_OWNER_RACE_ONLY' if 'OWNER_RACE_VALID_SUCCESSOR_NEW_EXPLICIT_OWNER' in log else 'PASS_POSITIVE_PATH_ONLY'
+            record.update(result=scope, finished=time.time())
         except BaseException as error:
             record.update(result='FAIL', failure_type=type(error).__name__, failure=str(error))
             raise
@@ -177,7 +185,7 @@ def run(args):
                 if 'installed_native_sha256' in record:
                     checked = subprocess.run(adb+['shell', 'su', '0', 'sha256sum', native_path], capture_output=True, text=True, timeout=15)
                     record['final_native_sha256'] = checked.stdout.split()[0] if checked.returncode == 0 else 'unavailable'
-                    if record['result'] == 'PASS_POSITIVE_PATH_ONLY' and record['final_native_sha256'] != receipt['native_sha256']:
+                    if record['result'] in SUCCESS_SCOPES and record['final_native_sha256'] != receipt['native_sha256']:
                         record.update(result='FAIL', failure='Native artifact changed during runtime')
                 events = subprocess.run(adb+['shell', 'su', '0', 'cat', '/data/data/com.familyconnect.app.friends/files/connectivity-events.json'], capture_output=True, timeout=15)
                 (args.work/f'api{api}-connectivity.json').write_bytes(events.stdout)
@@ -192,7 +200,7 @@ def run(args):
             output.close()
             record['owned_emulator_stopped'] = True
             (args.work/f'api{api}-receipt.json').write_text(json.dumps(record, indent=2)+'\n')
-        assert record['result'] == 'PASS_POSITIVE_PATH_ONLY', record.get('failure')
+        require_success(record)
         return record
 
     variant = 'default' if args.api == 27 else 'google_apis'

@@ -1,5 +1,42 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Actual Android owner-race continuation22:25UTC
+
+New relative to a30966c and the positive-only cases: API27 completes a real normal-owner
+readiness fetch after real300s cooldown, then exercises delayed **application completion**
+across explicit Disconnect and a new explicit Connect. The test holds the existing cache
+import monitor only after the frozen API generated a valid successor. Verified TLS bytes
+are released unchanged; the actual readiness thread reaches `RestrictedBootstrap.refresh`
+and blocks on that monitor. No mocked future, native credential injection, modified
+profile, security-clock change or production scheduling hook is used.
+
+With import still pending, the normal service closes its old owner; the next explicit
+Connect obtains a different owner. After the monitor is released, native validation and
+encrypted persistence complete normally, the new service connects with the successor,
+and borrowed native mux streams transfer checked bytes. This is not an assertion that
+the old TCP or HTTP socket survived Disconnect, nor delivery into a closed native owner.
+The separate late-security-deadline case remains unqualified.
+
+API27 `android-owner-gpu27-emulators2/api27-runtime.log`: `OK (1 test)`,339.069s;
+`HTTP_COMPLETED_IMPORT_PENDING`, `OLD_OWNER_CLOSED_BEFORE_IMPORT`,
+`NEW_EXPLICIT_OWNER_WAITING_FOR_IMPORT`, `OWNER_RACE_VALID_SUCCESSOR_NEW_EXPLICIT_OWNER`,
+then normal cleanup. Its wrapper exit1 is retained: the final runner assertion still
+required `PASS_POSITIVE_PATH_ONLY` after recording the new `PASS_OWNER_RACE_ONLY` scope.
+The correction explicitly allows only these two narrow outcomes; five new guard cases
+reject FAIL/RUNNING/invented full-G3 PASS. Targeted GPU/receipt selection21 PASS/0 SKIP,
+not an additive total or full CI. API35 runs the identical Android test sequentially;
+both test APK builds pass83 tasks. The initial API27 build invocation used a relative
+Gradle init path and failed before compilation; its separate log is retained. Its first
+route-helper invocation lacked the read-only busybox mount; the no-egress preflight
+refused before an emulator was started or invitation consumed. Neither is a PASS.
+
+Commands remain the existing `tests/android_core_partial.py --scenario owner-race`
+with frozen fd7562c archive/driver/snapshot inputs and
+`tests/android_core_emulators.py --api 27|35 --service --isolated-network`.
+Only androidTest/fixture/runner source changes; production owner, trust, credential
+delivery and TTL/timeouts are unchanged. G1 isolated evidence is retained; G2 actual
+expiry and G4 full-core remain running; full G3 and A are NOT_ACCEPTED, B NOT_STARTED.
+
 ## Both GPU Android positive paths complete22:00UTC
 
 **New full user scenario relative to a30966c:** on both API27 and API35 an active MESH

@@ -16,6 +16,9 @@
 переход реализован и проходит адресные Python-проверки, но G1–G4 целиком ещё не приняты.
 G2 — независимые процессы/отказы; G3 — фактическая Android HTTP/cache доставка;
 G4 — квалифицированный online runtime/API пакет. [Точные gates/evidence](releases/2026-11-05-mesh-online-renewal.md).
+Дельта22:25UTC: API27 проверяет задержанное завершение настоящего HTTP/cache после
+Disconnect и смены owner с пригодным successor на новом явном Connect. Это не сохранение
+старого TCP; полный G3/A остаётся открыт, split tunneling не начат.
 Дельта20:43UTC: frozenfd7562c проходит короткий public-IP HTTPS/DNS/mux preflight на обоих
 NL через изолированный внешний origin. Полный длительный путь и Android service-доставка
 ещё не приняты; отдельный восьмичасовой harness не является результатом до завершения.

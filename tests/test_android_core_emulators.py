@@ -10,6 +10,17 @@ emulators = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(emulators)
 
 
+@pytest.mark.parametrize('result', ['PASS_POSITIVE_PATH_ONLY', 'PASS_OWNER_RACE_ONLY'])
+def test_only_explicit_completed_runtime_scopes_are_accepted(result):
+    emulators.require_success(dict(result=result))
+
+
+@pytest.mark.parametrize('result', ['FAIL', 'RUNNING', 'PASS_FULL_G3'])
+def test_unknown_or_incomplete_runtime_scope_is_not_accepted(result):
+    with pytest.raises(AssertionError):
+        emulators.require_success(dict(result=result))
+
+
 def test_real_nvidia_renderer():
     renderer = 'GLES: Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti)'
     assert emulators.require_nvidia_renderer('header\n'+renderer+'\nfooter') == renderer
