@@ -144,7 +144,10 @@ def test_ssh_transport_budget_rejects_insufficient_window_before_writes(fleet, l
     assert not any((node.state/'owner.json').exists() for node in fleet.nodes.values())
 
 
-def test_lost_start_response_reconciles_existing_intent_without_second_start(fleet):
+@pytest.mark.parametrize('cause', ['REMOTE_OUTCOME_UNKNOWN_READBACK_REQUIRED', 'SERVICE_ACTION_FAILED',
+                                   'SERVICE_OUTCOME_UNKNOWN', 'SYSTEMD_READ_FAILED'])
+@pytest.mark.parametrize('started', [True, False])
+def test_lost_start_response_reconciles_existing_intent_without_second_start(fleet, cause, started):
     from production_transport import SystemdBarrier
     node = fleet.nodes['NL']
     service = node.barrier
@@ -158,19 +161,24 @@ def test_lost_start_response_reconciles_existing_intent_without_second_start(fle
         if action == 'stop':
             service.quiesce()
         else:
-            service.resume(commit_decided=True, equality_verified=True)
+            if started:
+                service.resume(commit_decided=True, equality_verified=True)
             if not response_lost:
                 response_lost = True
-                raise Rejected('REMOTE_OUTCOME_UNKNOWN_READBACK_REQUIRED')
+                raise Rejected(cause)
     barrier.invoke = invoke
     node.barrier = barrier
     interrupted(fleet)
     request = fleet.controller.recover_online_emergency(OPERATION)['request']
     result = fleet.controller.recover_online_emergency(OPERATION, approval=approved(fleet, request))
-    assert result['result'] == 'EMERGENCY_BLOCKED' and result['cause'] == 'REMOTE_OUTCOME_UNKNOWN_READBACK_REQUIRED'
-    assert service.starts == 1 and (node.state/'start-intent-0.json').exists()
+    assert result['result'] == 'EMERGENCY_BLOCKED' and result['cause'] == cause
+    assert service.starts == int(started) and (node.state/'start-intent-0.json').exists()
     assert fleet.nodes['RU'].barrier.stopped()
     result = fleet.controller.recover_online_emergency(OPERATION)
+    if not started:
+        assert result['result'] == 'EMERGENCY_BLOCKED' and result['cause'] == 'START_ALREADY_ATTEMPTED'
+        assert service.starts == 0 and service.stopped()
+        return
     assert result['result'] == 'EMERGENCY_RECOVERED', result
     assert service.starts == 1
 

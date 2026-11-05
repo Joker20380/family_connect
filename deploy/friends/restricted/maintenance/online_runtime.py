@@ -11,6 +11,25 @@ PACKAGE = 'MESH_ONLINE_RUNTIME_V1'
 FEATURES = ['durable-commit', 'emergency-continuation', 'fencing', 'readiness-generation', 'runtime-reader']
 
 
+def runtime_binding(manifest, path=None):
+    if path is None:
+        return {}
+    from production_node import pinned
+    raw = pinned(Path(path), {0})[0]
+    artifact = parse(raw)
+    require(type(artifact) is dict and set(artifact) == {'schema', 'scope', 'source_commit', 'native_sources',
+            'entrypoint', 'executable_sha256'} and type(artifact['schema']) is int and artifact['schema'] == 1,
+            'ONLINE_ISOLATED_ARTIFACT_SCHEMA')
+    require(artifact['scope'] == 'isolated-core-not-production' and
+            artifact['entrypoint'] == 'carrier/internal/qualification/cmd/mesh-runtime' and
+            artifact['source_commit'] == manifest['source_commit'] and
+            artifact['native_sources'] == manifest['native_sources'] and
+            type(artifact['executable_sha256']) is str and re.fullmatch('[0-9a-f]{64}', artifact['executable_sha256']),
+            'ONLINE_ISOLATED_ARTIFACT_BINDING')
+    return dict(runtime_scope=artifact['scope'], reader_sha256=artifact['executable_sha256'],
+                runtime_manifest_sha256=digest(raw))
+
+
 def package_manifest(source):
     from production_node import pinned
     manifest = parse(read_private(source.parent/'source-manifest.json'))
@@ -50,20 +69,25 @@ def activate(node, config, source):
             and config['api_sha256'] == manifest['api_sha256'], 'ONLINE_PACKAGE_BINDING')
     settings = config['online']
     expected = {'contract'} | ({'reader_socket', 'reader_uid', 'reader_executable_sha256'} if node.role == 'NL' else set())
+    if type(settings) is dict and 'isolated_runtime' in settings:
+        expected.add('isolated_runtime')
     require(type(settings) is dict and set(settings) == expected and settings['contract'] == CONTRACT,
             'ONLINE_OPT_IN_REQUIRED')
     require(node.validator.all_activated and node.gateway_ids is not None, 'ONLINE_MEMBERSHIP_REQUIRED')
     load_api(Path(config['api_archive']), manifest['api_sha256'])
+    binding = runtime_binding(manifest, settings.get('isolated_runtime'))
     if node.role == 'NL':
         from online_reader import RuntimeReader
         require(type(settings['reader_uid']) is int and settings['reader_uid'] >= 0
-                and settings['reader_executable_sha256'] == manifest['gateway_sha256'], 'ONLINE_READER_BINDING')
+                and settings['reader_executable_sha256'] == binding.get('reader_sha256', manifest['gateway_sha256']),
+                'ONLINE_READER_BINDING')
         node.online_reader = RuntimeReader(settings['reader_socket'], expected_uid=settings['reader_uid'],
             expected_executable=settings['reader_executable_sha256'],
             service_state=lambda: node.barrier.state(node.barrier.units[0]))
     node.online_runtime = dict(contract=CONTRACT, package_contract=PACKAGE, features=FEATURES,
         slot=node.gateway_slot, gateway_ids=node.gateway_ids, source_sha256=manifest['source_sha256'],
         api_sha256=manifest['api_sha256'], gateway_sha256=manifest['gateway_sha256'])
+    node.online_runtime.update(binding)
 
 
 def capabilities(node):
@@ -75,13 +99,14 @@ def capabilities(node):
     return result
 
 
-def verify_participants(nodes, operation, manifest, membership, *, running):
+def verify_participants(nodes, operation, manifest, membership, *, running, binding=None):
     require(set(nodes) == {'RU', 'NL', 'NL2'}, 'ONLINE_MEMBERSHIP_REQUIRED')
     for slot, remote in nodes.items():
         received = remote.call('online', operation, dict(command='capabilities'))
         expected = dict(contract=CONTRACT, package_contract=PACKAGE, features=FEATURES, slot=slot,
             gateway_ids=membership, source_sha256=manifest['source_sha256'], api_sha256=manifest['api_sha256'],
             gateway_sha256=manifest['gateway_sha256'])
+        expected.update(binding or {})
         require(type(received) is dict and {name: value for name, value in received.items() if name != 'runtime'} == expected,
                 'ONLINE_PARTICIPANT_CAPABILITIES')
         if slot != 'RU':

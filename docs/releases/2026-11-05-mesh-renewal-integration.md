@@ -1,5 +1,14 @@
 # MESH renewal: active-session integration / 5 November2026
 
+## Current continuation pointer
+
+The later isolated packet-runtime/recovery work is recorded in the
+[same online incident](2026-11-05-mesh-online-renewal.md#isolated-core-runtime-continuation-froma30966c).
+It reuses actual SeedManager/Family TLS/mux/broker/maintenance through packaged
+entrypoints, with a separate driver and real supervisor. This report's older999s
+evidence remains bound to its original source; it is not re-labelled as acceptance
+of the new package. Full G1–G4 and Android split tunneling remain unaccepted.
+
 ## Scope and baseline
 
 Continuation of the existing Android MESH stability incident, not a new PLAN task.

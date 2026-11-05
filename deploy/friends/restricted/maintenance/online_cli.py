@@ -6,7 +6,7 @@ import resource
 
 from credential_renewal import Rejected, Validator, canonical, parse, read_private, require
 from online_contract import CONTRACT, window
-from online_runtime import load_api, package_manifest, verify_participants
+from online_runtime import load_api, package_manifest, runtime_binding, verify_participants
 from production_controller import ProductionController
 from production_transport import SshNode
 
@@ -24,7 +24,7 @@ def main():
         require(os.geteuid() == 0, 'ROOT_REQUIRED')
         require(args.outage_approval is None or args.mode == 'emergency', 'MAINTENANCE_APPROVAL_INVALID')
         config = parse(read_private(args.config))
-        require(type(config) is dict and set(config) == {'schema', 'online', 'state', 'anchor', 'gateway_ids',
+        require(type(config) is dict and set(config) - {'isolated_runtime'} == {'schema', 'online', 'state', 'anchor', 'gateway_ids',
                 'schedule_seconds', 'ssh_routes'} and type(config['schema']) is int and config['schema'] == 1,
                 'ONLINE_CONTROLLER_CONFIG')
         require(config['online'] == CONTRACT, 'ONLINE_OPT_IN_REQUIRED')
@@ -39,7 +39,8 @@ def main():
                 'ONLINE_MEMBERSHIP_REQUIRED')
         nodes = {slot: SshNode('RU' if slot == 'RU' else 'NL', manifest['source_sha256'], route=route)
                  for slot, route in config['ssh_routes'].items()}
-        verify_participants(nodes, args.operation, manifest, members, running=args.mode in ('inspect', 'online'))
+        binding = runtime_binding(manifest, config.get('isolated_runtime'))
+        verify_participants(nodes, args.operation, manifest, members, running=args.mode in ('inspect', 'online'), binding=binding)
         if args.mode == 'inspect':
             result = dict(result='ONLINE_CAPABILITIES_READY', mutations=0)
         else:

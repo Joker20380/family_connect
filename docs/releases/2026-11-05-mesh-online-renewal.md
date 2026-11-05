@@ -1,5 +1,95 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Isolated core runtime continuation froma30966c
+
+Entry HEAD exactlya30966c16980e73074215a4570066c8fd31361ed; no subsequent committed
+delta. Existing dirty documents/historical patch/reports were preserved. The immutable
+online8c876e3 archive/digest and previous999s/a8e1db9 evidence remain unchanged.
+No production, owner-phone, release/publication, paid/cohort/admission/boot operations.
+
+New demonstrated user path: both isolated NL create actual seeds and admit a synthetic
+identity through Family TLS, dedicated broker/mux, original/new TCP, DNS and verified
+HTTPS beyond15s. After a real gateway replacement following COMMIT, the packaged
+controller detects the new runtime instance, quiesces actual processes, requires outage
+approval, reconciles a lost start response using the saved intent, and permits new
+Family sessions/traffic. Emergency deliberately closes old connections. This is not
+the earlier observer-only15s fixture, and not a claim that an old TCP survived a kill.
+
+The production command and isolated driver share `gatewayruntime`, `PacketGateway`
+and the bootstrap connector boundary. Actual SeedManager creates/publishes endpoints;
+no READY setter, hand-written usable directory, direct qualification constructor,
+manual DB/profile/journal repair or second signer/controller is used. An initial
+ordinary online COMMIT publishes the real NL directories to RU. The driver is built
+from the package's frozen native inventory, separately hashed, and bound by exact
+PID/UID/executable; the reader belongs to the traffic-serving gateway process.
+Only external room/packet transport is substituted. Test provider/configuration are
+not release payloads. Production rejects the test mode.
+
+The new process stand found a real bug absent from the earlier modeled lost-RPC test:
+`SystemdBarrier` reports an unsuccessful command response as `SERVICE_ACTION_FAILED`
+(or timeout as `SERVICE_OUTCOME_UNKNOWN`), whereas emergency recovery treated that
+as deterministic and fenced the already-started gateway. Its durable intent then
+prevented another start (`START_ALREADY_ATTEMPTED`). Post-emergency-COMMIT service
+outcome/readback uncertainty now preserves state for reconciliation. If the original
+start did not take effect, recovery remains blocked and does not start twice.
+
+| Gate | Full gate status | New isolated scope | Still missing |
+|---|---|---|---|
+| G1 | NOT_RUN (partial runtime evidence) | Real approved emergency stop/start/new TLS+DNS+HTTPS; absent/denied/expired approval, lost start reply and replay | Real revoke after COMMIT and after approval; revoked identity TLS denial |
+| G2 | NOT_RUN (partial PASS) | Controller SIGKILL distinguished from gateway SIGKILL; replacement receipt, preserved COMMIT/fence, real start-intent reconciliation | Remaining handoff/owner/publisher races, expiry/unavailable-participant full matrix |
+| G3 | NOT_RUN | Verified synthetic HTTP readiness supplies the core client | API27/API35 HTTP→encrypted cache→connection owner→active native delivery and full scenarios |
+| G4 | NOT_RUN | Two-node traffic/preflight and emergency path on frozen package/shared driver | Two successive online renewals retaining original sessions through actual old leaf/CRL/lease bounds; final combination qualification |
+
+The preflight is diagnostic, not the endpoint of this task: work continued into
+gateway-kill/approval/start-response recovery and the resulting source fix. The
+supervisor actually starts, stops and waits for children; it is not systemd acceptance.
+Telemost signaling/media and exact production-gateway live traffic remain separate
+unexecuted gates, not silently redefined as local-core PASS.
+
+Time budgets are distinct: provider creation15s, default lease600s, seed≤4h,
+SSH120 eligibility1395s+lateness. The isolated driver permits process≤8h using the
+existing4h seed/3h overlap rotation, not longer certificate TTLs or frozen clocks.
+Current issuer lifetimes mean the full two-renewal/boundary run is genuinely long;
+the20s traffic sample is not substituted for it.
+
+Working evidence is local/ignored under `state-client-build/mesh-core-runtime-20261105/`.
+`preflight-4.log` first passed the positive traffic check; initial failures retained:
+repository ownership setup, then unsupported test echo service alias (fixed to the
+existing chat-mailbox mapping, with no destination-policy relaxation). `emergency-1.log`
+reproduces the real start-response bug; later harness assertions were corrected to
+account for normal intent archival and monotonically increased recovery fencing.
+`native-race.log` records a fixture-location failure (no timestamp fixture mount);
+`native-race-fixtures.log` uses correct source-relative fixtures and mandatory packaged
+Python publication validation. Final frozen identities/results are recorded below when
+available; these working runs are not full-CI or accepted-A claims.
+
+Working validation: core entrypoint/traffic/recovery/binding selection8 PASS/0 SKIP
+(`core-checks-2.log`,103.55s). Root/renewal/package selection254 PASS/1 FAIL
+(`python-regression.log`,365.66s): COMMIT succeeded but its replay hit the old negative
+proxy's intentional15s exit. Positive COMMIT/process/RPC tests now use `CoreStand`;
+the original negative timeout test is preserved separately. This is a fixture boundary,
+not permission to extend a production timeout or suppress the replay assertion.
+The updated complete package module passes30/0 SKIP in253.00s
+(`package-positive-matrix.log`), including six controller kills and six lost/corrupt
+RPC replies on the real seeded runtime. This rechecks the failed replay, not a sum
+of the previous overlapping selections.
+Native bootstrap, production command, packet adapter and Family session `-race` pass.
+Broker `-race` with fresh disposable Family fixtures passes; four DNS subcases also
+pass in their explicit port53 selection (`broker-race-partitioned.log`). Counts overlap
+and are not summed. The historical opt-in long-stand test is not charged as executed.
+Earlier broker attempts retain two setup failures: missing Family fixture and a
+port53 collision when a cross-session test creates two fixtures concurrently. The
+final partition runs the full broker suite and then the mandatory DNS selection,
+without changing assertions, security clocks or product DNS behavior.
+
+Phase B: UI/storage/routing/recovery across AWG/TCP/MESH/Auto **NOT_STARTED**. No B
+checkpoint or APK exists. A is not accepted, so there is no unqualified A+B release
+combination. Current source rollback is selection of the previous source/package,
+not installation or production rollback. Next: complete the remaining G1–G4 scenarios;
+then independent accepted A, bounded B, exact release qualification, separately allowed
+delivery, real two-NL renewal and field gates. Paired-DNS/WebSocket, weak network,
+screen-off/mobile allowlists remain OPEN; the paid canary is not repeated.
+
 ## Online runtime package continuation
 
 Entry HEAD409644142114d34f50e0543c4472274d72153d20 matches the requested verified

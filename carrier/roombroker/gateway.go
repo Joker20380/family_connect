@@ -25,9 +25,19 @@ type TelemostGateway struct {
 
 const DedicatedMaxStreams = tcpforward.MuxMaxStreams
 
+type GatewayCarrier interface {
+	familysession.PacketEndpoint
+	Stats() telemost.Stats
+}
+
+type PacketGateway struct {
+	TelemostGateway
+	Connect func(context.Context, context.Context, Room) (GatewayCarrier, error)
+}
+
 type telemostGateway struct {
 	credit128       bool
-	session         *telemost.Session
+	session         GatewayCarrier
 	credentials     []byte
 	setupID         string
 	identity        Identity
@@ -39,6 +49,23 @@ type telemostGateway struct {
 }
 
 func (starter TelemostGateway) Start(lifetime, ready context.Context, room Room, id string, identity Identity) (Gateway, error) {
+	return (PacketGateway{starter, func(lifetime, ready context.Context, room Room) (GatewayCarrier, error) {
+		session, err := telemost.New(lifetime, telemost.Config{RoomURL: room.JoinURL, DisplayName: "Family gateway", Mode: telemost.ModeVP8})
+		if err != nil {
+			return nil, Code("gateway_configuration")
+		}
+		if err := session.Connect(ready); err != nil {
+			session.Close()
+			return nil, Code("gateway_join")
+		}
+		return session, nil
+	}}).Start(lifetime, ready, room, id, identity)
+}
+
+func (starter PacketGateway) Start(lifetime, ready context.Context, room Room, id string, identity Identity) (Gateway, error) {
+	if starter.Connect == nil {
+		return nil, Code("gateway_configuration")
+	}
 	credit128, err := muxCreditPolicy()
 	if err != nil {
 		return nil, err
@@ -47,14 +74,15 @@ func (starter TelemostGateway) Start(lifetime, ready context.Context, room Room,
 	if err != nil {
 		return nil, err
 	}
-	session, err := telemost.New(lifetime, telemost.Config{RoomURL: room.JoinURL, DisplayName: "Family gateway", Mode: telemost.ModeVP8})
-	if err != nil {
+	session, err := starter.Connect(lifetime, ready, room)
+	if err != nil || session == nil {
 		clear(raw)
-		return nil, Code("gateway_configuration")
-	}
-	if err := session.Connect(ready); err != nil {
-		session.Close()
-		clear(raw)
+		if session != nil {
+			session.Close()
+		}
+		if err != nil {
+			return nil, err
+		}
 		return nil, Code("gateway_join")
 	}
 	event := starter.Event

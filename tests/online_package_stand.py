@@ -42,6 +42,25 @@ class PackageStand:
         self.service_state = Path('/run/fc-online-service-state.json')
         assert not self.service_state.exists()
 
+    def online_settings(self):
+        return dict(contract=package.CONTRACT)
+
+    def gateway_binary(self):
+        return self.extracted/'gateway'
+
+    def launch(self, unit, command, environment):
+        return subprocess.Popen(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=environment)
+
+    def launch_gateway(self, unit, profile, observer, directory):
+        proxy = socket.socket()
+        proxy.bind(('127.0.0.1', 0))
+        proxy.listen(1)
+        self.proxies.append(proxy)
+        environment = dict(os.environ, YANDEX_TELEMOST_OAUTH_TOKEN='synthetic-isolated-unused',
+            HTTPS_PROXY='http://127.0.0.1:'+str(proxy.getsockname()[1]), NO_PROXY='')
+        return self.launch(unit, [str(self.gateway_binary()), '-family-config', str(profile), '-listen', '127.0.0.1:0',
+            '-publication-observer', str(observer)], environment)
+
     def configure(self, slot):
         node = self.fleet.nodes[slot]
         private = self.root/(slot+'-config')
@@ -52,7 +71,7 @@ class PackageStand:
             anchor_sha256=package.digest(self.fleet.service.anchor), api_archive=str(self.extracted/'api.pyz'),
             api_sha256=self.manifest['api_sha256'], source_files=self.manifest['source_files'],
             source_sha256=self.manifest['source_sha256'], admission_mode='all_activated',
-            gateway_ids=self.fleet.identities, gateway_slot=slot, online=dict(contract=package.CONTRACT))
+            gateway_ids=self.fleet.identities, gateway_slot=slot, online=self.online_settings())
         if slot == 'RU':
             private_file(node.live/'admission.json', package.encode(dict(version=2, eligibility='all_activated')))
             private_file(node.live/'anchor.pub', base64.b64encode(self.fleet.service.anchor))
@@ -63,9 +82,8 @@ class PackageStand:
                 self.http_port = port.getsockname()[1]
             environment = dict(os.environ, FC_FRIENDS_RESTRICTED_DIR=str(node.live),
                                FC_FRIENDS_RESTRICTED_DELIVERY_LIFETIME='14400')
-            process = subprocess.Popen([sys.executable, '-I', '-B', str(self.extracted/'http.pyz'),
-                '--root', str(self.root), '--port', str(self.http_port)], env=environment,
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            process = self.launch(config['service_units'][0], [sys.executable, '-I', '-B', str(self.extracted/'http.pyz'),
+                '--root', str(self.root), '--port', str(self.http_port)], environment)
             self.processes.append(process)
             deadline = time.monotonic()+5
             while True:
@@ -95,25 +113,19 @@ class PackageStand:
             private_file(node.live/'directory.json', package.encode(directory))
             private_file(self.fleet.nodes['RU'].directory_destination(slot), package.encode(directory))
             publisher = node.live.stat()
-            gateway = self.extracted/'gateway'
+            gateway = self.gateway_binary()
+            gateway_hash = package.digest(gateway.read_bytes())
             locator = dict(schema=1, lock_version=1, profile=str(profile), lock=str(lock), operations=str(operations),
                 reader_gid=41003, directory=dict(path=str(node.live/'directory.json'),
                     metadata=metadata((node.live/'directory.json').stat()), publisher_parent=dict(path=str(node.live),
                         **metadata(publisher), device=publisher.st_dev, inode=publisher.st_ino),
-                    publisher_contract=[[str(gateway), self.manifest['gateway_sha256'], metadata(gateway.stat())]]))
+                    publisher_contract=[[str(gateway), gateway_hash, metadata(gateway.stat())]]))
             locator_path = private_file(private/'locator.json', package.encode(locator))
             config.update(profile_locator=str(locator_path), profile_locator_sha256=package.digest(locator_path.read_bytes()))
             observer = private/'reader.sock'
             config['online'].update(reader_socket=str(observer), reader_uid=0,
-                                    reader_executable_sha256=self.manifest['gateway_sha256'])
-            proxy = socket.socket()
-            proxy.bind(('127.0.0.1', 0))
-            proxy.listen(1)
-            self.proxies.append(proxy)
-            environment = dict(os.environ, YANDEX_TELEMOST_OAUTH_TOKEN='synthetic-isolated-unused',
-                HTTPS_PROXY='http://127.0.0.1:'+str(proxy.getsockname()[1]), NO_PROXY='')
-            process = subprocess.Popen([str(gateway), '-family-config', str(profile), '-listen', '127.0.0.1:0',
-                '-publication-observer', str(observer)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=environment)
+                                    reader_executable_sha256=gateway_hash)
+            process = self.launch_gateway(config['service_units'][0], profile, observer, node.live/'directory.json')
             self.processes.append(process)
             deadline = time.monotonic()+5
             while not observer.exists():

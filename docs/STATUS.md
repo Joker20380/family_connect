@@ -11,7 +11,21 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
-**Online package/process checkpoint (same incident; A not accepted).**
+**Isolated core runtime continuation (same incident; A not accepted).**
+The positive packet-provider stand now creates real seeds and carries Family TLS/mux
+traffic on both NL beyond the old15s boundary: original/new TCP, DNS and verified HTTPS.
+It uses frozen packaged controller/node/API/HTTP plus a separately identified driver
+sharing the production runtime; no Telemost/live-production or systemd acceptance claim.
+Real gateway replacement after COMMIT reaches approval-gated emergency recovery and
+new sessions. This exposed a lost-start-response bug: emergency fencing stopped the
+already-started reader despite its durable intent. The fix preserves uncertain-start
+reconciliation; an inactive attempted start still blocks, with no second start.
+Full revoke G1, remaining process/race G2, Android HTTP/cache/native G3 and two-renewal
+wall-clock G4 are still incomplete. Phase B remains NOT_STARTED; this is not accepted A.
+Next: finish those remaining packaged G1–G4 scenarios, then independently checkpoint A.
+[Scope, commands and provenance](releases/2026-11-05-mesh-online-renewal.md#isolated-core-runtime-continuation-froma30966c).
+
+**Earlier online package/process checkpoint (retained evidence; A not accepted).**
 Separate default-off controller/node/current API/HTTP/native package is implemented;
 accepted maintenance archive unchanged. Real packaged CLI→SSH→three handlers now exercises
 COMMIT/replay, six controller SIGKILL boundaries and six lost/corrupt response cases.
@@ -21,7 +35,7 @@ Artifact-enabled bootstrap/command race/count3 PASS, zero skips; Family/broker r
 with7 optional skip events. No full-CI claim. Reader errors and later retry causes are explicit.
 The real gateway observer exits at the unchanged15s provider timeout on this isolated proxy;
 this fixture has no READY/traffic acceptance. Full G1/G2/G3/G4 remain NOT_RUN/incomplete.
-Next: supply the long-lived isolated native path and complete packaged G1–G4. Only after a
+At that checkpoint the next step was the isolated native path and packaged G1–G4. Only after a
 separate accepted A checkpoint, execute bounded ANDROID-APP-VPN. Phase B is not started.
 Archive SHA256a27502d752eefe05306a189dce6a8630107d5980eca1477ffa9401a9283ffaea;
 this is an incomplete-A implementation checkpoint, not the required accepted A checkpoint.

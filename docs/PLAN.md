@@ -12,13 +12,14 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
-**Online runtime package continuation — A IN PROGRESS, B gated.** Separate opt-in package
-and controller/node capability/actual-reader boundary implemented. Packaged SSH COMMIT/replay,
-six real controller kills and six RPC faults pass in the frozen8c876e3 package selection114 PASS/0 SKIP; root
-regression373 PASS/1 SKIP plus the skipped native check separately PASS (overlapping counts).
-These are observer-window tests, not a READY traffic stand or full G1–G4. The fixture's
-unchanged15s provider timeout is an explicit unfinished runtime boundary, not an entrypoint
-or approval blocker. One active step: complete the long-lived packaged G1/G2/G3/G4 path. After A,
+**Online runtime package continuation — A IN PROGRESS, B gated.** Shared-runtime packet
+driver now proves real SeedManager→Family TLS/mux→TCP/DNS/verified HTTPS on both NL,
+past15s, with actual supervisor process/socket cleanup. Packaged approval-gated recovery
+after gateway replacement exposed and fixes a lost-start-response reconciliation defect.
+The earlier frozen8c876e3 SSH/process evidence is retained, not renamed as this run.
+Local packet transport is not Telemost signaling/media, exact production gateway or
+systemd acceptance. One active step: finish revoke/late-revoke G1, remaining process/race G2,
+actual Android HTTP/cache/native G3 and two-successive-renewal wall-clock G4. After A,
 save its independent accepted source/package checkpoint before ANDROID-APP-VPN below.
 [Current package contract](../deploy/friends/restricted/maintenance/ONLINE_RUNTIME.md).
 

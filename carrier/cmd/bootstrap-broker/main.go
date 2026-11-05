@@ -2,14 +2,10 @@ package main
 
 import (
 	"context"
-	"crypto/tls"
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io"
-	"log"
 	"net"
-	"net/http"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -17,10 +13,8 @@ import (
 	"syscall"
 	"time"
 
-	"golang.org/x/net/netutil"
-
 	"github.com/Joker20380/family_connect/carrier/bootstrap"
-	"github.com/Joker20380/family_connect/carrier/familysession"
+	"github.com/Joker20380/family_connect/carrier/gatewayruntime"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
 	"github.com/Joker20380/family_connect/carrier/sessiondiag"
 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
@@ -41,24 +35,11 @@ func run() error {
 	publication := flag.String("publication-observer", "", "optional root-private online qualification socket")
 	flag.Parse()
 	host, _, err := net.SplitHostPort(*address)
-	if err != nil || net.ParseIP(host) == nil || *duration <= 0 || *duration > bootstrap.MaxAge {
+	if err != nil || net.ParseIP(host) == nil || *duration <= 0 || *duration > bootstrap.MaxAge ||
+		*export != "" && !filepath.IsAbs(*export) {
 		return roombroker.Code("invalid_options")
 	}
 	provider, err := roombroker.NewTelemostRoomProvider()
-	if err != nil {
-		return err
-	}
-	raw, err := roombroker.LoadCredentials(*path)
-	if err != nil {
-		return err
-	}
-	var credentials familysession.Credentials
-	err = json.Unmarshal(raw, &credentials)
-	clear(raw)
-	if err != nil {
-		return roombroker.Code("credentials_rejected")
-	}
-	config, err := roombroker.ServerTLS(*path)
 	if err != nil {
 		return err
 	}
@@ -79,80 +60,27 @@ func run() error {
 		defer output.Unlock()
 		_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "session_terminal", "utc": time.Now().UTC(), "diagnostic": report})
 	}
-	broker, err := roombroker.New(provider, roombroker.TelemostGateway{CredentialsPath: *path, Event: emit, Diagnostic: diagnostic}, roombroker.DefaultLimits(), func(state roombroker.State, code roombroker.Code) {
+	state := func(state roombroker.State, code roombroker.Code) {
 		output.Lock()
 		defer output.Unlock()
 		_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": string(state), "utc": time.Now().UTC(), "reason": brokerReason(code)})
-	}, traceSink)
-	if err != nil {
-		return err
 	}
-	defer broker.Close()
-	listener, err := net.Listen("tcp", *address)
-	if err != nil {
-		return roombroker.Code("listen_failed")
-	}
-	defer listener.Close()
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
-	ctx, cancel := context.WithTimeout(ctx, *duration)
-	defer cancel()
-	if *publication != "" {
-		closeObserver, err := roombroker.ObservePublication(ctx, *publication, *path)
-		if err != nil {
-			return err
-		}
-		defer closeObserver()
+	admissionFailure := func(failure bootstrap.ExchangeFailure) {
+		output.Lock()
+		defer output.Unlock()
+		_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "bootstrap_admission_rejected", "utc": time.Now().UTC(), "stage": failure.Stage, "reason": failure.Reason})
 	}
-	manager := &bootstrap.SeedManager{Event: emit}
-	if *export != "" {
-		if !filepath.IsAbs(*export) {
-			return roombroker.Code("invalid_options")
-		}
-		cache := &bootstrap.Cache{Path: *export, Family: credentials.Family, Gateway: credentials.Gateway}
-		manager.Publish = func(directory bootstrap.Directory) error {
-			raw, err := json.Marshal(directory)
-			if err != nil {
-				return err
-			}
-			return cache.Store(raw, time.Now())
-		}
+	exchangeFailure := func(failure bootstrap.ExchangeFailure) {
+		output.Lock()
+		defer output.Unlock()
+		_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "bootstrap_exchange_rejected", "utc": time.Now().UTC(), "stage": failure.Stage, "reason": failure.Reason})
 	}
-	server := &http.Server{Handler: manager.Handler(*path), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 5 * time.Second, WriteTimeout: 5 * time.Second, IdleTimeout: time.Second, MaxHeaderBytes: 4096, ErrorLog: log.New(io.Discard, "", 0)}
-	defer server.Close()
-	seedDone, httpDone := make(chan error, 1), make(chan error, 1)
-	go func() {
-		seedDone <- manager.Run(ctx, provider, bootstrap.TelemostSeed, credentials.Family, credentials.Gateway, *duration, func(ctx context.Context, endpoint familysession.PacketEndpoint) {
-			admissionFailure := func(failure bootstrap.ExchangeFailure) {
-				output.Lock()
-				defer output.Unlock()
-				_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "bootstrap_admission_rejected", "utc": time.Now().UTC(), "stage": failure.Stage, "reason": failure.Reason})
-			}
-			bootstrap.OpenServerObserved(ctx, endpoint, *path, broker, emit, admissionFailure, func(failure bootstrap.ExchangeFailure) {
-				output.Lock()
-				defer output.Unlock()
-				_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "bootstrap_exchange_rejected", "utc": time.Now().UTC(), "stage": failure.Stage, "reason": failure.Reason})
-			})
-		})
-	}()
-	go func() { httpDone <- server.Serve(tls.NewListener(netutil.LimitListener(listener, 8), config)) }()
-	select {
-	case <-ctx.Done():
-		cancel()
-		server.Close()
-		<-seedDone
-		<-httpDone
-		return nil
-	case err := <-seedDone:
-		cancel()
-		server.Close()
-		<-httpDone
-		return err
-	case err := <-httpDone:
-		cancel()
-		<-seedDone
-		return err
-	}
+	return gatewayruntime.Run(ctx, gatewayruntime.Config{Profile: *path, Listen: *address, Duration: *duration,
+		Directory: *export, Observer: *publication, Event: emit, State: state, Trace: traceSink,
+		AdmissionFailure: admissionFailure, ExchangeFailure: exchangeFailure}, provider, bootstrap.TelemostSeed,
+		roombroker.TelemostGateway{CredentialsPath: *path, Event: emit, Diagnostic: diagnostic})
 }
 
 func brokerReason(code roombroker.Code) string {

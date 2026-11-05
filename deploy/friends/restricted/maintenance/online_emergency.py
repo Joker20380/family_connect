@@ -216,6 +216,8 @@ def run(controller, operation, *, approval=None):
             cause = str(error) if isinstance(error, Rejected) else 'IO_OR_TRANSPORT_FAILURE'
             unknown_transport = cause in ('IO_OR_TRANSPORT_FAILURE', 'REMOTE_OUTCOME_UNKNOWN_READBACK_REQUIRED',
                                           'RPC_RESPONSE_SCHEMA', 'RPC_RESPONSE_BINDING')
+            unknown_transport = unknown_transport or (record['emergency_commit_decided'] and
+                cause in ('SERVICE_ACTION_FAILED', 'SERVICE_OUTCOME_UNKNOWN', 'SYSTEMD_READ_FAILED'))
             if not unknown_transport and record['state'] not in ('EMERGENCY_HANDOFF', 'EMERGENCY_APPROVAL_REQUIRED', 'CLEANING'):
                 for node in controller.nodes.values():
                     try:

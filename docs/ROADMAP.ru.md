@@ -18,9 +18,12 @@ G2 — независимые процессы/отказы; G3 — фактич
 G4 — квалифицированный online runtime/API пакет. [Точные gates/evidence](releases/2026-11-05-mesh-online-renewal.md).
 Историческая проверка b1d17d3: root/package118 PASS, online entrypoint отсутствовал.
 Этот пакетный дефект устранён в отдельном default-off кандидате; штатные controller/node
-проходят SSH COMMIT/replay и адресные отказы процессов. Это не приёмка G1–G4: реальный
-gateway в текущем изолированном fixture живёт лишь до15s timeout создания seed, без
-READY/полезного трафика. Полная G1 runtime / G2 matrix / G3 Android / G4 приёмка не выполнена.
+проходят SSH COMMIT/replay и адресные отказы процессов. Новый отдельный packet driver
+на общем runtime создаёт seed штатно и передаёт TLS/mux/TCP/DNS/verified HTTPS на обоих NL
+после15s; реальный supervisor проверяет restart и approval-gated recovery. Исправлен
+обнаруженный lost-start-response/fencing дефект. Старый proxy остаётся отрицательным тестом.
+Это не Telemost/live/systemd-приёмка и не закрытие G1–G4: revoke, оставшиеся process/race,
+Android HTTP/cache/native и два renewal через реальные сроки ещё требуют проверки.
 
 **Один действующий следующий шаг: закончить G1–G4 того же MESH incident.** После этого:
 

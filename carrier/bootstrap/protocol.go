@@ -248,6 +248,29 @@ func OpenServerObserved(ctx context.Context, endpoint familysession.PacketEndpoi
 }
 
 func Recover(ctx context.Context, directory Directory, raw []byte, event func(string), networks ...*underlay.Network) (roombroker.Descriptor, error) {
+	connect := func(lifetime, ready context.Context, room roombroker.Room) (familysession.PacketEndpoint, error) {
+		config := telemost.Config{RoomURL: room.JoinURL, DisplayName: "Family bootstrap device", Mode: telemost.ModeVP8, MaxVideoTracks: 4}
+		if len(networks) > 0 {
+			config.Underlay = networks[0]
+		}
+		carrier, err := telemost.NewOwned(lifetime, config)
+		if err != nil {
+			startupdiag.Failure(ctx, "SEED_CREATE", err)
+			return nil, roombroker.Code("bootstrap_carrier")
+		}
+		if err := carrier.Connect(ready); err != nil {
+			carrier.Close()
+			return nil, err
+		}
+		return carrier, nil
+	}
+	return RecoverWithConnector(ctx, directory, raw, event, connect)
+}
+
+func RecoverWithConnector(ctx context.Context, directory Directory, raw []byte, event func(string), connect SeedConnector) (roombroker.Descriptor, error) {
+	if connect == nil {
+		return roombroker.Descriptor{}, roombroker.Code("bootstrap_carrier")
+	}
 	var credentials familysession.Credentials
 	if json.Unmarshal(raw, &credentials) != nil {
 		startupdiag.Failure(ctx, "PROFILE", roombroker.Code("credentials_rejected"))
@@ -261,23 +284,20 @@ func Recover(ctx context.Context, directory Directory, raw []byte, event func(st
 	}
 	ctx, cancel := context.WithTimeout(ctx, ExchangeTimeout)
 	defer cancel()
-	config := telemost.Config{RoomURL: directory.Seeds[0].JoinURL, DisplayName: "Family bootstrap device", Mode: telemost.ModeVP8, MaxVideoTracks: 4}
-	if len(networks) > 0 {
-		config.Underlay = networks[0]
-	}
-	carrier, err := telemost.NewOwned(ctx, config)
-	if err != nil {
-		startupdiag.Failure(ctx, "SEED_CREATE", err)
-		return roombroker.Descriptor{}, roombroker.Code("bootstrap_carrier")
-	}
-	defer carrier.Close()
 	connecting, stop := context.WithTimeout(ctx, ConnectTimeout)
-	err = carrier.Connect(connecting)
+	carrier, err := connect(ctx, connecting, roombroker.Room{JoinURL: directory.Seeds[0].JoinURL})
 	stop()
-	if err != nil {
+	if err != nil || carrier == nil {
+		if carrier != nil {
+			carrier.Close()
+		}
+		if err == roombroker.Code("bootstrap_carrier") {
+			return roombroker.Descriptor{}, err
+		}
 		startupdiag.Failure(ctx, "SEED_CONNECT", err)
 		return roombroker.Descriptor{}, roombroker.Code("bootstrap_connect_timeout")
 	}
+	defer carrier.Close()
 	event("bootstrap_carrier_connected")
 	descriptor, err := recoverCarrier(ctx, carrier, raw, event)
 	if err == nil && descriptor.JoinURL == directory.Seeds[0].JoinURL {

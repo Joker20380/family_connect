@@ -1,0 +1,166 @@
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+import pytest
+
+from mesh_core_stand import CoreStand
+from fixtures.mesh_supervisor import request
+from online_package_stand import private_file
+from scripts import package_online_renewal as package
+from test_online_runtime_package import core_driver, online_package
+
+
+@pytest.mark.parametrize('field', ['source_commit', 'native_sources', 'scope', 'entrypoint', 'executable_sha256'])
+def test_isolated_binding_rejects_foreign_artifacts(online_package, core_driver, tmp_path, field):
+    manifest = json.loads((online_package[3]/'source-manifest.json').read_bytes())
+    artifact = dict(schema=1, scope='isolated-core-not-production', source_commit=manifest['source_commit'],
+        native_sources=manifest['native_sources'], entrypoint='carrier/internal/qualification/cmd/mesh-runtime',
+        executable_sha256=package.digest(core_driver.read_bytes()))
+    artifact[field] = {} if field == 'native_sources' else 'incorrect'
+    path = private_file(tmp_path/'artifact.json', package.encode(artifact))
+    probe = ('import sys,json;from pathlib import Path;sys.path.insert(0,sys.argv[1]);'
+        'from online_runtime import runtime_binding;'
+        'runtime_binding(json.loads(Path(sys.argv[2]).read_bytes()),sys.argv[3])')
+    result = subprocess.run([sys.executable, '-I', '-B', '-c', probe, str(online_package[3]/'renewal'),
+        str(online_package[3]/'source-manifest.json'), str(path)], capture_output=True, timeout=10)
+    assert result.returncode != 0 and b'ONLINE_ISOLATED_ARTIFACT_BINDING' in result.stderr
+
+
+def test_production_gateway_has_no_local_provider_mode(online_package):
+    binary = online_package[3]/'gateway'
+    result = subprocess.run([str(binary), '-mode', 'relay'], env=dict(os.environ, FC_LOCAL_CORE='1'),
+        capture_output=True, timeout=5)
+    assert result.returncode != 0 and b'flag provided but not defined' in result.stderr
+    dependencies = subprocess.check_output([os.environ['FC_ONLINE_GO'], 'list', '-deps', './cmd/bootstrap-broker'],
+        cwd=online_package[1]/'carrier', text=True)
+    assert '/internal/qualification' not in dependencies
+
+
+def test_two_gateway_seed_and_verified_traffic_preflight(online_package, core_driver, tmp_path):
+    assert os.geteuid() == 0 and Path('/.dockerenv').exists() and tmp_path.is_relative_to('/run')
+    _, _, archive, extracted, receipt = online_package
+    stand = CoreStand(tmp_path, extracted, core_driver)
+    started = time.monotonic()
+    try:
+        stand.start()
+        code, capabilities = stand.run('inspect')
+        assert code == 0, capabilities
+        code, commit = stand.run('online')
+        assert code == 0 and commit['result'] == 'COMMITTED', commit
+        clients = {slot: stand.client(slot, 20) for slot in ('NL', 'NL2')}
+        for slot, client in clients.items():
+            assert client.wait(timeout=65) == 0, (tmp_path/(slot+'-client.log')).read_text()
+        observations = {}
+        for slot in clients:
+            events = [json.loads(line) for line in (tmp_path/(slot+'-client.log')).read_text().splitlines()]
+            connected = next(value for value in events if value['event'] == 'connected')
+            traffic = [value for value in events if value['event'] == 'traffic']
+            assert len(traffic) >= 20 and events[-1]['event'] == 'finished'
+            assert all(value['session'] == connected['session'] and value['original']['ID'] == connected['stream']
+                and value['tcp'] and value['dns'] and value['verified_https'] for value in traffic)
+            assert traffic[-1]['original']['Received'] > traffic[0]['original']['Received'] > 0
+            observations[slot] = dict(first=traffic[0], last=traffic[-1], samples=len(traffic))
+        code, after = stand.run('inspect')
+        assert code == 0, after
+        assert time.monotonic()-started > 20
+        evidence = dict(scope='isolated-core-preflight-not-G1-G4-acceptance', package=receipt,
+            archive_sha256=package.digest(archive.read_bytes()), driver_sha256=package.digest(core_driver.read_bytes()),
+            capabilities=capabilities, commit=commit, traffic=observations, echo_connections=stand.accepted)
+    finally:
+        stand.close()
+    assert not any((tmp_path/(slot+'-config/reader.sock')).exists() for slot in ('NL', 'NL2'))
+    evidence['cleanup'] = 'processes-waited-and-reader-sockets-absent'
+    destination = os.environ.get('FC_CORE_EVIDENCE')
+    if destination:
+        root = Path(destination)
+        root.mkdir(mode=0o700, parents=True, exist_ok=True)
+        private_file(root/'preflight.json', package.encode(evidence))
+        for path in tmp_path.glob('*.log'):
+            private_file(root/path.name, path.read_bytes())
+
+
+def test_gateway_restart_after_commit_needs_approved_emergency(online_package, core_driver, tmp_path):
+    stand = CoreStand(tmp_path, online_package[3], core_driver)
+    process = None
+    results = []
+    try:
+        stand.start()
+        process = subprocess.Popen(stand.command('online'), cwd=tmp_path, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        journal = tmp_path/'coordinator/transaction.json'
+        deadline = time.monotonic()+40
+        while True:
+            record = json.loads(journal.read_bytes()) if journal.exists() else {}
+            if record.get('state') == 'ONLINE_COMMIT_DECIDED':
+                process.kill()
+                process.wait(timeout=5)
+                break
+            assert process.poll() is None and time.monotonic() < deadline, record.get('state')
+            time.sleep(.001)
+        origin = json.loads(journal.read_bytes())
+        before = request(dict(command='show', unit='test-NL2.service'))['state']
+        request(dict(command='kill', unit='test-NL2.service'))
+        assert not (tmp_path/'NL2-config/reader.sock').exists()
+        after = request(dict(command='start', unit='test-NL2.service'))['state']
+        assert before['MainPID'] != after['MainPID'] and before['InvocationID'] != after['InvocationID']
+        deadline = time.monotonic()+5
+        while not (tmp_path/'NL2-config/reader.sock').exists():
+            assert time.monotonic() < deadline
+            time.sleep(.02)
+        code, result = stand.run('resume')
+        results.append(result)
+        assert code == 75 and result['result'] == 'ONLINE_EMERGENCY_REQUIRED', result
+        emergency_fence = json.loads(journal.read_bytes())['fence']
+        assert emergency_fence > origin['fence']
+        code, required = stand.run('emergency')
+        results.append(required)
+        assert code == 75 and required['result'] == 'EMERGENCY_APPROVAL_REQUIRED', required
+        for slot in ('NL', 'NL2'):
+            assert request(dict(command='show', unit='test-'+slot+'.service'))['state']['MainPID'] == '0'
+            assert not (tmp_path/(slot+'-config/reader.sock')).exists()
+        for kind in ('denied', 'expired'):
+            now = int(time.time())
+            approval = dict(operation_id='test-packaged-ssh-controller', expected_state_sha256=required['request']['expected_state_sha256'],
+                approved_at=now if kind == 'denied' else now-901, expires_at=now+300 if kind == 'denied' else now-1,
+                approval='DENIED' if kind == 'denied' else 'OPERATOR_APPROVED_OUTAGE')
+            path = private_file(tmp_path/(kind+'.json'), package.encode(approval))
+            code, result = stand.run('emergency', path)
+            results.append(result)
+            assert code == 75 and result['result'] == 'EMERGENCY_BLOCKED' and result['cause'].startswith('MAINTENANCE_APPROVAL_'), result
+        now = int(time.time())
+        approval = private_file(tmp_path/'approved.json', package.encode(dict(operation_id='test-packaged-ssh-controller',
+            expected_state_sha256=required['request']['expected_state_sha256'], approved_at=now, expires_at=now+900,
+            approval='OPERATOR_APPROVED_OUTAGE')))
+        request(dict(command='lose-start-response', unit='test-NL.service'))
+        code, result = stand.run('emergency', approval)
+        results.append(result)
+        assert code == 75 and result['result'] == 'EMERGENCY_BLOCKED', result
+        intent = (stand.fleet.nodes['NL'].state/'start-intent-0.json').read_bytes()
+        started = request(dict(command='show', unit='test-NL.service'))['state']
+        assert started['MainPID'] != '0'
+        code, result = stand.run('emergency', approval)
+        results.append(result)
+        assert code == 0 and result['result'] == 'EMERGENCY_RECOVERED', result
+        assert request(dict(command='show', unit='test-NL.service'))['state'] == started
+        assert (stand.fleet.nodes['NL'].state/'archive/test-packaged-ssh-controller/start-intent-0.json').read_bytes() == intent
+        clients = {slot: stand.client(slot, 3) for slot in ('NL', 'NL2')}
+        for slot, client in clients.items():
+            assert client.wait(timeout=35) == 0, (tmp_path/(slot+'-client.log')).read_text()
+        code, replay = stand.run('emergency')
+        results.append(replay)
+        assert code == 0 and replay['replay'], replay
+        final = json.loads(journal.read_bytes())
+        assert final['online_parent']['decision'] == 'COMMIT' and final['online_parent']['fence'] == emergency_fence
+        assert package.digest(package.encode(final['online_parent']['plan'])) == origin['plan_sha256']
+    finally:
+        if process and process.poll() is None:
+            process.kill()
+            process.wait(timeout=5)
+        stand.close()
+        if os.environ.get('FC_CORE_EVIDENCE'):
+            root = Path(os.environ['FC_CORE_EVIDENCE'])
+            private_file(root/'gateway-restart-emergency.json', package.encode(dict(results=results,
+                scope='gateway-replacement-approval-start-intent-not-revocation-G1')))

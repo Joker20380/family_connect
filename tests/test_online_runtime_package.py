@@ -57,6 +57,17 @@ def online_package(tmp_path_factory):
     return root, source, archive, extracted, receipt
 
 
+@pytest.fixture(scope='module')
+def core_driver(online_package):
+    root, source, _, _, _ = online_package
+    driver = root/'mesh-runtime'
+    environment = dict(os.environ, CGO_ENABLED='0', GOTOOLCHAIN='local', GOOS='linux', GOARCH='amd64', GOFLAGS='')
+    subprocess.run([os.environ['FC_ONLINE_GO'], 'build', '-mod=readonly', '-trimpath', '-buildvcs=false',
+        '-ldflags=-buildid=', '-o', str(driver), './internal/qualification/cmd/mesh-runtime'],
+        cwd=source/'carrier', env=environment, check=True)
+    return driver
+
+
 def test_online_package_reproducible_without_working_checkout_imports(online_package):
     root, source, archive, extracted, receipt = online_package
     (source/'control/friends/restricted.py').write_text('raise RuntimeError("dirty source must not ship")\n')
@@ -290,11 +301,11 @@ def test_controller_entrypoint_reaches_three_ssh_handlers_and_enforces_budget(on
         stand.close()
 
 
-def test_packaged_online_commit_and_replay_over_ssh(online_package, tmp_path):
+def test_packaged_online_commit_and_replay_over_ssh(online_package, core_driver, tmp_path):
     if os.environ.get('FC_ONLINE_SSH') != '1':
         pytest.skip('explicit network-none SSH container required')
-    from online_package_stand import PackageStand
-    stand = PackageStand(tmp_path, online_package[3], age=12000)
+    from mesh_core_stand import CoreStand
+    stand = CoreStand(tmp_path, online_package[3], core_driver)
     try:
         stand.start()
         code, result = stand.run('online')
@@ -351,18 +362,18 @@ def test_packaged_nl_failure_rejects_before_owner_or_journal(online_package, tmp
 
 @pytest.mark.parametrize('boundary', ['ONLINE_FENCING', 'ONLINE_PREPARED', 'ONLINE_COMMIT_DECIDED',
                                     'ONLINE_NL2_DECIDED', 'ONLINE_NL2_PUBLISHED', 'ONLINE_CLEANING'])
-def test_packaged_controller_sigkill_resumes_same_decision(online_package, tmp_path, boundary):
+def test_packaged_controller_sigkill_resumes_same_decision(online_package, core_driver, tmp_path, boundary):
     if os.environ.get('FC_ONLINE_SSH') != '1':
         pytest.skip('explicit network-none SSH container required')
-    from online_package_stand import PackageStand
-    stand = PackageStand(tmp_path, online_package[3], age=12000)
+    from mesh_core_stand import CoreStand
+    stand = CoreStand(tmp_path, online_package[3], core_driver)
     process = None
     try:
         stand.start()
         process = subprocess.Popen(stand.command('online'), cwd=tmp_path,
                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         journal = tmp_path/'coordinator/transaction.json'
-        deadline = time.monotonic()+10
+        deadline = time.monotonic()+45
         while True:
             record = json.loads(journal.read_bytes()) if journal.exists() else {}
             if record.get('state') == boundary:
@@ -409,11 +420,11 @@ def test_packaged_seed_timeout_is_not_a_ready_traffic_runtime(online_package, tm
 
 @pytest.mark.parametrize('slot,command,kind', [('RU', 'prepare', 'drop'), ('NL', 'stage', 'drop'),
     ('NL2', 'decide', 'drop'), ('NL', 'publish', 'drop'), ('RU', 'publish', 'drop'), ('NL2', 'stage', 'wrong-slot')])
-def test_packaged_rpc_lost_reply_and_participant_corruption(online_package, tmp_path, slot, command, kind):
+def test_packaged_rpc_lost_reply_and_participant_corruption(online_package, core_driver, tmp_path, slot, command, kind):
     if os.environ.get('FC_ONLINE_SSH') != '1':
         pytest.skip('explicit network-none SSH container required')
-    from online_package_stand import PackageStand
-    stand = PackageStand(tmp_path, online_package[3], age=12000)
+    from mesh_core_stand import CoreStand
+    stand = CoreStand(tmp_path, online_package[3], core_driver)
     try:
         stand.start()
         stand.rpc_fault(slot, command, kind)

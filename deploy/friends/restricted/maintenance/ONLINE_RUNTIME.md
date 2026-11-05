@@ -73,6 +73,59 @@ reuses the continuation and start intents; emergency closes old TCP connections.
 
 ## Qualification boundary
 
+### Isolated packet runtime (not a production provider)
+
+`carrier/gatewayruntime` owns the shared SeedManager, admission, broker and profile
+observer lifecycle. Production `bootstrap-broker` still constructs Telemost only,
+accepts no `-mode`/local-provider flag, and retains its original duration limit.
+The separate `carrier/internal/qualification/cmd/mesh-runtime` executable requires
+`FC_LOCAL_CORE=1`. Its relay allocates real ephemeral rooms and framed loopback TCP
+endpoints; it replaces only the external room/packet transport. It does not implement
+Telemost signaling/media and is not a production-gateway artifact. Family TLS, mux,
+lease/credential handlers and the reader run in the actual serving gateway process.
+
+For this isolated scope only, controller configuration and every node's `online`
+object may explicitly include `isolated_runtime`, an absolute root-private manifest
+path. Its exact fields are `schema: 1`, `scope: "isolated-core-not-production"`,
+`source_commit`, `native_sources`, `entrypoint:
+"carrier/internal/qualification/cmd/mesh-runtime"`, `executable_sha256`. Source
+commit/inventory must equal the frozen package. Capabilities add `runtime_scope`,
+`reader_sha256` and `runtime_manifest_sha256`; all three participants must agree.
+The production `gateway_sha256` remains separate and unchanged. NL still pins the
+actual executable hash, UID and peer PID against the supervisor's real MainPID.
+Absent this explicit binding, only the package's production gateway is accepted.
+Neither the qualification binary nor its private configuration is put in the archive.
+
+`tests/test_mesh_core_runtime.py` builds the separate driver from the same frozen
+export, runs packaged controller/node/API/HTTP, and uses a real disposable supervisor
+(`tests/fixtures/mesh_supervisor.py`). Its container-only systemctl-compatible shim
+performs real start/stop/wait; this is **not systemd qualification**. SIGKILL cleanup
+removes a dead process's observer socket only after wait and inode verification.
+The negative nonresponding-proxy fixture below remains independent and unchanged.
+
+The positive preflight runs both NL beyond15s, performs HTTP readiness with a
+synthetic TLS CA, real Family bootstrap/dedicated handshakes, original and new TCP,
+DNS and verified HTTPS, then checks process/socket cleanup. The emergency test
+SIGKILLs a controller after COMMIT, replaces one gateway, observes the changed
+runtime instance, requires outage approval, loses a real start response, reconciles
+the saved intent and establishes new sessions. It does not claim that a killed
+gateway preserves an old TCP connection, or that the revoke scenarios are covered.
+
+Provider creation remains15s; seed lifetime is at most4h; lease defaults remain600s;
+online SSH eligibility remains1395s+lateness. The isolated driver can use a bounded
+process duration up to8h with the existing SeedManager overlap rotation (seed4h,
+rotation3h), independently of process lifetime. Production CLI duration semantics
+and certificate/CRL lifetimes are unchanged. A20s preflight does not establish
+cryptographic-boundary or two-renewal continuity; security clocks are never frozen.
+
+Service-start failure/timeout after the emergency COMMIT is an uncertain outcome,
+not permission to stop the newly started reader and erase its usability. Recovery
+keeps the durable intent and reconciles actual active state without issuing another
+start. A start that never became active remains blocked with
+`START_ALREADY_ATTEMPTED`; there is no implicit retry or rollback.
+
+### Retained negative and fault evidence
+
 Tests cover deterministic packaging/import closure/default-off, capability/membership
 refusal, actual reader PID/executable, three independent SSH handlers, COMMIT/replay,
 controller SIGKILL at six durable boundaries, and six RPC loss/corruption cases.
