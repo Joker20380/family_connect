@@ -35,14 +35,51 @@ absence of authenticated/broker admission, plus the preserved certificate's CRL 
 
 | Gate | Current status | Exact scope / remaining boundary |
 |---|---|---|
-| G1 | PASS working isolated scenario; frozen qualification pending | Both NL, real revoke/late revoke, absent/denied/expired/stale/fresh approval, original COMMIT/fence/floors, lost start, TLS denial and new survivor DNS/HTTPS. Not systemd/Telemost/production. |
+| G1 | PASS isolated core on frozen9369e65 | Both NL, real revoke/late revoke, absent/denied/expired/stale/fresh approval, original COMMIT/fence/floors, lost start, TLS denial and new survivor DNS/HTTPS. Not systemd/Telemost/production. |
 | G2 | NOT_RUN full matrix; earlier partial PASS retained | Remaining handoff/owner/publisher races, expiry and unavailable/partially updated participant scenarios. |
 | G3 | NOT_RUN | API27/API35 HTTP→encrypted cache→existing owner→active native session and required scenario matrix. No new Android artifact. |
 | G4 | NOT_RUN | Two successive renewals through real old leaf/CRL/lease bounds on final combined artifacts; earlier999s and20s results are not replacements. |
 
 This is an incomplete-A source checkpoint. B remains NOT_STARTED, with no B artifact or
-routing acceptance. Freeze this candidate before claiming its package acceptance, then
-continue the remaining A gates; no production, phone, publication or paid action occurs.
+routing acceptance. Continue the remaining A gates; no production, phone, publication
+or paid action occurs. G1 acceptance does not imply acceptance of the complete A package.
+
+### Frozen9369e65 G1 result
+
+Source9369e65c916650d016b3b15acb534467163b9af1 pushed; remote main readback matched.
+Separate artifact identities (local/ignored, no publication):
+
+| Artifact | SHA256 |
+|---|---|
+| online-9369e65.tar.gz | 7065f8bfb64128bb7ff796f5f087605cfbf60c51d50458ae4a1cffab3ae07ee8 |
+| source-manifest.json | a0fa60e947461ffc8a5ed5e58f2bc84cb8ff675ed5401540c5ddc5bfce53561a |
+| renewal source inventory | 54c4671e778a161278e2ab8dc87c0aa0daa75807658256808b365b9d0d0a3330 |
+| api.pyz | f46484d755658dc7c7cf3f853bfe227af4c58225a7d85e7b205522fb6975a5c4 |
+| http.pyz | bbefdb3d93b716d14d514224395439664559ba478d36bf08aab75cea7c66f8e8 |
+| packaged production gateway (unchanged) | 382dcf26298bad8ccbfc2ca5664e297215b2ab1d7a1338f594536285651f1e7d |
+| separate non-production mesh-runtime-9369e65 | dc104ed6c40c154f8b152ea673be0d7409eb5970af9a8eebd17f0c4a5a09518a |
+
+Same network-none image/toolchain as8eeb9f0. Build from committed export; checkout exact
+9369e65 in `/run/frozen-source`, set `FC_TEST_ONLINE_PACKAGE=/out/online-9369e65.tar.gz`,
+`FC_ONLINE_GO=/go/bin/go`, `FC_TEST_GO=/go/bin/go`, `FC_ONLINE_ISOLATED=1`,
+`FC_ONLINE_SSH=1`, then `python -m pytest -q -p no:cacheprovider
+tests/test_friends_access.py tests/test_friends_restricted.py tests/test_online_emergency.py
+tests/test_online_runtime_package.py tests/test_mesh_core_runtime.py --basetemp=/run/frozen-tests`:
+**138 PASS/0 SKIP,494.24s**, one selection, not full CI and not added to earlier overlapping
+counts. Deterministic archive rebuild, packaged SSH negative/fault cases and both core
+traffic/recovery scenarios run again. Go1.26.1 `go -C carrier test -race
+./internal/qualification`:PASS; shared production native/runtime is unchanged from8eeb9f0.
+
+Under `state-client-build/mesh-core-runtime-20261105/`:
+- `frozen-9369e65.log`:70a1ef5e49af28bc3ffbca77eec2aa7cd499dc76823848355fa4cad15566be51.
+- `frozen-9369e65/revoke/recovery.json`:96ea11420ded74cdf2e60618cc21431fbd83a0638b600310e9e1cb86f9cef7a1.
+- `revoke-native-race.log`:8f227f00f7dcb3085a380001659acfde0d0c2db48c33b777ce141dfd3166c96f.
+- Same receipt directory contains both gateway logs and survivor HTTP/TLS/mux/TCP/DNS/HTTPS
+  logs; synthetic-only, not committed. Before:NL PID9648/NL2 PID9657. After:10490/10554,
+  different process instances and exactly one emergency start each. CRL floor3 on both;
+  both revoked identities had successful bootstrap admission on both before COMMIT and
+  server-side Family rejection on both after recovery. Original COMMIT plan hash retained,
+  fence1→2, archived start-intent hash preserved and replay leaves actual service state unchanged.
 
 ## Isolated core runtime continuation froma30966c
 

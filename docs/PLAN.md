@@ -14,8 +14,8 @@ acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-he
 <!-- Android113 MESH incident 20261104 -->
 **G1 revoke delta:** the two-NL isolated runtime scenario now passes revoke after COMMIT,
 late revoke invalidating approval, real recovered TLS denial, survivor HTTP/TCP/DNS/HTTPS,
-and lost-start/idempotent recovery. Freeze/qualify this candidate, then finish remaining
-G2/G3/G4; no transition to B until independent accepted A. No new global stage.
+and lost-start/idempotent recovery. Frozen9369e65 selected138 PASS/0 SKIP; G1 isolated
+scope PASS. Finish remaining G2/G3/G4; no B until independent accepted A. No new global stage.
 
 **Online runtime package continuation — A IN PROGRESS, B gated.** Shared-runtime packet
 driver now proves real SeedManager→Family TLS/mux→TCP/DNS/verified HTTPS on both NL,

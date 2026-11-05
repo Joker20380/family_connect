@@ -18,7 +18,9 @@ original decision, invalidate stale approval, require fresh approval, retain rev
 floors and reconcile lost start response without another start. The surviving identity
 obtains normal HTTP readiness and new TLS/TCP/DNS/verified HTTPS. Local operator revoke
 uses the existing Access DB transaction, not test SQL or a second authorization service.
-Working scenario PASS85.48s; frozen follow-up pending. G2 remainder/G3/G4 remain open,
+Frozen9369e65 G1 PASS (isolated core); selected138 PASS/0 SKIP,494.24s, not full CI.
+Archive7065f8bf…/separate driverdc104ed6…; source pushed and remote verified.
+G2 remainder/G3/G4 remain open,
 and B is NOT_STARTED. No production or handset change. [Evidence and limits](releases/2026-11-05-mesh-online-renewal.md#g1-revoke-continuation).
 
 **Isolated core runtime continuation (same incident; A not accepted).**

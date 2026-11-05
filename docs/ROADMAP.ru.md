@@ -27,8 +27,8 @@ Android HTTP/cache/native и два renewal через реальные срок
 Frozen source8eeb9f0: адресная root/package/core-выборка263 PASS/0 SKIP; это
 самостоятельный implementation checkpoint, не принятая А и не разрешение начинать Б.
 Следующая локальная дельта закрывает сценарий G1 с настоящим revoke после COMMIT и после
-approval, TLS-отказом на обоих NL и новой рабочей сессией разрешённой identity. Рабочий
-прогон PASS; frozen qualification кандидата ещё ожидается. G2/G3/G4 и Б остаются открыты.
+approval, TLS-отказом на обоих NL и новой рабочей сессией разрешённой identity. Frozen9369e65:
+G1 isolated core PASS, адресная выборка138 PASS/0 SKIP. G2/G3/G4 и Б остаются открыты.
 
 **Один действующий следующий шаг: закончить G1–G4 того же MESH incident.** После этого:
 
