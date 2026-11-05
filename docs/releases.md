@@ -1,9 +1,11 @@
 # Release distribution / Выпуски
 
-**5 November11:05UTC — active-session renewal source checkpoint; NOT a release.**
-Android/native owner, gateway lease and broker-monitor generation integration is implemented;
-host native continuity/negative and66 scoped JVM checks pass. Isolated DNS, broader race
-and API27/API35 qualification remain pending.118/default113/catalog7 and servers unchanged.
+**5 November — active-session renewal integration candidate; NOT a release.**
+Android/native owner, gateway lease and broker-monitor generation integration is implemented.
+Real TLS/mux/TCP/DNS/verified-HTTPS continuity, negative/cleanup race,66 scoped JVM cases,
+API27/API35 five checks each and ARM64 local build pass. Mandatory bootstrap retains six
+baseline assertion failures: NOT full-CI PASS.118/default113/catalog7 and servers unchanged.
+Stage stopped; online publication/production activation NOT executed.
 [Dependency map, qualification and next-stage boundary](releases/2026-11-05-mesh-renewal-integration.md).
 
 **5 November10:10UTC — authenticated credential exchange source checkpoint; NOT a release.**

@@ -1,9 +1,10 @@
 # Documentation
 
 **Current5 November — [active-session renewal integration](releases/2026-11-05-mesh-renewal-integration.md).**
-Source/runtime integration followsd4de324; host native continuity and66 scoped JVM cases pass.
-Isolated DNS/API qualification is in progress; no installed/public version or server change.
-This stage stops after integration acceptance, before coordinated online publication.
+Source/runtime integration followsd4de324; real TLS/mux/TCP/DNS/HTTPS and negative gates pass,
+with66 scoped JVM cases and five targeted checks on each API27/API35. The inherited bootstrap
+gate remains FAIL, not full-CI/release acceptance. No installed/public version or server change.
+This bounded stage has stopped before coordinated online publication and production activation.
 
 **Current5 November09:07UTC — Android118 opt-in field download verified.** Separate signed
 APK/audio source for users on real mobile allowlists; install over the existing app and

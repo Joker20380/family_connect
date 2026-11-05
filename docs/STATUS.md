@@ -11,18 +11,20 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
-**5 November11:05UTC — renewal runtime integration source checkpoint; platform qualification in progress.**
-Exact starting pointd4de324 retained. Selected Android readiness → existing native owner →
-serialized credential/lease maintenance now reaches gateway lease checks and the broker
-monitor through a consistent authenticated generation. Real Family/mux/TCP/HTTPS crosses
-two prior security bounds and the original real lease timer; original control proof expires
-without killing the renewed session. Revoke/cancel/Disconnect/lease-expiry/partial-commit,
-duplicate/unready/legacy/control-drain cases pass locally. Android JVM66 PASS. Isolated DNS,
-broader race and API27/API35 JNI/runtime qualification are still PENDING at this checkpoint.
-No server/APK installation/publication, maintenance or admission change.118/default113/catalog7
-unchanged; paired-DNS/WebSocket and physical gates OPEN. Stop after integration qualification;
-online publication and production activation are not authorized by this stage.
-[Dependency map, implementation and remaining checks](releases/2026-11-05-mesh-renewal-integration.md).
+**5 November — bounded renewal integration stage finished; candidate NOT released.**
+Fromd4de324, sourcef7d0920 +6dcd727 +b46bff4 connects selected-node Android delivery to the
+existing native owner, consistent gateway lease authorization and active broker monitoring.
+Real TLS/mux/persistent TCP survives two authenticated generations across old leaf/CRL and
+real lease bounds; new TCP, isolated DNS and verified HTTPS PASS. Revoke/cancel/Disconnect/
+expiry/partial-commit/dedup/legacy/control-drain and joined-cleanup race checks PASS.
+Scoped JVM66 PASS; fresh API27/API35 five JNI/ownership/Keystore checks each PASS; official
+local ARM64 build/packet gate PASS. Five affected native packages pass the broad race run;
+bootstrap still FAILS the same six baseline diagnostic assertions. No full-CI/release PASS.
+No server/phone installation or public artifact/catalog/maintenance/admission change.
+118/default113/catalog7 unchanged; paired-DNS/WebSocket and physical gates OPEN.
+STOP here. Online single-writer/durable/crash-reconciled two-node publication is described
+but NOT executed or automatically authorized. Concurrent documentationd976e51 preserved.
+[Dependency map, exact bounds/evidence, failure and next-stage boundary](releases/2026-11-05-mesh-renewal-integration.md).
 
 Previous native primitive checkpoint:
 **5 November10:10UTC — authenticated native credential exchange implemented/locally qualified; NOT activated.**

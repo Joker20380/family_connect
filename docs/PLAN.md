@@ -12,15 +12,17 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
-**Selected stage11:05UTC — complete renewal runtime integration qualification, then STOP.**
-Continue fromd4de324, not the beta113-era queue. Dependency map and source integration now
-cover selected-node Android delivery/native ownership, atomic native authorization, gateway
-lease checks and active broker monitoring. Host real-runtime continuity/negative checks and
-66 scoped Android JVM cases pass. Finish isolated DNS, broader native race, API27/API35
-JNI/runtime and source/remote verification; retain inherited bootstrap failure evidence.
-No new global PLAN ID, release/deployment, online publication, maintenance-stop removal,
-cohort/paid/boot change or automatic successor. Online single-writer/durable/crash-reconciled
-two-node publication remains a separately described, NOT executed next stage.
+**Selected bounded stage COMPLETE — runtime integration candidate; STOP before publication.**
+Sourcef7d0920/6dcd727/b46bff4 followsd4de324, not the beta113-era queue. Dependency/capture
+map, selected-node delivery/native ownership, gateway lease and broker generation integration,
+real-time TLS/mux/TCP/DNS/verified-HTTPS continuity and negative/cleanup gates are exercised.
+Scoped JVM66 and API27/API35 five checks each PASS; ARM64 local build/packet gate PASS.
+Affected native race packages PASS; the mandatory bootstrap gate retains six baseline
+diagnostic assertion failures, so this is NOT full-CI or release acceptance. Fix/requalify
+that gate before a later release decision; field paired-DNS/WebSocket remain independent.
+No new global PLAN ID, deployment, maintenance-stop removal, cohort/paid/boot change or
+automatic successor. Online single-writer/durable/crash-reconciled two-node publication
+is only the described next stage, NOT executed. Production activation stays outside this task.
 [Current integration map and acceptance](releases/2026-11-05-mesh-renewal-integration.md).
 
 Previous selected continuation (superseded by the bounded stage above):
