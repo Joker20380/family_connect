@@ -21,6 +21,15 @@ Do not remove quiescence guards, extend expiry or pause maintenance as a shortcu
 Paired-DNS/signaling root causes and both-node physical slow/lossy/sustained gates remain
 open; no unrelated queued successor is authorized by this continuation.
 
+09:16UTC native boundary subgate complete, not seamless-renewal implementation: signed
+leaf/CRL atomic rotation with one persistent TCP stream, unchanged old security deadline,
+authenticated successor handshake, held-request revocation and unsafe-successor denial.
+120 repeated race leaf cases PASS;288 native regression leaf cases PASS,20 root/3 optional
+harness skips. Production/timers unchanged. Next implement the authenticated in-session
+successor exchange, then coordinated eligible online publication and cross-deadline/fleet
+acceptance; never substitute a local deadline extension or remove quiescence checks.
+[Source-only checkpoint and exact remaining gates](releases/2026-11-05-mesh-renewal-continuity.md).
+
 Previous completed overnight scope (publication prohibition superseded by the new request):
 **Selected overnight scope — diagnose paired-DNS/transport failures and execute stability gates.**
 Owner authorizes unattended checks; no unrelated queued successor or public rollout.

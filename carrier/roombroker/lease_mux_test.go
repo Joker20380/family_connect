@@ -91,6 +91,11 @@ func newLeaseMuxFixture(test *testing.T, support bool, securityLifetime ...time.
 	if err != nil {
 		test.Fatal(err)
 	}
+	return newLeaseMuxWithProfiles(test, support, clientRaw, serverRaw, securityLifetime...)
+}
+
+func newLeaseMuxWithProfiles(test *testing.T, support bool, clientRaw, serverRaw []byte, securityLifetime ...time.Duration) *leaseMuxFixture {
+	test.Helper()
 	path := filepath.Join(test.TempDir(), "gateway.json")
 	if err := os.WriteFile(path, serverRaw, 0600); err != nil {
 		test.Fatal(err)

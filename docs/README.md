@@ -8,6 +8,10 @@ cannot substitute for the restricted mobile network.
 [Download, instructions and rollback](releases/2026-11-05-android118-field.md) ·
 [Overnight outage and remaining gates](releases/2026-11-05-mesh-overnight-checks.md).
 
+09:16UTC [native credential-rotation boundary](releases/2026-11-05-mesh-renewal-continuity.md)
+is covered with real TLS/signed CRLs and persistent TCP. Source/tests only; authenticated
+in-session renewal and coordinated online maintenance remain unimplemented, not deployed.
+
 **Previous4 November22:43UTC — Android117 both-NL traffic/cleanup/reconnect accepted, sustained stability OPEN.** Physical116
 cellular loss coincides with ACK stall despite Wi-Fi/VPN continuity; a local all-interface
 ICE defect is reproduced and narrowed to the protected route. Native race239 PASS/6

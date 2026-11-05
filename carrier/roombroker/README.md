@@ -24,6 +24,14 @@ identity database. Existing Python `/v2/provisioning` and deployed services are
 unchanged. `cmd/room-broker` is an opt-in control facade colocated with the existing
 Amsterdam carrier, not a new production deployment or transport orchestrator.
 
+Profile reload is not seamless credential renewal. An established Family session and its
+lease handler keep the original certificate/CRL security deadline even after compatible
+successor files appear. The self-contained `TestLeaseCredential*` cases exercise real signed
+rotation, persistent TCP, new-handshake identity, held-request revocation and the unchanged
+old deadline. Run `go test -race ./roombroker -run '^TestLeaseCredential' -count=20` from
+`carrier/`. See the [current renewal boundary and remaining gate](../../docs/releases/2026-11-05-mesh-renewal-continuity.md).
+This source checkpoint does not enable online fleet publication or extend existing sessions.
+
 All endpoints are POST JSON and require admitted device mTLS:
 
 - `/v1/rooms/challenge`: reserve a random 256-bit setup authorization for this

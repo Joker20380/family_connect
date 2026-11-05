@@ -1,5 +1,11 @@
 # Release distribution / Выпуски
 
+**5 November09:16UTC — renewal boundary source/test checkpoint, not a runtime release.**
+Signed credential rotation retains the old TCP stream but not beyond its original security
+deadline.120 repeated race leaf cases and288 broader native cases PASS;20 root/3 optional
+harness skips. No APK/native/timer change; authenticated in-session renewal remains to be
+implemented. [Exact scope and next gate](releases/2026-11-05-mesh-renewal-continuity.md).
+
 **5 November — Android118 separate opt-in field download is published.**
 Existing accepted13e0b37/CI41933207129 bytes and matching audio source, same signer,
 no rebuild/resign. Android8.1+/ARM64; update in place without clearing data.

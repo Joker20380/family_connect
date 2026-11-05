@@ -17,6 +17,16 @@ remain PENDING. Both gateways retain70e6c0fc. Next engineering gate is authentic
 credential renewal without the measured coordinated outage; preserve hard security deadlines.
 [Download, user procedure, hashes and rollback](releases/2026-11-05-android118-field.md).
 
+09:16UTC renewal boundary checkpoint: real signed leaf/CRL replacement preserves the old
+TCP stream but cannot extend its original Family security deadline. A new handshake uses
+the authenticated successor; held-request revocation/foreign authority/Family/CRL-floor
+negatives preserve lease bounds.120 repeated leaf cases pass under race, no skips;
+288 broader native leaf cases pass,20 root and3 optional harness cases skipped explicitly.
+Only test scaffolding/tests/docs change, not production or deployment. Next implementation
+is authenticated in-session successor transition, then coordinated online publication and
+both-node acceptance. No timer/expiry workaround; field acceptance remains open.
+[Exact checks and remaining completion gate](releases/2026-11-05-mesh-renewal-continuity.md).
+
 Previous overnight checkpoint:
 **5 November00:55UTC — bounded overnight checks complete; maintenance outage confirmed, full acceptance OPEN.**
 New30-minute observation initially passes8 DNS/2 HTTPS/2 NL2-egress checks, then phone
