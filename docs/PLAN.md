@@ -15,10 +15,13 @@ acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-he
 **Selected continuation — coordinated online renewal qualification, IN PROGRESS.**
 Reuse the same incident and single writer; no new PLAN ID or production authorization.
 Compatible prepare/commit/publication/readiness and recoverable loss-of-response paths
-are implemented behind a source qualification guard;45 focused tests PASS. Complete
-post-commit emergency handoff, adversarial receipt/cache/recovery coverage, immutable
-two-node native stand and mandatory root/package/bootstrap gates before stage acceptance.
-Do not infer full qualification from the positive stand or remove maintenance stop guards.
+are implemented behind a source qualification guard. Immutablea8e1db9 two-node native
+stand999.12s PASS;55 focused negatives, root/package219 and artifact-enabled bootstrap
+race/count3 gates PASS. Next within the SAME incident: finish post-commit emergency
+handoff without manual profile/DB/marker edits, complete distributed receipt/cache/crash
+acceptance and explicitly qualify current online API packaging. These remain source gates,
+not permission to activate. Do not infer whole-stage acceptance from the positive stand
+or remove maintenance stop guards. No new production online mode is enabled.
 APK118/updater113, paired-DNS/WebSocket and physical/live release gates remain unchanged.
 [Current checkpoint and remaining gate](releases/2026-11-05-mesh-online-renewal.md).
 

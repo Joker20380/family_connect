@@ -1,5 +1,13 @@
 # Online MESH renewal qualification / 5 November 2026
 
+**Latest outcome,12:55UTC: positive isolated online stand PASS; requested stage INCOMPLETE.**
+Source checkpointa8e1db9 plus narrow negative-test/strict-JSON delta2cbd304 is pushed.
+The mandatory bootstrap gate now passes including its isolated Python artifact contract.
+Emergency reconciliation/handoff, complete distributed failure/cache acceptance and
+online runtime packaging remain source gates. The qualification RPC is disabled by the
+production constructor. Earlier checkpoint paragraphs below are historical progress,
+not additional active NEXTs or permission to activate anything.
+
 ## Entry and boundary
 
 Entry HEAD is exactly `15ef592bf92c143839130da7884328e4a7d9918f`. The four pre-existing
@@ -132,3 +140,130 @@ also requires the original receive cause and unchanged public Error text, and co
 the actual ERROR-frame branch. No production error is suppressed or authorization changed.
 Ten race repetitions of busy, both HELLO outcomes and negative admission boundary PASS.
 The complete artifact-enabled bootstrap repeat is still required after this assertion fix.
+
+## Frozen-source stand result
+
+`a8e1db900105219b22abae21accd2c2b6e2f5b30` exported with `git archive`, mounted read-only;
+one network-isolated Docker container contains three logical node roots, actual
+ProductionController/ProductionNode handlers, real authenticated RestrictedReadiness
+proofs, and two separate Family TLS/mux/broker runtimes. This is not a physical three-host
+or SSH-failure qualification. A local packet carrier and local echo/DNS/HTTPS origins
+replace Telemost/Internet. Synthetic signing/device keys never leave private test state.
+Server material is written by the real transaction; client material comes from readiness
+and wholedevice.DeliveryMaterial, not a manually supplied SessionMaintenance profile.
+
+The fixture shortens synthetic leaf/CRL validity only: initial500s, successors1000s;
+production4h validity is untouched. The real300s Android cooldown is included in the443s
+window, not waited by an actual Android process. The native driver validates readiness
+and offers each distinct profile through the existing maintenance owner. This does not
+claim Android HTTP/cache timing or APK118 continuity acceptance.
+
+All times below are UTC on5 November2026:
+
+| Observation | NL/AMS1 fixture | NL2/AMS2 fixture |
+|---|---|---|
+| Original security/leaf/CRL bound |12:47:25|12:47:25|
+| Original lease bound |12:39:17.030930941|12:39:17.031156091|
+| Generation1 native confirmation |12:39:09.588154962|12:39:09.726322421|
+| Generation1 security/leaf/CRL bound |12:55:42|12:55:42|
+| Generation2 native confirmation |12:47:29.328411896|12:47:29.390912114|
+| Generation2 security/leaf/CRL bound |13:04:02|13:04:02|
+| Final crossing observation |12:55:43.125387420|12:55:43.127724158|
+| Final lease bound |12:55:48.057772975|12:55:48.057092799|
+
+CRL floors1→2→3 and exact common CRL bytes agree on both gateways. Native authorization
+generation is checked on both endpoints for each exchange. Original client/server mux
+objects and exactly one accepted original TCP are asserted during every traffic iteration;
+the same stream survives both crossings with883 verified payloads /18,433 useful bytes
+in EACH direction per node. The final explicit fresh TCP makes the final accept count2;
+this is a deliberate new-flow check, not replacement of the original connection.
+DNS and certificate-verified HTTPS succeed after both old bounds. No mock deadline setter,
+service restart or new seed is counted as continuity. Entire stand:999.12s PASS.
+
+Receipt persistence timestamps provide upper bounds on the actual runtime-read observation,
+not a claim of distributed instantaneous commit:
+
+| Generation | NL receipt | NL2 receipt | RU delivery-ready receipt | Both native confirmations by |
+|---|---|---|---|---|
+|1|12:39:07.869196|12:39:07.870507|12:39:08.084377|12:39:09.726323|
+|2|12:47:27.635243|12:47:27.637729|12:47:27.785584|12:47:29.390912|
+
+Thus observed RU-ready→both validated native confirmations is under1.643s each round.
+The readiness-read and exchange are not separately timestamped; no invented split latency
+is reported. Receipt times are retained filesystem timestamps, while native times are
+explicit harness observations. At the second issuance the predecessor has495s remaining,
+above the443s local budget. A transport with the real120s SSH timeout requires a different,
+larger eligibility window; the local result does not qualify deployed scheduling.
+
+Runtime process-instance receipts remain unchanged across both generations:
+- NL: `c931f9a6929dc8c82dd277c623f4cf8b40d91771d115c1ef72abaf46e03f0d96`.
+- NL2: `fa4f8154f4a37bddbc29f0baa0ab94e9da6136ae16742ace28a7a67ac1260918`.
+
+| Gateway | Generation1 profile SHA256 | Generation2 profile SHA256 |
+|---|---|---|
+|NL|`cd9983e627d431e1b1c03d9bce53aceb81e5276058a5316b3748780515c2ccde`|`4c48d25db1f0a94a1f4b3d3218c244ad71dfe6c4f75644d0451bef0fdeab4bf6`|
+|NL2|`2415d0fbb5cd131b445c2bb9ac26daa49aced789c9db6df7c68205a2803e2557`|`3a2cf95e91930838e79216e4500f185b48f9811f53947b60a41e10f935996427`|
+
+## Final check scope and provenance
+
+- Python scoped controller/node/readiness/multi-gateway/package selection on2cbd304:
+  **229 PASS,5 optional harness skips**. Focused online subset: **55 PASS**.
+- Isolated root canonical custody, profile routes, archive/recovery, packaging and online
+  selection ona8e1db9: **219 PASS**, including existing immutable accepted API checks.
+- Go1.26.1 `-race -count=1` on four affected packages (familysession, roombroker, bootstrap,
+  cmd/bootstrap-broker) ona8e1db9 with fresh ProductStore fixtures: all packages PASS;
+  28 nested optional/root/DNS/stand skip events are not concealed.
+- Root roombroker race binary:163 parent/nested PASS events,5 skips (four explicit DNS
+  subtests and separate long stand). The long stand separately runs actual isolated DNS.
+  An earlier broad run with DNS enabled for every test hits an existing fixture collision:
+  cross-session proof test creates two independent port53 listeners. That failure is
+  retained, not erased or reported as production DNS failure; the proof test passes in
+  the normal root suite. No unrelated test is removed or desktop failure repaired.
+- Final mandatory bootstrap and command `-race -count=3` on2cbd304 with real disposable
+  identity fixtures AND source-built isolated sync Python artifact: **PASS, zero skips**,
+  350 parent/nested/package PASS events. Earlier failure logs remain in local evidence.
+- Android/JVM/API27/API35 are not rerun: this delta does not change Android/native owner
+  integration; those accepted previous-stage checks are not relabelled as new acceptance.
+
+Source and artefact distinctions:
+
+| Item | Provenance/SHA256 |
+|---|---|
+|Online stand/source checkpoint|`a8e1db900105219b22abae21accd2c2b6e2f5b30`|
+|Strict marker parsing/negative bootstrap assertion delta|`2cbd304684e23e855df75a8d9e5666e53a64805a`|
+|Isolated root image|`sha256:ca61f885607656ea89f5726853761c4c533d050faf26b71853575c24ca1ed123`|
+|Unbound maintenance capsule|`beb68dd770285d7e2a2315111c8ab6075af0834e0be1dfd692941acdeab7a23c`|
+|Capsule source-files inventory|`d6bbe45081e7652e76314f97589708028d9129d9ca795a22258e8f679baa3a82`|
+|Capsule manifest|`6bb965853b5e75dd49ac7d61891435d31cde4cb66910dcda8da98357b7303e5e`|
+|Race native stand test binary|`325d9263acbdf7e787114089be71fae520f786cf762eb0e11d8ef3d906c8fb23`|
+|Readiness validation helper|`2ef72dfe1c5ae57eba69cbc013c72a2f75a4fb963284159f39695e26bbca323a`|
+|Source-built sync Python artifact|`0227d22ccb5be6b1808e560c35a4dabd3da923dc9ed8aaa830374792968f11ff`|
+
+Capsule keeps accepted API sourceedca544 unchanged; it is NOT an online runtime package.
+No archive, native test binary, synthetic identity or raw fixture state is committed or
+distributed. Private evidence stays under `state-client-build/mesh-online-renewal-20261105/`;
+the sanitized `stand-a8e1db9-public-summary.json` contains no private material or traffic.
+
+## Unfinished source gates and later release gates
+
+The requested stage is deliberately **not marked complete**:
+1. Post-COMMIT revoke/emergency safely reaches ONLINE_EMERGENCY_REQUIRED with readers
+   fenced and original decision retained, but it lacks the machine handoff to the existing
+   quiesced emergency transaction. Do not delete its marker or edit profiles/DB to resume.
+2. Complete receipt-corruption/unknown-participant/process-death reconciliation, including
+   actual independent controller/node processes and concurrent directory publisher custody.
+   Logical crash/lost-response tests do not prove every remote process failure boundary.
+3. Qualify late/cached Android delivery and new-session admission throughout partial
+   publication, plus unsupported peers within this coordinated stand. Previous native
+   legacy/revoke/late-ACK/partial-commit/cancel/control-drain negatives remain in the race
+   scope, but are not a substitute for all coordinated end-to-end scenarios.
+4. Explicitly package and validate the current readiness/runtime-reader contract; retain
+   the old accepted maintenance API and production-disabled qualification guard meanwhile.
+
+Only after these source gates may a separate release decision consider immutable artifacts,
+full platform CI, exact matching gateway binaries, approved production scheduling/window,
+online live acceptance on both nodes and physical weak-link/screen-off/mobile allowlists.
+APK118 is not upgraded by this source work and receives no continuity promise. Production
+activation, paid/cohort/boot/catalog changes and fixes for paired-DNS/WebSocket are NOT done.
+No rollback of live systems is needed: none were changed. Source fallback is the unchanged
+quiesced path; this is not permission to reset Git or alter a live transaction.
