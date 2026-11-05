@@ -11,6 +11,22 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**5 November — G1 emergency implementation checkpoint; G1–G4 qualification IN PROGRESS.**
+Product milestone: operational reliability of Android MESH for a small opted-in group,
+without routine developer reconnection. Existing roadmap stage5 remains open; subscription
+accounting exists, but controlled paid beta/commercial acceptance is not implied.
+The same controller can now preserve an online COMMIT, durably archive its staged state,
+fence the old owner and request explicit outage approval before a linked quiesced recovery.
+Current revoke state wins; the emergency CRL advances beyond the committed floor, never
+restores the old DB, and ordinary rollback is forbidden for this continuation.
+Scoped Python192 PASS/1 optional SKIP (includes20 handoff tests, not an additional total).
+This is not yet independent-process, Android HTTP/cache or final-package runtime acceptance.
+Next: finish the SAME incident's G1–G4 qualification. Production constructors remain closed;
+no deployment/access, APK118/updater113, timers, cohort, admission or paid baseline changes.
+After G1–G4: exact immutable release qualification/delivery preparation, separately authorized
+delivery/live/field acceptance, then ANDROID-CONTROLLED-BETA. Paired-DNS/WebSocket remain OPEN.
+
+Previous isolated positive checkpoint (preserved evidence, not a current NEXT):
 **5 November12:55UTC — online positive stand PASS; whole requested stage NOT accepted.**
 Checkpointa8e1db9 survives999.12s on isolated logical RU/NL/NL2 roles: real Family TLS/mux,
 existing gateway/broker handlers and authenticated readiness → DeliveryMaterial → existing

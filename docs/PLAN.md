@@ -12,6 +12,23 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Current product milestone: Android MESH operational reliability.** The selected incident
+remains within the original stage5, not a new product/PLAN ID. Partial stage6/7 delivery and
+implemented subscription accounting do not close gateway recovery or paid launch.
+G1 now has a linked, approval-gated quiesced continuation implementation; scoped192 PASS/
+1 optional SKIP includes20 handoff tests. G1 runtime acceptance and G2 independent-process
+faults, G3 actual Android HTTP/cache delivery and G4 qualified package are still pending.
+**One active next step: finish G1–G4 source/integration qualification in this incident.**
+Then, without executing the next stage automatically: (A) exact client/both-gateway/publisher
+release artifacts and controlled-delivery preparation; (B) separately approved delivery,
+real renewal on both NL, paired-DNS/WebSocket and weak-link/loss/screen-off/mobile-allowlist
+acceptance; (C) ANDROID-CONTROLLED-BETA on the newly qualified baseline, applicable access/
+revocation checks, explicit roster/opt-in/subscription terms, monitoring and stop owner;
+(D) expansion only from connection/drop/recovery/support/cost evidence. Preserve existing
+paid/cohort limits and completed internal canary; no new payment or enrollment now.
+Desktop parity/iOS/Home Gateway/new providers/servers/acquiring are not dependencies here.
+
+Previous qualification checkpoint (not an independent NEXT):
 **Selected continuation — coordinated online renewal qualification, IN PROGRESS.**
 Reuse the same incident and single writer; no new PLAN ID or production authorization.
 Compatible prepare/commit/publication/readiness and recoverable loss-of-response paths

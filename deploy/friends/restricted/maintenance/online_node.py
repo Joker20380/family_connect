@@ -201,12 +201,18 @@ def dispatch(node, operation, payload):
     require(type(payload) is dict and type(payload.get('command')) is str, 'ONLINE_RPC_SCHEMA')
     command = payload['command']
     schemas = {'inspect': set(), 'acquire': {'fence', 'expected', 'online'}, 'prepare': {'fence', 'gateway'},
+               'emergency-handoff': {'origin'}, 'emergency-prepare': {'origin', 'gateway'},
                'stage': {'fence', 'plan'}, 'decide': {'fence', 'plan_sha256', 'prepared'},
                'complete': {'fence', 'reconciliation'}, 'abort': {'fence'}, 'fence': {'fence'},
                'publish': {'fence'} | ({'receipts'} if node.role == 'RU' else set())}
     require(command in schemas and set(payload) == schemas[command] | {'command'}, 'ONLINE_RPC_SCHEMA')
     if command == 'inspect':
         return node.inspect(online=True)
+    if command == 'emergency-handoff':
+        from online_emergency import handoff
+        return handoff(node, operation, payload['origin'])
+    if command == 'emergency-prepare':
+        return node.prepare(operation, payload['gateway'], emergency_handoff=payload['origin'])
     if command == 'acquire':
         return acquire(node, operation, payload)
     if command == 'prepare':

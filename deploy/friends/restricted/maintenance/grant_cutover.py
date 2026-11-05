@@ -275,7 +275,8 @@ class GrantDatabase:
             return dict(schema=1, model='MAINTENANCE_CUTOVER_NO_OVERLAP', before=before,
                         after_grants=after, predecessors=[], before_sha256=digest(canonical(before)), issued_at=issued)
 
-    def apply(self, plan, candidate_crl, issuer, now, *, readers_quiesced, recovery_authorization=None):
+    def apply(self, plan, candidate_crl, issuer, now, *, readers_quiesced, recovery_authorization=None,
+              committed_sequence=None):
         require(readers_quiesced(), 'READERS_NOT_QUIESCED')
         validate_grant_plan(plan, now if recovery_authorization is None else plan['issued_at'])
         if digest(canonical(self.snapshot())) == plan['before_sha256']:
@@ -297,7 +298,11 @@ class GrantDatabase:
                 return 'ALREADY_APPLIED'
             require(digest(canonical(actual)) == plan['before_sha256'], 'STALE_DATABASE')
             previous_number = actual['restricted_crl_sequence'][0]['sequence']
-            require(number in (previous_number,previous_number+1), 'CRL_SEQUENCE')
+            if committed_sequence is None:
+                require(number in (previous_number,previous_number+1), 'CRL_SEQUENCE')
+            else:
+                require(previous_number in (committed_sequence-1, committed_sequence)
+                        and number == committed_sequence+1, 'CRL_SEQUENCE')
             for old, new in zip(actual['restricted_grants'], plan['after_grants']):
                 if old == new:
                     continue
@@ -344,14 +349,17 @@ def validate_grant_plan(plan, now):
                 and successor['expires'] > predecessor['expires'], 'GRANT_REVISION_OR_VALIDITY')
 
 
-def prepare_crl(previous_pem, issuer, signing_key, plan, now):
+def prepare_crl(previous_pem, issuer, signing_key, plan, now, *, committed_sequence=None):
     validate_grant_plan(plan, now)
     require(hmac.compare_digest(spki(issuer.public_key()),spki(signing_key.public_key())),
             'ISSUER_SIGNING_KEY_MISMATCH')
     previous = x509.load_pem_x509_crl(previous_pem)
     require(previous.issuer == issuer.subject and previous.is_signature_valid(issuer.public_key()), 'CURRENT_CRL_INVALID')
     previous_number = previous.extensions.get_extension_for_class(x509.CRLNumber).value.crl_number
-    require(plan['before']['restricted_crl_sequence'][0]['sequence'] == previous_number, 'CURRENT_SEQUENCE_INVALID')
+    actual = plan['before']['restricted_crl_sequence'][0]['sequence']
+    require(actual == previous_number if committed_sequence is None else
+            previous_number == committed_sequence and actual in (committed_sequence-1, committed_sequence),
+            'CURRENT_SEQUENCE_INVALID')
     issued = max(now - 5, int(issuer.not_valid_before_utc.timestamp()), int(previous.last_update_utc.timestamp()))
     require(issued <= now and utc(issued + VALIDITY['crl']) <= issuer.not_valid_after_utc, 'AUTHORITY_HEADROOM_INSUFFICIENT')
     builder = x509.CertificateRevocationListBuilder().issuer_name(issuer.subject).last_update(utc(issued)).next_update(utc(issued + VALIDITY['crl']))

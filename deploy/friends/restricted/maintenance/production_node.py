@@ -481,11 +481,19 @@ class ProductionNode:
             require(self.barrier.stopped(), 'READERS_NOT_QUIESCED')
             return dict(stopped=True)
 
-    def prepare(self, operation_id, gateway, *, authority_handoff=None, expired_handoff=None, online_token=None):
+    def prepare(self, operation_id, gateway, *, authority_handoff=None, expired_handoff=None, online_token=None,
+                emergency_handoff=None):
         require(self.role == 'RU', 'NODE_ROLE')
         require(bool(self.gateway_ids) == ('secondary' in gateway), 'GATEWAY_SET_BINDING')
         with self.operation.lock():
             owner = self.owner(operation_id)
+            require((owner.get('mode') == 'online-emergency') == (emergency_handoff is not None),
+                    'ONLINE_EMERGENCY_ORIGIN')
+            if emergency_handoff is not None:
+                from online_emergency import gateway_inputs
+                require(authority_handoff is None and expired_handoff is None and online_token is None,
+                        'ONLINE_EMERGENCY_ORIGIN')
+                gateway = gateway_inputs(self, gateway, emergency_handoff)
             if online_token is None:
                 require(owner['state'] == 'QUIESCED' and self.barrier.stopped(), 'READERS_NOT_QUIESCED')
             else:
@@ -506,6 +514,9 @@ class ProductionNode:
             import json
             envelope = json.loads(self.read('issuer.json')[0])
             previous_crl = self.read('revocations.pem')[0]
+            if emergency_handoff is not None:
+                require(envelope == emergency_handoff['plan']['candidate']['authority'], 'ONLINE_EMERGENCY_BINDING')
+                previous_crl = emergency_handoff['plan']['candidate']['crl'].encode()
             now = int(self.clock())
             database = self.database.snapshot()
             previous = canonical(dict(schema=1,authority=envelope,crl=previous_crl.decode(),
@@ -553,7 +564,10 @@ class ProductionNode:
             crl_due = int(old_crl.next_update_utc.timestamp()) - now <= THRESHOLD['crl']
             missing_revocations = any(old_crl.get_revoked_certificate_by_serial_number(serial) is None
                                       for serial in grant_plan['predecessors'])
-            crl = prepare_crl(previous_crl,issuer,signer,grant_plan,now) if crl_due or missing_revocations else previous_crl
+            crl = (prepare_crl(previous_crl,issuer,signer,grant_plan,now,
+                    committed_sequence=old_crl.extensions.get_extension_for_class(x509.CRLNumber).value.crl_number
+                    if emergency_handoff is not None else None)
+                if crl_due or missing_revocations or emergency_handoff is not None else previous_crl)
             successor = gateway['certificate']
             if int(leaf.not_valid_after_utc.timestamp()) - now <= THRESHOLD['leaf']:
                 issued = max(now-5,int(issuer.not_valid_before_utc.timestamp()))
@@ -577,6 +591,8 @@ class ProductionNode:
                 from online_contract import validate_plan
                 plan['online'] = owner['online']
                 validate_plan(self, plan, full_window=True)
+            if emergency_handoff is not None:
+                plan['online_emergency'] = emergency_handoff
             self.validate(plan)
             path = self.state/'prepared-plan.json'
             if path.exists():
@@ -587,6 +603,10 @@ class ProductionNode:
 
     def validate(self, plan, *, recovery=False):
         extra = {'expired_recovery'} if 'expired_recovery' in plan else set()
+        if 'online_emergency' in plan:
+            from online_emergency import validate
+            validate(self, plan)
+            extra.add('online_emergency')
         if 'online' in plan:
             extra.add('online')
         if self.gateway_ids:
@@ -655,9 +675,15 @@ class ProductionNode:
             else:
                 local = gateway_set.selected(plan,self.gateway_slot)
                 gateway = self.public_gateway()
-                require(gateway['profile_sha256'] == local['nl_profile_sha256']
-                        and gateway['certificate'] == local['previous']['certificate']
-                        and gateway['revocations'] == local['previous']['crl'], 'STALE_NODE_STATE')
+                if 'online_emergency' in plan:
+                    parent = gateway_set.selected(plan['online_emergency']['plan'], self.gateway_slot)
+                    require(gateway['profile_sha256'] == local['nl_profile_sha256'] and any(
+                        gateway['certificate'] == parent[phase]['certificate'] and gateway['revocations'] == parent[phase]['crl']
+                        for phase in ('previous', 'candidate')), 'STALE_NODE_STATE')
+                else:
+                    require(gateway['profile_sha256'] == local['nl_profile_sha256']
+                            and gateway['certificate'] == local['previous']['certificate']
+                            and gateway['revocations'] == local['previous']['crl'], 'STALE_NODE_STATE')
                 import json
                 profile = json.loads(self.read('gateway.json')[0])
                 profile.update(authority=self.validator.validate(canonical(local['candidate']),int(self.clock()))[1]['authority'],
@@ -775,10 +801,15 @@ class ProductionNode:
                 require(digest(raw) == item['after'], 'STAGED_FILE_CHANGED')
                 self.replace(name,raw,item)
             if self.role == 'RU':
+                committed_sequence = None
+                if 'online_emergency' in plan:
+                    from online_emergency import validate
+                    committed_sequence = validate(self, plan)
                 self.database.apply(plan['grant_plan'],plan['candidate']['crl'].encode(),issuer,int(self.clock()),
                                     readers_quiesced=self.barrier.stopped,
                                     recovery_authorization=self.recovery_authorization(plan, durable=True)
-                                    if 'expired_recovery' in plan else None)
+                                    if 'expired_recovery' in plan else None,
+                                    committed_sequence=committed_sequence)
                 self.fault('after-sqlite-commit')
             self.operation.advance(owner,'PROMOTED')
             return self.readback(operation_id)
@@ -806,6 +837,7 @@ class ProductionNode:
 
     def rollback(self, operation_id):
         with self.operation.lock(), self.profile_lock():
+            require(self.owner(operation_id).get('mode') != 'online-emergency', 'ONLINE_DECISION_IMMUTABLE')
             owner = self.owner(operation_id)
             require(owner['state'] not in ('COMMIT_DECIDED','RESUMED'), 'ROLLBACK_AFTER_COMMIT_FORBIDDEN')
             require(self.barrier.stopped(), 'READERS_NOT_QUIESCED')
@@ -865,6 +897,13 @@ class ProductionNode:
                     'RU_NL_RECONCILIATION_FAILED')
             if self.role == 'RU':
                 self.accepted_directories(operation_id)
+                plan = parse(read_private(self.state/'plan.json'))
+                if 'online_emergency' in plan:
+                    from online_contract import CONTRACT
+                    atomic(self.live/'online-delivery.json', canonical(dict(schema=1, contract=CONTRACT,
+                        operation_id=operation_id, plan_sha256=digest(canonical(plan)), ready=True,
+                        crl_sha256=digest(plan['candidate']['crl'].encode()), gateways=self.gateway_ids,
+                        issued_at=plan['grant_plan']['issued_at'])))
             self.barrier.resume(commit_decided=True,equality_verified=True)
             return self.operation.advance(owner,'RESUMED')
 

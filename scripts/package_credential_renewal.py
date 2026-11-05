@@ -32,7 +32,7 @@ MODULES = ('credential_renewal.py', 'expired_recovery.py', 'grant_cutover.py', '
            'node.py', 'offline_handoff.py', 'production_controller.py', 'production_node.py',
            'production_transport.py', 'renewal_cli.py', 'renewal_health.py', 'runtime_controller.py',
            'scheduled_evaluate.py','gateway_set.py', 'online_contract.py', 'online_controller.py',
-           'online_node.py', 'online_reader.py')
+           'online_node.py', 'online_reader.py', 'online_emergency.py')
 SOURCES = tuple(sorted(set(API_MEMBERS) | set(API_ADDITIONS) | {DIRECTORY + '/' + name for name in MODULES}))
 
 

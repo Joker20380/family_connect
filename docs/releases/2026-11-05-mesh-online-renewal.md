@@ -1,5 +1,52 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Continuation from354513d — G1 implementation checkpoint
+
+HEAD matched354513dd9f8a9558b800963664eb9ea053e457ab; no subsequent source delta. All
+pre-existing dirty documents and historical untracked files are preserved. No production
+access or changes. This checkpoint does not accept G1–G4 or enable the production constructor.
+
+`recover_online_emergency` reuses the existing controller lock and node owner/lock,
+quiescence barrier, issuer custody, validator, ProfileStore CAS, grant planning/apply,
+directory publication, reconciliation, service resume intents and archive/cleanup ledger.
+There is no second signer, writer, timer or authorization database. A durable continuation
+ID binds the original COMMIT/plan/prepared receipts/fence; the original decision is never
+changed to ABORT. Node handoff archives the original bytes before replacing staged work,
+preserves services-before, and moves the owner to a higher fenced emergency epoch.
+Stale online publish/fence/abort and ordinary rollback cannot mutate that owner.
+
+States: ONLINE_EMERGENCY_REQUIRED → EMERGENCY_HANDOFF → EMERGENCY_APPROVAL_REQUIRED →
+EMERGENCY_AUTHORIZED → EMERGENCY_PREPARED/PUBLISHING → EMERGENCY_COMMIT_DECIDED → existing
+resume/cleanup → EMERGENCY_RECOVERED. Missing approval yields a durable state-bound request;
+invalid/denied/expired approval leaves all readers stopped. Leaf/CRL emergency uses the
+existing operator outage authorization, not a fabricated root signature. Changed pinned
+policy/authority is not automatically authorized; offline authority approval remains separate.
+
+The emergency successor is signed from the committed authenticated material with the
+current registry. It includes current revocations and advances to committed CRL floor+1,
+even if one participant never published the earlier floor. Skipping that unpublished floor
+requires the locally retained exact parent plan/prepared receipt proof; ordinary sequence
+rules are unchanged. No intermediate forbidden profile is published and no DB is restored.
+After both gateways reconcile and publish current directories, RU publishes a matching
+delivery marker before resuming HTTP. Intentional quiescence closes old sessions: this is
+availability recovery, not TCP continuity. New runtime/TLS acceptance is still a gate.
+
+Checks: `test_online_emergency.py`20 PASS; a containing selection with online renewal,
+multi-gateway and activated maintenance192 PASS/1 optional SKIP. Do not add these totals.
+The selection covers both pre-node-decision and post-NL-publication revoke, missing/invalid/
+expired/denied outage approval, six controller boundaries, nine node handoff response-loss
+boundaries, stale owners, immutable parent COMMIT/floor advance, revoked readiness rejection
+and surviving identity readiness. These are in-process Python handlers, NOT G2 process death.
+Logs: ignored `state-client-build/mesh-online-gates-20261105/python-g1-second.log`.
+An initial invocation used a nonexistent test filename (collection NOT_RUN); it is retained
+as `python-g1-first.log`, not counted as a passing execution.
+
+G1 runtime handoff, G2 real RPC/process faults, G3 disposable Android HTTP/cache and
+G4 final online API/runtime package remain qualification work. Existing accepted maintenance
+API archive, old stand provenance and bootstrap success below are not silently replaced.
+
+## Prior accepted evidence (not current instructions)
+
 **Latest outcome,12:55UTC: positive isolated online stand PASS; requested stage INCOMPLETE.**
 Source checkpointa8e1db9 plus narrow negative-test/strict-JSON delta2cbd304 is pushed.
 The mandatory bootstrap gate now passes including its isolated Python artifact contract.
