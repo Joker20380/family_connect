@@ -30,7 +30,26 @@ successor files appear. The self-contained `TestLeaseCredential*` cases exercise
 rotation, persistent TCP, new-handshake identity, held-request revocation and the unchanged
 old deadline. Run `go test -race ./roombroker -run '^TestLeaseCredential' -count=20` from
 `carrier/`. See the [current renewal boundary and remaining gate](../../docs/releases/2026-11-05-mesh-renewal-continuity.md).
-This source checkpoint does not enable online fleet publication or extend existing sessions.
+This file-reload path does not enable online fleet publication or extend existing sessions.
+
+The opt-in `familysession.Session.RenewCredentials` primitive now exchanges authenticated
+successors over `LeaseRenewalHost:CredentialRenewalPort` (virtual mux port2, not an external
+listener). Both endpoints must independently obtain compatible fresh profiles; configure
+`MuxConfig.CredentialRenewal` explicitly. It shares the single bounded lease-control reserve.
+The protocol binds Ed25519 proofs to the original TLS exporter, both nonces and the exact
+successor generation, without sending private keys or complete profiles. It preserves
+the old security bound until authenticated commit and fences the native session after any
+failed/ambiguous exchange. `ConnectionState()` remains the original TLS handshake;
+`AuthorizationState()` is the current authenticated application peer/chain. Do not use the
+former as renewed authorization or extend a broker lease from an unacknowledged profile.
+
+Production does not register this handler or schedule exchanges yet. Gateway lease closures
+and the broker control-session monitor still use original bounds/authorization; a refreshed
+`Session` alone cannot keep the full product setup alive. Android fresh-credential delivery
+and generation-consistent monitoring must be integrated before online fleet publication.
+Run `go test -race ./familysession ./roombroker -run '^TestCredential'` from `carrier/`;
+cross-deadline DNS needs the isolated port53 harness described in the
+[protocol/checkpoint report](../../docs/releases/2026-11-05-mesh-credential-exchange.md).
 
 All endpoints are POST JSON and require admitted device mTLS:
 

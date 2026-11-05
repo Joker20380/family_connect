@@ -8,7 +8,17 @@ import (
 type admissionWaiter struct{ lease bool }
 
 func leaseRequest(request OpenRequest) bool {
-	return canonicalHost(request.Host) == LeaseRenewalHost && request.Port == 1
+	return canonicalHost(request.Host) == LeaseRenewalHost && (request.Port == 1 || request.Port == CredentialRenewalPort)
+}
+
+func (mux *Mux) renewalHandler(request OpenRequest) func(context.Context, *MuxStream) {
+	if !leaseRequest(request) {
+		return nil
+	}
+	if request.Port == CredentialRenewalPort {
+		return mux.config.CredentialRenewal
+	}
+	return mux.config.LeaseRenewal
 }
 
 func (mux *Mux) jobSlots(lease bool) chan struct{} {

@@ -15,13 +15,28 @@ admission and both70e6c0fc gateways remain unchanged. At09:07UTC full HTTPS118/s
 and unchanged catalog readback PASS. Field installation and restricted
 network acceptance are PENDING, not inferred from CI or ordinary-network success.
 [Delivery, private diagnostic procedure and rollback](releases/2026-11-05-android118-field.md).
-Next within this incident: prove authenticated successor renewal, original-session security
-deadline handling, revocation and coordinated recovery without stopping both gateways.
+Next within this incident: integrate authenticated successor renewal with client delivery,
+gateway lease/authorization monitoring and coordinated publication without stopping both gateways.
 Do not remove quiescence guards, extend expiry or pause maintenance as a shortcut.
 Paired-DNS/signaling root causes and both-node physical slow/lossy/sustained gates remain
 open; no unrelated queued successor is authorized by this continuation.
 
-09:16UTC native boundary subgate complete, not seamless-renewal implementation: signed
+**10:10UTC native successor-exchange subgate complete, opt-in only; runtime gate OPEN.**
+Same TLS/mux/TCP session survives its original leaf/CRL bound using mutual session-bound
+Ed25519 proofs and monotonic authenticated credentials; three isolated race repetitions
+per bound include DNS. Replay/corruption/late/cancellation negatives and20 repeated
+two-generation renewals pass. Five native regression packages pass; inherited bootstrap
+assertion failure is reproduced onbea0421. No production handler or Android supplier enabled.
+Selected dependencies now: generation-consistent refreshed authorization in the gateway
+lease handler and broker monitor; trusted fresh Android/native supplier and bounded trigger;
+coordinated eligible online publication with crash/rollback proof. Keep unsupported peers
+on the old hard bound and retain quiesced machinery for ineligible changes. Completion
+still requires exact platform CI, identical running NL hashes and real scheduled-renewal
+traffic on both nodes, plus physical weak-link/screen-off and field allowlist acceptance.
+Do not deploy this opt-in primitive alone or replace immutable118 binaries.
+[Protocol, actual tests and remaining gates](releases/2026-11-05-mesh-credential-exchange.md).
+
+Earlier09:16UTC native boundary subgate, superseded for implementation scope only: signed
 leaf/CRL atomic rotation with one persistent TCP stream, unchanged old security deadline,
 authenticated successor handshake, held-request revocation and unsafe-successor denial.
 120 repeated race leaf cases PASS;288 native regression leaf cases PASS,20 root/3 optional

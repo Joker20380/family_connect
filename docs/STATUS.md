@@ -6,6 +6,21 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**5 November10:10UTC — authenticated native credential exchange implemented/locally qualified; NOT activated.**
+Opt-in Family TLS-bound successor proof preserves one TCP socket across the old leaf/CRL
+deadline, including concurrent traffic; isolated DNS checks pass across both boundaries
+three times each. Invalid/replayed/late/cancelled exchanges fail closed. Two successive
+generations pass20 race repetitions. Five native packages pass under race; six bootstrap
+assertions fail identically on baselinebea0421, not a green whole-suite claim.
+No gateway/client integration, online publication or deployment yet: current lease and
+broker monitors still use their original authorization/bounds. Next connect trusted fresh
+credential delivery and generation-consistent authorization/lease monitoring, then qualify
+coordinated online publication and identical both-node delivery. Maintenance guards remain.
+Owner/opt-in118, default113/catalog7, desktops and last-verified NL70e6c0fc are unchanged;
+no live readback this checkpoint. Restricted-network and physical stability acceptance OPEN.
+[Protocol, checks, limitations and rollback](releases/2026-11-05-mesh-credential-exchange.md).
+
+Previous field-delivery checkpoint:
 **5 November09:07UTC — Android118 opt-in field download HTTPS-verified; default113/catalog7 retained.**
 Owner requests testing by users actually on mobile allowlists, not another owner-local
 substitute. Existing qualified13e0b37/CI41933207129 APK is published unchanged with its
@@ -17,7 +32,7 @@ remain PENDING. Both gateways retain70e6c0fc. Next engineering gate is authentic
 credential renewal without the measured coordinated outage; preserve hard security deadlines.
 [Download, user procedure, hashes and rollback](releases/2026-11-05-android118-field.md).
 
-09:16UTC renewal boundary checkpoint: real signed leaf/CRL replacement preserves the old
+Earlier09:16UTC renewal boundary checkpoint: real signed leaf/CRL replacement preserves the old
 TCP stream but cannot extend its original Family security deadline. A new handshake uses
 the authenticated successor; held-request revocation/foreign authority/Family/CRL-floor
 negatives preserve lease bounds.120 repeated leaf cases pass under race, no skips;

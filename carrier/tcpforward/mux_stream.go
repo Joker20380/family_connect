@@ -293,6 +293,30 @@ func (stream *MuxStream) Close() error {
 		return nil
 	}
 	if stream.localFIN && stream.remoteFIN && stream.used == 0 {
+		if mux.server && stream.lease {
+			timer := time.NewTimer(10 * time.Second)
+			defer timer.Stop()
+			for stream.terminal == nil && !stream.closeRequested && mux.ctx.Err() == nil {
+				changed := mux.changed
+				mux.mu.Unlock()
+				select {
+				case <-changed:
+				case <-mux.ctx.Done():
+				case <-timer.C:
+					stream.Reset()
+				}
+				mux.mu.Lock()
+			}
+			if stream.terminal == nil && mux.ctx.Err() == nil {
+				stream.finishLocked(io.EOF)
+				stream.send = []muxFrame{{closeFrame, stream.id, nil}}
+				mux.signalLocked()
+			}
+			if stream.terminal != io.EOF {
+				return ErrReset
+			}
+			return nil
+		}
 		if !stream.closing {
 			stream.closing = true
 			stream.send = append(stream.send, muxFrame{closeFrame, stream.id, nil})

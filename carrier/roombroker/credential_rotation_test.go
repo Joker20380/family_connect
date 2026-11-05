@@ -126,13 +126,16 @@ func rotationRaw(test *testing.T, credentials familysession.Credentials) []byte 
 }
 
 func (profiles *rotationProfiles) successor(test *testing.T, revokePredecessor bool) (familysession.Credentials, familysession.Credentials) {
+	return profiles.successorUntil(test, revokePredecessor, profiles.now.Add(90*time.Minute), 2, 4, 5)
+}
+
+func (profiles *rotationProfiles) successorUntil(test *testing.T, revokePredecessor bool, deadline time.Time, crlNumber, clientSerial, serverSerial int64) (familysession.Credentials, familysession.Credentials) {
 	test.Helper()
 	var revoked []x509.RevocationListEntry
 	if revokePredecessor {
 		revoked = []x509.RevocationListEntry{{SerialNumber: big.NewInt(2), RevocationTime: profiles.now.Add(-time.Second)}}
 	}
-	deadline := profiles.now.Add(90 * time.Minute)
-	revocations := profiles.crl(test, 2, deadline, revoked)
+	revocations := profiles.crl(test, crlNumber, deadline, revoked)
 	renew := func(credentials familysession.Credentials, serial int64) familysession.Credentials {
 		pair, err := tls.X509KeyPair([]byte(credentials.Certificate), []byte(credentials.PrivateKey))
 		if err != nil {
@@ -148,7 +151,7 @@ func (profiles *rotationProfiles) successor(test *testing.T, revokePredecessor b
 		credentials.Revocations, credentials.MinimumCRL = revocations, 2
 		return credentials
 	}
-	return renew(profiles.client, 4), renew(profiles.server, 5)
+	return renew(profiles.client, clientSerial), renew(profiles.server, serverSerial)
 }
 
 func replaceRotationProfile(test *testing.T, path string, credentials familysession.Credentials) {

@@ -2,6 +2,11 @@
 
 ## Result and scope
 
+Follow-up10:10UTC: the [native authenticated exchange](2026-11-05-mesh-credential-exchange.md)
+is now implemented and locally qualified, still opt-in/not deployed. The account below
+retains the earlier boundary checkpoint; its implementation NEXT is historical, not a
+second active queue. Gateway/client integration and online publication remain open.
+
 **SOURCE/TEST CHECKPOINT, NOT A DEPLOYED RENEWAL FIX.** Continuation of the selected
 Android MESH incident after [118 field delivery](2026-11-05-android118-field.md).
 The [overnight outage](2026-11-05-mesh-overnight-checks.md) attributes one dropped session

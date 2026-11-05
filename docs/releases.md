@@ -1,5 +1,13 @@
 # Release distribution / Выпуски
 
+**5 November10:10UTC — authenticated credential exchange source checkpoint; NOT a release.**
+Opt-in native protocol preserves TLS/mux/TCP across old leaf/CRL expiry with successor
+proofs; isolated DNS/race checks pass. Production handlers, Android supplier, coordinated
+online publication and deployment remain gated. Existing118 field bytes/default113/catalog7
+and last-verified identical NL70e6c0fc unchanged. Inherited bootstrap assertion failures
+are retained, not hidden as a whole-suite PASS.
+[Protocol, exact qualification, next integration and rollback](releases/2026-11-05-mesh-credential-exchange.md).
+
 **5 November09:16UTC — renewal boundary source/test checkpoint, not a runtime release.**
 Signed credential rotation retains the old TCP stream but not beyond its original security
 deadline.120 repeated race leaf cases and288 broader native cases PASS;20 root/3 optional

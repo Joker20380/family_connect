@@ -14,15 +14,17 @@ import (
 )
 
 type MuxConfig struct {
-	Lifecycle    bool
-	MaxStreams   int
-	WaitForSlot  bool
-	Policy       Policy
-	DNSUpstream  string
-	LeaseRenewal func(context.Context, *MuxStream)
+	Lifecycle         bool
+	MaxStreams        int
+	WaitForSlot       bool
+	Policy            Policy
+	DNSUpstream       string
+	LeaseRenewal      func(context.Context, *MuxStream)
+	CredentialRenewal func(context.Context, *MuxStream)
 }
 
 const LeaseRenewalHost = "lease-renewal.family-connect.invalid"
+const CredentialRenewalPort = 2
 
 type ProtocolErrorCounts struct {
 	OpenReplay    uint64 `json:"open_replay"`
@@ -468,7 +470,7 @@ func (mux *Mux) dispatchLocked(frame muxFrame) {
 			mux.controlLocked(muxFrame{openError, frame.id, []byte(`{"code":"malformed_request"}`)})
 			return
 		}
-		lease := leaseRequest(request) && mux.config.LeaseRenewal != nil
+		lease := mux.renewalHandler(request) != nil
 		jobs := mux.jobSlots(lease)
 		if !mux.awaitReleasedSlotLocked(lease) {
 			return
@@ -581,7 +583,7 @@ func (mux *Mux) forward(stream *MuxStream, request OpenRequest) {
 		mux.signalLocked()
 		mux.mu.Unlock()
 	}()
-	if canonicalHost(request.Host) == LeaseRenewalHost && request.Port == 1 && mux.config.LeaseRenewal != nil {
+	if handler := mux.renewalHandler(request); handler != nil {
 		mux.mu.Lock()
 		for mux.leaseOpen && stream.terminal == nil && stream.ctx.Err() == nil {
 			changed := mux.changed
@@ -605,7 +607,7 @@ func (mux *Mux) forward(stream *MuxStream, request OpenRequest) {
 		mux.signalLocked()
 		mux.mu.Unlock()
 		defer func() { mux.mu.Lock(); mux.leaseOpen = false; mux.signalLocked(); mux.mu.Unlock(); stream.Reset() }()
-		mux.config.LeaseRenewal(stream.ctx, stream)
+		handler(stream.ctx, stream)
 		return
 	}
 	connection, err := connect(stream.ctx, request, mux.config.Policy, mux.lookup, mux.dial)

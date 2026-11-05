@@ -117,46 +117,51 @@ func TestAdmissionDeadlineAndImmediateCounter(test *testing.T) {
 }
 
 func TestAdmissionLeaseReserveAndUnconfiguredPeer(test *testing.T) {
-	for _, configured := range []bool{true, false} {
-		test.Run(map[bool]string{true: "reserved", false: "unconfigured"}[configured], func(test *testing.T) {
-			port := muxFixture(test, muxEcho)
-			ctx, client, server := muxPair(test, port, 4, 4)
-			if configured {
-				server.mu.Lock()
-				server.config.LeaseRenewal = func(ctx context.Context, stream *MuxStream) { stream.Write([]byte{42}); io.Copy(io.Discard, stream) }
-				server.mu.Unlock()
-			}
-			var flows []*MuxStream
-			for index := 0; index < 4; index++ {
-				flows = append(flows, muxOpen(test, ctx, client, port))
-			}
-			lease, err := client.OpenTCP(ctx, OpenRequest{Host: LeaseRenewalHost, Port: 1})
-			if !configured {
-				if err == nil {
-					lease.Reset()
-					test.Fatal("unconfigured control bypassed capacity/policy")
+	for _, controlPort := range []int{1, CredentialRenewalPort} {
+		for _, configured := range []bool{true, false} {
+			test.Run(map[bool]string{true: "reserved", false: "unconfigured"}[configured], func(test *testing.T) {
+				port := muxFixture(test, muxEcho)
+				ctx, client, server := muxPair(test, port, 4, 4)
+				if configured {
+					server.mu.Lock()
+					server.config.LeaseRenewal = func(ctx context.Context, stream *MuxStream) { stream.Write([]byte{42}); io.Copy(io.Discard, stream) }
+					if controlPort == CredentialRenewalPort {
+						server.config.CredentialRenewal = server.config.LeaseRenewal
+					}
+					server.mu.Unlock()
 				}
-				return
-			}
-			if err != nil {
-				test.Fatal(err)
-			}
-			defer lease.Reset()
-			var response [1]byte
-			if _, err := io.ReadFull(lease, response[:]); err != nil || response[0] != 42 {
-				test.Fatal(err)
-			}
-			if _, err := client.OpenTCP(ctx, OpenRequest{Host: LeaseRenewalHost, Port: 1}); err != ErrStreamLimit {
-				test.Fatal("unbounded control reserve", err)
-			}
-			if client.Stats().LeaseRejected != 1 || server.Stats().ActiveSockets != 4 || server.Stats().ActiveStreams != 5 {
-				test.Fatal(client.Stats(), server.Stats())
-			}
-			for _, stream := range flows {
-				if err := exactMux(stream, []byte("sibling remains usable")); err != nil {
+				var flows []*MuxStream
+				for index := 0; index < 4; index++ {
+					flows = append(flows, muxOpen(test, ctx, client, port))
+				}
+				lease, err := client.OpenTCP(ctx, OpenRequest{Host: LeaseRenewalHost, Port: controlPort})
+				if !configured {
+					if err == nil {
+						lease.Reset()
+						test.Fatal("unconfigured control bypassed capacity/policy")
+					}
+					return
+				}
+				if err != nil {
 					test.Fatal(err)
 				}
-			}
-		})
+				defer lease.Reset()
+				var response [1]byte
+				if _, err := io.ReadFull(lease, response[:]); err != nil || response[0] != 42 {
+					test.Fatal(err)
+				}
+				if _, err := client.OpenTCP(ctx, OpenRequest{Host: LeaseRenewalHost, Port: 1}); err != ErrStreamLimit {
+					test.Fatal("unbounded control reserve", err)
+				}
+				if client.Stats().LeaseRejected != 1 || server.Stats().ActiveSockets != 4 || server.Stats().ActiveStreams != 5 {
+					test.Fatal(client.Stats(), server.Stats())
+				}
+				for _, stream := range flows {
+					if err := exactMux(stream, []byte("sibling remains usable")); err != nil {
+						test.Fatal(err)
+					}
+				}
+			})
+		}
 	}
 }

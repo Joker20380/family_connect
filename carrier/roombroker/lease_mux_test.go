@@ -71,6 +71,7 @@ type leaseMuxFixture struct {
 	clock          *controlledLeaseClock
 	client, server *tcpforward.Mux
 	secured        *familysession.Session
+	clientSecured  *familysession.Session
 	id             string
 	path           string
 	port           int
@@ -95,6 +96,10 @@ func newLeaseMuxFixture(test *testing.T, support bool, securityLifetime ...time.
 }
 
 func newLeaseMuxWithProfiles(test *testing.T, support bool, clientRaw, serverRaw []byte, securityLifetime ...time.Duration) *leaseMuxFixture {
+	return newLeaseMuxProfileOptions(test, support, clientRaw, serverRaw, nil, securityLifetime...)
+}
+
+func newLeaseMuxProfileOptions(test *testing.T, support bool, clientRaw, serverRaw []byte, configure func(*leaseMuxFixture, *familysession.Session, *tcpforward.MuxConfig), securityLifetime ...time.Duration) *leaseMuxFixture {
 	test.Helper()
 	path := filepath.Join(test.TempDir(), "gateway.json")
 	if err := os.WriteFile(path, serverRaw, 0600); err != nil {
@@ -156,6 +161,9 @@ func newLeaseMuxWithProfiles(test *testing.T, support bool, clientRaw, serverRaw
 				}
 				config.LeaseRenewal = ctx.Value(leaseKey{}).(*leaseBinding).handler(SessionAuthorizer(path, secured.ConnectionState()), bound)
 			}
+			if configure != nil {
+				configure(fixture, secured, &config)
+			}
 			mux, err := tcpforward.NewMux(ctx, secured, true, config)
 			if err != nil {
 				return err
@@ -191,6 +199,7 @@ func newLeaseMuxWithProfiles(test *testing.T, support bool, clientRaw, serverRaw
 		test.Fatal(err)
 	}
 	test.Cleanup(func() { secured.Close() })
+	fixture.clientSecured = secured
 	if err := BindClient(ctx, secured, descriptor, clientRaw); err != nil {
 		test.Fatal(err)
 	}

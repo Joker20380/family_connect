@@ -242,6 +242,11 @@ type Session struct {
 	connection   *tls.Conn
 	stream       *stream
 	expiry       time.Time
+	securityMu   sync.Mutex
+	renewMu      sync.Mutex
+	renewal      *renewalState
+	readBound    time.Time
+	writeBound   time.Time
 	sendSequence uint64
 	recvSequence uint64
 	sendMu       sync.Mutex
@@ -303,7 +308,12 @@ func openReliable(ctx context.Context, endpoint PacketEndpoint, raw []byte, serv
 		return nil, ErrRejected
 	}
 	expiry = minTime(expiry, connection.ConnectionState().PeerCertificates[0].NotAfter)
-	return &Session{connection: connection, stream: transport, expiry: expiry, reliable: reliable, server: server, trace: sessiontrace.From(ctx)}, nil
+	state, err := initialRenewalState(raw, connection.ConnectionState())
+	if err != nil {
+		transport.Close()
+		return nil, ErrRejected
+	}
+	return &Session{connection: connection, stream: transport, expiry: expiry, renewal: state, reliable: reliable, server: server, trace: sessiontrace.From(ctx)}, nil
 }
 
 func (session *Session) ReliabilityStats() reliablestream.Stats { return session.reliable.Stats() }
@@ -314,22 +324,22 @@ func (session *Session) ConnectionState() tls.ConnectionState {
 
 func (session *Session) Done() <-chan struct{} { return session.stream.done }
 
-func (session *Session) SecurityDeadline() time.Time { return session.expiry }
+func (session *Session) SecurityDeadline() time.Time {
+	session.securityMu.Lock()
+	defer session.securityMu.Unlock()
+	return session.expiry
+}
 
 func (session *Session) SendContext(ctx context.Context, payload []byte) (failure error) {
 	defer func() { traceFailure(ctx, session.trace, failure) }()
 	session.sendMu.Lock()
 	defer session.sendMu.Unlock()
-	if len(payload) > MaxPayload || session.sendSequence == ^uint64(0) || !time.Now().Before(session.expiry) || ctx.Err() != nil {
+	if len(payload) > MaxPayload || session.sendSequence == ^uint64(0) || !session.beginSecurityIO(ctx, true) {
 		session.traceStop(ctx, "FAMILY_CONTRACT")
 		session.stream.stop()
 		return ErrRejected
 	}
-	deadline := session.expiry
-	if bound, ok := ctx.Deadline(); ok {
-		deadline = minTime(deadline, bound)
-	}
-	session.connection.SetWriteDeadline(deadline)
+	defer session.endSecurityIO(true)
 	stop := context.AfterFunc(ctx, func() { session.traceStop(ctx, "FAMILY_CONTEXT"); session.stream.stop() })
 	defer stop()
 	message := make([]byte, 12+len(payload))
@@ -349,17 +359,13 @@ func (session *Session) Recv(ctx context.Context) (data []byte, failure error) {
 	defer func() { traceFailure(ctx, session.trace, failure) }()
 	session.recvMu.Lock()
 	defer session.recvMu.Unlock()
-	if session.recvSequence == ^uint64(0) || !time.Now().Before(session.expiry) || ctx.Err() != nil {
+	if session.recvSequence == ^uint64(0) || !session.beginSecurityIO(ctx, false) {
 		observeReceive(ctx, ErrRejected)
 		session.traceStop(ctx, "FAMILY_CONTRACT")
 		session.stream.stop()
 		return nil, ErrRejected
 	}
-	deadline := session.expiry
-	if bound, ok := ctx.Deadline(); ok {
-		deadline = minTime(deadline, bound)
-	}
-	session.connection.SetReadDeadline(deadline)
+	defer session.endSecurityIO(false)
 	stop := context.AfterFunc(ctx, func() { session.traceStop(ctx, "FAMILY_CONTEXT"); session.stream.stop() })
 	defer stop()
 	header := make([]byte, 12)
@@ -394,7 +400,7 @@ func (session *Session) Close() error {
 }
 
 func (session *Session) traceStop(ctx context.Context, source string) {
-	if !time.Now().Before(session.expiry) {
+	if !time.Now().Before(session.SecurityDeadline()) {
 		source = "FAMILY_CREDENTIAL_EXPIRY"
 	} else if context.Cause(ctx) == context.DeadlineExceeded {
 		source = "PARENT_DEADLINE"
