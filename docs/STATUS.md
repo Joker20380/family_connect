@@ -11,6 +11,10 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**G2 successor-expiry run active:** packaged d968ddd controller was killed after the
+durable COMMIT. `expiry-d968ddd-long/successor-expiry/progress.json` records the unchanged
+decision/plan and real successor bounds; expiry is due23:46:04UTC. No result yet.
+
 **19:39UTC Android runtime checkpoint, not G3 PASS:** both fresh disposable API27/API35
 AVDs have completed verified HTTP readiness, actual encrypted-cache writes and native
 VPN owner connection/borrowed mux echo. They are waiting for the server's real due time

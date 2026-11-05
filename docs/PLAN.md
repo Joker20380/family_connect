@@ -12,6 +12,9 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**G2 expiry continuation:** retain the bounded wall-clock successor-expiry run alongside
+G3/G4; verify two recovery attempts preserve the original COMMIT without expired rollback.
+
 **Android runtime in progress:** retain the running API27/API35 HTTP/cache/native-owner
 sessions until the genuine successor window; first owner-connected evidence is not G3.
 Complete their delivery/negative scenarios and the running d968ddd long path, then

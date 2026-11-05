@@ -2,6 +2,15 @@
 
 ## Android HTTP runtime checkpoint19:39UTC
 
+Additional G2 runtime started19:46UTC: `FC_CORE_EXPIRY=1` enables
+`tests/test_mesh_core_expiry.py` against immutable `online-d968ddd.tar.gz` and its driver.
+The real controller is killed after ONLINE_COMMIT_DECIDED; the retained plan is hashed,
+not modified. The test waits until the actual candidate leaf/CRL bounds pass
+(23:46:04UTC), then runs two ordinary `resume` attempts and requires stable explicit
+blocking/emergency with the same COMMIT/plan, no expired rollback. Progress is retained
+at `expiry-d968ddd-long/successor-expiry/progress.json`; not a PASS until completion.
+This harness's source is later than the d968ddd runtime and is labelled separately.
+
 Not an acceptance result. New `tests/android_core_stand.py` starts frozen d968ddd
 controller/node/API/HTTP and the matching separate gateway driver in a network-none
 container. Actual custody rejected the first fixture attempts: directory0700 rather
