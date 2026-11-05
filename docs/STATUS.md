@@ -11,6 +11,17 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**21:14UTC thermal interruption and GPU correction — G3 remains open.** Four remaining
+software-rendered AVDs were explicitly stopped after the owner's overheating report;
+the two partial-scenario AVDs had already failed and exited, not passed or been interrupted.
+Their earlier service preflights do not prove successor delivery. The runner now requires
+one API per invocation, a shared exclusive emulator lock, `-gpu host`, NVIDIA PRIME and
+`-accel on`; actual guest GLES must identify NVIDIA or qualification stops. A fresh API27
+boot verified GTX1650Ti rendering and exact APK/native bytes, then failed synthetic
+activation (`FriendsAccessAndroid.Denied`) and cleaned up. No emulator remains running.
+Targeted guard tests:11 PASS; this is neither G3 nor A acceptance. Existing non-Android
+long-runtime evidence remains separate; B is not started. Production/phone unchanged.
+
 **21:00UTC actual Android service preflight on both APIs, still not G3 PASS.** API27
 and API35 complete HTTP/cache, normal ConnectionService, borrowed native session and
 verified HTTPS through VPN. API35 now runs inside a no-egress network namespace with

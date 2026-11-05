@@ -12,6 +12,13 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Thermal/GPU correction supersedes the Android waiting instruction below.** Previous
+Android sessions ended without successor acceptance. Resume G3 only on one hardware-GPU
+AVD at a time, retaining no-egress/trust boundaries; fix the synthetic activation refusal
+before another long run. API27 guest NVIDIA rendering is verified; API35's isolated GPU
+runtime is not yet verified. Keep remaining G2/G4 evidence and the accepted-A prerequisite
+for B unchanged. Do not silently return to SwiftShader or parallel emulators.
+
 **Actual service preflight now passes API27/API35.** Preserve their real sessions through
 successor delivery; complete the remaining G3 scenarios and running G2/G4 wall-clock
 qualification before accepting A. API35 qualification requires a no-egress namespace,

@@ -91,6 +91,13 @@ must pass Windows CI; a Linux cross-build alone is not a runtime validation.
 
 Do not enable subagents unless the user explicitly requests delegation.
 
+Android emulators on the owner's laptop must use NVIDIA hardware rendering
+(`-gpu host`, PRIME offload) and KVM (`-accel on`), never SwiftShader/software or
+automatic renderer fallback. Verify the guest's actual GLES renderer before tests;
+stop on a missing/non-NVIDIA renderer. Run only one emulator at a time, including
+across containers, using the shared qualification lock. Do not launch parallel AVDs
+to shorten wall-clock qualification; GPU rendering does not eliminate guest CPU load.
+
 Linux frontend is GTK 4/libadwaita from 0.2.7, not Tk. System Python must provide GI
 and Gtk 4.8+/Adw 1.2+. Run GUI checks with dbus-run-session and Xvfb; headless CI uses
 GSK_RENDERER=cairo, GTK_A11Y=none only in CI. Never set those for the installed app.

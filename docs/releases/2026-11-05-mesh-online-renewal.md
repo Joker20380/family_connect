@@ -1,5 +1,38 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Thermal interruption and hardware-GPU correction21:14UTC
+
+The owner's overheating report interrupts the remaining engine-only API27/API35,
+service API27 and isolated service API35 AVDs. They are stopped and cannot demonstrate
+successor delivery. Preserve their earlier service/preflight evidence, not G3 PASS.
+The two partial-working1 AVDs exited with failures before that explicit stop
+(container exit1 at21:10:10UTC): API27 native-session assertion and API35
+BOOTSTRAP_UNAVAILABLE. These are failures, not successful or operator-interrupted tests.
+
+`tests/android_core_emulators.py` now requires an explicit single API, a shared
+`android-emulator.lock` under the common evidence directory, NVIDIA PRIME offload,
+`-gpu host` and `-accel on`. Actual guest SurfaceFlinger GLES must identify NVIDIA
+without SwiftShader/llvmpipe/lavapipe/software rendering before installing/running
+qualification. Missing hardware rendering fails closed and cleans up. Container runs
+must share this lock and have real GPU access; isolation must not be weakened for GPU.
+Guest OS/native CPU work still exists. This is not a promise of CPU-free emulation.
+The owner-laptop constraint is also retained in AGENTS.md.
+
+Actual API27 hardware probe: private `android-service-gpu-api27-1/api27-renderer.txt`
+and `api27-receipt.json` record
+`Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti/PCIe/SSE2)`.
+APK38e3522f… and native d1025a1d… match before/after. The subsequent service test fails
+at `FriendsAccessAndroid.proof/activate` with `Denied`, before native connection;
+do not turn renderer success into G3 PASS. The emulator exited through normal cleanup.
+API35 container hardware rendering remains NOT_RUN. No AVD is left running.
+
+`python3 -m pytest -q tests/test_android_core_emulators.py`:11 PASS (hardware renderer,
+software/missing renderer rejection, exclusive lock and release after failure).
+The initial `python` alias was unavailable; the explicit python3 invocation ran tests.
+No full-CI, release/package change or accepted A/B checkpoint. Non-Android wall-clock
+stands retain their original source/artifact identity and remain independent evidence.
+No production, owner phone, public APK/catalog or paid operation occurred.
+
 ## Actual Android service preflight21:00UTC — qualification continues
 
 Two API-specific preflights now pass: HTTP readiness, validation, encrypted vault,

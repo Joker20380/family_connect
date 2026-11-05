@@ -1,5 +1,6 @@
 import argparse
-from concurrent.futures import ThreadPoolExecutor
+from contextlib import contextmanager
+import fcntl
 import hashlib
 import json
 import os
@@ -12,6 +13,27 @@ import urllib.request
 import zipfile
 
 
+@contextmanager
+def emulator_slot(directory):
+    with (directory/'android-emulator.lock').open('a') as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as error:
+            raise RuntimeError('Another qualification emulator is already running') from error
+        try:
+            yield
+        finally:
+            fcntl.flock(lock, fcntl.LOCK_UN)
+
+
+def require_nvidia_renderer(surface):
+    renderer = next((line.strip() for line in surface.splitlines() if line.strip().startswith('GLES:')), '')
+    software = ('swiftshader', 'llvmpipe', 'lavapipe', 'software rasterizer')
+    if 'nvidia' not in renderer.lower() or any(name in renderer.lower() for name in software):
+        raise RuntimeError('NVIDIA hardware renderer required; software fallback is forbidden')
+    return renderer
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--tools', type=Path, required=True)
@@ -20,9 +42,14 @@ def main():
     parser.add_argument('--work', type=Path, required=True)
     parser.add_argument('--port', type=int, default=5630)
     parser.add_argument('--service', action='store_true')
-    parser.add_argument('--api', type=int, choices=(27, 35))
+    parser.add_argument('--api', type=int, choices=(27, 35), required=True)
     parser.add_argument('--isolated-network', action='store_true')
     args = parser.parse_args()
+    with emulator_slot(args.work.parent):
+        run(args)
+
+
+def run(args):
     args.work.mkdir(mode=0o700)
     avd = args.work/'avd'
     avd.mkdir(mode=0o700)
@@ -46,7 +73,8 @@ def main():
         assert metadata['provider'] == 'isolated-local-core' and metadata['diagnostic_only']
         assert archive.read('assets/control-anchor.pub') == (args.build/'app-assets/control-anchor.pub').read_bytes()
     environment = dict(os.environ, JAVA_HOME=str(args.tools/'jdk'), ANDROID_HOME=str(sdk),
-        ANDROID_SDK_ROOT=str(sdk), ANDROID_AVD_HOME=str(avd))
+        ANDROID_SDK_ROOT=str(sdk), ANDROID_AVD_HOME=str(avd),
+        __NV_PRIME_RENDER_OFFLOAD='1', __GLX_VENDOR_LIBRARY_NAME='nvidia')
     receipt = dict(scope='working-Android-HTTP-cache-owner-positive-not-complete-G3',
         apk_sha256=hashlib.sha256(apk.read_bytes()).hexdigest(),
         tests_sha256=hashlib.sha256(tests.read_bytes()).hexdigest(),
@@ -68,7 +96,7 @@ def main():
         output=(args.work/f'api{api}-emulator.log').open('wb')
         proxy = [] if args.isolated_network else ['-http-proxy', 'http://127.0.0.1:'+str(bridge['https_proxy'])]
         emulator = subprocess.Popen([str(sdk/'emulator/emulator'), '-avd', name, '-port', str(port),
-            '-no-window', '-no-audio', '-no-snapshot', '-no-boot-anim', '-gpu', 'swiftshader_indirect',
+            '-no-window', '-no-audio', '-no-snapshot', '-no-boot-anim', '-gpu', 'host', '-accel', 'on',
             '-memory', '2048', '-cores', '2', *proxy],
             env=environment, stdout=output, stderr=subprocess.STDOUT)
         adb = [str(sdk/'platform-tools/adb'), '-s', f'emulator-{port}']
@@ -87,10 +115,16 @@ def main():
             assert 'generic' in fingerprint or 'sdk' in fingerprint
             assert subprocess.check_output(adb+['shell', 'getprop', 'ro.build.version.sdk'], text=True).strip() == str(api)
             owned = True
-            subprocess.run(adb+['shell', 'svc', 'wifi', 'enable' if api == 35 else 'disable'], check=True, capture_output=True, timeout=10)
-            subprocess.run(adb+['shell', 'svc', 'data', 'disable' if api == 35 else 'enable'], check=True, capture_output=True, timeout=10)
+            surface = subprocess.check_output(adb+['shell', 'dumpsys', 'SurfaceFlinger'], text=True, timeout=15)
+            (args.work/f'api{api}-renderer.txt').write_text(surface)
+            record['renderer'] = require_nvidia_renderer(surface)
+            record['gpu_mode'] = 'host'
+            record['acceleration'] = 'on'
+            wifi = args.isolated_network or api == 35
+            subprocess.run(adb+['shell', 'svc', 'wifi', 'enable' if wifi else 'disable'], check=True, capture_output=True, timeout=10)
+            subprocess.run(adb+['shell', 'svc', 'data', 'disable' if wifi else 'enable'], check=True, capture_output=True, timeout=10)
             time.sleep(5)
-            record['network_scope'] = 'owned-emulator-'+('wifi' if api == 35 else 'cellular')+'-not-mobile-field'
+            record['network_scope'] = 'owned-emulator-'+('wifi' if wifi else 'cellular')+'-not-mobile-field'
             for artifact in (apk, tests):
                 result = subprocess.run(adb+['install', '--no-streaming', '-t', str(artifact)], capture_output=True, text=True, timeout=90)
                 assert result.returncode == 0 and 'Success' in result.stdout, 'Owned emulator install failed'
@@ -144,10 +178,8 @@ def main():
         assert record['result'] == 'PASS_POSITIVE_PATH_ONLY', record.get('failure')
         return record
 
-    with ThreadPoolExecutor(max_workers=2) as executor:
-        jobs = [executor.submit(qualify, api, variant, port) for api, variant, port in
-                ((27, 'default', args.port), (35, 'google_apis', args.port+2)) if args.api is None or api == args.api]
-        receipt['apis'] = [job.result() for job in jobs]
+    variant = 'default' if args.api == 27 else 'google_apis'
+    receipt['apis'] = [qualify(args.api, variant, args.port)]
     (args.work/'result.json').write_text(json.dumps(receipt, indent=2)+'\n')
 
 
