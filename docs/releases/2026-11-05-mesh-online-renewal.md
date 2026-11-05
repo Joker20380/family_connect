@@ -1,5 +1,31 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Actual successor expiry23:46UTC: safe block, incomplete repeat
+
+[Exact source/package/result/journal receipt](2026-11-05-mesh-expiry-evidence.json).
+The d968ddd stand waited14408.39s under real wall clock after controller SIGKILL at
+durable COMMIT. Candidate leaf/CRL expire23:46:02UTC. At23:46:05UTC normal packaged
+`resume` returns `FAIL_CLOSED/ONLINE_RUNTIME_RECEIPT`, not the harness's expected
+emergency/recovery result. The already-expired loaded predecessor makes the real
+reader reject its profile and close the socket without a valid receipt; capability
+preflight stops **before** controller recovery. The retained journal remains the
+same COMMIT, plan and fence1, with no publication. No expired rollback or restart
+was used. Cleanup waited processes and removed reader sockets.
+
+The original assertion terminated before the second resume: **test FAIL, G2 not
+accepted**, not evidence of repeatability or a completed emergency handoff. A stable
+precisely explained block is an allowed G2 outcome. The test now explicitly admits
+only this exact fail-closed response, asserts unchanged journal bytes, canonical
+profiles and serving process identities, and verifies their leaf/CRL have actually
+expired. It records both raw responses before assertions. Unrelated/unknown failures
+are still rejected. This is a test-only correction, not a reader-custody or approval
+bypass, and needs a fresh4h qualification on bfff97d before any PASS claim.
+
+Separately the fixed G4 harness37ffc2c runs on unchanged bfff97d package/driver;
+its first renewal is due02:12:33UTC6 November. Source/tag/hash/runtime roles remain
+distinct. G3 legacy/too-late delivery is still missing; A/B are not accepted/started.
+No production, phone, publication, paid or emulator action accompanies this result.
+
 ## Frozen repeating-seed candidate and observation guard
 
 [Candidate identities and evidence](2026-11-05-mesh-seed-continuous-evidence.json).

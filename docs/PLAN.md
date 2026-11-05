@@ -12,6 +12,13 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Current G1–G4 next: finish the two real-time qualifications, without B.** The
+bfff97d/37ffc2c full path is running. Actual d968ddd successor expiry reached a safe
+preflight block, but the original assertion prevented its required second resume.
+Retain that FAIL; qualify the allowed stable-block outcome on the current frozen
+package with unchanged canonical profiles/processes/journal and actual expired
+bounds, not by accepting arbitrary FAIL_CLOSED. G3 legacy/late still remains.
+
 **One current next: complete the fixed frozen G4 harness on bfff97d artifacts.**
 Early two-NL traffic and artifact-enabled affected native race now pass. Retain the
 interrupted pre-renewal attempt; the harness must wait for both sampled generations

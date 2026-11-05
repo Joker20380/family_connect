@@ -16,7 +16,13 @@
 переход реализован и проходит адресные Python-проверки, но G1–G4 целиком ещё не приняты.
 G2 — независимые процессы/отказы; G3 — фактическая Android HTTP/cache доставка;
 G4 — квалифицированный online runtime/API пакет. [Точные gates/evidence](releases/2026-11-05-mesh-online-renewal.md).
-Текущая дельта: frozen bfff97d package/driver проходит оба NL traffic preflight и
+Текущая дельта23:46UTC: реальный4h expiry закончился безопасным
+`FAIL_CLOSED/ONLINE_RUNTIME_RECEIPT`, но не ожидаемым recovery result; исходный
+COMMIT/fence сохранён, второй resume не выполнен из-за assert. FAIL не переименован.
+Проверяется отдельный допустимый stable-block исход с неизменными профилями/processes/
+journal и двумя реальными попытками. Исправленный G4 идёт на bfff97d/37ffc2c;
+G3 legacy/late остаётся, А/Б не приняты/не начаты.
+Предыдущая дельта: frozen bfff97d package/driver проходит оба NL traffic preflight и
 затронутые native race с artifact-enabled bootstrap. Перед продолжением долгого G4
 harness фиксируется ожидание фактического поколения трафика, не только COMMIT callback.
 Первый короткий запуск остановлен до renewal, evidence сохранено. А не принята, Б не

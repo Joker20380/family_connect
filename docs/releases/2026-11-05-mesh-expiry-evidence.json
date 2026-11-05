@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "scope": "actual-expiry-first-resume-blocked-repeat-not-run",
+  "runtime_source": "d968ddd55935ef7b37340262e3ea2729afdf7cd2",
+  "package": {
+    "api_sha256": "6f8179c1554eb99bd17e141519a2edbba980aa25f5b426bf15a99a1342d3a783",
+    "gateway_sha256": "382dcf26298bad8ccbfc2ca5664e297215b2ab1d7a1338f594536285651f1e7d",
+    "http_sha256": "28b64a3389ba1aef8606c4ea8555c2a55a42dcfe9f175fd3c29d2850c684caaf",
+    "manifest_sha256": "d1540f8878197dcc7717b8c5964474e59a6ab0679c9860624599ed5518651f86",
+    "sha256": "849232db0d36252afceab0feabc7550700079569b333602d2c535dbc8d376350",
+    "source_commit": "d968ddd55935ef7b37340262e3ea2729afdf7cd2",
+    "source_sha256": "dba5a18f6409cd1ab10e9a373caccb9cec10cad1dc0647e2e433794bc9af4071"
+  },
+  "driver_sha256": "caeccf70210221cf371ff54a0e775d2ad05e9cab2d4dfa8ed0f176af675684d1",
+  "started": 1793907960.9380605,
+  "due": 1793922364.0,
+  "deadlines": [
+    1793922362.0,
+    1793922362.0,
+    1793922362.0
+  ],
+  "observed": 1793922365.1123998,
+  "result": {
+    "automatic_retry": false,
+    "cause": "ONLINE_RUNTIME_RECEIPT",
+    "result": "FAIL_CLOSED"
+  },
+  "retained_journal": {
+    "decision": "COMMIT",
+    "plan_sha256": "4b48d5af84bafbe824f512513d915d8b82e03aa03f2b3c3d31aec6e6093e7242",
+    "fence": 1,
+    "state": "ONLINE_COMMIT_DECIDED",
+    "published": {}
+  },
+  "journal_sha256": "8e8ffe1300840d68afad2f3c039ba4b045d5bb20869fc839fe6a1ae95ac7a60d",
+  "second_resume": "NOT_RUN: first assertion aborted the original test",
+  "cleanup": "processes-waited-and-reader-sockets-absent",
+  "private_evidence_root": "state-client-build/mesh-core-runtime-20261105",
+  "log": "expiry-d968ddd-long.log",
+  "progress": "expiry-d968ddd-long/successor-expiry/progress.json",
+  "test_result": "FAIL: expected recovery result, received preflight FAIL_CLOSED",
+  "G2": "NOT_ACCEPTED: stable repeated result not yet proven"
+}

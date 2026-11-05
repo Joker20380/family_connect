@@ -11,6 +11,17 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**23:46UTC real successor-expiry test FAIL, safely blocked; G2 not closed.** After
+four real hours and controller death after COMMIT, the frozen d968ddd package returns
+`FAIL_CLOSED/ONLINE_RUNTIME_RECEIPT` before resuming the journal. Expired loaded
+credentials cause the serving reader to close without a valid receipt. The saved
+COMMIT/plan/fence1 remain unchanged, with no publication. The old assertion stopped
+before the second attempt; cleanup completed. [Exact evidence](releases/2026-11-05-mesh-expiry-evidence.json).
+The harness now permits only this precisely guarded stable-block outcome and verifies
+unchanged canonical profiles/processes/journal plus actual expiry on both attempts.
+Its fresh four-hour run is still required, not PASS. Corrected G4 continues separately
+on bfff97d/37ffc2c; G3 legacy/late and A acceptance remain open, B not started.
+
 **bfff97d candidate preflight and affected native race PASS; A still open.** Its
 separate frozen archive/driver proves both NL Family TLS/mux/TCP/DNS/verified HTTPS
 and actual-reader cleanup; production rejects qualification flags. Bootstrap,
