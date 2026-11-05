@@ -32,7 +32,7 @@ def main():
     parser.add_argument('--evidence', type=Path, required=True)
     parser.add_argument('--snapshot', type=Path, required=True)
     parser.add_argument('--api', type=int, choices=(27, 35), required=True)
-    parser.add_argument('--scenario', choices=('partial', 'owner-race'), default='partial')
+    parser.add_argument('--scenario', choices=('partial', 'owner-race', 'partial-connect'), default='partial')
     args = parser.parse_args()
     os.umask(0o077)
     args.root.mkdir(mode=0o700)
@@ -64,7 +64,7 @@ def main():
                 receipt['connected'] = sorted(connected)
             elif action == 'release'+str(args.api):
                 assert receipt['state'] == 'PARTIAL'
-                assert time.time()-receipt['partial_at'] >= 305
+                assert args.scenario == 'partial-connect' or time.time()-receipt['partial_at'] >= 305
                 released.add(action[-2:])
                 receipt['released'] = sorted(released)
             elif action == 'response'+str(args.api):
@@ -113,13 +113,13 @@ def main():
                 begin = receipt['state'] == 'HTTP_READY' and connected == {str(args.api)}
                 resume = receipt['state'] == 'PARTIAL' and released == {str(args.api)}
             if begin:
-                if args.scenario == 'partial':
+                if args.scenario != 'owner-race':
                     stand.rpc_fault('NL2', 'publish', 'drop-before')
                 code, result = stand.run('online')
                 journal = json.loads((args.root/'coordinator/transaction.json').read_bytes())
                 assert journal['decision'] == 'COMMIT', result
                 with lock:
-                    if args.scenario == 'partial':
+                    if args.scenario != 'owner-race':
                         assert code != 0 and not journal['published'], result
                         receipt.update(state='PARTIAL', partial_at=time.time(), blocked=result,
                                        plan_sha256=journal['plan_sha256'], published=journal['published'])

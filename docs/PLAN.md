@@ -12,6 +12,13 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Current next after23:00UTC: finish the same G1–G4 qualification.** API27/API35 now
+pass positive successor delivery, delayed application completion across owner replacement,
+and explicit new Connect during partial publication. Next missing G3 runtime cases are
+legacy peer without exchange and too-late delivery; reconcile the running real-expiry G2
+and full-core G4 results before an independent accepted A checkpoint. Only then start B.
+The dated continuation updates below are historical deltas, not additional active NEXTs.
+
 **API27/API35 owner-race subscenario is now complete.** Preserve038b66a and its exact
 receipt, including API27's old wrapper exit1. Finish the current partial-publication
 new-Connect case with real clock preflight and credential-field comparison, then the

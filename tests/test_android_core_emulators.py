@@ -10,7 +10,7 @@ emulators = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(emulators)
 
 
-@pytest.mark.parametrize('result', ['PASS_POSITIVE_PATH_ONLY', 'PASS_OWNER_RACE_ONLY'])
+@pytest.mark.parametrize('result', ['PASS_POSITIVE_PATH_ONLY', 'PASS_OWNER_RACE_ONLY', 'PASS_PARTIAL_CONNECT_ONLY'])
 def test_only_explicit_completed_runtime_scopes_are_accepted(result):
     emulators.require_success(dict(result=result))
 
@@ -19,6 +19,41 @@ def test_only_explicit_completed_runtime_scopes_are_accepted(result):
 def test_unknown_or_incomplete_runtime_scope_is_not_accepted(result):
     with pytest.raises(AssertionError):
         emulators.require_success(dict(result=result))
+
+
+def test_real_wall_clock_allows_only_bounded_read_latency_and_rounding():
+    emulators.require_wall_clock(100.5, 100, 100.6)
+
+
+@pytest.mark.parametrize('before,guest,after', [(100.5, 93, 100.6), (100.5, 108, 100.6), (100, 100, 104), (101, 101, 100)])
+def test_skew_never_qualifies_crypto_runtime(before, guest, after):
+    with pytest.raises(AssertionError, match='clock skew'):
+        emulators.require_wall_clock(before, guest, after)
+
+
+def test_boot_clock_observation_waits_without_writing_time(monkeypatch):
+    clocks, guests, commands = iter((100, 100.1, 103, 103.1)), iter(('93', '103')), []
+    def read(command, **kwargs):
+        commands.append(command)
+        return next(guests)
+    monkeypatch.setattr(emulators.time, 'time', lambda: next(clocks))
+    monkeypatch.setattr(emulators.time, 'sleep', lambda seconds: None)
+    monkeypatch.setattr(emulators.subprocess, 'check_output', read)
+    record = {}
+    emulators.observe_wall_clock(['adb', '-s', 'owned'], record)
+    assert len(record['clock_samples']) == 2 and record['guest_wall_seconds'] == 103
+    assert all(command[-3:] == ['shell', 'date', '+%s'] for command in commands)
+
+
+def test_persistent_boot_clock_skew_remains_failure(monkeypatch):
+    ticks = iter((0, 61))
+    monkeypatch.setattr(emulators.time, 'monotonic', lambda: next(ticks))
+    monkeypatch.setattr(emulators.time, 'time', lambda: 100)
+    monkeypatch.setattr(emulators.subprocess, 'check_output', lambda *args, **kwargs: '93')
+    record = {}
+    with pytest.raises(AssertionError, match='clock skew'):
+        emulators.observe_wall_clock(['adb', '-s', 'owned'], record)
+    assert len(record['clock_samples']) == 1
 
 
 def test_real_nvidia_renderer():

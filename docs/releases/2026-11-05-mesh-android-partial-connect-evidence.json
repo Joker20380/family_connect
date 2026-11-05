@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "scope": "actual-explicit-Connect-during-partial-publication-not-full-G3",
+  "phase_A": "NOT_ACCEPTED",
+  "phase_B": "NOT_STARTED",
+  "source_base": "8cf5f27cd64423685a6c36968ac8682bebfed494",
+  "scenario_source_files": {
+    "clients/android/app/src/androidTest/java/com/familyconnect/app/OnlineReadinessRuntimeTest.java": "721b5801e3b106c658c9e5893ea19373737246fdda571db6fb7b11348cce4257",
+    "tests/android_core_partial.py": "fa0e48e80bf14ab1275f16bfd743afb9ac8ae1fe0440fa701c567753defe986b"
+  },
+  "current_runner_sha256": "3d012958a237f8a409b51d7c255fe3e0f1f9594e6b524209a025717ec39e79ff",
+  "clock_policy": "read-only observation; no date writes, frozen clocks, TTL changes or relaxed validation",
+  "apis": {
+    "27": {
+      "result": "PASS_PARTIAL_CONNECT_ONLY",
+      "wrapper_exit": 0,
+      "apk_sha256": "70455e14d0adecb02d4123b7201b1dd2627a5e95e49f5f68075998e8fa2172dd",
+      "test_apk_sha256": "71a0a70778ff24167e7a4b6428f81fb870a3d49044cb3433df53660c0e6d6d93",
+      "native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+      "started": 1793919449.5196502,
+      "finished": 1793919510.2942407,
+      "clock_observation": {
+        "host_before": 1793919449.5196538,
+        "host_after": 1793919449.525758,
+        "guest": 1793919449
+      },
+      "clock_preflight": "60s read-only retry budget; accepted first sample",
+      "original_bounds": {
+        "NL": {
+          "crl": 1793921752.0,
+          "leaf": 1793921752.0
+        },
+        "NL2": {
+          "crl": 1793921752.0,
+          "leaf": 1793921752.0
+        }
+      },
+      "successor_bounds": {
+        "NL": {
+          "crl": 1793933857.0,
+          "leaf": 1793933857.0
+        },
+        "NL2": {
+          "crl": 1793933857.0,
+          "leaf": 1793933857.0
+        }
+      },
+      "partial_at": 1793919470.9391177,
+      "published_at": 1793919509.5992293,
+      "plan_sha256": "24c1a121dbc692c46bef69afee58a71a2737cbe56138235c0391cd2841c1b2ad",
+      "cleanup": "emulator-stopped/server-processes-waited",
+      "private_evidence": "android-connect-gpu27-emulators3",
+      "server_evidence": "android-connect-gpu27-3/server.json"
+    },
+    "35": {
+      "result": "PASS_PARTIAL_CONNECT_ONLY",
+      "wrapper_exit": 0,
+      "apk_sha256": "a4afdd4cf84fdae62076211deb4d21eb72492971d9b04f2c033f51da0e3cc537",
+      "test_apk_sha256": "9a7d6ab75fb4a19922041353f9d4738fdff8b84ddbcf976544398190aaf84e34",
+      "native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+      "started": 1793919020.0564654,
+      "finished": 1793919091.2816908,
+      "clock_observation": {
+        "host_before": 1793919020.0564678,
+        "host_after": 1793919020.0734766,
+        "guest": 1793919019
+      },
+      "clock_preflight": "single strict read-only observation; before retry helper addition",
+      "original_bounds": {
+        "NL": {
+          "crl": 1793921014.0,
+          "leaf": 1793921014.0
+        },
+        "NL2": {
+          "crl": 1793921014.0,
+          "leaf": 1793921014.0
+        }
+      },
+      "successor_bounds": {
+        "NL": {
+          "crl": 1793933443.0,
+          "leaf": 1793933443.0
+        },
+        "NL2": {
+          "crl": 1793933443.0,
+          "leaf": 1793933443.0
+        }
+      },
+      "partial_at": 1793919053.8568835,
+      "published_at": 1793919090.3122516,
+      "plan_sha256": "614b75aa9ad7e3aa0f0e4470c14ba7de4899c80c6adca12083651d61d9ba3330",
+      "cleanup": "emulator-stopped/server-processes-waited",
+      "private_evidence": "android-connect-gpu35-emulators2",
+      "server_evidence": "android-connect-gpu35-2/server.json"
+    }
+  },
+  "runtime_source": "fd7562cc466606002aa2af064b2b67ee165056c2",
+  "archive_sha256": "846818adefa292939034b9c427d658cfd3c427f48d1fb522dbda104f31aeb94f",
+  "driver_sha256": "180f386f8afba4d9a604e3f3b812370dcc7f5e0c9d855775f9d3c379daf91376",
+  "retained_failures": [
+    {
+      "api": 27,
+      "evidence": "android-connect-gpu27-emulators",
+      "boundary": "initial certificate NotBefore; approximately7s guest lag; no Connect"
+    },
+    {
+      "api": 27,
+      "evidence": "android-connect-gpu27-emulators2",
+      "boundary": "clock preflight refused approximately9s guest lag; no activation/readiness request"
+    },
+    {
+      "api": 35,
+      "evidence": "android-connect-gpu35-emulators",
+      "boundary": "new Connect succeeded; erroneous test compared changing challenge bytes before traffic assertion"
+    }
+  ]
+}

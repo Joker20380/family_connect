@@ -13,11 +13,35 @@ import urllib.request
 import zipfile
 
 
-SUCCESS_SCOPES = frozenset(('PASS_POSITIVE_PATH_ONLY', 'PASS_OWNER_RACE_ONLY'))
+SUCCESS_SCOPES = frozenset(('PASS_POSITIVE_PATH_ONLY', 'PASS_OWNER_RACE_ONLY', 'PASS_PARTIAL_CONNECT_ONLY'))
 
 
 def require_success(record):
     assert record['result'] in SUCCESS_SCOPES, record.get('failure', record['result'])
+
+
+def require_wall_clock(before, guest, after):
+    assert 0 <= after-before <= 3 and before-2 <= guest <= after+2, 'Disposable clock skew; no clock adjustment or relaxed certificate validation allowed'
+
+
+def observe_wall_clock(adb, record):
+    deadline = time.monotonic()+60
+    record['clock_samples'] = []
+    while True:
+        before = time.time()
+        guest = int(subprocess.check_output(adb+['shell', 'date', '+%s'], text=True, timeout=10))
+        after = time.time()
+        observation = dict(host_before=before, host_after=after, guest=guest)
+        record['clock_samples'].append(observation)
+        record['clock_observation'] = observation
+        record['guest_wall_seconds'] = guest
+        try:
+            require_wall_clock(before, guest, after)
+            return
+        except AssertionError:
+            if time.monotonic() >= deadline:
+                raise
+        time.sleep(3)
 
 
 @contextmanager
@@ -165,7 +189,7 @@ def run(args):
             subprocess.run(adb+['reverse', 'tcp:19091', 'tcp:'+str(bridge['relay'])], check=True, capture_output=True, timeout=10)
             subprocess.run(adb+['shell', 'appops', 'set', 'com.familyconnect.app.friends', 'ACTIVATE_VPN', 'allow'], check=True, capture_output=True, timeout=10)
             record.update(result='RUNNING', started=time.time())
-            record['guest_wall_seconds'] = int(subprocess.check_output(adb+['shell', 'date', '+%s'], text=True))
+            observe_wall_clock(adb, record)
             (args.work/f'api{api}-receipt.json').write_text(json.dumps(record)+'\n')
             arguments = ['-e', 'fc_core_service', 'true'] if args.service else []
             with (args.work/f'api{api}-runtime.log').open('wb') as log:
@@ -176,6 +200,8 @@ def run(args):
             log = (args.work/f'api{api}-runtime.log').read_text()
             assert result.returncode == 0 and 'OK (1 test)' in log, 'HTTP/cache/owner runtime failed; retained log'
             scope = 'PASS_OWNER_RACE_ONLY' if 'OWNER_RACE_VALID_SUCCESSOR_NEW_EXPLICIT_OWNER' in log else 'PASS_POSITIVE_PATH_ONLY'
+            if 'PARTIAL_EXPLICIT_CONNECT_AND_SAME_COMMIT_RESUME' in log:
+                scope = 'PASS_PARTIAL_CONNECT_ONLY'
             record.update(result=scope, finished=time.time())
         except BaseException as error:
             record.update(result='FAIL', failure_type=type(error).__name__, failure=str(error))

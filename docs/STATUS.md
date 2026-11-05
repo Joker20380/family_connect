@@ -11,6 +11,16 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**23:00UTC partial-publication new Connect PASS on API27/API35; A remains open.**
+The explicit new owners connect using unchanged predecessor security material while NL2
+publication is missing; native mux/verified HTTPS work, then the same COMMIT resumes.
+[Exact receipt](releases/2026-11-05-mesh-android-partial-connect-evidence.json):61s/71s,
+wrapper exit0, unchanged native bytes, real aligned clocks and normal cleanup. The
+earlier clock/test-comparison failures are retained, not relabelled. All Android AVDs
+and stands are stopped. Final targeted runner/receipt selection29 PASS/0 SKIP; no full-CI
+claim. Remaining G3: legacy peer and too-late delivery. G2 expiry/G4 real-time stands
+continue; there is still no accepted A checkpoint and no split-tunneling implementation.
+
 **22:43UTC owner-race runtime PASS on both APIs.** API35 also completes363s through
 the actual HTTP/cache/closed-owner/new-explicit-owner/native path; its fixed runner
 exits0 and cleanup completes. [Exact paired receipt](releases/2026-11-05-mesh-android-owner-evidence.json).

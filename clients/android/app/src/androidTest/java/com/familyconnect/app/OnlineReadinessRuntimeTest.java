@@ -181,6 +181,45 @@ public class OnlineReadinessRuntimeTest {
             String other=gateway.equals(RestrictedGateway.PRIMARY)?RestrictedGateway.SECONDARY:RestrictedGateway.PRIMARY;
             FriendsRestricted.prewarm(context,other);
             if(settings.has("scenario")){
+                if("partial-connect".equals(settings.get("scenario").getAsString())){
+                    fixtureControl("connected"+Build.VERSION.SDK_INT);
+                    long partialDeadline=SystemClock.elapsedRealtime()+180000;
+                    while(!"PARTIAL".equals(fixtureControl("state").get("state").getAsString())){
+                        assertTrue("Partial publication starts",SystemClock.elapsedRealtime()<partialDeadline);echo(lease);Thread.sleep(500);
+                    }
+                    NativeRestricted.chatRelease(lease);lease=0;
+                    context.startService(new Intent(context,ConnectionService.class).setAction("disconnect"));
+                    long stopped=SystemClock.elapsedRealtime()+30000;
+                    while(!"off".equals(ConnectionService.status)&&SystemClock.elapsedRealtime()<stopped)Thread.sleep(100);
+                    assertEquals("off",ConnectionService.status);
+                    context.startForegroundService(connect);
+                    started=SystemClock.elapsedRealtime()+180000;
+                    while(!"on".equals(ConnectionService.status)){
+                        assertFalse("Explicit Connect during partial publication",ConnectionService.failed);
+                        assertTrue("Partial Connect deadline",SystemClock.elapsedRealtime()<started);Thread.sleep(100);
+                    }
+                    assertNotEquals(serviceOwner,ConnectionService.sessionId);
+                    serviceOwner=ConnectionService.sessionId;
+                    byte[] retained=cached(identity,gateway);assertNotNull(retained);
+                    try{
+                        JsonObject retainedResponse=JsonParser.parseString(new String(retained,StandardCharsets.UTF_8)).getAsJsonObject();
+                        for(String field:new String[]{"device","revision","issuer","certificate","revocations","minimum_crl","directory","expires_at"})
+                            assertEquals("Predecessor security material: "+field,original.get(field),retainedResponse.get(field));
+                        assertTrue(NativeRestricted.validateDelivery(retained,identity.publicIdentity(),ControlTrust.anchor(context)));
+                        lease=borrow(retained,identity,resolver);
+                    }
+                    finally{Arrays.fill(retained,(byte)0);}
+                    assertTrue(lease>0);assertEquals(2,NativeRestricted.chatState(lease));echo(lease);
+                    assertEquals("PARTIAL",fixtureControl("state").get("state").getAsString());
+                    status("NEW_EXPLICIT_CONNECT_DURING_PARTIAL",gateway,null);
+                    fixtureControl("release"+Build.VERSION.SDK_INT);
+                    long resumed=SystemClock.elapsedRealtime()+180000;
+                    while(!"SUCCESSOR_PUBLISHED".equals(fixtureControl("state").get("state").getAsString())){
+                        assertTrue("Same COMMIT resume deadline",SystemClock.elapsedRealtime()<resumed);
+                        assertEquals(serviceOwner,ConnectionService.sessionId);echo(lease);Thread.sleep(500);
+                    }
+                    status("PARTIAL_EXPLICIT_CONNECT_AND_SAME_COMMIT_RESUME",gateway,null);return;
+                }
                 if("owner-race".equals(settings.get("scenario").getAsString())){
                     ownerRace(identity,gateway,lease,serviceOwner,originalExpiry,connect);return;
                 }

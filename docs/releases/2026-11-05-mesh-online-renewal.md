@@ -1,5 +1,52 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Paired partial-publication new Connect result23:00UTC
+
+**Additional proven user scenario:** after explicit Disconnect, API27 and API35 create
+a new real ConnectionService/native owner while NL2 has not published the successor.
+Fresh authenticated HTTP readiness retains the predecessor's security material, native
+validation passes, and the new owner carries checked mux bytes and verified HTTPS.
+The controller subsequently resumes the **same COMMIT** and finishes publication. The
+previous connection is deliberately closed; this is not seamless TCP continuity.
+
+[Exact artifact, clock, decision and cleanup receipt](2026-11-05-mesh-android-partial-connect-evidence.json).
+API27 completes61s and API35 completes71s, both `PASS_PARTIAL_CONNECT_ONLY`, wrapper exit0.
+The accepted API27 run uses a fresh synthetic invitation and aligned clocks on its first
+measurement, with no clock writes. The runner may observe for a60s retry budget (10s per
+ADB read), but cannot set time or relax validation. Both accepted AVDs use NVIDIA/KVM;
+only one AVD runs at a time. All Android stands/AVDs now stopped normally.
+
+The failed API27 clock samples (approximately7s and9s behind) and API35's erroneous
+whole-response comparison remain in their original directories. They are not replaced
+or included as passes. The final assertion intentionally excludes only the changing
+challenge/issued-at envelope fields; it requires the same device, revision, issuer,
+certificate, CRL/floor, directory and expiry, plus actual native validation and traffic.
+The paired owner-race evidence above remains a separate scenario and separate artifacts.
+
+Final affected runner/receipt selection: `android-partial-connect-final-guards.log`,
+29 PASS/0 SKIP/0.35s. It includes the earlier overlapping GPU/network/metadata checks and
+new strict clock observations; do not add these selections together. Final APK builds
+pass83 tasks each. No production/native/package implementation changes in this delta;
+the earlier fd7562c67-test frozen selection, native race count3, artifact-enabled bootstrap
+and421-test Android JVM results remain their original evidence, not new/full-CI runs.
+
+| Gate | Status | Current evidence and unfinished scope |
+|---|---|---|
+|G1|PASS, isolated core|Retained frozen revoke/approval/restart/new-TLS/DNS/HTTPS evidence; final integrated repetition is in the running G4 test.|
+|G2|NOT_RUN, complete gate|Process/RPC subsets PASS; real successor-expiry continuation still running to23:46:04UTC.|
+|G3|NOT_RUN, complete gate|Both APIs pass positive delivery, closed/replaced owner and partial-publication new Connect. Actual legacy peer and too-late delivery are still missing.|
+|G4|NOT_RUN, complete gate|fd7562c two-renewal/crypto/lease/emergency run active; first renewal due23:11:57UTC. Older d968ddd soak remains separate evidence.|
+
+The online archive stays fd7562c /846818adefa292939034b9c427d658cfd3c427f48d1fb522dbda104f31aeb94f;
+local driver180f386f… and Android native39c69de /d1025a1d… are unchanged. Original
+online8c876e3 /a27502d7… and the accepted maintenance archive are untouched. There is
+**no independently accepted A checkpoint yet; B UI/storage/routing/recovery are NOT_STARTED**.
+No product APK version/catalog change, installation on the owner's phone, production
+rollout, release publication or paid operation occurred. No installed rollback is needed.
+Physical Telemost, exact production-binary/systemd and remaining field gates are not
+closed by this isolated packet/supervisor setup. The one active next remains finishing
+G1–G4, then preserving accepted A before the separately scoped Android feature.
+
 ## Paired owner-race result22:43UTC
 
 [Sanitized artifact/runtime receipt](2026-11-05-mesh-android-owner-evidence.json) now
