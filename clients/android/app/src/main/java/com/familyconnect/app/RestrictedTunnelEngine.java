@@ -129,12 +129,14 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     }
 
     ConnectivityOrchestrator.Failure connectionFailure() {
-        if(credentials!=null&&!cancelled.getAsBoolean()&&!authorizationDenied()&&context.getPackageName().equals("com.familyconnect.app.friends")){
-            credentials.poll(handle,SystemClock.elapsedRealtime(),()->FriendsRestricted.renewal(context,gateway),response->{
+        CredentialRefresh refresh=credentials;
+        long owner=handle;
+        if(refresh!=null&&!cancelled.getAsBoolean()&&!authorizationDenied()&&context.getPackageName().equals("com.familyconnect.app.friends")){
+            refresh.poll(owner,SystemClock.elapsedRealtime(),()->FriendsRestricted.renewal(context,gateway),response->{
                 try(ControlIdentity identity=new FriendsIdentityVault(context).load()){
                     if(cancelled.getAsBoolean()||authorizationDenied())return;
                     byte[] full=identity.material(),material=java.util.Arrays.copyOf(full,64);java.util.Arrays.fill(full,(byte)0);
-                    try{NativeRestricted.renew(handle,response,material);}finally{java.util.Arrays.fill(material,(byte)0);}
+                    try{NativeRestricted.renew(owner,response,material);}finally{java.util.Arrays.fill(material,(byte)0);}
                 }catch(Exception|LinkageError unavailable){}
             });
         }

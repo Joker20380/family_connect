@@ -85,6 +85,8 @@ A cleanup follow-up makes whole-device Close join maintenance and its callback b
 owner disposal. Internal fail-close uses a non-joining stop path to avoid joining itself.
 The confirmed JNI callback no longer takes the global owner mutex held by Disconnect:
 the captured owner's cancellation, exact session and coordinator ownership fence publication.
+Android polling also captures the owner handle locally for JNI delivery; a concurrently
+cleared/replaced engine handle cannot retarget a result between validation and delivery.
 Focused cleanup and replacement-owner tests pass with `-race -count=10`. This follow-up
 requires fresh ABI builds/API checks; the earlier platform receipts alone do not qualify it.
 
