@@ -11,6 +11,17 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**21:40UTC new API27 positive delivery evidence, not full G3/A acceptance.** A single
+NVIDIA/KVM AVD completed650s of actual HTTP readiness, encrypted cache, ConnectionService,
+partial NL2 publication, duplicate refresh, real310s cooldown, normal same-COMMIT resume
+and successor commit in the original native/VPN owner, then normal cleanup. The earlier
+activation failure was correct rejection of an already-consumed invitation on a fresh AVD.
+New stands use fresh synthetic invitations and the existing scheduled directory publisher
+over SSH/read-only snapshots, rather than the stale RU fixture directory. Two targeted
+root/package tests PASS/zero skips, including this publisher and pre-publication RPC loss.
+API35 now runs the same path sequentially on GPU. Old-peer/late-delivery/stale-owner and
+remaining G2/G4 gates are still open; B NOT_STARTED. No production/phone/release changes.
+
 **21:14UTC thermal interruption and GPU correction — G3 remains open.** Four remaining
 software-rendered AVDs were explicitly stopped after the owner's overheating report;
 the two partial-scenario AVDs had already failed and exited, not passed or been interrupted.

@@ -63,7 +63,39 @@ public class OnlineReadinessRuntimeTest {
             assertArrayEquals(sent,received);
         }
     }
-    private void servicePath(ControlIdentity identity,String gateway,byte[] predecessor)throws Exception{
+    private JsonObject fixtureControl(String action)throws Exception{
+        HttpsURLConnection request=(HttpsURLConnection)new java.net.URL("https://185.251.89.19:8443/qualification/"+action).openConnection();
+        request.setConnectTimeout(10000);request.setReadTimeout(10000);
+        try(InputStream input=request.getInputStream();ByteArrayOutputStream output=new ByteArrayOutputStream()){
+            byte[] buffer=new byte[1024];int count;
+            while((count=input.read(buffer))!=-1){assertTrue(output.size()+count<=8192);output.write(buffer,0,count);}
+            return JsonParser.parseString(new String(output.toByteArray(),StandardCharsets.UTF_8)).getAsJsonObject();
+        }finally{request.disconnect();}
+    }
+    private void partialPublication(ControlIdentity identity,String gateway,long lease,long serviceOwner,long originalExpiry,long originalCrl)throws Exception{
+        fixtureControl("connected"+Build.VERSION.SDK_INT);
+        long deadline=SystemClock.elapsedRealtime()+300000;
+        while(!"PARTIAL".equals(fixtureControl("state").get("state").getAsString())){
+            assertTrue("Partial publication starts",SystemClock.elapsedRealtime()<deadline);echo(lease);Thread.sleep(1000);
+        }
+        status("PARTIAL_PUBLICATION",gateway,null);
+        for(int attempt=0;attempt<2;attempt++){
+            byte[] duplicate=FriendsRestricted.ready(context,identity,SystemClock.elapsedRealtime()+60000,()->false,false,gateway);
+            if(duplicate!=null)Arrays.fill(duplicate,(byte)0);
+        }
+        long cooldown=SystemClock.elapsedRealtime()+310000;
+        while(SystemClock.elapsedRealtime()<cooldown){
+            assertEquals(serviceOwner,ConnectionService.sessionId);assertEquals("on",ConnectionService.status);assertFalse(ConnectionService.failed);echo(lease);
+            byte[] retained=cached(identity,gateway);assertNotNull("Usable predecessor retained during partial publication",retained);
+            try{
+                JsonObject value=JsonParser.parseString(new String(retained,StandardCharsets.UTF_8)).getAsJsonObject();
+                assertEquals(originalExpiry,value.get("expires_at").getAsLong());assertEquals(originalCrl,value.get("minimum_crl").getAsLong());
+            }finally{Arrays.fill(retained,(byte)0);}
+            Thread.sleep(1000);
+        }
+        fixtureControl("release"+Build.VERSION.SDK_INT);status("REAL_COOLDOWN_PARTIAL_RELEASED",gateway,null);
+    }
+    private void servicePath(ControlIdentity identity,String gateway,byte[] predecessor,JsonObject settings)throws Exception{
         AutomaticVpnOwner resolver=new AutomaticVpnOwner(context);
         JsonObject original=JsonParser.parseString(new String(predecessor,StandardCharsets.UTF_8)).getAsJsonObject();
         long originalExpiry=original.get("expires_at").getAsLong(),originalCrl=original.get("minimum_crl").getAsLong();
@@ -93,6 +125,10 @@ public class OnlineReadinessRuntimeTest {
             status("SERVICE_VERIFIED_HTTPS",gateway,null);
             String other=gateway.equals(RestrictedGateway.PRIMARY)?RestrictedGateway.SECONDARY:RestrictedGateway.PRIMARY;
             FriendsRestricted.prewarm(context,other);
+            if(settings.has("scenario")){
+                assertEquals("partial",settings.get("scenario").getAsString());
+                partialPublication(identity,gateway,lease,serviceOwner,originalExpiry,originalCrl);
+            }
             long deadline=SystemClock.elapsedRealtime()+11000000;boolean committed=false;
             while(SystemClock.elapsedRealtime()<deadline){
                 assertEquals("No internal reconnect",serviceOwner,ConnectionService.sessionId);
@@ -162,7 +198,7 @@ public class OnlineReadinessRuntimeTest {
                 JsonObject original=JsonParser.parseString(new String(predecessor,StandardCharsets.UTF_8)).getAsJsonObject();
                 long originalExpiry=original.get("expires_at").getAsLong(),originalCrl=original.get("minimum_crl").getAsLong();
                 if("true".equals(InstrumentationRegistry.getArguments().getString("fc_core_service"))){
-                    servicePath(identity,gateway,predecessor);return;
+                    servicePath(identity,gateway,predecessor,settings);return;
                 }
                 owner.open(()->cancelled.set(true));
                 engine=new RestrictedTunnelEngine(context,cancelled::get,connected::set,owner,SystemClock.elapsedRealtime()+200000,false,gateway);

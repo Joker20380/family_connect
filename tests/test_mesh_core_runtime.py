@@ -17,6 +17,31 @@ from device_identity.device import DeviceIdentity
 from test_friends_access import proof
 
 
+def test_seed_directory_publisher_preserves_credentials_and_processes(online_package, core_driver, tmp_path):
+    from mesh_core_directory import publish_seed_directories
+    snapshot = os.environ.get('FC_TEST_SNAPSHOT')
+    if not snapshot:
+        pytest.skip('explicit frozen read-only snapshot capsule required')
+    stand = CoreStand(tmp_path, online_package[3], core_driver)
+    try:
+        stand.start()
+        profiles = {slot: (tmp_path/(slot+'-profile/gateway.json')).read_bytes() for slot in ('NL', 'NL2')}
+        processes = {slot: request(dict(command='show', unit='test-'+slot+'.service'))['state'] for slot in profiles}
+        receipt = publish_seed_directories(stand, Path(snapshot))
+        assert receipt['result']['files_changed'] == 2
+        assert receipt['result']['crl_publications'] == receipt['result']['restarts'] == 0
+        assert not (tmp_path/'coordinator/transaction.json').exists()
+        for slot in profiles:
+            assert (tmp_path/(slot+'-profile/gateway.json')).read_bytes() == profiles[slot]
+            assert request(dict(command='show', unit='test-'+slot+'.service'))['state'] == processes[slot]
+            client = stand.client(slot, 3)
+            assert client.wait(timeout=15) == 0
+            samples = [json.loads(line) for line in (tmp_path/(slot+'-client.log')).read_text().splitlines()]
+            assert any(value.get('tcp') and value.get('dns') and value.get('verified_https') for value in samples)
+    finally:
+        stand.close()
+
+
 @pytest.mark.parametrize('field', ['source_commit', 'native_sources', 'scope', 'entrypoint', 'executable_sha256'])
 def test_isolated_binding_rejects_foreign_artifacts(online_package, core_driver, tmp_path, field):
     manifest = json.loads((online_package[3]/'source-manifest.json').read_bytes())

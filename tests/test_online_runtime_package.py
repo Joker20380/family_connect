@@ -420,7 +420,7 @@ def test_packaged_seed_timeout_is_not_a_ready_traffic_runtime(online_package, tm
 
 @pytest.mark.parametrize('slot,command,kind', [('RU', 'prepare', 'drop'), ('NL', 'stage', 'drop'),
     ('NL2', 'decide', 'drop'), ('NL', 'publish', 'drop'), ('NL2', 'confirm', 'drop'),
-    ('RU', 'publish', 'drop'), ('NL2', 'stage', 'wrong-slot')])
+    ('RU', 'publish', 'drop'), ('NL2', 'stage', 'wrong-slot'), ('NL2', 'publish', 'drop-before')])
 def test_packaged_rpc_lost_reply_and_participant_corruption(online_package, core_driver, tmp_path, slot, command, kind):
     if os.environ.get('FC_ONLINE_SSH') != '1':
         pytest.skip('explicit network-none SSH container required')
@@ -428,12 +428,17 @@ def test_packaged_rpc_lost_reply_and_participant_corruption(online_package, core
     stand = CoreStand(tmp_path, online_package[3], core_driver)
     try:
         stand.start()
+        initial_profiles = {name: (tmp_path/(name+'-profile/gateway.json')).read_bytes() for name in ('NL', 'NL2')}
         stand.rpc_fault(slot, command, kind)
         code, result = stand.run('online')
         assert code == 75 and result['result'] == 'ONLINE_RECOVERY_REQUIRED', result
         expected = 'ONLINE_PREPARED_RECEIPT' if kind == 'wrong-slot' else 'REMOTE_OUTCOME_UNKNOWN_READBACK_REQUIRED'
         assert result['cause'] == expected, result
         before = json.loads((tmp_path/'coordinator/transaction.json').read_bytes())
+        if kind == 'drop-before':
+            assert before['decision'] == 'COMMIT' and not before['published']
+            assert (tmp_path/'NL-profile/gateway.json').read_bytes() != initial_profiles['NL']
+            assert (tmp_path/'NL2-profile/gateway.json').read_bytes() == initial_profiles['NL2']
         code, result = stand.run('abort' if kind == 'wrong-slot' else 'resume')
         assert code == 0 and result['result'] == ('ABORTED' if kind == 'wrong-slot' else 'COMMITTED'), result
         final = json.loads((tmp_path/'coordinator/transaction.json').read_bytes())

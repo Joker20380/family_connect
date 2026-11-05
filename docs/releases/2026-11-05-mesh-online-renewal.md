@@ -1,5 +1,62 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## API27 real successor after partial publication21:40UTC
+
+Newly proven relative to a30966c: a normal Android ConnectionService VPN obtains its
+successor through verified HTTP and encrypted cache, survives an actual partially
+published durable COMMIT and real cooldown, and commits renewed credentials in its
+existing native session/owner. This is API27 isolated-core evidence, not complete G3.
+
+Private evidence: `android-partial-gpu27-1/server.json`,
+`android-partial-gpu27-emulators/{inputs.json,api27-receipt.json,api27-runtime.log}`.
+The650s instrumentation run finishes `OK (1 test)` and `PASS_POSITIVE_PATH_ONLY`;
+`SERVICE_SUCCESSOR_COMMITTED_SAME_OWNER` follows `REAL_COOLDOWN_PARTIAL_RELEASED`,
+then `SERVICE_OWNER_CLEANED`. Both installed native checks match d1025a1d….
+The successor borrow checks the native owner's profile fingerprint: `AcquireChat`
+refuses a different fingerprint until the actual renewal commit callback updates it.
+The original borrowed session continues carrying verified echo bytes throughout.
+
+| Component | Exact identity |
+|---|---|
+|Online source/archive|fd7562cc466606002aa2af064b2b67ee165056c2 / 846818adefa292939034b9c427d658cfd3c427f48d1fb522dbda104f31aeb94f|
+|Separate local-provider driver|180f386f8afba4d9a604e3f3b812370dcc7f5e0c9d855775f9d3c379daf91376|
+|Read-only snapshot capsule, same fd source|b6e15addc5eb2ab864208957cf2b5908c8075f37b96c62b37dfa46798479b78b|
+|API27 test-only APK|8270ef5811dd5e3fae30d059629b319df69531e17eed464bd5f5e9d8b0aed8be|
+|API27 instrumentation APK|0199e70dc4967cda417b3c72467d3a8e4199baf9ef684cbfb52e91e3e3a2f3f3|
+|Android native39c69de|d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af|
+
+The partial stand originally lacked RU publication of the actual SeedManager directory;
+its initial fixtures were not live endpoints. `scheduled_evaluate.py --directory-only`
+now publishes both real directories through forced-command SSH snapshots, preserving
+gateway PIDs/profiles and authority. The additional snapshot capsule is reproducible
+(second build byte-identical), unbound and read-only. Its separate fixture route binds
+`profile_snapshot.main` to each disposable configuration path; custody checks remain
+enabled, no signer/writer/timer is added, and this test adapter is not shipped. Packaged
+controller/node/API/HTTP still execute only frozen archive code through normal entrypoints.
+No manual directory/profile/journal repair is performed.
+
+`directory-drop-before-trusted.log`:2 PASS/0 SKIP/46.59s for the new publisher/traffic
+test and NL2 pre-publication RPC loss followed by the same COMMIT. The first fault test
+incorrectly expected a partially populated controller receipt map; parallel publication
+records that map only after both replies. Correct evidence is the actual changed NL
+profile, unchanged NL2 profile and unchanged durable decision on resume. Two preliminary
+test invocations failed Git clone trust setup before tests; they are not PASS.
+No totals are added to overlapping earlier suites. Retain earlier fd67 root/package,
+native race count3/artifact-bootstrap and421 JVM results with their original scope.
+
+| Gate | Full-gate status | Current evidence / missing runtime |
+|---|---|---|
+|G1|PASS, isolated core scope only|Earlier frozen revoke/approval/restart receipts retained; final integrated repetition still running in G4.|
+|G2|NOT_RUN, complete gate|Existing process/RPC cases plus new pre-publication loss PASS; genuine successor expiry still running on d968ddd.|
+|G3|NOT_RUN, complete gate|API27 positive partial-publication path PASS; API35 running sequentially. Actual late delivery, stale/closed owner, legacy peer and remaining negatives stay open.|
+|G4|NOT_RUN, complete gate|fd7562c eight-hour path still awaiting first renewal23:11:57UTC; d968ddd older soak has its first renewal and remains separate evidence.|
+
+NVIDIA rendering is verified inside the guest; only one AVD runs, additionally capped
+to one host CPU in its no-egress container. Finished/interrupted Android stands are
+cleaned up, not left as idle duplicate jobs. The selected next step remains completion
+of these gates. No accepted A checkpoint, B implementation, production installation,
+Telemost-media/systemd/physical-field acceptance or release publication is claimed.
+
 ## Thermal interruption and hardware-GPU correction21:14UTC
 
 The owner's overheating report interrupts the remaining engine-only API27/API35,

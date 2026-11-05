@@ -57,6 +57,8 @@ class CoreStand(PackageStand):
             executable_sha256=package.digest(driver.read_bytes()))))
         self.stack = contextlib.ExitStack()
         self.accepted = []
+        self.http_control = None
+        self.http_observer = None
 
     def online_settings(self):
         return dict(super().online_settings(), isolated_runtime=str(self.binding))
@@ -96,6 +98,14 @@ class CoreStand(PackageStand):
                 pass
 
             def do_GET(self):
+                if stand.http_control is not None and self.path.startswith('/qualification/'):
+                    raw = package.encode(stand.http_control(self.path.removeprefix('/qualification/')))
+                    self.send_response(200)
+                    self.send_header('Content-Length', str(len(raw)))
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(raw)
+                    return
                 self.send_response(200)
                 self.send_header('Content-Length', '24')
                 self.end_headers()
@@ -108,6 +118,8 @@ class CoreStand(PackageStand):
                     connection.request('POST', self.path, body, {'Content-Type': 'application/json'})
                     response = connection.getresponse()
                     raw = response.read()
+                    if stand.http_observer is not None:
+                        stand.http_observer(self.path, response.status, raw)
                     self.send_response(response.status)
                     self.send_header('Content-Length', str(len(raw)))
                     self.send_header('Content-Type', 'application/json')
