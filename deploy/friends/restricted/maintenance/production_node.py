@@ -36,10 +36,12 @@ def pinned(path, allowed_owners):
 class ProductionNode:
     def __init__(self, role, live, state, validator, *, database=None, barrier=None, clock=time.time, fault=lambda stage:None,
                  profile_uid=None, policy_paths=None, profile_store=None, service_units=None,
-                 gateway_ids=None, gateway_slot=None):
+                 gateway_ids=None, gateway_slot=None, online_reader=None, online_qualification=False):
         require(role in ('RU','NL'), 'NODE_ROLE')
         self.role,self.live,self.state,self.validator = role,Path(live),Path(state),validator
         self.database,self.clock,self.fault,self.profile_uid = database,clock,fault,profile_uid
+        self.online_reader = online_reader
+        self.online_qualification = online_qualification
         self.gateway_ids = gateway_set.membership(gateway_ids) if gateway_ids is not None else None
         require(self.gateway_ids is None or validator.all_activated, 'GATEWAY_SET_ADMISSION')
         require((self.gateway_ids is None and gateway_slot is None)
@@ -90,7 +92,7 @@ class ProductionNode:
             return read_regular(port.path, port.expected, 8192, publisher_parent=port.publisher_parent), port.expected
         return pinned(self.directory_path(), {os.geteuid(), self.profile_uid})
 
-    def inspect(self):
+    def inspect(self, *, online=False):
         files = {name:digest(self.read(name)[0]) for name in self.names()}
         value = dict(files=files,role=self.role,session_inventory='UNKNOWN')
         if self.gateway_ids:
@@ -100,7 +102,11 @@ class ProductionNode:
         if self.policy_paths:
             value['policy'] = {name:digest(pinned(path,{os.geteuid()})[0]) for name,path in self.policy_paths.items()}
         if self.role == 'RU':
-            value['database_sha256'] = digest(canonical(self.database.snapshot()))
+            snapshot = self.database.snapshot()
+            if online:
+                from online_contract import projection
+                snapshot = projection(snapshot)
+            value['database_sha256'] = digest(canonical(snapshot))
         return value
 
     def public_gateway(self):
@@ -289,7 +295,12 @@ class ProductionNode:
         require(owner['state'] in ('ROLLED_BACK','ABORTED','ABORTED_FENCED'), 'TRANSACTION_STATE')
         if owner['state'] == 'ABORTED_FENCED':
             self.fenced_rollback_readback(owner)
-        actual,expected = self.inspect(),dict(owner['expected_state'])
+        actual,expected = self.inspect(online=owner.get('mode') == 'online'),dict(owner['expected_state'])
+        if owner.get('mode') == 'online' and owner['state'] == 'ABORTED':
+            require(not owner['commit_decided'], 'ONLINE_DECISION_IMMUTABLE')
+            for name in ('database_sha256', 'policy'):
+                actual.pop(name, None)
+                expected.pop(name, None)
         if self.role == 'RU' and self.resume_authorized(owner):
             actual.pop('database_sha256')
             expected.pop('database_sha256')
@@ -470,13 +481,18 @@ class ProductionNode:
             require(self.barrier.stopped(), 'READERS_NOT_QUIESCED')
             return dict(stopped=True)
 
-    def prepare(self, operation_id, gateway, *, authority_handoff=None, expired_handoff=None):
+    def prepare(self, operation_id, gateway, *, authority_handoff=None, expired_handoff=None, online_token=None):
         require(self.role == 'RU', 'NODE_ROLE')
         require(bool(self.gateway_ids) == ('secondary' in gateway), 'GATEWAY_SET_BINDING')
         with self.operation.lock():
             owner = self.owner(operation_id)
-            require(owner['state'] == 'QUIESCED' and self.barrier.stopped(), 'READERS_NOT_QUIESCED')
-            require(self.inspect() == owner['expected_state'], 'STALE_NODE_STATE')
+            if online_token is None:
+                require(owner['state'] == 'QUIESCED' and self.barrier.stopped(), 'READERS_NOT_QUIESCED')
+            else:
+                from online_node import owned
+                owned(self, operation_id, online_token)
+                require(authority_handoff is None and expired_handoff is None, 'ONLINE_BINDING_CHANGED')
+            require(self.inspect(online=online_token is not None) == owner['expected_state'], 'STALE_NODE_STATE')
             saved = self.state/'prepared-plan.json'
             if saved.exists():
                 plan = parse(read_private(saved))
@@ -527,8 +543,12 @@ class ProductionNode:
                     secondary_successor = authorization.secondary.authority
                 trust,issuer = self.validator.delegation_parser(envelope,self.validator.anchor,now)
             require(trust['expires_at'] >= now + VALIDITY['leaf'], 'OFFLINE_AUTHORITY_RENEWAL_REQUIRED')
-            grant_plan = (self.database.plan(issuer,now,readers_quiesced=self.barrier.stopped)
-                if authorization is None else self.database.recovery_plan(issuer, now, authorization))
+            if online_token is not None:
+                grant_plan = self.database.online_plan(now, x509.load_pem_x509_crl(previous_crl),
+                    owner['online']['timing']['required_seconds'])
+            else:
+                grant_plan = (self.database.plan(issuer,now,readers_quiesced=self.barrier.stopped)
+                    if authorization is None else self.database.recovery_plan(issuer, now, authorization))
             old_crl = x509.load_pem_x509_crl(previous_crl)
             crl_due = int(old_crl.next_update_utc.timestamp()) - now <= THRESHOLD['crl']
             missing_revocations = any(old_crl.get_revoked_certificate_by_serial_number(serial) is None
@@ -553,6 +573,10 @@ class ProductionNode:
                     self.validator,signer,now,successor_manifest=secondary_successor,authorization=authorization))
             if authorization is not None:
                 plan['expired_recovery'] = dict(bundle=base64.b64encode(expired_handoff).decode(), accepted_at=now)
+            if online_token is not None:
+                from online_contract import validate_plan
+                plan['online'] = owner['online']
+                validate_plan(self, plan, full_window=True)
             self.validate(plan)
             path = self.state/'prepared-plan.json'
             if path.exists():
@@ -563,6 +587,8 @@ class ProductionNode:
 
     def validate(self, plan, *, recovery=False):
         extra = {'expired_recovery'} if 'expired_recovery' in plan else set()
+        if 'online' in plan:
+            extra.add('online')
         if self.gateway_ids:
             extra |= {'secondary','gateway_ids'}
         require(set(plan) == {'schema','operation_id','previous','candidate','grant_plan','ru_expected','nl_profile_sha256'} | extra
@@ -599,16 +625,22 @@ class ProductionNode:
                 and authorization.request.get('gateway_ids') == self.gateway_ids, 'GATEWAY_SET_BINDING')
         return authorization
 
-    def stage(self, operation_id, plan):
+    def stage(self, operation_id, plan, *, online_token=None):
         with self.operation.lock():
             owner = self.owner(operation_id)
-            require(owner['state'] in ('QUIESCED','STAGED') and self.barrier.stopped(), 'READERS_NOT_QUIESCED')
+            if online_token is None:
+                require(owner['state'] in ('QUIESCED','STAGED') and self.barrier.stopped(), 'READERS_NOT_QUIESCED')
+            else:
+                from online_node import owned
+                from online_contract import validate_plan
+                owned(self, operation_id, online_token)
+                validate_plan(self, plan, full_window=True)
             require(plan['operation_id'] == operation_id, 'PLAN_BINDING')
             self.validate(plan)
             if 'expired_recovery' in plan:
                 authorization = self.recovery_authorization(plan, durable=False)
                 require(owner['expected_state'] == authorization.request['expected'][self.gateway_slot], 'RECOVERY_STALE_APPROVAL')
-            require(self.inspect() == owner['expected_state'], 'STALE_NODE_STATE')
+            require(self.inspect(online=online_token is not None) == owner['expected_state'], 'STALE_NODE_STATE')
             if self.role == 'RU':
                 require(owner['expected_state'] == plan['ru_expected'], 'PLAN_BINDING')
                 require(read_private(self.state/'prepared-plan.json') == canonical(plan), 'PREPARED_PLAN_MISMATCH')
@@ -651,7 +683,7 @@ class ProductionNode:
                 self.fault('stage-'+name)
             atomic(self.state/'files.json',canonical(metadata))
             atomic(self.state/'plan.json',canonical(plan))
-            self.operation.advance(owner,'STAGED')
+            self.operation.advance(owner,'ONLINE_STAGED' if online_token is not None else 'STAGED')
             return dict(plan_sha256=digest(canonical(plan)),crl_sha256=digest(plan['candidate']['crl'].encode()),
                         files={name:item['after'] for name,item in metadata.items()})
 
@@ -765,7 +797,11 @@ class ProductionNode:
             expected = dict(plan['grant_plan']['before'],restricted_grants=plan['grant_plan']['after_grants'])
             crl = x509.load_pem_x509_crl(plan['candidate']['crl'].encode())
             expected['restricted_crl_sequence'] = [dict(singleton=1,sequence=crl.extensions.get_extension_for_class(x509.CRLNumber).value.crl_number)]
-            require(self.database.snapshot() == expected, 'DATABASE_READBACK_MISMATCH')
+            if owner.get('mode') == 'online':
+                from online_contract import projection
+                require(projection(self.database.snapshot()) == projection(expected), 'DATABASE_READBACK_MISMATCH')
+            else:
+                require(self.database.snapshot() == expected, 'DATABASE_READBACK_MISMATCH')
         return dict(plan_sha256=digest(canonical(plan)),crl_sha256=digest(plan['candidate']['crl'].encode()),state='PROMOTED')
 
     def rollback(self, operation_id):

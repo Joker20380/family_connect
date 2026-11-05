@@ -104,8 +104,14 @@ func newLeaseMuxProfileOptions(test *testing.T, support bool, clientRaw, serverR
 }
 
 func newLeaseMuxOptions(test *testing.T, support bool, clientRaw, serverRaw []byte, configure func(*leaseMuxFixture, *familysession.Session, *tcpforward.MuxConfig), realtimeLease time.Duration, securityLifetime ...time.Duration) *leaseMuxFixture {
+	return newLeaseMuxRuntime(test, support, clientRaw, serverRaw, configure, realtimeLease, "", 0, securityLifetime...)
+}
+
+func newLeaseMuxRuntime(test *testing.T, support bool, clientRaw, serverRaw []byte, configure func(*leaseMuxFixture, *familysession.Session, *tcpforward.MuxConfig), realtimeLease time.Duration, path string, budget time.Duration, securityLifetime ...time.Duration) *leaseMuxFixture {
 	test.Helper()
-	path := filepath.Join(test.TempDir(), "gateway.json")
+	if path == "" {
+		path = filepath.Join(test.TempDir(), "gateway.json")
+	}
 	if err := os.WriteFile(path, serverRaw, 0600); err != nil {
 		test.Fatal(err)
 	}
@@ -124,9 +130,11 @@ func newLeaseMuxOptions(test *testing.T, support bool, clientRaw, serverRaw []by
 	identity := Identity{Family: credentials.Family, Device: config.Certificates[0].Leaf.Subject.SerialNumber}
 	copy(identity.PublicKey[:], certificate.PrivateKey.(ed25519.PrivateKey).Public().(ed25519.PublicKey))
 	var authorize Authorize = func(context.Context) (Identity, error) { return identity, nil }
-	budget := 20 * time.Second
-	if realtimeLease > 0 {
-		budget = 40 * time.Second
+	if budget == 0 {
+		budget = 20 * time.Second
+		if realtimeLease > 0 {
+			budget = 40 * time.Second
+		}
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), budget)
 	test.Cleanup(cancel)

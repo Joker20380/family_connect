@@ -116,7 +116,9 @@ def from_env(access, gateway_id=None):
                               seed_source=lambda: bounded_file(material / 'directory.json', 8192),
                               crl_source=lambda: bounded_file(root / 'revocations.pem', 16384), eligible_devices=eligible_devices,
                               all_activated=all_activated,
-                              delivery_lifetime=int(lifetime), gateway_id=target)
+                              delivery_lifetime=int(lifetime), gateway_id=target,
+                              publication_source=lambda: bounded_file(root / 'online-delivery.json', 16384)
+                              if (root / 'online-delivery.json').exists() else None)
 
 
 def request(access, action, value, request_id=None, gateway_id=None):
@@ -287,8 +289,30 @@ def migrate(access):
         paid_beta.migrate(database)
 
 
+def online_generation(source, crl, gateway, now):
+    if source is None:
+        return None
+    raw = source()
+    if raw is None:
+        return None
+    try:
+        value = json.loads(raw)
+        if (type(value) is not dict or set(value) != {'schema', 'contract', 'operation_id', 'plan_sha256', 'ready', 'crl_sha256', 'gateways', 'issued_at'}
+                or type(value['schema']) is not int or value['schema'] != 1 or value['contract'] != 'MESH_SAME_HOLDER_ONLINE_V1'
+                or value['ready'] is not True or set(value['gateways']) != {'NL', 'NL2'}
+                or gateway not in value['gateways'].values() or len(set(value['gateways'].values())) != 2
+                or value['crl_sha256'] != hashlib.sha256(crl).hexdigest()
+                or type(value['plan_sha256']) is not str or not re.fullmatch('[0-9a-f]{64}', value['plan_sha256'])
+                or type(value['operation_id']) is not str or not re.fullmatch('[a-z0-9-]{16,96}', value['operation_id'])
+                or type(value['issued_at']) is not int or not 0 <= value['issued_at'] <= now):
+            raise ValueError()
+        return value
+    except Exception:
+        raise ChallengeUnavailable('publication', 'PUBLICATION_NOT_READY') from None
+
+
 class RestrictedReadiness:
-    def __init__(self, access, *, manifest, anchor, signing_key, seed_source, crl_source, eligible_devices=None, delivery_lifetime=3600, all_activated=False, gateway_id=None):
+    def __init__(self, access, *, manifest, anchor, signing_key, seed_source, crl_source, eligible_devices=None, delivery_lifetime=3600, all_activated=False, gateway_id=None, publication_source=None):
         require(type(delivery_lifetime) is int and delivery_lifetime in (3600, MAX_TEST_LIFETIME))
         require(type(all_activated) is bool and (not all_activated or eligible_devices is None))
         self.access, self.manifest, self.anchor = access, manifest, anchor
@@ -297,6 +321,7 @@ class RestrictedReadiness:
         self.delivery_lifetime = delivery_lifetime
         self.all_activated = all_activated
         self.gateway_id = gateway_target(gateway_id)
+        self.publication_source = publication_source
 
     def gateway_binding(self, trust):
         return '' if self.gateway_id == PRIMARY_GATEWAY else self.gateway_id + ':' + trust['gateway']
@@ -408,6 +433,7 @@ class RestrictedReadiness:
         digest = hashlib.sha256(proof['challenge'].encode()).hexdigest()
         now = int(self.access.clock())
         trust, authority, crl, crl_pem, crl_number = self._trust(now)
+        publication = online_generation(self.publication_source, crl_pem.encode(), trust['gateway'], now)
         seeds = directory(self.seed_source(), trust['family'], trust['gateway'], now_ns=clock_nanoseconds(self.access.clock))
         with self.access.db() as database:
             now = int(self.access.clock())
@@ -436,6 +462,12 @@ class RestrictedReadiness:
                 raise Rejected()
             previous = database.execute('SELECT * FROM restricted_certificates WHERE device=? AND revision=? '
                                         'AND expires>? ORDER BY expires DESC LIMIT 1', (device, row['revision'], now + 300)).fetchone()
+            if publication is not None and previous is not None:
+                target = min(expires, publication['issued_at'] + self.delivery_lifetime - readiness_receipts.CLOCK_SKEW_SECONDS)
+                retained = x509.load_pem_x509_certificate(previous['certificate'].encode())
+                retained.verify_directly_issued_by(authority)
+                if int(retained.not_valid_after_utc.timestamp()) < target:
+                    previous = None
             if paid and previous is not None:
                 retained = x509.load_pem_x509_certificate(previous['certificate'].encode())
                 retained.verify_directly_issued_by(authority)
@@ -458,6 +490,8 @@ class RestrictedReadiness:
                           revision=row['revision'], issuer=self.manifest, certificate=pem,
                           revocations=crl_pem, minimum_crl=crl_number, directory=seeds)
             encoded = json.dumps(result, separators=(',', ':')).encode()
+            if online_generation(self.publication_source, crl_pem.encode(), trust['gateway'], int(self.access.clock())) != publication:
+                raise ChallengeUnavailable('publication', 'PUBLICATION_NOT_READY')
             require(len(encoded) <= MAX_RESPONSE)
             database.execute('UPDATE challenges SET used=1 WHERE nonce=?', (digest,))
             if request_id is not None:

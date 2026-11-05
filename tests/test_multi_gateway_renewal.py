@@ -20,7 +20,11 @@ from test_activated_maintenance import (
 
 @pytest.fixture
 def fleet(tmp_path):
-    cluster = Cluster(tmp_path)
+    return make_fleet(tmp_path)
+
+
+def make_fleet(tmp_path, *, now=1800000000):
+    cluster = Cluster(tmp_path, now=now)
     primary = cluster.nodes['NL'].public_gateway()
     secondary = DeviceIdentity.generate()
     public = base64.b64decode(secondary.public_identity)

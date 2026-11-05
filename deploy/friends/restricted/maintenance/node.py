@@ -12,7 +12,8 @@ from production_transport import ACTIONS
 from grant_cutover import GrantDatabase
 
 NODE_MODULES = frozenset(('node.py','credential_renewal.py','production_node.py','production_transport.py',
-                         'grant_cutover.py','offline_handoff.py','expired_recovery.py','gateway_set.py'))
+                         'grant_cutover.py','offline_handoff.py','expired_recovery.py','gateway_set.py',
+                         'online_contract.py','online_controller.py','online_node.py','online_reader.py'))
 
 
 def construct(config_path, *, fenced_recovery=False):
@@ -113,6 +114,14 @@ def dispatch(node, request):
             and request['schema'] == 1 and request['role'] == node.role and request['action'] in ACTIONS,
             'RPC_SCHEMA')
     action,operation,payload = request['action'],request['operation_id'],request['payload']
+    if action == 'online':
+        from online_node import dispatch as online_dispatch
+        require(not getattr(node, 'fenced_recovery', False), 'FENCED_RECOVERY_ACTION_FORBIDDEN')
+        return online_dispatch(node, operation, payload)
+    if (node.state/'owner.json').exists():
+        current = parse(read_private(node.state/'owner.json'))
+        require(current.get('mode') != 'online' or action in ('inspect','public-gateway','public-authority'),
+                'ONLINE_RECOVERY_REQUIRED')
     import re
     require(type(operation) is str and re.fullmatch('[a-z0-9-]{16,96}',operation), 'OPERATION_ID')
     if getattr(node,'fenced_recovery',False):

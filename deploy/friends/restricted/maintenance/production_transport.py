@@ -14,6 +14,9 @@ ACTIONS = frozenset(('recovery-evidence','recovery-authority-request','prepare-e
                      'rollback','rollback-readback','rollback-registry-overlay','finalize-fenced-rollback','commit-decision','resume','fence','cleanup'))
 
 
+ACTIONS = ACTIONS | {'online'}
+
+
 def ssh_route(value, *, forced):
     require(type(value) is dict and set(value) == ({'key','known_hosts','target'} if forced else
             {'key','known_hosts','target','command'}), 'SSH_CONFIG')
@@ -42,6 +45,7 @@ def snapshot_command(route, *, executable='/usr/bin/ssh'):
 
 
 class SshNode:
+    timeout_seconds = 120
     def __init__(self, role, expected_source_sha256, *, executable='/usr/bin/ssh', forced=None, route=None):
         require(role in ('RU','NL') and re.fullmatch('[0-9a-f]{64}',expected_source_sha256), 'NODE_CONFIG')
         require((forced is None) != (route is None) and (forced is None or role == 'NL'), 'SSH_CONFIG')

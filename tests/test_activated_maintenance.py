@@ -67,8 +67,8 @@ class Rpc:
 
 
 class Cluster:
-    def __init__(self, root, *, authority_days=90, grants=False):
-        self.now = 1800000000
+    def __init__(self, root, *, authority_days=90, grants=False, now=1800000000):
+        self.now = now
         self.clock = lambda: self.now
         self.service, self.device, _ = configured(root, self.now, delivery_lifetime=14400)
         self.service.all_activated = True

@@ -310,6 +310,20 @@ class GrantDatabase:
             require(readers_quiesced(), 'READERS_NOT_QUIESCED')
         return 'APPLIED'
 
+    def online_plan(self, now, crl, window):
+        require(self.all_activated, 'ONLINE_ADMISSION_CONTRACT')
+        require(self.pending_revocations(crl, now) == 0, 'ONLINE_REVOCATION_FORBIDDEN')
+        with self.connect() as database:
+            before = self.snapshot(database)
+            require(all(row['expires'] <= now or row['expires'] > now+window
+                        for row in before['restricted_certificates']), 'ONLINE_CLIENT_WINDOW_INSUFFICIENT')
+            for row in before['restricted_grants']:
+                if not row['revoked']:
+                    self.grant_validator(database, row['device'], now)
+            return dict(schema=1, model='MAINTENANCE_CUTOVER_NO_OVERLAP', before=before,
+                        after_grants=before['restricted_grants'], predecessors=[],
+                        before_sha256=digest(canonical(before)), issued_at=now)
+
 
 def validate_grant_plan(plan, now):
     require(plan['schema'] == 1 and plan['model'] == 'MAINTENANCE_CUTOVER_NO_OVERLAP', 'GRANT_PLAN_SCHEMA')

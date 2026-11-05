@@ -12,6 +12,17 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Selected continuation — coordinated online renewal qualification, IN PROGRESS.**
+Reuse the same incident and single writer; no new PLAN ID or production authorization.
+Compatible prepare/commit/publication/readiness and recoverable loss-of-response paths
+are implemented behind a source qualification guard;45 focused tests PASS. Complete
+post-commit emergency handoff, adversarial receipt/cache/recovery coverage, immutable
+two-node native stand and mandatory root/package/bootstrap gates before stage acceptance.
+Do not infer full qualification from the positive stand or remove maintenance stop guards.
+APK118/updater113, paired-DNS/WebSocket and physical/live release gates remain unchanged.
+[Current checkpoint and remaining gate](releases/2026-11-05-mesh-online-renewal.md).
+
+Previous completed integration stage:
 **Selected bounded stage COMPLETE — runtime integration candidate; STOP before publication.**
 Sourcef7d0920/6dcd727/b46bff4 followsd4de324, not the beta113-era queue. Dependency/capture
 map, selected-node delivery/native ownership, gateway lease and broker generation integration,

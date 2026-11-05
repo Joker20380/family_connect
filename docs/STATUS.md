@@ -11,6 +11,20 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**5 November — online renewal source checkpoint; full qualification still OPEN.**
+Existing controller/node writer now has an explicit compatible-only qualification path,
+durable pre-publication decision, fenced recovery, runtime-reader receipts and readiness
+delivery gating.45 transaction/fault tests PASS; scoped existing Python/package checks
+214 PASS/5 optional skips. Two-node real-native long stand is running; no final continuity
+PASS claimed yet. Production construction rejects the qualification RPC by default.
+Post-commit emergency/revoke handoff is NOT complete: detection fences readers, but the
+remaining machine recovery gate must be implemented before enabling this route.
+The six bootstrap admission/exchange diagnostic assertions are fixed without removing
+negative checks; baseline evidence and transient busy-reason failure are retained.
+No deployment, APK/catalog/timer/admission change;118/default113 unchanged.
+[Current contract, evidence and explicit gaps](releases/2026-11-05-mesh-online-renewal.md).
+
+Previous completed integration stage:
 **5 November — bounded renewal integration stage finished; candidate NOT released.**
 Fromd4de324, sourcef7d0920 +6dcd727 +b46bff4 connects selected-node Android delivery to the
 existing native owner, consistent gateway lease authorization and active broker monitoring.

@@ -41,7 +41,7 @@ def test_renewal_package_pins_every_source_and_shared_profile_module(source, tmp
         manifest = json.load(archive.extractfile('source-manifest.json'))
         assert manifest['production_configuration'] == 'absent' and manifest['operation_permit'] is None
         assert manifest['source_commit'] == subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=source).decode().strip()
-        assert len(manifest['source_files']) == 14
+        assert set(manifest['source_files']) == set(package.MODULES)
         assert manifest['source_sha256'] == package.digest(package.encode(manifest['source_files']))
         assert set(archive.getnames()) == set(manifest['files']) | {'source-manifest.json'}
         for member in archive.getmembers():
@@ -78,7 +78,8 @@ def test_renewal_package_pins_every_source_and_shared_profile_module(source, tmp
              'assert "rollback-registry-overlay" in node.ACTIONS;'
              'assert hasattr(node.ProductionNode,"rollback_registry_overlay");'
              'assert hasattr(node.ProductionNode,"finalize_fenced_rollback");'
-             'assert profile_store.__file__.startswith(sys.argv[2]+"/");assert len(node.NODE_MODULES)==8')
+             'assert profile_store.__file__.startswith(sys.argv[2]+"/");'
+             'assert {"online_contract.py","online_controller.py","online_node.py","online_reader.py"} <= node.NODE_MODULES')
     subprocess.run([sys.executable, '-I', '-B', '-c', probe, str(extracted / 'renewal'), str(extracted / 'api.pyz')],
                    capture_output=True, check=True)
     with pytest.raises(FileExistsError):

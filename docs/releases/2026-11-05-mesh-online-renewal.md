@@ -56,3 +56,48 @@ Finish online transaction, runtime/readiness integration, both-node continuity a
 matrix before claiming this stage complete. Then stop. Full release CI, new immutable
 artifacts, equal gateway builds, scheduled live renewal and physical/mobile allowlist
 acceptance remain separate, unexecuted gates. No independent timer or writer is authorized.
+
+## Implementation checkpoint (not stage acceptance)
+
+The explicit `MESH_SAME_HOLDER_ONLINE_V1` path reuses the controller/node locks,
+owner journal, issuer, membership, staged file CAS, ProfileStore, SQLite sequence and
+existing archive ledger. It does not change the ordinary quiesced transaction. Node RPC
+requires an explicit in-process qualification flag; packaged production construction
+does not set it. There is no new timer, production online CLI activation or second signer.
+
+Window calculation after initial read: eight bounded RPC rounds plus explicit scheduling
+lateness, Android cooldown300s, owner polling30s, readiness request30s, maximum ordinary
+lease control attempts55s, credential exchange15s and skew5s. Thus local1s-RPC/0s-schedule
+qualification requires443s; configured SSH120s plus schedule requires1395s+schedule.
+Neither production validity nor timeouts are increased. Unknown timing rejects.
+Both gateway bindings, authority, keys, grants, policy revisions, CRL floors and current
+material validity are checked. Existing client certificate records also need headroom.
+
+States: ONLINE_ACQUIRING/FENCING → PREPARED/STAGED → durable COMMIT_DECIDED →
+per-node DECIDED/PUBLISHED → RU delivery-ready → CLEANING → COMMITTED. Before the
+decision, explicit ABORT requires unchanged credential files and does not restore DB rows.
+After COMMIT, retry uses the same plan/digests and higher fencing epoch, never a new CRL
+or rollback. Lost RPC results reconcile against node state; completed cleanup is archived.
+
+During NL-only publication, existing peers retain their authenticated generations and RU
+still gives predecessor readiness. Runtime receipts use the same native credential loader,
+cryptographic successor validation and process-instance nonce. RU only exposes the new
+CRL/readiness generation after both exact profile hashes acknowledge. It copies validated
+current directories without creating seed rooms; no distributed instantaneous atomicity is
+claimed. Readiness uses a fixed committed issuance target, not a moving target per refresh.
+Local publication is not a native session commit; only authenticated exchange advances it.
+
+45 focused tests cover17 controller crash boundaries,17 node crash/lost-response points,
+four durable abort positions, stale epochs, maintenance contention, client headroom,
+duplicate delivery/commands and two revoke positions. Positive/unit readers are doubles;
+those tests alone are NOT native continuity proof. Existing affected Python/package scope
+is214 PASS/5 optional skips. A real two-node stand has reached two authenticated native
+generations on both nodes; its complete cross-bound outcome/provenance is pending.
+
+Known blocking gaps at this checkpoint: post-decision emergency detection safely stops
+readers and preserves the COMMIT decision, but machine handoff/reconciliation from that
+fenced state is unfinished; no manual marker deletion is prescribed. Complete malformed
+receipt, expiry, old-peer/new-connection and cache-delay acceptance is also outstanding.
+The accepted maintenance API archive is intentionally unchanged; it must not be silently
+substituted with the newer readiness implementation. Final online runtime packaging and
+root qualification remain separate required gates. This checkpoint is NOT release-ready.

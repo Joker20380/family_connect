@@ -12,6 +12,14 @@ import gateway_set
 
 
 class ProductionController:
+    def run_online(self, operation, *, schedule_seconds, resume=False):
+        from online_controller import run
+        return run(self, operation, schedule_seconds=schedule_seconds, resume=resume)
+
+    def abort_online(self, operation):
+        from online_controller import abort
+        return abort(self, operation)
+
     def __init__(self, root, nodes, validator, *, clock=time.time, fault=lambda stage:None):
         self.root,self.nodes,self.validator,self.clock,self.fault = Path(root),nodes,validator,clock,fault
         private_directory(self.root)
@@ -293,6 +301,7 @@ class ProductionController:
         if marker.exists():
             previous_record = parse(read_private(marker))
             if previous_record['state'] not in ('COMMITTED','ABORTED'):
+                require(previous_record.get('mode') != 'online', 'ONLINE_RECOVERY_REQUIRED')
                 require(previous_record.get('mode') != 'expired', 'OPERATOR_RECOVERY_REQUIRED')
                 with self.operation.lock():
                     return self.recover(previous_record)
@@ -468,6 +477,7 @@ class ProductionController:
         return self.cleanup(record)
 
     def recover(self, record, *, preserve_registry_overlay=False):
+        require(record.get('mode') != 'online', 'ONLINE_RECOVERY_REQUIRED')
         require(record.get('mode') != 'expired', 'OPERATOR_RECOVERY_REQUIRED')
         self.check_admission(record['before'])
         operation = record['operation_id']
