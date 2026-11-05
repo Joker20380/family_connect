@@ -9,6 +9,7 @@ from cryptography import x509
 
 from fixtures.mesh_supervisor import request
 from mesh_core_stand import CoreStand
+from mesh_core_budget import require_seed_span
 from online_package_stand import private_file
 from scripts import package_online_renewal as package
 from test_online_runtime_package import core_driver, online_package
@@ -51,6 +52,7 @@ def test_two_online_renewals_cross_real_crypto_bounds(online_package, core_drive
     assert os.environ.get('FC_TEST_ONLINE_PACKAGE'), 'immutable archive required'
     destination = Path(os.environ['FC_CORE_EVIDENCE'])/'soak'
     destination.mkdir(mode=0o700, parents=True, exist_ok=False)
+    require_seed_span(7*3600, 4*3600, 3600)
     stand = CoreStand(tmp_path, online_package[3], core_driver, duration='7h', rotation='1h')
     clients = {}
     receipt = dict(scope='two-renewal-wall-clock-core-not-complete-G4', package=online_package[4],

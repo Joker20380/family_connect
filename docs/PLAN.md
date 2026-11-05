@@ -12,6 +12,15 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**One current next23:28UTC: repair the proven G4 seed/delivery budget boundary.**
+Preserve the first fd7562c renewal and the stopped-run receipt. Existing SeedManager
+has only two generations; the8h/1h stand cannot outlive its5h seed horizon, and its
+observed next eligibility exceeds the client deadline by61s. Implement a genuine
+long-lived lifecycle through the existing runtime/publication boundaries, without
+another signer/writer/timer authority or changed security TTLs. Then freeze and
+requalify G4; reconcile the independent G2 expiry and remaining G3 legacy/late cases.
+A remains unaccepted and B gated. All dated instructions below are historical deltas.
+
 **Current next after23:00UTC: finish the same G1–G4 qualification.** API27/API35 now
 pass positive successor delivery, delayed application completion across owner replacement,
 and explicit new Connect during partial publication. Next missing G3 runtime cases are

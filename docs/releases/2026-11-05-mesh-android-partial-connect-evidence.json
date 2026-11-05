@@ -1,5 +1,6 @@
 {
   "schema": 1,
+  "private_evidence_root": "state-client-build/mesh-core-runtime-20261105",
   "scope": "actual-explicit-Connect-during-partial-publication-not-full-G3",
   "phase_A": "NOT_ACCEPTED",
   "phase_B": "NOT_STARTED",

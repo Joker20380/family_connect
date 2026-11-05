@@ -11,6 +11,18 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**23:28UTC G4 stand budget FAIL; no accepted A checkpoint.** The frozen fd7562c
+full-core run completes its first normal renewal on both NL with original TLS/mux/TCP
+and checked traffic, but its next eligibility is61s after the actual client security
+deadline. SeedManager currently rotates only once:4h lifetime +1h rotation supports5h,
+not the requested8h. Both invalid long stands were interrupted normally; processes
+were waited and reader sockets removed. No actual second renewal or expiry is claimed.
+[Exact reproduction](releases/2026-11-05-mesh-seed-budget-evidence.json). Seven targeted
+budget guards pass; these prevent another invalid run, not fix the lifetime contract.
+The independent5h successor-expiry G2 run remains active; all Android emulators are off.
+G3 legacy/too-late cases remain; B is not started. Next: genuine long-lived seed and
+normal directory publication lifecycle, then requalify the complete G4 combination.
+
 **23:00UTC partial-publication new Connect PASS on API27/API35; A remains open.**
 The explicit new owners connect using unchanged predecessor security material while NL2
 publication is missing; native mux/verified HTTPS work, then the same COMMIT resumes.

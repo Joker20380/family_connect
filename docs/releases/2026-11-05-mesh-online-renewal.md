@@ -1,5 +1,36 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## G4 concrete stand-budget failure23:28UTC
+
+[Sanitized exact receipt](2026-11-05-mesh-seed-budget-evidence.json): the current
+fd7562c archive/driver with e144e81 full-core harness completes the first COMMIT on
+both NL at23:12:08UTC. Generation0→1 preserves original session/socket and TCP/DNS/
+verified HTTPS. Its actual client deadline is01:40:59UTC, whereas the next online
+eligibility is01:42:00UTC: **61s short even before SSH120's1395s + lateness budget**.
+No security clock, profile, database or marker was modified to finish the test.
+
+The common `carrier/bootstrap/seed_overlap.go` schedules generation2 only after
+generation1; `gatewayruntime.Run` exits when the active seed ends. With4h lifetime
+and1h rotation this provides5h, not the requested8h. The earlier7h d968ddd soak has
+the same incompatibility. Both were intentionally interrupted and normal finally
+cleanup waited processes and removed reader sockets. Their original logs remain;
+neither actual expiry nor a second renewal is claimed. The independent5h d968ddd
+successor-expiry scenario remains running and is not invalidated by this horizon.
+
+| Gate | Current result | Proven scope / remaining runtime |
+| --- | --- | --- |
+| G1 | PASS, isolated core | Existing package approval/revoke/restart/new traffic receipts retained; final combined repetition pending |
+| G2 | NOT_RUN, complete matrix | Existing process/RPC subsets retained; actual candidate-expiry run pending |
+| G3 | NOT_RUN, complete gate | Both APIs positive HTTP/cache/owner delivery, owner replacement and partial Connect pass; actual legacy/late cases missing |
+| G4 | FAIL, stand budget | First current-package renewal only; no second renewal/boundary-crossing/emergency acceptance |
+
+`full-core-seed-budget-final-guards.log`:7 PASS/0 SKIP,0.04s. These are arithmetic
+preflight/regression guards, not lifetime implementation or wall-clock acceptance.
+No common production runtime changes in this checkpoint. Next is a real long-lived
+SeedManager/publication lifecycle retaining its trust boundaries, then a new frozen
+combination and full G4. A is **NOT_ACCEPTED**, B **NOT_STARTED**. Release/live/field
+gates and all existing immutable artifacts remain unchanged; no delivery occurred.
+
 ## Paired partial-publication new Connect result23:00UTC
 
 **Additional proven user scenario:** after explicit Disconnect, API27 and API35 create

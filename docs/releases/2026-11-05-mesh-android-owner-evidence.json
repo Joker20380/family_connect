@@ -1,5 +1,6 @@
 {
   "schema": 1,
+  "private_evidence_root": "state-client-build/mesh-core-runtime-20261105",
   "scope": "isolated-Android-HTTP-completion-cache-monitor-owner-replacement-not-full-G3",
   "scenario_source": "038b66a1af7a30ed79e3a8697c8ce6c72ffa6548",
   "phase_A": "NOT_ACCEPTED",

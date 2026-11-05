@@ -15,6 +15,7 @@ from cryptography import x509
 from device_identity.device import DeviceIdentity
 from fixtures.mesh_supervisor import request
 from mesh_core_stand import CoreStand
+from mesh_core_budget import require_delivery_window, require_seed_span
 from online_package_stand import private_file
 from scripts import package_online_renewal as package
 from test_friends_access import proof
@@ -43,6 +44,7 @@ def test_two_renewals_then_linked_emergency_on_original_sessions(online_package,
         pytest.skip('explicit eight-hour full core qualification required')
     assert os.environ.get('FC_TEST_ONLINE_PACKAGE'), 'immutable archive required'
     assert all(line.split()[1] != '00000000' for line in Path('/proc/net/route').read_text().splitlines()[1:])
+    require_seed_span(8*3600, 4*3600, 3600)
     destination = Path(os.environ['FC_CORE_EVIDENCE'])/'full-core'
     destination.mkdir(mode=0o700, parents=True, exist_ok=False)
     stand = CoreStand(tmp_path, online_package[3], core_driver, duration='8h', rotation='1h', android_tls=True)
@@ -100,6 +102,15 @@ def test_two_renewals_then_linked_emergency_on_original_sessions(online_package,
                 plan_sha256=record['plan_sha256'], fence=record['fence'], published=record['published']))
             alive()
             save()
+            delivery_deadline = time.monotonic()+120
+            while True:
+                observed = {slot: generations(tmp_path/(slot+'-client.log')) for slot in clients}
+                if all(value['committed'] >= ordinal for value in observed.values()):
+                    break
+                alive()
+                assert time.monotonic() < delivery_deadline, 'actual client commit was not observed'
+                time.sleep(1)
+            require_delivery_window(observed, max(value['leaf'] for value in retained.values())-5400+2)
         crossed = max(bound for values in receipt['renewals'][0]['bounds'].values() for bound in values.values())
         wait(crossed+3, 'WAITING_FOR_CRYPTO_BOUND')
         receipt['traffic'] = {slot: generations(tmp_path/(slot+'-client.log')) for slot in clients}
