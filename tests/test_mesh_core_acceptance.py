@@ -44,10 +44,10 @@ def test_two_renewals_then_linked_emergency_on_original_sessions(online_package,
         pytest.skip('explicit eight-hour full core qualification required')
     assert os.environ.get('FC_TEST_ONLINE_PACKAGE'), 'immutable archive required'
     assert all(line.split()[1] != '00000000' for line in Path('/proc/net/route').read_text().splitlines()[1:])
-    require_seed_span(8*3600, 4*3600, 3600)
+    require_seed_span(8*3600, 4*3600, 2*3600, continuous=True)
     destination = Path(os.environ['FC_CORE_EVIDENCE'])/'full-core'
     destination.mkdir(mode=0o700, parents=True, exist_ok=False)
-    stand = CoreStand(tmp_path, online_package[3], core_driver, duration='8h', rotation='1h', android_tls=True)
+    stand = CoreStand(tmp_path, online_package[3], core_driver, duration='8h', rotation='2h', continuous=True, android_tls=True)
     clients = {}
     receipt = dict(scope='isolated-core-full-path-not-Telemost-systemd-or-Android', package=online_package[4],
                    driver_sha256=package.digest(core_driver.read_bytes()), started=time.time(), renewals=[])

@@ -37,3 +37,11 @@ def test_both_participants_need_the_window():
     nodes['NL2'] = observations(4900)['NL2']
     with pytest.raises(AssertionError, match='NL2: SEED_CAPPED_DELIVERY_WINDOW_TOO_SHORT'):
         require_delivery_window(nodes, 3605)
+
+
+def test_continuous_rotation_requires_bounded_overlap_and_explicit_opt_in():
+    require_seed_span(28800, 14400, 7200, continuous=True)
+    with pytest.raises(AssertionError, match='SEED_ROTATION_OVERLAP_NOT_BOUNDED'):
+        require_seed_span(28800, 14400, 3600, continuous=True)
+    with pytest.raises(AssertionError, match='SEED_MANAGER_SINGLE_ROTATION_LIMIT'):
+        require_seed_span(28800, 14400, 7200)

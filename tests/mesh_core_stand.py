@@ -46,10 +46,11 @@ class SupervisedProcess:
 
 
 class CoreStand(PackageStand):
-    def __init__(self, root, extracted, driver, *, age=12000, duration='1h', rotation=None, android_tls=False):
+    def __init__(self, root, extracted, driver, *, age=12000, duration='1h', rotation=None, continuous=False, android_tls=False):
         super().__init__(root, extracted, age=age)
         self.driver = driver
         self.duration, self.rotation = duration, rotation
+        self.continuous = continuous
         self.android_tls = android_tls
         self.binding = private_file(root/'isolated-runtime.json', package.encode(dict(schema=1,
             scope='isolated-core-not-production', source_commit=self.manifest['source_commit'],
@@ -78,6 +79,8 @@ class CoreStand(PackageStand):
             '-duration', self.duration, '-echo', self.echo, '-https', self.https]
         if self.rotation is not None:
             command += ['-seed-rotate-after', self.rotation]
+        if self.continuous:
+            command += ['-seed-continuous']
         return self.launch(unit, command, dict(os.environ, FC_LOCAL_CORE='1'))
 
     def origins(self):

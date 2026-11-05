@@ -22,6 +22,7 @@ type Config struct {
 	Profile, Listen, Directory, Observer string
 	Duration                             time.Duration
 	SeedLifetime, RotateAfter            time.Duration
+	ContinueSeedRotation                 bool
 	Event                                func(string)
 	State                                func(roombroker.State, roombroker.Code)
 	Trace                                func(sessiontrace.Event) bool
@@ -37,7 +38,8 @@ func Run(parent context.Context, options Config, provider roombroker.RoomProvide
 	}
 	host, _, err := net.SplitHostPort(options.Listen)
 	if err != nil || net.ParseIP(host) == nil || options.Duration <= 0 || options.SeedLifetime <= 0 || options.SeedLifetime > bootstrap.MaxAge ||
-		provider == nil || connect == nil || starter == nil || options.Directory != "" && !filepath.IsAbs(options.Directory) {
+		provider == nil || connect == nil || starter == nil || options.Directory != "" && !filepath.IsAbs(options.Directory) ||
+		options.ContinueSeedRotation && (options.RotateAfter < options.SeedLifetime/2 || options.RotateAfter >= options.SeedLifetime) {
 		return roombroker.Code("invalid_options")
 	}
 	raw, err := roombroker.LoadCredentials(options.Profile)
@@ -73,7 +75,7 @@ func Run(parent context.Context, options Config, provider roombroker.RoomProvide
 		}
 		defer closeObserver()
 	}
-	manager := &bootstrap.SeedManager{Event: options.Event, RotateAfter: options.RotateAfter}
+	manager := &bootstrap.SeedManager{Event: options.Event, RotateAfter: options.RotateAfter, ContinueRotation: options.ContinueSeedRotation}
 	if options.Directory != "" {
 		cache := &bootstrap.Cache{Path: options.Directory, Family: credentials.Family, Gateway: credentials.Gateway}
 		manager.Publish = func(directory bootstrap.Directory) error {

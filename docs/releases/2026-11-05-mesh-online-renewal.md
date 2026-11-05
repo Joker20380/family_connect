@@ -1,5 +1,29 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Bounded repeated-seed source candidate23:36UTC
+
+`SeedManager.ContinueRotation` defaults off and reuses the existing overlap loop,
+publisher and timer. It requires at least half-lifetime spacing, preserves each
+seed's expiry, publishes only after normal provider/readiness, retires old endpoints
+and waits all workers on shutdown. Creation failure preserves only the current finite
+seed; publication failure stops the runtime, without retry/authorization bypass.
+The separate driver can explicitly request4h seeds/2h rotation for8h; production
+`bootstrap-broker` retains Telemost-only options and its existing4h duration cap.
+
+Five-generation endpoint/traffic/cleanup, failed third-generation creation/publication,
+invalid overlap and previous finite behavior run under the native bootstrap suite:
+`seed-continuous-bootstrap-race-configured.log`, `-race -test.count=3`, PASS/0 SKIP,
+fresh disposable ProductStore fixtures plus the frozen fd7562c Python publication
+artifact. `seed-continuous-budget-guards.log`:8 PASS/0 SKIP,0.04s. Scheduling tests use
+a controlled clock and are **not** cryptographic-continuity evidence. No Android
+emulator was started for these checks. The earlier unconfigured targeted log is
+retained but does not replace this artifact-enabled run.
+
+This is a source checkpoint, not a replacement of the failed full-run receipt or an
+accepted A/package. Next: a new immutable source/package/driver combination, early
+two-NL traffic preflight and the actual8h G4/remaining G2/G3 path. No production,
+phone, publication or paid operation; release/live/field gates stay unchanged.
+
 ## G4 concrete stand-budget failure23:28UTC
 
 [Sanitized exact receipt](2026-11-05-mesh-seed-budget-evidence.json): the current

@@ -77,19 +77,20 @@ def test_isolated_binding_rejects_foreign_artifacts(online_package, core_driver,
 
 def test_production_gateway_has_no_local_provider_mode(online_package):
     binary = online_package[3]/'gateway'
-    result = subprocess.run([str(binary), '-mode', 'relay'], env=dict(os.environ, FC_LOCAL_CORE='1'),
-        capture_output=True, timeout=5)
-    assert result.returncode != 0 and b'flag provided but not defined' in result.stderr
+    for arguments in (['-mode', 'relay'], ['-seed-continuous'], ['-seed-rotate-after', '2h']):
+        result = subprocess.run([str(binary), *arguments], env=dict(os.environ, FC_LOCAL_CORE='1'),
+            capture_output=True, timeout=5)
+        assert result.returncode != 0 and b'flag provided but not defined' in result.stderr
     dependencies = subprocess.check_output([os.environ['FC_ONLINE_GO'], 'list', '-deps', './cmd/bootstrap-broker'],
         cwd=online_package[1]/'carrier', text=True)
     assert '/internal/qualification' not in dependencies
 
 
-@pytest.mark.parametrize('duration,rotation', [('1h', None), ('7h', '1h')])
-def test_two_gateway_seed_and_verified_traffic_preflight(online_package, core_driver, tmp_path, duration, rotation):
+@pytest.mark.parametrize('duration,rotation,continuous', [('1h', None, False), ('8h', '2h', True)])
+def test_two_gateway_seed_and_verified_traffic_preflight(online_package, core_driver, tmp_path, duration, rotation, continuous):
     assert os.geteuid() == 0 and Path('/.dockerenv').exists() and tmp_path.is_relative_to('/run')
     _, _, archive, extracted, receipt = online_package
-    stand = CoreStand(tmp_path, extracted, core_driver, duration=duration, rotation=rotation)
+    stand = CoreStand(tmp_path, extracted, core_driver, duration=duration, rotation=rotation, continuous=continuous)
     started = time.monotonic()
     try:
         stand.start()

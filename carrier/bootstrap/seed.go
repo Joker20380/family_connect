@@ -15,15 +15,16 @@ import (
 type SeedConnector func(lifetime, ready context.Context, room roombroker.Room) (familysession.PacketEndpoint, error)
 
 type SeedManager struct {
-	mu          sync.Mutex
-	directory   *Directory
-	running     bool
-	Event       func(string)
-	Publish     func(Directory) error
-	RotateAfter time.Duration
-	now         func() time.Time
-	lifetime    func(context.Context, time.Duration) (context.Context, context.CancelFunc)
-	after       func(time.Duration, func()) seedTimer
+	mu               sync.Mutex
+	directory        *Directory
+	running          bool
+	Event            func(string)
+	Publish          func(Directory) error
+	RotateAfter      time.Duration
+	ContinueRotation bool
+	now              func() time.Time
+	lifetime         func(context.Context, time.Duration) (context.Context, context.CancelFunc)
+	after            func(time.Duration, func()) seedTimer
 }
 
 func TelemostSeed(lifetime, ready context.Context, room roombroker.Room) (familysession.PacketEndpoint, error) {
@@ -40,6 +41,9 @@ func TelemostSeed(lifetime, ready context.Context, room roombroker.Room) (family
 
 func (manager *SeedManager) Run(ctx context.Context, provider roombroker.RoomProvider, connect SeedConnector, family, gateway string, ttl time.Duration, exchange func(context.Context, familysession.PacketEndpoint)) error {
 	if provider == nil || connect == nil || exchange == nil || ttl <= 0 || ttl > MaxAge || !hexID(family, 16) || !hexID(gateway, 16) {
+		return roombroker.Code("seed_configuration")
+	}
+	if manager.ContinueRotation && (manager.RotateAfter < ttl/2 || manager.RotateAfter == 0) {
 		return roombroker.Code("seed_configuration")
 	}
 	if manager.RotateAfter != 0 {

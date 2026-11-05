@@ -36,6 +36,7 @@ func run() error {
 	observer := flag.String("publication-observer", "", "same-process reader")
 	duration := flag.Duration("duration", time.Hour, "bounded runtime lifetime")
 	rotation := flag.Duration("seed-rotate-after", 0, "existing SeedManager overlap rotation; qualification only")
+	continuous := flag.Bool("seed-continuous", false, "opt in to bounded repeating SeedManager rotation; qualification only")
 	echo := flag.String("echo", "", "isolated echo origin")
 	https := flag.String("https", "", "isolated HTTPS origin")
 	config := flag.String("client-config", "", "private client configuration")
@@ -101,7 +102,8 @@ func run() error {
 		failure := func(failure bootstrap.ExchangeFailure) { emit(failure.Stage + ":" + failure.Reason) }
 		state := func(state roombroker.State, reason roombroker.Code) { emit(string(state) + ":" + string(reason)) }
 		return gatewayruntime.Run(ctx, gatewayruntime.Config{Profile: *profile, Listen: *address, Duration: *duration, SeedLifetime: seedLifetime, RotateAfter: rotateAfter,
-			Directory: *directory, Observer: *observer, Event: emit, State: state, Trace: trace, AdmissionFailure: failure, ExchangeFailure: failure}, provider, provider.Seed, starter)
+			ContinueSeedRotation: *continuous,
+			Directory:            *directory, Observer: *observer, Event: emit, State: state, Trace: trace, AdmissionFailure: failure, ExchangeFailure: failure}, provider, provider.Seed, starter)
 	case "client":
 		return qualification.Client(ctx, provider, *config)
 	case "admission-probe":

@@ -11,6 +11,14 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**23:36UTC seed-lifecycle source candidate; not G4 acceptance.** The existing overlap
+loop now supports explicit bounded repeated rotation, default off. The separate driver
+opts in to4h seeds/2h cadence; production command/defaults/TTL remain unchanged and no
+test provider is added to the release. Bootstrap `-race -count=3` with disposable
+ProductStore profiles and the isolated Python publication artifact passes without
+skips; eight budget guards pass. A new frozen package/preflight/full wall-clock path
+is still required. The previous failed stand receipt is preserved; A/B remain gated.
+
 **23:28UTC G4 stand budget FAIL; no accepted A checkpoint.** The frozen fd7562c
 full-core run completes its first normal renewal on both NL with original TLS/mux/TCP
 and checked traffic, but its next eligibility is61s after the actual client security

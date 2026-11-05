@@ -106,6 +106,20 @@ endpoints; it replaces only the external room/packet transport. It does not impl
 Telemost signaling/media and is not a production-gateway artifact. Family TLS, mux,
 lease/credential handlers and the reader run in the actual serving gateway process.
 
+The optional shared `SeedManager.ContinueRotation` extends the existing overlap loop,
+not its authorization ownership. It defaults off, requires `RotateAfter >= ttl/2`
+and the existing creation/connect headroom, and rotates only after a real successful
+publication. Each seed keeps its own unchanged lifetime; expired predecessors close
+independently. A failed replacement is not retried silently, a publication failure
+stops the lifecycle, and cancellation waits all workers and stops the existing timer.
+The qualification driver opts in with `-seed-continuous -seed-rotate-after 2h` for
+an8h process with4h seeds. The release command rejects these flags and preserves its
+Telemost-only finite/default behavior. This is not a deployed continuous-seed feature.
+The old two-generation4h+1h harness cannot qualify8h; its budget failure remains
+separate evidence. Native scheduling tests use a controlled clock, never as proof of
+cryptographic overlap. Full integration must still cross actual leaf/CRL/lease bounds
+with real traffic and verify1395s plus lateness before the next eligible operation.
+
 For this isolated scope only, controller configuration and every node's `online`
 object may explicitly include `isolated_runtime`, an absolute root-private manifest
 path. Its exact fields are `schema: 1`, `scope: "isolated-core-not-production"`,

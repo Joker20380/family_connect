@@ -85,13 +85,21 @@ func (manager *SeedManager) runOverlap(ctx context.Context, provider roombroker.
 			manager.directory = &directory
 			manager.mu.Unlock()
 			current.Store(int32(generation))
-			published <- publication{generation, directory}
-			return nil
+			select {
+			case published <- publication{generation, directory}:
+				return nil
+			case <-ctx.Done():
+				return ctx.Err()
+			}
 		}
 		workers.Add(1)
 		go func() {
 			defer workers.Done()
-			done <- completion{generation, child.Run(ctx, provider, connect, family, gateway, ttl, exchange)}
+			result := completion{generation, child.Run(ctx, provider, connect, family, gateway, ttl, exchange)}
+			select {
+			case done <- result:
+			case <-ctx.Done():
+			}
 		}()
 	}
 	rotate := make(chan struct{}, 1)
@@ -102,22 +110,29 @@ func (manager *SeedManager) runOverlap(ctx context.Context, provider roombroker.
 		}
 	}()
 	start(1)
+	nextGeneration := 2
 	for {
 		select {
 		case <-ctx.Done():
 			return ctx.Err()
 		case publication := <-published:
-			if publication.generation == 1 {
+			if publication.generation == 1 || manager.ContinueRotation {
 				when := publication.directory.IssuedAt.Add(manager.RotateAfter)
 				if when.Before(publication.directory.ExpiresAt) {
-					timer = manager.schedule(max(0, when.Sub(manager.timeNow())), func() { rotate <- struct{}{} })
+					timer = manager.schedule(max(0, when.Sub(manager.timeNow())), func() {
+						select {
+						case rotate <- struct{}{}:
+						case <-ctx.Done():
+						}
+					})
 				}
 			}
 		case <-rotate:
 			if ctx.Err() != nil {
 				return ctx.Err()
 			}
-			start(2)
+			start(nextGeneration)
+			nextGeneration++
 		case result := <-done:
 			active := int(current.Load())
 			if result.generation == active || active == 0 || result.err == roombroker.Code("seed_publication_failed") {

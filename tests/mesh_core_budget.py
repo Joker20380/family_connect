@@ -1,8 +1,11 @@
 import datetime
 
 
-def require_seed_span(duration_seconds, lifetime_seconds, rotation_seconds):
+def require_seed_span(duration_seconds, lifetime_seconds, rotation_seconds, *, continuous=False):
     assert duration_seconds > 0 and lifetime_seconds > 0 and 0 <= rotation_seconds < lifetime_seconds
+    if continuous:
+        assert rotation_seconds >= lifetime_seconds/2, 'SEED_ROTATION_OVERLAP_NOT_BOUNDED'
+        return
     supported = lifetime_seconds+rotation_seconds
     assert duration_seconds <= supported, 'SEED_MANAGER_SINGLE_ROTATION_LIMIT: requested runtime exceeds both real seed lifetimes'
 

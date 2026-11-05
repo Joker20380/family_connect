@@ -52,8 +52,8 @@ def test_two_online_renewals_cross_real_crypto_bounds(online_package, core_drive
     assert os.environ.get('FC_TEST_ONLINE_PACKAGE'), 'immutable archive required'
     destination = Path(os.environ['FC_CORE_EVIDENCE'])/'soak'
     destination.mkdir(mode=0o700, parents=True, exist_ok=False)
-    require_seed_span(7*3600, 4*3600, 3600)
-    stand = CoreStand(tmp_path, online_package[3], core_driver, duration='7h', rotation='1h')
+    require_seed_span(7*3600, 4*3600, 2*3600, continuous=True)
+    stand = CoreStand(tmp_path, online_package[3], core_driver, duration='7h', rotation='2h', continuous=True)
     clients = {}
     receipt = dict(scope='two-renewal-wall-clock-core-not-complete-G4', package=online_package[4],
                    driver_sha256=package.digest(core_driver.read_bytes()), started=time.time(), renewals=[])

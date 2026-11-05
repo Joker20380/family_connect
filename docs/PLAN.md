@@ -12,6 +12,13 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Current next23:36UTC: freeze and qualify the bounded repeated-seed candidate.**
+Source uses the existing SeedManager loop and publisher, with explicit opt-in and
+unchanged release defaults. Artifact-enabled bootstrap race checks pass. Build its
+own immutable package/driver, run both-NL traffic preflight, then the corrected8h
+G4 path with actual delivery-window assertions. Reconcile G2 expiry and missing G3
+legacy/late cases before A acceptance; B remains gated. Earlier deltas are historical.
+
 **One current next23:28UTC: repair the proven G4 seed/delivery budget boundary.**
 Preserve the first fd7562c renewal and the stopped-run receipt. Existing SeedManager
 has only two generations; the8h/1h stand cannot outlive its5h seed horizon, and its
