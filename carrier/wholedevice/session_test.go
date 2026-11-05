@@ -40,6 +40,46 @@ func TestTerminalReasonSurvivesClose(test *testing.T) {
 	}
 }
 
+func TestCloseJoinsSessionMaintenance(test *testing.T) {
+	for _, failClosed := range []bool{false, true} {
+		test.Run(map[bool]string{false: "disconnect", true: "maintenance-failure"}[failClosed], func(test *testing.T) {
+			plane := &testPlane{done: make(chan struct{})}
+			session := Attach(context.Background(), plane, nil)
+			release := make(chan struct{})
+			unblock := sync.OnceFunc(func() { close(release) })
+			defer unblock()
+			session.maintenance.Add(1)
+			go func() {
+				defer session.maintenance.Done()
+				if failClosed {
+					session.stop()
+				}
+				<-session.ctx.Done()
+				<-release
+			}()
+			closed := make(chan struct{})
+			go func() { defer close(closed); session.Close() }()
+			select {
+			case <-plane.done:
+			case <-time.After(time.Second):
+				test.Fatal("disconnect did not stop data plane")
+			}
+			select {
+			case <-closed:
+				test.Fatal("close returned before maintenance cleanup")
+			case <-time.After(20 * time.Millisecond):
+			}
+			unblock()
+			select {
+			case <-closed:
+			case <-time.After(time.Second):
+				test.Fatal("maintenance shutdown deadlocked")
+			}
+			session.Close()
+		})
+	}
+}
+
 func (stream testStream) CloseWrite() error { return nil }
 func (stream testStream) Reset() error      { return stream.Close() }
 

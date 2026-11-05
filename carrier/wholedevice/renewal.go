@@ -7,8 +7,12 @@ import (
 )
 
 func (session *Session) startMaintenance(secured *familysession.Session, mux *tcpforward.Mux, setupID string) {
-	session.credentials = roombroker.NewSessionMaintenance(session.ctx, mux, secured, setupID, session.Close)
-	go session.credentials.Run()
+	session.credentials = roombroker.NewSessionMaintenance(session.ctx, mux, secured, setupID, session.stop)
+	session.maintenance.Add(1)
+	go func() {
+		defer session.maintenance.Done()
+		session.credentials.Run()
+	}()
 }
 
 func (session *Session) OfferCredentialsWithCommit(raw []byte, committed func()) bool {

@@ -37,14 +37,9 @@ func fcRestrictedRenew(id int64, response, identity string) int32 {
 	defer clear(profile)
 	fingerprint := sha256.Sum256(profile)
 	if !session.OfferCredentialsWithCommit(profile, func() {
-		ownerMu.Lock()
-		defer ownerMu.Unlock()
-		if current != owned || owned.ctx.Err() != nil {
-			return
-		}
 		owned.mu.Lock()
 		defer owned.mu.Unlock()
-		if owned.session == session && owned.ownership.RefreshProfile(session, fingerprint) {
+		if owned.ctx.Err() == nil && owned.session == session && owned.ownership.RefreshProfile(session, fingerprint) {
 			owned.profileHash = fingerprint
 		}
 	}) {

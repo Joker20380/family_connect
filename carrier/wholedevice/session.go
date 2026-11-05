@@ -65,6 +65,7 @@ type Session struct {
 	mu           sync.Mutex
 	closed       bool
 	workers      sync.WaitGroup
+	maintenance  sync.WaitGroup
 	closeOnce    sync.Once
 	tcpSlots     chan struct{}
 	dnsSlots     chan struct{}
@@ -93,6 +94,11 @@ func Attach(parent context.Context, plane DataPlane, closeCarrier func()) *Sessi
 func (session *Session) Failed() bool { return session.ctx.Err() != nil }
 
 func (session *Session) Close() {
+	session.stop()
+	session.maintenance.Wait()
+}
+
+func (session *Session) stop() {
 	session.closeOnce.Do(func() {
 		sessiontrace.From(session.ctx).Add("LOCAL_CLOSE", "STARTED", "NONE")
 		session.mu.Lock()

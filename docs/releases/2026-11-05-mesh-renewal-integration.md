@@ -75,6 +75,19 @@ is published only after the exchange finishes, not at profile load or preflight.
 
 ## Qualification checkpoint
 
+Source `f7d092041d550683d1d98ad6b6a1b68558cffac1` was pushed and its remote SHA
+verified. Its isolated real-runtime continuity/DNS run passed twice for both leaf and CRL;
+API27/API35 each passed five scoped emulator checks (no physical installation). The broad
+native race gate passed the five affected packages; bootstrap retained the same six baseline
+diagnostic-counter failures. Final qualification does not claim an all-green release gate.
+
+A cleanup follow-up makes whole-device Close join maintenance and its callback before native
+owner disposal. Internal fail-close uses a non-joining stop path to avoid joining itself.
+The confirmed JNI callback no longer takes the global owner mutex held by Disconnect:
+the captured owner's cancellation, exact session and coordinator ownership fence publication.
+Focused cleanup and replacement-owner tests pass with `-race -count=10`. This follow-up
+requires fresh ABI builds/API checks; the earlier platform receipts alone do not qualify it.
+
 At source-checkpoint preparation, Android JVM **66 tests PASS** in CredentialRefresh,
 RestrictedGateway, ReadinessRefresh, RestrictedCache, RestrictedRecovery and
 ConnectivityOrchestrator. Native integration qualification and Android API27/API35 ABI/runtime
