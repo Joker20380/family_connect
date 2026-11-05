@@ -7,19 +7,27 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
-**Selected next gate — exact Android118 diagnostic qualification and controlled owner delivery.**
+**Selected next gate — diagnose118 paired-DNS loss; qualification/delivery complete, traffic FAIL.**
 First CI41931735646/sourcea03bdec stops at release contracts; stale117 version/diagnostic
 pins are locally reproduced and strictly updated. New Go/Java class-parity and unchanged
 recovery pins retain the security boundary. Contract-only edits now select Android CI.
-Synthetic API27 Java-storage117→118 passes; exact ARM64/UI/platform qualification is pending.
-Package the additive signaling-read classification from234af08 under version118; never
-replace signed117 bytes. Require exact-source platform CI, downloaded source/native/
-ABI/API27/API35/UI checks, existing offline signer and retained-data verification before
-owner installation. Repeat field diagnosis only with valid app consent; do not bypass an
-expired grant. No public distribution or server mutation. Owner117/public113/catalog7
-and identical NL70e6c0fc remain unchanged while this gate is pending. Completion of this
-diagnostic candidate is not a stability fix: cause/reproduction/correction, both-node
-slow/lossy checks and sustained30–60-minute acceptance still need evidence.
+Synthetic API27 Java-storage117→118, exact13e0b37 Client builds41933207129, downloaded
+ARM64/source/native/ABI/16K,839 JVM cases, API27/API35 and8 UI samples pass. Separate
+phase0/Linux-control failures remain visible. Existing-key118b7b0be92 is installed over117
+with exact bytes, UID/first-install and consented Support ID retained. No old binary is
+replaced. Repeat controlled field diagnosis with the current authorized app grant; do
+not bypass a later expired grant. No public distribution or server mutation: owner118,
+public113/catalog7/desktops unchanged, identical NL70e6c0fc. Completion of this diagnostic
+candidate is not a stability fix: cause/reproduction/correction, both-node slow/lossy
+checks and sustained30–60-minute acceptance still need evidence. Do not start another
+queued task from this delivery checkpoint.
+Controlled118/NL2 repeat stops26.081s into its20-minute gate:7/8 wire DNS and2/2 Android
+HTTPS pass, one UDP_PAIRED case times out at8011ms. The same native session remains
+CONNECTED; no new signaling/ICE failure or read-error class is observed. The probe is
+removed; the failed run remains failed despite a local error-reporting KeyError correction.
+Next requires exact client/gateway paired-DNS evidence and a deterministic reproduction,
+not longer deadlines, retry-until-green or a new public release.117's WebSocket cause
+and both-node weak-link/long-duration gates remain open separately.
 [Current118 gates](releases/2026-11-05-android118-signaling-diagnostics.md).
 
 Previous failed-observation/source checkpoint:

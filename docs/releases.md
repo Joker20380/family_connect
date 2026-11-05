@@ -1,9 +1,11 @@
 # Release distribution / Выпуски
 
-**5 November — Android118 diagnostic candidate, source only.** Exact platform CI,
-downloaded ARM64/source/API27/API35/UI, signing and retained-data delivery are pending.
-This adds error classification, not an accepted stability fix. Installed owner117 and
-public/invitation/updater113/catalog7 remain unchanged; no new public URL/checksum.
+**5 November00:01UTC — Android118 owner-only diagnostic delivery.** Exact13e0b37
+Client builds41933207129, downloaded ARM64/source/API27/API35/UI and839 JVM cases pass.
+Existing-key signedb7b0be92 is installed over117 with exact bytes, UID/first-install and
+Support ID retained. Controlled118/NL2 traffic gate fails:7/8 wire DNS and2/2 Android
+HTTPS pass, same tunnel retained; no sustained acceptance or new WebSocket cause.
+Public/invitation/updater113/catalog7 and desktops stay unchanged; no new public URL.
 [Current118 qualification](releases/2026-11-05-android118-signaling-diagnostics.md).
 
 **4 November20:29UTC — unified MESH gateway delivered to both NL nodes.** Both running

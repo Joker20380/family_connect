@@ -1,12 +1,16 @@
 # Existing-users private Android update / Частное обновление Android
 
 <!-- Unified MESH Android116 20261104 -->
-**118 is a source-only diagnostic candidate.** It is not a new public update or an
-accepted stability correction. Owner remains117; public113/catalog7/download links and
-checksums are unchanged. Exact-source118 CI/artifact/UI and same-signer retained-data
-delivery must pass first. No uninstall, data clear or reenrollment is needed.
-RU:118 готовится для диагностики обрыва; пока не установлен и не опубликован.
-У владельца117, для остальных113. Данные не удалять и повторно не регистрироваться.
+**118 is qualified, signed and installed only on the owner phone.** Exact-source CI,
+ARM64/API27/API35/UI, same signer, installed bytes, UID/first-install and Support ID pass.
+Signed APK SHA256:`b7b0be92456f522f81d87c71c401c2622d2f823178510b28510a6fb8d5c69fca`.
+This adds bounded diagnosis, not an accepted stability correction. Controlled118/NL2
+traffic fails one of8 wire DNS cases; both Android HTTPS cases pass and the same tunnel
+remains connected. No sustained PASS; public113/catalog7/download links stay unchanged.
+RU:118 установлен владельцу поверх117 без удаления данных; для остальных остаётся113.
+118 уточняет причину обрыва; проверка выявила один DNS-таймаут без разрыва туннеля.
+Исправление стабильности ещё не подтверждено.
+Не удалять данные и не регистрироваться повторно;118 не опубликован.
 [118 gates and rollback](../releases/2026-11-05-android118-signaling-diagnostics.md).
 
 Earlier117 ordinary acceptance (subsequent sustained test failed):

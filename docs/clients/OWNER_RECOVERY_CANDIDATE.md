@@ -1,12 +1,17 @@
 # Owner recovery106 — private candidate / закрытый кандидат
 
 <!-- Unified MESH Android116 20261104 -->
-**118 is a source diagnostic candidate, not installed or publicly available.** It adds
-typed signaling-read evidence after117's failed sustained test; it does not claim to fix
-the disconnect. Exact CI/artifact/UI/signing/retained-data gates are pending. Owner117,
-public113/catalog7 and download links/checksums remain unchanged; do not reinstall.
-RU: готовится118 для точного определения причины обрыва. На телефоне пока117, публично113.
-Это ещё не исправление стабильности; удалять приложение или данные не нужно.
+**118 is qualified and installed over117 only on the owner phone.** Exact-source CI,
+downloaded ARM64/API27/API35/UI and unchanged offline signer pass; installed bytes,
+UID/first-install and consented Support ID retention are verified.
+Signed APK SHA256:`b7b0be92456f522f81d87c71c401c2622d2f823178510b28510a6fb8d5c69fca`.
+Typed signaling-read evidence does not itself fix117's disconnect. Controlled118/NL2
+traffic fails one of8 wire DNS cases;2/2 Android HTTPS pass, same tunnel remains connected.
+The20-minute gate is not completed and no sustained stability PASS is claimed.
+Public113/catalog7 and download links/checksums stay unchanged; do not reinstall.
+RU: на телефоне владельца118 без удаления данных, публично по-прежнему113.
+118 уточняет причину обрыва; один DNS-таймаут повторился без разрыва туннеля.
+Стабильность пока не объявляется исправленной.
 [118 qualification and delivery](../releases/2026-11-05-android118-signaling-diagnostics.md).
 
 Earlier117 ordinary acceptance (subsequent sustained test failed):

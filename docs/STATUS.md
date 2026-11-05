@@ -6,16 +6,30 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
-**5 November — Android118 diagnostic candidate SOURCE; owner117/public113 unchanged.**
-The next selected gate packages234af08's finite signaling-read classes as a new immutable
+**5 November00:06UTC — Android118 owner delivery PASS; traffic gate FAIL, DNS7/8 pass.**
+This checkpoint packages234af08's finite signaling-read classes as a new immutable
 version118, without changing retries, timeouts, authorization, media wire or server code.
 First sourcea03bdec/run41931735646 fails at release contracts, before an ARM64 APK.
 Local reproduction identifies stale117/version and diagnostic-file hash expectations;
 strict118 pins and Android-only CI selection for that contract are corrected, not bypassed.
-Synthetic API27 Java-storage117→118 retention passes with disposable keys. Exact-source
-platform CI/downloaded ARM64/source/API27/API35/UI and physical retained-data gates
-remain pending; no118 signing, installation or publication yet. Both NL gateways retain the
-same70e6c0fc implementation.117's failed sustained observation is not retroactively fixed.
+Source13e0b37 is pushed/remote-verified. Client builds41933207129 attempt1 and readiness
+wire contract pass; phase0/Linux-control fail separately, so no whole-CI green claim.
+Downloaded ARM64/source/native/ABI/16K,839 JVM cases, API27/API35 and8 UI samples pass;
+the fixed-height CPU-row capture retains its identical117 crop, not a new UI regression.
+Synthetic API27 Java-storage117→118 retention passes with disposable keys. Production
+Android/carrier/messenger/vector sources are identical between fixturea03bdec and13e0b37.
+Existing-key signed118 SHA256b7b0be92 is installed in place with exact byte readback,
+same UID/first-install and consented Support ID verification; no uninstall/data reset.
+Current USB support is authorized; one normal Connect reaches NL2/native2. Exact-session
+server attribution and current118 readiness pass. The20-minute gate stops after26.081s:
+7/8 wire DNS pass, one UDP_PAIRED case times out at8011ms; both Android HTTPS cases pass.
+No egress round or long-duration PASS. The local harness reports KeyError on that error
+record's absent result field, not an app exception; failure is retained, not retried away.
+00:06:49 readback retains the same connected session, Support ID and no probe; no
+signaling/ICE failure is observed.13 protocol errors remain visible (unknown_stream9,
+dns_unmatched4), not attributed as root cause. Public113/catalog7/desktops are unchanged.
+Both NL gateways retain common70e6c0fc; no server mutation.117's failed sustained
+observation is not retroactively fixed, and118 remains diagnosis rather than a proven fix.
 [118 qualification, delivery and remaining gates](releases/2026-11-05-android118-signaling-diagnostics.md).
 
 Previous source-only diagnostic checkpoint:
