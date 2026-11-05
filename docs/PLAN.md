@@ -19,6 +19,10 @@ G1 now has a linked, approval-gated quiesced continuation implementation; scoped
 1 optional SKIP and root/package292 PASS on5ef0193; follow-up25 targeted tests PASS (overlap).
 Mandatory artifact bootstrap PASS, not a current blocker. G1 runtime acceptance and G2 independent-process
 faults, G3 actual Android HTTP/cache delivery and G4 qualified package are still pending.
+Final sourceb1d17d3 targeted root/package118 PASS; packaged `--mode online` rejects (exit2).
+The required entrypoint/current API capability contract is not implemented in the source
+capsule; it must not be replaced by disabling the constructor guard. G1–G3 full-path tests
+are NOT_RUN and the requested G1–G4 stage is explicitly NOT complete.
 **One active next step: finish G1–G4 source/integration qualification in this incident.**
 Then, without executing the next stage automatically: (A) exact client/both-gateway/publisher
 release artifacts and controlled-delivery preparation; (B) separately approved delivery,

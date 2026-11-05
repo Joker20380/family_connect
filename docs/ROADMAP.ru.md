@@ -16,6 +16,9 @@
 переход реализован и проходит адресные Python-проверки, но G1–G4 целиком ещё не приняты.
 G2 — независимые процессы/отказы; G3 — фактическая Android HTTP/cache доставка;
 G4 — квалифицированный online runtime/API пакет. [Точные gates/evidence](releases/2026-11-05-mesh-online-renewal.md).
+Последняя проверка b1d17d3: адресный root/package118 PASS, но штатного online entrypoint
+в пакете ещё нет (`--mode online` отвергается). Это конкретный незакрытый source gate,
+а не готовность к поставке. Полная G1 runtime / G2 process / G3 Android HTTP приёмка NOT_RUN.
 
 **Один действующий следующий шаг: закончить G1–G4 того же MESH incident.** После этого:
 

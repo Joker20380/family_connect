@@ -21,6 +21,11 @@ Current revoke state wins; the emergency CRL advances beyond the committed floor
 restores the old DB, and ordinary rollback is forbidden for this continuation.
 Scoped Python192 PASS/1 optional SKIP on5ef0193; root/package292 PASS on that exact capsule.
 Follow-up handoff/window/start-intent selection25 PASS (overlaps, not an additional total).
+Sourceb1d17d3 final targeted root/package118 PASS, zero skips. G1 full runtime, G2 independent
+processes and G3 Android HTTP/cache are NOT_RUN. G4 online entrypoint FAIL: the separate
+source capsule still has no `--mode online`, and the constructor's qualification guard is
+intact. This is an unfinished implementation/qualification gate, not an external approval
+blocker or a completed stage. No release preparation/activation is started.
 Fresh artifact-enabled bootstrap/command race/count3 PASS with zero skips; Family/native
 broker race PASS with27 optional/root/DNS/long-stand skip events. No full-CI claim.
 This is not yet independent-process, Android HTTP/cache or final-package runtime acceptance.

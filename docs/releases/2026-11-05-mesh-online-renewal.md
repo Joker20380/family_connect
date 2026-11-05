@@ -85,6 +85,61 @@ One sync packaging CLI invocation supplied an unsupported `--source` flag (FAIL 
 the corrected frozen-source builder API and smoke completed before bootstrap. No gate was
 disabled. No production access, deployment, APK/catalog change or private state is committed.
 
+### Final source checkpoint for this continuation — not G1–G4 acceptance
+
+Source`b1d17d3be8f347c1d991528ecebbe72c962ef21c` is committed/pushed after5ef0193;
+origin/main was checked against the pushed SHA. The final targeted root/network-none
+selection is118 PASS/0 SKIP:25 handoff/window/start-intent tests, canonical profile/package
+construction, deterministic packaging and entrypoint smoke. It overlaps the earlier292;
+do not sum them. `root-b1d17d3.log` is the exact receipt. Native/HTTP sync sources are
+byte-identical to5ef0193 (`git diff` of carrier and runtime inventory is empty), so the
+fresh artifact-enabled bootstrap/native results above retain that exact provenance rather
+than being renamed as a new execution. No full-path999s rerun, Android JVM or API27/API35
+HTTP/cache acceptance was performed for this source checkpoint.
+
+Final separate **maintenance source capsule, not online runtime candidate**:
+- Source SHA`b1d17d3be8f347c1d991528ecebbe72c962ef21c`.
+- Archive SHA256`04da90a06e141685573e983f8affe98cbb24141b11fe184cf66ef4b4cc155548`.
+- Source inventory SHA256`d11ae8d634fcb7659bb8d923e22442eb5aaad857a5a3df8f162563e3c17937ae`.
+- API wrapper SHA256`94ecc55e7282fa8d1a49bb8291065b9b3acf8b8985179a1579313c78616eb718`.
+- Manifest SHA256`8d67351fd966043edc11351b3f562bc0244491559001fa1a9eb0e452e69e2fc3`.
+The old accepted archive is not overwritten; these are distinct ignored local files.
+
+| Requested gate | Outcome | Exact scope and remaining transition |
+| --- | --- | --- |
+| G1 full emergency runtime acceptance | NOT_RUN | Implementation and25 focused tests PASS, including protected SystemdBarrier start-intent reconciliation with simulated service commands. No claim of actual gateway restart/TLS admission acceptance on the final package. |
+| G2 independent-process distributed failures | NOT_RUN | Existing in-process fault matrix remains evidence only. No claim that multiple Python objects or fault exceptions are remote process death. |
+| G3 Android HTTP/cache delivery | NOT_RUN | SSH120 budget1395s+lateness and pre-write rejection tested; Android300s cooldown/HTTP/Keystore/owner integration on API27/API35 still needs the isolated endpoint. |
+| G4 qualified online package | FAIL | Current separate source capsule's ordinary CLI rejects `--mode online` with exit2; `node.construct` still has no online reader/capability configuration and dispatch remains `ONLINE_QUALIFICATION_ONLY`. |
+
+G4 reproduction (no configuration read or mutation): unpack the separate source capsule;
+run its `renewal/runtime_controller.py` using the documented Python `-E -s -B` invocation,
+`--config <disposable-path> --mode online`. The parser accepts only evaluate/scheduled/
+operator/recover/expired-request/expired-apply/expired-resume. Evidence:
+`online-entrypoint-contract.log`. An earlier `-I` invocation wrongly excluded the script
+module directory and failed import; retained separately, not used as the gate diagnosis.
+
+Required remaining implementation: a distinct pinned current readiness/API/runtime package
+and explicit opt-in controller/node entrypoints with capability and actual-reader checks;
+then its own real RPC/process, disposable Android HTTP/cache and both-node full-path
+qualification. Do not simply enable the in-process qualification flag or replace the old
+API archive. The lack of production authorization is NOT the reason these isolated gates
+remain unfinished. There is no assertion that the requested stage is complete.
+
+Automatically recoverable within the qualified Python scope: stopped handoff/archive and
+lost replies, repeated authorization request, stale approval after another revoke, same
+emergency plan/floor publication and already-executed service start. Explicit outage
+approval remains required; pinned policy/authority changes require their separate trusted
+authorization, not continuity priority. Normal compatible online renewal retains earlier
+TLS/mux/TCP evidence; emergency quiescence deliberately closes those sessions and requires
+new permitted connections. No live user connection was touched by this work.
+
+Release/live/field gates stay queued, not started: exact immutable client+both-gateway+
+publisher artifacts, separately authorized controlled delivery, actual scheduled renewal
+on both NL, paired-DNS/WebSocket, weak-link/loss/screen-off/mobile allowlists; only then
+controlled paid beta on an accepted baseline with roster/opt-in/terms/access-revocation/
+monitoring/stop ownership. No canary replay, payments, enrollment or arbitrary expansion.
+
 ## Prior accepted evidence (not current instructions)
 
 **Latest outcome,12:55UTC: positive isolated online stand PASS; requested stage INCOMPLETE.**
