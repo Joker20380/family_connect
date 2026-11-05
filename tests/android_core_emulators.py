@@ -16,6 +16,9 @@ def main():
     parser.add_argument('--build', type=Path, required=True)
     parser.add_argument('--native', type=Path, required=True)
     parser.add_argument('--work', type=Path, required=True)
+    parser.add_argument('--port', type=int, default=5630)
+    parser.add_argument('--service', action='store_true')
+    parser.add_argument('--api', type=int, choices=(27, 35))
     args = parser.parse_args()
     args.work.mkdir(mode=0o700)
     avd = args.work/'avd'
@@ -69,16 +72,30 @@ def main():
             assert 'generic' in fingerprint or 'sdk' in fingerprint
             assert subprocess.check_output(adb+['shell', 'getprop', 'ro.build.version.sdk'], text=True).strip() == str(api)
             owned = True
+            subprocess.run(adb+['shell', 'svc', 'wifi', 'disable'], check=True, capture_output=True, timeout=10)
+            subprocess.run(adb+['shell', 'svc', 'data', 'enable'], check=True, capture_output=True, timeout=10)
+            time.sleep(5)
+            record['network_scope'] = 'owned-emulator-cellular-only-not-mobile-field'
             for artifact in (apk, tests):
-                result = subprocess.run(adb+['install', '-t', str(artifact)], capture_output=True, text=True, timeout=90)
+                result = subprocess.run(adb+['install', '--no-streaming', '-t', str(artifact)], capture_output=True, text=True, timeout=90)
                 assert result.returncode == 0 and 'Success' in result.stdout, 'Owned emulator install failed'
+            installed = subprocess.check_output(adb+['shell', 'pm', 'path', 'com.familyconnect.app.friends'], text=True).strip()
+            assert installed.startswith('package:/data/app/') and installed.endswith('/base.apk') and '\n' not in installed
+            installed_apk = subprocess.check_output(adb+['shell', 'su', '0', 'sha256sum', installed.removeprefix('package:')], text=True).split()[0]
+            assert installed_apk == receipt['apk_sha256'], 'Installed APK differs from supplied artifact'
+            record['installed_apk_sha256'] = installed_apk
+            native_path = installed.removeprefix('package:').removesuffix('/base.apk')+'/lib/x86_64/libfc_restricted.so'
+            installed_native = subprocess.check_output(adb+['shell', 'su', '0', 'sha256sum', native_path], text=True).split()[0]
+            record['installed_native_sha256'] = installed_native
+            assert installed_native == receipt['native_sha256'], 'Installed native bytes differ from verified APK'
             subprocess.run(adb+['reverse', 'tcp:19091', 'tcp:'+str(bridge['relay'])], check=True, capture_output=True, timeout=10)
             subprocess.run(adb+['shell', 'appops', 'set', 'com.familyconnect.app.friends', 'ACTIVATE_VPN', 'allow'], check=True, capture_output=True, timeout=10)
             record.update(result='RUNNING', started=time.time())
             (args.work/f'api{api}-receipt.json').write_text(json.dumps(record)+'\n')
+            arguments = ['-e', 'fc_core_service', 'true'] if args.service else []
             with (args.work/f'api{api}-runtime.log').open('wb') as log:
                 result = subprocess.run(adb+['shell', 'am', 'instrument', '-w', '-r', '-e', 'class',
-                    'com.familyconnect.app.OnlineReadinessRuntimeTest', '-e', 'fc_core_runtime', 'true',
+                    'com.familyconnect.app.OnlineReadinessRuntimeTest', '-e', 'fc_core_runtime', 'true', *arguments,
                     'com.familyconnect.app.friends.test/androidx.test.runner.AndroidJUnitRunner'],
                     stdout=log, stderr=subprocess.STDOUT, timeout=12000)
             log = (args.work/f'api{api}-runtime.log').read_text()
@@ -89,6 +106,15 @@ def main():
             raise
         finally:
             if owned:
+                if 'installed_native_sha256' in record:
+                    checked = subprocess.run(adb+['shell', 'su', '0', 'sha256sum', native_path], capture_output=True, text=True, timeout=15)
+                    record['final_native_sha256'] = checked.stdout.split()[0] if checked.returncode == 0 else 'unavailable'
+                    if record['result'] == 'PASS_POSITIVE_PATH_ONLY' and record['final_native_sha256'] != receipt['native_sha256']:
+                        record.update(result='FAIL', failure='Native artifact changed during runtime')
+                events = subprocess.run(adb+['shell', 'su', '0', 'cat', '/data/data/com.familyconnect.app.friends/files/connectivity-events.json'], capture_output=True, timeout=15)
+                (args.work/f'api{api}-connectivity.json').write_bytes(events.stdout)
+                diagnostic = subprocess.run(adb+['shell', 'su', '0', 'cat', '/data/data/com.familyconnect.app.friends/no_backup/diag-ring.json'], capture_output=True, timeout=15)
+                (args.work/f'api{api}-diagnostic.json').write_bytes(diagnostic.stdout)
                 logs = subprocess.run(adb+['logcat', '-d', '-s', 'GoLog:I', 'AndroidRuntime:E'], capture_output=True, timeout=15)
                 (args.work/f'api{api}-native.log').write_bytes(logs.stdout+logs.stderr)
                 subprocess.run(adb+['emu', 'kill'], capture_output=True, timeout=15)
@@ -101,7 +127,8 @@ def main():
         return record
 
     with ThreadPoolExecutor(max_workers=2) as executor:
-        jobs = [executor.submit(qualify, 27, 'default', 5630), executor.submit(qualify, 35, 'google_apis', 5632)]
+        jobs = [executor.submit(qualify, api, variant, port) for api, variant, port in
+                ((27, 'default', args.port), (35, 'google_apis', args.port+2)) if args.api is None or api == args.api]
         receipt['apis'] = [job.result() for job in jobs]
     (args.work/'result.json').write_text(json.dumps(receipt, indent=2)+'\n')
 

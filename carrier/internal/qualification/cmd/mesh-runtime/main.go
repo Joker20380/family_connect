@@ -17,6 +17,7 @@ import (
 	"github.com/Joker20380/family_connect/carrier/gatewayruntime"
 	"github.com/Joker20380/family_connect/carrier/internal/qualification"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 )
 
 func main() {
@@ -55,6 +56,11 @@ func run() error {
 		defer output.Unlock()
 		json.NewEncoder(os.Stdout).Encode(map[string]any{"event": event, "pid": os.Getpid(), "utc": time.Now().UTC()})
 	}
+	trace := func(event sessiontrace.Event) bool {
+		output.Lock()
+		defer output.Unlock()
+		return json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "session_trace", "trace": event, "pid": os.Getpid()}) == nil
+	}
 	switch *mode {
 	case "relay":
 		listener, err := net.Listen("tcp", *address)
@@ -90,12 +96,12 @@ func run() error {
 		if err != nil {
 			return err
 		}
-		starter := roombroker.PacketGateway{TelemostGateway: roombroker.TelemostGateway{CredentialsPath: *profile, Event: emit,
+		starter := roombroker.PacketGateway{TelemostGateway: roombroker.TelemostGateway{CredentialsPath: *profile, Event: emit, AllowInternet: true,
 			Services: map[string]netip.AddrPort{"chat-mailbox.family-connect.invalid": echoOrigin, "chat-api.family-connect.invalid": httpsOrigin}}, Connect: provider.Gateway}
 		failure := func(failure bootstrap.ExchangeFailure) { emit(failure.Stage + ":" + failure.Reason) }
 		state := func(state roombroker.State, reason roombroker.Code) { emit(string(state) + ":" + string(reason)) }
 		return gatewayruntime.Run(ctx, gatewayruntime.Config{Profile: *profile, Listen: *address, Duration: *duration, SeedLifetime: seedLifetime, RotateAfter: rotateAfter,
-			Directory: *directory, Observer: *observer, Event: emit, State: state, AdmissionFailure: failure, ExchangeFailure: failure}, provider, provider.Seed, starter)
+			Directory: *directory, Observer: *observer, Event: emit, State: state, Trace: trace, AdmissionFailure: failure, ExchangeFailure: failure}, provider, provider.Seed, starter)
 	case "client":
 		return qualification.Client(ctx, provider, *config)
 	case "admission-probe":

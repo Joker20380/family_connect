@@ -40,7 +40,12 @@ def main():
     args = parser.parse_args()
     assert args.container.startswith('fc-mesh-android-') and 0 < args.seconds <= 14400
     inspection = json.loads(subprocess.check_output(['docker', 'inspect', args.container]))[0]
-    assert inspection['HostConfig']['NetworkMode'] == 'none' and inspection['State']['Running']
+    assert inspection['State']['Running']
+    if inspection['HostConfig']['NetworkMode'] != 'none':
+        networks = inspection['NetworkSettings']['Networks']
+        assert len(networks) == 1
+        isolated = json.loads(subprocess.check_output(['docker', 'network', 'inspect', next(iter(networks))]))[0]
+        assert isolated['Internal'] and isolated['Labels'].get('family_connect.qualification') == 'android-core'
     state = json.loads(subprocess.check_output(['docker', 'exec', args.container, 'cat', args.server]))
     assert state['state'] == 'HTTP_READY'
     stopped = threading.Event()

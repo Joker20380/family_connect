@@ -12,6 +12,11 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Immediate G3 boundary:** qualify normal ConnectionService readiness through the active
+VPN, not just direct engine/underlay. Fix the test driver's accidental ServicesOnly scope
+and supply an isolated remote origin without disabling local-destination policy. Freeze
+and test this combination; retain, but do not relabel, the ongoing d968ddd runs.
+
 **G2 expiry continuation:** retain the bounded wall-clock successor-expiry run alongside
 G3/G4; verify two recovery attempts preserve the original COMMIT without expired rollback.
 

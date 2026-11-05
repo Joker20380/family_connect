@@ -1,6 +1,7 @@
 package com.familyconnect.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
@@ -62,6 +63,63 @@ public class OnlineReadinessRuntimeTest {
             assertArrayEquals(sent,received);
         }
     }
+    private void servicePath(ControlIdentity identity,String gateway,byte[] predecessor)throws Exception{
+        AutomaticVpnOwner resolver=new AutomaticVpnOwner(context);
+        JsonObject original=JsonParser.parseString(new String(predecessor,StandardCharsets.UTF_8)).getAsJsonObject();
+        long originalExpiry=original.get("expires_at").getAsLong(),originalCrl=original.get("minimum_crl").getAsLong();
+        Intent connect=new Intent(context,ConnectionService.class).setAction("connect").putExtra("transport","telemost").putExtra("country",gateway);
+        long lease=0;
+        try{
+            context.startForegroundService(connect);
+            long started=SystemClock.elapsedRealtime()+180000;
+            while(!"on".equals(ConnectionService.status)){
+                if(ConnectionService.failed){
+                    java.io.File events=new java.io.File(context.getFilesDir(),"connectivity-events.json");
+                    fail("Actual service failed: "+(events.exists()?new String(Files.readAllBytes(events.toPath()),StandardCharsets.UTF_8):"no connectivity events"));
+                }
+                assertTrue("Service connect deadline",SystemClock.elapsedRealtime()<started);Thread.sleep(200);
+            }
+            assertEquals(ConnectivityOrchestrator.RESTRICTED,ConnectionService.activeTransport);
+            lease=borrow(predecessor,identity,resolver);assertTrue(lease>0);assertEquals(2,NativeRestricted.chatState(lease));echo(lease);
+            long serviceOwner=ConnectionService.sessionId;
+            status("SERVICE_OWNER_CONNECTED",gateway,null);
+            HttpsURLConnection verified=(HttpsURLConnection)new java.net.URL("https://185.251.89.19:8443/").openConnection();
+            verified.setConnectTimeout(5000);verified.setReadTimeout(5000);
+            try(InputStream input=verified.getInputStream();ByteArrayOutputStream output=new ByteArrayOutputStream()){
+                byte[] buffer=new byte[256];int count;
+                while((count=input.read(buffer))!=-1){assertTrue(output.size()+count<=1024);output.write(buffer,0,count);}
+                assertEquals("verified-isolated-origin",new String(output.toByteArray(),StandardCharsets.UTF_8));
+            }finally{verified.disconnect();}
+            status("SERVICE_VERIFIED_HTTPS",gateway,null);
+            String other=gateway.equals(RestrictedGateway.PRIMARY)?RestrictedGateway.SECONDARY:RestrictedGateway.PRIMARY;
+            FriendsRestricted.prewarm(context,other);
+            long deadline=SystemClock.elapsedRealtime()+11000000;boolean committed=false;
+            while(SystemClock.elapsedRealtime()<deadline){
+                assertEquals("No internal reconnect",serviceOwner,ConnectionService.sessionId);
+                assertEquals("on",ConnectionService.status);assertFalse(ConnectionService.failed);echo(lease);
+                byte[] successor=cached(identity,gateway);
+                if(successor!=null)try{
+                    JsonObject candidate=JsonParser.parseString(new String(successor,StandardCharsets.UTF_8)).getAsJsonObject();
+                    if(candidate.get("expires_at").getAsLong()>originalExpiry&&candidate.get("minimum_crl").getAsLong()>originalCrl){
+                        long next=borrow(successor,identity,resolver);
+                        if(next>0){
+                            try{assertEquals(2,NativeRestricted.chatState(next));echo(next);}finally{NativeRestricted.chatRelease(next);}
+                            assertTrue(System.currentTimeMillis()/1000<originalExpiry-55);
+                            committed=true;status("SERVICE_SUCCESSOR_COMMITTED_SAME_OWNER",gateway,null);break;
+                        }
+                    }
+                }finally{Arrays.fill(successor,(byte)0);}
+                Thread.sleep(1000);
+            }
+            assertTrue("Service HTTP/cache/native successor before old expiry",committed);
+        }finally{
+            if(lease>0)NativeRestricted.chatRelease(lease);
+            context.startService(new Intent(context,ConnectionService.class).setAction("disconnect"));
+            long deadline=SystemClock.elapsedRealtime()+30000;
+            while(!"off".equals(ConnectionService.status)&&SystemClock.elapsedRealtime()<deadline)Thread.sleep(100);
+            assertEquals("off",ConnectionService.status);status("SERVICE_OWNER_CLEANED",gateway,null);
+        }
+    }
     @Test public void verifiedHttpCacheAndExistingOwnerReceiveSuccessor()throws Exception{
         assumeTrue("Explicit isolated runtime only","true".equals(InstrumentationRegistry.getArguments().getString("fc_core_runtime")));
         assertTrue(Build.FINGERPRINT.contains("generic")||Build.MODEL.contains("sdk"));
@@ -102,6 +160,9 @@ public class OnlineReadinessRuntimeTest {
                 finally{Arrays.fill(plain,(byte)0);Arrays.fill(encrypted,(byte)0);}
                 JsonObject original=JsonParser.parseString(new String(predecessor,StandardCharsets.UTF_8)).getAsJsonObject();
                 long originalExpiry=original.get("expires_at").getAsLong(),originalCrl=original.get("minimum_crl").getAsLong();
+                if("true".equals(InstrumentationRegistry.getArguments().getString("fc_core_service"))){
+                    servicePath(identity,gateway,predecessor);return;
+                }
                 owner.open(()->cancelled.set(true));
                 engine=new RestrictedTunnelEngine(context,cancelled::get,connected::set,owner,SystemClock.elapsedRealtime()+200000,false,gateway);
                 engine.up("auto");assertTrue(connected.get());assertTrue(engine.healthy());

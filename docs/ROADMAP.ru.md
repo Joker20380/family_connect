@@ -42,6 +42,11 @@ harness проверяет два renewal по wall clock, но пока не я
 
 **Один действующий следующий шаг: закончить G1–G4 того же MESH incident.** После этого:
 
+20:24UTC уточнён незакрытый переход G3: настоящий ConnectionService подключается, но
+readiness/HTTPS через VPN упирается в ServicesOnly тестового driver. Исправляется только
+испытательный контур и удалённый изолированный origin; production policy не ослабляется.
+Это не G3 PASS, не новый глобальный этап и не начало split tunneling.
+
 Уточнение5 ноября19:39UTC: frozen d968ddd67 PASS/0 SKIP для package/core/process/release
 selection. Disposable API27/API35 уже прошли настоящий HTTP/cache/native owner и ждут
 successor по wall clock; длительный двухузловой прогон продолжается. Ни G3/G4, ни А

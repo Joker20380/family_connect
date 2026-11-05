@@ -15,6 +15,7 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"net/netip"
 	"os"
 	"sync"
 	"time"
@@ -30,6 +31,7 @@ import (
 type clientConfig struct {
 	Endpoint, Gateway, Identity, Wireguard, Anchor, Roots, OriginRoot string
 	DurationSeconds                                                   int
+	HTTPSAddress                                                      string
 }
 
 func roots(path string) (*x509.CertPool, error) {
@@ -115,7 +117,7 @@ func (streamConnection) SetDeadline(time.Time) error      { return nil }
 func (streamConnection) SetReadDeadline(time.Time) error  { return nil }
 func (streamConnection) SetWriteDeadline(time.Time) error { return nil }
 
-func traffic(ctx context.Context, mux *tcpforward.Mux, original *tcpforward.MuxStream, trust *x509.CertPool, sequence int) error {
+func traffic(ctx context.Context, mux *tcpforward.Mux, original *tcpforward.MuxStream, trust *x509.CertPool, sequence int, httpsAddress string) error {
 	bounded, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 	stop := context.AfterFunc(bounded, func() { original.Reset() })
@@ -157,18 +159,27 @@ func traffic(ctx context.Context, mux *tcpforward.Mux, original *tcpforward.MuxS
 	if decoded.Unpack(answer) != nil || !decoded.Header.Response || decoded.Header.ID != 47 || len(decoded.Answers) != 1 {
 		return fmt.Errorf("DNS response invalid")
 	}
-	secureStream, err := mux.OpenTCP(bounded, tcpforward.OpenRequest{Host: "chat-api.family-connect.invalid", Port: 1})
+	httpsRequest, serverName := tcpforward.OpenRequest{Host: "chat-api.family-connect.invalid", Port: 1}, "localhost"
+	if httpsAddress != "" {
+		address, err := netip.ParseAddrPort(httpsAddress)
+		if err != nil || !address.Addr().IsGlobalUnicast() || address.Addr().IsPrivate() {
+			return fmt.Errorf("isolated public HTTPS address rejected")
+		}
+		serverName = address.Addr().String()
+		httpsRequest = tcpforward.OpenRequest{Host: serverName, Port: int(address.Port())}
+	}
+	secureStream, err := mux.OpenTCP(bounded, httpsRequest)
 	if err != nil {
 		return err
 	}
 	defer secureStream.Reset()
 	stopTLS := context.AfterFunc(bounded, func() { secureStream.Reset() })
 	defer stopTLS()
-	secure := tls.Client(streamConnection{secureStream}, &tls.Config{RootCAs: trust, ServerName: "localhost", MinVersion: tls.VersionTLS13})
+	secure := tls.Client(streamConnection{secureStream}, &tls.Config{RootCAs: trust, ServerName: serverName, MinVersion: tls.VersionTLS13})
 	if err := secure.HandshakeContext(bounded); err != nil {
 		return err
 	}
-	if _, err := io.WriteString(secure, "GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n"); err != nil {
+	if _, err := io.WriteString(secure, "GET / HTTP/1.1\r\nHost: "+serverName+"\r\nConnection: close\r\n\r\n"); err != nil {
 		return err
 	}
 	response, err := http.ReadResponse(bufio.NewReader(secure), nil)
@@ -268,7 +279,7 @@ func Client(parent context.Context, provider Provider, path string) error {
 	ticker := time.NewTicker(time.Second)
 	defer ticker.Stop()
 	for sequence := 0; ; sequence++ {
-		if err := traffic(ctx, mux, original, trust, sequence); err != nil {
+		if err := traffic(ctx, mux, original, trust, sequence, config.HTTPSAddress); err != nil {
 			return err
 		}
 		if err := secured.WithAuthorization(ctx, func(auth familysession.Authorization) error {

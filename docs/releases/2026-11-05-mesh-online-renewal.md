@@ -1,5 +1,51 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Actual service-path diagnostics20:24UTC
+
+The earlier direct-engine runtime is not sufficient evidence of normal active-VPN HTTP
+routing. `OnlineReadinessRuntimeTest` now has an explicit `fc_core_service=true` branch:
+actual ConnectionService connect/disconnect, its existing AutomaticConnection owner,
+borrowed native mux echo, verified HTTPS through the VPN, and real successor delivery.
+API35 reaches SERVICE_OWNER_CONNECTED; active HTTPS readiness fails. API27 trial4
+reproduces a TLS connection reset after actual service connection, before the long wait.
+Evidence: `android-service-emulators-1/api35-running-diagnostic.json` (HTTPS_VPN failure),
+`android-service-emulators-4/api27-runtime.log` (SSLHandshakeException/reset), with installed
+native SHA256d1025a1d… verified. This is a newly exposed fixture boundary, not G3 PASS.
+
+The separate qualification driver supplies test Services but omitted AllowInternet;
+the normal PacketGateway therefore correctly selected ServicesOnly. The real production
+entrypoint has no such service map and is not affected by that fixture error. A same-netns
+public-address loopback alias also cannot pass the existing local-address deny policy.
+Do not change those policy checks or test the VPN path solely through reserved chat services.
+The driver now explicitly retains ordinary forwarding and emits the existing sanitized
+sessiontrace/lease events. Production entrypoint, shared gateway runtime, signer, writer,
+timers, security clocks and TTLs are unchanged. Its new bytes require a new immutable
+package/driver qualification; the running d968ddd soak is not renamed as that acceptance.
+
+`tests/android_core_route.py` provides only TCP plumbing for an internal Docker network:
+gateway and origin have separate namespaces; the origin owns the synthetic API IP, while
+only the gateway namespace gets a specific route via the private peer. No public-address
+route is installed on the host. Both roles refuse a default route; the host bridge
+adapter accepts only network-none or a labelled Internal Docker network. The real frozen
+API/HTTP process still generates all replies, TLS remains verified against its synthetic
+CA, and gateway destination policy stays intact. This topology is pending preflight.
+
+Two earlier API27 attempts were not application validation failures: the exact installed
+APK contained the expected ELF, but PackageManager's extracted30788048-byte native file
+was entirely zero. Expectedd1025a1d… versus installed
+`229e15c2844bb20487e335c11bc93b0dc62a6a67acf7b4f4314f19554481587e`;
+`android-service-emulators-2/api27-probe.log` records bad ELF magic. Raw local APK/native
+copies and sanitized diagnostics are retained there, not in Git. The runner now uses
+non-streaming installs and verifies both installed APK and extracted native digests before
+the runtime, and rechecks native bytes at cleanup. Trial3 verified native bytes but had
+no available Wi-Fi underlay; trial4 uses stable emulated cellular only, not a physical
+mobile/allowlist gate. No production trust or application validation bypass was added.
+
+The incomplete source checkpoint includes this diagnostic harness, not accepted A.
+Existing G1 isolated-core receipts and original8c/d968ddd evidence remain retained with
+their own artifact identities. Next: early public-address HTTPS/service preflight, then
+complete G3 scenarios and the changed full G4 combination before considering B.
+
 ## Android HTTP runtime checkpoint19:39UTC
 
 Additional G2 runtime started19:46UTC: `FC_CORE_EXPIRY=1` enables

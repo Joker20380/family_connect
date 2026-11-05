@@ -11,6 +11,16 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**20:24UTC actual G3 service-path blocker reproduced, A not accepted.** API35 reaches
+ConnectionService/MESH, but HTTPS through its active VPN fails; a fresh API27 reproduces
+the reset with exact installed native bytes. The local driver unintentionally enabled
+ServicesOnly when adding test chat origins. A same-namespace API alias is also correctly
+forbidden as a local destination. The qualification-only fix retains normal internet
+forwarding policy and adds an external-to-gateway origin on an internal, no-egress test
+network. It does not weaken destination/trust checks or change the production entrypoint.
+The d968ddd long/expiry runs remain evidence of that older driver, not acceptance of this
+pending full path. B remains NOT_STARTED; no production/phone/publication changes.
+
 **G2 successor-expiry run active:** packaged d968ddd controller was killed after the
 durable COMMIT. `expiry-d968ddd-long/successor-expiry/progress.json` records the unchanged
 decision/plan and real successor bounds; expiry is due23:46:04UTC. No result yet.
