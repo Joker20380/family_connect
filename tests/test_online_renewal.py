@@ -4,7 +4,7 @@ import pytest
 
 from test_multi_gateway_renewal import fleet, profiles
 from test_activated_maintenance import atomic, canonical, digest, proof, Rejected
-from control.friends.restricted import iso
+from control.friends.restricted import iso, ChallengeUnavailable
 from online_contract import CONTRACT
 
 
@@ -171,3 +171,81 @@ def test_live_client_certificate_insufficient_headroom_rejects(fleet):
     result = fleet.controller.run_online('test-online-client-headroom',schedule_seconds=0)
     assert result['result']=='ONLINE_RECOVERY_REQUIRED' and result['cause']=='ONLINE_CLIENT_WINDOW_INSUFFICIENT'
     assert fleet.controller.abort_online('test-online-client-headroom')['result']=='ABORTED'
+
+
+def test_unavailable_participant_allows_proven_precommit_abort(fleet):
+    enable(fleet)
+    before = profiles(fleet)
+    original = fleet.controller.nodes['NL2'].call
+    def unavailable(action, operation, payload=None):
+        if action=='online' and payload['command']=='acquire':
+            raise OSError('isolated unavailable participant')
+        return original(action, operation, payload)
+    fleet.controller.nodes['NL2'].call = unavailable
+    result = fleet.controller.run_online('test-online-unavailable-node',schedule_seconds=0)
+    assert result['result']=='ONLINE_RECOVERY_REQUIRED' and result['decision'] is None
+    fleet.controller.nodes['NL2'].call = original
+    assert fleet.controller.abort_online('test-online-unavailable-node')['result']=='ABORTED'
+    assert profiles(fleet)==before
+
+
+@pytest.mark.parametrize('advance,expected',[(2400,'COMMITTED'),(20000,'ONLINE_EMERGENCY_REQUIRED')])
+def test_postcommit_expiry_never_rolls_back(fleet, advance, expected):
+    enable(fleet)
+    def crash(event):
+        if event=='ONLINE_COMMIT_DECIDED':
+            raise Crash()
+    fleet.controller.fault=crash
+    with pytest.raises(Crash):
+        fleet.controller.run_online('test-online-expiry-operation',schedule_seconds=0)
+    decision=json.loads((fleet.controller.root/'transaction.json').read_bytes())
+    fleet.now+=advance
+    fleet.controller.fault=lambda event:None
+    if expected=='COMMITTED':
+        for slot in ('NL','NL2'):
+            node=fleet.nodes[slot]
+            value=json.loads((node.live/'directory.json').read_bytes())
+            value.update(issued_at=iso(fleet.now),expires_at=iso(fleet.now+3599))
+            atomic(node.live/'directory.json',canonical(value))
+    result=fleet.controller.run_online('test-online-expiry-operation',schedule_seconds=0,resume=True)
+    assert result['result']==expected,result
+    final=json.loads((fleet.controller.root/'transaction.json').read_bytes())
+    assert final['decision']=='COMMIT' and final['plan_sha256']==decision['plan_sha256']
+
+
+@pytest.mark.parametrize('change', ['not-ready','digest','gateway','operation','duplicate','truncated'])
+def test_unready_or_corrupt_delivery_does_not_consume_challenge(fleet, change):
+    enable(fleet)
+    assert fleet.controller.run_online('test-online-readiness-gate',schedule_seconds=0)['result']=='COMMITTED'
+    marker=fleet.nodes['RU'].live/'online-delivery.json'
+    original=marker.read_bytes()
+    value=json.loads(original)
+    if change=='not-ready':value['ready']=False
+    if change=='digest':value['crl_sha256']='0'*64
+    if change=='gateway':value['gateways']['NL']='0'*32
+    if change=='operation':value['operation_id']='invalid'
+    corrupted=canonical(value)
+    if change=='duplicate':corrupted=corrupted[:-1]+b',"ready":true}'
+    if change=='truncated':corrupted=corrupted[:10]
+    atomic(marker,corrupted)
+    request=proof(fleet.service,fleet.device)
+    with pytest.raises(ChallengeUnavailable):
+        fleet.service.fetch(request)
+    atomic(marker,original)
+    assert fleet.service.fetch(request)['device']==fleet.device.reference
+
+
+def test_corrupt_durable_decision_fences_instead_of_guessing(fleet):
+    enable(fleet)
+    def crash(event):
+        if event=='ONLINE_COMMIT_DECIDED':raise Crash()
+    fleet.controller.fault=crash
+    with pytest.raises(Crash):fleet.controller.run_online('test-online-corrupt-decision',schedule_seconds=0)
+    marker=fleet.controller.root/'transaction.json'
+    value=json.loads(marker.read_bytes())
+    value['plan_sha256']='0'*64
+    atomic(marker,canonical(value))
+    fleet.controller.fault=lambda event:None
+    result=fleet.controller.run_online('test-online-corrupt-decision',schedule_seconds=0,resume=True)
+    assert result['result']=='ONLINE_EMERGENCY_REQUIRED' and result['decision']=='COMMIT'
+    assert all(node.barrier.stopped() for node in fleet.nodes.values())

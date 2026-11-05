@@ -6,6 +6,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -18,6 +19,7 @@ import (
 
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
+	"github.com/Joker20380/family_connect/carrier/startupdiag"
 )
 
 func fixture(test *testing.T, name string) []byte {
@@ -130,7 +132,7 @@ func TestAuthenticatedBusyExchangeReportsChallengeReason(test *testing.T) {
 			OpenServer(ctx, endpoint, path, broker, func(string) {}, func(report ExchangeFailure) { reports <- report })
 		})
 	}()
-	if _, err := recoverCarrier(ctx, client, raw, func(string) {}); err != roombroker.Code("bootstrap_protocol_rejected") {
+	if _, err := recoverCarrier(ctx, client, raw, func(string) {}); !errors.Is(err, roombroker.Code("bootstrap_protocol_rejected")) || startupdiag.Legacy(err) != roombroker.Code("bootstrap_protocol_rejected") {
 		test.Fatal("client wire reason changed", err)
 	}
 	cancel()

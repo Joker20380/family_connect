@@ -296,7 +296,7 @@ def online_generation(source, crl, gateway, now):
     if raw is None:
         return None
     try:
-        value = json.loads(raw)
+        value = parse(raw)
         if (type(value) is not dict or set(value) != {'schema', 'contract', 'operation_id', 'plan_sha256', 'ready', 'crl_sha256', 'gateways', 'issued_at'}
                 or type(value['schema']) is not int or value['schema'] != 1 or value['contract'] != 'MESH_SAME_HOLDER_ONLINE_V1'
                 or value['ready'] is not True or set(value['gateways']) != {'NL', 'NL2'}

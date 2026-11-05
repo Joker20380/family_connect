@@ -101,3 +101,34 @@ receipt, expiry, old-peer/new-connection and cache-delay acceptance is also outs
 The accepted maintenance API archive is intentionally unchanged; it must not be silently
 substituted with the newer readiness implementation. Final online runtime packaging and
 root qualification remain separate required gates. This checkpoint is NOT release-ready.
+
+## Additional negative and bootstrap evidence
+
+Source checkpoint `a8e1db900105219b22abae21accd2c2b6e2f5b30` is pushed and remote SHA
+verified. The real native stand is repeated from an immutable export of this commit.
+The earlier development stand passes999.28s but is not substituted for that frozen-source
+acceptance. Isolated root/package scope on the checkpoint passes219 tests. The first root
+attempt incorrectly put root-owned fixtures below a user-owned bind mount (UNSAFE_PARENT)
+and omitted Git's explicit read-only repository trust; both harness errors are retained.
+The repeat uses root-owned tmpfs, without relaxing ProfileStore ownership checks.
+
+Focused online negatives now pass55 tests: add unavailable participant/precommit abort,
+rollforward after predecessor expiry versus successor-expiry fencing, corrupt durable
+decision, and six readiness-marker failures with an unconsumed proof challenge. Strict
+existing JSON parsing rejects duplicate marker fields; no new runtime package dependency.
+
+The six inherited cases (unknown issuer, wrong Family, revoked device, wrong gateway,
+stale CRL floor, stale revision) all failed the same baseline `auth_test.go:87` assertion:
+expected zero authenticated-exchange reports before TLS admission, actual nonzero reports.
+Baseline15ef592 reproduces each case five times. The new observer preserves separate
+admission diagnostics and all denial assertions.
+
+The expanded bootstrap artifact gate also reproduces an independent busy-reason assertion:
+an ERROR frame gives a direct public Code, while a peer closing before HELLO gives the same
+public Code wrapped by the existing startupdiag.Preserve with its receive cause. Comparing
+Go error object identity incorrectly calls the latter a changed wire reason. The check now
+requires both errors.Is and exact startupdiag.Legacy category; a new deterministic test
+also requires the original receive cause and unchanged public Error text, and contrasts
+the actual ERROR-frame branch. No production error is suppressed or authorization changed.
+Ten race repetitions of busy, both HELLO outcomes and negative admission boundary PASS.
+The complete artifact-enabled bootstrap repeat is still required after this assertion fix.

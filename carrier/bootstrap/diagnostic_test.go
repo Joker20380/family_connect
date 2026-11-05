@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -12,7 +13,34 @@ import (
 	"time"
 
 	"github.com/Joker20380/family_connect/carrier/roombroker"
+	"github.com/Joker20380/family_connect/carrier/startupdiag"
 )
+
+type helloFailure struct {
+	*pipe
+	cause error
+}
+
+func (endpoint helloFailure) Recv(context.Context) ([]byte, error) { return nil, endpoint.cause }
+
+func TestHelloRejectionPreservesBothPublicCodeAndReceiveCause(test *testing.T) {
+	legacy := roombroker.Code("bootstrap_protocol_rejected")
+	client, server := pair()
+	defer client.Close()
+	defer server.Close()
+	descriptor, err := requestTransport(context.Background(), helloFailure{client, io.ErrUnexpectedEOF})
+	if descriptor.JoinURL != "" || !errors.Is(err, legacy) || startupdiag.Legacy(err) != legacy ||
+		!errors.Is(err, io.ErrUnexpectedEOF) || err.Error() != legacy.Error() {
+		test.Fatal("lost public category, receive cause, or closed admission")
+	}
+	if err := send(context.Background(), server, message{Type: "ERROR"}); err != nil {
+		test.Fatal(err)
+	}
+	descriptor, err = requestTransport(context.Background(), client)
+	if descriptor.JoinURL != "" || err != legacy || errors.Is(err, io.ErrUnexpectedEOF) {
+		test.Fatal("wire rejection was confused with receive failure")
+	}
+}
 
 func TestExchangeReasonDoesNotExposeRawErrors(test *testing.T) {
 	for _, entry := range []struct {
