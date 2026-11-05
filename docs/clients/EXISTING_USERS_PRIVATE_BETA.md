@@ -1,6 +1,14 @@
 # Existing-users private Android update / Частное обновление Android
 
 <!-- Unified MESH Android116 20261104 -->
+**5 November —118 is now available as a separate opt-in field download.**
+Default invitation/updater stay113/catalog7; field installation and allowlist acceptance
+are pending. Use the same qualified APK, update in place and export diagnostics privately.
+RU: для пользователей на белых списках доступна118 по отдельной ссылке; это тестовая
+сборка, не подтверждённое исправление стабильности. Не удаляйте приложение/данные.
+[APK, hashes and RU/EN testing instructions](../releases/2026-11-05-android118-field.md).
+
+Previous owner-only checkpoint (no longer the distribution boundary):
 **118 is qualified, signed and installed only on the owner phone.** Exact-source CI,
 ARM64/API27/API35/UI, same signer, installed bytes, UID/first-install and Support ID pass.
 Signed APK SHA256:`b7b0be92456f522f81d87c71c401c2622d2f823178510b28510a6fb8d5c69fca`.

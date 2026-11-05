@@ -6,6 +6,18 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**5 November09:07UTC — Android118 opt-in field download HTTPS-verified; default113/catalog7 retained.**
+Owner requests testing by users actually on mobile allowlists, not another owner-local
+substitute. Existing qualified13e0b37/CI41933207129 APK is published unchanged with its
+matching audio source; no rebuild/resign, forced update or stability-fix claim.
+Normal-trust HTTPS full bytes of118/source/retained113 and both catalog routes PASS.
+Guarded exact-route publication retains invitation, catalogs, prior downloads and protected
+product rows; nginx HUP only, no backend/MESH restart. Field installation/allowlist acceptance
+remain PENDING. Both gateways retain70e6c0fc. Next engineering gate is authenticated
+credential renewal without the measured coordinated outage; preserve hard security deadlines.
+[Download, user procedure, hashes and rollback](releases/2026-11-05-android118-field.md).
+
+Previous overnight checkpoint:
 **5 November00:55UTC — bounded overnight checks complete; maintenance outage confirmed, full acceptance OPEN.**
 New30-minute observation initially passes8 DNS/2 HTTPS/2 NL2-egress checks, then phone
 reliable exhaustion follows exact-session gateway parent cancellation. Independent

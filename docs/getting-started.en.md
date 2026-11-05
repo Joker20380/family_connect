@@ -32,6 +32,16 @@ MESH still requires accepted admission and current readiness material, not an ol
 
 ## Update an existing app
 
+**Separate opt-in beta118 for MESH testing on mobile allowlists:**
+[download APK118, 50.3 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta118.apk).
+Android8.1+/ARM64,50285984 bytes, SHA256
+`b7b0be92456f522f81d87c71c401c2622d2f823178510b28510a6fb8d5c69fca`.
+Update in place without uninstalling or clearing data. Enable diagnostics, disable Wi-Fi,
+explicitly select MESH and test Netherlands and Netherlands2 separately. After failure,
+export diagnostics and send them privately to the owner with operator and timestamp.
+[Full procedure, matching audio source and limitations](releases/2026-11-05-android118-field.md).
+Not an accepted stability fix; the default invitation/updater remain113.
+
 [Download beta113 — 50.3 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta113.apk).
 Version `0.1.18-beta113`, code113, ARM64,50273696 bytes; SHA256:
 

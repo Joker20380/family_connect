@@ -1,5 +1,13 @@
 # Release distribution / Выпуски
 
+**5 November — Android118 separate opt-in field download is published.**
+Existing accepted13e0b37/CI41933207129 bytes and matching audio source, same signer,
+no rebuild/resign. Android8.1+/ARM64; update in place without clearing data.
+Default invitation/updater remain113/catalog7. This is a diagnostic field build for users
+on allowlisted mobile networks, not an accepted stability fix or automatic mass rollout.
+[Download118, exact hashes, procedure and rollback](releases/2026-11-05-android118-field.md).
+
+Previous owner-only checkpoint, superseded for distribution by the entry above:
 **5 November00:01UTC — Android118 owner-only diagnostic delivery.** Exact13e0b37
 Client builds41933207129, downloaded ARM64/source/API27/API35/UI and839 JVM cases pass.
 Existing-key signedb7b0be92 is installed over117 with exact bytes, UID/first-install and

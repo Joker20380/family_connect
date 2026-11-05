@@ -1,6 +1,13 @@
 # Owner recovery106 — private candidate / закрытый кандидат
 
 <!-- Unified MESH Android116 20261104 -->
+**5 November —118 direct field delivery is authorized and published.**
+Owner remains on118; no new phone action. Default invitation/updater remain113/catalog7.
+Restricted-network checks belong to users on those networks, not a repeated owner-local
+test. Same signed bytes; stability acceptance and authenticated renewal repair remain open.
+[Separate118 download and private field procedure](../releases/2026-11-05-android118-field.md).
+
+Previous owner-only checkpoint (distribution scope superseded):
 **118 is qualified and installed over117 only on the owner phone.** Exact-source CI,
 downloaded ARM64/API27/API35/UI and unchanged offline signer pass; installed bytes,
 UID/first-install and consented Support ID retention are verified.

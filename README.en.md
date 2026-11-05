@@ -10,6 +10,8 @@ media path; Windows/Linux media clients remain incomplete.
 not current implementation or release claims.
 
 Public Android **beta113 / Android8.1+ / ARM64**: [download and update in place](docs/getting-started.en.md).
+Separate opt-in **beta118** for mobile-allowlist field testing: [download and instructions](docs/releases/2026-11-05-android118-field.md).
+Same qualified/signed bytes; not an accepted stability fix. Default invitation/updater stay113.
 Invitation/default updater offer113: one Russia/Netherlands/Netherlands2 list in every mode,
 per-node load squares (green below85%, orange from85%) and a selected-row checkmark.
 Exact CI/signature/HTTPS and owner112→113 installation/UI checks PASS. Russia/MESH remains

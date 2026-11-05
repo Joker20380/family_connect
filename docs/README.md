@@ -1,6 +1,14 @@
 # Documentation
 
-**Current4 November22:43UTC — Android117 both-NL traffic/cleanup/reconnect accepted, sustained stability OPEN.** Physical116
+**Current5 November09:07UTC — Android118 opt-in field download verified.** Separate signed
+APK/audio source for users on real mobile allowlists; install over the existing app and
+send diagnostics privately. Default invitation/updater113/catalog7, no admission changes.
+Field acceptance and authenticated renewal continuity remain open; ordinary owner tests
+cannot substitute for the restricted mobile network.
+[Download, instructions and rollback](releases/2026-11-05-android118-field.md) ·
+[Overnight outage and remaining gates](releases/2026-11-05-mesh-overnight-checks.md).
+
+**Previous4 November22:43UTC — Android117 both-NL traffic/cleanup/reconnect accepted, sustained stability OPEN.** Physical116
 cellular loss coincides with ACK stall despite Wi-Fi/VPN continuity; a local all-interface
 ICE defect is reproduced and narrowed to the protected route. Native race239 PASS/6
 optional skips, repeated media/recovery6 PASS, contracts46 PASS. Exact CI41917441995,

@@ -7,6 +7,21 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Selected continuation — field delivery118 and authenticated renewal continuity.**
+New owner request authorizes an opt-in version for users on real mobile allowlists;
+owner-local reproduction is not a dependency. Existing qualified/signed118 is published
+as a separate manual download with matching source; default invitation/updater113/catalog7,
+admission and both70e6c0fc gateways remain unchanged. At09:07UTC full HTTPS118/source/113
+and unchanged catalog readback PASS. Field installation and restricted
+network acceptance are PENDING, not inferred from CI or ordinary-network success.
+[Delivery, private diagnostic procedure and rollback](releases/2026-11-05-android118-field.md).
+Next within this incident: prove authenticated successor renewal, original-session security
+deadline handling, revocation and coordinated recovery without stopping both gateways.
+Do not remove quiescence guards, extend expiry or pause maintenance as a shortcut.
+Paired-DNS/signaling root causes and both-node physical slow/lossy/sustained gates remain
+open; no unrelated queued successor is authorized by this continuation.
+
+Previous completed overnight scope (publication prohibition superseded by the new request):
 **Selected overnight scope — diagnose paired-DNS/transport failures and execute stability gates.**
 Owner authorizes unattended checks; no unrelated queued successor or public rollout.
 One118 interruption is now attributed to the existing approved leaf/CRL maintenance:
