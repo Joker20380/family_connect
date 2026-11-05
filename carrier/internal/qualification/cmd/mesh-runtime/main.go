@@ -27,7 +27,7 @@ func main() {
 }
 
 func run() error {
-	mode := flag.String("mode", "", "relay, gateway or client; never a production provider")
+	mode := flag.String("mode", "", "relay, gateway, client or admission-probe; never a production provider")
 	address := flag.String("listen", "127.0.0.1:0", "local listen address")
 	relay := flag.String("relay", "", "isolated packet relay")
 	profile := flag.String("family-config", "", "synthetic private profile")
@@ -91,6 +91,8 @@ func run() error {
 			Directory: *directory, Observer: *observer, Event: emit, State: state, AdmissionFailure: failure, ExchangeFailure: failure}, provider, provider.Seed, starter)
 	case "client":
 		return qualification.Client(ctx, provider, *config)
+	case "admission-probe":
+		return qualification.AdmissionProbe(ctx, provider, *profile, *directory)
 	default:
 		return fmt.Errorf("unsupported qualification mode")
 	}

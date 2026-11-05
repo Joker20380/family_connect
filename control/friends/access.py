@@ -42,6 +42,11 @@ CREATE TABLE challenges(nonce TEXT PRIMARY KEY, device TEXT NOT NULL, public TEX
   value=secrets.token_hex(16).upper();code='FC-'+'-'.join(value[i:i+4] for i in range(0,32,4))
   with self.db() as db:db.execute('INSERT INTO invites(hash) VALUES (?)',(self.code_hash(code),))
   return code
+ def revoke_device(self,device):
+  if type(device) is not str or re.fullmatch('[0-9a-f]{32}',device) is None or not self.path.is_file():raise Rejected()
+  with self.db() as db:
+   if db.execute('SELECT 1 FROM devices WHERE device=?',(device,)).fetchone() is None:raise Rejected()
+   return bool(db.execute('UPDATE devices SET revoked=1 WHERE device=? AND revoked=0',(device,)).rowcount)
  @staticmethod
  def binding(public,wg):
   key=_decode(public,64);_decode(wg,32)

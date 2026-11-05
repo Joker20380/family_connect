@@ -103,7 +103,7 @@ def publish_crl(service, path, *, lifetime=900):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--db', type=Path, required=True)
-    parser.add_argument('action', choices=['migrate', 'grant', 'publish-crl', 'gateway-certificate'])
+    parser.add_argument('action', choices=['migrate', 'grant', 'revoke-device', 'publish-crl', 'gateway-certificate'])
     parser.add_argument('--device')
     parser.add_argument('--expires', type=int)
     parser.add_argument('--public-identity')
@@ -112,6 +112,8 @@ def main():
     access = Access(args.db)
     if args.action == 'migrate':
         migrate(access)
+    elif args.action == 'revoke-device':
+        access.revoke_device(args.device)
     else:
         service = from_env(access)
         if args.action in ('grant', 'gateway-certificate'):

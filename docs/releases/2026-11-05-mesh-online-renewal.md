@@ -1,5 +1,49 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## G1 revoke continuation
+
+Continuation HEAD1e2823ec042bf4fe35b083c94cf58c8aa42bc8d3; source8eeb9f0 and its
+90b02003… archive remain immutable. Foreign working changes are preserved separately.
+New user scenario beyonda30966c: after a durable online COMMIT, explicit identity revoke
+causes a safe emergency handoff. A second revoke invalidates the existing outage approval.
+With newly bound synthetic approval, both real gateway processes restart; both revoked
+identities fail Family TLS while the survivor obtains a new readiness-backed session
+with TCP/DNS/verified HTTPS. Lost start response reconciles the saved intent, without a
+second start or changed original COMMIT. This is local core, not Telemost or systemd.
+
+The missing operator action is added to existing `restricted_admin`/Access and packaged
+in the new API inventory. It only performs monotonic explicit device revocation in the
+existing transaction; no new DB/HTTP authorization route, signer, timer, policy or
+automatic CRL publication. The existing controller remains the publication writer.
+Tests never edit DB/profile/marker to complete recovery. Predecessor probe credentials
+are synthetic fixture material issued by the frozen API against real SeedManager output
+with wall-clock validation. That setup is not Android HTTP/cache acceptance. Post-recovery
+survivor delivery does use packaged HTTP readiness; revoked credentials are still unexpired.
+
+Working command: `python -m pytest -q tests/test_friends_access.py
+tests/test_mesh_core_runtime.py -k 'operator_revocation or signature_purpose or
+revocation_after_commit' --basetemp=/run/revoke-tests` in root/network-none
+`fc-online-runtime-tests:20261105`, explicit Go1.26.1 and isolated SSH. The fixture builds
+the entire candidate from one temporary committed export; controller/node/API/HTTP
+execute only its archive. `revoke-working-3.log`:3 PASS,14 deselected,85.48s.
+Independent Access selection9 PASS/0 SKIP,0.44s (overlaps, do not add counts).
+Logs/receipts remain ignored under `state-client-build/mesh-core-runtime-20261105/`.
+`revoke-working-1/2.log` retain harness diagnostic failures: a generic client bootstrap
+error is not a TLS rejection receipt, and the asynchronous server rejection must be
+awaited. Assertions now check the actual serving process's `family_open` rejection,
+absence of authenticated/broker admission, plus the preserved certificate's CRL serial.
+
+| Gate | Current status | Exact scope / remaining boundary |
+|---|---|---|
+| G1 | PASS working isolated scenario; frozen qualification pending | Both NL, real revoke/late revoke, absent/denied/expired/stale/fresh approval, original COMMIT/fence/floors, lost start, TLS denial and new survivor DNS/HTTPS. Not systemd/Telemost/production. |
+| G2 | NOT_RUN full matrix; earlier partial PASS retained | Remaining handoff/owner/publisher races, expiry and unavailable/partially updated participant scenarios. |
+| G3 | NOT_RUN | API27/API35 HTTP→encrypted cache→existing owner→active native session and required scenario matrix. No new Android artifact. |
+| G4 | NOT_RUN | Two successive renewals through real old leaf/CRL/lease bounds on final combined artifacts; earlier999s and20s results are not replacements. |
+
+This is an incomplete-A source checkpoint. B remains NOT_STARTED, with no B artifact or
+routing acceptance. Freeze this candidate before claiming its package acceptance, then
+continue the remaining A gates; no production, phone, publication or paid action occurs.
+
 ## Isolated core runtime continuation froma30966c
 
 Entry HEAD exactlya30966c16980e73074215a4570066c8fd31361ed; no subsequent committed

@@ -8,6 +8,9 @@ It reuses actual SeedManager/Family TLS/mux/broker/maintenance through packaged
 entrypoints, with a separate driver and real supervisor. This report's older999s
 evidence remains bound to its original source; it is not re-labelled as acceptance
 of the new package. Full G1–G4 and Android split tunneling remain unaccepted.
+The later [G1 revoke continuation](2026-11-05-mesh-online-renewal.md#g1-revoke-continuation)
+adds actual revoke/late-approval/TLS denial and survivor traffic on the isolated package
+stand; it does not retroactively broaden this report's Android or two-renewal evidence.
 
 ## Scope and baseline
 

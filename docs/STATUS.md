@@ -11,6 +11,16 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**G1 revoke continuation (isolated core; A still incomplete).** Both NL now pass actual
+Family admission before revoke and deny the same unexpired credentials after packaged
+approval-gated recovery. Revoke after COMMIT and another after approval preserve the
+original decision, invalidate stale approval, require fresh approval, retain revocations/
+floors and reconcile lost start response without another start. The surviving identity
+obtains normal HTTP readiness and new TLS/TCP/DNS/verified HTTPS. Local operator revoke
+uses the existing Access DB transaction, not test SQL or a second authorization service.
+Working scenario PASS85.48s; frozen follow-up pending. G2 remainder/G3/G4 remain open,
+and B is NOT_STARTED. No production or handset change. [Evidence and limits](releases/2026-11-05-mesh-online-renewal.md#g1-revoke-continuation).
+
 **Isolated core runtime continuation (same incident; A not accepted).**
 The positive packet-provider stand now creates real seeds and carries Family TLS/mux
 traffic on both NL beyond the old15s boundary: original/new TCP, DNS and verified HTTPS.

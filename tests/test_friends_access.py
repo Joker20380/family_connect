@@ -35,8 +35,26 @@ def test_signature_purpose_and_revocation(access):
  broken=dict(p);broken['signature']='A'*88
  with pytest.raises(ValueError):access.complete(broken,'activate')
  record=access.complete(p,'activate')
- with access.db() as db:db.execute('UPDATE devices SET revoked=1 WHERE device=?',(record['device'],))
+ assert access.revoke_device(record['device']) is True
  with pytest.raises(Rejected):proof(access,device,purpose='ru')
+
+def test_operator_revocation_is_monotonic_and_rejects_pending_proof(access):
+ device=DeviceIdentity.generate();other=DeviceIdentity.generate()
+ access.complete(proof(access,device,access.invite()),'activate')
+ access.complete(proof(access,other,access.invite()),'activate')
+ pending=proof(access,device,purpose='nl')
+ assert access.revoke_device(device.reference) is True
+ assert access.revoke_device(device.reference) is False
+ with pytest.raises(Rejected):access.complete(pending,'nl')
+ with pytest.raises(Rejected):proof(access,device,purpose='status')
+ assert access.complete(proof(access,other,purpose='nl'),'nl')['device']==other.reference
+ for invalid in (None,'','A'*32,'0'*32):
+  with pytest.raises(Rejected):access.revoke_device(invalid)
+
+def test_operator_revocation_never_initializes_a_database(tmp_path):
+ access=Access(tmp_path/'absent.db')
+ with pytest.raises(Rejected):access.revoke_device('a'*32)
+ assert not access.path.exists()
 
 
 def test_installation_without_invitation_cannot_enroll(access):

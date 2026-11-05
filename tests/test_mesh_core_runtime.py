@@ -12,6 +12,9 @@ from fixtures.mesh_supervisor import request
 from online_package_stand import private_file
 from scripts import package_online_renewal as package
 from test_online_runtime_package import core_driver, online_package
+from cryptography import x509
+from device_identity.device import DeviceIdentity
+from test_friends_access import proof
 
 
 @pytest.mark.parametrize('field', ['source_commit', 'native_sources', 'scope', 'entrypoint', 'executable_sha256'])
@@ -164,3 +167,145 @@ def test_gateway_restart_after_commit_needs_approved_emergency(online_package, c
             root = Path(os.environ['FC_CORE_EVIDENCE'])
             private_file(root/'gateway-restart-emergency.json', package.encode(dict(results=results,
                 scope='gateway-replacement-approval-start-intent-not-revocation-G1')))
+
+
+def test_revocation_after_commit_and_after_approval_recovers_without_rollback(online_package, core_driver, tmp_path):
+    stand = CoreStand(tmp_path, online_package[3], core_driver)
+    process, results, probes = None, [], []
+    lifecycle = {}
+    revoked, late = DeviceIdentity.generate(), DeviceIdentity.generate()
+    access = stand.fleet.service.access
+    for device in (revoked, late):
+        access.complete(proof(access, device, access.invite()), 'activate')
+    try:
+        stand.start()
+        credentials = {}
+        for label, device in (('revoked', revoked), ('late', late)):
+            for slot in ('NL', 'NL2'):
+                profile = stand.issue_probe(slot, device, label+'-'+slot)
+                credentials[label, slot] = profile
+                result = stand.probe(slot, profile)
+                assert result.returncode == 0 and b'admission_allowed' in result.stdout, result.stderr.decode()
+                probes.append(dict(identity=label, slot=slot, phase='before-commit', result='ALLOWED'))
+        before = {slot: request(dict(command='show', unit='test-'+slot+'.service'))['state'] for slot in ('NL', 'NL2')}
+        lifecycle['before'] = before
+        process = subprocess.Popen(stand.command('online'), cwd=tmp_path, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        journal = tmp_path/'coordinator/transaction.json'
+        deadline = time.monotonic()+60
+        while True:
+            record = json.loads(journal.read_bytes()) if journal.exists() else {}
+            if record.get('state') == 'ONLINE_COMMIT_DECIDED':
+                process.kill()
+                process.wait(timeout=5)
+                break
+            assert process.poll() is None and time.monotonic() < deadline, record.get('state')
+            time.sleep(.001)
+        origin = json.loads(journal.read_bytes())
+        assert stand.revoke(revoked).returncode == 0
+        code, result = stand.run('resume')
+        results.append(result)
+        assert code == 75 and result['result'] == 'ONLINE_EMERGENCY_REQUIRED', result
+        assert result['decision'] == 'COMMIT'
+        fence = json.loads(journal.read_bytes())['fence']
+        assert fence > origin['fence']
+        code, required = stand.run('emergency')
+        results.append(required)
+        assert code == 75 and required['result'] == 'EMERGENCY_APPROVAL_REQUIRED', required
+        for slot in before:
+            assert request(dict(command='show', unit='test-'+slot+'.service'))['state']['MainPID'] == '0'
+            assert not (tmp_path/(slot+'-config/reader.sock')).exists()
+
+        def approval(kind, current):
+            now = int(time.time())
+            return private_file(tmp_path/(kind+'.json'), package.encode(dict(operation_id=origin['operation_id'],
+                expected_state_sha256=current['request']['expected_state_sha256'],
+                approved_at=now-901 if kind == 'expired' else now,
+                expires_at=now-1 if kind == 'expired' else now+900,
+                approval='DENIED' if kind == 'denied' else 'OPERATOR_APPROVED_OUTAGE')))
+
+        for kind in ('denied', 'expired'):
+            code, result = stand.run('emergency', approval(kind, required))
+            results.append(result)
+            assert code == 75 and result['result'] == 'EMERGENCY_BLOCKED' and result['cause'].startswith('MAINTENANCE_APPROVAL_'), result
+        stale = approval('approved-before-late-revoke', required)
+        assert stand.revoke(late).returncode == 0
+        code, result = stand.run('emergency', stale)
+        results.append(result)
+        assert code == 75 and result['result'] == 'EMERGENCY_BLOCKED' and result['cause'] == 'MAINTENANCE_APPROVAL_BINDING', result
+        code, updated = stand.run('emergency')
+        results.append(updated)
+        assert code == 75 and updated['result'] == 'EMERGENCY_APPROVAL_REQUIRED', updated
+        assert updated['request']['expected_state_sha256'] != required['request']['expected_state_sha256']
+        approved = approval('approved-current-state', updated)
+        request(dict(command='lose-start-response', unit='test-NL.service'))
+        code, result = stand.run('emergency', approved)
+        results.append(result)
+        assert code == 75 and result['result'] == 'EMERGENCY_BLOCKED', result
+        started = request(dict(command='show', unit='test-NL.service'))['state']
+        assert started['MainPID'] != '0'
+        intent = (stand.fleet.nodes['NL'].state/'start-intent-0.json').read_bytes()
+        lifecycle['start_intent_sha256'] = package.digest(intent)
+        code, result = stand.run('emergency', approved)
+        results.append(result)
+        assert code == 0 and result['result'] == 'EMERGENCY_RECOVERED', result
+        assert request(dict(command='show', unit='test-NL.service'))['state'] == started
+        assert (stand.fleet.nodes['NL'].state/'archive'/origin['operation_id']/'start-intent-0.json').read_bytes() == intent
+        for slot in before:
+            after = request(dict(command='show', unit='test-'+slot+'.service'))['state']
+            assert before[slot]['MainPID'] != after['MainPID'] and before[slot]['InvocationID'] != after['InvocationID']
+            lifecycle[slot+'-after'] = after
+        for (label, slot), profile in credentials.items():
+            prior = json.loads(profile.read_bytes())
+            certificate = x509.load_pem_x509_certificate(prior['certificate'].encode())
+            serial = certificate.serial_number
+            assert time.time() < certificate.not_valid_after_utc.timestamp()
+            assert time.time() < x509.load_pem_x509_crl(prior['revocations'].encode()).next_update_utc.timestamp()
+            current = json.loads((tmp_path/(slot+'-profile/gateway.json')).read_bytes())
+            crl = x509.load_pem_x509_crl(current['revocations'].encode())
+            assert crl.get_revoked_certificate_by_serial_number(serial) is not None
+            assert current['minimum_crl'] > prior['minimum_crl']
+            gateway_log = tmp_path/('test-'+slot+'.service.log')
+            offset = gateway_log.stat().st_size
+            result = stand.probe(slot, profile)
+            assert result.returncode != 0 and b'admission_allowed' not in result.stdout, result.stdout.decode()
+            assert b'bootstrap_protocol_rejected' in result.stderr, result.stderr.decode()
+            deadline = time.monotonic()+5
+            while True:
+                events = [json.loads(line)['event'] for line in gateway_log.read_bytes()[offset:].splitlines()]
+                if 'family_open:unknown' in events or time.monotonic() >= deadline:
+                    break
+                time.sleep(.01)
+            assert 'bootstrap_admission_rejected' in events and 'family_open:unknown' in events, events
+            assert 'bootstrap_family_auth' not in events and 'CLIENT_ISSUED:' not in events, events
+            probes.append(dict(identity=label, slot=slot, phase='after-recovery', result='TLS_DENIED',
+                               cause=result.stderr.decode().strip(), server_events=events,
+                               revoked_serial_present=True, minimum_crl=current['minimum_crl']))
+        clients = {slot: stand.client(slot, 3) for slot in before}
+        for slot, client in clients.items():
+            assert client.wait(timeout=40) == 0, (tmp_path/(slot+'-client.log')).read_text()
+        for label, device in (('revoked', revoked), ('late', late)):
+            client = stand.client('NL', 1, device, name=label)
+            assert client.wait(timeout=15) != 0
+            assert 'readiness HTTP 403' in (tmp_path/(label+'-client.log')).read_text()
+        code, replay = stand.run('emergency')
+        results.append(replay)
+        assert code == 0 and replay['replay'], replay
+        assert request(dict(command='show', unit='test-NL.service'))['state'] == started
+        final = json.loads(journal.read_bytes())
+        assert final['online_parent']['decision'] == 'COMMIT' and final['online_parent']['fence'] == fence
+        assert package.digest(package.encode(final['online_parent']['plan'])) == origin['plan_sha256']
+        lifecycle.update(origin_plan_sha256=origin['plan_sha256'], original_fence=origin['fence'],
+                         resumed_fence=fence, origin_decision=final['online_parent']['decision'])
+    finally:
+        if process and process.poll() is None:
+            process.kill()
+            process.wait(timeout=5)
+        stand.close()
+        if os.environ.get('FC_CORE_EVIDENCE'):
+            root = Path(os.environ['FC_CORE_EVIDENCE'])/'revoke'
+            root.mkdir(mode=0o700, parents=True, exist_ok=True)
+            private_file(root/'recovery.json', package.encode(dict(results=results, probes=probes, lifecycle=lifecycle,
+                package=online_package[4], driver_sha256=package.digest(core_driver.read_bytes()),
+                scope='packaged-operator-revoke-real-TLS-emergency-not-Android-or-Telemost')))
+            for path in tmp_path.glob('*.log'):
+                private_file(root/path.name, path.read_bytes())

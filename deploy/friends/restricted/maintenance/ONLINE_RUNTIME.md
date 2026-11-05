@@ -111,6 +111,26 @@ runtime instance, requires outage approval, loses a real start response, reconci
 the saved intent and establishes new sessions. It does not claim that a killed
 gateway preserves an old TCP connection, or that the revoke scenarios are covered.
 
+The separate revoke test issues synthetic predecessor credentials through the frozen
+API with the existing issuer/DB and wall clock, using the actual SeedManager directory.
+These fixture credentials are not evidence of Android HTTP/cache delivery. A read-only
+`admission-probe` in the isolated driver proves they work before COMMIT and fail Family
+TLS admission afterwards, against the actual recovered reader process. Server rejection
+is checked separately: TLS1.3 client handshake completion alone is not server acceptance.
+Neither expired credentials nor an unreachable seed may stand in for revoked denial.
+
+Explicit local `control.friends.restricted_admin --db <existing-db> revoke-device
+--device <identity>` uses the existing Access transaction, is monotonic/idempotent and
+rejects unknown identities or a missing DB. It creates no authorization store, network
+API, signer or timer, and does not itself publish a CRL. The existing controller publishes
+current revocations through the same custody boundary. The module is in this candidate's
+API inventory; an isolated caller imports only `<package>/api.pyz` with Python `-I`.
+Do not interpret test authorization as permission to revoke a production identity.
+The test revokes after durable COMMIT and again after approval; the old approval must
+fail its state binding. Recovery needs a newly bound synthetic outage approval, preserves
+the COMMIT/fence/floors, reconciles lost start response, denies both revoked identities,
+and allows the survivor via normal packaged HTTP readiness and new TLS/TCP/DNS/HTTPS.
+
 Provider creation remains15s; seed lifetime is at most4h; lease defaults remain600s;
 online SSH eligibility remains1395s+lateness. The isolated driver can use a bounded
 process duration up to8h with the existing SeedManager overlap rotation (seed4h,

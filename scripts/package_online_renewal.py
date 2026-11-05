@@ -18,7 +18,7 @@ CONTRACT = 'MESH_SAME_HOLDER_ONLINE_V1'
 PACKAGE = 'MESH_ONLINE_RUNTIME_V1'
 ONLINE_MODULES = (*MODULES, 'online_runtime.py', 'online_cli.py')
 API_SOURCES = tuple(sorted(set(API_MEMBERS) | set(API_ADDITIONS) | {
-    'control/friends/paid_beta.py', 'clients/desktop/profile_config.py'}))
+    'control/friends/paid_beta.py', 'control/friends/restricted_admin.py', 'clients/desktop/profile_config.py'}))
 SOURCES = (*API_SOURCES, *(DIRECTORY+'/'+name for name in ONLINE_MODULES), DIRECTORY+'/ONLINE_RUNTIME.md')
 
 

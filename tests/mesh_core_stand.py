@@ -174,17 +174,70 @@ class CoreStand(PackageStand):
                 assert time.monotonic() < deadline, 'real SeedManager publication unavailable'
                 time.sleep(.02)
 
-    def client(self, slot, seconds):
-        config = private_file(self.root/(slot+'-client.json'), package.encode(dict(
+    def client_config(self, slot, seconds, device=None, name=None):
+        device = device or self.fleet.device
+        return private_file(self.root/((name or slot)+'-client.json'), package.encode(dict(
             Endpoint=self.endpoint, Gateway='nl-amsterdam-'+('1' if slot == 'NL' else '2'),
-            Identity=base64.b64encode(self.fleet.device._identity.get_private_key()).decode(),
-            Wireguard=self.fleet.device.wireguard_public_key, Anchor=base64.b64encode(self.fleet.service.anchor).decode(),
+            Identity=base64.b64encode(device._identity.get_private_key()).decode(),
+            Wireguard=device.wireguard_public_key, Anchor=base64.b64encode(self.fleet.service.anchor).decode(),
             Roots=str(self.ca), OriginRoot=str(self.ca), DurationSeconds=seconds)))
-        output = self.stack.enter_context((self.root/(slot+'-client.log')).open('wb'))
+
+    def client(self, slot, seconds, device=None, name=None):
+        config = self.client_config(slot, seconds, device, name)
+        output = self.stack.enter_context((self.root/((name or slot)+'-client.log')).open('wb'))
         process = subprocess.Popen([str(self.driver), '-mode', 'client', '-relay', self.relay, '-client-config', str(config)],
             env=dict(os.environ, FC_LOCAL_CORE='1'), stdout=output, stderr=output)
         self.processes.append(process)
         return process
+
+    def revoke(self, device):
+        command = ('import sys,runpy;sys.path.insert(0,sys.argv.pop(1));'
+            'runpy.run_module("control.friends.restricted_admin",run_name="__main__")')
+        return subprocess.run([sys.executable, '-I', '-B', '-c', command, str(self.extracted/'api.pyz'),
+            '--db', str(self.root/'access.db'), 'revoke-device', '--device', device.reference],
+            cwd=self.root, capture_output=True, timeout=20)
+
+    def issue_probe(self, slot, device, name):
+        config = self.client_config(slot, 1, device, name)
+        profile = self.root/(name+'-profile.json')
+        program = '''import sys,base64,json,os
+from pathlib import Path
+sys.path.insert(0,sys.argv[1])
+from control.friends.access import Access
+from control.friends.restricted import from_env,delegation
+from device_identity.device import _binding,_message
+import RNS
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+from cryptography.hazmat.primitives.serialization import Encoding,PrivateFormat,NoEncryption
+config=json.loads(Path(sys.argv[3]).read_bytes())
+identity=base64.b64decode(config['Identity'])
+signing=RNS.Identity(create_keys=False)
+assert signing.load_private_key(identity)
+public=base64.b64encode(signing.get_public_key()).decode()
+service=from_env(Access(Path(sys.argv[2])),config['Gateway'])
+service.seed_source=Path(sys.argv[4]).read_bytes
+challenge=service.challenge(public,config['Wireguard'])
+proof=_binding(public,config['Wireguard'],challenge['challenge'],'family-connect/enrollment/v1')
+proof['signature']=base64.b64encode(signing.sign(_message(proof))).decode()
+response=service.fetch(proof)
+trust,_=delegation(service.manifest,service.anchor,int(service.access.clock()))
+key=Ed25519PrivateKey.from_private_bytes(identity[32:])
+profile=dict(certificate=response['certificate'],authority=trust['authority'],revocations=response['revocations'],
+    family=trust['family'],gateway=trust['gateway'],minimum_revision=trust['minimum_revision'],minimum_crl=response['minimum_crl'],
+    private_key=key.private_bytes(Encoding.PEM,PrivateFormat.PKCS8,NoEncryption()).decode())
+with os.fdopen(os.open(sys.argv[5],os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600),'w') as output:json.dump(profile,output)
+'''
+        result = subprocess.run([sys.executable, '-I', '-B', '-c', program, str(self.extracted/'api.pyz'),
+            str(self.root/'access.db'), str(config), str(self.fleet.nodes[slot].live/'directory.json'), str(profile)],
+            env=dict(os.environ, FC_FRIENDS_RESTRICTED_DIR=str(self.fleet.nodes['RU'].live),
+                     FC_FRIENDS_RESTRICTED_DELIVERY_LIFETIME='14400'), cwd=self.root, capture_output=True, timeout=20)
+        assert result.returncode == 0, result.stderr.decode()
+        return profile
+
+    def probe(self, slot, profile):
+        return subprocess.run([str(self.driver), '-mode', 'admission-probe', '-relay', self.relay,
+            '-family-config', str(profile), '-directory-export', str(self.fleet.nodes[slot].live/'directory.json')],
+            env=dict(os.environ, FC_LOCAL_CORE='1'), cwd=self.root, capture_output=True, timeout=45)
 
     def run(self, mode, approval=None):
         command = self.command(mode)

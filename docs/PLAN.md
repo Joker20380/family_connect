@@ -12,6 +12,11 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**G1 revoke delta:** the two-NL isolated runtime scenario now passes revoke after COMMIT,
+late revoke invalidating approval, real recovered TLS denial, survivor HTTP/TCP/DNS/HTTPS,
+and lost-start/idempotent recovery. Freeze/qualify this candidate, then finish remaining
+G2/G3/G4; no transition to B until independent accepted A. No new global stage.
+
 **Online runtime package continuation — A IN PROGRESS, B gated.** Shared-runtime packet
 driver now proves real SeedManager→Family TLS/mux→TCP/DNS/verified HTTPS on both NL,
 past15s, with actual supervisor process/socket cleanup. Packaged approval-gated recovery
