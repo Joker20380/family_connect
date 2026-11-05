@@ -19,7 +19,10 @@ The same controller can now preserve an online COMMIT, durably archive its stage
 fence the old owner and request explicit outage approval before a linked quiesced recovery.
 Current revoke state wins; the emergency CRL advances beyond the committed floor, never
 restores the old DB, and ordinary rollback is forbidden for this continuation.
-Scoped Python192 PASS/1 optional SKIP (includes20 handoff tests, not an additional total).
+Scoped Python192 PASS/1 optional SKIP on5ef0193; root/package292 PASS on that exact capsule.
+Follow-up handoff/window/start-intent selection25 PASS (overlaps, not an additional total).
+Fresh artifact-enabled bootstrap/command race/count3 PASS with zero skips; Family/native
+broker race PASS with27 optional/root/DNS/long-stand skip events. No full-CI claim.
 This is not yet independent-process, Android HTTP/cache or final-package runtime acceptance.
 Next: finish the SAME incident's G1–G4 qualification. Production constructors remain closed;
 no deployment/access, APK118/updater113, timers, cohort, admission or paid baseline changes.

@@ -45,6 +45,14 @@ def handoff(node, operation, origin):
         if owner.get('mode') == 'online-emergency':
             require(read_private(node.state/'online-origin.json') == canonical(origin), 'ONLINE_EMERGENCY_ORIGIN')
             require(node.barrier.stopped(), 'READERS_NOT_QUIESCED')
+            require(owner['state'] == 'QUIESCED' and not (node.state/'prepared-plan.json').exists(),
+                    'ONLINE_EMERGENCY_ALREADY_PREPARED')
+            current = node.inspect()
+            require(current.get('policy') == owner['expected_state'].get('policy'),
+                    'ONLINE_EMERGENCY_POLICY_AUTHORIZATION_REQUIRED')
+            if current != owner['expected_state']:
+                owner['expected_state'] = current
+                atomic(node.state/'owner.json', canonical(owner))
             return receipt(node, operation, origin)
         require(owner.get('mode') == 'online' and owner['fence'] == origin['fence']
                 and owner['state'] in ('ONLINE_EMERGENCY_REQUIRED', 'ONLINE_HANDOFF'), 'ONLINE_STALE_WRITER')
@@ -60,6 +68,8 @@ def handoff(node, operation, origin):
             private_directory(location.parent)
             location.mkdir(mode=0o700, exist_ok=True)
             private_directory(location)
+            sync_directory(location.parent)
+            sync_directory(node.state)
             names = [path.name for path in node.state.iterdir() if path.is_file() and path.name not in
                      ('operation.lock', 'owner.json', 'completed.json', 'services-before.json')
                      and not path.name.startswith('start-intent-')]
@@ -204,7 +214,9 @@ def run(controller, operation, *, approval=None):
             return controller.finish(record)
         except Exception as error:
             cause = str(error) if isinstance(error, Rejected) else 'IO_OR_TRANSPORT_FAILURE'
-            if record['state'] not in ('EMERGENCY_HANDOFF', 'EMERGENCY_APPROVAL_REQUIRED', 'CLEANING'):
+            unknown_transport = cause in ('IO_OR_TRANSPORT_FAILURE', 'REMOTE_OUTCOME_UNKNOWN_READBACK_REQUIRED',
+                                          'RPC_RESPONSE_SCHEMA', 'RPC_RESPONSE_BINDING')
+            if not unknown_transport and record['state'] not in ('EMERGENCY_HANDOFF', 'EMERGENCY_APPROVAL_REQUIRED', 'CLEANING'):
                 for node in controller.nodes.values():
                     try:
                         node.call('fence', operation)

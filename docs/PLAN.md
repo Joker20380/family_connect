@@ -16,7 +16,8 @@ acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-he
 remains within the original stage5, not a new product/PLAN ID. Partial stage6/7 delivery and
 implemented subscription accounting do not close gateway recovery or paid launch.
 G1 now has a linked, approval-gated quiesced continuation implementation; scoped192 PASS/
-1 optional SKIP includes20 handoff tests. G1 runtime acceptance and G2 independent-process
+1 optional SKIP and root/package292 PASS on5ef0193; follow-up25 targeted tests PASS (overlap).
+Mandatory artifact bootstrap PASS, not a current blocker. G1 runtime acceptance and G2 independent-process
 faults, G3 actual Android HTTP/cache delivery and G4 qualified package are still pending.
 **One active next step: finish G1–G4 source/integration qualification in this incident.**
 Then, without executing the next stage automatically: (A) exact client/both-gateway/publisher

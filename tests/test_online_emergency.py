@@ -71,6 +71,23 @@ def test_invalid_emergency_approval_never_issues_or_starts(fleet, invalid):
     assert all(node.barrier.stopped() and node.barrier.starts == 0 for node in fleet.nodes.values())
 
 
+def test_late_registry_change_requires_fresh_approval_without_manual_marker_edit(fleet):
+    survivor = activate(fleet.service)
+    interrupted(fleet)
+    first = fleet.controller.recover_online_emergency(OPERATION)['request']
+    with fleet.service.access.db() as database:
+        database.execute('UPDATE devices SET revoked=1 WHERE device=?', (survivor.reference,))
+    stale = fleet.controller.recover_online_emergency(OPERATION, approval=approved(fleet, first))
+    assert stale['result'] == 'EMERGENCY_BLOCKED' and stale['cause'] == 'MAINTENANCE_APPROVAL_BINDING'
+    fresh = fleet.controller.recover_online_emergency(OPERATION)['request']
+    assert first['continuation_id'] == fresh['continuation_id']
+    assert first['expected_state_sha256'] != fresh['expected_state_sha256']
+    result = fleet.controller.recover_online_emergency(OPERATION, approval=approved(fleet, fresh))
+    assert result['result'] == 'EMERGENCY_RECOVERED', result
+    with pytest.raises(ValueError):
+        fleet.service.fetch(proof(fleet.service, survivor))
+
+
 @pytest.mark.parametrize('boundary', ['EMERGENCY_HANDOFF', 'EMERGENCY_APPROVAL_REQUIRED', 'EMERGENCY_AUTHORIZED',
                                     'EMERGENCY_PREPARED', 'EMERGENCY_PUBLISHING', 'EMERGENCY_COMMIT_DECIDED'])
 def test_controller_crash_resumes_same_handoff(fleet, boundary):
@@ -109,3 +126,61 @@ def test_node_handoff_lost_response_and_stale_online_owner(fleet, slot, boundary
             node.call('online', OPERATION, dict(command='fence', fence=parent['fence']))
     result = fleet.controller.recover_online_emergency(OPERATION, approval=approved(fleet, request['request']))
     assert result['result'] == 'EMERGENCY_RECOVERED', result
+
+
+@pytest.mark.parametrize('lateness', [0, 900])
+def test_ssh_transport_budget_rejects_insufficient_window_before_writes(fleet, lateness):
+    from online_contract import window
+    enable(fleet)
+    for node in fleet.controller.nodes.values():
+        node.timeout_seconds = 120
+    timing = window(120, lateness)
+    assert timing['delivery_seconds'] == 435
+    assert timing['required_seconds'] == 1395+lateness
+    fleet.now += 2395-timing['required_seconds']
+    with pytest.raises(Rejected, match='ONLINE_WINDOW_INSUFFICIENT'):
+        fleet.controller.run_online('test-online-ssh-window', schedule_seconds=lateness)
+    assert not (fleet.controller.root/'transaction.json').exists()
+    assert not any((node.state/'owner.json').exists() for node in fleet.nodes.values())
+
+
+def test_lost_start_response_reconciles_existing_intent_without_second_start(fleet):
+    from production_transport import SystemdBarrier
+    node = fleet.nodes['NL']
+    service = node.barrier
+    barrier = SystemdBarrier('NL', node.state, units=['synthetic-gateway.service'], clock=fleet.clock)
+    barrier.state = lambda unit: dict(ActiveState='inactive' if service.stopped() else 'active',
+                                      SubState='dead' if service.stopped() else 'running',
+                                      MainPID='0' if service.stopped() else '1')
+    response_lost = False
+    def invoke(action, unit):
+        nonlocal response_lost
+        if action == 'stop':
+            service.quiesce()
+        else:
+            service.resume(commit_decided=True, equality_verified=True)
+            if not response_lost:
+                response_lost = True
+                raise Rejected('REMOTE_OUTCOME_UNKNOWN_READBACK_REQUIRED')
+    barrier.invoke = invoke
+    node.barrier = barrier
+    interrupted(fleet)
+    request = fleet.controller.recover_online_emergency(OPERATION)['request']
+    result = fleet.controller.recover_online_emergency(OPERATION, approval=approved(fleet, request))
+    assert result['result'] == 'EMERGENCY_BLOCKED' and result['cause'] == 'REMOTE_OUTCOME_UNKNOWN_READBACK_REQUIRED'
+    assert service.starts == 1 and (node.state/'start-intent-0.json').exists()
+    assert fleet.nodes['RU'].barrier.stopped()
+    result = fleet.controller.recover_online_emergency(OPERATION)
+    assert result['result'] == 'EMERGENCY_RECOVERED', result
+    assert service.starts == 1
+
+
+def test_expired_online_successor_uses_fresh_emergency_signature_not_rollback(fleet):
+    interrupted(fleet)
+    request = fleet.controller.recover_online_emergency(OPERATION)['request']
+    fleet.now += 14400
+    result = fleet.controller.recover_online_emergency(OPERATION, approval=approved(fleet, request))
+    assert result['result'] == 'EMERGENCY_RECOVERED', result
+    plan = json.loads((fleet.controller.root/'plan.json').read_bytes())
+    fleet.validator.validate(canonical(plan['candidate']), fleet.now)
+    assert sequence(plan['candidate']) == sequence(plan['online_emergency']['plan']['candidate'])+1

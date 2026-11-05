@@ -45,6 +45,46 @@ G1 runtime handoff, G2 real RPC/process faults, G3 disposable Android HTTP/cache
 G4 final online API/runtime package remain qualification work. Existing accepted maintenance
 API archive, old stand provenance and bootstrap success below are not silently replaced.
 
+### Follow-up: current registry and start-intent reconciliation
+
+The stopped, not-yet-prepared continuation can refresh its expected registry snapshot;
+the old outage approval then fails binding and the same continuation emits a fresh request.
+This permits a second revoke while awaiting approval without manual DB/marker edits.
+Archive directory links are fsynced before publishing the handoff owner. An unknown start
+response does not manufacture another stop/start: the explicit repeat rechecks reconciliation
+and the existing start-intent against service state. Deterministic authorization/policy
+failures still fence readers; unavailable/corrupt transport receipts never count as commit
+success. There is no background recovery loop. The existing ambiguous-start guard remains.
+
+25 focused tests PASS: the original20 plus stale-approval-after-revoke, two real-contract
+SSH budget boundaries, lost start response using the existing SystemdBarrier intent logic
+(service adapter simulated), and expired online successor followed by a fresh emergency
+signature. Window evidence is a model test:120s ×8 +435s =1395s plus supplied scheduling
+lateness; equality/insufficient headroom rejects before journal/owner writes. It is NOT an
+Android HTTP/cache cooldown experiment or independent-process fault acceptance.
+
+Exact5ef0193252f00000e87da65a5deebadc3688eb19 evidence:
+- Separate unbound maintenance source capsule: SHA256
+  `2c04d2815edafe69aa8adb33fad0d097e29d01150e007448814541dfb88b8b91`;
+  source inventory`bac40c99de0e6d9fca73a99c189e5d085661a5cb90681464f8ebfacf4f0f1d33`.
+  This is NOT the G4 online runtime package. Accepted API source/digest remain unchanged.
+- Root/network-none container:292 PASS, zero skips, scoped online/handoff/canonical-profile/
+  route/package/expired-recovery/fenced-rollback tests (`root-5ef0193.log`).
+- Fresh frozen-source sync artifact and synthetic ProductStore fixtures: mandatory
+  bootstrap + bootstrap command `-race -count=3` PASS, zero skips/failures
+  (`bootstrap-5ef0193.jsonl`).350 parent/subtest/package PASS events are not350 independent tests.
+- Family session + broker `-race -count=1` PASS (`native-5ef0193.jsonl`),27 nested skip events:
+  canonical root/reader boundaries, four opt-in DNS checks, process-paced helper and long
+  online stand.211 PASS events are not an additive suite total. The old999s stand is retained,
+  not rerun or relabelled as this candidate's full-path acceptance.
+- Android JVM/API27/API35 delivery checks: NOT_RUN in this continuation; no Android changes.
+  Previous accepted ownership checks do not cover G3 actual HTTP/cache delivery.
+
+Raw evidence remains ignored under`state-client-build/mesh-online-gates-20261105`.
+One sync packaging CLI invocation supplied an unsupported `--source` flag (FAIL invocation);
+the corrected frozen-source builder API and smoke completed before bootstrap. No gate was
+disabled. No production access, deployment, APK/catalog change or private state is committed.
+
 ## Prior accepted evidence (not current instructions)
 
 **Latest outcome,12:55UTC: positive isolated online stand PASS; requested stage INCOMPLETE.**
