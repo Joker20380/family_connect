@@ -12,6 +12,11 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**API27/API35 owner-race subscenario is now complete.** Preserve038b66a and its exact
+receipt, including API27's old wrapper exit1. Finish the current partial-publication
+new-Connect case with real clock preflight and credential-field comparison, then the
+legacy/too-late G3 cases and G2/G4 results. No independent accepted A checkpoint yet.
+
 **Owner-race qualification continues on the same frozen runtime.** API27 exercises
 actual HTTP → delayed cache import → closed owner → new explicit owner/native traffic.
 Finish the sequential GPU API35 case, retain the runner postcondition failure separately,

@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "scope": "isolated-Android-HTTP-completion-cache-monitor-owner-replacement-not-full-G3",
+  "scenario_source": "038b66a1af7a30ed79e3a8697c8ce6c72ffa6548",
+  "phase_A": "NOT_ACCEPTED",
+  "phase_B": "NOT_STARTED",
+  "transport_scope": "local packet provider; NVIDIA/KVM; no physical Telemost or owner phone",
+  "barrier": "real HTTP bytes received before Disconnect; cache import and async owner completion delayed until replacement explicit Connect",
+  "apis": {
+    "27": {
+      "runtime_result": "PASS_OWNER_RACE_ONLY",
+      "wrapper_exit": 1,
+      "wrapper_note": "obsolete final PASS enum assertion after successful runtime and cleanup",
+      "apk_sha256": "fcd4d5df19810998d5e74dc71383cd863129bdf0376b249c18f4ebab6ad1dc0b",
+      "test_apk_sha256": "22fa7f0e158c2597dfd90ae8c6744b4c4bdff4b8f964db15da96b9a4f0a1cc47",
+      "native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+      "started": 1793917090.4724662,
+      "finished": 1793917429.791771,
+      "original_bounds": {
+        "NL": {
+          "crl": 1793919250.0,
+          "leaf": 1793919250.0
+        },
+        "NL2": {
+          "crl": 1793919250.0,
+          "leaf": 1793919250.0
+        }
+      },
+      "successor_bounds": {
+        "NL": {
+          "crl": 1793931497.0,
+          "leaf": 1793931497.0
+        },
+        "NL2": {
+          "crl": 1793931497.0,
+          "leaf": 1793931497.0
+        }
+      },
+      "plan_sha256": "1cfd8b4fabaeb2cd696347a60dc5a0b3fe9082f7e6209e54cd9e82b900e376e5",
+      "response_held_at": 1793917401.4432614,
+      "response_released_at": 1793917401.7313292,
+      "cleanup": "emulator-stopped/server-processes-waited",
+      "private_evidence": "android-owner-gpu27-emulators2",
+      "server_evidence": "android-owner-gpu27-1/server.json"
+    },
+    "35": {
+      "runtime_result": "PASS_OWNER_RACE_ONLY",
+      "wrapper_exit": 0,
+      "wrapper_note": "explicit narrow scope accepted",
+      "apk_sha256": "b1e9413c8e4c9f49ee9b28b8d46b48146b2d004a02900e48af3d173262de4235",
+      "test_apk_sha256": "76a795c93aa22c7ddb61523afa507442bd0298751d5b2f95ab38ed4ec59b6c15",
+      "native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+      "started": 1793917616.40193,
+      "finished": 1793917979.201295,
+      "original_bounds": {
+        "NL": {
+          "crl": 1793919496.0,
+          "leaf": 1793919496.0
+        },
+        "NL2": {
+          "crl": 1793919496.0,
+          "leaf": 1793919496.0
+        }
+      },
+      "successor_bounds": {
+        "NL": {
+          "crl": 1793932040.0,
+          "leaf": 1793932040.0
+        },
+        "NL2": {
+          "crl": 1793932040.0,
+          "leaf": 1793932040.0
+        }
+      },
+      "plan_sha256": "fb0085ffdc1915f1bfe1511aacaad2811d789f118412c9f619d3cb13a9438a89",
+      "response_held_at": 1793917950.8180904,
+      "response_released_at": 1793917951.151181,
+      "cleanup": "emulator-stopped/server-processes-waited",
+      "private_evidence": "android-owner-gpu35-emulators",
+      "server_evidence": "android-owner-gpu35-1/server.json"
+    }
+  },
+  "runtime_source": "fd7562cc466606002aa2af064b2b67ee165056c2",
+  "archive_sha256": "846818adefa292939034b9c427d658cfd3c427f48d1fb522dbda104f31aeb94f",
+  "driver_sha256": "180f386f8afba4d9a604e3f3b812370dcc7f5e0c9d855775f9d3c379daf91376",
+  "api27_runner_source": {
+    "base": "607f19e0f0dfd1f0b3ebd154077bff9dd15771c0",
+    "delta_sha256": "5e55f1186279175bd74af52e7d261a9753051dbe707bd02e43f4370463a647f3",
+    "private_delta": "android-owner-scenario.patch"
+  }
+}

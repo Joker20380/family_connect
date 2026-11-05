@@ -11,6 +11,15 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**22:43UTC owner-race runtime PASS on both APIs.** API35 also completes363s through
+the actual HTTP/cache/closed-owner/new-explicit-owner/native path; its fixed runner
+exits0 and cleanup completes. [Exact paired receipt](releases/2026-11-05-mesh-android-owner-evidence.json).
+Source038b66a is pushed/remote-verified. New-Connect-during-partial qualification is
+in progress: one API27 AVD was7s behind host UTC and correctly rejected a not-yet-valid
+certificate; API35 connected but the test incorrectly compared fresh challenge bytes.
+Both failures remain evidence, not PASS. No clock changes or validation bypass; A/B
+remain unaccepted/not started, and the independent G2/G4 real-time jobs continue.
+
 **22:25UTC API27 real late-completion/owner race exercised; A remains open.** The normal
 owner fetch reaches the real encrypted-cache import monitor after verified HTTP. While
 that import is delayed, explicit Disconnect completes and a new explicit Connect takes

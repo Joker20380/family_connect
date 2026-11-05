@@ -1,5 +1,26 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Paired owner-race result22:43UTC
+
+[Sanitized artifact/runtime receipt](2026-11-05-mesh-android-owner-evidence.json) now
+records both actual runs: API27 runtime339s with the preserved final-wrapper exit1;
+API35 runtime363s, narrow `PASS_OWNER_RACE_ONLY`, wrapper exit0 and normal cleanup.
+Source038b66a1af7a30ed79e3a8697c8ce6c72ffa6548 is pushed and remote-verified. Native
+d1025a1d… is unchanged before/after both runs. Both server stands and GPU AVDs stopped.
+This closes the application-completion/owner-race subscenario only, not full G3/A.
+
+The subsequent partial-publication **new Connect** test remains in progress. Its first
+API27 attempt failed initial native validation before Connect: host start1793918040.946,
+guest1793918034; actual issued leaf NotBefore1793918036. The AVD clock was about7s behind,
+beyond the unchanged5s certificate backdating. No clock was set or validation relaxed.
+A new runner guard records host-before/guest/host-after and refuses excessive skew
+before instrumentation. API35 had aligned clocks and did connect during partial
+publication, but the test compared the entire readiness response: a new authenticated
+challenge legitimately changes wire bytes. The corrected assertion compares device,
+revision, issuer, certificate, CRL/floor, directory and expiry, and still runs native
+validation. Earlier failed logs/artifacts are retained; no PASS is inferred from reaching
+Connect alone. G2 actual expiry and G4 full-core remain running; B NOT_STARTED.
+
 ## Actual Android owner-race continuation22:25UTC
 
 New relative to a30966c and the positive-only cases: API27 completes a real normal-owner
