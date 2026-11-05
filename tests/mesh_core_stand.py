@@ -184,16 +184,16 @@ class CoreStand(PackageStand):
                 assert time.monotonic() < deadline, 'real SeedManager publication unavailable'
                 time.sleep(.02)
 
-    def client_config(self, slot, seconds, device=None, name=None):
+    def client_config(self, slot, seconds, device=None, name=None, https_address=''):
         device = device or self.fleet.device
         return private_file(self.root/((name or slot)+'-client.json'), package.encode(dict(
             Endpoint=self.endpoint, Gateway='nl-amsterdam-'+('1' if slot == 'NL' else '2'),
             Identity=base64.b64encode(device._identity.get_private_key()).decode(),
             Wireguard=device.wireguard_public_key, Anchor=base64.b64encode(self.fleet.service.anchor).decode(),
-            Roots=str(self.ca), OriginRoot=str(self.ca), DurationSeconds=seconds)))
+            Roots=str(self.ca), OriginRoot=str(self.ca), DurationSeconds=seconds, HTTPSAddress=https_address)))
 
-    def client(self, slot, seconds, device=None, name=None):
-        config = self.client_config(slot, seconds, device, name)
+    def client(self, slot, seconds, device=None, name=None, https_address=''):
+        config = self.client_config(slot, seconds, device, name, https_address)
         output = self.stack.enter_context((self.root/((name or slot)+'-client.log')).open('wb'))
         process = subprocess.Popen([str(self.driver), '-mode', 'client', '-relay', self.relay, '-client-config', str(config)],
             env=dict(os.environ, FC_LOCAL_CORE='1'), stdout=output, stderr=output)

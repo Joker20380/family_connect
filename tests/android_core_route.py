@@ -21,7 +21,7 @@ def main():
     parser.add_argument('--seconds', type=int, default=14400)
     args = parser.parse_args()
     assert os.geteuid() == 0 and Path('/.dockerenv').exists()
-    assert 0 < args.origin_port < 65536 and 0 < args.seconds <= 14400
+    assert 0 < args.origin_port < 65536 and 0 < args.seconds <= 32400
     assert ipaddress.ip_address(args.address).is_private and ipaddress.ip_address(args.peer).is_private
     assert args.address != args.peer
     routes = Path('/proc/net/route').read_text().splitlines()[1:]

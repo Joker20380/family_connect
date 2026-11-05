@@ -1,5 +1,38 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Routed preflight and full-core harness20:43UTC
+
+Frozen sourcefd7562cc466606002aa2af064b2b67ee165056c2:
+archive`online-fd7562c.tar.gz` SHA256
+`846818adefa292939034b9c427d658cfd3c427f48d1fb522dbda104f31aeb94f`;
+separate local-provider driver SHA256
+`180f386f8afba4d9a604e3f3b812370dcc7f5e0c9d855775f9d3c379daf91376`.
+Normal driver client entrypoints now pass21 samples on each NL with original mux stream,
+462 echo bytes, DNS and verified HTTPS to the public-IP fixture address. Evidence under
+`state-client-build/mesh-core-runtime-20261105/`: `public-fd7562c-{1,2}.log`,
+`public-fd7562c-inspect.json` (ONLINE_CAPABILITIES_READY, mutations0), and
+`android-routed-{gateway,origin}.json`. The origin is in a separate namespace on a labelled
+internal network with no egress; no host/production public-IP route is changed.
+
+`tests/test_mesh_core_acceptance.py` extends the existing harness, not runtime business
+logic: bounded eight-hour two-renewal run, actual old leaf/CRL and original lease crossing,
+same process/session/socket/bytes, then real revoke/linked emergency/lost-start/replay
+and fresh public-IP HTTPS. Run explicitly with FC_CORE_ACCEPTANCE=1 and an immutable
+FC_TEST_ONLINE_PACKAGE; its skip/default does not count as acceptance. The test-source
+checkpoint and frozen runtime source are recorded separately. This full run is NOT_RUN
+at this checkpoint. API27/API35 actual service qualification is still incomplete.
+
+|Gate|Current result and remaining scope|
+|---|---|
+|G1|PASS earlier frozen isolated revoke/approval/restart scope; repeat in final full path pending|
+|G2|Partial process/RPC PASS retained; real successor-expiry run and final reconciliation pending|
+|G3|NOT COMPLETE: actual service HTTP/cache/native successor path and negatives remain|
+|G4|NOT_RUN full fd7562c path; short routed preflight PASS is not long-runtime acceptance|
+
+Older d968ddd long/expiry jobs continue without relabelling. Local-provider/core evidence
+does not prove Telemost media/signaling, exact production binary or systemd. No release,
+production, owner-phone or B changes; source checkpoint only.
+
 ## Actual service-path diagnostics20:24UTC
 
 The earlier direct-engine runtime is not sufficient evidence of normal active-VPN HTTP

@@ -55,8 +55,10 @@ def test_wall_clock_expiry_refuses_journal_and_owner_writes(online_package, core
         save_evidence(stand, 'wall-clock-predecessor-expiry', observations)
 
 
-def kill_at(stand, mode, state, approval=None):
+def kill_at(stand, mode, state, approval=None, operation=None):
     command = stand.command(mode)
+    if operation is not None:
+        command[command.index('--operation')+1] = operation
     if approval is not None:
         command += ['--outage-approval', str(approval)]
     process = subprocess.Popen(command, cwd=stand.root, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

@@ -11,6 +11,14 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**20:43UTC routed preflight PASS, not A acceptance.** Frozenfd7562c package846818ad…
+and separate driver180f386f… pass real public-IP TCP/verified HTTPS, DNS and original
+mux traffic on both NL (21 samples each), with serving-process reader custody intact.
+The new eight-hour harness additionally retains actual lease receipts, two renewals,
+crypto-bound crossing and linked emergency on the same sessions. Its full run is pending.
+API27/API35 service qualification remains incomplete; exact native/load and underlay
+failures are retained separately. Older d968ddd long/expiry jobs continue. B stays gated.
+
 **20:24UTC actual G3 service-path blocker reproduced, A not accepted.** API35 reaches
 ConnectionService/MESH, but HTTPS through its active VPN fails; a fresh API27 reproduces
 the reset with exact installed native bytes. The local driver unintentionally enabled

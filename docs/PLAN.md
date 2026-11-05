@@ -12,6 +12,11 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Routed preflight completed:** frozenfd7562c proves normal public-IP HTTPS on both NL.
+Run the bounded full-core/lease/emergency harness on these artifacts while completing
+actual Android service HTTP/cache delivery; retain older d968ddd evidence separately.
+No accepted A checkpoint or B implementation yet.
+
 **Immediate G3 boundary:** qualify normal ConnectionService readiness through the active
 VPN, not just direct engine/underlay. Fix the test driver's accidental ServicesOnly scope
 and supply an isolated remote origin without disabling local-destination policy. Freeze
