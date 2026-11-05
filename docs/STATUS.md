@@ -11,6 +11,15 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Frozen G2 fix5043d72 qualified for the exercised process/RPC scope.** Selected
+root/package/core/API regression347 PASS/1 optional skip,1059.78s; the omitted native
+compatibility gate was separately1 PASS on the same frozen source. No full-CI claim.
+G1 actual revoke/recovery repeats PASS; the dead-receipt defect now reaches approved
+recovery instead of false COMMITTED. Additional wall-clock predecessor expiry refuses
+journal/owner writes (61.15s). Successor-expiry/full G2, G3 and complete G4 remain open.
+The bounded long harness will retain two new renewals and cross actual old leaf/CRL
+bounds without clock changes; its short preflight is not long-runtime acceptance.
+
 **G3 transport preparation, not Android acceptance.** The existing whole-device runtime
 now accepts explicit packet connectors while retaining bootstrap admission, Family TLS,
 mux, owner cleanup and credential maintenance. Normal Android builds still select Telemost;

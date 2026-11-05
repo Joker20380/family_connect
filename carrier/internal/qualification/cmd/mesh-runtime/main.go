@@ -34,6 +34,7 @@ func run() error {
 	directory := flag.String("directory-export", "", "SeedManager publication")
 	observer := flag.String("publication-observer", "", "same-process reader")
 	duration := flag.Duration("duration", time.Hour, "bounded runtime lifetime")
+	rotation := flag.Duration("seed-rotate-after", 0, "existing SeedManager overlap rotation; qualification only")
 	echo := flag.String("echo", "", "isolated echo origin")
 	https := flag.String("https", "", "isolated HTTPS origin")
 	config := flag.String("client-config", "", "private client configuration")
@@ -74,6 +75,12 @@ func run() error {
 		seedLifetime, rotateAfter := min(*duration, bootstrap.MaxAge), time.Duration(0)
 		if *duration > seedLifetime {
 			rotateAfter = seedLifetime * 3 / 4
+		}
+		if *rotation != 0 {
+			if *rotation < time.Minute || *rotation >= seedLifetime {
+				return fmt.Errorf("qualification seed rotation out of bounds")
+			}
+			rotateAfter = *rotation
 		}
 		echoOrigin, err := netip.ParseAddrPort(*echo)
 		if err != nil {

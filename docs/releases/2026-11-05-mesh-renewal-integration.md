@@ -11,6 +11,10 @@ of the new package. Full G1–G4 and Android split tunneling remain unaccepted.
 The later [G1 revoke continuation](2026-11-05-mesh-online-renewal.md#g1-revoke-continuation)
 adds actual revoke/late-approval/TLS denial and survivor traffic on the isolated package
 stand; it does not retroactively broaden this report's Android or two-renewal evidence.
+The later [frozen5043d72 process qualification](2026-11-05-mesh-online-renewal.md#frozen5043d72-process-qualification)
+repeats G1 and exercises the dead-receipt fix plus additional G2 processes. The separate
+Android local-core connector is only a runtime prerequisite; API27/API35 HTTP/cache/owner
+and current-source long G4 remain open. No older result is relabelled as either gate.
 
 ## Scope and baseline
 

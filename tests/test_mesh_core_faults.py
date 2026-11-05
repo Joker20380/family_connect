@@ -7,12 +7,52 @@ import sys
 import time
 
 import pytest
+from cryptography import x509
 
 from fixtures.mesh_supervisor import request
 from mesh_core_stand import CoreStand
 from online_package_stand import private_file
 from scripts import package_online_renewal as package
 from test_online_runtime_package import core_driver, online_package
+
+
+def test_wall_clock_expiry_refuses_journal_and_owner_writes(online_package, core_driver, tmp_path):
+    stand = CoreStand(tmp_path, online_package[3], core_driver, age=14340)
+    observations = {}
+    try:
+        stand.start()
+        deadlines = {}
+        before = {}
+        for slot in ('NL', 'NL2'):
+            config = json.loads(stand.configs[slot].read_bytes())
+            locator = json.loads(Path(config['profile_locator']).read_bytes())
+            raw = Path(locator['profile']).read_bytes()
+            profile = json.loads(raw)
+            leaf = x509.load_pem_x509_certificate(profile['certificate'].encode())
+            crl = x509.load_pem_x509_crl(profile['revocations'].encode())
+            deadlines[slot] = min(leaf.not_valid_after_utc.timestamp(), crl.next_update_utc.timestamp())
+            before[slot] = dict(path=locator['profile'], sha256=package.digest(raw))
+        assert 10 < min(deadlines.values()) - time.time() < 70
+        code, insufficient = stand.run('online')
+        assert code == 1 and insufficient['cause'] == 'ONLINE_WINDOW_INSUFFICIENT', insufficient
+        assert not (tmp_path/'coordinator/transaction.json').exists()
+        assert all(not (node.state/'owner.json').exists() for node in stand.fleet.nodes.values())
+        while time.time() <= max(deadlines.values()) + 1:
+            time.sleep(.25)
+        results = []
+        for _ in range(2):
+            code, expired = stand.run('online')
+            assert code == 1 and expired['result'] == 'FAIL_CLOSED', expired
+            assert expired['cause'] == 'ONLINE_RUNTIME_RECEIPT', expired
+            results.append(expired)
+        assert not (tmp_path/'coordinator/transaction.json').exists()
+        assert all(not (node.state/'owner.json').exists() for node in stand.fleet.nodes.values())
+        assert all(package.digest(Path(value['path']).read_bytes()) == value['sha256'] for value in before.values())
+        observations.update(outcome='WALL_CLOCK_EXPIRED_PREDECESSOR_NO_WRITES', deadlines=deadlines,
+                            observed_utc=time.time(), insufficient=insufficient, retries=results)
+    finally:
+        stand.close()
+        save_evidence(stand, 'wall-clock-predecessor-expiry', observations)
 
 
 def kill_at(stand, mode, state, approval=None):

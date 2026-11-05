@@ -35,6 +35,10 @@ SSH120/1395s+lateness. Квалификация этого кандидата п
 Для G3 выделен общий whole-device transport seam; отдельный x86_64 test-only build
 подключает packet relay через штатный protect, release-проверки его отвергают.
 Это подготовка контура, не Android HTTP/cache/owner PASS и не начало Б.
+Frozen5043d72:347 PASS/1 optional SKIP в адресной выборке; пропущенный native gate
+отдельно1 PASS на том же source. G1 повторён, process/RPC-сценарии G2 пройдены;
+реальное истечение predecessor блокируется до journal/owner writes. Новый длительный
+harness проверяет два renewal по wall clock, но пока не является G4 PASS.
 
 **Один действующий следующий шаг: закончить G1–G4 того же MESH incident.** После этого:
 

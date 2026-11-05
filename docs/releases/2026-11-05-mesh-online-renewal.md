@@ -1,5 +1,63 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Frozen5043d72 process qualification
+
+The full selected run imports test sources from a detached5043d72 clone and starts
+controller/node/API/HTTP from its immutable archive. Real gateway ownership, SSH RPC,
+supervisor stop/start/wait, revoked Family admission and survivor TCP/DNS/verified HTTPS
+are exercised again. `frozen-5043d72.log`:347 PASS/1 optional SKIP,1059.78s. Selection:
+`test_online_emergency`, `test_online_renewal`, `test_online_diagnostics`,
+`test_activated_maintenance`, `test_multi_gateway_renewal`, `test_package_credential_renewal`,
+`test_online_runtime_package`, `test_mesh_core_runtime`, `test_mesh_core_faults`,
+`test_friends_access`, `test_friends_restricted` (all under `tests/`). The missing optional
+native compatibility environment was supplied in a separate detached5043d72 run:
+`test_operational_authority_two_existing_identities_native_compatibility`1 PASS1.57s.
+Do not add overlapping historical suites or call this full CI.
+
+| Gate | Status | Exact exercised scope / remaining boundary |
+|---|---|---|
+| G1 | PASS | Isolated core revoke after COMMIT and approval, real restart, denied revoked credentials and new survivor HTTP/TLS/DNS/HTTPS; `frozen-5043d72/revoke/recovery.json`. Not Telemost/systemd/production acceptance. |
+| G2 | NOT_RUN (complete gate) | Eleven real process/race cases PASS, including four emergency durable boundaries, dead/stale receipts, actual gateway death, unreachable NL, publisher contention, old-fence requester and corrupt confirmation. Real successor-expiry continuation and any unexercised full matrix boundaries remain open. |
+| G3 | NOT_RUN | The new shared Android connector/build prerequisite is tested, not the Android HTTP/cache/owner/native path. |
+| G4 | NOT_RUN | No completed current-combination two-renewal wall-clock plus emergency/Android acceptance. The new long harness is not a result. |
+
+Artifacts, all local under `state-client-build/mesh-core-runtime-20261105/`:
+
+| Identity | Exact value |
+|---|---|
+| Source | `5043d72c5b1db260d3200b9fab70a3f3bf1fa00c` |
+| online-5043d72.tar.gz | `bd9a35b8a065f07dbfa725d986a46031e339ea92a246f536f2cff1bdc5b73129` |
+| Manifest | `e0cd39aedab5ed9f12361ff18189446dd6b5e3c4c23f841b4a6595f85a9289c5` |
+| Renewal source inventory | `dba5a18f6409cd1ab10e9a373caccb9cec10cad1dc0647e2e433794bc9af4071` |
+| API / HTTP | `b2111a104412c5aad206b7acaca7854f51f9c99d9ad6608a63fd07644d24859f` / `6a4a8b36a68066204e41b86379c7f79f52e4765752304b51213bc627629a21bc` |
+| Production gateway | `382dcf26298bad8ccbfc2ca5664e297215b2ab1d7a1338f594536285651f1e7d` |
+| Separate packet driver | `dc104ed6c40c154f8b152ea673be0d7409eb5970af9a8eebd17f0c4a5a09518a` |
+| Main test log | `f77982442bac47e7c82b2daad8cad26ecea1a0411b8f4a355ac4efcf0b0a6aa9` |
+| Native compatibility log | `43557565734a08c43e5a3973973179f5bf3692ffb6987e822d48d508730995f8` |
+| G1 recovery receipt | `c84d15916e175a7501584f6279fcd1cf94ee4250045f0e7ee061dc2a144048ba` |
+
+Additional new test on that frozen runtime: actual wall clock crosses synthetic predecessor
+leaf/CRL bounds. First ONLINE_WINDOW_INSUFFICIENT, then two ONLINE_RUNTIME_RECEIPT refusals;
+no journal, owner or profile write. `expiry-5043d72.log`:1 PASS/11 deselected,61.15s;
+receipt `expiry-5043d72/wall-clock-predecessor-expiry/receipt.json`, SHA256
+`563c47832cba7c18a0b3d6333d9c9c53ef3ebb6d6abeeb73c9b35a0cbf47d06b`.
+The test was added after5043d72; do not describe its test source as part of that archive.
+Two retained failed assertion logs document correction of the expected CLI exit code and
+the actual earlier capability-receipt expiry boundary, not runtime bypasses.
+
+### Current long-runtime harness
+
+`FC_CORE_SOAK=1` explicitly enables `tests/test_mesh_core_soak.py` with a frozen archive.
+The gateway lifetime is7h, existing seed lifetime4h/overlap rotation1h, ordinary leaf/CRL
+validity4h and renewal due window90min. No production TTL, timer or security clock changes.
+After setup, original clients run24000s; two further normal CLI operations run only when
+actually due (approximately2.5h and5h). The test retains original process/instance,
+TLS/mux stream IDs, bytes and generations, then crosses the first successor's old leaf/CRL
+bound (approximately6.5h). Early provider/traffic failure is checked while waiting.
+This is the core continuity part of G4, not its complete emergency/Android/live scope;
+no PASS is implied before its result exists. Source changes after it require explicit
+artifact reconciliation, not renaming old evidence.
+
 ## Android shared-runtime transport preparation
 
 Continuation from5043d72; no Android version/production trust change. `wholedevice`
@@ -28,6 +86,12 @@ Working-source checks under `state-client-build/mesh-core-runtime-20261105/`:
 - Both default Telemost and `fc_local_core` Android27 x86_64 JNI shared objects compile;
   `android-default-deps.txt` contains neither qualificationtransport nor internal/qualification.
   These are working-source build probes, not frozen Android acceptance artifacts.
+
+Committed build39c69de21f87ea4ca83a3e7eac1d0b7d42a62fdb was subsequently built with the
+documented builder into `android-core-39c69de/`, without replacing generated release files:
+x86_64 JNI SHA256 `d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af`;
+metadata SHA256 `a557ea564334f705d0ceff57856b4e5cfafb166be7c6ccb51a6f9b901f7e2760`.
+It is explicitly isolated-local-core/diagnostic, not a production gateway digest or APK.
 
 **G3 remains NOT_RUN:** no emulator HTTP→validation→encrypted cache→connection owner→
 active native renewal has been executed by these tests. The local connector seam is only

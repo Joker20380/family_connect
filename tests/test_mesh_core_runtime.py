@@ -43,10 +43,11 @@ def test_production_gateway_has_no_local_provider_mode(online_package):
     assert '/internal/qualification' not in dependencies
 
 
-def test_two_gateway_seed_and_verified_traffic_preflight(online_package, core_driver, tmp_path):
+@pytest.mark.parametrize('duration,rotation', [('1h', None), ('7h', '1h')])
+def test_two_gateway_seed_and_verified_traffic_preflight(online_package, core_driver, tmp_path, duration, rotation):
     assert os.geteuid() == 0 and Path('/.dockerenv').exists() and tmp_path.is_relative_to('/run')
     _, _, archive, extracted, receipt = online_package
-    stand = CoreStand(tmp_path, extracted, core_driver)
+    stand = CoreStand(tmp_path, extracted, core_driver, duration=duration, rotation=rotation)
     started = time.monotonic()
     try:
         stand.start()
@@ -79,7 +80,7 @@ def test_two_gateway_seed_and_verified_traffic_preflight(online_package, core_dr
     evidence['cleanup'] = 'processes-waited-and-reader-sockets-absent'
     destination = os.environ.get('FC_CORE_EVIDENCE')
     if destination:
-        root = Path(destination)
+        root = Path(destination)/('preflight-'+duration)
         root.mkdir(mode=0o700, parents=True, exist_ok=True)
         private_file(root/'preflight.json', package.encode(evidence))
         for path in tmp_path.glob('*.log'):

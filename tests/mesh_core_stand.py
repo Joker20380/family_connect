@@ -43,9 +43,10 @@ class SupervisedProcess:
 
 
 class CoreStand(PackageStand):
-    def __init__(self, root, extracted, driver, *, age=12000):
+    def __init__(self, root, extracted, driver, *, age=12000, duration='1h', rotation=None):
         super().__init__(root, extracted, age=age)
         self.driver = driver
+        self.duration, self.rotation = duration, rotation
         self.binding = private_file(root/'isolated-runtime.json', package.encode(dict(schema=1,
             scope='isolated-core-not-production', source_commit=self.manifest['source_commit'],
             native_sources=self.manifest['native_sources'], entrypoint='carrier/internal/qualification/cmd/mesh-runtime',
@@ -66,9 +67,12 @@ class CoreStand(PackageStand):
 
     def launch_gateway(self, unit, profile, observer, directory):
         directory.unlink()
-        return self.launch(unit, [str(self.driver), '-mode', 'gateway', '-relay', self.relay,
+        command = [str(self.driver), '-mode', 'gateway', '-relay', self.relay,
             '-family-config', str(profile), '-publication-observer', str(observer), '-directory-export', str(directory),
-            '-duration', '1h', '-echo', self.echo, '-https', self.https], dict(os.environ, FC_LOCAL_CORE='1'))
+            '-duration', self.duration, '-echo', self.echo, '-https', self.https]
+        if self.rotation is not None:
+            command += ['-seed-rotate-after', self.rotation]
+        return self.launch(unit, command, dict(os.environ, FC_LOCAL_CORE='1'))
 
     def origins(self):
         stand = self
