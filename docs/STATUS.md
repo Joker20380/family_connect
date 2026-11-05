@@ -6,6 +6,19 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**5 November00:17UTC — unattended checks running; one118 outage attributed to scheduled renewal.**
+New30-minute observation initially passes8 DNS/2 HTTPS/2 NL2-egress checks, then phone
+reliable exhaustion follows exact-session gateway parent cancellation. Independent
+systemd records show RU credential renewal stopping both MESH nodes00:12:56/58UTC,
+restarting00:13:25/27 and COMMITTED00:13:37; common70e6c0fc unchanged. New PIDs
+1436865/1252999 have NRestarts0: this counter does not exclude intentional stop/start.
+Phone automatically reconnects00:14:40 with capture retained, no operator reconnect.
+This is not uninterrupted stability and does not explain the earlier117 WebSocket or
+118 paired-DNS failure. No policy/expiry bypass, timer pause, APK/public/server change.
+Observation and focused native/media/weak-link tests continue; owner118/public113/catalog7.
+[Current overnight checks and remaining gates](releases/2026-11-05-mesh-overnight-checks.md).
+
+Previous118 delivery checkpoint:
 **5 November00:06UTC — Android118 owner delivery PASS; traffic gate FAIL, DNS7/8 pass.**
 This checkpoint packages234af08's finite signaling-read classes as a new immutable
 version118, without changing retries, timeouts, authorization, media wire or server code.

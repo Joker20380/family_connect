@@ -7,6 +7,20 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Selected overnight scope — diagnose paired-DNS/transport failures and execute stability gates.**
+Owner authorizes unattended checks; no unrelated queued successor or public rollout.
+One118 interruption is now attributed to the existing approved leaf/CRL maintenance:
+RU COMMITTED rotation stops both gateways, exact NL2 parent cancellation precedes phone
+reliable exhaustion, then normal recovery succeeds. Keep this separate from117's
+WebSocket failure and118's paired-DNS timeout; never use NRestarts0 as uninterrupted
+process proof. Native binary equality remains70e6c0fc. Current30-minute observation
+continues as diagnostic evidence, not an uninterrupted PASS after session replacement.
+Run focused DNS/media/protection/weak-link regressions, correlate paired DNS before any
+correction, and keep actual handset/consent limitations visible. Owner118/public113/catalog7
+unchanged; no ad-hoc deadline/expiry relaxation or indefinite renewal pause.
+[Overnight evidence and exact gates](releases/2026-11-05-mesh-overnight-checks.md).
+
+Previous118 delivery/first-traffic checkpoint:
 **Selected next gate — diagnose118 paired-DNS loss; qualification/delivery complete, traffic FAIL.**
 First CI41931735646/sourcea03bdec stops at release contracts; stale117 version/diagnostic
 pins are locally reproduced and strictly updated. New Go/Java class-parity and unchanged
