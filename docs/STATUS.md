@@ -11,17 +11,23 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
-**Online package implementation checkpoint (same incident; A not accepted).**
-Separate default-off online controller/node contract and deterministic current API/HTTP/native
-package are implemented; accepted maintenance archive is unchanged. New isolated package
-checks6 PASS, including real packaged gateway observer, peer PID/executable/hash and opt-out
-rejection. The seed is deliberately held at an isolated proxy: no READY/traffic acceptance.
-G1/G2/G3/G4 remain NOT_RUN on this candidate. No production/phone/publication changes.
-Next: independent-process packaged qualification, then G1–G4; only after a separate accepted
-A checkpoint, execute bounded ANDROID-APP-VPN source/routing work. Phase B is not started.
+**Online package/process checkpoint (same incident; A not accepted).**
+Separate default-off controller/node/current API/HTTP/native package is implemented;
+accepted maintenance archive unchanged. Real packaged CLI→SSH→three handlers now exercises
+COMMIT/replay, six controller SIGKILL boundaries and six lost/corrupt response cases.
+Containing scoped selection110 PASS; root regression373 PASS/1 optional SKIP, with that
+native compatibility check separately1 PASS. These selections overlap; do not sum them.
+Artifact-enabled bootstrap/command race/count3 PASS, zero skips; Family/broker race PASS
+with7 optional skip events. No full-CI claim. Reader errors and later retry causes are explicit.
+The real gateway observer exits at the unchanged15s provider timeout on this isolated proxy;
+this fixture has no READY/traffic acceptance. Full G1/G2/G3/G4 remain NOT_RUN/incomplete.
+Next: supply the long-lived isolated native path and complete packaged G1–G4. Only after a
+separate accepted A checkpoint, execute bounded ANDROID-APP-VPN. Phase B is not started.
+No production/phone/publication changes; APK118/updater113 remain unchanged.
 [Contract](../deploy/friends/restricted/maintenance/ONLINE_RUNTIME.md) ·
 [Same incident evidence](releases/2026-11-05-mesh-online-renewal.md#online-runtime-package-continuation).
 
+Earlier emergency-only source checkpoint (superseded by package continuation above):
 **5 November — G1 emergency implementation checkpoint; G1–G4 qualification IN PROGRESS.**
 Product milestone: operational reliability of Android MESH for a small opted-in group,
 without routine developer reconnection. Existing roadmap stage5 remains open; subscription

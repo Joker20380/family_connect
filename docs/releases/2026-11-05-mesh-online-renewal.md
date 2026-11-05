@@ -31,7 +31,8 @@ only fixture setup. Initial containing Python selection82 PASS/3 FAIL is not all
 its80 online/emergency tests overlap prior evidence. The new6-check repeat is not full CI.
 Raw evidence: ignored `state-client-build/mesh-online-package-20261105/`.
 
-G1 full emergency runtime: NOT_RUN. G2 independent SSH/process faults: NOT_RUN. G3 actual
+Initial six-check scope: G1 full emergency runtime NOT_RUN; G2 independent SSH/process faults
+NOT_RUN (subsequently exercised in part below). G3 actual
 Android HTTP/cache/native owner: NOT_RUN. G4 final two-renewal/cross-bound package traffic:
 NOT_RUN. The original known parser blocker is implemented, not substituted for these gates.
 The999s stand remains evidence for a8e1db9 only. APK118/updater113 and production unchanged;
@@ -43,6 +44,75 @@ No Phase B source or acceptance claim yet. Exact release artifacts, separately a
 delivery, real both-NL renewal and remaining field gates still precede controlled paid beta.
 
 See [online configuration/entrypoint contract](../../deploy/friends/restricted/maintenance/ONLINE_RUNTIME.md).
+
+### Independent-process checkpoint — incomplete A, no B
+
+Sourcec54e7b3d96a930ca713a2a9fa4353ea93e60e4d5 was pushed and remote/main verified.
+Its separate immutable online archive (not an accepted release or maintenance replacement):
+
+| Identity | SHA256 |
+| --- | --- |
+| `online-c54e7b3.tar.gz` | c7f26418348bf326a7589beb7c8dde64adb9a749fec8a38f25c5e97fab32416c |
+| Manifest | e486157dead44e197d300e544480786ff06926d73d4b9a2991af84fb6d9cfd4b |
+| Renewal source inventory | a9984a302e6b08608c8bc955732cd76c7778afa1228fe39772eb1a07cfb45eac |
+| API | 817218bc19b308f1dc4f066291f3afcf795c91cf8527573a07ef3a066e1b118e |
+| HTTP | 2067e591be267045e39d911c489c818afbc2274a0294079e072d88cfd953f64a |
+| Gateway | 0e8d914cceba6712aba1e68b1dda53f98340ffe32215f02e7c142f9cb6ddf882 |
+
+New source tests use separate controller, three handlers, actual HTTP and two gateway
+observer processes, independent state, root-private canonical ProfileStore and ordinary
+SSH RPC/host-key checking. No production configuration, internal qualification constructor,
+manual DB/profile/marker repair, reduced SSH budget or security-clock substitution.
+Fixture setup creates synthetic initial profiles with the native-required gateway DNS SAN.
+The systemctl adapter reports owned PIDs only; it does not implement restart/stop acceptance.
+
+| Gate | Full gate result | New evidence and exact remaining boundary |
+| --- | --- | --- |
+| G1 | NOT_RUN | Existing approval/handoff tests retained; actual restarted gateway/new valid Family TLS, revoked denial and post-recovery DNS/HTTPS not exercised by this package stand. |
+| G2 | NOT_RUN (partial checks PASS) | Real controller SIGKILL at ONLINE_FENCING, ONLINE_PREPARED, ONLINE_COMMIT_DECIDED, ONLINE_NL2_DECIDED, ONLINE_NL2_PUBLISHED, ONLINE_CLEANING. RPC loss after RU prepare, NL stage, NL2 decide, NL publish, RU publish; wrong NL2 stage participant aborts predecision. Handoff/process-owner/publisher races, expired material and full distributed matrix remain. |
+| G3 | NOT_RUN | No new Android artifact or disposable API27/API35 HTTP→encrypted-cache→owner→native session qualification. Previous JNI/storage evidence is not substituted. |
+| G4 | NOT_RUN | COMMIT/replay/delivery-ready marker verified, but no two-renewal retained TLS/mux/TCP/bytes/lease/crypto-crossing run on the final package. The999s sourcea8e1db9 stand remains unchanged historical evidence. |
+
+Containing scoped selection:110 PASS/0 SKIP (`scoped-serial.log`,264.46s). Earlier six
+RPC cases passed alone (`rpc-faults.log`), but a containing concurrent-build run had108 PASS/
+1 FAIL (`scoped-final.log`): retry returned ONLINE_RECOVERY_REQUIRED after a lost stage
+reply. Its first-cause-only result concealed the current blocker; attribution to load or
+the15s fixture lifetime is unproven. New `last_cause` retains the original incident cause
+and independently reports a later retry failure. Missing/timed-out/malformed runtime-reader
+responses now have bounded explicit causes rather than UNKNOWN. No assert/gate is disabled.
+Additional package/document/participant tests5 PASS (`participant-configured.log`,31.08s):
+reproducibility, missing opt-in, incompatible contract, real gateway SIGKILL and natural15s
+seed timeout. Incompatible construction returns an unbound node rejection; SSH correctly
+rejects its response schema, and direct packaged-node diagnostic confirms
+ONLINE_OPT_IN_REQUIRED. The initial expectation of a bound rejection failed1/4 tests
+(`participant-final.log`); the RPC trust/binding requirement was preserved, not weakened.
+
+Broader root/profile/rollback/multi-gateway regression:373 PASS/1 optional SKIP
+(`root-regression-configured.log`,132.52s), using the exactc54e7b3 archive for construction.
+The skipped existing-identity native compatibility test separately1 PASS
+(`authority-native-configured.log`); its source is frozen c54e7b3, byte-identical native to
+the earlier accepted source. These counts overlap the110-test selection, not additive.
+Initial root run356 PASS/17 FAIL/1 SKIP retained (`root-regression.log`): missing explicit
+package environment and absent `/usr/bin/python3` for service DAC checks. Only the disposable
+image/test invocation was repaired. No production code workaround for those fixture errors.
+
+Fresh c54e7b3 native `-race` binaries and sync artifact
+`2f54d9df3b4178b110ac0cfd734bef722740d4c6ba4f95fb7c77c53dd943367e`:
+bootstrap + bootstrap command count3 PASS with zero skips (`bootstrap-c54e7b3-cwd.log`);
+Family session + broker count1 PASS with7 optional process/DNS/long-stand skip events
+(`native-c54e7b3.log`). Initial native invocation from the wrong working directory failed
+the shared timestamp fixture (`bootstrap-c54e7b3.log`); corrected package cwd rerun passes.
+These are exact-source checks, not full CI or G4. Final disposable Python/SSH image:
+`sha256:89598610ee266cf1efa164092d1193479069784f1c94493c46fcff82f5a6736f`.
+
+The unfinished boundary is concrete: the packaged production gateway creates its Telemost
+seed at startup; the network-none synthetic proxy never supplies a seed. The observer is
+real but exits at the unchanged production15s timeout. Current process tests fit that narrow
+window. This is not a long-lived isolated packet path and cannot qualify G1/G3/G4 traffic.
+No production token, extra provider dependency, altered timeout or security clock is used to
+hide this limit. Complete the reusable long-lived native stand before accepting A; phase B
+must not mask the gap. All raw archives/keys/state/logs remain ignored under
+`state-client-build/mesh-online-package-20261105/`. No release or deployment action occurred.
 
 ## Continuation from354513d — G1 implementation checkpoint
 

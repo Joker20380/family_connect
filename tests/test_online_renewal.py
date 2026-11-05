@@ -47,6 +47,22 @@ def test_online_transaction_uses_existing_readiness_and_does_not_stop(fleet):
     assert fleet.controller.run_online('test-online-transaction', schedule_seconds=0)['replay']
 
 
+def test_retry_retains_first_failure_and_reports_current_blocker(fleet):
+    enable(fleet)
+    def fail(cause):
+        def inject(event):
+            if event == 'online-prepared':
+                raise Rejected(cause)
+        return inject
+    fleet.nodes['NL'].fault = fail('RPC_RESPONSE_SCHEMA')
+    first = fleet.controller.run_online('test-online-retry-cause', schedule_seconds=0)
+    assert first['cause'] == first['last_cause'] == 'RPC_RESPONSE_SCHEMA'
+    fleet.nodes['NL'].fault = fail('ONLINE_RUNTIME_UNAVAILABLE')
+    second = fleet.controller.run_online('test-online-retry-cause', schedule_seconds=0, resume=True)
+    assert second['cause'] == 'RPC_RESPONSE_SCHEMA' and second['last_cause'] == 'ONLINE_RUNTIME_UNAVAILABLE'
+    assert second['decision'] is None
+
+
 @pytest.mark.parametrize('boundary', ['ONLINE_ACQUIRING', 'ONLINE_FENCING', 'ONLINE_RU_ACQUIRED',
     'ONLINE_NL_ACQUIRED', 'ONLINE_NL2_ACQUIRED', 'ONLINE_PREPARED', 'ONLINE_RU_STAGED',
     'ONLINE_NL_STAGED', 'ONLINE_NL2_STAGED', 'ONLINE_COMMIT_DECIDED', 'ONLINE_RU_DECIDED',

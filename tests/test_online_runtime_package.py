@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tarfile
 import time
+import threading
 import zipfile
 
 import pytest
@@ -22,21 +23,33 @@ def online_package(tmp_path_factory):
         pytest.skip('explicit online package Go toolchain required')
     root = tmp_path_factory.mktemp('online-source')
     source = root/'source'
-    source.mkdir()
-    native = subprocess.check_output(['git', 'ls-files', 'carrier'], cwd=package.ROOT, text=True).splitlines()
-    names = set(package.SOURCES) | {name for name in native if name.endswith(('.go', '/go.mod', '/go.sum'))}
-    names.update(json.loads((package.ROOT/'deploy/friends/restricted/http-runtime-files.json').read_bytes()))
-    names.update(('deploy/friends/restricted/http-runtime-files.json', 'deploy/friends/access-api.py'))
-    for name in names:
-        target = source/name
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes((package.ROOT/name).read_bytes())
-    subprocess.run(['git', 'init', '-q', str(source)], check=True)
-    subprocess.run(['git', 'add', '.'], cwd=source, check=True)
-    subprocess.run(['git', '-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
-                    'commit', '-qm', 'isolated source fixture'], cwd=source, check=True)
-    archive = root/'online.tar.gz'
-    receipt = package.build(archive, 'HEAD', go=Path(go), repository=source)
+    frozen = os.environ.get('FC_TEST_ONLINE_PACKAGE')
+    if frozen:
+        archive = Path(frozen)
+        with tarfile.open(archive) as bundle:
+            raw = bundle.extractfile('source-manifest.json').read()
+        manifest = json.loads(raw)
+        subprocess.run(['git', 'clone', '-q', '--shared', '--no-checkout', str(package.ROOT), str(source)], check=True)
+        subprocess.run(['git', 'checkout', '-q', '--detach', manifest['source_commit']], cwd=source, check=True)
+        receipt = {name: manifest[name] for name in
+                   ('source_commit', 'source_sha256', 'api_sha256', 'http_sha256', 'gateway_sha256')}
+        receipt.update(sha256=package.digest(archive.read_bytes()), manifest_sha256=package.digest(raw))
+    else:
+        source.mkdir()
+        native = subprocess.check_output(['git', 'ls-files', 'carrier'], cwd=package.ROOT, text=True).splitlines()
+        names = set(package.SOURCES) | {name for name in native if name.endswith(('.go', '/go.mod', '/go.sum'))}
+        names.update(json.loads((package.ROOT/'deploy/friends/restricted/http-runtime-files.json').read_bytes()))
+        names.update(('deploy/friends/restricted/http-runtime-files.json', 'deploy/friends/access-api.py'))
+        for name in names:
+            target = source/name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes((package.ROOT/name).read_bytes())
+        subprocess.run(['git', 'init', '-q', str(source)], check=True)
+        subprocess.run(['git', 'add', '.'], cwd=source, check=True)
+        subprocess.run(['git', '-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
+                        'commit', '-qm', 'isolated source fixture'], cwd=source, check=True)
+        archive = root/'online.tar.gz'
+        receipt = package.build(archive, 'HEAD', go=Path(go), repository=source)
     extracted = root/'package'
     extracted.mkdir(mode=0o700)
     with tarfile.open(archive) as bundle:
@@ -53,6 +66,7 @@ def test_online_package_reproducible_without_working_checkout_imports(online_pac
     manifest = json.loads((extracted/'source-manifest.json').read_bytes())
     assert manifest['default_online'] is False and manifest['production_configuration'] == 'absent'
     assert manifest['package_contract'] == package.PACKAGE and manifest['operation_permit'] is None
+    assert (extracted/'ONLINE_RUNTIME.md').read_bytes() == (package.ROOT/package.DIRECTORY/'ONLINE_RUNTIME.md').read_bytes()
     assert set(manifest['source_files']) == set(package.ONLINE_MODULES)
     for name, expected in manifest['files'].items():
         assert hashlib.sha256((extracted/name).read_bytes()).hexdigest() == expected
@@ -122,6 +136,37 @@ def test_participant_contract_fails_before_writes():
     with pytest.raises(Rejected, match='ONLINE_READER_STOPPED'):
         verify_participants(nodes, 'test-online-capabilities', manifest, members, running=True)
     verify_participants(nodes, 'test-online-capabilities', manifest, members, running=False)
+
+
+@pytest.mark.parametrize('response', [b'', b'{', b'{"contract":"one","contract":"two"}', b'\xff', b' '*4097])
+def test_malformed_reader_returns_bounded_explicit_cause(tmp_path, response):
+    from test_online_renewal import Rejected
+    from online_reader import RuntimeReader
+    path = str(tmp_path/'reader.sock')
+    listener = socket.socket(socket.AF_UNIX)
+    listener.bind(path)
+    listener.listen(1)
+    def serve():
+        with listener.accept()[0] as connection:
+            while connection.recv(4096):
+                pass
+            connection.sendall(response)
+    worker = threading.Thread(target=serve)
+    worker.start()
+    try:
+        with pytest.raises(Rejected, match='ONLINE_RUNTIME_RECEIPT'):
+            RuntimeReader(path)(None)
+    finally:
+        listener.close()
+        worker.join(timeout=5)
+        assert not worker.is_alive()
+
+
+def test_missing_reader_is_explicitly_unavailable(tmp_path):
+    from test_online_renewal import Rejected
+    from online_reader import RuntimeReader
+    with pytest.raises(Rejected, match='ONLINE_RUNTIME_UNAVAILABLE'):
+        RuntimeReader(tmp_path/'absent.sock')(None)
 
 
 def test_packaged_node_checks_actual_gateway_process(online_package, tmp_path):
@@ -226,3 +271,163 @@ def test_packaged_node_checks_actual_gateway_process(online_package, tmp_path):
         else:
             systemctl.write_bytes(prior)
             systemctl.chmod(prior_mode)
+
+
+def test_controller_entrypoint_reaches_three_ssh_handlers_and_enforces_budget(online_package, tmp_path):
+    if os.environ.get('FC_ONLINE_SSH') != '1':
+        pytest.skip('explicit network-none SSH container required')
+    from online_package_stand import PackageStand
+    stand = PackageStand(tmp_path, online_package[3], age=13001)
+    try:
+        stand.start()
+        code, result = stand.run('inspect')
+        assert code == 0 and result == dict(result='ONLINE_CAPABILITIES_READY', mutations=0), result
+        code, result = stand.run('online')
+        assert code == 1 and result['cause'] == 'ONLINE_WINDOW_INSUFFICIENT', result
+        assert not (tmp_path/'coordinator/transaction.json').exists()
+        assert not any((node.state/'owner.json').exists() for node in stand.fleet.nodes.values())
+    finally:
+        stand.close()
+
+
+def test_packaged_online_commit_and_replay_over_ssh(online_package, tmp_path):
+    if os.environ.get('FC_ONLINE_SSH') != '1':
+        pytest.skip('explicit network-none SSH container required')
+    from online_package_stand import PackageStand
+    stand = PackageStand(tmp_path, online_package[3], age=12000)
+    try:
+        stand.start()
+        code, result = stand.run('online')
+        assert code == 0 and result['result'] == 'COMMITTED', result
+        record = json.loads((tmp_path/'coordinator/transaction.json').read_bytes())
+        assert record['decision'] == 'COMMIT'
+        marker = json.loads((stand.fleet.nodes['RU'].live/'online-delivery.json').read_bytes())
+        assert marker['ready'] is True
+        before = (tmp_path/'coordinator/plan.json').read_bytes()
+        code, result = stand.run('resume')
+        assert code == 0 and result['result'] == 'COMMITTED' and result['replay'], result
+        assert (tmp_path/'coordinator/plan.json').read_bytes() == before
+        assert not any((node.state/'start-intent-0.json').exists() for node in stand.fleet.nodes.values())
+    finally:
+        stand.close()
+
+
+@pytest.mark.parametrize('failure,cause', [('missing-opt-in', 'ONLINE_QUALIFICATION_ONLY'),
+    ('incompatible', 'RPC_RESPONSE_SCHEMA'), ('gateway-exit', 'ONLINE_RUNTIME_UNAVAILABLE')])
+def test_packaged_nl_failure_rejects_before_owner_or_journal(online_package, tmp_path, failure, cause):
+    if os.environ.get('FC_ONLINE_SSH') != '1':
+        pytest.skip('explicit network-none SSH container required')
+    from online_package_stand import PackageStand, private_file
+    stand = PackageStand(tmp_path, online_package[3], age=12000)
+    try:
+        stand.start()
+        if failure == 'gateway-exit':
+            process = next(process for process in stand.processes
+                           if process.pid == int(stand.states['test-NL2.service']['MainPID']))
+            process.kill()
+            process.wait(timeout=5)
+        else:
+            configuration = json.loads(stand.configs['NL2'].read_bytes())
+            if failure == 'missing-opt-in':
+                configuration.pop('online')
+            else:
+                configuration['online']['contract'] = 'incompatible'
+            private_file(stand.configs['NL2'], package.encode(configuration))
+        code, result = stand.run('online')
+        assert code == 1 and result['result'] == 'FAIL_CLOSED' and result['cause'] == cause, result
+        assert not (tmp_path/'coordinator/transaction.json').exists()
+        assert not any((node.state/'owner.json').exists() for node in stand.fleet.nodes.values())
+        assert not (stand.fleet.nodes['RU'].live/'online-delivery.json').exists()
+        if failure == 'incompatible':
+            request = dict(schema=1, role='NL', action='online', operation_id='test-packaged-ssh-controller',
+                expected_source_sha256=stand.manifest['source_sha256'], payload=dict(command='capabilities'))
+            rejected = subprocess.run([sys.executable, '-E', '-s', '-B', str(stand.extracted/'renewal/node.py'),
+                '--config', str(stand.configs['NL2'])], input=package.encode(request), capture_output=True, timeout=5)
+            assert rejected.returncode == 1 and json.loads(rejected.stdout) == dict(
+                result='REJECTED', cause='ONLINE_OPT_IN_REQUIRED')
+    finally:
+        stand.close()
+
+
+@pytest.mark.parametrize('boundary', ['ONLINE_FENCING', 'ONLINE_PREPARED', 'ONLINE_COMMIT_DECIDED',
+                                    'ONLINE_NL2_DECIDED', 'ONLINE_NL2_PUBLISHED', 'ONLINE_CLEANING'])
+def test_packaged_controller_sigkill_resumes_same_decision(online_package, tmp_path, boundary):
+    if os.environ.get('FC_ONLINE_SSH') != '1':
+        pytest.skip('explicit network-none SSH container required')
+    from online_package_stand import PackageStand
+    stand = PackageStand(tmp_path, online_package[3], age=12000)
+    process = None
+    try:
+        stand.start()
+        process = subprocess.Popen(stand.command('online'), cwd=tmp_path,
+                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        journal = tmp_path/'coordinator/transaction.json'
+        deadline = time.monotonic()+10
+        while True:
+            record = json.loads(journal.read_bytes()) if journal.exists() else {}
+            if record.get('state') == boundary:
+                process.kill()
+                process.wait(timeout=5)
+                break
+            assert process.poll() is None and time.monotonic() < deadline, record.get('state')
+            time.sleep(.001)
+        before = json.loads(journal.read_bytes())
+        code, result = stand.run('resume')
+        assert code == 0 and result['result'] == 'COMMITTED', result
+        final = json.loads(journal.read_bytes())
+        assert final['decision'] == 'COMMIT' and final['operation_id'] == before['operation_id']
+        if before['commit_decided']:
+            assert final['plan_sha256'] == before['plan_sha256']
+        assert not any((node.state/'start-intent-0.json').exists() for node in stand.fleet.nodes.values())
+    finally:
+        if process is not None and process.poll() is None:
+            process.kill()
+            process.wait(timeout=5)
+        stand.close()
+
+
+def test_packaged_seed_timeout_is_not_a_ready_traffic_runtime(online_package, tmp_path):
+    if os.environ.get('FC_ONLINE_SSH') != '1':
+        pytest.skip('explicit network-none SSH container required')
+    from online_package_stand import PackageStand
+    stand = PackageStand(tmp_path, online_package[3], age=12000)
+    try:
+        started = time.monotonic()
+        stand.start()
+        gateways = {int(stand.states['test-'+slot+'.service']['MainPID']) for slot in ('NL', 'NL2')}
+        for process in stand.processes:
+            if process.pid in gateways:
+                assert process.wait(timeout=20) != 0
+        assert time.monotonic()-started >= 15
+        code, result = stand.run('online')
+        assert code == 1 and result['cause'] == 'ONLINE_RUNTIME_UNAVAILABLE', result
+        assert not (tmp_path/'coordinator/transaction.json').exists()
+        assert not any((node.state/'owner.json').exists() for node in stand.fleet.nodes.values())
+    finally:
+        stand.close()
+
+
+@pytest.mark.parametrize('slot,command,kind', [('RU', 'prepare', 'drop'), ('NL', 'stage', 'drop'),
+    ('NL2', 'decide', 'drop'), ('NL', 'publish', 'drop'), ('RU', 'publish', 'drop'), ('NL2', 'stage', 'wrong-slot')])
+def test_packaged_rpc_lost_reply_and_participant_corruption(online_package, tmp_path, slot, command, kind):
+    if os.environ.get('FC_ONLINE_SSH') != '1':
+        pytest.skip('explicit network-none SSH container required')
+    from online_package_stand import PackageStand
+    stand = PackageStand(tmp_path, online_package[3], age=12000)
+    try:
+        stand.start()
+        stand.rpc_fault(slot, command, kind)
+        code, result = stand.run('online')
+        assert code == 75 and result['result'] == 'ONLINE_RECOVERY_REQUIRED', result
+        expected = 'ONLINE_PREPARED_RECEIPT' if kind == 'wrong-slot' else 'REMOTE_OUTCOME_UNKNOWN_READBACK_REQUIRED'
+        assert result['cause'] == expected, result
+        before = json.loads((tmp_path/'coordinator/transaction.json').read_bytes())
+        code, result = stand.run('abort' if kind == 'wrong-slot' else 'resume')
+        assert code == 0 and result['result'] == ('ABORTED' if kind == 'wrong-slot' else 'COMMITTED'), result
+        final = json.loads((tmp_path/'coordinator/transaction.json').read_bytes())
+        if before['commit_decided']:
+            assert final['plan_sha256'] == before['plan_sha256'] and final['decision'] == 'COMMIT'
+        if kind == 'wrong-slot':
+            assert not before['commit_decided'] and not (stand.fleet.nodes['RU'].live/'online-delivery.json').exists()
+    finally:
+        stand.close()

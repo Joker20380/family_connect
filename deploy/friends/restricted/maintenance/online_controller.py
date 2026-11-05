@@ -114,7 +114,8 @@ def run(controller, operation, *, schedule_seconds, resume):
             controller.save(record, 'ONLINE_CLEANING')
             return cleanup(controller, record)
         except Exception as error:
-            record['first_cause'] = record['first_cause'] or (str(error) if isinstance(error, Rejected) else 'IO_OR_TRANSPORT_FAILURE')
+            record['last_cause'] = str(error) if isinstance(error, Rejected) else 'IO_OR_TRANSPORT_FAILURE'
+            record['first_cause'] = record['first_cause'] or record['last_cause']
             if isinstance(error, Rejected) and str(error) in {
                     'ONLINE_POLICY_CHANGED', 'ONLINE_REVOCATION_FORBIDDEN', 'ONLINE_SEQUENCE_CHANGED',
                     'ONLINE_RUNTIME_REPLACED', 'ONLINE_DECISION_CORRUPT', 'LEAF_EXPIRED_OR_FUTURE',
@@ -128,10 +129,10 @@ def run(controller, operation, *, schedule_seconds, resume):
                         record['fenced'][role] = dict(stopped=None)
                     controller.save(record, 'ONLINE_EMERGENCY_REQUIRED')
                 return dict(result='ONLINE_EMERGENCY_REQUIRED', operation_id=operation,
-                    decision=record['decision'], cause=record['first_cause'], fenced=record['fenced'])
+                    decision=record['decision'], cause=record['first_cause'], last_cause=record['last_cause'], fenced=record['fenced'])
             controller.save(record, 'ONLINE_CLEANING' if record['state'] == 'ONLINE_CLEANING' else 'ONLINE_RECOVERY_REQUIRED')
             return dict(result='ONLINE_RECOVERY_REQUIRED', operation_id=operation, decision=record['decision'],
-                        cause=record['first_cause'], automatic_retry=False)
+                        cause=record['first_cause'], last_cause=record['last_cause'], automatic_retry=False)
 
 
 def cleanup(controller, record):

@@ -73,10 +73,21 @@ reuses the continuation and start intents; emergency closes old TCP connections.
 
 ## Qualification boundary
 
-Current new tests cover deterministic packaging/import closure/default-off,
-capability/membership refusal, and node RPC with the actual packaged gateway's
-observer/PID/executable. The observer test uses a local nonresponding proxy and
-synthetic unused provider token inside a network-none container: it deliberately
-does NOT claim provider readiness, connected traffic, G1–G4 or production acceptance.
-G1 runtime emergency, G2 independent-process faults, G3 Android HTTP/cache and G4
-two-renewal/cross-bound package traffic each require their own further evidence.
+Tests cover deterministic packaging/import closure/default-off, capability/membership
+refusal, actual reader PID/executable, three independent SSH handlers, COMMIT/replay,
+controller SIGKILL at six durable boundaries, and six RPC loss/corruption cases.
+All use the packaged controller/node entrypoints, not a qualification constructor.
+Set `FC_TEST_ONLINE_PACKAGE` to an immutable archive to qualify that exact package;
+the reproducibility check exports its committed revision into a disposable clone.
+The test image is defined in `tests/fixtures/online-runtime.Dockerfile`. Root checks
+require an explicit network-none container, `FC_ONLINE_ISOLATED=1`, `FC_ONLINE_SSH=1`,
+an absolute `FC_ONLINE_GO`, and a private `--basetemp=/run/fc-online-tests`.
+
+The observer fixture holds seed creation at a local nonresponding proxy with a synthetic
+unused token. The actual gateway exits at its unchanged15s provider timeout; a separate
+test reproduces that limit and verifies fail-closed without journal/owner writes.
+This is NOT a long-lived READY provider, useful traffic, G1–G4 or production acceptance.
+It cannot establish emergency restart/new authorized Family TLS, retained connections
+across leaf/CRL/lease bounds, or actual Android HTTP/cache/native delivery. Those remain
+separate mandatory gates. Never extend production timeouts or use production credentials
+to turn this narrow observer fixture into a false full-path acceptance.

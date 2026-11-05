@@ -19,7 +19,7 @@ PACKAGE = 'MESH_ONLINE_RUNTIME_V1'
 ONLINE_MODULES = (*MODULES, 'online_runtime.py', 'online_cli.py')
 API_SOURCES = tuple(sorted(set(API_MEMBERS) | set(API_ADDITIONS) | {
     'control/friends/paid_beta.py', 'clients/desktop/profile_config.py'}))
-SOURCES = (*API_SOURCES, *(DIRECTORY+'/'+name for name in ONLINE_MODULES))
+SOURCES = (*API_SOURCES, *(DIRECTORY+'/'+name for name in ONLINE_MODULES), DIRECTORY+'/ONLINE_RUNTIME.md')
 
 
 def library(repository, source):
@@ -66,6 +66,7 @@ def build(output, ref, *, go, repository=ROOT):
     source = subprocess.check_output(['git', 'rev-parse', '--verify', '--end-of-options', ref+'^{commit}'],
                                      cwd=repository, text=True).strip()
     content = {'renewal/'+name: committed(repository, source, DIRECTORY+'/'+name) for name in ONLINE_MODULES}
+    content['ONLINE_RUNTIME.md'] = committed(repository, source, DIRECTORY+'/ONLINE_RUNTIME.md')
     content['api.pyz'] = library(repository, source)
     content['http.pyz'] = http_runtime(repository, source)
     native = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', source, '--', 'carrier'],

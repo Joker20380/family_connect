@@ -13,8 +13,12 @@ acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-he
 
 <!-- Android113 MESH incident 20261104 -->
 **Online runtime package continuation — A IN PROGRESS, B gated.** Separate opt-in package
-and controller/node capability/actual-reader boundary implemented;6 isolated checks PASS,
-not full G1–G4. Keep one active step: qualify this package through G1/G2/G3/G4. After A,
+and controller/node capability/actual-reader boundary implemented. Packaged SSH COMMIT/replay,
+six real controller kills and six RPC faults pass in a containing110-test selection; root
+regression373 PASS/1 SKIP plus the skipped native check separately PASS (overlapping counts).
+These are observer-window tests, not a READY traffic stand or full G1–G4. The fixture's
+unchanged15s provider timeout is an explicit unfinished runtime boundary, not an entrypoint
+or approval blocker. One active step: complete the long-lived packaged G1/G2/G3/G4 path. After A,
 save its independent accepted source/package checkpoint before ANDROID-APP-VPN below.
 [Current package contract](../deploy/friends/restricted/maintenance/ONLINE_RUNTIME.md).
 
@@ -26,7 +30,8 @@ recovery/guard/empty-INCLUDE/package-removal/update tests and renewal-delivery r
 No source work in parallel with unfinished A. No production, owner-phone installation,
 publication, release/catalog/timer/admission/cohort/paid change in either task.
 
-**Current product milestone: Android MESH operational reliability.** The selected incident
+Earlier emergency-only checkpointb1d17d3 (package blocker superseded above):
+**Product milestone: Android MESH operational reliability.** The selected incident
 remains within the original stage5, not a new product/PLAN ID. Partial stage6/7 delivery and
 implemented subscription accounting do not close gateway recovery or paid launch.
 G1 now has a linked, approval-gated quiesced continuation implementation; scoped192 PASS/

@@ -36,6 +36,14 @@ class RuntimeReader:
                     'ONLINE_READER_EXECUTABLE')
 
     def __call__(self, candidate):
+        try:
+            return self.read(candidate)
+        except TimeoutError:
+            require(False, 'ONLINE_RUNTIME_TIMEOUT')
+        except OSError:
+            require(False, 'ONLINE_RUNTIME_UNAVAILABLE')
+
+    def read(self, candidate):
         with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as channel:
             channel.settimeout(5)
             channel.connect(self.path)
@@ -53,4 +61,7 @@ class RuntimeReader:
                 require(len({name for name, value in items}) == len(items), 'ONLINE_RUNTIME_RECEIPT')
                 return dict(items)
             self.verify_peer(channel)
-            return parse(canonical(json.loads(response, object_pairs_hook=pairs)))
+            try:
+                return parse(canonical(json.loads(response, object_pairs_hook=pairs)))
+            except (ValueError, UnicodeError):
+                require(False, 'ONLINE_RUNTIME_RECEIPT')
