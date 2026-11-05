@@ -19,7 +19,7 @@ NODE_MODULES = frozenset(('node.py','credential_renewal.py','production_node.py'
 def construct(config_path, *, fenced_recovery=False):
     require(os.geteuid() == 0, 'ROOT_REQUIRED')
     config = parse(read_private(config_path))
-    require(set(config) - {'admission_mode', 'profile_locator', 'profile_locator_sha256', 'snapshot_target','gateway_ids','gateway_slot'} == {'schema','role','live','state','database','anchor','anchor_sha256','api_archive','api_sha256','service_units',
+    require(set(config) - {'online', 'admission_mode', 'profile_locator', 'profile_locator_sha256', 'snapshot_target','gateway_ids','gateway_slot'} == {'schema','role','live','state','database','anchor','anchor_sha256','api_archive','api_sha256','service_units',
                            'source_files','source_sha256'}, 'NODE_CONFIG_SCHEMA')
     require(type(config['schema']) is int and config['schema'] == 1 and config['role'] in ('RU','NL'), 'NODE_CONFIG_SCHEMA')
     source = Path(__file__).resolve().parent
@@ -106,6 +106,10 @@ def construct(config_path, *, fenced_recovery=False):
     node.snapshot_target = config.get('snapshot_target')
     node.pinned_archive_descriptor = descriptor
     node.fenced_recovery = fenced_recovery
+    if 'online' in config:
+        require(not fenced_recovery, 'FENCED_RECOVERY_ACTION_FORBIDDEN')
+        from online_runtime import activate
+        activate(node, config, source)
     return node,source_sha256
 
 

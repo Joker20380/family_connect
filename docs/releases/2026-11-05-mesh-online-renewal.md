@@ -1,5 +1,49 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Online runtime package continuation
+
+Entry HEAD409644142114d34f50e0543c4472274d72153d20 matches the requested verified
+baseline. Source against emergency checkpointb1d17d3 is unchanged (only four documentation
+files differ). The four pre-existing dirty documents and five untracked historical reports
+plus restricted patch are preserved. No server/phone access, deployment, signing or publication.
+
+Implemented a separate `MESH_ONLINE_RUNTIME_V1` builder and explicit online CLI, rather than
+setting the qualification flag. The package closes over committed current API/HTTP sources,
+renewal modules and a source-built native gateway; all have an inventory/digest. The accepted
+maintenance archive/accepted API inputs are unchanged. Online requires exact opt-in, package
+source/API, RU/NL/NL2 membership/capabilities and actual reader custody. Reader checks Unix
+peer UID/PID against service MainPID and the executable digest as well as gateway/profile
+receipt binding. Existing controller, RPC, signer, locks, fences, durable decisions, emergency
+authorization and continuation are reused. SSH budget remains1395s+lateness.
+
+New isolated package checks:6 PASS in10.78s (`reader-tests-second.log`), Go1.26.1 and existing
+Python3.13.15 locked test image. Build determinism is checked twice after dirtying the test
+checkout; isolated imports/HTTP/node/controller entrypoints, opt-out/membership negatives
+and actual packaged gateway reader/PID checks run. This is A1 boundary evidence only:
+the gateway's seed creation is held by a local nonresponding proxy with a synthetic unused
+token in a network-none container, not Telemost/provider readiness or useful traffic.
+Service status in this narrow test uses a disposable systemctl adapter reporting the actual
+owned PID; no real systemd stop/start acceptance is claimed.
+
+Initial failures retained: three test configs were not canonical JSON; the first native
+reader launch lacked a provider token and stopped before observation. Corrections affect
+only fixture setup. Initial containing Python selection82 PASS/3 FAIL is not all-green;
+its80 online/emergency tests overlap prior evidence. The new6-check repeat is not full CI.
+Raw evidence: ignored `state-client-build/mesh-online-package-20261105/`.
+
+G1 full emergency runtime: NOT_RUN. G2 independent SSH/process faults: NOT_RUN. G3 actual
+Android HTTP/cache/native owner: NOT_RUN. G4 final two-renewal/cross-bound package traffic:
+NOT_RUN. The original known parser blocker is implemented, not substituted for these gates.
+The999s stand remains evidence for a8e1db9 only. APK118/updater113 and production unchanged;
+rollback is source-only and old quiesced behavior remains available, not a live action.
+
+One next step: complete packaged independent-process G1–G4 on frozen source. Then retain an
+independent accepted A checkpoint before the separately scoped ANDROID-APP-VPN implementation.
+No Phase B source or acceptance claim yet. Exact release artifacts, separately authorized
+delivery, real both-NL renewal and remaining field gates still precede controlled paid beta.
+
+See [online configuration/entrypoint contract](../../deploy/friends/restricted/maintenance/ONLINE_RUNTIME.md).
+
 ## Continuation from354513d — G1 implementation checkpoint
 
 HEAD matched354513dd9f8a9558b800963664eb9ea053e457ab; no subsequent source delta. All

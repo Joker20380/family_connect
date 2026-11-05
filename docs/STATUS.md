@@ -11,6 +11,17 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Online package implementation checkpoint (same incident; A not accepted).**
+Separate default-off online controller/node contract and deterministic current API/HTTP/native
+package are implemented; accepted maintenance archive is unchanged. New isolated package
+checks6 PASS, including real packaged gateway observer, peer PID/executable/hash and opt-out
+rejection. The seed is deliberately held at an isolated proxy: no READY/traffic acceptance.
+G1/G2/G3/G4 remain NOT_RUN on this candidate. No production/phone/publication changes.
+Next: independent-process packaged qualification, then G1–G4; only after a separate accepted
+A checkpoint, execute bounded ANDROID-APP-VPN source/routing work. Phase B is not started.
+[Contract](../deploy/friends/restricted/maintenance/ONLINE_RUNTIME.md) ·
+[Same incident evidence](releases/2026-11-05-mesh-online-renewal.md#online-runtime-package-continuation).
+
 **5 November — G1 emergency implementation checkpoint; G1–G4 qualification IN PROGRESS.**
 Product milestone: operational reliability of Android MESH for a small opted-in group,
 without routine developer reconnection. Existing roadmap stage5 remains open; subscription

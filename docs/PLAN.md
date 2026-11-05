@@ -12,6 +12,20 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Online runtime package continuation — A IN PROGRESS, B gated.** Separate opt-in package
+and controller/node capability/actual-reader boundary implemented;6 isolated checks PASS,
+not full G1–G4. Keep one active step: qualify this package through G1/G2/G3/G4. After A,
+save its independent accepted source/package checkpoint before ANDROID-APP-VPN below.
+[Current package contract](../deploy/friends/restricted/maintenance/ONLINE_RUNTIME.md).
+
+**ANDROID-APP-VPN (bounded Android task, selected by owner, NOT STARTED).** Dependency:
+accepted A/G1–G4 checkpoint. One local ALL/INCLUDE/EXCLUDE policy and immutable per-Connect
+snapshot across AWG/TCP/MESH/Auto/guard; active edits remain pending until explicit next
+Connect. Gate: API27/API35 distinct-UID VPN/direct DNS/verified-HTTPS/IPv6 routing evidence,
+recovery/guard/empty-INCLUDE/package-removal/update tests and renewal-delivery regression.
+No source work in parallel with unfinished A. No production, owner-phone installation,
+publication, release/catalog/timer/admission/cohort/paid change in either task.
+
 **Current product milestone: Android MESH operational reliability.** The selected incident
 remains within the original stage5, not a new product/PLAN ID. Partial stage6/7 delivery and
 implemented subscription accounting do not close gateway recovery or paid launch.

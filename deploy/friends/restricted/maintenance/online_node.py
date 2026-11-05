@@ -196,16 +196,20 @@ def publish(node, operation, payload):
 
 
 def dispatch(node, operation, payload):
-    require(node.online_qualification is True, 'ONLINE_QUALIFICATION_ONLY')
+    require(node.online_qualification is True or getattr(node, 'online_runtime', None) is not None,
+            'ONLINE_QUALIFICATION_ONLY')
     require(type(operation) is str and re.fullmatch('[a-z0-9-]{16,96}', operation), 'OPERATION_ID')
     require(type(payload) is dict and type(payload.get('command')) is str, 'ONLINE_RPC_SCHEMA')
     command = payload['command']
-    schemas = {'inspect': set(), 'acquire': {'fence', 'expected', 'online'}, 'prepare': {'fence', 'gateway'},
+    schemas = {'capabilities': set(), 'inspect': set(), 'acquire': {'fence', 'expected', 'online'}, 'prepare': {'fence', 'gateway'},
                'emergency-handoff': {'origin'}, 'emergency-prepare': {'origin', 'gateway'},
                'stage': {'fence', 'plan'}, 'decide': {'fence', 'plan_sha256', 'prepared'},
                'complete': {'fence', 'reconciliation'}, 'abort': {'fence'}, 'fence': {'fence'},
                'publish': {'fence'} | ({'receipts'} if node.role == 'RU' else set())}
     require(command in schemas and set(payload) == schemas[command] | {'command'}, 'ONLINE_RPC_SCHEMA')
+    if command == 'capabilities':
+        from online_runtime import capabilities
+        return capabilities(node)
     if command == 'inspect':
         return node.inspect(online=True)
     if command == 'emergency-handoff':
