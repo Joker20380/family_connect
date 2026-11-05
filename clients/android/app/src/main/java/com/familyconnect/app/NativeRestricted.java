@@ -13,6 +13,7 @@ final class NativeRestricted {
     static native int validationCode(byte[] response, byte[] publicIdentity, byte[] anchor);
     static native long beginReady(byte[] response, byte[] identity, byte[] anchor, String resolver, long budgetMillis, VpnService protector, int speedProfile);
     static native boolean stop(long handle);
+    static native boolean renew(long handle, byte[] response, byte[] identity);
     static native long chatAcquire(byte[] response, byte[] identity, byte[] anchor, String resolver, Object protector);
     static native int chatState(long handle);
     static native void chatRelease(long handle);

@@ -43,10 +43,14 @@ failed/ambiguous exchange. `ConnectionState()` remains the original TLS handshak
 `AuthorizationState()` is the current authenticated application peer/chain. Do not use the
 former as renewed authorization or extend a broker lease from an unacknowledged profile.
 
-Production does not register this handler or schedule exchanges yet. Gateway lease closures
-and the broker control-session monitor still use original bounds/authorization; a refreshed
-`Session` alone cannot keep the full product setup alive. Android fresh-credential delivery
-and generation-consistent monitoring must be integrated before online fleet publication.
+The new source integration registers a preflight/credential handler in the gateway and
+shares atomic native authorization with lease handlers and the active broker monitor.
+Android delivers through the selected-node readiness path into its existing native owner;
+`SessionMaintenance` serializes credential offers and ordinary lease work. Unchanged and
+duplicate candidates are filtered before wire work; peer-readiness mismatches preserve
+the old bound, with no automatic retry loop for that candidate. This source is not deployed;
+online fleet publication and its existing stop guards are unchanged. See the
+[integration dependency map and gates](../../docs/releases/2026-11-05-mesh-renewal-integration.md).
 Run `go test -race ./familysession ./roombroker -run '^TestCredential'` from `carrier/`;
 cross-deadline DNS needs the isolated port53 harness described in the
 [protocol/checkpoint report](../../docs/releases/2026-11-05-mesh-credential-exchange.md).

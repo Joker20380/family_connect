@@ -9,6 +9,34 @@ import (
 	"time"
 )
 
+func TestConfirmedVPNProfileCannotReachAnotherOwner(test *testing.T) {
+	var manager Coordinator
+	ctx := bounded(test)
+	first, err := manager.ReserveVPN(ctx)
+	if err != nil {
+		test.Fatal(err)
+	}
+	session := &testSession{}
+	if first.Publish(session, [32]byte{1}) != nil {
+		test.Fatal("publish")
+	}
+	if !first.RefreshProfile(session, [32]byte{2}) || first.RefreshProfile(&testSession{}, [32]byte{3}) {
+		test.Fatal("profile binding")
+	}
+	first.Release()
+	second, err := manager.ReserveVPN(ctx)
+	if err != nil {
+		test.Fatal(err)
+	}
+	defer second.Release()
+	if second.Publish(&testSession{}, [32]byte{4}) != nil {
+		test.Fatal("replacement publish")
+	}
+	if first.RefreshProfile(session, [32]byte{5}) || second.profile != [32]byte{4} {
+		test.Fatal("late commit changed replacement")
+	}
+}
+
 func TestPinnedAcquisitionCannotReplaceFailedGeneration(test *testing.T) {
 	ctx := bounded(test)
 	var manager Coordinator

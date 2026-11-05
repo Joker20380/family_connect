@@ -67,6 +67,12 @@ final class FriendsRestricted {
     static void prewarm(Context source,String gateway){
         if(source.getPackageName().equals("com.familyconnect.app.friends"))start(source,false,gateway);
     }
+    static CompletableFuture<byte[]> renewal(Context source,String gateway){
+        return start(source,false,gateway).thenApply(selected->{
+            if(!selected.attempted||selected.availabilityFailure||scope(gateway).denied)return null;
+            return selected.response==null?null:selected.response.clone();
+        });
+    }
     private static synchronized CompletableFuture<Selection> start(Context source,boolean required,String requested){
         String gateway=RestrictedGateway.target(requested);Scope current=scope(gateway);
         if(current.running!=null&&!current.running.isDone())return current.running;

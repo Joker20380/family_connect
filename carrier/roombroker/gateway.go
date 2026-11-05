@@ -118,7 +118,9 @@ func (gateway *telemostGateway) Run(ctx context.Context, active func() error) er
 	}
 	config := tcpforward.MuxConfig{MaxStreams: DedicatedMaxStreams, Policy: tcpforward.Policy{Services: gateway.services, ServicesOnly: len(gateway.services) > 0 && !gateway.allowInternet}}
 	if binding, ok := ctx.Value(leaseKey{}).(*leaseBinding); ok {
-		config.LeaseRenewal = binding.handler(SessionAuthorizer(gateway.credentialsPath, secured.ConnectionState()), secured.SecurityDeadline())
+		if err := binding.configure(ctx, gateway.credentialsPath, secured, &config); err != nil {
+			return err
+		}
 	}
 	mux, err := tcpforward.NewMux(ctx, secured, true, config)
 	if err != nil {

@@ -11,12 +11,46 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"encoding/pem"
+	"errors"
 	"io"
 	"time"
 )
 
 const renewalDomain = "family-connect/credential-renewal/v1"
 const renewalMaxMessage = 8192
+
+var ErrUnchanged = errors.New("credential successor unchanged")
+
+type Authorization struct {
+	Generation  uint64
+	State       tls.ConnectionState
+	Deadline    time.Time
+	credentials *renewalState
+}
+
+func (authorization Authorization) CheckPolicy(raw []byte, server bool) error {
+	if _, _, err := configuration(raw, server, true); err != nil || authorization.credentials == nil {
+		return ErrRejected
+	}
+	next, err := initialRenewalState(raw, authorization.State)
+	previous := authorization.credentials
+	if err != nil || !compatibleSuccessor(previous, next) {
+		return ErrRejected
+	}
+	if next.verify(previous.local, !server) != nil || next.verify(previous.peer, server) != nil || next.verify(next.local, !server) != nil {
+		return ErrRejected
+	}
+	return nil
+}
+
+type RenewalCandidate struct {
+	Generation  uint64   `json:"generation"`
+	CRL         [32]byte `json:"crl"`
+	MinimumCRL  int64    `json:"minimum_crl"`
+	Fingerprint [32]byte `json:"-"`
+}
+
+type RenewalGuard func(Authorization, func() error) error
 
 type RenewalChannel interface {
 	io.ReadWriteCloser
@@ -119,15 +153,26 @@ func (session *Session) prepareRenewal(raw []byte) (*renewalState, ed25519.Priva
 		return nil, nil, time.Time{}, ErrRejected
 	}
 	next, err := initialRenewalState(raw, tls.ConnectionState{PeerCertificates: []*x509.Certificate{previous.peer}})
-	if err != nil || !bytes.Equal(next.authority.Raw, previous.authority.Raw) ||
+	if err != nil || !compatibleSuccessor(previous, next) {
+		return nil, nil, time.Time{}, ErrRejected
+	}
+	if next.verify(previous.local, !session.server) != nil || next.verify(previous.peer, session.server) != nil || next.verify(next.local, !session.server) != nil {
+		return nil, nil, time.Time{}, ErrRejected
+	}
+	next.generation = previous.generation + 1
+	return next, key, session.expiry, nil
+}
+
+func compatibleSuccessor(previous, next *renewalState) bool {
+	if !bytes.Equal(next.authority.Raw, previous.authority.Raw) ||
 		next.profile.Family != previous.profile.Family || next.profile.Gateway != previous.profile.Gateway ||
 		next.profile.MinimumRevision != previous.profile.MinimumRevision || next.profile.MinimumCRL < previous.profile.MinimumCRL ||
 		!sameRenewalHolder(previous.local, next.local) || next.crl.Number.Cmp(previous.crl.Number) < 0 ||
 		next.crl.ThisUpdate.Before(previous.crl.ThisUpdate) || next.crl.NextUpdate.Before(previous.crl.NextUpdate) {
-		return nil, nil, time.Time{}, ErrRejected
+		return false
 	}
 	if next.crl.Number.Cmp(previous.crl.Number) == 0 && !bytes.Equal(next.crl.Raw, previous.crl.Raw) {
-		return nil, nil, time.Time{}, ErrRejected
+		return false
 	}
 	for _, entry := range previous.crl.RevokedCertificateEntries {
 		found := false
@@ -138,14 +183,10 @@ func (session *Session) prepareRenewal(raw []byte) (*renewalState, ed25519.Priva
 			}
 		}
 		if !found {
-			return nil, nil, time.Time{}, ErrRejected
+			return false
 		}
 	}
-	if next.verify(previous.local, !session.server) != nil || next.verify(previous.peer, session.server) != nil || next.verify(next.local, !session.server) != nil {
-		return nil, nil, time.Time{}, ErrRejected
-	}
-	next.generation = previous.generation + 1
-	return next, key, session.expiry, nil
+	return true
 }
 
 func (session *Session) securityAlive() bool {
@@ -193,19 +234,60 @@ func (session *Session) endSecurityIO(write bool) {
 }
 
 func (session *Session) AuthorizationState() tls.ConnectionState {
-	state := session.ConnectionState()
 	session.securityMu.Lock()
 	defer session.securityMu.Unlock()
-	if session.renewal != nil {
-		peer, _ := x509.ParseCertificate(session.renewal.peer.Raw)
-		authority, _ := x509.ParseCertificate(session.renewal.authority.Raw)
-		state.PeerCertificates = []*x509.Certificate{peer}
-		state.VerifiedChains = [][]*x509.Certificate{{peer, authority}}
-	}
-	return state
+	return session.authorizationLocked().State
 }
 
-func (session *Session) commitRenewal(ctx context.Context, next *renewalState) error {
+func (session *Session) authorizationLocked() Authorization {
+	return session.authorizationFor(session.renewal, session.expiry)
+}
+
+func (session *Session) authorizationFor(next *renewalState, deadline time.Time) Authorization {
+	state := session.ConnectionState()
+	generation := uint64(0)
+	if next != nil {
+		peer, _ := x509.ParseCertificate(next.peer.Raw)
+		authority, _ := x509.ParseCertificate(next.authority.Raw)
+		state.PeerCertificates = []*x509.Certificate{peer}
+		state.VerifiedChains = [][]*x509.Certificate{{peer, authority}}
+		generation = next.generation
+	}
+	return Authorization{generation, state, deadline, next}
+}
+
+func (session *Session) WithAuthorization(ctx context.Context, use func(Authorization) error) error {
+	session.securityMu.Lock()
+	defer session.securityMu.Unlock()
+	if ctx.Err() != nil || !session.securityAlive() {
+		return ErrRejected
+	}
+	return use(session.authorizationLocked())
+}
+
+func (session *Session) Candidate(raw []byte) (RenewalCandidate, error) {
+	next, key, deadline, err := session.prepareRenewal(raw)
+	if err != nil {
+		return RenewalCandidate{}, err
+	}
+	defer clear(key)
+	session.securityMu.Lock()
+	defer session.securityMu.Unlock()
+	previous := session.renewal
+	if next.generation != previous.generation+1 || !session.securityAlive() {
+		return RenewalCandidate{}, ErrRejected
+	}
+	if bytes.Equal(next.local.Raw, previous.local.Raw) && bytes.Equal(next.crl.Raw, previous.crl.Raw) && next.profile.MinimumCRL == previous.profile.MinimumCRL {
+		return RenewalCandidate{}, ErrUnchanged
+	}
+	if next.local.NotAfter.Before(previous.local.NotAfter) || next.local.NotBefore.Before(previous.local.NotBefore) || !minTime(next.local.NotAfter, next.crl.NextUpdate, next.authority.NotAfter).After(deadline) {
+		return RenewalCandidate{}, ErrRejected
+	}
+	public, _ := json.Marshal(next.profile)
+	return RenewalCandidate{next.generation, sha256.Sum256(next.crl.Raw), next.profile.MinimumCRL, sha256.Sum256(public)}, nil
+}
+
+func (session *Session) commitRenewal(ctx context.Context, next *renewalState, guard RenewalGuard) error {
 	session.securityMu.Lock()
 	defer session.securityMu.Unlock()
 	previous := session.renewal
@@ -218,13 +300,22 @@ func (session *Session) commitRenewal(ctx context.Context, next *renewalState) e
 	if !expiry.After(session.expiry) || ctx.Err() != nil || !session.securityAlive() {
 		return ErrRejected
 	}
-	if session.connection.SetReadDeadline(securityBound(expiry, session.readBound)) != nil ||
-		session.connection.SetWriteDeadline(securityBound(expiry, session.writeBound)) != nil {
-		session.stream.stop()
-		return ErrRejected
+	commit := func() error {
+		if ctx.Err() != nil || !session.securityAlive() {
+			return ErrRejected
+		}
+		if session.connection.SetReadDeadline(securityBound(expiry, session.readBound)) != nil ||
+			session.connection.SetWriteDeadline(securityBound(expiry, session.writeBound)) != nil {
+			session.stream.stop()
+			return ErrRejected
+		}
+		session.renewal, session.expiry = next, expiry
+		return nil
 	}
-	session.renewal, session.expiry = next, expiry
-	return nil
+	if guard != nil {
+		return guard(session.authorizationFor(next, expiry), commit)
+	}
+	return commit()
 }
 
 func writeRenewal(channel io.Writer, message renewalMessage) error {
@@ -272,6 +363,10 @@ func renewalProof(kind string, transcript []byte) []byte {
 }
 
 func (session *Session) RenewCredentials(parent context.Context, channel RenewalChannel, raw []byte) (failure error) {
+	return session.RenewCredentialsGuarded(parent, channel, raw, nil)
+}
+
+func (session *Session) RenewCredentialsGuarded(parent context.Context, channel RenewalChannel, raw []byte, guard RenewalGuard) (failure error) {
 	if channel == nil {
 		return ErrRejected
 	}
@@ -368,11 +463,11 @@ func (session *Session) RenewCredentials(parent context.Context, channel Renewal
 	}
 	if session.server {
 		if receive("client-proof") != nil || send("server-proof") != nil || receive("client-commit") != nil ||
-			session.commitRenewal(ctx, next) != nil || send("server-committed") != nil || receive("client-done") != nil {
+			session.commitRenewal(ctx, next, guard) != nil || send("server-committed") != nil || receive("client-done") != nil {
 			return ErrRejected
 		}
 	} else if send("client-proof") != nil || receive("server-proof") != nil || send("client-commit") != nil ||
-		receive("server-committed") != nil || session.commitRenewal(ctx, next) != nil || send("client-done") != nil {
+		receive("server-committed") != nil || session.commitRenewal(ctx, next, guard) != nil || send("client-done") != nil {
 		return ErrRejected
 	}
 	if channel.CloseWrite() != nil {

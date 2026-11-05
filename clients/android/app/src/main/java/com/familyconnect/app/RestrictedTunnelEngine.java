@@ -33,6 +33,7 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     private final boolean restoring;
     private final String gateway;
     private boolean temporaryBootstrap;
+    private CredentialRefresh credentials;
 
     RestrictedTunnelEngine(Context context, BooleanSupplier cancelled, Consumer<Boolean> state) {
         this(context,cancelled,state,null,Long.MAX_VALUE);
@@ -94,6 +95,7 @@ final class RestrictedTunnelEngine implements TunnelEngine {
         int phase;
         while ((phase=NativeRestricted.state(handle))==0 && SystemClock.elapsedRealtime()<deadline && !cancelled.getAsBoolean() && !authorizationDenied()) Thread.sleep(100);
         evidence();
+        credentials=new CredentialRefresh(handle);
         checkAccess();
         if (!control.isEmpty() && phase==4) return;
         if (phase!=1) {
@@ -127,6 +129,15 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     }
 
     ConnectivityOrchestrator.Failure connectionFailure() {
+        if(credentials!=null&&!cancelled.getAsBoolean()&&!authorizationDenied()&&context.getPackageName().equals("com.familyconnect.app.friends")){
+            credentials.poll(handle,SystemClock.elapsedRealtime(),()->FriendsRestricted.renewal(context,gateway),response->{
+                try(ControlIdentity identity=new FriendsIdentityVault(context).load()){
+                    if(cancelled.getAsBoolean()||authorizationDenied())return;
+                    byte[] full=identity.material(),material=java.util.Arrays.copyOf(full,64);java.util.Arrays.fill(full,(byte)0);
+                    try{NativeRestricted.renew(handle,response,material);}finally{java.util.Arrays.fill(material,(byte)0);}
+                }catch(Exception|LinkageError unavailable){}
+            });
+        }
         int phase=-1;
         String snapshot=null;
         try {
@@ -175,6 +186,7 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     }
 
     public void down() throws Exception {
+        if(credentials!=null){credentials.close();credentials=null;}
         if (handle>0) {
             try { evidence(); }catch(Exception ignored){}
             boolean stopped=NativeRestricted.stop(handle);

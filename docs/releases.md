@@ -1,5 +1,11 @@
 # Release distribution / Выпуски
 
+**5 November11:05UTC — active-session renewal source checkpoint; NOT a release.**
+Android/native owner, gateway lease and broker-monitor generation integration is implemented;
+host native continuity/negative and66 scoped JVM checks pass. Isolated DNS, broader race
+and API27/API35 qualification remain pending.118/default113/catalog7 and servers unchanged.
+[Dependency map, qualification and next-stage boundary](releases/2026-11-05-mesh-renewal-integration.md).
+
 **5 November10:10UTC — authenticated credential exchange source checkpoint; NOT a release.**
 Opt-in native protocol preserves TLS/mux/TCP across old leaf/CRL expiry with successor
 proofs; isolated DNS/race checks pass. Production handlers, Android supplier, coordinated

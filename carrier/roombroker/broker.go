@@ -61,22 +61,23 @@ func DefaultLimits() Limits {
 }
 
 type setup struct {
-	exchange    string
-	created     time.Time
-	id          string
-	identity    Identity
-	authorize   Authorize
-	state       State
-	ctx         context.Context
-	cancel      context.CancelFunc
-	deadline    time.Time
-	started     bool
-	claimed     bool
-	done        chan struct{}
-	lease       *leaseLifetime
-	renewal     uint64
-	lastLease   LeaseReceipt
-	lastRequest LeaseReceipt
+	exchange      string
+	created       time.Time
+	id            string
+	identity      Identity
+	authorize     Authorize
+	authorization activeAuthorization
+	state         State
+	ctx           context.Context
+	cancel        context.CancelFunc
+	deadline      time.Time
+	started       bool
+	claimed       bool
+	done          chan struct{}
+	lease         *leaseLifetime
+	renewal       uint64
+	lastLease     LeaseReceipt
+	lastRequest   LeaseReceipt
 }
 
 type Broker struct {
@@ -274,15 +275,7 @@ func (broker *Broker) monitor(current *setup) {
 			broker.unlock()
 			return
 		case <-ticker.C:
-			identity, err := authorized(current.ctx, current.authorize)
-			broker.mu.Lock()
-			stale := current.state != Active && time.Now().After(current.deadline)
-			broker.unlock()
-			if err != nil || identity != current.identity {
-				broker.terminate(current, Failed, "authorization_changed")
-			} else if stale {
-				broker.terminate(current, Expired, "unused_expired")
-			}
+			broker.reauthorize(current)
 		}
 	}
 }

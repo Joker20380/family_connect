@@ -72,6 +72,7 @@ type Session struct {
 	metrics      func() map[string]any
 	diagnostic   func() sessiondiag.Report
 	terminal     string
+	credentials  *roombroker.SessionMaintenance
 	Counters     Counters
 }
 
@@ -423,7 +424,7 @@ func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Director
 		carrier.Close()
 		trace.Add("CLEANUP", "COMPLETED", "NONE")
 	})
-	go roombroker.MaintainLease(session.ctx, mux, descriptor.SetupID, session.Close)
+	session.startMaintenance(secured, mux, descriptor.SetupID)
 	session.diagnostic = func() sessiondiag.Report {
 		failure, failedAt := mux.Terminal()
 		report := sessiondiag.Capture(descriptor.SetupID, failure, failedAt, secured.ReliabilityStats(), carrier.Stats(), mux.Stats())

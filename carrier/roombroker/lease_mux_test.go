@@ -100,6 +100,10 @@ func newLeaseMuxWithProfiles(test *testing.T, support bool, clientRaw, serverRaw
 }
 
 func newLeaseMuxProfileOptions(test *testing.T, support bool, clientRaw, serverRaw []byte, configure func(*leaseMuxFixture, *familysession.Session, *tcpforward.MuxConfig), securityLifetime ...time.Duration) *leaseMuxFixture {
+	return newLeaseMuxOptions(test, support, clientRaw, serverRaw, configure, 0, securityLifetime...)
+}
+
+func newLeaseMuxOptions(test *testing.T, support bool, clientRaw, serverRaw []byte, configure func(*leaseMuxFixture, *familysession.Session, *tcpforward.MuxConfig), realtimeLease time.Duration, securityLifetime ...time.Duration) *leaseMuxFixture {
 	test.Helper()
 	path := filepath.Join(test.TempDir(), "gateway.json")
 	if err := os.WriteFile(path, serverRaw, 0600); err != nil {
@@ -119,9 +123,17 @@ func newLeaseMuxProfileOptions(test *testing.T, support bool, clientRaw, serverR
 	}
 	identity := Identity{Family: credentials.Family, Device: config.Certificates[0].Leaf.Subject.SerialNumber}
 	copy(identity.PublicKey[:], certificate.PrivateKey.(ed25519.PrivateKey).Public().(ed25519.PublicKey))
-	authorize := func(context.Context) (Identity, error) { return identity, nil }
-	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	var authorize Authorize = func(context.Context) (Identity, error) { return identity, nil }
+	budget := 20 * time.Second
+	if realtimeLease > 0 {
+		budget = 40 * time.Second
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), budget)
 	test.Cleanup(cancel)
+	if realtimeLease > 0 {
+		_, control := openRotationPair(test, ctx, clientRaw, serverRaw)
+		authorize = SessionAuthorizer(path, control.ConnectionState())
+	}
 	listener, err := net.Listen("tcp4", "127.0.0.1:0")
 	if err != nil {
 		test.Fatal(err)
@@ -143,6 +155,11 @@ func newLeaseMuxProfileOptions(test *testing.T, support bool, clientRaw, serverR
 	clientPipe, serverPipe := packets{incoming, outgoing, stopped, once}, packets{outgoing, incoming, stopped, once}
 	test.Cleanup(func() { clientPipe.Close() })
 	ready := make(chan struct{})
+	limits := DefaultLimits()
+	if realtimeLease > 0 {
+		limits.Lifetime = realtimeLease
+		limits.Recheck = 20 * time.Millisecond
+	}
 	broker, err := New(providerFunc(fresh), gatewayFunc(func(lifetime, _ context.Context, _ Room, identifier string, identity Identity) (Gateway, error) {
 		return &fakeGateway{run: func(ctx context.Context, active func() error) error {
 			secured, err := familysession.Open(ctx, serverPipe, serverRaw, true)
@@ -164,8 +181,15 @@ func newLeaseMuxProfileOptions(test *testing.T, support bool, clientRaw, serverR
 			if configure != nil {
 				configure(fixture, secured, &config)
 			}
+			if realtimeLease > 0 {
+				if err := ctx.Value(leaseKey{}).(*leaseBinding).configure(ctx, path, secured, &config); err != nil {
+					test.Log("runtime configure rejected", err)
+					return err
+				}
+			}
 			mux, err := tcpforward.NewMux(ctx, secured, true, config)
 			if err != nil {
+				test.Log("runtime mux rejected", err)
 				return err
 			}
 			defer mux.Close()
@@ -173,13 +197,15 @@ func newLeaseMuxProfileOptions(test *testing.T, support bool, clientRaw, serverR
 			close(ready)
 			return mux.Wait()
 		}}, nil
-	}), DefaultLimits(), nil)
+	}), limits, nil)
 	if err != nil {
 		test.Fatal(err)
 	}
 	fixture.broker = broker
-	broker.newLease = func(duration time.Duration) *leaseLifetime {
-		return newLeaseWithClock(duration, fixture.clock.Now, fixture.clock.After)
+	if realtimeLease == 0 {
+		broker.newLease = func(duration time.Duration) *leaseLifetime {
+			return newLeaseWithClock(duration, fixture.clock.Now, fixture.clock.After)
+		}
 	}
 	test.Cleanup(broker.Close)
 	identifier, err := broker.Challenge(ctx, authorize)
@@ -203,7 +229,7 @@ func newLeaseMuxProfileOptions(test *testing.T, support bool, clientRaw, serverR
 	if err := BindClient(ctx, secured, descriptor, clientRaw); err != nil {
 		test.Fatal(err)
 	}
-	client, err := tcpforward.NewMux(ctx, secured, false, tcpforward.MuxConfig{MaxStreams: 32})
+	client, err := tcpforward.NewMux(ctx, secured, false, tcpforward.MuxConfig{MaxStreams: 32, WaitForSlot: realtimeLease > 0})
 	if err != nil {
 		test.Fatal(err)
 	}

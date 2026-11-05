@@ -92,35 +92,42 @@ func connectionAuthorizer(path string, state *tls.ConnectionState, httpControl b
 			return Identity{}, err
 		}
 		defer clear(raw)
-		config, _, err := familysession.Configuration(raw, true)
-		if !httpControl {
-			config, _, err = familysession.MuxConfiguration(raw, true, true)
-		}
-		if err != nil {
-			return Identity{}, Code("unauthorized")
-		}
-		if httpControl {
-			controlALPN(config)
-		}
-		peer := state.PeerCertificates[0]
-		if _, err := peer.Verify(x509.VerifyOptions{Roots: config.ClientCAs, KeyUsages: []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth}}); err != nil {
-			return Identity{}, Code("unauthorized")
-		}
-		if config.VerifyConnection(*state) != nil {
-			return Identity{}, Code("unauthorized")
-		}
-		var credentials familysession.Credentials
-		if json.Unmarshal(raw, &credentials) != nil {
-			return Identity{}, Code("unauthorized")
-		}
-		identity := Identity{Family: credentials.Family, Device: peer.Subject.SerialNumber}
-		key, ok := peer.PublicKey.(ed25519.PublicKey)
-		if !ok {
-			return Identity{}, Code("unauthorized")
-		}
-		copy(identity.PublicKey[:], key)
-		return identity, nil
+		return profileIdentity(ctx, raw, state, httpControl)
 	}
+}
+
+func profileIdentity(ctx context.Context, raw []byte, state *tls.ConnectionState, httpControl bool) (Identity, error) {
+	if ctx.Err() != nil || state == nil || len(state.PeerCertificates) != 1 {
+		return Identity{}, Code("unauthorized")
+	}
+	config, _, err := familysession.Configuration(raw, true)
+	if !httpControl {
+		config, _, err = familysession.MuxConfiguration(raw, true, true)
+	}
+	if err != nil {
+		return Identity{}, Code("unauthorized")
+	}
+	if httpControl {
+		controlALPN(config)
+	}
+	peer := state.PeerCertificates[0]
+	if _, err := peer.Verify(x509.VerifyOptions{Roots: config.ClientCAs, KeyUsages: []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth}}); err != nil {
+		return Identity{}, Code("unauthorized")
+	}
+	if config.VerifyConnection(*state) != nil {
+		return Identity{}, Code("unauthorized")
+	}
+	var credentials familysession.Credentials
+	if json.Unmarshal(raw, &credentials) != nil {
+		return Identity{}, Code("unauthorized")
+	}
+	identity := Identity{Family: credentials.Family, Device: peer.Subject.SerialNumber}
+	key, ok := peer.PublicKey.(ed25519.PublicKey)
+	if !ok {
+		return Identity{}, Code("unauthorized")
+	}
+	copy(identity.PublicKey[:], key)
+	return identity, nil
 }
 
 func (broker *Broker) Handler(path string) http.Handler {

@@ -5,6 +5,16 @@ import (
 	"time"
 )
 
+func (vpn *VPN) RefreshProfile(session Session, profile [32]byte) bool {
+	vpn.manager.mu.Lock()
+	defer vpn.manager.mu.Unlock()
+	if vpn.manager.vpn != vpn || vpn.ctx.Err() != nil || vpn.session != session || session == nil || session.Failed() || profile == [32]byte{} {
+		return false
+	}
+	vpn.profile = profile
+	return true
+}
+
 func (manager *Coordinator) RetainChat(generation *Chat, expiry time.Time, profile [32]byte) (*Chat, error) {
 	manager.mu.Lock()
 	defer manager.mu.Unlock()

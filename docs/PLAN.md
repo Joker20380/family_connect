@@ -7,6 +7,18 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Selected stage11:05UTC — complete renewal runtime integration qualification, then STOP.**
+Continue fromd4de324, not the beta113-era queue. Dependency map and source integration now
+cover selected-node Android delivery/native ownership, atomic native authorization, gateway
+lease checks and active broker monitoring. Host real-runtime continuity/negative checks and
+66 scoped Android JVM cases pass. Finish isolated DNS, broader native race, API27/API35
+JNI/runtime and source/remote verification; retain inherited bootstrap failure evidence.
+No new global PLAN ID, release/deployment, online publication, maintenance-stop removal,
+cohort/paid/boot change or automatic successor. Online single-writer/durable/crash-reconciled
+two-node publication remains a separately described, NOT executed next stage.
+[Current integration map and acceptance](releases/2026-11-05-mesh-renewal-integration.md).
+
+Previous selected continuation (superseded by the bounded stage above):
 **Selected continuation — field delivery118 and authenticated renewal continuity.**
 New owner request authorizes an opt-in version for users on real mobile allowlists;
 owner-local reproduction is not a dependency. Existing qualified/signed118 is published

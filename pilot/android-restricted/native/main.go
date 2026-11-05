@@ -53,6 +53,7 @@ type ownedSession struct {
 	endpoint    stack.LinkEndpoint
 	fd          int
 	profileHash [32]byte
+	anchor      []byte
 	ownership   *restrictedowner.VPN
 	cleanupOnce sync.Once
 }
@@ -81,7 +82,7 @@ func (owned *ownedSession) failure(err error) {
 
 //export fcRestrictedBegin
 func fcRestrictedBegin(directory, control, resolver string, budget int64, owner C.uintptr_t) int64 {
-	return begin(directory, control, resolver, nil, nil, budget, owner, sessionprofile.P0)
+	return begin(directory, control, resolver, nil, nil, nil, budget, owner, sessionprofile.P0)
 }
 
 //export fcRestrictedValidationCode
@@ -111,10 +112,10 @@ func fcRestrictedBeginReady(response, identity, anchor, resolver string, budget 
 		C.fcRestrictedRelease(owner)
 		return 0
 	}
-	return begin("/", "provisioned", resolver, profile, directory, budget, owner, sessionprofile.Profile(speed))
+	return begin("/", "provisioned", resolver, profile, directory, []byte(anchor), budget, owner, sessionprofile.Profile(speed))
 }
 
-func begin(directory, control, resolver string, profile, seed []byte, budget int64, owner C.uintptr_t, speed sessionprofile.Profile) int64 {
+func begin(directory, control, resolver string, profile, seed, anchor []byte, budget int64, owner C.uintptr_t, speed sessionprofile.Profile) int64 {
 	directory, control, resolver = strings.Clone(directory), strings.Clone(control), strings.Clone(resolver)
 	ownerMu.Lock()
 	defer ownerMu.Unlock()
@@ -148,6 +149,7 @@ func begin(directory, control, resolver string, profile, seed []byte, budget int
 	retainStartup(ctx)
 	owned := &ownedSession{id: sequence, owner: owner, ctx: ctx, cancel: cancel, done: make(chan struct{}), network: network, fd: -1, ownership: ownership}
 	owned.profileHash = sha256.Sum256(profile)
+	owned.anchor = append([]byte(nil), anchor...)
 	current = owned
 	go func() {
 		defer clear(profile)

@@ -58,6 +58,15 @@ JNIEXPORT jstring JNICALL Java_com_familyconnect_app_OwnerFaultReceiver_control(
  jstring result=(*env)->NewStringUTF(env,raw);free(raw);return result;
 }
 JNIEXPORT jint JNICALL Java_com_familyconnect_app_NativeRestricted_state(JNIEnv *env,jclass cls,jlong id){return fcRestrictedState(id);}
+extern int32_t fcRestrictedRenew(int64_t,struct text,struct text);
+JNIEXPORT jboolean JNICALL Java_com_familyconnect_app_NativeRestricted_renew(JNIEnv *env,jclass cls,jlong id,jbyteArray response,jbyteArray identity){
+ if(!response||!identity)return 0;
+ jbyte *raw=(*env)->GetByteArrayElements(env,response,NULL),*secret=(*env)->GetByteArrayElements(env,identity,NULL);
+ int32_t result=0;
+ if(raw&&secret)result=fcRestrictedRenew(id,(struct text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct text){(char*)secret,(*env)->GetArrayLength(env,identity)});
+ if(secret){volatile jbyte *wipe=secret;jsize length=(*env)->GetArrayLength(env,identity);for(jsize index=0;index<length;index++)wipe[index]=0;}
+ if(raw)(*env)->ReleaseByteArrayElements(env,response,raw,JNI_ABORT);if(secret)(*env)->ReleaseByteArrayElements(env,identity,secret,JNI_ABORT);return result!=0;
+}
 JNIEXPORT jboolean JNICALL Java_com_familyconnect_app_NativeRestricted_attach(JNIEnv *env,jclass cls,jlong id,jint fd){return fcRestrictedTun(id,fd)!=0;}
 JNIEXPORT jboolean JNICALL Java_com_familyconnect_app_NativeRestricted_stop(JNIEnv *env,jclass cls,jlong id){return fcRestrictedStop(id)!=0;}
 JNIEXPORT jstring JNICALL Java_com_familyconnect_app_NativeRestricted_stats(JNIEnv *env,jclass cls,jlong id){char *raw=fcRestrictedStats(id);if(!raw)return NULL;jstring result=(*env)->NewStringUTF(env,raw);free(raw);return result;}
