@@ -21,6 +21,9 @@ Local packet transport is not Telemost signaling/media, exact production gateway
 systemd acceptance. One active step: finish revoke/late-revoke G1, remaining process/race G2,
 actual Android HTTP/cache/native G3 and two-successive-renewal wall-clock G4. After A,
 save its independent accepted source/package checkpoint before ANDROID-APP-VPN below.
+Implementation checkpoint8eeb9f0 is pushed and frozen: selected263 PASS/0 SKIP,
+not full CI or accepted A. Actual traffic/restart evidence and artifact identities:
+[report](releases/2026-11-05-mesh-online-renewal.md#frozen8eeb9f0-checkpoint-incomplete-a).
 [Current package contract](../deploy/friends/restricted/maintenance/ONLINE_RUNTIME.md).
 
 **ANDROID-APP-VPN (bounded Android task, selected by owner, NOT STARTED).** Dependency:

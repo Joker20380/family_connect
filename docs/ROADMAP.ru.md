@@ -24,6 +24,8 @@ G4 — квалифицированный online runtime/API пакет. [Точ
 обнаруженный lost-start-response/fencing дефект. Старый proxy остаётся отрицательным тестом.
 Это не Telemost/live/systemd-приёмка и не закрытие G1–G4: revoke, оставшиеся process/race,
 Android HTTP/cache/native и два renewal через реальные сроки ещё требуют проверки.
+Frozen source8eeb9f0: адресная root/package/core-выборка263 PASS/0 SKIP; это
+самостоятельный implementation checkpoint, не принятая А и не разрешение начинать Б.
 
 **Один действующий следующий шаг: закончить G1–G4 того же MESH incident.** После этого:
 

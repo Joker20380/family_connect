@@ -23,6 +23,9 @@ reconciliation; an inactive attempted start still blocks, with no second start.
 Full revoke G1, remaining process/race G2, Android HTTP/cache/native G3 and two-renewal
 wall-clock G4 are still incomplete. Phase B remains NOT_STARTED; this is not accepted A.
 Next: finish those remaining packaged G1–G4 scenarios, then independently checkpoint A.
+Frozen source8eeb9f0/package90b020034527…: selected root/renewal/package/core263 PASS,
+zero skips,486.54s; separate packet drivera49c4412efec… is not the production gateway.
+Source pushed/remote SHA verified. No Android artifact or accepted A/B checkpoint yet.
 [Scope, commands and provenance](releases/2026-11-05-mesh-online-renewal.md#isolated-core-runtime-continuation-froma30966c).
 
 **Earlier online package/process checkpoint (retained evidence; A not accepted).**

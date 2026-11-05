@@ -90,6 +90,61 @@ then independent accepted A, bounded B, exact release qualification, separately 
 delivery, real two-NL renewal and field gates. Paired-DNS/WebSocket, weak network,
 screen-off/mobile allowlists remain OPEN; the paid canary is not repeated.
 
+### Frozen8eeb9f0 checkpoint (incomplete A)
+
+Source8eeb9f0d4e92e439d0519a24317be8a8b4ac0078 was committed and pushed normally;
+remote `refs/heads/main` matched exactly. The source/package checkpoint is independently
+recoverable, **not the accepted A checkpoint required before B**. A fresh shared clone
+checked out that exact source, with no checkout imports in the package. Deterministic
+rebuild (including after dirtying the clone) and the combined selected root/renewal/
+package/core module run pass **263/0 SKIP in486.54s**. This is one actual selection,
+not addition of overlapping earlier runs, and not full CI.
+
+| Artifact | SHA256 / identity |
+|---|---|
+| Source commit | 8eeb9f0d4e92e439d0519a24317be8a8b4ac0078 |
+| `online-8eeb9f0.tar.gz` | 90b02003452724eee604e4372d581597f9dc40dde3670cebb43970d62ce53ffb |
+| Manifest | 438d49ed114bcfab259e3a856f859ebcbaaaef3b2732c73920ef2193c4aa60f5 |
+| Renewal inventory | 54c4671e778a161278e2ab8dc87c0aa0daa75807658256808b365b9d0d0a3330 |
+| Native inventory (310 source files; canonical JSON hash) | eb9f2b36b7b50349925187dc584820329d008474be406b194bf570ac5a124792 |
+| Packaged production gateway, Telemost path | 382dcf26298bad8ccbfc2ca5664e297215b2ab1d7a1338f594536285651f1e7d |
+| Separate isolated packet driver, **not production gateway** | a49c4412efecd6215767390fc9f78cbda8347187823b9b4b11875efbd40af4b5 |
+| Packaged API | b6c1fcfe62780bc874029617446a5e30dfc7d703fa30aca21a2a92c1829b6a13 |
+| Packaged HTTP | 59f170af4ac8e781e58f1d952af1a8d40aa3752234d000d05950bf6ebba162c8 |
+
+Toolchain: Go1.26.1/linux-amd64; existing locked Python3.13.15 image
+`fc-online-runtime-tests:20261105` / `89598610ee266cf1efa164092d1193479069784f1c94493c46fcff82f5a6736f`.
+Archive and driver remain local and uninstalled/unpublished. Previous online8c876e3
+archive was rehashed and still equalsa27502d752eefe05306a189dce6a8630107d5980eca1477ffa9401a9283ffaea.
+No accepted maintenance archive, APK118 or updater113 replacement.
+
+Evidence root: `state-client-build/mesh-core-runtime-20261105/`:
+- `frozen-8eeb9f0.log`:263 PASS; SHA25666c4a412fc4d9a09174fde040cc7902196a0a0a358eac3b6f7524cc85bcb893f.
+- `frozen-8eeb9f0/preflight.json`: SHA25612004f70577258568b0571c190d2b4d13bb3e1c9b95d81bc0ff6075e737d2e9c.
+  Both NL have21 traffic samples over20 real seconds, original stream/session retained,
+  verified echo bytes22→462, plus new TCP/DNS/verified HTTPS. Seed and gateway existed
+  before these samples and survive beyond15s. Cleanup waits for actual children and
+  verifies both reader sockets absent.
+- `frozen-8eeb9f0/gateway-restart-emergency.json`: SHA256f6e7987a4a5dc0d0664e9d15e083e30db4c8015e7450806d9b8f0102c72a0d22.
+  Controller/gateway death, new process/reader, approval refusal, real lost start
+  response, archived original intent, same-decision continuation and replay.
+- `frozen-8eeb9f0/emergency-{NL,NL2}-{client,gateway}.log`: actual restarted gateway
+  PIDs and four post-recovery traffic samples per NL, including verified HTTPS and
+  normal client completion. These are new sessions, not surviving old TCP.
+
+Reproduction uses the committed tests, `FC_TEST_ONLINE_PACKAGE=<that archive>`,
+`FC_ONLINE_GO=/go/bin/go`, `FC_ONLINE_ISOLATED=1`, `FC_ONLINE_SSH=1`,
+`FC_TEST_GO=/go/bin/go`, `FC_ACCEPTED_CARRIER_SOURCE=<frozen clone>/carrier`,
+`FC_CORE_EVIDENCE=<private directory>`, network-none root container and
+`--basetemp=/run/frozen-tests`. Selection: `test_online_emergency`, `test_online_renewal`,
+`test_online_diagnostics`, `test_activated_maintenance`, `test_multi_gateway_renewal`,
+`test_package_credential_renewal`, `test_online_runtime_package`, `test_mesh_core_runtime`.
+No Android artifact/runtime check was executed in this checkpoint. The remaining G3
+transition is specifically the real app HTTP/cache/connection-owner path into its
+native session; the driver client is not that path. The remaining G4 transition is
+two due renewals and actual old material-bound crossing, not merely a longer sleep
+after the already demonstrated COMMIT. Full gate statuses above remain NOT_RUN.
+
 ## Online runtime package continuation
 
 Entry HEAD409644142114d34f50e0543c4472274d72153d20 matches the requested verified
