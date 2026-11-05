@@ -101,6 +101,7 @@ class PackageStand:
             config['service_units'] = ['test-'+slot+'.service']
             profile_root = self.root/(slot+'-profile')
             profile_root.mkdir(mode=0o750)
+            profile_root.chmod(0o750)
             os.chown(profile_root, 0, 41003)
             profile = private_file(profile_root/'gateway.json', (node.live/'gateway.json').read_bytes())
             os.chown(profile, 0, 41003)

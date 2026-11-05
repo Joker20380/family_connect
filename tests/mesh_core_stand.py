@@ -1,6 +1,7 @@
 import base64
 import contextlib
 import http.client
+import ipaddress
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 import os
@@ -15,6 +16,8 @@ import threading
 import time
 
 from cryptography import x509
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, NoEncryption
 from cryptography.x509.oid import NameOID
@@ -43,10 +46,11 @@ class SupervisedProcess:
 
 
 class CoreStand(PackageStand):
-    def __init__(self, root, extracted, driver, *, age=12000, duration='1h', rotation=None):
+    def __init__(self, root, extracted, driver, *, age=12000, duration='1h', rotation=None, android_tls=False):
         super().__init__(root, extracted, age=age)
         self.driver = driver
         self.duration, self.rotation = duration, rotation
+        self.android_tls = android_tls
         self.binding = private_file(root/'isolated-runtime.json', package.encode(dict(schema=1,
             scope='isolated-core-not-production', source_commit=self.manifest['source_commit'],
             native_sources=self.manifest['native_sources'], entrypoint='carrier/internal/qualification/cmd/mesh-runtime',
@@ -76,12 +80,14 @@ class CoreStand(PackageStand):
 
     def origins(self):
         stand = self
-        key = Ed25519PrivateKey.generate()
+        key = ec.generate_private_key(ec.SECP256R1()) if self.android_tls else Ed25519PrivateKey.generate()
         name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, 'isolated localhost')])
         certificate = (x509.CertificateBuilder().subject_name(name).issuer_name(name).public_key(key.public_key())
             .serial_number(x509.random_serial_number()).not_valid_before(utc(time.time()-60))
             .not_valid_after(utc(time.time()+28800)).add_extension(x509.BasicConstraints(ca=True, path_length=None), True)
-            .add_extension(x509.SubjectAlternativeName([x509.DNSName('localhost')]), False).sign(key, None))
+            .add_extension(x509.SubjectAlternativeName([x509.DNSName('localhost')]+
+                ([x509.IPAddress(ipaddress.ip_address('185.251.89.19'))] if self.android_tls else [])), False)
+            .sign(key, hashes.SHA256() if self.android_tls else None))
         self.ca = private_file(self.root/'local-ca.pem', certificate.public_bytes(Encoding.PEM))
         secret = private_file(self.root/'local-origin.key', key.private_bytes(Encoding.PEM, PrivateFormat.PKCS8, NoEncryption()))
 

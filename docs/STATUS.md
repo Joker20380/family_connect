@@ -11,6 +11,13 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**19:39UTC Android runtime checkpoint, not G3 PASS:** both fresh disposable API27/API35
+AVDs have completed verified HTTP readiness, actual encrypted-cache writes and native
+VPN owner connection/borrowed mux echo. They are waiting for the server's real due time
+(21:57:20UTC), not using a changed clock. The d968ddd long core run remains active.
+Frozen d968ddd package/core/process/release-payload selection:67 PASS/0 SKIP,969.70s.
+No accepted A checkpoint or split tunneling implementation yet; production unchanged.
+
 **Long core run started, not accepted:** frozen d968ddd/archive849232db… and separate
 drivercaeccf70… run in the network-none disposable stand. At19:06UTC both original
 TLS/mux streams had431 successful TCP/DNS/verified-HTTPS samples; no restart or renewal

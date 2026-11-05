@@ -1,0 +1,23 @@
+import groovy.json.JsonSlurper
+
+gradle.beforeProject { project ->
+    def properties = gradle.startParameter.projectProperties
+    if (properties.fcFriendsCi != 'true' || properties.fcTargetAbi != 'x86_64' || !properties.fcCoreWork || !properties.fcCoreNative) {
+        throw new GradleException('Explicit disposable core Android build required')
+    }
+    def work = new File(properties.fcCoreWork)
+    def nativeRoot = new File(properties.fcCoreNative)
+    if (!work.isAbsolute() || !nativeRoot.isAbsolute()) throw new GradleException('Absolute qualification inputs required')
+    project.buildDir = new File(work, 'android/' + project.name)
+    project.afterEvaluate {
+        if (project.name == 'app') {
+            def metadata = new JsonSlurper().parse(new File(nativeRoot, 'assets/restricted-build.json'))
+            if (metadata.provider != 'isolated-local-core' || metadata.abi != 'x86_64' || metadata.diagnostic_only != true || metadata.build_tags != ['fc_local_core']) {
+                throw new GradleException('Wrong qualification native artifact')
+            }
+            project.android.sourceSets.friends.jniLibs.setSrcDirs([new File(nativeRoot, 'jniLibs')])
+            project.android.sourceSets.friends.assets.setSrcDirs([new File(nativeRoot, 'assets'), new File(work, 'app-assets')])
+            project.android.sourceSets.androidTest.assets.srcDir(new File(work, 'test-assets'))
+        }
+    }
+}

@@ -2,6 +2,10 @@
 
 ## Current continuation pointer
 
+The [19:39UTC HTTP runtime checkpoint](2026-11-05-mesh-online-renewal.md#android-http-runtime-checkpoint1939utc)
+adds actual API27/API35 HTTP/cache/native-owner connected evidence; successor delivery
+and full G3 remain pending. It does not supersede or broaden any older acceptance here.
+
 The later isolated packet-runtime/recovery work is recorded in the
 [same online incident](2026-11-05-mesh-online-renewal.md#isolated-core-runtime-continuation-froma30966c).
 It reuses actual SeedManager/Family TLS/mux/broker/maintenance through packaged

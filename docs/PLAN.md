@@ -12,6 +12,11 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Android runtime in progress:** retain the running API27/API35 HTTP/cache/native-owner
+sessions until the genuine successor window; first owner-connected evidence is not G3.
+Complete their delivery/negative scenarios and the running d968ddd long path, then
+reconcile remaining G2/G4 scope before an independent accepted A checkpoint. B stays gated.
+
 **Running evidence, not a new task:** monitor `fc-mesh-soak-d968ddd` and its retained
 progress receipt through the real due/expiry times; do not replace them with a model.
 Finish actual API27/API35 HTTP/cache/owner and remaining G2/full-G4 boundaries before A.

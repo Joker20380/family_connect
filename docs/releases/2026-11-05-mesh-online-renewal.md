@@ -1,5 +1,62 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Android HTTP runtime checkpoint19:39UTC
+
+Not an acceptance result. New `tests/android_core_stand.py` starts frozen d968ddd
+controller/node/API/HTTP and the matching separate gateway driver in a network-none
+container. Actual custody rejected the first fixture attempts: directory0700 rather
+than0750 under umask077, then an executable beneath a user-owned mount. The fixture
+now explicitly creates the existing required directory mode and copies the identical
+driver bytes into a root-owned runtime directory. Reader custody was not relaxed.
+Both failures remain in `android-server-working{,-2}.log`.
+
+`tests/android_core_bridge.py` exposes only loopback bridges to that container. The
+emulator HTTPS proxy permits only the application's existing API CONNECT destination
+and routes it to the local synthetic TLS origin, never the public destination. An
+instrumentation-only P256 test CA and offline public-anchor asset overlay are used;
+stock hostname verification is retained. Production trust, URLs, APK118/updater113,
+build variants and native Telemost defaults are unchanged. No test provider is releasable.
+
+The separately directed Gradle build uses `tests/android_core.init.gradle`,
+`fcFriendsCi=true`, `fcTargetAbi=x86_64`, `fcTestBuildType=friends`, absolute `fcCoreWork`
+and `fcCoreNative` paths, and tasks `:app:assembleFriends :app:assembleFriendsAndroidTest`.
+It does not overwrite normal build outputs. The initial private-method compile error
+is retained in `android-working-apk/build-private-call-failure.log`; corrected build2
+passes using ordinary `FriendsRestricted.ready`/`renewal`. APK digests:
+
+- local friends APK: `801ad1f63a1b62a54f675abaf360a3ec090877d198ba8d5a5da43d8907dab4ca`;
+- instrumentation APK: `c6710ab5c1774b6471744ffe57286cf76b29ca67f455aba4acd21584256182fa`;
+- native input: committed39c69de, SHA256 `d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af`.
+
+`tests/android_core_emulators.py` launches owned fresh API27/API35 AVDs, checks their
+identity, installs only these APKs, binds the protected loopback relay with serial-scoped
+ADB and executes `OnlineReadinessRuntimeTest`. It waits for the actual server renewal
+and always stops only its owned emulator. At19:39UTC both receipts report RUNNING and
+OWNER_CONNECTED after real HTTP validation, AndroidKeyStore encrypted cache, existing
+AutomaticVpnOwner/RestrictedTunnelEngine and borrowed native mux echo. Successor delivery
+is not yet observed. Logs/receipts are in `android-working-emulators-1/`; private synthetic
+invitations and APK test inputs remain ignored local state. This test does not replace
+partial-NL, stale-owner, late delivery, old-peer or full G4 acceptance.
+
+Additional frozen d968ddd regression completed: `test_online_runtime_package.py`,
+`test_mesh_core_runtime.py`, `test_mesh_core_faults.py`, `test_restricted_release_payload.py`:
+67 PASS/0 SKIP,969.70s. `frozen-d968ddd-integration.log` SHA256
+`1a7ec9fd308f63a83c84a33f404847682d3cef7a73295182f7e8e97b7bb8fea6`.
+This repeats G1 and12 process cases on the exact current package; do not sum it with
+the overlapping5043d72 selection or call it full CI. Long core evidence is still running.
+
+| Gate | Current result | Still required runtime |
+|---|---|---|
+| G1 | PASS, isolated core only | Retain exact frozen receipts; no Telemost/systemd claim. |
+| G2 | NOT_RUN, complete gate | Actual successor-expiry continuation and remaining matrix reconciliation;12 process cases pass. |
+| G3 | NOT_RUN, complete gate | Running API27/API35 actual successor plus HTTP/owner negative scenarios. |
+| G4 | NOT_RUN | Running two-renewal wall-clock path, lease-bound evidence and integrated emergency/Android scope. |
+
+No accepted A checkpoint exists yet. No B/UI/storage/routing/recovery acceptance exists.
+The only next task remains completion of these same G1–G4 gates before independent A
+checkpoint and bounded Android app-VPN work. No delivery, rollback or production operation
+has occurred; rollback of this test setup is owned-AVD/container cleanup only.
+
 ## Frozen5043d72 process qualification
 
 The full selected run imports test sources from a detached5043d72 clone and starts
