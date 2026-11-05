@@ -21,15 +21,20 @@ func TestNegativeAuthMandatoryRejectionBoundary(test *testing.T) {
 			var calls, admissions atomic.Int32
 			var mutex sync.Mutex
 			var reports []ExchangeFailure
+			var opening []ExchangeFailure
 			broker, _ := testBroker(test, &calls, nil, "")
 			client, server := pair()
 			finished := make(chan error, 1)
 			go func() {
 				finished <- ServeCarrier(ctx, server, func(ctx context.Context, endpoint familysession.PacketEndpoint) {
-					OpenServer(ctx, endpoint, path, broker, func(event string) {
+					OpenServerObserved(ctx, endpoint, path, broker, func(event string) {
 						if event == "bootstrap_family_auth" {
 							admissions.Add(1)
 						}
+					}, func(failure ExchangeFailure) {
+						mutex.Lock()
+						opening = append(opening, failure)
+						mutex.Unlock()
 					}, func(failure ExchangeFailure) {
 						mutex.Lock()
 						reports = append(reports, failure)
@@ -69,6 +74,9 @@ func TestNegativeAuthMandatoryRejectionBoundary(test *testing.T) {
 			}
 			mutex.Lock()
 			defer mutex.Unlock()
+			if len(reports) != 0 || (name == "valid" && len(opening) != 0) || (name != "valid" && (len(opening) != 1 || opening[0].Stage != "family_open")) {
+				test.Fatal("admission and authenticated exchange diagnostics mixed", opening, reports)
+			}
 			test.Logf("case=%s rejected=%t descriptor_present=%t provider_calls=%d authenticated=%d diagnostic_reports=%v", name, err != nil, descriptor.SetupID != "", calls.Load(), admissions.Load(), reports)
 		})
 	}

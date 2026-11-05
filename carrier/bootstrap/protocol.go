@@ -186,11 +186,14 @@ func requestTransport(ctx context.Context, endpoint familysession.PacketEndpoint
 }
 
 func OpenServer(ctx context.Context, endpoint familysession.PacketEndpoint, path string, broker *roombroker.Broker, event func(string), failures ...func(ExchangeFailure)) {
+	OpenServerObserved(ctx, endpoint, path, broker, event, nil, failures...)
+}
+
+func OpenServerObserved(ctx context.Context, endpoint familysession.PacketEndpoint, path string, broker *roombroker.Broker, event func(string), admissionFailure func(ExchangeFailure), failures ...func(ExchangeFailure)) {
 	reject := func(stage string, err error) {
-		for _, observe := range failures {
-			if observe != nil {
-				observe(ExchangeFailure{Stage: stage, Reason: exchangeReason(err)})
-			}
+		event("bootstrap_admission_rejected")
+		if admissionFailure != nil {
+			admissionFailure(ExchangeFailure{Stage: stage, Reason: exchangeReason(err)})
 		}
 	}
 	raw, err := roombroker.LoadCredentials(path)
