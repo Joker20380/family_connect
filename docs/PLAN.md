@@ -2,6 +2,11 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5 November11:29UTC operational readback complete:** all ordinary VPN services
+and both NL bootstrap active; seven recent AWG peers, no sampled TCP443/8446 sockets.
+No implementation priority change or stability acceptance. RU disk gain retained;
+brief CPU steal11% is observational. [Snapshot](releases/2026-11-05-vpn-health.md).
+
 **4 November22:54UTC operational check complete:** no sampled overload, RU cleanup
 gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH stability
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).

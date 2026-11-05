@@ -1,5 +1,10 @@
 # Текущее состояние / Current state
 
+**5 November11:29UTC — read-only VPN check:** all AWG/TCP and both NL bootstrap
+active; CPU RU9–25%, AMS1 19–21%, AMS2 16–18%. RU disk70%/8.5GiB free.
+Recent AWG peers1/5/1, TCP443/8446 sockets0; not unique users. RU steal briefly11%.
+[Measurements and limits](releases/2026-11-05-vpn-health.md). No runtime changes.
+
 **4 November22:54UTC — read-only VPN snapshot:** all AWG/TCP and both NL bootstrap
 services active. CPU RU13–23%, AMS1 8–34%, AMS2 8–17%; RU disk70%/8.5GiB free.
 Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime changes.
