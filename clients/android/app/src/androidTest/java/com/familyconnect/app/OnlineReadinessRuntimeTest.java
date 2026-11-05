@@ -133,6 +133,7 @@ public class OnlineReadinessRuntimeTest {
         assertTrue(nativeBuild.get("diagnostic_only").getAsBoolean());
         assertEquals(settings.get("native_source").getAsString(),nativeBuild.get("source_revision").getAsString());
         assertArrayEquals(Base64.getDecoder().decode(settings.get("anchor").getAsString()),ControlTrust.anchor(context));
+        NativeRestricted.load();
         assertEquals("off",ConnectionService.status);
         assertFalse(new java.io.File(context.getNoBackupFilesDir(),"friends-identity.enc").exists());
         String gateway=selected.get("gateway").getAsString();

@@ -1,5 +1,50 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Actual Android service preflight21:00UTC — qualification continues
+
+Two API-specific preflights now pass: HTTP readiness, validation, encrypted vault,
+normal ConnectionService/MESH owner, borrowed authenticated native session and verified
+HTTPS through its VPN. API27 evidence: `android-service-fd7562c-try2-emulators/api27-runtime.log`;
+API35: `android-service-fd7562c-isolated35-2-emulators/api35-runtime.log`. Both show
+SERVICE_OWNER_CONNECTED and SERVICE_VERIFIED_HTTPS and wait for the real22:55:56UTC
+server successor. Neither currently proves successor delivery or complete G3.
+
+API27 main APK SHA256`38e3522f1c9fbbb1114629db4d697714c3ce49b9bfbeb0d520b6aa5a2325ec49`;
+API35 main APK SHA256`5a12878b7206d6cadf672c5c8490eb10626f4cbf195c781a7b3d1e0c0d479f98`;
+instrumentation APK SHA256`3744880dcf01165fe0783791a19cdb7c8ea08de55faed22f06fa044ce9e253c6`.
+Both use exact native39c69de SHA256d1025a1d…; installed APK and extracted ELF digests
+are checked before and after execution. The earlier API27 cold-boot probe reproduces
+bad ELF magic; reinstall/sync then real HTTP probe validates both gateways. Those failed
+attempts are retained, not counted as successful application validation.
+
+Host API35 Wi-Fi attempts returned a different TLS trust path, despite the emulator
+HTTP-proxy argument; they do not prove isolated routing and are excluded. The successful
+API35 runtime instead shares only the disposable server's no-egress network namespace:
+no default route, synthetic185.251.89.19 routed exclusively to the private origin peer,
+verified host-side synthetic TLS preflight before boot, and namespace-local adb/reverse.
+This makes accidental external routing impossible, without changing host routing.
+The early container mount-path typo failed before AVD creation and is retained separately.
+
+`android_core.init.gradle` generates a domain-scoped synthetic CA/manifest only beneath
+the explicitly selected private qualification build directory. Release tasks reject
+this init script. Production sources/trust/Telemost, hostname verification, keys and
+normal output APKs are untouched; no trust-all or security-clock replacement is used.
+The owner/native positive path is real runtime, not a300s scheduling model.
+
+Full-core harness source checkpoint`e144e8184155f86519259fd9403a0ec675c959e5` was pushed
+and remote-verified. It now runs against immutablefd7562c archive/driver in a separate
+internal network; first due23:11:57UTC. Actual lease traces correlate with original
+session IDs and already show applied renewals of short leases; credential renewal and
+crypto crossing are still pending. `full-core-fd7562c-e144e81/full-core/progress.json`
+is running evidence, not G4 PASS. Older d968ddd long/expiry jobs remain separate.
+
+Frozenfd7562c native bootstrap/wholedevice/qualification/bootstrap-broker `-race`, count3,
+PASS with zero skips (`fd7562c-*-race-configured.log`), including real ProductStore
+fixtures and frozen-source sync artifact publication. A wrong artifact path failed the
+first bootstrap invocation; it was not waived. The configured full package/core/RPC
+selection is running; its earlier missing opt-in invocation was aborted and is not PASS.
+No full-CI, release, production, systemd, Telemost-media or physical-device claim.
+
 ## Routed preflight and full-core harness20:43UTC
 
 Frozen sourcefd7562cc466606002aa2af064b2b67ee165056c2:

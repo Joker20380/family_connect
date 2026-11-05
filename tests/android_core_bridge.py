@@ -124,7 +124,7 @@ def main():
         thread.start()
     args.receipt.write_text(json.dumps(dict(container=args.container, relay=servers[0].server_address[1],
         https_proxy=servers[1].server_address[1], source=state['source'], pid=os.getpid(),
-        actual_remote='network-none container loopback only'))+'\n')
+        actual_remote='selected isolated container loopback only', network_mode=inspection['HostConfig']['NetworkMode']))+'\n')
     for event in (signal.SIGTERM, signal.SIGINT):
         signal.signal(event, lambda *_: stopped.set())
     try:

@@ -19,6 +19,8 @@ G4 — квалифицированный online runtime/API пакет. [Точ
 Дельта20:43UTC: frozenfd7562c проходит короткий public-IP HTTPS/DNS/mux preflight на обоих
 NL через изолированный внешний origin. Полный длительный путь и Android service-доставка
 ещё не приняты; отдельный восьмичасовой harness не является результатом до завершения.
+Дельта21:00UTC: API27/API35 уже проходят штатный ConnectionService и HTTPS через VPN;
+доставка successor, оставшиеся отрицательные сценарии и долгий G4 ещё ожидаются.
 Историческая проверка b1d17d3: root/package118 PASS, online entrypoint отсутствовал.
 Этот пакетный дефект устранён в отдельном default-off кандидате; штатные controller/node
 проходят SSH COMMIT/replay и адресные отказы процессов. Новый отдельный packet driver

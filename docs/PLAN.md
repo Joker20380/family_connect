@@ -12,6 +12,11 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Actual service preflight now passes API27/API35.** Preserve their real sessions through
+successor delivery; complete the remaining G3 scenarios and running G2/G4 wall-clock
+qualification before accepting A. API35 qualification requires a no-egress namespace,
+not an assumed emulator-proxy boundary. No B or release action yet.
+
 **Routed preflight completed:** frozenfd7562c proves normal public-IP HTTPS on both NL.
 Run the bounded full-core/lease/emergency harness on these artifacts while completing
 actual Android service HTTP/cache delivery; retain older d968ddd evidence separately.

@@ -11,6 +11,15 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**21:00UTC actual Android service preflight on both APIs, still not G3 PASS.** API27
+and API35 complete HTTP/cache, normal ConnectionService, borrowed native session and
+verified HTTPS through VPN. API35 now runs inside a no-egress network namespace with
+an actual synthetic public-IP origin; emulator Wi-Fi must not rely on an HTTP proxy.
+Test-only domain CA resources cannot enter release tasks. Both await the real22:55:56UTC
+successor. Frozenfd7562c full-core run uses test checkpoint e144e81, first due23:11:57UTC.
+Affected native race count3 and artifact-enabled bootstrap PASS/zero skips; full A/B
+gates remain open. No production or owner-phone changes.
+
 **20:43UTC routed preflight PASS, not A acceptance.** Frozenfd7562c package846818ad…
 and separate driver180f386f… pass real public-IP TCP/verified HTTPS, DNS and original
 mux traffic on both NL (21 samples each), with serving-process reader custody intact.

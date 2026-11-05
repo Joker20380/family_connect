@@ -5,8 +5,10 @@ import json
 import os
 from pathlib import Path
 import socket
+import ssl
 import subprocess
 import time
+import urllib.request
 import zipfile
 
 
@@ -19,12 +21,22 @@ def main():
     parser.add_argument('--port', type=int, default=5630)
     parser.add_argument('--service', action='store_true')
     parser.add_argument('--api', type=int, choices=(27, 35))
+    parser.add_argument('--isolated-network', action='store_true')
     args = parser.parse_args()
     args.work.mkdir(mode=0o700)
     avd = args.work/'avd'
     avd.mkdir(mode=0o700)
     sdk = args.tools/'android'
     bridge = json.loads((args.build/'bridge.json').read_bytes())
+    if args.isolated_network:
+        assert Path('/.dockerenv').exists()
+        assert all(line.split()[1] != '00000000' for line in Path('/proc/net/route').read_text().splitlines()[1:])
+        trust = ssl.create_default_context(cafile=args.build/'test-assets/core-ca.pem')
+        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), urllib.request.HTTPSHandler(context=trust))
+        with opener.open('https://185.251.89.19:8443/', timeout=10) as response:
+            assert response.read() == b'verified-isolated-origin'
+    else:
+        assert args.api == 27, 'API35 needs a no-egress namespace; Wi-Fi must not rely on emulator HTTP proxy'
     apk = args.build/'android/app/outputs/apk/friends/app-friends.apk'
     tests = args.build/'android/app/outputs/apk/androidTest/friends/app-friends-androidTest.apk'
     native = args.native/'jniLibs/x86_64/libfc_restricted.so'
@@ -38,7 +50,9 @@ def main():
     receipt = dict(scope='working-Android-HTTP-cache-owner-positive-not-complete-G3',
         apk_sha256=hashlib.sha256(apk.read_bytes()).hexdigest(),
         tests_sha256=hashlib.sha256(tests.read_bytes()).hexdigest(),
-        native_sha256=hashlib.sha256(native.read_bytes()).hexdigest(), native=metadata, bridge=bridge)
+        native_sha256=hashlib.sha256(native.read_bytes()).hexdigest(), native=metadata, bridge=bridge,
+        no_egress_namespace=args.isolated_network,
+        tls_ca_sha256=hashlib.sha256((args.build/'test-assets/core-ca.pem').read_bytes()).hexdigest())
     (args.work/'inputs.json').write_text(json.dumps(receipt, indent=2)+'\n')
 
     def qualify(api, variant, port):
@@ -52,9 +66,10 @@ def main():
         (args.work/f'api{api}-create.log').write_text(result.stdout+result.stderr)
         assert result.returncode == 0, 'AVD create failed'
         output=(args.work/f'api{api}-emulator.log').open('wb')
+        proxy = [] if args.isolated_network else ['-http-proxy', 'http://127.0.0.1:'+str(bridge['https_proxy'])]
         emulator = subprocess.Popen([str(sdk/'emulator/emulator'), '-avd', name, '-port', str(port),
             '-no-window', '-no-audio', '-no-snapshot', '-no-boot-anim', '-gpu', 'swiftshader_indirect',
-            '-memory', '2048', '-cores', '2', '-http-proxy', 'http://127.0.0.1:'+str(bridge['https_proxy'])],
+            '-memory', '2048', '-cores', '2', *proxy],
             env=environment, stdout=output, stderr=subprocess.STDOUT)
         adb = [str(sdk/'platform-tools/adb'), '-s', f'emulator-{port}']
         record = dict(api=api, serial=f'emulator-{port}', emulator_pid=emulator.pid, result='STARTING')
@@ -72,13 +87,14 @@ def main():
             assert 'generic' in fingerprint or 'sdk' in fingerprint
             assert subprocess.check_output(adb+['shell', 'getprop', 'ro.build.version.sdk'], text=True).strip() == str(api)
             owned = True
-            subprocess.run(adb+['shell', 'svc', 'wifi', 'disable'], check=True, capture_output=True, timeout=10)
-            subprocess.run(adb+['shell', 'svc', 'data', 'enable'], check=True, capture_output=True, timeout=10)
+            subprocess.run(adb+['shell', 'svc', 'wifi', 'enable' if api == 35 else 'disable'], check=True, capture_output=True, timeout=10)
+            subprocess.run(adb+['shell', 'svc', 'data', 'disable' if api == 35 else 'enable'], check=True, capture_output=True, timeout=10)
             time.sleep(5)
-            record['network_scope'] = 'owned-emulator-cellular-only-not-mobile-field'
+            record['network_scope'] = 'owned-emulator-'+('wifi' if api == 35 else 'cellular')+'-not-mobile-field'
             for artifact in (apk, tests):
                 result = subprocess.run(adb+['install', '--no-streaming', '-t', str(artifact)], capture_output=True, text=True, timeout=90)
                 assert result.returncode == 0 and 'Success' in result.stdout, 'Owned emulator install failed'
+            subprocess.run(adb+['shell', 'sync'], check=True, capture_output=True, timeout=30)
             installed = subprocess.check_output(adb+['shell', 'pm', 'path', 'com.familyconnect.app.friends'], text=True).strip()
             assert installed.startswith('package:/data/app/') and installed.endswith('/base.apk') and '\n' not in installed
             installed_apk = subprocess.check_output(adb+['shell', 'su', '0', 'sha256sum', installed.removeprefix('package:')], text=True).split()[0]
@@ -91,6 +107,7 @@ def main():
             subprocess.run(adb+['reverse', 'tcp:19091', 'tcp:'+str(bridge['relay'])], check=True, capture_output=True, timeout=10)
             subprocess.run(adb+['shell', 'appops', 'set', 'com.familyconnect.app.friends', 'ACTIVATE_VPN', 'allow'], check=True, capture_output=True, timeout=10)
             record.update(result='RUNNING', started=time.time())
+            record['guest_wall_seconds'] = int(subprocess.check_output(adb+['shell', 'date', '+%s'], text=True))
             (args.work/f'api{api}-receipt.json').write_text(json.dumps(record)+'\n')
             arguments = ['-e', 'fc_core_service', 'true'] if args.service else []
             with (args.work/f'api{api}-runtime.log').open('wb') as log:
@@ -124,6 +141,7 @@ def main():
             output.close()
             record['owned_emulator_stopped'] = True
             (args.work/f'api{api}-receipt.json').write_text(json.dumps(record, indent=2)+'\n')
+        assert record['result'] == 'PASS_POSITIVE_PATH_ONLY', record.get('failure')
         return record
 
     with ThreadPoolExecutor(max_workers=2) as executor:

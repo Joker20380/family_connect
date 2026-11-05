@@ -5,6 +5,9 @@ gradle.beforeProject { project ->
     if (properties.fcFriendsCi != 'true' || properties.fcTargetAbi != 'x86_64' || !properties.fcCoreWork || !properties.fcCoreNative) {
         throw new GradleException('Explicit disposable core Android build required')
     }
+    if (!gradle.startParameter.taskNames.every { it.toLowerCase().contains('friends') }) {
+        throw new GradleException('Qualification trust cannot be used for release tasks')
+    }
     def work = new File(properties.fcCoreWork)
     def nativeRoot = new File(properties.fcCoreNative)
     if (!work.isAbsolute() || !nativeRoot.isAbsolute()) throw new GradleException('Absolute qualification inputs required')
@@ -18,6 +21,22 @@ gradle.beforeProject { project ->
             project.android.sourceSets.friends.jniLibs.setSrcDirs([new File(nativeRoot, 'jniLibs')])
             project.android.sourceSets.friends.assets.setSrcDirs([new File(nativeRoot, 'assets'), new File(work, 'app-assets')])
             project.android.sourceSets.androidTest.assets.srcDir(new File(work, 'test-assets'))
+            def ca = new File(work, 'test-assets/core-ca.pem')
+            if (!ca.isFile() || !ca.text.startsWith('-----BEGIN CERTIFICATE-----')) {
+                throw new GradleException('Explicit disposable TLS CA required')
+            }
+            def resources = new File(work, 'qualification-res')
+            new File(resources, 'raw').mkdirs()
+            new File(resources, 'xml').mkdirs()
+            new File(resources, 'raw/fc_core_qualification_ca.pem').bytes = ca.bytes
+            new File(resources, 'xml/fc_core_network_security.xml').text = '''<network-security-config>
+<base-config cleartextTrafficPermitted="false"><trust-anchors><certificates src="system"/></trust-anchors></base-config>
+<domain-config cleartextTrafficPermitted="false"><domain includeSubdomains="false">185.251.89.19</domain><trust-anchors><certificates src="@raw/fc_core_qualification_ca"/></trust-anchors></domain-config>
+</network-security-config>'''
+            def manifest = new File(work, 'qualification-manifest.xml')
+            manifest.text = '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><application android:networkSecurityConfig="@xml/fc_core_network_security"/></manifest>'
+            project.android.sourceSets.friends.res.srcDir(resources)
+            project.android.sourceSets.friends.manifest.srcFile(manifest)
         }
     }
 }
