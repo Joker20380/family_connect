@@ -15,7 +15,7 @@ from cryptography import x509
 from device_identity.device import DeviceIdentity
 from fixtures.mesh_supervisor import request
 from mesh_core_stand import CoreStand
-from mesh_core_budget import require_delivery_window, require_seed_span
+from mesh_core_budget import delivery_observed, require_delivery_window, require_seed_span
 from online_package_stand import private_file
 from scripts import package_online_renewal as package
 from test_friends_access import proof
@@ -105,7 +105,7 @@ def test_two_renewals_then_linked_emergency_on_original_sessions(online_package,
             delivery_deadline = time.monotonic()+120
             while True:
                 observed = {slot: generations(tmp_path/(slot+'-client.log')) for slot in clients}
-                if all(value['committed'] >= ordinal for value in observed.values()):
+                if delivery_observed(observed, ordinal):
                     break
                 alive()
                 assert time.monotonic() < delivery_deadline, 'actual client commit was not observed'

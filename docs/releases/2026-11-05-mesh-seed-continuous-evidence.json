@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "scope": "bounded-repeating-seed-candidate-not-G4-acceptance",
+  "source_commit": "bfff97d91507cbc7d1ac422facbf93278f760d92",
+  "archive": "online-seed-continuous.tar.gz",
+  "archive_sha256": "5721a5c1a03ce365ba723f3526ced0551d34402c4a1b461424197923b7671e01",
+  "manifest_sha256": "cd86e683a3033be15d3df6237db9ed8226da0923e758bc085f6fea6073daf519",
+  "production_gateway_sha256": "6032b9264e620657d39cf05044daffab5ad8212648a0cb0999fcbfd026a0aaf7",
+  "isolated_driver_sha256": "0fead52ab3dbedf2d78ff3b6ebc67a488e242a80b42fd04b81c0a088e6c26874",
+  "api_sha256": "f7593ba62db7a33e7979b481ff1a9d7e5ed0667de74459208d2a33fb0dd7d765",
+  "http_sha256": "370d1234dead32a13113dcf3e3fa6d9c691e4e9e235163b923e3df7dfa332a1c",
+  "private_evidence_root": "state-client-build/mesh-core-runtime-20261105",
+  "preflight": {
+    "result": "PASS",
+    "log": "preflight-bfff97d.log",
+    "tests": 3,
+    "seconds": 103.15,
+    "skipped": 0,
+    "receipt": "preflight-bfff97d/preflight-8h/preflight.json",
+    "samples_per_node": {"NL": 21, "NL2": 21},
+    "family_tls_mux_tcp_dns_verified_https": true,
+    "cleanup": "processes-waited-and-reader-sockets-absent",
+    "production_rejects_qualification_flags": true
+  },
+  "native_race": {
+    "result": "PASS",
+    "count_per_package": 3,
+    "skipped": 0,
+    "logs": ["bfff97d-bootstrap-race.log", "bfff97d-wholedevice-race.log", "bfff97d-qualification-race.log", "bfff97d-bootstrap-broker-race.log"],
+    "disposable_ProductStore_fixtures": true,
+    "bootstrap_python_publication_artifact": "sync-bfff97d/restricted-sync.pyz"
+  },
+  "harness_sampling_guards": {"log": "full-core-generation-guards.log", "passed": 9, "skipped": 0},
+  "phase_A": "NOT_ACCEPTED",
+  "phase_B": "NOT_STARTED"
+}

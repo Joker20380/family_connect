@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 
-from mesh_core_budget import require_delivery_window, require_seed_span
+from mesh_core_budget import delivery_observed, require_delivery_window, require_seed_span
 
 
 @pytest.mark.parametrize('duration,lifetime,rotation', [(3600, 3600, 0), (18000, 14400, 3600)])
@@ -45,3 +45,13 @@ def test_continuous_rotation_requires_bounded_overlap_and_explicit_opt_in():
         require_seed_span(28800, 14400, 3600, continuous=True)
     with pytest.raises(AssertionError, match='SEED_MANAGER_SINGLE_ROTATION_LIMIT'):
         require_seed_span(28800, 14400, 7200)
+
+
+def test_commit_callback_does_not_replace_sampled_runtime_generation():
+    nodes = {slot: dict(committed=1, first=dict(generation=0), last=dict(generation=0)) for slot in ('NL', 'NL2')}
+    assert not delivery_observed(nodes, 1)
+    nodes['NL']['last']['generation'] = 1
+    assert not delivery_observed(nodes, 1)
+    nodes['NL2']['last']['generation'] = 1
+    assert delivery_observed(nodes, 1)
+    assert not delivery_observed(nodes, 2)

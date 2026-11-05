@@ -16,7 +16,12 @@
 переход реализован и проходит адресные Python-проверки, но G1–G4 целиком ещё не приняты.
 G2 — независимые процессы/отказы; G3 — фактическая Android HTTP/cache доставка;
 G4 — квалифицированный online runtime/API пакет. [Точные gates/evidence](releases/2026-11-05-mesh-online-renewal.md).
-Текущая дельта23:36UTC: source-кандидат повторяет настоящий seed lifecycle через
+Текущая дельта: frozen bfff97d package/driver проходит оба NL traffic preflight и
+затронутые native race с artifact-enabled bootstrap. Перед продолжением долгого G4
+harness фиксируется ожидание фактического поколения трафика, не только COMMIT callback.
+Первый короткий запуск остановлен до renewal, evidence сохранено. А не принята, Б не
+начата; дальше тот же G4 плюс оставшиеся G2/G3, без эмуляторов и production-действий.
+Дельта23:36UTC: source-кандидат повторяет настоящий seed lifecycle через
 существующий loop/publisher, с отдельным opt-in и ограниченным перекрытием; default
 production не меняется. Artifact-enabled bootstrap race и8 бюджетных проверок PASS.
 Следующий шаг — собственный frozen package, traffic preflight и полный G4 по реальным

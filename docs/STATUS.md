@@ -11,6 +11,16 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**bfff97d candidate preflight and affected native race PASS; A still open.** Its
+separate frozen archive/driver proves both NL Family TLS/mux/TCP/DNS/verified HTTPS
+and actual-reader cleanup; production rejects qualification flags. Bootstrap,
+wholedevice, qualification and release-command `-race -count=3` pass with0 SKIP,
+including the source-pinned Python publication artifact. [Exact candidate receipt](releases/2026-11-05-mesh-seed-continuous-evidence.json).
+The8h harness also waits for sampled native generation, not only its earlier COMMIT
+callback;9 guards pass. The short initial long-run attempt is stopped before renewal
+to freeze this observation fix; its log is retained. Resume the same runtime package
+with the fixed frozen harness. No G4/A acceptance or B; no emulator is running.
+
 **23:36UTC seed-lifecycle source candidate; not G4 acceptance.** The existing overlap
 loop now supports explicit bounded repeated rotation, default off. The separate driver
 opts in to4h seeds/2h cadence; production command/defaults/TTL remain unchanged and no

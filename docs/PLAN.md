@@ -12,6 +12,13 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**One current next: complete the fixed frozen G4 harness on bfff97d artifacts.**
+Early two-NL traffic and artifact-enabled affected native race now pass. Retain the
+interrupted pre-renewal attempt; the harness must wait for both sampled generations
+before evaluating their next-delivery deadlines. Root/package regressions and real G2
+expiry are running; G3 legacy/late remains missing. No accepted A checkpoint or B yet.
+All older dated NEXTs below are superseded, not independent tasks.
+
 **Current next23:36UTC: freeze and qualify the bounded repeated-seed candidate.**
 Source uses the existing SeedManager loop and publisher, with explicit opt-in and
 unchanged release defaults. Artifact-enabled bootstrap race checks pass. Build its

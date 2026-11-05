@@ -1,5 +1,30 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Frozen repeating-seed candidate and observation guard
+
+[Candidate identities and evidence](2026-11-05-mesh-seed-continuous-evidence.json).
+Runtime/package source **bfff97d** is pushed and remote-verified. Its own archive and
+separate driver pass the early both-NL Family TLS/mux/TCP/DNS/verified-HTTPS preflight,
+real reader binding/cleanup and release-command rejection of local/continuous flags:
+3 PASS/0 SKIP,103.15s. These tests do not run for8h or prove repeated renewal.
+Affected bootstrap/wholedevice/qualification/bootstrap-broker native `-race -count=3`
+passes with0 SKIP, fresh ProductStore fixtures and the bfff97d Python publication
+artifact. Root/package/process regressions are separately running, not yet PASS.
+
+Review found a harness observation race: the native COMMIT callback can precede its
+next traffic sample. The deadline check now waits for **both** sampled generations as
+well as callbacks. Nine focused guards pass; controlled observations do not establish
+wall-clock continuity. The initial bfff97d long run is intentionally stopped **before
+any renewal** to freeze that test-only fix. Its log is
+`full-core-bfff97d-sampling-restart.log`; this is not a runtime-expiry failure. The
+new harness retains the same immutable runtime package/driver and its own source ID.
+
+The older fd7562c5h/8h budget failure remains unchanged evidence. Current complete
+G4 is still NOT_RUN on the corrected combination; G2 real expiry and G3 actual
+legacy/late cases remain. A is NOT_ACCEPTED, B NOT_STARTED. No emulators/owner phone,
+production, publication or paid operations. One next is completion of this corrected
+full path, not another architecture or a split-tunneling distraction.
+
 ## Bounded repeated-seed source candidate23:36UTC
 
 `SeedManager.ContinueRotation` defaults off and reuses the existing overlap loop,

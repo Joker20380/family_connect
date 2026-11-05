@@ -1,6 +1,12 @@
 import datetime
 
 
+def delivery_observed(observations, ordinal):
+    return all(value['committed'] >= ordinal and
+               value['last']['generation'] >= value['first']['generation']+ordinal
+               for value in observations.values())
+
+
 def require_seed_span(duration_seconds, lifetime_seconds, rotation_seconds, *, continuous=False):
     assert duration_seconds > 0 and lifetime_seconds > 0 and 0 <= rotation_seconds < lifetime_seconds
     if continuous:
