@@ -8,7 +8,8 @@ from online_contract import CONTRACT
 
 
 PACKAGE = 'MESH_ONLINE_RUNTIME_V1'
-FEATURES = ['durable-commit', 'emergency-continuation', 'fencing', 'readiness-generation', 'runtime-reader']
+FEATURES = ['durable-commit', 'emergency-continuation', 'fencing', 'pre-delivery-runtime-confirmation',
+            'readiness-generation', 'runtime-reader']
 
 
 def runtime_binding(manifest, path=None):

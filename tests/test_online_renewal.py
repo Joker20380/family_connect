@@ -67,7 +67,7 @@ def test_retry_retains_first_failure_and_reports_current_blocker(fleet):
     'ONLINE_NL_ACQUIRED', 'ONLINE_NL2_ACQUIRED', 'ONLINE_PREPARED', 'ONLINE_RU_STAGED',
     'ONLINE_NL_STAGED', 'ONLINE_NL2_STAGED', 'ONLINE_COMMIT_DECIDED', 'ONLINE_RU_DECIDED',
     'ONLINE_NL_DECIDED', 'ONLINE_NL2_DECIDED', 'ONLINE_NL_PUBLISHED', 'ONLINE_NL2_PUBLISHED',
-    'ONLINE_CLEANING', 'COMMITTED'])
+    'ONLINE_RUNTIME_CONFIRMED', 'ONLINE_CLEANING', 'COMMITTED'])
 def test_controller_crash_reconciles_same_decision(fleet, boundary):
     enable(fleet)
     def crash(event):
@@ -265,3 +265,46 @@ def test_corrupt_durable_decision_fences_instead_of_guessing(fleet):
     result=fleet.controller.run_online('test-online-corrupt-decision',schedule_seconds=0,resume=True)
     assert result['result']=='ONLINE_EMERGENCY_REQUIRED' and result['decision']=='COMMIT'
     assert all(node.barrier.stopped() for node in fleet.nodes.values())
+
+
+def test_published_receipt_requires_live_process_confirmation(fleet):
+    enable(fleet)
+    node = fleet.nodes['NL']
+    def replace(event):
+        if event == 'ONLINE_NL2_PUBLISHED':
+            node.online_reader = lambda candidate: dict(contract=CONTRACT, gateway=fleet.identities['NL'],
+                profile_sha256=digest(node.read('gateway.json')[0]), instance='f'*64)
+    fleet.controller.fault = replace
+    result = fleet.controller.run_online('test-online-stale-publication', schedule_seconds=0)
+    assert result['result'] == 'ONLINE_EMERGENCY_REQUIRED' and result['decision'] == 'COMMIT', result
+    assert result['last_cause'] == 'ONLINE_RUNTIME_REPLACED'
+    assert not (fleet.nodes['RU'].live/'online-delivery.json').exists()
+    assert all(node.barrier.stopped() for node in fleet.nodes.values())
+
+
+def test_window_is_rechecked_after_readonly_inspection_before_any_journal(fleet):
+    enable(fleet)
+    check = fleet.controller.check_admission
+    def inspect(current):
+        check(current)
+        fleet.now += 2000
+    fleet.controller.check_admission = inspect
+    with pytest.raises(Rejected, match='ONLINE_WINDOW_INSUFFICIENT'):
+        fleet.controller.run_online('test-online-inspection-budget', schedule_seconds=0)
+    assert not (fleet.controller.root/'transaction.json').exists()
+    assert not any((node.state/'owner.json').exists() for node in fleet.nodes.values())
+
+
+def test_completion_uses_one_parallel_rpc_round(fleet):
+    import threading
+    enable(fleet)
+    barrier = threading.Barrier(3)
+    for remote in fleet.controller.nodes.values():
+        invoke = remote.call
+        def call(action, operation, payload=None, invoke=invoke):
+            if action == 'online' and payload['command'] == 'complete':
+                barrier.wait(timeout=5)
+            return invoke(action, operation, payload)
+        remote.call = call
+    result = fleet.controller.run_online('test-online-parallel-completion', schedule_seconds=0)
+    assert result['result'] == 'COMMITTED', result

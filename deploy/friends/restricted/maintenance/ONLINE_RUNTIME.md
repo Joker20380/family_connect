@@ -62,6 +62,21 @@ There is no reduced transport budget or changed production lifetime. Existing
 single-writer locks, fenced durable COMMIT, publication, delivery gate and emergency
 continuation implement the operation, not a second controller/signing database.
 
+After both NL publications, `online/confirm` re-reads the serving PID/UID/executable
+and profile under the existing node/profile locks before RU can publish delivery-ready.
+A cached receipt from a dead/replaced process is insufficient; replacement enters the
+linked emergency path and never silently claims continuity. A stopped reader after
+COMMIT also enters emergency, remaining stopped until approved recovery starts it.
+Participants must advertise `pre-delivery-runtime-confirmation`; mixed packages fail
+the existing source/capability check. Confirmation adds no signer, writer or timer.
+
+The remaining budget is checked again after read-only inspection, before journal/owner
+writes. The eight bounded RPC rounds are acquire, prepare, stage, decide, NL publish,
+NL confirmation, RU delivery publish and **parallel** participant completion. Completion
+reconciles the same durable ledgers after lost responses/partial cleanup. SSH remains120s
+and the eligibility contract remains8×120+435=1395s plus scheduling lateness. No timeout,
+TTL, security clock or mandatory gate is relaxed to fit the added readback.
+
 `emergency` without approval preserves the original COMMIT and returns the linked
 quiesced request. `--outage-approval <private-file>` is allowed only in this mode;
 the canonical object has `operation_id`, `expected_state_sha256`, `approved_at`,

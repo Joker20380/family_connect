@@ -29,6 +29,9 @@ Frozen source8eeb9f0: адресная root/package/core-выборка263 PASS/
 Следующая локальная дельта закрывает сценарий G1 с настоящим revoke после COMMIT и после
 approval, TLS-отказом на обоих NL и новой рабочей сессией разрешённой identity. Frozen9369e65:
 G1 isolated core PASS, адресная выборка138 PASS/0 SKIP. G2/G3/G4 и Б остаются открыты.
+Новая G2-проверка обнаружила принятие receipt уже погибшего gateway. Source-исправление
+добавляет фактический reader-readback до delivery-ready; parallel cleanup сохраняет
+SSH120/1395s+lateness. Квалификация этого кандидата продолжается, без поставки.
 
 **Один действующий следующий шаг: закончить G1–G4 того же MESH incident.** После этого:
 

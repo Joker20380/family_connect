@@ -1,5 +1,53 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## G2 process handoff and stale receipt continuation
+
+Entry79421ec1cbd3fd9c457a65ddde7e8fbbde74eb8a; G1 frozen9369e65 evidence below remains
+valid for its scope. Added actual controller SIGKILL at EMERGENCY_HANDOFF,
+EMERGENCY_AUTHORIZED, EMERGENCY_COMMIT_DECIDED and CLEANING; replay preserves the same
+COMMIT and does not start gateways again. An unreachable NL before journal/after COMMIT
+blocks without changing the decision, then resumes when the SSH route is restored.
+The real packaged directory publisher refuses the active maintenance owner without
+mutations. A separate paused old-fence RPC requester resumes after a higher-fence owner
+and receives ONLINE_STALE_WRITER. These are actual processes, not exception-only faults.
+Earlier artifact9369e65: `g2-working-1.log`6 PASS231.04s, `g2-races-1.log`2 PASS40.72s;
+different selections, not a full matrix or full-CI count.
+
+**New failure reproduced, not hidden by those passes:** the fault adapter executes the
+normal NL publish RPC, then SIGKILLs/restarts its actual gateway and returns the original
+receipt. Frozen9369e65 reports COMMITTED/zero_stop despite receipt ownership belonging
+to the dead process. `g2-stale-receipt-1.log`:1 FAIL17.44s, with replacement PID/instance
+and original response retained in `g2-stale-receipt-9369e65/dead-process-receipt/receipt.json`.
+The old TCP cannot survive this kill; this result blocks accepting the whole A package.
+
+Source fix: a read-only `online/confirm` round checks fresh actual reader identity/profile
+against the stored publication before RU delivery-ready. Capability/version matching
+requires it. Changed process → ONLINE_EMERGENCY_REQUIRED; stopped gateway after COMMIT
+also enters the existing approved continuation, without a manual preliminary start.
+Current recovery reuses the original COMMIT, emergency machinery and custody boundaries.
+Completion is now parallel across participants, with existing durable per-node cleanup
+ledgers; lost replies replay without a second decision. Eight bounded rounds remain:
+acquire, prepare, stage, decide, NL publish, NL confirm, RU publish, parallel complete.
+Headroom is rechecked after read-only inspection before any journal/owner write.
+SSH120,1395s+lateness, certificate/CRL/lease limits and wall clocks are unchanged.
+
+`confirm-working-1.log`:93 PASS,8 deselected,136.50s (online/emergency unit selection and
+real dead-process-receipt recovery); this overlaps earlier suites and is not frozen/full
+acceptance. New tests also cover the confirmation crash/lost-reply boundaries, concurrent
+completion and insufficient headroom consumed during read-only inspection. Final frozen
+candidate results/provenance will be appended; no production/phone/publication operations.
+`confirm-working-2.log` retains a harness failure: crash was incorrectly labelled ordinary
+inactive by the disposable supervisor, so the intentionally unchanged quiesced resume
+preserved that inactive service and returned NEW_DIRECTORY_NOT_READY. The supervisor now
+derives failed state from an actual nonzero child exit absent an explicit stop request.
+`confirm-working-3.log`: dead-gateway approval-only restart PASS48.95s, with exit-9, no
+preliminary manual restart, new PID/instance, and both new DNS/HTTPS sessions. The earlier
+corrupt-confirmation case passed separately. No systemd acceptance is inferred.
+
+Still open: remaining expiry/full G2 matrix, actual API27/API35 HTTP/cache/owner/native G3,
+and final two-renewal wall-clock G4. B remains NOT_STARTED. This is the same incident,
+not a new roadmap stage and not an accepted A checkpoint.
+
 ## G1 revoke continuation
 
 Continuation HEAD1e2823ec042bf4fe35b083c94cf58c8aa42bc8d3; source8eeb9f0 and its

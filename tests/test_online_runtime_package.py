@@ -361,7 +361,7 @@ def test_packaged_nl_failure_rejects_before_owner_or_journal(online_package, tmp
 
 
 @pytest.mark.parametrize('boundary', ['ONLINE_FENCING', 'ONLINE_PREPARED', 'ONLINE_COMMIT_DECIDED',
-                                    'ONLINE_NL2_DECIDED', 'ONLINE_NL2_PUBLISHED', 'ONLINE_CLEANING'])
+                                    'ONLINE_NL2_DECIDED', 'ONLINE_NL2_PUBLISHED', 'ONLINE_RUNTIME_CONFIRMED', 'ONLINE_CLEANING'])
 def test_packaged_controller_sigkill_resumes_same_decision(online_package, core_driver, tmp_path, boundary):
     if os.environ.get('FC_ONLINE_SSH') != '1':
         pytest.skip('explicit network-none SSH container required')
@@ -419,7 +419,8 @@ def test_packaged_seed_timeout_is_not_a_ready_traffic_runtime(online_package, tm
 
 
 @pytest.mark.parametrize('slot,command,kind', [('RU', 'prepare', 'drop'), ('NL', 'stage', 'drop'),
-    ('NL2', 'decide', 'drop'), ('NL', 'publish', 'drop'), ('RU', 'publish', 'drop'), ('NL2', 'stage', 'wrong-slot')])
+    ('NL2', 'decide', 'drop'), ('NL', 'publish', 'drop'), ('NL2', 'confirm', 'drop'),
+    ('RU', 'publish', 'drop'), ('NL2', 'stage', 'wrong-slot')])
 def test_packaged_rpc_lost_reply_and_participant_corruption(online_package, core_driver, tmp_path, slot, command, kind):
     if os.environ.get('FC_ONLINE_SSH') != '1':
         pytest.skip('explicit network-none SSH container required')

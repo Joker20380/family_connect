@@ -26,6 +26,7 @@ def serve(root):
     assert os.geteuid() == 0 and Path('/.dockerenv').exists() and root.is_relative_to('/run')
     specifications, processes, instances, starts = {}, {}, {}, {}
     drop_start = set()
+    requested_stops = set()
     def reader(unit):
         command = specifications.get(unit, {}).get('command', [])
         if '-publication-observer' not in command:
@@ -64,6 +65,7 @@ def serve(root):
                             specifications[unit] = value['specification']
                         elif command == 'start':
                             assert unit in specifications
+                            requested_stops.discard(unit)
                             process = processes.get(unit)
                             if not process or process.poll() is not None:
                                 specification = specifications[unit]
@@ -74,8 +76,10 @@ def serve(root):
                                 instances[unit] = secrets.token_hex(16)
                                 starts[unit] = starts.get(unit, 0)+1
                         elif command == 'stop':
+                            requested_stops.add(unit)
                             stop(unit)
                         elif command == 'kill':
+                            requested_stops.discard(unit)
                             process = processes[unit]
                             process.kill()
                             process.wait(timeout=5)
@@ -86,9 +90,11 @@ def serve(root):
                             assert command == 'show'
                         process = processes.get(unit)
                         running = process is not None and process.poll() is None
-                        state = dict(ActiveState='active' if running else 'inactive', SubState='running' if running else 'dead',
+                        failed = process is not None and process.returncode not in (None, 0) and unit not in requested_stops
+                        state = dict(ActiveState='active' if running else 'failed' if failed else 'inactive',
+                            SubState='running' if running else 'failed' if failed else 'dead',
                             MainPID=str(process.pid) if running else '0', InvocationID=instances.get(unit, ''),
-                            NRestarts=str(max(0, starts.get(unit, 0)-1)), Result='success' if not process or process.returncode in (None, 0) else 'exit-code')
+                            NRestarts=str(max(0, starts.get(unit, 0)-1)), Result='exit-code' if failed else 'success')
                         drop = command == 'start' and unit in drop_start
                         if drop:
                             drop_start.remove(unit)

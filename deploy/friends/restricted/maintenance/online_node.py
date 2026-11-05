@@ -204,7 +204,7 @@ def dispatch(node, operation, payload):
     schemas = {'capabilities': set(), 'inspect': set(), 'acquire': {'fence', 'expected', 'online'}, 'prepare': {'fence', 'gateway'},
                'emergency-handoff': {'origin'}, 'emergency-prepare': {'origin', 'gateway'},
                'stage': {'fence', 'plan'}, 'decide': {'fence', 'plan_sha256', 'prepared'},
-               'complete': {'fence', 'reconciliation'}, 'abort': {'fence'}, 'fence': {'fence'},
+               'complete': {'fence', 'reconciliation'}, 'confirm': {'fence'}, 'abort': {'fence'}, 'fence': {'fence'},
                'publish': {'fence'} | ({'receipts'} if node.role == 'RU' else set())}
     require(command in schemas and set(payload) == schemas[command] | {'command'}, 'ONLINE_RPC_SCHEMA')
     if command == 'capabilities':
@@ -225,6 +225,19 @@ def dispatch(node, operation, payload):
         return staged(node, operation, payload)
     if command == 'publish':
         return publish(node, operation, payload)
+    if command == 'confirm':
+        with node.operation.lock(), node.profile_lock():
+            owner = owned(node, operation, payload['fence'])
+            require(node.role == 'NL' and owner['state'] == 'ONLINE_PUBLISHED', 'ONLINE_NOT_PUBLISHED')
+            plan = parse(read_private(node.state/'plan.json'))
+            validate_plan(node, plan, committed=True)
+            check_policy(node, owner, plan)
+            receipt = parse(read_private(node.state/'online-published.json'))
+            current = reader(node)
+            require(current['instance'] == receipt['runtime']['instance'], 'ONLINE_RUNTIME_REPLACED')
+            require(current == receipt['runtime'], 'ONLINE_RUNTIME_READBACK')
+            publication_receipt(node.gateway_slot, operation, plan, receipt, int(node.clock()))
+            return receipt
     if command == 'fence':
         with node.operation.lock():
             owner = node.owner(operation)

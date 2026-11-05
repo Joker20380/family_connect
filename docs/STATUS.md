@@ -11,6 +11,15 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**G2 stale-process receipt defect found and fixed in source; qualification continuing.**
+Frozen9369e65 incorrectly completed online renewal when a gateway was killed/replaced
+after publication but its old valid RPC receipt was returned. New pre-delivery confirmation
+reads the actual serving process again; replacement now requires emergency approval.
+Parallel cleanup keeps eight RPC rounds/SSH120/1395s+lateness; budget is rechecked before
+journal writes. Real handoff controller deaths, unavailable NL, publisher contention and
+paused stale RPC requester checks pass on the earlier artifact. Full matrix/expiry,
+Android G3 and long G4 remain open. B stays NOT_STARTED; no accepted A checkpoint.
+
 **G1 revoke continuation (isolated core; A still incomplete).** Both NL now pass actual
 Family admission before revoke and deny the same unexpired credentials after packaged
 approval-gated recovery. Revoke after COMMIT and another after approval preserve the

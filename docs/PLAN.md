@@ -12,6 +12,11 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**G2 current delta:** qualify the fresh pre-delivery reader confirmation fixing acceptance
+of a valid receipt from an already-dead gateway. Preserve eight bounded RPC rounds via
+parallel cleanup and1395s+lateness. Continue remaining G2 expiry/G3 Android/G4 long-runtime
+gates within the same incident; no B or release transition yet.
+
 **G1 revoke delta:** the two-NL isolated runtime scenario now passes revoke after COMMIT,
 late revoke invalidating approval, real recovered TLS denial, survivor HTTP/TCP/DNS/HTTPS,
 and lost-start/idempotent recovery. Frozen9369e65 selected138 PASS/0 SKIP; G1 isolated

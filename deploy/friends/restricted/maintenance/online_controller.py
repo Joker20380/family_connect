@@ -52,6 +52,8 @@ def run(controller, operation, *, schedule_seconds, resume):
             eligible(controller.validator, gateway['secondary_snapshot'], int(controller.clock()), timing)
             before = round_trip(controller, operation, 'inspect', {role: {} for role in controller.nodes})
             controller.check_admission(before)
+            eligible(controller.validator, previous, int(controller.clock()), timing)
+            eligible(controller.validator, gateway['secondary_snapshot'], int(controller.clock()), timing)
             record = dict(schema=1, mode='online', operation_id=operation, online=dict(contract=CONTRACT, timing=timing),
                           before=before, before_sha256=digest(canonical(before)), previous=previous,
                           gateway=gateway, prepared={}, published={}, acquired=[], cleaned=[],
@@ -105,6 +107,10 @@ def run(controller, operation, *, schedule_seconds, resume):
                         'ONLINE_RUNTIME_READBACK')
                 record['published'][role] = receipt
                 controller.save(record, 'ONLINE_'+role+'_PUBLISHED')
+            confirmed = round_trip(controller, operation, 'confirm', {role: dict(fence=record['fence'])
+                for role in ('NL', 'NL2')})
+            require(confirmed == record['published'], 'ONLINE_RUNTIME_CONFIRMATION')
+            controller.save(record, 'ONLINE_RUNTIME_CONFIRMED')
             receipt = call(controller, 'RU', operation, 'publish', fence=record['fence'], receipts=record['published'])
             require(receipt['operation_id'] == operation and receipt['plan_sha256'] == record['plan_sha256']
                     and receipt['slot'] == 'RU', 'ONLINE_DELIVERY_RECEIPT')
@@ -118,7 +124,7 @@ def run(controller, operation, *, schedule_seconds, resume):
             record['first_cause'] = record['first_cause'] or record['last_cause']
             if isinstance(error, Rejected) and str(error) in {
                     'ONLINE_POLICY_CHANGED', 'ONLINE_REVOCATION_FORBIDDEN', 'ONLINE_SEQUENCE_CHANGED',
-                    'ONLINE_RUNTIME_REPLACED', 'ONLINE_DECISION_CORRUPT', 'LEAF_EXPIRED_OR_FUTURE',
+                    'ONLINE_RUNTIME_REPLACED', 'ONLINE_READER_STOPPED', 'ONLINE_DECISION_CORRUPT', 'LEAF_EXPIRED_OR_FUTURE',
                     'CRL_EXPIRED_OR_FUTURE'}:
                 record['fenced'] = {}
                 controller.save(record, 'ONLINE_EMERGENCY_REQUIRED')
@@ -136,13 +142,13 @@ def run(controller, operation, *, schedule_seconds, resume):
 
 
 def cleanup(controller, record):
-    for role in controller.nodes:
-        if role not in record['cleaned']:
-            receipt = call(controller, role, record['operation_id'], 'complete', fence=record['fence'],
-                           reconciliation=record['reconciliation'])
-            require(receipt['result'] == 'CLEANED', 'ONLINE_CLEANUP_RECEIPT')
-            record['cleaned'].append(role)
-            controller.save(record, 'ONLINE_CLEANING')
+    pending = {role: dict(fence=record['fence'], reconciliation=record['reconciliation'])
+               for role in controller.nodes if role not in record['cleaned']}
+    receipts = round_trip(controller, record['operation_id'], 'complete', pending)
+    for role, receipt in receipts.items():
+        require(receipt['result'] == 'CLEANED', 'ONLINE_CLEANUP_RECEIPT')
+        record['cleaned'].append(role)
+        controller.save(record, 'ONLINE_CLEANING')
     controller.save(record, 'COMMITTED')
     controller.receipts(record)
     return dict(result='COMMITTED', operation_id=record['operation_id'], plan_sha256=record['plan_sha256'],

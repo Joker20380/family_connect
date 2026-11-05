@@ -1,8 +1,10 @@
 import json
 import os
 from pathlib import Path
+import runpy
 import subprocess
 import sys
+import time
 
 
 def main():
@@ -22,6 +24,24 @@ def main():
                 os.close(descriptor)
                 if fault['kind'] == 'drop':
                     os._exit(86)
+                if fault['kind'] == 'stale-runtime':
+                    settings = json.loads(config.read_bytes())
+                    supervisor = runpy.run_path('/usr/bin/systemctl')['request']
+                    unit = 'test-'+settings['gateway_slot']+'.service'
+                    before = supervisor(dict(command='show', unit=unit))['state']
+                    supervisor(dict(command='kill', unit=unit))
+                    observer = Path(settings['online']['reader_socket'])
+                    assert not observer.exists()
+                    after = supervisor(dict(command='start', unit=unit))['state']
+                    assert before['MainPID'] != after['MainPID'] and before['InvocationID'] != after['InvocationID']
+                    deadline = time.monotonic()+5
+                    while not observer.exists():
+                        assert time.monotonic() < deadline
+                        time.sleep(.02)
+                    with (config.parent/'rpc-runtime-replaced.json').open('x') as output:
+                        json.dump(dict(before=before, after=after, returned='receipt-from-dead-process'), output)
+                    sys.stdout.buffer.write(result.stdout)
+                    return 0
                 response = json.loads(result.stdout)
                 response['payload']['slot'] = 'unknown-participant'
                 sys.stdout.write(json.dumps(response, sort_keys=True, separators=(',', ':')))
