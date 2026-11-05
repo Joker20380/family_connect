@@ -17,6 +17,13 @@ from scripts import package_online_renewal as package
 from test_mesh_core_soak import bounds
 
 
+def readiness_metadata(raw):
+    envelope = json.loads(raw)
+    response = envelope.get('response', envelope)
+    return dict(ready=response.get('ready'), gateway=envelope.get('gateway_id', 'nl-amsterdam-1'),
+                expires=response.get('expires_at'), crl=response.get('minimum_crl'), sha256=package.digest(raw))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--archive', type=Path, required=True)
@@ -67,10 +74,7 @@ def main():
         if path != '/friends/restricted-readiness':
             return
         with lock:
-            response = json.loads(raw)
-            receipt['requests'].append(dict(wall=time.time(), state=receipt['state'], status=status,
-                ready=response.get('ready'), gateway=response.get('gateway'), expires=response.get('expires_at'),
-                crl=response.get('minimum_crl'), sha256=package.digest(raw)))
+            receipt['requests'].append(dict(wall=time.time(), state=receipt['state'], status=status, **readiness_metadata(raw)))
             save()
 
     stand.http_control, stand.http_observer = control, observe

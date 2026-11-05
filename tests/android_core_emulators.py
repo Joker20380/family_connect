@@ -34,6 +34,24 @@ def require_nvidia_renderer(surface):
     return renderer
 
 
+def configure_network(adb, wifi, record):
+    deadline = time.monotonic()+60
+    record['network_setup'] = []
+    while True:
+        results = []
+        for service, enabled in (('wifi', wifi), ('data', not wifi)):
+            result = subprocess.run(adb+['shell', 'svc', service, 'enable' if enabled else 'disable'],
+                                    capture_output=True, text=True, timeout=10)
+            record['network_setup'].append(dict(service=service, enabled=enabled, code=result.returncode,
+                output=(result.stdout+result.stderr)[-2048:]))
+            results.append(result.returncode)
+        if results == [0, 0]:
+            return
+        if time.monotonic() >= deadline:
+            raise RuntimeError('Android network services unavailable; see network_setup receipt')
+        time.sleep(2)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--tools', type=Path, required=True)
@@ -121,8 +139,7 @@ def run(args):
             record['gpu_mode'] = 'host'
             record['acceleration'] = 'on'
             wifi = args.isolated_network or api == 35
-            subprocess.run(adb+['shell', 'svc', 'wifi', 'enable' if wifi else 'disable'], check=True, capture_output=True, timeout=10)
-            subprocess.run(adb+['shell', 'svc', 'data', 'disable' if wifi else 'enable'], check=True, capture_output=True, timeout=10)
+            configure_network(adb, wifi, record)
             time.sleep(5)
             record['network_scope'] = 'owned-emulator-'+('wifi' if wifi else 'cellular')+'-not-mobile-field'
             for artifact in (apk, tests):

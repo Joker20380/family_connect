@@ -17,6 +17,23 @@ from device_identity.device import DeviceIdentity
 from test_friends_access import proof
 
 
+@pytest.mark.parametrize('raw', [
+    b'{"schema":1,"operation":"CREDENTIAL_RENEWAL_RPC","request":{}}',
+    b'{"schema":true,"operation":"READ_ONLY_SECURITY_SNAPSHOT"}',
+    b'{"schema":1,"schema":1,"operation":"READ_ONLY_SECURITY_SNAPSHOT"}',
+    b'{"schema":1,"operation":"READ_ONLY_SECURITY_SNAPSHOT","profile":"override"}',
+])
+def test_disposable_snapshot_route_is_read_only(tmp_path, raw):
+    snapshot = os.environ.get('FC_TEST_SNAPSHOT')
+    if not snapshot:
+        pytest.skip('explicit frozen read-only snapshot capsule required')
+    result = subprocess.run([sys.executable, '-I', '-B', str(package.ROOT/'tests/fixtures/mesh_snapshot.py'),
+        snapshot, str(tmp_path/'nonexistent-configuration')], input=raw, capture_output=True,
+        env=dict(os.environ, SSH_ORIGINAL_COMMAND='restricted-sync'), timeout=10)
+    assert result.returncode != 0 and b'READ_ONLY_SNAPSHOT_REQUIRED' in result.stderr
+    assert not list(tmp_path.iterdir())
+
+
 def test_seed_directory_publisher_preserves_credentials_and_processes(online_package, core_driver, tmp_path):
     from mesh_core_directory import publish_seed_directories
     snapshot = os.environ.get('FC_TEST_SNAPSHOT')

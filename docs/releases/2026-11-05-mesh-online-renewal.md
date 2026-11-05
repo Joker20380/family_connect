@@ -1,5 +1,61 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Both GPU Android positive paths complete22:00UTC
+
+**New full user scenario relative to a30966c:** on both API27 and API35 an active MESH
+VPN receives usable successor credentials through verified HTTP, validates and stores
+them in the encrypted cache, and renews the existing native session through the normal
+ConnectionService owner after a real partial two-NL publication and cooldown. It does
+not reconnect, bypass TLS, inject a profile into SessionMaintenance or change clocks.
+This closes the positive delivery subscenario, not every G3 case or phase A.
+
+[Sanitized machine-readable provenance, timestamps and bounds](2026-11-05-mesh-android-gpu-evidence.json).
+Scenario source checkpoint2e3d1801ed98a3a2a7f327408d0325fcceda59c3 is pushed and
+remote-verified. API27 runs650s; API35 runs669s. Both finish `OK (1 test)` /
+`PASS_POSITIVE_PATH_ONLY`, `SERVICE_SUCCESSOR_COMMITTED_SAME_OWNER` and normal cleanup.
+Both original and successor leaf/CRL bounds are real; SSH120 and the1395s+lateness window
+are unchanged. Initial synthetic age selects valid overlapping material, not a frozen
+security clock or extended production TTL. Both original native artifact checks match.
+
+The first GPU API35 attempt failed before APK installation when `svc data disable`
+returned20 after Android reported boot completion. The runner now uses a60s retry budget
+(10s per command) for both ordinary network commands to succeed, retains failed output and still
+fails closed; it never treats an unavailable command as success. A fresh AVD reused
+only the still-unconsumed synthetic invite (no readiness requests or activation had
+occurred), then completed the test. This is disposable boot readiness, not a changed
+product timeout. API35 runner hash is recorded separately in the receipt.
+
+Correction to the21:40 capsule wording: the canonical snapshot capsule also contains
+the existing bounded maintenance dispatcher. The dedicated fixture SSH route now
+explicitly rejects write/extra-field/duplicate-field/boolean-schema requests **before**
+loading its disposable configuration; it passes only the canonical read-only request
+to the frozen entrypoint. Old positive traces contained read-only calls but did not
+qualify that negative route guard. Capsule bytes stay b6e15add…; the hardened adapter
+hash is4089c58c386634aabc21dacfdba8c0a7e219235fe39bc5029de42c9e408ed929.
+
+Follow-up validation: `directory-readonly-guard.log`5 PASS/0 SKIP/13.76s (four rejects
+and normal real publisher/traffic), plus GPU runner/receipt projection selection16
+PASS/1.26s. The latter includes13 existing/new boot guards and three sanitized readiness
+metadata projections. Secondary gateway envelopes are now unwrapped for future receipt
+metadata; completed runtime receipts retain their original format. Do not add these
+overlapping selections to the earlier totals or call them full CI.
+
+| Gate | Status | Exact current scope |
+|---|---|---|
+|G1|PASS|Retained frozen isolated-core revoke/approval/restart evidence; final full-path repetition pending.|
+|G2|NOT_RUN, full gate|Process/RPC subsets PASS; actual successor expiry remains running, not accepted.|
+|G3|NOT_RUN, full gate|API27/API35 positive partial-publication paths PASS. Closed/replaced owner, new Connect during partial publication, legacy peer and too-late delivery remain unqualified.|
+|G4|NOT_RUN, full gate|fd7562c full-core wall-clock run remains active; first renewal due23:11:57UTC. Older d968ddd first renewal is separate evidence.|
+
+All Android AVDs and the corresponding disposable Android server/route helpers have
+stopped. Only the previously bounded non-Android long core/expiry checks remain active.
+Next: actual late HTTP completion across Disconnect/owner replacement in G3, retaining
+the real G2/G4 runs. No independently accepted A checkpoint exists; split tunneling UI,
+storage, routing and recovery are NOT_STARTED. No release package is approved from this
+combination. Production/phone/APK118/updater113, rollout/rollback, catalogs, payments and
+cohort are unchanged. Later exact-release, approved delivery, Telemost/systemd, both-NL
+live renewal, paired-DNS/WebSocket and weak-network/screen-off/mobile-field gates remain.
+
 ## API27 real successor after partial publication21:40UTC
 
 Newly proven relative to a30966c: a normal Android ConnectionService VPN obtains its

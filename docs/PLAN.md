@@ -12,6 +12,11 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Both API27/API35 positive partial-publication deliveries now pass on GPU.** Preserve
+their exact artifact/bounds receipt. Next within G3: actual delayed HTTP completion
+after Disconnect/owner replacement, then remaining new-connect/legacy/late-delivery
+cases; retain the running independent expiry/full-core checks. No A acceptance or B yet.
+
 **API27 positive HTTP/cache/owner/native successor now passes.** Retain the650s receipt
 and normal publisher evidence. Finish the sequential API35 GPU run and remaining actual
 HTTP/owner/late/legacy scenarios while the independent G2 expiry and full G4 stands run.

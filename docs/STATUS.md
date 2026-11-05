@@ -11,6 +11,16 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**22:00UTC API27 and API35 positive delivery PASS, full A still open.** Sequential
+NVIDIA/KVM runs650s and669s now both prove HTTP/cache → normal service owner → renewed
+native credentials after real partial publication/cooldown, without reconnect. Both
+AVDs and their server stands are stopped with normal cleanup. Exact identities/bounds:
+[sanitized receipt](releases/2026-11-05-mesh-android-gpu-evidence.json). Scenario checkpoint
+2e3d180 is pushed/remote-verified, not accepted A. Remaining G3 late/closed-owner/legacy/
+new-connect cases and genuine G2 expiry/full G4 stay open; B NOT_STARTED. Follow-up
+snapshot-route guard5 PASS and GPU/receipt unit selection16 PASS are separate scopes,
+not full CI or additive totals with older suites. No production/phone/publication.
+
 **21:40UTC new API27 positive delivery evidence, not full G3/A acceptance.** A single
 NVIDIA/KVM AVD completed650s of actual HTTP readiness, encrypted cache, ConnectionService,
 partial NL2 publication, duplicate refresh, real310s cooldown, normal same-COMMIT resume

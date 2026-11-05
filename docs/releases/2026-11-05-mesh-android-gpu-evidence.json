@@ -1,0 +1,61 @@
+{
+  "scope": "isolated Android positive partial-publication delivery; not complete G3 or accepted phase A",
+  "runtime_source": "fd7562cc466606002aa2af064b2b67ee165056c2",
+  "scenario_source": "2e3d1801ed98a3a2a7f327408d0325fcceda59c3",
+  "online_archive_sha256": "846818adefa292939034b9c427d658cfd3c427f48d1fb522dbda104f31aeb94f",
+  "qualification_driver_sha256": "180f386f8afba4d9a604e3f3b812370dcc7f5e0c9d855775f9d3c379daf91376",
+  "snapshot_capsule_sha256": "b6e15addc5eb2ab864208957cf2b5908c8075f37b96c62b37dfa46798479b78b",
+  "runtime_snapshot_route_adapter_sha256": "ac8547238624da2311785467828478528d5e2afb9bda37d624678426e23be26f",
+  "native_source": "39c69de21f87ea4ca83a3e7eac1d0b7d42a62fdb",
+  "native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+  "gpu": "NVIDIA GeForce GTX 1650 Ti",
+  "parallel_avds": false,
+  "security_clock": "real wall clock, unchanged",
+  "ssh_rpc_timeout_seconds": 120,
+  "online_required_window_seconds": 1395,
+  "scheduling_lateness_seconds": 0,
+  "runs": [
+    {
+      "api": 27,
+      "result": "PASS_POSITIVE_PATH_ONLY",
+      "apk_sha256": "8270ef5811dd5e3fae30d059629b319df69531e17eed464bd5f5e9d8b0aed8be",
+      "instrumentation_sha256": "0199e70dc4967cda417b3c72467d3a8e4199baf9ef684cbfb52e91e3e3a2f3f3",
+      "started": 1793914112.7466166,
+      "finished": 1793914762.2695322,
+      "original_leaf_and_crl_bound_both_nl": 1793916333,
+      "successor_leaf_and_crl_bound_both_nl": 1793928520,
+      "partial_publication": 1793914133.1624584,
+      "commit_resumed_and_published": 1793914462.0172136,
+      "plan_sha256": "4d84d6cc7c48c210bb78e145d74b544141a796ff68e8b92921005610cfcee16c",
+      "receipt": "state-client-build/mesh-core-runtime-20261105/android-partial-gpu27-emulators/api27-receipt.json",
+      "cleanup": "owned AVD stopped; server processes waited"
+    },
+    {
+      "api": 35,
+      "result": "PASS_POSITIVE_PATH_ONLY",
+      "apk_sha256": "ab4eb19709e5588fd3874fbe81f0bcc60f8298a13548b9324ede5be569d2978d",
+      "instrumentation_sha256": "7d1ced35b51f8cc3f1414008acfe7c1a9f5a350a26acb8d329d5ca723ece8dc3",
+      "runner_sha256": "716d7edac6752dc38b0bbccce6ee98bf2e27ae1dad2c386dc2445fdb07e1eef9",
+      "started": 1793915192.8457823,
+      "finished": 1793915862.235728,
+      "original_leaf_and_crl_bound_both_nl": 1793916987,
+      "successor_leaf_and_crl_bound_both_nl": 1793929613,
+      "partial_publication": 1793915225.2783089,
+      "commit_resumed_and_published": 1793915560.6592765,
+      "plan_sha256": "af20c3108ca95564ff17d1a5f0ce60ac3f92fe2f2ab0380dae75aa4eac5ccb3f",
+      "receipt": "state-client-build/mesh-core-runtime-20261105/android-partial-gpu35-emulators2/api35-receipt.json",
+      "cleanup": "owned AVD stopped; server processes waited"
+    }
+  ],
+  "remaining_g3": [
+    "actual delayed response after Disconnect or owner replacement",
+    "new connection during partial publication",
+    "legacy peer without exchange",
+    "delivery too late for safe native extension"
+  ],
+  "phase_a": "NOT_ACCEPTED",
+  "phase_b": "NOT_STARTED",
+  "production_changed": false,
+  "owner_phone_changed": false,
+  "published": false
+}

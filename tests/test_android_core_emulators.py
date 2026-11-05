@@ -1,5 +1,6 @@
 import importlib.util
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -39,3 +40,29 @@ def test_slot_released_after_failure(tmp_path):
             raise ValueError('fixture interruption')
     with emulators.emulator_slot(tmp_path):
         pass
+
+
+def test_network_services_must_accept_both_commands(monkeypatch):
+    codes = iter((0, 20, 0, 0))
+    calls = []
+    def run(command, **kwargs):
+        calls.append(command)
+        return SimpleNamespace(returncode=next(codes), stdout='', stderr='service starting')
+    monkeypatch.setattr(emulators.subprocess, 'run', run)
+    monkeypatch.setattr(emulators.time, 'sleep', lambda seconds: None)
+    record = {}
+    emulators.configure_network(['adb', '-s', 'owned'], True, record)
+    assert len(calls) == 4
+    assert calls[0][-2:] == ['wifi', 'enable'] and calls[-1][-2:] == ['data', 'disable']
+    assert [value['code'] for value in record['network_setup']] == [0, 20, 0, 0]
+
+
+def test_network_service_failure_is_not_ignored(monkeypatch):
+    ticks = iter((0, 61))
+    monkeypatch.setattr(emulators.time, 'monotonic', lambda: next(ticks))
+    monkeypatch.setattr(emulators.subprocess, 'run', lambda *args, **kwargs:
+        SimpleNamespace(returncode=20, stdout='', stderr='service unavailable'))
+    record = {}
+    with pytest.raises(RuntimeError, match='network services unavailable'):
+        emulators.configure_network(['adb', '-s', 'owned'], True, record)
+    assert len(record['network_setup']) == 2
