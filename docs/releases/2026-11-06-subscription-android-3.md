@@ -1,5 +1,45 @@
 # SUBSCRIPTION-ANDROID-3 — narrow physical ARM and normal ingress
 
+## Live checkpoint17:47UTC
+
+Prepared overlay source/tool checkpoint `4053da47bb9d484bd87bb60884cf74ded17b6634`
+was pushed and remote-verified before deployment. At17:43:50UTC only
+`family-connect-friends-http-candidate.service` restarted with the new last override
+`zzzzzzzzzz-subscription.conf`; actual PID3482330 owns127.0.0.1:18086, NRestarts0.
+Loaded argv points to `/opt/apps/family_connect/friends-access/subscription-0fa13b0a9240/friends-http.pyz`;
+SHA256 `0fa13b0a92406c9d58043287e880b6533768d031f31e1de10059b9072eb6473e` verified remotely.
+No dependency, app environment, DB schema or old drop-in changed. Guarded rollback
+was prepared but not used. The existing nginx master794445 received graceful HUP only;
+no container/service restart. Before/after nginx syntax checks PASS; config SHA256
+`6eb5d694dfe5f6b8b604484c790dc6457bdcd866f566e6a90ab51d1ac098602f`, only one exact
+location added, targeting the existing18086 (not the generic snippet's18084).
+Normal TLS POST without proof now returns403 JSON access-rejected, upstream403,
+Cache-Control:no-store. Preflight had404. This negative is not authenticated acceptance.
+
+**Installed:** `adb install -r` returned Success18:44:17 local/17:44:17UTC.
+Pulled installed base.apk has the fixed119 SHA256, UID10283 and original firstInstallTime
+`2026-09-19 17:30:26` retained. No downgrade/uninstall/clear/private-key extraction.
+Ordinary release startup and Python subscription projection work; no app native/Chaquopy
+exception in the bounded post-install log. Existing ChatDeliveryService starts naturally,
+confirming the retained activation path. No Family Connect/third-party VPN network exists.
+
+**First fresh physical response PASS:** ordinary subscription navigation via its existing
+activity intent,17:45:23UTC, displays “По последнему подтверждению устройство вне платного
+пилота. Это не означает отсутствие оплаты или доступа.” and confirmed18:45:23+01:00
+Europe/Brussels. Initial UI showed pending/no confirmed data, then a fresh server label.
+Read-only server correlation maps the pre-update public Support ID to the same existing
+registered/non-revoked identity: zero subscription challenges before, one fresh consumed
+`subscription` challenge afterward; canonical paid row absent. No supplied dictionary,
+alternate endpoint/CA, operator-generated proof or synthetic production event was used.
+This proves own authorized **non-cohort** response, not a paid subscription/event test.
+
+Physical Refresh/restart retention remain pending at this checkpoint. MIUI refuses ADB
+input injection and UIAutomator click; do not bypass that permission. Ordinary screenshot
+is unavailable under FLAG_SECURE; standard dump waits never idle with the animated UI.
+The read-only existing UIAutomator pattern with idle timeout0 reads actual visible labels;
+its initial dump-file method emitted no file, so the helper now reads bounded text nodes.
+An explicit user Refresh tap is requested. These harness limitations are not app defects.
+
 ## Prepared checkpoint (6 November)
 
 This section records preparation, not deployed or installed acceptance. Worktree

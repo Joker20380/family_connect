@@ -13,6 +13,12 @@ public final class SubscriptionDeviceUi extends UiAutomatorTestCase {
             assertTrue(button.exists());
             assertTrue(button.click());
         }
-        getUiDevice().dumpWindowHierarchy("fc-subscription-3.xml");
+        for (int index = 0; index < 96; index++) {
+            UiObject object = new UiObject(new UiSelector()
+                .packageName("com.familyconnect.app.friends").instance(index));
+            if (!object.exists()) break;
+            System.out.println("SUBSCRIPTION_UI " + object.getClassName() + " | "
+                + object.getText() + " | " + object.getBounds().toShortString());
+        }
     }
 }
