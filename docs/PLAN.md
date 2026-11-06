@@ -3,6 +3,11 @@
 ## Current engineering priority / Текущий critical path
 
 **Owner-selected SUBSCRIPTION-INTEGRATION-1 — integration gate OPEN.**
+Finish the remaining concrete1d4 fixtures and invitation-dispatch synchronization,
+then require final-head hosted PASS and normal merge. Exact retained snapshot and current
+unbound renewal package must be supplied, not skipped. Do not repeat closed native or
+messenger investigations, change historical hashes or claim emulator/phone acceptance
+from a source-review adaptation. Keep receipts in PR1 after the cohesive source push.
 Current authorized work includes the complete beta119 source-review guard adaptation
 and CI fixture corrections. Finish the actual-head hosted checks and ordinary PR1 merge;
 do not open a runtime qualification phase. All152 guarded files match beta119; seven

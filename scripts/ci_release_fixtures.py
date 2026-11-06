@@ -14,6 +14,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 HISTORICAL = '4bb53b0605c2c898b6a3feca6ee15fd34b943a94'
 HISTORICAL_SHA = '460e75205eb9baff313dc7dd963cdb7bceddf2d1e13405a71686f9ec6c976d71'
+SNAPSHOT_SHA = '0120dad028ead353b8b83a600538f3e578b2b46ddf871bf16e97529f9449f450'
 REQUIRED_COMMITS = (HISTORICAL, 'edca5447418141cb44c0706e26d1973d7defd397',
                     'efc13f1c7f2750cb7640dd2b8b90aed15c92c6e3')
 
@@ -91,13 +92,46 @@ def historical_http(output, source):
         raise ValueError('Historical fixture pin mismatch')
 
 
+def historical_snapshot(output):
+    fixture = ROOT / 'tests/fixtures/accepted_snapshot'
+    members = json.loads((fixture / 'sources.json').read_text())
+    content = {'__main__.py': b'# -*- coding: utf-8 -*-\nimport control.friends.restricted_sync\ncontrol.friends.restricted_sync.main()\n'}
+    for name, contract in members.items():
+        if Path(name).is_absolute() or '..' in Path(name).parts or not name.endswith('.py'):
+            raise ValueError('Unsafe snapshot member')
+        if 'commit' in contract:
+            if contract['commit'] not in REQUIRED_COMMITS:
+                raise ValueError('Unpinned snapshot commit')
+            raw = git('show', contract['commit'] + ':' + name)
+        else:
+            if contract['fixture'] != Path(contract['fixture']).name:
+                raise ValueError('Unsafe snapshot fixture')
+            raw = (fixture / contract['fixture']).read_bytes()
+        if hashlib.sha256(raw).hexdigest() != contract['sha256']:
+            raise ValueError('Snapshot member mismatch: ' + name)
+        content[name] = raw
+    directories = {str(parent) + '/' for name in content for parent in Path(name).parents if str(parent) != '.'}
+    with zipfile.ZipFile(output, 'x') as archive:
+        for name in sorted(directories) + sorted(content):
+            entry = zipfile.ZipInfo(name, (1980, 1, 1, 0, 0, 0))
+            entry.create_system = 3
+            entry.external_attr = ((0o40755 << 16) | 0x10) if name.endswith('/') else (0o100644 << 16)
+            entry.compress_type = zipfile.ZIP_STORED if name.endswith('/') else zipfile.ZIP_DEFLATED
+            archive.writestr(entry, content.get(name, b''), compresslevel=9)
+    if digest(output) != SNAPSHOT_SHA:
+        raise ValueError('Historical snapshot pin mismatch')
+
+
 def prepare(output, go, historical_archive=None):
     sys.path.insert(0, str(ROOT))
     from scripts.package_friends_http import build as http
     from scripts.package_restricted_runtime import build as sync
     from scripts.package_friends_readiness import build as readiness
+    from scripts.package_credential_renewal import build as renewal
     output.mkdir(parents=True, exist_ok=False)
     head = git('rev-parse', 'HEAD').decode().strip()
+    renewal(output / 'credential-renewal.tar.gz', head, repository=ROOT)
+    historical_snapshot(output / 'accepted-snapshot.pyz')
     with tempfile.TemporaryDirectory(prefix='fc-ci-source-') as temporary:
         source = Path(temporary) / 'current'
         historical = Path(temporary) / 'historical'
@@ -128,12 +162,16 @@ def environment(fixtures, go, nginx):
             raise ValueError('Fixture inventory mismatch')
     if digest(fixtures / 'historical-http/friends-http.pyz') != HISTORICAL_SHA:
         raise ValueError('Historical fixture pin mismatch')
+    if digest(fixtures / 'accepted-snapshot.pyz') != SNAPSHOT_SHA:
+        raise ValueError('Historical snapshot pin mismatch')
     return dict(FC_TEST_HTTP_ARTIFACT=str(fixtures / 'http'),
         FC_TEST_HTTP_SHA256=digest(fixtures / 'http/friends-http.pyz'),
         FC_TEST_SYNC_ARTIFACT=str(fixtures / 'sync'),
         FC_TEST_SYNC_SHA256=digest(fixtures / 'sync/restricted-sync.pyz'),
         FC_TEST_READINESS_ARTIFACT=str(fixtures / 'readiness'),
         FC_TEST_HISTORICAL_HTTP_ARTIFACT=str(fixtures / 'historical-http/friends-http.pyz'),
+        FC_TEST_RENEWAL_PACKAGE=str(fixtures / 'credential-renewal.tar.gz'),
+        FC_TEST_SNAPSHOT_ARCHIVE=str(fixtures / 'accepted-snapshot.pyz'),
         FC_TEST_GO=str(go), FC_TEST_NGINX=str(nginx))
 
 

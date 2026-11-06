@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import threading
 from types import SimpleNamespace
 
@@ -272,7 +273,7 @@ def test_enrollment_fail_closed(enrollment,reason):
 
 
 def test_cli_help_and_live_guard():
-    result=subprocess.run(['python3','-m','fleet','--help'],capture_output=True,text=True,timeout=5)
+    result=subprocess.run([sys.executable,'-m','fleet','--help'],capture_output=True,text=True,timeout=5)
     assert result.returncode==0 and 'no live activation' in result.stdout
 
 
@@ -295,7 +296,7 @@ def test_error_output_redacts_untrusted_input(tmp_path):
     marker='synthetic-sensitive-value-not-for-output'
     path=tmp_path/'inventory.json'
     path.write_text(json.dumps(dict(token=marker)))
-    result=subprocess.run(['python3','-m','fleet','plan','--inventory',str(path),'--instance',marker,
+    result=subprocess.run([sys.executable,'-m','fleet','plan','--inventory',str(path),'--instance',marker,
         '--bundle',str(tmp_path),'--public-key',str(tmp_path/'absent.key')],capture_output=True,text=True,timeout=5)
     assert result.returncode==1
     assert marker not in result.stdout+result.stderr

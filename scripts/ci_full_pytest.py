@@ -11,7 +11,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scripts.ci_pytest_context import CONTEXTS, ROOT_CLASS, ROOT_FILES, SNAPSHOT_FILE
+from scripts.ci_pytest_context import CONTEXTS, SNAPSHOT_FILE
 
 
 def main():
@@ -23,6 +23,7 @@ def main():
     if privileged and not args.unprivileged_user:
         parser.error('An explicit unprivileged test account is required')
     environment = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', PYTHONUNBUFFERED='1')
+    environment['PATH'] = str(Path(sys.executable).parent) + os.pathsep + environment['PATH']
     os.umask(0o022)
     with tempfile.TemporaryDirectory(prefix='fc-test-contexts-') as temporary:
         folder = Path(temporary)
@@ -40,8 +41,9 @@ def main():
                 preserved = [key for key in environment if key.startswith('FC_TEST_')]
                 preserved += ['PATH', 'PYTHONDONTWRITEBYTECODE', 'PYTHONUNBUFFERED']
                 prefix = ['sudo', '--preserve-env=' + ','.join(preserved)]
-            selection = sorted(ROOT_FILES) + [ROOT_CLASS.removesuffix('::')] if name == 'root' else (
-                [SNAPSHOT_FILE] if name == 'snapshot314' else [])
+            if name == 'root':
+                return prefix + [python, str(ROOT / 'scripts/ci_root_pytest.py'), '--collection', str(output)]
+            selection = [SNAPSHOT_FILE] if name == 'snapshot314' else []
             return prefix + [python, '-m', 'pytest', '-p', 'scripts.ci_pytest_context',
                 '--fixture-context=' + name, '--fixture-collection=' + str(output),
                 '-o', 'faulthandler_timeout=180', '-q', '--tb=short', *selection]

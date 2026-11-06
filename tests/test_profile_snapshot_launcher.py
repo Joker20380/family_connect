@@ -22,7 +22,8 @@ from scripts import build_profile_snapshot_launcher as launcher
 @pytest.fixture
 def fixture():
     previous_umask = os.umask(0o022)
-    temporary = tempfile.TemporaryDirectory(prefix='snapshot-test-', dir=Path.home())
+    temporary = tempfile.TemporaryDirectory(prefix='snapshot-test-',
+        dir=os.environ.get('FC_TEST_SNAPSHOT_ROOT', str(Path.home())))
     tmp_path = Path(temporary.name)
     tmp_path.chmod(0o755)
     (tmp_path / 'bin').mkdir(mode=0o755)

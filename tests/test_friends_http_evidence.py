@@ -150,6 +150,7 @@ def test_readiness_bounded_and_no_retry_in_gate(tmp_path):
 def test_evidence_rejects_unsafe_path_and_generation(tmp_path):
     directory = tmp_path / 'world'
     directory.mkdir(mode=0o755)
+    directory.chmod(0o755)
     with pytest.raises(ValueError):
         Evidence(directory, 'generation')
     with pytest.raises(ValueError):

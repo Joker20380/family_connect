@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**6 November — PR1 remaining fixture repair, final CI pending.**
+Head1d4 passes the Android source/diagnostic guards and full Linux candidate, but exposes
+missing exact snapshot/renewal fixtures, protected Python paths, explicit unsafe modes,
+CLI interpreter selection and an asynchronous invitation-test observation race. The next
+cohesive source fix preserves every assertion and original hash; the retained18-member
+snapshot is reproduced byte-for-byte as `0120dad0…`. Root fixtures use private `/run`,
+not shared `/tmp`; only their declared tests run privileged. No product Android change.
+Old5f709 phase0 is now finished FAIL, separately recorded; it is not the new-head result.
+Final hosted receipts and normal merge SHA will be recorded in PR1, not a docs-only head.
+
 **6 November — SUBSCRIPTION-INTEGRATION-1: reviewed guards and isolated CI fixtures.**
 The owner-authorized follow-up reviews all152 guarded Android inputs against original
 beta119 source: identical bytes; explicit seven subscription and three inherited-renewal

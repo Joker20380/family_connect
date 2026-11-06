@@ -87,6 +87,7 @@ def test_unsafe_existing_key_fails_closed(tmp_path, unsafe):
 def test_unsafe_directory_rejected(tmp_path):
     directory = tmp_path / 'device'
     directory.mkdir(mode=0o755)
+    directory.chmod(0o755)
     with pytest.raises(ValueError, match='unsafe identity directory'):
         load_or_create(directory)
 

@@ -1,9 +1,9 @@
 name: Linux control preview
 on:
   push:
-    paths: ['scripts/ci_release_fixtures.py', 'scripts/ci_full_pytest.py', 'scripts/ci_pytest_context.py', 'scripts/ci_android_fixture.py', 'scripts/ci_python314_context.sh', 'scripts/ci_python313_env.sh', 'control/requirements.lock', 'messenger/requirements.lock', 'control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'scripts/friends_http_transition.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
+    paths: ['scripts/ci_release_fixtures.py', 'scripts/ci_full_pytest.py', 'scripts/ci_root_pytest.py', 'scripts/ci_pytest_context.py', 'scripts/ci_android_fixture.py', 'scripts/ci_python314_context.sh', 'scripts/ci_python313_env.sh', 'control/requirements.lock', 'messenger/requirements.lock', 'control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'scripts/friends_http_transition.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
   pull_request:
-    paths: ['scripts/ci_release_fixtures.py', 'scripts/ci_full_pytest.py', 'scripts/ci_pytest_context.py', 'scripts/ci_android_fixture.py', 'scripts/ci_python314_context.sh', 'scripts/ci_python313_env.sh', 'control/requirements.lock', 'messenger/requirements.lock', 'control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'scripts/friends_http_transition.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
+    paths: ['scripts/ci_release_fixtures.py', 'scripts/ci_full_pytest.py', 'scripts/ci_root_pytest.py', 'scripts/ci_pytest_context.py', 'scripts/ci_android_fixture.py', 'scripts/ci_python314_context.sh', 'scripts/ci_python313_env.sh', 'control/requirements.lock', 'messenger/requirements.lock', 'control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'scripts/friends_http_transition.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: '3.14'
       - name: Isolated root-owned Python 3.14 launcher fixture
-        run: sudo --preserve-env=LD_LIBRARY_PATH bash scripts/ci_python314_context.sh '${{ steps.python314.outputs.python-path }}' /opt/fc-ci-python314
+        run: sudo --preserve-env=LD_LIBRARY_PATH bash scripts/ci_python314_context.sh '${{ steps.python314.outputs.python-path }}' /usr/local/lib/fc-ci-python314 "$(id -un)"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
@@ -44,12 +44,14 @@ jobs:
       - name: Provision source-pinned release fixtures
         run: '"$FC_TEST_PYTHON" scripts/ci_release_fixtures.py prepare --output "$RUNNER_TEMP/fc-release-fixtures" --go "$(command -v go)"'
       - name: Protocol, crash recovery, arbiter and packaging regression
+        env:
+          FC_TEST_SNAPSHOT_ROOT: /usr/local/lib/fc-ci-snapshot-fixtures
         timeout-minutes: 25
         id: full_pytest
         shell: bash
         run: |
           set -o pipefail
-          "$FC_TEST_PYTHON" scripts/ci_release_fixtures.py run --fixtures "$RUNNER_TEMP/fc-release-fixtures" --go "$(command -v go)" --nginx /usr/sbin/nginx -- "$FC_TEST_PYTHON" scripts/ci_full_pytest.py --python314 /opt/fc-ci-python314/test-env/bin/python 2>&1 | tee "$RUNNER_TEMP/full-pytest.log"
+          "$FC_TEST_PYTHON" scripts/ci_release_fixtures.py run --fixtures "$RUNNER_TEMP/fc-release-fixtures" --go "$(command -v go)" --nginx /usr/sbin/nginx -- "$FC_TEST_PYTHON" scripts/ci_full_pytest.py --python314 /usr/local/lib/fc-ci-python314/test-env/bin/python 2>&1 | tee "$RUNNER_TEMP/full-pytest.log"
       - name: Record sanitized full-suite failure IDs
         if: always()
         env:
@@ -73,7 +75,9 @@ jobs:
         if: always()
         with:
           name: control-full-pytest
-          path: ${{ runner.temp }}/full-pytest-receipt.json
+          path: |
+            ${{ runner.temp }}/full-pytest-receipt.json
+            ${{ runner.temp }}/full-pytest.log
           if-no-files-found: error
       - name: System GTK dependencies
         run: sudo apt-get update && sudo apt-get install -y python3-gi python3-gi-cairo python3-venv gir1.2-gtk-4.0 gir1.2-adw-1 libqrencode4 libzbar0 python3-cryptography xvfb dbus-x11

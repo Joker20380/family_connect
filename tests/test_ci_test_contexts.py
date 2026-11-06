@@ -54,3 +54,40 @@ def test_android_fixture_rejects_substitution(tmp_path, monkeypatch):
     path.write_bytes(b'substituted source')
     with pytest.raises(ValueError, match='fixture mismatch'):
         android.source('bridge95')
+
+
+def test_root_entrypoint_refuses_unprivileged_execution(tmp_path, monkeypatch, capsys):
+    from scripts import ci_root_pytest as root
+    monkeypatch.setattr(root.os, 'geteuid', lambda: 1000)
+    monkeypatch.setattr(root.sys, 'argv', ['ci_root_pytest.py', '--collection', str(tmp_path / 'collection.json')])
+    with pytest.raises(SystemExit) as result:
+        root.main()
+    assert result.value.code == 2
+    assert 'require isolated UID 0' in capsys.readouterr().err
+    assert not (tmp_path / 'collection.json').exists()
+
+
+def test_root_entrypoint_is_scoped_and_does_not_use_shared_tmp(monkeypatch, tmp_path):
+    from scripts import ci_root_pytest as root
+    from contextlib import contextmanager
+    calls = []
+    @contextmanager
+    def temporary(**options):
+        assert options == dict(prefix='fc-root-fixtures-', dir='/run')
+        yield str(tmp_path)
+    monkeypatch.setattr(root.os, 'geteuid', lambda: 0)
+    monkeypatch.setattr(root.tempfile, 'TemporaryDirectory', temporary)
+    monkeypatch.setattr(root.tempfile, 'tempdir', None)
+    monkeypatch.setenv('TMPDIR', '/synthetic/previous')
+    monkeypatch.setattr(root.sys, 'argv', ['ci_root_pytest.py', '--collection', str(tmp_path / 'collection.json')])
+    monkeypatch.setattr(pytest, 'main', lambda args: calls.append(args) or 0)
+    previous = os.umask(0o022)
+    try:
+        with pytest.raises(SystemExit) as result:
+            root.main()
+        assert result.value.code == 0
+        assert calls[0][-4:] == [*sorted(contexts.ROOT_FILES), contexts.ROOT_CLASS.removesuffix('::')]
+        assert '--basetemp=' + str(tmp_path) + '/pytest' in calls[0]
+        assert os.environ['TMPDIR'] == str(tmp_path)
+    finally:
+        os.umask(previous)

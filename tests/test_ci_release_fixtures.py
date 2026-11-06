@@ -1,5 +1,6 @@
 import hashlib
 import json
+import shutil
 import tarfile
 import zipfile
 
@@ -52,17 +53,20 @@ def test_required_git_objects_cover_the_real_native_and_renewal_inputs():
 
 def test_fixture_environment_rejects_modified_artifact_or_commit(tmp_path, monkeypatch):
     files = {}
-    for name in ('http/friends-http.pyz', 'sync/restricted-sync.pyz', 'historical-http/friends-http.pyz', 'readiness/candidate-readiness.pyz'):
+    for name in ('http/friends-http.pyz', 'sync/restricted-sync.pyz', 'historical-http/friends-http.pyz', 'readiness/candidate-readiness.pyz', 'accepted-snapshot.pyz', 'credential-renewal.tar.gz'):
         path = tmp_path / name
         path.parent.mkdir(exist_ok=True)
         path.write_bytes(name.encode())
         files[name] = fixtures.digest(path)
     monkeypatch.setattr(fixtures, 'HISTORICAL_SHA', files['historical-http/friends-http.pyz'])
+    monkeypatch.setattr(fixtures, 'SNAPSHOT_SHA', files['accepted-snapshot.pyz'])
     monkeypatch.setattr(fixtures, 'git', lambda *args: b'fixture-head\n')
     (tmp_path / 'inventory.json').write_text(json.dumps(dict(source_commit='fixture-head', files=files)))
     environment = fixtures.environment(tmp_path, tmp_path / 'go', tmp_path / 'nginx')
     assert environment['FC_TEST_HTTP_SHA256'] == files['http/friends-http.pyz']
     assert environment['FC_TEST_HISTORICAL_HTTP_ARTIFACT'] != environment['FC_TEST_HTTP_ARTIFACT']
+    assert environment['FC_TEST_SNAPSHOT_ARCHIVE'] == str(tmp_path / 'accepted-snapshot.pyz')
+    assert environment['FC_TEST_RENEWAL_PACKAGE'] == str(tmp_path / 'credential-renewal.tar.gz')
     (tmp_path / 'http/friends-http.pyz').write_bytes(b'changed')
     with pytest.raises(ValueError, match='inventory mismatch'):
         fixtures.environment(tmp_path, tmp_path / 'go', tmp_path / 'nginx')
@@ -93,3 +97,35 @@ def test_historical_http_uses_pinned_builder_not_current_ingress_inputs(tmp_path
     assert fixtures.digest(output / 'friends-http.pyz') == fixtures.HISTORICAL_SHA
     with zipfile.ZipFile(output / 'friends-http.pyz') as archive:
         assert 'control/friends/subscription.py' not in archive.namelist()
+
+
+def test_retained_snapshot_reproduces_original_archive_and_rejects_tampering(tmp_path, monkeypatch):
+    output = tmp_path / 'accepted.pyz'
+    fixtures.historical_snapshot(output)
+    assert fixtures.digest(output) == '0120dad028ead353b8b83a600538f3e578b2b46ddf871bf16e97529f9449f450'
+    assert output.stat().st_size == 26854
+    with zipfile.ZipFile(output) as archive:
+        assert len(archive.namelist()) == 18
+    source = fixtures.ROOT
+    target = tmp_path / 'source'
+    shutil.copytree(source / 'tests/fixtures/accepted_snapshot', target / 'tests/fixtures/accepted_snapshot')
+    monkeypatch.setattr(fixtures, 'ROOT', target)
+    original_git = fixtures.git
+    monkeypatch.setattr(fixtures, 'git', lambda *args: original_git(*args, source=source))
+    member = target / 'tests/fixtures/accepted_snapshot/restricted_sync.py.txt'
+    member.write_bytes(member.read_bytes() + b'\n')
+    with pytest.raises(ValueError, match='Snapshot member mismatch'):
+        fixtures.historical_snapshot(tmp_path / 'tampered.pyz')
+
+
+def test_ci_renewal_package_uses_real_unbound_builder_and_accepted_api(tmp_path):
+    from scripts.package_credential_renewal import build, ACCEPTED_API_SOURCE
+    package = tmp_path / 'renewal.tar.gz'
+    result = build(package, 'HEAD')
+    assert result['binding'] == 'unbound'
+    with tarfile.open(package) as archive:
+        manifest = json.load(archive.extractfile('source-manifest.json'))
+        assert manifest['accepted_api_source_commit'] == ACCEPTED_API_SOURCE
+        assert manifest['production_configuration'] == 'absent'
+        assert manifest['operation_permit'] is None
+        assert hashlib.sha256(archive.extractfile('api.pyz').read()).hexdigest() == manifest['api_sha256']

@@ -431,6 +431,61 @@ result. Put subsequent run URLs, exact tested refs and the verified remote merge
 [PR1 receipts](https://github.com/Joker20380/family_connect/pull/1), without creating a
 documentation-only head after the final CI starts.
 
+### Remaining fixture repair after1d4 hosted results
+
+Source `1d4b41014a0efe88a26a0c9cb906bdf0ad5e0a10` passes Android release/diagnostic
+guards, native race/build, Gradle debug/Friends tests/lint and APK structure verification.
+Linux internal candidate42289126314 passes the complete native/package chain; Messenger,
+readiness wire, voice, Linux client and both Windows client jobs also pass. These are
+specific1d4 results, not a claim that the entire PR is green.
+
+Linux control42289126256 completed all three contexts: standard5441, ownership258,
+launcher98. Remaining failures: two fleet subprocesses selected ambient `python3` rather
+than the lockfile interpreter; three unsafe-directory fixtures inherited a restrictive
+umask;13 root tests lacked their declared renewal package or exact snapshot archive;
+38 launcher cases still rejected the hosted path context. The repair makes the interpreter
+and deliberately unsafe modes explicit, isolates launcher input directories and Python
+under protected `/usr/local/lib`, and validates the real interpreter under the production
+sanitized probe environment before running tests. Production owner/path checks stay intact.
+
+Failover42289126377 stops before tests because root's Git rejects the exported checkout
+after ownership is assigned to the unprivileged runner. Only `/app` is trusted in that
+ephemeral test image; there is no wildcard or host configuration change. Root tests now
+use a private `/run` tree, because their canonical fixture deliberately chmods ancestors;
+this must not alter `/tmp` used by later unprivileged contexts. The ordinary runtime image
+does not inherit the test image's Git configuration or interpreter fixtures.
+
+The real unbound renewal builder now supplies `FC_TEST_RENEWAL_PACKAGE`, preserving
+accepted API source `edca5447418141cb44c0706e26d1973d7defd397`. The retained generic
+snapshot is reconstructed from exact Git members and two explicitly pinned public text
+snapshots, verified against the original complete18-member receipt. It reproduces exactly
+26,854 bytes and SHA256 `0120dad028ead353b8b83a600538f3e578b2b46ddf871bf16e97529f9449f450`.
+See [fixture contract](../../tests/fixtures/accepted_snapshot/README.md). This is neither a
+replacement expected hash nor a private source capsule, and contains no operational state.
+Member tampering is rejected; the unchanged whole-archive pin remains mandatory.
+
+Android job128137675828 then reaches the existing API35 runtime gate and fails one
+invitation test: after the second real implicit launch it observes previous token `a`
+instead of `b`. `am start -W`/idle synchronization does not establish receipt of the next
+`onNewIntent`. The test now waits boundedly for the exact token and consumed Intent, then
+retains the same-activity and token assertions. Invalid input also requires the actual
+rejection UI before asserting the prior token remains. No handler/product code or APK
+production input changed. This is a correction to the existing hosted gate, not a new
+runtime acceptance phase, and its final result must come from CI.
+
+Old5f709 phase0/tests finally completed with111 failures,5220 passes,298 existing skips,
+157 errors,7 subtests in493.47s (artifact13539517909). The module groups match the recorded
+old fixture/source problems; they are not attributed to a later head. The cancelled old
+control run remains CANCELLED. The1d4 phase0/tests runner was still in dependency setup
+when this source checkpoint was prepared; no assertion outcome is invented for it.
+
+Local new fixture/context tests19 PASS; launcher98 PASS; the unsafe-mode/interpreter
+selection passed under explicit umask077 (125 other scoped tests passed alongside the
+initial missing-new-fixture regression, then its seven-test module passed after correction).
+Full docs759 files/4786 links/zero errors. Full hosted logs are retained as CI artifacts to
+avoid losing primary failures behind bounded API log excerpts. Final CI, any infrastructure
+retry and the normal merge receipt belong in PR1; do not create a cosmetic docs-only head.
+
 ### Scope and rollback
 
 Before merge, close/revise the integration PR; after merge use an ordinary reviewed
