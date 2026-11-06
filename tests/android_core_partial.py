@@ -32,7 +32,7 @@ def main():
     parser.add_argument('--evidence', type=Path, required=True)
     parser.add_argument('--snapshot', type=Path, required=True)
     parser.add_argument('--api', type=int, choices=(27, 35), required=True)
-    parser.add_argument('--scenario', choices=('partial', 'owner-race', 'partial-connect'), default='partial')
+    parser.add_argument('--scenario', choices=('partial', 'owner-race', 'partial-connect', 'late-closed-owner'), default='partial')
     args = parser.parse_args()
     os.umask(0o077)
     args.root.mkdir(mode=0o700)
@@ -68,7 +68,7 @@ def main():
                 released.add(action[-2:])
                 receipt['released'] = sorted(released)
             elif action == 'response'+str(args.api):
-                assert args.scenario == 'owner-race' and receipt['state'] == 'READINESS_HELD'
+                assert args.scenario in ('owner-race', 'late-closed-owner') and receipt['state'] == 'READINESS_HELD'
                 release_response.set()
             else:
                 assert action == 'state'
@@ -82,7 +82,7 @@ def main():
         hold = False
         with lock:
             receipt['requests'].append(dict(wall=time.time(), state=receipt['state'], status=status, **metadata))
-            if args.scenario == 'owner-race' and receipt['state'] == 'SUCCESSOR_PUBLISHED' and metadata['gateway'] == 'nl-amsterdam-2':
+            if args.scenario in ('owner-race', 'late-closed-owner') and receipt['state'] == 'SUCCESSOR_PUBLISHED' and metadata['gateway'] == 'nl-amsterdam-2':
                 assert status == 200 and metadata['expires'] is not None
                 receipt.update(state='READINESS_HELD', response_held_at=time.time())
                 hold = True
@@ -113,13 +113,13 @@ def main():
                 begin = receipt['state'] == 'HTTP_READY' and connected == {str(args.api)}
                 resume = receipt['state'] == 'PARTIAL' and released == {str(args.api)}
             if begin:
-                if args.scenario != 'owner-race':
+                if args.scenario not in ('owner-race', 'late-closed-owner'):
                     stand.rpc_fault('NL2', 'publish', 'drop-before')
                 code, result = stand.run('online')
                 journal = json.loads((args.root/'coordinator/transaction.json').read_bytes())
                 assert journal['decision'] == 'COMMIT', result
                 with lock:
-                    if args.scenario != 'owner-race':
+                    if args.scenario not in ('owner-race', 'late-closed-owner'):
                         assert code != 0 and not journal['published'], result
                         receipt.update(state='PARTIAL', partial_at=time.time(), blocked=result,
                                        plan_sha256=journal['plan_sha256'], published=journal['published'])

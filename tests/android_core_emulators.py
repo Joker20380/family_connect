@@ -13,7 +13,7 @@ import urllib.request
 import zipfile
 
 
-SUCCESS_SCOPES = frozenset(('PASS_POSITIVE_PATH_ONLY', 'PASS_OWNER_RACE_ONLY', 'PASS_PARTIAL_CONNECT_ONLY'))
+SUCCESS_SCOPES = frozenset(('PASS_POSITIVE_PATH_ONLY', 'PASS_OWNER_RACE_ONLY', 'PASS_PARTIAL_CONNECT_ONLY', 'PASS_LATE_CLOSED_OWNER_ONLY'))
 
 
 def require_success(record):
@@ -202,6 +202,9 @@ def run(args):
             scope = 'PASS_OWNER_RACE_ONLY' if 'OWNER_RACE_VALID_SUCCESSOR_NEW_EXPLICIT_OWNER' in log else 'PASS_POSITIVE_PATH_ONLY'
             if 'PARTIAL_EXPLICIT_CONNECT_AND_SAME_COMMIT_RESUME' in log:
                 scope = 'PASS_PARTIAL_CONNECT_ONLY'
+            if 'LATE_NEW_EXPLICIT_CONNECT_NOT_RENEWAL' in log:
+                assert 'LATE_COMPLETION_IGNORED_CLOSED_OWNER' in log
+                scope = 'PASS_LATE_CLOSED_OWNER_ONLY'
             record.update(result=scope, finished=time.time())
         except BaseException as error:
             record.update(result='FAIL', failure_type=type(error).__name__, failure=str(error))

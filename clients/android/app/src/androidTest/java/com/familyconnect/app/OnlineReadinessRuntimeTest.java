@@ -223,6 +223,9 @@ public class OnlineReadinessRuntimeTest {
                 if("owner-race".equals(settings.get("scenario").getAsString())){
                     ownerRace(identity,gateway,lease,serviceOwner,originalExpiry,connect);return;
                 }
+                if("late-closed-owner".equals(settings.get("scenario").getAsString())){
+                    lateClosedOwner(identity,gateway,lease,serviceOwner,originalExpiry,connect);return;
+                }
                 assertEquals("partial",settings.get("scenario").getAsString());
                 partialPublication(identity,gateway,lease,serviceOwner,originalExpiry,originalCrl);
             }
@@ -252,6 +255,56 @@ public class OnlineReadinessRuntimeTest {
             while(!"off".equals(ConnectionService.status)&&SystemClock.elapsedRealtime()<deadline)Thread.sleep(100);
             assertEquals("off",ConnectionService.status);status("SERVICE_OWNER_CLEANED",gateway,null);
         }
+    }
+    private void lateClosedOwner(ControlIdentity identity,String gateway,long lease,long serviceOwner,long originalExpiry,Intent connect)throws Exception{
+        fixtureControl("connected"+Build.VERSION.SDK_INT);
+        long deadline=SystemClock.elapsedRealtime()+600000;
+        while(!"READINESS_HELD".equals(fixtureControl("state").get("state").getAsString())){
+            assertTrue("Real owner refresh deadline",SystemClock.elapsedRealtime()<deadline);
+            assertEquals(serviceOwner,ConnectionService.sessionId);echo(lease);Thread.sleep(500);
+        }
+        java.util.concurrent.CompletableFuture<byte[]> completion;
+        long closedOwner;
+        synchronized(RestrictedVault.LOCK){
+            completion=FriendsRestricted.renewal(context,gateway);
+            fixtureControl("response"+Build.VERSION.SDK_INT);
+            awaitImportBlocked();status("LATE_HTTP_COMPLETED_IMPORT_PENDING",gateway,null);
+            NativeRestricted.chatRelease(lease);
+            context.startService(new Intent(context,ConnectionService.class).setAction("disconnect"));
+            deadline=SystemClock.elapsedRealtime()+30000;
+            while(!"off".equals(ConnectionService.status)&&SystemClock.elapsedRealtime()<deadline)Thread.sleep(50);
+            assertEquals("off",ConnectionService.status);assertNotEquals(serviceOwner,ConnectionService.sessionId);
+            closedOwner=ConnectionService.sessionId;
+            assertTrue("Closed native lease cannot serve",NativeRestricted.chatState(lease)!=2);
+            status("LATE_OWNER_CLOSED_BEFORE_IMPORT",gateway,null);
+        }
+        byte[] completed=completion.get(30,TimeUnit.SECONDS);
+        try{
+            assertNotNull("Actual HTTP completion after owner close",completed);
+            assertTrue(NativeRestricted.validateDelivery(completed,identity.publicIdentity(),ControlTrust.anchor(context)));
+        }finally{if(completed!=null)Arrays.fill(completed,(byte)0);}
+        byte[] successor=cached(identity,gateway);assertNotNull("Validated successor in encrypted cache",successor);
+        try{
+            JsonObject response=JsonParser.parseString(new String(successor,StandardCharsets.UTF_8)).getAsJsonObject();
+            assertTrue(response.get("expires_at").getAsLong()>originalExpiry);
+            Thread.sleep(6000);
+            assertEquals("No late automatic resurrection","off",ConnectionService.status);
+            assertEquals(closedOwner,ConnectionService.sessionId);
+            assertTrue("Old native lease stays closed",NativeRestricted.chatState(lease)!=2);
+            assertTrue("Old native stream cannot reopen",NativeRestricted.chatOpen(lease,1000)<0);
+            status("LATE_COMPLETION_IGNORED_CLOSED_OWNER",gateway,null);
+            context.startForegroundService(connect);
+            deadline=SystemClock.elapsedRealtime()+180000;
+            while(!"on".equals(ConnectionService.status)){
+                assertFalse(ConnectionService.failed);assertTrue(SystemClock.elapsedRealtime()<deadline);Thread.sleep(100);
+            }
+            assertNotEquals(closedOwner,ConnectionService.sessionId);assertNotEquals(serviceOwner,ConnectionService.sessionId);
+            long next=borrow(successor,identity,new AutomaticVpnOwner(context));assertTrue(next>0);
+            try{assertEquals(2,NativeRestricted.chatState(next));echo(next);}
+            finally{NativeRestricted.chatRelease(next);}
+            assertTrue(NativeRestricted.chatState(lease)!=2);
+            status("LATE_NEW_EXPLICIT_CONNECT_NOT_RENEWAL",gateway,null);
+        }finally{Arrays.fill(successor,(byte)0);}
     }
     @Test public void verifiedHttpCacheAndExistingOwnerReceiveSuccessor()throws Exception{
         assumeTrue("Explicit isolated runtime only","true".equals(InstrumentationRegistry.getArguments().getString("fc_core_runtime")));

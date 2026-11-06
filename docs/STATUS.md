@@ -11,6 +11,11 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**6 November10:43UTC: corrected G4 RUNNING, not accepted.** Frozen c8eb8b9 uses the
+unchanged bfff97d package/driver; first renewal due13:13:02UTC. Expiry PASS is retained,
+not repeated. Existing Android runner gains a closed-owner late-completion scenario;
+its API27 APK compiles, actual paired runtime still pending. No legacy PASS, A or B.
+
 **6 November: finished-run readback, not A acceptance.** Frozen expiry52c91f5
 finished03:51:34UTC, exit0: two actual post-expiry resumes return precisely
 `FAIL_CLOSED/ONLINE_RUNTIME_RECEIPT/automatic_retry=false`, unchanged COMMIT,

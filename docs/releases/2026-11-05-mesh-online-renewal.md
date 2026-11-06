@@ -2,6 +2,22 @@
 
 ## Finished frozen runs read back6 November
 
+**10:43UTC continuation:** corrected full harness c8eb8b9 is running on the identical
+bfff97d archive/driver, first renewal due13:13:02UTC. Owned containers
+`fc-mesh-full-core-bfff97d-c8eb8b9` and its two `c8eb8b9` route helpers have independent
+output `full-core-bfff97d-c8eb8b9/full-core/progress.json`; a waiter records exit/log
+and stops only these helpers. This is RUNNING, not PASS or a rerun of expiry.
+
+The existing Android runner now has `late-closed-owner`: hold a real HTTP completion
+at the cache-import monitor, close the normal owner, then allow validation/encrypted
+cache completion and assert the old native lease stays closed. Only afterwards make
+a separate explicit Connect. This targets the specified closed-owner alternative,
+not wall-clock certificate-expiry proof. Source/test checkpoint only until actual
+API27/API35 runs finish. Runner/metadata selection30 PASS; disposable APK compile
+42s PASS. Two setup failures (missing `fcTestBuildType=friends`, first also incorrect
+local tool paths) are retained as `android-late-gpu27-apk1/build.log` and `build2.log`;
+corrected `build3.log` is not runtime acceptance. Legacy remains NOT_RUN.
+
 [Sanitized final receipts, identities and exact unexecuted boundary](2026-11-06-mesh-frozen-run-results.json).
 No candidate was rebuilt or stand restarted to obtain these results. Source remains
 bfff97d, archive5721a5c1, separate driver0fead52a; production gateway6032b926 is not

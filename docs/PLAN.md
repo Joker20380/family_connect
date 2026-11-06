@@ -12,6 +12,10 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Current execution:** c8eb8b9 G4 runs independently on immutable bfff97d artifacts.
+While it waits, run the existing Android late-closed-owner scenario on API27/API35
+sequentially with NVIDIA/KVM; legacy remains missing. No B before accepted A.
+
 **One active next6 November: complete remaining A, retaining finished-run results.**
 Expiry52c91f5 PASS after two guarded real post-expiry resumes; do not rerun it.
 Full37ffc2c FAIL only at the post-recovery assertion's stale profile path: retain
