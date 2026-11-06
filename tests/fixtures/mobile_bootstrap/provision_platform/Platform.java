@@ -14,6 +14,7 @@ interface TunnelEngine { void up(String profile)throws Exception;void down()thro
 final class NativeRestricted {
     static final java.util.concurrent.CountDownLatch delivered=new java.util.concurrent.CountDownLatch(1),release=new java.util.concurrent.CountDownLatch(1);
     static volatile int begins;
+    static volatile long provisioningBudget;
     static JsonObject call(String operation,Object... pairs){
         try{
             JsonObject request=new JsonObject();request.addProperty("operation",operation);
@@ -26,7 +27,7 @@ final class NativeRestricted {
         }catch(Exception error){throw new IllegalStateException("Native fixture RPC failed",error);}
     }
     static void load(){}
-    static long provisionBegin(byte[] locator,byte[] anchor,String gateway,String resolver,long budget,Object protector){return call("open","locator",locator,"anchor",anchor,"gateway",gateway).get("handle").getAsLong();}
+    static long provisionBegin(byte[] locator,byte[] anchor,String gateway,String resolver,long budget,Object protector){provisioningBudget=budget;return call("open","locator",locator,"anchor",anchor,"gateway",gateway).get("handle").getAsLong();}
     static String provisionPost(long handle,String path,String body,String id){JsonObject result=call("post","path",path,"body",body,"id",id);if(Boolean.getBoolean("fixture.late")&&path.equals("/friends/restricted-readiness")){delivered.countDown();try{if(!release.await(5,java.util.concurrent.TimeUnit.SECONDS))throw new AssertionError("Late response release");}catch(InterruptedException error){throw new AssertionError(error);}}return result.has("reply")?result.get("reply").toString():null;}
     static void provisionClose(long handle){call("close");}
     static int validationCode(byte[] raw,byte[] identity,byte[] anchor){return call("validate","raw",raw,"identity",identity,"anchor",anchor).get("code").getAsInt();}
@@ -48,12 +49,20 @@ final class ChatNetworkAndroid {
     static int blocked;
     ChatNetworkAndroid(Context context){}
     String provisioningResolver(){return "127.0.0.1:53";}
-    javax.net.ssl.HttpsURLConnection openHttps(String address,ReadinessFetchTrace trace)throws IOException{blocked++;throw new SocketTimeoutException("Isolated direct HTTPS disabled");}
+    javax.net.ssl.HttpsURLConnection openHttps(String address,ReadinessFetchTrace trace)throws IOException{
+        blocked++;
+        if(!Boolean.getBoolean("fixture.blackhole"))throw new SocketTimeoutException("Isolated direct HTTPS disabled");
+        return new javax.net.ssl.HttpsURLConnection(new URL(address)){
+            public String getCipherSuite(){throw new AssertionError();}public java.security.cert.Certificate[] getLocalCertificates(){return null;}public java.security.cert.Certificate[] getServerCertificates(){throw new AssertionError();}
+            public void disconnect(){}public boolean usingProxy(){return false;}public void connect(){throw new AssertionError();}
+            public OutputStream getOutputStream()throws IOException{try{Thread.sleep(getReadTimeout());}catch(InterruptedException error){throw new java.io.InterruptedIOException();}throw new SocketTimeoutException("Isolated TLS/write blackhole");}
+        };
+    }
 }
 final class ControlRnsAndroid {
     static int blocked;
     ControlRnsAndroid(Context context,long deadline){}
-    void openReadiness(ReadinessFetchTrace trace)throws FriendsReadinessProtocol.Unavailable{blocked++;throw new FriendsReadinessProtocol.Unavailable();}
+    void openReadiness(ReadinessFetchTrace trace)throws FriendsReadinessProtocol.Unavailable{blocked++;if(Boolean.getBoolean("fixture.blackhole"))try{Thread.sleep(5000);}catch(InterruptedException error){throw new AssertionError(error);}throw new FriendsReadinessProtocol.Unavailable();}
     byte[] requestReadiness(String path,byte[] raw){throw new AssertionError("Direct RNS forbidden");}
     void cancel(){}void close(){}
 }
@@ -64,9 +73,10 @@ final class ConnectionService { static String status="off",healthStatus="off"; }
 final class BuildConfig { static String VERSION_NAME="source-cold-candidate";static int VERSION_CODE=113; }
 final class SpeedProfile { static int read(Context context){return 0;} }
 final class Diagnostics {
+    static final java.util.concurrent.CountDownLatch refreshed=new java.util.concurrent.CountDownLatch(1);
     static String readinessConnection(Context context){return "isolated-owner";}
     static void readinessResult(Context context,ReadinessImportResult.Code code){}
-    static void readinessFetch(Context context,ReadinessFetchTrace trace){}
+    static void readinessFetch(Context context,ReadinessFetchTrace trace){refreshed.countDown();}
     static void readiness(Context context,boolean ready){}static void vpn(Context context,boolean active){}
     static void nativeStats(Context context,org.json.JSONObject snapshot){}static void cleanup(Context context,boolean stopped){}
 }

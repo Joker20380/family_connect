@@ -188,8 +188,8 @@ func androidSourcePipeline(test *testing.T, ctx context.Context, root string, pr
 			session.Close()
 		}
 	}()
-	for _, mode := range []string{"true", "false"} {
-		command := exec.CommandContext(ctx, java, "-Xmx128m", "-XX:ActiveProcessorCount=1", "-Dfixture.late="+mode, "-Dfixture.client="+clientState+mode, "-Dfixture.assets="+assets, "-Dfixture.identity="+filepath.Join(root, "identity96.private"), "-Dfixture.bridge="+server.URL, "-cp", classpath, "com.familyconnect.app.ClientPipeline")
+	for _, mode := range []string{"identity", "late", "normal"} {
+		command := exec.CommandContext(ctx, java, "-Xmx128m", "-XX:ActiveProcessorCount=1", fmt.Sprintf("-Dfixture.late=%t", mode != "normal"), fmt.Sprintf("-Dfixture.identityChanged=%t", mode == "identity"), fmt.Sprintf("-Dfixture.blackhole=%t", mode == "normal"), "-Dfixture.client="+clientState+mode, "-Dfixture.assets="+assets, "-Dfixture.identity="+filepath.Join(root, "identity96.private"), "-Dfixture.bridge="+server.URL, "-cp", classpath, "com.familyconnect.app.ClientPipeline")
 		output, err := command.CombinedOutput()
 		if err != nil {
 			test.Fatalf("Android source pipeline: %v\n%s", err, output)

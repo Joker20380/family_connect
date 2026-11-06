@@ -10,7 +10,9 @@ No production locator/credentials are supplied; missed rotation fails closed. Kn
 field-network uncertainty, G4 and other branches retain their independent state.
 **One next:** qualify real Android/Telemost provisioning and underlay cancellation,
 then a separately authorized controlled delivery/target-network check. JNI compilation
-is still pending at this source checkpoint; scoped results are not release acceptance.
+passes; final short integration also covers20s direct-path stalls within the unchanged
+Connect deadline, deferred ACK and changed-identity late delivery. Scoped results are
+not Android/Telemost runtime or release acceptance.
 [Implementation, limits and exact receipts](releases/2026-11-06-beta113-field16-bootstrap.md#bounded-provisioning-candidate).
 The earlier selected/proposed entries below record completed incident investigation,
 not permission for parallel live/G4/ANDROID-APP-VPN work in this branch.

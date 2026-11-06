@@ -135,6 +135,20 @@ func TestColdProvisionRealAuthorityAndNativeTraffic(test *testing.T) {
 	if err != nil {
 		test.Fatal(err)
 	}
+	dropSeen, dropRelease := make(chan struct{}), make(chan struct{})
+	authorityBackend := backend
+	backend = func(ctx context.Context, request coldprovision.Request) (coldprovision.Reply, error) {
+		reply, err := authorityBackend(ctx, request)
+		if request.ID == "33333333333333333333333333333333" && request.Path == coldprovision.Challenge {
+			close(dropSeen)
+			select {
+			case <-dropRelease:
+			case <-ctx.Done():
+				return coldprovision.Reply{}, ctx.Err()
+			}
+		}
+		return reply, err
+	}
 	publicationFailure := make(chan error, 1)
 	publish := func(directory bootstrap.Directory) ([]byte, error) {
 		raw, _ := json.Marshal(directory)
@@ -270,7 +284,7 @@ func TestColdProvisionRealAuthorityAndNativeTraffic(test *testing.T) {
 	if _, err := client.Post(coldprovision.Fetch, []byte(`{}`), "00000000000000000000000000000003"); err == nil {
 		test.Fatal("replay after fetch")
 	}
-	provisioningNegatives(test, ctx, root, provider, locator, anchor, secret, envelope.Response, request)
+	provisioningNegatives(test, ctx, root, provider, locator, anchor, secret, envelope.Response, request, dropSeen, dropRelease)
 	network, err := underlay.New(ctx, "127.0.0.1:53", func(int) bool { return true })
 	if err != nil {
 		test.Fatal(err)

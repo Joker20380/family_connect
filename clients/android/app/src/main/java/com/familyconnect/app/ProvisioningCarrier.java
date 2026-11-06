@@ -8,6 +8,10 @@ import java.io.IOException;
 import static com.familyconnect.app.ControlJson.*;
 
 final class ProvisioningCarrier implements AutoCloseable {
+    static boolean configured(Context context,String gateway){
+        try(InputStream input=context.getAssets().open("provisioning/"+RestrictedGateway.target(gateway)+".json")){return true;}
+        catch(IOException missing){return false;}
+    }
     private final Context context;
     private final String gateway;
     private final long deadline;

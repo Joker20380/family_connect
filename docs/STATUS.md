@@ -11,9 +11,12 @@ fixtures. Android OS/JNI boundaries are fixtures, not Android/Telemost field acc
 Locator expiry is at most4h and may be shorter; missing a locator rotation requires
 independent delivery, not a fetch from the blocked API. No locator ships by default.
 Trigger/cleanup diagnostic causes are separate; terminal policy remains unchanged.
-Scoped checks:94 JVM,97 Python (4 native-artifact cases skipped), four native packages
-under race, plus the13.91s full integration; these are not additive/full-CI totals.
-Native JNI build validation is pending at this source checkpoint. **Next:** qualify this
+Final scoped checks:95 JVM,97 Python (4 native-artifact cases skipped), four native
+packages under race;38.52s integration includes real20s of modeled direct-path stalls,
+late identity replacement and in-flight link loss. These are not additive/full-CI totals.
+The unchanged30s Connect budget now excludes a synchronous unavailable-path ACK:
+the existing receipt store retains ACK_PENDING, never a fabricated ACK_RECEIVED.
+Arm64 JNI candidate builds from6840193; no APK/install. **Next:** qualify this
 candidate on real Android with actual Telemost provisioning before controlled delivery;
 the phone's whitelist/provider reachability remains unknown. No AVD, production, APK,
 main-worktree or G4 changes. [Contract/evidence](releases/2026-11-06-beta113-field16-bootstrap.md#bounded-provisioning-candidate).

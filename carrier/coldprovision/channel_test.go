@@ -35,7 +35,7 @@ func TestAdapterCannotBecomeProxyOrDataPlane(test *testing.T) {
 		test.Fatal(err)
 	}
 	for _, path := range []string{"/friends/activate", "/friends/configuration/nl", "/dns-query", "/tcp", "https://example.com", "/friends/restricted-readiness/ack"} {
-		if _, err := backend(context.Background(), Request{Path: path}); err == nil {
+		if _, err := backend(context.Background(), Request{Path: path, ID: "00000000000000000000000000000001", Body: []byte(`{}`)}); err == nil {
 			test.Fatal("unsafe operation accepted")
 		}
 	}

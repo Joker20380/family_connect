@@ -671,3 +671,67 @@ No new speculative diagnostic APK is proposed. No release, install, live policy 
 or rollback was performed; source rollback is omission of this independent branch.
 Main worktree/foreign edits, G4/frozen artifacts, APK118/updater113, existing schedules,
 paid/cohort/admission and all production credentials remain untouched.
+
+### Final continuation: recipient guard, deferred ACK, actual bounded stalls
+
+The earlier6840193 candidate and `full-4` result above are retained, not relabelled.
+The final source delta fixes two directly relevant integration failures:
+
+1. After Disconnect and replacement of the synthetic local identity while the real
+   provisioning response was delayed, the previous recipient's response could enter
+   the shared node cache. Native did not start, but that cache write was inappropriate.
+   `identity-3-before` is a corrected, specific FAIL11.89s: it checks the **response**
+   field, not the existence of cache-attempt metadata. Earlier `identity-1`/`identity-2`
+   used the overbroad whole-file assertion and remain FAIL evidence, not proof by
+   themselves. The adapter now reloads the local identity, compares public identity
+   AND WG binding before returning provisioning material, and wipes a rejected result.
+   `identity-4-after` PASS17.43s includes changed identity, unchanged closed owner,
+   then a separate successful fresh Connect. This is not a diagnosis of the field AUTH.
+2. `final-3` retains FAIL at50s: a wall-clock model of15s HTTPS TLS/write timeout plus5s
+   RNS socket timeout obtained the bundle, but synchronous best-effort ACK via the same
+   unavailable API held completion beyond the owner's30s deadline. No timeout/TTL was
+   increased. Provisioning results now persist the existing **ACK_PENDING** receipt and
+   immediately finish normal owner delivery; existing later refresh/restart publication
+   remains the retry path. Cold locator-enabled restart also defers its old receipt.
+   No ACK is transported by the pre-admission service, no new timer/writer, and server
+   ACK_RECEIVED is not claimed. Ordinary/no-locator and usable-cache paths retain their
+   existing acknowledgement behavior. The unit test covers durable defer then normal ACK.
+
+**Final acceptance: `final-4/receipt.json`, all exits0, runtime38.52s.** It includes
+the full source/native traffic path, identity/owner negatives, and a real in-flight
+link loss after the authority has handled the challenge but before the reply arrives
+(not merely closing a handle before making a request). Invalid/stale bundle cases now
+explicitly require a valid public-identity baseline before the negative assertion.
+The normal Connect waits the actual modeled15s+5s before entering provisioning, obtains
+the bundle and starts native in the remainder of the unchanged30s budget. These are
+wall-clock **I/O fixture delays**, not measured phone/provider latency or cryptographic
+deadline crossings. Longer stalls or an unavailable Telemost carrier can still fail closed.
+
+Final runtime log SHA256 `85f89f620d73ef3b56c442a0a1ae7584c98e477e03fb7bc1790d7c712b5841b9`;
+receipt `4e1fc81f4035db3b69ac54eecc12843d458b5dd9765effa8f12967d9e379d16d`;
+source inventory `c5a2920ff29a67e73149e387e8464fb03c3e4c3cc051367c7fb4afafcfcc6488`;
+integration binary `6ef021fa58d96d68ae9ce3d099068f7e568987f91c34c38912fddbf9a984340a`.
+The inventory covers6840193 plus the source/test delta in the commit introducing this
+continuation; docs are not runtime inputs. Final JVM `jvm-5`: **95 PASS**, including
+earlier94 (not summed), plus the same actual Java network-selection probe. JVM log
+`44c4d88ce59b25a5754d705fd354c07c197cd59ea6ab201d58c306792a9c0a9c`.
+`race-2` repeats only coldprovision after strengthening its forbidden-path test with
+a valid request ID; PASS1.012s, not an additional package/full suite.
+
+The official `pilot/android-restricted/build.py` also passes its packet `-race -count=3`
+gate and arm64-v8a release-mode JNI compilation,1CPU/nice15, no AVD/Gradle/APK.
+Exact native source `6840193e766f33c2974dad639b8d7e6dad7d6bcb`; library SHA256
+`1e478adf1b2bf5c8ce78498f0ad9554f0b121190a18bceaf1dad0eabe4d58a4b`, Telemost provider,
+no qualification tags. All three new JNI exports are present. The final delta changes
+Android Java/tests, not production Go/C sources, so this unchanged library is not rebuilt.
+This is compilation/link acceptance, NOT execution of that library on Android.
+
+[Sanitized final component/evidence manifest](2026-11-06-cold-provisioning-evidence.json).
+Source is on the independent `feature/android-cold-provisioning-20261106` branch;
+6840193 was pushed and verified before the final logical fix. The final fix/report
+commit and remote verification are reported with this task, not an inferred main SHA.
+Original main remains19af689 with unchanged status/diff/staged hashes; all own short
+containers have exited/removed, no AVD started. Private fixture keys and raw evidence
+remain ignored/local. All field/Android/Telemost and controlled-delivery limitations
+above remain; positive traffic scope is the synthetic primary-node configuration,
+not a separate positive node2/production acceptance.

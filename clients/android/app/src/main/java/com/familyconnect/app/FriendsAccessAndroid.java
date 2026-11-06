@@ -30,6 +30,7 @@ final class FriendsAccessAndroid {
     FriendsAccessAndroid(Context context,long deadline,ReadinessFetchTrace trace){this(context,deadline);fetchTrace=trace;}
     FriendsAccessAndroid(Context context,ChatCarrier carrier){this(context,true);this.chatCarrier=carrier;this.deadline=android.os.SystemClock.elapsedRealtime()+60000;}
     void cancel(){cancelled=true;HttpsURLConnection connection=pending;if(connection!=null)connection.disconnect();ControlRnsAndroid relay=readinessRelay;if(relay!=null)relay.cancel();ProvisioningCarrier carrier=provisioningCarrier;if(carrier!=null)carrier.close();}
+    boolean usedProvisioning(){return provisioningCarrier!=null;}
     private int remaining(int maximum)throws IOException{
         long remaining=deadline-android.os.SystemClock.elapsedRealtime();
         if(cancelled)throw new IOException("Cancelled");
@@ -110,6 +111,12 @@ final class FriendsAccessAndroid {
             });
             try{
                 byte[] result=FriendsReadinessProtocol.fetch(RestrictedGateway.route(route::post,gateway),identity,receipt);
+                if(provisioningCarrier!=null){
+                    try(ControlIdentity current=new FriendsIdentityVault(context).load()){
+                        remaining(1);
+                        if(!java.security.MessageDigest.isEqual(current.publicIdentity(),identity.publicIdentity())||!current.wireguardPublicKey().equals(identity.wireguardPublicKey()))throw new SecurityException("Provisioning recipient changed");
+                    }catch(Exception failure){java.util.Arrays.fill(result,(byte)0);throw failure;}
+                }
                 if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.COMPLETE);
                 return result;
             }catch(Exception failure){if(fetchTrace!=null)fetchTrace.failed(failure);throw failure;}

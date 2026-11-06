@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "incident": "beta113-cold-bootstrap",
+  "scope": "isolated-source-integration-not-android-or-telemost-field",
+  "branch": "feature/android-cold-provisioning-20261106",
+  "base": "41b4e6e034efc3e51446f383f2fbaedee3ad5a67",
+  "initial_candidate": "6840193e766f33c2974dad639b8d7e6dad7d6bcb",
+  "final_source_binding": "candidate plus source/test delta in the commit introducing this manifest; exact file inventory preserved locally",
+  "inventory_sha256": "c5a2920ff29a67e73149e387e8464fb03c3e4c3cc051367c7fb4afafcfcc6488",
+  "evidence_root": "state-client-build/cold-provisioning-20261106",
+  "runtime": {
+    "result": "PASS",
+    "receipt": "final-4/receipt.json",
+    "receipt_sha256": "4e1fc81f4035db3b69ac54eecc12843d458b5dd9765effa8f12967d9e379d16d",
+    "log_sha256": "85f89f620d73ef3b56c442a0a1ae7584c98e477e03fb7bc1790d7c712b5841b9",
+    "test_binary_sha256": "6ef021fa58d96d68ae9ce3d099068f7e568987f91c34c38912fddbf9a984340a",
+    "offline_image": "sha256:89598610ee266cf1efa164092d1193479069784f1c94493c46fcff82f5a6736f",
+    "seconds": 38.52,
+    "direct_io_fixture_delays_seconds": {"https_tls_write": 15, "rns_socket": 5},
+    "connect_budget_seconds_unchanged": 30,
+    "locator_origin": "existing issuer signs actual SeedManager publication; asset copied before client process/Connect",
+    "real_components": ["device registration", "issuer and registry", "readiness HTTP handlers", "server TLS and device proof", "validator", "AES-GCM vault", "Android source owner and engine", "native Family TLS/mux", "TCP", "DNS", "verified HTTPS"],
+    "fixture_boundaries": ["provider packet transport", "Android framework and TUN", "hardware-keystore provider", "JNI invocation shim", "direct-path I/O failure timing"],
+    "negative_checks": ["missing expired forged wrong-node locator", "other signed but unpinned server", "unactivated revoked expired-subscription device", "other recipient", "other-session replay", "wrong-purpose challenge", "malformed signature retains existing 503 with no issuance", "invalid stale substituted bundle", "link lost in flight", "Disconnect and late response", "identity replaced before late response", "forbidden pre-admission data-plane paths"],
+    "ack": "durable ACK_PENDING, not server ACK_RECEIVED"
+  },
+  "native_compile": {
+    "result": "PASS_NOT_DEVICE_EXECUTED",
+    "source": "6840193e766f33c2974dad639b8d7e6dad7d6bcb",
+    "abi": "arm64-v8a",
+    "provider": "telemost",
+    "tags": [],
+    "sha256": "1e478adf1b2bf5c8ce78498f0ad9554f0b121190a18bceaf1dad0eabe4d58a4b",
+    "log": "native-build-1.log",
+    "log_sha256": "caef672a5b49a07f7b7543721d4644333457fab56b7df9e99d2b3d76439dafc9",
+    "packet_race_count": 3
+  },
+  "scoped_regression": {
+    "jvm": {"passed": 95, "receipt": "jvm-5/receipt.json", "log_sha256": "44c4d88ce59b25a5754d705fd354c07c197cd59ea6ab201d58c306792a9c0a9c"},
+    "python": {"passed": 97, "skipped_artifact_native": 4, "log": "python-1.log"},
+    "native_race": {"packages": ["coldprovision", "bootstrap", "familysession", "roombroker"], "result": "PASS", "log": "race-1.log", "coldprovision_test_only_repeat": "race-2.log"},
+    "full_ci": "NOT_RUN"
+  },
+  "retained_failures": ["native-1 through native-5", "native-7 shell PATH error", "jvm-1 compile", "pipeline-1 compile", "jvm-3 resource omission", "full-1 request-ID fixture", "full-2 purpose/status fixture", "identity-1 and identity-2 overbroad cache assertion", "identity-3-before confirmed stale-recipient cache write", "final-3 synchronous ACK blocks owner deadline"],
+  "not_run": ["Android JNI/framework runtime", "real Telemost provisioning", "positive secondary node", "target cellular network", "release and controlled delivery"],
+  "unchanged": ["production", "main worktree and foreign changes", "G4 and frozen artifacts", "APK118/updater113", "live schedules", "paid/cohort/admission policy"],
+  "next": "real Android and actual Telemost qualification with independently delivered finite locator, before separately authorized controlled delivery"
+}

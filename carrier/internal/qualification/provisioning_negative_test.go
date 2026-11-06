@@ -22,7 +22,7 @@ import (
 	"github.com/Joker20380/family_connect/carrier/wholedevice"
 )
 
-func provisioningNegatives(test *testing.T, ctx context.Context, root string, provider Provider, locator, anchor, secret, bundle []byte, valid map[string]any) {
+func provisioningNegatives(test *testing.T, ctx context.Context, root string, provider Provider, locator, anchor, secret, bundle []byte, valid map[string]any, dropSeen, dropRelease chan struct{}) {
 	issued := func() string {
 		repository, _ := filepath.Abs("../../..")
 		command := exec.CommandContext(ctx, os.Getenv("FC_COLD_PROVISION_PYTHON"), filepath.Join(repository, "tests/fixtures/mobile_bootstrap/provision_backend.py"), "inspect", root)
@@ -102,7 +102,7 @@ func provisioningNegatives(test *testing.T, ctx context.Context, root string, pr
 			}
 		})
 	}
-	for index, name := range []string{"other_session_replay", "wrong_purpose", "wrong_signature", "other_recipient", "link_drop"} {
+	for index, name := range []string{"other_session_replay", "wrong_purpose", "wrong_signature", "other_recipient"} {
 		test.Run(name, func(test *testing.T) {
 			client := open()
 			defer client.Close()
@@ -141,24 +141,55 @@ func provisioningNegatives(test *testing.T, ctx context.Context, root string, pr
 					request["signature"] = base64.StdEncoding.EncodeToString(make([]byte, 64))
 				}
 			}
-			if name == "link_drop" {
-				client.Close()
-			}
 			reply, err := post(client, coldprovision.Fetch, request, fmt.Sprintf("%032x", 101+index*2))
 			if err == nil && !(name == "wrong_signature" && reply.Status == 503) {
 				test.Fatalf("unsafe result status=%d", reply.Status)
 			}
 		})
 	}
+	test.Run("link_drop_in_flight", func(test *testing.T) {
+		client := open()
+		defer client.Close()
+		result := make(chan error, 1)
+		go func() {
+			_, err := post(client, coldprovision.Challenge, challengeBody, "33333333333333333333333333333333")
+			result <- err
+		}()
+		select {
+		case <-dropSeen:
+		case <-ctx.Done():
+			test.Fatal("authority request not observed")
+		}
+		client.Close()
+		close(dropRelease)
+		select {
+		case err := <-result:
+			if err == nil {
+				test.Fatal("lost response accepted")
+			}
+		case <-ctx.Done():
+			test.Fatal("cancel did not finish")
+		}
+		if _, err := post(client, coldprovision.Fetch, valid, "33333333333333333333333333333334"); err == nil {
+			test.Fatal("closed exchange reused")
+		}
+	})
 	test.Run("bundle_validation", func(test *testing.T) {
-		if wholedevice.DeliveryValidationCode(bundle, secret, anchor, time.Now().Add(time.Hour)) == 0 {
+		public, err := base64.StdEncoding.DecodeString(valid["public_identity"].(string))
+		if err != nil {
+			test.Fatal(err)
+		}
+		if wholedevice.DeliveryValidationCode(bundle, public, anchor, time.Now()) != 0 {
+			test.Fatal("valid bundle baseline rejected")
+		}
+		if wholedevice.DeliveryValidationCode(bundle, public, anchor, time.Now().Add(time.Hour)) == 0 {
 			test.Fatal("expired bundle accepted")
 		}
 		altered := bytes.Replace(bundle, []byte(`"sequence":1`), []byte(`"sequence":0`), 1)
 		if bytes.Equal(altered, bundle) {
 			altered = append(bytes.Clone(bundle[:len(bundle)-1]), []byte(`,"version":99}`)...)
 		}
-		if wholedevice.DeliveryValidationCode(altered, secret, anchor, time.Now()) == 0 {
+		if wholedevice.DeliveryValidationCode(altered, public, anchor, time.Now()) == 0 {
 			test.Fatal("tampered bundle accepted")
 		}
 		if wholedevice.DeliveryValidationCode(bundle, make([]byte, 64), anchor, time.Now()) == 0 {
