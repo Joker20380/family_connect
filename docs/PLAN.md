@@ -2,6 +2,11 @@
 
 ## Current engineering priority / Текущий critical path
 
+**6 November13:27UTC operational warning:** both live NL MESH bootstrap services
+FAILED; ordinary AWG/TCP active. Diagnosis/recovery remains separate from isolated G4;
+no production mutation or task advancement by this check. Root cause not established.
+[Health snapshot](releases/2026-11-06-vpn-health.md).
+
 **5 November11:29UTC operational readback complete:** all ordinary VPN services
 and both NL bootstrap active; seven recent AWG peers, no sampled TCP443/8446 sockets.
 No implementation priority change or stability acceptance. RU disk gain retained;

@@ -1,5 +1,11 @@
 # Текущее состояние / Current state
 
+**6 November13:27UTC — live health warning:** AWG/TCP active on all nodes, but BOTH
+NL MESH bootstrap services FAILED (exit1/NRestarts6; last exits5 November11:47UTC).
+Cause unknown; no repair/restart. RU CPU initially70–72%, follow-up4–31%; disk71%/8.4GiB.
+AWG recent peers0/4/0; TCP443 sockets0/91/5, not unique clients.
+[Read-only evidence](releases/2026-11-06-vpn-health.md). Isolated G4 untouched.
+
 **5 November11:29UTC — read-only VPN check:** all AWG/TCP and both NL bootstrap
 active; CPU RU9–25%, AMS1 19–21%, AMS2 16–18%. RU disk70%/8.5GiB free.
 Recent AWG peers1/5/1, TCP443/8446 sockets0; not unique users. RU steal briefly11%.
