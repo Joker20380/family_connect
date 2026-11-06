@@ -93,8 +93,9 @@ final class FriendsAccessAndroid {
         return identity.proveTransportKey(text(challenge.get("challenge")));
     }
     JsonObject subscription(ControlIdentity identity)throws Exception{
+        String device=identity.reference();
         return SubscriptionRequest.fetch(new SubscriptionRequest.Exchange(){
-            public String device(){return identity.reference();}
+            public String device(){return device;}
             public JsonObject proof(String purpose)throws Exception{
                 try{return FriendsAccessAndroid.this.proof(identity,purpose,"");}
                 catch(Denied rejected){throw new SubscriptionRequest.IdentityRejected();}

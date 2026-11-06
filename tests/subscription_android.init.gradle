@@ -1,0 +1,46 @@
+gradle.beforeProject { project ->
+    def properties = gradle.startParameter.projectProperties
+    if (properties.fcFriendsCi != 'true' || properties.fcTargetAbi != 'x86_64' || !properties.fcSubscriptionWork) {
+        throw new GradleException('Explicit disposable subscription build required')
+    }
+    if (!gradle.startParameter.taskNames.every { it.toLowerCase().contains('debug') }) {
+        throw new GradleException('Subscription test trust is forbidden for release tasks')
+    }
+    def work = new File(properties.fcSubscriptionWork)
+    if (!work.isAbsolute()) throw new GradleException('Absolute qualification directory required')
+    project.buildDir = new File(work, 'android/' + project.name)
+    project.afterEvaluate {
+        if (project.name == 'app') {
+            project.android.buildTypes.debug.applicationIdSuffix = '.subscriptiontest'
+            project.android.buildTypes.debug.manifestPlaceholders = [appLabel: 'SUBSCRIPTION TEST ONLY', launcherActivity: 'com.familyconnect.app.FriendsActivity']
+            project.android.signingConfigs.debug.storeFile = new File(work, 'private/debug.keystore')
+            def original = project.android.sourceSets.main.java.srcDirs.toList()
+            def sources = new File(work, 'qualification-java')
+            sources.mkdirs()
+            original.each { directory ->
+                project.fileTree(directory).matching { include '**/*.java' }.each { input ->
+                    def output = new File(sources, directory.toPath().relativize(input.toPath()).toString())
+                    output.parentFile.mkdirs()
+                    output.text = input.getText('UTF-8').replace('https://185.251.89.19:8443', 'https://10.0.2.2:18443')
+                }
+            }
+            project.android.sourceSets.main.java.setSrcDirs([sources])
+            project.android.sourceSets.main.jniLibs.setSrcDirs([new File(work, 'native/jniLibs')])
+            project.android.sourceSets.main.assets.setSrcDirs([project.file('src/main/assets'), new File(work, 'native/assets')])
+            project.android.sourceSets.debug.jniLibs.setSrcDirs([])
+            project.android.sourceSets.debug.assets.setSrcDirs([])
+            project.android.sourceSets.androidTest.java.setSrcDirs([project.rootProject.file('../../tests/android-subscription/java')])
+            def resources = new File(work, 'qualification-res')
+            new File(resources, 'raw').mkdirs()
+            new File(resources, 'xml').mkdirs()
+            new File(resources, 'raw/subscription_test_ca.pem').bytes = new File(work, 'private/ca.pem').bytes
+            new File(resources, 'xml/subscription_test_security.xml').text = '''<network-security-config>
+<base-config cleartextTrafficPermitted="false"><trust-anchors><certificates src="@raw/subscription_test_ca"/></trust-anchors></base-config>
+</network-security-config>'''
+            def manifest = new File(work, 'qualification-manifest.xml')
+            manifest.text = '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><application android:networkSecurityConfig="@xml/subscription_test_security"/></manifest>'
+            project.android.sourceSets.debug.res.srcDir(resources)
+            project.android.sourceSets.debug.manifest.srcFile(manifest)
+        }
+    }
+}

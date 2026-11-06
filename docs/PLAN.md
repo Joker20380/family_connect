@@ -2,6 +2,16 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Owner-selected SUBSCRIPTION-ANDROID-1 — bounded runtime complete6 November.**
+Independent feature worktree, not a G4 continuation. API35 NVIDIA/KVM diagnostic APK
+build/Chaquopy, real local HTTPS, Keystore/restart, canonical state/event display,
+permission/dedupe and cold/warm navigation pass; checked-exception compilation fixed.
+Mixed-underlay test-origin failure retained, stable Wi-Fi path qualified. Remaining
+independent gates: production-equivalent test ingress, ARM/release, physical whitelist
+and normal activated-service scheduling (notifications were exercised via the existing
+worker, not proven as automatic new-event delivery). No deployment/merge/full acceptance,
+G4 action or automatic next task. [Exact results and reproducible scope](releases/2026-11-06-subscription-android-1.md).
+
 **Independent owner-requested parallel subtask6 November — SUBSCRIPTION-CLIENT-VIEW**
 under `ANDROID-CONTROLLED-BETA`, not a replacement for the existing G4 critical path.
 Isolated source/integration candidate from checkpoint `47ef0463bd39`: authenticated

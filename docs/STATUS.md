@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**6 November — SUBSCRIPTION-ANDROID-1: bounded API35 runtime PASS, not production acceptance.**
+Isolated `feature/subscription-status-20261106`, starting remote `34529b622594`:
+fixed an actual checked-exception Android compile defect; built/installed diagnostic
+debug x86_64 `com.familyconnect.app.subscriptiontest`, Android118 (separate package).
+Real local HTTPS Handler → Friends proof → Chaquopy → Keystore/encrypted store → UI
+passes active/no-event/expired/grace/revoke, outside pilot, unsupported/unavailable,
+offline/process restart, permissions/durable dedupe and actual cold/warm notification taps.
+Existing notification delivery was invoked explicitly; new event fetching remains
+screen-open/manual only, not background push. One mixed-underlay test-origin failure
+is retained; final Wi-Fi recovery passes. Physical whitelist, production ingress,
+ARM/release and normal activated-service scheduling remain NOT_RUN. No G4/production
+or main-checkout changes. [Candidate, evidence boundaries and remaining gates](releases/2026-11-06-subscription-android-1.md).
+
 **6 November — isolated subscription HTTP/source integration candidate (not installed/qualified).**
 Owner-requested parallel `ANDROID-CONTROLLED-BETA / SUBSCRIPTION-CLIENT-VIEW`, branch
 `feature/subscription-status-20261106`, continuing checkpoint `47ef0463bd39`:
