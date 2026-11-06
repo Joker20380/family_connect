@@ -2,6 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected field bootstrap continuation — bounded provisioning candidate implemented.**
+The isolated uncached dual-block path now reaches real authority issuance, unchanged
+validation/encrypted vault, existing Android source owner and actual native MESH traffic.
+This is a separate finite-locator source candidate, not an installed beta113 repair.
+No production locator/credentials are supplied; missed rotation fails closed. Known
+field-network uncertainty, G4 and other branches retain their independent state.
+**One next:** qualify real Android/Telemost provisioning and underlay cancellation,
+then a separately authorized controlled delivery/target-network check. JNI compilation
+is still pending at this source checkpoint; scoped results are not release acceptance.
+[Implementation, limits and exact receipts](releases/2026-11-06-beta113-field16-bootstrap.md#bounded-provisioning-candidate).
+The earlier selected/proposed entries below record completed incident investigation,
+not permission for parallel live/G4/ANDROID-APP-VPN work in this branch.
+
 **Selected6 November: separate beta113/API28 field bootstrap diagnosis, not G4.**
 The148e212 source/JSON findings stand. A bounded exact113 test now confirms no cold
 provisioning route when HTTPS8443 and RNS4242 both fail and readiness is missing.

@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**6 November — bounded cold provisioning source candidate, not delivered.**
+Separate `feature/android-cold-provisioning-20261106`, based on41b4e6e: a registered
+uncached client uses a prepositioned root-delegated, issuer-signed finite locator,
+existing packet carrier and device proof, then unchanged readiness validation,
+encrypted vault, AutomaticVpnOwner/RestrictedTunnelEngine and native MESH.
+The isolated dual-block full path passes TCP/DNS/verified HTTPS and closed-owner
+late-response checks; real authority denies revoked/unactivated/expired-subscription
+fixtures. Android OS/JNI boundaries are fixtures, not Android/Telemost field acceptance.
+Locator expiry is at most4h and may be shorter; missing a locator rotation requires
+independent delivery, not a fetch from the blocked API. No locator ships by default.
+Trigger/cleanup diagnostic causes are separate; terminal policy remains unchanged.
+Scoped checks:94 JVM,97 Python (4 native-artifact cases skipped), four native packages
+under race, plus the13.91s full integration; these are not additive/full-CI totals.
+Native JNI build validation is pending at this source checkpoint. **Next:** qualify this
+candidate on real Android with actual Telemost provisioning before controlled delivery;
+the phone's whitelist/provider reachability remains unknown. No AVD, production, APK,
+main-worktree or G4 changes. [Contract/evidence](releases/2026-11-06-beta113-field16-bootstrap.md#bounded-provisioning-candidate).
+
 **6 November — beta113 cold bootstrap gap reproduced; not a field-network diagnosis.**
 With HTTPS8443 and direct RNS4242 both unavailable, an activated device without usable
 readiness or an already healthy VPN has no cold path to verified pre-Telemost materials.

@@ -4,6 +4,9 @@ import android.net.VpnService;
 
 final class NativeRestricted {
     static void load() { System.loadLibrary("fc_restricted"); }
+    static native long provisionBegin(byte[] locator,byte[] anchor,String gateway,String resolver,long budgetMillis,Object protector);
+    static native String provisionPost(long handle,String path,String body,String requestId);
+    static native void provisionClose(long handle);
     static native long begin(String directory, String control, String resolver, long budgetMillis, VpnService protector);
     static native boolean attach(long handle, int tunFd);
     static native int state(long handle);

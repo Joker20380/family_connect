@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 final class ReadinessFetchTrace {
     enum Operation { CHALLENGE, FETCH, UNKNOWN }
     enum Stage { LOCAL, OPEN_NETWORK, CONNECT_TLS_WRITE, HTTP_STATUS, READ_BODY, PARSE, BINDING, RELAY_OPEN, RELAY_REQUEST, COMPLETE }
-    enum Route { HTTPS_UNDERLAY, HTTPS_VPN, RNS }
+    enum Route { HTTPS_UNDERLAY, HTTPS_VPN, RNS, PROVISIONING }
     enum Error { NONE, DNS, CONNECT, SOCKET, TIMEOUT, TLS, AUTHORIZATION, HTTP, UNAVAILABLE, IO, PROTOCOL, SECURITY, INTERNAL }
     private final JsonObject value=new JsonObject();
     private final JsonArray failures=new JsonArray();

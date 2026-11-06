@@ -10,6 +10,7 @@ import java.io.IOException;
 /** JNI callback. Every mailbox socket must bind before connecting. */
 public final class ChatNetworkAndroid {
     private final Context context;
+    private Network provisioningNetwork;
     ChatNetworkAndroid(Context context) { this.context = context.getApplicationContext(); }
 
     boolean available() {
@@ -42,6 +43,12 @@ public final class ChatNetworkAndroid {
     public boolean bindSocket(int fd) {
         ConnectivityManager manager = context.getSystemService(ConnectivityManager.class);
         if (manager == null) return false;
+        if(provisioningNetwork!=null){
+            NetworkCapabilities caps=manager.getNetworkCapabilities(provisioningNetwork);
+            if(caps==null||!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)||!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET))return false;
+            try(ParcelFileDescriptor socket=ParcelFileDescriptor.fromFd(fd)){provisioningNetwork.bindSocket(socket.getFileDescriptor());return true;}
+            catch(IOException|SecurityException unavailable){return false;}
+        }
         for (Network network : manager.getAllNetworks()) {
             NetworkCapabilities caps = manager.getNetworkCapabilities(network);
             if (caps == null || !caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
@@ -55,4 +62,15 @@ public final class ChatNetworkAndroid {
     }
 
     public boolean protect(int fd) { return bindSocket(fd); }
+
+    String provisioningResolver()throws IOException{
+        ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
+        if(manager!=null)for(Network network:manager.getAllNetworks()){
+            NetworkCapabilities caps=manager.getNetworkCapabilities(network);
+            android.net.LinkProperties link=manager.getLinkProperties(network);
+            if(caps==null||link==null||!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)||!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET))continue;
+            for(java.net.InetAddress address:link.getDnsServers())if(address instanceof java.net.Inet4Address){provisioningNetwork=network;return address.getHostAddress()+":53";}
+        }
+        throw new IOException("Physical IPv4 resolver unavailable");
+    }
 }

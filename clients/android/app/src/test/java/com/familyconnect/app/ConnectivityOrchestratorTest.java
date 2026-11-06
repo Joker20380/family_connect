@@ -234,6 +234,26 @@ public class ConnectivityOrchestratorTest {
         Fixture fixture=new Fixture();fixture.cleanupFailure=true;fixture.connect();
         assertEquals(State.FAILED,fixture.core.state());assertEquals(0,fixture.opens);assertTrue(fixture.guard);
     }
+    @Test public void ownerAuthIsRetainedWhenFinishCleanupFails(){
+        Fixture fixture=new Fixture();fixture.connect();fixture.cleanupFailure=true;fixture.core.lost(Failure.AUTH);
+        Event last=fixture.core.events().get(fixture.core.events().size()-1);
+        assertEquals(State.FAILED,last.state);assertEquals(Failure.INTERNAL,last.failure);
+        assertEquals(Failure.AUTH,last.triggerReason);assertEquals(Failure.INTERNAL,last.cleanupReason);
+        assertEquals(1,fixture.opens);assertTrue(fixture.guard);
+    }
+    @Test public void candidateAuthIsRetainedWhenCleanupFails(){
+        Fixture fixture=new Fixture();fixture.cancelCandidate="awg";fixture.cancelPhase="normal";
+        Host host=new Host(){
+            int closes;
+            public long now(){return 0;}public void pause(long value){}public void open(String candidate,long deadline)throws Exception{throw new Rejected(Failure.AUTH);}
+            public void closeCandidate()throws Exception{if(++closes>1)throw new java.io.IOException("private detail");}
+            public void release(){}public void remember(String value){}public void event(Event event){}
+        };
+        ConnectivityOrchestrator core=new ConnectivityOrchestrator(host);core.connect(Arrays.asList("awg"),"awg",null);
+        Event last=core.events().get(core.events().size()-1);
+        assertEquals(Failure.INTERNAL,last.failure);assertEquals(Failure.AUTH,last.triggerReason);assertEquals(Failure.NETWORK,last.cleanupReason);
+        assertEquals(State.FAILED,core.state());
+    }
     @Test public void failureClassificationIsExplicit(){
         assertEquals(Failure.AUTH,classify(new SecurityException()));assertEquals(Failure.CONFIGURATION,classify(new IllegalArgumentException()));
         assertEquals(Failure.NETWORK,classify(new java.io.IOException()));assertEquals(Failure.INTERNAL,classify(new UnsatisfiedLinkError()));

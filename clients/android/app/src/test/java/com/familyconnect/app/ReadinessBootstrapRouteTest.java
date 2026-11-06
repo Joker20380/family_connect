@@ -8,6 +8,32 @@ import static org.junit.Assert.*;
 
 public class ReadinessBootstrapRouteTest {
     private static final String ROOT="/friends/restricted-readiness";
+    @Test public void dualUnavailableSelectsProvisioningOnceForFreshProof()throws Exception{
+        int[] calls={0,0,0};
+        ReadinessBootstrapRoute route=new ReadinessBootstrapRoute((path,body,id)->{calls[0]++;throw new IOException();},
+            (path,body,id)->{calls[1]++;throw new FriendsReadinessProtocol.Unavailable();},
+            (path,body,id)->{calls[2]++;return body;});
+        JsonObject body=new JsonObject();route.post(ROOT+"/challenge",body,"challenge");route.post(ROOT,body,"proof");
+        assertArrayEquals(new int[]{1,1,2},calls);
+    }
+    @Test public void relayAuthorizationAndAmbiguousProofNeverUseProvisioning()throws Exception{
+        for(Exception failure:new Exception[]{new SSLException("synthetic"),new FriendsReadinessProtocol.AuthorizationFailure(),new IllegalArgumentException()}){
+            ReadinessBootstrapRoute route=new ReadinessBootstrapRoute((path,body,id)->{throw new IOException();},
+                (path,body,id)->{throw failure;},(path,body,id)->{fail();return null;});
+            assertSame(failure,assertThrows(Exception.class,()->route.post(ROOT+"/challenge",new JsonObject(),"challenge")));
+        }
+        ReadinessBootstrapRoute route=new ReadinessBootstrapRoute((path,body,id)->{throw new IOException();},
+            (path,body,id)->{if(path.equals(ROOT))throw new FriendsReadinessProtocol.Unavailable();return body;},
+            (path,body,id)->{fail();return null;});
+        route.post(ROOT+"/challenge",new JsonObject(),"challenge");
+        assertThrows(FriendsReadinessProtocol.Unavailable.class,()->route.post(ROOT,new JsonObject(),"proof"));
+    }
+    @Test public void provisioningCannotReceiveAckOrEnrollment()throws Exception{
+        ReadinessBootstrapRoute route=new ReadinessBootstrapRoute((path,body,id)->{throw new IOException();},
+            (path,body,id)->{throw new FriendsReadinessProtocol.Unavailable();},(path,body,id)->{fail();return null;});
+        assertThrows(FriendsReadinessProtocol.Unavailable.class,()->route.post(ROOT+"/ack-challenge",new JsonObject(),"ack"));
+        assertThrows(IllegalArgumentException.class,()->route.post("/friends/activate",new JsonObject(),"activate"));
+    }
 
     @Test public void firstChallengeSelectsRelayForWholeProofExchange()throws Exception {
         int[] calls={0,0};JsonObject body=new JsonObject();

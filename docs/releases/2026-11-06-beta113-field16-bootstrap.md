@@ -530,3 +530,144 @@ audit. APK118/updater113, subscriptions, certificates, admission, G4 and frozen 
 are untouched. Earlier failed runs and unrelated local changes remain. **Next: the
 single comparison above with UTC/cache/Network observations**; the correct export
 has been received and does not need to be requested again. No speculative APK.
+
+## Bounded provisioning candidate
+
+### Answer and discovery contract
+
+**Yes in the isolated source/integration candidate, not in installed beta113.** An
+already registered device with no readiness, no working VPN and both direct paths
+disabled obtains a new signed bundle and opens normal MESH. It needs its existing
+Friends identity, the existing public root and a **previously delivered, still-valid
+public locator asset** `provisioning/nl-amsterdam-1.json` (or the node2 equivalent).
+No runtime injection after Connect, missing readiness, Family client leaf, old service
+IP or extra carrier is used to discover that room. This is NOT first activation.
+
+The locator is version1/purpose `family-connect-provisioning-v1`, node-bound, sequenced,
+time-bounded and contains only a room locator and public server certificate plus the
+existing root-signed restricted issuer delegation. The **same existing issuer key**
+signs it with a separate domain; `control/friends/bootstrap_locator.py:issue` checks
+the existing `_trust`, CRL, server certificate and SeedManager directory. No root,
+signer service, entitlement database or authorization writer is added. Locator sequence
+is metadata in this asset-only version, not a newly implemented persistent rotation floor.
+Readiness replay/revision/CRL floors remain unchanged and mandatory.
+
+The real SeedManager creates a room, joins it, then invokes its publication callback;
+only that published seed can be signed. Lifetime is bounded by seed expiry, issuer,
+server leaf and current CRL, **never more than4h**, and provider room failure can shorten
+it. This is a finite controlled-delivery window, not evergreen cold discovery. Rotation
+requires independently delivering a new signed asset; a client missing that delivery
+fails closed. There is no fallback locator download from HTTPS8443/RNS4242, hidden
+service IP, per-Connect manual room entry or prerequisite third-party VPN. No actual
+locator asset is committed or shipped. The original beta113 GAP evidence is preserved.
+
+### Bounded entry and custody
+
+- Server source entry: `coldprovision.Run(Config, RoomProvider, SeedConnector, Backend)`
+  uses the existing SeedManager and single-exchange carrier. `Config.Publish` remains
+  an authority-custody callback; it returns the signed locator for verification against
+  the actual published seed and server certificate. The integration invokes the actual
+  existing issuer in a separate Python process. Gateway code has no issuer private key
+  or grant registry. No change to production bootstrap entrypoints/configuration.
+- Client native entry: `coldprovision.Open` + `Telemost(underlay)` via the new JNI adapter.
+  Same Telemost/packet/reliable stream code, TLS1.3, distinct ALPN and exact signed
+  server certificate pin under the existing root delegation. No Family client leaf is
+  needed for this **pre-admission service**, but it cannot open Family mux/data plane.
+- Only challenge then readiness-fetch; at most two framed64KiB requests,30s overall
+  (also bounded by existing bootstrap exchange lifetime), one server exchange per seed,
+  at most two local JNI leases. No arbitrary HTTP URL, activation, ack, DNS or TCP RPC.
+  Backend is a fixed numeric loopback adapter to the existing readiness handlers;
+  redirects and environment proxies are disabled. No carrier-owned authorization store.
+- Existing device proof is checked by the real authority against current registration,
+  admission, entitlement and revocation. The adapter additionally binds node, public
+  identity, WG key and returned fresh challenge to this TLS exchange. Reusing another
+  session's proof, wrong-purpose challenge or recipient fails. Locator/room knowledge
+  is not bearer access. No proof is retried through another route after uncertain fetch.
+- Android selects this route only after an initial HTTPS challenge I/O failure and typed
+  RNS Unavailable, with no usable cache. TLS/trust/auth rejection and post-proof failure
+  do not select it; activation and ack remain outside it. A fresh physical Network and
+  its IPv4 DNS are selected and pinned for this provisioning lifetime. Loss fails closed,
+  not an implicit VPN or public-resolver fallback. No hardcoded replacement service IP.
+- Unchanged readiness protocol, native validator, encrypted RestrictedVault, existing
+  AutomaticVpnOwner and RestrictedTunnelEngine finish the normal path. Cancellation
+  does not revive the owner: a late valid response may populate the identity/node-bound
+  cache but cannot start native in the closed attempt. A separate new Connect is distinct.
+
+### Executed scope and provenance
+
+Local evidence: `state-client-build/cold-provisioning-20261106/` in the separate worktree.
+Base41b4e6e034efc3e51446f383f2fbaedee3ad5a67 plus candidate source inventory
+`03f3db74a76e8b60655544e081f6d7a44b7958db29f7ad366e318dd635616d85`.
+`full-4/receipt.json` records exact commands, image/binary hashes and exits; its inventory
+is verified unchanged at the end. Source checkpoint is the commit introducing this section;
+this is not a claim that unmodified41b4e6e implements provisioning.
+
+| Check | Result and exact scope |
+|---|---|
+| `full-4/runtime.log` | PASS13.91s; actual SeedManager publication → preplaced locator → dual-block Android source selection → server TLS → registered device proof → real access-api/issuer → unchanged validator/encrypted vault/owner/engine → real native Family TLS/mux, TCP echo, DNS and verified TLS HTTPS; normal cleanup |
+| Same runtime, negatives | PASS other issuer-valid but unpinned server, unactivated/revoked/expired-subscription devices (403), other-session replay, wrong-purpose challenge, other recipient, link drop, stale/tampered/wrong-device bundle. Certificate-row count unchanged by negatives. Malformed signature retains existing backend503, not relabelled AUTH; no issuance/fallback |
+| Same runtime, late owner | PASS actual fetch held until Disconnect, then validator/cache completion without native begin or owner resurrection; a separate fresh client Connect subsequently succeeds |
+| Locator | Missing/structurally invalid/forged/wrong-node/expired rejected; expiry boundary uses supplied verification time, not a wall-clock certificate-crossing claim |
+| `jvm-4` |94 PASS (includes earlier65, not additional); route selection/no proof retry/no auth bypass, cache floors, protocol, trigger/cleanup; actual ChatNetworkAndroid methods with OS stubs separately verify physical resolver/pinned-network loss |
+| `python-1.log` |97 PASS,4 skipped in1.09s: new locator9 cases plus existing readiness/paid-authority regression. The skipped artifact-enabled native delivery cases are NOT claimed PASS |
+| `race-1.log` |coldprovision/bootstrap/familysession/roombroker packages PASS with `-race -count=1 -p1 -timeout=90s`; not whole-native/full-CI acceptance |
+
+Runtime log SHA256 `40f424a86a73c6c2d0058b59b53e2fa58bef238841ba8432e9e08e22a4924259`.
+Python log `6925026ea2d9ef724c9e0043d7106da7f27b259beca948ea536ebd782167e1e3`;
+JVM log `feccd4362baaa260755b46d437fbd22f8c58cf9351a5ad2bf826ec975fba5098`;
+network log `bd8f60f24582ed7acaac4b3ca8220ee5ebc8c21f1e6dcc03de86a7f961feb3a7`;
+race log `7d08dbcbfd467667eaa10f28159c7ccd93cf7eb518c6773e05465d99fe50ca5b`.
+
+Reproduce with the existing pinned local tools and already present offline image;
+`OUTPUT` must be a fresh directory beneath this worktree's ignored `state-client-build`:
+
+```sh
+python3 tests/fixtures/mobile_bootstrap/run_provisioning.py --tools "$TOOLS" --output "$OUTPUT"
+python3 tests/fixtures/mobile_bootstrap/check_provisioning.py --tools "$TOOLS" --output "$OTHER_FRESH_OUTPUT"
+python -m pytest -q tests/test_bootstrap_locator.py tests/test_friends_restricted.py tests/test_paid_beta_readiness.py
+```
+
+The Python command needs the existing control/identity locked dependencies. Runtime
+runner inspects/reuses the local image; it does not build/pull an image or contact a
+production endpoint. Original FAIL outputs must not be reused as OUTPUT.
+
+The short runtime reuses the existing local packet provider and existing offline test
+image, `--network none`,1CPU/640MiB, no AVD. The service authority is a separate Python
+process; JVM source uses a test-only local RPC shim to the real Go native operations.
+Android framework/TUN, JNI invocation and hardware-keystore provider are fixtures;
+AES-GCM, identity proof, issuer, validators, owner/engine code and native MESH/traffic
+are real. Thus this proves source/core integration, NOT kernel VPN routing, Android
+JNI runtime, actual Telemost signaling/media or accessibility in this phone's network.
+JNI binary compilation is pending at this checkpoint, not silently substituted by the shim.
+
+### Preserved failures and diagnostic change
+
+Earlier field JSON/source analysis and41b4e6e GAP reproduction remain unchanged.
+Local candidate failures are retained: missing system RNS dependency; first closed pipe;
+integer-seconds seed-publication check corrected to existing nanosecond clock; initial
+DNS fixture incorrectly assumed default resolver and then used a prohibited non53 port
+(now isolated real port53, no relaxed mux rule); shell PATH variable failure; source
+compile errors/resource omission. `full-1` fails on reused test request IDs;
+`full-2` fails because its alleged wrong purpose was the valid enrollment audience,
+and because it assumed403 for malformed signature where the existing handler returns503.
+The corrected test uses an actual status-purpose challenge, fresh IDs, exact existing
+503 and asserts zero new certificates. No production expectation was changed for green.
+`full-3` PASS15.58s is preliminary; `full-4` rechecks the final CRL-bounded signer and guards.
+
+Diagnostic changes retain `trigger_reason` independently of `cleanup_reason` and
+`secondary_stage=CLEANUP`, keeping the existing event/attempt correlation and terminal
+`policy_reason`. AUTH is still AUTH; cleanup can still make policy INTERNAL. Existing
+fetch failure is a separate event; no inference of onRevoke or timeout cause is added.
+No key, proof, personal identifier or rendezvous content is logged by the new adapter.
+
+### Remaining boundary / one next
+
+Qualify this exact candidate on **real Android and actual Telemost provisioning** with
+fresh independently delivered locator, then separately authorize controlled delivery
+and a cold dual-block attempt in the target mobile network. Test OS keystore/JNI/TUN,
+Network handoff/cancellation and finite-locator distribution/rotation there. This does
+not claim provider reachability, first activation, permanent discovery, or a delivered fix.
+No new speculative diagnostic APK is proposed. No release, install, live policy change
+or rollback was performed; source rollback is omission of this independent branch.
+Main worktree/foreign edits, G4/frozen artifacts, APK118/updater113, existing schedules,
+paid/cohort/admission and all production credentials remain untouched.

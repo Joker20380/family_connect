@@ -8,9 +8,14 @@ final class ReadinessBootstrapRoute {
     private final FriendsReadinessProtocol.Transport https;
     private final FriendsReadinessProtocol.Transport relay;
     private boolean relaySelected;
+    private final FriendsReadinessProtocol.Transport provisioning;
+    private boolean provisioningSelected;
 
     ReadinessBootstrapRoute(FriendsReadinessProtocol.Transport https, FriendsReadinessProtocol.Transport relay) {
-        this.https=https;this.relay=relay;
+        this(https,relay,null);
+    }
+    ReadinessBootstrapRoute(FriendsReadinessProtocol.Transport https, FriendsReadinessProtocol.Transport relay,FriendsReadinessProtocol.Transport provisioning) {
+        this.https=https;this.relay=relay;this.provisioning=provisioning;
     }
 
     static boolean allowed(String path) {
@@ -20,13 +25,19 @@ final class ReadinessBootstrapRoute {
 
     JsonObject post(String path,JsonObject body,String requestId)throws Exception {
         if(!allowed(path))throw new IllegalArgumentException("Unsupported readiness path");
+        if(provisioningSelected)return provisioning.post(path,body,requestId);
         if(relaySelected)return relay.post(path,body,requestId);
         try{return https.post(path,body,requestId);}
         catch(SSLException trustFailure){throw trustFailure;}
         catch(IOException unavailable){
             if(!path.endsWith("/challenge")&&!path.endsWith("/ack-challenge"))throw unavailable;
             relaySelected=true;
-            return relay.post(path,body,requestId);
+            try{return relay.post(path,body,requestId);}
+            catch(SSLException trustFailure){throw trustFailure;}
+            catch(FriendsReadinessProtocol.Unavailable relayUnavailable){
+                if(provisioning==null||!path.equals("/friends/restricted-readiness/challenge"))throw relayUnavailable;
+                provisioningSelected=true;return provisioning.post(path,body,requestId);
+            }
         }
     }
 }
