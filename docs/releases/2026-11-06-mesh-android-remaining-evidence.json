@@ -268,5 +268,65 @@
     "legacy-peer-bfff97d-1/manifest.json: NOT_QUALIFIED, symlink-path overlay was not compiled, unchanged digest",
     "legacy-preflight-bfff97d.log: clients before normal directory publication",
     "legacy-preflight2-bfff97d.log: GATEWAY_READ_UNAVAILABLE with non-root-owned driver; repaired by copying into owned private test root, not disabling custody"
-  ]
+  ],
+  "late_underlay_attempt_2": {
+    "27": {
+      "result": "FAIL",
+      "renderer": "GLES: Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti/PCIe/SSE2), OpenGL ES 3.1 (4.5.0 NVIDIA 580.178.04)",
+      "clock_observation": {
+        "host_before": 1793965102.8004367,
+        "host_after": 1793965102.8073318,
+        "guest": 1793965102
+      },
+      "installed_apk_sha256": "14eb9a94c4d428edc8271e35d4c5fbfd448ab4bb437fad09b7f7c0ec4d31300b",
+      "installed_native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+      "final_native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+      "owned_emulator_stopped": true,
+      "test_source": "6befd101627f51253760d74fbbcea8a5c86c9779",
+      "exit_code": 1,
+      "seconds": 300.139,
+      "receipt": "android-latedirect-gpu27-emulators2/api27-receipt.json",
+      "receipt_sha256": "c0105750666b9be10286e9c4ea992de8bb63ca6c602f1790b07ac3c56d8ee33c",
+      "log": "android-latedirect-gpu27-emulators2/api27-runtime.log",
+      "server": "android-latedirect-gpu27-2/server.json",
+      "server_cleanup": "processes-waited",
+      "first_failure": "SSLHandshakeException on underlay fixture state poll, before READINESS_HELD",
+      "cause": "both synthetic HTTPS route helpers report EMFILE at RLIMIT_NOFILE=1024; forwarding waits for client FIN after origin EOF",
+      "route_logs": [
+        "android-latedirect2-gpu27-origin.log",
+        "android-latedirect2-gpu27-gateway.log"
+      ]
+    },
+    "35": {
+      "result": "NOT_RUN",
+      "reason": "prepared stand stopped after API27 exposed adapter FD exhaustion; no Android execution",
+      "server": "android-latedirect-gpu35-2/server.json"
+    }
+  },
+  "route_eof_correction": {
+    "scope": "test-only HTTPS adapter; not production data plane or running G4",
+    "reproduction": {
+      "scope": "original-frozen-HTTP-adapter-EOF-reproduction",
+      "source": "6befd101627f51253760d74fbbcea8a5c86c9779",
+      "route_sha256": "8b9dd6dfd4450c1af2122244b8b7d14c4a6a008dee9f5fae9cbf7644b006560a",
+      "result": "REPRODUCED",
+      "upstream_eof": true,
+      "client_fin": false,
+      "forwarding_thread_alive": true,
+      "retained_connections": 2,
+      "not_product_failure": true,
+      "cleanup_thread_stopped": true
+    },
+    "regression": {
+      "command": "python3 -m pytest -q tests/test_android_core_route.py",
+      "result": "2 passed",
+      "log": "android-route-eof-guards.log",
+      "checks": [
+        "origin EOF releases handler even without client FIN",
+        "client half-close does not truncate origin response"
+      ]
+    },
+    "paired_android": "NOT_RUN_ON_CORRECTED_ADAPTER",
+    "original_api35_timeout": "retained FAIL; no EMFILE observed in its retained route logs, not declared fixed"
+  }
 }

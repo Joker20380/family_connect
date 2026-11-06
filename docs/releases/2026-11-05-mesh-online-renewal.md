@@ -1,5 +1,24 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Late-fixture EOF defect and bounded correction
+
+Corrected-underlay API27 on6befd10 **FAIL**,300.139s, before READINESS_HELD:
+`SSLHandshakeException / Connection reset by peer`. Both synthetic HTTPS adapters
+log `EMFILE` at1024 descriptors. The original adapter forwards upstream EOF as a
+half-close but waits indefinitely for client FIN, retaining two descriptors and a
+handler. A deterministic socket-pair reproduction against the actual frozen Handler
+confirms this; normal client close releases it. This explains the new underlay-run
+failure, not the earlier API35 VPN timeout (its route logs have no EMFILE evidence).
+
+Repair is restricted to `tests/android_core_route.py`: origin HTTP EOF terminates
+the forwarding pair, while client half-close still permits the complete response.
+Two targeted tests pass; no descriptor-limit/TTL/trust/security-timeout increase.
+The original failed logs/receipts and unused API35 preparation are retained; owned
+AVD/stands/routes stopped. New paired late receipts are required on the corrected
+adapter. The running G4 uses its separate frozen copy and is not modified or restarted.
+No new gateway package or production changes; A still open, B not started.
+[Reproduction and exact failures](2026-11-06-mesh-android-remaining-evidence.json).
+
 ## Legacy Android completed:6 November11:41UTC
 
 API27/API35 **PASS_LEGACY_PEER_ONLY** on teste5c20eb, packagebfff97d/archive5721a5c1,

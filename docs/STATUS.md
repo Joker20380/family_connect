@@ -11,6 +11,14 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Late-fixture root cause localized:** corrected-underlay API27 fails at300.139s
+before delivery because both synthetic HTTPS adapters exhaust1024 file descriptors.
+The frozen adapter reproduces two retained sockets/thread after origin EOF without
+client FIN. A test-only cleanup repair passes both EOF and half-close guards; paired
+Android qualification on it is still pending. API35 was not started on this adapter;
+both prepared stands are stopped. Original API35 VPN timeout remains separately open.
+G4's copied adapter/source/processes remain unchanged. A open; B not started.
+
 **6 November11:41UTC: legacy Android API27/API35 PASS, A still open.** Both actual
 HTTP/cache/owner/native cases retain the old bound, refuse an unauthenticated
 successor commit, close normally and allow only a separate explicit new Connect.

@@ -12,6 +12,12 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Current next:** qualify the corrected test-only HTTPS adapter with the remaining
+late-owner API27/API35 cases, one NVIDIA/KVM AVD at a time. Preserve the new API27
+EMFILE FAIL and deterministic EOF reproduction; do not rerun unchanged expectations
+blindly. Retain paired legacy PASS and the independent frozen G4 still running.
+A remains open and ANDROID-APP-VPN remains gated; earlier NEXTs are history.
+
 **One active next6 November11:41UTC:** retain paired legacy Android PASS; finish
 the corrected late-owner cases sequentially on NVIDIA/KVM, then reconcile the
 already-running frozen G4. Preserve original API35 timeout FAIL, original full-run

@@ -11,6 +11,34 @@ import threading
 import time
 
 
+def forward_http(request, upstream, record_bytes):
+    def copy(source, destination, response):
+        try:
+            while data := source.recv(65536):
+                destination.sendall(data)
+                record_bytes(len(data))
+        except OSError:
+            pass
+        finally:
+            try:
+                destination.shutdown(socket.SHUT_RDWR if response else socket.SHUT_WR)
+            except OSError:
+                pass
+
+    receiver = threading.Thread(target=copy, args=(upstream, request, True), daemon=True)
+    receiver.start()
+    try:
+        copy(request, upstream, False)
+        receiver.join(5)
+    finally:
+        for connection in (request, upstream):
+            try:
+                connection.shutdown(socket.SHUT_RDWR)
+            except OSError:
+                pass
+        receiver.join(5)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--role', choices=('gateway', 'origin'), required=True)
@@ -45,6 +73,10 @@ def main():
     def save():
         args.receipt.write_text(json.dumps(receipt)+'\n')
 
+    def record_bytes(count):
+        with lock:
+            receipt['bytes'] += count
+
     class Handler(socketserver.BaseRequestHandler):
         def handle(self):
             with socket.create_connection(target, timeout=5) as upstream:
@@ -53,29 +85,9 @@ def main():
                     connections.update((self.request, upstream))
                     receipt['accepted'] += 1
                     save()
-                def copy(source, destination):
-                    try:
-                        while data := source.recv(65536):
-                            destination.sendall(data)
-                            with lock:
-                                receipt['bytes'] += len(data)
-                    except OSError:
-                        pass
-                    finally:
-                        try:
-                            destination.shutdown(socket.SHUT_WR)
-                        except OSError:
-                            pass
-                receiver = threading.Thread(target=copy, args=(upstream, self.request), daemon=True)
-                receiver.start()
                 try:
-                    copy(self.request, upstream)
+                    forward_http(self.request, upstream, record_bytes)
                 finally:
-                    try:
-                        upstream.shutdown(socket.SHUT_RDWR)
-                    except OSError:
-                        pass
-                    receiver.join(5)
                     with lock:
                         connections.difference_update((self.request, upstream))
                         save()
