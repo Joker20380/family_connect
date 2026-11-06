@@ -2,6 +2,11 @@
 
 ## Current engineering priority / Текущий critical path
 
+**6 November20:05UTC operational refresh complete:** all AWG/TCP and both NL
+bootstrap services active. No runtime changes; active state alone does not close the
+automatic-renewal or sustained MESH gates. Selected work unchanged.
+[Measurements](releases/2026-11-06-vpn-health.md#2005utc-read-only-refresh).
+
 **Selected owner follow-up6 November: restore failed live MESH, not a new rollout.**
 Recovery and post-repair traffic are verified: ordinary fleet COMMIT, fresh signed
 materials/floor27274, both real Telemost/Family/mux paths, per-node DNS/verified HTTPS

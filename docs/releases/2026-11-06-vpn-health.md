@@ -1,5 +1,34 @@
 # VPN health — 6 November 2026
 
+## 20:05UTC read-only refresh
+
+Observed20:04:43–20:04:55UTC (21:05 Brussels), no production changes.
+
+| Metric | RU | AMS1 | AMS2 |
+| --- | --- | --- | --- |
+| CPU us+sy, three one-second samples | 3–70% | 19–34% | 2% |
+| Load1/5/15 | 1.53/1.48/1.53 | 1.45/1.03/0.86 | 0.02/0.14/0.16 |
+| RAM used/total MiB | 1188/1962 | 875/1914 | 421/1919 |
+| Available RAM MiB | 774 | 1038 | 1497 |
+| Root disk used/free | 71%/8.4G | 17%/39G | 16%/39G |
+| Configured AWG peers | 19 | 48 | 5 |
+| AWG handshakes180s/24h | 0/1 | 6/18 | 0/1 |
+| TCP443/8446 established sockets | 0/0 | 50/0 | 5/0 |
+
+AWG/TCP active on all nodes; both NL bootstrap services now active, sampled NRestarts0.
+RU bootstrap inactive as expected. Six recent AWG peers and55 TCP sockets are not a
+unique-person count; MESH application sessions not measured. Short CPU samples do not
+prove sustained saturation. AMS1 swap223MiB, sampled si up to32KiB/s/so16KiB/s,
+IO wait0–1%; RU swap915MiB with si/so0, IO wait0–3%. Disk cleanup gain retained.
+External RU8443 TLS validates (verify0), root404 is not application-health acceptance.
+
+This readback does not verify the next automatic credential-renewal transaction or
+new expiry, and does not repeat the earlier real MESH traffic tests. Do not infer
+renewal or sustained-stability acceptance from active services/NRestarts0 alone.
+No restart, repair, deletion, release or configuration change; rollback not applicable.
+No artifact/version readback. Prior repair and its remaining automatic-renewal gate
+remain separately documented below; isolated G4 resources and unrelated work untouched.
+
 ## Verified recovery and live traffic
 
 **Live repair complete in the measured scope,6 November14:22UTC.** This follows the

@@ -1,5 +1,10 @@
 # Текущее состояние / Current state
 
+**6 November20:05UTC — read-only refresh:** AWG/TCP active on all nodes and BOTH NL
+MESH bootstrap active/NRestarts0. Recent AWG peers0/6/0; TCP443 sockets0/50/5,
+not unique clients. RU disk71%/8.4GiB free. No runtime changes or automatic-renewal
+acceptance claim. [Snapshot](releases/2026-11-06-vpn-health.md#2005utc-read-only-refresh).
+
 **6 November14:22UTC: authorized live MESH repair verified on both NL.**
 Common ordinary renewal COMMITTED; fresh leaf/CRL expire17:58:13UTC, CRL floor27274.
 Both original recovery-start PIDs remain active/NRestarts0. Existing service identity
