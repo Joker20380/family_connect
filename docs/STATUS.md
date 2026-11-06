@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**6 November — separate beta113/API28 initial-connect field audit, source-only.**
+The owner's export16 summary first identifies a readiness challenge timeout before a
+recorded HTTP status, not a proved authorization rejection or RNS carrier block.
+Exact shipped d2882cd source and retained signed113 APK/relay asset are checked;
+64 scoped JVM cases, the existing network-handoff fixture and six Python bridge cases
+pass. Synthetic missing-cache failure stays BOOTSTRAP_UNAVAILABLE, not AUTH/INTERNAL.
+No persistent Network/SocketFactory is found; an in-flight prewarm can retain its
+chosen network, and first-eligible physical-network selection is not validation.
+The requested raw beta113/API28 export is unavailable locally: the similarly named
+export16 is beta65/API31 and excluded. Field root cause and later AUTH/INTERNAL remain
+unresolved. Next for this bounded case: obtain the correct export and one same-cellular
+warm/cold-client comparison, without clearing data. No APK, AVD, production or G4 action.
+[Source audit, evidence and comparison instructions](releases/2026-11-06-beta113-field16-bootstrap.md).
+The live-renewal watch and frozen G4 below retain their separate scope/status.
+
 **6 November14:22UTC: authorized live MESH repair verified on both NL.**
 Common ordinary renewal COMMITTED; fresh leaf/CRL expire17:58:13UTC, CRL floor27274.
 Both original recovery-start PIDs remain active/NRestarts0. Existing service identity
