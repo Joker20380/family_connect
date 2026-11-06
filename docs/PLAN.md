@@ -2,14 +2,16 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Owner-selected SUBSCRIPTION-ANDROID-3 — in progress, narrow ARM/ingress gate.**
-Preserve fixed APK119; enable only the compatible subscription read on the actual
-serving HTTP archive and exact HTTPS location. Prepared overlay/synthetic tests PASS;
-pending guarded API-only deployment and expressly authorized Redmi118→119 update,
-fresh own response, restart and duplicate refresh. No G4/common-writer/certificate,
-bootstrap, production payment or global publication change. Whitelist and earlier
-unrelated runtime gates stay open; no automatic successor.
-[Candidate and rollback](releases/2026-11-06-subscription-android-3.md).
+**Owner-selected SUBSCRIPTION-ANDROID-3 — narrow ARM/ingress gate complete.**
+Fixed119 installed in place over118 with explicit owner-phone consent; Redmi/API31
+receives fresh own non-cohort state from normal trusted HTTPS without VPN. Real encrypted
+restart/cache and subsequent response PASS; actual human Refresh requests confirmed.
+Serving archive overlay preserves every unrelated member; targeted deployment/readback
+and46 focused tests PASS. No paid row/event exists for this identity, so physical paid
+snapshot/notification/dedupe remains NOT_RUN; do not manufacture a payment to close it.
+No publication/merge or automatic successor. Whitelist/COLD_BOOTSTRAP_GAP, natural expiry,
+UI identity switch and prior mixed-network gate remain separate; G4/renewal untouched.
+[Installed candidate, evidence and rollback](releases/2026-11-06-subscription-android-3.md).
 
 **Owner-selected SUBSCRIPTION-ANDROID-2 — narrow task complete, ARM119 candidate retained.**
 Real UI/save/automatic delivery/notification/tap/dedupe passed on the isolated API35

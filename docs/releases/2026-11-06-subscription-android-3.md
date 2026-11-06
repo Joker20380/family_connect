@@ -1,5 +1,83 @@
 # SUBSCRIPTION-ANDROID-3 — narrow physical ARM and normal ingress
 
+## Final result18:00UTC — narrow path PASS, not full subscription qualification
+
+| Gate | Result | Actual evidence / limit |
+| --- | --- | --- |
+| Fixed ordinary ARM119 artifact | PASS | No rebuild; source `b2a37fe989294018ab08060bdebfa46d741d11d5`; installed base.apk matches `52a9847b74181c48808c86a0c5bf5925b53ef498eec628aef2d78d26f1c92d2d` |
+| Physical installation | PASS | Redmi Note9 Pro, Android12/API31,ARM64; actual118→119 same signer/UID/first-install, explicit owner consent, not a new install or a disposable test phone |
+| Identity/activation/settings retention | PASS | Same pre-update Support ID→registered device proof binding; normal activated ChatDeliveryService; Russian/Opus/P1 settings retained; not an exhaustive chat-history audit |
+| ARM startup / Chaquopy | PASS | Ordinary non-debug release process and real Python decoder/encrypted projection; no native/Chaquopy crash observed; no VPN-transport runtime claim |
+| Normal TLS + fresh own response without VPN | PASS | Release origin `https://185.251.89.19:8443`; verified production ingress; visible fresh answers17:45:23,17:51:17,17:55:35 and17:58:20UTC, correct non-cohort state, one-use own proof correlation |
+| Keystore / process restart | PASS |25910→stopped→26740; old confirmed17:45:23 cache shown with updating marker before17:51:17 fresh answer, without data/identity reset |
+| Human Refresh request | PASS | After user corrected an OK tap, new consumed own subscription challenges at17:56:02/09/15UTC, in addition to automatic screen-open17:55:35; no manual internal delivery invocation |
+| No false payment notice | PASS | Real non-cohort reply has no snapshot/event; UI does not claim unpaid/paid; active `chat:subscription:` notifications remain0 after refresh/restart |
+| Paid snapshot/event, physical notification/tap and event dedupe | NOT_RUN | This legitimate identity has no paid row or corresponding event. No fake payment/event was created. Prior API35 event evidence remains separate |
+| Backend compatibility / readonly protection | PASS |3 overlay +43 exact-runtime synthetic HTTP tests; all33 unrelated archive members and live protected paid/device/invite/grant rows unchanged |
+| Physical expired-paid identity without VPN | NOT_RUN | Only non-cohort identity used; expired-paid read passes synthetic actual-handler tests, not a new physical claim |
+| Hard whitelist / COLD_BOOTSTRAP_GAP | NOT_RUN | Ordinary Belgian LTE, no authorized hard-whitelist network. Separate task, not closed by this ingress check |
+
+The human refresh dialog was closed before the next text read; that read saw Settings,
+not its exact response body. Do not present it as a screenshot of the manual reply.
+Fresh consumed proofs demonstrate the requested live calls; subsequent ordinary reopen
+again displays a fresh validated answer17:58:20UTC. Thus the **non-cohort refresh path**
+is proven; deduplication of an actual payment/access event on this phone is NOT_RUN.
+
+Backend source differs from APK source deliberately: committed overlay tool
+`4053da47bb9d484bd87bb60884cf74ded17b6634` patches the actual accepted serving archive,
+not a checkout deployment of the feature branch. Runtime SHA256:
+`0fa13b0a92406c9d58043287e880b6533768d031f31e1de10059b9072eb6473e`.
+The previous archive and guarded nginx preimage remain for code-only rollback. Exactly
+one HTTP service restart and one nginx HUP were performed; no G4/container restart,
+certificate, common renewal, bootstrap or transport-enforcement change. Personal reads
+stay no-store and out of public notices. No proof/raw personal HTTP response was logged.
+
+No APK publication, mass update, tag, main merge or new version. Public113/catalog7
+and field118 distribution are not changed or requalified by this task; this explicitly
+authorized owner phone is now119. Device rollback is **not** uninstall/downgrade:
+retain identity/data and prepare a separately validated same-signer higher-code candidate
+if a client correction becomes necessary. No client correction was needed here.
+
+Events are still acquired only when opening subscription or pressing Refresh; durable
+save schedules existing delivery, normal startup can deliver already stored events.
+Closed-app payment does not cause new-event polling/push. A snapshot is not payment
+confirmation and latest-event read is not complete-history delivery.
+
+Remaining independent checks: legitimate paid-state/event on an authorized device when
+available (without inventing owner payment), hard whitelist, natural clock expiry,
+identity switch through UI and the prior mixed-network scenario. Physical offline
+matrix and other native VPN transports were not repeated. No new broad programme is
+opened. Safe hashes/results are in the [receipt](2026-11-06-subscription-android-3-receipt.json);
+raw support/UI/DB fingerprints stay ignored under
+`state-client-build/subscription-android-3/private/` with private directory permissions.
+
+## Physical restart / retained state
+
+Real force-stop removed process25910; no PID remained. New process26740 opened the
+existing subscription screen. Its first visible text still showed the previously
+confirmed18:45:23+01:00 snapshot with “Обновляем… До проверенного ответа показываем
+сохранённые данные.”, then a fresh server answer18:51:17+01:00. Thus this is a real
+Android Keystore/encrypted-store reopen, not an injected cached dictionary. No network
+toggle, key export, root, debug app, private-file extraction or preference edit was used.
+This is **online process-restart/cache** acceptance; a physical offline matrix was not
+repeated. The old snapshot was visibly distinguished from the fresh server answer.
+Server correlation after restart uses the same pre-update identity and a new consumed
+subscription proof. UI language Russian, ordinary Opus and MESH preferenceP1 match
+the pre-update settings; the activated delivery-service path, UID and first-install
+time are retained. This does not assert a bytewise audit of every chat/contact/history.
+
+Production read-only fingerprints before and after deployment/phone reads match for
+`devices`, `invites`, `restricted_grants`, `paid_beta_subscriptions`, `paid_beta_events`.
+Only normal authentication challenges/support observation may change; no test participant,
+payment, event, cohort, grant or certificate was created. Final actual HTTP runtime remains
+PID3482330/NRestarts0 with the candidate hash; nginx keeps the same master and candidate
+config hash. The task's unused nginx syntax-test file was removed, backups retained.
+
+The initial human tap was **OK**, which closes the dialog, not Refresh (explicitly
+corrected by the user). It is not counted as Refresh. Settings readback and expired
+challenge cleanup are not evidence of a new subscription response. The subscription
+window was reopened and the specific left-hand Refresh action requested again.
+
 ## Live checkpoint17:47UTC
 
 Prepared overlay source/tool checkpoint `4053da47bb9d484bd87bb60884cf74ded17b6634`

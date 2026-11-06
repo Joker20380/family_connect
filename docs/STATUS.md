@@ -1,15 +1,17 @@
 # Текущее состояние / Current state
 
-**6 November — SUBSCRIPTION-ANDROID-3 in progress; ingress overlay prepared.**
-Fixed signed ARM119 hash reverified; source `b2a37fe98929`, branch remote `ef2daa59`
-contains documentation only after that source. Serving HTTP `e2ed4ca6b41e` lacks
-subscription; normal verified HTTPS returns404. Minimal pinned archive overlay changes
-only challenge purpose/handler and adds the subscription reader;33 other members remain
-byte-identical, including paid/registration/MESH. Three overlay tests and43 exact-runtime
-synthetic HTTP tests PASS. No live deployment yet. Owner explicitly authorizes the
-connected Redmi Note9 Pro/API31 beta118→119 in-place check; baseline signature matches,
-public Support ID captured privately, VPN off. G4/main/renewal remain untouched.
-[Scope, rollback and remaining gates](releases/2026-11-06-subscription-android-3.md).
+**6 November — SUBSCRIPTION-ANDROID-3: narrow physical ARM/normal HTTPS path PASS.**
+Fixed signed ARM119 `52a9847b7418…`, source `b2a37fe98929`, installed118→119 on
+Redmi Note9 Pro/API31 after explicit owner-phone permission. Installed bytes/signature,
+UID/first-install/identity/activation retained. Normal trusted HTTPS without VPN returns
+fresh own **non-cohort** state; real process restart shows retained encrypted cache then
+fresh response. Human Refresh produces new consumed own proofs; no false payment notice.
+Minimal serving HTTP overlay `0fa13b0a9240…` deployed on RU/18086; exact ingress added,
+one HTTP restart and nginx graceful reload only. Other33 archive members and protected
+paid/device/invite/grant rows unchanged. Three overlay +43 exact-runtime tests PASS.
+No legitimate paid row/event for this identity: physical paid-state/event/notification
+dedupe NOT_RUN. No general APK publication, merge, G4/main/bootstrap/renewal change.
+[Evidence, rollback and explicit remaining gates](releases/2026-11-06-subscription-android-3.md).
 
 **6 November — SUBSCRIPTION-ANDROID-2 natural delivery PASS; signed ARM119 candidate built.**
 Isolated feature branch: actual UI Refresh/Home produces a canonical-event notification,
