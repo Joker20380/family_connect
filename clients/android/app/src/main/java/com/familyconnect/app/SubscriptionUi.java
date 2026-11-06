@@ -10,6 +10,8 @@ import com.google.gson.JsonObject;
 import java.time.ZoneId;
 
 final class SubscriptionUi {
+    private static volatile AlertDialog foregroundDialog;
+    static boolean visible(){return foregroundDialog!=null;}
     static SubscriptionPresentation.Text text(Context context){
         Context localized=AppLanguage.wrap(context);
         return (name,arguments)->localized.getString(localized.getResources().getIdentifier(name,"string",localized.getPackageName()),arguments);
@@ -37,13 +39,18 @@ final class SubscriptionUi {
             try{connected=new ChatNetworkAndroid(activity).available();}catch(SecurityException unavailable){}
             try{
                 dialog.setMessage(SubscriptionPresentation.summary(saved,connected,activity.getResources().getConfiguration().getLocales().get(0),ZoneId.systemDefault(),System.currentTimeMillis()/1000,text(activity)));
-                if(saved.has("notice")&&!saved.get("notice").isJsonNull()){
+                if(dialog.getWindow().getDecorView().hasWindowFocus()&&saved.has("notice")&&!saved.get("notice").isJsonNull()){
                     JsonArray ids=new JsonArray();ids.add(saved.getAsJsonObject("notice").get("id"));
                     ChatNotifications.cancel(activity,"subscription");
                     ChatRuntime.WORKER.execute(()->{try{ChatRuntime.mark(ChatRuntime.open(activity,false),"mark_events",ids,"read");}catch(Exception unavailable){}});
                 }
             }catch(Exception invalid){dialog.setMessage(activity.getString(R.string.subscription_unknown));}
         };
+        android.view.ViewTreeObserver.OnWindowFocusChangeListener focus=focused->{
+            if(focused){foregroundDialog=dialog;render.accept(displayed[0]);}
+            else if(foregroundDialog==dialog)foregroundDialog=null;
+        };
+        dialog.getWindow().getDecorView().getViewTreeObserver().addOnWindowFocusChangeListener(focus);
         Runnable refresh=()->{
             if(activity.isFinishing()||activity.isDestroyed()||!dialog.isShowing())return;
             SubscriptionRefreshGate.Request request=ChatRuntime.SUBSCRIPTION_REFRESH.begin();
@@ -58,7 +65,12 @@ final class SubscriptionUi {
         };
         dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setEnabled(false);
         dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(view->refresh.run());
-        dialog.setOnDismissListener(ignored->{var request=pending.getAndSet(null);if(request!=null)request.cancel();});
+        dialog.setOnDismissListener(ignored->{
+            if(foregroundDialog==dialog)foregroundDialog=null;
+            dialog.getWindow().getDecorView().getViewTreeObserver().removeOnWindowFocusChangeListener(focus);
+            var request=pending.getAndSet(null);if(request!=null)request.cancel();
+            ChatRuntime.deliverSavedNotifications(activity);
+        });
         ChatRuntime.WORKER.execute(()->{
             JsonObject cached=new JsonObject();
             try{cached=ChatRuntime.subscription(activity,ChatRuntime.open(activity,false));}catch(Exception unavailable){}

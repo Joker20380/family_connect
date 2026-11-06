@@ -27,7 +27,7 @@ public class SubscriptionRuntimeTest {
     private <Value> Value worker(Callable<Value> action)throws Exception{return ChatRuntime.WORKER.submit(action).get(40,TimeUnit.SECONDS);}
 
     @Before public void disposableOnly(){
-        assertEquals("com.familyconnect.app.subscriptiontest",context.getPackageName());
+        assertTrue(context.getPackageName().equals("com.familyconnect.app.subscriptiontest")||context.getPackageName().equals("com.familyconnect.app.subscriptionnatural.friends"));
         assertEquals("true",arguments.getString("fc_disposable"));
         assertTrue(android.os.Build.FINGERPRINT.contains("generic")||android.os.Build.MODEL.contains("sdk"));
         assertEquals("off",ConnectionService.status);
@@ -103,6 +103,50 @@ public class SubscriptionRuntimeTest {
     }
 
     @Test public void refreshOnly()throws Exception{refresh();}
+
+    @Test public void inspectNatural()throws Exception{
+        JsonObject view=worker(()->ChatRuntime.subscription(context,ChatRuntime.open(context,false)));
+        try(ControlIdentity identity=new FriendsIdentityVault(context).load()){
+            assertEquals(identity.reference(),view.getAsJsonObject("snapshot").get("device").getAsString());
+        }
+        verify(view);
+        JsonObject notice=view.getAsJsonObject("notice");
+        assertEquals(arguments.getString("read"),String.valueOf(notice.get("read").getAsBoolean()));
+        assertEquals(arguments.getString("notified"),String.valueOf(notice.get("notified").getAsBoolean()));
+    }
+
+    private AccessibilityNodeInfo findText(AccessibilityNodeInfo node,String text){
+        if(node==null)return null;
+        if(node.isVisibleToUser()&&text.contentEquals(node.getText()==null?"":node.getText()))return node;
+        for(int index=0;index<node.getChildCount();index++){
+            AccessibilityNodeInfo found=findText(node.getChild(index),text);if(found!=null)return found;
+        }
+        return null;
+    }
+
+    private AccessibilityNodeInfo scrollable(AccessibilityNodeInfo node){
+        if(node==null)return null;
+        if(node.isScrollable())return node;
+        for(int index=0;index<node.getChildCount();index++){
+            AccessibilityNodeInfo found=scrollable(node.getChild(index));if(found!=null)return found;
+        }
+        return null;
+    }
+
+    @Test public void recoverThroughUi()throws Exception{
+        context.startActivity(new Intent(context,FriendsActivity.class).putExtra("tab",3).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        AccessibilityNodeInfo button=null;long deadline=android.os.SystemClock.elapsedRealtime()+30000;
+        while(button==null&&android.os.SystemClock.elapsedRealtime()<deadline){
+            AccessibilityNodeInfo root=InstrumentationRegistry.getInstrumentation().getUiAutomation().getRootInActiveWindow();
+            button=findText(root,"Get access");
+            if(button==null){AccessibilityNodeInfo scroll=scrollable(root);if(scroll!=null)scroll.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD);}
+            Thread.sleep(500);
+        }
+        assertNotNull(button);assertTrue(button.performAction(AccessibilityNodeInfo.ACTION_CLICK));
+        var preferences=context.getSharedPreferences(FriendsActivity.class.getName(),Context.MODE_PRIVATE);
+        while(!preferences.getBoolean("activated",false)&&android.os.SystemClock.elapsedRealtime()<deadline)Thread.sleep(200);
+        assertTrue("Activation must come from real authenticated UI recovery",preferences.getBoolean("activated",false));
+    }
 
     @Test public void refreshAndScreen()throws Exception{refresh();screen();}
 

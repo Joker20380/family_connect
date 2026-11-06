@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**6 November — SUBSCRIPTION-ANDROID-2 natural delivery PASS; ARM119 build pending.**
+Isolated feature branch: actual UI Refresh/Home produces a canonical-event notification,
+real tap opens the right identity's subscription, repeat refresh does not repost.
+Fixed hidden-dialog read acknowledgement and connected durable save/resume to a bounded
+drain on existing WORKER; no background subscription fetch or new scheduler. Actual UI
+recovery starts the ordinary delivery service. Six Python guards +13 JVM checks PASS.
+Source candidate beta119/119, ordinary Friends ARM64; public113/catalog7 and field118
+unchanged. ARM source-bound native/build/signature gates pending at this checkpoint.
+[Scope, behavior and preserved limits](releases/2026-11-06-subscription-android-2.md).
+
 **6 November — SUBSCRIPTION-ANDROID-1: bounded API35 runtime PASS, not production acceptance.**
 Isolated `feature/subscription-status-20261106`, starting remote `34529b622594`:
 source checkpoint `934867678f99` pushed/remote-verified; same-hash APK reinstalled,

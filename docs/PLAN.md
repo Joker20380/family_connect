@@ -2,6 +2,13 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Owner-selected SUBSCRIPTION-ANDROID-2 — natural scenario PASS, finish ARM119 artifact.**
+Real UI/save/automatic delivery/notification/tap/dedupe passed on the isolated API35
+stand. Complete ordinary source-bound ARM64 Friends build, existing-key signature and
+artifact inspection; no publication/merge/owner-phone action. Preserve previous runtime
+limitations; no G4 continuation or hidden background acquisition.
+[Current task and gates](releases/2026-11-06-subscription-android-2.md).
+
 **Owner-selected SUBSCRIPTION-ANDROID-1 — bounded runtime complete6 November.**
 Independent feature worktree, not a G4 continuation. Source `934867678f99` pushed and
 remote-verified, own backend/AVD stopped; evidence retained. API35 NVIDIA/KVM diagnostic

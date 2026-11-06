@@ -132,7 +132,7 @@ if __name__ == '__main__':
     parser.add_argument('--action', choices=('normal', 'unsupported', 'unavailable', 'slow', 'active', 'snapshot-only', 'grace', 'expire', 'revoke', 'identity-revoked'))
     arguments = parser.parse_args()
     work = arguments.work.resolve()
-    assert work.name == 'subscription-android-1' and (work / 'private').is_dir()
+    assert work.name in ('subscription-android-1', 'subscription-android-2') and (work / 'private').is_dir()
     if arguments.operation == 'scenario':
         assert arguments.action
         scenario(work, arguments.action)

@@ -127,6 +127,13 @@ final class ChatRuntime {
             catch(Exception unavailable){outcome="unavailable";}
             finally{SUBSCRIPTION_REFRESH.finish(request);}
             result.addProperty("refresh_status",outcome);completion.accept(result);
+            if("current".equals(outcome)||"stale".equals(outcome))new android.os.Handler(android.os.Looper.getMainLooper()).post(()->deliverSavedNotifications(app));
+        });
+    }
+    static void deliverSavedNotifications(Context context){
+        Context app=context.getApplicationContext();
+        WORKER.execute(()->{
+            try{if(ChatLocalAndroid.hasState(app))deliverNotifications(app,open(app,false));}catch(Exception|LinkageError unavailable){}
         });
     }
     static JsonArray serviceEvents(Context context,ChatLocalAndroid chat)throws Exception{
@@ -153,7 +160,7 @@ final class ChatRuntime {
             }
             for(var entry:conversations.entrySet()){
                 String peer=entry.getKey();var messages=entry.getValue();
-                if(peer.equals(visiblePeer)||(peer.equals("subscription")&&"service".equals(visiblePeer))){ChatNotifications.cancel(context,peer);continue;}
+                if(peer.equals(visiblePeer)||(peer.equals("subscription")&&("service".equals(visiblePeer)||SubscriptionUi.visible()))){ChatNotifications.cancel(context,peer);continue;}
                 boolean fresh=false;for(JsonObject message:messages)fresh|=!message.get("notified").getAsBoolean()&&!(message.has("notification_suppressed")&&message.get("notification_suppressed").getAsBoolean());
                 if(!fresh)continue;
                 JsonObject latest=messages.get(messages.size()-1);latest.addProperty("unread",messages.size());

@@ -11,7 +11,7 @@ gradle.beforeProject { project ->
     project.buildDir = new File(work, 'android/' + project.name)
     project.afterEvaluate {
         if (project.name == 'app') {
-            project.android.buildTypes.debug.applicationIdSuffix = '.subscriptiontest'
+            project.android.buildTypes.debug.applicationIdSuffix = properties.fcSubscriptionNatural == 'true' ? '.subscriptionnatural.friends' : '.subscriptiontest'
             project.android.buildTypes.debug.manifestPlaceholders = [appLabel: 'SUBSCRIPTION TEST ONLY', launcherActivity: 'com.familyconnect.app.FriendsActivity']
             project.android.signingConfigs.debug.storeFile = new File(work, 'private/debug.keystore')
             def original = project.android.sourceSets.main.java.srcDirs.toList()

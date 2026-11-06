@@ -14,10 +14,11 @@ def main():
     parser.add_argument('--tools', type=Path, required=True)
     parser.add_argument('--work', type=Path, required=True)
     parser.add_argument('--lock-directory', type=Path, required=True)
+    parser.add_argument('--reuse-avd', type=Path)
     args = parser.parse_args()
-    assert args.work.is_absolute() and args.work.name == 'subscription-android-1'
+    assert args.work.is_absolute() and args.work.name in ('subscription-android-1', 'subscription-android-2')
     sdk = args.tools / 'android'
-    avd = args.work / 'avd'
+    avd = args.reuse_avd or args.work / 'avd'
     avd.mkdir(mode=0o700, exist_ok=True)
     environment = dict(os.environ, JAVA_HOME=str(args.tools / 'jdk'), ANDROID_HOME=str(sdk),
         ANDROID_SDK_ROOT=str(sdk), ANDROID_AVD_HOME=str(avd), ANDROID_USER_HOME=str(args.work / 'android-user'),
@@ -25,11 +26,14 @@ def main():
         __NV_PRIME_RENDER_OFFLOAD='1', __GLX_VENDOR_LIBRARY_NAME='nvidia')
     with emulator_slot(args.lock_directory):
         assert 'emulator-' not in subprocess.check_output(['/usr/bin/adb', 'devices'], text=True)
-        created = subprocess.run([str(sdk / 'cmdline-tools/latest/bin/avdmanager'), 'create', 'avd',
-            '-n', 'fc-subscription35', '-k', 'system-images;android-35;google_apis;x86_64', '-d', 'pixel_2'],
-            input='no\n', text=True, capture_output=True, env=environment, timeout=90)
-        (args.work / 'logs/avd-create.log').write_text(created.stdout + created.stderr)
-        assert created.returncode == 0, 'AVD creation failed'
+        if args.reuse_avd:
+            assert (avd / 'fc-subscription35.ini').is_file()
+        else:
+            created = subprocess.run([str(sdk / 'cmdline-tools/latest/bin/avdmanager'), 'create', 'avd',
+                '-n', 'fc-subscription35', '-k', 'system-images;android-35;google_apis;x86_64', '-d', 'pixel_2'],
+                input='no\n', text=True, capture_output=True, env=environment, timeout=90)
+            (args.work / 'logs/avd-create.log').write_text(created.stdout + created.stderr)
+            assert created.returncode == 0, 'AVD creation failed'
         with (args.work / 'logs/emulator.log').open('wb') as output:
             emulator = subprocess.Popen([str(sdk / 'emulator/emulator'), '-avd', 'fc-subscription35', '-port', '5672',
                 '-no-window', '-no-audio', '-no-snapshot', '-no-boot-anim', '-gpu', 'host', '-accel', 'on',
