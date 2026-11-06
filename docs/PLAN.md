@@ -8,16 +8,22 @@ validation/encrypted vault, existing Android source owner and actual native MESH
 This is a separate finite-locator source candidate, not an installed beta113 repair.
 No production locator/credentials are supplied; missed rotation fails closed. Known
 field-network uncertainty, G4 and other branches retain their independent state.
-**One next:** execute one real Android/Telemost cold provisioning vertical after G4
-releases its resources and an authorized test OAuth source is identified. Read-only
-preflight6 November17:55UTC finds all three G4 containers running/using resources;
-no competing AVD/heavy build is permitted. Current environment token absent, no
-production/private credentials read. Runtime, APK, locator, Connect latency and real
+**One next:** obtain the specifically authorized test OAuth entry through normal
+local vault authentication, then execute the same Android/Telemost cold provisioning
+vertical. The single18:23UTC readback finds G4 main exited0/Pid0 and both helpers
+stopped; its terminal receipt was not obtained, and G4 acceptance/cleanup remains
+with the main session. Do not poll or take over cleanup. The earlier17:55 resource
+block is superseded, not relabelled as a test PASS. KeePassXC is not running/no DBus
+owner; no unlocked session is available and no secret was read. Normal local owner
+authentication is still needed, not another authorization or a token in chat.
+Runtime, APK, locator, Connect latency and real
 DNS/HTTPS/egress are NOT_RUN. Existing JNI compilation and source/core PASS remain
 their own evidence, not Android/Telemost runtime or release acceptance. Preserve the
 KVM/NVIDIA requirement and the finite pre-Connect APK asset; missed-rotation recovery
 remains unimplemented. Proposed signed-file locator import is a contract only, not
-another authorized implementation task or automatic discovery.
+another authorized implementation task or automatic discovery. The owner explicitly
+excludes locator import, new discovery and other features from this test.
+[Authorized access follow-up](releases/2026-11-06-beta113-field16-bootstrap.md#authorized-vault-access-follow-up-6-november).
 [Eligibility receipt and remaining boundary](releases/2026-11-06-beta113-field16-bootstrap.md#androidtelemost-runtime-eligibility-6-november1755utc).
 [Implementation, limits and exact receipts](releases/2026-11-06-beta113-field16-bootstrap.md#bounded-provisioning-candidate).
 The earlier selected/proposed entries below record completed incident investigation,

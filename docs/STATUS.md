@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**6 November18:23UTC onward — cold provisioning: G4 resources released, vault access pending.**
+One authorized read-only snapshot finds the existing G4 main container exited0 at
+18:14:35UTC/Pid0 and both route helpers stopped (gateway1, origin0). Its waiter exit
+file contains0; the terminal receipt is absent at the inspected local path, so this
+branch does not declare G4 PASS or take over its cleanup. No second poll is performed.
+The owner now authorizes one specific local OAuth vault entry for this isolated test
+and newly created test rooms only. However, KeePassXC is not running and has no DBus
+owner; no unlocked KeePassXC session is available. The documented CLI route requires
+normal owner authentication in the protected local dialog, not credentials in chat.
+No vault entry/password/token was read, and no alternative secret source was queried.
+Android/Telemost remains **NOT_RUN**: no AVD, build, room, locator or temporary secret
+copy was created. Source remains cf419a1; no release/deployment or product change.
+**Next:** normal local vault authentication, then the already authorized bounded test;
+no repeated entry-use authorization, locator import or discovery implementation.
+[Access boundary and retained readback](releases/2026-11-06-beta113-field16-bootstrap.md#authorized-vault-access-follow-up-6-november).
+
 **6 November17:55UTC — Android/Telemost cold provisioning runtime NOT_RUN.**
 Read-only preflight of unchanged cf419a1 finds the three existing G4 containers still
 running and using resources. Under the explicit no-competing-AVD/build constraint,

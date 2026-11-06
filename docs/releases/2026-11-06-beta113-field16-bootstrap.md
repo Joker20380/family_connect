@@ -835,3 +835,58 @@ Stop on the first exhausted unchanged Connect budget; retain its stage/reason.
 Record latency from the actual Connect, not suite time. Field-network accessibility,
 controlled delivery and any permanent discovery decision remain subsequent,
 separately scoped work; no delivery is performed here.
+
+### Authorized vault access follow-up, 6 November
+
+**NOT_RUN / LOCAL_VAULT_AUTHENTICATION_REQUIRED**, not a provider rejection or an
+Android failure. Product source remains `cf419a150f261bc7d49d7211d9cebda980a8d593`;
+the existing branch starts this documentation-only continuation at `f860098`.
+The owner authorizes exactly one named local vault entry for this bounded test and
+new test rooms; its private entry path is not copied into Git. This authorization
+does not cover other entries, account OAuth changes, existing rooms, production,
+admission, subscriptions, catalogs or live services. No further permission to use
+that entry is required within this test; authentication and authorization differ.
+
+The one allowed G4 snapshot at **18:23:17.516730UTC** establishes:
+
+- `fc-mesh-full-core-bfff97d-c8eb8b9`: exited, Running=false, Pid0, ExitCode0,
+  FinishedAt `2026-11-06T18:14:35.056146808Z`; existing `.exit` file contains0.
+- Both existing route helpers are stopped: gateway exit1, origin exit0. The gateway
+  nonzero exit is retained, not described as successful cleanup.
+- No terminal receipt is found at the inspected local relative path
+  `state-client-build/mesh-core-runtime-20261105/full-core-bfff97d-c8eb8b9/full-core/progress.json`.
+  It is not searched for elsewhere or reread. Exit0/resource release alone is not a
+  final G4 acceptance receipt. Interpretation and cleanup stay with the main session.
+- No container restart/stop/removal, G4 source/profile/network/artifact change,
+  repeated poll, AVD or heavy build occurs in this continuation.
+
+A separate local process/session-metadata check finds KeePassXC **not running**, no
+KeePassXC DBus owner, and an available desktop session bus. A registered generic
+Secret Service is not evidence of an unlocked KeePassXC database: it is not queried
+for entries or used as a substitute. Local KeePassXC settings/cache presence is
+checked, but no KDBX contents, vault entry, password or token is read. CLI and Zenity
+are installed; the existing [protected local-input pattern](../vault-signing.ru.md)
+requires ordinary owner authentication. No password dialog is left waiting, no lock
+is bypassed, and no other credential location/process environment is searched.
+The observation does not establish that the database or selected entry is missing.
+
+Consequently there is no provider request, test room, APK, newly issued locator,
+Connect, Android measurement or runtime regression result. No temporary secret copy
+or owned runtime resource is created, so none needs removal. The original vault
+entry is unchanged. Previous source/core checks are not rerun or counted as runtime
+acceptance. Installed/public/invitation versions and catalogs are unchanged; there
+is no deployment or rollback action. Only sanitized documentation is checkpointed
+on the existing feature branch, preserving the unrelated dirty main checkout.
+
+**One next:** complete normal local vault authentication without sending credentials
+to chat, then run the previously agreed single isolated vertical with the existing
+finite pre-Connect locator, matching-ABI JNI, one NVIDIA/KVM AVD under the shared
+qualification lock and the same bounded runtime negatives/ACK checks. Protect the
+token from command arguments, logs, reports, APK/locator/client artifacts and Git;
+retire only this test's newly created resources and any temporary secret copies.
+Locator import, new discovery and additional product functions are explicitly out
+of scope. This is a blocked runtime checkpoint, not a release or acceptance PASS.
+
+Documentation validation: `check_public_docs.py` on STATUS, PLAN and this report
+passes3 files/305 links, no errors; sanitized JSON invariants and `git diff --check`
+pass. These checks do not exercise Android, Telemost or any external URL.
