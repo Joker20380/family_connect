@@ -64,7 +64,11 @@ public class OnlineReadinessRuntimeTest {
         }
     }
     private JsonObject fixtureControl(String action)throws Exception{
-        HttpsURLConnection request=(HttpsURLConnection)new java.net.URL("https://185.251.89.19:8443/qualification/"+action).openConnection();
+        return fixtureControl(action,false);
+    }
+    private JsonObject fixtureControl(String action,boolean underlay)throws Exception{
+        String url="https://185.251.89.19:8443/qualification/"+action;
+        HttpsURLConnection request=underlay?new ChatNetworkAndroid(context).openHttps(url):(HttpsURLConnection)new java.net.URL(url).openConnection();
         request.setConnectTimeout(10000);request.setReadTimeout(10000);
         try(InputStream input=request.getInputStream();ByteArrayOutputStream output=new ByteArrayOutputStream()){
             byte[] buffer=new byte[1024];int count;
@@ -260,9 +264,10 @@ public class OnlineReadinessRuntimeTest {
         }
     }
     private void lateClosedOwner(ControlIdentity identity,String gateway,long lease,long serviceOwner,long originalExpiry,Intent connect)throws Exception{
-        fixtureControl("connected"+Build.VERSION.SDK_INT);
+        fixtureControl("connected"+Build.VERSION.SDK_INT,true);
+        status("LATE_FIXTURE_CONTROL_ON_UNDERLAY",gateway,null);
         long deadline=SystemClock.elapsedRealtime()+600000;
-        while(!"READINESS_HELD".equals(fixtureControl("state").get("state").getAsString())){
+        while(!"READINESS_HELD".equals(fixtureControl("state",true).get("state").getAsString())){
             assertTrue("Real owner refresh deadline",SystemClock.elapsedRealtime()<deadline);
             assertEquals(serviceOwner,ConnectionService.sessionId);echo(lease);Thread.sleep(500);
         }
@@ -270,7 +275,7 @@ public class OnlineReadinessRuntimeTest {
         long closedOwner;
         synchronized(RestrictedVault.LOCK){
             completion=FriendsRestricted.renewal(context,gateway);
-            fixtureControl("response"+Build.VERSION.SDK_INT);
+            fixtureControl("response"+Build.VERSION.SDK_INT,true);
             awaitImportBlocked();status("LATE_HTTP_COMPLETED_IMPORT_PENDING",gateway,null);
             NativeRestricted.chatRelease(lease);
             context.startService(new Intent(context,ConnectionService.class).setAction("disconnect"));

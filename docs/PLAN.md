@@ -12,6 +12,11 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Execution refinement:** keep the original API35 data-path timeout open; decouple
+late-case fixture coordination via the existing underlay helper, without changing
+product delivery or assertions. Finish paired corrected late/legacy cases while
+the existing G4 runs; no new package or B. Earlier NEXTs below remain historical.
+
 **One active next11:13UTC: finish remaining A, not B.** Retain API27 late-owner PASS
 and API35's real control-route timeout FAIL; localize the latter without changing
 expectations. The explicit legacy fixture now passes native preflight, but paired

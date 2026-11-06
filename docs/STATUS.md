@@ -11,6 +11,12 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**Late-test coordination correction:** only its fixture-state HTTPS moves to the
+existing underlay helper; actual readiness and owner/native checks stay unchanged.
+The original API35 data-path timeout stays FAIL/unexplained, not silently retried
+or declared fixed. Corrected paired late receipts are pending; legacy runtime is
+running sequentially on NVIDIA/KVM. G4's frozen c8eb8b9 run remains independent.
+
 **6 November11:13UTC: G3 late API27 PASS, API35 FAIL; A remains open.** API27 proves
 HTTP/cache completion after owner close cannot resurrect the native lease; explicit
 new Connect succeeds separately. API35 stops before late delivery on a10s HTTPS

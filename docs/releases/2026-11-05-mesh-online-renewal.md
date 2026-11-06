@@ -2,6 +2,17 @@
 
 ## Remaining Android cases:6 November11:13UTC checkpoint
 
+**Follow-up test correction:** late-case coordination used the VPN data path to poll
+its fixture state every500ms. It now explicitly uses the existing `ChatNetworkAndroid`
+underlay HTTPS helper for `/qualification/*` only, independent of the owner it must
+close. Ordinary product readiness, validation/cache/owner/native delivery, native
+echo and the initial verified VPN HTTPS check are unchanged; no timeout/trust/clock
+or acceptance assertion is relaxed. Other scenarios keep their existing control
+path. This isolates test orchestration; it does **not** fix or explain the retained
+API35 fresh-TCP timeout, which remains an open Android data-path observation.
+Both late cases require new receipts on this corrected test source before a paired
+PASS claim. Legacy Android is running separately against the explicit negative peer.
+
 [Exact APK/native/server identities and receipts](2026-11-06-mesh-android-remaining-evidence.json).
 API27 late-closed-owner **PASS**,319.028s: actual HTTP completion reaches the locked
 cache import, normal Disconnect closes the owner, then validated encrypted-cache
