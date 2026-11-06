@@ -52,7 +52,8 @@ class Session:
                           'mark_inbox': ('ids', 'flag'), 'rename_contact': ('address', 'name'), 'service_events': (),
                           'edit_message': ('address','message_id','text'), 'queue_audio': ('address','audio'), 'audio': ('message_id',),
                           'queue_radio': ('address','audio','mode','confirmed'),
-                          'import_events': ('feed',), 'mark_events': ('ids', 'flag')}
+                          'import_events': ('feed',), 'mark_events': ('ids', 'flag'),
+                          'subscription_status': ('device',)}
             if operation not in signatures or type(data) is not dict or set(data) != set(signatures[operation]):
                 raise LocalError('invalid_input')
             if operation == 'preview_contact':

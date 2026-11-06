@@ -1,0 +1,122 @@
+"""Display-only projection of canonical paid_beta status/event records.
+
+This is not authentication or an entitlement source. The production recipient-bound
+paid-status/event transport is missing. Only a future authenticated adapter may call
+accept(); public notices, chat text, payment links and the JSON UI API must not.
+"""
+import re
+
+
+def require(condition):
+    if not condition:
+        raise ValueError('Invalid confirmed subscription')
+
+
+def instant(value):
+    require(type(value) is int and 0 <= value <= 253402300799)
+    return value
+
+
+def recipient(device):
+    require(type(device) is str and re.fullmatch('[0-9a-f]{32}', device) is not None)
+    return device
+
+
+def snapshot(status, device):
+    recipient(device)
+    require(type(status) is dict and type(status.get('schema')) is int and status['schema'] == 1)
+    require(status.get('device') == device and status.get('cohort') is True)
+    row = status.get('subscription')
+    require(type(row) is dict and row.get('device') == device)
+    require(type(row.get('version')) is int and 1 <= row['version'] <= 2147483647)
+    event_id = row.get('last_event_id')
+    require(type(event_id) is str and re.fullmatch('[A-Za-z0-9_-]{8,128}', event_id) is not None)
+    states = {'trial', 'active', 'grace', 'expired', 'revoked'}
+    require(row.get('state') in states and status.get('effective_state') in states)
+    require(type(status.get('paid_allow')) is bool)
+    result = {name: row[name] for name in ('device', 'version', 'last_event_id', 'state')}
+    for name in ('period_start', 'paid_until', 'updated_at'):
+        result[name] = instant(row.get(name))
+    require(result['period_start'] < result['paid_until'])
+    result['grace_until'] = row.get('grace_until')
+    if result['grace_until'] is not None:
+        require(instant(result['grace_until']) >= result['paid_until'])
+    result['effective_state'] = status['effective_state']
+    result['entitlement_until'] = status.get('entitlement_until')
+    if status['paid_allow']:
+        require(status['effective_state'] in ('trial', 'active', 'grace'))
+        require(status['effective_state'] == row['state'])
+        boundary = result['grace_until'] if row['state'] == 'grace' else result['paid_until']
+        require(instant(result['entitlement_until']) == boundary)
+    else:
+        require(status['effective_state'] in ('expired', 'revoked') and result['entitlement_until'] is None)
+    return result
+
+
+def event_projection(event, current):
+    require(type(event) is dict and event.get('result') == 'APPLIED')
+    for name, field in (('event_id', 'last_event_id'), ('device', 'device'), ('new_state', 'state'),
+                        ('period_start', 'period_start'), ('paid_until', 'paid_until'),
+                        ('grace_until', 'grace_until'), ('applied_at', 'updated_at')):
+        require(event.get(name) == current[field])
+    require(instant(event.get('occurred_at')) == current['updated_at'])
+    kind = event.get('event_type')
+    require(kind in ('payment', 'grace', 'expire', 'revoke'))
+    require(event['new_state'] == {'payment': 'active', 'grace': 'grace', 'expire': 'expired', 'revoke': 'revoked'}[kind])
+    require('previous_state' in event and event['previous_state'] in (None, 'trial', 'active', 'grace', 'expired', 'revoked'))
+    return {name: event[name] for name in ('event_id', 'event_type', 'occurred_at', 'previous_state')}
+
+
+def accept(previous, status, *, device, confirmed_at, event=None):
+    """Consume trusted backend evidence, never a UI action or public service notice."""
+    current = snapshot(status, device)
+    instant(confirmed_at)
+    require(confirmed_at >= current['updated_at'])
+    incoming = event_projection(event, current) if event is not None else None
+    old = previous['snapshot'] if previous is not None else None
+    if old is not None:
+        require(old['device'] == device)
+        if current['version'] < old['version']:
+            return previous
+        if current['version'] == old['version']:
+            mutable = {'effective_state', 'entitlement_until'}
+            require({key: value for key, value in current.items() if key not in mutable}
+                    == {key: value for key, value in old.items() if key not in mutable})
+            if confirmed_at < previous['confirmed_at']:
+                return previous
+            if confirmed_at == previous['confirmed_at']:
+                require(current == old)
+            if old['effective_state'] in ('expired', 'revoked'):
+                require(current['effective_state'] == old['effective_state'])
+        else:
+            require(confirmed_at >= previous['confirmed_at'] and current['last_event_id'] != old['last_event_id'])
+    same = old is not None and old['version'] == current['version']
+    saved_event = previous['event'] if same else None
+    if saved_event is not None and incoming is not None:
+        require(saved_event == incoming)
+    notice = previous['notice'] if same else None
+    if incoming is not None and saved_event is None:
+        kind = incoming['event_type']
+        if kind == 'payment':
+            kind = 'activated' if incoming['previous_state'] is None else 'confirmed'
+            if old is not None and not same and current['paid_until'] > max(old['paid_until'], old['grace_until'] or 0):
+                kind = 'renewed'
+        notice = dict(id='subscription:' + str(current['version']) + ':' + current['last_event_id'],
+                      kind='subscription', subscription_event=kind, created=incoming['occurred_at'],
+                      author='Family Connect', read=False, notified=False)
+    return dict(snapshot=current, confirmed_at=confirmed_at, event=incoming or saved_event, notice=notice)
+
+
+def view(record, device, now):
+    recipient(device)
+    if record is None or record['snapshot']['device'] != device:
+        return dict(snapshot=None, confirmed_at=None, notice=None)
+    result = dict(snapshot=dict(record['snapshot']), confirmed_at=record['confirmed_at'], notice=None)
+    if record['notice'] is not None:
+        notice = dict(record['notice'])
+        boundary = record['snapshot']['entitlement_until']
+        confirmation = notice['subscription_event'] in ('activated', 'renewed', 'confirmed', 'grace')
+        notice['notification_suppressed'] = (now - notice['created'] > 86400 or
+            confirmation and (boundary is None or now >= boundary))
+        result['notice'] = notice
+    return result

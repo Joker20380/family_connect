@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**6 November — isolated subscription client checkpoint (not installed/qualified).**
+Owner-requested parallel `ANDROID-CONTROLLED-BETA / SUBSCRIPTION-CLIENT-VIEW`, branch
+`feature/subscription-status-20261106`: cached confirmed status/time, RU/EN access UI,
+local backend-event projection, revision/replay fences and existing notification-channel
+navigation implemented.32 focused Python checks and10 presentation JVM tests PASS.
+**Live integration remains BLOCKED:** authenticated device status exposes registration
+only; private paid status/events have no recipient-bound client delivery contract.
+The adapter seam is unbound, no invented endpoint or payment-success inference.
+Source remains Android118; no APK/build/install/publication/version or enforcement change.
+G4 is independent and untouched; its next step and acceptance are not changed here.
+[Scope, exact gap, tests and deferred gates](releases/2026-11-06-subscription-client-view.md).
+
 **5 November11:29UTC — read-only VPN check:** all AWG/TCP and both NL bootstrap
 active; CPU RU9–25%, AMS1 19–21%, AMS2 16–18%. RU disk70%/8.5GiB free.
 Recent AWG peers1/5/1, TCP443/8446 sockets0; not unique users. RU steal briefly11%.

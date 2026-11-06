@@ -275,6 +275,19 @@ class Store:
                 "SELECT id FROM records WHERE id LIKE 'notice:%' ORDER BY rowid").fetchall()]
             return [event for event in events + notices if event['expires'] > time.time()]
 
+    def accept_confirmed_subscription(self, status, *, device, confirmed_at, event=None):
+        """Unbound trusted-adapter seam; deliberately absent from every wire/UI API."""
+        from .subscription_view import accept
+        with self._lock, self._db:
+            previous = self._get('subscription-view')
+            current = accept(previous, status, device=device, confirmed_at=confirmed_at, event=event)
+            self._put('subscription-view', current)
+
+    def subscription_status(self, device):
+        from .subscription_view import view
+        with self._lock:
+            return view(self._get('subscription-view'), device, time.time())
+
     def service_mark(self, ids, flag):
         if flag not in ('read', 'notified') or type(ids) is not list or len(ids) > 1000 or any(type(i) is not str for i in ids):
             raise ValueError('Invalid service update')
@@ -285,6 +298,11 @@ class Store:
                     event[flag] = True
                     if flag == 'read': event['notified'] = True
             self._put('service-events', events)
+            subscription = self._get('subscription-view')
+            if subscription is not None and subscription['notice'] is not None and subscription['notice']['id'] in ids:
+                subscription['notice'][flag] = True
+                if flag == 'read': subscription['notice']['notified'] = True
+                self._put('subscription-view', subscription)
             for row in self._db.execute("SELECT id FROM records WHERE id LIKE 'notice:%'").fetchall():
                 event = self._get(row[0])
                 if event['id'] in ids:

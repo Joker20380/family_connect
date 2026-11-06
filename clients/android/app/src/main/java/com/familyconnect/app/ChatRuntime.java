@@ -21,6 +21,7 @@ final class ChatRuntime {
     static volatile int unread;
     static volatile long eventsRevision;
     static volatile boolean eventsUnavailable;
+    private static String subscriptionMarker;
     static String configuredRoute(){ChatCarrier current=carrier;return attached&&current!=null?current.route():"—";}
     static ChatLocalAndroid open(Context context,boolean create)throws Exception{
         if(owner==null)owner=ChatLocalAndroid.open(context,create);
@@ -91,6 +92,22 @@ final class ChatRuntime {
     static void mark(ChatLocalAndroid chat,String operation,JsonArray ids,String flag)throws Exception{
         JsonObject args=new JsonObject();args.add("ids",ids);args.addProperty("flag",flag);chat.call(operation,args);
     }
+    static JsonObject subscription(Context context,ChatLocalAndroid chat)throws Exception{
+        try(ControlIdentity identity=new FriendsIdentityVault(context).load()){
+            JsonObject args=new JsonObject();args.addProperty("device",identity.reference());
+            return chat.call("subscription_status",args).getAsJsonObject();
+        }
+    }
+    static JsonArray serviceEvents(Context context,ChatLocalAndroid chat)throws Exception{
+        JsonArray events=chat.call("service_events",new JsonObject()).getAsJsonArray();
+        try{
+            JsonObject view=subscription(context,chat);
+            String marker=view.get("notice").toString();
+            if(!marker.equals(subscriptionMarker)){subscriptionMarker=marker;eventsRevision++;}
+            if(!view.get("notice").isJsonNull())events.add(view.get("notice"));
+        }catch(Exception unavailable){}
+        return events;
+    }
     static void deliverNotifications(Context context,ChatLocalAndroid chat)throws Exception{
         int count=0;java.util.Map<String,String> names=new java.util.HashMap<>();
         for(JsonElement item:chat.call("contacts",new JsonObject()).getAsJsonArray()){JsonObject card=item.getAsJsonObject();if(card.has("name"))names.put(card.get("address").getAsString(),card.get("name").getAsString());}
@@ -98,14 +115,14 @@ final class ChatRuntime {
             boolean service=operation.equals("service_events");
             JsonArray posted=new JsonArray();
             java.util.Map<String,java.util.List<JsonObject>> conversations=new java.util.LinkedHashMap<>();
-            for(JsonElement item:chat.call(operation,new JsonObject()).getAsJsonArray()){
+            for(JsonElement item:service?serviceEvents(context,chat):chat.call(operation,new JsonObject()).getAsJsonArray()){
                 JsonObject message=item.getAsJsonObject();if(message.get("read").getAsBoolean())continue;
-                String peer=service?"service":message.get("peer").getAsString();
+                String peer=service?(message.has("subscription_event")?"subscription":"service"):message.get("peer").getAsString();
                 conversations.computeIfAbsent(peer,ignored->new java.util.ArrayList<>()).add(message);count++;
             }
             for(var entry:conversations.entrySet()){
                 String peer=entry.getKey();var messages=entry.getValue();
-                if(peer.equals(visiblePeer)){ChatNotifications.cancel(context,peer);continue;}
+                if(peer.equals(visiblePeer)||(peer.equals("subscription")&&"service".equals(visiblePeer))){ChatNotifications.cancel(context,peer);continue;}
                 boolean fresh=false;for(JsonObject message:messages)fresh|=!message.get("notified").getAsBoolean()&&!(message.has("notification_suppressed")&&message.get("notification_suppressed").getAsBoolean());
                 if(!fresh)continue;
                 JsonObject latest=messages.get(messages.size()-1);latest.addProperty("unread",messages.size());

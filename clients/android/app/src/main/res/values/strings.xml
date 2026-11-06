@@ -1,4 +1,28 @@
 <resources>
+    <string name="subscription_title">Subscription and access</string>
+    <string name="subscription_loading">Reading the last confirmed status…</string>
+    <string name="subscription_unknown">No confirmed subscription status is available. Device activation does not confirm payment.</string>
+    <string name="subscription_refresh_unavailable">The service does not yet provide subscription updates to this app. The current status cannot be confirmed.</string>
+    <string name="subscription_offline">No connection to refresh the status. Last confirmed information is retained; a network error does not mean unpaid access.</string>
+    <string name="subscription_last_state">Last confirmed status: %1$s</string>
+    <string name="subscription_checked">Confirmed at: %1$s</string>
+    <string name="subscription_until">Access until: %1$s</string>
+    <string name="subscription_last_until">Last confirmed period end: %1$s</string>
+    <string name="subscription_clock">The device clock is earlier than the confirmation. Check the date and time.</string>
+    <string name="subscription_period_elapsed">The last confirmed period has ended according to the device clock. Any renewal is not yet confirmed here.</string>
+    <string name="subscription_renewal_required">The last confirmed status requires renewal for continued access.</string>
+    <string name="subscription_last_event">Last backend event: %1$s</string>
+    <string name="subscription_state_active">Active</string>
+    <string name="subscription_state_trial">Trial access</string>
+    <string name="subscription_state_grace">Grace period</string>
+    <string name="subscription_state_expired">Ended</string>
+    <string name="subscription_state_revoked">Access revoked</string>
+    <string name="subscription_event_activated">Access activation confirmed by the service.</string>
+    <string name="subscription_event_renewed">Access extension confirmed by the service.</string>
+    <string name="subscription_event_confirmed">Access confirmed by the service.</string>
+    <string name="subscription_event_grace">Grace period confirmed by the service. Renewal is required.</string>
+    <string name="subscription_event_expire">The service confirmed that access has ended. Renewal is required.</string>
+    <string name="subscription_event_revoke">The service confirmed that access has been revoked.</string>
     <string name="tagline">Connectivity for your family</string>
     <string name="off">VPN is off</string><string name="on">Tunnel is on</string>
     <string name="connecting">Connecting…</string><string name="connect">Connect</string><string name="disconnect">Disconnect</string>

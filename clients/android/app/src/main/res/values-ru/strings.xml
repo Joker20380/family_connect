@@ -1,4 +1,28 @@
 <resources>
+    <string name="subscription_title">Подписка и доступ</string>
+    <string name="subscription_loading">Читаем последнее подтверждённое состояние…</string>
+    <string name="subscription_unknown">Нет подтверждённых данных о подписке. Активация устройства не подтверждает оплату.</string>
+    <string name="subscription_refresh_unavailable">Сервис пока не передаёт обновления подписки в приложение. Актуальное состояние подтвердить нельзя.</string>
+    <string name="subscription_offline">Нет связи для обновления статуса. Последние подтверждённые данные сохранены; ошибка сети не означает отсутствие оплаты.</string>
+    <string name="subscription_last_state">Последнее подтверждённое состояние: %1$s</string>
+    <string name="subscription_checked">Подтверждено: %1$s</string>
+    <string name="subscription_until">Доступ до: %1$s</string>
+    <string name="subscription_last_until">Конец последнего подтверждённого периода: %1$s</string>
+    <string name="subscription_clock">Часы устройства показывают время раньше подтверждения. Проверьте дату и время.</string>
+    <string name="subscription_period_elapsed">По часам устройства последний подтверждённый период закончился. Возможное продление здесь ещё не подтверждено.</string>
+    <string name="subscription_renewal_required">По последнему подтверждению для дальнейшего доступа требуется продление.</string>
+    <string name="subscription_last_event">Последнее событие сервиса: %1$s</string>
+    <string name="subscription_state_active">Действует</string>
+    <string name="subscription_state_trial">Пробный доступ</string>
+    <string name="subscription_state_grace">Льготный период</string>
+    <string name="subscription_state_expired">Завершена</string>
+    <string name="subscription_state_revoked">Доступ отозван</string>
+    <string name="subscription_event_activated">Сервис подтвердил активацию доступа.</string>
+    <string name="subscription_event_renewed">Сервис подтвердил продление доступа.</string>
+    <string name="subscription_event_confirmed">Сервис подтвердил доступ.</string>
+    <string name="subscription_event_grace">Сервис подтвердил льготный период. Требуется продление.</string>
+    <string name="subscription_event_expire">Сервис подтвердил окончание доступа. Требуется продление.</string>
+    <string name="subscription_event_revoke">Сервис подтвердил отзыв доступа.</string>
     <string name="tagline">Связь для вашей семьи</string>
     <string name="off">VPN выключен</string><string name="on">Туннель включён</string>
     <string name="connecting">Подключение…</string><string name="connect">Подключить</string><string name="disconnect">Отключить</string>

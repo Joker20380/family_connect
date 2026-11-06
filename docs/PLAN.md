@@ -2,6 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Independent owner-requested parallel subtask6 November — SUBSCRIPTION-CLIENT-VIEW**
+under `ANDROID-CONTROLLED-BETA`, not a replacement for the existing G4 critical path.
+Isolated source checkpoint: last confirmed status/period, RU/EN UI, durable event
+dedupe/order fencing and existing notifications/navigation;32 focused Python +10 JVM PASS.
+Dependencies reused: canonical paid_beta records, Friends identity, encrypted chat store,
+ChatRuntime/ChatNotifications. **Missing dependency:** recipient-authenticated client paid
+snapshot/event delivery with an ordering/freshness boundary; existing registration status
+and public notices cannot provide it. No backend endpoint/schema/protocol was invented.
+Completion gate remains OPEN: separately agree/bind that contract, review/merge the branch,
+then Android Keystore/restart, permission, cold/warm notification navigation and offline/time
+runtime checks when resources are free. No automatic continuation, G4 action, native rebuild,
+release or deployment is authorized by this entry.
+[Checkpoint and test commands](releases/2026-11-06-subscription-client-view.md).
+
 **5 November11:29UTC operational readback complete:** all ordinary VPN services
 and both NL bootstrap active; seven recent AWG peers, no sampled TCP443/8446 sockets.
 No implementation priority change or stability acceptance. RU disk gain retained;
