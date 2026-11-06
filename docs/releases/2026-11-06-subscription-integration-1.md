@@ -95,6 +95,9 @@ exercising any route.
 
 ### Hosted integration checks and reference boundary
 
+Integration-specific follow-up `551ec12e295da053935c9bc4ceb3df5cdebc281e`
+was pushed and remote-verified; no force push or skipped CI.
+
 Initial PR CI exposed a missing **explicit source adaptation record** for the two
 shared messenger files changed by subscription. Fixed using the existing
 `local_adaptations` mechanism, not by replacing original accepted106 hashes:
@@ -117,6 +120,37 @@ remaining repository checks, prevents an unqualified merge. The old broken globa
 documentation anchor is also retained as a known base failure, not hidden by narrowing
 the reported result. No G4 readback, restart or heavy local rebuild was used to diagnose
 either failure. The original failed CI runs remain visible.
+
+The initial phase0/control/failover fixture preparation also attempted to feed an
+immutable historical HTTP source into the **current** packager, which requires newer
+ingress templates. Corrected `ci_release_fixtures.historical_http` to execute the
+builder from the pinned historical source in an isolated subprocess and still enforce
+the unchanged historical archive SHA
+`460e75205eb9baff313dc7dd963cdb7bceddf2d1e13405a71686f9ec6c976d71`.
+Current HTTP fixtures continue to use the current strict builder; missing current
+subscription sources/configuration are not silently tolerated. Regression checks
+build the actual old archive with neither newer template present.8 targeted checks
+PASS/1 local-nginx skip (fixture guards, packaged subscription path, committed bundle).
+No historical source, accepted hash, workflow exclusion or runtime dependency changed.
+
+Other initial CI outcomes, retained rather than silently waived:
+
+| Check | Result / concrete gate |
+| --- | --- |
+| Android Friends readiness wire contract, PR42270131114 | PASS on first integration source |
+| Linux voice, PR42270131035 | Initial FAIL: two messenger reference assertions; explicit adaptation fix and38 scoped tests recorded above, hosted rerun required |
+| phase0/control fixture preparation | Initial FAIL: missing gateway-selection template in historical source; pinned-builder fix above, hosted rerun required |
+| Messenger prototype, PR42270130971 | FAIL:22 existing bridge/carrier tests still call the4-argument Session constructor, while main already requires platform/version;200 tests pass |
+| Linux internal candidate, PR42270131107 | FAIL:44 unchanged-main carrier source/reference mismatches; not subscription code |
+| All-documents link check | FAIL: unchanged main phase22 anchor; changed documents PASS |
+
+Both failing messenger test files and the required6-argument constructor are verified
+against main41b4e6e; subscription adds methods, not these constructor arguments. This
+task does not repair unrelated main tests or declare a desktop baseline accepted.
+**Merge remains NOT_DONE.** Prepared PR1 must receive a green applicable CI result
+after the existing main source-reference/test gates are resolved through the normal
+review process. Any latest running checks are not recorded as PASS. No auto-merge,
+main update or protection/check bypass has been attempted.
 
 ## Android provenance and retained acceptance
 

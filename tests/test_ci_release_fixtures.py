@@ -68,3 +68,15 @@ def test_sync_fixture_normalization_is_deterministic(tmp_path):
         fixtures.normalize_zip(path)
         results.append(hashlib.sha256(path.read_bytes()).hexdigest())
     assert results[0] == results[1]
+
+
+def test_historical_http_uses_pinned_builder_not_current_ingress_inputs(tmp_path):
+    source = tmp_path / 'historical'
+    fixtures.extract(fixtures.git('archive', fixtures.HISTORICAL), source)
+    assert not (source / 'deploy/friends/subscription-location.conf').exists()
+    assert not (source / 'deploy/friends/gateway-selection-location.conf').exists()
+    output = tmp_path / 'bundle'
+    fixtures.historical_http(output, source)
+    assert fixtures.digest(output / 'friends-http.pyz') == fixtures.HISTORICAL_SHA
+    with zipfile.ZipFile(output / 'friends-http.pyz') as archive:
+        assert 'control/friends/subscription.py' not in archive.namelist()

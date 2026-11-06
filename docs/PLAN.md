@@ -12,6 +12,9 @@ PR1 prepared; package/authentication tests pass. Resolve the existing main share
 reference gate through its own provenance review before merge; do not silently update
 44 carrier hashes or expand this task into desktop/native qualification. No auto-merge
 on incomplete/red checks, production action or automatic successor task.
+The other concrete base gates are obsolete4-argument messenger bridge fixtures and
+the pre-existing global documentation anchor. Subscription packaging/adaptation fixes
+are prepared; resolve base gates separately and rerun applicable CI before merging.
 [Task evidence and completion gate](releases/2026-11-06-subscription-integration-1.md).
 
 **Selected6 November: separate beta113/API28 field bootstrap diagnosis, not G4.**

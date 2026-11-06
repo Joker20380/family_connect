@@ -9,6 +9,9 @@ PR1/source `a71de948dd47` pushed and remote-verified;71 scoped +6 committed-pack
 checks PASS. CI exposes unchanged-main shared106 carrier reference drift (44 files);
 do not bypass it or rewrite the accepted baseline. Subscription-specific messenger
 adaptation metadata corrected separately;38 focused checks PASS. No main merge yet.
+Pinned historical HTTP fixture builder corrected (old hash preserved);8 targeted
+checks PASS/1 nginx skip. Existing main bridge tests also omit required platform/version;
+full hosted CI is not green. Leave PR1 open for normal gate resolution, not auto-merge.
 [Integration evidence and next paid/event prerequisites](releases/2026-11-06-subscription-integration-1.md).
 
 **6 November — beta113 cold bootstrap gap reproduced; not a field-network diagnosis.**

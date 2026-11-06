@@ -66,6 +66,13 @@ def normalize_zip(path):
             archive.writestr(entry, raw)
 
 
+def historical_http(output, source):
+    subprocess.run([sys.executable, '-I', str((source / 'scripts/package_friends_http.py').resolve()),
+                    '--output', str(output.resolve())], cwd=source, capture_output=True, check=True, timeout=30)
+    if digest(output / 'friends-http.pyz') != HISTORICAL_SHA:
+        raise ValueError('Historical fixture pin mismatch')
+
+
 def prepare(output, go, historical_archive=None):
     sys.path.insert(0, str(ROOT))
     from scripts.package_friends_http import build as http
@@ -85,7 +92,7 @@ def prepare(output, go, historical_archive=None):
         hashes['restricted-sync.pyz'] = digest(output / 'sync/restricted-sync.pyz')
         (output / 'sync/sha256.json').write_text(json.dumps(hashes, indent=2) + '\n')
         readiness(output / 'readiness', source, head, go)
-        http(output / 'historical-http', historical)
+        historical_http(output / 'historical-http', historical)
     if digest(output / 'historical-http/friends-http.pyz') != HISTORICAL_SHA:
         raise ValueError('Historical fixture pin mismatch')
     files = {str(path.relative_to(output)): digest(path) for path in sorted(output.rglob('*')) if path.is_file()}
