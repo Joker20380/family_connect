@@ -12,6 +12,11 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**One current next12:05UTC:** finish API35 late-owner runtime with the corrected
+owned modem-loopback prerequisite; retain paired legacy and corrected API27 PASS.
+Keep the same network-service/clock/NVIDIA gates and preserve all earlier FAILs.
+Then reconcile existing G4; do not duplicate it or start B before accepted A.
+
 **Current next:** qualify the corrected test-only HTTPS adapter with the remaining
 late-owner API27/API35 cases, one NVIDIA/KVM AVD at a time. Preserve the new API27
 EMFILE FAIL and deterministic EOF reproduction; do not rerun unchanged expectations

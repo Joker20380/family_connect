@@ -1,5 +1,28 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Corrected late API27 and API35 setup boundary:6 November12:05UTC
+
+API27 on af39bc7 **PASS_LATE_CLOSED_OWNER_ONLY**,333.565s, with actual HTTP/cache
+completion after owner closure and a separate successful new Connect. The corrected
+HTTP route observes at most6 descriptors across29 samples, instead of EMFILE.
+Original296cd55 PASS and6befd10 FAIL remain separate receipts. All its owned runtime
+resources are cleaned up; normal package/native hashes are unchanged.
+
+API35 af39bc7 has **setup FAIL, Android scenario NOT_RUN**: the unchanged60s
+network-service guard refuses missing `phone`, before APK installation or readiness
+requests. Its QEMU modem connection cannot resolve `::1` with AI_ADDRCONFIG because
+the namespace has only IPv6 loopback. Read-only reproduction fails deterministically;
+the same warning occurred in earlier successful boots, so it alone does not establish
+the final phone-service failure. The owned endpoint now enables only link-local IPv6
+on its existing internal network; no default route/global address/production change.
+Preflight proves real `::1` resolution and rejects IPv6 default egress before boot.
+The actual phone-service, hardware-GPU and clock gates remain mandatory/unchanged.
+33 runner/EOF guards pass (overlap earlier2 guards); corrected API35 still pending.
+The failed setup/AVD/stand receipts remain intact and its processes are stopped.
+
+Existing G4's source/copy/processes remain untouched; no A acceptance or B start.
+[Exact identities and retained outcomes](2026-11-06-mesh-android-remaining-evidence.json).
+
 ## Late-fixture EOF defect and bounded correction
 
 Corrected-underlay API27 on6befd10 **FAIL**,300.139s, before READINESS_HELD:

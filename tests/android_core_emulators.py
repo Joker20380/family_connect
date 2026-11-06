@@ -65,6 +65,20 @@ def require_nvidia_renderer(surface):
     return renderer
 
 
+def require_isolated_modem_loopback(routes):
+    for row in routes.splitlines():
+        fields = row.split()
+        flags = int(fields[8], 16)
+        if fields[0] == '0'*32 and fields[1] == '00' and flags & 1 and not flags & 0x200:
+            raise RuntimeError('Isolated emulator must not have an IPv6 default route')
+    try:
+        addresses = socket.getaddrinfo('::1', 0, socket.AF_INET6, socket.SOCK_STREAM, 0, socket.AI_ADDRCONFIG)
+    except socket.gaierror as error:
+        raise RuntimeError('API35 modem loopback unavailable with AI_ADDRCONFIG; configure only the owned internal endpoint') from error
+    assert addresses and all(value[4][0] == '::1' for value in addresses)
+    return dict(ipv6_loopback='::1',addrconfig_resolved=True,ipv6_default_route=False)
+
+
 def configure_network(adb, wifi, record):
     deadline = time.monotonic()+60
     record['network_setup'] = []
@@ -104,9 +118,12 @@ def run(args):
     avd.mkdir(mode=0o700)
     sdk = args.tools/'android'
     bridge = json.loads((args.build/'bridge.json').read_bytes())
+    modem_loopback = None
     if args.isolated_network:
         assert Path('/.dockerenv').exists()
         assert all(line.split()[1] != '00000000' for line in Path('/proc/net/route').read_text().splitlines()[1:])
+        if args.api == 35:
+            modem_loopback = require_isolated_modem_loopback(Path('/proc/net/ipv6_route').read_text())
         trust = ssl.create_default_context(cafile=args.build/'test-assets/core-ca.pem')
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), urllib.request.HTTPSHandler(context=trust))
         with opener.open('https://185.251.89.19:8443/', timeout=10) as response:
@@ -129,6 +146,7 @@ def run(args):
         tests_sha256=hashlib.sha256(tests.read_bytes()).hexdigest(),
         native_sha256=hashlib.sha256(native.read_bytes()).hexdigest(), native=metadata, bridge=bridge,
         no_egress_namespace=args.isolated_network,
+        modem_loopback=modem_loopback,
         tls_ca_sha256=hashlib.sha256((args.build/'test-assets/core-ca.pem').read_bytes()).hexdigest())
     (args.work/'inputs.json').write_text(json.dumps(receipt, indent=2)+'\n')
 

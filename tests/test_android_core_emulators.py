@@ -112,3 +112,29 @@ def test_network_service_failure_is_not_ignored(monkeypatch):
     with pytest.raises(RuntimeError, match='network services unavailable'):
         emulators.configure_network(['adb', '-s', 'owned'], True, record)
     assert len(record['network_setup']) == 2
+
+
+def test_modem_addrconfig_failure_is_explicit_before_boot(monkeypatch):
+    def fail(*args):
+        raise emulators.socket.gaierror('no non-loopback IPv6 interface')
+    monkeypatch.setattr(emulators.socket, 'getaddrinfo', fail)
+    with pytest.raises(RuntimeError, match='modem loopback unavailable'):
+        emulators.require_isolated_modem_loopback('')
+
+
+def test_modem_loopback_does_not_allow_ipv6_egress(monkeypatch):
+    route = '0'*32+' 00 '+'0'*32+' 00 '+'0'*32+' 00000100 00000001 00000000 00000001 eth0'
+    with pytest.raises(RuntimeError, match='IPv6 default route'):
+        emulators.require_isolated_modem_loopback(route)
+
+
+def test_reject_route_and_real_loopback_resolution_are_allowed(monkeypatch):
+    calls = []
+    def resolve(*args):
+        calls.append(args)
+        return [(emulators.socket.AF_INET6, emulators.socket.SOCK_STREAM, 6, '', ('::1', 0, 0, 0))]
+    monkeypatch.setattr(emulators.socket, 'getaddrinfo', resolve)
+    route = '0'*32+' 00 '+'0'*32+' 00 '+'0'*32+' ffffffff 00000001 00000000 00200200 lo'
+    result = emulators.require_isolated_modem_loopback(route)
+    assert result['addrconfig_resolved'] and not result['ipv6_default_route']
+    assert calls[0][-1] == emulators.socket.AI_ADDRCONFIG

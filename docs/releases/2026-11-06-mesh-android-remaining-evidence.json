@@ -328,5 +328,62 @@
     },
     "paired_android": "NOT_RUN_ON_CORRECTED_ADAPTER",
     "original_api35_timeout": "retained FAIL; no EMFILE observed in its retained route logs, not declared fixed"
+  },
+  "late_eof_corrected": {
+    "27": {
+      "result": "PASS_LATE_CLOSED_OWNER_ONLY",
+      "renderer": "GLES: Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti/PCIe/SSE2), OpenGL ES 3.1 (4.5.0 NVIDIA 580.178.04)",
+      "clock_observation": {
+        "host_before": 1793965806.8382378,
+        "host_after": 1793965806.8462405,
+        "guest": 1793965806
+      },
+      "installed_apk_sha256": "560ad80e6790217f81c7401b60016c7a93c1710e155199657107d7a37f9bbe1b",
+      "installed_native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+      "final_native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+      "owned_emulator_stopped": true,
+      "test_source": "af39bc7b8517dff97a0d04bf2396009f669b8dc1",
+      "exit_code": 0,
+      "seconds": 333.565,
+      "phases": [
+        "SERVICE_OWNER_CONNECTED",
+        "SERVICE_VERIFIED_HTTPS",
+        "LATE_FIXTURE_CONTROL_ON_UNDERLAY",
+        "LATE_HTTP_COMPLETED_IMPORT_PENDING",
+        "LATE_OWNER_CLOSED_BEFORE_IMPORT",
+        "LATE_COMPLETION_IGNORED_CLOSED_OWNER",
+        "LATE_NEW_EXPLICIT_CONNECT_NOT_RENEWAL",
+        "SERVICE_OWNER_CLEANED"
+      ],
+      "receipt": "android-lateeof-gpu27-emulators3/api27-receipt.json",
+      "receipt_sha256": "da279d861fb3301d0ddefd77d2a5cb38227a6a6e095b0af1ba543b12db79cddd",
+      "log": "android-lateeof-gpu27-emulators3/api27-runtime.log",
+      "server": "android-lateeof-gpu27-3/server.json",
+      "server_cleanup": "processes-waited",
+      "tests_sha256": "b6aeef34cf88c7d2c6406e6403db444c2a27cf4f4031ab3d0d8fb3e3963199b3",
+      "route_sha256": "26753143be453ce2f4711fb560dfe37fe2f8ff7981d32556045193b1cbdd5a26",
+      "fd_samples": 29,
+      "max_sampled_route_fds": 6
+    },
+    "35": {
+      "result": "NOT_RUN",
+      "setup_result": "FAIL",
+      "test_source": "af39bc7b8517dff97a0d04bf2396009f669b8dc1",
+      "receipt": "android-lateeof-gpu35-emulators3/api35-receipt.json",
+      "receipt_sha256": "537d357ee22e165d22d232ffcb5c5044454dab12bae0ef9d8fa77c16f52483fb",
+      "failure": "system phone service unavailable after unchanged60s guard; APK and instrumentation not started",
+      "readiness_requests": 0,
+      "owned_emulator_stopped": true,
+      "server_cleanup": "processes-waited"
+    }
+  },
+  "modem_prerequisite": {
+    "observation": "QEMU cannot resolve ::1 modem endpoint with AI_ADDRCONFIG while only IPv6 loopback exists; also present in earlier successful boots, not alone proof of the terminal cause",
+    "reproduction": "socket.getaddrinfo(::1, AF_UNSPEC, AI_ADDRCONFIG) fails with EAI_ADDRFAMILY in old namespace",
+    "correction": "only owned Docker endpoint link-local IPv6 enabled using com.docker.network.endpoint.sysctls; no IPv6 default route or global address; same private network, no production networking changes",
+    "preflight": "android-api35-ipv6-preflight2.log",
+    "guard_results": "33 passed / android-eof-modem-guards.log (includes2 EOF guards, overlapping previous selection)",
+    "next_runtime": "NOT_RUN",
+    "security": "same60s phone-service gate, KVM/NVIDIA enforcement and real clock validation; no timeout increase or service-check bypass"
   }
 }

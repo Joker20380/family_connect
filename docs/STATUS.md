@@ -11,6 +11,14 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**6 November12:05UTC: corrected late API27 PASS333.565s; API35 runtime NOT_RUN.**
+The repaired HTTPS adapters stay at≤6 sampled descriptors. API35 instead fails
+before APK installation: system phone service unavailable within the unchanged60s
+preflight. Its QEMU log and deterministic namespace check expose unavailable IPv6
+modem-loopback resolution; this warning also existed in older successful boots.
+An owned-endpoint link-local-only correction and fail-closed preflight pass33 scoped
+guards; actual API35 still pending. No new package, changed G4, accepted A or B.
+
 **Late-fixture root cause localized:** corrected-underlay API27 fails at300.139s
 before delivery because both synthetic HTTPS adapters exhaust1024 file descriptors.
 The frozen adapter reproduces two retained sockets/thread after origin EOF without
