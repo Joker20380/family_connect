@@ -3,8 +3,9 @@
 ## Current engineering priority / Текущий critical path
 
 **Owner-selected SUBSCRIPTION-ANDROID-1 — bounded runtime complete6 November.**
-Independent feature worktree, not a G4 continuation. API35 NVIDIA/KVM diagnostic APK
-build/Chaquopy, real local HTTPS, Keystore/restart, canonical state/event display,
+Independent feature worktree, not a G4 continuation. Source `934867678f99` pushed and
+remote-verified, own backend/AVD stopped; evidence retained. API35 NVIDIA/KVM diagnostic
+APK build/Chaquopy, real local HTTPS, Keystore/restart, canonical state/event display,
 permission/dedupe and cold/warm navigation pass; checked-exception compilation fixed.
 Mixed-underlay test-origin failure retained, stable Wi-Fi path qualified. Remaining
 independent gates: production-equivalent test ingress, ARM/release, physical whitelist

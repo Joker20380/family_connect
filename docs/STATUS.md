@@ -2,7 +2,9 @@
 
 **6 November — SUBSCRIPTION-ANDROID-1: bounded API35 runtime PASS, not production acceptance.**
 Isolated `feature/subscription-status-20261106`, starting remote `34529b622594`:
-fixed an actual checked-exception Android compile defect; built/installed diagnostic
+source checkpoint `934867678f99` pushed/remote-verified; same-hash APK reinstalled,
+own backend/AVD stopped and evidence retained. Closing receipt is documentation-only.
+Fixed an actual checked-exception Android compile defect; built/installed diagnostic
 debug x86_64 `com.familyconnect.app.subscriptiontest`, Android118 (separate package).
 Real local HTTPS Handler → Friends proof → Chaquopy → Keystore/encrypted store → UI
 passes active/no-event/expired/grace/revoke, outside pilot, unsupported/unavailable,

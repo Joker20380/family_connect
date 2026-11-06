@@ -209,5 +209,27 @@ or merge. Shared tools were read-only; the one-emulator qualification lock was h
 Synthetic baseline metadata is only a fixture in the isolated DB, not a cohort rollout.
 Only the task's test backend and AVD are stopped at completion; evidence is retained.
 
-Source commit, verified remote SHA and final same-source artifact verification follow
-in the closing receipt after the source checkpoint is saved.
+Source commit: **`934867678f99fed9fb7ae94b874d341c44825ead`**, pushed non-force with
+`[skip ci]`; `git ls-remote origin refs/heads/feature/subscription-status-20261106`
+returned that exact SHA. No CI build is being claimed. The subsequent closing-receipt
+commit changes documentation/evidence metadata only, not the installed candidate.
+
+At that clean source checkpoint, both Gradle assemblies were checked again offline
+(9s,72 tasks up-to-date); app/test APK hashes exactly match the tested artifacts above.
+Both were installed again with data preserved; `checkpoint-installed-smoke` PASS:
+real HTTPS identity refusal and previously confirmed revoked cache render correctly.
+An actual on-screen Refresh tap then produced new HTTPS403 challenge responses while
+preserving the cache (`manual-refresh-denied` PASS). Positive reads were already
+qualified through the real worker and screen-open path; this button tap tests denial.
+
+Retained instrumentation ledger: **24 PASS attempts,4 FAIL attempts** (3 corrected
+harness expectations/quoting,1 retained mixed-underlay failure), not28 unique scenarios.
+Actual cold/warm notification taps and manual Refresh are separate adb/UI observations.
+The original failed Android compile remains in `logs/build.log`.
+[Sanitized source/artifact/evidence manifest](2026-11-06-subscription-android-1-receipt.json)
+contains hashes, not keys, identities, DB contents or raw personal replies.
+
+Own backend PID1815786 stopped (SIGTERM exit143); own AVD PID1770060 stopped through
+its stop marker, launcher exited0 and released the shared qualification lock. No other
+process/service was stopped. Installed app data, test DB and evidence remain in the
+stopped disposable AVD/work directory for diagnosis; no public download was created.
