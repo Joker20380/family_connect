@@ -488,6 +488,17 @@ retry and the normal merge receipt belong in PR1; do not create a cosmetic docs-
 
 ### Scope and rollback
 
+Additional fixture preparation correction: b4ea004's hosted control/phase0 tests stop
+in the new strict3.14 preparation probe before the suite. The exact official setup-python
+3.14.10 Linux24.04 distribution was inspected independently: its ELF RUNPATH names the
+original `/opt/hostedtoolcache/Python/3.14.10/x64/lib`, not the relocated root-owned copy.
+The private test copy now gets `$ORIGIN/../lib` via patchelf, no inherited LD_LIBRARY_PATH,
+and lives under `/usr/lib`; no system/shared interpreter is patched. Its exact3.14.10
+binary and copied library execute with only PATH/LANG in the local synthetic inspection.
+The unchanged production ownership/runtime probe still gates CI. Complete preparation
+logs are now retained alongside full pytest logs so bounded API excerpts cannot obscure
+the primary failure. This is not a new source-review exception or a claimed hosted PASS.
+
 Before merge, close/revise the integration PR; after merge use an ordinary reviewed
 revert, never reset published main. This does not uninstall the existing APK or roll
 back the already accepted live overlay. Any later server rollout requires its own

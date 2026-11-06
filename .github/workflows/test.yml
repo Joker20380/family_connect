@@ -12,7 +12,10 @@ jobs:
         with:
           python-version: '3.14'
       - name: Isolated root-owned Python 3.14 launcher fixture
-        run: sudo --preserve-env=LD_LIBRARY_PATH bash scripts/ci_python314_context.sh '${{ steps.python314.outputs.python-path }}' /usr/local/lib/fc-ci-python314 "$(id -un)"
+        shell: bash
+        run: |
+          set -o pipefail
+          sudo --preserve-env=LD_LIBRARY_PATH bash scripts/ci_python314_context.sh '${{ steps.python314.outputs.python-path }}' /usr/lib/fc-ci-python314 "$(id -un)" 2>&1 | tee "$RUNNER_TEMP/python314-prepare.log"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
@@ -42,7 +45,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          "$FC_TEST_PYTHON" scripts/ci_release_fixtures.py run --fixtures "$RUNNER_TEMP/fc-release-fixtures" --go "$(command -v go)" --nginx /usr/sbin/nginx -- "$FC_TEST_PYTHON" scripts/ci_full_pytest.py --python314 /usr/local/lib/fc-ci-python314/test-env/bin/python 2>&1 | tee "$RUNNER_TEMP/full-pytest.log"
+          "$FC_TEST_PYTHON" scripts/ci_release_fixtures.py run --fixtures "$RUNNER_TEMP/fc-release-fixtures" --go "$(command -v go)" --nginx /usr/sbin/nginx -- "$FC_TEST_PYTHON" scripts/ci_full_pytest.py --python314 /usr/lib/fc-ci-python314/test-env/bin/python 2>&1 | tee "$RUNNER_TEMP/full-pytest.log"
       - name: Record sanitized full-suite failure IDs
         if: always()
         env:
@@ -69,6 +72,7 @@ jobs:
           path: |
             ${{ runner.temp }}/full-pytest-receipt.json
             ${{ runner.temp }}/full-pytest.log
+            ${{ runner.temp }}/python314-prepare.log
           if-no-files-found: error
       - run: cargo test --manifest-path core/Cargo.toml --locked
   failover:

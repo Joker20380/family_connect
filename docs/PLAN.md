@@ -4,6 +4,7 @@
 
 **Owner-selected SUBSCRIPTION-INTEGRATION-1 — integration gate OPEN.**
 Finish the remaining concrete1d4 fixtures and invitation-dispatch synchronization,
+including protected relocated Python and its real sanitized runtime probe,
 then require final-head hosted PASS and normal merge. Exact retained snapshot and current
 unbound renewal package must be supplied, not skipped. Do not repeat closed native or
 messenger investigations, change historical hashes or claim emulator/phone acceptance

@@ -1,6 +1,10 @@
 # Текущее состояние / Current state
 
 **6 November — PR1 remaining fixture repair, final CI pending.**
+The relocated hosted3.14 fixture now uses a private relative ELF RUNPATH rather than
+loading its shared library from the writable original toolcache; preparation logs are
+retained. The exact downloaded3.14.10 runtime runs with a sanitized environment locally.
+This does not claim the hosted ownership gate passed; PR receipts remain authoritative.
 Head1d4 passes the Android source/diagnostic guards and full Linux candidate, but exposes
 missing exact snapshot/renewal fixtures, protected Python paths, explicit unsafe modes,
 CLI interpreter selection and an asynchronous invitation-test observation race. The next
