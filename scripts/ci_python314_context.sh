@@ -11,6 +11,7 @@ apt-get update -qq
 apt-get install -y --no-install-recommends patchelf
 cp -a "$prefix" "$destination"
 chown -R root:root "$destination"
+"$source_python" -B -c 'from scripts.ci_fixture_permissions import remove_acls; import sys; remove_acls(sys.argv[1])' "$destination"
 chmod -R go-w "$destination"
 patchelf --set-rpath '$ORIGIN/../lib' "$destination/bin/python3.14"
 unset LD_LIBRARY_PATH
@@ -19,7 +20,9 @@ unset LD_LIBRARY_PATH
 "$destination/test-env/bin/python" -c 'import sys,pytest; assert sys.version_info[:2] == (3,14); print(sys.executable, pytest.__version__)'
 test "$(id -u "$fixture_user")" != 0
 install -d -m 0755 -o "$fixture_user" /usr/local/lib/fc-ci-snapshot-fixtures
+"$destination/bin/python3.14" -B -c 'from scripts.ci_fixture_permissions import remove_acls; remove_acls("/usr/local/lib/fc-ci-snapshot-fixtures")'
 runuser -u "$fixture_user" -- env -i PATH=/usr/bin:/bin LANG=C "$destination/bin/python3.14" -I -B -c 'import sys; assert sys.version_info[:2] == (3,14); print(sys.executable)'
 namei -l "$destination/bin/python3.14"
+"$destination/bin/python3.14" -c 'from pathlib import Path; import os,sys; print([(str(path),os.listxattr(path,follow_symlinks=False)) for path in Path(sys.argv[1]).parents])' "$destination/bin/python3.14"
 readelf -d "$destination/bin/python3.14" | grep -E 'RUNPATH|RPATH|NEEDED'
 runuser -u "$fixture_user" -- "$destination/test-env/bin/python" -c 'import os,pwd; from scripts.build_profile_snapshot_launcher import Account,inspect_executable; import sys; from pathlib import Path; print(inspect_executable(str(Path(sys.executable).resolve()),Account.lookup(pwd.getpwuid(os.geteuid()).pw_name))["runtime"])'

@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import struct
 import sys
 
 import pytest
@@ -91,3 +92,26 @@ def test_root_entrypoint_is_scoped_and_does_not_use_shared_tmp(monkeypatch, tmp_
         assert os.environ['TMPDIR'] == str(tmp_path)
     finally:
         os.umask(previous)
+
+
+def test_fixture_acl_cleanup_is_bounded_and_does_not_follow_links(tmp_path):
+    from scripts.ci_fixture_permissions import remove_acls
+    entries = [(1, 7, 0xffffffff), (2, 7, 123457), (4, 5, 0xffffffff),
+               (16, 7, 0xffffffff), (32, 5, 0xffffffff)]
+    acl = struct.pack('<I', 2) + b''.join(struct.pack('<HHI', *entry) for entry in entries)
+    outside = tmp_path / 'outside'
+    outside.mkdir()
+    os.setxattr(outside, 'system.posix_acl_access', acl)
+    root = tmp_path / 'fixture'
+    root.mkdir()
+    os.setxattr(root, 'system.posix_acl_default', acl)
+    child = root / 'child'
+    child.mkdir()
+    assert 'system.posix_acl_access' in os.listxattr(child)
+    (root / 'outside').symlink_to(outside, target_is_directory=True)
+    remove_acls(root)
+    assert not {'system.posix_acl_access', 'system.posix_acl_default'} & set(os.listxattr(root))
+    assert not {'system.posix_acl_access', 'system.posix_acl_default'} & set(os.listxattr(child))
+    assert os.getxattr(outside, 'system.posix_acl_access') == acl
+    with pytest.raises(ValueError, match='real directory'):
+        remove_acls(root / 'outside')

@@ -118,8 +118,10 @@ def test_readback_rechecks_revocation_and_expiry(ready):
     assert receipts.readback(service, 'a' * 32, owner.reference)['status'] == 'ACK_PENDING'
 
 
-def test_ui_unavailable_server_ack_is_authoritative(ready, tmp_path):
+@pytest.mark.parametrize('opened_offset,accepted', [(0.0, True), (0.999, True), (1.001, False)])
+def test_ui_unavailable_server_ack_is_authoritative(ready, tmp_path, monkeypatch, opened_offset, accepted):
     service, owner, now, payload = ready
+    monkeypatch.setattr('scripts.friends_http_transition.time.time', lambda: now + opened_offset)
     evidence = Evidence(tmp_path / 'acceptance', 'candidate')
     try:
         product = OwnerProduct(evidence, 'candidate')
@@ -127,8 +129,8 @@ def test_ui_unavailable_server_ack_is_authoritative(ready, tmp_path):
         trace = [dict(probe_id=payload[field], generation='candidate', timestamp=product.opened,
                       status=200, upstream_status='200', product_step=step)
                  for field, step in [('challenge_id','challenge'), ('fetch_id','readiness')]]
-        assert product.observe(receipts.readback(service, 'a' * 32, owner.reference), trace)
-        assert product.passed
+        assert product.observe(receipts.readback(service, 'a' * 32, owner.reference), trace) is accepted
+        assert product.passed is accepted
     finally:
         evidence.close()
 
