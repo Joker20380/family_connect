@@ -5,8 +5,11 @@ Owner-authorized base repairs now cover explicit Android Session test context,
 the phase22 documentation fragment and complete pinned native-source staging.
 Targeted bridge/carrier22 and messenger222 tests PASS; full public docs PASS.
 Accepted native313-file inventory reproduced from `efc13f1c7f27` with unchanged
-`f0e48d7c…` digest;13 staging/orchestration regressions PASS. Hosted native build,
-package smoke and other applicable final-head CI still required before merge.
+`f0e48d7c…` digest;13 staging/orchestration regressions PASS. On source `24de0b2`,
+hosted Linux full race/build/package smoke and Messenger gates PASS. Merge remains
+blocked by Client builds/android's concrete ChatActivity source-review assertion;
+phase0/control are not green, voice mirror timeout retried once. See the dated report
+for exact run IDs and separate source/binary provenance; no green-CI claim or merge.
 No Android production input, paid baseline/data, installed APK, production or G4 change.
 
 **Earlier PR checkpoint:**

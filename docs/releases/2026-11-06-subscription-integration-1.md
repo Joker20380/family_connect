@@ -271,10 +271,72 @@ isolated integration worktree; no foreign work is reset or overwritten.
   records native source commit and built binary digest. A mixed-provenance package
   is not attributed wholesale to the old native commit. Binary digest awaits hosted build.
 
-Final-head hosted results are pending. Earlier f119 CI additionally revealed phase0
-fixture failures (missing `edca544…` Git source and root-only tests under UID1000)
-and Android diagnostic-contract failure; these are not claimed fixed by the three
-repairs. No merge is allowed while an applicable gate remains red or running.
+### Hosted receipts for the repaired source
+
+Source head `24de0b2c3e4042f903395dacc72d367ff0df0f98`, base still
+`41b4e6e034efc3e51446f383f2fbaedee3ad5a67`, remote read back after push.
+GitHub PR test merge `7166d2fc67dbedc942392f1d1f6153e2ac6d63fd` has precisely
+these two parents and the **same tree** `a73440a6985646fb844c059c9a1fa27907fd1be9`
+as source head. This is a synthetic PR test ref, **not** a completed merge to main.
+
+| Gate | Result on repaired source | Receipt |
+| --- | --- | --- |
+| Linux internal candidate | PASS, complete race/build, metadata and package smoke | [42279283893](https://github.com/Joker20380/family_connect/actions/runs/42279283893) |
+| Messenger prototype | PASS | [42279283973](https://github.com/Joker20380/family_connect/actions/runs/42279283973) |
+| Android Friends readiness wire | PASS | [42279284000](https://github.com/Joker20380/family_connect/actions/runs/42279284000) |
+| Windows control conformance | PASS | [42279283993](https://github.com/Joker20380/family_connect/actions/runs/42279283993) |
+| Client builds | FAIL: Android source-review guard; Linux, Windows and compatibility jobs PASS | [42279283953](https://github.com/Joker20380/family_connect/actions/runs/42279283953) |
+| phase0 | Still running at this receipt; not PASS | [42279284001](https://github.com/Joker20380/family_connect/actions/runs/42279284001) |
+| Linux control preview | Still running at this receipt; not PASS | [42279283941](https://github.com/Joker20380/family_connect/actions/runs/42279283941) |
+| Linux voice/encrypted messaging | Infrastructure timeout downloading Ubuntu packages, one targeted job retry requested | [42279284021](https://github.com/Joker20380/family_connect/actions/runs/42279284021) |
+
+Linux artifact13535302062 was downloaded and its receipts inspected. `package-source.txt`
+records PR test ref7166, while `native-source.json` records the pinned efc13 closure.
+The artifact's full313-entry inventory recomputes exactly to `f0e48d7c…` above.
+Go1.26.1 linux/amd64 binary `fc-mesh` is29,031,243 bytes, SHA256
+`b038b78f1260bf37d3c48df722a3571553a0207a3be40acb2dd4bcfd44463feb`.
+`system-delivery.json` independently records this binary hash and native source commit;
+system archive SHA256 `c0427307858f4b3807fcd7b49651b289111f6362567fb10121a016b8ada2d3ba`.
+Actual system, DEB and AppImage smoke logs are PASS; AWG/TCP prestart and integrity
+checks also completed. These are isolated CI artifacts, not installation/publication.
+
+Local additional bounded packaging selection: first attempt had9 environment failures
+(inherited shell umask002 caused writable fixtures; isolated venv lacked GI). Retained
+that failure, then ran the same selection with child-only umask022 and the installed
+system GI import path:82 PASS,2 existing conditional skips,1.28s. No dependency install,
+shared-cache modification or assertion weakening. Hosted configured environment passes.
+
+**Concrete remaining code gate:** Client builds/android job128103761031,
+`Restricted diagnostic and readiness contracts`, fails
+`tests/test_android_public_release.py::test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main`.
+`ChatActivity.java` expected old reviewed hash
+`34aec6a30af77ece7753ee65ac592fd97a2fb3af8d19721de3edfb14e623e488`,
+actual `4a1e7a28cc374aef5d72664237a2c4dff8cd8d078aff760a1e996646bfb75a0d`.
+The actual value also matches the installed119 **source**, not a newly changed Android
+file. Local exact diagnostic selection reproduces1 FAIL/63 PASS/1 deselected. Required
+next action is an explicit source-provenance review of the subscription UI delta and
+its guard, retaining historical hashes, followed by this actual gate. Merely replacing
+hashes or asserting the old APK qualifies a new source is not a fix applied here.
+
+Earlier f119 phase0 failover additionally completed with110 failures/214 errors:
+root-only profile/maintenance fixtures ran as UID1000 and accepted historical Git
+objects (`edca544…`, historical HTTP) were absent from the restored shallow source.
+Its direct desktop verifier also still targets evolving current carrier, outside the
+now-fixed Linux package's pinned stage. These are reproducible fixture/selection
+failures, not attributed to a transient network or claimed fixed. A proper subsequent
+CI fixture repair must supply accepted inputs and execute root/unprivileged groups in
+their required isolated contexts without skip/xfail or weakening source checks.
+
+This receipt update is documentation-only. Any new commit from it retains24de0b2's
+production/build/test inputs; its own automatically requested checks must still be
+observed before any merge. Latest run observations belong to [PR1](https://github.com/Joker20380/family_connect/pull/1),
+not a claim that the still-running rows here later passed. No deterministic failed job
+was manually rerun without a fix; only the identified voice mirror timeout was retried.
+
+Android production inputs (`clients/android`, `carrier`, messenger excluding tests)
+remain byte-identical to beta119 source `b2a37fe989294018ab08060bdebfa46d741d11d5`.
+Its APK provenance and all prior physical/synthetic/NOT_RUN boundaries are unchanged.
+No merge is allowed while an applicable gate remains red or running.
 
 ### Scope and rollback
 

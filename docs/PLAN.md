@@ -12,9 +12,12 @@ PR1 base repairs explicitly authorized: update nine Session fixtures and the exa
 phase22 fragment; rebuild the already accepted native closure, not current carrier.
 The pinned `efc13f1c7f27` snapshot reproduces the existing313-file native digest;
 historical accepted hashes stay unchanged. Messenger222 and docs gates pass locally.
-NEXT within this task: final-head hosted Linux race/build/package smoke and all
-applicable PR checks; inspect remaining phase0/control/client failures, then normal
-merge only after concrete gates pass. No bypass, production action or successor task.
+Linux race/build/package smoke and Messenger PASS on `24de0b2`; no native baseline
+qualification or hash replacement was needed. Remaining gates are now concrete:
+Client builds/android source-review assertion for ChatActivity, phase0 fixture/root
+execution failures, and unfinished control/voice runs. Review these separately from
+the three repaired blockers; do not claim merge readiness or silently expand into
+renewal/bootstrap policy changes. Normal merge still requires all applicable checks.
 [Task evidence and completion gate](releases/2026-11-06-subscription-integration-1.md).
 
 **Selected6 November: separate beta113/API28 field bootstrap diagnosis, not G4.**
