@@ -2,6 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Owner-selected SUBSCRIPTION-ANDROID-3 — in progress, narrow ARM/ingress gate.**
+Preserve fixed APK119; enable only the compatible subscription read on the actual
+serving HTTP archive and exact HTTPS location. Prepared overlay/synthetic tests PASS;
+pending guarded API-only deployment and expressly authorized Redmi118→119 update,
+fresh own response, restart and duplicate refresh. No G4/common-writer/certificate,
+bootstrap, production payment or global publication change. Whitelist and earlier
+unrelated runtime gates stay open; no automatic successor.
+[Candidate and rollback](releases/2026-11-06-subscription-android-3.md).
+
 **Owner-selected SUBSCRIPTION-ANDROID-2 — narrow task complete, ARM119 candidate retained.**
 Real UI/save/automatic delivery/notification/tap/dedupe passed on the isolated API35
 stand. Source `b2a37fe98929` ordinary source-bound ARM64 Friends build, existing-key

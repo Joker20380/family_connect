@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**6 November — SUBSCRIPTION-ANDROID-3 in progress; ingress overlay prepared.**
+Fixed signed ARM119 hash reverified; source `b2a37fe98929`, branch remote `ef2daa59`
+contains documentation only after that source. Serving HTTP `e2ed4ca6b41e` lacks
+subscription; normal verified HTTPS returns404. Minimal pinned archive overlay changes
+only challenge purpose/handler and adds the subscription reader;33 other members remain
+byte-identical, including paid/registration/MESH. Three overlay tests and43 exact-runtime
+synthetic HTTP tests PASS. No live deployment yet. Owner explicitly authorizes the
+connected Redmi Note9 Pro/API31 beta118→119 in-place check; baseline signature matches,
+public Support ID captured privately, VPN off. G4/main/renewal remain untouched.
+[Scope, rollback and remaining gates](releases/2026-11-06-subscription-android-3.md).
+
 **6 November — SUBSCRIPTION-ANDROID-2 natural delivery PASS; signed ARM119 candidate built.**
 Isolated feature branch: actual UI Refresh/Home produces a canonical-event notification,
 real tap opens the right identity's subscription, repeat refresh does not repost.
