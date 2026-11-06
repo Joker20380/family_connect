@@ -1093,3 +1093,55 @@ is exhausted; further native-boundary work is not an automatic authorization for
 Exact artifact/source/log hashes and typed pre-cleanup evidence:
 [sanitized follow-up receipt](2026-11-06-cold-provisioning-followup.json).
 Public provider-reference check: <https://yandex.ru/dev/telemost/doc/ru/conferences/>.
+
+### Native diagnostic continuation, 6 November
+
+Owner-requested continuation from9765c5c; previous runtime047da1d and JNI4e27ff23…57f99
+remain FAIL_RUNTIME evidence, not tests of this new instrumentation. Both original
+receipts and local artifacts are preserved; no authority/readiness material is reused
+as a hidden cache. Current scope is source diagnostics and one separately gated runtime.
+
+Implementation: one mutex-protected snapshot in each existing provisioning lease,
+returned through a separate JNI output argument, not a synthetic server response.
+It records Go entry, handle, last completed/first failed stage, allowlisted cause,
+provider step/status, numeric errno, elapsed/remaining budget, protection counts and
+close/release observations. Pre-Go failures explicitly mark unknown Post budget;
+the JNI allocation snapshot is set before acquiring references. No raw error text,
+room URL, proof, token, certificate or bundle enters this diagnostic result.
+Existing `startupdiag.Preserve` keeps carrier/TLS causes with legacy classifications.
+The first failure is recorded before cleanup. Post observes Open completion before
+its cancellation check; ready→cancel cannot erase that completed failure. Closing a
+handle removes only that map entry, while an in-flight Post keeps its lease reference.
+Underlay callback locking drains before releasing the JNI global owner. Java serializes
+Posts, records each call's result in finally before cleanup, and keeps separate close
+observations instead of overwriting the failed request. CARRIER_HANDLE still means
+allocation only; CARRIER_REQUEST is invocation only; REQUEST_WRITE success means the
+framed TLS write returned, not server receipt. Trust errors still fail closed.
+
+Provisioning Network evidence comes from the actual pinned `ChatNetworkAndroid`, with
+its own handle/type, availability at bind and snapshot, bind outcome/time and resolver
+class. RNS's previous Network label is removed at provisioning-route entry. No network,
+DNS, protocol, retry, admission or timeout setting is changed. Request encoding is
+checked before write while preserving the original fail-and-close behavior.
+
+Source gate (local `state-client-build/cold-native-diagnostic-20261106/`):
+
+- `host-jni-final`: actual host JVM `-Xcheck:jni` → production C Begin/Post/Close → Go,
+  with only a local connector seam and a Post-entry latch. Pre-carrier rejection,
+  protect refusal, JNI callback missing/exception, carrier Open EOF, real TLS trust
+  refusal, real TLS response EOF and concurrent Close/Open are distinguishable after
+  JNI. No provider request. Host JVM reports expected Go/JVM signal-handler coexistence
+  warnings; this host test is not an Android execution claim. Earlier fixture build/
+  premature-server-close failures remain in host-jni-1…4; host-jni-5/6 also pass.
+- `go-race-final.log`: changed coldprovision and selected Telemost auth/owned-lifetime
+  tests PASS, `-race -count=3`; real local TLS, write/EOF and concurrent snapshots.
+- `lease-race-final.log`: production portable lease/map state PASS, `-race -count=3`,
+  each exercising100 simultaneous Open failure/Post/Close cases; no stale-handle read.
+- `jvm-final`:100 JVM tests PASS plus actual ChatNetworkAndroid/stubbed-platform
+  selection/bind/lost-Network assertions. `pipeline-2`: source pipeline compiles.
+
+Remaining gate: new real-Telemost x86_64 JNI/APK and short API27 provider-free check,
+then exactly one fresh cold Connect. Android result, bundle/READY/DNS/HTTPS/egress are
+NOT_RUN for this source checkpoint. Test-only version stays118/0.1.18-beta118; no
+installation on owner/field devices, distribution or catalog update. Rollback is to
+stop/remove only the disposable test execution; no production deployment to undo.

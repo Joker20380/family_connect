@@ -4,6 +4,17 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ReadinessFetchTraceTest {
+    @Test public void nativeSnapshotKeepsAttemptAndDoesNotInheritRnsNetwork(){
+        ReadinessFetchTrace trace=new ReadinessFetchTrace(new OwnerPrewarmReceipt(),"",1);
+        trace.network("WIFI",123);
+        trace.request("/friends/restricted-readiness/challenge",ReadinessFetchTrace.Route.PROVISIONING);
+        trace.provisioning("11111111111111111111111111111111","POST","{\"handle\":7,\"reason\":\"EOF\"}",null);
+        trace.provisioning("","CLOSE","{\"handle\":7,\"closed\":true}",null);
+        com.google.gson.JsonObject result=trace.json();
+        assertFalse(result.has("network_type"));
+        assertEquals("EOF",result.getAsJsonArray("provisioning").get(0).getAsJsonObject().getAsJsonObject("native").get("reason").getAsString());
+        assertEquals("11111111111111111111111111111111",result.getAsJsonArray("provisioning").get(0).getAsJsonObject().get("request_id").getAsString());
+    }
     @Test public void wrappedIoIsNotMisreportedAsProtocol(){
         ReadinessFetchTrace trace=new ReadinessFetchTrace(new OwnerPrewarmReceipt(),"",1);
         trace.failed(new java.io.IOException("private detail must not appear"));

@@ -27,9 +27,9 @@ final class NativeRestricted {
         }catch(Exception error){throw new IllegalStateException("Native fixture RPC failed",error);}
     }
     static void load(){}
-    static long provisionBegin(byte[] locator,byte[] anchor,String gateway,String resolver,long budget,Object protector){provisioningBudget=budget;return call("open","locator",locator,"anchor",anchor,"gateway",gateway).get("handle").getAsLong();}
-    static String provisionPost(long handle,String path,String body,String id){JsonObject result=call("post","path",path,"body",body,"id",id);if(Boolean.getBoolean("fixture.late")&&path.equals("/friends/restricted-readiness")){delivered.countDown();try{if(!release.await(5,java.util.concurrent.TimeUnit.SECONDS))throw new AssertionError("Late response release");}catch(InterruptedException error){throw new AssertionError(error);}}return result.has("reply")?result.get("reply").toString():null;}
-    static void provisionClose(long handle){call("close");}
+    static long provisionBegin(byte[] locator,byte[] anchor,String gateway,String resolver,long budget,Object protector,String[] diagnostic){provisioningBudget=budget;return call("open","locator",locator,"anchor",anchor,"gateway",gateway).get("handle").getAsLong();}
+    static String provisionPost(long handle,String path,String body,String id,String[] diagnostic){JsonObject result=call("post","path",path,"body",body,"id",id);if(Boolean.getBoolean("fixture.late")&&path.equals("/friends/restricted-readiness")){delivered.countDown();try{if(!release.await(5,java.util.concurrent.TimeUnit.SECONDS))throw new AssertionError("Late response release");}catch(InterruptedException error){throw new AssertionError(error);}}return result.has("reply")?result.get("reply").toString():null;}
+    static String provisionClose(long handle){call("close");return null;}
     static int validationCode(byte[] raw,byte[] identity,byte[] anchor){return call("validate","raw",raw,"identity",identity,"anchor",anchor).get("code").getAsInt();}
     static boolean validateDelivery(byte[] raw,byte[] identity,byte[] anchor){return validationCode(raw,identity,anchor)==0;}
     static long beginReady(byte[] raw,byte[] identity,byte[] anchor,String resolver,long budget,android.net.VpnService service,int profile){begins++;return call("begin","raw",raw,"identity",identity,"anchor",anchor).get("handle").getAsLong();}
@@ -49,6 +49,7 @@ final class ChatNetworkAndroid {
     static int blocked;
     ChatNetworkAndroid(Context context){}
     String provisioningResolver(){return "127.0.0.1:53";}
+    JsonObject provisioningDiagnostic(){JsonObject result=new JsonObject();result.addProperty("resolver","FIXTURE_LOOPBACK");return result;}
     javax.net.ssl.HttpsURLConnection openHttps(String address,ReadinessFetchTrace trace)throws IOException{
         blocked++;
         if(!Boolean.getBoolean("fixture.blackhole"))throw new SocketTimeoutException("Isolated direct HTTPS disabled");

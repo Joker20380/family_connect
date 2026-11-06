@@ -19,6 +19,7 @@ import (
 	"github.com/Joker20380/family_connect/carrier/bootstrap"
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
+	"github.com/Joker20380/family_connect/carrier/startupdiag"
 )
 
 const Challenge = "/friends/restricted-readiness/challenge"
@@ -44,7 +45,7 @@ type BoundReply struct {
 
 var requestID = regexp.MustCompile(`^[a-f0-9]{32}$`)
 
-func read(connection io.Reader, value any) error {
+func read(connection io.Reader, value any, diagnostics ...*Diagnostic) error {
 	var header [4]byte
 	if _, err := io.ReadFull(connection, header[:]); err != nil {
 		return err
@@ -57,6 +58,10 @@ func read(connection io.Reader, value any) error {
 	defer clear(raw)
 	if _, err := io.ReadFull(connection, raw); err != nil {
 		return err
+	}
+	if len(diagnostics) > 0 {
+		diagnostics[0].Stage("RESPONSE_READ", true)
+		diagnostics[0].Stage("RESPONSE_VALIDATE", false)
 	}
 	return strict(raw, value)
 }
@@ -81,50 +86,70 @@ type Client struct {
 	requests   int
 	cleanup    func()
 	once       sync.Once
+	diagnostic *Diagnostic
 }
 
 func Open(parent context.Context, locator, anchor []byte, gateway string, connect bootstrap.SeedConnector) (*Client, error) {
+	diagnostic := diagnosticFrom(parent)
+	diagnostic.Stage("LOCATOR", false)
 	address, config, err := Verify(locator, anchor, gateway, time.Now())
 	if err != nil || connect == nil {
+		diagnostic.Failure(ErrRejected)
 		return nil, ErrRejected
 	}
+	diagnostic.Stage("LOCATOR", true)
 	deadline := time.Now().Add(Timeout)
 	if expires := time.Unix(address.ExpiresAt, 0); expires.Before(deadline) {
 		deadline = expires
 	}
 	ctx, cancel := context.WithDeadline(parent, deadline)
+	diagnostic.Stage("CARRIER_OPEN", false)
 	carrier, err := connect(ctx, ctx, roombroker.Room{JoinURL: address.Room})
 	if err != nil || carrier == nil {
+		if err == nil {
+			err = ErrUnavailable
+		}
+		diagnostic.Failure(err)
 		cancel()
 		if carrier != nil {
 			carrier.Close()
 		}
-		return nil, ErrUnavailable
+		return nil, startupdiag.Preserve(ErrUnavailable, err)
 	}
+	diagnostic.Stage("CARRIER_OPEN", true)
 	stop := context.AfterFunc(ctx, func() { carrier.Close() })
 	cleanup := func() { cancel(); carrier.Close(); stop() }
+	diagnostic.Stage("PACKET_EXCHANGE", false)
 	endpoint, err := bootstrap.OpenPacketExchange(ctx, carrier)
 	if err != nil {
+		diagnostic.Failure(err)
 		cleanup()
 		return nil, err
 	}
+	diagnostic.Stage("PACKET_EXCHANGE", true)
+	diagnostic.Stage("RELIABLE_STREAM", false)
 	connection, err := familysession.ReliableConnection(ctx, endpoint)
 	if err != nil {
+		diagnostic.Failure(err)
 		cleanup()
 		return nil, err
 	}
+	diagnostic.Stage("RELIABLE_STREAM", true)
 	secured := tls.Client(connection, config)
 	secured.SetDeadline(deadline)
+	diagnostic.Stage("TLS_HANDSHAKE", false)
 	if err = secured.HandshakeContext(ctx); err != nil {
+		diagnostic.Failure(err)
 		connection.Close()
 		cleanup()
 		var certificateError *tls.CertificateVerificationError
 		if errors.Is(err, ErrRejected) || errors.As(err, &certificateError) {
-			return nil, ErrRejected
+			return nil, startupdiag.Preserve(ErrRejected, err)
 		}
-		return nil, ErrUnavailable
+		return nil, startupdiag.Preserve(ErrUnavailable, err)
 	}
-	client := &Client{connection: secured, ctx: ctx, cancel: cancel, cleanup: func() { connection.Close(); cleanup() }}
+	diagnostic.Stage("TLS_HANDSHAKE", true)
+	client := &Client{connection: secured, ctx: ctx, cancel: cancel, diagnostic: diagnostic, cleanup: func() { connection.Close(); cleanup() }}
 	return client, nil
 }
 
@@ -134,22 +159,50 @@ func (client *Client) Post(path string, body []byte, id string) (Reply, error) {
 	client.mu.Lock()
 	defer client.mu.Unlock()
 	var reply Reply
-	if client.ctx.Err() != nil || !requestID.MatchString(id) || client.requests == 0 && path != Challenge || client.requests == 1 && path != Fetch || client.requests > 1 {
+	client.diagnostic.Stage("REQUEST_VALIDATE", false)
+	if err := client.ctx.Err(); err != nil {
+		client.diagnostic.Failure(err)
 		return reply, ErrRejected
 	}
+	if !requestID.MatchString(id) || client.requests == 0 && path != Challenge || client.requests == 1 && path != Fetch || client.requests > 1 {
+		client.diagnostic.Failure(ErrRejected)
+		return reply, ErrRejected
+	}
+	encoded, err := json.Marshal(Request{path, id, body})
+	valid := err == nil && len(encoded) > 0 && len(encoded) <= MaxMessage
+	clear(encoded)
+	if !valid {
+		client.diagnostic.Failure(ErrRejected)
+		client.requests++
+		client.Close()
+		return reply, ErrRejected
+	}
+	client.diagnostic.Stage("REQUEST_VALIDATE", true)
 	client.requests++
+	client.diagnostic.Stage("REQUEST_WRITE", false)
 	if err := write(client.connection, Request{path, id, body}); err != nil {
+		client.diagnostic.Failure(err)
 		client.Close()
 		return reply, err
 	}
-	if err := read(client.connection, &reply); err != nil {
+	client.diagnostic.Stage("REQUEST_WRITE", true)
+	client.diagnostic.Stage("RESPONSE_READ", false)
+	if err := read(client.connection, &reply, client.diagnostic); err != nil {
+		client.diagnostic.Failure(err)
 		client.Close()
 		return reply, err
 	}
+	client.diagnostic.Stage("RESPONSE_VALIDATE", false)
 	if client.ctx.Err() != nil || reply.Status < 200 || reply.Status > 599 {
+		if err := client.ctx.Err(); err != nil {
+			client.diagnostic.Failure(err)
+		} else {
+			client.diagnostic.Failure(ErrRejected)
+		}
 		client.Close()
 		return Reply{}, ErrRejected
 	}
+	client.diagnostic.Stage("RESPONSE_VALIDATE", true)
 	if reply.Status != 200 || client.requests == 2 {
 		client.Close()
 	}

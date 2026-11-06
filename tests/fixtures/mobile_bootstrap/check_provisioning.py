@@ -20,7 +20,7 @@ def main():
     classes.mkdir()
     java = root / 'clients/android/app/src/main/java'
     tests = root / 'clients/android/app/src/test/java'
-    names = ['ReadinessBootstrapRouteTest', 'ConnectivityOrchestratorTest', 'DiagnosticRingTest',
+    names = ['ReadinessFetchTraceTest', 'ReadinessBootstrapRouteTest', 'ConnectivityOrchestratorTest', 'DiagnosticRingTest',
              'RestrictedBootstrapTest', 'ReadinessStopTest', 'RestrictedGatewayTest', 'RestrictedCacheTest',
              'ReadinessProductTest', 'FriendsReadinessProtocolTest']
     jars = [next((tools / 'gradle-home/caches/modules-2/files-2.1').rglob(name)) for name in
@@ -44,9 +44,9 @@ def main():
         network = Path(__file__).resolve().parent / 'network_fixture'
         network_classes = output / 'network-classes'
         network_classes.mkdir()
-        commands += [[str(tools / 'jdk/bin/javac'), '-J-Xmx128m', '-d', str(network_classes),
+        commands += [[str(tools / 'jdk/bin/javac'), '-J-Xmx128m', '-cp', classpath, '-d', str(network_classes),
                       *map(str, sorted(network.glob('*.java'))), str(java / 'com/familyconnect/app/ChatNetworkAndroid.java')],
-                     [str(tools / 'jdk/bin/java'), '-Xmx64m', '-cp', str(network_classes), 'com.familyconnect.app.NetworkProbe']]
+                     [str(tools / 'jdk/bin/java'), '-Xmx64m', '-cp', str(network_classes)+os.pathsep+classpath, 'com.familyconnect.app.NetworkProbe']]
     receipts = []
     for index, command in enumerate(commands):
         log = output / f'check-{index}.log'

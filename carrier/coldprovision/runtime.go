@@ -14,17 +14,25 @@ import (
 
 func Telemost(network *underlay.Network) bootstrap.SeedConnector {
 	return func(lifetime, ready context.Context, room roombroker.Room) (familysession.PacketEndpoint, error) {
+		diagnostic := diagnosticFrom(lifetime)
+		diagnostic.Stage("TELEMOST_CREATE", false)
 		if network == nil {
+			diagnostic.Failure(ErrRejected)
 			return nil, ErrRejected
 		}
 		carrier, err := telemost.NewOwned(lifetime, telemost.Config{RoomURL: room.JoinURL, DisplayName: "Family provisioning", Mode: telemost.ModeVP8, MaxVideoTracks: 4, Underlay: network})
 		if err != nil {
+			diagnostic.Failure(err)
 			return nil, err
 		}
+		diagnostic.Stage("TELEMOST_CREATE", true)
+		diagnostic.Stage("TELEMOST_CONNECT", false)
 		if err = carrier.Connect(ready); err != nil {
+			diagnostic.Failure(err)
 			carrier.Close()
 			return nil, err
 		}
+		diagnostic.Stage("TELEMOST_CONNECT", true)
 		return carrier, nil
 	}
 }

@@ -31,6 +31,7 @@ final class ReadinessFetchTrace {
     synchronized void request(String path,Route selected){
         operation=path.endsWith("/challenge")?Operation.CHALLENGE:path.equals("/friends/restricted-readiness")?Operation.FETCH:Operation.UNKNOWN;
         route=selected;httpStatus=0;stage=Stage.LOCAL;
+        if(selected==Route.PROVISIONING){value.remove("network_type");value.remove("network_generation");}
         observe();
     }
     synchronized void stage(Stage selected){stage=selected;observe();}
@@ -72,6 +73,13 @@ final class ReadinessFetchTrace {
         if(value.has("network_type"))entry.add("network_type",value.get("network_type"));
         if(value.has("network_generation"))entry.add("network_generation",value.get("network_generation"));
         if(failures.size()==4)failures.remove(0);failures.add(entry);
+    }
+    synchronized void provisioning(String requestId,String phase,String raw,JsonObject network){
+        JsonObject entry=new JsonObject();entry.addProperty("request_id",requestId);entry.addProperty("phase",phase);
+        if(raw!=null)entry.add("native",com.google.gson.JsonParser.parseString(raw));
+        if(network!=null)entry.add("network",network);
+        com.google.gson.JsonArray entries=value.has("provisioning")?value.getAsJsonArray("provisioning"):new com.google.gson.JsonArray();
+        if(entries.size()==6)entries.remove(0);entries.add(entry);value.add("provisioning",entries);
     }
     synchronized void cache(JsonObject cache){value.add("cache",cache);}
     synchronized void complete(ReadinessImportResult.Code result,boolean selected,boolean refreshed,long finished){

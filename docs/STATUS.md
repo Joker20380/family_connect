@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**6 November — same cold-provisioning incident, native diagnostic source gate PASS.**
+The owner explicitly authorizes this bounded continuation from9765c5c, with one new
+informative AutomaticConnection run only after error distinguishability. Native results
+now travel separately from trusted replies, bound to the current call/lease; original
+Open failure precedes ready publication/cancel and survives concurrent Close. Real host
+JVM→JNI→Go tests distinguish pre-Go arguments, Go locator rejection, protect denial,
+missing/throwing JNI callback, carrier EOF, TLS trust, response EOF and Open/Close race.
+Affected Go race tests (3 repeats),100 JVM tests and source-pipeline compilation pass.
+This is NOT Android/Telemost acceptance: next is fresh JNI/APK, short provider-free
+Android JNI check, then the one authorized cold Connect. No timeout/retry/admission,
+installed user APK, production/G4/catalog/version change. Both earlier FAIL_RUNTIME
+receipts/artifacts remain immutable. [Current diagnostic gate](releases/2026-11-06-beta113-field16-bootstrap.md#native-diagnostic-continuation-6-november).
+
 **6 November19:40UTC — single corrected diagnostic attempt FAIL_RUNTIME; no more retries.**
 The actual AutomaticConnection MESH candidate receives absolute guest deadline339645ms
 (200000ms budget), not the old harness30s. It fails after1.792s with preserved enum

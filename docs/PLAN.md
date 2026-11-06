@@ -2,6 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected owner continuation6 November: native diagnostic gate, then ONE new runtime.**
+Source distinguishability now passes real host JNI and targeted race tests; cancellation
+no longer masks the completed Open cause. Preserve both earlier FAIL_RUNTIME results.
+Next: build/package fresh x86_64 JNI, prove its digest/exports, run the short provider-free
+API27 JNI check first, then one fresh-identity/locator AutomaticConnection cold test.
+Keep production candidate deadline/readiness budget, trust/admission and guest-only
+direct-path blocks unchanged. On failure retain the actual native reason; no unchanged
+retry. On READY check DNS/verified HTTPS/egress before any runtime negatives. No adjacent
+queue, G4, production, rollout, locator import or discovery work is authorized.
+The consumed-retry entry below describes the preceding request, not this authorization.
+
 **Active same-incident gate: the one authorized diagnostic retry is consumed.**
 Original harness incorrectly gave the whole engine30s; corrected AutomaticConnection
 receives the production200000ms candidate deadline. The new API27/Telemost run fails
