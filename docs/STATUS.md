@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+**6 November22:01UTC — thermal-reader audit; cold runtime explicitly stopped.**
+The exact6096535 as-run reader hashes are verified. Both paths select coretemp/k10temp
+`temp*_input` and divide the raw integer by1000; no max/crit/highest source explains94.
+The watcher stores only its own earlier samples, sleeps3s after work, and stage audits
+independently reread without updating that peak. Identical-input replays agree;66 then94
+is reproducible with separate samples, not proof of the historical timing or physical peak.
+Old raw integers/per-sensor times/watch history/fan RPM are missing. Neither overheating
+nor a faulty sensor is established; the physical94°C event remains INSUFFICIENT_DATA.
+One passive60s observation on verified Dell XPS15 9500/i7-10750H records coretemp53–76°C
+package, Dell CPU55–61°C and reported fans2763–2774/3076–3088RPM. These newer readings
+do not refute old94 or establish old fan behavior. A subsequent paired sensors/sysfs
+check matches all7 coretemp inputs; the minute's sensors JSON parse fails, so a full
+per-second sensors comparison is unavailable. Raw sysfs readings/timestamps are saved.
+A separate reproduced bug is fixed in a versioned test helper: missing CPU sensors
+must stop, not fabricate0°C. It does not explain the populated94°C frames.16 targeted
+mocked tests plus exact/fixed input replays pass; no emulator/provider/build or cold gate
+runs. Original artifacts/native/Android PASS remain untouched;85°C is unchanged.
+[Reader sources, limitations and bounded observations](releases/2026-11-06-beta113-field16-bootstrap.md#thermal-reader-audit).
+
 **6 November21:47UTC — reduced-load attempt stopped after Android ready, before rooms.**
 Fromf7073e6, unchanged source6eb61a9/JNI17119f00…60c59 and existing binaries/APK bases
 are verified and reused; accepted Android JNI PASS is retained, no gate/suite/rebuild.

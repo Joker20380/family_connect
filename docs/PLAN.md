@@ -2,6 +2,22 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected6 November: thermal-reader audit only; all cold runtime attempts STOPPED.**
+Owner supersedes the runtime continuation with read-only verification of the exact
+6096535 readers. Same-input comparison agrees on sensors/units/thresholds; independent
+sample domains explain how a watcher maximum66 can coexist with a stage94, but missing
+historical watch timestamps/raw inputs/fan data prevent confirmation of a real peak,
+sustained heat or sensor error. One60s passive observation is complete, no stress/AVD.
+The separate missing-sensor0°C fallback is reproduced and removed in the versioned
+test helper with16 focused tests; original as-run files remain immutable. The fixed
+helper has no new runtime qualification. A sensors JSON collection limitation leaves
+only a later paired sensors/sysfs comparison, not the full minute comparison. Do not
+rerun this observation or cold stand automatically to fill gaps. No Connect, rooms,
+APK/native build, BIOS/fan/power changes, production/G4 or foreign-process operations.
+Accepted Android JNI PASS and the unused single Connect remain unchanged. This result
+does not authorize resumption or environment migration; next action is the owner's.
+
+**Prior runtime authorization outcome; not an active launch instruction:**
 **Selected continuation6 November21:47UTC: reduced-load thermal stop; migration decision next.**
 Fromf7073e6, product6eb61a9/JNI17119f00…60c59 remain unchanged and reused. Accepted
 provider-free Android JNI PASS is retained, no native rebuild or host/JVM/race/JNI rerun.

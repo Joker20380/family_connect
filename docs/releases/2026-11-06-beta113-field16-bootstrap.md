@@ -1383,3 +1383,124 @@ Per the owner, the next decision is migration of the runtime environment, not an
 identical local restart or an automatic move to a physical phone/another host.
 
 [Sanitized reduced-load evidence, retained identities and cleanup](2026-11-06-cold-reduced-load-runtime.json).
+
+#### Thermal reader audit
+
+Owner stops cold runtime attempts and requests verification, not MESH qualification.
+Conclusion for the old94°C observation: **INSUFFICIENT_DATA** to establish a real short
+peak, sustained high temperature or faulty physical sensor. The owner's report that
+fans were not noticeably audible is retained, not converted into RPM or thermal proof.
+No AVD, Connect, room, APK/native build, stress load, module/tool installation or system
+setting change occurs. Product6eb61a9/JNI17119f00…60c59 and accepted Android JNI PASS
+remain unchanged. No deployment/version change or rollback is involved.
+
+**Exact executed code, not a current lookalike.** The frozen directory is
+`state-client-build/cold-native-diagnostic-20261106/reduced-load-runtime/local-auth/`:
+
+| File / function | Verified SHA256 / source lines |
+| --- | --- |
+| `emulator_guard.py`, `start.watch` | `e4beb91db4305e9635d1a2c23ae17d7d5efa79d0e228e97416597260d8b29340`;15–36 |
+| `run_android.py`, `observe` / `audit` | `d705a82285cfef1269c01840ba0cd77fe51a72c7e6197bed7b5e9cb38cfb68b6`;34–90 |
+
+The watcher's exact temperature selection/conversion and decision are:
+
+```python
+for device in Path('/sys/class/hwmon').glob('hwmon*'):
+    if (device/'name').read_text().strip() in ('coretemp','k10temp'):
+        cpu.extend(int(path.read_text())/1000 for path in device.glob('temp*_input'))
+record['peak_cpu_c']=max(record.get('peak_cpu_c',0),max(cpu,default=0))
+```
+
+After GPU reading and that peak update, it calls `observe(False)` (another temperature
+read), then decides using its **original** CPU list:
+
+```python
+if max(cpu,default=0)>=85 or gpu>=80 or time.monotonic()-began>=180:
+```
+
+`observe` selects the same driver names and `temp*_input`, records labels, and computes
+`celsius=int(path.read_text())/1000`. It reads process CPU counters first, temperatures
+second, GPU/memory next, and timestamps the frame at the end. The exact stage assertion:
+
+```python
+observe();time.sleep(1)
+frame=observe(True)
+if enforce:
+    assert max(item['celsius'] for item in frame['temperatures'])<85 and frame['gpu_celsius']<80,'THERMAL_PREFLIGHT'
+    assert frame['memory_kib']['MemAvailable']>=4*1024*1024,'MEMORY_PREFLIGHT'
+```
+
+Neither path reads max/crit/highest as current temperature, loads a temperature fixture,
+or uses a previous peak for the thermal decision. Labels affect display only. The one
+bad fallback is the watcher's empty-list default0, discussed separately below.
+
+**66 versus94.** `peak_cpu_c` covers only the watcher's first CPU read in each loop;
+neither its `observe(False)` reread nor stage audits update it. The loop runs while
+the owned process is alive, with `sleep(3)` **after** all reads/observer work, so its
+actual cadence is longer/variable. The daemon is not joined. In the old run the stage
+assertion initiates cleanup and process exit; there is no watcher-abort/monitor-error
+flag. Its last read time and exact thread exit time were not saved. Thus a later audit
+can record94 while the earlier watch maximum remains66, without unit disagreement.
+A deterministic replay with a66 input followed by a94 audit reproduces exactly that;
+it establishes the code mechanism, not the missing historical sampling schedule.
+
+The old94 values are in `hwmon2/temp4_input` (Core2) and `hwmon2/temp1_input` (Package0)
+at frame times21:47:25.915094 and21:47:25.950063UTC. Other cores are62–75°C. The code's
+conversion implies raw94000, but the raw integers themselves were **not retained**.
+Two frames35ms apart are not independent physical thermometers and may reuse cached
+kernel sensor values. There are no old fan readings, per-input timestamps, continuous
+watch history or independent sensor records. Their absence prevents retrospective
+verification of94 or its duration. Do not declare either overheating or sensor failure.
+
+**One passive observation,22:00:50–22:01:50UTC.** Actual DMI reports Dell Inc./XPS15 9500;
+CPU is Intel Core i7-10750H. No serial identifiers are collected. Drivers are discovered
+by `name`, resolved `device` and labels, not a fixed hwmon number: coretemp is on
+`/sys/devices/platform/coretemp.0`; Dell SMM and DDV are separately identified. Every
+input read saves exact sysfs/resolved paths, raw integer, converted value, start/end
+UTC and monotonic times.60 samples in60.000103s, about1s cadence:
+
+| Source | Range during this observation |
+| --- | --- |
+| coretemp Package0 | 53–76°C |
+| Core0 / Core1 / Core2 | 51–67 /51–65 /52–71°C |
+| Core3 / Core4 / Core5 | 52–75 /52–71 /52–76°C |
+| Dell DDV CPU / SMM temp1 | 55–61°C; different sensor/reporting path, not a calibration standard |
+| DDV CPU Fan / Video Fan | 2763–2774 /3076–3088RPM |
+| SMM fan1 / fan2 | 2763–2773 /3076–3088RPM; SMM fan labels UNKNOWN/EINVAL |
+| Available frequency readout | scaling_cur_freq800–4205.329MHz; cpuinfo_cur_freq UNKNOWN/ENOENT |
+
+Per-logical-CPU utilization and topology/frequency snapshots are retained. Some
+uncontrolled existing workload reaches98.925% on one logical CPU; this is passive
+observation, not a deliberately idle or stress experiment. No throttle counter is read
+or used as evidence. These newer readings cannot refute old94 or infer old fan RPM.
+
+Installed `/usr/bin/sensors -j` with three chip selectors returns concatenated JSON
+documents; DDV also repeats feature labels such as Ambient. The initial collector's
+single-document parser rejects all60 outputs and does not retain those stdout values.
+Therefore the full per-second sensors comparison is **unavailable**, not a PASS.
+The collector is corrected to preserve raw output and parse this format; the60s window
+is **not repeated**. A later bounded paired sysfs→sensors→sysfs check matches all7
+coretemp inputs exactly and31/32 temperature/RPM fields to a bracketing read. The one
+remaining SMM fan difference is2769→2763→2769RPM. This tests reader/units only: sensors
+and sysfs address the same hardware interfaces, not independent thermometers. An early
+unreadable SMM label is marked UNKNOWN; it fails metadata preparation before the timed
+window, not a temperature read. Full raw sysfs and the successful paired check remain
+local, with hashes in the receipt.
+
+**Identical-input replay and bounded fix.** The exact two frozen modules execute with
+fake sysfs/subprocess/thread boundaries: no emulator or provider process is created.
+The new saved raw set yields73°C in both paths. Reconstructing the old set from stored
+degrees yields94°C and STOP in both paths; this is not recovered old raw evidence.
+Renumbered hwmon37, missing optional labels and999°C max/crit/highest distractors do
+not alter selection or units. Malformed integers, missing driver-name files and I/O
+errors stop both paths without fabricating a temperature. However no CPU driver or
+empty CPU inputs makes the **old watcher** invent0°C and continue; the stage path
+raises on empty max. This is a real fail-open guard bug, but cannot explain the old
+populated94°C frame. `tests/android_emulator_guard.py` versions the captured helper
+with fail-closed empty-input handling, no fabricated initial peak and unchanged
+85°C/80°C/180s limits. Frozen as-run files are not overwritten; runtime remains stopped.
+`tests/test_android_emulator_guard.py`:16 targeted mocked tests PASS. Eight original
+replay cases, eight corrected-helper cases and the separate66→94 schedule case are
+retained. No full suites, no runtime validation of the fix, and no authority to resume.
+
+[Sanitized audit receipt and exact local evidence hashes](2026-11-06-thermal-reader-audit.json).
