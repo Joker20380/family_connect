@@ -3,6 +3,10 @@
 ## Current engineering priority / Текущий critical path
 
 **Selected owner follow-up6 November: restore failed live MESH, not a new rollout.**
+The ordinary fleet recovery has now committed after bounded directory recovery; both NL
+and HTTP are active. Finish installing/readback of the qualified publisher interlock and
+verify current signed materials, real directory generation, readiness and unchanged AWG/TCP.
+The paragraphs below retain the preceding recovery preparation, not another active task.
 Use the qualified explicit unacquired-abort guard only for the proven empty
 OPERATION_BUSY transaction, then the existing pinned fleet controller and fresh
 both-NL/readiness checks. Preserve current DB, revocations/floors, ordinary VPN and

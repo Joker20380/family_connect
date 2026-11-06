@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**6 November14:00UTC: live fleet renewal COMMITTED; both NL MESH and HTTP active.**
+The first repair renewal safely aborted on expired seed directories (DIRECTORY_INVALID,
+readers stopped). Existing bounded publisher recovery staged real Telemost rooms and
+published fresh directories on both nodes; the next ordinary pinned-controller operation
+committed, after strict signatures/three-node readback and authorized normal starts.
+No online runtime package was installed. Final stability/readiness checks remain pending.
+A thin scheduled-service interlock is qualified: pause only the existing directory timer,
+wait for its active writer to finish, invoke the unchanged controller, restore prior timer
+state even on failure. This prevents its demonstrated shared-lock race; no new writer/timer,
+schedule interval or authorization policy. Installation/readback of the interlock is next.
+
 **6 November: authorized live MESH recovery, source guard qualified; not restored yet.**
 Both NL leaf/CRL expired5 November11:44:40UTC. RU's first acquisition failed with
 OPERATION_BUSY at10:15:12UTC; its durable RECOVERY_REQUIRED record has no acquired/
