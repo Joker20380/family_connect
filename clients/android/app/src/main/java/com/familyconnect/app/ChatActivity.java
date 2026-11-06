@@ -238,7 +238,7 @@ public final class ChatActivity extends LocalizedActivity {
         job(()->{
             JsonArray cards=chat.call("contacts",args()).getAsJsonArray();
             JsonArray inbox=chat.call("inbox",args()).getAsJsonArray();
-            serviceUnread=0;for(JsonElement entry:chat.call("service_events",args()).getAsJsonArray())if(!entry.getAsJsonObject().get("read").getAsBoolean())serviceUnread++;
+            serviceUnread=0;for(JsonElement entry:ChatRuntime.serviceEvents(this,chat))if(!entry.getAsJsonObject().get("read").getAsBoolean())serviceUnread++;
             for(JsonElement item:cards){JsonObject card=item.getAsJsonObject();int unread=0;for(JsonElement entry:inbox){JsonObject message=entry.getAsJsonObject();if(!message.get("read").getAsBoolean()&&message.get("peer").equals(card.get("address")))unread++;}card.addProperty("unread",unread);}
             for(JsonElement entry:cards){JsonObject card=entry.getAsJsonObject();JsonObject request=args("address",card.get("address").getAsString());request.addProperty("offset",0);request.addProperty("limit",1);
                 JsonObject h=chat.call("history",request).getAsJsonObject();int total=h.get("total").getAsInt();
@@ -377,7 +377,7 @@ public final class ChatActivity extends LocalizedActivity {
     private void serviceEvents(boolean refresh){
         if(busy)return;
         screen="events";
-        job(()->{if(refresh)ChatRuntime.syncEvents(this,chat,true);return chat.call("service_events",args());},result->{
+        job(()->{if(refresh)ChatRuntime.syncEvents(this,chat,true);return ChatRuntime.serviceEvents(this,chat);},result->{
             shell(getString(R.string.service_events),this::contacts,this::noticeAdmin);ChatRuntime.visiblePeer="service";
             renderedEventsRevision=ChatRuntime.eventsRevision;
             if(ChatRuntime.eventsUnavailable)notice.setText(R.string.service_events_unavailable);
@@ -385,6 +385,12 @@ public final class ChatActivity extends LocalizedActivity {
             if(events.isEmpty())TerminalUi.label(content,getString(R.string.service_events_empty),15,TerminalUi.MUTED);
             for(int i=events.size()-1;i>=0;i--){JsonObject event=events.get(i).getAsJsonObject();ids.add(event.get("id"));
                 LinearLayout card=TerminalUi.section(content,null);
+                if(event.has("subscription_event")){
+                    TerminalUi.label(card,getString(R.string.subscription_title),18,TerminalUi.MINT);
+                    TerminalUi.label(card,SubscriptionPresentation.event(event,SubscriptionUi.text(this)),15,TerminalUi.TEXT);
+                    TerminalUi.button(card,R.string.subscription_title,()->startActivity(SubscriptionUi.intent(this)));
+                    continue;
+                }
                 if(event.has("publisher"))TerminalUi.label(card,getString(R.string.exit_official),12,TerminalUi.AMBER);
                 if(event.has("kind")){String kind=event.get("kind").getAsString();TerminalUi.label(card,getString(kind.equals("update")?R.string.event_update:kind.equals("maintenance")?R.string.event_maintenance:kind.equals("server_change")?R.string.event_server_change:R.string.event_information),12,TerminalUi.MUTED);}
                 TerminalUi.label(card,event.get("title").getAsString(),18,TerminalUi.MINT);
@@ -396,6 +402,7 @@ public final class ChatActivity extends LocalizedActivity {
                 TerminalUi.label(card,event.get("author").getAsString()+" · "+DateFormat.getDateTimeInstance().format(new Date(event.get("created").getAsLong()*1000)),11,TerminalUi.MUTED);
             }
             ChatNotifications.cancel(this,"service");
+            ChatNotifications.cancel(this,"subscription");
             WORKER.execute(()->{try{ChatRuntime.mark(chat,"mark_events",ids,"read");}catch(Exception ignored){}});
         });
     }

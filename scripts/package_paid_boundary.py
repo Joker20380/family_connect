@@ -126,6 +126,9 @@ def build(output, ref='HEAD'):
         sources[name] = committed(ref, name)
     templates = {contract + name: committed(ref, contract + name) for name in
                  ('http-runtime.conf', 'access.conf', 'nginx-location.conf')}
+    for name in ('gateway-selection-location.conf', 'subscription-location.conf'):
+        location = 'deploy/friends/' + name
+        templates[location] = committed(ref, location)
     with tempfile.TemporaryDirectory() as directory:
         temporary = Path(directory)
         source = temporary / 'source'

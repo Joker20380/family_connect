@@ -100,10 +100,11 @@ def running(runtime):
 def nginx_sections():
     source = (ROOT / 'deploy/friends/install-access.py').read_text()
     ordinary = source[source.index('        location ~ ^/friends/'):source.index("\n'''", source.index('        location ~ ^/friends/'))]
-    old = 'referral/(issue|claim)|device/(status|support|diagnostics)|notices/publish)'
+    old = 'referral/(issue|claim)|device/(status|subscription|support|diagnostics)|notices/publish)'
     assert ordinary.count(old) == 1
-    ordinary = ordinary.replace(old, 'referral/(issue|claim)|device/(status|support|diagnostics)|notices/(publish|device/(role|publish|list|edit)))')
+    ordinary = ordinary.replace(old, 'referral/(issue|claim)|device/(status|subscription|support|diagnostics)|notices/(publish|device/(role|publish|list|edit)))')
     ordinary += (ROOT / 'deploy/friends/gateway-selection-location.conf').read_text()
+    ordinary += (ROOT / 'deploy/friends/subscription-location.conf').read_text()
     tree = ast.parse((ROOT / 'deploy/server-load/publish.py').read_text())
     status = next(ast.literal_eval(node.value) for node in tree.body
                   if isinstance(node, ast.Assign) and node.targets[0].id == 'section')

@@ -30,12 +30,22 @@ final class ChatNotifications {
         String channel=service?EVENTS:MESSAGES;
         if(manager.getNotificationChannel(channel).getImportance()==NotificationManager.IMPORTANCE_NONE)return false;
         String title=service?"Family Connect":name!=null?name:c.getString(R.string.chat_contact)+" "+peer.substring(0,8);
-        String text=service?message.get("title").getAsString():c.getString(R.string.chat_new_message);
+        boolean subscription=service&&message.has("subscription_event");
+        String text=subscription?SubscriptionPresentation.event(message,SubscriptionUi.text(c)):service?message.get("title").getAsString():c.getString(R.string.chat_new_message);
+        PendingIntent target=subscription?PendingIntent.getActivity(c,0,SubscriptionUi.intent(c),PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE):open(c,peer);
         Notification publicView=new Notification.Builder(c,channel).setSmallIcon(R.drawable.ic_shield).setContentTitle("Family Connect").setContentText(c.getString(R.string.chat_new_message)).build();
-        Notification notification=new Notification.Builder(c,channel).setSmallIcon(R.drawable.ic_shield).setContentTitle(title).setContentText(text).setCategory(Notification.CATEGORY_MESSAGE).setVisibility(Notification.VISIBILITY_PRIVATE).setPublicVersion(publicView).setContentIntent(open(c,peer)).setAutoCancel(true).setNumber(message.has("unread")?message.get("unread").getAsInt():1).build();
-        try{manager.notify("chat:"+peer,100,notification);return true;}catch(SecurityException denied){return false;}
+        Notification notification=new Notification.Builder(c,channel).setSmallIcon(R.drawable.ic_shield).setContentTitle(title).setContentText(text).setCategory(Notification.CATEGORY_MESSAGE).setVisibility(Notification.VISIBILITY_PRIVATE).setPublicVersion(publicView).setContentIntent(target).setOnlyAlertOnce(subscription).setAutoCancel(true).setNumber(message.has("unread")?message.get("unread").getAsInt():1).build();
+        String tag=subscription?"chat:subscription:"+message.get("id").getAsString():"chat:"+peer;
+        try{
+            if(subscription)for(var active:manager.getActiveNotifications())if(active.getTag()!=null&&active.getTag().startsWith("chat:subscription:")&&!active.getTag().equals(tag))manager.cancel(active.getTag(),100);
+            manager.notify(tag,100,notification);return true;
+        }catch(SecurityException denied){return false;}
     }
-    static void cancel(Context c,String peer){c.getSystemService(NotificationManager.class).cancel("chat:"+peer,100);}
+    static void cancel(Context c,String peer){
+        NotificationManager manager=c.getSystemService(NotificationManager.class);
+        manager.cancel("chat:"+peer,100);
+        if(peer.equals("subscription"))for(var active:manager.getActiveNotifications())if(active.getTag()!=null&&active.getTag().startsWith("chat:subscription:"))manager.cancel(active.getTag(),100);
+    }
     static void request(Activity activity){
         channels(activity);
         if(Build.VERSION.SDK_INT>=33&&activity.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED){

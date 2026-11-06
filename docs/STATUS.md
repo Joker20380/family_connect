@@ -1,5 +1,12 @@
 # Текущее состояние / Current state
 
+**6 November — SUBSCRIPTION-INTEGRATION-1 in progress, separate integration worktree.**
+Integrating the reviewed subscription source onto current main without replacing its
+bootstrap/renewal work. Installed ARM119 retains source `b2a37fe98929` and its original
+hash/acceptance scope. No new installation, production restart or paid/admission write.
+Gate: canonical package HTTP/authentication checks, repository CI and ordinary PR merge.
+[Integration evidence and next paid/event prerequisites](releases/2026-11-06-subscription-integration-1.md).
+
 **6 November — beta113 cold bootstrap gap reproduced; not a field-network diagnosis.**
 With HTTPS8443 and direct RNS4242 both unavailable, an activated device without usable
 readiness or an already healthy VPN has no cold path to verified pre-Telemost materials.
@@ -59,6 +66,62 @@ NL MESH bootstrap services FAILED (exit1/NRestarts6; last exits5 November11:47UT
 Cause unknown; no repair/restart. RU CPU initially70–72%, follow-up4–31%; disk71%/8.4GiB.
 AWG recent peers0/4/0; TCP443 sockets0/91/5, not unique clients.
 [Read-only evidence](releases/2026-11-06-vpn-health.md). Isolated G4 untouched.
+
+**6 November — SUBSCRIPTION-ANDROID-3: narrow physical ARM/normal HTTPS path PASS.**
+Fixed signed ARM119 `52a9847b7418…`, source `b2a37fe98929`, installed118→119 on
+Redmi Note9 Pro/API31 after explicit owner-phone permission. Installed bytes/signature,
+UID/first-install/identity/activation retained. Normal trusted HTTPS without VPN returns
+fresh own **non-cohort** state; real process restart shows retained encrypted cache then
+fresh response. Human Refresh produces new consumed own proofs; no false payment notice.
+Minimal serving HTTP overlay `0fa13b0a9240…` deployed on RU/18086; exact ingress added,
+one HTTP restart and nginx graceful reload only. Other33 archive members and protected
+paid/device/invite/grant rows unchanged. Three overlay +43 exact-runtime tests PASS.
+No legitimate paid row/event for this identity: physical paid-state/event/notification
+dedupe NOT_RUN. No general APK publication, merge, G4/main/bootstrap/renewal change.
+[Evidence, rollback and explicit remaining gates](releases/2026-11-06-subscription-android-3.md).
+
+**6 November — SUBSCRIPTION-ANDROID-2 natural delivery PASS; signed ARM119 candidate built.**
+Isolated feature branch: actual UI Refresh/Home produces a canonical-event notification,
+real tap opens the right identity's subscription, repeat refresh does not repost.
+Fixed hidden-dialog read acknowledgement and connected durable save/resume to a bounded
+drain on existing WORKER; no background subscription fetch or new scheduler. Actual UI
+recovery starts the ordinary delivery service. Six Python guards +13 JVM checks PASS.
+Source `b2a37fe98929` pushed/remote-verified; ordinary Friends ARM64 beta119/119 built,
+26 scoped Gradle tests/lint/native provenance/signature PASS. Signed APK SHA256
+`52a9847b74181c48808c86a0c5bf5925b53ef498eec628aef2d78d26f1c92d2d`.
+No ARM install/publication/production ingress claim; public113/catalog7 and field118
+unchanged. Own AVD/backend stopped; prior limitations retained, no G4/main changes.
+[Scope, behavior and preserved limits](releases/2026-11-06-subscription-android-2.md).
+
+**6 November — SUBSCRIPTION-ANDROID-1: bounded API35 runtime PASS, not production acceptance.**
+Isolated `feature/subscription-status-20261106`, starting remote `34529b622594`:
+source checkpoint `934867678f99` pushed/remote-verified; same-hash APK reinstalled,
+own backend/AVD stopped and evidence retained. Closing receipt is documentation-only.
+Fixed an actual checked-exception Android compile defect; built/installed diagnostic
+debug x86_64 `com.familyconnect.app.subscriptiontest`, Android118 (separate package).
+Real local HTTPS Handler → Friends proof → Chaquopy → Keystore/encrypted store → UI
+passes active/no-event/expired/grace/revoke, outside pilot, unsupported/unavailable,
+offline/process restart, permissions/durable dedupe and actual cold/warm notification taps.
+Existing notification delivery was invoked explicitly; new event fetching remains
+screen-open/manual only, not background push. One mixed-underlay test-origin failure
+is retained; final Wi-Fi recovery passes. Physical whitelist, production ingress,
+ARM/release and normal activated-service scheduling remain NOT_RUN. No G4/production
+or main-checkout changes. [Candidate, evidence boundaries and remaining gates](releases/2026-11-06-subscription-android-1.md).
+
+**6 November — isolated subscription HTTP/source integration candidate (not installed/qualified).**
+Owner-requested parallel `ANDROID-CONTROLLED-BETA / SUBSCRIPTION-CLIENT-VIEW`, branch
+`feature/subscription-status-20261106`, continuing checkpoint `47ef0463bd39`:
+new schema1 `POST /friends/device/subscription` uses existing Friends one-use proof,
+dedicated purpose and one transactional canonical paid snapshot/APPLIED event read.
+The screen now refreshes on open/explicit action over the existing HTTPS underlay,
+validates before encrypted projection, and preserves cache with separate failure states.
+84 focused Python checks (including real local HTTP→decoder→encrypted store) and26
+pure JVM tests PASS. `/friends/device/status` response/semantics are unchanged.
+**Contract gap closed in source, not deployed:** Android build/Keystore/transport,
+notifications/navigation and runtime qualification remain OPEN; merge is separate.
+Source remains Android118; no APK/build/install/publication/version or enforcement change.
+G4 is independent and untouched; its next step and acceptance are not changed here.
+[Exact contract, evidence boundaries and deferred gates](releases/2026-11-06-subscription-authenticated-api.md).
 
 **5 November11:29UTC — read-only VPN check:** all AWG/TCP and both NL bootstrap
 active; CPU RU9–25%, AMS1 19–21%, AMS2 16–18%. RU disk70%/8.5GiB free.

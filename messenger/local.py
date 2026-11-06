@@ -237,6 +237,20 @@ class LocalChat:
             self._require_open()
             return self._store.service_events()
 
+    def subscription_status(self, device):
+        with self._lock:
+            self._require_open()
+            try: return self._store.subscription_status(device)
+            except ValueError: raise LocalError('invalid_input') from None
+
+    def accept_subscription_response(self, raw, device):
+        from .subscription_view import decode_response
+        with self._lock:
+            self._require_open()
+            status, confirmed_at, event = decode_response(raw, device)
+            accepted = self._store.accept_confirmed_subscription(status, device=device, confirmed_at=confirmed_at, event=event)
+            return dict(accepted=accepted, view=self._store.subscription_status(device))
+
     def import_events(self, feed):
         from .service_events import validate_feed
         with self._lock:
