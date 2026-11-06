@@ -3,6 +3,17 @@
 ## Current engineering priority / Текущий critical path
 
 **Owner-selected SUBSCRIPTION-INTEGRATION-1 — integration gate OPEN.**
+Current authorized work includes the complete beta119 source-review guard adaptation
+and CI fixture corrections. Finish the actual-head hosted checks and ordinary PR1 merge;
+do not open a runtime qualification phase. All152 guarded files match beta119; seven
+subscription and three inherited-renewal exceptions are exact reviewed hashes, not new
+unguarded files. Historical native/reference hashes remain fixed. Ownership, interpreter,
+historical source and process-global fixture isolation must be explicit and every collected
+test must run in its declared context. Record final CI/merge receipts in PR1 without a
+cosmetic docs-only head. A normal source/fixture failure remains work to fix, not a reason
+to stop. Production, G4, paid baseline108 and installed beta119 are unchanged.
+
+Earlier integration requirements and evidence:
 Use a separate worktree from current main; preserve the independent bootstrap and
 renewal work below. Validate the ordinary server package, complete repository CI and
 merge through a PR. Do not redeploy, install, alter paid data or open another Android

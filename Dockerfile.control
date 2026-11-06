@@ -1,4 +1,5 @@
 FROM golang:1.26.0-bookworm AS test-go
+FROM python:3.14-slim AS test-python314
 
 FROM python:3.13-slim AS base
 WORKDIR /app
@@ -7,22 +8,23 @@ RUN pip install --no-cache-dir -r requirements.lock
 
 FROM base AS tests
 COPY --from=test-go /usr/local/go /usr/local/go
+COPY --from=test-python314 /usr/local /opt/fc-ci-python314
 ENV PATH=/usr/local/go/bin:$PATH
 ENV GOPATH=/opt/fc-go
-RUN apt-get update && apt-get install -y --no-install-recommends git nginx iproute2 keepassxc ca-certificates curl python3 util-linux gcc pkg-config libcairo2-dev libgirepository1.0-dev gir1.2-gtk-4.0 gir1.2-adw-1 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends git nginx iproute2 keepassxc ca-certificates curl python3 util-linux gcc pkg-config libcairo2-dev libgirepository1.0-dev gir1.2-gtk-4.0 gir1.2-adw-1 zstd default-jdk-headless && rm -rf /var/lib/apt/lists/*
 ADD .ci-release-source/current.tar /app/
-COPY .ci-release-source/current.commit .ci-release-source/tracked.paths .ci-release-source/historical.tar /opt/fc-ci-source/
-RUN python scripts/ci_release_fixtures.py restore-git --commit-file /opt/fc-ci-source/current.commit --paths-file /opt/fc-ci-source/tracked.paths
+COPY .ci-release-source/current.commit .ci-release-source/tracked.paths .ci-release-source/historical.tar .ci-release-source/fixture-objects.pack /opt/fc-ci-source/
+RUN python scripts/ci_release_fixtures.py restore-git --commit-file /opt/fc-ci-source/current.commit --paths-file /opt/fc-ci-source/tracked.paths --objects-file /opt/fc-ci-source/fixture-objects.pack
+ENV LD_LIBRARY_PATH=/opt/fc-ci-python314/lib
+RUN /opt/fc-ci-python314/bin/python3.14 -m venv /opt/fc-ci-python314/test-env && /opt/fc-ci-python314/test-env/bin/python -m pip install -r control/requirements.lock
 RUN bash scripts/ci_python313_env.sh /opt/fc-python313-env
 ENV PATH=/opt/fc-python313-env/bin:$PATH
 RUN cd carrier && go mod download
 ENV GOPROXY=off
 RUN python scripts/ci_release_fixtures.py prepare --output /opt/fc-release-fixtures --go /usr/local/go/bin/go --historical-archive /opt/fc-ci-source/historical.tar
-RUN python -m pytest -q tests/test_gateway_credential_publication.py::IsolatedRootTests
-RUN useradd --create-home --uid 1000 runner && chown -R runner:runner /app /opt/fc-go
-USER runner
-RUN python -m pytest -q clients/desktop/tests/test_chat_host_registration.py clients/desktop/tests/test_mesh_chat_host.py clients/desktop/tests/test_support_service.py clients/desktop/tests/test_chat_service.py -ra --tb=short
-RUN python scripts/ci_release_fixtures.py run --fixtures /opt/fc-release-fixtures --go /usr/local/go/bin/go --nginx /usr/sbin/nginx -- python -m pytest -q && touch /tmp/tests-passed
+RUN useradd --create-home --uid 1000 runner && chmod 755 /home/runner && chown -R runner:runner /app /opt/fc-go
+RUN runuser -u runner -- python -m pytest -q clients/desktop/tests/test_chat_host_registration.py clients/desktop/tests/test_mesh_chat_host.py clients/desktop/tests/test_support_service.py clients/desktop/tests/test_chat_service.py -ra --tb=short
+RUN python scripts/ci_release_fixtures.py run --fixtures /opt/fc-release-fixtures --go /usr/local/go/bin/go --nginx /usr/sbin/nginx -- python scripts/ci_full_pytest.py --python314 /opt/fc-ci-python314/test-env/bin/python --unprivileged-user runner && touch /tmp/tests-passed
 
 FROM base AS runtime
 COPY --from=tests /tmp/tests-passed /app/tests-passed

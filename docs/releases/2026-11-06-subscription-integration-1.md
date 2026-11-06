@@ -338,6 +338,99 @@ remain byte-identical to beta119 source `b2a37fe989294018ab08060bdebfa46d741d11d
 Its APK provenance and all prior physical/synthetic/NOT_RUN boundaries are unchanged.
 No merge is allowed while an applicable gate remains red or running.
 
+### Final-head guard and fixture repair
+
+Owner explicitly authorized completing the source-review guards and CI fixtures before
+the normal PR1 merge. Entry refs were still head `5f709afd121011de02c4ebd5d75b59dbbdf89b56`
+and main `41b4e6e034efc3e51446f383f2fbaedee3ad5a67`; the worktree was clean. No reset,
+force push, production operation, phone operation or G4 inspection was performed.
+
+**Android source review:** all152 entries in the accepted UI/handler manifest were
+compared with original beta119 source `b2a37fe989294018ab08060bdebfa46d741d11d5`.
+Every file is byte-identical. Ten stale expectations are now explicit literal adaptations:
+
+| Group | Files | Source provenance |
+| --- | --- | --- |
+| Subscription, seven | ChatActivity, ChatLocalAndroid, ChatNotifications, ChatRuntime, FriendsAccessAndroid, RU/EN strings | `47ef046`, `34529b6`, compile correction `9348676`, natural delivery `b2a37fe` |
+| Inherited renewal, three | FriendsRestricted, NativeRestricted, RestrictedTunnelEngine | `f7d0920`, captured-owner correction `b46bff4`, already present in beta119 |
+
+Old reference values and previous adaptation dictionaries remain; no new file exemption,
+runtime-derived expected hash, product rollback or new runtime acceptance. A separate stale
+owner-prewarm source assertion now follows the existing gateway-bound fetch and
+RestrictedBootstrap import-before-observation/zeroization chain (inherited107 refactor),
+keeping signing/private-data prohibitions intact.
+
+**Actual current CI diagnosis:** head5f709 failover run42281318027/job128110717669,
+artifact13537163335 completed with110 failures,5162 passes,300 existing conditional skips,
+214 errors in516.68s. Its build log was inspected locally, not committed. Confirmed roots:
+ownership fixtures executed at UID1000; snapshot launcher requires3.14 and a traversable,
+non-writable interpreter chain; absent historical Git objects and private Android source
+paths; missing zstd; process-global umask leakage; a legacy two-location renderer fixture
+receiving unrelated appended ingress locations; stale backdated-issuance and owner-prewarm
+expectations. The direct shared-native verifier incorrectly selected current carrier,
+although the successful Linux candidate correctly used pinned native staging.
+
+Linux control42281318012 is **cancelled**, not a contract PASS or a reproduced test
+assertion. Its job128110869389 started19:38:47UTC, remained in full pytest from19:39:49,
+and ended19:58:49 with later steps still pending; no receipt/log artifact was returned.
+The workflow had a15-minute job budget. The repaired runner gives full coverage a bounded
+25-minute step inside a60-minute job, retaining time for failure receipts. It emits the
+current test name without parameter payloads and faulthandler stacks for diagnosis.
+The separate phase0/tests observation must still reach a result; old errors are not
+automatically attributed to it. Final outcome and any additional repair receipts are in PR1.
+
+**Fixture contract, not weaker assertions:**
+
+- Full collection is partitioned once by explicit file/class ownership. All selected
+  test-function multiplicities must match the initial collection. Parameter values may
+  contain random synthetic bytes, so comparison uses function identity plus multiplicity.
+  Root-owned profile/maintenance fixtures and the root publication class run at UID0 only
+  on the independent hosted runner/container. Standard tests remain unprivileged3.13;
+  snapshot launcher tests run unprivileged3.14 using a root-owned interpreter. No new skip,
+  xfail, continue-on-error or production default is introduced. Existing conditional runtime
+  skips retain their original meaning and do not become new runtime evidence.
+- A scoped Git object pack contains the exact committed trees for historical HTTP `4bb53b0`,
+  accepted renewal API `edca544` and accepted native `efc13f1`. Restored CI Git retains the
+  actual current commit/tree and verifies those objects before use; no host Git credentials,
+  private files or untracked state enter the export. Historical HTTP hash stays `460e7520…`.
+  A real isolated export/restore of all three commits PASS (object pack17,393,438 bytes);
+  staging native from that restored repository reproduces the exact313-file digest.
+- The two formerly private Python unit inputs are now minimal public pinned snapshots.
+  The existing95-to96 patch must reproduce the complete candidate snapshot. Deadline103
+  and VpnHealth use existing public bytes with explicit historical hashes. See the
+  [fixture provenance](../../tests/fixtures/accepted_android/README.md).
+- Direct native inventory verification stages the exact same pinned closure as Linux build
+  and packager. The existing missing/extra/tampered-input protection is retained, as are
+  all accepted native hashes and subsequent race/build/package smoke gates.
+- CI installs zstd and a JDK for existing fixtures. Test process umask is restored after
+  each test, including exceptions; the tests still exercise restrictive modes themselves.
+  The closed two-placeholder transition test uses its declared ordinary/restricted template;
+  the real HTTP ingress fixture still includes gateway-selection and subscription locations.
+  Native issuance tests assert the existing five-second backdate and corresponding exact
+  expiry boundaries, without changing certificate or renewal code.
+
+Local bounded checks: Android release module23 PASS; diagnostic release selection64 PASS,
+one unrelated Windows case deselected; fixture/reference/diagnostic combined106 PASS,
+one existing optional capsule skip and one Windows deselection; public snapshot bridge/
+deadline/health plus reference selection50 PASS/one existing capsule skip; launcher98 PASS
+on the existing3.14 environment. Combined context/identity/evidence/registration/launcher
+regression selection181 PASS. Full public docs:758 documents,4785 links,zero errors;
+staged public source guard3615 entries,zero blocked files. Synthetic one-/four-hour issuance has the exact current
+issued/expiry boundaries. Root-context execution, native authority cross-language checks
+and all package/runtime CI remain hosted gates, not locally claimed PASS.
+
+The accepted native commit remains `efc13f1c7f2750cb7640dd2b8b90aed15c92c6e3`, full313-file
+inventory `f0e48d7cd3bd68a02759a5ff29967492ab170e171942d502864f0e03a07c23fe`, closure
+`2d4e1380efa25109e1f0ea2e17f8971d1e8a8f127c56b313742ee8819696e933`.
+Final source, native binary and package receipts must be recorded separately in PR1.
+The already built beta119 retains its original source and APK hash; none of these fixes
+changes Android production inputs or qualifies a different installed binary.
+
+Final-head CI and ordinary merge are required; this pre-push source report is not a green
+result. Put subsequent run URLs, exact tested refs and the verified remote merge SHA in
+[PR1 receipts](https://github.com/Joker20380/family_connect/pull/1), without creating a
+documentation-only head after the final CI starts.
+
 ### Scope and rollback
 
 Before merge, close/revise the integration PR; after merge use an ordinary reviewed

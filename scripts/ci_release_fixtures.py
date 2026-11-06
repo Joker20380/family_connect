@@ -14,6 +14,8 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 HISTORICAL = '4bb53b0605c2c898b6a3feca6ee15fd34b943a94'
 HISTORICAL_SHA = '460e75205eb9baff313dc7dd963cdb7bceddf2d1e13405a71686f9ec6c976d71'
+REQUIRED_COMMITS = (HISTORICAL, 'edca5447418141cb44c0706e26d1973d7defd397',
+                    'efc13f1c7f2750cb7640dd2b8b90aed15c92c6e3')
 
 
 def git(*arguments, source=None, **kwargs):
@@ -37,11 +39,19 @@ def export(output):
     (output / 'historical.tar').write_bytes(git('archive', HISTORICAL))
     (output / 'current.commit').write_bytes(git('cat-file', 'commit', head))
     (output / 'tracked.paths').write_bytes(git('ls-tree', '-rz', '--name-only', head))
+    objects = set()
+    for commit in REQUIRED_COMMITS:
+        objects.add(commit)
+        objects.add(git('rev-parse', commit + '^{tree}').decode().strip())
+        for entry in git('ls-tree', '-rt', commit).decode().splitlines():
+            objects.add(entry.split()[2])
+    (output / 'fixture-objects.pack').write_bytes(git('-c', 'pack.threads=1', 'pack-objects', '--stdout',
+        input=('\n'.join(sorted(objects)) + '\n').encode()))
     (output / 'inventory.json').write_text(json.dumps(dict(source_commit=head, historical_commit=HISTORICAL,
         files={path.name: digest(path) for path in sorted(output.iterdir())}), indent=2) + '\n')
 
 
-def restore_git(commit_file, paths_file):
+def restore_git(commit_file, paths_file, objects_file=None):
     if (ROOT / '.git').exists():
         raise ValueError('Refuse to replace Git metadata')
     commit = commit_file.read_bytes()
@@ -52,7 +62,15 @@ def restore_git(commit_file, paths_file):
         raise ValueError('Exported source tree mismatch')
     head = git('hash-object', '-w', '-t', 'commit', '--stdin', input=commit).decode().strip()
     git('update-ref', 'refs/heads/ci-fixture', head)
-    (ROOT / '.git/shallow').write_text(head + '\n')
+    shallow = {head}
+    if objects_file is not None:
+        git('index-pack', '--stdin', input=objects_file.read_bytes())
+        for expected in REQUIRED_COMMITS:
+            if git('rev-parse', expected + '^{commit}').decode().strip() != expected:
+                raise ValueError('Fixture commit mismatch')
+            git('archive', expected)
+            shallow.add(expected)
+    (ROOT / '.git/shallow').write_text('\n'.join(sorted(shallow)) + '\n')
 
 
 def normalize_zip(path):
@@ -127,6 +145,7 @@ def main():
     restoring = actions.add_parser('restore-git')
     restoring.add_argument('--commit-file', type=Path, required=True)
     restoring.add_argument('--paths-file', type=Path, required=True)
+    restoring.add_argument('--objects-file', type=Path)
     preparing = actions.add_parser('prepare')
     preparing.add_argument('--output', type=Path, required=True)
     preparing.add_argument('--go', type=Path, required=True)
@@ -140,7 +159,7 @@ def main():
     if args.action == 'export':
         export(args.output.resolve())
     elif args.action == 'restore-git':
-        restore_git(args.commit_file.resolve(), args.paths_file.resolve())
+        restore_git(args.commit_file.resolve(), args.paths_file.resolve(), args.objects_file)
     elif args.action == 'prepare':
         prepare(args.output.resolve(), args.go.resolve(), args.historical_archive)
     else:

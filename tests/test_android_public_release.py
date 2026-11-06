@@ -217,15 +217,33 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'DiagnosticRing.java': 'd6f0f8888164384c2c07627a283a00a9e2383e1488a177816b4f1352f92d0c68',
         'RestrictedTrace.java': '34a50256ffd04d98cb29274be2c5b800a18a7756c47f5da4568e3bc5a5418561',
     }
+    reviewed_subscription_beta119 = {
+        'ChatActivity.java': '4a1e7a28cc374aef5d72664237a2c4dff8cd8d078aff760a1e996646bfb75a0d',
+        'ChatLocalAndroid.java': 'd5a01e8137b10b577b7e84e35980b64f0a2f42739bd588a74b868ac5388ecf15',
+        'ChatNotifications.java': '75f7b6e2a188df6e87a084afddb6238707927c1567a93abac1b0f2ba2ed64f42',
+        'ChatRuntime.java': '4568fd78a2b63ab764b1d11d38976238abf7984f9063676d8167f05bc124b32b',
+        'FriendsAccessAndroid.java': '98563acb61287b7272adf3f74d3d9705b2d37c192420ce5bae63f51dcc638a24',
+    }
+    reviewed_inherited_renewal_beta119 = {
+        'FriendsRestricted.java': '8c8228f2188f0bc09348586ce4c9bf0585ab51c4c7894f3d1cf4faacd641f70a',
+        'NativeRestricted.java': 'bcf81d360910e4348133dffa13901701e2cf4461b26c1f21b5b4d872b2d2a867',
+        'RestrictedTunnelEngine.java': 'b8cb9725620a1086dfafa907b3edb5126282cc9e500bd990e3a162cb71b795c3',
+    }
     reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81,
                          **reviewed_gateway_readiness, **reviewed_slow_link_recovery,
-                         **reviewed_idle_ack_recovery, **reviewed_signaling_read_diagnostics}
+                         **reviewed_idle_ack_recovery, **reviewed_signaling_read_diagnostics,
+                         **reviewed_subscription_beta119, **reviewed_inherited_renewal_beta119}
     reviewed_resources = {
         'clients/android/app/src/main/res/values-ru/strings.xml': '89b334900a7febe2e50bfe06d593673961c320704a16ead76c09d9baa22ea279',
         'clients/android/app/src/main/res/values/strings.xml': '85e40c0044eaec9ebe8fb6f77d0a026ddc6bead90fb044237abd23b305fd2c39',
         'clients/android/app/src/main/res/values-ru/exit_radio.xml': 'bb5198a35cf336c3b364bb5ecd65285a948614a4f60b3d1434cec0e7d9b7608b',
         'clients/android/app/src/main/res/values/exit_radio.xml': 'f0147662d5ca508fba482cca46906a2198b2f7f4ae72d692a61631123ad07404',
     }
+    reviewed_subscription_resources_beta119 = {
+        'clients/android/app/src/main/res/values-ru/strings.xml': '120dfc00876e5603eb04edc3422023f6daf113744e3f112fa79136e9587af30e',
+        'clients/android/app/src/main/res/values/strings.xml': 'e5db89007bb81fe8a7a78632eb8bd29ef2d1a35ca7f85970e8cc709f289e3b23',
+    }
+    reviewed_resources = {**reviewed_resources, **reviewed_subscription_resources_beta119}
     changes = {'clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ChatAudio.java'}

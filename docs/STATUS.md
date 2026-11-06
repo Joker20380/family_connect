@@ -1,6 +1,21 @@
 # Текущее состояние / Current state
 
-**6 November — SUBSCRIPTION-INTEGRATION-1: PR1 CI repairs, merge gate open.**
+**6 November — SUBSCRIPTION-INTEGRATION-1: reviewed guards and isolated CI fixtures.**
+The owner-authorized follow-up reviews all152 guarded Android inputs against original
+beta119 source: identical bytes; explicit seven subscription and three inherited-renewal
+adaptations retain old hashes and the existing exemption set. Release23 and diagnostic64
+tests PASS locally. Current5f709 failover confirms110 failures/214 errors, not an inference
+from older runs. The cohesive fixture repair routes ownership tests to isolated UID0,
+launcher tests to root-owned Python3.14/unprivileged execution, all others to unprivileged
+Python3.13, with complete collection coverage and unchanged assertions. It supplies exact
+historical Git trees, pinned public Android fixtures, zstd/JDK and restores per-test umask.
+Native direct verification now selects the same accepted closure as the actual package.
+No Android production input or historical native baseline changes. Final-head hosted CI
+and normal merge receipts belong to [PR1](https://github.com/Joker20380/family_connect/pull/1);
+this source checkpoint does not claim they passed before running. No cosmetic receipt-only
+head is required. See the dated report for failure classification and preserved boundaries.
+
+**Earlier CI checkpoint — three initial blockers:**
 Owner-authorized base repairs now cover explicit Android Session test context,
 the phase22 documentation fragment and complete pinned native-source staging.
 Targeted bridge/carrier22 and messenger222 tests PASS; full public docs PASS.

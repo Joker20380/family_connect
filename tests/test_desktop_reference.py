@@ -45,8 +45,12 @@ def test_readiness_semantic_port_uses_exact_accepted_sources():
     assert not contract['invariants']['native_proposal_is_durable']
 
 
-def test_supported_shared_sources_match_accepted_inventory():
-    assert verify()["result"] == "PASS"
+def test_supported_shared_sources_match_accepted_inventory(tmp_path):
+    from scripts.stage_linux_native import inventory_digest, reference, stage, verify as verify_native
+    accepted = tmp_path / 'accepted-native'
+    stage(accepted)
+    assert inventory_digest(verify_native(accepted)) == reference()['native_source_digest']
+    assert verify(accepted)['result'] == 'PASS'
 
 
 def test_restricted_chat_contract_has_exact_services_and_bounds():

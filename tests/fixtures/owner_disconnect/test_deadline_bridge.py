@@ -1,12 +1,12 @@
 """Actual Python bridge regression with the Java callback's fixed stop states."""
 import base64
 import importlib.util
-import os
 from pathlib import Path
 import time
 import types
 import unittest
 from unittest.mock import patch
+from scripts.ci_android_fixture import source as accepted_source
 
 ROOT=Path(__file__).resolve().parents[3]
 spec=importlib.util.spec_from_file_location('bootstrap_bridge',ROOT/'tests/fixtures/mobile_bootstrap/test_transport_bridge.py')
@@ -16,7 +16,7 @@ spec.loader.exec_module(bridge)
 
 class DeadlineBridgeTest(unittest.TestCase):
     def setUp(self):
-        source=ROOT/'state-client-build'/os.environ.get('FC_DEADLINE_TEST_SOURCE','owner-deadline103-20261022')/'android-source'
+        source=accepted_source('bridge103')
         self.module=bridge.load(source,'deadline_bridge')
         self.channel=self.module.Channel.__new__(self.module.Channel)
         self.callbacks=types.SimpleNamespace(cancelled=lambda:True,stopReason=lambda:'TIMEOUT',bindSocket=lambda descriptor:False)
@@ -56,7 +56,7 @@ class DeadlineBridgeTest(unittest.TestCase):
 class InheritedBridgeTest(bridge.TransportBridgeTest):
     def setUp(self):
         super().setUp()
-        source=ROOT/'state-client-build'/os.environ.get('FC_DEADLINE_TEST_SOURCE','owner-deadline103-20261022')/'android-source'
+        source=accepted_source('bridge103')
         self.current=bridge.load(source,'current_candidate')
 
 

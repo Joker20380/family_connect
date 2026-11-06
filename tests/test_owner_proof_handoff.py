@@ -135,12 +135,14 @@ def test_android_protocol_observation_not_a_signing_api():
     root=Path(__file__).resolve().parents[1]
     android=root/'clients/android/app/src/main'
     access=(android/'java/com/familyconnect/app/FriendsAccessAndroid.java').read_text()
-    assert 'FriendsReadinessProtocol.fetch(this::post,identity,receipt)' in access
+    assert 'FriendsReadinessProtocol.fetch(RestrictedGateway.route(route::post,gateway),identity,receipt)' in access
     protocol=(android/'java/com/familyconnect/app/FriendsReadinessProtocol.java').read_text()
     assert protocol.index('/challenge')<protocol.index('identity.proveTransportKey(nonce)')<protocol.index('receipt.fetchAuthorized()')
     prewarm=(android/'java/com/familyconnect/app/FriendsRestricted.java').read_text()
-    assert prewarm.index('product.imported(response')<prewarm.index('receipt.imported(response)')
-    assert 'Arrays.fill(response,(byte)0)' in prewarm
+    assert 'RestrictedBootstrap.refresh(cache,product,receipt,' in prewarm
+    bootstrap=(android/'java/com/familyconnect/app/RestrictedBootstrap.java').read_text()
+    assert bootstrap.index('product.imported(response')<bootstrap.index('receipt.imported(response)')
+    assert 'Arrays.fill(response,(byte)0)' in bootstrap
     hook=(android/'java/com/familyconnect/app/OwnerPrewarmReceipt.java').read_text()
     for forbidden in ('ControlIdentity','proveTransportKey','material()','private_key','public_identity','join_url'):
         assert forbidden not in hook

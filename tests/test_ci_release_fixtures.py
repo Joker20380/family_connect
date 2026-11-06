@@ -16,8 +16,13 @@ def test_public_export_restores_exact_commit_without_host_git_or_untracked_files
     (source / 'public.txt').write_text('public source\n')
     fixtures.git('add', 'public.txt')
     fixtures.git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '-qm', 'fixture')
+    historical = fixtures.git('rev-parse', 'HEAD').decode().strip()
+    (source / 'public.txt').write_text('current public source\n')
+    fixtures.git('add', 'public.txt')
+    fixtures.git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '-qm', 'current')
     head = fixtures.git('rev-parse', 'HEAD').decode().strip()
-    monkeypatch.setattr(fixtures, 'HISTORICAL', head)
+    monkeypatch.setattr(fixtures, 'HISTORICAL', historical)
+    monkeypatch.setattr(fixtures, 'REQUIRED_COMMITS', (historical,))
     private = source / 'state-private'
     private.mkdir()
     (private / 'token.key').write_text('not-for-export')
@@ -29,12 +34,20 @@ def test_public_export_restores_exact_commit_without_host_git_or_untracked_files
     restored = tmp_path / 'restored'
     fixtures.extract((output / 'current.tar').read_bytes(), restored)
     monkeypatch.setattr(fixtures, 'ROOT', restored)
-    fixtures.restore_git(output / 'current.commit', output / 'tracked.paths')
+    fixtures.restore_git(output / 'current.commit', output / 'tracked.paths', output / 'fixture-objects.pack')
     assert fixtures.git('rev-parse', 'HEAD').decode().strip() == head
     assert fixtures.git('archive', 'HEAD') == (output / 'current.tar').read_bytes()
+    assert fixtures.git('show', historical + ':public.txt') == b'public source\n'
+    assert fixtures.git('archive', historical) == (output / 'historical.tar').read_bytes()
     assert b'private-marker' not in (restored / '.git/config').read_bytes()
     with pytest.raises(ValueError, match='replace Git'):
         fixtures.restore_git(output / 'current.commit', output / 'tracked.paths')
+
+
+def test_required_git_objects_cover_the_real_native_and_renewal_inputs():
+    from scripts.package_credential_renewal import ACCEPTED_API_SOURCE
+    from scripts.stage_linux_native import reference
+    assert set(fixtures.REQUIRED_COMMITS) == {fixtures.HISTORICAL, ACCEPTED_API_SOURCE, reference()['commit']}
 
 
 def test_fixture_environment_rejects_modified_artifact_or_commit(tmp_path, monkeypatch):
