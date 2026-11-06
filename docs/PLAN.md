@@ -12,6 +12,12 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**One active next6 November11:41UTC:** retain paired legacy Android PASS; finish
+the corrected late-owner cases sequentially on NVIDIA/KVM, then reconcile the
+already-running frozen G4. Preserve original API35 timeout FAIL, original full-run
+FAIL and expiry PASS. No duplicated stand, new package, accepted A or B yet.
+Earlier NEXT entries below remain historical.
+
 **Execution refinement:** keep the original API35 data-path timeout open; decouple
 late-case fixture coordination via the existing underlay helper, without changing
 product delivery or assertions. Finish paired corrected late/legacy cases while

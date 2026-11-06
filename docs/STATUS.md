@@ -11,6 +11,16 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**6 November11:41UTC: legacy Android API27/API35 PASS, A still open.** Both actual
+HTTP/cache/owner/native cases retain the old bound, refuse an unauthenticated
+successor commit, close normally and allow only a separate explicit new Connect.
+The synthetic negative peer has its own overlay/digest, not the production gateway.
+Both legacy NVIDIA/KVM AVDs and owned stands are stopped. Corrected late API27 is
+running alone on GPU; API35 follows. Original API35 VPN-control timeout remains FAIL.
+G4 c8eb8b9 is still waiting within its real-time budget; no restart, A or B acceptance.
+[Exact receipts](releases/2026-11-06-mesh-android-remaining-evidence.json).
+Older dated entries below are historical, not additional active next steps.
+
 **Late-test coordination correction:** only its fixture-state HTTPS moves to the
 existing underlay helper; actual readiness and owner/native checks stay unchanged.
 The original API35 data-path timeout stays FAIL/unexplained, not silently retried

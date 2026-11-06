@@ -75,7 +75,6 @@
   },
   "late_scope": "API27: valid HTTP completion after Disconnect cannot resurrect old native lease; new explicit Connect is separate. API35: failed before late delivery. No certificate-expiry crossing claimed.",
   "legacy": {
-    "android": "NOT_RUN",
     "fixture": {
       "schema": 1,
       "scope": "legacy-peer-compatibility-fixture-not-online-runtime-acceptance",
@@ -115,7 +114,152 @@
       "fresh_sessions": "TCP/DNS/verified HTTPS; not renewal",
       "cleanup": "processes-waited"
     },
-    "not_production": "Explicit synthetic old-feature peer: one handler-registration omission in frozen common runtime, no copied TLS/broker/lease logic. Not the normal driver or G1/G4 acceptance artifact. No release inclusion."
+    "not_production": "Explicit synthetic old-feature peer: one handler-registration omission in frozen common runtime, no copied TLS/broker/lease logic. Not the normal driver or G1/G4 acceptance artifact. No release inclusion.",
+    "android_at_1113utc": "NOT_RUN",
+    "android": "PASS_LEGACY_PEER_ONLY_API27_API35",
+    "android_results": {
+      "27": {
+        "result": "PASS_LEGACY_PEER_ONLY",
+        "renderer": "GLES: Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti/PCIe/SSE2), OpenGL ES 3.1 (4.5.0 NVIDIA 580.178.04)",
+        "clock_observation": {
+          "host_before": 1793963927.7341843,
+          "host_after": 1793963927.7422893,
+          "guest": 1793963927
+        },
+        "installed_apk_sha256": "b7dfbbbe9f9a0cdbd4ee00e9ae0dd720e51eca00e43c2d5d814c6ab062ae5988",
+        "installed_native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+        "final_native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+        "owned_emulator_stopped": true,
+        "started": 1793963924.721225,
+        "finished": 1793964309.9715621,
+        "test_source": "e5c20eb38aa106f9fdc4ec8d8c3d35f201564d33",
+        "exit_code": 0,
+        "seconds": 381.969,
+        "phases": [
+          "SERVICE_OWNER_CONNECTED",
+          "SERVICE_VERIFIED_HTTPS",
+          "LEGACY_HTTP_SUCCESSOR_CACHED",
+          "LEGACY_NO_UNAUTHENTICATED_PROFILE_COMMIT",
+          "LEGACY_CLOSED_OWNER_STAYS_CLOSED",
+          "LEGACY_NEW_CONNECT_NOT_RENEWAL",
+          "SERVICE_OWNER_CLEANED"
+        ],
+        "receipt": "android-legacy-gpu27-emulators1/api27-receipt.json",
+        "receipt_sha256": "5cb4b1a849322e8fd819e9ee422bc686c800b9a56589a70d524905735ec8c7a3",
+        "log": "android-legacy-gpu27-emulators1/api27-runtime.log",
+        "tests_sha256": "82997a29cc1e88d7853686acef499664418df70212dd5910ec368087ff188783",
+        "server": "android-legacy-gpu27-1/server.json",
+        "server_cleanup": "processes-waited",
+        "http_requests": [
+          {
+            "wall": 1793963928.2495437,
+            "crl": 1,
+            "expires": 1793966197,
+            "state": "HTTP_READY",
+            "status": 200
+          },
+          {
+            "wall": 1793963928.575711,
+            "crl": 1,
+            "expires": 1793966197,
+            "state": "HTTP_READY",
+            "status": 200
+          },
+          {
+            "wall": 1793963930.3038146,
+            "crl": 1,
+            "expires": 1793966197,
+            "state": "HTTP_READY",
+            "status": 200
+          },
+          {
+            "wall": 1793964237.7382424,
+            "crl": 2,
+            "expires": 1793966503,
+            "state": "SUCCESSOR_PUBLISHED",
+            "status": 200
+          },
+          {
+            "wall": 1793964294.648538,
+            "crl": 2,
+            "expires": 1793966503,
+            "state": "SUCCESSOR_PUBLISHED",
+            "status": 200
+          }
+        ]
+      },
+      "35": {
+        "result": "PASS_LEGACY_PEER_ONLY",
+        "renderer": "GLES: Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti/PCIe/SSE2), OpenGL ES 3.1 (4.5.0 NVIDIA 580.178.04)",
+        "clock_observation": {
+          "host_before": 1793964484.6773252,
+          "host_after": 1793964484.8633897,
+          "guest": 1793964485
+        },
+        "installed_apk_sha256": "89e2672e65dc4dbe12bf1cb9dced6eb9333e497f625c1fee8cf32d199d41a667",
+        "installed_native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+        "final_native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+        "owned_emulator_stopped": true,
+        "started": 1793964484.6773183,
+        "finished": 1793964894.80535,
+        "test_source": "e5c20eb38aa106f9fdc4ec8d8c3d35f201564d33",
+        "exit_code": 0,
+        "seconds": 403.3,
+        "phases": [
+          "SERVICE_OWNER_CONNECTED",
+          "SERVICE_VERIFIED_HTTPS",
+          "LEGACY_HTTP_SUCCESSOR_CACHED",
+          "LEGACY_NO_UNAUTHENTICATED_PROFILE_COMMIT",
+          "LEGACY_CLOSED_OWNER_STAYS_CLOSED",
+          "LEGACY_NEW_CONNECT_NOT_RENEWAL",
+          "SERVICE_OWNER_CLEANED"
+        ],
+        "receipt": "android-legacy-gpu35-emulators1/api35-receipt.json",
+        "receipt_sha256": "0c1cddd81b8a09a23fe56bb68a11c614b866449c84d2d6635a6892fd58679f19",
+        "log": "android-legacy-gpu35-emulators1/api35-runtime.log",
+        "tests_sha256": "f0f322e1d93b284307e3843488e971e8090376011fa0714ac50498c5f3bb8f4e",
+        "server": "android-legacy-gpu35-1/server.json",
+        "server_cleanup": "processes-waited",
+        "http_requests": [
+          {
+            "wall": 1793964495.1862352,
+            "crl": 1,
+            "expires": 1793966308,
+            "state": "HTTP_READY",
+            "status": 200
+          },
+          {
+            "wall": 1793964501.6606784,
+            "crl": 1,
+            "expires": 1793966308,
+            "state": "HTTP_READY",
+            "status": 200
+          },
+          {
+            "wall": 1793964508.4852133,
+            "crl": 1,
+            "expires": 1793966308,
+            "state": "HTTP_READY",
+            "status": 200
+          },
+          {
+            "wall": 1793964821.3878224,
+            "crl": 2,
+            "expires": 1793966614,
+            "state": "SUCCESSOR_PUBLISHED",
+            "status": 200
+          },
+          {
+            "wall": 1793964880.0608797,
+            "crl": 2,
+            "expires": 1793966614,
+            "state": "SUCCESSOR_PUBLISHED",
+            "status": 200
+          }
+        ]
+      }
+    },
+    "android_scope": "Actual HTTP validation/encrypted cache/owner/native: successor cached after real cooldown, legacy peer cannot commit successor fingerprint, original session stays useful under original bound, Disconnect closes it, separate new Connect succeeds. Synthetic peer overlay is not production binary."
   },
   "retained_failed_attempts": [
     "android-late-gpu27-apk1/build.log",

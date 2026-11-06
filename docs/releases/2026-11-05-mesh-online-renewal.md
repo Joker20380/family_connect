@@ -1,5 +1,24 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Legacy Android completed:6 November11:41UTC
+
+API27/API35 **PASS_LEGACY_PEER_ONLY** on teste5c20eb, packagebfff97d/archive5721a5c1,
+explicit legacy overlay drivere641e2cd and diagnostic native39c69de/d1025a1d.
+[Receipts, APK hashes, phases and clocks](2026-11-06-mesh-android-remaining-evidence.json)
+record real HTTP readiness, validated encrypted-cache successor after cooldown,
+existing owner/native traffic and refusal to commit a successor without peer exchange.
+Duplicate refresh does not change the owner; Disconnect leaves the old lease closed;
+a separate explicit new Connect succeeds. The two-NL native preflight additionally
+records exactly one offer and unchanged security deadlines; neither result claims
+that a legacy session was extended or that cryptographic expiry was crossed here.
+Both owned NVIDIA/KVM AVDs and supervisors/routes are stopped, with final receipts.
+
+Corrected late-owner API27 is running; API35 follows on the same existing runner.
+The initial API35 fresh-TCP timeout remains a retained FAIL, not an explained/fixed
+product defect. G4's unchanged-package c8eb8b9 run is independent and still RUNNING.
+No new package, release, accepted A checkpoint or phase B. Older checkpoints below
+retain the states observed then; this is the current continuation pointer.
+
 ## Remaining Android cases:6 November11:13UTC checkpoint
 
 **Follow-up test correction:** late-case coordination used the VPN data path to poll
