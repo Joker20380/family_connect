@@ -1,5 +1,25 @@
 # Текущее состояние / Current state
 
+**6 November — ordered single-AVD attempt: measured thermal conflict before workers.**
+The accepted Android JNI PASS is retained, not repeated. Product6eb61a9 and JNI
+17119f00…60c59 are unchanged; no native build or host/JVM/race suites. Immutable
+components are prepared first; one own API27/NVIDIA/KVM AVD reuses data-filesystem
+userdata. No reboot between stages. After Android boots and own test packages are
+reset/no VPN observed, the existing guard stops it at34.035s during pre-worker clock
+observation: coretemp Package id0/Core5 reach87°C against85°C. Over the paired3.072s
+CPU sample, own QEMU PID3031862 uses82.35% and other processes total226.62% (100%=one
+core), led by Isolated Web Co PID2937122 at79.09% and firefox-bin PID19485 at68.35%.
+No own compiler, authority, Telemost-worker or secret-input process is running.
+GPU60°C and available memory13860068KiB do not trip their guards. This identifies the
+observed AVD-plus-desktop thermal conflict, not an exclusive thermal cause per process;
+the previous pre-AVD86°C event still lacks retrospective PID attribution.
+No OAuth, new rooms/identity/locator, final APK packaging or Connect is started. The
+one authorized Connect remains unused; live provisioning cause/READY/traffic remain
+unknown. Own runner/QEMU are gone, lock free, no authority present; no foreign processes
+or cooling/power settings changed. No restart or automatic host/phone move. Both old
+FAIL_RUNTIMEs/19 artifacts and accepted Android evidence remain hash-identical.
+[Measured stages and process evidence](releases/2026-11-06-beta113-field16-bootstrap.md#ordered-runtime-resource-attribution).
+
 **6 November21:12UTC — actual Android JNI PASS; single Connect NOT_RUN, thermal preflight.**
 Continuation from6eb61a9 has no product-source delta. That exact source, including the
 final underlay/cancellation fixes, is rebuilt as real Telemost x86_64/API27 JNI

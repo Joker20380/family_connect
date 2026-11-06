@@ -1270,3 +1270,54 @@ runtime. Future execution needs a stable thermal window with the stand active an
 new finite locator/assets, not a blind reuse of this locator or another restart now.
 
 [Sanitized Android PASS, current artifact identities and stopped-live preflight](2026-11-06-cold-native-android-check.json).
+
+#### Ordered runtime resource attribution
+
+Continuation of documentation checkpointfce81ed with unchanged product6eb61a9 and
+JNI SHA256 `17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59`.
+The accepted provider-free Android JNI gate is NOT repeated. No Go/native build or
+host/JVM/race suite runs. Existing stand/verifier binaries and APK bases are verified
+and reused. A local assets-only ZIP/zipalign/test-signing packager is prepared to avoid
+Gradle compilation with the AVD; only syntax is checked, not runtime qualification of
+that packager. No new final APK is produced, and earlier APKs are not overwritten.
+
+The local runner adds bounded resource snapshots at preparation boundaries and guard
+abort: named temperature sensors, memory, PID/process name and interval CPU. No command
+lines, environments, secret values or browser content are collected. Prior pre-AVD86°C
+evidence has no process CPU samples, so it cannot establish that event's load source.
+This attempt starts exactly one existing own API27 AVD on the corrected data filesystem,
+with NVIDIA/KVM, CPUQuota100%, unchanged85°C/80°C/180s guard and shared lock. Android
+boots, actual NVIDIA renderer is verified, own test packages are removed, and no test
+VPN/readiness remains. Before OAuth/rooms/workers, during wall-clock readiness observation
+(as-run runner phase `ANDROID_BOOT`), the guard stops the AVD after34.035s.
+
+| Guard-aligned observation | Value |
+| --- | --- |
+| First guard violation | coretemp `Package id 0` and `Core 5`:87°C, limit85°C |
+| GPU / memory available | NVIDIA60°C;13860068KiB; neither guard fails |
+| CPU sample interval | 3.072s;100% means one CPU core |
+| Own emulator | PID3031862 `qemu-system-x86`:82.35% |
+| Other processes, total | 226.62% |
+| Largest other process | PID2937122 `Isolated Web Co`:79.09% |
+| Next other process | PID19485 `firefox-bin`:68.35% |
+| Other desktop processes | PID13381 `gnome-shell`:12.69%; PID16284 `ptyxis`:11.72% |
+| Own builds / authority / Telemost-workers | No such running processes; not started |
+
+This is a measured thermal conflict under concurrent AVD and desktop load, not proof
+that one process alone causes a temperature or that the old pre-AVD abort had the same
+cause. The next observation after stop reaches93°C; cleanup observation91°C, with no
+QEMU remaining. Do not reinterpret the resulting `adb device not found`/CalledProcessError
+as the primary cause: the earlier guard record retains87°C, stage, processes and elapsed.
+Clock convergence was not completed (observed guest offset about10s); no clock change
+is attempted. Server-worker co-load is NOT tested because that stage is never entered.
+
+Connect is NOT_RUN/0 consumed, no OAuth read or new rooms/identity/locator, no assets-only
+packaging/install, no new guest blocking rules or client carrier/TLS/challenge traffic.
+Bundle/READY/DNS/verified HTTPS/egress remain unknown; no runtime negatives or new
+product fix. Own runner and QEMU PIDs are gone, no emulator or own authority remains,
+shared lock is free. Foreign processes, host network/cooling/power, production/G4 and
+user/public APKs are untouched. Prior room deletion remains NOT_VERIFIED; this attempt
+creates zero rooms. Both original FAIL receipts/19 artifacts and all checksummed accepted
+Android PASS evidence remain unchanged. No automatic restart, host or phone migration.
+
+[Sanitized process/stage evidence and local artifact hashes](2026-11-06-cold-ordered-runtime.json).

@@ -2,23 +2,24 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Selected continuation6 November21:12UTC: Android JNI PASS; ONE Connect still unused.**
-Exact6eb61a9 is rebuilt for actual x86_64/API27, including final underlay/cancellation
-changes; JNI17119f00…60c59, exports and packaged manifest/bytes pass verification.
-One short real Android/NVIDIA/KVM provider-free test passes. Prior host-JNI/race/JVM
-results remain valid source evidence and are not repeated. Both old FAIL_RUNTIMEs and
-19 exact artifacts remain unchanged. Fresh registered synthetic identity, authority,
-two rooms, verified signed locator and real-input APK are prepared after native build.
-The fresh runtime preflight then observes CPU86°C against the existing85°C limit,
-before starting its AVD or invoking Connect. Stop here: no restart cycle, threshold
-change or foreign-resource cleanup. Own resources are stopped; room deletion unverified.
-Next only in a stable resource window with the stand active: regenerate/verify fresh
-locator and APK assets, then the one authorized AutomaticConnection. Keep candidate
-200000ms and separate readiness30000ms, trust/admission, no readiness cache/VPN, and
-guest-only rejection of the two direct destinations without blocking carrier traffic.
-On failure retain native reason and actual selected Network/bind; on READY check
-DNS/verified HTTPS/egress before any runtime negatives. No adjacent queue, G4, production,
-rollout, locator import or discovery work. This turn does not establish the live cause.
+**Selected continuation6 November: measured pre-worker resource conflict; ONE Connect unused.**
+Accepted provider-free Android JNI PASS remains accepted. Source6eb61a9/JNI17119f00…60c59
+are unchanged and reused, without native rebuild or repeated host/JVM/race/Android JNI
+gates. Revised local runner prepares immutable components before one own API27 AVD,
+then would start authority/workers and replace only fresh APK assets without reboot.
+The one AVD boots on NVIDIA/KVM but is stopped by the unchanged85°C guard at87°C,
+during pre-worker readiness/clock observation. Paired CPU evidence: QEMU82.35%, other
+processes226.62%, chiefly browser processes; own builds/authority/workers are absent.
+No OAuth/room/input creation, final packaging or Connect occurs. No second start.
+Next execution requires a safe host-resource window; the observed AVD-plus-desktop
+load fails before adding workers. Do not attribute the earlier pre-AVD abort to this
+emulator or claim server-worker load was measured. Do not raise thresholds, stop foreign
+processes or silently move to another host/phone. Keep the accepted JNI and immutable
+artifacts; regenerate finite locator/identity assets only after Android/resource checks.
+One AutomaticConnection200000ms candidate plus separate30000ms readiness remains the
+gate: actual native reason on failure; DNS/verified HTTPS/egress on READY, no negatives
+first. No product, production/G4, admission, public APK, discovery/import or activation
+work is authorized. Old FAILs/19 artifacts and Android PASS are preserved unchanged.
 
 **Prior request outcome, superseded by the current authorization: retry consumed.**
 Original harness incorrectly gave the whole engine30s; corrected AutomaticConnection
