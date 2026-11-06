@@ -1,5 +1,52 @@
 # VPN health — 6 November 2026
 
+## Authorized diagnosis and guarded recovery preparation
+
+The owner subsequently requested diagnosis and repair. Pinned read-only SSH confirms
+both canonical gateway leaf and shared CRL expired **5 November11:44:40UTC**,
+minimum CRL27273/revision1. AMS2 logs show session shutdown around that bound, then
+immediate failed process starts and the systemd restart limit. AMS1 retained no journal
+entries for the queried window; its matching canonical expiry and failed state are
+separate observations, not an invented identical log.
+
+The earlier causal failure is RU scheduled operation
+`scheduled-1793873691-d5a13907e2bb958f`: first OPERATION_BUSY at10:15:12.822953UTC,
+RECOVERY_REQUIRED, acquired=[], quiesced=[], commit_decided=false. Current readback
+finds no owner or preparation artifacts on any node. Both canonical profiles and all
+non-database inspected state match the operation's predecessor. Only RU database digest
+differs. The transient lock holder and particular later database row changes are not
+attributed. Scheduled recovery retains the original first cause; it cannot adopt a newer
+DB or restore expired material merely to recover availability. Ordinary AWG/TCP and the
+HTTP candidate are active; no blind restart has been attempted.
+
+`scripts/reconcile_unprepared_renewal.py --abort-unacquired` is a narrow explicit
+operator recovery, not a second controller/timer. Under existing coordinator and local
+RU locks it requires the exact fleet/RU-first acquisition contract, empty acquired and
+quiesced sets, OPERATION_BUSY, no decision/mode, no local owner/staging/completed entry
+or plan for this operation, unchanged authority/grants/non-DB state and no pending
+revocations. A lost acquisition response leaving an owner is rejected. It preserves the
+original record and an observational intent before marking only the empty coordinator
+operation ABORTED, with no node/DB/profile/service writes. Replays bind that intent;
+another operation or prepared/committed/online state cannot be cleared. Leaf/CRL may be
+historical only for this non-activating abort; normal renewal still validates fresh
+successors and all current revocations/floors before restarting any reader.
+
+Source checks: **128 PASS/16.30s**, existing unprepared reconciliation + new unacquired
+recovery + fleet renewal tests. Includes actual lock contention, subsequent DB drift and
+expired predecessor, zero-write abort, normal common renewal, duplicate/crash replay,
+pending revoke and ownership/preparation/policy/profile rejection. This is scoped Python
+qualification, not full CI or production recovery. Initial test collection/import and
+negative-fixture mistakes are retained in local logs, not relabelled PASS.
+
+Private readbacks and logs: `state-client-build/mesh-live-failure-20261106/` (not Git).
+Next: independently pinned live dry-run; only after its exact predicate passes, abort
+the empty transaction and use the existing installed controller for normal fleet renewal.
+Pause/resume existing schedules only for that bounded repair; do not alter timer settings,
+admission, grants, boot, artifacts, owner phone or the isolated G4 resources. Recovery
+does not roll back the product database or restart expired gateway profiles.
+
+## Original read-only snapshot
+
 Read-only snapshot13:27UTC (14:27 Brussels), followed by bounded diagnosis.
 
 | Metric | RU | AMS1 | AMS2 |

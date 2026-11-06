@@ -1,4 +1,4 @@
-"""Explicitly reconcile a fenced, unprepared renewal without restoring the product DB."""
+"""Explicit operator recovery for unprepared renewals without restoring the product DB."""
 import argparse
 import copy
 import json
@@ -79,12 +79,74 @@ def reconcile(controller, node, operation, *, apply=False, fault=lambda event: N
                     authority_writes=0, grant_writes=0, recovery_required=True)
 
 
+def abort_unacquired(controller, node, operation, *, apply=False, fault=lambda event: None):
+    from credential_renewal import atomic, canonical, digest, parse, read_private, require
+
+    require(re.fullmatch('[a-z0-9-]{16,96}', operation) is not None, 'OPERATION_ID')
+    require(node.role == 'RU' and controller.validator.all_activated and controller.multiple
+            and list(controller.nodes) == ['RU', 'NL', 'NL2']
+            and controller.nodes['RU'].node is node, 'LOCAL_RU_FIRST_REQUIRED')
+    marker = controller.root / 'transaction.json'
+    intent_path = controller.root / ('unacquired-abort-' + operation + '.json')
+    with controller.operation.lock(), node.operation.lock():
+        record = parse(read_private(marker))
+        require(record['operation_id'] == operation, 'OPERATION_ID')
+        intent = parse(read_private(intent_path)) if intent_path.exists() else None
+        if intent is not None:
+            require(set(intent) == {'schema', 'operation_id', 'record_before', 'observed'}
+                    and intent['schema'] == 1 and intent['operation_id'] == operation,
+                    'ABORT_INTENT_INVALID')
+        original = intent['record_before'] if intent is not None else record
+        require(set(original) == {'schema', 'operation_id', 'state', 'first_cause', 'before_sha256',
+                    'before', 'previous', 'previous_secondary', 'acquired', 'quiesced', 'commit_decided', 'gate'}
+                and original['schema'] == 1 and original['operation_id'] == operation
+                and original['state'] == 'RECOVERY_REQUIRED' and original['first_cause'] == 'OPERATION_BUSY'
+                and original['commit_decided'] is False and original['acquired'] == []
+                and original['quiesced'] == [], 'UNACQUIRED_REQUIRED')
+        require(digest(canonical(original['before'])) == original['before_sha256'], 'BEFORE_BINDING')
+        require({path.name for path in node.state.iterdir()} <= {'operation.lock', 'completed.json', 'archive'},
+                'LOCAL_OWNERSHIP_OR_ARTIFACT_PRESENT')
+        ledger = node.state / 'completed.json'
+        require(not ledger.exists() or operation not in parse(read_private(ledger)), 'OPERATION_ALREADY_EXECUTED')
+        plan = controller.root / 'plan.json'
+        require(not plan.exists() or parse(read_private(plan))['operation_id'] != operation,
+                'PREPARATION_ARTIFACT_PRESENT')
+        snapshot, gateway, current, pending_revocations = controller.read(operation)
+        require(not pending_revocations, 'PENDING_REVOCATIONS')
+        require(snapshot == original['previous'] and gateway['secondary_snapshot'] == original['previous_secondary'],
+                'AUTHORITY_OR_GRANTS_CHANGED')
+        for role, actual in current.items():
+            expected = dict(original['before'][role])
+            compared = dict(actual)
+            if role == 'RU':
+                expected.pop('database_sha256')
+                compared.pop('database_sha256')
+            require(compared == expected, 'NON_DATABASE_STATE_CHANGED')
+        require(set(current) == set(original['before']), 'NODE_SET')
+        if intent is None:
+            intent = dict(schema=1, operation_id=operation, record_before=original, observed=current)
+        terminal = dict(original, state='ABORTED', terminal_result='UNACQUIRED_ABORTED_READERS_UNCHANGED',
+                        unacquired_abort_sha256=digest(canonical(intent)))
+        require(record in (original, terminal), 'ABORT_STATE_CHANGED')
+        if apply:
+            if not intent_path.exists():
+                atomic(intent_path, canonical(intent))
+            fault('intent')
+            atomic(marker, canonical(terminal))
+            fault('record')
+            controller.receipts(terminal)
+        return dict(result='UNACQUIRED_ABORTED' if apply else 'UNACQUIRED_ABORTABLE', operation_id=operation,
+                    first_cause=original['first_cause'], readers_changed=False, database_writes=0,
+                    authority_writes=0, grant_writes=0, normal_renewal_required=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--runtime', type=Path, required=True)
     parser.add_argument('--config', type=Path, required=True)
     parser.add_argument('--operation', required=True)
     parser.add_argument('--apply', action='store_true')
+    parser.add_argument('--abort-unacquired', action='store_true')
     arguments = parser.parse_args()
     sys.path.insert(0, str(arguments.runtime.resolve()))
     from credential_renewal import Rejected, parse, read_private, require
@@ -101,7 +163,8 @@ def main():
                  'NL': SshNode('NL', config['nl_source_sha256'], forced=config['ssh']),
                  'NL2': SshNode('NL', config['secondary']['source_sha256'], forced=config['secondary']['ssh'])}
         controller = ProductionController(Path(config['coordinator_state']), nodes, node.validator)
-        print(json.dumps(reconcile(controller, node, arguments.operation, apply=arguments.apply)))
+        action = abort_unacquired if arguments.abort_unacquired else reconcile
+        print(json.dumps(action(controller, node, arguments.operation, apply=arguments.apply)))
     except Exception as error:
         print(json.dumps(dict(result='FAIL_CLOSED', cause=str(error) if isinstance(error, Rejected) else 'UNKNOWN')))
         raise SystemExit(1) from None

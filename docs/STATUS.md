@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**6 November: authorized live MESH recovery, source guard qualified; not restored yet.**
+Both NL leaf/CRL expired5 November11:44:40UTC. RU's first acquisition failed with
+OPERATION_BUSY at10:15:12UTC; its durable RECOVERY_REQUIRED record has no acquired/
+quiesced roles or COMMIT. All three node owners/staging are absent; canonical material
+matches the recorded predecessor, but the live RU database digest has since changed.
+Explicit unacquired-abort protection passes128 scoped tests, including expiry then
+ordinary fleet renewal, lost-response/owner refusal and metadata crash replay. It does
+not restore DB/profiles, start readers or deploy online renewal. Next: guarded dry-run,
+abort of only this empty operation and existing fleet-controller renewal/readback.
+[Diagnosis/recovery](releases/2026-11-06-vpn-health.md). Frozen G4 remains untouched.
+
 **6 November13:27UTC — live health warning:** AWG/TCP active on all nodes, but BOTH
 NL MESH bootstrap services FAILED (exit1/NRestarts6; last exits5 November11:47UTC).
 Cause unknown; no repair/restart. RU CPU initially70–72%, follow-up4–31%; disk71%/8.4GiB.

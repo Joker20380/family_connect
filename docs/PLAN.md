@@ -2,6 +2,14 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected owner follow-up6 November: restore failed live MESH, not a new rollout.**
+Use the qualified explicit unacquired-abort guard only for the proven empty
+OPERATION_BUSY transaction, then the existing pinned fleet controller and fresh
+both-NL/readiness checks. Preserve current DB, revocations/floors, ordinary VPN and
+all original evidence. No blind restart, profile restore, TTL change or online-package
+activation. The independently running frozen G4 is not restarted or requalified by this
+repair; ANDROID-APP-VPN still waits for its separate accepted A checkpoint.
+
 **6 November13:27UTC operational warning:** both live NL MESH bootstrap services
 FAILED; ordinary AWG/TCP active. Diagnosis/recovery remains separate from isolated G4;
 no production mutation or task advancement by this check. Root cause not established.
