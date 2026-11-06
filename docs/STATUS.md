@@ -1,6 +1,15 @@
 # Текущее состояние / Current state
 
-**6 November — SUBSCRIPTION-INTEGRATION-1: PR prepared, CI gate open.**
+**6 November — SUBSCRIPTION-INTEGRATION-1: PR1 CI repairs, merge gate open.**
+Owner-authorized base repairs now cover explicit Android Session test context,
+the phase22 documentation fragment and complete pinned native-source staging.
+Targeted bridge/carrier22 and messenger222 tests PASS; full public docs PASS.
+Accepted native313-file inventory reproduced from `efc13f1c7f27` with unchanged
+`f0e48d7c…` digest;13 staging/orchestration regressions PASS. Hosted native build,
+package smoke and other applicable final-head CI still required before merge.
+No Android production input, paid baseline/data, installed APK, production or G4 change.
+
+**Earlier PR checkpoint:**
 Integrating the reviewed subscription source onto current main without replacing its
 bootstrap/renewal work. Installed ARM119 retains source `b2a37fe98929` and its original
 hash/acceptance scope. No new installation, production restart or paid/admission write.

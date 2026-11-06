@@ -22,7 +22,7 @@ instruction for this source checkpoint; it does not resume paused implementation
 ## Validation and delivery boundaries
 
 The latest finalized parity checkpoint is phase22 in
-[the continuing report](2026-10-23-desktop-parity106.md#linux-user-chat-admission-and-existing-exit-handoff-24-10-phase22):
+[the continuing report](2026-10-23-desktop-parity106.md#linux-user-chat-admission-and-existing-exit-handoff-2410-phase22):
 1218 selected Python regressions PASS, six Linux native packages race PASS,
 Windows native cross-build only,175 shared/2073 capsule checks PASS. The internal
 component has98 files,22 root modules and4 common modules. These results do not

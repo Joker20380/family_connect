@@ -236,6 +236,48 @@ changed while preparing this scenario.
 
 ## Rollback and scope
 
+### Authorized PR1 base CI repairs
+
+Starting refs rechecked: PR head `f119d3061edd193106b53be832cea7d9982c363f`,
+main `41b4e6e034efc3e51446f383f2fbaedee3ad5a67`. Work stays in the existing
+isolated integration worktree; no foreign work is reset or overwritten.
+
+- Nine obsolete Session fixtures now pass `platform="android", version=119`,
+  including reopen. Production constructor/validation/PackageManager are unchanged.
+  Removing TypeError exposed three outdated relay-empty expectations: durable Android
+  reception queues a **storage receipt**, not a subscription/payment notification.
+  Tests now verify reply purge, automatic receipt relay, peer receipt consumption,
+  `recipient_stored`, then an empty relay. No assertion removed or production default added.
+- PASS:22 targeted bridge/carrier tests (16.73s), then222 messenger tests (119.33s).
+- Only the phase22 fragment in the24 October report is corrected (`2410`, not `24-10`).
+  Target heading unchanged. Single-document and `check_public_docs.py --all` completed
+  with no errors; this is an actual global run, not an inferred result.
+- Actual accepted builder `sources()` on archived commit
+  `efc13f1c7f2750cb7640dd2b8b90aed15c92c6e3` reproduces all313 native entries and digest
+  `f0e48d7cd3bd68a02759a5ff29967492ab170e171942d502864f0e03a07c23fe`.
+  Its desktop verifier passes all175 shared sources. Full staging closure has337 files,
+  digest `2d4e1380efa25109e1f0ea2e17f8971d1e8a8f127c56b313742ee8819696e933`:
+  complete carrier/mesh trees plus the pinned builder, verifier and their reference inputs.
+  A fresh `git archive` stage excludes later additions, not just44 known differences.
+- The **current** CI checkout still supplies frontend, messenger, support files, RNS,
+  normal transports and packaging. Native build and system packager independently
+  verify the **same** pinned stage; modified/missing/extra inputs, builder tampering,
+  symlinks and stage reuse fail closed. Historical builder,106 hashes and
+  `system-reference.native_source_digest` are unchanged.13 bounded tests PASS;
+  the real staging CLI also reproduced the pin. No local native build or Docker action.
+- CI keeps race tests, native binary/metadata checks and real package smokes intact.
+  Artifact receipts now separate `package-source.txt`, `native-source.json`, full
+  `native-inventory.json`, `native-build.json` and `system-delivery.json`. The latter
+  records native source commit and built binary digest. A mixed-provenance package
+  is not attributed wholesale to the old native commit. Binary digest awaits hosted build.
+
+Final-head hosted results are pending. Earlier f119 CI additionally revealed phase0
+fixture failures (missing `edca544…` Git source and root-only tests under UID1000)
+and Android diagnostic-contract failure; these are not claimed fixed by the three
+repairs. No merge is allowed while an applicable gate remains red or running.
+
+### Scope and rollback
+
 Before merge, close/revise the integration PR; after merge use an ordinary reviewed
 revert, never reset published main. This does not uninstall the existing APK or roll
 back the already accepted live overlay. Any later server rollout requires its own

@@ -8,13 +8,13 @@ renewal work below. Validate the ordinary server package, complete repository CI
 merge through a PR. Do not redeploy, install, alter paid data or open another Android
 matrix. Prepare one existing operator workflow read-only, including its eligibility
 and expiry consequences. Installed ARM119 provenance and prior NOT_RUN gates remain.
-PR1 prepared; package/authentication tests pass. Resolve the existing main shared106
-reference gate through its own provenance review before merge; do not silently update
-44 carrier hashes or expand this task into desktop/native qualification. No auto-merge
-on incomplete/red checks, production action or automatic successor task.
-The other concrete base gates are obsolete4-argument messenger bridge fixtures and
-the pre-existing global documentation anchor. Subscription packaging/adaptation fixes
-are prepared; resolve base gates separately and rerun applicable CI before merging.
+PR1 base repairs explicitly authorized: update nine Session fixtures and the exact
+phase22 fragment; rebuild the already accepted native closure, not current carrier.
+The pinned `efc13f1c7f27` snapshot reproduces the existing313-file native digest;
+historical accepted hashes stay unchanged. Messenger222 and docs gates pass locally.
+NEXT within this task: final-head hosted Linux race/build/package smoke and all
+applicable PR checks; inspect remaining phase0/control/client failures, then normal
+merge only after concrete gates pass. No bypass, production action or successor task.
 [Task evidence and completion gate](releases/2026-11-06-subscription-integration-1.md).
 
 **Selected6 November: separate beta113/API28 field bootstrap diagnosis, not G4.**
