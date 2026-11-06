@@ -3,14 +3,16 @@
 ## Current engineering priority / Текущий critical path
 
 **Selected6 November: separate beta113/API28 field bootstrap diagnosis, not G4.**
-Exact shipped-source audit and lightweight mock regressions are complete; no product
-classification or network policy is changed. The requested export is still missing
-(the local similarly named beta65/API31 file is not this incident). The first reported
-failure is HTTPS readiness challenge TIMEOUT before recorded HTTP status; RNS open
-UNAVAILABLE and subsequent AUTH/INTERNAL do not identify its physical cause.
-**One next for this case:** obtain the correct export plus the bounded same-cellular
-warm/cold-client comparison in the [audit](releases/2026-11-06-beta113-field16-bootstrap.md).
-Completion requires per-attempt network/connection correlation, not a speculative APK.
+The correct export is now read and correlated against exact d2882cd: first FETCH_FAILED,
+then BOOTSTRAP_UNAVAILABLE, owner AUTH during retry wait, and later AUTH→cleanup INTERNAL.
+The retained detailed fetch belongs to the preceding retry, not the final AUTH incident;
+the6 November ring records only readiness while disconnected. Two fetches bind CELLULAR
+with no handle change inside each attempt; endpoint reachability versus lost physical
+Network is still unproved. No classification or network policy is changed.
+**One next for this case:** the bounded same-cellular warm/cold-client comparison in the
+[audit](releases/2026-11-06-beta113-field16-bootstrap.md), retaining UTC/cache/handle results.
+The missing evidence is Network liveness and TCP/TLS/owner-callback detail, not the
+already supplied JSON. Do not build a speculative APK to replace that comparison.
 Do not start AVDs, touch frozen G4, change production or advance ANDROID-APP-VPN here.
 The separately recorded live-renewal follow-up below remains outstanding, not executed
 by this source investigation; the product queue is unchanged.

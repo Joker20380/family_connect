@@ -2,25 +2,115 @@
 
 ## Статус и границы входных данных
 
-**SOURCE_AUDIT_COMPLETE / FIELD_CAUSE_UNRESOLVED.** Это отдельный клиент, не телефон
+**EXPORT_READ / SOURCE_AUDIT_COMPLETE / FIELD_CAUSE_NARROWED_NOT_FIXED.** Это отдельный клиент, не телефон
 владельца, не isolated G4 и не проверка исправленного live MESH. Продуктовый код,
 классификация ошибок и серверы не изменены. Нового APK, AVD, транспорта или endpoint нет.
 
-Запрошенный `FamilyConnect-diagnostics (16).json` для beta113/API28 в доступных локальных
-файлах не найден. Похожий `FamilyConnect-diagnostics(16).json` относится к **beta65/API31**;
-он исключён, его идентификаторы и события не использованы. Следующие признаки — данные
-из сообщения владельца, **не независимо прочитанная последовательность нужного JSON**:
+Владелец передал точный путь Telegram к `FamilyConnect-diagnostics (16).json`;
+файл прочитан: **17640 bytes**, SHA256
+`94e2ba954b844b70107f8984837ff8fb4cd96c1c092094bee6f3fee287174682`.
+Оба раздела подтверждают beta113/code113/API28, Support ID=null. Ранее найденный
+похожий файл **beta65/API31 по-прежнему исключён**. Предыдущий source-only checkpoint
+`56c445df5ffcb97056deb9a16fa99e1b1135284b` сохраняет факт тогда отсутствовавшего input;
+теперь следующие признаки проверены непосредственно в правильном JSON:
 
-- beta113, API28, CELLULAR; `cache=MISSING`;
+- beta113, API28; оба сохранённых fetch имеют CELLULAR и `cache=MISSING`;
 - `CHALLENGE / CONNECT_TLS_WRITE / HTTPS_UNDERLAY / TIMEOUT`, HTTP-ответ не зафиксирован;
 - `RNS / RELAY_OPEN / UNAVAILABLE`, `readiness=FETCH_FAILED`, `directory=NOT_USABLE`;
 - `restricted_descriptor=NOT_ATTEMPTED`, затем AUTH и INTERNAL без раскрытой причины;
 - окна по часам телефона: 2026-11-05 09:31:20–09:34:43 UTC и
   2026-11-06 11:59:26–11:59:37 UTC; Support ID отсутствует.
 
-Часы телефона не сверены. Identity, оператор, регион, выбранный gateway и принадлежность
-поздних категорий той же попытке **не устанавливались и не угадываются**. Отсутствие
+Часы телефона не сверены. Identity, оператор, регион и выбранный gateway
+**не устанавливались и не угадываются**. Принадлежность событий соединениям сверена
+локально по opaque IDs, которые в отчёт не включены. Отсутствие
 Support ID не заменяется поиском похожего пользователя. Raw export/ключи в Git не попадают.
+
+## Уточнение по фактическому экспорту
+
+### Два snapshot, не одна непрерывная попытка
+
+- `incident`:35 событий5 ноября, последнее состояние FAILED, последний сохранённый
+  `vpn_capture_open=true`. Два явных Connect и два retry второго подключения.
+- `ring`:4 readiness-события6 ноября, состояние DISCONNECTED, `vpn_capture_open=false`;
+  Connect/owner/native events отсутствуют. Это readiness/prewarm-окно, не доказательство
+  нового VPN Connect6 ноября. Global network_class=UNKNOWN, но fetch.network_type=CELLULAR:
+  readiness logging не вызывает `Diagnostics.network()`, в отличие от orchestrator events.
+- В обоих snapshot `restricted_session` и `restricted_startup` пусты, history пуст.
+  Это согласуется с отказом до native beginReady; полноценного Family-сеанса не показано.
+- Snapshot `vpn_capture_open=true` сам по себе не является свежей проверкой Android VPN
+  owner: событие onRevoke/onDestroy в113 не записывает отдельную причину и может оставить
+  прежнюю диагностическую метку. Утверждать сохранённый TUN после AUTH по этому полю нельзя.
+
+### Хронология, UTC по телефону
+
+| Время5 ноября | Факт и локализация |
+|---|---|
+| 09:31:20.807 | MISSING до первого явного Connect |
+| 09:31:23.369–23.395 | Первый Connect, VPN_CAPTURE_READY |
+| 09:31:31.039 | **Первый записанный отказ FETCH_FAILED**; его отдельный detailed trace уже не сохранён |
+| 09:31:41.120–41.231 | BOOTSTRAP_UNAVAILABLE, переход к RESTORING и recovery_wait |
+| 09:32:01.257 | AUTH, RESTORING→FAILED, **без нового restoration_attempted**, через20.026s после recovery_wait |
+| 09:32:09.888–09:32:10.251 | Явный Disconnect/VPN_RELEASED, затем второй Connect/VPN_CAPTURE_READY |
+| 09:32:25.658–35.813 | FETCH_FAILED, BOOTSTRAP_UNAVAILABLE, ожидание recovery |
+| 09:33:10.834–09:33:32.369 | Первый retry; сохранённый detailed fetch, затем BOOTSTRAP_UNAVAILABLE и recovery_wait |
+| 09:34:37.406–38.453 | Второй retry и попытка restricted candidate |
+| 09:34:42.946–42.991 | Candidate AUTH → restoration_failed INTERNAL, промежуток45ms |
+
+В incident сохранён **последний завершённый readiness trace09:33:11.942–09:33:22.194**,
+а не trace исходной попытки09:31 и не trace последнего AUTH09:34. Его нельзя ретроспективно
+назначить этим двум попыткам. Connection ID у этого trace совпадает с началом/концом
+второго подключения; `connection_changed=false` не означает неизменную сеть.
+
+В ring6 ноября: MISSING в11:59:26.560/.639 и FETCH_FAILED в11:59:31.874/36.867.
+Сохранён только один подробный trace11:59:26.427–11:59:36.862. Два результата не позволяют
+угадать, какие node scopes/prewarm их породили: gateway binding в этом export не указан.
+
+### Сеть в двух сохранённых detailed traces
+
+| Trace | Длительность monotonic / wall | Состояние и route |
+|---|---|---|
+| 5 ноября09:33 | 10252ms /10252ms | CELLULAR handle H1, HTTPS TIMEOUT → RNS UNAVAILABLE, HTTP status0 |
+| 6 ноября11:59 | 10434ms /10435ms | CELLULAR handle H2, HTTPS TIMEOUT → RNS UNAVAILABLE, HTTP status0 |
+
+H1/H2 — только локальные обозначения: **handles различны между днями**, совпадают
+в HTTPS/RNS failure records внутри каждой попытки, не нулевые. У обоих trace
+cache=MISSING, source=NONE, refresh=FETCH_FAILED, connection_changed=false.
+Это исключает объяснение этих двух сохранённых traces одним неизменно закешированным
+handle на оба дня, но не исключает потерю выбранной Network внутри попытки.
+
+Две одинаковые записи RNS UNAVAILABLE внутри trace — предусмотренное логирование в
+`relayPost` и внешнем `restrictedReadiness` catch, а не свидетельство двух relay opens.
+При штатных monotonic clocks полный10.3s trace короче25s ожидания RNS path/link и нового
+30s общего бюджета. Callback записывает NONE/0 при отсутствии bindable underlay, чего
+здесь нет. По exact113 это существенно сужает RNS отказ до **TCP-connect ветви**; форма
+около10s совместима с последовательными5s HTTPS/RNS ожиданиями. Но export не содержит
+самого socket errno/индивидуального времени фаз: конкретный timeout/refusal, причина
+недоступности адреса и политика оператора **не доказаны**. В частности, это не доказанное
+25-секундное ожидание отсутствующего RNS peer и не отсутствие локального Python runtime.
+
+### Происхождение двух поздних категорий
+
+1. AUTH09:32:01 возникает до минимального30s retry backoff и без события новой попытки.
+   В штатном flow113 это ветвь `retryIfDue()` при уже установленном `interrupted=AUTH`,
+   а не новая HTTP challenge-авторизация. Production caller этого AUTH interruption —
+   callback AutomaticVpnOwner от `TcpVpnService.onRevoke()` **или** `onDestroy()`.
+   Какая из двух callback-причин сработала и кто её вызвал, JSON не различает. Это
+   не доказательство запуска стороннего VPN или конкретного действия пользователя.
+2. AUTH09:34:42.946 относится к candidate второго retry. Через45ms записан именно
+   `policy_reason=INTERNAL`. По control flow после candidate AUTH до terminal finish
+   категория меняется на INTERNAL при исключении `closeCandidate()`/cleanup. Там
+   выполняются blocking guard replacement и `candidate.down()`. Exception class и
+   точная операция отсутствуют; связку «owner revoke → guard establish null» нельзя
+   объявить доказанной. Ранее сохранённый trace09:33 не содержит причины этого AUTH.
+3. TRANSPORT_UNAVAILABLE сразу после restoration_attempted в09:33/09:34 не следует
+   объявлять отдельным измерением сети: source113 пишет это исходное значение `last`
+   в событии fallback, затем через1s пробует candidate. Export не сохраняет имя fallback.
+
+Обе control-flow последовательности воспроизведены синтетически на неизменном113;
+это локализует происхождение категорий, но не воспроизводит Android callback/сеть
+этого телефона. HTTP401/403, AUTHORIZATION_REJECTED или native Family-auth rejection
+в предоставленном JSON **не зафиксированы**. Классификация продукта не менялась.
 
 ## Точная версия и способ проверки
 
@@ -46,9 +136,10 @@ APK непосредственно с исследуемого телефона 
 
 ## 1. Первый подтверждённый переход и HTTP/underlay
 
-По предоставленным событиям первый отказ — **истёкшее ожидание readiness challenge до
-записи HTTP status**. Это ещё не получение readiness, не Family TLS handshake с NL и
-не отказ серверной авторизации. Причина сетевого ожидания пока неизвестна.
+Первый recorded result — FETCH_FAILED09:31:31. Самая ранняя сохранённая подробная
+сетевая цепочка09:33 подтверждает **истёкшее ожидание readiness challenge до записи
+HTTP status**. Это ещё не получение readiness, не Family TLS handshake с NL и не
+отказ серверной авторизации. Причина сетевого ожидания пока неизвестна.
 
 В `FriendsAccessAndroid.java:63` запрос идёт на
 `POST https://185.251.89.19:8443/friends/restricted-readiness/challenge`.
@@ -132,12 +223,12 @@ challenge status401/403 обрабатывается отдельно. TIMEOUT �
 | INTERNAL | Нераспознанная Exception/LinkageError в orchestrator; отдельный INTERNAL_ERROR во внешнем prewarm/import catch |
 | INTERNAL | `ConnectivityOrchestrator.java:143,164,185`: ошибка cleanup может заменить исходную категорию |
 
-Отзыв Android VPN consent сторонним VPN — допустимая гипотеза для AUTH, но без
-события onRevoke/consent и привязки к той же попытке это не установленный факт.
-Точный источник поздних AUTH/INTERNAL требует правильного JSON: component/event,
-policy reason, attempt ID, started/completed connection ID, connection_changed и
-непосредственно предшествующие owner/cleanup события. Если их нет в113 export, нужен
-узко ограниченный диагностический признак причинной ветви, а не переклассификация.
+Эта таблица перечисляет общий source-контракт. После чтения правильного JSON
+применимые ветви существенно сужены в разделе фактической хронологии: первый AUTH —
+interruption при ожидании retry, последний INTERNAL — cleanup после candidate AUTH.
+Отзыв consent именно сторонним VPN остаётся гипотезой. Export не разделяет onRevoke
+и onDestroy и не содержит причинное исключение cleanup; нужна эта узкая детализация,
+а не переклассификация сетевого timeout в AUTH или наоборот.
 
 ## 4. Почему список серверов виден без usable readiness
 
@@ -185,12 +276,12 @@ RNS socket bind заново исключает VPN networks. При исчез�
   после другого VPN, недоступность служебного IP:port или задержка HTTP/relay могут
   давать похожую внешнюю картину. Ни одна из этих причин на телефоне не воспроизведена.
 
-**Точный недостающий различитель:** для той же challenge attempt нужны выбранный
-`network_type` и `network_generation` (в113 это **Network handle, не счётчик поколений**),
-её NOT_VPN/INTERNET/VALIDATED и факт lost/замены к моменту ошибки, отдельно результаты
-TCP-connect, TLS-handshake и получения HTTP status. Общий CELLULAR телефона и метка
-HTTPS_UNDERLAY не заменяют этих данных. ReadinessFetchTrace уже содержит handle/type,
-а DiagnosticRing — connection_changed; сначала следует прочитать их в правильном файле.
+**Точный недостающий различитель после чтения JSON:** network_type=CELLULAR и
+`network_generation` уже известны; в113 это **Network handle, не счётчик поколений**.
+Неизвестно, оставалась ли эта Network действующей в момент ошибки: нужны её
+capabilities/lost/replacement и отдельные результаты TCP-connect, TLS-handshake и
+HTTP status. `connection_changed=false` сравнивает IDs подключения Family Connect,
+не Android Network. Совпадение handle на двух этапах не доказывает его liveness.
 
 Для строгого отличия неверного выбора сети от недоступности служебного адреса нужен
 сравнительный connect к **тому же IP:port с подтверждённой привязкой к текущей физической
@@ -248,7 +339,27 @@ Documentation check: `python3 scripts/check_public_docs.py docs/STATUS.md docs/P
 docs/releases/2026-11-06-beta113-field16-bootstrap.md` — three files/295 links, no errors;
 `git diff --check` passes. This is local link validation, not an HTTP availability check.
 
+### Дополнение после получения правильного файла
+
+В ignored `actual-export16/` сохранены input.private.json (0600), sanitized-analysis.json
+(локальные aliases вместо opaque IDs), exact commands/exit codes в recovery-checks.json.
+Raw JSON, его opaque IDs и локальная таблица сопоставления в Git не включены.
+
+- Существующий `ConnectivityOrchestratorTest`: **31 PASS**, 0.043s;
+  `recovery-check-2.log` SHA256 `875173a5bccfd202143e0ecb5339f9e00ac39e5f89cdba690b359477f97ccb7c`.
+  Это адресный повтор части прежних64, не31 дополнительных независимых теста.
+- Два синтетических control-flow сценария exact113: interruption AUTH до due retry;
+  candidate AUTH + cleanup exception → INTERNAL. Оба PASS, вместе с проверкой
+  fallback TRANSPORT_UNAVAILABLE при networkAvailable=true.
+  `recovery-check-1.log` SHA256 `940c36fd0d7f070cb594b0e3477a60288dde1d3893493d004e9173a7a27093de`.
+  Thin driver `Field113RecoveryProbe.java` SHA256
+  `aeda3cbf076797954c99e2776bf4747a50c55ba44aa29d1944122742fa9ebe5b`.
+- Sanitized local correlation SHA256
+  `c0c6f64dd966c05ce67e8f402baf792e049ea98594e9ce4ac7dde169979948e8`.
+  Это анализ двух snapshot, не новый полевой запуск и не Android runtime PASS.
+
 No installation/rollout/rollback is performed or needed for this documentation-only
 audit. APK118/updater113, subscriptions, certificates, admission, G4 and frozen artifacts
-are untouched. Earlier failed runs and unrelated local changes remain. **Next: correct
-beta113/API28 export plus the single comparison above**, not another speculative APK.
+are untouched. Earlier failed runs and unrelated local changes remain. **Next: the
+single comparison above with UTC/cache/Network observations**; the correct export
+has been received and does not need to be requested again. No speculative APK.

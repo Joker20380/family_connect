@@ -1,17 +1,18 @@
 # Текущее состояние / Current state
 
-**6 November — separate beta113/API28 initial-connect field audit, source-only.**
-The owner's export16 summary first identifies a readiness challenge timeout before a
-recorded HTTP status, not a proved authorization rejection or RNS carrier block.
-Exact shipped d2882cd source and retained signed113 APK/relay asset are checked;
-64 scoped JVM cases, the existing network-handoff fixture and six Python bridge cases
-pass. Synthetic missing-cache failure stays BOOTSTRAP_UNAVAILABLE, not AUTH/INTERNAL.
-No persistent Network/SocketFactory is found; an in-flight prewarm can retain its
-chosen network, and first-eligible physical-network selection is not validation.
-The requested raw beta113/API28 export is unavailable locally: the similarly named
-export16 is beta65/API31 and excluded. Field root cause and later AUTH/INTERNAL remain
-unresolved. Next for this bounded case: obtain the correct export and one same-cellular
-warm/cold-client comparison, without clearing data. No APK, AVD, production or G4 action.
+**6 November — actual beta113/API28 export16 read; field cause narrowed, not fixed.**
+The owner supplied the correct file (SHA25694e2ba95,17640 bytes); the old beta65 export
+remains excluded. Its incident contains35 events from5 November; the newer ring has
+four readiness-only events while DISCONNECTED on6 November, not another recorded Connect.
+Two retained fetches fail at HTTPS challenge then RNS open in10.252/10.434s; both use
+CELLULAR, with the same handle within a fetch but different handles between days.
+Initial FETCH_FAILED precedes BOOTSTRAP_UNAVAILABLE; AUTH while awaiting retry maps to
+owner interruption, and later candidate AUTH is followed by INTERNAL at cleanup.
+Exact onRevoke/onDestroy cause, cleanup exception and TCP/TLS failure stage remain absent.
+No HTTP authorization denial or RNS operator block is proved. Exact113 lightweight
+31-case orchestrator rerun and two synthetic control-flow cases PASS; earlier scoped
+checks retained, not added together. Next: one same-cellular warm/cold-client comparison
+without clearing data. No product change, APK, AVD, production or G4 action.
 [Source audit, evidence and comparison instructions](releases/2026-11-06-beta113-field16-bootstrap.md).
 The live-renewal watch and frozen G4 below retain their separate scope/status.
 
