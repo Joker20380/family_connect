@@ -1321,3 +1321,65 @@ creates zero rooms. Both original FAIL receipts/19 artifacts and all checksummed
 Android PASS evidence remain unchanged. No automatic restart, host or phone migration.
 
 [Sanitized process/stage evidence and local artifact hashes](2026-11-06-cold-ordered-runtime.json).
+
+#### Reduced-load runtime stop
+
+Owner-authorized continuation fromf7073e6 after desktop load reduction. Product source
+`6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7` has no product delta; accepted x86_64/API27
+JNI SHA256 `17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59`, existing
+stand/verifier and both APK bases are hash-verified and reused. No native build, suites
+or accepted Android JNI gate rerun. No new final APK is produced and none is overwritten.
+Private attempt artifacts use a separate `reduced-load-runtime` directory. The reused
+runner changes only two diagnostic phase labels for post-boot reset/clock observation;
+guards, timing and execution order are unchanged.
+
+Exactly one initial resource preflight passes at21:46:44UTC: CPU58°C, GPU52°C,
+17637796KiB available RAM. The shared lock, KVM and data-filesystem space checks pass;
+one existing own API27 AVD boots with `-gpu host`, PRIME NVIDIA, `-accel on`,2cores,
+2048MB, CPUQuota100%. Actual guest GLES reports NVIDIA GTX1650Ti. Both owned test
+packages are absent and no VPN is observed, so no test readiness cache is inherited.
+The guest clock converges without changing it: final observation host1794001644.781–
+1794001644.810, guest1794001644. The next existing stage guard fails **before** opening
+the protected OAuth dialog or starting authority/Telemost workers.
+
+| Stop observation,21:47:25.915UTC | Value |
+| --- | --- |
+| Stage / code | `ANDROID_READY_NO_VPN_BEFORE_ROOMS` / `THERMAL_PREFLIGHT` |
+| Elapsed from initial preflight | 41.740s; not an instrumented emulator-lifetime measurement |
+| Hottest named sensors | coretemp `Package id 0` and `Core 2`:94°C, limit85°C |
+| GPU / available RAM | NVIDIA53°C /16279992KiB; neither limit fails |
+| Paired CPU sample | 1.069s;100%=one core |
+| Own emulator | PID3079674 `qemu-system-x86`:2.81% |
+| Other processes, total | 58.01% |
+| Largest other process | PID19485 `firefox-bin`:21.51% |
+| Other desktop load | PID16284 `ptyxis`:12.16%; `codex` PIDs1399144/2757576:6.55% each |
+| Own runner | PID3079619 `python3`:1.87% |
+| Own compiler / authority / Telemost workers | Absent; not started |
+
+This confirms a thermal-limit violation even with much lower sampled CPU than the
+previous attempt (QEMU82.35%/other226.62%). It does **not** prove that the browser,
+emulator or another individual process caused94°C: the short CPU interval is not a
+thermal-causality measurement. The exception snapshot35ms later also reads94°C but
+reuses the preceding CPU interval, not an independent CPU sample. Cleanup reads63°C.
+The background watch's stored `peak_cpu_c=66` covers its own polling only; the stage
+audit records the actual94°C stop. It must not be presented as a below-threshold run.
+No threshold, cooling/power, DNS, network or foreign process is changed. No retry.
+
+OAuth/rooms/authority/workers, synthetic inputs/locator, assets-only packaging/install,
+guest direct-path blocks and AutomaticConnection are all NOT_RUN. Thus no new live
+Go/carrier/TLS/challenge/Network-bind evidence exists; provisioning's native cause and
+bundle/READY/DNS/verified HTTPS/egress remain unknown. The only host verified HTTPS
+request prepares an expected egress digest; it is not Android/VPN traffic proof. The
+single authorized Connect remains unused, with the200000ms candidate and separate
+30000ms readiness budgets unchanged. No runtime negatives or product correction.
+
+Cleanup verifies runner3079619 and QEMU3079674 gone, no emulator, free shared lock and
+no exact own authority container. Zero rooms are created; deletion of earlier provider
+room objects remains NOT_VERIFIED. Both original FAIL_RUNTIME receipts/19 artifacts,
+all30 checksummed accepted Android preparation/PASS artifacts and all17f7073e6 local
+evidence files remain hash-identical. No rollback/deployment is needed: no new APK is
+installed, public versions/catalogs/production/G4/user devices remain untouched.
+Per the owner, the next decision is migration of the runtime environment, not another
+identical local restart or an automatic move to a physical phone/another host.
+
+[Sanitized reduced-load evidence, retained identities and cleanup](2026-11-06-cold-reduced-load-runtime.json).

@@ -2,24 +2,26 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Selected continuation6 November: measured pre-worker resource conflict; ONE Connect unused.**
-Accepted provider-free Android JNI PASS remains accepted. Source6eb61a9/JNI17119f00…60c59
-are unchanged and reused, without native rebuild or repeated host/JVM/race/Android JNI
-gates. Revised local runner prepares immutable components before one own API27 AVD,
-then would start authority/workers and replace only fresh APK assets without reboot.
-The one AVD boots on NVIDIA/KVM but is stopped by the unchanged85°C guard at87°C,
-during pre-worker readiness/clock observation. Paired CPU evidence: QEMU82.35%, other
-processes226.62%, chiefly browser processes; own builds/authority/workers are absent.
-No OAuth/room/input creation, final packaging or Connect occurs. No second start.
-Next execution requires a safe host-resource window; the observed AVD-plus-desktop
-load fails before adding workers. Do not attribute the earlier pre-AVD abort to this
-emulator or claim server-worker load was measured. Do not raise thresholds, stop foreign
-processes or silently move to another host/phone. Keep the accepted JNI and immutable
-artifacts; regenerate finite locator/identity assets only after Android/resource checks.
-One AutomaticConnection200000ms candidate plus separate30000ms readiness remains the
-gate: actual native reason on failure; DNS/verified HTTPS/egress on READY, no negatives
-first. No product, production/G4, admission, public APK, discovery/import or activation
-work is authorized. Old FAILs/19 artifacts and Android PASS are preserved unchanged.
+**Selected continuation6 November21:47UTC: reduced-load thermal stop; migration decision next.**
+Fromf7073e6, product6eb61a9/JNI17119f00…60c59 remain unchanged and reused. Accepted
+provider-free Android JNI PASS is retained, no native rebuild or host/JVM/race/JNI rerun.
+Exactly one initial preflight passes and one own API27 NVIDIA/KVM AVD boots. Cold package/
+VPN checks and unmodified clock convergence complete. Before OAuth/rooms/workers, the
+existing `ANDROID_READY_NO_VPN_BEFORE_ROOMS` gate measures Package id0/Core2 at94°C
+against85°C,41.740s after preflight. The paired1.069s CPU sample is substantially lower
+than the earlier attempt: QEMU2.81%, other processes58.01% (100%=one core); no own builds
+or workers. The measured thermal limit still fails; individual heat-source causality is
+not established. GPU53°C and16279992KiB available RAM pass. Own resources are stopped;
+no OAuth, new rooms/inputs/APK, guest blocks or Connect. ONE Connect remains unused.
+Do not repeat this host/AVD cycle. The next execution decision belongs to the owner:
+environment migration, not threshold increases, foreign-process termination or an
+automatic move to a phone/host. Server-worker co-load remains untested. Keep accepted
+JNI and immutable artifacts; future finite inputs must be fresh, not previous readiness.
+The unchanged gate remains AutomaticConnection200000ms candidate plus separate30000ms
+readiness: concrete native reason on failure; DNS/verified HTTPS/egress on READY, no
+negatives first. Both old FAILs/19 artifacts, accepted Android PASS andf7073e6 evidence
+are preserved. No product, production/G4, admission, public APK, discovery/import or
+activation work is authorized. See [measured stop](releases/2026-11-06-beta113-field16-bootstrap.md#reduced-load-runtime-stop).
 
 **Prior request outcome, superseded by the current authorization: retry consumed.**
 Original harness incorrectly gave the whole engine30s; corrected AutomaticConnection

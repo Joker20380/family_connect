@@ -1,5 +1,26 @@
 # Текущее состояние / Current state
 
+**6 November21:47UTC — reduced-load attempt stopped after Android ready, before rooms.**
+Fromf7073e6, unchanged source6eb61a9/JNI17119f00…60c59 and existing binaries/APK bases
+are verified and reused; accepted Android JNI PASS is retained, no gate/suite/rebuild.
+One initial preflight passes at CPU58°C/GPU52°C; one own API27 NVIDIA/KVM AVD boots
+with the existing data-filesystem userdata. Own test packages/readiness and VPN are
+absent; the guest clock converges without adjustment. At the next existing resource
+gate, `ANDROID_READY_NO_VPN_BEFORE_ROOMS`, coretemp Package id0/Core2 reach94°C
+against85°C,41.740s after the initial preflight. GPU53°C and available16279992KiB RAM
+pass. The paired1.069s CPU sample shows QEMU PID3079674 at2.81%, other processes58.01%
+(100%=one core), chiefly firefox-bin PID19485 at21.51% and ptyxis PID16284 at12.16%.
+No own compiler/authority/Telemost-worker is running. This is a measured sensor-limit
+violation despite reduced sampled load, not proof of a particular process causing heat.
+The background watch's66°C maximum misses this stage-audit94°C sample and is not the
+whole-run peak. OAuth, rooms, fresh inputs, APK packaging/install, guest blocks and
+Connect are NOT_RUN; zero authorized Connects consumed, live native cause still unknown.
+Own runner/QEMU are gone, lock free, authority absent; zero new rooms. Both FAILs/19
+artifacts, accepted Android PASS andf7073e6 evidence remain unchanged. No restart:
+the owner's next decision is environment migration, not another identical local cycle.
+No production/G4/public APK/catalog/version or system/foreign-process change.
+[Measured reduced-load stop and cleanup](releases/2026-11-06-beta113-field16-bootstrap.md#reduced-load-runtime-stop).
+
 **6 November — ordered single-AVD attempt: measured thermal conflict before workers.**
 The accepted Android JNI PASS is retained, not repeated. Product6eb61a9 and JNI
 17119f00…60c59 are unchanged; no native build or host/JVM/race suites. Immutable
