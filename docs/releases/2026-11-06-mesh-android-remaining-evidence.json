@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "scope": "closed-owner-late-delivery-and-legacy-qualification-not-complete-G3",
+  "scope": "retained-initial-failures-and-completed-isolated-G3-remaining-cases-not-full-CI-or-production",
   "test_source": "296cd55882cb8b250f373868873eb64b5bfeb8c2",
   "runtime_source": "bfff97d91507cbc7d1ac422facbf93278f760d92",
   "archive_sha256": "5721a5c1a03ce365ba723f3526ced0551d34402c4a1b461424197923b7671e01",
@@ -326,7 +326,7 @@
         "client half-close does not truncate origin response"
       ]
     },
-    "paired_android": "NOT_RUN_ON_CORRECTED_ADAPTER",
+    "paired_android": "PASS_API27_API35_WITH_EXACT_LATE_FINAL_RECEIPTS",
     "original_api35_timeout": "retained FAIL; no EMFILE observed in its retained route logs, not declared fixed"
   },
   "late_eof_corrected": {
@@ -383,7 +383,123 @@
     "correction": "only owned Docker endpoint link-local IPv6 enabled using com.docker.network.endpoint.sysctls; no IPv6 default route or global address; same private network, no production networking changes",
     "preflight": "android-api35-ipv6-preflight2.log",
     "guard_results": "33 passed / android-eof-modem-guards.log (includes2 EOF guards, overlapping previous selection)",
-    "next_runtime": "NOT_RUN",
+    "next_runtime": "PASS_API35_LATE_CLOSED_OWNER_ONLY; phone-service guard passed and modem resolution error absent",
     "security": "same60s phone-service gate, KVM/NVIDIA enforcement and real clock validation; no timeout increase or service-check bypass"
+  },
+  "test_source_scope": "initial late attempt only; later runs have their own test_source",
+  "late_final": {
+    "27": {
+      "evidence_field": "late_eof_corrected.27",
+      "result": "PASS_LATE_CLOSED_OWNER_ONLY"
+    },
+    "35": {
+      "result": "PASS_LATE_CLOSED_OWNER_ONLY",
+      "renderer": "GLES: Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti/PCIe/SSE2), OpenGL ES 3.1 (4.5.0 NVIDIA 580.178.04)",
+      "clock_observation": {
+        "host_before": 1793966944.153501,
+        "host_after": 1793966944.189904,
+        "guest": 1793966944
+      },
+      "installed_apk_sha256": "22d64732be64d31640ca5a3c804fd1544f67d9cefa0200e52d27e262271568ae",
+      "installed_native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+      "final_native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+      "owned_emulator_stopped": true,
+      "started": 1793966944.153495,
+      "finished": 1793967298.800863,
+      "test_source": "212b8113a487a14f0fe3cab0b0188a2ca120d6ec",
+      "exit_code": 0,
+      "seconds": 350.367,
+      "phases": [
+        "SERVICE_OWNER_CONNECTED",
+        "SERVICE_VERIFIED_HTTPS",
+        "LATE_FIXTURE_CONTROL_ON_UNDERLAY",
+        "LATE_HTTP_COMPLETED_IMPORT_PENDING",
+        "LATE_OWNER_CLOSED_BEFORE_IMPORT",
+        "LATE_COMPLETION_IGNORED_CLOSED_OWNER",
+        "LATE_NEW_EXPLICIT_CONNECT_NOT_RENEWAL",
+        "SERVICE_OWNER_CLEANED"
+      ],
+      "receipt": "android-latemodem-gpu35-emulators4/api35-receipt.json",
+      "receipt_sha256": "50090e23fb2b5d39119242bfdb6837c8bdb375c4cb8b37a91e8efaad734dc93b",
+      "log": "android-latemodem-gpu35-emulators4/api35-runtime.log",
+      "server": "android-latemodem-gpu35-4/server.json",
+      "server_cleanup": "processes-waited",
+      "tests_sha256": "16a3df1ddee1ef313e91f61a31474ea2715cf9c723dda3cce340a73057e5787b",
+      "route_sha256": "26753143be453ce2f4711fb560dfe37fe2f8ff7981d32556045193b1cbdd5a26",
+      "fd_samples": 35,
+      "max_sampled_route_fds": 8,
+      "modem_loopback": {
+        "ipv6_loopback": "::1",
+        "addrconfig_resolved": true,
+        "ipv6_default_route": false
+      },
+      "modem_connection_error": false,
+      "network_setup_final": [
+        {
+          "service": "wifi",
+          "enabled": true,
+          "code": 0,
+          "output": ""
+        },
+        {
+          "service": "data",
+          "enabled": false,
+          "code": 0,
+          "output": ""
+        }
+      ],
+      "http_requests": [
+        {
+          "wall": 1793966950.9011178,
+          "crl": 1,
+          "expires": 1793969131,
+          "state": "HTTP_READY",
+          "status": 200
+        },
+        {
+          "wall": 1793966956.968589,
+          "crl": 1,
+          "expires": 1793969131,
+          "state": "HTTP_READY",
+          "status": 200
+        },
+        {
+          "wall": 1793966964.7725775,
+          "crl": 1,
+          "expires": 1793969131,
+          "state": "HTTP_READY",
+          "status": 200
+        },
+        {
+          "wall": 1793967275.5162323,
+          "crl": 2,
+          "expires": 1793969437,
+          "state": "SUCCESSOR_PUBLISHED",
+          "status": 200
+        },
+        {
+          "wall": 1793967284.3966534,
+          "crl": 2,
+          "expires": 1793969437,
+          "state": "HTTP_RELEASED",
+          "status": 200
+        }
+      ]
+    },
+    "scope": "Real HTTP/validation/encrypted-cache completion after explicit Disconnect does not resurrect old native session; separate explicit Connect succeeds. Closed-owner alternative, not a certificate-expiry crossing."
+  },
+  "current_g3": {
+    "result": "PASS",
+    "scope": "agreed isolated HTTP/cache/owner/native cases only; no Telemost/production binary/phone/field acceptance",
+    "retained_positive": "2026-11-05-mesh-android-gpu-evidence.json",
+    "retained_owner_replacement": "2026-11-05-mesh-android-owner-evidence.json",
+    "retained_partial_connect": "2026-11-05-mesh-android-partial-connect-evidence.json",
+    "new_legacy": "legacy.android_results",
+    "new_too_late": "late_final",
+    "original_api35_vpn_control_timeout": "retained FAIL; cause not established, corrected fixture control is not proof this observation is fixed",
+    "cleanup": "all owned Android AVDs/stands/routes stopped; latest API35 supervisors/routes exit0; old API27 route teardown exit1 after parent namespace removal retained",
+    "security_clock": "read-only host/AVD observations, no clock writes or trust/TTL changes",
+    "phase_A": "NOT_ACCEPTED_G4_RUNNING",
+    "phase_B": "NOT_STARTED"
   }
 }

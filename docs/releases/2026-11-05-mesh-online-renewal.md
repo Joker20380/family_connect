@@ -1,5 +1,54 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Current gate matrix:6 November12:16UTC
+
+The two originally running jobs have final outcomes: expiry52c91f5 **PASS**,
+exit0/14423.91s, exact repeated post-expiry stable block; full37ffc2c **FAIL**,
+exit1/27092.71s, at the stale test-profile assertion after two renewals and emergency.
+Neither result is relabelled. The repaired frozen c8eb8b9 G4 is still **RUNNING**:
+at12:16UTC its real NL/NL2 processes67/74 execute driver0fead52a, zero renewals so far,
+first due13:13:02UTC. A schedule/intermediate progress is not a final receipt.
+
+| Gate | Current result | Scope / exact evidence |
+|---|---|---|
+| G1 | PASS, isolated core | Retained bfff97d approval/revoke/real restart/lost-start/idempotence/new TLS/DNS/HTTPS; canonical-profile targeted regression12 PASS/84.26s |
+| G2 | PASS, isolated process/RPC matrix | Retained bfff97d matrix plus52c91f5 two real post-expiry packaged resumes with unchanged COMMIT/fence/profiles/processes; [final receipts](2026-11-06-mesh-frozen-run-results.json) |
+| G3 | PASS, agreed isolated scenarios | Retained positive/owner/partial-connect plus new paired legacy and late-closed-owner actual HTTP/cache/owner/native; [per-run source/APK/clock/receipts](2026-11-06-mesh-android-remaining-evidence.json) |
+| G4 | RUNNING, not accepted | Corrected c8eb8b9 on unchanged bfff97d/archive5721a5c1/driver0fead52a; [live observation, not final](2026-11-06-mesh-frozen-run-results.json). Original37ffc2c remains FAIL |
+
+**New user-visible behavior proven:** a real refreshed candidate received after
+Disconnect cannot revive the old native owner/session on either Android API; only a
+separate explicit Connect uses it. A peer without credential exchange also cannot
+commit that successor, while the old authorized session remains useful within its
+original bound; after Disconnect it stays closed and a fresh connection works.
+This uses the existing HTTP validation/encrypted-cache/connection-owner path, not
+manual profile insertion. Late means the agreed closed-owner alternative here, not
+a claimed crossing of a certificate deadline. Normal native remains39c69de/d1025a1d.
+
+Legacy teste5c20eb: API27 381.969s, API35 403.3s, explicit overlay drivere641e2cd.
+Late final: API27/af39bc7 333.565s, API35/212b811 350.367s, normal driver0fead52a.
+The HTTP adapter EOF repair is test-only26753143; sampled descriptors stay≤6/≤8.
+API35 modem-loopback prerequisite passes, its QEMU resolution error is absent, and
+the unchanged phone-service, NVIDIA/KVM and read-only clock guards all pass.
+33 scoped runner/EOF guards pass, overlapping the earlier2 guards; no summed suites
+or full-CI claim. Existing package/root/native race/artifact-bootstrap evidence is
+retained because their runtime sources/artifacts are unchanged, not rerun/relabelled.
+
+All own Android AVDs/stands/routes are stopped. Latest API35 cleanup exits0 for all;
+the older API27 route teardown exit1 after parent namespace removal remains logged,
+with the namespace/routes gone and gateway/readers waited. Initial API35 VPN-control
+timeout remains a separate unresolved observation, not declared fixed by changing
+fixture coordination. Initial API27 EMFILE and API35 setup FAILs are preserved too.
+
+**A NOT_ACCEPTED; no independent accepted A checkpoint. B NOT_STARTED** for all
+UI/storage/routing/recovery transports; no B artifact. One next is the existing G4
+final receipt/exit, then independent A acceptance before B. Do not rebuild unchanged
+runtime or restart the running stand for this documentation SHA. Production gateway
+6032b926 differs from isolated driver0fead52a; local packet transport does not prove
+Telemost/systemd/exact deployed binary/physical phone. Separate release qualification,
+authorized delivery, real both-NL renewal, paired-DNS/WebSocket, weak-network,
+screen-off and mobile-allowlist gates remain. No production/catalog/paid operation.
+
 ## Corrected late API27 and API35 setup boundary:6 November12:05UTC
 
 API27 on af39bc7 **PASS_LATE_CLOSED_OWNER_ONLY**,333.565s, with actual HTTP/cache

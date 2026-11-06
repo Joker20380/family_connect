@@ -254,11 +254,47 @@
     "route_helpers": "both stopped after test exit; gateway helper exit1 retained, origin exit0"
   },
   "G3": {
+    "result": "PASS",
+    "scope": "agreed isolated scenarios, exact older/new identities retained",
+    "evidence": "2026-11-06-mesh-android-remaining-evidence.json",
+    "original_failures": "retained, not relabelled"
+  },
+  "A": "NOT_ACCEPTED",
+  "B": "NOT_STARTED",
+  "corrected_full_path_observation": {
+    "observed": 1793967367.2050383,
+    "harness_source": "c8eb8b97e133f09870e61d6bebaca5445f913df5",
+    "state": "WAITING_FOR_RENEWAL_1",
+    "due": 1793970782.0,
+    "renewals": 0,
+    "processes": {
+      "NL": {
+        "pid": 67,
+        "exe_sha256": "0fead52ab3dbedf2d78ff3b6ebc67a488e242a80b42fd04b81c0a088e6c26874",
+        "start_ticks": "33443910"
+      },
+      "NL2": {
+        "pid": 74,
+        "exe_sha256": "0fead52ab3dbedf2d78ff3b6ebc67a488e242a80b42fd04b81c0a088e6c26874",
+        "start_ticks": "33443917"
+      }
+    },
+    "result": "RUNNING",
+    "container": "fc-mesh-full-core-bfff97d-c8eb8b9",
+    "container_started": "2026-11-06T10:42:51.672330173Z",
+    "final_exit_code": null,
+    "final_receipt": false,
+    "progress": "full-core-bfff97d-c8eb8b9/full-core/progress.json",
+    "progress_sha256_at_observation": "41d77a10364dc55c38409aa81041e06da2e94a3db86221d8c847c140d96fce8a",
+    "source_execution": "separate detached frozen-source checkout, not current /src imports",
+    "runtime_changed": false,
+    "no_duplicate": true,
+    "next": "read the existing final receipt and exit status after real-time run; do not infer PASS from schedule"
+  },
+  "G3_at_finished_run_readback": {
     "result": "INCOMPLETE",
     "legacy": "NOT_RUN",
     "too_late": "NOT_RUN",
     "retained": "paired GPU positive/owner/partial-connect receipts unchanged"
-  },
-  "A": "NOT_ACCEPTED",
-  "B": "NOT_STARTED"
+  }
 }

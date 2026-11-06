@@ -11,6 +11,17 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**6 November12:16UTC: G3 remaining cases PASS on API27/API35; G4 still RUNNING.**
+Legacy HTTP/cache/owner/native and late completion after closed owner are now proven
+on both APIs, with separate new Connect, real clocks and NVIDIA/KVM. Late final:
+API27/af39bc7 333.565s; API35/212b811 350.367s. Original failures remain unchanged;
+the older API35 VPN-control timeout is not declared fixed. All own Android AVDs and
+stands are stopped. G1/G2 scoped PASS retained; frozen c8eb8b9 G4 is still before
+renewal1, due13:13:02UTC, on unchanged bfff97d archive5721a5c1/driver0fead52a.
+**A NOT_ACCEPTED, B NOT_STARTED.** One next: collect the existing full G4 final
+receipt/exit, without duplicate/rebuild. [Gate matrix](releases/2026-11-05-mesh-online-renewal.md).
+No production, phone, release/catalog/timer or paid changes. Older deltas are history.
+
 **6 November12:05UTC: corrected late API27 PASS333.565s; API35 runtime NOT_RUN.**
 The repaired HTTPS adapters stay at≤6 sampled descriptors. API35 instead fails
 before APK installation: system phone service unavailable within the unchanged60s
