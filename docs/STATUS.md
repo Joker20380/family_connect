@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**6 November17:55UTC — Android/Telemost cold provisioning runtime NOT_RUN.**
+Read-only preflight of unchanged cf419a1 finds the three existing G4 containers still
+running and using resources. Under the explicit no-competing-AVD/build constraint,
+no emulator, qualification APK or Telemost room is started. KVM/NVIDIA are available,
+but that does not override the resource gate; no physical phone is authorized here.
+The current environment has no Telemost OAuth token; no separately authorized test
+credential source was supplied, and production/private credentials were not read.
+Connect latency, node, real DNS/HTTPS/egress, Android negatives and ACK runtime results
+are NOT_RUN, not inherited from core PASS. The finite APK-asset locator (at most4h)
+still has no independent refresh after missed rotation. **Next:** after G4 releases
+its resources and an authorized test OAuth source is identified, execute the single
+Android/real-Telemost vertical with a fresh independently prepositioned locator.
+[Resource receipt, exact scope and proposed locator import](releases/2026-11-06-beta113-field16-bootstrap.md#androidtelemost-runtime-eligibility-6-november1755utc).
+
 **6 November — bounded cold provisioning source candidate, not delivered.**
 Separate `feature/android-cold-provisioning-20261106`, based on41b4e6e: a registered
 uncached client uses a prepositioned root-delegated, issuer-signed finite locator,

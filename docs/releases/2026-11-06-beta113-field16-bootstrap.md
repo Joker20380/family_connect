@@ -735,3 +735,103 @@ containers have exited/removed, no AVD started. Private fixture keys and raw evi
 remain ignored/local. All field/Android/Telemost and controlled-delivery limitations
 above remain; positive traffic scope is the synthetic primary-node configuration,
 not a separate positive node2/production acceptance.
+
+### Android/Telemost runtime eligibility, 6 November17:55UTC
+
+**NOT_RUN**, not a failure of the accepted core candidate and not a runtime PASS.
+The requested source remains `cf419a150f261bc7d49d7211d9cebda980a8d593` on
+`feature/android-cold-provisioning-20261106`, clean at preflight; remote SHA matched.
+This continuation changes documentation/evidence only. No previous suites were rerun.
+
+Read-only Docker inspection at17:55:51UTC finds these existing containers running:
+
+| Resource | Started UTC | CPU quota |
+| --- | --- | --- |
+| `fc-mesh-full-core-bfff97d-c8eb8b9` | 2026-11-06T10:42:51.672330173Z | 1 CPU |
+| `fc-mesh-full-core-c8eb8b9-gateway` | 2026-11-06T10:42:56.345212932Z | 0.2 CPU |
+| `fc-mesh-full-core-c8eb8b9-origin` | 2026-11-06T10:42:56.213258024Z | 0.2 CPU |
+
+A preceding `docker stats --no-stream` sample reports9.97%/0.58%/0.22% CPU,
+respectively. This establishes occupied resources, **not a G4 test outcome**: no G4
+logs, receipts or frozen files were read/modified, and no container was stopped.
+The user's no-competing-heavy-build/AVD constraint therefore prevents this run.
+KVM is readable/writable; NVIDIA GTX1650Ti/driver580.178.04 is present. GPU availability
+alone is not permission to compete with G4. No AVD is launched and no software
+rendering fallback is used. No physical test phone has been authorized for this task;
+owner/field devices were not queried or used.
+
+`roombroker.NewTelemostRoomProvider` requires `YANDEX_TELEMOST_OAUTH_TOKEN`.
+Only its **presence in the current execution environment** was checked: absent.
+No separately authorized test-account credential path was supplied. This is not a
+claim that credentials do not exist elsewhere; no private files, other process
+environments or production hosts were inspected for them. The older
+`pilot/android-telemost/bootstrap_acceptance.py` hardcodes a live gateway/SSH writes
+and is **not executed** as an isolated substitute. No provider call or room creation
+is made. The existing offline JNI/RPC fixture is not rerun as Android evidence.
+
+#### Artifact and result boundary
+
+The prior arm64-v8a JNI library is unchanged: native source
+`6840193e766f33c2974dad639b8d7e6dad7d6bcb`, SHA256
+`1e478adf1b2bf5c8ce78498f0ad9554f0b121190a18bceaf1dad0eabe4d58a4b`.
+It is compiled evidence only, not an APK or a library executed on Android. A future
+KVM AVD must use a matching ABI and the actual JNI/framework/Keystore, never an
+ARM emulation/software-provider substitution or the prior invocation shim.
+
+| Requested measurement/result | This continuation |
+| --- | --- |
+| Real Android + Telemost provisioning + validator/vault + MESH | NOT_RUN |
+| Qualification APK manifest/native/assets/source/digest | No APK built; no digest invented |
+| Locator origin/issued-at/expiry/node/server binding | No locator issued or injected; fields absent |
+| Connect, direct-path completion, carrier ready, server/device authentication, bundle validation, native ready, first DNS/HTTPS monotonic timestamps | No Connect attempted; all absent, not zero or the38.52s core-suite time |
+| Tested node, DNS, verified HTTPS and gateway egress | NOT_RUN; neither NL claimed |
+| Disconnect/late result/old owner, expired locator, foreign/revoked identity | NOT_RUN on real runtime |
+| Durable ACK_PENDING and separately delivered ACK_RECEIVED | NOT_RUN on real runtime; prior source evidence retained |
+| Cleanup | No own runtime resources created; none to stop |
+
+Local read-only receipt:
+`state-client-build/cold-provisioning-runtime-20261106/preflight.json`, SHA256
+`3dcfd10d70db27605a04f12341d28d3e6f879f736985879f65fe42ba9aad15be`.
+Its monotonic elapsed field measures **preflight only**, not Connect latency.
+[Sanitized NOT_RUN manifest](2026-11-06-cold-provisioning-runtime-evidence.json).
+The earlier core receipt, original failures, source inventory and artifact remain
+unchanged. Main-worktree status/diff/staged hashes match the preceding checkpoint;
+no installed version, public catalog, G4, production, admission/paid/cohort or schedule
+change occurred. There is no new deployment or deployment rollback.
+
+#### Locator rotation remains an open product scenario
+
+Current `ProvisioningCarrier` reads only `assets/provisioning/<node>.json`. For the
+future bounded runtime check, the same issuer must sign the real SeedManager
+publication and include that locator in the qualification APK **before Connect**;
+record issuance/expiry, node/server binding and APK/source digest locally without
+publishing the rendezvous. No readiness bundle is preloaded. The maximum4h and all
+shorter seed/certificate/CRL bounds remain unchanged. A stale asset is rejected.
+
+The scenario **registered client starts after its last locator expires while both
+direct service paths are unavailable** is still unsupported. A qualification APK
+carrying a short-lived asset is not a final field fix or evergreen discovery.
+
+One minimal **proposed, unimplemented** independent-refresh contract is explicit
+signed-locator-file import through Android's document picker. The existing authority
+issues the same public locator envelope with the same issuer/root trust; an operator
+delivers that file through an independently available channel chosen for that user,
+not through the blocked API or a required third-party VPN. No specific channel is
+assumed reachable in the field phone's network. Before atomic replacement in a
+separate local locator store, validate root delegation, signature, version/purpose,
+node/server binding, all time bounds and a persisted per-node locator sequence floor;
+equal-sequence identical content may be idempotent, conflicting/older content must
+not replace it. Keep the current locator on failed import; do not reset floors or
+touch readiness/identity. The new file remains a locator, never a grant or user
+secret; device proof and current authority admission are still required. This small
+manual refresh contract does not promise unattended discovery, needs its own review
+and tests, and is **not implemented or started in this continuation**.
+
+**One execution next:** when G4 resources are released and an authorized test OAuth
+source is identified, run the single bounded Android/real-Telemost vertical and
+small runtime regression on the separate synthetic backend, with matching-ABI JNI,
+KVM/NVIDIA if using an AVD, fresh pre-Connect asset and scoped direct-path isolation.
+Stop on the first exhausted unchanged Connect budget; retain its stage/reason.
+Record latency from the actual Connect, not suite time. Field-network accessibility,
+controlled delivery and any permanent discovery decision remain subsequent,
+separately scoped work; no delivery is performed here.
