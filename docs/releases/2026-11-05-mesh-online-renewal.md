@@ -1,13 +1,24 @@
 # Online MESH renewal qualification / 5 November 2026
 
-## Current gate matrix:6 November12:16UTC
+## Current gate matrix:6 November12:43UTC
 
 The two originally running jobs have final outcomes: expiry52c91f5 **PASS**,
 exit0/14423.91s, exact repeated post-expiry stable block; full37ffc2c **FAIL**,
 exit1/27092.71s, at the stale test-profile assertion after two renewals and emergency.
 Neither result is relabelled. The repaired frozen c8eb8b9 G4 is still **RUNNING**:
-at12:16UTC its real NL/NL2 processes67/74 execute driver0fead52a, zero renewals so far,
+at12:43UTC its real NL/NL2 processes67/74 execute driver0fead52a, zero renewals so far,
 first due13:13:02UTC. A schedule/intermediate progress is not a final receipt.
+
+Readback of the existing container confirms its10:42:51.672330173UTC start and
+separate frozen c8eb8b9 checkout. Archive and executing-driver hashes match the fixed
+combination. At12:43:21UTC both original sockets remain open, each158378 bytes sent
+and received, generation0, with current TCP/DNS/verified-HTTPS samples and existing
+reader sockets. This is pre-renewal liveness, not completed renewal/continuity proof.
+The `.exit` file exists but is empty, final `.log` is absent, and Docker is Running;
+its current ExitCode0 is not a final exit status. The existing `docker wait` collector
+is still present. Read-only copies are in local `readback-20261106T1243Z`, with hashes
+in [the readback record](2026-11-06-mesh-frozen-run-results.json). No stand restart,
+rebuild, competing suite, emulator launch or B implementation. G1–G3 unchanged.
 
 | Gate | Current result | Scope / exact evidence |
 |---|---|---|

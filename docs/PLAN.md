@@ -12,9 +12,11 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
-**One active next6 November12:16UTC:** G1/G2/G3 isolated scope now PASS; read the
+**One active next6 November12:43UTC:** G1/G2/G3 isolated scope remains PASS; read the
 final result of the existing c8eb8b9/bfff97d G4 run when its real-time bounds complete.
-It is RUNNING, not PASS; no duplicate or unchanged-package rebuild. Legacy and late
+Read-only inspection finds RUNNING/WAITING_FOR_RENEWAL_1, fresh both-NL traffic,
+zero renewals and no final exit/receipt; due13:13:02UTC remains a schedule, not a result.
+No duplicate or unchanged-package rebuild. Legacy and late
 API27/API35 receipts are saved and all own AVDs stopped. Preserve original failures
 and the separate unresolved API35 VPN-control observation. A is not yet accepted;
 only after G4 PASS save an independent accepted A checkpoint, then ANDROID-APP-VPN.

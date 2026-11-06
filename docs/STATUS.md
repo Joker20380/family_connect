@@ -11,7 +11,15 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
-**6 November12:16UTC: G3 remaining cases PASS on API27/API35; G4 still RUNNING.**
+**6 November12:43UTC: existing corrected G4 still RUNNING; G1/G2/G3 PASS retained.**
+Read-only inspection confirms the same container started10:42:51UTC, frozen c8eb8b9,
+archive5721a5c1 and serving driver0fead52a/PIDs67/74. Both original sockets are open
+with fresh TCP/DNS/verified-HTTPS samples, generation0; renewal1 is still due13:13:02UTC.
+The exit file is empty and there is no final receipt or final exit code. The unchanged
+progress is a waiting phase, not acceptance. Local readback/logs are preserved separately;
+no runtime resources, frozen source or artifacts changed. No AVD or competing test started.
+
+**Retained6 November12:16UTC: G3 remaining cases PASS on API27/API35.**
 Legacy HTTP/cache/owner/native and late completion after closed owner are now proven
 on both APIs, with separate new Connect, real clocks and NVIDIA/KVM. Late final:
 API27/af39bc7 333.565s; API35/212b811 350.367s. Original failures remain unchanged;
