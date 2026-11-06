@@ -12,6 +12,13 @@
     "messenger/notices.py": "31241b050755b8ce9e0523c99032a528e11306f0742bcbd205375a2d1b440890",
     "messenger/store.py": "ffb7be9d5c8e4d304a53ec7a9b775e7b768fb692656dd25f32343208a54d6076"
   },
+  "local_adaptations": {
+    "messenger/store.py": {
+      "sha256": "4e91993cb2357481c2bff1ae42e5962b43c7becc3b670058971136975bc5eb04",
+      "reason": "Beta119 durable subscription flags; not background acquisition or desktop subscription delivery acceptance.",
+      "patch": "clients/shared/subscription119-messenger.patch"
+    }
+  },
   "polling": {
     "runtime_seconds": 6,
     "feed_seconds": 30,

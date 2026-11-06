@@ -1,0 +1,46 @@
+{
+  "clients/desktop/profile_config.py": {
+    "commit": "edca5447418141cb44c0706e26d1973d7defd397",
+    "sha256": "0c72f3353aa4be1ada9c6bfc6c29475ba3c1ae9f8ce2860dbfb0d5fd3a3ec83a"
+  },
+  "control/friends/__init__.py": {
+    "commit": "edca5447418141cb44c0706e26d1973d7defd397",
+    "sha256": "efb76720b2ad1c9594aee9488b342e3311ed01a4bff3082c2fa3999663354cc8"
+  },
+  "control/friends/access.py": {
+    "commit": "4bb53b0605c2c898b6a3feca6ee15fd34b943a94",
+    "sha256": "63098918ec20d8610038dbaa246a2f605dad889108648f18ec192b944325880b"
+  },
+  "control/friends/readiness_receipts.py": {
+    "commit": "edca5447418141cb44c0706e26d1973d7defd397",
+    "sha256": "16e4556af6d914e7411b3563bef44efebd2a8ba2d7dda1d0faa4f4e100ceb660"
+  },
+  "control/friends/restricted.py": {
+    "fixture": "restricted.py.txt",
+    "sha256": "4a932f292290ba7060f705ade74279d81834fc7816e14e17fa7c7d42c16c8397"
+  },
+  "control/friends/restricted_admin.py": {
+    "commit": "edca5447418141cb44c0706e26d1973d7defd397",
+    "sha256": "d3ff58346e929442f981b099c7c76bf50a5a70fea0747b1d48e73ff74b079a10"
+  },
+  "control/friends/restricted_sync.py": {
+    "fixture": "restricted_sync.py.txt",
+    "sha256": "30a4247d295d22b5a84ca0263c5c3a76b7082754e7911297ccf8960eaf42453e"
+  },
+  "device_identity/__init__.py": {
+    "commit": "edca5447418141cb44c0706e26d1973d7defd397",
+    "sha256": "3cd56edaf5fbfde9c88df7078dc55be15bf23cfc830727ee410bc8f31dc9990f"
+  },
+  "device_identity/device.py": {
+    "commit": "edca5447418141cb44c0706e26d1973d7defd397",
+    "sha256": "38e29e640c913c1331164aa36fde0ca95b1d13ee057ae92c3d31ec7b993151d3"
+  },
+  "provisioning/__init__.py": {
+    "commit": "edca5447418141cb44c0706e26d1973d7defd397",
+    "sha256": "a8d11b35f8be63395d505bcf0cf7774aa5c0dbffa5eee905eef911a8d3fdb905"
+  },
+  "provisioning/friends_catalog.py": {
+    "commit": "edca5447418141cb44c0706e26d1973d7defd397",
+    "sha256": "add970991089003c7b4589e8dbb135d56e63a601b5530c939f4b6ab8b964bebe"
+  }
+}

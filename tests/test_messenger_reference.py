@@ -2,6 +2,8 @@ import ast
 import hashlib
 import json
 from pathlib import Path
+import shutil
+import subprocess
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -10,12 +12,31 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_accepted_messenger_closure_and_explicit_platform_delta():
     manifest = json.loads((ROOT / 'clients/shared/android106-messenger.json').read_text())
     assert manifest['source_inventory_sha256'] == '8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c'
-    assert set(manifest['local_adaptations']) == {'messenger/routed.py'}
+    assert set(manifest['local_adaptations']) == {'messenger/routed.py', 'messenger/local.py', 'messenger/store.py'}
     for relative, accepted in manifest['accepted_modules'].items():
         expected = manifest['local_adaptations'].get(relative, {}).get('sha256', accepted)
         assert hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() == expected, relative
     patch = (ROOT / manifest['local_adaptations']['messenger/routed.py']['patch']).read_text()
     assert "+    ROUTES = ('DIRECT', 'EXISTING_EXIT', 'SERVICE_ONLY')" in patch
+
+
+def test_subscription_adaptation_reverses_to_unchanged_accepted106_sources(tmp_path):
+    manifest = json.loads((ROOT / 'clients/shared/android106-messenger.json').read_text())
+    notifications = json.loads((ROOT / 'clients/shared/android106-notifications.json').read_text())
+    (tmp_path / 'messenger').mkdir()
+    for name in ('messenger/local.py', 'messenger/store.py'):
+        shutil.copyfile(ROOT / name, tmp_path / name)
+        assert manifest['local_adaptations'][name]['patch'] == 'clients/shared/subscription119-messenger.patch'
+    subprocess.run(['git', 'apply', '--reverse', str(ROOT / 'clients/shared/subscription119-messenger.patch')],
+                   cwd=tmp_path, check=True, capture_output=True)
+    for name in ('messenger/local.py', 'messenger/store.py'):
+        assert hashlib.sha256((tmp_path / name).read_bytes()).hexdigest() == manifest['accepted_modules'][name]
+    assert set(notifications['local_adaptations']) == {'messenger/store.py'}
+    assert notifications['local_adaptations']['messenger/store.py']['sha256'] == manifest['local_adaptations']['messenger/store.py']['sha256']
+    assert notifications['accepted_sources']['messenger/store.py'] == manifest['accepted_modules']['messenger/store.py']
+    assert set(manifest['additional_modules']) == {'messenger/subscription_view.py'}
+    for name, expected in manifest['additional_modules'].items():
+        assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == expected
 
 
 def test_gtk_chat_strings_are_verbatim_accepted_resource_values():
@@ -59,5 +80,6 @@ def test_notification_reference_preserves_shared_sources_and_records_platform_li
     assert len(contract['accepted_sources']) == 8
     for name, expected in contract['accepted_sources'].items():
         if name.startswith('messenger/'):
+            expected = contract['local_adaptations'].get(name, {}).get('sha256', expected)
             assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == expected
     assert contract['polling']['feed_seconds'] == 30

@@ -1,17 +1,14 @@
 """Exercise exact VpnHealth logic with Android stubs and only loopback DNS."""
 
-import os
 from pathlib import Path
 import subprocess
+import shutil
 
-from preserve import ROOT, WORK, digest
+from scripts.ci_android_fixture import source as accepted_source
 
 
 def test_health_fixture(tmp_path):
-    parent = ROOT / 'state-client-build/beta87-product-fix-20261019/android88-source'
-    relative = Path('clients/android/app/src/main/java/com/familyconnect/app/VpnHealth.java')
-    source = WORK / 'android-source' / relative
-    assert digest(source) == digest(parent / relative)
+    source = accepted_source('health89')
     text = source.read_text()
     assert text.count('new String[]{"1.1.1.1","9.9.9.9"}') == 1
     assert text.count('InetAddress.getByName(target),53') == 1
@@ -34,8 +31,9 @@ def test_health_fixture(tmp_path):
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(value)
         files.append(str(target))
-    tools = ROOT / 'state-client-build/field65-export16/diag-source-freeze-1/resume-tools/jdk/bin'
-    subprocess.run([str(tools / 'javac'), '-d', str(tmp_path / 'classes'), *files], check=True, capture_output=True, timeout=30)
-    result = subprocess.run([str(tools / 'java'), '-cp', str(tmp_path / 'classes'), 'com.familyconnect.app.HealthHarness'], capture_output=True, text=True, timeout=15)
+    javac, java = shutil.which('javac'), shutil.which('java')
+    assert javac and java, 'Accepted health fixture requires a JDK on PATH'
+    subprocess.run([javac, '-d', str(tmp_path / 'classes'), *files], check=True, capture_output=True, timeout=30)
+    result = subprocess.run([java, '-cp', str(tmp_path / 'classes'), 'com.familyconnect.app.HealthHarness'], capture_output=True, text=True, timeout=15)
     assert result.returncode == 0, result.stderr
     assert 'PASS_HEALTH_10_SCENARIOS' in result.stdout

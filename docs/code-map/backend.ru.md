@@ -24,7 +24,8 @@ No live deployment or broad admission enabled.
 | --- | --- | --- | --- |
 | device_identity/device.py | DeviceIdentity, ключи RNS/WG и transport-key proof | Локальное приватное состояние; identity не сбрасывать при ошибке | tests/test_device_identity.py |
 | device_identity/friends.py | Явное создание/возобновление POSIX Friends identity | Private files и enrollment marker, flock; это не desktop keyring | tests/test_friends_identity_store.py |
-| control/friends/access.py | Access: invite → challenge → activation/config access | SQLite invites/devices/challenges, явный revoke; не готовая система подписок | tests/test_friends_access.py |
+| control/friends/access.py | Access: invite → challenge → activation/config access | SQLite invites/devices/challenges, явный revoke; права paid_beta отдельны | tests/test_friends_access.py |
+| control/friends/subscription.py | Персональный schema1 snapshot и последнее подходящее событие | One-use purpose subscription; один transaction/now, canonical paid_beta, без миграции/выдачи прав | tests/test_subscription_http.py, tests/test_subscription_package.py |
 | control/friends/referrals.py | Выдача/использование реферальных приглашений | Лимиты и записи на сервере | tests/test_referrals.py |
 | control/friends/chat.py, chat_sync.py | Допуск chat identity и синхронизация membership | Связь доступа Friends с закрытым relay | tests/test_friends_chat.py |
 | control/friends/notices.py | Сервисные объявления и права публикации | Отдельное хранилище notices/роли | tests/test_device_notices.py |

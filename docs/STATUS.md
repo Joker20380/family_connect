@@ -1,5 +1,74 @@
 # Текущее состояние / Current state
 
+**6 November — PR1 full-suite fixtures PASS; voice runner mirror repair.**
+On663377e all client builds/runtime gates, phase0, voice, native candidate, messenger,
+readiness and Windows control pass. Linux control remains in APT preparation before
+tests after roughly30 minutes; apply the same official HTTPS mirror only to that
+disposable job. This is not an assertion failure or permission to waive the gate.
+Head360cc26 completes phase0 (including Docker failover/auth/offline/revocation),
+Linux control and full Linux candidate. Both hosted pytest receipts audit all5804
+collected cases across unprivileged3.13, declared UID0 and protected3.14 contexts:
+5531 passed,273 existing conditional skips; no missing context or failed test.
+Voice has twice exhausted its10-minute job during Azure APT downloads before tests.
+Only that disposable runner now uses the official Ubuntu HTTPS archive; package
+signatures, dependencies, tests and timeout remain intact. Final-head CI and merge
+receipts stay in PR1. No product, installed APK, production or G4 change.
+
+**6 November — PR1 remaining fixture repair, final CI pending.**
+The relocated hosted3.14 fixture now uses a private relative ELF RUNPATH rather than
+loading its shared library from the writable original toolcache; preparation logs are
+retained. The exact downloaded3.14.10 runtime runs with a sanitized environment locally.
+This does not claim the hosted ownership gate passed; PR receipts remain authoritative.
+Head1d4 passes the Android source/diagnostic guards and full Linux candidate, but exposes
+missing exact snapshot/renewal fixtures, protected Python paths, explicit unsafe modes,
+CLI interpreter selection and an asynchronous invitation-test observation race. The next
+cohesive source fix preserves every assertion and original hash; the retained18-member
+snapshot is reproduced byte-for-byte as `0120dad0…`. Root fixtures use private `/run`,
+not shared `/tmp`; only their declared tests run privileged. No product Android change.
+Old5f709 phase0 is now finished FAIL, separately recorded; it is not the new-head result.
+Final hosted receipts and normal merge SHA will be recorded in PR1, not a docs-only head.
+
+**6 November — SUBSCRIPTION-INTEGRATION-1: reviewed guards and isolated CI fixtures.**
+The owner-authorized follow-up reviews all152 guarded Android inputs against original
+beta119 source: identical bytes; explicit seven subscription and three inherited-renewal
+adaptations retain old hashes and the existing exemption set. Release23 and diagnostic64
+tests PASS locally. Current5f709 failover confirms110 failures/214 errors, not an inference
+from older runs. The cohesive fixture repair routes ownership tests to isolated UID0,
+launcher tests to root-owned Python3.14/unprivileged execution, all others to unprivileged
+Python3.13, with complete collection coverage and unchanged assertions. It supplies exact
+historical Git trees, pinned public Android fixtures, zstd/JDK and restores per-test umask.
+Native direct verification now selects the same accepted closure as the actual package.
+No Android production input or historical native baseline changes. Final-head hosted CI
+and normal merge receipts belong to [PR1](https://github.com/Joker20380/family_connect/pull/1);
+this source checkpoint does not claim they passed before running. No cosmetic receipt-only
+head is required. See the dated report for failure classification and preserved boundaries.
+
+**Earlier CI checkpoint — three initial blockers:**
+Owner-authorized base repairs now cover explicit Android Session test context,
+the phase22 documentation fragment and complete pinned native-source staging.
+Targeted bridge/carrier22 and messenger222 tests PASS; full public docs PASS.
+Accepted native313-file inventory reproduced from `efc13f1c7f27` with unchanged
+`f0e48d7c…` digest;13 staging/orchestration regressions PASS. On source `24de0b2`,
+hosted Linux full race/build/package smoke and Messenger gates PASS. Merge remains
+blocked by Client builds/android's concrete ChatActivity source-review assertion;
+phase0/control are not green, voice mirror timeout retried once. See the dated report
+for exact run IDs and separate source/binary provenance; no green-CI claim or merge.
+No Android production input, paid baseline/data, installed APK, production or G4 change.
+
+**Earlier PR checkpoint:**
+Integrating the reviewed subscription source onto current main without replacing its
+bootstrap/renewal work. Installed ARM119 retains source `b2a37fe98929` and its original
+hash/acceptance scope. No new installation, production restart or paid/admission write.
+Gate: canonical package HTTP/authentication checks, repository CI and ordinary PR merge.
+PR1/source `a71de948dd47` pushed and remote-verified;71 scoped +6 committed-package
+checks PASS. CI exposes unchanged-main shared106 carrier reference drift (44 files);
+do not bypass it or rewrite the accepted baseline. Subscription-specific messenger
+adaptation metadata corrected separately;38 focused checks PASS. No main merge yet.
+Pinned historical HTTP fixture builder corrected (old hash preserved);8 targeted
+checks PASS/1 nginx skip. Existing main bridge tests also omit required platform/version;
+full hosted CI is not green. Leave PR1 open for normal gate resolution, not auto-merge.
+[Integration evidence and next paid/event prerequisites](releases/2026-11-06-subscription-integration-1.md).
+
 **6 November — beta113 cold bootstrap gap reproduced; not a field-network diagnosis.**
 With HTTPS8443 and direct RNS4242 both unavailable, an activated device without usable
 readiness or an already healthy VPN has no cold path to verified pre-Telemost materials.
@@ -59,6 +128,62 @@ NL MESH bootstrap services FAILED (exit1/NRestarts6; last exits5 November11:47UT
 Cause unknown; no repair/restart. RU CPU initially70–72%, follow-up4–31%; disk71%/8.4GiB.
 AWG recent peers0/4/0; TCP443 sockets0/91/5, not unique clients.
 [Read-only evidence](releases/2026-11-06-vpn-health.md). Isolated G4 untouched.
+
+**6 November — SUBSCRIPTION-ANDROID-3: narrow physical ARM/normal HTTPS path PASS.**
+Fixed signed ARM119 `52a9847b7418…`, source `b2a37fe98929`, installed118→119 on
+Redmi Note9 Pro/API31 after explicit owner-phone permission. Installed bytes/signature,
+UID/first-install/identity/activation retained. Normal trusted HTTPS without VPN returns
+fresh own **non-cohort** state; real process restart shows retained encrypted cache then
+fresh response. Human Refresh produces new consumed own proofs; no false payment notice.
+Minimal serving HTTP overlay `0fa13b0a9240…` deployed on RU/18086; exact ingress added,
+one HTTP restart and nginx graceful reload only. Other33 archive members and protected
+paid/device/invite/grant rows unchanged. Three overlay +43 exact-runtime tests PASS.
+No legitimate paid row/event for this identity: physical paid-state/event/notification
+dedupe NOT_RUN. No general APK publication, merge, G4/main/bootstrap/renewal change.
+[Evidence, rollback and explicit remaining gates](releases/2026-11-06-subscription-android-3.md).
+
+**6 November — SUBSCRIPTION-ANDROID-2 natural delivery PASS; signed ARM119 candidate built.**
+Isolated feature branch: actual UI Refresh/Home produces a canonical-event notification,
+real tap opens the right identity's subscription, repeat refresh does not repost.
+Fixed hidden-dialog read acknowledgement and connected durable save/resume to a bounded
+drain on existing WORKER; no background subscription fetch or new scheduler. Actual UI
+recovery starts the ordinary delivery service. Six Python guards +13 JVM checks PASS.
+Source `b2a37fe98929` pushed/remote-verified; ordinary Friends ARM64 beta119/119 built,
+26 scoped Gradle tests/lint/native provenance/signature PASS. Signed APK SHA256
+`52a9847b74181c48808c86a0c5bf5925b53ef498eec628aef2d78d26f1c92d2d`.
+No ARM install/publication/production ingress claim; public113/catalog7 and field118
+unchanged. Own AVD/backend stopped; prior limitations retained, no G4/main changes.
+[Scope, behavior and preserved limits](releases/2026-11-06-subscription-android-2.md).
+
+**6 November — SUBSCRIPTION-ANDROID-1: bounded API35 runtime PASS, not production acceptance.**
+Isolated `feature/subscription-status-20261106`, starting remote `34529b622594`:
+source checkpoint `934867678f99` pushed/remote-verified; same-hash APK reinstalled,
+own backend/AVD stopped and evidence retained. Closing receipt is documentation-only.
+Fixed an actual checked-exception Android compile defect; built/installed diagnostic
+debug x86_64 `com.familyconnect.app.subscriptiontest`, Android118 (separate package).
+Real local HTTPS Handler → Friends proof → Chaquopy → Keystore/encrypted store → UI
+passes active/no-event/expired/grace/revoke, outside pilot, unsupported/unavailable,
+offline/process restart, permissions/durable dedupe and actual cold/warm notification taps.
+Existing notification delivery was invoked explicitly; new event fetching remains
+screen-open/manual only, not background push. One mixed-underlay test-origin failure
+is retained; final Wi-Fi recovery passes. Physical whitelist, production ingress,
+ARM/release and normal activated-service scheduling remain NOT_RUN. No G4/production
+or main-checkout changes. [Candidate, evidence boundaries and remaining gates](releases/2026-11-06-subscription-android-1.md).
+
+**6 November — isolated subscription HTTP/source integration candidate (not installed/qualified).**
+Owner-requested parallel `ANDROID-CONTROLLED-BETA / SUBSCRIPTION-CLIENT-VIEW`, branch
+`feature/subscription-status-20261106`, continuing checkpoint `47ef0463bd39`:
+new schema1 `POST /friends/device/subscription` uses existing Friends one-use proof,
+dedicated purpose and one transactional canonical paid snapshot/APPLIED event read.
+The screen now refreshes on open/explicit action over the existing HTTPS underlay,
+validates before encrypted projection, and preserves cache with separate failure states.
+84 focused Python checks (including real local HTTP→decoder→encrypted store) and26
+pure JVM tests PASS. `/friends/device/status` response/semantics are unchanged.
+**Contract gap closed in source, not deployed:** Android build/Keystore/transport,
+notifications/navigation and runtime qualification remain OPEN; merge is separate.
+Source remains Android118; no APK/build/install/publication/version or enforcement change.
+G4 is independent and untouched; its next step and acceptance are not changed here.
+[Exact contract, evidence boundaries and deferred gates](releases/2026-11-06-subscription-authenticated-api.md).
 
 **5 November11:29UTC — read-only VPN check:** all AWG/TCP and both NL bootstrap
 active; CPU RU9–25%, AMS1 19–21%, AMS2 16–18%. RU disk70%/8.5GiB free.

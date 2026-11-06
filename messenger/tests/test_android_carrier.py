@@ -28,7 +28,7 @@ def configure(session, callbacks, port=4243):
 def test_carrier_requires_binding_and_shares_control_lease(tmp_path, bridge, monkeypatch):
     transport = importlib.import_module('fc_rns_transport')
     monkeypatch.setattr(transport, '_runtime', object())
-    session = bridge.Session(str(tmp_path/'chat'), 'unused', AESGCM(b'x'*32), True)
+    session = bridge.Session(str(tmp_path/'chat'), 'unused', AESGCM(b'x'*32), True, platform='android', version=119)
     callbacks = Bindings(False)
     try:
         configure(session, callbacks)
@@ -46,7 +46,7 @@ def test_carrier_requires_binding_and_shares_control_lease(tmp_path, bridge, mon
         assert destination in RNS.Transport.destinations
     finally: session.close()
     assert destination not in RNS.Transport.destinations
-    reopened = bridge.Session(str(tmp_path/'chat'), 'unused', AESGCM(b'x'*32), False)
+    reopened = bridge.Session(str(tmp_path/'chat'), 'unused', AESGCM(b'x'*32), False, platform='android', version=119)
     try: configure(reopened, Bindings(False))
     finally: reopened.close()
 
@@ -54,7 +54,7 @@ def test_carrier_requires_binding_and_shares_control_lease(tmp_path, bridge, mon
 @pytest.mark.parametrize('host,port,public', [('example.com',4243,'00'*64),
     ('127.0.0.1',True,'00'*64), ('127.0.0.1',0,'00'*64), ('127.0.0.1',4243,'00')])
 def test_invalid_bootstrap_does_not_register_destination(tmp_path, bridge, host, port, public):
-    session = bridge.Session(str(tmp_path/'chat'), 'unused', AESGCM(b'x'*32), True)
+    session = bridge.Session(str(tmp_path/'chat'), 'unused', AESGCM(b'x'*32), True, platform='android', version=119)
     before = list(RNS.Transport.destinations)
     try:
         with pytest.raises(ValueError): session.configure_delivery(host,port,public,Bindings())
@@ -67,7 +67,7 @@ def test_invalid_bootstrap_does_not_register_destination(tmp_path, bridge, host,
 def test_android_carrier_real_exchange_cleanup_and_reopen(tmp_path, bridge, monkeypatch, chat_runtime,payload):
     transport = importlib.import_module('fc_rns_transport')
     monkeypatch.setattr(transport, '_runtime', chat_runtime)
-    session = bridge.Session(str(tmp_path/'chat'), 'unused', AESGCM(b'x'*32), True)
+    session = bridge.Session(str(tmp_path/'chat'), 'unused', AESGCM(b'x'*32), True, platform='android', version=119)
     peer = node = None
     baseline = list(RNS.Transport.interfaces)
     callbacks = Bindings()
@@ -118,11 +118,18 @@ def test_android_carrier_real_exchange_cleanup_and_reopen(tmp_path, bridge, monk
         assert RNS.Transport.interfaces == baseline
         assert len(callbacks.fds)==1
         # Same session opens another bound socket and discovers a fresh path.
-        peer.call('queue',peer=profile['address'],text='reply')
+        reply = peer.call('queue',peer=profile['address'],text='reply')
         peer.call('batch',ids=[m['id'] for m in peer.call('messages') if m['outgoing']])
         assert invoke(session,'request_sync')['ok']
         wait_for(lambda: len(invoke(session,'history',address=card['address'],offset=0,limit=50)['value']['messages'])==2)
         wait_for(lambda: not invoke(session,'delivery_state')['value']['running'])
+        state = invoke(session,'delivery_state')['value']
+        assert state['error'] is None, failures
+        assert state['result']['received']['purged'] == 1
+        assert state['result']['relayed'] == 1
+        assert node.call('stats')['count'] == 1
+        assert peer.call('fetch')['purged'] == 1
+        assert next(message for message in peer.call('messages') if message['id'] == reply)['status'] == 'recipient_stored'
         assert node.call('stats')['count']==0
         assert len(callbacks.fds)==2 and RNS.Transport.interfaces==baseline
         assert transport._session_lock.acquire(False); transport._session_lock.release()

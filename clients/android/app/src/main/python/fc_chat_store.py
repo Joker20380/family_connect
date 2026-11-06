@@ -52,7 +52,8 @@ class Session:
                           'mark_inbox': ('ids', 'flag'), 'rename_contact': ('address', 'name'), 'service_events': (),
                           'edit_message': ('address','message_id','text'), 'queue_audio': ('address','audio'), 'audio': ('message_id',),
                           'queue_radio': ('address','audio','mode','confirmed'),
-                          'import_events': ('feed',), 'mark_events': ('ids', 'flag')}
+                          'import_events': ('feed',), 'mark_events': ('ids', 'flag'),
+                          'subscription_status': ('device',)}
             if operation not in signatures or type(data) is not dict or set(data) != set(signatures[operation]):
                 raise LocalError('invalid_input')
             if operation == 'preview_contact':
@@ -70,6 +71,11 @@ class Session:
         except Exception:
             code = 'store_unavailable'
         return json.dumps(dict(ok=False, error=code), separators=(',', ':'))
+
+    def accept_subscription(self, raw, device):
+        if self.local is None:
+            raise LocalError('closed')
+        return json.dumps(self.local.accept_subscription_response(raw, device), ensure_ascii=False, separators=(',', ':'))
 
     def configure_delivery(self, host, port, public_hex, callbacks, expires=None):
         if self.local is None:

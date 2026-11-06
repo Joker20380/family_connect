@@ -1,0 +1,62 @@
+diff --git a/messenger/local.py b/messenger/local.py
+index 3e0828d..d3d9dd9 100644
+--- a/messenger/local.py
++++ b/messenger/local.py
+@@ -237,6 +237,20 @@ class LocalChat:
+             self._require_open()
+             return self._store.service_events()
+ 
++    def subscription_status(self, device):
++        with self._lock:
++            self._require_open()
++            try: return self._store.subscription_status(device)
++            except ValueError: raise LocalError('invalid_input') from None
++
++    def accept_subscription_response(self, raw, device):
++        from .subscription_view import decode_response
++        with self._lock:
++            self._require_open()
++            status, confirmed_at, event = decode_response(raw, device)
++            accepted = self._store.accept_confirmed_subscription(status, device=device, confirmed_at=confirmed_at, event=event)
++            return dict(accepted=accepted, view=self._store.subscription_status(device))
++
+     def import_events(self, feed):
+         from .service_events import validate_feed
+         with self._lock:
+diff --git a/messenger/store.py b/messenger/store.py
+index 829d296..10ad9cc 100644
+--- a/messenger/store.py
++++ b/messenger/store.py
+@@ -275,6 +275,20 @@ class Store:
+                 "SELECT id FROM records WHERE id LIKE 'notice:%' ORDER BY rowid").fetchall()]
+             return [event for event in events + notices if event['expires'] > time.time()]
+ 
++    def accept_confirmed_subscription(self, status, *, device, confirmed_at, event=None):
++        """Trusted Friends adapter seam; deliberately absent from the generic UI RPC."""
++        from .subscription_view import accept
++        with self._lock, self._db:
++            previous = self._get('subscription-view')
++            current = accept(previous, status, device=device, confirmed_at=confirmed_at, event=event)
++            self._put('subscription-view', current)
++            return current is not previous
++
++    def subscription_status(self, device):
++        from .subscription_view import view
++        with self._lock:
++            return view(self._get('subscription-view'), device, time.time())
++
+     def service_mark(self, ids, flag):
+         if flag not in ('read', 'notified') or type(ids) is not list or len(ids) > 1000 or any(type(i) is not str for i in ids):
+             raise ValueError('Invalid service update')
+@@ -285,6 +299,11 @@ class Store:
+                     event[flag] = True
+                     if flag == 'read': event['notified'] = True
+             self._put('service-events', events)
++            subscription = self._get('subscription-view')
++            if subscription is not None and subscription['notice'] is not None and subscription['notice']['id'] in ids:
++                subscription['notice'][flag] = True
++                if flag == 'read': subscription['notice']['notified'] = True
++                self._put('subscription-view', subscription)
+             for row in self._db.execute("SELECT id FROM records WHERE id LIKE 'notice:%'").fetchall():
+                 event = self._get(row[0])
+                 if event['id'] in ids:

@@ -2,6 +2,48 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Owner-selected SUBSCRIPTION-INTEGRATION-1 — integration gate OPEN.**
+663377e passes all client/runtime gates and phase0; control stalls in dependency
+setup, not tests. Apply the already verified voice mirror repair to that job, then
+finish its real check and the complete final-head CI. No additional qualification.
+Full-suite/context and Linux candidate gates passed on360cc26. Repair only the
+repeated voice-runner APT mirror timeout, then require actual final-head checks;
+do not restart closed source investigations or relabel infrastructure cancellation
+as an assertion failure. Record final receipts/merge in PR1 without a docs-only head.
+Finish the remaining concrete1d4 fixtures and invitation-dispatch synchronization,
+including protected relocated Python and its real sanitized runtime probe,
+then require final-head hosted PASS and normal merge. Exact retained snapshot and current
+unbound renewal package must be supplied, not skipped. Do not repeat closed native or
+messenger investigations, change historical hashes or claim emulator/phone acceptance
+from a source-review adaptation. Keep receipts in PR1 after the cohesive source push.
+Current authorized work includes the complete beta119 source-review guard adaptation
+and CI fixture corrections. Finish the actual-head hosted checks and ordinary PR1 merge;
+do not open a runtime qualification phase. All152 guarded files match beta119; seven
+subscription and three inherited-renewal exceptions are exact reviewed hashes, not new
+unguarded files. Historical native/reference hashes remain fixed. Ownership, interpreter,
+historical source and process-global fixture isolation must be explicit and every collected
+test must run in its declared context. Record final CI/merge receipts in PR1 without a
+cosmetic docs-only head. A normal source/fixture failure remains work to fix, not a reason
+to stop. Production, G4, paid baseline108 and installed beta119 are unchanged.
+
+Earlier integration requirements and evidence:
+Use a separate worktree from current main; preserve the independent bootstrap and
+renewal work below. Validate the ordinary server package, complete repository CI and
+merge through a PR. Do not redeploy, install, alter paid data or open another Android
+matrix. Prepare one existing operator workflow read-only, including its eligibility
+and expiry consequences. Installed ARM119 provenance and prior NOT_RUN gates remain.
+PR1 base repairs explicitly authorized: update nine Session fixtures and the exact
+phase22 fragment; rebuild the already accepted native closure, not current carrier.
+The pinned `efc13f1c7f27` snapshot reproduces the existing313-file native digest;
+historical accepted hashes stay unchanged. Messenger222 and docs gates pass locally.
+Linux race/build/package smoke and Messenger PASS on `24de0b2`; no native baseline
+qualification or hash replacement was needed. Remaining gates are now concrete:
+Client builds/android source-review assertion for ChatActivity, phase0 fixture/root
+execution failures, and unfinished control/voice runs. Review these separately from
+the three repaired blockers; do not claim merge readiness or silently expand into
+renewal/bootstrap policy changes. Normal merge still requires all applicable checks.
+[Task evidence and completion gate](releases/2026-11-06-subscription-integration-1.md).
+
 **Selected6 November: separate beta113/API28 field bootstrap diagnosis, not G4.**
 The148e212 source/JSON findings stand. A bounded exact113 test now confirms no cold
 provisioning route when HTTPS8443 and RNS4242 both fail and readiness is missing.
@@ -36,6 +78,53 @@ All earlier dated preparation/NEXT entries below are historical, not parallel ta
 FAILED; ordinary AWG/TCP active. Diagnosis/recovery remains separate from isolated G4;
 no production mutation or task advancement by this check. Root cause not established.
 [Health snapshot](releases/2026-11-06-vpn-health.md).
+
+**Owner-selected SUBSCRIPTION-ANDROID-3 — narrow ARM/ingress gate complete.**
+Fixed119 installed in place over118 with explicit owner-phone consent; Redmi/API31
+receives fresh own non-cohort state from normal trusted HTTPS without VPN. Real encrypted
+restart/cache and subsequent response PASS; actual human Refresh requests confirmed.
+Serving archive overlay preserves every unrelated member; targeted deployment/readback
+and46 focused tests PASS. No paid row/event exists for this identity, so physical paid
+snapshot/notification/dedupe remains NOT_RUN; do not manufacture a payment to close it.
+No publication/merge or automatic successor. Whitelist/COLD_BOOTSTRAP_GAP, natural expiry,
+UI identity switch and prior mixed-network gate remain separate; G4/renewal untouched.
+[Installed candidate, evidence and rollback](releases/2026-11-06-subscription-android-3.md).
+
+**Owner-selected SUBSCRIPTION-ANDROID-2 — narrow task complete, ARM119 candidate retained.**
+Real UI/save/automatic delivery/notification/tap/dedupe passed on the isolated API35
+stand. Source `b2a37fe98929` ordinary source-bound ARM64 Friends build, existing-key
+signature,26 focused Gradle tests/lint and artifact inspection PASS; no publication,
+merge or owner-phone action. Next separate gate: authorized dedicated ARM retained-data
+installation plus trusted candidate ingress. Preserve previous runtime limitations;
+no automatic continuation, G4 action or hidden background acquisition.
+[Current task and gates](releases/2026-11-06-subscription-android-2.md).
+
+**Owner-selected SUBSCRIPTION-ANDROID-1 — bounded runtime complete6 November.**
+Independent feature worktree, not a G4 continuation. Source `934867678f99` pushed and
+remote-verified, own backend/AVD stopped; evidence retained. API35 NVIDIA/KVM diagnostic
+APK build/Chaquopy, real local HTTPS, Keystore/restart, canonical state/event display,
+permission/dedupe and cold/warm navigation pass; checked-exception compilation fixed.
+Mixed-underlay test-origin failure retained, stable Wi-Fi path qualified. Remaining
+independent gates: production-equivalent test ingress, ARM/release, physical whitelist
+and normal activated-service scheduling (notifications were exercised via the existing
+worker, not proven as automatic new-event delivery). No deployment/merge/full acceptance,
+G4 action or automatic next task. [Exact results and reproducible scope](releases/2026-11-06-subscription-android-1.md).
+
+**Independent owner-requested parallel subtask6 November — SUBSCRIPTION-CLIENT-VIEW**
+under `ANDROID-CONTROLLED-BETA`, not a replacement for the existing G4 critical path.
+Isolated source/integration candidate from checkpoint `47ef0463bd39`: authenticated
+schema1 personal HTTP read, canonical snapshot/event, explicit UI refresh and existing
+encrypted projection/notification fences;84 focused Python +26 pure JVM checks PASS.
+Dependencies reused: canonical paid_beta records, Friends identity, encrypted chat store,
+ChatRuntime/ChatNotifications and the existing protected HTTPS underlay.
+The owner-authorized minimal API closes the prior missing-contract dependency in source;
+registration status and public notices remain unchanged and never imply paid entitlement.
+Completion gate remains OPEN: separate review/merge and controlled backend ingress/runtime
+qualification, then Android build/Keystore/restart, permissions, cold/warm notification
+navigation and offline/time/expired-VPN checks when resources are free. No further API
+redesign is required to start those checks. No automatic continuation, G4 action, native
+rebuild, release or deployment is authorized by this entry.
+[Contract, test commands and deferred gates](releases/2026-11-06-subscription-authenticated-api.md).
 
 **5 November11:29UTC operational readback complete:** all ordinary VPN services
 and both NL bootstrap active; seven recent AWG peers, no sampled TCP443/8446 sockets.

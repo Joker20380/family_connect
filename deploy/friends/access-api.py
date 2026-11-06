@@ -8,6 +8,7 @@ from control.friends.access import Access,Rejected
 from control.friends.chat import ChatAccess
 from control.friends.chat_sync import synchronize
 from control.friends.referrals import Referrals,Exhausted,RateLimited
+from control.friends.subscription import Unsupported as SubscriptionUnsupported
 access=Access(ROOT/'access.db');slots=threading.BoundedSemaphore(4)
 chat_access=ChatAccess(access)
 
@@ -41,7 +42,7 @@ class Handler(BaseHTTPRequestHandler):
   raw=json.dumps(value,ensure_ascii=False,separators=(',',':')).encode();self.send_response(status);self.send_header('Content-Type','application/json');self.send_header('Cache-Control','no-store');self.send_header('Content-Length',str(len(raw)));self.end_headers();self.wfile.write(raw)
  def do_POST(self):
   self.connection.settimeout(5)
-  if self.path not in ('/friends/challenge','/friends/activate','/friends/restricted-readiness','/friends/restricted-readiness/challenge','/friends/restricted-readiness/ack-challenge','/friends/restricted-readiness/ack','/friends/configuration/ru','/friends/configuration/nl','/friends/gateway-configuration/nl-amsterdam-1','/friends/gateway-configuration/nl-amsterdam-2','/friends/chat/challenge','/friends/chat/register','/friends/referral/issue','/friends/referral/claim','/friends/device/status','/friends/device/support','/friends/device/diagnostics','/friends/notices/publish','/friends/notices/device/role','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit'):self.reply(404,{'error':'not-found'});return
+  if self.path not in ('/friends/challenge','/friends/activate','/friends/restricted-readiness','/friends/restricted-readiness/challenge','/friends/restricted-readiness/ack-challenge','/friends/restricted-readiness/ack','/friends/configuration/ru','/friends/configuration/nl','/friends/gateway-configuration/nl-amsterdam-1','/friends/gateway-configuration/nl-amsterdam-2','/friends/chat/challenge','/friends/chat/register','/friends/referral/issue','/friends/referral/claim','/friends/device/status','/friends/device/subscription','/friends/device/support','/friends/device/diagnostics','/friends/notices/publish','/friends/notices/device/role','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit'):self.reply(404,{'error':'not-found'});return
   if not slots.acquire(blocking=False):self.reply(429,{'error':'busy'});return
   phase='http_parse'
   try:
@@ -87,6 +88,9 @@ class Handler(BaseHTTPRequestHandler):
     record=access.complete(value,'activate');result={'device':record['device'],'status':'active'}
    elif self.path=='/friends/device/status':
     result=access.status(value)
+   elif self.path=='/friends/device/subscription':
+    from control.friends.subscription import request
+    result=request(access,value)
    elif self.path=='/friends/device/diagnostics':
     from control.friends.diagnostics import request
     result=request(access,ROOT/'diagnostics.sqlite',value)
@@ -109,6 +113,7 @@ class Handler(BaseHTTPRequestHandler):
     result={'device':record['device'],'country':country,'address':assigned['address'],'tcp_id':record['tcp_id'],'catalog':catalog}
     if explicit:result['gateway_id']=target
    self.reply(200,result)
+  except SubscriptionUnsupported:self.reply(501,{'error':'subscription-unsupported'})
   except Exhausted:self.reply(410,{'error':'referral-pool-exhausted'})
   except RateLimited:self.reply(429,{'error':'referral-rate-limited'})
   except Rejected:self.reply(403,{'error':'access-rejected'})

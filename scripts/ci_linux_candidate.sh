@@ -4,14 +4,19 @@ export PYTHONDONTWRITEBYTECODE=1
 source_root=$PWD
 work="${RUNNER_TEMP:?}/fc-linux-candidate"
 version='0.2.12~ci.preview.8'
-mkdir -p "$work/accepted" "$work/normal"
-git archive HEAD | tar -xf - -C "$work/accepted"
+mkdir -p "$work/current" "$work/normal" artifacts/linux-candidate
+git archive HEAD | tar -xf - -C "$work/current"
+git rev-parse HEAD > artifacts/linux-candidate/package-source.txt
+python -m scripts.stage_linux_native --out "$work/native-source" | tee artifacts/linux-candidate/native-source.json
 git init "$work/xray"
 git -C "$work/xray" remote add origin https://github.com/XTLS/Xray-core.git
 git -C "$work/xray" fetch --depth=1 origin d2758a023cd7f4174a5a5fa4ff66e487d4342ba0
 (
-  cd "$work/accepted"
+  cd "$work/native-source"
   python -m scripts.build_desktop_mesh --go "$(command -v go)" --xray "$work/xray" --out "$work/native" --os linux --test
+)
+(
+  cd "$work/current"
   tar -c tests/fixtures/linux_system_runtime/Dockerfile control/requirements.lock \
     device_identity/requirements.lock provisioning/requirements.lock messenger/requirements.lock | \
     docker build --build-arg BASE=ubuntu:26.04 --target builder -t fc-l032-builder:ci -f tests/fixtures/linux_system_runtime/Dockerfile -
@@ -24,11 +29,15 @@ docker cp "$awg_container:/opt/awg31" "$work/normal/awg"
 docker cp "$tcp_container:/usr/local/bin/xray" "$work/normal/xray"
 docker rm "$awg_container" "$tcp_container"
 docker run --rm --network none --read-only --tmpfs /tmp:exec \
-  --mount "type=bind,src=$work/accepted,dst=/workspace,readonly" \
+  --mount "type=bind,src=$work/current,dst=/workspace,readonly" \
+  --mount "type=bind,src=$work/native-source,dst=/native-source,readonly" \
   --mount "type=bind,src=$work,dst=/evidence" fc-l032-builder:ci /bin/bash -c '
     /opt/build-venv/bin/python -m scripts.build_desktop_rns --out /evidence/rns
-    /opt/build-venv/bin/python -m scripts.package_mesh_component --native /evidence/native --rns /evidence/rns \
+    /opt/build-venv/bin/python -m scripts.package_mesh_component --native /evidence/native --native-source /native-source --rns /evidence/rns \
       --awg /evidence/normal/awg --tcp /evidence/normal/xray --out /evidence/system'
+cp "$work/native/build.json" artifacts/linux-candidate/native-build.json
+cp "$work/native/source-inventory.json" artifacts/linux-candidate/native-inventory.json
+cp "$work/system/delivery.json" artifacts/linux-candidate/system-delivery.json
 docker build --build-arg BASE=ubuntu:26.04 -f tests/fixtures/linux_candidate/Dockerfile -t fc-l032-system:ci tests/fixtures/linux_candidate
 mkdir -p artifacts/linux-candidate
 system_archive="$work/system/FamilyConnect-MESH-system-amd64.tar.gz"

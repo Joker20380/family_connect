@@ -17,11 +17,24 @@
     "messenger/service_events.py": "8535cd7c3086537b159b966ac6c582380d776726e9fdda2bf2016fea834f78ee"
   },
   "local_adaptations": {
+    "messenger/local.py": {
+      "sha256": "59dd090e13d415a4e05ca333d421aa1513e674f40acc86145affc26c08155001",
+      "reason": "Beta119 authenticated subscription response adapter; no generic RPC or desktop subscription UI. Original accepted106 hash remains unchanged.",
+      "patch": "clients/shared/subscription119-messenger.patch"
+    },
+    "messenger/store.py": {
+      "sha256": "4e91993cb2357481c2bff1ae42e5962b43c7becc3b670058971136975bc5eb04",
+      "reason": "Beta119 encrypted personal subscription projection and durable flags; existing public notices and messenger semantics retained.",
+      "patch": "clients/shared/subscription119-messenger.patch"
+    },
     "messenger/routed.py": {
       "sha256": "21ce1899e9e6362ed88b310d642cbd6ee956373f82d83c316d95bb60f57c4163",
       "reason": "Trusted platform subclass can use SYSTEM routing without falsely claiming a protected DIRECT or service-only path. Default Android route order is unchanged.",
       "patch": "clients/shared/android106-messenger.patch"
     }
+  },
+  "additional_modules": {
+    "messenger/subscription_view.py": "bca7f4fb1c703019067c9d4bfe314993e61df019f3e59867510b9fa2a9c73b59"
   },
   "ui_resources": {
     "clients/android/app/src/main/res/values/strings.xml": "0982299f670f909f34786997d9f8e1aff5cae7f8a5094a611ff58fd89a40152b",

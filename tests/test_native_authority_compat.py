@@ -102,11 +102,12 @@ def test_long_testing_window_preserves_native_expiry_checks(tools, tmp_path):
     service, owner, now, profile = fixture(tmp_path, crl_number=2, crl_lifetime=3600,
                                           gateway_lifetime=14400)
     response = service.fetch(proof(service, owner))
-    assert response['expires_at'] == now + 3599
+    assert response['issued_at'] == now - 5
+    assert response['expires_at'] == now + 3595
     result = native(tools['current'], tmp_path, profile, response['certificate'])
     assert result.returncode == 0 and json.loads(result.stdout)['status'] == 'PASS'
     assert delivery(tools['delivery'], service, owner, now + 1800, response, public_only=True).returncode == 0
-    assert delivery(tools['delivery'], service, owner, now + 3599, response, public_only=True).returncode != 0
+    assert delivery(tools['delivery'], service, owner, now + 3595, response, public_only=True).returncode != 0
 
 
 def test_four_hour_real_delivery_cross_language(tools, tmp_path):
@@ -114,13 +115,14 @@ def test_four_hour_real_delivery_cross_language(tools, tmp_path):
                                           gateway_lifetime=14400, delivery_lifetime=14400,
                                           directory_lifetime=14400)
     response = service.fetch(proof(service, owner))
-    assert response['expires_at'] == now + 14399
+    assert response['issued_at'] == now - 5
+    assert response['expires_at'] == now + 14395
     result = native(tools['current'], tmp_path, profile, response['certificate'])
     assert result.returncode == 0 and json.loads(result.stdout)['status'] == 'PASS'
     assert delivery(tools['delivery'], service, owner, now, response).returncode == 0
-    for observed in (now, now + 7200, now + 14398):
+    for observed in (now, now + 7200, now + 14394):
         assert delivery(tools['delivery'], service, owner, observed, response, public_only=True).returncode == 0
-    for observed in (now - 1, now + 14399, now + 14400):
+    for observed in (now - 6, now + 14395, now + 14400):
         assert delivery(tools['delivery'], service, owner, observed, response, public_only=True).returncode != 0
     overlong = dict(response, expires_at=now + 14401)
     assert delivery(tools['delivery'], service, owner, now, overlong, public_only=True).returncode != 0
