@@ -16,6 +16,13 @@
 переход реализован и проходит адресные Python-проверки, но G1–G4 целиком ещё не приняты.
 G2 — независимые процессы/отказы; G3 — фактическая Android HTTP/cache доставка;
 G4 — квалифицированный online runtime/API пакет. [Точные gates/evidence](releases/2026-11-05-mesh-online-renewal.md).
+Актуальная дельта6 ноября: expiry52c91f5 PASS (два реальных resume после срока,
+точный stable-block); full37ffc2c FAIL после двух renewal и пересечения crypto/lease
+на прежних соединениях. Причина — чтение тестом старого fixture вместо canonical
+profile после recovery, не дефект CRL runtime; свежий трафик и финальный replay
+этого прогона не выполнены. [Итоги](releases/2026-11-06-mesh-frozen-run-results.json).
+Один следующий шаг — завершить оставшуюся А: исправленный G4 и G3 legacy/late.
+А не принята, Б не начата; прежние дельты ниже — история, поставка не разрешена.
 Текущая дельта6 ноября00:06UTC: bfff97d root/package/process68 PASS/5 SKIP;
 пять обязательных snapshot-кейсов отдельно выполнены5 PASS/0 SKIP с собственным
 воспроизводимым capsule. Native race и G1 isolated core PASS; это не full-CI/А.

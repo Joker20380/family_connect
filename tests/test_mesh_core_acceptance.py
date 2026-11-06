@@ -20,7 +20,7 @@ from online_package_stand import private_file
 from scripts import package_online_renewal as package
 from test_friends_access import proof
 from test_mesh_core_faults import kill_at
-from test_mesh_core_soak import bounds, generations
+from test_mesh_core_soak import bounds, canonical_profile, generations
 from test_online_runtime_package import core_driver, online_package
 
 
@@ -162,13 +162,17 @@ def test_two_renewals_then_linked_emergency_on_original_sessions(online_package,
         assert (stand.fleet.nodes['NL'].state/'archive'/operation/'start-intent-0.json').read_bytes() == intent
         assert all(after[slot]['MainPID'] != receipt['processes'][slot]['MainPID'] and
                    after[slot]['InvocationID'] != receipt['processes'][slot]['InvocationID'] for slot in after)
+        receipt.update(state='EMERGENCY_RECOVERED_TRAFFIC_PENDING', emergency=dict(result=emergency,
+            approval_required=approval_required, lost_start=lost, recovered=recovered, after=after,
+            original_plan_sha256=origin['plan_sha256'], start_intent_sha256=package.digest(intent)))
+        save()
         revocations = {}
         for slot, profile in profiles.items():
             rejected = stand.probe(slot, profile)
             assert rejected.returncode != 0 and b'admission_allowed' not in rejected.stdout
             assert b'bootstrap_protocol_rejected' in rejected.stderr
             old = json.loads(profile.read_bytes())
-            current = json.loads((stand.fleet.nodes[slot].live/'gateway.json').read_bytes())
+            current = canonical_profile(stand, slot)
             serial = x509.load_pem_x509_certificate(old['certificate'].encode()).serial_number
             assert x509.load_pem_x509_crl(current['revocations'].encode()).get_revoked_certificate_by_serial_number(serial) is not None
             assert current['minimum_crl'] > old['minimum_crl']

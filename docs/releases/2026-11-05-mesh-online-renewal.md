@@ -1,5 +1,56 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Finished frozen runs read back6 November
+
+[Sanitized final receipts, identities and exact unexecuted boundary](2026-11-06-mesh-frozen-run-results.json).
+No candidate was rebuilt or stand restarted to obtain these results. Source remains
+bfff97d, archive5721a5c1, separate driver0fead52a; production gateway6032b926 is not
+this driver. Original failed runs and all foreign work are retained.
+
+* Expiry52c91f5: **PASS**, exit0,14423.91s, finished03:51:34UTC. At03:51:31 and
+  03:51:33UTC both packaged resumes return exit1 and the exact stable-block response
+  `FAIL_CLOSED / ONLINE_RUNTIME_RECEIPT / automatic_retry=false`, after candidate
+  leaf/CRL expiry03:51:27UTC. The frozen test asserts byte-identical journal and
+  canonical profiles, unchanged serving processes, expired loaded leaf/CRL, original
+  COMMIT/plan/fence and no publication/start/rollback. Safety, not availability recovery.
+  The initial d968ddd assertion FAIL remains a separate failed run, never relabelled.
+* Full37ffc2c: **FAIL**, exit1,27092.71s, finished07:13:57UTC. Both NL complete two
+  online renewals, native confirmations and23395 useful traffic samples each,
+  generation0→2 on original TLS/mux/TCP with real crypto/lease crossing. Preserved
+  socket byte counters increase; no normal-renewal process replacement. The combined
+  emergency closes those sockets intentionally, reconciles lost start and recovers.
+  Line173 then reads `node.live/gateway.json`, the old setup fixture, instead of the
+  `profile_locator` canonical file. Read-only retained-state inspection confirms the
+  revoked serial in both real CRLs and floor6>4, COMMITTED with original COMMIT parent.
+  This is a **harness evidence-path defect**, not grounds to mark the run PASS.
+  NL2's final rejection check, fresh allowed TCP/DNS/HTTPS and idempotent replay were
+  not reached. Both test containers and owned route helpers have stopped; cleanup
+  receipts confirm waited processes and absent reader sockets.
+
+Repair scope: reuse the canonical lookup already used by `bounds`, plus decoy/missing
+profile regression and the existing packaged emergency test. No runtime security,
+TTL, clock, eligibility,1395s+lateness or package change. A corrected full run is
+justified by this exact fixed assertion, not a blind retry. The successful long
+prefix is retained as scoped evidence, not renamed complete G4.
+
+Targeted correction check: `canonical-profile-check.log`,12 PASS/0 SKIP,84.26s
+(two canonical-path guards, nine existing budget/sampling guards and real packaged
+revoke-after-COMMIT/approval recovery). The latter uses the same canonical reader
+as corrected G4 and proves both revoked denial and new allowed traffic. This short
+regression does not retroactively execute the missing tail of37ffc2c or accept G4.
+
+| Gate | Current result | Evidence / limitation |
+| --- | --- | --- |
+| G1 | PASS isolated core | Existing bfff97d approval/revoke/start-intent regression retained |
+| G2 | PASS isolated process/RPC matrix | Existing bfff97d root/package fault cases plus52c91f5 actual expiry repeat; stable-block is not auto-recovery |
+| G3 | INCOMPLETE | Positive/owner/partial-connect GPU cases retained; legacy/too-late NOT_RUN on both APIs |
+| G4 | FAIL |37ffc2c finished at stale-fixture assertion; real two-renewal prefix retained, final traffic/replay missing |
+
+No independent accepted A checkpoint yet; B UI/storage/routing/recovery for all
+transports NOT_STARTED. One active next: finish remaining A. Release/live/field
+constraints remain unchanged, not new isolated gates. Nothing installed or published.
+All earlier waiting-state snapshots below are historical, not current results.
+
 ## Continuation checkpoint6 November00:06UTC
 
 **Newly demonstrated compared with a30966c:** a frozen package now supports actual

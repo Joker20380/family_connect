@@ -8,6 +8,7 @@ import time
 import pytest
 
 from mesh_core_stand import CoreStand
+from test_mesh_core_soak import canonical_profile
 from fixtures.mesh_supervisor import request
 from online_package_stand import private_file
 from scripts import package_online_renewal as package
@@ -304,7 +305,7 @@ def test_revocation_after_commit_and_after_approval_recovers_without_rollback(on
             serial = certificate.serial_number
             assert time.time() < certificate.not_valid_after_utc.timestamp()
             assert time.time() < x509.load_pem_x509_crl(prior['revocations'].encode()).next_update_utc.timestamp()
-            current = json.loads((tmp_path/(slot+'-profile/gateway.json')).read_bytes())
+            current = canonical_profile(stand, slot)
             crl = x509.load_pem_x509_crl(current['revocations'].encode())
             assert crl.get_revoked_certificate_by_serial_number(serial) is not None
             assert current['minimum_crl'] > prior['minimum_crl']

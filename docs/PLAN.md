@@ -12,6 +12,16 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**One active next6 November: complete remaining A, retaining finished-run results.**
+Expiry52c91f5 PASS after two guarded real post-expiry resumes; do not rerun it.
+Full37ffc2c FAIL only at the post-recovery assertion's stale profile path: retain
+both successful renewals and real crypto/lease traffic crossing, fix canonical
+lookup and qualify the unfinished full path on unchanged bfff97d artifacts.
+G3 legacy/too-late still requires actual HTTP/cache/owner/native cases on API27/35,
+one NVIDIA/KVM AVD at a time. No A acceptance or B before all required scenarios.
+[Final receipts and exact unexecuted boundary](releases/2026-11-06-mesh-frozen-run-results.json).
+All older NEXT entries below are history, not simultaneous instructions.
+
 **One active next00:06UTC: finish A on the recorded frozen combination.** Preserve
 the completed bfff97d root/package/native/snapshot evidence, await and reconcile its
 real G2 expiry repeat and G4 renewals, then close the remaining actual G3 legacy/late

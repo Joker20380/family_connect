@@ -1,0 +1,264 @@
+{
+  "schema": 1,
+  "scope": "readback-of-finished-frozen-runs-not-A-acceptance",
+  "runtime_source": "bfff97d91507cbc7d1ac422facbf93278f760d92",
+  "archive_sha256": "5721a5c1a03ce365ba723f3526ced0551d34402c4a1b461424197923b7671e01",
+  "driver_sha256": "0fead52ab3dbedf2d78ff3b6ebc67a488e242a80b42fd04b81c0a088e6c26874",
+  "private_evidence_root": "state-client-build/mesh-core-runtime-20261105",
+  "expiry": {
+    "result": "PASS",
+    "test_source": "52c91f52d0fce944cdcc395d58afe70160072073",
+    "container": "fc-mesh-expiry-bfff97d-52c91f5",
+    "exit_code": 0,
+    "seconds": 14423.91,
+    "receipt": "expiry-bfff97d-52c91f5/successor-expiry/progress.json",
+    "receipt_sha256": "f128299e58497917d4c47fecf3828b1de5cc68bd3d5c12587cb108f95c7afb27",
+    "log": "expiry-bfff97d-52c91f5.log",
+    "state": "EXPIRED_SUCCESSOR_BLOCKED_SAME_COMMIT",
+    "deadlines_utc": [
+      "2026-11-06T03:51:27+00:00",
+      "2026-11-06T03:51:27+00:00",
+      "2026-11-06T03:51:27+00:00"
+    ],
+    "attempts": [
+      {
+        "attempt": 1,
+        "cause": "ONLINE_RUNTIME_RECEIPT",
+        "exit_code": 1,
+        "observed": 1793937091.5579584,
+        "result": {
+          "automatic_retry": false,
+          "cause": "ONLINE_RUNTIME_RECEIPT",
+          "result": "FAIL_CLOSED"
+        }
+      },
+      {
+        "attempt": 2,
+        "cause": "ONLINE_RUNTIME_RECEIPT",
+        "exit_code": 1,
+        "observed": 1793937093.661925,
+        "result": {
+          "automatic_retry": false,
+          "cause": "ONLINE_RUNTIME_RECEIPT",
+          "result": "FAIL_CLOSED"
+        }
+      }
+    ],
+    "decision": "COMMIT",
+    "plan_sha256": "b19000bcc8e24860ba3fb9b6aa4a0ee66cb751a0e117b88a4fa0c47576b39846",
+    "fence": 1,
+    "asserted_invariants": [
+      "byte-identical journal",
+      "byte-identical canonical profiles",
+      "identical real serving processes",
+      "leaf and CRL expired at both attempts",
+      "no publication, rollback or start"
+    ],
+    "cleanup": "processes-waited-and-reader-sockets-absent",
+    "limitation": "stable safety block; not automatic availability recovery",
+    "original_failed_run": "2026-11-05-mesh-expiry-evidence.json"
+  },
+  "full_path": {
+    "result": "FAIL",
+    "test_source": "37ffc2cc18b5c868aeb5498d6aa18a3997d88dd6",
+    "container": "fc-mesh-full-core-bfff97d-37ffc2c",
+    "exit_code": 1,
+    "seconds": 27092.71,
+    "receipt": "full-core-bfff97d-37ffc2c/full-core/progress.json",
+    "receipt_sha256": "73fa943a35c70b9722b6d21f13802c64c8e3279d8e2098e14176326d299c47eb",
+    "log": "full-core-bfff97d-37ffc2c.log",
+    "failed_at_utc": "2026-11-06T07:13:55.593920+00:00",
+    "renewals": [
+      {
+        "ordinal": 1,
+        "completed_utc": "2026-11-06T02:13:00.236130+00:00",
+        "result": "COMMITTED",
+        "bounds": {
+          "NL": {
+            "crl": 1793945559.0,
+            "leaf": 1793945559.0
+          },
+          "NL2": {
+            "crl": 1793945559.0,
+            "leaf": 1793945559.0
+          }
+        },
+        "plan_sha256": "0f92b1dd8603030e7213e5a2419ecf4e85f6129672fb37355294f5868f90e803",
+        "fence": 1,
+        "runtime": {
+          "NL": {
+            "contract": "MESH_SAME_HOLDER_ONLINE_V1",
+            "gateway": "8d08889941801b19be171afc733add8e",
+            "instance": "2a50fd00f16c16ce5b3f7acecdf322b65d2cf52bdce2610ee83d37d62d7a7fe8",
+            "profile_sha256": "6ee0352d70f6b713cd2e553a0dcad662d5dfbe4e9dfd41c8099f3b7a7a33013d"
+          },
+          "NL2": {
+            "contract": "MESH_SAME_HOLDER_ONLINE_V1",
+            "gateway": "02c97ef6c27e7e2aafbe53684918c7ef",
+            "instance": "c85f7d893a650443b12e608be7bf4b35c60c3f424fad8c09e46f737358f3e626",
+            "profile_sha256": "5d3ad0847733e6cb4193311b38aa8e4e8bcb0e7b2fdcdc343cb260562ab92758"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "completed_utc": "2026-11-06T04:43:09.140912+00:00",
+        "result": "COMMITTED",
+        "bounds": {
+          "NL": {
+            "crl": 1793954567.0,
+            "leaf": 1793954567.0
+          },
+          "NL2": {
+            "crl": 1793954567.0,
+            "leaf": 1793954567.0
+          }
+        },
+        "plan_sha256": "80846c966c7ba0c0b9b121def719047c9f8642ab280d1792a04eee6b0e83edd3",
+        "fence": 1,
+        "runtime": {
+          "NL": {
+            "contract": "MESH_SAME_HOLDER_ONLINE_V1",
+            "gateway": "8d08889941801b19be171afc733add8e",
+            "instance": "2a50fd00f16c16ce5b3f7acecdf322b65d2cf52bdce2610ee83d37d62d7a7fe8",
+            "profile_sha256": "d45d53d945feaff3cc9c2a33658f503e120607ef8934cc8150c1d18613efb677"
+          },
+          "NL2": {
+            "contract": "MESH_SAME_HOLDER_ONLINE_V1",
+            "gateway": "02c97ef6c27e7e2aafbe53684918c7ef",
+            "instance": "c85f7d893a650443b12e608be7bf4b35c60c3f424fad8c09e46f737358f3e626",
+            "profile_sha256": "777671bfc48cf08ff0f1755b946dce546a06cdc0cf3a580158ad1b7d45b1e345"
+          }
+        }
+      }
+    ],
+    "traffic": {
+      "NL": {
+        "samples": 23395,
+        "committed": 2,
+        "first_utc": "2026-11-05T23:42:48.136528451Z",
+        "last_utc": "2026-11-06T06:12:42.131246038Z",
+        "generations": [
+          0,
+          2
+        ],
+        "same_session": true,
+        "same_socket": true,
+        "original_socket_received_bytes": 514690,
+        "tcp_dns_verified_https": true,
+        "carrier_received_bytes": 118372753,
+        "lease_initial_deadline_ms": 1793922767456,
+        "lease_last_applied": {
+          "lease_action": "applied",
+          "lease_deadline_ms": 1793946068711,
+          "lease_sequence": 49,
+          "reason": "NONE",
+          "rx": 0,
+          "sequence": 11857,
+          "session_tag": "28ebe3f494b7974e954e76dc0544ad4be4698a2d61a5b62396c9d3b8d0d1f6be",
+          "stage": "GATEWAY_SESSION",
+          "state": "ESTABLISHED",
+          "timestamp_ms": 1793945468714,
+          "tx": 0
+        }
+      },
+      "NL2": {
+        "samples": 23395,
+        "committed": 2,
+        "first_utc": "2026-11-05T23:42:48.144171606Z",
+        "last_utc": "2026-11-06T06:12:42.128232616Z",
+        "generations": [
+          0,
+          2
+        ],
+        "same_session": true,
+        "same_socket": true,
+        "original_socket_received_bytes": 514690,
+        "tcp_dns_verified_https": true,
+        "carrier_received_bytes": 118456029,
+        "lease_initial_deadline_ms": 1793922767461,
+        "lease_last_applied": {
+          "lease_action": "applied",
+          "lease_deadline_ms": 1793946068773,
+          "lease_sequence": 49,
+          "reason": "NONE",
+          "rx": 0,
+          "sequence": 11857,
+          "session_tag": "3e1d7748194e07702602fc8e20e992624ccdaa6c660867d4b879d8c19ebb9430",
+          "stage": "GATEWAY_SESSION",
+          "state": "ESTABLISHED",
+          "timestamp_ms": 1793945468774,
+          "tx": 0
+        }
+      }
+    },
+    "original_sockets_before_emergency": [
+      {
+        "accepted": 1793922168.093875,
+        "closed": false,
+        "peer": [
+          "127.0.0.1",
+          44954
+        ],
+        "received": 514756
+      },
+      {
+        "accepted": 1793922168.094176,
+        "closed": false,
+        "peer": [
+          "127.0.0.1",
+          44968
+        ],
+        "received": 514756
+      }
+    ],
+    "original_sockets_after_emergency": [
+      {
+        "accepted": 1793922168.093875,
+        "closed": true,
+        "peer": [
+          "127.0.0.1",
+          44954
+        ],
+        "received": 594770
+      },
+      {
+        "accepted": 1793922168.094176,
+        "closed": true,
+        "peer": [
+          "127.0.0.1",
+          44968
+        ],
+        "received": 594770
+      }
+    ],
+    "cleanup": "processes-waited-and-reader-sockets-absent",
+    "first_failure": "test_mesh_core_acceptance.py:173 reads stale fixture live/gateway.json rather than canonical profile_locator",
+    "failure_class": "harness evidence path",
+    "postmortem": {
+      "source": "read-only retained /run/full-core-tests state; not a replay",
+      "canonical_revoked_serial_present": {
+        "NL": true,
+        "NL2": true
+      },
+      "canonical_minimum_crl": 6,
+      "probe_minimum_crl": 4,
+      "journal_state": "COMMITTED",
+      "online_parent_decision": "COMMIT"
+    },
+    "unexecuted": [
+      "NL2 post-recovery probe at this assertion boundary",
+      "fresh allowed TCP/DNS/HTTPS after emergency",
+      "final idempotent replay"
+    ],
+    "route_helpers": "both stopped after test exit; gateway helper exit1 retained, origin exit0"
+  },
+  "G3": {
+    "result": "INCOMPLETE",
+    "legacy": "NOT_RUN",
+    "too_late": "NOT_RUN",
+    "retained": "paired GPU positive/owner/partial-connect receipts unchanged"
+  },
+  "A": "NOT_ACCEPTED",
+  "B": "NOT_STARTED"
+}

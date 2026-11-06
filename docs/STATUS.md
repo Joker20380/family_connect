@@ -11,6 +11,21 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**6 November: finished-run readback, not A acceptance.** Frozen expiry52c91f5
+finished03:51:34UTC, exit0: two actual post-expiry resumes return precisely
+`FAIL_CLOSED/ONLINE_RUNTIME_RECEIPT/automatic_retry=false`, unchanged COMMIT,
+canonical profiles and processes. Original first-run FAIL remains unchanged.
+Full path37ffc2c finished07:13:57UTC, exit1 after27092.71s: both NL completed two
+renewals and23395 checked samples each across real leaf/CRL/lease bounds on the
+original sessions/sockets. Emergency recovery completed, but the next CRL assertion
+read the stale fixture instead of the canonical profile. Read-only postmortem finds
+the revoked serial in both canonical CRLs, floor6>4; final fresh traffic/replay was
+not reached. [Exact results](releases/2026-11-06-mesh-frozen-run-results.json).
+Repair only the test's profile lookup, validate it, then qualify the unfinished
+combined path on unchanged bfff97d package5721a5c1. G3 legacy/late still NOT_RUN;
+A not accepted, B not started. Both old runs/helpers stopped; no AVD running.
+Older NEXT entries below are historical; one active next is to complete remaining A.
+
 **6 November00:06UTC checkpoint: current isolated G1 regression PASS; A open.**
 The bfff97d root/package/process selection finishes68 PASS/5 SKIP; the five omitted
 snapshot cases then pass separately5/0 using its reproducible frozen capsule. The

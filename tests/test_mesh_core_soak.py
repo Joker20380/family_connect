@@ -15,12 +15,16 @@ from scripts import package_online_renewal as package
 from test_online_runtime_package import core_driver, online_package
 
 
+def canonical_profile(stand, slot):
+    config = json.loads(stand.configs[slot].read_bytes())
+    locator = json.loads(Path(config['profile_locator']).read_bytes())
+    return json.loads(Path(locator['profile']).read_bytes())
+
+
 def bounds(stand):
     result = {}
     for slot in ('NL', 'NL2'):
-        config = json.loads(stand.configs[slot].read_bytes())
-        locator = json.loads(Path(config['profile_locator']).read_bytes())
-        profile = json.loads(Path(locator['profile']).read_bytes())
+        profile = canonical_profile(stand, slot)
         result[slot] = dict(leaf=x509.load_pem_x509_certificate(profile['certificate'].encode()).not_valid_after_utc.timestamp(),
                            crl=x509.load_pem_x509_crl(profile['revocations'].encode()).next_update_utc.timestamp())
     return result
