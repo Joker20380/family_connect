@@ -1,0 +1,128 @@
+{
+  "schema": 1,
+  "scope": "closed-owner-late-delivery-and-legacy-qualification-not-complete-G3",
+  "test_source": "296cd55882cb8b250f373868873eb64b5bfeb8c2",
+  "runtime_source": "bfff97d91507cbc7d1ac422facbf93278f760d92",
+  "archive_sha256": "5721a5c1a03ce365ba723f3526ced0551d34402c4a1b461424197923b7671e01",
+  "normal_driver_sha256": "0fead52ab3dbedf2d78ff3b6ebc67a488e242a80b42fd04b81c0a088e6c26874",
+  "native_source": "39c69de21f87ea4ca83a3e7eac1d0b7d42a62fdb",
+  "native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+  "private_evidence_root": "state-client-build/mesh-core-runtime-20261105",
+  "late": {
+    "27": {
+      "result": "PASS_LATE_CLOSED_OWNER_ONLY",
+      "renderer": "GLES: Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti/PCIe/SSE2), OpenGL ES 3.1 (4.5.0 NVIDIA 580.178.04)",
+      "clock_observation": {
+        "host_before": 1793962343.1923935,
+        "host_after": 1793962343.1994941,
+        "guest": 1793962342
+      },
+      "installed_apk_sha256": "364e2e672d34030f3ec4e0384314351d9a36d02f6791ef6c57463774812b15d1",
+      "installed_native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+      "final_native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+      "owned_emulator_stopped": true,
+      "seconds": 319.028,
+      "phases": [
+        "SERVICE_OWNER_CONNECTED",
+        "SERVICE_VERIFIED_HTTPS",
+        "LATE_HTTP_COMPLETED_IMPORT_PENDING",
+        "LATE_OWNER_CLOSED_BEFORE_IMPORT",
+        "LATE_COMPLETION_IGNORED_CLOSED_OWNER",
+        "LATE_NEW_EXPLICIT_CONNECT_NOT_RENEWAL",
+        "SERVICE_OWNER_CLEANED"
+      ],
+      "receipt": "android-late-gpu27-emulators1/api27-receipt.json",
+      "receipt_sha256": "159b07e9c4d7282c2864fe8ad958cb59217f203452960223ac30125566ee76a2",
+      "log": "android-late-gpu27-emulators1/api27-runtime.log",
+      "server": "android-late-gpu27-1/server.json",
+      "tests_sha256": "4a1b7b384c30f95fbd8d205bb62303c01879e6fc6509e2600580d69bdcb2eb49"
+    },
+    "35": {
+      "result": "FAIL",
+      "renderer": "GLES: Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti/PCIe/SSE2), OpenGL ES 3.1 (4.5.0 NVIDIA 580.178.04)",
+      "clock_observation": {
+        "host_before": 1793962864.7202678,
+        "host_after": 1793962864.798693,
+        "guest": 1793962864
+      },
+      "installed_apk_sha256": "dd8f0d069ffa812517b9c637c75342fdb5e72ff055d6c41bbd1aa1da762e3ce8",
+      "installed_native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+      "final_native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+      "owned_emulator_stopped": true,
+      "seconds": 257.498,
+      "phases": [
+        "SERVICE_OWNER_CONNECTED",
+        "SERVICE_VERIFIED_HTTPS",
+        "SERVICE_OWNER_CLEANED"
+      ],
+      "receipt": "android-late-gpu35-emulators1/api35-receipt.json",
+      "receipt_sha256": "c5b7804442e111d99e89488a541caa623f847446a33c9e7e8c97f583a0b8830e",
+      "log": "android-late-gpu35-emulators1/api35-runtime.log",
+      "server": "android-late-gpu35-1/server.json",
+      "tests_sha256": "dae6d63203edeb3c5c2ac0fa0ce51ca4074affc361a6c1f58802b1940db6d0d1",
+      "first_failure": "SocketTimeoutException opening fixtureControl(state) HTTPS over VPN before READINESS_HELD",
+      "destination": "isolated185.251.89.19:8443",
+      "timeout_ms": 10000,
+      "original_leaf_crl_not_expired": true,
+      "classification": "unresolved runtime/control-route failure; no blind retry",
+      "retained_native_counters": {
+        "tcp": 310,
+        "tcp_peak": 2,
+        "limit_denied": 0
+      },
+      "cleanup": "test finally explicit Disconnect; gateway/AVD/supervisor cleanup completed"
+    }
+  },
+  "late_scope": "API27: valid HTTP completion after Disconnect cannot resurrect old native lease; new explicit Connect is separate. API35: failed before late delivery. No certificate-expiry crossing claimed.",
+  "legacy": {
+    "android": "NOT_RUN",
+    "fixture": {
+      "schema": 1,
+      "scope": "legacy-peer-compatibility-fixture-not-online-runtime-acceptance",
+      "source_commit": "bfff97d91507cbc7d1ac422facbf93278f760d92",
+      "source_path": "carrier/roombroker/authorization.go",
+      "original_sha256": "c47455a3e6d95bd7dc9f79e5483f67651205e9bf2ef521f651f1e4d72db0fb90",
+      "overlay_sha256": "e0fb4db90c0ddf64d889c7931424258a9966b583138fd4a11ad3a378dc18ecc8",
+      "driver_sha256": "e641e2cd7625ea7c8b062773464b0d051ec9758be4cc36e5227eab3f999f539f",
+      "normal_driver_sha256": "0fead52ab3dbedf2d78ff3b6ebc67a488e242a80b42fd04b81c0a088e6c26874",
+      "credential_exchange": false,
+      "lease_renewal": true,
+      "change": "omit credential-exchange handler only; shared TLS/broker/lease/profile reader unchanged",
+      "native_inventory_sha256": "8d3c0a9562efa29628403ce607062126efc7eee0b683df25d6f0d176b6cdfdd3"
+    },
+    "preflight": {
+      "result": "PASS_LEGACY_UNCHANGED_BOUND",
+      "tests": 5,
+      "seconds": 89.56,
+      "log": "legacy-preflight3-bfff97d.log",
+      "receipt": "legacy-preflight3-bfff97d/legacy-peer/receipt.json",
+      "per_node": {
+        "NL": {
+          "samples": 61,
+          "offers": 1,
+          "commits": 0,
+          "generation": 0,
+          "security_deadline_unchanged": true
+        },
+        "NL2": {
+          "samples": 61,
+          "offers": 1,
+          "commits": 0,
+          "generation": 0,
+          "security_deadline_unchanged": true
+        }
+      },
+      "fresh_sessions": "TCP/DNS/verified HTTPS; not renewal",
+      "cleanup": "processes-waited"
+    },
+    "not_production": "Explicit synthetic old-feature peer: one handler-registration omission in frozen common runtime, no copied TLS/broker/lease logic. Not the normal driver or G1/G4 acceptance artifact. No release inclusion."
+  },
+  "retained_failed_attempts": [
+    "android-late-gpu27-apk1/build.log",
+    "android-late-gpu27-apk1/build2.log",
+    "android-late-gpu35-emulators1/api35-runtime.log",
+    "legacy-peer-bfff97d-1/manifest.json: NOT_QUALIFIED, symlink-path overlay was not compiled, unchanged digest",
+    "legacy-preflight-bfff97d.log: clients before normal directory publication",
+    "legacy-preflight2-bfff97d.log: GATEWAY_READ_UNAVAILABLE with non-root-owned driver; repaired by copying into owned private test root, not disabling custody"
+  ]
+}

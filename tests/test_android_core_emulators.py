@@ -10,7 +10,7 @@ emulators = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(emulators)
 
 
-@pytest.mark.parametrize('result', ['PASS_POSITIVE_PATH_ONLY', 'PASS_OWNER_RACE_ONLY', 'PASS_PARTIAL_CONNECT_ONLY', 'PASS_LATE_CLOSED_OWNER_ONLY'])
+@pytest.mark.parametrize('result', ['PASS_POSITIVE_PATH_ONLY', 'PASS_OWNER_RACE_ONLY', 'PASS_PARTIAL_CONNECT_ONLY', 'PASS_LATE_CLOSED_OWNER_ONLY', 'PASS_LEGACY_PEER_ONLY'])
 def test_only_explicit_completed_runtime_scopes_are_accepted(result):
     emulators.require_success(dict(result=result))
 

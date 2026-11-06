@@ -11,6 +11,15 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**6 November11:13UTC: G3 late API27 PASS, API35 FAIL; A remains open.** API27 proves
+HTTP/cache completion after owner close cannot resurrect the native lease; explicit
+new Connect succeeds separately. API35 stops before late delivery on a10s HTTPS
+fixture-control connect timeout, with still-valid materials; product/harness cause
+not yet localized. Both GPU AVDs/Android stands are stopped, failure retained.
+Legacy compatibility peer preflight passes on both NL with unchanged old native
+bounds and no commit; actual Android legacy NOT_RUN. [Exact evidence](releases/2026-11-06-mesh-android-remaining-evidence.json).
+G1/G2 scoped PASS; c8eb8b9 G4 still RUNNING on unchanged bfff97d package. No B.
+
 **6 November10:43UTC: corrected G4 RUNNING, not accepted.** Frozen c8eb8b9 uses the
 unchanged bfff97d package/driver; first renewal due13:13:02UTC. Expiry PASS is retained,
 not repeated. Existing Android runner gains a closed-owner late-completion scenario;

@@ -226,6 +226,9 @@ public class OnlineReadinessRuntimeTest {
                 if("late-closed-owner".equals(settings.get("scenario").getAsString())){
                     lateClosedOwner(identity,gateway,lease,serviceOwner,originalExpiry,connect);return;
                 }
+                if("legacy".equals(settings.get("scenario").getAsString())){
+                    legacyPeer(identity,gateway,lease,serviceOwner,originalExpiry,connect);return;
+                }
                 assertEquals("partial",settings.get("scenario").getAsString());
                 partialPublication(identity,gateway,lease,serviceOwner,originalExpiry,originalCrl);
             }
@@ -304,6 +307,56 @@ public class OnlineReadinessRuntimeTest {
             finally{NativeRestricted.chatRelease(next);}
             assertTrue(NativeRestricted.chatState(lease)!=2);
             status("LATE_NEW_EXPLICIT_CONNECT_NOT_RENEWAL",gateway,null);
+        }finally{Arrays.fill(successor,(byte)0);}
+    }
+    private void legacyPeer(ControlIdentity identity,String gateway,long lease,long serviceOwner,long originalExpiry,Intent connect)throws Exception{
+        fixtureControl("connected"+Build.VERSION.SDK_INT);
+        long deadline=SystemClock.elapsedRealtime()+600000;
+        byte[] successor=null;
+        while(SystemClock.elapsedRealtime()<deadline){
+            assertEquals(serviceOwner,ConnectionService.sessionId);assertEquals("on",ConnectionService.status);echo(lease);
+            byte[] candidate=cached(identity,gateway);
+            if(candidate!=null){
+                JsonObject response=JsonParser.parseString(new String(candidate,StandardCharsets.UTF_8)).getAsJsonObject();
+                if(response.get("expires_at").getAsLong()>originalExpiry){successor=candidate;break;}
+                Arrays.fill(candidate,(byte)0);
+            }
+            Thread.sleep(500);
+        }
+        assertNotNull("Real HTTP validated and cached successor",successor);
+        try{
+            assertTrue(NativeRestricted.validateDelivery(successor,identity.publicIdentity(),ControlTrust.anchor(context)));
+            status("LEGACY_HTTP_SUCCESSOR_CACHED",gateway,null);
+            for(int attempt=0;attempt<10;attempt++){
+                Thread.sleep(5000);
+                assertEquals(serviceOwner,ConnectionService.sessionId);assertEquals("on",ConnectionService.status);
+                assertFalse(ConnectionService.failed);assertEquals(2,NativeRestricted.chatState(lease));echo(lease);
+                long changed=borrow(successor,identity,new AutomaticVpnOwner(context));
+                try{assertEquals("Legacy peer cannot commit the successor fingerprint",0,changed);}
+                finally{if(changed>0)NativeRestricted.chatRelease(changed);}
+            }
+            byte[] repeated=FriendsRestricted.renewal(context,gateway).get(15,TimeUnit.SECONDS);
+            if(repeated!=null)Arrays.fill(repeated,(byte)0);
+            assertEquals(serviceOwner,ConnectionService.sessionId);echo(lease);
+            status("LEGACY_NO_UNAUTHENTICATED_PROFILE_COMMIT",gateway,null);
+            NativeRestricted.chatRelease(lease);
+            context.startService(new Intent(context,ConnectionService.class).setAction("disconnect"));
+            deadline=SystemClock.elapsedRealtime()+30000;
+            while(!"off".equals(ConnectionService.status)&&SystemClock.elapsedRealtime()<deadline)Thread.sleep(50);
+            assertEquals("off",ConnectionService.status);long closedOwner=ConnectionService.sessionId;
+            Thread.sleep(6000);
+            assertEquals(closedOwner,ConnectionService.sessionId);assertEquals("off",ConnectionService.status);
+            assertTrue(NativeRestricted.chatState(lease)!=2);assertTrue(NativeRestricted.chatOpen(lease,1000)<0);
+            status("LEGACY_CLOSED_OWNER_STAYS_CLOSED",gateway,null);
+            context.startForegroundService(connect);deadline=SystemClock.elapsedRealtime()+180000;
+            while(!"on".equals(ConnectionService.status)){
+                assertFalse(ConnectionService.failed);assertTrue(SystemClock.elapsedRealtime()<deadline);Thread.sleep(100);
+            }
+            assertNotEquals(serviceOwner,ConnectionService.sessionId);assertNotEquals(closedOwner,ConnectionService.sessionId);
+            long next=borrow(successor,identity,new AutomaticVpnOwner(context));assertTrue(next>0);
+            try{assertEquals(2,NativeRestricted.chatState(next));echo(next);}
+            finally{NativeRestricted.chatRelease(next);}
+            status("LEGACY_NEW_CONNECT_NOT_RENEWAL",gateway,null);
         }finally{Arrays.fill(successor,(byte)0);}
     }
     @Test public void verifiedHttpCacheAndExistingOwnerReceiveSuccessor()throws Exception{

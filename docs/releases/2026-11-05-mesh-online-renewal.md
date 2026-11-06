@@ -1,5 +1,49 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Remaining Android cases:6 November11:13UTC checkpoint
+
+[Exact APK/native/server identities and receipts](2026-11-06-mesh-android-remaining-evidence.json).
+API27 late-closed-owner **PASS**,319.028s: actual HTTP completion reaches the locked
+cache import, normal Disconnect closes the owner, then validated encrypted-cache
+completion leaves the old native lease closed. A later explicit Connect works; it
+is not renewal or resurrection. This is the requested closed-owner alternative,
+not a claimed wall-clock certificate-expiry crossing.
+
+API35 same scenario **FAIL**,257.498s, before READINESS_HELD: a new HTTPS TCP to the
+isolated fixture-control endpoint times out after10s while polling state. The earlier
+Family service/HTTPS and echoes succeeded; host/AVD initial clocks passed, leaf/CRL
+were still valid,310 native TCP flows, peak2, limit_denied0. The test finally requests
+Disconnect; later gateway close is cleanup, not proof that it died first. Cause
+inside the VPN/control route is **not localized sufficiently to label product versus
+harness**. No retry or relaxed timeout, trust, clock or expectation. Its failed log,
+diagnostics, gateway trace and route receipts are retained. Both NVIDIA/KVM AVDs and
+their own Android supervisors/routes are stopped; G4's independent run is untouched.
+
+Legacy peer preparation is separate and **not Android PASS**. A compiler overlay on
+frozen bfff97d omits only registration of the optional credential-exchange handler;
+the actual TLS, broker, lease, reader and all validation remain the shared code.
+This synthetic old-feature peer is **not** the production gateway, normal isolated
+driver, or a G1/G4 online-runtime acceptance artifact. Its explicit delta manifest
+records base inventory, original/overlay hashes and distinct binarye641e2cd. The
+normal bfff97d archive and driver remain byte-identical. No test feature enters a
+release. This is a negative compatibility fixture, not another authorization writer.
+
+`legacy-preflight3-bfff97d.log`:5 PASS,89.56s (four fixture guards and real two-NL
+preflight). Each original native session offers the valid delivered successor once,
+does not commit it, retains generation0 and exactly the original security deadline
+through61 checked TCP/DNS/verified HTTPS samples; separate fresh sessions succeed.
+No security-clock substitution. This does not replace either Android HTTP/cache case.
+The first overlay used a symlink path and produced the normal digest: NOT_QUALIFIED;
+a new unchanged-binary guard rejects that. Two initial preflight FAILs are retained:
+missing normal seed-directory publication, then non-root-owned driver custody. The
+accepted fixture uses the existing publisher and root-owned copied executable, not
+manual profile writes or disabled reader checks. API27/API35 legacy are still NOT_RUN.
+
+**A not accepted; B not started.** G1/G2 scoped PASS retained; G3 is incomplete with
+a real API35 FAIL; corrected G4 c8eb8b9 is RUNNING, not PASS. One next is remaining A:
+localize that control-route failure, run the legacy Android cases, then reconcile the
+already-running G4 result. No unrelated suites, release/production/phone/paid changes.
+
 ## Finished frozen runs read back6 November
 
 **10:43UTC continuation:** corrected full harness c8eb8b9 is running on the identical

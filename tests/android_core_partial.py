@@ -32,7 +32,8 @@ def main():
     parser.add_argument('--evidence', type=Path, required=True)
     parser.add_argument('--snapshot', type=Path, required=True)
     parser.add_argument('--api', type=int, choices=(27, 35), required=True)
-    parser.add_argument('--scenario', choices=('partial', 'owner-race', 'partial-connect', 'late-closed-owner'), default='partial')
+    parser.add_argument('--scenario', choices=('partial', 'owner-race', 'partial-connect', 'late-closed-owner', 'legacy'), default='partial')
+    parser.add_argument('--legacy-manifest', type=Path)
     args = parser.parse_args()
     os.umask(0o077)
     args.root.mkdir(mode=0o700)
@@ -52,6 +53,19 @@ def main():
     receipt = dict(scope='actual-Android-'+args.scenario+'-not-full-G3', source=stand.manifest['source_commit'],
                    archive_sha256=package.digest(args.archive.read_bytes()), driver_sha256=package.digest(driver.read_bytes()),
                    state='STARTING', requests=[], connected=[], released=[])
+    if args.scenario == 'legacy':
+        assert args.legacy_manifest is not None
+        legacy = json.loads(args.legacy_manifest.read_bytes())
+        assert legacy['scope'] == 'legacy-peer-compatibility-fixture-not-online-runtime-acceptance'
+        assert legacy['source_commit'] == stand.manifest['source_commit']
+        assert legacy['source_path'] == 'carrier/roombroker/authorization.go'
+        assert legacy['original_sha256'] == stand.manifest['native_sources'][legacy['source_path']]
+        assert legacy['driver_sha256'] == receipt['driver_sha256']
+        assert legacy['driver_sha256'] != legacy['normal_driver_sha256']
+        assert legacy['credential_exchange'] is False and legacy['lease_renewal'] is True
+        receipt['legacy_peer'] = legacy
+    else:
+        assert args.legacy_manifest is None
 
     def save():
         with lock:
@@ -113,13 +127,13 @@ def main():
                 begin = receipt['state'] == 'HTTP_READY' and connected == {str(args.api)}
                 resume = receipt['state'] == 'PARTIAL' and released == {str(args.api)}
             if begin:
-                if args.scenario not in ('owner-race', 'late-closed-owner'):
+                if args.scenario in ('partial', 'partial-connect'):
                     stand.rpc_fault('NL2', 'publish', 'drop-before')
                 code, result = stand.run('online')
                 journal = json.loads((args.root/'coordinator/transaction.json').read_bytes())
                 assert journal['decision'] == 'COMMIT', result
                 with lock:
-                    if args.scenario not in ('owner-race', 'late-closed-owner'):
+                    if args.scenario in ('partial', 'partial-connect'):
                         assert code != 0 and not journal['published'], result
                         receipt.update(state='PARTIAL', partial_at=time.time(), blocked=result,
                                        plan_sha256=journal['plan_sha256'], published=journal['published'])

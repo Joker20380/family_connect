@@ -16,6 +16,11 @@
 переход реализован и проходит адресные Python-проверки, но G1–G4 целиком ещё не приняты.
 G2 — независимые процессы/отказы; G3 — фактическая Android HTTP/cache доставка;
 G4 — квалифицированный online runtime/API пакет. [Точные gates/evidence](releases/2026-11-05-mesh-online-renewal.md).
+Дельта6 ноября11:13UTC: late-owner API27 PASS; API35 FAIL до доставки — timeout
+контрольного HTTPS через VPN, причина ещё локализуется. Оба GPU AVD остановлены.
+Legacy peer native preflight PASS не заменяет оставшиеся Android-кейсы. Исправленный
+G4(c8eb8b9) работает на прежнем bfff97d пакете; G1/G2 scoped PASS сохранены.
+Один следующий шаг — недостающая приёмка А; Б/поставка не начаты.
 Актуальная дельта6 ноября: expiry52c91f5 PASS (два реальных resume после срока,
 точный stable-block); full37ffc2c FAIL после двух renewal и пересечения crypto/lease
 на прежних соединениях. Причина — чтение тестом старого fixture вместо canonical

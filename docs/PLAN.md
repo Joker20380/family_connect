@@ -12,6 +12,12 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**One active next11:13UTC: finish remaining A, not B.** Retain API27 late-owner PASS
+and API35's real control-route timeout FAIL; localize the latter without changing
+expectations. The explicit legacy fixture now passes native preflight, but paired
+Android HTTP/cache/owner cases remain NOT_RUN. Reconcile c8eb8b9 G4 when it finishes;
+do not duplicate or touch its running resources. All earlier NEXTs below are history.
+
 **Current execution:** c8eb8b9 G4 runs independently on immutable bfff97d artifacts.
 While it waits, run the existing Android late-closed-owner scenario on API27/API35
 sequentially with NVIDIA/KVM; legacy remains missing. No B before accepted A.
