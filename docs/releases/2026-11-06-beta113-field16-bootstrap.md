@@ -1197,3 +1197,76 @@ Resume only when a safe thermal/resource window is available, through provider-f
 Android JNI first, then fresh cold materials and the one authorized Connect.
 
 [Sanitized checksums, preserved FAILs and all preflight outcomes](2026-11-06-cold-native-diagnostic.json).
+
+#### Actual Android JNI PASS; live preflight stopped
+
+6 November21:12UTC, continuation from
+`6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7`, with no subsequent product-source delta.
+The previously built070b808/af52aeb8 artifact is not reused. Latest source, including
+underlay cause preservation and post-TLS cancellation classification, is rebuilt with
+Go1.26/NDK28.2 for x86_64/API27, real Telemost, no transport-substitution tags.
+ELF Android identification is27; seven JNI/Go provisioning exports are defined/global,
+not undefined references. Both APK generations contain byte-identical current JNI and
+the matching restricted-build manifest. Heavy builds finish before emulation begins.
+Existing host-JNI,100 JVM and targeted race evidence is retained rather than rerun.
+
+| Artifact | SHA256 |
+| --- | --- |
+| Latest JNI, source6eb61a9 | `17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59` |
+| Provider-free APK, installed on own API27 | `405f739958676a887bd2e74d4af522cab2fa9de14188bed731c1b0db0b310cbb` |
+| Provider-free instrumentation APK | `3f4965c8195bc23b7a7795992e4f775f706307e61c455fd6934b0cb387f0eed5` |
+| Final real-input cold APK, built but NOT installed | `79c4ea7bda4e8c7dbcab6abe13dc076fce5be4623910e1bc55606d99242cbbfc` |
+| Final real-input instrumentation APK, NOT run | `bd230fc53ed70ce84e2dd353cb511b930af22811c1a0cd0594cad3ec5a0b4257` |
+
+**Actual Android JNI: PASS.** Initial preflight samples CPU70/58/57°C and GPU53°C;
+available memory16363692KiB and AVD data-filesystem space22907133952bytes. Shared lock
+is held and no other emulator exists. Reuse only the task's provider-free userdata on
+the corrected data filesystem, not the space-constrained worktree filesystem.
+Actual API27/x86_64 GLES reports NVIDIA GTX1650Ti; host rendering/KVM, two guest cores,
+own CPUQuota100%, existing CPU85°C/GPU80°C/180s guards remain. Observed peak83°C/59°C;
+no guard abort. `ProvisioningDiagnosticRuntimeTest` completes one test successfully
+(JUnit0.015s; instrumentation wall0.467s). It asserts JNI_ARGUMENTS with Go not entered,
+Go-entered LOCATOR security rejection, CLOSED for handle−1, idempotent Close and the
+saved diagnostic remaining unchanged after Close. This directly exercises Android/JNI,
+not the host invocation shim. It does not open a provider socket, establish a carrier,
+test a live asynchronous lease race, or imply TLS/readiness. The earlier host matrix
+remains the evidence for those injected failures and concurrent lifecycle cases.
+
+Only after that PASS, the existing protected local password dialog reads the same
+authorized OAuth entry and pipes its value through process memory; no secret is written
+to files/APKs/logs. A new test authority registers a synthetic identity and creates two
+provider rooms. Native build has already finished. A new signed locator is verified by
+the production `coldprovision.Verify` implementation, with400s remaining at initial
+verification and316s before the runtime preflight. Final APK assets match the new
+anchor/locator and synthetic identity exactly. No prior readiness or issuance material
+is imported. The separate host verified-HTTPS egress expectation is a digest only;
+it is NOT an Android/VPN HTTPS or egress result.
+
+**Single cold Connect: NOT_RUN, authorization remains unused.** Before launching the
+fresh runtime AVD, CPU samples68/80/86°C violate the unchanged85°C threshold. GPU is
+56/56/57°C; available memory15740940KiB and data space22189363200bytes pass. The runner
+records `FAIL_PREFLIGHT / THERMAL_PREFLIGHT`, does not start this emulator or install
+the final APK, and stops its authority/workers. There is no retry/restart cycle.
+The proven blocker is host CPU temperature at this preflight; it is not a diagnosis
+of the original provisioning failure or proof of a Network race. The source setup
+would reject only guest TCP185.251.89.19:8443 and186.246.45.246:4242, leaving other
+carrier/control destinations intact; these new rules are NOT applied because the
+guest never starts. AutomaticConnection200000ms candidate and separate30000ms readiness
+remain unchanged. No new client provisioning Network/bind snapshot, carrier exchange,
+TLS handshake, challenge transmission, bundle/READY, DNS, verified HTTPS or egress
+exists. No runtime-negative tests are started. Authority counters remain0 challenges
+and0 certificates. Provider API room creation is not client cold-path traffic evidence.
+
+**Cleanup and retained evidence.** First own AVD is stopped; no emulator or own stand
+process remains, the exact own authority container is absent, workers join, protected
+input/supervisor exits0, shared lock is reacquired/released. The two new provider room
+objects are retained privately; deletion is NOT_VERIFIED. The unbooted new AVD directory
+and both APK generations remain local evidence. Both old FAIL_RUNTIME receipts and all
+19 original artifacts are rehashed unchanged. No foreign processes, production/G4,
+host network/cooling/power settings, public artifacts, subscriptions or admission are
+changed. Both APK generations are disposable118, not a release/version rollout; no
+production rollback is needed. No additional source fix is inferred from this blocked
+runtime. Future execution needs a stable thermal window with the stand active and
+new finite locator/assets, not a blind reuse of this locator or another restart now.
+
+[Sanitized Android PASS, current artifact identities and stopped-live preflight](2026-11-06-cold-native-android-check.json).

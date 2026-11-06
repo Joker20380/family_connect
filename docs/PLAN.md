@@ -2,24 +2,25 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Selected owner continuation6 November: native diagnostic gate, then ONE new runtime.**
-Source distinguishability passes real host JNI and targeted race tests; cancellation
-no longer masks the completed Open cause. Preserve both earlier FAIL_RUNTIME results.
-Fresh070b808 x86_64 JNI/APK prebuild and digest/exports are verified, but Android
-instrumentation is NOT_RUN: disk preflight fails, then NVIDIA/KVM AVDs hit the85°C CPU
-guard (observed85/88°C; both stopped). No OAuth/provider/new Connect. Do not keep
-restarting AVDs under this thermal condition or touch other processes to free resources.
-Final source review also retains typed underlay route/DNS causes without changing the
-legacy ErrDenied policy and labels cancellation after successful TLS at request validation.
-Next, only after a safe resource window: rebuild the latest source, finish short
-provider-free API27 JNI; then fresh authority/identity/locator/runtime APK and one Connect.
-Keep production candidate deadline/readiness budget, trust/admission and guest-only
-direct-path blocks unchanged. On failure retain the actual native reason; no unchanged
-retry. On READY check DNS/verified HTTPS/egress before any runtime negatives. No adjacent
-queue, G4, production, rollout, locator import or discovery work is authorized.
-The consumed-retry entry below describes the preceding request, not this authorization.
+**Selected continuation6 November21:12UTC: Android JNI PASS; ONE Connect still unused.**
+Exact6eb61a9 is rebuilt for actual x86_64/API27, including final underlay/cancellation
+changes; JNI17119f00…60c59, exports and packaged manifest/bytes pass verification.
+One short real Android/NVIDIA/KVM provider-free test passes. Prior host-JNI/race/JVM
+results remain valid source evidence and are not repeated. Both old FAIL_RUNTIMEs and
+19 exact artifacts remain unchanged. Fresh registered synthetic identity, authority,
+two rooms, verified signed locator and real-input APK are prepared after native build.
+The fresh runtime preflight then observes CPU86°C against the existing85°C limit,
+before starting its AVD or invoking Connect. Stop here: no restart cycle, threshold
+change or foreign-resource cleanup. Own resources are stopped; room deletion unverified.
+Next only in a stable resource window with the stand active: regenerate/verify fresh
+locator and APK assets, then the one authorized AutomaticConnection. Keep candidate
+200000ms and separate readiness30000ms, trust/admission, no readiness cache/VPN, and
+guest-only rejection of the two direct destinations without blocking carrier traffic.
+On failure retain native reason and actual selected Network/bind; on READY check
+DNS/verified HTTPS/egress before any runtime negatives. No adjacent queue, G4, production,
+rollout, locator import or discovery work. This turn does not establish the live cause.
 
-**Active same-incident gate: the one authorized diagnostic retry is consumed.**
+**Prior request outcome, superseded by the current authorization: retry consumed.**
 Original harness incorrectly gave the whole engine30s; corrected AutomaticConnection
 receives the production200000ms candidate deadline. The new API27/Telemost run fails
 BOOTSTRAP_UNAVAILABLE after1.792s, before challenge response, with198230ms remaining;

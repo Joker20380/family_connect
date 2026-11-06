@@ -1,29 +1,29 @@
 # Текущее состояние / Current state
 
-**6 November — native diagnostic source gate PASS; Android gate BLOCKED_RESOURCE.**
-The owner explicitly authorizes this bounded continuation from9765c5c, with one new
-informative AutomaticConnection run only after error distinguishability. Native results
-now travel separately from trusted replies, bound to the current call/lease; original
-Open failure precedes ready publication/cancel and survives concurrent Close. Real host
-JVM→JNI→Go tests distinguish pre-Go arguments, Go locator rejection, protect denial,
-missing/throwing JNI callback, carrier EOF, TLS trust, response EOF and Open/Close race.
-Affected Go race tests (3 repeats),100 JVM tests and source-pipeline compilation pass.
-Source070b808 is pushed/remote-verified. New Telemost x86_64 JNI af52aeb8…d1e04 is
-built and byte-verified inside disposable118 prebuild APK19a9b85f…bc7a7, with exports.
-Final source-only review also retains underlay RouteIPv4/DNS causes and distinguishes
-post-TLS cancellation; this is not inside that intermediate binary. Latest source must
-be rebuilt before runtime, rather than reusing the070b808 APK.
-The short real Android JNI test does NOT execute: three own AVD disk preflights fail,
-then two NVIDIA/KVM boots are stopped by the CPU thermal guard at85°C/88°C before
-instrumentation (second with own CPUQuota100%). All failures are retained; no further
-AVD is started. Own AVDs are stopped and the shared lock is free. No OAuth read, new
-room/authority/carrier worker or new Connect; the one authorized runtime remains unused.
-Transport root cause and bundle/READY/DNS/HTTPS/egress remain unproved. Need a safe
-thermal/resource window to finish provider-free Android JNI, then fresh authority/
-identity/locator/runtime APK and exactly one Connect. Prebuild has placeholders, not
-previous readiness. No timeout/retry/admission, user APK, production/G4/catalog/version
-change. Both original FAIL receipts and19 exact artifacts are reverified unchanged.
-[Current diagnostic gate](releases/2026-11-06-beta113-field16-bootstrap.md#native-diagnostic-continuation-6-november).
+**6 November21:12UTC — actual Android JNI PASS; single Connect NOT_RUN, thermal preflight.**
+Continuation from6eb61a9 has no product-source delta. That exact source, including the
+final underlay/cancellation fixes, is rebuilt as real Telemost x86_64/API27 JNI
+17119f00…60c59; seven defined exports, manifest and packaged bytes are verified.
+The short provider-free test passes on actual API27/NVIDIA/KVM: pre-Go arguments,
+Go locator rejection/security and closed-handle diagnostic retained across Close.
+This is Android JNI evidence, not carrier/TLS/provisioning readiness. Existing host-JNI,
+100 JVM and targeted race results are retained, not rerun without a source change.
+After that PASS, protected local input accesses the same authorized OAuth entry; a new
+synthetic identity/authority and two test rooms produce a freshly verified signed
+locator. Final disposable118 APK79c4ea7b…2cbbfc contains real inputs and the latest JNI,
+not placeholders or previous readiness. Native/APK builds and emulation are sequential.
+Before the fresh cold AVD starts, CPU samples68/80/86°C fail the unchanged85°C guard;
+GPU56/56/57°C, memory and data-filesystem space pass. No second guest boot, Connect,
+client provisioning Network/bind, TLS or challenge occurs. No restart is attempted.
+Own first AVD, authority, workers and secret-input processes are stopped; lock is free.
+Authority challenge/certificate counts are0/0. Two provider room objects were created;
+their deletion is NOT_VERIFIED. Both previous FAIL_RUNTIME receipts and19 artifacts
+remain hash-identical. The single authorized Connect remains unused; the live root
+cause and bundle/READY/DNS/verified HTTPS/egress remain unknown. A future continuation
+needs a stable resource window with the stand running and a new verified locator/APK;
+do not reuse this expiring locator or infer live success from the offline PASS.
+No product timeout/retry/admission, production/G4, public APK/catalog/version change.
+[Current evidence](releases/2026-11-06-beta113-field16-bootstrap.md#actual-android-jni-pass-live-preflight-stopped).
 
 **6 November19:40UTC — single corrected diagnostic attempt FAIL_RUNTIME; no more retries.**
 The actual AutomaticConnection MESH candidate receives absolute guest deadline339645ms
