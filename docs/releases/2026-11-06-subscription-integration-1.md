@@ -505,6 +505,15 @@ timeout are unchanged. No local/system/shared-runner network setting changes.
 The next head still requires its own applicable CI results, not inherited green
 statuses. Those receipts and normal merge will be kept in PR1.
 
+On663377e voice passes with the official HTTPS archive, as do full phase0 and all
+Client builds (including both existing hosted Android runtime versions and final
+release-payload verification). Linux control42299499555 instead remains in its APT
+setup before any test for roughly30 minutes. Apply the identical exact mirror URI
+change to this disposable job only; retain its60-minute timeout, full dependency
+list and every remaining gate. The in-progress old job is not an assertion failure
+and its eventual cancellation/result is recorded separately in PR1. No new product
+inputs or qualification phase accompany this infrastructure fix.
+
 Additional fixture preparation correction: b4ea004's hosted control/phase0 tests stop
 in the new strict3.14 preparation probe before the suite. The exact official setup-python
 3.14.10 Linux24.04 distribution was inspected independently: its ELF RUNPATH names the

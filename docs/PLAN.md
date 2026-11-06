@@ -3,6 +3,9 @@
 ## Current engineering priority / Текущий critical path
 
 **Owner-selected SUBSCRIPTION-INTEGRATION-1 — integration gate OPEN.**
+663377e passes all client/runtime gates and phase0; control stalls in dependency
+setup, not tests. Apply the already verified voice mirror repair to that job, then
+finish its real check and the complete final-head CI. No additional qualification.
 Full-suite/context and Linux candidate gates passed on360cc26. Repair only the
 repeated voice-runner APT mirror timeout, then require actual final-head checks;
 do not restart closed source investigations or relabel infrastructure cancellation

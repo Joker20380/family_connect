@@ -1,6 +1,10 @@
 # Текущее состояние / Current state
 
 **6 November — PR1 full-suite fixtures PASS; voice runner mirror repair.**
+On663377e all client builds/runtime gates, phase0, voice, native candidate, messenger,
+readiness and Windows control pass. Linux control remains in APT preparation before
+tests after roughly30 minutes; apply the same official HTTPS mirror only to that
+disposable job. This is not an assertion failure or permission to waive the gate.
 Head360cc26 completes phase0 (including Docker failover/auth/offline/revocation),
 Linux control and full Linux candidate. Both hosted pytest receipts audit all5804
 collected cases across unprivileged3.13, declared UID0 and protected3.14 contexts:

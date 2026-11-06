@@ -31,7 +31,10 @@ jobs:
         with:
           python-version: '3.13'
       - name: Local HTTP contract proxy
-        run: sudo apt-get update && sudo apt-get install -y nginx iproute2 keepassxc gcc pkg-config libcairo2-dev libgirepository1.0-dev gir1.2-gtk-4.0 gir1.2-adw-1 zstd default-jdk-headless
+        run: |
+          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list.d/ubuntu.sources
+          sudo apt-get update
+          sudo apt-get install -y nginx iproute2 keepassxc gcc pkg-config libcairo2-dev libgirepository1.0-dev gir1.2-gtk-4.0 gir1.2-adw-1 zstd default-jdk-headless
       - name: Prepare Python 3.13 and verify real full-suite imports
         run: |
           bash scripts/ci_python313_env.sh "$RUNNER_TEMP/fc-python313-env"
