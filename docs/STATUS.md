@@ -1,13 +1,16 @@
 # Текущее состояние / Current state
 
-**6 November — SUBSCRIPTION-ANDROID-2 natural delivery PASS; ARM119 build pending.**
+**6 November — SUBSCRIPTION-ANDROID-2 natural delivery PASS; signed ARM119 candidate built.**
 Isolated feature branch: actual UI Refresh/Home produces a canonical-event notification,
 real tap opens the right identity's subscription, repeat refresh does not repost.
 Fixed hidden-dialog read acknowledgement and connected durable save/resume to a bounded
 drain on existing WORKER; no background subscription fetch or new scheduler. Actual UI
 recovery starts the ordinary delivery service. Six Python guards +13 JVM checks PASS.
-Source candidate beta119/119, ordinary Friends ARM64; public113/catalog7 and field118
-unchanged. ARM source-bound native/build/signature gates pending at this checkpoint.
+Source `b2a37fe98929` pushed/remote-verified; ordinary Friends ARM64 beta119/119 built,
+26 scoped Gradle tests/lint/native provenance/signature PASS. Signed APK SHA256
+`52a9847b74181c48808c86a0c5bf5925b53ef498eec628aef2d78d26f1c92d2d`.
+No ARM install/publication/production ingress claim; public113/catalog7 and field118
+unchanged. Own AVD/backend stopped; prior limitations retained, no G4/main changes.
 [Scope, behavior and preserved limits](releases/2026-11-06-subscription-android-2.md).
 
 **6 November — SUBSCRIPTION-ANDROID-1: bounded API35 runtime PASS, not production acceptance.**

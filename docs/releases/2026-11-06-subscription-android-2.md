@@ -115,9 +115,9 @@ the exact current commit manifest and ordinary `telemost` provider, no diagnosti
 All native/Chaquopy contents, package, version, TLS configuration and signer pin must
 be checked before naming the artifact a signed candidate.
 
-At this source checkpoint ARM assembly/signing is **PENDING**, not release acceptance.
-The artifact/source SHA, hashes, signature and exact build outcomes follow in the closing
-receipt. Standard existing signer pin:
+At the implementation checkpoint ARM assembly/signing was pending. The completed
+build/signature results are recorded below; this is still not rollout acceptance.
+Standard existing signer pin:
 `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
 No replacement key, update catalog signing, upload, public URL or phone installation.
 
@@ -133,3 +133,75 @@ It is not permission to install on the owner's phone or change production/G4.
 All private DB/identity/key material, raw local evidence, generated/native inputs and
 APKs remain outside Git. Only safe source/tests/docs and sanitized receipts are pushed
 with `[skip ci]`. No full CI/110-test rerun. Own test services are stopped at completion.
+
+## Completed artifact and closing evidence
+
+**Source `b2a37fe989294018ab08060bdebfa46d741d11d5`**, pushed non-force with `[skip ci]`,
+verified by `git ls-remote` before building. Closing documentation changes do not change
+that source or APK. The natural test APK SHA256 is
+`7116072c53f89dcb1cd7b57c3bfa79d824b10546e05c491d94018fdf9e5d35f7`;
+that is the disposable x86_64 artifact, **not** the following normal ARM64 package.
+
+| ARM candidate property/check | Actual result |
+| --- | --- |
+| Local artifact | `state-client-build/subscription-android-2/release/FamilyConnect-Test-0.1.18-beta119.apk` in this worktree |
+| Persistent local copy | `/mnt/data/fc-subscription-android-2-build/release/FamilyConnect-Test-0.1.18-beta119.apk`, same verified SHA256; not a published URL |
+| Variant/package | `friends` release-derived, `com.familyconnect.app.friends`, debuggable=false |
+| Version/ABI/SDK | `0.1.18-beta119`,119, exactly `arm64-v8a`, min27/target35 |
+| Signed APK bytes | 50,351,520 |
+| Signed APK SHA256 | `52a9847b74181c48808c86a0c5bf5925b53ef498eec628aef2d78d26f1c92d2d` |
+| Unsigned payload SHA256 | `480fcc5279c7377611a51269c3e7f6bab31d07b28a4c11a1b3083e2836e0b994` |
+| Existing signer | PASS, exactly one certificate matching pin above; APK v2/v3 verification PASS, no rotation/replacement key |
+| Native source binding | PASS, ordinary producer built current restricted ARM64: SHA256 `dbd033704d7132690e8f19da4b404d9df272ffa5c1b224029a1d44342cfca82c`, source/tree checks, Telemost, no diagnostic tags |
+| Required native payload | PASS, AWG, restricted, Codec2, exit audio, Chaquopy and Python3.10 ARM64 libraries present; accepted unchanged AWG/audio provenance checked |
+| Python subscription integration | PASS, actual Chaquopy `app.imy` contains `messenger/subscription_view.pyc` and encrypted-store wrapper |
+| Ordinary endpoint/TLS | PASS, original HTTPS origin in DEX, no test origin/package/CA/security-config, cleartext=false, original platform trust |
+| Alignment/payload integrity | PASS, unsigned and signed zipalign `-c -P 16 -v 4`; signing preserves every non-META-INF ZIP entry byte-for-byte |
+| Local build/lint | PASS, standard `assembleFriends`, `lintFriends`, source-bound `verifyFriendsRestrictedInputs`;52s Gradle run |
+| Scoped Friends JVM | PASS,26 Subscription* tests through actual Gradle Friends test classpath |
+| Native producer gate | PASS, existing packet tests `go test -race -count=3` run by the ordinary native builder |
+| ARM installation/runtime | NOT_RUN; APK is only built/signed/inspected, no physical ARM device/owner installation |
+| Publication/production ingress | NOT_RUN; no upload, release tag, download/catalog update, production deployment or request |
+
+Current user-facing Friends releases support ARM64/Android8.1+, as documented for118;
+the legacy generic four-ABI debug target is not an ARMv7 user release claim.
+Signing reused the existing local beta-v1 key through `scripts/sign_android_vault.sign`
+and memfd inputs, after validating its known certificate pin. No key/password export,
+new production key or debug signer was used. Local qualification/signing is explicitly
+not a claim of a new full platform-CI release gate or installed-device acceptance.
+
+Reproduction uses the unchanged standard producer/build commands on that clean source:
+
+```sh
+# Existing pinned tools; all writable cache/temp/output paths belong to this task.
+GOMAXPROCS=2 GOCACHE="$OWN_CACHE/go-cache" GOMODCACHE="$OWN_CACHE/go-mod" \
+  GOPATH="$OWN_CACHE/gopath" TMPDIR="$OWN_CACHE/tmp" \
+  python pilot/android-restricted/build.py --xray "$PINNED_XRAY" \
+  --go "$TOOLS/go/bin/go" --ndk "$TOOLS/android/ndk/28.2.13676358" \
+  --out "$PWD/clients/android/restricted-generated"
+"$TOOLS/gradle-8.11.1/bin/gradle" -p clients/android --no-daemon --offline --max-workers=1 \
+  -Dorg.gradle.jvmargs=-Xmx2048m -PfcFriendsCi=false -PfcTargetAbi=arm64-v8a \
+  -PfcBuildPython="$BUILD_PYTHON_310" :app:assembleFriends \
+  :app:testFriendsUnitTest --tests 'com.familyconnect.app.Subscription*' :app:lintFriends
+python pilot/android-restricted/package_ci.py --source-commit "$SOURCE_SHA" \
+  --out "$OWN_OUTPUT" --apksigner "$TOOLS/android/build-tools/35.0.0/apksigner" --android-only
+```
+
+Tools: Java17.0.20.1, Gradle8.11.1, AGP8.9.2, SDK35/NDK28.2.13676358, Go1.26.1,
+Chaquopy16.1.0/build Python3.10.15. No test init script or endpoint override in this ARM
+command. The earlier task's private Gradle cache was reused; new Go cache/temp live in
+`/mnt/data/fc-subscription-android-2-build`, not shared dependencies or G4 directories.
+Only unchanged AWG/audio binaries are reused; restricted native and all Java/Python
+were built from the stated final source, not a relabelled old APK.
+
+[Sanitized receipt](2026-11-06-subscription-android-2-receipt.json) binds artifacts and
+local evidence hashes. Natural notification enqueue/post counters stayed2/3 before and
+after repeat refresh, with no active subscription notification after viewing it. The
+final read-only instrumented assertion binds the saved device to the actual vault.
+Actual HTTP evidence has routes/status/time only, no proofs or raw personal responses.
+
+Own synthetic backend PID2036194 stopped with SIGTERM; reused AVD PID2036658 stopped
+through its task marker, launcher exit0 and shared lock released. All previous/private
+evidence retained. G4, main checkout, host routing, production, paid baseline/limits,
+updater113 and field118 bytes remain untouched. **Narrow task complete; candidate ready
+for the separate authorized ARM/ingress check, not a fully accepted installed update.**

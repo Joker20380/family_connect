@@ -11,8 +11,9 @@ No manual service setup is needed. Affected Windows10 device acceptance is pendi
 Android8.1+, ARM64; access is invitation-only. Installing the APK does not grant access.
 The invitation page and in-app updater both provide beta113. Updating does not enable restricted FIELD access.
 
-Beta119 is a separate unpublished subscription-status candidate, not a new public
-update. [Build status and qualification boundaries](releases/2026-11-06-subscription-android-2.md).
+Beta119 is a built and signed, unpublished ARM64 subscription-status candidate, not a
+new public update. Physical ARM qualification has not run.
+[Local artifact, SHA256 and qualification boundaries](releases/2026-11-06-subscription-android-2.md#completed-artifact-and-closing-evidence).
 
 Beta113 includes MESH and quiet ongoing VPN-notification updates. Android8.1/API27 is the minimum; Android8.0 and older are unsupported.
 Exact Android CI41833086774 attempt2, existing signer and full verified-HTTPS hash checks PASS.

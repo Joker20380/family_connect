@@ -2,11 +2,13 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Owner-selected SUBSCRIPTION-ANDROID-2 — natural scenario PASS, finish ARM119 artifact.**
+**Owner-selected SUBSCRIPTION-ANDROID-2 — narrow task complete, ARM119 candidate retained.**
 Real UI/save/automatic delivery/notification/tap/dedupe passed on the isolated API35
-stand. Complete ordinary source-bound ARM64 Friends build, existing-key signature and
-artifact inspection; no publication/merge/owner-phone action. Preserve previous runtime
-limitations; no G4 continuation or hidden background acquisition.
+stand. Source `b2a37fe98929` ordinary source-bound ARM64 Friends build, existing-key
+signature,26 focused Gradle tests/lint and artifact inspection PASS; no publication,
+merge or owner-phone action. Next separate gate: authorized dedicated ARM retained-data
+installation plus trusted candidate ingress. Preserve previous runtime limitations;
+no automatic continuation, G4 action or hidden background acquisition.
 [Current task and gates](releases/2026-11-06-subscription-android-2.md).
 
 **Owner-selected SUBSCRIPTION-ANDROID-1 — bounded runtime complete6 November.**
