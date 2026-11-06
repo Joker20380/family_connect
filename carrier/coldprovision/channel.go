@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"log"
 	"net"
 	"net/http"
 	"regexp"
@@ -158,6 +159,7 @@ func (client *Client) Post(path string, body []byte, id string) (Reply, error) {
 type Backend func(context.Context, Request) (Reply, error)
 
 func Serve(parent context.Context, endpoint familysession.PacketEndpoint, identity tls.Certificate, expires time.Time, gateway string, backend Backend) {
+	started := time.Now()
 	if backend == nil || !expires.After(time.Now()) {
 		endpoint.Close()
 		return
@@ -176,8 +178,10 @@ func Serve(parent context.Context, endpoint familysession.PacketEndpoint, identi
 	secured := tls.Server(connection, &tls.Config{MinVersion: tls.VersionTLS13, MaxVersion: tls.VersionTLS13, Certificates: []tls.Certificate{identity}, NextProtos: []string{Protocol}, SessionTicketsDisabled: true})
 	secured.SetDeadline(deadline)
 	if secured.HandshakeContext(ctx) != nil || secured.ConnectionState().NegotiatedProtocol != Protocol {
+		log.Printf("cold_provision stage=tls_failed elapsed_ms=%d", time.Since(started).Milliseconds())
 		return
 	}
+	log.Printf("cold_provision stage=tls_ready elapsed_ms=%d", time.Since(started).Milliseconds())
 	var public, wireguard, nonce, challengeID string
 	for index, path := range []string{Challenge, Fetch} {
 		var request Request
@@ -195,7 +199,9 @@ func Serve(parent context.Context, endpoint familysession.PacketEndpoint, identi
 		} else if text("public_identity") != public || text("wireguard_public_key") != wireguard || text("challenge") != nonce || request.ID == challengeID {
 			return
 		}
+		log.Printf("cold_provision stage=request_accepted operation=%d request_id=%s elapsed_ms=%d", index, request.ID, time.Since(started).Milliseconds())
 		reply, err := backend(ctx, request)
+		log.Printf("cold_provision stage=backend_complete operation=%d request_id=%s status=%d bytes=%d success=%t elapsed_ms=%d", index, request.ID, reply.Status, len(reply.Body), err == nil, time.Since(started).Milliseconds())
 		if err != nil || ctx.Err() != nil {
 			return
 		}
@@ -203,6 +209,7 @@ func Serve(parent context.Context, endpoint familysession.PacketEndpoint, identi
 			var response BoundReply
 			var value map[string]json.RawMessage
 			if strict(reply.Body, &response) != nil || response.Gateway != gateway || strict(response.Response, &value) != nil {
+				log.Printf("cold_provision stage=response_binding_failed operation=%d request_id=%s elapsed_ms=%d", index, request.ID, time.Since(started).Milliseconds())
 				return
 			}
 			var returned string
@@ -213,15 +220,19 @@ func Serve(parent context.Context, endpoint familysession.PacketEndpoint, identi
 					return
 				}
 			} else if returned != nonce {
+				log.Printf("cold_provision stage=response_nonce_failed operation=%d request_id=%s elapsed_ms=%d", index, request.ID, time.Since(started).Milliseconds())
 				return
 			}
 		}
 		if write(secured, reply) != nil {
+			log.Printf("cold_provision stage=write_failed operation=%d request_id=%s elapsed_ms=%d", index, request.ID, time.Since(started).Milliseconds())
 			return
 		}
+		log.Printf("cold_provision stage=write_complete operation=%d request_id=%s elapsed_ms=%d", index, request.ID, time.Since(started).Milliseconds())
 		if reply.Status != 200 || index == 1 {
 			var end [1]byte
 			secured.Read(end[:])
+			log.Printf("cold_provision stage=peer_end operation=%d request_id=%s elapsed_ms=%d", index, request.ID, time.Since(started).Milliseconds())
 			return
 		}
 	}

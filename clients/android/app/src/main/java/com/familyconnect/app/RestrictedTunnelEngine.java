@@ -34,6 +34,7 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     private final String gateway;
     private boolean temporaryBootstrap;
     private CredentialRefresh credentials;
+    private volatile String startupStage="NOT_STARTED";
 
     RestrictedTunnelEngine(Context context, BooleanSupplier cancelled, Consumer<Boolean> state) {
         this(context,cancelled,state,null,Long.MAX_VALUE);
@@ -78,11 +79,13 @@ final class RestrictedTunnelEngine implements TunnelEngine {
         if(context.getPackageName().equals("com.familyconnect.app.friends")) {
             try(ControlIdentity identity=new FriendsIdentityVault(context).load()) {
                 byte[] response;
+                startupStage="READINESS_WAIT";
                 response=FriendsRestricted.ready(context,identity,connectDeadline,cancelled,restoring,gateway);
+                startupStage="READINESS_RETURNED";
                 Diagnostics.readiness(context,response!=null);
                 if(response==null)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
                 byte[] full=identity.material(),material=java.util.Arrays.copyOf(full,64);java.util.Arrays.fill(full,(byte)0);
-                try{checkAccess();handle=NativeRestricted.beginReady(response,material,ControlTrust.anchor(context),resolver,deadline-SystemClock.elapsedRealtime(),service,SpeedProfile.read(context));}
+                try{checkAccess();startupStage="NATIVE_BEGIN_READY";handle=NativeRestricted.beginReady(response,material,ControlTrust.anchor(context),resolver,deadline-SystemClock.elapsedRealtime(),service,SpeedProfile.read(context));}
                 finally{java.util.Arrays.fill(material,(byte)0);java.util.Arrays.fill(response,(byte)0);}
             }
         } else {
@@ -91,6 +94,7 @@ final class RestrictedTunnelEngine implements TunnelEngine {
             handle=NativeRestricted.begin(directory.getAbsolutePath(),automaticOwner==null?control:"auto",resolver,deadline-SystemClock.elapsedRealtime(),service);
         }
         if (handle<=0) throw new IllegalStateException("Restricted startup rejected");
+        startupStage="NATIVE_HANDLE";
         StartupDiagnostics.begin(context,handle);
         int phase;
         while ((phase=NativeRestricted.state(handle))==0 && SystemClock.elapsedRealtime()<deadline && !cancelled.getAsBoolean() && !authorizationDenied()) Thread.sleep(100);
@@ -104,6 +108,7 @@ final class RestrictedTunnelEngine implements TunnelEngine {
             if(original.getCause()!=null)failure.initCause(original.getCause());
             throw failure;
         }
+        startupStage="TUN_ATTACH";
         if(automaticOwner!=null)tun=automaticOwner.replace(automaticOwner.builder());
         else tun=service.new Builder().setSession("Family restricted diagnostic").setMtu(1280)
             .addAddress("10.79.0.2",32).addAddress("fd79:fc::2",128)
@@ -112,6 +117,7 @@ final class RestrictedTunnelEngine implements TunnelEngine {
         if (tun==null || revoked || !NativeRestricted.attach(handle,tun.getFd())) throw new IllegalStateException("Packet attachment failed");
         evidence();
         state.accept(true);
+        startupStage="READY";
     }
 
     private RestrictedHealthPolicy.Sample healthSample;

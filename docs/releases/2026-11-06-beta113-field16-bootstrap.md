@@ -997,3 +997,33 @@ checkpoint, not an authentication-only documentation update or acceptance PASS.
 Documentation/receipt validation passes: three Markdown files/308 local links,
 eight retained evidence/source hashes, exact monotonic delta, manifest118/version
 readback, JSON parsing and whitespace. No full-CI or remaining runtime PASS is claimed.
+
+### Same-incident harness correction, 6 November
+
+The original `FAIL_RUNTIME` receipt and private evidence are unchanged. SHA256 of the
+executed instrumentation source is reverified as
+`952790bb4137c3d5f55c19474b84a8072d4b69fa0c563ed6fbc5911ad13fc590`.
+It directly creates RestrictedTunnelEngine with `elapsedRealtime()+30000`, bypassing
+ConnectionService/AutomaticConnection. Earlier wording calling this the unchanged
+product Connect budget is incorrect. In cf419a1 the orchestrator gives MESH a200000ms
+candidate deadline under300000ms Connect; FriendsRestricted separately gives fetch30s.
+The exact original absolute deadline was not emitted: assignment lies between recorded
+38706/38725ms, so its deadline lies within68706–68725ms on that guest clock. `Rejected`
+at68825ms lacks its enum/stack and cannot prove which check rejected. No clocks from
+different processes are subtracted. Original authority issuance proves authenticated
+issuance only; server write, client receipt, validator/vault and native begin are unknown.
+No saved logcat/server stage log exists. An offline read-only conversion of the retained
+AVD disk does not expose an ext filesystem (encrypted userdata); the original AVD is
+not booted or modified to invent retrospective evidence.
+
+The replacement harness calls existing AutomaticConnection with the MESH-only selection
+used by ConnectionService, not a bespoke engine deadline. It does not exercise the service
+foreground/UI lifecycle and does not call recovery polling. Existing diagnostics gain
+bounded stage elapsed/remaining fields and a live readiness trace; server logs contain
+only stage, validated random request ID, status and size. Before `candidate_failed`
+cleanup the harness captures enum category, trigger/cleanup fields and native state.
+Its finally always closes the owned connection even if snapshotting fails.
+36 JVM tests (deadline/category and trace bounds included), Go coldprovision tests and
+test-only118/x86_64 prebuild pass. The already pinned real-provider JNI is reused; the
+server adds observational logging only. Runtime remains pending one diagnostic attempt.
+No runtime negatives, product timeout/TTL/trust/admission change, user APK or deployment.

@@ -15,9 +15,11 @@ final class ProvisioningCarrier implements AutoCloseable {
     private final Context context;
     private final String gateway;
     private final long deadline;
+    private final ReadinessFetchTrace trace;
     private long handle;
     private boolean closed;
-    ProvisioningCarrier(Context context,String gateway,long deadline){this.context=context;this.gateway=RestrictedGateway.target(gateway);this.deadline=deadline;}
+    ProvisioningCarrier(Context context,String gateway,long deadline){this(context,gateway,deadline,null);}
+    ProvisioningCarrier(Context context,String gateway,long deadline,ReadinessFetchTrace trace){this.context=context;this.gateway=RestrictedGateway.target(gateway);this.deadline=deadline;this.trace=trace;}
     private synchronized long acquire()throws Exception{
         if(closed||android.os.SystemClock.elapsedRealtime()>=deadline)throw new IOException("Provisioning cancelled");
         if(handle!=0)return handle;
@@ -37,12 +39,17 @@ final class ProvisioningCarrier implements AutoCloseable {
         if(!path.equals("/friends/restricted-readiness/challenge")&&!path.equals("/friends/restricted-readiness"))throw new SecurityException("Provisioning operation rejected");
         JsonObject request=body;
         if(RestrictedGateway.PRIMARY.equals(gateway)){request=new JsonObject();request.addProperty("gateway_id",gateway);request.add("request",body);}
+        if(trace!=null)trace.stage(ReadinessFetchTrace.Stage.CARRIER_OPEN);
         long current=acquire();
+        if(trace!=null)trace.stage(ReadinessFetchTrace.Stage.CARRIER_HANDLE);
+        if(trace!=null)trace.stage(ReadinessFetchTrace.Stage.CARRIER_REQUEST);
         String raw=NativeRestricted.provisionPost(current,path,request.toString(),requestId);
+        if(trace!=null&&raw!=null)trace.stage(ReadinessFetchTrace.Stage.RESPONSE_RECEIVED);
         synchronized(this){if(closed||android.os.SystemClock.elapsedRealtime()>=deadline)throw new IOException("Provisioning cancelled");}
         if(raw==null)throw new IOException("Provisioning unavailable");
         JsonObject reply=parse(raw.getBytes(java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();fields(reply,"status body");
         int status=(int)integer(reply.get("status"),0);
+        if(trace!=null)trace.status(status);
         if(status==0)throw new SecurityException("Provisioning authentication rejected");
         if(path.endsWith("/challenge"))FriendsReadinessProtocol.challengeStatus(status);
         if(status==401||status==403)throw new FriendsReadinessProtocol.AuthorizationFailure();

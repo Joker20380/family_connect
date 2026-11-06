@@ -6,10 +6,13 @@ import os
 from pathlib import Path
 import sys
 import time
+import sqlite3
+import RNS
 from http.server import ThreadingHTTPServer
 
 from cryptography import x509
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
 from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, NoEncryption
 from cryptography.x509.oid import NameOID, ExtendedKeyUsageOID
 
@@ -113,6 +116,19 @@ def prepare(root):
 def main():
     root = Path(sys.argv[2]).resolve()
     os.environ['FC_FRIENDS_RESTRICTED_DIR'] = str(root)
+    if sys.argv[1] == 'verify-cold':
+        material = (root / 'identity96.private').read_bytes()
+        assert len(material) == 96
+        identity = RNS.Identity(create_keys=False)
+        assert identity.load_private_key(material[:64])
+        device = DeviceIdentity(identity, X25519PrivateKey.from_private_bytes(material[64:]))
+        with sqlite3.connect(f'file:{root / "access.db"}?mode=ro', uri=True) as database:
+            row = database.execute('SELECT public,wg,revoked FROM devices WHERE device=?', (device.reference,)).fetchone()
+            assert row == (device.public_identity, device.wireguard_public_key, 0)
+            assert database.execute('SELECT count(*) FROM restricted_certificates').fetchone()[0] == 0
+            assert database.execute('SELECT count(*) FROM restricted_challenges').fetchone()[0] == 0
+        print('REGISTERED_SYNTHETIC_IDENTITY_AND_COLD_AUTHORITY_VERIFIED', flush=True)
+        return
     if sys.argv[1] == 'inspect':
         with Access(root / 'access.db').db() as database:
             print(database.execute('SELECT count(*) FROM restricted_certificates').fetchone()[0])

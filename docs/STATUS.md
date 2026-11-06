@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**6 November — same incident: harness deadline defect established; one diagnostic follow-up pending.**
+Hash-verified original instrumentation `952790bb…fc590` directly constructed the engine
+with `elapsedRealtime()+30000`; it did not use ConnectionService/AutomaticConnection.
+This is not the product MESH budget (200000ms candidate/300000ms Connect).
+The separate real readiness fetch remains 30000ms. Original FAIL and all artifacts
+remain intact; issued certificate does not establish delivery or acceptance.
+The corrected harness uses the existing AutomaticConnection MESH path, snapshots
+typed failure/trace/native state before cleanup, and never polls restoration/retries.
+36 focused JVM tests and coldprovision Go tests pass; disposable APK prebuild passes.
+Exactly one new API27/Telemost diagnostic run is authorized, not yet performed.
+No timeout, trust, TTL, admission, production or public artifact change.
+
 **6 November — actual Android/Telemost cold provisioning attempt FAIL, not auth-blocked.**
 Protected local input now reads only the authorized vault entry and pipes its value
 to the disposable test process; no credential is printed, persisted or sent to the
@@ -14,7 +26,7 @@ No budget extension or unchanged retry. DNS/verified HTTPS/egress and runtime
 negatives/ACK checks remain NOT_RUN. Both own AVDs, authority and carrier workers
 are stopped; no temporary secret file was made. Test-only118/x86_64 APK is built,
 installed only in the disposable AVD, never distributed; product source unchanged.
-**Next:** localize the issued-bundle→READY30s boundary with better stage evidence,
+**Superseded next (see corrected deadline finding above):** localize the issued-bundle→READY boundary with better stage evidence,
 not a rollout, locator import, new discovery or another identical Connect attempt.
 [Actual attempt, failures and cleanup limits](releases/2026-11-06-beta113-field16-bootstrap.md#actual-androidtelemost-attempt-6-november).
 

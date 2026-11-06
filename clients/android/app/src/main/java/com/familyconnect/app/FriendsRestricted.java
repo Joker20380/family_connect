@@ -21,6 +21,7 @@ final class FriendsRestricted {
         volatile String refresh="NOT_ATTEMPTED";
         volatile boolean denied;
         volatile OwnerPrewarmReceipt observation;
+        volatile ReadinessFetchTrace trace;
     }
     private static final Scope primary=new Scope(),secondary=new Scope();
     private static Scope scope(String gateway){return RestrictedGateway.PRIMARY.equals(RestrictedGateway.target(gateway))?primary:secondary;}
@@ -85,6 +86,7 @@ final class FriendsRestricted {
             byte[] selected=null;
             OwnerPrewarmReceipt receipt=new OwnerPrewarmReceipt();
             ReadinessFetchTrace trace=new ReadinessFetchTrace(receipt,startedConnection,System.currentTimeMillis());
+            current.trace=trace;
             ReadinessProduct product=null;
             try(ProvisioningTestGate.Permit permit=ProvisioningTestGate.enter(context);
                     ControlIdentity identity=new FriendsIdentityVault(context).load()){
@@ -104,7 +106,9 @@ final class FriendsRestricted {
                 attempted=true;
                 current.refresh="IN_PROGRESS";
                 current.observation=receipt;ReadinessImportResult result;
-                FriendsAccessAndroid fetch=new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+30000,trace);
+                long fetchDeadline=android.os.SystemClock.elapsedRealtime()+30000;
+                trace.budget(fetchDeadline-android.os.SystemClock.elapsedRealtime());
+                FriendsAccessAndroid fetch=new FriendsAccessAndroid(context,fetchDeadline,trace);
                 RestrictedBootstrap.Selection startup=RestrictedBootstrap.refresh(cache,product,receipt,
                     ()->{permit.requireAvailable();return fetch.restrictedReadiness(identity,receipt,gateway);},
                     RestrictedVault.LOCK,()->System.currentTimeMillis()/1000);

@@ -2,6 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Active same-incident gate:** original harness hash proves a test-only `now+30000`
+engine deadline, not the normal 200000ms MESH candidate/300000ms Connect budget.
+Corrected instrumentation now uses AutomaticConnection, retains enum category before
+candidate cleanup and records bounded existing readiness/native stages. Real readiness
+fetch stays 30000ms. Source checks:36 focused JVM tests, Go coldprovision PASS and APK
+prebuild PASS. Next is exactly one authorized API27/Telemost diagnostic run on fresh
+synthetic identity/cache/server state, followed by owned-resource cleanup. Original
+FAIL_RUNTIME and all evidence are immutable; positive runtime gate remains unmet.
+
 **Selected field bootstrap continuation — bounded provisioning candidate implemented.**
 The isolated uncached dual-block path now reaches real authority issuance, unchanged
 validation/encrypted vault, existing Android source owner and actual native MESH traffic.
@@ -15,7 +24,7 @@ isolated server publishes a finite signed locator; the synthetic authority recor
 one real restricted challenge/certificate issuance. Android API27 uses real NVIDIA/
 KVM, framework/Keystore/JNI and guest-only direct-path rejection, but no NATIVE_READY
 or proven delivery/cache completion. Retain the earlier loopback-ICE fixture failure.
-Do not repeat an unchanged Connect or extend its30s budget. Test-only118/x86_64 APK
+Do not repeat an unchanged Connect or extend the real30s readiness budget. Test-only118/x86_64 APK
 is built/AVD-installed, not distributed. DNS/HTTPS/egress and negative/ACK runtime
 checks remain NOT_RUN. Own processes/sessions are stopped; G4 cleanup and acceptance
 remain with the main session. No product code, live service, catalog or policy change.
