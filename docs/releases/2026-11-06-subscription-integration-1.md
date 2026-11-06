@@ -488,6 +488,23 @@ retry and the normal merge receipt belong in PR1; do not create a cosmetic docs-
 
 ### Scope and rollback
 
+Final fixture evidence on360cc26: phase0 and Linux control both pass their complete
+context audit (standard5175 passed/273 existing skips, root258 passed, protected
+Python3.14 launcher98 passed;5804 collected cases accounted for). Docker failover,
+auth/offline/revocation, Rust, GTK/extracted packaging and Linux internal candidate
+also pass. The real source/runtime controls were not relaxed: copied POSIX ACLs are
+removed only inside disposable fixture trees; the launcher fixture includes its
+exact interpreter's shared library and preserves the strict runtime inspection.
+
+Voice run42295960952 attempts1/2 never reached tests: Azure's Ubuntu mirror exhausted
+the10-minute job during libcodec2 package downloads, reproduced after one targeted
+infrastructure retry. The source repair changes only that ephemeral Ubuntu24.04
+runner's exact Azure archive URI to official `https://archive.ubuntu.com/ubuntu`.
+APT signed metadata verification, complete dependency list, test commands and job
+timeout are unchanged. No local/system/shared-runner network setting changes.
+The next head still requires its own applicable CI results, not inherited green
+statuses. Those receipts and normal merge will be kept in PR1.
+
 Additional fixture preparation correction: b4ea004's hosted control/phase0 tests stop
 in the new strict3.14 preparation probe before the suite. The exact official setup-python
 3.14.10 Linux24.04 distribution was inspected independently: its ELF RUNPATH names the

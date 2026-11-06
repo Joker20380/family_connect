@@ -3,6 +3,10 @@
 ## Current engineering priority / Текущий critical path
 
 **Owner-selected SUBSCRIPTION-INTEGRATION-1 — integration gate OPEN.**
+Full-suite/context and Linux candidate gates passed on360cc26. Repair only the
+repeated voice-runner APT mirror timeout, then require actual final-head checks;
+do not restart closed source investigations or relabel infrastructure cancellation
+as an assertion failure. Record final receipts/merge in PR1 without a docs-only head.
 Finish the remaining concrete1d4 fixtures and invitation-dispatch synchronization,
 including protected relocated Python and its real sanitized runtime probe,
 then require final-head hosted PASS and normal merge. Exact retained snapshot and current

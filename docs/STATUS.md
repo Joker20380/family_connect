@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**6 November — PR1 full-suite fixtures PASS; voice runner mirror repair.**
+Head360cc26 completes phase0 (including Docker failover/auth/offline/revocation),
+Linux control and full Linux candidate. Both hosted pytest receipts audit all5804
+collected cases across unprivileged3.13, declared UID0 and protected3.14 contexts:
+5531 passed,273 existing conditional skips; no missing context or failed test.
+Voice has twice exhausted its10-minute job during Azure APT downloads before tests.
+Only that disposable runner now uses the official Ubuntu HTTPS archive; package
+signatures, dependencies, tests and timeout remain intact. Final-head CI and merge
+receipts stay in PR1. No product, installed APK, production or G4 change.
+
 **6 November — PR1 remaining fixture repair, final CI pending.**
 The relocated hosted3.14 fixture now uses a private relative ELF RUNPATH rather than
 loading its shared library from the writable original toolcache; preparation logs are
