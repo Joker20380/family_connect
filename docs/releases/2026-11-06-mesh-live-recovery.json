@@ -1,0 +1,378 @@
+{
+  "apk118_updater113_changed": false,
+  "commits": {
+    "both_pushed_remote_verified": true,
+    "branch": "main",
+    "scheduled_interlock": "ea1bfc92abe990819665355f6f358e007b7585ec",
+    "unacquired_guard": "0aaa9310e383d304c3f59717a66ec272f05f7362"
+  },
+  "directory_sync_successes_in_saved_post_install_window": 27,
+  "due_automatic_renewal": "NOT_YET_OBSERVED",
+  "evidence_root": "state-client-build/mesh-live-failure-20261106",
+  "evidence_sha256": {
+    "NL1-final.json": "7e1738056d1b8ca9c0a5618b0cdd15e9ec30e9e192cc33184bfe6f8bf53899fb",
+    "NL1-initial.private.json": "86c5993b2c9fb7b71044c136baed3262dfb1bdb74db72b455b743098d5ff495a",
+    "NL1-publisher-promote.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "NL1-publisher-promote.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "NL1-publisher-promote.stdout": "6f1296fa3d73f4f4c58bfb51ef134846194b9ddb4d8e4d6d37015d5eb016759d",
+    "NL1-publisher-stage.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "NL1-publisher-stage.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "NL1-publisher-stage.stdout": "8713fd79337648ee0a088a5e1b9138628df69a788927a24f1f9c5c4d81fe485e",
+    "NL2-final-r2.json": "d460fe41a1576abbd7951013bae13c0aeb9526e073a3b843c9c57e7730a57c54",
+    "NL2-initial.private.json": "eaa94d38eafe31509f659cdfde2bc7ec5da8d2ce5635e08a737f374e7dfd5c15",
+    "NL2-publisher-promote.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "NL2-publisher-promote.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "NL2-publisher-promote.stdout": "635d8b86d807cc92ee35e3c06f23275bf10ed0e9558e7e58d0da9fe7f2528000",
+    "NL2-publisher-stage.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "NL2-publisher-stage.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "NL2-publisher-stage.stdout": "a17f0b1045b5c374aec0fa31188929f4c09d683c02d82548f9f33b8cc92642ea",
+    "RU-final-r2.json": "3654196c57b34c7436a22c5a9e365ccf3cce0216a0c7c7f16bd71f00c431fd30",
+    "RU-scheduled-final-r2.journal.jsonl": "6e399417edb4c87703eaa42187154dae9f577b13858d173b1c86e035f6eb7f30",
+    "RU-transaction.private.json": "c253542320cc2820be9b1bb10325098586c4466411bb87c9d58e4671d225017e",
+    "commit-before-start.log": "c96ce2e75c946a62c857b057be47134e02376e062e069bdb8dbfbbb110a705b8",
+    "final-readback.py": "ed501f4cc71f87b1643ce79803f69ee9f0a43473fc803c34e322bff89f73e7e0",
+    "interlock-install.log": "a1d8be1bcd41bf3e9e4d4651b0a6c65a0eac45d38f5c71055888ff3f9b58f688",
+    "live-dry-run.log": "84c1c30d97a7cebfd324b71fb0b72ccad63e85c3bdfadbae7557de541dcb8efb",
+    "live-first-renewal.log": "d304b8024c89f65b579cc4c3740167f69bf937ae925c5374a70b30a4d03408dc",
+    "probe-NL1/cleanup.json": "cd121816b95fe3dba90a6dc2b2a37ed3df4cc4459a9fd66b3bfd63745658171c",
+    "probe-NL1/import.stdout": "0f8bbac075ad789a2ed0ccba9aaa6653e85fe3460509b034e401b3914985bb84",
+    "probe-NL1/mux.stdout": "88ac412be4fc85e7bda9fe95bb9988afec2676ea9a25f14e611a8abc375801d3",
+    "probe-NL1/receipt.json": "afb70065b768774797f47808abee0840cd7acfe6297ba2a72609ebf9bdc3a7fa",
+    "probe-NL2-r2/cleanup.json": "cd121816b95fe3dba90a6dc2b2a37ed3df4cc4459a9fd66b3bfd63745658171c",
+    "probe-NL2-r2/import.stdout": "539771ea3b93db9e7b9cf8bd351e8d9a961c2b306fcb1364d3f0f2b89d576fe8",
+    "probe-NL2-r2/mux.stdout": "b85f35eabbbab86ed0a6a2fb8288cbed09c5d3d9aa0af7c74680a6fff2b00be4",
+    "probe-NL2-r2/receipt.json": "9d319978284f43b78b4890c2cf0a63c6dc33179b96329240194f38d70cbe3baf",
+    "probe-NL2/mux.stdout": "e9437973406c70b26931544a24adfe2909741beacec4cbed7e96d1acb0854c99",
+    "probe-NL2/receipt.json": "114c09735f0c4bd80cc2571d71af0c8c8dcec0d47af160e5ad4db5428e79a658",
+    "probe-recovered.py": "6ad8f39feebc82b8cd4a31db39b06d3a8bbe4cd6e9805be0e92efb9c4b6b8d43",
+    "reconciliation-tests-r4.log": "4163c46e3d3f60499bbc83d3df016a2f1bd2989b3288577be0c61ba783376b4d",
+    "remote-recovery-evidence.tar": "1df3ba2e4ac4332c923d00b2339f2683f5fccf2b807905f66a36bf99946d83d0",
+    "second-window.log": "3e5524d3fb8503275e7548570d04575f19f9640e17248e8fb4bcc1c17abd83ea",
+    "serialization-tests.log": "e8cc4afd417ffffca5ae4cf6e9525aa2e4c016b018d13e3970236008f14b66a2"
+  },
+  "exit": 0,
+  "final_readbacks": {
+    "NL1": {
+      "bootstrap": {
+        "ActiveState": "active",
+        "ExecMainStartTimestamp": "Fri 2026-11-06 13:59:57 UTC",
+        "ExecMainStatus": "0",
+        "MainPID": "3625967",
+        "NRestarts": "0",
+        "Result": "success",
+        "SubState": "running"
+      },
+      "directory_sha256": "24adbac014036e89ee18bba6cc47f9570a7c475a9de499e35103c4e2519a7f9f",
+      "executable": "/usr/local/lib/fc-profile-tools/unified-a597d2a/gateway",
+      "executable_sha256": "70e6c0fc1b920ad308e24667be94f674c34979dab6aa518e1a8194fff7c131b6",
+      "node": "NL1",
+      "node_state_entries": [
+        "archive",
+        "completed.json",
+        "operation.lock"
+      ],
+      "observed_at": "2026-11-06T14:15:46.158452+00:00",
+      "ordinary": {
+        "family-connect-friends-awg.service": {
+          "ActiveState": "active",
+          "ExecMainStartTimestamp": "Fri 2026-10-30 20:02:03 UTC",
+          "ExecMainStatus": "0",
+          "MainPID": "3200",
+          "NRestarts": "0",
+          "Result": "success",
+          "SubState": "running"
+        },
+        "family-connect-friends-tcp.service": {
+          "ActiveState": "active",
+          "ExecMainStartTimestamp": "Fri 2026-10-30 20:02:05 UTC",
+          "ExecMainStatus": "0",
+          "MainPID": "3355",
+          "NRestarts": "0",
+          "Result": "success",
+          "SubState": "running"
+        }
+      },
+      "profile_sha256": "ddddaaa34fda6966daf4643b65a596302c69ee20e9229486e34c6e0cf1493e6e",
+      "source_sha256": "e9fd31754bdf50c95842a1644f86ddb328b839ec1e0c9454daf08d3e9d17f0cc",
+      "temporary_publisher_configuration_retired": true
+    },
+    "NL2": {
+      "bootstrap": {
+        "ActiveState": "active",
+        "ExecMainStartTimestamp": "Fri 2026-11-06 13:59:59 UTC",
+        "ExecMainStatus": "0",
+        "MainPID": "2228070",
+        "NRestarts": "0",
+        "Result": "success",
+        "SubState": "running"
+      },
+      "directory_sha256": "a22284bcde91e492f0a318fb940685638c24c79bd71998b17b9d33ab65fd2240",
+      "executable": "/usr/local/lib/fc-profile-tools/unified-a597d2a/gateway",
+      "executable_sha256": "70e6c0fc1b920ad308e24667be94f674c34979dab6aa518e1a8194fff7c131b6",
+      "node": "NL2",
+      "node_state_entries": [
+        "archive",
+        "completed.json",
+        "operation.lock"
+      ],
+      "observed_at": "2026-11-06T14:17:07.230621+00:00",
+      "ordinary": {
+        "family-connect-friends-awg.service": {
+          "ActiveState": "active",
+          "ExecMainStartTimestamp": "Mon 2026-11-02 00:43:32 UTC",
+          "ExecMainStatus": "0",
+          "MainPID": "6206",
+          "NRestarts": "0",
+          "Result": "success",
+          "SubState": "running"
+        },
+        "family-connect-friends-tcp.service": {
+          "ActiveState": "active",
+          "ExecMainStartTimestamp": "Mon 2026-11-02 00:43:31 UTC",
+          "ExecMainStatus": "0",
+          "MainPID": "6146",
+          "NRestarts": "0",
+          "Result": "success",
+          "SubState": "running"
+        }
+      },
+      "profile_sha256": "a6faba2e98e9a6dc6579b4c9fead35afca9f88ef3107ed4bf84cf47ef43fa333",
+      "source_sha256": "e9fd31754bdf50c95842a1644f86ddb328b839ec1e0c9454daf08d3e9d17f0cc",
+      "temporary_publisher_configuration_retired": true
+    },
+    "RU": {
+      "commit_decided": true,
+      "gateways": {
+        "NL1": {
+          "crl_last_update": "2026-11-06T13:58:13+00:00",
+          "crl_next_update": "2026-11-06T17:58:13+00:00",
+          "current_strict_validation": true,
+          "leaf_not_after": "2026-11-06T17:58:13+00:00",
+          "leaf_not_before": "2026-11-06T13:58:13+00:00",
+          "minimum_crl": 27274,
+          "minimum_revision": 1
+        },
+        "NL2": {
+          "crl_last_update": "2026-11-06T13:58:13+00:00",
+          "crl_next_update": "2026-11-06T17:58:13+00:00",
+          "current_strict_validation": true,
+          "leaf_not_after": "2026-11-06T17:58:13+00:00",
+          "leaf_not_before": "2026-11-06T13:58:13+00:00",
+          "minimum_crl": 27274,
+          "minimum_revision": 1
+        }
+      },
+      "http": {
+        "ActiveState": "active",
+        "ExecMainStartTimestamp": "Fri 2026-11-06 17:01:45 MSK",
+        "ExecMainStatus": "0",
+        "MainPID": "2856504",
+        "NRestarts": "0",
+        "Result": "success",
+        "SubState": "running"
+      },
+      "node": "RU",
+      "node_state_entries": [
+        "archive",
+        "completed.json",
+        "operation.lock"
+      ],
+      "observed_at": "2026-11-06T14:18:09.521378+00:00",
+      "operation": "owner-live-mesh-20261106-directory-recovery",
+      "ordinary": {
+        "family-connect-friends-awg.service": {
+          "ActiveState": "active",
+          "ExecMainStartTimestamp": "Fri 2026-10-23 06:10:51 MSK",
+          "ExecMainStatus": "0",
+          "MainPID": "2205322",
+          "NRestarts": "0",
+          "Result": "success",
+          "SubState": "running"
+        },
+        "family-connect-friends-tcp.service": {
+          "ActiveState": "active",
+          "ExecMainStartTimestamp": "Thu 2026-09-24 17:11:09 MSK",
+          "ExecMainStatus": "0",
+          "MainPID": "1908885",
+          "NRestarts": "0",
+          "Result": "success",
+          "SubState": "running"
+        }
+      },
+      "pending_revocations": false,
+      "plan_sha256": "16ca935861061064d2247b106710dbc61737f5f873be09b96b50e2a1c7090d16",
+      "profile_readback": {
+        "NL1": "ddddaaa34fda6966daf4643b65a596302c69ee20e9229486e34c6e0cf1493e6e",
+        "NL2": "a6faba2e98e9a6dc6579b4c9fead35afca9f88ef3107ed4bf84cf47ef43fa333"
+      },
+      "scheduled": {
+        "family-connect-credential-renewal.service": {
+          "ActiveState": "inactive",
+          "ExecMainStartTimestamp": "Fri 2026-11-06 17:05:49 MSK",
+          "ExecMainStatus": "0",
+          "MainPID": "0",
+          "NRestarts": "0",
+          "Result": "success",
+          "SubState": "dead"
+        },
+        "family-connect-credential-renewal.timer": {
+          "ActiveState": "active",
+          "Result": "success",
+          "SubState": "waiting"
+        },
+        "family-connect-restricted-directory-sync.service": {
+          "ActiveState": "activating",
+          "ExecMainStartTimestamp": "Fri 2026-11-06 17:18:15 MSK",
+          "ExecMainStatus": "0",
+          "MainPID": "2903166",
+          "NRestarts": "0",
+          "Result": "success",
+          "SubState": "start"
+        },
+        "family-connect-restricted-directory-sync.timer": {
+          "ActiveState": "active",
+          "Result": "success",
+          "SubState": "running"
+        }
+      },
+      "source_sha256": "e9fd31754bdf50c95842a1644f86ddb328b839ec1e0c9454daf08d3e9d17f0cc",
+      "timer_definitions_unchanged": true,
+      "transaction_sha256": "9b894571d86677e981ed124269920485edfbb65e3845eb82fa9b02ff66909f48",
+      "transaction_state": "COMMITTED",
+      "wrapper_sha256": "9a0df90fbfe461f3e826d31bb9124b4c3dc50d2ecac273c927ff14c9bc238353"
+    }
+  },
+  "full_ci_pass_claim": false,
+  "g4_resources_modified": false,
+  "installed_dropin_sha256": "e423fe1ca218e6a065055967fedcc1be94ec47a7fb58699b2f59a46efb4370af",
+  "installed_interlock_sha256": "9a0df90fbfe461f3e826d31bb9124b4c3dc50d2ecac273c927ff14c9bc238353",
+  "native_importer_sha256": "2ba0f671043f491124c1508d150f7a5ab127e676d6d8e0c80977d0a3309dbac5",
+  "online_package_deployed": false,
+  "operation": "owner-live-mesh-20261106-directory-recovery",
+  "operator_guard_sha256": "4f7fa6d362d67dd5b62691fb6b4ee74d8913d9391b1537bd5787b52e56cd83dc",
+  "ordinary_pids_and_start_times_unchanged": true,
+  "phone_changed": false,
+  "probes": {
+    "NL1": {
+      "at": "2026-11-06T14:13:56+00:00",
+      "binary_sha256": "344db2c25d978473a096f70e83d23fe8a9ee618f4ac1951e330bfc9fee0b5a02",
+      "bootstrap_carrier_connected": true,
+      "dedicated_carrier_connected": true,
+      "dns_pass": 3,
+      "exit": 0,
+      "expected_node_egress": true,
+      "family_authenticated": true,
+      "https_pass": 4,
+      "own_forward_exited": true,
+      "permanent_identity_unchanged": true,
+      "receipt": "probe-NL1/receipt.json",
+      "result": "PASS",
+      "traffic": {
+        "DNSErrors": 0,
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSTimeouts": 0,
+        "OpenOK": 5,
+        "Opened": 5,
+        "ReceivedBytes": 33046,
+        "SentBytes": 8502
+      },
+      "verified_egress_https": true
+    },
+    "NL2": {
+      "at": "2026-11-06T14:19:57+00:00",
+      "binary_sha256": "0552949c1b45375cc42c08c2956a5dd51b75e93f259635a99faa3c66440c59e2",
+      "bootstrap_carrier_connected": true,
+      "dedicated_carrier_connected": true,
+      "dns_pass": 3,
+      "exit": 0,
+      "expected_node_egress": true,
+      "family_authenticated": true,
+      "https_pass": 4,
+      "own_forward_exited": true,
+      "permanent_identity_unchanged": true,
+      "receipt": "probe-NL2-r2/receipt.json",
+      "result": "PASS",
+      "traffic": {
+        "DNSErrors": 0,
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSTimeouts": 0,
+        "OpenOK": 5,
+        "Opened": 5,
+        "ReceivedBytes": 33044,
+        "SentBytes": 8502
+      },
+      "verified_egress_https": true
+    }
+  },
+  "publisher_recovery_sha256": "f44ace11d7013cdf2908e888a5ed6175a936970ab9c9195ddf9846d77f587995",
+  "result": "COMMITTED",
+  "retained_failures": [
+    {
+      "cause": "DIRECTORY_INVALID",
+      "exit": 75,
+      "result": "ROLLED_BACK_READERS_STOPPED"
+    },
+    {
+      "cause": "NL1-specific probe expected NL1 egress; actual NL2-specific probe is a separate run",
+      "exit": 1,
+      "probe": "NL2-first",
+      "result": "FAIL"
+    },
+    {
+      "causes": [
+        "wrong NL2 interpreter path",
+        "minimum_crl read from wrong dictionary"
+      ],
+      "production_mutation": false,
+      "scope": "readback helper only"
+    }
+  ],
+  "scheduled_results": [
+    {
+      "at": "2026-11-06T14:06:05.066938+00:00",
+      "files_changed": 0,
+      "remote_writes": 0,
+      "restarts": 0,
+      "result": "NOOP"
+    },
+    {
+      "at": "2026-11-06T14:21:01.553493+00:00",
+      "files_changed": 0,
+      "remote_writes": 0,
+      "restarts": 0,
+      "result": "NOOP"
+    }
+  ],
+  "schema": 1,
+  "scope": "authorized live MESH outage repair, not isolated G4 or Android acceptance",
+  "source_inventories": {
+    "NL1-probe": {
+      "file_count": 269,
+      "local_path": "NL1-probe-source-inventory.json",
+      "sha256": "4c57e0131f85db795a03a6a819ec85ba83620c42845ca1048765c7aa5d6f6497"
+    },
+    "NL2-probe": {
+      "file_count": 276,
+      "local_path": "NL2-probe-source-inventory.json",
+      "sha256": "2077bbcdc3cb2e5ba23adfacb32c1a6f1a8e4e591f0024545ccf5a62408c1607"
+    }
+  },
+  "test_overlap_cases": 20,
+  "tests": [
+    {
+      "command": "tests/test_abort_unacquired_renewal.py tests/test_reconcile_unprepared_renewal.py tests/test_multi_gateway_renewal.py",
+      "passed": 128,
+      "seconds": 16.3
+    },
+    {
+      "command": "tests/test_serialized_renewal.py tests/test_abort_unacquired_renewal.py",
+      "passed": 32,
+      "seconds": 1.32
+    }
+  ],
+  "timer_definitions_unchanged": true,
+  "unchanged_gateway_sha256": "70e6c0fc1b920ad308e24667be94f674c34979dab6aa518e1a8194fff7c131b6",
+  "unchanged_maintenance_source_sha256": "e9fd31754bdf50c95842a1644f86ddb328b839ec1e0c9454daf08d3e9d17f0cc"
+}

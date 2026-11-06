@@ -1,6 +1,92 @@
 # VPN health — 6 November 2026
 
+## Verified recovery and live traffic
+
+**Live repair complete in the measured scope,6 November14:22UTC.** This follows the
+owner's explicit request to diagnose and repair the outage; it is not permission to
+publish/install Android artifacts or deploy the separately qualified online package.
+The original read-only report and all failed recovery/probe attempts remain below
+and in private evidence. [Sanitized receipt](2026-11-06-mesh-live-recovery.json).
+
+Confirmed causal chain: the common scheduled renewal was stranded at initial
+OPERATION_BUSY before acquiring any node; leaf/CRL subsequently expired on both NL
+at5 November11:44:40UTC, followed by gateway exits and exhausted restart attempts.
+The directory evaluator/controller shared-lock race is reproduced and now serialized.
+The exact historical competing process is **not established**, nor are the later
+unrelated DB-row changes attributed. Recovery did not discard/rebase those DB changes.
+
+| Final check | Result / scope |
+| --- | --- |
+| Existing fleet controller | `owner-live-mesh-20261106-directory-recovery`, COMMITTED/exit0, original durable decision and three-node reconciliation retained |
+| Current strict signature/time validation | Both NL leaf and CRL13:58:13–17:58:13UTC; revision1, minimum CRL27274; no pending revocations |
+| Actual serving processes | NL1 PID3625967 since13:59:57UTC; NL2 PID2228070 since13:59:59UTC; same production executable70e6c0fc, NRestarts0 at final node reads14:15/14:17UTC |
+| Canonical profiles/directories | Read through current locators; fresh normal gateway directory generations differ from the temporary bounded publisher generations |
+| Normal HTTPS delivery | Existing permanent FLEET_MESH_PROBE_1, separate node-bound challenge/proof/readiness and strict native import; no new identity/grant or owner-phone use |
+| NL1 live carrier traffic | Real Telemost seed/bootstrap and dedicated Family TLS/mux; four verified HTTPS, three DNS, expected NL1 egress; exit0/PASS at14:13:56UTC |
+| NL2 live carrier traffic | Same useful path, four verified HTTPS, three DNS, expected NL2 egress; retained NL2-specific probe exit0/PASS at14:19:57UTC |
+| Scheduler interlock | Real systemd invocations14:06/14:21 return NOOP; initial service exit0, no files/remote writes/restarts;27 successful directory synchronizations in the saved post-install window |
+| Other VPN services | AWG/TCP on all three nodes stay active with unchanged PIDs and NRestarts0 |
+| Cleanup | Both fixed temporary publisher configurations archived root-only; no old directory restored; own local probe forwards exited, permanent probe keys unchanged |
+
+The production gateway SHA256 remains
+`70e6c0fc1b920ad308e24667be94f674c34979dab6aa518e1a8194fff7c131b6`.
+The installed maintenance source inventory remains
+`e9fd31754bdf50c95842a1644f86ddb328b839ec1e0c9454daf08d3e9d17f0cc`.
+No gateway/API archive was rebuilt or replaced. New source commits are0aaa931
+(explicit guarded abort) and ea1bfc9 (scheduled-service interlock), both pushed and
+remote-verified on main. Full identities and evidence digests are in the JSON receipt.
+
+The interlock alone is installed as a root-owned standalone script in
+`/var/lib/fc-profile-control/mesh-serialization-ea1bfc9/`, SHA256
+`9a0df90fbfe461f3e826d31bb9124b4c3dc50d2ecac273c927ff14c9bc238353`.
+The only new unit drop-in is
+`/etc/systemd/system/family-connect-credential-renewal.service.d/zzzzzz-serialized-directory.conf`,
+SHA256 `e423fe1ca218e6a065055967fedcc1be94ec47a7fb58699b2f59a46efb4370af`.
+It delegates to the unchanged source-pinned controller; both timer definitions compare
+byte-for-byte equal to the saved originals, including15min renewal and30s directory
+intervals. Temporarily pausing/restoring those timers during authorized repair is
+recorded, not presented as “no production changes”. No timer enablement/boot policy,
+TTL, SSH120, admission, grants, revocation/floors or paid/cohort change was made.
+
+Preserved failures/limitations:
+
+- First repair returns ROLLED_BACK_READERS_STOPPED/DIRECTORY_INVALID before COMMIT;
+  repeated zero-acquisition OPERATION_BUSY is separately guarded, not erased.
+- First NL2 traffic attempt remains **FAIL/exit1**: the retained NL1 probe hardcodes
+  `ip=185.10.158.212` and rejects NL2 after successful Family/DNS/four HTTPS checks.
+  The independent retained NL2 probe binds `185.10.158.196` and passes; no assertion
+  was removed or first result relabelled. No production binary change was needed.
+- Readback attempts with the wrong NL2 Python path and an incorrect trust-dictionary
+  field fail locally/read-only; preserved stderr precedes corrected successful reads.
+- The probes are existing standalone native tools, not Android APKs, owner-phone
+  testing, a long-lived renewal crossing, or acceptance of the frozen isolated G4.
+  Recovery closes old sessions; new traffic is not seamless preservation of old TCP.
+- The real scheduled **NOOP is not yet a due automatic renewal**. Observe that next
+  renewal and both nodes before17:58:13UTC. Unrelated future lock contention still
+  fails closed; the explicit abort tool is not an automatic retry mechanism.
+- Paired Android DNS/WebSocket, screen-off, weak/mobile networks and paid-beta gates
+  remain unchanged. No invitation/catalog/release publication or APK118/updater113
+  overwrite. The frozen G4 resources and foreign working-tree changes were untouched.
+
+Rollback: if the interlock itself proves defective, preserve its failed execution,
+wait for the active renewal to finish, archive **only this added drop-in**, and
+daemon-reload to expose the saved prior ExecStart. Restore the observed prior timer
+state; do not enable new units. This reopens the known race and needs an explicit
+maintenance decision, not an automatic action. Never roll back DB, current canonical
+profiles, CRLs/floors or directories to the expired predecessors. Standalone recovery
+helpers have no timer and require explicit operator invocation. Temporary publisher
+configs were retired to each node's `generation-20261106/retired-worker-config.json`.
+
+Private evidence: `state-client-build/mesh-live-failure-20261106/`, including original
+readbacks, recovery stdout/stderr/exits, final locator/signature/service receipts,
+real scheduled journal and separate per-node probe receipts/raw logs. No private
+profiles, keys, DB snapshots or raw traffic are committed. Source checks remain128
+and32 scoped PASS with20 overlapping cases; no sum and no full-CI claim. This final
+documentation/receipt delta needs JSON/content/whitespace checks only.
+
 ## Live recovery and schedule interlock:6 November14:00UTC
+
+Historical intermediate checkpoint; final installation/readback is recorded above.
 
 Pinned helper0aaa931/`4f7fa6d3…` dry-run and apply both pass. The original empty
 transaction is ABORTED with its OPERATION_BUSY cause/intent preserved and no DB writes.

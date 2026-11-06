@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**6 November14:22UTC: authorized live MESH repair verified on both NL.**
+Common ordinary renewal COMMITTED; fresh leaf/CRL expire17:58:13UTC, CRL floor27274.
+Both original recovery-start PIDs remain active/NRestarts0. Existing service identity
+FLEET_MESH_PROBE_1 fetched node-bound HTTPS readiness, passed native validation and
+real Telemost bootstrap/Family TLS/mux, four verified HTTPS and three DNS checks per
+NL, including each correct egress. NL2's first probe FAIL is preserved: that old probe
+hardcodes NL1's egress; the retained NL2-specific binary passes separately, not a
+relabelled result. Temporary publisher configurations and own SSH forwards are retired.
+Scheduled-service interlock ea1bfc9 is installed;14:06/14:21 jobs return NOOP with
+both existing timers restored and their definitions unchanged. AWG/TCP PIDs on all
+three nodes are unchanged. Next operational check: the next due automatic common
+renewal, before17:58:13UTC; a NOOP does not prove that renewal has already happened.
+[Final evidence and rollback](releases/2026-11-06-vpn-health.md#verified-recovery-and-live-traffic).
+This is a narrow live repair, not online-package/G4 acceptance, Android rollout or B.
+Earlier preparation/checkpoint entries below retain their original historical state.
+
 **6 November14:00UTC: live fleet renewal COMMITTED; both NL MESH and HTTP active.**
 The first repair renewal safely aborted on expired seed directories (DIRECTORY_INVALID,
 readers stopped). Existing bounded publisher recovery staged real Telemost rooms and

@@ -3,16 +3,17 @@
 ## Current engineering priority / Текущий critical path
 
 **Selected owner follow-up6 November: restore failed live MESH, not a new rollout.**
-The ordinary fleet recovery has now committed after bounded directory recovery; both NL
-and HTTP are active. Finish installing/readback of the qualified publisher interlock and
-verify current signed materials, real directory generation, readiness and unchanged AWG/TCP.
-The paragraphs below retain the preceding recovery preparation, not another active task.
-Use the qualified explicit unacquired-abort guard only for the proven empty
-OPERATION_BUSY transaction, then the existing pinned fleet controller and fresh
-both-NL/readiness checks. Preserve current DB, revocations/floors, ordinary VPN and
-all original evidence. No blind restart, profile restore, TTL change or online-package
-activation. The independently running frozen G4 is not restarted or requalified by this
-repair; ANDROID-APP-VPN still waits for its separate accepted A checkpoint.
+Recovery and post-repair traffic are verified: ordinary fleet COMMIT, fresh signed
+materials/floor27274, both real Telemost/Family/mux paths, per-node DNS/verified HTTPS
+and matching egress. The interlock is installed and the real scheduled service passes
+NOOP; existing timers/intervals and ordinary AWG/TCP PIDs are unchanged. Temporary
+publisher configurations and own probe forwards are retired; original failures remain.
+**One operational next:** observe the next due automatic common renewal before the
+current17:58:13UTC expiry, retaining exact decision/readback and both-NL traffic results.
+Do not claim it passed from the earlier NOOP. [Repair receipt](releases/2026-11-06-vpn-health.md#verified-recovery-and-live-traffic).
+The independently running frozen G4 is not restarted, merged into or accepted by this
+live repair; ANDROID-APP-VPN still requires its separate accepted A checkpoint.
+All earlier dated preparation/NEXT entries below are historical, not parallel tasks.
 
 **6 November13:27UTC operational warning:** both live NL MESH bootstrap services
 FAILED; ordinary AWG/TCP active. Diagnosis/recovery remains separate from isolated G4;
