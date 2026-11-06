@@ -1,6 +1,173 @@
 # beta113 / API28 — отдельный полевой отказ начального подключения
 
+<a id="dual-direct-path-failure"></a>
+## Продолжение148e212: оба прямых служебных пути недоступны
+
+**COLD_BOOTSTRAP_GAP_REPRODUCED / PRODUCT_UNCHANGED.** В поставленной beta113 нет
+реализованного пути получения проверенных стартовых материалов для уже активированного
+устройства **без пригодного readiness-кеша и без уже работающего VPN**, если одновременно недоступны основной
+HTTPS `185.251.89.19:8443` и прямой RNS TCP `186.246.45.246:4242`. Это отсутствие
+перехода до первого MESH, а не только неточная классификация ошибки. Локальный тест
+задаёт оба отказа; он **не устанавливает**, что именно оператор блокирует эти адреса
+на данном телефоне. Прежние source/JSON выводы148e212 ниже сохраняются без пересмотра.
+
+### Зависимости первого подключения
+
+Все ссылки на исходники в этом разделе относятся к поставленному
+`d2882cde4c50b15085b925007c04c48f4de61bf0`, не к текущему main. Пути Java указаны
+от `clients/android/app/src/main/java/com/familyconnect/app/`.
+
+| Этап | Фактический вход / источник | Что есть без readiness-кеша |
+|---|---|---|
+| Identity / активация | FriendsAccessAndroid.identity; FriendsActivity.register; `/friends/challenge` → proof → `/friends/activate`; при приглашении сначала `/friends/referral/claim` | У активированного клиента сохранён локальный ключ. Новый ключ можно создать офлайн, но это не выдаёт серверную identity/активацию/допуск |
+| Trust / выбор сервера | APK ControlTrust anchor, pin/config RNS; статический выбор gateway и отдельно сохранённые обычные профили | Публичный якорь, адреса, выбор узла и возможные AWG/TCP-профили не содержат замену действующему Family/readiness bundle |
+| Получение readiness | FriendsAccessAndroid:94; actual ReadinessBootstrapRoute + FriendsReadinessProtocol: HTTPS challenge/fetch, при допустимом сетевом отказе challenge — прямой RNS | Третьей release-ветки получения bundle нет. Chat fallback в post:50 разрешён только для chat/challenge и chat/register, не активации/readiness |
+| Проверка / кеш | FriendsRestricted.cache:31 → NativeRestricted.validationCode; RestrictedCache/RestrictedVault | Нужны выданные issuer delegation, leaf с device/Family/node binding, действующая CRL и directory/seed join URLs, сроки и монотонные ограничения. Ключ и anchor сами их не создают |
+| Начало MESH | RestrictedTunnelEngine:80 ждёт ready; только затем beginReady:84 → native DeliveryMaterial → wholedevice.OpenProvisioned | Без пригодного bundle до Telemost bootstrap не доходит; descriptor ещё не запрашивается |
+| Seed / descriptor / session | wholedevice/session.go:323,340 → bootstrap.Recover → seed Family TLS → broker descriptor → dedicated room/Family TLS/mux | Уже требуются Family credentials и usable directory. `/v1/bootstrap/directory` в bootstrap/seed.go:97 также проверяет существующую Family TLS identity, а не выдаёт её с нуля |
+
+Production native `pilot/android-restricted/native/main.go:101` вызывает
+`wholedevice.DeliveryMaterial(..., time.Now())` перед созданием сеанса.
+`carrier/wholedevice/provisioning.go:119,205` проверяет issuer/leaf/CRL, identity/root/node
+bindings и bounds; private leaf material выводится в памяти из существующей identity.
+Directory принимается в проверенном provisioning-контексте, не из произвольного
+неподписанного файла. Видимый список узлов не означает наличия этих материалов.
+
+Граница вывода: уже существующая ветвь `HTTPS_VPN` при собственном `status=on`,
+`healthStatus=ok` может доставлять readiness через ранее работающий VPN. Это не
+независимый холодный вход: сначала нужно получить исправный транспорт. В тесте
+status/health=off, как при отсутствии такого соединения; blocking guard не равен
+healthy VPN. Возможную доступность AWG/TCP отдельно в конкретной сети не отрицаем,
+но в заявленных жёстких белых списках она не доказана и не заменяет требуемый cold MESH.
+Само создание VPN-интерфейса или видимый сервер не удовлетворяет этому условию.
+
+**Service-only ChatCarrier не разрывает зависимость.** Его настоящий `acquire():21`
+загружает identity/anchor и `RestrictedCache`; при `cache.usable()==null` прекращает
+вызов **до** native chatAcquire. Native restrictedchat также требует DeliveryMaterial
+перед OpenProvisioned. Наличие классов carrier/chat не является альтернативным входом
+для отсутствующего кеша. Тестовый provisioning gate обычной поставки выключен.
+
+### Короткое воспроизведение, без телефона и реальной сети
+
+Новый runner находится в существующем `tests/fixtures/mobile_bootstrap/`:
+
+```sh
+python3 tests/fixtures/mobile_bootstrap/check_blocked_paths.py \
+  --source-root state-client-build/beta113-field16/source \
+  --tools /mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools \
+  --output state-client-build/beta113-field16/blocked-paths-2
+```
+
+Это уже выполненная команда; при воспроизведении требуется **новое** output-имя.
+Runner не перезаписывает evidence. Компилируются неизменённые actual113
+FriendsAccessAndroid, ChatCarrier, route/protocol/cache/bootstrap и release-disabled
+gate; SHA выбранных source сверяются с Git d2882cd. Заменены Android/platform и I/O
+границы: HTTPS write выдаёт SocketTimeoutException, RNS open — typed Unavailable.
+Identity синтетическая, storage в памяти; подключения к серверу не выполняются.
+Это JVM source-flow, **не Android Network/Keystore/JNI runtime и не VPN traffic PASS**.
+
+| Случай | Фактический результат |
+|---|---|
+| Уже активированное устройство без кеша (существующая identity, server eligibility — предпосылка) | Один HTTPS readiness challenge и один RNS open; FETCH_FAILED, availabilityFailure=true, response=null; свежий Connect получает temporary BOOTSTRAP_UNAVAILABLE до native MESH |
+| Уже валидированный, ещё действующий кеш | Те же два отказа; exact cached bytes допускаются для нового явного Connect, status=CACHED_VALID_REFRESH_UNAVAILABLE. Это **выбор материалов**, не проверенное здесь Telemost-подключение. Внутренний restoring=true при таком refresh отказе блокируется |
+| Истёкший кеш | После двух отказов response=null; не превращается в допустимый кеш |
+| Первая activate / register без invitation token | Создан только локальный ключ; HTTPS `/friends/challenge` не проходит, `/friends/activate` не вызван; RNS не вызывается |
+| Register с синтетическим invitation token | Остановка уже на HTTPS `/friends/referral/claim`; активации/ready/RNS нет |
+| Попытка service-only chat без readiness | Actual ChatCarrier.openMailbox возвращает -1; native chatAcquire не вызван, другого fetch нет |
+
+**7 JUnit PASS, 0.361s, compiler/run exit0.** Положительный cache-case использует
+контролируемое время и seam уже успешного validator; это не подмена production-проверки
+и не самостоятельное доказательство криптографической пригодности. Поэтому отдельно
+на exact113 выполнены существующие native тесты:
+`TestCachedBootstrapCryptoDeadlinesAndRevocation`,
+`TestProductionDeliveryToExistingFamilyMaterial`,
+`TestProductionDeliveryRejectsBindingTrustExpiryBounds` — **3 PASS, 0.014s, exit0**.
+Они используют реальные синтетические подписи, actual ValidateDelivery/DeliveryMaterial,
+Family configuration и directory parser, проверяют expiry/revocation/bindings. Это не
+wall-clock пересечение срока и не полный carrier suite. Команда с offline Go caches,
+GOMAXPROCS=2, `-p 1`, nice10 и timeout приведена в [fixture README](../../tests/fixtures/mobile_bootstrap/README.md#beta113-both-direct-bootstrap-paths-unavailable).
+JVM ограничен двумя CPU/128MiB; ни AVD, ни APK, ни длительный soak не запускались.
+
+Локальный корень результатов: `state-client-build/beta113-field16/` в отдельной
+рабочей копии. Результаты не складываются с прежними пересекающимися suites.
+
+| Evidence | Результат / SHA256 |
+|---|---|
+| `blocked-paths-2/receipt.json`, `check-1.log` | PASS7; log `1f83d0cae4a9700dfb9832737482a453032172dc74a49d1db025adb52b362ca4`; receipt содержит команды, exit и source/fixture inventory |
+| `blocked-native.log`, `blocked-native.exit` | PASS3/exit0; log `f86d3ccd9911307550d9bfa78ed5e03ad10f5eacd8bee77a68b630e8ba00788a` |
+| Первый `blocked-paths-1/check-1.log` | **FAIL сохранён**, `b4e290dc114de7d9058818c7199cfb8f24632b945a5ecc0041dcd387e209e1a9`: ошибочный test URL handler запрещал само создание внутреннего JCE non-HTTPS URL. Исправлен только seam: запрет на открытие сети, не создание URL; продукт/ожидания не менялись |
+| Runner `check_blocked_paths.py` | `3855550e4d845948d33432d2ffbf870198dea857dc33f3db57a9e167196df6cc` |
+| `blocked_paths/BlockedPathsTest.java` | `73965a090f50f57b088b15b5b489598faaa8482edd299c0c9e582472a88d7093` |
+
+### Минимальный недостающий переход — предложение, не реализация
+
+Не хватает перехода **существующая device identity + публичный trust → проверенный
+readiness bundle через доступный carrier, до наличия Family leaf/seed directory**.
+Минимальное направление — ограниченный service-only provisioning-вход поверх уже
+используемого Telemost packet transport с существующими challenge/device-proof,
+readiness handlers, issuer и trust boundaries. Не второй writer/signer/transport и
+не выдача доступа только за знание room URL.
+
+У этого входа должен быть **аутентифицированный provisioning rendezvous, не зависящий
+от самого readiness-кеша**: его locator/server binding проверяется существующим
+trust anchor/pin; locator не является grant. Пока такого входа нет, просто вызвать
+ChatCarrier означало бы цикл. Разрешены только ограниченные provisioning RPC;
+TCP/DNS/mux-доступ — после обычной проверки bundle, identity/node, CRL/floors и bounds.
+На сервере переиспользуются текущие entitlement/admission/proof проверки без ослабления.
+Если для rendezvous потребуется новый контракт, его надо явно ограничить и проверить,
+а не объявить существующим на основании transport-классов.
+
+**Один следующий шаг реализации:** такой bounded adapter для *уже активированного*
+клиента без кеша и его интеграционный тест с двумя отключёнными direct путями,
+настоящим signed bundle и неизменённым validator, прежде чем разрешать MESH.
+Получение новой identity/первая активация остаётся отдельным неподтверждённым сценарием;
+для него понадобился бы тот же service-only доступ к существующим claim/challenge/
+activate handlers с прежними правилами, не автоматическое расширение этого задания.
+Здесь adapter не реализован, endpoint/provider не добавлены. Доступность Telemost
+в конкретных белых списках телефона не установлена и должна проверяться в поле.
+Timeout/retry, истёкший кеш, неподписанный каталог и сторонний VPN не являются решением.
+
+### Минимальная правка сохранения причины — отдельно от доступности
+
+Сохранённое исходное FETCH_FAILED, последующий owner interruption AUTH и cleanup
+INTERNAL — **разные события**. Exact113 `ConnectivityOrchestrator:143` теряет `last`
+при исключении closeCandidate, вызывая finish(INTERNAL); `:164` аналогично заменяет
+переданный reason. Ранее сохранённый control-flow probe воспроизводит эти ветви.
+
+Предлагаемая минимальная правка — не переклассификация и не изменение recovery:
+добавить к terminal event/DiagnosticRing ограниченные enum-поля `trigger_reason`,
+`cleanup_reason`, `secondary_stage`, сохранив действующий `reason=INTERNAL` как
+policy outcome. В первом catch передавать сохранённый `last` как trigger; во втором
+захватить входной reason **до** попытки cleanup. Обе ветви записывают classify(cleanup)
+в отдельное поле, не текст исключения/ключи/URL. Схема результата для воспроизведённого
+случая: `reason=INTERNAL, trigger_reason=AUTH, secondary_stage=CLEANUP`; cleanup enum
+берётся только из реально пойманного исключения, не угадывается по экспорту.
+
+Существующие `candidate_failed`/fetch trace остаются самостоятельными, связанными с
+своей попыткой; старый fetch не копируется как доказанная причина нового AUTH.
+Источник owner-события сохранять UNKNOWN до наблюдения фактического callback;
+onRevoke и onDestroy различать лишь там, где они действительно вызваны. Fail-closed,
+терминальность и отсутствие нового retry остаются прежними. Gate такой правки:
+два cleanup-catch теста плюс неизменённые orchestrator/serializer проверки; **это
+описание минимального изменения, не уже установленное исправление**.
+
+### Неопределённость телефона и границы результата
+
+По-прежнему отсутствует признак живого выбранного physical Network в момент ошибки
+и раздельный исход TCP connect / TLS handshake / HTTP write. Поэтому недоступность
+служебного адреса и ошибка выбора/потери underlay на этом телефоне пока неразличимы.
+Локальный dual-block test не выбирает одну из этих гипотез. Сравнительный same-cellular
+тест предыдущего отчёта остаётся полевой рекомендацией, а не выполненной проверкой.
+Новый диагностический APK не собирался: полезен был бы только для различения этих
+конкретных этапов/liveness и фактических owner/cleanup событий, не как предполагаемый
+ремонт холодного старта. Raw export, opaque IDs, ключи и приватные receipts в Git нет.
+G4/frozen artifacts, production, сертификаты, подписки, admission и другие рабочие
+копии не затронуты. Изменены только локальные fixtures/runner и документация.
+
 ## Статус и границы входных данных
+
+Следующие разделы сохраняют выводы checkpoint148e212; их прежний NEXT заменён
+ограниченным предложением реализации в продолжении выше, не новым глобальным этапом.
 
 **EXPORT_READ / SOURCE_AUDIT_COMPLETE / FIELD_CAUSE_NARROWED_NOT_FIXED.** Это отдельный клиент, не телефон
 владельца, не isolated G4 и не проверка исправленного live MESH. Продуктовый код,

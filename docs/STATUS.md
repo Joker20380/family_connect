@@ -1,19 +1,19 @@
 # Текущее состояние / Current state
 
-**6 November — actual beta113/API28 export16 read; field cause narrowed, not fixed.**
-The owner supplied the correct file (SHA25694e2ba95,17640 bytes); the old beta65 export
-remains excluded. Its incident contains35 events from5 November; the newer ring has
-four readiness-only events while DISCONNECTED on6 November, not another recorded Connect.
-Two retained fetches fail at HTTPS challenge then RNS open in10.252/10.434s; both use
-CELLULAR, with the same handle within a fetch but different handles between days.
-Initial FETCH_FAILED precedes BOOTSTRAP_UNAVAILABLE; AUTH while awaiting retry maps to
-owner interruption, and later candidate AUTH is followed by INTERNAL at cleanup.
-Exact onRevoke/onDestroy cause, cleanup exception and TCP/TLS failure stage remain absent.
-No HTTP authorization denial or RNS operator block is proved. Exact113 lightweight
-31-case orchestrator rerun and two synthetic control-flow cases PASS; earlier scoped
-checks retained, not added together. Next: one same-cellular warm/cold-client comparison
-without clearing data. No product change, APK, AVD, production or G4 action.
-[Source audit, evidence and comparison instructions](releases/2026-11-06-beta113-field16-bootstrap.md).
+**6 November — beta113 cold bootstrap gap reproduced; not a field-network diagnosis.**
+With HTTPS8443 and direct RNS4242 both unavailable, an activated device without usable
+readiness or an already healthy VPN has no cold path to verified pre-Telemost materials.
+Service-only chat also requires that cache; it is not an independent provisioning route.
+A valid cache can feed a fresh Connect, not first activation or unavailable-refresh recovery.
+Seven short exact113 JVM entrypoint cases PASS with blocked synthetic I/O; three existing
+native crypto/binding cases PASS separately. This is not Android/Telemost traffic acceptance.
+The first fixture failure is retained. No product code, APK, AVD, production or G4 change.
+Export16/source conclusions at148e212 stand: fetch failure, owner interruption and cleanup
+are distinct; neither operator blocking nor the exact owner callback is established.
+**Next proposed implementation:** bounded service-only provisioning for an activated,
+uncached device over the existing carrier/trust, without the current cache dependency.
+It is not implemented or assumed reachable on this phone. Activation remains separate.
+[Missing transition, reproduction and diagnostic metadata proposal](releases/2026-11-06-beta113-field16-bootstrap.md#dual-direct-path-failure).
 The live-renewal watch and frozen G4 below retain their separate scope/status.
 
 **6 November14:22UTC: authorized live MESH repair verified on both NL.**

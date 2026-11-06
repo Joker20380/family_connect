@@ -3,16 +3,18 @@
 ## Current engineering priority / Текущий critical path
 
 **Selected6 November: separate beta113/API28 field bootstrap diagnosis, not G4.**
-The correct export is now read and correlated against exact d2882cd: first FETCH_FAILED,
-then BOOTSTRAP_UNAVAILABLE, owner AUTH during retry wait, and later AUTH→cleanup INTERNAL.
-The retained detailed fetch belongs to the preceding retry, not the final AUTH incident;
-the6 November ring records only readiness while disconnected. Two fetches bind CELLULAR
-with no handle change inside each attempt; endpoint reachability versus lost physical
-Network is still unproved. No classification or network policy is changed.
-**One next for this case:** the bounded same-cellular warm/cold-client comparison in the
-[audit](releases/2026-11-06-beta113-field16-bootstrap.md), retaining UTC/cache/handle results.
-The missing evidence is Network liveness and TCP/TLS/owner-callback detail, not the
-already supplied JSON. Do not build a speculative APK to replace that comparison.
+The148e212 source/JSON findings stand. A bounded exact113 test now confirms no cold
+provisioning route when HTTPS8443 and RNS4242 both fail and readiness is missing.
+Actual FriendsAccessAndroid and ChatCarrier entrypoints are exercised with synthetic I/O;
+valid-cache selection is a separate model, backed by separate existing native crypto checks,
+not evidence of uncached or first-activation success. No product implementation is changed.
+**One proposed implementation next:** an activated-device service-only provisioning entry
+over the existing carrier and trust, with authenticated rendezvous independent of readiness.
+Require the same dual-block case to obtain and validate a real bundle before opening MESH;
+do not substitute today's cache-dependent ChatCarrier. First activation is a separate scope.
+[Bounded result, test commands and constraints](releases/2026-11-06-beta113-field16-bootstrap.md#dual-direct-path-failure).
+Phone endpoint reachability versus Network selection remains unproved. Preserve separate
+fetch/owner/cleanup causes; no timeout/AUTH relabelling or speculative diagnostic APK.
 Do not start AVDs, touch frozen G4, change production or advance ANDROID-APP-VPN here.
 The separately recorded live-renewal follow-up below remains outstanding, not executed
 by this source investigation; the product queue is unchanged.
