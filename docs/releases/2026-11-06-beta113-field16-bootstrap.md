@@ -890,3 +890,110 @@ of scope. This is a blocked runtime checkpoint, not a release or acceptance PASS
 Documentation validation: `check_public_docs.py` on STATUS, PLAN and this report
 passes3 files/305 links, no errors; sanitized JSON invariants and `git diff --check`
 pass. These checks do not exercise Android, Telemost or any external URL.
+
+### Actual Android/Telemost attempt, 6 November
+
+**FAIL_RUNTIME, incomplete acceptance.** The previous authentication-only blocker
+is superseded by successful protected local input and an actual bounded Connect.
+No product source changes: candidate `cf419a1`, execution checkout `41923a2` (later
+commits in that interval are documentation only). No locator import/new discovery,
+OAuth/account, production, admission, subscription, catalog or live-service change.
+
+#### Secret input and preserved setup failures
+
+The existing Zenity→stdin-pipe→KeePassXC CLI pattern is used, not GUI-unlock reuse,
+clipboard, chat, argv or a recorded terminal password prompt. The selected database
+is opened read-only with the existing owner/mode/symlink guards. Only the authorized
+entry's Password attribute is requested; no listing, full export or other entry.
+CLI output goes to the dedicated local test supervisor, then the server's stdin;
+the server creates its provider and immediately removes the temporary environment
+binding. Build/Android processes do not receive this value. Core dumps are disabled.
+No password/token file, report value, hash, fragment or client-asset copy is created.
+All processes that held the secret have exited. The original entry is unchanged.
+
+The first two CLI attempts fail with the displayed root group incorrectly included
+in the CLI path. Their raw diagnostics were suppressed, so no password-error claim
+is made. A disposable synthetic database reproduces this path discrepancy; removing
+the display root addresses the same authorized entry, not a search for alternatives.
+The next successful read is followed by a fail-closed executable-permission guard
+before provider access. Its memory is released; the guard is moved before input and
+the own executable is restricted to0700. Further local input successfully starts
+the server. These operator/runner failures are retained, not credential exposure or
+product failures. No automatic recovery of a password from another source occurs.
+
+The first runtime fixture uses loopback DNS127.0.0.53 for a protected-route server
+connector. `underlay.RouteIPv4` therefore selects loopback and the ICE filter cannot
+advertise the physical route. The ordinary gateway publishes a real seed, while the
+provisioning worker fails before its locator. Both workers join, the authority stops,
+and the first NVIDIA/KVM AVD closes before installing/running the test. The initial
+worker error was not retained beyond its stage; attribution to the fixture's route
+selection is source-supported, not a captured provider error. The corrected fixture
+uses existing `bootstrap.TelemostSeed` on the non-VPN server; Android's real protected
+network code is unchanged. A new local input starts this separate corrected attempt.
+
+#### Actual runtime result
+
+Before heavy work, no running G4-matching container is found. No G4 final receipt is
+reread, and none of its resources is stopped/removed. The shared qualification lock
+and absence of another QEMU process are checked. AVDs run sequentially, API27/x86_64,
+`-gpu host`, PRIME offload, `-accel on`; actual guest renderer is NVIDIA GTX1650Ti /
+driver580.178.04. Strict guest wall-clock checks pass without adjusting clocks or
+relaxing certificate checks. No physical owner/field device is queried or used.
+
+The fresh local Friends authority has generated disposable identities, root/issuer,
+DB and profile. Provider access creates test rooms only. The corrected server publishes
+an issuer-signed finite locator before Connect; the build embeds only that locator
+and synthetic trust. Test identity is imported into real Android Keystore-wrapped
+storage; readiness is initially absent. Guest-only OUTPUT rules reject the RU address
+and TCP8443/4242 before app installation, preventing accidental production fallback.
+There are no host firewall or server-policy changes. This is a synthetic gateway
+using the primary-node identifier, **not production NL1/NL2 or cellular acceptance**.
+
+| Actual instrumentation event | Guest monotonic ms | Since Connect |
+| --- | --- | --- |
+| CONNECT_START | 38706 | 0 |
+| OWNER_OPEN | 38725 | 19ms |
+| FAIL_Rejected | 68825 | 30.119s |
+| OWN_CLIENT_CLOSED | 68893 | 30.187s |
+
+JUnit:1 test/1 failure,30.203s; host instrumentation command30.567534s. These durations
+are not successful provisioning latency. The unchanged30s Connect bound is not
+extended and the actual Connect is not retried. The corrected authority DB has one
+restricted challenge and one issued certificate; the earlier fixture has zero of
+each. This proves progress through authenticated issuance, **not** response delivery,
+client validation, encrypted readiness-cache completion or native READY. The test
+retains the exception class `Rejected`, but not its category/native substage; no AUTH,
+provider-denial or carrier-timeout diagnosis is invented. DNS, verified HTTPS, egress,
+late/closed-owner, expired/foreign/revoked identity and ACK_PENDING/ACK_RECEIVED runtime
+assertions are NOT_RUN after this first failure. Earlier mocked/core PASS is separate.
+
+Qualification APK manifest remains118/`0.1.18-beta118`, package
+`com.familyconnect.app.friends`, debug signing for this disposable AVD only. Native
+metadata: `telemost`, x86_64, no local-core/owner-diagnostic build tags. Its bytes and
+packaged locator/root match the actual inputs. APK and test APK are built and installed
+only in the disposable AVD; no public install/update/catalog/invitation version changes.
+There is no production rollout/rollback action. Exact hashes and retained local
+evidence are in [the sanitized runtime receipt](2026-11-06-cold-provisioning-live-attempt.json).
+
+#### Cleanup and remaining boundary
+
+On failure the engine is closed and the owner ends; both owned emulator processes
+are subsequently confirmed stopped. All own Telemost workers join, the isolated
+authority container is stopped/removed, and the credential supervisors exit. Final
+checks find no own stand, Zenity or QEMU process and no own authority container.
+No secret file was created, so there is no temporary secret file to delete. Private
+synthetic fixture/AVD/artifact evidence remains ignored/local, not Git. Provider-side
+room-object deletion/retention is not independently verified: this receipt proves
+closure of own participants/connections, not deletion of the provider's room metadata.
+Working rooms are not inspected, modified or closed. No additional OAuth read is
+performed just to repeat this failed Connect.
+
+**One next:** improve stage attribution around issuance→delivery→cache→native READY
+within this same bounded diagnostic task before considering another runtime attempt.
+Keep the original result,30s budget and current scope. Do not start locator import,
+discovery, public delivery or any unrelated feature. This is an incomplete runtime
+checkpoint, not an authentication-only documentation update or acceptance PASS.
+
+Documentation/receipt validation passes: three Markdown files/308 local links,
+eight retained evidence/source hashes, exact monotonic delta, manifest118/version
+readback, JSON parsing and whitespace. No full-CI or remaining runtime PASS is claimed.

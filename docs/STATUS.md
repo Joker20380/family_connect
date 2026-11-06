@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**6 November — actual Android/Telemost cold provisioning attempt FAIL, not auth-blocked.**
+Protected local input now reads only the authorized vault entry and pipes its value
+to the disposable test process; no credential is printed, persisted or sent to the
+client. After G4 resource release, sequential API27 NVIDIA/KVM AVDs pass renderer
+checks. The first server fixture incorrectly pins ICE to a loopback resolver and
+fails before locator publication; its evidence is retained. The corrected fixture
+uses the existing server Telemost connector and publishes a signed finite locator.
+Real Android/framework/Keystore/JNI Connect then fails with `Rejected` at30.119s,
+without NATIVE_READY. Its isolated authority records one restricted challenge and
+one newly issued certificate, but delivery/validation/cache completion is unproved.
+No budget extension or unchanged retry. DNS/verified HTTPS/egress and runtime
+negatives/ACK checks remain NOT_RUN. Both own AVDs, authority and carrier workers
+are stopped; no temporary secret file was made. Test-only118/x86_64 APK is built,
+installed only in the disposable AVD, never distributed; product source unchanged.
+**Next:** localize the issued-bundle→READY30s boundary with better stage evidence,
+not a rollout, locator import, new discovery or another identical Connect attempt.
+[Actual attempt, failures and cleanup limits](releases/2026-11-06-beta113-field16-bootstrap.md#actual-androidtelemost-attempt-6-november).
+
 **6 November18:23UTC onward — cold provisioning: G4 resources released, vault access pending.**
 One authorized read-only snapshot finds the existing G4 main container exited0 at
 18:14:35UTC/Pid0 and both route helpers stopped (gateway1, origin0). Its waiter exit

@@ -8,17 +8,19 @@ validation/encrypted vault, existing Android source owner and actual native MESH
 This is a separate finite-locator source candidate, not an installed beta113 repair.
 No production locator/credentials are supplied; missed rotation fails closed. Known
 field-network uncertainty, G4 and other branches retain their independent state.
-**One next:** obtain the specifically authorized test OAuth entry through normal
-local vault authentication, then execute the same Android/Telemost cold provisioning
-vertical. The single18:23UTC readback finds G4 main exited0/Pid0 and both helpers
-stopped; its terminal receipt was not obtained, and G4 acceptance/cleanup remains
-with the main session. Do not poll or take over cleanup. The earlier17:55 resource
-block is superseded, not relabelled as a test PASS. KeePassXC is not running/no DBus
-owner; no unlocked session is available and no secret was read. Normal local owner
-authentication is still needed, not another authorization or a token in chat.
-Runtime, APK, locator, Connect latency and real
-DNS/HTTPS/egress are NOT_RUN. Existing JNI compilation and source/core PASS remain
-their own evidence, not Android/Telemost runtime or release acceptance. Preserve the
+**One next:** localize the real issued-bundle→READY boundary after the first actual
+Android/Telemost Connect fails with `Rejected` at30.119s. Protected local vault input
+and token handoff succeeded; authentication is no longer the blocker. The corrected
+isolated server publishes a finite signed locator; the synthetic authority records
+one real restricted challenge/certificate issuance. Android API27 uses real NVIDIA/
+KVM, framework/Keystore/JNI and guest-only direct-path rejection, but no NATIVE_READY
+or proven delivery/cache completion. Retain the earlier loopback-ICE fixture failure.
+Do not repeat an unchanged Connect or extend its30s budget. Test-only118/x86_64 APK
+is built/AVD-installed, not distributed. DNS/HTTPS/egress and negative/ACK runtime
+checks remain NOT_RUN. Own processes/sessions are stopped; G4 cleanup and acceptance
+remain with the main session. No product code, live service, catalog or policy change.
+[Actual runtime attempt](releases/2026-11-06-beta113-field16-bootstrap.md#actual-androidtelemost-attempt-6-november).
+Existing source/core PASS remains separate, not runtime acceptance. Preserve the
 KVM/NVIDIA requirement and the finite pre-Connect APK asset; missed-rotation recovery
 remains unimplemented. Proposed signed-file locator import is a contract only, not
 another authorized implementation task or automatic discovery. The owner explicitly
