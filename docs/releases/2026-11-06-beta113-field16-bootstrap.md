@@ -1027,3 +1027,69 @@ Its finally always closes the owned connection even if snapshotting fails.
 test-only118/x86_64 prebuild pass. The already pinned real-provider JNI is reused; the
 server adds observational logging only. Runtime remains pending one diagnostic attempt.
 No runtime negatives, product timeout/TTL/trust/admission change, user APK or deployment.
+
+### Single corrected diagnostic attempt, 6 November
+
+1. **Origin of30s / conformity.** Original hash-verified harness bypassed AutomaticConnection
+   and supplied `now+30000` to the whole engine. That test defect is fixed, not a product
+   timeout. The new harness invokes the same AutomaticConnection MESH-only selection as
+   ConnectionService, without its UI/foreground-service lifecycle. Recorded absolute
+   candidate deadline339645ms is139645+200000ms on this guest; Connect begins139617ms.
+   The separate readiness fetch remains30000ms. Original exact deadline/category were
+   not recorded, so original30.119s is not retrospective proof of a particular check.
+2. **Bundle delivery/acceptance.** Original attempt: issuance1, delivery/acceptance unknown.
+   New attempt: fresh authority restricted challenges0/certificates0; no challenge reply
+   and no bundle received/accepted. Cache diagnostics remain MISSING/selected_source NONE.
+   A readiness storage file exists after the attempt because cache bookkeeping is durable;
+   that file's existence is not an accepted readiness bundle. Initial vault read was null.
+3. **Last success / first unexpected failure.** Both direct paths are deliberately rejected.
+   HTTPS CHALLENGE fails at CONNECT_TLS_WRITE/SOCKET (trace20ms); RNS at RELAY_OPEN/
+   UNAVAILABLE (1729ms). Provisioning locator passes native begin validation and a lease
+   is allocated (CARRIER_OPEN1734ms → CARRIER_HANDLE1736ms). CARRIER_REQUEST starts1736ms,
+   then fails by1739ms without RESPONSE_RECEIVED. Source control flow and the wrapper
+   code identify the native Post null/no-reply boundary, not its underlying Go reason.
+   There is no server TLS-ready/request/backend/write event; absence does not distinguish
+   failed carrier establishment from earlier native underlay/lease failures. No request-ID
+   match can be made because no server request event exists. No cross-process monotonic
+   subtraction is used. FriendsRestricted.ready returns null; engine stage READINESS_RETURNED
+   precedes its BOOTSTRAP_UNAVAILABLE rejection. NativeRestricted.beginReady is NOT_RUN.
+4. **Fixed causes / remaining uncertainty.** Harness-wide30s was wrong and is corrected.
+   The new failure occurs at orchestrator elapsed1792ms, leaving198230ms at the pre-cleanup
+   snapshot; readiness has about28277ms left at CARRIER_REQUEST. Neither deadline expired.
+   The recorded trace's PROTOCOL is misleading: generic provisioning IOException becomes
+   CHALLENGE_TEMPORARY_SERVER_FAILURE with availabilityFailure=false, an IllegalArgumentException
+   subtype classified as PROTOCOL by the old diagnostic mapper. After this run, source now
+   retains the original provisioning exception before wrapping and maps wrapped IO to IO,
+   retaining challenge enum/availability. This changes diagnostics only, not retry policy.
+   37 focused JVM tests pass, including deadline/category and wrapped-IO regression tests;
+   Go coldprovision tests pass. No second runtime tests that final diagnostic correction.
+   The original issuance→client boundary and the new native no-reply subcause remain unknown;
+   neither AUTH nor slow Telemost nor generic network failure is established as root cause.
+5. **Single run / cleanup.** API27, real Keystore/JNI/TUN owner, NVIDIA host GPU/KVM;
+   guest-only direct-path rejects. Registered synthetic identity is explicitly verified
+   against the fresh read-only authority DB, with zero previous challenge/certificate;
+   matching identity assets, valid prepositioned locator, null readiness and no prior VPN
+   are checked before Connect. This is the only new Connect, with no restoration polling.
+   It is FAIL_RUNTIME, not MESH PASS. DNS/verified HTTPS/egress and other runtime negatives
+   are NOT_RUN. Client disconnected, owned AVD exited, carrier workers joined, authority
+   stopped/removed, credential supervisors exited and shared emulator lock was reacquired.
+   Two new owned room objects have distinct privately retained IDs; participant closure
+   is not object deletion. The official Telemost conference reference lists create/read/
+   update, not an object-delete operation; no guessed DELETE or working-room access was
+   attempted. Room-object deletion and lifetime remain NOT_VERIFIED. No token file was
+   created; secret-bearing processes exited. Original KeePass record is unchanged.
+
+The first Wayland dialog returned without a value; protected Zenity via the verified
+X11 display succeeded. No password/token entered agent stdin, logs, client assets or Git.
+The original AVD/evidence are untouched; the follow-up uses a separate ignored directory
+`state-client-build/cold-provisioning-followup-20261106`. Its source is047da1d; pinned
+JNI remains4e27ff23…57f99 from41923a2 (same product code as cf419a1). The follow-up server
+adds safe stage logging and preserves provider ownership records. Test-only APK118/
+`0.1.18-beta118` is built and installed only in its disposable AVD, never distributed.
+No production rollout or rollback, installed owner/field client, admission/catalog,
+OAuth account settings, paid pilot, G4 or other branch is changed. The one-run allowance
+is exhausted; further native-boundary work is not an automatic authorization for runtime.
+
+Exact artifact/source/log hashes and typed pre-cleanup evidence:
+[sanitized follow-up receipt](2026-11-06-cold-provisioning-followup.json).
+Public provider-reference check: <https://yandex.ru/dev/telemost/doc/ru/conferences/>.

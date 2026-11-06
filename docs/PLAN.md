@@ -2,14 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Active same-incident gate:** original harness hash proves a test-only `now+30000`
-engine deadline, not the normal 200000ms MESH candidate/300000ms Connect budget.
-Corrected instrumentation now uses AutomaticConnection, retains enum category before
-candidate cleanup and records bounded existing readiness/native stages. Real readiness
-fetch stays 30000ms. Source checks:36 focused JVM tests, Go coldprovision PASS and APK
-prebuild PASS. Next is exactly one authorized API27/Telemost diagnostic run on fresh
-synthetic identity/cache/server state, followed by owned-resource cleanup. Original
-FAIL_RUNTIME and all evidence are immutable; positive runtime gate remains unmet.
+**Active same-incident gate: the one authorized diagnostic retry is consumed.**
+Original harness incorrectly gave the whole engine30s; corrected AutomaticConnection
+receives the production200000ms candidate deadline. The new API27/Telemost run fails
+BOOTSTRAP_UNAVAILABLE after1.792s, before challenge response, with198230ms remaining;
+readiness30s has not expired either. JNI provisioning lease exists, but native Post
+returns no reply; no server TLS/backend event, challenge, certificate, accepted bundle
+or native MESH startup is observed. Underlying native error is not exposed: no invented
+AUTH/network/slow-provider diagnosis and no claim to have fixed the original delivery
+failure. Post-run IO-wrapper diagnostic correction passes37 JVM tests; no second run.
+Both FAIL receipts remain separate and immutable. Owned runtime resources are closed;
+two exact new provider room objects are privately accounted for, deletion NOT_VERIFIED.
+Positive MESH, DNS/HTTPS/egress and runtime-negative gates remain unmet. No automatic
+runtime continuation, rollout, discovery, locator import or adjacent queued task.
 
 **Selected field bootstrap continuation — bounded provisioning candidate implemented.**
 The isolated uncached dual-block path now reaches real authority issuance, unchanged

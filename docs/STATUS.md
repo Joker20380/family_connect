@@ -1,6 +1,24 @@
 # Текущее состояние / Current state
 
-**6 November — same incident: harness deadline defect established; one diagnostic follow-up pending.**
+**6 November19:40UTC — single corrected diagnostic attempt FAIL_RUNTIME; no more retries.**
+The actual AutomaticConnection MESH candidate receives absolute guest deadline339645ms
+(200000ms budget), not the old harness30s. It fails after1.792s with preserved enum
+BOOTSTRAP_UNAVAILABLE,198230ms candidate budget remaining. HTTPS and RNS fail as
+deliberately blocked; provisioning creates a JNI lease but returns no challenge reply
+with about28.27s of the real readiness budget remaining. No deadline expired in this
+attempt. Fresh authority challenge/certificate counts both remain0. No received bundle,
+validator/vault acceptance or NativeRestricted.beginReady/READY/DNS/HTTPS/egress PASS.
+The original issued-bundle attempt remains FAIL with its unknown delivery boundary.
+The native provisioning null-reply boundary is localized, but its underlying transport/
+TLS/lease error was collapsed by JNI and is still unknown. Do not label it AUTH, slow
+Telemost or a protocol rejection. Post-run source diagnostics now preserve original IO
+before challenge wrapping (37 JVM tests PASS); that diagnostic change was not rerun live.
+Owned connection/AVD/authority/workers and credential processes exited; shared emulator
+lock is free. Two owned room objects are recorded privately; deletion remains NOT_VERIFIED.
+No token file, deployment, public APK, production/G4 or other-branch change.
+[Exact follow-up sequence and remaining limits](releases/2026-11-06-beta113-field16-bootstrap.md#single-corrected-diagnostic-attempt-6-november).
+
+**Earlier source checkpoint — harness deadline defect established; follow-up was pending.**
 Hash-verified original instrumentation `952790bb…fc590` directly constructed the engine
 with `elapsedRealtime()+30000`; it did not use ConnectionService/AutomaticConnection.
 This is not the product MESH budget (200000ms candidate/300000ms Connect).

@@ -1,0 +1,181 @@
+{
+  "result": "FAIL_RUNTIME",
+  "runtime_source": "047da1debd1fe0877224d495c54867daeee72a3b",
+  "original_result": "FAIL_RUNTIME_UNCHANGED",
+  "runtime_connect_count": 1,
+  "connect_start_ms": 139617,
+  "candidate_deadline_ms": 339645,
+  "pre_cleanup_remaining_ms": 198230,
+  "engine_stage": "READINESS_RETURNED",
+  "native_handle_present": false,
+  "readiness_fetch": {
+    "attempt_id": "b830bcbc39744450bb9033a9df5c0f2e",
+    "fetch_id": "c8f8ed9285ca44baaaa2490a94366cd7",
+    "started_connection_id": "a0a051ab-2fc0-4342-8aa7-b9b89a0f1aff",
+    "started_at": 1793994027147,
+    "network_type": "WIFI",
+    "cache": {
+      "validation": "MISSING"
+    },
+    "refresh_result": "FETCH_FAILED",
+    "selected_source": "NONE",
+    "finished_at": 1793994028889,
+    "operation": "CHALLENGE",
+    "stage": "CARRIER_REQUEST",
+    "duration_ms": 1741,
+    "failures": [
+      {
+        "operation": "CHALLENGE",
+        "stage": "CONNECT_TLS_WRITE",
+        "route": "HTTPS_UNDERLAY",
+        "error_class": "SOCKET",
+        "http_status": 0,
+        "elapsed_ms": 20,
+        "network_type": "CELLULAR"
+      },
+      {
+        "operation": "CHALLENGE",
+        "stage": "RELAY_OPEN",
+        "route": "RNS",
+        "error_class": "UNAVAILABLE",
+        "http_status": 0,
+        "elapsed_ms": 1729,
+        "network_type": "WIFI"
+      },
+      {
+        "operation": "CHALLENGE",
+        "stage": "CARRIER_REQUEST",
+        "route": "PROVISIONING",
+        "error_class": "PROTOCOL",
+        "http_status": 0,
+        "elapsed_ms": 1739,
+        "network_type": "WIFI"
+      }
+    ],
+    "stages": [
+      {
+        "operation": "CHALLENGE",
+        "route": "HTTPS_UNDERLAY",
+        "stage": "LOCAL",
+        "elapsed_ms": 16,
+        "remaining_ms": 29998
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "HTTPS_UNDERLAY",
+        "stage": "OPEN_NETWORK",
+        "elapsed_ms": 16,
+        "remaining_ms": 29998
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "HTTPS_UNDERLAY",
+        "stage": "CONNECT_TLS_WRITE",
+        "elapsed_ms": 19,
+        "remaining_ms": 29995
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "RNS",
+        "stage": "LOCAL",
+        "elapsed_ms": 20,
+        "remaining_ms": 29994
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "RNS",
+        "stage": "RELAY_OPEN",
+        "elapsed_ms": 20,
+        "remaining_ms": 29994
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "PROVISIONING",
+        "stage": "LOCAL",
+        "elapsed_ms": 1734,
+        "remaining_ms": 28280
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "PROVISIONING",
+        "stage": "CARRIER_OPEN",
+        "elapsed_ms": 1734,
+        "remaining_ms": 28280
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "PROVISIONING",
+        "stage": "CARRIER_HANDLE",
+        "elapsed_ms": 1736,
+        "remaining_ms": 28278
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "PROVISIONING",
+        "stage": "CARRIER_REQUEST",
+        "elapsed_ms": 1736,
+        "remaining_ms": 28277
+      }
+    ]
+  },
+  "owner_acceptance": {
+    "receipt_class": "real_owner_product",
+    "challenge_id": "b830bcbc39744450bb9033a9df5c0f2e",
+    "fetch_id": "c8f8ed9285ca44baaaa2490a94366cd7",
+    "challenge_result": "failed",
+    "fetch_result": "not_attempted",
+    "import_result": "not_attempted",
+    "revision": 0,
+    "expires_at": 0,
+    "observed_at": 1793994028
+  },
+  "authority_counts": {
+    "restricted_challenges": 0,
+    "restricted_certificates": 0
+  },
+  "own_rooms_created": 2,
+  "provider_room_deletion": "NOT_VERIFIED",
+  "artifacts": {
+    "apk-1/artifact-receipt.json": "2f3896f4d6b28d2c69aa063e7653be527cf345a934650224cf97727427a601bc",
+    "apk-1/android/app/outputs/apk/friends/app-friends.apk": "be6a260316b263c6836e398ced7fde1f7cdf3ba54a0078748a812a696b042821",
+    "apk-1/android/app/outputs/apk/androidTest/friends/app-friends-androidTest.apk": "e7c10fde3243fb5b277b252c01213f157a00fc8091c103ec5f2c945e0e7349fa",
+    "apk-1/test-java/com/familyconnect/app/ColdProvisionRuntimeTest.java": "56e8d41f9b585660798c7d8ccfb088316301f3346d5428f48c94ae38f96f4643",
+    "apk-1/cold.init.gradle": "916611e2f618d4ffb19c3b854b756edbae7d3f751d12876e9a57cc1e0d826706",
+    "local-auth/stand.go": "c9893373ef6c79e693be8d8110a915e871c7a49769b3f8457c0ade34bd39456a",
+    "local-auth/stand": "e85edbbd8d77d11961da9a880bf40d2fdcbd1b4959e3a8256a321055052997a0",
+    "local-auth/run_android.py": "725d6e0a95456e4f31fea128adeb41e8ad285b8c0957d027f2f885d299e7cb97",
+    "local-auth/final_apk.py": "578b62c46e9d18e4d8a8db5e723e9a1ea05eed70f41d83327a3dd9e7e1e9525c",
+    "local-auth/server-events-x11.log": "f308d574918c5062ea66f4677efce46215fa86cdbe662f434d9edbf796cd69bc",
+    "android-api27-two/instrumentation.log": "acbac13af2f374eff9023fece1ca7bd91590474909a8c040e2b16f14f75df84e",
+    "android-api27-two/receipt.json": "9df5f756a0895295e6abf8280d152a0575da103464388cd7e96a7c472d16fdee"
+  },
+  "runtime_errors": [
+    {
+      "event": "candidate_failed",
+      "state": "CONNECTING",
+      "elapsed_ms": 1792,
+      "category": "BOOTSTRAP_UNAVAILABLE",
+      "trigger_reason": "BOOTSTRAP_UNAVAILABLE",
+      "stage": "ORCHESTRATOR",
+      "monotonic_ms": 141414
+    },
+    {
+      "event": "connect_failed",
+      "state": "FAILED",
+      "elapsed_ms": 1852,
+      "category": "BOOTSTRAP_UNAVAILABLE",
+      "trigger_reason": "BOOTSTRAP_UNAVAILABLE",
+      "stage": "ORCHESTRATOR",
+      "monotonic_ms": 141474
+    }
+  ],
+  "cleanup": {
+    "client_disconnected": true,
+    "own_avd_stopped": true,
+    "carrier_workers_joined": true,
+    "authority_stopped": true,
+    "credential_processes_exited": true,
+    "temporary_secret_files_created": false,
+    "shared_emulator_lock_released": true
+  }
+}

@@ -4,6 +4,17 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ReadinessFetchTraceTest {
+    @Test public void wrappedIoIsNotMisreportedAsProtocol(){
+        ReadinessFetchTrace trace=new ReadinessFetchTrace(new OwnerPrewarmReceipt(),"",1);
+        trace.failed(new java.io.IOException("private detail must not appear"));
+        trace.failed(new FriendsReadinessProtocol.ChallengeFailure(FriendsReadinessProtocol.ChallengeCode.CHALLENGE_TEMPORARY_SERVER_FAILURE,false));
+        com.google.gson.JsonArray failures=trace.json().getAsJsonArray("failures");
+        assertEquals("IO",failures.get(0).getAsJsonObject().get("error_class").getAsString());
+        assertEquals("IO",failures.get(1).getAsJsonObject().get("error_class").getAsString());
+        assertEquals("CHALLENGE_TEMPORARY_SERVER_FAILURE",failures.get(1).getAsJsonObject().get("challenge_code").getAsString());
+        assertFalse(failures.get(1).getAsJsonObject().get("availability_failure").getAsBoolean());
+        assertFalse(failures.toString().contains("private detail"));
+    }
     @Test public void boundedStagesRetainBudgetAndFailureCategory(){
         ReadinessFetchTrace trace=new ReadinessFetchTrace(new OwnerPrewarmReceipt(),"",1);
         trace.budget(30000);

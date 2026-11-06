@@ -107,7 +107,7 @@ final class FriendsAccessAndroid {
                 }
                 if(provisioningCarrier==null)provisioningCarrier=new ProvisioningCarrier(context,gateway,deadline,fetchTrace);
                 try{remaining(1);if(fetchTrace!=null)fetchTrace.request(path,ReadinessFetchTrace.Route.PROVISIONING);return provisioningCarrier.post(path,body,id);}
-                catch(Exception failure){provisioningCarrier.close();throw failure;}
+                catch(Exception failure){if(fetchTrace!=null)fetchTrace.failed(failure);provisioningCarrier.close();throw failure;}
             });
             try{
                 byte[] result=FriendsReadinessProtocol.fetch(RestrictedGateway.route(route::post,gateway),identity,receipt);

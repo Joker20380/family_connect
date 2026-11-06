@@ -43,7 +43,10 @@ final class ReadinessFetchTrace {
         if(failure instanceof FriendsReadinessProtocol.ChallengeFailure){
             FriendsReadinessProtocol.ChallengeFailure challenge=(FriendsReadinessProtocol.ChallengeFailure)failure;
             if(challenge.code==FriendsReadinessProtocol.ChallengeCode.CHALLENGE_UNAUTHORIZED)return Error.AUTHORIZATION;
+            if(challenge.code==FriendsReadinessProtocol.ChallengeCode.CHALLENGE_TIMEOUT)return Error.TIMEOUT;
             if(challenge.availabilityFailure)return Error.UNAVAILABLE;
+            if(challenge.code==FriendsReadinessProtocol.ChallengeCode.CHALLENGE_TEMPORARY_SERVER_FAILURE)return Error.IO;
+            if(challenge.code==FriendsReadinessProtocol.ChallengeCode.CHALLENGE_INTERNAL_ERROR)return Error.INTERNAL;
         }
         if(failure instanceof javax.net.ssl.SSLException)return Error.TLS;
         if(failure instanceof java.net.UnknownHostException)return Error.DNS;
@@ -61,6 +64,10 @@ final class ReadinessFetchTrace {
         JsonObject entry=new JsonObject();entry.addProperty("operation",operation.name());entry.addProperty("stage",stage.name());
         entry.addProperty("route",route.name());entry.addProperty("error_class",classify(failure).name());
         entry.addProperty("http_status",httpStatus);
+        if(failure instanceof FriendsReadinessProtocol.ChallengeFailure){
+            FriendsReadinessProtocol.ChallengeFailure challenge=(FriendsReadinessProtocol.ChallengeFailure)failure;
+            entry.addProperty("challenge_code",challenge.code.name());entry.addProperty("availability_failure",challenge.availabilityFailure);
+        }
         entry.addProperty("elapsed_ms",Math.max(0,(System.nanoTime()-startedNanos)/1000000));
         if(value.has("network_type"))entry.add("network_type",value.get("network_type"));
         if(value.has("network_generation"))entry.add("network_generation",value.get("network_generation"));
