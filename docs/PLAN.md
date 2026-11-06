@@ -4,17 +4,19 @@
 
 **Independent owner-requested parallel subtask6 November — SUBSCRIPTION-CLIENT-VIEW**
 under `ANDROID-CONTROLLED-BETA`, not a replacement for the existing G4 critical path.
-Isolated source checkpoint: last confirmed status/period, RU/EN UI, durable event
-dedupe/order fencing and existing notifications/navigation;32 focused Python +10 JVM PASS.
+Isolated source/integration candidate from checkpoint `47ef0463bd39`: authenticated
+schema1 personal HTTP read, canonical snapshot/event, explicit UI refresh and existing
+encrypted projection/notification fences;84 focused Python +26 pure JVM checks PASS.
 Dependencies reused: canonical paid_beta records, Friends identity, encrypted chat store,
-ChatRuntime/ChatNotifications. **Missing dependency:** recipient-authenticated client paid
-snapshot/event delivery with an ordering/freshness boundary; existing registration status
-and public notices cannot provide it. No backend endpoint/schema/protocol was invented.
-Completion gate remains OPEN: separately agree/bind that contract, review/merge the branch,
-then Android Keystore/restart, permission, cold/warm notification navigation and offline/time
-runtime checks when resources are free. No automatic continuation, G4 action, native rebuild,
-release or deployment is authorized by this entry.
-[Checkpoint and test commands](releases/2026-11-06-subscription-client-view.md).
+ChatRuntime/ChatNotifications and the existing protected HTTPS underlay.
+The owner-authorized minimal API closes the prior missing-contract dependency in source;
+registration status and public notices remain unchanged and never imply paid entitlement.
+Completion gate remains OPEN: separate review/merge and controlled backend ingress/runtime
+qualification, then Android build/Keystore/restart, permissions, cold/warm notification
+navigation and offline/time/expired-VPN checks when resources are free. No further API
+redesign is required to start those checks. No automatic continuation, G4 action, native
+rebuild, release or deployment is authorized by this entry.
+[Contract, test commands and deferred gates](releases/2026-11-06-subscription-authenticated-api.md).
 
 **5 November11:29UTC operational readback complete:** all ordinary VPN services
 and both NL bootstrap active; seven recent AWG peers, no sampled TCP443/8446 sockets.

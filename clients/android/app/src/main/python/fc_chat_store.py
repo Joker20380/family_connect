@@ -72,6 +72,11 @@ class Session:
             code = 'store_unavailable'
         return json.dumps(dict(ok=False, error=code), separators=(',', ':'))
 
+    def accept_subscription(self, raw, device):
+        if self.local is None:
+            raise LocalError('closed')
+        return json.dumps(self.local.accept_subscription_response(raw, device), ensure_ascii=False, separators=(',', ':'))
+
     def configure_delivery(self, host, port, public_hex, callbacks, expires=None):
         if self.local is None:
             raise LocalError('closed')

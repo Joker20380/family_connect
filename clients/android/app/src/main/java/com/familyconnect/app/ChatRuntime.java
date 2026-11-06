@@ -22,6 +22,7 @@ final class ChatRuntime {
     static volatile long eventsRevision;
     static volatile boolean eventsUnavailable;
     private static String subscriptionMarker;
+    static final SubscriptionRefreshGate SUBSCRIPTION_REFRESH=new SubscriptionRefreshGate();
     static String configuredRoute(){ChatCarrier current=carrier;return attached&&current!=null?current.route():"—";}
     static ChatLocalAndroid open(Context context,boolean create)throws Exception{
         if(owner==null)owner=ChatLocalAndroid.open(context,create);
@@ -49,7 +50,7 @@ final class ChatRuntime {
         Context app=context.getApplicationContext();
         WORKER.execute(()->{if(task==null)task=WORKER.scheduleWithFixedDelay(()->tick(app),0,6,TimeUnit.SECONDS);});
     }
-    static void stop(){ChatCarrier active=carrier;if(active!=null&&!uiVisible)active.close();WORKER.execute(()->{if(task!=null){task.cancel(false);task=null;}if(owner!=null&&!uiVisible)try{owner.close();owner=null;attached=false;carrier=null;}catch(Exception ignored){}});}
+    static void stop(){SUBSCRIPTION_REFRESH.cancel();ChatCarrier active=carrier;if(active!=null&&!uiVisible)active.close();WORKER.execute(()->{if(task!=null){task.cancel(false);task=null;}if(owner!=null&&!uiVisible)try{owner.close();owner=null;attached=false;carrier=null;}catch(Exception ignored){}});}
     private static void tick(Context context){
         try{
             // An existing identity must never be replaced on a failed resume.
@@ -97,6 +98,36 @@ final class ChatRuntime {
             JsonObject args=new JsonObject();args.addProperty("device",identity.reference());
             return chat.call("subscription_status",args).getAsJsonObject();
         }
+    }
+    static void refreshSubscription(Context context,SubscriptionRefreshGate.Request request,java.util.function.Consumer<JsonObject> completion){
+        Context app=context.getApplicationContext();
+        WORKER.execute(()->{
+            JsonObject result=new JsonObject();String outcome="unavailable";
+            try(ControlIdentity identity=new FriendsIdentityVault(app).load()){
+                if(request.cancelled())throw new SubscriptionRefreshGate.Cancelled();
+                ChatLocalAndroid expected=open(app,!ChatLocalAndroid.hasState(app));
+                result=subscription(app,expected);
+                if(!request.bind(expected,identity.reference())){result=new JsonObject();throw new SubscriptionRefreshGate.Cancelled();}
+                if(!new ChatNetworkAndroid(app).available())outcome="offline";
+                else{
+                    JsonObject response=new FriendsAccessAndroid(app,android.os.SystemClock.elapsedRealtime()+20000).subscription(identity);
+                    JsonObject[] saved=new JsonObject[1];
+                    try(ControlIdentity current=new FriendsIdentityVault(app).load()){
+                        if(!request.commit(owner,current.reference(),()->saved[0]=expected.acceptSubscription(response,identity.reference()))){result=new JsonObject();throw new SubscriptionRefreshGate.Cancelled();}
+                    }
+                    result=saved[0].getAsJsonObject("view");
+                    outcome=saved[0].get("accepted").getAsBoolean()?"current":"stale";
+                    eventsRevision++;
+                }
+            }catch(SubscriptionRefreshGate.Cancelled cancelled){outcome="cancelled";}
+            catch(SubscriptionRequest.Unsupported unsupported){outcome="unsupported";}
+            catch(SubscriptionRequest.IdentityRejected rejected){outcome="identity_rejected";}
+            catch(SubscriptionRequest.InvalidResponse invalid){outcome="invalid";}
+            catch(ChatLocalAndroid.ChatException invalid){outcome="invalid_subscription".equals(invalid.code)?"invalid":"unavailable";}
+            catch(Exception unavailable){outcome="unavailable";}
+            finally{SUBSCRIPTION_REFRESH.finish(request);}
+            result.addProperty("refresh_status",outcome);completion.accept(result);
+        });
     }
     static JsonArray serviceEvents(Context context,ChatLocalAndroid chat)throws Exception{
         JsonArray events=chat.call("service_events",new JsonObject()).getAsJsonArray();

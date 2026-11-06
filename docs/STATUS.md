@@ -1,16 +1,19 @@
 # Текущее состояние / Current state
 
-**6 November — isolated subscription client checkpoint (not installed/qualified).**
+**6 November — isolated subscription HTTP/source integration candidate (not installed/qualified).**
 Owner-requested parallel `ANDROID-CONTROLLED-BETA / SUBSCRIPTION-CLIENT-VIEW`, branch
-`feature/subscription-status-20261106`: cached confirmed status/time, RU/EN access UI,
-local backend-event projection, revision/replay fences and existing notification-channel
-navigation implemented.32 focused Python checks and10 presentation JVM tests PASS.
-**Live integration remains BLOCKED:** authenticated device status exposes registration
-only; private paid status/events have no recipient-bound client delivery contract.
-The adapter seam is unbound, no invented endpoint or payment-success inference.
+`feature/subscription-status-20261106`, continuing checkpoint `47ef0463bd39`:
+new schema1 `POST /friends/device/subscription` uses existing Friends one-use proof,
+dedicated purpose and one transactional canonical paid snapshot/APPLIED event read.
+The screen now refreshes on open/explicit action over the existing HTTPS underlay,
+validates before encrypted projection, and preserves cache with separate failure states.
+84 focused Python checks (including real local HTTP→decoder→encrypted store) and26
+pure JVM tests PASS. `/friends/device/status` response/semantics are unchanged.
+**Contract gap closed in source, not deployed:** Android build/Keystore/transport,
+notifications/navigation and runtime qualification remain OPEN; merge is separate.
 Source remains Android118; no APK/build/install/publication/version or enforcement change.
 G4 is independent and untouched; its next step and acceptance are not changed here.
-[Scope, exact gap, tests and deferred gates](releases/2026-11-06-subscription-client-view.md).
+[Exact contract, evidence boundaries and deferred gates](releases/2026-11-06-subscription-authenticated-api.md).
 
 **5 November11:29UTC — read-only VPN check:** all AWG/TCP and both NL bootstrap
 active; CPU RU9–25%, AMS1 19–21%, AMS2 16–18%. RU disk70%/8.5GiB free.

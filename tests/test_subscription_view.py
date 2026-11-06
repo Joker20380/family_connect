@@ -245,7 +245,7 @@ def test_ru_en_resources_have_matching_keys_and_format_parameters():
     resources = ROOT / 'clients/android/app/src/main/res'
     tables = [{item.attrib['name']: item.text for item in ET.parse(resources / folder / 'strings.xml').getroot()
                if item.attrib.get('name', '').startswith('subscription_')} for folder in ('values', 'values-ru')]
-    assert tables[0].keys() == tables[1].keys() and len(tables[0]) == 24
+    assert tables[0].keys() == tables[1].keys() and len(tables[0]) == 35
     for key in tables[0]:
         assert bool('%1$s' in tables[0][key]) == bool('%1$s' in tables[1][key])
 

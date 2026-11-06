@@ -1,5 +1,10 @@
 # Subscription/access client — isolated source checkpoint, 6 November 2026
 
+Historical checkpoint `47ef0463bd39aa8996ff11b1196c7adbb6bb4c60`.
+The missing adapter described below is now connected in the separate, owner-authorized
+[authenticated API/source integration candidate](2026-11-06-subscription-authenticated-api.md).
+Neither checkpoint claims deployment, installation or Android runtime qualification.
+
 ## Scope and result
 
 Owner-requested parallel subtask `ANDROID-CONTROLLED-BETA / SUBSCRIPTION-CLIENT-VIEW`.

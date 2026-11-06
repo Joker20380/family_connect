@@ -25,6 +25,7 @@ def build(output, source=ROOT):
     inputs['app/friends_http.py'] = 'deploy/friends/access-api.py'
     inputs.update({name: str(CONTRACT / name) for name in ('http-runtime.conf', 'http-runtime-files.json', 'access.conf', 'nginx-location.conf')})
     inputs['gateway-selection-location.conf'] = 'deploy/friends/gateway-selection-location.conf'
+    inputs['subscription-location.conf'] = 'deploy/friends/subscription-location.conf'
     inputs.update({'control.lock': 'control/requirements.lock', 'identity.lock': 'device_identity/requirements.lock',
                    'friends-http-acceptance.py': 'scripts/friends_http_acceptance.py'})
     for name in inputs.values():

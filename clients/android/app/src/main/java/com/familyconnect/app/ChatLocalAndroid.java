@@ -92,6 +92,15 @@ final class ChatLocalAndroid implements AutoCloseable {
         }
     }
 
+    JsonObject acceptSubscription(JsonObject response,String device)throws ChatException {
+        requireWorker();
+        synchronized(LOCK){
+            if(session==null||active!=this)throw new ChatException("closed");
+            try{return JsonParser.parseString(session.callAttr("accept_subscription",response.toString(),device).toString()).getAsJsonObject();}
+            catch(Exception invalid){throw new ChatException("invalid_subscription");}
+        }
+    }
+
     // Platform enrollment must supply a trusted mailbox anchor, never contact-card JSON.
     JsonObject enrollmentProof(String device, String challenge) throws ChatException {
         requireWorker();

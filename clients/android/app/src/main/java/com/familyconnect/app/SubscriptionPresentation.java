@@ -24,7 +24,15 @@ final class SubscriptionPresentation {
     }
 
     static String summary(JsonObject view,boolean online,Locale locale,ZoneId zone,long now,Text text){
-        String availability=text.get(online?"subscription_refresh_unavailable":"subscription_offline");
+        String refresh=view.has("refresh_status")?view.get("refresh_status").getAsString():online?"cached":"offline";
+        switch(refresh){
+            case "current": case "cached": case "unsupported": case "unavailable": case "identity_rejected":
+            case "invalid": case "stale": case "busy": case "refreshing": case "offline": case "cancelled": break;
+            default: refresh="invalid";
+        }
+        String availability=text.get(refresh.equals("offline")?"subscription_offline":"subscription_refresh_"+refresh);
+        if(view.has("cohort")&&!view.get("cohort").getAsBoolean())return text.get("subscription_not_cohort")+"\n"+
+            text.get("subscription_checked",time(view.get("confirmed_at").getAsLong(),locale,zone))+"\n\n"+availability;
         if(!view.has("snapshot")||view.get("snapshot").isJsonNull())return text.get("subscription_unknown")+"\n\n"+availability;
         JsonObject snapshot=view.getAsJsonObject("snapshot");
         String state=snapshot.get("effective_state").getAsString();
@@ -36,7 +44,8 @@ final class SubscriptionPresentation {
         long confirmed=view.get("confirmed_at").getAsLong();
         result+="\n"+text.get("subscription_checked",time(confirmed,locale,zone));
         boolean hasAccess=!snapshot.get("entitlement_until").isJsonNull();
-        long until=snapshot.get(hasAccess?"entitlement_until":"paid_until").getAsLong();
+        String boundary=hasAccess?"entitlement_until":snapshot.has("grace_until")&&!snapshot.get("grace_until").isJsonNull()?"grace_until":"paid_until";
+        long until=snapshot.get(boundary).getAsLong();
         result+="\n"+text.get(hasAccess?"subscription_until":"subscription_last_until",time(until,locale,zone));
         if(now<confirmed)result+="\n"+text.get("subscription_clock");
         else if(hasAccess&&now>=until)result+="\n"+text.get("subscription_period_elapsed");

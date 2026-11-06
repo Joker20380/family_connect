@@ -46,9 +46,30 @@ public class SubscriptionPresentationTest {
         assertTrue(english.contains("Access until:"));assertTrue(english.contains("[UTC]"));
     }
 
-    @Test public void apiGapIsNotSuccessfulRefresh()throws Exception{
-        assertTrue(render(active(),"en",true,NOW).contains("current status cannot be confirmed"));
-        assertTrue(render(active(),"ru",true,NOW).contains("Актуальное состояние подтвердить нельзя"));
+    @Test public void cachedIsNotSuccessfulRefresh()throws Exception{
+        assertTrue(render(active(),"en",true,NOW).contains("current status has not been checked"));
+        assertTrue(render(active(),"ru",true,NOW).contains("Актуальное состояние ещё не проверено"));
+    }
+
+    @Test public void refreshOutcomesAreDistinctAndNeverInventPayment()throws Exception{
+        var english=new java.util.HashSet<String>();var russian=new java.util.HashSet<String>();
+        for(String outcome:new String[]{"current","unsupported","unavailable","identity_rejected","invalid","stale","busy","refreshing","cancelled"}){
+            JsonObject view=active();view.addProperty("refresh_status",outcome);
+            String en=render(view,"en",true,NOW),ru=render(view,"ru",true,NOW);
+            english.add(en);russian.add(ru);
+            assertTrue(en.contains("Last confirmed status: Active"));assertFalse(en.contains("payment received"));
+            assertFalse(ru.contains("Оплачено"));
+        }
+        assertEquals(9,english.size());assertEquals(9,russian.size());
+    }
+
+    @Test public void nonCohortDoesNotMeanUnpaid()throws Exception{
+        JsonObject view=new JsonObject();view.addProperty("cohort",false);view.addProperty("confirmed_at",NOW);
+        view.addProperty("refresh_status","current");
+        assertTrue(render(view,"en",true,NOW).contains("outside the paid pilot"));
+        assertTrue(render(view,"ru",true,NOW).contains("Это не означает отсутствие оплаты или доступа"));
+        view.addProperty("refresh_status","unavailable");
+        assertTrue(render(view,"en",true,NOW).contains("not freshly confirmed"));
     }
 
     @Test public void exactBoundaryDoesNotRewriteBackendState()throws Exception{
@@ -77,6 +98,16 @@ public class SubscriptionPresentationTest {
             notice.addProperty("subscription_event",kind);
             assertFalse(SubscriptionPresentation.event(notice,text("ru")).isEmpty());
             assertFalse(SubscriptionPresentation.event(notice,text("en")).isEmpty());
+        }
+    }
+
+    @Test public void expiredGraceShowsLastGrantedBoundaryNotEarlierPaidEnd()throws Exception{
+        JsonObject view=active(),snapshot=view.getAsJsonObject("snapshot");
+        snapshot.addProperty("effective_state","expired");snapshot.addProperty("grace_until",NOW+7200);
+        snapshot.add("entitlement_until",com.google.gson.JsonNull.INSTANCE);
+        for(String language:new String[]{"en","ru"}){
+            String expected=SubscriptionPresentation.time(NOW+7200,Locale.forLanguageTag(language),ZoneId.of("UTC"));
+            assertTrue(render(view,language,true,NOW+7200).contains(expected));
         }
     }
 

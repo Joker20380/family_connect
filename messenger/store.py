@@ -276,12 +276,13 @@ class Store:
             return [event for event in events + notices if event['expires'] > time.time()]
 
     def accept_confirmed_subscription(self, status, *, device, confirmed_at, event=None):
-        """Unbound trusted-adapter seam; deliberately absent from every wire/UI API."""
+        """Trusted Friends adapter seam; deliberately absent from the generic UI RPC."""
         from .subscription_view import accept
         with self._lock, self._db:
             previous = self._get('subscription-view')
             current = accept(previous, status, device=device, confirmed_at=confirmed_at, event=event)
             self._put('subscription-view', current)
+            return current is not previous
 
     def subscription_status(self, device):
         from .subscription_view import view
