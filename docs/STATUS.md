@@ -1,10 +1,14 @@
 # Текущее состояние / Current state
 
-**6 November — SUBSCRIPTION-INTEGRATION-1 in progress, separate integration worktree.**
+**6 November — SUBSCRIPTION-INTEGRATION-1: PR prepared, CI gate open.**
 Integrating the reviewed subscription source onto current main without replacing its
 bootstrap/renewal work. Installed ARM119 retains source `b2a37fe98929` and its original
 hash/acceptance scope. No new installation, production restart or paid/admission write.
 Gate: canonical package HTTP/authentication checks, repository CI and ordinary PR merge.
+PR1/source `a71de948dd47` pushed and remote-verified;71 scoped +6 committed-package
+checks PASS. CI exposes unchanged-main shared106 carrier reference drift (44 files);
+do not bypass it or rewrite the accepted baseline. Subscription-specific messenger
+adaptation metadata corrected separately;38 focused checks PASS. No main merge yet.
 [Integration evidence and next paid/event prerequisites](releases/2026-11-06-subscription-integration-1.md).
 
 **6 November — beta113 cold bootstrap gap reproduced; not a field-network diagnosis.**

@@ -12,6 +12,13 @@ Gate OPEN until ordinary PR checks pass and the remote merge is verified.
 No `[skip ci]`, branch-protection bypass, deployment or installation is authorized
 by this checkpoint. GitHub-hosted existing CI is independent of the occupied host.
 
+Prepared [PR1](https://github.com/Joker20380/family_connect/pull/1).
+First integration merge checkpoint `a71de948dd479f993e4b5f3d9b44ce11e7d22517`
+was pushed and read back from the remote. Six committed-source paid-bundle and
+source-drift tests pass; the canonical bundle builds reproducibly from this commit.
+Initial push hit a transient DNS failure; ordinary retry succeeded without changing
+network settings, history or authentication.
+
 Integrated scope: one-use authenticated subscription purpose/HTTP schema1,
 transactional canonical paid_beta snapshot/event, Android decoder/screen/encrypted
 projection, revision/event fences/durable dedupe, real-focus read acknowledgement,
@@ -86,6 +93,31 @@ exercising any route.
   from the unchanged main documents (the actual heading uses `—24.10`). It is not
   caused by this integration; the global documentation check is not labelled PASS.
 
+### Hosted integration checks and reference boundary
+
+Initial PR CI exposed a missing **explicit source adaptation record** for the two
+shared messenger files changed by subscription. Fixed using the existing
+`local_adaptations` mechanism, not by replacing original accepted106 hashes:
+`android106-messenger.json` and `android106-notifications.json` retain their immutable
+accepted sources and separately pin the119 changes plus new projection module.
+`subscription119-messenger.patch` is checked by actually reverse-applying it and
+verifying both restored files against their original accepted106 hashes. No desktop
+subscription UI, delivery transport or runtime acceptance is claimed.38 focused
+reference/projection/delivery tests PASS after this metadata/test fix.
+
+The independent Linux internal candidate run
+[42270131107](https://github.com/Joker20380/family_connect/actions/runs/42270131107)
+fails in `build_desktop_mesh.py` with `shared106 source verification failed`.
+The verifier names44 carrier source/test files; **all44 are byte-identical to base
+main41b4e6e**, and neither their source nor the reference manifest is changed by this
+subscription PR. Updating these accepted desktop/shared-native assertions requires
+separate provenance/qualification review; silently accepting current hashes or
+skipping this workflow would bypass the gate. That existing main mismatch, plus any
+remaining repository checks, prevents an unqualified merge. The old broken global
+documentation anchor is also retained as a known base failure, not hidden by narrowing
+the reported result. No G4 readback, restart or heavy local rebuild was used to diagnose
+either failure. The original failed CI runs remain visible.
+
 ## Android provenance and retained acceptance
 
 Merged Android production inputs (`clients/android`, `messenger`, `carrier`) have
@@ -144,7 +176,8 @@ When legitimately authorized/eligible, `start <= server now < end` creates canon
 `payment`/`APPLIED`, first revision1 and `last_event_id`, enrollment within limit10.
 The first event maps to `activated`: “Сервис подтвердил активацию доступа.” /
 “Access activation confirmed by the service.” Existing periods cannot be shortened;
-a longer period maps to `renewed`, not “money received”. Only the latest corresponding
+a longer period with a retained prior snapshot maps to `renewed` (otherwise `confirmed`),
+not “money received”. Only the latest corresponding
 event is fetched; snapshot alone creates no payment notice.
 
 Enrollment changes this device from legacy non-cohort admission to paid entitlement

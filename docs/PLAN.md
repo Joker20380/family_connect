@@ -8,6 +8,10 @@ renewal work below. Validate the ordinary server package, complete repository CI
 merge through a PR. Do not redeploy, install, alter paid data or open another Android
 matrix. Prepare one existing operator workflow read-only, including its eligibility
 and expiry consequences. Installed ARM119 provenance and prior NOT_RUN gates remain.
+PR1 prepared; package/authentication tests pass. Resolve the existing main shared106
+reference gate through its own provenance review before merge; do not silently update
+44 carrier hashes or expand this task into desktop/native qualification. No auto-merge
+on incomplete/red checks, production action or automatic successor task.
 [Task evidence and completion gate](releases/2026-11-06-subscription-integration-1.md).
 
 **Selected6 November: separate beta113/API28 field bootstrap diagnosis, not G4.**
