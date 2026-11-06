@@ -16,7 +16,13 @@
 переход реализован и проходит адресные Python-проверки, но G1–G4 целиком ещё не приняты.
 G2 — независимые процессы/отказы; G3 — фактическая Android HTTP/cache доставка;
 G4 — квалифицированный online runtime/API пакет. [Точные gates/evidence](releases/2026-11-05-mesh-online-renewal.md).
-Текущая дельта23:46UTC: реальный4h expiry закончился безопасным
+Текущая дельта6 ноября00:06UTC: bfff97d root/package/process68 PASS/5 SKIP;
+пять обязательных snapshot-кейсов отдельно выполнены5 PASS/0 SKIP с собственным
+воспроизводимым capsule. Native race и G1 isolated core PASS; это не full-CI/А.
+G4(37ffc2c) ожидает первый renewal02:12:33UTC, G2 повтор(52c91f5) — expiry03:51:29UTC;
+G3 legacy/late остаётся. Эмуляторы выключены, Б не начата; один следующий шаг —
+закончить А на этой зафиксированной комбинации, не переходить к поставке.
+Дельта23:46UTC: реальный4h expiry закончился безопасным
 `FAIL_CLOSED/ONLINE_RUNTIME_RECEIPT`, но не ожидаемым recovery result; исходный
 COMMIT/fence сохранён, второй resume не выполнен из-за assert. FAIL не переименован.
 Проверяется отдельный допустимый stable-block исход с неизменными профилями/processes/

@@ -12,6 +12,13 @@ gain retained; AWG/TCP and both NL bootstrap active. No unique-client or MESH st
 acceptance claim; selected task unchanged. [Snapshot](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**One active next00:06UTC: finish A on the recorded frozen combination.** Preserve
+the completed bfff97d root/package/native/snapshot evidence, await and reconcile its
+real G2 expiry repeat and G4 renewals, then close the remaining actual G3 legacy/late
+delivery cases. Do not replace those results with unit PASS or start B early. Current
+test-source IDs are37ffc2c(G4) and52c91f5(expiry); runtime stays bfff97d. No new release,
+owner-phone, production or paid operation; all older NEXT entries below are history.
+
 **Current G1–G4 next: finish the two real-time qualifications, without B.** The
 bfff97d/37ffc2c full path is running. Actual d968ddd successor expiry reached a safe
 preflight block, but the original assertion prevented its required second resume.

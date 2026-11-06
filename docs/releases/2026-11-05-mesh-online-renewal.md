@@ -1,5 +1,50 @@
 # Online MESH renewal qualification / 5 November 2026
 
+## Continuation checkpoint6 November00:06UTC
+
+**Newly demonstrated compared with a30966c:** a frozen package now supports actual
+both-NL Family TLS/mux/TCP/DNS/verified HTTPS through the real serving reader and
+supervisor; retained API27/API35 GPU evidence additionally proves real HTTP validation,
+encrypted cache, normal owner/native successor delivery, owner replacement and a new
+Connect during partial publication. This continuation requalifies the new bounded
+seed-lifecycle candidate; it does **not** yet prove two long renewals or all G3 cases.
+
+[Current exact identities and result paths](2026-11-05-mesh-seed-continuous-evidence.json).
+Runtime/package **bfff97d**, separate driver `0fead52a…`, archive `5721a5c1…`.
+The production gateway digest `6032b926…` is not the driver digest and its Telemost
+path is not qualified by local packet transport. The old online8c876e3 archive is
+rehashed unchanged; original999s evidence retains its original source/scope.
+
+| Gate | Result at checkpoint | Exact scope / remaining boundary |
+| --- | --- | --- |
+| G1 | PASS, isolated core | bfff97d packaged revoke/approval/restart/lost-start/repeat/new TLS traffic regression; full combined G4 still pending |
+| G2 | FAIL, original expiry test | d968ddd first expired resume safely blocked; required repeat was not reached. Current bfff97d/52c91f5 repeat waits until03:51:29UTC |
+| G3 | NOT_RUN, complete gate | Retained paired GPU HTTP/cache/owner/partial cases PASS; actual legacy-peer/too-late cases not complete |
+| G4 | NOT_RUN, complete current path | bfff97d/37ffc2c running, first renewal due02:12:33UTC; previous fd7562c budget FAIL is retained, not relabelled |
+
+`regression-bfff97d.log`:68 PASS/5 SKIP,1404.49s. The missing configuration was
+`FC_TEST_SNAPSHOT`, not disabled code. Host snapshot construction lacked RNS; its
+resulting five failed checks are preserved in `snapshot-bfff97d-checks.log`. Building
+inside the locked Python image produces byte-identical bfff97d snapshot capsules.
+With that artifact, `snapshot-bfff97d-locked-checks.log` runs all five missing cases:
+5 PASS/0 SKIP,13.78s. Report these selections separately; the earlier3-case preflight
+overlaps the larger run and is not added. Affected native `-race -count=3` remains
+PASS/0 SKIP with artifact-enabled bootstrap. This is **not full CI PASS**.
+
+The full-path harness and expiry harness have independent frozen source IDs and
+normal cleanup; full-path route adapters stop after its test exits. No emulator is
+running. No new Android runtime is claimed in this continuation: the existing GPU
+receipts and unchanged native `d1025a1d…` remain scoped evidence, not full G3.
+
+**Checkpoint status:** A has no independently accepted source/integration checkpoint
+yet. Split tunneling UI/storage/routing/recovery for AWG/TCP/MESH/Auto is NOT_STARTED;
+there is no B artifact/checkpoint. These source pushes install nothing. One active
+next is to finish A's real-time/remaining G3 qualification on the recorded combination.
+Then the original release-qualification → separately authorized delivery → both-NL
+live renewal/field gates → controlled paid-beta queue remains unchanged. Exact release
+binary/Telemost/systemd, paired-DNS/WebSocket, weak network, screen-off and mobile
+allowlist gates remain open; no phone/production/catalog/timer/paid changes occurred.
+
 ## Actual successor expiry23:46UTC: safe block, incomplete repeat
 
 [Exact source/package/result/journal receipt](2026-11-05-mesh-expiry-evidence.json).

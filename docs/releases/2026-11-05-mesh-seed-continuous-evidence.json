@@ -31,6 +31,43 @@
     "bootstrap_python_publication_artifact": "sync-bfff97d/restricted-sync.pyz"
   },
   "harness_sampling_guards": {"log": "full-core-generation-guards.log", "passed": 9, "skipped": 0},
+  "root_package_regression": {
+    "log": "regression-bfff97d.log",
+    "passed": 68,
+    "skipped": 5,
+    "seconds": 1404.49,
+    "missing_configuration": "FC_TEST_SNAPSHOT",
+    "follow_up_log": "snapshot-bfff97d-locked-checks.log",
+    "follow_up_passed": 5,
+    "follow_up_skipped": 0,
+    "follow_up_seconds": 13.78,
+    "scope": "all five missing snapshot cases executed separately; no full-CI or summed-suite claim",
+    "retained_setup_failure": "snapshot-bfff97d-checks.log: five failures after host builder lacked RNS; not an accepted run"
+  },
+  "snapshot": {
+    "artifact": "snapshot-bfff97d-locked.pyz",
+    "sha256": "5ea89a3c492e3890be43ac15817a072144700bbda80c36fe85b6a16f9e6229ff",
+    "manifest_sha256": "d716b853c656639b5559705d0e20c5e49cf097be72a9f6108930ad115d0c655d",
+    "reproduced_identically": true
+  },
+  "running_observation_utc": "2026-11-06T00:06:39Z",
+  "full_path": {
+    "test_source": "37ffc2cc18b5c868aeb5498d6aa18a3997d88dd6",
+    "progress": "full-core-bfff97d-37ffc2c/full-core/progress.json",
+    "state": "WAITING_FOR_RENEWAL_1",
+    "renewals_completed": 0,
+    "first_renewal_due_utc": "2026-11-06T02:12:33Z",
+    "automatic_route_cleanup_after_test_exit": true
+  },
+  "expiry_repeat": {
+    "test_source": "52c91f52d0fce944cdcc395d58afe70160072073",
+    "progress": "expiry-bfff97d-52c91f5/successor-expiry/progress.json",
+    "state": "WAITING_FOR_SUCCESSOR_EXPIRY",
+    "due_utc": "2026-11-06T03:51:29Z"
+  },
+  "preserved_online_8c876e3_sha256": "a27502d752eefe05306a189dce6a8630107d5980eca1477ffa9401a9283ffaea",
+  "retained_android_native_sha256": "d1025a1ddbebc4169872fdbc194317d86a21164b8b19767b0a62aa65c08129af",
+  "android_emulators_running": false,
   "phase_A": "NOT_ACCEPTED",
   "phase_B": "NOT_STARTED"
 }

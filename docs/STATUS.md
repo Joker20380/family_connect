@@ -11,6 +11,16 @@ Recent AWG peers0/2/0, AMS1 TCP443 sockets145, not unique clients. No runtime ch
 [Measurements and limits](releases/2026-11-04-vpn-health.md#2254utc-refresh).
 
 <!-- Android113 MESH incident 20261104 -->
+**6 November00:06UTC checkpoint: current isolated G1 regression PASS; A open.**
+The bfff97d root/package/process selection finishes68 PASS/5 SKIP; the five omitted
+snapshot cases then pass separately5/0 using its reproducible frozen capsule. The
+missing-RNS/missing-artifact setup failure remains in the log, not an accepted run.
+No overlapping-suite sum or full-CI claim. [Current artifacts/results](releases/2026-11-05-mesh-seed-continuous-evidence.json).
+G4 bfff97d/37ffc2c is waiting for its first renewal02:12:33UTC; the guarded current
+G2 expiry repeat bfff97d/52c91f5 waits until03:51:29UTC. Neither is PASS yet. G3
+legacy/too-late remains; no accepted A checkpoint or B. All AVDs are off, heavy
+foreground regressions finished; only isolated low-load wall-clock stands remain.
+
 **23:46UTC real successor-expiry test FAIL, safely blocked; G2 not closed.** After
 four real hours and controller death after COMMIT, the frozen d968ddd package returns
 `FAIL_CLOSED/ONLINE_RUNTIME_RECEIPT` before resuming the journal. Expired loaded
