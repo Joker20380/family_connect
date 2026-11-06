@@ -3,10 +3,16 @@
 ## Current engineering priority / Текущий critical path
 
 **Selected owner continuation6 November: native diagnostic gate, then ONE new runtime.**
-Source distinguishability now passes real host JNI and targeted race tests; cancellation
+Source distinguishability passes real host JNI and targeted race tests; cancellation
 no longer masks the completed Open cause. Preserve both earlier FAIL_RUNTIME results.
-Next: build/package fresh x86_64 JNI, prove its digest/exports, run the short provider-free
-API27 JNI check first, then one fresh-identity/locator AutomaticConnection cold test.
+Fresh070b808 x86_64 JNI/APK prebuild and digest/exports are verified, but Android
+instrumentation is NOT_RUN: disk preflight fails, then NVIDIA/KVM AVDs hit the85°C CPU
+guard (observed85/88°C; both stopped). No OAuth/provider/new Connect. Do not keep
+restarting AVDs under this thermal condition or touch other processes to free resources.
+Final source review also retains typed underlay route/DNS causes without changing the
+legacy ErrDenied policy and labels cancellation after successful TLS at request validation.
+Next, only after a safe resource window: rebuild the latest source, finish short
+provider-free API27 JNI; then fresh authority/identity/locator/runtime APK and one Connect.
 Keep production candidate deadline/readiness budget, trust/admission and guest-only
 direct-path blocks unchanged. On failure retain the actual native reason; no unchanged
 retry. On READY check DNS/verified HTTPS/egress before any runtime negatives. No adjacent

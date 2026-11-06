@@ -45,3 +45,17 @@ func TestProvisionOpenFailureSurvivesCancelCloseAndOtherHandle(test *testing.T) 
 		}
 	}
 }
+
+func TestProvisionCancelledAfterOpenDoesNotClaimTLSFailure(test *testing.T) {
+	diagnostic := coldprovision.NewDiagnostic(time.Second)
+	diagnostic.Stage("TLS_HANDSHAKE", true)
+	ctx, cancel := context.WithCancel(context.Background())
+	lease := &provisioningLease{ctx: ctx, cancel: cancel, ready: make(chan struct{}), diagnostic: diagnostic}
+	close(lease.ready)
+	cancel()
+	_, err := lease.post("", nil, "")
+	result := diagnostic.Snapshot()
+	if !errors.Is(err, context.Canceled) || result.FirstFailure != "REQUEST_VALIDATE" || result.LastSuccess != "TLS_HANDSHAKE" || result.Reason != "CANCELLED" {
+		test.Fatal("post-Open cancellation misreported")
+	}
+}

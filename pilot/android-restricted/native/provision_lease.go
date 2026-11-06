@@ -66,6 +66,7 @@ func (lease *provisioningLease) post(path string, body []byte, requestID string)
 		return coldprovision.Reply{}, lease.err
 	}
 	if err := lease.ctx.Err(); err != nil {
+		lease.diagnostic.Stage("REQUEST_VALIDATE", false)
 		lease.diagnostic.Failure(err)
 		return coldprovision.Reply{}, err
 	}

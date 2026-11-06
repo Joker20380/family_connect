@@ -1133,7 +1133,7 @@ Source gate (local `state-client-build/cold-native-diagnostic-20261106/`):
   JNI. No provider request. Host JVM reports expected Go/JVM signal-handler coexistence
   warnings; this host test is not an Android execution claim. Earlier fixture build/
   premature-server-close failures remain in host-jni-1…4; host-jni-5/6 also pass.
-- `go-race-final.log`: changed coldprovision and selected Telemost auth/owned-lifetime
+- `go-race-final.log`: changed coldprovision and selected Telemost owned-lifetime
   tests PASS, `-race -count=3`; real local TLS, write/EOF and concurrent snapshots.
 - `lease-race-final.log`: production portable lease/map state PASS, `-race -count=3`,
   each exercising100 simultaneous Open failure/Post/Close cases; no stale-handle read.
@@ -1145,3 +1145,55 @@ then exactly one fresh cold Connect. Android result, bundle/READY/DNS/HTTPS/egre
 NOT_RUN for this source checkpoint. Test-only version stays118/0.1.18-beta118; no
 installation on owner/field devices, distribution or catalog update. Rollback is to
 stop/remove only the disposable test execution; no production deployment to undo.
+
+#### Built artifact and stopped Android preflight
+
+Source070b8087ed494876c550f50befc64ffc7f197193 is committed, pushed and remote-SHA
+verified on the requested branch. Its newly built x86_64 Telemost JNI has SHA256
+`af52aeb8af7c5c782a8c1a659f271e0505e4a49a84a9a774b3f97404a86d1e04`;
+no `fc_local_core` or diagnostic transport substitution. JNI Begin/Post/Close and
+Go Begin/Post/Close/protect exports are checked. The library bytes exactly match the
+packaged disposable118 APK, SHA256
+`19a9b85f2a69d801dbd3d5c808725b5d1541c1966d2bf28a90fa3f1601cbc7a7`.
+Instrumentation APK SHA256
+`3f4965c8195bc23b7a7795992e4f775f706307e61c455fd6934b0cb387f0eed5`.
+These are provider-free prebuilds with placeholder locator/identity assets, NOT a
+ready-to-run cold provisioning package and not a user APK/public release.
+
+Three own preflights fail before guest boot because the emulator normalizes its
+userdata requirement to6GiB and the worktree filesystem has insufficient free space.
+Those failed directories/logs are retained. Only the new test AVD storage is moved
+to the writable data filesystem; no existing state, other branch or process is changed.
+API27 then boots with actual GLES reporting NVIDIA GTX1650Ti, host GPU and KVM.
+The CPU thermal guard stops that own AVD at85°C before instrumentation. After cooling,
+an offline-only retry on the same own userdata with CPUQuota100% (previously150%)
+again hits the guard, first observed at88°C, during preflight/install. No further AVD
+is started. The original GPU80°C/CPU85°C and180s host safety limits are not relaxed.
+Guest wall-clock eventually satisfies the observation guard; no clock/DNS/Network
+switch is made. No JNI Android assertion has run: NVIDIA/KVM boot is NOT its PASS.
+
+Consequently the **single new Telemost Connect is NOT_RUN and remains unused**.
+No OAuth read, new provider room, authority, registered runtime identity or fresh locator
+was created. No new cold transport cause can be claimed. Go/carrier/TLS/challenge
+boundaries are demonstrated only by the local deterministic JNI fixture, not a field
+attempt. Bundle/READY/DNS/verified HTTPS/egress and runtime negatives remain NOT_RUN.
+Do not use source PASS, an allocated handle or prebuild APK as runtime acceptance.
+The first concrete *test blocker* is resource availability, not a provisioning diagnosis.
+
+Final review additionally finds RouteIPv4 and resolver wrappers discarding typed
+underlay causes. The narrow follow-up preserves their original cause behind the same
+safe `ErrDenied` string/identity; context/DNS/errno remain inspectable without logging
+their private values. Cancellation after completed TLS is recorded at request validation,
+not as a TLS handshake failure. This follow-up is source/race-qualified only and is NOT
+inside the070b808 library/APK above. Rebuild latest source before any future runtime;
+do not reuse either4e27ff23 or this intermediate070b808 binary as the final candidate.
+
+Own AVDs/processes are stopped, shared emulator lock reacquired/released. Guest-only
+rules vanish with those guests; host network, production, G4 and other processes are
+untouched. The live fixture/credential workers were never started. All19 exact original
+FAIL artifacts are rehashed unchanged. The previous provider room objects remain
+deletion NOT_VERIFIED; this turn creates none. Source transport cause remains unknown.
+Resume only when a safe thermal/resource window is available, through provider-free
+Android JNI first, then fresh cold materials and the one authorized Connect.
+
+[Sanitized checksums, preserved FAILs and all preflight outcomes](2026-11-06-cold-native-diagnostic.json).

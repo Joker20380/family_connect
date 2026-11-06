@@ -125,8 +125,6 @@ func reasonCode(err error) string {
 		return "TLS_TRUST"
 	case errors.Is(err, ErrRejected):
 		return "REJECTED"
-	case errors.Is(err, underlay.ErrDenied):
-		return "SOCKET_DENIED"
 	case errors.Is(err, context.Canceled):
 		return "CANCELLED"
 	case errors.Is(err, context.DeadlineExceeded), errors.Is(err, os.ErrDeadlineExceeded):
@@ -141,6 +139,8 @@ func reasonCode(err error) string {
 		return "NETWORK_UNREACHABLE"
 	case errors.Is(err, syscall.ECONNRESET):
 		return "CONNECTION_RESET"
+	case errors.Is(err, underlay.ErrDenied):
+		return "SOCKET_DENIED"
 	case errors.Is(err, io.EOF):
 		return "EOF"
 	case errors.Is(err, io.ErrUnexpectedEOF):

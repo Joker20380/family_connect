@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**6 November — same cold-provisioning incident, native diagnostic source gate PASS.**
+**6 November — native diagnostic source gate PASS; Android gate BLOCKED_RESOURCE.**
 The owner explicitly authorizes this bounded continuation from9765c5c, with one new
 informative AutomaticConnection run only after error distinguishability. Native results
 now travel separately from trusted replies, bound to the current call/lease; original
@@ -8,10 +8,22 @@ Open failure precedes ready publication/cancel and survives concurrent Close. Re
 JVM→JNI→Go tests distinguish pre-Go arguments, Go locator rejection, protect denial,
 missing/throwing JNI callback, carrier EOF, TLS trust, response EOF and Open/Close race.
 Affected Go race tests (3 repeats),100 JVM tests and source-pipeline compilation pass.
-This is NOT Android/Telemost acceptance: next is fresh JNI/APK, short provider-free
-Android JNI check, then the one authorized cold Connect. No timeout/retry/admission,
-installed user APK, production/G4/catalog/version change. Both earlier FAIL_RUNTIME
-receipts/artifacts remain immutable. [Current diagnostic gate](releases/2026-11-06-beta113-field16-bootstrap.md#native-diagnostic-continuation-6-november).
+Source070b808 is pushed/remote-verified. New Telemost x86_64 JNI af52aeb8…d1e04 is
+built and byte-verified inside disposable118 prebuild APK19a9b85f…bc7a7, with exports.
+Final source-only review also retains underlay RouteIPv4/DNS causes and distinguishes
+post-TLS cancellation; this is not inside that intermediate binary. Latest source must
+be rebuilt before runtime, rather than reusing the070b808 APK.
+The short real Android JNI test does NOT execute: three own AVD disk preflights fail,
+then two NVIDIA/KVM boots are stopped by the CPU thermal guard at85°C/88°C before
+instrumentation (second with own CPUQuota100%). All failures are retained; no further
+AVD is started. Own AVDs are stopped and the shared lock is free. No OAuth read, new
+room/authority/carrier worker or new Connect; the one authorized runtime remains unused.
+Transport root cause and bundle/READY/DNS/HTTPS/egress remain unproved. Need a safe
+thermal/resource window to finish provider-free Android JNI, then fresh authority/
+identity/locator/runtime APK and exactly one Connect. Prebuild has placeholders, not
+previous readiness. No timeout/retry/admission, user APK, production/G4/catalog/version
+change. Both original FAIL receipts and19 exact artifacts are reverified unchanged.
+[Current diagnostic gate](releases/2026-11-06-beta113-field16-bootstrap.md#native-diagnostic-continuation-6-november).
 
 **6 November19:40UTC — single corrected diagnostic attempt FAIL_RUNTIME; no more retries.**
 The actual AutomaticConnection MESH candidate receives absolute guest deadline339645ms
