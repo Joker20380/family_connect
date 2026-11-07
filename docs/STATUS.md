@@ -1,6 +1,20 @@
 # Текущее состояние / Current state
 
-**7 November — PR2 review corrections, normal merge gate.**
+**7 November — SUBSCRIPTION-PAID-119, owner-selected policy A.**
+PR1/PR2 are closed (main9d05c0f/5197563). Explicit paid descriptors108/119,
+observation agreement and exact-version APK attestation are implemented; old108
+replay payloads/receipts, canary108 and synthetic108 metadata remain unchanged.
+Retained signed ARM119 hash/package/certificate/source are rechecked without rebuild
+or phone use. Fresh read-only runtime12:41:56UTC still has108 policy,1 cohort/4 events;
+these are dated observations, not a new paid operation. The pinned rollout replaces
+only paid_beta in the actual serving archive; CLI and collector pin must agree.
+Final-head CI, normal merge, private nonempty backup, independent HTTP restart,
+installed operator status and fresh panel readback are the completion gate; their
+receipts stay in the task PR, without a post-CI cosmetic head.
+[Scope, hashes, tests and rollback](releases/2026-11-07-subscription-paid-119.md).
+No paid data/identity/period/phone/G4/renewal change; decision B remains unimplemented.
+
+**Historical7 November — PR2 review corrections, now merged5197563.**
 Collection pins the SQLite read snapshot before its projection clock; canonical module
 execution must originate in the verified archive. Local attempt audit and last successful
 server observation time are separate, including import errors/clock skew. Copyable RU
