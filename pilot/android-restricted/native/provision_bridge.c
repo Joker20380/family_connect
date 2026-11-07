@@ -4,10 +4,7 @@
 #include <stdio.h>
 #include <time.h>
 
-struct provision_text { const char *ptr; long len; };
-extern int64_t fcProvisionBegin(struct provision_text,struct provision_text,struct provision_text,struct provision_text,int64_t,uintptr_t,char **);
-extern char *fcProvisionPost(int64_t,struct provision_text,struct provision_text,struct provision_text,char **);
-extern char *fcProvisionClose(int64_t);
+#include "go_dispatch.h"
 
 static void diagnostic(JNIEnv *env,jobjectArray output,const char *raw){
  if(!output||(*env)->ExceptionCheck(env)||(*env)->GetArrayLength(env,output)!=1)return;

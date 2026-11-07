@@ -1,6 +1,13 @@
 # Текущее состояние / Current state
 
 **7 November — beta120 release qualification in progress.**
+Second Android run42383259832 reaches real restricted JNI but crashes atAPI35:
+restricted cgocallback sees AWG's goexit frame. Both independently linked Go runtimes
+use Android Q+'s fixed TLS_SLOT_APP; Bsymbolic is already present in both ELF files.
+JNI Go calls now run on fresh joined native threads, never on a Java thread retaining
+another runtime's g. Arguments/owner lifetime stay synchronous; Close is not serialized
+behind Post. Targeted native dispatch regression passes; hosted Android confirmation
+is pending. This changes native JNI glue, not TLS trust/network deadlines or accepted F.
 First exact-source Android run42381579767 failed atAPI35: the unchanged
 ProvisioningDiagnosticRuntimeTest loaded libfc_restricted.so before CI built it.
 Runtime artifact13578990044/SHAe3786820…e48ed is retained. Fix the CI dependency
@@ -17,10 +24,10 @@ The retained NL1 readback also resolves the current profile to
 `/etc/fc-canonical-pinned-venv/profile.json`; the unit template no longer points at
 the pre-renewal gateway.json. Finalization now fails closed without accepted CI pins
 and rechecks CI→locator-only→signature lineage. Synthetic vault/apksigner5 tests pass;
-no production key or final field signature was used. Client builds42381579767 is running.
+no production key or final field signature was used. Failed CI artifacts are retained.
 The canonical directory is protected by ProtectSystem=strict, not a per-directory
 read-only bind: the unchanged custody reader intentionally rejects such mounts.
-Corrected client candidate18bdeee runs Client builds42383259832. Canonical profile
+Corrected client candidate18bdeee failed Client builds42383259832 at the Go boundary. Canonical profile
 configuration also passes as an unprivileged fixture reader; no host account changes.
 
 **7 November — local ARM64 field-delivery kit prepared; NOT signed/deployed.**

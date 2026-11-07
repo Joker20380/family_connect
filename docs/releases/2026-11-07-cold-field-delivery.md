@@ -187,3 +187,29 @@ permits that probe (2 PASS), with no host mount/power/user-account change.
 The deployment manifest names the current RU `family-connect-friends-http-candidate`
 unit from canonical inventory/readback, not the historical friends-access service alias;
 it remains explicitly unchanged by this operation.
+
+Second Client builds42383259832/head18bdeee: Android128435219393 FAIL atAPI35 after
+the required production x86_64 JNI build succeeds. The diagnostic probe now reaches Go,
+but `runtime.cgocallback` reports an unknown caller PC. Runtime artifact13578524175
+SHA256 f8670dd3850d3cf809ef93764fd5b0b6df0632f6034ce30a3a2efd301de9a3a3;
+debug artifact13578848425 SHA256
+e71c0cb2bf3547d5ba6d6d060d2b9ca30153a179aabc7012912fceb7a5e0f4a2 are preserved.
+The process had already entered AWG Go on the instrumentation thread. The unexpected
+PC ends at AWG `runtime.goexit+1` (offset0x1014dc1, inferred page-aligned base
+0x792aa3213000); restricted cgocallback belongs to base0x792b280ba000. Go1.26.1
+runtime/cgo/gcc_android.c assigns both runtimes TLS_SLOT_APP=2 onQ+. Both ELF files
+already have SYMBOLIC/BIND_NOW/NODELETE; adding Bsymbolic would not fix that TLS collision.
+
+Bounded correction: every restricted JNI→Go call uses a new native pthread and joins
+before releasing Java-owned marshaled inputs. No JNIEnv crosses threads. Independent
+calls preserve concurrent Close/Post; allocation failure does not enter Go and releases
+the newly acquired global owner. C regression covers all19 exports, foreign caller TLS,
+concurrent cancellation, result lifetime and allocation failure. The Android test now
+explicitly enters AWG before and after restricted diagnostic/state calls on the same
+Java thread. No test is skipped; API27/API35 hosted release confirmation remains required.
+The new glue is a native-source delta from6eb, not a claim that F used these new bytes.
+F and the old local ARM64 artifact keep their original accepted/historical scope.
+Targeted host regression:26 contracts PASS and real JVM/JNI/Go diagnostic matrix PASS
+after this relevant glue change; retained log SHA256
+e6f93a56ee56c7a46407dd80b0053f2cc1e21d07fd34075936ad02901141c1ed.
+This is not the Android confirmation of the multi-runtime fix.

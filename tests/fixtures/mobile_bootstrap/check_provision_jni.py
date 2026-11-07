@@ -25,9 +25,10 @@ def main():
     source = source.replace('coldprovision.Telemost(network)', 'diagnosticConnector(network, resolver)')
     source = source.replace('defer provisioningResult(output, lease.diagnostic)', 'testPostEntered <- struct{}{}\n\tdefer provisioningResult(output, lease.diagnostic)')
     (output / 'provision.go').write_text(source)
-    for name in ('provision_lease.go', 'provision_bridge.c'):
+    for name in ('provision_lease.go', 'provision_bridge.c', 'go_dispatch.h'):
         (output / name).write_bytes((native / name).read_bytes())
-    bridge = (native / 'bridge.c').read_text().split('struct text{',1)[0]
+    (output / 'go_dispatch.c').write_text('#define FC_PROVISION_ONLY\n'+(native / 'go_dispatch.c').read_text())
+    bridge = (native / 'bridge.c').read_text().split('#include "go_dispatch.h"',1)[0]
     bridge = bridge.replace('AttachCurrentThread(vm,&env,NULL)', 'AttachCurrentThread(vm,(void **)&env,NULL)')
     (output / 'bridge.c').write_text(bridge + '''
 extern char *fcProvisionFixture(void);

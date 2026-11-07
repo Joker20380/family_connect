@@ -9,8 +9,9 @@ Use existing Client builds Android gates, download and bind the accepted ARM64 p
 repackage corrected185.10.158.212 entry immutably, and pin finalization to those CI bytes.
 Completion: READY_FOR_CONTROLLED_FIELD_OPERATION, never signed/delivered/field PASS.
 Live deployment, fresh production locator and targeted handoff remain one later operation.
-Selected corrected client CI source18bdeee (failed59849b0 preserved); finalizer pins remain disabled until its
-Android job and downloaded payload pass. Server package will use a separate clean
+Both failed client sources59849b0/18bdeee are preserved. Confirm the narrow Android
+multi-Go-runtime JNI thread-isolation fix in existing release-CI; finalizer pins remain
+disabled until the Android job and downloaded payload pass. Server package uses a separate clean
 source checkpoint including the corrected canonical profile and finalized CI pins.
 
 **Completed locally7 November: bounded ARM64 field kit after accepted F.**
