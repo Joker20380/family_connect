@@ -2,6 +2,11 @@
 
 ## Current engineering priority / Текущий critical path
 
+**7 November20:04UTC MESH count complete:** journal-derived concurrent sessions
+NL1=1/NL2=0, with fresh NL1 incoming heartbeat and stable process invocations.
+No implementation/deployment or gate advancement; RU intent and NL1 load follow-up
+remain separate. [Counting evidence](releases/2026-11-07-vpn-health.md#mesh-session-follow-up).
+
 **7 November19:57UTC operational readback:** NL AWG/TCP/MESH active; RU AWG/TCP
 masked and not running since19:04UTC. Read-only request complete, no repair authorized
 by this check. Confirm intended RU disablement and investigate NL1 CPU/swap bursts

@@ -51,3 +51,31 @@ entry docs record opt-in118/default113/catalog7; this is not a rollout claim.
 Rollback not applicable. Remaining: establish intended RU masking; investigate NL1
 CPU/swap activity if sustained; separately measure authenticated MESH concurrency
 and end-to-end availability. Preserve existing engineering gates and unrelated edits.
+
+## MESH session follow-up
+
+Owner separately requested MESH concurrency. Snapshots20:04:25–27UTC and
+20:04:51–52UTC both yield **NL1=1, NL2=0** authenticated dedicated sessions.
+NL1's remaining session has Family TLS establishment and no terminal/cleanup event;
+incoming HEARTBEAT/RX advances between samples, latest19.3s before final readback.
+NL2 has only bootstrap_seed_ready and no dedicated admission/session events during
+its current invocation. A ready bootstrap room is not a connected client.
+
+Method: stream journalctl JSON filtered by each service's current InvocationID;
+aggregate restricted_trace by session_tag on the server, never print tags. Count
+GATEWAY_SESSION/ESTABLISHED with no LOCAL_CLOSE, GATEWAY_SESSION failed/closed or
+CLEANUP completed event, cross-check Family TLS and recent incoming heartbeat.
+Both services remain active with identical invocation/PID/start metadata before and
+after each read. Journal starts18:29:06UTC/18:29:08UTC, within seconds of service
+starts18:29:03UTC/18:29:06UTC. Journal reads exit0; no suppression messages observed
+in the selected streams. The initial parser failed sorting missing activity samples;
+fixed locally and repeated successfully, not treated as a zero-session result.
+
+NL1 current process totals:28 setup tags,27 ACTIVE events,26 FAILED and1 EXPIRED
+setup events. These are historical setup attempts/reconnections, not28 clients and
+not the current online count. Repeated session-established trace events are deduped.
+No CARRIER_ACTIVITY events exist in this readback; heartbeat proves recent liveness,
+not a measured user payload rate. No client traffic test or memory introspection.
+Journal-derived count is a point-in-time observation, not a native exported gauge;
+missing/dropped logs remain a general limitation. No service/profile changes,
+version changes, deployment or rollback. Existing unrelated working edits preserved.

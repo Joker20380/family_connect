@@ -1,5 +1,11 @@
 # Текущее состояние / Current state
 
+**7 November20:04UTC — MESH concurrency follow-up:** current-invocation journals
+show1 established/authenticated nonterminal session on NL1,0 on NL2, unchanged
+across two snapshots. NL1 receives fresh heartbeat (19.3s old at final snapshot).
+Counts exclude bootstrap rooms and are not unique-user counts. No runtime changes.
+[Method and limits](releases/2026-11-07-vpn-health.md#mesh-session-follow-up).
+
 **7 November19:57UTC — read-only VPN check:** NL1/NL2 AWG/TCP and MESH active;
 RU AWG failed/masked and TCP inactive/masked, both exited19:04UTC. No restart or
 attribution of that change. Recent AWG peers2/1 on NL; registry63 devices,59 not
