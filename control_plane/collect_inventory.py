@@ -5,6 +5,7 @@ import json
 import hashlib
 import hmac
 import os
+import re
 from pathlib import Path
 import secrets
 import shlex
@@ -17,6 +18,20 @@ else:
 
 HOSTS = {source: SOURCES[source]['host'] for source in ACTIVE_SOURCES}
 BASE = Path(__file__).resolve().parent
+
+
+def transport_pin(config, source):
+    if set(config) == {'archive_sha256'}:
+        value = config['archive_sha256']
+    elif set(config) == {'archives'} and type(config['archives']) is dict and set(config['archives']) == set(HOSTS):
+        if not all(isinstance(value, str) and re.fullmatch('[a-f0-9]{64}', value) for value in config['archives'].values()):
+            raise ValueError('Invalid node archive pins')
+        value = config['archives'][source]
+    else:
+        raise ValueError('Complete exact node archive pins required')
+    if not isinstance(value, str) or not re.fullmatch('[a-f0-9]{64}', value):
+        raise ValueError('Invalid node archive pin')
+    return value
 
 
 def ssh_command(source, known_hosts=None):
@@ -74,7 +89,7 @@ def main():
     if transport_config.exists():
         if transport_config.is_symlink() or transport_config.stat().st_mode & 0o077:
             parser.error('Transport source configuration must be private')
-        expected_transport = json.loads(transport_config.read_text())['archive_sha256']
+        expected_transport = transport_pin(json.loads(transport_config.read_text()), args.source)
     source += (BASE / 'apps/console/transport_collector.py').read_text()
     source += f'\ndocument["transport_observation"] = collect_transport({args.source!r}, None, {expected_transport!r})\n'
     source += 'document["schema"] = 3\nprint(json.dumps(document, allow_nan=False))\n'

@@ -4,19 +4,38 @@ run: service lifetime; register: forced SSH command, one bounded JSON request.
 No private key/config/traffic is printed. Existing gateways are never modified.
 """
 import base64,fcntl,re,uuid,ipaddress,json,os,signal,sqlite3,subprocess,sys,time
+from contextlib import contextmanager
 from pathlib import Path
 ROOT=Path('/opt/apps/family_connect/friends-awg')
 IFACE='fcopen31'
 
 def command(args,check=True):
- r=subprocess.run(args,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
- if check and r.returncode:raise RuntimeError('AWG gateway operation failed')
- return r.returncode
+ try:
+  if 'control.friends.transport_gateway' in sys.modules:
+   sys.modules['control.friends.transport_gateway'].execute(args)
+  else:
+   with subprocess.Popen(args,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,start_new_session=True) as process:
+    try:process.wait(timeout=8)
+    except BaseException:os.killpg(process.pid,signal.SIGKILL);process.wait();raise
+    if process.returncode:raise subprocess.CalledProcessError(process.returncode,args)
+  return 0
+ except subprocess.CalledProcessError as error:
+  if check:raise RuntimeError('AWG gateway operation failed') from None
+  return error.returncode
+
+@contextmanager
+def registration(engine):
+ if engine is not None:
+  with engine.serialized():yield
+ else:
+  with (ROOT/'registration.lock').open('a') as lock:
+   fcntl.flock(lock,fcntl.LOCK_EX);yield
 
 def settings():return json.loads((ROOT/'settings.json').read_text())
 
 def database():
- db=sqlite3.connect(ROOT/'peers.db',timeout=10);db.execute('PRAGMA synchronous=FULL')
+ module=sys.modules.get('control.friends.transport_gateway')
+ db=sqlite3.connect(ROOT/'peers.db',timeout=module.remaining() if module else 8);db.execute('PRAGMA synchronous=FULL')
  db.execute('CREATE TABLE IF NOT EXISTS peers (id INTEGER PRIMARY KEY AUTOINCREMENT, public TEXT UNIQUE NOT NULL)')
  os.chmod(ROOT/'peers.db',0o600);return db
 
@@ -51,7 +70,7 @@ def tcp_user(device,ident):
  temporary=tcp/'user-request.json';fd=os.open(temporary,os.O_WRONLY|os.O_CREAT|os.O_TRUNC,0o600)
  with os.fdopen(fd,'w') as f:json.dump(payload,f)
  command([str(tcp/'xray'),'api','adu','--server=127.0.0.1:18085',str(temporary)],False)
- result=subprocess.run([str(tcp/'xray'),'api','inbounduser','--server=127.0.0.1:18085','-tag=friends','-email='+email],capture_output=True,text=True)
+ result=subprocess.run([str(tcp/'xray'),'api','inbounduser','--server=127.0.0.1:18085','-tag=friends','-email='+email],capture_output=True,text=True,timeout=8)
  assert result.returncode==0 and ident in result.stdout and email in result.stdout,'TCP user not confirmed'
  temporary.unlink()
 
@@ -74,8 +93,7 @@ def register():
  assert set(request)==({'public_key','tcp_id','device','paid'} if engine is not None else {'public_key','tcp_id','device'})
  ident=request['tcp_id'];device=request['device'];assert str(uuid.UUID(ident))==ident and re.fullmatch('[0-9a-f]{32}',device)
  key=request['public_key'];decoded=base64.b64decode(key,validate=True);assert len(decoded)==32 and any(decoded) and base64.b64encode(decoded).decode()==key
- with (ROOT/('application.lock' if engine is not None else 'registration.lock')).open('a') as lock:
-  fcntl.flock(lock,fcntl.LOCK_EX)
+ with registration(engine):
   if engine is not None:
    assert len(request['paid']['decisions'])==1
    decision=request['paid']['decisions'][0]
@@ -114,8 +132,7 @@ def run():
    time.sleep(.05)
   command([str(ROOT/'awg'),'setconf',IFACE,str(ROOT/'server.conf')])
   command(['ip','address','add',config['address'],'dev',IFACE]);command(['ip','link','set','dev',IFACE,'mtu','1280','up'])
-  with (ROOT/'registration.lock').open('a') as lock:
-   fcntl.flock(lock,fcntl.LOCK_EX)
+  with (engine.lock() if engine is not None else registration(None)):
    with database() as db:
     for index,public in db.execute('SELECT id,public FROM peers'):
      if engine is None or engine.peer_allowed(public):add_peer(public,address(index))

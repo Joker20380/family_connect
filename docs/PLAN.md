@@ -2,6 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected SUBSCRIPTION-RU-RECOVERY — finish authorized recovery, no adjacent task.**
+Dependency: main2077c271, immutable v2 kit299b4845, partial-enable incident receipt.
+Preserve NL lease refresh while RU stays masked until packaged qualification. Bound
+lock/engine/restart/readback/convergence by one monotonic budget; batch exact native
+sets and avoid no-op actuation. Include root-only preflight with production base units.
+Gate:63 canonical records/19-48-5 registered, real systemd/AWG/Xray, concurrent requests,
+slow-child/lock failure, traffic/expiry/noncohort/pending recovery and ≥360s stability;
+normal CI/review/merge; exact-byte RU recovery ≥360s, sequential NL, fresh strict per-node
+panel pins/readback, unchanged protected data, new operator pointer restored. Final
+receipts stay in the task PR/closed handoff; no cosmetic post-CI head required.
+No real paid operation, ledger/identity/period change, APK, G4/renewal or cold provisioning.
+[Recovery report](releases/2026-11-07-subscription-ru-recovery.md).
+
 **Owner-selected7 November: correct NL1 background load, bounded operational task.**
 Complete:54 scoped checks, read-only live parser preflight and exact systemd/native
 gates pass; NL1 node-only archive and persistent mailbox cap applied20:25UTC.
@@ -11,7 +24,7 @@ queued by this task: monitor long-term mailbox footprint separately, without dec
 a leak fixed. No RU/NL2 rollout, subscription mutation, client release or adjacent task advancement.
 [Gate and rollback](releases/2026-11-07-nl1-load-fix.md).
 
-**Selected SUBSCRIPTION-ENFORCEMENT-FIX — correct PR4, not enable production.**
+**Historical SUBSCRIPTION-ENFORCEMENT-FIX — corrected PR4; superseded operational status.**
 Core gate closed by PR5/3683fed3 with six green hosted runs and the real-systemd
 receipt. Final panel-only correction removes the hardcoded schema1 label, preserves
 historical observations and displays the actual imported schema when recorded.

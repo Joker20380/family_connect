@@ -1,11 +1,12 @@
 # Documentation
 
 **7 November — [Подписки: ежедневная эксплуатация](operators/subscriptions.ru.md).**
-Подготовленный [transport enforcement kit и обновлённая локальная витрина](releases/2026-11-07-subscription-transport-enforcement.md):
-новые production-ограничения ещё не включены; отдельное решение владельца.
+[Авторизованное восстановление RU и согласованная поставка node-fix](releases/2026-11-07-subscription-ru-recovery.md):
+v2 внедрён частично, RU после watchdog остановлен/masked, NL получают свежие leases.
+Финальный установленный статус определяется recovery receipt, не исходниками main.
 Каноническая RU-инструкция, реальная read-only витрина локальной панели,
 backup непустого registry и [выбранная политика108/119](releases/2026-11-07-subscription-paid-119.md).
-Единый paid-enforcement AWG/TCP/MESH остаётся отдельным невыбранным решением Б.
+Ограниченный профиль v2 выбран владельцем; прежняя MESH cert/CRL-граница сохраняется.
 [Наблюдения и проверки](releases/2026-11-07-subscription-operations.md).
 PR1/PR2 закрыты merge9d05c0f/5197563; прежняя Android-матрица не открывается заново.
 
