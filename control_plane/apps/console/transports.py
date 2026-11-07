@@ -17,7 +17,7 @@ def attempt(source, status, snapshot=None):
 
 def ingest(value, source):
     fields(value, 'schema source observed_at status runtime_sha256 devices')
-    require(type(value['schema']) is int and value['schema'] == 1 and value['source'] == source and source in NODES)
+    require(type(value['schema']) is int and value['schema'] in (1,2) and value['source'] == source and source in NODES)
     epoch(value['observed_at'])
     require(value['status'] in ('ok', 'not_installed', 'unavailable'))
     require(value['runtime_sha256'] is None or hex_digest(value['runtime_sha256']))
@@ -26,16 +26,23 @@ def ingest(value, source):
     require(value['status'] == 'ok' or not value['devices'])
     seen = set()
     for row in value['devices']:
-        fields(row, 'pseudonym expected_revision applied_revision applied_at registered awg_allowed tcp_allowed result decision_observed_at valid_until reason')
+        fields(row, 'pseudonym expected_revision applied_revision applied_at registered awg_allowed tcp_allowed result decision_observed_at valid_until reason' + (' managed' if value['schema']==2 else ''))
         require(hex_digest(row['pseudonym']) and row['pseudonym'] not in seen)
         seen.add(row['pseudonym'])
         require(type(row['expected_revision']) is int and row['expected_revision'] >= 0)
         require(row['result'] in ('applied', 'pending'))
         epoch(row['decision_observed_at'])
-        epoch(row['valid_until'])
         require(row['decision_observed_at'] <= value['observed_at'])
-        require(row['decision_observed_at'] < row['valid_until'] <= row['decision_observed_at']+120)
-        require(row['reason'] in (None,'canonical','lease-valid','lease-expired'))
+        if value['schema']==2:
+            require(type(row['managed']) is bool)
+            require(row['managed'] or row['valid_until'] is None)
+        if row['valid_until'] is None:
+            require(value['schema']==2 and row['reason'] not in ('lease-valid','lease-expired'))
+            require(not row['managed'] or row['awg_allowed'] is not True and row['tcp_allowed'] is not True)
+        else:
+            epoch(row['valid_until'])
+            require(row['decision_observed_at'] < row['valid_until'] <= row['decision_observed_at']+120)
+        require(row['reason'] in (None,'canonical','lease-valid','lease-expired','noncohort','membership-pending'))
         require(all(row[name] is None or type(row[name]) is bool for name in ('registered', 'awg_allowed', 'tcp_allowed')))
         if row['applied_revision'] is not None:
             require(type(row['applied_revision']) is int and 0 <= row['applied_revision'] <= row['expected_revision'])

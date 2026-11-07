@@ -12,6 +12,11 @@ TransportSnapshot/attempt приходят внешним RO collector по pinn
 квитанция — неизвестность; успех одного узла не распространяется на другие.
 Наблюдения применения старше90 секунд не считаются актуальными. Системные restart
 сценарии и MESH traffic эта страница сама не проверяет.
+Transport schema2 distinguishes ordinary noncohort (no paid timer) from durable
+pending enrollment and finite managed paid leases; schema1 historical observations
+remain readable. This is still applied-node evidence, never inferred from paid_allow.
+The PR4 kit is superseded by [the enforcement fix](../docs/releases/2026-11-07-subscription-enforcement-fix.md),
+not enabled in production. Existing layout and read-only boundaries are retained.
 [Инструкция](../docs/operators/subscriptions.ru.md) ·
 [проверки и границы](../docs/releases/2026-11-07-subscription-transport-enforcement.md).
 

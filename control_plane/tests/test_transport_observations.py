@@ -91,9 +91,9 @@ def test_collector_clock_is_taken_after_receipt_read(tmp_path, monkeypatch, cons
     now = int(timezone.now().timestamp())
     (tmp_path/'paid-transport.pyz').write_bytes(raw)
     node = 'gateway-ru'
-    (tmp_path/'transport-enforcement.json').write_text(json.dumps(dict(schema=1, profile='paid-transports-v1', node=node, enabled=True)))
+    (tmp_path/'transport-enforcement.json').write_text(json.dumps(dict(schema=1, profile='paid-transports-v2', node=node, enabled=True)))
     (tmp_path/'transport-attempt.json').write_text(json.dumps(dict(schema=1, node=node, observed_at=now+1, result='applied')))
-    (tmp_path/'transport-state.json').write_text(json.dumps(dict(schema=1,node=node,records={'a'*32:dict(decision=dict(revision=1,observed_at=now,valid_until=now+120),applied=dict(applied_revision=1,observed_at=now+1,registered=True,allowed=False,reason='canonical'))})))
+    (tmp_path/'transport-state.json').write_text(json.dumps(dict(schema=1,node=node,records={'a'*32:dict(decision=dict(revision=1,observed_at=now,valid_until=now+120,cohort=True),applied=dict(applied_revision=1,observed_at=now+1,registered=True,allowed=False,reason='canonical'))})))
     clock = iter((now, now+2))
     monkeypatch.setattr(transport_collector.time, 'time', lambda: next(clock))
     value = transport_collector.collect_transport(node,b'k'*32,hashlib.sha256(raw).hexdigest(),tmp_path)
@@ -113,3 +113,21 @@ def test_transport_error_is_visible_despite_old_source_clock(console, client):
     node=response.context['transport_nodes'][0]
     assert node['text']=='Ошибка источника' and node['previous'].pk==previous.pk
     assert 'Последнее успешное наблюдение' in response.content.decode()
+
+
+def test_v2_noncohort_and_prepared_membership_are_not_lease_expiry(console, client):
+    subscriptions.ingest(observation(),attempt=True)
+    value = transport_observation()
+    value['schema'] = 2
+    value['devices'][0].update(expected_revision=0,applied_revision=0,managed=False,valid_until=None,
+        reason='noncohort',awg_allowed=True,tcp_allowed=True)
+    transports.ingest(value,'gateway-ru')
+    client.force_login(console)
+    text = client.get('/subscriptions/').content.decode()
+    assert 'paid-таймер не применяется' in text and 'paid-срок не применяется' in text
+    value['devices'][0].update(managed=True,reason='membership-pending',awg_allowed=False,tcp_allowed=False)
+    transports.ingest(value,'gateway-ru')
+    assert 'Первое включение: узел подготовлен' in client.get('/subscriptions/').content.decode()
+    value['devices'][0]['tcp_allowed'] = True
+    with pytest.raises(SnapshotError):
+        transports.ingest(value,'gateway-ru')

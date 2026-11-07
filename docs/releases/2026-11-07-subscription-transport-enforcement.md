@@ -1,5 +1,12 @@
 # SUBSCRIPTION-TRANSPORT-ENFORCEMENT — 7 November 2026
 
+**Historical receipt; kit withdrawn from enablement by independent review.**
+Do not enable archive `d6e5dd679dec671dd9ec992f23057cd869580aa71ec34f8ad3c19f5f1eb89f3c`.
+The preserved results below do not prove the combined shipped systemd/preflight path
+and do not approve noncohort expiry on controller loss. See the
+[corrective task](2026-11-07-subscription-enforcement-fix.md); do not reassign these
+measurements to its new artifacts.
+
 ## Scope and provenance
 
 Base: remote main `a258e93347ba34fb876cc21f6bcae628e9b6c7b8`, closed PR1–3,

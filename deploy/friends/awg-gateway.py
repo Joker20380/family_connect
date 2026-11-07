@@ -59,24 +59,28 @@ def register():
  raw=sys.stdin.buffer.read(8000001);assert len(raw)<=8000000
  request=json.loads(raw)
  engine=paid_engine()
- if engine is not None and set(request)=={'operation','paid'}:
-  assert request['operation']=='reconcile'
-  with (ROOT/'registration.lock').open('a') as lock:
-   fcntl.flock(lock,fcntl.LOCK_EX)
-   engine.accept(request['paid'])
-   try:engine.apply()
+ if engine is not None and request.get('operation') in ('reconcile','prepare'):
+  preparing=request['operation']=='prepare'
+  assert set(request)==({'operation','paid','token'} if preparing else {'operation','paid'})
+  with engine.serialized():
+   with engine.lock():
+    if preparing:engine.prepare(request['paid'],request['token'])
+    else:engine.accept(request['paid'])
+   try:engine.apply_serialized()
    except BaseException:engine.stop_all();engine.failure();raise
-  print(json.dumps({'schema':1,'node':engine.node,'result':'applied'}));return
+  reply={'schema':1,'node':engine.node,'result':'prepared' if preparing else 'applied'}
+  if preparing:reply['token']=request['token']
+  print(json.dumps(reply));return
  assert set(request)==({'public_key','tcp_id','device','paid'} if engine is not None else {'public_key','tcp_id','device'})
  ident=request['tcp_id'];device=request['device'];assert str(uuid.UUID(ident))==ident and re.fullmatch('[0-9a-f]{32}',device)
  key=request['public_key'];decoded=base64.b64decode(key,validate=True);assert len(decoded)==32 and any(decoded) and base64.b64encode(decoded).decode()==key
- with (ROOT/'registration.lock').open('a') as lock:
+ with (ROOT/('application.lock' if engine is not None else 'registration.lock')).open('a') as lock:
   fcntl.flock(lock,fcntl.LOCK_EX)
   if engine is not None:
    assert len(request['paid']['decisions'])==1
    decision=request['paid']['decisions'][0]
    assert all(decision[name]==request[name] for name in ('device','public_key','tcp_id'))
-   state=engine.accept(request['paid'])
+   with engine.lock():state=engine.accept(request['paid'])
    assert engine.allowed(state['records'][device]),'Transport access denied'
   with database() as db:
    db.execute('BEGIN IMMEDIATE');row=db.execute('SELECT id FROM peers WHERE public=?',(key,)).fetchone()
@@ -84,10 +88,12 @@ def register():
     index=db.execute('INSERT INTO peers(public) VALUES (?)',(key,)).lastrowid
    else:index=row[0]
    assigned=address(index)
-   try:add_peer(key,assigned);tcp_user(device,ident)
-   except BaseException:
-    if engine is not None:engine.stop_all()
-    raise
+   if engine is None:add_peer(key,assigned);tcp_user(device,ident)
+  try:
+   if engine is not None:engine.apply_serialized()
+  except BaseException:
+   if engine is not None:engine.stop_all();engine.failure()
+   raise
   print(json.dumps({'public_key':key,'address':assigned,'transport':'amneziawg-3.1'}))
 
 def run():
@@ -138,8 +144,7 @@ if __name__=='__main__':
   elif sys.argv[1:] == ['register']:register()
   elif sys.argv[1:] == ['paid-preflight']:
    engine=paid_engine();assert engine is not None
-   with (ROOT/'registration.lock').open('a') as lock:
-    fcntl.flock(lock,fcntl.LOCK_EX);engine.apply(starting=True)
+   engine.apply(starting=True)
   elif sys.argv[1:] == ['paid-watch']:
    assert paid_engine() is not None
    from control.friends.transport_gateway import watch

@@ -2,15 +2,26 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Selected SUBSCRIPTION-TRANSPORT-ENFORCEMENT — prepare, not enable production.**
+**Selected SUBSCRIPTION-ENFORCEMENT-FIX — correct PR4, not enable production.**
+Base: actual remote main `1cbe8fbf0de1924e9326125e1932078b5b1f56ee`, separate worktree.
+Gate: reproduced deadlock/deadline regressions; packaged watcher + exact preflight +
+actual systemd/native transitions and real streams; safe first cohort preparation
+with unavailable node/lost ACK/restart/replay; noncohort preserved on central outage.
+Retain paid108/119/replay/terminal rules, local panel and MESH cert/CRL boundary.
+Build a new inventory-bound kit, refresh private delivery/readback/fail-closed rollback,
+run applicable hosted checks/review and normal merge. Old v1 archive is forbidden for
+enablement; historical receipts remain. Production/ledger/phone/G4/renewal/cold work
+are excluded. [Corrected evidence and scope](releases/2026-11-07-subscription-enforcement-fix.md).
+
+**Historical SUBSCRIPTION-TRANSPORT-ENFORCEMENT — PR4 merged, kit superseded.**
 Dependency: closed PR1–3/maina258e933, installed108/119 policy and local RO panel.
 Gate: canonical decisions, protected AWG/TCP registration and persistent/live sets,
 finite leases and explicit open-flow/mux interruption; isolated exact-engine tests,
 fresh private mapping/impact/rollback kit, installed local authenticated desktop/390px
 visual acceptance, applicable hosted checks and normal PR merge. Preserve existing
 MESH certificate/CRL boundary, non-billing noncohort semantics and control HTTPS.
-The recommended availability fence also expires cached noncohort admission on a
-central outage; this collateral effect is explicit, not an already approved policy.
+The earlier proposed noncohort expiry on central outage was not approved and is
+replaced by explicit first-enrollment preparation in SUBSCRIPTION-ENFORCEMENT-FIX.
 Only subsequent owner enablement remains after the gate. No production transport
 activation, paid writes, phone/G4/renewal/cold-provisioning work in this task.
 [Evidence, recommended profile and exact kit](releases/2026-11-07-subscription-transport-enforcement.md).

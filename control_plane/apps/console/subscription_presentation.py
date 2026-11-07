@@ -59,9 +59,11 @@ def present(rows, request, now):
             if observation:
                 detail.update(applied_time=datetime.fromtimestamp(observation['applied_at'], utc.utc) if observation['applied_at'] else None,
                     decision_time=datetime.fromtimestamp(observation['decision_observed_at'],utc.utc),
-                    valid_until=datetime.fromtimestamp(observation['valid_until'],utc.utc),
+                    valid_until=datetime.fromtimestamp(observation['valid_until'],utc.utc) if observation['valid_until'] is not None else None,
                     reason={'canonical':'Каноническое решение','lease-valid':'Локальное разрешение действительно',
-                            'lease-expired':'Срок локального разрешения истёк'}.get(observation['reason'],'Ожидается применение'))
+                            'lease-expired':'Срок локального разрешения истёк',
+                            'noncohort':'Вне пилота: paid-таймер не применяется',
+                            'membership-pending':'Первое включение: узел подготовлен, ожидается каноническая подписка'}.get(observation['reason'],'Ожидается применение'))
             row['transports'].append(detail)
     selected = rows
     if form.is_valid():
