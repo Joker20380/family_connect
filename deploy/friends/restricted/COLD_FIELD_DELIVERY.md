@@ -145,6 +145,17 @@ may differ before signing; all other APK payload members must remain byte-identi
 
 ## Actual handoff window
 
+Accepted prebuild: Client builds42385799106, Android job128442818128,
+source55525859465ff4713196db7206129ad840f67cb3, ARM64 artifact13580421361.
+The unsigned APK SHA256 is
+`9eae8668544c9b0d968befb82dc655a2594535fe59c4b5af5d55a804fd67348c`.
+Use the downloaded `verification.json` and accompanying audio source from that artifact.
+The old local269a9219 prebuild is preserved but is not this CI-qualified input. The new
+JNI includes isolated native callback threads after an API35 multi-Go-runtime failure;
+API27/API35 release gates confirm that fix, not a new Telemost/F or physical-phone run.
+The final locator-bearing signed APK necessarily gets a new digest. Never label it
+with the unsigned prebuild hash. Retain the corresponding source/notices beside handoff.
+
 Let entry start be T0. Its context ends atT0+420s. `SeedManager` takes the minimum
 of its own lifetime and that parent deadline, so seed expiry never extends the entry.
 The issuer uses `E=min(seed expiry, trust expiry, gateway leaf notAfter, CRL nextUpdate)`.

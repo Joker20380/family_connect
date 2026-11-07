@@ -1,10 +1,12 @@
 {
-  "state": "PENDING_ANDROID_RELEASE_CI",
-  "head_sha": "18bdeeeef44d9f153273b87be26a251d2f3e7d74",
-  "run_id": 42383259832,
-  "android_job_id": 128435219393,
-  "apk_sha256": null,
-  "verification_sha256": null,
-  "native_sha256": null,
-  "anchor_sha256": null
+  "state": "ANDROID_RELEASE_CI_ACCEPTED",
+  "head_sha": "55525859465ff4713196db7206129ad840f67cb3",
+  "run_id": 42385799106,
+  "android_job_id": 128442818128,
+  "artifact_id": 13580421361,
+  "artifact_sha256": "4a44d04badb22cb06e31d09fb2d4b5ec152232f9aad99c96fb2b8168c717f4d3",
+  "apk_sha256": "9eae8668544c9b0d968befb82dc655a2594535fe59c4b5af5d55a804fd67348c",
+  "verification_sha256": "48eab8c49462e3feb8c1d819db037c909ea92129eadc5915f073436275f466bb",
+  "native_sha256": "9f5798fdf17c81a53fb162f110bd2ec8b945181b5e7abc0f6804c662f1a0d11f",
+  "anchor_sha256": "d0ae60e61af6ac5018428aaad89e362ec0f75d7468633a26c22906356228d281"
 }
