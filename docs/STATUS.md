@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**7 November — real cold Connect now reaches Go; socket bind cause under investigation.**
+Owner permits evidence-driven corrective runs without new consent; CPU observe-only
+continues. Fixed packaging passes in the stand. The cold AutomaticConnection fails in
+2.206s: native last success TELEMOST_CREATE, first failure SOCKET_PROTECT_BIND /
+SOCKET_DENIED,0 protected/4 denied,4ms elapsed/27993ms native remaining. CELLULAR was
+available at bind; Java reports IO. TLS/challenge bytes were not reached; server challenge
+and certificate counts are0. Both exact guest blocks register2 rejected packets each.
+No route-race or trust diagnosis is inferred. Add only Java FD_DUP/NETWORK_BIND and safe
+nested errno/type fields to distinguish this failure. Network-probe regression and39
+harness tests pass. Next diagnostic APK reuses unchanged JNI; runtime is still pending.
+[First concrete cold result and immutable artifacts](releases/2026-11-07-cold-connect-a.json).
+
 **7 November11:14UTC — CPU stop overridden; packaging defect found and fixed offline.**
 One19877fd API27 NVIDIA/KVM run retains CPU readings without CPU termination; no guard
 stop occurs. It reaches fresh registered identity/two own rooms/verified locator but

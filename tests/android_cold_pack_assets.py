@@ -1,3 +1,4 @@
+import argparse
 import hashlib
 import json
 import os
@@ -19,8 +20,9 @@ def signature(name):
 def signer_command(buildtools,work,final,aligned):
     return [str(buildtools/'apksigner'),'sign','--ks',str(work/'test-signing.p12'),'--ks-key-alias','cold-runtime','--ks-pass','file:'+str(work/'test-signing.pass'),'--min-sdk-version','27','--v1-signing-enabled','true','--v2-signing-enabled','true','--v3-signing-enabled','false','--out',str(final),str(aligned)]
 
-def main(work):
+def main(work,base_apks=None):
     WORK=Path(work).resolve()
+    base_apks=Path(base_apks).resolve() if base_apks else BASE/'offline-artifacts'
     os.umask(0o077)
     fixture=WORK/'local-auth/fixture'
     out=WORK/'apk-final'
@@ -29,8 +31,11 @@ def main(work):
     environment=os.environ|{'JAVA_HOME':str(TOOLS/'jdk'),'PATH':str(TOOLS/'jdk/bin')+':'+os.environ['PATH']}
     buildtools=TOOLS/'android/build-tools/35.0.0'
     record={'source':'6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7','abi':'x86_64','native_sha256':'17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59','method':'assets-only zip rewrite, zipalign16K, fresh isolated test signer; unchanged manifest/dex/native','apks':{}}
+    record['native_source']=record['source']
+    if (base_apks/'managed-source.txt').exists():record['source']=(base_apks/'managed-source.txt').read_text().strip()
+    assert len(record['source'])==40 and all(value in '0123456789abcdef' for value in record['source'])
     for name,replacements in pairs:
-        original=BASE/'offline-artifacts'/name
+        original=base_apks/name
         unsigned=out/(name+'.unsigned')
         aligned=out/(name+'.aligned')
         final=out/name
@@ -50,11 +55,12 @@ def main(work):
                     assert after.read(name_in_archive)==(replacements[name_in_archive].read_bytes() if name_in_archive in replacements else before.read(name_in_archive))
             if name=='app-friends.apk':
                 assert hashlib.sha256(after.read('lib/x86_64/libfc_restricted.so')).hexdigest()==record['native_sha256']
-                assert json.loads(after.read('assets/restricted-build.json'))['source_revision']==record['source']
+                assert json.loads(after.read('assets/restricted-build.json'))['source_revision']==record['native_source']
         record['apks'][name]={'sha256':digest(final),'base_sha256':digest(original),'changed_entries':list(replacements)}
     (out/'receipt.json').write_text(json.dumps(record,indent=2)+'\n')
     print('FRESH_ASSETS_ONLY_APKS_VERIFIED',flush=True)
 
 if __name__=='__main__':
-    if len(sys.argv)!=2:raise SystemExit('Explicit private packaging directory required')
-    main(sys.argv[1])
+    parser=argparse.ArgumentParser(description='Explicit private packaging directory required')
+    parser.add_argument('work');parser.add_argument('--base-apks')
+    arguments=parser.parse_args();main(arguments.work,arguments.base_apks)

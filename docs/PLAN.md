@@ -2,6 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Active7 November: localize and repair proven Android socket bind failure.**
+The owner removes the single-launch approval constraint; continue evidence-driven
+diagnostic/fix/confirmation runs with CPU observe-only and unchanged security/budgets.
+First real cold Connect: Go entered; SOCKET_PROTECT_BIND/SOCKET_DENIED before TLS,
+selected CELLULAR available, Java IO. Add bounded bind operation/errno to distinguish
+descriptor duplication from platform binding. Reuse accepted JNI, compile managed APK
+only, then confirm a specific cause; no unchanged retry-until-green or scope expansion.
+[Actual evidence](releases/2026-11-07-cold-connect-a.json).
+
 **7 November CPU-override attempt finished; packager repair verified offline only.**
 No thermal abort; no Connect: apksigner password-file EOF stops final packaging.
 Remove the redundant key-password read;39 targeted tests plus actual offline signing

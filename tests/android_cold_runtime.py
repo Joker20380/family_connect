@@ -127,12 +127,17 @@ def aborted(event):
         finally:os._exit(124)
 
 
-def main(work, *, observe_cpu_temperature=False):
+def main(work, *, observe_cpu_temperature=False, base_apks=None):
     global WORK,AUTH,monitor
     WORK=Path(work).resolve();AUTH=WORK/'local-auth'
     assert AUTH.is_dir(),'EXISTING_ISOLATED_WORK_DIRECTORY_REQUIRED'
     for name in ('runtime.started','receipt.json','resources.jsonl','emulator.log','instrumentation.log'):
         assert not (WORK/name).exists(),'UNUSED_RUNTIME_OUTPUT_DIRECTORY_REQUIRED'
+    if base_apks:
+        base_apks=Path(base_apks).resolve()
+        record['native_source']=record['source']
+        record['source']=(base_apks/'managed-source.txt').read_text().strip()
+        assert re.fullmatch('[0-9a-f]{40}',record['source']),'MANAGED_SOURCE_REQUIRED'
     monitor=emulator_guard.Monitor(record,save_guard,aborted,cpu_temperature_stop=not observe_cpu_temperature)
     resource.setrlimit(resource.RLIMIT_CORE,(0,0));os.umask(0o077)
     emulator=None;vault=None;package=None;lock=None;logs=[];owns_stand=False
@@ -216,7 +221,9 @@ def main(work, *, observe_cpu_temperature=False):
         record['synthetic_identity_registered']=True
         record['phase']='FINAL_ASSET_PACKAGING'
         log=(WORK/'asset-packaging.log').open('xb');logs.append(log)
-        package=own_start(lambda: subprocess.Popen([sys.executable,str(ROOT/'tests/android_cold_pack_assets.py'),str(WORK)],stdout=log,stderr=subprocess.STDOUT,start_new_session=True))
+        packaging=[sys.executable,str(ROOT/'tests/android_cold_pack_assets.py'),str(WORK)]
+        if base_apks:packaging+=['--base-apks',str(base_apks)]
+        package=own_start(lambda: subprocess.Popen(packaging,stdout=log,stderr=subprocess.STDOUT,start_new_session=True))
         record['process_roots'][str(package.pid)]='asset_packaging'
         while package.poll() is None:live();time.sleep(0.25)
         assert package.returncode==0,'ASSET_PACKAGING_FAILED'
@@ -295,6 +302,7 @@ def main(work, *, observe_cpu_temperature=False):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description='Explicit isolated work directory required; no runtime authorization implied')
     parser.add_argument('work')
+    parser.add_argument('--base-apks')
     parser.add_argument('--observe-cpu-temperature-only',action='store_true',help='Explicit owner-authorized run: retain CPU readings without CPU thermal stop; all other guards remain')
     arguments=parser.parse_args()
-    main(arguments.work,observe_cpu_temperature=arguments.observe_cpu_temperature_only)
+    main(arguments.work,observe_cpu_temperature=arguments.observe_cpu_temperature_only,base_apks=arguments.base_apks)

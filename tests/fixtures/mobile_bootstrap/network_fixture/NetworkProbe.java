@@ -31,6 +31,17 @@ public class NetworkProbe {
         require(provisioning.protect(43)&&cell.bound==2&&vpn.bound==0);
         com.google.gson.JsonObject selected=provisioning.provisioningDiagnostic();
         require(selected.get("handle").getAsLong()==2&&selected.get("type").getAsString().equals("CELLULAR")&&selected.get("bind_result").getAsString().equals("BOUND"));
+        java.net.SocketException rejected=new java.net.SocketException("must not escape into diagnostics");
+        rejected.initCause(new android.system.ErrnoException("private syscall details",22));
+        cell.bindFailure=rejected;
+        require(!provisioning.protect(43));selected=provisioning.provisioningDiagnostic();
+        require(selected.get("bind_operation").getAsString().equals("NETWORK_BIND")&&selected.get("bind_errno").getAsInt()==22);
+        require(!selected.toString().contains("private")&&!selected.toString().contains("escape"));
+        cell.bindFailure=null;android.os.ParcelFileDescriptor.failure=rejected;
+        require(!provisioning.protect(43));selected=provisioning.provisioningDiagnostic();
+        require(selected.get("bind_operation").getAsString().equals("FD_DUP")&&selected.get("bind_errno").getAsInt()==22);
+        android.os.ParcelFileDescriptor.failure=null;
+        require(provisioning.protect(43)&&provisioning.provisioningDiagnostic().get("bind_errno").getAsInt()==0);
         cell.alive=false;wifi.alive=true;context.manager.networks=new Network[]{vpn,wifi};
         require(!provisioning.protect(44)&&wifi.bound==0&&vpn.bound==0);
         selected=provisioning.provisioningDiagnostic();

@@ -15,6 +15,9 @@ public final class ChatNetworkAndroid {
     private long bindAt;
     private boolean bindAvailable;
     private String bindResult="NOT_RUN";
+    private String bindOperation="NOT_RUN";
+    private String bindError="NONE";
+    private int bindErrno;
     private String resolverClass="NONE";
     ChatNetworkAndroid(Context context) { this.context = context.getApplicationContext(); }
 
@@ -51,11 +54,22 @@ public final class ChatNetworkAndroid {
         if(provisioningNetwork!=null){
             NetworkCapabilities caps=manager.getNetworkCapabilities(provisioningNetwork);
             bindAt=android.os.SystemClock.elapsedRealtime();
+            bindOperation="NETWORK_CHECK";bindError="NONE";bindErrno=0;
             bindAvailable=caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
             if(!bindAvailable){bindResult="NETWORK_UNAVAILABLE";return false;}
-            try(ParcelFileDescriptor socket=ParcelFileDescriptor.fromFd(fd)){provisioningNetwork.bindSocket(socket.getFileDescriptor());bindResult="BOUND";return true;}
-            catch(IOException unavailable){bindResult="IO";return false;}
-            catch(SecurityException unavailable){bindResult="SECURITY";return false;}
+            bindOperation="FD_DUP";
+            try(ParcelFileDescriptor socket=ParcelFileDescriptor.fromFd(fd)){bindOperation="NETWORK_BIND";provisioningNetwork.bindSocket(socket.getFileDescriptor());bindResult="BOUND";return true;}
+            catch(IOException unavailable){
+                bindResult="IO";bindError=unavailable instanceof java.net.SocketException?"SOCKET":"IO";
+                Throwable cause=unavailable;
+                for(int depth=0;cause!=null&&depth<4;depth++,cause=cause.getCause())if(cause instanceof android.system.ErrnoException){
+                    int code=((android.system.ErrnoException)cause).errno;
+                    if(code>0&&code<4096)bindErrno=code;
+                    break;
+                }
+                return false;
+            }
+            catch(SecurityException unavailable){bindResult="SECURITY";bindError="SECURITY";return false;}
         }
         for (Network network : manager.getAllNetworks()) {
             NetworkCapabilities caps = manager.getNetworkCapabilities(network);
@@ -90,6 +104,7 @@ public final class ChatNetworkAndroid {
         value.addProperty("resolver",provisioningNetwork==null?"NONE":"NETWORK_IPV4_GO_RESOLVER");
         value.addProperty("resolver_class",resolverClass);
         value.addProperty("observed_ms",android.os.SystemClock.elapsedRealtime());value.addProperty("bind_ms",bindAt);value.addProperty("bind_available",bindAvailable);value.addProperty("bind_result",bindResult);
+        value.addProperty("bind_operation",bindOperation);value.addProperty("bind_error",bindError);value.addProperty("bind_errno",bindErrno);
         return value;
     }
 }

@@ -144,3 +144,19 @@ or AVD were used for the correction. Cleanup is verified; room deletion NOT_VERI
 Connect/native snapshot/READY/traffic remain NOT_RUN. An additional AVD/preparation
 launch requires owner approval; there is no automatic retry series.
 [Safe receipt, source/artifact identities and limits](2026-11-07-cold-cpu-observed-runtime.json).
+
+## First informative cold Connect
+
+Owner authorizes evidence-driven continuation without repeated approval. Corrected
+packaging reaches one real cold AutomaticConnection with source6eb61a9/JNI17119f00…60c59.
+Go enters, locator/underlay/Telemost factory succeed; first failure is socket protect/bind,
+SOCKET_DENIED, before TLS/request bytes. Java pins available CELLULAR but reports IO.
+0 protected/4 denied; native4ms elapsed/27993ms remaining, candidate197866ms remaining.
+Both guest-only direct blocks register2 rejects; authority challenge/certificate counts0.
+No READY or traffic, and no trust failure inferred. Own runtime is stopped and exact
+artifacts retained in [Connect A receipt](2026-11-07-cold-connect-a.json).
+Only missing Java observability is added: FD_DUP versus NETWORK_BIND, safe error class
+and bounded errno; no raw error text, fallback route, DNS or timeout change. Stubbed
+network regression and39 harness tests pass. Runner/packager accept an explicit managed
+base-APK directory so Java-only diagnostic/fix builds can retain the original JNI and
+separate managed/native source provenance. A diagnostic follow-up is not yet PASS.
