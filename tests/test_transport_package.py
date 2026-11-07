@@ -83,7 +83,7 @@ def test_lifetime_fences_and_disabled_default():
 
 def test_exact_v2_node_forward_package_and_inventory(tmp_path):
     from scripts import package_transport_node_recovery as recovery
-    commit = '2077c271d43d3bbe09f76e70934947bcc3fb51c6'
+    commit = recovery.PREVIOUS_SOURCE
     def historical(path):
         return subprocess.check_output(['git', '-C', str(kit.ROOT), 'show', commit+':'+path])
     inputs = {name: historical(name) for name in kit.MODULES}

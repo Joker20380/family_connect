@@ -43,6 +43,10 @@ full nested inventory plus source SHA/dirty status. HTTP/operator/reconciler are
 part of this forward package; their previously installed hashes/PID must stay unchanged.
 The final committed-byte rebuild must equal qualified payload bytes. Historical
 artifacts are never overwritten or assigned the new source SHA.
+The Docker CI export explicitly includes the exact2077c271 Git object closure needed
+to reconstruct the accepted v2 node. Host-checkout success alone missed this fixture
+requirement; restored-export reproduction must retain7fa86e75… and reject tampering.
+Existing native/renewal snapshot contracts and owner/interpreter checks remain intact.
 
 Addressed unit gates cover63-record no-op query count, bounded lock wait, killed child
 descendants/no late write, strict full-query parsing, existing expiry/revision/membership
@@ -53,6 +57,27 @@ It includes overlapping watcher/reconcile/register, open traffic, expiry/offline
 cutoff/noncohort, enrollment ACK/replay, application failure/recovery and ≥360s steady
 window. Intentional fault scenarios respect the actual five-starts/120s rate limit;
 the limit is not removed to accelerate qualification.
+
+Exact payload source0be45494242d97cd4ebe21e06085f836813d71ae, harnessdeca5618:
+real systemd/native **PASS**,374.777s steady window/18 overlapping central cycles;
+same actual service PIDs throughout. The later CI fixture correction changes no node
+bytes. Native hashes match fresh installed Xray26.3.27/AWG on all three production
+nodes. Isolated nodes use0.6CPU/448MiB, versus observed production2CPU/about2GiB.
+
+| Evidence on the exact recovery payload | Measured result |
+| --- | --- |
+| Maximum successful pass RU / NL1 / NL2 | 0.646 /1.197 /0.106s |
+| Maximum useful-progress interval RU / NL1 / NL2 | 2.646 /3.197 /2.106s |
+| Natural expiry: AWG / TCP / open mux | 2.318 /2.182 /0.216s after deadline |
+| Center-loss cutoff: AWG / TCP / open mux | 4.191 /3.919 /1.971s after finite lease |
+| Held lock / slow engine controlled failure | 8.410 /8.475s; exit-code, not watchdog; no late child write |
+| Enrollment unavailable/lost ACK/restart/replay, recovery, terminal denial | PASS on synthetic canonical data |
+
+Node archive SHA2564948e888579c42fdb4697b23a10bcb256f76b8de7fe52b8aa618e25bd9b28e4d;
+gateway69f32dbfdf0db5f57fb598d58935b5f2b098e53d0c0e2ac24517ad299ced26bf;
+recovery tar5f82efd60ac6e027bf1154b8cae364bd3edb0dc444921e30e7f56d7d16d6019c;
+full inventoryb1433795ecf837f7b3592fc5312190fb0480e0ef5896a575847937aba3fa1ab5.
+These are qualification results, not production recovery or user traffic evidence.
 
 Final exact-byte qualification, maxima, hosted CI/review/merge and operational receipts
 are attached to the recovery PR and retained privately. A source checkpoint is not a

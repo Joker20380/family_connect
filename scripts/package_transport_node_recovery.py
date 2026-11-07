@@ -12,6 +12,7 @@ else:
 
 PREVIOUS_NODE = '7fa86e75162fc6c7f6c4ea8968ee3792027f05fc470a743c0b1b6cbb7af3eb2e'
 PREVIOUS_GATEWAY = 'd7e57b79a5a4766c3dced902c4684f808b59ab99f4df37b47f6970eb5e92eb2a'
+PREVIOUS_SOURCE = '2077c271d43d3bbe09f76e70934947bcc3fb51c6'
 
 
 def build(node, gateway, output, source=ROOT):
