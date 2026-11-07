@@ -2,15 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Selected7 November: API28/CELLULAR-only applicability, not reopening E.**
-Use existing runner with real API28 NetworkCapabilities, no WiFi/VPN/readiness, fresh
-synthetic inputs, exact two guest DROP rules, candidate200s/readiness30s unchanged.
-Measure direct-path consumption and native remainder, then DNS/HTTPS/egress if READY.
-E counter timing is localized; same-request causality is unknown. Capture existing Mux
-reason counters and before/after traffic snapshots without rebuilding JNI. Only causal
-diagnostic repeats/fixes; no soak, discovery/import/activation or field-phone changes.
+**Completed7 November: API28/emulated CELLULAR-only cold DROP follow-up.**
+F/252c87e with unchanged application9bf0272 and JNI17119f00…60c59 passes real Android28
+sole foreground/unrestricted CELLULAR, no WiFi/VPN/readiness, fresh synthetic inputs and
+exact guest DROP. Direct HTTPS5.002s + RNS6.201s leave18.790s provisioning budget;
+fetch validated with7.279s remaining. READY57.565s, DNS/verified HTTPS/egress PASS.
+All per-traffic-boundary error/timeout/reason counters stay0, including after NXDOMAIN.
+E counter timing is localized, but same-request/underlying-delay causality remains unknown
+without E's missing per-request evidence; F is not a claimed fix. No product/native rebuild,
+deadline/security change, soak or unchanged retry. Own resources stopped, old evidence kept.
 Field gate remains ARM64 + real trust/signature + authorized provisioning entry + valid
 pre-Connect locator delivery; x86 synthetic rooms/APKs are not a field release.
+The emulator is not the original physical user's carrier; no G4/phone PASS or automatic
+next task. Field delivery is a separate controlled gate, not authorized production changes.
 [Follow-up evidence and remaining gate](releases/2026-11-07-cold-api28-cellular.json).
 
 **Completed7 November: authorized cold-provisioning positive runtime goal.**

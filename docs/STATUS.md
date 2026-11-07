@@ -1,6 +1,23 @@
 # Текущее состояние / Current state
 
-**7 November — selected follow-up: API28/CELLULAR-only with silent direct-path DROP.**
+**7 November — API28/emulated CELLULAR-only cold DROP PASS (F).**
+Unchanged application9bf0272/native6eb61a9/JNI17119f00…60c59 with harness252c87e:
+real API28/x86_64 Android, sole foreground/unrestricted CELLULAR, no WiFi/VPN/readiness,
+fresh verified locator407s, registered synthetic identity. Exact guest DROP records4/3
+packets on former HTTPS/RNS destinations. HTTPS consumes5.002s, RNS6.201s including
+initialization; provisioning starts with18.790s readiness budget and validates fetch with
+7.279s remaining. Native27 protected/0 denied; both request IDs correlate server200.
+Ordinary MESH READY57.565s; DNS, default verified HTTPS and gateway egress pass. Every
+traffic-boundary snapshot retains zero DNS timeouts/errors and zero Mux protocol reasons.
+Original example.com still returns NXDOMAIN without counter errors. No product/native
+change or timeout increase; all A–E artifacts/original FAILs verified unchanged. Own
+AVD/workers/authority stopped, lock free, monitor joined; room deletion NOT_VERIFIED.
+This is emulator cellular, not the original user's physical operator, G4 or field rollout.
+Field gate: compatible signed ARM64 candidate, real trust/authorized provisioning entry,
+and a valid pre-Connect locator; assets-only expiration remains an operational constraint.
+[F runtime, budgets, exact artifacts and field gate](releases/2026-11-07-cold-api28-cellular.json).
+
+**E counter analysis — timing localized, exact per-request cause still unknown.**
 E remains accepted in its exact API27/x86_64 synthetic scope. Its saved counters place
 timeouts in(45.894,51.100]s and(51.100,56.252]s after Connect; protocol errors rise
 in(56.252,57.268]s, after READY43.982s but before DNS_OK58.018s, HTTPS60.616s and
@@ -10,7 +27,9 @@ are a code-supported hypothesis, not an established E cause. Existing JNI expose
 counters: the targeted test now retains them and per-traffic-stage snapshots. Existing
 runner adds API28, actual sole eligible CELLULAR checks and exact guest DROP; no product,
 JNI, budgets or security changes. Seven selected harness checks and the network-only
-27/28/35 probe pass; actual API28 runtime remains pending. No public/production/G4 action.
+27/28/35 probe pass. F's zero counters do not retrospectively identify or fix E's cause;
+E lacks per-DNS IDs, reason breakdown and gateway resolver exchange timing. No unchanged
+repeat is justified. No public/production/G4 action.
 [Bounded follow-up evidence](releases/2026-11-07-cold-api28-cellular.json).
 
 **7 November — real cold positive path PASS; bounded incident goal achieved.**
