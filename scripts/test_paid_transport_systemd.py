@@ -14,6 +14,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import traceback
 
 from test_fleet_canary import call, cleanup, inspect, verify_container, LABEL, ROOT
 
@@ -29,9 +30,10 @@ def execute(kit, report):
                 context = Path(temporary)
                 shutil.copytree(kit,context/'kit')
                 shutil.copyfile(ROOT/'pilot/fleet_canary.py', context/'canary.py')
+                shutil.copyfile(ROOT/'pilot/transport-production-tcp.service', context/'production-tcp.service')
                 for source,target in (('transport_enforcement_fixture.py','transport_fixture.py'),('transport_systemd_fixture.py','systemd_fixture.py')):
                     shutil.copyfile(ROOT/'pilot'/source,context/target)
-                (context/'Dockerfile').write_text('FROM family-connect-fleet-canary:local\nRUN apt-get update && apt-get install -y --no-install-recommends iptables=1.8.10-3ubuntu2 && rm -rf /var/lib/apt/lists/*\nCOPY kit /kit\nCOPY canary.py transport_fixture.py systemd_fixture.py /\nENTRYPOINT ["sleep","1200"]\n')
+                (context/'Dockerfile').write_text('FROM sha256:af9c993c2fcd60804ef576e2190dee88699830624ec74317a91eb6d9855284e9\nCOPY kit /kit\nCOPY canary.py transport_fixture.py systemd_fixture.py production-tcp.service /\nENTRYPOINT ["sleep","1800"]\n')
                 image = prefix+':local'
                 built = call(['docker','build','-t',image,str(context)],timeout=300,check=False)
                 (report.parent/(prefix+'-build.log')).write_bytes(built.stdout+built.stderr)
@@ -109,7 +111,7 @@ def execute(kit, report):
             access = Access(central/'registry.sqlite3')
             access.initialize()
             private = base64.b64decode(re.search(r'PrivateKey = ([^\n]+)',materials['gateway-ru']['awg']).group(1))
-            identities = [DeviceIdentity(RNS.Identity(),X25519PrivateKey.from_private_bytes(private)),DeviceIdentity.generate(),DeviceIdentity.generate()]
+            identities = [DeviceIdentity(RNS.Identity(),X25519PrivateKey.from_private_bytes(private))]+[DeviceIdentity.generate() for index in range(62)]
             bound = []
             for identity in identities:
                 challenge = access.challenge(identity.public_identity,identity.wireguard_public_key,'activate',access.invite())
@@ -125,8 +127,9 @@ def execute(kit, report):
             commands_path.write_text(json.dumps(commands))
             (central/'transport-enforcement.json').write_text(json.dumps(dict(schema=1,profile=policy.PROFILE,enabled=True,hosts={node:node for node in nodes})))
             client = None
+            registrations = dict(zip(nodes, (identities[:19], identities[:4]+identities[19:], identities[1:6])))
             for node in nodes:
-                result = inner(node,'setup',dict(node=node,envelope=policy.snapshot(access.path,node),registered=[identity.reference for identity in identities[:2]]))
+                result = inner(node,'setup',dict(node=node,envelope=policy.snapshot(access.path,node),registered=[identity.reference for identity in registrations[node]]))
                 if node=='gateway-ru':
                     client=result['client']
                 assert 'paid-preflight' in result['info']['preflight']
@@ -144,7 +147,7 @@ def execute(kit, report):
                 assert process.returncode==expect, process.stdout.decode()
                 return json.loads(process.stdout)
 
-            start=int(time.time());end=start+90
+            start=int(time.time());end=start+150
             blocked=dict(commands);blocked[nodes[-1]]=[sys.executable,'-c','raise SystemExit(1)']
             commands_path.write_text(json.dumps(blocked))
             denied=operator('activate','systemd-first-paid',start=start,end=end,expect=2)
@@ -174,7 +177,10 @@ def execute(kit, report):
             time.sleep(1)
             opened=inner('client','stream-results',script='/transport_fixture.py')
             assert all(row['count'] and row['stopped'] is None for row in opened.values())
-            time.sleep(max(0,end-time.time())+6)
+            while time.time() < end:
+                time.sleep(min(20, max(0,end-time.time())))
+                assert transport_reconcile.cycle(access.path,commands)==dict.fromkeys(nodes,'applied')
+            time.sleep(6)
             info=inner('gateway-ru','info')
             assert all('ActiveState=active' in value for value in info['services'].values())
             stopped=inner('client','stream-results',script='/transport_fixture.py')
@@ -182,7 +188,7 @@ def execute(kit, report):
             assert all(-1<=delay<=25 for delay in delays.values())
             receipt['checks']['natural_expiry_seconds']=delays
             inner('client','probe',dict(allowed=False))
-            start=int(time.time());end=start+600
+            start=int(time.time());end=start+1200
             operator('activate','systemd-renewal',start=start,end=end)
             assert transport_reconcile.cycle(access.path,commands)==dict.fromkeys(nodes,'applied')
             inner('client','probe',dict(allowed=True))
@@ -191,6 +197,24 @@ def execute(kit, report):
             after=inner('gateway-ru','info')
             assert before['services']==after['services']
             receipt['checks']['renewal_and_duplicate_no_extra_restart']=True
+            stable_started = time.monotonic()
+            cycles = []
+            while time.monotonic()-stable_started < 360:
+                with ThreadPoolExecutor(max_workers=2) as pool:
+                    request={key:bound[1][key] for key in ('device','public_key','tcp_id')}
+                    request['paid']=policy.snapshot(access.path,'gateway-ru',device=identities[1].reference)
+                    registration=pool.submit(call,commands['gateway-ru'],payload=json.dumps(request).encode(),timeout=20)
+                    refresh=pool.submit(transport_reconcile.cycle,access.path,commands)
+                    assert registration.result().returncode==0
+                    assert refresh.result()==dict.fromkeys(nodes,'applied')
+                cycles.append(time.monotonic()-stable_started)
+                time.sleep(20)
+            receipt['checks']['stable_63_records_19_48_5'] = dict(seconds=time.monotonic()-stable_started, cycles=cycles)
+            before=inner('gateway-ru','info')
+            after=before
+            for node in nodes:
+                journal=call(['docker','exec',containers[node],'journalctl','-u',SERVICES_WATCH,'-o','cat','--no-pager']).stdout
+                (report.parent/(prefix+'-'+node+'-progress.private.log')).write_bytes(journal)
             lease=after['state']['records'][identities[0].reference]['decision']['valid_until']
             inner('client','streams',script='/transport_fixture.py')
             time.sleep(max(0,lease-time.time())+6)
@@ -221,6 +245,13 @@ def execute(kit, report):
             operator('activate','systemd-renewal-after-failure',start=int(time.time()),end=end+600)
             assert transport_reconcile.cycle(access.path,commands)==dict.fromkeys(nodes,'applied')
             receipt['checks']['restored_profile_after_engine_restart']=inner('client','probe',dict(allowed=True))
+            for interval in range(7):
+                time.sleep(20)
+                assert transport_reconcile.cycle(access.path,commands)==dict.fromkeys(nodes,'applied')
+            for fault in ('lock', 'engine'):
+                receipt['checks']['bounded_'+fault] = inner('gateway-ru','budget-fault',dict(kind=fault))
+                assert transport_reconcile.cycle(access.path,commands)==dict.fromkeys(nodes,'applied')
+                inner('client','probe',dict(allowed=True))
             operator('revoke','systemd-terminal-revoke')
             assert transport_reconcile.cycle(access.path,commands)==dict.fromkeys(nodes,'applied')
             inner('gateway-ru','restart')
@@ -228,6 +259,7 @@ def execute(kit, report):
             receipt['checks']['restart_denial_noncohort_survives']=True
             receipt['result']='PASS'
         except Exception as error:
+            (report.parent/(prefix+'-traceback.private.txt')).write_text(traceback.format_exc())
             receipt['error']=type(error).__name__+':'+str(error)[:300]
             diagnostics={role:call(['docker','exec',container,'sh','-c','journalctl --no-pager -n 160; cat /run/fc-canary/*.log 2>/dev/null; ip route; ip address; iptables -t nat -S; /native/awg show all'],check=False).stdout.decode(errors='replace') for role,container in containers.items()}
             (report.parent/(prefix+'-diagnostics.private.json')).write_text(json.dumps(diagnostics))

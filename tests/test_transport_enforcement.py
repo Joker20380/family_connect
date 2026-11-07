@@ -75,11 +75,13 @@ def engine(tmp_path, registry):
             live['restarts'] += 1
             live['tcp'] = json.loads((tcp/'server.json').read_text())['inbounds'][0]['settings']['clients']
         if arguments[1:3] == ['api', 'inbounduser']:
-            return json.dumps({'users': [item for item in live['tcp'] if item['email'] == arguments[-1].removeprefix('-email=')]}).encode()
+            return json.dumps({'users': [dict(email=item['email'], account={name: value for name, value in item.items() if name != 'email'}) for item in live['tcp']]}).encode()
         if arguments[1] == 'show':
-            return '\n'.join(live['awg']).encode()
+            return '\n'.join(key+'\t10.1.0.2/32' for key in live['awg']).encode()
         if arguments[-1] == 'remove':
             live['awg'].discard(arguments[-2])
+        if arguments[-2] == 'allowed-ips':
+            live['awg'].add(arguments[-3])
         return b''
     runtime = SimpleNamespace(ROOT=root, IFACE='fixture', database=lambda: sqlite3.connect(root/'peers.db'),
         address=lambda index: '10.1.0.2/32', add_peer=lambda key, address: live['awg'].add(key))

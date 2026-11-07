@@ -1,6 +1,22 @@
 # Текущее состояние / Current state
 
-**7 November — SUBSCRIPTION-ENFORCEMENT-FIX: current, production disabled.**
+**7 November — SUBSCRIPTION-RU-RECOVERY: authorized incident recovery.**
+The enablement receipt supersedes the earlier production-disabled checkpoint: HTTP,
+operator and NL nodes received v2; RU watchdog failed at19:04:02UTC and ordinary
+RU transports were stopped/masked, with durable state retained. New paid operations
+are paused; NL reconciliation continues. The exact historical blocking phase is not
+proven. The reproduced source class is an unbounded serialized sweep/lock wait with
+127 engine queries for63 records. Node recovery batches full sets, bounds the whole
+operation and child process groups, and packages privileged preflight without changing
+Xray's fc-friends sandbox. HTTP/operator/paid policy and G4 are not rebuilt or restarted.
+Gate: exact packaged systemd/native63-record acceptance ≥360s, hosted CI/review/merge,
+RU forward recovery ≥360s then sequential NL rollout, protected-data equality, fresh
+per-node panel observations and restoration of the compatible operator current pointer.
+Source acceptance is not installed acceptance; final operational hashes/windows and
+status are retained in the recovery PR receipt and closed handoff, not inferred from main.
+[Recovery scope and evidence](releases/2026-11-07-subscription-ru-recovery.md).
+
+**Historical7 November — SUBSCRIPTION-ENFORCEMENT-FIX: prepared, subsequently deployed.**
 Core fix merged by PR5 `3683fed3506e32b5795fd93601a78fdfe5e73199` after all six
 applicable hosted runs passed on299b4845; remote main/tree verified. Final readback
 found a hardcoded transport schema label: the narrow panel-only follow-up now records

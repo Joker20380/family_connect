@@ -318,7 +318,12 @@ status и свежий импорт. БД/платежи/cohort/identity/пер�
 архив SHA256 `d6e5dd679dec671dd9ec992f23057cd869580aa71ec34f8ad3c19f5f1eb89f3c`
 **не устанавливать**. Исторические receipts сохраняются. Исправление и новые доказательства:
 [SUBSCRIPTION-ENFORCEMENT-FIX](../releases/2026-11-07-subscription-enforcement-fix.md).
-**Новые production-ограничения ещё не включены**; старые измерения не относятся к новому комплекту.
+Поставка v2 разрешена владельцем и выполнена частично: HTTP/operator и NL установлены;
+RU после watchdog19:04:02UTC7 ноября переведён в безопасный masked stop. Это не успешное
+включение всех узлов. Авторизованное восстановление описано в
+[SUBSCRIPTION-RU-RECOVERY](../releases/2026-11-07-subscription-ru-recovery.md).
+Текущий итог установленной системы, хеши и окно восстановления проверять по финальному
+receipt этой задачи; наличие исходника в main не подтверждает работающий процесс.
 Единственный источник — `paid_beta`. HTTP configuration/gateway-configuration
 проверяет решение после proof; node registration принимает только совпадающие
 device/WG/TCP bindings, сохраняет revision/конечную lease до применения. Старая
@@ -334,12 +339,13 @@ TCP-клиенты этого узла, в том числе noncohort; им п�
 restart MESH, API, машины или AWG. Ошибка частичного применения останавливает оба
 обычных транспорта узла; никаких неподтверждённых «доступ закрыт» в UI.
 
-Рекомендуемый, ещё не утверждённый профиль `paid-transports-v2`:
+Принятый владельцем ограниченный профиль `paid-transports-v2`:
 
 | Параметр | Подготовленное значение / граница |
 | --- | --- |
 | Центральная сверка | через30с после завершения, один cycle, лимит40с +5с stop |
 | Node watch / watchdog | 2с /12с; stop максимум5с, BindsTo обоих engines |
+| Один проход исправленного node | общий монотонный бюджет8с: lock, plan, child commands, restart/preflight, readback, повторное согласование |
 | Paid lease | максимум120с, дополнительно не позднее paid/grace end; не для обычного noncohort |
 | Известная актуальная paid-граница | расчётная граница25с после UTC expiry |
 | Изменение уже управляемого paid-доступа | консервативно200с, включая прежний in-flight snapshot и потерю связи |
@@ -431,6 +437,37 @@ hook в paid_beta с необходимыми transport modules; renewal/bootstr
 Восстановление работы — только forward-fix + свежая canonical сверка, а не удаление
 cache или восстановление старой БД. Ledger/cohort/identity/периоды не откатываются.
 Цена fail-closed rollback — недоступность обычных транспортов соответствующего узла.
+
+### Forward recovery после локального отказа
+
+Разрешение на RU-recovery и последующую последовательную поставку общего исправления
+на NL уже дано в текущей задаче. Сначала квалифицировать точные node bytes с настоящим
+systemd и production user/sandbox; до этого RU остаётся masked. Не запускать initial
+preparation поверх существующего состояния, не удалять cache/prepared/deny и не править
+boot/monotonic deadlines. HTTP late override и центральные108/119-компоненты сохраняются.
+На короткое окно замены закрыть только применение целевого узла; полный enrollment
+набор из трёх узлов сохраняется, NL продолжают получать120-секундные leases. Установить
+node/gateway и предусмотренные units/drop-ins, принять свежую canonical сверку обычным
+handler, затем daemon-reload/unmask/start. Проверить реальный Xray UID fc-friends;
+только ExecStartPre имеет `+` для root-only state. Нельзя снимать sandbox всего Xray.
+
+Проверить не меньше360с стабильности RU, затем последовательно NL. Collector поддерживает
+либо прежний точный общий archive pin, либо полный `archives` mapping всех трёх sources
+на отдельные точные SHA256; wildcard и неполный mapping запрещены. Смена pin соответствует
+фактически установленным bytes конкретного узла, а не ожиданию успешной поставки.
+Финал: последовательные успешные cycles, обновляемые leases, engine/persisted readback,
+свежая authenticated витрина, равенство paid/cohort/identity/period fingerprints.
+Только после этого вернуть current-путь совместимого оператора с preparation hook.
+Не выполнять платную операцию для проверки. Ошибка любого узла останавливает расширение
+поставки: сохранить durable intent, остановить/mask обычные AWG/TCP, не восстанавливать
+старый ledger или unfenced gateway. Точные пути/команды и архивы — в закрытом receipt.
+
+Метрики node содержат только фазы/время/результат, без device/key/UUID: lock, plan,
+engine query, actuation, restart/preflight, readback, total, интервал завершённого
+полезного прохода. Watchdog подтверждается завершённой ограниченной работой, не отдельным
+таймером heartbeat. Просроченные дочерние process groups завершаются; systemd stop
+замещает незавершённый restart при ошибке. Локальная авария по-прежнему может остановить
+оба обычных транспорта; штатная потеря центра не отключает noncohort.
 
 ## Границы доказательств
 

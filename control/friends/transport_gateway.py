@@ -1,17 +1,50 @@
 """Gateway decision cache and bounded application, not a subscription authority."""
 import fcntl
 from contextlib import contextmanager
+from contextvars import ContextVar
 import json
 import os
 from pathlib import Path
 import re
+import signal
 import socket
 import subprocess
+import sys
 import time
 
 from . import transport_policy as policy
 
 SERVICES = ('family-connect-friends-awg.service', 'family-connect-friends-tcp.service')
+OPERATION_SECONDS = 8
+CURRENT_OPERATION = ContextVar('transport_operation', default=None)
+
+
+class Operation:
+    def __init__(self, seconds=OPERATION_SECONDS):
+        self.started = time.monotonic()
+        self.deadline = self.started + seconds
+        self.stages = {}
+
+    def remaining(self):
+        remaining = self.deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError('TRANSPORT_OPERATION_DEADLINE')
+        return remaining
+
+    @contextmanager
+    def stage(self, name):
+        self.remaining()
+        started = time.monotonic()
+        try:
+            yield
+        finally:
+            self.stages[name] = self.stages.get(name, 0) + time.monotonic() - started
+        self.remaining()
+
+
+def remaining():
+    operation = CURRENT_OPERATION.get()
+    return operation.remaining() if operation else OPERATION_SECONDS
 
 
 def unique(pairs):
@@ -47,7 +80,18 @@ def write(path, value, mode=0o600):
 
 
 def execute(arguments):
-    return subprocess.run(arguments, capture_output=True, timeout=8, check=True).stdout
+    timeout = remaining()
+    with subprocess.Popen(arguments, stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True) as process:
+        try:
+            output, errors = process.communicate(timeout=timeout)
+        except BaseException:
+            os.killpg(process.pid, signal.SIGKILL)
+            process.communicate()
+            raise
+        if process.returncode:
+            raise subprocess.CalledProcessError(process.returncode, arguments)
+    remaining()
+    return output
 
 
 def boot_id():
@@ -63,11 +107,43 @@ class Gateway:
                 or config['profile'] != policy.PROFILE or config['node'] not in policy.NODES or config['enabled'] is not True):
             raise ValueError('INVALID_GATEWAY_POLICY')
         self.node = config['node']
+        self.metrics = None
+
+    @contextmanager
+    def operation(self):
+        if CURRENT_OPERATION.get() is not None:
+            yield
+            return
+        operation = Operation()
+        token = CURRENT_OPERATION.set(operation)
+        result = 'error'
+        try:
+            yield
+            operation.remaining()
+            result = 'complete'
+        finally:
+            self.metrics = dict(result=result, total=time.monotonic()-operation.started, stages=operation.stages)
+            CURRENT_OPERATION.reset(token)
+            print(json.dumps(dict(transport_progress=self.metrics), sort_keys=True), file=sys.stderr, flush=True)
+
+    @contextmanager
+    def stage(self, name):
+        operation = CURRENT_OPERATION.get()
+        if operation is None:
+            raise RuntimeError('TRANSPORT_OPERATION_REQUIRED')
+        with operation.stage(name):
+            yield
 
     @contextmanager
     def lock(self, name='registration.lock'):
-        with (self.root/name).open('a') as handle:
-            fcntl.flock(handle, fcntl.LOCK_EX)
+        with self.operation(), (self.root/name).open('a') as handle:
+            with self.stage('lock'):
+                while True:
+                    try:
+                        fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                        break
+                    except BlockingIOError:
+                        time.sleep(min(.02, remaining()))
             yield
 
     def serialized(self):
@@ -104,6 +180,7 @@ class Gateway:
         policy.validate(envelope, self.node, self.clock())
         state = self.load()
         for decision in envelope['decisions']:
+            remaining()
             old = state['records'].get(decision['device'])
             policy.successor(old['decision'] if old else None, decision)
             for device, cached in state['records'].items():
@@ -134,11 +211,11 @@ class Gateway:
         return not found or self.allowed(found[0])
 
     def stop_all(self):
-        for service in SERVICES:
-            try:
-                self.run(['systemctl', 'stop', service])
-            except (OSError, subprocess.SubprocessError):
-                self.run(['systemctl', 'kill', '--signal=KILL', service])
+        token = CURRENT_OPERATION.set(None)
+        try:
+            self.run(['systemctl', '--no-block', 'stop', *SERVICES])
+        finally:
+            CURRENT_OPERATION.reset(token)
 
     def failure(self):
         write(self.root/'transport-attempt.json', dict(schema=1, node=self.node,
@@ -155,13 +232,15 @@ class Gateway:
     def apply_serialized(self):
         for attempt in range(12):
             with self.lock():
-                state, peers, observations, changed = self.plan()
+                with self.stage('plan'):
+                    state, peers, observations, changed = self.plan()
             if changed:
-                self.run(['systemctl', 'restart', SERVICES[1]])
+                with self.stage('restart_preflight'):
+                    self.run(['systemctl', 'restart', SERVICES[1]])
             with self.lock():
-                if self.readback(state, peers, observations):
-                    return
-            notify('WATCHDOG=1')
+                with self.stage('readback'):
+                    if self.readback(state, peers, observations):
+                        return
         raise ValueError('APPLICATION_DID_NOT_CONVERGE')
 
     def plan(self):
@@ -175,6 +254,7 @@ class Gateway:
             peers = {public: self.gateway.address(index) for index, public in database.execute('SELECT id,public FROM peers')}
         changed, observations = False, {}
         for device, cached in state['records'].items():
+            remaining()
             decision = cached['decision']
             email = device + '@family.test'
             matching = [client for client in clients if client.get('email') == email or client.get('id') == decision['tcp_id']]
@@ -201,23 +281,63 @@ class Gateway:
             os.chown(tcp_path, info.st_uid, info.st_gid)
         return state, peers, observations, changed
 
+    def awg_snapshot(self):
+        with self.stage('engine_query'):
+            raw = self.run([str(self.root/'awg'), 'show', self.gateway.IFACE, 'allowed-ips']).decode()
+        result = {}
+        for line in raw.splitlines():
+            public, addresses = line.split('\t')
+            if public in result:
+                raise ValueError('INVALID_AWG_SNAPSHOT')
+            result[public] = addresses.split()
+        return result
+
+    def tcp_snapshot(self):
+        with self.stage('engine_query'):
+            raw = json.loads(self.run([str(self.root.parent/'friends-tcp/xray'), 'api', 'inbounduser',
+                '--server=127.0.0.1:18085', '-tag=friends']), object_pairs_hook=unique)
+        if type(raw) is not dict or raw and (set(raw) != {'users'} or type(raw['users']) is not list):
+            raise ValueError('INVALID_TCP_SNAPSHOT')
+        result, identities = {}, set()
+        for user in raw.get('users', []):
+            email, account = user['email'], user['account']
+            if not isinstance(email, str) or email in result or account['id'] in identities:
+                raise ValueError('INVALID_TCP_SNAPSHOT')
+            result[email] = account
+            identities.add(account['id'])
+        return result
+
     def readback(self, state, peers, observations):
-        live = self.run([str(self.root / 'awg'), 'show', self.gateway.IFACE, 'peers']).decode().split()
+        live = self.awg_snapshot()
+        changed = False
         for device, cached in state['records'].items():
             decision, observation = cached['decision'], observations[device]
             public, allowed = decision['public_key'], observation['allowed']
             if public in peers:
-                if allowed:
-                    self.gateway.add_peer(public, peers[public])
+                if allowed and live.get(public) != [peers[public]]:
+                    with self.stage('actuation'):
+                        self.run([str(self.root/'awg'), 'set', self.gateway.IFACE, 'peer', public, 'allowed-ips', peers[public]])
+                    changed = True
                 elif public in live:
-                    self.run([str(self.root / 'awg'), 'set', self.gateway.IFACE, 'peer', public, 'remove'])
-            runtime = json.loads(self.run([str(self.root.parent / 'friends-tcp/xray'), 'api', 'inbounduser',
-                '--server=127.0.0.1:18085', '-tag=friends', '-email='+device+'@family.test']))
-            serialized = json.dumps(runtime)
-            tcp_present = decision['tcp_id'] in serialized and device+'@family.test' in serialized
-            awg_present = public in self.run([str(self.root / 'awg'), 'show', self.gateway.IFACE, 'peers']).decode().split()
+                    if not allowed:
+                        with self.stage('actuation'):
+                            self.run([str(self.root / 'awg'), 'set', self.gateway.IFACE, 'peer', public, 'remove'])
+                        changed = True
+        if changed:
+            live = self.awg_snapshot()
+        runtime = self.tcp_snapshot()
+        for device, cached in state['records'].items():
+            decision, observation = cached['decision'], observations[device]
+            public = decision['public_key']
+            account = runtime.get(device+'@family.test')
+            if account and (account.get('id') != decision['tcp_id'] or account.get('flow') != 'xtls-rprx-vision'):
+                raise ValueError('TCP_BINDING_CONFLICT')
+            if any(value['id'] == decision['tcp_id'] and email != device+'@family.test' for email, value in runtime.items()):
+                raise ValueError('TCP_BINDING_CONFLICT')
+            tcp_present = account is not None
+            awg_present = public in live
             expected = observation['allowed']
-            if tcp_present != expected or awg_present != expected:
+            if tcp_present != expected or awg_present != expected or expected and live[public] != [peers[public]]:
                 if any(observations[key]['allowed'] != (observations[key]['registered'] and self.allowed(value))
                        for key, value in state['records'].items()):
                     return False
@@ -249,17 +369,22 @@ def watch(gateway, *, run=execute):
         notify('READY=1')
         for attempt in range(15):
             try:
-                for service in SERVICES:
-                    engine.run(['systemctl', 'is-active', '--quiet', service])
+                with engine.operation():
+                    for service in SERVICES:
+                        engine.run(['systemctl', 'is-active', '--quiet', service])
                 break
             except subprocess.SubprocessError:
                 notify('WATCHDOG=1')
                 time.sleep(policy.TICK_SECONDS)
         else:
             raise ValueError('ENGINE_START_TIMEOUT')
+        previous = time.monotonic()
         while True:
             engine.apply()
             notify('WATCHDOG=1')
+            current = time.monotonic()
+            print(json.dumps(dict(transport_progress_gap=current-previous)), file=sys.stderr, flush=True)
+            previous = current
             time.sleep(policy.TICK_SECONDS)
     except BaseException:
         try:

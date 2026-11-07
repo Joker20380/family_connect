@@ -79,3 +79,28 @@ def test_lifetime_fences_and_disabled_default():
     assert 'TimeoutStartSec=40' in (root/'family-connect-paid-reconcile.service.in').read_text()
     assert 'TimeoutStopSec=5' in (root/'family-connect-paid-reconcile.service.in').read_text()
     assert 'OnUnitInactiveSec=30' in (root/'family-connect-paid-reconcile.timer').read_text()
+
+
+def test_exact_v2_node_forward_package_and_inventory(tmp_path):
+    from scripts import package_transport_node_recovery as recovery
+    commit = '2077c271d43d3bbe09f76e70934947bcc3fb51c6'
+    def historical(path):
+        return subprocess.check_output(['git', '-C', str(kit.ROOT), 'show', commit+':'+path])
+    inputs = {name: historical(name) for name in kit.MODULES}
+    inputs.update({'control/': b'', 'control/friends/': b'', 'control/friends/__init__.py': b''})
+    node = tmp_path/'v2.pyz'
+    gateway = tmp_path/'v2.py'
+    kit.archive(node, inputs)
+    gateway.write_bytes(historical('deploy/friends/awg-gateway.py'))
+    assert kit.sha(node.read_bytes()) == recovery.PREVIOUS_NODE
+    assert kit.sha(gateway.read_bytes()) == recovery.PREVIOUS_GATEWAY
+    output = tmp_path/'recovery'
+    receipt = recovery.build(node, gateway, output)
+    assert {name for name, digest in receipt['archives']['paid-transport.pyz'].items() if receipt['before'][name] != digest} == {'control/friends/transport_gateway.py'}
+    assert not any(name in receipt['files'] for name in ('friends-http.pyz','paid-operator.pyz','paid-reconcile.pyz'))
+    assert 'ExecStartPre=+' in (output/'paid-tcp-preflight.conf').read_text()
+    code = 'import sys;sys.path.insert(0,sys.argv[1]);from control.friends.transport_gateway import Operation,OPERATION_SECONDS;assert OPERATION_SECONDS==8;assert Operation().remaining()>0'
+    subprocess.run([sys.executable,'-I','-B','-c',code,str(output/'paid-transport.pyz')],check=True,cwd=tmp_path)
+    gateway.write_bytes(gateway.read_bytes()+b'\n')
+    with pytest.raises(ValueError,match='EXACT_INSTALLED_V2_REQUIRED'):
+        recovery.build(node,gateway,tmp_path/'bad')
