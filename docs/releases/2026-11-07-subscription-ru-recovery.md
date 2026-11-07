@@ -78,6 +78,19 @@ gateway69f32dbfdf0db5f57fb598d58935b5f2b098e53d0c0e2ac24517ad299ced26bf;
 recovery tar5f82efd60ac6e027bf1154b8cae364bd3edb0dc444921e30e7f56d7d16d6019c;
 full inventoryb1433795ecf837f7b3592fc5312190fb0480e0ef5896a575847937aba3fa1ab5.
 These are qualification results, not production recovery or user traffic evidence.
+They belong to the first payload, not to the subsequently merged NL1-compatible build.
+
+## Concurrent NL1 change preserved
+
+During CI, main advanced to f30536c7 with the separately authorized NL1 load fix
+(source780f0898). Its strict full-set parsers, final post-TCP AWG snapshot, drift and
+malformed-input regressions and independent mailbox cap are preserved, not overwritten.
+The combined sweep performs three constant-count queries rather than127, with the
+same shared8s operation budget and change-only actuation. The mailbox change is not
+part of the recovery archive or delivery. A new exact node payload and full native
+qualification are required for this merged implementation; prior measurements above
+are retained only as historical evidence. Final payload, CI and installed receipts
+will be attached to the task PR without a cosmetic documentation-only head.
 
 Final exact-byte qualification, maxima, hosted CI/review/merge and operational receipts
 are attached to the recovery PR and retained privately. A source checkpoint is not a

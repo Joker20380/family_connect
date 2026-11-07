@@ -15,6 +15,15 @@ receipts stay in the task PR/closed handoff; no cosmetic post-CI head required.
 No real paid operation, ledger/identity/period change, APK, G4/renewal or cold provisioning.
 [Recovery report](releases/2026-11-07-subscription-ru-recovery.md).
 
+**Owner-selected7 November: correct NL1 background load, bounded operational task.**
+Complete:54 scoped checks, read-only live parser preflight and exact systemd/native
+gates pass; NL1 node-only archive and persistent mailbox cap applied20:25UTC.
+MESH/mailbox PIDs stable,63 applied records/zero drift and60s load improvement verified.
+First failed grouped restart/rollback remains recorded. No further implementation is
+queued by this task: monitor long-term mailbox footprint separately, without declaring
+a leak fixed. No RU/NL2 rollout, subscription mutation, client release or adjacent task advancement.
+[Gate and rollback](releases/2026-11-07-nl1-load-fix.md).
+
 **Historical SUBSCRIPTION-ENFORCEMENT-FIX — corrected PR4; superseded operational status.**
 Core gate closed by PR5/3683fed3 with six green hosted runs and the real-systemd
 receipt. Final panel-only correction removes the hardcoded schema1 label, preserves

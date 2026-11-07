@@ -68,23 +68,28 @@ def engine(tmp_path, registry):
     with sqlite3.connect(root / 'peers.db') as database:
         database.execute('CREATE TABLE peers(id INTEGER PRIMARY KEY, public TEXT)')
         database.execute('INSERT INTO peers VALUES(1,?)', (initial['public_key'],))
-    live = {'awg': {initial['public_key'], 'foreign-key'}, 'tcp': [client, foreign], 'restarts': 0, 'calls': []}
+    live = {'awg': {initial['public_key'], 'foreign-key'}, 'addresses': {initial['public_key']: '10.1.0.2/32', 'foreign-key': '10.1.0.3/32'},
+        'tcp': [client, foreign], 'restarts': 0, 'calls': [], 'sets': []}
     def run(arguments):
         live['calls'].append(arguments)
         if arguments[:2] == ['systemctl', 'restart']:
             live['restarts'] += 1
             live['tcp'] = json.loads((tcp/'server.json').read_text())['inbounds'][0]['settings']['clients']
         if arguments[1:3] == ['api', 'inbounduser']:
-            return json.dumps({'users': [dict(email=item['email'], account={name: value for name, value in item.items() if name != 'email'}) for item in live['tcp']]}).encode()
+            return json.dumps({'users': [dict(email=item['email'], account={key: value for key, value in item.items() if key != 'email'}) for item in live['tcp']]}).encode()
         if arguments[1] == 'show':
-            return '\n'.join(key+'\t10.1.0.2/32' for key in live['awg']).encode()
+            if arguments[-1] == 'allowed-ips':
+                return '\n'.join(key+'\t'+live['addresses'][key] for key in live['awg']).encode()
+            return '\n'.join(live['awg']).encode()
         if arguments[-1] == 'remove':
             live['awg'].discard(arguments[-2])
-        if arguments[-2] == 'allowed-ips':
-            live['awg'].add(arguments[-3])
         return b''
+    def add_peer(key, address):
+        live['sets'].append((key, address))
+        live['awg'].add(key)
+        live['addresses'][key] = address
     runtime = SimpleNamespace(ROOT=root, IFACE='fixture', database=lambda: sqlite3.connect(root/'peers.db'),
-        address=lambda index: '10.1.0.2/32', add_peer=lambda key, address: live['awg'].add(key))
+        address=lambda index: '10.1.0.2/32', add_peer=add_peer)
     current = [NOW]
     gateway = Gateway(runtime, clock=lambda: current[0], monotonic=lambda: current[0], run=run)
     return gateway, current, live, initial

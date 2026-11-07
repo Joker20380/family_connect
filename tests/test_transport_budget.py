@@ -12,7 +12,7 @@ from control.friends import transport_gateway as module
 from test_transport_enforcement import engine, envelope, event, registry
 
 
-def test_full_inventory_noop_uses_two_queries_and_no_actuation(engine, registry):
+def test_full_inventory_noop_uses_three_queries_and_no_actuation(engine, registry):
     gateway, current, live, initial = engine
     snapshot = envelope(registry)
     for index in range(2, 64):
@@ -24,7 +24,7 @@ def test_full_inventory_noop_uses_two_queries_and_no_actuation(engine, registry)
     gateway.apply()
     live['calls'].clear()
     gateway.apply()
-    assert len(live['calls']) == 2
+    assert len(live['calls']) == 3
     assert all('set' not in call and 'restart' not in call for call in live['calls'])
     assert len(gateway.load()['records']) == 63
     assert gateway.metrics['result'] == 'complete'
@@ -80,7 +80,7 @@ def test_failed_complete_query_is_not_empty_or_success(engine, registry):
             return b'{"error":"unavailable"}'
         return original(arguments)
     gateway.run = malformed
-    with pytest.raises(ValueError, match='INVALID_TCP_SNAPSHOT'):
+    with pytest.raises(ValueError, match='INVALID_TCP_READBACK'):
         gateway.apply()
     assert gateway.load()['records'][initial['device']]['applied'] is None
 
@@ -89,7 +89,7 @@ def test_exact_xray_empty_protobuf_response(engine):
     gateway = engine[0]
     gateway.run = lambda arguments: b'{}\n\n'
     with gateway.operation():
-        assert gateway.tcp_snapshot() == {}
+        assert gateway.tcp_snapshot() == ({}, {})
 
 
 def test_transport_pins_are_exact_and_complete():

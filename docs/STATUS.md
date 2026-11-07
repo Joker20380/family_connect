@@ -16,6 +16,17 @@ Source acceptance is not installed acceptance; final operational hashes/windows 
 status are retained in the recovery PR receipt and closed handoff, not inferred from main.
 [Recovery scope and evidence](releases/2026-11-07-subscription-ru-recovery.md).
 
+**7 November20:25–20:27UTC — NL1 load correction applied and read back.**
+Exact source780f0898/node archive40ae1fa8 installed after54 scoped tests and real
+systemd/native gates. First grouped-restart attempt rolled back; bounded stop/start
+retry passes, preserving that original failure. Watcher CPU falls~17.9→1.5–1.9%
+of the two-vCPU host; mailbox~11.1→0.6–2.0%, zero new cap events/swap-out in60s.
+Mailbox512MiB is persistent; mailbox/MESH original PIDs unchanged. All63 records
+applied,48 AWG/TCP users, zero readback mismatches; two live MESH sessions observed.
+No RU/NL2/client/catalog/paid-policy rollout. Long-term mailbox footprint still needs
+observation; no throughput/end-to-end acceptance claim.
+[Scope, hashes and rollback](releases/2026-11-07-nl1-load-fix.md).
+
 **Historical7 November — SUBSCRIPTION-ENFORCEMENT-FIX: prepared, subsequently deployed.**
 Core fix merged by PR5 `3683fed3506e32b5795fd93601a78fdfe5e73199` after all six
 applicable hosted runs passed on299b4845; remote main/tree verified. Final readback
