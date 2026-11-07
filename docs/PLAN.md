@@ -2,6 +2,12 @@
 
 ## Current engineering priority / Текущий critical path
 
+**7 November19:57UTC operational readback:** NL AWG/TCP/MESH active; RU AWG/TCP
+masked and not running since19:04UTC. Read-only request complete, no repair authorized
+by this check. Confirm intended RU disablement and investigate NL1 CPU/swap bursts
+before claiming fleet health. Existing engineering priority and acceptance gates remain
+unchanged. [Evidence](releases/2026-11-07-vpn-health.md).
+
 **6 November20:05UTC operational refresh complete:** all AWG/TCP and both NL
 bootstrap services active. No runtime changes; active state alone does not close the
 automatic-renewal or sustained MESH gates. Selected work unchanged.

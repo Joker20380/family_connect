@@ -1,5 +1,11 @@
 # Текущее состояние / Current state
 
+**7 November19:57UTC — read-only VPN check:** NL1/NL2 AWG/TCP and MESH active;
+RU AWG failed/masked and TCP inactive/masked, both exited19:04UTC. No restart or
+attribution of that change. Recent AWG peers2/1 on NL; registry63 devices,59 not
+revoked, not concurrent users. NL1 CPU bursts82% and swap activity warrant follow-up.
+[Snapshot and limits](releases/2026-11-07-vpn-health.md). No rollout or gate advancement.
+
 **6 November20:05UTC — read-only refresh:** AWG/TCP active on all nodes and BOTH NL
 MESH bootstrap active/NRestarts0. Recent AWG peers0/6/0; TCP443 sockets0/50/5,
 not unique clients. RU disk71%/8.4GiB free. No runtime changes or automatic-renewal
