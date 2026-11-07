@@ -2,6 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
+**In progress: authorized owner API31/119→120 field operation, awaiting phone setup.**
+The owner selected their connected API31 phone; this is not the original API28 case.
+Exact kit, actual phone signer/root, current NL1/RU trust and device admission pass
+preflight. Manifest-listed entry files are staged but inactive; vault check-only passes.
+No locator, signature, transfer, install or Connect yet. Phone still reports Wi-Fi and
+valid readiness: await manual mobile-only/NL1 setup, preserve cache and label WARM.
+Then execute only the authorized bounded entry/locator/finalization/private USB handoff
+and manual update/Connect, capturing the outcome and stopping only the new entry.
+Do not repeat CI/F/JNI, clear data, change production VPN services or begin another task.
+[Operation evidence](releases/2026-11-07-cold-field-delivery.md#owner-api31-operation-preflight).
+
 **Completed: beta120 READY_FOR_CONTROLLED_FIELD_OPERATION.**
 Exact Android release-CI42385799106/source55525859 and downloaded ARM64 prebuild
 9eae8668…7348c are accepted. Corrected NL1 server3c0487eb/archive5ec255f5…d71cb is

@@ -322,3 +322,56 @@ are retained. E/F retain their exact scopes and E's unexplained2/2 counters. No 
 OAuth, rooms, Connect, production change, phone installation or public release occurred.
 Own test processes/containers ended; provider room deletion is not claimed. Native/runtime
 and field-signer/source compatibility are not a performed physical update or FIELD_PASS.
+
+### Owner API31 operation preflight
+
+The owner authorized the field operation and then explicitly selected their USB-connected
+Redmi Note9 Pro, Android12/API31/ARM64, installed119, instead of the original API28/113
+target. This changes only the addressed test scope; no original API28 or cold PASS follows.
+The accepted b3af8cd kit remains unchanged. Installed119 APK SHA256 is
+`52a9847b74181c48808c86a0c5bf5925b53ef498eec628aef2d78d26f1c92d2d`;
+its verified sole signer and ControlTrust root match the accepted120 requirements.
+The actual119→120 installation has not occurred.
+
+Private evidence directory (excluded from Git):
+`state-client-build/cold-field-delivery-20261107/owner-api31-20261107T193739Z`.
+Exact phone Support ID from explicitly enabled USB support resolves to one existing
+device. Read-only RU registry/grant checks pass; no enrollment/admission/subscription
+change. Current NL1 canonical profile and RU trust agree on family/gateway, issuer,
+revision floor1, CRL/floor27285. Leaf/CRL expire22:28:35UTC. Existing `public-gateway`
+RPC validates the current key/public-certificate pair without exporting a private key.
+The initial operator RPC serialization was rejected `NON_CANONICAL_INPUT`; canonical
+JSON succeeds. Both responses are retained; no server change or bypass was required.
+NL1→RU8443 verifies normal HTTPS/IP trust and reaches the challenge route (GET405,
+SSL verification0); this is not a successful authorized provisioning RPC.
+
+CI prebuild9eae8668…7348c, JNI9f5798fd…0d11f, rootd0ae60e6…d281 and server archive
+5ec255f5…d71cb hashes match. Protected local vault check-only verifies the required
+certificate; no APK is signed and no key/password is persisted. One incomplete earlier
+vault preflight is retained as unsuccessful, not a signed result.
+
+Only new manifest paths are staged: NL1 entry binary/public anchor/template unit/run
+parent and RU one-shot issuer tool/run parent. Every transferred file hash matches the
+accepted kit. Unprivileged `--check` returns `CONFIGURATION_VALID_NO_PROVIDER_CALL`.
+Provider environment stays root0600: systemd reads EnvironmentFile before dropping to
+the existing service user; permissions are not broadened. Template verification and
+daemon-reload complete without restarting existing services. New instance
+`cold-provision-entry@cold-owner-api31-20261107t193739z.service` is inactive/dead,
+MainPID0, template static/not enabled; its invocation directory does not exist.
+Existing NL bootstrap PID1072432 and RU authority PID3636765 remain active/unchanged.
+No new entry process, provider room, locator or connection needs stopping at this point;
+staged files remain inactive for the authorized continuation, not an active deployment.
+
+Phone snapshots show DISCONNECTED, app TUN closed, WIFI and a validated bundle expiring
+22:28:35UTC (23:28:35Europe/Brussels). Do not remove it to manufacture a cold result.
+An attempt using it is WARM. Owner was asked to select NL1, disable Wi-Fi and other VPNs,
+leave mobile Internet available, and signal readiness before the short entry window.
+Final selected-node/other-VPN checks remain pending. Public120 file still returns404;
+this does not prove absence of every private distribution. Updater/catalogs unchanged.
+
+States: LIVE_PREFLIGHT=server/device checks pass, final phone setup pending;
+ENTRY_READY=NOT_STARTED; SIGNED=NOT_RUN; HANDED_OFF=NOT_RUN; INSTALLED=119;
+COLD_OR_WARM=valid cache present, WARM if used; FIELD_PASS_OR_FAIL=NOT_RUN;
+CLEANUP=no started entry/connections, own check processes completed. The entry lifetime
+and locator countdown have not begun. Next action is the coordinated operation, not
+another build, release gate or documentation-only acceptance.

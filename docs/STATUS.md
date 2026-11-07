@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**7 November — authorized owner API31/119→120 operation: preflight, waiting for mobile setup.**
+Owner explicitly selected the connected Redmi Note9 Pro/API31 instead of the original
+API28/113 target. USB support is enabled; exact phone Support ID maps to one registered,
+eligible device. Current NL1/RU family/gateway, issuer/CRL/floors and verified backend HTTPS
+agree. Installed119 signer/root match the accepted120 requirements; CI/server hashes and
+protected vault check-only pass. Only manifest-listed new files are staged; new entry is
+inactive/static, no locator/signature/handoff/install/Connect. Existing service PIDs unchanged.
+Phone reports DISCONNECTED, app TUN closed, WIFI and a valid readiness bundle until
+22:28:35UTC. Do not clear it: an attempt using it is WARM, not cold/API28 acceptance.
+Await owner Wi-Fi OFF/mobile Internet/NL1 readiness before starting the short window.
+[Current operation evidence and remaining manual step](releases/2026-11-07-cold-field-delivery.md#owner-api31-operation-preflight).
+
 **7 November — beta120 READY_FOR_CONTROLLED_FIELD_OPERATION.**
 NL1 is185.10.158.212, not retired186.246.45.246: canonical inventory, verified signed
 catalogs4/6 and retained deployment identity evidence agree. Fresh live canonical
