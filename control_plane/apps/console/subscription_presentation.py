@@ -26,6 +26,7 @@ def present(rows, request, now):
         attempt = AuditRecord.objects.filter(action='transports.attempt', details__source=source).order_by('-pk').first()
         snapshot = TransportSnapshot.objects.filter(pk=attempt.target).first() if attempt and attempt.target else None
         previous = TransportSnapshot.objects.filter(source=source,status__in=('ok','not_installed')).order_by('-pk').first()
+        previous_attempt = AuditRecord.objects.filter(action='transports.attempt', target=str(previous.pk)).order_by('-pk').first() if previous else None
         fresh = snapshot and now - timedelta(seconds=90) <= snapshot.observed_at <= now + timedelta(seconds=15)
         status = attempt.details['status'] if attempt else 'unknown'
         text = {'not_installed': 'Контроль AWG/TCP не установлен', 'ok': 'Применение наблюдается',
@@ -34,7 +35,8 @@ def present(rows, request, now):
         if status in ('ok','not_installed') and snapshot and not fresh:
             text = 'Наблюдение устарело · применение неизвестно'
         nodes.append(dict(source=source, label=SOURCES[source]['label'], text=text, snapshot=snapshot,
-            fresh=fresh, status=status, attempt=attempt, previous=previous))
+            fresh=fresh, status=status, attempt=attempt, previous=previous,
+            previous_schema=previous_attempt.details.get('schema') if previous_attempt else None))
     for row in rows:
         state = row['subscription']['effective_state'] if row['cohort'] else 'noncohort'
         row.update(state_key=state, state_label=STATES[state], transports=[])

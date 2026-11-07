@@ -29,6 +29,7 @@ def test_distinct_canonical_and_application_read_only(console, client):
     response = client.get('/subscriptions/')
     text = response.content.decode()
     assert 'Активна' in text and 'AWG: peer удалён' in text and 'TCP: пользователь удалён' in text
+    assert 'Schema 1 · проверенный archive SHA256' in text
     assert 'Амстердам 1' in text and 'Неизвестно' in text
     assert response['Cache-Control'] == 'no-store'
     assert client.post('/subscriptions/').status_code == 405
@@ -124,6 +125,7 @@ def test_v2_noncohort_and_prepared_membership_are_not_lease_expiry(console, clie
     transports.ingest(value,'gateway-ru')
     client.force_login(console)
     text = client.get('/subscriptions/').content.decode()
+    assert 'Schema 2 · проверенный archive SHA256' in text
     assert 'paid-таймер не применяется' in text and 'paid-срок не применяется' in text
     value['devices'][0].update(managed=True,reason='membership-pending',awg_allowed=False,tcp_allowed=False)
     transports.ingest(value,'gateway-ru')
@@ -131,3 +133,12 @@ def test_v2_noncohort_and_prepared_membership_are_not_lease_expiry(console, clie
     value['devices'][0]['tcp_allowed'] = True
     with pytest.raises(SnapshotError):
         transports.ingest(value,'gateway-ru')
+
+
+def test_historical_observation_does_not_invent_schema(console, client, monkeypatch):
+    original = transports.attempt
+    monkeypatch.setattr(transports, 'attempt', lambda source, status, snapshot=None, **kwargs: original(source, status, snapshot))
+    subscriptions.ingest(observation(), attempt=True)
+    transports.ingest(transport_observation(), 'gateway-ru')
+    client.force_login(console)
+    assert 'Schema не сохранена в историческом наблюдении' in client.get('/subscriptions/').content.decode()

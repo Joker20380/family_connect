@@ -1,6 +1,13 @@
 # Текущее состояние / Current state
 
 **7 November — SUBSCRIPTION-ENFORCEMENT-FIX: current, production disabled.**
+Core fix merged by PR5 `3683fed3506e32b5795fd93601a78fdfe5e73199` after all six
+applicable hosted runs passed on299b4845; remote main/tree verified. Final readback
+found a hardcoded transport schema label: the narrow panel-only follow-up now records
+actual schema in append-only attempt metadata, never rewrites old observations, and
+shows unknown for historical metadata. Built panel41 tests and fresh17:14:39UTC
+authenticated schema2 readback pass; final follow-up CI/merge receipts stay in its PR.
+The tested transport kit/hash and all native measurements are unchanged.
 PR4 is merged at `1cbe8fbf0de1924e9326125e1932078b5b1f56ee`, but its v1 archive
 `d6e5dd679dec671dd9ec992f23057cd869580aa71ec34f8ad3c19f5f1eb89f3c` must **not** be
 enabled. Independent review reproduced restart/preflight lock inversion and deadline

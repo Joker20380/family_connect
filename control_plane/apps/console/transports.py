@@ -9,10 +9,14 @@ from .subscriptions import epoch, hex_digest
 NODES = ('gateway-ru', 'nl-amsterdam-1', 'nl-amsterdam-2')
 
 
-def attempt(source, status, snapshot=None):
+def attempt(source, status, snapshot=None, *, schema=None):
     require(source in NODES and status in ('ok', 'not_installed', 'unavailable', 'collection_failed', 'import_failed'))
+    details = dict(source=source, status=status, scope='production', synthetic=False)
+    if schema is not None:
+        require(type(schema) is int and schema in (1,2))
+        details['schema'] = schema
     return AuditRecord.objects.create(action='transports.attempt', target=str(snapshot.pk) if snapshot else '',
-        details=dict(source=source, status=status, scope='production', synthetic=False))
+        details=details)
 
 
 def ingest(value, source):
@@ -57,5 +61,5 @@ def ingest(value, source):
     snapshot = TransportSnapshot.objects.get_or_create(digest=digest, defaults=dict(source=source,
         observed_at=datetime.fromtimestamp(value['observed_at'], timezone.utc), status=value['status'],
         runtime_sha256=value['runtime_sha256'], devices=value['devices']))[0]
-    attempt(source, snapshot.status, snapshot)
+    attempt(source, snapshot.status, snapshot, schema=value['schema'])
     return snapshot

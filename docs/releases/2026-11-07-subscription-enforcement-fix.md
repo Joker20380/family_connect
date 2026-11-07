@@ -95,7 +95,7 @@ Local `http://127.0.0.1:8765/subscriptions/` updated only for schema2 observatio
 (unmanaged noncohort has no paid TTL; pending membership is distinct). Historical
 schema1 remains readable. Existing styling, filters, roles, secrets/HMAC, PostgreSQL,
 volumes, immutable payment/release/cohort records and synthetic identity registry
-are preserved by before/after fingerprints and private backup. Installed image:
+are preserved by before/after fingerprints and private backup. Initial updated image:
 `d3529a01d60bcfba968e56eba2713627cfeee0c1096b11d376278277a256a6d5`.
 Authenticated HTTP200/no-store readback and desktop1440/mobile390 screenshots pass;
 no horizontal overflow. Screenshots and raw observations stay private.
@@ -105,6 +105,26 @@ Fresh observation **7 November16:45:29UTC**, attempt16:45:31UTC:63 devices,
 Read-only16:45:08UTC mapping: RU19/19, Amsterdam1 48/48, Amsterdam2 5/5 peer mappings;
 cohort bindings1/1/0, currently denied0/0/0. This is dated deployment impact, not a
 new payment or a claim that production restriction works. Recheck before enablement.
+
+### Final technical-label correction
+
+PR5 merged as `3683fed3506e32b5795fd93601a78fdfe5e73199` after six applicable
+hosted runs passed on299b4845. Remote main and identical merged tree were verified.
+Post-merge authenticated readback exposed a hardcoded transport “Schema1” label.
+The panel-only follow-up records actual schema in append-only import-attempt audit
+metadata and displays it beside the corresponding successful observation. Historical
+records without schema remain unchanged and are labelled unknown, not guessed.
+No new migration, subscription authority, archive change or native requalification.
+
+Built image subscription/application tests: **41 PASS**, ten existing static/cache
+warnings. Current installed local image:
+`6093606ad14d38737f28522074296e7cee916e629c20975a1d645d8b971d15d7`.
+Fresh17:14:39UTC canonical readback and all three actual schema2 transport observations
+pass authenticated HTTP200/no-store;63 devices/1 active cohort, enforcement remains
+not installed. Original protected fingerprints and retained screenshot history match.
+Final follow-up hosted checks/merge are recorded in its PR, without a cosmetic head.
+The prepared tar, full inventory, committed source299b4845 and native evidence above
+remain the exact delivery artifacts; they are not relabelled with a UI-only source SHA.
 
 ## Recommended profile and operational impact
 
