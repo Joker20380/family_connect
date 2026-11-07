@@ -2,6 +2,12 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Active: beta120 exact-source Android release qualification and corrected NL1 package.**
+Use existing Client builds Android gates, download and bind the accepted ARM64 payload,
+repackage corrected185.10.158.212 entry immutably, and pin finalization to those CI bytes.
+Completion: READY_FOR_CONTROLLED_FIELD_OPERATION, never signed/delivered/field PASS.
+Live deployment, fresh production locator and targeted handoff remain one later operation.
+
 **Completed locally7 November: bounded ARM64 field kit after accepted F.**
 Unsigned120/08d7e41, retained6eb ARM64 native, reproducible server7398858 archive and
 tested assets-only fresh-locator/signing/handoff tooling are prepared. No F rerun,

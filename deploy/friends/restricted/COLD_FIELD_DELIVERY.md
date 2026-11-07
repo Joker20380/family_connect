@@ -16,8 +16,16 @@ python3 scripts/package_cold_provision.py --go /trusted/go/bin/go --output /priv
 `manifest.json` records source, clean/dirty state, runtime source hashes and artifact
 digests. Only a clean-source package is eligible. `deployment.json` is the exact
 unapplied deployment plan. The Linux entry is for the existing NL1 node
-`186.246.45.246`, not the user's phone; authorized preflight must reconfirm that
-mapping against the user's selected node and current signed routing catalog.
+`185.10.158.212`, not the user's phone. `186.246.45.246` is the retired gateway,
+not an alternative management address or relay for NL1. The canonical collector,
+offline reverified signed catalog4/6 and retained replacement/live-traffic receipts
+agree on NL1. AMS2 is185.10.158.196, not this entry. See the
+[binding receipt](../../../docs/releases/2026-11-07-cold-field-node-binding.json).
+Management, ordinary relay and observed egress happen to share the NL1 address;
+none proves cryptographic gateway identity. Telemost is the provisioning carrier,
+not a raw TCP relay at that address. These are historical observations, not fresh
+server checks. Authorized preflight must reconfirm the registered user's selected
+route, canonical profile/leaf and current signed routing policy before staging.
 
 The gateway private key stays on NL in the existing0600 profile. The existing issuer,
 registry, admission and signed CRL stay on RU `185.251.89.19`. The entry does not load
@@ -49,6 +57,10 @@ No listener, ingress route, firewall or working gateway service changes are requ
    Confirm the current authority handlers support the two targeted RPCs and NL can
    verify RU's existing HTTPS certificate without insecure flags. Compare APK
    `control-anchor.pub` with RU's public anchor. Keep gateway profile owner/mode intact.
+   Resolve the running NL1 canonical profile locator. The unit's configured
+   `friends-restricted/gateway.json` must resolve to that current profile, not a stale
+   pre-renewal copy. Stop on any mismatch; do not move/copy a gateway key or certificate
+   to another host, change canonical locators or substitute the retired gateway.
 3. Stage only the new paths listed in `cold-provision-deployment.json`, with exact
    accepted package hashes. Install the new template unit, **do not enable** it.
    Parent `cold-provision/run` is owned by existing `family-restricted`, mode0700.

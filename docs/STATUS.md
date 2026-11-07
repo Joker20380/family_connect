@@ -1,5 +1,12 @@
 # Текущее состояние / Current state
 
+**7 November — beta120 release qualification in progress.** Corrected the prepared
+NL1 entry host to185.10.158.212 from canonical inventory, reverified signed catalog4/6
+and retained replacement/MESH receipts. Old186.246.45.246 is retired, not an alias.
+Fresh live identity/profile readback remains an authorized deployment gate. No exact
+0c6fcb7 Client builds run exists; the Android release job is now required before selecting
+CI bytes/finalizer pins. No production, signature, handoff or F rerun.
+
 **7 November — local ARM64 field-delivery kit prepared; NOT signed/deployed.**
 Accepted F/application9bf02724/native6eb61a9 remains immutable. Production-tag ARM64
 JNI is now built through the accepted builder; beta120 is reserved for the unpublished

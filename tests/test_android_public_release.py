@@ -38,6 +38,22 @@ def test_android120_candidate_keeps_test_seam_disabled_and_requires_native_prove
     assert '--native-source-commit' in gradle
 
 
+def test_android120_field_entry_matches_canonical_nl1_not_retired_gateway():
+    from control_plane.apps.console.collector import SOURCES
+    manifest = json.loads((ROOT / 'deploy/friends/restricted/cold-provision-deployment.json').read_text())
+    binding = manifest['binding']
+    assert manifest['node'] == binding['logical_gateway'] == 'nl-amsterdam-1'
+    assert manifest['entry_host'] == SOURCES[manifest['node']]['host'] == '185.10.158.212'
+    assert manifest['entry_host'] != binding['retired_host_not_an_alias'] == '186.246.45.246'
+    assert SOURCES['gateway-nl']['host'] is None
+    assert manifest['entry_host'] != SOURCES['nl-amsterdam-2']['host']
+    receipt = json.loads((ROOT / binding['evidence']).read_text())
+    assert receipt['catalogs'][0]['sha256'] == binding['routing_catalog_sha256']
+    assert receipt['catalogs'][2]['sha256'] == binding['routing_forward_rollback_sha256']
+    assert receipt['fresh_live_verification'] == 'NOT_RUN'
+    assert 'never copy a key' in binding['identity_rule']
+
+
 def test_signaling_read_classes_match_without_changing_legacy_recovery():
     native = (ROOT / 'carrier/sessiontrace/trace.go').read_text()
     android = ROOT / 'clients/android/app/src/main/java/com/familyconnect/app'

@@ -145,3 +145,12 @@ not claimed. This is neither G4 PASS nor proof of the original physical user's n
 
 Rollback is to stop only the prospective new entry; existing services and public
 beta113/catalog7 remain unchanged. No new public download link/checksum is advertised.
+# Release qualification continuation
+
+The prepared node/host mapping is corrected toNL1/185.10.158.212. Signed retained
+catalog4/6 verify offline; the old host186.246.45.246 is retired, not a management alias.
+[Binding evidence](2026-11-07-cold-field-node-binding.json). Fresh deployment preflight
+must verify the current canonical profile/leaf; documentation is not live verification.
+The original server7398858 archive is preserved and superseded only by a newly hashed
+package. Exact-source Client builds Android qualification and CI byte selection are
+in progress; the old local269a9219 APK is not retroactively CI accepted.
