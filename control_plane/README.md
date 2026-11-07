@@ -149,7 +149,7 @@ Systemd active/низкая нагрузка не являются провер�
 `python3 control_plane/monitor_inventory.py` — один ограниченный цикл: существующий
 collector RU/NL → существующий strict stdin importer → локальный PostgreSQL.
 Никаких payment/entitlement commands, remote uploads/units/config edits. `flock`
-не допускает параллельных циклов. Каждый subprocess ограничен60s, цикл unit260s;
+не допускает параллельных циклов. Каждый subprocess ограничен60s, цикл unit380s;
 ошибка одного источника не прекращает попытку другого. Старые observations не
 переписываются, unavailable не превращается в0. После попытки импорта новый
 промежуточный snapshot удаляется; прежние ручные снимки не затрагиваются.
@@ -178,12 +178,43 @@ credential **может писать**: read-only обеспечивается �
 `mode=ro/query_only`, не ограниченным ключом. Ключа/production mount в Django нет.
 Отдельный least-privilege SSH endpoint требует нового security gate, не выдаётся за PASS.
 
-### Paid boundary: reviewed served baseline, not another authority
+### Реальные подписки: отдельный read-only источник
 
-[CP2 report](../docs/releases/2026-10-27-android106-control-plane-2.md) фиксирует
+[Ежедневная русская инструкция](../docs/operators/subscriptions.ru.md) — canonical
+операторский вход. Страница `http://127.0.0.1:8765/subscriptions/` показывает реальные
+наблюдения, не synthetic платежи. Нужна существующая роль чтения инвентаризации.
+Внешний RU collector использует private0600 `.local/subscriptions-source.json`
+(ровно `python`, `archive`, `archive_sha256`), прежний HMAC key и проверенный runtime.
+Пути и pins получают из закрытого операторского receipt, не из веб-формы.
+Новый bounded inventory envelope2 содержит отдельный subscription envelope1;
+старые envelope1 и NL collectors сохранены. Нет дополнительного timer/SSH hop.
+Importer хранит immutable `SubscriptionSnapshot`, не entitlement authority;
+публичные ID/reference/payment hashes не импортируются. Отдельного production
+режима выполнения операций в веб-процессе нет: `CONTROL_PLANE_MODE=synthetic`
+и guards реальных устройств остаются неизменны.
+Runtime mismatch/повреждение схемы/SSH failure → unknown/error, не пустой cohort;
+неудачный импорт оставляет стареющее наблюдение. Последняя попытка хранится отдельно
+в существующем append-only AuditRecord (`subscriptions.attempt`), в порядке локального
+журнала, а не серверных часов. Повторный импорт не дублирует SubscriptionSnapshot;
+отдельная попытка может дать новую запись аудита. Collector закрепляет SQLite snapshot
+первым чтением внутри read-only transaction и лишь затем берёт общий observed_at.
+В свежем isolated interpreter проверяются хеш архива, наличие модулей, их origin/file
+и zipimport loader; предзагруженные или внешние canonical modules отклоняются.
+Effective вычислен сервером на observed_at; после5 минут UI явно stale. Последнее APPLIED не банковское подтверждение
+и не подтверждение клиентской доставки. Изменение runtime pin требует ручной сверки.
+Ошибки collection/import видны независимо от clock skew; последнее успешное серверное
+observed_at показано отдельно. Если сам Docker/PostgreSQL недоступен или исчерпан60s
+бюджет импорта, запись попытки в PG невозможна: проверяйте private monitor receipt/user
+journal и старение данных. Отдельный retry loop не добавлен; общий бюджет380s сохранён.
+
+### Paid boundary: historical reviewed served baseline, not another authority
+
+[CP2 report](../docs/releases/2026-10-27-android106-control-plane-2.md) исторически фиксировал
 reconciled baseline и **DEPLOYED_EMPTY_COHORT / REVIEW_PENDING**: paid schema
 PRESENT_EMPTY, exact paid-aware HTTP обслуживает production после одного guarded
-restart. Реальных subscriptions/events0; это не paid launch. Общий packaging tool:
+restart. Тогда subscriptions/events0; это не текущее число и не paid launch.
+Актуальные наблюдения — в витрине и датированном операторском receipt.
+Общий packaging tool:
 `python3 -m scripts.package_paid_boundary build
 --ref <commit> --output <new-private-tar>` из repository root экспортирует только
 явный committed inventory; dirty working tree/DB/env не входят. `source-gate

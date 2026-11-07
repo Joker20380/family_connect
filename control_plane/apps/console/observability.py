@@ -19,6 +19,26 @@ from .server_inventory import server_cards, observation_state
 from .recovery_policy import assess
 
 
+@staff('view_inventorysnapshot')
+def subscriptions(request):
+    from django.views.decorators.http import require_safe
+    from .models import AuditRecord, SubscriptionSnapshot
+    from .subscriptions import freshness, display_rows
+
+    @require_safe
+    def read_only(request):
+        attempt = AuditRecord.objects.filter(action__in=('subscriptions.attempt', 'subscriptions.import')).order_by('-pk').first()
+        snapshot = SubscriptionSnapshot.objects.filter(pk=attempt.target).first() if attempt and attempt.target else None
+        previous = SubscriptionSnapshot.objects.filter(status='ok').order_by('-pk').first()
+        rows = display_rows(snapshot)
+        attempt_status = attempt.details.get('status', snapshot.status if snapshot else 'unknown') if attempt else None
+        return render(request, 'console/subscriptions.html', dict(snapshot=snapshot, attempt=attempt,
+            attempt_status=attempt_status,
+            freshness=freshness(previous, timezone.now()), rows=rows, previous=previous,
+            cohort_count=sum(row['cohort'] for row in rows), outside_count=sum(not row['cohort'] for row in rows)))
+    return read_only(request)
+
+
 class Filters(forms.Form):
     scope = forms.ChoiceField(label='Контур', choices=[('production', 'Рабочие серверы · только чтение'), ('synthetic', 'Синтетическое демо')])
     source = forms.ChoiceField(label='Источник', required=False,

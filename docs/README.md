@@ -1,5 +1,11 @@
 # Documentation
 
+**7 November — [Подписки: ежедневная эксплуатация](operators/subscriptions.ru.md).**
+Каноническая RU-инструкция, реальная read-only витрина локальной панели,
+backup непустого registry и отдельные решения по119/AWG/TCP.
+[Наблюдения и проверки](releases/2026-11-07-subscription-operations.md).
+PR1 закрыт merge9d05c0f; прежняя Android-матрица не открывается заново.
+
 **Current5 November — [active-session renewal integration](releases/2026-11-05-mesh-renewal-integration.md).**
 Source/runtime integration followsd4de324; real TLS/mux/TCP/DNS/HTTPS and negative gates pass,
 with66 scoped JVM cases and five targeted checks on each API27/API35. The inherited bootstrap

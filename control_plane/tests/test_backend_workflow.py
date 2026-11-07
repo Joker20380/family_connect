@@ -28,7 +28,10 @@ def counts():
 def test_real_postgresql_and_no_subscription_models(console):
     assert connection.vendor == 'postgresql'
     names = connection.introspection.table_names()
-    assert not any('subscription' in name or name == 'paid_beta_events' for name in names)
+    assert {name for name in names if 'subscription' in name or name == 'paid_beta_events'} == {'console_subscriptionsnapshot'}
+    with connection.cursor() as cursor:
+        columns = {column.name for column in connection.introspection.get_table_description(cursor, 'console_subscriptionsnapshot')}
+    assert columns == {'id', 'observed_at', 'imported_at', 'digest', 'status', 'runtime_sha256', 'devices'}
     assert len(backend.members()) == DeviceProjection.objects.count() == 50
     assert counts() == (0, 0)
 

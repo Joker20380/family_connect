@@ -3,6 +3,7 @@ import sqlite3
 import pytest
 
 from scripts.backup_paid_registry import backup
+from test_paid_beta import registry, event, snapshot
 
 
 def test_readonly_backup_restore_is_consistent_and_private(tmp_path):
@@ -41,3 +42,15 @@ def test_source_symlink_is_not_followed(tmp_path):
     link.symlink_to(source)
     with pytest.raises(ValueError, match='Symlink'):
         backup(link, tmp_path / 'backup')
+
+
+def test_nonempty_paid_backup_preserves_canonical_projection(registry, tmp_path):
+    access, _, _ = registry
+    event(registry)
+    before = snapshot(access)
+    receipt = backup(access.path, tmp_path / 'paid-backup', include_paid=True)
+    assert receipt['paid_projection_recovery'] == 'PASS'
+    assert receipt['tables']['paid_beta_events']['count'] == 1
+    assert receipt['tables']['paid_beta_subscriptions']['count'] == 1
+    assert snapshot(access) == before
+    assert receipt['application_recovery'] == 'NOT_RUN'

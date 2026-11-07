@@ -59,6 +59,36 @@ def test_timer_budget_covers_all_three_bounded_collection_import_pairs():
     assert timeout >= len(monitor.SOURCES) * 120 + 20
 
 
+@pytest.mark.parametrize('failure', ['collection_failed', 'import_failed'])
+def test_subscription_failure_records_attempt_without_fabricating_server_time(tmp_path, failure):
+    local = tmp_path / '.local'
+    local.mkdir()
+    (local / 'subscriptions-source.json').write_text('{}')
+    imports = []
+
+    def run(command, **options):
+        assert 0 < options['timeout'] <= 60
+        if command[0] != 'docker':
+            if failure == 'collection_failed':
+                raise subprocess.TimeoutExpired(command, 60)
+            source = command[-1]
+            path = local / (source + '-sample.json')
+            path.write_text(json.dumps(dict(source=source, scope='production')))
+            return subprocess.CompletedProcess(command, 0, stdout=str(path).encode())
+        if 'import_inventory' in command:
+            if '--subscription-attempt' in command:
+                assert 'gateway-ru' in json.loads(options['input'])['source']
+            raise subprocess.CalledProcessError(1, command)
+        assert command[-3:] == ['import_subscriptions', '--failure', failure]
+        assert 'input' not in options
+        imports.append(command)
+        return subprocess.CompletedProcess(command, 0)
+
+    receipt = monitor.cycle(tmp_path, run)
+    assert len(imports) == 1
+    assert all(row['status'] == 'FAILED' for row in receipt['sources'])
+
+
 def test_one_missing_node_never_reuses_other_node_or_stops_the_cycle(tmp_path):
     collected = []
     imported = []
@@ -83,3 +113,23 @@ def test_one_missing_node_never_reuses_other_node_or_stops_the_cycle(tmp_path):
     assert imported == ['gateway-ru', 'nl-amsterdam-2']
     assert [item['status'] for item in result['sources']] == ['IMPORTED', 'FAILED', 'IMPORTED']
     assert result['sources'][1]['error'] == 'COLLECTION_FAILED'
+
+
+def test_subscription_error_reporting_does_not_extend_import_budget(tmp_path, monkeypatch):
+    local = tmp_path / '.local'
+    local.mkdir()
+    (local / 'subscriptions-source.json').write_text('{}')
+    clock = iter([0, 61, 62, 123, 124, 185])
+    monkeypatch.setattr(monitor.time, 'monotonic', lambda: next(clock))
+
+    def run(command, **options):
+        if command[0] != 'docker':
+            source = command[-1]
+            path = local / (source + '-sample.json')
+            path.write_text(json.dumps(dict(source=source, scope='production')))
+            return subprocess.CompletedProcess(command, 0, stdout=str(path).encode())
+        assert 'import_inventory' in command
+        raise subprocess.TimeoutExpired(command, 60)
+
+    receipt = monitor.cycle(tmp_path, run)
+    assert all(row['error'] == 'IMPORT_FAILED' for row in receipt['sources'])

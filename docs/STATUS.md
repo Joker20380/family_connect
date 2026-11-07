@@ -1,5 +1,31 @@
 # Текущее состояние / Current state
 
+**7 November — PR2 review corrections, normal merge gate.**
+Collection pins the SQLite read snapshot before its projection clock; canonical module
+execution must originate in the verified archive. Local attempt audit and last successful
+server observation time are separate, including import errors/clock skew. Copyable RU
+operations use distinct non-clobber receipts and explicit one-action selection. Baseline108
+and decisions A/B remain unchanged. Final tests/local readback are recorded in the
+[operator report](releases/2026-11-07-subscription-operations.md); final-head hosted CI and
+ordinary merge receipts belong in [PR2](https://github.com/Joker20380/family_connect/pull/2),
+without a cosmetic post-CI source head. No adjacent qualification is opened.
+
+**7 November — SUBSCRIPTION-OPERATIONS: operator handoff.**
+PR1 completed by normal merge `9d05c0f936b076b0536f7c7d23833436677e0191`;
+the CI/open-gate paragraphs below are earlier checkpoints, not active instructions.
+The owner-selected work is the local read-only subscription view and
+[Russian operations guide](operators/subscriptions.ru.md), not another Android gate.
+Fresh RU observation7 November10:51:28UTC:63 devices,1 cohort member, effective active;
+these are device/observation counts, not customers or bank receipts. Canonical runtime
+paid_beta matches current main and baseline108. Legacy standalone106 operator is not
+an approved108 command path; a matching source-only operator is prepared privately.
+Production payments/cohort/identity/admission, installed119, G4 and renewal unchanged.
+The local view is installed and serves authenticated fresh63/1 observations; both timers
+remain active. Built-panel203 tests, final subscription17, scoped operator/collector83
+and global public-docs gate PASS. Actual nonempty-registry isolated backup/projection
+restore PASS; service recovery/offline backup storage remain separate NOT_RUN gates.
+[Task receipt, panel update and remaining policy choices](releases/2026-11-07-subscription-operations.md).
+
 **6 November — PR1 full-suite fixtures PASS; voice runner mirror repair.**
 On663377e all client builds/runtime gates, phase0, voice, native candidate, messenger,
 readiness and Windows control pass. Linux control remains in APT preparation before

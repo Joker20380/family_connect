@@ -4,6 +4,7 @@ from . import observability
 
 app_name = 'console'
 urlpatterns = [
+    path('subscriptions/', observability.subscriptions, name='subscriptions'),
     path('observability/', observability.overview, name='observability'),
     path('inventory/', observability.inventory, name='inventory'),
     path('inventory/<str:pseudonym>/', observability.inventory_device, name='inventory_device'),
