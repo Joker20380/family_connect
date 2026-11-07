@@ -1,5 +1,10 @@
 # Documentation
 
+**7 November — [bounded ARM64 cold field kit](releases/2026-11-07-cold-field-delivery.md).**
+Unsigned120 + pinned6eb native, reproducible bounded server entry and tested fresh-assets
+procedure. F remains accepted in its emulator scope; no production/phone/public release.
+[Operator handoff procedure](../deploy/friends/restricted/COLD_FIELD_DELIVERY.md).
+
 **Current5 November — [active-session renewal integration](releases/2026-11-05-mesh-renewal-integration.md).**
 Source/runtime integration followsd4de324; real TLS/mux/TCP/DNS/HTTPS and negative gates pass,
 with66 scoped JVM cases and five targeted checks on each API27/API35. The inherited bootstrap

@@ -184,7 +184,7 @@ def test_restricted_loss_uses_typed_cause_before_cleanup_and_revalidates_access(
     bootstrap = source('RestrictedBootstrap')
     assert 'return cache.usable(now);' in bootstrap
     assert 'result.code()!=ReadinessImportResult.Code.READY' in bootstrap
-    assert 'try{checkAccess();handle=NativeRestricted.beginReady(' in startup
+    assert 'try{checkAccess();startupStage="NATIVE_BEGIN_READY";handle=NativeRestricted.beginReady(' in startup
     assert 'while ((phase=NativeRestricted.state(handle))==0' in startup
     assert '!authorizationDenied()' in startup
     assert 'if(denied||phase==5)return Failure.AUTH' in source('RestrictedRecovery')

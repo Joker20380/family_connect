@@ -1,6 +1,7 @@
 # Bounded cold field delivery preparation — 7 November 2026
 
-Status: local build/package work in progress; NOT a deployable field APK or rollout.
+Status: local build/package preparation complete; unsigned/no-locator prebuild,
+NOT a ready-to-install field APK, release-CI PASS or rollout.
 
 ## Accepted baseline
 
@@ -77,6 +78,66 @@ assets-only workflow are in
 Server-side HTTPS access, real authority/key validity and registered-user eligibility
 remain live preflight checks after authorization; no current production readiness is claimed.
 
-Final clean package identities and offline APK compatibility receipt follow below.
+## Exact deliverables and remaining boundary
+
+Private output root: `state-client-build/cold-field-delivery-20261107/`.
+No binaries/private state were added to Git. [Safe receipt](2026-11-07-cold-field-delivery.json)
+retains exact checksums for outputs and verification logs, including failed preparation.
+
+| Component | Source / identity |
+| --- | --- |
+| Application prebuild | `08d7e416be2bbd9067e207d92fa9900df63f4812`, accepted9bf behavior plus version120/source-only lint annotation |
+| Unsigned APK | `accepted-apk-120/FamilyConnect-Test-0.1.18-beta120-unsigned.apk`,50,367,849 bytes, SHA256 `269a9219f093d7afbc487ba41a9115036842ebba22633879d79a794350fca967` |
+| Native | accepted6eb, Go1.26.0/NDK28.2.13676358, ARM64/API26 build target; SHA256 `773d760dc8f5a7894ed7008b5f6c30b830bd663f66a8935d470f5262ebc50d26` |
+| Server package | `7398858d2b404104e486e56411e78a9e1e15ad78`, Linux/amd64/CGO0; all9 package files byte-equal across two builds |
+| Server archive | `cold-provision-entry-7398858-linux-amd64.tar`,16,906,240 bytes, SHA256 `26ccddba2e0eafc635c6138f5109debae8c5b96347de6a0c90561373c2131fdd` |
+| Entry executable | SHA256 `c7ed0b15b38fc3f215ef23f8a8687076ed5e73ade1c099d6ffc2d69ca3a8a96c` |
+| Closed locator issuer | SHA256 `08b0ed4a8e982f7aa54a64b0630dce68a19399c492ee30fbb8d43ff4016d97a2` |
+
+APK package is `com.familyconnect.app.friends`, minSdk27/target35, ARM64-only,
+non-debuggable; all19 JNI exports present, ELF AArch64/16K LOAD alignment and APK16K
+alignment verified. Packaged native equals its manifest; diagnostic tags/schema disabled.
+No locator, synthetic root, test identity/private key or qualification assets are included.
+The public anchor is byte-identical to trusted beta113 and repository ControlTrust,
+SHA256 `d0ae60e61af6ac5018428aaad89e362ec0f75d7468633a26c22906356228d281`.
+
+Trusted beta113 digest6078d061…4edc094 is verified with the existing signer certificate
+`67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+New120 is **unsigned**, so signature compatibility is a checked required pin, not a
+completed signing/install claim. Identity/configuration/restricted/chat-key vaults,
+settings and AndroidManifest match beta113 source d2882cd; delivery changes do not
+clear storage or regenerate identity. Actual in-place physical upgrade remains untested.
+Unchanged accepted AWG/audio libraries and notices are retained. Matching Codec2 LGPL
+source/rebuild files accompany the private kit in `accepted-apk-120/corresponding-source`;
+source archive SHA256 `6e3066c08ff87062cfd4e74ee31e5336cabb833ee20a0f97e10c6717b9d4fc1d`.
+Retain that source offer with the private APK handoff over the same reachable channel.
+
+The selected release/package batch initially gives80 PASS/1 failure/1 Windows deselection.
+The failure is an obsolete exact-string contract: accepted047da1d already inserts
+`startupStage="NATIVE_BEGIN_READY"` after `checkAccess()`. The assertion now requires
+that exact checked order; all17 targeted orchestrator contracts pass afterward. No
+authorization check, runtime assertion, timeout or product code was removed to pass.
+Final package tests include the new dirty-source rejection; no production credentials
+or calls occur. Full `Client builds` CI (including the independent old runtime/native
+suites) was not relaunched for this bounded preparation and is **not** claimed accepted
+for120. Its existing release gate still applies before real vault signing. Prior CI,
+local433 JVM/lint checks and F are recorded separately, not substituted for it.
+
+Remaining sequence: complete release acceptance before ephemeral issuance; obtain one
+authorization for only the new bounded NL1 entry + existing RU issuer operation + private
+handoff. Confirm live server credentials/handlers, selected-node/user eligibility and
+reachable private delivery channel. Then issue the real locator, package only that
+asset, sign via the existing protected vault workflow and verify exact signed bytes.
+No manual key extraction is needed; production vault access was not attempted early.
+The generated receipt supplies absolute Connect cutoff=locator expiry−200s; missed
+window means no attempt with expired material, fresh coordinated issuance, and a new
+free version if previous bytes were already handed off. No blocked-page promise or VPN.
+
+Original19 FAIL artifacts and all A/B/C/D/E/F receipts14/11/9/12/18/19 rehash unchanged.
+No AVD, real provider room, OAuth access, production write or phone operation occurred.
+Disposable test containers exit/remove; test HTTP threads join; synthetic material in
+tmpfs is destroyed. No own persistent runtime remains. Provider object deletion is
+not claimed. This is neither G4 PASS nor proof of the original physical user's network.
+
 Rollback is to stop only the prospective new entry; existing services and public
 beta113/catalog7 remain unchanged. No new public download link/checksum is advertised.

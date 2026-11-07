@@ -2,17 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Selected7 November: bounded ARM64 field-delivery preparation after accepted F.**
-Build/package120 with accepted application/native provenance; package the existing
-restricted provisioning entry and exercise it locally with disposable authority custody.
-Then prepare executable assets-only fresh-locator/signing/handoff procedure. No F rerun,
-production change, public release, phone install or G4 work. Final readiness requires
-real authorized entry, fresh bound locator, final-byte checks and existing-key signature.
+**Completed locally7 November: bounded ARM64 field kit after accepted F.**
+Unsigned120/08d7e41, retained6eb ARM64 native, reproducible server7398858 archive and
+tested assets-only fresh-locator/signing/handoff tooling are prepared. No F rerun,
+production change, public release, phone install or G4 work. Final handoff remains blocked
+on release-CI acceptance, authorized live entry, fresh bound locator, final bytes and
+existing-key signature; do not relabel the unsigned/no-locator prebuild a field APK.
 [Current build/package checkpoint](releases/2026-11-07-cold-field-delivery.md).
 
 ARM64 build, package and release lint complete; server lifecycle, unchanged registry/key
 custody, existing-handler signed bundle and negative forwarding/TLS checks pass locally.
-Record final clean package identities and handoff boundary; do not start live services.
+Exact safe receipts are recorded. One explicit authorization boundary covers staging/
+starting only the new NL1 entry, RU one-shot locator and private targeted handoff after
+release gates; no automatic production/phone/public-updater action follows this task.
 
 **Completed7 November: API28/emulated CELLULAR-only cold DROP follow-up.**
 F/252c87e with unchanged application9bf0272 and JNI17119f00…60c59 passes real Android28
