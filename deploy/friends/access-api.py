@@ -105,6 +105,9 @@ class Handler(BaseHTTPRequestHandler):
      from control.friends.gateway_selection import configuration
      catalog,host=configuration(access,ROOT,target,record['device'])
     else:catalog,host=configuration_catalog(country,record['device'])
+    from control.friends.transport_policy import configuration_decision,node_for_host
+    node=node_for_host(ROOT,host)
+    if node is not None:record=configuration_decision(access,ROOT,node,record)
     if country=='ru':command=['/usr/bin/python3','/opt/apps/family_connect/friends-awg/awg-gateway.py','register']
     else:command=['/usr/bin/ssh','-i','/opt/apps/family_connect/friends-awg/registration-key','-o','IdentitiesOnly=yes','-o','BatchMode=yes','-o','ConnectTimeout=5','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/opt/apps/family_connect/friends-awg/known_hosts','root@'+host,'register']
     reply=subprocess.run(command,input=json.dumps(record).encode(),capture_output=True,timeout=15)

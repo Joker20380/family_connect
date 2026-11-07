@@ -1,6 +1,8 @@
 # Documentation
 
 **7 November — [Подписки: ежедневная эксплуатация](operators/subscriptions.ru.md).**
+Подготовленный [transport enforcement kit и обновлённая локальная витрина](releases/2026-11-07-subscription-transport-enforcement.md):
+новые production-ограничения ещё не включены; отдельное решение владельца.
 Каноническая RU-инструкция, реальная read-only витрина локальной панели,
 backup непустого registry и [выбранная политика108/119](releases/2026-11-07-subscription-paid-119.md).
 Единый paid-enforcement AWG/TCP/MESH остаётся отдельным невыбранным решением Б.

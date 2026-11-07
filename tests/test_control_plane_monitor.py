@@ -15,7 +15,12 @@ def test_monitor_is_bounded_sanitized_and_preserves_unknown(tmp_path, failure):
 
     def run(command, **options):
         calls.append(command)
-        assert options['capture_output'] and options['check'] and options['timeout'] == 60
+        assert options['capture_output'] and options['check']
+        if 'transport_failure' in command:
+            assert 0 < options['timeout'] <= 60 and 'input' not in options
+            assert command[-3] in monitor.SOURCES
+            return subprocess.CompletedProcess(command, 0)
+        assert options['timeout'] == 60
         if command[0] != 'docker':
             if failure == 'collect':
                 raise subprocess.CalledProcessError(1, command, stderr=b'private credentials must not leak')
@@ -79,6 +84,10 @@ def test_subscription_failure_records_attempt_without_fabricating_server_time(tm
             if '--subscription-attempt' in command:
                 assert 'gateway-ru' in json.loads(options['input'])['source']
             raise subprocess.CalledProcessError(1, command)
+        if 'transport_failure' in command:
+            assert command[-3] in monitor.SOURCES and command[-1] == failure
+            assert 'input' not in options
+            return subprocess.CompletedProcess(command, 0)
         assert command[-3:] == ['import_subscriptions', '--failure', failure]
         assert 'input' not in options
         imports.append(command)
@@ -105,6 +114,9 @@ def test_one_missing_node_never_reuses_other_node_or_stops_the_cycle(tmp_path):
             path.write_text(json.dumps(dict(source=source, scope='production',
                 observed_at='2026-11-03T00:00:00Z', registry_status='not_collected')))
             return subprocess.CompletedProcess(command, 0, stdout=str(path).encode())
+        if 'transport_failure' in command:
+            assert command[-3] == 'nl-amsterdam-1' and command[-1] == 'collection_failed'
+            return subprocess.CompletedProcess(command, 0)
         imported.append(json.loads(options['input'])['source'])
         return subprocess.CompletedProcess(command, 0, stdout=b'')
 
@@ -119,8 +131,8 @@ def test_subscription_error_reporting_does_not_extend_import_budget(tmp_path, mo
     local = tmp_path / '.local'
     local.mkdir()
     (local / 'subscriptions-source.json').write_text('{}')
-    clock = iter([0, 61, 62, 123, 124, 185])
-    monkeypatch.setattr(monitor.time, 'monotonic', lambda: next(clock))
+    clock = [0]
+    monkeypatch.setattr(monitor.time, 'monotonic', lambda: clock[0])
 
     def run(command, **options):
         if command[0] != 'docker':
@@ -129,6 +141,7 @@ def test_subscription_error_reporting_does_not_extend_import_budget(tmp_path, mo
             path.write_text(json.dumps(dict(source=source, scope='production')))
             return subprocess.CompletedProcess(command, 0, stdout=str(path).encode())
         assert 'import_inventory' in command
+        clock[0] += 61
         raise subprocess.TimeoutExpired(command, 60)
 
     receipt = monitor.cycle(tmp_path, run)

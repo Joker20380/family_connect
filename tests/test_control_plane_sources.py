@@ -64,6 +64,8 @@ def test_node_cli_does_not_create_or_send_hmac_key(tmp_path, monkeypatch, capsys
     standalone = tmp_path / 'apps/console/collector.py'
     standalone.parent.mkdir(parents=True)
     standalone.write_text(source)
+    (standalone.parent/'transport_collector.py').write_text(
+        (Path(collector.__file__).parent/'transport_collector.py').read_text())
     monkeypatch.setattr(collect_inventory, 'BASE', tmp_path)
     monkeypatch.setattr(sys, 'argv', ['collect_inventory.py', 'nl-amsterdam-2'])
     def run(command, **options):

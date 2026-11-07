@@ -2,6 +2,8 @@
 import argparse
 from datetime import datetime, timezone
 import json
+import hashlib
+import hmac
 import os
 from pathlib import Path
 import secrets
@@ -67,7 +69,15 @@ def main():
         source += (BASE / 'apps/console/subscription_collector.py').read_text()
         source += f'\ndocument["subscription_observation"] = collect_subscriptions({config!r}, REGISTRY, {key_expression})\n'
         source += 'document["schema"] = 2\n'
-    source += '\nprint(json.dumps(document, allow_nan=False))\n'
+    transport_config = local / 'transport-source.json'
+    expected_transport = None
+    if transport_config.exists():
+        if transport_config.is_symlink() or transport_config.stat().st_mode & 0o077:
+            parser.error('Transport source configuration must be private')
+        expected_transport = json.loads(transport_config.read_text())['archive_sha256']
+    source += (BASE / 'apps/console/transport_collector.py').read_text()
+    source += f'\ndocument["transport_observation"] = collect_transport({args.source!r}, None, {expected_transport!r})\n'
+    source += 'document["schema"] = 3\nprint(json.dumps(document, allow_nan=False))\n'
     try:
         result = subprocess.run(command, input=source.encode(), capture_output=True, timeout=45)
         if result.returncode:
@@ -75,6 +85,18 @@ def main():
         data = json.loads(result.stdout)
         if type(data) is not dict or data.get('source') != args.source or data.get('scope') != 'production':
             raise ValueError('Wrong source binding')
+        transport = data.get('transport_observation')
+        if transport and transport['devices']:
+            if (not key_path.is_file() or key_path.is_symlink() or key_path.stat().st_mode & 0o077
+                    or key_path.stat().st_size != 32):
+                transport.update(status='unavailable', devices=[])
+            else:
+                key = key_path.read_bytes()
+                for row in transport['devices']:
+                    device = row.pop('device')
+                    if type(device) is not str or len(device) != 32 or any(value not in '0123456789abcdef' for value in device):
+                        raise ValueError('Invalid transport binding')
+                    row['pseudonym'] = hmac.new(key, device.encode(), hashlib.sha256).hexdigest()
         raw = json.dumps(data, ensure_ascii=False, allow_nan=False, indent=2).encode()
     except (OSError, ValueError, subprocess.TimeoutExpired):
         parser.error('Снимок не получен; предыдущие данные не изменены.')

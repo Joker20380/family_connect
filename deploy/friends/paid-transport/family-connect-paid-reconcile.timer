@@ -1,0 +1,11 @@
+[Unit]
+Description=Reconcile canonical Friends paid decisions
+
+[Timer]
+OnBootSec=5
+OnUnitInactiveSec=30
+AccuracySec=1
+Unit=family-connect-paid-reconcile.service
+
+[Install]
+WantedBy=timers.target
