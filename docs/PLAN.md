@@ -3,6 +3,11 @@
 ## Current engineering priority / Текущий critical path
 
 **Selected SUBSCRIPTION-ENFORCEMENT-FIX — correct PR4, not enable production.**
+Core gate closed by PR5/3683fed3 with six green hosted runs and the real-systemd
+receipt. Final panel-only correction removes the hardcoded schema1 label, preserves
+historical observations and displays the actual imported schema when recorded.
+Its built41-test/readback gate passes; finish ordinary follow-up CI/merge without
+changing or requalifying the transport kit, and stop at the same delivery decision.
 Base: actual remote main `1cbe8fbf0de1924e9326125e1932078b5b1f56ee`, separate worktree.
 Gate: reproduced deadlock/deadline regressions; packaged watcher + exact preflight +
 actual systemd/native transitions and real streams; safe first cohort preparation
