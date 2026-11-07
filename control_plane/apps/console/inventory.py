@@ -51,6 +51,13 @@ def strict_load(raw):
 
 @transaction.atomic
 def ingest(data):
+    if type(data) is dict and type(data.get('schema')) is int and data['schema'] == 2:
+        fields(data, 'schema scope source observed_at registry_status devices server subscription_observation')
+        require(data['source'] == 'gateway-ru')
+        from .subscriptions import ingest as ingest_subscriptions
+        ingest_subscriptions(data['subscription_observation'])
+        data = {name: value for name, value in data.items() if name != 'subscription_observation'}
+        data['schema'] = 1
     fields(data, 'schema scope source observed_at registry_status devices server')
     require(type(data['schema']) is int and data['schema'] == 1 and data['scope'] == 'production')
     require(isinstance(data['source'], str) and data['source'] in SOURCES)

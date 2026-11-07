@@ -58,7 +58,16 @@ def cycle(base=BASE, run=subprocess.run, known_hosts=None):
                 result.update(status='IMPORTED', error=None, observed_at=document['observed_at'],
                     registry_status=document['registry_status'], sha256=hashlib.sha256(raw).hexdigest())
             except (OSError, ValueError, KeyError, subprocess.SubprocessError):
-                pass
+                if source == 'gateway-ru' and result['error'] == 'COLLECTION_FAILED' and (local / 'subscriptions-source.json').exists():
+                    failure = dict(schema=1, scope='production', source=source,
+                        observed_at=int(datetime.now(timezone.utc).timestamp()), status='unavailable',
+                        runtime_sha256=None, devices=[])
+                    try:
+                        run(['docker', 'compose', '-f', str(base / 'compose.yaml'), '--env-file', str(base / '.env'),
+                            'exec', '-T', 'console', 'python', 'manage.py', 'import_subscriptions'],
+                            input=json.dumps(failure).encode(), capture_output=True, check=True, timeout=60)
+                    except (OSError, subprocess.SubprocessError):
+                        pass
             finally:
                 if snapshot is not None:
                     snapshot.unlink(missing_ok=True)

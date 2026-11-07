@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import secrets
+import shlex
 import subprocess
 
 if __package__:
@@ -52,7 +53,21 @@ def main():
             parser.error('Ключ HMAC должен содержать 32 байта и иметь права 0600')
         key_expression = f'bytes.fromhex({key_path.read_bytes().hex()!r})'
     source = (BASE / 'apps/console/collector.py').read_text()
-    source += f'\nprint(json.dumps(collect({args.source!r}, {key_expression}), allow_nan=False))\n'
+    source += f'\ndocument = collect({args.source!r}, {key_expression})\n'
+    config_path = local / 'subscriptions-source.json'
+    if args.source == 'gateway-ru' and config_path.exists():
+        if config_path.is_symlink() or config_path.stat().st_mode & 0o077:
+            parser.error('Subscription source configuration must be private (0600)')
+        config = json.loads(config_path.read_text())
+        if set(config) != {'python', 'archive', 'archive_sha256'} or not all(isinstance(value, str) for value in config.values()):
+            parser.error('Invalid subscription source configuration')
+        if not all(Path(config[name]).is_absolute() for name in ('python', 'archive')):
+            parser.error('Absolute operator runtime paths required')
+        command[-1] = shlex.quote(config['python']) + ' -I -B -'
+        source += (BASE / 'apps/console/subscription_collector.py').read_text()
+        source += f'\ndocument["subscription_observation"] = collect_subscriptions({config!r}, REGISTRY, {key_expression})\n'
+        source += 'document["schema"] = 2\n'
+    source += '\nprint(json.dumps(document, allow_nan=False))\n'
     try:
         result = subprocess.run(command, input=source.encode(), capture_output=True, timeout=45)
         if result.returncode:

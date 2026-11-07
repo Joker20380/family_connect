@@ -5,6 +5,19 @@ from django.db import models
 SCOPE = [('synthetic', 'Синтетическое демо'), ('production', 'Рабочие серверы · только чтение')]
 
 
+class SubscriptionSnapshot(models.Model):
+    observed_at = models.DateTimeField()
+    imported_at = models.DateTimeField(auto_now_add=True)
+    digest = models.CharField(max_length=64, unique=True)
+    status = models.CharField(max_length=16)
+    runtime_sha256 = models.CharField(max_length=64, null=True)
+    devices = models.JSONField(default=list)
+
+    class Meta:
+        ordering = ['-observed_at', '-pk']
+        default_permissions = ('view',)
+
+
 class InventorySnapshot(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     scope = models.CharField('Контур', max_length=12, choices=SCOPE)

@@ -19,6 +19,23 @@ from .server_inventory import server_cards, observation_state
 from .recovery_policy import assess
 
 
+@staff('view_inventorysnapshot')
+def subscriptions(request):
+    from django.views.decorators.http import require_safe
+    from .models import SubscriptionSnapshot
+    from .subscriptions import freshness, display_rows
+
+    @require_safe
+    def read_only(request):
+        snapshot = SubscriptionSnapshot.objects.first()
+        previous = SubscriptionSnapshot.objects.filter(status='ok').first()
+        rows = display_rows(snapshot)
+        return render(request, 'console/subscriptions.html', dict(snapshot=snapshot,
+            freshness=freshness(snapshot, timezone.now()), rows=rows, previous=previous,
+            cohort_count=sum(row['cohort'] for row in rows), outside_count=sum(not row['cohort'] for row in rows)))
+    return read_only(request)
+
+
 class Filters(forms.Form):
     scope = forms.ChoiceField(label='Контур', choices=[('production', 'Рабочие серверы · только чтение'), ('synthetic', 'Синтетическое демо')])
     source = forms.ChoiceField(label='Источник', required=False,

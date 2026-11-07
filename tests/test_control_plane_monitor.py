@@ -59,6 +59,26 @@ def test_timer_budget_covers_all_three_bounded_collection_import_pairs():
     assert timeout >= len(monitor.SOURCES) * 120 + 20
 
 
+def test_subscription_source_failure_imports_unknown_not_zero(tmp_path):
+    local = tmp_path / '.local'
+    local.mkdir()
+    (local / 'subscriptions-source.json').write_text('{}')
+    imports = []
+
+    def run(command, **options):
+        assert options['timeout'] == 60
+        if command[0] != 'docker':
+            raise subprocess.TimeoutExpired(command, 60)
+        assert command[-1] == 'import_subscriptions'
+        imports.append(json.loads(options['input']))
+        return subprocess.CompletedProcess(command, 0)
+
+    receipt = monitor.cycle(tmp_path, run)
+    assert len(imports) == 1 and imports[0]['status'] == 'unavailable'
+    assert imports[0]['devices'] == [] and imports[0]['runtime_sha256'] is None
+    assert all(row['status'] == 'FAILED' for row in receipt['sources'])
+
+
 def test_one_missing_node_never_reuses_other_node_or_stops_the_cycle(tmp_path):
     collected = []
     imported = []
