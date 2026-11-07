@@ -1,0 +1,359 @@
+{
+  "result": "STOPPED_BEFORE_CONNECT",
+  "harness_commit": "4854f96111ec9d60ebe98b25b3829f80c863f019",
+  "branch": "feature/android-cold-provisioning-20261106",
+  "product_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+  "native_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+  "abi": "x86_64",
+  "android_api": 27,
+  "actual_import": {
+    "runner": {
+      "path": "/home/joker/.codex/worktrees/61d0/family_connect/tests/android_cold_runtime.py",
+      "sha256": "d171e7c3b85364dd03f42ec2d1e6260231def971d24421a145bdc33983a47f4b"
+    },
+    "guard": {
+      "path": "/home/joker/.codex/worktrees/61d0/family_connect/tests/android_emulator_guard.py",
+      "sha256": "1a93d8e19a19a375c6a6a7b5a3a6717d6e477867ff745a5a3b2dccc230258e0b"
+    }
+  },
+  "import_evidence": "python-imports.log:329 and 333",
+  "native_rebuilt": false,
+  "product_delta_empty": true,
+  "accepted_android_jni_pass_retained": true,
+  "old_host_jvm_race_suites_repeated": false,
+  "new_tests_run": false,
+  "runtime_launches": 1,
+  "stage_preflight_count": 1,
+  "avd_start_count": 1,
+  "reboot_between_stages": false,
+  "gpu_flag": "host",
+  "acceleration_flag": "on",
+  "renderer": "GLES: Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti/PCIe/SSE2), OpenGL ES 3.1 (4.5.0 NVIDIA 580.178.04)",
+  "primary_stop": {
+    "reason": "CPU_TEMPERATURE_LIMIT",
+    "stage": "WATCH",
+    "phase": "preparation",
+    "decision_monotonic": 336604.264065909,
+    "frame": {
+      "started_monotonic": 336604.226811169,
+      "started_unix": 1794049563.6625438,
+      "cpu": [
+        {
+          "path": "/sys/class/hwmon/hwmon2/temp1_input",
+          "driver": "coretemp",
+          "label": "Package id 0",
+          "raw_input": 90000,
+          "celsius": 90.0,
+          "started_monotonic": 336604.22715066,
+          "started_unix": 1794049563.6628833,
+          "finished_monotonic": 336604.227328293,
+          "finished_unix": 1794049563.6630607
+        },
+        {
+          "path": "/sys/class/hwmon/hwmon2/temp2_input",
+          "driver": "coretemp",
+          "label": "Core 0",
+          "raw_input": 69000,
+          "celsius": 69.0,
+          "started_monotonic": 336604.22732979,
+          "started_unix": 1794049563.6630623,
+          "finished_monotonic": 336604.227512666,
+          "finished_unix": 1794049563.6632452
+        },
+        {
+          "path": "/sys/class/hwmon/hwmon2/temp3_input",
+          "driver": "coretemp",
+          "label": "Core 1",
+          "raw_input": 65000,
+          "celsius": 65.0,
+          "started_monotonic": 336604.227513949,
+          "started_unix": 1794049563.6632464,
+          "finished_monotonic": 336604.227624269,
+          "finished_unix": 1794049563.6633568
+        },
+        {
+          "path": "/sys/class/hwmon/hwmon2/temp4_input",
+          "driver": "coretemp",
+          "label": "Core 2",
+          "raw_input": 73000,
+          "celsius": 73.0,
+          "started_monotonic": 336604.227625138,
+          "started_unix": 1794049563.6633575,
+          "finished_monotonic": 336604.227718207,
+          "finished_unix": 1794049563.6634507
+        },
+        {
+          "path": "/sys/class/hwmon/hwmon2/temp5_input",
+          "driver": "coretemp",
+          "label": "Core 3",
+          "raw_input": 67000,
+          "celsius": 67.0,
+          "started_monotonic": 336604.227718808,
+          "started_unix": 1794049563.6634512,
+          "finished_monotonic": 336604.227804299,
+          "finished_unix": 1794049563.6635365
+        },
+        {
+          "path": "/sys/class/hwmon/hwmon2/temp6_input",
+          "driver": "coretemp",
+          "label": "Core 4",
+          "raw_input": 91000,
+          "celsius": 91.0,
+          "started_monotonic": 336604.227804914,
+          "started_unix": 1794049563.6635375,
+          "finished_monotonic": 336604.227857794,
+          "finished_unix": 1794049563.6635904
+        },
+        {
+          "path": "/sys/class/hwmon/hwmon2/temp7_input",
+          "driver": "coretemp",
+          "label": "Core 5",
+          "raw_input": 69000,
+          "celsius": 69.0,
+          "started_monotonic": 336604.227858373,
+          "started_unix": 1794049563.663591,
+          "finished_monotonic": 336604.227905012,
+          "finished_unix": 1794049563.6636374
+        }
+      ],
+      "gpu": {
+        "source": "nvidia-smi:GPU0",
+        "label": "GPU 0",
+        "raw_input": 56,
+        "celsius": 56,
+        "started_monotonic": 336604.228095716,
+        "started_unix": 1794049563.6638281,
+        "finished_monotonic": 336604.245504236,
+        "finished_unix": 1794049563.6812367
+      },
+      "cpu_max_c": 91.0,
+      "gpu_max_c": 56,
+      "error": null,
+      "finished_monotonic": 336604.245508896,
+      "finished_unix": 1794049563.6812413,
+      "stage": "WATCH",
+      "phase": "preparation"
+    }
+  },
+  "primary_stop_frame_equals_saved_resource_frame": true,
+  "stop_time_utc": "2026-11-07T11:06:03.662544+00:00",
+  "actual_preparation_stage": "FINAL_ASSET_PACKAGING",
+  "elapsed_since_monitor_seconds": 58.198578962998,
+  "remaining_preparation_seconds": 121.801421037002,
+  "frame_acquisition_ms": 18.697727005928755,
+  "secondary_runner_result": {
+    "result": "FAIL_PRECONNECT",
+    "failure_stage": "FINAL_ASSET_PACKAGING",
+    "failure_category": "AssertionError",
+    "failure_code": "ASSET_PACKAGING_FAILED"
+  },
+  "secondary_result_interpretation": "ASSET_PACKAGING_FAILED follows the persisted CPU stop and owned-process termination; no separate packaging defect established; child return code not retained.",
+  "guard_budgets": {
+    "preparation_seconds": 180,
+    "candidate_seconds": 200,
+    "attempt_seconds": 390,
+    "cleanup_seconds": 120,
+    "overall_seconds": 705,
+    "sample_seconds": 3,
+    "join_seconds": 6,
+    "started_monotonic": 336546.065486946,
+    "preparation_deadline": 336726.065486946,
+    "overall_deadline": 337251.065486946,
+    "forced_cleanup_seconds": 5,
+    "hard_exit_deadline": 337256.065486946,
+    "cleanup_deadline": 336724.463996583
+  },
+  "last_pre_worker_audit": [
+    {
+      "stage": "IMMUTABLE_COMPONENTS_READY",
+      "cpu_max_c": 69.0,
+      "gpu_max_c": 53,
+      "started_unix": 1794049505.5738533
+    },
+    {
+      "stage": "ANDROID_READY_NO_VPN_BEFORE_ROOMS",
+      "cpu_max_c": 82.0,
+      "gpu_max_c": 57,
+      "started_unix": 1794049545.0195682
+    },
+    {
+      "stage": "AFTER_AUTHORITY_TELEMOST_WORKERS",
+      "cpu_max_c": 61.0,
+      "gpu_max_c": 56,
+      "started_unix": 1794049561.006589
+    }
+  ],
+  "load_at_stop": {
+    "memory_kib": {
+      "MemTotal": 32074740,
+      "MemAvailable": 14892780,
+      "SwapFree": 3968880
+    },
+    "sample_interval_seconds": 2.631,
+    "cpu_percent_one_core_100": {
+      "other": 38.38,
+      "runner": 0.76,
+      "emulator": 3.42,
+      "secret_input": 0.0,
+      "telemost_workers": 1.52,
+      "authority": 0.0,
+      "asset_packaging": 0
+    },
+    "own_processes": [
+      {
+        "pid": 831643,
+        "name": "qemu-system-x86",
+        "cpu_percent": 3.42,
+        "role": "emulator"
+      },
+      {
+        "pid": 834199,
+        "name": "stand",
+        "cpu_percent": 1.52,
+        "role": "telemost_workers"
+      },
+      {
+        "pid": 831623,
+        "name": "python3",
+        "cpu_percent": 0.76,
+        "role": "runner"
+      },
+      {
+        "pid": 833618,
+        "name": "python3",
+        "cpu_percent": 0.0,
+        "role": "secret_input"
+      },
+      {
+        "pid": 834198,
+        "name": "python3",
+        "cpu_percent": 0.0,
+        "role": "secret_input"
+      },
+      {
+        "pid": 834208,
+        "name": "docker",
+        "cpu_percent": 0.0,
+        "role": "secret_input"
+      },
+      {
+        "pid": 834251,
+        "name": "python",
+        "cpu_percent": 0.0,
+        "role": "authority"
+      },
+      {
+        "pid": 834797,
+        "name": "python3",
+        "cpu_percent": 0,
+        "role": "asset_packaging"
+      }
+    ],
+    "top_other_processes": [
+      {
+        "pid": 16284,
+        "name": "ptyxis",
+        "cpu_percent": 10.26,
+        "role": "other"
+      },
+      {
+        "pid": 1399144,
+        "name": "codex",
+        "cpu_percent": 4.94,
+        "role": "other"
+      },
+      {
+        "pid": 2757576,
+        "name": "codex",
+        "cpu_percent": 4.94,
+        "role": "other"
+      },
+      {
+        "pid": 13381,
+        "name": "gnome-shell",
+        "cpu_percent": 3.8,
+        "role": "other"
+      },
+      {
+        "pid": 3035918,
+        "name": "Isolated Web Co",
+        "cpu_percent": 3.42,
+        "role": "other"
+      }
+    ]
+  },
+  "load_limitations": "New packaging PID has no previous CPU sample: recorded 0 is UNKNOWN, not proof of idle. Interval-average CPU is not synchronized instantaneous load or heat-source causality. No fan measurements or hardware audit repeated.",
+  "cold_no_test_package_readiness_or_vpn_before_workers": true,
+  "oauth_access": "authorized exact entry via local protected dialog; token in process memory only; no token logged or embedded",
+  "new_test_rooms": 2,
+  "synthetic_registered_identity": true,
+  "fresh_signed_locator_verification": {
+    "remaining_seconds": 415,
+    "verified": true,
+    "verified_at": 1794049561
+  },
+  "previous_readiness_reused": false,
+  "authority_and_telemost_workers_started": true,
+  "guest_block_rules_applied": false,
+  "planned_guest_only_blocks": [
+    "185.251.89.19:8443/tcp",
+    "186.246.45.246:4242/tcp"
+  ],
+  "carrier_network_scope": "No guest block rules reached/applied. Planned rules are destination IP/port scoped, not blanket carrier/control blocks. No Android carrier/control reachability success claimed.",
+  "final_packaging": "INTERRUPTED; only unsigned partial output retained; no completed signed final APK or packaging receipt",
+  "final_apk_installed": false,
+  "apk_native_trust_locator_final_correspondence": "NOT_VERIFIED: no completed final APK",
+  "connect_attempted": false,
+  "connect_count": 0,
+  "candidate_budget_ms": 200000,
+  "readiness_budget_ms": 30000,
+  "android_native_snapshot": "NOT_OBTAINED: stopped before final install/instrumentation/AutomaticConnection, not a JNI snapshot failure",
+  "android_go_carrier_tls_challenge": "NOT_ENTERED_BY_THIS_ATTEMPT; server Go workers are not Android client provisioning proof",
+  "provisioning_network_bind_elapsed_remaining": "NOT_RUN; host preparation elapsed/remaining are separate fields, not native operation metrics",
+  "bundle_ready_dns_verified_https_egress": "NOT_RUN",
+  "traffic_evidence": "Host provider room creation and signed-locator publication only; no Android provisioning or tunneled egress proof. Host egress digest is not Android evidence.",
+  "cleanup": {
+    "checked_unix": 1794049607.2206585,
+    "observed_owned_pids_remaining": [],
+    "shared_lock_available": true,
+    "runner_exited": true,
+    "guard_monitor_joined": true,
+    "owned_emulator_stopped": true,
+    "provider_room_objects": 2,
+    "provider_room_deletion": "NOT_VERIFIED",
+    "final_checked_unix": 1794049666.1068244,
+    "owned_process_group_members_remaining": [],
+    "exact_owned_authority_container_absent": true
+  },
+  "automatic_retry": false,
+  "next_execution_decision": "Separate owner decision on test environment required; do not repeat this local AVD/guard cycle or raise thresholds.",
+  "historical_94_c": "This saved input does not independently prove or disprove historical physical 94C; no sensor-fault or heat-source diagnosis claimed.",
+  "local_evidence_root": "/home/joker/.codex/worktrees/61d0/family_connect/state-client-build/cold-native-diagnostic-20261106/guarded-runtime-20261107",
+  "artifact_sha256": {
+    "immutable.json": "6b6c5877805a37ec6a598a989484bc5742549280b7ba8896b7f43fbb22aa9cb1",
+    "python-imports.log": "9f514fd633bd7bcd083dc59cc6dc21ee6dfdadb7446568b68116946984771851",
+    "runner.log": "f0e809bc98d20ebd22b1e88b103054c6b011f2c6409a9df60d1515e9fbe4aed7",
+    "resources.jsonl": "e234d20ff9d0a35d493cd64f4dc026849d83b662edc1e807f8fffcb447349170",
+    "guard-stop-CPU_TEMPERATURE_LIMIT-sensor.json": "355cdc236b59d049904e7bad15f97cb1e6c3172a82340bdced910ca42f6cefb1",
+    "receipt.json": "b2f2acc9130b277c4324c07e19847df9519c179b3b89570dc0014d857de739e1",
+    "cleanup-check.json": "52e5d80720f4e2f5d7e0b97af1d289b12d53b0a4c42cdb55862211a73be2254e",
+    "emulator.log": "ad017efe4cd39c96841c6e828289c4d9f66a4bce001f2c45e120c7ebec5ce3cd",
+    "renderer.txt": "695737d633f17edeca484b2d459bbf865f1cf3e125ed92a4bde341fb16d0379c",
+    "connectivity-before-workers.txt": "e9188144233cd8c5e2eba84a543cd3a75161f4beb9f9bdae34b883d5143cbffe",
+    "asset-packaging.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "local-auth/stand.log": "f308d574918c5062ea66f4677efce46215fa86cdbe662f434d9edbf796cd69bc",
+    "apk-final/app-friends.apk.unsigned": "c6e6b2276199cdfa4be1b7496275639a2870f1d394f3739f2d0fd0ea4d9a1ea6"
+  },
+  "fresh_public_inputs_sha256": {
+    "anchor.pub": "75400c34368278856c8b5c431931c1ad1a2e5c0283c62d1d43a6c85dce4c2193",
+    "locator.json": "2b6899b4f632751e97a59a4938b6ee09cec326a706ba02def32d5e0c8daa0ad1"
+  },
+  "retained_base_apks": {
+    "app-friends.apk": "405f739958676a887bd2e74d4af522cab2fa9de14188bed731c1b0db0b310cbb",
+    "app-friends-androidTest.apk": "3f4965c8195bc23b7a7795992e4f775f706307e61c455fd6934b0cb387f0eed5"
+  },
+  "preserved_fail_manifest_sha256": "8b4501cf10e7564e9992771087b4c9747e951c7d425dbf817b5c07cd7736961c",
+  "both_previous_fail_runtime_and_all_19_artifacts_verified_unchanged": true,
+  "product_production_g4_public_apks_catalogs_admission_subscriptions_user_devices_changed": false,
+  "deployment_or_rollback": "NONE; private qualification only, no public version change"
+}

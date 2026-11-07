@@ -80,3 +80,39 @@ performed. No runtime acceptance of this repair is claimed. Production/G4, other
 branches, phones, public artifacts, cooling/power and foreign processes are untouched.
 No deployment/rollback or version/catalog change is involved. Future runtime requires
 a separate owner decision; the unused Connect is not consumed or automatically resumed.
+
+## Subsequent authorized single runtime — 7 November11:06UTC
+
+The owner separately authorized one run of this exact4854f96 harness. It ends
+**STOPPED_BEFORE_CONNECT**, without retries. [Sanitized receipt and exact local hashes](2026-11-07-cold-guarded-runtime.json).
+Actual Python import logging confirms the versioned guard, not a local-auth copy:
+`tests/android_emulator_guard.py` SHA256
+`1a93d8e19a19a375c6a6a7b5a3a6717d6e477867ff745a5a3b2dccc230258e0b`.
+One preflight (CPU69°C/GPU53°C) and one API27 NVIDIA/KVM AVD pass. Android is ready with
+no test package/readiness/VPN before protected local OAuth access. Two own test rooms,
+registered synthetic identity and a verified fresh locator (415s remaining) are created.
+The post-worker audit is61°C/GPU56°C; no native rebuild or old suites run.
+
+At FINAL_ASSET_PACKAGING, the exact saved WATCH frame (18.698ms acquisition interval)
+reports Core4 `temp6_input=91000`, Package `temp1_input=90000`, GPU56°C. The unchanged
+85°C CPU threshold yields **CPU_TEMPERATURE_LIMIT**,58.199s after monitor start with
+121.801s preparation remaining: not lifetime expiry. Frame equality between stop and
+resource evidence is verified. The later ASSET_PACKAGING_FAILED follows owned-process
+termination; no independent packager defect is established. Only an unsigned partial
+APK remains; no completed final APK/install, guest rules, instrumentation or Connect.
+
+Associated2.631s CPU averages (100%=one core): emulator3.42%, Telemost workers1.52%,
+other38.38%, available RAM14892780KiB. The new packager PID has no prior sample; its
+recorded0 is UNKNOWN, not proof of idle. These data do not identify the heat source or
+independently establish physical sensor accuracy. No fan audit or old94°C reinvestigation.
+No Android JNI/native-operation snapshot exists because the client was never launched;
+server Go workers/room creation are not Android Go/carrier/TLS/challenge or traffic proof.
+READY, bundle, DNS, verified HTTPS and Android egress remain NOT_RUN.
+
+Runner/monitor/owned process groups and exact authority container are stopped; shared
+lock is released. Two provider room objects remain deletion NOT_VERIFIED. Product6eb61a9,
+JNI17119f00…60c59, accepted Android JNI PASS and both prior FAILs/all19 artifact hashes
+remain unchanged. No public artifacts, production/G4, phones, admission/subscriptions,
+cooling/power or foreign processes change. No deployment/rollback applies. This local
+attempt is terminal; a separate owner environment decision is required before any
+further execution, not another same-host retry or provisioning change.

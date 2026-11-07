@@ -2,6 +2,18 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected7 November runtime authorization completed: STOPPED_BEFORE_CONNECT.**
+One4854f96 guarded API27 run stops at FINAL_ASSET_PACKAGING on a persisted
+CPU_TEMPERATURE_LIMIT frame (Core4/raw91000/max91°C; Package90°C; GPU56°C).
+Android-ready/no-readiness/no-VPN, two own provider rooms and verified fresh locator
+precede the stop; no final APK install or client Connect/native snapshot/READY/traffic.
+Cleanup is verified; room-object deletion remains NOT_VERIFIED. Product6eb61a9,
+JNI17119f00…60c59, Android JNI PASS and both historical FAILs remain unchanged.
+No further local AVD/guard cycle, MESH patch or threshold increase is authorized.
+Next execution requires a separate owner decision on the environment, not another
+automatic attempt. [Exact evidence](releases/2026-11-07-cold-guarded-runtime.json).
+
+**Previous selected source repair (runtime authorization subsequently supplied):**
 **Selected7 November: bounded harness repair complete; NO runtime authorization.**
 One-frame thermal decision/evidence and finite preparation/attempt/cleanup/overall
 budgets are implemented in the existing test-helper lineage and versioned runner.

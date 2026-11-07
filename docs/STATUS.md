@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**7 November11:06UTC — authorized single guarded run STOPPED_BEFORE_CONNECT.**
+Versioned4854f96 runner/guard actually imported; source6eb61a9/JNI17119f00…60c59
+and accepted Android JNI PASS unchanged, no rebuild or suite repeat. One preflight and
+one API27 NVIDIA/KVM AVD reach Android-ready/no-VPN/no-readiness. Protected local OAuth
+access starts the isolated authority/workers, creates two test rooms and a fresh verified
+locator (415s remaining). During assets-only packaging, the exact saved WATCH frame
+reports Core4 raw91000/max91°C, Package90°C, GPU56°C: CPU_TEMPERATURE_LIMIT at58.199s,
+with121.801s preparation remaining. Secondary ASSET_PACKAGING_FAILED is not the primary
+cause. No final signed APK/install, guest blocks, Connect, Android native snapshot or
+READY/DNS/HTTPS/egress. Own processes/groups/container are gone; monitor joined and lock
+released. Room deletion NOT_VERIFIED. Both prior FAILs/all19 artifact hashes preserved.
+This local attempt is finished: no automatic repeat; a separate owner decision on the
+test environment is required. No heat-source attribution, physical94°C conclusion,
+provisioning fix, product/public/production/G4 change or rollout/rollback is claimed.
+[Exact stop, load, provenance and artifact hashes](releases/2026-11-07-cold-guarded-runtime.json).
+
 **7 November — source-only harness repair; runtime remains stopped.**
 Watcher and stage audit now decide from the exact saved temperature frame, including
 raw inputs/labels, per-read times, capture interval and computed maxima. Typed stop
