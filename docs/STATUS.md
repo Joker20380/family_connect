@@ -1,52 +1,39 @@
 # Текущее состояние / Current state
 
-**7 November — beta120 release qualification in progress.**
-Second Android run42383259832 reaches real restricted JNI but crashes atAPI35:
-restricted cgocallback sees AWG's goexit frame. Both independently linked Go runtimes
-use Android Q+'s fixed TLS_SLOT_APP; Bsymbolic is already present in both ELF files.
-JNI Go calls now run on fresh joined native threads, never on a Java thread retaining
-another runtime's g. Arguments/owner lifetime stay synchronous; Close is not serialized
-behind Post. Targeted native dispatch regression passes; hosted Android confirmation
-is pending. This changes native JNI glue, not TLS trust/network deadlines or accepted F.
-First exact-source Android run42381579767 failed atAPI35: the unchanged
-ProvisioningDiagnosticRuntimeTest loaded libfc_restricted.so before CI built it.
-Runtime artifact13578990044/SHAe3786820…e48ed is retained. Fix the CI dependency
-order with production-tag x86_64 native before runtime and fresh ARM64 afterwards;
-no test skip, provider fixture, TLS or product change. CI acceptance remains pending.
+**7 November — beta120 READY_FOR_CONTROLLED_FIELD_OPERATION.**
+NL1 is185.10.158.212, not retired186.246.45.246: canonical inventory, verified signed
+catalogs4/6 and retained deployment identity evidence agree. Fresh live canonical
+profile/certificate/user-route verification is still mandatory before an authorized start.
 
-Corrected the prepared
-NL1 entry host to185.10.158.212 from canonical inventory, reverified signed catalog4/6
-and retained replacement/MESH receipts. Old186.246.45.246 is retired, not an alias.
-Fresh live identity/profile readback remains an authorized deployment gate. No exact
-0c6fcb7 Client builds run exists; the Android release job is now required before selecting
-CI bytes/finalizer pins. No production, signature, handoff or F rerun.
-The retained NL1 readback also resolves the current profile to
-`/etc/fc-canonical-pinned-venv/profile.json`; the unit template no longer points at
-the pre-renewal gateway.json. Finalization now fails closed without accepted CI pins
-and rechecks CI→locator-only→signature lineage. Synthetic vault/apksigner5 tests pass;
-no production key or final field signature was used. Failed CI artifacts are retained.
-The canonical directory is protected by ProtectSystem=strict, not a per-directory
-read-only bind: the unchanged custody reader intentionally rejects such mounts.
-Corrected client candidate18bdeee failed Client builds42383259832 at the Go boundary. Canonical profile
-configuration also passes as an unprivileged fixture reader; no host account changes.
+Exact Client builds42385799106/Android128442818128/source55525859 passes Android
+contracts/race/native/unit/lint/API35/API27/ARM64 release payload. Downloaded CI APK
+9eae8668…7348c (50385121bytes), JNI9f5798fd…0d11f and rootd0ae60e6…d281 are pinned.
+CI exposed missing JNI build order and then Android Q+ shared Go TLS on the Java caller;
+both are fixed and confirmed by the existing runtime gate, with both failures retained.
+Application behavior remains9bf plus prior lint annotation; restricted JNI glue now has
+isolated callback threads. F's old6eb/17119 JNI PASS is not reassigned to the new bytes.
 
-**7 November — local ARM64 field-delivery kit prepared; NOT signed/deployed.**
-Accepted F/application9bf02724/native6eb61a9 remains immutable. Production-tag ARM64
-JNI is now built through the accepted builder; beta120 is reserved for the unpublished
-candidate (118 is not reused). Packaging accepts a separately pinned native commit only
-after checking its complete runtime-source closure against application HEAD. No native
-runtime changes, new AVD, provider rooms or phone operations. ARM64 managed/package/lint
-gates now pass (433 JVM cases, lint0 errors/57 existing warnings). The new server entry's
-disposable lifecycle/closed issuer/real authority handlers and bounded RPC checks pass.
-Unsigned120/08d7e41 SHA269a9219…fca967 and ARM64 JNI773d760d…0d26 are retained;
-server7398858 package builds twice byte-identically (archive26ccddba…131fdd). Real
-zipalign/fresh-asset finalization passes offline, with all fixture output destroyed.
-Fresh real locator and vault signature are deferred until authorized server start/handoff;
-the existing full release-CI/signing gate is NOT claimed by local checks or F. No user
-ARM64 install/runtime acceptance yet. Public113/catalog7 and public118 unchanged.
-Local119 draft was never signed/distributed;119 is already reserved by a separate paid
-branch, which remains untouched. This cold candidate uses120 to avoid that collision.
-[Delivery preparation and remaining gates](releases/2026-11-07-cold-field-delivery.md).
+Corrected server package source3c0487eb, archive5ec255f5…d71cb, builds twice identically.
+Eleven disposable package/finalizer checks PASS, including canonical unprivileged custody,
+existing authority handlers, bounded RPC/lifecycle, no forwarding, real zipalign and
+locator-only payload preservation. Real CI prebuild/root acceptance and synthetic vault
+signing checks pass; no production secret or final field signature was used.
+Public/default113/catalog7 and public118 remain unchanged.120 is not publicly present;
+main/paid119 is untouched. Separate phase0/Linux-control failures are NOT full-CI PASS.
+
+Next is ONE separately authorized coordinated operation: live NL1/RU preflight, only the
+new bounded entry, fresh signed locator, locator-only packaging, existing-key signature,
+byte/window verification and agreed private handoff. Confirm recipient/channel before
+start. Best-case prepare cutoffT0+160s, Connect cutoffT0+220s; earlier trust expiry shortens
+both. No production locator, deployment, signing, delivery or phone installation occurred.
+Own tests/containers ended; no local AVD/room/Connect was started. E/F and all prior FAILs
+remain unchanged; E's2/2 counters remain unexplained. NOT SIGNED/DELIVERED/FIELD_PASS/G4.
+[Exact qualification receipt](releases/2026-11-07-beta120-release-qualification.json) ·
+[Build/failure history and operation boundary](releases/2026-11-07-cold-field-delivery.md).
+
+Earlier local269a9219 prebuild /6eb ARM64 /server7398858 artifacts are retained as historical
+pre-CI preparation, not the selected field input. Their exact original receipt remains in
+[the local preparation record](releases/2026-11-07-cold-field-delivery.json).
 
 **7 November — API28/emulated CELLULAR-only cold DROP PASS (F).**
 Unchanged application9bf0272/native6eb61a9/JNI17119f00…60c59 with harness252c87e:

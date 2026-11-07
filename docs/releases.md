@@ -1,5 +1,14 @@
 # Release distribution / Выпуски
 
+**7 November — beta120 controlled field-operation preparation READY, not distributed.**
+Client builds42385799106/55525859 Android API27/API35/native/release payload accepted;
+downloaded ARM64 prebuild9eae8668 and reproducible corrected NL1 package3c0487eb pinned.
+Fresh locator, final signature and private handoff remain one separately authorized
+operation after live preflight and recipient/channel readiness. No public120, updater,
+production or phone change;113/catalog7 and118 remain intact. Not whole-repository CI green.
+[Exact receipt](releases/2026-11-07-beta120-release-qualification.json) ·
+[Preparation history and handoff boundary](releases/2026-11-07-cold-field-delivery.md).
+
 **5 November — active-session renewal integration candidate; NOT a release.**
 Android/native owner, gateway lease and broker-monitor generation integration is implemented.
 Real TLS/mux/TCP/DNS/verified-HTTPS continuity, negative/cleanup race,66 scoped JVM cases,

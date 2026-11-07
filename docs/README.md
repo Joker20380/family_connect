@@ -1,8 +1,10 @@
 # Documentation
 
 **7 November — [bounded ARM64 cold field kit](releases/2026-11-07-cold-field-delivery.md).**
-Unsigned120 + pinned6eb native, reproducible bounded server entry and tested fresh-assets
-procedure. F remains accepted in its emulator scope; no production/phone/public release.
+READY_FOR_CONTROLLED_FIELD_OPERATION: exact Android CI42385799106/source55525859,
+unsigned ARM64 APK9eae8668 and corrected NL1 server3c0487eb. No final locator/signature,
+production change, delivery or phone PASS. F keeps its original accepted emulator scope.
+[Exact release receipt](releases/2026-11-07-beta120-release-qualification.json).
 [Operator handoff procedure](../deploy/friends/restricted/COLD_FIELD_DELIVERY.md).
 
 **Current5 November — [active-session renewal integration](releases/2026-11-05-mesh-renewal-integration.md).**

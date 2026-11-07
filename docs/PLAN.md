@@ -2,31 +2,25 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Active: beta120 exact-source Android release qualification and corrected NL1 package.**
-First Android run failed because its JNI runtime test had no packaged restricted JNI.
-Qualify the corrected native-before-runtime build order; retain the failed artifact.
-Use existing Client builds Android gates, download and bind the accepted ARM64 payload,
-repackage corrected185.10.158.212 entry immutably, and pin finalization to those CI bytes.
-Completion: READY_FOR_CONTROLLED_FIELD_OPERATION, never signed/delivered/field PASS.
-Live deployment, fresh production locator and targeted handoff remain one later operation.
-Both failed client sources59849b0/18bdeee are preserved. Confirm the narrow Android
-multi-Go-runtime JNI thread-isolation fix in existing release-CI; finalizer pins remain
-disabled until the Android job and downloaded payload pass. Server package uses a separate clean
-source checkpoint including the corrected canonical profile and finalized CI pins.
+**Completed: beta120 READY_FOR_CONTROLLED_FIELD_OPERATION.**
+Exact Android release-CI42385799106/source55525859 and downloaded ARM64 prebuild
+9eae8668…7348c are accepted. Corrected NL1 server3c0487eb/archive5ec255f5…d71cb is
+reproducible and passes11 disposable package/finalizer checks. Finalizer pins select
+that CI payload only; new locator and signature will have their own final APK digest.
+Both CI failures and original local preparation/E/F/FAIL artifacts remain preserved.
+Selected scope is Android release qualification plus bounded server package, not whole
+repository CI green, G4 or a new Telemost/physical-phone PASS.
 
-**Completed locally7 November: bounded ARM64 field kit after accepted F.**
-Unsigned120/08d7e41, retained6eb ARM64 native, reproducible server7398858 archive and
-tested assets-only fresh-locator/signing/handoff tooling are prepared. No F rerun,
-production change, public release, phone install or G4 work. Final handoff remains blocked
-on release-CI acceptance, authorized live entry, fresh bound locator, final bytes and
-existing-key signature; do not relabel the unsigned/no-locator prebuild a field APK.
-[Current build/package checkpoint](releases/2026-11-07-cold-field-delivery.md).
-
-ARM64 build, package and release lint complete; server lifecycle, unchanged registry/key
-custody, existing-handler signed bundle and negative forwarding/TLS checks pass locally.
-Exact safe receipts are recorded. One explicit authorization boundary covers staging/
-starting only the new NL1 entry, RU one-shot locator and private targeted handoff after
-release gates; no automatic production/phone/public-updater action follows this task.
+**Next only after ONE explicit field-operation authorization and recipient readiness:**
+current NL1 profile/certificate/route/backend preflight → new bounded entry → fresh
+production locator → minimal asset-only packaging/vault signing → byte/window checks →
+agreed private handoff and one ordinary Connect over113 without data clearing.
+No blocked-download-page assumption, expired locator, new discovery/import or phone
+operation is authorized automatically. All preparation is finished before the finite
+entry window starts; no CI/tool build consumes it. Production/public updater/paid119
+and user phones are unchanged. No other queued task starts automatically.
+[Exact release receipt](releases/2026-11-07-beta120-release-qualification.json) ·
+[Operator procedure](../deploy/friends/restricted/COLD_FIELD_DELIVERY.md).
 
 **Completed7 November: API28/emulated CELLULAR-only cold DROP follow-up.**
 F/252c87e with unchanged application9bf0272 and JNI17119f00…60c59 passes real Android28

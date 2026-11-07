@@ -1,0 +1,533 @@
+{
+  "status": "READY_FOR_CONTROLLED_FIELD_OPERATION",
+  "not_claimed": [
+    "SIGNED",
+    "DELIVERED",
+    "FIELD_PASS",
+    "G4_PASS",
+    "whole_repository_CI_PASS",
+    "new_F_or_Telemost_acceptance"
+  ],
+  "artifact_root": "/mnt/data/PycharmProjects/family_connect/state-client-build/cold-field-delivery-20261107",
+  "node_binding": {
+    "scope": "offline retained evidence, no SSH, production operation or fresh server verification",
+    "node": "nl-amsterdam-1",
+    "host": "185.10.158.212",
+    "inventory": "control_plane/apps/console/collector.py",
+    "catalog_source_directory": "state-client-build/fleet-bootstrap-2/second-nl-ordinary",
+    "verification": "provisioning.friends_catalog.verify_catalog, Ed25519 domain separated signature and schema; PASS on all three saved envelopes",
+    "anchor_file_sha256": "d0ae60e61af6ac5018428aaad89e362ec0f75d7468633a26c22906356228d281",
+    "catalogs": [
+      {
+        "file": "legacy-catalog.json",
+        "sequence": 4,
+        "sha256": "214cb6a3611b5c05117dd2ddfbfbb2f8add0603c680368a9299b34cd28214922",
+        "nl_host": "185.10.158.212"
+      },
+      {
+        "file": "second-nl-catalog.json",
+        "sequence": 5,
+        "sha256": "f543fb9c0d3b54a4436a7468376bf22980214422720c4103c11f8fcaf7e038a6",
+        "nl_host": "185.10.158.196"
+      },
+      {
+        "file": "rollback-first-nl-catalog.json",
+        "sequence": 6,
+        "sha256": "e89ff6da3edc85008a397d8aa75e1e00f0d8923d0368ed7d15faa455ca57b37e",
+        "nl_host": "185.10.158.212"
+      }
+    ],
+    "assignment_evidence": "2026-11-02-second-nl-ordinary-live.md: existing assignments retained on NL1, new admissions NL2; catalog schema2 alone does not encode logical node identity",
+    "replacement_evidence": "2026-10-30-nl-gateway-replacement.json: authenticated replacement host185.10.158.212, old186.246.45.246 fenced/inactive, not trusted",
+    "mesh_evidence": "2026-11-06-mesh-live-recovery.json and 2026-11-06-vpn-health.md: canonical NL1 strict leaf/CRL and real DNS/verified HTTPS/185.10.158.212 egress; observed2026-11-06, not current liveness",
+    "canonical_profile_evidence": {
+      "path": "state-client-build/mesh-live-failure-20261106/NL1-publisher-binding.private.json",
+      "sha256": "4cc0913056dc20acd8e1b27159f9bb73c999ee03777f528a6062f62667d40e02",
+      "locator": "/etc/fc-canonical-pinned-venv/locator.json",
+      "profile": "/etc/fc-canonical-pinned-venv/profile.json",
+      "provider_environment": "/opt/apps/family_connect/friends-restricted/provider.env",
+      "reader_user": "family-restricted",
+      "private_values_exported": false
+    },
+    "fresh_live_verification": "NOT_RUN",
+    "deployment_gate": "current canonical profile/leaf, family/gateway binding, issuer/CRL/floors, APK root, selected registered-device route, backend TLS and service user access must match before start; no key transfer or stale certificate reuse"
+  },
+  "client_ci": {
+    "workflow": "Client builds",
+    "run_id": 42385799106,
+    "head_sha": "55525859465ff4713196db7206129ad840f67cb3",
+    "attempt": 1,
+    "conclusion": "success",
+    "android_job_id": 128442818128,
+    "mandatory_steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-java@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-python@v5",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run android-actions/setup-android@v3",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run gradle/actions/setup-gradle@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-go@v5",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'ndk;28.2.13676358'",
+        "conclusion": "success"
+      },
+      {
+        "name": "JVM control conformance",
+        "conclusion": "success"
+      },
+      {
+        "name": "Restricted carrier race regression",
+        "conclusion": "success"
+      },
+      {
+        "name": "Restricted diagnostic and readiness contracts",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build pinned unified Android VPN library",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build pinned dynamic audio libraries and corresponding source",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build production restricted JNI for emulator contracts",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:lintDebug :app:assembleFriends :app:testFriendsUnitTest :app:lintFriends",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run python3 pilot/android-awg/verify-apk.py",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run python3 -m pip install cryptography==46.0.7",
+        "conclusion": "success"
+      },
+      {
+        "name": "Enable emulator KVM",
+        "conclusion": "success"
+      },
+      {
+        "name": "Real WG AWG TCP and Auto lifecycle on Android emulator",
+        "conclusion": "success"
+      },
+      {
+        "name": "Publish bounded Android runtime summary",
+        "conclusion": "success"
+      },
+      {
+        "name": "Confirm control conformance on Android runtime",
+        "conclusion": "success"
+      },
+      {
+        "name": "Preserve Android 15 runtime evidence before legacy acceptance",
+        "conclusion": "success"
+      },
+      {
+        "name": "Android 8.1 transport lifecycle and Friends compatibility",
+        "conclusion": "success"
+      },
+      {
+        "name": "Publish bounded Android 8.1 runtime summary",
+        "conclusion": "success"
+      },
+      {
+        "name": "Confirm control conformance on Android 8.1 runtime",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build pinned restricted Android native",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build unsigned ARM64 Friends for offline signing",
+        "conclusion": "success"
+      },
+      {
+        "name": "Verify exact restricted release payload",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/upload-artifact@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/upload-artifact@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/upload-artifact@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/upload-artifact@v4",
+        "conclusion": "success"
+      }
+    ],
+    "scope_jobs": [
+      {
+        "id": 128442786123,
+        "name": "scope",
+        "conclusion": "success"
+      },
+      {
+        "id": 128442819399,
+        "name": "linux",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 128442819704,
+        "name": "windows-compatibility",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 128442819845,
+        "name": "windows",
+        "conclusion": "skipped"
+      },
+      {
+        "id": 128449995867,
+        "name": "release",
+        "conclusion": "skipped"
+      }
+    ],
+    "readiness_wire": {
+      "run_id": 42385799093,
+      "conclusion": "success"
+    },
+    "separate_not_accepted": [
+      {
+        "workflow": "phase0",
+        "run_id": 42385799155,
+        "conclusion": "failure"
+      },
+      {
+        "workflow": "Linux control preview",
+        "run_id": 42385799096,
+        "conclusion": "failure"
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "id": 13580421361,
+      "name": "FamilyConnect-Android-restricted-arm64",
+      "file": "android-arm64-qualified.zip",
+      "sha256": "4a44d04badb22cb06e31d09fb2d4b5ec152232f9aad99c96fb2b8168c717f4d3",
+      "bytes": 57428500
+    },
+    {
+      "id": 13579723637,
+      "name": "FamilyConnect-Android-debug",
+      "file": "android-debug-qualified.zip",
+      "sha256": "b6b435e071c63d184b2928504bce88b0979ae1634312d83e98cb0af2bffc6988",
+      "bytes": 186771209
+    },
+    {
+      "id": 13579533973,
+      "name": "FamilyConnect-Android-ui",
+      "file": "android-ui-qualified.zip",
+      "sha256": "b7c27630791ce8d9d7b10b6409b2cdf5d88dec357ef6f0a2b4aa1f0d2ba5ade9",
+      "bytes": 295812
+    },
+    {
+      "id": 13579319399,
+      "name": "FamilyConnect-Android-runtime-diagnostics",
+      "file": "android-runtime-qualified.zip",
+      "sha256": "30bd0d12abe2f6aeef56c2c954807aed53df9ba1ba203a3fe9ceed673c935156",
+      "bytes": 1273191
+    }
+  ],
+  "application": {
+    "source_commit": "55525859465ff4713196db7206129ad840f67cb3",
+    "version": "0.1.18-beta120",
+    "version_code": 120,
+    "package": "com.familyconnect.app.friends",
+    "apk_sha256": "9eae8668544c9b0d968befb82dc655a2594535fe59c4b5af5d55a804fd67348c",
+    "size": 50385121,
+    "unsigned": true,
+    "restricted_native": {
+      "xray_revision": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+      "gvisor_version": "v0.0.0-20260122175437-89a5d21be8f0",
+      "patch_sha256": "770f8f359faf0630a271f103bcd31033eb46d30aeb531b5933c15058c624b420",
+      "binary_sha256": "9f5798fdf17c81a53fb162f110bd2ec8b945181b5e7abc0f6804c662f1a0d11f",
+      "diagnostic_only": false,
+      "owner_diagnostic_fault_schema": 0,
+      "metadata_schema": 2,
+      "source_revision": "55525859465ff4713196db7206129ad840f67cb3",
+      "source_tree": "9944a4afb8b1f5ba805a220531d693e8abfd3635",
+      "abi": "arm64-v8a",
+      "provider": "telemost",
+      "build_tags": [],
+      "builder_sha256": "34967f545b43d35041e1dfaf9e3b6525b70c385a3f957602d69a79b7aaeae4ea"
+    },
+    "android_only": true
+  },
+  "downloaded_checks": {
+    "apk_sha256": "9eae8668544c9b0d968befb82dc655a2594535fe59c4b5af5d55a804fd67348c",
+    "receipt_sha256": "48eab8c49462e3feb8c1d819db037c909ea92129eadc5915f073436275f466bb",
+    "native_sha256": "9f5798fdf17c81a53fb162f110bd2ec8b945181b5e7abc0f6804c662f1a0d11f",
+    "anchor_sha256": "d0ae60e61af6ac5018428aaad89e362ec0f75d7468633a26c22906356228d281",
+    "jni_exports": [
+      "Java_com_familyconnect_app_NativeRestricted_attach",
+      "Java_com_familyconnect_app_NativeRestricted_begin",
+      "Java_com_familyconnect_app_NativeRestricted_beginReady",
+      "Java_com_familyconnect_app_NativeRestricted_chatAcquire",
+      "Java_com_familyconnect_app_NativeRestricted_chatOpen",
+      "Java_com_familyconnect_app_NativeRestricted_chatRelease",
+      "Java_com_familyconnect_app_NativeRestricted_chatRequest",
+      "Java_com_familyconnect_app_NativeRestricted_chatState",
+      "Java_com_familyconnect_app_NativeRestricted_provisionBegin",
+      "Java_com_familyconnect_app_NativeRestricted_provisionClose",
+      "Java_com_familyconnect_app_NativeRestricted_provisionPost",
+      "Java_com_familyconnect_app_NativeRestricted_readiness",
+      "Java_com_familyconnect_app_NativeRestricted_renew",
+      "Java_com_familyconnect_app_NativeRestricted_state",
+      "Java_com_familyconnect_app_NativeRestricted_stats",
+      "Java_com_familyconnect_app_NativeRestricted_stop",
+      "Java_com_familyconnect_app_NativeRestricted_validateDelivery",
+      "Java_com_familyconnect_app_NativeRestricted_validationCode",
+      "Java_com_familyconnect_app_OwnerFaultReceiver_control"
+    ],
+    "changed_from_local_269a": [
+      "lib/arm64-v8a/libcodec2.so",
+      "lib/arm64-v8a/libfc-awg.so",
+      "lib/arm64-v8a/libfc_restricted.so",
+      "assets/awg-build.json",
+      "assets/chaquopy/app.imy",
+      "assets/chaquopy/build.json",
+      "assets/chaquopy/requirements-common.imy",
+      "assets/restricted-build.json"
+    ],
+    "abi": "arm64-v8a",
+    "locator_present": false,
+    "corresponding_audio_source": "PASS",
+    "apk_member_count": 143,
+    "vcs_modified_stamp": true,
+    "tracked_source_guard": "PASS in CI; Go stamp observes generated untracked outputs too"
+  },
+  "toolchain": {
+    "native_go": "1.26.1",
+    "server_go": "1.26.0",
+    "ndk": "28.2.13676358",
+    "jdk": "17",
+    "gradle": "8.11.1",
+    "android_compile_target": 35,
+    "minimum_api": 27,
+    "arm64_native_api": 26,
+    "package": "com.familyconnect.app.friends",
+    "production_tags": true,
+    "synthetic_root_or_identity_in_candidate": false,
+    "qualification_transport": false
+  },
+  "tests": {
+    "jvm": {
+      "testDebugUnitTest": {
+        "tests": 438,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testFriendsUnitTest": {
+        "tests": 433,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "api35": {
+      "declared": 82,
+      "executed": 48,
+      "assumption_skips": 34,
+      "failures": 0,
+      "jni_multi_runtime_probe": "PASS"
+    },
+    "api27": {
+      "declared": 82,
+      "executed": 46,
+      "assumption_skips": 36,
+      "failures": 0,
+      "jni_multi_runtime_probe": "PASS"
+    },
+    "skips_policy": "existing explicit isolated-runtime/feature assumptions; no new skips or waived assertions",
+    "ui": "downloaded; RU/EN large text, failed controls and legacy voice inspected",
+    "jni_c_regression": "19 typed exports; concurrent Post/Close, owner-release on allocation failure, foreign TLS, ASan/UBSan PASS",
+    "host_jni_matrix": "PASS after relevant glue delta; not Android evidence",
+    "host_jni_log_sha256": "e6f93a56ee56c7a46407dd80b0053f2cc1e21d07fd34075936ad02901141c1ed",
+    "server_finalizer_pytest": {
+      "passed": 11,
+      "skipped": 0,
+      "log_sha256": "0432cde1099a35d92512cc44c186368ccec2fd7f2155663deed681d6acd69c0c"
+    },
+    "vault_signing_synthetic_tests": 5,
+    "production_vault_key_or_signature_used": false
+  },
+  "source_delta": {
+    "accepted_application_base": "9bf02724deacf1c5e4293bea1bfdc6fc4f7fcacc",
+    "accepted_native_go_base": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+    "runtime_go_and_security_policy_delta": "none",
+    "native_glue_change": "joined fresh pthread per restricted JNI Go invocation; no caller TLS reuse and no serialization of Close behind Post",
+    "ci_dependency_change": "production x86 JNI before Android runtime, fresh ARM64 afterwards",
+    "java_main_delta": "prior method-scoped API27 lint annotation only; DEX matches local269a prebuild",
+    "old_local_apk_selected": false,
+    "python_payload": {
+      "assets/chaquopy/app.imy": {
+        "code_objects_equal": 14,
+        "other_members_equal": true
+      },
+      "assets/chaquopy/requirements-common.imy": {
+        "code_objects_equal": 140,
+        "other_members_equal": true
+      }
+    },
+    "awg_and_codec2_text_sections": "byte-identical to local269a; normal source/dependency pins unchanged, build/debug/replacement-path metadata differs"
+  },
+  "server": {
+    "source": "3c0487ebd0acdb79149d20dc69a4d63942f891b9",
+    "archive": "cold-provision-entry-3c0487e-linux-amd64.tar",
+    "sha256": "5ec255f586398fbf6c17623a83056d73e0ea41c0bd7573945cf17586146d71cb",
+    "bytes": 16916480,
+    "manifest_sha256": "ffb0c61fbd8647e1f082da3231f990e26271a1a57f0531fb77062c6f0b5c5564",
+    "artifact_sha256": {
+      "cold-provision-entry@.service": "a95441b852fa169ae21ae1dc532c9b53de05aa66ba0216db4174d82d1adc8b5d",
+      "cold-field-qualified.json": "2c2880ece43b894e7f677ceae492577e794dc1176e73a03c5070670eee061a58",
+      "identity.lock": "8133533475c48477f7ccf6d65a5c426a2511ceea61f6539c1667b3a6900a77be",
+      "HANDOFF.md": "0dbd55f0947cda05be708e346e36766cdbe75e29298beeb7ad0aa72c76dc042d",
+      "cold-provision-locator.pyz": "08b0ed4a8e982f7aa54a64b0630dce68a19399c492ee30fbb8d43ff4016d97a2",
+      "control.lock": "5adccf995e9634be711ae3167229cca0d2751b493c3a041dd68c745ec44ad94a",
+      "prepare_cold_field_apk.py": "46ee8cd1abd03bd3dfec648a480596430cea59124d4acf632e6e0d61dc661313",
+      "cold-provision-entry": "c7ed0b15b38fc3f215ef23f8a8687076ed5e73ade1c099d6ffc2d69ca3a8a96c",
+      "deployment.json": "2d08912201199e7c699e0439fb12bb10ca54f2efbddf1dbec3572ce6090e4ecd"
+    },
+    "target": [
+      "linux",
+      "amd64",
+      "0"
+    ],
+    "source_clean": true,
+    "reproducible_two_builds": true,
+    "deployed": false,
+    "live_current_profile_or_certificate_check": "NOT_RUN; mandatory during authorized operation",
+    "test_scope": "packaged executable config and root-owned canonical profile as unprivileged reader; synthetic disposable lifecycle/issuer and existing handlers; RPC/TLS/no-forwarding tests; no provider or production call"
+  },
+  "source_delivery": {
+    "application_archive": {
+      "file": "release-ci-5552585/application-source-5552585.tar.gz",
+      "sha256": "dee77ec9fc50c3006970eb6b349c111b4b2a8dbcc526520a957237282f1b24a8"
+    },
+    "server_archive": {
+      "file": "release-ci-5552585/server-source-3c0487e.tar.gz",
+      "sha256": "876895bab4077e69fb331fb21814b7b34e1093efd113946347ccbe2f2516e27c"
+    },
+    "audio_corresponding_source": "inside artifact13580421361; tar/build.py/native radio.c/notices verified against audio-build.json and APK"
+  },
+  "upgrade": {
+    "from_version_code": 113,
+    "to_version_code": 120,
+    "same_package": true,
+    "required_certificate_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+    "public_113_apk_sha256": "6078d0610272c5eb1b8008d330f9e646163b90b89df180b4bd56fd8ae4edc094",
+    "public_113_anchor_equals_candidate": true,
+    "physical_install": "NOT_RUN",
+    "data_clear_or_identity_recreation": false
+  },
+  "version_availability": {
+    "public_beta120_http": 404,
+    "public_catalog_sha256": "2283a89ffa05e6ad439858f111f7272993b4e46e652c9efa11b44158b9f01b30",
+    "public_code": 113,
+    "public_sequence": 7,
+    "main_observed": "1cbe8fbf0de1924e9326125e1932078b5b1f56ee",
+    "main_code": 119,
+    "paid_branch_unchanged": "e775953449ba88b1d4c2303f26db7d344ec8b2b4",
+    "all_private_distribution_absence_proven": false,
+    "recheck_before_handoff": true
+  },
+  "field_operation": {
+    "authorized_now": false,
+    "recipient_ready": "UNCONFIRMED; required before entry start",
+    "delivery_channel": "UNCONFIRMED; agree reachable private document/local transfer, not blocked HTTPS page or auxiliary VPN",
+    "one_authorization_covers": [
+      "live NL1 profile/leaf/route/backend/custody preflight",
+      "install/start only new bounded entry on NL1",
+      "one-shot real RU signed locator without DB/admission mutation",
+      "verify locator binding/expiry and entry ready; asset-only packaging from pinned CI bytes",
+      "existing vault signature and exact signed payload/ABI/113 signer checks",
+      "agreed private handoff; update over113 without clearing data; ordinary MESH Connect and minimal diagnostics",
+      "stop only new entry and verify cleanup"
+    ],
+    "entry_lifetime_seconds": 420,
+    "readiness_budget_seconds": 30,
+    "candidate_seconds": 200,
+    "handoff_reserve_seconds": 60,
+    "expiry_formula": "E=min(seed expiry, trust expiry, leaf notAfter, CRL nextUpdate); seed expiry<=T0+420",
+    "prepare_min_remaining_seconds": 260,
+    "connect_not_after": "E-200s",
+    "best_case_prepare_by": "T0+160s",
+    "best_case_connect_by": "T0+220s",
+    "cleanup_systemd_max_seconds": 440,
+    "cleanup_stop_seconds": 20,
+    "missed_window": "stop own entry, retain evidence and arrange fresh issuance; no TTL extension; a handed-off120 is immutable",
+    "final_locator_issued": false,
+    "final_signed_apk_sha256": null
+  },
+  "preservation": {
+    "F": "867ba7f7bc2869f41468c12495a2e929e4dc3f33; original accepted API28 emulator scope unchanged",
+    "E": "positive original scope with2 DNS timeouts/2 ProtocolErrors of unknown cause; no fix claimed",
+    "original_fail_manifest_sha256": "8b4501cf10e7564e9992771087b4c9747e951c7d425dbf817b5c07cd7736961c",
+    "old_local_prebuild_sha256": "269a9219f093d7afbc487ba41a9115036842ebba22633879d79a794350fca967",
+    "old_server_archive_sha256": "26ccddba2e0eafc635c6138f5109debae8c5b96347de6a0c90561373c2131fdd",
+    "failed_ci": [
+      {
+        "run": 42381579767,
+        "job": 128430153601,
+        "source": "59849b0c26be6aee4c79e073e5baef1168043eda",
+        "reason": "API35 JNI library missing before runtime",
+        "artifact_id": 13578990044,
+        "sha256": "e37868205ac0bd94556947a90c9c76588d19d573fa8f4e1e97c63be9684e48ed"
+      },
+      {
+        "run": 42383259832,
+        "job": 128435219393,
+        "source": "18bdeeeef44d9f153273b87be26a251d2f3e7d74",
+        "reason": "API35 foreign Go TLS/cgocallback unknown caller pc",
+        "artifact_id": 13578848425,
+        "sha256": "e71c0cb2bf3547d5ba6d6d060d2b9ca30153a179aabc7012912fceb7a5e0f4a2"
+      }
+    ]
+  },
+  "cleanup": {
+    "owned_local_tests_finished": true,
+    "containers_removed": true,
+    "local_avd_started": false,
+    "provider_rooms_created_here": false,
+    "production_changed": false,
+    "public_catalog_changed": false,
+    "phone_touched": false,
+    "room_object_deletion": "NOT_CLAIMED"
+  }
+}

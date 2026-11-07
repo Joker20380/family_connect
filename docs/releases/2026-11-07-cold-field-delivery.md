@@ -1,7 +1,11 @@
 # Bounded cold field delivery preparation — 7 November 2026
 
-Status: local build/package preparation complete; unsigned/no-locator prebuild,
-NOT a ready-to-install field APK, release-CI PASS or rollout.
+Current status: READY_FOR_CONTROLLED_FIELD_OPERATION. Exact Android release-CI and
+downloaded prebuild55525859, corrected server package3c0487eb and finalization checks
+are accepted. NOT SIGNED / DELIVERED / FIELD_PASS; no ready-to-install locator APK yet.
+[Machine-readable final receipt](2026-11-07-beta120-release-qualification.json).
+The following local pre-CI checkpoint and failed CI sections are retained history;
+the final qualification section selects the only current delivery combination.
 
 ## Accepted baseline
 
@@ -213,3 +217,108 @@ Targeted host regression:26 contracts PASS and real JVM/JNI/Go diagnostic matrix
 after this relevant glue change; retained log SHA256
 e6f93a56ee56c7a46407dd80b0053f2cc1e21d07fd34075936ad02901141c1ed.
 This is not the Android confirmation of the multi-runtime fix.
+
+## Final qualification — READY_FOR_CONTROLLED_FIELD_OPERATION
+
+Client builds42385799106, Android job128442818128, source
+55525859465ff4713196db7206129ad840f67cb3: PASS through the existing full selected
+Android release pipeline: contracts, carrier/packet race, native builds, unit/lint,
+API35, API27, fresh ARM64 build and exact release payload verifier. Readiness wire
+42385799093 also PASS. Client builds Linux/Windows jobs are skipped by the existing
+source-path policy. Separate phase0/Linux-control failures remain outside this Android
+acceptance; this is not whole-repository CI green or a waiver of their failures.
+
+438 Debug +433 Friends JVM cases PASS. Per API,82 instrumentation cases are declared:
+API35 executes48 with34 existing assumption skips; API27 executes46 with36 skips.
+No failures/errors. The previously crashing multi-runtime diagnostic executes and passes
+on both APIs, with AWG calls before and after restricted calls on the same Java thread.
+No new skips/assertion changes are used for acceptance. RU/EN large-text, failed controls
+and legacy voice UI screenshots were downloaded and inspected. Existing durable-storage
+conformance passes; this is not a physical113→120 update. C dispatch additionally passes
+ASan/UBSan and all19 typed argument checks without warning suppressions (test-only3cd8698).
+F is not rerun and no new Telemost/cold/physical-phone success is claimed for this JNI delta.
+
+### Selected client bytes
+
+- ARM64 artifact13580421361, ZIP SHA256
+  `4a44d04badb22cb06e31d09fb2d4b5ec152232f9aad99c96fb2b8168c717f4d3`.
+- Unsigned APK50385121bytes, SHA256
+  `9eae8668544c9b0d968befb82dc655a2594535fe59c4b5af5d55a804fd67348c`.
+- CI verification receipt SHA256
+  `48eab8c49462e3feb8c1d819db037c909ea92129eadc5915f073436275f466bb`.
+- ARM64 JNI SHA256
+  `9f5798fdf17c81a53fb162f110bd2ec8b945181b5e7abc0f6804c662f1a0d11f`;
+  API27/API35 test JNI61f8037a…12198, both from55525859/production tags.
+- Packagecom.familyconnect.app.friends/code120/min27/target35, ARM64 only,
+  all19 Java JNI exports,16KiB alignment, Go1.26.1/NDK28.2.13676358.
+
+The Go VCS stamp says modified=true in the generated CI workspace; the builder's tracked
+runtime-source guard passes and the manifest pins checkout tree
+9944a4afb8b1f5ba805a220531d693e8abfd3635. Generated/untracked CI output also affects that
+Go stamp; do not call the entire generated workspace pristine. Rootd0ae60e6…d281 matches
+113; no locator, synthetic root/identity, private key, owner diagnostic tags or qualification
+transport is supplied in this release payload. Unsigned signature rejection is expected.
+
+Compared with local269a, exactly8/143 ZIP members differ. DEX, Android manifest, trust and
+all other members are byte-identical. Restricted JNI/build metadata include the bounded
+callback fix/new provenance. AWG build metadata changes source/ABI hashes; its Go build-info
+differences are temporary replacement paths; AWG and Codec2 .text sections are byte-identical.
+Codec2 includes build/debug metadata. Chaquopy archives retain identical member sets and
+equal decoded Python3.10 code objects (14 app/140 dependency), with pyc header/frozenset
+serialization order and container metadata differences. Use the qualified CI combination,
+not a mixture with old native/payload. Codec2 source tar/build glue/notices match the CI audio
+manifest and APK. An exact55525859 public-source archive is retained alongside the CI kit.
+
+Debug13579723637, runtime13579319399 and UI13579533973 were also downloaded and their
+GitHub archive digests verified; exact hashes and all mandatory step results are in the
+[final receipt](2026-11-07-beta120-release-qualification.json).
+
+### Selected server bytes and offline finalization
+
+Clean server source3c0487ebd0acdb79149d20dc69a4d63942f891b9, Linuxamd64/CGO0/Go1.26.0.
+Two independent outputs are byte-identical. New immutable archive
+`cold-provision-entry-3c0487e-linux-amd64.tar`,16916480bytes, SHA256
+`5ec255f586398fbf6c17623a83056d73e0ea41c0bd7573945cf17586146d71cb`.
+Manifest SHA256`ffb0c61fbd8647e1f082da3231f990e26271a1a57f0531fb77062c6f0b5c5564`;
+deployment manifest SHA256`2d08912201199e7c699e0439fb12bb10ca54f2efbddf1dbec3572ce6090e4ecd`.
+This package replaces, but does not overwrite, the incorrect old7398858 package.
+
+Eleven isolated package/finalizer tests PASS,0 skips: configuration/custody and real
+root-owned canonical profile read as an unprivileged user; packaged issuer/lifecycle,
+existing authority handlers, bounded RPC/TLS/no-forwarding checks; actual SDK zipalign
+and asset-only finalization with synthetic ephemeral authority. The test binary is built
+with race support from this server source. No provider request or production issuer is used.
+Fixture output dies with the disposable container. Independently, the unmodified real CI
+prebuild and production root pass the now-pinned finalizer input check. Five existing
+synthetic vault/apksigner tests pass without accessing the production key. No final field
+signature or production locator has been created.
+
+### Single subsequent operation, still not authorized here
+
+Confirm recipient readiness and a reachable private document/local-transfer channel before
+entry start; both remain unconfirmed. Do not assume the blocked download page or another
+VPN. One authorization covers current NL1 canonical profile/leaf/route/backend/custody
+preflight, installation/start of only the new bounded entry, one-shot real RU locator,
+binding/expiry/liveness checks, minimal locator-only packaging, existing-key vault signature,
+exact payload/113 signer verification, private handoff and the one ordinary field Connect.
+Install over113 without clearing data/new identity; classify warm if a valid cache exists.
+Record server readiness near Connect; at READY verify DNS, verified HTTPS and egress and
+export minimal diagnostics. Historical emulator EACCES is not assigned to the phone.
+
+Entry lifetime420s; `E=min(seed expiry, trust expiry, leaf notAfter, CRL nextUpdate)`.
+Candidate200s and handoff reserve60s require260s remaining at preparation;
+`connect_not_after=E-200s`. At best preparation finishes byT0+160s and Connect starts by
+T0+220s; earlier trust expiry shortens both. Readiness30s is unchanged. Systemd440s/stop20s
+is cleanup, not validity. All CI/tools/source work is complete beforeT0. Missed window:
+stop own entry and arrange fresh issuance; do not extend TTL or reuse handed-off120 bytes.
+
+Public signed catalog remains113/sequence7/hash2283a89f…1b30; public120 URL returns404.
+Read-only main advanced to1cbe8fbf (still119), paid branch remainse7759534; neither was
+modified by this task. This does not prove absence of every private distribution: recheck
+reservation before handoff. Public118/default113/updater remain unchanged.
+
+Original FAIL manifest still hashes8b4501cf…6961c; old server26ccddba…131fdd and local269a
+are retained. E/F retain their exact scopes and E's unexplained2/2 counters. No local AVD,
+OAuth, rooms, Connect, production change, phone installation or public release occurred.
+Own test processes/containers ended; provider room deletion is not claimed. Native/runtime
+and field-signer/source compatibility are not a performed physical update or FIELD_PASS.
