@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**7 November11:14UTC — CPU stop overridden; packaging defect found and fixed offline.**
+One19877fd API27 NVIDIA/KVM run retains CPU readings without CPU termination; no guard
+stop occurs. It reaches fresh registered identity/two own rooms/verified locator but
+stops before Connect: apksigner exits2 because one one-line password file is supplied
+twice (`--ks-pass` and `--key-pass`), exhausting the stream. Exact offline replay proves
+the cause. The versioned asset packager now omits redundant key-pass and is called by
+the existing runner.39 targeted harness tests pass; real signing/verification/alignment
+of both APKs succeeds offline with unchanged manifest/dex/JNI. Those offline inputs are
+expired, not installed and not a new runtime. Own processes/container/AVD are stopped,
+lock released, room deletion NOT_VERIFIED. Source6eb61a9/JNI/Android PASS unchanged.
+Connect/native snapshot/READY/DNS/HTTPS/egress remain unexecuted. No automatic extra AVD;
+an additional preparation launch needs owner approval under the one-launch constraint.
+[Cause, regression and offline artifact identities](releases/2026-11-07-cold-cpu-observed-runtime.json).
+
 **7 November — owner supersedes CPU thermal stop for one new attempt; runtime pending.**
 Explicit `--observe-cpu-temperature-only` retains CPU raw frames/85°C observations but
 does not abort on that CPU reading for the selected run. Default CPU stopping remains;

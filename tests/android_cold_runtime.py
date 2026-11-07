@@ -216,7 +216,7 @@ def main(work, *, observe_cpu_temperature=False):
         record['synthetic_identity_registered']=True
         record['phase']='FINAL_ASSET_PACKAGING'
         log=(WORK/'asset-packaging.log').open('xb');logs.append(log)
-        package=own_start(lambda: subprocess.Popen([sys.executable,str(AUTH/'pack_assets.py')],stdout=log,stderr=subprocess.STDOUT,start_new_session=True))
+        package=own_start(lambda: subprocess.Popen([sys.executable,str(ROOT/'tests/android_cold_pack_assets.py'),str(WORK)],stdout=log,stderr=subprocess.STDOUT,start_new_session=True))
         record['process_roots'][str(package.pid)]='asset_packaging'
         while package.poll() is None:live();time.sleep(0.25)
         assert package.returncode==0,'ASSET_PACKAGING_FAILED'

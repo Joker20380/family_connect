@@ -2,6 +2,14 @@
 
 ## Current engineering priority / Текущий critical path
 
+**7 November CPU-override attempt finished; packager repair verified offline only.**
+No thermal abort; no Connect: apksigner password-file EOF stops final packaging.
+Remove the redundant key-password read;39 targeted tests plus actual offline signing
+of both APKs pass. No product/native/readiness/TLS change. Runtime is cleaned up, two
+own room objects have unverified deletion, old evidence remains. Additional AVD launch
+requires owner approval; do not auto-repeat. Single Connect/READY/traffic gate remains
+unexecuted. [Exact result](releases/2026-11-07-cold-cpu-observed-runtime.json).
+
 **Selected7 November follow-up: owner cancels CPU-temperature stop for one new run.**
 Use explicit per-run CPU observation-only flag on the same versioned runner. Preserve
 raw CPU evidence; other guards/budgets and product source/JNI/Android PASS remain.

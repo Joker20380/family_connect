@@ -127,3 +127,20 @@ still stop the stand. No BIOS/power/cooling, product or native change. This does
 establish sensor accuracy or safe physical temperature.38 targeted harness tests pass,
 including observed94°C without CPU stop and retained GPU/sensor/monitor/watchdog stops.
 The next runtime outcome remains pending; this source checkpoint is not runtime PASS.
+
+## CPU-observation attempt and offline packager correction
+
+One19877fd run reaches fresh identity/two own rooms/verified locator without a guard
+stop. CPU readings remain recorded (two above85°C frames, reported maximum99°C), not
+used as thermal diagnosis. It ends before final install/Connect on apksigner exit2.
+Exact offline replay identifies password-file EOF: both `--ks-pass` and `--key-pass`
+consume successive lines of the same one-line file. No independent native issue is
+established. The existing asset packager is versioned under tests, invoked explicitly
+by the existing runner, and omits redundant key-pass for the same-password PKCS12 key.
+39 targeted tests pass; both real APKs sign, verify and align successfully offline,
+with manifest/dex/JNI unchanged and only intended asset substitutions. Expired reused
+offline materials are not installed or approved for a new cold runtime. No new rooms
+or AVD were used for the correction. Cleanup is verified; room deletion NOT_VERIFIED.
+Connect/native snapshot/READY/traffic remain NOT_RUN. An additional AVD/preparation
+launch requires owner approval; there is no automatic retry series.
+[Safe receipt, source/artifact identities and limits](2026-11-07-cold-cpu-observed-runtime.json).
