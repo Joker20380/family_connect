@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**7 November — source-only harness repair; runtime remains stopped.**
+Watcher and stage audit now decide from the exact saved temperature frame, including
+raw inputs/labels, per-read times, capture interval and computed maxima. Typed stop
+evidence separates CPU/GPU limits, unavailable sensors, monitor failures and lifetime
+expiry. Missing/unreadable sensors remain fail-closed;85°C/80°C are unchanged. The
+captured as-run scripts remain immutable; their runner is versioned with the corrected
+helper under tests. Preparation180s, instrumentation attempt390s (including the unchanged
+200s product candidate), cleanup120s and overall705s replace the conflicting global180s
+cap. A separate clock watchdog remains responsive to a blocked sampler; forced teardown
+has at most5s authority-stop allowance. Monitor join is bounded6s and preserves the last
+completed frame, without another read.34 targeted mocked/controlled-clock tests pass;
+no sensor observation, AVD/OAuth/rooms/APK/native build/Connect or old suites run.
+Product6eb61a9/JNI17119f00…60c59 and Android JNI PASS are hash-verified unchanged.
+This fixes runner contradictions, neither disproves old94°C nor repairs provisioning.
+[Harness change, budgets and scope](releases/2026-11-07-cold-harness-guards.md).
+
 **6 November22:01UTC — thermal-reader audit; cold runtime explicitly stopped.**
 The exact6096535 as-run reader hashes are verified. Both paths select coretemp/k10temp
 `temp*_input` and divide the raw integer by1000; no max/crit/highest source explains94.

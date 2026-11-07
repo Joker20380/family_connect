@@ -2,6 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected7 November: bounded harness repair complete; NO runtime authorization.**
+One-frame thermal decision/evidence and finite preparation/attempt/cleanup/overall
+budgets are implemented in the existing test-helper lineage and versioned runner.
+34 targeted tests use fixtures, mocked process boundaries and controlled time only.
+Source6eb61a9, JNI17119f00…60c59 and accepted Android JNI PASS are unchanged. The helper
+no longer labels lifetime expiry as temperature failure or rereads temperatures for
+the stop evidence. The overall watchdog covers the full declared attempt window and
+bounded cleanup, and can interrupt a hung sampler/test. No product/readiness/TLS/network
+timeouts change. Cold stand remains STOPPED; no AVD/OAuth/room/APK/Connect, new hardware
+investigation or automatic next task. Old94°C remains unverified, provisioning unfixed.
+[Exact harness scope and limits](releases/2026-11-07-cold-harness-guards.md).
+
+**Previous selected audit, completed atbd0fbe7:**
 **Selected6 November: thermal-reader audit only; all cold runtime attempts STOPPED.**
 Owner supersedes the runtime continuation with read-only verification of the exact
 6096535 readers. Same-input comparison agrees on sensors/units/thresholds; independent

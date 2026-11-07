@@ -1,0 +1,82 @@
+# Cold test harness: one-frame guards and consistent budgets
+
+Source-only continuation of `bd0fbe7db7bc80b1846e26b4c3984e2661f3a3f0`.
+This repairs the test runner, not Family Connect provisioning. It does not establish
+that the historical94°C was false. Hardware investigation and cold runtime stay stopped.
+
+## Scope and preserved evidence
+
+- `tests/android_emulator_guard.py`: existing helper updated, no telemetry service,
+  external collector, system configuration or temperature-threshold change.
+- `tests/android_cold_runtime.py`: versioned copy of the existing local runner, with
+  guard/lifecycle integration only. An explicit existing isolated work directory is
+  required with unused output paths; reused evidence is refused before monitoring or
+  cleanup. Importing it does not start the stand. Private fixture, locator, OAuth
+  helpers and binaries are not copied into Git or produced by this change.
+- The frozen `reduced-load-runtime/local-auth/run_android.py` SHA256 remains
+  `d705a82285cfef1269c01840ba0cd77fe51a72c7e6197bed7b5e9cb38cfb68b6`; its guard remains
+  `e4beb91db4305e9635d1a2c23ae17d7d5efa79d0e228e97416597260d8b29340`.
+- Product source `6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7` is unchanged in carrier,
+  Android and native source. JNI SHA256 remains
+  `17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59`.
+  Accepted provider-free Android JNI PASS artifacts retain their recorded hashes.
+
+## Decision and evidence
+
+Watcher and stage audit call the same serialized sampling path. Each frame contains
+CPU raw millidegree inputs, path/driver/label, converted values, GPU raw degrees/label,
+per-read wall/monotonic timestamps, frame acquisition interval and computed maxima.
+This records sequential acquisition; it does not claim simultaneous physical readings.
+The decision, saved frame and stop callback receive copies of that same frame. Resource
+CPU/memory profiling no longer reads temperatures. Later reads/cleanup cannot replace
+the first stop's evidence. Audit checks its associated resource snapshot under the same
+sampling lock. Optional missing labels are UNKNOWN; missing or failed sensor input is
+not0°C and fails closed.
+
+Stop reasons are `CPU_TEMPERATURE_LIMIT`, `GPU_TEMPERATURE_LIMIT`, `SENSOR_UNAVAILABLE`,
+`MONITOR_ERROR` and `TEST_LIFETIME_EXCEEDED`. CPU85°C/GPU80°C remain the boundaries.
+Stop events are persisted before owned-process termination, separately from resource
+profiling, so a profiling lock cannot block the deadline watchdog. Lifetime evidence
+records its exact deadline, decision time and limit name; its temperature frame is
+explicitly the last completed frame (or absent if no read completed), not a new reading.
+The independent clock watchdog does not wait for the sensor-reader lock.
+
+## Finite test budgets
+
+| Boundary | Limit and origin |
+| --- | --- |
+| Preparation | 180s from monitor creation, including Android boot and pre-Connect setup; existing boot sub-limit120s retained |
+| Attempt | Existing390s instrumentation envelope, from immediately before its launch; includes the unchanged200s MESH candidate and non-candidate harness work |
+| Cleanup | 120s from first entry; repeated entry cannot reset it |
+| Overall watchdog | 705s from monitor creation:180 +390 +120 +15s termination reserve |
+| Monitor join | At most6s within the overall reserve; failure is MONITOR_ERROR, not PASS |
+| Forced exit | Own process groups are killed; exact owned authority stop has a5s maximum allowance, then own runner exits124; final ceiling710s |
+
+An attempt can start only before the preparation deadline, once. Therefore even a
+latest-admitted attempt's full390s envelope ends before overall expiry; a200s candidate
+is no longer cut off by a180s-from-boot guard. These are host test envelopes, not new
+product candidate/readiness budgets. Readiness30s, ConnectivityOrchestrator, TLS,
+certificates, network timeouts and provider/locator lifetimes are untouched. No retries
+or deadline extension is added. Temperature monitoring continues through preparation,
+attempt and cleanup independently of the remaining time. Close interrupts waits, joins
+both helper threads and retains the last completed frame without polling again.
+
+## Verification and remaining limits
+
+`python3 -B -m pytest -q tests/test_android_emulator_guard.py`: **34 PASS**. Controlled
+time and mocked inputs/processes cover66→94 evidence identity, raw-unit conversion,
+absent/malformed/unreadable sensors, separate GPU/CPU/monitor/lifetime reasons, concurrent
+audit/watcher serialization, immutable first-stop evidence, cleanup/join, full attempt
+window near preparation expiry, hung-reader watchdog, runner forced-exit integration
+and refusal to overwrite preserved evidence before starting monitoring or cleanup.
+An owned child created concurrently with a guard stop is registered and terminated;
+subsequent child creation is refused.
+Unwritable stop/evidence files do not prevent owned-process signals or forced exit.
+No test starts a real child process, emulator, authority or provider connection. AST,
+whitespace and retained artifact/source checks also pass.
+
+No60s poll, host/JNI/race/MESH suites, AVD, OAuth, rooms, APK/native build or Connect was
+performed. No runtime acceptance of this repair is claimed. Production/G4, other
+branches, phones, public artifacts, cooling/power and foreign processes are untouched.
+No deployment/rollback or version/catalog change is involved. Future runtime requires
+a separate owner decision; the unused Connect is not consumed or automatically resumed.
