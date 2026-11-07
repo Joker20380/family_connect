@@ -25,15 +25,16 @@ def present(rows, request, now):
     for source in NODES:
         attempt = AuditRecord.objects.filter(action='transports.attempt', details__source=source).order_by('-pk').first()
         snapshot = TransportSnapshot.objects.filter(pk=attempt.target).first() if attempt and attempt.target else None
+        previous = TransportSnapshot.objects.filter(source=source,status__in=('ok','not_installed')).order_by('-pk').first()
         fresh = snapshot and now - timedelta(seconds=90) <= snapshot.observed_at <= now + timedelta(seconds=15)
         status = attempt.details['status'] if attempt else 'unknown'
         text = {'not_installed': 'Контроль AWG/TCP не установлен', 'ok': 'Применение наблюдается',
                 'unavailable': 'Ошибка источника', 'collection_failed': 'Ошибка сбора',
                 'import_failed': 'Ошибка импорта', 'unknown': 'Нет наблюдений применения'}.get(status, 'Неизвестно')
-        if snapshot and not fresh:
+        if status in ('ok','not_installed') and snapshot and not fresh:
             text = 'Наблюдение устарело · применение неизвестно'
         nodes.append(dict(source=source, label=SOURCES[source]['label'], text=text, snapshot=snapshot,
-            fresh=fresh, status=status, attempt=attempt))
+            fresh=fresh, status=status, attempt=attempt, previous=previous))
     for row in rows:
         state = row['subscription']['effective_state'] if row['cohort'] else 'noncohort'
         row.update(state_key=state, state_label=STATES[state], transports=[])
@@ -54,7 +55,14 @@ def present(rows, request, now):
                         text = 'Профиль не зарегистрирован на этом узле'
                 else:
                     text = 'Ожидается сверка актуальной ревизии'
-            row['transports'].append(dict(label=node['label'], text=text, observation=observation))
+            detail = dict(label=node['label'], text=text, observation=observation)
+            if observation:
+                detail.update(applied_time=datetime.fromtimestamp(observation['applied_at'], utc.utc) if observation['applied_at'] else None,
+                    decision_time=datetime.fromtimestamp(observation['decision_observed_at'],utc.utc),
+                    valid_until=datetime.fromtimestamp(observation['valid_until'],utc.utc),
+                    reason={'canonical':'Каноническое решение','lease-valid':'Локальное разрешение действительно',
+                            'lease-expired':'Срок локального разрешения истёк'}.get(observation['reason'],'Ожидается применение'))
+            row['transports'].append(detail)
     selected = rows
     if form.is_valid():
         if form.cleaned_data['state']:

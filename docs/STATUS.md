@@ -7,7 +7,7 @@ The disabled-by-default AWG/TCP kit consumes canonical paid_beta, persists finit
 decisions and verifies real engine application. Native isolated expiry/open-flow/mux,
 restart, stale registration, terminal revoke and partial-restart failure checks pass.
 Local `/subscriptions/` is updated, authenticated and visually checked at1440/390px;
-fresh14:46:34UTC observation:63 devices/1 cohort, all three enforcement nodes **not installed**.
+fresh15:18:29UTC observation:63 devices/1 cohort, all three enforcement nodes **not installed**.
 Production transport restrictions are **not enabled**. Recommended offline/collateral
 policy requires the owner's one enablement decision after ordinary CI/review/merge;
 final receipts belong in the task PR. [Kit, measurements and boundaries](releases/2026-11-07-subscription-transport-enforcement.md).

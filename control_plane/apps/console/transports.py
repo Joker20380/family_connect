@@ -26,11 +26,16 @@ def ingest(value, source):
     require(value['status'] == 'ok' or not value['devices'])
     seen = set()
     for row in value['devices']:
-        fields(row, 'pseudonym expected_revision applied_revision applied_at registered awg_allowed tcp_allowed result')
+        fields(row, 'pseudonym expected_revision applied_revision applied_at registered awg_allowed tcp_allowed result decision_observed_at valid_until reason')
         require(hex_digest(row['pseudonym']) and row['pseudonym'] not in seen)
         seen.add(row['pseudonym'])
         require(type(row['expected_revision']) is int and row['expected_revision'] >= 0)
         require(row['result'] in ('applied', 'pending'))
+        epoch(row['decision_observed_at'])
+        epoch(row['valid_until'])
+        require(row['decision_observed_at'] <= value['observed_at'])
+        require(row['decision_observed_at'] < row['valid_until'] <= row['decision_observed_at']+120)
+        require(row['reason'] in (None,'canonical','lease-valid','lease-expired'))
         require(all(row[name] is None or type(row[name]) is bool for name in ('registered', 'awg_allowed', 'tcp_allowed')))
         if row['applied_revision'] is not None:
             require(type(row['applied_revision']) is int and 0 <= row['applied_revision'] <= row['expected_revision'])

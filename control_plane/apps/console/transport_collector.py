@@ -36,6 +36,8 @@ def collect_transport(source, key, expected_sha256, root=Path('/opt/apps/family_
             binding = {'device': device} if key is None else {'pseudonym': hmac.new(key, device.encode(), hashlib.sha256).hexdigest()}
             result['devices'].append(dict(**binding,
                 expected_revision=cached['decision']['revision'], applied_revision=applied['applied_revision'] if applied else None,
+                decision_observed_at=cached['decision']['observed_at'], valid_until=cached['decision']['valid_until'],
+                reason=applied['reason'] if applied else None,
                 applied_at=applied['observed_at'] if applied else None,
                 registered=applied['registered'] if applied else None,
                 awg_allowed=applied['allowed'] if applied else None, tcp_allowed=applied['allowed'] if applied else None,

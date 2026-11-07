@@ -369,7 +369,9 @@ MESH продолжает существующий `RestrictedReadiness._grant`/
 
 1. Найти HMAC-псевдоним в «Подписки и доступ», проверить canonical snapshot и paid_allow.
 2. Для **каждого** узла раскрыть technical details: expected/applied revision,
-   applied_at, зарегистрирован ли профиль, AWG peer и TCP user readback.
+   applied_at, время/конец lease и причину решения, зарегистрирован ли профиль,
+   AWG peer и TCP user readback. В блоке источника отдельно указаны последняя
+   попытка, последнее успешное наблюдение и SHA проверенного node archive.
 3. Успех требует совпадающей текущей revision и свежих данных. Старше90с, ошибка
    collection/import, pending или отсутствующий источник — **неизвестно**.
    «Не включён» означает отсутствие node kit, а не запрет доступа.

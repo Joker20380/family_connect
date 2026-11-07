@@ -93,6 +93,13 @@ Native fixtures substitute only systemctl orchestration with actual bounded chil
 engine processes; real production systemd watchdog stop timing remains a rollout
 readback, not a newly performed production restart.
 
+Additional63-identity native capacity run PASS:3.725s full apply under0.6CPU gateway
+limit; natural cutoff2.649/2.124/0.141/0.141s, center-loss cutoff3.149/2.456/0.515/0.527s.
+Separate actual **user-systemd transient units**, not production services: SIGSTOP of
+the12s-watchdog process stopped both BindsTo dependents in12.223/12.244s. Native
+engine behavior and supervisor dependency timing are distinct tests, not a claim
+that the production root manager was deliberately crashed or restarted.
+
 ## Recommended profile (owner decision still required)
 
 `paid-transports-v1`: central30s after completion,40s cycle+5s stop; node2s tick,
@@ -142,21 +149,24 @@ Unfenced restart of historical code is not a safe rollback.
 ## Installed local panel and gates
 
 Local http://127.0.0.1:8765/subscriptions/ updated with image
-`sha256:73d6603b016cf6c2cfdc2e71331956fa03a15a4a332bfdedc96e06f9a4b5f8aa`.
+`sha256:54f4144978b4cfc792b548158b4ee0cd1cdc114ec40ef20b873c2eee0e796c53`.
 Existing PostgreSQL/volumes/users/HMAC/env/subscription pin and synthetic registry
 retained, with private consistent pg_dump and rollback image. Existing seed_demo
 refreshed only50 DeviceProjection.observed_at fields; comparison against the restored
 isolated backup confirms every other projection field unchanged. Paid records, release
 metadata, cohort, identities and user/group memberships are unchanged.
 
-Fresh authenticated HTTP200/no-store readback14:46:42UTC: server observed14:46:34UTC,
+Fresh authenticated HTTP200/no-store readback15:18:37UTC: server observed15:18:29UTC,
 63 devices,1 cohort, serving archive4bcbd7ed unchanged. Each RU/NL1/NL2 observation
 reports **not_installed**, not disabled access. This is no production rollout.
-225 panel tests, Django check/migration drift checks and50 focused policy/HTTP/package/
+226 panel tests, Django check/migration drift checks and50 focused policy/HTTP/package/
 collector tests PASS. Browser Chromium157: actual authenticated desktop1440 and390px,
 filters/pagination/long details/focus, synthetic empty/active/grace/expired/revoked/
 noncohort/stale/collection/import-error states PASS; private screenshots visually
 inspected. UI labels distinguish text states, real/demo and latest attempt/data time.
+Review regression: a node error with an old server clock remains an error, never
+relabelled merely stale; previous successful node data is shown separately. Node
+details expose decision/application/lease UTC times, reason and archive provenance.
 
 Hosted applicable checks/review/merge and final source/remote SHA are attached to the
 task PR. Production enablement, physical whitelist/COLD_BOOTSTRAP_GAP, Android natural
