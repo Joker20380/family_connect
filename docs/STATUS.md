@@ -11,6 +11,8 @@ The retained NL1 readback also resolves the current profile to
 the pre-renewal gateway.json. Finalization now fails closed without accepted CI pins
 and rechecks CI→locator-only→signature lineage. Synthetic vault/apksigner5 tests pass;
 no production key or final field signature was used. Client builds42381579767 is running.
+The canonical directory is protected by ProtectSystem=strict, not a per-directory
+read-only bind: the unchanged custody reader intentionally rejects such mounts.
 
 **7 November — local ARM64 field-delivery kit prepared; NOT signed/deployed.**
 Accepted F/application9bf02724/native6eb61a9 remains immutable. Production-tag ARM64

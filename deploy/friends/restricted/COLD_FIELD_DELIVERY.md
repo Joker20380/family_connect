@@ -63,6 +63,9 @@ No listener, ingress route, firewall or working gateway service changes are requ
    `/etc/fc-canonical-pinned-venv/profile.json` must still be that current profile, not a stale
    pre-renewal copy. Stop on any mismatch; do not move/copy a gateway key or certificate
    to another host, change canonical locators or substitute the retired gateway.
+   `ProtectSystem=strict` already protects `/etc`; do not add a bind/read-only mount
+   at the canonical profile directory. The unchanged native custody reader rejects
+   mounts at/below that boundary, including a `ReadOnlyPaths` bind of the directory.
 3. Stage only the new paths listed in `cold-provision-deployment.json`, with exact
    accepted package hashes. Install the new template unit, **do not enable** it.
    Parent `cold-provision/run` is owned by existing `family-restricted`, mode0700.

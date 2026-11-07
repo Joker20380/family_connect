@@ -162,3 +162,6 @@ Finalizer now pins the CI prebuild/receipt/source/native/anchor and independentl
 that the prepared APK differs by only the locator before accepting a signature. Pins
 remain PENDING until downloaded acceptance. Five synthetic KeePassXC→memfd→apksigner
 tests pass on the host; fixture packaging passes with real zipalign in isolation.
+The corrected unit uses ProtectSystem=strict without binding the canonical directory:
+the existing custody reader rejects mounts at/below that path. A package configuration
+test exercises a real root-owned0640 canonical profile in an isolated container.

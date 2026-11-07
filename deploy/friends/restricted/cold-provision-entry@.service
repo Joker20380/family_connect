@@ -13,6 +13,6 @@ TimeoutStopSec=20
 UMask=0077
 NoNewPrivileges=true
 ProtectSystem=strict
-ReadOnlyPaths=/opt/apps/family_connect/friends-restricted /etc/fc-canonical-pinned-venv
+ReadOnlyPaths=/opt/apps/family_connect/friends-restricted
 ReadWritePaths=/opt/apps/family_connect/cold-provision/run
 PrivateTmp=true

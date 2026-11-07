@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import tempfile
 import threading
 import zipfile
 from http.server import ThreadingHTTPServer
@@ -23,6 +24,28 @@ def test_deployment_uses_retained_nl1_canonical_profile_without_copying_keys():
     assert 'User='+evidence['reader_user'] in unit
     assert 'friends-restricted/gateway.json' not in unit
     assert all('canonical' not in path for path in deployment['new_paths'])
+    assert 'ProtectSystem=strict' in unit
+    assert not any('/etc/fc-canonical-pinned-venv' in line for line in unit.splitlines()
+                   if line.startswith(('ReadOnlyPaths=', 'BindReadOnlyPaths=', 'BindPaths=')))
+
+
+def test_packaged_entry_reads_real_canonical_profile_without_bind_mount(packaged_authority):
+    if os.geteuid() != 0:
+        pytest.skip('root-owned canonical fixture requires isolated root container')
+    root, package, _ = packaged_authority
+    with tempfile.TemporaryDirectory(prefix='cold-canonical-', dir='/run') as temporary:
+        parent = Path(temporary)
+        parent.chmod(0o750)
+        os.chown(parent, 0, 65534)
+        profile = parent/'profile.json'
+        profile.write_bytes((root/'gateway.json').read_bytes())
+        profile.chmod(0o640)
+        os.chown(profile, 0, 65534)
+        command = [str(package/'cold-provision-entry'), '--check', '--profile', str(profile),
+                   '--anchor', str(root/'anchor.pub'), '--state', str(root/'not-created'), '--node', 'nl-amsterdam-1']
+        result = subprocess.run(command, capture_output=True, timeout=5)
+        assert result.returncode == 0 and b'CONFIGURATION_VALID_NO_PROVIDER_CALL' in result.stdout
+        assert not (root/'not-created').exists()
 
 
 def test_packager_rejects_uncommitted_source(tmp_path, monkeypatch):
