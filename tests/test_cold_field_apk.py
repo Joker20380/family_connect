@@ -1,8 +1,17 @@
+import base64
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import subprocess
+import time
+from types import SimpleNamespace
 import zipfile
 
 import pytest
 
-from scripts.prepare_cold_field_apk import check_window, compare_payload, entries
+from scripts.prepare_cold_field_apk import check_window, compare_payload, entries, prepare
 
 
 def test_window_keeps_candidate_and_handoff_budgets():
@@ -41,3 +50,51 @@ def test_duplicate_zip_entries_rejected(tmp_path):
             archive.writestr('classes.dex', b'two')
     with pytest.raises(ValueError):
         entries(apk)
+
+
+def test_real_zipalign_fresh_asset_packaging_offline(tmp_path):
+    prebuild, package, zipalign = (os.environ.get(name) for name in ('FC_FIELD_PREBUILD', 'FC_ENTRY_PACKAGE', 'FC_ZIPALIGN'))
+    if not all((prebuild, package, zipalign)):
+        pytest.skip('requires accepted unsigned APK, packaged verifier, real SDK zipalign')
+    root = Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location('offline_only_authority', root/'tests/fixtures/mobile_bootstrap/provision_backend.py')
+    fixture = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(fixture)
+    authority = tmp_path/'SYNTHETIC_NOT_FOR_DELIVERY'
+    authority.mkdir()
+    fixture.prepare(authority)
+    profile = json.loads((authority/'gateway.json').read_bytes())
+    (authority/'gateway.pem').write_text(profile['certificate'])
+    from datetime import datetime, timezone
+    now = int(time.time())
+    timestamp = lambda value: datetime.fromtimestamp(value, timezone.utc).isoformat()
+    seed = dict(version=1, family=profile['family'], issued_at=timestamp(now-1), expires_at=timestamp(now+360),
+                seeds=[dict(transport='telemost-webrtc', join_url='https://telemost.yandex.ru/j/12345678901234', gateway=profile['gateway'])])
+    (authority/'seed.json').write_text(json.dumps(seed))
+    issued = subprocess.run(['python3', '-I', str(Path(package)/'cold-provision-locator.pyz'),
+                             '--database', str(authority/'access.db'), '--material', str(authority),
+                             '--certificate', str(authority/'gateway.pem'), '--state', str(authority),
+                             '--node', 'nl-amsterdam-1', '--sequence', '1'], capture_output=True, timeout=10)
+    assert issued.returncode == 0, issued.stderr.decode()
+    locator = authority/'locator.json'
+    expiry = json.loads(base64.b64decode(json.loads(locator.read_bytes())['payload']))['expires_at']
+    (authority/'ready.json').write_text(json.dumps(dict(phase='LOCATOR_VERIFIED_SEED_CONNECTED', observed_at=now,
+        expires_at=expiry, locator_sha256=hashlib.sha256(locator.read_bytes()).hexdigest())))
+    unsigned = authority/'SYNTHETIC-UNSIGNED-NOT-FOR-DELIVERY.apk'
+    with zipfile.ZipFile(prebuild) as source, zipfile.ZipFile(unsigned, 'x') as target:
+        for item in source.infolist():
+            raw = (authority/'anchor.pub').read_bytes() if item.filename == 'assets/control-anchor.pub' else source.read(item.filename)
+            target.writestr(item, raw)
+    receipt = authority/'fixture-verification.json'
+    receipt.write_text(json.dumps(dict(unsigned=True, package='com.familyconnect.app.friends', version_code=120,
+                                      apk_sha256=hashlib.sha256(unsigned.read_bytes()).hexdigest())))
+    args = SimpleNamespace(unsigned=unsigned, verification=receipt, locator=locator, ready=authority/'ready.json',
+        anchor=authority/'anchor.pub', verifier=Path(package)/'cold-provision-entry', node='nl-amsterdam-1',
+        zipalign=Path(zipalign), output=authority/'final', handoff_seconds=60)
+    result = prepare(args)
+    assert result['signed'] is False and result['distributed'] is False
+    output = next(args.output.glob('*.apk'))
+    assert subprocess.run([zipalign, '-c', '-P', '16', '4', str(output)], capture_output=True, timeout=10).returncode == 0
+    assert entries(output)['assets/provisioning/nl-amsterdam-1.json'] == locator.read_bytes()
+    with pytest.raises(FileExistsError):
+        prepare(args)

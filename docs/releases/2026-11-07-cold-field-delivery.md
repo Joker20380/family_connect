@@ -63,6 +63,12 @@ restricted destinations/RPCs/response bound/no redirect, untrusted TLS/wrong hos
 Existing two framing/no-forwarding checks also pass. Three finalizer tests cover
 freshness/budget, payload preservation across signature and duplicate ZIP rejection.
 These use disposable provider injection, not another Telemost/Android runtime or F rerun.
+An additional offline finalizer test uses the actual120 APK layout, packaged Go verifier,
+disposable public trust/locator and real SDK zipalign: four finalizer cases PASS, no skips.
+All synthetic test output is confined to a disposable container/tmpfs and destroyed;
+no fixture-signed/root-swapped bytes enter the field candidate. The server packager now
+requires a fully clean committed worktree before and after packaging, including untracked
+source, so source-clean evidence cannot hide dirty Go VCS metadata.
 
 The exact **unapplied** host/path/service/custody/rollback manifest and executable
 assets-only workflow are in

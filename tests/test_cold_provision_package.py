@@ -13,6 +13,16 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_packager_rejects_uncommitted_source(tmp_path, monkeypatch):
+    from scripts import package_cold_provision as builder
+    subprocess.run(['git', 'init', '-q', str(tmp_path)], check=True)
+    (tmp_path/'untracked').write_text('not an accepted checkpoint')
+    monkeypatch.setattr(builder, 'ROOT', tmp_path)
+    with pytest.raises(ValueError, match='clean committed source'):
+        builder.build(tmp_path/'output', tmp_path/'not-a-compiler')
+    assert not (tmp_path/'output').exists()
+
+
 @pytest.fixture
 def packaged_authority(tmp_path):
     package = os.environ.get('FC_ENTRY_PACKAGE')

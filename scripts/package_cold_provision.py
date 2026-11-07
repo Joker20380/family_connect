@@ -10,7 +10,14 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def source_identity():
+    if subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=normal'], cwd=ROOT).strip():
+        raise ValueError('clean committed source required')
+    return subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
+
+
 def build(output, go):
+    revision = source_identity()
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=False)
     subprocess.run([str(go), 'build', '-trimpath', '-o', str(output/'cold-provision-entry'),
@@ -33,14 +40,12 @@ def build(output, go):
     entry_sources = {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
                      for path in sorted((ROOT/'carrier').rglob('*'))
                      if path.is_file() and (path.suffix in ('.go', '.mod', '.sum'))}
-    clean = not subprocess.check_output(['git', 'status', '--porcelain', '--', 'carrier',
-                                        'scripts/cold_provision_locator.py', 'scripts/package_cold_provision.py',
-                                        'scripts/prepare_cold_field_apk.py', 'deploy/friends/restricted/COLD_FIELD_DELIVERY.md',
-                                        'deploy/friends/restricted/cold-provision-entry@.service',
-                                        'deploy/friends/restricted/cold-provision-deployment.json'], cwd=ROOT).strip()
-    manifest = {'source': subprocess.check_output(['git','rev-parse','HEAD'], cwd=ROOT, text=True).strip(),
+    if source_identity() != revision:
+        raise ValueError('source moved during packaging')
+    manifest = {'source': revision,
+                'builder_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                 'target': subprocess.check_output([str(go), 'env', 'GOOS', 'GOARCH', 'CGO_ENABLED'], cwd=ROOT/'carrier', text=True).splitlines(),
-                'source_clean': clean, 'carrier_source_files': entry_sources,
+                'source_clean': True, 'carrier_source_files': entry_sources,
                 'source_files': {name: hashlib.sha256(raw).hexdigest() for name,raw in sources.items()},
                 'artifacts': {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in output.iterdir()},
                 'authority': 'existing restricted issuer; no keys, DB, test fixtures or OAuth in package',
