@@ -47,7 +47,23 @@ public class NetworkProbe {
         selected=provisioning.provisioningDiagnostic();
         require(selected.get("handle").getAsLong()==2&&!selected.get("available").getAsBoolean()&&!selected.get("bind_available").getAsBoolean()&&selected.get("bind_result").getAsString().equals("NETWORK_UNAVAILABLE"));
         require(new ChatNetworkAndroid(context).provisioningResolver().equals("192.0.2.53:53"));
+        cell.alive=true;cell.caps.foreground=false;
+        context.manager.networks=new Network[]{cell,vpn,wifi};
+        ChatNetworkAndroid foreground=new ChatNetworkAndroid(context);
+        foreground.provisioningResolver();
+        require(foreground.provisioningDiagnostic().get("handle").getAsLong()==1);
+        require(foreground.protect(45)&&wifi.bound==1);
+        cell.caps.foreground=true;wifi.caps.foreground=false;
+        require(!foreground.protect(46)&&cell.bound==3);
+        ChatNetworkAndroid activeCellular=new ChatNetworkAndroid(context);
+        activeCellular.provisioningResolver();
+        require(activeCellular.provisioningDiagnostic().get("handle").getAsLong()==2);
+        require(activeCellular.protect(47)&&cell.bound==4);
+        cell.caps.notRestricted=false;
+        require(!activeCellular.protect(48)&&cell.bound==4);
+        try{new ChatNetworkAndroid(context).provisioningResolver();throw new AssertionError();}catch(java.io.IOException expected){}
         System.out.println("PASS: actual ChatNetworkAndroid, handoff before/during/after ready, TUN excluded, fresh network per call, no lost-network fallback into VPN. Android stubs only; no physical cellular proof.");
         System.out.println("PASS: provisioning uses physical-network DNS and pins that Network for its lifetime; lost pinned Network fails closed, a new request discovers afresh.");
+        System.out.println("PASS: background/restricted networks cannot be pinned; eligible cellular remains usable; demotion fails closed without route fallback.");
     }
 }

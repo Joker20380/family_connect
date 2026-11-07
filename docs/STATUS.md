@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**7 November — bind cause localized; minimal selection repair, confirmation pending.**
+Diagnostic Connect B preserves NETWORK_BIND/SOCKET/EACCES(13), after successful FD_DUP,
+before TLS. Selected CELLULAR lacks FOREGROUND; WIFI has it. API27 netd denies this
+background network to the ordinary app. Provisioning now filters unrestricted foreground
+physical networks before pinning, and fails closed on demotion. No added permission,
+forced WiFi, resolver override or security/budget change. The targeted replay fails on
+old Java and passes on the correction, including eligible cellular and no fallback.
+Managed APK confirmation next; accepted JNI/Android JNI PASS unchanged. B resources
+are stopped; room deletion unverified. No bundle/READY/traffic yet; no public rollout.
+[Cause and exact B artifacts](releases/2026-11-07-cold-connect-b.json).
+
 **7 November — real cold Connect now reaches Go; socket bind cause under investigation.**
 Owner permits evidence-driven corrective runs without new consent; CPU observe-only
 continues. Fixed packaging passes in the stand. The cold AutomaticConnection fails in

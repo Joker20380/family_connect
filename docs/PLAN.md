@@ -2,6 +2,14 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Active7 November: confirm foreground-network selection correction in cold runtime.**
+B localizes Android NETWORK_BIND EACCES(13), not FD duplication: the first enumerated
+CELLULAR is background and therefore permission-gated by API27. Filter unrestricted
+foreground physical candidates and retain pinned-network fail-closed semantics. Targeted
+before/after Java regression passes; real fix confirmation remains pending. Build managed
+APK only with accepted JNI; fresh cold inputs and existing runner, CPU observe-only.
+[B result and source correction](releases/2026-11-07-cold-connect-b.json).
+
 **Active7 November: localize and repair proven Android socket bind failure.**
 The owner removes the single-launch approval constraint; continue evidence-driven
 diagnostic/fix/confirmation runs with CPU observe-only and unchanged security/budgets.

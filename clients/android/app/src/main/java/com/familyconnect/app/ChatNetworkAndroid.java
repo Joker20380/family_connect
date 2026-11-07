@@ -55,7 +55,7 @@ public final class ChatNetworkAndroid {
             NetworkCapabilities caps=manager.getNetworkCapabilities(provisioningNetwork);
             bindAt=android.os.SystemClock.elapsedRealtime();
             bindOperation="NETWORK_CHECK";bindError="NONE";bindErrno=0;
-            bindAvailable=caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+            bindAvailable=provisioningEligible(caps);
             if(!bindAvailable){bindResult="NETWORK_UNAVAILABLE";return false;}
             bindOperation="FD_DUP";
             try(ParcelFileDescriptor socket=ParcelFileDescriptor.fromFd(fd)){bindOperation="NETWORK_BIND";provisioningNetwork.bindSocket(socket.getFileDescriptor());bindResult="BOUND";return true;}
@@ -85,12 +85,19 @@ public final class ChatNetworkAndroid {
 
     public boolean protect(int fd) { return bindSocket(fd); }
 
+    private static boolean provisioningEligible(NetworkCapabilities caps){
+        return caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
+                &&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                &&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
+                &&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND);
+    }
+
     synchronized String provisioningResolver()throws IOException{
         ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
         if(manager!=null)for(Network network:manager.getAllNetworks()){
             NetworkCapabilities caps=manager.getNetworkCapabilities(network);
             android.net.LinkProperties link=manager.getLinkProperties(network);
-            if(caps==null||link==null||!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)||!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET))continue;
+            if(!provisioningEligible(caps)||link==null)continue;
             for(java.net.InetAddress address:link.getDnsServers())if(address instanceof java.net.Inet4Address){provisioningNetwork=network;resolverClass=address.isLoopbackAddress()?"LOOPBACK":address.isSiteLocalAddress()?"PRIVATE_IPV4":"OTHER_IPV4";provisioningType=caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)?"CELLULAR":caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)?"WIFI":caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)?"ETHERNET":"OTHER";return address.getHostAddress()+":53";}
         }
         throw new IOException("Physical IPv4 resolver unavailable");
@@ -101,6 +108,8 @@ public final class ChatNetworkAndroid {
         NetworkCapabilities caps=manager==null||provisioningNetwork==null?null:manager.getNetworkCapabilities(provisioningNetwork);
         value.addProperty("type",provisioningType);value.addProperty("handle",provisioningNetwork==null?0:provisioningNetwork.getNetworkHandle());
         value.addProperty("available",caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET));
+        value.addProperty("foreground",caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND));
+        value.addProperty("not_restricted",caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED));
         value.addProperty("resolver",provisioningNetwork==null?"NONE":"NETWORK_IPV4_GO_RESOLVER");
         value.addProperty("resolver_class",resolverClass);
         value.addProperty("observed_ms",android.os.SystemClock.elapsedRealtime());value.addProperty("bind_ms",bindAt);value.addProperty("bind_available",bindAvailable);value.addProperty("bind_result",bindResult);
