@@ -211,7 +211,7 @@ def serve_origin():
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     context.minimum_version = context.maximum_version = ssl.TLSVersion.TLSv1_3
     context.load_cert_chain(ROOT / 'tls.crt', ROOT / 'tls.key')
-    server.socket = context.wrap_socket(server.socket, server_side=True)
+    server.socket = context.wrap_socket(server.socket, server_side=True, do_handshake_on_connect=False)
     persist()
     threading.Thread(target=dns, daemon=True).start()
     server.serve_forever()

@@ -1,8 +1,10 @@
 """Gateway decision cache and bounded application, not a subscription authority."""
 import fcntl
+from contextlib import contextmanager
 import json
 import os
 from pathlib import Path
+import re
 import socket
 import subprocess
 import time
@@ -62,6 +64,15 @@ class Gateway:
             raise ValueError('INVALID_GATEWAY_POLICY')
         self.node = config['node']
 
+    @contextmanager
+    def lock(self, name='registration.lock'):
+        with (self.root/name).open('a') as handle:
+            fcntl.flock(handle, fcntl.LOCK_EX)
+            yield
+
+    def serialized(self):
+        return self.lock('application.lock')
+
     def load(self):
         value = read(self.path)
         if (set(value) != {'schema', 'node', 'records', 'observed_at'} or value['schema'] != 1
@@ -69,6 +80,10 @@ class Gateway:
                 or len(value['records']) > 10000 or self.clock() + policy.CLOCK_SKEW_SECONDS < value['observed_at']):
             raise ValueError('INVALID_GATEWAY_CACHE')
         for device, cached in value['records'].items():
+            if (set(cached) != {'decision', 'boot', 'deadline', 'applied', 'prepared'}
+                    or cached['prepared'] is not None and
+                    (type(cached['prepared']) is not str or not re.fullmatch('[a-f0-9]{64}', cached['prepared']))):
+                raise ValueError('INVALID_MEMBERSHIP_CACHE')
             decision = cached['decision']
             if device != decision['device']:
                 raise ValueError('INVALID_GATEWAY_BINDING')
@@ -80,6 +95,8 @@ class Gateway:
         decision = cached['decision']
         if not decision['allowed']:
             return False
+        if not decision['cohort']:
+            return not cached.get('prepared')
         return (cached['boot'] == boot_id() and self.clock() < decision['valid_until']
                 and self.monotonic() < cached['deadline'])
 
@@ -96,10 +113,20 @@ class Gateway:
                 continue
             state['records'][decision['device']] = dict(decision=decision, boot=boot_id(),
                 deadline=self.monotonic() + min(policy.LEASE_SECONDS, max(0, decision['valid_until'] - self.clock())),
-                applied=old.get('applied') if old else None)
+                applied=old.get('applied') if old else None, prepared=old.get('prepared') if old else None)
         state['observed_at'] = max(state['observed_at'], int(self.clock()))
         write(self.path, state)
         return state
+
+    def prepare(self, envelope, token):
+        if not isinstance(token, str) or not re.fullmatch('[a-f0-9]{64}', token) or len(envelope['decisions']) != 1:
+            raise ValueError('INVALID_MEMBERSHIP_PREPARATION')
+        state = self.accept(envelope)
+        cached = state['records'][envelope['decisions'][0]['device']]
+        if cached['decision']['cohort']:
+            raise ValueError('MEMBERSHIP_OPERATION_CONFLICT')
+        cached['prepared'] = token
+        write(self.path, state)
 
     def peer_allowed(self, public):
         state = self.load()
@@ -118,6 +145,26 @@ class Gateway:
             observed_at=int(self.clock()), result='error'))
 
     def apply(self, *, starting=False):
+        if starting:
+            with self.lock():
+                self.plan()
+            return
+        with self.serialized():
+            self.apply_serialized()
+
+    def apply_serialized(self):
+        for attempt in range(12):
+            with self.lock():
+                state, peers, observations, changed = self.plan()
+            if changed:
+                self.run(['systemctl', 'restart', SERVICES[1]])
+            with self.lock():
+                if self.readback(state, peers, observations):
+                    return
+            notify('WATCHDOG=1')
+        raise ValueError('APPLICATION_DID_NOT_CONVERGE')
+
+    def plan(self):
         state = self.load()
         tcp_path = self.root.parent / 'friends-tcp/server.json'
         info = tcp_path.stat()
@@ -145,19 +192,20 @@ class Gateway:
                 clients.append(expected)
                 changed = True
             observations[device] = dict(expected_revision=decision['revision'], applied_revision=None,
-                observed_at=int(self.clock()), registered=registered, allowed=None, result='pending',
-                reason='canonical' if not decision['allowed'] else 'lease-expired' if not allowed else 'lease-valid')
+                observed_at=int(self.clock()), registered=registered, allowed=registered and allowed, result='pending',
+                reason='membership-pending' if cached.get('prepared') and not decision['cohort'] else
+                    'canonical' if not decision['allowed'] else 'noncohort' if not decision['cohort'] else
+                    'lease-expired' if not allowed else 'lease-valid')
         if changed:
             write(tcp_path, config, info.st_mode & 0o777)
             os.chown(tcp_path, info.st_uid, info.st_gid)
-        if starting:
-            return
-        if changed:
-            self.run(['systemctl', 'restart', SERVICES[1]])
+        return state, peers, observations, changed
+
+    def readback(self, state, peers, observations):
         live = self.run([str(self.root / 'awg'), 'show', self.gateway.IFACE, 'peers']).decode().split()
         for device, cached in state['records'].items():
             decision, observation = cached['decision'], observations[device]
-            public, allowed = decision['public_key'], self.allowed(cached)
+            public, allowed = decision['public_key'], observation['allowed']
             if public in peers:
                 if allowed:
                     self.gateway.add_peer(public, peers[public])
@@ -168,15 +216,22 @@ class Gateway:
             serialized = json.dumps(runtime)
             tcp_present = decision['tcp_id'] in serialized and device+'@family.test' in serialized
             awg_present = public in self.run([str(self.root / 'awg'), 'show', self.gateway.IFACE, 'peers']).decode().split()
-            expected = observation['registered'] and allowed
+            expected = observation['allowed']
             if tcp_present != expected or awg_present != expected:
+                if any(observations[key]['allowed'] != (observations[key]['registered'] and self.allowed(value))
+                       for key, value in state['records'].items()):
+                    return False
                 raise ValueError('ENGINE_READBACK_MISMATCH')
             observation.update(applied_revision=decision['revision'], allowed=expected, result='applied')
             cached['applied'] = observation
+        if any(observations[key]['allowed'] != (observations[key]['registered'] and self.allowed(value))
+               for key, value in state['records'].items()):
+            return False
         state['observed_at'] = int(self.clock())
         write(self.path, state)
         write(self.root/'transport-attempt.json', dict(schema=1, node=self.node,
             observed_at=int(self.clock()), result='applied'))
+        return True
 
 
 def notify(value):
@@ -190,9 +245,7 @@ def notify(value):
 def watch(gateway, *, run=execute):
     engine = Gateway(gateway, run=run)
     try:
-        with (gateway.ROOT / 'registration.lock').open('a') as lock:
-            fcntl.flock(lock, fcntl.LOCK_EX)
-            engine.apply(starting=True)
+        engine.apply(starting=True)
         notify('READY=1')
         for attempt in range(15):
             try:
@@ -205,9 +258,7 @@ def watch(gateway, *, run=execute):
         else:
             raise ValueError('ENGINE_START_TIMEOUT')
         while True:
-            with (gateway.ROOT / 'registration.lock').open('a') as lock:
-                fcntl.flock(lock, fcntl.LOCK_EX)
-                engine.apply()
+            engine.apply()
             notify('WATCHDOG=1')
             time.sleep(policy.TICK_SECONDS)
     except BaseException:

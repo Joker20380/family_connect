@@ -1,6 +1,21 @@
 # Текущее состояние / Current state
 
-**7 November — SUBSCRIPTION-TRANSPORT-ENFORCEMENT: isolated kit + installed local view.**
+**7 November — SUBSCRIPTION-ENFORCEMENT-FIX: current, production disabled.**
+PR4 is merged at `1cbe8fbf0de1924e9326125e1932078b5b1f56ee`, but its v1 archive
+`d6e5dd679dec671dd9ec992f23057cd869580aa71ec34f8ad3c19f5f1eb89f3c` must **not** be
+enabled. Independent review reproduced restart/preflight lock inversion and deadline
+crossing; both have deterministic regressions. v2 separates application serialization
+from preflight locking and converges time transitions without hiding engine failures.
+Noncohort no longer expires with central paid-controller outages; first enrollment
+requires durable preparation/ACK of every serving node before canonical commit.
+Node corruption/watchdog/engine failures still have explicit local collateral effects.
+The existing local panel/layout, paid108/119, APK119 and MESH boundary are preserved.
+Final packaged real-systemd/native checks, local readback and ordinary CI/merge receipts
+are recorded in the [fix report](releases/2026-11-07-subscription-enforcement-fix.md)
+and its PR. No production enablement, real ledger/cohort/identity/period mutation,
+G4/renewal or cold-provisioning work. Stop at the corrected delivery decision.
+
+**Historical7 November — SUBSCRIPTION-TRANSPORT-ENFORCEMENT: PR4, kit superseded.**
 PR1–3 are closed; PR3/main `a258e93347ba34fb876cc21f6bcae628e9b6c7b8` installed
 `android-paid-108-119-v1`. This task does not reopen Android or alter that policy.
 The disabled-by-default AWG/TCP kit consumes canonical paid_beta, persists finite

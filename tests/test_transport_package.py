@@ -16,6 +16,8 @@ def test_closed_overlay_modules_and_tamper(tmp_path, monkeypatch):
     with zipfile.ZipFile(baseline) as package:
         inputs = {name: package.read(name) for name in package.namelist()}
     inputs['friends_http.py'] = inputs['friends_http.py'].replace(kit.API_INSERT, b'')
+    inputs['control/friends/paid_beta.py'] = inputs['control/friends/paid_beta.py'].replace(kit.PAID_INSERT, b'')
+    inputs.pop('control/friends/transport_membership.py', None)
     inputs.pop('control/friends/transport_policy.py', None)
     baseline.unlink()
     kit.archive(baseline, inputs)
@@ -26,8 +28,11 @@ def test_closed_overlay_modules_and_tamper(tmp_path, monkeypatch):
     output = tmp_path/'kit'
     receipt = kit.build(baseline, gateway, output)
     changed = {name for name, digest in receipt['http_after'].items() if receipt['http_before'].get(name) != digest}
-    assert changed == {'friends_http.py', 'control/friends/transport_policy.py', 'control/friends/transport_reconcile.py'}
-    assert receipt['http_after']['control/friends/paid_beta.py'] == receipt['http_before']['control/friends/paid_beta.py']
+    assert changed == {'friends_http.py', 'control/friends/transport_policy.py', 'control/friends/transport_reconcile.py',
+                       'control/friends/transport_membership.py', 'control/friends/paid_beta.py'}
+    with zipfile.ZipFile(output/'paid-operator.pyz') as operator, zipfile.ZipFile(output/'friends-http.pyz') as http:
+        for name in ('paid_beta','transport_policy','transport_membership'):
+            assert operator.read('control/friends/'+name+'.py') == http.read('control/friends/'+name+'.py')
     assert not receipt['production_enabled']
     code = '''import json,sys
 sys.path.insert(0,sys.argv[1])
@@ -37,7 +42,7 @@ print(json.dumps(dict(profile=transport_policy.PROFILE,lease=transport_policy.LE
 '''
     process = subprocess.run([sys.executable, '-I', '-B', '-c', code, str(output/'paid-transport.pyz')],
                              cwd=tmp_path, capture_output=True, text=True, check=True)
-    assert json.loads(process.stdout) == dict(profile='paid-transports-v1', lease=120)
+    assert json.loads(process.stdout) == dict(profile='paid-transports-v2', lease=120)
     original = gateway.read_bytes()
     gateway.write_bytes(original+b'tampered')
     with pytest.raises(ValueError, match='OBSERVED_SERVING_INPUTS_REQUIRED'):

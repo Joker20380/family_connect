@@ -279,6 +279,12 @@ def apply_event(database, support, event_type, event_id, reference, *, now, peri
                   previous_state=effective.state if effective is not None else None, new_state=new_state,
                   period_start=period_start, paid_until=paid_until, grace_until=grace_until,
                   reference_hash=reference_hash, payload_hash=payload_hash, applied_at=now, result='APPLIED')
+    if previous is None:
+        registry_path = next(row[2] for row in database.execute('PRAGMA database_list') if row[1] == 'main')
+        transport_config = Path(registry_path).parent/'transport-enforcement.json'
+        if transport_config.exists() or transport_config.is_symlink():
+            from .transport_membership import prepare
+            prepare(database, device['device'], payload_hash, now)
     database.execute('INSERT INTO paid_beta_events VALUES (:event_id,:device,:event_type,:occurred_at,:previous_state,'
         ':new_state,:period_start,:paid_until,:grace_until,:reference_hash,:payload_hash,:applied_at,:result)', record)
     database.execute('INSERT INTO paid_beta_subscriptions VALUES (?,?,?,?,?,?,?,?,?,?) '

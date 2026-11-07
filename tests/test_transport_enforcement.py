@@ -171,12 +171,12 @@ def test_partial_restart_failure_does_not_restore_persisted_user(engine, registr
     assert gateway.load()['records'][initial['device']]['applied'] is None
 
 
-def test_noncohort_is_not_unpaid_but_old_membership_is_not_an_infinite_allow(engine, registry):
+def test_noncohort_survives_controller_outage_without_ignoring_known_denial(engine, registry):
     gateway, current, live, initial = engine
     gateway.accept(envelope(registry))
     assert gateway.peer_allowed(initial['public_key'])
     current[0] += policy.LEASE_SECONDS
-    assert not gateway.peer_allowed(initial['public_key'])
+    assert gateway.peer_allowed(initial['public_key'])
     assert gateway.load()['records'][initial['device']]['decision']['state'] == 'noncohort'
     gateway.accept(envelope(registry, current[0]))
     assert gateway.peer_allowed(initial['public_key'])

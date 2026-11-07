@@ -7,7 +7,7 @@ import time
 
 
 def collect_transport(source, key, expected_sha256, root=Path('/opt/apps/family_connect/friends-awg')):
-    result = dict(schema=1, source=source, observed_at=int(time.time()), status='unavailable',
+    result = dict(schema=2, source=source, observed_at=int(time.time()), status='unavailable',
                   runtime_sha256=None, devices=[])
     try:
         archive, state_path = root/'paid-transport.pyz', root/'transport-state.json'
@@ -28,7 +28,7 @@ def collect_transport(source, key, expected_sha256, root=Path('/opt/apps/family_
         config = json.loads((root/'transport-enforcement.json').read_text())
         result['observed_at'] = int(time.time())
         if (attempt != dict(schema=1, node=source, observed_at=attempt.get('observed_at'), result='applied')
-                or config != dict(schema=1, profile='paid-transports-v1', node=source, enabled=True)):
+                or config != dict(schema=1, profile='paid-transports-v2', node=source, enabled=True)):
             return result
         result['runtime_sha256'] = digest
         for device, cached in state['records'].items():
@@ -36,7 +36,9 @@ def collect_transport(source, key, expected_sha256, root=Path('/opt/apps/family_
             binding = {'device': device} if key is None else {'pseudonym': hmac.new(key, device.encode(), hashlib.sha256).hexdigest()}
             result['devices'].append(dict(**binding,
                 expected_revision=cached['decision']['revision'], applied_revision=applied['applied_revision'] if applied else None,
-                decision_observed_at=cached['decision']['observed_at'], valid_until=cached['decision']['valid_until'],
+                managed=bool(cached['decision']['cohort'] or cached.get('prepared')),
+                decision_observed_at=cached['decision']['observed_at'],
+                valid_until=cached['decision']['valid_until'] if cached['decision']['cohort'] else None,
                 reason=applied['reason'] if applied else None,
                 applied_at=applied['observed_at'] if applied else None,
                 registered=applied['registered'] if applied else None,

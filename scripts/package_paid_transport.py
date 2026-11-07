@@ -10,6 +10,7 @@ MODULES = ('control/friends/transport_policy.py', 'control/friends/transport_gat
 BASELINE = '4bcbd7ed0dcc756965f5eb60aa340c8d5d638513a0af64ca93b50affce86b7fb'
 GATEWAY = '8e536367a391661f003d0725afc13f69c45a9e43bb1763b61fd21ce0b998035a'
 API_INSERT = b"    from control.friends.transport_policy import configuration_decision,node_for_host\n    node=node_for_host(ROOT,host)\n    if node is not None:record=configuration_decision(access,ROOT,node,record)\n"
+PAID_INSERT = b"    if previous is None:\n        registry_path = next(row[2] for row in database.execute('PRAGMA database_list') if row[1] == 'main')\n        transport_config = Path(registry_path).parent/'transport-enforcement.json'\n        if transport_config.exists() or transport_config.is_symlink():\n            from .transport_membership import prepare\n            prepare(database, device['device'], payload_hash, now)\n"
 
 
 def sha(raw):
@@ -35,13 +36,20 @@ def build(baseline, gateway, output, source=ROOT):
     replacement = (source/'deploy/friends/access-api.py').read_bytes()
     if replacement.count(API_INSERT) != 1 or replacement.replace(API_INSERT, b'') != original['friends_http.py']:
         raise ValueError('UNRELATED_HTTP_DELTA')
+    paid = (source/'control/friends/paid_beta.py').read_bytes()
+    if paid.count(PAID_INSERT) != 1 or paid.replace(PAID_INSERT, b'') != original['control/friends/paid_beta.py']:
+        raise ValueError('UNRELATED_PAID_DELTA')
     output.mkdir(mode=0o700, parents=True, exist_ok=False)
     http = dict(original, **{'friends_http.py': replacement})
-    for name in ('control/friends/transport_policy.py', 'control/friends/transport_reconcile.py'):
+    for name in ('control/friends/transport_policy.py', 'control/friends/transport_reconcile.py',
+                 'control/friends/transport_membership.py', 'control/friends/paid_beta.py'):
         http[name] = (source/name).read_bytes()
     archive(output/'friends-http.pyz', http)
     reconcile = dict(http, **{'__main__.py': b'from control.friends.transport_reconcile import main\nraise SystemExit(main())\n'})
     archive(output/'paid-reconcile.pyz', reconcile)
+    operator = dict(http, **{'control/friends/paid_beta_admin.py': (source/'control/friends/paid_beta_admin.py').read_bytes(),
+        '__main__.py': b'from control.friends.paid_beta_admin import main\nraise SystemExit(main())\n'})
+    archive(output/'paid-operator.pyz', operator)
     native = {name: (source/name).read_bytes() for name in MODULES}
     native.update({'control/': b'', 'control/friends/': b'', 'control/friends/__init__.py': b''})
     archive(output/'paid-transport.pyz', native)

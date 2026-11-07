@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "profile": "paid-transports-v2",
+  "production_enabled": false,
+  "superseded_tar_sha256": "d6e5dd679dec671dd9ec992f23057cd869580aa71ec34f8ad3c19f5f1eb89f3c",
+  "tar_sha256": "75832d0c71dcef2e085dcc95a250dc6da2e62400b3a2b992ec4ea8161116d97c",
+  "full_inventory_sha256": "0fc06beff6bafcdc85c9caf65e179ca1134718ae009bc5d7a631440079b9430f",
+  "baseline_http_sha256": "4bcbd7ed0dcc756965f5eb60aa340c8d5d638513a0af64ca93b50affce86b7fb",
+  "baseline_gateway_sha256": "8e536367a391661f003d0725afc13f69c45a9e43bb1763b61fd21ce0b998035a",
+  "files": {
+    "friends-http.pyz": "a59956c40af36d6172e5f35f1804fe3c7bc93993c21f5f4cc1030820383e8ec1",
+    "paid-operator.pyz": "d1bcd1b57454c423ddc91334350cf7f6092c5ad6925480e66dfedfd616975948",
+    "paid-reconcile.pyz": "4c147f170948a7f28859ab5a0cba4561a30a3a3cd8bdf8d176a8d9b2042d0083",
+    "paid-transport.pyz": "7fa86e75162fc6c7f6c4ea8968ee3792027f05fc470a743c0b1b6cbb7af3eb2e",
+    "awg-gateway.py": "d7e57b79a5a4766c3dced902c4684f808b59ab99f4df37b47f6970eb5e92eb2a",
+    "inventory.json": "651e2db1e8527f9ec3b095a1e84e5d1c63cb0af73bed41196bf47942eee96a67"
+  }
+}

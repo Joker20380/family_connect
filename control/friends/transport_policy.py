@@ -7,7 +7,7 @@ import re
 import time
 import uuid
 
-PROFILE = 'paid-transports-v1'
+PROFILE = 'paid-transports-v2'
 LEASE_SECONDS = 120
 RECONCILE_SECONDS = 30
 TICK_SECONDS = 2
@@ -41,26 +41,30 @@ def snapshot(registry, node, *, device=None, clock=time.time):
         raise ValueError('INVALID_NODE')
     with paid_beta.connection(registry) as database:
         paid_beta.require(paid_beta.schema_present(database), 'PAID_SCHEMA_REQUIRED')
-        now = int(clock())
-        query = 'SELECT device,wg,tcp,revoked FROM devices'
-        records = database.execute(query + (' WHERE device=?' if device else '') + ' ORDER BY device',
-                                   (device,) if device else ()).fetchall()
-        if device and len(records) != 1:
-            raise ValueError('UNKNOWN_DEVICE')
-        decisions = []
-        for record in records:
-            identity = not record['revoked'] and database.execute(
-                'SELECT 1 FROM invites WHERE device=? AND revoked=0', (record['device'],)).fetchone() is not None
-            effective = paid_beta.effective_subscription_state(database, record['device'], now)
-            row = database.execute('SELECT state,version,paid_until,grace_until FROM paid_beta_subscriptions WHERE device=?',
-                                   (record['device'],)).fetchone()
-            allowed = bool(identity and (effective is None or effective.allowed))
-            deadline = min(now + LEASE_SECONDS, effective.expires_at) if allowed and effective else now + LEASE_SECONDS
-            decisions.append(dict(device=record['device'], public_key=record['wg'], tcp_id=record['tcp'],
-                cohort=effective is not None, revision=row['version'] if row else 0,
-                state=effective.state if effective else 'noncohort', identity_allowed=bool(identity),
-                allowed=allowed, paid_until=row['paid_until'] if row else None,
-                grace_until=row['grace_until'] if row else None, observed_at=now, valid_until=deadline))
+        return read_snapshot(database, node, int(clock()), device=device)
+
+
+def read_snapshot(database, node, now, *, device=None):
+    from . import paid_beta
+    query = 'SELECT device,wg,tcp,revoked FROM devices'
+    records = database.execute(query + (' WHERE device=?' if device else '') + ' ORDER BY device',
+                               (device,) if device else ()).fetchall()
+    if device and len(records) != 1:
+        raise ValueError('UNKNOWN_DEVICE')
+    decisions = []
+    for record in records:
+        identity = not record['revoked'] and database.execute(
+            'SELECT 1 FROM invites WHERE device=? AND revoked=0', (record['device'],)).fetchone() is not None
+        effective = paid_beta.effective_subscription_state(database, record['device'], now)
+        row = database.execute('SELECT state,version,paid_until,grace_until FROM paid_beta_subscriptions WHERE device=?',
+                               (record['device'],)).fetchone()
+        allowed = bool(identity and (effective is None or effective.allowed))
+        deadline = min(now + LEASE_SECONDS, effective.expires_at) if allowed and effective else now + LEASE_SECONDS
+        decisions.append(dict(device=record['device'], public_key=record['wg'], tcp_id=record['tcp'],
+            cohort=effective is not None, revision=row['version'] if row else 0,
+            state=effective.state if effective else 'noncohort', identity_allowed=bool(identity),
+            allowed=allowed, paid_until=row['paid_until'] if row else None,
+            grace_until=row['grace_until'] if row else None, observed_at=now, valid_until=deadline))
     return dict(schema=1, profile=PROFILE, node=node, observed_at=now, decisions=decisions)
 
 

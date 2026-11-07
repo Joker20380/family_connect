@@ -3,6 +3,7 @@ from types import SimpleNamespace
 import pytest
 
 from control.friends import transport_policy as policy
+from control.friends import transport_membership
 from test_subscription_http import runtime, post, proof, read, payment
 
 
@@ -22,7 +23,16 @@ def test_configuration_guard_does_not_block_own_status_or_subscription(runtime, 
     monkeypatch.setattr(runtime.module, 'subprocess', SimpleNamespace(run=run))
     assert post(runtime.server, '/friends/configuration/ru', proof(runtime, purpose='ru'))[0] == 200
     assert captured[-1]['paid']['decisions'][0]['state'] == 'noncohort'
+    (root/'transport-commands.json').write_text(json.dumps({node:[node] for node in policy.NODES}))
+    (root/'transport-commands.json').chmod(0o600)
+    prepared = []
+    def prepare(command, *, input, **kwargs):
+        request=json.loads(input)
+        prepared.append(command[0])
+        return SimpleNamespace(stdout=json.dumps(dict(schema=1,node=command[0],result='prepared',token=request['token'])).encode())
+    monkeypatch.setattr(transport_membership, 'subprocess', SimpleNamespace(run=prepare))
     payment(runtime)
+    assert prepared == list(policy.NODES)
     assert post(runtime.server, '/friends/configuration/ru', proof(runtime, purpose='ru'))[0] == 200
     assert captured[-1]['paid']['decisions'][0]['state'] == 'active'
     runtime.now[0] += 3600
