@@ -1,0 +1,10 @@
+{
+  "state": "PENDING_ANDROID_RELEASE_CI",
+  "head_sha": "59849b0c26be6aee4c79e073e5baef1168043eda",
+  "run_id": 42381579767,
+  "android_job_id": 128430153601,
+  "apk_sha256": null,
+  "verification_sha256": null,
+  "native_sha256": null,
+  "anchor_sha256": null
+}

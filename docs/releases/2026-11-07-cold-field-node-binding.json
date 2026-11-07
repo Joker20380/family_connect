@@ -14,6 +14,15 @@
   "assignment_evidence": "2026-11-02-second-nl-ordinary-live.md: existing assignments retained on NL1, new admissions NL2; catalog schema2 alone does not encode logical node identity",
   "replacement_evidence": "2026-10-30-nl-gateway-replacement.json: authenticated replacement host185.10.158.212, old186.246.45.246 fenced/inactive, not trusted",
   "mesh_evidence": "2026-11-06-mesh-live-recovery.json and 2026-11-06-vpn-health.md: canonical NL1 strict leaf/CRL and real DNS/verified HTTPS/185.10.158.212 egress; observed2026-11-06, not current liveness",
+  "canonical_profile_evidence": {
+    "path": "state-client-build/mesh-live-failure-20261106/NL1-publisher-binding.private.json",
+    "sha256": "4cc0913056dc20acd8e1b27159f9bb73c999ee03777f528a6062f62667d40e02",
+    "locator": "/etc/fc-canonical-pinned-venv/locator.json",
+    "profile": "/etc/fc-canonical-pinned-venv/profile.json",
+    "provider_environment": "/opt/apps/family_connect/friends-restricted/provider.env",
+    "reader_user": "family-restricted",
+    "private_values_exported": false
+  },
   "fresh_live_verification": "NOT_RUN",
   "deployment_gate": "current canonical profile/leaf, family/gateway binding, issuer/CRL/floors, APK root, selected registered-device route, backend TLS and service user access must match before start; no key transfer or stale certificate reuse"
 }

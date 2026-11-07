@@ -30,7 +30,7 @@
     "/etc/systemd/system/cold-provision-entry@.service"
   ],
   "entry_reads_existing_only": [
-    "friends-restricted/gateway.json",
+    "/etc/fc-canonical-pinned-venv/profile.json",
     "friends-restricted/provider.env"
   ],
   "backend": "https://185.251.89.19:8443",
@@ -54,7 +54,7 @@
   "automatic_restart": false,
   "preconditions": [
     "authorized readback confirms selected node/host, active backend handler version and user eligibility",
-    "resolve the running NL1 canonical profile locator; configured gateway.json must be that profile, not a stale pre-renewal copy; stop on mismatch, never copy keys or rewrite existing locators",
+    "resolve /etc/fc-canonical-pinned-venv/locator.json on NL1; configured /etc/fc-canonical-pinned-venv/profile.json must still be its current profile and match the running gateway; stop on mismatch, never copy keys or rewrite existing locators",
     "gateway profile certificate, current CRL/floors, family and gateway match existing issuer and APK ControlTrust",
     "normal authority HTTPS verifies from NL without custom roots or insecure flags",
     "existing dedicated service user can read gateway profile/provider env; preserve their ownership and mode",

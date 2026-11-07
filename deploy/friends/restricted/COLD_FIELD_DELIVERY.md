@@ -27,7 +27,9 @@ not a raw TCP relay at that address. These are historical observations, not fres
 server checks. Authorized preflight must reconfirm the registered user's selected
 route, canonical profile/leaf and current signed routing policy before staging.
 
-The gateway private key stays on NL in the existing0600 profile. The existing issuer,
+The gateway private key stays on NL in the existing canonical profile
+`/etc/fc-canonical-pinned-venv/profile.json`, resolved by the retained NL1 locator
+readback (not the old `friends-restricted/gateway.json`). The existing issuer,
 registry, admission and signed CRL stay on RU `185.251.89.19`. The entry does not load
 the issuer key. RU's one-shot `cold-provision-locator.pyz` reuses the existing issuer;
 it performs no migration, enrollment, grant or policy write. No new signer, database
@@ -58,7 +60,7 @@ No listener, ingress route, firewall or working gateway service changes are requ
    verify RU's existing HTTPS certificate without insecure flags. Compare APK
    `control-anchor.pub` with RU's public anchor. Keep gateway profile owner/mode intact.
    Resolve the running NL1 canonical profile locator. The unit's configured
-   `friends-restricted/gateway.json` must resolve to that current profile, not a stale
+   `/etc/fc-canonical-pinned-venv/profile.json` must still be that current profile, not a stale
    pre-renewal copy. Stop on any mismatch; do not move/copy a gateway key or certificate
    to another host, change canonical locators or substitute the retired gateway.
 3. Stage only the new paths listed in `cold-provision-deployment.json`, with exact
@@ -125,12 +127,34 @@ as explicit UTC/local time, not an inferred promise of connection duration.
    Use the existing approved vault entry/member names; master password only in its
    protected local dialog. No manual key extraction, command-line password, debug
    key or lineage reset. Supply the exact fresh unsigned digest and a new output path.
-10. Run `prepare_cold_field_apk.py verify-signed` with `--prepared` fresh unsigned,
+10. Run `prepare_cold_field_apk.py verify-signed` with the same CI `--unsigned` and
+    `--verification` inputs, `--prepared` fresh unsigned,
     `--apk` new signed, `--apksigner`, `--aapt`, `--zipalign`, and the same verifier/anchor/node.
     It checks signer, unchanged payload, native/trust, package/minSdk/ABI and current
     locator validity. Save its receipt and perform the normal `zipalign -c -P 16 4`.
     Only then hand off those exact bytes privately with digest and Connect cutoff.
     Do not publish a tag, catalog entry, general download or updater change.
+
+The bundled `cold-field-qualified.json` pins the accepted CI head/run/job/artifact,
+unsigned APK, verification receipt, native library and trust anchor. Final verification
+rechecks that CI input, not just a supplied prepared APK. Only the one node locator asset
+may differ before signing; all other APK payload members must remain byte-identical.
+
+## Actual handoff window
+
+Let entry start be T0. Its context ends atT0+420s. `SeedManager` takes the minimum
+of its own lifetime and that parent deadline, so seed expiry never extends the entry.
+The issuer uses `E=min(seed expiry, trust expiry, gateway leaf notAfter, CRL nextUpdate)`.
+The default60s handoff reserve and200s candidate reserve require `E-now >=260s` at
+both preparation checks; `connect_not_after=E-200s`, rechecked after signing.
+At best, preparation must finish byT0+160s and Connect start byT0+220s. Room creation,
+seed Connect, issuance, transfer, alignment, signature and verification consume that
+window; earlier certificate/CRL expiry shortens it. This is not420s available for
+handoff and not a promised connection duration. Readiness30s is unchanged. The20s
+stop allowance/systemd440s ceiling is cleanup, not additional locator validity.
+Do all CI, source/archive preparation, SDK/vault-path checks and recipient/channel
+coordination beforeT0. Recipient availability and a reachable document/local transfer
+channel are still required before the authorized operation starts.
 
 If the window is missed: do not Connect with expired material, extend TTL, change
 clock or substitute a cached bundle. Stop only the new entry, retain evidence and

@@ -154,3 +154,11 @@ must verify the current canonical profile/leaf; documentation is not live verifi
 The original server7398858 archive is preserved and superseded only by a newly hashed
 package. Exact-source Client builds Android qualification and CI byte selection are
 in progress; the old local269a9219 APK is not retroactively CI accepted.
+Client builds42381579767/head59849b0 selects Android; Windows/Linux jobs are skipped
+by the existing path policy, not waived after failure. Saved NL1 binding readback also
+establishes canonical `/etc/fc-canonical-pinned-venv/profile.json` and existing provider
+environment/service user; the template is corrected, live verification still mandatory.
+Finalizer now pins the CI prebuild/receipt/source/native/anchor and independently checks
+that the prepared APK differs by only the locator before accepting a signature. Pins
+remain PENDING until downloaded acceptance. Five synthetic KeePassXC→memfd→apksigner
+tests pass on the host; fixture packaging passes with real zipalign in isolation.

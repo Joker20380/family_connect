@@ -11,7 +11,13 @@ import zipfile
 
 SIGNER = '67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a'
 PACKAGE = 'com.familyconnect.app.friends'
-NATIVE = '773d760dc8f5a7894ed7008b5f6c30b830bd663f66a8935d470f5262ebc50d26'
+
+
+def qualification():
+    value = json.loads(Path(__file__).with_name('cold-field-qualified.json').read_bytes())
+    if value.get('state') != 'ANDROID_RELEASE_CI_ACCEPTED':
+        raise ValueError('release CI not accepted')
+    return value
 
 
 def digest(raw):
@@ -55,19 +61,38 @@ def compare_payload(prepared, signed):
         raise ValueError('signed APK payload mismatch')
 
 
-def prepare(args):
+def accepted_prebuild(args):
+    accepted = qualification()
+    if digest(args.verification.read_bytes()) != accepted['verification_sha256']:
+        raise ValueError('unqualified CI receipt')
     receipt = json.loads(args.verification.read_bytes())
     if receipt.get('unsigned') is not True or receipt.get('package') != PACKAGE or receipt.get('version_code') != 120:
         raise ValueError('not the reserved field prebuild')
-    if digest(args.unsigned.read_bytes()) != receipt['apk_sha256']:
+    if receipt.get('source_commit') != accepted['head_sha']:
+        raise ValueError('CI source mismatch')
+    if digest(args.unsigned.read_bytes()) != receipt['apk_sha256'] or receipt['apk_sha256'] != accepted['apk_sha256']:
         raise ValueError('prebuild hash mismatch')
     payload = entries(args.unsigned)
-    if digest(payload['lib/arm64-v8a/libfc_restricted.so']) != NATIVE:
+    if digest(payload['lib/arm64-v8a/libfc_restricted.so']) != accepted['native_sha256']:
         raise ValueError('unaccepted ARM64 JNI')
+    if digest(payload['assets/control-anchor.pub']) != accepted['anchor_sha256']:
+        raise ValueError('unaccepted trust anchor')
     if any(name.startswith('assets/provisioning/') for name in payload):
         raise ValueError('prebuild contains an old locator')
     if payload['assets/control-anchor.pub'].strip() != args.anchor.read_bytes().strip():
         raise ValueError('APK and authority trust differ')
+    return accepted, receipt, payload
+
+
+def compare_fresh_payload(prebuild, fresh, node):
+    allowed = 'assets/provisioning/'+node+'.json'
+    if set(fresh)-set(prebuild) != {allowed} or any(fresh.get(name) != raw for name, raw in prebuild.items()):
+        raise ValueError('non-locator payload changed')
+    return allowed
+
+
+def prepare(args):
+    accepted, receipt, payload = accepted_prebuild(args)
     if (args.ready.parent/'stopped.json').exists():
         raise ValueError('entry stopped')
     locator = verified_locator(args.verifier, args.locator, args.anchor, args.node)
@@ -83,20 +108,21 @@ def prepare(args):
         target = args.output/'FamilyConnect-Test-0.1.18-beta120-fresh-unsigned.apk'
         subprocess.run([str(args.zipalign), '-P', '16', '4', str(staged), str(target)], check=True, capture_output=True)
     final = entries(target)
-    allowed = 'assets/provisioning/'+args.node+'.json'
-    if set(final)-set(payload) != {allowed} or any(final.get(name) != raw for name, raw in payload.items()):
-        raise ValueError('non-locator payload changed')
+    allowed = compare_fresh_payload(payload, final, args.node)
     if digest(final[allowed]) != locator['locator_sha256']:
         raise ValueError('locator changed while packaging')
     check_window(locator, ready, now=int(time.time()), handoff_seconds=args.handoff_seconds)
     result = dict(prebuild_sha256=receipt['apk_sha256'], apk_sha256=digest(target.read_bytes()),
-                  locator=locator, native_sha256=NATIVE, signed=False, installed=False, distributed=False,
-                  connect_not_after=locator['expires_at']-200, entry_liveness='RECHECK_ON_SERVER_BEFORE_HANDOFF')
+                  qualification=accepted, locator=locator, native_sha256=accepted['native_sha256'], signed=False, installed=False, distributed=False,
+                  connect_not_after=locator['expires_at']-200,
+                  entry_liveness='RECHECK_ON_SERVER_BEFORE_HANDOFF')
     (args.output/'preparation.json').write_text(json.dumps(result, indent=2)+'\n')
     return result
 
 
 def verify_signed(args):
+    accepted, receipt, prebuild = accepted_prebuild(args)
+    compare_fresh_payload(prebuild, entries(args.prepared), args.node)
     compare_payload(args.prepared, args.apk)
     result = subprocess.run([str(args.apksigner), 'verify', '--verbose', '--print-certs', str(args.apk)],
                             capture_output=True, text=True, timeout=20)
@@ -108,7 +134,7 @@ def verify_signed(args):
         raise ValueError('field package incompatible')
     subprocess.run([str(args.zipalign), '-c', '-P', '16', '4', str(args.apk)], capture_output=True, check=True, timeout=10)
     payload = entries(args.apk)
-    if digest(payload['lib/arm64-v8a/libfc_restricted.so']) != NATIVE or payload['assets/control-anchor.pub'].strip() != args.anchor.read_bytes().strip():
+    if digest(payload['lib/arm64-v8a/libfc_restricted.so']) != accepted['native_sha256'] or payload['assets/control-anchor.pub'].strip() != args.anchor.read_bytes().strip():
         raise ValueError('final native/trust mismatch')
     with tempfile.TemporaryDirectory(prefix='cold-public-locator-') as staging:
         path = Path(staging)/'locator.json'
@@ -117,6 +143,7 @@ def verify_signed(args):
     if locator['expires_at']-int(time.time()) < 200:
         raise ValueError('expired handoff window')
     return dict(apk_sha256=digest(args.apk.read_bytes()), certificate_sha256=SIGNER, locator=locator,
+                prebuild_sha256=receipt['apk_sha256'], qualification=accepted,
                 connect_not_after=locator['expires_at']-200, payload_matches=True, installed=False, distributed=False)
 
 
@@ -124,13 +151,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
     staging = commands.add_parser('prepare')
-    for name in ('unsigned', 'verification', 'locator', 'ready', 'zipalign', 'output'):
+    for name in ('locator', 'ready', 'zipalign', 'output'):
         staging.add_argument('--'+name, type=Path, required=True)
     staging.add_argument('--handoff-seconds', type=int, default=60)
     signed = commands.add_parser('verify-signed')
     for name in ('prepared', 'apk', 'apksigner', 'aapt', 'zipalign'):
         signed.add_argument('--'+name, type=Path, required=True)
     for command in (staging, signed):
+        command.add_argument('--unsigned', type=Path, required=True)
+        command.add_argument('--verification', type=Path, required=True)
         command.add_argument('--verifier', type=Path, required=True)
         command.add_argument('--anchor', type=Path, required=True)
         command.add_argument('--node', choices=('nl-amsterdam-1', 'nl-amsterdam-2'), required=True)

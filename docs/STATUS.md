@@ -6,6 +6,11 @@ and retained replacement/MESH receipts. Old186.246.45.246 is retired, not an ali
 Fresh live identity/profile readback remains an authorized deployment gate. No exact
 0c6fcb7 Client builds run exists; the Android release job is now required before selecting
 CI bytes/finalizer pins. No production, signature, handoff or F rerun.
+The retained NL1 readback also resolves the current profile to
+`/etc/fc-canonical-pinned-venv/profile.json`; the unit template no longer points at
+the pre-renewal gateway.json. Finalization now fails closed without accepted CI pins
+and rechecks CI→locator-only→signature lineage. Synthetic vault/apksigner5 tests pass;
+no production key or final field signature was used. Client builds42381579767 is running.
 
 **7 November — local ARM64 field-delivery kit prepared; NOT signed/deployed.**
 Accepted F/application9bf02724/native6eb61a9 remains immutable. Production-tag ARM64

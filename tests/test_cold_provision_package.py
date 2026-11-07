@@ -13,6 +13,18 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_deployment_uses_retained_nl1_canonical_profile_without_copying_keys():
+    deployment = json.loads((ROOT/'deploy/friends/restricted/cold-provision-deployment.json').read_text())
+    evidence = json.loads((ROOT/deployment['binding']['evidence']).read_text())['canonical_profile_evidence']
+    unit = (ROOT/'deploy/friends/restricted/cold-provision-entry@.service').read_text()
+    assert evidence['profile'] in deployment['entry_reads_existing_only']
+    assert '--profile '+evidence['profile']+' ' in unit
+    assert 'EnvironmentFile='+evidence['provider_environment'] in unit
+    assert 'User='+evidence['reader_user'] in unit
+    assert 'friends-restricted/gateway.json' not in unit
+    assert all('canonical' not in path for path in deployment['new_paths'])
+
+
 def test_packager_rejects_uncommitted_source(tmp_path, monkeypatch):
     from scripts import package_cold_provision as builder
     subprocess.run(['git', 'init', '-q', str(tmp_path)], check=True)

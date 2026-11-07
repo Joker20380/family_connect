@@ -35,7 +35,8 @@ def build(output, go):
                          ('deploy/friends/restricted/cold-provision-entry@.service','cold-provision-entry@.service'),
                          ('deploy/friends/restricted/cold-provision-deployment.json','deployment.json'),
                          ('deploy/friends/restricted/COLD_FIELD_DELIVERY.md','HANDOFF.md'),
-                         ('scripts/prepare_cold_field_apk.py','prepare_cold_field_apk.py')]:
+                         ('scripts/prepare_cold_field_apk.py','prepare_cold_field_apk.py'),
+                         ('scripts/cold-field-qualified.json','cold-field-qualified.json')]:
         shutil.copyfile(ROOT/source, output/name)
     entry_sources = {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
                      for path in sorted((ROOT/'carrier').rglob('*'))

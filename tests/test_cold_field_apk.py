@@ -12,6 +12,7 @@ import zipfile
 import pytest
 
 from scripts.prepare_cold_field_apk import check_window, compare_payload, entries, prepare
+from scripts import prepare_cold_field_apk as finalizer
 
 
 def test_window_keeps_candidate_and_handoff_budgets():
@@ -23,6 +24,28 @@ def test_window_keeps_candidate_and_handoff_budgets():
             check_window(locator, dict(ready, **change), now=1201, handoff_seconds=60)
     with pytest.raises(ValueError):
         check_window(locator, ready, now=1241, handoff_seconds=60)
+
+
+def test_final_verification_rejects_altered_prepared_payload():
+    prebuild = {'classes.dex': b'accepted', 'lib/arm64-v8a/libfc_restricted.so': b'native'}
+    fresh = dict(prebuild, **{'assets/provisioning/nl-amsterdam-1.json': b'locator'})
+    finalizer.compare_fresh_payload(prebuild, fresh, 'nl-amsterdam-1')
+    for changed in (dict(fresh, **{'classes.dex': b'changed'}), dict(fresh, **{'assets/extra': b'extra'})):
+        with pytest.raises(ValueError):
+            finalizer.compare_fresh_payload(prebuild, changed, 'nl-amsterdam-1')
+
+
+def test_same_version_receipt_cannot_replace_qualified_prebuild(tmp_path, monkeypatch):
+    receipt = tmp_path/'verification.json'
+    receipt.write_text(json.dumps(dict(unsigned=True, package=finalizer.PACKAGE, version_code=120,
+                                       source_commit='a'*40, apk_sha256='b'*64)))
+    accepted = dict(head_sha='c'*40, verification_sha256=hashlib.sha256(receipt.read_bytes()).hexdigest())
+    monkeypatch.setattr(finalizer, 'qualification', lambda: accepted)
+    with pytest.raises(ValueError, match='CI source mismatch'):
+        finalizer.accepted_prebuild(SimpleNamespace(verification=receipt))
+    receipt.write_text(receipt.read_text()+'\n')
+    with pytest.raises(ValueError, match='unqualified CI receipt'):
+        finalizer.accepted_prebuild(SimpleNamespace(verification=receipt))
 
 
 def test_signature_does_not_hide_changed_payload(tmp_path):
@@ -52,7 +75,7 @@ def test_duplicate_zip_entries_rejected(tmp_path):
         entries(apk)
 
 
-def test_real_zipalign_fresh_asset_packaging_offline(tmp_path):
+def test_real_zipalign_fresh_asset_packaging_offline(tmp_path, monkeypatch):
     prebuild, package, zipalign = (os.environ.get(name) for name in ('FC_FIELD_PREBUILD', 'FC_ENTRY_PACKAGE', 'FC_ZIPALIGN'))
     if not all((prebuild, package, zipalign)):
         pytest.skip('requires accepted unsigned APK, packaged verifier, real SDK zipalign')
@@ -86,8 +109,14 @@ def test_real_zipalign_fresh_asset_packaging_offline(tmp_path):
             raw = (authority/'anchor.pub').read_bytes() if item.filename == 'assets/control-anchor.pub' else source.read(item.filename)
             target.writestr(item, raw)
     receipt = authority/'fixture-verification.json'
-    receipt.write_text(json.dumps(dict(unsigned=True, package='com.familyconnect.app.friends', version_code=120,
+    receipt.write_text(json.dumps(dict(unsigned=True, package='com.familyconnect.app.friends', version_code=120, source_commit='a'*40,
                                       apk_sha256=hashlib.sha256(unsigned.read_bytes()).hexdigest())))
+    payload = entries(unsigned)
+    accepted = dict(head_sha='a'*40, verification_sha256=hashlib.sha256(receipt.read_bytes()).hexdigest(),
+                    apk_sha256=hashlib.sha256(unsigned.read_bytes()).hexdigest(),
+                    native_sha256=hashlib.sha256(payload['lib/arm64-v8a/libfc_restricted.so']).hexdigest(),
+                    anchor_sha256=hashlib.sha256(payload['assets/control-anchor.pub']).hexdigest())
+    monkeypatch.setattr(finalizer, 'qualification', lambda: accepted)
     args = SimpleNamespace(unsigned=unsigned, verification=receipt, locator=locator, ready=authority/'ready.json',
         anchor=authority/'anchor.pub', verifier=Path(package)/'cold-provision-entry', node='nl-amsterdam-1',
         zipalign=Path(zipalign), output=authority/'final', handoff_seconds=60)
