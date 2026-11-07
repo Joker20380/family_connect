@@ -51,6 +51,12 @@ def strict_load(raw):
 
 @transaction.atomic
 def ingest(data, *, subscription_attempt=False):
+    if type(data) is dict and type(data.get('schema')) is int and data['schema'] == 3:
+        from .transports import ingest as ingest_transports
+        require('transport_observation' in data)
+        ingest_transports(data['transport_observation'], data['source'])
+        data = {name: value for name, value in data.items() if name != 'transport_observation'}
+        data['schema'] = 2 if 'subscription_observation' in data else 1
     if subscription_attempt:
         require(type(data) is dict and data.get('schema') == 2 and data.get('source') == 'gateway-ru')
     if type(data) is dict and type(data.get('schema')) is int and data['schema'] == 2:

@@ -1,5 +1,20 @@
 # CONTROL-PLANE · русская локальная панель и наблюдаемость
 
+## Подписки и доступ · 7 ноября 2026
+
+Установленная локальная страница http://127.0.0.1:8765/subscriptions/ — **рабочие
+данные, только просмотр**, не интерфейс оплаты/отзыва. Фильтры по состоянию и
+HMAC-псевдониму, по20 устройств на страницу; UTC-даты/revision/event/SHA — в details.
+Canonical paid_allow не доказывает AWG/TCP-доступ: отдельные append-only
+TransportSnapshot/attempt приходят внешним RO collector по pinned SSH, HMAC строится
+локально (ключ не передаётся NL). Веб-процесс не получает SSH или production DB.
+Отсутствующий node kit явно показан как «не включён», отсутствующая/старая/ошибочная
+квитанция — неизвестность; успех одного узла не распространяется на другие.
+Наблюдения применения старше90 секунд не считаются актуальными. Системные restart
+сценарии и MESH traffic эта страница сама не проверяет.
+[Инструкция](../docs/operators/subscriptions.ru.md) ·
+[проверки и границы](../docs/releases/2026-11-07-subscription-transport-enforcement.md).
+
 ## FLEET-BOOTSTRAP-2 · preparation
 
 The legacy12→50 synthetic seeder uses canonical `FC-` invitation formatting even when

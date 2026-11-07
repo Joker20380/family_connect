@@ -2,7 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Selected SUBSCRIPTION-PAID-119 — implement and install policy A.**
+**Selected SUBSCRIPTION-TRANSPORT-ENFORCEMENT — prepare, not enable production.**
+Dependency: closed PR1–3/maina258e933, installed108/119 policy and local RO panel.
+Gate: canonical decisions, protected AWG/TCP registration and persistent/live sets,
+finite leases and explicit open-flow/mux interruption; isolated exact-engine tests,
+fresh private mapping/impact/rollback kit, installed local authenticated desktop/390px
+visual acceptance, applicable hosted checks and normal PR merge. Preserve existing
+MESH certificate/CRL boundary, non-billing noncohort semantics and control HTTPS.
+The recommended availability fence also expires cached noncohort admission on a
+central outage; this collateral effect is explicit, not an already approved policy.
+Only subsequent owner enablement remains after the gate. No production transport
+activation, paid writes, phone/G4/renewal/cold-provisioning work in this task.
+[Evidence, recommended profile and exact kit](releases/2026-11-07-subscription-transport-enforcement.md).
+
+**Historical SUBSCRIPTION-PAID-119 — CLOSED, PR3 mergeda258e933 and installed.**
 Dependencies: closed PR1 and PR2/main5197563, accepted unchanged ARM119 artifact.
 Gate: explicit108/119 descriptors; matching authenticated latest pair/hash; exact
 legacy replay; canary/demo108 preserved; isolated real packaged CLI/server tests;

@@ -13,6 +13,7 @@
   "control/friends/restricted.py",
   "control/friends/paid_beta.py",
   "control/friends/subscription.py",
+  "control/friends/transport_policy.py",
   "control/friends/readiness_receipts.py",
   "device_identity/__init__.py",
   "device_identity/device.py",

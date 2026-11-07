@@ -1,28 +1,44 @@
-{% extends 'console/base.html' %}{% block title %}Реальные подписки{% endblock %}{% block mode %}PRODUCTION · ТОЛЬКО НАБЛЮДЕНИЯ{% endblock %}{% block content %}
-<p class="eyebrow">PRODUCTION · РАБОЧИЙ РЕЕСТР · ТОЛЬКО ЧТЕНИЕ</p>
-<h1>Подписки: реальные наблюдения</h1>
-<p class="notice">Это не демо и не управление оплатами. Данные получены внешним операторским сборщиком; веб-процесс не подключается к рабочему реестру. APPLIED означает применение операции доступа, а не банковское подтверждение и не доставку клиенту.</p>
-<p><strong>{{ freshness }}</strong>. Обновление страницы читает только локальные наблюдения.</p>
-{% if attempt %}<p>Последняя попытка (локальный журнал): {{ attempt.occurred_at|date:'Y-m-d H:i:s' }} UTC · {{ attempt_status }}.</p>{% endif %}
-{% if previous %}<p>Последнее успешное чтение: {{ previous.observed_at|date:'Y-m-d H:i:s' }} UTC. Это время серверных данных, не последней попытки.</p>{% endif %}
-{% if attempt_status == 'collection_failed' or attempt_status == 'import_failed' %}<p class="notice">Последняя попытка завершилась ошибкой: {{ attempt_status }}. Количество и состояния сейчас неизвестны. Это не нулевой cohort и не отсутствие подписки.</p>{% endif %}
-{% if snapshot %}
-<p>Источник: gateway-ru · schema 1 · observed_at: {{ snapshot.observed_at|date:'Y-m-d H:i:s' }} UTC · импорт: {{ snapshot.imported_at|date:'Y-m-d H:i:s' }} UTC.</p>
-<p>SHA256 проверенного серверного runtime: <code>{{ snapshot.runtime_sha256|default:'не проверен' }}</code></p>
+{% extends 'console/base.html' %}
+{% block title %}Подписки и доступ{% endblock %}
+{% block mode %}РАБОЧИЕ ДАННЫЕ · ТОЛЬКО ПРОСМОТР{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">ЛОКАЛЬНАЯ ВИТРИНА РАБОЧЕЙ СРЕДЫ</p><h1>Подписки и доступ</h1><p class="muted">Каноническая подписка и отдельные наблюдения применения ограничений.</p></div><a class="button secondary" href="{% url 'console:subscriptions' %}">Перечитать локальные данные</a></div>
+<section class="panel freshness-panel" aria-label="Свежесть наблюдений">
+<strong class="readonly-label">Рабочие данные · только просмотр</strong><h2>{{ freshness }}</h2>
+<p>Последняя попытка: <strong>{{ attempt_label }}</strong>{% if attempt %} · {{ attempt.occurred_at|date:'d.m.Y H:i:s' }} UTC · <code>{{ attempt_status }}</code>{% endif %}.</p>
+<p>Последнее успешное чтение (серверный снимок): {% if previous %}<time>{{ previous.observed_at|date:'d.m.Y H:i:s' }} UTC</time>{% else %}ещё не получен{% endif %}.</p>
+<p class="muted">Кнопка перечитывает сохранённые локальные наблюдения, а не запрашивает устройство или сервер напрямую.</p>
+{% if attempt_status == 'collection_failed' or attempt_status == 'import_failed' %}<p class="notice error-notice" role="alert">Последняя попытка завершилась ошибкой: {{ attempt_label }}. Количество и состояния сейчас неизвестны. Это не нулевой cohort и не отсутствие подписки.</p>{% endif %}
+</section>
 {% if snapshot.status == 'ok' %}
-<p>Реестр прочитан. Устройств в снимке: {{ rows|length }}; в cohort: {{ cohort_count }}; вне cohort: {{ outside_count }}. Участники показаны первыми. Effective-состояния вычислены каноническим paid_beta на observed_at; после этого времени не пересчитываются панелью.</p>
-<section class="panel table-scroll" role="region" aria-label="Реальные подписки" tabindex="0"><table>
-<thead><tr><th>Устройство · HMAC</th><th>Cohort</th><th>Сохранённое / effective</th><th>paid_allow</th><th>Начало UTC</th><th>Paid UTC</th><th>Grace UTC</th><th>Доступ до UTC</th><th>Revision</th><th>Последнее соответствующее событие</th></tr></thead>
-<tbody>{% for row in rows %}<tr>
-<td><a href="{% url 'console:inventory_device' row.pseudonym %}">{{ row.pseudonym|truncatechars:18 }}</a></td>
-<td>{% if row.cohort %}В платном контуре{% else %}Вне платного пилота · не «не оплачено»{% endif %}</td>
-<td>{{ row.subscription.state|default:'—' }} / {{ row.subscription.effective_state|default:'—' }}</td>
-<td>{% if row.cohort %}{{ row.subscription.paid_allow|yesno:'да,нет' }}{% else %}не применяется{% endif %}</td>
-<td>{{ row.subscription.period_start|date:'Y-m-d H:i:s'|default:'—' }}</td><td>{{ row.subscription.paid_until|date:'Y-m-d H:i:s'|default:'—' }}</td>
-<td>{{ row.subscription.grace_until|date:'Y-m-d H:i:s'|default:'—' }}</td><td>{{ row.subscription.entitlement_until|date:'Y-m-d H:i:s'|default:'—' }}</td>
-<td>{{ row.subscription.version|default:'—' }}</td><td>{% if row.event %}{{ row.event.event_type }} / {{ row.event.result }} · {{ row.event.occurred_at|date:'Y-m-d H:i:s' }} UTC · HMAC {{ row.event.event_id|truncatechars:18 }}{% else %}Соответствующего события нет{% endif %}</td>
-</tr>{% empty %}<tr><td colspan="10">Успешный снимок содержит 0 устройств. Это не ошибка источника.</td></tr>{% endfor %}</tbody></table></section>
-{% else %}<p class="notice">{% if snapshot.status == 'unsupported' %}Paid-схема отсутствует: источник не поддерживает наблюдение подписок.{% else %}Ошибка источника или проверки runtime/схемы. Количество и состояния неизвестны.{% endif %} Это не нулевой cohort и не отсутствие подписки.</p>
-{% endif %}{% elif not attempt %}<p>Источник ещё не импортирован. Количество неизвестно.</p>{% endif %}
-<p>Публичных Support ID, платёжных реквизитов и ключей здесь нет. Для поиска конкретного устройства используйте закрытый операторский receipt и canonical status; HMAC не принимается как получатель платёжной операции.</p>
+<section class="metrics" aria-label="Сводка последнего снимка">
+<article><span>Устройств в снимке</span><strong>{{ total_count }}</strong><p>Не число клиентов или оплат</p></article>
+<article><span>В платном контуре</span><strong>{{ cohort_count }}</strong><p>Занятые cohort slots</p></article>
+<article><span>Активна / льготный период</span><strong>{{ counts.active }} <small>/ {{ counts.grace }}</small></strong><p>На время серверного снимка</p></article>
+<article><span>Вне пилота</span><strong>{{ outside_count }}</strong><p>Прежний допуск · не «не оплачено»</p></article>
+</section>
+<form class="panel filters" method="get" aria-label="Фильтры подписок">{{ filter_form.as_p }}<button type="submit">Показать</button><a class="button secondary" href="{% url 'console:subscriptions' %}">Сбросить</a></form>
+<p class="muted">Истекла: {{ counts.expired }} · Отозвана: {{ counts.revoked }} · Пробный период: {{ counts.trial }}. Показано {{ rows|length }} из {{ page.paginator.count }} по фильтру.</p>
+<section class="subscription-list" aria-label="Реальные подписки">
+{% for row in rows %}<article class="panel subscription-card">
+<div class="subscription-main"><div><span class="muted">Устройство · HMAC</span><h2><a class="device-alias" href="{% url 'console:inventory_device' row.pseudonym %}">{{ row.pseudonym|truncatechars:20 }}</a></h2><span class="state-badge state-{{ row.state_key }}">{{ row.state_label }}</span></div>
+<div><span class="muted">Срок доступа · UTC</span><p class="access-date">{% if row.subscription.entitlement_until %}{{ row.subscription.entitlement_until|date:'d.m.Y H:i:s' }}{% elif row.cohort %}Действующего срока нет{% else %}Платный срок не применяется{% endif %}</p><p>Paid-слой: {% if row.cohort %}<strong>{{ row.subscription.paid_allow|yesno:'разрешает,не разрешает' }}</strong>{% else %}не применяется{% endif %}.</p></div>
+<div><span class="muted">Применение на узлах · не проверка трафика</span><ul class="node-observations">{% for item in row.transports %}<li><strong>{{ item.label }}</strong><span>{{ item.text }}</span></li>{% endfor %}</ul></div></div>
+<details class="technical-details"><summary>Технические сведения: даты, событие и ревизия</summary><dl class="release-details">
+<dt>Псевдоним</dt><dd><code>{{ row.pseudonym }}</code></dd>
+<dt>Cohort</dt><dd>{% if row.cohort %}Участник платного пилота{% else %}Вне платного пилота · не «не оплачено»{% endif %}</dd>
+<dt>Сохранённое / effective</dt><dd>{{ row.subscription.state|default:'—' }} / {{ row.subscription.effective_state|default:'—' }}</dd>
+<dt>Начало · UTC</dt><dd>{{ row.subscription.period_start|date:'Y-m-d H:i:s'|default:'—' }}</dd>
+<dt>Paid / grace · UTC</dt><dd>{{ row.subscription.paid_until|date:'Y-m-d H:i:s'|default:'—' }} / {{ row.subscription.grace_until|date:'Y-m-d H:i:s'|default:'—' }}</dd>
+<dt>Revision</dt><dd>{{ row.subscription.version|default:'—' }}</dd>
+<dt>Последнее событие</dt><dd>{% if row.event %}{{ row.event.event_type }} / {{ row.event.result }} · {{ row.event.occurred_at|date:'Y-m-d H:i:s' }} UTC<br><code>{{ row.event.event_id }}</code>{% else %}Соответствующего события нет{% endif %}</dd>
+{% for item in row.transports %}<dt>{{ item.label }}</dt><dd>{% if item.observation %}Ожидаемая / применённая revision: {{ item.observation.expected_revision|default_if_none:'—' }} / {{ item.observation.applied_revision|default_if_none:'—' }}. Применено: {{ item.applied_time|date:'Y-m-d H:i:s'|default:'—' }} UTC. Решение: {{ item.decision_time|date:'Y-m-d H:i:s' }} UTC; локальный срок: {{ item.valid_until|date:'Y-m-d H:i:s' }} UTC. {{ item.reason }}.{% else %}Нет подтверждённых наблюдений.{% endif %}</dd>{% endfor %}
+</dl></details></article>{% empty %}<div class="panel empty">{% if total_count == 0 %}Успешный снимок содержит 0 устройств. Это не ошибка источника.{% else %}По этому фильтру устройства не найдены. Полный снимок содержит {{ total_count }} устройств.{% endif %}</div>{% endfor %}
+</section>
+{% if page.has_other_pages %}<nav class="pagination" aria-label="Страницы устройств">{% if page.has_previous %}<a class="button secondary" href="?{{ querystring }}&amp;page={{ page.previous_page_number }}">Назад</a>{% endif %}<span>Страница {{ page.number }} из {{ page.paginator.num_pages }}</span>{% if page.has_next %}<a class="button secondary" href="?{{ querystring }}&amp;page={{ page.next_page_number }}">Далее</a>{% endif %}</nav>{% endif %}
+{% elif snapshot %}<p class="notice error-notice" role="alert">{% if snapshot.status == 'unsupported' %}Paid-схема отсутствует: источник не поддерживает наблюдение подписок.{% else %}Ошибка источника или проверки runtime/схемы. Количество и состояния неизвестны.{% endif %} Это не нулевой cohort и не отсутствие подписки.</p>
+{% elif not attempt %}<section class="panel empty">Источник ещё не импортирован. Количество неизвестно.</section>{% endif %}
+<section class="panel"><h2>Контроль AWG/TCP на узлах</h2><ul class="node-observations">{% for node in transport_nodes %}<li><strong>{{ node.label }}</strong><span>{{ node.text }}</span><details><summary>Источник и время сверки</summary><p>Последняя попытка: {{ node.attempt.occurred_at|date:'Y-m-d H:i:s'|default:'—' }} UTC · {{ node.status }}.</p><p>Последнее успешное наблюдение: {{ node.previous.observed_at|date:'Y-m-d H:i:s'|default:'—' }} UTC.</p><p>Schema 1 · проверенный archive SHA256: <code>{{ node.previous.runtime_sha256|default:'контроль не установлен / не проверен' }}</code></p></details></li>{% endfor %}</ul><p class="muted">Подписка сама по себе не доказывает отключение транспорта. Неизвестность и отсутствие установленного контроля не означают, что доступ закрыт. MESH использует отдельный действующий путь сертификатов/CRL; его сессии эта витрина не измеряет.</p></section>
+<details class="panel technical-details"><summary>Источник снимка, schema и SHA256</summary><dl class="release-details"><dt>Источник</dt><dd>gateway-ru · schema 1</dd><dt>Observed_at / импорт</dt><dd>{{ snapshot.observed_at|date:'Y-m-d H:i:s'|default:'—' }} / {{ snapshot.imported_at|date:'Y-m-d H:i:s'|default:'—' }} UTC</dd><dt>Runtime SHA256</dt><dd><code>{{ snapshot.runtime_sha256|default:'не проверен' }}</code></dd></dl><p>Effective-состояния вычислены каноническим paid_beta на observed_at; после этого времени не пересчитываются панелью.</p></details>
+<p class="notice">Это не демо и не управление оплатами. APPLIED означает применение операции доступа, а не банковское подтверждение и не доставку клиенту. Веб-процесс не подключается к рабочему реестру. Support ID, ключи и платёжные реквизиты здесь не публикуются.</p>
 {% endblock %}

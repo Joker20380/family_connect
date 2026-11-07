@@ -1,0 +1,18 @@
+[Unit]
+Description=Bounded Friends transport decision application
+After=time-sync.target
+
+[Service]
+Type=notify
+NotifyAccess=main
+ExecStart=/usr/bin/python3 /opt/apps/family_connect/friends-awg/awg-gateway.py paid-watch
+WatchdogSec=12
+TimeoutStartSec=45
+TimeoutStopSec=5
+KillMode=control-group
+Restart=on-failure
+RestartSec=5
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

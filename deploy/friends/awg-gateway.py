@@ -26,6 +26,14 @@ def address(index):
 
 def add_peer(public,assigned):command([str(ROOT/'awg'),'set',IFACE,'peer',public,'allowed-ips',assigned])
 
+def paid_engine():
+ if not (ROOT/'transport-enforcement.json').exists() and not (ROOT/'transport-enforcement.json').is_symlink():return None
+ archive=ROOT/'paid-transport.pyz'
+ assert archive.is_file() and not archive.is_symlink() and archive.stat().st_uid==0 and not archive.stat().st_mode&0o022
+ if str(archive) not in sys.path:sys.path.insert(0,str(archive))
+ from control.friends.transport_gateway import Gateway
+ return Gateway(sys.modules[__name__])
+
 def tcp_user(device,ident):
  tcp=ROOT.parent/'friends-tcp';path=tcp/'server.json'
  value=json.loads(path.read_text());inbound=next(i for i in value['inbounds'] if i.get('tag')=='friends')
@@ -48,23 +56,46 @@ def tcp_user(device,ident):
  temporary.unlink()
 
 def register():
- raw=sys.stdin.buffer.read(1025);assert len(raw)<=1024
- request=json.loads(raw);assert set(request)=={'public_key','tcp_id','device'}
+ raw=sys.stdin.buffer.read(8000001);assert len(raw)<=8000000
+ request=json.loads(raw)
+ engine=paid_engine()
+ if engine is not None and set(request)=={'operation','paid'}:
+  assert request['operation']=='reconcile'
+  with (ROOT/'registration.lock').open('a') as lock:
+   fcntl.flock(lock,fcntl.LOCK_EX)
+   engine.accept(request['paid'])
+   try:engine.apply()
+   except BaseException:engine.stop_all();engine.failure();raise
+  print(json.dumps({'schema':1,'node':engine.node,'result':'applied'}));return
+ assert set(request)==({'public_key','tcp_id','device','paid'} if engine is not None else {'public_key','tcp_id','device'})
  ident=request['tcp_id'];device=request['device'];assert str(uuid.UUID(ident))==ident and re.fullmatch('[0-9a-f]{32}',device)
  key=request['public_key'];decoded=base64.b64decode(key,validate=True);assert len(decoded)==32 and any(decoded) and base64.b64encode(decoded).decode()==key
  with (ROOT/'registration.lock').open('a') as lock:
   fcntl.flock(lock,fcntl.LOCK_EX)
+  if engine is not None:
+   assert len(request['paid']['decisions'])==1
+   decision=request['paid']['decisions'][0]
+   assert all(decision[name]==request[name] for name in ('device','public_key','tcp_id'))
+   state=engine.accept(request['paid'])
+   assert engine.allowed(state['records'][device]),'Transport access denied'
   with database() as db:
    db.execute('BEGIN IMMEDIATE');row=db.execute('SELECT id FROM peers WHERE public=?',(key,)).fetchone()
    if row is None:
     index=db.execute('INSERT INTO peers(public) VALUES (?)',(key,)).lastrowid
    else:index=row[0]
-   assigned=address(index);add_peer(key,assigned);tcp_user(device,ident)
+   assigned=address(index)
+   try:add_peer(key,assigned);tcp_user(device,ident)
+   except BaseException:
+    if engine is not None:engine.stop_all()
+    raise
   print(json.dumps({'public_key':key,'address':assigned,'transport':'amneziawg-3.1'}))
 
 def run():
  assert Path('/proc/sys/net/ipv4/ip_forward').read_text().strip()=='1','Existing gateway forwarding required'
  config=settings();network=config['network'];external=config['external']
+ engine=paid_engine()
+ if engine is not None:
+  engine.load();assert '[Peer]' not in (ROOT/'server.conf').read_text(),'Peer bindings must come from the retained registry'
  assert external.replace('-','').replace('_','').isalnum()
  process=subprocess.Popen([str(ROOT/'amneziawg-go'),'-f',IFACE],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env={**os.environ,'GOMAXPROCS':'2'})
  rules=[]
@@ -77,8 +108,11 @@ def run():
    time.sleep(.05)
   command([str(ROOT/'awg'),'setconf',IFACE,str(ROOT/'server.conf')])
   command(['ip','address','add',config['address'],'dev',IFACE]);command(['ip','link','set','dev',IFACE,'mtu','1280','up'])
-  with database() as db:
-   for index,public in db.execute('SELECT id,public FROM peers'):add_peer(public,address(index))
+  with (ROOT/'registration.lock').open('a') as lock:
+   fcntl.flock(lock,fcntl.LOCK_EX)
+   with database() as db:
+    for index,public in db.execute('SELECT id,public FROM peers'):
+     if engine is None or engine.peer_allowed(public):add_peer(public,address(index))
   command(['iptables','-N','FCFRIENDS31'],False)
   command(['iptables','-F','FCFRIENDS31'])
   for blocked in ['0.0.0.0/8','10.0.0.0/8','127.0.0.0/8','169.254.0.0/16','172.16.0.0/12','192.168.0.0/16','224.0.0.0/4']:
@@ -102,5 +136,13 @@ if __name__=='__main__':
  try:
   if sys.argv[1:] == ['run']:run()
   elif sys.argv[1:] == ['register']:register()
+  elif sys.argv[1:] == ['paid-preflight']:
+   engine=paid_engine();assert engine is not None
+   with (ROOT/'registration.lock').open('a') as lock:
+    fcntl.flock(lock,fcntl.LOCK_EX);engine.apply(starting=True)
+  elif sys.argv[1:] == ['paid-watch']:
+   assert paid_engine() is not None
+   from control.friends.transport_gateway import watch
+   watch(sys.modules[__name__])
   else:raise ValueError('Unknown operation')
  except Exception:print('Open AWG service unavailable',file=sys.stderr);sys.exit(1)

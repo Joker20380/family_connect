@@ -1,0 +1,11 @@
+[Unit]
+Description=Read-only canonical Friends transport reconciliation
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=@PYTHON@ -I @RECONCILER_ARCHIVE@ --registry @REGISTRY@ --commands @COMMANDS@
+TimeoutStartSec=40
+TimeoutStopSec=5
+KillMode=control-group
+UMask=0077

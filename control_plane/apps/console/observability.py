@@ -24,6 +24,7 @@ def subscriptions(request):
     from django.views.decorators.http import require_safe
     from .models import AuditRecord, SubscriptionSnapshot
     from .subscriptions import freshness, display_rows
+    from .subscription_presentation import present, ATTEMPTS
 
     @require_safe
     def read_only(request):
@@ -32,10 +33,17 @@ def subscriptions(request):
         previous = SubscriptionSnapshot.objects.filter(status='ok').order_by('-pk').first()
         rows = display_rows(snapshot)
         attempt_status = attempt.details.get('status', snapshot.status if snapshot else 'unknown') if attempt else None
+        presentation = present(rows, request, timezone.now())
+        page = Paginator(presentation['rows'], 20).get_page(request.GET.get('page'))
+        presentation['rows'] = list(page)
+        query = request.GET.copy()
+        query.pop('page', None)
+        presentation.update(page=page, querystring=query.urlencode())
         return render(request, 'console/subscriptions.html', dict(snapshot=snapshot, attempt=attempt,
             attempt_status=attempt_status,
-            freshness=freshness(previous, timezone.now()), rows=rows, previous=previous,
-            cohort_count=sum(row['cohort'] for row in rows), outside_count=sum(not row['cohort'] for row in rows)))
+            attempt_label=ATTEMPTS.get(attempt_status, 'Нет попыток'),
+            freshness=freshness(previous, timezone.now()), previous=previous,
+            cohort_count=sum(row['cohort'] for row in rows), outside_count=sum(not row['cohort'] for row in rows), **presentation))
     return read_only(request)
 
 

@@ -63,12 +63,22 @@ def cycle(base=BASE, run=subprocess.run, known_hosts=None):
                 result.update(status='IMPORTED', error=None, observed_at=document['observed_at'],
                     registry_status=document['registry_status'], sha256=hashlib.sha256(raw).hexdigest())
             except (OSError, ValueError, KeyError, subprocess.SubprocessError):
+                failure_started = time.monotonic() if import_started is None else import_started
                 remaining = 60 if import_started is None else 60 - (time.monotonic() - import_started)
                 if subscriptions and remaining > 0:
                     try:
                         run(['docker', 'compose', '-f', str(base / 'compose.yaml'), '--env-file', str(base / '.env'),
                             'exec', '-T', 'console', 'python', 'manage.py', 'import_subscriptions',
                             '--failure', result['error'].lower()],
+                            capture_output=True, check=True, timeout=remaining)
+                    except (OSError, subprocess.SubprocessError):
+                        pass
+                remaining = 60 - (time.monotonic() - failure_started)
+                if remaining > 0:
+                    try:
+                        run(['docker', 'compose', '-f', str(base / 'compose.yaml'), '--env-file', str(base / '.env'),
+                            'exec', '-T', 'console', 'python', 'manage.py', 'transport_failure',
+                            '--source', source, '--failure', result['error'].lower()],
                             capture_output=True, check=True, timeout=remaining)
                     except (OSError, subprocess.SubprocessError):
                         pass

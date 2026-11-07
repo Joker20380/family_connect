@@ -1,6 +1,19 @@
 # Текущее состояние / Current state
 
-**7 November — SUBSCRIPTION-PAID-119, owner-selected policy A.**
+**7 November — SUBSCRIPTION-TRANSPORT-ENFORCEMENT: isolated kit + installed local view.**
+PR1–3 are closed; PR3/main `a258e93347ba34fb876cc21f6bcae628e9b6c7b8` installed
+`android-paid-108-119-v1`. This task does not reopen Android or alter that policy.
+The disabled-by-default AWG/TCP kit consumes canonical paid_beta, persists finite
+decisions and verifies real engine application. Native isolated expiry/open-flow/mux,
+restart, stale registration, terminal revoke and partial-restart failure checks pass.
+Local `/subscriptions/` is updated, authenticated and visually checked at1440/390px;
+fresh15:18:29UTC observation:63 devices/1 cohort, all three enforcement nodes **not installed**.
+Production transport restrictions are **not enabled**. Recommended offline/collateral
+policy requires the owner's one enablement decision after ordinary CI/review/merge;
+final receipts belong in the task PR. [Kit, measurements and boundaries](releases/2026-11-07-subscription-transport-enforcement.md).
+No paid/identity/period/APK/G4/renewal/cold-provisioning mutation; no adjacent task starts.
+
+**Historical7 November — SUBSCRIPTION-PAID-119, completed by PR3.**
 PR1/PR2 are closed (main9d05c0f/5197563). Explicit paid descriptors108/119,
 observation agreement and exact-version APK attestation are implemented; old108
 replay payloads/receipts, canary108 and synthetic108 metadata remain unchanged.
