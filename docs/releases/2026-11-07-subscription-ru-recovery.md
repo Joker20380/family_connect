@@ -92,6 +92,19 @@ qualification are required for this merged implementation; prior measurements ab
 are retained only as historical evidence. Final payload, CI and installed receipts
 will be attached to the task PR without a cosmetic documentation-only head.
 
+The first combined native attempt passed375.7s but failed AWG startup after the
+injected lock fault; its exact startup phase is not recoverable from the generic
+gateway error. Three diagnostic fault/recovery cycles subsequently passed, without
+being counted as payload acceptance. The exact retry passed376.8s, both bounded
+faults and real restored flows, then exposed a fixture's grouped watcher/engine
+restart: stopping the watcher can enqueue protective engine-stop jobs that conflict
+with that same restart transaction. The already accepted NL1 operational procedure
+uses an explicit stop, verifies zero PIDs, then starts the three units. The fixture
+now uses that same procedure, including after deliberate failures. TCP composition
+changes still execute the real synchronous `systemctl restart` and exact preflight;
+no assertion, watchdog, start limit or service dependency is disabled. Earlier failed
+receipts remain failures. Exact final qualification is repeated with this fixture.
+
 Final exact-byte qualification, maxima, hosted CI/review/merge and operational receipts
 are attached to the recovery PR and retained privately. A source checkpoint is not a
 claim of recovery. Delivery gate: RU≥360s stable, then sequential NL on the same payload,

@@ -41,6 +41,13 @@ def run(arguments, **kwargs):
     return subprocess.run(arguments, capture_output=True, check=True, timeout=35, **kwargs)
 
 
+def restart_services():
+    run(['systemctl', 'stop', *SERVICES])
+    for service in SERVICES:
+        assert run(['systemctl', 'show', service, '-p', 'MainPID', '--value']).stdout.strip() == b'0'
+    run(['systemctl', 'start', *SERVICES])
+
+
 def material(document):
     client = canary.prepare_gateway({key: document[key] for key in ('origin','gateway','egress','certificate')})
     canary.stop('server-awg')
@@ -169,7 +176,7 @@ def budget_fault(document):
             (TCP/'xray').unlink();(TCP/'xray').symlink_to('/native/xray')
         if subprocess.run(['systemctl','is-failed','--quiet',SERVICES[0]]).returncode == 0:
             run(['systemctl','reset-failed',SERVICES[0]])
-        run(['systemctl','start',*SERVICES])
+        restart_services()
 
 
 def start_client(document):
@@ -218,7 +225,7 @@ def main():
     elif action == 'budget-fault':
         result = budget_fault(document)
     elif action == 'restart':
-        run(['systemctl','restart',*SERVICES])
+        restart_services()
         result = info()
     elif action == 'fault':
         drop = Path('/etc/systemd/system')/(SERVICES[2]+'.d')/'99-fixture-fault.conf'
