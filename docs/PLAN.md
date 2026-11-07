@@ -2,6 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Completed7 November: authorized cold-provisioning positive runtime goal.**
+E/14c2b81: no-cache registered synthetic identity → real Telemost provisioning/TLS →
+verified encrypted bundle → ordinary MESH READY43.982s → DNS/verified HTTPS/correct
+gateway egress. Background-network EACCES is fixed with API27-compatible eligibility
+filter/pinning; D/E and targeted regressions confirm the causal correction. Original
+example.com NXDOMAIN is observed through both unchanged host resolver and MESH/TUN.
+Keep2 observed DNS timeouts/2 Mux protocol-error counts as remaining quality evidence,
+not a full stability PASS. No further runtime negatives, release, deployment, discovery,
+activation or queued platform task is started here. All own resources stopped; old FAILs
+retained. [Final result and exact artifacts](releases/2026-11-07-cold-connect-e.json).
+
+### Historical checkpoints for this incident (not active NEXTs)
+
 **Active7 November: finish traffic confirmation after real cold READY.**
 9bf0272/D confirms corrected bind, Telemost provisioning, verified encrypted bundle and
 normal MESH READY42.762s. DNS assertion used example.com, which also returns NXDOMAIN

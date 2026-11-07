@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**7 November — real cold positive path PASS; bounded incident goal achieved.**
+E/14c2b81 (application9bf0272, native6eb61a9/JNI17119f00…60c59 unchanged) reaches
+ordinary MESH READY43.982s from a registered synthetic identity with no readiness/VPN,
+fresh verified locator and both exact former direct paths rejected. Real Telemost/TLS,
+challenge/fetch, authorized verified encrypted bundle, DNS, default verified HTTPS and
+matching gateway egress pass. Native28 protected/0 denied; request IDs correlate server
+issuance. D also reached READY, so the bind fix is not inferred from one lucky success:
+B's background-network EACCES, targeted before/after regression and D/E bind success agree.
+E confirms original example.com NXDOMAIN through TUN, matching the host resolver; no DNS
+settings changed. Observed2 DNS timeouts/2 Mux protocol errors remain unclassified: this
+is positive-path acceptance, not zero-loss or sustained-stability acceptance. Old FAILs/
+all19 original artifacts and A–D remain. Own processes/authority/AVD stopped, lock free,
+monitor joined; provider room deletion NOT_VERIFIED. Only disposable beta118 qualification
+APKs installed; public/production/G4/phones unchanged. No further task starts automatically.
+[Final runtime, provenance, limitations and cleanup](releases/2026-11-07-cold-connect-e.json).
+
 **7 November — cold provisioning and ordinary MESH READY confirmed; traffic gate next.**
 D on9bf0272 confirms the bind repair:29 protected/0 denied, real Telemost/TLS, challenge
 and fetch responses validated, registered identity authorized, encrypted bundle accepted,
