@@ -380,3 +380,26 @@ def test_child_created_during_guard_stop_is_not_left_running(monkeypatch):
     with pytest.raises(guard.GuardStopped):
         runner.own_start(create)
     assert created == [True]
+
+
+@pytest.mark.parametrize('failure,reason', [(None, None), ('gpu', 'GPU_TEMPERATURE_LIMIT'),
+                                         ('sensor', 'SENSOR_UNAVAILABLE'), ('monitor', 'MONITOR_ERROR')])
+def test_explicit_cpu_observation_override_keeps_other_stops(failure, reason):
+    value = frame(94, 80 if failure == 'gpu' else 53)
+    if failure in ('sensor', 'monitor'):
+        value['error'] = {'reason': reason}
+    clock, record, saved, stops = Clock(), {}, [], []
+    instance = guard.Monitor(record, saved.append, stops.append, reader=lambda: value,
+                             clock=clock, cpu_temperature_stop=False)
+    selected = instance.sample('WATCH')
+    assert selected['cpu_max_c'] == 94 and selected['cpu_temperature_limit_observed']
+    assert selected['cpu_temperature_stop_enabled'] is False
+    assert selected == saved[0]['frame'] == record['guard_last_frame']
+    assert record['guard_budgets']['cpu_temperature_stop_enabled'] is False
+    if reason:
+        assert stops[0]['reason'] == reason
+    else:
+        assert stops == []
+        clock.now = instance.overall_deadline
+        instance.check_deadline()
+        assert stops[0]['reason'] == 'TEST_LIFETIME_EXCEEDED'

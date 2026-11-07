@@ -116,3 +116,14 @@ remain unchanged. No public artifacts, production/G4, phones, admission/subscrip
 cooling/power or foreign processes change. No deployment/rollback applies. This local
 attempt is terminal; a separate owner environment decision is required before any
 further execution, not another same-host retry or provisioning change.
+
+## Owner override after that stop
+
+The owner explicitly cancels the CPU-temperature stop and asks to continue. A narrowly
+scoped `--observe-cpu-temperature-only` switch selects one new run: CPU frames and85°C
+crossings remain recorded, but do not cause CPU termination. The default is unchanged.
+GPU80°C and unavailable/failed sensors, monitor errors, memory/lock and finite deadlines
+still stop the stand. No BIOS/power/cooling, product or native change. This does not
+establish sensor accuracy or safe physical temperature.38 targeted harness tests pass,
+including observed94°C without CPU stop and retained GPU/sensor/monitor/watchdog stops.
+The next runtime outcome remains pending; this source checkpoint is not runtime PASS.

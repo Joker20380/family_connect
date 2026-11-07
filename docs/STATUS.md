@@ -1,5 +1,13 @@
 # Текущее состояние / Current state
 
+**7 November — owner supersedes CPU thermal stop for one new attempt; runtime pending.**
+Explicit `--observe-cpu-temperature-only` retains CPU raw frames/85°C observations but
+does not abort on that CPU reading for the selected run. Default CPU stopping remains;
+GPU80°C, sensor/monitor errors, memory/lock and all finite budgets still enforce stops.
+38 targeted harness tests pass; no product/JNI change or old suite repetition. No claim
+of sensor correctness, thermal safety or provisioning repair. One fresh cold runtime
+is authorized by the owner, not an automatic retry series; prior receipts stay immutable.
+
 **7 November11:06UTC — authorized single guarded run STOPPED_BEFORE_CONNECT.**
 Versioned4854f96 runner/guard actually imported; source6eb61a9/JNI17119f00…60c59
 and accepted Android JNI PASS unchanged, no rebuild or suite repeat. One preflight and

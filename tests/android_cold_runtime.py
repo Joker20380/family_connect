@@ -1,3 +1,4 @@
+import argparse
 import fcntl
 import hashlib
 import json
@@ -126,13 +127,13 @@ def aborted(event):
         finally:os._exit(124)
 
 
-def main(work):
+def main(work, *, observe_cpu_temperature=False):
     global WORK,AUTH,monitor
     WORK=Path(work).resolve();AUTH=WORK/'local-auth'
     assert AUTH.is_dir(),'EXISTING_ISOLATED_WORK_DIRECTORY_REQUIRED'
     for name in ('runtime.started','receipt.json','resources.jsonl','emulator.log','instrumentation.log'):
         assert not (WORK/name).exists(),'UNUSED_RUNTIME_OUTPUT_DIRECTORY_REQUIRED'
-    monitor=emulator_guard.Monitor(record,save_guard,aborted)
+    monitor=emulator_guard.Monitor(record,save_guard,aborted,cpu_temperature_stop=not observe_cpu_temperature)
     resource.setrlimit(resource.RLIMIT_CORE,(0,0));os.umask(0o077)
     emulator=None;vault=None;package=None;lock=None;logs=[];owns_stand=False
     sdk=TOOLS/'android'
@@ -292,5 +293,8 @@ def main(work):
         (WORK/'receipt.json').write_text(json.dumps(record,indent=2)+'\n')
 
 if __name__=='__main__':
-    if len(sys.argv)!=2:raise SystemExit('Explicit existing isolated work directory required; no runtime authorization implied')
-    main(sys.argv[1])
+    parser=argparse.ArgumentParser(description='Explicit isolated work directory required; no runtime authorization implied')
+    parser.add_argument('work')
+    parser.add_argument('--observe-cpu-temperature-only',action='store_true',help='Explicit owner-authorized run: retain CPU readings without CPU thermal stop; all other guards remain')
+    arguments=parser.parse_args()
+    main(arguments.work,observe_cpu_temperature=arguments.observe_cpu_temperature_only)

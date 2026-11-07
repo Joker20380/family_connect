@@ -2,6 +2,12 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected7 November follow-up: owner cancels CPU-temperature stop for one new run.**
+Use explicit per-run CPU observation-only flag on the same versioned runner. Preserve
+raw CPU evidence; other guards/budgets and product source/JNI/Android PASS remain.
+38 targeted harness tests pass. Proceed with one fresh cold attempt and existing
+native snapshot/READY-traffic gate; no automatic series or old-evidence replacement.
+
 **Selected7 November runtime authorization completed: STOPPED_BEFORE_CONNECT.**
 One4854f96 guarded API27 run stops at FINAL_ASSET_PACKAGING on a persisted
 CPU_TEMPERATURE_LIMIT frame (Core4/raw91000/max91°C; Package90°C; GPU56°C).

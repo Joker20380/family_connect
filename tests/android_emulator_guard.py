@@ -76,12 +76,12 @@ def read_frame(clock=time.monotonic, wall=time.time):
     return frame
 
 
-def temperature_reason(frame):
+def temperature_reason(frame, *, cpu_temperature_stop=True):
     if frame['error']:
         return frame['error']['reason']
     if frame['cpu_max_c'] is None or frame['gpu_max_c'] is None:
         return 'SENSOR_UNAVAILABLE'
-    if frame['cpu_max_c'] >= 85:
+    if cpu_temperature_stop and frame['cpu_max_c'] >= 85:
         return 'CPU_TEMPERATURE_LIMIT'
     if frame['gpu_max_c'] >= 80:
         return 'GPU_TEMPERATURE_LIMIT'
@@ -93,9 +93,11 @@ class GuardStopped(RuntimeError):
 
 
 class Monitor:
-    def __init__(self, record, save, on_stop, *, reader=read_frame, clock=time.monotonic):
+    def __init__(self, record, save, on_stop, *, reader=read_frame, clock=time.monotonic,
+                 cpu_temperature_stop=True):
         self.record, self.save, self.on_stop = record, save, on_stop
         self.reader, self.clock = reader, clock
+        self.cpu_temperature_stop = cpu_temperature_stop
         self.lock = threading.RLock()
         self.read_lock = threading.RLock()
         self.done = threading.Event()
@@ -106,6 +108,8 @@ class Monitor:
         self.deadline = began + PREPARATION_SECONDS
         self.overall_deadline = began + OVERALL_SECONDS
         record['guard_budgets'] = {
+            'cpu_temperature_stop_enabled': cpu_temperature_stop,
+            'cpu_limit_c': 85, 'gpu_limit_c': 80,
             'preparation_seconds': PREPARATION_SECONDS, 'candidate_seconds': CANDIDATE_SECONDS,
             'attempt_seconds': ATTEMPT_SECONDS, 'cleanup_seconds': CLEANUP_SECONDS,
             'overall_seconds': OVERALL_SECONDS, 'sample_seconds': SAMPLE_SECONDS,
@@ -174,7 +178,7 @@ class Monitor:
             capture_started = self.clock()
             try:
                 frame = self.reader()
-                reason = temperature_reason(frame)
+                reason = temperature_reason(frame, cpu_temperature_stop=self.cpu_temperature_stop)
             except Exception as error:
                 frame = {'error': {'reason': 'MONITOR_ERROR', 'type': type(error).__name__},
                          'cpu': [], 'gpu': None, 'cpu_max_c': None, 'gpu_max_c': None,
@@ -182,6 +186,9 @@ class Monitor:
                          'finished_monotonic': self.clock()}
                 reason = 'MONITOR_ERROR'
             frame = deepcopy(frame)
+            frame['cpu_temperature_stop_enabled'] = self.cpu_temperature_stop
+            frame['cpu_temperature_limit_observed'] = (
+                frame.get('cpu_max_c') >= 85 if frame.get('cpu_max_c') is not None else None)
             frame['stage'] = stage
             with self.lock:
                 frame['phase'] = self.phase
