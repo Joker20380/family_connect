@@ -178,3 +178,9 @@ its output is preserved separately before the existing fresh ARM64 build. Four t
 builder/order regressions cover this; no assertion/skip or application/native runtime
 code is changed. A new exact-source Android run, not a retry of missing-library bytes,
 must pass. Separate phase0/control preview fixture failures are not a full-matrix PASS.
+Corrected client source18bdeeeef44d9f153273b87be26a251d2f3e7d74 is running as
+Client builds42383259832/android128435219393;42 targeted package/build contracts PASS.
+The canonical profile test additionally runs the real packaged executable as UID/GID65534
+with no supplementary groups against a synthetic root-owned0640 profile. Initial
+container noexec refusal is retained; explicit exec on its own disposable `/run` tmpfs
+permits that probe (2 PASS), with no host mount/power/user-account change.

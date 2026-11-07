@@ -20,6 +20,8 @@ and rechecks CI→locator-only→signature lineage. Synthetic vault/apksigner5 t
 no production key or final field signature was used. Client builds42381579767 is running.
 The canonical directory is protected by ProtectSystem=strict, not a per-directory
 read-only bind: the unchanged custody reader intentionally rejects such mounts.
+Corrected client candidate18bdeee runs Client builds42383259832. Canonical profile
+configuration also passes as an unprivileged fixture reader; no host account changes.
 
 **7 November — local ARM64 field-delivery kit prepared; NOT signed/deployed.**
 Accepted F/application9bf02724/native6eb61a9 remains immutable. Production-tag ARM64

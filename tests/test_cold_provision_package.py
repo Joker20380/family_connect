@@ -41,11 +41,17 @@ def test_packaged_entry_reads_real_canonical_profile_without_bind_mount(packaged
         profile.write_bytes((root/'gateway.json').read_bytes())
         profile.chmod(0o640)
         os.chown(profile, 0, 65534)
-        command = [str(package/'cold-provision-entry'), '--check', '--profile', str(profile),
-                   '--anchor', str(root/'anchor.pub'), '--state', str(root/'not-created'), '--node', 'nl-amsterdam-1']
-        result = subprocess.run(command, capture_output=True, timeout=5)
+        binary = parent/'entry'
+        binary.write_bytes((package/'cold-provision-entry').read_bytes())
+        binary.chmod(0o755)
+        anchor = parent/'anchor.pub'
+        anchor.write_bytes((root/'anchor.pub').read_bytes())
+        anchor.chmod(0o644)
+        command = [str(binary), '--check', '--profile', str(profile),
+                   '--anchor', str(anchor), '--state', str(parent/'not-created'), '--node', 'nl-amsterdam-1']
+        result = subprocess.run(command, user=65534, group=65534, extra_groups=(), capture_output=True, timeout=5)
         assert result.returncode == 0 and b'CONFIGURATION_VALID_NO_PROVIDER_CALL' in result.stdout
-        assert not (root/'not-created').exists()
+        assert not (parent/'not-created').exists()
 
 
 def test_packager_rejects_uncommitted_source(tmp_path, monkeypatch):
