@@ -30,27 +30,27 @@ char *fcProvisionPost(int64_t handle, struct provision_text path, struct provisi
     return NULL;
 }
 char *fcProvisionClose(int64_t handle) { entered_go(); assert(handle == 71); atomic_store(&closed, 1); return "CLOSED"; }
-#define NUMERIC_STUB(name, parameters) int32_t name parameters { entered_go(); return -1; }
-#define TEXT_STUB(name, parameters) char *name parameters { entered_go(); return NULL; }
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-int64_t fcRestrictedBegin(struct text directory, struct text control, struct text resolver, int64_t budget, uintptr_t owner) { entered_go(); return 0; }
-int64_t fcRestrictedBeginReady(struct text response, struct text identity, struct text anchor, struct text resolver, int64_t budget, uintptr_t owner, int32_t speed) { entered_go(); return 0; }
-NUMERIC_STUB(fcRestrictedTun, (int64_t handle, int32_t fd))
-NUMERIC_STUB(fcRestrictedState, (int64_t handle))
-NUMERIC_STUB(fcRestrictedStop, (int64_t handle))
-TEXT_STUB(fcRestrictedStats, (int64_t handle))
-TEXT_STUB(fcRestrictedReadiness, (struct text directory))
-NUMERIC_STUB(fcRestrictedValidateDelivery, (struct text response, struct text identity, struct text anchor))
-NUMERIC_STUB(fcRestrictedValidationCode, (struct text response, struct text identity, struct text anchor))
-NUMERIC_STUB(fcRestrictedRenew, (int64_t handle, struct text response, struct text identity))
-TEXT_STUB(fcRestrictedFault, (struct text command))
-int64_t fcChatAcquire(struct chat_text response, struct chat_text identity, struct chat_text anchor, struct chat_text resolver, uintptr_t owner) { entered_go(); return 0; }
-NUMERIC_STUB(fcChatState, (int64_t handle))
-void fcChatRelease(int64_t handle) { entered_go(); }
-NUMERIC_STUB(fcChatOpen, (int64_t handle, int32_t timeout))
-TEXT_STUB(fcChatRequest, (int64_t handle, struct chat_text path, struct chat_text body, int32_t timeout))
+#define NUMERIC_STUB(name, parameters, check) int32_t name parameters { entered_go(); assert(check); return -1; }
+#define TEXT_STUB(name, parameters, check) char *name parameters { entered_go(); assert(check); return NULL; }
+int64_t fcRestrictedBegin(struct text directory, struct text control, struct text resolver, int64_t budget, uintptr_t owner) { entered_go(); assert(directory.size == 0 && control.size == 0 && resolver.size == 0 && budget == 3000 && owner == 99); return 0; }
+int64_t fcRestrictedBeginReady(struct text response, struct text identity, struct text anchor, struct text resolver, int64_t budget, uintptr_t owner, int32_t speed) { entered_go(); assert(response.size == 0 && identity.size == 0 && anchor.size == 0 && resolver.size == 0 && budget == 3000 && owner == 99 && speed == 0); return 0; }
+NUMERIC_STUB(fcRestrictedTun, (int64_t handle, int32_t fd), handle == -1 && fd == -1)
+NUMERIC_STUB(fcRestrictedState, (int64_t handle), handle == -1)
+NUMERIC_STUB(fcRestrictedStop, (int64_t handle), handle == -1)
+TEXT_STUB(fcRestrictedStats, (int64_t handle), handle == -1)
+TEXT_STUB(fcRestrictedReadiness, (struct text directory), directory.size == 0)
+NUMERIC_STUB(fcRestrictedValidateDelivery, (struct text response, struct text identity, struct text anchor), response.size == 0 && identity.size == 0 && anchor.size == 0)
+NUMERIC_STUB(fcRestrictedValidationCode, (struct text response, struct text identity, struct text anchor), response.size == 0 && identity.size == 0 && anchor.size == 0)
+NUMERIC_STUB(fcRestrictedRenew, (int64_t handle, struct text response, struct text identity), handle == -1 && response.size == 0 && identity.size == 0)
+TEXT_STUB(fcRestrictedFault, (struct text command), command.size == 0)
+int64_t fcChatAcquire(struct chat_text response, struct chat_text identity, struct chat_text anchor, struct chat_text resolver, uintptr_t owner) { entered_go(); assert(response.len == 0 && identity.len == 0 && anchor.len == 0 && resolver.len == 0 && owner == 99); return 0; }
+NUMERIC_STUB(fcChatState, (int64_t handle), handle == -1)
+void fcChatRelease(int64_t handle) { entered_go(); assert(handle == -1); }
+NUMERIC_STUB(fcChatOpen, (int64_t handle, int32_t timeout), handle == -1 && timeout == 1000)
+TEXT_STUB(fcChatRequest, (int64_t handle, struct chat_text path, struct chat_text body, int32_t timeout), handle == -1 && path.len == 0 && body.len == 0 && timeout == 1000)
 
 static void *post(void *unused) {
+    assert(unused == NULL);
     char *report = NULL;
     runtime_slot = 1;
     assert(isolatedProvisionPost(71, (struct provision_text){"a",1}, (struct provision_text){"ab",2}, (struct provision_text){"abc",3}, &report) == NULL);
