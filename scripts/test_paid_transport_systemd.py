@@ -197,6 +197,7 @@ def execute(kit, report):
             after=inner('gateway-ru','info')
             assert before['services']==after['services']
             receipt['checks']['renewal_and_duplicate_no_extra_restart']=True
+            stable_services = {node:inner(node,'info')['services'] for node in nodes}
             stable_started = time.monotonic()
             cycles = []
             while time.monotonic()-stable_started < 360:
@@ -213,8 +214,16 @@ def execute(kit, report):
             before=inner('gateway-ru','info')
             after=before
             for node in nodes:
+                assert inner(node,'info')['services'] == stable_services[node], 'unexpected restart during stable window'
                 journal=call(['docker','exec',containers[node],'journalctl','-u',SERVICES_WATCH,'-o','cat','--no-pager']).stdout
                 (report.parent/(prefix+'-'+node+'-progress.private.log')).write_bytes(journal)
+                measurements=[json.loads(line) for line in journal.decode().splitlines() if line.startswith('{"transport_progress')]
+                passes=[item['transport_progress'] for item in measurements if 'transport_progress' in item and item['transport_progress']['result']=='complete']
+                gaps=[item['transport_progress_gap'] for item in measurements if 'transport_progress_gap' in item]
+                maximum=dict(total=max(item['total'] for item in passes),progress_gap=max(gaps),
+                    stages={stage:max(item['stages'].get(stage,0) for item in passes) for stage in {stage for item in passes for stage in item['stages']}})
+                assert maximum['total']<8 and maximum['progress_gap']<12
+                receipt['checks']['maxima_'+node]=maximum
             lease=after['state']['records'][identities[0].reference]['decision']['valid_until']
             inner('client','streams',script='/transport_fixture.py')
             time.sleep(max(0,lease-time.time())+6)
