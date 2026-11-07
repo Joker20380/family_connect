@@ -40,6 +40,37 @@ in the accepted API27 compatibility helper (numeric18 is FOREGROUND on that API)
 A method-scoped source-only `SuppressLint` annotation documents that deliberate numeric
 compatibility path; the expression and network-selection behavior remain unchanged.
 Release lint and bytecode equivalence are rechecked before packaging, not waived globally.
-The release/packaging checks, bounded server package and handoff procedure remain pending.
+Release lint now passes0 errors/57 pre-existing warnings;433 Friends JVM cases pass.
+The annotation changes line-number metadata only: `javap -c -p` output is identical.
+The first packaging attempt correctly rejects non-pyc Python3.14 build output; using
+isolated Python3.10.19 fixes packaging without changing application or bundled Python
+version. The final120 normal/restricted native/package gate passes.
+
+## Deliverable server entry
+
+`carrier/cmd/cold-provision-entry` wraps existing coldprovision.Run. The Linux NL entry
+keeps the existing gateway key on NL and calls only the two existing RU authority RPCs
+over default-verified HTTPS8443 (no proxy/redirect/arbitrary forwarding). The issuer
+key and DB stay on RU; the closed one-shot pyz signs only a fresh bound locator, with
+existing trust/CRL/admission validation. No second signer or policy database is added.
+
+Disposable package checks pass11 Python cases, including packaged CLI configuration,
+closed pyz invocation from outside the checkout, ready/cancel/invalid-locator lifecycle
+under Go race instrumentation, real existing handlers issuing a bundle accepted by
+the unchanged validator and rejecting invalid identity proof. Issuance leaves registry,
+issuer key and admission bytes unchanged. Two focused Go adapter tests pass under-race:
+restricted destinations/RPCs/response bound/no redirect, untrusted TLS/wrong hostname.
+Existing two framing/no-forwarding checks also pass. Three finalizer tests cover
+freshness/budget, payload preservation across signature and duplicate ZIP rejection.
+These use disposable provider injection, not another Telemost/Android runtime or F rerun.
+
+The exact **unapplied** host/path/service/custody/rollback manifest and executable
+assets-only workflow are in
+[deployment.json](../../deploy/friends/restricted/cold-provision-deployment.json) and
+[RU/EN handoff procedure](../../deploy/friends/restricted/COLD_FIELD_DELIVERY.md).
+Server-side HTTPS access, real authority/key validity and registered-user eligibility
+remain live preflight checks after authorization; no current production readiness is claimed.
+
+Final clean package identities and offline APK compatibility receipt follow below.
 Rollback is to stop only the prospective new entry; existing services and public
 beta113/catalog7 remain unchanged. No new public download link/checksum is advertised.

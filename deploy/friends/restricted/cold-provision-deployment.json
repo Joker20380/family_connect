@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "state": "PREPARED_NOT_AUTHORIZED_OR_APPLIED",
+  "node": "nl-amsterdam-1",
+  "entry_host": "186.246.45.246",
+  "authority_host": "185.251.89.19",
+  "root": "/opt/apps/family_connect",
+  "new_entry_unit": "cold-provision-entry@<unique-invocation>.service",
+  "entry_user": "family-restricted",
+  "entry_binary": "cold-provision/bin/cold-provision-entry",
+  "new_paths": [
+    "cold-provision/bin/cold-provision-entry",
+    "cold-provision/anchor.pub",
+    "cold-provision/run/<unique-invocation>/",
+    "/etc/systemd/system/cold-provision-entry@.service"
+  ],
+  "entry_reads_existing_only": [
+    "friends-restricted/gateway.json",
+    "friends-restricted/provider.env"
+  ],
+  "backend": "https://185.251.89.19:8443",
+  "backend_security": "system TLS roots + IP SAN validation, no proxy/redirect, two fixed RPC paths only",
+  "backend_rpc": ["/friends/restricted-readiness/challenge", "/friends/restricted-readiness"],
+  "authority_one_shot": {
+    "new_tool": "cold-provision/cold-provision-locator.pyz",
+    "python": "friends-access/venv/bin/python",
+    "existing_database": "friends-access/access.db",
+    "existing_material": "friends-restricted",
+    "input": "new private invocation directory containing public seed.json and existing gateway public certificate PEM",
+    "output": "new signed locator.json, copied atomically to matching entry invocation",
+    "mutation": "no migration, identity creation, key generation, admission or registry writes"
+  },
+  "secret_custody": {
+    "issuer_key": "stays at existing RU authority; not read by entry or packager",
+    "gateway_private_key": "stays on NL in existing private gateway profile",
+    "oauth": "existing NL provider.env; never copied into artifacts, argv or receipts"
+  },
+  "timing_seconds": {"entry_maximum": 420, "systemd_runtime_maximum": 440, "stop_maximum": 20},
+  "automatic_restart": false,
+  "preconditions": [
+    "authorized readback confirms selected node/host, active backend handler version and user eligibility",
+    "gateway profile certificate, current CRL/floors, family and gateway match existing issuer and APK ControlTrust",
+    "normal authority HTTPS verifies from NL without custom roots or insecure flags",
+    "existing dedicated service user can read gateway profile/provider env; preserve their ownership and mode",
+    "new invocation path does not exist; no concurrent field entry; installed package hashes match receipt",
+    "user reachable on an agreed APK document delivery channel and ready before entry starts"
+  ],
+  "unchanged_services": [
+    "family-connect-friends-access.service",
+    "family-connect-restricted-bootstrap.service",
+    "existing maintenance, renewal and sync units",
+    "nginx, AWG and other data-plane services"
+  ],
+  "stop": "systemctl stop cold-provision-entry@<same-invocation>.service; verify inactive, its MainPID gone and stopped.json; preserve invocation evidence",
+  "rollback": "stop only new entry; remove only its unit/package after evidence retention if requested; do not modify existing service configuration",
+  "room_deletion": "NOT_VERIFIED; disconnect is not provider object deletion",
+  "network_changes": "none; no new listener, forwarding rule, public route or host firewall modification",
+  "phone_and_catalog_changes": "none in preparation; separate authorized handoff, never automatic install or public updater publication"
+}

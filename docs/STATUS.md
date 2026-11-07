@@ -5,8 +5,10 @@ Accepted F/application9bf02724/native6eb61a9 remains immutable. Production-tag A
 JNI is now built through the accepted builder; beta120 is reserved for the unpublished
 candidate (118 is not reused). Packaging accepts a separately pinned native commit only
 after checking its complete runtime-source closure against application HEAD. No native
-runtime changes, new AVD, provider rooms or phone operations. Server entry packaging and
-final APK gates remain in progress; fresh real locator and vault signature are deliberately
+runtime changes, new AVD, provider rooms or phone operations. ARM64 managed/package/lint
+gates now pass (433 JVM cases, lint0 errors/57 existing warnings). The new server entry's
+disposable lifecycle/closed issuer/real authority handlers and bounded RPC checks pass;
+final clean package receipts are being recorded. Fresh real locator and vault signature are deliberately
 deferred until authorized server start/user handoff. Public113/catalog7 unchanged.
 Local119 draft was never signed/distributed;119 is already reserved by a separate paid
 branch, which remains untouched. This cold candidate uses120 to avoid that collision.

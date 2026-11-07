@@ -10,6 +10,10 @@ production change, public release, phone install or G4 work. Final readiness req
 real authorized entry, fresh bound locator, final-byte checks and existing-key signature.
 [Current build/package checkpoint](releases/2026-11-07-cold-field-delivery.md).
 
+ARM64 build, package and release lint complete; server lifecycle, unchanged registry/key
+custody, existing-handler signed bundle and negative forwarding/TLS checks pass locally.
+Record final clean package identities and handoff boundary; do not start live services.
+
 **Completed7 November: API28/emulated CELLULAR-only cold DROP follow-up.**
 F/252c87e with unchanged application9bf0272 and JNI17119f00…60c59 passes real Android28
 sole foreground/unrestricted CELLULAR, no WiFi/VPN/readiness, fresh synthetic inputs and
