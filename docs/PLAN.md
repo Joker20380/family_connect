@@ -3,7 +3,7 @@
 ## Current engineering priority / Текущий critical path
 
 **Selected7 November: bounded ARM64 field-delivery preparation after accepted F.**
-Build/package119 with accepted application/native provenance; package the existing
+Build/package120 with accepted application/native provenance; package the existing
 restricted provisioning entry and exercise it locally with disposable authority custody.
 Then prepare executable assets-only fresh-locator/signing/handoff procedure. No F rerun,
 production change, public release, phone install or G4 work. Final readiness requires

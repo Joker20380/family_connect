@@ -2,12 +2,14 @@
 
 **7 November — bounded ARM64 field-delivery preparation, not deployment.**
 Accepted F/application9bf02724/native6eb61a9 remains immutable. Production-tag ARM64
-JNI is now built through the accepted builder; beta119 is reserved for the unpublished
+JNI is now built through the accepted builder; beta120 is reserved for the unpublished
 candidate (118 is not reused). Packaging accepts a separately pinned native commit only
 after checking its complete runtime-source closure against application HEAD. No native
 runtime changes, new AVD, provider rooms or phone operations. Server entry packaging and
 final APK gates remain in progress; fresh real locator and vault signature are deliberately
 deferred until authorized server start/user handoff. Public113/catalog7 unchanged.
+Local119 draft was never signed/distributed;119 is already reserved by a separate paid
+branch, which remains untouched. This cold candidate uses120 to avoid that collision.
 [Delivery preparation and remaining gates](releases/2026-11-07-cold-field-delivery.md).
 
 **7 November — API28/emulated CELLULAR-only cold DROP PASS (F).**

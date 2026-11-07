@@ -24,7 +24,10 @@ matrix or emulator gate is repeated. JNI SHA256:
 `773d760dc8f5a7894ed7008b5f6c30b830bd663f66a8935d470f5262ebc50d26`.
 Private output: `state-client-build/cold-field-delivery-20261107/native-arm64`.
 
-Reserve unpublished versionCode119 / `0.1.18-beta119`, not a replacement118.
+Reserve unpublished versionCode120 / `0.1.18-beta120`, not a replacement118.
+The initial unsigned local119 draft is abandoned: read-only branch inventory found119
+already reserved by `feature/subscription-paid-119-20261107`. That branch and its paid
+work remain untouched. No119 cold bytes were signed or distributed.
 Package gate now supports a pinned native-source commit and generated-artifact directory;
 it still requires clean tracked sources, exact native/manifest match and verifies that
 carrier runtime/native/build closure did not change. Application source is independently

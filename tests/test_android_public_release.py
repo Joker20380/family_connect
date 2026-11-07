@@ -26,9 +26,9 @@ def test_android_changes_do_not_start_desktop_suites():
     assert not any(platforms(['docs/STATUS.md']).values())
 
 
-def test_android119_candidate_keeps_test_seam_disabled_and_requires_native_provenance():
+def test_android120_candidate_keeps_test_seam_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 119' in gradle and "versionName '0.1.18-beta119'" in gradle
+    assert 'versionCode 120' in gradle and "versionName '0.1.18-beta120'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
