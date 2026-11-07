@@ -2,6 +2,12 @@
 
 ## Current engineering priority / Текущий critical path
 
+**7 November NL1 load diagnosis complete, read-only:** paid-watch polling overhead
+and mailbox192MiB cgroup pressure explain substantial non-MESH load. No watcher,
+memory/CPU limit, admission or deployment changes. Any optimization must preserve
+revocation/lease enforcement and separately qualify mailbox sizing.
+[Measurements](releases/2026-11-07-vpn-health.md#nl1-load-attribution).
+
 **7 November20:04UTC MESH count complete:** journal-derived concurrent sessions
 NL1=1/NL2=0, with fresh NL1 incoming heartbeat and stable process invocations.
 No implementation/deployment or gate advancement; RU intent and NL1 load follow-up

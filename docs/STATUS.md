@@ -1,5 +1,11 @@
 # Текущее состояние / Current state
 
+**7 November20:07–20:08UTC — NL1 load attributed:** ten-second cgroup sample:
+paid-watch35.8%, mailbox22.1%, MESH17.6% of ONE core (two-vCPU host).
+Mailbox hits its192MiB cap with250.6MiB swap despite~1GiB host available memory;
+306 new memory.max events/10s. Watcher repeats per-record subprocess readback with
+2s sleeps. No tuning/restart. [Evidence](releases/2026-11-07-vpn-health.md#nl1-load-attribution).
+
 **7 November20:04UTC — MESH concurrency follow-up:** current-invocation journals
 show1 established/authenticated nonterminal session on NL1,0 on NL2, unchanged
 across two snapshots. NL1 receives fresh heartbeat (19.3s old at final snapshot).

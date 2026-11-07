@@ -79,3 +79,35 @@ not a measured user payload rate. No client traffic test or memory introspection
 Journal-derived count is a point-in-time observation, not a native exported gauge;
 missing/dropped logs remain a general limitation. No service/profile changes,
 version changes, deployment or rollback. Existing unrelated working edits preserved.
+
+## NL1 load attribution
+
+Read-only follow-up20:07–20:08UTC: six5s /proc samples plus a10s cgroup CPU delta,
+including short-lived child processes omitted by a simple stable-PID comparison.
+Host has2 vCPU. Cgroup figures below use100%=ONE core, not the whole host:
+paid-watch35.8% (~17.9% host), mailbox22.1% (~11.1% host), MESH17.6% (~8.8% host),
+TCP2.6%, AWG2.1%; root cgroup91.6% (~45.8% host) during the same10s.
+These rates cannot exactly apportion the earlier82% short peak from another window.
+
+Mailbox MemoryMax=201326592 (192MiB); current201101312→201281536 bytes,
+swap262721536 bytes (~250.6MiB). Host MemAvailable1092476KiB (~1.04GiB).
+memory.events max597490→597796 (+306/10s); OOM/kill0. CPU quota25000/100000
+(25% of one core). In six5s samples mailbox accounts for approximately all major
+faults (up to9911/sample); host swap-in peaks11363 pages/5.04s (~8.8MiB/s), IO wait
+up to20.7%. MESH major faults0, cgroup swap0 and memory-limit events0.
+This supports local mailbox cgroup pressure/paging, not whole-host RAM exhaustion.
+The application's reason for its memory footprint is not diagnosed by these reads.
+
+Installed paid-transport.pyz source was read, not executed: watch calls engine.apply
+then sleeps TICK_SECONDS=2. Each pass loads/validates stored decisions and peer/config
+state; readback loops through stored records, invokes xray inbounduser and AWG show
+per record, reapplies permitted AWG peers and writes state/attempt receipts. Thus
+background cost follows stored records as well as active clients; a single MESH
+session does not imply an idle host. cgroup accounting includes these subprocesses.
+The exact number/duration of subprocess calls was not traced.
+
+No settings/limits/services were changed, no admission checks disabled, no deployment
+or version change. Rollback not applicable. Before a separately authorized fix:
+qualify idempotent/batched readback without weakening revocation/lease/watchdog
+semantics; diagnose mailbox footprint and budget before raising its memory cap.
+Short samples are not capacity/load-test acceptance or a causal intervention trial.
