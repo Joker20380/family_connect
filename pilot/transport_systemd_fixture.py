@@ -167,7 +167,8 @@ def budget_fault(document):
             process.terminate();process.wait(timeout=2)
         else:
             (TCP/'xray').unlink();(TCP/'xray').symlink_to('/native/xray')
-        run(['systemctl','reset-failed',SERVICES[0]])
+        if subprocess.run(['systemctl','is-failed','--quiet',SERVICES[0]]).returncode == 0:
+            run(['systemctl','reset-failed',SERVICES[0]])
         run(['systemctl','start',*SERVICES])
 
 
