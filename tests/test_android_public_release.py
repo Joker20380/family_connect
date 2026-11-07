@@ -26,14 +26,16 @@ def test_android_changes_do_not_start_desktop_suites():
     assert not any(platforms(['docs/STATUS.md']).values())
 
 
-def test_android118_candidate_keeps_provisioning_disabled_and_requires_native_provenance():
+def test_android119_candidate_keeps_test_seam_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 118' in gradle and "versionName '0.1.18-beta118'" in gradle
+    assert 'versionCode 119' in gradle and "versionName '0.1.18-beta119'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
     assert 'verifyFriendsRestrictedInputs' in gradle
     assert '--check-generated' in gradle
+    assert 'file(restrictedDirectory).absolutePath' in gradle
+    assert '--native-source-commit' in gradle
 
 
 def test_signaling_read_classes_match_without_changing_legacy_recovery():
@@ -217,9 +219,22 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'DiagnosticRing.java': 'd6f0f8888164384c2c07627a283a00a9e2383e1488a177816b4f1352f92d0c68',
         'RestrictedTrace.java': '34a50256ffd04d98cb29274be2c5b800a18a7756c47f5da4568e3bc5a5418561',
     }
+    reviewed_cold_candidate_9bf02724 = {
+        'ChatNetworkAndroid.java': '7229512c6645549be8dc3257faed12d7cf47db5345b04bed6fd3547b7b032ccd',
+        'ConnectivityOrchestrator.java': '93b6d8c322ad95ef74594aab2ce30a1b2fea02d54d2ac06b4a3308fe3664224e',
+        'DiagnosticRing.java': '5c9db0e90368bfd642446f735d856ae2960026ba6fc48ce41ffbd4e72c32ea61',
+        'FriendsAccessAndroid.java': '8c26c43dec6210318911785231c673546dce98505e642cedb0326e0d8b5f6642',
+        'FriendsRestricted.java': '985bd6739c38c28537112dead9217f0cf1471a5c51433c51cbc5b17c1415cce8',
+        'NativeRestricted.java': '4b79103dd6e67039d95eae83af0bcc3df30f298f0d92221fc53f5c97bdc75939',
+        'ReadinessBootstrapRoute.java': 'b1f21dfb01d7a79cef793d898b8b58c99b324c75c53d745c47b370f679bbe5ef',
+        'ReadinessFetchTrace.java': 'c91f00af4852bdc9cee839cf7db4a798ac387781d8d9d36a5f730c37e8915cc8',
+        'ReadinessProduct.java': '3f63c57c4b543df769a96a72599f3380ba8fb32af4c5ddede6b21b6e36ae7074',
+        'RestrictedTunnelEngine.java': 'b331aa8c3678fdaf12a0552239cd3e6927c23028b95493b741d96faf23c80740',
+    }
     reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81,
                          **reviewed_gateway_readiness, **reviewed_slow_link_recovery,
-                         **reviewed_idle_ack_recovery, **reviewed_signaling_read_diagnostics}
+                         **reviewed_idle_ack_recovery, **reviewed_signaling_read_diagnostics,
+                         **reviewed_cold_candidate_9bf02724}
     reviewed_resources = {
         'clients/android/app/src/main/res/values-ru/strings.xml': '89b334900a7febe2e50bfe06d593673961c320704a16ead76c09d9baa22ea279',
         'clients/android/app/src/main/res/values/strings.xml': '85e40c0044eaec9ebe8fb6f77d0a026ddc6bead90fb044237abd23b305fd2c39',

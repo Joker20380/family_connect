@@ -3,6 +3,7 @@ import importlib.util
 import json
 from pathlib import Path
 import zipfile
+import subprocess
 
 import pytest
 
@@ -10,6 +11,29 @@ ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('restricted_ci', ROOT / 'pilot/android-restricted/package_ci.py')
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
+
+
+def test_retained_native_source_requires_equal_dependency_tree(tmp_path):
+    def git(*args):
+        return subprocess.check_output(['git', *args], cwd=tmp_path, text=True).strip()
+    git('init', '-q')
+    git('config', 'user.name', 'Disposable Test')
+    git('config', 'user.email', 'test@example.invalid')
+    for name in ('carrier/coldprovision/channel.go', 'carrier/cmd/entry/main.go', 'clients/android/version'):
+        path = tmp_path/name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text('one')
+    git('add', '.')
+    git('commit', '-qm', 'base')
+    native = git('rev-parse', 'HEAD')
+    (tmp_path/'clients/android/version').write_text('two')
+    (tmp_path/'carrier/cmd/entry/main.go').write_text('two')
+    git('commit', '-qam', 'delivery only')
+    module.verify_native_source(native, git('rev-parse', 'HEAD'), tmp_path)
+    (tmp_path/'carrier/coldprovision/channel.go').write_text('changed native dependency')
+    git('commit', '-qam', 'native delta')
+    with pytest.raises(subprocess.CalledProcessError):
+        module.verify_native_source(native, git('rev-parse', 'HEAD'), tmp_path)
 
 
 @pytest.mark.parametrize('fault', ['', 'native', 'manifest', 'source', 'dex', 'revision', 'tags', 'producer', 'patch',

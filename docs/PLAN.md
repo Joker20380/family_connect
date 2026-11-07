@@ -2,6 +2,14 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected7 November: bounded ARM64 field-delivery preparation after accepted F.**
+Build/package119 with accepted application/native provenance; package the existing
+restricted provisioning entry and exercise it locally with disposable authority custody.
+Then prepare executable assets-only fresh-locator/signing/handoff procedure. No F rerun,
+production change, public release, phone install or G4 work. Final readiness requires
+real authorized entry, fresh bound locator, final-byte checks and existing-key signature.
+[Current build/package checkpoint](releases/2026-11-07-cold-field-delivery.md).
+
 **Completed7 November: API28/emulated CELLULAR-only cold DROP follow-up.**
 F/252c87e with unchanged application9bf0272 and JNI17119f00…60c59 passes real Android28
 sole foreground/unrestricted CELLULAR, no WiFi/VPN/readiness, fresh synthetic inputs and
