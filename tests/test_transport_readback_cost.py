@@ -127,5 +127,5 @@ def test_final_awg_snapshot_detects_concurrent_drift(engine, registry):
 def test_malformed_awg_snapshot_is_rejected(engine, output):
     gateway, current, live, initial = engine
     gateway.run = lambda args: output
-    with pytest.raises(ValueError, match='INVALID_AWG_READBACK'):
+    with gateway.operation(), pytest.raises(ValueError, match='INVALID_AWG_READBACK'):
         gateway.awg_snapshot()

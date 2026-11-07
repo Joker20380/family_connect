@@ -3,6 +3,7 @@ from copy import deepcopy
 import importlib.util
 import json
 import os
+import pwd
 from pathlib import Path
 import shutil
 import subprocess
@@ -54,6 +55,12 @@ def setup(document):
     client = json.loads((canary.ROOT/'material.json').read_text())
     ROOT.mkdir(parents=True)
     TCP.mkdir()
+    run(['useradd', '--system', '--no-create-home', 'fc-friends'])
+    user = pwd.getpwnam('fc-friends')
+    for path in (ROOT.parent, ROOT.parent.parent):
+        path.chmod(0o755)
+    TCP.chmod(0o750)
+    os.chown(TCP, 0, user.pw_gid)
     for name in ('awg','amneziawg-go'):
         (ROOT/name).symlink_to('/native/'+name)
     (TCP/'xray').symlink_to('/native/xray')
@@ -74,14 +81,17 @@ def setup(document):
     config['inbounds'].append(dict(tag='api',listen='127.0.0.1',port=18085,protocol='dokodemo-door',settings=dict(address='127.0.0.1')))
     config['routing'] = dict(rules=[dict(type='field',inboundTag=['api'],outboundTag='api')])
     write(TCP/'server.json',config)
+    os.chown(TCP/'server.json',0,user.pw_gid)
+    (TCP/'server.json').chmod(0o640)
     spec = importlib.util.spec_from_file_location('actual_gateway',ROOT/'awg-gateway.py')
     gateway = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = gateway
     spec.loader.exec_module(gateway)
     by_device = {item['device']:item for item in document['envelope']['decisions']}
-    primary, other = [by_device[device] for device in document['registered']]
+    registered = [by_device[device] for device in document['registered']]
+    primary, other = registered[:2]
     with gateway.database() as database:
-        for record in (primary,other):
+        for record in registered:
             database.execute('INSERT INTO peers(public) VALUES (?)',(record['public_key'],))
     from control.friends.transport_gateway import Gateway
     engine = Gateway(gateway)
@@ -89,7 +99,7 @@ def setup(document):
     engine.apply(starting=True)
     units = Path('/etc/systemd/system')
     (units/SERVICES[1]).write_text('[Unit]\nDescription=Isolated packaged AWG service\n[Service]\nExecStart=/usr/bin/python3 /opt/apps/family_connect/friends-awg/awg-gateway.py run\n')
-    (units/SERVICES[2]).write_text('[Unit]\nDescription=Isolated exact Xray service\n[Service]\nExecStart=/native/xray run -config /opt/apps/family_connect/friends-tcp/server.json\n')
+    shutil.copyfile('/production-tcp.service', units/SERVICES[2])
     shutil.copyfile('/kit/'+SERVICES[0],units/SERVICES[0])
     for service in SERVICES[1:]:
         drop = units/(service+'.d')
@@ -116,8 +126,50 @@ def setup(document):
 
 def info():
     state = json.loads((ROOT/'transport-state.json').read_text())
+    for attempt in range(50):
+        pid = int(run(['systemctl','show',SERVICES[2],'-p','MainPID','--value']).stdout)
+        if not pid or Path('/proc/'+str(pid)+'/comm').read_text().strip() == 'xray':
+            break
+        time.sleep(.1)
+    if pid:
+        assert Path('/proc/'+str(pid)+'/status').read_text().split('Uid:')[1].split()[0] == str(pwd.getpwnam('fc-friends').pw_uid)
     return dict(state=state,services={service:run(['systemctl','show',service,'-p','MainPID','-p','NRestarts','-p','ActiveState','-p','InvocationID']).stdout.decode() for service in SERVICES},
         preflight=run(['systemctl','show',SERVICES[2],'-p','ExecStartPre']).stdout.decode())
+
+
+def budget_fault(document):
+    started = time.monotonic()
+    if document['kind'] == 'lock':
+        process = subprocess.Popen([sys.executable, '-c',
+            'import fcntl,time,sys; handle=open(sys.argv[1],"a"); fcntl.flock(handle,fcntl.LOCK_EX); time.sleep(30)',str(ROOT/'application.lock')])
+    else:
+        process = None
+        (TCP/'xray').unlink()
+        (TCP/'xray').write_text('#!/usr/bin/python3\nimport os,subprocess,sys,time\n'
+            'if "api" in sys.argv:\n subprocess.Popen([sys.executable,"-c","import time,pathlib; time.sleep(10); pathlib.Path(\\"/tmp/late-engine-write\\").touch()"]); time.sleep(30)\n'
+            'os.execv("/native/xray",["/native/xray",*sys.argv[1:]])\n')
+        (TCP/'xray').chmod(0o755)
+    try:
+        for attempt in range(120):
+            result = run(['systemctl','show',SERVICES[0],'-p','Result','--value']).stdout.strip()
+            if result != b'success':
+                break
+            time.sleep(.1)
+        assert result == b'exit-code', result
+        elapsed = time.monotonic()-started
+        assert elapsed < 12
+        run(['systemctl','stop',*SERVICES])
+        time.sleep(max(0,12-(time.monotonic()-started)))
+        assert not Path('/tmp/late-engine-write').exists()
+        return dict(kind=document['kind'],bounded_failure_seconds=elapsed,late_write=False)
+    finally:
+        if process:
+            process.terminate();process.wait(timeout=2)
+        else:
+            (TCP/'xray').unlink();(TCP/'xray').symlink_to('/native/xray')
+        if subprocess.run(['systemctl','is-failed','--quiet',SERVICES[0]]).returncode == 0:
+            run(['systemctl','reset-failed',SERVICES[0]])
+        run(['systemctl','start',*SERVICES])
 
 
 def start_client(document):
@@ -163,6 +215,8 @@ def main():
         result = start_client(document)
     elif action == 'probe':
         result = probe(document)
+    elif action == 'budget-fault':
+        result = budget_fault(document)
     elif action == 'restart':
         run(['systemctl','restart',*SERVICES])
         result = info()
