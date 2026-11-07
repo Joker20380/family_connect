@@ -89,7 +89,12 @@ public final class ChatNetworkAndroid {
         return caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
                 &&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
                 &&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
-                &&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND);
+                &&foreground(caps);
+    }
+
+    private static boolean foreground(NetworkCapabilities caps){
+        int capability=android.os.Build.VERSION.SDK_INT==27?18:NetworkCapabilities.NET_CAPABILITY_FOREGROUND;
+        return caps!=null&&caps.hasCapability(capability);
     }
 
     synchronized String provisioningResolver()throws IOException{
@@ -108,7 +113,7 @@ public final class ChatNetworkAndroid {
         NetworkCapabilities caps=manager==null||provisioningNetwork==null?null:manager.getNetworkCapabilities(provisioningNetwork);
         value.addProperty("type",provisioningType);value.addProperty("handle",provisioningNetwork==null?0:provisioningNetwork.getNetworkHandle());
         value.addProperty("available",caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET));
-        value.addProperty("foreground",caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND));
+        value.addProperty("foreground",foreground(caps));
         value.addProperty("not_restricted",caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED));
         value.addProperty("resolver",provisioningNetwork==null?"NONE":"NETWORK_IPV4_GO_RESOLVER");
         value.addProperty("resolver_class",resolverClass);

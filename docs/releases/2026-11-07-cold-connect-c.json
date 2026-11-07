@@ -1,0 +1,108 @@
+{
+  "result": "FAIL_RUNTIME",
+  "managed_source": "e0fe6e543ca4c338a2a65f486cee592b5035f6c7",
+  "native_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+  "native_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+  "candidate_failure": {
+    "event": "candidate_failed",
+    "state": "CONNECTING",
+    "elapsed_ms": 2702,
+    "category": "BOOTSTRAP_UNAVAILABLE",
+    "trigger_reason": "BOOTSTRAP_UNAVAILABLE",
+    "stage": "ORCHESTRATOR",
+    "monotonic_ms": 74533
+  },
+  "provisioning_before_cleanup": [
+    {
+      "request_id": "849b0516fa98405bb124da8528feb7e6",
+      "phase": "BEGIN",
+      "network": {
+        "type": "NONE",
+        "handle": 0,
+        "available": false,
+        "foreground": false,
+        "not_restricted": false,
+        "resolver": "NONE",
+        "resolver_class": "NONE",
+        "observed_ms": 74517,
+        "bind_ms": 0,
+        "bind_available": false,
+        "bind_result": "NOT_RUN",
+        "bind_operation": "NOT_RUN",
+        "bind_error": "NONE",
+        "bind_errno": 0
+      }
+    }
+  ],
+  "go_carrier_tls_request_reached": false,
+  "cause": "Correction used modern public FOREGROUND=19, but API27 hidden FOREGROUND=18. No network was selected, resolver failed before JNI. This is an API27 compatibility defect introduced by e0fe6e5, not a repaired native bind.",
+  "fix": "Version-specific capability on supported API27, modern constant on API28+; test fixtures use actual platform bit values, covering SDK27/28/35.",
+  "compatibility_source": "https://android.googlesource.com/platform/frameworks/base/+/android-8.1.0_r1/core/java/android/net/NetworkCapabilities.java",
+  "regression": {
+    "before": {
+      "exit": 1,
+      "log_sha256": "f82abbfd370c131301c4f2c2ff0b587642dacf664d0a3b562566ef836fa7f0ae"
+    },
+    "after": {
+      "exit": 0,
+      "log_sha256": "8914b2875b935efdfd9f1bf6af5e95e70a51f87e2ceddea128d3f11d90e5447f"
+    }
+  },
+  "additional_harness_input_defect": "B/C egress expectation had hex text instead of 32 raw digest bytes. Egress never reached. Packager now rejects wrong length before work; next fresh input must be raw SHA256. Four targeted packager tests pass.",
+  "server_counts": {
+    "restricted_challenges": 0,
+    "restricted_certificates": 0
+  },
+  "ready_dns_https_egress": false,
+  "locator_before_connect": {
+    "remaining_seconds": 404,
+    "verified": true,
+    "verified_at": 1794052075
+  },
+  "synthetic_identity_registered": true,
+  "final_apks": {
+    "source": "e0fe6e543ca4c338a2a65f486cee592b5035f6c7",
+    "abi": "x86_64",
+    "native_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+    "method": "assets-only zip rewrite, zipalign16K, fresh isolated test signer; unchanged manifest/dex/native",
+    "apks": {
+      "app-friends.apk": {
+        "sha256": "f122c238de6425f96f0507111222ccf33ae617c53f3254c7307532b7ffc7221d",
+        "base_sha256": "eee7e84c90570f95fbc85967ecc66c629238631494447cc342c62460758d8ae5",
+        "changed_entries": [
+          "assets/control-anchor.pub",
+          "assets/provisioning/nl-amsterdam-1.json"
+        ]
+      },
+      "app-friends-androidTest.apk": {
+        "sha256": "f30ef9005c2723f7765d8a7a791af30be986d66a4b921b5c90a3d8c73154e898",
+        "base_sha256": "bd230fc53ed70ce84e2dd353cb511b930af22811c1a0cd0594cad3ec5a0b4257",
+        "changed_entries": [
+          "assets/identity96.private",
+          "assets/egress.sha256"
+        ]
+      }
+    },
+    "native_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7"
+  },
+  "fix_confirmation": "PENDING",
+  "cleanup": {
+    "owned_emulator_stopped": true,
+    "monitor_joined": true,
+    "authority_container_absent": true,
+    "vault_exit": -15,
+    "provider_room_deletion": "NOT_VERIFIED"
+  },
+  "local_evidence_root": "state-client-build/cold-native-diagnostic-20261106/connect-c-20261107",
+  "artifact_sha256": {
+    "immutable.json": "b747bf21e53f5a936408741c723ebf7ab514cd9598b259ed334dea8314ef9f06",
+    "receipt.json": "5c24a0b2e813d02010867f001109cb5b912ce8d138676b52a0c892d5e0198c47",
+    "instrumentation.log": "81c113f5a1bc8b0aa135f7550eeab2f5e6bf6c0ba8768f01e152201058e4606f",
+    "resources.jsonl": "946dfc33164f906b3a69bbbf7d807dc5f7f912a934cbf861b05cf40d1ab74b59",
+    "guest-rules-after.txt": "7bc964d7c9f297e14dce88813e034f29f7a8907264c984a4f95a783287e010d2",
+    "guest-connectivity-after.txt": "896cdd76ab9cb411d67f5e4b4cd75ab13bd602e3c83a81ba71ebb1edc5df48c0",
+    "apk-final/receipt.json": "df18a18ba38f18924aaac501c878af9d72ed1ab53121b3baeb1ca44e2f62ebd5",
+    "apk-final/app-friends.apk": "f122c238de6425f96f0507111222ccf33ae617c53f3254c7307532b7ffc7221d",
+    "apk-final/app-friends-androidTest.apk": "f30ef9005c2723f7765d8a7a791af30be986d66a4b921b5c90a3d8c73154e898"
+  }
+}

@@ -4,6 +4,9 @@ public class NetworkProbe {
     private static final String URL="https://127.0.0.1:1/friends/restricted-readiness/challenge";
     private static void require(boolean value){if(!value)throw new AssertionError();}
     public static void main(String[] arguments)throws Exception{
+        for(int sdk:new int[]{27,28,35}){android.os.Build.VERSION.SDK_INT=sdk;probe();}
+    }
+    private static void probe()throws Exception{
         android.content.Context context=new android.content.Context();
         context.manager=new ConnectivityManager();
         Network wifi=new Network(1),cell=new Network(2),vpn=new Network(3);

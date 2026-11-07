@@ -2,6 +2,12 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Active7 November: API27-compatible network selection confirmation.**
+C exposed modern FOREGROUND19 versus API27 hidden18; correct that compatibility edge,
+retain filtering/pinning/fail-closed, verify actual bit values on27/28/35. Rebuild managed
+only and confirm cold runtime with retained JNI and32-byte raw egress expectation.
+No permission expansion, routing override or deadline change. [C evidence](releases/2026-11-07-cold-connect-c.json).
+
 **Active7 November: confirm foreground-network selection correction in cold runtime.**
 B localizes Android NETWORK_BIND EACCES(13), not FD duplication: the first enumerated
 CELLULAR is background and therefore permission-gated by API27. Filter unrestricted

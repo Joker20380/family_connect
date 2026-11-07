@@ -1,5 +1,14 @@
 # Текущее состояние / Current state
 
+**7 November — C exposes API27 compatibility error in the selection correction.**
+Modern FOREGROUND=19 does not match API27's then-hidden bit18. C fails before JNI,
+not a confirmation of the bind fix. Use bit18 only on supported SDK27 and public19
+on28+; actual-bit regression fails before, passes after on27/28/35. Also reject hex-text
+egress fixtures before packaging (the traffic verifier expects32 raw bytes);4 packager
+tests pass. Neither issue changes JNI, trust, deadlines or CPU observation-only. Own C
+resources stopped, no READY/traffic, room deletion unverified; corrected runtime pending.
+[C evidence and correction](releases/2026-11-07-cold-connect-c.json).
+
 **7 November — bind cause localized; minimal selection repair, confirmation pending.**
 Diagnostic Connect B preserves NETWORK_BIND/SOCKET/EACCES(13), after successful FD_DUP,
 before TLS. Selected CELLULAR lacks FOREGROUND; WIFI has it. API27 netd denies this

@@ -22,6 +22,8 @@ def signer_command(buildtools,work,final,aligned):
 
 def main(work,base_apks=None):
     WORK=Path(work).resolve()
+    if len((WORK/'egress.sha256').read_bytes())!=32:
+        raise ValueError('EGRESS_DIGEST_MUST_BE_32_RAW_BYTES')
     base_apks=Path(base_apks).resolve() if base_apks else BASE/'offline-artifacts'
     os.umask(0o077)
     fixture=WORK/'local-auth/fixture'
