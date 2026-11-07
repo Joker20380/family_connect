@@ -1,5 +1,13 @@
 # Текущее состояние / Current state
 
+**7 November — owner-selected NL1 load correction, source qualified; not deployed.**
+Watcher uses three bulk readbacks rather than per-record subprocess queries/no-op
+peer writes; all lease/revocation/watchdog fences remain. Mailbox memory cap512MiB
+retains CPU/security/spool limits.54 focused tests and real NL1 read-only parser
+preflight PASS; exact native/systemd expiry/lease/recovery gate PASS. No server
+changes yet; guarded NL1 delivery and post-change load readback are next.
+[Scope, hashes and rollback](releases/2026-11-07-nl1-load-fix.md).
+
 **7 November — SUBSCRIPTION-ENFORCEMENT-FIX: current, production disabled.**
 Core fix merged by PR5 `3683fed3506e32b5795fd93601a78fdfe5e73199` after all six
 applicable hosted runs passed on299b4845; remote main/tree verified. Final readback

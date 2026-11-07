@@ -2,6 +2,13 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Owner-selected7 November: correct NL1 background load, bounded operational task.**
+Source/54 scoped checks, read-only live parser preflight and exact packaged systemd/
+native gates pass. Deliver only NL1 watcher archive
+and mailbox cap; verify stable MESH/mailbox PIDs, admission readback and lower load.
+No RU/NL2 rollout, subscription mutation, client release or adjacent task advancement.
+[Gate and rollback](releases/2026-11-07-nl1-load-fix.md).
+
 **Selected SUBSCRIPTION-ENFORCEMENT-FIX — correct PR4, not enable production.**
 Core gate closed by PR5/3683fed3 with six green hosted runs and the real-systemd
 receipt. Final panel-only correction removes the hardcoded schema1 label, preserves

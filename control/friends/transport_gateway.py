@@ -202,22 +202,29 @@ class Gateway:
         return state, peers, observations, changed
 
     def readback(self, state, peers, observations):
-        live = self.run([str(self.root / 'awg'), 'show', self.gateway.IFACE, 'peers']).decode().split()
+        live = self.awg_snapshot()
         for device, cached in state['records'].items():
             decision, observation = cached['decision'], observations[device]
             public, allowed = decision['public_key'], observation['allowed']
             if public in peers:
-                if allowed:
+                if allowed and live.get(public) != peers[public]:
                     self.gateway.add_peer(public, peers[public])
-                elif public in live:
+                elif not allowed and public in live:
                     self.run([str(self.root / 'awg'), 'set', self.gateway.IFACE, 'peer', public, 'remove'])
-            runtime = json.loads(self.run([str(self.root.parent / 'friends-tcp/xray'), 'api', 'inbounduser',
-                '--server=127.0.0.1:18085', '-tag=friends', '-email='+device+'@family.test']))
-            serialized = json.dumps(runtime)
-            tcp_present = decision['tcp_id'] in serialized and device+'@family.test' in serialized
-            awg_present = public in self.run([str(self.root / 'awg'), 'show', self.gateway.IFACE, 'peers']).decode().split()
+        tcp_by_email, tcp_by_id = self.tcp_snapshot()
+        live = self.awg_snapshot()
+        for device, cached in state['records'].items():
+            decision, observation = cached['decision'], observations[device]
+            public = decision['public_key']
+            email = device+'@family.test'
+            user = tcp_by_email.get(email)
+            tcp_present = user is not None and user['account']['id'] == decision['tcp_id']
+            if (user is not None or decision['tcp_id'] in tcp_by_id) and (
+                    not tcp_present or user['account'].get('flow') != 'xtls-rprx-vision'):
+                raise ValueError('ENGINE_READBACK_MISMATCH')
+            awg_present = public in live
             expected = observation['allowed']
-            if tcp_present != expected or awg_present != expected:
+            if tcp_present != expected or awg_present != expected or expected and live[public] != peers[public]:
                 if any(observations[key]['allowed'] != (observations[key]['registered'] and self.allowed(value))
                        for key, value in state['records'].items()):
                     return False
@@ -232,6 +239,32 @@ class Gateway:
         write(self.root/'transport-attempt.json', dict(schema=1, node=self.node,
             observed_at=int(self.clock()), result='applied'))
         return True
+
+    def awg_snapshot(self):
+        live = {}
+        output = self.run([str(self.root / 'awg'), 'show', self.gateway.IFACE, 'allowed-ips']).decode()
+        for line in output.splitlines():
+            fields = line.split()
+            if len(fields) != 2 or fields[0] in live:
+                raise ValueError('INVALID_AWG_READBACK')
+            live[fields[0]] = fields[1]
+        return live
+
+    def tcp_snapshot(self):
+        runtime = json.loads(self.run([str(self.root.parent / 'friends-tcp/xray'), 'api', 'inbounduser',
+            '--server=127.0.0.1:18085', '-tag=friends']), object_pairs_hook=unique)
+        if type(runtime) is not dict or set(runtime) - {'users'} or type(runtime.get('users', [])) is not list:
+            raise ValueError('INVALID_TCP_READBACK')
+        users = runtime.get('users', [])
+        emails, identities = {}, {}
+        for user in users:
+            if (type(user) is not dict or type(user.get('email')) is not str or not user['email']
+                    or type(user.get('account')) is not dict or type(user['account'].get('id')) is not str
+                    or not user['account']['id'] or user['email'] in emails or user['account']['id'] in identities):
+                raise ValueError('INVALID_TCP_READBACK')
+            emails[user['email']] = user
+            identities[user['account']['id']] = user
+        return emails, identities
 
 
 def notify(value):
