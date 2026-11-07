@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**7 November — selected follow-up: API28/CELLULAR-only with silent direct-path DROP.**
+E remains accepted in its exact API27/x86_64 synthetic scope. Its saved counters place
+timeouts in(45.894,51.100]s and(51.100,56.252]s after Connect; protocol errors rise
+in(56.252,57.268]s, after READY43.982s but before DNS_OK58.018s, HTTPS60.616s and
+cleanup62.267s. The later example.com NXDOMAIN cannot explain these earlier increments.
+No per-request IDs or protocol-reason breakdown were saved, so late unmatched DNS frames
+are a code-supported hypothesis, not an established E cause. Existing JNI exposes reason
+counters: the targeted test now retains them and per-traffic-stage snapshots. Existing
+runner adds API28, actual sole eligible CELLULAR checks and exact guest DROP; no product,
+JNI, budgets or security changes. Seven selected harness checks and the network-only
+27/28/35 probe pass; actual API28 runtime remains pending. No public/production/G4 action.
+[Bounded follow-up evidence](releases/2026-11-07-cold-api28-cellular.json).
+
 **7 November — real cold positive path PASS; bounded incident goal achieved.**
 E/14c2b81 (application9bf0272, native6eb61a9/JNI17119f00…60c59 unchanged) reaches
 ordinary MESH READY43.982s from a registered synthetic identity with no readiness/VPN,

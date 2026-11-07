@@ -362,6 +362,28 @@ def test_runner_forced_exit_survives_unwritable_evidence(monkeypatch, tmp_path):
     assert runner.record['stop_marker_error'] == 'FileNotFoundError'
 
 
+@pytest.mark.parametrize('networks,accepted', [
+    (['CELLULAR'], True), (['WIFI'], False), (['CELLULAR','WIFI'], False),
+    (['VPN'], False), ([], False), (['CELLULAR_BACKGROUND'], False)])
+def test_cold_cellular_only_requires_one_real_connected_foreground_network(monkeypatch, networks, accepted):
+    monkeypatch.setitem(sys.modules, 'android_emulator_guard', guard)
+    specification = importlib.util.spec_from_file_location('cold_runner', Path(__file__).with_name('android_cold_runtime.py'))
+    runner = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(runner)
+    lines = []
+    for network in networks:
+        foreground = '' if network.endswith('_BACKGROUND') else '&FOREGROUND'
+        transport = network.removesuffix('_BACKGROUND')
+        lines.append('NetworkAgentInfo{ state: CONNECTED/CONNECTED Transports: '+transport+
+                     ' Capabilities: INTERNET&NOT_RESTRICTED&NOT_VPN'+foreground+' }')
+    assert runner.cellular_only('\n'.join(lines)) is accepted
+    rules = runner.direct_rules('DROP')
+    assert rules == [
+        ['shell','iptables','-I','OUTPUT','-d','185.251.89.19','-p','tcp','--dport','8443','-j','DROP'],
+        ['shell','iptables','-I','OUTPUT','-d','186.246.45.246','-p','tcp','--dport','4242','-j','DROP']]
+    with pytest.raises(AssertionError):runner.direct_rules('ACCEPT')
+
+
 def test_child_created_during_guard_stop_is_not_left_running(monkeypatch):
     monkeypatch.setitem(sys.modules, 'android_emulator_guard', guard)
     specification = importlib.util.spec_from_file_location('cold_runner', Path(__file__).with_name('android_cold_runtime.py'))

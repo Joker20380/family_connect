@@ -28,9 +28,10 @@ public class NetworkProbe {
         require(!requests.available());
         try{requests.openHttps(URL,trace);throw new AssertionError();}catch(java.io.IOException expected){}
         require(trace.generation==0&&trace.type.equals("NONE")&&vpn.opened==0);
-        context.manager.networks=new Network[]{vpn,cell};
+        context.manager.networks=new Network[]{cell};
         ChatNetworkAndroid provisioning=new ChatNetworkAndroid(context);
         require(provisioning.provisioningResolver().equals("192.0.2.53:53"));
+        require(context.manager.dnsNetwork==cell);
         require(provisioning.protect(43)&&cell.bound==2&&vpn.bound==0);
         com.google.gson.JsonObject selected=provisioning.provisioningDiagnostic();
         require(selected.get("handle").getAsLong()==2&&selected.get("type").getAsString().equals("CELLULAR")&&selected.get("bind_result").getAsString().equals("BOUND"));

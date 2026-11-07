@@ -1,0 +1,193 @@
+{
+  "status": "SOURCE_CHECKED_RUNTIME_PENDING",
+  "application_source": "9bf02724deacf1c5e4293bea1bfdc6fc4f7fcacc",
+  "native_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+  "jni_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+  "accepted_E": {
+    "harness_source": "14c2b816c0a2aa3f9cd90ddbef65edb0c1a92ab7",
+    "app_sha256": "876daae0beb893e3b2bebb4773f6848de1f566ae76e960fb04c4cfa779858c50",
+    "test_sha256": "5fd5299643d330d92130d5d676956000f32a5bfa8552c97b3a2f4cf8c6e863e2",
+    "log_path": "state-client-build/cold-native-diagnostic-20261106/connect-e-20261107/instrumentation.log",
+    "log_sha256": "359d0eaf1780d0ba17519c4fce48d321525971db0e5a73a99c5281e227ce1e6a",
+    "counter_transitions": [
+      {
+        "elapsed_ms": 43814,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 0,
+          "DNSResponses": 0,
+          "DNSErrors": 0,
+          "DNSTimeouts": 0,
+          "OpenOK": 0,
+          "OpenErrors": 0,
+          "ProtocolErrors": 0,
+          "SentBytes": 0,
+          "ReceivedBytes": 0
+        }
+      },
+      {
+        "elapsed_ms": 44853,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 1,
+          "DNSResponses": 0,
+          "DNSErrors": 0,
+          "DNSTimeouts": 0,
+          "OpenOK": 1,
+          "OpenErrors": 0,
+          "ProtocolErrors": 0,
+          "SentBytes": 171,
+          "ReceivedBytes": 197
+        }
+      },
+      {
+        "elapsed_ms": 45894,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 2,
+          "DNSResponses": 1,
+          "DNSErrors": 0,
+          "DNSTimeouts": 0,
+          "OpenOK": 1,
+          "OpenErrors": 0,
+          "ProtocolErrors": 0,
+          "SentBytes": 260,
+          "ReceivedBytes": 370
+        }
+      },
+      {
+        "elapsed_ms": 51100,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 3,
+          "DNSResponses": 1,
+          "DNSErrors": 0,
+          "DNSTimeouts": 1,
+          "OpenOK": 1,
+          "OpenErrors": 0,
+          "ProtocolErrors": 0,
+          "SentBytes": 260,
+          "ReceivedBytes": 370
+        }
+      },
+      {
+        "elapsed_ms": 56252,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 4,
+          "DNSResponses": 1,
+          "DNSErrors": 0,
+          "DNSTimeouts": 2,
+          "OpenOK": 1,
+          "OpenErrors": 0,
+          "ProtocolErrors": 0,
+          "SentBytes": 260,
+          "ReceivedBytes": 370
+        }
+      },
+      {
+        "elapsed_ms": 57268,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 5,
+          "DNSResponses": 2,
+          "DNSErrors": 0,
+          "DNSTimeouts": 2,
+          "OpenOK": 1,
+          "OpenErrors": 0,
+          "ProtocolErrors": 2,
+          "SentBytes": 260,
+          "ReceivedBytes": 370
+        }
+      },
+      {
+        "elapsed_ms": 58309,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 5,
+          "DNSResponses": 3,
+          "DNSErrors": 0,
+          "DNSTimeouts": 2,
+          "OpenOK": 1,
+          "OpenErrors": 0,
+          "ProtocolErrors": 2,
+          "SentBytes": 260,
+          "ReceivedBytes": 370
+        }
+      },
+      {
+        "elapsed_ms": 59347,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 5,
+          "DNSResponses": 3,
+          "DNSErrors": 0,
+          "DNSTimeouts": 2,
+          "OpenOK": 2,
+          "OpenErrors": 0,
+          "ProtocolErrors": 2,
+          "SentBytes": 435,
+          "ReceivedBytes": 370
+        }
+      },
+      {
+        "elapsed_ms": 60363,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 5,
+          "DNSResponses": 3,
+          "DNSErrors": 0,
+          "DNSTimeouts": 2,
+          "OpenOK": 2,
+          "OpenErrors": 0,
+          "ProtocolErrors": 2,
+          "SentBytes": 747,
+          "ReceivedBytes": 3331
+        }
+      },
+      {
+        "elapsed_ms": 61407,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 6,
+          "DNSResponses": 3,
+          "DNSErrors": 0,
+          "DNSTimeouts": 2,
+          "OpenOK": 2,
+          "OpenErrors": 0,
+          "ProtocolErrors": 2,
+          "SentBytes": 747,
+          "ReceivedBytes": 3589
+        }
+      },
+      {
+        "elapsed_ms": 62267,
+        "stage": "BEFORE_FINAL_CLEANUP",
+        "mux": {
+          "DNSRequests": 6,
+          "DNSResponses": 4,
+          "DNSErrors": 0,
+          "DNSTimeouts": 2,
+          "OpenOK": 2,
+          "OpenErrors": 0,
+          "ProtocolErrors": 2,
+          "SentBytes": 747,
+          "ReceivedBytes": 3589
+        }
+      }
+    ],
+    "causality": "UNKNOWN: no per-request DNS IDs or ProtocolErrorReasons retained; 2/2 is not proof; events precede original-target NXDOMAIN and cleanup"
+  },
+  "preserved_original_fail_artifacts_verified": 19,
+  "tests": [
+    "7 selected harness tests PASS",
+    "NetworkProbe SDK27/28/35 cellular-only DNS pinning/fail-closed PASS (stubs, not runtime)"
+  ],
+  "runtime": "NOT_RUN_YET",
+  "boundaries": [
+    "CPU observe-only retained",
+    "GPU guard/watchdog/cleanup retained",
+    "No product/native change",
+    "No production/G4/field phone changes"
+  ]
+}

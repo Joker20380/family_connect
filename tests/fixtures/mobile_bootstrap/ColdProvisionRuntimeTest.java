@@ -59,6 +59,8 @@ public final class ColdProvisionRuntimeTest {
                         for(String key:new String[]{"DNSRequests","DNSResponses","DNSErrors","DNSTimeouts","OpenOK","OpenErrors","ProtocolErrors","SentBytes","ReceivedBytes"})
                             if(mux.has(key))counters.addProperty(key,mux.getLong(key));
                         value.add("mux_counters",counters);
+                        org.json.JSONObject reasons=mux.optJSONObject("ProtocolErrorReasons");
+                        if(reasons!=null)value.add("mux_protocol_reasons",com.google.gson.JsonParser.parseString(reasons.toString()));
                     }
                 }
             }
@@ -112,6 +114,21 @@ public final class ColdProvisionRuntimeTest {
         assertNull(VpnService.prepare(context));
         android.net.ConnectivityManager manager=context.getSystemService(android.net.ConnectivityManager.class);
         for(android.net.Network network:manager.getAllNetworks())assertFalse(manager.getNetworkCapabilities(network).hasTransport(android.net.NetworkCapabilities.TRANSPORT_VPN));
+        Bundle arguments=InstrumentationRegistry.getArguments();
+        assertEquals(Integer.parseInt(arguments.getString("expected_api","27")),android.os.Build.VERSION.SDK_INT);
+        if(Boolean.parseBoolean(arguments.getString("cellular_only","false"))){
+            android.net.Network[] networks=manager.getAllNetworks();assertEquals(1,networks.length);
+            android.net.NetworkCapabilities caps=manager.getNetworkCapabilities(networks[0]);assertNotNull(caps);
+            assertTrue(caps.hasTransport(android.net.NetworkCapabilities.TRANSPORT_CELLULAR));
+            assertFalse(caps.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI));
+            for(int capability:new int[]{12,13,15,19})assertTrue(caps.hasCapability(capability));
+            ChatNetworkAndroid selected=new ChatNetworkAndroid(context);
+            String resolver=selected.provisioningResolver();
+            assertTrue(manager.getLinkProperties(networks[0]).getDnsServers().stream().anyMatch(address->resolver.equals(address.getHostAddress()+":53")));
+            JsonObject network=selected.provisioningDiagnostic();
+            assertEquals(networks[0].getNetworkHandle(),network.get("handle").getAsLong());
+            record("CELLULAR_ONLY_REAL_ANDROID_NETWORK",network);
+        }
         File identityFile=new File(context.getNoBackupFilesDir(),"friends-identity.enc");
         assertFalse(identityFile.exists());assertNull(new RestrictedVault(context).read());
         assertTrue(ProvisioningCarrier.configured(context,RestrictedGateway.PRIMARY));
@@ -142,12 +159,14 @@ public final class ColdProvisionRuntimeTest {
             byte[] readiness=new RestrictedVault(context).read();assertNotNull(readiness);
             byte[] encrypted=Files.readAllBytes(new File(context.getNoBackupFilesDir(),"restricted-readiness.enc").toPath());
             assertFalse(Arrays.equals(readiness,encrypted));Arrays.fill(readiness,(byte)0);phase("ENCRYPTED_READINESS_ACCEPTED");
-            assertTrue(InetAddress.getAllByName("api.ipify.org").length>0);phase("DNS_OK");
+            snapshot("BEFORE_TRAFFIC");
+            assertTrue(InetAddress.getAllByName("api.ipify.org").length>0);snapshot("DNS_OK");
             byte[] observed=https("https://api.ipify.org");
-            assertTrue(observed.length>0);phase("VERIFIED_HTTPS_OK");
+            assertTrue(observed.length>0);snapshot("VERIFIED_HTTPS_OK");
             byte[] expected=asset(tests,"egress.sha256");
-            assertTrue(MessageDigest.isEqual(MessageDigest.getInstance("SHA-256").digest(observed),expected));phase("EGRESS_VERIFIED");
+            assertTrue(MessageDigest.isEqual(MessageDigest.getInstance("SHA-256").digest(observed),expected));snapshot("EGRESS_VERIFIED");
             originalDnsTarget();
+            snapshot("AFTER_ORIGINAL_DNS");
         }catch(Exception|AssertionError|LinkageError failure){
             JsonObject value=new JsonObject();value.addProperty("category",ConnectivityOrchestrator.classify(failure).name());record("HARNESS_FAILURE",value);
             throw new AssertionError("Cold runtime failed; see typed pre-cleanup evidence");

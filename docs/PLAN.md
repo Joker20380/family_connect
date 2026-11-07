@@ -2,6 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected7 November: API28/CELLULAR-only applicability, not reopening E.**
+Use existing runner with real API28 NetworkCapabilities, no WiFi/VPN/readiness, fresh
+synthetic inputs, exact two guest DROP rules, candidate200s/readiness30s unchanged.
+Measure direct-path consumption and native remainder, then DNS/HTTPS/egress if READY.
+E counter timing is localized; same-request causality is unknown. Capture existing Mux
+reason counters and before/after traffic snapshots without rebuilding JNI. Only causal
+diagnostic repeats/fixes; no soak, discovery/import/activation or field-phone changes.
+Field gate remains ARM64 + real trust/signature + authorized provisioning entry + valid
+pre-Connect locator delivery; x86 synthetic rooms/APKs are not a field release.
+[Follow-up evidence and remaining gate](releases/2026-11-07-cold-api28-cellular.json).
+
 **Completed7 November: authorized cold-provisioning positive runtime goal.**
 E/14c2b81: no-cache registered synthetic identity → real Telemost provisioning/TLS →
 verified encrypted bundle → ordinary MESH READY43.982s → DNS/verified HTTPS/correct

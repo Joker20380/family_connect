@@ -127,9 +127,29 @@ def aborted(event):
         finally:os._exit(124)
 
 
-def main(work, *, observe_cpu_temperature=False, base_apks=None):
+def cellular_only(connectivity):
+    networks=[line for line in connectivity.splitlines() if 'NetworkAgentInfo{' in line]
+    return len(networks)==1 and all(token in networks[0] for token in
+        ('Transports: CELLULAR ', 'CONNECTED/CONNECTED', 'INTERNET', 'NOT_RESTRICTED', 'NOT_VPN', 'FOREGROUND'))
+
+
+def direct_rules(action):
+    assert action in ('REJECT','DROP')
+    return [['shell','iptables','-I','OUTPUT','-d',address,'-p','tcp','--dport',port,'-j',action]
+            for address,port in (('185.251.89.19','8443'),('186.246.45.246','4242'))]
+
+
+def main(work, *, observe_cpu_temperature=False, base_apks=None, api_level=27,
+         avd_home=AVD, avd_name='fc-cold-one', require_cellular=False, direct_block='REJECT'):
     global WORK,AUTH,monitor
     WORK=Path(work).resolve();AUTH=WORK/'local-auth'
+    avd_home=Path(avd_home).resolve()
+    assert api_level in (27,28) and re.fullmatch('[a-zA-Z0-9_-]+',avd_name)
+    rules_to_install=direct_rules(direct_block)
+    record['qualification']={'api_level':api_level,'cellular_only':require_cellular,'direct_block':direct_block,
+                             'cellular_scope':'EMULATOR_NOT_FIELD_MOBILE_NETWORK'}
+    record['imported_guard']={'path':str(Path(emulator_guard.__file__).resolve()),
+                             'sha256':hashlib.sha256(Path(emulator_guard.__file__).read_bytes()).hexdigest()}
     assert AUTH.is_dir(),'EXISTING_ISOLATED_WORK_DIRECTORY_REQUIRED'
     for name in ('runtime.started','receipt.json','resources.jsonl','emulator.log','instrumentation.log'):
         assert not (WORK/name).exists(),'UNUSED_RUNTIME_OUTPUT_DIRECTORY_REQUIRED'
@@ -161,13 +181,13 @@ def main(work, *, observe_cpu_temperature=False, base_apks=None):
             try:assert 'qemu-system' not in path.read_text(),'OTHER_EMULATOR_PRESENT'
             except FileNotFoundError:pass
         assert os.access('/dev/kvm',os.R_OK|os.W_OK),'KVM_UNAVAILABLE'
-        assert shutil.disk_usage(AVD).free>=7372*1024*1024,'AVD_DISK_PREFLIGHT'
-        assert (AVD/'fc-cold-one.avd/config.ini').is_file(),'OWN_AVD_MISSING'
+        assert shutil.disk_usage(avd_home).free>=7372*1024*1024,'AVD_DISK_PREFLIGHT'
+        assert (avd_home/(avd_name+'.avd/config.ini')).is_file(),'OWN_AVD_MISSING'
         assert not subprocess.check_output(['docker','ps','-aq','--filter','name=^'+CONTAINER+'$'],text=True).strip(),'AUTHORITY_NAME_ALREADY_OWNED'
         log=(WORK/'emulator.log').open('xb');logs.append(log)
-        environment=os.environ|dict(JAVA_HOME=str(TOOLS/'jdk'),ANDROID_HOME=str(sdk),ANDROID_SDK_ROOT=str(sdk),ANDROID_AVD_HOME=str(AVD),__NV_PRIME_RENDER_OFFLOAD='1',__GLX_VENDOR_LIBRARY_NAME='nvidia')
+        environment=os.environ|dict(JAVA_HOME=str(TOOLS/'jdk'),ANDROID_HOME=str(sdk),ANDROID_SDK_ROOT=str(sdk),ANDROID_AVD_HOME=str(avd_home),__NV_PRIME_RENDER_OFFLOAD='1',__GLX_VENDOR_LIBRARY_NAME='nvidia')
         record['phase']='ANDROID_BOOT'
-        emulator=own_start(lambda: emulator_guard.start([str(sdk/'emulator/emulator'),'-avd','fc-cold-one','-port','5582','-no-window','-no-audio','-no-snapshot','-no-boot-anim','-gpu','host','-accel','on','-memory','2048','-cores','2'],environment,log))
+        emulator=own_start(lambda: emulator_guard.start([str(sdk/'emulator/emulator'),'-avd',avd_name,'-port','5582','-no-window','-no-audio','-no-snapshot','-no-boot-anim','-gpu','host','-accel','on','-memory','2048','-cores','2'],environment,log))
         record['process_roots'][str(emulator.pid)]='emulator'
         deadline=time.monotonic()+120
         while True:
@@ -176,12 +196,22 @@ def main(work, *, observe_cpu_temperature=False, base_apks=None):
             if boot.returncode==0 and boot.stdout.strip()=='1':break
             assert time.monotonic()<deadline,'BOOT_TIMEOUT'
             time.sleep(2)
-        assert call(['shell','getprop','ro.build.version.sdk']).strip()=='27'
+        assert call(['shell','getprop','ro.build.version.sdk']).strip()==str(api_level)
         assert call(['shell','getprop','ro.product.cpu.abi']).strip()=='x86_64'
         record['phase']='ANDROID_POSTBOOT_COLD_RESET'
         surface=call(['shell','dumpsys','SurfaceFlinger'])
         (WORK/'renderer.txt').write_text(surface);record['renderer']=require_nvidia_renderer(surface)
         call(['root']);call(['wait-for-device'],30)
+        if require_cellular:
+            call(['shell','svc','wifi','disable'])
+            call(['shell','svc','data','enable'])
+            deadline=time.monotonic()+20
+            while True:
+                connectivity=call(['shell','dumpsys','connectivity'])
+                (WORK/'cellular-selection.txt').write_text(connectivity)
+                if cellular_only(connectivity):break
+                assert time.monotonic()<deadline,'CELLULAR_ONLY_NETWORK_UNAVAILABLE'
+                time.sleep(0.5)
         call(['shell','am','force-stop','com.familyconnect.app.friends'])
         call(['shell','am','force-stop','com.familyconnect.app.friends.test'])
         for name in ('com.familyconnect.app.friends.test','com.familyconnect.app.friends'):
@@ -191,6 +221,7 @@ def main(work, *, observe_cpu_temperature=False, base_apks=None):
         assert 'package:' not in remaining.stdout,'OWN_PACKAGE_NOT_RESET'
         connectivity=call(['shell','dumpsys','connectivity'])
         (WORK/'connectivity-before-workers.txt').write_text(connectivity)
+        if require_cellular:assert cellular_only(connectivity),'CELLULAR_ONLY_NETWORK_UNAVAILABLE'
         assert not re.search(r'(?:NetworkAgentInfo|Transports:)[^\n]*\bVPN\b',connectivity),'VPN_ACTIVE_BEFORE_WORKERS'
         record['no_test_package_no_readiness_before_workers']=True
         record['phase']='ANDROID_PREWORKER_CLOCK_OBSERVATION'
@@ -233,9 +264,8 @@ def main(work, *, observe_cpu_temperature=False, base_apks=None):
             assert 'Success' in call(['install','--no-streaming','-t',str(WORK/'apk-final'/name)],45),'OWNED_INSTALL_FAILED'
         call(['shell','appops','set','com.familyconnect.app.friends','ACTIVATE_VPN','allow'])
         rules=call(['shell','iptables','-S','OUTPUT'])
-        assert not re.search(r'--dport (8443|4242).*REJECT',rules),'UNEXPECTED_EXISTING_BLOCKS'
-        for address,port in (('185.251.89.19','8443'),('186.246.45.246','4242')):
-            call(['shell','iptables','-I','OUTPUT','-d',address,'-p','tcp','--dport',port,'-j','REJECT'])
+        assert not re.search(r'--dport (8443|4242).*(REJECT|DROP)',rules),'UNEXPECTED_EXISTING_BLOCKS'
+        for rule in rules_to_install:call(rule)
         (WORK/'guest-rules-before.txt').write_text(call(['shell','iptables','-nvxL','OUTPUT']))
         call(['shell','am','start','-n','com.familyconnect.app.friends/com.familyconnect.app.FriendsActivity'])
         observe_wall_clock(adb,record)
@@ -250,7 +280,7 @@ def main(work, *, observe_cpu_temperature=False, base_apks=None):
         monitor.begin_attempt()
         record['connect_attempted']=True
         with (WORK/'instrumentation.log').open('xb') as output:
-            result=own_start(lambda: subprocess.Popen(adb+['shell','am','instrument','-w','-e','class','com.familyconnect.app.ColdProvisionRuntimeTest','com.familyconnect.app.friends.test/androidx.test.runner.AndroidJUnitRunner'],stdout=output,stderr=subprocess.STDOUT,start_new_session=True))
+            result=own_start(lambda: subprocess.Popen(adb+['shell','am','instrument','-w','-e','expected_api',str(api_level),'-e','cellular_only',str(require_cellular).lower(),'-e','class','com.familyconnect.app.ColdProvisionRuntimeTest','com.familyconnect.app.friends.test/androidx.test.runner.AndroidJUnitRunner'],stdout=output,stderr=subprocess.STDOUT,start_new_session=True))
             result.wait(timeout=monitor.remaining())
         record['result']='PASS_POSITIVE_ONLY' if result.returncode==0 and 'OK (1 test)' in (WORK/'instrumentation.log').read_text() else 'FAIL_RUNTIME'
         audit('AFTER_SINGLE_CONNECT')
@@ -303,6 +333,13 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description='Explicit isolated work directory required; no runtime authorization implied')
     parser.add_argument('work')
     parser.add_argument('--base-apks')
+    parser.add_argument('--api-level',type=int,choices=(27,28),default=27)
+    parser.add_argument('--avd-home',default=str(AVD))
+    parser.add_argument('--avd-name',default='fc-cold-one')
+    parser.add_argument('--cellular-only',action='store_true')
+    parser.add_argument('--direct-block',choices=('REJECT','DROP'),default='REJECT')
     parser.add_argument('--observe-cpu-temperature-only',action='store_true',help='Explicit owner-authorized run: retain CPU readings without CPU thermal stop; all other guards remain')
     arguments=parser.parse_args()
-    main(arguments.work,observe_cpu_temperature=arguments.observe_cpu_temperature_only,base_apks=arguments.base_apks)
+    main(arguments.work,observe_cpu_temperature=arguments.observe_cpu_temperature_only,base_apks=arguments.base_apks,
+         api_level=arguments.api_level,avd_home=arguments.avd_home,avd_name=arguments.avd_name,
+         require_cellular=arguments.cellular_only,direct_block=arguments.direct_block)
