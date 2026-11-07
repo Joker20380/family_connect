@@ -5,6 +5,32 @@ import importlib
 from pathlib import Path
 import sys
 import time
+import zipfile
+import zipimport
+
+
+def canonical_modules(archive):
+    names = ('control.friends.paid_beta', 'control.friends.subscription')
+    if any(name in sys.modules for name in names):
+        raise ValueError('Canonical module was loaded before archive verification')
+    with zipfile.ZipFile(archive) as package:
+        for name in names:
+            package.getinfo(name.replace('.', '/') + '.py')
+    sys.path.insert(0, str(archive))
+    try:
+        modules = [importlib.import_module(name) for name in names]
+        for name, module in zip(names, modules):
+            expected = str(archive / (name.replace('.', '/') + '.py'))
+            spec = module.__spec__
+            if (module.__file__ != expected or spec.origin != expected
+                    or not isinstance(spec.loader, zipimport.zipimporter)
+                    or Path(spec.loader.archive).resolve() != archive):
+                raise ValueError('Canonical module is outside the verified archive')
+        if modules[1].paid_beta is not modules[0]:
+            raise ValueError('Canonical module binding mismatch')
+        return modules
+    finally:
+        sys.path.pop(0)
 
 
 def collect_subscriptions(config, registry, key):
@@ -12,16 +38,17 @@ def collect_subscriptions(config, registry, key):
     result = dict(schema=1, scope='production', source='gateway-ru', observed_at=observed,
                   status='unavailable', runtime_sha256=None, devices=[])
     try:
-        archive = Path(config['archive'])
+        archive = Path(config['archive']).resolve(strict=True)
         digest = hashlib.sha256(archive.read_bytes()).hexdigest()
         if digest != config['archive_sha256']:
             return result
         result['runtime_sha256'] = digest
-        sys.path.insert(0, str(archive))
-        paid = importlib.import_module('control.friends.paid_beta')
-        subscription = importlib.import_module('control.friends.subscription')
+        paid, subscription = canonical_modules(archive)
         with paid.connection(registry) as database:
-            if not paid.schema_present(database):
+            present = paid.schema_present(database)
+            observed = int(time.time())
+            result['observed_at'] = observed
+            if not present:
                 result['status'] = 'unsupported'
                 return result
             devices = database.execute('SELECT device FROM devices ORDER BY device LIMIT 10001').fetchall()

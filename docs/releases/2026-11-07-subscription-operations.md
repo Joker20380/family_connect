@@ -10,6 +10,57 @@ transport-policy changes. No production DB migrations. Only the existing local p
 console and its read-only collector source were updated. Private paths, HMAC key,
 mapping, raw HTML/status, backups and operator receipts remain outside Git.
 
+## PR2 review correction set
+
+Review baseline `4e1dfeb4a5ba4624395e7f7712ac3fec5c8531bb`; main remains
+`9d05c0f936b076b0536f7c7d23833436677e0191`. These are review findings, not evidence
+of a live archive substitution or production mutation.
+
+- First schema SELECT inside the canonical read-only SQLite transaction pins the
+  snapshot before its single projection clock. A real server operation between collection
+  start and snapshot acquisition is covered through a real ZIP import in fresh `python -I`
+  and the strict RU envelope importer; future-event validation is unchanged.
+- Archive hash, required members, module file/spec origin and zipimport loader archive
+  are checked; preloaded canonical modules and external-package fallback fail unavailable.
+  Projection-only tests explicitly stub the archive loader and are not provenance evidence.
+- Existing immutable AuditRecord stores local attempt results separately from immutable,
+  digest-idempotent SubscriptionSnapshot. UI orders attempts by local journal sequence,
+  preserving last successful server observed_at even on collection/import failure and
+  server-clock skew. No new subscription state machine or migration. If local import
+  cannot run at all, private monitor receipt/journal and freshness remain the fallback.
+  Error reporting shares the existing60s import budget; no extra polling/retry supervisor.
+- Grace/expire/revoke have independent choose-one blocks and receipts; all copied
+  operator commands use noclobber before invocation. True renewal requires a strictly
+  later end, although backend accepts equality. Proposal B names RestrictedReadiness.
+
+Final-head CI links and ordinary merge/tree verification are retained in
+[PR2](https://github.com/Joker20380/family_connect/pull/2). No post-CI cosmetic source
+commit is required. Installed runtime and scoped-check receipt below supplement, not
+replace, the earlier dated observations.
+
+Review validation: final built-panel **212 tests PASS**, Django system check and
+migration drift check PASS; **82 scoped host tests PASS** (collector/import orchestration,
+source/prepare/network guards, real operator CLI and copied-command noclobber). Real ZIP
+subprocess tests cover both missing modules, foreign parent fallback, foreign/already-pinned
+preloads and hash mismatch. Strict importer still rejects an event after observed_at;
+clock-skew/error/recovery preserves the original snapshot and immutable audit.
+Global public-docs gate PASS. Test-only static-directory warnings are not installed
+runtime failures; normal local startup still runs collectstatic.
+
+Local authenticated actual gunicorn HTTP readback on7 November11:49:41UTC: HTTP200,
+no-store, latest attempt ok11:49:23UTC, server snapshot11:49:21UTC,63 devices/1 cohort/
+62 outside cohort, age20s, same pinned served archive. This exercises the fresh isolated
+SSH process and verified ZIP module loading, not just the projection fixture. A transient
+SSH banner/timeout was observed during review; no production/network change was made,
+and normal collection recovered. Separate optional full-registry audit attempts timed
+out; those are not claimed as a new live before/after paid-table fingerprint PASS.
+Local users/payments/operations/cohort metadata and synthetic registry hashes match;
+all50 synthetic projection identities/labels/readback match (only existing seed_demo
+observation timestamps refreshed). Environment, HMAC key, source pin, volumes and the
+PostgreSQL container are unchanged. Review adds no DB migration. Only the console image
+and retained collector files are updated; final installed image/source and later fresh
+readback receipts are attached to PR2. Old local image/private backup remain available.
+
 ## Observed system, not historical counts
 
 - 7 November10:43UTC: local `fc-control-plane-0` console and PostgreSQL healthy;

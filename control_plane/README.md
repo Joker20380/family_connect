@@ -193,9 +193,19 @@ Importer хранит immutable `SubscriptionSnapshot`, не entitlement authori
 режима выполнения операций в веб-процессе нет: `CONTROL_PLANE_MODE=synthetic`
 и guards реальных устройств остаются неизменны.
 Runtime mismatch/повреждение схемы/SSH failure → unknown/error, не пустой cohort;
-неудачный импорт оставляет стареющее наблюдение. Effective вычислен сервером на
-observed_at; после5 минут UI явно stale. Последнее APPLIED не банковское подтверждение
+неудачный импорт оставляет стареющее наблюдение. Последняя попытка хранится отдельно
+в существующем append-only AuditRecord (`subscriptions.attempt`), в порядке локального
+журнала, а не серверных часов. Повторный импорт не дублирует SubscriptionSnapshot;
+отдельная попытка может дать новую запись аудита. Collector закрепляет SQLite snapshot
+первым чтением внутри read-only transaction и лишь затем берёт общий observed_at.
+В свежем isolated interpreter проверяются хеш архива, наличие модулей, их origin/file
+и zipimport loader; предзагруженные или внешние canonical modules отклоняются.
+Effective вычислен сервером на observed_at; после5 минут UI явно stale. Последнее APPLIED не банковское подтверждение
 и не подтверждение клиентской доставки. Изменение runtime pin требует ручной сверки.
+Ошибки collection/import видны независимо от clock skew; последнее успешное серверное
+observed_at показано отдельно. Если сам Docker/PostgreSQL недоступен или исчерпан60s
+бюджет импорта, запись попытки в PG невозможна: проверяйте private monitor receipt/user
+journal и старение данных. Отдельный retry loop не добавлен; общий бюджет380s сохранён.
 
 ### Paid boundary: historical reviewed served baseline, not another authority
 

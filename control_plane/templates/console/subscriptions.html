@@ -3,6 +3,9 @@
 <h1>Подписки: реальные наблюдения</h1>
 <p class="notice">Это не демо и не управление оплатами. Данные получены внешним операторским сборщиком; веб-процесс не подключается к рабочему реестру. APPLIED означает применение операции доступа, а не банковское подтверждение и не доставку клиенту.</p>
 <p><strong>{{ freshness }}</strong>. Обновление страницы читает только локальные наблюдения.</p>
+{% if attempt %}<p>Последняя попытка (локальный журнал): {{ attempt.occurred_at|date:'Y-m-d H:i:s' }} UTC · {{ attempt_status }}.</p>{% endif %}
+{% if previous %}<p>Последнее успешное чтение: {{ previous.observed_at|date:'Y-m-d H:i:s' }} UTC. Это время серверных данных, не последней попытки.</p>{% endif %}
+{% if attempt_status == 'collection_failed' or attempt_status == 'import_failed' %}<p class="notice">Последняя попытка завершилась ошибкой: {{ attempt_status }}. Количество и состояния сейчас неизвестны. Это не нулевой cohort и не отсутствие подписки.</p>{% endif %}
 {% if snapshot %}
 <p>Источник: gateway-ru · schema 1 · observed_at: {{ snapshot.observed_at|date:'Y-m-d H:i:s' }} UTC · импорт: {{ snapshot.imported_at|date:'Y-m-d H:i:s' }} UTC.</p>
 <p>SHA256 проверенного серверного runtime: <code>{{ snapshot.runtime_sha256|default:'не проверен' }}</code></p>
@@ -20,7 +23,6 @@
 <td>{{ row.subscription.version|default:'—' }}</td><td>{% if row.event %}{{ row.event.event_type }} / {{ row.event.result }} · {{ row.event.occurred_at|date:'Y-m-d H:i:s' }} UTC · HMAC {{ row.event.event_id|truncatechars:18 }}{% else %}Соответствующего события нет{% endif %}</td>
 </tr>{% empty %}<tr><td colspan="10">Успешный снимок содержит 0 устройств. Это не ошибка источника.</td></tr>{% endfor %}</tbody></table></section>
 {% else %}<p class="notice">{% if snapshot.status == 'unsupported' %}Paid-схема отсутствует: источник не поддерживает наблюдение подписок.{% else %}Ошибка источника или проверки runtime/схемы. Количество и состояния неизвестны.{% endif %} Это не нулевой cohort и не отсутствие подписки.</p>
-{% if previous %}<p>Последнее успешное чтение: {{ previous.observed_at|date:'Y-m-d H:i:s' }} UTC. Оно не выдаётся за свежий ответ.</p>{% endif %}
-{% endif %}{% else %}<p>Источник ещё не импортирован. Количество неизвестно.</p>{% endif %}
+{% endif %}{% elif not attempt %}<p>Источник ещё не импортирован. Количество неизвестно.</p>{% endif %}
 <p>Публичных Support ID, платёжных реквизитов и ключей здесь нет. Для поиска конкретного устройства используйте закрытый операторский receipt и canonical status; HMAC не принимается как получатель платёжной операции.</p>
 {% endblock %}

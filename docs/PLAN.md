@@ -2,7 +2,7 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Owner-selected SUBSCRIPTION-OPERATIONS — handoff installed; source review, no adjacent task start.**
+**Owner-selected SUBSCRIPTION-OPERATIONS — PR2 review corrections and authorized ordinary merge.**
 Dependency: closed PR1/main9d05c0f and existing local collector/importer panel.
 Gate: actual read-only observations, separate production subscription display without
 web SSH/DB secrets, preserved synthetic guards/local data, real-CLI isolated checks,
@@ -11,7 +11,9 @@ Policy proposals119 eligibility and unified AWG/TCP/MESH enforcement remain prop
 do not change baseline108/cohort/identity, installed APK, G4 or production transport.
 Completion evidence: [7 November operator report](releases/2026-11-07-subscription-operations.md).
 Local read-only view/automatic collection and real nonempty isolated backup rehearsal
-are verified; source/tests/docs proceed through the normal PR review process. This is
+are verified; coherent snapshot/archive-origin/attempt-clock and guide corrections proceed
+through final-head hosted checks and the authorized ordinary PR2 merge. Final receipts
+stay in PR2, not a documentation-only follow-up head. This is
 not permission to activate a paid device, change either proposed policy or merge/redeploy
 unrelated work. No additional Android qualification is opened.
 Earlier integration paragraphs below retain checkpoint history only: PR1 is merged,

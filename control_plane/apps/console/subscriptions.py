@@ -5,7 +5,14 @@ import re
 
 from django.db import transaction
 from .inventory import fields, require, timestamp
-from .models import SubscriptionSnapshot
+from .models import AuditRecord, SubscriptionSnapshot
+
+
+def record_attempt(status, snapshot=None):
+    require(status in ('ok', 'unsupported', 'unavailable', 'collection_failed', 'import_failed'))
+    require((snapshot is None) == (status in ('collection_failed', 'import_failed')))
+    return AuditRecord.objects.create(action='subscriptions.attempt', target=str(snapshot.pk) if snapshot else '',
+        details={'scope': 'production', 'synthetic': False, 'status': status})
 
 
 def hex_digest(value):
@@ -17,7 +24,7 @@ def epoch(value):
 
 
 @transaction.atomic
-def ingest(data):
+def ingest(data, *, attempt=False):
     fields(data, 'schema scope source observed_at status runtime_sha256 devices')
     require(type(data['schema']) is int and data['schema'] == 1)
     require(data['scope'] == 'production' and data['source'] == 'gateway-ru')
@@ -62,9 +69,10 @@ def ingest(data):
     snapshot, created = SubscriptionSnapshot.objects.get_or_create(digest=digest, defaults=dict(
         observed_at=observed, status=data['status'], runtime_sha256=data['runtime_sha256'], devices=data['devices']))
     if created:
-        from .models import AuditRecord
         AuditRecord.objects.create(action='subscriptions.import', target=str(snapshot.pk),
                                    details={'scope': 'production', 'synthetic': False})
+    if attempt:
+        record_attempt(snapshot.status, snapshot)
     return snapshot
 
 

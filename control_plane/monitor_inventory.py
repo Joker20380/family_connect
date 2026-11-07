@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import time
 
 if __package__:
     from .apps.console.collector import ACTIVE_SOURCES
@@ -34,6 +35,8 @@ def cycle(base=BASE, run=subprocess.run, known_hosts=None):
         for source in SOURCES:
             result = dict(source=source, attempted_at=instant(), status='FAILED', error='COLLECTION_FAILED')
             snapshot = None
+            import_started = None
+            subscriptions = source == 'gateway-ru' and (local / 'subscriptions-source.json').exists()
             try:
                 command = [sys.executable, str(base / 'collect_inventory.py')]
                 if known_hosts is not None:
@@ -52,20 +55,21 @@ def cycle(base=BASE, run=subprocess.run, known_hosts=None):
                 if document.get('source') != source or document.get('scope') != 'production':
                     raise ValueError('Invalid snapshot scope')
                 result['error'] = 'IMPORT_FAILED'
+                import_started = time.monotonic()
                 run(['docker', 'compose', '-f', str(base / 'compose.yaml'), '--env-file', str(base / '.env'),
-                    'exec', '-T', 'console', 'python', 'manage.py', 'import_inventory'],
+                    'exec', '-T', 'console', 'python', 'manage.py', 'import_inventory'] +
+                    (['--subscription-attempt'] if subscriptions else []),
                     input=raw, capture_output=True, check=True, timeout=60)
                 result.update(status='IMPORTED', error=None, observed_at=document['observed_at'],
                     registry_status=document['registry_status'], sha256=hashlib.sha256(raw).hexdigest())
             except (OSError, ValueError, KeyError, subprocess.SubprocessError):
-                if source == 'gateway-ru' and result['error'] == 'COLLECTION_FAILED' and (local / 'subscriptions-source.json').exists():
-                    failure = dict(schema=1, scope='production', source=source,
-                        observed_at=int(datetime.now(timezone.utc).timestamp()), status='unavailable',
-                        runtime_sha256=None, devices=[])
+                remaining = 60 if import_started is None else 60 - (time.monotonic() - import_started)
+                if subscriptions and remaining > 0:
                     try:
                         run(['docker', 'compose', '-f', str(base / 'compose.yaml'), '--env-file', str(base / '.env'),
-                            'exec', '-T', 'console', 'python', 'manage.py', 'import_subscriptions'],
-                            input=json.dumps(failure).encode(), capture_output=True, check=True, timeout=60)
+                            'exec', '-T', 'console', 'python', 'manage.py', 'import_subscriptions',
+                            '--failure', result['error'].lower()],
+                            capture_output=True, check=True, timeout=remaining)
                     except (OSError, subprocess.SubprocessError):
                         pass
             finally:

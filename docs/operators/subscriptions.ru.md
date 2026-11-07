@@ -16,12 +16,17 @@
 «Демо-устройства», «Записи оплат» и их действия остаются SYNTHETIC, не оплатами
 реальных пользователей. Форма демо не принимает HMAC реального устройства.
 
-Проверьте `observed_at` (UTC), время импорта, SHA256 проверенного серверного
-runtime и отметку свежести. До 5 минут — свежее *наблюдение*, не live-запрос.
+Проверьте результат и локальное время **последней попытки** collection/import,
+отдельно `observed_at` (UTC) **последнего успешного серверного снимка**, время
+импорта, SHA256 проверенного серверного runtime и отметку свежести. Ошибка попытки
+не скрывается более поздними часами сервера. До 5 минут — свежее *наблюдение*, не live-запрос.
 Старше 5 минут — устаревшее; время в будущем более15 секунд — ошибка часов.
 Перезагрузка страницы не опрашивает сервер. Сохранённый `state` и `effective_state`
 относятся к одному серверному now/SQLite read transaction, а не к времени открытия
 страницы. Панель не вычисляет новый допуск из старых данных.
+Если сам локальный importer/PostgreSQL недоступен или его60s бюджет исчерпан,
+сохранить ошибку в панели невозможно: смотрите private monitor receipt/user journal
+и старение последнего успешного снимка. Не считайте отсутствие новой строки успехом.
 
 Различайте: нет наблюдений; ошибка/непроверенный runtime; отсутствующая paid-схема;
 устаревшее успешное наблюдение; успешный снимок с нулём устройств; устройство вне
@@ -63,11 +68,15 @@ HTTP. Не путайте подготовленный локальный archiv
 source-only archive замените `python -m control.friends.paid_beta_admin` на
 `"$OPERATOR_PYTHON" -I "$PAID_OPERATOR_ARCHIVE"`; остальной argv неизменен.
 Отключите shell tracing/history, направляйте результат в новый private0600 receipt.
+Блоки используют отдельный subshell с `set -C` (noclobber): существующий receipt
+не перезаписывается, команда при таком отказе перенаправления не запускается.
+Не используйте `>|`; при точном replay сохраняйте новый receipt, старый оставьте.
 
 ```sh
-umask 077
+( umask 077; set -C
 python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" status \
   --support-id "$SUPPORT_ID" > "$PRIVATE_STATUS_RECEIPT"
+)
 ```
 
 Нормализация Support ID и уникальность получателя проверяются оператором.
@@ -104,18 +113,22 @@ python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" status \
 Все даты: точное `YYYY-MM-DDTHH:MM:SSZ`, абсолютное UTC, без дробей/offset.
 `PERIOD_START_UTC <= server now < PAID_UNTIL_UTC`. Дни автоматически не прибавляются.
 Продление — ещё один `activate` с новым event ID и явно согласованным новым концом;
-начало не раньше прежнего, конец не короче прежнего paid/grace. Не округляйте период
+начало не раньше прежнего, конец **строго больше** прежнего paid/grace конца.
+Backend допускает равную границу, но такая операция не продлевает доступ и не
+должна называться настоящим renewal. Не округляйте период
 по локальному часовому поясу. Baseline108: наблюдение Android
 `0.1.18-beta108`/108 и подтверждение передачи именно APK с указанным хешем.
 Не передавайте хеш108 вместо установленного119 ради обхода проверки.
 
 ```sh
+( umask 077; set -C
 python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" activate \
   --support-id "$SUPPORT_ID" --event-id "$PAYMENT_EVENT_ID" \
   --reference "$OPAQUE_REFERENCE" --period-start "$PERIOD_START_UTC" \
   --paid-until "$PAID_UNTIL_UTC" \
   --apk-sha256 144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf \
-  > "$PRIVATE_OPERATION_RECEIPT"
+  > "$PRIVATE_PAYMENT_RECEIPT"
+)
 ```
 
 Постоянный `event_id` создаётся и сохраняется **до запроса**, 8–128 ASCII
@@ -130,17 +143,38 @@ ID для «повтора» неизвестного результата. Ст
 
 ## Grace, досрочное окончание, terminal revoke
 
+**Выберите ровно одно нужное действие**, не выполняйте три блока подряд.
+Для каждого согласуйте свой event ID, основание и новый путь receipt.
+
+### Grace — временная льготная граница
+
 ```sh
+( umask 077; set -C
 python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" grace \
   --support-id "$SUPPORT_ID" --event-id "$GRACE_EVENT_ID" \
   --reference "$OPAQUE_REFERENCE" --grace-until "$GRACE_UNTIL_UTC" \
-  > "$PRIVATE_OPERATION_RECEIPT"
+  > "$PRIVATE_GRACE_RECEIPT"
+)
+```
+
+### Expire — досрочное окончание
+
+```sh
+( umask 077; set -C
 python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" expire \
   --support-id "$SUPPORT_ID" --event-id "$EXPIRY_EVENT_ID" \
-  --reference "$OPAQUE_REFERENCE" > "$PRIVATE_OPERATION_RECEIPT"
+  --reference "$OPAQUE_REFERENCE" > "$PRIVATE_EXPIRY_RECEIPT"
+)
+```
+
+### Revoke — терминальный отзыв
+
+```sh
+( umask 077; set -C
 python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" revoke \
   --support-id "$SUPPORT_ID" --event-id "$REVOCATION_EVENT_ID" \
-  --reference "$OPAQUE_REFERENCE" > "$PRIVATE_OPERATION_RECEIPT"
+  --reference "$OPAQUE_REFERENCE" > "$PRIVATE_REVOCATION_RECEIPT"
+)
 ```
 
 Каждой операции — **отдельный** новый путь receipt (не затирать предыдущий).
@@ -251,7 +285,7 @@ paid/event-сценарий требует конкретного получат
 ### B. Одна подписка AWG/TCP/MESH
 
 Объём предложения: единый canonical paid predicate поверх существующей identity,
-не новая billing DB. MESH сохранить в `RestrictedService._grant`, readiness и
+не новая billing DB. MESH сохранить в `RestrictedReadiness._grant`, readiness и
 выдаче материалов. Для AWG/TCP добавить серверные проверки в
 `deploy/friends/access-api.py` на configuration/gateway-configuration после proof,
 в gateway registration (`deploy/friends/awg-gateway.py::register`, `tcp_user`) и

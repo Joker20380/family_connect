@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**7 November — PR2 review corrections, normal merge gate.**
+Collection pins the SQLite read snapshot before its projection clock; canonical module
+execution must originate in the verified archive. Local attempt audit and last successful
+server observation time are separate, including import errors/clock skew. Copyable RU
+operations use distinct non-clobber receipts and explicit one-action selection. Baseline108
+and decisions A/B remain unchanged. Final tests/local readback are recorded in the
+[operator report](releases/2026-11-07-subscription-operations.md); final-head hosted CI and
+ordinary merge receipts belong in [PR2](https://github.com/Joker20380/family_connect/pull/2),
+without a cosmetic post-CI source head. No adjacent qualification is opened.
+
 **7 November — SUBSCRIPTION-OPERATIONS: operator handoff.**
 PR1 completed by normal merge `9d05c0f936b076b0536f7c7d23833436677e0191`;
 the CI/open-gate paragraphs below are earlier checkpoints, not active instructions.
