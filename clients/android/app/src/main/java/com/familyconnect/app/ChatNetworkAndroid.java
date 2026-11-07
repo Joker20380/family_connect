@@ -92,6 +92,7 @@ public final class ChatNetworkAndroid {
                 &&foreground(caps);
     }
 
+    @android.annotation.SuppressLint("WrongConstant")
     private static boolean foreground(NetworkCapabilities caps){
         int capability=android.os.Build.VERSION.SDK_INT==27?18:NetworkCapabilities.NET_CAPABILITY_FOREGROUND;
         return caps!=null&&caps.hasCapability(capability);

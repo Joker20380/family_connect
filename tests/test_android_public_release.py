@@ -220,7 +220,7 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'RestrictedTrace.java': '34a50256ffd04d98cb29274be2c5b800a18a7756c47f5da4568e3bc5a5418561',
     }
     reviewed_cold_candidate_9bf02724 = {
-        'ChatNetworkAndroid.java': '7229512c6645549be8dc3257faed12d7cf47db5345b04bed6fd3547b7b032ccd',
+        'ChatNetworkAndroid.java': '181fa6d969786cf46aac0840abb35d2e7da1b1ecf65951f7e215ca8e307ce9cf',
         'ConnectivityOrchestrator.java': '93b6d8c322ad95ef74594aab2ce30a1b2fea02d54d2ac06b4a3308fe3664224e',
         'DiagnosticRing.java': '5c9db0e90368bfd642446f735d856ae2960026ba6fc48ce41ffbd4e72c32ea61',
         'FriendsAccessAndroid.java': '8c26c43dec6210318911785231c673546dce98505e642cedb0326e0d8b5f6642',

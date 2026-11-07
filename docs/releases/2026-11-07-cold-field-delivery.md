@@ -32,6 +32,11 @@ recorded. Existing release-preservation pins are advanced only to already accept
 classes, not to new untested application changes.
 
 No final locator has been issued, no signature produced, no APK installed or published.
+The ARM64 managed build and unit tests complete; release lint identifies `WrongConstant`
+in the accepted API27 compatibility helper (numeric18 is FOREGROUND on that API).
+A method-scoped source-only `SuppressLint` annotation documents that deliberate numeric
+compatibility path; the expression and network-selection behavior remain unchanged.
+Release lint and bytecode equivalence are rechecked before packaging, not waived globally.
 The release/packaging checks, bounded server package and handoff procedure remain pending.
 Rollback is to stop only the prospective new entry; existing services and public
 beta113/catalog7 remain unchanged. No new public download link/checksum is advertised.
