@@ -165,3 +165,16 @@ tests pass on the host; fixture packaging passes with real zipalign in isolation
 The corrected unit uses ProtectSystem=strict without binding the canonical directory:
 the existing custody reader rejects mounts at/below that path. A package configuration
 test exercises a real root-owned0640 canonical profile in an isolated container.
+
+First Client builds42381579767/head59849b0: Android job128430153601 FAIL atAPI35,
+`ProvisioningDiagnosticRuntimeTest` → UnsatisfiedLinkError/libfc_restricted.so absent.
+Contracts/race/native AWG+audio/managed unit+lint/APK checks passed; API27, restricted
+ARM64 and release upload were not reached. Runtime artifact13578990044 ZIP SHA256
+e37868205ac0bd94556947a90c9c76588d19d573fa8f4e1e97c63be9684e48ed is retained.
+The unchanged diagnostic test had been added to androidTest, but CI built restricted
+JNI only after both emulator runs. The build dependency is corrected: standard builder
+supports explicit production-tag x86_64 (no local-core/owner tags), built before runtime;
+its output is preserved separately before the existing fresh ARM64 build. Four targeted
+builder/order regressions cover this; no assertion/skip or application/native runtime
+code is changed. A new exact-source Android run, not a retry of missing-library bytes,
+must pass. Separate phase0/control preview fixture failures are not a full-matrix PASS.

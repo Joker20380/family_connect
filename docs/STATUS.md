@@ -1,6 +1,13 @@
 # Текущее состояние / Current state
 
-**7 November — beta120 release qualification in progress.** Corrected the prepared
+**7 November — beta120 release qualification in progress.**
+First exact-source Android run42381579767 failed atAPI35: the unchanged
+ProvisioningDiagnosticRuntimeTest loaded libfc_restricted.so before CI built it.
+Runtime artifact13578990044/SHAe3786820…e48ed is retained. Fix the CI dependency
+order with production-tag x86_64 native before runtime and fresh ARM64 afterwards;
+no test skip, provider fixture, TLS or product change. CI acceptance remains pending.
+
+Corrected the prepared
 NL1 entry host to185.10.158.212 from canonical inventory, reverified signed catalog4/6
 and retained replacement/MESH receipts. Old186.246.45.246 is retired, not an alias.
 Fresh live identity/profile readback remains an authorized deployment gate. No exact

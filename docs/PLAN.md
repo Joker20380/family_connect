@@ -3,6 +3,8 @@
 ## Current engineering priority / Текущий critical path
 
 **Active: beta120 exact-source Android release qualification and corrected NL1 package.**
+First Android run failed because its JNI runtime test had no packaged restricted JNI.
+Qualify the corrected native-before-runtime build order; retain the failed artifact.
 Use existing Client builds Android gates, download and bind the accepted ARM64 payload,
 repackage corrected185.10.158.212 entry immutably, and pin finalization to those CI bytes.
 Completion: READY_FOR_CONTROLLED_FIELD_OPERATION, never signed/delivered/field PASS.

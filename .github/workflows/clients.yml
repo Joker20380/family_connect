@@ -79,6 +79,13 @@ jobs:
           git clone --quiet https://github.com/drowe67/codec2 "$RUNNER_TEMP/android-codec2"
           git -C "$RUNNER_TEMP/android-codec2" checkout --detach 06d4c11e699b0351765f10398abb4f663a984f36
           python3 clients/android/audio/build.py --source "$RUNNER_TEMP/android-codec2" --ndk "$ANDROID_HOME/ndk/28.2.13676358" --out clients/android/audio-generated --abi all
+      - name: Build production restricted JNI for emulator contracts
+        shell: bash
+        run: |
+          git clone --quiet https://github.com/XTLS/Xray-core "$RUNNER_TEMP/restricted-xray"
+          git -C "$RUNNER_TEMP/restricted-xray" checkout --detach d2758a023cd7f4174a5a5fa4ff66e487d4342ba0
+          python3 pilot/android-restricted/build.py --abi x86_64 --xray "$RUNNER_TEMP/restricted-xray" --go "$(command -v go)" --ndk "$ANDROID_HOME/ndk/28.2.13676358" --out "$GITHUB_WORKSPACE/clients/android/restricted-generated"
+          cp clients/android/restricted-generated/assets/restricted-build.json restricted-emulator-build.json
       - run: gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:lintDebug :app:assembleFriends :app:testFriendsUnitTest :app:lintFriends
         working-directory: clients/android
       - run: python3 pilot/android-awg/verify-apk.py
@@ -126,8 +133,7 @@ jobs:
       - name: Build pinned restricted Android native
         shell: bash
         run: |
-          git clone --quiet https://github.com/XTLS/Xray-core "$RUNNER_TEMP/restricted-xray"
-          git -C "$RUNNER_TEMP/restricted-xray" checkout --detach d2758a023cd7f4174a5a5fa4ff66e487d4342ba0
+          mv clients/android/restricted-generated "$RUNNER_TEMP/restricted-emulator-native"
           python3 pilot/android-restricted/build.py --xray "$RUNNER_TEMP/restricted-xray" --go "$(command -v go)" --ndk "$ANDROID_HOME/ndk/28.2.13676358" --out "$GITHUB_WORKSPACE/clients/android/restricted-generated"
           mkdir -p restricted-release
       - name: Build unsigned ARM64 Friends for offline signing
@@ -155,6 +161,7 @@ jobs:
           name: FamilyConnect-Android-runtime-diagnostics
           path: |
             android-ci-summary.json
+            restricted-emulator-build.json
             android-awg-runtime.log
             android-emulator-runner.log
             android-friends-runtime.log
