@@ -2,6 +2,14 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Active7 November: finish traffic confirmation after real cold READY.**
+9bf0272/D confirms corrected bind, Telemost provisioning, verified encrypted bundle and
+normal MESH READY42.762s. DNS assertion used example.com, which also returns NXDOMAIN
+from the gateway host's actual resolver. Keep product/servers/DNS unchanged; use prechecked
+api.ipify.org for positive DNS/verified HTTPS/egress, retain Mux counters, then observe the
+original target's DNS RCODE through TUN. This is a specific traffic-harness hypothesis,
+not an unchanged retry. [D evidence](releases/2026-11-07-cold-connect-d.json).
+
 **Active7 November: API27-compatible network selection confirmation.**
 C exposed modern FOREGROUND19 versus API27 hidden18; correct that compatibility edge,
 retain filtering/pinning/fail-closed, verify actual bit values on27/28/35. Rebuild managed

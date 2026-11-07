@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**7 November — cold provisioning and ordinary MESH READY confirmed; traffic gate next.**
+D on9bf0272 confirms the bind repair:29 protected/0 denied, real Telemost/TLS, challenge
+and fetch responses validated, registered identity authorized, encrypted bundle accepted,
+ordinary MESH READY in42.762s. Server request IDs correlate both operations. The subsequent
+example.com DNS check fails; the unchanged gateway host resolver independently returns
+NXDOMAIN for A/AAAA and host HTTPS fails too. api.ipify.org DNS/verified HTTPS pass on
+the host, not yet Android. Keep all DNS/routes/security/native unchanged; qualify that
+working public traffic target and capture original-target RCODE plus numeric Mux counters.
+Own D resources stopped, all failures retained. No public rollout; room deletion unverified.
+[D READY and traffic evidence](releases/2026-11-07-cold-connect-d.json).
+
 **7 November — C exposes API27 compatibility error in the selection correction.**
 Modern FOREGROUND=19 does not match API27's then-hidden bit18. C fails before JNI,
 not a confirmation of the bind fix. Use bit18 only on supported SDK27 and public19

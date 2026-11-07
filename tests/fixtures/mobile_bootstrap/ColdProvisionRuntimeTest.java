@@ -52,6 +52,14 @@ public final class ColdProvisionRuntimeTest {
                     Diagnostics.nativeStats(context,stats);
                     for(String key:new String[]{"state","events","protect_ok","protect_denied"})
                         if(stats.has(key))value.add(key,com.google.gson.JsonParser.parseString(stats.get(key).toString()));
+                    org.json.JSONObject packet=stats.optJSONObject("packet");
+                    org.json.JSONObject mux=packet==null?null:packet.optJSONObject("mux");
+                    if(mux!=null){
+                        JsonObject counters=new JsonObject();
+                        for(String key:new String[]{"DNSRequests","DNSResponses","DNSErrors","DNSTimeouts","OpenOK","OpenErrors","ProtocolErrors","SentBytes","ReceivedBytes"})
+                            if(mux.has(key))counters.addProperty(key,mux.getLong(key));
+                        value.add("mux_counters",counters);
+                    }
                 }
             }
             Field primary=FriendsRestricted.class.getDeclaredField("primary");primary.setAccessible(true);
@@ -77,6 +85,25 @@ public final class ColdProvisionRuntimeTest {
         try{assertEquals(200,request.getResponseCode());try(InputStream input=request.getInputStream();ByteArrayOutputStream output=new ByteArrayOutputStream()){
             byte[] buffer=new byte[2048];int count;while((count=input.read(buffer))!=-1){assertTrue(output.size()+count<=65536);output.write(buffer,0,count);}return output.toByteArray();
         }}finally{request.disconnect();}
+    }
+    private void originalDnsTarget(){
+        JsonObject evidence=new JsonObject();
+        try(java.net.DatagramSocket socket=new java.net.DatagramSocket()){
+            ByteArrayOutputStream bytes=new ByteArrayOutputStream();
+            java.io.DataOutputStream output=new java.io.DataOutputStream(bytes);
+            output.writeShort(0x4731);output.writeShort(0x0100);output.writeShort(1);
+            output.writeShort(0);output.writeShort(0);output.writeShort(0);
+            output.writeByte(7);output.writeBytes("example");output.writeByte(3);output.writeBytes("com");output.writeByte(0);
+            output.writeShort(1);output.writeShort(1);
+            socket.setSoTimeout(5000);socket.connect(InetAddress.getByName("10.79.0.1"),53);
+            byte[] query=bytes.toByteArray();socket.send(new java.net.DatagramPacket(query,query.length));
+            byte[] response=new byte[4096];java.net.DatagramPacket packet=new java.net.DatagramPacket(response,response.length);socket.receive(packet);
+            boolean valid=packet.getLength()>=12&&response[0]==query[0]&&response[1]==query[1]&&(response[2]&0x80)!=0;
+            evidence.addProperty("id_and_header_valid",valid);
+            if(valid){evidence.addProperty("rcode",response[3]&15);evidence.addProperty("answer_count",((response[6]&255)<<8)|(response[7]&255));}
+        }catch(java.net.SocketTimeoutException failure){evidence.addProperty("error","TIMEOUT");}
+        catch(Exception failure){evidence.addProperty("error","IO");}
+        record("ORIGINAL_TARGET_DNS_OBSERVATION",evidence);
     }
     @Test public void uncachedRealTelemost()throws Exception{
         context=InstrumentationRegistry.getInstrumentation().getTargetContext();
@@ -115,11 +142,12 @@ public final class ColdProvisionRuntimeTest {
             byte[] readiness=new RestrictedVault(context).read();assertNotNull(readiness);
             byte[] encrypted=Files.readAllBytes(new File(context.getNoBackupFilesDir(),"restricted-readiness.enc").toPath());
             assertFalse(Arrays.equals(readiness,encrypted));Arrays.fill(readiness,(byte)0);phase("ENCRYPTED_READINESS_ACCEPTED");
-            assertTrue(InetAddress.getAllByName("example.com").length>0);phase("DNS_OK");
-            assertTrue(https("https://example.com/").length>0);phase("VERIFIED_HTTPS_OK");
+            assertTrue(InetAddress.getAllByName("api.ipify.org").length>0);phase("DNS_OK");
             byte[] observed=https("https://api.ipify.org");
+            assertTrue(observed.length>0);phase("VERIFIED_HTTPS_OK");
             byte[] expected=asset(tests,"egress.sha256");
             assertTrue(MessageDigest.isEqual(MessageDigest.getInstance("SHA-256").digest(observed),expected));phase("EGRESS_VERIFIED");
+            originalDnsTarget();
         }catch(Exception|AssertionError|LinkageError failure){
             JsonObject value=new JsonObject();value.addProperty("category",ConnectivityOrchestrator.classify(failure).name());record("HARNESS_FAILURE",value);
             throw new AssertionError("Cold runtime failed; see typed pre-cleanup evidence");
