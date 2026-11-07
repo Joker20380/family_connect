@@ -1,11 +1,14 @@
 # Текущее состояние / Current state
 
-**7 November — owner-selected NL1 load correction, source qualified; not deployed.**
-Watcher uses three bulk readbacks rather than per-record subprocess queries/no-op
-peer writes; all lease/revocation/watchdog fences remain. Mailbox memory cap512MiB
-retains CPU/security/spool limits.54 focused tests and real NL1 read-only parser
-preflight PASS; exact native/systemd expiry/lease/recovery gate PASS. No server
-changes yet; guarded NL1 delivery and post-change load readback are next.
+**7 November20:25–20:27UTC — NL1 load correction applied and read back.**
+Exact source780f0898/node archive40ae1fa8 installed after54 scoped tests and real
+systemd/native gates. First grouped-restart attempt rolled back; bounded stop/start
+retry passes, preserving that original failure. Watcher CPU falls~17.9→1.5–1.9%
+of the two-vCPU host; mailbox~11.1→0.6–2.0%, zero new cap events/swap-out in60s.
+Mailbox512MiB is persistent; mailbox/MESH original PIDs unchanged. All63 records
+applied,48 AWG/TCP users, zero readback mismatches; two live MESH sessions observed.
+No RU/NL2/client/catalog/paid-policy rollout. Long-term mailbox footprint still needs
+observation; no throughput/end-to-end acceptance claim.
 [Scope, hashes and rollback](releases/2026-11-07-nl1-load-fix.md).
 
 **7 November — SUBSCRIPTION-ENFORCEMENT-FIX: current, production disabled.**

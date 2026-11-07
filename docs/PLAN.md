@@ -3,10 +3,12 @@
 ## Current engineering priority / Текущий critical path
 
 **Owner-selected7 November: correct NL1 background load, bounded operational task.**
-Source/54 scoped checks, read-only live parser preflight and exact packaged systemd/
-native gates pass. Deliver only NL1 watcher archive
-and mailbox cap; verify stable MESH/mailbox PIDs, admission readback and lower load.
-No RU/NL2 rollout, subscription mutation, client release or adjacent task advancement.
+Complete:54 scoped checks, read-only live parser preflight and exact systemd/native
+gates pass; NL1 node-only archive and persistent mailbox cap applied20:25UTC.
+MESH/mailbox PIDs stable,63 applied records/zero drift and60s load improvement verified.
+First failed grouped restart/rollback remains recorded. No further implementation is
+queued by this task: monitor long-term mailbox footprint separately, without declaring
+a leak fixed. No RU/NL2 rollout, subscription mutation, client release or adjacent task advancement.
 [Gate and rollback](releases/2026-11-07-nl1-load-fix.md).
 
 **Selected SUBSCRIPTION-ENFORCEMENT-FIX — correct PR4, not enable production.**
