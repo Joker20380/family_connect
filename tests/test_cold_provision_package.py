@@ -15,7 +15,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_deployment_uses_retained_nl1_canonical_profile_without_copying_keys():
+    from control_plane.apps.console.collector import SOURCES
     deployment = json.loads((ROOT/'deploy/friends/restricted/cold-provision-deployment.json').read_text())
+    assert deployment['authority_service'] in SOURCES['gateway-ru']['required_services']
+    assert deployment['authority_service'] in deployment['unchanged_services']
     evidence = json.loads((ROOT/deployment['binding']['evidence']).read_text())['canonical_profile_evidence']
     unit = (ROOT/'deploy/friends/restricted/cold-provision-entry@.service').read_text()
     assert evidence['profile'] in deployment['entry_reads_existing_only']

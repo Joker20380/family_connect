@@ -184,3 +184,6 @@ The canonical profile test additionally runs the real packaged executable as UID
 with no supplementary groups against a synthetic root-owned0640 profile. Initial
 container noexec refusal is retained; explicit exec on its own disposable `/run` tmpfs
 permits that probe (2 PASS), with no host mount/power/user-account change.
+The deployment manifest names the current RU `family-connect-friends-http-candidate`
+unit from canonical inventory/readback, not the historical friends-access service alias;
+it remains explicitly unchanged by this operation.

@@ -19,6 +19,7 @@
     "fresh_live_verification": "NOT_RUN; required during authorized deployment preflight"
   },
   "authority_host": "185.251.89.19",
+  "authority_service": "family-connect-friends-http-candidate.service",
   "root": "/opt/apps/family_connect",
   "new_entry_unit": "cold-provision-entry@<unique-invocation>.service",
   "entry_user": "family-restricted",
@@ -62,7 +63,7 @@
     "user reachable on an agreed APK document delivery channel and ready before entry starts"
   ],
   "unchanged_services": [
-    "family-connect-friends-access.service",
+    "family-connect-friends-http-candidate.service",
     "family-connect-restricted-bootstrap.service",
     "existing maintenance, renewal and sync units",
     "nginx, AWG and other data-plane services"
