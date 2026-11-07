@@ -2,9 +2,10 @@
 
 **7 November — [Подписки: ежедневная эксплуатация](operators/subscriptions.ru.md).**
 Каноническая RU-инструкция, реальная read-only витрина локальной панели,
-backup непустого registry и отдельные решения по119/AWG/TCP.
+backup непустого registry и [выбранная политика108/119](releases/2026-11-07-subscription-paid-119.md).
+Единый paid-enforcement AWG/TCP/MESH остаётся отдельным невыбранным решением Б.
 [Наблюдения и проверки](releases/2026-11-07-subscription-operations.md).
-PR1 закрыт merge9d05c0f; прежняя Android-матрица не открывается заново.
+PR1/PR2 закрыты merge9d05c0f/5197563; прежняя Android-матрица не открывается заново.
 
 **Current5 November — [active-session renewal integration](releases/2026-11-05-mesh-renewal-integration.md).**
 Source/runtime integration followsd4de324; real TLS/mux/TCP/DNS/HTTPS and negative gates pass,

@@ -2,7 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Owner-selected SUBSCRIPTION-OPERATIONS — PR2 review corrections and authorized ordinary merge.**
+**Selected SUBSCRIPTION-PAID-119 — implement and install policy A.**
+Dependencies: closed PR1 and PR2/main5197563, accepted unchanged ARM119 artifact.
+Gate: explicit108/119 descriptors; matching authenticated latest pair/hash; exact
+legacy replay; canary/demo108 preserved; isolated real packaged CLI/server tests;
+green applicable hosted CI/review and ordinary merge. Then minimal serving paid-only
+overlay, verified nonempty backup/code rollback, installed private operator policy/status,
+collector source pin with unchanged HMAC and fresh authenticated panel readback;
+paid/identity fingerprints must match across the deployment interval. No real payment,
+cohort/period/identity changes, Android requalification, G4/renewal or decision B.
+Final CI/merge/install receipts go in the task PR, not a cosmetic documentation-only head.
+[Execution contract](releases/2026-11-07-subscription-paid-119.md).
+
+**Historical SUBSCRIPTION-OPERATIONS — CLOSED, PR2 merged5197563.**
 Dependency: closed PR1/main9d05c0f and existing local collector/importer panel.
 Gate: actual read-only observations, separate production subscription display without
 web SSH/DB secrets, preserved synthetic guards/local data, real-CLI isolated checks,

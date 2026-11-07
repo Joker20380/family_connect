@@ -1,9 +1,11 @@
 """Local manual-payment operator. Never an HTTP endpoint or automatic enrollment."""
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import sqlite3
 import time
+import zipimport
 
 from . import paid_beta
 
@@ -13,10 +15,22 @@ class OperatorParser(argparse.ArgumentParser):
         raise paid_beta.PaidBetaError('INVALID_ARGUMENTS')
 
 
+def provenance():
+    result = paid_beta.policy()
+    result['modules'] = {
+        'control/friends/paid_beta.py': hashlib.sha256(paid_beta.__loader__.get_data(paid_beta.__file__)).hexdigest(),
+        'control/friends/paid_beta_admin.py': hashlib.sha256(__loader__.get_data(__file__)).hexdigest(),
+    }
+    if isinstance(__loader__, zipimport.zipimporter):
+        result['archive_sha256'] = hashlib.sha256(Path(__loader__.archive).read_bytes()).hexdigest()
+    return result
+
+
 def main(argv=None):
     parser = OperatorParser(description=__doc__, prog='paid-beta')
-    parser.add_argument('--db', type=Path, required=True)
+    parser.add_argument('--db', type=Path)
     commands = parser.add_subparsers(dest='action', required=True)
+    commands.add_parser('policy', help='Read release descriptors and executable provenance without opening a registry')
     commands.add_parser('migrate')
     status = commands.add_parser('status')
     status.add_argument('--support-id', required=True)
@@ -33,6 +47,10 @@ def main(argv=None):
             command.add_argument('--grace-until', required=True)
     try:
         args = parser.parse_args(argv)
+        if args.action == 'policy':
+            print(json.dumps(provenance(), sort_keys=True, allow_nan=False))
+            return 0
+        paid_beta.require(args.db is not None, 'INVALID_ARGUMENTS')
         with paid_beta.connection(args.db, write=args.action != 'status') as database:
             now = int(time.time())
             if args.action == 'migrate':

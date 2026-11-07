@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_copied_operator_commands_choose_one_action_and_refuse_receipt_overwrite(tmp_path):
     guide = (ROOT / 'docs/operators/subscriptions.ru.md').read_text()
     blocks = [block for block in re.findall(r'```sh\n(.*?)```', guide, re.S)
-              if 'python -m control.friends.paid_beta_admin' in block]
+              if '--db "$REGISTRY_DB"' in block and '"$PAID_OPERATOR_ARCHIVE"' in block]
     expected = {'status', 'activate', 'grace', 'expire', 'revoke'}
     actions = []
     receipts = []
@@ -27,7 +27,8 @@ def test_copied_operator_commands_choose_one_action_and_refuse_receipt_overwrite
         receipt = tmp_path / variable
         receipt.write_text('original receipt')
         environment = dict(os.environ, PATH=str(tmp_path) + ':' + os.environ['PATH'],
-                           EXECUTED=str(executed), **{variable: str(receipt)})
+                           EXECUTED=str(executed), OPERATOR_PYTHON=str(executable),
+                           PAID_OPERATOR_ARCHIVE='synthetic-operator.pyz', **{variable: str(receipt)})
         subprocess.run(['sh', '-n'], input=block, text=True, check=True)
         result = subprocess.run(['sh'], input=block, text=True, env=environment, capture_output=True)
         assert result.returncode != 0 and not executed.exists()

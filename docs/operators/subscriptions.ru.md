@@ -1,11 +1,13 @@
 # Подписки Family Connect: ежедневная эксплуатация
 
-Каноническая инструкция SUBSCRIPTION-OPERATIONS, 7 ноября 2026.
+Каноническая инструкция SUBSCRIPTION-OPERATIONS / SUBSCRIPTION-PAID-119, 7 ноября 2026.
 Закрытая интеграция PR1 слита в main `9d05c0f936b076b0536f7c7d23833436677e0191`.
 Это инструкция по существующей модели, **не разрешение на конкретную оплату**.
 Получатель, основание оплаты, абсолютный период и допустимая версия должны быть
-согласованы до операции. Production baseline остаётся beta108; установленная119
-и merge сами по себе его не меняют. [Предложения A/B](#решения-которые-ещё-не-приняты).
+согласованы до операции. PR2 закрыт merge `5197563916442d953746cb5aa3d03756ab85e51f`.
+Владелец отдельно разрешил политику108/119: установка119 или merge сами по себе
+не являются таким разрешением. [Политика A и отдельное решение Б](#политика-a-и-отдельное-решение-б).
+Фактические install/CI/merge receipts — в [отчёте PAID-119](../releases/2026-11-07-subscription-paid-119.md).
 
 ## Где смотреть и чему доверять
 
@@ -51,22 +53,23 @@ Support ID, ключи, reference/payload hashes и банковские рек�
 runtime/operator paths и соответствие Support ID ↔ HMAC. Не помещайте receipt,
 сырые status, ключи, БД или персональные пути в Git/PR/общий чат.
 
-Работайте в принятом control/identity Python-окружении с lockfiles. Перед запуском
-проверьте источник/хеш оператора и его baseline. **Обнаруженный старый архив
-оператора106 не соответствует действующему HTTP runtime108: не используйте его
-для новых операций.** Подготовленный source-only оператор108 и его checksum
-находятся в закрытом комплекте этого этапа; его CLI проверен на отдельном реестре.
-Production `status` также проверен настоящим `paid_beta_admin` через SSH stdin,
-с импортом paid_beta из проверенного действующего HTTP archive; серверные файлы
-не заменялись. Для постоянной административной установки нового archive нужны
-сверка checksum/lockfiles и штатное размещение операторского инструмента, не restart
-HTTP. Не путайте подготовленный локальный archive с установленным старым106.
+Работайте в принятом control/identity Python-окружении с lockfiles. Используйте
+административный путь из **актуального закрытого install receipt**, не исторический
+оператор106 или ранее подготовленный локальный108. Перед новой записью выполните
+read-only `policy`: он не открывает registry даже при указанном `--db`.
 
-В примерах `python` — проверенный locked interpreter; команды выполняются **там,
-где доступен канонический registry**, не в веб-контейнере. `REGISTRY_DB`,
-`SUPPORT_ID` и остальные переменные берутся из закрытого задания. Для проверенного
-source-only archive замените `python -m control.friends.paid_beta_admin` на
-`"$OPERATOR_PYTHON" -I "$PAID_OPERATOR_ARCHIVE"`; остальной argv неизменен.
+```sh
+"$OPERATOR_PYTHON" -I "$PAID_OPERATOR_ARCHIVE" policy
+```
+
+Должны совпасть `policy=android-paid-108-119-v1`, два release descriptors ниже,
+`cohort_limit=10`, archive SHA256 и хеш paid_beta с установленным HTTP runtime.
+Пути, interpreter, исходный commit, inventory и checksums берутся из закрытого
+receipt. Несовпадение — остановить новую запись, а не подменять APK hash.
+
+В примерах `OPERATOR_PYTHON` — проверенный locked interpreter; команды выполняются
+**там, где доступен канонический registry**, не в веб-контейнере. `REGISTRY_DB`,
+`SUPPORT_ID` и остальные переменные берутся из закрытого задания.
 Отключите shell tracing/history, направляйте результат в новый private0600 receipt.
 Блоки используют отдельный subshell с `set -C` (noclobber): существующий receipt
 не перезаписывается, команда при таком отказе перенаправления не запускается.
@@ -74,7 +77,7 @@ source-only archive замените `python -m control.friends.paid_beta_admin`
 
 ```sh
 ( umask 077; set -C
-python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" status \
+"$OPERATOR_PYTHON" -I "$PAID_OPERATOR_ARCHIVE" --db "$REGISTRY_DB" status \
   --support-id "$SUPPORT_ID" > "$PRIVATE_STATUS_RECEIPT"
 )
 ```
@@ -116,17 +119,26 @@ python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" status \
 начало не раньше прежнего, конец **строго больше** прежнего paid/grace конца.
 Backend допускает равную границу, но такая операция не продлевает доступ и не
 должна называться настоящим renewal. Не округляйте период
-по локальному часовому поясу. Baseline108: наблюдение Android
-`0.1.18-beta108`/108 и подтверждение передачи именно APK с указанным хешем.
-Не передавайте хеш108 вместо установленного119 ради обхода проверки.
+по локальному часовому поясу. Последние authenticated support/readiness observations
+должны согласованно определить **одну** точную пару версии. Equally-latest108 и119
+отклоняются как конфликт. Выберите `ACCEPTED_APK_SHA256` именно для этой пары:
+
+| versionName | versionCode | APK SHA256 |
+| --- | --- | --- |
+| `0.1.18-beta108` |108| `144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf` |
+| `0.1.18-beta119` |119| `52a9847b74181c48808c86a0c5bf5925b53ef498eec628aef2d78d26f1c92d2d` |
+
+Это не диапазон версий. Будущие релизы не разрешены автоматически; хеш другой
+разрешённой версии также отклоняется. APK119 сохраняет source
+`b2a37fe989294018ab08060bdebfa46d741d11d5`, Friends/ARM64 и прежнюю подпись.
 
 ```sh
 ( umask 077; set -C
-python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" activate \
+"$OPERATOR_PYTHON" -I "$PAID_OPERATOR_ARCHIVE" --db "$REGISTRY_DB" activate \
   --support-id "$SUPPORT_ID" --event-id "$PAYMENT_EVENT_ID" \
   --reference "$OPAQUE_REFERENCE" --period-start "$PERIOD_START_UTC" \
   --paid-until "$PAID_UNTIL_UTC" \
-  --apk-sha256 144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf \
+  --apk-sha256 "$ACCEPTED_APK_SHA256" \
   > "$PRIVATE_PAYMENT_RECEIPT"
 )
 ```
@@ -135,11 +147,13 @@ python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" activate \
 букв/цифр/`_`/`-`, без Support ID/персональных данных. Reference — непрозрачная
 ссылка на закрытое основание сверки, не банковские реквизиты. При потерянном ответе
 сначала сохраните исходный argv, проверьте receipt и свежий status; при повторе
-используйте **точно тот же event ID, получателя, действие, reference и период**.
+используйте **точно тот же event ID, получателя, действие, reference, период и APK hash**.
 Ответ `duplicate=true` означает прежнее применение, а не новую оплату.
 Изменённый payload с тем же ID отклоняется `EVENT_ID_CONFLICT`. Не создавайте новый
 ID для «повтора» неизвестного результата. Старый duplicate receipt не возвращает
 подписку к прежнему состоянию: итог проверяйте отдельным свежим status.
+Точный108 replay после upgrade119, expiry или revoke возвращает прежнюю квитанцию
+до проверки текущей версии. Не меняйте исходный108 hash на119 для такого replay.
 
 ## Grace, досрочное окончание, terminal revoke
 
@@ -150,7 +164,7 @@ ID для «повтора» неизвестного результата. Ст
 
 ```sh
 ( umask 077; set -C
-python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" grace \
+"$OPERATOR_PYTHON" -I "$PAID_OPERATOR_ARCHIVE" --db "$REGISTRY_DB" grace \
   --support-id "$SUPPORT_ID" --event-id "$GRACE_EVENT_ID" \
   --reference "$OPAQUE_REFERENCE" --grace-until "$GRACE_UNTIL_UTC" \
   > "$PRIVATE_GRACE_RECEIPT"
@@ -161,7 +175,7 @@ python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" grace \
 
 ```sh
 ( umask 077; set -C
-python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" expire \
+"$OPERATOR_PYTHON" -I "$PAID_OPERATOR_ARCHIVE" --db "$REGISTRY_DB" expire \
   --support-id "$SUPPORT_ID" --event-id "$EXPIRY_EVENT_ID" \
   --reference "$OPAQUE_REFERENCE" > "$PRIVATE_EXPIRY_RECEIPT"
 )
@@ -171,7 +185,7 @@ python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" expire \
 
 ```sh
 ( umask 077; set -C
-python -m control.friends.paid_beta_admin --db "$REGISTRY_DB" revoke \
+"$OPERATOR_PYTHON" -I "$PAID_OPERATOR_ARCHIVE" --db "$REGISTRY_DB" revoke \
   --support-id "$SUPPORT_ID" --event-id "$REVOCATION_EVENT_ID" \
   --reference "$OPAQUE_REFERENCE" > "$PRIVATE_REVOCATION_RECEIPT"
 )
@@ -261,26 +275,42 @@ live_database_writes=0. Скрипт удаляет только собстве�
 CLI `restore`/`dry-run`: их нет. Для настоящего disaster restore сначала сверяются
 все операции после backup; эта инструкция не даёт разрешения терять их.
 
-## Решения, которые ещё не приняты
+## Политика A и отдельное решение Б
 
 ### A. Новые платные операции для beta119, без потери108
 
-Объём предложения: вместо единственного equality baseline в
-`control/friends/paid_beta.py::confirm_android_baseline` — явный reviewed allowlist
-**пар** (platform, versionName, versionCode, APK hash)108 и119; payment attestation
-должна соответствовать последнему аутентифицированному наблюдению, а не любому
-разрешённому хешу. Сохранить проверки всех equally-latest observations, replay/
-payload identity, активной identity и существующего MESH revoke. Обновить согласованно
-paid operator packaging/fixtures и источник synthetic baseline; не менять старые
-events, periods, grants и выданные entitlement. Grace использует ту же eligibility;
-чтение статуса и исполнение старого entitlement не зависят от upgrade клиента.
+Решение выбрано владельцем. `confirmed_android_release` разрешает только точные
+descriptors108/119. Grace использует ту же eligibility без APK-аргумента и без
+превращения в payment. Сохранены active identity/invite, MESH revoke, лимит10,
+периоды и terminal revoke. `confirm_android_baseline` оставлен108-only для старых
+canary/permits; live canary не повторяется. Synthetic backend/seed_demo/immutable
+ReleaseMetadata остаются108; старые identities, наблюдения и payment records
+не преобразуются в119. Старый entitlement не требует нового activate или upgrade.
+Это изменение серверной политики новых операций, не новая Android-квалификация.
 
-Gate: явное продуктовое разрешение119 и проверенный APK119/signature/provenance;
-положительные108/119 activate+grace, отрицательные смешанные hash/version/unknown/
-conflicting observation, точный replay старых108 событий, отсутствие миграции/смены
-cohort/сокращения прежних прав; пакет+адресный runtime readback. Следующий реальный
-paid/event-сценарий требует конкретного получателя, периода и основания оплаты.
-Этот этап **не** вводит allowlist119 и не повышает Android runtime-квалификацию.
+### Установка и кодовый rollback политики A
+
+Перед обновлением: согласованный `--include-paid` backup/rehearsal по предыдущему
+разделу, private fingerprints paid/identity и сохранённые HTTP/CLI archives, effective
+unit и source config collector. `scripts/package_paid_policy_overlay.py` требует
+точные SHA256 serving archive и его paid_beta; заменяет **только paid_beta.py**,
+сравнивает полный inventory. Bootstrap/renewal и прочие serving bytes не заменяются
+снимком HEAD. Оператор собирается `scripts/package_support_operator.py --operator
+paid-beta --output "$NEW_OPERATOR_ARCHIVE"` и проверяется реальным `policy`/status.
+Пути и точные команды установки находятся в закрытом комплекте, не в веб-процессе.
+
+Restart разрешён только независимому HTTP API после проверки его effective unit;
+сразу подтвердите новый PID/archive/module hashes и read-only status. Согласованно
+смените archive path/SHA256 в private `subscriptions-source.json` внешнего collector,
+**сохраните HMAC key**. Дождитесь успешного импорта и authenticated HTTP200 страницы
+`/subscriptions/` с новым runtime SHA и свежим observed_at; ошибка/старый кеш не PASS.
+
+При кодовом rollback: вернуть сохранённый HTTP ExecStart/drop-in и соответствующий
+проверенный108 CLI (не legacy106), reload systemd и restart **только этого HTTP API**;
+вернуть сохранённый collector source config, не HMAC key; проверить старые hashes,
+status и свежий импорт. БД/платежи/cohort/identity/периоды **не восстанавливать из backup**.
+Уже выданные119 entitlement сохраняются, новые119 activate/grace после отката
+недопустимы. Зафиксировать rollback receipt, приостановить новые119 операции.
 
 ### B. Одна подписка AWG/TCP/MESH
 
