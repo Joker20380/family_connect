@@ -122,6 +122,10 @@ or calls occur. Full `Client builds` CI (including the independent old runtime/n
 suites) was not relaunched for this bounded preparation and is **not** claimed accepted
 for120. Its existing release gate still applies before real vault signing. Prior CI,
 local433 JVM/lint checks and F are recorded separately, not substituted for it.
+Final120 variant unit check passes433/0 failures/errors/skips at9f194fd; Android
+sources remain byte-equal to APK build08d7e41 and its immutable APK digest is unchanged.
+Final selected source/package/orchestrator checks pass54 with no skips. Earlier local
+119 draft and failed preparation logs remain hashed evidence, not candidate artifacts.
 
 Remaining sequence: complete release acceptance before ephemeral issuance; obtain one
 authorization for only the new bounded NL1 entry + existing RU issuer operation + private
