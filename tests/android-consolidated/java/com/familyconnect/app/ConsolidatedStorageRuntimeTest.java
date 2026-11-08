@@ -48,6 +48,8 @@ public class ConsolidatedStorageRuntimeTest {
         assertEquals("com.familyconnect.app.friends",context.getPackageName());
         assertTrue("119".equals(sourceVersion)||"120".equals(sourceVersion));
         assertEquals("off",ConnectionService.status);
+        if(android.os.Build.VERSION.SDK_INT>=33)assertEquals(android.content.pm.PackageManager.PERMISSION_GRANTED,
+            context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS));
         assertFalse("Offline fixture must not contact real endpoints",new ChatNetworkAndroid(context).available());
     }
     @Test public void prepareHistoricalFormat()throws Exception {

@@ -16,6 +16,7 @@ def main():
         raise SystemExit('Disposable hosted emulator only')
     serial = ready_emulator()
     adb = ['adb', '-s', serial]
+    sdk = int(subprocess.check_output(adb+['shell', 'getprop', 'ro.build.version.sdk'], text=True, timeout=10).strip())
     build = ROOT/'clients/android'
     gradle = ['gradle', '--no-daemon', '-PfcTestBuildType=friends', '-PfcFriendsCi=true', '-PfcTargetAbi=x86_64']
     output = ROOT/'android-ci-ui'
@@ -33,6 +34,8 @@ def main():
         tests, = (build/'app/build/outputs/apk/androidTest/friends').glob('*.apk')
         run(adb+['install', '-r', str(apk)])
         run(adb+['install', '-r', str(tests)])
+        if sdk >= 33:
+            run(adb+['shell', 'pm', 'grant', PACKAGE, 'android.permission.POST_NOTIFICATIONS'])
     def instrument(method, version):
         result = run(adb+['shell', 'am', 'instrument', '-w', '-e', 'fc_disposable', 'true',
                     '-e', 'sourceVersion', str(version), '-e', 'class',

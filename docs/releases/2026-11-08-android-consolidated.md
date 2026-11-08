@@ -68,6 +68,10 @@ ActivityScenario, checks the focused dialog's real TextView and draws its measur
 view using the established UI-test method. It does not remove production FLAG_SECURE
 or depend on accessibility exporting a secure window. Failure logs and the completed
 format-upgrade receipt are retained with the normal runtime artifacts.
+As in the existing Friends CI, the disposable fixture grants POST_NOTIFICATIONS
+before launching an activated app and asserts that prerequisite. Otherwise the
+first-run system permission prompt legitimately takes focus from subscription;
+this fixture is not a repetition of the separate permission acceptance matrix.
 
 ## Corrected operator preparation
 
