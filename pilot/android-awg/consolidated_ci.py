@@ -25,6 +25,7 @@ def main():
         return subprocess.run(command, check=True, timeout=600, **kwargs)
     def build_version(version, init):
         init.write_text("allprojects { afterEvaluate { project -> if (project.path == ':app') { "
+                        "android.sourceSets.androidTest.java.srcDir('"+str(ROOT/'tests/android-consolidated/java')+"'); "
                         "android.defaultConfig.versionCode = "+str(version)+"; "
                         "android.defaultConfig.versionName = '0.1.18-beta"+str(version)+"' } } }\n")
         run(gradle+['--init-script', str(init), ':app:assembleFriends', ':app:assembleFriendsAndroidTest'], cwd=build)
