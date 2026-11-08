@@ -58,6 +58,9 @@ cancel<5s, guard/exhaustion и system revoke. Новый concurrency-тест п
 Повтор UI/service/двух UID и каталога также прошёл; общий локальный прогон прервался
 после7/10 на падении host OpenGL emulator (`null ctx`), а не на assertion приложения.
 Этот неполный прогон не объявлен PASS; полный результат требует hosted CI.
+Catalog gate проверяет декларацию QUERY_ALL_PACKAGES на всех API и grant на API30+,
+где это permission существует. На27/28 проверка фактического launcher-набора сохраняется;
+несуществующий в этих ОС grant не подменяет проверку видимости.
 
 На исходном debug122 тот же новый UI/service regression воспроизводит сохранённый
 `failed` после Save ALL → Disconnect → повторного Connect. Первая попытка запуска

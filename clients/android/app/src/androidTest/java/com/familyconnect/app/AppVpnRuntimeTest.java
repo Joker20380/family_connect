@@ -283,7 +283,8 @@ public class AppVpnRuntimeTest {
     @Test public void catalogMatchesCurrentProfileLaunchersNotSystemFlag()throws Exception{
         org.junit.Assume.assumeTrue("Dedicated fixture", "true".equals(InstrumentationRegistry.getArguments().getString("fc_app_vpn")));
         prepare();android.content.pm.PackageManager manager=context.getPackageManager();
-        assertEquals(android.content.pm.PackageManager.PERMISSION_GRANTED,manager.checkPermission("android.permission.QUERY_ALL_PACKAGES",context.getPackageName()));
+        assertTrue(java.util.Arrays.asList(manager.getPackageInfo(context.getPackageName(),android.content.pm.PackageManager.GET_PERMISSIONS).requestedPermissions).contains("android.permission.QUERY_ALL_PACKAGES"));
+        if(android.os.Build.VERSION.SDK_INT>=30)assertEquals(android.content.pm.PackageManager.PERMISSION_GRANTED,manager.checkPermission("android.permission.QUERY_ALL_PACKAGES",context.getPackageName()));
         java.util.List<AppVpnCatalog.Entry> catalog=AppVpnCatalog.read(manager,Set.of("not.available.saved.package"));
         java.util.Set<String> actual=new java.util.HashSet<>(),expected=new java.util.HashSet<>();int preinstalled=0,components=0;
         for(android.content.pm.ResolveInfo entry:manager.queryIntentActivities(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER),0))
