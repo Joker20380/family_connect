@@ -1,0 +1,522 @@
+{
+  "conclusion": "INSUFFICIENT_HISTORICAL_DATA_TO_VALIDATE_94C_PHYSICAL_TEMPERATURE",
+  "incident_checkpoint": "6096535f53057c7340f520ca54f77173b670a563",
+  "no_avd_connect_rooms_apk_native_rebuild": true,
+  "accepted_android_jni_gate": "RETAINED_PASS_NOT_REPEATED",
+  "original_evidence_unchanged": true,
+  "exact_original_root": "state-client-build/cold-native-diagnostic-20261106/reduced-load-runtime/local-auth",
+  "exact_original_sha256": {
+    "emulator_guard.py": "e4beb91db4305e9635d1a2c23ae17d7d5efa79d0e228e97416597260d8b29340",
+    "run_android.py": "d705a82285cfef1269c01840ba0cd77fe51a72c7e6197bed7b5e9cb38cfb68b6"
+  },
+  "original_readers": {
+    "watch": "emulator_guard.py:start.watch:15-36",
+    "stage_read": "run_android.py:observe:65-71",
+    "stage_decision": "run_android.py:audit:82-89",
+    "selection": "hwmon name in coretemp/k10temp; temp*_input only",
+    "conversion": "int(raw_text)/1000",
+    "stop": "CPU >=85; GPU >=80; emulator lifetime >=180; unchanged",
+    "watch_period": "sleep(3) after reading and observer work, not an exact 3s cadence",
+    "stage_period": "observe, sleep(1), observe and assert on second sample",
+    "watch_scope": "while owned process.poll() is None; daemon, no join; exceptions stop owned process",
+    "ordering": "watch temp -> GPU -> update watch peak -> observe(False) including independent temp reread -> compare original watch temp -> sleep(3); stage process CPU counters -> temp -> GPU -> end timestamp",
+    "clock_limitation": "Old frames have only end-of-frame timestamps, not per-sensor or background-watch timestamps."
+  },
+  "old94": {
+    "frame_utc": "2026-11-06T21:47:25.915094+00:00",
+    "second_frame_utc": "2026-11-06T21:47:25.950063+00:00",
+    "fields": [
+      "/sys/class/hwmon/hwmon2/temp4_input",
+      "/sys/class/hwmon/hwmon2/temp1_input"
+    ],
+    "labels": [
+      "Core 2",
+      "Package id 0"
+    ],
+    "stored_celsius": [
+      94,
+      94
+    ],
+    "raw_integer": "NOT_RECORDED; 94000 follows from verified conversion, not a retained raw read",
+    "old_fan_rpm": "UNKNOWN_NOT_COLLECTED",
+    "independent_temperature_evidence": "NONE",
+    "duration": "UNKNOWN; two frames 35ms apart need not be independent hardware samples"
+  },
+  "why66vs94": {
+    "same_input_different_conversion": false,
+    "independent_sample_domains": true,
+    "watch_peak_only": 66,
+    "stage_peak": 94,
+    "stage_does_not_update_watch_peak": true,
+    "deterministic_66_then_94_replay": "PASS_POSSIBILITY_ONLY",
+    "actual_last_watch_sample_time": "UNKNOWN_NOT_RECORDED",
+    "actual_watch_exit_time": "UNKNOWN_NOT_RECORDED",
+    "not_established": [
+      "overheating",
+      "faulty physical sensor",
+      "real short peak",
+      "sustained high temperature"
+    ]
+  },
+  "confirmed_separate_guard_bug": {
+    "case": "empty CPU input set or no coretemp/k10temp driver",
+    "old_watch": "max(cpu,default=0) fabricates 0C, continues",
+    "old_stage": "empty max raises ValueError and stops",
+    "explains_old94": false,
+    "fix": "versioned tests/android_emulator_guard.py fails closed before recording a temperature",
+    "original_artifacts_modified": false,
+    "runtime_executed_with_fix": false
+  },
+  "host": {
+    "machine": {
+      "sys_vendor": "Dell Inc.",
+      "product_name": "XPS 15 9500"
+    },
+    "cpu_models": [
+      "Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz"
+    ],
+    "no_serials": true,
+    "hwmon_identity": [
+      {
+        "name": "dell_smm",
+        "path": "/sys/class/hwmon/hwmon8",
+        "device": "/sys/devices/platform/dell_smm_hwmon",
+        "resolved_path": "/sys/devices/platform/dell_smm_hwmon/hwmon/hwmon8"
+      },
+      {
+        "name": "coretemp",
+        "path": "/sys/class/hwmon/hwmon2",
+        "device": "/sys/devices/platform/coretemp.0",
+        "resolved_path": "/sys/devices/platform/coretemp.0/hwmon/hwmon2"
+      },
+      {
+        "name": "dell_ddv",
+        "path": "/sys/class/hwmon/hwmon9",
+        "device": "/sys/devices/platform/PNP0C14:08/wmi_bus/wmi_bus-PNP0C14:08/8A42EA14-4F2A-FD45-6422-0087F7A7E608",
+        "resolved_path": "/sys/devices/platform/PNP0C14:08/wmi_bus/wmi_bus-PNP0C14:08/8A42EA14-4F2A-FD45-6422-0087F7A7E608/hwmon/hwmon9"
+      }
+    ]
+  },
+  "observation": {
+    "duration": {
+      "result": "COMPLETED",
+      "samples": 60,
+      "elapsed_seconds": 60.00010301999282,
+      "no_avd_no_stress_no_system_writes": true
+    },
+    "from": "2026-11-06T22:00:50.698127+00:00",
+    "to": "2026-11-06T22:01:49.808428+00:00",
+    "readings": [
+      {
+        "driver": "dell_smm",
+        "field": "fan1_input",
+        "label": "UNKNOWN",
+        "unit": "rpm",
+        "minimum": 2763.0,
+        "maximum": 2773.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_smm",
+        "field": "fan2_input",
+        "label": "UNKNOWN",
+        "unit": "rpm",
+        "minimum": 3076.0,
+        "maximum": 3088.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_smm",
+        "field": "temp10_input",
+        "label": "UNKNOWN",
+        "unit": "celsius",
+        "minimum": 52.0,
+        "maximum": 52.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_smm",
+        "field": "temp1_input",
+        "label": "UNKNOWN",
+        "unit": "celsius",
+        "minimum": 55.0,
+        "maximum": 61.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_smm",
+        "field": "temp2_input",
+        "label": "UNKNOWN",
+        "unit": "celsius",
+        "minimum": 46.0,
+        "maximum": 46.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_smm",
+        "field": "temp3_input",
+        "label": "UNKNOWN",
+        "unit": "celsius",
+        "minimum": 45.0,
+        "maximum": 46.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_smm",
+        "field": "temp4_input",
+        "label": "UNKNOWN",
+        "unit": "celsius",
+        "minimum": 48.0,
+        "maximum": 49.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_smm",
+        "field": "temp5_input",
+        "label": "UNKNOWN",
+        "unit": "celsius",
+        "minimum": 40.0,
+        "maximum": 41.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_smm",
+        "field": "temp6_input",
+        "label": "UNKNOWN",
+        "unit": "celsius",
+        "minimum": 30.0,
+        "maximum": 30.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_smm",
+        "field": "temp7_input",
+        "label": "UNKNOWN",
+        "unit": "celsius",
+        "minimum": 40.0,
+        "maximum": 40.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_smm",
+        "field": "temp8_input",
+        "label": "UNKNOWN",
+        "unit": "celsius",
+        "minimum": 46.0,
+        "maximum": 47.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_smm",
+        "field": "temp9_input",
+        "label": "UNKNOWN",
+        "unit": "celsius",
+        "minimum": 49.0,
+        "maximum": 50.0,
+        "count": 60
+      },
+      {
+        "driver": "coretemp",
+        "field": "temp1_input",
+        "label": "Package id 0",
+        "unit": "celsius",
+        "minimum": 53.0,
+        "maximum": 76.0,
+        "count": 60
+      },
+      {
+        "driver": "coretemp",
+        "field": "temp2_input",
+        "label": "Core 0",
+        "unit": "celsius",
+        "minimum": 51.0,
+        "maximum": 67.0,
+        "count": 60
+      },
+      {
+        "driver": "coretemp",
+        "field": "temp3_input",
+        "label": "Core 1",
+        "unit": "celsius",
+        "minimum": 51.0,
+        "maximum": 65.0,
+        "count": 60
+      },
+      {
+        "driver": "coretemp",
+        "field": "temp4_input",
+        "label": "Core 2",
+        "unit": "celsius",
+        "minimum": 52.0,
+        "maximum": 71.0,
+        "count": 60
+      },
+      {
+        "driver": "coretemp",
+        "field": "temp5_input",
+        "label": "Core 3",
+        "unit": "celsius",
+        "minimum": 52.0,
+        "maximum": 75.0,
+        "count": 60
+      },
+      {
+        "driver": "coretemp",
+        "field": "temp6_input",
+        "label": "Core 4",
+        "unit": "celsius",
+        "minimum": 52.0,
+        "maximum": 71.0,
+        "count": 60
+      },
+      {
+        "driver": "coretemp",
+        "field": "temp7_input",
+        "label": "Core 5",
+        "unit": "celsius",
+        "minimum": 52.0,
+        "maximum": 76.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_ddv",
+        "field": "fan1_input",
+        "label": "CPU Fan",
+        "unit": "rpm",
+        "minimum": 2763.0,
+        "maximum": 2774.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_ddv",
+        "field": "fan2_input",
+        "label": "Video Fan",
+        "unit": "rpm",
+        "minimum": 3076.0,
+        "maximum": 3088.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_ddv",
+        "field": "temp10_input",
+        "label": "Unknown",
+        "unit": "celsius",
+        "minimum": 52.0,
+        "maximum": 52.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_ddv",
+        "field": "temp11_input",
+        "label": "Video",
+        "unit": "celsius",
+        "minimum": 49.0,
+        "maximum": 51.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_ddv",
+        "field": "temp1_input",
+        "label": "CPU",
+        "unit": "celsius",
+        "minimum": 55.0,
+        "maximum": 61.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_ddv",
+        "field": "temp2_input",
+        "label": "SODIMM",
+        "unit": "celsius",
+        "minimum": 46.0,
+        "maximum": 46.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_ddv",
+        "field": "temp3_input",
+        "label": "Ambient",
+        "unit": "celsius",
+        "minimum": 45.0,
+        "maximum": 46.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_ddv",
+        "field": "temp4_input",
+        "label": "Unknown",
+        "unit": "celsius",
+        "minimum": 48.0,
+        "maximum": 49.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_ddv",
+        "field": "temp5_input",
+        "label": "HDD",
+        "unit": "celsius",
+        "minimum": 40.0,
+        "maximum": 41.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_ddv",
+        "field": "temp6_input",
+        "label": "Ambient",
+        "unit": "celsius",
+        "minimum": 30.0,
+        "maximum": 30.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_ddv",
+        "field": "temp7_input",
+        "label": "Unknown",
+        "unit": "celsius",
+        "minimum": 40.0,
+        "maximum": 40.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_ddv",
+        "field": "temp8_input",
+        "label": "Ambient",
+        "unit": "celsius",
+        "minimum": 46.0,
+        "maximum": 47.0,
+        "count": 60
+      },
+      {
+        "driver": "dell_ddv",
+        "field": "temp9_input",
+        "label": "Ambient",
+        "unit": "celsius",
+        "minimum": 49.0,
+        "maximum": 50.0,
+        "count": 60
+      }
+    ],
+    "logical_cpu_load_and_frequency": {
+      "cpu0": {
+        "max_busy_percent": 32.11,
+        "scaling_cur_freq_mhz_min": 899.837,
+        "scaling_cur_freq_mhz_max": 4199.998,
+        "cpuinfo_cur_freq": "UNKNOWN_ENOENT"
+      },
+      "cpu1": {
+        "max_busy_percent": 23.077,
+        "scaling_cur_freq_mhz_min": 800.0,
+        "scaling_cur_freq_mhz_max": 4201.259,
+        "cpuinfo_cur_freq": "UNKNOWN_ENOENT"
+      },
+      "cpu2": {
+        "max_busy_percent": 93.519,
+        "scaling_cur_freq_mhz_min": 800.0,
+        "scaling_cur_freq_mhz_max": 4200.001,
+        "cpuinfo_cur_freq": "UNKNOWN_ENOENT"
+      },
+      "cpu3": {
+        "max_busy_percent": 68.817,
+        "scaling_cur_freq_mhz_min": 800.0,
+        "scaling_cur_freq_mhz_max": 3800.694,
+        "cpuinfo_cur_freq": "UNKNOWN_ENOENT"
+      },
+      "cpu4": {
+        "max_busy_percent": 47.312,
+        "scaling_cur_freq_mhz_min": 800.0,
+        "scaling_cur_freq_mhz_max": 4205.329,
+        "cpuinfo_cur_freq": "UNKNOWN_ENOENT"
+      },
+      "cpu5": {
+        "max_busy_percent": 34.513,
+        "scaling_cur_freq_mhz_min": 800.0,
+        "scaling_cur_freq_mhz_max": 3799.949,
+        "cpuinfo_cur_freq": "UNKNOWN_ENOENT"
+      },
+      "cpu6": {
+        "max_busy_percent": 19.565,
+        "scaling_cur_freq_mhz_min": 800.0,
+        "scaling_cur_freq_mhz_max": 4197.798,
+        "cpuinfo_cur_freq": "UNKNOWN_ENOENT"
+      },
+      "cpu7": {
+        "max_busy_percent": 22.619,
+        "scaling_cur_freq_mhz_min": 800.0,
+        "scaling_cur_freq_mhz_max": 4032.045,
+        "cpuinfo_cur_freq": "UNKNOWN_ENOENT"
+      },
+      "cpu8": {
+        "max_busy_percent": 30.337,
+        "scaling_cur_freq_mhz_min": 800.0,
+        "scaling_cur_freq_mhz_max": 3806.383,
+        "cpuinfo_cur_freq": "UNKNOWN_ENOENT"
+      },
+      "cpu9": {
+        "max_busy_percent": 98.925,
+        "scaling_cur_freq_mhz_min": 800.0,
+        "scaling_cur_freq_mhz_max": 4200.62,
+        "cpuinfo_cur_freq": "UNKNOWN_ENOENT"
+      },
+      "cpu10": {
+        "max_busy_percent": 36.471,
+        "scaling_cur_freq_mhz_min": 800.0,
+        "scaling_cur_freq_mhz_max": 4200.906,
+        "cpuinfo_cur_freq": "UNKNOWN_ENOENT"
+      },
+      "cpu11": {
+        "max_busy_percent": 27.586,
+        "scaling_cur_freq_mhz_min": 800.0,
+        "scaling_cur_freq_mhz_max": 4201.581,
+        "cpuinfo_cur_freq": "UNKNOWN_ENOENT"
+      }
+    },
+    "per_read_raw_integer_path_label_start_end_timestamps": "readings.jsonl",
+    "dell_smm_fan_label": "UNKNOWN_EINVAL; numerical RPM readable",
+    "throttle_counters_read": false,
+    "no_new60s_repeat": true
+  },
+  "sensors_comparison": {
+    "installed_binary": "/usr/bin/sensors",
+    "same_sensor_not_independent_thermometer": true,
+    "sixty_second_sensors_values": "UNKNOWN: collector JSONDecodeError on concatenated chip documents; original stdout for those 60 calls not retained",
+    "collector_fix": "parse concatenated documents and merge disjoint repeated-label features; preserve raw stdout before parsing",
+    "extra_paired_check_utc": "2026-11-06T22:04:43.653282+00:00",
+    "paired_fields": 32,
+    "equal_to_before_or_after": 31,
+    "coretemp_inputs_exact_match": 7,
+    "remaining_difference": {
+      "field": "dell_smm/fan1_input",
+      "sysfs_before": 2769,
+      "sensors": 2763,
+      "sysfs_after": 2769,
+      "unit": "rpm"
+    },
+    "limitations": "One valid paired comparison, not a full per-second sensors/sysfs comparison. Current readings do not refute old94."
+  },
+  "checks": {
+    "exact_original_replay_cases": 8,
+    "fixed_replay_cases": 8,
+    "schedule_replay": 1,
+    "targeted_pytest": "python3 -B -m pytest -q tests/test_android_emulator_guard.py",
+    "pytest_result": "16 passed in 0.07s; Popen and thread are mocked, no process launched"
+  },
+  "local_evidence_root": "state-client-build/cold-native-diagnostic-20261106/thermal-reader-audit",
+  "artifact_sha256": {
+    "host.json": "bc4f572b567b50634449b4db1e9c74ae17a97ca68c75eb251cb4941454452faa",
+    "readings.jsonl": "35bbead979b3868947af14583ea24ec89e853089a65e70010b6460c1cf0e56c0",
+    "observation.json": "2b85739e3842c2657179c0f88635f7ecfb6cfc04103120ced508b12cb825458c",
+    "observe_once.py": "b04f231056c75c37a5c09a6084f483f9334b8290629810c0ef242e635942f8fe",
+    "observe_once.executed-reconstructed.py": "664d6577082948afbab3a9371531fbfe16132b1a1718bce91b6be28b989c66bc",
+    "sensors-post-observation.stdout": "78dc17751979f9e99673852e95fa6aa2a01cad1ccefbc2c8b0b96aa62fe722e4",
+    "sensors-post-observation.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sensors-post-observation.json": "66ef82a46cf0efe7bc1ef5478350024c4c2a27c319a2dc2899b9aafd85a7e83a",
+    "paired-sensors-check.json": "861a576af628f1540d0843614b3de348e3fff6f2b70b98e8da895c508f46a59b",
+    "replay_readers.py": "71a0204e334833d8c9ee552090effb82a2f5cc3691a25981a72fb3205b06a076",
+    "replay-original.json": "ead8c306056d05d1e2effbdcd96b23abf967e2686d2a2c8c4c59aad068743032",
+    "replay-fixed.json": "28a7502b45948c80c6517a117ef54fe6bdcc9642ad6659ea0c0af3c344bdb4e3",
+    "replay-66-94.json": "0e6e298282517994809f799db931834374ab7e902fa05ab734bcf0c64333938a",
+    "guard-fix.patch": "641473a3c83859060ce87bde876779f8b60205e1232c6f2685ea0664b2a4f82e"
+  },
+  "executed_collector_source_note": "observe_once.executed-reconstructed.py reconstructed from this turn patches; observe_once.py contains subsequent parser fixes and was not rerun for 60 seconds.",
+  "guard_fix_scope": "Test helper source only; retained captured runner is immutable. No authorization to resume cold runtime."
+}

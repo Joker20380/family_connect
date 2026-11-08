@@ -1,0 +1,28 @@
+{
+  "scope": "offline retained evidence, no SSH, production operation or fresh server verification",
+  "node": "nl-amsterdam-1",
+  "host": "185.10.158.212",
+  "inventory": "control_plane/apps/console/collector.py",
+  "catalog_source_directory": "state-client-build/fleet-bootstrap-2/second-nl-ordinary",
+  "verification": "provisioning.friends_catalog.verify_catalog, Ed25519 domain separated signature and schema; PASS on all three saved envelopes",
+  "anchor_file_sha256": "d0ae60e61af6ac5018428aaad89e362ec0f75d7468633a26c22906356228d281",
+  "catalogs": [
+    {"file": "legacy-catalog.json", "sequence": 4, "sha256": "214cb6a3611b5c05117dd2ddfbfbb2f8add0603c680368a9299b34cd28214922", "nl_host": "185.10.158.212"},
+    {"file": "second-nl-catalog.json", "sequence": 5, "sha256": "f543fb9c0d3b54a4436a7468376bf22980214422720c4103c11f8fcaf7e038a6", "nl_host": "185.10.158.196"},
+    {"file": "rollback-first-nl-catalog.json", "sequence": 6, "sha256": "e89ff6da3edc85008a397d8aa75e1e00f0d8923d0368ed7d15faa455ca57b37e", "nl_host": "185.10.158.212"}
+  ],
+  "assignment_evidence": "2026-11-02-second-nl-ordinary-live.md: existing assignments retained on NL1, new admissions NL2; catalog schema2 alone does not encode logical node identity",
+  "replacement_evidence": "2026-10-30-nl-gateway-replacement.json: authenticated replacement host185.10.158.212, old186.246.45.246 fenced/inactive, not trusted",
+  "mesh_evidence": "2026-11-06-mesh-live-recovery.json and 2026-11-06-vpn-health.md: canonical NL1 strict leaf/CRL and real DNS/verified HTTPS/185.10.158.212 egress; observed2026-11-06, not current liveness",
+  "canonical_profile_evidence": {
+    "path": "state-client-build/mesh-live-failure-20261106/NL1-publisher-binding.private.json",
+    "sha256": "4cc0913056dc20acd8e1b27159f9bb73c999ee03777f528a6062f62667d40e02",
+    "locator": "/etc/fc-canonical-pinned-venv/locator.json",
+    "profile": "/etc/fc-canonical-pinned-venv/profile.json",
+    "provider_environment": "/opt/apps/family_connect/friends-restricted/provider.env",
+    "reader_user": "family-restricted",
+    "private_values_exported": false
+  },
+  "fresh_live_verification": "NOT_RUN",
+  "deployment_gate": "current canonical profile/leaf, family/gateway binding, issuer/CRL/floors, APK root, selected registered-device route, backend TLS and service user access must match before start; no key transfer or stale certificate reuse"
+}

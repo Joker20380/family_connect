@@ -49,6 +49,12 @@ final class DiagnosticRing {
         Code diagnostic=event.failure==null?Code.NONE:Code.valueOf(event.failure.name());
         if(diagnostic==Code.INTERNAL&&("restricted".equals(transport)||"restoration_failed".equals(event.name)&&restrictedSession.size()>0))diagnostic=Code.valueOf(RestrictedTrace.firstReason(restrictedSession));
         add(Component.ORCHESTRATOR,diagnostic,before,state,transport,event.elapsedMs,now);
+        if(event.cleanupReason!=null){
+            JsonObject recent=events.getLast();recent.addProperty("event",event.name);
+            recent.addProperty("policy_reason",event.failure.name());
+            if(event.triggerReason!=null)recent.addProperty("trigger_reason",event.triggerReason.name());
+            recent.addProperty("cleanup_reason",event.cleanupReason.name());recent.addProperty("secondary_stage","CLEANUP");
+        }
         if("recovery_wait".equals(event.name))events.getLast().addProperty("event",event.name);
         if(Arrays.asList("restoration_attempted","restoration_succeeded","restoration_failed","cleanup_failed").contains(event.name)){
             JsonObject recent=events.getLast();recent.addProperty("event",event.name);

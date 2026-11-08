@@ -1,0 +1,241 @@
+{
+  "result": "FAIL_RUNTIME",
+  "harness_source": "137d9b04556ab4e08d22c406ee415ec2848f763e",
+  "managed_and_native_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+  "native_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+  "connect_attempted": true,
+  "connect_count": 1,
+  "candidate_failure": {
+    "event": "candidate_failed",
+    "state": "CONNECTING",
+    "elapsed_ms": 2206,
+    "category": "BOOTSTRAP_UNAVAILABLE",
+    "trigger_reason": "BOOTSTRAP_UNAVAILABLE",
+    "stage": "ORCHESTRATOR",
+    "monotonic_ms": 63792
+  },
+  "native_post_before_cleanup": {
+    "request_id": "07411166b9c84aa9942d4124e2b23740",
+    "phase": "POST",
+    "native": {
+      "handle": 1,
+      "go_entered": true,
+      "budget_known": true,
+      "stage": "TELEMOST_CONNECT",
+      "last_success": "TELEMOST_CREATE",
+      "first_failure": "SOCKET_PROTECT_BIND",
+      "reason": "SOCKET_DENIED",
+      "provider_step": "",
+      "http_status": 0,
+      "errno": 0,
+      "security": false,
+      "elapsed_ms": 4,
+      "remaining_ms": 27993,
+      "protected": 0,
+      "denied": 4,
+      "closed": false,
+      "released": true
+    },
+    "network": {
+      "type": "CELLULAR",
+      "handle": 429513165534,
+      "available": true,
+      "resolver": "NETWORK_IPV4_GO_RESOLVER",
+      "resolver_class": "PRIVATE_IPV4",
+      "observed_ms": 63772,
+      "bind_ms": 63771,
+      "bind_available": true,
+      "bind_result": "IO"
+    }
+  },
+  "candidate_remaining_ms": 197866,
+  "all_provisioning_snapshots": [
+    {
+      "request_id": "07411166b9c84aa9942d4124e2b23740",
+      "phase": "BEGIN",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "LOCATOR",
+        "last_success": "LOCATOR",
+        "first_failure": "",
+        "reason": "NONE",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 1,
+        "remaining_ms": 27996,
+        "protected": 0,
+        "denied": 0,
+        "closed": false,
+        "released": false
+      },
+      "network": {
+        "type": "CELLULAR",
+        "handle": 429513165534,
+        "available": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 63772,
+        "bind_ms": 63771,
+        "bind_available": true,
+        "bind_result": "IO"
+      }
+    },
+    {
+      "request_id": "07411166b9c84aa9942d4124e2b23740",
+      "phase": "POST",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "TELEMOST_CONNECT",
+        "last_success": "TELEMOST_CREATE",
+        "first_failure": "SOCKET_PROTECT_BIND",
+        "reason": "SOCKET_DENIED",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 4,
+        "remaining_ms": 27993,
+        "protected": 0,
+        "denied": 4,
+        "closed": false,
+        "released": true
+      },
+      "network": {
+        "type": "CELLULAR",
+        "handle": 429513165534,
+        "available": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 63772,
+        "bind_ms": 63771,
+        "bind_available": true,
+        "bind_result": "IO"
+      }
+    },
+    {
+      "request_id": "",
+      "phase": "CLOSE",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "TELEMOST_CONNECT",
+        "last_success": "TELEMOST_CREATE",
+        "first_failure": "SOCKET_PROTECT_BIND",
+        "reason": "SOCKET_DENIED",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 4,
+        "remaining_ms": 27993,
+        "protected": 0,
+        "denied": 4,
+        "closed": true,
+        "released": true
+      },
+      "network": {
+        "type": "CELLULAR",
+        "handle": 429513165534,
+        "available": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 63773,
+        "bind_ms": 63771,
+        "bind_available": true,
+        "bind_result": "IO"
+      }
+    }
+  ],
+  "direct_path_failures": [
+    {
+      "operation": "CHALLENGE",
+      "stage": "CONNECT_TLS_WRITE",
+      "route": "HTTPS_UNDERLAY",
+      "error_class": "SOCKET",
+      "http_status": 0,
+      "elapsed_ms": 108,
+      "network_type": "CELLULAR",
+      "network_generation": 429513165534
+    },
+    {
+      "operation": "CHALLENGE",
+      "stage": "RELAY_OPEN",
+      "route": "RNS",
+      "error_class": "UNAVAILABLE",
+      "http_status": 0,
+      "elapsed_ms": 2093,
+      "network_type": "WIFI",
+      "network_generation": 433808132830
+    }
+  ],
+  "server_counts": {
+    "restricted_challenges": 0,
+    "restricted_certificates": 0
+  },
+  "bundle_ready_dns_https_egress": "NOT_REACHED",
+  "cache_before_attempt": "MISSING",
+  "readiness_file_after_failure_not_validated_bundle": true,
+  "locator_before_connect": {
+    "remaining_seconds": 408,
+    "verified": true,
+    "verified_at": 1794050901
+  },
+  "registered_identity": true,
+  "final_apks": {
+    "source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+    "abi": "x86_64",
+    "native_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+    "method": "assets-only zip rewrite, zipalign16K, fresh isolated test signer; unchanged manifest/dex/native",
+    "apks": {
+      "app-friends.apk": {
+        "sha256": "bf8921d811896a57ea47cd3d8cf8d5e810eaac17695083002920f18ec944c9be",
+        "base_sha256": "405f739958676a887bd2e74d4af522cab2fa9de14188bed731c1b0db0b310cbb",
+        "changed_entries": [
+          "assets/control-anchor.pub",
+          "assets/provisioning/nl-amsterdam-1.json"
+        ]
+      },
+      "app-friends-androidTest.apk": {
+        "sha256": "9b9106ee261effed4db366f3ea4eddc5c3c8f0e5a5fd70ae74533b239d2df9f3",
+        "base_sha256": "3f4965c8195bc23b7a7795992e4f775f706307e61c455fd6934b0cb387f0eed5",
+        "changed_entries": [
+          "assets/identity96.private",
+          "assets/egress.sha256"
+        ]
+      }
+    }
+  },
+  "new_rooms": 2,
+  "cleanup": {
+    "own_emulator_stopped": true,
+    "monitor_joined": true,
+    "authority_container_absent": true,
+    "vault_exit": 0,
+    "provider_room_deletion": "NOT_VERIFIED"
+  },
+  "local_evidence_root": "/home/joker/.codex/worktrees/61d0/family_connect/state-client-build/cold-native-diagnostic-20261106/connect-a-20261107",
+  "artifact_sha256": {
+    "immutable.json": "63f84a89dc2c1aef6772485dbad7c8ac0455724dd3e615d3b3d7c7b620728e1d",
+    "receipt.json": "4f6bc0572a7843009b8131a7f7849ee1ce1d0c00e65e45e0f3959757dad9398d",
+    "runner.log": "a7bc6b892129322f7e4d43e31722de7270e620fdec4bd57be568d7388f8121b6",
+    "instrumentation.log": "5de2469103c12396c89b0be7ee30e8918cf80c7e98506e84ae456b2f9d859ef2",
+    "resources.jsonl": "9677395df4474e8475f83ad543f36719b12987538b75648188e4fe14aa813815",
+    "emulator.log": "f8d2d07ece8363e811d115700618ab8f353a101157683fb1b74e73e32fb12a7b",
+    "renderer.txt": "0a9167bc3f2166435354a3536590cdefb73038ca8b3ac6b993ff524bfcd58cb5",
+    "guest-rules-before.txt": "a81eede5610ef6843ed1c1ccb07a65abdfeeab063289086d0aa8e919a2886fc8",
+    "guest-rules-after.txt": "2ca8eec8f7f569b1cdc2d1a9c811b07c55b6f80c5c15239d0fd97aeaed0ee312",
+    "guest-connectivity-after.txt": "c8ad26a6288ed8ef2894478bdd3e659d3507d482935e10ad51cdc59ceb386e13",
+    "local-auth/stand.log": "f308d574918c5062ea66f4677efce46215fa86cdbe662f434d9edbf796cd69bc",
+    "apk-final/receipt.json": "987d22a18df1bc5936e6ff652e736bbf94486ebb8d38a4ff1a73c1405d787801",
+    "apk-final/app-friends.apk": "bf8921d811896a57ea47cd3d8cf8d5e810eaac17695083002920f18ec944c9be",
+    "apk-final/app-friends-androidTest.apk": "9b9106ee261effed4db366f3ea4eddc5c3c8f0e5a5fd70ae74533b239d2df9f3"
+  },
+  "next_hypothesis": "Differentiate FD duplication vs Android Network.bindSocket, preserve bounded nested errno; no route, DNS or policy changes."
+}

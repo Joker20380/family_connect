@@ -1,0 +1,18 @@
+[Unit]
+Description=Bounded cold provisioning entry (operator-started, no restart)
+After=network-online.target
+
+[Service]
+Type=simple
+User=family-restricted
+EnvironmentFile=/opt/apps/family_connect/friends-restricted/provider.env
+ExecStart=/opt/apps/family_connect/cold-provision/bin/cold-provision-entry --profile /etc/fc-canonical-pinned-venv/profile.json --anchor /opt/apps/family_connect/cold-provision/anchor.pub --backend https://185.251.89.19:8443 --node nl-amsterdam-1 --state /opt/apps/family_connect/cold-provision/run/%i --duration 7m
+Restart=no
+RuntimeMaxSec=440
+TimeoutStopSec=20
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadOnlyPaths=/opt/apps/family_connect/friends-restricted
+ReadWritePaths=/opt/apps/family_connect/cold-provision/run
+PrivateTmp=true

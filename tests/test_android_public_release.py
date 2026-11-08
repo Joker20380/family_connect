@@ -26,14 +26,32 @@ def test_android_changes_do_not_start_desktop_suites():
     assert not any(platforms(['docs/STATUS.md']).values())
 
 
-def test_android119_candidate_keeps_provisioning_disabled_and_requires_native_provenance():
+def test_android121_candidate_keeps_test_seam_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 119' in gradle and "versionName '0.1.18-beta119'" in gradle
+    assert 'versionCode 121' in gradle and "versionName '0.1.18-beta121'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
     assert 'verifyFriendsRestrictedInputs' in gradle
     assert '--check-generated' in gradle
+    assert 'file(restrictedDirectory).absolutePath' in gradle
+    assert '--native-source-commit' in gradle
+
+
+def test_android120_field_entry_matches_canonical_nl1_not_retired_gateway():
+    from control_plane.apps.console.collector import SOURCES
+    manifest = json.loads((ROOT / 'deploy/friends/restricted/cold-provision-deployment.json').read_text())
+    binding = manifest['binding']
+    assert manifest['node'] == binding['logical_gateway'] == 'nl-amsterdam-1'
+    assert manifest['entry_host'] == SOURCES[manifest['node']]['host'] == '185.10.158.212'
+    assert manifest['entry_host'] != binding['retired_host_not_an_alias'] == '186.246.45.246'
+    assert SOURCES['gateway-nl']['host'] is None
+    assert manifest['entry_host'] != SOURCES['nl-amsterdam-2']['host']
+    receipt = json.loads((ROOT / binding['evidence']).read_text())
+    assert receipt['catalogs'][0]['sha256'] == binding['routing_catalog_sha256']
+    assert receipt['catalogs'][2]['sha256'] == binding['routing_forward_rollback_sha256']
+    assert receipt['fresh_live_verification'] == 'NOT_RUN'
+    assert 'never copy a key' in binding['identity_rule']
 
 
 def test_signaling_read_classes_match_without_changing_legacy_recovery():
@@ -229,10 +247,26 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'NativeRestricted.java': 'bcf81d360910e4348133dffa13901701e2cf4461b26c1f21b5b4d872b2d2a867',
         'RestrictedTunnelEngine.java': 'b8cb9725620a1086dfafa907b3edb5126282cc9e500bd990e3a162cb71b795c3',
     }
+    reviewed_cold_candidate_9bf02724 = {
+        'ChatNetworkAndroid.java': '181fa6d969786cf46aac0840abb35d2e7da1b1ecf65951f7e215ca8e307ce9cf',
+        'ConnectivityOrchestrator.java': '93b6d8c322ad95ef74594aab2ce30a1b2fea02d54d2ac06b4a3308fe3664224e',
+        'DiagnosticRing.java': '5c9db0e90368bfd642446f735d856ae2960026ba6fc48ce41ffbd4e72c32ea61',
+        'FriendsAccessAndroid.java': '8c26c43dec6210318911785231c673546dce98505e642cedb0326e0d8b5f6642',
+        'FriendsRestricted.java': '985bd6739c38c28537112dead9217f0cf1471a5c51433c51cbc5b17c1415cce8',
+        'NativeRestricted.java': '4b79103dd6e67039d95eae83af0bcc3df30f298f0d92221fc53f5c97bdc75939',
+        'ReadinessBootstrapRoute.java': 'b1f21dfb01d7a79cef793d898b8b58c99b324c75c53d745c47b370f679bbe5ef',
+        'ReadinessFetchTrace.java': 'c91f00af4852bdc9cee839cf7db4a798ac387781d8d9d36a5f730c37e8915cc8',
+        'ReadinessProduct.java': '3f63c57c4b543df769a96a72599f3380ba8fb32af4c5ddede6b21b6e36ae7074',
+        'RestrictedTunnelEngine.java': 'b331aa8c3678fdaf12a0552239cd3e6927c23028b95493b741d96faf23c80740',
+    }
+    reviewed_consolidated_beta121 = {
+        'FriendsAccessAndroid.java': 'f4eb3235f067d91e66109e8d18e8a7c9986b42d6b92cd6b0d4e2661c6c54f3e7',
+    }
     reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81,
                          **reviewed_gateway_readiness, **reviewed_slow_link_recovery,
                          **reviewed_idle_ack_recovery, **reviewed_signaling_read_diagnostics,
-                         **reviewed_subscription_beta119, **reviewed_inherited_renewal_beta119}
+                         **reviewed_subscription_beta119, **reviewed_inherited_renewal_beta119,
+                         **reviewed_cold_candidate_9bf02724, **reviewed_consolidated_beta121}
     reviewed_resources = {
         'clients/android/app/src/main/res/values-ru/strings.xml': '89b334900a7febe2e50bfe06d593673961c320704a16ead76c09d9baa22ea279',
         'clients/android/app/src/main/res/values/strings.xml': '85e40c0044eaec9ebe8fb6f77d0a026ddc6bead90fb044237abd23b305fd2c39',

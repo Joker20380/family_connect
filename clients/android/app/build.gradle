@@ -5,6 +5,7 @@ def friendsCi = providers.gradleProperty('fcFriendsCi').getOrElse('false') == 't
 def restrictedDiagnostic = providers.gradleProperty('fcRestrictedDiagnostic').getOrElse('false') == 'true'
 def orchestratorDiagnostic = providers.gradleProperty('fcOrchestratorDiagnostic').getOrElse('false') == 'true'
 def ownerRestrictedDirectory = providers.gradleProperty('fcOwnerRestrictedDirectory').getOrElse('../owner-restricted-generated')
+def restrictedDirectory = providers.gradleProperty('fcRestrictedDirectory').getOrElse('../restricted-generated')
 if (!(targetAbi in ['all', 'arm64-v8a']) && !(friendsCi && targetAbi == 'x86_64')) throw new GradleException('Unsupported fcTargetAbi')
 android {
     buildFeatures { buildConfig = true }
@@ -18,8 +19,8 @@ android {
         minSdk 26
         targetSdk 35
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        versionCode 119
-        versionName '0.1.18-beta119'
+        versionCode 121
+        versionName '0.1.18-beta121'
         buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'
         buildConfigField 'String', 'PROVISIONING_SEAM_SOURCE', '""'
         manifestPlaceholders = [appLabel: 'family_connect', launcherActivity: 'com.familyconnect.app.MainActivity']
@@ -41,7 +42,7 @@ android {
         ownerDiagnostic { java.srcDirs 'src/publicStartup/java', 'src/provisioningDisabled/java' }
     }
     sourceSets { debug { jniLibs.srcDir '../restricted-generated/jniLibs'; assets.srcDir '../restricted-generated/assets' } }
-    sourceSets { friends { jniLibs.srcDir '../restricted-generated/jniLibs'; assets.srcDir '../restricted-generated/assets' } }
+    sourceSets { friends { jniLibs.srcDir "${restrictedDirectory}/jniLibs"; assets.srcDir "${restrictedDirectory}/assets" } }
     sourceSets { ownerDiagnostic {
         jniLibs.srcDir "${ownerRestrictedDirectory}/jniLibs"
         assets.srcDir "${ownerRestrictedDirectory}/assets"
@@ -111,7 +112,10 @@ def verifyFriendsRestrictedInputs = tasks.register('verifyFriendsRestrictedInput
     workingDir rootProject.file('../..')
     commandLine providers.gradleProperty('fcBuildPython').getOrElse('python3'), 'pilot/android-restricted/package_ci.py',
         '--source-commit', providers.exec { commandLine 'git', '-C', rootProject.file('../..'), 'rev-parse', 'HEAD' }.standardOutput.asText.get().trim(),
-        '--check-generated', rootProject.file('restricted-generated').absolutePath
+        '--check-generated', file(restrictedDirectory).absolutePath
+    if (providers.gradleProperty('fcRestrictedNativeSource').isPresent()) {
+        args '--native-source-commit', providers.gradleProperty('fcRestrictedNativeSource').get()
+    }
 }
 tasks.configureEach { task ->
     if (task.name == 'preFriendsBuild' && targetAbi == 'arm64-v8a' && !friendsCi) {

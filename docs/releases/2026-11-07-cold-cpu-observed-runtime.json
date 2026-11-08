@@ -1,0 +1,121 @@
+{
+  "result": "STOPPED_BEFORE_CONNECT",
+  "run_source": "19877fda9df8daa6cf94b16100e867cabb56446c",
+  "product_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+  "jni_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+  "actual_import": {
+    "runner": {
+      "path": "/home/joker/.codex/worktrees/61d0/family_connect/tests/android_cold_runtime.py",
+      "sha256": "01eab1ccc215046feca4d56e77b0eb123a11ca7a8f0c7e50ff0abaa88ef1ac68"
+    },
+    "guard": {
+      "path": "/home/joker/.codex/worktrees/61d0/family_connect/tests/android_emulator_guard.py",
+      "sha256": "a292cbd1251547cdfe120dfab06ecd8efa5dea67e1cb8aea6e82ae6449df7280"
+    }
+  },
+  "invocation_flag": "--observe-cpu-temperature-only",
+  "cpu_stop_disabled_by_explicit_owner_request": true,
+  "other_guards_and_budgets_unchanged": true,
+  "guard_stop": null,
+  "cpu_observed_peak_c": 99.0,
+  "above_85_observation_frames": 2,
+  "thermal_diagnosis": "NOT_CLAIMED; recorded inputs only; no new hardware investigation",
+  "runtime_launch_count": 1,
+  "avd_start_count": 1,
+  "connect_count": 0,
+  "api": 27,
+  "abi": "x86_64",
+  "renderer": "GLES: Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti/PCIe/SSE2), OpenGL ES 3.1 (4.5.0 NVIDIA 580.178.04)",
+  "native_rebuild": false,
+  "accepted_android_jni_pass_repeated": false,
+  "old_host_jvm_race_suites_repeated": false,
+  "failure_stage": "FINAL_ASSET_PACKAGING",
+  "failure_code": "ASSET_PACKAGING_FAILED",
+  "specific_cause": "APKSIGNER_PASSWORD_FILE_EOF",
+  "apksigner_exit_code": 2,
+  "cause_evidence": "Offline exact-command replay reproduces: Failed to read Key cold-runtime password: end of file reached. Same one-line file was supplied for both --ks-pass and --key-pass; apksigner consumes successive lines.",
+  "source_fix": "Version existing pack_assets helper as tests/android_cold_pack_assets.py; omit redundant --key-pass for the PKCS12 key using the same store password; runner calls that helper with explicit work path. No keystore/password/public signing changes.",
+  "regression": "39 targeted tests PASS (38 guard plus password-file command regression)",
+  "offline_fix_check": {
+    "source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+    "abi": "x86_64",
+    "native_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+    "method": "assets-only zip rewrite, zipalign16K, fresh isolated test signer; unchanged manifest/dex/native",
+    "apks": {
+      "app-friends.apk": {
+        "sha256": "4bfdc903afc40b2f1c5820336aaa0f940dc5221b3a8088c05af38f0006c056ec",
+        "base_sha256": "405f739958676a887bd2e74d4af522cab2fa9de14188bed731c1b0db0b310cbb",
+        "changed_entries": [
+          "assets/control-anchor.pub",
+          "assets/provisioning/nl-amsterdam-1.json"
+        ]
+      },
+      "app-friends-androidTest.apk": {
+        "sha256": "55d10b9ecd5736bd26111361b81696f6463708402fdaed1776f162f016c2e5b7",
+        "base_sha256": "3f4965c8195bc23b7a7795992e4f775f706307e61c455fd6934b0cb387f0eed5",
+        "changed_entries": [
+          "assets/identity96.private",
+          "assets/egress.sha256"
+        ]
+      }
+    },
+    "qualification": "OFFLINE_PACKAGING_ONLY_REUSED_NOW_EXPIRED_SYNTHETIC_INPUTS_NOT_FOR_RUNTIME",
+    "provider_calls": false,
+    "installed": false,
+    "connect": false,
+    "packager_sha256": "22cd9e5bac0cb61ba5bcd47cbc357a79f9bf70e4f8e77405688ee444b7bfb56f"
+  },
+  "offline_check_scope": "Both real qualification APKs pass apksigner verify and zipalign16K; manifest/dex/native unchanged except listed synthetic assets. Reused locator is expired; these APKs were never installed and are NOT runtime inputs.",
+  "synthetic_identity_registered": true,
+  "fresh_locator_at_attempt": {
+    "remaining_seconds": 411,
+    "verified": true,
+    "verified_at": 1794050089
+  },
+  "new_rooms_this_attempt": 2,
+  "cold_before_workers": true,
+  "guest_blocks_applied": false,
+  "final_runtime_install": false,
+  "android_go_carrier_tls_challenge": "NOT_ENTERED; no instrumentation/AutomaticConnection",
+  "native_snapshot": "NOT_OBTAINED because client never started, not a proven JNI diagnostic defect",
+  "bundle_ready_dns_https_egress": "NOT_RUN",
+  "traffic_proven": "Host provider room creation and locator publication only, not Android provisioning or egress",
+  "cleanup": {
+    "checked_unix": 1794050280.480277,
+    "owned_pids_or_groups_remaining": [],
+    "exact_authority_container_absent": true,
+    "shared_lock_available": true,
+    "emulator_stopped": true,
+    "monitor_joined": true,
+    "vault_exit": 0,
+    "provider_room_deletion": "NOT_VERIFIED"
+  },
+  "runtime_evidence_root": "/home/joker/.codex/worktrees/61d0/family_connect/state-client-build/cold-native-diagnostic-20261106/cpu-observed-runtime-20261107",
+  "artifact_sha256": {
+    "immutable.json": "1bbdb03c911863258121e5450558a55bc102289e545619ac06b12ea0ba676501",
+    "runner.log": "f0e809bc98d20ebd22b1e88b103054c6b011f2c6409a9df60d1515e9fbe4aed7",
+    "python-imports.log": "3a7060f08d7c3966ae7db677826962973222c96aca4804e52580a7bb434169d3",
+    "resources.jsonl": "130b4a938f1d053cc1adc9644222454cfdc2665601ac4f919f9fddbdad2c29e4",
+    "receipt.json": "acce45322560f3541a765d8bc23e72643b97b8a4d1d434262bda5c3b95474b98",
+    "cleanup-check.json": "8d33d92a7f0ba3f5106a1f634e5a81eef9f655bb5a129c6ba113b1a54d2937ea",
+    "emulator.log": "24936fd4e1aeeea62577ae5b4d9aa414d15ae20095416e7ea26cf6d1d4712cc4",
+    "renderer.txt": "920d2defb38b3b2b4421ab7a29778a42d97ad68135d14c76175eb564e5c08493",
+    "connectivity-before-workers.txt": "9b82e55bcb8b5773587d7bcb6e87c105b06658f346d74beaa9338d8baf37dba8",
+    "asset-packaging.log": "f330e70c3c468ce39c92d432298db1cb6f69befef57ca399c2e877f168cee254",
+    "signer-diagnostic.private.log": "32063795f5116f1dbeb6cf23bfeb4e1155063280cdfa4b25a3c252a2df7dcc01",
+    "local-auth/stand.log": "f308d574918c5062ea66f4677efce46215fa86cdbe662f434d9edbf796cd69bc"
+  },
+  "offline_packaging_evidence_root": "/home/joker/.codex/worktrees/61d0/family_connect/state-client-build/cold-native-diagnostic-20261106/cpu-observed-packaging-check-20261107",
+  "offline_artifact_sha256": {
+    "offline-check.json": "e37068120897afd07a19ddfa151ea413af77f7829f49b35bd2f278691c503d48",
+    "apk-final/receipt.json": "f090e7d9b5bcb4f3fd85b0556c581175629b7278f914a59245d23dc8fa4d95d2",
+    "apk-final/app-friends.apk": "4bfdc903afc40b2f1c5820336aaa0f940dc5221b3a8088c05af38f0006c056ec",
+    "apk-final/app-friends-androidTest.apk": "55d10b9ecd5736bd26111361b81696f6463708402fdaed1776f162f016c2e5b7",
+    "apk-final/app-friends.apk.verify.txt": "efcf2c7319f66b650a381fd76f15fcd72fe69fad380f4aeffebcc4f5ab366807",
+    "apk-final/app-friends-androidTest.apk.verify.txt": "efcf2c7319f66b650a381fd76f15fcd72fe69fad380f4aeffebcc4f5ab366807"
+  },
+  "old_fail_receipts_and_preceding_thermal_stop_preserved": true,
+  "production_g4_public_apks_admission_subscriptions_user_phones_modified": false,
+  "automatic_retry": false,
+  "remaining_gate": "Additional AVD/preparation launch needs owner approval under single-launch limit; the single actual Connect remains unexecuted. No provisioning fix or runtime PASS claimed."
+}

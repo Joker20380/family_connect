@@ -1,0 +1,340 @@
+{
+  "result": "READY_TRAFFIC_GATE_FAILED",
+  "managed_source": "9bf02724deacf1c5e4293bea1bfdc6fc4f7fcacc",
+  "native_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+  "native_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+  "candidate_success": {
+    "event": "candidate_succeeded",
+    "state": "CONNECTED",
+    "elapsed_ms": 42762,
+    "stage": "ORCHESTRATOR",
+    "monotonic_ms": 105538
+  },
+  "all_provisioning_snapshots_before_cleanup": [
+    {
+      "request_id": "a417b29cc83c4413a24c62f56b0e720f",
+      "phase": "BEGIN",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "LOCATOR",
+        "last_success": "LOCATOR",
+        "first_failure": "",
+        "reason": "NONE",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 1,
+        "remaining_ms": 27288,
+        "protected": 0,
+        "denied": 0,
+        "closed": false,
+        "released": false
+      },
+      "network": {
+        "type": "WIFI",
+        "handle": 433808132830,
+        "available": true,
+        "foreground": true,
+        "not_restricted": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 65732,
+        "bind_ms": 0,
+        "bind_available": false,
+        "bind_result": "NOT_RUN",
+        "bind_operation": "NOT_RUN",
+        "bind_error": "NONE",
+        "bind_errno": 0
+      }
+    },
+    {
+      "request_id": "a417b29cc83c4413a24c62f56b0e720f",
+      "phase": "POST",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "RESPONSE_VALIDATE",
+        "last_success": "RESPONSE_VALIDATE",
+        "first_failure": "",
+        "reason": "NONE",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 12122,
+        "remaining_ms": 15167,
+        "protected": 29,
+        "denied": 0,
+        "closed": false,
+        "released": false
+      },
+      "network": {
+        "type": "WIFI",
+        "handle": 433808132830,
+        "available": true,
+        "foreground": true,
+        "not_restricted": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 77853,
+        "bind_ms": 67020,
+        "bind_available": true,
+        "bind_result": "BOUND",
+        "bind_operation": "NETWORK_BIND",
+        "bind_error": "NONE",
+        "bind_errno": 0
+      }
+    },
+    {
+      "request_id": "dbed8902957542fab38c47aae4f7f104",
+      "phase": "POST",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "RESPONSE_VALIDATE",
+        "last_success": "RESPONSE_VALIDATE",
+        "first_failure": "",
+        "reason": "NONE",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 13842,
+        "remaining_ms": 13447,
+        "protected": 29,
+        "denied": 0,
+        "closed": false,
+        "released": false
+      },
+      "network": {
+        "type": "WIFI",
+        "handle": 433808132830,
+        "available": true,
+        "foreground": true,
+        "not_restricted": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 79574,
+        "bind_ms": 67020,
+        "bind_available": true,
+        "bind_result": "BOUND",
+        "bind_operation": "NETWORK_BIND",
+        "bind_error": "NONE",
+        "bind_errno": 0
+      }
+    },
+    {
+      "request_id": "",
+      "phase": "CLOSE",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "RESPONSE_VALIDATE",
+        "last_success": "RESPONSE_VALIDATE",
+        "first_failure": "",
+        "reason": "NONE",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 13851,
+        "remaining_ms": 13438,
+        "protected": 29,
+        "denied": 0,
+        "closed": true,
+        "released": false
+      },
+      "network": {
+        "type": "WIFI",
+        "handle": 433808132830,
+        "available": true,
+        "foreground": true,
+        "not_restricted": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 79583,
+        "bind_ms": 67020,
+        "bind_available": true,
+        "bind_result": "BOUND",
+        "bind_operation": "NETWORK_BIND",
+        "bind_error": "NONE",
+        "bind_errno": 0
+      }
+    }
+  ],
+  "acceptance_before_cleanup": {
+    "receipt_class": "real_owner_product",
+    "challenge_id": "a417b29cc83c4413a24c62f56b0e720f",
+    "fetch_id": "dbed8902957542fab38c47aae4f7f104",
+    "challenge_result": "issued",
+    "fetch_result": "authorized",
+    "import_result": "accepted",
+    "revision": 1,
+    "expires_at": 1794052782,
+    "observed_at": 1794052395
+  },
+  "startup_before_cleanup": {
+    "schema": 1,
+    "attempt": 1,
+    "started_unix_ms": 1794052395084,
+    "completed_ms": 25737,
+    "status": "SUCCEEDED",
+    "stage": "STARTUP",
+    "cause": "NONE",
+    "complete": true,
+    "directory_fingerprint": "b69970cbe293a6c2f79c6487049e294091216ad14aaf32419ca5f83034d93908",
+    "bootstrap_exchanges": [
+      {
+        "bootstrap_exchange_tag": "1d1bc7696739f6f2641f03331b8f634871aac3bed45ba2af90e6b081a6cac697",
+        "family_authenticated": true
+      }
+    ],
+    "bootstrap_exchanges_dropped": 0,
+    "connection_id": "1b196a81-52fe-499a-8584-332760acb8f3",
+    "incident_id": "e64b9553-8f8c-4808-9158-619d2425331c"
+  },
+  "counters_before_cleanup": {
+    "protect_ok": 55,
+    "protect_denied": 0,
+    "dns": 5,
+    "tcp": 0,
+    "tcp_active": 0,
+    "tcp_peak": 0,
+    "limit_denied": 0,
+    "udp_denied": 0,
+    "ipv6_denied": 0
+  },
+  "server_counts": {
+    "restricted_challenges": 1,
+    "restricted_certificates": 1
+  },
+  "server_provisioning_correlation": [
+    "cold_provision stage=tls_ready elapsed_ms=4222",
+    "cold_provision stage=request_accepted operation=0 request_id=a417b29cc83c4413a24c62f56b0e720f elapsed_ms=7250",
+    "cold_provision stage=backend_complete operation=0 request_id=a417b29cc83c4413a24c62f56b0e720f status=200 bytes=169 success=true elapsed_ms=7256",
+    "cold_provision stage=write_complete operation=0 request_id=a417b29cc83c4413a24c62f56b0e720f elapsed_ms=7256",
+    "cold_provision stage=request_accepted operation=1 request_id=dbed8902957542fab38c47aae4f7f104 elapsed_ms=8463",
+    "cold_provision stage=backend_complete operation=1 request_id=dbed8902957542fab38c47aae4f7f104 status=200 bytes=2927 success=true elapsed_ms=8474",
+    "cold_provision stage=write_complete operation=1 request_id=dbed8902957542fab38c47aae4f7f104 elapsed_ms=8474",
+    "cold_provision stage=peer_end operation=1 request_id=dbed8902957542fab38c47aae4f7f104 elapsed_ms=9141"
+  ],
+  "milestones": [
+    "COLD_PREREQUISITES_VERIFIED",
+    "CONNECT_START",
+    "CONNECT_RETURNED",
+    "NATIVE_READY",
+    "ENCRYPTED_READINESS_ACCEPTED",
+    "HARNESS_FAILURE",
+    "OWN_CLIENT_CLEANUP_RETURNED"
+  ],
+  "original_bind_fix": "CONFIRMED: pinned foreground unrestricted WIFI,29 protected/0 denied, two validated responses after TLS, authorized server issuance, ordinary MESH READY42.762s.",
+  "remaining_traffic_gate": "Android InetAddress example.com failed before HTTPS. Gateway configured host resolver independently returns NXDOMAIN for A/AAAA example.com; no direct client DNS response snapshot yet.",
+  "host_upstream_probe": [
+    {
+      "qtype": 1,
+      "transport": "TCP",
+      "upstream_type": "LOOPBACK",
+      "query_sha256": "e56292db92543e7e1380ac9c6de8b83bd26ae365369f058312962ca9962c55c6",
+      "response_bytes": 29,
+      "id_matches": true,
+      "rcode": 3,
+      "answer_count": 0,
+      "response_sha256": "56d8793ce464c0ddd9fd71e4358dfe61d3d1c7e240706aae210f965cf6ca3be4",
+      "elapsed_ms": 21
+    },
+    {
+      "qtype": 28,
+      "transport": "TCP",
+      "upstream_type": "LOOPBACK",
+      "query_sha256": "0074854d0887eec737e9d211621b536bfbdcdaafc746f0167eb514948ea6371c",
+      "response_bytes": 29,
+      "id_matches": true,
+      "rcode": 3,
+      "answer_count": 0,
+      "response_sha256": "f2d44e8305ec0d9bde9471a5ee66e3d2069f3e23baad19f31963f4ea19f6769f",
+      "elapsed_ms": 5
+    }
+  ],
+  "host_target_probe": [
+    {
+      "public_test_name": "example.com",
+      "tcp_dns_rcode": 3,
+      "answer_count": 0,
+      "host_getaddrinfo_error": "gaierror",
+      "verified_https_error": "URLError"
+    },
+    {
+      "public_test_name": "www.iana.org",
+      "dns_error_type": "TimeoutError",
+      "errno": null,
+      "host_getaddrinfo_count": 4,
+      "verified_https_status": 200
+    },
+    {
+      "public_test_name": "api.ipify.org",
+      "tcp_dns_rcode": 0,
+      "answer_count": 3,
+      "host_getaddrinfo_count": 3,
+      "verified_https_status": 200
+    }
+  ],
+  "next_hypothesis": "Probe a preverified public target api.ipify.org through unchanged MESH/DNS; retain numeric mux counters and, after positive traffic, observe original example.com DNS response over TUN. No DNS/server/native changes.",
+  "locator_before_connect": {
+    "remaining_seconds": 406,
+    "verified": true,
+    "verified_at": 1794052377
+  },
+  "final_apks": {
+    "source": "9bf02724deacf1c5e4293bea1bfdc6fc4f7fcacc",
+    "abi": "x86_64",
+    "native_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+    "method": "assets-only zip rewrite, zipalign16K, fresh isolated test signer; unchanged manifest/dex/native",
+    "apks": {
+      "app-friends.apk": {
+        "sha256": "40f072caedf89927ab96bfb78b8e5508d155bedd45816a14e055b827d5cb9751",
+        "base_sha256": "908c66c3d2bb1b39f35e30633b7303e9f96e0c57de7e4a30fdc56a4bf45159a5",
+        "changed_entries": [
+          "assets/control-anchor.pub",
+          "assets/provisioning/nl-amsterdam-1.json"
+        ]
+      },
+      "app-friends-androidTest.apk": {
+        "sha256": "8d64e5882246be7ed7e5beb79361449a42176709543dbf9d25f89f6250675b50",
+        "base_sha256": "bd230fc53ed70ce84e2dd353cb511b930af22811c1a0cd0594cad3ec5a0b4257",
+        "changed_entries": [
+          "assets/identity96.private",
+          "assets/egress.sha256"
+        ]
+      }
+    },
+    "native_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7"
+  },
+  "cleanup": {
+    "owned_emulator_stopped": true,
+    "monitor_joined": true,
+    "authority_container_absent": true,
+    "vault_exit": 0,
+    "provider_room_deletion": "NOT_VERIFIED"
+  },
+  "local_evidence_root": "state-client-build/cold-native-diagnostic-20261106/connect-d-20261107",
+  "artifact_sha256": {
+    "immutable.json": "415e1de51e416dff0e186d3f9c8bf1f2f2c608232a4c1b1c87c016a592e5ea67",
+    "receipt.json": "585668ffe57b1521077026364f398f6214a08caff5aa379b77ab75d21a4769ce",
+    "instrumentation.log": "f42f9ffa1aaa071e2cacf5736d0fd51c49d6d85cf8e141da20b50d8250c16e53",
+    "resources.jsonl": "ffc8db95e4f0c9c63a2904d557e4c59aa1623a9b7f2e45ce96f41dcab8afad7e",
+    "guest-rules-after.txt": "0c221aba09ac850210d2afad351e79f06e6df0db36ab74d05ac862373939008b",
+    "guest-connectivity-after.txt": "d0c80a3f4f22ac30c16bb7ca0a81b64c3a76e6b4fc18a73f1e698c6c66e81e39",
+    "local-auth/stand.log": "8cf1633498ce74f4d57b571ce12259415b123cd7494dfd64bdcc1ea772358a8f",
+    "dns-upstream-probe.json": "e6560439e3debc730053f0c2a6f98b6ead2359653eddbb973e652e5011a496f5",
+    "traffic-target-probe.json": "644806165c985fd3eb4c89a62c70aa8134955b7c0c54f28ab3a41dd24685795a",
+    "apk-final/receipt.json": "0eea89d7c8d2f13166fd3bcb3065b1c1948aae4c4b331efb23ae9aa58d8c6e2c",
+    "apk-final/app-friends.apk": "40f072caedf89927ab96bfb78b8e5508d155bedd45816a14e055b827d5cb9751",
+    "apk-final/app-friends-androidTest.apk": "8d64e5882246be7ed7e5beb79361449a42176709543dbf9d25f89f6250675b50"
+  }
+}
