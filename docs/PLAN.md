@@ -2,18 +2,23 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Selected SUBSCRIPTION-RU-RECOVERY — finish authorized recovery, no adjacent task.**
-Dependency: main2077c271, immutable v2 kit299b4845, partial-enable incident receipt.
-Preserve NL lease refresh while RU stays masked until packaged qualification. Bound
-lock/engine/restart/readback/convergence by one monotonic budget; batch exact native
-sets and avoid no-op actuation. Include root-only preflight with production base units.
-Gate:63 canonical records/19-48-5 registered, real systemd/AWG/Xray, concurrent requests,
-slow-child/lock failure, traffic/expiry/noncohort/pending recovery and ≥360s stability;
-normal CI/review/merge; exact-byte RU recovery ≥360s, sequential NL, fresh strict per-node
-panel pins/readback, unchanged protected data, new operator pointer restored. Final
-receipts stay in the task PR/closed handoff; no cosmetic post-CI head required.
-No real paid operation, ledger/identity/period change, APK, G4/renewal or cold provisioning.
-[Recovery report](releases/2026-11-07-subscription-ru-recovery.md).
+**Selected SUBSCRIPTION-USER-SMOKE — three owner checks and docs only.**
+Dependency: accepted PR7/main34e29d2c recovery; post-merge Client builds PASS.
+Device access BLOCKED at entry: ADB lists no device. Obtain the available owner phone
+without taking over parallel cold-provisioning, record actual package/version/provenance
+and original node/mode/VPN state. Gate: fresh own subscription without any VPN, small
+HTTPS over RU AWG, then separate RU TCP with actual route correlation; restore original
+settings/connection. No install, paid writes, server restart/configuration or wider matrix.
+Correct obsolete operator/current-status wording independently through docs-only CI/PR/merge.
+BLOCKED/FAIL must remain explicit until actual client evidence; real payment and physical
+paid/event scenario stay NOT_RUN. [Report](releases/2026-11-08-subscription-user-smoke.md).
+
+**SUBSCRIPTION-RU-RECOVERY — CLOSED, RECOVERED.**
+PR7 merged34e29d2c; RU≥360s then sequential NL and all-node lease/readback/panel checks
+passed, compatible operator current restored, protected data preserved. This is not a
+new recovery or Android qualification gate. Historical [report](releases/2026-11-07-subscription-ru-recovery.md)
+and [final installed receipt](https://github.com/Joker20380/family_connect/pull/7#issuecomment-6713677516)
+retain hashes, measurements and the distinct production user-traffic NOT_RUN boundary.
 
 **Owner-selected7 November: correct NL1 background load, bounded operational task.**
 Complete:54 scoped checks, read-only live parser preflight and exact systemd/native
