@@ -26,6 +26,7 @@ final class AppVpnCatalog {
         }
         boolean system(){return info!=null&&(info.flags&(ApplicationInfo.FLAG_SYSTEM|ApplicationInfo.FLAG_UPDATED_SYSTEM_APP))!=0;}
         boolean visible(boolean components,boolean selectedOnly,Set<String> selection,String query){
+            query=query.trim().toLowerCase(Locale.ROOT);
             if(selectedOnly&&!selection.contains(name))return false;
             if(!components&&!launcher&&!selection.contains(name))return false;
             return label.toLowerCase(Locale.ROOT).contains(query)||name.toLowerCase(Locale.ROOT).contains(query);
