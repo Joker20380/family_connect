@@ -1,5 +1,10 @@
 # RU incident diagnosis — 8 November 2026
 
+Subsequent owner-authorized server recovery is recorded in the
+[9 November Brussels recovery receipt](2026-11-09-ru-recovery.md). The original
+read-only findings and NOT_RECOVERED result below describe the earlier inspection,
+not the post-recovery service state.
+
 Owner request: investigate what happened to RU. Read-only inspection of authorized
 RU185.251.89.19, approximately22:49–22:55UTC. No recovery was attempted. Result:
 **NOT_RECOVERED; initiating failure identified, underlying delay cause open.**

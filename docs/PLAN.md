@@ -2,6 +2,14 @@
 
 ## Current engineering priority / Текущий critical path
 
+**9 November — selected RU recovery complete at server-validation scope.**
+Owner approved the previously proposed recovery. Exact accepted runtime retained;
+RU-only fence removed, all three services stable, actual/expected sets and lease
+renewal across120s pass, protected data unchanged. No NL deployment/client change,
+watchdog relaxation or automatic recovery introduced. Physical RU AWG/TCP HTTPS
+remains NOT_RUN; underlying slow-plan cause remains open. Do not automatically start
+a new implementation task. [Receipt](releases/2026-11-09-ru-recovery.md).
+
 **8 November — selected RU incident investigation: diagnosis complete, service NOT_RECOVERED.**
 Read-only gate: preserve first failure, correlate watcher/engine chronology, check host
 resources and distinguish known protective shutdown from unknown delay cause. Gate

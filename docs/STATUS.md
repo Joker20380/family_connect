@@ -1,5 +1,14 @@
 # Текущее состояние / Current state
 
+**9 November00:03 Brussels / 8 November23:03UTC — RU server recovery verified.**
+Owner-authorized RU-only fence, stopped/PID0/no-jobs gate and normal start restore
+AWG/TCP/watcher on unchanged accepted bytes. Original three-node commands restored;
+NL reconciliation continues. Thirteen readbacks over180.103s pass: stable PIDs,
+NRestarts0, exact20 AWG/20 TCP sets,63 applied revisions and refreshed120s lease.
+Paid tables/device bindings and the first-failure record are unchanged. Server
+recovery is not a root-cause fix or a physical-client HTTPS PASS; that check remains
+NOT_RUN. [Recovery receipt and remaining limits](releases/2026-11-09-ru-recovery.md).
+
 **8 November22:49–22:55UTC — RU incident diagnosed, NOT_RECOVERED.** RU is reachable;
 ordinary AWG/TCP have been down since21:02:26UTC. The installed first-failure recorder
 identifies TRANSPORT_OPERATION_DEADLINE in plan:9.368s against8s, before the12s
