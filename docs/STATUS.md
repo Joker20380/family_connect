@@ -1,20 +1,22 @@
 # Текущее состояние / Current state
 
-**7 November — SUBSCRIPTION-RU-RECOVERY: authorized incident recovery.**
-The enablement receipt supersedes the earlier production-disabled checkpoint: HTTP,
-operator and NL nodes received v2; RU watchdog failed at19:04:02UTC and ordinary
-RU transports were stopped/masked, with durable state retained. New paid operations
-are paused; NL reconciliation continues. The exact historical blocking phase is not
-proven. The reproduced source class is an unbounded serialized sweep/lock wait with
-127 engine queries for63 records. Node recovery batches full sets, bounds the whole
-operation and child process groups, and packages privileged preflight without changing
-Xray's fc-friends sandbox. HTTP/operator/paid policy and G4 are not rebuilt or restarted.
-Gate: exact packaged systemd/native63-record acceptance ≥360s, hosted CI/review/merge,
-RU forward recovery ≥360s then sequential NL rollout, protected-data equality, fresh
-per-node panel observations and restoration of the compatible operator current pointer.
-Source acceptance is not installed acceptance; final operational hashes/windows and
-status are retained in the recovery PR receipt and closed handoff, not inferred from main.
-[Recovery scope and evidence](releases/2026-11-07-subscription-ru-recovery.md).
+**8 November — SUBSCRIPTION-USER-SMOKE: device access BLOCKED; documentation correction.**
+No Android device is visible over ADB at the entry check. Actual installed build,
+selected node/mode and VPN state cannot yet be read; no device action was performed.
+Own subscription without VPN, RU AWG HTTPS and RU TCP HTTPS remain BLOCKED, not FAIL
+or inherited PASS. Do not take over a device used by the parallel cold-provisioning
+operation. [Exact scope, evidence and next action](releases/2026-11-08-subscription-user-smoke.md).
+
+**7 November — SUBSCRIPTION-RU-RECOVERY: RECOVERED, PR7 merged.**
+Merge `34e29d2cf1bdf1b3c54ecf971c7d39775bc2e0d0`; final-head CI and subsequent
+[main Client builds](https://github.com/Joker20380/family_connect/actions/runs/42417545102) PASS.
+RU restored and observed364.975s, then Amsterdam1/2 updated sequentially to the same
+bounded node implementation; final joint window159.579s confirms lease renewal and
+actual/persisted sets. Compatible paid-operator current path restored; protected
+paid/cohort/identity/period data preserved. Local panel has authenticated per-node
+observations. [Installed receipt and exact hashes](https://github.com/Joker20380/family_connect/pull/7#issuecomment-6713677516).
+The exact historical watchdog phase remains unknown; no user traffic PASS follows
+from set readback. Recovery/Android matrices are closed, not reopened by USER-SMOKE.
 
 **7 November20:25–20:27UTC — NL1 load correction applied and read back.**
 Exact source780f0898/node archive40ae1fa8 installed after54 scoped tests and real
