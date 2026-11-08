@@ -73,6 +73,12 @@ event→карточка/anchor; problem metric→отфильтрованный
 - Собранный allowlisted image: Django check и migration drift PASS, **248 тестов
   PASS** на PostgreSQL17/Python3.13. Старые synthetic workflow, permissions,
   immutable release/payment records и независимая network probe сохранены.
+- Первый общий CI обнаружил неполный standalone fixture в
+  `tests/test_control_plane_sources.py`: он копировал transport helper, но не новый
+  metrics helper. Fixture теперь включает оба исполняемых источника; assertions
+  запрета отправки/создания HMAC на NL сохранены. Все18 адресных source tests PASS.
+  Это изменение тестовой упаковки, не panel/runtime payload; итоговый hosted
+  результат относится к исправленному head и фиксируется в receipt PR.
 - Приватный `pg_dump -Fc` восстановлен в отдельный PostgreSQL. Миграции0010/0011
   применены без переписывания старых наблюдений. Проверены исходные26769 registry
   snapshots и остальные прежние модели по cutoffs/хешам; UUID не используются как
