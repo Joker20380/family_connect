@@ -119,10 +119,10 @@ final class RestrictedTunnelEngine implements TunnelEngine {
         }
         startupStage="TUN_ATTACH";
         if(automaticOwner!=null)tun=establishOwnedTun(automaticOwner);
-        else tun=applications.apply(service.new Builder().setSession("Family restricted diagnostic").setMtu(1280)
+        else tun=applications.establish(service.new Builder().setSession("Family restricted diagnostic").setMtu(1280)
             .addAddress("10.79.0.2",32).addAddress("fd79:fc::2",128)
             .addRoute("0.0.0.0",0).addRoute("::",0).addDnsServer("10.79.0.1")
-            .setBlocking(false)).establish();
+            .setBlocking(false));
         if (tun==null || revoked || !NativeRestricted.attach(handle,tun.getFd())) throw new IllegalStateException("Packet attachment failed");
         evidence();
         state.accept(true);

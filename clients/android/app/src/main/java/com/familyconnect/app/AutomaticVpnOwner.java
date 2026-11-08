@@ -57,7 +57,7 @@ final class AutomaticVpnOwner {
             .addRoute("0.0.0.0",0).addRoute("::",0).addDnsServer("10.79.0.1").setBlocking(false);
     }
     ParcelFileDescriptor replace(VpnService.Builder builder) throws Exception {
-        ParcelFileDescriptor next=applications.apply(builder).establish();
+        ParcelFileDescriptor next=applications.establish(builder);
         if(next==null)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.AUTH);
         ParcelFileDescriptor previous=tun;tun=next;Diagnostics.vpn(context,true);
         if(previous!=null)previous.close();

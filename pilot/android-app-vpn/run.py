@@ -49,14 +49,35 @@ def main():
             if 'Success' not in run(adb+['install', '-r', str(apk)], timeout=90):
                 raise RuntimeError('Fixture installation failed')
         run(adb+['push', str(apks[2]), '/data/local/tmp/fc-app-probe-alpha.apk'])
-        result = run(adb+['shell', 'am', 'instrument', '-w', '-r', '-e', 'class', 'com.familyconnect.app.AppVpnRuntimeTest',
-                         '-e', 'fc_app_vpn', 'true', 'com.familyconnect.app.pilot.test/androidx.test.runner.AndroidJUnitRunner'], timeout=600)
-        (output/'instrumentation.log').write_text(result)
-        for name in ('routing', 'automatic', 'screen', 'owner-health', 'package-removal'):
+        completed = subprocess.run(adb+['shell', 'am', 'instrument', '-w', '-r', '-e', 'class', 'com.familyconnect.app.AppVpnRuntimeTest',
+                         '-e', 'fc_app_vpn', 'true', 'com.familyconnect.app.pilot.test/androidx.test.runner.AndroidJUnitRunner'],
+                         capture_output=True, text=True, timeout=600)
+        result = completed.stdout
+        (output/'instrumentation.log').write_text(result+completed.stderr)
+        if completed.returncode:
+            raise RuntimeError('Instrumentation command failed; see instrumentation.log')
+        if 'OK (7 tests)' not in result or any(value in result for value in ('FAILURES!!!', 'INSTRUMENTATION_FAILED', 'INSTRUMENTATION_STATUS_CODE: -3', 'INSTRUMENTATION_STATUS_CODE: -4')):
+            raise RuntimeError('Per-app routing acceptance failed; see instrumentation.log')
+        for name in ('routing', 'automatic', 'screen', 'owner-health', 'package-removal', 'service'):
             raw = run(adb+['shell', 'run-as', 'com.familyconnect.app.pilot', 'cat', 'files/app-vpn-'+name+'.json'])
             (output/(name+'.json')).write_text(json.dumps(json.loads(raw), indent=2))
-        if 'OK (6 tests)' not in result or any(value in result for value in ('FAILURES!!!', 'INSTRUMENTATION_FAILED', 'INSTRUMENTATION_STATUS_CODE: -3', 'INSTRUMENTATION_STATUS_CODE: -4')):
-            raise RuntimeError('Per-app routing acceptance failed; see instrumentation.log')
+        visuals = output/'visuals'
+        visuals.mkdir()
+        remote_visuals = '/sdcard/Android/data/com.familyconnect.app.pilot/files/app-vpn-visual/'
+        subprocess.run(adb+['pull', remote_visuals, str(visuals/'en')], check=True, timeout=30)
+        scale = run(adb+['shell', 'settings', 'get', 'system', 'font_scale']).strip()
+        try:
+            run(adb+['shell', 'settings', 'put', 'system', 'font_scale', '1.5'])
+            result = run(adb+['shell', 'am', 'instrument', '-w', '-r', '-e', 'class',
+                             'com.familyconnect.app.AppVpnRuntimeTest#screenSavesRealRoutingAndPendingSelection',
+                             '-e', 'fc_app_vpn', 'true', '-e', 'app_vpn_language', 'ru',
+                             'com.familyconnect.app.pilot.test/androidx.test.runner.AndroidJUnitRunner'], timeout=90)
+            (output/'visual-ru-large.log').write_text(result)
+            subprocess.run(adb+['pull', remote_visuals, str(visuals/'ru-large')], check=True, timeout=30)
+            if 'OK (1 test)' not in result:
+                raise RuntimeError('Large-font visual/runtime fixture failed; see visual-ru-large.log')
+        finally:
+            run(adb+['shell', 'settings', 'put', 'system', 'font_scale', scale if scale != 'null' else '1.0'])
         print(json.dumps(dict(api=run(adb+['shell','getprop','ro.build.version.sdk']).strip(), result='PASS',
                               scope='real AWG/TCP/Auto; MESH owned TUN with REALITY substitute carrier')))
     finally:

@@ -22,6 +22,7 @@ interface TunnelEngine {
                 org.amnezia.awg.config.Config config=applications.awg(org.amnezia.awg.config.Config.parse(new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8))));
                 source=config.getInterface().getAddresses().stream().filter(address->address.getAddress() instanceof java.net.Inet4Address).findFirst().orElseThrow().getAddress().getHostAddress();
                 backend.setState(tunnel,org.amnezia.awg.backend.Tunnel.State.UP,config);
+                try{applications.validate();}catch(Exception changed){down();throw changed;}
             }
             public String probeDns(String query,int budgetMillis){
                 try{

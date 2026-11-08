@@ -3,6 +3,7 @@ package com.familyconnect.app;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.VpnService;
+import android.os.ParcelFileDescriptor;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -44,6 +45,12 @@ final class AppVpnAndroid {
             else builder.addDisallowedApplication(name);
         }}catch(PackageManager.NameNotFoundException missing){throw new PackageManager.NameNotFoundException("APP_POLICY_UNAVAILABLE");}
         validate();return builder;
+    }
+    ParcelFileDescriptor establish(VpnService.Builder builder)throws Exception{
+        ParcelFileDescriptor descriptor=apply(builder).establish();
+        if(descriptor==null)throw new IllegalStateException("APP_POLICY_VPN_UNAVAILABLE");
+        try{validate();return descriptor;}
+        catch(Exception failure){descriptor.close();throw failure;}
     }
     Config awg(Config original)throws Exception{
         validate();

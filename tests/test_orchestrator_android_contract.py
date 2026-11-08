@@ -46,7 +46,7 @@ def test_only_existing_service_owns_automatic_tuns():
     assert '.addRoute("0.0.0.0",0).addRoute("::",0)' in owner
     assert '.allowBypass(' not in owner and '.addDisallowedApplication(' not in owner
     replace = owner.split('ParcelFileDescriptor replace', 1)[1]
-    assert replace.index('applications.apply(builder).establish()') < replace.index('previous.close()')
+    assert replace.index('applications.establish(builder)') < replace.index('previous.close()')
     policy = source('AppVpnAndroid')
     assert 'builder.addAllowedApplication(name)' in policy
     assert 'else builder.addDisallowedApplication(name)' in policy

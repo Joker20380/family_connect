@@ -95,10 +95,10 @@ public final class ConnectionService extends Service {
                 failed=true;status="failed";forgetRequest(this);stopSelf();return START_NOT_STICKY;
             }
         }
-        if(connectRequested)activeApplications=applications.policy;
         worker.execute(()->{
             try{ControlOperations.APP.claim(operationOwner);claimed=true;}
             catch(Exception busy){if(intake||selection)reportControl("BUSY");main.post(()->{status=priorStatus;stopSelf();});return;}
+            if(connectRequested)activeApplications=applications.policy;
             owned(()->{
                 try{
                     if(selection){reportControl(controlNow(null,false,false,gateway));}
@@ -167,7 +167,9 @@ public final class ConnectionService extends Service {
     private boolean cleanup(){
         managedExpiry=0;Runnable lease=leaseTask;if(lease!=null){main.removeCallbacks(lease);leaseTask=null;}ControlTrafficHealth c=controlHealth;if(c!=null)c.cancel();
         ++generation;sessionId=sessionCounter.incrementAndGet();vpnSource=null;healthStatus="off";if(pending!=null)pending.cancel(false);if(health!=null){health.cancel();health=null;}
-        try{if(engine!=null){engine.down();engine=null;}automaticConnection=null;return true;}
+        try{if(engine!=null){engine.down();engine=null;}automaticConnection=null;
+            if((closing||stopping)&&applications!=null&&activeApplications==applications.policy)activeApplications=null;
+            return true;}
         catch(Exception|LinkageError e){failed=true;stopping=true;status="cleanup-required";main.post(this::notifyState);return false;}
     }
     private void startAutomatic(String country){
@@ -347,7 +349,6 @@ public final class ConnectionService extends Service {
     }
     private void notifyState(){if(!closing)getSystemService(NotificationManager.class).notify(1,notification());}
     @Override public void onDestroy(){
-        if(applications!=null&&activeApplications==applications.policy)activeApplications=null;
         closing=true;rnsEnabled=false;ControlRnsAndroid transport=rnsCarrier;if(transport!=null)transport.cancel();rnsWorker.shutdownNow();if(claimed)cancel();else stopping=true;worker.execute(()->owned(()->{if(cleanup()){ControlOperations.APP.release(operationOwner);claimed=false;status="off";}}));worker.shutdown();stopForeground(STOP_FOREGROUND_REMOVE);super.onDestroy();
     }
     @Override public IBinder onBind(Intent intent){return null;}

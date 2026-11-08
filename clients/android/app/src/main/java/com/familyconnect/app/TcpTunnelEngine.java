@@ -17,9 +17,9 @@ final class TcpTunnelEngine implements TunnelEngine {
         NativeTcp.load(context);
         context.startService(new Intent(context,TcpVpnService.class));service=TcpVpnService.ready.get(3,TimeUnit.SECONDS);
         service.revoked=()->{revoked=true;state.accept(false);};
-        tun=applications.apply(service.new Builder().setSession("Family Connect TCP").setMtu(1280)
+        tun=applications.establish(service.new Builder().setSession("Family Connect TCP").setMtu(1280)
             .addAddress("10.79.0.2",32).addAddress("fd79:fc::2",128).addRoute("0.0.0.0",0).addRoute("::",0)
-            .addDnsServer("1.1.1.1").setBlocking(false)).establish();
+            .addDnsServer("1.1.1.1").setBlocking(false));
         if(tun==null||revoked)throw new IllegalStateException("VPN unavailable");
         handle=NativeTcp.start(tun.getFd(),profile,service);
         if(handle<=0||revoked){android.util.Log.e("FamilyConnect","TCP startup failed stage="+handle);throw new IllegalStateException("TCP startup failed");}

@@ -265,12 +265,12 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
     reviewed_app_vpn_beta122 = {
         'AutomaticConnection.java': 'f393817ca84ccc444203d4bfad9be7943fef65c7351981c2dc32ebc8b88f6a48',
         'AutomaticNormalEngine.java': '360cfbe0399ed03d5cf1b56525cb712b84a688f6efd7aa5b6cab6073a56f1484',
-        'AutomaticVpnOwner.java': '7ae1cae2dc4cb863b57e996ed4526ab31a5b40c69b7c632d8f47fbb23ef17975',
+        'AutomaticVpnOwner.java': '64d120873786b263ce04eb62b8fcbfd093f6c7affe5363ea07b8090cd034c712',
         'NativeRestricted.java': 'c86f49e49dbf8b01d3b67a949665952c6c7cfd784d89bb8d85bb38a044cc4cd6',
         'NativeTcp.java': 'fc9b01ee9b735e9fbc0ec2768eba0724e07b2ebfed0fff621a1facd2a02c3657',
-        'RestrictedTunnelEngine.java': '919f560ee47ec73a48b3347aff307517bc83394341a754a1b7294de56e5b13d4',
-        'TcpTunnelEngine.java': '351320841926e095ab524743a413de12bce774c1937c36ff395324b102f146a6',
-        'TunnelEngine.java': 'bd0414885d4ec6d228e411ccd375b34fc8f5ac21853ce11fc46a82893fc49608',
+        'RestrictedTunnelEngine.java': 'd506c0bc2b95cd6e34aedb2e05b91a8350613d5b4de9a5cf869a8c236cbc8a6d',
+        'TcpTunnelEngine.java': '1615e4646de0b68d5b3f470f57fa20149c8a9f5e1dfa1afe512739f44faa655d',
+        'TunnelEngine.java': 'f1c16279b1ea466b5d0a76ad249f50c91e544c0a5abcfaa4bcdc24957b20bd4e',
         'VpnHealth.java': '01e7b553c995958dd1e882fbc929bdfff3d7ff805bb0ac69738d579b1f6646aa',
     }
     reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81,

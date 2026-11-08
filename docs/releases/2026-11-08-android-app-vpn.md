@@ -41,7 +41,15 @@ launcher-query не перечисляет такой набор. Список �
   view-renderings осмотрены (EN, длинное имя); FLAG_SECURE остаётся включённым.
 - Новый AWG health demultiplexer: адресные Go race tests PASS; native x86_64
   пересобран из закреплённых зависимостей. Это ещё не окончательный ARM artifact.
-- Package removal, service/process restart/update, API27/28, RU/крупный шрифт,
+- ConnectionService explicit Connect, invalid pending, сохранённый resume snapshot
+  и следующий Connect с новой политикой — адресный API35 PASS. Удаление последнего
+  выбранного package и повторная установка — адресный PASS в совместном запуске;
+  полный запуск прерван сбоем GL-контекста локального NVIDIA эмулятора, не выдан за PASS.
+- Усилена повторная проверка package binding после establish; исторический health89
+  сохранён отдельным byte-exact fixture с прежним SHA. Его10 сценариев и те же
+  сценарии текущего health проходят; JNI dispatcher проверяет новый DNS export.
+  Адресный release/source gate:72 PASS; исторический/current health:2 PASS.
+- Process restart/update, API27/28, RU/крупный шрифт,
   окончательный native/MESH adapter, обязательный CI/review/merge — **NOT_RUN**.
 - UI и unit tests сами по себе не подтверждают завершение функции.
 

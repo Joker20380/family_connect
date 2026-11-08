@@ -51,15 +51,21 @@ def main():
         run(adb+['shell', 'svc', 'data', 'disable'])
         with tempfile.TemporaryDirectory(prefix='fc-upgrade-ci-') as temporary:
             init = Path(temporary)/'version-fixture.gradle'
-            for version in (119, 120):
+            for version in (119, 120, 121):
                 build_version(version, init)
                 instrument('prepareHistoricalFormat', version)
                 run(adb+['shell', 'am', 'force-stop', PACKAGE])
-                build_version(121, init)
+                build_version(122, init)
                 instrument('verifyUpgradeAndSubscriptionScreen', version)
                 if not (output/('consolidated-subscription-'+str(version)+'.png')).is_file():
                     raise RuntimeError('Actual subscription visual evidence missing')
-                results.append(dict(from_version=version, to_version=121, status='PASS',
+                instrument('saveAppPolicyForRestart', version)
+                run(adb+['shell', 'am', 'force-stop', PACKAGE])
+                instrument('verifyAppPolicyAfterRestartOrReplacement', version)
+                apk, = (build/'app/build/outputs/apk/friends').glob('*.apk')
+                run(adb+['install', '-r', str(apk)])
+                instrument('verifyAppPolicyAfterRestartOrReplacement', version)
+                results.append(dict(from_version=version, to_version=122, status='PASS',
                     scope='in-place format fixture; exact historical vault source, not historical signed APK'))
                 for package in (PACKAGE+'.test', PACKAGE):
                     run(adb+['uninstall', package])

@@ -179,8 +179,9 @@ public class AppVpnRuntimeTest {
         org.junit.Assume.assumeTrue("Dedicated distinct-UID routing fixture", "true".equals(InstrumentationRegistry.getArguments().getString("fc_app_vpn")));
         prepare();AppVpnPolicy policy=policy(AppVpnPolicy.Mode.INCLUDE);
         AppVpnAndroid captured=new AppVpnAndroid(context,policy);
-        assertTrue(shell("test -f /data/local/tmp/fc-app-probe-alpha.apk && echo staged").contains("staged"));
+        assertTrue(shell("ls /data/local/tmp/fc-app-probe-alpha.apk").contains("fc-app-probe-alpha.apk"));
         try{
+            shell("am force-stop "+ALPHA);SystemClock.sleep(300);
             assertTrue(shell("pm uninstall "+ALPHA).contains("Success"));
             assertThrows(android.content.pm.PackageManager.NameNotFoundException.class,captured::validate);
             assertThrows(IllegalArgumentException.class,()->new AppVpnAndroid(context,policy));
@@ -193,9 +194,38 @@ public class AppVpnRuntimeTest {
         try{owner.open(()->{});engine.up(TcpRuntimeTest.profile());SystemClock.sleep(700);pair(AppVpnPolicy.Mode.INCLUDE,"VPN_TCP");}
         finally{engine.down();owner.close();helper.clean();receipt("package-removal");}
     }
+    @Test public void serviceConnectPendingAndResumeUseDifferentSnapshots()throws Exception{
+        org.junit.Assume.assumeTrue("Dedicated distinct-UID routing fixture", "true".equals(InstrumentationRegistry.getArguments().getString("fc_app_vpn")));
+        prepare();AppVpnStore settings=new AppVpnStore(context);AppVpnPolicy previous=settings.read();
+        ProfileStore profile=new ProfileStore(context,Transport.TCP);String previousProfile=profile.exists()?profile.load():null;
+        AppVpnPolicy initial=policy(AppVpnPolicy.Mode.INCLUDE);
+        Intent connect=new Intent(context,ConnectionService.class).setAction("connect").putExtra("transport","tcp");
+        Intent disconnect=new Intent(context,ConnectionService.class).setAction("disconnect");
+        try{
+            profile.save(TcpRuntimeTest.profile());settings.save(initial);
+            context.startForegroundService(connect);helper.waitState("on");pair(AppVpnPolicy.Mode.INCLUDE,"VPN_TCP");
+            assertEquals(initial,ConnectionService.activeApplications);
+            settings.save(new AppVpnPolicy(AppVpnPolicy.Mode.INCLUDE,Set.of(),Set.of(ALPHA)));
+            pair(AppVpnPolicy.Mode.INCLUDE,"VPN_TCP");assertEquals(initial,ConnectionService.activeApplications);
+            String retained=context.getSharedPreferences("connection-request",0).getString("app-policy",null);
+            assertEquals(initial,AppVpnStore.decode(retained));
+            context.startService(disconnect);helper.waitState("off");helper.clean();
+            context.startForegroundService(new Intent(connect).putExtra("resume-app-policy",true));
+            helper.waitState("on");pair(AppVpnPolicy.Mode.INCLUDE,"VPN_TCP");assertEquals(initial,ConnectionService.activeApplications);
+            context.startService(disconnect);helper.waitState("off");helper.clean();
+            settings.save(new AppVpnPolicy(AppVpnPolicy.Mode.EXCLUDE,Set.of(ALPHA),Set.of(ALPHA)));
+            context.startForegroundService(connect);helper.waitState("on");route(ALPHA,"DIRECT");route(BETA,"VPN_TCP");
+            assertEquals(AppVpnPolicy.Mode.EXCLUDE,ConnectionService.activeApplications.mode);
+        }finally{
+            context.startService(disconnect);helper.waitState("off");helper.clean();settings.save(previous);
+            if(previousProfile==null)profile.clear();else profile.save(previousProfile);receipt("service");
+        }
+    }
     @Test public void screenSavesRealRoutingAndPendingSelection()throws Exception{
         org.junit.Assume.assumeTrue("Dedicated distinct-UID routing fixture", "true".equals(InstrumentationRegistry.getArguments().getString("fc_app_vpn")));
         prepare();AppVpnStore settings=new AppVpnStore(context);AppVpnPolicy previous=settings.read();settings.save(AppVpnPolicy.all());
+        String language=AppLanguage.selected(context);String requested=InstrumentationRegistry.getArguments().getString("app_vpn_language");
+        if(requested!=null)AppLanguage.select(context,requested);
         try(androidx.test.core.app.ActivityScenario<AppVpnActivity> screen=androidx.test.core.app.ActivityScenario.launch(AppVpnActivity.class)){
             long deadline=SystemClock.elapsedRealtime()+10000;java.util.concurrent.atomic.AtomicBoolean loaded=new java.util.concurrent.atomic.AtomicBoolean();
             while(!loaded.get()&&SystemClock.elapsedRealtime()<deadline){screen.onActivity(activity->loaded.set(((android.widget.ListView)activity.getWindow().getDecorView().findViewWithTag("app_vpn_list")).getCount()>0));SystemClock.sleep(100);}
@@ -207,8 +237,10 @@ public class AppVpnRuntimeTest {
             InstrumentationRegistry.getInstrumentation().waitForIdleSync();
             screen.onActivity(activity->{
                 android.widget.ListView list=activity.getWindow().getDecorView().findViewWithTag("app_vpn_list");assertEquals(1,list.getCount());
-                list.getChildAt(0).performClick();activity.getWindow().getDecorView().findViewWithTag("app_vpn_save").performClick();render(activity,"selected");
+                list.getChildAt(0).performClick();activity.getWindow().getDecorView().findViewWithTag("app_vpn_save").performClick();
             });
+            InstrumentationRegistry.getInstrumentation().waitForIdleSync();SystemClock.sleep(200);
+            screen.onActivity(activity->render(activity,"selected"));
             assertEquals(Set.of(ALPHA),settings.read().selected());assertEquals(AppVpnPolicy.Mode.INCLUDE,settings.read().mode);
             AppVpnAndroid snapshot=new AppVpnAndroid(context,settings.read());ConnectionService.activeApplications=snapshot.policy;
             AutomaticVpnOwner owner=new AutomaticVpnOwner(context,snapshot);AutomaticNormalEngine engine=new AutomaticNormalEngine(context,owner,Transport.TCP);
@@ -220,11 +252,12 @@ public class AppVpnRuntimeTest {
                     android.widget.ListView list=activity.getWindow().getDecorView().findViewWithTag("app_vpn_list");list.getChildAt(0).performClick();
                     activity.getWindow().getDecorView().findViewWithTag("app_vpn_save").performClick();
                     assertTrue(((android.widget.TextView)activity.getWindow().getDecorView().findViewWithTag("app_vpn_summary")).getText().toString().contains(activity.getString(R.string.app_vpn_pending)));
-                    render(activity,"pending");
                 });
+                InstrumentationRegistry.getInstrumentation().waitForIdleSync();SystemClock.sleep(200);
+                screen.onActivity(activity->render(activity,"pending"));
                 pair(AppVpnPolicy.Mode.INCLUDE,"VPN_TCP");assertEquals(Set.of(ALPHA),settings.read().excluded);
             }finally{engine.down();owner.close();ConnectionService.activeApplications=null;helper.clean();}
-        }finally{settings.save(previous);ConnectionService.activeApplications=null;receipt("screen");}
+        }finally{settings.save(previous);AppLanguage.select(context,language);ConnectionService.activeApplications=null;receipt("screen");}
     }
     private void render(AppVpnActivity activity,String name){
         assertTrue((activity.getWindow().getAttributes().flags&android.view.WindowManager.LayoutParams.FLAG_SECURE)!=0);
