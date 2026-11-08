@@ -2,7 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Selected SUBSCRIPTION-USER-SMOKE — three owner checks and docs only.**
+**Selected RU-TRANSPORT-RECOVERY-2 — bounded incident response.**
+Preserve first-stop evidence before mutation; distinguish historical UNKNOWN cause
+from reproduced diagnostic loss. Accepted RU stop/PID0/no jobs/start has restored
+availability without changing NL, paid state or policy. Gate: safe pre-cleanup first
+failure, real systemd/native failure/retained-deny/recovery test, applicable CI and
+ordinary merge, exact RU-only overlay/per-node pin, lease/readback/panel verification,
+then physical RU AWG HTTPS and separate RU TCP HTTPS; restore NL1/MESH/OFF.
+Own subscription PASS is closed. No automatic restarter or watchdog/lease relaxation;
+no payment, APK, G4, renewal, NL rollout or adjacent task. If both physical probes pass
+but historical cause remains unknown, use RECOVERED_CAUSE_OPEN, not FIXED_AND_VERIFIED.
+[Incident report](releases/2026-11-08-ru-transport-recovery-2.md); final operational
+receipt records exact installed hashes and physical results after source acceptance.
+
+**Historical SUBSCRIPTION-USER-SMOKE — three owner checks and docs only.**
 Dependency: accepted PR7/main34e29d2c recovery; post-merge Client builds PASS.
 Device access BLOCKED at entry: ADB lists no device. Obtain the available owner phone
 without taking over parallel cold-provisioning, record actual package/version/provenance

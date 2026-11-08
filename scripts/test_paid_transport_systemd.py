@@ -19,7 +19,7 @@ import traceback
 from test_fleet_canary import call, cleanup, inspect, verify_container, LABEL, ROOT
 
 
-def execute(kit, report):
+def execute(kit, report, *, recovery_diagnostics=False):
     os.umask(0o077)
     prefix = 'fc-enforcement-fix-' + secrets.token_hex(5)
     receipt = dict(result='FAIL',run_id=prefix,production_writes=0,checks={})
@@ -146,6 +146,21 @@ def execute(kit, report):
                 process=call(args,timeout=50,check=False)
                 assert process.returncode==expect, process.stdout.decode()
                 return json.loads(process.stdout)
+
+            if recovery_diagnostics:
+                start=int(time.time());end=start+1200
+                operator('activate','diagnostic-active',start=start,end=end)
+                assert transport_reconcile.cycle(access.path,commands)==dict.fromkeys(nodes,'applied')
+                inner('client','probe',dict(allowed=True))
+                operator('revoke','diagnostic-terminal')
+                assert transport_reconcile.cycle(access.path,commands)==dict.fromkeys(nodes,'applied')
+                receipt['checks']['first_failure_and_controlled_recovery']=inner('gateway-ru','diagnostic-fault')
+                assert transport_reconcile.cycle(access.path,commands)==dict.fromkeys(nodes,'applied')
+                inner('client','probe',dict(allowed=False))
+                receipt['checks']['terminal_deny_and_noncohort_after_recovery']=True
+                receipt['checks']['active_actual_https']=True
+                receipt['result']='PASS'
+                return receipt
 
             start=int(time.time());end=start+150
             blocked=dict(commands);blocked[nodes[-1]]=[sys.executable,'-c','raise SystemExit(1)']
@@ -286,7 +301,8 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--kit',type=Path,required=True)
     parser.add_argument('--report',type=Path,required=True)
+    parser.add_argument('--recovery-diagnostics',action='store_true',help='Only first-failure diagnostics, controlled recovery and real positive/deny flows')
     args=parser.parse_args()
-    result=execute(args.kit.resolve(),args.report)
+    result=execute(args.kit.resolve(),args.report,recovery_diagnostics=args.recovery_diagnostics)
     print(json.dumps(result))
     raise SystemExit(result['result']!='PASS')

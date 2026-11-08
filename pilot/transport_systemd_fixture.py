@@ -179,6 +179,44 @@ def budget_fault(document):
         restart_services()
 
 
+def diagnostic_fault():
+    before = json.loads((ROOT/'transport-state.json').read_text())
+    invocation = run(['systemctl', 'show', SERVICES[0], '-p', 'InvocationID', '--value']).stdout.decode().strip()
+    assert not (ROOT/'transport-failure.json').exists()
+    (TCP/'xray').unlink()
+    (TCP/'xray').write_text('#!/usr/bin/python3\nimport os,sys\n'
+        'if "api" in sys.argv:\n print("synthetic-private-proof",file=sys.stderr);sys.exit(73)\n'
+        'os.execv("/native/xray",["/native/xray",*sys.argv[1:]])\n')
+    (TCP/'xray').chmod(0o755)
+    started = time.monotonic()
+    try:
+        while run(['systemctl','show',SERVICES[0],'-p','Result','--value']).stdout.strip() == b'success':
+            assert time.monotonic()-started < 10
+            time.sleep(.1)
+        failure = json.loads((ROOT/'transport-failure.json').read_text())
+        assert failure['phase'] == 'engine_query' and failure['mode'] == 'watch'
+        assert failure['reason'] == 'COMMAND_FAILED' and failure['command_family'] == 'tcp-query'
+        assert failure['returncode'] == 73 and failure['timeout'] is False
+        assert failure['invocation_id'] == invocation
+        run(['systemctl','stop',*SERVICES])
+        assert all(run(['systemctl','show',service,'-p','MainPID','--value']).stdout.strip() == b'0' for service in SERVICES)
+        journal = run(['journalctl','_SYSTEMD_INVOCATION_ID='+invocation,'--no-pager','-o','cat']).stdout.decode()
+        assert 'synthetic-private-proof' not in journal
+        assert '"transport_failure"' in journal
+        after = json.loads((ROOT/'transport-state.json').read_text())
+        for device, cached in before['records'].items():
+            for field in ('decision','prepared','boot','deadline'):
+                assert after['records'][device][field] == cached[field]
+        stopped_after = time.monotonic()-started
+    finally:
+        (TCP/'xray').unlink()
+        (TCP/'xray').symlink_to('/native/xray')
+        restart_services()
+    assert json.loads((ROOT/'transport-failure.json').read_text()) == failure
+    return dict(result='PASS',stop_seconds=stopped_after,primary=failure,
+        durable_restrictions_preserved=True,actual_systemd_recovery=True)
+
+
 def start_client(document):
     client = document['client']
     canary.secret('client.json',json.dumps(client).encode())
@@ -224,6 +262,8 @@ def main():
         result = probe(document)
     elif action == 'budget-fault':
         result = budget_fault(document)
+    elif action == 'diagnostic-fault':
+        result = diagnostic_fault()
     elif action == 'restart':
         restart_services()
         result = info()
