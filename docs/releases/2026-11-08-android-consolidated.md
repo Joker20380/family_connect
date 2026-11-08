@@ -41,6 +41,11 @@ updater change is part of this integration.
 
 ## Candidate gates and evidence contract
 
+The packaging isolation guard follows the accepted cold branch's explicit
+`fcRestrictedDirectory` property, checking its production default and separate
+owner-diagnostic directory. The former literal-path assertion rejected the valid
+parameterized source set; diagnostic isolation and payload checks are retained.
+
 The ordinary PR runs mandatory hosted gates, including native race/contracts,
 Android JVM/lint, API27/API35 transport runtime and unsigned ARM64 packaging. New
 offline API35 fixtures perform119→121 and120→121 in-place version transitions with
