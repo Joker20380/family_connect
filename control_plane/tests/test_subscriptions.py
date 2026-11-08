@@ -166,10 +166,10 @@ def canonical_archive(tmp_path, omit=None):
     return dict(archive=str(archive), archive_sha256=hashlib.sha256(archive.read_bytes()).hexdigest())
 
 
-def isolated_collection(config, registry, setup=''):
+def isolated_collection(config, registry, setup='', *, include_history=False):
     code = (f'exec(compile(open({subscription_collector.__file__!r}).read(), "collector", "exec"))\n'
             f'config = {config!r}\nregistry = {str(registry)!r}\n' + setup + '\n'
-            'import json\nprint(json.dumps(collect_subscriptions(config, registry, b"s"*32)))\n')
+            f'import json\nprint(json.dumps(collect_subscriptions(config, registry, b"s"*32, include_history={include_history!r})))\n')
     return json.loads(subprocess.check_output([sys.executable, '-I', '-B', '-c', code], timeout=30))
 
 
@@ -210,6 +210,28 @@ canonical_modules = load_and_apply
     before = backend.checked_path().read_bytes()
     assert isolated_collection(config, backend.checked_path())['status'] == 'ok'
     assert backend.checked_path().read_bytes() == before
+
+
+def test_history_from_real_pinned_archive_is_read_only_and_deduplicated(console, tmp_path):
+    from apps.console.models import SubscriptionEventObservation
+    config = canonical_archive(tmp_path)
+    device = DeviceProjection.objects.order_by('label').first()
+    now = int(timezone.now().timestamp())
+    with backend.registry(write=True) as database:
+        support = backend.selector(database, device.device)
+        paid_beta.apply_event(database, support, 'payment', 'synthetic-history-one', 'test-only',
+            now=now-2, period_start=now-60, paid_until=now+100, apk_sha256=paid_beta.PAID_ANDROID_APK_SHA256)
+        paid_beta.apply_event(database, support, 'payment', 'synthetic-history-two', 'test-only-two',
+            now=now-1, period_start=now-60, paid_until=now+200, apk_sha256=paid_beta.PAID_ANDROID_APK_SHA256)
+    before = backend.checked_path().read_bytes()
+    data = isolated_collection(config, backend.checked_path(), include_history=True)
+    assert data['schema'] == 2 and data['history']['truncated'] is False
+    assert len(data['history']['events']) == 2
+    assert not any('hash' in field for event in data['history']['events'] for field in event)
+    subscriptions.ingest(data)
+    subscriptions.ingest(data)
+    assert SubscriptionEventObservation.objects.count() == 2
+    assert before == backend.checked_path().read_bytes()
 
 
 @pytest.mark.parametrize('case', ['missing_paid', 'missing_subscription', 'preloaded', 'preloaded_pinned', 'foreign_package', 'hash'])

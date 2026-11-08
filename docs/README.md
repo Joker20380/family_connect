@@ -1,5 +1,12 @@
 # Documentation
 
+[Объектная операторская панель · 8 ноября](releases/2026-11-08-control-panel-reference.md):
+единые карточки устройств/серверов, связанные события и реальные Linux/AWG графики.
+[Локальный адрес, источники и ограничения](../control_plane/README.md).
+
+Датированные checkpoints ниже сохранены как история; текущая задача и результат —
+в [STATUS](STATUS.md), [PLAN](PLAN.md) и итоговом receipt соответствующего PR.
+
 [Android consolidated beta121 — candidate and corrected field preparation](releases/2026-11-08-android-consolidated.md).
 
 **7 November — [Подписки: ежедневная эксплуатация](operators/subscriptions.ru.md).**

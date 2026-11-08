@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone as utc
 from django import forms
 
 from .collector import SOURCES
-from .models import AuditRecord, TransportSnapshot
+from .models import AuditRecord, TransportSnapshot, DeviceLabel
 from .transports import NODES
 
 STATES = {'active': 'Активна', 'trial': 'Пробный период', 'grace': 'Льготный период',
@@ -37,7 +37,9 @@ def present(rows, request, now):
         nodes.append(dict(source=source, label=SOURCES[source]['label'], text=text, snapshot=snapshot,
             fresh=fresh, status=status, attempt=attempt, previous=previous,
             previous_schema=previous_attempt.details.get('schema') if previous_attempt else None))
+    labels = dict(DeviceLabel.objects.values_list('pseudonym', 'label'))
     for row in rows:
+        row['label'] = labels.get(row['pseudonym'], 'Устройство ' + row['pseudonym'][:12])
         state = row['subscription']['effective_state'] if row['cohort'] else 'noncohort'
         row.update(state_key=state, state_label=STATES[state], transports=[])
         counts[state] += 1
@@ -57,7 +59,7 @@ def present(rows, request, now):
                         text = 'Профиль не зарегистрирован на этом узле'
                 else:
                     text = 'Ожидается сверка актуальной ревизии'
-            detail = dict(label=node['label'], text=text, observation=observation)
+            detail = dict(source=node['source'], label=node['label'], text=text, observation=observation)
             if observation:
                 detail.update(applied_time=datetime.fromtimestamp(observation['applied_at'], utc.utc) if observation['applied_at'] else None,
                     decision_time=datetime.fromtimestamp(observation['decision_observed_at'],utc.utc),

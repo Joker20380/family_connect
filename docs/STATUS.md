@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**8 November — CONTROL-PANEL-REFERENCE-1: object-oriented local panel.**
+Production overview, stable full-HMAC device cards and RU/Amsterdam server cards
+join registry, subscription, node application and bounded histories. Linux interface
+RX/TX and CPU interval counters, plus reliably mapped AWG counters, are read by the
+external collector; TCP/MESH per-user counters remain unavailable, not zero.
+Local-only migration and authenticated1440/390px object journeys pass;248 packaged
+tests pass. The panel is installed at127.0.0.1:8765 with preserved users/history/pins.
+Exact installed provenance and final CI/merge are recorded in the
+[panel report](releases/2026-11-08-control-panel-reference.md) and final PR receipt.
+No production policy/runtime or phone changes. Owner beta121
+technical upgrade checks are reported complete; actual Android visual confirmation
+remains separate and is not inferred from this panel work.
+Earlier task entries below are historical checkpoints, not active NEXTs.
+
 **8 November — ANDROID-CONSOLIDATED-CANDIDATE: beta121, source/package only.**
 Current main subscription/storage/UI and the accepted cold client are integrated
 without server rollout or owner installation.119/120 historical hashes stay intact;

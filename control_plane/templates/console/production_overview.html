@@ -1,0 +1,11 @@
+{% extends 'console/base.html' %}{% block title %}Обзор{% endblock %}{% block content %}
+<div class="page-heading"><div><p class="eyebrow">РАБОЧАЯ СРЕДА</p><h1>Обзор</h1><p class="subtitle">Устройства, серверы и доступ — по последним наблюдениям.</p></div><span class="readonly-label">Рабочие данные · только просмотр</span></div>
+<section class="metrics"><a href="{% url 'console:inventory' %}?registry=1"><small>Устройства в реестре</small><strong>{{ device_count|default_if_none:'—' }}</strong><span>Не число online</span></a><a href="{% url 'console:subscriptions' %}"><small>Участники paid cohort</small><strong>{{ cohort_count|default_if_none:'—' }}</strong><span>Сохранённое членство</span></a><a href="{% url 'console:inventory' %}?problem=1"><small>Требуют внимания</small><strong>{{ problem_count|default_if_none:'—' }}</strong><span>Состояние или свежесть</span></a><a href="{% url 'console:servers' %}"><small>Источники серверов</small><strong>{{ servers|length }}</strong><span>RU · Amsterdam1 · Amsterdam2</span></a></section>
+{% include 'console/object_freshness.html' %}
+{% if not registry_fresh or not canonical_fresh %}<div class="notice error-notice" role="status">Не все источники свежие. Показаны последние сохранённые данные, не текущая доступность.</div>{% endif %}
+{% for server in servers %}{% if server.issue %}<div class="attention"><span class="warning">{{ server.issue }}</span><a href="{% url 'console:server' server.source %}">{{ server.label }} →</a></div>{% endif %}{% endfor %}
+<div class="section-heading"><h2>Сетевой трафик</h2><span class="muted">Внешний интерфейс каждого узла · не сумма пользовательского VPN</span></div>
+{% include 'console/object_charts.html' %}
+<section class="panel"><div class="panel-heading"><h2>Серверы</h2><a href="{% url 'console:servers' %}">Все серверы →</a></div>{% include 'console/object_server_table.html' %}</section>
+<section class="panel"><div class="panel-heading"><h2>Последние значимые события</h2><a href="{% url 'console:events' %}">Вся доступная история →</a></div>{% include 'console/object_timeline.html' %}</section>
+{% endblock %}

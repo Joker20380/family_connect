@@ -82,7 +82,7 @@ def main():
             parser.error('Absolute operator runtime paths required')
         command[-1] = shlex.quote(config['python']) + ' -I -B -'
         source += (BASE / 'apps/console/subscription_collector.py').read_text()
-        source += f'\ndocument["subscription_observation"] = collect_subscriptions({config!r}, REGISTRY, {key_expression})\n'
+        source += f'\ndocument["subscription_observation"] = collect_subscriptions({config!r}, REGISTRY, {key_expression}, include_history=True)\n'
         source += 'document["schema"] = 2\n'
     transport_config = local / 'transport-source.json'
     expected_transport = None
@@ -92,7 +92,9 @@ def main():
         expected_transport = transport_pin(json.loads(transport_config.read_text()), args.source)
     source += (BASE / 'apps/console/transport_collector.py').read_text()
     source += f'\ndocument["transport_observation"] = collect_transport({args.source!r}, None, {expected_transport!r})\n'
-    source += 'document["schema"] = 3\nprint(json.dumps(document, allow_nan=False))\n'
+    source += (BASE / 'apps/console/metrics_collector.py').read_text()
+    source += f'\ndocument["metrics"] = collect_metrics({args.source!r}, {expected_transport!r})\n'
+    source += 'document["schema"] = 4\nprint(json.dumps(document, allow_nan=False))\n'
     try:
         result = subprocess.run(command, input=source.encode(), capture_output=True, timeout=45)
         if result.returncode:
@@ -100,11 +102,12 @@ def main():
         data = json.loads(result.stdout)
         if type(data) is not dict or data.get('source') != args.source or data.get('scope') != 'production':
             raise ValueError('Wrong source binding')
-        transport = data.get('transport_observation')
-        if transport and transport['devices']:
+        for transport in (data.get('transport_observation'), data.get('metrics')):
+            if not transport or not transport['devices']:
+                continue
             if (not key_path.is_file() or key_path.is_symlink() or key_path.stat().st_mode & 0o077
                     or key_path.stat().st_size != 32):
-                transport.update(status='unavailable', devices=[])
+                raise ValueError('Missing shared HMAC key')
             else:
                 key = key_path.read_bytes()
                 for row in transport['devices']:

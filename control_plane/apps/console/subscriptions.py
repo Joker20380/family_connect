@@ -5,7 +5,7 @@ import re
 
 from django.db import transaction
 from .inventory import fields, require, timestamp
-from .models import AuditRecord, SubscriptionSnapshot
+from .models import AuditRecord, SubscriptionSnapshot, SubscriptionEventObservation
 
 
 def record_attempt(status, snapshot=None):
@@ -23,10 +23,23 @@ def epoch(value):
     require(type(value) is int and 0 <= value <= 253402300799)
 
 
+def import_event(event, pseudonym, observed_at):
+    fields(event, 'event_id event_type occurred_at previous_state new_state result')
+    require(hex_digest(pseudonym) and hex_digest(event['event_id']))
+    require(event['event_type'] in ('payment', 'grace', 'expire', 'revoke') and event['result'] == 'APPLIED')
+    epoch(event['occurred_at'])
+    require(event['occurred_at'] <= observed_at)
+    states = ('trial', 'active', 'grace', 'expired', 'revoked')
+    require(event['new_state'] in states and event['previous_state'] in (*states, None))
+    record, created = SubscriptionEventObservation.objects.get_or_create(event_id=event['event_id'], defaults=dict(
+        pseudonym=pseudonym, occurred_at=datetime.fromtimestamp(event['occurred_at'], utc.utc), details=event))
+    require(created or record.pseudonym == pseudonym and record.details == event)
+
+
 @transaction.atomic
 def ingest(data, *, attempt=False):
-    fields(data, 'schema scope source observed_at status runtime_sha256 devices')
-    require(type(data['schema']) is int and data['schema'] == 1)
+    require(type(data) is dict and type(data.get('schema')) is int and data['schema'] in (1, 2))
+    fields(data, 'schema scope source observed_at status runtime_sha256 devices' + (' history' if data['schema'] == 2 else ''))
     require(data['scope'] == 'production' and data['source'] == 'gateway-ru')
     epoch(data['observed_at'])
     observed = timestamp(datetime.fromtimestamp(data['observed_at'], utc.utc).isoformat())
@@ -65,9 +78,21 @@ def ingest(data, *, attempt=False):
             epoch(event['occurred_at'])
             require(event['occurred_at'] <= data['observed_at'] and event['result'] == 'APPLIED')
             require(event['new_state'] == subscription['state'] and event['previous_state'] in (*states, None))
+            import_event(event, row['pseudonym'], data['observed_at'])
+    history = data.get('history')
+    require(data['schema'] == 1 or type(history) is dict)
+    if history is not None:
+        fields(history, 'events truncated')
+        require(data['status'] == 'ok' and type(history['truncated']) is bool and type(history['events']) is list and len(history['events']) <= 1000)
+        event_ids = set()
+        for row in history['events']:
+            require(type(row) is dict and 'pseudonym' in row and row['pseudonym'] in seen)
+            require(row.get('event_id') not in event_ids)
+            event_ids.add(row['event_id'])
+            import_event({name: value for name, value in row.items() if name != 'pseudonym'}, row['pseudonym'], data['observed_at'])
     digest = hashlib.sha256(json.dumps(data, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
     snapshot, created = SubscriptionSnapshot.objects.get_or_create(digest=digest, defaults=dict(
-        observed_at=observed, status=data['status'], runtime_sha256=data['runtime_sha256'], devices=data['devices']))
+        observed_at=observed, status=data['status'], runtime_sha256=data['runtime_sha256'], devices=data['devices'], history=history))
     if created:
         AuditRecord.objects.create(action='subscriptions.import', target=str(snapshot.pk),
                                    details={'scope': 'production', 'synthetic': False})
