@@ -45,6 +45,11 @@ The packaging isolation guard follows the accepted cold branch's explicit
 `fcRestrictedDirectory` property, checking its production default and separate
 owner-diagnostic directory. The former literal-path assertion rejected the valid
 parameterized source set; diagnostic isolation and payload checks are retained.
+The required Linux client gate also encountered persistent GitHub release-URL504s.
+CI obtains the same upstream AppImage tool/runtime through canonical API asset IDs
+715388534/657374641 with fixed SHA256 checks, then supplies the runtime explicitly.
+The existing package inspection/extraction smoke still runs; no desktop product,
+accepted native reference, Android input or distribution is changed by this fetch fix.
 
 The ordinary PR runs mandatory hosted gates, including native race/contracts,
 Android JVM/lint, API27/API35 transport runtime and unsigned ARM64 packaging. New

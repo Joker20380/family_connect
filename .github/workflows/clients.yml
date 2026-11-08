@@ -308,13 +308,21 @@ jobs:
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a "$RUNNER_TEMP/fc-desktop-env/bin/python" clients/desktop/tcp_install_check.py
       - name: Install appimagetool
         run: |
-          curl -fsSL https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage -o /tmp/appimagetool
-          chmod +x /tmp/appimagetool
+          curl --retry 3 -fsSL -H 'Accept: application/octet-stream' https://api.github.com/repos/AppImage/appimagetool/releases/assets/715388534 -o "$RUNNER_TEMP/appimage-tool"
+          curl --retry 3 -fsSL -H 'Accept: application/octet-stream' https://api.github.com/repos/AppImage/type2-runtime/releases/assets/657374641 -o "$RUNNER_TEMP/appimage-runtime"
+          echo "e8c1169c4af66c3184d7ee110713d4be04befe671fa358e2c1591ee840553b03  $RUNNER_TEMP/appimage-tool" | sha256sum -c -
+          echo "617aa77314d57c8b8e4fae9c3f0b35af7b30d5529cb69e98f64f92510ed98a46  $RUNNER_TEMP/appimage-runtime" | sha256sum -c -
+          chmod +x "$RUNNER_TEMP/appimage-tool"
+          cat > "$RUNNER_TEMP/appimagetool" <<EOF
+          #!/bin/sh
+          exec "$RUNNER_TEMP/appimage-tool" --runtime-file "$RUNNER_TEMP/appimage-runtime" "\$@"
+          EOF
+          chmod +x "$RUNNER_TEMP/appimagetool"
       - name: Build Linux AppImage, DEB and legacy archive
         run: |
           args=()
           if [[ "$GITHUB_REF" != refs/tags/* ]]; then args+=(--internal-version '0.2.12~ci.preview.1'); fi
-          APPIMAGE_EXTRACT_AND_RUN=1 "$RUNNER_TEMP/fc-desktop-env/bin/python" scripts/package_linux.py --appimagetool /tmp/appimagetool "${args[@]}"
+          APPIMAGE_EXTRACT_AND_RUN=1 "$RUNNER_TEMP/fc-desktop-env/bin/python" scripts/package_linux.py --appimagetool "$RUNNER_TEMP/appimagetool" "${args[@]}"
       - name: Verify DEB metadata, desktop integration and content audit
         run: |
           dpkg-deb --info artifacts/clients/FamilyConnect_*_amd64.deb
