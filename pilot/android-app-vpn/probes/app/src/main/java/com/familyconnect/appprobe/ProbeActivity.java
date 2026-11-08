@@ -30,11 +30,13 @@ public final class ProbeActivity extends Activity {
                 NetworkCapabilities network=manager.getNetworkCapabilities(manager.getActiveNetwork());
                 result.put("vpn_capability",network!=null&&network.hasTransport(NetworkCapabilities.TRANSPORT_VPN));
                 JSONArray dns=new JSONArray();
+                long dnsStarted=android.os.SystemClock.elapsedRealtime();
                 java.util.concurrent.ExecutorService resolver=java.util.concurrent.Executors.newSingleThreadExecutor();
                 java.util.concurrent.Future<InetAddress[]> lookup=resolver.submit(()->InetAddress.getAllByName("example.com"));
-                try{for(InetAddress address:lookup.get(3,java.util.concurrent.TimeUnit.SECONDS))dns.put(address.getHostAddress());result.put("dns",dns);}
+                try{for(InetAddress address:lookup.get(8,java.util.concurrent.TimeUnit.SECONDS))dns.put(address.getHostAddress());result.put("dns",dns);}
                 catch(Exception failure){result.put("dns_error",failure.getClass().getSimpleName());}
                 finally{lookup.cancel(true);resolver.shutdownNow();}
+                result.put("dns_elapsed_ms",android.os.SystemClock.elapsedRealtime()-dnsStarted);
                 KeyStore trust=KeyStore.getInstance(KeyStore.getDefaultType());trust.load(null);
                 try(var certificate=getAssets().open("routing-ca.pem")){trust.setCertificateEntry("fixture",CertificateFactory.getInstance("X.509").generateCertificate(certificate));}
                 TrustManagerFactory factory=TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());factory.init(trust);

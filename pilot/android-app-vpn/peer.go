@@ -41,8 +41,10 @@ func run() error {
             if end+4>len(question){continue};kind:=binary.BigEndian.Uint16(question[end:end+2]);end+=4
             value:=[]byte{198,19,1,1};if kind==28{value=net.ParseIP("fd79:fc::1").To16()}else if kind!=1{continue}
             answer:=append([]byte(nil),question[:end]...);answer[2]=0x81;answer[3]=0x80;answer[6]=0;answer[7]=1
+            for index:=8;index<12;index++{answer[index]=0}
             answer=append(answer,0xc0,0x0c,byte(kind>>8),byte(kind),0,1,0,0,0,0,0,byte(len(value)));answer=append(answer,value...)
-            dns.WriteTo(answer,client)
+            _,err=dns.WriteTo(answer,client)
+            fmt.Fprintf(os.Stderr,"fixture_dns time=%s kind=%d additional=%d write_ok=%t\n",time.Now().UTC().Format(time.RFC3339Nano),kind,binary.BigEndian.Uint16(question[10:12]),err==nil)
         }
     }()
     fmt.Println("ready");<-engine.Wait();return nil

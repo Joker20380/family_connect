@@ -290,8 +290,8 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'clients/android/app/src/main/res/values/strings.xml': 'e5db89007bb81fe8a7a78632eb8bd29ef2d1a35ca7f85970e8cc709f289e3b23',
     }
     reviewed_app_vpn_resources_beta122 = {
-        'clients/android/app/src/main/res/values-ru/strings.xml': 'b88a2342bc5e6b797187adfe3480ee91e980a53e2fb6c64e8de274f3a3a9f2cc',
-        'clients/android/app/src/main/res/values/strings.xml': 'a66f9bd10f72728c471a413061cf44b5227e3617c2f890ef6aba32cfcb2946a8',
+        'clients/android/app/src/main/res/values-ru/strings.xml': '77c9a48fbd500c1bfa80b1efb895e8a1976a621d53668b9a57d47c650f3f17c7',
+        'clients/android/app/src/main/res/values/strings.xml': 'b9fe19d231f4dd80526178826b2213f602f6286ba480ca9fc9deb5874d691711',
     }
     reviewed_resources = {**reviewed_resources, **reviewed_subscription_resources_beta119, **reviewed_app_vpn_resources_beta122}
     changes = {'clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java',

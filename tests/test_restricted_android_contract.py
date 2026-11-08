@@ -25,13 +25,20 @@ def test_existing_owner_and_normal_backends_preserved():
     assert vpn == ['org.amnezia.awg.backend.GoBackend$VpnService', '.TcpVpnService']
 
 
-def test_underlay_ready_precedes_capture_no_excluded_apps_or_bypass():
+def test_underlay_ready_precedes_policy_capture_no_hidden_exclusions_or_bypass():
     engine = source('RestrictedTunnelEngine.java')
-    assert engine.index('NativeRestricted.begin') < engine.index('phase!=1') < engine.index('.establish()') < engine.index('NativeRestricted.attach')
+    for establish in ('tun=establishOwnedTun(automaticOwner)', 'tun=applications.establish('):
+        assert engine.index('NativeRestricted.begin') < engine.index('phase!=1') < engine.index(establish) < engine.index('NativeRestricted.attach')
+    assert 'return owner.replace(owner.builder())' in engine
+    adapter = source('AppVpnAndroid.java')
+    assert 'ParcelFileDescriptor descriptor=apply(builder).establish()' in adapter
+    assert 'validate();return descriptor' in adapter
+    assert 'catch(Exception failure){descriptor.close();throw failure;}' in adapter
     assert 'TcpVpnService.ready.get' in engine and 'service.revoked=' in engine
     assert '.addRoute("0.0.0.0",0).addRoute("::",0)' in engine
     assert '.addDnsServer("10.79.0.1")' in engine
     assert '.allowBypass(' not in engine and '.addDisallowedApplication(' not in engine
+    assert '.addAllowedApplication(' not in engine
     health = source('ConnectionService.java').split('private void restrictedHealth', 1)[1].split('private void ', 1)[0]
     assert 'failed=true;status="on";healthStatus="unavailable"' in health
     assert 'stopConnection' not in health and 'next()' not in health

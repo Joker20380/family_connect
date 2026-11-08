@@ -228,42 +228,58 @@ public class AppVpnRuntimeTest {
         if(requested!=null)AppLanguage.select(context,requested);
         try(androidx.test.core.app.ActivityScenario<AppVpnActivity> screen=androidx.test.core.app.ActivityScenario.launch(AppVpnActivity.class)){
             long deadline=SystemClock.elapsedRealtime()+10000;java.util.concurrent.atomic.AtomicBoolean loaded=new java.util.concurrent.atomic.AtomicBoolean();
-            while(!loaded.get()&&SystemClock.elapsedRealtime()<deadline){screen.onActivity(activity->loaded.set(((android.widget.ListView)activity.getWindow().getDecorView().findViewWithTag("app_vpn_list")).getCount()>0));SystemClock.sleep(100);}
+            while(!loaded.get()&&SystemClock.elapsedRealtime()<deadline){screen.onActivity(activity->loaded.set(((android.widget.ListView)activity.getWindow().getDecorView().findViewWithTag("app_vpn_list")).getCount()>1));SystemClock.sleep(100);}
             assertTrue("Installed package inventory",loaded.get());
             screen.onActivity(activity->{
                 ((android.widget.Spinner)activity.getWindow().getDecorView().findViewWithTag("app_vpn_modes")).setSelection(1);
                 ((android.widget.EditText)activity.getWindow().getDecorView().findViewWithTag("app_vpn_search")).setText(ALPHA);
             });
             InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+            scroll(screen,1);
             screen.onActivity(activity->{
-                android.widget.ListView list=activity.getWindow().getDecorView().findViewWithTag("app_vpn_list");assertEquals(1,list.getCount());
-                list.getChildAt(0).performClick();activity.getWindow().getDecorView().findViewWithTag("app_vpn_save").performClick();
+                android.widget.ListView list=activity.getWindow().getDecorView().findViewWithTag("app_vpn_list");assertEquals(2,list.getCount());
+                list.getChildAt(1-list.getFirstVisiblePosition()).performClick();activity.getWindow().getDecorView().findViewWithTag("app_vpn_save").performClick();
             });
-            InstrumentationRegistry.getInstrumentation().waitForIdleSync();SystemClock.sleep(200);
-            screen.onActivity(activity->render(activity,"selected"));
+            captureScreen(screen,"selected");
             assertEquals(Set.of(ALPHA),settings.read().selected());assertEquals(AppVpnPolicy.Mode.INCLUDE,settings.read().mode);
             AppVpnAndroid snapshot=new AppVpnAndroid(context,settings.read());ConnectionService.activeApplications=snapshot.policy;
             AutomaticVpnOwner owner=new AutomaticVpnOwner(context,snapshot);AutomaticNormalEngine engine=new AutomaticNormalEngine(context,owner,Transport.TCP);
             try{
                 owner.open(()->{});engine.up(TcpRuntimeTest.profile());SystemClock.sleep(700);pair(AppVpnPolicy.Mode.INCLUDE,"VPN_TCP");
+                scroll(screen,0);
                 screen.onActivity(activity->{((android.widget.Spinner)activity.getWindow().getDecorView().findViewWithTag("app_vpn_modes")).setSelection(2);});
                 InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+                scroll(screen,1);
                 screen.onActivity(activity->{
-                    android.widget.ListView list=activity.getWindow().getDecorView().findViewWithTag("app_vpn_list");list.getChildAt(0).performClick();
+                    android.widget.ListView list=activity.getWindow().getDecorView().findViewWithTag("app_vpn_list");list.getChildAt(1-list.getFirstVisiblePosition()).performClick();
                     activity.getWindow().getDecorView().findViewWithTag("app_vpn_save").performClick();
+                });
+                scroll(screen,0);
+                screen.onActivity(activity->{
                     assertTrue(((android.widget.TextView)activity.getWindow().getDecorView().findViewWithTag("app_vpn_summary")).getText().toString().contains(activity.getString(R.string.app_vpn_pending)));
                 });
-                InstrumentationRegistry.getInstrumentation().waitForIdleSync();SystemClock.sleep(200);
-                screen.onActivity(activity->render(activity,"pending"));
+                captureScreen(screen,"pending");
                 pair(AppVpnPolicy.Mode.INCLUDE,"VPN_TCP");assertEquals(Set.of(ALPHA),settings.read().excluded);
             }finally{engine.down();owner.close();ConnectionService.activeApplications=null;helper.clean();}
         }finally{settings.save(previous);AppLanguage.select(context,language);ConnectionService.activeApplications=null;receipt("screen");}
+    }
+    private void scroll(androidx.test.core.app.ActivityScenario<AppVpnActivity> screen,int position){
+        screen.onActivity(activity->{android.widget.ListView list=activity.getWindow().getDecorView().findViewWithTag("app_vpn_list");list.setSelection(position);});
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();SystemClock.sleep(200);
+    }
+    private void captureScreen(androidx.test.core.app.ActivityScenario<AppVpnActivity> screen,String name){
+        scroll(screen,0);screen.onActivity(activity->render(activity,name+"-controls"));
+        scroll(screen,1);screen.onActivity(activity->render(activity,name));
     }
     private void render(AppVpnActivity activity,String name){
         assertTrue((activity.getWindow().getAttributes().flags&android.view.WindowManager.LayoutParams.FLAG_SECURE)!=0);
         android.view.View root=activity.findViewById(android.R.id.content);
         assertTrue(root.getWidth()>0&&root.getHeight()>0);
         android.widget.ListView list=root.findViewWithTag("app_vpn_list");assertTrue("App list remains reachable",list.getHeight()>80*activity.getResources().getDisplayMetrics().density);
+        for(String tag:new String[]{"app_vpn_save","app_vpn_back"}){
+            android.view.View button=root.findViewWithTag(tag);android.graphics.Rect bounds=new android.graphics.Rect();
+            assertTrue("Action remains visible",button.getGlobalVisibleRect(bounds));assertEquals(button.getHeight(),bounds.height());
+        }
         android.graphics.Bitmap image=android.graphics.Bitmap.createBitmap(root.getWidth(),root.getHeight(),android.graphics.Bitmap.Config.ARGB_8888);
         root.draw(new android.graphics.Canvas(image));
         try(var output=new java.io.FileOutputStream(new java.io.File(activity.getExternalFilesDir("app-vpn-visual"),name+".png"))){assertTrue(image.compress(android.graphics.Bitmap.CompressFormat.PNG,100,output));}

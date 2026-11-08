@@ -29,6 +29,8 @@ def test_health_fixture(tmp_path, historical):
         'com/familyconnect/app/HealthHarness.java': Path(__file__).with_name('HealthHarness.java').read_text(),
     }
     files = []
+    if not historical:
+        stubs['com/familyconnect/app/AppVpnHealthHarness.java'] = Path(__file__).with_name('AppVpnHealthHarness.java').read_text()
     for name, value in stubs.items():
         target = tmp_path / name
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -40,3 +42,7 @@ def test_health_fixture(tmp_path, historical):
     result = subprocess.run([java, '-cp', str(tmp_path / 'classes'), 'com.familyconnect.app.HealthHarness'], capture_output=True, text=True, timeout=15)
     assert result.returncode == 0, result.stderr
     assert 'PASS_HEALTH_10_SCENARIOS' in result.stdout
+    if not historical:
+        result = subprocess.run([java, '-cp', str(tmp_path / 'classes'), 'com.familyconnect.app.AppVpnHealthHarness'], capture_output=True, text=True, timeout=5)
+        assert result.returncode == 0, result.stderr
+        assert 'PASS_CARRIER_HEALTH_8_SCENARIOS_NO_UNDERLAY' in result.stdout

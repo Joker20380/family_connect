@@ -8,7 +8,10 @@ are being connected to AWG/TCP/MESH/Auto/guard.122 is reserved after remote bran
 local artifact inspection (highest existing121); accepted121 remains immutable.
 Completion requires actual distinct-UID Android traffic, API27/28/35 checks and ordinary
 green CI/review/merge. No phone, production, paid policy, G4, entry, renewal or updater work.
-[Current evidence and limits](releases/2026-11-08-android-app-vpn.md).
+Actual separate-UID routing and guard/pending tests pass on isolated API35/API27;
+API27 RU large-font UI is corrected and visually inspected. Hosted package,
+upgrade-format and remaining compatibility gates are tracked in PR12, not inferred
+from these local checks. [Current evidence and limits](releases/2026-11-08-android-app-vpn.md).
 
 **8 November — CONTROL-PANEL-REFERENCE-1: object-oriented local panel.**
 Production overview, stable full-HMAC device cards and RU/Amsterdam server cards

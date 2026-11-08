@@ -47,25 +47,27 @@ public final class AppVpnActivity extends LocalizedActivity {
         }catch(IllegalArgumentException damaged){invalid=true;}
         LinearLayout root=new LinearLayout(this);root.setOrientation(LinearLayout.VERTICAL);root.setBackgroundColor(TerminalUi.BACKGROUND);
         int padding=TerminalUi.dp(this,16);root.setPadding(padding,padding,padding,padding);
-        TerminalUi.label(root,getString(R.string.app_vpn_title),22,TerminalUi.TEXT);
-        TerminalUi.label(root,getString(R.string.app_vpn_warning),13,TerminalUi.MUTED);
+        LinearLayout header=new LinearLayout(this);header.setOrientation(LinearLayout.VERTICAL);
+        TerminalUi.label(header,getString(R.string.app_vpn_title),22,TerminalUi.TEXT);
+        TerminalUi.label(header,getString(R.string.app_vpn_warning),13,TerminalUi.MUTED);
         Spinner modes=new Spinner(this);modes.setTag("app_vpn_modes");
-        modes.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.app_vpn_modes)));
-        modes.setSelection(mode.ordinal());root.addView(modes,new LinearLayout.LayoutParams(-1,-2));
-        summary=TerminalUi.label(root,getString(invalid?R.string.app_vpn_invalid:R.string.app_vpn_loading),13,TerminalUi.AMBER);summary.setTag("app_vpn_summary");
+        modes.setAdapter(choices(R.array.app_vpn_modes));
+        modes.setSelection(mode.ordinal());header.addView(modes,new LinearLayout.LayoutParams(-1,-2));
+        summary=TerminalUi.label(header,getString(invalid?R.string.app_vpn_invalid:R.string.app_vpn_loading),13,TerminalUi.AMBER);summary.setTag("app_vpn_summary");
         search=new EditText(this);search.setTag("app_vpn_search");search.setSingleLine();search.setHint(R.string.app_vpn_search);search.setTextColor(TerminalUi.TEXT);search.setHintTextColor(TerminalUi.MUTED);
-        root.addView(search,new LinearLayout.LayoutParams(-1,-2));
-        selected=new CheckBox(this);selected.setTag("app_vpn_selected");selected.setText(R.string.app_vpn_selected);selected.setTextColor(TerminalUi.TEXT);root.addView(selected);
-        category=new Spinner(this);category.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.app_vpn_categories)));root.addView(category);
-        ListView list=new ListView(this);list.setTag("app_vpn_list");rows=new Rows();list.setAdapter(rows);list.setDividerHeight(1);
+        header.addView(search,new LinearLayout.LayoutParams(-1,-2));
+        selected=new CheckBox(this);selected.setTag("app_vpn_selected");selected.setText(R.string.app_vpn_selected);selected.setTextColor(TerminalUi.TEXT);header.addView(selected);
+        category=new Spinner(this);category.setAdapter(choices(R.array.app_vpn_categories));header.addView(category);
+        ListView list=new ListView(this);list.setTag("app_vpn_list");list.addHeaderView(header,null,false);rows=new Rows();list.setAdapter(rows);list.setDividerHeight(1);
         root.addView(list,new LinearLayout.LayoutParams(-1,0,1));
-        TextView scope=TerminalUi.label(root,getString(R.string.app_vpn_scope),12,TerminalUi.MUTED);
-        scope.setMaxLines(3);scope.setOnClickListener(view->new android.app.AlertDialog.Builder(this).setMessage(R.string.app_vpn_scope).setPositiveButton(android.R.string.ok,null).show());
+        TextView scope=TerminalUi.label(root,getString(R.string.app_vpn_details),13,TerminalUi.MINT);
+        scope.setMinHeight(TerminalUi.dp(this,48));scope.setFocusable(true);scope.setPaintFlags(scope.getPaintFlags()|android.graphics.Paint.UNDERLINE_TEXT_FLAG);
+        scope.setOnClickListener(view->new android.app.AlertDialog.Builder(this).setMessage(R.string.app_vpn_scope).setPositiveButton(android.R.string.ok,null).show());
         TerminalUi.button(root,R.string.app_vpn_save,()->{
             try{store.save(draft());updateSummary();Toast.makeText(this,R.string.app_vpn_saved,Toast.LENGTH_SHORT).show();}
             catch(IllegalArgumentException|IllegalStateException failed){summary.setText(R.string.app_vpn_invalid);}
         }).setTag("app_vpn_save");
-        TerminalUi.button(root,R.string.app_vpn_back,this::finish);
+        TerminalUi.button(root,R.string.app_vpn_back,this::finish).setTag("app_vpn_back");
         modes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> parent,View view,int position,long id){mode=AppVpnPolicy.Mode.values()[position];filter();updateSummary();}
             public void onNothingSelected(AdapterView<?> parent){}
@@ -95,6 +97,13 @@ public final class AppVpnActivity extends LocalizedActivity {
             });
         });
     }
+    private ArrayAdapter<String> choices(int resource){
+        return new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(resource)){
+            @Override public View getView(int position,View convert,ViewGroup parent){
+                TextView view=(TextView)super.getView(position,convert,parent);view.setSingleLine(false);view.setMaxLines(3);view.setTextSize(16);return view;
+            }
+        };
+    }
     private AppVpnPolicy draft(){return new AppVpnPolicy(mode,included,excluded);}
     private Set<String> selection(){return mode==AppVpnPolicy.Mode.INCLUDE?included:excluded;}
     private void updateSummary(){
@@ -103,7 +112,7 @@ public final class AppVpnActivity extends LocalizedActivity {
         try{if(!policy.equals(store.read())){summary.setText(R.string.app_vpn_unsaved);return;}}
         catch(IllegalArgumentException invalid){summary.setText(R.string.app_vpn_unsaved);return;}
         boolean pending=ConnectionService.activeApplications!=null&&!policy.equals(ConnectionService.activeApplications);
-        try{new AppVpnAndroid(this,policy);summary.setText(getString(pending?R.string.app_vpn_pending:R.string.app_vpn_next)+" · "+policy.selected().size());}
+        try{new AppVpnAndroid(this,policy);summary.setText(getString(pending?R.string.app_vpn_pending:R.string.app_vpn_next)+(policy.mode==AppVpnPolicy.Mode.ALL?"":" · "+policy.selected().size()));}
         catch(IllegalArgumentException invalid){summary.setText(getString(R.string.app_vpn_invalid)+(pending?"\n"+getString(R.string.app_vpn_pending):""));}
     }
     private void filter(){

@@ -15,6 +15,7 @@ def main():
     parser.add_argument('--serial', required=True)
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--gradle', default='gradle')
+    parser.add_argument('--visual-only', action='store_true')
     args = parser.parse_args()
     if not args.serial.startswith('emulator-') or not args.serial[9:].isdigit():
         raise SystemExit('An emulator serial is required')
@@ -49,16 +50,17 @@ def main():
             if 'Success' not in run(adb+['install', '-r', str(apk)], timeout=90):
                 raise RuntimeError('Fixture installation failed')
         run(adb+['push', str(apks[2]), '/data/local/tmp/fc-app-probe-alpha.apk'])
-        completed = subprocess.run(adb+['shell', 'am', 'instrument', '-w', '-r', '-e', 'class', 'com.familyconnect.app.AppVpnRuntimeTest',
+        selection = 'com.familyconnect.app.AppVpnRuntimeTest'+('#screenSavesRealRoutingAndPendingSelection' if args.visual_only else '')
+        completed = subprocess.run(adb+['shell', 'am', 'instrument', '-w', '-r', '-e', 'class', selection,
                          '-e', 'fc_app_vpn', 'true', 'com.familyconnect.app.pilot.test/androidx.test.runner.AndroidJUnitRunner'],
                          capture_output=True, text=True, timeout=600)
         result = completed.stdout
         (output/'instrumentation.log').write_text(result+completed.stderr)
         if completed.returncode:
             raise RuntimeError('Instrumentation command failed; see instrumentation.log')
-        if 'OK (7 tests)' not in result or any(value in result for value in ('FAILURES!!!', 'INSTRUMENTATION_FAILED', 'INSTRUMENTATION_STATUS_CODE: -3', 'INSTRUMENTATION_STATUS_CODE: -4')):
+        if ('OK (1 test)' if args.visual_only else 'OK (7 tests)') not in result or any(value in result for value in ('FAILURES!!!', 'INSTRUMENTATION_FAILED', 'INSTRUMENTATION_STATUS_CODE: -3', 'INSTRUMENTATION_STATUS_CODE: -4')):
             raise RuntimeError('Per-app routing acceptance failed; see instrumentation.log')
-        for name in ('routing', 'automatic', 'screen', 'owner-health', 'package-removal', 'service'):
+        for name in (('screen',) if args.visual_only else ('routing', 'automatic', 'screen', 'owner-health', 'package-removal', 'service')):
             raw = run(adb+['shell', 'run-as', 'com.familyconnect.app.pilot', 'cat', 'files/app-vpn-'+name+'.json'])
             (output/(name+'.json')).write_text(json.dumps(json.loads(raw), indent=2))
         visuals = output/'visuals'
@@ -79,7 +81,7 @@ def main():
         finally:
             run(adb+['shell', 'settings', 'put', 'system', 'font_scale', scale if scale != 'null' else '1.0'])
         print(json.dumps(dict(api=run(adb+['shell','getprop','ro.build.version.sdk']).strip(), result='PASS',
-                              scope='real AWG/TCP/Auto; MESH owned TUN with REALITY substitute carrier')))
+                              scope='screen/TCP only' if args.visual_only else 'real AWG/TCP/Auto; MESH owned TUN with REALITY substitute carrier')))
     finally:
         if fixture.poll() is None:
             fixture.terminate()

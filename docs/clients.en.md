@@ -1,5 +1,10 @@
 # Client installation
 
+**8 November candidate — beta122, not a public rollout:** local
+[Apps and VPN selection](android-app-vpn.en.md). This does not replace accepted
+beta121; the task receipt identifies the exact candidate and checks.
+The dated release entries below remain historical.
+
 **4 November — Android113 published and installed in place on the owner phone.** Every mode
 uses Russia, Netherlands and Netherlands2. Rows show each node's load with green squares,
 orange from85%, grey/dash without fresh data; a green tint and checkmark identify selection.
