@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**8 November22:49–22:55UTC — RU incident diagnosed, NOT_RECOVERED.** RU is reachable;
+ordinary AWG/TCP have been down since21:02:26UTC. The installed first-failure recorder
+identifies TRANSPORT_OPERATION_DEADLINE in plan:9.368s against8s, before the12s
+watchdog termination and protective engine shutdown. Watcher retries do not restart
+the engines; NRestarts188 at final readback is not availability. Disk/paging stalls
+are observed, but the exact cause of the initiating plan delay remains unproven.
+No service/configuration/policy/client changes. Latest upstream recovery evidence
+was consulted without merging the divergent checkout or overwriting local work.
+[Timeline, evidence and recovery boundary](releases/2026-11-08-ru-incident-diagnosis.md).
+
 **7 November20:07–20:08UTC — NL1 load attributed:** ten-second cgroup sample:
 paid-watch35.8%, mailbox22.1%, MESH17.6% of ONE core (two-vCPU host).
 Mailbox hits its192MiB cap with250.6MiB swap despite~1GiB host available memory;

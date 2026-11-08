@@ -2,6 +2,16 @@
 
 ## Current engineering priority / Текущий critical path
 
+**8 November — selected RU incident investigation: diagnosis complete, service NOT_RECOVERED.**
+Read-only gate: preserve first failure, correlate watcher/engine chronology, check host
+resources and distinguish known protective shutdown from unknown delay cause. Gate
+met: plan9.368s/8s at21:02:26UTC, subsequent watchdog and both engine stops; recurring
+watcher startup failures do not restore VPN. No deployment or engineering gate advanced.
+Next only if selected: exact accepted RU stop/PID0/no-jobs/start recovery with retained
+deny/cache, RU-only application fence and lease/readback/real-traffic verification;
+separately qualify a root fix for the slow plan without weakening watchdog or leases.
+[Current diagnosis and limits](releases/2026-11-08-ru-incident-diagnosis.md).
+
 **7 November NL1 load diagnosis complete, read-only:** paid-watch polling overhead
 and mailbox192MiB cgroup pressure explain substantial non-MESH load. No watcher,
 memory/CPU limit, admission or deployment changes. Any optimization must preserve
