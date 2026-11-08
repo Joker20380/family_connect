@@ -44,7 +44,7 @@ public class AppVpnRuntimeTest {
     }
     private void route(String name,String expected)throws Exception{
         JSONObject result=probe(name);String nonce=result.getString("nonce");
-        assertEquals(expected+"/"+nonce,result.optString("ipv4"));
+        assertEquals("ipv4_error="+result.optString("ipv4_error")+", dns_error="+result.optString("dns_error")+", vpn="+result.optBoolean("vpn_capability"),expected+"/"+nonce,result.optString("ipv4"));
         assertFalse(result.getString("ipv4_tls").isEmpty());
         assertTrue(result.has("dns")&&result.getJSONArray("dns").length()>0);
         if(expected.startsWith("VPN")){

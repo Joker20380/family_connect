@@ -20,6 +20,17 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.x509.oid import NameOID
 
 
+class RoutingHTTPServer(http.server.ThreadingHTTPServer):
+    def __init__(self, address, handler, tls):
+        self.tls = tls
+        super().__init__(address, handler)
+
+    def get_request(self):
+        connection, address = super().get_request()
+        connection.settimeout(5)
+        return self.tls.wrap_socket(connection, server_side=True, do_handshake_on_connect=False), address
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--out', type=Path, required=True)
@@ -84,8 +95,7 @@ def main():
 
     try:
         for port, route in [(51904, 'DIRECT'), (51905, 'VPN_TCP')]:
-            server = http.server.ThreadingHTTPServer(('127.0.0.1', port), handler(route))
-            server.socket = tls.wrap_socket(server.socket, server_side=True)
+            server = RoutingHTTPServer(('127.0.0.1', port), handler(route), tls)
             servers.append(server)
         for address, port, answer in [('127.0.0.1', 51906, '198.19.1.1')]:
             server = socketserver.ThreadingUDPServer((address, port), DNS)

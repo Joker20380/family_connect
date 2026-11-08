@@ -10,6 +10,22 @@ import time
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def collect_receipts(adb, output, names):
+    failures = []
+    for name in names:
+        result = subprocess.run(adb+['shell', 'run-as', 'com.familyconnect.app.pilot', 'cat', 'files/app-vpn-'+name+'.json'],
+                                capture_output=True, text=True, timeout=30)
+        try:
+            if result.returncode:
+                raise ValueError('Missing receipt')
+            parsed = json.loads(result.stdout)
+        except ValueError:
+            failures.append(name)
+        else:
+            (output/(name+'.json')).write_text(json.dumps(parsed, indent=2))
+    return failures
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--serial', required=True)
@@ -65,18 +81,20 @@ def main():
                          capture_output=True, text=True, timeout=600)
         result = completed.stdout
         (output/'instrumentation.log').write_text(result+completed.stderr)
+        if args.method:
+            name = 'rejection' if args.method == 'rejection' else 'ui-recovery' if args.method.startswith('rejected') else 'catalog'
+            names = (name,)
+        else:
+            names = ('screen',) if args.visual_only else ('routing', 'automatic', 'screen', 'owner-health', 'package-removal', 'service', 'catalog', 'ui-recovery', 'rejection')
+        missing = collect_receipts(adb, output, names)
         if completed.returncode:
             raise RuntimeError('Instrumentation command failed; see instrumentation.log')
         if ('OK (1 test)' if args.visual_only or args.method else 'OK (10 tests)') not in result or any(value in result for value in ('FAILURES!!!', 'INSTRUMENTATION_FAILED', 'INSTRUMENTATION_STATUS_CODE: -3', 'INSTRUMENTATION_STATUS_CODE: -4')):
             raise RuntimeError('Per-app routing acceptance failed; see instrumentation.log')
+        if missing:
+            raise RuntimeError('Missing routing receipts: '+', '.join(missing))
         if args.method:
-            name = 'rejection' if args.method == 'rejection' else 'ui-recovery' if args.method.startswith('rejected') else 'catalog'
-            raw = run(adb+['shell', 'run-as', 'com.familyconnect.app.pilot', 'cat', 'files/app-vpn-'+name+'.json'])
-            (output/(name+'.json')).write_text(json.dumps(json.loads(raw), indent=2))
             return
-        for name in (('screen',) if args.visual_only else ('routing', 'automatic', 'screen', 'owner-health', 'package-removal', 'service', 'catalog', 'ui-recovery', 'rejection')):
-            raw = run(adb+['shell', 'run-as', 'com.familyconnect.app.pilot', 'cat', 'files/app-vpn-'+name+'.json'])
-            (output/(name+'.json')).write_text(json.dumps(json.loads(raw), indent=2))
         visuals = output/'visuals'
         visuals.mkdir()
         remote_visuals = '/sdcard/Android/data/com.familyconnect.app.pilot/files/app-vpn-visual/'
