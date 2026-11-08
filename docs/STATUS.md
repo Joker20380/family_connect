@@ -1,19 +1,23 @@
 # Текущее состояние / Current state
 
-**8 November — owner cold operation resumed; fresh preflight, entry still inactive.**
-Remote main93102333 (PR1–9) and cold checkpoint843457e are preserved in separate
-worktrees. Actual owner API31 client is still the exact accepted beta119/code119;
-selected NL1/MESH, VPN OFF, Wi-Fi ON. At06:57UTC current trust/admission, canonical
-profile/keypair and ordinary NL1→RU HTTPS pass. Valid readiness expires09:14:28UTC:
-do not clear it or describe a cache-backed attempt as COLD. Immutable Android55525859
-and server3c0487eb bytes are verified; no entry, locator, signature or install started.
-Await mobile-only phone setup and fresh protected vault verification before the bounded
-operation. Frozen120 lacks subscription UI119 and is not a general client update.
-Existing corrected G4c8eb8b9/bfff97d has a final FULL_CORE_PATH_PASS receipt, exit0,
-two committed renewals; no rerun. Its isolated scope is not owner/mobile acceptance.
-[Fresh preflight and G4 readback](releases/2026-11-07-cold-field-delivery.md#owner-api31-resumption-8-november).
+**8 November — owner experiment complete: WARM/Wi-Fi PASS; cold entry NOT accepted.**
+Owner explicitly selected Wi-Fi instead of the mobile check. Existing Redmi/API31 was
+updated119→120 without wiping or a new identity: installed APK24a5338a…517ea,
+source55525859, existing signer, locator-only finalization of accepted CI bytes.
+One ordinary MESH Connect reached READY, DNS and verified HTTPS with NL1 egress.
+Readiness used ordinary HTTPS REFRESH with a valid cache; no mobile/whitelist/COLD PASS.
+Two preparation errors remain recorded: derived CI receipt rejected before signing;
+wrong Activity launch component after install caused entry cleanup. The correct launcher
+then worked, but entry was inactive at Connect: that cold-entry gate explicitly FAILS.
+Both new entries are stopped; protected paid/identity/grant data and existing service
+PIDs/restart counts are unchanged. Phone restored to NL1/MESH/VPN OFF/Wi-Fi ON/P1;
+public identity and chat list preserved, temporary USB support disabled.
+Frozen120 lacks subscription UI119 and is not a general update; no updater publication.
+Existing G4c8eb8b9/bfff97d final FULL_CORE_PATH_PASS/exit0 was read, not rerun.
+Stop here. Integration with119 and a future common release require a separate task.
+[Final owner result](releases/2026-11-07-cold-field-delivery.md#owner-wifi-final-result-8-november).
 
-**7 November — authorized owner API31/119→120 operation: preflight, waiting for mobile setup.**
+**Historical7 November preflight — superseded by the8 November result above.**
 Owner explicitly selected the connected Redmi Note9 Pro/API31 instead of the original
 API28/113 target. USB support is enabled; exact phone Support ID maps to one registered,
 eligible device. Current NL1/RU family/gateway, issuer/CRL/floors and verified backend HTTPS

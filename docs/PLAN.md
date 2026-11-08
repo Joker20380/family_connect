@@ -2,15 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
-**8 November continuation: same owner operation, no second entry.**
-Fresh remote main93102333 and cold843457e verified; preserve PR1–9 production changes.
-Actual beta119/API31/NL1/MESH/VPN OFF and immutable accepted kit pass read-only checks.
-Current phone is on Wi-Fi with valid readiness; next manual step is mobile-only setup.
-Then verify the existing vault in memory, start one short entry, issue a fresh locator,
-finalize only its asset, sign/install in place and perform one ordinary Connect; preserve
-cache and report WARM/COLD factually. Frozen120 does not contain subscription UI119.
-Final corrected G4 readback is FULL_CORE_PATH_PASS/exit0; do not run another G4.
-[Current evidence and pending gates](releases/2026-11-07-cold-field-delivery.md#owner-api31-resumption-8-november).
+**Completed8 November: authorized owner Wi-Fi experiment; stop at this result.**
+Owner chose Wi-Fi; one ordinary Connect on installed frozen120/API31 passed READY,
+DNS and verified HTTPS/NL1 egress. Existing identity/chat list and NL1/MESH/P1 settings
+preserved; VPN OFF and Wi-Fi ON restored. Cache was not cleared: WARM/direct-HTTPS,
+not mobile or cold acceptance. Entry was inactive at Connect after an operator launch
+error; that gate remains FAIL, despite successful normal Wi-Fi traffic. Both entries
+cleaned up; no production service restart, paid-policy change or updater publication.
+APK24a5338a…517ea retains source55525859, not the documentation/main SHA.120 lacks
+subscription UI119. Final G4 readback is FULL_CORE_PATH_PASS/exit0, with no new run.
+Do not automatically start integration with119, another field attempt or a common release.
+[Final receipt and limitations](releases/2026-11-07-cold-field-delivery.md#owner-wifi-final-result-8-november).
+
+### Superseded preparation notes (not active NEXTs)
 
 **In progress: authorized owner API31/119→120 field operation, awaiting phone setup.**
 The owner selected their connected API31 phone; this is not the original API28 case.

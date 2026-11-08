@@ -406,3 +406,70 @@ Support ID, keys or raw logs are included here. Fresh vault verification remains
 the protected local dialog. Entry remains inactive: no locator, signature, install or
 Connect has started. Next is owner mobile-only setup, followed by the same bounded
 operation and one ordinary Connect. No paid, renewal, G4 or general updater change.
+
+### Owner WiFi final result 8 November
+
+**WARM_WIFI_PASS_COLD_ENTRY_NOT_ACCEPTED.** The owner explicitly chose to skip
+mobile-network testing and continue this same experiment over Wi-Fi. This is the
+final owner outcome, not mobile/whitelist acceptance, not qualification of the cold
+fallback path and not a general Android release. Frozen120 lacks subscription UI119.
+
+| Check | Result | Actual evidence |
+| --- | --- | --- |
+| Exact prebuild/server, fresh trust/admission/TLS, existing vault signer | PASS | CI42385799106/source55525859; server3c0487eb; fresh canonical readback |
+| Asset-only finalization and in-place119→120 | PASS | Original ZIP payload unchanged except the added locator; same signer; installed APK pulled back and matched |
+| New entry and signed locator readiness before installation | PASS | Two sequential, bounded entries; exact immutable server bytes; ready markers retained |
+| Entry still live at Connect | **FAIL** | Operator launch error triggered cleanup before Connect; no cold-entry success claimed |
+| One ordinary Connect on owner API31 over Wi-Fi | PASS | Requested07:29:00.465UTC; CONNECTED/READY observed07:29:30.768UTC |
+| DNS and verified HTTPS through selected NL1 | PASS |16 native DNS responses, zero DNS errors; built-in VPN-bound Cloudflare trace HTTP200 and matching NL1 egress |
+| Cache classification | WARM/direct HTTPS | Valid cache preserved; ordinary readiness FETCH/REFRESH completed in975ms; no cold locator use |
+| Mobile network / Russian whitelist / cold carrier | NOT_RUN | Explicitly outside this Wi-Fi outcome |
+| Cleanup and protected data | PASS in stated scope | Both entries inactive/MainPID0/stopped markers; protected fingerprints and existing service state/PID/restart counts unchanged |
+
+Installed `com.familyconnect.app.friends`0.1.18-beta120/code120, ARM64,
+on Redmi Note9 Pro/Android12/API31. Final APK50408949bytes, SHA256
+`24a5338a98cfb7e67537c27085356d7932e500c916bf93e3f169b3b9c79517ea`;
+sole signer `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+Android source remains `55525859465ff4713196db7206129ad840f67cb3`; server remains
+`3c0487ebd0acdb79149d20dc69a4d63942f891b9`. Neither is renamed to main93102333
+or to the final documentation commit. No APK rebuild, publication or updater change.
+The locator expired07:32:34UTC; these same120 bytes are not a fresh cold handoff.
+
+Preparation failures are preserved, not assigned to the APK:
+
+- First attempt selected a derived CI receipt instead of the original qualified
+  `verification.json`. Its hash was correctly rejected before signing/install.
+  The original receipt hash48eab8c4…66bb was then checked before the next entry.
+- Second attempt signed/installed accepted bytes but used `.FriendsActivity`
+  relative to the applicationId. Android rejected that operator command; cleanup
+  stopped the entry. PackageManager resolved the correct component to
+  `com.familyconnect.app.friends/com.familyconnect.app.FriendsActivity`, which
+  launched successfully without changing the APK. Android's “COLD launch” label
+  is not a cold-provisioning result.
+- Some USB UI-helper processes exited `Killed` after completing their action.
+  Actual screen/provider readbacks were used before proceeding. Standard UI dump
+  also failed to reach idle. These are retained tooling failures, not APK crashes.
+
+Exactly one Connect used the existing owner USB command, invoking the same
+`FriendsActivity.prepareConnect` path as the normal MESH button. No injected profile,
+cleared cache, synthetic success response or second Connect was used. The HTTPS
+probe uses the current VPN-bound Network with normal certificate/hostname checks,
+requires HTTP200 and checks that session/network did not change. Native post-probe
+evidence also records15 successful TCP opens, zero TCP/protocol errors. Egress and
+raw diagnostics remain in private evidence; they do not qualify another network.
+
+VPN disconnected07:31:41UTC. Final readback at07:33:10UTC confirms the same public
+identity, identical chat-screen text, NL1/MESH/P1, VPN OFF and Wi-Fi ON. Temporary USB
+support was disabled. No online-consent toggle was issued; its static status label
+changed OFF→UNAVAILABLE and the consent bit was not available in this UI helper.
+Do not claim that flag was independently verified OFF or that all private app storage
+was compared. Protected devices/invites/grants/subscriptions/events fingerprints match
+over07:24:26–07:32:19UTC; ordinary readiness observations/challenges/certificates are
+not claimed byte-identical. Existing HTTP/bootstrap/paid-watch/AWG/TCP services were
+not restarted. Provider room-object deletion was not verified; both owned entry
+processes ended with stopped markers. G4 was not rerun or modified.
+
+The combined private final receipt contains timings, hashes, preserved failures and
+evidence inventory; no identifiers, keys, raw logs or receipts are published here.
+This task stops at the stated Wi-Fi result. Integration with subscription119, another
+cold/mobile attempt and a future common release are separate decisions.
