@@ -17,6 +17,7 @@ def source_paths():
         paths.extend((BASE / directory).rglob('*.py'))
     paths.extend((BASE / 'templates').rglob('*.html'))
     paths.extend((BASE / 'static').rglob('*.css'))
+    paths.extend((BASE / 'static').rglob('*.js'))
     paths.extend((REPOSITORY / 'control/friends').glob('*.py'))
     paths.extend((REPOSITORY / 'device_identity').glob('*.py'))
     fleet = REPOSITORY / 'fleet'

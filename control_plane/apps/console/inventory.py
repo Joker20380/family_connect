@@ -51,6 +51,12 @@ def strict_load(raw):
 
 @transaction.atomic
 def ingest(data, *, subscription_attempt=False):
+    if type(data) is dict and type(data.get('schema')) is int and data['schema'] == 4:
+        from .measurements import ingest as ingest_metrics
+        require('metrics' in data)
+        ingest_metrics(data['metrics'], data['source'])
+        data = {name: value for name, value in data.items() if name != 'metrics'}
+        data['schema'] = 3
     if type(data) is dict and type(data.get('schema')) is int and data['schema'] == 3:
         from .transports import ingest as ingest_transports
         require('transport_observation' in data)
@@ -77,7 +83,7 @@ def ingest(data, *, subscription_attempt=False):
         require(data['registry_status'] == 'not_collected' and not data['devices'])
     seen, devices = set(), []
     for entry in data['devices']:
-        fields(entry, 'pseudonym activated revoked version_code version_source last_seen')
+        fields(entry, 'pseudonym activated revoked version_code version_source last_seen' + (' metadata' if 'metadata' in entry else ''))
         require(isinstance(entry['pseudonym'], str) and re.fullmatch(r'[0-9a-f]{64}', entry['pseudonym']) is not None)
         require(entry['pseudonym'] not in seen)
         seen.add(entry['pseudonym'])
@@ -86,6 +92,13 @@ def ingest(data, *, subscription_attempt=False):
         require(entry['version_source'] in ('support', 'readiness_ack', 'unknown'))
         last_seen = timestamp(entry['last_seen']) if entry['last_seen'] is not None else None
         require(last_seen is None or last_seen <= observed)
+        if 'metadata' in entry:
+            metadata = entry['metadata']
+            fields(metadata, 'platform app_version support_id observed_at')
+            for name in ('platform', 'app_version', 'support_id'):
+                require(metadata[name] is None or isinstance(metadata[name], str) and len(metadata[name]) <= 128
+                        and not any(ord(character) < 32 for character in metadata[name]))
+            require(metadata['observed_at'] is None or timestamp(metadata['observed_at']) <= observed)
         devices.append(dict(entry, last_seen=last_seen))
     server = data['server']
     fields(server, 'load_1m memory_used_percent disk_used_percent uptime_seconds services')

@@ -38,7 +38,7 @@ def registry_rows(path, key):
     try:
         database.execute('PRAGMA query_only=ON')
         database.execute('BEGIN')
-        rows = database.execute('''SELECT d.device,d.revoked,s.version_code,s.last_seen,
+        rows = database.execute('''SELECT d.device,d.revoked,s.version_code,s.last_seen,s.platform,s.app_version,s.support_id,
             EXISTS(SELECT 1 FROM invites i WHERE i.device=d.device AND i.revoked=0) AS activated,
             EXISTS(SELECT 1 FROM invites i WHERE i.device=d.device AND i.revoked!=0) AS invite_revoked
             FROM devices d LEFT JOIN device_support s ON s.device=d.device ORDER BY d.device LIMIT 10001''').fetchall()
@@ -58,7 +58,9 @@ def registry_rows(path, key):
             result.append(dict(pseudonym=hmac.new(key, row['device'].encode(), hashlib.sha256).hexdigest(),
                 activated=bool(row['activated']) and not bool(row['revoked']),
                 revoked=bool(row['revoked'] or row['invite_revoked']), version_code=version,
-                version_source=source, last_seen=instant(seen)))
+                version_source=source, last_seen=instant(seen),
+                metadata=dict(platform=row['platform'], app_version=row['app_version'], support_id=row['support_id'],
+                              observed_at=instant(row['last_seen']))))
         return result
     finally:
         database.rollback()
@@ -101,4 +103,5 @@ def collect(source, key=None, path=REGISTRY):
             status = 'unknown'
         server['services'][service] = status if status in ('active', 'inactive', 'failed', 'activating', 'deactivating', 'not_found') else 'unknown'
     data['server'] = server
+    data['observed_at'] = datetime.now(timezone.utc).isoformat()
     return data

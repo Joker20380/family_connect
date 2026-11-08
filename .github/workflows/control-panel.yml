@@ -1,0 +1,40 @@
+name: Control panel
+on:
+  push:
+    paths: ['control_plane/**', '.github/workflows/control-panel.yml']
+  pull_request:
+    paths: ['control_plane/**', '.github/workflows/control-panel.yml']
+jobs:
+  panel:
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:17-alpine@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73
+        env:
+          POSTGRES_USER: fc_control_plane
+          POSTGRES_DB: fc_control_plane
+          POSTGRES_PASSWORD: synthetic-ci-panel-password-only
+        ports: ['5432:5432']
+        options: --health-cmd pg_isready --health-interval 3s --health-retries 20
+    env:
+      CONTROL_PLANE_MODE: synthetic
+      DJANGO_SECRET_KEY: synthetic-ci-panel-key-not-for-installation-000000000000
+      POSTGRES_PASSWORD: synthetic-ci-panel-password-only
+      POSTGRES_HOST: 127.0.0.1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install --require-hashes -r control_plane/requirements.lock
+      - name: Migrations and console/fleet regression
+        working-directory: control_plane
+        run: |
+          python manage.py check
+          python manage.py makemigrations --check --dry-run
+          python -m pytest -q tests
+      - name: Build the actual allowlisted panel
+        run: |
+          python control_plane/prepare_local.py
+          docker build -t fc-panel-ci control_plane/.local/build-context
+          docker run --rm --env-file control_plane/.env fc-panel-ci python manage.py check

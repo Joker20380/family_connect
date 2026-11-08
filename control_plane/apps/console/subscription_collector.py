@@ -33,7 +33,7 @@ def canonical_modules(archive):
         sys.path.pop(0)
 
 
-def collect_subscriptions(config, registry, key):
+def collect_subscriptions(config, registry, key, *, include_history=False):
     observed = int(time.time())
     result = dict(schema=1, scope='production', source='gateway-ru', observed_at=observed,
                   status='unavailable', runtime_sha256=None, devices=[])
@@ -69,6 +69,16 @@ def collect_subscriptions(config, registry, key):
                         ('event:' + value['event']['event_id']).encode(), hashlib.sha256).hexdigest()
                 rows.append(entry)
             result.update(status='ok', devices=rows)
+            if include_history:
+                events = database.execute('SELECT event_id,device,event_type,occurred_at,previous_state,new_state,result '
+                    'FROM paid_beta_events WHERE result=? ORDER BY occurred_at DESC,event_id DESC LIMIT 1001', ('APPLIED',)).fetchall()
+                history = []
+                for event in events[:1000]:
+                    value = dict(event)
+                    value['pseudonym'] = hmac.new(key, value.pop('device').encode(), hashlib.sha256).hexdigest()
+                    value['event_id'] = hmac.new(key, ('event:' + value['event_id']).encode(), hashlib.sha256).hexdigest()
+                    history.append(value)
+                result.update(schema=2, history=dict(events=history, truncated=len(events) > 1000))
     except Exception:
         result.update(status='unavailable', devices=[])
     return result

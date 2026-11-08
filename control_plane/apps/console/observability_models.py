@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.core.validators import RegexValidator
 
 SCOPE = [('synthetic', 'Синтетическое демо'), ('production', 'Рабочие серверы · только чтение')]
 
@@ -12,6 +13,7 @@ class SubscriptionSnapshot(models.Model):
     status = models.CharField(max_length=16)
     runtime_sha256 = models.CharField(max_length=64, null=True)
     devices = models.JSONField(default=list)
+    history = models.JSONField(null=True)
 
     class Meta:
         ordering = ['-observed_at', '-pk']
@@ -44,6 +46,7 @@ class InventorySnapshot(models.Model):
 
     class Meta:
         ordering = ['-observed_at']
+        indexes = [models.Index(fields=['scope', 'source', 'imported_at'])]
         verbose_name = 'снимок инвентаризации'
         verbose_name_plural = 'снимки инвентаризации'
 
@@ -57,11 +60,51 @@ class InventoryDevice(models.Model):
     version_source = models.CharField('Источник версии', max_length=24,
         choices=[('support', 'Отчёт поддержки'), ('readiness_ack', 'Подтверждение готовности'), ('unknown', 'Нет данных')])
     last_seen = models.DateTimeField('Последний отчёт устройства', null=True)
+    metadata = models.JSONField(default=dict)
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['snapshot', 'pseudonym'], name='unique_inventory_device')]
+        indexes = [models.Index(fields=['pseudonym', 'snapshot'])]
         verbose_name = 'устройство в снимке'
         verbose_name_plural = 'устройства в снимках'
+
+
+class DeviceLabel(models.Model):
+    pseudonym = models.CharField(max_length=64, unique=True, validators=[RegexValidator(r'^[a-f0-9]{64}$')])
+    label = models.CharField('Локальное название', max_length=120)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'локальная метка рабочего устройства'
+        verbose_name_plural = 'локальные метки рабочих устройств'
+
+
+class MeasurementSnapshot(models.Model):
+    source = models.CharField(max_length=32)
+    observed_at = models.DateTimeField()
+    imported_at = models.DateTimeField(auto_now_add=True)
+    digest = models.CharField(max_length=64, unique=True)
+    node = models.JSONField(null=True)
+    devices = models.JSONField(default=list)
+    awg_status = models.CharField(max_length=16)
+    unknown_peers = models.PositiveIntegerField(null=True)
+    tcp_status = models.CharField(max_length=20)
+    mesh_status = models.CharField(max_length=20)
+
+    class Meta:
+        default_permissions = ('view',)
+        indexes = [models.Index(fields=['source', 'observed_at'])]
+
+
+class SubscriptionEventObservation(models.Model):
+    event_id = models.CharField(max_length=64, unique=True)
+    pseudonym = models.CharField(max_length=64, db_index=True)
+    occurred_at = models.DateTimeField(db_index=True)
+    details = models.JSONField()
+    imported_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        default_permissions = ('view',)
 
 
 class ServerObservation(models.Model):

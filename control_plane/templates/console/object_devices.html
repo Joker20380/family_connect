@@ -1,0 +1,6 @@
+{% extends 'console/base.html' %}{% block title %}Устройства{% endblock %}{% block content %}
+<div class="page-heading"><div><p class="eyebrow">РАБОЧИЙ РЕЕСТР</p><h1>Устройства</h1><p class="subtitle">Одна карточка устройства — подписка, серверы и история вместе.</p></div><span class="readonly-label">{{ total }} в текущем выборе</span></div>
+{% include 'console/object_freshness.html' %}{% include 'console/object_filters.html' %}
+<section class="panel">{% include 'console/object_device_table.html' with rows=page %}</section>
+<nav class="pagination" aria-label="Страницы">{% if page.has_previous %}<a href="?{{ querystring }}&page={{ page.previous_page_number }}">Назад</a>{% endif %}<span>{{ page.number }} / {{ page.paginator.num_pages }}</span>{% if page.has_next %}<a href="?{{ querystring }}&page={{ page.next_page_number }}">Далее</a>{% endif %}</nav>
+{% endblock %}

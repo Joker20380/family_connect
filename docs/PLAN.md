@@ -2,6 +2,21 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected CONTROL-PANEL-REFERENCE-1 — cohesive operator objects.**
+Dependency: current main501c94bd, installed Django/PostgreSQL observation panel and
+unchanged HMAC/source pins. Gate: one production device URL, bidirectional server
+links, deduplicated canonical events, honest rate/reset/gap calculations, separate
+source freshness/errors; locked focused/packaged tests, authenticated1440/390px
+visual journeys, data-preserving local update, ordinary green CI/review/merge.
+TCP/MESH missing per-user metrics stay explicit. No production transport changes,
+Android/phone/G4/entry/renewal/updater work; stop after panel handoff.
+Implementation/local installation and object journeys complete;248 packaged tests
+PASS. Final hosted checks and ordinary merge are recorded in the PR receipt, not
+followed by another product task or cosmetic CI-invalidating commit.
+[Scope, sources and evidence](releases/2026-11-08-control-panel-reference.md).
+
+### Earlier selected task — closed source/package checkpoint
+
 **Selected ANDROID-CONSOLIDATED-CANDIDATE — beta121 source/package integration.**
 Dependencies: main93102333/PR1–9, coldd3cf49c7 and frozen120 evidence. Gate: combine
 subscription and cold without changing UI60/settings/trust; strict original-receipt

@@ -17,7 +17,7 @@ def test_authentication_required(console, client, path):
     assert result.status_code == 302 and '/admin/login/' in result.url
 
 
-@pytest.mark.parametrize('path', ['/', '/devices/', '/payments/', '/operations/', '/audit/', '/releases/', '/analytics.json', '/admin/'])
+@pytest.mark.parametrize('path', ['/demo/', '/devices/', '/payments/', '/operations/', '/audit/', '/releases/', '/analytics.json', '/admin/'])
 def test_staff_pages_are_local_and_synthetic(console, client, path):
     client.force_login(console)
     result = client.get(path)
