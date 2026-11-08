@@ -107,6 +107,8 @@ def accepted_prebuild(args):
         raise ValueError('prebuild contains an old locator')
     if payload['assets/control-anchor.pub'].strip() != args.anchor.read_bytes().strip():
         raise ValueError('APK and authority trust differ')
+    if accepted['version_code'] == 121 and digest(args.verifier.read_bytes()) != accepted['verifier_sha256']:
+        raise ValueError('unqualified consolidated locator verifier')
     return accepted, receipt, payload
 
 

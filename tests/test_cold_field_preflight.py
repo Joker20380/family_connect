@@ -126,6 +126,21 @@ def test_historical_qualification_bytes_unchanged():
     assert json.loads(original)['verification_sha256'] == '48eab8c49462e3feb8c1d819db037c909ea92129eadc5915f073436275f466bb'
 
 
+def test_121_finalizer_itself_pins_verifier_not_only_operator_preflight(tmp_path, monkeypatch):
+    args = synthetic_inputs(tmp_path, monkeypatch)
+    accepted = finalizer.release_inputs(args)
+    receipt = json.loads(args.verification.read_bytes())
+    receipt['version_code'] = 121
+    args.verification.write_text(json.dumps(receipt))
+    accepted.update(version_code=121, version='0.1.18-beta121',
+                    verification_sha256=finalizer.digest(args.verification.read_bytes()))
+    monkeypatch.setattr(finalizer, 'release_inputs', lambda args: accepted)
+    assert finalizer.accepted_prebuild(args)[0]['version_code'] == 121
+    args.verifier.write_bytes(b'unaccepted verifier')
+    with pytest.raises(ValueError, match='unqualified consolidated locator verifier'):
+        finalizer.accepted_prebuild(args)
+
+
 def test_upgrade_fixtures_keep_exact_119_and_120_vault_formats():
     root = Path(__file__).resolve().parents[1]/'clients/android/app/src/main/java/com/familyconnect/app'
     historical = {
