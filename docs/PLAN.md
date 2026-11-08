@@ -2,6 +2,16 @@
 
 ## Current engineering priority / Текущий critical path
 
+**8 November continuation: same owner operation, no second entry.**
+Fresh remote main93102333 and cold843457e verified; preserve PR1–9 production changes.
+Actual beta119/API31/NL1/MESH/VPN OFF and immutable accepted kit pass read-only checks.
+Current phone is on Wi-Fi with valid readiness; next manual step is mobile-only setup.
+Then verify the existing vault in memory, start one short entry, issue a fresh locator,
+finalize only its asset, sign/install in place and perform one ordinary Connect; preserve
+cache and report WARM/COLD factually. Frozen120 does not contain subscription UI119.
+Final corrected G4 readback is FULL_CORE_PATH_PASS/exit0; do not run another G4.
+[Current evidence and pending gates](releases/2026-11-07-cold-field-delivery.md#owner-api31-resumption-8-november).
+
 **In progress: authorized owner API31/119→120 field operation, awaiting phone setup.**
 The owner selected their connected API31 phone; this is not the original API28 case.
 Exact kit, actual phone signer/root, current NL1/RU trust and device admission pass

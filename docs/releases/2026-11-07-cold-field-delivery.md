@@ -375,3 +375,34 @@ COLD_OR_WARM=valid cache present, WARM if used; FIELD_PASS_OR_FAIL=NOT_RUN;
 CLEANUP=no started entry/connections, own check processes completed. The entry lifetime
 and locator countdown have not begun. Next action is the coordinated operation, not
 another build, release gate or documentation-only acceptance.
+
+### Owner API31 resumption 8 November
+
+Same authorized operation, not a second entry. Remote main
+`931023334ebf7419d0e7f2e976d99409b09b6cb5` and cold branch checkpoint
+`843457e1cdaeada84b1222a90e7083e6053af0b7` verified; dirty primary checkout and
+PR1–9 production changes preserved. The cold branch is not a server rollout snapshot.
+**Frozen beta120 lacks subscription UI119 and is not a general user update.**
+
+Fresh read-only preflight at06:57UTC confirms the existing Redmi Note9 Pro/API31,
+exact installed beta119/code119 digest52a9847b…d92d, sole accepted signer/root,
+NL1/MESH selection, VPN OFF and Wi-Fi ON. Current NL1/RU trust, floors, existing
+device admission and ordinary verified HTTPS to the authority agree. Current public
+gateway RPC validates key/certificate custody without exporting a key. The old
+maintenance config rejected `PROFILE_LOCATOR_CHANGED`; discovery found the current
+matching config and its read-only RPC passed. No config, profile or floor was changed.
+Immutable CI55525859 prebuild and server3c0487eb hashes still match their receipt.
+Valid phone readiness expires2026-11-08T09:14:28Z; cache is preserved and any use of
+it must be classified WARM. Old7November expiries are not reused as authorization.
+
+Existing corrected G4c8eb8b9 on bfff97d now has final `FULL_CORE_PATH_PASS`, exit0,
+two committed renewals and completed cleanup. Final receipt time is
+2026-11-06T18:14:32.758Z; stopped container exit0 at18:14:35.056Z; test log reports
+1passed in27102.27s. This was one read of retained evidence, not a new run or cyclic
+poll. Scope remains isolated core full path, not Telemost/systemd/Android or cold field.
+
+Private originals and safe summaries are retained in the operator handoff; no identity,
+Support ID, keys or raw logs are included here. Fresh vault verification remains pending
+the protected local dialog. Entry remains inactive: no locator, signature, install or
+Connect has started. Next is owner mobile-only setup, followed by the same bounded
+operation and one ordinary Connect. No paid, renewal, G4 or general updater change.
