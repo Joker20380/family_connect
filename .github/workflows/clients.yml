@@ -103,10 +103,12 @@ jobs:
           arch: x86_64
           target: google_apis
           disable-animations: true
+          emulator-options: -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -dns-server 1.1.1.1
           script: |
             bash -o pipefail -c 'python3 -u pilot/android-awg/run.py 2>&1 | tee android-emulator-runner.log'
             bash -o pipefail -c 'python3 -u pilot/android-awg/friends_ci.py 2>&1 | tee android-friends-runtime.log'
             bash -o pipefail -c 'python3 -u pilot/android-awg/consolidated_ci.py 2>&1 | tee android-consolidated-runtime.log'
+            python3 pilot/android-app-vpn/run.py --serial emulator-5554 --out "$RUNNER_TEMP/app-vpn-api35"
       - name: Publish bounded Android runtime summary
         if: always()
         run: python3 pilot/android-awg/report_ci.py
@@ -124,14 +126,37 @@ jobs:
           arch: x86_64
           target: default
           disable-animations: true
+          emulator-options: -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -dns-server 1.1.1.1
           script: |
             bash -o pipefail -c 'python3 -u pilot/android-awg/run.py 2>&1 | tee android-legacy-emulator-runner.log'
             bash -o pipefail -c 'python3 -u pilot/android-awg/friends_ci.py --legacy 2>&1 | tee android-legacy-friends-runtime.log'
+            python3 pilot/android-app-vpn/run.py --serial emulator-5554 --out "$RUNNER_TEMP/app-vpn-api27"
       - name: Publish bounded Android 8.1 runtime summary
         if: always()
         run: python3 pilot/android-awg/report_ci.py
       - name: Confirm control conformance on Android 8.1 runtime
         run: python3 pilot/android-awg/report_control_ci.py
+      - name: Android 9 per-app routing compatibility
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 28
+          arch: x86_64
+          target: default
+          disable-animations: true
+          emulator-options: -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -dns-server 1.1.1.1
+          script: python3 pilot/android-app-vpn/run.py --serial emulator-5554 --out "$RUNNER_TEMP/app-vpn-api28"
+      - name: Save per-app routing receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-app-vpn-routing
+          path: |
+            ${{ runner.temp }}/app-vpn-api*/instrumentation.log
+            ${{ runner.temp }}/app-vpn-api*/routing.json
+            ${{ runner.temp }}/app-vpn-api*/automatic.json
+            ${{ runner.temp }}/app-vpn-api*/owner-health.json
+            ${{ runner.temp }}/app-vpn-api*/package-removal.json
+            ${{ runner.temp }}/app-vpn-api*/screen.json
       - name: Build pinned restricted Android native
         shell: bash
         run: |

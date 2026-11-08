@@ -11,6 +11,7 @@ final class NativeRestricted {
     static native boolean attach(long handle, int tunFd);
     static native int state(long handle);
     static native String stats(long handle);
+    static native String dns(long handle,String query,int budgetMillis);
     static native String readiness(String directory);
     static native boolean validateDelivery(byte[] response, byte[] publicIdentity, byte[] anchor);
     static native int validationCode(byte[] response, byte[] publicIdentity, byte[] anchor);

@@ -2,6 +2,18 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected ANDROID-APP-VPN — per-application Android VPN.**
+Owner explicitly removes physical cold/whitelist as a priority blocker without changing
+measurements. Gate: one validated local policy, immutable active snapshot across all
+engines/Auto/recovery/guard, pending until next explicit Connect; two distinct-UID apps
+prove VPN/direct DNS/verified HTTPS and IPv6 contract on API27/35 plus targeted28.
+Preserve data on restart/update; empty INCLUDE/package races fail closed. Add only the
+Apps and VPN screen, keep UI60; ordinary CI/review/merge and immutable122 candidate.
+Production, owner phone, paid policy and adjacent tasks remain outside this task.
+[Implementation and runtime evidence](releases/2026-11-08-android-app-vpn.md).
+
+### Previous selected task — completed local panel
+
 **Selected CONTROL-PANEL-REFERENCE-1 — cohesive operator objects.**
 Dependency: current main501c94bd, installed Django/PostgreSQL observation panel and
 unchanged HMAC/source pins. Gate: one production device URL, bidirectional server
@@ -669,12 +681,12 @@ not full CI or accepted A. Actual traffic/restart evidence and artifact identiti
 [report](releases/2026-11-05-mesh-online-renewal.md#frozen8eeb9f0-checkpoint-incomplete-a).
 [Current package contract](../deploy/friends/restricted/maintenance/ONLINE_RUNTIME.md).
 
-**ANDROID-APP-VPN (bounded Android task, selected by owner, NOT STARTED).** Dependency:
-accepted A/G1–G4 checkpoint. One local ALL/INCLUDE/EXCLUDE policy and immutable per-Connect
+**ANDROID-APP-VPN (bounded Android task, selected8 November, IN PROGRESS).** Dependency:
+owner-accepted current launch; historical measurements unchanged. One local ALL/INCLUDE/EXCLUDE policy and immutable per-Connect
 snapshot across AWG/TCP/MESH/Auto/guard; active edits remain pending until explicit next
 Connect. Gate: API27/API35 distinct-UID VPN/direct DNS/verified-HTTPS/IPv6 routing evidence,
 recovery/guard/empty-INCLUDE/package-removal/update tests and renewal-delivery regression.
-No source work in parallel with unfinished A. No production, owner-phone installation,
+Cold/whitelist no longer blocks this owner-selected task. No production, owner-phone installation,
 publication, release/catalog/timer/admission/cohort/paid change in either task.
 
 Earlier emergency-only checkpointb1d17d3 (package blocker superseded above):

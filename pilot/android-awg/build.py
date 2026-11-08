@@ -4,7 +4,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2];OUT=ROOT/'clients/android/awg-generated'
 parser=argparse.ArgumentParser()
 parser.add_argument('--out',type=Path,default=OUT)
-parser.add_argument('--abi',choices=('all','arm64-v8a'),default='all')
+parser.add_argument('--abi',choices=('all','arm64-v8a','x86_64'),default='all')
 args=parser.parse_args();OUT=args.out.resolve()
 os.environ.pop('YANDEX_TELEMOST_OAUTH_TOKEN',None)
 ANDROID='5420011143f9dd42831cc95fcdb0d6ac9bde868f';ENGINE='b5928efb6ca19f0153958460c3d141f04abc5c2e'
@@ -64,6 +64,7 @@ with tempfile.TemporaryDirectory(prefix='fc-android-awg-') as temporary:
  text=text.replace('                vpnService.get(0, TimeUnit.NANOSECONDS).stopSelf();', '                final VpnService stoppingService=vpnService.get(0, TimeUnit.NANOSECONDS);\n                pendingShutdown=stoppingService.destroyed;\n                stoppingService.stopSelf();\n                awaitShutdown();')
  text=text.replace('public static class VpnService extends android.net.VpnService {', 'public static class VpnService extends android.net.VpnService {\n        public final java.util.concurrent.CompletableFuture<Void> destroyed=new java.util.concurrent.CompletableFuture<>();')
  text=text.replace('            super.onDestroy();', '            super.onDestroy();\n            destroyed.complete(null);')
+ text=text.replace('public final class GoBackend implements Backend {', 'public final class GoBackend implements Backend {\n    public int ownedHandle() { return currentTunnelHandle; }')
  backend.write_text(text)
  native=android/'tunnel/tools/libwg-go';api=native/'api-android.go';text=api.read_text()
  for imp in ('net','os','os/signal','runtime','runtime/debug','strings'):text=text.replace('\n\t"'+imp+'"','')
@@ -82,17 +83,28 @@ with tempfile.TemporaryDirectory(prefix='fc-android-awg-') as temporary:
   text=text[:brace+1]+'\n handlesMu.'+lock+'();defer handlesMu.'+unlock+'()'+text[brace+1:]
  start=text.index('func awgVersion()');end=text.index('\nfunc main()',start);text=text[:start]+'func awgVersion() *C.char {return C.CString("FamilyConnect/'+ENGINE+'") }\n'+text[end:];api.write_text(text)
  text=api.read_text().replace(' handlesMu.Lock();defer handlesMu.Unlock()',' handlesMu.Lock();defer handlesMu.Unlock()\n if tcpRunning.Load(){unix.Close(int(tunFd));return -1}',1)
+ text=text.replace('device *device.Device', 'device *device.Device\n health *healthTun')
+ text=text.replace('device.NewDevice(tun, conn.NewStdNetBind(), logger)', 'device.NewDevice(probeTun, conn.NewStdNetBind(), logger)')
+ text=text.replace('\tdevice := device.NewDevice(probeTun', '\tprobeTun := newHealthTun(tun)\n\tdevice := device.NewDevice(probeTun')
+ text=text.replace('TunnelHandle{device: device}', 'TunnelHandle{device: device, health: probeTun}')
  api.write_text(text.replace('github.com/amnezia-vpn/amneziawg-go/', 'github.com/amnezia-vpn/amneziawg-go/v3/'))
+ shutil.copy2(ROOT/'pilot/android-awg/health-tun.go',native/'health-tun.go')
+ shutil.copy2(ROOT/'pilot/android-awg/health-android.go',native/'health-android.go')
  for name in ('tcp-android.go','tcp-jni.c'):shutil.copy2(ROOT/'pilot/android-tcp'/name,native/name)
  run('go','mod','edit','-replace','github.com/xtls/xray-core='+str(xray),cwd=native)
  run('go','mod','edit','-require','github.com/xtls/xray-core@v0.0.0',cwd=native)
  run('go','mod','edit','-droprequire','github.com/amnezia-vpn/amneziawg-go',cwd=native)
  run('go','mod','edit','-require','github.com/amnezia-vpn/amneziawg-go/v3@v3.0.0','-replace','github.com/amnezia-vpn/amneziawg-go/v3='+str(engine),cwd=native)
  env=os.environ.copy();env['GOTOOLCHAIN']='local';tidy(native,env)
+ shutil.copy2(ROOT/'pilot/android-awg/health-tun_test.go',native/'health-tun_test.go')
+ run('go','test','-race','-count=1','health-tun.go','health-tun_test.go',cwd=native,env=env)
  run('go','build','-trimpath','-buildvcs=false','-o',str(OUT/'xray-peer'),'./main',cwd=xray,env=env)
  # Same in-memory encrypted UDP echo peer used for isolated Windows acceptance, portable source.
  peer=engine/'cmd/fc-android-peer';peer.mkdir(parents=True);(peer/'main.go').write_text((ROOT/'pilot/android-awg/peer.go').read_text().replace('github.com/amnezia-vpn/amneziawg-go/', 'github.com/amnezia-vpn/amneziawg-go/v3/'))
  run('go','build','-trimpath','-buildvcs=false','-o',str(OUT/'peer-fixture'),'./cmd/fc-android-peer',cwd=engine,env=env)
+ app_peer=engine/'cmd/fc-app-vpn-peer';app_peer.mkdir(parents=True)
+ (app_peer/'main.go').write_bytes((ROOT/'pilot/android-app-vpn/peer.go').read_bytes())
+ run('go','build','-trimpath','-buildvcs=false','-o',str(OUT/'app-vpn-peer'),'./cmd/fc-app-vpn-peer',cwd=engine,env=env)
  wg=temp/'wireguard'
  checkout('https://github.com/WireGuard/wireguard-go','ecfc5a8d54462e18e13c72173e2623d16d8e25a0',wg)
  wgpeer=wg/'cmd/fc-android-peer';wgpeer.mkdir(parents=True)
@@ -112,6 +124,8 @@ with tempfile.TemporaryDirectory(prefix='fc-android-awg-') as temporary:
  gvisor=Path(subprocess.check_output(['go','list','-m','-f','{{.Dir}}','gvisor.dev/gvisor'],cwd=native,env=env,text=True).strip());shutil.copy2(gvisor/'LICENSE',licenses/'gVisor.txt')
  shutil.copy2(android/'COPYING',licenses/'Android.txt');shutil.copy2(engine/'LICENSE',licenses/'Engine.txt')
  manifest={'android_revision':ANDROID,'engine_revision':ENGINE,'transport_version':'3.1','engine_patch_sha256':hashlib.sha256((ROOT/'pilot/awg31/patches/0001-refresh-s4-after-tun-read.patch').read_bytes()).hexdigest(),'interface_patch_sha256':hashlib.sha256((ROOT/'pilot/android-awg/awg31-interface.patch').read_bytes()).hexdigest(),'go':'1.26.1','ndk':'28.2.13676358','abis':hashes,'jni_source_sha256':hashlib.sha256(api.read_bytes()).hexdigest(),'public_uapi':False,'root_backend':False,'single_runtime':True,'xray_revision':'d2758a023cd7f4174a5a5fa4ff66e487d4342ba0','tcp_source_sha256':hashlib.sha256((native/'tcp-android.go').read_bytes()).hexdigest(),'tcp_jni_sha256':hashlib.sha256((native/'tcp-jni.c').read_bytes()).hexdigest(),'go_sum_sha256':hashlib.sha256((native/'go.sum').read_bytes()).hexdigest(),'wg_peer_revision':'ecfc5a8d54462e18e13c72173e2623d16d8e25a0'}
+ manifest['health_tun_sha256']=hashlib.sha256((native/'health-tun.go').read_bytes()).hexdigest()
+ manifest['health_android_sha256']=hashlib.sha256((native/'health-android.go').read_bytes()).hexdigest()
  manifest['source_revision']=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
  manifest['builder_sha256']=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
  manifest['ndk']=dict(line.strip().split(' = ',1) for line in (Path(os.environ['ANDROID_NDK_HOME'])/'source.properties').read_text().splitlines() if ' = ' in line)['Pkg.Revision']

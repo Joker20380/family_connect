@@ -128,6 +128,17 @@ int32_t isolatedRestrictedStop(int64_t handle) {
 }
 
 struct isolatedRestrictedStatsArgs { int64_t handle; char * result; };
+struct isolatedRestrictedDnsArgs { int64_t handle; struct text query; int32_t millis; char *result; };
+static void *isolatedRestrictedDnsInvoke(void *opaque) {
+    struct isolatedRestrictedDnsArgs *arguments=opaque;
+    arguments->result=fcRestrictedDns(arguments->handle,arguments->query,arguments->millis);
+    return NULL;
+}
+char * isolatedRestrictedDns(int64_t handle,struct text query,int32_t millis) {
+    struct isolatedRestrictedDnsArgs arguments={.handle=handle,.query=query,.millis=millis};
+    if(!dispatch(isolatedRestrictedDnsInvoke,&arguments))return NULL;
+    return arguments.result;
+}
 static void *isolatedRestrictedStatsInvoke(void *opaque) {
     struct isolatedRestrictedStatsArgs *arguments = opaque;
     arguments->result = fcRestrictedStats(arguments->handle);

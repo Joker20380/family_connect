@@ -31,6 +31,13 @@ JNIEXPORT jlong JNICALL Java_com_familyconnect_app_NativeRestricted_beginReady(J
  if(raw)(*env)->ReleaseByteArrayElements(env,response,raw,JNI_ABORT);if(secret)(*env)->ReleaseByteArrayElements(env,identity,secret,JNI_ABORT);if(root)(*env)->ReleaseByteArrayElements(env,anchor,root,JNI_ABORT);if(dns)(*env)->ReleaseStringUTFChars(env,resolver,dns);return result;
 }
 JNIEXPORT jstring JNICALL Java_com_familyconnect_app_NativeRestricted_readiness(JNIEnv *env,jclass cls,jstring directory){if(!directory)return NULL;const char *path=(*env)->GetStringUTFChars(env,directory,0);if(!path)return NULL;char *raw=fcRestrictedReadiness((struct text){path,(*env)->GetStringUTFLength(env,directory)});(*env)->ReleaseStringUTFChars(env,directory,path);if(!raw)return NULL;jstring result=(*env)->NewStringUTF(env,raw);free(raw);return result;}
+JNIEXPORT jstring JNICALL Java_com_familyconnect_app_NativeRestricted_dns(JNIEnv *env,jclass cls,jlong handle,jstring query,jint millis){
+ if(!query||(*env)->GetStringUTFLength(env,query)>1024)return NULL;
+ const char *text=(*env)->GetStringUTFChars(env,query,NULL);if(!text)return NULL;
+ char *answer=fcRestrictedDns(handle,(struct text){text,(*env)->GetStringUTFLength(env,query)},millis);
+ (*env)->ReleaseStringUTFChars(env,query,text);if(!answer)return NULL;
+ jstring result=(*env)->NewStringUTF(env,answer);free(answer);return result;
+}
 JNIEXPORT jlong JNICALL Java_com_familyconnect_app_NativeRestricted_begin(JNIEnv *env,jclass cls,jstring directory,jstring control,jstring resolver,jlong budget,jobject service){
  if(!directory||!control||!resolver||!service)return 0;
  const char *dir=(*env)->GetStringUTFChars(env,directory,NULL),*url=(*env)->GetStringUTFChars(env,control,NULL),*dns=(*env)->GetStringUTFChars(env,resolver,NULL);

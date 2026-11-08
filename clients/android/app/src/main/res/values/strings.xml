@@ -1,4 +1,21 @@
 <resources>
+    <string name="app_vpn_title">Apps and VPN</string>
+    <string name="app_vpn_warning">Apps outside the VPN use your regular connection and remain subject to your network restrictions.</string>
+    <string name="app_vpn_scope">Only this Android profile is shown. Apps sharing a UID share one rule. A work profile has its own VPN. System “Block connections without VPN” may also block excluded apps; this screen does not change it.</string>
+    <string name="app_vpn_pending">Applies on the next connection; the current session is unchanged</string>
+    <string name="app_vpn_next">Saved choices apply on the next explicit Connect</string>
+    <string name="app_vpn_invalid">Cannot connect with this selection. Select at least one installed, enabled app in Only selected mode. Remove unavailable selections or save a valid policy.</string>
+    <string name="app_vpn_loading">Reading apps locally…</string>
+    <string name="app_vpn_search">Search name or package</string>
+    <string name="app_vpn_selected">Selected only</string>
+    <string name="app_vpn_save">Save selection</string>
+    <string name="app_vpn_saved">Selection saved locally</string>
+    <string name="app_vpn_back">Back</string>
+    <string name="app_vpn_missing">Not installed or unavailable</string>
+    <string name="app_vpn_system">System component</string>
+    <string name="app_vpn_shared">Shared UID · one rule for the entire group</string>
+    <string-array name="app_vpn_modes"><item>All apps</item><item>Only selected through VPN</item><item>All except selected</item></string-array>
+    <string-array name="app_vpn_categories"><item>All visible apps</item><item>User apps</item><item>System components</item></string-array>
     <string name="subscription_title">Subscription and access</string>
     <string name="subscription_loading">Reading the last confirmed status…</string>
     <string name="subscription_unknown">No confirmed subscription status is available. Device activation does not confirm payment.</string>
@@ -287,4 +304,5 @@
     <string name="diagnostics_send">Send diagnostics</string>
     <string name="diagnostics_privacy">Share recent connection states, failure codes, app version and random support identifiers with someone you choose. No browsing history, messages, destinations or credentials are included. Nothing is uploaded automatically.</string>
     <string name="diagnostics_failed">Diagnostics could not be exported. Your connection is unchanged.</string>
+    <string name="app_vpn_unsaved">Unsaved changes. Save to use them on the next connection.</string>
 </resources>

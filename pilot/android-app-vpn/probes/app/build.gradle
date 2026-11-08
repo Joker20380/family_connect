@@ -1,0 +1,13 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'com.familyconnect.appprobe'
+    compileSdk 35
+    defaultConfig { applicationId 'com.familyconnect.appprobe'; minSdk 27; targetSdk 35; versionCode 1; versionName 'synthetic-routing-1' }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    flavorDimensions 'identity'
+    productFlavors {
+        alpha { dimension 'identity'; applicationIdSuffix '.alpha' }
+        beta { dimension 'identity'; applicationIdSuffix '.beta' }
+    }
+    sourceSets { main { assets.srcDir providers.gradleProperty('fcProbeAssets').get() } }
+}
