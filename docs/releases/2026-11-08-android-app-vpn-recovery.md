@@ -40,6 +40,25 @@ cleanup-required. Старый unclaimed destroy не меняет новую п
 
 ## Проверки и статус поставки
 
+Первый hosted runtime выявил регрессию отмены: общий owner-monitor удерживается
+worker во время подключения. Стек локального повтора показал main в ожидании
+owner-monitor, а worker — main-thread остановки TcpVpnService;8323ms нарушили
+существующий пятисекундный cancel gate. Отмена собственных sockets/worker теперь
+подаётся сразу, а owned publication/cleanup ставятся на worker, не блокируя main.
+Короткая синхронизация токена admission отделена от долгой операции, поэтому
+новый onCreate/неполучивший claim onDestroy не задерживают остановку движка.
+Освобождение ресурсов остаётся под проверкой владельца. Это не глобальный reset
+и не изменение cancel budget. Повтор использует изолированный normal_hint, который
+fixture восстанавливает; владельческие настройки не затрагиваются.
+Первичный отказ Auto и последующие отказы загрязнённого fixture сохранены в CI;
+исправление проверяется существующим настоящим AutoRuntimeTest и UI/service gate.
+Адресный native AutoRuntimeTest после исправления прошёл целиком, включая прежний
+cancel<5s, guard/exhaustion и system revoke. Новый concurrency-тест проверяет, что
+неполучивший claim lifecycle не ждёт долгую owned-операцию и не сбрасывает владельца.
+Повтор UI/service/двух UID и каталога также прошёл; общий локальный прогон прервался
+после7/10 на падении host OpenGL emulator (`null ctx`), а не на assertion приложения.
+Этот неполный прогон не объявлен PASS; полный результат требует hosted CI.
+
 На исходном debug122 тот же новый UI/service regression воспроизводит сохранённый
 `failed` после Save ALL → Disconnect → повторного Connect. Первая попытка запуска
 нового тестового APK с прежним target не загрузилась из-за нового catalog-класса;

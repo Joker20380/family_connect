@@ -10,22 +10,25 @@ final class ControlOperations {
     static final ControlOperations APP = new ControlOperations();
     interface Mutation { void run() throws Exception; }
     static final class Stale extends IllegalStateException { Stale() { super("Stale VPN owner"); } }
-    private Object session;
+    private volatile Object session;
+    private final Object admission = new Object();
     private Object attempt;
     void beginAttempt(Object owner) {
         Objects.requireNonNull(owner);
-        synchronized(ControlJournal.OWNER) { if(session==null)attempt=owner; }
+        synchronized(admission) { if(session==null)attempt=owner; }
     }
     void unclaimed(Object owner,Runnable action) {
         Objects.requireNonNull(owner);
-        synchronized(ControlJournal.OWNER) { if(session==null&&attempt==owner)action.run(); }
+        synchronized(admission) { if(session==null&&attempt==owner)action.run(); }
     }
     void claim(Object owner) throws IOException {
         Objects.requireNonNull(owner);
         synchronized (ControlJournal.OWNER) {
-            if (session != null && session != owner) throw new IOException("VPN cleanup still owns operations");
-            session = owner;
-            attempt = owner;
+            synchronized(admission) {
+                if (session != null && session != owner) throw new IOException("VPN cleanup still owns operations");
+                session = owner;
+                attempt = owner;
+            }
         }
     }
     void session(Object owner, Runnable action) {
@@ -37,7 +40,7 @@ final class ControlOperations {
     void release(Object owner) {
         synchronized (ControlJournal.OWNER) {
             if (owner == null || session != owner) throw new Stale();
-            session = null;
+            synchronized(admission) { session = null; }
         }
     }
     void requireOwner(Object owner) {

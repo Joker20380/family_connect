@@ -275,7 +275,7 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
     }
     reviewed_app_vpn_recovery_beta123 = {
         'MainActivity.java': 'ae04b97387cd9f67ce6e80bd01c31b411168e538c1c3a60a4516ab715aa0e4ad',
-        'ControlOperations.java': '3c1a7139c79ff0b000c775a8948cf18b21145e4eb7e06130f0acdd267a896482',
+        'ControlOperations.java': 'bfa026bd45010ce410a8ed5e82240d72a36f73ce4311835bc8e72d9d608d6626',
     }
     reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81,
                          **reviewed_gateway_readiness, **reviewed_slow_link_recovery,

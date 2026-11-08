@@ -62,11 +62,10 @@ public final class ConnectionService extends Service {
         if(intent==null){stopSelf();return START_NOT_STICKY;}
         startForeground(1,notification());
         if("disconnect".equals(intent.getAction())){
-            stopping=true;
-            if(claimed)owned(()->{forgetRequest(this);cancel();});
-            else ControlOperations.APP.unclaimed(operationOwner,()->{forgetRequest(this);status="off";});
+            interruptWork();
+            if(!claimed)ControlOperations.APP.unclaimed(operationOwner,()->{forgetRequest(this);status="off";});
             if(!started){stopSelf();return START_NOT_STICKY;}
-            worker.execute(()->{if(claimed)owned(this::stopConnection);else{unclaimedOff();main.post(this::stopSelf);}});
+            worker.execute(()->{if(claimed)owned(()->{forgetRequest(this);cancel();stopConnection();});else{unclaimedOff();main.post(this::stopSelf);}});
             return START_NOT_STICKY;
         }
         final boolean sync=intent!=null&&"sync-control".equals(intent.getAction());
@@ -179,7 +178,8 @@ public final class ConnectionService extends Service {
         try{ControlOperations.APP.session(operationOwner,action);}
         catch(ControlOperations.Stale ignored){/* Late callback belongs to a released service. */}
     }
-    private void cancel(){ConnectionTerminal.VPN.end(terminalAttempt,failed?ConnectionTerminal.Stage.FAILED:ConnectionTerminal.Stage.CANCELLED,false);AutomaticConnection connection=automaticConnection;if(connection!=null)connection.interrupt(ConnectivityOrchestrator.Failure.CANCELLED);rnsEnabled=false;ControlRnsAndroid transport=rnsCarrier;if(transport!=null)transport.cancel();stopping=true;status="disconnecting";healthStatus="off";VpnHealth h=health;if(h!=null)h.cancel();ControlTrafficHealth c=controlHealth;if(c!=null)c.cancel();}
+    private void interruptWork(){stopping=true;AutomaticConnection connection=automaticConnection;if(connection!=null)connection.interrupt(ConnectivityOrchestrator.Failure.CANCELLED);rnsEnabled=false;ControlRnsAndroid transport=rnsCarrier;if(transport!=null)transport.cancel();VpnHealth h=health;if(h!=null)h.cancel();ControlTrafficHealth c=controlHealth;if(c!=null)c.cancel();}
+    private void cancel(){interruptWork();ConnectionTerminal.VPN.end(terminalAttempt,failed?ConnectionTerminal.Stage.FAILED:ConnectionTerminal.Stage.CANCELLED,false);status="disconnecting";healthStatus="off";}
     private void schedule(Runnable action,int seconds){if(!stopping&&!closing)pending=worker.schedule(()->owned(action),seconds,TimeUnit.SECONDS);}
     private boolean cleanup(){
         managedExpiry=0;Runnable lease=leaseTask;if(lease!=null){main.removeCallbacks(lease);leaseTask=null;}ControlTrafficHealth c=controlHealth;if(c!=null)c.cancel();
@@ -367,9 +367,9 @@ public final class ConnectionService extends Service {
     private void notifyState(){if(!closing)getSystemService(NotificationManager.class).notify(1,notification());}
     @Override public void onDestroy(){
         closing=true;rnsEnabled=false;ControlRnsAndroid transport=rnsCarrier;if(transport!=null)transport.cancel();rnsWorker.shutdownNow();
-        if(claimed)owned(this::cancel);else stopping=true;
+        interruptWork();
         worker.execute(()->{
-            if(claimed)owned(()->{if(cleanup()){ControlOperations.APP.release(operationOwner);claimed=false;status="off";}});
+            if(claimed)owned(()->{cancel();if(cleanup()){ControlOperations.APP.release(operationOwner);claimed=false;status="off";}});
             else unclaimedOff();
         });
         worker.shutdown();stopForeground(STOP_FOREGROUND_REMOVE);super.onDestroy();

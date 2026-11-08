@@ -26,6 +26,22 @@ public class ControlOperationsTest {
         ops.session(owner,()->writes[0]++);assertEquals(2,writes[0]);
         ops.release(owner);ops.edit(()->{},()->writes[0]++);assertEquals(3,writes[0]);
     }
+    @Test public void unclaimedLifecycleDoesNotBlockOwnedEngineShutdown() throws Exception {
+        ControlOperations ops=new ControlOperations();Object owner=new Object(),rejected=new Object();ops.claim(owner);
+        ExecutorService pool=Executors.newFixedThreadPool(2);
+        CountDownLatch working=new CountDownLatch(1),finish=new CountDownLatch(1);
+        try {
+            Future<?> worker=pool.submit(()->ops.session(owner,()->{
+                working.countDown();try{assertTrue(finish.await(5,TimeUnit.SECONDS));}
+                catch(InterruptedException interrupted){throw new AssertionError(interrupted);}
+            }));
+            assertTrue(working.await(1,TimeUnit.SECONDS));
+            Future<?> lifecycle=pool.submit(()->{ops.beginAttempt(rejected);ops.unclaimed(rejected,()->fail("Retained owner reset"));});
+            lifecycle.get(1,TimeUnit.SECONDS);assertFalse(worker.isDone());finish.countDown();worker.get(1,TimeUnit.SECONDS);
+            ops.requireOwner(owner);ops.release(owner);
+            ops.unclaimed(rejected,()->fail("Rejected destroy survived owner release"));
+        } finally {finish.countDown();pool.shutdownNow();}
+    }
     @Test public void oldCleanupCannotReleaseNewSession() throws Exception {
         ControlOperations ops=new ControlOperations();Object old=new Object(),current=new Object();
         ops.claim(old);ops.release(old);ops.claim(current);
