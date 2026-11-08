@@ -19,6 +19,7 @@ final class FriendsAccessAndroid {
     private volatile HttpsURLConnection pending;
     private volatile boolean cancelled;
     private volatile ControlRnsAndroid readinessRelay;
+    private volatile ProvisioningCarrier provisioningCarrier;
     private ReadinessFetchTrace fetchTrace;
     static final class Denied extends FriendsReadinessProtocol.AuthorizationFailure {}
     static final class Conflict extends Exception {}
@@ -28,7 +29,8 @@ final class FriendsAccessAndroid {
     FriendsAccessAndroid(Context context,long deadline){this(context,true);this.deadline=deadline;}
     FriendsAccessAndroid(Context context,long deadline,ReadinessFetchTrace trace){this(context,deadline);fetchTrace=trace;}
     FriendsAccessAndroid(Context context,ChatCarrier carrier){this(context,true);this.chatCarrier=carrier;this.deadline=android.os.SystemClock.elapsedRealtime()+60000;}
-    void cancel(){cancelled=true;HttpsURLConnection connection=pending;if(connection!=null)connection.disconnect();ControlRnsAndroid relay=readinessRelay;if(relay!=null)relay.cancel();}
+    void cancel(){cancelled=true;HttpsURLConnection connection=pending;if(connection!=null)connection.disconnect();ControlRnsAndroid relay=readinessRelay;if(relay!=null)relay.cancel();ProvisioningCarrier carrier=provisioningCarrier;if(carrier!=null)carrier.close();}
+    boolean usedProvisioning(){return provisioningCarrier!=null;}
     private int remaining(int maximum)throws IOException{
         long remaining=deadline-android.os.SystemClock.elapsedRealtime();
         if(cancelled)throw new IOException("Cancelled");
@@ -113,13 +115,28 @@ final class FriendsAccessAndroid {
     byte[] restrictedReadiness(ControlIdentity identity,OwnerPrewarmReceipt receipt,String gateway)throws Exception{
         try(ProvisioningTestGate.Permit permit=ProvisioningTestGate.enter(context)){
             permit.requireAvailable();
-            ReadinessBootstrapRoute route=new ReadinessBootstrapRoute(this::post,this::relayPost);
+            ReadinessBootstrapRoute route=new ReadinessBootstrapRoute(this::post,this::relayPost,(path,body,id)->{
+                remaining(1);
+                if(provisioningCarrier==null)synchronized(RestrictedVault.LOCK){
+                    byte[] usable=FriendsRestricted.cache(context,identity,gateway).usable(System.currentTimeMillis()/1000);
+                    if(usable!=null){java.util.Arrays.fill(usable,(byte)0);throw new FriendsReadinessProtocol.Unavailable();}
+                }
+                if(provisioningCarrier==null)provisioningCarrier=new ProvisioningCarrier(context,gateway,deadline,fetchTrace);
+                try{remaining(1);if(fetchTrace!=null)fetchTrace.request(path,ReadinessFetchTrace.Route.PROVISIONING);return provisioningCarrier.post(path,body,id);}
+                catch(Exception failure){if(fetchTrace!=null)fetchTrace.failed(failure);provisioningCarrier.close();throw failure;}
+            });
             try{
                 byte[] result=FriendsReadinessProtocol.fetch(RestrictedGateway.route(route::post,gateway),identity,receipt);
+                if(provisioningCarrier!=null){
+                    try(ControlIdentity current=new FriendsIdentityVault(context).load()){
+                        remaining(1);
+                        if(!java.security.MessageDigest.isEqual(current.publicIdentity(),identity.publicIdentity())||!current.wireguardPublicKey().equals(identity.wireguardPublicKey()))throw new SecurityException("Provisioning recipient changed");
+                    }catch(Exception failure){java.util.Arrays.fill(result,(byte)0);throw failure;}
+                }
                 if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.COMPLETE);
                 return result;
             }catch(Exception failure){if(fetchTrace!=null)fetchTrace.failed(failure);throw failure;}
-        }finally{closeReadinessRelay();}
+        }finally{closeReadinessRelay();ProvisioningCarrier carrier=provisioningCarrier;if(carrier!=null)carrier.close();}
     }
     void readinessAck(ControlIdentity identity,JsonObject receipt)throws Exception{
         readinessAck(identity,receipt,null);

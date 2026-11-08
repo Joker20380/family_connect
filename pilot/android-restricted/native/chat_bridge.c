@@ -2,12 +2,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-struct chat_text { const char *ptr; long len; };
-extern int64_t fcChatAcquire(struct chat_text,struct chat_text,struct chat_text,struct chat_text,uintptr_t);
-extern int32_t fcChatState(int64_t);
-extern void fcChatRelease(int64_t);
-extern int32_t fcChatOpen(int64_t,int32_t);
-extern char *fcChatRequest(int64_t,struct chat_text,struct chat_text,int32_t);
+#include "go_dispatch.h"
 
 JNIEXPORT jlong JNICALL Java_com_familyconnect_app_NativeRestricted_chatAcquire(JNIEnv *env,jclass cls,jbyteArray response,jbyteArray identity,jbyteArray anchor,jstring resolver,jobject protector){
  if(!response||!identity||!anchor||!resolver||!protector)return 0;

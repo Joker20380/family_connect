@@ -157,19 +157,19 @@ func (a *Auth) FetchConnection(ctx context.Context, roomURL, displayName string)
 
 	resp, err := boundedClient.Do(req)
 	if err != nil {
-		return info, errors.New("telemost: HTTP connection failed")
+		return info, connectionFailure("HTTP_CONNECT", "HTTP_TRANSPORT", 0, err)
 	}
 	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
-		return info, fmt.Errorf("%w: HTTP status %d", ErrAPI, resp.StatusCode)
+		return info, connectionFailure("HTTP_STATUS", "PROVIDER_HTTP", resp.StatusCode, ErrAPI)
 	}
 	dec := json.NewDecoder(io.LimitReader(resp.Body, 8<<20))
 	if err := dec.Decode(&info); err != nil {
-		return info, errors.New("telemost: invalid connection response")
+		return info, connectionFailure("HTTP_DECODE", "PROVIDER_RESPONSE", resp.StatusCode, err)
 	}
 	if info.RoomID == "" || info.PeerID == "" || info.Credentials == "" || !validSignalingURL(info.ClientConfig.MediaServerURL) {
-		return info, errors.New("telemost: connection response missing required fields")
+		return info, connectionFailure("HTTP_VALIDATE", "PROVIDER_RESPONSE", resp.StatusCode, nil)
 	}
 	return info, nil
 }

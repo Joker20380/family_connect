@@ -2,6 +2,18 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected ANDROID-CONSOLIDATED-CANDIDATE — beta121 source/package integration.**
+Dependencies: main93102333/PR1–9, coldd3cf49c7 and frozen120 evidence. Gate: combine
+subscription and cold without changing UI60/settings/trust; strict original-receipt
+preflight and manifest launcher regression; isolated119/120 storage preservation,
+mandatory Android/release CI, visual review, unsigned ARM64 inventory, ordinary PR
+review/merge. No production, phone, signing/publication, entry or paid-policy change.
+Final accepted bytes/results are pinned in the PR receipt, not a cosmetic post-CI
+head. Stop after candidate delivery; physical COLD and owner installation remain
+separately selected operations. [Contract](releases/2026-11-08-android-consolidated.md).
+
+### Earlier task checkpoints — not active NEXTs
+
 **Selected RU-TRANSPORT-RECOVERY-2 — bounded incident response.**
 Preserve first-stop evidence before mutation; distinguish historical UNKNOWN cause
 from reproduced diagnostic loss. Accepted RU stop/PID0/no jobs/start has restored
@@ -141,6 +153,229 @@ execution failures, and unfinished control/voice runs. Review these separately f
 the three repaired blockers; do not claim merge readiness or silently expand into
 renewal/bootstrap policy changes. Normal merge still requires all applicable checks.
 [Task evidence and completion gate](releases/2026-11-06-subscription-integration-1.md).
+
+**Completed8 November: authorized owner Wi-Fi experiment; stop at this result.**
+Owner chose Wi-Fi; one ordinary Connect on installed frozen120/API31 passed READY,
+DNS and verified HTTPS/NL1 egress. Existing identity/chat list and NL1/MESH/P1 settings
+preserved; VPN OFF and Wi-Fi ON restored. Cache was not cleared: WARM/direct-HTTPS,
+not mobile or cold acceptance. Entry was inactive at Connect after an operator launch
+error; that gate remains FAIL, despite successful normal Wi-Fi traffic. Both entries
+cleaned up; no production service restart, paid-policy change or updater publication.
+APK24a5338a…517ea retains source55525859, not the documentation/main SHA.120 lacks
+subscription UI119. Final G4 readback is FULL_CORE_PATH_PASS/exit0, with no new run.
+Do not automatically start integration with119, another field attempt or a common release.
+[Final receipt and limitations](releases/2026-11-07-cold-field-delivery.md#owner-wifi-final-result-8-november).
+
+### Superseded preparation notes (not active NEXTs)
+
+**In progress: authorized owner API31/119→120 field operation, awaiting phone setup.**
+The owner selected their connected API31 phone; this is not the original API28 case.
+Exact kit, actual phone signer/root, current NL1/RU trust and device admission pass
+preflight. Manifest-listed entry files are staged but inactive; vault check-only passes.
+No locator, signature, transfer, install or Connect yet. Phone still reports Wi-Fi and
+valid readiness: await manual mobile-only/NL1 setup, preserve cache and label WARM.
+Then execute only the authorized bounded entry/locator/finalization/private USB handoff
+and manual update/Connect, capturing the outcome and stopping only the new entry.
+Do not repeat CI/F/JNI, clear data, change production VPN services or begin another task.
+[Operation evidence](releases/2026-11-07-cold-field-delivery.md#owner-api31-operation-preflight).
+
+**Completed: beta120 READY_FOR_CONTROLLED_FIELD_OPERATION.**
+Exact Android release-CI42385799106/source55525859 and downloaded ARM64 prebuild
+9eae8668…7348c are accepted. Corrected NL1 server3c0487eb/archive5ec255f5…d71cb is
+reproducible and passes11 disposable package/finalizer checks. Finalizer pins select
+that CI payload only; new locator and signature will have their own final APK digest.
+Both CI failures and original local preparation/E/F/FAIL artifacts remain preserved.
+Selected scope is Android release qualification plus bounded server package, not whole
+repository CI green, G4 or a new Telemost/physical-phone PASS.
+
+**Next only after ONE explicit field-operation authorization and recipient readiness:**
+current NL1 profile/certificate/route/backend preflight → new bounded entry → fresh
+production locator → minimal asset-only packaging/vault signing → byte/window checks →
+agreed private handoff and one ordinary Connect over113 without data clearing.
+No blocked-download-page assumption, expired locator, new discovery/import or phone
+operation is authorized automatically. All preparation is finished before the finite
+entry window starts; no CI/tool build consumes it. Production/public updater/paid119
+and user phones are unchanged. No other queued task starts automatically.
+[Exact release receipt](releases/2026-11-07-beta120-release-qualification.json) ·
+[Operator procedure](../deploy/friends/restricted/COLD_FIELD_DELIVERY.md).
+
+**Completed7 November: API28/emulated CELLULAR-only cold DROP follow-up.**
+F/252c87e with unchanged application9bf0272 and JNI17119f00…60c59 passes real Android28
+sole foreground/unrestricted CELLULAR, no WiFi/VPN/readiness, fresh synthetic inputs and
+exact guest DROP. Direct HTTPS5.002s + RNS6.201s leave18.790s provisioning budget;
+fetch validated with7.279s remaining. READY57.565s, DNS/verified HTTPS/egress PASS.
+All per-traffic-boundary error/timeout/reason counters stay0, including after NXDOMAIN.
+E counter timing is localized, but same-request/underlying-delay causality remains unknown
+without E's missing per-request evidence; F is not a claimed fix. No product/native rebuild,
+deadline/security change, soak or unchanged retry. Own resources stopped, old evidence kept.
+Field gate remains ARM64 + real trust/signature + authorized provisioning entry + valid
+pre-Connect locator delivery; x86 synthetic rooms/APKs are not a field release.
+The emulator is not the original physical user's carrier; no G4/phone PASS or automatic
+next task. Field delivery is a separate controlled gate, not authorized production changes.
+[Follow-up evidence and remaining gate](releases/2026-11-07-cold-api28-cellular.json).
+
+**Completed7 November: authorized cold-provisioning positive runtime goal.**
+E/14c2b81: no-cache registered synthetic identity → real Telemost provisioning/TLS →
+verified encrypted bundle → ordinary MESH READY43.982s → DNS/verified HTTPS/correct
+gateway egress. Background-network EACCES is fixed with API27-compatible eligibility
+filter/pinning; D/E and targeted regressions confirm the causal correction. Original
+example.com NXDOMAIN is observed through both unchanged host resolver and MESH/TUN.
+Keep2 observed DNS timeouts/2 Mux protocol-error counts as remaining quality evidence,
+not a full stability PASS. No further runtime negatives, release, deployment, discovery,
+activation or queued platform task is started here. All own resources stopped; old FAILs
+retained. [Final result and exact artifacts](releases/2026-11-07-cold-connect-e.json).
+
+### Historical checkpoints for this incident (not active NEXTs)
+
+**Active7 November: finish traffic confirmation after real cold READY.**
+9bf0272/D confirms corrected bind, Telemost provisioning, verified encrypted bundle and
+normal MESH READY42.762s. DNS assertion used example.com, which also returns NXDOMAIN
+from the gateway host's actual resolver. Keep product/servers/DNS unchanged; use prechecked
+api.ipify.org for positive DNS/verified HTTPS/egress, retain Mux counters, then observe the
+original target's DNS RCODE through TUN. This is a specific traffic-harness hypothesis,
+not an unchanged retry. [D evidence](releases/2026-11-07-cold-connect-d.json).
+
+**Active7 November: API27-compatible network selection confirmation.**
+C exposed modern FOREGROUND19 versus API27 hidden18; correct that compatibility edge,
+retain filtering/pinning/fail-closed, verify actual bit values on27/28/35. Rebuild managed
+only and confirm cold runtime with retained JNI and32-byte raw egress expectation.
+No permission expansion, routing override or deadline change. [C evidence](releases/2026-11-07-cold-connect-c.json).
+
+**Active7 November: confirm foreground-network selection correction in cold runtime.**
+B localizes Android NETWORK_BIND EACCES(13), not FD duplication: the first enumerated
+CELLULAR is background and therefore permission-gated by API27. Filter unrestricted
+foreground physical candidates and retain pinned-network fail-closed semantics. Targeted
+before/after Java regression passes; real fix confirmation remains pending. Build managed
+APK only with accepted JNI; fresh cold inputs and existing runner, CPU observe-only.
+[B result and source correction](releases/2026-11-07-cold-connect-b.json).
+
+**Active7 November: localize and repair proven Android socket bind failure.**
+The owner removes the single-launch approval constraint; continue evidence-driven
+diagnostic/fix/confirmation runs with CPU observe-only and unchanged security/budgets.
+First real cold Connect: Go entered; SOCKET_PROTECT_BIND/SOCKET_DENIED before TLS,
+selected CELLULAR available, Java IO. Add bounded bind operation/errno to distinguish
+descriptor duplication from platform binding. Reuse accepted JNI, compile managed APK
+only, then confirm a specific cause; no unchanged retry-until-green or scope expansion.
+[Actual evidence](releases/2026-11-07-cold-connect-a.json).
+
+**7 November CPU-override attempt finished; packager repair verified offline only.**
+No thermal abort; no Connect: apksigner password-file EOF stops final packaging.
+Remove the redundant key-password read;39 targeted tests plus actual offline signing
+of both APKs pass. No product/native/readiness/TLS change. Runtime is cleaned up, two
+own room objects have unverified deletion, old evidence remains. Additional AVD launch
+requires owner approval; do not auto-repeat. Single Connect/READY/traffic gate remains
+unexecuted. [Exact result](releases/2026-11-07-cold-cpu-observed-runtime.json).
+
+**Selected7 November follow-up: owner cancels CPU-temperature stop for one new run.**
+Use explicit per-run CPU observation-only flag on the same versioned runner. Preserve
+raw CPU evidence; other guards/budgets and product source/JNI/Android PASS remain.
+38 targeted harness tests pass. Proceed with one fresh cold attempt and existing
+native snapshot/READY-traffic gate; no automatic series or old-evidence replacement.
+
+**Selected7 November runtime authorization completed: STOPPED_BEFORE_CONNECT.**
+One4854f96 guarded API27 run stops at FINAL_ASSET_PACKAGING on a persisted
+CPU_TEMPERATURE_LIMIT frame (Core4/raw91000/max91°C; Package90°C; GPU56°C).
+Android-ready/no-readiness/no-VPN, two own provider rooms and verified fresh locator
+precede the stop; no final APK install or client Connect/native snapshot/READY/traffic.
+Cleanup is verified; room-object deletion remains NOT_VERIFIED. Product6eb61a9,
+JNI17119f00…60c59, Android JNI PASS and both historical FAILs remain unchanged.
+No further local AVD/guard cycle, MESH patch or threshold increase is authorized.
+Next execution requires a separate owner decision on the environment, not another
+automatic attempt. [Exact evidence](releases/2026-11-07-cold-guarded-runtime.json).
+
+**Previous selected source repair (runtime authorization subsequently supplied):**
+**Selected7 November: bounded harness repair complete; NO runtime authorization.**
+One-frame thermal decision/evidence and finite preparation/attempt/cleanup/overall
+budgets are implemented in the existing test-helper lineage and versioned runner.
+34 targeted tests use fixtures, mocked process boundaries and controlled time only.
+Source6eb61a9, JNI17119f00…60c59 and accepted Android JNI PASS are unchanged. The helper
+no longer labels lifetime expiry as temperature failure or rereads temperatures for
+the stop evidence. The overall watchdog covers the full declared attempt window and
+bounded cleanup, and can interrupt a hung sampler/test. No product/readiness/TLS/network
+timeouts change. Cold stand remains STOPPED; no AVD/OAuth/room/APK/Connect, new hardware
+investigation or automatic next task. Old94°C remains unverified, provisioning unfixed.
+[Exact harness scope and limits](releases/2026-11-07-cold-harness-guards.md).
+
+**Previous selected audit, completed atbd0fbe7:**
+**Selected6 November: thermal-reader audit only; all cold runtime attempts STOPPED.**
+Owner supersedes the runtime continuation with read-only verification of the exact
+6096535 readers. Same-input comparison agrees on sensors/units/thresholds; independent
+sample domains explain how a watcher maximum66 can coexist with a stage94, but missing
+historical watch timestamps/raw inputs/fan data prevent confirmation of a real peak,
+sustained heat or sensor error. One60s passive observation is complete, no stress/AVD.
+The separate missing-sensor0°C fallback is reproduced and removed in the versioned
+test helper with16 focused tests; original as-run files remain immutable. The fixed
+helper has no new runtime qualification. A sensors JSON collection limitation leaves
+only a later paired sensors/sysfs comparison, not the full minute comparison. Do not
+rerun this observation or cold stand automatically to fill gaps. No Connect, rooms,
+APK/native build, BIOS/fan/power changes, production/G4 or foreign-process operations.
+Accepted Android JNI PASS and the unused single Connect remain unchanged. This result
+does not authorize resumption or environment migration; next action is the owner's.
+
+**Prior runtime authorization outcome; not an active launch instruction:**
+**Selected continuation6 November21:47UTC: reduced-load thermal stop; migration decision next.**
+Fromf7073e6, product6eb61a9/JNI17119f00…60c59 remain unchanged and reused. Accepted
+provider-free Android JNI PASS is retained, no native rebuild or host/JVM/race/JNI rerun.
+Exactly one initial preflight passes and one own API27 NVIDIA/KVM AVD boots. Cold package/
+VPN checks and unmodified clock convergence complete. Before OAuth/rooms/workers, the
+existing `ANDROID_READY_NO_VPN_BEFORE_ROOMS` gate measures Package id0/Core2 at94°C
+against85°C,41.740s after preflight. The paired1.069s CPU sample is substantially lower
+than the earlier attempt: QEMU2.81%, other processes58.01% (100%=one core); no own builds
+or workers. The measured thermal limit still fails; individual heat-source causality is
+not established. GPU53°C and16279992KiB available RAM pass. Own resources are stopped;
+no OAuth, new rooms/inputs/APK, guest blocks or Connect. ONE Connect remains unused.
+Do not repeat this host/AVD cycle. The next execution decision belongs to the owner:
+environment migration, not threshold increases, foreign-process termination or an
+automatic move to a phone/host. Server-worker co-load remains untested. Keep accepted
+JNI and immutable artifacts; future finite inputs must be fresh, not previous readiness.
+The unchanged gate remains AutomaticConnection200000ms candidate plus separate30000ms
+readiness: concrete native reason on failure; DNS/verified HTTPS/egress on READY, no
+negatives first. Both old FAILs/19 artifacts, accepted Android PASS andf7073e6 evidence
+are preserved. No product, production/G4, admission, public APK, discovery/import or
+activation work is authorized. See [measured stop](releases/2026-11-06-beta113-field16-bootstrap.md#reduced-load-runtime-stop).
+
+**Prior request outcome, superseded by the current authorization: retry consumed.**
+Original harness incorrectly gave the whole engine30s; corrected AutomaticConnection
+receives the production200000ms candidate deadline. The new API27/Telemost run fails
+BOOTSTRAP_UNAVAILABLE after1.792s, before challenge response, with198230ms remaining;
+readiness30s has not expired either. JNI provisioning lease exists, but native Post
+returns no reply; no server TLS/backend event, challenge, certificate, accepted bundle
+or native MESH startup is observed. Underlying native error is not exposed: no invented
+AUTH/network/slow-provider diagnosis and no claim to have fixed the original delivery
+failure. Post-run IO-wrapper diagnostic correction passes37 JVM tests; no second run.
+Both FAIL receipts remain separate and immutable. Owned runtime resources are closed;
+two exact new provider room objects are privately accounted for, deletion NOT_VERIFIED.
+Positive MESH, DNS/HTTPS/egress and runtime-negative gates remain unmet. No automatic
+runtime continuation, rollout, discovery, locator import or adjacent queued task.
+
+**Selected field bootstrap continuation — bounded provisioning candidate implemented.**
+The isolated uncached dual-block path now reaches real authority issuance, unchanged
+validation/encrypted vault, existing Android source owner and actual native MESH traffic.
+This is a separate finite-locator source candidate, not an installed beta113 repair.
+No production locator/credentials are supplied; missed rotation fails closed. Known
+field-network uncertainty, G4 and other branches retain their independent state.
+**One next:** localize the real issued-bundle→READY boundary after the first actual
+Android/Telemost Connect fails with `Rejected` at30.119s. Protected local vault input
+and token handoff succeeded; authentication is no longer the blocker. The corrected
+isolated server publishes a finite signed locator; the synthetic authority records
+one real restricted challenge/certificate issuance. Android API27 uses real NVIDIA/
+KVM, framework/Keystore/JNI and guest-only direct-path rejection, but no NATIVE_READY
+or proven delivery/cache completion. Retain the earlier loopback-ICE fixture failure.
+Do not repeat an unchanged Connect or extend the real30s readiness budget. Test-only118/x86_64 APK
+is built/AVD-installed, not distributed. DNS/HTTPS/egress and negative/ACK runtime
+checks remain NOT_RUN. Own processes/sessions are stopped; G4 cleanup and acceptance
+remain with the main session. No product code, live service, catalog or policy change.
+[Actual runtime attempt](releases/2026-11-06-beta113-field16-bootstrap.md#actual-androidtelemost-attempt-6-november).
+Existing source/core PASS remains separate, not runtime acceptance. Preserve the
+KVM/NVIDIA requirement and the finite pre-Connect APK asset; missed-rotation recovery
+remains unimplemented. Proposed signed-file locator import is a contract only, not
+another authorized implementation task or automatic discovery. The owner explicitly
+excludes locator import, new discovery and other features from this test.
+[Authorized access follow-up](releases/2026-11-06-beta113-field16-bootstrap.md#authorized-vault-access-follow-up-6-november).
+[Eligibility receipt and remaining boundary](releases/2026-11-06-beta113-field16-bootstrap.md#androidtelemost-runtime-eligibility-6-november1755utc).
+[Implementation, limits and exact receipts](releases/2026-11-06-beta113-field16-bootstrap.md#bounded-provisioning-candidate).
+The earlier selected/proposed entries below record completed incident investigation,
+not permission for parallel live/G4/ANDROID-APP-VPN work in this branch.
 
 **Selected6 November: separate beta113/API28 field bootstrap diagnosis, not G4.**
 The148e212 source/JSON findings stand. A bounded exact113 test now confirms no cold

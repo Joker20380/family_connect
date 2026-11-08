@@ -1,0 +1,1130 @@
+{
+  "status": "PASS_API28_EMULATED_CELLULAR_ONLY_COLD_DROP",
+  "application_source": "9bf02724deacf1c5e4293bea1bfdc6fc4f7fcacc",
+  "native_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+  "jni_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+  "accepted_E": {
+    "harness_source": "14c2b816c0a2aa3f9cd90ddbef65edb0c1a92ab7",
+    "app_sha256": "876daae0beb893e3b2bebb4773f6848de1f566ae76e960fb04c4cfa779858c50",
+    "test_sha256": "5fd5299643d330d92130d5d676956000f32a5bfa8552c97b3a2f4cf8c6e863e2",
+    "log_path": "state-client-build/cold-native-diagnostic-20261106/connect-e-20261107/instrumentation.log",
+    "log_sha256": "359d0eaf1780d0ba17519c4fce48d321525971db0e5a73a99c5281e227ce1e6a",
+    "counter_transitions": [
+      {
+        "elapsed_ms": 43814,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 0,
+          "DNSResponses": 0,
+          "DNSErrors": 0,
+          "DNSTimeouts": 0,
+          "OpenOK": 0,
+          "OpenErrors": 0,
+          "ProtocolErrors": 0,
+          "SentBytes": 0,
+          "ReceivedBytes": 0
+        }
+      },
+      {
+        "elapsed_ms": 44853,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 1,
+          "DNSResponses": 0,
+          "DNSErrors": 0,
+          "DNSTimeouts": 0,
+          "OpenOK": 1,
+          "OpenErrors": 0,
+          "ProtocolErrors": 0,
+          "SentBytes": 171,
+          "ReceivedBytes": 197
+        }
+      },
+      {
+        "elapsed_ms": 45894,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 2,
+          "DNSResponses": 1,
+          "DNSErrors": 0,
+          "DNSTimeouts": 0,
+          "OpenOK": 1,
+          "OpenErrors": 0,
+          "ProtocolErrors": 0,
+          "SentBytes": 260,
+          "ReceivedBytes": 370
+        }
+      },
+      {
+        "elapsed_ms": 51100,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 3,
+          "DNSResponses": 1,
+          "DNSErrors": 0,
+          "DNSTimeouts": 1,
+          "OpenOK": 1,
+          "OpenErrors": 0,
+          "ProtocolErrors": 0,
+          "SentBytes": 260,
+          "ReceivedBytes": 370
+        }
+      },
+      {
+        "elapsed_ms": 56252,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 4,
+          "DNSResponses": 1,
+          "DNSErrors": 0,
+          "DNSTimeouts": 2,
+          "OpenOK": 1,
+          "OpenErrors": 0,
+          "ProtocolErrors": 0,
+          "SentBytes": 260,
+          "ReceivedBytes": 370
+        }
+      },
+      {
+        "elapsed_ms": 57268,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 5,
+          "DNSResponses": 2,
+          "DNSErrors": 0,
+          "DNSTimeouts": 2,
+          "OpenOK": 1,
+          "OpenErrors": 0,
+          "ProtocolErrors": 2,
+          "SentBytes": 260,
+          "ReceivedBytes": 370
+        }
+      },
+      {
+        "elapsed_ms": 58309,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 5,
+          "DNSResponses": 3,
+          "DNSErrors": 0,
+          "DNSTimeouts": 2,
+          "OpenOK": 1,
+          "OpenErrors": 0,
+          "ProtocolErrors": 2,
+          "SentBytes": 260,
+          "ReceivedBytes": 370
+        }
+      },
+      {
+        "elapsed_ms": 59347,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 5,
+          "DNSResponses": 3,
+          "DNSErrors": 0,
+          "DNSTimeouts": 2,
+          "OpenOK": 2,
+          "OpenErrors": 0,
+          "ProtocolErrors": 2,
+          "SentBytes": 435,
+          "ReceivedBytes": 370
+        }
+      },
+      {
+        "elapsed_ms": 60363,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 5,
+          "DNSResponses": 3,
+          "DNSErrors": 0,
+          "DNSTimeouts": 2,
+          "OpenOK": 2,
+          "OpenErrors": 0,
+          "ProtocolErrors": 2,
+          "SentBytes": 747,
+          "ReceivedBytes": 3331
+        }
+      },
+      {
+        "elapsed_ms": 61407,
+        "stage": "LIVE",
+        "mux": {
+          "DNSRequests": 6,
+          "DNSResponses": 3,
+          "DNSErrors": 0,
+          "DNSTimeouts": 2,
+          "OpenOK": 2,
+          "OpenErrors": 0,
+          "ProtocolErrors": 2,
+          "SentBytes": 747,
+          "ReceivedBytes": 3589
+        }
+      },
+      {
+        "elapsed_ms": 62267,
+        "stage": "BEFORE_FINAL_CLEANUP",
+        "mux": {
+          "DNSRequests": 6,
+          "DNSResponses": 4,
+          "DNSErrors": 0,
+          "DNSTimeouts": 2,
+          "OpenOK": 2,
+          "OpenErrors": 0,
+          "ProtocolErrors": 2,
+          "SentBytes": 747,
+          "ReceivedBytes": 3589
+        }
+      }
+    ],
+    "causality": "UNKNOWN: no per-request DNS IDs or ProtocolErrorReasons retained; 2/2 is not proof; events precede original-target NXDOMAIN and cleanup",
+    "analysis": {
+      "dns_timeout_increment": "carrier/tcpforward/mux_dns.go:98: unfinished client QueryDNS exits with context.DeadlineExceeded (5s bounded by parent). Not a received NXDOMAIN. Server-only timeout increment at line166 is not this client counter.",
+      "protocol_increment": "carrier/tcpforward/mux.go:43: common reason-specific protocolErrorLocked. Client DNS late/duplicate/unknown response or error reaches DNSUnmatched at mux_dns.go:138; other stream/frame reasons also exist. E did not retain reason breakdown.",
+      "first_timeout_interval_connect_ms": [
+        45894,
+        51100
+      ],
+      "second_timeout_interval_connect_ms": [
+        51100,
+        56252
+      ],
+      "protocol_0_to_2_interval_connect_ms": [
+        56252,
+        57268
+      ],
+      "already_before_timeouts": {
+        "READY": true,
+        "OpenOK": 1,
+        "SentBytes": 260,
+        "ReceivedBytes": 370
+      },
+      "before_explicit_traffic_gates": [
+        "DNS_OK58018",
+        "VERIFIED_HTTPS_OK60616",
+        "EGRESS_VERIFIED60617"
+      ],
+      "not_cleanup": "Counters remain 2/2 until pre-cleanup62267; disconnect begins62273.",
+      "not_original_nxdomain": "Original target observation occurs62237, after counters reached2/2. F separately obtains same RCODE3 with zero errors/timeouts.",
+      "same_request_correlation": "UNKNOWN: E lacks per-DNS transaction events/IDs, protocol reason breakdown, and gateway resolver exchange timing. Cannot separate upstream delay from carrier delay, or prove both counters refer to the same requests.",
+      "next_target_observation": "F captures existing protocol reason breakdown and counters before/after each traffic gate; all remain zero for errors/timeouts. No event pair to correlate, no reason to repeat unchanged runtime or modify native.",
+      "source_fix": "NONE: no reproducible causal E defect established. The accepted E result remains unchanged; F is not proof that its errors were fixed."
+    }
+  },
+  "preserved_original_fail_artifacts_verified": 19,
+  "tests": [
+    "7 selected harness tests PASS",
+    "NetworkProbe SDK27/28/35 cellular-only DNS pinning/fail-closed PASS (stubs, not runtime)",
+    "Managed instrumentation build PASS; assets-only offline and fresh packaging/signature/native equality PASS; real F OK(1 test)"
+  ],
+  "runtime": "F",
+  "boundaries": [
+    "CPU observe-only retained",
+    "GPU guard/watchdog/cleanup retained",
+    "No product/native change",
+    "No production/G4/field phone changes"
+  ],
+  "harness_source": "252c87e367e59cdad1b29f8245d2db618125ad40",
+  "product_changes_this_followup": false,
+  "native_rebuilt": false,
+  "accepted_android_jni_gate_repeated": false,
+  "qualification": {
+    "api_level": 28,
+    "cellular_only": true,
+    "direct_block": "DROP",
+    "cellular_scope": "EMULATOR_NOT_FIELD_MOBILE_NETWORK"
+  },
+  "renderer": "GLES: Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti/PCIe/SSE2), OpenGL ES 3.1 (4.5.0 NVIDIA 580.178.04)",
+  "guard_budgets": {
+    "cpu_temperature_stop_enabled": false,
+    "cpu_limit_c": 85,
+    "gpu_limit_c": 80,
+    "preparation_seconds": 180,
+    "candidate_seconds": 200,
+    "attempt_seconds": 390,
+    "cleanup_seconds": 120,
+    "overall_seconds": 705,
+    "sample_seconds": 3,
+    "join_seconds": 6,
+    "started_monotonic": 342614.634806598,
+    "preparation_deadline": 342794.634806598,
+    "overall_deadline": 343319.634806598,
+    "forced_cleanup_seconds": 5,
+    "hard_exit_deadline": 343324.634806598,
+    "attempt_started_monotonic": 342680.042146166,
+    "attempt_deadline": 343070.042146166,
+    "candidate_budget_seconds": 200,
+    "cleanup_deadline": 342865.935694428
+  },
+  "locator_before_connect": {
+    "remaining_seconds": 407,
+    "verified": true,
+    "verified_at": 1794055639
+  },
+  "synthetic_identity_registered": true,
+  "cold_prerequisites": {
+    "asserted_in_real_android": true,
+    "readiness_before_connect": "ABSENT",
+    "working_vpn_before_connect": "ABSENT",
+    "wifi_networks": 0,
+    "physical_android_networks": 1,
+    "network_transport": "CELLULAR",
+    "emulated_not_field_mobile_carrier": true,
+    "direct_rules": [
+      {
+        "destination": "185.251.89.19",
+        "tcp_port": 8443,
+        "action": "DROP",
+        "packets": 4,
+        "bytes": 240
+      },
+      {
+        "destination": "186.246.45.246",
+        "tcp_port": 4242,
+        "action": "DROP",
+        "packets": 3,
+        "bytes": 180
+      }
+    ],
+    "other_carrier_directions": "Not blocked by these exact rules; successful real Telemost provisioning and MESH observed"
+  },
+  "budgets_observed": {
+    "readiness_ms": 30000,
+    "candidate_ms": 200000,
+    "https_connect_start_trace_ms": 87,
+    "https_timeout_trace_ms": 5089,
+    "https_wait_ms": 5002,
+    "rns_start_trace_ms": 5089,
+    "rns_unavailable_trace_ms": 11290,
+    "rns_including_runtime_initialization_ms": 6201,
+    "provisioning_start_trace_ms": 11293,
+    "readiness_remaining_at_provisioning_ms": 18790,
+    "native_fetch_validated_elapsed_ms": 11510,
+    "native_remaining_after_fetch_ms": 7279,
+    "candidate_success_orchestrator_elapsed_ms": 57565,
+    "no_timeout_increase": true
+  },
+  "native_and_network": [
+    {
+      "request_id": "76268ca755dc43468bfd077357ba6028",
+      "phase": "BEGIN",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "LOCATOR",
+        "last_success": "LOCATOR",
+        "first_failure": "",
+        "reason": "NONE",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 0,
+        "remaining_ms": 18789,
+        "protected": 0,
+        "denied": 0,
+        "closed": false,
+        "released": false
+      },
+      "network": {
+        "type": "CELLULAR",
+        "handle": 432902426637,
+        "available": true,
+        "foreground": true,
+        "not_restricted": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 75977,
+        "bind_ms": 0,
+        "bind_available": false,
+        "bind_result": "NOT_RUN",
+        "bind_operation": "NOT_RUN",
+        "bind_error": "NONE",
+        "bind_errno": 0
+      }
+    },
+    {
+      "request_id": "76268ca755dc43468bfd077357ba6028",
+      "phase": "POST",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "RESPONSE_VALIDATE",
+        "last_success": "RESPONSE_VALIDATE",
+        "first_failure": "",
+        "reason": "NONE",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 9075,
+        "remaining_ms": 9714,
+        "protected": 27,
+        "denied": 0,
+        "closed": false,
+        "released": false
+      },
+      "network": {
+        "type": "CELLULAR",
+        "handle": 432902426637,
+        "available": true,
+        "foreground": true,
+        "not_restricted": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 85052,
+        "bind_ms": 77401,
+        "bind_available": true,
+        "bind_result": "BOUND",
+        "bind_operation": "NETWORK_BIND",
+        "bind_error": "NONE",
+        "bind_errno": 0
+      }
+    },
+    {
+      "request_id": "53439d290c664c809a1f09c6f747cb6f",
+      "phase": "POST",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "RESPONSE_VALIDATE",
+        "last_success": "RESPONSE_VALIDATE",
+        "first_failure": "",
+        "reason": "NONE",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 11510,
+        "remaining_ms": 7279,
+        "protected": 27,
+        "denied": 0,
+        "closed": false,
+        "released": false
+      },
+      "network": {
+        "type": "CELLULAR",
+        "handle": 432902426637,
+        "available": true,
+        "foreground": true,
+        "not_restricted": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 87486,
+        "bind_ms": 77401,
+        "bind_available": true,
+        "bind_result": "BOUND",
+        "bind_operation": "NETWORK_BIND",
+        "bind_error": "NONE",
+        "bind_errno": 0
+      }
+    },
+    {
+      "request_id": "",
+      "phase": "CLOSE",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "RESPONSE_VALIDATE",
+        "last_success": "RESPONSE_VALIDATE",
+        "first_failure": "",
+        "reason": "NONE",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 11542,
+        "remaining_ms": 7247,
+        "protected": 27,
+        "denied": 0,
+        "closed": true,
+        "released": false
+      },
+      "network": {
+        "type": "CELLULAR",
+        "handle": 432902426637,
+        "available": true,
+        "foreground": true,
+        "not_restricted": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 87519,
+        "bind_ms": 77401,
+        "bind_available": true,
+        "bind_result": "BOUND",
+        "bind_operation": "NETWORK_BIND",
+        "bind_error": "NONE",
+        "bind_errno": 0
+      }
+    }
+  ],
+  "readiness_trace": {
+    "attempt_id": "76268ca755dc43468bfd077357ba6028",
+    "fetch_id": "53439d290c664c809a1f09c6f747cb6f",
+    "started_connection_id": "e75f3431-5429-4538-8aca-d3065ec6d9b9",
+    "started_at": 1794055639713,
+    "provisioning": [
+      {
+        "request_id": "76268ca755dc43468bfd077357ba6028",
+        "phase": "BEGIN",
+        "native": {
+          "handle": 1,
+          "go_entered": true,
+          "budget_known": true,
+          "stage": "LOCATOR",
+          "last_success": "LOCATOR",
+          "first_failure": "",
+          "reason": "NONE",
+          "provider_step": "",
+          "http_status": 0,
+          "errno": 0,
+          "security": false,
+          "elapsed_ms": 0,
+          "remaining_ms": 18789,
+          "protected": 0,
+          "denied": 0,
+          "closed": false,
+          "released": false
+        },
+        "network": {
+          "type": "CELLULAR",
+          "handle": 432902426637,
+          "available": true,
+          "foreground": true,
+          "not_restricted": true,
+          "resolver": "NETWORK_IPV4_GO_RESOLVER",
+          "resolver_class": "PRIVATE_IPV4",
+          "observed_ms": 75977,
+          "bind_ms": 0,
+          "bind_available": false,
+          "bind_result": "NOT_RUN",
+          "bind_operation": "NOT_RUN",
+          "bind_error": "NONE",
+          "bind_errno": 0
+        }
+      },
+      {
+        "request_id": "76268ca755dc43468bfd077357ba6028",
+        "phase": "POST",
+        "native": {
+          "handle": 1,
+          "go_entered": true,
+          "budget_known": true,
+          "stage": "RESPONSE_VALIDATE",
+          "last_success": "RESPONSE_VALIDATE",
+          "first_failure": "",
+          "reason": "NONE",
+          "provider_step": "",
+          "http_status": 0,
+          "errno": 0,
+          "security": false,
+          "elapsed_ms": 9075,
+          "remaining_ms": 9714,
+          "protected": 27,
+          "denied": 0,
+          "closed": false,
+          "released": false
+        },
+        "network": {
+          "type": "CELLULAR",
+          "handle": 432902426637,
+          "available": true,
+          "foreground": true,
+          "not_restricted": true,
+          "resolver": "NETWORK_IPV4_GO_RESOLVER",
+          "resolver_class": "PRIVATE_IPV4",
+          "observed_ms": 85052,
+          "bind_ms": 77401,
+          "bind_available": true,
+          "bind_result": "BOUND",
+          "bind_operation": "NETWORK_BIND",
+          "bind_error": "NONE",
+          "bind_errno": 0
+        }
+      },
+      {
+        "request_id": "53439d290c664c809a1f09c6f747cb6f",
+        "phase": "POST",
+        "native": {
+          "handle": 1,
+          "go_entered": true,
+          "budget_known": true,
+          "stage": "RESPONSE_VALIDATE",
+          "last_success": "RESPONSE_VALIDATE",
+          "first_failure": "",
+          "reason": "NONE",
+          "provider_step": "",
+          "http_status": 0,
+          "errno": 0,
+          "security": false,
+          "elapsed_ms": 11510,
+          "remaining_ms": 7279,
+          "protected": 27,
+          "denied": 0,
+          "closed": false,
+          "released": false
+        },
+        "network": {
+          "type": "CELLULAR",
+          "handle": 432902426637,
+          "available": true,
+          "foreground": true,
+          "not_restricted": true,
+          "resolver": "NETWORK_IPV4_GO_RESOLVER",
+          "resolver_class": "PRIVATE_IPV4",
+          "observed_ms": 87486,
+          "bind_ms": 77401,
+          "bind_available": true,
+          "bind_result": "BOUND",
+          "bind_operation": "NETWORK_BIND",
+          "bind_error": "NONE",
+          "bind_errno": 0
+        }
+      },
+      {
+        "request_id": "",
+        "phase": "CLOSE",
+        "native": {
+          "handle": 1,
+          "go_entered": true,
+          "budget_known": true,
+          "stage": "RESPONSE_VALIDATE",
+          "last_success": "RESPONSE_VALIDATE",
+          "first_failure": "",
+          "reason": "NONE",
+          "provider_step": "",
+          "http_status": 0,
+          "errno": 0,
+          "security": false,
+          "elapsed_ms": 11542,
+          "remaining_ms": 7247,
+          "protected": 27,
+          "denied": 0,
+          "closed": true,
+          "released": false
+        },
+        "network": {
+          "type": "CELLULAR",
+          "handle": 432902426637,
+          "available": true,
+          "foreground": true,
+          "not_restricted": true,
+          "resolver": "NETWORK_IPV4_GO_RESOLVER",
+          "resolver_class": "PRIVATE_IPV4",
+          "observed_ms": 87519,
+          "bind_ms": 77401,
+          "bind_available": true,
+          "bind_result": "BOUND",
+          "bind_operation": "NETWORK_BIND",
+          "bind_error": "NONE",
+          "bind_errno": 0
+        }
+      }
+    ],
+    "cache": {
+      "validation": "READY",
+      "age_seconds": 6,
+      "expires_at": 1794056046,
+      "revision": 1,
+      "minimum_crl": 1,
+      "fingerprint": "8fdf9742e932c5add795c5c050d817142674f147effb9e2953573accef247c1c",
+      "issuer_expires_at": 1794059226,
+      "certificate_expires_at": 1794056225,
+      "revocations_expires_at": 1794056225,
+      "directory_expires_at": 1794056046,
+      "documents": {
+        "issuer": "VALIDATED_AS_BUNDLE",
+        "certificate": "VALIDATED_AS_BUNDLE",
+        "revocations": "VALIDATED_AS_BUNDLE",
+        "directory": "VALIDATED_AS_BUNDLE"
+      }
+    },
+    "refresh_result": "READY",
+    "selected_source": "REFRESH",
+    "finished_at": 1794055662593,
+    "operation": "FETCH",
+    "stage": "COMPLETE",
+    "duration_ms": 22880,
+    "failures": [
+      {
+        "operation": "CHALLENGE",
+        "stage": "CONNECT_TLS_WRITE",
+        "route": "HTTPS_UNDERLAY",
+        "error_class": "TIMEOUT",
+        "http_status": 0,
+        "elapsed_ms": 5089,
+        "network_type": "CELLULAR",
+        "network_generation": 432902426637
+      },
+      {
+        "operation": "CHALLENGE",
+        "stage": "RELAY_OPEN",
+        "route": "RNS",
+        "error_class": "UNAVAILABLE",
+        "http_status": 0,
+        "elapsed_ms": 11290,
+        "network_type": "CELLULAR",
+        "network_generation": 432902426637
+      }
+    ],
+    "stages": [
+      {
+        "operation": "CHALLENGE",
+        "route": "HTTPS_UNDERLAY",
+        "stage": "LOCAL",
+        "elapsed_ms": 86,
+        "remaining_ms": 29998
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "HTTPS_UNDERLAY",
+        "stage": "OPEN_NETWORK",
+        "elapsed_ms": 86,
+        "remaining_ms": 29998
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "HTTPS_UNDERLAY",
+        "stage": "CONNECT_TLS_WRITE",
+        "elapsed_ms": 87,
+        "remaining_ms": 29997
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "RNS",
+        "stage": "LOCAL",
+        "elapsed_ms": 5089,
+        "remaining_ms": 24995
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "RNS",
+        "stage": "RELAY_OPEN",
+        "elapsed_ms": 5089,
+        "remaining_ms": 24994
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "PROVISIONING",
+        "stage": "LOCAL",
+        "elapsed_ms": 11293,
+        "remaining_ms": 18790
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "PROVISIONING",
+        "stage": "CARRIER_OPEN",
+        "elapsed_ms": 11293,
+        "remaining_ms": 18790
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "PROVISIONING",
+        "stage": "CARRIER_HANDLE",
+        "elapsed_ms": 11296,
+        "remaining_ms": 18787
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "PROVISIONING",
+        "stage": "CARRIER_REQUEST",
+        "elapsed_ms": 11297,
+        "remaining_ms": 18787
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "PROVISIONING",
+        "stage": "RESPONSE_RECEIVED",
+        "elapsed_ms": 20371,
+        "remaining_ms": 9713
+      },
+      {
+        "operation": "CHALLENGE",
+        "route": "PROVISIONING",
+        "stage": "HTTP_STATUS",
+        "elapsed_ms": 20372,
+        "remaining_ms": 9712
+      },
+      {
+        "operation": "FETCH",
+        "route": "PROVISIONING",
+        "stage": "LOCAL",
+        "elapsed_ms": 20389,
+        "remaining_ms": 9695
+      },
+      {
+        "operation": "FETCH",
+        "route": "PROVISIONING",
+        "stage": "CARRIER_OPEN",
+        "elapsed_ms": 20389,
+        "remaining_ms": 9694
+      },
+      {
+        "operation": "FETCH",
+        "route": "PROVISIONING",
+        "stage": "CARRIER_HANDLE",
+        "elapsed_ms": 20389,
+        "remaining_ms": 9694
+      },
+      {
+        "operation": "FETCH",
+        "route": "PROVISIONING",
+        "stage": "CARRIER_REQUEST",
+        "elapsed_ms": 20389,
+        "remaining_ms": 9694
+      },
+      {
+        "operation": "FETCH",
+        "route": "PROVISIONING",
+        "stage": "RESPONSE_RECEIVED",
+        "elapsed_ms": 22806,
+        "remaining_ms": 7278
+      },
+      {
+        "operation": "FETCH",
+        "route": "PROVISIONING",
+        "stage": "HTTP_STATUS",
+        "elapsed_ms": 22807,
+        "remaining_ms": 7277
+      },
+      {
+        "operation": "FETCH",
+        "route": "PROVISIONING",
+        "stage": "COMPLETE",
+        "elapsed_ms": 22836,
+        "remaining_ms": 7247
+      }
+    ]
+  },
+  "owner_acceptance": {
+    "receipt_class": "real_owner_product",
+    "challenge_id": "76268ca755dc43468bfd077357ba6028",
+    "fetch_id": "53439d290c664c809a1f09c6f747cb6f",
+    "challenge_result": "issued",
+    "fetch_result": "authorized",
+    "import_result": "accepted",
+    "revision": 1,
+    "expires_at": 1794056046,
+    "observed_at": 1794055662
+  },
+  "server_counts": {
+    "restricted_challenges": 1,
+    "restricted_certificates": 1
+  },
+  "server_correlation": [
+    "cold_provision stage=tls_ready elapsed_ms=3587",
+    "cold_provision stage=request_accepted operation=0 request_id=76268ca755dc43468bfd077357ba6028 elapsed_ms=3590",
+    "cold_provision stage=backend_complete operation=0 request_id=76268ca755dc43468bfd077357ba6028 status=200 bytes=169 success=true elapsed_ms=3601",
+    "cold_provision stage=write_complete operation=0 request_id=76268ca755dc43468bfd077357ba6028 elapsed_ms=3601",
+    "cold_provision stage=request_accepted operation=1 request_id=53439d290c664c809a1f09c6f747cb6f elapsed_ms=4772",
+    "cold_provision stage=backend_complete operation=1 request_id=53439d290c664c809a1f09c6f747cb6f status=200 bytes=2927 success=true elapsed_ms=4791",
+    "cold_provision stage=write_complete operation=1 request_id=53439d290c664c809a1f09c6f747cb6f elapsed_ms=4795",
+    "cold_provision stage=peer_end operation=1 request_id=53439d290c664c809a1f09c6f747cb6f elapsed_ms=6724"
+  ],
+  "traffic_milestones": [
+    {
+      "stage": "NATIVE_READY",
+      "elapsed_ms": 57643
+    },
+    {
+      "stage": "ENCRYPTED_READINESS_ACCEPTED",
+      "elapsed_ms": 57646
+    },
+    {
+      "stage": "BEFORE_TRAFFIC",
+      "elapsed_ms": 57657,
+      "mux_counters": {
+        "DNSRequests": 0,
+        "DNSResponses": 0,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0,
+        "OpenOK": 0,
+        "OpenErrors": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 0,
+        "ReceivedBytes": 0
+      },
+      "mux_protocol_reasons": {
+        "open_replay": 0,
+        "unknown_stream": 0,
+        "open_state": 0,
+        "data_state": 0,
+        "credit_state": 0,
+        "fin_state": 0,
+        "close_state": 0,
+        "frame_kind": 0,
+        "dns_replay": 0,
+        "dns_role": 0,
+        "dns_unmatched": 0
+      }
+    },
+    {
+      "stage": "DNS_OK",
+      "elapsed_ms": 59751,
+      "mux_counters": {
+        "DNSRequests": 2,
+        "DNSResponses": 2,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0,
+        "OpenOK": 1,
+        "OpenErrors": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 260,
+        "ReceivedBytes": 370
+      },
+      "mux_protocol_reasons": {
+        "open_replay": 0,
+        "unknown_stream": 0,
+        "open_state": 0,
+        "data_state": 0,
+        "credit_state": 0,
+        "fin_state": 0,
+        "close_state": 0,
+        "frame_kind": 0,
+        "dns_replay": 0,
+        "dns_role": 0,
+        "dns_unmatched": 0
+      }
+    },
+    {
+      "stage": "VERIFIED_HTTPS_OK",
+      "elapsed_ms": 62905,
+      "mux_counters": {
+        "DNSRequests": 2,
+        "DNSResponses": 2,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0,
+        "OpenOK": 2,
+        "OpenErrors": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 747,
+        "ReceivedBytes": 3591
+      },
+      "mux_protocol_reasons": {
+        "open_replay": 0,
+        "unknown_stream": 0,
+        "open_state": 0,
+        "data_state": 0,
+        "credit_state": 0,
+        "fin_state": 0,
+        "close_state": 0,
+        "frame_kind": 0,
+        "dns_replay": 0,
+        "dns_role": 0,
+        "dns_unmatched": 0
+      }
+    },
+    {
+      "stage": "EGRESS_VERIFIED",
+      "elapsed_ms": 62920,
+      "mux_counters": {
+        "DNSRequests": 2,
+        "DNSResponses": 2,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0,
+        "OpenOK": 2,
+        "OpenErrors": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 747,
+        "ReceivedBytes": 3591
+      },
+      "mux_protocol_reasons": {
+        "open_replay": 0,
+        "unknown_stream": 0,
+        "open_state": 0,
+        "data_state": 0,
+        "credit_state": 0,
+        "fin_state": 0,
+        "close_state": 0,
+        "frame_kind": 0,
+        "dns_replay": 0,
+        "dns_role": 0,
+        "dns_unmatched": 0
+      }
+    },
+    {
+      "stage": "ORIGINAL_TARGET_DNS_OBSERVATION",
+      "elapsed_ms": 64022,
+      "id_and_header_valid": true,
+      "rcode": 3,
+      "answer_count": 0
+    },
+    {
+      "stage": "AFTER_ORIGINAL_DNS",
+      "elapsed_ms": 64060,
+      "mux_counters": {
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0,
+        "OpenOK": 2,
+        "OpenErrors": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 747,
+        "ReceivedBytes": 3591
+      },
+      "mux_protocol_reasons": {
+        "open_replay": 0,
+        "unknown_stream": 0,
+        "open_state": 0,
+        "data_state": 0,
+        "credit_state": 0,
+        "fin_state": 0,
+        "close_state": 0,
+        "frame_kind": 0,
+        "dns_replay": 0,
+        "dns_role": 0,
+        "dns_unmatched": 0
+      }
+    },
+    {
+      "stage": "BEFORE_FINAL_CLEANUP",
+      "elapsed_ms": 64076,
+      "mux_counters": {
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0,
+        "OpenOK": 2,
+        "OpenErrors": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 747,
+        "ReceivedBytes": 3591
+      },
+      "mux_protocol_reasons": {
+        "open_replay": 0,
+        "unknown_stream": 0,
+        "open_state": 0,
+        "data_state": 0,
+        "credit_state": 0,
+        "fin_state": 0,
+        "close_state": 0,
+        "frame_kind": 0,
+        "dns_replay": 0,
+        "dns_role": 0,
+        "dns_unmatched": 0
+      }
+    },
+    {
+      "stage": "OWN_CLIENT_CLEANUP_RETURNED",
+      "elapsed_ms": 64757
+    }
+  ],
+  "final_packet_counters": {
+    "protect_ok": 54,
+    "protect_denied": 0,
+    "dns": 3,
+    "tcp": 1,
+    "tcp_active": 1,
+    "tcp_peak": 1,
+    "limit_denied": 0,
+    "udp_denied": 0,
+    "ipv6_denied": 0
+  },
+  "final_apks": {
+    "source": "252c87e367e59cdad1b29f8245d2db618125ad40",
+    "abi": "x86_64",
+    "native_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+    "method": "assets-only zip rewrite, zipalign16K, fresh isolated test signer; unchanged manifest/dex/native",
+    "apks": {
+      "app-friends.apk": {
+        "sha256": "94ef6c489327e0917bd377f2b926d0783a821894ef8f27932e56ee00704c0fad",
+        "base_sha256": "908c66c3d2bb1b39f35e30633b7303e9f96e0c57de7e4a30fdc56a4bf45159a5",
+        "changed_entries": [
+          "assets/control-anchor.pub",
+          "assets/provisioning/nl-amsterdam-1.json"
+        ]
+      },
+      "app-friends-androidTest.apk": {
+        "sha256": "66a79faf9a3088bdfe9026bf25c34f847b2ef7f606ac596a9afdee24363e17bf",
+        "base_sha256": "34fe0a816fe30e5c0c97cc224212505d69fe3f830ca5f47783fb4f693d791c23",
+        "changed_entries": [
+          "assets/identity96.private",
+          "assets/egress.sha256"
+        ]
+      }
+    },
+    "native_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7"
+  },
+  "manifest": {
+    "package": "com.familyconnect.app.friends",
+    "version_code": 118,
+    "version_name": "0.1.18-beta118",
+    "min_sdk": 27,
+    "target_sdk": 35,
+    "runtime_api": 28,
+    "abi": "x86_64",
+    "signer": "fresh disposable qualification signer, NOT field update signer"
+  },
+  "image": {
+    "package": "system-images;android-28;default;x86_64",
+    "revision": 4
+  },
+  "helper_import": {
+    "path": "/home/joker/.codex/worktrees/61d0/family_connect/tests/android_emulator_guard.py",
+    "sha256": "a292cbd1251547cdfe120dfab06ecd8efa5dea67e1cb8aea6e82ae6449df7280"
+  },
+  "local_components_sha256": {
+    "vault_to_runtime.py": "6e9c3487f8d02e9d8b02c1ae55eb4cfdd20d11a54eeb50a75cbeed6580c25817",
+    "runtime_receiver.py": "a0068d6e81b009cc8cccc5e815c66ab19eb25ce267dcba1db0e79253fba8cd0f",
+    "stand": "7a6a5f458160bf0eadac6a8708a702c433155cf9f8d825afb2ff982207fa3d6a",
+    "verify_locator": "e767362d3da3fba9fba31a4a940e8699bd9c56aed489f0488b1960c276ddb7d1"
+  },
+  "cleanup": {
+    "owned_root_pids_alive": [],
+    "owned_executable_or_cwd_processes": [],
+    "authority_container_absent": true,
+    "shared_lock_acquirable": true,
+    "monitor_joined": true,
+    "owned_avd_stopped": true,
+    "provider_room_deletion": "NOT_VERIFIED"
+  },
+  "rooms_created": 3,
+  "prior_attempt_artifacts_verified": {
+    "original_FAIL": 19,
+    "A": 14,
+    "B": 11,
+    "C": 9,
+    "D": 12,
+    "E": 18
+  },
+  "local_evidence_root": "/home/joker/.codex/worktrees/61d0/family_connect/state-client-build/cold-native-diagnostic-20261106/connect-f-api28-20261107",
+  "field_delivery_gate": [
+    "Build and qualify an API28-compatible ARM64 candidate with the accepted application selection fix and provenance-matched native source; x86_64 synthetic APK is NOT deliverable to the original user.",
+    "Use the authorized field signing identity and correct trust anchors/server trust; disposable synthetic authority/signature cannot stand in for real service trust.",
+    "Explicitly authorize and prepare an actual server provisioning entry for the already registered user identity/entitlement; test rooms are not a production provisioning entry.",
+    "Deliver a valid signed locator bound to that entry before Connect within its existing validity window. Assets-only delivery has no automatic refresh/import/discovery; this remains a separate operational constraint.",
+    "Then a separately controlled test on the original physical API28 mobile carrier is required. Emulator cellular success is not historical-phone or G4 acceptance."
+  ],
+  "remaining_limits": [
+    "API28 is real Android in NVIDIA/KVM emulator, not a physical operator network; mobile radio/operator DNS/firewall behavior is untested.",
+    "Network loss/demotion fail-closed and DNS/socket pinning have targeted source-probe checks; runtime did not induce network loss.",
+    "E exact DNS/Mux event causality remains unknown; no per-request evidence can be reconstructed retrospectively.",
+    "Positive bounded F, not soak/stability or G4 PASS; no production/catalog/public APK/user phone changes.",
+    "Provider room object deletion NOT_VERIFIED."
+  ],
+  "artifact_sha256": {
+    "immutable.json": "bd89fa4c9bc83c72f2d910d48f03ba1ceda2dbb935d8a09b732ee49e0bd7430a",
+    "receipt.json": "98b42268270c3e1dd6f32e97b47f78d118545fb29f23b457e5fa311429d0e006",
+    "instrumentation.log": "cc55dd1cd23da007d9a89958eac053ca322d478d71405d767be6304813a3c4e4",
+    "resources.jsonl": "1cded155ad3efd5ceff86a7ed2011f06f6a437c416db0b229c70bf06f251093b",
+    "python-imports.log": "865c0649e7c67cfbc34a126095433687fe10962aaf47cb8ba9a99cb17d4fd5a6",
+    "runner.log": "a7bc6b892129322f7e4d43e31722de7270e620fdec4bd57be568d7388f8121b6",
+    "renderer.txt": "733a9b577faba6b1562305ec4836322b89c1d302853e4b81f3535381db366e26",
+    "cellular-selection.txt": "46cb08980e8762dcf897a3e16713d6ca719cc1b1aa7d83cb3cfa85a9db828854",
+    "connectivity-before-workers.txt": "46cb08980e8762dcf897a3e16713d6ca719cc1b1aa7d83cb3cfa85a9db828854",
+    "guest-rules-before.txt": "45ec0b3c059884559856f7a63d8fe8b14512663f4d45e8fb6381f4c4c88d5a75",
+    "guest-rules-after.txt": "d42830ec85c8efd5e0df1632ddb00474342c38466bf8fb7c25ef7c1c0fc8557e",
+    "guest-connectivity-after.txt": "1348ed0ee2ba9df2a4477278d45d58774bbf4fc0c5fa40d190c3eed77ae4cf71",
+    "local-auth/stand.log": "e9ef7a1ba8bacfd92473f4d8c40be4ffa17647bf337a565bf2028982b1e5c7bd",
+    "cleanup-verified.json": "27dc2ec57a9f8fdd458b019f7a9c4cf994ae2d1d7338a2360019dfb29dd36e29",
+    "apk-final/receipt.json": "aa19a6b8ca5a820645d1739464319443f2c3c77828e76f733f72aa63015e944e",
+    "apk-final/app-friends.apk": "94ef6c489327e0917bd377f2b926d0783a821894ef8f27932e56ee00704c0fad",
+    "apk-final/app-friends-androidTest.apk": "66a79faf9a3088bdfe9026bf25c34f847b2ef7f606ac596a9afdee24363e17bf",
+    "apk-final/app-friends.apk.verify.txt": "aba2bc37a2da4c1ac5e6506e455a33b9cc0c37d2fb3bc3ce057ff59edba527f6",
+    "apk-final/app-friends-androidTest.apk.verify.txt": "aba2bc37a2da4c1ac5e6506e455a33b9cc0c37d2fb3bc3ce057ff59edba527f6"
+  }
+}

@@ -1,5 +1,7 @@
 # Documentation
 
+[Android consolidated beta121 — candidate and corrected field preparation](releases/2026-11-08-android-consolidated.md).
+
 **7 November — [Подписки: ежедневная эксплуатация](operators/subscriptions.ru.md).**
 [Авторизованное восстановление RU и согласованная поставка node-fix](releases/2026-11-07-subscription-ru-recovery.md):
 v2 внедрён частично, RU после watchdog остановлен/masked, NL получают свежие leases.
@@ -9,6 +11,13 @@ backup непустого registry и [выбранная политика108/11
 Ограниченный профиль v2 выбран владельцем; прежняя MESH cert/CRL-граница сохраняется.
 [Наблюдения и проверки](releases/2026-11-07-subscription-operations.md).
 PR1/PR2 закрыты merge9d05c0f/5197563; прежняя Android-матрица не открывается заново.
+
+**7 November — [bounded ARM64 cold field kit](releases/2026-11-07-cold-field-delivery.md).**
+READY_FOR_CONTROLLED_FIELD_OPERATION: exact Android CI42385799106/source55525859,
+unsigned ARM64 APK9eae8668 and corrected NL1 server3c0487eb. No final locator/signature,
+production change, delivery or phone PASS. F keeps its original accepted emulator scope.
+[Exact release receipt](releases/2026-11-07-beta120-release-qualification.json).
+[Operator handoff procedure](../deploy/friends/restricted/COLD_FIELD_DELIVERY.md).
 
 **Current5 November — [active-session renewal integration](releases/2026-11-05-mesh-renewal-integration.md).**
 Source/runtime integration followsd4de324; real TLS/mux/TCP/DNS/HTTPS and negative gates pass,

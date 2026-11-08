@@ -281,9 +281,14 @@ func (s *Session) Connect(ctx context.Context) (connectError error) {
 		return errors.New("telemost: connect already attempted")
 	}
 	s.initMu.Lock()
+	connectionStep := "HTTP_CONNECT"
 	defer func() {
 		s.initMu.Unlock()
 		if connectError != nil {
+			var classified *ConnectionFailure
+			if !errors.As(connectError, &classified) {
+				connectError = connectionFailure(connectionStep, "CARRIER_ERROR", 0, connectError)
+			}
 			if ctx.Err() != context.Canceled {
 				s.cfg.Trace.Add(stage, "FAILED", reason)
 			}
@@ -307,6 +312,7 @@ func (s *Session) Connect(ctx context.Context) (connectError error) {
 	s.roomID = info.RoomID
 	s.credentials = info.Credentials
 	s.wsURL = info.ClientConfig.MediaServerURL
+	connectionStep = "PEER_SETUP"
 
 	if err := s.setupPeerConnections(webrtc.Configuration{
 		ICEServers:   []webrtc.ICEServer{{URLs: []string{defaultSTUNURL}}},
@@ -315,9 +321,11 @@ func (s *Session) Connect(ctx context.Context) (connectError error) {
 		return err
 	}
 
+	connectionStep = "TRANSPORT_SETUP"
 	if err := s.setupTransport(); err != nil {
 		return err
 	}
+	connectionStep = "SIGNAL_CONNECT"
 	if err := s.dialWebSocket(connCtx); err != nil {
 		return err
 	}
@@ -340,10 +348,12 @@ func (s *Session) Connect(ctx context.Context) (connectError error) {
 		}
 	})
 
+	connectionStep = "SIGNAL_HELLO"
 	if err := s.sendHello(); err != nil {
 		return err
 	}
 	stage, reason = "CARRIER", "RECOVERY_CARRIER_FAILED"
+	connectionStep = "MEDIA_READY"
 
 	select {
 	case <-s.connected:
@@ -356,7 +366,7 @@ func (s *Session) Connect(ctx context.Context) (connectError error) {
 		return nil
 	case <-connCtx.Done():
 		if connCtx.Err() == context.DeadlineExceeded {
-			return fmt.Errorf("telemost: connect timeout after %s", s.cfg.ConnectTimeout)
+			return connectionFailure(connectionStep, "DEADLINE", 0, connCtx.Err())
 		}
 		return connCtx.Err()
 	case <-s.closeCh:
