@@ -67,8 +67,14 @@ lint и обязательные gates сохранены; это не разр�
   включая8 дополнительных carrier/cancel/budget случаев. Исторические
   health89 и baseline hashes сохранены; новый Restricted contract проверяет порядок
   через валидирующий adapter, а не прежнюю буквальную строку `.establish()`.
-- API28, process restart/update format fixtures и окончательный ARM package проходят
-  отдельные gates. Финальные результаты, source/native/APK hashes и CI/review/merge
+- API28:7 runtime tests и отдельный RU/font1.5 test PASS; EN rendering осмотрен.
+  Адресная дополнительная проверка повреждённого типа SharedPreferences PASS:
+  корректная ошибка вместо ClassCastException, экран открывается, действующий TCP
+  сохраняет captured policy и реальные маршруты обоих UID. Новый явный Connect
+  получает исправленную настройку. Android JNI calls обоих загруженных Go libraries
+  с отсутствующим handle возвращают отказ; это boundary test, не live MESH DNS.
+- Process restart/update format fixtures и окончательный ARM package проходят
+  отдельные hosted gates. Финальные результаты, source/native/APK hashes и CI/review/merge
   закрепляются в [PR12](https://github.com/Joker20380/family_connect/pull/12), без
   косметического post-CI head. Пока этих receipts нет, эти gates не приняты.
 - UI и unit tests сами по себе не подтверждают завершение функции.

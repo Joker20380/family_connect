@@ -172,7 +172,13 @@ public class AppVpnRuntimeTest {
             assertThrows(IllegalArgumentException.class,()->new AppVpnAndroid(context,new AppVpnPolicy(AppVpnPolicy.Mode.INCLUDE,Set.of("not.installed.fixture"),Set.of())));
             assertThrows(IllegalArgumentException.class,()->AppVpnStore.decode("{}"));
             assertThrows(IllegalArgumentException.class,()->AppVpnStore.decode("{\"schema\":\"1\",\"mode\":\"ALL\",\"included\":[],\"excluded\":[]}"));
+            assertTrue(context.getSharedPreferences("app-vpn",Context.MODE_PRIVATE).edit().putBoolean("policy",true).commit());
+            assertThrows(IllegalArgumentException.class,settings::read);
             assertEquals(AppVpnPolicy.all(),AppVpnStore.decode(null));
+            String query=android.util.Base64.encodeToString(VpnHealth.query(7,"bounded"),android.util.Base64.NO_WRAP);
+            NativeRestricted.load();assertNull(NativeRestricted.dns(-1,query,25));
+            NativeTcp.load(context);assertNull(NativeTcp.tcpDns(-1,query,25));
+            assertNull(NativeRestricted.dns(-1,query,25));
         }finally{settings.save(previous);}
     }
     @Test public void removedLastPackageCannotEstablishAll()throws Exception{
@@ -205,6 +211,12 @@ public class AppVpnRuntimeTest {
             profile.save(TcpRuntimeTest.profile());settings.save(initial);
             context.startForegroundService(connect);helper.waitState("on");pair(AppVpnPolicy.Mode.INCLUDE,"VPN_TCP");
             assertEquals(initial,ConnectionService.activeApplications);
+            assertTrue(context.getSharedPreferences("app-vpn",Context.MODE_PRIVATE).edit().putBoolean("policy",true).commit());
+            try(androidx.test.core.app.ActivityScenario<AppVpnActivity> invalidScreen=androidx.test.core.app.ActivityScenario.launch(AppVpnActivity.class)){
+                InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+                assertEquals("on",ConnectionService.status);assertEquals(initial,ConnectionService.activeApplications);
+                pair(AppVpnPolicy.Mode.INCLUDE,"VPN_TCP");
+            }
             settings.save(new AppVpnPolicy(AppVpnPolicy.Mode.INCLUDE,Set.of(),Set.of(ALPHA)));
             pair(AppVpnPolicy.Mode.INCLUDE,"VPN_TCP");assertEquals(initial,ConnectionService.activeApplications);
             String retained=context.getSharedPreferences("connection-request",0).getString("app-policy",null);

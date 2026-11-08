@@ -9,7 +9,10 @@ import java.util.ArrayList;
 final class AppVpnStore {
     private final SharedPreferences preferences;
     AppVpnStore(Context context){preferences=context.getSharedPreferences("app-vpn",Context.MODE_PRIVATE);}
-    AppVpnPolicy read(){return decode(preferences.getString("policy",null));}
+    AppVpnPolicy read(){
+        try{return decode(preferences.getString("policy",null));}
+        catch(ClassCastException damaged){throw new IllegalArgumentException("APP_POLICY_INVALID");}
+    }
     void save(AppVpnPolicy policy){
         if(!preferences.edit().putString("policy",encode(policy)).commit())throw new IllegalStateException("APP_POLICY_STORAGE");
     }

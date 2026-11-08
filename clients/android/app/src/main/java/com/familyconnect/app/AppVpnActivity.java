@@ -110,7 +110,7 @@ public final class AppVpnActivity extends LocalizedActivity {
         if(summary==null||!loaded)return;
         AppVpnPolicy policy=draft();
         try{if(!policy.equals(store.read())){summary.setText(R.string.app_vpn_unsaved);return;}}
-        catch(IllegalArgumentException invalid){summary.setText(R.string.app_vpn_unsaved);return;}
+        catch(IllegalArgumentException invalid){summary.setText(R.string.app_vpn_invalid);return;}
         boolean pending=ConnectionService.activeApplications!=null&&!policy.equals(ConnectionService.activeApplications);
         try{new AppVpnAndroid(this,policy);summary.setText(getString(pending?R.string.app_vpn_pending:R.string.app_vpn_next)+(policy.mode==AppVpnPolicy.Mode.ALL?"":" · "+policy.selected().size()));}
         catch(IllegalArgumentException invalid){summary.setText(getString(R.string.app_vpn_invalid)+(pending?"\n"+getString(R.string.app_vpn_pending):""));}

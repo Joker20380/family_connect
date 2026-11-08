@@ -73,7 +73,7 @@ public final class ConnectionService extends Service {
                 ?AppVpnStore.decode(getSharedPreferences("connection-request",MODE_PRIVATE).getString("app-policy",null))
                 :new AppVpnStore(this).read();
             applications=new AppVpnAndroid(this,policy);
-        }catch(IllegalArgumentException invalid){
+        }catch(IllegalArgumentException|ClassCastException invalid){
             failed=true;status="failed";forgetRequest(this);
             android.widget.Toast.makeText(this,R.string.app_vpn_invalid,android.widget.Toast.LENGTH_LONG).show();
             stopSelf();return START_NOT_STICKY;
