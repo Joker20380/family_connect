@@ -23,6 +23,13 @@ public class ConsolidatedStorageRuntimeTest {
         return ChatRuntime.WORKER.submit(action).get(30,TimeUnit.SECONDS);
     }
     private File evidence(){return new File(context.getFilesDir(),"consolidated-storage.json");}
+    private String texts(android.view.accessibility.AccessibilityNodeInfo node){
+        if(node==null)return "";
+        StringBuilder result=new StringBuilder();
+        if(node.getText()!=null)result.append(node.getText()).append('\n');
+        for(int index=0;index<node.getChildCount();index++)result.append(texts(node.getChild(index)));
+        return result.toString();
+    }
     private android.content.SharedPreferences settings(){return context.getSharedPreferences(FriendsActivity.class.getName(),0);}
     @Before public void disposableOnly()throws Exception {
         assertEquals("true",InstrumentationRegistry.getArguments().getString("fc_disposable"));
@@ -94,7 +101,17 @@ public class ConsolidatedStorageRuntimeTest {
             return null;
         });
         context.startActivity(SubscriptionUi.intent(context).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-        SystemClock.sleep(5000);
+        String unavailable=SubscriptionUi.text(context).get("subscription_refresh_unavailable");
+        String offline=SubscriptionUi.text(context).get("subscription_offline");
+        long until=SystemClock.elapsedRealtime()+30000;
+        String rendered="";
+        while(SystemClock.elapsedRealtime()<until){
+            rendered=texts(InstrumentationRegistry.getInstrumentation().getUiAutomation().getRootInActiveWindow());
+            if(rendered.contains(unavailable)||rendered.contains(offline))break;
+            SystemClock.sleep(200);
+        }
+        assertTrue("Final offline outcome, not a loading screenshot",rendered.contains(unavailable)||rendered.contains(offline));
+        assertFalse("Cache is never a fresh server result",rendered.contains(SubscriptionUi.text(context).get("subscription_refresh_current")));
         Bitmap screenshot=InstrumentationRegistry.getInstrumentation().getUiAutomation().takeScreenshot();
         assertNotNull(screenshot);
         try(FileOutputStream output=new FileOutputStream(new File(context.getExternalFilesDir("ui-acceptance"),"consolidated-subscription-"+sourceVersion+".png"))){
