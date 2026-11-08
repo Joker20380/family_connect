@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+**8 November — RU-TRANSPORT-RECOVERY-2: availability restored; cause remains open.**
+Before mutation, preserved the first02:34:18UTC failure and subsequent protective
+stops/restart loop. Last useful pass02:34:07.936; failed readback pass8.362s, native
+queries0.030s, but the predecessor did not retain the exception or exact persistence
+phase. No historical watchdog/OOM/lock diagnosis is asserted. Exact accepted RU bytes
+and retained state validated; isolated RU apply fence, stop/all PID0/no jobs/start
+restored services05:14:46UTC. NL leases continued;135s observation confirms stable
+processes, actual/persisted sets and lease renewal. Safe first-failure diagnostics
+and real-systemd recovery regression are qualified; new RU-only delivery requires
+ordinary green CI/merge. Final delivery and the two physical RU HTTPS results belong
+in this incident's final receipt, not the closed PR8 documentation gate.
+[Scope, measurements and acceptance boundary](releases/2026-11-08-ru-transport-recovery-2.md).
+
+**8 November — USER-SMOKE device follow-up.**
+Actual119 own subscription without VPN PASS; RU AWG/TCP configuration attempts FAIL
+before traffic because RU engines were down. Original NL1/MESH/OFF restored; protected
+records unchanged. [Final smoke receipt](https://github.com/Joker20380/family_connect/pull/8#issuecomment-6717509534).
+The earlier unavailable-device entry below remains historical evidence, not current status.
+
 **8 November — SUBSCRIPTION-USER-SMOKE: device access BLOCKED; documentation correction.**
 No Android device is visible over ADB at the entry check. Actual installed build,
 selected node/mode and VPN state cannot yet be read; no device action was performed.

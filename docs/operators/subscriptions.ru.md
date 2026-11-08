@@ -482,6 +482,28 @@ engine query, actuation, restart/preflight, readback, total, интервал з
 замещает незавершённый restart при ошибке. Локальная авария по-прежнему может остановить
 оба обычных транспорта; штатная потеря центра не отключает noncohort.
 
+При новом отказе **до restart/reset-failed** сохранить ограниченное окно journal,
+effective units, Result/InvocationID/PID/NRestarts, jobs, retained state и последнюю
+попытку. Разделять первый отказ, защитную остановку и последующее ожидание engines.
+Одна строка `Open AWG service unavailable` не устанавливает причину. Не повторять
+grouped restart: сначала stop watcher/AWG/TCP, подтвердить нулевые PID и завершение
+stop jobs, затем штатный start с preflight и свежей сверкой. Сам watcher не является
+автоматическим восстановителем остановленных engines.
+
+RU-TRANSPORT-RECOVERY-2 добавляет безопасный `transport_failure` до cleanup: режим,
+фаза, класс/стабильный код, семейство команды и rc/timeout, elapsed/budget,
+PID/InvocationID. Не передаются argv, произвольный exception text, stderr/stdout,
+identity, ключи или запрос. Первая запись `transport-failure.json` рядом с retained
+node state создаётся без перезаписи; последующие startup/cleanup errors не заменяют
+её. Journal содержит отдельные последующие события и `transport_cleanup_failure`.
+После успешного recovery первая запись **не удаляется автоматически**: оператор
+сохраняет её в закрытом receipt; перед новым диагностическим интервалом переносит
+сохранённый файл в приватный архив при остановленном узле. Ошибка записи diagnostics
+отражается отдельно и не должна подменять первоначальное исключение. Фазы persistence
+теперь различают fsync файла, замену и fsync каталога. Историческую причину это не
+доказывает. Проверить установленный node hash по финальному receipt: NL в этой задаче
+не обновляются. [Инцидент и точные границы доказательств](../releases/2026-11-08-ru-transport-recovery-2.md).
+
 ## Границы доказательств
 
 [Отчёт этапа](../releases/2026-11-07-subscription-operations.md) отделяет фактические

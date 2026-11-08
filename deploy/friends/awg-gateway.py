@@ -20,7 +20,7 @@ def command(args,check=True):
     if process.returncode:raise subprocess.CalledProcessError(process.returncode,args)
   return 0
  except subprocess.CalledProcessError as error:
-  if check:raise RuntimeError('AWG gateway operation failed') from None
+  if check:raise
   return error.returncode
 
 @contextmanager
@@ -86,7 +86,7 @@ def register():
     if preparing:engine.prepare(request['paid'],request['token'])
     else:engine.accept(request['paid'])
    try:engine.apply_serialized()
-   except BaseException:engine.stop_all();engine.failure();raise
+   except BaseException as error:engine.fail_closed(error,'register');raise
   reply={'schema':1,'node':engine.node,'result':'prepared' if preparing else 'applied'}
   if preparing:reply['token']=request['token']
   print(json.dumps(reply));return
@@ -109,8 +109,8 @@ def register():
    if engine is None:add_peer(key,assigned);tcp_user(device,ident)
   try:
    if engine is not None:engine.apply_serialized()
-  except BaseException:
-   if engine is not None:engine.stop_all();engine.failure()
+  except BaseException as error:
+   if engine is not None:engine.fail_closed(error,'register')
    raise
   print(json.dumps({'public_key':key,'address':assigned,'transport':'amneziawg-3.1'}))
 
@@ -167,4 +167,8 @@ if __name__=='__main__':
    from control.friends.transport_gateway import watch
    watch(sys.modules[__name__])
   else:raise ValueError('Unknown operation')
- except Exception:print('Open AWG service unavailable',file=sys.stderr);sys.exit(1)
+ except Exception as error:
+  module=sys.modules.get('control.friends.transport_gateway')
+  if module is not None:module.report_failure(error,'watch' if sys.argv[1:] == ['paid-watch'] else sys.argv[1] if len(sys.argv)==2 else 'unknown',ROOT)
+  else:print(json.dumps(dict(gateway_failure=dict(reason='ENTRY_FAILURE',pid=os.getpid()))),file=sys.stderr,flush=True)
+  print('Open AWG service unavailable',file=sys.stderr);sys.exit(1)

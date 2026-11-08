@@ -17,6 +17,74 @@ from . import transport_policy as policy
 SERVICES = ('family-connect-friends-awg.service', 'family-connect-friends-tcp.service')
 OPERATION_SECONDS = 8
 CURRENT_OPERATION = ContextVar('transport_operation', default=None)
+FAILURE_CODES = frozenset(('TRANSPORT_OPERATION_DEADLINE', 'ENGINE_START_TIMEOUT',
+    'ENGINE_READBACK_MISMATCH', 'INVALID_AWG_READBACK', 'INVALID_TCP_READBACK',
+    'UNSAFE_GATEWAY_STATE', 'INVALID_GATEWAY_POLICY', 'INVALID_GATEWAY_CACHE',
+    'INVALID_MEMBERSHIP_CACHE', 'INVALID_GATEWAY_BINDING', 'TCP_BINDING_CONFLICT',
+    'INCOMPLETE_NODE_BINDING', 'APPLICATION_DID_NOT_CONVERGE', 'DUPLICATE_JSON_FIELD'))
+
+
+def emit(value):
+    try:
+        print(json.dumps(value, sort_keys=True), file=sys.stderr, flush=True)
+    except OSError:
+        pass
+
+
+def command_family(arguments):
+    executable = Path(arguments[0]).name if arguments else ''
+    if executable == 'awg':
+        return 'awg-query' if arguments[1:2] == ['show'] else 'awg-actuation'
+    if executable == 'xray':
+        return 'tcp-query' if arguments[1:2] == ['api'] else 'tcp-engine'
+    return executable if executable in ('systemctl', 'ip', 'iptables') else 'other'
+
+
+def failure_record(error, mode):
+    context = getattr(error, 'transport_context', {})
+    if isinstance(error, subprocess.TimeoutExpired):
+        kind, reason = 'TimeoutExpired', 'COMMAND_TIMEOUT'
+    elif isinstance(error, subprocess.CalledProcessError):
+        kind, reason = 'CalledProcessError', 'COMMAND_FAILED'
+    elif isinstance(error, TimeoutError):
+        kind, reason = 'TimeoutError', 'TRANSPORT_OPERATION_DEADLINE'
+    elif isinstance(error, OSError):
+        kind, reason = 'OSError', 'FILESYSTEM_OR_OS_ERROR'
+    elif isinstance(error, ValueError):
+        kind, reason = 'ValueError', str(error) if str(error) in FAILURE_CODES else 'INVALID_INPUT_OR_STATE'
+    elif isinstance(error, AssertionError):
+        kind, reason = 'AssertionError', 'INVARIANT_FAILED'
+    else:
+        kind, reason = 'Exception', 'UNCLASSIFIED_FAILURE'
+    invocation = os.environ.get('INVOCATION_ID', '')
+    record = dict(schema=1, mode=mode if mode in ('watch', 'register', 'run', 'paid-preflight') else 'unknown',
+        phase=context.get('phase', 'entry'), exception_class=kind, reason=reason,
+        pid=os.getpid(), invocation_id=invocation if re.fullmatch('[a-f0-9]{32}', invocation) else None,
+        observed_at=time.time(), elapsed=context.get('elapsed'), budget=OPERATION_SECONDS)
+    if isinstance(error, (subprocess.TimeoutExpired, subprocess.CalledProcessError)):
+        record.update(command_family=command_family(error.cmd),
+            returncode=getattr(error, 'returncode', None), timeout=isinstance(error, subprocess.TimeoutExpired))
+    if isinstance(error, OSError):
+        record['errno'] = error.errno
+    return record
+
+
+def report_failure(error, mode, root):
+    if getattr(error, 'transport_reported', False):
+        return
+    error.transport_reported = True
+    record = failure_record(error, mode)
+    emit(dict(transport_failure=record))
+    try:
+        descriptor = os.open(root/'transport-failure.json', os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+        with os.fdopen(descriptor, 'w') as output:
+            json.dump(record, output, sort_keys=True)
+            output.flush()
+            os.fsync(output.fileno())
+    except FileExistsError:
+        pass
+    except Exception:
+        emit(dict(transport_diagnostic_persistence='unavailable'))
 
 
 class Operation:
@@ -33,13 +101,17 @@ class Operation:
 
     @contextmanager
     def stage(self, name):
-        self.remaining()
         started = time.monotonic()
         try:
+            self.remaining()
             yield
+            self.remaining()
+        except BaseException as error:
+            if not hasattr(error, 'transport_context'):
+                error.transport_context = dict(phase=name, elapsed=time.monotonic()-self.started)
+            raise
         finally:
             self.stages[name] = self.stages.get(name, 0) + time.monotonic() - started
-        self.remaining()
 
 
 def remaining():
@@ -63,6 +135,16 @@ def read(path):
     return json.loads(path.read_text(), object_pairs_hook=unique)
 
 
+@contextmanager
+def persistence_stage(name):
+    operation = CURRENT_OPERATION.get()
+    if operation is None:
+        yield
+    else:
+        with operation.stage(name):
+            yield
+
+
 def write(path, value, mode=0o600):
     temporary = path.with_suffix('.pending')
     descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW, mode)
@@ -70,11 +152,14 @@ def write(path, value, mode=0o600):
     with os.fdopen(descriptor, 'w') as handle:
         json.dump(value, handle, sort_keys=True)
         handle.flush()
-        os.fsync(handle.fileno())
-    os.replace(temporary, path)
+        with persistence_stage('persist_file'):
+            os.fsync(handle.fileno())
+    with persistence_stage('persist_replace'):
+        os.replace(temporary, path)
     directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
     try:
-        os.fsync(directory)
+        with persistence_stage('persist_directory'):
+            os.fsync(directory)
     finally:
         os.close(directory)
 
@@ -121,10 +206,14 @@ class Gateway:
             yield
             operation.remaining()
             result = 'complete'
+        except BaseException as error:
+            if not hasattr(error, 'transport_context'):
+                error.transport_context = dict(phase='operation', elapsed=time.monotonic()-operation.started)
+            raise
         finally:
             self.metrics = dict(result=result, total=time.monotonic()-operation.started, stages=operation.stages)
             CURRENT_OPERATION.reset(token)
-            print(json.dumps(dict(transport_progress=self.metrics), sort_keys=True), file=sys.stderr, flush=True)
+            emit(dict(transport_progress=self.metrics))
 
     @contextmanager
     def stage(self, name):
@@ -220,6 +309,18 @@ class Gateway:
     def failure(self):
         write(self.root/'transport-attempt.json', dict(schema=1, node=self.node,
             observed_at=int(self.clock()), result='error'))
+
+    def fail_closed(self, error, mode):
+        report_failure(error, mode, self.root)
+        token = CURRENT_OPERATION.set(None)
+        try:
+            for action in (self.stop_all, self.failure):
+                try:
+                    action()
+                except BaseException as cleanup:
+                    emit(dict(transport_cleanup_failure=failure_record(cleanup, mode)))
+        finally:
+            CURRENT_OPERATION.reset(token)
 
     def apply(self, *, starting=False):
         if starting:
@@ -383,9 +484,6 @@ def watch(gateway, *, run=execute):
             print(json.dumps(dict(transport_progress_gap=current-previous)), file=sys.stderr, flush=True)
             previous = current
             time.sleep(policy.TICK_SECONDS)
-    except BaseException:
-        try:
-            engine.stop_all()
-        finally:
-            engine.failure()
+    except BaseException as error:
+        engine.fail_closed(error, 'watch')
         raise
