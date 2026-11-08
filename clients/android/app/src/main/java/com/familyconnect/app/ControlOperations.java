@@ -11,11 +11,21 @@ final class ControlOperations {
     interface Mutation { void run() throws Exception; }
     static final class Stale extends IllegalStateException { Stale() { super("Stale VPN owner"); } }
     private Object session;
+    private Object attempt;
+    void beginAttempt(Object owner) {
+        Objects.requireNonNull(owner);
+        synchronized(ControlJournal.OWNER) { if(session==null)attempt=owner; }
+    }
+    void unclaimed(Object owner,Runnable action) {
+        Objects.requireNonNull(owner);
+        synchronized(ControlJournal.OWNER) { if(session==null&&attempt==owner)action.run(); }
+    }
     void claim(Object owner) throws IOException {
         Objects.requireNonNull(owner);
         synchronized (ControlJournal.OWNER) {
             if (session != null && session != owner) throw new IOException("VPN cleanup still owns operations");
             session = owner;
+            attempt = owner;
         }
     }
     void session(Object owner, Runnable action) {

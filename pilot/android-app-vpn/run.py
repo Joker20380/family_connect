@@ -16,6 +16,8 @@ def main():
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--gradle', default='gradle')
     parser.add_argument('--visual-only', action='store_true')
+    parser.add_argument('--method', choices=['rejection', 'rejectedIncludeRecoversThroughScreenServiceAndTraffic', 'catalogMatchesCurrentProfileLaunchersNotSystemFlag'])
+    parser.add_argument('--baseline-apk', type=Path)
     args = parser.parse_args()
     if not args.serial.startswith('emulator-') or not args.serial[9:].isdigit():
         raise SystemExit('An emulator serial is required')
@@ -46,11 +48,18 @@ def main():
         probes = ROOT/'pilot/android-app-vpn/probes/app/build/outputs/apk'
         apks = [app/'debug/app-debug.apk', app/'androidTest/debug/app-debug-androidTest.apk',
                 probes/'alpha/debug/app-alpha-debug.apk', probes/'beta/debug/app-beta-debug.apk']
-        for apk in apks:
-            if 'Success' not in run(adb+['install', '-r', str(apk)], timeout=90):
+        if args.baseline_apk:
+            apks[0] = args.baseline_apk.resolve(strict=True)
+        for index, apk in enumerate(apks):
+            flags = ['-r', '-d'] if args.baseline_apk and index == 0 else ['-r']
+            if 'Success' not in run(adb+['install', *flags, str(apk)], timeout=90):
                 raise RuntimeError('Fixture installation failed')
         run(adb+['push', str(apks[2]), '/data/local/tmp/fc-app-probe-alpha.apk'])
-        selection = 'com.familyconnect.app.AppVpnRuntimeTest'+('#screenSavesRealRoutingAndPendingSelection' if args.visual_only else '')
+        selection = 'com.familyconnect.app.AppVpnRuntimeTest'+('#'+args.method if args.method else '#screenSavesRealRoutingAndPendingSelection' if args.visual_only else '')
+        if args.method == 'rejection':
+            selection = 'com.familyconnect.app.AppVpnRejectedPolicyTest'
+        elif not args.method and not args.visual_only:
+            selection += ',com.familyconnect.app.AppVpnRejectedPolicyTest'
         completed = subprocess.run(adb+['shell', 'am', 'instrument', '-w', '-r', '-e', 'class', selection,
                          '-e', 'fc_app_vpn', 'true', 'com.familyconnect.app.pilot.test/androidx.test.runner.AndroidJUnitRunner'],
                          capture_output=True, text=True, timeout=600)
@@ -58,9 +67,14 @@ def main():
         (output/'instrumentation.log').write_text(result+completed.stderr)
         if completed.returncode:
             raise RuntimeError('Instrumentation command failed; see instrumentation.log')
-        if ('OK (1 test)' if args.visual_only else 'OK (7 tests)') not in result or any(value in result for value in ('FAILURES!!!', 'INSTRUMENTATION_FAILED', 'INSTRUMENTATION_STATUS_CODE: -3', 'INSTRUMENTATION_STATUS_CODE: -4')):
+        if ('OK (1 test)' if args.visual_only or args.method else 'OK (10 tests)') not in result or any(value in result for value in ('FAILURES!!!', 'INSTRUMENTATION_FAILED', 'INSTRUMENTATION_STATUS_CODE: -3', 'INSTRUMENTATION_STATUS_CODE: -4')):
             raise RuntimeError('Per-app routing acceptance failed; see instrumentation.log')
-        for name in (('screen',) if args.visual_only else ('routing', 'automatic', 'screen', 'owner-health', 'package-removal', 'service')):
+        if args.method:
+            name = 'rejection' if args.method == 'rejection' else 'ui-recovery' if args.method.startswith('rejected') else 'catalog'
+            raw = run(adb+['shell', 'run-as', 'com.familyconnect.app.pilot', 'cat', 'files/app-vpn-'+name+'.json'])
+            (output/(name+'.json')).write_text(json.dumps(json.loads(raw), indent=2))
+            return
+        for name in (('screen',) if args.visual_only else ('routing', 'automatic', 'screen', 'owner-health', 'package-removal', 'service', 'catalog', 'ui-recovery', 'rejection')):
             raw = run(adb+['shell', 'run-as', 'com.familyconnect.app.pilot', 'cat', 'files/app-vpn-'+name+'.json'])
             (output/(name+'.json')).write_text(json.dumps(json.loads(raw), indent=2))
         visuals = output/'visuals'

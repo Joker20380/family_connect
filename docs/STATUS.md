@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**8 November — ANDROID-APP-VPN-RECOVERY: catalog and rejected-policy lifecycle.**
+Separate branch from main967f38f4;123 reserved after all30 remote Android refs
+and local candidate names were checked (maximum122). Default catalog follows
+current-profile launcher packages, not FLAG_SYSTEM; components and retained
+unavailable selections remain inspectable. Before-claim failures and owned cleanup
+are isolated so stale callbacks cannot reset a newer session. UI/service/traffic
+regressions and API31 join the existing27/28/35 gate. Candidate not delivered;
+signed owner122 bytes and its field BLOCKED result remain immutable.
+[Evidence and remaining gates](releases/2026-11-08-android-app-vpn-recovery.md).
+
 **8 November — ANDROID-APP-VPN: selected implementation, not routing acceptance.**
 Owner accepts the current launch as the product prerequisite; this does not change
 historical cold/whitelist PASS/FAIL/NOT_RUN. Work starts from main09f1aae5 in an isolated

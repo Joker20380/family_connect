@@ -8,6 +8,7 @@ import java.util.concurrent.*;
 public final class ConnectionService extends Service {
     static volatile String status="off",activeTransport="wg",requestedTransport="wg";
     static volatile boolean failed=false;
+    static volatile int failureMessage=R.string.failed;
     static volatile String healthStatus="off",vpnSource=null;
     static volatile long sessionId=0;
     static volatile String controlOutcome;
@@ -39,6 +40,15 @@ public final class ConnectionService extends Service {
     private volatile VpnHealth health;
     private ScheduledFuture<?> pending;
     private String source;
+    @Override public void onCreate(){super.onCreate();ControlOperations.APP.beginAttempt(operationOwner);}
+    private void unclaimedOff(){ControlOperations.APP.unclaimed(operationOwner,()->{status="off";});}
+    private void rejectPolicy(){
+        ControlOperations.APP.unclaimed(operationOwner,()->{
+            failed=true;failureMessage=R.string.app_vpn_invalid;status="off";forgetRequest(this);
+        });
+        android.widget.Toast.makeText(this,R.string.app_vpn_invalid,android.widget.Toast.LENGTH_LONG).show();
+        stopSelf();
+    }
     static void forgetRequest(android.content.Context context){context.getSharedPreferences("connection-request",MODE_PRIVATE).edit().putBoolean("requested",false).commit();}
     private int restartMode(){return getSharedPreferences("connection-request",MODE_PRIVATE).getBoolean("requested",false)?START_STICKY:START_NOT_STICKY;}
     private Intent resumeRequest(){
@@ -51,7 +61,14 @@ public final class ConnectionService extends Service {
         final Intent intent=incomingIntent==null?resumeRequest():incomingIntent;
         if(intent==null){stopSelf();return START_NOT_STICKY;}
         startForeground(1,notification());
-        if("disconnect".equals(intent.getAction())){forgetRequest(this);if(!started){stopSelf();return START_NOT_STICKY;}cancel();worker.execute(()->owned(this::stopConnection));return START_NOT_STICKY;}
+        if("disconnect".equals(intent.getAction())){
+            stopping=true;
+            if(claimed)owned(()->{forgetRequest(this);cancel();});
+            else ControlOperations.APP.unclaimed(operationOwner,()->{forgetRequest(this);status="off";});
+            if(!started){stopSelf();return START_NOT_STICKY;}
+            worker.execute(()->{if(claimed)owned(this::stopConnection);else{unclaimedOff();main.post(this::stopSelf);}});
+            return START_NOT_STICKY;
+        }
         final boolean sync=intent!=null&&"sync-control".equals(intent.getAction());
         final boolean intake=intent!=null&&"apply-control".equals(intent.getAction());
         final boolean selection=intent!=null&&"select-gateway".equals(intent.getAction());
@@ -74,32 +91,32 @@ public final class ConnectionService extends Service {
                 :new AppVpnStore(this).read();
             applications=new AppVpnAndroid(this,policy);
         }catch(IllegalArgumentException|ClassCastException invalid){
-            failed=true;status="failed";forgetRequest(this);
-            android.widget.Toast.makeText(this,R.string.app_vpn_invalid,android.widget.Toast.LENGTH_LONG).show();
-            stopSelf();return START_NOT_STICKY;
+            rejectPolicy();return START_NOT_STICKY;
         }
-        final String priorStatus=status;
         byte[] received=null;
         if(intake){try{received=ControlIntake.copy(intent.getByteArrayExtra("envelope"));}
             catch(Exception invalid){reportControl("FAILED");stopSelf();return START_NOT_STICKY;}}
         final byte[] incoming=received;
-        started=true;status="connecting";failed=false;
-        String id=intent==null?"auto":intent.getStringExtra("transport");requestedTransport=id==null?"auto":id;
-        automatic="auto".equals(requestedTransport)||"telemost".equals(requestedTransport);
-        terminalAttempt=ConnectionTerminal.VPN.begin(ConnectionTerminal.Stage.PREPARING);
-        if(connectRequested){
-            boolean retain=ConnectionResume.allowed(true,true,requestedTransport);
-            if(!getSharedPreferences("connection-request",MODE_PRIVATE).edit().putBoolean("requested",retain)
-                .putString("app-policy",AppVpnStore.encode(applications.policy))
-                .putString("transport",requestedTransport).putString("country",intent.getStringExtra("country")).commit()){
-                failed=true;status="failed";forgetRequest(this);stopSelf();return START_NOT_STICKY;
-            }
-        }
+        started=true;
         worker.execute(()->{
+            if(stopping||closing)return;
             try{ControlOperations.APP.claim(operationOwner);claimed=true;}
-            catch(Exception busy){if(intake||selection)reportControl("BUSY");main.post(()->{status=priorStatus;stopSelf();});return;}
-            if(connectRequested)activeApplications=applications.policy;
+            catch(Exception busy){if(intake||selection)reportControl("BUSY");main.post(this::stopSelf);return;}
             owned(()->{
+                if(stopping||closing){stopConnection();return;}
+                status="connecting";failed=false;failureMessage=R.string.failed;
+                String id=intent.getStringExtra("transport");requestedTransport=id==null?"auto":id;
+                automatic="auto".equals(requestedTransport)||"telemost".equals(requestedTransport);
+                terminalAttempt=ConnectionTerminal.VPN.begin(ConnectionTerminal.Stage.PREPARING);
+                if(connectRequested){
+                    boolean retain=ConnectionResume.allowed(true,true,requestedTransport);
+                    if(!getSharedPreferences("connection-request",MODE_PRIVATE).edit().putBoolean("requested",retain)
+                        .putString("app-policy",AppVpnStore.encode(applications.policy))
+                        .putString("transport",requestedTransport).putString("country",intent.getStringExtra("country")).commit()){
+                        failed=true;forgetRequest(this);cancel();stopConnection();return;
+                    }
+                    activeApplications=applications.policy;
+                }
                 try{
                     if(selection){reportControl(controlNow(null,false,false,gateway));}
                     else if(sync){
@@ -349,7 +366,13 @@ public final class ConnectionService extends Service {
     }
     private void notifyState(){if(!closing)getSystemService(NotificationManager.class).notify(1,notification());}
     @Override public void onDestroy(){
-        closing=true;rnsEnabled=false;ControlRnsAndroid transport=rnsCarrier;if(transport!=null)transport.cancel();rnsWorker.shutdownNow();if(claimed)cancel();else stopping=true;worker.execute(()->owned(()->{if(cleanup()){ControlOperations.APP.release(operationOwner);claimed=false;status="off";}}));worker.shutdown();stopForeground(STOP_FOREGROUND_REMOVE);super.onDestroy();
+        closing=true;rnsEnabled=false;ControlRnsAndroid transport=rnsCarrier;if(transport!=null)transport.cancel();rnsWorker.shutdownNow();
+        if(claimed)owned(this::cancel);else stopping=true;
+        worker.execute(()->{
+            if(claimed)owned(()->{if(cleanup()){ControlOperations.APP.release(operationOwner);claimed=false;status="off";}});
+            else unclaimedOff();
+        });
+        worker.shutdown();stopForeground(STOP_FOREGROUND_REMOVE);super.onDestroy();
     }
     @Override public IBinder onBind(Intent intent){return null;}
 }

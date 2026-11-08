@@ -1,9 +1,9 @@
 # Apps and VPN
 
-Beta122/code122 candidate: **Settings → Apps and VPN**. This is not a public update
+Beta123/code123 candidate: **Settings → Apps and VPN**. This is not a public update
 announcement. Exact artifact identity and acceptance belong to the
-[task receipt](releases/2026-11-08-android-app-vpn.md); the owner's installed beta121
-and its provenance remain unchanged.
+[task receipt](releases/2026-11-08-android-app-vpn-recovery.md); the owner's installed
+beta122 and its signed bytes are not changed by this preparation.
 
 - **All apps** is the default, including migration from previous versions.
 - **Selected apps only** sends the selected apps through VPN. An empty or unavailable
@@ -11,7 +11,11 @@ and its provenance remain unchanged.
 - **All except selected** leaves selected apps on their ordinary connection.
 
 Search local labels or package names, distinguish identical labels by package name,
-and use the selected/system filters. Inclusion and exclusion lists are stored
+and use the selected filter. Apps lists current-profile launcher packages, including
+preinstalled apps. All apps and components also exposes non-launcher services.
+Retained unavailable selections remain inspectable; disabled and unknown packages
+are distinguished without assuming that another profile means uninstalled.
+Inclusion and exclusion lists are stored
 separately, locally only. Apps sharing an Android UID share a rule; a work profile
 has a separate VPN and cannot be managed from this profile's screen.
 

@@ -6,6 +6,18 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ControlOperationsTest {
+    @Test public void rejectedAttemptCannotResetNewOrBusySession() throws Exception {
+        ControlOperations ops=new ControlOperations();Object rejected=new Object(),current=new Object();int[] resets={0};
+        assertThrows(NullPointerException.class,()->ops.unclaimed(null,()->fail("Unbound callback ran")));
+        ops.beginAttempt(rejected);ops.unclaimed(rejected,()->resets[0]++);assertEquals(1,resets[0]);
+        ops.beginAttempt(current);ops.unclaimed(rejected,()->fail("Late unclaimed destroy reset new attempt"));
+        ops.claim(current);ops.beginAttempt(rejected);
+        assertThrows(IOException.class,()->ops.claim(rejected));
+        ops.unclaimed(rejected,()->fail("Busy claimant changed active owner"));
+        ops.unclaimed(current,()->fail("Resource owner appeared idle"));
+        ops.release(current);ops.unclaimed(rejected,()->fail("Late unclaimed callback survived release"));
+        ops.beginAttempt(rejected);ops.unclaimed(rejected,()->resets[0]++);assertEquals(2,resets[0]);
+    }
     @Test public void liveLeaseBlocksImportsBetweenCallbacks() throws Exception {
         ControlOperations ops=new ControlOperations();Object owner=new Object();int[] writes={0};
         ops.claim(owner);ops.session(owner,()->writes[0]++);

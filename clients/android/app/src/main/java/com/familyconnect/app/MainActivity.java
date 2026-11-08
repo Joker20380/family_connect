@@ -120,7 +120,7 @@ public final class MainActivity extends LocalizedActivity {
         autoMode.setEnabled(!busy&&!on&&!waiting);toggle.setEnabled(!busy&&(on||waiting||available));transportPicker.setEnabled(!busy&&!on&&!waiting);importButton.setEnabled(!busy&&!on&&!waiting);
         enrollButton.setEnabled(!busy&&!on&&!waiting);controlButton.setEnabled(!busy&&!on&&!waiting);rnsButton.setEnabled(!busy&&!on&&!waiting);
         forgetButton.setEnabled(!busy&&!on&&!waiting&&store.exists());checkButton.setEnabled(!busy&&on);
-        if(ConnectionService.failed)textIfChanged(detail,getString(R.string.failed));
+        if(ConnectionService.failed)textIfChanged(detail,getString(ConnectionService.failureMessage));
         else if(!value.equals("off")&&"auto".equals(ConnectionService.requestedTransport))textIfChanged(detail,"Auto · "+ConnectionService.activeTransport.toUpperCase(java.util.Locale.ROOT));
         showControlResult();
     }

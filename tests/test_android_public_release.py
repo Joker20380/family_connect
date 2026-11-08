@@ -26,9 +26,9 @@ def test_android_changes_do_not_start_desktop_suites():
     assert not any(platforms(['docs/STATUS.md']).values())
 
 
-def test_android122_candidate_keeps_test_seam_disabled_and_requires_native_provenance():
+def test_android123_candidate_keeps_test_seam_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 122' in gradle and "versionName '0.1.18-beta122'" in gradle
+    assert 'versionCode 123' in gradle and "versionName '0.1.18-beta123'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
@@ -273,12 +273,16 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'TunnelEngine.java': 'f1c16279b1ea466b5d0a76ad249f50c91e544c0a5abcfaa4bcdc24957b20bd4e',
         'VpnHealth.java': '01e7b553c995958dd1e882fbc929bdfff3d7ff805bb0ac69738d579b1f6646aa',
     }
+    reviewed_app_vpn_recovery_beta123 = {
+        'MainActivity.java': 'ae04b97387cd9f67ce6e80bd01c31b411168e538c1c3a60a4516ab715aa0e4ad',
+        'ControlOperations.java': '3c1a7139c79ff0b000c775a8948cf18b21145e4eb7e06130f0acdd267a896482',
+    }
     reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81,
                          **reviewed_gateway_readiness, **reviewed_slow_link_recovery,
                          **reviewed_idle_ack_recovery, **reviewed_signaling_read_diagnostics,
                          **reviewed_subscription_beta119, **reviewed_inherited_renewal_beta119,
                          **reviewed_cold_candidate_9bf02724, **reviewed_consolidated_beta121,
-                         **reviewed_app_vpn_beta122}
+                         **reviewed_app_vpn_beta122, **reviewed_app_vpn_recovery_beta123}
     reviewed_resources = {
         'clients/android/app/src/main/res/values-ru/strings.xml': '89b334900a7febe2e50bfe06d593673961c320704a16ead76c09d9baa22ea279',
         'clients/android/app/src/main/res/values/strings.xml': '85e40c0044eaec9ebe8fb6f77d0a026ddc6bead90fb044237abd23b305fd2c39',
@@ -293,7 +297,12 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'clients/android/app/src/main/res/values-ru/strings.xml': '77c9a48fbd500c1bfa80b1efb895e8a1976a621d53668b9a57d47c650f3f17c7',
         'clients/android/app/src/main/res/values/strings.xml': 'b9fe19d231f4dd80526178826b2213f602f6286ba480ca9fc9deb5874d691711',
     }
-    reviewed_resources = {**reviewed_resources, **reviewed_subscription_resources_beta119, **reviewed_app_vpn_resources_beta122}
+    reviewed_app_vpn_catalog_resources_beta123 = {
+        'clients/android/app/src/main/res/values-ru/strings.xml': '025b8c5f82d87a54693660e288515e9e012d9da8c7b5876c5d0f1effe19f61fe',
+        'clients/android/app/src/main/res/values/strings.xml': '5db570467d29199a7b6f93a7911494a0093269c6601cbc6b46c61f5871372303',
+    }
+    reviewed_resources = {**reviewed_resources, **reviewed_subscription_resources_beta119,
+                          **reviewed_app_vpn_resources_beta122, **reviewed_app_vpn_catalog_resources_beta123}
     changes = {'clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ChatAudio.java'}

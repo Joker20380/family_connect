@@ -2,6 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected ANDROID-APP-VPN-RECOVERY — beta123 candidate.**
+Fix the launcher-based catalog and preclaim rejection/owned cleanup independently.
+Gate: real AppVpnActivity Save → ordinary Connect → ConnectionService rejection →
+valid selection → reconnect without process restart; distinct-UID traffic and pending
+policy, profile launcher comparison, disabled/shared UID and late-owner regressions.
+API31 plus applicable27/28/35, ordinary CI/review/merge and immutable ARM64 artifact.
+No owner installation/signing, servers, paid policy, G4, cold or updater changes.
+[Task receipt](releases/2026-11-08-android-app-vpn-recovery.md).
+
+### Previous selected task — accepted candidate, separate owner defect
+
 **Selected ANDROID-APP-VPN — per-application Android VPN.**
 Owner explicitly removes physical cold/whitelist as a priority blocker without changing
 measurements. Gate: one validated local policy, immutable active snapshot across all
