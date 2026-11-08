@@ -10,7 +10,10 @@ final class VpnHealth {
     private final ConnectivityManager manager;
     private volatile DatagramSocket active;
     private volatile boolean cancelled;
-    VpnHealth(Context context){manager=context.getSystemService(ConnectivityManager.class);}
+    interface CarrierProbe { String query(String encoded,int budgetMillis); }
+    private final CarrierProbe carrier;
+    VpnHealth(Context context){this(context,null);}
+    VpnHealth(Context context,CarrierProbe carrier){manager=context.getSystemService(ConnectivityManager.class);this.carrier=carrier;}
     synchronized void cancel(){cancelled=true;if(active!=null)active.close();}
     private synchronized boolean own(DatagramSocket socket){if(cancelled){socket.close();return false;}active=socket;return true;}
     static byte[] query(int id,String label){
@@ -37,6 +40,17 @@ final class VpnHealth {
         return check(source,android.os.SystemClock.elapsedRealtime()+5000);
     }
     boolean check(String source,long deadline){
+        if(carrier!=null){
+            if(cancelled||android.os.SystemClock.elapsedRealtime()>=deadline)return false;
+            byte[] request=query(new SecureRandom().nextInt(65536),"fc-"+java.util.UUID.randomUUID().toString().replace("-",""));
+            try{
+                int remaining=(int)Math.max(1,Math.min(2500,deadline-android.os.SystemClock.elapsedRealtime()));
+                String encoded=carrier.query(android.util.Base64.encodeToString(request,android.util.Base64.NO_WRAP),remaining);
+                if(encoded==null||encoded.length()>2048||cancelled||android.os.SystemClock.elapsedRealtime()>deadline)return false;
+                byte[] answer=android.util.Base64.decode(encoded,android.util.Base64.NO_WRAP);
+                return valid(request,answer,answer.length);
+            }catch(Exception unavailable){return false;}
+        }
         Network network=find(source);if(network==null||cancelled)return false;
         for(String target:new String[]{"1.1.1.1","9.9.9.9"}){
             if(cancelled||android.os.SystemClock.elapsedRealtime()>=deadline)return false;

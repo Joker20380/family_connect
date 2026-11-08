@@ -10,7 +10,7 @@ SOURCES = {
                  '2c895a3728eb1d93e4121c8c9526960e544a947417738823a4e714c7475e250d'),
     'bridge103': ('clients/rns/fc_rns_transport.py',
                   '70593713d1d915904d10cf0cac0eb21ca41b11b4dedcdb7973d0da236579ada0'),
-    'health89': ('clients/android/app/src/main/java/com/familyconnect/app/VpnHealth.java',
+    'health89': ('tests/fixtures/accepted_android/health89.java.txt',
                  'bbab99f2cfbc527c19e378c37b78f7ec53be96bdafb2bcd2915666ce8013f19b'),
 }
 

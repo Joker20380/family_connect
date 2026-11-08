@@ -1,4 +1,22 @@
 <resources>
+    <string name="app_vpn_title">Приложения и VPN</string>
+    <string name="app_vpn_details">Ограничения Android и профилей</string>
+    <string name="app_vpn_warning">Приложения вне VPN используют обычное подключение и остаются под ограничениями вашей сети.</string>
+    <string name="app_vpn_scope">Показан только этот профиль Android. Приложения с общим UID используют одно правило. Рабочий профиль имеет свой VPN. Системный запрет соединений без VPN может блокировать и исключённые приложения; этот экран его не меняет.</string>
+    <string name="app_vpn_pending">Применится при следующем подключении; текущий сеанс не меняется</string>
+    <string name="app_vpn_next">Сохранённый выбор применяется при следующем явном Connect</string>
+    <string name="app_vpn_invalid">Нельзя подключиться с этим выбором. В режиме «Только выбранные» выберите хотя бы одно установленное и включённое приложение. Уберите недоступные приложения или сохраните допустимую настройку.</string>
+    <string name="app_vpn_loading">Читаем локальный список приложений…</string>
+    <string name="app_vpn_search">Поиск по названию или package</string>
+    <string name="app_vpn_selected">Только выбранные</string>
+    <string name="app_vpn_save">Сохранить выбор</string>
+    <string name="app_vpn_saved">Выбор сохранён локально</string>
+    <string name="app_vpn_back">Назад</string>
+    <string name="app_vpn_missing">Не установлено или недоступно</string>
+    <string name="app_vpn_system">Системный компонент</string>
+    <string name="app_vpn_shared">Общий UID · одно правило для всей группы</string>
+    <string-array name="app_vpn_modes"><item>Все приложения</item><item>Только выбранные через VPN</item><item>Все, кроме выбранных</item></string-array>
+    <string-array name="app_vpn_categories"><item>Все видимые приложения</item><item>Пользовательские</item><item>Системные компоненты</item></string-array>
     <string name="subscription_title">Подписка и доступ</string>
     <string name="subscription_loading">Читаем последнее подтверждённое состояние…</string>
     <string name="subscription_unknown">Нет подтверждённых данных о подписке. Активация устройства не подтверждает оплату.</string>
@@ -287,4 +305,5 @@
     <string name="diagnostics_send">Отправить диагностику</string>
     <string name="diagnostics_privacy">Передайте выбранному получателю недавние состояния подключения, коды ошибок, версию и случайные идентификаторы поддержки. История сайтов, сообщения, адреса и ключи не включены. Автоматической отправки нет.</string>
     <string name="diagnostics_failed">Не удалось экспортировать диагностику. Подключение не изменилось.</string>
+    <string name="app_vpn_unsaved">Изменения не сохранены. Сохраните их для следующего подключения.</string>
 </resources>

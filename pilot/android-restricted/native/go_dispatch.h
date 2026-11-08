@@ -46,6 +46,11 @@ int32_t isolatedRestrictedStop(int64_t handle);
 #define fcRestrictedStop isolatedRestrictedStop
 #endif
 char * fcRestrictedStats(int64_t handle);
+char * fcRestrictedDns(int64_t handle,struct text query,int32_t millis);
+char * isolatedRestrictedDns(int64_t handle,struct text query,int32_t millis);
+#ifndef FC_GO_DISPATCH_IMPLEMENTATION
+#define fcRestrictedDns isolatedRestrictedDns
+#endif
 char * isolatedRestrictedStats(int64_t handle);
 #ifndef FC_GO_DISPATCH_IMPLEMENTATION
 #define fcRestrictedStats isolatedRestrictedStats

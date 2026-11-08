@@ -35,9 +35,13 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     private boolean temporaryBootstrap;
     private CredentialRefresh credentials;
     private volatile String startupStage="NOT_STARTED";
+    private AppVpnAndroid applications;
 
     RestrictedTunnelEngine(Context context, BooleanSupplier cancelled, Consumer<Boolean> state) {
         this(context,cancelled,state,null,Long.MAX_VALUE);
+    }
+    RestrictedTunnelEngine(Context context, BooleanSupplier cancelled, Consumer<Boolean> state,AppVpnAndroid applications) {
+        this(context,cancelled,state);this.applications=applications;
     }
 
     RestrictedTunnelEngine(Context context, BooleanSupplier cancelled, Consumer<Boolean> state,AutomaticVpnOwner owner,long deadline) {
@@ -48,8 +52,13 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     }
     RestrictedTunnelEngine(Context context, BooleanSupplier cancelled, Consumer<Boolean> state,AutomaticVpnOwner owner,long deadline,boolean restoring,String gateway) {
         this.context=context; this.cancelled=cancelled; this.state=state;
+        applications=new AppVpnAndroid(context,AppVpnPolicy.all());
         automaticOwner=owner;connectDeadline=deadline;this.restoring=restoring;
         this.gateway=RestrictedGateway.target(gateway);
+    }
+
+    static ParcelFileDescriptor establishOwnedTun(AutomaticVpnOwner owner)throws Exception{
+        return owner.replace(owner.builder());
     }
 
     public void up(String control) throws Exception {
@@ -109,11 +118,11 @@ final class RestrictedTunnelEngine implements TunnelEngine {
             throw failure;
         }
         startupStage="TUN_ATTACH";
-        if(automaticOwner!=null)tun=automaticOwner.replace(automaticOwner.builder());
-        else tun=service.new Builder().setSession("Family restricted diagnostic").setMtu(1280)
+        if(automaticOwner!=null)tun=establishOwnedTun(automaticOwner);
+        else tun=applications.establish(service.new Builder().setSession("Family restricted diagnostic").setMtu(1280)
             .addAddress("10.79.0.2",32).addAddress("fd79:fc::2",128)
             .addRoute("0.0.0.0",0).addRoute("::",0).addDnsServer("10.79.0.1")
-            .setBlocking(false).establish();
+            .setBlocking(false));
         if (tun==null || revoked || !NativeRestricted.attach(handle,tun.getFd())) throw new IllegalStateException("Packet attachment failed");
         evidence();
         state.accept(true);
@@ -121,6 +130,7 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     }
 
     private RestrictedHealthPolicy.Sample healthSample;
+    public String probeDns(String query,int budgetMillis){return healthy()?NativeRestricted.dns(handle,query,budgetMillis):null;}
     RestrictedHealthPolicy.Sample healthSample(){return healthSample;}
 
     boolean healthy() { return handle>0 && NativeRestricted.state(handle)==2 && (!context.getPackageName().equals("com.familyconnect.app.friends") || !FriendsRestricted.denied(gateway)); }

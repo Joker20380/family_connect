@@ -200,6 +200,7 @@ public final class FriendsActivity extends LocalizedActivity {
         LinearLayout panel=dialogContent();
         TerminalUi.label(panel,getString(R.string.dashboard_settings),20,TerminalUi.AMBER);
         SubscriptionUi.attach(this,panel);
+        TerminalUi.button(panel,R.string.app_vpn_title,()->startActivity(new android.content.Intent(this,AppVpnActivity.class)));
         TerminalUi.label(panel,getString(R.string.dashboard_motion),14,TerminalUi.TEXT);
         TerminalToggle toggle=new TerminalToggle(this);toggle.setMotion(motion);toggle.setChecked(motion);
         toggle.setText(R.string.dashboard_motion);toggle.setContentDescription(getString(R.string.dashboard_motion));

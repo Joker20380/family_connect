@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**8 November — ANDROID-APP-VPN: selected implementation, not routing acceptance.**
+Owner accepts the current launch as the product prerequisite; this does not change
+historical cold/whitelist PASS/FAIL/NOT_RUN. Work starts from main09f1aae5 in an isolated
+branch. Local ALL/INCLUDE/EXCLUDE policy, explicit-Connect snapshot and pending edits
+are being connected to AWG/TCP/MESH/Auto/guard.122 is reserved after remote branch and
+local artifact inspection (highest existing121); accepted121 remains immutable.
+Completion requires actual distinct-UID Android traffic, API27/28/35 checks and ordinary
+green CI/review/merge. No phone, production, paid policy, G4, entry, renewal or updater work.
+Actual separate-UID routing and guard/pending tests pass on isolated API35/API27/API28;
+RU large-font UI is corrected and visually inspected. Malformed pending storage is
+rejected without crashing the active session. Hosted package and upgrade-format gates
+are tracked in PR12, not inferred
+from these local checks. [Current evidence and limits](releases/2026-11-08-android-app-vpn.md).
+
 **8 November — CONTROL-PANEL-REFERENCE-1: object-oriented local panel.**
 Production overview, stable full-HMAC device cards and RU/Amsterdam server cards
 join registry, subscription, node application and bounded histories. Linux interface

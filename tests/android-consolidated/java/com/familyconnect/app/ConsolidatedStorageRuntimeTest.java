@@ -46,7 +46,7 @@ public class ConsolidatedStorageRuntimeTest {
         assertEquals("true",InstrumentationRegistry.getArguments().getString("fc_disposable"));
         assertTrue(android.os.Build.FINGERPRINT.contains("generic")||android.os.Build.MODEL.contains("sdk"));
         assertEquals("com.familyconnect.app.friends",context.getPackageName());
-        assertTrue("119".equals(sourceVersion)||"120".equals(sourceVersion));
+        assertTrue("119".equals(sourceVersion)||"120".equals(sourceVersion)||"121".equals(sourceVersion));
         assertEquals("off",ConnectionService.status);
         if(android.os.Build.VERSION.SDK_INT>=33)assertEquals(android.content.pm.PackageManager.PERMISSION_GRANTED,
             context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS));
@@ -58,6 +58,7 @@ public class ConsolidatedStorageRuntimeTest {
         assertTrue(settings().edit().putBoolean("activated",true).putString("country","nl")
             .putString("gateway_id","nl-amsterdam-2").putString("transport","telemost").commit());
         assertTrue(context.getSharedPreferences("chat-notifications",0).edit().putBoolean("background",false).commit());
+        assertEquals(AppVpnPolicy.all(),new AppVpnStore(context).read());
         JsonObject expected=new JsonObject();
         try(ControlIdentity identity=new FriendsIdentityVault(context).create()){
             expected.addProperty("identity",identity.reference());
@@ -65,7 +66,7 @@ public class ConsolidatedStorageRuntimeTest {
         worker(()->{
             try(ChatLocalAndroid chat=ChatLocalAndroid.open(context,true)){
                 expected.add("profile",chat.call("profile",new JsonObject()));
-                if(sourceVersion.equals("119")){
+                if(!sourceVersion.equals("120")){
                     long now=System.currentTimeMillis()/1000;
                     JsonObject response=new JsonObject();response.addProperty("schema",1);
                     response.addProperty("device",expected.get("identity").getAsString());
@@ -89,7 +90,8 @@ public class ConsolidatedStorageRuntimeTest {
         Files.write(evidence().toPath(),expected.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
     @Test public void verifyUpgradeAndSubscriptionScreen()throws Exception {
-        assertEquals(121,context.getPackageManager().getPackageInfo(context.getPackageName(),0).versionCode);
+        assertEquals(122,context.getPackageManager().getPackageInfo(context.getPackageName(),0).versionCode);
+        assertEquals(AppVpnPolicy.all(),new AppVpnStore(context).read());
         JsonObject expected=JsonParser.parseString(new String(Files.readAllBytes(evidence().toPath()),java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();
         assertEquals(expected.get("uid").getAsInt(),android.os.Process.myUid());
         assertEquals(expected.get("first_install").getAsLong(),context.getPackageManager().getPackageInfo(context.getPackageName(),0).firstInstallTime);
@@ -106,7 +108,7 @@ public class ConsolidatedStorageRuntimeTest {
                 JsonObject arguments=new JsonObject();arguments.add("device",expected.get("identity"));
                 JsonObject view=chat.call("subscription_status",arguments).getAsJsonObject();
                 assertTrue("Snapshot never invents a payment notice",view.get("notice").isJsonNull());
-                if(sourceVersion.equals("119")){
+                if(!sourceVersion.equals("120")){
                     assertEquals(expected.get("confirmed_at"),view.get("confirmed_at"));
                     assertEquals("active",view.getAsJsonObject("snapshot").get("effective_state").getAsString());
                 }else assertTrue(view.get("snapshot").isJsonNull());
@@ -138,5 +140,19 @@ public class ConsolidatedStorageRuntimeTest {
             assertTrue("Final offline outcome, not a loading screenshot: "+rendered.get(),rendered.get().contains(unavailable)||rendered.get().contains(offline));
             assertFalse("Cache is never a fresh server result",rendered.get().contains(SubscriptionUi.text(context).get("subscription_refresh_current")));
         }
+    }
+    @Test public void saveAppPolicyForRestart()throws Exception {
+        new AppVpnStore(context).save(new AppVpnPolicy(AppVpnPolicy.Mode.INCLUDE,
+            java.util.Set.of(context.getPackageName()),java.util.Set.of("com.android.settings")));
+    }
+    @Test public void verifyAppPolicyAfterRestartOrReplacement()throws Exception {
+        assertEquals(new AppVpnPolicy(AppVpnPolicy.Mode.INCLUDE,java.util.Set.of(context.getPackageName()),
+            java.util.Set.of("com.android.settings")),new AppVpnStore(context).read());
+        JsonObject expected=JsonParser.parseString(new String(Files.readAllBytes(evidence().toPath()),java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();
+        assertEquals(expected.get("uid").getAsInt(),android.os.Process.myUid());
+        try(ControlIdentity identity=new FriendsIdentityVault(context).load()){
+            assertEquals(expected.get("identity").getAsString(),identity.reference());
+        }
+        assertTrue(settings().getBoolean("activated",false));
     }
 }

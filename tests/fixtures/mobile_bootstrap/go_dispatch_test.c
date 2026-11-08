@@ -38,6 +38,7 @@ NUMERIC_STUB(fcRestrictedTun, (int64_t handle, int32_t fd), handle == -1 && fd =
 NUMERIC_STUB(fcRestrictedState, (int64_t handle), handle == -1)
 NUMERIC_STUB(fcRestrictedStop, (int64_t handle), handle == -1)
 TEXT_STUB(fcRestrictedStats, (int64_t handle), handle == -1)
+TEXT_STUB(fcRestrictedDns, (int64_t handle, struct text query, int32_t millis), handle == -1 && query.size == 0 && millis == 1000)
 TEXT_STUB(fcRestrictedReadiness, (struct text directory), directory.size == 0)
 NUMERIC_STUB(fcRestrictedValidateDelivery, (struct text response, struct text identity, struct text anchor), response.size == 0 && identity.size == 0 && anchor.size == 0)
 NUMERIC_STUB(fcRestrictedValidationCode, (struct text response, struct text identity, struct text anchor), response.size == 0 && identity.size == 0 && anchor.size == 0)
@@ -73,12 +74,12 @@ int main(void) {
     isolatedRestrictedBegin(empty,empty,empty,3000,99);
     isolatedRestrictedBeginReady(empty,empty,empty,empty,3000,99,0);
     isolatedRestrictedTun(-1,-1); isolatedRestrictedState(-1); isolatedRestrictedStop(-1);
-    isolatedRestrictedStats(-1); isolatedRestrictedReadiness(empty);
+    isolatedRestrictedStats(-1); isolatedRestrictedReadiness(empty); isolatedRestrictedDns(-1,empty,1000);
     isolatedRestrictedValidateDelivery(empty,empty,empty); isolatedRestrictedValidationCode(empty,empty,empty);
     isolatedRestrictedRenew(-1,empty,empty); isolatedRestrictedFault(empty);
     isolatedChatAcquire(chat,chat,chat,chat,99); isolatedChatState(-1); isolatedChatRelease(-1);
     isolatedChatOpen(-1,1000); isolatedChatRequest(-1,chat,chat,1000);
-    assert(atomic_load(&entered) == 19 && runtime_slot == 1);
+    assert(atomic_load(&entered) == 20 && runtime_slot == 1);
     atomic_store(&fail_create,1);
     report = NULL;
     assert(isolatedProvisionBegin(locator,anchor,gateway,resolver,3000,99,&report) == 0);
@@ -86,7 +87,8 @@ int main(void) {
     assert(isolatedRestrictedBegin(empty,empty,empty,3000,99) == 0);
     assert(isolatedRestrictedBeginReady(empty,empty,empty,empty,3000,99,0) == 0);
     assert(isolatedChatAcquire(chat,chat,chat,chat,99) == 0);
-    assert(atomic_load(&released) == 4 && atomic_load(&entered) == 19);
+    assert(atomic_load(&released) == 4 && atomic_load(&entered) == 20);
+    assert(isolatedRestrictedDns(-1,empty,1000) == NULL && runtime_slot == 1);
     assert(isolatedRestrictedValidationCode(empty,empty,empty) == 1);
     assert(isolatedRestrictedValidateDelivery(empty,empty,empty) == 0);
     assert(isolatedRestrictedState(-1) == -1 && isolatedChatState(-1) == -1);

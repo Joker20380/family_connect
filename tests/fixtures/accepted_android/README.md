@@ -1,6 +1,6 @@
 # Historical Android unit inputs
 
-These are public Python source snapshots, not APKs, identities, runtime state or
+These are public source snapshots, not APKs, identities, runtime state or
 new acceptance evidence. `scripts/ci_android_fixture.py` checks literal SHA256
 before loading any snapshot. A mismatch fails; current Android source is not used
 as an unverified replacement for an older boundary.
@@ -15,7 +15,8 @@ as an unverified replacement for an older boundary.
 - The deadline103 bridge uses `clients/rns/fc_rns_transport.py`, pinned to
   `70593713d1d915904d10cf0cac0eb21ca41b11b4dedcdb7973d0da236579ada0`
   in the [RNS source receipt](../../../docs/releases/2026-10-24-rns-reference-d02-2.md).
-- The health89 fixture pins the unchanged public `VpnHealth.java` to
+- The health89 fixture pins `health89.java.txt` (exact `VpnHealth.java` from
+  main09f1aae5, before per-app carrier health) to
   `bbab99f2cfbc527c19e378c37b78f7ec53be96bdafb2bcd2915666ce8013f19b`,
   also recorded in the [earlier source inventory](../../../docs/releases/2026-10-03-canary57-provenance.json).
 

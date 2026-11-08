@@ -26,9 +26,9 @@ def test_android_changes_do_not_start_desktop_suites():
     assert not any(platforms(['docs/STATUS.md']).values())
 
 
-def test_android121_candidate_keeps_test_seam_disabled_and_requires_native_provenance():
+def test_android122_candidate_keeps_test_seam_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 121' in gradle and "versionName '0.1.18-beta121'" in gradle
+    assert 'versionCode 122' in gradle and "versionName '0.1.18-beta122'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
@@ -262,11 +262,23 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
     reviewed_consolidated_beta121 = {
         'FriendsAccessAndroid.java': 'f4eb3235f067d91e66109e8d18e8a7c9986b42d6b92cd6b0d4e2661c6c54f3e7',
     }
+    reviewed_app_vpn_beta122 = {
+        'AutomaticConnection.java': 'f393817ca84ccc444203d4bfad9be7943fef65c7351981c2dc32ebc8b88f6a48',
+        'AutomaticNormalEngine.java': '360cfbe0399ed03d5cf1b56525cb712b84a688f6efd7aa5b6cab6073a56f1484',
+        'AutomaticVpnOwner.java': '64d120873786b263ce04eb62b8fcbfd093f6c7affe5363ea07b8090cd034c712',
+        'NativeRestricted.java': 'c86f49e49dbf8b01d3b67a949665952c6c7cfd784d89bb8d85bb38a044cc4cd6',
+        'NativeTcp.java': 'fc9b01ee9b735e9fbc0ec2768eba0724e07b2ebfed0fff621a1facd2a02c3657',
+        'RestrictedTunnelEngine.java': 'd506c0bc2b95cd6e34aedb2e05b91a8350613d5b4de9a5cf869a8c236cbc8a6d',
+        'TcpTunnelEngine.java': '1615e4646de0b68d5b3f470f57fa20149c8a9f5e1dfa1afe512739f44faa655d',
+        'TunnelEngine.java': 'f1c16279b1ea466b5d0a76ad249f50c91e544c0a5abcfaa4bcdc24957b20bd4e',
+        'VpnHealth.java': '01e7b553c995958dd1e882fbc929bdfff3d7ff805bb0ac69738d579b1f6646aa',
+    }
     reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81,
                          **reviewed_gateway_readiness, **reviewed_slow_link_recovery,
                          **reviewed_idle_ack_recovery, **reviewed_signaling_read_diagnostics,
                          **reviewed_subscription_beta119, **reviewed_inherited_renewal_beta119,
-                         **reviewed_cold_candidate_9bf02724, **reviewed_consolidated_beta121}
+                         **reviewed_cold_candidate_9bf02724, **reviewed_consolidated_beta121,
+                         **reviewed_app_vpn_beta122}
     reviewed_resources = {
         'clients/android/app/src/main/res/values-ru/strings.xml': '89b334900a7febe2e50bfe06d593673961c320704a16ead76c09d9baa22ea279',
         'clients/android/app/src/main/res/values/strings.xml': '85e40c0044eaec9ebe8fb6f77d0a026ddc6bead90fb044237abd23b305fd2c39',
@@ -277,7 +289,11 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'clients/android/app/src/main/res/values-ru/strings.xml': '120dfc00876e5603eb04edc3422023f6daf113744e3f112fa79136e9587af30e',
         'clients/android/app/src/main/res/values/strings.xml': 'e5db89007bb81fe8a7a78632eb8bd29ef2d1a35ca7f85970e8cc709f289e3b23',
     }
-    reviewed_resources = {**reviewed_resources, **reviewed_subscription_resources_beta119}
+    reviewed_app_vpn_resources_beta122 = {
+        'clients/android/app/src/main/res/values-ru/strings.xml': '77c9a48fbd500c1bfa80b1efb895e8a1976a621d53668b9a57d47c650f3f17c7',
+        'clients/android/app/src/main/res/values/strings.xml': 'b9fe19d231f4dd80526178826b2213f602f6286ba480ca9fc9deb5874d691711',
+    }
+    reviewed_resources = {**reviewed_resources, **reviewed_subscription_resources_beta119, **reviewed_app_vpn_resources_beta122}
     changes = {'clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ChatAudio.java'}
