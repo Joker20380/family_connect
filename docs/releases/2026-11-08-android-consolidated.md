@@ -63,6 +63,12 @@ artifact/source SHA and inventory belong in the final PR receipt, without a cosm
 post-CI source revision. The resulting ARM64 Friends artifact is an **unsigned
 prebuild without a locator**, not an installed/signed release or ready cold handoff.
 
+The isolated upgrade fixture launches the ordinary subscription intent through
+ActivityScenario, checks the focused dialog's real TextView and draws its measured
+view using the established UI-test method. It does not remove production FLAG_SECURE
+or depend on accessibility exporting a secure window. Failure logs and the completed
+format-upgrade receipt are retained with the normal runtime artifacts.
+
 ## Corrected operator preparation
 
 The two owner-operation errors were operator preparation errors, not evidence of

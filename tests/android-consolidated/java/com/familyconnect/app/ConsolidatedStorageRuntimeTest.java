@@ -1,9 +1,11 @@
 package com.familyconnect.app;
 
 import android.content.Context;
-import android.content.Intent;
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.SystemClock;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.platform.app.InstrumentationRegistry;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -23,12 +25,21 @@ public class ConsolidatedStorageRuntimeTest {
         return ChatRuntime.WORKER.submit(action).get(30,TimeUnit.SECONDS);
     }
     private File evidence(){return new File(context.getFilesDir(),"consolidated-storage.json");}
-    private String texts(android.view.accessibility.AccessibilityNodeInfo node){
-        if(node==null)return "";
-        StringBuilder result=new StringBuilder();
-        if(node.getText()!=null)result.append(node.getText()).append('\n');
-        for(int index=0;index<node.getChildCount();index++)result.append(texts(node.getChild(index)));
-        return result.toString();
+    private AlertDialog subscriptionDialog(){
+        try{
+            java.lang.reflect.Field field=SubscriptionUi.class.getDeclaredField("foregroundDialog");
+            field.setAccessible(true);
+            return (AlertDialog)field.get(null);
+        }catch(ReflectiveOperationException failure){throw new AssertionError(failure);}
+    }
+    private void capture(AlertDialog dialog)throws Exception {
+        android.view.View view=dialog.getWindow().getDecorView();
+        assertTrue(view.getWidth()>0&&view.getHeight()>0);
+        Bitmap screenshot=Bitmap.createBitmap(view.getWidth(),view.getHeight(),Bitmap.Config.ARGB_8888);
+        try(FileOutputStream output=new FileOutputStream(new File(context.getExternalFilesDir("ui-acceptance"),"consolidated-subscription-"+sourceVersion+".png"))){
+            view.draw(new Canvas(screenshot));
+            assertTrue(screenshot.compress(Bitmap.CompressFormat.PNG,100,output));
+        }finally{screenshot.recycle();}
     }
     private android.content.SharedPreferences settings(){return context.getSharedPreferences(FriendsActivity.class.getName(),0);}
     @Before public void disposableOnly()throws Exception {
@@ -100,22 +111,30 @@ public class ConsolidatedStorageRuntimeTest {
             }
             return null;
         });
-        context.startActivity(SubscriptionUi.intent(context).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         String unavailable=SubscriptionUi.text(context).get("subscription_refresh_unavailable");
         String offline=SubscriptionUi.text(context).get("subscription_offline");
-        long until=SystemClock.elapsedRealtime()+30000;
-        String rendered="";
-        while(SystemClock.elapsedRealtime()<until){
-            rendered=texts(InstrumentationRegistry.getInstrumentation().getUiAutomation().getRootInActiveWindow());
-            if(rendered.contains(unavailable)||rendered.contains(offline))break;
-            SystemClock.sleep(200);
+        try(ActivityScenario<FriendsActivity> scenario=ActivityScenario.launch(SubscriptionUi.intent(context))){
+            java.util.concurrent.atomic.AtomicReference<String> rendered=new java.util.concurrent.atomic.AtomicReference<>("");
+            long until=SystemClock.elapsedRealtime()+30000;
+            while(SystemClock.elapsedRealtime()<until){
+                scenario.onActivity(activity->{
+                    AlertDialog dialog=subscriptionDialog();
+                    if(dialog!=null&&dialog.isShowing()){
+                        android.widget.TextView message=dialog.findViewById(android.R.id.message);
+                        if(message!=null)rendered.set(message.getText().toString());
+                    }
+                });
+                if(rendered.get().contains(unavailable)||rendered.get().contains(offline))break;
+                SystemClock.sleep(200);
+            }
+            scenario.onActivity(activity->{
+                AlertDialog dialog=subscriptionDialog();
+                assertNotNull("Actual foreground subscription dialog",dialog);
+                assertTrue(dialog.getWindow().getDecorView().hasWindowFocus());
+                try{capture(dialog);}catch(Exception failure){throw new AssertionError(failure);}
+            });
+            assertTrue("Final offline outcome, not a loading screenshot: "+rendered.get(),rendered.get().contains(unavailable)||rendered.get().contains(offline));
+            assertFalse("Cache is never a fresh server result",rendered.get().contains(SubscriptionUi.text(context).get("subscription_refresh_current")));
         }
-        assertTrue("Final offline outcome, not a loading screenshot",rendered.contains(unavailable)||rendered.contains(offline));
-        assertFalse("Cache is never a fresh server result",rendered.contains(SubscriptionUi.text(context).get("subscription_refresh_current")));
-        Bitmap screenshot=InstrumentationRegistry.getInstrumentation().getUiAutomation().takeScreenshot();
-        assertNotNull(screenshot);
-        try(FileOutputStream output=new FileOutputStream(new File(context.getExternalFilesDir("ui-acceptance"),"consolidated-subscription-"+sourceVersion+".png"))){
-            assertTrue(screenshot.compress(Bitmap.CompressFormat.PNG,100,output));
-        }finally{screenshot.recycle();}
     }
 }

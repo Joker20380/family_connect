@@ -167,6 +167,8 @@ jobs:
             android-awg-runtime.log
             android-emulator-runner.log
             android-friends-runtime.log
+            android-consolidated-runtime.log
+            android-ci-ui/consolidated-storage.json
             android-legacy-*.log
             android-runtime-matrix/
             clients/android/app/build/outputs/androidTest-results/connected/**/*.xml

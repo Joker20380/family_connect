@@ -39,6 +39,8 @@ def main():
                     'com.familyconnect.app.ConsolidatedStorageRuntimeTest#'+method,
                     PACKAGE+'.test/androidx.test.runner.AndroidJUnitRunner'], capture_output=True, text=True)
         print(result.stdout, flush=True)
+        if method == 'verifyUpgradeAndSubscriptionScreen':
+            subprocess.run(adb+['pull', '/sdcard/Android/data/'+PACKAGE+'/files/ui-acceptance/consolidated-subscription-'+str(version)+'.png', str(output)], timeout=30, check=False)
         if 'OK (1 test)' not in result.stdout:
             raise RuntimeError('Storage fixture instrumentation failed')
     try:
@@ -52,7 +54,8 @@ def main():
                 run(adb+['shell', 'am', 'force-stop', PACKAGE])
                 build_version(121, init)
                 instrument('verifyUpgradeAndSubscriptionScreen', version)
-                run(adb+['pull', '/sdcard/Android/data/'+PACKAGE+'/files/ui-acceptance/consolidated-subscription-'+str(version)+'.png', str(output)])
+                if not (output/('consolidated-subscription-'+str(version)+'.png')).is_file():
+                    raise RuntimeError('Actual subscription visual evidence missing')
                 results.append(dict(from_version=version, to_version=121, status='PASS',
                     scope='in-place format fixture; exact historical vault source, not historical signed APK'))
                 for package in (PACKAGE+'.test', PACKAGE):
