@@ -2,6 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected SUBSCRIPTION-PAID-123 — exact signed release, source/package only.**
+Dependencies: PR13 merged, installed signed123 receipt and owner visual confirmation;
+split recovery/routing and existing Android/JNI/G4 acceptance remain closed. Preserve
+the two-system-launcher expanded-list limitation without reopening catalog work.
+Gate: explicit108/119/123 descriptors, old replay unchanged, synthetic packaged
+operator/authenticated HTTP/canonical projection agreement, rejection/limit/revoke
+regressions, fresh serving inventories, minimal three-archive overlay, backup/readback/
+code rollback plan, ordinary green hosted CI/review/merge. No deployed-policy or real
+payment claim; no phone/APK/production mutation. After acceptance, policy delivery is
+one separate addressed operation. Future direction: panel ↔ official support chat ↔
+Android, not parallel implementation. [Evidence](releases/2026-11-09-subscription-paid-123.md).
+
+### Previous selected task — delivered, physical checks accepted
+
 **Selected ANDROID-APP-VPN-RECOVERY — beta123 candidate.**
 Fix the launcher-based catalog and preclaim rejection/owned cleanup independently.
 Gate: real AppVpnActivity Save → ordinary Connect → ConnectionService rejection →

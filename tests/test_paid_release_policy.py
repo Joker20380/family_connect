@@ -1,4 +1,5 @@
 import hashlib
+import itertools
 import json
 
 import pytest
@@ -17,6 +18,17 @@ def set_release(registry, code):
                          (f'0.1.18-beta{code}', code, device.reference))
 
 
+def test_exact_signed_release_descriptors_only():
+    assert [(item.platform, item.version_name, item.version_code, item.apk_sha256)
+            for item in paid_beta.PAID_ANDROID_RELEASES] == [
+        ('android', '0.1.18-beta108', 108, '144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf'),
+        ('android', '0.1.18-beta119', 119, '52a9847b74181c48808c86a0c5bf5925b53ef498eec628aef2d78d26f1c92d2d'),
+        ('android', '0.1.18-beta123', 123, 'ae011307b4afc58ea211ea6c5cd27c28bc472bda6af9b19892de400a3d3de15d'),
+    ]
+    assert paid_beta.LEGACY_ANDROID_RELEASE == paid_beta.PAID_ANDROID_RELEASES[0]
+    assert paid_beta.policy()['policy'] == 'android-paid-108-119-123-v1'
+
+
 @pytest.mark.parametrize('release', paid_beta.PAID_ANDROID_RELEASES)
 def test_new_payment_and_grace_match_explicit_release(registry, release):
     set_release(registry, release.version_code)
@@ -29,7 +41,11 @@ def test_new_payment_and_grace_match_explicit_release(registry, release):
 
 
 @pytest.mark.parametrize('code,apk', [(108, paid_beta.PAID_ANDROID_RELEASES[1].apk_sha256),
-    (119, paid_beta.PAID_ANDROID_APK_SHA256), (120, paid_beta.PAID_ANDROID_RELEASES[1].apk_sha256)])
+    (119, paid_beta.PAID_ANDROID_APK_SHA256), (120, paid_beta.PAID_ANDROID_RELEASES[1].apk_sha256),
+    (123, '96a4eaed68ab31313d2d5ace3136998880d2d2fb8a803bde2d30cc17816efcae'),
+    (123, paid_beta.PAID_ANDROID_APK_SHA256), (123, paid_beta.PAID_ANDROID_RELEASES[1].apk_sha256),
+    (119, paid_beta.PAID_ANDROID_RELEASES[2].apk_sha256),
+    *[(code, paid_beta.PAID_ANDROID_RELEASES[2].apk_sha256) for code in (121, 122, 124, 999)]])
 def test_wrong_release_hash_or_unknown_version_rejects_without_write(registry, code, apk):
     set_release(registry, code)
     before = snapshot(registry[0])
@@ -39,14 +55,13 @@ def test_wrong_release_hash_or_unknown_version_rejects_without_write(registry, c
 
 
 @pytest.mark.parametrize('kind', ['payment', 'grace'])
-@pytest.mark.parametrize('reverse', [False, True])
+@pytest.mark.parametrize('codes', list(itertools.permutations((108, 119, 123), 2)))
 @pytest.mark.parametrize('source', ['support_ack', 'two_acks'])
-def test_equally_latest_allowed_versions_conflict(paid_setup, kind, reverse, source):
+def test_equally_latest_allowed_versions_conflict(paid_setup, kind, codes, source):
     service, device, support, now = paid_setup
     registry = service.access, device, support
     if kind == 'grace':
         event(registry, now=now)
-    codes = (119, 108) if reverse else (108, 119)
     support_observation(paid_setup, codes[0] if source == 'support_ack' else 108,
                         0 if source == 'support_ack' else -60)
     if source == 'two_acks':
@@ -69,7 +84,8 @@ def test_new119_ack_overrides_old108_and_requires119_hash(paid_setup):
 
 
 @pytest.mark.parametrize('name,code', [('0.1.18-beta119', 108), ('0.1.18-beta108', 119),
-                                      ('0.1.18-beta119', '119'), ('0.1.18-beta120', 120)])
+    ('0.1.18-beta119', '119'), ('0.1.18-beta120', 120), ('0.1.18-beta123', 119),
+    ('0.1.18-beta119', 123), ('0.1.18-beta123', '123'), ('0.1.18-beta124', 124)])
 def test_latest_pair_must_match_one_descriptor(paid_setup, name, code):
     service, device, support, now = paid_setup
     ack_observation(paid_setup, dict(app_version=name, version_code=code), 1)
@@ -112,7 +128,7 @@ def test_exact108_replay_after119_preserves_payload_receipt_and_state(registry, 
     assert snapshot(registry[0]) == before
 
 
-@pytest.mark.parametrize('code', [106, 120])
+@pytest.mark.parametrize('code', [106, 120, 121, 122, 124])
 def test_grace_keeps_version_eligibility(registry, code):
     event(registry)
     set_release(registry, code)
@@ -122,9 +138,10 @@ def test_grace_keeps_version_eligibility(registry, code):
     assert snapshot(registry[0]) == before
 
 
-def test_canary_lookup_and_old_permit_cannot_enroll119(registry):
+@pytest.mark.parametrize('code', [119, 123])
+def test_canary_lookup_and_old_permit_remain108_only(registry, code):
     permit = envelope(registry)
-    set_release(registry, 119)
+    set_release(registry, code)
     before = snapshot(registry[0])
     with pytest.raises(paid_beta.PaidBetaError, match='BASELINE_REQUIRED'):
         paid_beta_canary.lookup(registry[0].path, registry[2], KEY, NOW)
@@ -133,9 +150,10 @@ def test_canary_lookup_and_old_permit_cannot_enroll119(registry):
     assert snapshot(registry[0]) == before
 
 
-def test_crl_canary_precondition_still_requires108(operation):
+@pytest.mark.parametrize('code', [119, 123])
+def test_crl_canary_precondition_still_requires108(operation, code):
     registry = operation.service.access, operation.device, operation.support
-    set_release(registry, 119)
+    set_release(registry, code)
     with paid_beta.connection(registry[0].path) as database:
         with pytest.raises(paid_beta.PaidBetaError, match='BASELINE_REQUIRED'):
             operation.engine.preconditions(database, operation.now)

@@ -1,6 +1,6 @@
 # Подписки Family Connect: ежедневная эксплуатация
 
-Каноническая инструкция подписок и наблюдения доступа, 8 ноября 2026.
+Каноническая инструкция подписок и наблюдения доступа, 9 ноября 2026.
 Закрытая интеграция PR1 слита в main `9d05c0f936b076b0536f7c7d23833436677e0191`.
 Это инструкция по существующей модели, **не разрешение на конкретную оплату**.
 Получатель, основание оплаты, абсолютный период и допустимая версия должны быть
@@ -8,6 +8,10 @@
 Владелец отдельно разрешил политику108/119: установка119 или merge сами по себе
 не являются таким разрешением. [Политика A и отдельное решение Б](#политика-a-и-отдельное-решение-б).
 Фактические install/CI/merge receipts — в [отчёте PAID-119](../releases/2026-11-07-subscription-paid-119.md).
+**PAID-123 сейчас — подготовленный source/package, не поставка.** В рабочем runtime
+остаётся `android-paid-108-119-v1`; кандидат `android-paid-108-119-123-v1` добавляет
+только проверенные signed123. До отдельного install/readback receipt новые123
+операции не выполнять. [Граница и пакетные доказательства](../releases/2026-11-09-subscription-paid-123.md).
 
 ## Где смотреть и чему доверять
 
@@ -72,8 +76,10 @@ read-only `policy`: он не открывает registry даже при ука
 "$OPERATOR_PYTHON" -I "$PAID_OPERATOR_ARCHIVE" policy
 ```
 
-Должны совпасть `policy=android-paid-108-119-v1`, два release descriptors ниже,
-`cohort_limit=10`, archive SHA256 и хеш paid_beta с установленным HTTP runtime.
+До поставки123 должны совпасть `policy=android-paid-108-119-v1` и два descriptors108/119;
+после отдельной подтверждённой поставки — `android-paid-108-119-123-v1` и три descriptors.
+Всегда сверяются `cohort_limit=10`, archive SHA256 и хеш paid_beta в HTTP, operator
+и центральном reconciler. Подготовленный локальный кандидат не равен установленному.
 Пути, interpreter, исходный commit, inventory и checksums берутся из закрытого
 receipt. Несовпадение — остановить новую запись, а не подменять APK hash.
 
@@ -133,17 +139,25 @@ receipt. Несовпадение — остановить новую запис
 Backend допускает равную границу, но такая операция не продлевает доступ и не
 должна называться настоящим renewal. Не округляйте период
 по локальному часовому поясу. Последние authenticated support/readiness observations
-должны согласованно определить **одну** точную пару версии. Equally-latest108 и119
-отклоняются как конфликт. Выберите `ACCEPTED_APK_SHA256` именно для этой пары:
+должны согласованно определить **одну** точную пару версии. Equally-latest разные
+версии (включая108/119/123 в кандидате) отклоняются как конфликт. `app_version`
+не является криптографической аттестацией APK: hash подтверждает оператор по
+проверенной доставке, а не по одному номеру версии. Выберите `ACCEPTED_APK_SHA256`
+именно для пары, разрешённой **фактически установленной** политикой:
 
 | versionName | versionCode | APK SHA256 |
 | --- | --- | --- |
 | `0.1.18-beta108` |108| `144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf` |
 | `0.1.18-beta119` |119| `52a9847b74181c48808c86a0c5bf5925b53ef498eec628aef2d78d26f1c92d2d` |
+| `0.1.18-beta123` — только после отдельной поставки политики |123| `ae011307b4afc58ea211ea6c5cd27c28bc472bda6af9b19892de400a3d3de15d` |
 
 Это не диапазон версий. Будущие релизы не разрешены автоматически; хеш другой
 разрешённой версии также отклоняется. APK119 сохраняет source
 `b2a37fe989294018ab08060bdebfa46d741d11d5`, Friends/ARM64 и прежнюю подпись.
+Signed123 сохраняет Android source `73064237fca7ea311501f1b3dda8a4a2689bf8bc`,
+Friends/ARM64 и тот же signer. Unsigned123 (`96a4eaed…`) **не допустим**;120/121/122
+не добавлены. Merge серверной политики не меняет происхождение APK и не создаёт
+entitlement, оплату или участие в cohort.
 
 ```sh
 ( umask 077; set -C
@@ -165,8 +179,8 @@ Backend допускает равную границу, но такая опер
 Изменённый payload с тем же ID отклоняется `EVENT_ID_CONFLICT`. Не создавайте новый
 ID для «повтора» неизвестного результата. Старый duplicate receipt не возвращает
 подписку к прежнему состоянию: итог проверяйте отдельным свежим status.
-Точный108 replay после upgrade119, expiry или revoke возвращает прежнюю квитанцию
-до проверки текущей версии. Не меняйте исходный108 hash на119 для такого replay.
+Точный108/119 replay после upgrade123, expiry или revoke возвращает прежнюю квитанцию
+до проверки текущей версии. Не заменяйте исходный hash новым123 для такого replay.
 
 ## Grace, досрочное окончание, terminal revoke
 
@@ -290,10 +304,11 @@ CLI `restore`/`dry-run`: их нет. Для настоящего disaster resto
 
 ## Политика A и отдельное решение Б
 
-### A. Новые платные операции для beta119, без потери108
+### A. Точные108/119 и подготовленное расширение123
 
 Решение выбрано владельцем. `confirmed_android_release` разрешает только точные
-descriptors108/119. Grace использует ту же eligibility без APK-аргумента и без
+descriptors108/119 в установленном runtime; подготовленный кандидат добавляет только
+signed123 после отдельной поставки. Grace использует ту же eligibility без APK-аргумента и без
 превращения в payment. Сохранены active identity/invite, MESH revoke, лимит10,
 периоды и terminal revoke. `confirm_android_baseline` оставлен108-only для старых
 canary/permits; live canary не повторяется. Synthetic backend/seed_demo/immutable
@@ -308,22 +323,34 @@ ReleaseMetadata остаются108; старые identities, наблюдени
 unit и source config collector. `scripts/package_paid_policy_overlay.py` требует
 точные SHA256 serving archive и его paid_beta; заменяет **только paid_beta.py**,
 сравнивает полный inventory. Bootstrap/renewal и прочие serving bytes не заменяются
-снимком HEAD. Оператор собирается `scripts/package_support_operator.py --operator
-paid-beta --output "$NEW_OPERATOR_ARCHIVE"` и проверяется реальным `policy`/status.
+снимком HEAD. Для123 этот же overlay применяется к **фактически установленным**
+HTTP, paid-operator и paid-reconcile: все три содержат paid_beta. Полный inventory
+каждого архива сохраняется, остальные members побайтно неизменны, в том числе
+preparation hook. Архивы nodes paid_beta не содержат: их не менять, VPN/renewal не
+перезапускать. Исторический PAID-119 package не является текущей baseline.
+CLI проверяется реальным `policy`/status; пакетная репетиция пишет только synthetic DB.
 Пути и точные команды установки находятся в закрытом комплекте, не в веб-процессе.
 
-Restart разрешён только независимому HTTP API после проверки его effective unit;
+Следующая поставка требует отдельного разрешения. На её короткое окно приостановить
+новые операторские записи, заменить согласованные архивы, сохранив current-path,
+interpreter, units, transport commands и membership. Центральный timer продолжает
+обновлять leases: атомарная замена reconciler действует со следующего цикла без
+остановки узлов. Старый уже запущенный read-only цикл можно дождаться.
+Restart нужен только независимому HTTP API после проверки его effective unit;
 сразу подтвердите новый PID/archive/module hashes и read-only status. Согласованно
 смените archive path/SHA256 в private `subscriptions-source.json` внешнего collector,
 **сохраните HMAC key**. Дождитесь успешного импорта и authenticated HTTP200 страницы
 `/subscriptions/` с новым runtime SHA и свежим observed_at; ошибка/старый кеш не PASS.
 
-При кодовом rollback: вернуть сохранённый HTTP ExecStart/drop-in и соответствующий
-проверенный108 CLI (не legacy106), reload systemd и restart **только этого HTTP API**;
+При кодовом rollback123: вернуть точно сохранённые **до этой поставки** HTTP,
+совместимый108/119 CLI с preparation hook и reconciler, не legacy106/старый108 CLI.
+Если units не менялись, daemon-reload не нужен; restart **только этого HTTP API**;
 вернуть сохранённый collector source config, не HMAC key; проверить старые hashes,
 status и свежий импорт. БД/платежи/cohort/identity/периоды **не восстанавливать из backup**.
-Уже выданные119 entitlement сохраняются, новые119 activate/grace после отката
-недопустимы. Зафиксировать rollback receipt, приостановить новые119 операции.
+Уже выданные entitlement108/119/123 и их exact replay сохраняются; новые123
+activate/grace после отката недопустимы,108/119 остаются разрешены. Зафиксировать
+rollback receipt, приостановить новые123 операции. Отдельно подтвердить свежий
+canonical snapshot, node observations и неизменность защищённых данных.
 
 ### B. Одна подписка AWG/TCP/MESH
 
