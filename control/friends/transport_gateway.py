@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import re
+import resource
 import signal
 import socket
 import subprocess
@@ -29,6 +30,13 @@ def emit(value):
         print(json.dumps(value, sort_keys=True), file=sys.stderr, flush=True)
     except OSError:
         pass
+
+
+def process_usage():
+    try:
+        return resource.getrusage(resource.RUSAGE_SELF)
+    except OSError:
+        return None
 
 
 def command_family(arguments):
@@ -61,6 +69,9 @@ def failure_record(error, mode):
         phase=context.get('phase', 'entry'), exception_class=kind, reason=reason,
         pid=os.getpid(), invocation_id=invocation if re.fullmatch('[a-f0-9]{32}', invocation) else None,
         observed_at=time.time(), elapsed=context.get('elapsed'), budget=OPERATION_SECONDS)
+    for name in ('boundary', 'calls', 'calls_dropped', 'stage_counts'):
+        if name in context:
+            record[name] = context[name]
     if isinstance(error, (subprocess.TimeoutExpired, subprocess.CalledProcessError)):
         record.update(command_family=command_family(error.cmd),
             returncode=getattr(error, 'returncode', None), timeout=isinstance(error, subprocess.TimeoutExpired))
@@ -75,16 +86,27 @@ def report_failure(error, mode, root):
     error.transport_reported = True
     record = failure_record(error, mode)
     emit(dict(transport_failure=record))
+    diagnostic_started = time.monotonic()
+    outcome = 'unavailable'
     try:
         descriptor = os.open(root/'transport-failure.json', os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
         with os.fdopen(descriptor, 'w') as output:
             json.dump(record, output, sort_keys=True)
             output.flush()
+            sync_started = time.monotonic()
+            emit(dict(transport_diagnostic_call=dict(role='failure_record', kind='file_fsync',
+                boundary='before', remaining=None)))
             os.fsync(output.fileno())
+            emit(dict(transport_diagnostic_call=dict(role='failure_record', kind='file_fsync',
+                boundary='after', duration=time.monotonic()-sync_started, completed=True)))
+            outcome = 'created'
     except FileExistsError:
-        pass
+        outcome = 'retained'
     except Exception:
         emit(dict(transport_diagnostic_persistence='unavailable'))
+    finally:
+        emit(dict(transport_diagnostic_write=dict(role='failure_record', result=outcome,
+            duration=time.monotonic()-diagnostic_started)))
 
 
 class Operation:
@@ -92,6 +114,13 @@ class Operation:
         self.started = time.monotonic()
         self.deadline = self.started + seconds
         self.stages = {}
+        self.stage_counts = {}
+        self.calls = []
+        self.calls_dropped = 0
+
+    def context(self, phase, boundary):
+        return dict(phase=phase, boundary=boundary, elapsed=time.monotonic()-self.started,
+            calls=self.calls.copy(), calls_dropped=self.calls_dropped, stage_counts=self.stage_counts.copy())
 
     def remaining(self):
         remaining = self.deadline - time.monotonic()
@@ -102,16 +131,73 @@ class Operation:
     @contextmanager
     def stage(self, name):
         started = time.monotonic()
+        self.stage_counts[name] = self.stage_counts.get(name, 0) + 1
+        boundary = 'before'
         try:
             self.remaining()
+            boundary = 'body'
             yield
+            boundary = 'after'
             self.remaining()
         except BaseException as error:
             if not hasattr(error, 'transport_context'):
-                error.transport_context = dict(phase=name, elapsed=time.monotonic()-self.started)
+                error.transport_context = self.context(name, boundary)
             raise
         finally:
             self.stages[name] = self.stages.get(name, 0) + time.monotonic() - started
+
+    @contextmanager
+    def call(self, kind, *, role=None, replacement=None, phase=None):
+        entry = dict(kind=kind, role=role, entered=time.monotonic()-self.started,
+            remaining=self.deadline-time.monotonic(), started=None, finished=None,
+            duration=None, completed=False, replace_completed=replacement, boundary='before')
+        if len(self.calls) == 24:
+            self.calls.pop(0)
+            self.calls_dropped += 1
+        self.calls.append(entry)
+        usage = None
+        boundary = 'before'
+        if phase:
+            self.stage_counts[phase] = self.stage_counts.get(phase, 0) + 1
+        try:
+            self.remaining()
+            usage = process_usage()
+            entry['started'] = time.monotonic()-self.started
+            boundary = 'body'
+            entry['boundary'] = boundary
+            yield entry
+            entry['completed'] = True
+            entry['finished'] = time.monotonic()-self.started
+            boundary = 'after'
+            entry['boundary'] = boundary
+            self.remaining()
+        except BaseException as error:
+            if phase and not hasattr(error, 'transport_context'):
+                error.transport_context = self.context(phase, boundary)
+            raise
+        finally:
+            if entry['started'] is not None:
+                if entry['finished'] is None:
+                    entry['finished'] = time.monotonic()-self.started
+                entry['duration'] = entry['finished']-entry['started']
+                latest = process_usage()
+                if usage is not None and latest is not None:
+                    entry['self_cpu_seconds'] = latest.ru_utime+latest.ru_stime-usage.ru_utime-usage.ru_stime
+                    entry['major_faults'] = latest.ru_majflt-usage.ru_majflt
+                    entry['voluntary_switches'] = latest.ru_nvcsw-usage.ru_nvcsw
+                    entry['involuntary_switches'] = latest.ru_nivcsw-usage.ru_nivcsw
+            if phase:
+                self.stages[phase] = self.stages.get(phase, 0) + time.monotonic()-self.started-entry['entered']
+
+
+@contextmanager
+def measured_call(kind, *, role=None, replacement=None, phase=None):
+    operation = CURRENT_OPERATION.get()
+    if operation is None:
+        yield {}
+    else:
+        with operation.call(kind, role=role, replacement=replacement, phase=phase) as entry:
+            yield entry
 
 
 def remaining():
@@ -135,36 +221,34 @@ def read(path):
     return json.loads(path.read_text(), object_pairs_hook=unique)
 
 
-@contextmanager
-def persistence_stage(name):
-    operation = CURRENT_OPERATION.get()
-    if operation is None:
-        yield
-    else:
-        with operation.stage(name):
-            yield
-
-
 def write(path, value, mode=0o600):
+    role = {'transport-state.json': 'decision_state', 'transport-attempt.json': 'attempt_result',
+        'server.json': 'engine_config'}.get(path.name, 'unknown')
     temporary = path.with_suffix('.pending')
     descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW, mode)
     os.fchmod(descriptor, mode)
     with os.fdopen(descriptor, 'w') as handle:
         json.dump(value, handle, sort_keys=True)
         handle.flush()
-        with persistence_stage('persist_file'):
+        with measured_call('file_fsync', role=role, replacement=False, phase='persist_file'):
             os.fsync(handle.fileno())
-    with persistence_stage('persist_replace'):
+    with measured_call('replace', role=role, replacement=False, phase='persist_replace') as entry:
         os.replace(temporary, path)
+        entry['replace_completed'] = True
     directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
     try:
-        with persistence_stage('persist_directory'):
+        with measured_call('directory_fsync', role=role, replacement=True, phase='persist_directory'):
             os.fsync(directory)
     finally:
         os.close(directory)
 
 
 def execute(arguments):
+    with measured_call(command_family(arguments)):
+        return execute_command(arguments)
+
+
+def execute_command(arguments):
     timeout = remaining()
     with subprocess.Popen(arguments, stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True) as process:
         try:
@@ -175,7 +259,6 @@ def execute(arguments):
             raise
         if process.returncode:
             raise subprocess.CalledProcessError(process.returncode, arguments)
-    remaining()
     return output
 
 
@@ -208,10 +291,11 @@ class Gateway:
             result = 'complete'
         except BaseException as error:
             if not hasattr(error, 'transport_context'):
-                error.transport_context = dict(phase='operation', elapsed=time.monotonic()-operation.started)
+                error.transport_context = operation.context('operation', 'body')
             raise
         finally:
-            self.metrics = dict(result=result, total=time.monotonic()-operation.started, stages=operation.stages)
+            self.metrics = dict(result=result, total=time.monotonic()-operation.started, stages=operation.stages,
+                stage_counts=operation.stage_counts, calls=operation.calls, calls_dropped=operation.calls_dropped)
             CURRENT_OPERATION.reset(token)
             emit(dict(transport_progress=self.metrics))
 

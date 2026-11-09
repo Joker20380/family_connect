@@ -2,6 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected RU incident follow-up — user traffic and bounded budget attribution.**
+Dependencies: accepted PR14 recovery receipt6740402014, exact RU sourceb811547f
+and nodef747759c. Gate: separate owner beta123 RU AWG/TCP DNS/verified HTTPS/egress,
+restore settings; deterministic pre/post-call deadline cases, immutable packaged
+diagnostic candidate, existing systemd/native and applicable hosted checks, ordinary
+review/merge. Diagnostics are not a historical root-cause proof or a production
+deployment. Keep durable decisions/receipts,8s operation/12s watchdog/120s lease;
+no service restart, paid123 retry, NL mutation or new policy. USB-support readiness
+may block only physical traffic, not source work. Final identities/results stay in
+the PR receipt without a cosmetic post-CI head.
+[Scope and completion evidence](releases/2026-11-09-ru-operation-budget.md).
+
+### Previous selected task — source/package accepted; rollout reverted
+
 **Selected SUBSCRIPTION-PAID-123 — exact signed release, source/package only.**
 Dependencies: PR13 merged, installed signed123 receipt and owner visual confirmation;
 split recovery/routing and existing Android/JNI/G4 acceptance remain closed. Preserve

@@ -81,6 +81,45 @@ def test_lifetime_fences_and_disabled_default():
     assert 'OnUnitInactiveSec=30' in (root/'family-connect-paid-reconcile.timer').read_text()
 
 
+def test_exact_ru_diagnostic_overlay_executes_pinned_package(tmp_path):
+    from scripts import package_transport_diagnostics as diagnostic
+    inputs = {name: subprocess.check_output(['git', '-C', str(kit.ROOT), 'show',
+        diagnostic.BASE_SOURCE+':'+name]) for name in kit.MODULES}
+    inputs.update({'control/': b'', 'control/friends/': b'', 'control/friends/__init__.py': b''})
+    node = tmp_path/'accepted.pyz'
+    kit.archive(node, inputs)
+    gateway = tmp_path/'gateway.py'
+    gateway.write_bytes(subprocess.check_output(['git', '-C', str(kit.ROOT), 'show',
+        diagnostic.BASE_SOURCE+':deploy/friends/awg-gateway.py']))
+    assert kit.sha(node.read_bytes()) == diagnostic.BASE_NODE
+    output = tmp_path/'candidate'
+    receipt = diagnostic.build(node, gateway, output)
+    assert {name for name in inputs if receipt['before_modules'][name] != receipt['after_modules'][name]} == {diagnostic.MODULE}
+    code = '''import json,sys,tempfile
+from pathlib import Path
+sys.path.insert(0,sys.argv[1])
+from control.friends import transport_gateway as module,transport_policy
+assert module.__loader__.archive == transport_policy.__loader__.archive == sys.argv[1]
+operation=module.Operation();token=module.CURRENT_OPERATION.set(operation)
+try:
+ with tempfile.TemporaryDirectory() as directory:
+  path=Path(directory)/'transport-state.json';module.write(path,{'synthetic':True})
+  assert module.read(path)=={'synthetic':True}
+finally:module.CURRENT_OPERATION.reset(token)
+assert [call['kind'] for call in operation.calls]==['file_fsync','replace','directory_fsync']
+assert all(call['completed'] and call['role']=='decision_state' for call in operation.calls)
+assert module.OPERATION_SECONDS==8 and transport_policy.LEASE_SECONDS==120
+print(json.dumps({'result':'PASS','calls':len(operation.calls)}))
+'''
+    result = subprocess.run([sys.executable, '-I', '-B', '-c', code, str(output/'paid-transport.pyz')],
+        cwd=tmp_path, capture_output=True, text=True, check=True)
+    assert json.loads(result.stdout) == dict(result='PASS', calls=3)
+    with zipfile.ZipFile(node, 'a') as package:
+        package.writestr('unexpected.py', b'not accepted')
+    with pytest.raises(ValueError, match='EXACT_RU_PR9_INPUTS_REQUIRED'):
+        diagnostic.build(node, gateway, tmp_path/'rejected')
+
+
 def test_exact_v2_node_forward_package_and_inventory(tmp_path):
     from scripts import package_transport_node_recovery as recovery
     commit = recovery.PREVIOUS_SOURCE

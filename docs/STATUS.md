@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**9 November — RU incident follow-up: budget diagnostics, not deployment.**
+Accepted recovery remains RECOVERED_CAUSE_OPEN; installed RU source is exactly
+b811547f, central policy108/119. Five isolated deadline cases distinguish pre-call,
+query-exhausted budget, file fsync, replace and directory fsync without changing8/12/120s
+bounds. The candidate records bounded, redacted per-call timing/file roles and keeps
+both durable readback writes. Packaged real-systemd/native diagnostic failure/recovery
+and positive/terminal-denied flows pass. No RU/NL/HTTP rollout or paid operation.
+Owner RU AWG/TCP traffic is a separate gate: Redmi is present but temporary app USB
+support is closed at entry; physical results and final CI/merge belong in the task PR.
+[Analysis and evidence limits](releases/2026-11-09-ru-operation-budget.md).
+Earlier selected-task entries are retained history, not permission for paid123 retry.
+
 **9 November — SUBSCRIPTION-PAID-123: source/package preparation, not deployed.**
 Owner beta123 is installed: recovery, ALL/INCLUDE/EXCLUDE, pending and live MESH
 physical checks are accepted; owner confirms «выглядит норм». Two system launcher

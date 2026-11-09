@@ -197,6 +197,11 @@ def diagnostic_fault():
         assert failure['phase'] == 'engine_query' and failure['mode'] == 'watch'
         assert failure['reason'] == 'COMMAND_FAILED' and failure['command_family'] == 'tcp-query'
         assert failure['returncode'] == 73 and failure['timeout'] is False
+        assert failure['boundary'] == 'body'
+        queries = [entry for entry in failure['calls'] if entry['kind'] == 'tcp-query']
+        assert len(queries) == 1 and queries[0]['started'] is not None
+        assert queries[0]['duration'] >= 0 and not queries[0]['completed']
+        assert queries[0]['remaining'] <= 8
         assert failure['invocation_id'] == invocation
         run(['systemctl','stop',*SERVICES])
         assert all(run(['systemctl','show',service,'-p','MainPID','--value']).stdout.strip() == b'0' for service in SERVICES)
