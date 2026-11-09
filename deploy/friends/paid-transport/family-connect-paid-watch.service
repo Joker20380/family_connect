@@ -10,8 +10,7 @@ WatchdogSec=12
 TimeoutStartSec=45
 TimeoutStopSec=5
 KillMode=control-group
-Restart=on-failure
-RestartSec=5
+Restart=no
 UMask=0077
 
 [Install]

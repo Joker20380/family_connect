@@ -2,6 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected RU recovery / lifecycle and diagnostic-output fix.**
+Dependencies: preexisting incident PR14/comment6751072916, installed PR15
+node125c796a/sourcefa0ec71e, unchanged gateway9023d2c3 and policy108/119.
+Availability recovery is authorized and verified separately from source work.
+Gate: exact-package real-systemd watcher-loss reproduction with production unit
+context, bounded unread-stderr regression, retained deny/expiry/security checks,
+ordinary hosted review/merge and an immutable RU-only candidate. The candidate
+chooses explicit manual RECOVERY_REQUIRED, not automatic VPN recovery. No new
+production code, paid123 retry, phone, Android/G4 or paid operations. First trigger
+remains open unless supported by original-invocation evidence, not synthetic similarity.
+[Evidence and scope](releases/2026-11-09-ru-watch-lifecycle.md).
+
+### Previous selected task — diagnostics delivered; prior traffic preserved
+
 **Selected RU incident follow-up — user traffic and bounded budget attribution.**
 Dependencies: accepted PR14 recovery receipt6740402014, exact RU sourceb811547f
 and nodef747759c. Gate: separate owner beta123 RU AWG/TCP DNS/verified HTTPS/egress,

@@ -9,6 +9,7 @@ import re
 import resource
 import signal
 import socket
+import stat
 import subprocess
 import sys
 import time
@@ -18,6 +19,7 @@ from . import transport_policy as policy
 SERVICES = ('family-connect-friends-awg.service', 'family-connect-friends-tcp.service')
 OPERATION_SECONDS = 8
 CURRENT_OPERATION = ContextVar('transport_operation', default=None)
+DIAGNOSTIC_MESSAGES_DROPPED = 0
 FAILURE_CODES = frozenset(('TRANSPORT_OPERATION_DEADLINE', 'ENGINE_START_TIMEOUT',
     'ENGINE_READBACK_MISMATCH', 'INVALID_AWG_READBACK', 'INVALID_TCP_READBACK',
     'UNSAFE_GATEWAY_STATE', 'INVALID_GATEWAY_POLICY', 'INVALID_GATEWAY_CACHE',
@@ -26,10 +28,33 @@ FAILURE_CODES = frozenset(('TRANSPORT_OPERATION_DEADLINE', 'ENGINE_START_TIMEOUT
 
 
 def emit(value):
+    global DIAGNOSTIC_MESSAGES_DROPPED
     try:
-        print(json.dumps(value, sort_keys=True), file=sys.stderr, flush=True)
-    except OSError:
+        payload = ('\n' + json.dumps(dict(value,
+            diagnostic_messages_dropped=DIAGNOSTIC_MESSAGES_DROPPED), sort_keys=True) + '\n').encode()
+        descriptor = sys.stderr.fileno()
+        mode = os.fstat(descriptor).st_mode
+        if len(payload) > 32768:
+            raise ValueError('DIAGNOSTIC_MESSAGE_TOO_LARGE')
+        if stat.S_ISSOCK(mode):
+            with socket.socket(fileno=os.dup(descriptor)) as channel:
+                written = channel.send(payload, socket.MSG_DONTWAIT | socket.MSG_NOSIGNAL)
+        elif stat.S_ISFIFO(mode):
+            pipe = os.open('/proc/self/fd/' + str(descriptor), os.O_WRONLY | os.O_NONBLOCK | os.O_CLOEXEC)
+            try:
+                if len(payload) > os.fpathconf(pipe, 'PC_PIPE_BUF'):
+                    raise ValueError('DIAGNOSTIC_MESSAGE_TOO_LARGE')
+                written = os.write(pipe, payload)
+            finally:
+                os.close(pipe)
+        else:
+            raise ValueError('DIAGNOSTIC_SINK_NOT_NONBLOCKING')
+        if written == len(payload):
+            return True
+    except (OSError, ValueError):
         pass
+    DIAGNOSTIC_MESSAGES_DROPPED += 1
+    return False
 
 
 def process_usage():
@@ -86,6 +111,7 @@ def report_failure(error, mode, root):
     error.transport_reported = True
     record = failure_record(error, mode)
     emit(dict(transport_failure=record))
+    record['diagnostic_messages_dropped'] = DIAGNOSTIC_MESSAGES_DROPPED
     diagnostic_started = time.monotonic()
     outcome = 'unavailable'
     try:
@@ -565,7 +591,7 @@ def watch(gateway, *, run=execute):
             engine.apply()
             notify('WATCHDOG=1')
             current = time.monotonic()
-            print(json.dumps(dict(transport_progress_gap=current-previous)), file=sys.stderr, flush=True)
+            emit(dict(transport_progress_gap=current-previous))
             previous = current
             time.sleep(policy.TICK_SECONDS)
     except BaseException as error:

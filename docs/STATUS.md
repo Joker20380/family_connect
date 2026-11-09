@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**9 November — RU availability recovered; lifecycle/output candidate, not deployed.**
+The preexisting19:14 incident is recovered with unchanged PR15 node125c796a and
+policy108/119. Six readback samples over183s, five normal three-node cycles, renewed
+leases, protected fingerprints and authenticated fresh panel pass; current108/119
+is restored. No phone or paid operation. The initial trigger remains UNKNOWN.
+Exact-package systemd reproduction confirms watcher-only restarts leave both engines
+stopped; unread pipe/socket reproduction confirms synchronous diagnostics can block
+a completed operation. Candidate uses explicit manual RECOVERY_REQUIRED and bounded
+optional diagnostics, preserving8/12/120s and durable receipts. New code remains
+uninstalled; package/CI identities and final results belong in the task receipt.
+[Recovery, evidence limits and candidate](releases/2026-11-09-ru-watch-lifecycle.md).
+
 **9 November — RU incident follow-up: budget diagnostics, not deployment.**
 Accepted recovery remains RECOVERED_CAUSE_OPEN; installed RU source is exactly
 b811547f, central policy108/119. Five isolated deadline cases distinguish pre-call,

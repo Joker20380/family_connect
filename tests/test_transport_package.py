@@ -120,6 +120,37 @@ print(json.dumps({'result':'PASS','calls':len(operation.calls)}))
         diagnostic.build(node, gateway, tmp_path/'rejected')
 
 
+def test_exact_pr15_lifecycle_package_rejects_drift(tmp_path):
+    from scripts import package_ru_lifecycle as lifecycle
+    def historical(name):
+        return subprocess.check_output(['git','-C',str(kit.ROOT),'show',lifecycle.BASE_SOURCE+':'+name])
+    inputs = {name:historical(name) for name in kit.MODULES}
+    inputs.update({'control/': b'', 'control/friends/': b'', 'control/friends/__init__.py': b''})
+    node, gateway, unit = (tmp_path/name for name in ('base.pyz','gateway.py','watch.service'))
+    kit.archive(node, inputs)
+    gateway.write_bytes(historical('deploy/friends/awg-gateway.py'))
+    unit.write_bytes(historical('deploy/friends/paid-transport/'+lifecycle.UNIT))
+    receipt = lifecycle.build(node,gateway,unit,tmp_path/'candidate')
+    assert {name for name in inputs if receipt['before_modules'][name]!=receipt['after_modules'][name]}=={lifecycle.MODULE}
+    assert set(receipt['files'])=={'paid-transport.pyz',lifecycle.UNIT}
+    code = '''import sys,socket,json
+sys.path.insert(0,sys.argv[1])
+from control.friends import transport_gateway as module,transport_policy
+assert module.__loader__.archive==transport_policy.__loader__.archive==sys.argv[1]
+reader,writer=socket.socketpair();sys.stderr=writer.makefile('w')
+assert module.emit({'package_probe':True})
+assert json.loads(reader.recv(4096))['package_probe']
+assert module.OPERATION_SECONDS==8 and transport_policy.LEASE_SECONDS==120
+print('PACKAGED_BOUNDS_AND_OUTPUT_PASS')
+'''
+    result = subprocess.run([sys.executable,'-I','-B','-c',code,str(tmp_path/'candidate/paid-transport.pyz')],
+        capture_output=True,text=True,check=True,timeout=5)
+    assert result.stdout.strip()=='PACKAGED_BOUNDS_AND_OUTPUT_PASS'
+    unit.write_bytes(unit.read_bytes()+b'\nWatchdogSec=99\n')
+    with pytest.raises(ValueError,match='EXACT_RU_PR15_INPUTS_REQUIRED'):
+        lifecycle.build(node,gateway,unit,tmp_path/'rejected')
+
+
 def test_exact_v2_node_forward_package_and_inventory(tmp_path):
     from scripts import package_transport_node_recovery as recovery
     commit = recovery.PREVIOUS_SOURCE

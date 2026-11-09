@@ -45,7 +45,10 @@ def restart_services():
     run(['systemctl', 'stop', *SERVICES])
     for service in SERVICES:
         assert run(['systemctl', 'show', service, '-p', 'MainPID', '--value']).stdout.strip() == b'0'
-    run(['systemctl', 'start', *SERVICES])
+    jobs = run(['systemctl', 'list-jobs', '--no-pager']).stdout.decode()
+    assert not any(service in jobs for service in SERVICES)
+    for service in SERVICES:
+        run(['systemctl', 'start', service])
 
 
 def material(document):
@@ -105,12 +108,15 @@ def setup(document):
     engine.accept(document['envelope'])
     engine.apply(starting=True)
     units = Path('/etc/systemd/system')
-    (units/SERVICES[1]).write_text('[Unit]\nDescription=Isolated packaged AWG service\n[Service]\nExecStart=/usr/bin/python3 /opt/apps/family_connect/friends-awg/awg-gateway.py run\n')
+    shutil.copyfile('/production-awg.service', units/SERVICES[1])
     shutil.copyfile('/production-tcp.service', units/SERVICES[2])
     shutil.copyfile('/kit/'+SERVICES[0],units/SERVICES[0])
     for service in SERVICES[1:]:
         drop = units/(service+'.d')
         drop.mkdir()
+        (drop/'70-private-files.conf').write_text('[Service]\nUMask=0077\n')
+        if service == SERVICES[1]:
+            (drop/'80-stop-timeout.conf').write_text('[Service]\nTimeoutStopSec=90\n')
         shutil.copyfile('/kit/paid-dependency.conf',drop/'90-paid.conf')
     shutil.copyfile('/kit/paid-tcp-preflight.conf',units/(SERVICES[2]+'.d')/'91-paid-preflight.conf')
     run(['systemctl','daemon-reload'])
@@ -177,6 +183,66 @@ def budget_fault(document):
         if subprocess.run(['systemctl','is-failed','--quiet',SERVICES[0]]).returncode == 0:
             run(['systemctl','reset-failed',SERVICES[0]])
         restart_services()
+
+
+def lifecycle_fault(document):
+    def properties(service):
+        raw = run(['systemctl','show',service,'-p',
+            'MainPID,NRestarts,Result,ActiveState,SubState,InvocationID,Restart,BindsTo,After']).stdout.decode()
+        return dict(line.split('=',1) for line in raw.splitlines() if '=' in line)
+    before = json.loads((ROOT/'transport-state.json').read_text())
+    initial = {service:properties(service) for service in SERVICES}
+    assert all(value['ActiveState']=='active' for value in initial.values())
+    assert all(SERVICES[0] in initial[service]['BindsTo'] for service in SERVICES[1:])
+    expected_loop = document['expect_restart_loop']
+    assert initial[SERVICES[0]]['Restart'] == ('on-failure' if expected_loop else 'no')
+    started = time.monotonic()
+    samples = []
+    run(['systemctl','kill','--kill-who=main','--signal=SIGKILL',SERVICES[0]])
+    try:
+        while True:
+            current = {service:properties(service) for service in SERVICES}
+            samples.append(dict(elapsed=time.monotonic()-started,units=current))
+            engines_stopped = all(current[service]['MainPID']=='0' for service in SERVICES[1:])
+            if expected_loop:
+                if int(current[SERVICES[0]]['NRestarts'])>=2 and engines_stopped:
+                    break
+            elif time.monotonic()-started>=12:
+                assert engines_stopped and current[SERVICES[0]]['MainPID']=='0'
+                assert current[SERVICES[0]]['NRestarts']==initial[SERVICES[0]]['NRestarts']
+                assert current[SERVICES[0]]['ActiveState']=='failed'
+                break
+            assert time.monotonic()-started<65, 'Lifecycle did not reach its declared bounded outcome'
+            time.sleep(.4)
+        jobs = run(['systemctl','list-jobs','--no-pager']).stdout.decode()
+        assert not any(service in jobs for service in SERVICES[1:])
+        after = json.loads((ROOT/'transport-state.json').read_text())
+        for device, record in before['records'].items():
+            for field in ('decision','prepared','boot','deadline'):
+                assert after['records'][device][field]==record[field]
+    finally:
+        restart_services()
+    return dict(result='RESTART_LOOP_REPRODUCED' if expected_loop else 'RECOVERY_REQUIRED',
+        samples=samples,engine_start_jobs='none during automatic watcher-only restart',
+        recovery_job_source='explicit operator-equivalent sequential systemctl start',
+        manual_recovery=info(),durable_decisions_unchanged=True)
+
+
+def invalid_start():
+    run(['systemctl','stop',*SERVICES])
+    path = ROOT/'transport-state.json'
+    original = path.read_bytes()
+    try:
+        path.write_bytes(b'{}')
+        process = subprocess.run(['systemctl','start',SERVICES[0]],capture_output=True,timeout=15)
+        assert process.returncode!=0
+        time.sleep(6)
+        assert all(run(['systemctl','show',service,'-p','MainPID','--value']).stdout.strip()==b'0' for service in SERVICES)
+        assert run(['systemctl','show',SERVICES[0],'-p','NRestarts','--value']).stdout.strip()==b'0'
+    finally:
+        path.write_bytes(original)
+        restart_services()
+    return dict(result='RECOVERY_REQUIRED',invalid_state_never_opened_access=True)
 
 
 def diagnostic_fault():
@@ -269,6 +335,10 @@ def main():
         result = budget_fault(document)
     elif action == 'diagnostic-fault':
         result = diagnostic_fault()
+    elif action == 'lifecycle-fault':
+        result = lifecycle_fault(document)
+    elif action == 'invalid-start':
+        result = invalid_start()
     elif action == 'restart':
         restart_services()
         result = info()
