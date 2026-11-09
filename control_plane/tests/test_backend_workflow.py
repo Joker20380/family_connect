@@ -273,11 +273,11 @@ def test_policy_expansion_preserves_demo108_metadata_and_registry(console):
 
     before_registry = backend.checked_path().read_bytes()
     before_metadata = list(ReleaseMetadata.objects.values())
-    assert [item.version_code for item in paid_beta.PAID_ANDROID_RELEASES] == [108, 119]
+    assert [item.version_code for item in paid_beta.PAID_ANDROID_RELEASES] == [108, 119, 123]
     call_command('seed_demo', verbosity=0)
     assert backend.checked_path().read_bytes() == before_registry
     assert list(ReleaseMetadata.objects.values()) == before_metadata
     release = ReleaseMetadata.objects.get(version_name='0.1.18-beta108')
     assert release.version_code == 108 and release.size == 56212840
     assert release.sha256 == '144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf'
-    assert not ReleaseMetadata.objects.filter(version_code=119).exists()
+    assert not ReleaseMetadata.objects.filter(version_code__in=[119, 123]).exists()

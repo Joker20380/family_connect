@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -19,6 +20,11 @@ from test_paid_release_policy import set_release
 
 @pytest.fixture
 def packages(tmp_path):
+    supplied_http = os.environ.get('FC_TEST_HTTP_ARTIFACT')
+    supplied_operator = os.environ.get('FC_TEST_PAID_OPERATOR')
+    if supplied_http or supplied_operator:
+        assert supplied_http and supplied_operator, 'Both accepted package inputs are required'
+        return Path(supplied_http).resolve() / 'friends-http.pyz', Path(supplied_operator).resolve()
     http = tmp_path / 'http'
     build_http(http)
     operator = tmp_path / 'operator.pyz'
@@ -48,7 +54,7 @@ def test_packaged_policy_reports_matching_modules_without_registry(packages, tmp
     assert json.loads(result.stdout) == paid_beta.policy()
 
 
-@pytest.mark.parametrize('code', [108, 119])
+@pytest.mark.parametrize('code', [108, 119, 123])
 def test_actual_operator_and_http_paid_module_apply_same_policy(packages, registry, code):
     http, operator = packages
     access, device, support = registry
@@ -80,7 +86,9 @@ print(json.dumps(result))
 
 
 def test_overlay_preserves_complete_serving_inventory_and_executes_policy(packages, tmp_path):
-    http, _ = packages
+    original, _ = packages
+    http = tmp_path / 'overlay-baseline.pyz'
+    http.write_bytes(original.read_bytes())
     with zipfile.ZipFile(http, 'a') as archive:
         archive.writestr('unrelated-installed-bootstrap.txt', b'keep the accepted serving revision')
     with zipfile.ZipFile(http) as archive:

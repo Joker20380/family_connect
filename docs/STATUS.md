@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**9 November — SUBSCRIPTION-PAID-123: source/package preparation, not deployed.**
+Owner beta123 is installed: recovery, ALL/INCLUDE/EXCLUDE, pending and live MESH
+physical checks are accepted; owner confirms «выглядит норм». Two system launcher
+apps remain available only in the expanded list: main-catalog completeness is not
+claimed. [Closed owner receipt](https://github.com/Joker20380/family_connect/pull/13#issuecomment-6737682320).
+Exact signed123 is added alongside unchanged108/119; unsigned123 and120/121/122
+are not eligible. Synthetic packaged CLI/HTTP/projection and replay tests pass.
+Fresh read-only serving inventory supports a paid_beta-only overlay of HTTP,
+operator and reconciler, preserving the preparation hook and all transport bytes.
+Installed policy remains108/119 until a separately authorized rollout; no real
+payment/cohort change. CI/review/merge and final kit identities are recorded in the
+[paid123 report](releases/2026-11-09-subscription-paid-123.md) and final PR receipt.
+Next product direction, not started: panel ↔ official support chat ↔ Android.
+Earlier selected-task entries below are historical checkpoints.
+
 **8 November — ANDROID-APP-VPN-RECOVERY: catalog and rejected-policy lifecycle.**
 Separate branch from main967f38f4;123 reserved after all30 remote Android refs
 and local candidate names were checked (maximum122). Default catalog follows
