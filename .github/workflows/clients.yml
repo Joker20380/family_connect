@@ -145,6 +145,15 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -dns-server 1.1.1.1
           script: python3 pilot/android-app-vpn/run.py --serial emulator-5554 --out "$RUNNER_TEMP/app-vpn-api28"
+      - name: Android 12 catalog and rejected-policy recovery
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          emulator-options: -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -dns-server 1.1.1.1
+          script: python3 pilot/android-app-vpn/run.py --serial emulator-5554 --out "$RUNNER_TEMP/app-vpn-api31"
       - name: Save per-app routing receipts
         if: always()
         uses: actions/upload-artifact@v4
@@ -157,6 +166,9 @@ jobs:
             ${{ runner.temp }}/app-vpn-api*/owner-health.json
             ${{ runner.temp }}/app-vpn-api*/package-removal.json
             ${{ runner.temp }}/app-vpn-api*/screen.json
+            ${{ runner.temp }}/app-vpn-api*/catalog.json
+            ${{ runner.temp }}/app-vpn-api*/ui-recovery.json
+            ${{ runner.temp }}/app-vpn-api*/rejection.json
       - name: Build pinned restricted Android native
         shell: bash
         run: |

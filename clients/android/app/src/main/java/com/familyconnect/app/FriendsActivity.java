@@ -301,7 +301,7 @@ public final class FriendsActivity extends LocalizedActivity {
         if(dashboardMap!=null)dashboardMap.update(shownRegion,value,ConnectionService.healthStatus,false);
         if(routeMap!=null){routeMap.update(shownRegion,value,ConnectionService.healthStatus,motion);text(routeStatus,getString(off?R.string.route_selected:R.string.route_active)+" · "+summary+"\n"+getString(R.string.route_core)+": "+getString(off?R.string.route_waiting:on?R.string.on:R.string.connecting)+"\n"+getString(R.string.route_check)+": "+getString(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:off?R.string.route_waiting:R.string.health_checking));text(routeDetail,detail.getText().toString());}
         countries.setEnabled(Ui60Presentation.canSelectRoute(value,busy));check.setEnabled(!busy&&on);transports.setEnabled(Ui60Presentation.canSelectRoute(value,busy));
-        if(ConnectionService.failed)text(detail,getString(R.string.failed));
+        if(ConnectionService.failed)text(detail,getString(ConnectionService.failureMessage));
         if(Ui60Presentation.canReconnect(value,busy,reconnect)){reconnect=false;toggle();}
     }
     private String pendingInvitation="";

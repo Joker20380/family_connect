@@ -12,11 +12,12 @@
     <string name="app_vpn_save">Сохранить выбор</string>
     <string name="app_vpn_saved">Выбор сохранён локально</string>
     <string name="app_vpn_back">Назад</string>
-    <string name="app_vpn_missing">Не установлено или недоступно</string>
-    <string name="app_vpn_system">Системный компонент</string>
+    <string name="app_vpn_missing">Недоступно в этом профиле: удалено, скрыто или в другом профиле. При необходимости уберите сохранённый выбор.</string>
+    <string name="app_vpn_disabled">Установлено в этом профиле, но отключено</string>
+    <string name="app_vpn_system">Предустановленное / системное приложение</string>
     <string name="app_vpn_shared">Общий UID · одно правило для всей группы</string>
     <string-array name="app_vpn_modes"><item>Все приложения</item><item>Только выбранные через VPN</item><item>Все, кроме выбранных</item></string-array>
-    <string-array name="app_vpn_categories"><item>Все видимые приложения</item><item>Пользовательские</item><item>Системные компоненты</item></string-array>
+    <string-array name="app_vpn_categories"><item>Приложения</item><item>Все приложения и компоненты</item></string-array>
     <string name="subscription_title">Подписка и доступ</string>
     <string name="subscription_loading">Читаем последнее подтверждённое состояние…</string>
     <string name="subscription_unknown">Нет подтверждённых данных о подписке. Активация устройства не подтверждает оплату.</string>

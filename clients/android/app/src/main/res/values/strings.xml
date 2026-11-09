@@ -12,11 +12,12 @@
     <string name="app_vpn_save">Save selection</string>
     <string name="app_vpn_saved">Selection saved locally</string>
     <string name="app_vpn_back">Back</string>
-    <string name="app_vpn_missing">Not installed or unavailable</string>
-    <string name="app_vpn_system">System component</string>
+    <string name="app_vpn_missing">Unavailable in this profile: removed, hidden or in another profile. Remove the saved selection if needed.</string>
+    <string name="app_vpn_disabled">Installed in this profile, but disabled</string>
+    <string name="app_vpn_system">Preinstalled / system app</string>
     <string name="app_vpn_shared">Shared UID · one rule for the entire group</string>
     <string-array name="app_vpn_modes"><item>All apps</item><item>Only selected through VPN</item><item>All except selected</item></string-array>
-    <string-array name="app_vpn_categories"><item>All visible apps</item><item>User apps</item><item>System components</item></string-array>
+    <string-array name="app_vpn_categories"><item>Apps</item><item>All apps and components</item></string-array>
     <string name="subscription_title">Subscription and access</string>
     <string name="subscription_loading">Reading the last confirmed status…</string>
     <string name="subscription_unknown">No confirmed subscription status is available. Device activation does not confirm payment.</string>
