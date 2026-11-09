@@ -19,6 +19,27 @@ import traceback
 from test_fleet_canary import call, cleanup, inspect, verify_container, LABEL, ROOT
 
 
+def progress_maxima(journal):
+    measurements = []
+    for line in journal.decode().splitlines():
+        try:
+            record = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(record, dict):
+            measurements.append(record)
+    passes = [item['transport_progress'] for item in measurements
+        if 'transport_progress' in item and item['transport_progress']['result'] == 'complete']
+    gaps = [item['transport_progress_gap'] for item in measurements if 'transport_progress_gap' in item]
+    assert passes and gaps, 'MISSING_COMPLETED_PROGRESS_OR_GAP'
+    maximum = dict(total=max(item['total'] for item in passes), progress_gap=max(gaps),
+        stages={stage:max(item['stages'].get(stage, 0) for item in passes)
+            for stage in {stage for item in passes for stage in item['stages']}},
+        diagnostic_messages_dropped=max(item.get('diagnostic_messages_dropped', 0) for item in measurements))
+    assert maximum['total'] < 8 and maximum['progress_gap'] < 12
+    return maximum
+
+
 def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=False, expect_restart_loop=False):
     os.umask(0o077)
     prefix = 'fc-enforcement-fix-' + secrets.token_hex(5)
@@ -169,6 +190,11 @@ def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=Fa
                 inner('client','probe',dict(allowed=False))
                 receipt['checks']['terminal_deny_and_noncohort_after_recovery']=True
                 receipt['checks']['active_actual_https']=True
+                if lifecycle_diagnostics and not expect_restart_loop:
+                    for node in nodes:
+                        journal=call(['docker','exec',containers[node],'journalctl','-u',SERVICES_WATCH,'-o','cat','--no-pager']).stdout
+                        (report.parent/(prefix+'-'+node+'-progress.private.log')).write_bytes(journal)
+                        receipt['checks']['maxima_'+node]=progress_maxima(journal)
                 receipt['result']='PASS'
                 return receipt
 
@@ -242,13 +268,7 @@ def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=Fa
                 assert inner(node,'info')['services'] == stable_services[node], 'unexpected restart during stable window'
                 journal=call(['docker','exec',containers[node],'journalctl','-u',SERVICES_WATCH,'-o','cat','--no-pager']).stdout
                 (report.parent/(prefix+'-'+node+'-progress.private.log')).write_bytes(journal)
-                measurements=[json.loads(line) for line in journal.decode().splitlines() if line.startswith('{"transport_progress')]
-                passes=[item['transport_progress'] for item in measurements if 'transport_progress' in item and item['transport_progress']['result']=='complete']
-                gaps=[item['transport_progress_gap'] for item in measurements if 'transport_progress_gap' in item]
-                maximum=dict(total=max(item['total'] for item in passes),progress_gap=max(gaps),
-                    stages={stage:max(item['stages'].get(stage,0) for item in passes) for stage in {stage for item in passes for stage in item['stages']}})
-                assert maximum['total']<8 and maximum['progress_gap']<12
-                receipt['checks']['maxima_'+node]=maximum
+                receipt['checks']['maxima_'+node]=progress_maxima(journal)
             lease=after['state']['records'][identities[0].reference]['decision']['valid_until']
             inner('client','streams',script='/transport_fixture.py')
             time.sleep(max(0,lease-time.time())+6)

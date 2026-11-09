@@ -10,6 +10,24 @@ import pytest
 
 from control.friends import transport_gateway as module
 
+
+def test_progress_reader_accepts_legacy_and_new_field_order(monkeypatch):
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1]/'scripts'))
+    from test_paid_transport_systemd import progress_maxima
+    progress = dict(result='complete', total=0.5, stages=dict(engine_query=0.3))
+    records = [dict(transport_progress=progress), dict(transport_progress_gap=2.2),
+        dict(diagnostic_messages_dropped=2, transport_progress=progress),
+        dict(diagnostic_messages_dropped=2, transport_progress_gap=2.3)]
+    journal = '\n'.join(['systemd status', '{"partial', '[]', ''] +
+        [json.dumps(record, sort_keys=True) for record in records]).encode()
+    assert progress_maxima(journal) == dict(total=0.5, progress_gap=2.3,
+        stages=dict(engine_query=0.3), diagnostic_messages_dropped=2)
+    with pytest.raises(AssertionError, match='MISSING_COMPLETED_PROGRESS_OR_GAP'):
+        progress_maxima(b'no completed measurements\n')
+    with pytest.raises(AssertionError):
+        progress_maxima(journal+b'\n{"transport_progress_gap": 12.5}\n')
+
+
 WATCH_OUTPUT_SCENARIO = '''import contextlib,os,sys,time
 from pathlib import Path
 if len(sys.argv)>2:sys.path.insert(0,sys.argv[2])
