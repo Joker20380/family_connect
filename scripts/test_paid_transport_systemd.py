@@ -16,7 +16,10 @@ import tempfile
 import time
 import traceback
 
-from test_fleet_canary import call, cleanup, inspect, verify_container, LABEL, ROOT
+if __package__:
+    from .test_fleet_canary import call, cleanup, inspect, verify_container, LABEL, ROOT
+else:
+    from test_fleet_canary import call, cleanup, inspect, verify_container, LABEL, ROOT
 
 
 def progress_maxima(journal):

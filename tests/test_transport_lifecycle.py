@@ -11,9 +11,8 @@ import pytest
 from control.friends import transport_gateway as module
 
 
-def test_progress_reader_accepts_legacy_and_new_field_order(monkeypatch):
-    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1]/'scripts'))
-    from test_paid_transport_systemd import progress_maxima
+def test_progress_reader_accepts_legacy_and_new_field_order():
+    from scripts.test_paid_transport_systemd import progress_maxima
     progress = dict(result='complete', total=0.5, stages=dict(engine_query=0.3))
     records = [dict(transport_progress=progress), dict(transport_progress_gap=2.2),
         dict(diagnostic_messages_dropped=2, transport_progress=progress),
