@@ -49,7 +49,9 @@ def test_required_git_objects_cover_the_real_native_and_renewal_inputs():
     from scripts.package_credential_renewal import ACCEPTED_API_SOURCE
     from scripts.stage_linux_native import reference
     from scripts.package_transport_node_recovery import PREVIOUS_SOURCE
-    assert set(fixtures.REQUIRED_COMMITS) == {fixtures.HISTORICAL, ACCEPTED_API_SOURCE, reference()['commit'], PREVIOUS_SOURCE}
+    from scripts.package_transport_diagnostics import BASE_SOURCE
+    assert set(fixtures.REQUIRED_COMMITS) == {fixtures.HISTORICAL, ACCEPTED_API_SOURCE,
+        reference()['commit'], PREVIOUS_SOURCE, BASE_SOURCE}
 
 
 def test_fixture_environment_rejects_modified_artifact_or_commit(tmp_path, monkeypatch):

@@ -17,7 +17,8 @@ HISTORICAL_SHA = '460e75205eb9baff313dc7dd963cdb7bceddf2d1e13405a71686f9ec6c976d
 SNAPSHOT_SHA = '0120dad028ead353b8b83a600538f3e578b2b46ddf871bf16e97529f9449f450'
 REQUIRED_COMMITS = (HISTORICAL, 'edca5447418141cb44c0706e26d1973d7defd397',
                     'efc13f1c7f2750cb7640dd2b8b90aed15c92c6e3',
-                    '2077c271d43d3bbe09f76e70934947bcc3fb51c6')
+                    '2077c271d43d3bbe09f76e70934947bcc3fb51c6',
+                    'b811547fcfd15d112c66d5db77a708daaee1b0a7')
 
 
 def git(*arguments, source=None, **kwargs):

@@ -104,6 +104,12 @@ diagnostics, not source grep. Final committed-source rebuild, hashes, hosted che
 review and merge are recorded in the PR receipt. Production installation is **NOT_RUN**
 and needs a separate addressed decision; do not install this candidate automatically.
 
+The first hosted Docker gate exposed a missing PR9 Git snapshot in the explicit
+release-fixture object export. The fixture now carries the exact `b811547` commit
+and complete tree; the pinned-package assertion is unchanged. A normal checkout
+passing that test did not establish that the isolated Docker source export contained
+its historical inputs. The corrected final head must pass both contexts.
+
 Redmi API31 is connected; initial UI shows Netherlands/MESH/VPN off. Temporary app
 USB-support was closed at entry and one owner action was requested. Owner traffic
 is not inferred from host requests, native sets, old beta123 split-routing results or
