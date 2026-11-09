@@ -20,7 +20,7 @@ from test_paid_release_policy import set_release
 
 @pytest.fixture
 def packages(tmp_path):
-    supplied_http = os.environ.get('FC_TEST_HTTP_ARTIFACT')
+    supplied_http = os.environ.get('FC_TEST_PAID_HTTP')
     supplied_operator = os.environ.get('FC_TEST_PAID_OPERATOR')
     if supplied_http or supplied_operator:
         assert supplied_http and supplied_operator, 'Both accepted package inputs are required'

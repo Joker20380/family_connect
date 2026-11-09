@@ -80,6 +80,9 @@ baseline code rollback copies, preflight and private operator handoff.
   limit10 and terminal revoke are covered; tests never label APPLIED as bank payment.
 - The first new clock-fixture run failed because a lazy lambda consumed argv too
   late; the isolated test clock was corrected. No production contract change needed.
+  Dedicated `FC_TEST_PAID_HTTP`/`FC_TEST_PAID_OPERATOR` pins are separate from the
+  existing global CI HTTP fixture; both the shared-fixture and exact-overlay paths
+  are exercised without rewriting supplied archives.
 - Mandatory hosted CI/review and merge identities are retained in the final PR
   receipt, not followed by a cosmetic documentation-only head. Android production
   inputs and accepted123 bytes do not change.
