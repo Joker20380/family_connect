@@ -2,6 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected RU TCP-query boundary task.**
+Dependencies: PR16 rolled-back deployment receipt6755872599 and exact Xrayd2758a0.
+Gate: bounded saved/live evidence; exact-version systemd/native stage discrimination;
+before/after wrapper regression, security/package tests and normal hosted review/merge
+for a candidate only. Keep8/12/120s, actual set checks and durability. No production
+deployment, paid123, phone or NL change. One missing historical boundary must remain
+explicit rather than substituting a synthetic cause.
+[Scope and evidence](releases/2026-11-10-ru-tcp-query.md).
+
+### Previous selected task — accepted candidate, deployment rolled back
+
 **Selected RU recovery / lifecycle and diagnostic-output fix.**
 Dependencies: preexisting incident PR14/comment6751072916, installed PR15
 node125c796a/sourcefa0ec71e, unchanged gateway9023d2c3 and policy108/119.

@@ -270,22 +270,70 @@ def write(path, value, mode=0o600):
 
 
 def execute(arguments):
-    with measured_call(command_family(arguments)):
-        return execute_command(arguments)
+    with measured_call(command_family(arguments)) as entry:
+        return execute_command(arguments, entry)
 
 
-def execute_command(arguments):
-    timeout = remaining()
-    with subprocess.Popen(arguments, stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True) as process:
+@contextmanager
+def command_step(details, name):
+    started = time.monotonic()
+    operation = CURRENT_OPERATION.get()
+    step = dict(entered=started-operation.started if operation else None,
+        remaining=operation.deadline-started if operation else None, completed=False)
+    details[name] = step
+    try:
+        yield
+        step['completed'] = True
+    finally:
+        step['duration'] = time.monotonic()-started
+
+
+def terminate_command(process, details):
+    with command_step(details, 'cleanup'):
         try:
-            output, errors = process.communicate(timeout=timeout)
-        except BaseException:
             os.killpg(process.pid, signal.SIGKILL)
-            process.communicate()
-            raise
+        except ProcessLookupError:
+            pass
+        except OSError as error:
+            details['kill_errno'] = error.errno
+            try:
+                process.kill()
+            except OSError as fallback:
+                details['kill_fallback_errno'] = fallback.errno
+        try:
+            process.wait(timeout=.25)
+            details['reaped'] = True
+        except (OSError, subprocess.TimeoutExpired):
+            details['reaped'] = False
+
+
+def execute_command(arguments, entry=None):
+    details = {}
+    if entry is not None:
+        entry['process'] = details
+    deadline = time.monotonic()+remaining()
+    with command_step(details, 'spawn'):
+        process = subprocess.Popen(arguments, stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True)
+    details['pid'] = process.pid
+    try:
+        with command_step(details, 'communicate'):
+            timeout = min(remaining(), deadline-time.monotonic())
+            if timeout <= 0:
+                raise TimeoutError('TRANSPORT_OPERATION_DEADLINE')
+            output, errors = process.communicate(timeout=timeout)
+        details.update(stdout_bytes=len(output), stderr_bytes=len(errors), returncode=process.returncode)
         if process.returncode:
             raise subprocess.CalledProcessError(process.returncode, arguments)
-    return output
+        return output
+    except BaseException as error:
+        if isinstance(error, subprocess.TimeoutExpired):
+            details.update(stdout_bytes=len(error.output or b''), stderr_bytes=len(error.stderr or b''))
+        terminate_command(process, details)
+        details['returncode'] = process.returncode
+        raise
+    finally:
+        process.stdout.close()
+        process.stderr.close()
 
 
 def boot_id():

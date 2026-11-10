@@ -43,7 +43,8 @@ def progress_maxima(journal):
     return maximum
 
 
-def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=False, expect_restart_loop=False):
+def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=False, expect_restart_loop=False,
+            tcp_query_fixtures=None):
     os.umask(0o077)
     prefix = 'fc-enforcement-fix-' + secrets.token_hex(5)
     receipt = dict(result='FAIL',run_id=prefix,production_writes=0,checks={})
@@ -58,7 +59,19 @@ def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=Fa
                 shutil.copyfile(ROOT/'pilot/transport-production-awg.service', context/'production-awg.service')
                 for source,target in (('transport_enforcement_fixture.py','transport_fixture.py'),('transport_systemd_fixture.py','systemd_fixture.py')):
                     shutil.copyfile(ROOT/'pilot'/source,context/target)
-                (context/'Dockerfile').write_text('FROM sha256:af9c993c2fcd60804ef576e2190dee88699830624ec74317a91eb6d9855284e9\nCOPY kit /kit\nCOPY canary.py transport_fixture.py systemd_fixture.py production-tcp.service production-awg.service /\nENTRYPOINT ["sleep","1800"]\n')
+                rpc_setup = ''
+                if tcp_query_fixtures:
+                    inventory = json.loads((tcp_query_fixtures/'inventory.json').read_text())
+                    assert inventory['source'] == 'd2758a023cd7f4174a5a5fa4ff66e487d4342ba0'
+                    for name, expected in inventory['generated'].items():
+                        assert hashlib.sha256((tcp_query_fixtures/name).read_bytes()).hexdigest() == expected
+                    receipt['rpc_inputs'] = inventory
+                    shutil.copytree(tcp_query_fixtures, context/'rpc')
+                    shutil.copyfile(ROOT/'pilot/transport_tcp_query_fixture.py', context/'tcp_query.py')
+                    rpc_setup = ('COPY rpc /rpc\nCOPY tcp_query.py /tcp_query.py\n'
+                        'RUN python3 -m pip install --target=/rpc/lib --no-index --find-links=/rpc/wheels '
+                        'grpcio==1.76.0 protobuf==6.33.6 typing-extensions==4.16.0\n')
+                (context/'Dockerfile').write_text('FROM sha256:af9c993c2fcd60804ef576e2190dee88699830624ec74317a91eb6d9855284e9\nCOPY kit /kit\nCOPY canary.py transport_fixture.py systemd_fixture.py production-tcp.service production-awg.service /\n'+rpc_setup+'ENTRYPOINT ["sleep","1800"]\n')
                 image = prefix+':local'
                 built = call(['docker','build','-t',image,str(context)],timeout=300,check=False)
                 (report.parent/(prefix+'-build.log')).write_bytes(built.stdout+built.stderr)
@@ -161,6 +174,15 @@ def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=Fa
             inner('client','client',dict(client=client))
             inner('client','probe',dict(allowed=True))
             receipt['checks']['actual_packaged_preflight_all_nodes'] = True
+
+            if tcp_query_fixtures:
+                process = call(['docker','exec',containers['gateway-ru'],'systemd-run','--wait',
+                    '--unit=fc-query-fixture','--property=User=root','--property=TimeoutStartSec=60',
+                    '--property=LimitNOFILE=524288','--property=LimitNPROC=5495',
+                    '--property=TasksMax=1648','/usr/bin/python3','/tcp_query.py'], timeout=70, check=False)
+                assert process.returncode == 0, 'RPC_BOUNDARY_FIXTURE_FAILED'
+                receipt['checks']['tcp_query_boundaries'] = json.loads(call(['docker','exec',containers['gateway-ru'],
+                    'cat','/run/tcp-query-result.json']).stdout)
 
             def operator(kind, event_id, *, start=None, end=None, expect=0):
                 args=[sys.executable,'-I',str(kit/'paid-operator.pyz'),'--db',str(access.path),kind,'--support-id',support,
@@ -337,9 +359,11 @@ if __name__=='__main__':
     parser.add_argument('--recovery-diagnostics',action='store_true',help='Only first-failure diagnostics, controlled recovery and real positive/deny flows')
     parser.add_argument('--lifecycle-diagnostics',action='store_true',help='Watcher loss, dependent stops, restart behavior, retained deny and controlled recovery')
     parser.add_argument('--expect-restart-loop',action='store_true',help='Reproduce the historical loop using the exact old package, not candidate acceptance')
+    parser.add_argument('--tcp-query-fixtures',type=Path,help='Exact-Xray generated protobufs and pinned offline Python RPC wheels, isolated test only')
     args=parser.parse_args()
     assert not args.expect_restart_loop or args.lifecycle_diagnostics
     result=execute(args.kit.resolve(),args.report,recovery_diagnostics=args.recovery_diagnostics,
-        lifecycle_diagnostics=args.lifecycle_diagnostics,expect_restart_loop=args.expect_restart_loop)
+        lifecycle_diagnostics=args.lifecycle_diagnostics,expect_restart_loop=args.expect_restart_loop,
+        tcp_query_fixtures=args.tcp_query_fixtures)
     print(json.dumps(result))
     raise SystemExit(result['result']!='PASS')
