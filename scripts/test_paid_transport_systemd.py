@@ -16,10 +16,34 @@ import tempfile
 import time
 import traceback
 
-from test_fleet_canary import call, cleanup, inspect, verify_container, LABEL, ROOT
+if __package__:
+    from .test_fleet_canary import call, cleanup, inspect, verify_container, LABEL, ROOT
+else:
+    from test_fleet_canary import call, cleanup, inspect, verify_container, LABEL, ROOT
 
 
-def execute(kit, report, *, recovery_diagnostics=False):
+def progress_maxima(journal):
+    measurements = []
+    for line in journal.decode().splitlines():
+        try:
+            record = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(record, dict):
+            measurements.append(record)
+    passes = [item['transport_progress'] for item in measurements
+        if 'transport_progress' in item and item['transport_progress']['result'] == 'complete']
+    gaps = [item['transport_progress_gap'] for item in measurements if 'transport_progress_gap' in item]
+    assert passes and gaps, 'MISSING_COMPLETED_PROGRESS_OR_GAP'
+    maximum = dict(total=max(item['total'] for item in passes), progress_gap=max(gaps),
+        stages={stage:max(item['stages'].get(stage, 0) for item in passes)
+            for stage in {stage for item in passes for stage in item['stages']}},
+        diagnostic_messages_dropped=max(item.get('diagnostic_messages_dropped', 0) for item in measurements))
+    assert maximum['total'] < 8 and maximum['progress_gap'] < 12
+    return maximum
+
+
+def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=False, expect_restart_loop=False):
     os.umask(0o077)
     prefix = 'fc-enforcement-fix-' + secrets.token_hex(5)
     receipt = dict(result='FAIL',run_id=prefix,production_writes=0,checks={})
@@ -31,9 +55,10 @@ def execute(kit, report, *, recovery_diagnostics=False):
                 shutil.copytree(kit,context/'kit')
                 shutil.copyfile(ROOT/'pilot/fleet_canary.py', context/'canary.py')
                 shutil.copyfile(ROOT/'pilot/transport-production-tcp.service', context/'production-tcp.service')
+                shutil.copyfile(ROOT/'pilot/transport-production-awg.service', context/'production-awg.service')
                 for source,target in (('transport_enforcement_fixture.py','transport_fixture.py'),('transport_systemd_fixture.py','systemd_fixture.py')):
                     shutil.copyfile(ROOT/'pilot'/source,context/target)
-                (context/'Dockerfile').write_text('FROM sha256:af9c993c2fcd60804ef576e2190dee88699830624ec74317a91eb6d9855284e9\nCOPY kit /kit\nCOPY canary.py transport_fixture.py systemd_fixture.py production-tcp.service /\nENTRYPOINT ["sleep","1800"]\n')
+                (context/'Dockerfile').write_text('FROM sha256:af9c993c2fcd60804ef576e2190dee88699830624ec74317a91eb6d9855284e9\nCOPY kit /kit\nCOPY canary.py transport_fixture.py systemd_fixture.py production-tcp.service production-awg.service /\nENTRYPOINT ["sleep","1800"]\n')
                 image = prefix+':local'
                 built = call(['docker','build','-t',image,str(context)],timeout=300,check=False)
                 (report.parent/(prefix+'-build.log')).write_bytes(built.stdout+built.stderr)
@@ -147,18 +172,32 @@ def execute(kit, report, *, recovery_diagnostics=False):
                 assert process.returncode==expect, process.stdout.decode()
                 return json.loads(process.stdout)
 
-            if recovery_diagnostics:
+            if recovery_diagnostics or lifecycle_diagnostics:
                 start=int(time.time());end=start+1200
                 operator('activate','diagnostic-active',start=start,end=end)
                 assert transport_reconcile.cycle(access.path,commands)==dict.fromkeys(nodes,'applied')
                 inner('client','probe',dict(allowed=True))
+                if lifecycle_diagnostics:
+                    receipt['checks']['active_lifecycle']=inner('gateway-ru','lifecycle-fault',dict(expect_restart_loop=expect_restart_loop))
+                    assert transport_reconcile.cycle(access.path,commands)==dict.fromkeys(nodes,'applied')
+                    inner('client','probe',dict(allowed=True))
                 operator('revoke','diagnostic-terminal')
                 assert transport_reconcile.cycle(access.path,commands)==dict.fromkeys(nodes,'applied')
-                receipt['checks']['first_failure_and_controlled_recovery']=inner('gateway-ru','diagnostic-fault')
+                if lifecycle_diagnostics:
+                    receipt['checks']['terminal_lifecycle']=inner('gateway-ru','lifecycle-fault',dict(expect_restart_loop=expect_restart_loop))
+                    if not expect_restart_loop:
+                        receipt['checks']['corrupt_state_requires_recovery']=inner('gateway-ru','invalid-start')
+                else:
+                    receipt['checks']['first_failure_and_controlled_recovery']=inner('gateway-ru','diagnostic-fault')
                 assert transport_reconcile.cycle(access.path,commands)==dict.fromkeys(nodes,'applied')
                 inner('client','probe',dict(allowed=False))
                 receipt['checks']['terminal_deny_and_noncohort_after_recovery']=True
                 receipt['checks']['active_actual_https']=True
+                if lifecycle_diagnostics and not expect_restart_loop:
+                    for node in nodes:
+                        journal=call(['docker','exec',containers[node],'journalctl','-u',SERVICES_WATCH,'-o','cat','--no-pager']).stdout
+                        (report.parent/(prefix+'-'+node+'-progress.private.log')).write_bytes(journal)
+                        receipt['checks']['maxima_'+node]=progress_maxima(journal)
                 receipt['result']='PASS'
                 return receipt
 
@@ -232,13 +271,7 @@ def execute(kit, report, *, recovery_diagnostics=False):
                 assert inner(node,'info')['services'] == stable_services[node], 'unexpected restart during stable window'
                 journal=call(['docker','exec',containers[node],'journalctl','-u',SERVICES_WATCH,'-o','cat','--no-pager']).stdout
                 (report.parent/(prefix+'-'+node+'-progress.private.log')).write_bytes(journal)
-                measurements=[json.loads(line) for line in journal.decode().splitlines() if line.startswith('{"transport_progress')]
-                passes=[item['transport_progress'] for item in measurements if 'transport_progress' in item and item['transport_progress']['result']=='complete']
-                gaps=[item['transport_progress_gap'] for item in measurements if 'transport_progress_gap' in item]
-                maximum=dict(total=max(item['total'] for item in passes),progress_gap=max(gaps),
-                    stages={stage:max(item['stages'].get(stage,0) for item in passes) for stage in {stage for item in passes for stage in item['stages']}})
-                assert maximum['total']<8 and maximum['progress_gap']<12
-                receipt['checks']['maxima_'+node]=maximum
+                receipt['checks']['maxima_'+node]=progress_maxima(journal)
             lease=after['state']['records'][identities[0].reference]['decision']['valid_until']
             inner('client','streams',script='/transport_fixture.py')
             time.sleep(max(0,lease-time.time())+6)
@@ -302,7 +335,11 @@ if __name__=='__main__':
     parser.add_argument('--kit',type=Path,required=True)
     parser.add_argument('--report',type=Path,required=True)
     parser.add_argument('--recovery-diagnostics',action='store_true',help='Only first-failure diagnostics, controlled recovery and real positive/deny flows')
+    parser.add_argument('--lifecycle-diagnostics',action='store_true',help='Watcher loss, dependent stops, restart behavior, retained deny and controlled recovery')
+    parser.add_argument('--expect-restart-loop',action='store_true',help='Reproduce the historical loop using the exact old package, not candidate acceptance')
     args=parser.parse_args()
-    result=execute(args.kit.resolve(),args.report,recovery_diagnostics=args.recovery_diagnostics)
+    assert not args.expect_restart_loop or args.lifecycle_diagnostics
+    result=execute(args.kit.resolve(),args.report,recovery_diagnostics=args.recovery_diagnostics,
+        lifecycle_diagnostics=args.lifecycle_diagnostics,expect_restart_loop=args.expect_restart_loop)
     print(json.dumps(result))
     raise SystemExit(result['result']!='PASS')

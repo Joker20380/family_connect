@@ -437,6 +437,20 @@ watchdog/crash watcher, повреждении cache/bindings или реаль�
 потерей центрального paid-контроллера; после устранения причины нужны watcher,
 оба engines и успешная сверка. Неизвестные/чужие bindings не удаляются массово.
 
+**RU после инцидента9 ноября:** доступность восстановлена на прежнем node125c796a,
+current108/119 возвращён; причина первой остановки19:14 остаётся открытой.
+`active`/READY watcher без actual/persisted readback обоих engines не означает
+работоспособный узел. В установленном runtime его автоперезапуск не ставит jobs
+запуска остановленных зависимых engines и может повторять бесполезное ожидание.
+[Новый source/package-кандидат](../releases/2026-11-09-ru-watch-lifecycle.md),
+ещё не установленный, переводит такой отказ в устойчивый **RECOVERY_REQUIRED**
+без автоматического restart-loop. Это **ручное**, не автоматическое восстановление:
+после проверки причины — RU-only fence с продолжающимися leases остальных узлов,
+stop watcher/AWG/TCP, PID0/no jobs, retained-state preflight, последовательный start,
+снятие fence и проверка наборов/revisions/lease. Не удалять cache/deny или подменять
+успехом один запуск watcher. Применять поведение кандидата к production до его
+отдельно разрешённой поставки нельзя.
+
 MESH продолжает существующий `RestrictedReadiness._grant`/paid predicate, ограничение
 новых материалов и cert/CRL expiry. Paid revoke **не публикует CRL автоматически**.
 Ранее выданные материалы/сессии ограничены старым минимумом cert/CRL/authority expiry;
