@@ -311,13 +311,16 @@ def execute_command(arguments, entry=None):
     details = {}
     if entry is not None:
         entry['process'] = details
-    remaining()
+    deadline = time.monotonic()+remaining()
     with command_step(details, 'spawn'):
         process = subprocess.Popen(arguments, stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True)
     details['pid'] = process.pid
     try:
         with command_step(details, 'communicate'):
-            output, errors = process.communicate(timeout=remaining())
+            timeout = min(remaining(), deadline-time.monotonic())
+            if timeout <= 0:
+                raise TimeoutError('TRANSPORT_OPERATION_DEADLINE')
+            output, errors = process.communicate(timeout=timeout)
         details.update(stdout_bytes=len(output), stderr_bytes=len(errors), returncode=process.returncode)
         if process.returncode:
             raise subprocess.CalledProcessError(process.returncode, arguments)
