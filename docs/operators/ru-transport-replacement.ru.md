@@ -82,7 +82,10 @@ Host/cgroup окружение записывается отдельно; оно
 
 **Отсутствует ровно один ресурс: отдельно разрешённый независимый Linux-хост.**
 Не NL и не контейнер/VM на прежнем RU. Нужен disposable x86_64 VM/host с KVM/TUN,
-systemd/cgroupv2, синхронизированными часами, Docker Engine и Python3.12+venv.
+systemd/cgroupv2, синхронизированными часами, Docker Engine29.1.3 с containerd
+image store (`io.containerd.snapshotter.v1`) и Python3.12+venv. Это контекст
+сохранённого OCI image:af9c993c — manifest digest, не digest JSON config;
+обычный classic-store нельзя считать эквивалентным без проверки загрузки.
 Практический запас:4vCPU/4GiB RAM/15GiB свободного диска; это вместимость пяти
 ограниченных fixture-контейнеров, не вывод о причине старого отказа.
 Потребуются root или sudo для Docker/TUN, отдельный операторский SSH public key
