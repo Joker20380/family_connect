@@ -9,6 +9,12 @@ import pytest
 from control_plane import prepare_local
 
 
+def test_local_panel_services_have_restart_policy():
+    compose = (prepare_local.BASE / 'compose.yaml').read_text()
+    for service in ('postgres', 'console'):
+        assert f'  {service}:\n    restart: unless-stopped\n' in compose
+
+
 def test_context_contains_fleet_runtime_without_private_state_or_binaries():
     names = {path.relative_to(prepare_local.REPOSITORY).as_posix() for path in prepare_local.source_paths()}
     assert {'fleet/contracts.py', 'fleet/health.py', 'fleet/runtime/roles.py',

@@ -2,6 +2,22 @@
 
 ## Current engineering priority / Текущий critical path
 
+**SUPPORT-CHAT-1 — selected, IN_PROGRESS; not installed or accepted.**
+Reuse registered device↔chat binding, encrypted history/outbox, existing mailbox,
+Android worker/notifications and signed recipient-stored ACK. The local panel outage
+reported during development is resolved with the unchanged installed image and
+persistent restart policy; this is not a support-chat rollout.
+Gate: real panel→official support identity→Android→same card with two synthetic
+clients, offline/restart/lost-response dedup, identity/permission/CSRF refusals,
+verified official contact, actual notification/deep link and accurate statuses.
+Then applicable CI/review/ordinary merge and verified backup/isolated restore before
+any local application update. beta123 is immutable; any new client needs a separate
+version/artifact and qualification. Production/phone/paid operations are excluded.
+RU replacement WAITING_FOR_HOST, RU incidents, paid123 rollout and payment-provider
+selection are not dependencies. [Panel availability receipt](releases/2026-11-10-panel-availability.md).
+
+### Previous selected task — source candidate, no new deployment
+
 **Selected RU TCP-query boundary task.**
 Dependencies: PR16 rolled-back deployment receipt6755872599 and exact Xrayd2758a0.
 Gate: bounded saved/live evidence; exact-version systemd/native stage discrimination;

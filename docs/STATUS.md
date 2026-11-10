@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**10 November22:52UTC — local panel availability restored without an application update.**
+Docker stopped22:22UTC/restarted22:27UTC; both panel containers exited0 and had
+restart policy `no`. The same console imagec179d1ae and the same PostgreSQL/synthetic
+volumes are running/healthy again, now `unless-stopped`; installed Compose is aligned.
+Private consistent pg_dump retained before console start; no database restore,
+container recreation, image rebuild, new migration or user/secret replacement.
+HTTP health/login200 and protected inventory302, Django check and existing user pass.
+Both read-only monitoring jobs subsequently return success;4 scoped source tests and
+all750 links in the5 affected documents pass. Docker reboot test deliberately NOT_RUN.
+SUPPORT-CHAT-1 remains in development, NOT installed or accepted; beta123 unchanged.
+RU replacement stays WAITING_FOR_HOST; no VPN/policy/owner-phone action.
+[Diagnosis, exact runtime and rollback](releases/2026-11-10-panel-availability.md).
+
+Earlier selected-task entries below are history, not concurrent active NEXTs.
+
 **10 November — RU TCP query localization and bounded-child candidate.**
 PR16 deployment was rolled back; fresh read-only RU state is healthy on node125c796a,
 policy108/119. No new recovery or rollout. Exact Xray26.3.27/d2758a0 is pinned;

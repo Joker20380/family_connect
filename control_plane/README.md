@@ -334,6 +334,14 @@ STOP с сохранением evidence; не удалять backup и не по
 
 ### Аварийная остановка и восстановление
 
+Оба локальных сервиса используют `restart: unless-stopped`: после перезапуска Docker
+они поднимаются без пересоздания volumes. Явная операторская остановка сохраняется.
+Для уже созданных контейнеров политика обновляется командой
+`docker update --restart unless-stopped fc-control-plane-0-postgres-1 fc-control-plane-0-console-1`; изменение
+Compose само по себе не обновляет существующие контейнеры. Сначала проверить их
+имена, image IDs и volumes. Это не обновление приложения и не восстановление БД.
+[Инцидент10 ноября и проверенный запуск](../docs/releases/2026-11-10-panel-availability.md).
+
 `/stop/` блокирует новые dispatch в **демо** backend (RBAC+CSRF+подтверждение,
 сохранённый PG singleton и audit). Уже отправленные RUNNING/UNKNOWN операции
 не отменяются: только read-only reconcile исходного события. Чтение APPLIED
