@@ -2,6 +2,28 @@
 
 ## Current engineering priority / Текущий critical path
 
+**RU recurrence — urgent owner interruption; RECOVERED_CAUSE_OPEN.**
+Bounded recovery gate passed: retain the first failure, verify accepted installed
+bytes, fence only RU apply, drain watcher/engines, validate retained security state,
+start sequentially, remove the fence, verify fresh strict readback/lease renewal and
+unchanged protected records. No source deployment or new paid policy.
+Historical swap/I/O pressure is now evidenced for the failure interval; the cause
+of the individual slow query remains open. Do not retry PR16/17 on the old host,
+increase8/12/120s bounds, clear deny state or call a restart a permanent fix.
+RU replacement remains WAITING_FOR_HOST: the already prepared independent-host
+qualification requires one explicitly authorized resource. No automatic cutover.
+[Recovery and precise remaining boundary](releases/2026-11-11-ru-recurrence.md).
+
+**SUPPORT-CHAT-1 — existing development preserved, not installed or accepted.**
+The incident does not make RU replacement, paid123 or provider selection a chat
+dependency. Complete actual authenticated Android enrollment/background reply,
+two-client addressed exchange/negative gates, applicable CI/review and ordinary
+merge; verify backup restoration before any local panel application update.
+beta123 is immutable; candidate124 work is separate and unqualified for rollout.
+The local panel remains on its existing image/database; this incident did not update it.
+
+### Previous selected task — candidate deployed and rolled back, not a cure
+
 **Selected RU TCP-query boundary task.**
 Dependencies: PR16 rolled-back deployment receipt6755872599 and exact Xrayd2758a0.
 Gate: bounded saved/live evidence; exact-version systemd/native stage discrimination;

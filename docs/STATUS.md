@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+**11 November — RU recurrence: availability recovered, cause still open.**
+The owner's interruption selected incident response, not another PR16/17 rollout.
+First failure10 November23:13:41UTC: AWG query completed in7.609s; the following
+TCP query had0.379s left in the8s operation and timed out. The retained first-failure
+record and historical sysstat show major faults plus swap/I/O pressure in the
+failure interval; they do not establish a specific process, OOM or provider fault.
+Unchanged node125c796a/gateway9023d2c3 restored23:34:07UTC through the RU-only
+fence, stopped-PID check, retained-state validation and sequential start.
+Six observations over196.7s pass, including strict watcher readback and a renewed
+paid lease across its old expiry. Code/units/policy108/119, protected database
+fingerprints and operator current are unchanged; the RU fence is removed.
+Existing panel is healthy with fresh RU/NL observations; no panel application update.
+Owner traffic NOT_RUN. RU replacement remains WAITING_FOR_HOST, not a chat dependency.
+SUPPORT-CHAT-1 source work is preserved separately, incomplete and not installed;
+its real Android enrollment/background-reply and delivery acceptance remain open.
+[Incident evidence, limits and next action](releases/2026-11-11-ru-recurrence.md).
+
+Earlier entries below are historical checkpoints, not simultaneous active tasks.
+
 **10 November — RU TCP query localization and bounded-child candidate.**
 PR16 deployment was rolled back; fresh read-only RU state is healthy on node125c796a,
 policy108/119. No new recovery or rollout. Exact Xray26.3.27/d2758a0 is pinned;
