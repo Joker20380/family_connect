@@ -1,5 +1,6 @@
 """Disposable systemd/native fixture; never install this on a gateway."""
 from copy import deepcopy
+import hashlib
 import importlib.util
 import json
 import os
@@ -45,6 +46,7 @@ def restart_services():
     run(['systemctl', 'stop', *SERVICES])
     for service in SERVICES:
         assert run(['systemctl', 'show', service, '-p', 'MainPID', '--value']).stdout.strip() == b'0'
+        assert run(['systemctl', 'show', service, '-p', 'ControlPID', '--value']).stdout.strip() == b'0'
     jobs = run(['systemctl', 'list-jobs', '--no-pager']).stdout.decode()
     assert not any(service in jobs for service in SERVICES)
     for service in SERVICES:
@@ -316,6 +318,71 @@ def probe(document):
     return dict(traffic.probe(document['allowed']), elapsed_seconds=time.monotonic()-started)
 
 
+def dns_probe(document):
+    assert document['allowed'] is True
+    client = json.loads((canary.ROOT/'client.json').read_text())
+    answer = canary.run(['dig', '+short', '+tries=1', '+time=3', '-b', canary.TUNNEL,
+        '@'+client['origin'], canary.DOMAIN, 'A']).stdout.decode().strip()
+    assert answer == client['origin'], 'AWG_DNS_FAILED'
+    return dict(awg_dns=True, tcp_dns='SOCKS5 hostname resolved by actual Xray', https=probe(document))
+
+
+def live_readback():
+    spec = importlib.util.spec_from_file_location('replacement_gateway', ROOT/'awg-gateway.py')
+    gateway = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(gateway)
+    from control.friends.transport_gateway import Gateway
+    engine = Gateway(gateway)
+    with engine.operation(), engine.serialized(), engine.lock():
+        state = engine.load()
+        live_awg = engine.awg_snapshot()
+        live_tcp, unused = engine.tcp_snapshot()
+        config = json.loads((TCP/'server.json').read_text())
+        persisted_tcp = next(item for item in config['inbounds'] if item.get('tag') == 'friends')['settings']['clients']
+        expected_tcp = {(item['email'], item['id'], item.get('flow')) for item in persisted_tcp}
+        actual_tcp = {(item['email'], item['account']['id'], item['account'].get('flow')) for item in live_tcp.values()}
+        assert actual_tcp == expected_tcp, 'FULL_TCP_SET_MISMATCH'
+        with gateway.database() as database:
+            registered = {public: gateway.address(index) for index, public in database.execute('SELECT id,public FROM peers')}
+        expected_awg = {}
+        for device, cached in state['records'].items():
+            decision = cached['decision']
+            public = decision['public_key']
+            allowed = public in registered and engine.allowed(cached)
+            applied = cached['applied']
+            assert applied['result'] == 'applied' and applied['allowed'] == allowed
+            assert applied['expected_revision'] == applied['applied_revision'] == decision['revision']
+            expected_user = (device+'@family.test', decision['tcp_id'], 'xtls-rprx-vision')
+            assert (expected_user in actual_tcp) == allowed, 'TCP_DECISION_MISMATCH'
+            if allowed:
+                expected_awg[public] = registered[public]
+        assert live_awg == expected_awg, 'FULL_AWG_SET_MISMATCH'
+    return dict(canonical_records=len(state['records']), registered=len(registered),
+        actual_awg=len(live_awg), actual_tcp=len(actual_tcp),
+        full_sets_and_revisions_match=True, observed_at=int(time.time()))
+
+
+def replacement_context():
+    expected = dict(awg='906d6795af1dd4adee7b11bf1e7fa133d4795c8a8d6e2099b34a026f810a3278',
+        **{'amneziawg-go':'e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f'},
+        xray='4f7a4436f86798bbb5c875014e352021a1673710a45e170ccc507c5f59341940')
+    actual = {name: hashlib.sha256((Path('/native')/name).read_bytes()).hexdigest() for name in expected}
+    assert actual == expected
+    units = {service: run(['systemctl','show',service,'-p',
+        'User,Group,MemoryMax,TasksMax,Restart,WatchdogUSec,TimeoutStopUSec,KillMode,BindsTo,After,NoNewPrivileges,ProtectSystem,ProtectHome,PrivateTmp,CapabilityBoundingSet,AmbientCapabilities,RestrictAddressFamilies,LimitNOFILE,LimitNPROC']).stdout.decode()
+        for service in SERVICES}
+    assert 'Restart=no\n' in units[SERVICES[0]]
+    assert 'WatchdogUSec=12s\n' in units[SERVICES[0]]
+    assert 'User=fc-friends\n' in units[SERVICES[2]]
+    assert 'MemoryMax=268435456\n' in units[SERVICES[2]]
+    assert 'TasksMax=128\n' in units[SERVICES[2]]
+    assert 'ProtectSystem=strict\n' in units[SERVICES[2]]
+    assert 'NoNewPrivileges=yes\n' in units[SERVICES[2]]
+    return dict(native_hashes=actual, units=units, processes=info(),
+        python=run(['/usr/bin/python3','--version']).stdout.decode().strip(),
+        xray=run(['/native/xray','version']).stdout.decode().splitlines()[0])
+
+
 def main():
     os.umask(0o077)
     canary.ROOT.mkdir(mode=0o700,exist_ok=True)
@@ -331,6 +398,12 @@ def main():
         result = start_client(document)
     elif action == 'probe':
         result = probe(document)
+    elif action == 'dns-probe':
+        result = dns_probe(document)
+    elif action == 'live-readback':
+        result = live_readback()
+    elif action == 'replacement-context':
+        result = replacement_context()
     elif action == 'budget-fault':
         result = budget_fault(document)
     elif action == 'diagnostic-fault':

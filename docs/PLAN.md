@@ -2,6 +2,18 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected RU-TRANSPORT-REPLACEMENT-PREP.**
+Dependencies: accepted PR17 source377cfe8a/exact bundle and rolled-back deployment
+receipt6765941574. Gate: minimal transport-only boundary, reproducible synthetic
+installation/finite qualification kit and one independent-host handoff. Native host
+acceptance remains NOT_RUN until that single external resource is explicitly supplied.
+Prepare, do not execute, client/canonical routing and catalog cutover. Keep full
+enrollment set, central108/119, production/NL/phone unchanged. No PR16/17/paid123
+retry on current RU, diagnostic successor, or8/12/120s relaxation.
+[Concrete handoff](operators/ru-transport-replacement.ru.md).
+
+### Previous selected task — PR17 candidate accepted, deployment rolled back
+
 **Selected RU TCP-query boundary task.**
 Dependencies: PR16 rolled-back deployment receipt6755872599 and exact Xrayd2758a0.
 Gate: bounded saved/live evidence; exact-version systemd/native stage discrimination;

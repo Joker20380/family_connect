@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**10 November — RU replacement environment preparation; independent host required.**
+PR17 deployment ended DEPLOYMENT_FAILED_ROLLED_BACK_VERIFIED (receipt6765941574).
+The rollout series on current RU is closed. Exact PR17 bytes are retained only for
+an independent synthetic environment: offline allowlisted kit, finite systemd/native
+qualification profile and concrete host/cutover handoff prepared. Runtime unchanged;
+new-host native qualification NOT_RUN. One missing external resource: an explicitly
+authorized independent Linux host; NL/current RU are not substitutes. No production
+changes or fresh serving-state claims. [Preparation and boundary](releases/2026-11-10-ru-replacement-preparation.md).
+Earlier dated entries below are historical evidence, not active rollout instructions.
+
 **10 November — RU TCP query localization and bounded-child candidate.**
 PR16 deployment was rolled back; fresh read-only RU state is healthy on node125c796a,
 policy108/119. No new recovery or rollout. Exact Xray26.3.27/d2758a0 is pinned;

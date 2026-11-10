@@ -44,11 +44,12 @@ def progress_maxima(journal):
 
 
 def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=False, expect_restart_loop=False,
-            tcp_query_fixtures=None):
+            tcp_query_fixtures=None, replacement_qualification=False):
     os.umask(0o077)
     prefix = 'fc-enforcement-fix-' + secrets.token_hex(5)
     receipt = dict(result='FAIL',run_id=prefix,production_writes=0,checks={})
     containers = {}
+    image = None
     with report.open('x') as output:
         try:
             with tempfile.TemporaryDirectory(prefix='fc-systemd-image-') as temporary:
@@ -166,6 +167,9 @@ def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=Fa
             (central/'transport-enforcement.json').write_text(json.dumps(dict(schema=1,profile=policy.PROFILE,enabled=True,hosts={node:node for node in nodes})))
             client = None
             registrations = dict(zip(nodes, (identities[:19], identities[:4]+identities[19:], identities[1:6])))
+            if replacement_qualification:
+                from scripts.ru_replacement_qualification import registration_sets
+                registrations = dict(zip(nodes, registration_sets(identities)))
             for node in nodes:
                 result = inner(node,'setup',dict(node=node,envelope=policy.snapshot(access.path,node),registered=[identity.reference for identity in registrations[node]]))
                 if node=='gateway-ru':
@@ -193,6 +197,20 @@ def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=Fa
                 process=call(args,timeout=50,check=False)
                 assert process.returncode==expect, process.stdout.decode()
                 return json.loads(process.stdout)
+
+            if replacement_qualification:
+                from scripts.ru_replacement_qualification import qualify, call_summary
+                qualify(receipt, inner, operator,
+                    lambda: transport_reconcile.cycle(access.path, commands), nodes,
+                    identities[0].reference)
+                for node in nodes:
+                    journal = call(['docker','exec',containers[node],'journalctl','-u',SERVICES_WATCH,
+                        '-o','cat','--no-pager'], timeout=30).stdout
+                    (report.parent/(prefix+'-'+node+'-progress.private.log')).write_bytes(journal)
+                    receipt['checks']['maxima_'+node] = progress_maxima(journal)
+                    receipt['checks']['calls_'+node] = call_summary(journal)
+                receipt['result'] = 'PASS'
+                return receipt
 
             if recovery_diagnostics or lifecycle_diagnostics:
                 start=int(time.time());end=start+1200
@@ -344,6 +362,10 @@ def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=Fa
             (report.parent/(prefix+'-diagnostics.private.json')).write_text(json.dumps(diagnostics))
         finally:
             failures=cleanup(prefix)
+            if replacement_qualification and image:
+                removed = call(['docker', 'image', 'rm', image], check=False, timeout=30)
+                if removed.returncode:
+                    failures.append('own-fixture-image-removal')
             receipt['cleanup']='FAIL' if failures else 'PASS'
             if failures:receipt['result']='FAIL'
             json.dump(receipt,output,indent=2)
@@ -360,10 +382,13 @@ if __name__=='__main__':
     parser.add_argument('--lifecycle-diagnostics',action='store_true',help='Watcher loss, dependent stops, restart behavior, retained deny and controlled recovery')
     parser.add_argument('--expect-restart-loop',action='store_true',help='Reproduce the historical loop using the exact old package, not candidate acceptance')
     parser.add_argument('--tcp-query-fixtures',type=Path,help='Exact-Xray generated protobufs and pinned offline Python RPC wheels, isolated test only')
+    parser.add_argument('--replacement-qualification',action='store_true',help='Independent authorized host only: finite synthetic replacement profile, no fault series')
     args=parser.parse_args()
     assert not args.expect_restart_loop or args.lifecycle_diagnostics
+    assert not args.replacement_qualification or not any((args.recovery_diagnostics,
+        args.lifecycle_diagnostics, args.expect_restart_loop, args.tcp_query_fixtures))
     result=execute(args.kit.resolve(),args.report,recovery_diagnostics=args.recovery_diagnostics,
         lifecycle_diagnostics=args.lifecycle_diagnostics,expect_restart_loop=args.expect_restart_loop,
-        tcp_query_fixtures=args.tcp_query_fixtures)
+        tcp_query_fixtures=args.tcp_query_fixtures,replacement_qualification=args.replacement_qualification)
     print(json.dumps(result))
     raise SystemExit(result['result']!='PASS')

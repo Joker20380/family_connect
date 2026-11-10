@@ -1,5 +1,8 @@
 # Documentation
 
+[RU transport replacement preparation ·10 November](operators/ru-transport-replacement.ru.md):
+offline kit, one independent-host handoff and a cutover plan; no production switch.
+
 [Объектная операторская панель · 8 ноября](releases/2026-11-08-control-panel-reference.md):
 единые карточки устройств/серверов, связанные события и реальные Linux/AWG графики.
 [Локальный адрес, источники и ограничения](../control_plane/README.md).
