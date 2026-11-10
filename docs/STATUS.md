@@ -1,5 +1,13 @@
 # Текущее состояние / Current state
 
+**10 November — RU TCP query localization and bounded-child candidate.**
+PR16 deployment was rolled back; fresh read-only RU state is healthy on node125c796a,
+policy108/119. No new recovery or rollout. Exact Xray26.3.27/d2758a0 is pinned;
+historical command-level timeout does not locate dial/RPC/output. A separate real-child
+regression reproduces reuse of pre-spawn timeout; the candidate accounts for spawn
+and bounds failure cleanup. Targeted systemd/package/hosted acceptance remains pending.
+[Evidence and distinction from historical cause](releases/2026-11-10-ru-tcp-query.md).
+
 **9 November — RU availability recovered; lifecycle/output candidate, not deployed.**
 The preexisting19:14 incident is recovered with unchanged PR15 node125c796a and
 policy108/119. Six readback samples over183s, five normal three-node cycles, renewed
