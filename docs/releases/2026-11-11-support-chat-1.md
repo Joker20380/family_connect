@@ -79,8 +79,11 @@ are used, not transport mocks or direct role injection.
 - Panel observes relayed before recipient_stored, then the incoming reply. Panel,
   worker, mailbox and both client processes restart without losing history/identity.
 - A browser response is deliberately dropped **after the real POST completes**.
-  Retrying the same signed UUID creates one message, subsequently stored/ACKed by
-  real Android. An initial harness mistake used two different form IDs; those two
+  The form now retains its signed UUID/text, reports the unknown outcome and enables
+  retry without navigation or regenerating the ID. A real second button click creates
+  no duplicate; Android stores/ACKs the one message. Two Node built-in regression
+  tests cover double click/lost reply and validation correction, in addition to the
+  actual browser/runtime qualification. An initial harness mistake used two different form IDs; those two
   independent messages remain in private evidence, not counted as a dedup failure
   or as acceptance evidence. The corrected same-ID run passes.
 - Actual browser requests reject GET send, missing CSRF, excessive UTF-8 text,
@@ -92,21 +95,39 @@ are used, not transport mocks or direct role injection.
 
 Private receipts: `/mnt/data/fc-support-chat-20261110/https5/result.json`,
 `negative-result.json`, `unit-result.json`; raw logs, credentials, screenshots and
-databases stay outside Git. API35 VPN OFF is tested over an available emulator
-network. This is neither an offline-delivery promise nor Russian-whitelist evidence.
+databases stay outside Git. API35 and API27 VPN OFF are tested over an available
+emulator network. The separate `https27/result.json` and `negative-result.json`
+confirm two-client round trip, notification/UI reply, restarts, real same-ID button
+retry and foreign-sender rejection on Android8.1, the Friends minimum API. Its first
+attempt hit the pre-existing selection of a background cellular Network100 (EACCES);
+qualification used Wi-Fi with only the synthetic emulator's cellular data disabled.
+No network-selection code was changed, and cellular/multicarrier success is not
+claimed. Neither run is an offline-delivery promise nor Russian-whitelist evidence.
 The emulator is singular under the shared lock, KVM/host GPU; its actual GLES renderer
 is NVIDIA GTX1650Ti, not software rendering. No physical owner device is used.
 
 Candidate version is `0.1.18-beta124`, versionCode124. Existing123 artifacts and
 catalogs are untouched. Only isolated debug artifacts exist; release qualification,
-signed ARM64 artifact/checksum, minimum-supported-API verification and hosted
+signed ARM64 artifact/checksum and hosted
 review/ordinary merge remain open. Public guides retain their existing downloads.
 This checkpoint skips automatic broad CI; no hosted gate is claimed passed or waived.
 The existing Control panel workflow now has an explicit `support_candidate` dispatch:
 panel regression/image, messenger/support contracts and a source-bound unsigned ARM64
 candidate with JVM/lint checks. It rebuilds pinned native dependencies but does not
 repeat unchanged VPN/G4/transport runtime suites. Applicable final-head CI and
-independent review remain required; final identities/results belong in the PR receipt.
+independent review remain required; final identities/results belong in [draft PR18](https://github.com/Joker20380/family_connect/pull/18).
+No hosted run or review is currently recorded. This session's GitHub connection
+can create/read the PR but exposes no initial workflow-dispatch action; there is no
+authenticated local `gh` command. No credentials were searched in unrelated services.
+The exact remaining dispatch from an authorized GitHub session is:
+
+```sh
+gh workflow run control-panel.yml -R Joker20380/family_connect \
+  --ref feature/support-chat-1-20261110 -f support_candidate=true
+```
+
+Wait for the three jobs and inspect their artifacts/review before an ordinary merge.
+This is a pending gate, not a green CI result or permission to publish/install124.
 
 ## Commissioning and local installation gates
 
@@ -132,7 +153,7 @@ only the socket directory read-only and grants its numeric IPC group, not keys/s
 
 ### One commissioning sequence, not an automatic rollout
 
-1. Complete remaining client qualification and review/merge; retain exact accepted
+1. Complete hosted candidate qualification and review/merge; retain exact accepted
    source/artifact hashes. Verify the kit manifest in an empty staging directory.
    Never install a test certificate or emulator endpoint redirection in production.
 2. An authorized operator must designate a dedicated, registered support device/chat

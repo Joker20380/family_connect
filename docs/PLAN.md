@@ -23,8 +23,9 @@ enrollment, ordinary Android worker/UI reply, closed systemd mailbox, notificati
 two-client isolation, offline/restart/storage-ACK and same-ID lost-response retry
 now pass without role injection. Foreign-sender mailbox rejection and actual browser
 permission/CSRF refusals pass. The closed kit's nonroot systemd owner and separate
-forced-SSH collector also pass. Next: minimum-API qualification, scoped hosted
-candidate CI/review/ordinary merge; fresh backup/isolated restore before a local
+forced-SSH collector also pass. Minimum supported Friends API27 now passes on Wi-Fi,
+including the real button retry after response loss without changing its signed ID.
+Next: scoped hosted candidate CI/review/ordinary merge ([draft PR18](https://github.com/Joker20380/family_connect/pull/18)); fresh backup/isolated restore before a local
 panel update. Production commissioning still requires an explicitly designated
 support identity and separately scoped credentials. [Evidence and kit](releases/2026-11-11-support-chat-1.md).
 

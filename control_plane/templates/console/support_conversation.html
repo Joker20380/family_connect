@@ -20,6 +20,7 @@
 <section class="panel"><form method="post" action="{% url 'console:support_send' pseudonym %}" data-support-send>
 {% csrf_token %}<input type="hidden" name="token" value="{{ token }}">
 <label for="support-text">Текст · до 4096 байт UTF-8</label><textarea id="support-text" name="text" maxlength="4096" rows="6" required>{{ text }}</textarea>
+<p role="alert" class="notice error-notice" data-support-result hidden></p>
 <button type="submit">Отправить этому адресату от поддержки</button></form></section>
 <script src="{% static 'console/support.js' %}" defer></script>
 {% endif %}{% else %}<p class="notice">Нет разрешения на отправку сообщений.</p>{% endif %}

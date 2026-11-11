@@ -13,8 +13,11 @@ ordinary-worker UI reply, notification/deep link, stable history after restart,
 signed storage ACK and same-ID retry after a deliberately lost browser response.
 Actual foreign mailbox sender rejection and browser authorization/CSRF refusals pass.
 The extracted kit's nonroot systemd worker and separate forced-SSH collector pass
-restart/permissions checks. Minimum-API qualification, hosted candidate CI, review,
-ordinary merge and backup/restore-before-panel-update remain open. No production
+restart/permissions checks. API27 now also passes the two-client HTTPS/UI round trip
+and foreign-sender rejection over available Wi-Fi. The browser preserves its form,
+text and signed ID after a lost response; an actual second button click delivers
+only once. Two focused JavaScript regressions pass. Hosted candidate CI, review,
+ordinary merge and backup/restore-before-panel-update remain open ([draft PR18](https://github.com/Joker20380/family_connect/pull/18)). No production
 application/server/phone rollout; installed panel stays unchanged.
 The intervening RU recovery is recorded separately in commitf7877217; no RU work
 is resumed here. Replacement remains WAITING_FOR_HOST and is not a chat dependency.
