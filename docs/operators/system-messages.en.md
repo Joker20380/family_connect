@@ -48,3 +48,14 @@ enabling any schedule. Disable by stopping external runs/revoking the grant; UI 
 uses the previous image without restoring an old database or deleting tables/volumes.
 Already published notices remain public until expiry or a separately authorized existing
 administrator action. Use an isolated test feed for owner-only verification.
+
+For an explicitly authorized permanent enablement, overlay
+`deploy/system-messages/compose.publisher.yaml` on the existing Compose project.
+The separate `system_publisher` processes one queued request every10 seconds and
+uses `unless-stopped`. Only that process receives the read-only token mount and runs
+as its file-owner UID/GID. Pin `FC_PANEL_IMAGE` to the immutable qualified image ID;
+keep other deployment variables private, preserving PostgreSQL/secrets/volumes.
+Update only console first, verify health/login/empty queue, then start the publisher.
+Publisher health means its processing loop is alive, never client delivery.
+This existing-install overlay deliberately omits `seed_demo`: migrations run, but
+existing group permissions and member projections are not reset by fixture seeding.

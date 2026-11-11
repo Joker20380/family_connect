@@ -2,7 +2,7 @@
 
 ## Current engineering priority / Текущий critical path
 
-**SYSTEM-MESSAGES-1 — selected11 November, implementation/qualification.**
+**SYSTEM-MESSAGES-1 — selected11 November, owner-authorized activation IN_PROGRESS.**
 Owner requests sending system messages. Reuse the existing public service-events
 API/feed and the owner's panel login, not a clone of the phone's private identity.
 Scope: compose → immutable preview → explicit platform/audience confirmation → durable
@@ -22,8 +22,13 @@ Local gate:295 panel tests (44 new),38 existing announcement/CI-contract checks,
 migration drift and actual1440/390px browser → canonical HTTPS → encrypted Store
 restart/same-ID lost-response acceptance PASS. Hosted panel run43020554360 PASS
 on19b6ab37, including actual allowlisted image build/check; unrelated Android/support
-jobs skipped. Next is independent review/ordinary merge and production commissioning
-gated above. Documentation-only follow-up does not change the qualified runtime code.
+jobs skipped. Owner now explicitly requests enablement without a test broadcast.
+Deployment overlay preserves existing group permissions (no fixture reseeding) and
+isolates the permanent publisher token. Next: final scoped CI/readiness review,
+ordinary merge, fresh backup/isolated restore, console update and empty-queue publisher
+commissioning. No independent approval is present; do not label the CI command as one.
+Disk headroom is now1.1GiB after approved export/verification/removal of one stopped
+beta109 test container; running services, rollback images and volumes are preserved.
 
 ### Previous selected task — support production preflight
 

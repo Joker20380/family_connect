@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**11 November — owner explicitly authorizes SYSTEM-MESSAGES-1 enablement; IN_PROGRESS.**
+Permanent Compose overlay separates the scoped publisher from the web container,
+pins their image together and preserves existing users/groups by omitting fixture
+seeding on upgrade. Deployment-boundary checks cover secret isolation, restart,
+resources and no-seed startup. Runtime is not yet updated. The single stopped
+`fc-beta109-smiley-ci` container was fully exported, checksum/archive-verified and
+removed with approval; image/bind source/volumes and all running services remain.
+Root headroom increased from about200MiB to1.1GiB. RU bounded readback shows all four
+relevant services active; public feed HTTPS200 with3 unchanged events. No public
+announcement text is authorized. Fresh backup/isolated restore, final scoped CI,
+ordinary merge and dedicated token commissioning are still pending.
+PR18 has no independent approval; the owner's explicit enablement request is recorded
+separately from the owner-only CI trigger, which is not a review approval.
+
 **11 November — SYSTEM-MESSAGES-1 selected by owner; implementation, not rollout.**
 The panel now has a separate public-system-announcement workflow under the existing
 operator login: immutable preview, explicit audience confirmation, durable same-ID

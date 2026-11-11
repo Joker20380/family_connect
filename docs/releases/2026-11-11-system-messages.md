@@ -70,3 +70,25 @@ image while retaining additive tables and all existing volumes/users/history. Do
 restore an old DB over current observations or claim an already public message is
 retracted by stopping the queue. Existing server notice expiry/edit rules still apply.
 Operator guides: [RU](../operators/system-messages.ru.md), [EN](../operators/system-messages.en.md).
+
+## Owner-authorized enablement — in progress
+
+Owner explicitly requested activation, not a public test message. Add a permanent
+Compose overlay: same immutable image for web/publisher, token only in a nonroot
+read-only publisher, bounded resources/logs, restart policy and loop-only health.
+The existing-install console startup skips `seed_demo` to preserve group permissions
+and projections; additive migrations/collectstatic still run. New Compose merge test
+checks these boundaries; hosted panel-only CI now runs it as well.
+
+Only stopped `fc-beta109-smiley-ci` was exported (374265397-byte compressed archive,
+32592 members, gzip/SHA verified) and removed with approval, retaining its image,
+bind sources and all volumes. Private archive/receipt stay ignored under
+`state-client-build/system-enable-20261111/`. Root available space became1.1GiB;
+no generic Docker prune or neighbouring-service cleanup occurred.
+RU bounded readback: HTTP candidate, paid watch, AWG and TCP units active; installed
+notice modules match reviewed source; public HTTPS feed has3 events. No RU restart,
+phone role change, announcement or token grant yet. Existing panel image remains
+c179d1ae pending fresh backup/isolated restore and final source qualification.
+PR18 is mergeable/unprotected with no independent approval; the owner's enablement
+instruction and source-readiness review are not an independent reviewer approval.
+No repository protection or review rule is changed.

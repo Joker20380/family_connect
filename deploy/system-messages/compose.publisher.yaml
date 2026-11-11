@@ -1,0 +1,55 @@
+services:
+  console:
+    image: ${FC_PANEL_IMAGE:?Use the qualified immutable panel image}
+    command: >-
+      sh -ec 'python manage.py migrate --noinput &&
+      python manage.py collectstatic --noinput && exec gunicorn fc_control_plane.wsgi:application
+      --bind 0.0.0.0:8000 --workers 2 --timeout 30 --access-logfile -'
+  system_publisher:
+    image: ${FC_PANEL_IMAGE:?Use the qualified immutable panel image}
+    restart: unless-stopped
+    init: true
+    user: ${FC_PUBLISHER_UID:?Token file owner UID}:${FC_PUBLISHER_GID:?Token file owner GID}
+    environment:
+      CONTROL_PLANE_MODE: synthetic
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Preserve the existing panel secret}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Preserve the existing database password}
+      POSTGRES_HOST: postgres
+      FC_SYSTEM_PUBLISHER_ORIGIN: ${FC_SYSTEM_PUBLISHER_ORIGIN:?Use the existing verified HTTPS origin}
+    command:
+      - sh
+      - -ec
+      - >-
+        while :; do
+        python manage.py publish_system_messages --origin "$$FC_SYSTEM_PUBLISHER_ORIGIN"
+        --token-file /run/secrets/system-publisher.token --limit 1
+        && date +%s > /tmp/publisher-cycle;
+        sleep 10;
+        done
+    volumes:
+      - type: bind
+        source: ${FC_SYSTEM_PUBLISHER_TOKEN_FILE:?Private announcements-only token file}
+        target: /run/secrets/system-publisher.token
+        read_only: true
+        bind:
+          create_host_path: false
+    networks: [local_only, loopback_ui]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    cpus: 0.25
+    mem_limit: 192m
+    pids_limit: 64
+    stop_grace_period: 60s
+    logging:
+      driver: json-file
+      options:
+        max-size: 2m
+        max-file: '2'
+    healthcheck:
+      test: [CMD, python, -c, "import pathlib,time; stamp=pathlib.Path('/tmp/publisher-cycle'); assert stamp.exists() and time.time()-stamp.stat().st_mtime<90"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
