@@ -21,7 +21,7 @@ jobs:
     if: >-
       (github.event_name == 'workflow_dispatch' && inputs.support_candidate) ||
       (github.event_name == 'pull_request_review' && github.event.review.state == 'commented' &&
-       github.event.review.body == '/qualify-support-candidate' &&
+       (github.event.review.body == '/qualify-support-candidate' || github.event.review.body == '/qualify-support-runtime') &&
        github.event.review.user.login == github.repository_owner &&
        github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-24.04
@@ -115,7 +115,7 @@ jobs:
     if: >-
       github.event_name != 'pull_request_review' ||
       (github.event.review.state == 'commented' &&
-       (github.event.review.body == '/qualify-support-candidate' || github.event.review.body == '/qualify-system-messages') &&
+       (github.event.review.body == '/qualify-support-candidate' || github.event.review.body == '/qualify-system-messages' || github.event.review.body == '/qualify-support-runtime') &&
        github.event.review.user.login == github.repository_owner &&
        github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-24.04

@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**11 November — support commissioning checkpoint; restart boundary fix pending.**
+PR20 merged710338b0; scoped hosted43048235831 PASS. ARM64 beta125 is signed and
+verified, not installed or published. Isolated API35 round trip plus124→125
+preservation, and API27/35 actual100s admission renewal without VPN/cache PASS.
+RU has the support-only16d96eb7 overlay and chat-only identity; paid watch/AWG/TCP
+PIDs remain unchanged. Local worker/collector run with fresh leases. Panel50de6f25
+received only the socket overlay after independent backup restore37 tables/949640 rows.
+Restart testing exposed a stale Docker bind mount after systemd recreated the socket
+directory. The pending unit fix preserves that directory across stop/start; do not
+claim operator availability until the container is rebound once and rechecked.
+No live message/broadcast or phone change. Physical123 is only the last known version.
+[Current commissioning receipt](releases/2026-11-11-support-chat-125.md).
+
+The source-candidate entry below is a historical checkpoint.
+
 **11 November — SUPPORT-CHAT-1 resumed; beta125 source candidate, NOT deployed.**
 Source baseline is merged PR19 /93d0b9f1, installed panel remains50de6f25/database0013
 with the separate public publisher healthy. The selected change adds an explicit,
