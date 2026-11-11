@@ -1,17 +1,26 @@
 # Текущее состояние / Current state
 
-**11 November — support commissioning checkpoint; restart boundary fix pending.**
-PR20 merged710338b0; scoped hosted43048235831 PASS. ARM64 beta125 is signed and
-verified, not installed or published. Isolated API35 round trip plus124→125
-preservation, and API27/35 actual100s admission renewal without VPN/cache PASS.
-RU has the support-only16d96eb7 overlay and chat-only identity; paid watch/AWG/TCP
-PIDs remain unchanged. Local worker/collector run with fresh leases. Panel50de6f25
-received only the socket overlay after independent backup restore37 tables/949640 rows.
-Restart testing exposed a stale Docker bind mount after systemd recreated the socket
-directory. The pending unit fix preserves that directory across stop/start; do not
-claim operator availability until the container is rebound once and rechecked.
-No live message/broadcast or phone change. Physical123 is only the last known version.
-[Current commissioning receipt](releases/2026-11-11-support-chat-125.md).
+**11 November — SUPPORT-CHAT-1 backend ENABLED; physical acceptance remains open.**
+Existing owner account can open card → «Сообщения · личная поддержка» and `/messages/`;
+actual authenticated HTTP200 and explicit legacy-client blocking PASS. Panel image
+50de6f25/database0013/users/passwords/volumes are unchanged; only a read-only socket
+was attached after independent backup restore37 tables/949640 rows. Chat-only sender,
+encrypted durable state and forced-read collector are installed; no phone keys copied.
+PR20 merged710338b0, CI43048235831 PASS; PR21 merged340c905b, runtime CI43055427259
+PASS. RuntimeDirectory preservation fixes the actual Docker stale-bind defect:
+container IPC and owner HTTP survive restart and separate stop/start. Fresh authority
+lease renews1794413022→1794413144; recipient_stored remains storage ACK, never read.
+Isolated round trip/offline/retry/closed-browser receive/restarts PASS;125 in-place
+preservation, API27/35 no-VPN/no-cache actual100s renewal and audience checks PASS.
+Signed ARM64 beta125 is private and NOT installed/distributed. No physical ADB phone;
+123 is only the last verified install. Remaining physical action is one agreed owner
+phone session: in-place125, authoritative enrollment, approved addressed send/reply.
+No production message/broadcast sent here; production Android public-feed delivery
+and cold no-cache restricted bootstrap remain NOT_RUN. RU watch/AWG/TCP PIDs and
+restart counters unchanged; historical stop cause/replacement remain open.
+Root979MiB→2.5GiB after bounded build-cache cleanup; final2.3GiB, still low capacity.
+[Receipt/rollback](releases/2026-11-11-support-chat-125.md) ·
+[RU guide](operators/support-chat.ru.md) · [EN guide](operators/support-chat.en.md).
 
 The source-candidate entry below is a historical checkpoint.
 

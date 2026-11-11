@@ -2,29 +2,26 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Immediate SUPPORT-CHAT-1 gate:** qualify/install RuntimeDirectoryPreserve=yes,
-rebind the panel once, then verify authenticated history through actual HTTP across
-worker restart. Keep Android125 artifact from qualifiedb293f9ac; this host-only fix
-does not require a new Android version or another native build. Owner-only review
-command `/qualify-support-runtime` runs contracts/kit/panel, not Android. PR20 CI and
-merge, signing, API27/35 no-VPN renewal and isolated audience checks are completed;
-physical phone/live addressed exchange and production public-feed delivery are not.
-
-**SUPPORT-CHAT-1 — owner-selected IN_PROGRESS,11 November; Android125 candidate.**
-Complete the existing panel/device-binding/worker/mailbox path, commission an official
-chat-only sender without a VPN grant, and qualify authenticated Android enrollment,
-actual100s admission renewal, offline/restart/retry/background replies. Public
-announcements remain a separate audience-qualified feed; no live send without an
-approved exact text/recipient or audience. Existing owner's panel login is retained;
-phone private keys never leave the device. Source base93d0b9f1; installed panel50de6f25,
-last verified physical Android123, no phone currently on ADB.125 is not installed.
-Dependencies/gates: existing dual-proof binding and signed ACK; scoped contracts,
-Android JVM/lint/ARM64 CI, isolated real-client tests, ordinary review/merge, fresh
-backup with separate restore before runtime changes. Preserve all prior accepted
-artifacts/rollback and report physical absence rather than synthesizing acceptance.
-Preserve installed HTTP-only VPN fixes with the pinned support overlay, not the full
-main HTTP kit; changing this runtime base requires review again before installation.
-Root979MiB→2.5GiB after1.557GB old unused build-cache cleanup; do not prune volumes.
+**SUPPORT-CHAT-1 — backend ENABLED, awaiting physical owner-phone acceptance.**
+Operator entry: device card → «Сообщения · личная поддержка»; replies `/messages/`.
+Completed: chat-only service identity, authoritative binding collector, encrypted
+worker/outbox, existing owner permissions, CI/review/ordinary PR20/21 merges,
+backup with separate restore, runtime overlay and actual restart/stop-start IPC gate.
+The systemd socket-directory defect is fixed with RuntimeDirectoryPreserve=yes;
+scoped runtime CI43055427259 passes without rebuilding unchanged Android125.
+Isolated exchange, offline/dedup/closed-browser replies and existing124 evidence are
+preserved;125 API27/35 actual admission renewal and audience checks also pass.
+Installed panel50de6f25/database0013; RU HTTP support-only16d96eb7, not full main.
+Signed125 from qualifiedb293f9ac is private, neither installed nor published; last
+verified phone123 is historical. No physical phone is attached. One remaining
+physical session: inspect version, install125 in place preserving data, enroll its
+canonical binding, approve exact addressed text and perform send/reply with VPN off.
+Until enrollment, the panel explicitly blocks legacy recipients; no guessed binding.
+Public Android announcement delivery remains a separate NOT_RUN production gate:
+isolated audience checks do not authorize a broadcast. Cold no-cache/allowlisted
+bootstrap remains separate from ordinary Wi-Fi and expired synthetic subscription.
+No live message was sent. Host reboot/startup ordering is not a completed test.
+Root979MiB→2.5GiB after1.557GB old build-cache cleanup, final2.3GiB; preserve artifacts.
 Next global tracks remain separate: confirmed subscription-change notifications;
 payment partner selection/integration; cold no-cache restricted bootstrap/recovery
 field gate; RU replacement WAITING_FOR_HOST and open stop cause; later Windows/Linux.
