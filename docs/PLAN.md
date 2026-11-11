@@ -3,6 +3,9 @@
 ## Current engineering priority / Текущий critical path
 
 **11 November production follow-up selected by owner — PREFLIGHT, NOT_DEPLOYED.**
+CI43007041835: panel PASS; contracts287 PASS/1 stale UI-pin FAIL. Retain the failure,
+review/pin only the four support Java deltas and two additive string resources, then
+qualify the corrected head with the same scoped workflow. Do not remove the guard.
 The owner requests production and use of their account. Keep the existing panel
 login; do not silently clone its Android chat identity into the worker: the protocol
 rejects sender=recipient. A separate owner-controlled sender needs explicit resolution.

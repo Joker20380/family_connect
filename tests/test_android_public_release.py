@@ -277,12 +277,19 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'MainActivity.java': 'ae04b97387cd9f67ce6e80bd01c31b411168e538c1c3a60a4516ab715aa0e4ad',
         'ControlOperations.java': 'bfa026bd45010ce410a8ed5e82240d72a36f73ce4311835bc8e72d9d608d6626',
     }
+    reviewed_support_candidate_beta124 = {
+        'ChatActivity.java': '80b89cfcdc9e6f095bf074f76cc929be5d686573f4828074de40daad594331a5',
+        'ChatLocalAndroid.java': '96e1ce4463a0476dd610779c9f52818dcc77b6359dea105303ae96782277a414',
+        'ChatRuntime.java': '93e0e57e3365a77e7722ed1a476422e61fd480836875a820fdb79ed82f74b3f4',
+        'FriendsAccessAndroid.java': 'e21901751a49b8fece4d210878382781c0e44814896412e67d70050ff1391b5d',
+    }
     reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81,
                          **reviewed_gateway_readiness, **reviewed_slow_link_recovery,
                          **reviewed_idle_ack_recovery, **reviewed_signaling_read_diagnostics,
                          **reviewed_subscription_beta119, **reviewed_inherited_renewal_beta119,
                          **reviewed_cold_candidate_9bf02724, **reviewed_consolidated_beta121,
-                         **reviewed_app_vpn_beta122, **reviewed_app_vpn_recovery_beta123}
+                         **reviewed_app_vpn_beta122, **reviewed_app_vpn_recovery_beta123,
+                         **reviewed_support_candidate_beta124}
     reviewed_resources = {
         'clients/android/app/src/main/res/values-ru/strings.xml': '89b334900a7febe2e50bfe06d593673961c320704a16ead76c09d9baa22ea279',
         'clients/android/app/src/main/res/values/strings.xml': '85e40c0044eaec9ebe8fb6f77d0a026ddc6bead90fb044237abd23b305fd2c39',
@@ -301,8 +308,13 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'clients/android/app/src/main/res/values-ru/strings.xml': '025b8c5f82d87a54693660e288515e9e012d9da8c7b5876c5d0f1effe19f61fe',
         'clients/android/app/src/main/res/values/strings.xml': '5db570467d29199a7b6f93a7911494a0093269c6601cbc6b46c61f5871372303',
     }
+    reviewed_support_resources_beta124 = {
+        'clients/android/app/src/main/res/values-ru/strings.xml': '8c0837cbf6c56fcc0917f4db3ff89a4f90726abc604b7fe58d4d909c606038fc',
+        'clients/android/app/src/main/res/values/strings.xml': '42b13c1ef5351aaed6e8323f634e341b72ea34b5a588e9313b8b38d2b4da6288',
+    }
     reviewed_resources = {**reviewed_resources, **reviewed_subscription_resources_beta119,
-                          **reviewed_app_vpn_resources_beta122, **reviewed_app_vpn_catalog_resources_beta123}
+                          **reviewed_app_vpn_resources_beta122, **reviewed_app_vpn_catalog_resources_beta123,
+                          **reviewed_support_resources_beta124}
     changes = {'clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ChatAudio.java'}

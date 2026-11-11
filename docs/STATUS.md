@@ -1,6 +1,11 @@
 # Текущее состояние / Current state
 
 **11 November — owner requests production; preflight, not rollout.**
+Scoped hosted CI43007041835 is actually running on3d2f8d1c: panel PASS;
+contracts287 PASS/1 stale Android UI-pin failure, retained. Four support-only Java
+deltas and two additive RU/EN resource deltas are reviewed and explicitly pinned;
+no file is excluded from the provenance guard. This source-only test correction
+needs a fresh scoped run; the earlier Android job is not a final-head qualification.
 The existing panel remains imagec179d1ae/database0011, healthy/HTTP200. A consistent
 PostgreSQL exported snapshot was restored into a separate networkless RAM-backed
 PostgreSQL: all36 tables/929830 row fingerprints match; the live database was not

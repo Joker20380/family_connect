@@ -255,3 +255,20 @@ The earlier candidate kit/local acceptance retain their original source identiti
 any accepted hosted artifacts must retain their own final-head provenance. Rollback
 remains the previous panel image without volume or database rollback; no rollback
 is necessary for this preflight because no application was updated.
+
+### First hosted run and provenance-guard correction
+
+The owner review command5857582530 successfully starts
+[run43007041835](https://github.com/Joker20380/family_connect/actions/runs/43007041835)
+at10:51:03UTC on exact3d2f8d1c. Panel regression/image/browser checks pass. Contracts
+report287 PASS/1 FAIL: the accepted Android UI guard still pins the pre-support
+ChatActivity hash. The failure is retained, not skipped or retried as infrastructure.
+
+Manual diff review against87fbe744 confirms four intended support deltas only:
+ChatActivity verified/unavailable title; ChatLocalAndroid worker-thread support-role
+bridge; ChatRuntime official notification title; FriendsAccessAndroid authenticated
+opt-in and legacy fallback. Two string files add only the matching official/unavailable
+labels. The guard gains explicit reviewed beta124 hashes for these six files; all
+other original hashes and equality checks remain enforced. No application/native
+code changes in this correction. A fresh scoped run is required for the corrected
+source; this is neither release signing nor an independent PR approval.
