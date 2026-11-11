@@ -1,7 +1,8 @@
 # SYSTEM-MESSAGES-1 · 11 November2026
 
 Owner-selected continuation: implement system-message sending from the operator panel
-under the existing account. **SOURCE CANDIDATE; NOT INSTALLED / NOT PUBLICLY SENT.**
+under the existing account. **ENABLED13:17 UTC; NO PUBLIC ANNOUNCEMENT SENT.**
+The sections before the activation receipt retain the earlier qualification checkpoints.
 
 ## Scope
 
@@ -92,3 +93,71 @@ c179d1ae pending fresh backup/isolated restore and final source qualification.
 PR18 is mergeable/unprotected with no independent approval; the owner's enablement
 instruction and source-readiness review are not an independent reviewer approval.
 No repository protection or review rule is changed.
+
+## Activation receipt
+
+Enabled11 November2026,13:17 UTC.
+
+- Source4c85cecb88d587ceb50162005604cf3c64f6e648; final scoped hosted
+  [run43023898059](https://github.com/Joker20380/family_connect/actions/runs/43023898059),
+  panel job130533616267 PASS: migrations/regression, browser request identity,
+  Compose isolation/no-seed check and allowlisted image build. Local focused3 PASS,
+  1 unrelated closed-kit test deselected. Android/support jobs intentionally skipped.
+- [PR18](https://github.com/Joker20380/family_connect/pull/18) ordinarily merged at
+  b896b38a4c098f6c2623601330ef43fc95bd779f. Merged runtime/source matches qualified
+  head. Readiness review and explicit owner enablement authorize this operation;
+  no independent approval is claimed, repository protection unchanged.
+- Installed console/publisher image:
+  `sha256:50de6f25a04c1127b127b3278314619c69eddeec229d0d4ad9b7e67c1d2ffeab`.
+  All237 packaged source/lock hashes match. An initial verification looked for the
+  lockfile in the source path; corrected to the Dockerfile's `/tmp/requirements.lock`
+  destination, then passed. Actual build and original rollback image are retained.
+- Before upgrade, monitoring timers were paused and active jobs allowed to finish.
+  Fresh repeatable-read PostgreSQL dump plus existing configuration/synthetic-volume
+  backup; separate networkless RAM-backed PostgreSQL restore matches all36 tables,
+  939954 rows. Dump SHA256:
+  `37264aefdf397c29d4149327d4e9cfc1b4af2604195d60ab142de6eb512f872f`.
+  Verification container removed; live DB never restored. Console alone updated
+  without dependencies/build/pull; original DB container, volumes and environment stay.
+- Additive migrations0012/0013 installed. No `seed_demo`, password reset, account
+  replacement or group permission assignment. Initial strict post-upgrade comparison
+  stopped at `auth_user`; investigation confirms only `last_login` changed. Monitoring
+  resumed on that stop, adding observations/audit rows. Subsequent row-level check
+  proves23 protected tables identical and every original row retained in10 active
+  tables (938254 original rows, ignoring only `auth_user.last_login`). User identity,
+  password hash and permissions unchanged; session changes are additive.
+- Existing sole active owner account: actual authenticated HTTP200 on list and compose
+  form, no POST. Short-lived verification session deleted; existing sessions/password
+  untouched. Queue asserted empty before starting publisher and at final readback.
+- Server notices SQLite backed up/`integrity_check`/table comparison before granting
+  the separate `Family Connect · панель` announcements-only publisher. One admin added;
+  existing admins, device roles, events/revisions/edit operations preserved.0600 token
+  transferred privately, mounted read-only only in nonroot publisher, never web/Git/CI.
+  `unless-stopped`,10-second loop, one request per cycle, bounded logs/resources.
+- Console/publisher/PostgreSQL healthy; panel HTTP200. Publisher's own certificate-
+  verified HTTPS public-feed GET matches the host readback. Public feed hash unchanged,
+  3 events, queue0, publications0. Publisher health is a loop check, not delivery proof.
+  No public POST or physical Android/client-delivery acceptance is claimed.
+- Monitoring timers restored; both monitor/probe services subsequently succeed.
+  RU HTTP/watch/AWG/TCP active. AWG/TCP/watch PIDs and restart counters unchanged;
+  HTTP MainPID changed during the window outside this operation's commands, so the
+  initial strict all-unit equality check correctly failed. Follow-up checks active
+  state, unchanged notice modules/HTTP archive and functioning HTTPS feed. No service
+  restart or policy/VPN/phone/NL change was performed here; prior RU cause remains open.
+- Root available988MiB, data volume2.8GiB at readback: still a capacity warning.
+  Only the separately approved, fully archived stopped beta109 container was removed.
+  No client version, signing key, release installer, invitation link or catalog changed.
+
+Private deployment bundle remains under
+`state-client-build/system-enable-20261111/`: `publisher.private.env`, runtime overlay,
+token, `panel-backup/`, sanitized-in-console/private-on-disk verification receipts,
+and `runtime-control.sh`. It is ignored by Git. Status:
+`sh state-client-build/system-enable-20261111/runtime-control.sh status`.
+Disable processing with its `stop-publisher` argument. `rollback-ui` stops publisher
+and restores original imagec179d1ae with the no-seed startup while retaining additive
+tables/users/history/volumes. Old tag `fc-panel-rollback:pre-system-20261111` is kept.
+Do not restore the old DB over current observations. A separate grant revocation can
+use the existing notices CLI/name; stopping UI/publisher does not retract public events.
+Normal administration must use the retained overlay/env pair, not rebuild the old
+base Compose console. Remaining acceptance: explicitly approved public text and
+actual real-client receipt; no unsolicited broadcast is part of enabling the feature.

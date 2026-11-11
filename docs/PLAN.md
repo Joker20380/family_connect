@@ -2,7 +2,7 @@
 
 ## Current engineering priority / Текущий critical path
 
-**SYSTEM-MESSAGES-1 — selected11 November, owner-authorized activation IN_PROGRESS.**
+**SYSTEM-MESSAGES-1 — owner-authorized activation complete11 November13:17 UTC.**
 Owner requests sending system messages. Reuse the existing public service-events
 API/feed and the owner's panel login, not a clone of the phone's private identity.
 Scope: compose → immutable preview → explicit platform/audience confirmation → durable
@@ -14,21 +14,28 @@ this feature. Do not grant a phone role or publish a test announcement automatic
 Gate: view/send/CSRF/actor/content-bound preview, stable ID after ambiguous outcomes,
 bounded TLS/no-redirect/no-token-in-web, actual browser and isolated HTTPS/store path,
 panel regression/migration/packaging and scoped hosted CI/review/ordinary merge.
-Production still requires disk headroom, fresh consistent backup with separate restore,
-external least-privilege publisher credential and an explicitly approved public text.
+Activation requires disk headroom, fresh consistent backup with separate restore and
+an external least-privilege publisher credential; actual broadcast separately requires
+an explicitly approved public text. Enabling the idle publisher is not a test broadcast.
 No RU policy/transport work, phone change, new client version or mass broadcast is
 performed as part of source qualification. [Report](releases/2026-11-11-system-messages.md).
 Local gate:295 panel tests (44 new),38 existing announcement/CI-contract checks,
 migration drift and actual1440/390px browser → canonical HTTPS → encrypted Store
 restart/same-ID lost-response acceptance PASS. Hosted panel run43020554360 PASS
 on19b6ab37, including actual allowlisted image build/check; unrelated Android/support
-jobs skipped. Owner now explicitly requests enablement without a test broadcast.
-Deployment overlay preserves existing group permissions (no fixture reseeding) and
-isolates the permanent publisher token. Next: final scoped CI/readiness review,
-ordinary merge, fresh backup/isolated restore, console update and empty-queue publisher
-commissioning. No independent approval is present; do not label the CI command as one.
-Disk headroom is now1.1GiB after approved export/verification/removal of one stopped
-beta109 test container; running services, rollback images and volumes are preserved.
+jobs skipped. Final deployment source4c85cecb passes scoped hosted43023898059,
+including the actual Compose boundary. PR18 ordinarily merged asb896b38a under owner
+authorization/readiness review; no independent approval is claimed and no protections
+were changed. Fresh separate restore matches36 tables/939954 rows. Installed image
+50de6f25/database0013, existing-owner authenticated form HTTP200, three containers
+healthy and publisher-to-public-feed HTTPS readback PASS. Source hashes237/237 match
+the local image; no fixture reseeding, password reset, phone role or ordinary send grant.
+Queue0/feed3 unchanged, no announcements sent. Monitoring restored; old image and
+private backup/rollback retained. Root988MiB remains a capacity warning, not solved.
+Remaining check is an owner-approved public announcement and real-client receipt;
+not run automatically because no public text/audience was approved for a test.
+Private support/Android124 commissioning remains separate and is not resumed by this
+completion. RU transport is active; earlier incident-cause investigation remains open.
 
 ### Previous selected task — support production preflight
 

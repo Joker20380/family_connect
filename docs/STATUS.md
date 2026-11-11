@@ -1,18 +1,33 @@
 # Текущее состояние / Current state
 
-**11 November — owner explicitly authorizes SYSTEM-MESSAGES-1 enablement; IN_PROGRESS.**
-Permanent Compose overlay separates the scoped publisher from the web container,
-pins their image together and preserves existing users/groups by omitting fixture
-seeding on upgrade. Deployment-boundary checks cover secret isolation, restart,
-resources and no-seed startup. Runtime is not yet updated. The single stopped
-`fc-beta109-smiley-ci` container was fully exported, checksum/archive-verified and
-removed with approval; image/bind source/volumes and all running services remain.
-Root headroom increased from about200MiB to1.1GiB. RU bounded readback shows all four
-relevant services active; public feed HTTPS200 with3 unchanged events. No public
-announcement text is authorized. Fresh backup/isolated restore, final scoped CI,
-ordinary merge and dedicated token commissioning are still pending.
-PR18 has no independent approval; the owner's explicit enablement request is recorded
-separately from the owner-only CI trigger, which is not a review approval.
+**11 November13:17 UTC — SYSTEM-MESSAGES-1 ENABLED; no public announcement sent.**
+Installed panel and separate permanent publisher now use immutable image50de6f25
+(qualified source4c85cecb; PR18 ordinary mergeb896b38a). Final hosted panel
+CI43023898059 PASS, including deployment-boundary checks. Database0013 is installed;
+console/publisher/PostgreSQL healthy, panel HTTP200. The existing owner's unchanged
+account sees the list and compose form; no new ordinary-operator permissions were
+granted. Publisher alone receives the dedicated0600 announcements-only token;
+its verified HTTPS feed read succeeds. Queue0, public feed still the same3 events,
+no POST/publication/client-delivery test. This is public broadcast, not a private
+message to the owner's phone or the addressed support worker.
+
+Fresh backup independently restored36 tables/939954 rows, all fingerprints equal.
+After migration23 protected tables were identical; all original rows in10 active
+tables remain. Only user `last_login` changed; password/identity/permission assignments
+are unchanged. Extra rows are observations/audit/live sessions after monitoring resumed.
+Monitoring timers resumed and both services completed successfully. Previous image,
+volumes, users, private backup and rollback helper remain; no live DB restore occurred.
+One stopped beta109 test container was archived/verified then removed with approval;
+no images/volumes/neighbouring services were pruned. Root still has only988MiB free.
+RU HTTP/watch/AWG/TCP are active; transport PIDs/restart counters and notice source are
+unchanged. HTTP PID changed externally during the window (no restart command here);
+the feed and publisher HTTPS readback work. Do not claim the earlier RU disk-latency
+incident's cause is fixed. No Android build/version/catalog/phone change occurred.
+PR18 had no independent approval: owner-authorized activation/readiness review is
+recorded separately from CI, not misrepresented as an independent reviewer approval.
+Exact image, backup hash, rollback and limits: [report](releases/2026-11-11-system-messages.md#activation-receipt).
+
+Earlier entries below are historical checkpoints, not the installed state.
 
 **11 November — SYSTEM-MESSAGES-1 selected by owner; implementation, not rollout.**
 The panel now has a separate public-system-announcement workflow under the existing
