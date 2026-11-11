@@ -1,0 +1,19 @@
+{% extends 'console/base.html' %}
+{% block title %}Системное сообщение{% endblock %}
+{% block mode %}Системная лента · не личная переписка{% endblock %}
+{% block content %}
+<h1>{{ message.title }}</h1><div>{{ message.body|linebreaksbr }}</div>
+<dl><dt>Аудитория</dt><dd>Все пользователи: {{ message.platforms|join:', ' }}. Лента общедоступна.</dd>
+<dt>Тип</dt><dd>{{ message.kind }}</dd><dt>Срок в ленте</dt><dd>{{ message.days }} дней с публикации</dd>
+<dt>Оператор панели</dt><dd>{{ message.created_by.get_username }}</dd><dt>Статус</dt><dd>{{ message.get_status_display }}</dd>
+<dt>ID</dt><dd><code>{{ message.pk.hex }}</code></dd></dl>
+<p>Имя автора в клиентской ленте задаётся отдельным серверным разрешением публикации. Статус не доказывает доставку или прочтение. Персональный ответ не предусмотрен.</p>
+{% if message.status == 'queued' %}<p>Запрос сохранён. Публикация произойдёт только при запуске отдельного настроенного publisher-процесса. Пока он не подключён, очередь остаётся локальной.</p>{% endif %}
+{% if message.status == 'unknown' %}<p role="alert">Ответ сервера потерян или публикация ещё не подтверждена лентой. Не создавайте новый текст: повтор ниже использует прежний ID и не создаёт второе объявление.</p>{% endif %}
+{% if can_send and perms.console.send_system_message %}
+<form method="post" action="{% url 'console:system_message_send' message.pk %}">{% csrf_token %}<input type="hidden" name="token" value="{{ token }}">
+<label><input type="checkbox" name="confirm" value="public" required> Подтверждаю общедоступную публикацию этого текста для указанной аудитории</label>
+<button type="submit">{% if message.status == 'draft' %}Отправить на публикацию{% else %}Повторить с тем же ID{% endif %}</button></form>
+{% endif %}
+<p><a href="{% url 'console:system_messages' %}">К списку системных сообщений</a></p>
+{% endblock %}

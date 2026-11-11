@@ -25,6 +25,8 @@ def test_support_ci_review_command_is_owner_only_and_source_bound():
     assert workflow.count('ref: ${{ env.SUPPORT_SOURCE_SHA }}') == 3
     assert "github.event.pull_request.head.sha || github.sha" in workflow
     assert '--source-commit "$SUPPORT_SOURCE_SHA"' in workflow
+    assert workflow.count("github.event.review.body == '/qualify-system-messages'") == 1
+    assert "github.event.review.body == '/qualify-system-messages'" in workflow.split('\n  panel:\n')[1]
 
 
 def test_closed_support_kit_imports_outside_checkout_and_is_reproducible(tmp_path):

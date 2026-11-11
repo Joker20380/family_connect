@@ -3,9 +3,15 @@ from . import views
 from . import observability
 from . import objects
 from . import support
+from . import system_messages
 
 app_name = 'console'
 urlpatterns = [
+    path('system-messages/', system_messages.index, name='system_messages'),
+    path('system-messages/new/', system_messages.compose, name='system_message_new'),
+    path('system-messages/preview/', system_messages.preview, name='system_message_preview'),
+    path('system-messages/<uuid:ident>/', system_messages.detail, name='system_message'),
+    path('system-messages/<uuid:ident>/send/', system_messages.send, name='system_message_send'),
     path('messages/', support.inbox, name='support_inbox'),
     path('inventory/<str:pseudonym>/messages/', support.history, name='support_history'),
     path('inventory/<str:pseudonym>/messages/send/', support.send, name='support_send'),

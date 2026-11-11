@@ -2,6 +2,29 @@
 
 ## Current engineering priority / Текущий critical path
 
+**SYSTEM-MESSAGES-1 — selected11 November, implementation/qualification.**
+Owner requests sending system messages. Reuse the existing public service-events
+API/feed and the owner's panel login, not a clone of the phone's private identity.
+Scope: compose → immutable preview → explicit platform/audience confirmation → durable
+queue → external scoped publisher → exact public-feed readback. The public feed cannot
+target only the owner's phone or receive private replies; use SUPPORT-CHAT-1 for that.
+Dependencies: existing notices authorization/idempotency/feed contract and preserved
+panel users/history. No beta124 installation or separate chat sender is required for
+this feature. Do not grant a phone role or publish a test announcement automatically.
+Gate: view/send/CSRF/actor/content-bound preview, stable ID after ambiguous outcomes,
+bounded TLS/no-redirect/no-token-in-web, actual browser and isolated HTTPS/store path,
+panel regression/migration/packaging and scoped hosted CI/review/ordinary merge.
+Production still requires disk headroom, fresh consistent backup with separate restore,
+external least-privilege publisher credential and an explicitly approved public text.
+No RU policy/transport work, phone change, new client version or mass broadcast is
+performed as part of source qualification. [Report](releases/2026-11-11-system-messages.md).
+Local gate:295 panel tests (44 new),38 existing announcement/CI-contract checks,
+migration drift and actual1440/390px browser → canonical HTTPS → encrypted Store
+restart/same-ID lost-response acceptance PASS. Next is source-bound panel hosted CI
+and independent review/ordinary merge; production commissioning remains gated above.
+
+### Previous selected task — support production preflight
+
 **11 November production follow-up selected by owner — PREFLIGHT, NOT_DEPLOYED.**
 CI43007041835: panel PASS; contracts287 PASS/1 stale UI-pin FAIL. Retain the failure,
 review/pin only the four support Java deltas and two additive string resources, then

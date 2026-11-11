@@ -1,5 +1,8 @@
 # Documentation
 
+[Системные сообщения · 11 ноября: форма панели и безопасная очередь публикации](releases/2026-11-11-system-messages.md).
+[Инструкция оператора](operators/system-messages.ru.md) · [Operator guide](operators/system-messages.en.md).
+
 [SUPPORT-CHAT-1 · 11 ноября: реальный изолированный обмен, ещё не production](releases/2026-11-11-support-chat-1.md).
 
 [10 ноября: доступность локальной панели после перезапуска Docker](releases/2026-11-10-panel-availability.md).

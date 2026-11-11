@@ -1,5 +1,28 @@
 # Текущее состояние / Current state
 
+**11 November — SYSTEM-MESSAGES-1 selected by owner; implementation, not rollout.**
+The panel now has a separate public-system-announcement workflow under the existing
+operator login: immutable preview, explicit audience confirmation, durable same-ID
+queue and an external HTTPS publisher. View/send permissions and CSRF are separate;
+the web process has no publisher token or phone identity. Unknown network outcomes
+require explicit same-ID retry. Only exact live public-feed readback marks published;
+delivery, read receipts and replies are not claimed. This is the existing service
+feed, not SUPPORT-CHAT-1 and not addressed subscription events. No Android change,
+release/version increment, production announcement or installed-panel update.
+Final local panel regression295 PASS (44 new checks), existing announcement/CI
+contracts38 PASS; actual Chromium → durable queue → canonical HTTPS API → feed →
+encrypted client store/restart PASS. Lost-response retry uses two POSTs but one event;
+desktop1440/mobile390 rendering passes. Physical Android/production delivery NOT_RUN.
+Scoped hosted qualification remains a separate gate recorded in the
+[system-message report](releases/2026-11-11-system-messages.md).
+Previous support CI43008983724 actually passed all three jobs on26727eb7; downloaded
+unsigned124 remains that exact artifact, not a build of these subsequent panel changes.
+PR18 remains unmerged; production disk headroom, fresh backup/isolated restore and
+review/commissioning gates remain. RU is not operated in this selected task; its
+last recovery and open disk-latency cause are on68afd2e6, not requalified here.
+
+Earlier entries below describe previous checkpoints, not additional active tasks.
+
 **11 November — owner requests production; preflight, not rollout.**
 Scoped hosted CI43007041835 is actually running on3d2f8d1c: panel PASS;
 contracts287 PASS/1 stale Android UI-pin failure, retained. Four support-only Java
