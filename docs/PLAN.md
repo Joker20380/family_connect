@@ -2,6 +2,14 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Immediate SUPPORT-CHAT-1 gate:** qualify/install RuntimeDirectoryPreserve=yes,
+rebind the panel once, then verify authenticated history through actual HTTP across
+worker restart. Keep Android125 artifact from qualifiedb293f9ac; this host-only fix
+does not require a new Android version or another native build. Owner-only review
+command `/qualify-support-runtime` runs contracts/kit/panel, not Android. PR20 CI and
+merge, signing, API27/35 no-VPN renewal and isolated audience checks are completed;
+physical phone/live addressed exchange and production public-feed delivery are not.
+
 **SUPPORT-CHAT-1 — owner-selected IN_PROGRESS,11 November; Android125 candidate.**
 Complete the existing panel/device-binding/worker/mailbox path, commission an official
 chat-only sender without a VPN grant, and qualify authenticated Android enrollment,

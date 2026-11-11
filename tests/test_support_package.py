@@ -27,6 +27,15 @@ def test_support_ci_review_command_is_owner_only_and_source_bound():
     assert '--source-commit "$SUPPORT_SOURCE_SHA"' in workflow
     assert workflow.count("github.event.review.body == '/qualify-system-messages'") == 1
     assert "github.event.review.body == '/qualify-system-messages'" in workflow.split('\n  panel:\n')[1]
+    assert workflow.count("github.event.review.body == '/qualify-support-runtime'") == 2
+    assert '/qualify-support-runtime' not in workflow.split('\n  support-android:\n')[1].split('\n  panel:\n')[0]
+
+
+def test_worker_preserves_socket_directory_for_readonly_container_bind_mount():
+    unit = (ROOT / 'deploy/support-chat/family-connect-support.service').read_text()
+    assert 'RuntimeDirectory=family-connect-support\n' in unit
+    assert 'RuntimeDirectoryMode=0750\n' in unit
+    assert 'RuntimeDirectoryPreserve=yes\n' in unit
 
 
 def test_closed_support_kit_imports_outside_checkout_and_is_reproducible(tmp_path):
