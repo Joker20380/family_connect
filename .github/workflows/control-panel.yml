@@ -37,9 +37,9 @@ jobs:
       - run: python -m pip install --no-deps --require-hashes -r messenger/requirements.lock
       - name: Existing messenger and addressed support contracts
         run: >-
-          python -m pytest -q messenger/tests tests/test_friends_chat.py
+          python -m pytest -q messenger/tests tests/test_friends_chat.py tests/test_chat_service.py
           tests/test_support_binding.py tests/test_support_collector.py
-          tests/test_support_http.py tests/test_support_package.py
+          tests/test_support_http.py tests/test_support_package.py tests/test_support_upgrade.py
           tests/test_android_public_release.py
       - name: Closed commissioning kit
         run: python -m scripts.package_support_chat --output artifacts/support-chat-kit
@@ -82,8 +82,12 @@ jobs:
       - name: Build unchanged pinned native dependencies, without transport suites
         run: |
           ANDROID_NDK_HOME="$ANDROID_HOME/ndk/28.2.13676358" python3 pilot/android-awg/build.py --abi arm64-v8a
-          sudo apt-get update -qq
-          sudo apt-get install -y cmake ninja-build
+          if ! command -v cmake >/dev/null || ! command -v ninja >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y cmake ninja-build
+          fi
+          cmake --version
+          ninja --version
           git clone --quiet https://github.com/drowe67/codec2 "$RUNNER_TEMP/android-codec2"
           git -C "$RUNNER_TEMP/android-codec2" checkout --detach 06d4c11e699b0351765f10398abb4f663a984f36
           python3 clients/android/audio/build.py --source "$RUNNER_TEMP/android-codec2" --ndk "$ANDROID_HOME/ndk/28.2.13676358" --out clients/android/audio-generated --abi arm64-v8a
@@ -101,7 +105,7 @@ jobs:
           python3 pilot/android-restricted/package_ci.py --source-commit "$SUPPORT_SOURCE_SHA" --out restricted-release --apksigner "$ANDROID_HOME/build-tools/35.0.0/apksigner" --android-only
       - uses: actions/upload-artifact@v4
         with:
-          name: support-chat-Android124-unsigned-arm64
+          name: support-chat-Android125-unsigned-arm64
           path: |
             restricted-release/
             clients/android/audio-generated/corresponding-source/

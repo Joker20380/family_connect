@@ -17,9 +17,12 @@ def load(path):
     if not stat.S_ISREG(info.st_mode) or not 0 < info.st_size <= 4096 or info.st_mode & 0o022:
         raise ValueError('Unsafe support configuration')
     document = json.loads(path.read_bytes(), object_pairs_hook=unique)
-    if (type(document) is not dict or set(document) != {'schema', 'sender_device', 'sender_public', 'revision', 'enabled'}
-            or type(document['schema']) is not int or document['schema'] != 1
-            or type(document['sender_device']) is not str or re.fullmatch('[0-9a-f]{32}', document['sender_device']) is None
+    fields = {'schema', 'sender_public', 'revision', 'enabled'}
+    if (type(document) is not dict or type(document.get('schema')) is not int
+            or document['schema'] not in (1, 2)
+            or set(document) != (fields | {'sender_device'} if document['schema'] == 1 else fields)
+            or (document['schema'] == 1 and (type(document['sender_device']) is not str
+                or re.fullmatch('[0-9a-f]{32}', document['sender_device']) is None))
             or type(document['sender_public']) is not str or re.fullmatch('[0-9a-f]{128}', document['sender_public']) is None
             or type(document['revision']) is not int or not 1 <= document['revision'] <= 2**53 - 1
             or type(document['enabled']) is not bool):
@@ -28,6 +31,12 @@ def load(path):
 
 
 def sender(database, document):
+    if document['schema'] == 2:
+        registered = database.execute('SELECT enabled FROM chat_service_senders WHERE public=?',
+                                      (document['sender_public'],)).fetchone()
+        if registered is None or not registered['enabled']:
+            raise ValueError('Unregistered support service sender')
+        return
     ChatAccess.active(database, document['sender_device'])
     registered = database.execute('SELECT public FROM chat_bindings WHERE device=?', (document['sender_device'],)).fetchone()
     if registered is None or registered['public'] != document['sender_public']:

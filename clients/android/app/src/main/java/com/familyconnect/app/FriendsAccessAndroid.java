@@ -294,8 +294,10 @@ final class FriendsAccessAndroid {
             JsonObject result=post("/friends/chat/register",body);
             String status=text(result.get("status"));
             boolean support=result.has("support_configuration");
+            boolean publishers=result.has("publisher_configuration");
             require(!support||supportProtocol&&status.equals("active"));
-            fields(result,(status.equals("active")?"device chat_public status node":"device chat_public status")+(support?" support_configuration":""));
+            require(!publishers||status.equals("active"));
+            fields(result,(status.equals("active")?"device chat_public status node":"device chat_public status")+(support?" support_configuration":"")+(publishers?" publisher_configuration":""));
             require(text(result.get("device")).equals(identity.reference())&&text(result.get("chat_public")).equals(publicKey)
                 &&(status.equals("pending-node")||status.equals("active")));
             if(status.equals("active")) {
@@ -305,6 +307,7 @@ final class FriendsAccessAndroid {
                 require(until>current&&until-current<=120);
                 require(text(node.get("host")).matches("[0-9]+(\\.[0-9]+){3}")
                     &&integer(node.get("port"),1)<=65535&&text(node.get("public_key")).matches("[0-9a-f]{128}"));
+                if(publishers)ChatPublisherConfiguration.validate(result.getAsJsonObject("publisher_configuration"),identity.reference(),publicKey,current);
                 if(support)chat.acceptSupport(result.getAsJsonObject("support_configuration"),identity.reference());
             }
             return result;

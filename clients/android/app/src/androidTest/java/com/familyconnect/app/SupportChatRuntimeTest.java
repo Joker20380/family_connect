@@ -162,11 +162,47 @@ public class SupportChatRuntimeTest {
                 JsonObject value = new JsonObject();
                 value.add("profile", chat.call("profile", new JsonObject()));
                 value.addProperty("device", enrollment.get("device").getAsString());
+                value.addProperty("expires_at", enrollment.getAsJsonObject("node").get("expires_at").getAsLong());
                 value.add("contacts", chat.call("contacts", new JsonObject()));
                 return value;
             }).get(90, TimeUnit.SECONDS);
             ChatRuntime.start(context);
             String address = arguments.getString("address");
+            if ("renewal".equals(phase)) {
+                assertNull("Ordinary network support must not require RestrictedCache", new RestrictedVault(context).read());
+                long initial = result.get("expires_at").getAsLong();
+                java.lang.reflect.Field expiry = ChatRuntime.class.getDeclaredField("enrollmentExpires");
+                expiry.setAccessible(true);
+                long deadline = SystemClock.elapsedRealtime() + 135000;
+                long renewed = initial;
+                while (SystemClock.elapsedRealtime() < deadline) {
+                    SystemClock.sleep(1000);
+                    renewed = ChatRuntime.WORKER.submit(() -> expiry.getLong(null)).get(30, TimeUnit.SECONDS);
+                    if (System.currentTimeMillis() / 1000 > initial && renewed > initial + 40) break;
+                }
+                assertTrue("Background enrollment must extend the actual 100s lease", renewed > initial + 40);
+                assertTrue("Test must cross the original admission expiry", System.currentTimeMillis() / 1000 > initial);
+                assertTrue("Renewed lease must remain usable", renewed > System.currentTimeMillis() / 1000);
+                result.addProperty("renewed_expires_at", renewed);
+            }
+            if ("announcements".equals(phase)) {
+                ChatRuntime.WORKER.submit(() -> {
+                    ChatLocalAndroid chat = ChatRuntime.open(context, false);
+                    for (int attempt = 0; attempt < 2; attempt++) {
+                        ChatRuntime.syncEvents(context, chat, true);
+                        assertFalse("Isolated HTTPS public feed must be reachable", ChatRuntime.eventsUnavailable);
+                        int matched = 0;
+                        for (var entry : chat.call("service_events", new JsonObject()).getAsJsonArray()) {
+                            String id = entry.getAsJsonObject().get("id").getAsString();
+                            assertNotEquals("Non-Android audience must be excluded", arguments.getString("excluded"), id);
+                            if (id.equals(arguments.getString("notice"))) matched++;
+                        }
+                        assertEquals("Repeated fetch must preserve one Android announcement", 1, matched);
+                    }
+                    return null;
+                }).get(40, TimeUnit.SECONDS);
+                result.addProperty("announcement_audience_pass", true);
+            }
             if ("untrusted".equals(phase)) {
                 String target = arguments.getString("target");
                 String messageId = ChatRuntime.WORKER.submit(() -> {

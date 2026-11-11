@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+**11 November — SUPPORT-CHAT-1 resumed; beta125 source candidate, NOT deployed.**
+Source baseline is merged PR19 /93d0b9f1, installed panel remains50de6f25/database0013
+with the separate public publisher healthy. The selected change adds an explicit,
+proof-bearing chat-only support identity: no synthetic Android activation, invite or
+paid/VPN entitlement. Android125 accepts the independently validated optional
+publisher_configuration alongside support_configuration; neither grants the other's
+role. Prior124 isolated round-trip evidence remains scoped to that source, not125.
+Root free space increased from979MiB to2.5GiB by pruning only unused Docker build
+cache older than7 days (1.557GB); images/volumes/keys/data/rollback are preserved.
+ADB currently lists no physical phone; last verified owner install is123, not a fresh
+observation. RU remains active, but stop cause and replacement stay open.
+Commissioning, current hosted CI,125 artifact and physical acceptance remain open;
+no addressed production message or public announcement was sent.
+HTTP deployment must use a support-only overlay of observed a59956c4: installed
+paid/restricted/recovery fixes differ from main and must remain byte-identical.
+[Current implementation/acceptance record](releases/2026-11-11-support-chat-125.md).
+
+Earlier entries below are historical checkpoints, not simultaneous selected tasks.
+
 **11 November13:17 UTC — SYSTEM-MESSAGES-1 ENABLED; no public announcement sent.**
 Installed panel and separate permanent publisher now use immutable image50de6f25
 (qualified source4c85cecb; PR18 ordinary mergeb896b38a). Final hosted panel
