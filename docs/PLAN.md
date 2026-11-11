@@ -20,8 +20,10 @@ No RU policy/transport work, phone change, new client version or mass broadcast 
 performed as part of source qualification. [Report](releases/2026-11-11-system-messages.md).
 Local gate:295 panel tests (44 new),38 existing announcement/CI-contract checks,
 migration drift and actual1440/390px browser → canonical HTTPS → encrypted Store
-restart/same-ID lost-response acceptance PASS. Next is source-bound panel hosted CI
-and independent review/ordinary merge; production commissioning remains gated above.
+restart/same-ID lost-response acceptance PASS. Hosted panel run43020554360 PASS
+on19b6ab37, including actual allowlisted image build/check; unrelated Android/support
+jobs skipped. Next is independent review/ordinary merge and production commissioning
+gated above. Documentation-only follow-up does not change the qualified runtime code.
 
 ### Previous selected task — support production preflight
 

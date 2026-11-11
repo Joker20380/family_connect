@@ -13,7 +13,12 @@ Final local panel regression295 PASS (44 new checks), existing announcement/CI
 contracts38 PASS; actual Chromium → durable queue → canonical HTTPS API → feed →
 encrypted client store/restart PASS. Lost-response retry uses two POSTs but one event;
 desktop1440/mobile390 rendering passes. Physical Android/production delivery NOT_RUN.
-Scoped hosted qualification remains a separate gate recorded in the
+Scoped hosted panel CI43020554360 PASS on19b6ab37: migrations/regression, existing
+browser retry checks and actual allowlisted image build/check. Android/support jobs
+are intentionally skipped for this panel-only change. Final readback: installed
+panel still imagec179d1ae, healthy/HTTP200; temporary test DB removed. Root has204MiB
+free. Review/merge, disk headroom and fresh backup/publisher commissioning remain.
+This follow-up changes documentation only; qualified runtime source is19b6ab37. See the
 [system-message report](releases/2026-11-11-system-messages.md).
 Previous support CI43008983724 actually passed all three jobs on26727eb7; downloaded
 unsigned124 remains that exact artifact, not a build of these subsequent panel changes.

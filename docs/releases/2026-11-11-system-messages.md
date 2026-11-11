@@ -46,14 +46,22 @@ hosted run43008983724, not the new panel source. No artifact/catalog/link is rep
 - Hosted owner-only review command `/qualify-system-messages` runs just the existing
   source-bound panel job (tests, migrations, allowlisted image). It cannot start the
   Android/VPN/G4 jobs or deploy. The ordinary support qualification command is unchanged.
+- **Hosted PASS:** [run43020554360](https://github.com/Joker20380/family_connect/actions/runs/43020554360),
+  panel job130522389829, exact runtime source19b6ab37808b9899a2df0de32e5e9754f331ed51.
+  Migration/system checks, console/fleet regression, existing browser-form retry checks,
+  allowlisted container build and packaged Django check all pass. Support-contracts and
+  support-android are skipped by the panel-only command, not newly qualified artifacts.
+  Source was committed/pushed and remote SHA verified; this later receipt is docs-only.
 
 ## Deployment boundary / rollback
 
 Installed panel remains imagec179d1ae and DB migration0011 from the prior receipt.
 This turn does not mutate that runtime, RU, NL, owner phone or public notices. Prior
 36-table/929830-row backup/isolated restore belongs to earlier preflight and is not a
-fresh deployment backup. Root disk was227MiB free at entry: no image build/update or
-unsolicited cleanup is attempted. CI/review/ordinary merge, sufficient disk space,
+fresh deployment backup. Root disk was227MiB free at entry and204MiB at final readback:
+no local image build/update or unsolicited cleanup is attempted. Final exact installed
+image remainsc179d1ae and both panel containers are healthy; HTTP health200. Only the
+temporary RAM test container is stopped/removed. Hosted CI passed; review/ordinary merge, sufficient disk space,
 fresh consistent backup/isolated restore and a separately provisioned publisher remain
 gates. No production text/audience was approved, so no test announcement is broadcast.
 
