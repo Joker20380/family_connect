@@ -2,6 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
+**11 November daytime selected RU repair — server mitigation validation PASS.**
+Preserve both failures; do not represent the initial196.7s PASS followed by another
+shutdown as recovery completion. Second recovery uses unchanged accepted binaries
+plus only a null optional-stderr sink for the watcher. Gate: exact code/policy,
+stopped/PID0/preflight/start, restored RU-only fence, stable real readback/lease across
+ten minutes, protected fingerprints and explicit rollback. Met:15 samples/616.634s,
+same PIDs/NRestarts0, actual readback/renewed lease, unchanged protected tables and
+11:17UTC /dev/null/fresh durable receipt/no-new-failure readback. No weakened watchdog,
+fsync, lease or deny; no new PR16/17 runtime attempt, phone or NL mutation.
+Shared-host I/O cause remains open; independent-host replacement still waits for an
+explicitly authorized host; physical owner traffic remains NOT_RUN. Support final-head
+CI43008983724 PASS is separate and is not signing, merge or production commissioning.
+[Daytime receipt](releases/2026-11-11-ru-daytime-recovery.md).
+
 **RU recurrence — urgent owner interruption; RECOVERED_CAUSE_OPEN.**
 Bounded recovery gate passed: retain the first failure, verify accepted installed
 bytes, fence only RU apply, drain watcher/engines, validate retained security state,

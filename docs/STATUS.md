@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**11 November daytime — RU SERVER_RECOVERED_WITH_OUTPUT_MITIGATION; cause open.**
+The03:11UTC outage is a retained9.481s/8s durable-write deadline, during elevated
+disk pressure and the system upgrade window. The first unchanged-code recovery
+passes196.7s but fails again near10:22UTC; that short PASS is not final availability.
+At10:44:14UTC a second controlled recovery installs only a watcher
+`StandardError=null` drop-in, removing its known blocking optional-output path.
+Node125c796a/gateway9023d2c3, base units,8/12/120s, required durable state/attempt
+commits, paid108/119 and all protected data stay unchanged. This sacrifices optional
+stderr diagnostics, not security checks; it does not fix shared-host disk latency.
+Fifteen samples10:44:37–10:54:53UTC span616.634s: same PIDs/NRestarts0,63 records,
+20 allowed, fresh strict readback and renewed lease. Protected fingerprints and exact
+command map match;11:05 snapshot retains those PIDs. At11:17 stderr is actually
+/dev/null, required applied receipt is1.063s old and no new first failure exists.
+Physical owner traffic remains NOT_RUN; this is not a permanent-latency cure.
+[Incident, mitigation, limits and rollback](releases/2026-11-11-ru-daytime-recovery.md).
+Separately, support PR18 source26727eb7 passes all three scoped CI43008983724 jobs;
+panel backup restores in isolation, but signed124/support production is not deployed.
+
 **11 November — RU recurrence: availability recovered, cause still open.**
 The owner's interruption selected incident response, not another PR16/17 rollout.
 First failure10 November23:13:41UTC: AWG query completed in7.609s; the following

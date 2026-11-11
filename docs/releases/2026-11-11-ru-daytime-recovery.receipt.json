@@ -1,0 +1,19 @@
+{
+  "status": "SERVER_RECOVERED_WITH_OUTPUT_MITIGATION",
+  "root_cause": "OPEN",
+  "user_traffic": "NOT_RUN",
+  "samples": 15,
+  "window_seconds": 616.6339919567108,
+  "lease_renewals_verified": 1,
+  "protected_unchanged": true,
+  "original_commands_restored": true,
+  "binary_and_policy_unchanged": true,
+  "same_processes_at_final_snapshot": true,
+  "final": {
+    "observed_at": 1794395824.0629332,
+    "stderr_sink": "/dev/null",
+    "dropin_sha256": "94e55b4fb640b7dd6c689b260fbcdc3f14ad9d933ce5451568a94656cd97d42a",
+    "fresh_applied_age": 1.0628445148468018,
+    "no_new_failure": true
+  }
+}
