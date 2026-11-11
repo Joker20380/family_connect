@@ -12,6 +12,21 @@ import pytest
 from scripts.package_support_chat import ROOT, archive, build
 
 
+def test_support_ci_review_command_is_owner_only_and_source_bound():
+    workflow = (ROOT / '.github/workflows/control-panel.yml').read_text()
+    assert 'pull_request_review:\n    types: [submitted]' in workflow
+    assert 'pull_request_target' not in workflow
+    assert 'permissions:\n  contents: read' in workflow
+    for clause in ("github.event.review.state == 'commented'",
+                   "github.event.review.body == '/qualify-support-candidate'",
+                   'github.event.review.user.login == github.repository_owner',
+                   'github.event.pull_request.head.repo.full_name == github.repository'):
+        assert workflow.count(clause) == 3
+    assert workflow.count('ref: ${{ env.SUPPORT_SOURCE_SHA }}') == 3
+    assert "github.event.pull_request.head.sha || github.sha" in workflow
+    assert '--source-commit "$SUPPORT_SOURCE_SHA"' in workflow
+
+
 def test_closed_support_kit_imports_outside_checkout_and_is_reproducible(tmp_path):
     output = tmp_path / 'kit'
     hashes = build(output)

@@ -119,7 +119,7 @@ independent review remain required; final identities/results belong in [draft PR
 No hosted run or review is currently recorded. This session's GitHub connection
 can create/read the PR but exposes no initial workflow-dispatch action; there is no
 authenticated local `gh` command. No credentials were searched in unrelated services.
-The exact remaining dispatch from an authorized GitHub session is:
+The original dispatch from an authorized GitHub session is:
 
 ```sh
 gh workflow run control-panel.yml -R Joker20380/family_connect \
@@ -214,3 +214,44 @@ take a fresh consistent backup, restore it into an isolated database and compare
 users/history/secrets/source pins. Preserve all volumes; no down-v/prune/reset.
 No automatic mass send, RU/NL/paid-policy change or phone installation is part of
 this checkpoint. Real sends must remain explicit authorized operator actions.
+
+## Production preflight — 11 November
+
+The owner subsequently requested production and use of their own account. This is
+authorization to prepare a rollout, not evidence that its acceptance gates passed.
+The existing panel operator login can be retained. Its Android chat identity cannot
+be both sender and recipient: `messenger.support.validate` deliberately refuses that
+binding, and the worker excludes itself. A separate owner-controlled service identity
+has been proposed; no personal key/store has been copied or new identity created.
+
+10:42:37–10:43:09UTC: a private `pg_dump -Fc` uses one exported repeatable-read
+snapshot, also used for source fingerprints. An isolated networkless PostgreSQL17
+with RAM-backed data restores it; all36 tables/929830 row multisets match. Row values,
+auth data, dumps, mounted synthetic state and `.env` remain private under ignored
+`state-client-build/support-panel-preflight-20261111b`. No production DB restore,
+migration, application image replacement or permission change occurred. The temporary
+restore container was stopped/removed; installed console remainsc179d1ae/0011.
+
+The initial verification is retained separately: sorting complete JSON rows exhausted
+temporary space on the live DB's disk. Its read-only transaction rolled back; it is
+not relabelled PASS. The corrected verification streams rows, sorts only their hashes
+locally and does not need live-disk temporary sorting. At readback, root free space
+was222MiB and /mnt/data3.3GiB. No pruning, database cleanup or unrelated deletion was
+performed. Additional build/update headroom and a refreshed pre-update backup are
+still needed; a successful restore now does not freeze later monitoring writes.
+
+The GitHub connector lacks initial workflow dispatch and no authenticated local `gh`
+is available. An additional `pull_request_review: submitted` entrypoint now accepts
+exactly `/qualify-support-candidate`, only as a COMMENT by the repository owner on a
+same-repository head. Every job checks the gate; its token is contents-read-only,
+there is no `pull_request_target`, and all checkouts/artifact provenance use that
+review event's immutable head SHA. It runs the existing panel/contracts/unsigned
+ARM64 jobs, not deployment or unchanged VPN/G4 suites. Other reviews do not start
+these jobs. The command is a CI request, not an approval or independent code review.
+
+At this source checkpoint hosted run/qualified signed124/review/merge remain open.
+Existing123 artifacts, update catalogs, signing material and owner phone are unchanged.
+The earlier candidate kit/local acceptance retain their original source identities;
+any accepted hosted artifacts must retain their own final-head provenance. Rollback
+remains the previous panel image without volume or database rollback; no rollback
+is necessary for this preflight because no application was updated.

@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**11 November — owner requests production; preflight, not rollout.**
+The existing panel remains imagec179d1ae/database0011, healthy/HTTP200. A consistent
+PostgreSQL exported snapshot was restored into a separate networkless RAM-backed
+PostgreSQL: all36 tables/929830 row fingerprints match; the live database was not
+restored or migrated. The first verification failed on temporary-sort disk space;
+the corrected streaming-hash verification passed without sorting on the live disk.
+Root has only222MiB free and /mnt/data3.3GiB at preflight; no cleanup is authorized
+or performed. Refresh the backup again immediately before any eventual update.
+An owner-only `/qualify-support-candidate` PR review command now requests the same
+scoped hosted jobs, pinned to the event's exact head SHA, without privileged triggers
+or deployment. This command is not a review approval or CI PASS. Production identity
+still needs resolution: the owner's panel login can operate support, but the Android
+recipient cannot also be the support sender; self-binding is intentionally refused.
+No release124/signing/catalog/phone/panel application deployment has occurred.
+RU incident/recovery work is recorded on its separate existing branch.
+[Preflight and remaining gates](releases/2026-11-11-support-chat-1.md#production-preflight--11-november).
+
 **11 November — SUPPORT-CHAT-1 resumed; source checkpoint, not acceptance.**
 Addressed panel history/send/inbox, separate view/send permissions, CSRF and actor-bound
 idempotency use a Unix worker and the existing encrypted store/outbox/mailbox/ACK.

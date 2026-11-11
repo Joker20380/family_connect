@@ -2,6 +2,18 @@
 
 ## Current engineering priority / Текущий critical path
 
+**11 November production follow-up selected by owner — PREFLIGHT, NOT_DEPLOYED.**
+The owner requests production and use of their account. Keep the existing panel
+login; do not silently clone its Android chat identity into the worker: the protocol
+rejects sender=recipient. A separate owner-controlled sender needs explicit resolution.
+Current snapshot/isolated restore passes36 tables/929830 rows; initial disk-sort failure
+is retained. Disk headroom, scoped hosted CI on the final source, independent review,
+ordinary merge, signed124 and verified commissioning remain gates. The owner-only
+PR review command `/qualify-support-candidate` requests the existing scoped jobs;
+it neither approves the PR nor publishes anything. No broad VPN/G4 rerun is required
+for this CI entrypoint. Refresh backup immediately before update, preserve prior image
+and all volumes. RU operational recovery is selected separately, not a chat dependency.
+
 **SUPPORT-CHAT-1 — selected, IN_PROGRESS; not installed or accepted.**
 Reuse registered device↔chat binding, encrypted history/outbox, existing mailbox,
 Android worker/notifications and signed recipient-stored ACK. The local panel outage

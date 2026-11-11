@@ -10,13 +10,26 @@ on:
     paths: ['control_plane/**', 'messenger/**', 'provisioning/support_worker.py', 'control/friends/support.py', '.github/workflows/control-panel.yml']
   pull_request:
     paths: ['control_plane/**', 'messenger/**', 'provisioning/support_worker.py', 'control/friends/support.py', '.github/workflows/control-panel.yml']
+  pull_request_review:
+    types: [submitted]
+permissions:
+  contents: read
+env:
+  SUPPORT_SOURCE_SHA: ${{ github.event_name == 'pull_request_review' && github.event.pull_request.head.sha || github.sha }}
 jobs:
   support-contracts:
-    if: github.event_name == 'workflow_dispatch' && inputs.support_candidate
+    if: >-
+      (github.event_name == 'workflow_dispatch' && inputs.support_candidate) ||
+      (github.event_name == 'pull_request_review' && github.event.review.state == 'commented' &&
+       github.event.review.body == '/qualify-support-candidate' &&
+       github.event.review.user.login == github.repository_owner &&
+       github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SUPPORT_SOURCE_SHA }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
@@ -36,11 +49,18 @@ jobs:
           path: artifacts/support-chat-kit.tar.gz
           if-no-files-found: error
   support-android:
-    if: github.event_name == 'workflow_dispatch' && inputs.support_candidate
+    if: >-
+      (github.event_name == 'workflow_dispatch' && inputs.support_candidate) ||
+      (github.event_name == 'pull_request_review' && github.event.review.state == 'commented' &&
+       github.event.review.body == '/qualify-support-candidate' &&
+       github.event.review.user.login == github.repository_owner &&
+       github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SUPPORT_SOURCE_SHA }}
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -78,7 +98,7 @@ jobs:
       - name: Verify unsigned source-bound ARM64 payload
         run: |
           python3 -m pip install cryptography==46.0.7
-          python3 pilot/android-restricted/package_ci.py --source-commit "$GITHUB_SHA" --out restricted-release --apksigner "$ANDROID_HOME/build-tools/35.0.0/apksigner" --android-only
+          python3 pilot/android-restricted/package_ci.py --source-commit "$SUPPORT_SOURCE_SHA" --out restricted-release --apksigner "$ANDROID_HOME/build-tools/35.0.0/apksigner" --android-only
       - uses: actions/upload-artifact@v4
         with:
           name: support-chat-Android124-unsigned-arm64
@@ -88,6 +108,12 @@ jobs:
             clients/android/audio-generated/audio-build.json
           if-no-files-found: error
   panel:
+    if: >-
+      github.event_name != 'pull_request_review' ||
+      (github.event.review.state == 'commented' &&
+       github.event.review.body == '/qualify-support-candidate' &&
+       github.event.review.user.login == github.repository_owner &&
+       github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-24.04
     services:
       postgres:
@@ -105,6 +131,8 @@ jobs:
       POSTGRES_HOST: 127.0.0.1
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SUPPORT_SOURCE_SHA }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
