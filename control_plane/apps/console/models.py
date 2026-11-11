@@ -146,6 +146,8 @@ class AuditRecord(models.Model):
         verbose_name = 'событие аудита'
         verbose_name_plural = 'события аудита'
         ordering = ['-occurred_at']
+        permissions = [('view_support_messages', 'Просматривать переписку поддержки'),
+                       ('send_support_message', 'Отправлять личные сообщения от поддержки')]
 
 
 class ReleaseMetadata(models.Model):

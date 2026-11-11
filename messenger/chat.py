@@ -30,7 +30,8 @@ class Chat:
         return address
 
     def contacts(self):
-        return {bytes.fromhex(k): bytes.fromhex(v) for k, v in self.store.contacts().items()}
+        from .support import contacts
+        return {bytes.fromhex(k): bytes.fromhex(v) for k, v in contacts(self.store, self.store.contacts()).items()}
 
     def delivery_contacts(self):
         return {**self.contacts(), **{bytes.fromhex(address): bytes.fromhex(public)

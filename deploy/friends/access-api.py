@@ -72,6 +72,8 @@ class Handler(BaseHTTPRequestHandler):
     assert set(value)=={'public_identity','wireguard_public_key','chat_public'}
     result=chat_access.challenge(**value)
    elif self.path=='/friends/chat/register':
+    support_protocol=value.pop('support_protocol',None)
+    assert support_protocol is None or type(support_protocol) is int and support_protocol==1
     assert set(value)=={'proof','chat_public','chat_signature'}
     result=chat_access.register(**value)
     if (ROOT/'chat-node.json').exists():
@@ -81,6 +83,9 @@ class Handler(BaseHTTPRequestHandler):
      from control.friends.chat_publishers import configured
      publisher_config=configured(ROOT/'chat-publishers.json',result['device'],value['chat_public'],node['expires_at'],int(access.clock()))
      if publisher_config is not None:result['publisher_configuration']=publisher_config
+     if support_protocol==1 and (ROOT/'chat-support.json').exists():
+      from control.friends.support import enroll
+      result['support_configuration']=enroll(access,ROOT/'chat-support.json',result['device'],value['chat_public'],node['expires_at'])
    elif self.path=='/friends/challenge':
     assert set(value)=={'public_identity','wireguard_public_key','purpose','invitation'}
     result=access.challenge(**value)

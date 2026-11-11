@@ -17,6 +17,8 @@ class ChatAccess:
         # Explicit additive migration, never executed on a request or module import.
         with self.access.db() as db:
             db.execute('CREATE TABLE IF NOT EXISTS chat_bindings (device TEXT PRIMARY KEY, public TEXT UNIQUE NOT NULL)')
+            if 'support_sender' not in {row[1] for row in db.execute('PRAGMA table_info(chat_bindings)')}:
+                db.execute('ALTER TABLE chat_bindings ADD COLUMN support_sender TEXT')
             db.execute('''CREATE TABLE IF NOT EXISTS chat_challenges (
                 nonce TEXT PRIMARY KEY, device TEXT NOT NULL, public TEXT NOT NULL,
                 expires INTEGER NOT NULL, used INTEGER NOT NULL DEFAULT 0)''')
@@ -69,7 +71,7 @@ class ChatAccess:
             prior = db.execute('SELECT public FROM chat_bindings WHERE device=?', (device,)).fetchone()
             if prior is not None and prior['public'] != chat_public: raise Rejected()
             try:
-                if prior is None: db.execute('INSERT INTO chat_bindings VALUES (?,?)', (device, chat_public))
+                if prior is None: db.execute('INSERT INTO chat_bindings (device,public) VALUES (?,?)', (device, chat_public))
             except sqlite3.IntegrityError: raise Rejected() from None
             db.execute('UPDATE chat_challenges SET used=1 WHERE nonce=?', (nonce,))
         # Registration is NOT proof that an operator has synchronized the node.

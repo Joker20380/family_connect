@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**11 November — SUPPORT-CHAT-1 resumed; source checkpoint, not acceptance.**
+Addressed panel history/send/inbox, separate view/send permissions, CSRF and actor-bound
+idempotency use a Unix worker and the existing encrypted store/outbox/mailbox/ACK.
+Canonical device↔registered chat binding and authenticated support-role opt-in are
+required; a legacy registered beta123 chat is not enough to enable support sending.
+Candidate124 adds that contract to the existing Android runtime, without replacing123.
+38 scoped identity/worker/security/package checks and34 panel checks pass; debug
+Android build/instrumentation compilation and lint pass. Earlier actual browser↔
+Android exchange used direct role injection and a restart-assisted reply, so it
+does not close acceptance. Actual HTTPS enrollment/ordinary-worker qualification is
+in progress. No application/server/phone rollout; installed panel stays unchanged.
+The intervening RU recovery is recorded separately in commitf7877217; no RU work
+is resumed here. Replacement remains WAITING_FOR_HOST and is not a chat dependency.
+[Implementation, evidence and remaining gates](releases/2026-11-11-support-chat-1.md).
+
 **10 November22:52UTC — local panel availability restored without an application update.**
 Docker stopped22:22UTC/restarted22:27UTC; both panel containers exited0 and had
 restart policy `no`. The same console imagec179d1ae and the same PostgreSQL/synthetic

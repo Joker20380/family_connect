@@ -1,0 +1,27 @@
+[Unit]
+Description=Read the pinned support binding projection (no message send)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/opt/family-connect-support/app
+EnvironmentFile=/etc/family-connect-support-bindings/source.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/family-connect-support/venv/bin/python -m provisioning.support_bindings --host ${SUPPORT_REGISTRY_HOST} --key /etc/family-connect-support-bindings/readonly.key --known-hosts /etc/family-connect-support-bindings/known_hosts --output /var/lib/fc-support-bindings/current.json
+ReadWritePaths=/var/lib/fc-support-bindings
+UMask=0077
+TimeoutStartSec=20
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+StandardOutput=null
+StandardError=null

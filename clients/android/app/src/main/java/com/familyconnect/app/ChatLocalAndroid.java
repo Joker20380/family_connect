@@ -132,6 +132,15 @@ final class ChatLocalAndroid implements AutoCloseable {
         }
     }
 
+    void acceptSupport(JsonObject configuration, String device) throws ChatException {
+        requireWorker();
+        synchronized (LOCK) {
+            if (session == null) throw new ChatException("closed");
+            try { session.callAttr("accept_support", configuration.toString(), device); }
+            catch (Exception failure) { throw new ChatException("support_unavailable"); }
+        }
+    }
+
     void pinPublisher(String publicHex) throws ChatException {
         requireWorker();
         synchronized (LOCK) {

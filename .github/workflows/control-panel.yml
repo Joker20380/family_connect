@@ -1,9 +1,9 @@
 name: Control panel
 on:
   push:
-    paths: ['control_plane/**', '.github/workflows/control-panel.yml']
+    paths: ['control_plane/**', 'messenger/**', 'provisioning/support_worker.py', 'control/friends/support.py', '.github/workflows/control-panel.yml']
   pull_request:
-    paths: ['control_plane/**', '.github/workflows/control-panel.yml']
+    paths: ['control_plane/**', 'messenger/**', 'provisioning/support_worker.py', 'control/friends/support.py', '.github/workflows/control-panel.yml']
 jobs:
   panel:
     runs-on: ubuntu-24.04
@@ -27,6 +27,8 @@ jobs:
         with:
           python-version: '3.13'
       - run: pip install --require-hashes -r control_plane/requirements.lock
+      - name: Source-only support worker integration dependencies
+        run: pip install --no-deps --require-hashes -r messenger/requirements.lock
       - name: Migrations and console/fleet regression
         working-directory: control_plane
         run: |

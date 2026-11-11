@@ -108,6 +108,13 @@ class LocalChat:
                 names = self._store.contact_names()
                 for card in cards:
                     if card['address'] in names: card['name'] = names[card['address']]
+                from .support import role, active
+                support = role(self._store)
+                if support is not None:
+                    card = contact_card(support['sender_public'])
+                    cards = [item for item in cards if item['address'] != card['address']]
+                    card.update(official_support=active(support), support_unavailable=not active(support))
+                    cards.insert(0, card)
                 return cards
             except Exception:
                 raise LocalError('store_unavailable') from None

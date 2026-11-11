@@ -319,6 +319,11 @@ class Store:
         Legacy records keep their relay-only behavior. Expiry retains history.
         """
         with self._lock, self._db:
+            from .support import role, active
+            from .codec import address
+            support = role(self)
+            blocked_support = (address(bytes.fromhex(support['sender_public'])).hex()
+                               if support is not None and not active(support) else None)
             now = time.time()
             messages = self.messages()
             for message in messages:
@@ -327,7 +332,7 @@ class Store:
                     message.update(status='expired', attempt=None)
                     self._put('message:' + message['id'], message)
             return [message['id'] for message in messages
-                    if message['outgoing'] and (message['status'] == 'queued'
+                    if message['outgoing'] and message['peer'] != blocked_support and (message['status'] == 'queued'
                     or (message['status'] == 'relayed' and message.get('require_stored')
                         and now >= message.get('retry_at', 0))
                     or (message['status'] == 'sending'

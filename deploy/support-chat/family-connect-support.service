@@ -1,0 +1,39 @@
+[Unit]
+Description=Family Connect addressed support identity owner
+After=network-online.target family-connect-support-bindings.service
+Wants=network-online.target
+StartLimitIntervalSec=120
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=fc-support
+Group=fc-support-ipc
+SupplementaryGroups=fc-support-read
+WorkingDirectory=/opt/family-connect-support/app
+EnvironmentFile=/etc/family-connect-support/sender.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/family-connect-support/venv/bin/python -m provisioning.support_worker --store /var/lib/family-connect-support/history --key /etc/family-connect-support/store.key --sender-public ${SUPPORT_SENDER_PUBLIC} --snapshot /var/lib/fc-support-bindings/current.json --runtime /var/lib/family-connect-support/rns --socket /run/family-connect-support/worker.sock --snapshot-uid 0
+RuntimeDirectory=family-connect-support
+RuntimeDirectoryMode=0750
+StateDirectory=family-connect-support
+StateDirectoryMode=0700
+UMask=0077
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=40
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+StandardOutput=null
+StandardError=null
+
+[Install]
+WantedBy=multi-user.target

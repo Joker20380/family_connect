@@ -2,6 +2,7 @@
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{% block title %}Обзор{% endblock %} · Family Connect</title><link rel="stylesheet" href="{% static 'console/console.css' %}"><script src="{% static 'console/charts.js' %}" defer></script></head>
 <body><a class="skip-link" href="#content">К содержимому</a><aside class="sidebar"><a class="brand" href="{% url 'console:dashboard' %}"><span class="brand-icon">FC</span><span>Family Connect<small>Операторская панель</small></span></a>
 <nav aria-label="Главная навигация">
+{% if perms.console.view_support_messages %}<a {% if section == 'messages' %}aria-current="page"{% endif %} href="{% url 'console:support_inbox' %}">Входящие обращения</a>{% endif %}
 <a {% if section == 'overview' %}aria-current="page"{% endif %} href="{% url 'console:dashboard' %}"><span aria-hidden="true">▦</span> Обзор</a>
 <a {% if section == 'devices' %}aria-current="page"{% endif %} href="{% url 'console:inventory' %}"><span aria-hidden="true">▣</span> Устройства</a>
 <a {% if section == 'servers' %}aria-current="page"{% endif %} href="{% url 'console:servers' %}"><span aria-hidden="true">▤</span> Серверы</a>

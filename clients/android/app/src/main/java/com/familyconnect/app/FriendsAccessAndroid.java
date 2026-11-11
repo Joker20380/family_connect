@@ -271,6 +271,10 @@ final class FriendsAccessAndroid {
         }
     }
     JsonObject registerChat(ChatLocalAndroid chat)throws Exception {
+        try { return registerChat(chat, true); }
+        catch (Denied unsupported) { return registerChat(chat, false); }
+    }
+    private JsonObject registerChat(ChatLocalAndroid chat, boolean supportProtocol)throws Exception {
         try(ControlIdentity identity=identity(false)) {
             String publicKey=chat.call("profile",new JsonObject()).getAsJsonObject().get("public").getAsString();
             JsonObject request=new JsonObject();
@@ -286,9 +290,12 @@ final class FriendsAccessAndroid {
             JsonObject body=chat.enrollmentProof(identity.reference(),nonce);
             fields(body,"chat_public chat_signature");require(text(body.get("chat_public")).equals(publicKey));
             body.add("proof",identity.proveTransportKey(nonce));
+            if(supportProtocol)body.addProperty("support_protocol",1);
             JsonObject result=post("/friends/chat/register",body);
             String status=text(result.get("status"));
-            fields(result,status.equals("active")?"device chat_public status node":"device chat_public status");
+            boolean support=result.has("support_configuration");
+            require(!support||supportProtocol&&status.equals("active"));
+            fields(result,(status.equals("active")?"device chat_public status node":"device chat_public status")+(support?" support_configuration":""));
             require(text(result.get("device")).equals(identity.reference())&&text(result.get("chat_public")).equals(publicKey)
                 &&(status.equals("pending-node")||status.equals("active")));
             if(status.equals("active")) {
@@ -298,6 +305,7 @@ final class FriendsAccessAndroid {
                 require(until>current&&until-current<=120);
                 require(text(node.get("host")).matches("[0-9]+(\\.[0-9]+){3}")
                     &&integer(node.get("port"),1)<=65535&&text(node.get("public_key")).matches("[0-9a-f]{128}"));
+                if(support)chat.acceptSupport(result.getAsJsonObject("support_configuration"),identity.reference());
             }
             return result;
         }

@@ -2,9 +2,13 @@ from django.urls import path
 from . import views
 from . import observability
 from . import objects
+from . import support
 
 app_name = 'console'
 urlpatterns = [
+    path('messages/', support.inbox, name='support_inbox'),
+    path('inventory/<str:pseudonym>/messages/', support.history, name='support_history'),
+    path('inventory/<str:pseudonym>/messages/send/', support.send, name='support_send'),
     path('subscriptions/', observability.subscriptions, name='subscriptions'),
     path('observability/', observability.overview, name='observability'),
     path('inventory/', objects.devices, name='inventory'),

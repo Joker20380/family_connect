@@ -16,6 +16,14 @@ version/artifact and qualification. Production/phone/paid operations are exclude
 RU replacement WAITING_FOR_HOST, RU incidents, paid123 rollout and payment-provider
 selection are not dependencies. [Panel availability receipt](releases/2026-11-10-panel-availability.md).
 
+11 November continuation: the API now records explicit support-protocol enrollment
+against the immutable official sender; legacy beta123 bindings remain send-blocked.
+Source checkpoint includes candidate124, not a release. The next acceptance step is
+actual HTTPS dual-proof enrollment and ordinary Android background reply with the
+real restricted membership importer/mailbox, replacing earlier test role injection.
+Do not count the previous limited fixture, compilation or a successful queue POST
+as completed delivery acceptance. [Current evidence](releases/2026-11-11-support-chat-1.md).
+
 ### Previous selected task — source candidate, no new deployment
 
 **Selected RU TCP-query boundary task.**

@@ -265,7 +265,11 @@ public final class ChatActivity extends LocalizedActivity {
             }
         });
     }
-    private String contactTitle(JsonObject card){return card.has("name")&&!card.get("name").getAsString().isEmpty()?card.get("name").getAsString():getString(R.string.chat_contact)+" "+card.get("address").getAsString().substring(0,8);}
+    private String contactTitle(JsonObject card){
+        if(card.has("official_support")&&card.get("official_support").getAsBoolean())return getString(R.string.chat_official_support);
+        if(card.has("support_unavailable")&&card.get("support_unavailable").getAsBoolean())return getString(R.string.chat_support_unavailable);
+        return card.has("name")&&!card.get("name").getAsString().isEmpty()?card.get("name").getAsString():getString(R.string.chat_contact)+" "+card.get("address").getAsString().substring(0,8);
+    }
     private void profile() {
         if(busy)return;
         screen="profile";
