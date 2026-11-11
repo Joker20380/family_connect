@@ -1,0 +1,40 @@
+# Addressed support conversation
+
+Use the existing operator account at `http://127.0.0.1:8765/`. Open a production
+device card and select **«Сообщения · личная поддержка»**. Replies are listed at
+`/messages/`. This is separate from `/system-messages/`, which broadcasts to the
+entire selected platform audience.
+
+The recipient is an authoritative device identity ↔ chat identity binding, never
+a device name or IP address. Missing, ambiguous, revoked or stale bindings block
+sending. beta123 does not enroll into this support contract; a separate beta125
+candidate is prepared. Never copy the phone's private key into the panel.
+
+Queued means durably stored by the sender; mailbox accepted means server receipt;
+recipient stored means a signed ACK after Android storage. There is no read receipt.
+A permanent backend receives replies while the browser is closed. After an unknown
+send outcome, retry the same form/text/ID rather than creating another message.
+
+## Owner's physical acceptance
+
+Signed ARM64 beta125 /0.1.18-beta125 is not installed or publicly distributed.
+Local artifact:
+`state-client-build/support-live-20261111/FamilyConnect-Test-0.1.18-beta125.apk`.
+Size50,470,304 bytes; SHA256
+`f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c`.
+Public catalogs, invitation-page version and download links are unchanged.
+
+The remaining physical action is one agreed owner-phone session: verify its actual
+version, install125 in place without clearing data, open chat to enroll its binding,
+then perform an approved addressed round trip with the user VPN off. Proposed text,
+not yet sent: «Проверка служебной связи Family Connect. Ответьте, пожалуйста: „Получено“».
+Confirm that exact text and the selected phone's canonical binding before sending.
+
+Ordinary Wi-Fi and an expired synthetic subscription were checked in isolation;
+cold no-cache startup on allowlisted networks is still a separate field gate.
+Production announcement delivery needs separate approval of exact text and computed
+audience. Selecting Android is a platform-wide broadcast, not a one-device test.
+
+Current evidence, limitations and recovery:
+[125 receipt](../releases/2026-11-11-support-chat-125.md),
+[STATUS](../STATUS.md), [PLAN](../PLAN.md).
