@@ -1,0 +1,14 @@
+{% extends 'console/base.html' %}
+{% block title %}Системные сообщения{% endblock %}
+{% block mode %}Системная лента · публикация по отдельному подтверждению{% endblock %}
+{% block content %}
+<h1>Системные сообщения</h1>
+<p>Публичные объявления для всех клиентов выбранных платформ. Не личная переписка: не указывайте персональные данные или ключи. Ответы на объявления не поддерживаются.</p>
+<p>Здесь последние 100 запросов панели. История объявлений, созданных на телефоне или другим операторским инструментом, сюда не импортируется.</p>
+{% if perms.console.send_system_message %}<p><a class="button" href="{% url 'console:system_message_new' %}">Новое объявление</a></p>{% endif %}
+<div class="table-scroll"><table><thead><tr><th>Создано, UTC</th><th>Заголовок</th><th>Оператор</th><th>Статус</th></tr></thead><tbody>
+{% for record in records %}<tr><td>{{ record.created_at|date:'Y-m-d H:i:s' }}</td><td><a href="{% url 'console:system_message' record.pk %}">{{ record.title }}</a></td><td>{{ record.created_by.get_username }}</td><td>{{ record.get_status_display }}</td></tr>
+{% empty %}<tr><td colspan="4">Запросов ещё нет.</td></tr>{% endfor %}
+</tbody></table></div>
+<p>«Опубликовано» означает подтверждённое присутствие в публичной ленте, а не доставку или прочтение на телефоне. Клиент получает ленту при следующем успешном обновлении.</p>
+{% endblock %}

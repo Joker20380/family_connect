@@ -148,7 +148,11 @@ final class ChatRuntime {
     }
     static void deliverNotifications(Context context,ChatLocalAndroid chat)throws Exception{
         int count=0;java.util.Map<String,String> names=new java.util.HashMap<>();
-        for(JsonElement item:chat.call("contacts",new JsonObject()).getAsJsonArray()){JsonObject card=item.getAsJsonObject();if(card.has("name"))names.put(card.get("address").getAsString(),card.get("name").getAsString());}
+        for(JsonElement item:chat.call("contacts",new JsonObject()).getAsJsonArray()){
+            JsonObject card=item.getAsJsonObject();
+            if(card.has("official_support")&&card.get("official_support").getAsBoolean())names.put(card.get("address").getAsString(),context.getString(R.string.chat_official_support));
+            else if(card.has("name"))names.put(card.get("address").getAsString(),card.get("name").getAsString());
+        }
         for(String operation:new String[]{"inbox","service_events"}){
             boolean service=operation.equals("service_events");
             JsonArray posted=new JsonArray();

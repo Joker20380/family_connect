@@ -11,6 +11,7 @@ def test_new_chat_runtime_closure_and_legacy_shape(tmp_path):
     audit(bundle)
     assert len(LEGACY_TAR) == 6
     assert (bundle / 'messenger/admission.py').is_file()
+    assert (bundle / 'messenger/support.py').is_file()
     assert (bundle / 'provisioning/chat_audio.py').is_file()
     assert (bundle / 'clients/desktop/chat_voice.py').is_file()
     assert (bundle / 'clients/desktop/chat_notifications.py').is_file()

@@ -1,0 +1,13 @@
+services:
+  console:
+    environment:
+      FC_SUPPORT_SOCKET: /run/family-connect-support/worker.sock
+    group_add:
+      - "${FC_SUPPORT_IPC_GID:?Set the existing fc-support-ipc numeric group ID}"
+    volumes:
+      - type: bind
+        source: /run/family-connect-support
+        target: /run/family-connect-support
+        read_only: true
+        bind:
+          create_host_path: false

@@ -9,6 +9,11 @@ No manual service setup is needed. Affected Windows10 device acceptance is pendi
 ## First activation
 
 Android8.1+, ARM64; access is invitation-only. Installing the APK does not grant access.
+
+Addressed operator support is under development in the separate beta124 candidate.
+This is not a release or an upgrade instruction: beta123 is not replaced, and no new
+download/checksum is published. [Current checks and limitations](releases/2026-11-11-support-chat-1.md).
+
 The invitation page and in-app updater both provide beta113. Updating does not enable restricted FIELD access.
 
 Beta119 remains an unpublished ARM64 subscription-status candidate, not a public update.

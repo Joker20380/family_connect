@@ -1,0 +1,28 @@
+{% extends 'console/base.html' %}{% load static %}
+{% block title %}Сообщения поддержки{% endblock %}
+{% block mode %}Личная переписка · отдельное право отправки{% endblock %}
+{% block content %}
+<div class="breadcrumbs"><a href="{% url 'console:inventory_device' pseudonym %}">Карточка устройства</a> / Сообщения</div>
+<h1>Сообщения поддержки</h1>
+<section class="panel"><h2>Адресат</h2><dl class="release-details">
+<dt>Карточка · полный HMAC</dt><dd><code>{{ pseudonym }}</code></dd>
+<dt>Каноническая device identity</dt><dd><code>{{ history.binding.device|default:'Не подтверждена' }}</code></dd>
+<dt>Chat address</dt><dd><code>{{ history.binding.address|default:'Не зарегистрирован' }}</code></dd>
+<dt>Отправитель поддержки</dt><dd><code>{{ history.sender|default:'Не введён в эксплуатацию' }}</code></dd></dl>
+{% if blocked %}<p class="notice error-notice">{{ blocked }}</p>{% endif %}
+{% if error %}<p role="alert" class="notice error-notice">{{ error }}</p>{% endif %}
+<p>Только диалог с поддержкой. Личные контакты клиента недоступны. Подтверждения прочтения протокол не предоставляет.</p></section>
+<section class="panel"><h2>История</h2>{% for message in history.messages %}
+<article><h3>{% if message.outgoing %}Поддержка → клиент{% else %}Клиент → поддержка{% endif %}</h3>
+<pre>{{ message.text }}</pre><p>{{ message.status_label }} · <code>{{ message.id }}</code></p></article>
+{% empty %}<p>Сохранённых сообщений нет.</p>{% endfor %}</section>
+{% if perms.console.send_support_message %}{% if ready %}
+<section class="panel"><form method="post" action="{% url 'console:support_send' pseudonym %}" data-support-send>
+{% csrf_token %}<input type="hidden" name="token" value="{{ token }}">
+<label for="support-text">Текст · до 4096 байт UTF-8</label><textarea id="support-text" name="text" maxlength="4096" rows="6" required>{{ text }}</textarea>
+<p role="alert" class="notice error-notice" data-support-result hidden></p>
+<button type="submit">Отправить этому адресату от поддержки</button></form></section>
+<script src="{% static 'console/support.js' %}" defer></script>
+{% endif %}{% else %}<p class="notice">Нет разрешения на отправку сообщений.</p>{% endif %}
+<p><a href="{% url 'console:support_history' pseudonym %}">Обновить историю</a> · Статус не означает доступность сети.</p>
+{% endblock %}

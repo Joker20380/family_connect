@@ -146,6 +146,29 @@ class AuditRecord(models.Model):
         verbose_name = 'событие аудита'
         verbose_name_plural = 'события аудита'
         ordering = ['-occurred_at']
+        permissions = [('view_support_messages', 'Просматривать переписку поддержки'),
+                       ('send_support_message', 'Отправлять личные сообщения от поддержки'),
+                       ('view_system_messages', 'Просматривать системные объявления'),
+                       ('send_system_message', 'Публиковать системные объявления')]
+
+
+class SystemMessage(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    title = models.CharField(max_length=160)
+    body = models.TextField(max_length=4000)
+    kind = models.CharField(max_length=20)
+    platforms = models.JSONField()
+    days = models.PositiveIntegerField()
+    status = models.CharField(max_length=16, default='draft', choices=[
+        ('draft', 'Предпросмотр — не отправлено'), ('queued', 'В очереди публикации'),
+        ('unknown', 'Результат неизвестен — повтор только с прежним ID'),
+        ('refused', 'Отказ в публикации'), ('published', 'Опубликовано в системной ленте')])
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        default_permissions = ()
 
 
 class ReleaseMetadata(models.Model):

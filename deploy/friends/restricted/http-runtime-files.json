@@ -8,6 +8,7 @@
   "control/friends/chat.py",
   "control/friends/chat_sync.py",
   "control/friends/chat_publishers.py",
+  "control/friends/support.py",
   "control/friends/notices.py",
   "control/friends/referrals.py",
   "control/friends/restricted.py",
@@ -24,6 +25,7 @@
   "clients/desktop/profile_config.py",
   "messenger/__init__.py",
   "messenger/admission.py",
+  "messenger/support.py",
   "messenger/service_events.py",
   "scripts/service_notices.py",
   "scripts/read_readiness_ack.py"

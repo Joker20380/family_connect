@@ -2,6 +2,80 @@
 
 ## Current engineering priority / Текущий critical path
 
+**SYSTEM-MESSAGES-1 — selected11 November, owner-authorized activation IN_PROGRESS.**
+Owner requests sending system messages. Reuse the existing public service-events
+API/feed and the owner's panel login, not a clone of the phone's private identity.
+Scope: compose → immutable preview → explicit platform/audience confirmation → durable
+queue → external scoped publisher → exact public-feed readback. The public feed cannot
+target only the owner's phone or receive private replies; use SUPPORT-CHAT-1 for that.
+Dependencies: existing notices authorization/idempotency/feed contract and preserved
+panel users/history. No beta124 installation or separate chat sender is required for
+this feature. Do not grant a phone role or publish a test announcement automatically.
+Gate: view/send/CSRF/actor/content-bound preview, stable ID after ambiguous outcomes,
+bounded TLS/no-redirect/no-token-in-web, actual browser and isolated HTTPS/store path,
+panel regression/migration/packaging and scoped hosted CI/review/ordinary merge.
+Production still requires disk headroom, fresh consistent backup with separate restore,
+external least-privilege publisher credential and an explicitly approved public text.
+No RU policy/transport work, phone change, new client version or mass broadcast is
+performed as part of source qualification. [Report](releases/2026-11-11-system-messages.md).
+Local gate:295 panel tests (44 new),38 existing announcement/CI-contract checks,
+migration drift and actual1440/390px browser → canonical HTTPS → encrypted Store
+restart/same-ID lost-response acceptance PASS. Hosted panel run43020554360 PASS
+on19b6ab37, including actual allowlisted image build/check; unrelated Android/support
+jobs skipped. Owner now explicitly requests enablement without a test broadcast.
+Deployment overlay preserves existing group permissions (no fixture reseeding) and
+isolates the permanent publisher token. Next: final scoped CI/readiness review,
+ordinary merge, fresh backup/isolated restore, console update and empty-queue publisher
+commissioning. No independent approval is present; do not label the CI command as one.
+Disk headroom is now1.1GiB after approved export/verification/removal of one stopped
+beta109 test container; running services, rollback images and volumes are preserved.
+
+### Previous selected task — support production preflight
+
+**11 November production follow-up selected by owner — PREFLIGHT, NOT_DEPLOYED.**
+CI43007041835: panel PASS; contracts287 PASS/1 stale UI-pin FAIL. Retain the failure,
+review/pin only the four support Java deltas and two additive string resources, then
+qualify the corrected head with the same scoped workflow. Do not remove the guard.
+The owner requests production and use of their account. Keep the existing panel
+login; do not silently clone its Android chat identity into the worker: the protocol
+rejects sender=recipient. A separate owner-controlled sender needs explicit resolution.
+Current snapshot/isolated restore passes36 tables/929830 rows; initial disk-sort failure
+is retained. Disk headroom, scoped hosted CI on the final source, independent review,
+ordinary merge, signed124 and verified commissioning remain gates. The owner-only
+PR review command `/qualify-support-candidate` requests the existing scoped jobs;
+it neither approves the PR nor publishes anything. No broad VPN/G4 rerun is required
+for this CI entrypoint. Refresh backup immediately before update, preserve prior image
+and all volumes. RU operational recovery is selected separately, not a chat dependency.
+
+**SUPPORT-CHAT-1 — selected, IN_PROGRESS; not installed or accepted.**
+Reuse registered device↔chat binding, encrypted history/outbox, existing mailbox,
+Android worker/notifications and signed recipient-stored ACK. The local panel outage
+reported during development is resolved with the unchanged installed image and
+persistent restart policy; this is not a support-chat rollout.
+Gate: real panel→official support identity→Android→same card with two synthetic
+clients, offline/restart/lost-response dedup, identity/permission/CSRF refusals,
+verified official contact, actual notification/deep link and accurate statuses.
+Then applicable CI/review/ordinary merge and verified backup/isolated restore before
+any local application update. beta123 is immutable; any new client needs a separate
+version/artifact and qualification. Production/phone/paid operations are excluded.
+RU replacement WAITING_FOR_HOST, RU incidents, paid123 rollout and payment-provider
+selection are not dependencies. [Panel availability receipt](releases/2026-11-10-panel-availability.md).
+
+11 November continuation: the API now records explicit support-protocol enrollment
+against the immutable official sender; legacy beta123 bindings remain send-blocked.
+Source checkpoint includes candidate124, not a release. Actual HTTPS dual-proof
+enrollment, ordinary Android worker/UI reply, closed systemd mailbox, notification,
+two-client isolation, offline/restart/storage-ACK and same-ID lost-response retry
+now pass without role injection. Foreign-sender mailbox rejection and actual browser
+permission/CSRF refusals pass. The closed kit's nonroot systemd owner and separate
+forced-SSH collector also pass. Minimum supported Friends API27 now passes on Wi-Fi,
+including the real button retry after response loss without changing its signed ID.
+Next: scoped hosted candidate CI/review/ordinary merge ([draft PR18](https://github.com/Joker20380/family_connect/pull/18)); fresh backup/isolated restore before a local
+panel update. Production commissioning still requires an explicitly designated
+support identity and separately scoped credentials. [Evidence and kit](releases/2026-11-11-support-chat-1.md).
+
+### Previous selected task — source candidate, no new deployment
+
 **Selected RU TCP-query boundary task.**
 Dependencies: PR16 rolled-back deployment receipt6755872599 and exact Xrayd2758a0.
 Gate: bounded saved/live evidence; exact-version systemd/native stage discrimination;

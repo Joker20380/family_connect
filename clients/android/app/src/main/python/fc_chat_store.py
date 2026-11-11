@@ -102,6 +102,12 @@ class Session:
             raise LocalError('closed')
         self.local._chat.pin_service_publisher(bytes.fromhex(public_hex))
 
+    def accept_support(self, payload, device):
+        from messenger.support import accept
+        if self.local is None:
+            raise LocalError('closed')
+        accept(self.local._store, json.loads(payload, object_pairs_hook=_object), device, self.local.profile()['public'])
+
     def enrollment_proof(self, device, challenge):
         if self.local is None:
             raise LocalError('closed')

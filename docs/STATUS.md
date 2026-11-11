@@ -1,5 +1,107 @@
 # Текущее состояние / Current state
 
+**11 November — owner explicitly authorizes SYSTEM-MESSAGES-1 enablement; IN_PROGRESS.**
+Permanent Compose overlay separates the scoped publisher from the web container,
+pins their image together and preserves existing users/groups by omitting fixture
+seeding on upgrade. Deployment-boundary checks cover secret isolation, restart,
+resources and no-seed startup. Runtime is not yet updated. The single stopped
+`fc-beta109-smiley-ci` container was fully exported, checksum/archive-verified and
+removed with approval; image/bind source/volumes and all running services remain.
+Root headroom increased from about200MiB to1.1GiB. RU bounded readback shows all four
+relevant services active; public feed HTTPS200 with3 unchanged events. No public
+announcement text is authorized. Fresh backup/isolated restore, final scoped CI,
+ordinary merge and dedicated token commissioning are still pending.
+PR18 has no independent approval; the owner's explicit enablement request is recorded
+separately from the owner-only CI trigger, which is not a review approval.
+
+**11 November — SYSTEM-MESSAGES-1 selected by owner; implementation, not rollout.**
+The panel now has a separate public-system-announcement workflow under the existing
+operator login: immutable preview, explicit audience confirmation, durable same-ID
+queue and an external HTTPS publisher. View/send permissions and CSRF are separate;
+the web process has no publisher token or phone identity. Unknown network outcomes
+require explicit same-ID retry. Only exact live public-feed readback marks published;
+delivery, read receipts and replies are not claimed. This is the existing service
+feed, not SUPPORT-CHAT-1 and not addressed subscription events. No Android change,
+release/version increment, production announcement or installed-panel update.
+Final local panel regression295 PASS (44 new checks), existing announcement/CI
+contracts38 PASS; actual Chromium → durable queue → canonical HTTPS API → feed →
+encrypted client store/restart PASS. Lost-response retry uses two POSTs but one event;
+desktop1440/mobile390 rendering passes. Physical Android/production delivery NOT_RUN.
+Scoped hosted panel CI43020554360 PASS on19b6ab37: migrations/regression, existing
+browser retry checks and actual allowlisted image build/check. Android/support jobs
+are intentionally skipped for this panel-only change. Final readback: installed
+panel still imagec179d1ae, healthy/HTTP200; temporary test DB removed. Root has204MiB
+free. Review/merge, disk headroom and fresh backup/publisher commissioning remain.
+This follow-up changes documentation only; qualified runtime source is19b6ab37. See the
+[system-message report](releases/2026-11-11-system-messages.md).
+Previous support CI43008983724 actually passed all three jobs on26727eb7; downloaded
+unsigned124 remains that exact artifact, not a build of these subsequent panel changes.
+PR18 remains unmerged; production disk headroom, fresh backup/isolated restore and
+review/commissioning gates remain. RU is not operated in this selected task; its
+last recovery and open disk-latency cause are on68afd2e6, not requalified here.
+
+Earlier entries below describe previous checkpoints, not additional active tasks.
+
+**11 November — owner requests production; preflight, not rollout.**
+Scoped hosted CI43007041835 is actually running on3d2f8d1c: panel PASS;
+contracts287 PASS/1 stale Android UI-pin failure, retained. Four support-only Java
+deltas and two additive RU/EN resource deltas are reviewed and explicitly pinned;
+no file is excluded from the provenance guard. This source-only test correction
+needs a fresh scoped run; the earlier Android job is not a final-head qualification.
+The existing panel remains imagec179d1ae/database0011, healthy/HTTP200. A consistent
+PostgreSQL exported snapshot was restored into a separate networkless RAM-backed
+PostgreSQL: all36 tables/929830 row fingerprints match; the live database was not
+restored or migrated. The first verification failed on temporary-sort disk space;
+the corrected streaming-hash verification passed without sorting on the live disk.
+Root has only222MiB free and /mnt/data3.3GiB at preflight; no cleanup is authorized
+or performed. Refresh the backup again immediately before any eventual update.
+An owner-only `/qualify-support-candidate` PR review command now requests the same
+scoped hosted jobs, pinned to the event's exact head SHA, without privileged triggers
+or deployment. This command is not a review approval or CI PASS. Production identity
+still needs resolution: the owner's panel login can operate support, but the Android
+recipient cannot also be the support sender; self-binding is intentionally refused.
+No release124/signing/catalog/phone/panel application deployment has occurred.
+RU incident/recovery work is recorded on its separate existing branch.
+[Preflight and remaining gates](releases/2026-11-11-support-chat-1.md#production-preflight--11-november).
+
+**11 November — SUPPORT-CHAT-1 resumed; source checkpoint, not acceptance.**
+Addressed panel history/send/inbox, separate view/send permissions, CSRF and actor-bound
+idempotency use a Unix worker and the existing encrypted store/outbox/mailbox/ACK.
+Canonical device↔registered chat binding and authenticated support-role opt-in are
+required; a legacy registered beta123 chat is not enough to enable support sending.
+Candidate124 adds that contract to the existing Android runtime, without replacing123.
+38 scoped identity/worker/security checks,2 closed-kit checks and34 panel checks
+pass; debug Android build/instrumentation compilation and lint pass. The new actual
+HTTPS-enrolled browser↔mailbox↔Android exchange passes: two clients, offline queue,
+ordinary-worker UI reply, notification/deep link, stable history after restart,
+signed storage ACK and same-ID retry after a deliberately lost browser response.
+Actual foreign mailbox sender rejection and browser authorization/CSRF refusals pass.
+The extracted kit's nonroot systemd worker and separate forced-SSH collector pass
+restart/permissions checks. API27 now also passes the two-client HTTPS/UI round trip
+and foreign-sender rejection over available Wi-Fi. The browser preserves its form,
+text and signed ID after a lost response; an actual second button click delivers
+only once. Two focused JavaScript regressions pass. Hosted candidate CI, review,
+ordinary merge and backup/restore-before-panel-update remain open ([draft PR18](https://github.com/Joker20380/family_connect/pull/18)). No production
+application/server/phone rollout; installed panel stays unchanged.
+The intervening RU recovery is recorded separately in commitf7877217; no RU work
+is resumed here. Replacement remains WAITING_FOR_HOST and is not a chat dependency.
+[Implementation, evidence and remaining gates](releases/2026-11-11-support-chat-1.md).
+
+**10 November22:52UTC — local panel availability restored without an application update.**
+Docker stopped22:22UTC/restarted22:27UTC; both panel containers exited0 and had
+restart policy `no`. The same console imagec179d1ae and the same PostgreSQL/synthetic
+volumes are running/healthy again, now `unless-stopped`; installed Compose is aligned.
+Private consistent pg_dump retained before console start; no database restore,
+container recreation, image rebuild, new migration or user/secret replacement.
+HTTP health/login200 and protected inventory302, Django check and existing user pass.
+Both read-only monitoring jobs subsequently return success;4 scoped source tests and
+all750 links in the5 affected documents pass. Docker reboot test deliberately NOT_RUN.
+SUPPORT-CHAT-1 remains in development, NOT installed or accepted; beta123 unchanged.
+RU replacement stays WAITING_FOR_HOST; no VPN/policy/owner-phone action.
+[Diagnosis, exact runtime and rollback](releases/2026-11-10-panel-availability.md).
+
+Earlier selected-task entries below are history, not concurrent active NEXTs.
+
 **10 November — RU TCP query localization and bounded-child candidate.**
 PR16 deployment was rolled back; fresh read-only RU state is healthy on node125c796a,
 policy108/119. No new recovery or rollout. Exact Xray26.3.27/d2758a0 is pinned;

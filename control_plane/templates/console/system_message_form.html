@@ -1,0 +1,10 @@
+{% extends 'console/base.html' %}
+{% block title %}Новое системное сообщение{% endblock %}
+{% block mode %}Черновик · ничего не отправляется{% endblock %}
+{% block content %}
+<h1>Новое системное сообщение</h1>
+<p>Объявление будет общедоступно всем клиентам выбранных платформ. Не используйте для личных сообщений. Авторизация — ваш текущий аккаунт панели; телефонная identity не копируется.</p>
+<form method="post" action="{% url 'console:system_message_preview' %}">{% csrf_token %}<input type="hidden" name="token" value="{{ token }}">
+{{ form.as_p }}
+<button type="submit">Предпросмотр — без отправки</button></form>
+{% endblock %}
