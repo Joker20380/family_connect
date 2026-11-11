@@ -18,11 +18,15 @@ selection are not dependencies. [Panel availability receipt](releases/2026-11-10
 
 11 November continuation: the API now records explicit support-protocol enrollment
 against the immutable official sender; legacy beta123 bindings remain send-blocked.
-Source checkpoint includes candidate124, not a release. The next acceptance step is
-actual HTTPS dual-proof enrollment and ordinary Android background reply with the
-real restricted membership importer/mailbox, replacing earlier test role injection.
-Do not count the previous limited fixture, compilation or a successful queue POST
-as completed delivery acceptance. [Current evidence](releases/2026-11-11-support-chat-1.md).
+Source checkpoint includes candidate124, not a release. Actual HTTPS dual-proof
+enrollment, ordinary Android worker/UI reply, closed systemd mailbox, notification,
+two-client isolation, offline/restart/storage-ACK and same-ID lost-response retry
+now pass without role injection. Foreign-sender mailbox rejection and actual browser
+permission/CSRF refusals pass. The closed kit's nonroot systemd owner and separate
+forced-SSH collector also pass. Next: minimum-API qualification, scoped hosted
+candidate CI/review/ordinary merge; fresh backup/isolated restore before a local
+panel update. Production commissioning still requires an explicitly designated
+support identity and separately scoped credentials. [Evidence and kit](releases/2026-11-11-support-chat-1.md).
 
 ### Previous selected task — source candidate, no new deployment
 

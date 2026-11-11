@@ -1,10 +1,92 @@
 name: Control panel
 on:
+  workflow_dispatch:
+    inputs:
+      support_candidate:
+        description: 'Qualify support contracts and build a separate unsigned Android candidate; no VPN/G4 rerun or deployment'
+        type: boolean
+        default: false
   push:
     paths: ['control_plane/**', 'messenger/**', 'provisioning/support_worker.py', 'control/friends/support.py', '.github/workflows/control-panel.yml']
   pull_request:
     paths: ['control_plane/**', 'messenger/**', 'provisioning/support_worker.py', 'control/friends/support.py', '.github/workflows/control-panel.yml']
 jobs:
+  support-contracts:
+    if: github.event_name == 'workflow_dispatch' && inputs.support_candidate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r control/requirements.lock -r provisioning/requirements.lock -r device_identity/requirements.lock
+      - run: python -m pip install --no-deps --require-hashes -r messenger/requirements.lock
+      - name: Existing messenger and addressed support contracts
+        run: >-
+          python -m pytest -q messenger/tests tests/test_friends_chat.py
+          tests/test_support_binding.py tests/test_support_collector.py
+          tests/test_support_http.py tests/test_support_package.py
+          tests/test_android_public_release.py
+      - name: Closed commissioning kit
+        run: python -m scripts.package_support_chat --output artifacts/support-chat-kit
+      - uses: actions/upload-artifact@v4
+        with:
+          name: support-chat-commissioning-kit
+          path: artifacts/support-chat-kit.tar.gz
+          if-no-files-found: error
+  support-android:
+    if: github.event_name == 'workflow_dispatch' && inputs.support_candidate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.1'
+          cache: false
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+      - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'ndk;28.2.13676358'
+      - name: Build unchanged pinned native dependencies, without transport suites
+        run: |
+          ANDROID_NDK_HOME="$ANDROID_HOME/ndk/28.2.13676358" python3 pilot/android-awg/build.py --abi arm64-v8a
+          sudo apt-get update -qq
+          sudo apt-get install -y cmake ninja-build
+          git clone --quiet https://github.com/drowe67/codec2 "$RUNNER_TEMP/android-codec2"
+          git -C "$RUNNER_TEMP/android-codec2" checkout --detach 06d4c11e699b0351765f10398abb4f663a984f36
+          python3 clients/android/audio/build.py --source "$RUNNER_TEMP/android-codec2" --ndk "$ANDROID_HOME/ndk/28.2.13676358" --out clients/android/audio-generated --abi arm64-v8a
+          git clone --quiet https://github.com/XTLS/Xray-core "$RUNNER_TEMP/restricted-xray"
+          git -C "$RUNNER_TEMP/restricted-xray" checkout --detach d2758a023cd7f4174a5a5fa4ff66e487d4342ba0
+          python3 pilot/android-restricted/build.py --xray "$RUNNER_TEMP/restricted-xray" --go "$(command -v go)" --ndk "$ANDROID_HOME/ndk/28.2.13676358" --out "$GITHUB_WORKSPACE/clients/android/restricted-generated"
+      - name: Candidate APK, JVM checks, lint and actual runtime-test compilation
+        working-directory: clients/android
+        run: >-
+          gradle --no-daemon -PfcTargetAbi=arm64-v8a -PfcFriendsCi=false
+          :app:assembleFriends :app:testFriendsUnitTest :app:lintFriends :app:assembleDebugAndroidTest
+      - name: Verify unsigned source-bound ARM64 payload
+        run: |
+          python3 -m pip install cryptography==46.0.7
+          python3 pilot/android-restricted/package_ci.py --source-commit "$GITHUB_SHA" --out restricted-release --apksigner "$ANDROID_HOME/build-tools/35.0.0/apksigner" --android-only
+      - uses: actions/upload-artifact@v4
+        with:
+          name: support-chat-Android124-unsigned-arm64
+          path: |
+            restricted-release/
+            clients/android/audio-generated/corresponding-source/
+            clients/android/audio-generated/audio-build.json
+          if-no-files-found: error
   panel:
     runs-on: ubuntu-24.04
     services:

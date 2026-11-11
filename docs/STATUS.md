@@ -6,11 +6,16 @@ idempotency use a Unix worker and the existing encrypted store/outbox/mailbox/AC
 Canonical device↔registered chat binding and authenticated support-role opt-in are
 required; a legacy registered beta123 chat is not enough to enable support sending.
 Candidate124 adds that contract to the existing Android runtime, without replacing123.
-38 scoped identity/worker/security/package checks and34 panel checks pass; debug
-Android build/instrumentation compilation and lint pass. Earlier actual browser↔
-Android exchange used direct role injection and a restart-assisted reply, so it
-does not close acceptance. Actual HTTPS enrollment/ordinary-worker qualification is
-in progress. No application/server/phone rollout; installed panel stays unchanged.
+38 scoped identity/worker/security checks,2 closed-kit checks and34 panel checks
+pass; debug Android build/instrumentation compilation and lint pass. The new actual
+HTTPS-enrolled browser↔mailbox↔Android exchange passes: two clients, offline queue,
+ordinary-worker UI reply, notification/deep link, stable history after restart,
+signed storage ACK and same-ID retry after a deliberately lost browser response.
+Actual foreign mailbox sender rejection and browser authorization/CSRF refusals pass.
+The extracted kit's nonroot systemd worker and separate forced-SSH collector pass
+restart/permissions checks. Minimum-API qualification, hosted candidate CI, review,
+ordinary merge and backup/restore-before-panel-update remain open. No production
+application/server/phone rollout; installed panel stays unchanged.
 The intervening RU recovery is recorded separately in commitf7877217; no RU work
 is resumed here. Replacement remains WAITING_FOR_HOST and is not a chat dependency.
 [Implementation, evidence and remaining gates](releases/2026-11-11-support-chat-1.md).

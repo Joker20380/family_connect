@@ -1,6 +1,6 @@
 # Documentation
 
-[SUPPORT-CHAT-1 · 11 ноября: исходный checkpoint, не внедрённая доставка](releases/2026-11-11-support-chat-1.md).
+[SUPPORT-CHAT-1 · 11 ноября: реальный изолированный обмен, ещё не production](releases/2026-11-11-support-chat-1.md).
 
 [10 ноября: доступность локальной панели после перезапуска Docker](releases/2026-11-10-panel-availability.md).
 

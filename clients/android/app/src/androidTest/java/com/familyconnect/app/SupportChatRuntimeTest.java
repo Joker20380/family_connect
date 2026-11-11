@@ -167,10 +167,33 @@ public class SupportChatRuntimeTest {
             }).get(90, TimeUnit.SECONDS);
             ChatRuntime.start(context);
             String address = arguments.getString("address");
-            if (!"prepare".equals(phase)) {
+            if ("untrusted".equals(phase)) {
+                String target = arguments.getString("target");
+                String messageId = ChatRuntime.WORKER.submit(() -> {
+                    ChatLocalAndroid chat = ChatRuntime.open(context, false);
+                    chat.call("trust_contact", data("public", arguments.getString("public"),
+                            "fingerprint", arguments.getString("fingerprint")));
+                    JsonObject contact = chat.call("rename_contact", data("address", target,
+                            "name", context.getString(R.string.chat_official_support))).getAsJsonObject();
+                    assertFalse("A contact label cannot grant the official role", contact.has("official_support"));
+                    return chat.call("queue", data("address", target, "text", "untrusted synthetic sender")).getAsString();
+                }).get(30, TimeUnit.SECONDS);
+                awaitHistory(target, 1, true);
+                result.addProperty("untrusted_id", messageId);
+            } else if (!"prepare".equals(phase)) {
                 JsonArray messages = awaitHistory(address, Integer.parseInt(arguments.getString("expected")), false);
                 if (arguments.containsKey("message")) assertEquals(arguments.getString("message"), messages.get(0).getAsJsonObject().get("id").getAsString());
                 result.addProperty("count", messages.size());
+            }
+            if ("reject-untrusted".equals(phase)) {
+                JsonObject state = ChatRuntime.WORKER.submit(() -> {
+                    ChatLocalAndroid chat = ChatRuntime.open(context, false);
+                    assertEquals(0, history(chat, arguments.getString("foreign")).size());
+                    return chat.call("delivery_state", new JsonObject()).getAsJsonObject();
+                }).get(30, TimeUnit.SECONDS);
+                assertTrue("Actual mailbox payload must be rejected, not just absent",
+                        state.getAsJsonObject("result").getAsJsonObject("received").get("rejected").getAsInt() > 0);
+                result.addProperty("untrusted_rejected", true);
             }
             if ("reply".equals(phase)) {
                 notificationAndReply(address);
