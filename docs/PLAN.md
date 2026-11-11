@@ -14,6 +14,8 @@ Dependencies/gates: existing dual-proof binding and signed ACK; scoped contracts
 Android JVM/lint/ARM64 CI, isolated real-client tests, ordinary review/merge, fresh
 backup with separate restore before runtime changes. Preserve all prior accepted
 artifacts/rollback and report physical absence rather than synthesizing acceptance.
+Preserve installed HTTP-only VPN fixes with the pinned support overlay, not the full
+main HTTP kit; changing this runtime base requires review again before installation.
 Root979MiB→2.5GiB after1.557GB old unused build-cache cleanup; do not prune volumes.
 Next global tracks remain separate: confirmed subscription-change notifications;
 payment partner selection/integration; cold no-cache restricted bootstrap/recovery

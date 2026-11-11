@@ -13,6 +13,8 @@ ADB currently lists no physical phone; last verified owner install is123, not a 
 observation. RU remains active, but stop cause and replacement stay open.
 Commissioning, current hosted CI,125 artifact and physical acceptance remain open;
 no addressed production message or public announcement was sent.
+HTTP deployment must use a support-only overlay of observed a59956c4: installed
+paid/restricted/recovery fixes differ from main and must remain byte-identical.
 [Current implementation/acceptance record](releases/2026-11-11-support-chat-125.md).
 
 Earlier entries below are historical checkpoints, not simultaneous selected tasks.
