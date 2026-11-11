@@ -1,6 +1,7 @@
 # System messages from the panel
 
-Source implementation, not installed yet. Use the existing panel login. Separate
+Enabled on the working panel11 November2026. Open
+`http://127.0.0.1:8765/system-messages/` using the existing panel login. Separate
 `console.view_system_messages` and `console.send_system_message` permissions control
 reading and publication; existing superusers have both. No ordinary account gains
 permissions automatically and no phone identity is copied.
@@ -43,7 +44,8 @@ python manage.py publish_system_messages \
 Paths above are examples, not provisioned credentials. Use the qualified runtime and
 private local PostgreSQL settings. Certificate verification stays enabled; redirects
 and proxies are disabled, public readback receives no bearer token, batch size is1–20.
-No timer or production credential is installed automatically. Inspect the queue before
+This installation's separate publisher is enabled with explicit owner authorization;
+other installations do not gain a credential automatically. Inspect the queue before
 enabling any schedule. Disable by stopping external runs/revoking the grant; UI rollback
 uses the previous image without restoring an old database or deleting tables/volumes.
 Already published notices remain public until expiry or a separately authorized existing
