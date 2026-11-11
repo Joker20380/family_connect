@@ -24,6 +24,8 @@ class ChatAccess:
                 expires INTEGER NOT NULL, used INTEGER NOT NULL DEFAULT 0)''')
             db.execute('CREATE TABLE IF NOT EXISTS chat_sequence (id INTEGER PRIMARY KEY CHECK(id=1), value INTEGER NOT NULL)')
             db.execute('INSERT OR IGNORE INTO chat_sequence VALUES (1,0)')
+            db.execute('''CREATE TABLE IF NOT EXISTS chat_service_senders (
+                public TEXT PRIMARY KEY, enabled INTEGER NOT NULL CHECK(enabled IN (0,1)))''')
 
     @staticmethod
     def active(db, device, public_identity=None, wireguard_public_key=None):
@@ -65,6 +67,8 @@ class ChatAccess:
         now = int(self.access.clock())
         with self.access.db() as db:
             self.active(db, device, proof['public_identity'], proof['wireguard_public_key'])
+            if db.execute('SELECT 1 FROM chat_service_senders WHERE public=?', (chat_public,)).fetchone():
+                raise Rejected()
             row = db.execute('SELECT * FROM chat_challenges WHERE nonce=?', (nonce,)).fetchone()
             if row is None or row['used'] or row['expires'] <= now or row['device'] != device or row['public'] != chat_public:
                 raise Rejected()
@@ -80,15 +84,20 @@ class ChatAccess:
     def desired_members(self):
         """Operator-only snapshot. Never expose membership via the public API."""
         with self.access.db() as db:
-            return [row[0] for row in db.execute('''SELECT c.public FROM chat_bindings c
-                JOIN devices d ON d.device=c.device JOIN invites i ON i.device=c.device
-                WHERE d.revoked=0 AND i.revoked=0 ORDER BY c.device''')]
+            return self.members(db)
+
+    @staticmethod
+    def members(db):
+        devices = [row[0] for row in db.execute('''SELECT c.public FROM chat_bindings c
+            JOIN devices d ON d.device=c.device JOIN invites i ON i.device=c.device
+            WHERE d.revoked=0 AND i.revoked=0 ORDER BY c.device''')]
+        services = [row[0] for row in db.execute(
+            'SELECT public FROM chat_service_senders WHERE enabled=1 ORDER BY public')]
+        return list(dict.fromkeys(devices + services))
 
     def snapshot(self):
         with self.access.db() as db:
-            keys=[row[0] for row in db.execute('''SELECT c.public FROM chat_bindings c
-                JOIN devices d ON d.device=c.device JOIN invites i ON i.device=c.device
-                WHERE d.revoked=0 AND i.revoked=0 ORDER BY c.device''')]
+            keys=self.members(db)
             if len(keys)>550:raise Rejected()
             db.execute('UPDATE chat_sequence SET value=value+1 WHERE id=1')
             sequence=db.execute('SELECT value FROM chat_sequence WHERE id=1').fetchone()[0]

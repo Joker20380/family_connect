@@ -26,9 +26,9 @@ def test_android_changes_do_not_start_desktop_suites():
     assert not any(platforms(['docs/STATUS.md']).values())
 
 
-def test_android124_candidate_keeps_test_seam_disabled_and_requires_native_provenance():
+def test_android125_candidate_keeps_test_seam_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 124' in gradle and "versionName '0.1.18-beta124'" in gradle
+    assert 'versionCode 125' in gradle and "versionName '0.1.18-beta125'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
@@ -283,13 +283,16 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'ChatRuntime.java': '93e0e57e3365a77e7722ed1a476422e61fd480836875a820fdb79ed82f74b3f4',
         'FriendsAccessAndroid.java': 'e21901751a49b8fece4d210878382781c0e44814896412e67d70050ff1391b5d',
     }
+    reviewed_support_candidate_beta125 = {
+        'FriendsAccessAndroid.java': 'ccc24fb4d9236773227e1e26a9ae812812ab47f1c455a2f97b0ba5830c60259a',
+    }
     reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81,
                          **reviewed_gateway_readiness, **reviewed_slow_link_recovery,
                          **reviewed_idle_ack_recovery, **reviewed_signaling_read_diagnostics,
                          **reviewed_subscription_beta119, **reviewed_inherited_renewal_beta119,
                          **reviewed_cold_candidate_9bf02724, **reviewed_consolidated_beta121,
                          **reviewed_app_vpn_beta122, **reviewed_app_vpn_recovery_beta123,
-                         **reviewed_support_candidate_beta124}
+                         **reviewed_support_candidate_beta124, **reviewed_support_candidate_beta125}
     reviewed_resources = {
         'clients/android/app/src/main/res/values-ru/strings.xml': '89b334900a7febe2e50bfe06d593673961c320704a16ead76c09d9baa22ea279',
         'clients/android/app/src/main/res/values/strings.xml': '85e40c0044eaec9ebe8fb6f77d0a026ddc6bead90fb044237abd23b305fd2c39',

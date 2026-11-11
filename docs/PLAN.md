@@ -2,6 +2,26 @@
 
 ## Current engineering priority / Текущий critical path
 
+**SUPPORT-CHAT-1 — owner-selected IN_PROGRESS,11 November; Android125 candidate.**
+Complete the existing panel/device-binding/worker/mailbox path, commission an official
+chat-only sender without a VPN grant, and qualify authenticated Android enrollment,
+actual100s admission renewal, offline/restart/retry/background replies. Public
+announcements remain a separate audience-qualified feed; no live send without an
+approved exact text/recipient or audience. Existing owner's panel login is retained;
+phone private keys never leave the device. Source base93d0b9f1; installed panel50de6f25,
+last verified physical Android123, no phone currently on ADB.125 is not installed.
+Dependencies/gates: existing dual-proof binding and signed ACK; scoped contracts,
+Android JVM/lint/ARM64 CI, isolated real-client tests, ordinary review/merge, fresh
+backup with separate restore before runtime changes. Preserve all prior accepted
+artifacts/rollback and report physical absence rather than synthesizing acceptance.
+Root979MiB→2.5GiB after1.557GB old unused build-cache cleanup; do not prune volumes.
+Next global tracks remain separate: confirmed subscription-change notifications;
+payment partner selection/integration; cold no-cache restricted bootstrap/recovery
+field gate; RU replacement WAITING_FOR_HOST and open stop cause; later Windows/Linux.
+[Current record and remaining gates](releases/2026-11-11-support-chat-125.md).
+
+### Previous completed activation — public announcements
+
 **SYSTEM-MESSAGES-1 — owner-authorized activation complete11 November13:17 UTC.**
 Owner requests sending system messages. Reuse the existing public service-events
 API/feed and the owner's panel login, not a clone of the phone's private identity.

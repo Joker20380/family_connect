@@ -6,6 +6,7 @@
   "control/friends/support_ids.py",
   "control/friends/diagnostics.py",
   "control/friends/chat.py",
+  "control/friends/chat_service.py",
   "control/friends/chat_sync.py",
   "control/friends/chat_publishers.py",
   "control/friends/support.py",
