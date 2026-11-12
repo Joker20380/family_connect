@@ -1,17 +1,19 @@
 # Текущее состояние / Current state
 
-**12 November13:52 UTC — SUPPORT-CHAT-1 owner round trip CONFIRMED.**
+**12 November — SUPPORT-CHAT-1 owner round trip confirmed with tunnel OFF.**
 Owner reports «сообщения приходят и уходят» after the125 in-place update. Readback
 through the installed panel IPC finds one authoritative `verified` support thread:
 one outgoing message `recipient_stored` and one incoming reply `received`, latest
 message timestamp13:10:30UTC. This corroborates real addressed delivery/storage in
 both directions, not only installation or an ordinary-chat assumption. The ACK means
 stored, never read. Worker is active/running, NRestarts0. No message sent by this check.
-Core physical panel↔owner Android125 exchange is confirmed. Phone VPN/network state,
-offline/restart/closed-browser conditions of this exchange were not observed; retain
-the scoped isolated checks separately. Public-broadcast delivery, cold restricted
-bootstrap and full history/settings retention remain unclaimed. Next narrow physical
-condition is confirmation/test with the user VPN off, not another APK installation.
+Core physical panel↔owner Android125 exchange is confirmed. The owner subsequently
+clarifies «туннель был выключен»: user-tunnel-OFF is owner-confirmed, not inferred
+from ACKs or a new automated phone probe. That physical condition is closed; do not
+repeat installation/exchange for it. Network type, offline/restart/closed-browser
+conditions were not observed; retain isolated checks separately. Public-broadcast
+delivery, cold restricted bootstrap and full history/settings retention remain
+unclaimed. No new runtime action or live send accompanies this clarification.
 [Physical receipt and remaining boundaries](releases/2026-11-12-android125-owner-install.md).
 
 Earlier12 November entries retain their observation-time state.

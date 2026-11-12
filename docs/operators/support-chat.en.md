@@ -29,9 +29,10 @@ Public catalogs, invitation-page version and download links are unchanged.
 On12 November the owner confirms exchange; panel readback corroborates one verified
 addressed thread, an outgoing signed storage ACK and one durably received reply.
 The core panel↔phone round trip is confirmed; no reinstall or reenrollment is needed.
-The exchange's network conditions remain unknown: confirm/test user VPN off next.
-Two messages do not establish complete old-history/settings preservation; MIUI
-blocked automated UI inspection. For any new live test approve its text and verify
+The owner confirms the tunnel was OFF during that exchange; this physical condition
+is accepted without a rerun. Network type and complete old-history/settings
+preservation are not established; MIUI blocked automated UI inspection.
+For any new live test approve its text and verify
 the canonical recipient binding; do not send a duplicate merely to repeat acceptance.
 
 Ordinary Wi-Fi and an expired synthetic subscription were checked in isolation;

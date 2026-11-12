@@ -2,13 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
-**SUPPORT-CHAT-1 — core physical addressed exchange CONFIRMED12 November13:52UTC.**
+**SUPPORT-CHAT-1 — core physical exchange with user tunnel OFF CONFIRMED12 November.**
 Owner confirmation plus actual panel IPC: one `verified` binding/thread, outgoing1
 with signed `recipient_stored`, incoming1 durably `received`; worker active/restarts0.
 Do not repeat installation, enrollment or the basic round trip merely to reproduce
 accepted evidence. `recipient_stored` is storage, not read. No live send in this check.
-Remaining narrow physical boundary: establish whether the confirmed exchange used
-ordinary connectivity with user VPN off; repeat only that condition if needed.
+Owner explicitly confirms «туннель был выключен» for the corroborated exchange.
+The user-tunnel-OFF physical condition is closed on owner testimony plus the earlier
+backend delivery/storage receipts; no new automated network/phone probe is claimed.
+Do not repeat this accepted exchange or assume a particular Wi-Fi/mobile network.
 The owner's short confirmation does not prove complete historical-data equality,
 offline/restart/closed-browser conditions, expired-subscription behavior or cold
 no-cache bootstrap. Preserve existing isolated PASS results at their actual scope.
@@ -24,7 +26,7 @@ No source rebuild, new signing, public/invitation/catalog change or live message
 MIUI UI restrictions were not bypassed. Physical history/settings/cryptographic
 identity preservation remains an owner UI check; unchanged Android package identity
 is not proof of chat-content equality. Subsequent owner/backend evidence confirms
-support enrollment and the core round trip; the VPN-off condition remains open.
+support enrollment and the core round trip; user tunnel OFF is now owner-confirmed.
 Do not reinstall125 or advance public-broadcast/cold-bootstrap/traffic gates from
 the installation result. [Receipt](releases/2026-11-12-android125-owner-install.md).
 
@@ -65,7 +67,7 @@ Installed panel50de6f25/database0013; RU HTTP support-only16d96eb7, not full mai
 Signed125 from qualifiedb293f9ac is private and now installed over123 on the owner
 phone; installed bytes/signer/package identity/launch PASS12 November. No public
 distribution. The owner binding and addressed round trip are now verified; remaining
-physical scope is retained-history/settings confirmation and the VPN-off condition.
+physical scope is retained-history/settings confirmation; tunnel OFF is confirmed.
 The panel still explicitly blocks unenrolled legacy recipients; no guessed binding.
 Public Android announcement delivery remains a separate NOT_RUN production gate:
 isolated audience checks do not authorize a broadcast. Cold no-cache/allowlisted

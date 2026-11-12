@@ -17,14 +17,21 @@ and exposed no message text, recipient identifier or private key in the report.
 The sanitized counts/statuses and timestamp are retained under the same private
 evidence directory in `owner-confirmation-*.json` and its raw command receipts.
 
-The current exchange's VPN state/network, offline period, browser-closed interval
-and component restart were not observed. Those conditions must not be inferred
-from two stored messages; retain prior isolated queue/retry/closed-browser/restart
-and no-VPN/expired synthetic-subscription evidence separately. The next narrow owner
-confirmation is whether this exchange ran with user VPN off; test that condition
-only if still needed. Complete old-history/settings/cryptographic-key equality,
-public Android announcement delivery and cold no-cache restricted bootstrap remain
-unclaimed. No new APK installation or basic duplicate round trip is required.
+The owner subsequently clarifies «туннель был выключен». **The same physical
+bidirectional support exchange with the user tunnel OFF is owner-confirmed.** Its
+message delivery/storage is independently corroborated by the preceding panel IPC
+readback; the tunnel state comes from the owner's testimony, not an inferred ACK
+property or a new automated device/network measurement. No rerun is needed for this
+condition, and no phone/server action or message send accompanies the clarification.
+
+Network type, offline period, browser-closed interval and component restart were not
+observed. Those conditions must not be inferred from two stored messages; retain
+prior isolated queue/retry/closed-browser/restart and no-VPN/expired synthetic-
+subscription evidence separately. Complete old-history/settings/cryptographic-key
+equality, public Android announcement delivery and cold no-cache restricted bootstrap
+remain unclaimed. Tunnel OFF does not establish Wi-Fi, an expired paid subscription
+or cold bootstrap under allowlists. No new APK installation or duplicate round trip
+is required.
 
 The installation sections below preserve their13:06–13:08UTC observation-time scope;
 their then-open basic support exchange is superseded by this confirmation.
