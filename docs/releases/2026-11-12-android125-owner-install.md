@@ -1,5 +1,34 @@
 # Android125 — owner in-place installation, 12 November 2026
 
+## Owner confirmation and panel verification — 13:52 UTC
+
+After installation the owner reports «сообщения приходят и уходят». At13:52:30.767UTC
+a readback through the installed console's ordinary support IPC returns exactly one
+inbox thread with authoritative binding state `verified`, one outgoing message in
+`recipient_stored`, and one incoming reply in `received`. Latest message timestamp
+is13:10:30.711UTC, after the125 installation. The worker is active/running with
+NRestarts0. Thus the owner report is corroborated by the addressed support history,
+not silently treated as proof about support when only ordinary chats were tested.
+
+**Core physical panel↔owner Android125 round trip CONFIRMED.** The outgoing state is
+the signed recipient-storage ACK, not a read receipt; the incoming state confirms
+durable receipt by support. This readback sent no messages, changed no configuration
+and exposed no message text, recipient identifier or private key in the report.
+The sanitized counts/statuses and timestamp are retained under the same private
+evidence directory in `owner-confirmation-*.json` and its raw command receipts.
+
+The current exchange's VPN state/network, offline period, browser-closed interval
+and component restart were not observed. Those conditions must not be inferred
+from two stored messages; retain prior isolated queue/retry/closed-browser/restart
+and no-VPN/expired synthetic-subscription evidence separately. The next narrow owner
+confirmation is whether this exchange ran with user VPN off; test that condition
+only if still needed. Complete old-history/settings/cryptographic-key equality,
+public Android announcement delivery and cold no-cache restricted bootstrap remain
+unclaimed. No new APK installation or basic duplicate round trip is required.
+
+The installation sections below preserve their13:06–13:08UTC observation-time scope;
+their then-open basic support exchange is superseded by this confirmation.
+
 ## Result and scope
 
 **INSTALLED_IN_PLACE**,12 November13:06:44UTC. The owner explicitly requested a phone

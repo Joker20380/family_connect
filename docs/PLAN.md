@@ -2,15 +2,29 @@
 
 ## Current engineering priority / Текущий critical path
 
+**SUPPORT-CHAT-1 — core physical addressed exchange CONFIRMED12 November13:52UTC.**
+Owner confirmation plus actual panel IPC: one `verified` binding/thread, outgoing1
+with signed `recipient_stored`, incoming1 durably `received`; worker active/restarts0.
+Do not repeat installation, enrollment or the basic round trip merely to reproduce
+accepted evidence. `recipient_stored` is storage, not read. No live send in this check.
+Remaining narrow physical boundary: establish whether the confirmed exchange used
+ordinary connectivity with user VPN off; repeat only that condition if needed.
+The owner's short confirmation does not prove complete historical-data equality,
+offline/restart/closed-browser conditions, expired-subscription behavior or cold
+no-cache bootstrap. Preserve existing isolated PASS results at their actual scope.
+Public Android broadcast delivery remains a separate NOT_RUN production gate.
+[Owner confirmation and backend receipt](releases/2026-11-12-android125-owner-install.md).
+
+### Completed owner update — retained evidence
+
 **ANDROID125-OWNER-INSTALL — owner-requested update COMPLETE12 November13:06UTC.**
 Qualified immutable signed125 replaces physical123 in place: package, signer,
 installed bytes, unchanged UID/first-install/data directory and normal launch PASS.
 No source rebuild, new signing, public/invitation/catalog change or live message.
 MIUI UI restrictions were not bypassed. Physical history/settings/cryptographic
-identity preservation and authoritative support enrollment still require an owner
-UI check; unchanged Android package identity is not proof of chat-content equality.
-Next SUPPORT-CHAT-1 physical action is to open Chat, check retained data/binding,
-then separately approve exact addressed text and complete send/reply with VPN off.
+identity preservation remains an owner UI check; unchanged Android package identity
+is not proof of chat-content equality. Subsequent owner/backend evidence confirms
+support enrollment and the core round trip; the VPN-off condition remains open.
 Do not reinstall125 or advance public-broadcast/cold-bootstrap/traffic gates from
 the installation result. [Receipt](releases/2026-11-12-android125-owner-install.md).
 
@@ -36,9 +50,9 @@ Next corrective boundary: isolate storage/fsync latency and qualify any persiste
 change separately; replacement remains WAITING_FOR_HOST. No automatic new task.
 [Current incident and limits](releases/2026-11-12-ru-recurrence.md).
 
-### Retained product milestone — support physical acceptance
+### Retained implementation — support network/field boundaries
 
-**SUPPORT-CHAT-1 — backend ENABLED, awaiting physical owner-phone acceptance.**
+**SUPPORT-CHAT-1 — backend ENABLED; core owner-phone exchange confirmed above.**
 Operator entry: device card → «Сообщения · личная поддержка»; replies `/messages/`.
 Completed: chat-only service identity, authoritative binding collector, encrypted
 worker/outbox, existing owner permissions, CI/review/ordinary PR20/21 merges,
@@ -50,13 +64,13 @@ preserved;125 API27/35 actual admission renewal and audience checks also pass.
 Installed panel50de6f25/database0013; RU HTTP support-only16d96eb7, not full main.
 Signed125 from qualifiedb293f9ac is private and now installed over123 on the owner
 phone; installed bytes/signer/package identity/launch PASS12 November. No public
-distribution. Remaining physical session: verify retained history/settings, enroll
-its canonical binding, approve exact addressed text and perform send/reply with VPN off.
-Until enrollment, the panel explicitly blocks legacy recipients; no guessed binding.
+distribution. The owner binding and addressed round trip are now verified; remaining
+physical scope is retained-history/settings confirmation and the VPN-off condition.
+The panel still explicitly blocks unenrolled legacy recipients; no guessed binding.
 Public Android announcement delivery remains a separate NOT_RUN production gate:
 isolated audience checks do not authorize a broadcast. Cold no-cache/allowlisted
 bootstrap remains separate from ordinary Wi-Fi and expired synthetic subscription.
-No live message was sent. Host reboot/startup ordering is not a completed test.
+Owner round trip is confirmed; host reboot/startup ordering remains NOT_RUN.
 Root979MiB→2.5GiB after1.557GB old build-cache cleanup, final2.3GiB; preserve artifacts.
 Next global tracks remain separate: confirmed subscription-change notifications;
 payment partner selection/integration; cold no-cache restricted bootstrap/recovery

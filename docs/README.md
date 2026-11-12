@@ -3,7 +3,7 @@
 [Системные сообщения · 11 ноября: форма панели и безопасная очередь публикации](releases/2026-11-11-system-messages.md).
 [Инструкция оператора](operators/system-messages.ru.md) · [Operator guide](operators/system-messages.en.md).
 
-[Android125 · 12 ноября: установлен поверх123 на телефоне владельца](releases/2026-11-12-android125-owner-install.md).
+[Android125 · 12 ноября: установлен поверх123; адресный обмен подтверждён владельцем и панелью](releases/2026-11-12-android125-owner-install.md).
 [SUPPORT-CHAT-1 · 11 ноября: beta125, адресный канал и точный статус ввода](releases/2026-11-11-support-chat-125.md).
 [Инструкция переписки](operators/support-chat.ru.md) · [Support chat guide](operators/support-chat.en.md).
 

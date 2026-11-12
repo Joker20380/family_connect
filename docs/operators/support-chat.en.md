@@ -26,12 +26,13 @@ Size50,470,304 bytes; SHA256
 `f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c`.
 Public catalogs, invitation-page version and download links are unchanged.
 
-Do not reinstall125. MIUI blocked automated UI inspection; the owner still needs to
-check existing history/settings in the app. The remaining physical action is to open
-Chat, verify enrollment of its authoritative binding, then perform an approved
-addressed round trip with the user VPN off. Proposed text,
-not yet sent: «Проверка служебной связи Family Connect. Ответьте, пожалуйста: „Получено“».
-Confirm that exact text and the selected phone's canonical binding before sending.
+On12 November the owner confirms exchange; panel readback corroborates one verified
+addressed thread, an outgoing signed storage ACK and one durably received reply.
+The core panel↔phone round trip is confirmed; no reinstall or reenrollment is needed.
+The exchange's network conditions remain unknown: confirm/test user VPN off next.
+Two messages do not establish complete old-history/settings preservation; MIUI
+blocked automated UI inspection. For any new live test approve its text and verify
+the canonical recipient binding; do not send a duplicate merely to repeat acceptance.
 
 Ordinary Wi-Fi and an expired synthetic subscription were checked in isolation;
 cold no-cache startup on allowlisted networks is still a separate field gate.

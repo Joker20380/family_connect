@@ -3,8 +3,9 @@
 **12 November — owner125 installed privately over123.** The connected Redmi Note9
 Pro /Android12 now has0.1.18-beta125, same signing identity/UID/first-install/data
 directory; installed APK readback and ordinary launch PASS. No uninstall/data clear
-or public/invitation/catalog update. Owner UI confirmation of history/settings and
-the addressed support exchange remain open; do not reinstall or reenroll identity.
+or public/invitation/catalog update. Owner confirmation plus panel storage ACK/reply
+now confirms the core addressed support exchange. History/settings and the VPN-off
+condition remain open; do not reinstall or reenroll identity.
 RU: на телефоне владельца beta125; повторная установка и очистка данных не нужны.
 [Current installation receipt](../releases/2026-11-12-android125-owner-install.md).
 Earlier device versions below are historical checkpoints, not the current install.

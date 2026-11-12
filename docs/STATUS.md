@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**12 November13:52 UTC — SUPPORT-CHAT-1 owner round trip CONFIRMED.**
+Owner reports «сообщения приходят и уходят» after the125 in-place update. Readback
+through the installed panel IPC finds one authoritative `verified` support thread:
+one outgoing message `recipient_stored` and one incoming reply `received`, latest
+message timestamp13:10:30UTC. This corroborates real addressed delivery/storage in
+both directions, not only installation or an ordinary-chat assumption. The ACK means
+stored, never read. Worker is active/running, NRestarts0. No message sent by this check.
+Core physical panel↔owner Android125 exchange is confirmed. Phone VPN/network state,
+offline/restart/closed-browser conditions of this exchange were not observed; retain
+the scoped isolated checks separately. Public-broadcast delivery, cold restricted
+bootstrap and full history/settings retention remain unclaimed. Next narrow physical
+condition is confirmation/test with the user VPN off, not another APK installation.
+[Physical receipt and remaining boundaries](releases/2026-11-12-android125-owner-install.md).
+
+Earlier12 November entries retain their observation-time state.
+
 **12 November13:06 UTC — owner phone updated123→125 in place.**
 Physical Redmi Note9 Pro /Android12 now runs signed0.1.18-beta125, versionCode125.
 Exact installed APK SHA256f1c5bf57 matches the qualified private artifact; both old
