@@ -2,6 +2,28 @@
 
 ## Current engineering priority / Текущий critical path
 
+**RU-INCIDENT-20261112 — availability RECOVERED_CAUSE_OPEN; recovery gate complete.**
+Dependencies: exact installed node125c796a/gateway9023d2c3, unchanged108/119 policy,
+retained decisions/deny/expiry and currently installed support-only HTTP16d96eb7.
+First-failure evidence now identifies slow synchronous persistence in this occurrence;
+it does not resolve the older query-boundary incidents or establish the storage cause.
+Recovery gate: preserve failure/configuration/protected DB fingerprints; fence only
+RU with NL command entries and central timer unchanged; stop/PID0/no handlers;
+validate retained state; sequentially start the same bytes; restore exact command
+map; observe beyond120s admission renewal with fresh applied readback, exact persisted
+TCP users, stable PIDs/restarts, no new failure and unchanged protected data.
+Controlled restart and six-sample196.377s observation/comparison PASS, including
+actual renewal1794480005→1794480176 across the initial lease,63 records/20 allowed,
+exact persisted TCP users, stable services and unchanged protected data. Panel has
+fresh `ok` RU data. No client traffic acceptance is inferred from this or HTTP200.
+Do not deploy the previously rolled-back PR16/17 candidates or weaken8/12/120s
+and durability to hide delay.
+Next corrective boundary: isolate storage/fsync latency and qualify any persistence
+change separately; replacement remains WAITING_FOR_HOST. No automatic new task.
+[Current incident and limits](releases/2026-11-12-ru-recurrence.md).
+
+### Retained product milestone — support physical acceptance
+
 **SUPPORT-CHAT-1 — backend ENABLED, awaiting physical owner-phone acceptance.**
 Operator entry: device card → «Сообщения · личная поддержка»; replies `/messages/`.
 Completed: chat-only service identity, authoritative binding collector, encrypted

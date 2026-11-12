@@ -1,5 +1,27 @@
 # Текущее состояние / Current state
 
+**12 November — RU recovered; persistence-timeout trigger identified, cause OPEN.**
+Owner reports stopped services. Preserved first failure11Nov21:12:13.800732UTC:
+`TRANSPORT_OPERATION_DEADLINE`, `persist_directory/after`,8.651672s against8s.
+This occurrence is dominated by synchronous state/attempt persistence, not TCP:
+three engine queries total0.034137s; four fsync calls total7.425943s. Watcher-only
+restarts leave AWG/TCP stopped;1354 restarts were observed before recovery.
+RU-only fence, retained-state validation and sequential unchanged-runtime restart
+completed12Nov10:37:44UTC; original command map restored10:37:46UTC. No NL changes,
+timeout relaxation, new binary, subscription change or database rollback.
+Six samples over196.377s PASS: stable PIDs/restarts0, fresh applied readback,63 records,
+20 allowed, exact persisted TCP users and actual renewal across the120s lease.
+Protected device/invite/subscription/event/chat tables, units/code/policy/support
+configuration remain identical. Fresh RU panel snapshot10:42:35UTC is `ok`; panel
+HTTP200. Phone DNS/HTTPS/egress were NOT_RUN, so no end-to-end VPN traffic claim.
+The underlying storage delay and earlier incidents remain open; RU replacement is
+still WAITING_FOR_HOST. Support-only HTTP16d96eb7 is preserved, not replaced by main.
+SUPPORT-CHAT-1 physical acceptance and public announcement delivery remain open;
+no phone, chat message, public broadcast or client version changed in this incident.
+[Incident evidence and recovery scope](releases/2026-11-12-ru-recurrence.md).
+
+The11 November entries below are historical checkpoints, not current RU health.
+
 **11 November — SUPPORT-CHAT-1 backend ENABLED; physical acceptance remains open.**
 Existing owner account can open card → «Сообщения · личная поддержка» and `/messages/`;
 actual authenticated HTTP200 and explicit legacy-client blocking PASS. Panel image
