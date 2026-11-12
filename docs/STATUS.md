@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**12 November13:06 UTC — owner phone updated123→125 in place.**
+Physical Redmi Note9 Pro /Android12 now runs signed0.1.18-beta125, versionCode125.
+Exact installed APK SHA256f1c5bf57 matches the qualified private artifact; both old
+and new APKs verify against the original67a90d1b signer. UID, first-install timestamp
+and data directory are unchanged. No uninstall, data clear, reenrollment, key export
+or public release. Normal launch and30.561s stable-process/bounded crash check PASS.
+MIUI prevents automated UI inspection/control; history/settings and cryptographic
+identity retention are not independently verified on the physical phone. Existing
+isolated preservation evidence remains separate. Next physical action: owner opens
+Chat and checks existing history/settings, then verifies authoritative enrollment
+before any separately approved addressed send/reply. No live message/broadcast sent.
+Public/invitation/catalog versions remain unchanged;125 is installed on this owner
+phone only, not a public rollout. RU remains RECOVERED_CAUSE_OPEN as recorded below;
+no gateway operation is part of this update.
+[Installation, checks and limits](releases/2026-11-12-android125-owner-install.md).
+
 **12 November — RU recovered; persistence-timeout trigger identified, cause OPEN.**
 Owner reports stopped services. Preserved first failure11Nov21:12:13.800732UTC:
 `TRANSPORT_OPERATION_DEADLINE`, `persist_directory/after`,8.651672s against8s.

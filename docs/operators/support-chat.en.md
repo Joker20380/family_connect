@@ -17,16 +17,19 @@ send outcome, retry the same form/text/ID rather than creating another message.
 
 ## Owner's physical acceptance
 
-Signed ARM64 beta125 /0.1.18-beta125 is not installed or publicly distributed.
+Signed ARM64 beta125 /0.1.18-beta125 was installed over123 on the owner's phone on
+12 November. Signer, installed bytes, UID, first-install timestamp, data directory
+and ordinary launch checks pass. It is not publicly distributed.
 Local artifact:
 `state-client-build/support-live-20261111/FamilyConnect-Test-0.1.18-beta125.apk`.
 Size50,470,304 bytes; SHA256
 `f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c`.
 Public catalogs, invitation-page version and download links are unchanged.
 
-The remaining physical action is one agreed owner-phone session: verify its actual
-version, install125 in place without clearing data, open chat to enroll its binding,
-then perform an approved addressed round trip with the user VPN off. Proposed text,
+Do not reinstall125. MIUI blocked automated UI inspection; the owner still needs to
+check existing history/settings in the app. The remaining physical action is to open
+Chat, verify enrollment of its authoritative binding, then perform an approved
+addressed round trip with the user VPN off. Proposed text,
 not yet sent: «Проверка служебной связи Family Connect. Ответьте, пожалуйста: „Получено“».
 Confirm that exact text and the selected phone's canonical binding before sending.
 
@@ -36,5 +39,6 @@ Production announcement delivery needs separate approval of exact text and compu
 audience. Selecting Android is a platform-wide broadcast, not a one-device test.
 
 Current evidence, limitations and recovery:
+[12 November phone installation](../releases/2026-11-12-android125-owner-install.md),
 [125 receipt](../releases/2026-11-11-support-chat-125.md),
 [STATUS](../STATUS.md), [PLAN](../PLAN.md).

@@ -2,6 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
+**ANDROID125-OWNER-INSTALL — owner-requested update COMPLETE12 November13:06UTC.**
+Qualified immutable signed125 replaces physical123 in place: package, signer,
+installed bytes, unchanged UID/first-install/data directory and normal launch PASS.
+No source rebuild, new signing, public/invitation/catalog change or live message.
+MIUI UI restrictions were not bypassed. Physical history/settings/cryptographic
+identity preservation and authoritative support enrollment still require an owner
+UI check; unchanged Android package identity is not proof of chat-content equality.
+Next SUPPORT-CHAT-1 physical action is to open Chat, check retained data/binding,
+then separately approve exact addressed text and complete send/reply with VPN off.
+Do not reinstall125 or advance public-broadcast/cold-bootstrap/traffic gates from
+the installation result. [Receipt](releases/2026-11-12-android125-owner-install.md).
+
+### Retained RU incident — recovered, cause still open
+
 **RU-INCIDENT-20261112 — availability RECOVERED_CAUSE_OPEN; recovery gate complete.**
 Dependencies: exact installed node125c796a/gateway9023d2c3, unchanged108/119 policy,
 retained decisions/deny/expiry and currently installed support-only HTTP16d96eb7.
@@ -34,10 +48,10 @@ scoped runtime CI43055427259 passes without rebuilding unchanged Android125.
 Isolated exchange, offline/dedup/closed-browser replies and existing124 evidence are
 preserved;125 API27/35 actual admission renewal and audience checks also pass.
 Installed panel50de6f25/database0013; RU HTTP support-only16d96eb7, not full main.
-Signed125 from qualifiedb293f9ac is private, neither installed nor published; last
-verified phone123 is historical. No physical phone is attached. One remaining
-physical session: inspect version, install125 in place preserving data, enroll its
-canonical binding, approve exact addressed text and perform send/reply with VPN off.
+Signed125 from qualifiedb293f9ac is private and now installed over123 on the owner
+phone; installed bytes/signer/package identity/launch PASS12 November. No public
+distribution. Remaining physical session: verify retained history/settings, enroll
+its canonical binding, approve exact addressed text and perform send/reply with VPN off.
 Until enrollment, the panel explicitly blocks legacy recipients; no guessed binding.
 Public Android announcement delivery remains a separate NOT_RUN production gate:
 isolated audience checks do not authorize a broadcast. Cold no-cache/allowlisted
