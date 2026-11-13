@@ -1,5 +1,14 @@
 # Release distribution / Выпуски
 
+**13 November — Android0.1.18-beta125/code125 is PUBLIC, optional catalog8.**
+The exact qualified APK already installed on the owner phone is now the default
+invitation/updater release. Full verified-HTTPS APK/audio-source readback, original
+signer, catalog signature, both invitation paths/CSP and retained113 downloads PASS.
+No rebuild, phone operation, forced install or new VPN entitlement. Desktop versions
+are unchanged. [Publication and rollback receipt](releases/2026-11-13-android125-publication.md).
+
+Earlier dated entries are historical checkpoints, not the current public version.
+
 **8 November — beta121 consolidated candidate, not distributed or installed.**
 Unsigned ARM64 Friends prebuild combines subscription UI119/current main and cold120;
 new source/native inventory, no bundled locator. Owner120 and public updater remain
@@ -328,7 +337,7 @@ Python3.14's implicit-directory imports must not hide a broken isolated archive.
 The [client workflow](../.github/workflows/clients.yml) defines platform builds and
 release conditions. CI artifacts do not by themselves establish a release. Validate native
 UI/runtime and downloaded artifacts before signing/publishing. Windows cross-build alone
-is insufficient. The current public releases are Android0.1.18-beta113, Linux0.2.11 and Windows0.2.16; see [current Android delivery](releases/2026-11-04-android113-server-picker.md#publication-and-readback) and [desktop delivery](releases/2026-11-02-gateway-selection.md). The [FIELD report](releases/2026-10-03-field1-release-final.md), [desktop cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md) are historical evidence.
+is insufficient. The current public releases are Android0.1.18-beta125, Linux0.2.11 and Windows0.2.16; see [current Android delivery](releases/2026-11-13-android125-publication.md) and [desktop delivery](releases/2026-11-02-gateway-selection.md). The [FIELD report](releases/2026-10-03-field1-release-final.md), [desktop cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md) are historical evidence.
 
 Desktop catalogs use offline signing with increasing sequence numbers. Keep keys out of
 CI and servers; never replace an existing version/tag with different binaries.

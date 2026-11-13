@@ -1,5 +1,11 @@
 # Client installation
 
+**13 November — public Android125, optional signed catalog8.** Both invitation
+paths and update discovery now offer125. Install over the current app without
+deleting data. The owner already runs125; no repeat installation is needed.
+[APK, verification and limits](releases/2026-11-13-android125-publication.md).
+Dated candidate notes below are historical, not current installation instructions.
+
 **8 November candidate — beta122, not a public rollout:** local
 [Apps and VPN selection](android-app-vpn.en.md). This does not replace accepted
 beta121; the task receipt identifies the exact candidate and checks.
@@ -22,16 +28,19 @@ Huawei remain unconfirmed. Update in place; do not uninstall or clear data.
 Android8.1–9 uses Codec2 with confirmed peer support; Opus recording requires Android10+.
 [Acceptance, delivery and remaining checks](releases/2026-11-03-android-update-incident.md#beta111-publication-and-readback).
 
-**Current releases — 4 November 2026.** Windows0.2.16 is published:
+**Current public releases — 13 November 2026.** Windows0.2.16 is published:
 [download installer](https://github.com/Joker20380/family_connect/releases/download/windows-v0.2.16/FamilyConnect-Setup-0.2.16-pilot-unsigned.exe).
 Windows0.2.13+ discovers it through Check for updates (signed catalog12);0.2.12
 and earlier need one manual in-place installation without deleting data. Explicit
 Amsterdam1/2 choices support AWG/TCP. The installer has no publisher signature.
 SHA256 `491a731edbf80887122844bebcccb8741e701b03816202f9a9b77c77855e8a65`.
-Android113 is published: [APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta113.apk),
-optional signed catalog7, existing signer; SHA256
-`6078d0610272c5eb1b8008d330f9e646163b90b89df180b4bd56fd8ae4edc094`,50273696bytes.
-Update over the existing version without clearing data; owner112→113 installation/UI verified; VPN reconnect is manual.
+Android125 is published: [APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta125.apk),
+optional signed catalog8, existing signer; SHA256
+`f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c`,50470304bytes.
+Update over the existing version without clearing data; owner123→125 installation
+and two-way support with the user tunnel OFF are confirmed. This does not claim all
+113 devices have upgraded. Reconnect VPN manually after installation if necessary.
+The internal Linux installation state below retains its earlier separate acceptance:
 Complete Linux0.2.12~l03.2.13 Ubuntu26.04/Python3.14 is now installed on the owner's
 workstation: exact full DEB/system pair, imports/READY, GTK and separate live node
 metrics PASS;3171 protected entries unchanged, no automatic connection. AWG/TCP has
@@ -377,7 +386,7 @@ not publicly distributed and not a FIELD release. Public beta51/invitation links
 remain unchanged and were not reverified. [Attempt14](releases/2026-10-02-5n-prov1-attempt14.ru.md)
 · [Canary provenance and SHA256](releases/2026-10-02-5n-android-canary-build.ru.md).
 
-Use the [friends beta guide](getting-started.en.md): Android8.1+, ARM64 beta113,
+Use the [friends beta guide](getting-started.en.md): Android8.1+, ARM64 beta125,
 invitation-based access, VPN, text and voice messages. The APK is distributed through
 an invitation page and HTTPS download; it is not yet a GitHub or app-store release.
 The [client workflow](../.github/workflows/clients.yml) documents source-build requirements.

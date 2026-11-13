@@ -1,5 +1,14 @@
 # Owner recovery106 — private candidate / закрытый кандидат
 
+**13 November — public125/catalog8; owner already on125.** Default invitation and
+updater now offer the exact qualified APK installed on12 November. Update existing
+users in place, without uninstall/data clear; no repeat owner installation or identity
+enrollment is needed. This is not a cold restricted-network stability acceptance.
+RU: публичная версия теперь125; старые инструкции118/106 ниже — история, не откат.
+[Public APK, hashes and publication receipt](../releases/2026-11-13-android125-publication.md).
+
+Earlier entries describe their observation-time installation/distribution state.
+
 **12 November — owner125 installed privately over123.** The connected Redmi Note9
 Pro /Android12 now has0.1.18-beta125, same signing identity/UID/first-install/data
 directory; installed APK readback and ordinary launch PASS. No uninstall/data clear

@@ -7,8 +7,9 @@ entire selected platform audience.
 
 The recipient is an authoritative device identity ↔ chat identity binding, never
 a device name or IP address. Missing, ambiguous, revoked or stale bindings block
-sending. beta123 does not enroll into this support contract; a separate beta125
-candidate is prepared. Never copy the phone's private key into the panel.
+sending. beta123 does not enroll into this support contract; compatible beta125
+is public since13 November for in-place updating. Never copy the phone's private
+key into the panel.
 
 Queued means durably stored by the sender; mailbox accepted means server receipt;
 recipient stored means a signed ACK after Android storage. There is no read receipt.
@@ -19,12 +20,13 @@ send outcome, retry the same form/text/ID rather than creating another message.
 
 Signed ARM64 beta125 /0.1.18-beta125 was installed over123 on the owner's phone on
 12 November. Signer, installed bytes, UID, first-install timestamp, data directory
-and ordinary launch checks pass. It is not publicly distributed.
-Local artifact:
+and ordinary launch checks pass. These exact APK bytes became public on13 November
+without a rebuild. Retained local artifact:
 `state-client-build/support-live-20261111/FamilyConnect-Test-0.1.18-beta125.apk`.
 Size50,470,304 bytes; SHA256
 `f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c`.
-Public catalogs, invitation-page version and download links are unchanged.
+Public catalog8, both invitation paths and the APK link now offer125.
+[Download and publication receipt](../releases/2026-11-13-android125-publication.md).
 
 On12 November the owner confirms exchange; panel readback corroborates one verified
 addressed thread, an outgoing signed storage ACK and one durably received reply.

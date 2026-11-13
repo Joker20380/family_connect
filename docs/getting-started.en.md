@@ -10,25 +10,22 @@ No manual service setup is needed. Affected Windows10 device acceptance is pendi
 
 Android8.1+, ARM64; access is invitation-only. Installing the APK does not grant access.
 
-Addressed operator support is under development in the separate beta124 candidate.
-This is not a release or an upgrade instruction: beta123 is not replaced, and no new
-download/checksum is published. [Current checks and limitations](releases/2026-11-11-support-chat-1.md).
+The invitation page and in-app updater now provide **beta125**, optional catalog8.
+It includes current subscription status and addressed operator-support compatibility.
+The owner's two-way exchange with the user tunnel OFF is confirmed, not acceptance
+on every restricted network. Updating grants neither paid VPN rights nor restricted
+FIELD admission. [Artifact and limitations](releases/2026-11-13-android125-publication.md).
 
-The invitation page and in-app updater both provide beta113. Updating does not enable restricted FIELD access.
-
-Beta119 remains an unpublished ARM64 subscription-status candidate, not a public update.
-With explicit permission it updated118 on Redmi/API31: own non-cohort status over the
-normal HTTPS ingress and retained cache after process restart are verified.
-[Artifact, server contract and qualification boundaries](releases/2026-11-06-subscription-android-3.md).
-
-Beta113 includes MESH and quiet ongoing VPN-notification updates. Android8.1/API27 is the minimum; Android8.0 and older are unsupported.
-Exact Android CI41833086774 attempt2, existing signer and full verified-HTTPS hash checks PASS.
+Beta125 retains MESH and quiet VPN-notification updates. Android8.1/API27 is the
+minimum; Android8.0 and older are unsupported. Exact CI43048235831/sourceb293f9ac,
+original signer and full verified-HTTPS hash checks pass; publication does not rebuild the APK.
 Every mode now lists Russia, Netherlands and Netherlands2, with per-node load squares:
 green below85%, orange from85%, grey/dash when unavailable. Selected rows have a green tint
-and checkmark. Russia cannot use MESH; choose AWG/TCP/Auto. Owner112→113 installation and
-dashboard/load checks PASS; sustained MESH stability and physical Huawei113 acceptance remain open.
-![Android113 English server list; synthetic load values](assets/android113-server-picker-en.png)
-Paid baseline remains108 and existing entitlement is preserved. No Mi account or ADB is needed.
+and checkmark. Russia cannot use MESH; choose AWG/TCP/Auto. Owner123→125 installation
+and support exchange pass; other-model acceptance, sustained MESH stability and cold
+no-cache restricted-network startup remain open.
+![Historical Android113 server-list illustration; synthetic loads, not a125 screenshot](assets/android113-server-picker-en.png)
+Server policy and existing entitlement are unchanged. No Mi account or ADB is needed.
 MESH still requires accepted admission and current readiness material, not an old cached READY.
 
 1. Ask a participant for their link/QR from **Settings → Invite a friend**. Keep it private.
@@ -42,21 +39,15 @@ MESH still requires accepted admission and current readiness material, not an ol
 
 ## Update an existing app
 
-**Separate opt-in beta118 for MESH testing on mobile allowlists:**
-[download APK118, 50.3 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta118.apk).
-Android8.1+/ARM64,50285984 bytes, SHA256
-`b7b0be92456f522f81d87c71c401c2622d2f823178510b28510a6fb8d5c69fca`.
-Update in place without uninstalling or clearing data. Enable diagnostics, disable Wi-Fi,
-explicitly select MESH and test Netherlands and Netherlands2 separately. After failure,
-export diagnostics and send them privately to the owner with operator and timestamp.
-[Full procedure, matching audio source and limitations](releases/2026-11-05-android118-field.md).
-Not an accepted stability fix; the default invitation/updater remain113.
+The [older beta118 field material](releases/2026-11-05-android118-field.md) is retained
+as history, not a downgrade instruction for125. Restricted-network field testing is
+separately coordinated; an ordinary Wi-Fi test does not replace it.
 
-[Download beta113 — 50.3 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta113.apk).
-Version `0.1.18-beta113`, code113, ARM64,50273696 bytes; SHA256:
+[Download beta125 — 50.5 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta125.apk).
+Version `0.1.18-beta125`, code125, ARM64,50470304 bytes; SHA256:
 
 ```text
-6078d0610272c5eb1b8008d330f9e646163b90b89df180b4bd56fd8ae4edc094
+f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c
 ```
 
 The app also checks for updates. An update restarts the VPN; tap Connect again if needed. Open the APK and select **Update** in Android’s system
@@ -66,15 +57,15 @@ do not copy another device’s profiles or keys.
 
 The [older universal beta13](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.12-beta13.apk)
 remains available for other architectures,240.5 MB. It lacks current features and is not
-an equivalent alternative to113.
+an equivalent alternative to125.
 
-[Exact audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta113-audio-source.tar.gz)
+[Exact125 audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta125-audio-source.tar.gz)
 are available with the release. Installation requires Android confirmation; it is not forced.
 
-Update over the existing app via **Settings → Check for updates → Install beta113**.
+Update over the existing app via **Settings → Check for updates → Install beta125**.
 If the old updater fails, download the APK above in a browser. Do not uninstall, clear
-data or reenroll. Android sequence7 is optional; installation and operation on the
-affected Huawei still need confirmation. [Public108 rollback evidence](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk)
+data or reenroll. Catalog8 is optional; publication does not mean other users have
+already installed125. [Public108 rollback evidence](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk)
 remains immutable; no paid event or canary replay accompanies this update.
 
 ## Text and voice
@@ -104,7 +95,7 @@ not established. [Notification and announcement guide (RU)](testing/messenger-no
 - Update failure: record the error and versions; do not erase data to bypass a signature mismatch.
 
 Report model, Android/app version and network type. Exclude invitations, keys, profiles
-and messages. [Beta113 validation/publication](releases/2026-11-04-android113-server-picker.md#publication-and-readback).
+and messages. [Beta125 validation/publication](releases/2026-11-13-android125-publication.md).
 
 ## Desktop clients
 
@@ -115,7 +106,7 @@ current availability counts.
 
 ## Server load display
 
-Beta113 shows **Server CPU** on the dashboard and **CPU N%** in the server list when
+The dashboard shows **Server CPU** and the server list shows **CPU N%** when
 channel capacity is unknown. CPU is not channel utilization or the monthly traffic quota.
 Known-capacity servers retain their combined CPU/channel indicator; stale/missing samples show No data.
 [Release status](releases.md).

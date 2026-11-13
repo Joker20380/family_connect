@@ -2,13 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
-**ANDROID125-PUBLIC-20261113 — owner-selected, IN_PROGRESS.**
-Promote qualified immutable125, not a fresh candidate: exact hosted/source/artifact
-and original signer, local optional catalog8, preserved113 downloads and public
-metadata backup. Gates: metadata/signature/invitation tests, guarded static publication,
-matching invitation/CSP/legacy/v2, full HTTPS APK/source hashes, unchanged protected
-records and transport/backend processes. No forced install or new VPN entitlement.
-Current public113/catalog7; owner installed125. No unrelated queued task starts.
+**ANDROID125-PUBLIC-20261113 — owner-selected, COMPLETE.**
+Qualified immutable125 is public13 November14:26:54UTC: exact hosted/source/artifact
+and original signer, locally signed optional catalog8, preserved113 downloads and
+prior metadata backup. All publication gates PASS:56 scoped tests, guarded static
+publication, matching invitation/CSP/legacy/v2, full verified-HTTPS APK/source hashes,
+unchanged protected records and backend/transport processes; one nginx HUP only.
+Current public/invitation/updater125/catalog8; owner already installed125. No forced
+install, all-users-installed claim or new VPN entitlement. Separate public-broadcast,
+cold field and RU-cause/replacement gates remain open; no unrelated queued task starts.
 [Current release receipt](releases/2026-11-13-android125-publication.md).
 
 **AMSTERDAM1-HEALTH-20261113 — owner-requested read-only check COMPLETE.**
