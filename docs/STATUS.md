@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**13 November — Amsterdam1 read-only health PASS12:33–12:35UTC.**
+Canonical NL1 `185.10.158.212`: watcher/AWG/TCP active, stable PIDs/restarts0;
+three samples/131.591s confirm fresh applied readback,64 records/52 allowed, exact
+persisted TCP users and actual renewal1794573284→1794573419 across initial expiry.
+No current transport failure. Monitoring/restricted-bootstrap/Reticulum/mailbox
+active; TCP443 reachable3/3, panel snapshot fresh/`ok`, disk37GiB free and no sampled
+memory/I/O full pressure. No restart, remote write, rollout or phone operation.
+USER_TRAFFIC NOT_RUN: this is not authenticated phone VPN/DNS/HTTPS/egress acceptance.
+RU recovery/cause and replacement remain separate/open as below.
+[Read-only receipt and actual runtime hashes](releases/2026-11-13-amsterdam1-health.md).
+
 **13 November — RU recurrence recovered; disk/resource-pressure cause still OPEN.**
 First failure01:36:28.115UTC: `TRANSPORT_OPERATION_DEADLINE`, decision-state
 `persist_directory/after`,9.259661s against8s. Persistence consumes6.511998s;

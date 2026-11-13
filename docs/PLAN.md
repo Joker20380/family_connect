@@ -2,6 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
+**AMSTERDAM1-HEALTH-20261113 — owner-requested read-only check COMPLETE.**
+Gate: canonical NL1 target/pinned SSH, stable active transports, fresh applied
+readback/exact persisted TCP users, actual admission renewal beyond initial expiry,
+independent endpoint reachability and fresh panel evidence. Three samples/131.591s
+PASS, renewal1794573284→1794573419; no current failure or observed storage-pressure
+stall. No remote changes/repair indicated by this window; phone VPN traffic remains
+NOT_RUN. This does not close RU's cause/replacement or begin any queued task.
+[Amsterdam1 current receipt](releases/2026-11-13-amsterdam1-health.md).
+
 **RU-INCIDENT-20261113 — owner-requested recovery complete; RECOVERED_CAUSE_OPEN.**
 Dependencies: exact accepted node125c796a/gateway9023d2c3, policy108/119, retained
 decisions/deny/expiry, support-only HTTP16d96eb7 and current authoritative registry.
