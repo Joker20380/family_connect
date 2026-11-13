@@ -1,5 +1,7 @@
 # Documentation
 
+[RU · 13 ноября: повторный сбой записи состояния, восстановление и открытая причина задержек](releases/2026-11-13-ru-recurrence.md).
+
 [Системные сообщения · 11 ноября: форма панели и безопасная очередь публикации](releases/2026-11-11-system-messages.md).
 [Инструкция оператора](operators/system-messages.ru.md) · [Operator guide](operators/system-messages.en.md).
 

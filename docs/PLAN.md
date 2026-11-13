@@ -2,6 +2,26 @@
 
 ## Current engineering priority / Текущий critical path
 
+**RU-INCIDENT-20261113 — owner-requested recovery complete; RECOVERED_CAUSE_OPEN.**
+Dependencies: exact accepted node125c796a/gateway9023d2c3, policy108/119, retained
+decisions/deny/expiry, support-only HTTP16d96eb7 and current authoritative registry.
+Gate: preserve the first failure/current protected state; RU-only fence and handler
+drain; validate retained state; sequential unchanged-runtime start; restore exact
+command map; observe past the120s lease with actual renewal, exact engine/persisted
+readback, stable PIDs/restarts and unchanged protected data. No rollback of live DB.
+Gate PASS13 November: six samples/197.795s,64 records/20 allowed, renewal
+1794571181→1794571389 across initial expiry, no new failure; panel RU snapshot `ok`.
+This recurrence is a decision-state persistence deadline9.259661s/8s, accompanied
+by host disk/swap/memory pressure. Exact resource-pressure source remains unproven;
+watcher-only restarts still do not recover stopped AWG/TCP. USER_TRAFFIC NOT_RUN.
+Do not weaken8/12/120s, remove fsync, redeploy failed PR16/17 or call a restart FIXED.
+Next corrective boundary is storage/resource-pressure attribution or a separately
+qualified persistence/recovery correction. RU replacement remains WAITING_FOR_HOST.
+No queued support/broadcast/payment/desktop task is automatically started here.
+[Current RU evidence and limits](releases/2026-11-13-ru-recurrence.md).
+
+### Retained support acceptance
+
 **SUPPORT-CHAT-1 — core physical exchange with user tunnel OFF CONFIRMED12 November.**
 Owner confirmation plus actual panel IPC: one `verified` binding/thread, outgoing1
 with signed `recipient_stored`, incoming1 durably `received`; worker active/restarts0.
@@ -30,9 +50,10 @@ support enrollment and the core round trip; user tunnel OFF is now owner-confirm
 Do not reinstall125 or advance public-broadcast/cold-bootstrap/traffic gates from
 the installation result. [Receipt](releases/2026-11-12-android125-owner-install.md).
 
-### Retained RU incident — recovered, cause still open
+### Previous RU incident — historical recovery, cause still open
 
 **RU-INCIDENT-20261112 — availability RECOVERED_CAUSE_OPEN; recovery gate complete.**
+Historical12 November result; superseded by the13 November recurrence above.
 Dependencies: exact installed node125c796a/gateway9023d2c3, unchanged108/119 policy,
 retained decisions/deny/expiry and currently installed support-only HTTP16d96eb7.
 First-failure evidence now identifies slow synchronous persistence in this occurrence;

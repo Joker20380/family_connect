@@ -1,5 +1,27 @@
 # Текущее состояние / Current state
 
+**13 November — RU recurrence recovered; disk/resource-pressure cause still OPEN.**
+First failure01:36:28.115UTC: `TRANSPORT_OPERATION_DEADLINE`, decision-state
+`persist_directory/after`,9.259661s against8s. Persistence consumes6.511998s;
+queries2.194040s. The containing sysstat interval also records high disk wait,
+swap and memory/I/O pressure; no exact competing writer/provider fault is proven.
+AWG/TCP stopped; watcher-only restarts reached1046 without restoring them.
+RU-only fence and retained-state validation precede an unchanged-runtime restart
+at11:58:12UTC; exact command map restored11:58:13UTC. Six samples/197.795s PASS:
+stable PIDs/restarts0, fresh applied readback,64 records/20 allowed, exact persisted
+TCP clients and actual renewal1794571181→1794571389 across initial expiry.
+Protected64/118 device/invite records, paid1/4 and chat52/1 tables, code/units/policy,
+support configuration and keys remain unchanged. HTTP is not restarted. Fresh RU
+panel snapshot12:01:42UTC is `ok`; panel HTTP200, but USER_TRAFFIC NOT_RUN.
+Result **RECOVERED_CAUSE_OPEN**, not a permanent fix. RU replacement remains
+WAITING_FOR_HOST. No NL, neighbouring-service, phone, subscription or release change.
+Installed owner Android125 and confirmed support exchange with tunnel OFF retain
+their accepted scope; public Android broadcast production delivery remains NOT_RUN.
+Local root/data free space1.9/2.6GiB before/after; no cleanup/build or data removal.
+[Evidence, recovery gate and remaining limits](releases/2026-11-13-ru-recurrence.md).
+
+Earlier entries retain their observation-time state, not current RU health.
+
 **12 November — SUPPORT-CHAT-1 owner round trip confirmed with tunnel OFF.**
 Owner reports «сообщения приходят и уходят» after the125 in-place update. Readback
 through the installed panel IPC finds one authoritative `verified` support thread:
