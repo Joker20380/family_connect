@@ -2,6 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
+**ANDROID125-PUBLIC-20261113 — owner-selected, IN_PROGRESS.**
+Promote qualified immutable125, not a fresh candidate: exact hosted/source/artifact
+and original signer, local optional catalog8, preserved113 downloads and public
+metadata backup. Gates: metadata/signature/invitation tests, guarded static publication,
+matching invitation/CSP/legacy/v2, full HTTPS APK/source hashes, unchanged protected
+records and transport/backend processes. No forced install or new VPN entitlement.
+Current public113/catalog7; owner installed125. No unrelated queued task starts.
+[Current release receipt](releases/2026-11-13-android125-publication.md).
+
 **AMSTERDAM1-HEALTH-20261113 — owner-requested read-only check COMPLETE.**
 Gate: canonical NL1 target/pinned SSH, stable active transports, fresh applied
 readback/exact persisted TCP users, actual admission renewal beyond initial expiry,

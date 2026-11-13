@@ -1,5 +1,13 @@
 # Текущее состояние / Current state
 
+**13 November — Android125 public promotion authorized; PREPARED, not yet live.**
+Fresh HTTPS confirms default113/catalog7. Exact qualified signed125 and matching
+audio source are retained; offline optional catalog8 and invitation125 are prepared.
+CI43048235831/sourceb293f9ac, original signer, payload equality and alignment recheck
+PASS. Metadata/signature/invitation regressions56 PASS. Owner already has125; no
+phone reinstall or APK rebuild. Public activation and full readback remain pending.
+[Publication identity, gates and recovery](releases/2026-11-13-android125-publication.md).
+
 **13 November — Amsterdam1 read-only health PASS12:33–12:35UTC.**
 Canonical NL1 `185.10.158.212`: watcher/AWG/TCP active, stable PIDs/restarts0;
 three samples/131.591s confirm fresh applied readback,64 records/52 allowed, exact
