@@ -1,0 +1,39 @@
+name: Paid Android release compatibility
+on:
+  pull_request:
+    paths:
+      - 'control/friends/**'
+      - 'updates/android-friends-v2.json'
+      - 'scripts/package_paid_policy_overlay.py'
+      - 'tests/test_paid*.py'
+      - 'tests/test_transport_membership*.py'
+      - 'tests/test_package_paid_canary_crl.py'
+      - 'control/requirements.lock'
+      - 'device_identity/requirements.lock'
+      - '.github/workflows/paid-policy.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'control/friends/**'
+      - 'updates/android-friends-v2.json'
+      - 'scripts/package_paid_policy_overlay.py'
+      - 'tests/test_paid*.py'
+      - 'tests/test_transport_membership*.py'
+      - 'tests/test_package_paid_canary_crl.py'
+      - 'control/requirements.lock'
+      - 'device_identity/requirements.lock'
+      - '.github/workflows/paid-policy.yml'
+permissions:
+  contents: read
+jobs:
+  paid-policy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r control/requirements.lock -r device_identity/requirements.lock
+      - name: Exact public descriptor and isolated payment contracts
+        run: python -m pytest -q tests/test_paid*.py tests/test_transport_membership*.py tests/test_package_paid_canary_crl.py

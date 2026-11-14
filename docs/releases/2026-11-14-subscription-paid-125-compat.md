@@ -86,3 +86,31 @@ over new user events; old code keeps existing entitlements/replay but rejects ne
 Next product task: automatic addressed notifications for confirmed subscription
 events. It is queued only; no notification implementation, public announcement or
 test message to users is part of this task. RU stop cause remains separate.
+
+## CI scope and preexisting monitoring drift
+
+On source540c5b97, hosted Control panel43534779716 and Android readiness contract
+43534779818 PASS. Full phase043534779731 (including failover) and Linux
+control43534779752 FAIL before tests, during inventory `--collect-only` (exit2).
+Their retained receipts contain no executed full-suite result. A local isolated
+reproduction using only two unchanged main files demonstrates the existing duplicate
+module name: `tests/test_chat_service.py` versus
+`clients/desktop/tests/test_chat_service.py`. Both files and the full-suite launcher
+are unchanged by this task; the launcher suppresses collection stdout in CI, so the
+CI receipt alone does not identify that underlying exception. Do not label these
+full runs green or delete/skip tests to hide the failure. Global collection repair
+remains separate; no Android/desktop release gate is advanced here.
+
+The task-specific hosted paid-policy workflow runs the complete441-case selected
+paid/membership/backup contract, including real temporary packaged HTTP/CLI and public
+catalog consistency. It also runs on subsequent public catalog changes, not only
+paid-module changes. This is the risk-selected compatibility gate, not a replacement
+or waiver of a full/release gate where one is required. Full workflows are unchanged.
+
+Preflight also finds an independent existing collector mismatch: installed HTTP is
+support-only16d96eb7, but subscription-source still pins pre-supporta59956c4. Latest
+subscription snapshot is therefore `unavailable`, not fresh usable paid data. Delivery
+must repair this pin and verify successful import; rollback must use16d96eb7 with
+the restored baseline code, not silently recreate the stalea59956c4 mismatch. Preserve
+the original configuration as evidence. Panel's123 module is confined to synthetic
+demo operations, not real payment writes; production uses the verified HTTP collector.
