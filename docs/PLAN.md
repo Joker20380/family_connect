@@ -2,7 +2,7 @@
 
 ## Current engineering priority / Текущий critical path
 
-**RU-FIRST-FAILURE-ATTRIBUTION-QUALIFICATION-1 — completed negative admission / NO_GO.**
+**RU-FIRST-FAILURE-ATTRIBUTION-QUALIFICATION-1 — completed negative admission / NO_GO (PR34).**
 Exact-kernel/BTF KVM candidate fails the first clean gate: zero allocation generation
 for162 request events and12/64 fsync coverage. First failure/pipe drain preserved,
 complete=false; advanced real scenarios and complete overhead qualification NOT_RUN.

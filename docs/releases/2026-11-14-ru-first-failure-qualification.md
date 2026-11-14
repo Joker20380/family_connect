@@ -163,3 +163,14 @@ durability/access/crash/reboot/expiry/revoke/8/12/120 behavior is unchanged, not
 qualified by these tests. This NO_GO diagnostic-only source is not packaged/deployed.
 Hosted CI is separate; local checks are not a claim that every hosted workflow passed.
 Ordinary PR integration preserves commits; no protected checks are bypassed.
+
+Source695ff6c3fe7e976f38e1837ad073449a093f2702 was committed/pushed and remote SHA
+verified. Subsequent integration-note changes are documentation-only. PR34:
+https://github.com/Joker20380/family_connect/pull/34 . Scoped self-review5906794022
+is explicitly not independent approval. At the integration checkpoint hosted
+phase0 run43634152801 and Linux control43634152730 were IN_PROGRESS; Android wire
+contract43634152763 completed SUCCESS. This is not whole-hosted-CI PASS. The scoped
+diagnostic gate is the tested negative admission result, not a transport release.
+Main was unprotected with no required contexts/rulesets; no mandatory gate was
+disabled, cancelled or bypassed. Exact ordinary-merge/remote SHA receipt is retained
+in PR34 after integration; source/code hashes remain in the committed JSON receipt.
