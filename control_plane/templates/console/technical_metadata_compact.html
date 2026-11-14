@@ -1,0 +1,2 @@
+<small>{{ device.technical.profile.model|default:device.technical.label }}{% if device.technical.profile.android_version %} · Android {{ device.technical.profile.android_version }}{% endif %}</small>
+<small>{{ device.technical.network.kind|default:'—' }} · {{ device.technical.session.transport|default:'—' }} · {{ device.technical.profile.app_version|default:'—' }}</small>

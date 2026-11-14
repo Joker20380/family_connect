@@ -58,6 +58,29 @@ collect Android observations, enrich GeoIP, populate the panel or publish an APK
 Ingress snippet is prepared for actual18086 and overwrites X-FC-Ingress-Peer;
 the API intentionally does not trust or use that header as source-location proof.
 
+### Second source checkpoint: replaceable panel projection
+
+Migration0014 adds current metadata and a source cursor, keyed by full existing HMAC,
+not InventoryDevice PK. A separate archive-pinned, isolated read-only SSH collector
+passes transient output directly to the importer; no new metadata is inserted in
+inventory files/history/audit. Monitor records only import status, prunes on source
+failure, and does not couple metadata failure to VPN/subscription/support actions.
+Revocation/epoch fencing is also enforced at import. Templates hide expired groups
+before the next cleanup; the import command physically removes expired values.
+
+Production object templates (not /demo/) now display profile, network, separate SIM/
+registered operators/radio, actual-session fields and sources/individual ages, with
+model/Android/app/network/operator/transport search filters. These are SOURCE changes,
+not evidence of currently populated or deployed metadata. City/ASN remain unfinished.
+The normal existing panel address is http://127.0.0.1:8765/ with existing login.
+
+Local disposable PostgreSQL17 (no production DB mounted), matching panel lock versions:
+23 focused projection/object checks PASS; full panel suite306 PASS/94 known static-dir
+warnings. Initial test start raced PostgreSQL initialization and one synthetic key
+fixture was34 not32 bytes; fixed fixture and waited for pg_isready before these passes.
+Local Python3.14.4 results do not substitute hosted Python3.13 CI. PR38 is DRAFT:
+https://github.com/Joker20380/family_connect/pull/38. No merge/release acceptance.
+
 Implementation/security/lifecycle tests, Android API27/API35 and NVIDIA/KVM runtime
 qualification; installed125→new identity/settings/support preservation; local MMDB
 positive/provenance/negative checks; latest-only panel projection and UI; exact APK

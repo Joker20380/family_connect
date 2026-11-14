@@ -70,6 +70,13 @@ def validate(raw):
     observations = report['observations']
     require(type(observations) is dict)
     require(set(observations) == (set(SOURCES) if report['operation'] == 'sample' else set()))
+    validate_observations(observations)
+    return report
+
+
+def validate_observations(observations, complete=False):
+    require(type(observations) is dict and set(observations) <= set(SOURCES))
+    require(not complete or set(observations) == set(SOURCES))
     for group, observation in observations.items():
         require(type(observation) is dict and set(observation) == {
             'sampled_at_ms', 'age_ms', 'source', 'status', 'reason', 'values'})
@@ -101,7 +108,6 @@ def validate(raw):
                                 ('radio', 'radio_reason')):
                 require(values[reason] is not None)
                 require(values[name] not in (None, 'UNKNOWN') or values[reason] != 'none')
-    return report
 
 
 @contextmanager

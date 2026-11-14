@@ -86,8 +86,28 @@ def cycle(base=BASE, run=subprocess.run, known_hosts=None):
                 if snapshot is not None:
                     snapshot.unlink(missing_ok=True)
             results.append(result)
+        metadata_status = 'NOT_CONFIGURED'
+        if (local / 'technical-metadata-source.json').exists():
+            metadata_command = ['docker', 'compose', '-f', str(base / 'compose.yaml'), '--env-file', str(base / '.env'),
+                'exec', '-T', 'console', 'python', 'manage.py', 'import_technical_metadata']
+            try:
+                command = [sys.executable, str(base / 'collect_technical_metadata.py')]
+                if known_hosts is not None:
+                    command += ['--known-hosts', str(known_hosts)]
+                response = run(command, capture_output=True, check=True, timeout=50)
+                if len(response.stdout) > 4 * 1024 * 1024:
+                    raise ValueError('Metadata bound exceeded')
+                run(metadata_command, input=response.stdout, capture_output=True, check=True, timeout=30)
+                metadata_status = 'IMPORTED'
+            except (OSError, ValueError, subprocess.SubprocessError):
+                metadata_status = 'UNAVAILABLE'
+                try:
+                    run(metadata_command + ['--unavailable'], capture_output=True, check=True, timeout=30)
+                except (OSError, subprocess.SubprocessError):
+                    metadata_status = 'IMPORT_UNAVAILABLE'
         receipt = dict(schema=1, completed_at=instant(), production_writes=0, sources=results,
-            limitations=['Client telemetry NOT_COLLECTED', 'Local workstation must stay awake',
+            technical_metadata=metadata_status,
+            limitations=['Technical metadata ' + metadata_status, 'Local workstation must stay awake',
                 'SSH credential is administrative; commands are read-only, credential is not read-only'])
         temporary = local / 'monitor-latest.tmp'
         descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW, 0o600)

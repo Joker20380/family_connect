@@ -1,0 +1,23 @@
+<section class="panel" id="device-technical">
+  <div class="panel-heading"><h2>Технические сведения для поддержки</h2><span>{{ device.technical.label }}</span></div>
+  <p class="source-note">Отдельное добровольное включение в приложении. Не подтверждает оплату, identity или доступ VPN. Только последние сведения, до 7 дней.</p>
+  <dl class="release-details">
+    <dt>Устройство</dt><dd>{{ device.technical.profile.manufacturer|default:'—' }} {{ device.technical.profile.model|default:'—' }}</dd>
+    <dt>Android / API</dt><dd>{{ device.technical.profile.android_version|default:'—' }} / {{ device.technical.profile.api_level|default:'—' }}</dd>
+    <dt>Family Connect</dt><dd>{{ device.technical.profile.app_version|default:'—' }} · code {{ device.technical.profile.version_code|default:'—' }}</dd>
+    <dt>Исходная связь</dt><dd>{{ device.technical.network.kind|default:'Не наблюдалась' }} · {{ device.technical.network.scope|default:'unknown' }}</dd>
+    <dt>Оператор SIM</dt><dd>{{ device.technical.mobile.sim_operator|default:'Недоступен' }} · {{ device.technical.mobile.sim_reason }}</dd>
+    <dt>Зарегистрированная мобильная сеть</dt><dd>{{ device.technical.mobile.registered_operator|default:'Недоступна' }} · {{ device.technical.mobile.registered_reason }}</dd>
+    <dt>Радио</dt><dd>{{ device.technical.mobile.radio|default:'UNKNOWN' }} · {{ device.technical.mobile.radio_reason }}</dd>
+    <dt>VPN · установленная сессия</dt><dd>{{ device.technical.session.transport|default:'Не наблюдалась' }} · {{ device.technical.session.gateway|default:'—' }} · {{ device.technical.session.state|default:'UNKNOWN' }}</dd>
+    <dt>Предпочтение / текущая попытка</dt><dd>{{ device.technical.session.preference|default:'—' }} / {{ device.technical.session.attempt|default:'—' }}</dd>
+    <dt>Последняя ошибка / readiness</dt><dd>{{ device.technical.observations.diagnostic.values.error|default:'Не наблюдалась' }} / {{ device.technical.observations.diagnostic.values.readiness|default:'UNKNOWN' }}</dd>
+  </dl>
+  <details class="technical-details"><summary>Источники и независимый возраст наблюдений</summary>
+    {% for name,observation in device.technical.observations.items %}
+    <p><strong>{{ name }}</strong> · {{ observation.source }} · {{ observation.status }} / {{ observation.reason }}<br>
+      sampled_at: {{ observation.sampled_at|date:'Y-m-d H:i:s'|default:'Не представимо' }} UTC · received_at: {{ observation.received|date:'Y-m-d H:i:s' }} UTC<br>
+      Возраст: {{ observation.age_seconds }} с · {{ observation.clock_label }}</p>
+    {% empty %}<p>{{ device.technical.label }}. Новое подтверждение readiness не обновляет время сети.</p>{% endfor %}
+  </details>
+</section>

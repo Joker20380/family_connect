@@ -1,5 +1,22 @@
 # CONTROL-PLANE · русская локальная панель и наблюдаемость
 
+## Technical metadata candidate · 15 November 2026 · NOT DEPLOYED
+
+Migration0014 stores only the latest consented observations by full HMAC; these never
+enter InventorySnapshot, audit details or dated collector files. External
+`collect_technical_metadata.py` uses private `.local/technical-metadata-source.json`
+with exact `python`, `archive`, `archive_sha256` of the accepted serving HTTP archive
+and the existing `inventory-hmac.key`. Pipe transient bytes to
+`manage.py import_technical_metadata`; never redirect them to retained files/logs.
+The monitor enables this independent path only when that config exists; errors call
+`import_technical_metadata --unavailable`, which still prunes expired data. Keep this
+cleanup running if collection is disabled. Do not back up the observations table or
+new metadata SQLite payloads into indefinite archives. Preserve consent tombstones.
+No SSH credentials or production registry are mounted in the web container.
+All groups, including hardware, expire independently after at most7days. UI source
+and the current implementation limits are recorded in the
+[selected task receipt](../docs/releases/2026-11-15-device-technical-metadata.md).
+
 ## Системные сообщения · source candidate11 ноября2026
 
 `/system-messages/`: отдельная общедоступная лента объявлений, не личный чат.
