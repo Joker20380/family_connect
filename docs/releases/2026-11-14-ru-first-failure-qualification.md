@@ -1,5 +1,12 @@
 # RU-FIRST-FAILURE-ATTRIBUTION-QUALIFICATION-1 — NO_GO
 
+**Historical source695ff6c3 / PR34 remains NO_GO.** The separately selected
+identity/readiness continuation has its own [v2 qualification report](2026-11-14-ru-attribution-v2-qualification.md)
+and source receipt; it also fails original burst admission. Do not combine its
+measurements with this historical capture. Current normative contracts are in the
+updated runbook: BEGIN is not readiness, alloc_time_ns is not lifetime identity,
+and bpftrace0.25's8-page buffer is shared ringbuf, not per-CPU perf storage.
+
 14 November 2026. Diagnostic candidate only; **NO_GO for RU use**. This is a
 completed negative admission decision, not a successful full scenario matrix.
 FINAL_ANALYSIS_COMPLETE / CAUSE_OPEN from PR33 remains unchanged. No third RU

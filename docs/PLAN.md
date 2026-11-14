@@ -2,14 +2,30 @@
 
 ## Current engineering priority / Текущий critical path
 
+**RU attribution v2 identity/readiness continuation — completed negative admission / NO_GO.**
+Selected continuation over PR34/41ada7cf now has verified attach/fences, generation
+lifetimes and exact ledger accounting. Original burst still FAIL:64 successful
+fsync,128 producer phases,17 enter/16 exit/16 pairs retained;1398 window events lost
+upstream of parser. Same32KiB ring/10%quota; no admission pacing or limit increase.
+Pipe drain/first-failure checks pass independently. Paced lifecycle diagnostic is
+not INITIAL_GATE_PASS. Full frozen kernel matrix and matched overhead NOT_RUN after
+the failed burst gate, not silently accepted.73 scoped checks/6247 collection PASS;
+hosted CI remains separately reported. No RU access/production/persistence changes.
+[Decision and receipts](releases/2026-11-14-ru-attribution-v2-qualification.md).
+Single proposed next, NOT_STARTED and requiring selection: bounded compact transport
+with acknowledged emission and per-CPU terminal accounting, within unchanged limits.
+Completion gate: original64 enter+64 exit+64 unique ledger pairs, real allocation/
+reuse/partial controls, immutable first failure,≤8s drain, then ALL frozen kernel
+scenarios and matched overhead. No third RU capture or automatic new architecture.
+
 **RU-FIRST-FAILURE-ATTRIBUTION-QUALIFICATION-1 — completed negative admission / NO_GO (PR34).**
 Exact-kernel/BTF KVM candidate fails the first clean gate: zero allocation generation
 for162 request events and12/64 fsync coverage. First failure/pipe drain preserved,
 complete=false; advanced real scenarios and complete overhead qualification NOT_RUN.
 60 scoped checks PASS; no production deployment or third collection. See the
 [qualification report](releases/2026-11-14-ru-first-failure-qualification.md).
-Single proposed next, NOT_STARTED: separately select bounded producer identity and
-verified attach/terminal coverage redesign on the existing disposable fixture.
+Its proposed bounded producer identity and verified attach/terminal coverage redesign
+was separately selected and completed as v2 above on the same disposable fixture.
 Gate before full matrix:64/64 fsync, lifetime identity under reuse/partial completion,
 no unexplained loss, first-failure/8s drain and unchanged resource ceilings. No
 automatic second architecture, RU capture, timeout change or server replacement.
