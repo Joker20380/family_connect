@@ -2,6 +2,25 @@
 
 ## Current engineering priority / Текущий critical path
 
+**SUBSCRIPTION-PAID-125-COMPAT — owner-selected14 November, IN PROGRESS.**
+Dependencies: finish PR23 public125 documentation/merge, then a separate branch
+from current main; retain qualified immutable125/sourceb293f9ac and support/recovery
+runtime. Explicitly resolve source123 versus installed108/119 before deployment.
+Gate: exact canonical125 version/code/APK hash; isolated first payment/renewal/grace,
+negative/replay/limit/revoke/access regressions; baseline-preserving executable
+overlay and backup/restore rehearsal; merged source; actual loaded policy across
+consumers, fresh panel/support health and unchanged protected business records.
+No real payment, APK rebuild, user broadcast or transport redesign. Rollback code
+and configuration only, never an old ledger over new events. After closure, queue
+automatic addressed notifications of confirmed subscription events, not implementation
+in this task. RU stop cause remains a separate task.
+
+**TABLET109→125 — PASS — подтверждено пользователем14 November.**
+Real tablet download/install through the in-app update button succeeded; former1–2%
+interruption did not recur. No repeat required; no instrumental installed-SHA/full
+data-equality or beta113 root-cause claim. Public/invitation/updater125/catalog8 and
+owner installation are accepted. [Receipt](releases/2026-11-13-android125-publication.md).
+
 **ANDROID125-PUBLIC-20261113 — owner-selected, COMPLETE.**
 Qualified immutable125 is public13 November14:26:54UTC: exact hosted/source/artifact
 and original signer, locally signed optional catalog8, preserved113 downloads and
@@ -105,9 +124,9 @@ scoped runtime CI43055427259 passes without rebuilding unchanged Android125.
 Isolated exchange, offline/dedup/closed-browser replies and existing124 evidence are
 preserved;125 API27/35 actual admission renewal and audience checks also pass.
 Installed panel50de6f25/database0013; RU HTTP support-only16d96eb7, not full main.
-Signed125 from qualifiedb293f9ac is private and now installed over123 on the owner
-phone; installed bytes/signer/package identity/launch PASS12 November. No public
-distribution. The owner binding and addressed round trip are now verified; remaining
+Signed125 from qualifiedb293f9ac is public since13 November and installed over123 on
+the owner phone; installed bytes/signer/package identity/launch PASS12 November.
+Tablet109→125 update is user-confirmed14 November. The owner binding and addressed round trip are verified; remaining
 physical scope is retained-history/settings confirmation; tunnel OFF is confirmed.
 The panel still explicitly blocks unenrolled legacy recipients; no guessed binding.
 Public Android announcement delivery remains a separate NOT_RUN production gate:

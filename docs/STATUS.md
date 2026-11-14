@@ -1,5 +1,14 @@
 # Текущее состояние / Current state
 
+**14 November — tablet109→125 in-app update PASS — подтверждено пользователем.**
+Owner confirms successful download and installation on the real tablet via the
+application update button; the previous1–2% interruption did not recur. No repeat
+tablet test is required. This is user acceptance, not instrumental installed-SHA,
+complete-data preservation verification or proof of the old beta113 download cause.
+Public/owner-installed Android remains0.1.18-beta125/code125, signed catalog8.
+Next selected task: SUBSCRIPTION-PAID-125-COMPAT; production paid eligibility is
+not implied by APK publication. [Receipt](releases/2026-11-13-android125-publication.md).
+
 **13 November14:26:54UTC — Android125 PUBLIC; invitation/updater125, catalog8.**
 Exact qualified signed125 and matching audio source are published; original113
 downloads are retained. Independent verified-HTTPS full APK/source readback, signed

@@ -1,5 +1,20 @@
 # Android125 — public promotion, 13 November 2026
 
+## 14 November — tablet in-app upgrade acceptance
+
+**109→125: PASS — подтверждено пользователем.** The owner reports that the real
+tablet downloaded and installed beta125 using the update button inside the app.
+The previous interruption at1–2% did not recur. This closes that user update check;
+do not repeat the tablet test. It does not establish an instrumentally measured
+installed APK SHA, full retained-data equality, or the cause of the older beta113
+download failure. Dated earlier failures remain historical evidence.
+
+No APK rebuild/signing or publication is performed for this receipt. Public125,
+versionCode125/catalog8, the qualified source/CI and owner-phone support acceptance
+remain as recorded below. The56 publication/metadata tests are a separate result;
+no CI execution on this documentation-only head is claimed. Paid-policy125 admission
+is a separate SUBSCRIPTION-PAID-125-COMPAT change after PR23 merge.
+
 ## Published — verified live
 
 At **13 November2026 14:26:54.985103UTC**, the qualified immutable Android125 became
