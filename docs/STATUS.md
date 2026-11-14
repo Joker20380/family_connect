@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**14 November — RU-PERSISTENCE-PRESSURE-1 selected; diagnosis in progress.**
+Read-only entry confirms actual node125c796a/gateway9023d2c3 (not main), active
+watcher/AWG/TCP with unchanged PIDs3952264/3952267/3952276, restart counters0,
+fresh applied state and no current first-failure file. Paid125 and all closed
+Android/support/notification results retained; no preventive restart or access change.
+Historical8.651672s/9.259661s failures prove persistence deadline overruns, not the
+competing writer/memory-pressure source/provider cause. Exact installed source has
+TICK_SECONDS=2 and two durable readback writes per cycle. Attribution is still OPEN.
+[Current scope and bounded evidence](releases/2026-11-14-ru-persistence-pressure.md).
+Separate CI-RUNNER-COMPLETION-1: phase0/tests132438099847 is now FAILED by external
+timeout, all three pytest contexts rc0/coverage PASS, cargo skipped; Linux control
+has the analogous outer timeout. Actual failover/auth/offline/revocation PASS.
+Whole CI is not PASS; runner completion cause is not diagnosed in this RU task.
+
 **14 November13:05UTC — SUBSCRIPTION-NOTIFICATIONS-1 DEPLOYED_VERIFIED.**
 After the owner's prepared sudo action, the pinned ac3479bf worker/collector,
 systemd timer/drop-in and five-file console image61e4df54 are installed and enabled
@@ -15,7 +29,8 @@ Consistent canonical, panel and stopped encrypted-history backups/isolated check
 Late terminal ACK and reversible accepted106 reference fixes qualified. Collection6164,
 422 core/48 panel/25 reference-package checks and actual failover/auth/offline/revocation
 PASS. Overall CI **not PASS**: Linux control43591863123 timed out its25-minute enclosing
-step despite all pytest contexts returning0; independent phase043591863104 still pending.
+step despite all pytest contexts returning0; phase043591863104 tests subsequently
+also ended by external timeout (separate CI-RUNNER-COMPLETION-1).
 Client builds now PASS; no APK was published. No new real event or automatic stored
 receipt: **NOT_OBSERVED**, separate from deployed-route acceptance. No deployment
 blocker remains. Payment provider, client-card auto-refresh and RU cause are separate.

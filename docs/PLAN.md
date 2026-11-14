@@ -2,7 +2,29 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Selected14 November — SUBSCRIPTION-NOTIFICATIONS-1, DEPLOYED_VERIFIED13:05UTC.**
+**Selected14 November — RU-PERSISTENCE-PRESSURE-1, IN PROGRESS.**
+Scope: authorized RU185.251.89.19 only; diagnose the observed persistence deadline
+overruns using actual node125c796a, saved first failures and bounded process/cgroup/
+host counters aligned to operation phases. No preventive restart, storage stress,
+timeout/lease increase or fsync removal. Closed beta125/paid125/support/notifications
+(including baseline/cursor/jobs/guard) stay closed and preserved.
+Gate: establish a causal mechanism before a minimal fix, qualify exact artifact over
+installed baseline and retain durability/access/crash/expiry/revoke guarantees plus
+8/12/120s. Otherwise deploy and verify a finite, resource/file-bounded observation
+for the specifically missing attribution, preserving first failure. Current health,
+root cause, deployed correction and observation window must remain distinct.
+No full-main/PR16/17 redeployment; recovery only after evidence of actual failure,
+using the existing RU-only controlled procedure. Replacement is a separate decision.
+[Task evidence](releases/2026-11-14-ru-persistence-pressure.md).
+
+**CI-RUNNER-COMPLETION-1 — separate queued follow-up, NOT STARTED.**
+Phase0/tests132438099847 completed with external timeout; all three pytest contexts
+return0/coverage PASS, subsequent cargo skipped. Linux control132438784552 has the
+analogous outer timeout; failover/auth/offline/revocation132438099607 PASS. Why the
+outer commands fail to finish is unproven. Preserve mandatory gates for any RU code
+change; do not repair general CI or declare whole-CI PASS within RU diagnosis.
+
+**SUBSCRIPTION-NOTIFICATIONS-1 — DEPLOYED_VERIFIED13:05UTC14 November.**
 PR26 ordinary mergefe6a317c retains separate late-ACK0950bba0 and referenceac3479bf
 commits. The owner executed the prepared installer; actual worker/collector/timer,
 RU helpers and console delta are installed and enabled. Atomic production baseline
@@ -15,7 +37,7 @@ not a reason to manufacture a payment or repeat accepted tablet/support testing.
 Collection6164; core422, panel48, reference/package25 and actual failover/auth/offline/
 revocation PASS. General CI is not green: Linux control43591863123 enclosing step
 timed out25 minutes despite all three pytest contexts returning0; standalone phase0
-43591863104 still pending. No failing test IDs were reported by the control artifact;
+43591863104 subsequently also timed out externally. No failing test IDs were reported;
 no assertion regression is established, and no timeout increase/test exclusion was
 made. Client builds PASS, no Android release. Preserve this separate CI follow-up,
 not an indefinite repair of the historical suite within this task.

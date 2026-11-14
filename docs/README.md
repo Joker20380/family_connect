@@ -1,5 +1,7 @@
 # Documentation
 
+[RU · 14 ноября: attribution задержек persistence и ограниченный сбор](releases/2026-11-14-ru-persistence-pressure.md).
+
 [Android125 · 13 ноября: публичный APK, обе страницы приглашения и подписанный каталог8](releases/2026-11-13-android125-publication.md).
 
 [Amsterdam1 · 13 ноября: проверка служб, продления допуска и доступности без изменений сервера](releases/2026-11-13-amsterdam1-health.md).
