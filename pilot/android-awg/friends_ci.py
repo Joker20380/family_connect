@@ -44,7 +44,7 @@ def main():
         subprocess.run(["adb", "-s", serial, "shell", "pm", "grant", "com.familyconnect.app.friends", "android.permission.POST_NOTIFICATIONS"], check=True)
     classes = ["AppLanguageRuntimeTest", "AppUpdateRuntimeTest", "DashboardLayoutRuntimeTest",
                "DialRuntimeTest", "RouteMapRuntimeTest", "ChatNotificationRuntimeTest",
-               "ChatScrollRuntimeTest", "VoiceBubbleRuntimeTest", "VoiceHoldRuntimeTest", "VoiceRuntimeTest", "InvitationRuntimeTest", "AndroidCompatibilityRuntimeTest"]
+               "ChatScrollRuntimeTest", "VoiceBubbleRuntimeTest", "VoiceHoldRuntimeTest", "VoiceRuntimeTest", "InvitationRuntimeTest", "AndroidCompatibilityRuntimeTest", "TechnicalMetadataRuntimeTest"]
     try:
         subprocess.run(gradle + [":app:connectedFriendsAndroidTest",
             "-Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true",

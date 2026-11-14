@@ -6,6 +6,22 @@ Check [STATUS](STATUS.md) for the actual deployed versions.
 
 ## On the device
 
+The unpublished Android126 technical-information candidate uses new, separate,
+explicit opt-in, off by default; old seven-day diagnostics consent is not reused.
+It proposes model/OS/app, network type, available SIM and registered-network names,
+radio category, actual VPN/session/gateway, limited error/readiness and approximate
+IP-derived country/region/city/ASN. No phone number, GPS coordinates, IMEI, serial,
+advertising ID, SSID/BSSID, cell ID, contacts, installed-app lists, sites, traffic,
+messages, keys or tokens are added to this telemetry. Existing split tunnelling is
+unchanged. It is support information, never identity/payment/access authority.
+Consent lasts until disabled. Hardware and dynamic observations expire independently
+within seven days; no location history. Off stops new collection/upload; the server
+deletes the payload on receipt of the revoke. Offline revocation is shown as pending.
+Minimal consent/sequence tombstones last for the device lifetime to prevent delayed
+resurrection; they contain no device/network/geographic payload. The current metadata
+database and panel projection must not enter indefinite backups or append-only logs.
+Public125 is unchanged; candidate implementation/qualification is still in progress.
+
 Android protects saved VPN profiles with Android Keystore-backed storage. The messenger
 has a separate identity and encrypted local storage; its Android key handling is in
 [ChatKeyVault.java](../clients/android/app/src/main/java/com/familyconnect/app/ChatKeyVault.java).

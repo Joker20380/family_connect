@@ -3,6 +3,8 @@ import hashlib
 import importlib.util
 import json
 import re
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -26,9 +28,9 @@ def test_android_changes_do_not_start_desktop_suites():
     assert not any(platforms(['docs/STATUS.md']).values())
 
 
-def test_android125_candidate_keeps_test_seam_disabled_and_requires_native_provenance():
+def test_android126_candidate_keeps_test_seam_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 125' in gradle and "versionName '0.1.18-beta125'" in gradle
+    assert 'versionCode 126' in gradle and "versionName '0.1.18-beta126'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
@@ -195,7 +197,22 @@ def test_ui_runner_offline_wait_is_bounded(monkeypatch):
         helper.ready_emulator()
 
 
-def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
+def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main(tmp_path):
+    patch = ROOT / 'tests/fixtures/device_technical_metadata/beta125-to126.patch'
+    assert hashlib.sha256(patch.read_bytes()).hexdigest() == '22f2bf971e6311e8d95bd5c9df76a4455af4189ed0722c8dfb6120c7778a47e4'
+    metadata_overlay = {
+        'ConnectionTerminal.java': '008f6aa25ff16fec0e49746dfe74a884e6db3b0ef47f2a804d739196478eb17a',
+        'FriendsAccessAndroid.java': '5596561ae2355fbd7136851b2a21cca226d155ca6ca0d48f69b23a8eefd44418',
+    }
+    restored = {}
+    for filename, digest in metadata_overlay.items():
+        name = 'clients/android/app/src/main/java/com/familyconnect/app/' + filename
+        assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == digest
+        destination = tmp_path / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / name, destination)
+        restored[name] = destination
+    subprocess.run(['git', 'apply', '--reverse', str(patch)], cwd=tmp_path, check=True, capture_output=True)
     reference = json.loads((ROOT / 'clients/shared/android106-reference.json').read_text())
     reviewed_ui109 = {
         'ConnectionTerminal.java': '6aedb6c35dd9119d9005e5e6f328ef7b7c23eb1d9e0e6f2e007a34ce0913d582',
@@ -324,7 +341,7 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
     for name, expected in reference['android_ui_and_handlers'].items():
         if name not in changes:
             reviewed = reviewed_resources.get(name, reviewed_handlers.get(Path(name).name, expected))
-            assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == reviewed, name
+            assert hashlib.sha256(restored.get(name, ROOT / name).read_bytes()).hexdigest() == reviewed, name
 
 
 def test_accepted_jni_startup_observation_helper_is_in_public_source():

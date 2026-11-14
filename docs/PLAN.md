@@ -7,6 +7,8 @@ First source checkpoint implements versioned API and revocation/retention securi
 82 focused checks PASS/14 integration SKIP. Android/GeoIP/projection/release remain.
 Projection/collector/object UI source now passes306 local panel checks; runtime
 delivery, Android and GeoIP still pending. Draft PR38 is not completion of this task.
+Android successor source candidate126 is reserved, not signed or distributed;
+exact APK descriptor/payment policy and125→126 upgrade remain release gates.
 Implement separately consented, identity/content-bound technical observations,
 bounded latest-only retention/revocation, honest underlay and IP provenance, local
 GeoIP, collector/importer and production device UI, then qualify a new immutable

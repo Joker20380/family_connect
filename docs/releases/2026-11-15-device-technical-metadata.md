@@ -2,6 +2,11 @@
 
 ## State
 
+Android source candidate:0.1.18-beta126/code126, package remains
+com.familyconnect.app.friends. NOT_BUILT / NOT_SIGNED / NOT_INSTALLED /
+NOT_PUBLISHED; no APK/source hash exists yet. Public125/catalog8, invitation routes
+and accepted paid108/119/123/125 remain unchanged. Never publish a rebuilt125.
+
 IN_PROGRESS / NOT_DEPLOYED / NOT_USER_READY. This is the selected product work,
 not recorder architecture or production failure-writer work. RU CAUSE_OPEN and
 PR36 NO_GO_PREFLIGHT remain. PR37 sourcea5067ae2 and merge53a780d9 are the entry
@@ -80,6 +85,38 @@ warnings. Initial test start raced PostgreSQL initialization and one synthetic k
 fixture was34 not32 bytes; fixed fixture and waited for pg_isready before these passes.
 Local Python3.14.4 results do not substitute hosted Python3.13 CI. PR38 is DRAFT:
 https://github.com/Joker20380/family_connect/pull/38. No merge/release acceptance.
+
+### Third source checkpoint: Android126 candidate (not runtime qualified)
+
+Separate support-information switch defaults off and does not inherit support-upload
+preferences. New consent persists until disabled; revoke is a separately persisted
+pending operation and cancels the old request. Only a latest pending refresh is kept;
+each retry samples current public APIs, not an unbounded queue of old reports. One
+asynchronous request, completion-based60s minimum and exponential capped30min backoff;
+app/session/default-network events and a six-hour active-process refresh. Requests
+use the existing ordinary HTTPS route, NOT a new protected/bound bypass or speed probe.
+The old seven-day diagnostics switch, body and expiration remain separate.
+
+Build/Package gives manufacturer/model/Android/API/app/versionCode. Public telephony
+APIs use the default data subscription, not a fabricated combination of two SIMs;
+no READ_PHONE_STATE permission is requested. Unavailable radio has a concrete reason.
+Default non-VPN network is explicitly labelled default, never tunnel underlay.
+For an active session, public API31+ own-VPN underlying networks is used only when
+exactly one underlying network is exposed; otherwise underlay_not_exposed. Pre31
+active-underlay coverage remains a limitation to address/qualify, not inferred from
+ChatNetworkAndroid. Auto gets active transport only in CONNECTED; attempt/preference
+remain separate, gateway is recorded at the actual successful connection transition.
+Bounded last terminal-error time is collected only with the new consent and cleared
+on off. MESH readiness remains a reported diagnostic, not a grant of VPN access.
+
+18 Java17 JVM checks PASS (new snapshot/backoff/consent cases plus existing terminal
+tests).84 Python metadata/Android-release/notification/orchestrator/subscription-source
+checks PASS. Existing accepted pins are preserved: two additive integration changes
+are pinned as an explicit125→126 overlay and reverse-applied in tests before checking
+the unchanged125/reference hashes. AutomaticConnection/native transport files retain
+their existing bytes. API27/API35 instrumentation is added to the normal Friends CI
+list but has NOT_RUN locally. No emulator, physical phone, new APK, signing, paid
+descriptor, production metadata route, projection migration or public change yet.
 
 Implementation/security/lifecycle tests, Android API27/API35 and NVIDIA/KVM runtime
 qualification; installed125→new identity/settings/support preservation; local MMDB

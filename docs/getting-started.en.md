@@ -118,3 +118,14 @@ Each row uses that node's measurements: green squares below85%, orange from85%, 
 and a dash without fresh data, never an inferred country CPU value. CPU-only and estimated
 capacity values remain labelled; the two NL channel capacities are assumed5000Mbps,
 not a measured connection speed.
+# Technical information preparation · not published
+
+Android126 is an unpublished candidate for separately opted-in support information:
+model/OS/app, connection/operator/radio, actual VPN/gateway, limited errors and
+approximate IP geography/ASN from a suitable observation. This is not GPS or proof
+of a person's location. Consent lasts until disabled; latest information, including
+hardware, expires within7days. No movement history. Turning off stops collection
+immediately; offline revocation awaits delivery for server deletion. Existing
+seven-day diagnostics consent does not carry over. All services remain optional
+with respect to this setting. **Public125 does not yet have it;126 is not signed,
+installed or published.** Existing download links stay unchanged; never replace125.

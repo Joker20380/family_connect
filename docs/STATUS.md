@@ -9,6 +9,8 @@ Android/GeoIP/panel/release delivery remain unfinished; no user-ready claim.
 Panel source projection/collector and production-object templates now implemented;
 306 local panel checks PASS. Not deployed; city/ASN and Android remain unfinished.
 Draft PR38 tracks preparation only; do not merge it as completed product delivery.
+Android source now reserves0.1.18-beta126/code126 for the new separate consent path;
+NOT_BUILT / NOT_SIGNED / NOT_INSTALLED / NOT_PUBLISHED. Public125 remains unchanged.
 Remote main verified53a780d9ccfcdb2c3ec6141a197917190f9be7a5 (PR37 merged).
 Dirty/diverged primary checkout preserved; isolated feature worktree starts at that
 main. Public125/catalog8 and paid108/119/123/125 remain unchanged; no new APK or
