@@ -2,6 +2,21 @@
 
 ## Current engineering priority / Текущий critical path
 
+**RU compact transport continuation — NO_GO_PREFLIGHT / sourceea19c1d7, PR36.**
+The selected single direct-output format is measured and rejected BEFORE full
+implementation:82896B histogram demand /32768B ring; controlled quota pause loses
+1219 of1871 attempts, directly accounted by helper return + independent terminal
+maps. Final source also rejects two unpaced transport microbursts; no favorable-phase
+or paced replacement of admission. This microtest is not Gate A's original64 fsync
+pairs. Gates A/B/C and full overhead remain NOT_RUN after the authorized preflight
+rejection.90 scoped tests/6264 collection PASS, hosted results separately tracked.
+[Decision](releases/2026-11-14-ru-compact-transport-qualification.md).
+Single proposed next, NOT_STARTED: separately decide architecture only after a
+verifiable worst-quota-pause byte bound within32768B (all headers/events included,
+no hidden queues). Any future admission still requires original64+64+64, real
+lifecycle controls, first-failure/drain and the ENTIRE frozen matrix. No automatic
+architecture search, RU capture, host replacement, persistence or limit change.
+
 **RU attribution v2 identity/readiness continuation — NO_GO, source417edbe2 / PR35.**
 Selected continuation over PR34/41ada7cf now has verified attach/fences, generation
 lifetimes and exact ledger accounting. Original burst still FAIL:64 successful
@@ -12,8 +27,8 @@ not INITIAL_GATE_PASS. Full frozen kernel matrix and matched overhead NOT_RUN af
 the failed burst gate, not silently accepted.73 scoped checks/6247 collection PASS;
 hosted CI remains separately reported. No RU access/production/persistence changes.
 [Decision and receipts](releases/2026-11-14-ru-attribution-v2-qualification.md).
-Single proposed next, NOT_STARTED and requiring selection: bounded compact transport
-with acknowledged emission and per-CPU terminal accounting, within unchanged limits.
+Its then-proposed compact transport was subsequently selected and negatively
+qualified at the feasibility gate above, within unchanged limits.
 Completion gate: original64 enter+64 exit+64 unique ledger pairs, real allocation/
 reuse/partial controls, immutable first failure,≤8s drain, then ALL frozen kernel
 scenarios and matched overhead. No third RU capture or automatic new architecture.

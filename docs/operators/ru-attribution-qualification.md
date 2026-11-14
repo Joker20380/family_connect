@@ -1,6 +1,100 @@
 # RU first-failure candidate: isolated qualification only
 
-**Outcome: NO_GO**, both original695ff6c3 and the separately qualified v2 candidate.
+**Current: NO_GO_PREFLIGHT for compact transport**, following the historical
+NO_GO results for695ff6c3 and417edbe2. See the
+[compact report](../releases/2026-11-14-ru-compact-transport-qualification.md).
+Its direct-output microbenchmark is NOT a full watcher or original-fsync gate.
+No production use, full probe port or alternative architecture follows this rejection.
+
+## Current sequential admission contract
+
+1. Preflight: compiled layouts including ring header/alignment, one32KiB ring,
+   finite transport peak with normal consumer and verified quota pause, independent
+   terminal maps. A measured capacity rejection ends NO_GO before large rewriting.
+2. Gate A: unchanged16-cycle unpaced workload,64 successful fsync ledger operations,
+   64 enters,64 exits,64 unique pairs; per-kind/CPU conservation and boundaries.
+   A healthy workload need not happen to generate a valid partial completion.
+3. Gate B: REAL controlled allocation/reuse, partial completion, requeue, merge,
+   batch release. Partial is mandatory here for final GO, never dropped as optional.
+4. Gate C: ALL frozen scenarios below and matched probes-off/on overhead. Continue
+   automatically within the selected qualification after preceding gates pass.
+
+No passed microbenchmark, replay or paced run substitutes for Gate A. Missing
+required experiments remain NOT_RUN/BLOCKED. Process completion, window coverage,
+request validity and attribution are distinct. The new preflight failed; A/B/C
+did not run. Old probe readiness/generation/flush/failure code remains unchanged.
+
+### Compact preflight reproduction (disposable VM ONLY)
+
+Use the existing builder and exact-kernel fixture described below, unique work/log
+directories, no concurrent VM, no network/host mount. Do not run BPF loading on the
+owner's host or RU. All following compilation is offline build preparation; runtime
+loader/consumer/audit/save execute in the guest diagnostic cgroup. The guest driver
+alone is a synthetic observed workload, in writer1. Extract (do not install) pinned
+clang21.1.8-6ubuntu1, libclang-common-21-dev and libbpf-dev1.6.3-1ubuntu1; existing
+runtime libbpf1.6.3 and GCC15.2.0 are sufficient. Explicit local variables:
+`TOOLS`=extracted toolchain root, `BUILD`=private output, `ROOT`=disposable initramfs
+root created by `scripts/ru_attribution_vm.py`, `REPO`=this source checkout.
+
+```sh
+"$TOOLS/usr/lib/llvm-21/bin/clang" -O2 -g -target bpf \
+  -I"$TOOLS/usr/include" -I/usr/include/x86_64-linux-gnu \
+  -c "$REPO/scripts/ru_compact_transport.bpf.c" -o "$BUILD/transport.bpf.o"
+gcc -O2 -Wall -Wextra -Werror -I"$TOOLS/usr/include" \
+  "$REPO/scripts/ru_compact_transport.c" -Wl,-l:libbpf.so.1 -o "$BUILD/transport"
+cp "$BUILD/transport" "$BUILD/transport.bpf.o" "$ROOT/"
+cp "$REPO/scripts/ru_compact_preflight.py" "$REPO/scripts/ru_compact_protocol.py" "$ROOT/"
+```
+
+`transport-plan.json` is exactly `runs[0].producer_by_cpu_kind` from the committed
+v2 qualification JSON, not private event contents. `compiled-layout.json` is the
+`receipt.compiled_layout` object from the compact qualification JSON; its full
+private LLVM digest is verified. To reproduce that independent layout measurement,
+inside the exact-kernel build guest generate `ru_attribution_program.program()` as
+`/run/layout.bt`, then run (NO attachment):
+
+```sh
+bpftrace -q --mode codegen --emit-llvm /run/layout /run/layout.bt 123 100 252 12 13 0 456
+python3 ru_compact_layout.py /run/layout.original.ll > /run/compiled-layout.json
+```
+
+This compilation is build work, not a200ms runtime processing operation. Keep its
+raw LLVM private; do not stream megabytes to the live diagnostic serial channel.
+Copy the two small JSON inputs to `ROOT/`. Replace only the init script's
+`python3 -u /ru_attribution_lab_v2.py` entry with
+`python3 -u /ru_compact_preflight.py`; preserve mount/VM isolation and poweroff.
+Repack with the existing builder's `find|cpio --format=newc|gzip -1` recipe and
+use its capped QEMU command with a new log/unit. Verify final image/source hashes.
+No probe runtime is moved out of diagnostic: the harness re-execs into that cgroup
+before measurements. One shared ring, no batching or secondary event queue.
+
+Finite cases: three unpaced synthetic histogram trains; one independently observed
+quota-throttling pause; sequence-limit injection; invalid-kind/map-bound injection;
+active-stop. Counters/retained arrays are fixed; unknown fields and overflow reject.
+The histogram driver is deliberately NOT an fsync or lifecycle experiment. It does
+not preserve old event ordering/timing and cannot qualify64 unique real operations.
+
+Read `FC_CASE`, `FC_PREFLIGHT`, `FC_PREFLIGHT_SAVE`, and `FC_LAB_EXIT`; VM poweroff0
+is not qualification. Decode only the bounded base64 JSON. Compare per CPU/kind
+ledger→hits→attempts→submitted→received, require attempts=submitted+failed, no
+failed/discarded/overflow, exact sequences and both consumed fences. Independently
+verify detached/stable terminal maps and drain≤8s. Serialization/audit guard failures
+override other stop reasons; no retention of receipts can erase the latch. C exit4
+is an implementation/runtime error; C exit0 only termination; harness1 rejects and
+harness2 would require the original Gates A/B/C. There is no full-GO exit here.
+
+Prototype header is16B little-endian `{u64 monotonic,u32 sequence,u8 version,kind,
+cpu,length}`. Payloads are8-byte aligned,16/24/32/40/48B total. The prototype carries
+synthetic tokens; the report documents the proposed task-binding/generation fields
+WITHOUT claiming their full producer implementation. Terminal counts live in a
+32-entry per-CPU map, read after producer join/config disable/link detach, drained
+then read again unchanged. Output success is not consumer success. Missing terminal
+read, partial frame, duplicate/gap, CPU hotplug or sequence exhaustion rejects.
+
+At NO_GO retain logs/build/source privately, sanitized numeric receipts in Git, and
+stop. Do not launch another encoding, raise limits or perform a third RU capture.
+
+**Historical outcome: NO_GO**, both original695ff6c3 and the separately qualified v2 candidate.
 See the [measured qualification report](../releases/2026-11-14-ru-first-failure-qualification.md).
 The original allocation/attach assumptions are rejected, not normative instructions.
 V2 uses verified attach/CPU fences and bounded request generations, but still loses
@@ -10,10 +104,14 @@ NOT_RUN after the failed original burst gate; do not start a production capture.
 
 This is not an installation or capture runbook. No production probes are authorized.
 V2 baseline is PR34/41ada7cf; PR33 FINAL_ANALYSIS_COMPLETE / CAUSE_OPEN remains unchanged.
-The candidate uses existing bpftrace0.25 and numeric ring-buffer output, not a new loader.
+The historical v2 candidate uses existing bpftrace0.25 and numeric ring-buffer output.
 Despite its historical name, `perf_rb_pages=8` configures ONE shared BPF ring buffer
 of8×4096=32768 bytes here, not8 pages per CPU. Keep8; doubling it is not an allowed
 repair. `printf` exposes attempts, not successful transfer, to the bpftrace program.
+It already transports binary arguments, not formatted text. Measured compiled
+payloads vary56–88B plus8B ring header, not a fixed guessed record size. The new
+compact feasibility experiment uses ONE direct libbpf output ring of32768B with
+explicit successful/failed output counters. It is not an installed recorder.
 Taskstats is not used: RU `kernel.task_delayacct=0` for the live watcher. Enabling it
 or restarting the watcher is outside scope. Read-only capability receipt14November
 identifies7.0.0-30-generic, ext4/vda1, cgroupv2 and the required tracepoint formats.
