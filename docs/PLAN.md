@@ -2,6 +2,16 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected14 November — SUBSCRIPTION-NOTIFICATIONS-1, IN PROGRESS.**
+Retain accepted paid125, support and recovery. First qualify collection independently;
+then implement read-only committed-event ingestion, durable exact-recipient jobs,
+deadline deduplication/revalidation, truthful panel state and isolated mailbox/stored
+ACK acceptance. Deploy only after applicable gates/review/merge; retain first-enable
+baseline and queue on rollback. No synthetic production payment/message. Real-user
+receipt is a separate observation, not implied by isolated acceptance or deployment.
+Payment-provider integration, automatic client-card refresh and RU cause stay separate.
+[Task evidence](releases/2026-11-14-subscription-notifications.md).
+
 **SUBSCRIPTION-PAID-125-COMPAT — COMPLETE / DEPLOYED_VERIFIED14 November.**
 PR23 merged137f85dc; separate PR24 mergedf626fb4a. Canonical108/119/123/125 is loaded
 in all three actual serving executables.123 is explicitly newly admitted relative
@@ -22,18 +32,19 @@ and configuration only, never an old ledger over new events. After closure, queu
 automatic addressed notifications of confirmed subscription events, not implementation
 in this task. RU stop cause remains a separate task.
 
-**NEXT PRODUCT — SUBSCRIPTION-NOTIFICATIONS-1 (queued, NOT STARTED).**
+**SUBSCRIPTION-NOTIFICATIONS-1 — selected above (former queued scope).**
 Automatic addressed notifications of confirmed subscription events, using the
 accepted private support channel and authoritative event/binding model. Dependencies:
 paid125 delivery above and retained support acceptance. Gate for the future task:
 confirmed events only, exact recipient, replay/dedup, offline delivery and truthful
 delivery/storage status; no speculative payment confirmation or unsolicited test send.
-This queue entry does not authorize implementation in the current task.
+The owner's14 November request now authorizes this task and server automation.
 
-**Separate engineering follow-up — CI-COLLECTION-NAMESPACE, OPEN.**
+**CI-COLLECTION-NAMESPACE — collection/local regression PASS14 November.**
 Generic phase0/Linux full-suite inventory exits2; unchanged root/desktop
 `test_chat_service.py` names collide in local reproduction. Full CI is not green;
-repair separately without dropping tests. Scoped paid125 gates are recorded distinctly.
+Fixed separately without dropping tests:6149 collected,24 scoped tests PASS.
+Full hosted CI remains separately unaccepted. Scoped paid125 gates remain distinct.
 RU recurring-stop cause/replacement remains separate, not resolved by policy delivery.
 
 **TABLET109→125 — PASS — подтверждено пользователем14 November.**

@@ -1,5 +1,14 @@
 # Текущее состояние / Current state
 
+**14 November — CI-COLLECTION-NAMESPACE fixed; SUBSCRIPTION-NOTIFICATIONS-1 selected.**
+Reproduced the root/desktop `test_chat_service` import mismatch. Server tests now
+use `test_chat_service_sender.py`; the full-suite inventory keeps stdout/stderr.
+Collection PASS:6149 tests, unchanged testpaths. Focused regressions24 PASS.
+Local GI must be appended after locked dependencies, not prepended over them.
+Full hosted CI is not yet a PASS. Notification implementation/deployment remains
+pending; public beta125/catalog8 and accepted paid/support runtime are unchanged.
+[Current task receipt](releases/2026-11-14-subscription-notifications.md).
+
 **14 November00:55UTC — SUBSCRIPTION-PAID-125-COMPAT DEPLOYED_VERIFIED.**
 PR23 merged137f85dc; separate PR24 mergedf626fb4a after scoped paid/panel/readiness CI.
 Actual HTTP/operator/reconciler load `android-paid-108-119-123-125-v1`, including exact

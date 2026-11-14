@@ -12,6 +12,21 @@ from scripts import ci_android_fixture as android
 from scripts import ci_pytest_context as contexts
 
 
+def test_inventory_failure_keeps_collection_diagnostics(tmp_path):
+    import inspect
+    from scripts import ci_full_pytest
+    source = inspect.getsource(ci_full_pytest)
+    launcher = tmp_path / 'launcher.py'
+    launcher.write_text(source.replace("ROOT = Path(__file__).resolve().parents[1]",
+        'ROOT = Path(' + repr(str(android.ROOT)) + ')').replace(
+        "command('inventory', inventory) + ['--collect-only']",
+        "[sys.executable, '-c', \"print('COLLECTION_FAILURE_DETAIL'); raise SystemExit(2)\"]"))
+    result = subprocess.run([sys.executable, str(launcher), '--python314', sys.executable],
+        capture_output=True, text=True, timeout=20)
+    assert result.returncode != 0
+    assert 'COLLECTION_FAILURE_DETAIL' in result.stdout
+
+
 @pytest.mark.parametrize('nodeid,expected', [
     ('tests/test_profile_store.py::test_owner[one]', 'root'),
     ('tests/test_profile_snapshot.py::test_snapshot', 'root'),

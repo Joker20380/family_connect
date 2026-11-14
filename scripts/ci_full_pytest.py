@@ -49,7 +49,7 @@ def main():
                 '-o', 'faulthandler_timeout=180', '-q', '--tb=short', *selection]
         inventory = folder / 'inventory.json'
         subprocess.run(command('inventory', inventory) + ['--collect-only'], cwd=ROOT,
-                       env=environment, stdout=subprocess.DEVNULL, check=True, timeout=180)
+                       env=environment, check=True, timeout=180)
         expected = json.loads(inventory.read_text())
         if set(expected) != set(CONTEXTS) or not all(expected.values()):
             raise ValueError('Incomplete fixture context inventory')
