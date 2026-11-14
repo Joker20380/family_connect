@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**14 November12:37UTC — PR26 merged; RU reader installed; local activation awaits owner.**
+Mergefe6a317c2ee115b2bc3c3f5e9d65fb119d43fa07 verified on remote main; executable/
+reference sourceac3479bf unchanged. On RU box-932982 only support-bindings-read.py
+and subscription_events.py are installed, root0644. Both read routes, resumed cursor
+and rejected arbitrary command PASS; canonical backup/isolated restore PASS.
+All19 protected groups, all paid125 archive bytes/configuration/units and transport/
+HTTP PIDs unchanged. Current64 devices/118 invites/1 subscription/4 events; new events
+not observed. Existing local support PID1285950/NRestarts0, binding timer and actual
+console IPC/history (2 threads/5 messages) remain healthy; console image50de6f25.
+New worker/timer/panel image are **prepared, not installed/enabled**. No production
+baseline or retrospective send; new mechanism cycles/restart and real ACK remain
+NOT_OBSERVED. Root execution on joker-XPS still requires interactive authentication.
+The exact prepared helper/hash/command and result receipt are in the
+[operator runbook](operators/subscription-notifications.md#prepared-administrative-action--14-november).
+Applicable route/reference/package and actual failover gates PASS; independent
+hosted phase0/Linux control/Android still IN_PROGRESS, **not general CI PASS**.
+
 **14 November12:34UTC — notification source gates complete; general hosted CI separate.**
 Onac3479bf the notification/reference/package/panel/paid/messenger gates and completed
 Docker full-suite command plus actual failover/auth/offline/revocation pass. These
