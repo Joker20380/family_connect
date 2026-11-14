@@ -82,7 +82,7 @@ producer/reader completion contract is needed before future deployment, retainin
 first-failure ownership/durability and protective-stop bounds. Nothing in this task
 changes that producer or an installed runtime; no production readiness claim.
 
-## Verification / integration checkpoint
+## Verification / integration
 
 100 scoped recorder/contract/compact/observer/analysis/production-diagnostic tests
 PASS in the existing locked environment; collection6269 PASS. This includes all
@@ -90,7 +90,39 @@ five new boundary/corruption cases. Existing kernel scenarios are NOT rerun: thi
 is a filesystem fixture correction, not transport Gates A–C or a new RU collection.
 Source/doc whitespace and privacy guard checked before commit.
 
-Hosted **completed** phase0/tests (including cargo) and full Linux control (including
-GTK/render/recovery, packaging and extracted artifacts) are required before merge
-for this selected task. Initial source checkpoint does not claim those results;
-their exact source, IDs, conclusions and review will be recorded after completion.
+Executable source: **a5067ae24599023e6d3f2d14e6e8b95d30b5b810**. Hosted PR37 checkout
+is the test merge **f3b38e51d1e770aef75fa7db02bb6f83357c2a20**; both Git trees are
+**244092c7240acbf58c600e98793b4e45a7a0d17a**, verified by fetching refs/pull/37/merge.
+These are completed results, not internal PASS markers while a command still runs:
+
+| Check | Run / job | Completed result |
+| --- | --- | --- |
+|phase0/tests|43648982308 /132612972198|SUCCESS; full pytest, then cargo test --locked actually executed successfully|
+|Linux control|43648982300 /132612972299|SUCCESS entire workflow; full pytest, system GTK, render/interaction, paired/six-file build, extracted artifacts outside checkout, extracted GTK recovery/digest and uploads|
+|Readiness wire contract|43648982296 /132612971919|SUCCESS|
+|phase0/failover|43648982308 /132612972043|SUCCESS, observed23:04UTC; actual failover/auth/offline/revocation steps all executed successfully after Docker build|
+
+Both downloaded full-suite artifacts prove the same complete collection:6269,
+standard5913/root258/snapshot31498, all returncodes0, no failure/error IDs, coverage
+PASS. Standard execution:5637 passed/276 existing skips/356 context deselections;
+root258 passed, snapshot31498 passed. No new skip or omitted test. Launcher, wrapper
+and outer pipeline ended; command/tee/console all0, completed=true. Standard duration
+636.24s in phase0 and498.92s in control; these are execution measurements, not timeout
+changes. Artifact ZIP SHA256 verified locally against the API digests:
+
+- phase0-full-pytest14136055505: `c58c7e2f66ef546b89073f56a6a8d682ef73eae3d5dd6066e200f6547117fd67`
+- control-full-pytest14135328522: `8534728f8c5ae6771f7f42da6726c0c77afc8c3514ac12b634a37ca0b771a284`
+
+Private logs/receipts remain under the evidence directory above. Subsequent report
+changes are documentation-only and do not substitute another executable source for
+these checks. The source failover job was allowed to finish before the documentation
+push (not cancelled/restarted). All three selected-source workflows finished
+successfully. CI jobs for other heads are not inferred successful from this source.
+
+[PR37](https://github.com/Joker20380/family_connect/pull/37) uses ordinary merge, not
+force or bypass. Review5907527890 is **own scoped review**, not independent approval.
+Rulesets list is empty; this task's explicitly required hosted gates nevertheless
+finished before integration. Remote branch source SHA was verified after push;
+final documentation-head and merged-main receipts are recorded in the PR integration
+comment to avoid a self-referential commit hash. The unrelated dirty original checkout
+is preserved. No deployment, new RU observation or architecture gate is authorized.
