@@ -1,12 +1,19 @@
 # RU first-failure candidate: isolated qualification only
 
-**Outcome: NO_GO**, see the [measured qualification report](../releases/2026-11-14-ru-first-failure-qualification.md).
-Request allocation generation is zero on the matching guest; complete phase
-coverage also fails. Remaining real mechanisms were NOT_RUN after the clean gate.
+**Outcome: NO_GO**, both original695ff6c3 and the separately qualified v2 candidate.
+See the [measured qualification report](../releases/2026-11-14-ru-first-failure-qualification.md).
+The original allocation/attach assumptions are rejected, not normative instructions.
+V2 uses verified attach/CPU fences and bounded request generations, but still loses
+the original healthy burst between producer attempts and consumer input under the
+unchanged limits. A paced control is NOT admission. Advanced real mechanisms remain
+NOT_RUN after the failed original burst gate; do not start a production capture.
 
 This is not an installation or capture runbook. No production probes are authorized.
-Baseline is PR33/e1defaab; FINAL_ANALYSIS_COMPLETE / CAUSE_OPEN remains unchanged.
-The candidate uses existing bpftrace0.25 and numeric perf output, not a new loader.
+V2 baseline is PR34/41ada7cf; PR33 FINAL_ANALYSIS_COMPLETE / CAUSE_OPEN remains unchanged.
+The candidate uses existing bpftrace0.25 and numeric ring-buffer output, not a new loader.
+Despite its historical name, `perf_rb_pages=8` configures ONE shared BPF ring buffer
+of8×4096=32768 bytes here, not8 pages per CPU. Keep8; doubling it is not an allowed
+repair. `printf` exposes attempts, not successful transfer, to the bpftrace program.
 Taskstats is not used: RU `kernel.task_delayacct=0` for the live watcher. Enabling it
 or restarting the watcher is outside scope. Read-only capability receipt14November
 identifies7.0.0-30-generic, ext4/vda1, cgroupv2 and the required tracepoint formats.
@@ -48,9 +55,35 @@ request,16 free,17/18 cgroup creation/removal,19 task exit,20/21 stream begin/en
 23 explicit loss. PID/TID plus start_boottime is scoped by saved boot ID. Watcher
 selection checks leader start ticks (this target has CLK_TCK100). No names, paths,
 argv, environment or file contents are emitted. Request addresses are private
-ephemeral correlation tokens, never public evidence; alloc_time_ns separates
-lifetimes, and free/completion retire the state. Zero/missing allocation identity
-needs an explicit limitation, not an assumption of globally unique pointers.
+ephemeral correlation tokens, never public evidence. `alloc_time_ns` is conditional
+and is NOT a lifetime ID. V2 uses bounded per-CPU generation counters at the exact
+kernel's `blk_mq_rq_ctx_init.isra.0`, plus `blk_rq_init` generations for reused internal
+flush requests. It checks `__blk_mq_free_request` and the32-tag batch release through
+`blk_mq_put_tags`; a hook's presence is not proof its path was exercised. Reset may
+retire a previous internal flush generation only after its observed completion.
+Unknown initial requests, reuse without a terminal, map overflow and open terminal
+requests stay explicit. No universal free-path qualification is claimed.
+
+Kinds24/25 are per-CPU start/end fences;26 allocation/reset generation;27 lifecycle
+conflict;28 `blk_insert_flush` (length/flags). Completion carries pre-update rq_flags;
+exact7.0.0-30 headers define RQF_FLUSH_SEQ as bit1. A completed data transfer with that
+bit remains `flush_wait`; the later zero-byte logical completion after bit clearing
+is not another device service interval or a duplicate. Ordinary partial completion
+is an observation, not stream loss. Real partial/batch/requeue/merge controls remain
+unqualified until exercised independently; deterministic replay is separate.
+
+BEGIN runs before ordinary attachment in0.25 and must NEVER release workload.
+Require the pinned tracer's `__BPFTRACE_NOTIFY_PROBES_ATTACHED` marker with
+`missing_probes="error"`, then a separate pinned controller's start fence on every
+participating CPU, consumed by the recorder. This proves consumer readiness without
+restarting the already-running target. End fences use the same controller before
+SIGINT. CPU hotplug/changed affinity is unsupported, not silently covered.
+The independent ledger records each successful syscall's TID,fd and monotonic
+begin/end; require64 enter AND64 exit AND64 unique matching pairs, not just totals.
+Per-CPU/kind terminal C counts reconcile hits/attempts with parsed/retained records;
+sequences and fences expose missing prefix/tail and duplicates. No internal gap
+alone can prove completeness. Successful transfer count is UNKNOWN when attempted
+and received disagree; the exact missing site within ring/formatter is not guessed.
 
 Regular block tracepoint formatted fields lack request identity. Raw tracepoints
 expose the actual request; exact matching kernel headers define complete(rq,error,
@@ -78,13 +111,27 @@ written or replaced; later failures cannot replace it. Production launcher absen
 Run deterministic/pipe checks with the project's locked environment:
 
 ```sh
-python -m pytest -q tests/test_ru_attribution_recorder.py
+python -m pytest -q tests/test_ru_attribution_recorder.py tests/test_ru_attribution_contract.py
 ```
 
-The executable harness intentionally stops at the first admission gate; it is not
-an implementation of every subsequent injection. Controls prove basic probe loading;
-the failed clean gate prevents a misleading full-matrix PASS. Existing pressure
-observer remains stopped and unchanged. Kernel compatibility is not attribution GO.
+The executable harness reports negative admission, not a full matrix implementation.
+On a genuine initial PASS, the selected task requires continuing the frozen matrix,
+not accepting GO. No such original-burst PASS occurred. Existing pressure observer
+remains stopped and unchanged. Kernel compatibility is not attribution GO.
+
+Recorder CLI exit0 means pipes drained and measured resource checks passed, NOT
+kernel completeness. V2 separates `window_complete`, `phase_complete`, lifecycle
+validity, and causal UNKNOWN. The legacy `complete` field is not the v2 gate.
+Lab exit1/NO_GO_INITIAL_GATE rejects burst admission; exit2 requires the full matrix;
+exit0 in paced/readiness modes means that auxiliary experiment ended, not GO.
+The exact30-byte `WARNING: Addrspace is not set` is retained/hash-counted and only
+explicitly allowed in this pinned fixture (legacy probe_read fallback). Other stderr,
+including loss warnings, rejects admission. Do not suppress all tracer warnings.
+CPU/wall guards cover batches, reducer, v2 audit and serialization. Violations latch
+outside the60-receipt ring. Failure-file hash remains unchanged;1ns fixture budget
+tests publication only, not the production8s failure. EOF/END/exit0/drain≤8s remain
+separate from producer reconciliation and retained endpoints. SIGKILL/OOM promises
+no final JSON. Unit accounting excludes some kernel/host overhead.
 
 Use explicit extracted packages, never install them on RU or the host. Required
 guest kernel/image/modules package7.0.0-30.30, QEMU10.2.1, bpftrace0.25 and local
@@ -118,3 +165,12 @@ this disposable VM unit if its240s outer limit is reached; never pkill host work
 Rebuilding reproduces the environment, not an identical cpio digest (file times and
 local runtime packages matter). The exact tested image and its hash are retained
 privately in final-vm; recorder/trace/harness hashes also match the committed receipt.
+
+For the separately retained v2 image/source receipts use the
+[v2 report](../releases/2026-11-14-ru-attribution-v2-qualification.md), not final-vm
+from the original695ff6c3 candidate. Default builder selects v2; `--legacy` selects
+the old harness. The ordinary command above is the original burst. Appending
+`FC_LAB_MODE=readiness` runs only the minimal old/new barrier reproduction. Appending
+`FC_LAB_PACE=0.2` deliberately lowers rate for a lifecycle diagnostic and NEVER passes
+the original burst gate. Kernel passes these assignment arguments to init's environment.
+All runs require separate unit/log names and sequential exclusive use of test.raw.

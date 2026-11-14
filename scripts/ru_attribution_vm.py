@@ -9,7 +9,7 @@ import shutil
 import subprocess
 
 
-def build(kernel, output):
+def build(kernel, output, legacy=False):
     output.mkdir(mode=0o700, parents=True, exist_ok=False)
     root = output / 'root'
     root.mkdir()
@@ -73,8 +73,12 @@ echo FC_LAB_EXIT=$?
 poweroff -f
 ''')
     (root / 'init').chmod(0o755)
-    for name in ('ru_attribution_recorder.py', 'ru_attribution_trace.bt', 'ru_attribution_lab.py'):
+    for name in ('ru_attribution_recorder.py', 'ru_attribution_trace.bt', 'ru_attribution_lab.py',
+                 'ru_attribution_program.py', 'ru_attribution_contract.py', 'ru_attribution_lab_v2.py'):
         shutil.copyfile(Path(__file__).with_name(name), root / name)
+    if not legacy:
+        init = root / 'init'
+        init.write_text(init.read_text().replace('/ru_attribution_lab.py', '/ru_attribution_lab_v2.py'))
     archive = output / 'initramfs.cpio.gz'
     with archive.open('wb') as stream:
         subprocess.run(['bash', '-o', 'pipefail', '-c',
@@ -92,5 +96,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--kernel', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--legacy', action='store_true')
     args = parser.parse_args()
-    print(json.dumps(build(args.kernel, args.output)))
+    print(json.dumps(build(args.kernel, args.output, args.legacy)))

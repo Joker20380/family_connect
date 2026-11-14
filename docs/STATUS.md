@@ -1,5 +1,25 @@
 # Текущее состояние / Current state
 
+**14 November — RU attribution v2 continuation / NO_GO, source417edbe2, PR35.**
+PR34 baseline41ada7cf retained; original695ff6c3 remains NO_GO. Verified attach/CPU
+fences, bounded allocation/reset generations and independent syscall ledger now
+separate pipe drain, stream completeness and request lifecycle. Original16-cycle
+burst:64 successful fsync, producer64 enter+64 exit, consumer17 enter/16 exit/16
+unique pairs. All1871 producer attempts versus473 parsed window records:1398 lost
+before parser/retention; EOF/END/exit0 does not make this complete. Shared32KiB
+bpftrace ring overflow under unchanged10% quota rejects admission. Paced controls
+are not the original burst gate. Advanced kernel matrix/valid overhead NOT_RUN after
+rejection; no initial burst PASS was declared.73 scoped tests/collection6247 PASS.
+Paced exact-source control:64 enter/64 exit/64 pairs,1914/1914 window records,
+288 generations/32 ordinary address reuses; real partial control still NOT_RUN.
+Hosted source phase043643172522/control43643172588 were IN_PROGRESS at21:31UTC,
+not whole-CI PASS. Documentation head does not change the qualified executable files.
+No production access, deployment, third RU collection or persistence change. RU
+CAUSE_OPEN; closed stages below retained. Single proposed next, NOT_STARTED:
+separately select bounded compact transport with actual emission accounting under
+the SAME limits, then original burst/lifecycle gate and full frozen matrix.
+[V2 evidence and limitations](releases/2026-11-14-ru-attribution-v2-qualification.md).
+
 **14 November — RU-FIRST-FAILURE-ATTRIBUTION-QUALIFICATION-1 / NO_GO, PR34.**
 Candidate/reducer and disposable KVM fixture implemented; exact RU kernel7.0.0-30
 and BTF match verified. Real clean16-cycle gate FAIL:162 request records have zero
@@ -8,9 +28,8 @@ drain/EOF/END succeeds but complete=false; no full-stream or attribution accepta
 Remaining CPU/reclaim/queue/service/two-writer/mixed kernel scenarios NOT_RUN after
 rejection, not PASS. Source695ff6c3:60 scoped tests/collection6234 PASS; limits unchanged.
 Hosted phase0/control were still running at the integration checkpoint, not claimed
-green. Single proposed next is
-a separately selected producer identity/readiness/drain redesign on the same VM,
-not a third RU capture. No production changes; CAUSE_OPEN and all closed stages
+green. Its then-proposed producer identity/readiness/drain redesign was separately
+selected and completed as v2 above, not a third RU capture. No production changes; CAUSE_OPEN and all closed stages
 retained. [Qualification decision](releases/2026-11-14-ru-first-failure-qualification.md).
 
 **14 November — RU-PERSISTENCE-PRESSURE-1 / FINAL_ANALYSIS_COMPLETE, CAUSE_OPEN (PR33).**

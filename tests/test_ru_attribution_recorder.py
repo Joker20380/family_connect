@@ -40,7 +40,8 @@ def test_request_partial_requeue_merge_free_and_pointer_reuse():
                     row(13, 11, birth=102), row(14, 16, birth=102)])
     assert value['union_ns']['device_queue'] == 3
     assert value['union_ns']['device_service'] == 5
-    assert value['issues']['partial_completion'] == 1
+    assert value['observations']['partial_completion'] == 1
+    assert 'partial_completion' not in value['issues']
     assert value['issues']['merged_unknown_destination'] == 1
     assert value['issues']['free_without_final_completion'] == 1
     assert value['open_intervals'] == 0
@@ -71,7 +72,7 @@ def test_order_duplicates_loss_and_bounded_open_state():
     assert value['issues']['sequence_gap_or_reorder'] == 1
 
 
-@pytest.mark.parametrize('line', [b'private text', b'E 1 0 1 24 1 1 0 0 0 0 0',
+@pytest.mark.parametrize('line', [b'private text', b'E 1 0 1 99 1 1 0 0 0 0 0',
                                  b'E -1 0 1 1 1 1 0 0 0 0 0'])
 def test_non_protocol_rejected(line):
     with pytest.raises(ValueError):
@@ -90,6 +91,55 @@ def test_first_receipt_filters_and_preserves_original(tmp_path):
 
 def command(source):
     return [sys.executable, '-u', '-c', source]
+
+
+def test_guard_latched_after_receipt_eviction_and_first_failure(tmp_path, monkeypatch):
+    monkeypatch.setattr(recorder, 'BATCH_BYTES', 64)
+    calls = []
+
+    def cpu_clock():
+        calls.append(None)
+        return 0 if len(calls) == 1 else .3
+
+    monkeypatch.setattr(recorder.time, 'process_time', cpu_clock)
+    failure = tmp_path / 'failure'
+    source = '''
+import signal
+signal.signal(signal.SIGINT, signal.SIG_IGN)
+print('E 1 0 1 20 0 0 0 0 0 0 0', flush=True)
+for index in range(2, 1000):
+    print(f'E {index} 0 {index} 10 1 1 1 1 0 0 0', flush=True)
+print('E 1000 0 1000 21 0 0 0 0 0 0 0', flush=True)
+'''
+    value = recorder.record(command(source), failure, 5,
+                            ready=lambda: failure.write_text('{"budget":8,"elapsed":9}'))
+    assert value['batch_count'] > 60
+    assert all(batch['cpu'] == 0 for batch in value['batches'])
+    assert value['stop_reason'] == 'first_failure'
+    assert value['guard_violations'][0]['stage'] == 'batch'
+    assert not value['budget_ok']
+    assert value['drain_complete']
+
+
+def test_accounting_map_is_bounded_and_overflow_visible(tmp_path):
+    source = '''
+for cpu in range(300):
+    print(f'E 1 {cpu} 1 10 1 1 1 1 0 0 0')
+print('E 2 0 2 21 0 0 0 0 0 0 0')
+'''
+    value = recorder.record(command(source), tmp_path / 'failure', 5)
+    assert len(value['parsed_counts']) == 256
+    assert value['accounting_overflow'] > 0
+    assert value['invalid'] > 0
+    assert not value['complete']
+
+
+def test_terminal_counter_duplicate_is_not_overwritten(tmp_path):
+    source = "print('C 0 6 64 64\\nC 0 6 63 63\\nE 1 0 0 21 0 0 0 0 0 0 0')"
+    value = recorder.record(command(source), tmp_path / 'failure', 5)
+    assert value['producer_counts'] == [dict(cpu=0, kind=6, hits=64, attempted=64)]
+    assert value['invalid'] == 1
+    assert not value['complete']
 
 
 def test_real_pipe_drains_sigint_tail_and_preserves_first_failure(tmp_path):
