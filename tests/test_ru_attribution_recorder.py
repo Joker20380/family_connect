@@ -1,6 +1,8 @@
 import importlib.util
 import json
 from pathlib import Path
+import select
+import subprocess
 import sys
 
 import pytest
@@ -156,15 +158,133 @@ def stop(*unused):
     raise SystemExit(0)
 signal.signal(signal.SIGINT, stop)
 print('E 1 0 1 20 0 0 0 0 0 0 0', flush=True)
-path.write_text(json.dumps(dict(elapsed=9,budget=8)))
+pending = path.with_name('failure.pending')
+pending.write_text(json.dumps(dict(elapsed=9,budget=8)))
+pending.replace(path)
 while True: time.sleep(.01)
 ''' % str(failure)
     value = recorder.record(command(source), failure, 5)
     assert value['stop_reason'] == 'first_failure'
     assert value['events_seen'] == 102
     assert value['drain_complete'] and value['complete'] and value['budget_ok']
+    assert value['eof'] and value['end_marker'] and value['child_returncode'] == 0
+    assert not value['forced'] and value['stop_elapsed'] < recorder.STOP_SECONDS
+    assert value['first_failure'] == recorder.failure_receipt(failure)
     assert json.loads(failure.read_text()) == dict(elapsed=9, budget=8)
     assert json.loads(failure.with_name('second-failure').read_text())['elapsed'] == 10
+
+
+@pytest.mark.parametrize('atomic', [False, True], ids=['visible-final', 'pending-replace'])
+@pytest.mark.parametrize('prefix', ['', '{"elapsed":'], ids=['empty', 'partial'])
+def test_failure_publication_boundary_is_interprocess_and_atomic(tmp_path, monkeypatch, atomic, prefix):
+    failure = tmp_path / 'failure'
+    pending = tmp_path / 'failure.pending'
+    payload = '{"elapsed":9,"budget":8}'
+    publisher_source = '''
+import select, sys
+from pathlib import Path
+def receive():
+    assert select.select([sys.stdin], [], [], 2)[0], 'publisher_handshake_timeout'
+    assert sys.stdin.readline() == 'continue\\n'
+receive()
+target = Path(%r)
+with target.open('w') as stream:
+    stream.write(%r)
+    stream.flush()
+    print('prepared', flush=True)
+    receive()
+    stream.write(%r)
+if %r:
+    target.replace(Path(%r))
+print('published', flush=True)
+''' % (str(pending if atomic else failure), prefix, payload[len(prefix):], atomic, str(failure))
+    publisher = subprocess.Popen(command(publisher_source), stdin=subprocess.PIPE,
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    transitions = []
+    reads = []
+    original = recorder.failure_receipt
+
+    def exchange(expected):
+        publisher.stdin.write('continue\n')
+        publisher.stdin.flush()
+        assert select.select([publisher.stdout], [], [], 2)[0], 'parent_handshake_timeout'
+        assert publisher.stdout.readline().strip() == expected
+        transitions.append(expected)
+
+    def ready():
+        exchange('prepared')
+        assert (pending if atomic else failure).read_text() == prefix
+
+    def stop_requested():
+        if atomic and transitions == ['prepared']:
+            assert not failure.exists() and pending.exists()
+            assert not reads
+            transitions.append('pending_not_published')
+            exchange('published')
+        return False
+
+    def read(path):
+        reads.append(path.read_bytes())
+        try:
+            return original(path)
+        finally:
+            if not atomic:
+                exchange('published')
+
+    monkeypatch.setattr(recorder, 'failure_receipt', read)
+    tracer = '''
+import signal
+def stop(*unused):
+    print('E 2 0 2 21 0 0 0 0 0 0 0', flush=True)
+    raise SystemExit(0)
+signal.signal(signal.SIGINT, stop)
+print('E 1 0 1 20 0 0 0 0 0 0 0', flush=True)
+signal.pause()
+'''
+    try:
+        value = recorder.record(command(tracer), failure, 5, stop_requested, ready)
+        output, error = publisher.communicate(timeout=2)
+        assert publisher.returncode == 0 and not output and not error
+    finally:
+        if publisher.poll() is None:
+            publisher.kill()
+        publisher.communicate(timeout=2)
+    assert failure.read_text() == payload
+    assert reads == [(payload if atomic else prefix).encode()]
+    assert value['stop_reason'] == ('first_failure' if atomic else 'invalid_failure')
+    assert value['complete'] is atomic
+    assert value['first_failure'] == (original(failure) if atomic else None)
+    assert value['events_seen'] == 2 and value['end_marker'] and value['eof']
+    assert value['child_returncode'] == 0 and value['drain_complete'] and not value['forced']
+    assert value['stop_elapsed'] < recorder.STOP_SECONDS
+    assert transitions == (['prepared', 'pending_not_published', 'published'] if atomic else ['prepared', 'published'])
+
+
+def test_corrupt_published_failure_remains_negative_without_retry(tmp_path, monkeypatch):
+    failure = tmp_path / 'failure'
+    original = recorder.failure_receipt
+    reads = []
+
+    def read(path):
+        reads.append(path)
+        return original(path)
+
+    monkeypatch.setattr(recorder, 'failure_receipt', read)
+    source = '''
+import signal
+def stop(*unused):
+    print('E 2 0 2 21 0 0 0 0 0 0 0', flush=True)
+    raise SystemExit(0)
+signal.signal(signal.SIGINT, stop)
+print('E 1 0 1 20 0 0 0 0 0 0 0', flush=True)
+signal.pause()
+'''
+    value = recorder.record(command(source), failure, 5, ready=lambda: failure.write_text('{'))
+    assert reads == [failure] and failure.read_text() == '{'
+    assert value['stop_reason'] == 'invalid_failure' and value['first_failure'] is None
+    assert not value['complete'] and value['drain_complete']
+    assert value['eof'] and value['child_returncode'] == 0
+    assert not value['forced'] and value['stop_elapsed'] < recorder.STOP_SECONDS
 
 
 @pytest.mark.parametrize('exit_code,tail,complete', [(0, '\n', True), (2, '\n', False), (0, '', False)])

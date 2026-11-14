@@ -2,6 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected correction qualified: attribution failure-publication / PR37.**
+Deterministic empty/partial interprocess reproduction and atomic positive-fixture
+repair implemented; strict invalid_failure, immutable first receipt and SIGINT tail
+checks preserved. Sourcea5067ae2:100 scoped tests/6269 collection PASS. Hosted gate
+COMPLETED: phase0/tests132612972198 including cargo AND Linux control132612972299
+through GTK/render/build/extracted recovery. Context inventories and pipeline receipts
+verified, source/PR test-merge trees identical. Own review explicitly labelled;
+ordinary merge and remote-SHA receipt tracked in PR37, not a production rollout.
+No production change; O_EXCL-only product failure publication remains a documented
+future compatibility limitation, not permission to change it now. No recorder
+architecture or Gates A–C work; PR36 NO_GO_PREFLIGHT / RU CAUSE_OPEN unchanged.
+[Report](releases/2026-11-14-attribution-failure-publication.md).
+
 **RU compact transport continuation — NO_GO_PREFLIGHT / sourceea19c1d7, PR36.**
 The selected single direct-output format is measured and rejected BEFORE full
 implementation:82896B histogram demand /32768B ring; controlled quota pause loses

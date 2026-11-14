@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**14 November — attribution failure-publication fixture repair / QUALIFIED, PR37.**
+Sourcea5067ae24599023e6d3f2d14e6e8b95d30b5b810 corrects positive pipe/v2 readiness
+producers; reader stays strict. Linux control source132604440606 and main132605128651
+reported invalid_failure; documentation PASS132605100860 does not erase the race.
+Interprocess handshakes prove empty/partial final-path rejection and pending+replace
+acceptance (historical read bytes were not captured).100 scoped tests/6269 collection
+PASS. Hosted tests132612972198 completed full pytest AND cargo; Linux control132612972299
+completed full pytest, GTK/render/package/extracted recovery. Both artifacts prove
+standard/root/snapshot314=0/0/0, coverage6269 and completed pipeline0/0/0. Own review,
+not independent approval; ordinary integration tracked in PR37. Other CI is recorded
+separately: source failover132612972043 (actual failover/auth/offline/revocation) and
+readiness132612971919 also completed successfully. Documentation/merge-head runs
+are not inferred successful from source results.
+Production O_EXCL writer has a separate incomplete-publication contract limitation;
+not changed or qualified here. PR36 NO_GO_PREFLIGHT / RU CAUSE_OPEN preserved.
+[Evidence and checks](releases/2026-11-14-attribution-failure-publication.md).
+
 **14 November — RU compact transport / NO_GO_PREFLIGHT, sourceea19c1d7 / PR36.**
 Selected continuation after PR35/0d689d32 is complete at the authorized feasibility
 gate, BEFORE a full probe rewrite. Actual compiled old records occupy64–96B;

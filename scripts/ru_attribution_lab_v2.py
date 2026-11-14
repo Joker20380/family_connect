@@ -60,7 +60,9 @@ def readiness_repro(diagnostic):
             wait_file(marker)
             value = workload()
             Path(f'/run/{mode}-ledger').write_text(json.dumps(value))
-            failure.write_text('{"budget":1e-9,"elapsed":1}')
+            pending = failure.with_suffix('.pending')
+            pending.write_text('{"budget":1e-9,"elapsed":1}')
+            pending.replace(failure)
             os._exit(0)
         source = '''BEGIN { printf("E %llu %u 0 20 0 0 0 0 0 0 0\\n", nsecs(monotonic), cpu); }
 tracepoint:syscalls:sys_enter_fsync /pid == $1/ {
