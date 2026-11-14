@@ -217,3 +217,15 @@ collection6247 PASS. No tests excluded. Whitespace, linked local documents and s
 digests checked; staged public-source guard required before commit. Hosted CI is
 reported separately, not inferred from local tests or the VM's exit0 poweroff.
 All isolated VM units have terminated; no scheduled recorder or production hook exists.
+
+Executable source **417edbe2251e1762db2122735a144e5d7380910b** committed/pushed;
+remote branch SHA verified. Subsequent integration notes are documentation-only.
+[PR35](https://github.com/Joker20380/family_connect/pull/35) retains the original
+source commit; scoped review5907244092 is self-review, NOT independent approval.
+At21:31UTC source PR runs phase043643172522 and Linux control43643172588 were
+IN_PROGRESS; Android wire43643172642 was also IN_PROGRESS. No full-hosted-CI success
+is claimed from these pending runs. Main protection=false, required contexts empty,
+rulesets empty at21:30UTC; nothing disabled, cancelled or bypassed. The applicable
+diagnostic gate is the reproducible NO_GO plus local source/test/privacy checks,
+not a transport release gate. Ordinary merge and exact remote-main SHA are recorded
+in the PR integration receipt after merge; production remains untouched.

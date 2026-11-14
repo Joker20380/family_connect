@@ -2,7 +2,7 @@
 
 ## Current engineering priority / Текущий critical path
 
-**RU attribution v2 identity/readiness continuation — completed negative admission / NO_GO.**
+**RU attribution v2 identity/readiness continuation — NO_GO, source417edbe2 / PR35.**
 Selected continuation over PR34/41ada7cf now has verified attach/fences, generation
 lifetimes and exact ledger accounting. Original burst still FAIL:64 successful
 fsync,128 producer phases,17 enter/16 exit/16 pairs retained;1398 window events lost

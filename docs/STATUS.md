@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**14 November — RU attribution v2 continuation / NO_GO, isolated only.**
+**14 November — RU attribution v2 continuation / NO_GO, source417edbe2, PR35.**
 PR34 baseline41ada7cf retained; original695ff6c3 remains NO_GO. Verified attach/CPU
 fences, bounded allocation/reset generations and independent syscall ledger now
 separate pipe drain, stream completeness and request lifecycle. Original16-cycle
@@ -10,6 +10,10 @@ before parser/retention; EOF/END/exit0 does not make this complete. Shared32KiB
 bpftrace ring overflow under unchanged10% quota rejects admission. Paced controls
 are not the original burst gate. Advanced kernel matrix/valid overhead NOT_RUN after
 rejection; no initial burst PASS was declared.73 scoped tests/collection6247 PASS.
+Paced exact-source control:64 enter/64 exit/64 pairs,1914/1914 window records,
+288 generations/32 ordinary address reuses; real partial control still NOT_RUN.
+Hosted source phase043643172522/control43643172588 were IN_PROGRESS at21:31UTC,
+not whole-CI PASS. Documentation head does not change the qualified executable files.
 No production access, deployment, third RU collection or persistence change. RU
 CAUSE_OPEN; closed stages below retained. Single proposed next, NOT_STARTED:
 separately select bounded compact transport with actual emission accounting under
