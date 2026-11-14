@@ -1,5 +1,55 @@
 # SUBSCRIPTION-NOTIFICATIONS-1
 
+## 12:37UTC — partial deployment and concrete owner handoff
+
+PR26 ordinary mergefe6a317c2ee115b2bc3c3f5e9d65fb119d43fa07 completed and remote
+main verified. Separate ACK commit0950bba030cb376b01e4d5a17dc355ead53dee67 and
+reference commitac3479bfa4f8b190826182fb9633d78a7fdfb993 are retained. Documentation
+headb4c082b0 contains no non-doc delta overac3479bf. No history rewrite or original
+dirty-worktree overwrite (same4 modified files/123 additions and untracked work).
+
+Using the existing authorized administrative SSH path, installed only these RU
+root0644 helpers in `/opt/apps/family_connect/friends-access`:
+
+- `support-bindings-read.py`: c49202036b1b2750312c71531906529c4bea7cf5742b0c415c097dccc9a9f125
+- `subscription_events.py`: 585f84a46dfc1c289e9e2830a8f18eaad4bee09410746a7a45c4d90975462016
+
+Fresh consistent canonical backup/isolated restore passed before replacement.
+Actual installed isolated-Python reader handles both support-bindings and canonical
+subscription feed, saved anchor/resume and rejects arbitrary command injection.
+Private before/after comparison passes all19 protected groups, exact accepted
+HTTP/operator/reconciler archives, configuration and units, unchanged HTTP/transport
+PIDs; paid125 policy/leases remain current. Current counts64/118/1/4 unchanged.
+No full HTTP kit, DB migration/restore, key/identity/binding edit or transport restart.
+RU backups/helper/source receipt remain privately under
+`/opt/apps/family_connect/private-subscription-notifications-20261114`.
+
+Local actual support still runs pre-notification worker SHA256
+3efb9b5bf3ebeb4885b75755b6f455b191ffa3c19ad5cafeae4fe7698334ee36,
+PID1285950/NRestarts0; RuntimeDirectoryPreserve=yes/inode333786 retained. Existing
+binding collector completes successfully after RU replacement. Real running console
+image50de6f25 is healthy; actual IPC reads2 existing conversations/5 messages.
+No new local modules/unit/drop-in/timer/panel delta have been activated. Their
+encrypted-history backup, atomic first-enable baseline, cycles/restart acceptance
+are pending the prepared privileged phase; do not confuse panel/canonical backup
+rehearsals with that unexecuted phase. Historical events have NOT been labelled
+delivered; no notification baseline exists yet and no automatic message was sent.
+
+Remaining required owner action: on **joker-XPS**, run the exact operator-runbook
+sudo command for the prepared local helper (final SHA2564bf466a3f802462e5a297f2d7eb51c5dcd800cff853996141c2c68e187a040a6).
+Password only in the normal OS prompt; arbitrary-terminal sudo-v is not assumed.
+After its roughly6-minute run, read `/opt/family-connect-support/notification-install-receipt.json`
+and continue independent production acceptance. Safe disable retains the new guard;
+no old database or unguarded worker may replace the current queue. Real new automatic
+user receipt stays a separate NOT_OBSERVED unless a real stored ACK is subsequently
+seen. No synthetic payment/deadline/test message/public announcement is authorized.
+
+Final hosted readback: dedicated gates and actual failover remain PASS; standalone
+phase043591863104 tests, Linux control43591863123 and Android in43591863044 remain
+IN_PROGRESS with no completed failure diagnosis. Overall hosted CI is NOT declared
+successful. These running checks were not cancelled, weakened or replaced with an
+APK release; reconcile their eventual results during the activation follow-up.
+
 ## 12:34UTC — applicable gate disposition
 
 All dedicated server route/reference/package/panel/paid/messenger gates and real

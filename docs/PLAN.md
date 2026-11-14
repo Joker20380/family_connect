@@ -3,6 +3,14 @@
 ## Current engineering priority / Текущий critical path
 
 **Selected14 November — SUBSCRIPTION-NOTIFICATIONS-1, IN PROGRESS.**
+Current next action12:37UTC: PR26 mergedfe6a317c; RU's two read-only helpers are
+installed/verified, all19 protected groups and paid125 archives retained. Execute
+the already prepared checksum-pinned installer on joker-XPS using the exact sudo
+command in the operator runbook. Then read its baseline/cycles/restart receipt and
+independently verify installed components/source/protected data/panel. Local new
+worker/timer/panel are NOT installed; production baseline is absent; real receipt
+NOT_OBSERVED. Also reconcile independent hosted suites still IN_PROGRESS; do not
+call them PASS. Do not start payment-provider, client-card sync or RU investigation.
 Gate disposition12:34UTC: applicable server route/reference/package/panel/paid gates,
 completed Docker full-suite execution and actual failover/auth/offline/revocation
 PASS. Proceed to ordinary source merge; independently running hosted phase0/Linux
