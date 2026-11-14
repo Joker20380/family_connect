@@ -5,6 +5,31 @@ actual installation. Source availability is not deployment. Android remains publ
 beta125/catalog8; ordinary signed text arrives in the official private chat. The
 subscription card uses its authenticated endpoint only on opening/Refresh.
 
+## Installed state — 14 November13:05UTC
+
+Sourceac3479bf is installed, not just built: RU's two read-only helpers and, on
+joker-XPS, four support modules, the new systemd collector/timer/worker drop-in,
+and console image61e4df54 (publisher remains50de6f25). Baseline created once at
+12:48:20UTC: position/highwater4, actual excluded count4, `baseline_excluded`.
+No automatic jobs/messages; one future boundary is tracked. Three steady cycles
+and a controlled restart passed; independent IPC/render/source/hash checks passed.
+Real new automatic storage ACK remains `NOT_OBSERVED`; do not send a test to clear it.
+
+Read the sanitized receipt and service status without repeating installation:
+
+```sh
+cat /opt/family-connect-support/notification-install-receipt.json
+systemctl show family-connect-support.service -p ActiveState -p MainPID -p NRestarts -p RuntimeDirectoryPreserve
+systemctl show family-connect-subscription-notifications.service -p Result -p ExecMainStatus -p ExecMainExitTimestamp
+systemctl is-active family-connect-subscription-notifications.timer
+```
+
+The collector is a successful inactive oneshot between ticks, not a stopped daemon.
+Current backup directory: `/var/backups/family-connect-subscription-notifications/20261114T124724Z-ac3479bf`.
+Keys are separate from encrypted history. Retain all state and the guard on disable;
+never restore this backup over later live events. Exact hashes/CI caveats are in the
+dated receipt. General CI timeout is not a production delivery status.
+
 ## Authority and durability
 
 The forced reader uses SQLite `mode=ro`, `query_only`, one read transaction and
@@ -114,7 +139,9 @@ Do not confuse this host with RU **box-932982 /185.251.89.19**. The existing sep
 administrative SSH connection can install RU helpers; the collector key remains a
 forced read-only command. No changes on Amsterdam or excluded hosts are needed.
 
-After final applicable gates and PR26 merge, the already prepared local helper is:
+After applicable gates and PR26 merge, the owner successfully ran this local helper
+(installation completed12:53:21UTC). Retain it for verified idempotent repair or safe
+disable; a routine status check does not need another install:
 `/mnt/data/fc-subscription-notifications-20261114/install-ac3479bf/install.py`
 
 SHA256: `4bf466a3f802462e5a297f2d7eb51c5dcd800cff853996141c2c68e187a040a6`.
@@ -145,6 +172,11 @@ cursor, future-boundary count and separate real stored-ACK observation. Assistan
 readback still verifies source/archives/protected data and the running panel.
 
 Safe disable uses the same verified helper with `disable` instead of `install`.
+
+```sh
+sudo /usr/bin/python3 /mnt/data/fc-subscription-notifications-20261114/install-ac3479bf/install.py disable
+```
+
 It stops the new collector, removes only its worker drop-in and restarts the guarded
 worker. The panel's observation delta and all current records remain. Never replace
 the worker with its pre-notification version. A failed switch attempts this safe

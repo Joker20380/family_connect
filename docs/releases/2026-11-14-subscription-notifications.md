@@ -1,5 +1,132 @@
 # SUBSCRIPTION-NOTIFICATIONS-1
 
+## Final production acceptance — 14 November13:05UTC
+
+**DEPLOYED_VERIFIED; new real automatic receipt NOT_OBSERVED.** Subsequent committed
+APPLIED payment/renewal, grace, expire and revoke operations, and valid future paid/
+grace boundaries, now produce addressed official-support messages on public beta125.
+This is not a new APK/catalog release or automatic refresh of the subscription card.
+Card opening/Refresh still reads the existing authenticated subscription endpoint.
+
+PR26 merged normally as `fe6a317c2ee115b2bc3c3f5e9d65fb119d43fa07`, retaining ACK
+commit0950bba030cb376b01e4d5a17dc355ead53dee67 and reference/source commit
+ac3479bfa4f8b190826182fb9633d78a7fdfb993. PR27 documentation merged023dcd92; the
+production executable source remainsac3479bf, not the later documentation head.
+Review is author-side, not an independent approval claim. The original dirty checkout
+and its untracked work remain untouched; deployment/readback used the existing worktree.
+
+### Actual activation and component identity
+
+The owner executed the pinned helper on **joker-XPS**. It finished12:53:21UTC with
+`installed_baseline_observed` and `cycles_restart_acceptance=PASS`. Helper SHA256
+4bf466a3f802462e5a297f2d7eb51c5dcd800cff853996141c2c68e187a040a6 and bundle
+16284251df81423d772f0b808ad89cd7863924239eb50d7e7cd230c0422e6313 are unchanged.
+Support modules are under `/opt/family-connect-support/app/provisioning`; service/
+timer and the worker drop-in are under `/etc/systemd/system`:
+
+| Component | Installed SHA256 |
+| --- | --- |
+| subscription_notifications.py | 3792bbbc37ace2188f04148e936bf44acb2fdd992285d134448e7be173ae839e |
+| subscription_collector.py | 6bfe32119ecfcfe40212c1bf3d588495dac9cf82671faf7beb182537add50955 |
+| support_bindings.py | e7c3e0733ae4f9520bf3530e6b8d73f4f7934294f157170f547c88f06de471a7 |
+| support_worker.py | d72aa7ecae3896c90ba636762ddfb9f9d147622fa11a8b1a8fbcc14f23261b19 |
+| family-connect-subscription-notifications.service | be933a37a1ed37e9a2bc21ccfa213b9459a84493e339f3ae029ac109724b7a1b |
+| family-connect-subscription-notifications.timer | c6a6a36b170d3186cdfbf2b47a555c7874493707c7a60c036dfdddbdf48e4192 |
+| subscription-notifications.conf worker drop-in | 0b3f772532b7792f84b783634e146b6e8dd85f0ad1dae3f1d2a0da3511f2fac9 |
+
+The root helper read back all installed hashes; the unprivileged independent check
+also reads the four modules/units/overlay. The root0700 drop-in directory is not
+bypassed: its loaded DropInPaths/ExecStart and process `--subscription-feed` are
+independently verified instead. The main worker unit remains unchanged,
+RuntimeDirectoryPreserve=yes, runtime inode333786, socket group980/mode0660.
+
+Console runs `sha256:61e4df54f1e1b83011b03427ec96e8941f9060173f7f756cbb4f1979fac81ad7`;
+all five delta files match accepted source. The publisher retains50de6f25; original
+commands/environment/mounts/users/settings/volumes are retained. No migration source
+changed. On **box-932982 /185.251.89.19**, only the two root0644 reader helpers listed
+in the earlier checkpoint are installed; final13:05:47UTC hashes match. The restricted
+collector SSH key remains read-only. No full HTTP commissioning archive was installed.
+
+### Baseline, cycles, restart and preservation
+
+- Atomic baseline **12:48:20UTC**: position4, actual excluded event count4, status
+  `baseline_excluded`. This count was read from the consistent source, not hardcoded.
+  Cursor/highwater remain4. No historical event is labelled delivered.
+- Three steady observations12:49:25,12:50:30,12:52:07UTC and one controlled restart
+  observed12:53:12UTC retain the same baseline/cursor and zero jobs/messages. One
+  future subscription boundary is visible throughout, also in final fresh source.
+- Worker PID2639328 becomes2651059 only at the deliberate restart; NRestarts0.
+  Independent13:03:17UTC readback sees that same PID, enabled/active new timer,
+  successful collectors, current source and unchanged baseline. Both existing binding
+  and new notification collectors continue successful ticks beyond installation.
+- Actual console IPC and rendered notification section PASS:2 existing conversations,
+  3 inspected device histories,5 messages,1 existing panel user, no source error.
+  The isolated regression, not production data fabrication, proves the new-event UI.
+- Encrypted sender records15→17 are the baseline and cursor only. Installer verifies
+  unchanged sender identity, all existing immutable message/request fingerprints and
+  any existing job IDs. No automatic message/outbox mapping was created by historical
+  ingestion. No new real payment or receipt occurred; no test message was sent.
+- Fresh consistent canonical snapshot:64 devices/118 invites/1 subscription/4 events.
+  All19 protected groups, bindings and exact paid125 HTTP/operator/reconciler archive
+  bytes/configuration/unit definitions match preactivation evidence. Actual archive
+  policy remains `android-paid-108-119-123-125-v1`; RU reconciliation is fresh/applied.
+  AWG/TCP/watch PIDs remain unchanged. HTTP PID changed3916809→178722 at12:52:41UTC,
+  but is active with the same archive/configuration/unit and NRestarts0. This task's
+  installers do not restart RU HTTP; cause/attribution is not inferred or investigated.
+
+Consistent panel dump/isolated PostgreSQL restore, read-only canonical backup/isolated
+restore, and stopped-worker encrypted-history SQLite integrity/every-record decryption
+PASS before switching. Local root0700 backup:
+`/var/backups/family-connect-subscription-notifications/20261114T124724Z-ac3479bf`.
+Keys are stored separately; no live database was restored. Sanitized installer receipt
+at `/opt/family-connect-support/notification-install-receipt.json` has SHA256
+9a7f7692cc091ecb043ebbc956c949ad22bbed7f051aaf2ea8282e6b0a334d60.
+Private independent readback digest:
+fb21d89abf042909eac3856a8af0b4625b68dc60b342e47d547fd934bcb6cbd7.
+Raw history, identities, snapshots, helper/bundle, images and backups remain outside Git.
+
+### Separate validation outcomes
+
+Collection **6164 PASS**. Final source: **422 core**, **48 panel**, **25 reference/
+package PASS** (overlapping selections, not an aggregate count). Late mailbox→terminal
+job→valid stored ACK regressions preserve superseded/expired processing state, show
+recipient_stored separately in the actual panel route, prohibit further sends and
+leave subscription authority unchanged. A late explicit expire aliases an already
+terminal natural-boundary job without a second message, even if never delivered.
+Reference tests reverse the explicit accepted support delta, then119/platform delta,
+and restore all original106 sources/dependencies; historical hashes/inventory unchanged.
+
+Hosted route43591863039, messenger43591863077, panel43591863067, paid43591863176,
+readiness43591863215, Linux voice43591863049 and candidate43591863079 PASS. Actual
+phase0 failover job132438099607 **PASS**, including failover/auth/offline/revocation
+steps, not merely Docker build. Its Docker-enforced full-suite command also passed.
+Client builds43591863044 now PASS; no new APK was signed, installed or published.
+
+**Overall hosted CI is NOT PASS.** Linux control43591863123/job132438784552 failed:
+`The action 'Protocol, crash recovery, arbiter and packaging regression' has timed out after 25 minutes.`
+Artifact14115080706 (SHA2560964cb46ce98c3bfb5cac44ca5b31dcf68edd70c343621221f688f78a0e74f98)
+nevertheless records all contexts completed/returncode0: standard5532 passed/276 skipped
+(5808 selected), root258 passed, snapshot31498 passed; coverage PASS, no failed/error
+test IDs. The enclosing action failure and skipped subsequent GTK/build steps remain
+failures, not converted to PASS by this artifact. Why the action exceeded its limit
+is not established; no failing notification/reference assertion is identified.
+The artifact's PR test-merge906b46538a6ee1cd51c5a39f4a5cd3afdf0ce793 has exactly the
+same tree0e2adfbfd058a4b4fdbf9027a91aeda51177812c asac3479bf. Independent phase0
+tests132438099847 still IN_PROGRESS at this readback; no completed full-CI claim.
+No gate was removed, timeout increased, test excluded or workflow cancelled.
+
+No deployment blocker remains. Real automatic user storage remains **NOT_OBSERVED**
+because no postbaseline event/boundary has occurred; the mechanism's installation and
+isolated end-to-end acceptance are complete independently. Keep the current guarded
+worker on safe disable; preserve baseline/cursor/jobs/request mappings/dedup/history.
+Never restore old databases or the old unguarded worker. Exact safe-disable command is
+in the [operator runbook](../operators/subscription-notifications.md). Payment provider,
+client-card auto-refresh and RU-cause investigation remain separate, not started here.
+
+## Historical checkpoints
+
+The following timed entries record earlier states, not remaining production gates.
+
 ## 12:37UTC — partial deployment and concrete owner handoff
 
 PR26 ordinary mergefe6a317c2ee115b2bc3c3f5e9d65fb119d43fa07 completed and remote
@@ -250,7 +377,7 @@ The production notification baseline does not yet exist; no retrospective sends
 or new real automatic receipts were produced. The four existing events are not
 used to trigger acceptance messages.
 
-## Remaining gates
+## Historical remaining gates — before continuation
 
 Source checkpoint `a63e4d29c93a97d239e7245a0d9d97431160a8c9` pushed and remote SHA
 verified. PR26 is not yet merged. Hosted route43586664982, panel43586665041,
