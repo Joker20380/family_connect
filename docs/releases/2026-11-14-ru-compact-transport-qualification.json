@@ -1,0 +1,3406 @@
+{
+  "schema": 3,
+  "decision": "NO_GO_PREFLIGHT",
+  "scope": "Synthetic transport feasibility, not Gate A or full probe qualification",
+  "baseline": "0d689d32fa1c9d164c8d123e4800518ecab611f6",
+  "source_sha256": {
+    "scripts/ru_compact_layout.py": "21325223a4bdaedf6ecd316a9b7bcb5e4c54f1009b6451fbaac32cfd772742bb",
+    "scripts/ru_compact_preflight.py": "d8b156644cb07a2b1cfad47f8ea0b19e42ab13f8656829c7aca5dd54ec625289",
+    "scripts/ru_compact_protocol.h": "4b1fd3be34f70b6dd7c2bcb0925a6cf14702bf93a355470da4940ad13cd723ae",
+    "scripts/ru_compact_protocol.py": "945ddb8eef8c62ace8e70bb5040d4befdaf5c136fcb40978bfcb6b574ee113c9",
+    "scripts/ru_compact_transport.bpf.c": "f3922ff7a1617c800541e41c5ed81ab9e33b06e48fcfbc3a67bac2f2fcc2ec94",
+    "scripts/ru_compact_transport.c": "cd12665edd473d38a68fe56215bc8b2b0da737a7ed69f40842ab5052d82a5b94",
+    "tests/test_ru_compact_protocol.py": "e5f7d69cf26011cc96a2b4d934a4ec11e8f1f7a92f9962a975fad7a2c30593ab"
+  },
+  "environment": {
+    "kernel": "7.0.0-30-generic",
+    "kernel_package": "7.0.0-30.30",
+    "kernel_sha256": "04d6998810b8e0a9b8b3676524bfca2e895f44c5da2626c963368d7204c6e0da",
+    "btf_sha256": "d7fca84d2c3f476afbeb2e37ddba3093eaac0af39b07b0cd1b61c11fdc1c89fb",
+    "image_sha256": "79a5304a879cfdc8f6b0eed380e3b2da9fb9fed42b9310f5dec089316b310f40",
+    "bpftrace": "0.25.0-1ubuntu1",
+    "bpftrace_sha256": "1d6b5e1d4716d4f746c38d6e8e9c2b2bd4f97123c23435ad006ea639d974fc48",
+    "page_size": 4096,
+    "clock_ticks": 100,
+    "cpus": 2,
+    "guest_mib": 1536,
+    "test_disk_mib": 128,
+    "ringbuf_bytes": 32768,
+    "diagnostic_cpu_percent": 10,
+    "diagnostic_memory_mib": 256,
+    "swap": 0,
+    "tasks": 24,
+    "compiler": "clang21.1.8-6ubuntu1; gcc15.2.0; libbpf1.6.3"
+  },
+  "log_sha256": "87aca2ed9bf819e4eb30883ea6a66152a5a8386b7c3fb2e2546d01511770ba77",
+  "final_save_cost": {
+    "cpu": 0.0018926839999999778,
+    "wall": 0.0019064509999999757
+  },
+  "receipt": {
+    "schema": 3,
+    "scope": "transport feasibility only, not Gate A/B/C",
+    "compiled_layout": {
+      "sha256": "fa485109825fb675d1af53ae851de92311af2920da7dc2c52aa04cf3aee44917",
+      "sizes": {
+        "24": {
+          "payload": 56,
+          "occupied": 64
+        },
+        "25": {
+          "payload": 56,
+          "occupied": 64
+        },
+        "1": {
+          "payload": 56,
+          "occupied": 64
+        },
+        "3": {
+          "payload": 56,
+          "occupied": 64
+        },
+        "2": {
+          "payload": 56,
+          "occupied": 64
+        },
+        "4": {
+          "payload": 56,
+          "occupied": 64
+        },
+        "5": {
+          "payload": 56,
+          "occupied": 64
+        },
+        "8": {
+          "payload": 56,
+          "occupied": 64
+        },
+        "19": {
+          "payload": 56,
+          "occupied": 64
+        },
+        "6": {
+          "payload": 64,
+          "occupied": 72
+        },
+        "7": {
+          "payload": 72,
+          "occupied": 80
+        },
+        "9": {
+          "payload": 64,
+          "occupied": 72
+        },
+        "10": {
+          "payload": 72,
+          "occupied": 80
+        },
+        "27": {
+          "payload": 64,
+          "occupied": 72
+        },
+        "23": {
+          "payload": 56,
+          "occupied": 64
+        },
+        "26": {
+          "payload": 64,
+          "occupied": 72
+        },
+        "16": {
+          "payload": 64,
+          "occupied": 72
+        },
+        "11": {
+          "payload": 88,
+          "occupied": 96
+        },
+        "12": {
+          "payload": 88,
+          "occupied": 96
+        },
+        "13": {
+          "payload": 88,
+          "occupied": 96
+        },
+        "15": {
+          "payload": 88,
+          "occupied": 96
+        },
+        "28": {
+          "payload": 72,
+          "occupied": 80
+        },
+        "14": {
+          "payload": 88,
+          "occupied": 96
+        },
+        "17": {
+          "payload": 56,
+          "occupied": 64
+        },
+        "18": {
+          "payload": 56,
+          "occupied": 64
+        }
+      }
+    },
+    "sizes": {
+      "24": {
+        "payload": 16,
+        "occupied": 24
+      },
+      "25": {
+        "payload": 16,
+        "occupied": 24
+      },
+      "1": {
+        "payload": 24,
+        "occupied": 32
+      },
+      "2": {
+        "payload": 24,
+        "occupied": 32
+      },
+      "3": {
+        "payload": 24,
+        "occupied": 32
+      },
+      "4": {
+        "payload": 24,
+        "occupied": 32
+      },
+      "5": {
+        "payload": 24,
+        "occupied": 32
+      },
+      "8": {
+        "payload": 24,
+        "occupied": 32
+      },
+      "9": {
+        "payload": 24,
+        "occupied": 32
+      },
+      "17": {
+        "payload": 24,
+        "occupied": 32
+      },
+      "18": {
+        "payload": 24,
+        "occupied": 32
+      },
+      "19": {
+        "payload": 24,
+        "occupied": 32
+      },
+      "23": {
+        "payload": 24,
+        "occupied": 32
+      },
+      "6": {
+        "payload": 32,
+        "occupied": 40
+      },
+      "7": {
+        "payload": 32,
+        "occupied": 40
+      },
+      "16": {
+        "payload": 32,
+        "occupied": 40
+      },
+      "27": {
+        "payload": 32,
+        "occupied": 40
+      },
+      "28": {
+        "payload": 32,
+        "occupied": 40
+      },
+      "29": {
+        "payload": 32,
+        "occupied": 40
+      },
+      "10": {
+        "payload": 40,
+        "occupied": 48
+      },
+      "14": {
+        "payload": 40,
+        "occupied": 48
+      },
+      "26": {
+        "payload": 40,
+        "occupied": 48
+      },
+      "11": {
+        "payload": 48,
+        "occupied": 56
+      },
+      "12": {
+        "payload": 48,
+        "occupied": 56
+      },
+      "13": {
+        "payload": 48,
+        "occupied": 56
+      },
+      "15": {
+        "payload": 48,
+        "occupied": 56
+      }
+    },
+    "v2_burst_records": 1871,
+    "compact_burst_bytes": 82896,
+    "runs": [
+      {
+        "mode": 0,
+        "header_bytes": 16,
+        "max_record_bytes": 48,
+        "alignment": 8,
+        "received": 1790,
+        "decoded": 1790,
+        "retained": 1790,
+        "evicted": 0,
+        "invalid": 0,
+        "sequence_errors": 1,
+        "boundary_errors": 0,
+        "occupied_bytes": 79216,
+        "drain_cpu_ns": 40048,
+        "starts": 2,
+        "ends": 2,
+        "detached": true,
+        "terminal_stable": true,
+        "drain_ns": 42834104,
+        "driver_ns": 774134,
+        "max_consumer_pause_ns": 42940573,
+        "consumer_cpu_ns": 119963,
+        "batch_cpu_max_ns": 1206464,
+        "batch_wall_max_ns": 90278289,
+        "guard_violations": 0,
+        "throttled_before": 9,
+        "throttled_at_trigger": 0,
+        "terminal": [
+          {
+            "cpu": 0,
+            "kind": 1,
+            "ledger": 7,
+            "hits": 7,
+            "attempted": 7,
+            "submitted": 7,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 7
+          },
+          {
+            "cpu": 0,
+            "kind": 2,
+            "ledger": 12,
+            "hits": 12,
+            "attempted": 12,
+            "submitted": 12,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 12
+          },
+          {
+            "cpu": 0,
+            "kind": 3,
+            "ledger": 7,
+            "hits": 7,
+            "attempted": 7,
+            "submitted": 7,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 7
+          },
+          {
+            "cpu": 0,
+            "kind": 6,
+            "ledger": 4,
+            "hits": 4,
+            "attempted": 4,
+            "submitted": 4,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 4
+          },
+          {
+            "cpu": 0,
+            "kind": 7,
+            "ledger": 4,
+            "hits": 4,
+            "attempted": 4,
+            "submitted": 4,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 4
+          },
+          {
+            "cpu": 0,
+            "kind": 8,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 9,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 10,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 11,
+            "ledger": 58,
+            "hits": 58,
+            "attempted": 58,
+            "submitted": 58,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 58
+          },
+          {
+            "cpu": 0,
+            "kind": 12,
+            "ledger": 233,
+            "hits": 233,
+            "attempted": 233,
+            "submitted": 233,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 233
+          },
+          {
+            "cpu": 0,
+            "kind": 14,
+            "ledger": 291,
+            "hits": 291,
+            "attempted": 291,
+            "submitted": 291,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 291
+          },
+          {
+            "cpu": 0,
+            "kind": 16,
+            "ledger": 232,
+            "hits": 232,
+            "attempted": 232,
+            "submitted": 232,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 232
+          },
+          {
+            "cpu": 0,
+            "kind": 24,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 0,
+            "kind": 25,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 0,
+            "kind": 26,
+            "ledger": 233,
+            "hits": 233,
+            "attempted": 233,
+            "submitted": 233,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 233
+          },
+          {
+            "cpu": 0,
+            "kind": 28,
+            "ledger": 58,
+            "hits": 58,
+            "attempted": 58,
+            "submitted": 58,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 58
+          },
+          {
+            "cpu": 1,
+            "kind": 1,
+            "ledger": 92,
+            "hits": 92,
+            "attempted": 92,
+            "submitted": 92,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 92
+          },
+          {
+            "cpu": 1,
+            "kind": 2,
+            "ledger": 87,
+            "hits": 87,
+            "attempted": 87,
+            "submitted": 87,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 87
+          },
+          {
+            "cpu": 1,
+            "kind": 3,
+            "ledger": 92,
+            "hits": 92,
+            "attempted": 92,
+            "submitted": 92,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 92
+          },
+          {
+            "cpu": 1,
+            "kind": 6,
+            "ledger": 60,
+            "hits": 60,
+            "attempted": 60,
+            "submitted": 60,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 60
+          },
+          {
+            "cpu": 1,
+            "kind": 7,
+            "ledger": 60,
+            "hits": 60,
+            "attempted": 60,
+            "submitted": 60,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 60
+          },
+          {
+            "cpu": 1,
+            "kind": 8,
+            "ledger": 31,
+            "hits": 31,
+            "attempted": 31,
+            "submitted": 31,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 31
+          },
+          {
+            "cpu": 1,
+            "kind": 9,
+            "ledger": 31,
+            "hits": 31,
+            "attempted": 31,
+            "submitted": 31,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 31
+          },
+          {
+            "cpu": 1,
+            "kind": 10,
+            "ledger": 32,
+            "hits": 32,
+            "attempted": 32,
+            "submitted": 32,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 32
+          },
+          {
+            "cpu": 1,
+            "kind": 11,
+            "ledger": 6,
+            "hits": 6,
+            "attempted": 6,
+            "submitted": 6,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 6
+          },
+          {
+            "cpu": 1,
+            "kind": 12,
+            "ledger": 55,
+            "hits": 55,
+            "attempted": 55,
+            "submitted": 55,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 55
+          },
+          {
+            "cpu": 1,
+            "kind": 14,
+            "ledger": 61,
+            "hits": 61,
+            "attempted": 61,
+            "submitted": 61,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 61
+          },
+          {
+            "cpu": 1,
+            "kind": 16,
+            "ledger": 54,
+            "hits": 54,
+            "attempted": 54,
+            "submitted": 34,
+            "failed": 20,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 34
+          },
+          {
+            "cpu": 1,
+            "kind": 24,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 1,
+            "kind": 25,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 1,
+            "kind": 26,
+            "ledger": 55,
+            "hits": 55,
+            "attempted": 55,
+            "submitted": 0,
+            "failed": 55,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 28,
+            "ledger": 6,
+            "hits": 6,
+            "attempted": 6,
+            "submitted": 0,
+            "failed": 6,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          }
+        ],
+        "save_cost": {
+          "cpu_ns": 36272,
+          "wall_ns": 35445
+        },
+        "case": 0,
+        "cgroup_before": {
+          "cpu.stat": "usage_usec 94997\nuser_usec 68994\nsystem_usec 26002\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 9\nnr_throttled 8\nthrottled_usec 716489\nnr_bursts 0\nburst_usec 0\n",
+          "memory.peak": "14495744\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+          "pids.peak": "1\n"
+        },
+        "cgroup_after": {
+          "cpu.stat": "usage_usec 98440\nuser_usec 70311\nsystem_usec 28129\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 10\nnr_throttled 9\nthrottled_usec 805551\nnr_bursts 0\nburst_usec 0\n",
+          "memory.peak": "14495744\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+          "pids.peak": "3\n"
+        },
+        "totals": {
+          "ledger": 1871,
+          "hits": 1871,
+          "attempted": 1871,
+          "submitted": 1790,
+          "failed": 81,
+          "discarded": 0,
+          "overflow": 0,
+          "received": 1790
+        },
+        "per_key_conserved": false,
+        "pass_transport": false,
+        "audit_cost": {
+          "cpu_ns": 535927,
+          "wall_ns": 539684
+        }
+      },
+      {
+        "mode": 0,
+        "header_bytes": 16,
+        "max_record_bytes": 48,
+        "alignment": 8,
+        "received": 1519,
+        "decoded": 1519,
+        "retained": 1519,
+        "evicted": 0,
+        "invalid": 0,
+        "sequence_errors": 1,
+        "boundary_errors": 0,
+        "occupied_bytes": 68608,
+        "drain_cpu_ns": 175668,
+        "starts": 2,
+        "ends": 1,
+        "detached": true,
+        "terminal_stable": true,
+        "drain_ns": 48759093,
+        "driver_ns": 583094,
+        "max_consumer_pause_ns": 48663594,
+        "consumer_cpu_ns": 75933,
+        "batch_cpu_max_ns": 1011668,
+        "batch_wall_max_ns": 48761725,
+        "guard_violations": 0,
+        "throttled_before": 9,
+        "throttled_at_trigger": 0,
+        "terminal": [
+          {
+            "cpu": 0,
+            "kind": 1,
+            "ledger": 7,
+            "hits": 7,
+            "attempted": 7,
+            "submitted": 7,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 7
+          },
+          {
+            "cpu": 0,
+            "kind": 2,
+            "ledger": 12,
+            "hits": 12,
+            "attempted": 12,
+            "submitted": 12,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 12
+          },
+          {
+            "cpu": 0,
+            "kind": 3,
+            "ledger": 7,
+            "hits": 7,
+            "attempted": 7,
+            "submitted": 7,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 7
+          },
+          {
+            "cpu": 0,
+            "kind": 6,
+            "ledger": 4,
+            "hits": 4,
+            "attempted": 4,
+            "submitted": 4,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 4
+          },
+          {
+            "cpu": 0,
+            "kind": 7,
+            "ledger": 4,
+            "hits": 4,
+            "attempted": 4,
+            "submitted": 4,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 4
+          },
+          {
+            "cpu": 0,
+            "kind": 8,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 9,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 10,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 11,
+            "ledger": 58,
+            "hits": 58,
+            "attempted": 58,
+            "submitted": 58,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 58
+          },
+          {
+            "cpu": 0,
+            "kind": 12,
+            "ledger": 233,
+            "hits": 233,
+            "attempted": 233,
+            "submitted": 233,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 233
+          },
+          {
+            "cpu": 0,
+            "kind": 14,
+            "ledger": 291,
+            "hits": 291,
+            "attempted": 291,
+            "submitted": 291,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 291
+          },
+          {
+            "cpu": 0,
+            "kind": 16,
+            "ledger": 232,
+            "hits": 232,
+            "attempted": 232,
+            "submitted": 232,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 232
+          },
+          {
+            "cpu": 0,
+            "kind": 24,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 0,
+            "kind": 25,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 0,
+            "kind": 26,
+            "ledger": 233,
+            "hits": 233,
+            "attempted": 233,
+            "submitted": 233,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 233
+          },
+          {
+            "cpu": 0,
+            "kind": 28,
+            "ledger": 58,
+            "hits": 58,
+            "attempted": 58,
+            "submitted": 58,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 58
+          },
+          {
+            "cpu": 1,
+            "kind": 1,
+            "ledger": 92,
+            "hits": 92,
+            "attempted": 92,
+            "submitted": 83,
+            "failed": 9,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 83
+          },
+          {
+            "cpu": 1,
+            "kind": 2,
+            "ledger": 87,
+            "hits": 87,
+            "attempted": 87,
+            "submitted": 0,
+            "failed": 87,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 3,
+            "ledger": 92,
+            "hits": 92,
+            "attempted": 92,
+            "submitted": 42,
+            "failed": 50,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 42
+          },
+          {
+            "cpu": 1,
+            "kind": 6,
+            "ledger": 60,
+            "hits": 60,
+            "attempted": 60,
+            "submitted": 60,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 60
+          },
+          {
+            "cpu": 1,
+            "kind": 7,
+            "ledger": 60,
+            "hits": 60,
+            "attempted": 60,
+            "submitted": 60,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 60
+          },
+          {
+            "cpu": 1,
+            "kind": 8,
+            "ledger": 31,
+            "hits": 31,
+            "attempted": 31,
+            "submitted": 31,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 31
+          },
+          {
+            "cpu": 1,
+            "kind": 9,
+            "ledger": 31,
+            "hits": 31,
+            "attempted": 31,
+            "submitted": 31,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 31
+          },
+          {
+            "cpu": 1,
+            "kind": 10,
+            "ledger": 32,
+            "hits": 32,
+            "attempted": 32,
+            "submitted": 32,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 32
+          },
+          {
+            "cpu": 1,
+            "kind": 11,
+            "ledger": 6,
+            "hits": 6,
+            "attempted": 6,
+            "submitted": 6,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 6
+          },
+          {
+            "cpu": 1,
+            "kind": 12,
+            "ledger": 55,
+            "hits": 55,
+            "attempted": 55,
+            "submitted": 26,
+            "failed": 29,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 26
+          },
+          {
+            "cpu": 1,
+            "kind": 14,
+            "ledger": 61,
+            "hits": 61,
+            "attempted": 61,
+            "submitted": 0,
+            "failed": 61,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 16,
+            "ledger": 54,
+            "hits": 54,
+            "attempted": 54,
+            "submitted": 0,
+            "failed": 54,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 24,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 1,
+            "kind": 25,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 0,
+            "failed": 1,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 26,
+            "ledger": 55,
+            "hits": 55,
+            "attempted": 55,
+            "submitted": 0,
+            "failed": 55,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 28,
+            "ledger": 6,
+            "hits": 6,
+            "attempted": 6,
+            "submitted": 0,
+            "failed": 6,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          }
+        ],
+        "save_cost": {
+          "cpu_ns": 183957,
+          "wall_ns": 181323
+        },
+        "case": 1,
+        "cgroup_before": {
+          "cpu.stat": "usage_usec 101492\nuser_usec 71041\nsystem_usec 30451\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 10\nnr_throttled 9\nthrottled_usec 805551\nnr_bursts 0\nburst_usec 0\n",
+          "memory.peak": "14495744\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+          "pids.peak": "3\n"
+        },
+        "cgroup_after": {
+          "cpu.stat": "usage_usec 106100\nuser_usec 72751\nsystem_usec 33349\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 11\nnr_throttled 9\nthrottled_usec 805551\nnr_bursts 0\nburst_usec 0\n",
+          "memory.peak": "14495744\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+          "pids.peak": "3\n"
+        },
+        "totals": {
+          "ledger": 1871,
+          "hits": 1871,
+          "attempted": 1871,
+          "submitted": 1519,
+          "failed": 352,
+          "discarded": 0,
+          "overflow": 0,
+          "received": 1519
+        },
+        "per_key_conserved": false,
+        "pass_transport": false,
+        "audit_cost": {
+          "cpu_ns": 1371375,
+          "wall_ns": 1380902
+        }
+      },
+      {
+        "mode": 0,
+        "header_bytes": 16,
+        "max_record_bytes": 48,
+        "alignment": 8,
+        "received": 1871,
+        "decoded": 1871,
+        "retained": 1871,
+        "evicted": 0,
+        "invalid": 0,
+        "sequence_errors": 0,
+        "boundary_errors": 0,
+        "occupied_bytes": 82896,
+        "drain_cpu_ns": 108126,
+        "starts": 2,
+        "ends": 2,
+        "detached": true,
+        "terminal_stable": true,
+        "drain_ns": 59172170,
+        "driver_ns": 2291101,
+        "max_consumer_pause_ns": 90352180,
+        "consumer_cpu_ns": 479370,
+        "batch_cpu_max_ns": 3667955,
+        "batch_wall_max_ns": 90440821,
+        "guard_violations": 0,
+        "throttled_before": 10,
+        "throttled_at_trigger": 0,
+        "terminal": [
+          {
+            "cpu": 0,
+            "kind": 1,
+            "ledger": 7,
+            "hits": 7,
+            "attempted": 7,
+            "submitted": 7,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 7
+          },
+          {
+            "cpu": 0,
+            "kind": 2,
+            "ledger": 12,
+            "hits": 12,
+            "attempted": 12,
+            "submitted": 12,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 12
+          },
+          {
+            "cpu": 0,
+            "kind": 3,
+            "ledger": 7,
+            "hits": 7,
+            "attempted": 7,
+            "submitted": 7,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 7
+          },
+          {
+            "cpu": 0,
+            "kind": 6,
+            "ledger": 4,
+            "hits": 4,
+            "attempted": 4,
+            "submitted": 4,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 4
+          },
+          {
+            "cpu": 0,
+            "kind": 7,
+            "ledger": 4,
+            "hits": 4,
+            "attempted": 4,
+            "submitted": 4,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 4
+          },
+          {
+            "cpu": 0,
+            "kind": 8,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 9,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 10,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 11,
+            "ledger": 58,
+            "hits": 58,
+            "attempted": 58,
+            "submitted": 58,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 58
+          },
+          {
+            "cpu": 0,
+            "kind": 12,
+            "ledger": 233,
+            "hits": 233,
+            "attempted": 233,
+            "submitted": 233,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 233
+          },
+          {
+            "cpu": 0,
+            "kind": 14,
+            "ledger": 291,
+            "hits": 291,
+            "attempted": 291,
+            "submitted": 291,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 291
+          },
+          {
+            "cpu": 0,
+            "kind": 16,
+            "ledger": 232,
+            "hits": 232,
+            "attempted": 232,
+            "submitted": 232,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 232
+          },
+          {
+            "cpu": 0,
+            "kind": 24,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 0,
+            "kind": 25,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 0,
+            "kind": 26,
+            "ledger": 233,
+            "hits": 233,
+            "attempted": 233,
+            "submitted": 233,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 233
+          },
+          {
+            "cpu": 0,
+            "kind": 28,
+            "ledger": 58,
+            "hits": 58,
+            "attempted": 58,
+            "submitted": 58,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 58
+          },
+          {
+            "cpu": 1,
+            "kind": 1,
+            "ledger": 92,
+            "hits": 92,
+            "attempted": 92,
+            "submitted": 92,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 92
+          },
+          {
+            "cpu": 1,
+            "kind": 2,
+            "ledger": 87,
+            "hits": 87,
+            "attempted": 87,
+            "submitted": 87,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 87
+          },
+          {
+            "cpu": 1,
+            "kind": 3,
+            "ledger": 92,
+            "hits": 92,
+            "attempted": 92,
+            "submitted": 92,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 92
+          },
+          {
+            "cpu": 1,
+            "kind": 6,
+            "ledger": 60,
+            "hits": 60,
+            "attempted": 60,
+            "submitted": 60,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 60
+          },
+          {
+            "cpu": 1,
+            "kind": 7,
+            "ledger": 60,
+            "hits": 60,
+            "attempted": 60,
+            "submitted": 60,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 60
+          },
+          {
+            "cpu": 1,
+            "kind": 8,
+            "ledger": 31,
+            "hits": 31,
+            "attempted": 31,
+            "submitted": 31,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 31
+          },
+          {
+            "cpu": 1,
+            "kind": 9,
+            "ledger": 31,
+            "hits": 31,
+            "attempted": 31,
+            "submitted": 31,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 31
+          },
+          {
+            "cpu": 1,
+            "kind": 10,
+            "ledger": 32,
+            "hits": 32,
+            "attempted": 32,
+            "submitted": 32,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 32
+          },
+          {
+            "cpu": 1,
+            "kind": 11,
+            "ledger": 6,
+            "hits": 6,
+            "attempted": 6,
+            "submitted": 6,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 6
+          },
+          {
+            "cpu": 1,
+            "kind": 12,
+            "ledger": 55,
+            "hits": 55,
+            "attempted": 55,
+            "submitted": 55,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 55
+          },
+          {
+            "cpu": 1,
+            "kind": 14,
+            "ledger": 61,
+            "hits": 61,
+            "attempted": 61,
+            "submitted": 61,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 61
+          },
+          {
+            "cpu": 1,
+            "kind": 16,
+            "ledger": 54,
+            "hits": 54,
+            "attempted": 54,
+            "submitted": 54,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 54
+          },
+          {
+            "cpu": 1,
+            "kind": 24,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 1,
+            "kind": 25,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 1,
+            "kind": 26,
+            "ledger": 55,
+            "hits": 55,
+            "attempted": 55,
+            "submitted": 55,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 55
+          },
+          {
+            "cpu": 1,
+            "kind": 28,
+            "ledger": 6,
+            "hits": 6,
+            "attempted": 6,
+            "submitted": 6,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 6
+          }
+        ],
+        "save_cost": {
+          "cpu_ns": 161803,
+          "wall_ns": 159400
+        },
+        "case": 2,
+        "cgroup_before": {
+          "cpu.stat": "usage_usec 116032\nuser_usec 79158\nsystem_usec 36874\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 12\nnr_throttled 10\nthrottled_usec 854818\nnr_bursts 0\nburst_usec 0\n",
+          "memory.peak": "14495744\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+          "pids.peak": "3\n"
+        },
+        "cgroup_after": {
+          "cpu.stat": "usage_usec 127412\nuser_usec 83137\nsystem_usec 44274\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 13\nnr_throttled 11\nthrottled_usec 945004\nnr_bursts 0\nburst_usec 0\n",
+          "memory.peak": "14495744\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+          "pids.peak": "3\n"
+        },
+        "totals": {
+          "ledger": 1871,
+          "hits": 1871,
+          "attempted": 1871,
+          "submitted": 1871,
+          "failed": 0,
+          "discarded": 0,
+          "overflow": 0,
+          "received": 1871
+        },
+        "per_key_conserved": true,
+        "pass_transport": true,
+        "audit_cost": {
+          "cpu_ns": 1402932,
+          "wall_ns": 1411788
+        }
+      },
+      {
+        "mode": 1,
+        "header_bytes": 16,
+        "max_record_bytes": 48,
+        "alignment": 8,
+        "received": 652,
+        "decoded": 652,
+        "retained": 652,
+        "evicted": 0,
+        "invalid": 0,
+        "sequence_errors": 0,
+        "boundary_errors": 0,
+        "occupied_bytes": 32808,
+        "drain_cpu_ns": 63619,
+        "starts": 2,
+        "ends": 0,
+        "detached": true,
+        "terminal_stable": true,
+        "drain_ns": 59316231,
+        "driver_ns": 492981,
+        "max_consumer_pause_ns": 157592054,
+        "consumer_cpu_ns": 7963438,
+        "batch_cpu_max_ns": 7955993,
+        "batch_wall_max_ns": 98365374,
+        "guard_violations": 0,
+        "throttled_before": 12,
+        "throttled_at_trigger": 13,
+        "terminal": [
+          {
+            "cpu": 0,
+            "kind": 1,
+            "ledger": 7,
+            "hits": 7,
+            "attempted": 7,
+            "submitted": 7,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 7
+          },
+          {
+            "cpu": 0,
+            "kind": 2,
+            "ledger": 12,
+            "hits": 12,
+            "attempted": 12,
+            "submitted": 12,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 12
+          },
+          {
+            "cpu": 0,
+            "kind": 3,
+            "ledger": 7,
+            "hits": 7,
+            "attempted": 7,
+            "submitted": 7,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 7
+          },
+          {
+            "cpu": 0,
+            "kind": 6,
+            "ledger": 4,
+            "hits": 4,
+            "attempted": 4,
+            "submitted": 4,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 4
+          },
+          {
+            "cpu": 0,
+            "kind": 7,
+            "ledger": 4,
+            "hits": 4,
+            "attempted": 4,
+            "submitted": 4,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 4
+          },
+          {
+            "cpu": 0,
+            "kind": 8,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 9,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 10,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 11,
+            "ledger": 58,
+            "hits": 58,
+            "attempted": 58,
+            "submitted": 58,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 58
+          },
+          {
+            "cpu": 0,
+            "kind": 12,
+            "ledger": 233,
+            "hits": 233,
+            "attempted": 233,
+            "submitted": 233,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 233
+          },
+          {
+            "cpu": 0,
+            "kind": 14,
+            "ledger": 291,
+            "hits": 291,
+            "attempted": 291,
+            "submitted": 291,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 291
+          },
+          {
+            "cpu": 0,
+            "kind": 16,
+            "ledger": 232,
+            "hits": 232,
+            "attempted": 232,
+            "submitted": 28,
+            "failed": 204,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 28
+          },
+          {
+            "cpu": 0,
+            "kind": 24,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 0,
+            "kind": 25,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 0,
+            "failed": 1,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 26,
+            "ledger": 233,
+            "hits": 233,
+            "attempted": 233,
+            "submitted": 0,
+            "failed": 233,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 28,
+            "ledger": 58,
+            "hits": 58,
+            "attempted": 58,
+            "submitted": 0,
+            "failed": 58,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 1,
+            "ledger": 92,
+            "hits": 92,
+            "attempted": 92,
+            "submitted": 0,
+            "failed": 92,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 2,
+            "ledger": 87,
+            "hits": 87,
+            "attempted": 87,
+            "submitted": 0,
+            "failed": 87,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 3,
+            "ledger": 92,
+            "hits": 92,
+            "attempted": 92,
+            "submitted": 0,
+            "failed": 92,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 6,
+            "ledger": 60,
+            "hits": 60,
+            "attempted": 60,
+            "submitted": 0,
+            "failed": 60,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 7,
+            "ledger": 60,
+            "hits": 60,
+            "attempted": 60,
+            "submitted": 0,
+            "failed": 60,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 8,
+            "ledger": 31,
+            "hits": 31,
+            "attempted": 31,
+            "submitted": 0,
+            "failed": 31,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 9,
+            "ledger": 31,
+            "hits": 31,
+            "attempted": 31,
+            "submitted": 0,
+            "failed": 31,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 10,
+            "ledger": 32,
+            "hits": 32,
+            "attempted": 32,
+            "submitted": 0,
+            "failed": 32,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 11,
+            "ledger": 6,
+            "hits": 6,
+            "attempted": 6,
+            "submitted": 0,
+            "failed": 6,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 12,
+            "ledger": 55,
+            "hits": 55,
+            "attempted": 55,
+            "submitted": 0,
+            "failed": 55,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 14,
+            "ledger": 61,
+            "hits": 61,
+            "attempted": 61,
+            "submitted": 0,
+            "failed": 61,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 16,
+            "ledger": 54,
+            "hits": 54,
+            "attempted": 54,
+            "submitted": 0,
+            "failed": 54,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 24,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 1,
+            "kind": 25,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 0,
+            "failed": 1,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 26,
+            "ledger": 55,
+            "hits": 55,
+            "attempted": 55,
+            "submitted": 0,
+            "failed": 55,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 28,
+            "ledger": 6,
+            "hits": 6,
+            "attempted": 6,
+            "submitted": 0,
+            "failed": 6,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          }
+        ],
+        "save_cost": {
+          "cpu_ns": 58359,
+          "wall_ns": 57532
+        },
+        "case": 3,
+        "cgroup_before": {
+          "cpu.stat": "usage_usec 138517\nuser_usec 88142\nsystem_usec 50374\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 14\nnr_throttled 11\nthrottled_usec 945004\nnr_bursts 0\nburst_usec 0\n",
+          "memory.peak": "14495744\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+          "pids.peak": "3\n"
+        },
+        "cgroup_after": {
+          "cpu.stat": "usage_usec 156960\nuser_usec 99090\nsystem_usec 57869\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 17\nnr_throttled 13\nthrottled_usec 1119051\nnr_bursts 0\nburst_usec 0\n",
+          "memory.peak": "14495744\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+          "pids.peak": "3\n"
+        },
+        "totals": {
+          "ledger": 1871,
+          "hits": 1871,
+          "attempted": 1871,
+          "submitted": 652,
+          "failed": 1219,
+          "discarded": 0,
+          "overflow": 0,
+          "received": 652
+        },
+        "per_key_conserved": false,
+        "pass_transport": false,
+        "audit_cost": {
+          "cpu_ns": 1407581,
+          "wall_ns": 1417021
+        }
+      },
+      {
+        "mode": 2,
+        "header_bytes": 16,
+        "max_record_bytes": 48,
+        "alignment": 8,
+        "received": 2,
+        "decoded": 2,
+        "retained": 2,
+        "evicted": 0,
+        "invalid": 0,
+        "sequence_errors": 0,
+        "boundary_errors": 0,
+        "occupied_bytes": 48,
+        "drain_cpu_ns": 1717,
+        "starts": 2,
+        "ends": 0,
+        "detached": true,
+        "terminal_stable": true,
+        "drain_ns": 58427691,
+        "driver_ns": 465493,
+        "max_consumer_pause_ns": 639,
+        "consumer_cpu_ns": 76161,
+        "batch_cpu_max_ns": 5151196,
+        "batch_wall_max_ns": 58428084,
+        "guard_violations": 0,
+        "throttled_before": 15,
+        "throttled_at_trigger": 0,
+        "terminal": [
+          {
+            "cpu": 0,
+            "kind": 0,
+            "ledger": 0,
+            "hits": 0,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 1,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 1,
+            "ledger": 7,
+            "hits": 7,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 7,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 2,
+            "ledger": 12,
+            "hits": 12,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 12,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 3,
+            "ledger": 7,
+            "hits": 7,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 7,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 6,
+            "ledger": 4,
+            "hits": 4,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 4,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 7,
+            "ledger": 4,
+            "hits": 4,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 4,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 8,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 2,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 9,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 2,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 10,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 2,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 11,
+            "ledger": 58,
+            "hits": 58,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 58,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 12,
+            "ledger": 233,
+            "hits": 233,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 233,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 14,
+            "ledger": 291,
+            "hits": 291,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 291,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 16,
+            "ledger": 232,
+            "hits": 232,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 232,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 24,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 0,
+            "kind": 25,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 1,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 26,
+            "ledger": 233,
+            "hits": 233,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 233,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 28,
+            "ledger": 58,
+            "hits": 58,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 58,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 0,
+            "ledger": 0,
+            "hits": 0,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 1,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 1,
+            "ledger": 92,
+            "hits": 92,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 92,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 2,
+            "ledger": 87,
+            "hits": 87,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 87,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 3,
+            "ledger": 92,
+            "hits": 92,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 92,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 6,
+            "ledger": 60,
+            "hits": 60,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 60,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 7,
+            "ledger": 60,
+            "hits": 60,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 60,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 8,
+            "ledger": 31,
+            "hits": 31,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 31,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 9,
+            "ledger": 31,
+            "hits": 31,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 31,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 10,
+            "ledger": 32,
+            "hits": 32,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 32,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 11,
+            "ledger": 6,
+            "hits": 6,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 6,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 12,
+            "ledger": 55,
+            "hits": 55,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 55,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 14,
+            "ledger": 61,
+            "hits": 61,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 61,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 16,
+            "ledger": 54,
+            "hits": 54,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 54,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 24,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 1,
+            "kind": 25,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 1,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 26,
+            "ledger": 55,
+            "hits": 55,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 55,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 28,
+            "ledger": 6,
+            "hits": 6,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 6,
+            "received": 0
+          }
+        ],
+        "save_cost": {
+          "cpu_ns": 44559,
+          "wall_ns": 43974
+        },
+        "case": 4,
+        "cgroup_before": {
+          "cpu.stat": "usage_usec 167777\nuser_usec 106333\nsystem_usec 61444\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 18\nnr_throttled 14\nthrottled_usec 1207408\nnr_bursts 0\nburst_usec 0\n",
+          "memory.peak": "14495744\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+          "pids.peak": "3\n"
+        },
+        "cgroup_after": {
+          "cpu.stat": "usage_usec 178852\nuser_usec 108964\nsystem_usec 69888\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 19\nnr_throttled 15\nthrottled_usec 1297970\nnr_bursts 0\nburst_usec 0\n",
+          "memory.peak": "14495744\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+          "pids.peak": "3\n"
+        },
+        "totals": {
+          "ledger": 1871,
+          "hits": 1871,
+          "attempted": 2,
+          "submitted": 2,
+          "failed": 0,
+          "discarded": 0,
+          "overflow": 1871,
+          "received": 2
+        },
+        "per_key_conserved": false,
+        "pass_transport": false,
+        "audit_cost": {
+          "cpu_ns": 490793,
+          "wall_ns": 493922
+        }
+      },
+      {
+        "mode": 3,
+        "header_bytes": 16,
+        "max_record_bytes": 48,
+        "alignment": 8,
+        "received": 1850,
+        "decoded": 1850,
+        "retained": 1850,
+        "evicted": 0,
+        "invalid": 0,
+        "sequence_errors": 1,
+        "boundary_errors": 0,
+        "occupied_bytes": 81936,
+        "drain_cpu_ns": 126221,
+        "starts": 2,
+        "ends": 2,
+        "detached": true,
+        "terminal_stable": true,
+        "drain_ns": 58040251,
+        "driver_ns": 989285,
+        "max_consumer_pause_ns": 58013083,
+        "consumer_cpu_ns": 160818,
+        "batch_cpu_max_ns": 1358579,
+        "batch_wall_max_ns": 58041855,
+        "guard_violations": 0,
+        "throttled_before": 15,
+        "throttled_at_trigger": 0,
+        "terminal": [
+          {
+            "cpu": 0,
+            "kind": 0,
+            "ledger": 0,
+            "hits": 0,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 1,
+            "received": 0
+          },
+          {
+            "cpu": 0,
+            "kind": 1,
+            "ledger": 7,
+            "hits": 7,
+            "attempted": 7,
+            "submitted": 7,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 7
+          },
+          {
+            "cpu": 0,
+            "kind": 2,
+            "ledger": 12,
+            "hits": 12,
+            "attempted": 12,
+            "submitted": 12,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 12
+          },
+          {
+            "cpu": 0,
+            "kind": 3,
+            "ledger": 7,
+            "hits": 7,
+            "attempted": 7,
+            "submitted": 7,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 7
+          },
+          {
+            "cpu": 0,
+            "kind": 6,
+            "ledger": 4,
+            "hits": 4,
+            "attempted": 4,
+            "submitted": 4,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 4
+          },
+          {
+            "cpu": 0,
+            "kind": 7,
+            "ledger": 4,
+            "hits": 4,
+            "attempted": 4,
+            "submitted": 4,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 4
+          },
+          {
+            "cpu": 0,
+            "kind": 8,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 9,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 10,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 11,
+            "ledger": 58,
+            "hits": 58,
+            "attempted": 58,
+            "submitted": 58,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 58
+          },
+          {
+            "cpu": 0,
+            "kind": 12,
+            "ledger": 233,
+            "hits": 233,
+            "attempted": 233,
+            "submitted": 233,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 233
+          },
+          {
+            "cpu": 0,
+            "kind": 14,
+            "ledger": 291,
+            "hits": 291,
+            "attempted": 291,
+            "submitted": 291,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 291
+          },
+          {
+            "cpu": 0,
+            "kind": 16,
+            "ledger": 232,
+            "hits": 232,
+            "attempted": 232,
+            "submitted": 232,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 232
+          },
+          {
+            "cpu": 0,
+            "kind": 24,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 0,
+            "kind": 25,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 0,
+            "kind": 26,
+            "ledger": 233,
+            "hits": 233,
+            "attempted": 233,
+            "submitted": 233,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 233
+          },
+          {
+            "cpu": 0,
+            "kind": 28,
+            "ledger": 58,
+            "hits": 58,
+            "attempted": 58,
+            "submitted": 58,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 58
+          },
+          {
+            "cpu": 1,
+            "kind": 0,
+            "ledger": 0,
+            "hits": 0,
+            "attempted": 0,
+            "submitted": 0,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 1,
+            "received": 0
+          },
+          {
+            "cpu": 1,
+            "kind": 1,
+            "ledger": 92,
+            "hits": 92,
+            "attempted": 92,
+            "submitted": 92,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 92
+          },
+          {
+            "cpu": 1,
+            "kind": 2,
+            "ledger": 87,
+            "hits": 87,
+            "attempted": 87,
+            "submitted": 87,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 87
+          },
+          {
+            "cpu": 1,
+            "kind": 3,
+            "ledger": 92,
+            "hits": 92,
+            "attempted": 92,
+            "submitted": 92,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 92
+          },
+          {
+            "cpu": 1,
+            "kind": 6,
+            "ledger": 60,
+            "hits": 60,
+            "attempted": 60,
+            "submitted": 60,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 60
+          },
+          {
+            "cpu": 1,
+            "kind": 7,
+            "ledger": 60,
+            "hits": 60,
+            "attempted": 60,
+            "submitted": 60,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 60
+          },
+          {
+            "cpu": 1,
+            "kind": 8,
+            "ledger": 31,
+            "hits": 31,
+            "attempted": 31,
+            "submitted": 31,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 31
+          },
+          {
+            "cpu": 1,
+            "kind": 9,
+            "ledger": 31,
+            "hits": 31,
+            "attempted": 31,
+            "submitted": 31,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 31
+          },
+          {
+            "cpu": 1,
+            "kind": 10,
+            "ledger": 32,
+            "hits": 32,
+            "attempted": 32,
+            "submitted": 32,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 32
+          },
+          {
+            "cpu": 1,
+            "kind": 11,
+            "ledger": 6,
+            "hits": 6,
+            "attempted": 6,
+            "submitted": 6,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 6
+          },
+          {
+            "cpu": 1,
+            "kind": 12,
+            "ledger": 55,
+            "hits": 55,
+            "attempted": 55,
+            "submitted": 55,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 55
+          },
+          {
+            "cpu": 1,
+            "kind": 14,
+            "ledger": 61,
+            "hits": 61,
+            "attempted": 61,
+            "submitted": 61,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 61
+          },
+          {
+            "cpu": 1,
+            "kind": 16,
+            "ledger": 54,
+            "hits": 54,
+            "attempted": 54,
+            "submitted": 54,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 54
+          },
+          {
+            "cpu": 1,
+            "kind": 24,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 1,
+            "kind": 25,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 1,
+            "kind": 26,
+            "ledger": 55,
+            "hits": 55,
+            "attempted": 55,
+            "submitted": 40,
+            "failed": 15,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 40
+          },
+          {
+            "cpu": 1,
+            "kind": 28,
+            "ledger": 6,
+            "hits": 6,
+            "attempted": 6,
+            "submitted": 0,
+            "failed": 6,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 0
+          }
+        ],
+        "save_cost": {
+          "cpu_ns": 160945,
+          "wall_ns": 158322
+        },
+        "case": 5,
+        "cgroup_before": {
+          "cpu.stat": "usage_usec 182341\nuser_usec 110829\nsystem_usec 71511\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 19\nnr_throttled 15\nthrottled_usec 1297970\nnr_bursts 0\nburst_usec 0\n",
+          "memory.peak": "14495744\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+          "pids.peak": "3\n"
+        },
+        "cgroup_after": {
+          "cpu.stat": "usage_usec 187878\nuser_usec 112482\nsystem_usec 75396\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 20\nnr_throttled 15\nthrottled_usec 1297970\nnr_bursts 0\nburst_usec 0\n",
+          "memory.peak": "14495744\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+          "pids.peak": "3\n"
+        },
+        "totals": {
+          "ledger": 1871,
+          "hits": 1871,
+          "attempted": 1871,
+          "submitted": 1850,
+          "failed": 21,
+          "discarded": 0,
+          "overflow": 2,
+          "received": 1850
+        },
+        "per_key_conserved": false,
+        "pass_transport": false,
+        "audit_cost": {
+          "cpu_ns": 1431551,
+          "wall_ns": 1438730
+        }
+      },
+      {
+        "mode": 4,
+        "header_bytes": 16,
+        "max_record_bytes": 48,
+        "alignment": 8,
+        "received": 323,
+        "decoded": 323,
+        "retained": 323,
+        "evicted": 0,
+        "invalid": 0,
+        "sequence_errors": 0,
+        "boundary_errors": 0,
+        "occupied_bytes": 17160,
+        "drain_cpu_ns": 6364,
+        "starts": 2,
+        "ends": 0,
+        "detached": true,
+        "terminal_stable": true,
+        "drain_ns": 43590046,
+        "driver_ns": 485070,
+        "max_consumer_pause_ns": 331547,
+        "consumer_cpu_ns": 217311,
+        "batch_cpu_max_ns": 3881152,
+        "batch_wall_max_ns": 95973532,
+        "guard_violations": 0,
+        "throttled_before": 17,
+        "throttled_at_trigger": 0,
+        "terminal": [
+          {
+            "cpu": 0,
+            "kind": 1,
+            "ledger": 7,
+            "hits": 7,
+            "attempted": 7,
+            "submitted": 7,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 7
+          },
+          {
+            "cpu": 0,
+            "kind": 2,
+            "ledger": 12,
+            "hits": 12,
+            "attempted": 12,
+            "submitted": 12,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 12
+          },
+          {
+            "cpu": 0,
+            "kind": 3,
+            "ledger": 7,
+            "hits": 7,
+            "attempted": 7,
+            "submitted": 7,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 7
+          },
+          {
+            "cpu": 0,
+            "kind": 6,
+            "ledger": 4,
+            "hits": 4,
+            "attempted": 4,
+            "submitted": 4,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 4
+          },
+          {
+            "cpu": 0,
+            "kind": 7,
+            "ledger": 4,
+            "hits": 4,
+            "attempted": 4,
+            "submitted": 4,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 4
+          },
+          {
+            "cpu": 0,
+            "kind": 8,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 9,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 10,
+            "ledger": 2,
+            "hits": 2,
+            "attempted": 2,
+            "submitted": 2,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 2
+          },
+          {
+            "cpu": 0,
+            "kind": 11,
+            "ledger": 58,
+            "hits": 58,
+            "attempted": 58,
+            "submitted": 58,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 58
+          },
+          {
+            "cpu": 0,
+            "kind": 12,
+            "ledger": 223,
+            "hits": 223,
+            "attempted": 223,
+            "submitted": 223,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 223
+          },
+          {
+            "cpu": 0,
+            "kind": 24,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          },
+          {
+            "cpu": 1,
+            "kind": 24,
+            "ledger": 1,
+            "hits": 1,
+            "attempted": 1,
+            "submitted": 1,
+            "failed": 0,
+            "discarded": 0,
+            "overflow": 0,
+            "received": 1
+          }
+        ],
+        "save_cost": {
+          "cpu_ns": 112573,
+          "wall_ns": 109700
+        },
+        "case": 6,
+        "cgroup_before": {
+          "cpu.stat": "usage_usec 198787\nuser_usec 118766\nsystem_usec 80021\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 21\nnr_throttled 16\nthrottled_usec 1352263\nnr_bursts 0\nburst_usec 0\n",
+          "memory.peak": "14495744\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+          "pids.peak": "3\n"
+        },
+        "cgroup_after": {
+          "cpu.stat": "usage_usec 210671\nuser_usec 121946\nsystem_usec 88724\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 22\nnr_throttled 17\nthrottled_usec 1477941\nnr_bursts 0\nburst_usec 0\n",
+          "memory.peak": "14495744\n",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+          "pids.peak": "3\n"
+        },
+        "totals": {
+          "ledger": 323,
+          "hits": 323,
+          "attempted": 323,
+          "submitted": 323,
+          "failed": 0,
+          "discarded": 0,
+          "overflow": 0,
+          "received": 323
+        },
+        "per_key_conserved": true,
+        "pass_transport": false,
+        "audit_cost": {
+          "cpu_ns": 1262450,
+          "wall_ns": 1270776
+        }
+      }
+    ],
+    "setup_cost": {
+      "cpu_ns": 387458,
+      "wall_ns": 391797
+    }
+  },
+  "build_artifacts_sha256": {
+    "transport": "7e55845e950b4438479c043160baa91a66f1303d4f3efa3b0cbf245b949e5d0d",
+    "transport.bpf.o": "a022f3d8a8efff5ba0b951d36103df449f1c70e2d2782ef9a2da2b34a9beaf1f"
+  },
+  "transport_plan": [
+    {
+      "cpu": 0,
+      "kind": 1,
+      "hits": 7,
+      "attempted": 7
+    },
+    {
+      "cpu": 0,
+      "kind": 2,
+      "hits": 12,
+      "attempted": 12
+    },
+    {
+      "cpu": 0,
+      "kind": 3,
+      "hits": 7,
+      "attempted": 7
+    },
+    {
+      "cpu": 0,
+      "kind": 6,
+      "hits": 4,
+      "attempted": 4
+    },
+    {
+      "cpu": 0,
+      "kind": 7,
+      "hits": 4,
+      "attempted": 4
+    },
+    {
+      "cpu": 0,
+      "kind": 8,
+      "hits": 2,
+      "attempted": 2
+    },
+    {
+      "cpu": 0,
+      "kind": 9,
+      "hits": 2,
+      "attempted": 2
+    },
+    {
+      "cpu": 0,
+      "kind": 10,
+      "hits": 2,
+      "attempted": 2
+    },
+    {
+      "cpu": 0,
+      "kind": 11,
+      "hits": 58,
+      "attempted": 58
+    },
+    {
+      "cpu": 0,
+      "kind": 12,
+      "hits": 233,
+      "attempted": 233
+    },
+    {
+      "cpu": 0,
+      "kind": 14,
+      "hits": 291,
+      "attempted": 291
+    },
+    {
+      "cpu": 0,
+      "kind": 16,
+      "hits": 232,
+      "attempted": 232
+    },
+    {
+      "cpu": 0,
+      "kind": 24,
+      "hits": 1,
+      "attempted": 1
+    },
+    {
+      "cpu": 0,
+      "kind": 25,
+      "hits": 1,
+      "attempted": 1
+    },
+    {
+      "cpu": 0,
+      "kind": 26,
+      "hits": 233,
+      "attempted": 233
+    },
+    {
+      "cpu": 0,
+      "kind": 28,
+      "hits": 58,
+      "attempted": 58
+    },
+    {
+      "cpu": 1,
+      "kind": 1,
+      "hits": 92,
+      "attempted": 92
+    },
+    {
+      "cpu": 1,
+      "kind": 2,
+      "hits": 87,
+      "attempted": 87
+    },
+    {
+      "cpu": 1,
+      "kind": 3,
+      "hits": 92,
+      "attempted": 92
+    },
+    {
+      "cpu": 1,
+      "kind": 6,
+      "hits": 60,
+      "attempted": 60
+    },
+    {
+      "cpu": 1,
+      "kind": 7,
+      "hits": 60,
+      "attempted": 60
+    },
+    {
+      "cpu": 1,
+      "kind": 8,
+      "hits": 31,
+      "attempted": 31
+    },
+    {
+      "cpu": 1,
+      "kind": 9,
+      "hits": 31,
+      "attempted": 31
+    },
+    {
+      "cpu": 1,
+      "kind": 10,
+      "hits": 32,
+      "attempted": 32
+    },
+    {
+      "cpu": 1,
+      "kind": 11,
+      "hits": 6,
+      "attempted": 6
+    },
+    {
+      "cpu": 1,
+      "kind": 12,
+      "hits": 55,
+      "attempted": 55
+    },
+    {
+      "cpu": 1,
+      "kind": 14,
+      "hits": 61,
+      "attempted": 61
+    },
+    {
+      "cpu": 1,
+      "kind": 16,
+      "hits": 54,
+      "attempted": 54
+    },
+    {
+      "cpu": 1,
+      "kind": 24,
+      "hits": 1,
+      "attempted": 1
+    },
+    {
+      "cpu": 1,
+      "kind": 25,
+      "hits": 1,
+      "attempted": 1
+    },
+    {
+      "cpu": 1,
+      "kind": 26,
+      "hits": 55,
+      "attempted": 55
+    },
+    {
+      "cpu": 1,
+      "kind": 28,
+      "hits": 6,
+      "attempted": 6
+    }
+  ],
+  "old_burst_occupied_bytes": 150232,
+  "gates": {
+    "A_original_64_fsync": "NOT_RUN after feasibility rejection",
+    "B_real_lifecycle": "NOT_RUN after feasibility rejection",
+    "C_frozen_matrix": "NOT_RUN after feasibility rejection",
+    "matched_overhead": "NOT_RUN after feasibility rejection",
+    "new_first_failure_integration": "NOT_RUN after feasibility rejection"
+  }
+}

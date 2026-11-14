@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**14 November — RU compact transport / NO_GO_PREFLIGHT, isolated only.**
+Selected continuation after PR35/0d689d32 is complete at the authorized feasibility
+gate, BEFORE a full probe rewrite. Actual compiled old records occupy64–96B;
+direct libbpf v3 occupies24–56B. Same1871-event histogram:150232→82896B, still larger
+than the shared32768B ring. Final exact-kernel KVM quota-pause control:1871 hits /
+attempts,652 submitted/received/decoded/retained,1219 explicit output failures;
+terminal maps obtained after join/detach independently of the ring. Two of three
+normal microbursts also lose81/352 events. This is NOT the original fsync Gate A:
+64 real pairs, lifecycle Gate B, matrix Gate C, matched overhead and new first-failure
+integration are NOT_RUN after preflight rejection, not silently accepted.90 scoped
+tests/6264 collection PASS; hosted CI remains separate. Limits unchanged, old v1/v2
+sources and closed acceptances retained. No RU access/production/persistence changes;
+CAUSE_OPEN. Single next boundary: separate architecture decision with a proven
+worst-pause capacity bound under existing limits; no alternative started.
+[Compact decision and receipts](releases/2026-11-14-ru-compact-transport-qualification.md).
+
 **14 November — RU attribution v2 continuation / NO_GO, source417edbe2, PR35.**
 PR34 baseline41ada7cf retained; original695ff6c3 remains NO_GO. Verified attach/CPU
 fences, bounded allocation/reset generations and independent syscall ledger now
@@ -15,9 +31,9 @@ Paced exact-source control:64 enter/64 exit/64 pairs,1914/1914 window records,
 Hosted source phase043643172522/control43643172588 were IN_PROGRESS at21:31UTC,
 not whole-CI PASS. Documentation head does not change the qualified executable files.
 No production access, deployment, third RU collection or persistence change. RU
-CAUSE_OPEN; closed stages below retained. Single proposed next, NOT_STARTED:
-separately select bounded compact transport with actual emission accounting under
-the SAME limits, then original burst/lifecycle gate and full frozen matrix.
+CAUSE_OPEN; closed stages below retained. That proposed compact-transport continuation
+was separately selected and ended at the negative feasibility gate above; no
+original burst or full-matrix PASS followed.
 [V2 evidence and limitations](releases/2026-11-14-ru-attribution-v2-qualification.md).
 
 **14 November — RU-FIRST-FAILURE-ATTRIBUTION-QUALIFICATION-1 / NO_GO, PR34.**
