@@ -1,0 +1,54 @@
+tracepoint:syscalls:sys_enter_openat /pid == $1/ {
+  @opening[tid] = (uint64)0;
+  if (str(args->filename) == "/opt/apps/family_connect/friends-awg/transport-state.pending") { @opening[tid] = (uint64)1; }
+  if (str(args->filename) == "/opt/apps/family_connect/friends-awg/transport-attempt.pending") { @opening[tid] = (uint64)2; }
+  if (str(args->filename) == "/opt/apps/family_connect/friends-awg") { @opening[tid] = (uint64)3; }
+}
+tracepoint:syscalls:sys_exit_openat /pid == $1/ {
+  if (@opening[tid] && args->ret >= 0) { @role[(uint64)args->ret] = @opening[tid]; }
+  delete(@opening[tid]);
+}
+tracepoint:syscalls:sys_enter_close /pid == $1/ {
+  delete(@role[(uint64)args->fd]); delete(@bytes[(uint64)args->fd]);
+}
+tracepoint:syscalls:sys_enter_write /pid == $1/ { @writing[tid] = (uint64)args->fd; }
+tracepoint:syscalls:sys_exit_write /pid == $1/ {
+  $fd = @writing[tid];
+  if (@role[$fd] && args->ret > 0) { @bytes[$fd] += (uint64)args->ret; }
+  delete(@writing[tid]);
+}
+tracepoint:syscalls:sys_enter_fsync /pid == $1/ {
+  $fd = (uint64)args->fd; $role = @role[$fd];
+  if ($role == 1 || $role == 2) { @last = $role; }
+  @phase[tid] = $role == 3 ? @last + 2 : $role;
+  @size[tid] = @bytes[$fd]; @sync[tid] = nsecs;
+}
+tracepoint:syscalls:sys_exit_fsync /pid == $1 && @sync[tid]/ {
+  printf("EV F %llu %llu %llu %lld %llu\n", nsecs, @phase[tid], nsecs - @sync[tid], args->ret, @size[tid]);
+  delete(@sync[tid]); delete(@phase[tid]); delete(@size[tid]);
+}
+tracepoint:syscalls:sys_enter_rename /pid == $1/ {
+  @rename_role[tid] = (uint64)0;
+  if (str(args->oldname) == "/opt/apps/family_connect/friends-awg/transport-state.pending") { @rename_role[tid] = (uint64)1; }
+  if (str(args->oldname) == "/opt/apps/family_connect/friends-awg/transport-attempt.pending") { @rename_role[tid] = (uint64)2; }
+  @rename[tid] = nsecs;
+}
+tracepoint:syscalls:sys_exit_rename /pid == $1 && @rename[tid]/ {
+  printf("EV R %llu %llu %llu %lld 0\n", nsecs, @rename_role[tid], nsecs - @rename[tid], args->ret);
+  delete(@rename[tid]); delete(@rename_role[tid]);
+}
+tracepoint:sched:sched_process_fork /pid == $1/ { @child[(uint64)args->child_pid] = nsecs; }
+tracepoint:sched:sched_process_exec /@child[(uint64)pid]/ {
+  @engine[(uint64)pid] = (uint64)0;
+  if (comm == "awg") { @engine[(uint64)pid] = (uint64)1; }
+  if (comm == "xray") { @engine[(uint64)pid] = (uint64)2; }
+}
+tracepoint:sched:sched_process_exit /tid == pid && @child[(uint64)pid]/ {
+  printf("EV Q %llu %llu %llu 0 0\n", nsecs, @engine[(uint64)pid], nsecs - @child[(uint64)pid]);
+  delete(@child[(uint64)pid]); delete(@engine[(uint64)pid]);
+}
+END {
+  clear(@opening); clear(@role); clear(@bytes); clear(@writing); clear(@last);
+  clear(@phase); clear(@size); clear(@sync); clear(@rename); clear(@rename_role);
+  clear(@child); clear(@engine);
+}

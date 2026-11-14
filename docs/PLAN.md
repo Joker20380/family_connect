@@ -15,6 +15,9 @@ for the specifically missing attribution, preserving first failure. Current heal
 root cause, deployed correction and observation window must remain distinct.
 No full-main/PR16/17 redeployment; recovery only after evidence of actual failure,
 using the existing RU-only controlled procedure. Replacement is a separate decision.
+Observer-only source qualified (27 tests/6191 collection;181.50s/75-cycle smoke,
+cost and lease-crossing/actual engine readback PASS); next: review/merge and one
+pinned finite window. No product persistence change is justified by current evidence.
 [Task evidence](releases/2026-11-14-ru-persistence-pressure.md).
 
 **CI-RUNNER-COMPLETION-1 — separate queued follow-up, NOT STARTED.**

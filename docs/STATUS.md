@@ -8,6 +8,10 @@ Android/support/notification results retained; no preventive restart or access c
 Historical8.651672s/9.259661s failures prove persistence deadline overruns, not the
 competing writer/memory-pressure source/provider cause. Exact installed source has
 TICK_SECONDS=2 and two durable readback writes per cycle. Attribution is still OPEN.
+Finite phase/process/cgroup collector qualified for181.50s:75 cycles/300 fsync,
+no lost events/failure; lease renewed across its initial deadline and independent
+AWG/TCP readback PASS. Unit CPU3.63% of one core/peak74MB. Local observer27 /
+collection6191 PASS. No persistence fix or long-running observation is yet installed.
 [Current scope and bounded evidence](releases/2026-11-14-ru-persistence-pressure.md).
 Separate CI-RUNNER-COMPLETION-1: phase0/tests132438099847 is now FAILED by external
 timeout, all three pytest contexts rc0/coverage PASS, cargo skipped; Linux control

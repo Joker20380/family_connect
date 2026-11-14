@@ -43,7 +43,69 @@ not that its load causes the multi-second stalls or that writes are safely remov
 Missing: time-aligned syscall phase latency, per-process/cgroup writes/major faults/
 swap/memory and host PSI/disk deltas at a slow cycle/first failure. Historical sysstat
 10-minute aggregates do not supply that attribution. Do not change persistence,
-8/12/120s or lifecycle based on correlation. Bounded observation preparation is next.
+8/12/120s or lifecycle based on correlation.
+
+## Bounded observer qualification
+
+Added a PID-scoped BPF syscall/child-lifetime observer plus a finite counter ring;
+[limits, signals, collection and extraction](../operators/ru-pressure-observation.md).
+Only numeric phase/counter data and aggregate access observations, no argv, keys or
+message contents. No transport/paid/support source, archive or unit was changed.
+The prerequisite node/gateway hashes and hostname are enforced, including refusal
+to start over an existing first failure. No diagnostic persistence is authoritative.
+
+Qualification is staged in RAM with CPU10%/Memory256MiB/no swap, not an application
+installation. Initial small probes and guard tests are not route acceptance: one
+invocation lost its SSH wait result; the detached20-second tracer hit its unit
+runtime limit after collecting36 fsyncs. Three candidate collector runs stopped on
+their own cost guard before tracing, exposing that sampling235+ PIDs/45 cgroups
+costs about0.12–0.13 CPU seconds and quota wait inflates wall time. The accepted
+budget must therefore use separate CPU/wall measurements and a five-second counter
+interval, not a tight two-second loop. A subsequent candidate failed BPF compilation
+on signed fd keys/conditional integer types; explicit uint64 map keys/roles correct
+that diagnostic compatibility issue. None of these probes restarted or changed RU.
+
+Own scheduling inspected: paid reconcile and restricted directory sync30s after
+completion; chat sync20s; credential health10min/renewal15min; cert renewal00/12 host
+time plus≤30min jitter. No Family Connect entry found in inspected cron.d/root-user
+crontabs, and no Family Connect backup timer appeared in the unit inventory. This
+does not exclude manual/provider tasks. Installed server-load monitorf9ec91fb matches
+source and writes two small atomic snapshots roughly every15s, without fsync. These
+are candidate contributors to measure, not established historical causes.
+
+Local collection6191 PASS; observer regressions27 PASS (numeric schema, privacy,
+PID identity, first-failure priority, immutable bounded outputs, five stop paths).
+General CI remains separate below. No product persistence/lifecycle alteration is
+proposed: crash/reboot/partial-write fault injection would be mandatory for such a
+fix, but is not falsely claimed from observer tests or repeated on production.
+
+Final qualification14:09:04–14:12:03UTC (181.50s process duration) PASS:75 complete
+cycles,300 fsync/150 rename/225 child-exit phase records, no phase0, no lost indication,
+no first failure and no tracer errors. Source script004114fe317b223fd78f898444f0990147b3634b25ba0c64330360279b8104f5;
+exact companion hash is recorded in the source/installation receipt.28 counter
+samples; mean/max sample CPU152/175ms, aggregate unit CPU6.584s (3.63% of one core),
+MemoryPeak74,014,720 bytes. Counter polling waits5s after sampling; actual mean
+spacing6.63s, not an asserted exact5s. Zero omitted PIDs/cgroups; up to13 procfs races
+per sample are visible. Short-lived tasks between samples may escape per-PID deltas;
+host/cgroup totals must not be mistaken for complete per-process accounting.
+
+State-file fsync median23.08/p95 53.07/max374.13ms; attempt-file median18.91/max44.47ms;
+directory maxima44.85/34.70ms; rename maxima3.05/2.72ms. AWG child max24.27ms/TCP
+child max91.59ms (not whole engine-query timings). Logical watched writes3,220,647
+bytes over75 cycles; watcher `/proc/io` delta4,128,768 bytes over178.91s (~22.54KiB/s),
+not an I/O reduction: no product write-path change was made. Host writes52,980KiB,
+swap-in0/swap-out12 pages; memory-full PSI delta0.0226s versus IO-full6.301s.
+Largest long-lived process write deltas include journald5.83MB, watcher4.13MB and
+Family Connect HTTP2.03MB. These healthy-window counters do not attribute the old
+multi-second stalls to any of them or prove a provider fault.
+
+All28 observations:64 applied records/20 allowed, fresh readback, no prepared entry
+at independent engine inspection. Initial lease14:10:38UTC crossed with later
+deadline14:14:02UTC, no extension of the120s policy. Independent AWG/TCP queries at
+14:10:59UTC:64 canonical identities checked, zero presence/identity/flow mismatches,
+no decision race, state age1.09s, same four runtime PIDs/invocations/NRestarts0.
+The measured interval is not proof against future recurrence. Finite production
+capture is not yet enabled at this source checkpoint.
 
 ## Separate CI disposition
 
