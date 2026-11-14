@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**14 November — RU-FIRST-FAILURE-ATTRIBUTION-QUALIFICATION-1 / NO_GO, PR34.**
+Candidate/reducer and disposable KVM fixture implemented; exact RU kernel7.0.0-30
+and BTF match verified. Real clean16-cycle gate FAIL:162 request records have zero
+allocation generation;12/64 expected fsync enter/exit pairs retained. Python pipe
+drain/EOF/END succeeds but complete=false; no full-stream or attribution acceptance.
+Remaining CPU/reclaim/queue/service/two-writer/mixed kernel scenarios NOT_RUN after
+rejection, not PASS. Source695ff6c3:60 scoped tests/collection6234 PASS; limits unchanged.
+Hosted phase0/control were still running at the integration checkpoint, not claimed
+green. Single proposed next is
+a separately selected producer identity/readiness/drain redesign on the same VM,
+not a third RU capture. No production changes; CAUSE_OPEN and all closed stages
+retained. [Qualification decision](releases/2026-11-14-ru-first-failure-qualification.md).
+
 **14 November — RU-PERSISTENCE-PRESSURE-1 / FINAL_ANALYSIS_COMPLETE, CAUSE_OPEN (PR33).**
 Both finite windows and original failures analyzed; source/trace/extraction hashes
 verified, duplicate exports/overlapping rings counted once. First349.878s, refined
