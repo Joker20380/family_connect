@@ -30,14 +30,14 @@ def pipe_owners(records):
     known = {record['pid'] for record in records}
     result = []
     unreadable = 0
-    for process in sorted(Path('/proc').iterdir()):
+    for process in sorted(Path('/proc').iterdir())[:4096]:
         if not process.name.isdigit():
             continue
         try:
             stat = (process / 'stat').read_text().rsplit(')', 1)[1].split()
             pid, parent, group = int(process.name), int(stat[1]), int(stat[2])
             owners = []
-            for descriptor in (process / 'fd').iterdir():
+            for descriptor in list((process / 'fd').iterdir())[:256]:
                 try:
                     target = os.readlink(descriptor)
                     if target in pipes:

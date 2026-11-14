@@ -3,7 +3,10 @@
 **14 November15:07UTC — CI-RUNNER-COMPLETION-1 SELECTED / DIAGNOSTIC_CHECKPOINT.**
 Baseline main248b1881 retained; original dirty checkout untouched. No production
 changes authorized by this CI task. Instrumenting inventory/context/cleanup/wrapper/
-pipeline boundaries and bounded pipe-owner evidence; cause is not established yet.
+pipeline boundaries and bounded pipe-owner evidence. Diagnostic60b3ff87 is running;
+candidate bounds only console lines to2048 bytes while tee retains the exact full
+artifact and all pipeline exit codes.31 local lifecycle/fixture tests PASS; hosted
+external completion/cargo/GTK gates remain pending. No causal closure from a PASS line.
 Source38e9f403 phase043606003930/tests132480665060 and Linux43606003884/
 132480664898 were still running at entry; actual failover132480665285 PASS.
 RU observer38e9f403 has already stopped safely after1171.45s on sample_cost_limit,

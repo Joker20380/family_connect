@@ -10,6 +10,8 @@ the25-minute outer limit. Gate: real external completion in phase0 and Linux con
 subsequent cargo/GTK/recovery/package/extracted checks executed, actual failover gate,
 review/ordinary merge/remote SHA. No production deployment. Inner coverage is not
 external completion. [Evidence](releases/2026-11-14-ci-runner-completion.md).
+Raw-output diagnostic60b3ff87 retained; bounded-console candidate qualified locally
+(31 tests), awaiting hosted external results. Do not merge on an internal marker.
 RU is waiting for analysis of its already-extracted final window: sample_cost_limit
 after1171.45s, no gateway failure; no restart/extension or CI-driven RU changes.
 

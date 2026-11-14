@@ -233,3 +233,12 @@ completed timeout debt and from the observer's completed local/RU qualification.
 
 Private read-only snapshots/source capsule stay in `/mnt/data/fc-ru-persistence-pressure-20261114`;
 no keys, raw registry, user contents or private snapshots are committed.
+
+## CI-task entry readback15:07UTC
+
+Refined observer38e9f403 had already stopped on sample_cost_limit after1171.45s;
+unit active/exited/MainPID0/Resultsuccess, no gateway failure, tracer rc0/empty errors.
+Start/final/errors extracted under NEW label`ci-entry-20261114-1506` with hashes,
+without restarting/extending/changing RU. Final analysis remains separate and OPEN;
+see [CI handoff receipt](2026-11-14-ci-runner-completion.md#ru-read-only-handoff).
+The earlier408s running check is historical, not the current observer state.

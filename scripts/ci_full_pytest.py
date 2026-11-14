@@ -62,13 +62,15 @@ def main():
                 '-o', 'faulthandler_timeout=180', '-q', '--tb=short', *selection]
         inventory = folder / 'inventory.json'
         mark('inventory_start')
-        subprocess.run(command('inventory', inventory) + ['--collect-only'], cwd=ROOT,
-                       env=environment, check=True, timeout=180)
-        mark('inventory_end')
+        result = subprocess.run(command('inventory', inventory) + ['--collect-only'], cwd=ROOT,
+                                env=environment, timeout=180)
+        mark('inventory_end', returncode=result.returncode)
+        result.check_returncode()
         expected = json.loads(inventory.read_text())
         if set(expected) != set(CONTEXTS) or not all(expected.values()):
             raise ValueError('Incomplete fixture context inventory')
         failures = []
+        collections = {}
         for name in CONTEXTS:
             print('FULL-SUITE CONTEXT: ' + name, flush=True)
             output = folder / (name + '.json')
@@ -76,12 +78,15 @@ def main():
             result = subprocess.run(command(name, output), cwd=ROOT, env=environment)
             mark('context_end', context=name, returncode=result.returncode)
             actual = json.loads(output.read_text())
-            if actual[name] != expected[name]:
-                raise ValueError('Fixture collection changed between contexts: ' + name)
+            collections[name] = actual[name]
             print(json.dumps(dict(context=name, tests=len(actual[name]), returncode=result.returncode,
                 collection_sha256=hashlib.sha256(json.dumps(actual[name]).encode()).hexdigest())), flush=True)
             if result.returncode:
                 failures.append(name)
+        mark('coverage_start')
+        for name in CONTEXTS:
+            if collections[name] != expected[name]:
+                raise ValueError('Fixture collection changed between contexts: ' + name)
         if failures:
             raise SystemExit('Failed fixture contexts: ' + ', '.join(failures))
         print('Full-suite context coverage: PASS', flush=True)

@@ -29,6 +29,32 @@ No test exclusions, source pin updates or dependency changes. Receipt coverage a
 outer completion are separate. Local real-process tests check exit0/7 and safe
 identification of pipe writers. Hosted evidence remains pending.
 
+Diagnostic commit60b3ff87acdd03f896df7e5c6ac613f0c35e2dc0 was pushed/remote verified.
+One diagnostic candidate, no manual reruns: phase043608832012/tests132489150366,
+Linux43608832034/job132490566049. Its real failover132489150109 completed PASS,
+including all four scripts. At16:09UTC outer pytest steps still pending. Live phase0
+log still ends inside a megabyte inventory parameter ID; not at cleanup. Existing
+raw artifact has18,627 lines, max1,048,685 bytes/line. The local identical4,750,501
+byte log traverses the original tee pipeline in31ms, rc0 and byte-identical artifact.
+History21cfe5e5 exposed collect-only stdout (previously discarded); all six CI chain
+files are unchanged betweenac3479bf and38e9f403. This narrows the output-handling
+mechanism, but final lifecycle/artifact evidence and bounded-output hosted result
+are still required before causal/acceptance closure.
+
+The candidate changes only console representation: bounded streaming relay after
+tee emits a line-number/length/SHA reference for lines over2048 bytes. Full log bytes
+remain in the artifact, including failed collection diagnostics. No truncation of
+inventory, test input, assertions or failure artifact. Shell records command/tee/
+console actual exit codes and propagates errors.31 local lifecycle/context/fixture
+checks PASS: real process exit0/7 with1MiB output and exact full artifact, tee failure,
+wrapper exit, inherited pipe vs parent completion and safe process evidence.
+No timeout increase, new dependency, historical hash or test exclusion.
+
+Newer observer source38e9f403 Linux43606003884/job132480664898 became CANCELLED
+at15:44:33UTC, without artifact/downstream completion; it is not a completed PASS
+or the originalac3479bf timeout. No manual cancel/rerun was issued. Its phase0 tests
+were still running at15:58; failover132480665285 remains a completed PASS.
+
 ## RU read-only handoff
 
 One entry extraction15:07UTC using existing refined helper and NEW label
