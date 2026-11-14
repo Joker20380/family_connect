@@ -6,6 +6,15 @@ NO_GO results for695ff6c3 and417edbe2. See the
 Its direct-output microbenchmark is NOT a full watcher or original-fsync gate.
 No production use, full probe port or alternative architecture follows this rejection.
 
+Positive synthetic failure producers must close a sibling temporary file before
+atomic replacement of the watched final path. A pending file is not publication;
+a corrupt final file must still stop as invalid_failure, even if later repaired.
+This is an isolated-fixture contract, NOT proof of production compatibility:
+the repository transport gateway's O_EXCL final-file creation does not prevent an
+incomplete concurrent read. A separate first-writer/completion/durability contract
+must be qualified before future use; no product writer/reader change is authorized
+by the [fixture repair](../releases/2026-11-14-attribution-failure-publication.md).
+
 ## Current sequential admission contract
 
 1. Preflight: compiled layouts including ring header/alignment, one32KiB ring,

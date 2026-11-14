@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**14 November — attribution failure-publication fixture repair / CI_PENDING.**
+Linux control source132604440606 and main132605128651 both reject a partially
+published final failure; successful documentation job132605100860 does not cancel
+those failures. Interprocess handshakes deterministically reproduce empty/partial
+final-path rejection and pending+replace acceptance. Positive pipe fixture and v2
+readiness producer corrected; reader stays strict.100 scoped tests/6269 collection
+PASS; completed hosted phase0/tests and full Linux control required before merge.
+Production O_EXCL writer has a separate incomplete-publication contract limitation;
+not changed or qualified here. PR36 NO_GO_PREFLIGHT / RU CAUSE_OPEN preserved.
+[Evidence and checks](releases/2026-11-14-attribution-failure-publication.md).
+
 **14 November — RU compact transport / NO_GO_PREFLIGHT, sourceea19c1d7 / PR36.**
 Selected continuation after PR35/0d689d32 is complete at the authorized feasibility
 gate, BEFORE a full probe rewrite. Actual compiled old records occupy64–96B;
