@@ -1,6 +1,7 @@
 {
   "schema": 1,
   "reference": "android106-native105",
+  "subsequent_deltas": ["clients/shared/support1-messenger.json"],
   "source_inventory_sha256": "8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c",
   "accepted_modules": {
     "messenger/chat.py": "70da531f18645dda519a7eabbac9a505ac626ced19c023bf60f2ea796896c8d8",

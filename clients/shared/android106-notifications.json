@@ -1,6 +1,7 @@
 {
   "schema": 1,
   "reference": "android106-native105",
+  "subsequent_deltas": ["clients/shared/support1-messenger.json"],
   "source_inventory_sha256": "8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c",
   "accepted_sources": {
     "clients/android/app/src/main/java/com/familyconnect/app/TerminalToggle.java": "7e5a569a93939920bf77c4991cffd11ef573514f1367fb58bd3a9de34f9d336e",

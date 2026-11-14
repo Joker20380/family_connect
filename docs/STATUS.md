@@ -1,5 +1,11 @@
 # Текущее состояние / Current state
 
+**14 November — accepted support reference delta repaired, final CI pending.**
+Original106 hashes/inventory and subscription119 patch unchanged. Explicit support1
+patch from10d353d8 plus support.py dependency pins reversibly connect all accepted
+modules; reverse support, subscription119 and platform deltas restores106 exactly.
+Reference/package25 PASS; full collection6164 PASS. No deployment/baseline yet.
+
 **14 November — notification late-ACK correction qualified, NOT DEPLOYED.**
 Terminal job state and message delivery fact are separate. Real mailbox/valid ACK
 regressions cover superseded/expired jobs and immediate panel observation without

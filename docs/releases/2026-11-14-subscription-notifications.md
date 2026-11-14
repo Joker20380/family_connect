@@ -1,5 +1,20 @@
 # SUBSCRIPTION-NOTIFICATIONS-1
 
+## Continuation — reference contract
+
+Historical support commit10d353d8 changes chat/local/store and introduces support.py;
+all four are pinned in a separate support1 delta, including patch checksum and
+before/after hashes. Both106 manifests reference it; accepted106 hashes/inventory,
+119 intermediate hashes and subscription119 patch are byte-for-byte preserved.
+Tests reverse support, then subscription119, then platform routing and check every
+accepted module against106. Parameterized checks report each module/dependency;
+AST closure verifies relative imports including the new support dependency.
+Reference/package25 PASS; collection6164 PASS in exact core environment with system
+GI appended via local .pth (also inherited by package subprocess). Initial package
+attempt lacked GI in its child process; corrected environment, no skipped check.
+Late-ACK commit0950bba0 pushed and remote SHA verified. Final hosted/full runtime
+gates and administrative installation are still pending; no full-CI PASS claimed.
+
 ## Continuation — late stored ACK
 
 Preserve superseded/expired processing states; reconcile persisted delivery status

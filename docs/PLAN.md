@@ -3,6 +3,8 @@
 ## Current engineering priority / Текущий critical path
 
 **Selected14 November — SUBSCRIPTION-NOTIFICATIONS-1, IN PROGRESS.**
+Reference debt fixed without changing accepted106 hashes:25 reference/package and
+6164 collection PASS. Await final hosted gates including actual failover steps.
 Continuation: late stored-ACK/terminal-job correction qualified (50 support,
 48 panel checks); next repair the accepted support reference delta, complete CI,
 merge and prepare the exact administrative install action before requesting it.
