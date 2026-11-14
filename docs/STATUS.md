@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**14 November — RU-PERSISTENCE-PRESSURE-1 / FINAL_ANALYSIS_IN_PROGRESS.**
+Selected offline analysis of the two already-ended windows, not a third collection.
+Main817266aa/PR32 retained; original dirty checkout untouched. Manifest source/trace
+hashes match exact Git blobs; both original historical failure hashes verified.
+Refined duplicate exports are one capture. Actual terminating sample CPU202.842ms
+exceeded200ms; wall1.999824s did not exceed10s. New offline calculation tool checks
+deduplication, ring coverage, monotonic intervals, PID/start identity and counter
+units;38 analysis/observer regressions PASS. Attribution/conclusions still pending
+full interval review. No product/production change or resource-limit relaxation.
+
 **14 November — CI-RUNNER-COMPLETION-1 COMPLETE / CI_ONLY, integration PR32.**
 Qualified executable sourcefd1d87941888f33773cab9e015a57358f0e67d39; later report
 changes are documentation-only. Raw diagnostic60b3ff87 proves cleanup/wrapper/tee

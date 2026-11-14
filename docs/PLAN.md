@@ -2,6 +2,14 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected — RU-PERSISTENCE-PRESSURE-1 / final offline analysis.**
+Verify provenance, deduplicate exports/overlapping rings, separate accumulated
+statistics from retained distributions, resolve cost stop and correlate only covered
+counter intervals. Gate: reproducible bounded calculations, explicit attribution
+limits and one justified next decision, review/ordinary PR integration. No third
+capture, guard increase, product change or production deployment. CI completion
+remains closed; appimagetool/readiness follow-ups stay separate.
+
 **CI-RUNNER-COMPLETION-1 — COMPLETE / CI_ONLY, integration PR32.**
 Sourcefd1d8794 qualified:31 local checks/6203 collection; phase0/tests132506529152
 full step507s and subsequent cargo PASS; Linux control132506529441 full step519s

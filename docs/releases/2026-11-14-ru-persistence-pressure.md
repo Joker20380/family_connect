@@ -1,5 +1,19 @@
 # RU-PERSISTENCE-PRESSURE-1 — 14 November 2026
 
+## Final-analysis tooling checkpoint
+
+Selected on main817266aa after PR32. `scripts/ru_pressure_analysis.py` reads only
+existing local captures and writes a new exclusive0600 private analysis file. It
+verifies source/trace pairs, deduplicates identical exports and overlapping samples,
+keeps summary means separate from retained nearest-rank percentiles, uses saved
+clock_ticks/page_size and actual monotonic spacing, and brackets a phase only with
+a completed before-sample and an after-sample. Counter decreases are unknown/reset,
+not negative traffic; changing PID start identity is not joined. No host access.
+38 analysis/observer tests PASS, including real CLI non-overwrite/input-preservation.
+Historical first-failure bytes and source manifests verified. Refined stop is CPU
+202.841517ms>200ms, not wall1.999824s>10s. Full attribution decision follows below;
+no new collection, runtime fix, resource increase or deployment is authorized here.
+
 ## Entry and scope
 
 Entry main732dabae710b7db03e95e9a2f62d3a4414f3958e; existing clean worktree/branch
