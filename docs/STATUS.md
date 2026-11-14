@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**14 November12:34UTC — notification source gates complete; general hosted CI separate.**
+Onac3479bf the notification/reference/package/panel/paid/messenger gates and completed
+Docker full-suite command plus actual failover/auth/offline/revocation pass. These
+are the applicable server-route gates; no required check is removed or bypassed.
+Standalone hosted phase0 tests132438099847 and Linux control remain IN_PROGRESS,
+not PASS (phase0 full step started11:57:41UTC; no completed log/receipt yet). Android
+CI also remains separate; no new Android build/publication is used for this task.
+Proceed with ordinary source merge and helper-only RU preparation, not a claim that
+all CI or production acceptance completed. Local privileged installation still needs
+the exact prepared OS-prompt action; baseline/cycles/real receipt remain unobserved.
+
 **14 November — notification continuation: scoped CI/real failover PASS; install prepared.**
 Code/referenceac3479bf:422 core,48 panel,25 reference/package and6164 collection PASS.
 Hosted route/messenger/panel/paid/readiness/Linux voice/candidate PASS. Phase0 actual

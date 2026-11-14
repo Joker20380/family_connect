@@ -3,8 +3,13 @@
 ## Current engineering priority / Текущий critical path
 
 **Selected14 November — SUBSCRIPTION-NOTIFICATIONS-1, IN PROGRESS.**
+Gate disposition12:34UTC: applicable server route/reference/package/panel/paid gates,
+completed Docker full-suite execution and actual failover/auth/offline/revocation
+PASS. Proceed to ordinary source merge; independently running hosted phase0/Linux
+control/Android remain unaccepted, not cancelled or declared green. No client release.
+Then install RU helpers and request the fully prepared local administrative action.
 Scoped CI and actual failover/auth/offline/revocation now PASS onac3479bf; await
-standalone full-suite completion, then merge. Installation is fully prepared for
+standalone full-suite outcome separately from source merge. Installation is fully prepared for
 one exact local sudo action (operator runbook), not a generic access request.
 Canonical/panel restore rehearsals PASS; production baseline still absent.
 Reference debt fixed without changing accepted106 hashes:25 reference/package and

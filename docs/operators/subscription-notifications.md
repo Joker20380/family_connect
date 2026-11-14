@@ -117,7 +117,7 @@ forced read-only command. No changes on Amsterdam or excluded hosts are needed.
 After final applicable gates and PR26 merge, the already prepared local helper is:
 `/mnt/data/fc-subscription-notifications-20261114/install-ac3479bf/install.py`
 
-SHA256: `3eadef11a617863d967fe9280446fd8d8573013fd145af10d5057773da18b79f`.
+SHA256: `4bf466a3f802462e5a297f2d7eb51c5dcd800cff853996141c2c68e187a040a6`.
 It pins sourceac3479bf and bundle16284251df81423d772f0b808ad89cd7863924239eb50d7e7cd230c0422e6313.
 Run in a normal local terminal on joker-XPS; enter the password only in sudo's OS prompt:
 
@@ -127,11 +127,14 @@ sudo /usr/bin/python3 /mnt/data/fc-subscription-notifications-20261114/install-a
 
 The helper checks hostname, exact bundle/files, current configuration/image and
 mounted runtime inode333786. It takes fresh panel and encrypted sender backups,
+revalidates resolved Compose environment/command/IPC group/mount targets,
 keeps keys separately, verifies isolated restores before switching, installs only
 four support modules and the new units/drop-in, and switches only console's image.
 Users/settings/volumes, main unit and existing support-binding timer are retained.
 It then enables the collector, waits for the worker's atomic baseline, observes
 three65s cycles and one restart/70s observation. Allow roughly6 minutes. It does not
+accept an unexpected worker restart, stale notification source or failed panel IPC.
+It does not
 initialize/reset the baseline itself and never restores a live database. Repeating
 install retains baseline/cursor/jobs; unexpected code/configuration drift aborts.
 

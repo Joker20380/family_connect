@@ -1,5 +1,27 @@
 # SUBSCRIPTION-NOTIFICATIONS-1
 
+## 12:34UTC — applicable gate disposition
+
+All dedicated server route/reference/package/panel/paid/messenger gates and real
+failover/auth/offline/revocation are completed PASS onac3479bf. Docker's enforced
+full-suite command completed successfully before its tests-passed marker/runtime
+image and integration steps; no test was excluded to obtain that result. This is
+not a claim that every independently running hosted workflow has completed.
+Standalone phase0 job132438099847 still reports its full step IN_PROGRESS from
+11:57:41UTC; log download returns BlobNotFound and no full-suite receipt exists yet.
+Linux control and automatically triggered Android CI also remain independently
+unaccepted. Do not invent a failing test/root cause or report general CI PASS.
+The applicable backend gates permit ordinary source merge; preserve all outstanding
+CI runs/checks and report their actual status on subsequent readback. No Android
+artifact is signed, published or needed for server activation.
+
+Private installer review additionally checks resolved runtime Compose values before
+switching, stable worker PID/no automatic restarts for three cycles, a changed PID
+after the intentional restart, fresh source and successful real console IPC/history.
+Final helper SHA2564bf466a3f802462e5a297f2d7eb51c5dcd800cff853996141c2c68e187a040a6;
+four isolated tests and resolved-current-configuration check PASS. Source remains
+ac3479bf; subsequent commits only update documentation, not the qualified bundle.
+
 ## Continuation — qualified preparation, awaiting final gate/merge
 
 Executable/reference headac3479bfa4f8b190826182fb9633d78a7fdfb993 pushed; remote SHA
