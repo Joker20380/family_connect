@@ -5,6 +5,11 @@ gateway code, state, lease, engine, paid policy, support or notification data. U
 only authorized RU185.251.89.19 (`box-932982`), via the existing administrative path,
 never the read-only collector key. Do not restart healthy transport for observation.
 
+Current disposition14November: both windows ended, final analysis COMPLETE and
+RU cause OPEN. No third capture/extension is authorized. The original15November
+deadline is historical, not a condition for analysis. See the offline procedure below
+and [decision](../releases/2026-11-14-ru-persistence-pressure.md#final-analysis--complete-cause-remains-open).
+
 ## Pinned prerequisites and information collected
 
 `scripts/ru_pressure_observer.py` checks root, hostname, RAM-only `/run`, root0700
@@ -90,6 +95,40 @@ all databases untouched. No database restore or old worker rollback is involved.
 Do not change neighbour applications, run disk stress, induce swap, remove fsync,
 increase8/12s budgets or extend120s access leases to make the graph look better.
 
+## Offline final analysis
+
+Run only on retained local copies. This command does not connect to RU. Output must
+be a new filename: creation is exclusive0600, and every input is read-only.
+
+```sh
+evidence=/mnt/data/fc-ru-persistence-pressure-20261114
+python3 scripts/ru_pressure_analysis.py \
+  --manifest "$evidence/observer-manifest.json" \
+  --manifest "$evidence/refined-observer-manifest.json" \
+  --output "$evidence/final-analysis-replay.private.json" \
+  "$evidence/extracted-first-window-final" \
+  "$evidence/extracted-acceptance-20261114" \
+  "$evidence/extracted-refined-ci-entry-20261114-1506" \
+  "$evidence/extracted-refined-ci-exit-20261114-1713"
+```
+
+Check manifest file hashes against exact Git source blobs, local input SHA256 against
+the retained extraction receipts, and the report's refined final911a8f16 full hash.
+Do not commit output or captures. Run `python -m pytest -q tests/test_ru_pressure_analysis.py
+tests/test_ru_pressure_observer.py` using the locked test environment.
+Duplicate exports/slow-final overlap are one event stream. Summary duration/counts
+are accumulated only through processed tracer output; percentiles use retained
+records only. Last60 samples are not the whole refined run. Counter timestamps mark
+sequential-read start; use sample_seconds bounds, actual monotonic spacing, boot ID
+and PID/start_ticks. Never infer bytes from pages without saved page_size, CPU seconds
+without clock_ticks, or disk sectors using page_size (diskstats sectors are512 bytes).
+Cgroup paths lack creation identity, short-lived processes can be absent, and no
+reported perf loss does not imply final stdout was drained at shutdown. A before
+snapshot in slow.json is not an after-event counter; first final supplies that bracket.
+
+Current analytical next is only the isolated attribution-qualification proposal in
+the report, not another monitoring run. Preserve all captures and original failures.
+
 ## First window — 14 November 2026 (stopped by cost guard)
 
 PR29 merged59cd72ed, exact source43eb84eb76871ae907a64f2fef4934f04cf8385f.
@@ -127,8 +166,9 @@ the next task turn must inspect the saved finite result.
 CI-task entry15:07UTC14Nov found active/exited/MainPID0: sample_cost_limit after
 1171.45s, not a gateway failure. Final/start/errors are safely extracted as
 `extracted-refined-ci-entry-20261114-1506` under the private evidence directory below.
-No scheduled automatic analysis exists. Analyze that final window separately;
-do not restart/extend the observer or wait for the original ceiling to collect it.
+No scheduled automatic analysis exists. That final window is now analyzed in the
+linked report: CPU202.841517ms exceeded200ms, wall1.999824s stayed below10s.
+Do not restart/extend the observer or wait for the original ceiling to analyze it.
 The start/deadline configuration below is retained historical configuration.
 
 PR30 mergededd10793f43f866c7add806d0a1609b0b43e42e8. Reviewed/qualified source

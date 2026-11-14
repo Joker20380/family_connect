@@ -2,6 +2,24 @@
 
 ## Current engineering priority / Текущий critical path
 
+**RU-PERSISTENCE-PRESSURE-1 / final offline analysis COMPLETE, CAUSE_OPEN (PR33).**
+Provenance, deduplication, retained-vs-aggregate statistics, serial-sample bounds and
+refined CPU202.841517ms cost stop verified;38 analysis/observer checks PASS. First
+349.878s/refined1171.448s include no new deadline failure. Refined counters cover
+only14:54–15:00UTC; historical8s failure attribution is absent, not reconstructed
+from healthy samples. No product fix/deployment/third capture is justified or made.
+[Completed evidence and decision](releases/2026-11-14-ru-persistence-pressure.md#final-analysis--complete-cause-remains-open).
+
+**One proposed next, NOT_STARTED: RU-FIRST-FAILURE-ATTRIBUTION-QUALIFICATION-1.**
+Only if selected: isolated qualification of a bounded event-driven recorder that
+distinguishes watcher off-CPU/reclaim, vda queue/completion wait and writer-cgroup
+activity at a real first failure, without full procfs polling. Gate: controlled
+isolated wait-class cases, exact first-failure/terminal-tail retention, no secrets,
+measured cost within original200ms CPU/10s wall and10% CPU/256MiB/no-swap/time/file
+limits. Failure to fit is a completed NO_GO, not a limit increase. No production
+capture is authorized by qualification; no provider-blame or replacement decision.
+CI PR32 stays closed; appimagetool/readiness follow-ups remain separate.
+
 **CI-RUNNER-COMPLETION-1 — COMPLETE / CI_ONLY, integration PR32.**
 Sourcefd1d8794 qualified:31 local checks/6203 collection; phase0/tests132506529152
 full step507s and subsequent cargo PASS; Linux control132506529441 full step519s
@@ -16,11 +34,10 @@ Not whole-CI green: Client builds/linux132506592194 HTTP403 fetching appimagetoo
 earlier push failover build132506280739 failed unchanged readiness attempt-count
 assertion within150ms. These separate failures remain visible; no blanket rerun,
 assertion relaxation or silent repair. Follow-up needs explicit selection.
-Next RU checkpoint: analyze already-extracted final window (sample_cost_limit
-after1171.45s, no gateway failure), preserving CAUSE_OPEN. No automatic task start,
+The former RU analysis checkpoint is complete above; CAUSE_OPEN remains. No automatic task start,
 observer restart/extension, payment-provider, card-refresh or Android work.
 
-**RU-PERSISTENCE-PRESSURE-1, CAUSE_OPEN / final capture awaiting analysis.**
+**RU-PERSISTENCE-PRESSURE-1 — retained scope/gates and historical collection.**
 Scope: authorized RU185.251.89.19 only; diagnose the observed persistence deadline
 overruns using actual node125c796a, saved first failures and bounded process/cgroup/
 host counters aligned to operation phases. No preventive restart, storage stress,
@@ -41,17 +58,17 @@ Lower-cost kernel path qualified181.99s/75 cycles with unchanged limits,29 tests
 6193 collection PASS; PR30 mergededd10793/source38e9f403 enabled14:40:36UTC with
 unchanged limits. No extension of the original overall window: normal deadline
 15Nov14:18:47UTC, hard ceiling14:19:16UTC. It stopped early on sample_cost_limit;
-entry/exit CI extractions retained identical final/start/error receipts. Next action:
-inspect the retained final/start phase/cgroup deltas and first-window evidence to decide
-whether a specific mechanism warrants a qualified patch. First747.74ms fsync
+entry/exit CI extractions retained identical final/start/error receipts. Final analysis
+above is complete; the original15November deadline is not a waiting condition.
+No specific product correction is warranted by these captures. First747.74ms fsync
 capture is retained; it is not an8s failure or proof against a particular process.
 No product persistence change is justified by current evidence. Preserve concurrent
 legitimate live metadata/enrollment; audited identity keys/device sets are unchanged.
 Revised window was running408s at14:47:24UTC, no RU failure; actual engine readback
 and lease crossing PASS. Final elapsed1171.45s; no failure/lost events, tracer rc0.
-No scheduled extraction/analysis exists. Optional new-label readback command and
-original15Nov after15:20Brussels checkpoint remain in the CI report. This is an
-observation handoff, not causal closure or a claim of current VPN reachability.
+No scheduled extraction/analysis exists. Old readback commands/deadlines remain
+historical evidence only; the single next proposal is above. The separately dated
+18:27:25UTC health check does not establish continuous historical VPN reachability.
 [Task evidence](releases/2026-11-14-ru-persistence-pressure.md).
 
 **CI-RUNNER-COMPLETION-1 — historical entry evidence; resolved separately above.**

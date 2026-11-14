@@ -188,6 +188,10 @@ separate, unselected follow-ups, not hidden mandatory checks for a release.
 
 ## RU read-only handoff
 
+This dated CI handoff is superseded by the completed
+[RU final analysis](2026-11-14-ru-persistence-pressure.md#final-analysis--complete-cause-remains-open).
+Its former15November checkpoint is not a current waiting condition; CI remains closed.
+
 One entry extraction15:07UTC using existing refined helper and NEW label
 `ci-entry-20261114-1506`. Unit active/exited, MainPID0, Resultsuccess. Final reason
 sample_cost_limit after1171.44765s; no gateway failure/lost indications; tracer rc0,
