@@ -1,5 +1,81 @@
 # SUBSCRIPTION-PAID-125-COMPAT — 14 November 2026
 
+## Verified production outcome
+
+**DEPLOYED_VERIFIED / compatibility PASS. REAL_PAID_OPERATION: NOT_RUN.**
+PR24 normal merge `f626fb4a813a914d61ffd8c89ab1e936fbdbad81`; reviewed final source
+`861d18c3fca81ff3092aa265eeb46d0130ac1511`. Source/module and exact serving-overlay
+bytes qualified below are unchanged. Switch completed **00:44:08UTC**; final readback
+**00:55UTC**, operator current path resumed **00:55:42.263301UTC**.
+
+Actual HTTP, preparation-aware operator and reconciler load
+`android-paid-108-119-123-125-v1`, with the exact public125 descriptor, not a minimum-code
+rule. All three share paid module SHA256
+`c98d56b6b40434c85784dc66441f92f9a5209bc110830cfac3bf44721287c615`.
+Installed archive SHA256s equal the qualified candidates in the table below. Complete
+inventories42/40/39 members preserve every non-paid member. HTTP is restarted once;
+new process uses the verified archive, whose startup imports paid_beta. Installed
+operator `policy` and each archive-origin-verified loader agree; ordinary reconciler
+cycles subsequently succeed. No transport service restart or arbitrary main package.
+
+Fresh nonempty SQLite backup at00:43:19.734253UTC passes integrity/foreign-key/table
+fingerprint and isolated paid-projection restore checks, with zero live DB writes.
+Encrypted off-host AES-256-GCM copy decrypts to the same digest; key is stored
+separately. This is not a physical-offline or full cold-service recovery claim.
+Predeployment code/config/unit backups and baseline archives are retained privately.
+
+Six post-switch observations span **608.0s**, followed by final readback. Actual paid
+admission leases advance across the initial120s boundary on all nodes:
+RU 1794617096→1794617838, NL1 1794617096→1794617839,
+NL2 1794617097→1794617840. All64 records per node retain membership, revision and
+AWG/TCP decisions; managed record applied/expected revisions agree. RU watcher/AWG/TCP
+PIDs, start times, zero restarts and successful applied state are unchanged; final
+state age0.64s. This is operational continuity, not new phone VPN traffic acceptance.
+
+Before/final fingerprints match for **19 protected groups**, including64 devices,
+118 invitations,1 subscription/4 payment events, unchanged stored periods/cohort,
+52 chat bindings,1 service sender,2 restricted grants, referral/assignment/owner
+handoff data and stable support identity columns. Only operational chat challenges/
+sequence differ during the window; no payment/identity mutation is inferred from
+those counters. No DB migration, restoration over live data or real paid event.
+
+The preexisting collector pin mismatch is repaired first to the actual16d96eb7
+baseline, then to installed617c7d75. Final canonical snapshot observed00:55:19UTC,
+imported00:55:21UTC, is `ok`; authenticated `/subscriptions/` is200/no-store. All
+three node snapshots are fresh/`ok`; panel users, labels, append-only prior history,
+HMAC, per-node pins and environment fingerprints are unchanged. The production panel
+uses these canonical snapshots; its isolated synthetic108 demo is not deployed as
+a real payment path or a competing release policy.
+
+Support worker remains the same active process/NRestarts0. Existing IPC readback
+finds two verified threads/five stored messages, with two outgoing `recipient_stored`
+receipts; logical history/binding hashes match before/after. No message was sent.
+This preserves earlier owner125/tunnel-OFF acceptance without repeating the phone
+test; storage ACK is not read, and new network/offline/cold scenarios are not claimed.
+
+Final-head hosted gates: paid compatibility43535477840 SUCCESS, panel43535477759
+SUCCESS, Android readiness43535477845 SUCCESS. Generic phase043535477779 and Linux
+control43535477861 remain FAILED at collection, separately disclosed below; this is
+not a whole-suite or platform-release PASS. No paid125 delivery blocker remains.
+RU stop cause and global CI collection repair remain separate engineering work.
+
+### Rollback and retained private handoff
+
+Private evidence/driver root: `/mnt/data/fc-paid125-20261114`; remote backup root:
+`/opt/apps/family_connect/private-paid125-20261114` on the authorized RU host.
+For a later explicitly selected rollback, guarded `deploy.py pause-rollback`,
+`deploy.py rollback`, and `pin.py rollback` restore only exact baseline code and
+the corrected16d96eb7 collector pin. Verify health/fresh panel before
+`deploy.py resume-rollback`. The prior erroneousa59956c4 config is retained as
+evidence, not reused as a working pin. Never restore an older DB over later events.
+Synthetic actual-package rollback already proves existing125 entitlement/replay
+survive while new123/125 operations reject under108/119. No live rollback was needed.
+Operator pause is removed; temporary inspection sessions are deleted, observation
+process has exited, and no new timer/transport command or public announcement exists.
+
+The following preparation sections retain their observation-time state; the verified
+outcome above supersedes their predeployment pending markers.
+
 ## Scope and accepted release
 
 PR23 merged normally at `137f85dce19c6ea7fd3e235ae23cb85b32b8532a`, after

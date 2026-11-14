@@ -1,12 +1,21 @@
 # Текущее состояние / Current state
 
-**14 November — paid125 source/package qualification; deployment pending.**
-PR23 merged137f85dc; separate compatibility branch adds exact public125 to canonical
-policy108/119/123/125.123 was source/package accepted but rolled back during RU failure;
-its new production admission is explicit, not assumed already installed. Actual
-support-preserving HTTP/operator overlays pass38 isolated tests; canonical/packaged
-selection passes126. Current installed policy remains108/119 until delivery receipt.
-No real payment or APK rebuild. [Scope, pins and gates](releases/2026-11-14-subscription-paid-125-compat.md).
+**14 November00:55UTC — SUBSCRIPTION-PAID-125-COMPAT DEPLOYED_VERIFIED.**
+PR23 merged137f85dc; separate PR24 mergedf626fb4a after scoped paid/panel/readiness CI.
+Actual HTTP/operator/reconciler load `android-paid-108-119-123-125-v1`, including exact
+public125.123 admission is explicitly new relative to the previously installed108/119;
+its prior source/package acceptance was not mistaken for deployment. Only paid_beta
+changes in three baseline-derived archives; support/recovery bytes preserved.
+441 paid regressions,77 panel tests,38 actual-overlay tests PASS; nonempty backup and
+isolated restore PASS. Six observations/608s and final readback confirm fresh panel,
+all-node lease renewal, stable RU transports and unchanged19 protected groups:
+64 devices/118 invites/1 subscription/4 events/52 chat bindings/1 service sender.
+Support worker/history/bindings unchanged; current operator path resumed00:55:42UTC.
+Collector's preexisting stale HTTP pin corrected; no real payment, APK rebuild,
+transport restart or DB migration/restore. Full generic CI still fails at collection;
+that separate issue is NOT a full-suite PASS. No remaining paid125 delivery blocker.
+Next product task: addressed confirmed-subscription-event notifications, queued only.
+[Exact outcome, CI limits and rollback](releases/2026-11-14-subscription-paid-125-compat.md).
 
 **14 November — tablet109→125 in-app update PASS — подтверждено пользователем.**
 Owner confirms successful download and installation on the real tablet via the
@@ -14,7 +23,7 @@ application update button; the previous1–2% interruption did not recur. No rep
 tablet test is required. This is user acceptance, not instrumental installed-SHA,
 complete-data preservation verification or proof of the old beta113 download cause.
 Public/owner-installed Android remains0.1.18-beta125/code125, signed catalog8.
-Next selected task: SUBSCRIPTION-PAID-125-COMPAT; production paid eligibility is
+Paid eligibility is separately verified by SUBSCRIPTION-PAID-125-COMPAT above,
 not implied by APK publication. [Receipt](releases/2026-11-13-android125-publication.md).
 
 **13 November14:26:54UTC — Android125 PUBLIC; invitation/updater125, catalog8.**
