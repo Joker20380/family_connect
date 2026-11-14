@@ -2,7 +2,7 @@
 
 ## Current engineering priority / Текущий critical path
 
-**RU compact transport continuation — NO_GO_PREFLIGHT / analysis complete.**
+**RU compact transport continuation — NO_GO_PREFLIGHT / sourceea19c1d7, PR36.**
 The selected single direct-output format is measured and rejected BEFORE full
 implementation:82896B histogram demand /32768B ring; controlled quota pause loses
 1219 of1871 attempts, directly accounted by helper return + independent terminal

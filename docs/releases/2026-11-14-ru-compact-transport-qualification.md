@@ -187,3 +187,15 @@ are unchanged. Local source/doc/whitespace checks and staged public-source guard
 precede commit. Hosted CI is separate; no claim of whole-workflow success from
 local tests, VM poweroff or inner terminal success. Integration details follow in
 the documentation-only receipt after source push and ordinary PR review.
+
+Executable source **ea19c1d751cfb330ad1f9f503e650cdee27151c3** is committed/pushed;
+remote branch SHA verified. [PR36](https://github.com/Joker20380/family_connect/pull/36)
+preserves it separately from this documentation-only integration receipt. Scoped
+review5907383301 is explicitly SELF-review, not independent approval. At22:05UTC
+main remained0d689d32, protected=false, required contexts/checks empty, rulesets=[];
+no mandatory check disabled or bypassed. Source PR phase043646233529, Linux
+control43646233437 and readiness43646233533 were IN_PROGRESS at22:07UTC, not green.
+The applicable isolated diagnostic gate is a completed negative result; no product
+release/requalification is authorized. Final merge/remote SHA is verified separately
+from hosted completion and retained in the PR receipt. All VM units are inactive;
+no collector, schedule or runtime deployment was left behind.

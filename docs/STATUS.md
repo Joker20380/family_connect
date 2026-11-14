@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**14 November — RU compact transport / NO_GO_PREFLIGHT, isolated only.**
+**14 November — RU compact transport / NO_GO_PREFLIGHT, sourceea19c1d7 / PR36.**
 Selected continuation after PR35/0d689d32 is complete at the authorized feasibility
 gate, BEFORE a full probe rewrite. Actual compiled old records occupy64–96B;
 direct libbpf v3 occupies24–56B. Same1871-event histogram:150232→82896B, still larger
@@ -15,6 +15,9 @@ sources and closed acceptances retained. No RU access/production/persistence cha
 CAUSE_OPEN. Single next boundary: separate architecture decision with a proven
 worst-pause capacity bound under existing limits; no alternative started.
 [Compact decision and receipts](releases/2026-11-14-ru-compact-transport-qualification.md).
+Source PR phase043646233529/control43646233437 were IN_PROGRESS at22:07UTC,
+not CI PASS. Subsequent receipt changes are documentation-only. No required branch
+contexts/rulesets at review; ordinary integration, no disabled/bypassed checks.
 
 **14 November — RU attribution v2 continuation / NO_GO, source417edbe2, PR35.**
 PR34 baseline41ada7cf retained; original695ff6c3 remains NO_GO. Verified attach/CPU
