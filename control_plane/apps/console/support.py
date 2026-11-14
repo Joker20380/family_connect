@@ -82,6 +82,7 @@ def notification_labels(result):
         job['status_label'] = dict(STATUSES, saved='Задание сохранено', blocked='Заблокировано / ожидание',
             expired='Срок доставки истёк', superseded='Замещено', baseline_excluded='Исключено начальной границей').get(job['status'], job['status'])
         job['reason_label'] = ERRORS.get(job['reason'], job['reason'])
+        job['delivery_label'] = STATUSES.get(job.get('delivery_status'))
         job['created_label'] = datetime.fromtimestamp(job['created_at'], timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
     return result
 

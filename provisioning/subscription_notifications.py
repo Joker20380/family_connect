@@ -162,11 +162,14 @@ class Notifications:
         from provisioning.support_worker import SupportError
         with self.store._lock, self.store._db:
             for job in self.jobs():
+                if job['message_id']:
+                    message = self.store._get('message:' + job['message_id'])
+                    job['delivery_status'] = message['status']
                 if job['status'] in ('baseline_excluded', 'recipient_stored', 'expired', 'superseded'):
+                    self.save(job)
                     continue
                 reason = self.blocked(job, now)
                 if job['message_id']:
-                    message = self.store._get('message:' + job['message_id'])
                     job['status'] = message['status']
                     if message['status'] == 'recipient_stored':
                         reason = None
@@ -200,13 +203,14 @@ class Notifications:
             if key is None:
                 return True
             job = self.store._get('subscription-job:' + key)
-            return job['status'] not in ('superseded', 'expired') and self.blocked(job, time.time()) is None
+            return job['status'] not in ('superseded', 'expired', 'recipient_stored') and self.blocked(job, time.time()) is None
 
     def status(self, pseudonym):
         with self.store._lock:
             error = self.error or ('source_unavailable' if self.current is None or self.current['expires_at'] <= time.time() else None)
             return dict(baseline=self.store._get('subscription-baseline'), error=error,
-                jobs=[{name: job[name] for name in ('key', 'source', 'status', 'reason', 'created_at', 'message_id')}
+                jobs=[dict({name: job[name] for name in ('key', 'source', 'status', 'reason', 'created_at', 'message_id')},
+                           delivery_status=self.store._get('message:' + job['message_id'])['status'] if job['message_id'] else None)
                       for job in self.jobs() if job['pseudonym'] == pseudonym])
 
     def refresh(self, path, *, uid=0):

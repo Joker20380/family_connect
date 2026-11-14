@@ -48,6 +48,14 @@ canonical paid/grace boundary. Messages are dated historical facts, never a clai
 of current active access. No amounts/currencies/revocation reasons are invented.
 Mailbox-accepted messages cannot be recalled; wording remains about the recorded
 period/operation. `recipient_stored` means stored, not read. Chat cannot grant VPN.
+Late valid storage ACKs remain visible as a separate delivery fact even when the
+job is expired or superseded. They never clear its terminal processing state or
+permit another send. IPC reads the linked message immediately; dispatch also
+persists the delivery fact without rewriting unchanged records.
+An explicit expire for an already terminal natural boundary adds its event ID to
+that same job only: frozen text/request/message IDs and terminal state stay intact,
+even if the first message was never delivered. It does not automatically resend.
+Only the distinct baseline-excluded case creates a new explicit-operation job.
 
 ## Operator observation
 

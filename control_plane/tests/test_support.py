@@ -47,7 +47,8 @@ def page(client):
     return client.get(reverse('console:support_history', args=['1' * 64]))
 
 
-def test_canonical_notification_real_mailbox_ack_and_panel(console, support_panel, tmp_path, chat_runtime):
+@pytest.mark.parametrize('terminal', [None, 'superseded', 'expired'])
+def test_canonical_notification_real_mailbox_ack_and_panel(console, support_panel, tmp_path, chat_runtime, terminal):
     from control.friends import paid_beta
     from control.friends.subscription_events import read
     from messenger.tests.test_offline import Peer
@@ -92,9 +93,15 @@ def test_canonical_notification_real_mailbox_ack_and_panel(console, support_pane
     carriers = [SystemMailbox(owner.chat, lease, chat_runtime), SystemMailbox(clients[0]._chat, lease, chat_runtime)]
     try:
         assert carriers[0].exchange(timeout=20).relayed == 1
+        owner.notifications.dispatch()
+        if terminal:
+            job = owner.notifications.jobs()[0]
+            job.update(status=terminal, reason=terminal)
+            with owner.store._lock, owner.store._db:
+                owner.notifications.save(job)
+            assert not owner.notifications.allow(job['message_id'])
         assert carriers[1].exchange(timeout=20).received.stored == 1
         carriers[0].exchange(timeout=20)
-        owner.notifications.dispatch()
         client = Client()
         client.force_login(console)
         response = page(client)
@@ -106,7 +113,16 @@ def test_canonical_notification_real_mailbox_ack_and_panel(console, support_pane
         card = client.get(reverse('console:inventory_device', args=['1'*64]))
         assert card.status_code == 200
         assert 'Сохранено клиентом' in card.content.decode()
-        assert owner.notifications.jobs()[0]['status'] == 'recipient_stored'
+        owner.notifications.dispatch()
+        assert owner.notifications.jobs()[0]['status'] == (terminal or 'recipient_stored')
+        assert owner.notifications.jobs()[0]['delivery_status'] == 'recipient_stored'
+        if terminal:
+            assert ('Замещено' if terminal == 'superseded' else 'Срок доставки истёк') in text
+        assert not owner.notifications.allow(job['message_id'])
+        owner.notifications.dispatch()
+        assert not owner.store.pending_outbox()
+        assert len(owner.store.visible_messages()) == 1
+        assert not clients[1].history(owner.chat.address.hex())['messages']
         assert registry.read_bytes() == before
     finally:
         for carrier in carriers:

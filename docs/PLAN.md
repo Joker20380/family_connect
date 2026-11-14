@@ -3,6 +3,9 @@
 ## Current engineering priority / Текущий critical path
 
 **Selected14 November — SUBSCRIPTION-NOTIFICATIONS-1, IN PROGRESS.**
+Continuation: late stored-ACK/terminal-job correction qualified (50 support,
+48 panel checks); next repair the accepted support reference delta, complete CI,
+merge and prepare the exact administrative install action before requesting it.
 Source and isolated route are implemented/qualified; production NOT DEPLOYED.
 Scoped hosted gates and author-side source review PASS on6cd2771f; no independent
 approval or general-suite PASS claimed. Next: final general-CI disposition/merge, administrative host access,

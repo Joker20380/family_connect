@@ -1,5 +1,19 @@
 # SUBSCRIPTION-NOTIFICATIONS-1
 
+## Continuation — late stored ACK
+
+Preserve superseded/expired processing states; reconcile persisted delivery status
+even for terminal jobs. IPC reflects the actual linked message immediately, before
+the next dispatch. Panel distinguishes delivery from cancellation/expiry. Valid
+late ACKs cannot revive attempts, enqueue a second message or mutate entitlement.
+Real mailbox→terminal job→client storage→signed ACK→IPC/panel tests PASS for both
+terminal states; isolated second recipient stays empty. Existing Store receipt
+validation is unchanged. Late explicit expire aliases terminal natural jobs only;
+original text/request/message IDs stay fixed (all terminal states covered).
+Exact-lock scoped support50 PASS; panel48 PASS. Still source-only, no installation
+or production baseline. Host joker-XPS, user joker: sudo still requires interactive
+authentication; a fixed-path verified installer must be prepared before owner action.
+
 ## 14 November10:57UTC — source qualified, deployment still pending
 
 Code head `6cd2771f26cafd104997f8a0178ce7df48207c71`, ordinary push and remote SHA

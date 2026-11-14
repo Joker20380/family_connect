@@ -17,6 +17,7 @@
 {% for job in history.notifications.jobs %}
 <article><p>{{ job.source.event_type|default:job.source.kind }} · {{ job.status_label }} · {{ job.created_label }}</p>
 <p>{{ job.reason_label|default:'' }} <code>{{ job.source.event_id|default:job.key }}</code></p>
+{% if job.delivery_label %}<p>Доставка сообщения: {{ job.delivery_label }}</p>{% endif %}
 {% if job.message_id %}<a href="#message-{{ job.message_id }}">Сообщение в этом диалоге</a>{% endif %}</article>
 {% empty %}<p>Новых заданий нет. Исторические события не рассылаются.</p>{% endfor %}</section>
 <section class="panel"><h2>История</h2>{% for message in history.messages %}

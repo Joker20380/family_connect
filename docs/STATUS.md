@@ -1,5 +1,12 @@
 # Текущее состояние / Current state
 
+**14 November — notification late-ACK correction qualified, NOT DEPLOYED.**
+Terminal job state and message delivery fact are separate. Real mailbox/valid ACK
+regressions cover superseded/expired jobs and immediate panel observation without
+reviving sends;50 scoped support and48 panel tests PASS. Terminal natural-boundary
+aliases for late explicit expire are pinned. Reference-contract repair, final CI,
+merge and prepared administrative install remain pending. No production baseline.
+
 **14 November — SUBSCRIPTION-NOTIFICATIONS-1 source checkpoint, NOT DEPLOYED.**
 Final code6cd2771f: hosted route43587126587, panel43587126690, messenger43587126573,
 paid43587126669 and readiness43587126622 PASS; author-side review recorded in PR26

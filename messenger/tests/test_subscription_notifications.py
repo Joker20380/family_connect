@@ -188,7 +188,8 @@ def test_natural_end_explicit_expire_dedup_and_renewal_before_enqueue(route, gra
 
 
 @pytest.mark.parametrize('grace', [False, True])
-def test_explicit_expire_after_natural_end_has_one_notification(route, grace):
+@pytest.mark.parametrize('terminal', [None, 'recipient_stored', 'expired', 'superseded'])
+def test_explicit_expire_after_natural_end_has_one_notification(route, grace, terminal):
     registry, _, owner, _, _ = route
     now = int(time.time())
     pay(registry, now=now, until=now+1)
@@ -197,10 +198,20 @@ def test_explicit_expire_after_natural_end_has_one_notification(route, grace):
     cycle(route, now=now)
     cycle(route, now=now+3)
     cycle(route, now=now+4)
+    original = owner.notifications.jobs()[0]
+    if terminal:
+        original['status'] = terminal
+        with owner.store._lock, owner.store._db:
+            owner.notifications.save(original)
     event(registry, 'expire', 'expire-0001', now=now+3)
     cycle(route, now=now+5)
     assert len(owner.notifications.jobs()) == len(owner.store.visible_messages()) == 1
     assert owner.notifications.jobs()[0]['events'] == ['expire-0001']
+    current = owner.notifications.jobs()[0]
+    assert current['status'] == original['status']
+    assert all(current[name] == original[name] for name in ('request_id', 'message_id', 'source', 'text'))
+    if terminal:
+        assert not owner.notifications.allow(current['message_id'])
 
 
 @pytest.mark.parametrize('change,reason', [('missing', 'identity_missing_at_capture'),
