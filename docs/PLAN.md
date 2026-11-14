@@ -2,6 +2,23 @@
 
 ## Current engineering priority / Текущий critical path
 
+**RU-INCIDENT-20261114 — owner-selected; availability recovered, root fix OPEN.**
+Dependencies: accepted RU node125c796a/gateway9023d2c3 and actual deployed paid125
+overlay; preserve current records rather than restoring an older database. Gate:
+retain first failure, correlate service stops with bounded host evidence, RU-only
+fence/stop/PID0/retained-state validation/start, actual lease renewal and protected
+state comparison. Recovery gate PASS; physical-client traffic remains NOT_RUN.
+Specific trigger is a9.278200s decision-state fsync, not memory pressure proven by
+the previous incident. The underlying storage-latency cause and permanent prevention
+remain OPEN. Do not call the restart a fix, remove fsync, weaken8/12/120s, or redeploy
+the rolled-back PR16/17 candidates. Next requires storage/provider attribution or a
+separately qualified persistence/recovery correction; replacement WAITING_FOR_HOST.
+The separately diagnosed legacy peer-worker name conflict is repaired after proving
+the old container has no live PID/task and preserving private state. Same unit,
+image and mounts, successful cycles and zero restarts; inherited Docker `unhealthy`
+remains a separate healthcheck limitation, not transport failure. No new queued
+product task starts from this incident. [Receipt](releases/2026-11-14-ru-incident.md).
+
 **SUBSCRIPTION-PAID-125-COMPAT — COMPLETE / DEPLOYED_VERIFIED14 November.**
 PR23 merged137f85dc; separate PR24 mergedf626fb4a. Canonical108/119/123/125 is loaded
 in all three actual serving executables.123 is explicitly newly admitted relative

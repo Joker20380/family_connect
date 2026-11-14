@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**14 November10:52UTC — RU availability recovered; persistence cause remains OPEN.**
+First failure03:03:41.800UTC is one decision-state file fsync taking9.278200s;
+operation9.314666s exceeds8s and explicitly stops AWG/TCP. This is not a proven
+OOM or watchdog-first event: the containing sysstat interval has zero memory
+pressure, negligible paging and disk await62.59ms at low throughput. Recovery on
+unchanged accepted node125c796a completes10:36:19UTC. Six samples/196.493s cross
+actual120s admission renewal; final10:52 readback has stable PIDs/restarts0 and no
+new first failure. Paid125 policy,64 devices/118 invites/1 subscription/4 events,
+support52/1, code, units, keys and HTTP process are unchanged; USER_TRAFFIC NOT_RUN.
+Separately, legacy peer-worker's Docker name collision is repaired: its old
+"running" container had no PID/task. Only that verified orphan is removed, with
+private backup retained; the unchanged service/image/mounts now run successful
+reconciliation cycles, NRestarts0. Its existing Docker health flag remains
+`unhealthy`, not a claim of all-container health. No neighbouring/NL service change.
+Neither repair proves the storage stall eliminated; no timeout/fsync/lease relaxation
+or automatic transport recovery was introduced. [Evidence and limits](releases/2026-11-14-ru-incident.md).
+
 **14 November00:55UTC — SUBSCRIPTION-PAID-125-COMPAT DEPLOYED_VERIFIED.**
 PR23 merged137f85dc; separate PR24 mergedf626fb4a after scoped paid/panel/readiness CI.
 Actual HTTP/operator/reconciler load `android-paid-108-119-123-125-v1`, including exact
