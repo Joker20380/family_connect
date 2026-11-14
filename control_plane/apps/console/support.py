@@ -1,6 +1,7 @@
 import json
 import socket
 import uuid
+from datetime import datetime, timezone
 
 from django.conf import settings
 from django.core import signing
@@ -14,6 +15,14 @@ from .views import staff
 
 
 ERRORS = {
+    'source_unavailable': 'Нет свежего канонического источника подписки; очередь сохранена.',
+    'source_catching_up': 'Чтение промежуточных событий; очередь сохранена.',
+    'awaiting_deadline_recheck': 'Ожидание повторной канонической проверки срока перед отправкой.',
+    'subscription_missing': 'Каноническая подписка недоступна.',
+    'identity_missing_at_capture': 'На момент создания задания chat identity отсутствовала. Автоматическое переназначение запрещено.',
+    'notification_ttl': 'Истёк срок доставки уведомления; запись сохранена.',
+    'deadline_not_reached': 'Граница срока ещё не наступила по текущим часам.',
+    'superseded': 'Окончание периода замещено более поздней операцией.',
     'unconfirmed': 'Связь устройства и chat identity не подтверждена.',
     'unregistered': 'Чат устройства не зарегистрирован.',
     'support_not_enrolled': 'Клиент не подтвердил протокол официальной поддержки. Нужен совместимый клиент и регистрация чата.',
@@ -68,6 +77,26 @@ def invoke(operation, **arguments):
         raise SupportUnavailable('support_unavailable') from None
 
 
+def notification_labels(result):
+    for job in result.get('jobs', []):
+        job['status_label'] = dict(STATUSES, saved='Задание сохранено', blocked='Заблокировано / ожидание',
+            expired='Срок доставки истёк', superseded='Замещено', baseline_excluded='Исключено начальной границей').get(job['status'], job['status'])
+        job['reason_label'] = ERRORS.get(job['reason'], job['reason'])
+        job['delivery_label'] = STATUSES.get(job.get('delivery_status'))
+        job['created_label'] = datetime.fromtimestamp(job['created_at'], timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
+    return result
+
+
+def notification_status(request, pseudonym):
+    if not request.user.has_perm('console.view_support_messages'):
+        return None
+    try:
+        result = invoke('history', pseudonym=pseudonym).get('notifications', {})
+        return notification_labels(result)
+    except SupportUnavailable:
+        return dict(error='support_unavailable', jobs=[])
+
+
 def conversation(request, pseudonym, *, error=None, token=None, text=''):
     known_device(pseudonym)
     data = dict(production_page=True, section='messages', pseudonym=pseudonym, error=ERRORS.get(error), text=text)
@@ -75,6 +104,7 @@ def conversation(request, pseudonym, *, error=None, token=None, text=''):
         history = invoke('history', pseudonym=pseudonym)
         for message in history['messages']:
             message['status_label'] = STATUSES.get(message['status'], 'Неизвестный статус')
+        notification_labels(history.get('notifications', {}))
         binding = history['binding']
         data.update(history=history, blocked=ERRORS.get(binding['state']), ready=binding['state'] == 'verified')
         if token is None and data['ready']:

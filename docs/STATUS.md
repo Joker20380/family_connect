@@ -1,5 +1,73 @@
 # Текущее состояние / Current state
 
+**14 November12:34UTC — notification source gates complete; general hosted CI separate.**
+Onac3479bf the notification/reference/package/panel/paid/messenger gates and completed
+Docker full-suite command plus actual failover/auth/offline/revocation pass. These
+are the applicable server-route gates; no required check is removed or bypassed.
+Standalone hosted phase0 tests132438099847 and Linux control remain IN_PROGRESS,
+not PASS (phase0 full step started11:57:41UTC; no completed log/receipt yet). Android
+CI also remains separate; no new Android build/publication is used for this task.
+Proceed with ordinary source merge and helper-only RU preparation, not a claim that
+all CI or production acceptance completed. Local privileged installation still needs
+the exact prepared OS-prompt action; baseline/cycles/real receipt remain unobserved.
+
+**14 November — notification continuation: scoped CI/real failover PASS; install prepared.**
+Code/referenceac3479bf:422 core,48 panel,25 reference/package and6164 collection PASS.
+Hosted route/messenger/panel/paid/readiness/Linux voice/candidate PASS. Phase0 actual
+failover/auth/offline/revocation PASS; standalone full suite still pending, not yet
+full-CI PASS or merge. Fixed-host checksum-pinned helper for joker-XPS is ready;
+RU has a separate authorized admin path. Canonical/panel isolated restore PASS.
+Support is still running its accepted baseline; no production notification baseline
+or automatic send. Final gate/merge and the prepared interactive sudo action remain.
+[Exact helper, checksums and action](operators/subscription-notifications.md).
+
+**14 November — accepted support reference delta repaired, final CI pending.**
+Original106 hashes/inventory and subscription119 patch unchanged. Explicit support1
+patch from10d353d8 plus support.py dependency pins reversibly connect all accepted
+modules; reverse support, subscription119 and platform deltas restores106 exactly.
+Reference/package25 PASS; full collection6164 PASS. No deployment/baseline yet.
+
+**14 November — notification late-ACK correction qualified, NOT DEPLOYED.**
+Terminal job state and message delivery fact are separate. Real mailbox/valid ACK
+regressions cover superseded/expired jobs and immediate panel observation without
+reviving sends;50 scoped support and48 panel tests PASS. Terminal natural-boundary
+aliases for late explicit expire are pinned. Reference-contract repair, final CI,
+merge and prepared administrative install remain pending. No production baseline.
+
+**14 November — SUBSCRIPTION-NOTIFICATIONS-1 source checkpoint, NOT DEPLOYED.**
+Final code6cd2771f: hosted route43587126587, panel43587126690, messenger43587126573,
+paid43587126669 and readiness43587126622 PASS; author-side review recorded in PR26
+(ready for review, not merged; no independent approval claimed). Fresh separate
+lockfile environments:193 core/identity checks,46 panel checks and6150 collection PASS.
+Prerequisite full Docker suite43585268077 reaches all contexts: standard has only
+the3 reproduced baseline reference failures; root258 and Python3.14 snapshot98 pass.
+No full-CI PASS or deployment claim. Administrative execution is still required.
+Hosted notification route43586664982, panel43586665041, paid compatibility43586664957
+and readiness43586664978 PASS on sourcea63e4d29. Linux voice fails three unchanged
+messenger-reference checks, independently reproduced on entry main1b186e15; no
+historical manifest was weakened. Review adds monotone observed-highwater protection
+and an explicit request-conflict regression. Deployment remains blocked/pending.
+Committed-event/deadline producer, durable jobs and official support outbox route
+implemented; isolated real mailbox/storage ACK/panel chain passes.317 support
+regressions,46 panel and165 notification/paid/subscription checks PASS (overlapping
+selections, not a combined total). Collection6150 PASS; hosted full CI still pending.
+Read-only production preflight retains paid125 policy,64 devices/118 invites/
+1 subscription/4 events and accepted support unit/RuntimeDirectory. No real event,
+message, APK or production source changed. Installation needs host administrative
+execution: `sudo -n` currently requires authentication. Backups/restore rehearsal,
+review/merge and deployment acceptance remain OPEN. Production notification baseline
+is NOT initialized; no retrospective send or real automatic receipt occurred.
+[Evidence and remaining gates](releases/2026-11-14-subscription-notifications.md).
+
+**14 November — CI-COLLECTION-NAMESPACE fixed; SUBSCRIPTION-NOTIFICATIONS-1 selected.**
+Reproduced the root/desktop `test_chat_service` import mismatch. Server tests now
+use `test_chat_service_sender.py`; the full-suite inventory keeps stdout/stderr.
+Collection PASS:6149 tests, unchanged testpaths. Focused regressions24 PASS.
+Local GI must be appended after locked dependencies, not prepended over them.
+Full hosted CI is not yet a PASS. Notification implementation/deployment remains
+pending; public beta125/catalog8 and accepted paid/support runtime are unchanged.
+[Current task receipt](releases/2026-11-14-subscription-notifications.md).
+
 **14 November00:55UTC — SUBSCRIPTION-PAID-125-COMPAT DEPLOYED_VERIFIED.**
 PR23 merged137f85dc; separate PR24 mergedf626fb4a after scoped paid/panel/readiness CI.
 Actual HTTP/operator/reconciler load `android-paid-108-119-123-125-v1`, including exact

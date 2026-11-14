@@ -1,0 +1,11 @@
+[Unit]
+Description=Poll committed subscription events without changing entitlement
+
+[Timer]
+OnBootSec=25
+OnUnitInactiveSec=30
+AccuracySec=1
+Unit=family-connect-subscription-notifications.service
+
+[Install]
+WantedBy=timers.target

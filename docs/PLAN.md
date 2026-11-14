@@ -2,6 +2,35 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected14 November — SUBSCRIPTION-NOTIFICATIONS-1, IN PROGRESS.**
+Gate disposition12:34UTC: applicable server route/reference/package/panel/paid gates,
+completed Docker full-suite execution and actual failover/auth/offline/revocation
+PASS. Proceed to ordinary source merge; independently running hosted phase0/Linux
+control/Android remain unaccepted, not cancelled or declared green. No client release.
+Then install RU helpers and request the fully prepared local administrative action.
+Scoped CI and actual failover/auth/offline/revocation now PASS onac3479bf; await
+standalone full-suite outcome separately from source merge. Installation is fully prepared for
+one exact local sudo action (operator runbook), not a generic access request.
+Canonical/panel restore rehearsals PASS; production baseline still absent.
+Reference debt fixed without changing accepted106 hashes:25 reference/package and
+6164 collection PASS. Await final hosted gates including actual failover steps.
+Continuation: late stored-ACK/terminal-job correction qualified (50 support,
+48 panel checks); next repair the accepted support reference delta, complete CI,
+merge and prepare the exact administrative install action before requesting it.
+Source and isolated route are implemented/qualified; production NOT DEPLOYED.
+Scoped hosted gates and author-side source review PASS on6cd2771f; no independent
+approval or general-suite PASS claimed. Next: final general-CI disposition/merge, administrative host access,
+consistent backups/restore, guarded install, baseline and multicycle/restart readback.
+Do not treat the source checkpoint as completed server automation or user receipt.
+Retain accepted paid125, support and recovery. First qualify collection independently;
+then implement read-only committed-event ingestion, durable exact-recipient jobs,
+deadline deduplication/revalidation, truthful panel state and isolated mailbox/stored
+ACK acceptance. Deploy only after applicable gates/review/merge; retain first-enable
+baseline and queue on rollback. No synthetic production payment/message. Real-user
+receipt is a separate observation, not implied by isolated acceptance or deployment.
+Payment-provider integration, automatic client-card refresh and RU cause stay separate.
+[Task evidence](releases/2026-11-14-subscription-notifications.md).
+
 **SUBSCRIPTION-PAID-125-COMPAT — COMPLETE / DEPLOYED_VERIFIED14 November.**
 PR23 merged137f85dc; separate PR24 mergedf626fb4a. Canonical108/119/123/125 is loaded
 in all three actual serving executables.123 is explicitly newly admitted relative
@@ -22,18 +51,20 @@ and configuration only, never an old ledger over new events. After closure, queu
 automatic addressed notifications of confirmed subscription events, not implementation
 in this task. RU stop cause remains a separate task.
 
-**NEXT PRODUCT — SUBSCRIPTION-NOTIFICATIONS-1 (queued, NOT STARTED).**
+**SUBSCRIPTION-NOTIFICATIONS-1 — selected above (former queued scope).**
 Automatic addressed notifications of confirmed subscription events, using the
 accepted private support channel and authoritative event/binding model. Dependencies:
 paid125 delivery above and retained support acceptance. Gate for the future task:
 confirmed events only, exact recipient, replay/dedup, offline delivery and truthful
 delivery/storage status; no speculative payment confirmation or unsolicited test send.
-This queue entry does not authorize implementation in the current task.
+The owner's14 November request now authorizes this task and server automation.
 
-**Separate engineering follow-up — CI-COLLECTION-NAMESPACE, OPEN.**
-Generic phase0/Linux full-suite inventory exits2; unchanged root/desktop
-`test_chat_service.py` names collide in local reproduction. Full CI is not green;
-repair separately without dropping tests. Scoped paid125 gates are recorded distinctly.
+**CI-COLLECTION-NAMESPACE — collection/local regression PASS14 November.**
+Before correction, generic phase0/Linux inventory exited2 due to colliding root/
+desktop `test_chat_service.py` names. Current collection passes; full CI is not green:
+three independent messenger-reference failures reproduce on entry main1b186e15.
+Fixed separately without dropping tests:6149 collected,24 scoped tests PASS.
+Full hosted CI remains separately unaccepted. Scoped paid125 gates remain distinct.
 RU recurring-stop cause/replacement remains separate, not resolved by policy delivery.
 
 **TABLET109→125 — PASS — подтверждено пользователем14 November.**

@@ -5,6 +5,8 @@ from pathlib import Path
 import stat
 import sys
 import time
+import re
+import importlib.util
 
 
 def read(path):
@@ -23,8 +25,28 @@ def read(path):
 
 if __name__ == '__main__':
     try:
-        if len(sys.argv) != 1 or os.environ.get('SSH_ORIGINAL_COMMAND') != 'support-bindings':
+        command = os.environ.get('SSH_ORIGINAL_COMMAND', '')
+        if len(sys.argv) != 1:
             raise ValueError('Unavailable')
-        sys.stdout.buffer.write(read(Path('/opt/apps/family_connect/friends-access/support-bindings.json')))
+        root = Path('/opt/apps/family_connect/friends-access')
+        if command == 'support-bindings':
+            sys.stdout.buffer.write(read(root / 'support-bindings.json'))
+        else:
+            match = re.fullmatch(r'subscription-notifications (-1|0|[1-9][0-9]{0,18}) (none|[0-9a-f]{64})', command)
+            if match is None:
+                raise ValueError('Unavailable')
+            source = root / 'subscription_events.py'
+            info = source.lstat()
+            if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or info.st_mode & 0o022:
+                raise ValueError('Unavailable')
+            spec = importlib.util.spec_from_file_location('subscription_events', source)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            key = root / 'support-inventory-hmac.key'
+            info = key.lstat()
+            if not stat.S_ISREG(info.st_mode) or info.st_mode & 0o077 or info.st_uid != os.getuid() or info.st_size != 32:
+                raise ValueError('Unavailable')
+            value = module.read(root / 'access.db', key.read_bytes(), int(match[1]), None if match[2] == 'none' else match[2])
+            sys.stdout.write(json.dumps(value, separators=(',', ':')))
     except Exception:
         sys.exit(1)

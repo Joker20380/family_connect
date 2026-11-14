@@ -1,5 +1,9 @@
 # Addressed support conversation
 
+Subscription notifications: [authority, queue, status and safe rollout](subscription-notifications.md).
+Check the [task receipt](../releases/2026-11-14-subscription-notifications.md) for actual activation;
+source availability is not deployment. No beta125 reinstall is required.
+
 Use the existing operator account at `http://127.0.0.1:8765/`. Open a production
 device card and select **«Сообщения · личная поддержка»**. Replies are listed at
 `/messages/`. This is separate from `/system-messages/`, which broadcasts to the

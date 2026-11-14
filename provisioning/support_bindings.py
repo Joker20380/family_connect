@@ -15,7 +15,7 @@ def limit_output():
     resource.setrlimit(resource.RLIMIT_FSIZE, (512 * 1024 + 1, 512 * 1024 + 1))
 
 
-def collect(host, key, known_hosts, output):
+def collect(host, key, known_hosts, output, *, command='support-bindings'):
     host = str(ipaddress.IPv4Address(host))
     for path in (key, known_hosts):
         if not path.is_absolute() or path.is_symlink() or not path.is_file():
@@ -31,7 +31,7 @@ def collect(host, key, known_hosts, output):
     with tempfile.TemporaryFile() as response:
         result = subprocess.run(['/usr/bin/ssh', '-T', '-i', str(key), '-o', 'IdentitiesOnly=yes', '-o',
             'BatchMode=yes', '-o', 'ConnectTimeout=5', '-o', 'StrictHostKeyChecking=yes',
-            '-o', 'UserKnownHostsFile='+str(known_hosts), 'root@'+host, 'support-bindings'],
+            '-o', 'UserKnownHostsFile='+str(known_hosts), 'root@'+host, command],
             stdin=subprocess.DEVNULL, stdout=response, stderr=subprocess.DEVNULL, timeout=12, preexec_fn=limit_output)
         if result.returncode or response.tell() > 512 * 1024:
             raise ValueError('Binding projection unavailable')
