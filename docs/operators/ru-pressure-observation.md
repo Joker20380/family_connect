@@ -28,6 +28,11 @@ PID+start_ticks and boot ID, not wall-clock ordering. At most512 PIDs/64 cgroups
 sampling races and omissions are explicit. No argv, environment, buffer contents,
 keys or user messages. Applied-state observation retains only times/counts/lease
 bounds, no identities. Timer names/times are metadata, not command arguments.
+PF_KTHREAD kernel threads retain stat/CPU/fault counters; only jbd2 additionally
+reads per-thread I/O. Kernel threads do not have user RSS/swap, so reading their
+status/cgroup files is unnecessary. `kernel_io_sampled=false` explicitly marks
+other kernel-thread I/O as unsampled, not zero. All user processes retain I/O,
+RSS/swap and cgroup sampling; host disk and cgroup totals cover shared writeback.
 Tasks that start and exit between counter samples can be missing from per-PID
 deltas; do not equate the sampled process sum with host/cgroup total I/O or use
 absence in a sample as proof a process did not run.
@@ -53,6 +58,8 @@ absence in a sample as proof a process did not run.
   RuntimeMaxSec is chosen duration+30s. BPF maps≤256 keys/map, perf ring8 pages/CPU.
   A hard OOM/kill may prevent a final receipt; unit result and original failure remain
   evidence. RAM captures do not survive reboot: retrieve before reboot/recovery.
+  Unit CPU accounting/quota does not measure all in-kernel BPF probe overhead;
+  do not describe the measured unit CPU as total host instrumentation cost.
 
 ## Qualification, launch and extraction
 
@@ -82,3 +89,35 @@ process group and leaves captures, gateway, original failure, queues, baseline a
 all databases untouched. No database restore or old worker rollback is involved.
 Do not change neighbour applications, run disk stress, induce swap, remove fsync,
 increase8/12s budgets or extend120s access leases to make the graph look better.
+
+## First window — 14 November 2026 (stopped by cost guard)
+
+PR29 merged59cd72ed, exact source43eb84eb76871ae907a64f2fef4934f04cf8385f.
+Only two verified diagnostic files and a manifest are staged in
+`/run/family-connect-ru-pressure/source-43eb84eb` (root0700/0600). No persistent
+application file or existing systemd unit is replaced; no application backup/DB
+restore is needed for this additive, volatile diagnostic switch.
+
+- Unit: `family-connect-ru-pressure-20261114-43eb84eb.service`, Restart=no.
+- Output: `/run/family-connect-ru-pressure/20261114-43eb84eb`.
+- Start14November14:19:15.976UTC; deadline15November14:19:15.976UTC.
+- Actual stop14November14:25:05UTC after349.88s: one sample used306ms CPU>200ms.
+  No gateway failure,151 complete cycles,604 fsync, zero lost indications. Full
+  final receipt extracted under label`first-window-final`; the original maximum
+  deadline is no longer an active collection. A lower-cost kernel-counter path
+  passed a separate181.99s qualification with the same limits before reactivation.
+- Safe disable on RU: `systemctl stop family-connect-ru-pressure-20261114-43eb84eb.service`.
+- Prepared extraction on the owner's laptop, using the existing administrative
+  SSH path without printing its credentials:
+
+```sh
+python3 /mnt/data/fc-ru-persistence-pressure-20261114/collect_result.py final-20261115
+```
+
+It preserves exclusive private receipts and verifies SHA256 of downloaded files in
+`/mnt/data/fc-ru-persistence-pressure-20261114/extracted-final-20261115`. Use a fresh
+label for another observation, never overwrite a prior result. Extraction was
+tested with label`acceptance-20261114`: start/first-slow/errors downloaded and hashes
+verified. A running unit without final receipt is reported as such, not completed.
+Do not reboot before retrieval. No background task promises automatic analysis;
+the next task turn must inspect the saved finite result.

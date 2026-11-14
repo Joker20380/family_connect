@@ -52,6 +52,11 @@ def process(path):
     result = dict(pid=int(path.name), name=raw[raw.index('(') + 1:closing][:64], state=fields[0],
                   majflt=int(fields[9]), cpu_ticks=int(fields[11]) + int(fields[12]),
                   start_ticks=int(fields[19]), rss_pages=int(fields[21]))
+    if int(fields[6]) & 0x00200000:
+        result.update(kernel=True, cgroup='/', kernel_io_sampled=result['name'].startswith('jbd2/'))
+        if result['kernel_io_sampled']:
+            result.update(counters(text(path / 'io', 4096), {'read_bytes', 'write_bytes', 'cancelled_write_bytes'}))
+        return result
     result.update(counters(text(path / 'io', 4096), {'read_bytes', 'write_bytes', 'cancelled_write_bytes'}))
     result.update(counters(text(path / 'status', 8192), {'VmRSS', 'VmSwap'}))
     result['cgroup'] = next(line[3:] for line in text(path / 'cgroup', 4096).splitlines() if line.startswith('0::'))
