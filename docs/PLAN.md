@@ -2,11 +2,14 @@
 
 ## Current engineering priority / Текущий critical path
 
-**SUBSCRIPTION-PAID-125-COMPAT — owner-selected14 November, IN PROGRESS.**
-PR23 merged137f85dc. Canonical108/119/123/125 and actual baseline-only overlays are
-prepared;123 admission is explicitly requalified, not claimed previously installed.
-126 targeted /38 actual-overlay tests PASS; deployment/loaded policy/protected-data
-gate still pending. [Current receipt](releases/2026-11-14-subscription-paid-125-compat.md).
+**SUBSCRIPTION-PAID-125-COMPAT — COMPLETE / DEPLOYED_VERIFIED14 November.**
+PR23 merged137f85dc; separate PR24 mergedf626fb4a. Canonical108/119/123/125 is loaded
+in all three actual serving executables.123 is explicitly newly admitted relative
+to installed108/119, not assumed deployed from PR14 source.441 paid/77 panel/38 actual
+overlay tests, scoped hosted paid/panel/readiness CI, nonempty backup/isolated restore,
+six observations/608s, fresh all-node renewal/panel/support and19 protected groups
+unchanged PASS. Current operator path resumed00:55:42UTC. No real payment or APK change.
+[Final receipt and rollback](releases/2026-11-14-subscription-paid-125-compat.md).
 Dependencies: finish PR23 public125 documentation/merge, then a separate branch
 from current main; retain qualified immutable125/sourceb293f9ac and support/recovery
 runtime. Explicitly resolve source123 versus installed108/119 before deployment.
@@ -18,6 +21,20 @@ No real payment, APK rebuild, user broadcast or transport redesign. Rollback cod
 and configuration only, never an old ledger over new events. After closure, queue
 automatic addressed notifications of confirmed subscription events, not implementation
 in this task. RU stop cause remains a separate task.
+
+**NEXT PRODUCT — SUBSCRIPTION-NOTIFICATIONS-1 (queued, NOT STARTED).**
+Automatic addressed notifications of confirmed subscription events, using the
+accepted private support channel and authoritative event/binding model. Dependencies:
+paid125 delivery above and retained support acceptance. Gate for the future task:
+confirmed events only, exact recipient, replay/dedup, offline delivery and truthful
+delivery/storage status; no speculative payment confirmation or unsolicited test send.
+This queue entry does not authorize implementation in the current task.
+
+**Separate engineering follow-up — CI-COLLECTION-NAMESPACE, OPEN.**
+Generic phase0/Linux full-suite inventory exits2; unchanged root/desktop
+`test_chat_service.py` names collide in local reproduction. Full CI is not green;
+repair separately without dropping tests. Scoped paid125 gates are recorded distinctly.
+RU recurring-stop cause/replacement remains separate, not resolved by policy delivery.
 
 **TABLET109→125 — PASS — подтверждено пользователем14 November.**
 Real tablet download/install through the in-app update button succeeded; former1–2%
