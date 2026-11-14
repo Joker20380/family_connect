@@ -1,5 +1,14 @@
 # Текущее состояние / Current state
 
+**15 November — DEVICE-TECHNICAL-METADATA-1 / IN_PROGRESS, NOT_DEPLOYED.**
+Owner-selected product task: explicit new consent, latest technical device/network
+observations, production panel and compatible public Android successor to125.
+Remote main verified53a780d9ccfcdb2c3ec6141a197917190f9be7a5 (PR37 merged).
+Dirty/diverged primary checkout preserved; isolated feature worktree starts at that
+main. Public125/catalog8 and paid108/119/123/125 remain unchanged; no new APK or
+metadata deployment is claimed. Phone deferred; RU CAUSE_OPEN and PR36
+NO_GO_PREFLIGHT unchanged. [Scope, checks and remaining gates](releases/2026-11-15-device-technical-metadata.md).
+
 **14 November — attribution failure-publication fixture repair / QUALIFIED, PR37.**
 Sourcea5067ae24599023e6d3f2d14e6e8b95d30b5b810 corrects positive pipe/v2 readiness
 producers; reader stays strict. Linux control source132604440606 and main132605128651

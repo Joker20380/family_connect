@@ -2,6 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
+**DEVICE-TECHNICAL-METADATA-1 — SELECTED / implementation in progress, 15 November.**
+Implement separately consented, identity/content-bound technical observations,
+bounded latest-only retention/revocation, honest underlay and IP provenance, local
+GeoIP, collector/importer and production device UI, then qualify a new immutable
+Friends APK and its exact paid descriptor before optional public publication.
+Dependencies: serving-runtime baseline/restore rehearsal, Android public APIs,
+existing device identity and pinned collector. Recorder architecture/failure-writer
+and a physical phone are NOT dependencies. RU CAUSE_OPEN / PR36 NO_GO_PREFLIGHT remain.
+Completion gate: authenticated installed APK → API → collector → production panel,
+125→new in-place preservation, negative security/consent/TTL/GeoIP checks, exact
+source/platform CI, minimal deployment and public HTTPS/catalog/invitation readback.
+Do not call source preparation a user-ready rollout. No unrelated queued successor.
+[Implementation and delivery receipt](releases/2026-11-15-device-technical-metadata.md).
+
 **Selected correction qualified: attribution failure-publication / PR37.**
 Deterministic empty/partial interprocess reproduction and atomic positive-fixture
 repair implemented; strict invalid_failure, immutable first receipt and SIGINT tail
