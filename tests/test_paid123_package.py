@@ -94,7 +94,7 @@ def test_packaged_activate_renew_grace_http_and_readonly_projection_agree(setup)
     runtime, http, operator, support, now = setup
     access, device = runtime['access'], runtime['canary']
     policy = run_archive(operator, 'policy')
-    assert policy['releases'][-1]['apk_sha256'] == SIGNED123
+    assert next(item for item in policy['releases'] if item['version_code'] == 123)['apk_sha256'] == SIGNED123
     before = snapshot(access)
     observed = projection(http, access.path)
     assert all(not row['cohort'] for row in observed['devices'])

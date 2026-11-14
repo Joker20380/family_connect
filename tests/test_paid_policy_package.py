@@ -54,7 +54,7 @@ def test_packaged_policy_reports_matching_modules_without_registry(packages, tmp
     assert json.loads(result.stdout) == paid_beta.policy()
 
 
-@pytest.mark.parametrize('code', [108, 119, 123])
+@pytest.mark.parametrize('code', [108, 119, 123, 125])
 def test_actual_operator_and_http_paid_module_apply_same_policy(packages, registry, code):
     http, operator = packages
     access, device, support = registry
