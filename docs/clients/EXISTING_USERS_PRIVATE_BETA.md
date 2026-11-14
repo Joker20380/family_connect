@@ -1,5 +1,15 @@
 # Existing-users private Android update / Частное обновление Android
 
+**13 November — default public Android125 / optional signed catalog8.**
+Use Settings → Check for updates → Install125, or the current invitation link.
+Preserve app data/identity; do not uninstall, clear data or downgrade to the historical
+118 candidate below. The owner already runs these exact125 bytes. Publication does
+not prove installation on every user device or cold restricted-network acceptance.
+RU: пользователям доступна125 поверх113; установка добровольная, без удаления данных.
+[Public APK, hashes and release receipt](../releases/2026-11-13-android125-publication.md).
+
+Earlier dated entries retain historical distribution boundaries, not current advice.
+
 <!-- Unified MESH Android116 20261104 -->
 **5 November —118 is now available as a separate opt-in field download.**
 Default invitation/updater stay113/catalog7; field installation and allowlist acceptance

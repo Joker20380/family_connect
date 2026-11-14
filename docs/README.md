@@ -1,8 +1,15 @@
 # Documentation
 
+[Android125 · 13 ноября: публичный APK, обе страницы приглашения и подписанный каталог8](releases/2026-11-13-android125-publication.md).
+
+[Amsterdam1 · 13 ноября: проверка служб, продления допуска и доступности без изменений сервера](releases/2026-11-13-amsterdam1-health.md).
+
+[RU · 13 ноября: повторный сбой записи состояния, восстановление и открытая причина задержек](releases/2026-11-13-ru-recurrence.md).
+
 [Системные сообщения · 11 ноября: форма панели и безопасная очередь публикации](releases/2026-11-11-system-messages.md).
 [Инструкция оператора](operators/system-messages.ru.md) · [Operator guide](operators/system-messages.en.md).
 
+[Android125 · 12 ноября: адресный обмен подтверждён; туннель выключен по подтверждению владельца](releases/2026-11-12-android125-owner-install.md).
 [SUPPORT-CHAT-1 · 11 ноября: beta125, адресный канал и точный статус ввода](releases/2026-11-11-support-chat-125.md).
 [Инструкция переписки](operators/support-chat.ru.md) · [Support chat guide](operators/support-chat.en.md).
 

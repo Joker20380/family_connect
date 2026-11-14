@@ -9,13 +9,13 @@ media path; Windows/Linux media clients remain incomplete.
 [Current status](docs/STATUS.md). The earlier Stage5 notes below are historical,
 not current implementation or release claims.
 
-Public Android **beta113 / Android8.1+ / ARM64**: [download and update in place](docs/getting-started.en.md).
-Separate opt-in **beta118** for mobile-allowlist field testing: [download and instructions](docs/releases/2026-11-05-android118-field.md).
-Same qualified/signed bytes; not an accepted stability fix. Default invitation/updater stay113.
-Invitation/default updater offer113: one Russia/Netherlands/Netherlands2 list in every mode,
-per-node load squares (green below85%, orange from85%) and a selected-row checkmark.
-Exact CI/signature/HTTPS and owner112→113 installation/UI checks PASS. Russia/MESH remains
-unavailable; sustained MESH stability is still open. No admission or entitlement change.
+Public Android **beta125 / Android8.1+ / ARM64**: [download and update in place](docs/getting-started.en.md).
+Invitation and optional signed updater catalog8 now offer125, including addressed
+operator-support compatibility. The exact qualified APK already runs on the owner's
+phone; two-way support with the user tunnel OFF is confirmed. No forced installation
+or new VPN entitlement. Russia/MESH remains unavailable; cold restricted bootstrap
+and sustained MESH stability remain separate gates. Older118 field material is
+historical, not a downgrade instruction. [Publication and limits](docs/releases/2026-11-13-android125-publication.md).
 
 **Stage5 priority update:** Android → Telemost VP8 → Linux EU Gateway → Internet.
 Reticulum control/recovery remains; Windows Home Gateway is a secondary feature.

@@ -1,5 +1,115 @@
 # Текущее состояние / Current state
 
+**14 November — tablet109→125 in-app update PASS — подтверждено пользователем.**
+Owner confirms successful download and installation on the real tablet via the
+application update button; the previous1–2% interruption did not recur. No repeat
+tablet test is required. This is user acceptance, not instrumental installed-SHA,
+complete-data preservation verification or proof of the old beta113 download cause.
+Public/owner-installed Android remains0.1.18-beta125/code125, signed catalog8.
+Next selected task: SUBSCRIPTION-PAID-125-COMPAT; production paid eligibility is
+not implied by APK publication. [Receipt](releases/2026-11-13-android125-publication.md).
+
+**13 November14:26:54UTC — Android125 PUBLIC; invitation/updater125, catalog8.**
+Exact qualified signed125 and matching audio source are published; original113
+downloads are retained. Independent verified-HTTPS full APK/source readback, signed
+v2/legacy discovery, both invitation paths/CSP and unchanged Windows delivery PASS.
+CI43048235831/sourceb293f9ac, original signer, payload equality and alignment recheck
+PASS; metadata/signature/invitation regressions56 PASS. One nginx HUP only: protected
+records, support configuration and backend/transport processes unchanged. Owner
+already has125; no phone reinstall, APK rebuild or all-users-installed claim.
+Optional update, no new VPN entitlement. Public announcement delivery, cold restricted
+bootstrap and RU cause/replacement remain open, separate from this publication.
+[Publication identity, gates and recovery](releases/2026-11-13-android125-publication.md).
+
+**13 November — Amsterdam1 read-only health PASS12:33–12:35UTC.**
+Canonical NL1 `185.10.158.212`: watcher/AWG/TCP active, stable PIDs/restarts0;
+three samples/131.591s confirm fresh applied readback,64 records/52 allowed, exact
+persisted TCP users and actual renewal1794573284→1794573419 across initial expiry.
+No current transport failure. Monitoring/restricted-bootstrap/Reticulum/mailbox
+active; TCP443 reachable3/3, panel snapshot fresh/`ok`, disk37GiB free and no sampled
+memory/I/O full pressure. No restart, remote write, rollout or phone operation.
+USER_TRAFFIC NOT_RUN: this is not authenticated phone VPN/DNS/HTTPS/egress acceptance.
+RU recovery/cause and replacement remain separate/open as below.
+[Read-only receipt and actual runtime hashes](releases/2026-11-13-amsterdam1-health.md).
+
+**13 November — RU recurrence recovered; disk/resource-pressure cause still OPEN.**
+First failure01:36:28.115UTC: `TRANSPORT_OPERATION_DEADLINE`, decision-state
+`persist_directory/after`,9.259661s against8s. Persistence consumes6.511998s;
+queries2.194040s. The containing sysstat interval also records high disk wait,
+swap and memory/I/O pressure; no exact competing writer/provider fault is proven.
+AWG/TCP stopped; watcher-only restarts reached1046 without restoring them.
+RU-only fence and retained-state validation precede an unchanged-runtime restart
+at11:58:12UTC; exact command map restored11:58:13UTC. Six samples/197.795s PASS:
+stable PIDs/restarts0, fresh applied readback,64 records/20 allowed, exact persisted
+TCP clients and actual renewal1794571181→1794571389 across initial expiry.
+Protected64/118 device/invite records, paid1/4 and chat52/1 tables, code/units/policy,
+support configuration and keys remain unchanged. HTTP is not restarted. Fresh RU
+panel snapshot12:01:42UTC is `ok`; panel HTTP200, but USER_TRAFFIC NOT_RUN.
+Result **RECOVERED_CAUSE_OPEN**, not a permanent fix. RU replacement remains
+WAITING_FOR_HOST. No NL, neighbouring-service, phone, subscription or release change.
+Installed owner Android125 and confirmed support exchange with tunnel OFF retain
+their accepted scope; public Android broadcast production delivery remains NOT_RUN.
+Local root/data free space1.9/2.6GiB before/after; no cleanup/build or data removal.
+[Evidence, recovery gate and remaining limits](releases/2026-11-13-ru-recurrence.md).
+
+Earlier entries retain their observation-time state, not current RU health.
+
+**12 November — SUPPORT-CHAT-1 owner round trip confirmed with tunnel OFF.**
+Owner reports «сообщения приходят и уходят» after the125 in-place update. Readback
+through the installed panel IPC finds one authoritative `verified` support thread:
+one outgoing message `recipient_stored` and one incoming reply `received`, latest
+message timestamp13:10:30UTC. This corroborates real addressed delivery/storage in
+both directions, not only installation or an ordinary-chat assumption. The ACK means
+stored, never read. Worker is active/running, NRestarts0. No message sent by this check.
+Core physical panel↔owner Android125 exchange is confirmed. The owner subsequently
+clarifies «туннель был выключен»: user-tunnel-OFF is owner-confirmed, not inferred
+from ACKs or a new automated phone probe. That physical condition is closed; do not
+repeat installation/exchange for it. Network type, offline/restart/closed-browser
+conditions were not observed; retain isolated checks separately. Public-broadcast
+delivery, cold restricted bootstrap and full history/settings retention remain
+unclaimed. No new runtime action or live send accompanies this clarification.
+[Physical receipt and remaining boundaries](releases/2026-11-12-android125-owner-install.md).
+
+Earlier12 November entries retain their observation-time state.
+
+**12 November13:06 UTC — owner phone updated123→125 in place.**
+Physical Redmi Note9 Pro /Android12 now runs signed0.1.18-beta125, versionCode125.
+Exact installed APK SHA256f1c5bf57 matches the qualified private artifact; both old
+and new APKs verify against the original67a90d1b signer. UID, first-install timestamp
+and data directory are unchanged. No uninstall, data clear, reenrollment, key export
+or public release. Normal launch and30.561s stable-process/bounded crash check PASS.
+MIUI prevents automated UI inspection/control; history/settings and cryptographic
+identity retention are not independently verified on the physical phone. Existing
+isolated preservation evidence remains separate. Next physical action: owner opens
+Chat and checks existing history/settings, then verifies authoritative enrollment
+before any separately approved addressed send/reply. No live message/broadcast sent.
+Public/invitation/catalog versions remain unchanged;125 is installed on this owner
+phone only, not a public rollout. RU remains RECOVERED_CAUSE_OPEN as recorded below;
+no gateway operation is part of this update.
+[Installation, checks and limits](releases/2026-11-12-android125-owner-install.md).
+
+**12 November — RU recovered; persistence-timeout trigger identified, cause OPEN.**
+Owner reports stopped services. Preserved first failure11Nov21:12:13.800732UTC:
+`TRANSPORT_OPERATION_DEADLINE`, `persist_directory/after`,8.651672s against8s.
+This occurrence is dominated by synchronous state/attempt persistence, not TCP:
+three engine queries total0.034137s; four fsync calls total7.425943s. Watcher-only
+restarts leave AWG/TCP stopped;1354 restarts were observed before recovery.
+RU-only fence, retained-state validation and sequential unchanged-runtime restart
+completed12Nov10:37:44UTC; original command map restored10:37:46UTC. No NL changes,
+timeout relaxation, new binary, subscription change or database rollback.
+Six samples over196.377s PASS: stable PIDs/restarts0, fresh applied readback,63 records,
+20 allowed, exact persisted TCP users and actual renewal across the120s lease.
+Protected device/invite/subscription/event/chat tables, units/code/policy/support
+configuration remain identical. Fresh RU panel snapshot10:42:35UTC is `ok`; panel
+HTTP200. Phone DNS/HTTPS/egress were NOT_RUN, so no end-to-end VPN traffic claim.
+The underlying storage delay and earlier incidents remain open; RU replacement is
+still WAITING_FOR_HOST. Support-only HTTP16d96eb7 is preserved, not replaced by main.
+SUPPORT-CHAT-1 physical acceptance and public announcement delivery remain open;
+no phone, chat message, public broadcast or client version changed in this incident.
+[Incident evidence and recovery scope](releases/2026-11-12-ru-recurrence.md).
+
+The11 November entries below are historical checkpoints, not current RU health.
+
 **11 November — SUPPORT-CHAT-1 backend ENABLED; physical acceptance remains open.**
 Existing owner account can open card → «Сообщения · личная поддержка» and `/messages/`;
 actual authenticated HTTP200 and explicit legacy-client blocking PASS. Panel image

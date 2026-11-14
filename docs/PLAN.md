@@ -2,7 +2,119 @@
 
 ## Current engineering priority / Текущий critical path
 
-**SUPPORT-CHAT-1 — backend ENABLED, awaiting physical owner-phone acceptance.**
+**SUBSCRIPTION-PAID-125-COMPAT — owner-selected14 November, IN PROGRESS.**
+Dependencies: finish PR23 public125 documentation/merge, then a separate branch
+from current main; retain qualified immutable125/sourceb293f9ac and support/recovery
+runtime. Explicitly resolve source123 versus installed108/119 before deployment.
+Gate: exact canonical125 version/code/APK hash; isolated first payment/renewal/grace,
+negative/replay/limit/revoke/access regressions; baseline-preserving executable
+overlay and backup/restore rehearsal; merged source; actual loaded policy across
+consumers, fresh panel/support health and unchanged protected business records.
+No real payment, APK rebuild, user broadcast or transport redesign. Rollback code
+and configuration only, never an old ledger over new events. After closure, queue
+automatic addressed notifications of confirmed subscription events, not implementation
+in this task. RU stop cause remains a separate task.
+
+**TABLET109→125 — PASS — подтверждено пользователем14 November.**
+Real tablet download/install through the in-app update button succeeded; former1–2%
+interruption did not recur. No repeat required; no instrumental installed-SHA/full
+data-equality or beta113 root-cause claim. Public/invitation/updater125/catalog8 and
+owner installation are accepted. [Receipt](releases/2026-11-13-android125-publication.md).
+
+**ANDROID125-PUBLIC-20261113 — owner-selected, COMPLETE.**
+Qualified immutable125 is public13 November14:26:54UTC: exact hosted/source/artifact
+and original signer, locally signed optional catalog8, preserved113 downloads and
+prior metadata backup. All publication gates PASS:56 scoped tests, guarded static
+publication, matching invitation/CSP/legacy/v2, full verified-HTTPS APK/source hashes,
+unchanged protected records and backend/transport processes; one nginx HUP only.
+Current public/invitation/updater125/catalog8; owner already installed125. No forced
+install, all-users-installed claim or new VPN entitlement. Separate public-broadcast,
+cold field and RU-cause/replacement gates remain open; no unrelated queued task starts.
+[Current release receipt](releases/2026-11-13-android125-publication.md).
+
+**AMSTERDAM1-HEALTH-20261113 — owner-requested read-only check COMPLETE.**
+Gate: canonical NL1 target/pinned SSH, stable active transports, fresh applied
+readback/exact persisted TCP users, actual admission renewal beyond initial expiry,
+independent endpoint reachability and fresh panel evidence. Three samples/131.591s
+PASS, renewal1794573284→1794573419; no current failure or observed storage-pressure
+stall. No remote changes/repair indicated by this window; phone VPN traffic remains
+NOT_RUN. This does not close RU's cause/replacement or begin any queued task.
+[Amsterdam1 current receipt](releases/2026-11-13-amsterdam1-health.md).
+
+**RU-INCIDENT-20261113 — owner-requested recovery complete; RECOVERED_CAUSE_OPEN.**
+Dependencies: exact accepted node125c796a/gateway9023d2c3, policy108/119, retained
+decisions/deny/expiry, support-only HTTP16d96eb7 and current authoritative registry.
+Gate: preserve the first failure/current protected state; RU-only fence and handler
+drain; validate retained state; sequential unchanged-runtime start; restore exact
+command map; observe past the120s lease with actual renewal, exact engine/persisted
+readback, stable PIDs/restarts and unchanged protected data. No rollback of live DB.
+Gate PASS13 November: six samples/197.795s,64 records/20 allowed, renewal
+1794571181→1794571389 across initial expiry, no new failure; panel RU snapshot `ok`.
+This recurrence is a decision-state persistence deadline9.259661s/8s, accompanied
+by host disk/swap/memory pressure. Exact resource-pressure source remains unproven;
+watcher-only restarts still do not recover stopped AWG/TCP. USER_TRAFFIC NOT_RUN.
+Do not weaken8/12/120s, remove fsync, redeploy failed PR16/17 or call a restart FIXED.
+Next corrective boundary is storage/resource-pressure attribution or a separately
+qualified persistence/recovery correction. RU replacement remains WAITING_FOR_HOST.
+No queued support/broadcast/payment/desktop task is automatically started here.
+[Current RU evidence and limits](releases/2026-11-13-ru-recurrence.md).
+
+### Retained support acceptance
+
+**SUPPORT-CHAT-1 — core physical exchange with user tunnel OFF CONFIRMED12 November.**
+Owner confirmation plus actual panel IPC: one `verified` binding/thread, outgoing1
+with signed `recipient_stored`, incoming1 durably `received`; worker active/restarts0.
+Do not repeat installation, enrollment or the basic round trip merely to reproduce
+accepted evidence. `recipient_stored` is storage, not read. No live send in this check.
+Owner explicitly confirms «туннель был выключен» for the corroborated exchange.
+The user-tunnel-OFF physical condition is closed on owner testimony plus the earlier
+backend delivery/storage receipts; no new automated network/phone probe is claimed.
+Do not repeat this accepted exchange or assume a particular Wi-Fi/mobile network.
+The owner's short confirmation does not prove complete historical-data equality,
+offline/restart/closed-browser conditions, expired-subscription behavior or cold
+no-cache bootstrap. Preserve existing isolated PASS results at their actual scope.
+Public Android broadcast delivery remains a separate NOT_RUN production gate.
+[Owner confirmation and backend receipt](releases/2026-11-12-android125-owner-install.md).
+
+### Completed owner update — retained evidence
+
+**ANDROID125-OWNER-INSTALL — owner-requested update COMPLETE12 November13:06UTC.**
+Qualified immutable signed125 replaces physical123 in place: package, signer,
+installed bytes, unchanged UID/first-install/data directory and normal launch PASS.
+No source rebuild, new signing, public/invitation/catalog change or live message.
+MIUI UI restrictions were not bypassed. Physical history/settings/cryptographic
+identity preservation remains an owner UI check; unchanged Android package identity
+is not proof of chat-content equality. Subsequent owner/backend evidence confirms
+support enrollment and the core round trip; user tunnel OFF is now owner-confirmed.
+Do not reinstall125 or advance public-broadcast/cold-bootstrap/traffic gates from
+the installation result. [Receipt](releases/2026-11-12-android125-owner-install.md).
+
+### Previous RU incident — historical recovery, cause still open
+
+**RU-INCIDENT-20261112 — availability RECOVERED_CAUSE_OPEN; recovery gate complete.**
+Historical12 November result; superseded by the13 November recurrence above.
+Dependencies: exact installed node125c796a/gateway9023d2c3, unchanged108/119 policy,
+retained decisions/deny/expiry and currently installed support-only HTTP16d96eb7.
+First-failure evidence now identifies slow synchronous persistence in this occurrence;
+it does not resolve the older query-boundary incidents or establish the storage cause.
+Recovery gate: preserve failure/configuration/protected DB fingerprints; fence only
+RU with NL command entries and central timer unchanged; stop/PID0/no handlers;
+validate retained state; sequentially start the same bytes; restore exact command
+map; observe beyond120s admission renewal with fresh applied readback, exact persisted
+TCP users, stable PIDs/restarts, no new failure and unchanged protected data.
+Controlled restart and six-sample196.377s observation/comparison PASS, including
+actual renewal1794480005→1794480176 across the initial lease,63 records/20 allowed,
+exact persisted TCP users, stable services and unchanged protected data. Panel has
+fresh `ok` RU data. No client traffic acceptance is inferred from this or HTTP200.
+Do not deploy the previously rolled-back PR16/17 candidates or weaken8/12/120s
+and durability to hide delay.
+Next corrective boundary: isolate storage/fsync latency and qualify any persistence
+change separately; replacement remains WAITING_FOR_HOST. No automatic new task.
+[Current incident and limits](releases/2026-11-12-ru-recurrence.md).
+
+### Retained implementation — support network/field boundaries
+
+**SUPPORT-CHAT-1 — backend ENABLED; core owner-phone exchange confirmed above.**
 Operator entry: device card → «Сообщения · личная поддержка»; replies `/messages/`.
 Completed: chat-only service identity, authoritative binding collector, encrypted
 worker/outbox, existing owner permissions, CI/review/ordinary PR20/21 merges,
@@ -12,15 +124,15 @@ scoped runtime CI43055427259 passes without rebuilding unchanged Android125.
 Isolated exchange, offline/dedup/closed-browser replies and existing124 evidence are
 preserved;125 API27/35 actual admission renewal and audience checks also pass.
 Installed panel50de6f25/database0013; RU HTTP support-only16d96eb7, not full main.
-Signed125 from qualifiedb293f9ac is private, neither installed nor published; last
-verified phone123 is historical. No physical phone is attached. One remaining
-physical session: inspect version, install125 in place preserving data, enroll its
-canonical binding, approve exact addressed text and perform send/reply with VPN off.
-Until enrollment, the panel explicitly blocks legacy recipients; no guessed binding.
+Signed125 from qualifiedb293f9ac is public since13 November and installed over123 on
+the owner phone; installed bytes/signer/package identity/launch PASS12 November.
+Tablet109→125 update is user-confirmed14 November. The owner binding and addressed round trip are verified; remaining
+physical scope is retained-history/settings confirmation; tunnel OFF is confirmed.
+The panel still explicitly blocks unenrolled legacy recipients; no guessed binding.
 Public Android announcement delivery remains a separate NOT_RUN production gate:
 isolated audience checks do not authorize a broadcast. Cold no-cache/allowlisted
 bootstrap remains separate from ordinary Wi-Fi and expired synthetic subscription.
-No live message was sent. Host reboot/startup ordering is not a completed test.
+Owner round trip is confirmed; host reboot/startup ordering remains NOT_RUN.
 Root979MiB→2.5GiB after1.557GB old build-cache cleanup, final2.3GiB; preserve artifacts.
 Next global tracks remain separate: confirmed subscription-change notifications;
 payment partner selection/integration; cold no-cache restricted bootstrap/recovery
