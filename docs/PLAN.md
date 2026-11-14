@@ -2,7 +2,7 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Selected14 November — RU-PERSISTENCE-PRESSURE-1, CAUSE_OPEN / observer cost refinement.**
+**Selected14 November — RU-PERSISTENCE-PRESSURE-1, CAUSE_OPEN / finite capture active.**
 Scope: authorized RU185.251.89.19 only; diagnose the observed persistence deadline
 overruns using actual node125c796a, saved first failures and bounded process/cgroup/
 host counters aligned to operation phases. No preventive restart, storage stress,
@@ -20,12 +20,17 @@ smoke, cost and lease-crossing/actual engine readback PASS), reviewed and merged
 PR29/main59cd72ed. First RAM-only window enabled14Nov14:19:16UTC, stopped after
 349.88s on sample CPU306ms>200ms, no gateway failure. Full result extracted.
 Lower-cost kernel path qualified181.99s/75 cycles with unchanged limits,29 tests /
-6193 collection PASS. Next concrete action: review/merge and finite reactivation,
-then inspect first-failure/phase/cgroup deltas to decide
+6193 collection PASS; PR30 mergededd10793/source38e9f403 enabled14:40:36UTC with
+unchanged limits. No extension of the original overall window: normal deadline
+15Nov14:18:47UTC, hard ceiling14:19:16UTC. Next concrete action: run the prepared
+`collect_refined_result.py final-20261115` after deadline/early stop, then inspect
+first-failure/phase/cgroup deltas to decide
 whether a specific mechanism warrants a qualified patch. First747.74ms fsync
 capture is retained; it is not an8s failure or proof against a particular process.
 No product persistence change is justified by current evidence. Preserve concurrent
 legitimate live metadata/enrollment; audited identity keys/device sets are unchanged.
+Revised window verified running408s at14:47:24UTC, no RU failure; actual engine
+readback and lease crossing PASS. This is an observation handoff, not causal closure.
 [Task evidence](releases/2026-11-14-ru-persistence-pressure.md).
 
 **CI-RUNNER-COMPLETION-1 — separate queued follow-up, NOT STARTED.**

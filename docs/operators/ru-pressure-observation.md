@@ -121,3 +121,35 @@ tested with label`acceptance-20261114`: start/first-slow/errors downloaded and h
 verified. A running unit without final receipt is reported as such, not completed.
 Do not reboot before retrieval. No background task promises automatic analysis;
 the next task turn must inspect the saved finite result.
+
+## Active refined window — source38e9f403
+
+PR30 mergededd10793f43f866c7add806d0a1609b0b43e42e8. Reviewed/qualified source
+38e9f403913ee7a73e6eb309bbe0d445d11f0494 is staged separately at
+`/run/family-connect-ru-pressure/source-38e9f403`; old captures/source remain intact.
+Script SHAebd64d14346385cb1e98b754dab3b34ed7dfde1ba0e9790f72250c8451d5c0ff;
+unchanged trace SHA49f96235b61eee6b3b9e03033880b6391f6cf48e984ce7ac0aede8571fa2de90.
+
+- Active unit: `family-connect-ru-pressure-20261114-38e9f403.service`.
+- Output: `/run/family-connect-ru-pressure/20261114-38e9f403`.
+- Start14Nov14:40:35.898UTC; normal deadline15Nov14:18:46.898UTC.
+- Same limits; remaining duration is calculated from the first window's deadline,
+  less30s headroom. Hard ceiling remains15Nov14:19:16UTC, not a reset24-hour budget.
+- Disable only this diagnostic unit:
+  `systemctl stop family-connect-ru-pressure-20261114-38e9f403.service`.
+
+Extract this window (not the former43eb84eb one) on the owner's laptop:
+
+```sh
+python3 /mnt/data/fc-ru-persistence-pressure-20261114/collect_refined_result.py final-20261115
+```
+
+The exclusive destination is
+`/mnt/data/fc-ru-persistence-pressure-20261114/extracted-refined-final-20261115`.
+Use a new label on a second extraction. Check stop reason/complete JSON, not just
+systemd's success status: a cost-guard stop is successful data preservation, not a
+completed24-hour window or proof the RU cause is solved.
+This exact refined extraction path was tested with label`acceptance-20261114`:
+start/errors downloaded with digest verification; unit still running/no final
+receipt was reported honestly. At14:47:24UTC it had run408s with unchanged limits,
+empty errors,87.47MB peak and no process disk I/O. Do not infer tomorrow's outcome.

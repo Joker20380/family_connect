@@ -156,6 +156,11 @@ HTTP65,536 write bytes, no sampled long-lived PID major-fault increment while ho
 pgmajfault rose35. Short-lived/unobserved tasks and shared writeback remain attribution
 gaps; no process is blamed from this snapshot. First-failure detection/finite expiry
 will preserve the then-current ring in final.json. No current transport failure.
+The subsequently extracted full first-window final receipt also brackets this slow
+fsync with14:20:43.568–14:20:50.356UTC counters (6.788s): journald cgroup writes
+1,765,376 bytes, watcher147,456, HTTP53,248; host swap-in/out0, major faults4. This
+narrows contemporaneous I/O accounting but still does not prove journald caused
+the747ms wait, identify its log producer or explain the old8s deadline failures.
 
 Before/after read-only canonical snapshots:64 devices/118 invites/1 subscription/
 4 paid events retained; subscriptions, terms, pilot membership, credentials and17
@@ -177,6 +182,34 @@ this bounded data acquisition satisfies the diagnostic fallback, not causal clos
 or a promise of future stability. Next action is finite-result analysis, not another
 unspecified monitoring request or an unrelated CI/payment/client-card task.
 
+## Refined finite activation
+
+PR30 ordinary mergeedd10793f43f866c7add806d0a1609b0b43e42e8 and source38e9f403913ee7a73e6eb309bbe0d445d11f0494
+verified remotely. Enabled only the exact ebd64d14/49f96235 diagnostic pair in a new
+RAM directory; previous source43eb84eb/start/slow/final are preserved. New unit
+`family-connect-ru-pressure-20261114-38e9f403.service`, invocation428ee09ca2744951b2b4249f08c823f5,
+PID535313, started14:40:35.898UTC. Normal deadline15Nov14:18:46.898UTC; runtime
+ceiling remains14:19:16UTC from the original window, not an unlimited retry extension.
+At14:42:27UTC: active/running, unit CPU4.251s, peak73.19MB, process disk read/write0,
+no final/error receipt. Both installed source hashes verified. Repeated actual
+engine readback at14:40:35UTC:64 applied/20 allowed, zero identity/presence/flow
+mismatches, no prepared state/failure, same archive bytes and four runtime PIDs.
+No application restart, new lease policy or persistence fix. Exact extraction and
+safe disable commands are in the runbook's active-refined-window section.
+Final acceptance14:47:24UTC: same observer PID535313 running408.48s, past the first
+window's349.88s cutoff; CPU10.785s (2.64% one core), peak87,474,176 bytes, process
+read/write/cancelled-write0, empty errors, no final receipt yet. Refined extraction
+helper tested under`acceptance-20261114`, downloaded start/errors with SHA verification.
+At14:47:26UTC independent RU readback:64 applied/20 allowed, no prepared/mismatched
+identity/presence/flow, no failure, age2.12s; same four PIDs/invocations/NRestarts0.
+Initial renewed lease14:42:12 crossed to14:48:56. Final read-only registry check
+found no further protected-table changes after the audited live deltas, same4 paid
+events/1 subscription/64 devices/118 invites and identical paid archives. Local
+support worker still2651059/NRestarts0, RuntimeDirectoryPreserve=yes/inode333786.
+The original dirty checkout/untracked work was preserved. Continuous qualification
+windows and this408s live check are limited observations, not a24-hour PASS or
+evidence that future stalls cannot recur. No unrelated task is resumed.
+
 ## Separate CI disposition
 
 Phase043591863104 tests132438099847 is completed FAILED by external timeout; cargo
@@ -192,6 +225,11 @@ completed PASS. At14:22UTC phase043603921594/tests132474346280 and Linux control
 43603921607/job132474346773 were still running; failover132474346460 was still
 building, with actual failover/auth/offline/revocation pending. Neither Docker build
 nor the prior source's result is substituted for that new run's completed steps.
+Later14:42UTC, PR29 actual failover/auth/offline/revocation132474346460 completed
+PASS (all execution steps, not just build). PR30 exact source38e9f403 readiness
+43606003839 PASS; its phase043606003930 and Linux control43606003884 remain
+IN_PROGRESS at that observation. These are separate from old sourceac3479bf's
+completed timeout debt and from the observer's completed local/RU qualification.
 
 Private read-only snapshots/source capsule stay in `/mnt/data/fc-ru-persistence-pressure-20261114`;
 no keys, raw registry, user contents or private snapshots are committed.
