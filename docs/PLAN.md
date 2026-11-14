@@ -2,7 +2,25 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Selected14 November — RU-PERSISTENCE-PRESSURE-1, CAUSE_OPEN / finite capture active.**
+**CI-RUNNER-COMPLETION-1 — COMPLETE / CI_ONLY, integration PR32.**
+Sourcefd1d8794 qualified:31 local checks/6203 collection; phase0/tests132506529152
+full step507s and subsequent cargo PASS; Linux control132506529441 full step519s
+and subsequent GTK/render/recovery/package/extracted checks PASS; final actual
+failover/auth/offline/revocation132506528873 PASS. Exact test-merge tree matches
+qualified source. Diagnostic60b3ff87 proves all inner processes/pipeline exited0;
+hosted processing of megabyte collect-only console lines continued until timeout.
+Bound only console representation, retaining full artifact, real exit status and
+all tests/pins/locks/contexts/25min timeout. No production deployment.
+[Evidence, receipts and integration](releases/2026-11-14-ci-runner-completion.md).
+Not whole-CI green: Client builds/linux132506592194 HTTP403 fetching appimagetool;
+earlier push failover build132506280739 failed unchanged readiness attempt-count
+assertion within150ms. These separate failures remain visible; no blanket rerun,
+assertion relaxation or silent repair. Follow-up needs explicit selection.
+Next RU checkpoint: analyze already-extracted final window (sample_cost_limit
+after1171.45s, no gateway failure), preserving CAUSE_OPEN. No automatic task start,
+observer restart/extension, payment-provider, card-refresh or Android work.
+
+**RU-PERSISTENCE-PRESSURE-1, CAUSE_OPEN / final capture awaiting analysis.**
 Scope: authorized RU185.251.89.19 only; diagnose the observed persistence deadline
 overruns using actual node125c796a, saved first failures and bounded process/cgroup/
 host counters aligned to operation phases. No preventive restart, storage stress,
@@ -22,23 +40,26 @@ PR29/main59cd72ed. First RAM-only window enabled14Nov14:19:16UTC, stopped after
 Lower-cost kernel path qualified181.99s/75 cycles with unchanged limits,29 tests /
 6193 collection PASS; PR30 mergededd10793/source38e9f403 enabled14:40:36UTC with
 unchanged limits. No extension of the original overall window: normal deadline
-15Nov14:18:47UTC, hard ceiling14:19:16UTC. Next concrete action: run the prepared
-`collect_refined_result.py final-20261115` after deadline/early stop, then inspect
-first-failure/phase/cgroup deltas to decide
+15Nov14:18:47UTC, hard ceiling14:19:16UTC. It stopped early on sample_cost_limit;
+entry/exit CI extractions retained identical final/start/error receipts. Next action:
+inspect the retained final/start phase/cgroup deltas and first-window evidence to decide
 whether a specific mechanism warrants a qualified patch. First747.74ms fsync
 capture is retained; it is not an8s failure or proof against a particular process.
 No product persistence change is justified by current evidence. Preserve concurrent
 legitimate live metadata/enrollment; audited identity keys/device sets are unchanged.
-Revised window verified running408s at14:47:24UTC, no RU failure; actual engine
-readback and lease crossing PASS. This is an observation handoff, not causal closure.
+Revised window was running408s at14:47:24UTC, no RU failure; actual engine readback
+and lease crossing PASS. Final elapsed1171.45s; no failure/lost events, tracer rc0.
+No scheduled extraction/analysis exists. Optional new-label readback command and
+original15Nov after15:20Brussels checkpoint remain in the CI report. This is an
+observation handoff, not causal closure or a claim of current VPN reachability.
 [Task evidence](releases/2026-11-14-ru-persistence-pressure.md).
 
-**CI-RUNNER-COMPLETION-1 — separate queued follow-up, NOT STARTED.**
+**CI-RUNNER-COMPLETION-1 — historical entry evidence; resolved separately above.**
 Phase0/tests132438099847 completed with external timeout; all three pytest contexts
 return0/coverage PASS, subsequent cargo skipped. Linux control132438784552 has the
-analogous outer timeout; failover/auth/offline/revocation132438099607 PASS. Why the
-outer commands fail to finish is unproven. Preserve mandatory gates for any RU code
-change; do not repair general CI or declare whole-CI PASS within RU diagnosis.
+analogous outer timeout; failover/auth/offline/revocation132438099607 PASS. These
+old-source results are not replaced by newer-source qualification. Preserve mandatory
+gates for any future RU code change; general CI is not declared universally green.
 
 **SUBSCRIPTION-NOTIFICATIONS-1 — DEPLOYED_VERIFIED13:05UTC14 November.**
 PR26 ordinary mergefe6a317c retains separate late-ACK0950bba0 and referenceac3479bf

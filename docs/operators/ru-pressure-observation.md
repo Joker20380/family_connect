@@ -122,7 +122,14 @@ verified. A running unit without final receipt is reported as such, not complete
 Do not reboot before retrieval. No background task promises automatic analysis;
 the next task turn must inspect the saved finite result.
 
-## Active refined window — source38e9f403
+## Refined window — source38e9f403 (stopped; final retained)
+
+CI-task entry15:07UTC14Nov found active/exited/MainPID0: sample_cost_limit after
+1171.45s, not a gateway failure. Final/start/errors are safely extracted as
+`extracted-refined-ci-entry-20261114-1506` under the private evidence directory below.
+No scheduled automatic analysis exists. Analyze that final window separately;
+do not restart/extend the observer or wait for the original ceiling to collect it.
+The start/deadline configuration below is retained historical configuration.
 
 PR30 mergededd10793f43f866c7add806d0a1609b0b43e42e8. Reviewed/qualified source
 38e9f403913ee7a73e6eb309bbe0d445d11f0494 is staged separately at

@@ -1,9 +1,9 @@
 name: Linux control preview
 on:
   push:
-    paths: ['scripts/ci_release_fixtures.py', 'scripts/ci_full_pytest.py', 'scripts/ci_root_pytest.py', 'scripts/ci_pytest_context.py', 'scripts/ci_android_fixture.py', 'scripts/ci_python314_context.sh', 'scripts/ci_fixture_permissions.py', 'scripts/ci_python313_env.sh', 'control/requirements.lock', 'messenger/requirements.lock', 'control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'scripts/friends_http_transition.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
+    paths: ['scripts/ci_release_fixtures.py', 'scripts/ci_full_pytest.py', 'scripts/ci_full_suite.sh', 'scripts/ci_lifecycle.py', 'scripts/ci_console.py', 'scripts/ci_root_pytest.py', 'scripts/ci_pytest_context.py', 'scripts/ci_android_fixture.py', 'scripts/ci_python314_context.sh', 'scripts/ci_fixture_permissions.py', 'scripts/ci_python313_env.sh', 'control/requirements.lock', 'messenger/requirements.lock', 'control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'scripts/friends_http_transition.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
   pull_request:
-    paths: ['scripts/ci_release_fixtures.py', 'scripts/ci_full_pytest.py', 'scripts/ci_root_pytest.py', 'scripts/ci_pytest_context.py', 'scripts/ci_android_fixture.py', 'scripts/ci_python314_context.sh', 'scripts/ci_fixture_permissions.py', 'scripts/ci_python313_env.sh', 'control/requirements.lock', 'messenger/requirements.lock', 'control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'scripts/friends_http_transition.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
+    paths: ['scripts/ci_release_fixtures.py', 'scripts/ci_full_pytest.py', 'scripts/ci_full_suite.sh', 'scripts/ci_lifecycle.py', 'scripts/ci_console.py', 'scripts/ci_root_pytest.py', 'scripts/ci_pytest_context.py', 'scripts/ci_android_fixture.py', 'scripts/ci_python314_context.sh', 'scripts/ci_fixture_permissions.py', 'scripts/ci_python313_env.sh', 'control/requirements.lock', 'messenger/requirements.lock', 'control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'scripts/friends_http_transition.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
   workflow_dispatch:
 permissions:
   contents: read
@@ -57,7 +57,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          "$FC_TEST_PYTHON" scripts/ci_release_fixtures.py run --fixtures "$RUNNER_TEMP/fc-release-fixtures" --go "$(command -v go)" --nginx /usr/sbin/nginx -- "$FC_TEST_PYTHON" scripts/ci_full_pytest.py --python314 /usr/lib/fc-ci-python314/test-env/bin/python 2>&1 | tee "$RUNNER_TEMP/full-pytest.log"
+          bash scripts/ci_full_suite.sh "$FC_TEST_PYTHON" scripts/ci_release_fixtures.py run --fixtures "$RUNNER_TEMP/fc-release-fixtures" --go "$(command -v go)" --nginx /usr/sbin/nginx -- "$FC_TEST_PYTHON" scripts/ci_full_pytest.py --python314 /usr/lib/fc-ci-python314/test-env/bin/python
       - name: Record sanitized full-suite failure IDs
         if: always()
         env:
@@ -68,9 +68,13 @@ jobs:
           from pathlib import Path
           log = Path(os.environ['RUNNER_TEMP']) / 'full-pytest.log'
           text = log.read_text() if log.is_file() else ''
+          lifecycle = log.with_name('full-pytest-lifecycle.jsonl')
+          stages = [json.loads(line) for line in lifecycle.read_text().splitlines()] if lifecycle.exists() else []
+          pipeline = [record for record in stages if record['stage'] == 'pipeline_end']
           summary = re.findall(r'(?m)^\d+ (?:failed|passed)[^\n]* in [0-9.]+s[^\n]*$', text)
           result = dict(source_commit=os.environ['GITHUB_SHA'], outcome=os.environ['FC_PYTEST_OUTCOME'],
-                        completed='Full-suite context coverage: PASS' in text, summary=summary[-1] if summary else None,
+                        completed=bool(pipeline), pipeline=pipeline,
+                        coverage_pass='Full-suite context coverage: PASS' in text, summary=summary[-1] if summary else None,
                         last_fixture=re.findall(r'(?m)^FIXTURE TEST: (.+)$', text)[-1:],
                         context_results=re.findall(r'(?m)^\{"context": .+$', text),
                         failure_ids=sorted(set(re.findall(r'(?m)^FAILED (\S+)', text))),
@@ -84,6 +88,9 @@ jobs:
           path: |
             ${{ runner.temp }}/full-pytest-receipt.json
             ${{ runner.temp }}/full-pytest.log
+            ${{ runner.temp }}/full-pytest-lifecycle.jsonl
+            ${{ runner.temp }}/full-pytest-processes.json
+            ${{ runner.temp }}/full-pytest-monitor.log
             ${{ runner.temp }}/python314-prepare.log
           if-no-files-found: error
       - name: System GTK dependencies
