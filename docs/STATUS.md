@@ -1,5 +1,28 @@
 # Текущее состояние / Current state
 
+**14 November13:05UTC — SUBSCRIPTION-NOTIFICATIONS-1 DEPLOYED_VERIFIED.**
+After the owner's prepared sudo action, the pinned ac3479bf worker/collector,
+systemd timer/drop-in and five-file console image61e4df54 are installed and enabled
+on joker-XPS; both RU read-only helpers are installed. PR26 mergedfe6a317c; PR27
+documentation merged023dcd92. Public beta125/catalog8 and paid125 archives retained.
+Atomic baseline12:48:20UTC excludes the actual4 historical events, not delivered;
+cursor/highwater4, zero automatic jobs/messages, one future boundary tracked.
+Three cycles plus controlled worker restart PASS; independent actual panel IPC,
+rendered notification section, installed hashes and source freshness PASS. Existing
+2 conversations/5 messages, identity/request mappings,19 protected canonical groups,
+users/settings/volumes, RuntimeDirectoryPreserve=yes and inode333786 retained.
+Consistent canonical, panel and stopped encrypted-history backups/isolated checks PASS.
+Late terminal ACK and reversible accepted106 reference fixes qualified. Collection6164,
+422 core/48 panel/25 reference-package checks and actual failover/auth/offline/revocation
+PASS. Overall CI **not PASS**: Linux control43591863123 timed out its25-minute enclosing
+step despite all pytest contexts returning0; independent phase043591863104 still pending.
+Client builds now PASS; no APK was published. No new real event or automatic stored
+receipt: **NOT_OBSERVED**, separate from deployed-route acceptance. No deployment
+blocker remains. Payment provider, client-card auto-refresh and RU cause are separate.
+[Production receipt, exact CI limits and safe disable](releases/2026-11-14-subscription-notifications.md).
+
+## Earlier status checkpoints (historical, not current next actions)
+
 **14 November12:37UTC — PR26 merged; RU reader installed; local activation awaits owner.**
 Mergefe6a317c2ee115b2bc3c3f5e9d65fb119d43fa07 verified on remote main; executable/
 reference sourceac3479bf unchanged. On RU box-932982 only support-bindings-read.py
