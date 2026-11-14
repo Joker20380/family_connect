@@ -3,6 +3,10 @@
 ## Current engineering priority / Текущий critical path
 
 **Selected14 November — SUBSCRIPTION-NOTIFICATIONS-1, IN PROGRESS.**
+Source and isolated route are implemented/qualified; production NOT DEPLOYED.
+Next within this task: hosted CI/review, merge, administrative host access,
+consistent backups/restore, guarded install, baseline and multicycle/restart readback.
+Do not treat the source checkpoint as completed server automation or user receipt.
 Retain accepted paid125, support and recovery. First qualify collection independently;
 then implement read-only committed-event ingestion, durable exact-recipient jobs,
 deadline deduplication/revalidation, truthful panel state and isolated mailbox/stored

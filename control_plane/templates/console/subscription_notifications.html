@@ -1,0 +1,5 @@
+{% if notifications %}<section class="panel"><h2>Уведомления подписки</h2>
+{% if notifications.error %}<p>Источник или worker недоступен. Очередь сохраняется.</p>{% endif %}
+{% for job in notifications.jobs %}<p>{{ job.source.event_type|default:job.source.kind }} · {{ job.status_label }} · {{ job.created_label }}<br>{{ job.reason_label|default:'' }}<br><code>{{ job.source.event_id|default:job.key }}</code></p>{% empty %}<p>Новых заданий нет; исходная история не рассылается.</p>{% endfor %}
+<a href="{% url 'console:support_history' device.pseudonym %}">Соответствующий диалог официальной поддержки</a>
+<p>«Сохранено клиентом» не означает прочтение. Сообщение не меняет право на VPN.</p></section>{% endif %}

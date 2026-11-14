@@ -22,10 +22,62 @@ prepending system packages instead caused five typing_extensions import failures
 These were environment ordering failures, not removed or skipped tests. Full hosted
 CI and backend notification gates are NOT claimed from collection success.
 
+## Source checkpoint and isolated acceptance
+
+Read-only cursor/anchor feed pages128 APPLIED ledger records; events with identical
+timestamps and backwards time are covered, including1005 committed records. It does
+not consume the last-event endpoint or truncated panel history. Origin version and
+actual deadlines derive the natural-ending key. A separate later canonical read is
+required before enqueue; renewal/grace supersede stale endings. Explicit expiry
+deduplicates that same boundary. No payment/schema/entitlement writer was added.
+
+The existing encrypted sender store holds baseline, jobs, frozen identity/text/UUID,
+cursor, outbox and request mappings transactionally. No automatic producer IPC is
+exposed; the panel cannot substitute a service actor. Quota/TTL/source/binding errors
+remain visible. The production device card and conversation distinguish jobs,
+queued/relayed/stored messages and reasons. Stored ACK is never read status.
+
+Local gates:317 support regressions PASS;46 panel checks PASS, including canonical
+commit → producer → durable job → real support worker/mailbox → intended client →
+stored ACK → actual panel IPC/device card.165 notification/paid/subscription checks
+PASS. These overlap, not additive counts. Collection6150 PASS; new messenger cases
+also run explicitly in their dedicated hosted workflow (outside root testpaths).
+Existing beta125 protocol/upgrade tests remain unchanged; no emulator or phone rerun.
+
+Tests cover first payment/extension/grace/expire/revoke, paid/grace natural expiry,
+renewal/grace before enqueue, two recipients,1005 records, uncommitted rollback,
+cursor/job rollback, enqueue crash before/after insert, committed unknown outcome,
+lost read-only IPC response, restart, offline mailbox storage then client ACK,
+missing/expired/revoked/changed binding, initial baseline atomicity/no historical
+send, new events after restart, quota/backoff/TTL, late wording, source permissions
+and no canonical change from incoming text. Raw evidence stays outside Git under
+`/mnt/data/fc-subscription-notifications-20261114/`.
+
+## Production preflight, not rollout
+
+Fresh read-only gateway observation: loaded policy
+`android-paid-108-119-123-125-v1`;64 devices/118 invites/1 subscription/4 events;
+RU reconciliation applied, observed state age2.512s. Actual support worker active,
+NRestarts0; installed source SHA256
+`3efb9b5bf3ebeb4885b75755b6f455b191ffa3c19ad5cafeae4fe7698334ee36`;
+installed unit SHA256
+`6bf8cc2222c22981321c8bf2a7fd47af7306834979e5d10ded8ca59d7a176849`,
+`RuntimeDirectoryPreserve=yes`. Existing panel image50de6f25 retained. No archives,
+HTTP pins, services, subscriptions, bindings, history, keys or APKs changed.
+
+Host administrative execution is unavailable to this process: `sudo -n true`
+returns `sudo: interactive authentication is required`; no permission bypass or
+alternate privileged-container host mutation attempted. Installation is NOT done.
+The production notification baseline does not yet exist; no retrospective sends
+or new real automatic receipts were produced. The four existing events are not
+used to trigger acceptance messages.
+
 ## Remaining gates
 
-Durable read-only producer, canonical event/deadline deduplication, service-source
-authorization, exact recipient, panel observations, isolated full route, review/merge
-and server installation are pending. No new real automatic receipt observed.
-Rollback must preserve queue/checkpoints/deduplication; never restore an old registry
+Hosted source qualification/review/merge; administrative support-host execution;
+consistent nonempty backup and restore rehearsal; guarded source/panel installation,
+actual first baseline, multiple steady cycles, restart and protected-state readback.
+See [operator procedure and rollback](../operators/subscription-notifications.md).
+Rollback preserves the new automatic-outbox guard and all state; old unguarded worker
+must not dispatch pending automatic endings. Never restore an old registry/history
 over new events. No payment-provider integration, client-card polling or RU repair.

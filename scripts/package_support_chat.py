@@ -12,9 +12,11 @@ from scripts.package_friends_http import build as build_http
 ROOT = Path(__file__).resolve().parents[1]
 MESSENGER = ('__init__', 'chat', 'codec', 'delivery', 'mailbox', 'notices', 'routed',
              'store', 'subscription_view', 'support')
-PROVISIONING = ('__init__', 'chat_transport', 'chat_bridge_protocol', 'support_worker', 'support_bindings', 'support_identity')
+PROVISIONING = ('__init__', 'chat_transport', 'chat_bridge_protocol', 'support_worker', 'support_bindings', 'support_identity',
+                'subscription_notifications', 'subscription_collector')
 UNITS = ('family-connect-support.service', 'family-connect-support-bindings.service',
-         'family-connect-support-bindings.timer')
+         'family-connect-support-bindings.timer', 'family-connect-subscription-notifications.service',
+         'family-connect-subscription-notifications.timer')
 
 
 def build(output, source=ROOT):
@@ -24,7 +26,9 @@ def build(output, source=ROOT):
     inputs.update({'provisioning.lock': 'provisioning/requirements.lock', 'messenger.lock': 'messenger/requirements.lock',
                    'panel.override.yaml': 'deploy/support-chat/panel.override.yaml',
                    'registry/chat-sync.py': 'deploy/friends/chat-sync.py',
-                   'registry/support-bindings-read.py': 'deploy/friends/support-bindings-read.py'})
+                   'registry/support-bindings-read.py': 'deploy/friends/support-bindings-read.py',
+                   'registry/subscription_events.py': 'control/friends/subscription_events.py',
+                   'units/subscription-notifications.conf': 'deploy/support-chat/subscription-notifications.conf'})
     for relative in inputs.values():
         path = source / relative
         if not path.is_file() or any(parent.is_symlink() for parent in (path, *path.parents)):

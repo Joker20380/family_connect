@@ -1,6 +1,7 @@
 {% extends 'console/base.html' %}{% block title %}{{ device.label }}{% endblock %}{% block content %}
 <div class="breadcrumbs"><a href="{% url 'console:inventory' %}">Устройства</a> / {{ device.short_id }}</div>
 {% if perms.console.view_support_messages %}<p><a href="{% url 'console:support_history' device.pseudonym %}">Сообщения · личная поддержка</a></p>{% endif %}
+{% include 'console/subscription_notifications.html' %}
 <div class="page-heading"><div><p class="eyebrow">КАРТОЧКА УСТРОЙСТВА</p><h1>{{ device.label }}</h1><p class="subtitle"><code>{{ device.short_id }}</code> · версия {{ device.inventory.version_code|default:'неизвестна' }} · {{ device.metadata.platform|default:'платформа неизвестна' }}</p></div><span class="state-badge state-{{ device.state_key }}">{{ device.state_label }}</span></div>
 <nav class="object-tabs" aria-label="Разделы устройства"><a href="#overview">Обзор</a><a href="#connections">Серверы</a><a href="#access">Подписка и доступ</a><a href="#traffic">Трафик</a><a href="#events">События</a><a href="#technical">Подробности</a></nav>
 {% if device.issues %}<section class="notice error-notice"><strong>Требует внимания</strong><ul>{% for issue in device.issues %}<li>{{ issue }}</li>{% endfor %}</ul></section>{% endif %}

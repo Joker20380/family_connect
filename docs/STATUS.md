@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**14 November — SUBSCRIPTION-NOTIFICATIONS-1 source checkpoint, NOT DEPLOYED.**
+Committed-event/deadline producer, durable jobs and official support outbox route
+implemented; isolated real mailbox/storage ACK/panel chain passes.317 support
+regressions,46 panel and165 notification/paid/subscription checks PASS (overlapping
+selections, not a combined total). Collection6150 PASS; hosted full CI still pending.
+Read-only production preflight retains paid125 policy,64 devices/118 invites/
+1 subscription/4 events and accepted support unit/RuntimeDirectory. No real event,
+message, APK or production source changed. Installation needs host administrative
+execution: `sudo -n` currently requires authentication. Backups/restore rehearsal,
+review/merge and deployment acceptance remain OPEN. Production notification baseline
+is NOT initialized; no retrospective send or real automatic receipt occurred.
+[Evidence and remaining gates](releases/2026-11-14-subscription-notifications.md).
+
 **14 November — CI-COLLECTION-NAMESPACE fixed; SUBSCRIPTION-NOTIFICATIONS-1 selected.**
 Reproduced the root/desktop `test_chat_service` import mismatch. Server tests now
 use `test_chat_service_sender.py`; the full-suite inventory keeps stdout/stderr.

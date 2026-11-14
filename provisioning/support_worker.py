@@ -16,6 +16,7 @@ from messenger.chat import Chat
 from messenger.delivery import DeliveryController
 from messenger.mailbox import MailboxError
 from messenger.store import Store
+from provisioning.subscription_notifications import Notifications
 from provisioning.chat_transport import SystemMailbox, initialize
 
 
@@ -47,7 +48,8 @@ class SupportStore(Store):
         allowed = self.authority.contacts()
         with self._lock:
             return [ident for ident in pending
-                    if bytes.fromhex(self._get('message:' + ident)['peer']) in allowed]
+                    if bytes.fromhex(self._get('message:' + ident)['peer']) in allowed
+                    and self.authority.notifications.allow(ident)]
 
 
 class SupportOwner:
@@ -58,6 +60,7 @@ class SupportOwner:
             raise SupportError('sender_mismatch')
         self.chat.authority = self
         store.authority = self
+        self.notifications = Notifications(self)
 
     def update(self, snapshot):
         fields = {'schema', 'sequence', 'expires_at', 'sender_public', 'node', 'devices'}
@@ -93,6 +96,8 @@ class SupportOwner:
             devices[item['pseudonym']] = dict(item)
         with self.store._lock, self.store._db:
             prior = self.store._get('support-bindings')
+            if snapshot == prior:
+                return
             if prior is not None and (snapshot['sequence'] < prior['sequence'] or
                     snapshot['sequence'] == prior['sequence'] and snapshot != prior):
                 raise SupportError('stale_binding_snapshot')
@@ -143,27 +148,34 @@ class SupportOwner:
                 or type(text) is not str or not text.strip() or not 1 <= len(text.encode('utf-8')) <= codec.MAX_TEXT):
             raise SupportError('invalid_message')
         with self.store._lock, self.store._db:
-            binding = self.binding(pseudonym)
-            request = dict(pseudonym=pseudonym, address=address, actor=actor, text=text)
-            previous = self.store._get('support-request:' + request_id)
-            if previous is not None:
-                if previous['request'] != request:
-                    raise SupportError('request_conflict')
-                return dict(id=previous['id'], accepted=True)
-            if binding['state'] != 'verified':
-                raise SupportError(binding['state'])
-            if binding['address'] != address:
-                raise SupportError('recipient_mismatch')
-            public = bytes.fromhex(binding['public'])
-            raw = codec.pack(self.chat.identity, public, text)
-            message = codec.unpack(raw, recipient=public, contacts={self.chat.address: self.chat.public})
-            message.update(peer=address, require_stored=True, expires_at=time.time() + 7 * 86400)
-            try:
-                self.store._add(message, raw, outgoing=True)
-            except ValueError:
-                raise SupportError('history_full') from None
-            self.store._put('support-request:' + request_id, dict(request=request, id=message['id']))
-            return dict(id=message['id'], accepted=True)
+            return self.enqueue(pseudonym, address, request_id, actor, text)
+
+    def enqueue(self, pseudonym, address, request_id, source, text, *, expires_at=None):
+        binding = self.binding(pseudonym)
+        request = dict(pseudonym=pseudonym, address=address, text=text)
+        request['actor' if type(source) is str else 'source'] = source
+        if expires_at is not None:
+            request['expires_at'] = expires_at
+        previous = self.store._get('support-request:' + request_id)
+        if previous is not None:
+            if previous['request'] != request:
+                raise SupportError('request_conflict')
+            return dict(id=previous['id'], accepted=True)
+        if binding['state'] != 'verified':
+            raise SupportError(binding['state'])
+        if binding['address'] != address:
+            raise SupportError('recipient_mismatch')
+        public = bytes.fromhex(binding['public'])
+        raw = codec.pack(self.chat.identity, public, text)
+        message = codec.unpack(raw, recipient=public, contacts={self.chat.address: self.chat.public})
+        message.update(peer=address, require_stored=True,
+                       expires_at=time.time() + 7 * 86400 if expires_at is None else expires_at)
+        try:
+            self.store._add(message, raw, outgoing=True)
+        except ValueError:
+            raise SupportError('history_full') from None
+        self.store._put('support-request:' + request_id, dict(request=request, id=message['id']))
+        return dict(id=message['id'], accepted=True)
 
     def history(self, pseudonym):
         binding = self.binding(pseudonym)
@@ -171,7 +183,8 @@ class SupportOwner:
         for message in self.store.visible_messages():
             if message['peer'] == binding['address']:
                 messages.append({key: message[key] for key in ('id', 'text', 'outgoing', 'status', 'timestamp')})
-        return dict(binding=binding, messages=messages, sender=self.chat.address.hex())
+        return dict(binding=binding, messages=messages, sender=self.chat.address.hex(),
+                    notifications=self.notifications.status(pseudonym))
 
     def inbox(self):
         with self.store._lock:
@@ -190,10 +203,14 @@ class SupportOwner:
         if type(request) is not dict or set(request) != {'operation', 'arguments'} or type(request['arguments']) is not dict:
             raise SupportError('invalid_request')
         operation, arguments = request['operation'], request['arguments']
-        fields = {'history': {'pseudonym'}, 'inbox': set(), 'send': {'pseudonym', 'address', 'request_id', 'actor', 'text'}}
+        fields = {'history': {'pseudonym'}, 'inbox': set(), 'notification_cursor': set(),
+                  'send': {'pseudonym', 'address', 'request_id', 'actor', 'text'}}
         if operation not in fields or set(arguments) != fields[operation]:
             raise SupportError('invalid_request')
         return getattr(self, operation)(**arguments)
+
+    def notification_cursor(self):
+        return self.notifications.cursor()
 
 
 class SupportMailbox:
@@ -268,6 +285,7 @@ def main():
     for name in ('store', 'key', 'sender-public', 'snapshot', 'runtime', 'socket'):
         parser.add_argument('--' + name, required=True)
     parser.add_argument('--snapshot-uid', type=int, default=0)
+    parser.add_argument('--subscription-feed', type=Path)
     args = parser.parse_args()
     key_path = Path(args.key)
     info = key_path.lstat()
@@ -288,6 +306,8 @@ def main():
             while not stopped.is_set():
                 server.handle_request()
                 if time.monotonic() >= next_sync:
+                    if args.subscription_feed:
+                        owner.notifications.refresh(args.subscription_feed, uid=args.snapshot_uid)
                     delivery.request_sync()
                     next_sync = time.monotonic() + 60
     finally:

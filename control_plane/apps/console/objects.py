@@ -301,7 +301,8 @@ def device(request, pseudonym):
         row['issues'] = ['Устройство отсутствует в текущих снимках. Показаны исторические данные.']
         data.update(canonical=canonical, registry=history.snapshot if history else None,
             canonical_age='Историческое наблюдение', registry_age='Историческое наблюдение')
-    data.update(device=row, events=timeline(pseudonym=pseudonym),
+    from .support import notification_status
+    data.update(device=row, notifications=notification_status(request, pseudonym), events=timeline(pseudonym=pseudonym),
         graphs=[graph_data(binding['server']['source'], now, selected_period(request), pseudonym)[0] for binding in row['nodes']])
     if request.GET.get('kind') in ('event', 'observation'):
         data['events'] = [entry for entry in data['events'] if entry['kind'] == request.GET['kind']]

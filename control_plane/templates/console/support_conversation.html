@@ -12,8 +12,15 @@
 {% if blocked %}<p class="notice error-notice">{{ blocked }}</p>{% endif %}
 {% if error %}<p role="alert" class="notice error-notice">{{ error }}</p>{% endif %}
 <p>Только диалог с поддержкой. Личные контакты клиента недоступны. Подтверждения прочтения протокол не предоставляет.</p></section>
+<section class="panel"><h2>Автоматические уведомления подписки</h2>
+{% if history.notifications.error %}<p>Нет свежего источника уведомлений. Сохранённые записи не удаляются.</p>{% endif %}
+{% for job in history.notifications.jobs %}
+<article><p>{{ job.source.event_type|default:job.source.kind }} · {{ job.status_label }} · {{ job.created_label }}</p>
+<p>{{ job.reason_label|default:'' }} <code>{{ job.source.event_id|default:job.key }}</code></p>
+{% if job.message_id %}<a href="#message-{{ job.message_id }}">Сообщение в этом диалоге</a>{% endif %}</article>
+{% empty %}<p>Новых заданий нет. Исторические события не рассылаются.</p>{% endfor %}</section>
 <section class="panel"><h2>История</h2>{% for message in history.messages %}
-<article><h3>{% if message.outgoing %}Поддержка → клиент{% else %}Клиент → поддержка{% endif %}</h3>
+<article id="message-{{ message.id }}"><h3>{% if message.outgoing %}Поддержка → клиент{% else %}Клиент → поддержка{% endif %}</h3>
 <pre>{{ message.text }}</pre><p>{{ message.status_label }} · <code>{{ message.id }}</code></p></article>
 {% empty %}<p>Сохранённых сообщений нет.</p>{% endfor %}</section>
 {% if perms.console.send_support_message %}{% if ready %}
