@@ -1,6 +1,13 @@
 # Текущее состояние / Current state
 
 **14 November — SUBSCRIPTION-NOTIFICATIONS-1 source checkpoint, NOT DEPLOYED.**
+Final code6cd2771f: hosted route43587126587, panel43587126690, messenger43587126573,
+paid43587126669 and readiness43587126622 PASS; author-side review recorded in PR26
+(ready for review, not merged; no independent approval claimed). Fresh separate
+lockfile environments:193 core/identity checks,46 panel checks and6150 collection PASS.
+Prerequisite full Docker suite43585268077 reaches all contexts: standard has only
+the3 reproduced baseline reference failures; root258 and Python3.14 snapshot98 pass.
+No full-CI PASS or deployment claim. Administrative execution is still required.
 Hosted notification route43586664982, panel43586665041, paid compatibility43586664957
 and readiness43586664978 PASS on sourcea63e4d29. Linux voice fails three unchanged
 messenger-reference checks, independently reproduced on entry main1b186e15; no

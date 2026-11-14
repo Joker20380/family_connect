@@ -4,7 +4,8 @@
 
 **Selected14 November — SUBSCRIPTION-NOTIFICATIONS-1, IN PROGRESS.**
 Source and isolated route are implemented/qualified; production NOT DEPLOYED.
-Next within this task: hosted CI/review, merge, administrative host access,
+Scoped hosted gates and author-side source review PASS on6cd2771f; no independent
+approval or general-suite PASS claimed. Next: final general-CI disposition/merge, administrative host access,
 consistent backups/restore, guarded install, baseline and multicycle/restart readback.
 Do not treat the source checkpoint as completed server automation or user receipt.
 Retain accepted paid125, support and recovery. First qualify collection independently;

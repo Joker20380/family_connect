@@ -1,5 +1,39 @@
 # SUBSCRIPTION-NOTIFICATIONS-1
 
+## 14 November10:57UTC — source qualified, deployment still pending
+
+Code head `6cd2771f26cafd104997f8a0178ce7df48207c71`, ordinary push and remote SHA
+verified. Hosted route43587126587, messenger43587126573, panel43587126690,
+paid43587126669 and readiness43587126622 PASS. PR26 is ready for review, not merged;
+author-side review5903950020 is not independent human approval. No new production
+component is installed or enabled; administrative execution remains unavailable.
+
+Fresh isolated core/identity/provisioning/messenger lockfile environment verifies
+every installed pinned version and pip check:193 focused checks PASS;6150 root
+tests collect successfully with system GI appended after locked packages. Separate
+panel-lockfile environment verifies its pins:46 tests PASS, including the full new
+mailbox/stored-ACK/IPC/device-card chain. Profiles are intentionally separate: the
+panel lock pins newer iniconfig/pluggy/pycparser than the core lock. Initial shared
+environment results below are retained, not used as exact-core-lock acceptance.
+
+Reviewed73-file kit SHA256
+`fdbc4b8394f05bb570c5341a3c3a4a4ac96b6063879174e55404707c70a51f98`;
+unit syntax and documentation links/whitespace PASS. Kit is built, NOT installed.
+
+Collection prerequisite source21cfe5e5 hosted phase0/failover43585268077 provides
+the retained full Docker log (artifact14111040417): standard5793 tests,5510 PASS /
+3 FAIL /280 skipped; root258 return0; snapshot31498 PASS. The three failures are
+exactly the unchanged messenger-reference failures reproduced on entry main, listed
+below. The Docker build therefore exits1 and actual failover/auth/offline/revocation
+integration steps do not run. This is NOT full CI/failover PASS. Long general runs
+for the backend head remain separately pending; no historical suite repair begun.
+
+Still required: merge disposition, administrative host execution, consistent private
+backup/restore rehearsal, installed component/pin checks, first-enable baseline and
+multicycle/restart readback. Real-user receipt remains unobserved. The last production
+readback has the same4 prior events; no synthetic payment, deadline change, message,
+announcement, APK/release or production database mutation was performed.
+
 ## Entry and collection prerequisite
 
 Remote main verified `1b186e15cc88302807a7927776b9a5ad1f428149`.
@@ -15,7 +49,7 @@ workflow reference, keep all three pytest testpaths and all tests. The inventory
 subprocess inherits stdout/stderr; a subprocess regression verifies the original
 failure detail is emitted before the nonzero launcher result.
 
-Local locked support environment: pip check PASS. With system GI appended after
+Initial shared support environment: pip check PASS. With system GI appended after
 the virtualenv packages, full collection6149 PASS; targeted sender/desktop/context
 checks24 PASS. Initial collection without GI failed on desktop support-service;
 prepending system packages instead caused five typing_extensions import failures.
@@ -92,7 +126,7 @@ including all declared manifest inputs, only the same three failures remain. No 
 are relaxed to turn them green. Full phase0/Linux suites remain separate from the
 successful notification route and panel gates.
 
-Hosted source qualification/review/merge; administrative support-host execution;
+Final general-CI disposition and merge; administrative support-host execution;
 consistent nonempty backup and restore rehearsal; guarded source/panel installation,
 actual first baseline, multiple steady cycles, restart and protected-state readback.
 See [operator procedure and rollback](../operators/subscription-notifications.md).
