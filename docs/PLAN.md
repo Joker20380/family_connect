@@ -2,6 +2,18 @@
 
 ## Current engineering priority / Текущий critical path
 
+**RU-FIRST-FAILURE-ATTRIBUTION-QUALIFICATION-1 — completed negative admission / NO_GO.**
+Exact-kernel/BTF KVM candidate fails the first clean gate: zero allocation generation
+for162 request events and12/64 fsync coverage. First failure/pipe drain preserved,
+complete=false; advanced real scenarios and complete overhead qualification NOT_RUN.
+60 scoped checks PASS; no production deployment or third collection. See the
+[qualification report](releases/2026-11-14-ru-first-failure-qualification.md).
+Single proposed next, NOT_STARTED: separately select bounded producer identity and
+verified attach/terminal coverage redesign on the existing disposable fixture.
+Gate before full matrix:64/64 fsync, lifetime identity under reuse/partial completion,
+no unexplained loss, first-failure/8s drain and unchanged resource ceilings. No
+automatic second architecture, RU capture, timeout change or server replacement.
+
 **RU-PERSISTENCE-PRESSURE-1 / final offline analysis COMPLETE, CAUSE_OPEN (PR33).**
 Provenance, deduplication, retained-vs-aggregate statistics, serial-sample bounds and
 refined CPU202.841517ms cost stop verified;38 analysis/observer checks PASS. First
@@ -10,8 +22,8 @@ only14:54–15:00UTC; historical8s failure attribution is absent, not reconstruc
 from healthy samples. No product fix/deployment/third capture is justified or made.
 [Completed evidence and decision](releases/2026-11-14-ru-persistence-pressure.md#final-analysis--complete-cause-remains-open).
 
-**One proposed next, NOT_STARTED: RU-FIRST-FAILURE-ATTRIBUTION-QUALIFICATION-1.**
-Only if selected: isolated qualification of a bounded event-driven recorder that
+**Retained selected-task contract: RU-FIRST-FAILURE-ATTRIBUTION-QUALIFICATION-1.**
+Outcome NO_GO above. Scope was isolated qualification of a bounded event-driven recorder that
 distinguishes watcher off-CPU/reclaim, vda queue/completion wait and writer-cgroup
 activity at a real first failure, without full procfs polling. Gate: controlled
 isolated wait-class cases, exact first-failure/terminal-tail retention, no secrets,

@@ -1,0 +1,115 @@
+config = { max_map_keys = 256; perf_rb_pages = 8; }
+
+
+BEGIN { @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], 20, 0, 0, 0, 0, 0, 0, 0); }
+
+rawtracepoint:sched_switch {
+  $prev = (struct task_struct *)arg1;
+  $next = (struct task_struct *)arg2;
+  if ($prev->tgid == $1 && $prev->group_leader->start_boottime / 10000000 == $2) {
+    @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], 1, $prev->pid, $prev->start_boottime, arg0 || arg3 == 0, 0, 0, 0, 0);
+  }
+  if ($next->tgid == $1 && $next->group_leader->start_boottime / 10000000 == $2) {
+    @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], 3, $next->pid, $next->start_boottime, 0, 0, 0, 0, 0);
+  }
+}
+
+rawtracepoint:sched_wakeup, rawtracepoint:sched_wakeup_new {
+  $task = (struct task_struct *)arg0;
+  if ($task->tgid == $1 && $task->group_leader->start_boottime / 10000000 == $2) {
+    @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], 2, $task->pid, $task->start_boottime, 0, 0, 0, 0, 0);
+  }
+}
+
+tracepoint:vmscan:mm_vmscan_direct_reclaim_begin,
+tracepoint:vmscan:mm_vmscan_direct_reclaim_end,
+tracepoint:syscalls:sys_enter_fsync,
+tracepoint:syscalls:sys_enter_rename,
+tracepoint:sched:sched_process_exit
+/pid == $1 && curtask->group_leader->start_boottime / 10000000 == $2/ {
+  $kind = (uint64)0;
+  if (probe == "tracepoint:vmscan:mm_vmscan_direct_reclaim_begin") { $kind = 4; }
+  if (probe == "tracepoint:vmscan:mm_vmscan_direct_reclaim_end") { $kind = 5; }
+  if (probe == "tracepoint:syscalls:sys_enter_fsync") { $kind = 6; }
+  if (probe == "tracepoint:syscalls:sys_enter_rename") { $kind = 8; }
+  if (probe == "tracepoint:sched:sched_process_exit") { $kind = 19; }
+  @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], $kind, tid, curtask->start_boottime, 0, 0, 0, cgroup, 0);
+}
+
+tracepoint:syscalls:sys_exit_fsync, tracepoint:syscalls:sys_exit_rename
+/pid == $1 && curtask->group_leader->start_boottime / 10000000 == $2/ {
+  $kind = (uint64)7;
+  if (probe == "tracepoint:syscalls:sys_exit_rename") { $kind = 9; }
+  @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], $kind, tid, curtask->start_boottime, 0, 0, 0, cgroup, args.ret);
+}
+
+tracepoint:syscalls:sys_exit_write /cgroup == $4 || cgroup == $5/ {
+  if (args.ret > 0) { @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], 10, tid, curtask->start_boottime, cgroup, args.ret, 0, 0, 0); }
+}
+
+rawtracepoint:block_rq_insert {
+  $request = (struct request *)arg0;
+  if ($request->q->disk->major == $3 && $request->q->disk->first_minor == $6) {
+    $owner = (uint64)0;
+    $bio = $request->bio;
+    if ($bio != 0 && $bio->bi_blkg != 0 && $bio->bi_next == 0) {
+      $owner = $bio->bi_blkg->blkcg->css.cgroup->kn->id;
+    }
+    @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], 11, (uint64)$request, $request->alloc_time_ns, $request->__data_len, $request->cmd_flags, $owner, cgroup, 0);
+  }
+}
+
+rawtracepoint:block_rq_issue {
+  $request = (struct request *)arg0;
+  if ($request->q->disk->major == $3 && $request->q->disk->first_minor == $6) {
+    $owner = (uint64)0;
+    $bio = $request->bio;
+    if ($bio != 0 && $bio->bi_blkg != 0 && $bio->bi_next == 0) {
+      $owner = $bio->bi_blkg->blkcg->css.cgroup->kn->id;
+    }
+    @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], 12, (uint64)$request, $request->alloc_time_ns, $request->__data_len, $request->cmd_flags, $owner, cgroup, 0);
+  }
+}
+
+rawtracepoint:block_rq_requeue {
+  $request = (struct request *)arg0;
+  if ($request->q->disk->major == $3 && $request->q->disk->first_minor == $6) {
+    $owner = (uint64)0;
+    $bio = $request->bio;
+    if ($bio != 0 && $bio->bi_blkg != 0 && $bio->bi_next == 0) {
+      $owner = $bio->bi_blkg->blkcg->css.cgroup->kn->id;
+    }
+    @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], 13, (uint64)$request, $request->alloc_time_ns, $request->__data_len, $request->cmd_flags, $owner, cgroup, 0);
+  }
+}
+
+rawtracepoint:block_rq_merge {
+  $request = (struct request *)arg0;
+  if ($request->q->disk->major == $3 && $request->q->disk->first_minor == $6) {
+    $owner = (uint64)0;
+    $bio = $request->bio;
+    if ($bio != 0 && $bio->bi_blkg != 0 && $bio->bi_next == 0) {
+      $owner = $bio->bi_blkg->blkcg->css.cgroup->kn->id;
+    }
+    @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], 15, (uint64)$request, $request->alloc_time_ns, $request->__data_len, $request->cmd_flags, $owner, cgroup, 0);
+  }
+}
+
+rawtracepoint:block_rq_complete {
+  $request = (struct request *)arg0;
+  if ($request->q->disk->major == $3 && $request->q->disk->first_minor == $6) {
+    @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], 14, (uint64)$request, $request->alloc_time_ns, arg2, $request->__data_len, 0, 0, arg1);
+  }
+}
+
+kprobe:blk_mq_free_request {
+  $request = (struct request *)arg0;
+  if ($request->q->disk->major == $3 && $request->q->disk->first_minor == $6) {
+    @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], 16, (uint64)$request, $request->alloc_time_ns, 0, 0, 0, 0, 0);
+  }
+}
+
+tracepoint:cgroup:cgroup_mkdir { @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], 17, args.id, 0, 0, 0, 0, 0, 0); }
+tracepoint:cgroup:cgroup_rmdir { @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], 18, args.id, 0, 0, 0, 0, 0, 0); }
+
+END { @sequence[cpu] = @sequence[cpu] + 1; printf("E %llu %u %llu %llu %llu %llu %llu %llu %llu %llu %lld\n", nsecs(monotonic), cpu, @sequence[cpu], 21, 0, 0, 0, 0, 0, 0, 0); clear(@sequence); }

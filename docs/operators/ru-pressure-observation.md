@@ -1,5 +1,9 @@
 # Finite RU persistence-pressure observation
 
+The subsequent [isolated attribution candidate](ru-attribution-qualification.md)
+was rejected **NO_GO** on the matching-kernel clean gate. Do not use its presence
+in source as authorization to install it or restart the stopped RU observer.
+
 This is diagnostic collection, **not a persistence fix or recovery**. It changes no
 gateway code, state, lease, engine, paid policy, support or notification data. Use
 only authorized RU185.251.89.19 (`box-932982`), via the existing administrative path,

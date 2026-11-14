@@ -1,0 +1,144 @@
+{
+  "analysis": {
+    "issues": {
+      "sequence_gap_or_reorder": 1,
+      "unknown_request_generation": 162,
+      "wake_without_switch_out": 1
+    },
+    "open_intervals": 0,
+    "union_ns": {
+      "blocked": 103903633,
+      "fsync": 4172268,
+      "rename": 649820,
+      "runnable": 249231
+    }
+  },
+  "baseline_cycles_ns": [
+    1356192,
+    894848,
+    848918,
+    892162,
+    903636,
+    904265,
+    851992,
+    836428,
+    840676,
+    815003,
+    835636,
+    881793,
+    794345,
+    848023,
+    23395210,
+    1061391
+  ],
+  "batch_cpu_max": 0.0003992429999999936,
+  "batch_wall_max": 0.10015321999999927,
+  "btf_sha256": "d7fca84d2c3f476afbeb2e37ddba3093eaac0af39b07b0cd1b61c11fdc1c89fb",
+  "budget_ok": true,
+  "capture_sha256": "c794cf66a0cef098a14b12d3197c90b25ffb09ffc3a9b87185147e4cfd1391eb",
+  "clean_gate": {
+    "device_service": false,
+    "fsync_enters": false,
+    "fsync_exits": false,
+    "request_generation": false
+  },
+  "complete": false,
+  "controls": [
+    {
+      "code": 0,
+      "name": "begin",
+      "stderr": "",
+      "stdout": "CONTROL_OK\n\n\n"
+    },
+    {
+      "code": 0,
+      "name": "syscall",
+      "stderr": "",
+      "stdout": "\n\n"
+    },
+    {
+      "code": 0,
+      "name": "task_btf",
+      "stderr": "",
+      "stdout": "\n\n@last: 0\n"
+    },
+    {
+      "code": 0,
+      "name": "request_btf",
+      "stderr": "",
+      "stdout": "\n\n"
+    }
+  ],
+  "decision": "NO_GO",
+  "diagnostic": {
+    "cpu.stat": "usage_usec 3230772\nuser_usec 2548408\nsystem_usec 682363\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 335\nnr_throttled 320\nthrottled_usec 28564199\nnr_bursts 0\nburst_usec 0\n",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+    "memory.peak": "72433664\n",
+    "pids.peak": "3\n"
+  },
+  "diagnostic_cpu_before_record": "usage_usec 1648398\nuser_usec 1224336\nsystem_usec 424062\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 172\nnr_throttled 162\nthrottled_usec 14306776\nnr_bursts 0\nburst_usec 0\n",
+  "drain_complete": true,
+  "elapsed": 12.196008197999998,
+  "events_seen": 268,
+  "failure_unchanged": true,
+  "invalid": 0,
+  "kernel": "7.0.0-30-generic",
+  "kind_counts": {
+    "1": 20,
+    "10": 6,
+    "11": 12,
+    "12": 54,
+    "14": 66,
+    "16": 30,
+    "2": 21,
+    "20": 1,
+    "21": 1,
+    "3": 21,
+    "6": 12,
+    "7": 12,
+    "8": 6,
+    "9": 6
+  },
+  "processing_cpu": 0.02576926900000015,
+  "reduction": {
+    "cpu": 0.0006436599999999904,
+    "wall": 0.0006465570000031562
+  },
+  "save_cost": {
+    "cpu": 0.000621750000000032,
+    "wall": 0.0006243799999978705
+  },
+  "source_sha256": {
+    "scripts/ru_attribution_lab.py": "c859a949aade85ba116eab08708fbe87ca57da9c617d13eab23db949cdb1df39",
+    "scripts/ru_attribution_recorder.py": "714afb809455821f1ee79b7899c752dc3c110967218d5680d3de0a196cde32e2",
+    "scripts/ru_attribution_trace.bt": "a1e55036aa627d9a9a8f3c8a6213415e00b0d3e1e5862438c88e96048ac3f72f",
+    "scripts/ru_attribution_vm.py": "8d1753de7eb5e404a6166fe2a8998d1014e0c9af11705e098f36e60441067f7a"
+  },
+  "stderr_bytes": 53,
+  "stop_elapsed": 0.6056994549999999,
+  "stop_reason": "first_failure",
+  "vm12_log_sha256": "61aea65e25305daefa00f56c0ef38e368399ef7d3712511a3fadd50d3b9ab109",
+  "vm_image_sha256": {
+    "initramfs.cpio.gz": "21e940c8d07250a5344e29d65827c6b280408470feafadfd51562d47cf58e6a7",
+    "vmlinuz": "04d6998810b8e0a9b8b3676524bfca2e895f44c5da2626c963368d7204c6e0da"
+  },
+  "workload_ns": [
+    2667046,
+    1488850,
+    1867894,
+    1239342,
+    1043143,
+    1003556,
+    977190,
+    953870,
+    945733,
+    1006664,
+    1164771,
+    1617238,
+    1410373,
+    1162101,
+    1707118,
+    1440163
+  ],
+  "zero_request_generations": 162
+}

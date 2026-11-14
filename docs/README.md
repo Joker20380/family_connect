@@ -1,6 +1,7 @@
 # Documentation
 
 [RU · 14 ноября: attribution задержек persistence и ограниченный сбор](releases/2026-11-14-ru-persistence-pressure.md).
+[RU · изолированная квалификация first-failure: NO_GO](releases/2026-11-14-ru-first-failure-qualification.md).
 
 [Android125 · 13 ноября: публичный APK, обе страницы приглашения и подписанный каталог8](releases/2026-11-13-android125-publication.md).
 
