@@ -242,3 +242,11 @@ Start/final/errors extracted under NEW label`ci-entry-20261114-1506` with hashes
 without restarting/extending/changing RU. Final analysis remains separate and OPEN;
 see [CI handoff receipt](2026-11-14-ci-runner-completion.md#ru-read-only-handoff).
 The earlier408s running check is historical, not the current observer state.
+
+CI-task exit readback: NEW label`ci-exit-20261114-1713`, separate local directory;
+same active/exited/MainPID0/Resultsuccess and sample_cost_limit final receipt.
+Start/final/empty-error SHA256 match entry; no slow receipt, no gateway failure,
+no lost indications, tracer rc0. No restart, extension or production change.
+The final window is ready for a separately selected analysis now; no scheduled
+automatic collection/analysis exists. RU remains CAUSE_OPEN, not resolved by the
+separately completed CI fix. Exact command/checkpoint/hashes are in the linked report.

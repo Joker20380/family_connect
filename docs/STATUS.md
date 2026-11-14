@@ -1,18 +1,27 @@
 # Текущее состояние / Current state
 
-**14 November15:07UTC — CI-RUNNER-COMPLETION-1 SELECTED / DIAGNOSTIC_CHECKPOINT.**
-Baseline main248b1881 retained; original dirty checkout untouched. No production
-changes authorized by this CI task. Instrumenting inventory/context/cleanup/wrapper/
-pipeline boundaries and bounded pipe-owner evidence. Diagnostic60b3ff87 is running;
-candidate bounds only console lines to2048 bytes while tee retains the exact full
-artifact and all pipeline exit codes.31 local lifecycle/fixture tests PASS; hosted
-external completion/cargo/GTK gates remain pending. No causal closure from a PASS line.
-Source38e9f403 phase043606003930/tests132480665060 and Linux43606003884/
-132480664898 were still running at entry; actual failover132480665285 PASS.
-RU observer38e9f403 has already stopped safely after1171.45s on sample_cost_limit,
-not a gateway failure. Unit active/exited/MainPID0/Resultsuccess; final/start/empty
-tracer-errors extracted once into a new immutable ci-entry-20261114-1506 directory.
-No restart or window extension. RU remains CAUSE_OPEN / FINAL_CAPTURE_AWAITING_ANALYSIS.
+**14 November — CI-RUNNER-COMPLETION-1 COMPLETE / CI_ONLY, integration PR32.**
+Qualified executable sourcefd1d87941888f33773cab9e015a57358f0e67d39; later report
+changes are documentation-only. Raw diagnostic60b3ff87 proves cleanup/wrapper/tee
+all exited0 after667.87s while the hosted step continued until its external timeout.
+Unbounded collect-only parameter lines (up to1,048,685 bytes) stalled hosted console
+processing, not Python cleanup or an open child pipe. Console lines are now bounded
+to2048 bytes; tee retains the full byte-exact artifact and every pipeline exit code.
+Collection6203, local31 regressions PASS. Final phase0 job132506529152 completed
+the full step in507s and then cargo PASS; Linux control132506529441 in519s, then
+GTK/render/recovery/package/extracted checks PASS. Actual final PR failover/auth/
+offline/revocation132506528873 PASS, not just Docker build. All original inventory
+entries, assertions, pins, lockfiles, UID/Python3.13/3.14 contexts and25min limit retained.
+Whole CI is NOT universally green: separate Client builds/linux132506592194 failed
+appimagetool download HTTP403 (exit22); an earlier same-source push failover build
+failed existing150ms readiness-attempt assertion. Both are retained, not hidden or
+relaxed; final applicable PR gates passed. No production deployment or public release.
+Original dirty checkout untouched. RU remains CAUSE_OPEN / FINAL_CAPTURE_AWAITING_ANALYSIS:
+entry and exit extractions ci-entry-20261114-1506 / ci-exit-20261114-1713 have identical
+start/final/empty-error SHA256. Unit active/exited/MainPID0/Resultsuccess, safely stopped
+after1171.45s on sample_cost_limit, no gateway failure. No restart/window extension.
+Next separate RU action is analysis of the already-retained final window, not waiting
+for another incident; no scheduled automatic extraction/analysis is claimed.
 [CI evidence](releases/2026-11-14-ci-runner-completion.md).
 
 **14 November — RU-PERSISTENCE-PRESSURE-1: CAUSE_OPEN / FINAL_CAPTURE_AWAITING_ANALYSIS.**
@@ -46,12 +55,11 @@ peak87.47MB, disk read/write0), beyond the first window's349.88s stop. At14:47:2
 actual RU engine/readback check:64 applied/20 allowed, no mismatches/prepared/failure,
 same PIDs/invocations; lease renewed past the14:42:12 initial boundary. Full24h
 stability is not claimed. Further protected table changes: none at final readback.
-Do not start payment-provider/card-refresh; CI repair is now separately selected.
+Do not start payment-provider/card-refresh; CI repair is completed separately above.
 [Current scope and bounded evidence](releases/2026-11-14-ru-persistence-pressure.md).
-Separate CI-RUNNER-COMPLETION-1: phase0/tests132438099847 is now FAILED by external
-timeout, all three pytest contexts rc0/coverage PASS, cargo skipped; Linux control
-has the analogous outer timeout. Actual failover/auth/offline/revocation PASS.
-Whole CI is not PASS; runner completion cause is not diagnosed in this RU task.
+Historical CI entry: phase0/tests132438099847 and Linux132438784552 failed externally
+after inner coverage PASS; downstream checks skipped. The separate CI completion fix
+and exact-source qualification are recorded above, not attributed to RU observation.
 
 **14 November13:05UTC — SUBSCRIPTION-NOTIFICATIONS-1 DEPLOYED_VERIFIED.**
 After the owner's prepared sudo action, the pinned ac3479bf worker/collector,
