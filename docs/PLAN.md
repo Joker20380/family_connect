@@ -2,7 +2,7 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Selected14 November — RU-PERSISTENCE-PRESSURE-1, IN PROGRESS.**
+**Selected14 November — RU-PERSISTENCE-PRESSURE-1, CAUSE_OPEN / observer cost refinement.**
 Scope: authorized RU185.251.89.19 only; diagnose the observed persistence deadline
 overruns using actual node125c796a, saved first failures and bounded process/cgroup/
 host counters aligned to operation phases. No preventive restart, storage stress,
@@ -15,9 +15,17 @@ for the specifically missing attribution, preserving first failure. Current heal
 root cause, deployed correction and observation window must remain distinct.
 No full-main/PR16/17 redeployment; recovery only after evidence of actual failure,
 using the existing RU-only controlled procedure. Replacement is a separate decision.
-Observer-only source qualified (27 tests/6191 collection;181.50s/75-cycle smoke,
-cost and lease-crossing/actual engine readback PASS); next: review/merge and one
-pinned finite window. No product persistence change is justified by current evidence.
+Observer-only source43eb84eb qualified (27 tests/6191 collection;181.50s/75-cycle
+smoke, cost and lease-crossing/actual engine readback PASS), reviewed and merged in
+PR29/main59cd72ed. First RAM-only window enabled14Nov14:19:16UTC, stopped after
+349.88s on sample CPU306ms>200ms, no gateway failure. Full result extracted.
+Lower-cost kernel path qualified181.99s/75 cycles with unchanged limits,29 tests /
+6193 collection PASS. Next concrete action: review/merge and finite reactivation,
+then inspect first-failure/phase/cgroup deltas to decide
+whether a specific mechanism warrants a qualified patch. First747.74ms fsync
+capture is retained; it is not an8s failure or proof against a particular process.
+No product persistence change is justified by current evidence. Preserve concurrent
+legitimate live metadata/enrollment; audited identity keys/device sets are unchanged.
 [Task evidence](releases/2026-11-14-ru-persistence-pressure.md).
 
 **CI-RUNNER-COMPLETION-1 — separate queued follow-up, NOT STARTED.**

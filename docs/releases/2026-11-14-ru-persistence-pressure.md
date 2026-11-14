@@ -104,8 +104,78 @@ at independent engine inspection. Initial lease14:10:38UTC crossed with later
 deadline14:14:02UTC, no extension of the120s policy. Independent AWG/TCP queries at
 14:10:59UTC:64 canonical identities checked, zero presence/identity/flow mismatches,
 no decision race, state age1.09s, same four runtime PIDs/invocations/NRestarts0.
-The measured interval is not proof against future recurrence. Finite production
-capture is not yet enabled at this source checkpoint.
+The measured interval is not proof against future recurrence. At that source
+checkpoint finite production capture was not yet enabled; activation follows below.
+
+## Actual activation and preservation
+
+Observer source43eb84eb76871ae907a64f2fef4934f04cf8385f pushed/remote SHA verified;
+PR29 ordinary merge59cd72ed0e3af4a2f68c399a6fc8b6f27fedd461 verified on remote main.
+Author scoped review and27 tests/exact RU smoke/public-source/docs gates completed.
+No independent third-party approval is claimed. The repository has no required
+check contexts; hosted general CI was still running, not represented as PASS or
+as qualification for a product persistence change.
+
+Enabled **only** the RAM-staged observer/trace/manifest, not a gateway correction:
+`/run/family-connect-ru-pressure/source-43eb84eb`. Script SHA004114fe317b223fd78f898444f0990147b3634b25ba0c64330360279b8104f5;
+trace SHA49f96235b61eee6b3b9e03033880b6391f6cf48e984ce7ac0aede8571fa2de90.
+Transient unit`family-connect-ru-pressure-20261114-43eb84eb.service`, PID464781,
+invocation2384a0930d87408c9490297b023febe7. Start14Nov14:19:15.976UTC; one-day
+deadline15Nov14:19:15.976UTC, unit ceiling+30s, Restart=no, no reboot enablement.
+Effective CPU100ms/s, memory268435456/no swap, Tasks24, Nice19, IOWeight1, LimitFSIZE9MiB
+read back. At14:24:42UTC still running: unit CPU10.567s over326s, peak89.59MB;
+observer process read_bytes/write_bytes/cancelled_write_bytes all0, empty trace errors.
+Unit CPU excludes some in-kernel probe work; no total-host overhead claim.
+
+At14:25:05UTC the diagnostic process stopped by its own cost guard, NOT a RU
+failure: sample CPU306ms exceeded200ms. Completed349.88s/151 cycles/604 fsync with
+zero lost indications, preserved first-slow and final receipts; unit CPU11.716s,
+peak94.96MB. The24-hour maximum was NOT reached and that collector is no longer
+running. Final extraction`first-window-final` succeeded. A small observer-only
+refinement skips redundant user-memory/cgroup reads for143 kernel threads while
+retaining their stat/CPU/fault and jbd2 I/O, full userspace I/O/memory/cgroups and
+host disk/PSI. No resource guard or product guarantee is relaxed. This revised
+observer requires its own exact qualification before a new finite window.
+
+Refinement qualified14:32:23–14:35:18UTC,181.99s process duration: script
+ebd64d14346385cb1e98b754dab3b34ed7dfde1ba0e9790f72250c8451d5c0ff, unchanged trace49f96235.
+75 cycles/300 fsync/150 rename/225 child records, zero lost indications/errors or
+gateway failure.29 samples, mean/max sample CPU121.68/151.82ms (previous smoke
+152.01/174.69ms); unit CPU5.960s/3.28% one core, peak76.69MB. The code deterministically
+avoids redundant kernel-thread procfs reads; healthy-window latency differences do
+not establish a product I/O improvement. New local tests29/collection6193 PASS.
+Initial lease14:34:21 crossed to14:37:11,64 applied/20 allowed throughout. Same
+200ms CPU/10s sample wall guards and unit limits; no repeated automatic retry.
+
+First slow trigger14:20:46UTC: successful state-file fsync747.740401ms/42,862 bytes,
+not an8-second deadline failure. Immutable`slow.json` SHA8513f09ce715af5adf15a0f14bf35d7f0b91d20c2d728e6ffb80ad77c34b20a2
+was extracted and hash-verified with14 preceding counter snapshots/292 phase records.
+Last counter sample precedes syscall completion by2.48s; it must not be advertised
+as an after-event measurement. Preceding6.41s interval: journald225,280/watcher147,456/
+HTTP65,536 write bytes, no sampled long-lived PID major-fault increment while host
+pgmajfault rose35. Short-lived/unobserved tasks and shared writeback remain attribution
+gaps; no process is blamed from this snapshot. First-failure detection/finite expiry
+will preserve the then-current ring in final.json. No current transport failure.
+
+Before/after read-only canonical snapshots:64 devices/118 invites/1 subscription/
+4 paid events retained; subscriptions, terms, pilot membership, credentials and17
+protected groups byte-identical. Initial blanket19-group comparison correctly failed
+for two live changes and was **not** silently waived: matching12:35 backup anchors
+prove all52 device→chat-public mappings unchanged, with one support_sender NULL→the
+already-existing official sender; all64 support-ID mappings unchanged, with one
+observation_source change already present before observer activation. The initiator
+is not established from these rows. No old DB was restored to erase live changes.
+All paid archive members/configs/effective existing units, four runtime PIDs and
+both notification-reader helper hashes unchanged. Local actual panel IPC still
+shows baseline_excluded4/cursor4, zero automatic jobs,2 conversations/5 messages,
+1 panel user/socket0660 gid980. No payment, message or subscription operation created.
+
+Safe rollback is stopping the diagnostic unit, retaining captures and all product
+state. No old archive, DB, worker or configuration is installed. The exact tested
+extraction command/deadline is in the operator runbook. Cause remains **OPEN**;
+this bounded data acquisition satisfies the diagnostic fallback, not causal closure
+or a promise of future stability. Next action is finite-result analysis, not another
+unspecified monitoring request or an unrelated CI/payment/client-card task.
 
 ## Separate CI disposition
 
@@ -116,6 +186,12 @@ no failure/error IDs. It uses PR test-merge906b4653, tree-identical toac3479bf.
 Linux control43591863123 has the analogous outer timeout; actual failover/auth/
 offline/revocation132438099607 PASS. CI-RUNNER-COMPLETION-1 stays separate; no general
 CI success or runner-cause claim. No gate is removed for a prospective RU change.
+
+New observer PR29 hosted runs are distinct: readiness43603921659/job132474346844
+completed PASS. At14:22UTC phase043603921594/tests132474346280 and Linux control
+43603921607/job132474346773 were still running; failover132474346460 was still
+building, with actual failover/auth/offline/revocation pending. Neither Docker build
+nor the prior source's result is substituted for that new run's completed steps.
 
 Private read-only snapshots/source capsule stay in `/mnt/data/fc-ru-persistence-pressure-20261114`;
 no keys, raw registry, user contents or private snapshots are committed.

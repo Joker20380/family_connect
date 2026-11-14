@@ -65,6 +65,22 @@ def test_first_failure_filtered_without_modifying_original(tmp_path):
     assert len(result['sha256']) == 64
 
 
+@pytest.mark.parametrize('name,journal', [('kworker/1', False), ('jbd2/vda1-8', True)])
+def test_kernel_threads_skip_user_memory_and_group_reads(tmp_path, name, journal):
+    target = tmp_path / '42'
+    target.mkdir()
+    fields = ['0'] * 22
+    fields[0], fields[6] = 'S', str(0x00200000)
+    (target / 'stat').write_text('42 (' + name + ') ' + ' '.join(fields))
+    if journal:
+        (target / 'io').write_text('write_bytes: 123\n')
+    result = observer.process(target)
+    assert result['kernel'] is True and result['kernel_io_sampled'] == journal
+    assert result['cgroup'] == '/'
+    assert result.get('write_bytes') == (123 if journal else None)
+    assert 'VmSwap' not in result
+
+
 def test_capture_never_replaces_existing_file(tmp_path):
     path = tmp_path / 'first.json'
     observer.save(path, dict(first=True))

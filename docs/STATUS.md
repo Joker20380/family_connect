@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**14 November — RU-PERSISTENCE-PRESSURE-1 selected; diagnosis in progress.**
+**14 November — RU-PERSISTENCE-PRESSURE-1: CAUSE_OPEN / observer cost refinement.**
 Read-only entry confirms actual node125c796a/gateway9023d2c3 (not main), active
 watcher/AWG/TCP with unchanged PIDs3952264/3952267/3952276, restart counters0,
 fresh applied state and no current first-failure file. Paid125 and all closed
@@ -11,7 +11,19 @@ TICK_SECONDS=2 and two durable readback writes per cycle. Attribution is still O
 Finite phase/process/cgroup collector qualified for181.50s:75 cycles/300 fsync,
 no lost events/failure; lease renewed across its initial deadline and independent
 AWG/TCP readback PASS. Unit CPU3.63% of one core/peak74MB. Local observer27 /
-collection6191 PASS. No persistence fix or long-running observation is yet installed.
+collection6191 PASS. PR29 merged59cd72ed; first observer window43eb84eb ran in RAM
+from14Nov14:19:16 for349.88s, then stopped safely on its200ms sample-CPU limit. Exact
+unit/output/extraction command is in the report/runbook. First747.74ms fsync trigger
+saved/extracted, not an8s failure or attribution proof. No persistence fix installed.
+Paid archives/configs/units and all runtime PIDs retained;17 protected groups are
+byte-identical. Two remaining differences were audited against the matching prior
+backup: one observation_source and one support_sender NULL→existing official sender;
+device/public/support-ID mappings unchanged. No rollback of concurrent live changes.
+Notification baseline/cursor4, zero jobs,2 conversations/5 messages retained at IPC
+readback. Full first-window result extracted; lower-cost kernel-thread path qualified
+for181.99s/75 cycles, sample CPU mean/max122/152ms with unchanged limits.29 tests /
+6193 collection PASS; next is reviewed finite reactivation. No diagnostic restart loop.
+Do not start payment-provider/card-refresh/CI repair.
 [Current scope and bounded evidence](releases/2026-11-14-ru-persistence-pressure.md).
 Separate CI-RUNNER-COMPLETION-1: phase0/tests132438099847 is now FAILED by external
 timeout, all three pytest contexts rc0/coverage PASS, cargo skipped; Linux control
