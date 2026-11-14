@@ -1,6 +1,18 @@
 # Текущее состояние / Current state
 
-**14 November — RU-PERSISTENCE-PRESSURE-1: CAUSE_OPEN / BOUNDED_CAPTURE_ACTIVE.**
+**14 November15:07UTC — CI-RUNNER-COMPLETION-1 SELECTED / DIAGNOSTIC_CHECKPOINT.**
+Baseline main248b1881 retained; original dirty checkout untouched. No production
+changes authorized by this CI task. Instrumenting inventory/context/cleanup/wrapper/
+pipeline boundaries and bounded pipe-owner evidence; cause is not established yet.
+Source38e9f403 phase043606003930/tests132480665060 and Linux43606003884/
+132480664898 were still running at entry; actual failover132480665285 PASS.
+RU observer38e9f403 has already stopped safely after1171.45s on sample_cost_limit,
+not a gateway failure. Unit active/exited/MainPID0/Resultsuccess; final/start/empty
+tracer-errors extracted once into a new immutable ci-entry-20261114-1506 directory.
+No restart or window extension. RU remains CAUSE_OPEN / FINAL_CAPTURE_AWAITING_ANALYSIS.
+[CI evidence](releases/2026-11-14-ci-runner-completion.md).
+
+**14 November — RU-PERSISTENCE-PRESSURE-1: CAUSE_OPEN / FINAL_CAPTURE_AWAITING_ANALYSIS.**
 Read-only entry confirms actual node125c796a/gateway9023d2c3 (not main), active
 watcher/AWG/TCP with unchanged PIDs3952264/3952267/3952276, restart counters0,
 fresh applied state and no current first-failure file. Paid125 and all closed
@@ -31,7 +43,7 @@ peak87.47MB, disk read/write0), beyond the first window's349.88s stop. At14:47:2
 actual RU engine/readback check:64 applied/20 allowed, no mismatches/prepared/failure,
 same PIDs/invocations; lease renewed past the14:42:12 initial boundary. Full24h
 stability is not claimed. Further protected table changes: none at final readback.
-Do not start payment-provider/card-refresh/CI repair.
+Do not start payment-provider/card-refresh; CI repair is now separately selected.
 [Current scope and bounded evidence](releases/2026-11-14-ru-persistence-pressure.md).
 Separate CI-RUNNER-COMPLETION-1: phase0/tests132438099847 is now FAILED by external
 timeout, all three pytest contexts rc0/coverage PASS, cargo skipped; Linux control

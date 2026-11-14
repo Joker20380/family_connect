@@ -12,6 +12,8 @@ import tempfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from scripts.ci_lifecycle import mark
 HISTORICAL = '4bb53b0605c2c898b6a3feca6ee15fd34b943a94'
 HISTORICAL_SHA = '460e75205eb9baff313dc7dd963cdb7bceddf2d1e13405a71686f9ec6c976d71'
 SNAPSHOT_SHA = '0120dad028ead353b8b83a600538f3e578b2b46ddf871bf16e97529f9449f450'
@@ -208,7 +210,11 @@ def main():
         if not command:
             parser.error('Test command required')
         values = environment(args.fixtures.resolve(), args.go.resolve(), args.nginx.resolve())
-        raise SystemExit(subprocess.call(command, cwd=ROOT, env=dict(os.environ, **values)))
+        mark('wrapper_child_start')
+        result = subprocess.call(command, cwd=ROOT, env=dict(os.environ, **values))
+        mark('wrapper_child_end', returncode=result)
+        mark('wrapper_end', returncode=result)
+        raise SystemExit(result)
 
 
 if __name__ == '__main__':

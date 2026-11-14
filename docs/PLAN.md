@@ -2,7 +2,18 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Selected14 November — RU-PERSISTENCE-PRESSURE-1, CAUSE_OPEN / finite capture active.**
+**Selected14 November — CI-RUNNER-COMPLETION-1, DIAGNOSTIC_CHECKPOINT.**
+Locate the actual unfinished resource after successful pytest contexts. Add monotonic
+lifecycle/pipe-owner evidence, bounded local regression then one diagnostic candidate
+on hosted CI if needed. Preserve all contexts, pins, locks, UID/Python separation and
+the25-minute outer limit. Gate: real external completion in phase0 and Linux control,
+subsequent cargo/GTK/recovery/package/extracted checks executed, actual failover gate,
+review/ordinary merge/remote SHA. No production deployment. Inner coverage is not
+external completion. [Evidence](releases/2026-11-14-ci-runner-completion.md).
+RU is waiting for analysis of its already-extracted final window: sample_cost_limit
+after1171.45s, no gateway failure; no restart/extension or CI-driven RU changes.
+
+**RU-PERSISTENCE-PRESSURE-1, CAUSE_OPEN / final capture awaiting analysis.**
 Scope: authorized RU185.251.89.19 only; diagnose the observed persistence deadline
 overruns using actual node125c796a, saved first failures and bounded process/cgroup/
 host counters aligned to operation phases. No preventive restart, storage stress,
@@ -33,7 +44,7 @@ Revised window verified running408s at14:47:24UTC, no RU failure; actual engine
 readback and lease crossing PASS. This is an observation handoff, not causal closure.
 [Task evidence](releases/2026-11-14-ru-persistence-pressure.md).
 
-**CI-RUNNER-COMPLETION-1 — separate queued follow-up, NOT STARTED.**
+**CI-RUNNER-COMPLETION-1 — historical entry evidence; now selected above.**
 Phase0/tests132438099847 completed with external timeout; all three pytest contexts
 return0/coverage PASS, subsequent cargo skipped. Linux control132438784552 has the
 analogous outer timeout; failover/auth/offline/revocation132438099607 PASS. Why the
