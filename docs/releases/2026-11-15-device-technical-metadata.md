@@ -38,6 +38,26 @@ Collector projections must replace current data, not append it to inventory hist
 
 ## Pending delivery gates
 
+### First source checkpoint: authenticated storage
+
+Separate `/friends/device/technical-metadata/v1` schema1 binds exact report bytes
+to `technical-metadata-v1:SHA256` identity proof. Strict bounded groups distinguish
+SIM operator/registered operator/radio and preference/attempt/established transport.
+Consent epochs plus monotonic sequence-derived IDs reject replay/conflicts; immediate
+revoke bypasses per-device rate limiting and retains only an anti-replay tombstone.
+Replaying after expiry cannot extend retention. Per-group monotonic age, server
+received_at, clock-skew annotation and seven-day expiry do not use support/ACK times.
+Latest-only private SQLite has secure_delete and independent minute cleanup.
+Store ceiling5000 devices; sample interval60s; maximum report6144UTF-8 bytes.
+
+Local control + identity lock versions verified. Focused API/lifecycle/security,
+legacy support/diagnostics and packaged real HTTP tests:82 PASS,14 SKIP (13 nginx
+matrix without FC_TEST_NGINX;1 separately pinned sync artifact absent). These skips
+are NOT ingress/GeoIP/Android/release acceptance. This checkpoint does not yet
+collect Android observations, enrich GeoIP, populate the panel or publish an APK.
+Ingress snippet is prepared for actual18086 and overwrites X-FC-Ingress-Peer;
+the API intentionally does not trust or use that header as source-location proof.
+
 Implementation/security/lifecycle tests, Android API27/API35 and NVIDIA/KVM runtime
 qualification; installed125→new identity/settings/support preservation; local MMDB
 positive/provenance/negative checks; latest-only panel projection and UI; exact APK

@@ -148,6 +148,24 @@ def test_online_diagnostic_route_binds_proof_to_safe_report(runtime):
         assert request(runtime['backend'], '/friends/device/diagnostics', body={})[0] == 403
 
 
+def test_technical_metadata_versioned_route_and_revoke(runtime):
+    from test_technical_metadata import report
+    with running(runtime):
+        device = runtime['canary']
+        for sequence, operation in ((1, 'sample'), (2, 'revoke')):
+            raw = json.dumps(report(sequence=sequence, operation=operation))
+            status, body = request(runtime['backend'], '/friends/challenge', body=dict(
+                public_identity=device.public_identity, wireguard_public_key=device.wireguard_public_key,
+                purpose='technical-metadata-v1:' + hashlib.sha256(raw.encode()).hexdigest(), invitation=''))
+            assert status == 200
+            signed = device.prove_transport_key(json.loads(body)['challenge'])
+            status, body = request(runtime['backend'], '/friends/device/technical-metadata/v1',
+                                   body=dict(proof=signed, report=raw))
+            assert status == 200
+            assert json.loads(body)['consent'] == ('enabled' if operation == 'sample' else 'revoked')
+        assert request(runtime['backend'], '/friends/device/technical-metadata/v1', body={})[0] == 403
+
+
 @contextlib.contextmanager
 def ingress(runtime, enabled, tls=False):
     executable = os.environ.get('FC_TEST_NGINX')

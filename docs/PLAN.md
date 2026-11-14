@@ -3,6 +3,8 @@
 ## Current engineering priority / Текущий critical path
 
 **DEVICE-TECHNICAL-METADATA-1 — SELECTED / implementation in progress, 15 November.**
+First source checkpoint implements versioned API and revocation/retention security;
+82 focused checks PASS/14 integration SKIP. Android/GeoIP/projection/release remain.
 Implement separately consented, identity/content-bound technical observations,
 bounded latest-only retention/revocation, honest underlay and IP provenance, local
 GeoIP, collector/importer and production device UI, then qualify a new immutable

@@ -3,6 +3,9 @@
 **15 November — DEVICE-TECHNICAL-METADATA-1 / IN_PROGRESS, NOT_DEPLOYED.**
 Owner-selected product task: explicit new consent, latest technical device/network
 observations, production panel and compatible public Android successor to125.
+First source checkpoint: versioned body-bound API, revocation epochs, bounded
+latest-only seven-day storage;82 local checks PASS/14 explicit integration skips.
+Android/GeoIP/panel/release delivery remain unfinished; no user-ready claim.
 Remote main verified53a780d9ccfcdb2c3ec6141a197917190f9be7a5 (PR37 merged).
 Dirty/diverged primary checkout preserved; isolated feature worktree starts at that
 main. Public125/catalog8 and paid108/119/123/125 remain unchanged; no new APK or
