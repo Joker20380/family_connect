@@ -60,6 +60,7 @@ def test_counter_units_and_identity_not_pid_alone():
     before, after = sample(1, 1), sample(4, 3)
     result = interval(before, after, metadata)
     assert result['seconds'] == 3
+    assert result['counter_interval_bounds_seconds'] == [2.75, 3.25]
     assert result['swap_bytes']['pswpin'] == 2 * 8192
     assert result['disk']['write_bytes'] == 8 * 512
     assert result['pressure_seconds']['io']['some'] == 2
@@ -68,6 +69,8 @@ def test_counter_units_and_identity_not_pid_alone():
     assert result['processes'][0]['swap_bytes'] == 2 * 1024
     assert result['vm_gauges']['nr_dirty'] == [99, 97]
     assert 'anon' not in result['cgroups']['/test']['memory_counters']
+    after['wall'] = -1
+    assert interval(before, after, metadata)['seconds'] == 3
     after['processes'][0]['start_ticks'] += 1
     assert interval(before, after, metadata)['processes'] == []
     assert delta({'counter': 5}, {'counter': 2}) == {'counter': None}
@@ -106,6 +109,10 @@ def test_conflicting_final_metadata_and_sample_rejected():
     values = captures()
     values[0] = ('start.json', dict(values[0][1], boot_id='other-boot'))
     with pytest.raises(ValueError, match='metadata mismatch'):
+        analyze_window(values)
+    values = captures()
+    values[-1][1]['samples'][-1]['processes'][0]['start_ticks'] += 1
+    with pytest.raises(ValueError, match='Watcher identity'):
         analyze_window(values)
 
 

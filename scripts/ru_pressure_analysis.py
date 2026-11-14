@@ -58,6 +58,8 @@ def interval(before, after, metadata):
                   before_ns=before['mono_ns'], after_ns=after['mono_ns'],
                   before_sample_seconds=before['sample_seconds'],
                   after_sample_seconds=after['sample_seconds'],
+                  counter_interval_bounds_seconds=[max(0, elapsed - before['sample_seconds']),
+                                                   elapsed + after['sample_seconds']],
                   vm=delta({key: value for key, value in before['vm'].items() if key not in ('nr_dirty', 'nr_writeback')},
                            {key: value for key, value in after['vm'].items() if key not in ('nr_dirty', 'nr_writeback')}),
                   vm_gauges={key: [before['vm'].get(key), after['vm'].get(key)] for key in ('nr_dirty', 'nr_writeback')},

@@ -1,14 +1,23 @@
 # Текущее состояние / Current state
 
-**14 November — RU-PERSISTENCE-PRESSURE-1 / FINAL_ANALYSIS_IN_PROGRESS.**
-Selected offline analysis of the two already-ended windows, not a third collection.
-Main817266aa/PR32 retained; original dirty checkout untouched. Manifest source/trace
-hashes match exact Git blobs; both original historical failure hashes verified.
-Refined duplicate exports are one capture. Actual terminating sample CPU202.842ms
-exceeded200ms; wall1.999824s did not exceed10s. New offline calculation tool checks
-deduplication, ring coverage, monotonic intervals, PID/start identity and counter
-units;38 analysis/observer regressions PASS. Attribution/conclusions still pending
-full interval review. No product/production change or resource-limit relaxation.
+**14 November — RU-PERSISTENCE-PRESSURE-1 / FINAL_ANALYSIS_COMPLETE, CAUSE_OPEN (PR33).**
+Both finite windows and original failures analyzed; source/trace/extraction hashes
+verified, duplicate exports/overlapping rings counted once. First349.878s, refined
+1171.448s; refined final has4096 of4842 processed phases and only the last60 counters
+(14:54–15:00UTC), not a complete detailed run. Stop was CPU202.841517ms>200ms;
+wall1.999824s<10s, not the first window's306ms. Shutdown does not drain trailing
+tracer stdout; no false end-to-end completeness claim from zero lost indications.
+747.740ms successful fsync is counter-bracketed but journald concurrence does not
+attribute the old8.65/9.26s failures. No product fix is justified by this dataset.
+38 offline analysis/observer tests and collection6212 PASS; exact coverage, bounds, statistics and
+reproduction are in the [final analysis](releases/2026-11-14-ru-persistence-pressure.md#final-analysis--complete-cause-remains-open).
+One fresh read-only check18:27:25UTC: RU watcher/AWG/TCP same PIDs/invocations,
+restarts0;64 applied/20 allowed, zero engine mismatches/prepared, state age2.469s,
+no failure. HTTP PID changed separately; cause unassigned. No deployment/restart.
+Single proposed next: isolated qualification of an event-driven first-failure
+attribution recorder under unchanged limits; not a third RU run or automatic task.
+Tomorrow's original ceiling is no longer a waiting condition. Closed client/paid/
+support/notifications/CI results and original dirty checkout retained.
 
 **14 November — CI-RUNNER-COMPLETION-1 COMPLETE / CI_ONLY, integration PR32.**
 Qualified executable sourcefd1d87941888f33773cab9e015a57358f0e67d39; later report
@@ -26,15 +35,15 @@ Whole CI is NOT universally green: separate Client builds/linux132506592194 fail
 appimagetool download HTTP403 (exit22); an earlier same-source push failover build
 failed existing150ms readiness-attempt assertion. Both are retained, not hidden or
 relaxed; final applicable PR gates passed. No production deployment or public release.
-Original dirty checkout untouched. RU remains CAUSE_OPEN / FINAL_CAPTURE_AWAITING_ANALYSIS:
+Historical CI handoff, now analyzed above: RU remains CAUSE_OPEN;
 entry and exit extractions ci-entry-20261114-1506 / ci-exit-20261114-1713 have identical
 start/final/empty-error SHA256. Unit active/exited/MainPID0/Resultsuccess, safely stopped
 after1171.45s on sample_cost_limit, no gateway failure. No restart/window extension.
-Next separate RU action is analysis of the already-retained final window, not waiting
-for another incident; no scheduled automatic extraction/analysis is claimed.
+Final-window analysis is completed separately above; no automatic collection or
+analysis is scheduled, and no waiting for another incident is required by this stage.
 [CI evidence](releases/2026-11-14-ci-runner-completion.md).
 
-**14 November — RU-PERSISTENCE-PRESSURE-1: CAUSE_OPEN / FINAL_CAPTURE_AWAITING_ANALYSIS.**
+**14 November — historical RU collection/qualification observations (final analysis above).**
 Read-only entry confirms actual node125c796a/gateway9023d2c3 (not main), active
 watcher/AWG/TCP with unchanged PIDs3952264/3952267/3952276, restart counters0,
 fresh applied state and no current first-failure file. Paid125 and all closed
