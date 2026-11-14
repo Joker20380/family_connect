@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**14 November — RU-PERSISTENCE-PRESSURE-1: CAUSE_OPEN / observer cost refinement.**
+**14 November — RU-PERSISTENCE-PRESSURE-1: CAUSE_OPEN / BOUNDED_CAPTURE_ACTIVE.**
 Read-only entry confirms actual node125c796a/gateway9023d2c3 (not main), active
 watcher/AWG/TCP with unchanged PIDs3952264/3952267/3952276, restart counters0,
 fresh applied state and no current first-failure file. Paid125 and all closed
@@ -22,7 +22,15 @@ device/public/support-ID mappings unchanged. No rollback of concurrent live chan
 Notification baseline/cursor4, zero jobs,2 conversations/5 messages retained at IPC
 readback. Full first-window result extracted; lower-cost kernel-thread path qualified
 for181.99s/75 cycles, sample CPU mean/max122/152ms with unchanged limits.29 tests /
-6193 collection PASS; next is reviewed finite reactivation. No diagnostic restart loop.
+6193 collection PASS. PR30 mergededd10793; source38e9f403 reactivated14:40:36UTC
+with the same limits and original overall time budget: normal deadline15Nov14:18:47UTC,
+hard ceiling14:19:16UTC. No automatic diagnostic restart loop. Current exact unit,
+paths and prepared extraction command are in the report/runbook.
+At14:47:24UTC the revised collector is still running after408s (unit CPU10.785s,
+peak87.47MB, disk read/write0), beyond the first window's349.88s stop. At14:47:26
+actual RU engine/readback check:64 applied/20 allowed, no mismatches/prepared/failure,
+same PIDs/invocations; lease renewed past the14:42:12 initial boundary. Full24h
+stability is not claimed. Further protected table changes: none at final readback.
 Do not start payment-provider/card-refresh/CI repair.
 [Current scope and bounded evidence](releases/2026-11-14-ru-persistence-pressure.md).
 Separate CI-RUNNER-COMPLETION-1: phase0/tests132438099847 is now FAILED by external
