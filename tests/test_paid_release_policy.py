@@ -24,9 +24,10 @@ def test_exact_signed_release_descriptors_only():
         ('android', '0.1.18-beta108', 108, '144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf'),
         ('android', '0.1.18-beta119', 119, '52a9847b74181c48808c86a0c5bf5925b53ef498eec628aef2d78d26f1c92d2d'),
         ('android', '0.1.18-beta123', 123, 'ae011307b4afc58ea211ea6c5cd27c28bc472bda6af9b19892de400a3d3de15d'),
+        ('android', '0.1.18-beta125', 125, 'f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c'),
     ]
     assert paid_beta.LEGACY_ANDROID_RELEASE == paid_beta.PAID_ANDROID_RELEASES[0]
-    assert paid_beta.policy()['policy'] == 'android-paid-108-119-123-v1'
+    assert paid_beta.policy()['policy'] == 'android-paid-108-119-123-125-v1'
 
 
 @pytest.mark.parametrize('release', paid_beta.PAID_ANDROID_RELEASES)
@@ -55,7 +56,7 @@ def test_wrong_release_hash_or_unknown_version_rejects_without_write(registry, c
 
 
 @pytest.mark.parametrize('kind', ['payment', 'grace'])
-@pytest.mark.parametrize('codes', list(itertools.permutations((108, 119, 123), 2)))
+@pytest.mark.parametrize('codes', list(itertools.permutations((108, 119, 123, 125), 2)))
 @pytest.mark.parametrize('source', ['support_ack', 'two_acks'])
 def test_equally_latest_allowed_versions_conflict(paid_setup, kind, codes, source):
     service, device, support, now = paid_setup

@@ -1,5 +1,13 @@
 # Текущее состояние / Current state
 
+**14 November — paid125 source/package qualification; deployment pending.**
+PR23 merged137f85dc; separate compatibility branch adds exact public125 to canonical
+policy108/119/123/125.123 was source/package accepted but rolled back during RU failure;
+its new production admission is explicit, not assumed already installed. Actual
+support-preserving HTTP/operator overlays pass38 isolated tests; canonical/packaged
+selection passes126. Current installed policy remains108/119 until delivery receipt.
+No real payment or APK rebuild. [Scope, pins and gates](releases/2026-11-14-subscription-paid-125-compat.md).
+
 **14 November — tablet109→125 in-app update PASS — подтверждено пользователем.**
 Owner confirms successful download and installation on the real tablet via the
 application update button; the previous1–2% interruption did not recur. No repeat

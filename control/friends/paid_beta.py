@@ -16,7 +16,7 @@ PAID_ANDROID_VERSION_CODE = 108
 COHORT_LIMIT = 10
 MAX_TIME = 253402300799
 TABLES = {'paid_beta_subscriptions', 'paid_beta_events'}
-PAID_ANDROID_POLICY = 'android-paid-108-119-123-v1'
+PAID_ANDROID_POLICY = 'android-paid-108-119-123-125-v1'
 
 
 @dataclass(frozen=True)
@@ -35,6 +35,8 @@ PAID_ANDROID_RELEASES = (
                    '52a9847b74181c48808c86a0c5bf5925b53ef498eec628aef2d78d26f1c92d2d'),
     AndroidRelease('android', '0.1.18-beta123', 123,
                    'ae011307b4afc58ea211ea6c5cd27c28bc472bda6af9b19892de400a3d3de15d'),
+    AndroidRelease('android', '0.1.18-beta125', 125,
+                   'f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c'),
 )
 
 

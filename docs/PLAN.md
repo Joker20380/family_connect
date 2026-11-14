@@ -3,6 +3,10 @@
 ## Current engineering priority / Текущий critical path
 
 **SUBSCRIPTION-PAID-125-COMPAT — owner-selected14 November, IN PROGRESS.**
+PR23 merged137f85dc. Canonical108/119/123/125 and actual baseline-only overlays are
+prepared;123 admission is explicitly requalified, not claimed previously installed.
+126 targeted /38 actual-overlay tests PASS; deployment/loaded policy/protected-data
+gate still pending. [Current receipt](releases/2026-11-14-subscription-paid-125-compat.md).
 Dependencies: finish PR23 public125 documentation/merge, then a separate branch
 from current main; retain qualified immutable125/sourceb293f9ac and support/recovery
 runtime. Explicitly resolve source123 versus installed108/119 before deployment.
