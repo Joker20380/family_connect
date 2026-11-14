@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**14 November — notification continuation: scoped CI/real failover PASS; install prepared.**
+Code/referenceac3479bf:422 core,48 panel,25 reference/package and6164 collection PASS.
+Hosted route/messenger/panel/paid/readiness/Linux voice/candidate PASS. Phase0 actual
+failover/auth/offline/revocation PASS; standalone full suite still pending, not yet
+full-CI PASS or merge. Fixed-host checksum-pinned helper for joker-XPS is ready;
+RU has a separate authorized admin path. Canonical/panel isolated restore PASS.
+Support is still running its accepted baseline; no production notification baseline
+or automatic send. Final gate/merge and the prepared interactive sudo action remain.
+[Exact helper, checksums and action](operators/subscription-notifications.md).
+
 **14 November — accepted support reference delta repaired, final CI pending.**
 Original106 hashes/inventory and subscription119 patch unchanged. Explicit support1
 patch from10d353d8 plus support.py dependency pins reversibly connect all accepted

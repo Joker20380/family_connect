@@ -3,6 +3,10 @@
 ## Current engineering priority / Текущий critical path
 
 **Selected14 November — SUBSCRIPTION-NOTIFICATIONS-1, IN PROGRESS.**
+Scoped CI and actual failover/auth/offline/revocation now PASS onac3479bf; await
+standalone full-suite completion, then merge. Installation is fully prepared for
+one exact local sudo action (operator runbook), not a generic access request.
+Canonical/panel restore rehearsals PASS; production baseline still absent.
 Reference debt fixed without changing accepted106 hashes:25 reference/package and
 6164 collection PASS. Await final hosted gates including actual failover steps.
 Continuation: late stored-ACK/terminal-job correction qualified (50 support,

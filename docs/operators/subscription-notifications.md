@@ -106,3 +106,45 @@ Restore only code/configuration compatible with this guard. Retain current encry
 history, baseline, positions, jobs, requests and deduplication. Never restore an old
 registry or sender database over new events. Reenable at the saved position, never
 at a new baseline. This compatibility restriction is part of the deployment gate.
+
+## Prepared administrative action — 14 November
+
+Support and console are on **joker-XPS**, login **joker**, worker **fc-support**.
+Do not confuse this host with RU **box-932982 /185.251.89.19**. The existing separate
+administrative SSH connection can install RU helpers; the collector key remains a
+forced read-only command. No changes on Amsterdam or excluded hosts are needed.
+
+After final applicable gates and PR26 merge, the already prepared local helper is:
+`/mnt/data/fc-subscription-notifications-20261114/install-ac3479bf/install.py`
+
+SHA256: `3eadef11a617863d967fe9280446fd8d8573013fd145af10d5057773da18b79f`.
+It pins sourceac3479bf and bundle16284251df81423d772f0b808ad89cd7863924239eb50d7e7cd230c0422e6313.
+Run in a normal local terminal on joker-XPS; enter the password only in sudo's OS prompt:
+
+```sh
+sudo /usr/bin/python3 /mnt/data/fc-subscription-notifications-20261114/install-ac3479bf/install.py install
+```
+
+The helper checks hostname, exact bundle/files, current configuration/image and
+mounted runtime inode333786. It takes fresh panel and encrypted sender backups,
+keeps keys separately, verifies isolated restores before switching, installs only
+four support modules and the new units/drop-in, and switches only console's image.
+Users/settings/volumes, main unit and existing support-binding timer are retained.
+It then enables the collector, waits for the worker's atomic baseline, observes
+three65s cycles and one restart/70s observation. Allow roughly6 minutes. It does not
+initialize/reset the baseline itself and never restores a live database. Repeating
+install retains baseline/cursor/jobs; unexpected code/configuration drift aborts.
+
+Result: `/opt/family-connect-support/notification-install-receipt.json`, readable
+without sudo; expect `state=installed_baseline_observed` and
+`cycles_restart_acceptance=PASS`. The receipt records the actual excluded count,
+cursor, future-boundary count and separate real stored-ACK observation. Assistant
+readback still verifies source/archives/protected data and the running panel.
+
+Safe disable uses the same verified helper with `disable` instead of `install`.
+It stops the new collector, removes only its worker drop-in and restarts the guarded
+worker. The panel's observation delta and all current records remain. Never replace
+the worker with its pre-notification version. A failed switch attempts this safe
+disable, preserves backups/current data and records a failure receipt, not PASS.
+The generated private bundle/helper/tests and raw backups stay outside Git; only
+their sanitized hashes and this execution contract are tracked here.

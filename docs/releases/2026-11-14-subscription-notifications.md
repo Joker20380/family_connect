@@ -1,5 +1,48 @@
 # SUBSCRIPTION-NOTIFICATIONS-1
 
+## Continuation — qualified preparation, awaiting final gate/merge
+
+Executable/reference headac3479bfa4f8b190826182fb9633d78a7fdfb993 pushed; remote SHA
+verified. Local exact-lock core/messenger/paid/subscription422 PASS, panel48 PASS,
+reference/package25 PASS and root collection6164 PASS (overlapping selections).
+Hosted route43591863039, messenger43591863077, panel43591863067, paid43591863176,
+readiness43591863215, Linux voice43591863049 and candidate43591863079 PASS.
+Phase043591863104 failover job132438099607 completes **all** build/provision,
+failover/auth/offline/revocation steps successfully. Artifact14112893152 SHA256
+507e001ecc5df5aea75586df0cf6c8ed4a9843f23d453d1884ed7a60b936d8e0 retained privately;
+failover1 switch/16MiB, offline16MiB, unauthorized denied, revocation1.115s.
+Its build log is rate-clipped during inventory output; step success is not used as
+a substitute for completed standalone full-suite results, which are still pending.
+Author-side continuation review5904249423 is recorded; no independent approval claimed.
+
+Actual preflight: local joker-XPS/joker, support userfc-support, accepted main unit
+RuntimeDirectoryPreserve=yes and mounted directory inode333786. Existing console
+image50de6f25a04c and separate publisher retained. Root sudo still requires an OS
+interactive prompt. Authorized RU admin connection independently confirms root on
+box-932982; the restricted collector credential is not repurposed for administration.
+Canonical SQLite backup and isolated integrity/full-table restore comparison PASS.
+Panel pg_dump/isolated PostgreSQL17 restore PASS (nonempty auth_user), no live restore.
+Current canonical source read:4 events,1 subscription/1 future boundary,0 expired
+boundaries. This is a read-only preflight, **not** a production notification baseline.
+
+Prepared kitac3479bf:73-file manifest PASS, tar SHA256
+a80846f6b4b9961d06251c13fdd50046f9b7bf3e450652a54b0b362fd975634e.
+Only four app modules differ from installed support. Minimal install bundle SHA256
+16284251df81423d772f0b808ad89cd7863924239eb50d7e7cd230c0422e6313;
+no HTTP archive installation. Prepared five-file panel overlay image
+sha256:61e4df54f1e1b83011b03427ec96e8941f9060173f7f756cbb4f1979fac81ad7,
+actual source hashes/syntax PASS; resolved Compose differs only in console image and
+pull policy. Existing commands/environment/volumes match the running container.
+Both panel images saved privately; archive SHA256
+ae77042cc9330672aba57097a951e048ac600afa6bece9c31cd2fb8523e8fb53.
+
+Fixed-host helper and exact sudo command/checksum are in the operator runbook.
+Four isolated helper checks cover pinned-bundle tampering, every-record decryption
+and unchanged backup bytes, baseline/cursor/job/history preservation and actual IPC
+request framing. Root stop/backup/install/enable/multicycle/restart phase is **not
+executed** yet. No production baseline, retrospective message or real automatic ACK.
+Helper/source capsules, credentials and raw private evidence remain outside Git.
+
 ## Continuation — reference contract
 
 Historical support commit10d353d8 changes chat/local/store and introduces support.py;
