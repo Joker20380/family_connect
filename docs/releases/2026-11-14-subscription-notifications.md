@@ -74,6 +74,24 @@ used to trigger acceptance messages.
 
 ## Remaining gates
 
+Source checkpoint `a63e4d29c93a97d239e7245a0d9d97431160a8c9` pushed and remote SHA
+verified. PR26 is not yet merged. Hosted route43586664982, panel43586665041,
+paid43586664957 and readiness43586664978 PASS on that source. Code review adds a
+saved maximum observed highwater, so source rollback cannot silently discard even
+unprocessed records seen on a preceding page; explicit auto/manual request conflict
+is also qualified. No production changes from this follow-up.
+
+Linux voice43586664962 reports104 PASS /3 FAIL after collection. Exact failures in
+`tests/test_messenger_reference.py`: `test_accepted_messenger_closure_and_explicit_platform_delta`,
+`test_subscription_adaptation_reverses_to_unchanged_accepted106_sources`, and
+`test_notification_reference_preserves_shared_sources_and_records_platform_limits`.
+All three are reproduced independently from archived entry main1b186e15 (3 FAIL /
+3 PASS); their tests, shared manifests and referenced messenger source are unchanged
+in this task. The initial baseline reproduction missed one fixture dependency; after
+including all declared manifest inputs, only the same three failures remain. No pins
+are relaxed to turn them green. Full phase0/Linux suites remain separate from the
+successful notification route and panel gates.
+
 Hosted source qualification/review/merge; administrative support-host execution;
 consistent nonempty backup and restore rehearsal; guarded source/panel installation,
 actual first baseline, multiple steady cycles, restart and protected-state readback.

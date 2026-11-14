@@ -1,6 +1,11 @@
 # Текущее состояние / Current state
 
 **14 November — SUBSCRIPTION-NOTIFICATIONS-1 source checkpoint, NOT DEPLOYED.**
+Hosted notification route43586664982, panel43586665041, paid compatibility43586664957
+and readiness43586664978 PASS on sourcea63e4d29. Linux voice fails three unchanged
+messenger-reference checks, independently reproduced on entry main1b186e15; no
+historical manifest was weakened. Review adds monotone observed-highwater protection
+and an explicit request-conflict regression. Deployment remains blocked/pending.
 Committed-event/deadline producer, durable jobs and official support outbox route
 implemented; isolated real mailbox/storage ACK/panel chain passes.317 support
 regressions,46 panel and165 notification/paid/subscription checks PASS (overlapping

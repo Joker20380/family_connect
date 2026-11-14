@@ -80,6 +80,9 @@ class Notifications:
             raise ValueError('invalid_subscription_feed')
         with self.store._lock, self.store._db:
             cursor = self.cursor()
+            previous = self.store._get('subscription-cursor')
+            if previous and feed['highwater'] < previous.get('highwater', previous['position']):
+                raise ValueError('source_highwater_regressed')
             if (feed['cursor'], feed['anchor']) != (cursor['cursor'], cursor['anchor']):
                 raise ValueError('stale_subscription_feed')
             subscriptions = {item['device']: item for item in feed['subscriptions']}
@@ -110,7 +113,7 @@ class Notifications:
                     feed['observed_at'])
             if cursor['cursor'] >= 0 and position != feed['position']:
                 raise ValueError('invalid_event_position')
-            saved = dict(position=feed['position'], position_hash=feed['position_hash'])
+            saved = dict(position=feed['position'], position_hash=feed['position_hash'], highwater=feed['highwater'])
             if self.store._get('subscription-cursor') != saved:
                 self.store._put('subscription-cursor', saved)
             if feed['position'] == feed['highwater']:

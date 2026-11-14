@@ -10,7 +10,8 @@ subscription card uses its authenticated endpoint only on opening/Refresh.
 The forced reader uses SQLite `mode=ro`, `query_only`, one read transaction and
 pages of128 committed APPLIED events in immutable ledger rowid order. It does not
 use timestamps, last-snapshot events or the1000-entry panel history. Each position
-includes the exact row hash; changed/missing anchors fail closed. Equal timestamps
+includes the exact row hash and maximum observed highwater; changed/missing anchors
+or regression of even not-yet-processed source positions fail closed. Equal timestamps
 and clock reversal cannot skip events. Never reset the cursor after source damage.
 
 The root collector has only the existing forced SSH reader and read-only cursor

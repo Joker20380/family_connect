@@ -45,8 +45,9 @@ delivery/storage status; no speculative payment confirmation or unsolicited test
 The owner's14 November request now authorizes this task and server automation.
 
 **CI-COLLECTION-NAMESPACE — collection/local regression PASS14 November.**
-Generic phase0/Linux full-suite inventory exits2; unchanged root/desktop
-`test_chat_service.py` names collide in local reproduction. Full CI is not green;
+Before correction, generic phase0/Linux inventory exited2 due to colliding root/
+desktop `test_chat_service.py` names. Current collection passes; full CI is not green:
+three independent messenger-reference failures reproduce on entry main1b186e15.
 Fixed separately without dropping tests:6149 collected,24 scoped tests PASS.
 Full hosted CI remains separately unaccepted. Scoped paid125 gates remain distinct.
 RU recurring-stop cause/replacement remains separate, not resolved by policy delivery.

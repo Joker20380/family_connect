@@ -285,6 +285,34 @@ def test_committed_enqueue_unknown_result_keeps_source_request_and_bytes(route):
     assert len(owner.store.visible_messages()) == 1
 
 
+def test_request_conflict_blocks_without_reattributing_manual_message(route):
+    registry, _, owner, clients, _ = route
+    cycle(route)
+    pay(registry)
+    cycle(route, dispatch=False)
+    job = owner.notifications.jobs()[0]
+    owner.send(job['pseudonym'], clients[0].profile()['address'], job['request_id'], '1', 'Manual synthetic message')
+    owner.notifications.dispatch()
+    job = owner.notifications.jobs()[0]
+    assert job['status'] == 'blocked' and job['reason'] == 'request_conflict'
+    assert job['message_id'] is None and len(owner.store.visible_messages()) == 1
+
+
+def test_seen_unprocessed_highwater_cannot_regress(route):
+    registry, _, owner, _, _ = route
+    now = int(time.time())
+    cycle(route, now=now)
+    pay(registry, now=now)
+    pay(registry, 'payment-0002', now=now, until=now+7200)
+    cycle(route, now=now, limit=1, dispatch=False)
+    assert owner.notifications.cursor()['cursor'] == 1
+    feed = read(registry[0].path, b'h'*32, **owner.notifications.cursor(), now=now)
+    feed.update(highwater=1, position=1, events=[])
+    with pytest.raises(ValueError, match='source_highwater_regressed'):
+        owner.notifications.ingest(feed, now=now)
+    assert owner.notifications.cursor()['cursor'] == 1
+
+
 def test_lost_readonly_ipc_response_does_not_reinitialize_baseline(route, tmp_path):
     from provisioning.support_worker import SupportServer, SupportMailbox
     from messenger.tests.test_support_security import IdleDelivery
