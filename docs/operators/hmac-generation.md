@@ -32,6 +32,13 @@ Missing active/pending references block switching. Ordinary operation after cuto
 uses only the new HMAC key and saved aliases; the old key is not mounted in either
 isolated steady-state rehearsal.
 
+The independent `probe_network.py` cycle does not read this key or device aliases;
+do not pause it or restart VPN services for rotation. Routine paid operations select
+the existing Support ID, not a panel HMAC. Historical bound `paid_beta_canary`
+packages are not the routine operator path: do not resume an old permit or load the
+disclosed key to make it work. Any separately authorized future canary needs its own
+new-generation qualification; rotation creates no payment/expiry authorization.
+
 ## Preparation / Подготовка
 
 1. Verify current installed hashes against `deploy/support-chat/pseudonym-baseline.json`.
@@ -65,6 +72,30 @@ isolated steady-state rehearsal.
 
 **Requires a separate owner confirmation referencing the qualified receipt/source.**
 
+### Exact consumer placement / Размещение
+
+These are proposed destinations, not a claim they are installed. Use the qualified
+overlay from source61b00409, checking every current input against the baseline
+manifest before replacing a file. Never copy the entire source tree into production.
+
+| Consumer | Minimal code / private configuration |
+|---|---|
+| Operator collector runtime | Replace `control_plane/collect_inventory.py` and `monitor_inventory.py`; add `control/friends/pseudonyms.py` at that runtime root. Set `FC_PSEUDONYM_ALIASES` to its `.local/pseudonym-aliases.json`, owned by the operator,0600. Replace only its existing `.local/inventory-hmac.key`. |
+| RU chat-sync | Replace `friends-access/app/control/friends/support.py`; add `app/control/friends/pseudonyms.py`. Place the same manifest at `friends-access/pseudonym-aliases.json`, root-owned0600. Replace only `friends-access/support-inventory-hmac.key`. |
+| RU forced-command reader | Replace `friends-access/support-bindings-read.py`; add the same module as `friends-access/pseudonyms.py`, root-owned and not group/world writable. Keep `subscription_events.py`, its canonical IDs and the forced-command SSH restriction unchanged. |
+| Local root support/notification collectors | Replace `/opt/family-connect-support/app/provisioning/support_bindings.py`; add `control/friends/pseudonyms.py` beneath that app root. Set `FC_PSEUDONYM_ALIASES` in both existing collector units. |
+| Local support owner | Replace only `provisioning/support_worker.py`; use `/etc/family-connect-support/pseudonym-aliases.json`, owned by `fc-support`,0600, for the owner and the root collectors. No store/chat key replacement. |
+| Console importers | Use qualified image `fc-hmac-alias:20261115-prep` with the two importer changes and alias module. Mount a separate0600 copy owned by the measured console UID/GID10001:10001 at `/run/fc-pseudonym-aliases.json` read-only; set `FC_PSEUDONYM_ALIASES` to that container path. No SSH keys, registry access or HMAC key mount. |
+
+Use explicit systemd environment drop-ins and the current compose overrides; retain
+the actual previous configuration and permissions privately. Check each service's
+effective manifest generation/digest without printing its contents. Confirm the
+console UID again if the accepted image changes. Operator and RU key bytes must
+compare equal in-process; manifests must match on all consumers. Never include key
+bytes or private mapping content in command arguments, logs or the source package.
+
+### Ordered cutover / Порядок
+
 1. Refresh installed-source/image/key-copy equality checks and free-space checks.
    Confirm scope still matches the receipt. Obtain fresh encrypted backups and
    preflight restorations. Do not continue after unexpected runtime drift.
@@ -73,9 +104,13 @@ isolated steady-state rehearsal.
    import/monitor lock to finish. Stop scheduling local system
    `family-connect-support-bindings.timer` and
    `family-connect-subscription-notifications.timer`; wait for active oneshots.
-   Block new support-send IPC while draining `family-connect-support.service`
-   with its normal SIGTERM/40-second stop budget. Abort on incomplete drain;
-   never kill a sender to force the switch. Existing outbox/requests remain saved.
+   Block new console IPC by temporarily restricting the existing worker socket to
+   owner-only access, recording its original mode. Send SIGTERM to the support
+   service's main process and observe its normal delivery close for at most40s.
+   Do not start a stop job that would automatically SIGKILL on timeout. Require
+   clean inactive/exit0 and a released store lock; if draining is incomplete,
+   abort the switch without force-killing the sender. Existing outbox/requests
+   remain saved. The normal restart recreates the socket with its original access.
 3. Pause RU `family-connect-chat-sync.timer` and wait for its current oneshot to
    finish. Do NOT stop VPN, AWG, TCP, MESH, HTTP admission or paid reconciliation.
    Do not reset subscription baseline/cursor. Chat binding leases may temporarily

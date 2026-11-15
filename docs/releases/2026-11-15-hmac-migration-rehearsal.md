@@ -1,6 +1,7 @@
 # HMAC migration preparation — 15 November2026
 
-**NOT_SWITCHED. Metadata NOT_DEPLOYED / beta126 NOT_PUBLISHED.**
+**HMAC PREPARATION QUALIFIED FOR OWNER REVIEW; NOT_SWITCHED.**
+**Metadata NOT_DEPLOYED / beta126 NOT_PUBLISHED.**
 Preparation is part of draft PR38, based on remote main53a780d9. It is not permission
 to deploy the whole PR or main. [Exact proposed switch/recovery plan](../operators/hmac-generation.md).
 
@@ -20,6 +21,8 @@ blobs,33 scoped preparation logs/receipts and all members of8 known ZIP/APK/PYZ
 artifacts (no oversized member omitted). This is a bounded scan, not a claim about
 all remote CI logs or every file on the laptop. No mapping, key or private matched
 line is committed. No broad log deletion or Git history rewrite was performed.
+Final reachable-Git rescan after source61b00409 and its CI merge checks12,173 blobs:
+0 matches for either the old or prepared replacement key (raw/hex/base64).
 
 ## Installed boundary and protected copies
 
@@ -38,6 +41,9 @@ area. A duplicate derived row-export encryption hit the local disk bound; only t
 incomplete duplicate was removed. Complete encrypted canonical/support/PG backups
 were retained and checked; no original backup was deleted. No giant derived export
 is needed for recovery. Recheck space before any additional staging.
+All six encrypted round trips compare exactly in-process: canonical registry,
+support store, support encryption key, panel dump, replacement HMAC key and aliases.
+Neither plaintext key nor private mapping is included in a public receipt/artifact.
 
 ## Complete reference coverage
 
@@ -68,6 +74,9 @@ times. No unresolved legacy record was found in these checked domains. The tool
 explicitly marks missing history `legacy_unresolved` and blocks missing critical
 references rather than guessing matches. Active/pending coverage must be refreshed
 under the final bounded pause, not inferred from this table indefinitely.
+An additional scan of32 other PostgreSQL tables found0 extra known-HMAC references
+and0 unmapped named pseudonym fields. FK-linked rows, users/passwords and canonical
+notification records are not relabelled. This does not replace the final delta scan.
 
 ## Rehearsal and limits
 
@@ -96,6 +105,41 @@ under the final bounded pause, not inferred from this table indefinitely.
   accepted61e4df54. Candidate SHA256:
   `e44c342383f53feea8414f51033264079b7bfa86247c0b69e8dda2ad2510245d`.
   This is a prepared image, not a running production version.
+- The exact minimal image's real `import_subscriptions` command also passes:
+  original snapshot/event counts and digests remain,0 event duplicates. It appends
+  one ordinary `subscriptions.attempt` audit record, as the existing command should;
+  this legitimate attempt is not a historical rewrite or suppressed audit.
+- Repeated support replay using the minimal worker overlay over the actually
+  installed support app passes with the same7 pins/16 records/2 requests, preserved
+  baseline/cursor and restart,0 sends. Only the new HMAC key and alias manifest are
+  mounted; old HMAC material is absent from that isolated runtime.
+-167 additional metadata/GeoIP/support HTTP/paid125/policy/boundary/overlay tests
+  PASS using the existing locked environment. These are compatibility checks, not
+  admission of126 or a substitute for installed Android end-to-end qualification.
+
+The isolated real-copy PostgreSQL instance was stopped after these checks. The
+original encrypted backups, candidate key/manifest and bounded receipts remain in
+the private operator area. Production console/PostgreSQL remain running unchanged.
+
+Source61b00409e24b92651678b817d2a6f5d4796948f9 is committed and pushed. Minimal
+eight-file delta SHA256:
+`828ad17a43435605e1e8f2cf0549662b00348abe565b54f1aa8da89c1971e65a`.
+All baseline pins are checked before applying that delta; its zero-context result
+was compared byte-for-byte with a context-checked patch over the same accepted
+baseline. No entire main/PR archive is installed. Own review5908648910 explicitly
+means self-review, not independent approval. Documentation receipts have a separate
+head from this source; PR38 remains draft and there is no merge head or release tag.
+
+Hosted full Python/Cargo job132667962357 passes on source61b00409. Its complete
+context inventory covers6337 tests: standard:5705 PASS/276 explicit SKIP, root:258
+PASS, snapshot314:98 PASS;356 standard deselections run in the latter contexts.
+The receipt reports coverage_pass=true and no failed/error IDs. PR test-merge
+918191db7510973edae32e35db02cdef21df4acf has the same tree as source61b00409:
+`d4568dc5923facedcd52573c1e8ec46f170e26a9`. This temporary CI merge is not a merge
+into main. Artifact14143296602 SHA256:
+`7aa421f6f30c785c7cb9e2f99cd0c6e01014a816ac8c50fa5ecbce1365851b12`.
+The separate phase0 failover job132667962562 also passes; the complete phase0
+run43666831501 is successful. Android matrix results remain separately recorded.
 
 Recovery keeps new data/key/aliases; finish the missing consumer or deploy compatible
 alias-aware code. No old-DB restore and no automatic old-key reactivation. See the
@@ -111,6 +155,46 @@ synthetic fd79:fc::1 endpoint. Neither is a full Android CI PASS; a standard job
 rerun is requested without dropping tests or changing assertions. Phase0, panel,
 Linux control, paid and readiness contexts pass on419279c8; final source qualification
 is tracked separately from these earlier results.
+
+On source61b00409, job132667993489 compiles and runs99 debug/Friends instrumented
+cases without failures, including all three `TechnicalMetadataRuntimeTest` methods
+in both variants on API35. Thus real Build/network/radio-fallback/consent assertions
+have Android instrumentation evidence, not just the20 JVM tests. The later separate
+per-app harness fails1 of10 cases: `independentUidsUseRealBuildersAndTraffic`,
+`AppVpnRuntimeTest.route:49`, DNS lookup timeout8000ms despite successful VPN TCP
+IPv4/IPv6 TLS traffic. No assertion is removed or relaxed. Artifacts14143203828 and
+14143418160 retain the bounded evidence. A standard exact-source Android rerun is
+requested. Android/native/harness/workflow paths are byte-identical between419279c8
+and61b00409; that observation does not substitute for a successful current-head job
+or prove a root cause for the intermittent DNS failure.
+
+The unchanged419279c8 Android job132666741992 (run43664069230, attempt2) now
+passes the complete standard API35/27 transport/Friends and API28/31 per-app matrix.
+This confirms the correction beyond JVM/compilation. The earlier failed attempts
+remain part of the record. Exact-head61b00409 rerun job132675960943 also completes
+SUCCESS, including API35/27/28/31 and the per-app assertions. Run43666831505 attempt2
+is successful with no failed steps. No source/assertion change was made for reruns.
+
+Final applicable source61b00409 contexts:
+
+| Context | Run | Result |
+|---|---:|---|
+| Full Python/Cargo + failover | 43666831501 | PASS |
+| Client builds / Android full matrix | 43666831505 attempt2 | PASS |
+| Paid Android release compatibility | 43666831450 | PASS |
+| Readiness wire contract | 43666831474 | PASS |
+| Control panel | 43666831482 | PASS |
+| Subscription notification route | 43666831483 | PASS |
+| Linux control preview | 43666831529 | PASS |
+| Linux voice / messenger / internal candidate | 43666831489 /43666831471 /43666831495 | PASS |
+| Explicit support runtime contracts + closed kit + panel | 43672504816 | PASS |
+
+The last run uses the existing `/qualify-support-runtime` automation command
+(review5908843075), not independent approval. Jobs132685440944/132685441145 pass;
+support-android is intentionally not selected by this runtime-only command. The
+separate standard Android matrix above supplies instrumentation qualification.
+Subsequent documentation-only head checks are separate; these results qualify the
+exact source/overlay, not any later unexamined source or a production release.
 
 Original public125 remains immutable and published. Its ARM64 library raises SIGILL
 in `golang.org/x/sys/cpu.getisar0.abi0` on the x86_64 translation bench after normal

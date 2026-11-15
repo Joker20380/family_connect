@@ -8,24 +8,27 @@ implement generation-aware device/event aliases, prove complete coverage and iso
 restore/replay/delta recovery. Production key switch requires a completed rehearsal
 report and a separate owner confirmation; do not reactivate the disclosed key on rollback.
 Real-copy coverage and isolated support/panel rehearsals pass; private mappings are
-not published. Qualify the minimal source/image overlay and final hosted contexts,
-then request only the bounded [generation switch](operators/hmac-generation.md).
+not published. Minimal source/image overlays pass real-copy replay/import and
+source61b00409 applicable hosted contexts PASS; request only the bounded
+[generation switch](operators/hmac-generation.md).
 No paid/HTTP/VPN archive replacement is needed for this rotation; PR38 delivery is
 still independent and NOT_USER_READY. [Receipt](releases/2026-11-15-hmac-migration-rehearsal.md).
-Android non-public test mutators corrected;20 JVM checks PASS, new CI pending.
+Android non-public test mutators corrected;20 JVM checks and419279c8 full hosted
+Android matrix PASS on rerun. Source61b00409 also completes the full API35/27/28/31
+matrix on exact-head rerun132675960943. Earlier failed attempts remain recorded.
+Source61b00409 full Python/Cargo and failover CI PASS with
+all6337 tests assigned to their normal contexts; explicit276 skips retained.
 Original public125 ARM64 crashes under x86_64 translation; preserve immutable125
 and qualify upgrade on compatible ARM64 rather than rebuilding the accepted APK.
-First source checkpoint implements versioned API and revocation/retention security;
-82 focused checks PASS/14 integration SKIP. Android/GeoIP/projection/release remain.
-Projection/collector/object UI source now passes306 local panel checks; runtime
-delivery, Android and GeoIP still pending. Draft PR38 is not completion of this task.
-Android successor source candidate126 is reserved, not signed or distributed;
+Versioned API, consent/revoke/retention, Android observations, GeoIP candidate and
+collector/object UI/filter source are prepared, not deployed. Draft PR38 is not
+completion of this task. Android successor source candidate126 is reserved;
+CI test builds are not a qualified release-signed or distributed artifact;
 exact APK descriptor/payment policy and125→126 upgrade remain release gates.
-Local GeoIP/updater/projection source tests now pass47+315; actual installed-client
-and production peer enrichment still NOT_OBSERVED. Fixing source CI compilation/
-packaging failures precedes any signing or deployment; no acceptance waiver.
-Hosted panel/paid/readiness pass on d89cd292; gateway serialization/race follow-up
-retains19 JVM tests. Android/full CI and125→126 installed E2E remain open gates.
+Controlled local GeoIP IPv4/IPv6 lookup passes; actual installed-client/production
+peer enrichment remains NOT_OBSERVED. RU/AWG source does not qualify NL/TCP or
+MESH city attribution. Keep unavailable/aged semantics, not gateway geography.
+Complete exact source/platform CI before signing/deployment; no acceptance waiver.
 Implement separately consented, identity/content-bound technical observations,
 bounded latest-only retention/revocation, honest underlay and IP provenance, local
 GeoIP, collector/importer and production device UI, then qualify a new immutable
@@ -40,14 +43,16 @@ Do not call source preparation a user-ready rollout. No unrelated queued success
 [Implementation and delivery receipt](releases/2026-11-15-device-technical-metadata.md).
 Preparation checkpoint: baseline-derived HTTP overlay/TLS42PASS, synthetic panel
 1440/390px PASS, public125 installed only on the isolated NVIDIA/KVM testbed.
-Android permission/legacy allowlist corrections are prepared; await exact new-source
-CI, then APK qualification, backups/restore, minimal rollout and public delivery.
+Android permission/legacy allowlist corrections pass exact-source CI; APK
+qualification, fresh backups/restore, minimal rollout and public delivery remain.
 Preparation backups/isolated SQLite paid projection and network-isolated PostgreSQL
 restore PASS; refresh baseline immediately before any switch. Capacity/privacy
 follow-up is qualified locally, not a deployed API or installed/public126.
 New-source gate also includes API30 ownerUid correction and panel log-query privacy.
-The isolated125 bench is being enrolled through the ordinary referral/identity path;
-no phone action or real payment/expiry mutation is part of this preparation.
+The isolated125 bench was activated through the ordinary referral/identity path;
+its incompatible ARM64 translation fails before126 installation. Own unused
+emulator/devserver/test databases are stopped; private state/evidence retained.
+No phone action, real payment/expiry mutation or user message is part of preparation.
 
 **Selected correction qualified: attribution failure-publication / PR37.**
 Deterministic empty/partial interprocess reproduction and atomic positive-fixture

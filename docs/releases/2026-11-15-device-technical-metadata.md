@@ -293,8 +293,9 @@ This is NOT the deployed panel. Preserve that preparation image and source recei
 apply the separately qualified query-free access-log command during deployment.
 # Continuation: incident preparation and Android public test APIs
 
-The preceding session exposed an inventory-HMAC value in tool output. Scope is
-under investigation; this is not evidence of public disclosure. Values, mapping
+The preceding session exposed an inventory-HMAC value in tool output. Bounded
+local/Git/artifact checks are recorded in the HMAC receipt; they do not establish
+public disclosure or attest every external log. Values, mapping
 tables and private matched lines must not be emitted or committed. No production
 key switch is authorized until a successful compatible migration rehearsal report
 is presented and the owner confirms the concrete cutover.
@@ -315,3 +316,12 @@ NOT_OBSERVED; a compatible ARM64 environment is required, not a rebuilt125.
 HMAC containment, full reference coverage and isolated replay now have a separate
 [preparation receipt](2026-11-15-hmac-migration-rehearsal.md). No production key switch
 or metadata deployment is implied by that preparation.
+Source61b00409e24b92651678b817d2a6f5d4796948f9 now passes applicable hosted contexts,
+including the full Android API35/27/28/31 matrix on rerun132675960943 and explicit
+support-runtime/closed-kit qualification43672504816. Earlier failed DNS attempts
+are retained in the receipt. The metadata runtime tests use actual public Android
+observations; no hidden API or instrumentation waiver. HMAC baseline overlays and
+real-copy recovery are qualified for a separate owner decision, not installed.
+Production metadata and release-signed126 remain absent;125→126 preservation on
+compatible ARM64, exact paid descriptor, installed end-to-end chain and public
+catalog/invitation publication are still required. Own unused benches are stopped.

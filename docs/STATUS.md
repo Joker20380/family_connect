@@ -1,53 +1,48 @@
 # Текущее состояние / Current state
 
 **15 November — DEVICE-TECHNICAL-METADATA-1 / IN_PROGRESS, NOT_DEPLOYED.**
-Continuation gate: HMAC disclosure containment and compatible generation/alias
-migration rehearsal BEFORE any production key switch. No cutover authorized yet.
+Continuation: HMAC containment and compatible generation/alias preparation is
+qualified for owner review. Production key switch still requires confirmation;
+no cutover authorized or performed yet.
 Protected real-copy coverage:66 canonical devices/4 canonical events, all checked
 stored references mapped,0 missing/conflicts. Restored support replay/pins and panel
 event/card continuity pass without historical rewrites or an old runtime HMAC key.
-70 focused source/support +48 panel checks PASS. Generation source/plan is prepared,
-not installed; [rehearsal and bounds](releases/2026-11-15-hmac-migration-rehearsal.md).
+70 focused source/support +48 panel +167 compatibility checks PASS. Six encrypted
+backup round trips and the exact minimal support/panel overlays PASS in isolation.
+Generation source61b00409/plan is prepared, not installed;
+[rehearsal and bounds](releases/2026-11-15-hmac-migration-rehearsal.md).
 Android job132651608837 failed on non-public NetworkCapabilities test mutators;
 replaced with exhaustive pure classification and real public Android observations.
-20 JVM tests PASS; instrumentation/hosted Android remain separate pending gates.
+20 JVM tests PASS; source419279c8 Android full matrix PASS on rerun132666741992.
+Source61b00409 Android full matrix also PASS on exact-head rerun132675960943,
+including API35/27/28/31. Earlier per-app DNS failures remain recorded, not hidden.
+Source61b00409 full Python/Cargo CI passes:6337-test context inventory covered,
+6061 PASS/276 explicit SKIP. Separate failover, panel, paid, readiness, notifications,
+Linux contexts and explicit support-runtime/closed-kit CI43672504816 also PASS.
 Public125 activated on the isolated x86_64 bench, but its original ARM64 native
 library faults in CPU detection under translation;125→126 is NOT_OBSERVED.
 Owner-selected product task: explicit new consent, latest technical device/network
 observations, production panel and compatible public Android successor to125.
-First source checkpoint: versioned body-bound API, revocation epochs, bounded
-latest-only seven-day storage;82 local checks PASS/14 explicit integration skips.
-Android/GeoIP/panel/release delivery remain unfinished; no user-ready claim.
-Panel source projection/collector and production-object templates now implemented;
-306 local panel checks PASS. Not deployed; city/ASN and Android remain unfinished.
+Prepared product source includes body-bound versioned API, consent/revocation
+epochs, latest-only seven-day storage, Android observation/events, collector and
+panel projections/filters. None of these new runtime components is deployed.
 Draft PR38 tracks preparation only; do not merge it as completed product delivery.
 Android source now reserves0.1.18-beta126/code126 for the new separate consent path;
-NOT_BUILT / NOT_SIGNED / NOT_INSTALLED / NOT_PUBLISHED. Public125 remains unchanged.
-GeoIP source checkpoint: local official DB-IP Lite2026-11 City/ASN pair, bounded
+CI builds test artifacts, but no immutable release-signed126 is qualified,
+installed or published. Public125 remains unchanged.
+GeoIP candidate: local official DB-IP Lite2026-11 City/ASN pair, bounded
 atomic updater and identity→AWG public-key→recent peer binding; raw IP never exported.
-47 focused metadata/GeoIP and315 panel checks PASS locally; controlled IPv4/IPv6
-lookup succeeds (not a real-device location proof). Android compile and packaging
-errors on30f68b69 are corrected in source, pending new CI; prior panel CI also exposed
-an unrelated midnight-window fixture failure. No production changes or APK yet.
-Source d89cd292: hosted panel43657720733, paid43657720741 and readiness43657720823
-PASS; Android/full suites still pending. Follow-up fixes canonical RU gateway
-serialization and cross-session sampling;19 JVM checks PASS. Isolated NVIDIA/KVM
-API35 testbed prepared; public125 full HTTPS bytes/signer/catalog8 verified anew.
-Public125 is installed on that isolated testbed (not yet activated/upgraded).
-Baseline-derived HTTP overlay:42 checks PASS/1 explicit pinned-sync skip, including
-real nginx/TLS and forged ingress headers; synthetic panel1440/390px PASS.
-Source46a8686a panel/paid/readiness PASS. Android lint and one full-suite allowlist
-source assertion still fail; delivery remains NOT_DEPLOYED / NOT_USER_READY.
-Source repair uses only Android33+ normal READ_BASIC_PHONE_STATE for radio (older
-Android falls back explicitly); preserves the old service allowlist verbatim with
-one exact additional endpoint. New hosted Android qualification is still required.
-Capacity/privacy follow-up: metadata-only transient64MiB bound (inventory4MiB
-unchanged), no nginx metadata access/error IP logs;19 projection/14 monitor/3 TLS
-checks PASS. Consistent canonical registry and panel backups restored in isolation;
-encrypted off-host copies retained privately. No production code/database switch.
-Hosted5d7be0a2 resolves radio permission lint but exposes ownerUid's API30 minimum;
-the guard is corrected (not suppressed). Metadata filter query strings/peer IP are
-excluded from proposed panel access logs;20 projection and5 packaging checks PASS.
+Controlled IPv4/IPv6 lookup succeeds; real installed-device city is NOT_OBSERVED.
+Only RU/AWG provenance is prepared. NL/TCP and MESH lack a qualified direct peer
+observation; report unavailable or a separately aged previous observation.
+Earlier checkpoint tests/repairs are in the dated delivery report, not active
+simultaneous failures. The metadata TLS/panel overlays and1440/390px rendering have
+isolated checks, not production acceptance. Old support body/paid access remain.
+Unused own emulator5590, Django18769, synthetic PostgreSQL55439 and the isolated
+real-copy HMAC PostgreSQL are stopped. Private evidence/AVD data/backups retained.
+Next gates: obtain explicit bounded HMAC-cutover approval and refresh final delta;
+separately qualify release signature, compatible ARM64 in-place upgrade,
+exact paid descriptor and installed APK→API→collector→production panel delivery.
 Remote main verified53a780d9ccfcdb2c3ec6141a197917190f9be7a5 (PR37 merged).
 Dirty/diverged primary checkout preserved; isolated feature worktree starts at that
 main. Public125/catalog8 and paid108/119/123/125 remain unchanged; no new APK or
