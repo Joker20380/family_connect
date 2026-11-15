@@ -3,8 +3,9 @@
 ## State
 
 Android source candidate:0.1.18-beta126/code126, package remains
-com.familyconnect.app.friends. NOT_BUILT / NOT_SIGNED / NOT_INSTALLED /
-NOT_PUBLISHED; no APK/source hash exists yet. Public125/catalog8, invitation routes
+com.familyconnect.app.friends. CI_UNSIGNED_BUILT / NOT_SIGNED / NOT_INSTALLED /
+NOT_PUBLISHED. The current artifact receipt below supersedes the historical
+not-built checkpoints. Public125/catalog8, invitation routes
 and accepted paid108/119/123/125 remain unchanged. Never publish a rebuilt125.
 
 IN_PROGRESS / NOT_DEPLOYED / NOT_USER_READY. This is the selected product work,
@@ -15,6 +16,36 @@ baseline, not qualification of this change. No delegated agents.
 Remote main53a780d9ccfcdb2c3ec6141a197917190f9be7a5 verified by fetch. Primary
 checkout8937e71e has unrelated modified/untracked files and diverged history;
 all preserved. Worktree branch: feature/device-technical-metadata-20261115.
+
+## Post-recovery delivery preparation
+
+Starting documentation headc5a2a9ce, remote main53a780d9. The separate RU recovery
+receipt is accepted, not rerun. Fresh runtime readback confirms HTTP617c7d75,
+reconciler40e1d721 and node125c796a, unchanged running transport PIDs/restarts0,
+active support and the generation2 panel imagee44c3423. A guessed inactive HTTP unit
+was discarded; actual family-connect-friends-http-candidate.service/PID325012 serves
+friends-http.pyz. No transport or watcher mutation is part of this continuation.
+
+CI run43666831505/attempt2 artifact14144443841 was downloaded and its GitHub ZIP
+digest verified: `a3006b0ba81e4be356bbde38ff0dee174377b6ea87f6ba7a8ad2c7204ff52dcd`.
+The unsigned ARM64 APK is50,458,905bytes, SHA256
+`645ef3970cd1264c8d24237752319cb454184fe6fa2ce8cbb6a9ed8a1c2822b1`.
+Package/code/version126, minSDK27 and16KiB ZIP alignment pass. Build receipt source
+is PR test-merge918191db7510973edae32e35db02cdef21df4acf, tree-equivalent to qualified
+head61b00409, NOT a main merge. Android/native source has no subsequent changes.
+No ADB device is currently connected; the mandatory original125→126 preservation
+and real signed installed APK chain remain NOT_OBSERVED. No incompatible emulator
+is started and public125 is not rebuilt.
+
+`scripts/package_metadata_panel_overlay.py` pins the actual generation2 image,
+six replaced preimages and three preserved alias/importer modules. It refuses an
+unknown image/preimage, existing metadata or output reuse. Fourteen metadata files
+and the query-free Gunicorn command produce candidate image
+`sha256:5ae92f8c7775d2ff0ad26627f6cdfcda53a3d4193a08b9fe1de1e89f32c432da`.
+Full extracted `/app` comparison preserves all232 unrelated files byte-for-byte;
+current metadata importer unseals the generation-aware envelope. Thirteen focused
+HTTP/panel packager checks pass. This candidate is not installed and does not change
+production Compose, secrets, mounts, migrations or volumes by itself.
 
 ## Observed ingress and deployment boundary
 

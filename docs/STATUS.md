@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**15 November — metadata delivery resumed on the accepted RU/HMAC2 base.**
+DEVICE-TECHNICAL-METADATA-1 remains selected. Fresh readback confirms the accepted
+HTTP617c7d75/reconciler40e1d721/node125c796a and active unchanged RU transport PIDs;
+panel remains alias-aware e44c3423, support active, generation2 manifest unchanged.
+Qualified CI ARM64 beta126 is downloaded and verified unsigned; signing,125→126
+on compatible ARM64 and installed production chain remain mandatory. No ADB device
+is connected. The new fourteen-file panel overlay preserves all232 other application
+files, including inventory/subscription importers and pseudonyms;13 packager checks
+pass. This is independent preparation, not a metadata deployment/public release.
+[Current delivery receipt](releases/2026-11-15-device-technical-metadata.md).
+
 **15 November13:03–13:07UTC — RU RECOVERED_CAUSE_OPEN.**
 Owner separately authorized controlled restoration after diagnosis. Fresh27-table
 registry backup/isolated restore and all three paid projections pass; encrypted

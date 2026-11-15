@@ -2,6 +2,14 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Selected now: DEVICE-TECHNICAL-METADATA-1 delivery.** Accept the completed RU
+recovery below and HMAC generation2 without repeating either stage. Qualify and
+deploy only metadata deltas over those actual runtime pins, preserve aliases and
+existing paid descriptors, then complete signed126/ARM64125→126/installed production
+chain before optional public release. Unsigned CI artifact and generation2 panel
+overlay are prepared; absence of a connected compatible device is not a PASS.
+No observer/recovery successor is selected. See the current metadata receipt.
+
 **RU-INCIDENT-20261115 — authorized recovery complete, RECOVERED_CAUSE_OPEN.**
 First failure retained: local TCP engine-query timeout, not a demonstrated fsync
 failure. Separate owner permission obtained. Fresh27-table restore/paid projection
