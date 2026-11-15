@@ -1,6 +1,8 @@
 # HMAC generation cutover / Смена поколения псевдонимов
 
-**Preparation only. No production key switch is authorized by this document.**
+**The owner approved the bounded production switch on15 November2026**, referencing
+source61b00409 and documentationca076b7e. This document does not itself authorize
+other deployments. [Cutover receipt](../releases/2026-11-15-hmac-generation2-cutover.md).
 Scope: the pseudonymization key, NOT device identity, chat/store encryption,
 payment credentials, VPN keys or Android signing. PR38 metadata delivery remains
 separately gated. [Rehearsal receipt](../releases/2026-11-15-hmac-migration-rehearsal.md).
@@ -68,13 +70,14 @@ new-generation qualification; rotation creates no payment/expiry authorization.
    interface. Mount no old HMAC key. Retain receipts for replay, restart, card/event
    deduplication and partial activation rejection, plus synthetic pending/ACK tests.
 
-## Proposed production switch / Предлагаемый порядок
+## Production switch / Порядок переключения
 
-**Requires a separate owner confirmation referencing the qualified receipt/source.**
+The separate owner confirmation applies only to the qualified HMAC overlay,
+aliases and two pseudonymization keys, not the metadata release or whole PR38.
 
 ### Exact consumer placement / Размещение
 
-These are proposed destinations, not a claim they are installed. Use the qualified
+These are intended destinations; the cutover receipt records actual installation. Use the qualified
 overlay from source61b00409, checking every current input against the baseline
 manifest before replacing a file. Never copy the entire source tree into production.
 
@@ -104,12 +107,18 @@ bytes or private mapping content in command arguments, logs or the source packag
    import/monitor lock to finish. Stop scheduling local system
    `family-connect-support-bindings.timer` and
    `family-connect-subscription-notifications.timer`; wait for active oneshots.
-   Block new console IPC by temporarily restricting the existing worker socket to
-   owner-only access, recording its original mode. Send SIGTERM to the support
+   Require `/run/family-connect-support/worker.sock` to exist as the expected
+   owner-owned socket before stopping. Block new console IPC by temporarily
+   restricting that socket to owner-only access, recording its original mode,
+   owner and inode. Send SIGTERM to the support
    service's main process and observe its normal delivery close for at most40s.
    Do not start a stop job that would automatically SIGKILL on timeout. Require
-   clean inactive/exit0 and a released store lock; if draining is incomplete,
-   abort the switch without force-killing the sender. Existing outbox/requests
+   clean inactive/exit0, a released existing support-store lock and disappearance
+   of `worker.sock` by the worker's normal cleanup within that same window.
+   Exit0 alone is insufficient: `main()` can exit without a successful
+   `delivery.close()`. Never unlink the socket manually to manufacture a PASS.
+   If any condition is missing, abort before switching keys or installing overlays,
+   record all conditions separately and do not force-kill the sender. Existing outbox/requests
    remain saved. The normal restart recreates the socket with its original access.
 3. Pause RU `family-connect-chat-sync.timer` and wait for its current oneshot to
    finish. Do NOT stop VPN, AWG, TCP, MESH, HTTP admission or paid reconciliation.
@@ -141,6 +150,18 @@ bytes or private mapping content in command arguments, logs or the source packag
    can then resume normal processing; old excluded history stays excluded.
 
 ## Recovery / Восстановление без потери новых данных
+
+Before any key/code switch, an incomplete worker drain is a **BLOCKED** cutover,
+not a successful generation change. Leave both active key copies unchanged. If the
+owner process is still running, restore only the recorded socket access (after
+checking the same socket owner/inode) and resume the previous collectors/timers;
+never launch a second owner. If it exited, confirm the unit has no remaining
+processes and the store lock is released before an ordinary restart of the
+unchanged service. Its existing startup owns stale-socket validation/replacement;
+that recovery is not evidence of successful shutdown cleanup. Refresh the existing
+bindings/feed with the original cursor before normal operation. If ownership or
+lock safety is uncertain, preserve the bounded pause and report that specific
+condition. Do not delete the socket by hand or reset the baseline.
 
 If distribution stops between consumers, leave automatic collection/publication
 paused, retain both databases, the new key and the same candidate manifest, and

@@ -5,12 +5,15 @@
 **DEVICE-TECHNICAL-METADATA-1 — SELECTED / implementation in progress, 15 November.**
 Current preparation: contain disclosed inventory HMAC, inventory all consumers,
 implement generation-aware device/event aliases, prove complete coverage and isolated
-restore/replay/delta recovery. Production key switch requires a completed rehearsal
-report and a separate owner confirmation; do not reactivate the disclosed key on rollback.
+restore/replay/delta recovery. The owner approved the narrow production switch on
+15 November using source61b00409/documentationca076b7e; fresh checks and the stricter
+worker-cleanup gate precede activation. Do not reactivate the disclosed key on rollback.
 Real-copy coverage and isolated support/panel rehearsals pass; private mappings are
 not published. Minimal source/image overlays pass real-copy replay/import and
-source61b00409 applicable hosted contexts PASS; request only the bounded
+source61b00409 applicable hosted contexts PASS; execute only the approved bounded
 [generation switch](operators/hmac-generation.md).
+Track actual activation in the [cutover receipt](releases/2026-11-15-hmac-generation2-cutover.md),
+not the historical rehearsal counts.
 No paid/HTTP/VPN archive replacement is needed for this rotation; PR38 delivery is
 still independent and NOT_USER_READY. [Receipt](releases/2026-11-15-hmac-migration-rehearsal.md).
 Android non-public test mutators corrected;20 JVM checks and419279c8 full hosted

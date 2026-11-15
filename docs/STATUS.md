@@ -1,9 +1,11 @@
 # Текущее состояние / Current state
 
 **15 November — DEVICE-TECHNICAL-METADATA-1 / IN_PROGRESS, NOT_DEPLOYED.**
-Continuation: HMAC containment and compatible generation/alias preparation is
-qualified for owner review. Production key switch still requires confirmation;
-no cutover authorized or performed yet.
+Continuation: the owner approved the narrow HMAC generation2 switch using
+source61b00409/documentationca076b7e. Fresh preflight and isolated restore pass;
+the cutover has not yet occurred at this checkpoint. Worker shutdown additionally
+requires normal socket disappearance, not merely exit0.
+[Current cutover receipt](releases/2026-11-15-hmac-generation2-cutover.md).
 Protected real-copy coverage:66 canonical devices/4 canonical events, all checked
 stored references mapped,0 missing/conflicts. Restored support replay/pins and panel
 event/card continuity pass without historical rewrites or an old runtime HMAC key.
