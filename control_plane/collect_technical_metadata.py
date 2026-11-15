@@ -10,6 +10,7 @@ import subprocess
 import sys
 
 from collect_inventory import BASE, ssh_command
+from control.friends.pseudonyms import seal
 
 MAX_EXPORT_BYTES = 64 * 1024 * 1024
 
@@ -44,7 +45,7 @@ def collect(known_hosts=None, base=BASE, run=subprocess.run):
         if not isinstance(device, str) or not re.fullmatch('[0-9a-f]{32}', device):
             raise ValueError('Invalid device binding')
         row['pseudonym'] = hmac.new(key, device.encode(), hashlib.sha256).hexdigest()
-    raw = json.dumps(data, ensure_ascii=False, allow_nan=False).encode()
+    raw = json.dumps(seal(data, 'technical_metadata', key), ensure_ascii=False, allow_nan=False).encode()
     if len(raw) > MAX_EXPORT_BYTES:
         raise ValueError('Metadata projection bound exceeded')
     return raw

@@ -411,7 +411,8 @@ def test_revocation_event_and_grace_supersede_waiting_deadline(route):
     assert 'Доступ отозван' in owner.notifications.jobs()[-1]['text']
 
 
-def test_real_mailbox_isolated_route_restart_offline_ack_and_no_chat_entitlement(route, tmp_path, chat_runtime):
+@pytest.mark.parametrize('rotate', [False, True])
+def test_real_mailbox_isolated_route_restart_offline_ack_and_no_chat_entitlement(route, tmp_path, chat_runtime, monkeypatch, rotate):
     registry, second, owner, clients, bindings = route
     cycle(route)
     pay(registry)
@@ -420,6 +421,9 @@ def test_real_mailbox_isolated_route_restart_offline_ack_and_no_chat_entitlement
     before = snapshot(registry[0])
     jobs = owner.notifications.jobs()
     keys = [job['request_id'] for job in jobs]
+    if rotate:
+        from messenger.tests.test_pseudonym_rotation import rotation
+        rotation(route, tmp_path, monkeypatch)
     root = tmp_path / 'support'
     owner.store.close()
     store = SupportStore(root, b's'*32, create=False)

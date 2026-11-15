@@ -9,6 +9,7 @@ import stat
 import subprocess
 import tempfile
 import time
+from control.friends.pseudonyms import unseal
 
 
 def limit_output():
@@ -37,7 +38,8 @@ def collect(host, key, known_hosts, output, *, command='support-bindings'):
             raise ValueError('Binding projection unavailable')
         response.seek(0)
         raw = response.read(512 * 1024 + 1)
-    document = json.loads(raw)
+    document = unseal(json.loads(raw), 'support' if command == 'support-bindings' else 'notifications')
+    raw = json.dumps(document, separators=(',', ':')).encode()
     if (type(document) is not dict or type(document.get('expires_at')) is not int
             or not time.time() < document['expires_at'] <= time.time() + 120):
         raise ValueError('Fresh projection required')

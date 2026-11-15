@@ -10,6 +10,7 @@ import tempfile
 from messenger.support import validate
 from .chat import ChatAccess
 from .chat_publishers import unique
+from .pseudonyms import load as load_aliases, seal
 
 
 def load(path):
@@ -102,6 +103,9 @@ def publish(access, root, node):
             raise ValueError('Private existing inventory HMAC key required')
         key = stream.read(33)
     document = bindings(access, key, root / 'chat-support.json', node)
+    aliases_path = root / 'pseudonym-aliases.json'
+    if aliases_path.exists():
+        document = seal(document, 'support', key, load_aliases(aliases_path))
     descriptor, temporary = tempfile.mkstemp(prefix='.support-bindings-', dir=root)
     try:
         with os.fdopen(descriptor, 'w') as stream:

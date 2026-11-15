@@ -7,6 +7,11 @@ Current preparation: contain disclosed inventory HMAC, inventory all consumers,
 implement generation-aware device/event aliases, prove complete coverage and isolated
 restore/replay/delta recovery. Production key switch requires a completed rehearsal
 report and a separate owner confirmation; do not reactivate the disclosed key on rollback.
+Real-copy coverage and isolated support/panel rehearsals pass; private mappings are
+not published. Qualify the minimal source/image overlay and final hosted contexts,
+then request only the bounded [generation switch](operators/hmac-generation.md).
+No paid/HTTP/VPN archive replacement is needed for this rotation; PR38 delivery is
+still independent and NOT_USER_READY. [Receipt](releases/2026-11-15-hmac-migration-rehearsal.md).
 Android non-public test mutators corrected;20 JVM checks PASS, new CI pending.
 Original public125 ARM64 crashes under x86_64 translation; preserve immutable125
 and qualify upgrade on compatible ARM64 rather than rebuilding the accepted APK.

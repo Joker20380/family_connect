@@ -1,4 +1,5 @@
 import sys
+from control.friends.pseudonyms import unseal
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 from apps.console.inventory import SnapshotError
@@ -17,7 +18,7 @@ class Command(BaseCommand):
             data = dict(schema=1, source='gateway-ru', observed_at=int(timezone.now().timestamp()),
                         status='unavailable', devices=[]) if options['unavailable'] else load_export(
                             sys.stdin.buffer.read(MAX_EXPORT_BYTES + 1))
-            count = ingest(data)
+            count = ingest(data if options['unavailable'] else unseal(data, 'technical_metadata'))
         except (SnapshotError, ValueError, TypeError, KeyError):
             raise CommandError('Technical metadata import rejected; no payload logged') from None
         self.stdout.write(f'Technical metadata: {count} latest records; no history; production writes: 0')

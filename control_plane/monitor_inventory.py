@@ -9,6 +9,8 @@ from pathlib import Path
 import subprocess
 import sys
 import time
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from control.friends.pseudonyms import unseal
 
 if __package__:
     from .apps.console.collector import ACTIVE_SOURCES
@@ -52,7 +54,7 @@ def cycle(base=BASE, run=subprocess.run, known_hosts=None):
                 if not snapshot.is_file() or snapshot.stat().st_size > 4 * 1024 * 1024:
                     raise ValueError('Invalid snapshot file')
                 raw = snapshot.read_bytes()
-                document = json.loads(raw)
+                document = unseal(json.loads(raw), 'inventory')
                 if document.get('source') != source or document.get('scope') != 'production':
                     raise ValueError('Invalid snapshot scope')
                 result['error'] = 'IMPORT_FAILED'

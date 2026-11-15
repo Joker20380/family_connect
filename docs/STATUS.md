@@ -3,6 +3,11 @@
 **15 November — DEVICE-TECHNICAL-METADATA-1 / IN_PROGRESS, NOT_DEPLOYED.**
 Continuation gate: HMAC disclosure containment and compatible generation/alias
 migration rehearsal BEFORE any production key switch. No cutover authorized yet.
+Protected real-copy coverage:66 canonical devices/4 canonical events, all checked
+stored references mapped,0 missing/conflicts. Restored support replay/pins and panel
+event/card continuity pass without historical rewrites or an old runtime HMAC key.
+70 focused source/support +48 panel checks PASS. Generation source/plan is prepared,
+not installed; [rehearsal and bounds](releases/2026-11-15-hmac-migration-rehearsal.md).
 Android job132651608837 failed on non-public NetworkCapabilities test mutators;
 replaced with exhaustive pure classification and real public Android observations.
 20 JVM tests PASS; instrumentation/hosted Android remain separate pending gates.

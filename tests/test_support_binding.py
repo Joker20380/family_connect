@@ -110,3 +110,26 @@ def test_private_projection_export_uses_existing_key_and_ack(registry, tmp_path)
     with pytest.raises(ValueError):
         publish(registry.access, tmp_path, node)
     assert output.read_bytes() == prior
+
+
+def test_generation_bound_publisher_rejects_wrong_key_without_extending_lease(registry,tmp_path):
+    from control.friends.support import publish
+    from control.friends.pseudonyms import prepare,save,unseal
+    path,policy,client,node=configured(registry,tmp_path)
+    path.rename(tmp_path/'chat-support.json')
+    with registry.access.db() as database:
+        devices=[row[0] for row in database.execute('SELECT device FROM devices')]
+    aliases=prepare(dict(device=devices,panel_event=[]),b'n'*32,legacy_key=b'h'*32)
+    old=bindings(registry.access,b'h'*32,tmp_path/'chat-support.json',node)
+    save(tmp_path/'pseudonym-aliases.json',aliases)
+    key=tmp_path/'support-inventory-hmac.key';key.write_bytes(b'n'*32);key.chmod(0o600)
+    publish(registry.access,tmp_path,node)
+    output=tmp_path/'support-bindings.json';prior=output.read_bytes()
+    assert unseal(json.loads(prior),'support',aliases)==old
+    key.write_bytes(b'h'*32)
+    with pytest.raises(ValueError):publish(registry.access,tmp_path,node)
+    assert output.read_bytes()==prior
+    key.chmod(0o644)
+    with pytest.raises(ValueError):
+        publish(registry.access, tmp_path, node)
+    assert output.read_bytes() == prior

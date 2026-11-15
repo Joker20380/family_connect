@@ -312,4 +312,6 @@ messages. After activation its unchanged ARM64 libfc_restricted.so crashes with
 SIGILL in golang.org/x/sys/cpu.getisar0.abi0 under native translation. This precedes
 installation of126 and is not evidence of a metadata regression. Upgrade remains
 NOT_OBSERVED; a compatible ARM64 environment is required, not a rebuilt125.
-
+HMAC containment, full reference coverage and isolated replay now have a separate
+[preparation receipt](2026-11-15-hmac-migration-rehearsal.md). No production key switch
+or metadata deployment is implied by that preparation.

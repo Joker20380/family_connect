@@ -18,6 +18,7 @@ from messenger.mailbox import MailboxError
 from messenger.store import Store
 from provisioning.subscription_notifications import Notifications
 from provisioning.chat_transport import SystemMailbox, initialize
+from control.friends.pseudonyms import handle
 
 
 class SupportError(ValueError):
@@ -103,6 +104,10 @@ class SupportOwner:
                 raise SupportError('stale_binding_snapshot')
             pinned = self.store._get('support-threads') or {}
             for pseudonym, item in devices.items():
+                if any(other != pseudonym and (prior['device'] == item['device'] or
+                        item['public'] is not None and prior['public'] == item['public'])
+                        for other, prior in pinned.items()):
+                    raise SupportError('ambiguous_binding')
                 original = pinned.get(pseudonym)
                 if original is not None:
                     if original['device'] != item['device'] or original['public'] != item['public']:
@@ -115,6 +120,10 @@ class SupportOwner:
             self.store._put('support-threads', pinned)
 
     def binding(self, pseudonym):
+        try:
+            pseudonym = handle(pseudonym)
+        except (OSError, ValueError, KeyError, TypeError):
+            raise SupportError('invalid_recipient') from None
         if not canonical(pseudonym, 64):
             raise SupportError('invalid_recipient')
         with self.store._lock:
@@ -152,7 +161,7 @@ class SupportOwner:
 
     def enqueue(self, pseudonym, address, request_id, source, text, *, expires_at=None):
         binding = self.binding(pseudonym)
-        request = dict(pseudonym=pseudonym, address=address, text=text)
+        request = dict(pseudonym=binding['pseudonym'], address=address, text=text)
         request['actor' if type(source) is str else 'source'] = source
         if expires_at is not None:
             request['expires_at'] = expires_at
@@ -184,7 +193,7 @@ class SupportOwner:
             if message['peer'] == binding['address']:
                 messages.append({key: message[key] for key in ('id', 'text', 'outgoing', 'status', 'timestamp')})
         return dict(binding=binding, messages=messages, sender=self.chat.address.hex(),
-                    notifications=self.notifications.status(pseudonym))
+                    notifications=self.notifications.status(binding['pseudonym']))
 
     def inbox(self):
         with self.store._lock:
