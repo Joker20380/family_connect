@@ -86,6 +86,8 @@ workaround or recompiled125. Owner password input stays in the local dialog.
 
 Only after the signed descriptor's isolated payment/renewal/grace/replay checks,
 load that exact policy in HTTP/operator/reconciler, retaining108/119/123/125.
+For this126 release, original125→126 device acceptance also precedes that loading;
+the exact source descriptor and isolated tests may be prepared without ADB.
 Then prove enabled installed126 → API → generation2 collector → real panel and
 revocation/cleanup. RU/AWG is the only qualified IP-source design in this release;
 NL/TCP and MESH city remain unavailable or independently age-labelled. Controlled

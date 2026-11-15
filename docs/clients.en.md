@@ -2,6 +2,7 @@
 
 **15 November — beta126 technical information is not yet released to users.**
 Compatible server components are installed;125 remains the public update.
+Candidate126 is signed with the existing certificate and frozen, but not published.
 126 uses separate consent, OFF by default, for model/Android/app, connection and
 available data-SIM operator information, VPN session, limited errors and approximate
 IP-network geography. Consent lasts until disabled; each latest group, including

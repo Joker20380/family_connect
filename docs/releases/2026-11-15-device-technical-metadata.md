@@ -50,6 +50,35 @@ authorized ARM64 device with original125, enable USB debugging and approve this 
 No device data/settings were touched. The older unsigned/signing-blocked statements
 below record historical checkpoints and are superseded by this signed receipt.
 
+### Exact paid126 preparation, not production admission
+
+Source policy `android-paid-108-119-123-125-126-v1` adds exactly the final signed
+SHA97513e3f descriptor above.108/119/123/125 retain every accepted version/hash.
+No range, unsigned hash or metadata-reported APK identity grants admission. Existing
+access remains independent of APK eligibility. Production still loads the previous
+four-descriptor policy; this preparation creates no payments, messages or expiry
+changes and does not replace any installed archive.
+
+168 focused tests and the full paid-policy workflow selection499 tests PASS locally
+with all27 active control/identity lockfile pins matched. Coverage includes first
+payment, renewal with a distinct payment ID, grace, expired/revoked replay from all
+four previous versions, conflicting event payload, unsigned/wrong SHA, wrong version
+pair/types, period-shortening rejection, HTTP/operator/projection agreement and
+non-paid registry preservation. Equal-time version conflicts now include126. The
+old125 negative case with126 version plus125 hash still rejects without mutation:
+its precise reason becomes APK_INVALID; unknown127 remains BASELINE_REQUIRED.
+Accepted pins and rejection assertions are not removed. The isolated overlay test
+preserves all other archive members; actual loaded-runtime pins must be read again
+before the later authorized paid-only overlay. No metadata image/server rebuild.
+
+New paid source CI is pending at this checkpoint; Android artifact qualification
+remains source61, not the later paid-policy source. PR38 remains draft. ADB20:52UTC
+still has no device; no in-place upgrade, device consent/revoke or real RU/AWG
+geography is claimed. The concrete remaining owner action is USB attachment and
+debugging authorization of one ARM64 original125 device. Once accepted, load the
+qualified exact paid policy into HTTP/operator/reconciler, prove the installed
+chain, then publish the frozen APK and independently sign the increasing catalog.
+
 ## Historical continuation20:22–20:26UTC: signing/device boundary
 
 Remote PR38 head9326c3bd/main53a780d9 are verified; the PR worktree is clean before
