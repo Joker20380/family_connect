@@ -291,3 +291,25 @@ No unrelated main or paid modules copied. Isolated checks/migration drift/actual
 `/inventory/` render PASS after providing the ordinary tmpfs collectstatic step.
 This is NOT the deployed panel. Preserve that preparation image and source receipt;
 apply the separately qualified query-free access-log command during deployment.
+# Continuation: incident preparation and Android public test APIs
+
+The preceding session exposed an inventory-HMAC value in tool output. Scope is
+under investigation; this is not evidence of public disclosure. Values, mapping
+tables and private matched lines must not be emitted or committed. No production
+key switch is authorized until a successful compatible migration rehearsal report
+is presented and the owner confirms the concrete cutover.
+
+Job132651608837 on b195b10d failed compiling instrumentation because the test used
+non-public NetworkCapabilities mutators. The correction extracts an exhaustive
+eight-combination pure classifier and retains an instrumentation assertion against
+a real connected Android default network using public read APIs.20 JVM tests PASS;
+this does not constitute instrumentation or APK qualification. Version stays126.
+
+The original public125 was activated on the isolated NVIDIA/KVM x86_64 bench through
+the ordinary referral path. Two controlled test devices and three invitations were
+created (one unused invitation revoked); no real payments, expiry changes or user
+messages. After activation its unchanged ARM64 libfc_restricted.so crashes with
+SIGILL in golang.org/x/sys/cpu.getisar0.abi0 under native translation. This precedes
+installation of126 and is not evidence of a metadata regression. Upgrade remains
+NOT_OBSERVED; a compatible ARM64 environment is required, not a rebuilt125.
+

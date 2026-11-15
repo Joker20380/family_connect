@@ -6,6 +6,10 @@ import java.util.Locale;
 final class TechnicalMetadataSnapshot {
     static final long RETENTION_MS=7L*86400000;
     private TechnicalMetadataSnapshot(){}
+    static String networkKind(boolean wifi,boolean cellular,boolean ethernet){
+        if((wifi?1:0)+(cellular?1:0)+(ethernet?1:0)!=1)return "UNKNOWN";
+        return wifi?"WIFI":cellular?"CELLULAR":"ETHERNET";
+    }
     static JsonObject report(long epoch,long sequence,boolean enabled,JsonObject observations){
         if(epoch<=0||sequence<=0||epoch>9007199254740991L||sequence>9007199254740991L)throw new IllegalArgumentException("Metadata counter bound");
         JsonObject result=new JsonObject();result.addProperty("schema",1);

@@ -1,6 +1,13 @@
 # Текущее состояние / Current state
 
 **15 November — DEVICE-TECHNICAL-METADATA-1 / IN_PROGRESS, NOT_DEPLOYED.**
+Continuation gate: HMAC disclosure containment and compatible generation/alias
+migration rehearsal BEFORE any production key switch. No cutover authorized yet.
+Android job132651608837 failed on non-public NetworkCapabilities test mutators;
+replaced with exhaustive pure classification and real public Android observations.
+20 JVM tests PASS; instrumentation/hosted Android remain separate pending gates.
+Public125 activated on the isolated x86_64 bench, but its original ARM64 native
+library faults in CPU detection under translation;125→126 is NOT_OBSERVED.
 Owner-selected product task: explicit new consent, latest technical device/network
 observations, production panel and compatible public Android successor to125.
 First source checkpoint: versioned body-bound API, revocation epochs, bounded

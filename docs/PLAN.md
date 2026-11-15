@@ -3,6 +3,13 @@
 ## Current engineering priority / Текущий critical path
 
 **DEVICE-TECHNICAL-METADATA-1 — SELECTED / implementation in progress, 15 November.**
+Current preparation: contain disclosed inventory HMAC, inventory all consumers,
+implement generation-aware device/event aliases, prove complete coverage and isolated
+restore/replay/delta recovery. Production key switch requires a completed rehearsal
+report and a separate owner confirmation; do not reactivate the disclosed key on rollback.
+Android non-public test mutators corrected;20 JVM checks PASS, new CI pending.
+Original public125 ARM64 crashes under x86_64 translation; preserve immutable125
+and qualify upgrade on compatible ARM64 rather than rebuilding the accepted APK.
 First source checkpoint implements versioned API and revocation/retention security;
 82 focused checks PASS/14 integration SKIP. Android/GeoIP/projection/release remain.
 Projection/collector/object UI source now passes306 local panel checks; runtime

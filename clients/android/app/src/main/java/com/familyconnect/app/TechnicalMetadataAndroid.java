@@ -48,12 +48,8 @@ final class TechnicalMetadataAndroid {
     }
     static String kind(NetworkCapabilities caps){
         if(caps==null)return "UNKNOWN";
-        int count=(caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)?1:0)+(caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)?1:0)+(caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)?1:0);
-        if(count!=1)return "UNKNOWN";
-        if(caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI))return "WIFI";
-        if(caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))return "CELLULAR";
-        if(caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))return "ETHERNET";
-        return "UNKNOWN";
+        return TechnicalMetadataSnapshot.networkKind(caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI),
+            caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR),caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
     }
     static JsonObject network(Context context,long now){
         String type="UNKNOWN",source="unavailable",scope="unknown",reason="underlay_not_exposed";

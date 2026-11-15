@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.net.NetworkCapabilities;
+import android.net.ConnectivityManager;
+import android.net.Network;
 import androidx.test.platform.app.InstrumentationRegistry;
 import com.google.gson.JsonObject;
 import org.junit.Test;
@@ -30,11 +32,22 @@ public class TechnicalMetadataRuntimeTest {
         assertFalse(context.getSharedPreferences("technical-metadata-v1",Context.MODE_PRIVATE).getBoolean("enabled",false));
     }
     @Test public void platformVpnTransportCapabilitiesDoNotPickFirstOfMultipleUnderlays(){
-        NetworkCapabilities caps=new NetworkCapabilities().addTransportType(NetworkCapabilities.TRANSPORT_VPN).addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
-        assertEquals("WIFI",TechnicalMetadataAndroid.kind(caps));
-        caps.addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR);
-        assertEquals("UNKNOWN",TechnicalMetadataAndroid.kind(caps));
-        caps.removeTransportType(NetworkCapabilities.TRANSPORT_WIFI);
-        assertEquals("CELLULAR",TechnicalMetadataAndroid.kind(caps));
+        assertEquals("WIFI",TechnicalMetadataSnapshot.networkKind(true,false,false));
+        assertEquals("UNKNOWN",TechnicalMetadataSnapshot.networkKind(true,true,false));
+        assertEquals("CELLULAR",TechnicalMetadataSnapshot.networkKind(false,true,false));
+        Context context=InstrumentationRegistry.getInstrumentation().getTargetContext();
+        ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
+        assertNotNull(manager);
+        Network network=manager.getActiveNetwork();
+        assertNotNull("Qualification requires a connected Android testbed",network);
+        NetworkCapabilities caps=manager.getNetworkCapabilities(network);
+        assertNotNull(caps);
+        assertFalse("Run this observation before VPN session tests",caps.hasTransport(NetworkCapabilities.TRANSPORT_VPN));
+        assertTrue(caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN));
+        JsonObject observation=TechnicalMetadataAndroid.network(context,System.currentTimeMillis());
+        assertEquals("android_default_network",observation.get("source").getAsString());
+        assertEquals("available",observation.get("status").getAsString());
+        assertEquals(TechnicalMetadataAndroid.kind(caps),observation.getAsJsonObject("values").get("kind").getAsString());
+        assertNotEquals("UNKNOWN",observation.getAsJsonObject("values").get("kind").getAsString());
     }
 }

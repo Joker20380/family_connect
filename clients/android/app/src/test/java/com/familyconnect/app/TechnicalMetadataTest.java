@@ -5,6 +5,12 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class TechnicalMetadataTest {
+    @Test public void ambiguousUnderlaysAreNotGuessed(){
+        for(int bits=0;bits<8;bits++){
+            String expected=bits==1?"WIFI":bits==2?"CELLULAR":bits==4?"ETHERNET":"UNKNOWN";
+            assertEquals(expected,TechnicalMetadataSnapshot.networkKind((bits&1)!=0,(bits&2)!=0,(bits&4)!=0));
+        }
+    }
     @Test public void consentEpochAndSequenceDetermineUniqueIdentity(){
         JsonObject first=TechnicalMetadataSnapshot.report(1,2,true,new JsonObject());
         assertEquals("00000000000000010000000000000002",first.get("report_id").getAsString());
