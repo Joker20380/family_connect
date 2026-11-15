@@ -24,12 +24,14 @@ final class TechnicalMetadataUpload {
     private FriendsAccessAndroid request;
     private ConnectivityManager.NetworkCallback callback;
     private boolean dirty;
+    private boolean forcedOff;
+    private boolean storageFault;
     private String status="OFF";
     private TechnicalMetadataUpload(Context context){this.context=context.getApplicationContext();prefs=context.getSharedPreferences("technical-metadata-v1",Context.MODE_PRIVATE);}
     private static synchronized TechnicalMetadataUpload get(Context context){if(instance==null)instance=new TechnicalMetadataUpload(context);return instance;}
     static void start(Context context){get(context).changed();}
     static void changed(Context context){get(context).changed();}
-    private synchronized boolean enabled(){return prefs.getBoolean("enabled",false);}
+    private synchronized boolean enabled(){return !forcedOff&&prefs.getBoolean("enabled",false);}
     private synchronized void changed(){
         boolean enabled=enabled(),revoke=prefs.getBoolean("revoke_pending",false);
         ConnectionTerminal.VPN.observeTechnical(enabled);
@@ -52,12 +54,19 @@ final class TechnicalMetadataUpload {
         if(callback!=null){try{context.getSystemService(ConnectivityManager.class).unregisterNetworkCallback(callback);}catch(RuntimeException ignored){}callback=null;}
     }
     private synchronized boolean consent(boolean enabled){
+        if(!enabled){forcedOff=true;ConnectionTerminal.VPN.observeTechnical(false);if(request!=null)request.cancel();}
         long epoch=prefs.getLong("epoch",0)+1;
-        if(!prefs.edit().putLong("epoch",epoch).putBoolean("enabled",enabled).putBoolean("revoke_pending",!enabled).commit())return false;
+        storageFault=!prefs.edit().putLong("epoch",epoch).putBoolean("enabled",enabled).putBoolean("revoke_pending",!enabled).commit();
+        if(storageFault){forcedOff=true;prefs.edit().putBoolean("enabled",false).putBoolean("revoke_pending",true).apply();status="LOCAL_STORAGE_FAILURE";schedule.revoke();changed();return false;}
+        forcedOff=!enabled;
         if(request!=null)request.cancel();status=enabled?"PENDING":"REVOCATION_PENDING";
         schedule.revoke();changed();return true;
     }
     private synchronized void flush(){
+        if(storageFault){
+            if(!prefs.edit().putBoolean("enabled",false).putBoolean("revoke_pending",true).commit()){main.postDelayed(flush,60000);return;}
+            storageFault=false;
+        }
         boolean enabled=enabled(),revoke=prefs.getBoolean("revoke_pending",false);
         if(!enabled&&!revoke){detach();return;}
         if(!schedule.begin(SystemClock.elapsedRealtime(),revoke)){main.postDelayed(flush,schedule.delay(SystemClock.elapsedRealtime(),revoke));return;}
@@ -97,7 +106,7 @@ final class TechnicalMetadataUpload {
         TechnicalMetadataUpload upload=get(activity);Switch toggle=new Switch(activity);
         toggle.setText("Технические сведения для поддержки / Support technical information");toggle.setChecked(upload.enabled());panel.addView(toggle);
         TextView status=new TextView(activity);panel.addView(status);
-        Runnable render=()->status.setText(upload.enabled()?"ON · до выключения / until disabled · "+upload.status:upload.prefs.getBoolean("revoke_pending",false)?"OFF · отзыв ожидает связи / revocation pending":"OFF");render.run();
+        Runnable render=()->status.setText(upload.storageFault?"OFF · ошибка сохранения; не перезапускайте приложение до сохранения отзыва / storage failure; revocation not durable yet":upload.enabled()?"ON · до выключения / until disabled · "+upload.status:upload.prefs.getBoolean("revoke_pending",false)?"OFF · отзыв ожидает связи / revocation pending":"OFF");render.run();
         toggle.setOnCheckedChangeListener((button,checked)->{
             if(!checked){if(upload.enabled())upload.consent(false);render.run();return;}
             new android.app.AlertDialog.Builder(activity).setTitle("Технические сведения / Technical information")

@@ -76,6 +76,7 @@ class TechnicalMetadata(models.Model):
     consent = models.CharField(max_length=16)
     received_at = models.BigIntegerField()
     observations = models.JSONField(default=dict)
+    geoip = models.JSONField(null=True, default=None)
 
 
 class TechnicalMetadataSource(models.Model):

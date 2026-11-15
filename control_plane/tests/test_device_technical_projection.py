@@ -145,3 +145,48 @@ def test_collector_transient_hmac_and_bad_pin_input(tmp_path):
         with pytest.raises(ValueError): collect(base=tmp_path, run=run)
     finally:
         sys.path.pop(0)
+
+
+def with_location():
+    from control.friends.geoip import unknown
+    data = observation()
+    location = unknown('none', data['observed_at'], 'authenticated_awg_peer')
+    location.update(status='available', country='AU', region='Controlled region', city='Controlled city',
+                    asn=13335, organization='Controlled network', database=dict(version='2026-11', city_sha256='b'*64, asn_sha256='c'*64))
+    data['devices'][0]['geoip'] = location
+    return data
+
+
+def test_geoip_independent_age_retained_on_mesh_and_removed_on_revoke(db):
+    data = with_location()
+    technical_metadata.ingest(data)
+    from control.friends.geoip import unknown
+    data['devices'][0]['sequence'] += 1
+    data['devices'][0]['geoip'] = unknown('no_suitable_direct_observation', data['observed_at'])
+    technical_metadata.ingest(data)
+    row = TechnicalMetadata.objects.first()
+    assert row.geoip['city'] == 'Controlled city'
+    assert row.geoip['sampled_at'] == data['observed_at']
+    technical_metadata.prune(timezone.now() + timedelta(days=8))
+    row.refresh_from_db(); assert row.geoip is None
+    data['devices'][0].update(consent_epoch=2, sequence=3, consent='revoked', observations={}, geoip=None)
+    technical_metadata.ingest(data)
+    assert TechnicalMetadata.objects.first().geoip is None
+
+
+@pytest.mark.parametrize('change', [dict(ip='1.1.1.1'), dict(latitude=12), dict(origin='unknown'),
+    dict(origin='vpn_exit'), dict(retail_isp='invented'), dict(status='unavailable'), dict(database=None)])
+def test_projection_rejects_private_or_unverified_geoip(db, change):
+    data = with_location()
+    data['devices'][0]['geoip'].update(change)
+    with pytest.raises(inventory.SnapshotError):
+        technical_metadata.ingest(data)
+
+
+def test_geoip_real_object_filter_age_and_attribution(console, client):
+    inventory.ingest(snapshot()); technical_metadata.ingest(with_location()); client.force_login(console)
+    page = client.get('/inventory/?city=controlled')
+    assert page.context['total'] == 1
+    assert client.get('/inventory/?city=absent').context['total'] == 0
+    html = client.get('/inventory/' + 'a'*64 + '/').content.decode()
+    assert 'Controlled city' in html and 'DB-IP' in html and 'приблизительно' in html

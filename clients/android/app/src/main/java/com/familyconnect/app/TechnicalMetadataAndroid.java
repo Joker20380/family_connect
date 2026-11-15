@@ -9,7 +9,6 @@ import android.os.Build;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import com.google.gson.JsonObject;
-import java.util.List;
 
 final class TechnicalMetadataAndroid {
     private TechnicalMetadataAndroid(){}
@@ -45,6 +44,8 @@ final class TechnicalMetadataAndroid {
     }
     static String kind(NetworkCapabilities caps){
         if(caps==null)return "UNKNOWN";
+        int count=(caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)?1:0)+(caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)?1:0)+(caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)?1:0);
+        if(count!=1)return "UNKNOWN";
         if(caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI))return "WIFI";
         if(caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))return "CELLULAR";
         if(caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))return "ETHERNET";
@@ -60,16 +61,15 @@ final class TechnicalMetadataAndroid {
             if(!session&&current==null){type="OFFLINE";source="android_default_network";scope="default_network";reason="none";}
             else if(!session&&caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)){
                 type=kind(caps);source="android_default_network";scope="default_network";reason="UNKNOWN".equals(type)?"not_observed":"none";
-            }else if(session&&Build.VERSION.SDK_INT>=31&&manager!=null){
+            }else if(session&&manager!=null){
+                NetworkCapabilities selected=null;int count=0;
                 for(Network vpn:manager.getAllNetworks()){
                     NetworkCapabilities own=manager.getNetworkCapabilities(vpn);
-                    if(own==null||!own.hasTransport(NetworkCapabilities.TRANSPORT_VPN)||own.getOwnerUid()!=android.os.Process.myUid())continue;
-                    List<Network> underlying=own.getUnderlyingNetworks();
-                    if(underlying==null||underlying.size()!=1)continue;
-                    NetworkCapabilities actual=manager.getNetworkCapabilities(underlying.get(0));
-                    if(actual==null||!actual.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN))continue;
-                    type=kind(actual);source="vpn_underlying_networks";scope="session_underlay";reason="UNKNOWN".equals(type)?"not_observed":"none";break;
+                    if(own==null||!own.hasTransport(NetworkCapabilities.TRANSPORT_VPN))continue;
+                    if(Build.VERSION.SDK_INT>=29&&own.getOwnerUid()!=android.os.Process.myUid())continue;
+                    selected=own;count++;
                 }
+                if(count==1){type=kind(selected);source="vpn_transport_capabilities";scope="session_underlay";reason="UNKNOWN".equals(type)?"underlay_not_exposed":"none";}
             }
         }catch(SecurityException unavailable){reason="permission_not_granted";}
         catch(RuntimeException unavailable){reason="service_unavailable";}

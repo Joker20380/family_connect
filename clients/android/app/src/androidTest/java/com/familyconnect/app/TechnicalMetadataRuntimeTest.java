@@ -3,6 +3,7 @@ package com.familyconnect.app;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.net.NetworkCapabilities;
 import androidx.test.platform.app.InstrumentationRegistry;
 import com.google.gson.JsonObject;
 import org.junit.Test;
@@ -25,5 +26,13 @@ public class TechnicalMetadataRuntimeTest {
     @Test public void newConsentDoesNotInheritSevenDayDiagnostics(){
         Context context=InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertFalse(context.getSharedPreferences("technical-metadata-v1",Context.MODE_PRIVATE).getBoolean("enabled",false));
+    }
+    @Test public void platformVpnTransportCapabilitiesDoNotPickFirstOfMultipleUnderlays(){
+        NetworkCapabilities caps=new NetworkCapabilities().addTransportType(NetworkCapabilities.TRANSPORT_VPN).addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
+        assertEquals("WIFI",TechnicalMetadataAndroid.kind(caps));
+        caps.addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR);
+        assertEquals("UNKNOWN",TechnicalMetadataAndroid.kind(caps));
+        caps.removeTransportType(NetworkCapabilities.TRANSPORT_WIFI);
+        assertEquals("CELLULAR",TechnicalMetadataAndroid.kind(caps));
     }
 }

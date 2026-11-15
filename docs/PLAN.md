@@ -9,6 +9,9 @@ Projection/collector/object UI source now passes306 local panel checks; runtime
 delivery, Android and GeoIP still pending. Draft PR38 is not completion of this task.
 Android successor source candidate126 is reserved, not signed or distributed;
 exact APK descriptor/payment policy and125→126 upgrade remain release gates.
+Local GeoIP/updater/projection source tests now pass47+315; actual installed-client
+and production peer enrichment still NOT_OBSERVED. Fixing source CI compilation/
+packaging failures precedes any signing or deployment; no acceptance waiver.
 Implement separately consented, identity/content-bound technical observations,
 bounded latest-only retention/revocation, honest underlay and IP provenance, local
 GeoIP, collector/importer and production device UI, then qualify a new immutable

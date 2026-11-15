@@ -12,12 +12,17 @@
     <dt>VPN · установленная сессия</dt><dd>{{ device.technical.session.transport|default:'Не наблюдалась' }} · {{ device.technical.session.gateway|default:'—' }} · {{ device.technical.session.state|default:'UNKNOWN' }}</dd>
     <dt>Предпочтение / текущая попытка</dt><dd>{{ device.technical.session.preference|default:'—' }} / {{ device.technical.session.attempt|default:'—' }}</dd>
     <dt>Последняя ошибка / readiness</dt><dd>{{ device.technical.observations.diagnostic.values.error|default:'Не наблюдалась' }} / {{ device.technical.observations.diagnostic.values.readiness|default:'UNKNOWN' }}</dd>
+    <dt>Город по IP · приблизительно</dt><dd>{{ device.technical.geoip.city|default:'Неизвестен' }} · {{ device.technical.geoip.region|default:'—' }} · {{ device.technical.geoip.country|default:'—' }}</dd>
+    <dt>Сеть / ASN · DB-IP Lite</dt><dd>{{ device.technical.geoip.organization|default:'Неизвестна' }} / {{ device.technical.geoip.asn|default:'—' }}<br>Розничный ISP не предоставлен этим источником.</dd>
+    <dt>Последнее пригодное IP-наблюдение</dt><dd>{{ device.technical.geoip.origin|default:'unknown' }} · {{ device.technical.geoip.sampled|date:'Y-m-d H:i:s'|default:'—' }} UTC · возраст {{ device.technical.geoip.age_seconds|default_if_none:'—' }} с · {{ device.technical.geoip.reason|default:'no_suitable_direct_observation' }}</dd>
   </dl>
   <details class="technical-details"><summary>Источники и независимый возраст наблюдений</summary>
+    <p>GeoIP: {{ device.technical.geoip.database.version|default:'Источник недоступен' }}<br>City SHA256: <code>{{ device.technical.geoip.database.city_sha256|default:'—' }}</code><br>ASN SHA256: <code>{{ device.technical.geoip.database.asn_sha256|default:'—' }}</code>. Это локальные контрольные суммы, не подпись поставщика.</p>
     {% for name,observation in device.technical.observations.items %}
     <p><strong>{{ name }}</strong> · {{ observation.source }} · {{ observation.status }} / {{ observation.reason }}<br>
       sampled_at: {{ observation.sampled_at|date:'Y-m-d H:i:s'|default:'Не представимо' }} UTC · received_at: {{ observation.received|date:'Y-m-d H:i:s' }} UTC<br>
       Возраст: {{ observation.age_seconds }} с · {{ observation.clock_label }}</p>
     {% empty %}<p>{{ device.technical.label }}. Новое подтверждение readiness не обновляет время сети.</p>{% endfor %}
   </details>
+  <p class="source-note"><a href="https://db-ip.com/" rel="noreferrer">IP Geolocation by DB-IP</a> · CC BY4.0. Это география IP-сети, не GPS и не доказательство физического местонахождения. VPN/relay не выдаются за город клиента; последнее подходящее наблюдение имеет собственный возраст.</p>
 </section>

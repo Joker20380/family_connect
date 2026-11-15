@@ -101,10 +101,13 @@ Build/Package gives manufacturer/model/Android/API/app/versionCode. Public telep
 APIs use the default data subscription, not a fabricated combination of two SIMs;
 no READ_PHONE_STATE permission is requested. Unavailable radio has a concrete reason.
 Default non-VPN network is explicitly labelled default, never tunnel underlay.
-For an active session, public API31+ own-VPN underlying networks is used only when
-exactly one underlying network is exposed; otherwise underlay_not_exposed. Pre31
-active-underlay coverage remains a limitation to address/qualify, not inferred from
-ChatNetworkAndroid. Auto gets active transport only in CONNECTED; attempt/preference
+The first source incorrectly attempted getUnderlyingNetworks (not a public SDK35
+method); source30f68b69 Android CI correctly rejected compilation. The correction
+uses public capabilities propagated by Android onto its VPN network, only when one
+VPN and one concrete physical transport are exposed; API29+ also checks owner UID.
+Ambiguous/absent propagation remains underlay_not_exposed, not first-NOT_VPN inference
+from ChatNetworkAndroid. Runtime underlay transition qualification remains pending.
+Auto gets active transport only in CONNECTED; attempt/preference
 remain separate, gateway is recorded at the actual successful connection transition.
 Bounded last terminal-error time is collected only with the new consent and cleared
 on off. MESH readiness remains a reported diagnostic, not a grant of VPN access.
@@ -125,6 +128,56 @@ CI/signing/source archive/hash; isolated paid compatibility; consistent producti
 backup/restore; minimal runtime/panel/policy delivery; public discovery/invitations/
 full HTTPS byte verification; PR/own review/ordinary merge and remote SHA readback.
 Physical5G/carrier cases may be NOT_OBSERVED with fallback tests, not fabricated PASS.
+
+## Local GeoIP preparation and CI correction · source checkpoint, not deployment
+
+The verified ingress is nginx8443 → loopback18086 → serving HTTP candidate archive,
+not inactive18084. The prepared new route overwrites X-FC-Ingress-Peer and clears
+XFF/Forwarded, but metadata does NOT geolocate that header: normal service requests
+can arrive through VPN/relay. No new protect/binding/IP-echo path was added.
+
+The candidate external collector joins consented stable device identity to the
+canonical registry's full AWG public key, then RU fcopen31 endpoints AND recent
+handshakes (≤180s). It never matches an identity by coincident IP. Only a current
+RU/AWG connected session is eligible. Public peer addresses are lookup inputs in
+process memory only; no raw address, port, coordinates or peer key is exported to
+the panel. Known VPN exits/nonpublic/relay/unverified/stale observations get explicit
+unavailable reasons. NL/TCP direct-peer enrichment is NOT_IMPLEMENTED here; other
+fields work independently and last suitable geo remains age-labelled for ≤7days.
+The retained location is the peer network's database entry, not proof of where a
+person is physically located; an upstream third-party VPN can still affect it.
+
+Centralized candidate location: `/opt/apps/family_connect/geoip` on the canonical RU
+collector host only, not every gateway or the web container. No server installation
+has occurred. Official HTTPS DB-IP Lite2026-11 City and ASN were downloaded locally
+to a disposable preparation directory after checking ≥1536MiB staging/rollback free
+space. Download bounds160MiB compressed/256MiB expanded per file, allowed origin,
+MMDB type/month/IP structure, hashes and atomic pair replacement are enforced.
+One previous set retained; update failures visible in update-status.json. Missing,
+invalid or >45day database does not reject metadata. SHA256 is local integrity,
+NOT a supplier signature. Exact local MMDB receipts:
+
+- City126873350bytes: `5f64491f77c2c78b56cd83a88db4ea6c4666874322da38805498bbb754ccc735`.
+- ASN9648279bytes: `81565a450281c949fc83745f5ec9cfea70b035163b1152b055645884765d153d`.
+- Controlled public resolver IPv4/IPv6 lookups: city/country/region/ASN/organization
+  populated, no coordinates exported. Synthetic key-binding fixture proves exclusion
+  of another identity, revoked key and unknown peers. This is NOT an observed live
+  production peer or installed-APK→panel chain. Real peer attribution still required.
+
+Migration0015 adds a replaceable GeoIP projection with independent age/expiry, city
+filter, source/version/SHA detail and DB-IP attribution. Missing current direct
+evidence may retain the last suitable observation without changing its timestamp;
+revocation and TTL clear it.47 focused metadata/GeoIP tests and315 panel tests PASS
+locally (95 existing static-directory warnings). Core/identity/panel installed
+versions match current lockfiles; GeoIP reader uses its separate hash lock.
+
+CI for source30f68b699c65c1112e6ff140620fb9bbb4d4fc38 is not accepted: Android job
+132634376299 failed at the invalid SDK method, paid132634345643 failed because the
+closed committed-source packager omitted the new nginx snippet. Both source causes
+are corrected, not waived. Panel132634343669:305PASS/1FAIL, existing network-probe
+test's “yesterday” window contains its120-second-old fixture at UTC midnight; no
+assertion weakened. New source must pass ordinary applicable CI. Readiness wire
+43655938216 PASS is independent and does not qualify the APK or complete delivery.
 
 Rollback must restore code/config only, preserving later user events and metadata
 revocation tombstones. Never restore old databases over live data. No transport

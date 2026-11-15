@@ -2,7 +2,7 @@
 
 ## Technical metadata candidate · 15 November 2026 · NOT DEPLOYED
 
-Migration0014 stores only the latest consented observations by full HMAC; these never
+Migrations0014/0015 store only the latest consented observations/GeoIP by full HMAC; these never
 enter InventorySnapshot, audit details or dated collector files. External
 `collect_technical_metadata.py` uses private `.local/technical-metadata-source.json`
 with exact `python`, `archive`, `archive_sha256` of the accepted serving HTTP archive
@@ -16,6 +16,14 @@ No SSH credentials or production registry are mounted in the web container.
 All groups, including hardware, expire independently after at most7days. UI source
 and the current implementation limits are recorded in the
 [selected task receipt](../docs/releases/2026-11-15-device-technical-metadata.md).
+GeoIP uses the canonical RU host's local DB-IP Lite MMDB pair and authenticated
+AWG peer binding, not loopback/XFF or a client-provided IP. The updater is
+`scripts/update_geoip.py --root /opt/apps/family_connect/geoip --version YYYY-MM`;
+install `control/geoip-requirements.lock` in the isolated collector environment.
+This command is preparation guidance, NOT a deployed scheduler. Preserve current/
+previous manifests and one rollback pair. Alert on update-status failure and45day
+age. Keep DB-IP attribution on every page rendering results. NL/TCP peer enrichment
+and live end-to-end qualification are pending; see the task receipt.
 
 ## Системные сообщения · source candidate11 ноября2026
 

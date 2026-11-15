@@ -25,6 +25,12 @@ def collect_technical_metadata(config):
                     or Path(module.__spec__.loader.archive).resolve() != archive):
                 return result
             result['devices'] = module.read_all(Path('/opt/apps/family_connect/friends-access/technical-metadata.sqlite'), result['observed_at'])
+            geo = importlib.import_module('control.friends.geoip')
+            if geo.__file__ != str(archive / 'control/friends/geoip.py'):
+                raise ValueError('GeoIP module outside verified archive')
+            result['devices'] = geo.enrich_ru_peers(result['devices'],
+                Path('/opt/apps/family_connect/friends-access/access.db'),
+                Path('/opt/apps/family_connect/geoip'), now=result['observed_at'])
         finally:
             sys.path.pop(0)
         result['status'] = 'ok'

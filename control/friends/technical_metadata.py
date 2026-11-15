@@ -20,7 +20,7 @@ MIN_INTERVAL = 60
 MAX_INTEGER = 2**53 - 1
 SOURCES = {
     'profile': {'android_build_package'},
-    'network': {'tunnel_socket', 'vpn_underlying_networks', 'android_default_network', 'unavailable'},
+    'network': {'tunnel_socket', 'vpn_transport_capabilities', 'android_default_network', 'unavailable'},
     'mobile': {'android_telephony_public'},
     'session': {'connection_service'},
     'diagnostic': {'connection_terminal'},
@@ -99,7 +99,7 @@ def validate_observations(observations, complete=False):
                 require(isinstance(value, str) and value in specification)
         if group == 'network':
             require(values['scope'] != 'session_underlay' or observation['source'] in {
-                'tunnel_socket', 'vpn_underlying_networks'})
+                'tunnel_socket', 'vpn_transport_capabilities'})
         if group == 'session':
             require(values['state'] in ('CONNECTED', 'RESTORING') or
                     values['transport'] in ('NONE', 'UNKNOWN', None))

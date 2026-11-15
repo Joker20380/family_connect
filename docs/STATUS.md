@@ -11,6 +11,12 @@ Panel source projection/collector and production-object templates now implemente
 Draft PR38 tracks preparation only; do not merge it as completed product delivery.
 Android source now reserves0.1.18-beta126/code126 for the new separate consent path;
 NOT_BUILT / NOT_SIGNED / NOT_INSTALLED / NOT_PUBLISHED. Public125 remains unchanged.
+GeoIP source checkpoint: local official DB-IP Lite2026-11 City/ASN pair, bounded
+atomic updater and identity→AWG public-key→recent peer binding; raw IP never exported.
+47 focused metadata/GeoIP and315 panel checks PASS locally; controlled IPv4/IPv6
+lookup succeeds (not a real-device location proof). Android compile and packaging
+errors on30f68b69 are corrected in source, pending new CI; prior panel CI also exposed
+an unrelated midnight-window fixture failure. No production changes or APK yet.
 Remote main verified53a780d9ccfcdb2c3ec6141a197917190f9be7a5 (PR37 merged).
 Dirty/diverged primary checkout preserved; isolated feature worktree starts at that
 main. Public125/catalog8 and paid108/119/123/125 remain unchanged; no new APK or
