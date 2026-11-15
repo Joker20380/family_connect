@@ -14,6 +14,9 @@ IP-derived country/region/city/ASN. No phone number, GPS coordinates, IMEI, seri
 advertising ID, SSID/BSSID, cell ID, contacts, installed-app lists, sites, traffic,
 messages, keys or tokens are added to this telemetry. Existing split tunnelling is
 unchanged. It is support information, never identity/payment/access authority.
+Radio detail uses Android33+ normal READ_BASIC_PHONE_STATE (no runtime permission
+prompt); older Android or unavailable telephony exposes an explicit reason instead.
+No READ_PHONE_STATE dangerous permission is added or requested.
 Consent lasts until disabled. Hardware and dynamic observations expire independently
 within seven days; no location history. Off stops new collection/upload; the server
 deletes the payload on receipt of the revoke. Offline revocation is shown as pending.

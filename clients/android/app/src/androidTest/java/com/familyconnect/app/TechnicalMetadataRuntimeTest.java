@@ -19,8 +19,10 @@ public class TechnicalMetadataRuntimeTest {
         assertEquals(BuildConfig.VERSION_CODE,profile.get("version_code").getAsInt());
         assertFalse(profile.get("model").isJsonNull());assertFalse(profile.get("manufacturer").isJsonNull());
         JsonObject mobile=groups.getAsJsonObject("mobile").getAsJsonObject("values");
-        assertEquals("UNKNOWN",mobile.get("radio").getAsString());
-        assertNotEquals("none",mobile.get("radio_reason").getAsString());
+        String radio=mobile.get("radio").getAsString();
+        if(Build.VERSION.SDK_INT<33)assertEquals("UNKNOWN",radio);
+        if("UNKNOWN".equals(radio))assertNotEquals("none",mobile.get("radio_reason").getAsString());
+        else{assertTrue("LTE_4G".equals(radio)||"5G".equals(radio));assertEquals("none",mobile.get("radio_reason").getAsString());}
         for(String forbidden:new String[]{"imei","phone_number","ssid","bssid","cell_id","latitude","longitude","installed_apps","ip"})assertFalse(groups.toString().contains("\""+forbidden+"\""));
     }
     @Test public void newConsentDoesNotInheritSevenDayDiagnostics(){

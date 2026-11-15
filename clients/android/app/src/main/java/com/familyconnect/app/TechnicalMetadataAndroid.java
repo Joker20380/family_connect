@@ -91,7 +91,7 @@ final class TechnicalMetadataAndroid {
                     sim=TechnicalMetadataSnapshot.text(manager.getSimOperatorName(),100);
                     registered=TechnicalMetadataSnapshot.text(manager.getNetworkOperatorName(),100);
                     simReason=sim==null?"no_sim":"none";registeredReason=registered==null?"no_registered_network":"none";
-                    if(context.checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE)==PackageManager.PERMISSION_GRANTED){
+                    if(Build.VERSION.SDK_INT>=33&&context.checkSelfPermission(android.Manifest.permission.READ_BASIC_PHONE_STATE)==PackageManager.PERMISSION_GRANTED){
                         int type=manager.getDataNetworkType();
                         radio=type==TelephonyManager.NETWORK_TYPE_NR?"5G":type==TelephonyManager.NETWORK_TYPE_LTE?"LTE_4G":"UNKNOWN";
                         radioReason="UNKNOWN".equals(radio)?"not_observed":"none";

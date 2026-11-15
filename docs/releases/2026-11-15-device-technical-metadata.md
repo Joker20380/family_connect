@@ -233,3 +233,16 @@ PR test-merge source24d98766816d8fff68d773f721bf8baacda26688 is distinct from he
 Desktop runtime checks passed, but unrelated appimagetool download failed in132642755597.
 These failures block acceptance, not reasons to bypass gates. No production writes,
 paid descriptor126, signed APK, public catalog change or user-ready rollout.
+
+## Permission and legacy-path correction
+
+Android33+ radio uses public getDataNetworkType with normal READ_BASIC_PHONE_STATE,
+declared and checked; no dangerous READ_PHONE_STATE declaration/request or lint
+suppression. API27–32 retain explicit permission-not-granted radio fallback while
+SIM/network names remain independently available. Runtime tests retain the dangerous
+permission denial assertion and validate either a real radio category or its reason.
+The legacy service regex is restored verbatim; one exact metadata-v1 path is added
+separately. Existing source/security assertions are preserved, with an additional
+exact-path assertion. Only the reviewed metadata delta pins change; reverse-applied
+beta125 source/UI/MESH hashes remain unchanged.67 targeted subscription/public-source
+checks PASS after the correction. Hosted lint/runtime acceptance is still pending.

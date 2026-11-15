@@ -26,6 +26,9 @@ Baseline-derived HTTP overlay:42 checks PASS/1 explicit pinned-sync skip, includ
 real nginx/TLS and forged ingress headers; synthetic panel1440/390px PASS.
 Source46a8686a panel/paid/readiness PASS. Android lint and one full-suite allowlist
 source assertion still fail; delivery remains NOT_DEPLOYED / NOT_USER_READY.
+Source repair uses only Android33+ normal READ_BASIC_PHONE_STATE for radio (older
+Android falls back explicitly); preserves the old service allowlist verbatim with
+one exact additional endpoint. New hosted Android qualification is still required.
 Remote main verified53a780d9ccfcdb2c3ec6141a197917190f9be7a5 (PR37 merged).
 Dirty/diverged primary checkout preserved; isolated feature worktree starts at that
 main. Public125/catalog8 and paid108/119/123/125 remain unchanged; no new APK or

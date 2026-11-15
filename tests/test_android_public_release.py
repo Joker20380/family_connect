@@ -199,10 +199,10 @@ def test_ui_runner_offline_wait_is_bounded(monkeypatch):
 
 def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main(tmp_path):
     patch = ROOT / 'tests/fixtures/device_technical_metadata/beta125-to126.patch'
-    assert hashlib.sha256(patch.read_bytes()).hexdigest() == '22f2bf971e6311e8d95bd5c9df76a4455af4189ed0722c8dfb6120c7778a47e4'
+    assert hashlib.sha256(patch.read_bytes()).hexdigest() == 'd465e822bf098ac678f36ed4c964299d50f91634302d14b643ff6286f6df2d5e'
     metadata_overlay = {
         'ConnectionTerminal.java': '008f6aa25ff16fec0e49746dfe74a884e6db3b0ef47f2a804d739196478eb17a',
-        'FriendsAccessAndroid.java': '5596561ae2355fbd7136851b2a21cca226d155ca6ca0d48f69b23a8eefd44418',
+        'FriendsAccessAndroid.java': '97e21b93387a9a48616d291e6ab3fcce7f24eb1f72643776a7e6a29d8cc7ab39',
     }
     restored = {}
     for filename, digest in metadata_overlay.items():

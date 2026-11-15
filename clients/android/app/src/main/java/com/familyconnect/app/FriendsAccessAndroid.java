@@ -64,7 +64,7 @@ final class FriendsAccessAndroid {
     }
     private JsonObject directPostObserved(String path,JsonObject body,String requestId)throws Exception{
         remaining(5000);
-        require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|gateway-configuration/nl-amsterdam-[12]|chat/(challenge|register)|referral/(issue|claim)|device/(status|subscription|support|diagnostics|technical-metadata/v1)|notices/device/(role|publish|list|edit))"));
+        require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|gateway-configuration/nl-amsterdam-[12]|chat/(challenge|register)|referral/(issue|claim)|device/(status|subscription|support|diagnostics)|notices/device/(role|publish|list|edit))")||path.equals("/friends/device/technical-metadata/v1"));
         boolean viaVpn=ReadinessBootstrapRoute.allowed(path)&&"on".equals(ConnectionService.status)&&"ok".equals(ConnectionService.healthStatus);
         if(fetchTrace!=null){fetchTrace.request(path,direct&&!viaVpn?ReadinessFetchTrace.Route.HTTPS_UNDERLAY:ReadinessFetchTrace.Route.HTTPS_VPN);fetchTrace.stage(ReadinessFetchTrace.Stage.OPEN_NETWORK);}
         HttpsURLConnection connection=direct&&!viaVpn?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path,fetchTrace):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();

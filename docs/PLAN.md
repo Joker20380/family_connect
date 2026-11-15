@@ -28,8 +28,8 @@ Do not call source preparation a user-ready rollout. No unrelated queued success
 [Implementation and delivery receipt](releases/2026-11-15-device-technical-metadata.md).
 Preparation checkpoint: baseline-derived HTTP overlay/TLS42PASS, synthetic panel
 1440/390px PASS, public125 installed only on the isolated NVIDIA/KVM testbed.
-Next within this task: fix Android permission lint and legacy allowlist regression,
-then exact APK qualification, backups/restore, minimal rollout and public delivery.
+Android permission/legacy allowlist corrections are prepared; await exact new-source
+CI, then APK qualification, backups/restore, minimal rollout and public delivery.
 
 **Selected correction qualified: attribution failure-publication / PR37.**
 Deterministic empty/partial interprocess reproduction and atomic positive-fixture
