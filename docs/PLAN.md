@@ -15,7 +15,9 @@ generation2 imports/real legacy-card layout pass. Public125 remains unchanged.
 Vault-backed signing completed20:48UTC: frozen signed126 SHA97513e3f,50,478,496bytes,
 accepted certificate/package/ARM64/alignment and unchanged payload verified. Its
 exact paid126 policy is prepared with168 targeted/499 full isolated gate tests PASS;
-new source CI is pending, production policy remains108/119/123/125. Compatible ARM64125→126 and installed
+new source CI is pending after updating the panel's explicit demo-preservation test
+for126 (e7bd86c7 panel failure retained). Production policy remains108/119/123/125.
+Compatible ARM64125→126 and installed
 opt-in/revoke acceptance precede production paid loading and public publication.
 No compatible ADB device is attached. Do not claim an
 unsigned candidate, empty metadata projection or a controlled MMDB fixture as the

@@ -9,7 +9,9 @@ accepted signer67a90d1b, package/code126/ARM64,16KiB alignment and unchanged uns
 payload verified. The final bytes are read-only; no rebuild or re-sign is needed.
 Exact paid126 source is prepared: policy `android-paid-108-119-123-125-126-v1`,
 previous four descriptors unchanged,168 focused and499 full paid gate tests PASS.
-This policy is NOT_LOADED; new source CI remains pending at this checkpoint.
+This policy is NOT_LOADED. Sourcee7bd86c7 panel CI exposed its test's old four-release
+list; the exact five-release assertion and demo non-insertion guard now include126.
+No guard/pin is removed; corrected-head CI remains pending at this checkpoint.
 ADB is empty at20:52UTC. Next: original125→126 and installed opt-in/revoke/GeoIP
 acceptance on an authorized ARM64 device, before policy loading/publication.
 No paid loading, publication, server deployment, RU recovery or HMAC rotation here.

@@ -79,6 +79,14 @@ debugging authorization of one ARM64 original125 device. Once accepted, load the
 qualified exact paid policy into HTTP/operator/reconciler, prove the installed
 chain, then publish the frozen APK and independently sign the increasing catalog.
 
+The first paid sourcee7bd86c7 panel workflow43760729576 fails its migration/console
+regression step. Its demo-preservation test still asserts exactly four paid versions;
+the source now has five. The correction explicitly adds126 to both the exact policy
+list and the assertion that `seed_demo` must not insert later release rows. Existing
+registry bytes/demo metadata/hash assertions remain unchanged. This is a test-only
+compatibility correction, not a production panel change; corrected-head CI must
+pass before qualification. The failed run remains evidence, not overwritten PASS.
+
 ## Historical continuation20:22–20:26UTC: signing/device boundary
 
 Remote PR38 head9326c3bd/main53a780d9 are verified; the PR worktree is clean before
