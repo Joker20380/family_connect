@@ -3,7 +3,7 @@
 ## State
 
 Android source candidate:0.1.18-beta126/code126, package remains
-com.familyconnect.app.friends. CI_UNSIGNED_BUILT / NOT_SIGNED / NOT_INSTALLED /
+com.familyconnect.app.friends. CI_QUALIFIED / SIGNED / NOT_INSTALLED /
 NOT_PUBLISHED. The current artifact receipt below supersedes the historical
 not-built checkpoints. Public125/catalog8, invitation routes
 and accepted paid108/119/123/125 remain unchanged. Never publish a rebuilt125.
@@ -17,7 +17,40 @@ Remote main53a780d9ccfcdb2c3ec6141a197917190f9be7a5 verified by fetch. Primary
 checkout8937e71e has unrelated modified/untracked files and diverged history;
 all preserved. Worktree branch: feature/device-technical-metadata-20261115.
 
-## Continuation20:22–20:26UTC: actual signing/device boundary
+## Signed candidate20:48UTC
+
+Existing KeePassXC location settings provided no database path. Owner-authorized
+bounded filename-only discovery found operator vault copies and disposable test
+databases; test databases were excluded, and the owner selected an operator copy in
+a local chooser. The search reached its bound, so this is not an exhaustive disk
+inventory. No database contents, private scripts/configurations, keys or attachment
+were printed. After the owner explicitly requested retry of an accidental password
+dialog cancellation, local unlocking and existing vault-backed APK signing passed.
+No new keystore/certificate was created, and no alternative vault was auto-selected.
+
+| Frozen artifact | Verified value |
+| --- | --- |
+| Version/package | 0.1.18-beta126/code126; `com.familyconnect.app.friends` |
+| Final signed size | 50,478,496bytes |
+| Final signed SHA256 | `97513e3f62fe107a36e6e1453e07dfdf7fab33588ed637a676fb2cfb0d2de5b8` |
+| Certificate SHA256 | `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a` |
+| Android source | `61b00409e24b92651678b817d2a6f5d4796948f9` |
+| CI merge source | `918191db7510973edae32e35db02cdef21df4acf`; same qualified tree |
+| CI provenance | Run43666831505/attempt2; artifact14144443841; retained ZIPa3006b0b |
+| Unsigned input SHA256 | `645ef3970cd1264c8d24237752319cb454184fe6fa2ce8cbb6a9ed8a1c2822b1` |
+| Checks | One accepted signer; ARM64-only; nondebuggable;16KiB alignment; every original ZIP payload member unchanged |
+| Distribution | Private read-only final file; NOT_INSTALLED / NOT_PUBLISHED |
+
+This signature is not an installed-device PASS, paid admission or catalog signature.
+No server rebuild/deployment, RU recovery or HMAC rotation was performed. Production
+paid108/119/123/125 and public125/catalog8 remain unchanged. Exact paid126 isolated
+qualification is now possible independently of ADB; loading/publication still require
+the agreed acceptance order. ADB remains empty: next device action is to connect one
+authorized ARM64 device with original125, enable USB debugging and approve this host.
+No device data/settings were touched. The older unsigned/signing-blocked statements
+below record historical checkpoints and are superseded by this signed receipt.
+
+## Historical continuation20:22–20:26UTC: signing/device boundary
 
 Remote PR38 head9326c3bd/main53a780d9 are verified; the PR worktree is clean before
 this documentation-only checkpoint. The exact retained unsigned APK again matches
@@ -51,8 +84,8 @@ stage is reopened. Public125/catalog8/paid108/119/123/125 remain unchanged.
 ## Current installed result: minimal metadata server path
 
 The owner-authorized server delivery is installed, not merely built. It does not
-complete the Android/user release. No signed126 exists, no126 paid descriptor is
-loaded, and no real installed126 report has reached the panel. Public125, signed
+complete the Android/user release. Signed126 now exists privately; no126 paid descriptor
+is loaded, and no real installed126 report has reached the panel. Public125, signed
 catalog sequence8, invitation routes and exact paid108/119/123/125 remain unchanged.
 PR38 stays draft. Remote main is still53a780d9; no whole-PR/main deployment occurred.
 

@@ -97,6 +97,14 @@ HTTPS bytes, signature/package/signer/code, Range/resume and updater behavior.
 
 ## Owner-assisted signing and device session
 
+Signing and exact signed-descriptor isolated qualification do not require ADB.
+The selected126 is now signed and frozen in the current receipt; reuse those bytes,
+do not repeat signing. The sequence below also documents future signing sessions.
+Discover only known database-location settings or bounded `.kdbx` filenames; never
+dump private configuration or search secret contents. Multiple/unconfirmed candidates
+require explicit local selection. Cancellation stops the attempt; repeat only at the
+owner's request, without silently changing databases.
+
 1. Connect one authorized ARM64 Android device with original public125 by USB.
    Enable Developer options → USB debugging, unlock it and approve this computer's
    debugging prompt. Do not uninstall Family Connect, clear storage or reset keys.

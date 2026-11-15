@@ -12,19 +12,23 @@ No observer/recovery successor is selected. See the current metadata receipt.
 
 Current gate: metadata HTTP/panel/collector/GeoIP are minimally deployed and normal
 generation2 imports/real legacy-card layout pass. Public125 remains unchanged.
-Finish local vault-backed signing, compatible ARM64125→126 and installed opt-in/revoke
-chain before exact paid126 and public catalog/invitation publication. No signing
-selection was completed and no compatible ADB device is attached. Do not claim an
+Vault-backed signing completed20:48UTC: frozen signed126 SHA97513e3f,50,478,496bytes,
+accepted certificate/package/ARM64/alignment and unchanged payload verified. Qualify
+its exact paid descriptor independently; compatible ARM64125→126 and installed
+opt-in/revoke acceptance precede production paid loading and public publication.
+No compatible ADB device is attached. Do not claim an
 unsigned candidate, empty metadata projection or a controlled MMDB fixture as the
 required installed-device result. [Delivery/recovery plan](operators/technical-metadata-release.md).
 Delivery sourcef42efdab is now CI-qualified: all13 applicable workflows PASS,
 including phase0 and the Android matrix. Synthetic real-vault signing5 PASS.
-Those results do not remove the local vault-selection and physical-device gates.
-Continuation20:22–20:26UTC reverified the exact selected unsigned APK/provenance and
+Those results do not remove the physical-device gates. Signing is now complete;
+do not rebuild or re-sign the selected artifact.
+Historical continuation20:22–20:26UTC reverified the exact selected unsigned APK/provenance and
 accepted runtime without redeployment. The actual KDBX chooser returned1/no selection,
 with no GUI error output; ADB remains empty. Next: identify/select the existing
 release vault locally, then sign the frozen artifact and perform ARM64 acceptance.
-No placeholder paid126 or public descriptor is created while signature is missing.
+That vault-selection/signing boundary is superseded by the20:48UTC receipt. Public
+descriptors remain125 until mandatory installed acceptance; no placeholder hashes.
 
 **RU-INCIDENT-20261115 — authorized recovery complete, RECOVERED_CAUSE_OPEN.**
 First failure retained: local TCP engine-query timeout, not a demonstrated fsync

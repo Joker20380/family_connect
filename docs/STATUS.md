@@ -1,6 +1,19 @@
 # Текущее состояние / Current state
 
-**15 November20:22–20:26UTC — release continuation awaits local owner input.**
+**15 November20:48UTC — selected beta126 SIGNED, not installed/published.**
+The existing operator vault was located by bounded filename-only discovery and
+selected locally; after the owner explicitly retried an accidental cancellation,
+the local password workflow signed the unchanged source61 candidate. Final APK:
+50,478,496bytes, SHA25697513e3f62fe107a36e6e1453e07dfdf7fab33588ed637a676fb2cfb0d2de5b8,
+accepted signer67a90d1b, package/code126/ARM64,16KiB alignment and unchanged unsigned
+payload verified. The final bytes are read-only; no rebuild or re-sign is needed.
+ADB is empty. Next: independently qualify this exact paid descriptor, then original
+125→126 and installed opt-in/revoke/GeoIP acceptance on an authorized ARM64 device.
+No paid loading, publication, server deployment, RU recovery or HMAC rotation here.
+Public125/catalog8 and production paid108/119/123/125 remain unchanged.
+[Signed artifact receipt](releases/2026-11-15-device-technical-metadata.md#signed-candidate2048utc).
+
+**Historical15 November20:22–20:26UTC — local owner input boundary.**
 The selected source61 unsigned126 file/hash, CI ZIP provenance, package/code/ARM64
 and16KiB alignment are reverified unchanged. Fresh readback retains HTTP70a924db,
 panel5ae92f8c, matching generation2 keys/manifest and normal imports. Original RU
@@ -12,7 +25,7 @@ input is selection of the existing release KDBX (or its path, never its password
 Compatible ARM64 USB acceptance remains necessary afterwards. Public125/paid policy
 and all user data remain untouched;126 publication and merge are still gated.
 
-**15 November — metadata server path DEPLOYED; user release still BLOCKED.**
+**Historical15 November — metadata server path DEPLOYED; user release still BLOCKED.**
 Minimal HTTP70a924db, generation2-aware panel5ae92f8c, collector and centralized
 DB-IP Lite2026-11 are installed. No transport/watcher/paid reconciler restart or
 whole-PR deployment. Three normal cycles14:10:15/14:11:35/14:12:54UTC import all
