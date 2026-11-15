@@ -37,7 +37,7 @@ final class TechnicalMetadataSnapshot {
         }
     }
     static String gateway(String raw){
-        if("ru".equals(raw))return "gateway-ru";
+        if("ru".equals(raw)||"gateway-ru".equals(raw))return "gateway-ru";
         if("nl".equals(raw)||"nl-amsterdam-1".equals(raw))return "nl-amsterdam-1";
         if("nl-amsterdam-2".equals(raw))return raw;
         return "UNKNOWN";

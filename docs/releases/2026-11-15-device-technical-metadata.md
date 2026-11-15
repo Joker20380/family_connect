@@ -179,6 +179,28 @@ test's “yesterday” window contains its120-second-old fixture at UTC midnight
 assertion weakened. New source must pass ordinary applicable CI. Readiness wire
 43655938216 PASS is independent and does not qualify the APK or complete delivery.
 
+## Source follow-up and isolated bench preparation
+
+Source d89cd2923a8885f012691d0b17f9d395fd3e5be7 pushed/remote SHA verified.
+Hosted panel43657720733, paid43657720741 and readiness43657720823 PASS; local
+committed-source paid packaging/HTTP tests27PASS/14 explicit integration skips.
+Full pipelines/Android were still running when this follow-up was prepared.
+Own review found a canonical RU gateway being serialized through the raw-name mapper
+twice; mapping is now idempotent and a regression test covers every supported name.
+Network/session sampling is invalidated across a concurrent session transition.
+19 Java17 JVM checks PASS. Panel now also renders the independent client error time.
+
+One new API35 AVD runs with shared qualification lock, PRIME offload, `-gpu host`
+and `-accel on`. Actual guest GLES identifies NVIDIA GTX1650Ti; the emulator process
+holds `/dev/kvm`. Existing AVDs/owner phone are untouched, no parallel emulator.
+Current public125 independently downloaded over normal verified HTTPS:50470304bytes,
+SHA256 f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c;
+package/code125/ARM64/minSDK27 and original67a90d1b signer verified. Signed v2 catalog8
+signature/source bytes and legacy descriptor agree. This is only the125 baseline,
+not evidence that126 is built, installed, compatible or publicly available.
+Fresh RU read-only resource check:7511MiB disk available/1089MiB available RAM;
+HTTP PID2345109 remains active, ordinary AWG/TCP not restarted. GeoIP still local-only.
+
 Rollback must restore code/config only, preserving later user events and metadata
 revocation tombstones. Never restore old databases over live data. No transport
 restart, kill-switch bypass, new dangerous permission or RU persistence changes.

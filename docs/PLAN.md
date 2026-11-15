@@ -12,6 +12,8 @@ exact APK descriptor/payment policy and125→126 upgrade remain release gates.
 Local GeoIP/updater/projection source tests now pass47+315; actual installed-client
 and production peer enrichment still NOT_OBSERVED. Fixing source CI compilation/
 packaging failures precedes any signing or deployment; no acceptance waiver.
+Hosted panel/paid/readiness pass on d89cd292; gateway serialization/race follow-up
+retains19 JVM tests. Android/full CI and125→126 installed E2E remain open gates.
 Implement separately consented, identity/content-bound technical observations,
 bounded latest-only retention/revocation, honest underlay and IP provenance, local
 GeoIP, collector/importer and production device UI, then qualify a new immutable

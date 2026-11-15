@@ -17,6 +17,10 @@ atomic updater and identity→AWG public-key→recent peer binding; raw IP never
 lookup succeeds (not a real-device location proof). Android compile and packaging
 errors on30f68b69 are corrected in source, pending new CI; prior panel CI also exposed
 an unrelated midnight-window fixture failure. No production changes or APK yet.
+Source d89cd292: hosted panel43657720733, paid43657720741 and readiness43657720823
+PASS; Android/full suites still pending. Follow-up fixes canonical RU gateway
+serialization and cross-session sampling;19 JVM checks PASS. Isolated NVIDIA/KVM
+API35 testbed prepared; public125 full HTTPS bytes/signer/catalog8 verified anew.
 Remote main verified53a780d9ccfcdb2c3ec6141a197917190f9be7a5 (PR37 merged).
 Dirty/diverged primary checkout preserved; isolated feature worktree starts at that
 main. Public125/catalog8 and paid108/119/123/125 remain unchanged; no new APK or

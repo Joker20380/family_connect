@@ -131,6 +131,8 @@ def presentation(row, now, source=None, supported=None):
     network = observations.get('network', {}).get('values', {})
     mobile = observations.get('mobile', {}).get('values', {})
     session = observations.get('session', {}).get('values', {})
+    error_at = observations.get('diagnostic', {}).get('values', {}).get('error_at_ms')
+    error_time = datetime.fromtimestamp(error_at / 1000, utc.utc) if error_at is not None and 0 <= error_at < 253402300799000 else None
     terms = [profile.get(name) for name in ('manufacturer', 'model', 'android_version', 'app_version', 'version_code')]
     terms += [network.get('kind'), mobile.get('sim_operator'), mobile.get('registered_operator'), session.get('transport')]
     location = dict(row.geoip) if row and row.geoip and row.geoip['expires_at'] > current else None
@@ -139,7 +141,7 @@ def presentation(row, now, source=None, supported=None):
         location['sampled'] = datetime.fromtimestamp(location['sampled_at'], utc.utc)
         terms += [location.get(name) for name in ('city', 'country', 'region', 'asn', 'organization')]
     return dict(status=status, label=LABELS[status], observations=observations, profile=profile,
-                network=network, mobile=mobile, session=session, geoip=location,
+                network=network, mobile=mobile, session=session, geoip=location, error_time=error_time,
                 search=' '.join(str(value) for value in terms if value is not None).casefold())
 
 

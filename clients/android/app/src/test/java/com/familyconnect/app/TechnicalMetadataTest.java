@@ -37,6 +37,13 @@ public class TechnicalMetadataTest {
         assertNull(TechnicalMetadataSnapshot.text("  ",20));
         assertEquals("UNKNOWN",TechnicalMetadataSnapshot.gateway("not-a-registry-node"));
     }
+    @Test public void canonicalGatewayIsNotLostAtSessionSerialization(){
+        for(String raw:new String[]{"ru","gateway-ru","nl","nl-amsterdam-1","nl-amsterdam-2"}){
+            String canonical=TechnicalMetadataSnapshot.gateway(raw);
+            assertEquals(canonical,TechnicalMetadataSnapshot.session("auto","NONE","awg",canonical,"CONNECTED").get("gateway").getAsString());
+        }
+        assertEquals("gateway-ru",TechnicalMetadataSnapshot.gateway("ru"));
+    }
     @Test public void onlyOneUploadAndCompletionBasedMinimumInterval(){
         TechnicalMetadataSchedule schedule=new TechnicalMetadataSchedule();
         assertTrue(schedule.begin(0,false));assertFalse(schedule.begin(100000,false));

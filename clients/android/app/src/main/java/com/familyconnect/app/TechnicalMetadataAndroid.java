@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 final class TechnicalMetadataAndroid {
     private TechnicalMetadataAndroid(){}
     static JsonObject sample(Context context){
+        long generation=ConnectionService.sessionId;String rawState=ConnectionService.status;
         long now=System.currentTimeMillis();JsonObject groups=new JsonObject();
         JsonObject profile=new JsonObject();profile.addProperty("manufacturer",TechnicalMetadataSnapshot.text(Build.MANUFACTURER,80));
         profile.addProperty("model",TechnicalMetadataSnapshot.text(Build.MODEL,100));
@@ -21,7 +22,6 @@ final class TechnicalMetadataAndroid {
         profile.addProperty("version_code",BuildConfig.VERSION_CODE);
         groups.add("profile",TechnicalMetadataSnapshot.observation("android_build_package","partial","none",profile,now,0));
         groups.add("network",network(context,now));groups.add("mobile",mobile(context,now));
-        long generation=ConnectionService.sessionId;String rawState=ConnectionService.status;
         String active=ConnectionService.activeTransport,gateway=ConnectionService.observedGateway,preference=ConnectionService.requestedTransport;
         ConnectionTerminal.Snapshot terminal=ConnectionTerminal.VPN.snapshot();String attempt="NONE";
         if("connecting".equals(rawState)||"restoring".equals(rawState))for(ConnectionTerminal.Stage stage:terminal.lines){
@@ -30,7 +30,11 @@ final class TechnicalMetadataAndroid {
             if(stage==ConnectionTerminal.Stage.TELEMOST)attempt="MESH";
         }
         String state=TechnicalMetadataSnapshot.state(rawState);
-        if(generation!=ConnectionService.sessionId||!rawState.equals(ConnectionService.status))state="UNKNOWN";
+        if(generation!=ConnectionService.sessionId||!rawState.equals(ConnectionService.status)){
+            state="UNKNOWN";attempt="NONE";
+            JsonObject network=new JsonObject();network.addProperty("kind","UNKNOWN");network.addProperty("scope","unknown");
+            groups.add("network",TechnicalMetadataSnapshot.observation("unavailable","unavailable","not_observed",network,now,0));
+        }
         groups.add("session",TechnicalMetadataSnapshot.observation("connection_service","available","none",
             TechnicalMetadataSnapshot.session(preference,attempt,active,gateway,state),now,0));
         JsonObject diagnostic=new JsonObject();String error="NONE";
