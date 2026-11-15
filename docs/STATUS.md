@@ -1,5 +1,11 @@
 # Текущее состояние / Current state
 
+**15 November — local system-disk cleanup complete.** Final selected scope is the
+owner laptop's `/`, not further `/mnt/data` cleanup. Root now has approximately19GiB
+available/89% used, versus1.1GiB at session entry. Current applications, all18 running
+containers, source/private state and VM images are retained. No gateway/client
+deployment or version change. [Actions, scope changes and rollback](releases/2026-11-15-local-disk-maintenance.md).
+
 **9 November00:03 Brussels / 8 November23:03UTC — RU server recovery verified.**
 Owner-authorized RU-only fence, stopped/PID0/no-jobs gate and normal start restore
 AWG/TCP/watcher on unchanged accepted bytes. Original three-node commands restored;

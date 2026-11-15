@@ -2,6 +2,12 @@
 
 ## Current engineering priority / Текущий critical path
 
+**15 November — selected local root-disk cleanup DONE.** Root readback:19GiB free,
+89% used;18 containers remain running. No implementation/release gate advances.
+Further `/mnt/data` cleanup is stopped. The separate37GiB NTFS volume remains
+read-only pending Windows filesystem checking; no format, force mount or automatic
+repair is authorized. [Receipt and boundaries](releases/2026-11-15-local-disk-maintenance.md).
+
 **9 November — selected RU recovery complete at server-validation scope.**
 Owner approved the previously proposed recovery. Exact accepted runtime retained;
 RU-only fence removed, all three services stable, actual/expected sets and lease
