@@ -2,19 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
-**RU-INCIDENT-20261115 — immediate operational diagnosis complete, NOT_RECOVERED.**
-Read-only response to the owner's new outage report preserves the first failure
-and confirms stopped AWG/TCP, watcher restart-loop and failed reconciliation.
-This failure is a local TCP engine-query timeout, not a demonstrated persistence
-call failure. Root resource cause remains open; no new diagnostic agent is deployed.
-Separate recovery gate: explicit permission beyond the prior HMAC-only scope;
-fresh protected-state backup/pins, RU-only command-map fence with NL continuation,
-drain and PID0/no-jobs, retained-state validation, sequential unchanged-runtime
-start, exact fence restoration and ordinary readback/renewal beyond120s.
-Keep generation2/aliases/new data, current paid125 policy and all durability guards.
-No old DB restore, HMAC rollback, full PR38 deployment or restart-only FIXED claim.
+**RU-INCIDENT-20261115 — authorized recovery complete, RECOVERED_CAUSE_OPEN.**
+First failure retained: local TCP engine-query timeout, not a demonstrated fsync
+failure. Separate owner permission obtained. Fresh27-table restore/paid projection
+and encrypted backup pass; RU-only fence, drain/PID0/no-jobs/zero handlers,
+retained-state validation and unchanged-runtime sequential start complete.
+Exact original command map restored13:03:16UTC; six observations over201.054s pass,
+actual20 AWG/20 TCP,66 revisions, stable PIDs/restarts0 and admission renewal across
+the initial120s deadline. Canonical protected data, generation2/aliases and units
+remain. HTTP/peer worker not restarted; support active and panel RU/NL imports fresh.
+No DB restore over live data, paid terms change, HMAC rollback or PR38 deployment.
+Client traffic NOT_RUN; resource cause stays open. No unattended recovery, timeout
+relaxation or recorder successor is selected automatically by this completion.
 [Current diagnosis and recovery boundary](releases/2026-11-15-ru-recurrence.md).
-The metadata product remains selected but is not advanced by this incident check.
+The metadata product remains selected but is not advanced by this recovery.
 
 **DEVICE-TECHNICAL-METADATA-1 — SELECTED / implementation in progress, 15 November.**
 HMAC prerequisite is **SWITCHED / completed**: owner-approved source61b00409 minimal

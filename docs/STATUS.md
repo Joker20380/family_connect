@@ -1,6 +1,21 @@
 # Текущее состояние / Current state
 
-**15 November12:46–12:49UTC — RU recurrence confirmed, NOT_RECOVERED.**
+**15 November13:03–13:07UTC — RU RECOVERED_CAUSE_OPEN.**
+Owner separately authorized controlled restoration after diagnosis. Fresh27-table
+registry backup/isolated restore and all three paid projections pass; encrypted
+offline backup decrypts correctly. RU-only fence, stopped/PID0/no-jobs/zero-handler
+gate and retained-state validation pass. Same accepted watcher/AWG/TCP start;
+original three-node command map is restored at13:03:16UTC. Six observations over
+201.054s pass: stable PIDs/restarts0, actual20 AWG/20 TCP,66 applied revisions,
+renewed cohort lease1794747946→1794748148 across the initial deadline.
+Eight protected canonical tables, retained bindings/decisions/prepared state,
+effective units and generation2 keys/aliases are unchanged. HTTP/peer worker did
+not restart; support owner stays active. RU and both NL panel imports are fresh/ok.
+No DB rollback, paid-term change, new binary or guard relaxation. Client VPN traffic
+NOT_RUN and underlying latency CAUSE_OPEN; recovery is not a permanent fix.
+[Recovery, preservation and remaining limits](releases/2026-11-15-ru-recurrence.md).
+
+**Historical15 November12:46–12:49UTC — RU recurrence confirmed before recovery.**
 Owner-reported outage is real: AWG failed/timeout and TCP inactive since12:06:49UTC;
 watcher has67 restarts at12:46 and central reconcile fails. The preserved first
 failure is COMMAND_TIMEOUT in tcp-query/engine_query at12:06:48.857UTC, not another
@@ -10,7 +25,7 @@ and watcher-unit pins are unchanged. HTTP/peer worker remain active. Host disk
 pressure is corroborating evidence, not attribution to HMAC work or a provider.
 No service/config/data changes or recovery are performed by this read-only check.
 Prior permission was HMAC-only and explicitly excluded transport/paid restarts;
-the separate controlled RU recovery needs owner confirmation.
+the owner subsequently confirmed the separate controlled RU recovery above.
 [Diagnosis and exact recovery boundary](releases/2026-11-15-ru-recurrence.md).
 
 **15 November — DEVICE-TECHNICAL-METADATA-1 / IN_PROGRESS, NOT_DEPLOYED.**

@@ -1,16 +1,106 @@
 # RU recurrence — 15 November 2026
 
-## Result and scope
+## Final recovery — RECOVERED_CAUSE_OPEN
 
-**NOT_RECOVERED / CAUSE_OPEN.** The owner's new report is confirmed by read-only
+The owner explicitly confirmed the separate recovery after the read-only diagnosis.
+RU watcher/AWG/TCP are restored on the same accepted bytes by13:03:16.077UTC.
+No metadata deployment, version change or HMAC rollback is part of this recovery.
+
+Fresh preflight at13:02:06UTC verifies runtime pins, effective watcher unit and
+original command-map digest. All27 canonical registry tables restore identically
+into a separate SQLite, with integrity/FK checks and the three exact-runtime paid
+projections evaluated at the same time. The restored database never replaces live
+data. Private evidence stays on RU and an encrypted offline copy is retained;
+AES-GCM decryption/digest round trip passes. Encrypted archive187933bytes SHA256:
+`8fb269a836de0c95f65200ed499aa2142ce548239334e78ab07f00a2c9064d22`.
+Registry backup SHA256:
+`056aa06790f4b978f2c9ebf13051144d3eec831f176a86741328686c5af8b0a0`.
+Backup key is kept separately in the protected local backup-key directory.
+
+The initial preparatory ownership guard rejected the reconciler's existing
+uid1000/gid1000/mode0664. Inspection confirms the accepted40e1d721 archive hash,
+its unchanged14November timestamp and root-owned0700 immediate parent. The
+recovery pins that exact existing ownership instead of assuming every artifact
+is root-owned. Node/gateway remain root-owned0600. No ownership or permissions
+were changed; this is not a new archive installation or a security-hardening claim.
+
+Only gateway-ru is fenced in the command map; both NL commands and the central
+timer remain. After the current cycle drains, watcher/AWG/TCP are stopped together.
+At13:02:46UTC all have MainPID0/ControlPID0, no pending jobs and zero gateway
+handlers. Native files, current decisions and a consistent peers database are
+backed up. Installed engine load/lock validation and retained TCP identity checks
+pass for66 decisions/20 registered peers without modifying decision-state bytes.
+
+The original first-failure bytes are archived without replacement as
+`friends-awg/transport-failure.20261115-120648.preserved.json`; their digest remains
+the97afb4fa value recorded below. After reset-failed and sequential unchanged-runtime
+starts, the exact original command-map bytes are restored. No old database is
+restored, denied decisions are not cleared and no lease/expiry is manually extended.
+
+| Unit | Restored PID | Observation |
+| --- | ---: | --- |
+| paid-watch | 733875 | active/running, NRestarts0 |
+| friends-awg | 733879 | active/running, NRestarts0 |
+| friends-tcp | 733898 | active/running, NRestarts0 |
+| HTTP candidate | 325012 | Original PID/invocation unchanged |
+| peer worker | 3967036 | Original PID/invocation unchanged |
+
+Six server observations from13:03:56.768 to13:07:17.822UTC span **201.054s**.
+Every observation verifies exact live20 AWG/20 TCP sets, TCP id/email/flow, all66
+persisted applied revisions and fresh ordinary watcher readback (final age0.822s).
+All restored PIDs/invocations remain, restart counters stay0 and no new first
+failure appears. Ordinary reconciliation succeeds with its original timer active.
+The cohort deadline advances **1794747946→1794748148**; the final observation
+crosses the initial deadline while remaining before the renewed deadline.
+
+Full row fingerprints remain equal for these current protected canonical tables:
+
+| Table/domain | Before | After | Result |
+| --- | ---: | ---: | --- |
+| Devices | 66 | 66 | Unchanged |
+| Invites | 121 | 121 | Unchanged |
+| Paid subscriptions | 1 | 1 | Unchanged, including terms/expiry |
+| Paid events | 4 | 4 | Unchanged |
+| Chat bindings | 53 | 53 | Unchanged |
+| Official chat senders | 1 | 1 | Unchanged |
+| Referral links | 19 | 19 | Unchanged |
+| Referral claims | 59 | 59 | Unchanged |
+
+Retained device/public/TCP identities, membership/revisions/paid terms and prepared
+decisions also compare equal across all66 transport records. Expected observation
+and lease timestamps advance normally, not by restoring stale state. All six
+checked effective service definitions remain identical. HMAC generation2 manifest
+validates; RU/operator keys both equal the prepared generation2 key in-process.
+Manifest digest remains8602e6526ca1ec0e408c99a7ca37aedc4413b417f392e32096d5167517fcdcb8.
+No key, mapping or raw identifier is published. Local support owner remains active,
+NRestarts0; support histories, queues and notification baselines are not rewritten.
+
+Panel read at13:07:32UTC confirms all three transport snapshots `ok`,66 records each.
+RU observed13:07:20/imported13:07:22.926, registry status `ok`, accepted node125c796a.
+NL1/NL2 also have fresh transport imports; their `not_collected` inventory registry
+status is expected because canonical registry collection belongs to RU.
+The actual `/inventory/` route follows its login redirect to HTTP200. An initial
+guess `/accounts/login/` returned404; it was not treated as a panel outage or PASS.
+Open the panel at http://127.0.0.1:8765/inventory/ with the existing login.
+
+**Remaining limit:** client VPN DNS/verified HTTPS/egress is NOT_RUN. Server
+restoration and renewed admission are verified, not permanent removal of the
+latency cause. No new observer, pressure run or unqualified lifecycle/failure-writer
+candidate is enabled. If failure recurs, preserve the new first failure and use
+the guarded procedure; do not create an automatic restart loop, relax8/12/120s,
+restore an old database or reactivate the disclosed HMAC key.
+
+## Historical diagnosis and scope before authorization
+
+**Initial NOT_RECOVERED / CAUSE_OPEN.** The owner's new report is confirmed by read-only
 RU observations at12:46:47–12:49:31UTC. This is not merely a stale panel.
 No remote service, configuration, key, policy or database was changed in this
-diagnostic continuation. No transport restart, pressure workload, new recorder,
+diagnostic phase. No transport restart, pressure workload, new recorder,
 timeout relaxation or collection-window extension was performed.
 
 The preceding permission covered only the HMAC generation2 cutover and expressly
 excluded transport/paid restarts. A separate bounded recovery is proposed below;
-it has not been executed. The dirty primary checkout is preserved. Safe evidence
+it was not yet executed at that point. The dirty primary checkout is preserved. Safe evidence
 documentation uses the existing PR38 worktree, not a new production deployment.
 
 ## Preserved first failure and timeline
@@ -76,9 +166,9 @@ deleted. Bounded journal queries covered only the failure window; they are not a
 complete system-log audit. No raw journal text, identifiers, keys or mapping is
 published. Protected local evidence is kept outside Git.
 
-## Proposed controlled recovery — not executed
+## Recovery plan confirmed and executed
 
-One owner confirmation should cover restoring only the existing RU AWG/TCP/watcher
+The owner's subsequent confirmation covered restoring only the existing RU AWG/TCP/watcher
 runtime by the [established procedure](../operators/subscriptions.ru.md), without
 changing binaries, policy, persistence or HMAC generation:
 
@@ -101,10 +191,14 @@ Physical-client traffic and a lasting root-cause correction remain separate gate
 
 ## Documentation and release boundary
 
-This checkpoint changes documentation only. Public beta125/catalog8, exact
+The Git checkpoint changes documentation only; operational recovery is described
+separately above. Public beta125/catalog8, exact
 paid108/119/123/125 and metadata NOT_DEPLOYED remain. No APK is built or published,
 and no product or RU root-cause acceptance is claimed. PR38 stays draft.
 Remote main at entry is53a780d9ccfcdb2c3ec6141a197917190f9be7a5;
-the preceding documentation head is7edf0e8e10d3e08b9b3c636def9e4ee1db8d9f73.
-Documentation checks:4 changed files/813 local links, zero errors; whitespace check
-passes. Staged private-key scan reports zero matches. Review is the author's own.
+the diagnosis documentation head is46543f33296d048698fc0ae3818a21f677c54f75.
+Recovery documentation checks:5 changed files/829 local links, zero errors;
+whitespace check passes. Review is the author's own, not an independent review.
+The initial diagnosis checkpoint separately passed4 files/813 links and its
+staged private-key scan. No source/runtime test results are invented for this
+documentation change; operational checks and their limitations are listed above.

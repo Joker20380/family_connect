@@ -1,6 +1,6 @@
 # Documentation
 
-[RU · 15 ноября: повторная остановка, таймаут TCP readback; восстановление не выполнено](releases/2026-11-15-ru-recurrence.md).
+[RU · 15 ноября: работа восстановлена, продление допуска проверено; причина задержек открыта](releases/2026-11-15-ru-recurrence.md).
 
 [HMAC · 15 ноября: generation2 переключено; сохранность и отдельная деградация RU](releases/2026-11-15-hmac-generation2-cutover.md).
 [Порядок и восстановление](operators/hmac-generation.md). Это не выпуск метаданных или beta126.
