@@ -1,17 +1,23 @@
 # Текущее состояние / Current state
 
 **15 November — DEVICE-TECHNICAL-METADATA-1 / IN_PROGRESS, NOT_DEPLOYED.**
-Continuation: the owner approved the narrow HMAC generation2 switch using
-source61b00409/documentationca076b7e. Fresh preflight and isolated restore pass;
-the cutover has not yet occurred at this checkpoint. Worker shutdown additionally
-requires normal socket disappearance, not merely exit0.
+HMAC prerequisite: **SWITCHED to generation2** using the owner's narrow approval
+for source61b00409/documentationca076b7e. Both active keys and all consumers agree;
+three automatic inventory/support cycles PASS, old key inactive, original identity,
+history, requests, baseline/cursor preserved. No metadata API/schema/UI/APK rollout.
+The strict worker drain passed: exit0, released lock, normal socket disappearance.
+**Separate RU degradation observed during the window:** AWG failed on stop timeout,
+TCP inactive since12:06UTC; paid-watch restarts and reconcile failures observed.
+No transport/HTTP/paid service restart was issued by this cutover. HTTP process and
+HTTP/reconciler archive pins remain unchanged. Causality is not established here;
+RU CAUSE_OPEN remains, and this is not a healthy-VPN acceptance claim.
 [Current cutover receipt](releases/2026-11-15-hmac-generation2-cutover.md).
 Protected real-copy coverage:66 canonical devices/4 canonical events, all checked
 stored references mapped,0 missing/conflicts. Restored support replay/pins and panel
 event/card continuity pass without historical rewrites or an old runtime HMAC key.
 70 focused source/support +48 panel +167 compatibility checks PASS. Six encrypted
 backup round trips and the exact minimal support/panel overlays PASS in isolation.
-Generation source61b00409/plan is prepared, not installed;
+Generation source61b00409's minimal HMAC overlay is installed; the rest of PR38 is not;
 [rehearsal and bounds](releases/2026-11-15-hmac-migration-rehearsal.md).
 Android job132651608837 failed on non-public NetworkCapabilities test mutators;
 replaced with exhaustive pure classification and real public Android observations.

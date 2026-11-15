@@ -1,5 +1,8 @@
 # Documentation
 
+[HMAC · 15 ноября: generation2 переключено; сохранность и отдельная деградация RU](releases/2026-11-15-hmac-generation2-cutover.md).
+[Порядок и восстановление](operators/hmac-generation.md). Это не выпуск метаданных или beta126.
+
 [RU · 14 ноября: attribution задержек persistence и ограниченный сбор](releases/2026-11-14-ru-persistence-pressure.md).
 [RU · first-failure v2: NO_GO, проверяемые потери burst](releases/2026-11-14-ru-attribution-v2-qualification.md);
 [исторический кандидат PR34: NO_GO](releases/2026-11-14-ru-first-failure-qualification.md).

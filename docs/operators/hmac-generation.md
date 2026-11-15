@@ -77,13 +77,13 @@ aliases and two pseudonymization keys, not the metadata release or whole PR38.
 
 ### Exact consumer placement / Размещение
 
-These are intended destinations; the cutover receipt records actual installation. Use the qualified
+These destinations are installed; the cutover receipt records verification. Use the qualified
 overlay from source61b00409, checking every current input against the baseline
 manifest before replacing a file. Never copy the entire source tree into production.
 
 | Consumer | Minimal code / private configuration |
 |---|---|
-| Operator collector runtime | Replace `control_plane/collect_inventory.py` and `monitor_inventory.py`; add `control/friends/pseudonyms.py` at that runtime root. Set `FC_PSEUDONYM_ALIASES` to its `.local/pseudonym-aliases.json`, owned by the operator,0600. Replace only its existing `.local/inventory-hmac.key`. |
+| Operator collector runtime | Replace `control_plane/collect_inventory.py` and `monitor_inventory.py`; add `control/friends/pseudonyms.py` at that runtime root. Set `FC_PSEUDONYM_ALIASES` to its `control_plane/.local/pseudonym-aliases.json`, owned by the operator,0600. Replace only its existing `control_plane/.local/inventory-hmac.key`. |
 | RU chat-sync | Replace `friends-access/app/control/friends/support.py`; add `app/control/friends/pseudonyms.py`. Place the same manifest at `friends-access/pseudonym-aliases.json`, root-owned0600. Replace only `friends-access/support-inventory-hmac.key`. |
 | RU forced-command reader | Replace `friends-access/support-bindings-read.py`; add the same module as `friends-access/pseudonyms.py`, root-owned and not group/world writable. Keep `subscription_events.py`, its canonical IDs and the forced-command SSH restriction unchanged. |
 | Local root support/notification collectors | Replace `/opt/family-connect-support/app/provisioning/support_bindings.py`; add `control/friends/pseudonyms.py` beneath that app root. Set `FC_PSEUDONYM_ALIASES` in both existing collector units. |
@@ -96,6 +96,17 @@ effective manifest generation/digest without printing its contents. Confirm the
 console UID again if the accepted image changes. Operator and RU key bytes must
 compare equal in-process; manifests must match on all consumers. Never include key
 bytes or private mapping content in command arguments, logs or the source package.
+
+Verify traversal of newly created **public code directories** as the actual runtime
+user before starting services. A0700 root-owned `app/control` blocks `fc-support`
+even when its module is0644. Set only newly created public code directories to0755;
+never widen private key/manifest directories or files. Import the installed worker
+module and load the alias manifest as `fc-support`, and verify the console manifest
+as UID10001. Inspect effective drop-ins, not just the written configuration file.
+The actual compose invocation also needs its existing image/UID/GID/publisher
+variables; reconstruct them in-process from the accepted configuration, never print
+tokens or pass their values in argv. Verify unchanged environment/command/mounts
+before recreating only the console with `--no-deps --no-build`.
 
 ### Ordered cutover / Порядок
 
@@ -148,6 +159,11 @@ bytes or private mapping content in command arguments, logs or the source packag
    counts/digests, and absence of duplicate identity/contact/notification jobs.
    Re-enable the existing timers only after all checks agree. New genuine events
    can then resume normal processing; old excluded history stays excluded.
+8. Observe at least three distinct automatic cycles, including fresh binding/feed,
+   active support owner and successful inventory/import from the existing sources.
+   Separate normal delivery/event progression from rotation duplicates. Report
+   degraded service observations explicitly rather than claiming the whole VPN
+   fleet healthy from a successful HMAC import.
 
 ## Recovery / Восстановление без потери новых данных
 

@@ -24,6 +24,9 @@ line is committed. No broad log deletion or Git history rewrite was performed.
 Final reachable-Git rescan after source61b00409 and its CI merge checks12,173 blobs:
 0 matches for either the old or prepared replacement key (raw/hex/base64).
 
+The later owner-approved [generation2 cutover](2026-11-15-hmac-generation2-cutover.md)
+is now complete. Counts and preparation status below remain historical evidence.
+
 ## Installed boundary and protected copies
 
 Fresh runtime checks identify the RU `friends-access/app/control/friends/support.py`
@@ -74,8 +77,11 @@ times. No unresolved legacy record was found in these checked domains. The tool
 explicitly marks missing history `legacy_unresolved` and blocks missing critical
 references rather than guessing matches. Active/pending coverage must be refreshed
 under the final bounded pause, not inferred from this table indefinitely.
-An additional scan of32 other PostgreSQL tables found0 extra known-HMAC references
-and0 unmapped named pseudonym fields. FK-linked rows, users/passwords and canonical
+An additional scan of32 other isolated PostgreSQL tables found0 extra known-HMAC
+references and0 unmapped named pseudonym fields. The later cutover compared original
+dumps: neither production dump contains the two technical-metadata tables; those
+were present only in the earlier expanded rehearsal replica. The fresh production
+restore has30 additional tables, all scanned. FK-linked rows, users/passwords and canonical
 notification records are not relabelled. This does not replace the final delta scan.
 
 ## Rehearsal and limits

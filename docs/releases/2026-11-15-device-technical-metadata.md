@@ -325,3 +325,15 @@ real-copy recovery are qualified for a separate owner decision, not installed.
 Production metadata and release-signed126 remain absent;125→126 preservation on
 compatible ARM64, exact paid descriptor, installed end-to-end chain and public
 catalog/invitation publication are still required. Own unused benches are stopped.
+
+## 15 November continuation: narrow HMAC stage complete
+
+The owner-approved [generation2 cutover](2026-11-15-hmac-generation2-cutover.md)
+installs only the qualified minimal HMAC overlay and protected aliases/keys.
+Three automatic inventory/support cycles and historical identity/request/cursor
+preservation pass. No new metadata API, database model, panel UI or beta126 is
+deployed. Public125 and its paid descriptors are unchanged;125→126 on compatible
+ARM64 and installed APK→API→panel remain release gates.
+RU AWG/TCP and paid-watch/reconciler degradation was observed during the window;
+the cutover did not restart those services, and triggering causality remains open.
+This is not a healthy-VPN or user-release acceptance claim.

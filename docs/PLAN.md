@@ -3,19 +3,23 @@
 ## Current engineering priority / Текущий critical path
 
 **DEVICE-TECHNICAL-METADATA-1 — SELECTED / implementation in progress, 15 November.**
-Current preparation: contain disclosed inventory HMAC, inventory all consumers,
-implement generation-aware device/event aliases, prove complete coverage and isolated
-restore/replay/delta recovery. The owner approved the narrow production switch on
-15 November using source61b00409/documentationca076b7e; fresh checks and the stricter
-worker-cleanup gate precede activation. Do not reactivate the disclosed key on rollback.
-Real-copy coverage and isolated support/panel rehearsals pass; private mappings are
-not published. Minimal source/image overlays pass real-copy replay/import and
-source61b00409 applicable hosted contexts PASS; execute only the approved bounded
-[generation switch](operators/hmac-generation.md).
+HMAC prerequisite is **SWITCHED / completed**: owner-approved source61b00409 minimal
+overlay, generation2 keys/aliases, fresh full coverage, isolated restore/replay and
+three automatic cycles pass. Original storage handles/history, identity blocks,
+request/message IDs and notification baseline/cursor remain. Old key is not active;
+private mappings stay private. Recovery retains generation2 and new data, never
+reactivates the disclosed key or restores an old DB over current operations.
+The strict worker exit/socket/lock gate passed. The
+[generation runbook](operators/hmac-generation.md) records placement and recovery.
 Track actual activation in the [cutover receipt](releases/2026-11-15-hmac-generation2-cutover.md),
 not the historical rehearsal counts.
-No paid/HTTP/VPN archive replacement is needed for this rotation; PR38 delivery is
+No paid/HTTP/VPN archive was replaced for this rotation; PR38 delivery is
 still independent and NOT_USER_READY. [Receipt](releases/2026-11-15-hmac-migration-rehearsal.md).
+During observation RU AWG stopped with timeout, TCP became inactive and paid-watch/
+reconcile failures occurred. This cutover issued no transport/HTTP/paid restarts;
+the HTTP process and admission/reconciler archive pins remain unchanged. Do not
+claim healthy VPN acceptance or assign a cause without evidence. RU CAUSE_OPEN
+remains separate; this does not authorize unrelated repair or transport restart.
 Android non-public test mutators corrected;20 JVM checks and419279c8 full hosted
 Android matrix PASS on rerun. Source61b00409 also completes the full API35/27/28/31
 matrix on exact-head rerun132675960943. Earlier failed attempts remain recorded.
