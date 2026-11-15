@@ -1,5 +1,17 @@
 # Client installation
 
+**15 November — beta126 technical information is not yet released to users.**
+Compatible server components are installed;125 remains the public update.
+126 uses separate consent, OFF by default, for model/Android/app, connection and
+available data-SIM operator information, VPN session, limited errors and approximate
+IP-network geography. Consent lasts until disabled; each latest group, including
+the hardware profile, expires independently within seven days. Offline disabling
+shows a pending revoke. Refusal does not restrict VPN, subscriptions or support.
+City currently requires a suitable RU/AWG observation; NL/TCP and MESH show unavailable
+or the genuine age of the last suitable observation. This is not GPS or proof of
+physical location. In-place125→126 preservation still requires a compatible ARM64
+device. [Privacy](privacy.md) · [Current receipt](releases/2026-11-15-device-technical-metadata.md).
+
 **13 November — public Android125, optional signed catalog8.** Both invitation
 paths and update discovery now offer125. Install over the current app without
 deleting data. The owner already runs125; no repeat installation is needed.

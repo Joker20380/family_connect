@@ -8,7 +8,7 @@ NOT_PUBLISHED. The current artifact receipt below supersedes the historical
 not-built checkpoints. Public125/catalog8, invitation routes
 and accepted paid108/119/123/125 remain unchanged. Never publish a rebuilt125.
 
-IN_PROGRESS / NOT_DEPLOYED / NOT_USER_READY. This is the selected product work,
+SERVER_PATH_DEPLOYED / NOT_USER_READY. This is the selected product work,
 not recorder architecture or production failure-writer work. RU CAUSE_OPEN and
 PR36 NO_GO_PREFLIGHT remain. PR37 sourcea5067ae2 and merge53a780d9 are the entry
 baseline, not qualification of this change. No delegated agents.
@@ -17,7 +17,154 @@ Remote main53a780d9ccfcdb2c3ec6141a197917190f9be7a5 verified by fetch. Primary
 checkout8937e71e has unrelated modified/untracked files and diverged history;
 all preserved. Worktree branch: feature/device-technical-metadata-20261115.
 
-## Post-recovery delivery preparation
+## Current installed result: minimal metadata server path
+
+The owner-authorized server delivery is installed, not merely built. It does not
+complete the Android/user release. No signed126 exists, no126 paid descriptor is
+loaded, and no real installed126 report has reached the panel. Public125, signed
+catalog sequence8, invitation routes and exact paid108/119/123/125 remain unchanged.
+PR38 stays draft. Remote main is still53a780d9; no whole-PR/main deployment occurred.
+
+### Actual runtime and privacy configuration
+
+| Component | Installed result |
+| --- | --- |
+| Serving HTTP | `family-connect-friends-http-candidate.service`, archive SHA256 `70a924dbc02c4ebdb15fe2b935f29070bda0a5fa37f140ac2d35765b34500614` |
+| Panel | Image `sha256:5ae92f8c7775d2ff0ad26627f6cdfcda53a3d4193a08b9fe1de1e89f32c432da`, additive migrations0014/0015 |
+| Generation2 | Manifest `8602e6526ca1ec0e408c99a7ca37aedc4413b417f392e32096d5167517fcdcb8`; both active keys agree internally; no key values/mappings exported |
+| Collector | Independent metadata path in existing monitor; current archive pinned; existing inventory/subscription collectors and HMAC normalization retained |
+| GeoIP | Central RU local DB-IP Lite City/ASN2026-11, dedicated pinned maxminddb3.2.0 environment; no customer IP sent externally |
+| Actual TLS ingress | `family-connect-product-https`, `nginx -c /etc/fc/nginx.conf`; loaded configuration SHA256 `c5e73c104f00a08245fd8e76c69bdd1dde9483da112c7e9f5be33443b94edd5c` |
+
+HTTP replaces only four qualified archive members; every other member, including
+paid/support/recovery, stays unchanged. Panel retains all232 other application
+files, including accepted import_inventory, import_subscriptions and pseudonyms.
+Actual environment, UID10001, group980, volumes and read-only alias mount match.
+Only serving HTTP and console were restarted/recreated; nginx was reloaded.
+VPN/watch/reconciler were not restarted. Monitor alone was briefly paused/drained.
+
+The first console recreation used an old private Compose reconstruction that
+omitted the existing HMAC override. A strict loaded-environment check caught this
+while imports remained paused. Restoring the explicit existing HMAC override and
+recreating console corrected it before imports resumed. No generation1 imports or
+key rollback occurred. The new `validate_deployment` regression guard compares the
+resolved configuration against actual Docker inspect before mutation, not against
+another reconstruction. Its missing-environment/mount/user/logging checks pass.
+This transient configuration failure is retained as evidence, not erased as PASS.
+
+The real8443 metadata location disables access/error logging and overwrites ingress
+headers; it does not use those headers as a client-city source. Actual Gunicorn
+uses query-free `%(m)s %(U)s %(s)s %(D)s`. A controlled city-filter marker is absent
+from loaded logs while the inventory access path is present.
+
+### Fresh backups, restoration and preservation
+
+- Canonical SQLite: consistent27-table backup, isolated integrity/FK/full-table
+  checks and encrypted off-host decrypt/restore pass. Backup SHA256
+  `7d71344c7157bc8c78463391f56af99a578672f924362f018fdc26755fe4e24b`.
+- Panel: consistent27,435,304-byte dump, SHA256
+  `037495cd0c61b57f86b5709845755b8f2cb07c99361b4801bb13fab6cd04068b`;
+  isolated network-none/port-free PostgreSQL restore and migrations pass. All34
+  prior protected tables survive migration. Disposable restore resources removed.
+  Initial test tmpfs capacity/readiness errors were fixed in the isolated harness;
+  no old database was restored on production.
+- Fresh canonical comparison: devices66, invites121, subscriptions1, paid events4,
+  chat bindings53, service senders1, referral links19 and claims59 all retain their
+  complete protected contents. These are this deployment's counts, not expectations
+  copied from the HMAC rehearsal.
+- Original41699 inventory and6326 subscription snapshot IDs/digests remain unchanged
+  as normal imports increase totals to41828/6369 at the preservation observation.
+  All4 subscription-event observations remain unchanged; no labels existed in this
+  baseline. The single account's password, identity and all privileges are exact;
+  only its `last_login` advances. Full-row auth equality is therefore not claimed.
+- Support owner is not restarted. A SQLite byte comparison changes during ordinary
+  binding refresh and is not used as proof of corruption or preservation. A fresh
+  consistent decrypted, in-process semantic comparison across normal cycles retains
+  all17 records:8 pins,2 requests,8 messages,0 jobs,1 baseline and1 cursor, with
+  missing/changed/new all0. Only binding sequence/expiry is excluded. This semantic
+  observation is explicitly post-cutover, not a fabricated pre-deploy comparison.
+  No request, message, identity, baseline or cursor was rewritten by deployment.
+
+Private receipts, backups and identifiers stay outside Git. Recovery retains new
+data, consent tombstones and generation2; never restores an old DB or retired key.
+See the [narrow delivery/recovery runbook](../operators/technical-metadata-release.md).
+
+### Operational and UI observations
+
+Three automatic complete monitor cycles14:10:15.466720,14:11:35.129563 and
+14:12:54.791130UTC report RU/NL inventory, subscriptions and metadata imported. The
+metadata source is `ok`, not just an importer exit0. There are66 distinct stable
+device handles and0 metadata rows. Empty metadata is expected without an installed
+signed126 opt-in and does **not** satisfy the mandatory end-to-end gate.
+
+Authenticated production cards at1440/390px pass: real125 unsupported-state labels,
+all seven filters, source disclosure, no horizontal overflow and existing support,
+subscriptions/server navigation. No synthetic production metadata was inserted.
+Open [the existing operator panel](http://127.0.0.1:8765/inventory/) on the operator
+host; its existing authentication is retained.
+
+HTTP loopback18086 and fully verified public HTTPS reject unauthenticated metadata
+and legacy support requests403; `/i/` remains200. Transport/watch PIDs733875/733879/
+733898 remain active with0 restarts; node125c796a and reconciler40e1d721 are unchanged.
+This is not client traffic acceptance or a permanent RU cause fix. No test payment,
+term change or user message is created. New real notification delivery NOT_OBSERVED.
+
+### GeoIP and scope of proof
+
+City MMDB126,873,350bytes SHA256
+`5f64491f77c2c78b56cd83a88db4ea6c4666874322da38805498bbb754ccc735`;
+ASN MMDB9,648,279bytes SHA256
+`81565a450281c949fc83745f5ec9cfea70b035163b1152b055645884765d153d`.
+These are locally computed hashes, not supplier signatures. Bounded atomic updater
+retains one prior pair and visible update status. Free disk after staging7,629,688,832
+bytes. Monthly update procedure is documented; no new timer was silently added.
+DB-IP attribution is present on metadata views.
+
+Controlled IPv4/IPv6 public-resolver lookups using the actual installed environment
+return country/city/ASN with the correct database hashes. The fixture origin is
+synthetic: this proves local MMDB operation, not a real device endpoint or city.
+Actual device geography still needs installed126 over the canonical-identity-bound
+RU/AWG peer observation. NL/TCP and MESH have no qualified direct-IP source and show
+unavailable or a separately aged last observation. No VPN/relay city is substituted.
+
+### Android artifact and remaining external prerequisites
+
+Original public125 is fully downloaded over verified HTTPS:50,470,304bytes,
+SHA256 `f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c`.
+Its accepted certificate is
+`67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+All seven corresponding audio-source members match the qualified126 CI source;
+the retained7,601,671-byte archive hash is
+`249b86d49612b716d69e25d554579213a32cbb74d7167d652f6808f60f618a89`.
+Nothing has been republished under an existing version/hash.
+
+Vault-backed signing was attempted through a local file-selection/password workflow,
+but vault selection was not completed; no production credentials were consumed and
+no signed APK was produced. No compatible ADB device is connected. Required next
+owner-assisted session: select/unlock the existing signing vault locally and connect
+an authorized ARM64 device with original125 via USB debugging without clearing data.
+Do not send passwords/keys in chat. Then verify signed126 in-place preservation,
+default consent OFF, opt-in/report/actual panel, disconnect/revoke/TTL and restart.
+Physical5G/dual-SIM remain separately NOT_OBSERVED with fallback tests retained.
+
+Exact signed126 paid qualification/loading, installed-device chain, updater download,
+public APK/catalog/invitations, review and ordinary merge remain blocked on those
+mandatory gates. Signed bytes must be frozen before computing the paid descriptor.
+No placeholder/range/hash wildcard is accepted. There is no public126 download URL.
+
+### Checks at this checkpoint
+
+- Current panel deployment/HTTP packager tests:19 PASS.
+- Focused metadata/GeoIP/overlay/vault checks:64 PASS,1 opt-in vault integration SKIP.
+- Actual minimal HTTP archive with real local nginx:35 PASS,1 accepted-sync fixture
+  SKIP; earlier qualification of that unchanged interoperability path remains separate.
+- Published preparation sourceaeb8923b: panel, paid compatibility, readiness wire,
+  notification route, messenger and Linux checks PASS; phase0/client-build results
+  are tracked separately from the qualified Android source61b00409 below.
+- No JVM test is represented as instrumentation; no empty projection is represented
+  as an installed client result. Old checkpoints below are historical evidence.
+
+## Historical post-recovery delivery preparation
 
 Starting documentation headc5a2a9ce, remote main53a780d9. The separate RU recovery
 receipt is accepted, not rerun. Fresh runtime readback confirms HTTP617c7d75,
@@ -47,7 +194,7 @@ current metadata importer unseals the generation-aware envelope. Thirteen focuse
 HTTP/panel packager checks pass. This candidate is not installed and does not change
 production Compose, secrets, mounts, migrations or volumes by itself.
 
-## Observed ingress and deployment boundary
+## Historical observed ingress and deployment boundary
 
 Read-only authorized RU inspection: TLS nginx listens8443; Friends routes proxy
 to loopback18086, NOT the inactive legacy18084 unit. Current Friends locations

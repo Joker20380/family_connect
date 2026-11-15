@@ -1,6 +1,24 @@
 # Текущее состояние / Current state
 
-**15 November — metadata delivery resumed on the accepted RU/HMAC2 base.**
+**15 November — metadata server path DEPLOYED; user release still BLOCKED.**
+Minimal HTTP70a924db, generation2-aware panel5ae92f8c, collector and centralized
+DB-IP Lite2026-11 are installed. No transport/watcher/paid reconciler restart or
+whole-PR deployment. Three normal cycles14:10:15/14:11:35/14:12:54UTC import all
+three sources plus metadata; source is `ok`,66 stable device handles,0 metadata
+records (no signed installed126 consent yet). Real125 cards/filters/navigation pass
+authenticated1440/390px checks; loaded logs exclude the test city query.
+The Compose reconstruction initially omitted the existing HMAC override. The strict
+post-recreation check caught it while imports stayed paused; explicit override/mount
+restoration and loaded-environment validation pass before resumption. A new preflight
+guard prevents this omission. Generation2 manifest/key and existing importers remain.
+Original public125 APK/signer and candidate audio sources are verified unchanged.
+126 remains unsigned: local KeePassXC selection was not completed. No compatible
+ADB device is connected. Exact paid126,125→126, installed APK chain and publication
+are NOT accepted; public125/catalog8/paid108/119/123/125 stay unchanged.
+[Delivery receipt](releases/2026-11-15-device-technical-metadata.md) ·
+[Narrow deployment/recovery runbook](operators/technical-metadata-release.md).
+
+**Historical15 November — metadata delivery resumed on the accepted RU/HMAC2 base.**
 DEVICE-TECHNICAL-METADATA-1 remains selected. Fresh readback confirms the accepted
 HTTP617c7d75/reconciler40e1d721/node125c796a and active unchanged RU transport PIDs;
 panel remains alias-aware e44c3423, support active, generation2 manifest unchanged.
@@ -39,7 +57,7 @@ Prior permission was HMAC-only and explicitly excluded transport/paid restarts;
 the owner subsequently confirmed the separate controlled RU recovery above.
 [Diagnosis and exact recovery boundary](releases/2026-11-15-ru-recurrence.md).
 
-**15 November — DEVICE-TECHNICAL-METADATA-1 / IN_PROGRESS, NOT_DEPLOYED.**
+**Historical15 November — DEVICE-TECHNICAL-METADATA-1 / IN_PROGRESS, NOT_DEPLOYED.**
 HMAC prerequisite: **SWITCHED to generation2** using the owner's narrow approval
 for source61b00409/documentationca076b7e. Both active keys and all consumers agree;
 three automatic inventory/support cycles PASS, old key inactive, original identity,

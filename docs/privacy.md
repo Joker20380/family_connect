@@ -23,7 +23,18 @@ deletes the payload on receipt of the revoke. Offline revocation is shown as pen
 Minimal consent/sequence tombstones last for the device lifetime to prevent delayed
 resurrection; they contain no device/network/geographic payload. The current metadata
 database and panel projection must not enter indefinite backups or append-only logs.
-Public125 is unchanged; candidate implementation/qualification is still in progress.
+Public125 is unchanged. The compatible server/collector/panel path is deployed,
+but126 signing, upgrade and installed opt-in/revoke acceptance are not complete;
+this is not a public126 rollout. The first geographic source is only a recent RU/AWG
+peer endpoint joined through the authenticated device's canonical AWG key. NL/TCP
+and MESH have no qualified direct-IP source here: show unavailable or an older
+suitable observation with its own age. Ordinary HTTP/VPN-exit/relay addresses do
+not establish the client's city. Local DB-IP Lite supplies network geography/ASN,
+not GPS, retail ISP certainty or proof of a person's physical location; an upstream
+third-party VPN can affect even a qualified peer observation. No raw IP/coordinates
+are retained in the metadata projection, logs or history. DB-IP attribution remains
+visible beside results; database version and SHA256 describe local integrity, not
+a vendor signature. Missing/stale GeoIP does not block VPN, payments or support.
 
 Android protects saved VPN profiles with Android Keystore-backed storage. The messenger
 has a separate identity and encrypted local storage; its Android key handling is in

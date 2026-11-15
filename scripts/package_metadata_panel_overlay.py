@@ -36,6 +36,35 @@ def digest(raw):
     return hashlib.sha256(raw).hexdigest()
 
 
+def validate_deployment(running, image, resolved):
+    console = resolved['services']['console']
+    actual_environment = dict(value.split('=', 1) for value in running['Config']['Env'])
+    inherited = dict(value.split('=', 1) for value in image['Config']['Env'])
+    if inherited | console.get('environment', {}) != actual_environment:
+        raise ValueError('Effective panel environment differs from running container')
+    actual_mounts = {(item['Type'], item.get('Name') if item['Type'] == 'volume' else item['Source'],
+                      item['Destination'], item['RW']) for item in running['Mounts']}
+    desired_mounts = set()
+    for item in console.get('volumes', []):
+        source = item['source']
+        if item['type'] == 'volume':
+            source = resolved['volumes'][source]['name']
+        desired_mounts.add((item['type'], source, item['target'], not item.get('read_only', False)))
+    if desired_mounts != actual_mounts:
+        raise ValueError('Effective panel mounts differ from running container')
+    alias_path = actual_environment.get('FC_PSEUDONYM_ALIASES')
+    if alias_path != '/run/fc-pseudonym-aliases.json' or not any(
+            target == alias_path and not writable for kind, source, target, writable in actual_mounts):
+        raise ValueError('Generation2 read-only manifest required')
+    if console.get('user', image['Config']['User']) != running['Config']['User']:
+        raise ValueError('Panel user must remain unchanged')
+    if sorted(map(str, console.get('group_add', []))) != sorted(map(str, running['HostConfig'].get('GroupAdd') or [])):
+        raise ValueError('Panel supplementary groups must remain unchanged')
+    command = console.get('command', image['Config']['Cmd'])
+    if not isinstance(command, list) or 'seed_demo' in ' '.join(command) or LOG_FORMAT not in ' '.join(command):
+        raise ValueError('Production command must exclude seed data and query logging')
+
+
 def prepare(baseline, image, output, source=ROOT):
     if image != IMAGE:
         raise ValueError('Unqualified panel image')

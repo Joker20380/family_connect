@@ -10,6 +10,14 @@ chain before optional public release. Unsigned CI artifact and generation2 panel
 overlay are prepared; absence of a connected compatible device is not a PASS.
 No observer/recovery successor is selected. See the current metadata receipt.
 
+Current gate: metadata HTTP/panel/collector/GeoIP are minimally deployed and normal
+generation2 imports/real legacy-card layout pass. Public125 remains unchanged.
+Finish local vault-backed signing, compatible ARM64125→126 and installed opt-in/revoke
+chain before exact paid126 and public catalog/invitation publication. No signing
+selection was completed and no compatible ADB device is attached. Do not claim an
+unsigned candidate, empty metadata projection or a controlled MMDB fixture as the
+required installed-device result. [Delivery/recovery plan](operators/technical-metadata-release.md).
+
 **RU-INCIDENT-20261115 — authorized recovery complete, RECOVERED_CAUSE_OPEN.**
 First failure retained: local TCP engine-query timeout, not a demonstrated fsync
 failure. Separate owner permission obtained. Fresh27-table restore/paid projection
@@ -38,7 +46,7 @@ Track actual activation in the [cutover receipt](releases/2026-11-15-hmac-genera
 not the historical rehearsal counts.
 No paid/HTTP/VPN archive was replaced for this rotation; PR38 delivery is
 still independent and NOT_USER_READY. [Receipt](releases/2026-11-15-hmac-migration-rehearsal.md).
-During observation RU AWG stopped with timeout, TCP became inactive and paid-watch/
+Historical HMAC observation: RU AWG stopped with timeout, TCP became inactive and paid-watch/
 reconcile failures occurred. This cutover issued no transport/HTTP/paid restarts;
 the HTTP process and admission/reconciler archive pins remain unchanged. Do not
 claim healthy VPN acceptance or assign a cause without evidence. RU CAUSE_OPEN

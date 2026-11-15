@@ -1,4 +1,5 @@
 import json
+from copy import deepcopy
 
 import pytest
 
@@ -53,3 +54,47 @@ def test_rejects_pre_hmac_image_and_existing_metadata(baseline, tmp_path):
     target.write_bytes(b'existing metadata')
     with pytest.raises(ValueError, match='already present'):
         overlay.prepare(baseline, overlay.IMAGE, tmp_path / 'context')
+
+
+def deployment():
+    running = dict(Config=dict(Env=['PATH=/usr/bin', 'FC_PSEUDONYM_ALIASES=/run/fc-pseudonym-aliases.json'], User='console'),
+                   HostConfig=dict(GroupAdd=['980']), Mounts=[
+                       dict(Type='bind', Source='/private/aliases.json', Destination='/run/fc-pseudonym-aliases.json', RW=False),
+                       dict(Type='volume', Name='production_data', Destination='/data', RW=True)])
+    image = dict(Config=dict(Env=['PATH=/usr/bin'], User='console', Cmd=['gunicorn', '--access-logformat', overlay.LOG_FORMAT]))
+    resolved = dict(services=dict(console=dict(environment={'FC_PSEUDONYM_ALIASES': '/run/fc-pseudonym-aliases.json'},
+                    group_add=['980'], volumes=[
+                        dict(type='bind', source='/private/aliases.json', target='/run/fc-pseudonym-aliases.json', read_only=True),
+                        dict(type='volume', source='data', target='/data')])), volumes=dict(data=dict(name='production_data')))
+    return running, image, resolved
+
+
+def test_validate_loaded_configuration_not_just_reconstructed_compose():
+    running, image, resolved = deployment()
+    overlay.validate_deployment(running, image, resolved)
+    missing_override = deepcopy(resolved)
+    missing_override['services']['console']['environment'] = {}
+    with pytest.raises(ValueError, match='environment'):
+        overlay.validate_deployment(running, image, missing_override)
+    missing_mount = deepcopy(resolved)
+    missing_mount['services']['console']['volumes'] = resolved['services']['console']['volumes'][1:]
+    with pytest.raises(ValueError, match='mounts'):
+        overlay.validate_deployment(running, image, missing_mount)
+
+
+@pytest.mark.parametrize('change', ('writable_alias', 'user', 'group', 'seed', 'query_log'))
+def test_rejects_runtime_security_regressions(change):
+    running, image, resolved = deployment()
+    console = resolved['services']['console']
+    if change == 'writable_alias':
+        console['volumes'][0]['read_only'] = False
+    elif change == 'user':
+        console['user'] = 'root'
+    elif change == 'group':
+        console['group_add'] = []
+    elif change == 'seed':
+        console['command'] = ['sh', '-ec', 'python manage.py seed_demo; gunicorn --access-logformat "' + overlay.LOG_FORMAT + '"']
+    elif change == 'query_log':
+        console['command'] = ['gunicorn', '--access-logformat', '%(r)s']
+    with pytest.raises(ValueError):
+        overlay.validate_deployment(running, image, resolved)
