@@ -70,7 +70,7 @@ final class TechnicalMetadataAndroid {
                 for(Network vpn:manager.getAllNetworks()){
                     NetworkCapabilities own=manager.getNetworkCapabilities(vpn);
                     if(own==null||!own.hasTransport(NetworkCapabilities.TRANSPORT_VPN))continue;
-                    if(Build.VERSION.SDK_INT>=29&&own.getOwnerUid()!=android.os.Process.myUid())continue;
+                    if(Build.VERSION.SDK_INT>=30&&own.getOwnerUid()!=android.os.Process.myUid())continue;
                     selected=own;count++;
                 }
                 if(count==1){type=kind(selected);source="vpn_transport_capabilities";scope="session_underlay";reason="UNKNOWN".equals(type)?"underlay_not_exposed":"none";}

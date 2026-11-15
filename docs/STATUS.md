@@ -33,6 +33,9 @@ Capacity/privacy follow-up: metadata-only transient64MiB bound (inventory4MiB
 unchanged), no nginx metadata access/error IP logs;19 projection/14 monitor/3 TLS
 checks PASS. Consistent canonical registry and panel backups restored in isolation;
 encrypted off-host copies retained privately. No production code/database switch.
+Hosted5d7be0a2 resolves radio permission lint but exposes ownerUid's API30 minimum;
+the guard is corrected (not suppressed). Metadata filter query strings/peer IP are
+excluded from proposed panel access logs;20 projection and5 packaging checks PASS.
 Remote main verified53a780d9ccfcdb2c3ec6141a197917190f9be7a5 (PR37 merged).
 Dirty/diverged primary checkout preserved; isolated feature worktree starts at that
 main. Public125/catalog8 and paid108/119/123/125 remain unchanged; no new APK or

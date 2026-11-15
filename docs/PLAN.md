@@ -33,6 +33,9 @@ CI, then APK qualification, backups/restore, minimal rollout and public delivery
 Preparation backups/isolated SQLite paid projection and network-isolated PostgreSQL
 restore PASS; refresh baseline immediately before any switch. Capacity/privacy
 follow-up is qualified locally, not a deployed API or installed/public126.
+New-source gate also includes API30 ownerUid correction and panel log-query privacy.
+The isolated125 bench is being enrolled through the ordinary referral/identity path;
+no phone action or real payment/expiry mutation is part of this preparation.
 
 **Selected correction qualified: attribution failure-publication / PR37.**
 Deterministic empty/partial interprocess reproduction and atomic positive-fixture

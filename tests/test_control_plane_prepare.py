@@ -15,6 +15,14 @@ def test_local_panel_services_have_restart_policy():
         assert f'  {service}:\n    restart: unless-stopped\n' in compose
 
 
+def test_panel_access_logs_exclude_metadata_search_terms_and_peer_addresses():
+    for name in ('compose.yaml', 'Dockerfile'):
+        source = (prepare_local.BASE / name).read_text()
+        assert '--access-logformat' in source
+        assert '%(m)s %(U)s %(s)s %(D)s' in source
+        assert not any(atom in source for atom in ('%(r)s', '%(q)s', '%(h)s', '%(f)s'))
+
+
 def test_context_contains_fleet_runtime_without_private_state_or_binaries():
     names = {path.relative_to(prepare_local.REPOSITORY).as_posix() for path in prepare_local.source_paths()}
     assert {'fleet/contracts.py', 'fleet/health.py', 'fleet/runtime/roles.py',

@@ -160,6 +160,21 @@ def test_metadata_export_bound_does_not_relax_inventory_bound(monkeypatch):
         technical_metadata.load_export(b' ' * 17)
 
 
+def test_actual_gunicorn_atoms_do_not_log_city_operator_or_peer():
+    from gunicorn.config import Config
+    from gunicorn.glogging import Logger
+    from types import SimpleNamespace
+    logger = Logger(Config())
+    request = dict(REQUEST_METHOD='GET', PATH_INFO='/devices/',
+                   RAW_URI='/devices/?city=private-city&operator=private-operator',
+                   QUERY_STRING='city=private-city&operator=private-operator',
+                   SERVER_PROTOCOL='HTTP/1.1', REMOTE_ADDR='198.51.100.42',
+                   HTTP_REFERER='/devices/?city=private-city')
+    atoms = logger.atoms(SimpleNamespace(status='200 OK', headers=[], sent=32), [],
+                         request, timedelta(milliseconds=1))
+    assert '%(m)s %(U)s %(s)s %(D)s' % atoms == 'GET /devices/ 200 1000'
+
+
 def test_maximum_fleet_export_fits_without_geo_history():
     row = with_location()['devices'][0]
     maximum = dict(observations='x' * contract.MAX_REPORT, geoip=row['geoip'],

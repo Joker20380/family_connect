@@ -18,6 +18,9 @@ ordinary inventory remains capped at4MiB. Neither path silently truncates a flee
 The local monitor's500s budget includes the independent metadata cleanup fallback.
 Panel backups must exclude `console_technicalmetadata` row data; restore projections
 only from the current consent-fenced source, never from an old metadata snapshot.
+Use Gunicorn access format `%(m)s %(U)s %(s)s %(D)s` when overlaying the existing
+production command: method/path/status/duration only, no query, referrer or peer IP.
+Otherwise a city/operator search could be retained in ordinary access logs.
 All groups, including hardware, expire independently after at most7days. UI source
 and the current implementation limits are recorded in the
 [selected task receipt](../docs/releases/2026-11-15-device-technical-metadata.md).

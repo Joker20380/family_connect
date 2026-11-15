@@ -273,3 +273,21 @@ production is permitted. Future panel backups must exclude metadata projection r
 The first backup attempt used system Python without RNS and stopped before creating
 the database copy; recovery reused the same pinned archive with the actual accepted
 venv. No protected state was changed by that failed preparation.
+
+## API-level and panel-log review
+
+Source5d7be0a2 hosted Android132647466544 passes the radio permission check but fails
+NewApi: NetworkCapabilities.getOwnerUid is API30, not29. Guard corrected to30 after
+checking the installed SDK API database; no lint suppression/baseline. New runtime
+qualification still required. The default-data SIM qualifier is shown explicitly.
+The panel's proposed Gunicorn format emits only method/path/status/duration, never
+city/operator query strings, referrer or peer IP.20 projection tests include actual
+Gunicorn atom rendering;5 build-context checks PASS. Production command must receive
+this format at cutover; changing source compose alone is not a deployment.
+
+Baseline-derived panel image5051f0e722661ad63343c964945b8d7f37f7984bdf6b5c709c4e4082c14d94d5
+contains only14 metadata-related source files over accepted61e4df54f1e1 image.
+No unrelated main or paid modules copied. Isolated checks/migration drift/actual
+`/inventory/` render PASS after providing the ordinary tmpfs collectstatic step.
+This is NOT the deployed panel. Preserve that preparation image and source receipt;
+apply the separately qualified query-free access-log command during deployment.
