@@ -2,6 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
+**RU-INCIDENT-20261115 — immediate operational diagnosis complete, NOT_RECOVERED.**
+Read-only response to the owner's new outage report preserves the first failure
+and confirms stopped AWG/TCP, watcher restart-loop and failed reconciliation.
+This failure is a local TCP engine-query timeout, not a demonstrated persistence
+call failure. Root resource cause remains open; no new diagnostic agent is deployed.
+Separate recovery gate: explicit permission beyond the prior HMAC-only scope;
+fresh protected-state backup/pins, RU-only command-map fence with NL continuation,
+drain and PID0/no-jobs, retained-state validation, sequential unchanged-runtime
+start, exact fence restoration and ordinary readback/renewal beyond120s.
+Keep generation2/aliases/new data, current paid125 policy and all durability guards.
+No old DB restore, HMAC rollback, full PR38 deployment or restart-only FIXED claim.
+[Current diagnosis and recovery boundary](releases/2026-11-15-ru-recurrence.md).
+The metadata product remains selected but is not advanced by this incident check.
+
 **DEVICE-TECHNICAL-METADATA-1 — SELECTED / implementation in progress, 15 November.**
 HMAC prerequisite is **SWITCHED / completed**: owner-approved source61b00409 minimal
 overlay, generation2 keys/aliases, fresh full coverage, isolated restore/replay and

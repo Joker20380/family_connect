@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**15 November12:46–12:49UTC — RU recurrence confirmed, NOT_RECOVERED.**
+Owner-reported outage is real: AWG failed/timeout and TCP inactive since12:06:49UTC;
+watcher has67 restarts at12:46 and central reconcile fails. The preserved first
+failure is COMMAND_TIMEOUT in tcp-query/engine_query at12:06:48.857UTC, not another
+observed fsync failure:9.284s total against8s, query3.610s with2.326s remaining.
+Systemd records a watchdog timeout next. Exact accepted node/gateway/reconciler
+and watcher-unit pins are unchanged. HTTP/peer worker remain active. Host disk
+pressure is corroborating evidence, not attribution to HMAC work or a provider.
+No service/config/data changes or recovery are performed by this read-only check.
+Prior permission was HMAC-only and explicitly excluded transport/paid restarts;
+the separate controlled RU recovery needs owner confirmation.
+[Diagnosis and exact recovery boundary](releases/2026-11-15-ru-recurrence.md).
+
 **15 November — DEVICE-TECHNICAL-METADATA-1 / IN_PROGRESS, NOT_DEPLOYED.**
 HMAC prerequisite: **SWITCHED to generation2** using the owner's narrow approval
 for source61b00409/documentationca076b7e. Both active keys and all consumers agree;
@@ -48,8 +61,8 @@ simultaneous failures. The metadata TLS/panel overlays and1440/390px rendering h
 isolated checks, not production acceptance. Old support body/paid access remain.
 Unused own emulator5590, Django18769, synthetic PostgreSQL55439 and the isolated
 real-copy HMAC PostgreSQL are stopped. Private evidence/AVD data/backups retained.
-Next gates: obtain explicit bounded HMAC-cutover approval and refresh final delta;
-separately qualify release signature, compatible ARM64 in-place upgrade,
+HMAC cutover approval and final delta are complete. Remaining metadata gates:
+qualify release signature, compatible ARM64 in-place upgrade,
 exact paid descriptor and installed APK→API→collector→production panel delivery.
 Remote main verified53a780d9ccfcdb2c3ec6141a197917190f9be7a5 (PR37 merged).
 Dirty/diverged primary checkout preserved; isolated feature worktree starts at that
