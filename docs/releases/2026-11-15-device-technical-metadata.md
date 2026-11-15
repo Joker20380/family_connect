@@ -204,3 +204,32 @@ HTTP PID2345109 remains active, ordinary AWG/TCP not restarted. GeoIP still loca
 Rollback must restore code/config only, preserving later user events and metadata
 revocation tombstones. Never restore old databases over live data. No transport
 restart, kill-switch bypass, new dangerous permission or RU persistence changes.
+
+## Baseline-derived overlay and browser gate
+
+Fresh serving HTTP archive617c7d752a20631d624b301c59142af34f3624483a5d2d5adc2a7c7722dd74b1
+differs from main: its access module lacks main's unrelated revoke_device method.
+The explicit two-member patch plus two new modules preserves that accepted runtime
+and every unrelated archive member, including paid policy. Candidate HTTP SHA256
+70a924dbc02c4ebdb15fe2b935f29070bda0a5fa37f140ac2d35765b34500614 is local-only.
+Overlay unit2PASS; exact candidate with complete isolated test companions:
+42PASS/1SKIP (external pinned sync artifact not supplied). Actual nginx/TLS checks
+prove forged XFF/Forwarded/client peer headers cannot choose the forwarded peer;
+the header is not a client-location proof and is not used for GeoIP.
+
+Isolated PostgreSQL/browser gate PASS at1440/390px: model/city filters, sources,
+attribution and existing subscriptions/server navigation, no horizontal overflow.
+Screenshots contain synthetic fixtures, NOT a production end-to-end observation.
+Exact public125 installed successfully on the new API35 NVIDIA/KVM emulator;
+package/code125 read back. No activation or125→126 preservation claim yet.
+
+Source46a8686ab8e84aff7994aef34299690c35a94722 hosted panel43658628417,
+paid43658628518 and readiness43658628548 PASS. Android132642755619 fails lint on
+READ_PHONE_STATE/getDataNetworkType; no suppression or new dangerous permission is
+accepted. Linux-control132642792242:5684PASS/1FAIL/276SKIP in standard context,
+root258PASS and snapshot31498PASS. The failing subscription source assertion finds
+the legacy device regex changed by the new endpoint; repair must preserve it.
+PR test-merge source24d98766816d8fff68d773f721bf8baacda26688 is distinct from head.
+Desktop runtime checks passed, but unrelated appimagetool download failed in132642755597.
+These failures block acceptance, not reasons to bypass gates. No production writes,
+paid descriptor126, signed APK, public catalog change or user-ready rollout.
