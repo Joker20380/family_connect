@@ -13,6 +13,11 @@ The monitor enables this independent path only when that config exists; errors c
 cleanup running if collection is disabled. Do not back up the observations table or
 new metadata SQLite payloads into indefinite archives. Preserve consent tombstones.
 No SSH credentials or production registry are mounted in the web container.
+Metadata-only transient export/import is bounded at64MiB for the5000-device store;
+ordinary inventory remains capped at4MiB. Neither path silently truncates a fleet.
+The local monitor's500s budget includes the independent metadata cleanup fallback.
+Panel backups must exclude `console_technicalmetadata` row data; restore projections
+only from the current consent-fenced source, never from an old metadata snapshot.
 All groups, including hardware, expire independently after at most7days. UI source
 and the current implementation limits are recorded in the
 [selected task receipt](../docs/releases/2026-11-15-device-technical-metadata.md).

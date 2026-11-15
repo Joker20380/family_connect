@@ -11,6 +11,8 @@ import sys
 
 from collect_inventory import BASE, ssh_command
 
+MAX_EXPORT_BYTES = 64 * 1024 * 1024
+
 
 def collect(known_hosts=None, base=BASE, run=subprocess.run):
     local = base / '.local'
@@ -30,9 +32,9 @@ def collect(known_hosts=None, base=BASE, run=subprocess.run):
     command = ssh_command('gateway-ru', known_hosts)
     command[-1] = shlex.quote(config['python']) + ' -I -B -'
     script = (base / 'apps/console/technical_metadata_collector.py').read_text()
-    script += '\nimport json\nprint(json.dumps(collect_technical_metadata(' + repr(config) + '), allow_nan=False))\n'
+    script += '\nimport json\nprint(json.dumps(collect_technical_metadata(' + repr(config) + '), ensure_ascii=False, allow_nan=False))\n'
     response = run(command, input=script.encode(), capture_output=True, check=True, timeout=45)
-    if len(response.stdout) > 4 * 1024 * 1024:
+    if len(response.stdout) > MAX_EXPORT_BYTES:
         raise ValueError('Metadata bound exceeded')
     data = json.loads(response.stdout)
     if data.get('source') != 'gateway-ru' or type(data.get('devices')) is not list or len(data['devices']) > 5000:
@@ -42,7 +44,10 @@ def collect(known_hosts=None, base=BASE, run=subprocess.run):
         if not isinstance(device, str) or not re.fullmatch('[0-9a-f]{32}', device):
             raise ValueError('Invalid device binding')
         row['pseudonym'] = hmac.new(key, device.encode(), hashlib.sha256).hexdigest()
-    return json.dumps(data, ensure_ascii=False, allow_nan=False).encode()
+    raw = json.dumps(data, ensure_ascii=False, allow_nan=False).encode()
+    if len(raw) > MAX_EXPORT_BYTES:
+        raise ValueError('Metadata projection bound exceeded')
+    return raw
 
 
 def main():

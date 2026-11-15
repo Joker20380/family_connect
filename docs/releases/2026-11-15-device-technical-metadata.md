@@ -246,3 +246,30 @@ separately. Existing source/security assertions are preserved, with an additiona
 exact-path assertion. Only the reviewed metadata delta pins change; reverse-applied
 beta125 source/UI/MESH hashes remain unchanged.67 targeted subscription/public-source
 checks PASS after the correction. Hosted lint/runtime acceptance is still pending.
+
+## Capacity, privacy and protected-state preparation
+
+The5000-device metadata store needs more than the inventory4MiB envelope. Its separate
+collector/monitor/importer now have a64MiB transient bound, UTF-8 export and strict
+duplicate/nonfinite JSON rejection; ordinary inventory4MiB assertions remain intact.
+19 projection tests and14 monitor tests PASS, including a full-capacity size bound,
+independent failure cleanup and no retained payload file. The local monitor budget
+is500s including that independent path, not a change to RU service limits.
+The metadata nginx location discards both access and error logs to avoid raw peer IP
+retention on proxy failures. Three actual nginx/TLS/header tests PASS against the
+same immutable candidate HTTP archive. SIM labels explicitly refer to the default
+data subscription rather than claiming every observed SIM is the tunnel underlay.
+
+At2026-11-15T00:54:38Z, the canonical520192-byte registry backup passed integrity,
+foreign keys, table-hash comparison and paid projection recovery in isolated SQLite.
+The25335651-byte panel pg_dump restored with --exit-on-error in a disposable
+PostgreSQL with --network none, no published port and tmpfs data; it was stopped
+after validation. Private encrypted off-host backups plus the local key remain under
+/mnt/data/fc-device-metadata-20261115 (not Git). Existing panel environment/HMAC/source
+configs are separately encrypted. No real payments, product DB edits or service
+restarts. This is preparation, not an old baseline to impose on concurrent users;
+fresh comparison is required immediately before deployment. No old DB restore into
+production is permitted. Future panel backups must exclude metadata projection rows.
+The first backup attempt used system Python without RNS and stopped before creating
+the database copy; recovery reused the same pinned archive with the actual accepted
+venv. No protected state was changed by that failed preparation.

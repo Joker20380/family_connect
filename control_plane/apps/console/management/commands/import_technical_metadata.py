@@ -1,8 +1,8 @@
 import sys
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
-from apps.console.inventory import strict_load, SnapshotError
-from apps.console.technical_metadata import ingest, prune
+from apps.console.inventory import SnapshotError
+from apps.console.technical_metadata import MAX_EXPORT_BYTES, load_export, ingest, prune
 
 
 class Command(BaseCommand):
@@ -15,8 +15,8 @@ class Command(BaseCommand):
         prune()
         try:
             data = dict(schema=1, source='gateway-ru', observed_at=int(timezone.now().timestamp()),
-                        status='unavailable', devices=[]) if options['unavailable'] else strict_load(
-                            sys.stdin.buffer.read(4 * 1024 * 1024 + 1))
+                        status='unavailable', devices=[]) if options['unavailable'] else load_export(
+                            sys.stdin.buffer.read(MAX_EXPORT_BYTES + 1))
             count = ingest(data)
         except (SnapshotError, ValueError, TypeError, KeyError):
             raise CommandError('Technical metadata import rejected; no payload logged') from None

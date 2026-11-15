@@ -6,8 +6,8 @@
     <dt>Android / API</dt><dd>{{ device.technical.profile.android_version|default:'—' }} / {{ device.technical.profile.api_level|default:'—' }}</dd>
     <dt>Family Connect</dt><dd>{{ device.technical.profile.app_version|default:'—' }} · code {{ device.technical.profile.version_code|default:'—' }}</dd>
     <dt>Исходная связь</dt><dd>{{ device.technical.network.kind|default:'Не наблюдалась' }} · {{ device.technical.network.scope|default:'unknown' }}</dd>
-    <dt>Оператор SIM</dt><dd>{{ device.technical.mobile.sim_operator|default:'Недоступен' }} · {{ device.technical.mobile.sim_reason }}</dd>
-    <dt>Зарегистрированная мобильная сеть</dt><dd>{{ device.technical.mobile.registered_operator|default:'Недоступна' }} · {{ device.technical.mobile.registered_reason }}</dd>
+    <dt>Оператор SIM · SIM по умолчанию для данных</dt><dd>{{ device.technical.mobile.sim_operator|default:'Недоступен' }} · {{ device.technical.mobile.sim_reason }}</dd>
+    <dt>Зарегистрированная сеть этой SIM</dt><dd>{{ device.technical.mobile.registered_operator|default:'Недоступна' }} · {{ device.technical.mobile.registered_reason }}</dd>
     <dt>Радио</dt><dd>{{ device.technical.mobile.radio|default:'UNKNOWN' }} · {{ device.technical.mobile.radio_reason }}</dd>
     <dt>VPN · установленная сессия</dt><dd>{{ device.technical.session.transport|default:'Не наблюдалась' }} · {{ device.technical.session.gateway|default:'—' }} · {{ device.technical.session.state|default:'UNKNOWN' }}</dd>
     <dt>Предпочтение / текущая попытка</dt><dd>{{ device.technical.session.preference|default:'—' }} / {{ device.technical.session.attempt|default:'—' }}</dd>

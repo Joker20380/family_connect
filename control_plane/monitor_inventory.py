@@ -17,6 +17,7 @@ else:
 
 BASE = Path(__file__).resolve().parent
 SOURCES = ACTIVE_SOURCES
+MAX_TECHNICAL_METADATA_BYTES = 64 * 1024 * 1024
 
 
 def instant():
@@ -95,7 +96,7 @@ def cycle(base=BASE, run=subprocess.run, known_hosts=None):
                 if known_hosts is not None:
                     command += ['--known-hosts', str(known_hosts)]
                 response = run(command, capture_output=True, check=True, timeout=50)
-                if len(response.stdout) > 4 * 1024 * 1024:
+                if len(response.stdout) > MAX_TECHNICAL_METADATA_BYTES:
                     raise ValueError('Metadata bound exceeded')
                 run(metadata_command, input=response.stdout, capture_output=True, check=True, timeout=30)
                 metadata_status = 'IMPORTED'

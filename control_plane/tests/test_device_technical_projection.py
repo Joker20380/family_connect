@@ -147,6 +147,28 @@ def test_collector_transient_hmac_and_bad_pin_input(tmp_path):
         sys.path.pop(0)
 
 
+def test_metadata_export_bound_does_not_relax_inventory_bound(monkeypatch):
+    raw = json.dumps(dict(padding='x' * (4 * 1024 * 1024))).encode()
+    assert technical_metadata.load_export(raw)['padding']
+    with pytest.raises(inventory.SnapshotError):
+        inventory.strict_load(raw)
+    for invalid in (b'{"schema":1,"schema":1}', b'{"schema":NaN}', b'\xff'):
+        with pytest.raises((ValueError, UnicodeError)):
+            technical_metadata.load_export(invalid)
+    monkeypatch.setattr(technical_metadata, 'MAX_EXPORT_BYTES', 16)
+    with pytest.raises(inventory.SnapshotError):
+        technical_metadata.load_export(b' ' * 17)
+
+
+def test_maximum_fleet_export_fits_without_geo_history():
+    row = with_location()['devices'][0]
+    maximum = dict(observations='x' * contract.MAX_REPORT, geoip=row['geoip'],
+                   pseudonym='a' * 64, consent_epoch=contract.MAX_INTEGER,
+                   sequence=contract.MAX_INTEGER, received_at=contract.MAX_INTEGER)
+    raw = json.dumps(dict(devices=[maximum] * contract.MAX_DEVICES), ensure_ascii=False).encode()
+    assert 4 * 1024 * 1024 < len(raw) < technical_metadata.MAX_EXPORT_BYTES
+
+
 def with_location():
     from control.friends.geoip import unknown
     data = observation()

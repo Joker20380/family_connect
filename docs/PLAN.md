@@ -30,6 +30,9 @@ Preparation checkpoint: baseline-derived HTTP overlay/TLS42PASS, synthetic panel
 1440/390px PASS, public125 installed only on the isolated NVIDIA/KVM testbed.
 Android permission/legacy allowlist corrections are prepared; await exact new-source
 CI, then APK qualification, backups/restore, minimal rollout and public delivery.
+Preparation backups/isolated SQLite paid projection and network-isolated PostgreSQL
+restore PASS; refresh baseline immediately before any switch. Capacity/privacy
+follow-up is qualified locally, not a deployed API or installed/public126.
 
 **Selected correction qualified: attribution failure-publication / PR37.**
 Deterministic empty/partial interprocess reproduction and atomic positive-fixture

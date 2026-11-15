@@ -1,5 +1,6 @@
 """Replaceable support observations, separate from append-only inventory history."""
 from datetime import datetime, timezone as utc
+import json
 import re
 
 from django.db import transaction
@@ -10,9 +11,17 @@ from control.friends import geoip
 from .inventory import fields, require
 from .models import TechnicalMetadata, TechnicalMetadataSource
 
+MAX_EXPORT_BYTES = 64 * 1024 * 1024
+
 LABELS = {'not_received': 'Ещё не получено', 'unsupported': 'Не поддерживается этой версией',
           'revoked': 'Сбор выключен', 'stale': 'Устарело', 'unavailable': 'Источник недоступен',
           'available': 'Получено', 'clock_skew': 'Часы устройства не согласованы'}
+
+
+def load_export(raw):
+    require(len(raw) <= MAX_EXPORT_BYTES)
+    return json.loads(raw, object_pairs_hook=contract.unique,
+                      parse_constant=lambda value: require(False))
 
 
 def prune(now=None):
