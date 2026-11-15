@@ -44,9 +44,9 @@ No new keystore/certificate was created, and no alternative vault was auto-selec
 This signature is not an installed-device PASS, paid admission or catalog signature.
 No server rebuild/deployment, RU recovery or HMAC rotation was performed. Production
 paid108/119/123/125 and public125/catalog8 remain unchanged. Exact paid126 isolated
-qualification is now possible independently of ADB; loading/publication still require
-the agreed acceptance order. ADB remains empty: next device action is to connect one
-authorized ARM64 device with original125, enable USB debugging and approve this host.
+qualification is completed below independently of ADB; loading/publication still require
+the agreed acceptance order. At this20:48UTC checkpoint ADB was empty; the later
+physical-device observation and current USB boundary are recorded below.
 No device data/settings were touched. The older unsigned/signing-blocked statements
 below record historical checkpoints and are superseded by this signed receipt.
 
@@ -71,7 +71,7 @@ Accepted pins and rejection assertions are not removed. The isolated overlay tes
 preserves all other archive members; actual loaded-runtime pins must be read again
 before the later authorized paid-only overlay. No metadata image/server rebuild.
 
-New paid source CI is pending at this checkpoint; Android artifact qualification
+New paid source CI was pending at this checkpoint; Android artifact qualification
 remains source61, not the later paid-policy source. PR38 remains draft. ADB20:52UTC
 still has no device; no in-place upgrade, device consent/revoke or real RU/AWG
 geography is claimed. The concrete remaining owner action is USB attachment and
@@ -86,6 +86,60 @@ list and the assertion that `seed_demo` must not insert later release rows. Exis
 registry bytes/demo metadata/hash assertions remain unchanged. This is a test-only
 compatibility correction, not a production panel change; corrected-head CI must
 pass before qualification. The failed run remains evidence, not overwritten PASS.
+
+### Corrected source CI and physical-device boundary
+
+Corrected source `e977119d94de55f162bf74d673bd125db3635262` passes hosted paid43761018397,
+panel push43761011892/PR43761018474 and phase0 push43761011903/PR43761018379, including
+both full Python/Cargo jobs and isolated failover jobs. Readiness43761018327,
+notifications43761018356, messenger43761018443, Linux voice43761018427,
+Linux internal43761018383 and Linux control preview43761018415 also PASS.
+Self-review5912954830 is own review, not independent approval; review-triggered
+workflow43762345618 is intentionally SKIPPED. Clients43761018400 does not pass the
+complete Android gate; desktop jobs pass separately, not as Android qualification.
+
+Android job132956278087 fails in `TcpRuntimeTest.traffic` with Connection reset at
+the existing REALITY transport lifecycle check. Its73-case API35 receipt includes
+all three TechnicalMetadataRuntimeTest cases PASS, not merely JVM coverage. Bounded
+artifact14180977760 SHA128950bb0adbaa154e2df41c809f7e887347c9dc3907237bad9b59a8b0ae7077
+is retained. A retry of the failed job was requested; the platform also reruns
+dependent client jobs. No assertions/transport source are changed, and no resulting
+CI binary replaces the already frozen signed61-source APK.
+
+Retry132963251910 finishes with failure at21:48UTC. Its main debug/Friends XML
+summary has99 cases and zero failures; all three metadata cases pass in both
+variants. The later, separately invoked `AppVpnRuntimeTest` fails
+`independentUidsUseRealBuildersAndTraffic`: the TCP IPv4 result is present but the
+IPv6 probe returns SocketTimeoutException, leaving the expected nonce echo absent.
+The full Android step therefore FAILS despite the main summary. Legacy API27/28/31
+stages are SKIPPED, not PASS. Retained bounded evidence:
+
+| Retry evidence | Artifact / SHA256 |
+| --- | --- |
+| Main instrumentation | 14182212837 / `ee7aa13588ed1665edaf5b126a265a1e76d6582ed8f7bef218561d62f1503989` |
+| Per-app routing | 14182421865 / `e0891bde6e6f8623c9be606c5349e711093ef888cc95331e73034c065e5cb546` |
+
+No Android/native or clients workflow file differs between source61 and e977.
+The transport failure is retained without claiming its cause or changing assertions;
+it does not authorize replacing/re-signing the selected previously qualified APK.
+Current-source CI and the physical-device acceptance remain separate release gates.
+
+At21:30UTC, exactly one authorized Redmi Note9Pro is visible in ADB: ARM64,
+Android12/API31. The actual installed package is125; its pulled APK matches the
+accepted50,470,304bytes/SHAf1c5bf57 and signer67a90d1b exactly. This is a real compatible
+device, not the rejected x86 translation. Bounded package/device/network-setting
+baseline is saved privately, without exporting Keystore keys. UI identity/settings/
+contacts/history/subscription baseline is not yet complete: MIUI rejects shell UI
+input with SecurityException/INJECT_EVENTS, and hierarchy capture fails to reach
+idle. Launching the app/settings does not establish preserved identity or history.
+
+At21:47/21:50/21:51UTC ADB instead lists zero devices. Current owner action: reconnect
+the same Redmi after enabling Developer options → USB debugging (Security settings),
+approve this computer and leave the screen unlocked. This is permission for the owner's ADB test session,
+not a new app metadata permission. Do not bypass the restriction or clear app data.
+No125→126 installation, synthetic production metadata, payment, expiry change or
+public delivery is performed. Network settings remain unchanged; consent was not
+toggled. Finish the private baseline, then use the previously accepted release order.
 
 ## Historical continuation20:22–20:26UTC: signing/device boundary
 

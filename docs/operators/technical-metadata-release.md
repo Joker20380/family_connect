@@ -111,6 +111,10 @@ owner's request, without silently changing databases.
    Enable Developer options → USB debugging, unlock it and approve this computer's
    debugging prompt. Do not uninstall Family Connect, clear storage or reset keys.
    An empty ADB device list is not a usable test stand. No translation workaround.
+   On MIUI, an authorized device can still reject shell UI input with
+   SecurityException/INJECT_EVENTS. Ask the owner to enable USB debugging (Security
+   settings) and keep the screen unlocked; do not bypass the restriction. Record
+   package verification separately from UI/data-preservation acceptance.
 2. Select the existing release KeePassXC vault in the local signing dialog and
    unlock it there. Do not send its password, key or recovery attachment in chat.
    Follow the [vault signer procedure](../android-vault-signing.ru.md); pin the

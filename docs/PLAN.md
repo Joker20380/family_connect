@@ -15,11 +15,17 @@ generation2 imports/real legacy-card layout pass. Public125 remains unchanged.
 Vault-backed signing completed20:48UTC: frozen signed126 SHA97513e3f,50,478,496bytes,
 accepted certificate/package/ARM64/alignment and unchanged payload verified. Its
 exact paid126 policy is prepared with168 targeted/499 full isolated gate tests PASS;
-new source CI is pending after updating the panel's explicit demo-preservation test
-for126 (e7bd86c7 panel failure retained). Production policy remains108/119/123/125.
+corrected sourcee977 passes hosted paid/panel and phase0 push/PR. Full Android CI
+remains red at the transport probe described below; the e7bd86c7 panel failure is
+retained. Production policy remains108/119/123/125.
 Compatible ARM64125→126 and installed
 opt-in/revoke acceptance precede production paid loading and public publication.
-No compatible ADB device is attached. Do not claim an
+One authorized Redmi Note9Pro ARM64/Android12 device was observed at21:30UTC; its original
+public125 APK/signer match exactly. MIUI blocks UI input (INJECT_EVENTS); owner must
+enable USB debugging (Security settings) and unlock the screen before private UI
+baseline and upgrade. ADB is empty again at21:51UTC; reconnect that same phone and
+approve this host after enabling the security-debugging option. No install/data
+clear/network change yet. Do not claim an
 unsigned candidate, empty metadata projection or a controlled MMDB fixture as the
 required installed-device result. [Delivery/recovery plan](operators/technical-metadata-release.md).
 Delivery sourcef42efdab is now CI-qualified: all13 applicable workflows PASS,
@@ -32,6 +38,13 @@ with no GUI error output; ADB remains empty. Next: identify/select the existing
 release vault locally, then sign the frozen artifact and perform ARM64 acceptance.
 That vault-selection/signing boundary is superseded by the20:48UTC receipt. Public
 descriptors remain125 until mandatory installed acceptance; no placeholder hashes.
+Corrected-sourcee977119d hosted paid/panel checks PASS. The first Android job's TCP
+Connection reset is retained separately; all three API35 metadata instrumentation
+cases PASS. Retry132963251910 passes the main debug/Friends instrumentation but
+fails the separate per-app TCP IPv6 probe with SocketTimeoutException; legacy stages
+are skipped. Preserve this red gate, not just the main runner's zero-failure summary.
+Android/native/workflow source is unchanged from selected61; do not rebuild the
+frozen APK or weaken the probe to obtain PASS.
 
 **RU-INCIDENT-20261115 — authorized recovery complete, RECOVERED_CAUSE_OPEN.**
 First failure retained: local TCP engine-query timeout, not a demonstrated fsync

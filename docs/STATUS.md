@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+**15 November21:51UTC — signed126 frozen; physical upgrade waits for USB session.**
+At21:30UTC one Redmi Note9Pro (Android12/API31) was authorized in ADB. Its pulled installed APK
+matches the accepted public125 SHA/size and certificate exactly. No installation,
+uninstall, data clearing, downgrade or network-setting change has occurred. MIUI
+rejects UI input with SecurityException/INJECT_EVENTS; hierarchy capture also cannot
+reach idle. The next owner action is enable Developer options → USB debugging
+(Security settings), keep the screen unlocked, then finish private pre-upgrade
+identity/settings/support/subscription evidence before installing frozen126.
+At21:47/21:50/21:51UTC the ADB list is empty: reconnect that phone after enabling
+the MIUI security-debugging option and approve this host. Do not infer attachment.
+Paid499 local tests and corrected-sourcee977119d hosted paid/panel checks PASS.
+Its first Android CI attempt has a TCP Connection reset, not a metadata-test failure;
+three actual API35 metadata instrumentation cases PASS. The failed job's bounded
+evidence is retained. Retry132963251910 passes the main debug/Friends instrumentation
+but fails the separate per-app TCP IPv6 probe with SocketTimeoutException. Legacy
+API stages are skipped; this is not a full Android CI PASS. Phase0 push/PR now PASS.
+No Android/native/workflow change exists between selected source61 and e977; retain
+both failed attempts, unchanged assertions and the previously qualified frozen APK.
+
 **15 November20:48UTC — selected beta126 SIGNED, not installed/published.**
 The existing operator vault was located by bounded filename-only discovery and
 selected locally; after the owner explicitly retried an accidental cancellation,
