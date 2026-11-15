@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**15 November20:22–20:26UTC — release continuation awaits local owner input.**
+The selected source61 unsigned126 file/hash, CI ZIP provenance, package/code/ARM64
+and16KiB alignment are reverified unchanged. Fresh readback retains HTTP70a924db,
+panel5ae92f8c, matching generation2 keys/manifest and normal imports. Original RU
+transport/watch PIDs remain active/restarts0; HTTP has a newer process with the same
+accepted archive. No server restart, rebuild, recovery or rotation is performed.
+The KDBX chooser was opened, but returned1 without a selected file or stderr; no
+vault unlock/signature occurred. ADB is still empty at20:26UTC. The next concrete
+input is selection of the existing release KDBX (or its path, never its password).
+Compatible ARM64 USB acceptance remains necessary afterwards. Public125/paid policy
+and all user data remain untouched;126 publication and merge are still gated.
+
 **15 November — metadata server path DEPLOYED; user release still BLOCKED.**
 Minimal HTTP70a924db, generation2-aware panel5ae92f8c, collector and centralized
 DB-IP Lite2026-11 are installed. No transport/watcher/paid reconciler restart or

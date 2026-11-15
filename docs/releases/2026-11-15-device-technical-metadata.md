@@ -17,6 +17,37 @@ Remote main53a780d9ccfcdb2c3ec6141a197917190f9be7a5 verified by fetch. Primary
 checkout8937e71e has unrelated modified/untracked files and diverged history;
 all preserved. Worktree branch: feature/device-technical-metadata-20261115.
 
+## Continuation20:22–20:26UTC: actual signing/device boundary
+
+Remote PR38 head9326c3bd/main53a780d9 are verified; the PR worktree is clean before
+this documentation-only checkpoint. The exact retained unsigned APK again matches
+50,458,905bytes/SHA645ef397, package/code/version126 and ARM64-only ABI.16KiB alignment
+passes. Original downloaded CI ZIP still matchesa3006b0b; its embedded APK bytes and
+receipt source918191db agree with the selected candidate and source61 tree. No later
+CI artifact is substituted and no build/signature is repeated.
+
+Fresh readback20:22:30UTC confirms HTTP70a924db, panel5ae92f8c/read-only alias mount,
+generation2 key agreement verified inside the process and manifest8602e652. All
+three normal inventory sources and metadata import succeed. RU watch/AWG/TCP retain
+PIDs733875/733879/733898 with0 restarts; HTTP is now PID1906891 with the same accepted
+archive. This continuation issues no restart/rebuild/rotation/recovery operation.
+
+The local KDBX file chooser was actually invoked. No selection was returned. A
+bounded diagnostic retry records exit1, empty stderr and `no_selection`, not a
+demonstrated display failure. No password/key was consumed, no production APK was
+signed and no new keystore was created. Do not repeatedly reopen the chooser or
+search private directories to guess a vault. Next owner input is the selected
+existing release KDBX/path; its password belongs only in the subsequent local dialog.
+
+ADB remains empty at20:26:15UTC. There is no authorized connected ARM64 device to
+claim as a stand.125→126, real device consent/GeoIP/revoke, exact signed paid126 and
+publication remain unperformed. No device settings or consent were changed. For
+post-publication125 updater acceptance, prefer a second authorized125 device if
+available; otherwise keep protocol checks separate from physical update-button
+installation, and never downgrade/reset the accepted126 device to manufacture proof.
+All previously qualified independent components remain accepted; no obsolete server
+stage is reopened. Public125/catalog8/paid108/119/123/125 remain unchanged.
+
 ## Current installed result: minimal metadata server path
 
 The owner-authorized server delivery is installed, not merely built. It does not

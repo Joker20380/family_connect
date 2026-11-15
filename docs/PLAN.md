@@ -20,6 +20,11 @@ required installed-device result. [Delivery/recovery plan](operators/technical-m
 Delivery sourcef42efdab is now CI-qualified: all13 applicable workflows PASS,
 including phase0 and the Android matrix. Synthetic real-vault signing5 PASS.
 Those results do not remove the local vault-selection and physical-device gates.
+Continuation20:22–20:26UTC reverified the exact selected unsigned APK/provenance and
+accepted runtime without redeployment. The actual KDBX chooser returned1/no selection,
+with no GUI error output; ADB remains empty. Next: identify/select the existing
+release vault locally, then sign the frozen artifact and perform ARM64 acceptance.
+No placeholder paid126 or public descriptor is created while signature is missing.
 
 **RU-INCIDENT-20261115 — authorized recovery complete, RECOVERED_CAUSE_OPEN.**
 First failure retained: local TCP engine-query timeout, not a demonstrated fsync
