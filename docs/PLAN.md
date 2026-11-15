@@ -3,11 +3,11 @@
 ## Current engineering priority / Текущий critical path
 
 **Selected now: DEVICE-TECHNICAL-METADATA-1 delivery.** Accept the completed RU
-recovery below and HMAC generation2 without repeating either stage. Qualify and
-deploy only metadata deltas over those actual runtime pins, preserve aliases and
-existing paid descriptors, then complete signed126/ARM64125→126/installed production
-chain before optional public release. Unsigned CI artifact and generation2 panel
-overlay are prepared; absence of a connected compatible device is not a PASS.
+recovery, HMAC generation2 and minimal metadata server deployment without repeating
+them. Finish original ARM64125→frozen signed126, then load exact paid126 and qualify
+its installed production chain before optional public release in the agreed order.
+Preserve aliases and existing paid descriptors. A connected device alone is not
+data-preservation or installed-metadata acceptance.
 No observer/recovery successor is selected. See the current metadata receipt.
 
 Current gate: metadata HTTP/panel/collector/GeoIP are minimally deployed and normal
@@ -15,17 +15,16 @@ generation2 imports/real legacy-card layout pass. Public125 remains unchanged.
 Vault-backed signing completed20:48UTC: frozen signed126 SHA97513e3f,50,478,496bytes,
 accepted certificate/package/ARM64/alignment and unchanged payload verified. Its
 exact paid126 policy is prepared with168 targeted/499 full isolated gate tests PASS;
-corrected sourcee977 passes hosted paid/panel and phase0 push/PR. Full Android CI
-remains red at the transport probe described below; the e7bd86c7 panel failure is
-retained. Production policy remains108/119/123/125.
-Compatible ARM64125→126 and installed
-opt-in/revoke acceptance precede production paid loading and public publication.
-One authorized Redmi Note9Pro ARM64/Android12 device was observed at21:30UTC; its original
-public125 APK/signer match exactly. MIUI blocks UI input (INJECT_EVENTS); owner must
-enable USB debugging (Security settings) and unlock the screen before private UI
-baseline and upgrade. ADB is empty again at21:51UTC; reconnect that same phone and
-approve this host after enabling the security-debugging option. No install/data
-clear/network change yet. Do not claim an
+corrected sourcee977 passes hosted paid/panel and phase0 push/PR. Its failed Android
+transport probe and the earlier e7bd86c7 panel failure are retained separately;
+the current0ecf Android job ends CANCELLED during API27. Production policy remains108/119/123/125.
+Compatible ARM64125→126 precedes production paid loading; the installed
+opt-in/revoke chain must then pass before public publication.
+One authorized Redmi Note9Pro ARM64/Android12 is now connected; its original
+public125 APK/signer match exactly. MIUI still blocks actual taps (INJECT_EVENTS)
+after a completed normal reboot. Read-only local observations progress independently;
+the remaining profile/history screens require owner-performed navigation, not private
+data-entry forms. No install/data clear/network change yet. Do not claim an
 unsigned candidate, empty metadata projection or a controlled MMDB fixture as the
 required installed-device result. [Delivery/recovery plan](operators/technical-metadata-release.md).
 Delivery sourcef42efdab is now CI-qualified: all13 applicable workflows PASS,
@@ -38,7 +37,24 @@ with no GUI error output; ADB remains empty. Next: identify/select the existing
 release vault locally, then sign the frozen artifact and perform ARM64 acceptance.
 That vault-selection/signing boundary is superseded by the20:48UTC receipt. Public
 descriptors remain125 until mandatory installed acceptance; no placeholder hashes.
-Corrected-sourcee977119d hosted paid/panel checks PASS. The first Android job's TCP
+Current23:05UTC device boundary supersedes the earlier empty-ADB instructions:
+the selected original125 Redmi is authorized. A fresh support identity proof,
+canonical chat binding/pinned sender, current non-paid-cohort subscription response
+and bounded read-only UI baseline are saved privately. Full local chat profile,
+pinned fingerprint/history and per-app choices still need observation before install.
+The owner declines data-entry forms; do not ask for private values or screenshots.
+One normal reboot completed. Wake-up succeeds but a real tap still returns
+SecurityException/INJECT_EVENTS. Use specific owner-performed navigation, not a
+permission bypass; read/compare the resulting screens locally. No126 installation,
+data clearing, network/consent change, policy load or publication has occurred.
+Current Android132971537546/source0ecf2fe8 passes API35 runtime/per-app/conformance,
+then ends CANCELLED23:08UTC during API27 after the75-minute job window. Bounded
+artifacts retain99 main cases (54 executed/45 conditional skips,0 failures), all
+six metadata cases and the separate10-test per-app harness PASS. API27/28/31 are
+not qualified by this attempt. No additional parallel retry was started; retain
+the cancellation without guessing an infrastructure or Android-code cause.
+
+Historical corrected-sourcee977119d hosted paid/panel checks PASS. The first Android job's TCP
 Connection reset is retained separately; all three API35 metadata instrumentation
 cases PASS. Retry132963251910 passes the main debug/Friends instrumentation but
 fails the separate per-app TCP IPv6 probe with SocketTimeoutException; legacy stages

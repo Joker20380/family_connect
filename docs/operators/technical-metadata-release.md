@@ -110,11 +110,37 @@ owner's request, without silently changing databases.
 1. Connect one authorized ARM64 Android device with original public125 by USB.
    Enable Developer options → USB debugging, unlock it and approve this computer's
    debugging prompt. Do not uninstall Family Connect, clear storage or reset keys.
-   An empty ADB device list is not a usable test stand. No translation workaround.
-   On MIUI, an authorized device can still reject shell UI input with
-   SecurityException/INJECT_EVENTS. Ask the owner to enable USB debugging (Security
-   settings) and keep the screen unlocked; do not bypass the restriction. Record
-   package verification separately from UI/data-preservation acceptance.
+   Classify the actual `adb devices -l` result before requesting an owner action:
+   - Empty: check USB enumeration, the selected ADB binary/server and local USB
+     permissions. The MIUI security-debugging switch is not a general fix for an
+     absent USB/ADB connection; do not reset unrelated devices or ADB sessions.
+   - `unauthorized`: ask the owner to unlock the phone and approve this host's RSA
+     prompt. Do not confuse this with a permission to inject UI input.
+   - `device`: verify the selected device and current app, then test permitted UI
+     input separately. Multiple devices require an explicit selection.
+   - `device` with SecurityException/INJECT_EVENTS: USB works, but MIUI rejects
+     automatic input. The owner may enable USB debugging (Security settings);
+     verify the permission after the owner's restart, not merely their toggle.
+     Test a harmless actual tap on a known app navigation target: successful
+     KEYCODE_WAKEUP alone is insufficient. Do not keep rebooting when taps still
+     fail after one completed restart.
+     Otherwise use specific owner-performed taps and distinguish owner-observed
+     evidence from an automated comparison. Never disable MIUI optimization.
+   No translation workaround, uninstall, downgrade or clear-data. A blocked screen
+   capture or hierarchy dump is not proof of missing app data. Friends and chat
+   windows use FLAG_SECURE; do not remove/bypass it to obtain acceptance evidence.
+   Prefer bounded read-only public Android UI observations and authenticated
+   canonical comparisons, without exporting Keystore keys or posting IDs/messages.
+   An optional disposable read-only instrumentation probe must be a separate
+   permissionless/no-network test package, restricted to this app's public UI
+   nodes. It must not read the app's private files or inject actions as a workaround
+   for denied shell input. Keep evidence local/private; remove only that temporary
+   probe when no longer needed. Do not replace/re-sign the production APK.
+   If the owner declines data-entry forms, stop those forms. Request only the
+   concrete on-device navigation/unlock that cannot be performed with the available
+   permissions; the assistant can read/compare the resulting screen privately.
+   A contact-list preview is not a full local history or pinned-key comparison.
+   Record package verification separately from UI/data-preservation acceptance.
 2. Select the existing release KeePassXC vault in the local signing dialog and
    unlock it there. Do not send its password, key or recovery attachment in chat.
    Follow the [vault signer procedure](../android-vault-signing.ru.md); pin the
@@ -132,6 +158,9 @@ owner's request, without silently changing databases.
    test available network changes, restart, offline revoke/pending state and online
    cleanup. Preserve consent epochs/tombstones; never inject synthetic production
    observations to fill a card. All screenshots/identity comparisons remain private.
+6. After all required phone checks, agree with the owner on restoring temporary USB
+   debugging/security-debugging settings to their original state. Do not disable
+   them while the acceptance session still requires the connection.
 
 ## Recovery without losing new data
 

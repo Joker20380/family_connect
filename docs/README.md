@@ -1,6 +1,6 @@
 # Documentation
 
-[Technical metadata · 15 November: server path deployed; signed APK/device acceptance still pending](releases/2026-11-15-device-technical-metadata.md).
+[Technical metadata · 15 November: server deployed, signed126 frozen; device acceptance pending](releases/2026-11-15-device-technical-metadata.md).
 [Minimal deployment and data-preserving recovery](operators/technical-metadata-release.md).
 
 [RU · 15 ноября: работа восстановлена, продление допуска проверено; причина задержек открыта](releases/2026-11-15-ru-recurrence.md).

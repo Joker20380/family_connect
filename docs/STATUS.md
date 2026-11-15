@@ -1,6 +1,31 @@
 # Текущее состояние / Current state
 
-**15 November21:51UTC — signed126 frozen; physical upgrade waits for USB session.**
+**15 November23:05UTC — Redmi authorized; private baseline partial, no upgrade.**
+The same original125 Redmi is connected and authorized. A fresh authenticated
+support request proves its existing device identity/activation; read-only canonical
+chat binding and pinned support sender are retained privately. The app confirms a
+current non-paid-cohort subscription status (not evidence of missing access/payment).
+Bounded read-only UI observations cover home, visible settings and the contact list;
+full local chat profile/fingerprint/history and per-app choices remain unobserved.
+No IDs, messages or keys belong in chat/Git; no further owner data-entry forms.
+One normal device reboot completed. KEYCODE_WAKEUP succeeds after it, but an actual
+tap still fails with SecurityException/INJECT_EVENTS. Wake-up is NOT permission to
+automate taps. Do not bypass MIUI, disable optimization or treat this as empty ADB.
+Only owner-performed navigation is needed to expose the remaining screens; the
+assistant reads/compares them locally without asking the owner to transcribe data.
+The app remains125 with unchanged UID/first-install time. Frozen126 SHA97513e3f and
+50,478,496bytes remain unchanged; no rebuild, re-sign, install or publication.
+Fresh readback retains HTTP70a924db, panel5ae92f8c and read-only generation2 manifest
+8602e652; the accepted paid watcher remains active/PID733875/restarts0. No server
+write, RU recovery or HMAC rotation. Exact paid126 remains source-qualified/not loaded.
+Android job132971537546 on0ecf2fe8 ends CANCELLED23:08UTC during the API27 stage,
+after the configured75-minute job window. API35 runtime/per-app/conformance PASS;
+99 main cases enumerate54 executed/45 conditional skips,0 failures, and the separate
+per-app runner passes10 tests (TCP IPv6 routing15/15). API27/28/31 are not qualified
+by this attempt. Bounded artifacts are retained; cancellation cause is not inferred.
+[Current device evidence and remaining gate](releases/2026-11-15-device-technical-metadata.md#redmi-continuation2305utc).
+
+**Historical15 November21:51UTC — signed126 frozen; USB session absent then.**
 At21:30UTC one Redmi Note9Pro (Android12/API31) was authorized in ADB. Its pulled installed APK
 matches the accepted public125 SHA/size and certificate exactly. No installation,
 uninstall, data clearing, downgrade or network-setting change has occurred. MIUI

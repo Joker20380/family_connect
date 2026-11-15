@@ -17,6 +17,84 @@ Remote main53a780d9ccfcdb2c3ec6141a197917190f9be7a5 verified by fetch. Primary
 checkout8937e71e has unrelated modified/untracked files and diverged history;
 all preserved. Worktree branch: feature/device-technical-metadata-20261115.
 
+## Redmi continuation23:05UTC
+
+Continuation source/head0ecf2fe833d6892291d9830404bf904f5220923a. The selected
+Redmi Note9Pro remains original signed125/Android12/API31/ARM64. At22:26UTC ADB
+contains exactly that authorized device, not an absent or unauthorized USB session.
+No new vault access, Android candidate build/re-sign or server deployment.
+
+| Before-upgrade boundary | Actual observation |
+| --- | --- |
+| Installed125 | Previously pulled exact public APK/signer; after reboot still code125, same UID/first-install time |
+| Device identity/activation | Fresh successful strict support request; canonical device/public/WG/TCP identifiers retained privately, not exported Keystore secrets |
+| Chat binding | Selected device has a canonical chat public key and pinned support sender; raw values remain private |
+| Subscription | App displays a freshly confirmed non-paid-cohort response, matching absent canonical paid record; this does not deny ordinary VPN access |
+| Visible local UI | Home35nodes, settings43nodes, contacts26nodes and subscription16nodes captured with public read-only Android accessibility API |
+| Remaining local baseline | Own chat profile, pinned contact fingerprint/full history and per-app choices NOT_OBSERVED; visible contact preview is not a substitute |
+| Frozen126 | Rechecked23:05UTC:50,478,496bytes/SHA97513e3f62fe107a36e6e1453e07dfdf7fab33588ed637a676fb2cfb0d2de5b8; NOT_INSTALLED |
+
+The owner declines manual private-data forms. No more such forms are required or
+opened. Public UI observations are kept in the protected local receipt directory;
+no IDs/messages/mapping/keys are included here. A temporary separate permissionless,
+no-network read-only instrumentation probe handles the app's constantly redrawing
+UI without waiting for idle. It only reads public UI nodes from the selected app;
+it does not access Family Connect's private files, export keys, alter FLAG_SECURE or
+inject input. FLAG_SECURE screenshots remain unavailable, not bypassed.
+
+One normal selected-device reboot was requested22:55:49UTC to test application of
+MIUI's security-debugging setting. ADB briefly disappears during reboot, then the
+same authorized device returns with reset uptime. The owner unlocks it. Wake-up
+key succeeds, but actual known-target taps still exit255 with
+SecurityException/INJECT_EVENTS. Correct the interim wake-up-only inference:
+automatic UI input is NOT available after reboot. Do not retry reboot indefinitely,
+disable MIUI optimization or use the probe to bypass the denial. Remaining screens
+require specific owner-performed navigation; no transcription of private values.
+125→126 and real metadata opt-in/revoke/GeoIP are not claimed. No test payment,
+expiry mutation or message is created; network and collection choices are unchanged.
+
+Fresh readback22:56UTC confirms loaded HTTP archive70a924db, panel5ae92f8c,
+read-only generation2 manifest8602e652 and active paid watcherPID733875/restarts0.
+HTTP has a newer process with the same accepted archive; no restart is issued here.
+No server image/overlay, HMAC key, canonical terms or public catalog is changed.
+
+### Current CI result23:08UTC
+
+Job132971537546/run43766117945/source0ecf2fe8 was observed without launching another
+parallel retry. It ends **CANCELLED** during the API27 stage after the configured
+75-minute job window (runner21:53:07, cleanup23:08:21UTC). The bounded artifact has
+no retained API27 runner log/results; do not infer the cancellation's root cause or
+call it an infrastructure failure from unchanged Android source. API28/31,
+legacy conformance and final ARM64/release-payload steps are skipped, not PASS.
+
+API35 results are separately verified from XML and independent harness receipts:
+
+| Scope | Result |
+| --- | --- |
+| Main debug XML | 73 enumerated,41 conditional skips,0 failures/errors |
+| Main Friends XML | 26 enumerated,4 conditional skips,0 failures/errors |
+| TechnicalMetadataRuntimeTest | All3 actual cases in each variant PASS, none skipped |
+| Independent AppVpn harness | `OK (10 tests)`, successful instrumentation completion |
+| Routing TCP observations | 15/15 IPv4+TLS and15/15 IPv6+TLS |
+| Routing AWG observations | 4/4 IPv4+TLS and4/4 IPv6+TLS |
+| Auto TCP observations | 4/4 IPv4+TLS and4/4 IPv6+TLS |
+| UI recovery TCP observations | 7/7 IPv4+TLS and7/7 IPv6+TLS |
+
+The99 main cases are not99 executed tests:54 execute and45 explicitly skip under
+the matrix conditions. Dedicated per-app execution is separate. The retained
+direct-underlay probes have IPv4 but not IPv6; the passing assertions still require
+IPv6 through TCP/AWG and were not weakened. Earlier TCP reset/per-app IPv6 failures
+remain below; this successful later harness does not establish their cause.
+
+| Downloaded bounded artifact | SHA256 |
+| --- | --- |
+| Runtime diagnostics14184793590 | `da0d9461de14854727c63f7137977b49b1224488766ade4b477cadf1774a6a62` |
+| Per-app routing14185466662 | `b4d140173e00b59395096420fbc50b863e0af436fe37db091a2aec9d2c778a0d` |
+
+Hashes and bounded ZIP structures verify. No candidate is taken from this later
+run. No assertion, IPv6 probe or timeout changes; full current-head Android CI
+remains an unmet release gate. Linux/Windows/Windows-compatibility jobs pass separately.
+
 ## Signed candidate20:48UTC
 
 Existing KeePassXC location settings provided no database path. Owner-authorized
