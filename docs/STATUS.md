@@ -7,6 +7,10 @@ whole-PR deployment. Three normal cycles14:10:15/14:11:35/14:12:54UTC import all
 three sources plus metadata; source is `ok`,66 stable device handles,0 metadata
 records (no signed installed126 consent yet). Real125 cards/filters/navigation pass
 authenticated1440/390px checks; loaded logs exclude the test city query.
+Qualified delivery sourcef42efdabb41d08adc6efb21a0deb3c9e5dea7657 has all13 applicable
+push/PR workflows PASS, including full Android matrix; self-review5911281932 is not
+independent approval. Real synthetic-vault signing tests5 PASS without production
+secrets. Final documentation is separate from that source and from unmerged main.
 The Compose reconstruction initially omitted the existing HMAC override. The strict
 post-recreation check caught it while imports stayed paused; explicit override/mount
 restoration and loaded-environment validation pass before resumption. A new preflight

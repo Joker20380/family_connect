@@ -17,6 +17,9 @@ chain before exact paid126 and public catalog/invitation publication. No signing
 selection was completed and no compatible ADB device is attached. Do not claim an
 unsigned candidate, empty metadata projection or a controlled MMDB fixture as the
 required installed-device result. [Delivery/recovery plan](operators/technical-metadata-release.md).
+Delivery sourcef42efdab is now CI-qualified: all13 applicable workflows PASS,
+including phase0 and the Android matrix. Synthetic real-vault signing5 PASS.
+Those results do not remove the local vault-selection and physical-device gates.
 
 **RU-INCIDENT-20261115 — authorized recovery complete, RECOVERED_CAUSE_OPEN.**
 First failure retained: local TCP engine-query timeout, not a demonstrated fsync

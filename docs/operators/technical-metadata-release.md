@@ -95,6 +95,30 @@ Publish the same signed APK/audio source, increasing signed discovery sequence,
 legacy descriptor and both invitation paths only after those gates. Verify full
 HTTPS bytes, signature/package/signer/code, Range/resume and updater behavior.
 
+## Owner-assisted signing and device session
+
+1. Connect one authorized ARM64 Android device with original public125 by USB.
+   Enable Developer options → USB debugging, unlock it and approve this computer's
+   debugging prompt. Do not uninstall Family Connect, clear storage or reset keys.
+   An empty ADB device list is not a usable test stand. No translation workaround.
+2. Select the existing release KeePassXC vault in the local signing dialog and
+   unlock it there. Do not send its password, key or recovery attachment in chat.
+   Follow the [vault signer procedure](../android-vault-signing.ru.md); pin the
+   original certificate and the qualified unsigned artifact recorded in the receipt.
+   Disposable synthetic-vault tests do not authorize replacing the production key.
+3. Before installation, retain bounded private evidence of the original package/
+   signer, identity proof and activation, settings, existing support contacts/history
+   and subscription. Keep raw identifiers outside Git/logs; do not create messages,
+   payments or new expiry terms as fixtures. Observe current baseline, not old counts.
+4. Install the frozen signed126 over125 through the normal Android confirmation,
+   without removal/clear-data. Compare the same evidence, restart and verify new
+   metadata consent is OFF. Do not infer retained keystore identity from app name.
+5. Only then enable the new consent deliberately and observe the complete production
+   chain and real fields. Record actual underlay/session and qualified RU/AWG lookup;
+   test available network changes, restart, offline revoke/pending state and online
+   cleanup. Preserve consent epochs/tombstones; never inject synthetic production
+   observations to fill a card. All screenshots/identity comparisons remain private.
+
 ## Recovery without losing new data
 
 Keep generation2, aliases, canonical operations, metadata epochs/sequences/tombstones

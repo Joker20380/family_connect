@@ -108,6 +108,9 @@ and legacy support requests403; `/i/` remains200. Transport/watch PIDs733875/733
 733898 remain active with0 restarts; node125c796a and reconciler40e1d721 are unchanged.
 This is not client traffic acceptance or a permanent RU cause fix. No test payment,
 term change or user message is created. New real notification delivery NOT_OBSERVED.
+Final bounded runtime readback15:19:41UTC confirms those same active transport/watch
+and HTTP PIDs with0 restarts and the installed HTTP hash. Panel retains its
+`unless-stopped` restart policy and both effective HMAC/metadata Compose overrides.
 
 ### GeoIP and scope of proof
 
@@ -154,13 +157,27 @@ No placeholder/range/hash wildcard is accepted. There is no public126 download U
 
 ### Checks at this checkpoint
 
+- Qualified delivery/deployment-guard source:
+  `f42efdabb41d08adc6efb21a0deb3c9e5dea7657`. All13 applicable push/PR workflow
+  executions completed successfully: phase0 PR43724707028/push43724701311,
+  clients43724707306, panel43724707055, paid43724706939, readiness43724707481/
+  43724701364, notifications43724706984, messenger43724707330, Linux candidate
+  43724706900, voice43724707150 and control43724707329/43724701295.
+  Review-event43725313669 is intentionally SKIPPED, not a test PASS. Android job
+  132844066584 passes the full configured runtime matrix. It does not replace the
+  immutable candidate chosen from source61 or the physical125→126 requirement.
+- Own review5911281932 is explicitly self-review, not independent approval.
+  This final receipt is documentation-only after qualified sourcef42; its content,
+  local links and whitespace are checked separately. No main merge is performed.
 - Current panel deployment/HTTP packager tests:19 PASS.
 - Focused metadata/GeoIP/overlay/vault checks:64 PASS,1 opt-in vault integration SKIP.
+  The previously skipped real KDBX→memfd→apksigner→verify integration was then run
+  with disposable synthetic keys and the public binary manifest:5 vault tests PASS,
+  zero skips. No production vault credential or signing key was used by that test.
 - Actual minimal HTTP archive with real local nginx:35 PASS,1 accepted-sync fixture
   SKIP; earlier qualification of that unchanged interoperability path remains separate.
-- Published preparation sourceaeb8923b: panel, paid compatibility, readiness wire,
-  notification route, messenger and Linux checks PASS; phase0/client-build results
-  are tracked separately from the qualified Android source61b00409 below.
+- Earlier preparation sourceaeb8923b also completed all13 applicable push/PR workflow
+  executions successfully; this is separate from the Android source61 qualification.
 - No JVM test is represented as instrumentation; no empty projection is represented
   as an installed client result. Old checkpoints below are historical evidence.
 
