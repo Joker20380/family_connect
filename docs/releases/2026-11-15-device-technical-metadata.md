@@ -1,8 +1,105 @@
 # DEVICE-TECHNICAL-METADATA-1 — 15 November 2026
 
+## Delivery resumption and updater125 protocol — 16 November16:35UTC
+
+The owner resumes product delivery after the separately accepted recovery. A short
+readback at16:26:43UTC finds watcher/AWG/TCP active with the same accepted recovery
+PIDs, successful state and zero restarts. Serving HTTP/peer PIDs remain unchanged;
+all three paid-v2 archive hashes and the generation2 manifest match. At16:27:50UTC
+support IPC passes with original baseline/cursor position4, excluded history4 and
+unchanged anchor/time; no new real notification delivery is claimed. No transport,
+HTTP, panel or support restart, recovery, rotation, payment or term change occurs.
+
+### Hosted Android result
+
+Source `9c421a9db759c551b14c1009ee139273769ae2c2`, run43890061758,
+Android job133378630911: **SUCCESS**, including native race, JNI build, JVM/lint,
+API35/27/28/31, separate per-app qualification and exact release payload. This is
+the test-only Close-completion correction, not new APK executable code. Frozen
+signed4f288cbb/sourceba3e9370 remains the installed/release candidate.
+
+| Retained receipt | Size | SHA256 |
+| --- | ---: | --- |
+| Routing artifact14239947548 | 27,484 | `a5fa130721ef39574a0f0521925f7e4d225efd99d48fd566d747fec58650e897` |
+| Runtime artifact14241301242 | 1,313,764 | `9ca7e98cc8a24281074193a72dc402e8ff3757662379b014787b2be6cb055eb4` |
+
+Both downloads match the server artifact digests. Each API27/28/31/35 routing receipt
+contains40 records; the separate harness steps pass. API35 debug/friends JUnit reports
+contain73/26 cases with41/4 explicit skips, zero failures/errors. API27 contains73/26
+with42/5 skips, zero failures/errors. Thus99 reported cases do not mean99 unskipped
+executions. No TCP/IPv6 assertion is removed and no timeout is increased.
+
+The source push workflow itself concludes failure because its separate Linux job
+133378630847 fails at `Install appimagetool`; it is not reported as wholly green.
+At the read boundary, documentation head68867b58 has Linux/Windows, paid, readiness,
+panel, notifications, messenger, Linux voice and Linux internal checks passing;
+Android133432181071, phase0 and Linux control are still running. Do not call this
+complete current-head acceptance. No extra parallel rerun is started. Merge remains
+pending; remote main still53a780d9. Reviews so far are self-review, not independent.
+
+### Original125 protocol compatibility and immutable publication preparation
+
+`AppUpdate.java`, `AndroidUpdateManifest.java` and `AppUpdateUi.java` are byte-identical
+between accepted125 sourceb293f9ac and candidate sourceba3e9370. A separate JVM harness
+compiles the first two exact original125 source files with the existing pinned Gson
+2.13.2/Bouncy Castle1.85.2 dependencies, without building an APK. It verifies original
+catalog8, then prepared signed catalog9 with the previous sequence/digest, legacy
+equality, optional upgrade from125, API31 compatibility and all50,478,496 bytes of the
+signed4f288cbb APK. Rollback, same-sequence conflicting digest and altered signature
+are rejected; same-sequence identical replay is accepted. **PASS, JVM protocol only.**
+No second125 device is observed, no downgrade/clear-data is performed, and this does
+not claim a new physical125 updater UI installation. Existing two-step physical
+125→old126→corrected126 evidence retains its original scope.
+
+At16:34:19UTC verified HTTPS still serves125/catalog8 and both unchanged invitations
+with their correct CSP. Three immutable local assets pass owner/mode/size/hash checks.
+Actual ingress image/entrypoint/arguments, readonly config-directory mount, four
+accepted file hashes/owners/modes and available disk pass. The private126 publication
+journal and public126 assets are absent; no deployment/write/reload has occurred.
+The initial read-only helper expected nginx executable/flag order in Docker `Cmd`
+rather than its actual separate `Entrypoint`; those failed preflights are retained.
+The corrected check verifies the actual nginx entrypoint and exact configuration/
+foreground arguments, rather than weakening the configuration or ownership guards.
+
+Existing four-file isolated configuration roundtrip and actual-container syntax
+acceptance remain applicable. Publication uses a fresh protected intent/completion
+journal, staged immutable assets, verified active configuration and guarded reload.
+An uncertain write must be reconciled against that same journal/current hashes,
+never blindly replayed. Preserve generation2, all current data/tombstones and assets;
+rollback is compatible routes/advertisements, not an old database. A catalog already
+seen at sequence9 requires a higher sequence for correction, never overwritten126
+bytes or a silently resigned file. Full public126 HTTPS/Range/source checks remain
+post-publication gates, not passed by local preparation.
+
+### Current owner-assisted phone boundary
+
+One authorized Redmi remains in ADB `device` state. A fresh normal navigation tap at
+16:20:39UTC still fails exit255/INJECT_EVENTS; no bypass or repeated generic USB grant.
+At16:34:35UTC the read-only visible-state probe confirms technical-information consent
+ON, Wi-Fi/mobile data ON and airplane mode OFF. At16:27:50UTC canonical and original
+generation2 panel agree on enabled epoch5/sequence111 and five groups. Prior epoch4
+OFF/cleanup remains historical acceptance, not the current consent state or evidence
+of an unexplained late-request resurrection. Actor/intent of re-enabling is not inferred.
+
+Owner action: turn technical information OFF and restore original NL1 on the status
+page, leaving VPN disconnected. Then read back automatic revoke/cleanup and final
+settings; retain USB until phone work completes and agree its restoration separately.
+No current gateway/session or completed restoration is inferred from the settings page.
+Publication and ordinary integration remain pending current gates. Physical5G/dual-SIM
+remain NOT_OBSERVED. Private UI/identity/location evidence stays outside Git.
+
 ## State
 
-Latest16 November16:08UTC: separately authorized RU restoration completes on the
+Latest16 November16:35UTC: metadata delivery resumes without rebuilding/signing,
+server deployment, HMAC rotation or RU recovery. Source9c421a9d's complete Android job
+passes; current documentation-head CI remains incomplete. Original125 updater sources
+accept the prepared signed optional126 catalog and exact immutable APK in a JVM
+protocol check, not physical installation. Live125/catalog8 and both invitations stay
+unchanged. Redmi remains ADB-authorized but rejects normal injected input; current
+consent is ON, so final owner-assisted OFF/NL1 restoration is still required.
+See [resumption, evidence and remaining gates](#delivery-resumption-and-updater125-protocol--16-november1635utc).
+
+Historical16 November16:08UTC: separately authorized RU restoration completes on the
 current accepted node125c796a, HTTP4e2df679, operator19efd0b4 and reconcilerff4601aa;
 no APK, paid policy, metadata runtime, HMAC2 or panel change. Six strict samples over
 224.856s and a final protected-state readback pass. HTTP/peer/support/panel are not

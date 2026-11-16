@@ -134,6 +134,27 @@ rebuild the already accepted metadata server or repeat HMAC/RU recovery.
 
 ## Owner-assisted signing and device session
 
+### Final restoration and updater protocol scope
+
+After a separately accepted service recovery, take one short fresh readback of runtime
+pins/HMAC2 and phone state; do not repeat recovery or assume an old OFF receipt is the
+current preference. Preserve later consent epochs and distinguish a new authenticated
+enable from delayed old-report resurrection. If normal ADB input returns INJECT_EVENTS,
+request the specific owner toggle/navigation; do not bypass MIUI or keep re-requesting
+an already granted USB connection. Restore original consent/country/network state and
+verify resulting server/panel cleanup before closing the phone session.
+
+With only the upgraded phone available, never downgrade/clear it to manufacture a125
+updater result. Verify original125 updater source equivalence and run its parser,
+signature/sequence policy and bounded download validation against exact release bytes;
+label that JVM/protocol evidence separately from Android instrumentation and physical
+installation. Repeat public HTTPS/hash/Range verification after actual publication.
+An Android job PASS does not imply the whole source workflow or a newer documentation
+head PASS. Keep artifact-source, test correction, documentation head and merge results
+distinct. [16 November evidence](../releases/2026-11-15-device-technical-metadata.md#delivery-resumption-and-updater125-protocol--16-november1635utc).
+
+### Existing signing and device procedure
+
 Signing and exact signed-descriptor isolated qualification do not require ADB.
 The selected126 is now signed and frozen in the current receipt; reuse those bytes,
 do not repeat signing. The sequence below also documents future signing sessions.

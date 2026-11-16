@@ -1,5 +1,31 @@
 # Текущее состояние / Current state
 
+**16 November16:35UTC — metadata delivery resumed; Android correction qualified.**
+Source9c421a9d Android133378630911 finishes successfully: native race, JVM/lint,
+API35/27/28/31, separate per-app harness and exact release payload. Downloaded runtime
+and routing receipts match GitHub artifact digests. The99-case instrumentation reports
+include explicit conditional skips; these are not99 executed physical-device cases.
+The source push workflow is not wholly green: its Linux job failed at installing
+appimagetool. On documentation head68867b58 Linux/Windows pass; Android133432181071
+and other applicable checks still run. No additional rerun or complete-head PASS.
+
+The original125 updater/parser/signature verifier are byte-identical to the corrected
+candidate's. A bounded JVM protocol check using those original sources accepts the
+prepared signed catalog9, optional125→126, matching legacy descriptor and all exact
+50,478,496 signed APK bytes; rollback, conflicting sequence and signature alteration
+are rejected. This is not Android instrumentation or an observed updater installation.
+Fresh verified HTTPS still serves125/catalog8 and both original invitations/CSP.
+All three immutable126 assets and the actual ingress/configuration guards pass; no
+publication, reload, build, signing or server deployment occurs.
+
+Short16:26UTC readback preserves current RU process identities, paid-v2 archive pins
+and HMAC2. Support IPC and the original baseline/cursor remain. Redmi is authorized
+over ADB but normal input still fails INJECT_EVENTS. At16:34UTC Wi-Fi/mobile are ON,
+airplane mode OFF and technical-information consent ON; canonical/panel epoch5 agree.
+Owner-assisted restoration of consent OFF and original NL1 remains, followed by fresh
+cleanup readback, applicable CI, publication and integration. Do not claim the earlier
+OFF/tombstone receipt is the current setting. [Resumed release receipt](releases/2026-11-15-device-technical-metadata.md#delivery-resumption-and-updater125-protocol--16-november1635utc).
+
 **16 November16:08UTC — separately authorized RU recovery: RECOVERED_CAUSE_OPEN.**
 Fresh accepted-byte/owner/unit/HMAC2 guards pass against the current paid-v2 foundation,
 not the earlier pre-paid archives. A new consistent backup restores all27 canonical

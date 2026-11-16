@@ -2,7 +2,22 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Current boundary — separate RU recovery16 November16:08UTC:** the owner's explicit
+**Current boundary — DEVICE-TECHNICAL-METADATA-1 resumed16 November16:35UTC.**
+Keep installed signed4f288cbb, exact paid-v2, metadata server/panel and HMAC2 unchanged.
+The test-only9c421a9d Android job completes all required Android/per-app stages;
+separate runtime/routing artifacts are downloaded and digest-verified. Do not call
+its whole push workflow green (Linux appimagetool installation failed), or transfer
+that result to the still-running documentation-head matrix. No duplicate CI rerun.
+Original125 updater sources accept prepared optional catalog9 and exact signed bytes
+in an isolated JVM protocol check, not a physical updater installation. Fresh ingress,
+immutable assets and public125/catalog8/both invitations are verified without writes.
+Next: owner restores technical-information consent OFF and original NL1 (USB input
+still denied); verify resulting cleanup/current phone state, finish applicable CI,
+publish accepted immutable assets/discovery/invitations, then review/integrate.
+Keep USB until remaining phone work is complete; agree its restoration afterward.
+Do not repeat completed RU/HMAC/server work. [Receipt](releases/2026-11-15-device-technical-metadata.md#delivery-resumption-and-updater125-protocol--16-november1635utc).
+
+**Historical boundary — separate RU recovery16 November16:08UTC:** the owner's explicit
 confirmation is executed on the accepted current paid-v2/metadata/HMAC2 foundation.
 Fresh backup/isolated restore, RU-only fence/drain/stop/preflight, encrypted off-host
 backup and sequential unchanged start pass. Six strict samples over224.856s cross a
