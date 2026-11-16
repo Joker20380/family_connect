@@ -2,17 +2,21 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Current replacement boundary — installed16 November12:58UTC:** immutable4f288cbb
+**Current replacement boundary — history checked16 November13:14UTC:** immutable4f288cbb
 is installed over the earlier test126 without data clearing. Pulled bytes/signer,
 UID/first-install time, network settings, bounded options/contact-list comparison,
 fresh device/chat proof and canonical identity/activation/chat pin/subscription/event
 preservation pass. Consent was already OFF with an empty epoch2/sequence30 tombstone;
 both remain after replacement/restart. Do not attribute the earlier revoke to this test.
 Normal exported tab/subscription intents remove unnecessary navigation prompts but
-do not change consent, connect VPN or bypass denied input. Chat list is open: remaining
-local history/per-app/session acceptance needs the actual supported UI actions.
-Next owner action is opening the existing support conversation, not sharing its text.
-Then finish affected data/session acceptance, exact paid loading, new-APK metadata
+do not change consent, connect VPN or bypass denied input. The owner opened the
+existing conversation; all four previously observed message/date/status pairs match
+exactly and in order. This closes that bounded history-page comparison, not a full
+local database or pinned-key comparison. Fresh input remains denied by MIUI. Options
+are open; next owner action is opening “Applications and VPN” and its selected-only
+display filter, not changing the routing mode or saving a new selection. Compare the
+complete saved selection privately. Then finish affected data/session acceptance,
+exact paid loading, new-APK metadata
 chain/revoke/RU-AWG geography and public delivery. No full-release or direct125→new
 PASS; preserve the separate125→old126→replacement evidence. No new build/signing.
 

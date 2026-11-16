@@ -1,6 +1,21 @@
 # Текущее состояние / Current state
 
-**16 November12:58UTC — corrected126 installed in place; bounded preservation PASS.**
+**16 November13:14UTC — replacement history comparison PASS within observed scope.**
+The owner opened the existing conversation. All four previously recorded message/
+date/status pairs match exactly, once each, under the same row parent and in the
+same order. This is the saved visible page, not a full message-database export.
+No message was sent. Corrected installed4f288cbb, existing identity proofs and the
+OFF/empty-tombstone consent result remain as recorded below. A fresh normal tap on
+the visible app-VPN settings button still fails with INJECT_EVENTS/exit255; there
+is no alternate injection or new USB-grant request. Options are open. Next: inspect
+the existing saved per-app selection using the selected-only display filter, without
+saving/changing policy. Local pinned-key UI/session/new-byte metadata/revoke/GeoIP
+and publication gates remain. Exact paid v2 stays staged/not loaded; public125 stays.
+Current documentation headfbd7444f has7 successful workflows; Android133318003937 is
+still running (native race PASS, runtime matrix pending at readback), not a full
+current-head CI PASS. Qualified Android sourceba3e9370 remains separately accepted.
+
+**Historical16 November12:58UTC — corrected126 installed in place; bounded preservation PASS.**
 After the owner enabled temporary USB support, the exact old installed SHA97513e3f
 and replacement SHA4f288cbb both verify with the accepted signer. Normal install -r
 loads the frozen50,478,496byte replacement without uninstall, clear-data or downgrade.

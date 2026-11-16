@@ -177,6 +177,12 @@ owner's request, without silently changing databases.
    compare the mode spinner and complete saved selected-only set separately from
    the category filter. Keep observed history-page scope distinct from a full DB
    comparison. Never interpret a reader-shape mismatch as lost application data.
+   Evidence summaries must construct an explicit scalar allowlist: type-check
+   booleans/integers and compute counts with len(), rather than printing a field
+   whose name merely sounds like a count. A saved history_rows field can contain
+   message/date/status arrays. Compare those privately and publish only equality,
+   uniqueness/order/pairing results and the observed scope. Do not print lists,
+   private text, identifiers, arbitrary receipt values or exception arguments.
 2. Select the existing release KeePassXC vault in the local signing dialog and
    unlock it there. Do not send its password, key or recovery attachment in chat.
    Follow the [vault signer procedure](../android-vault-signing.ru.md); pin the

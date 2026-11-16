@@ -2,9 +2,10 @@
 
 ## State
 
-Latest16 November12:58UTC: corrected replacement126 is installed in place on the
-authorized ARM64 Redmi; bounded data preservation and restart checks pass. Full local
-history/per-app/session and replacement metadata-chain acceptance remain open.
+Latest16 November13:14UTC: corrected replacement126 is installed in place on the
+authorized ARM64 Redmi; bounded data preservation and restart checks pass. The four
+previously observed history rows now match exactly. Complete local database,
+per-app/pinned-key UI/session and replacement metadata-chain checks are not inferred.
 Its exact paid v2 passes isolated/hosted qualification but remains not loaded; APK
 is not published. Subscriptions projection is repaired; corrected Android CI passes.
 Old frozen signed bytes remain unchanged/test-only.
@@ -51,6 +52,34 @@ checkout8937e71e has unrelated modified/untracked files and diverged history;
 all preserved. Worktree branch: feature/device-technical-metadata-20261115.
 
 ## Resumed delivery — 16 November
+
+### Replacement history readback — 16 November13:14UTC
+
+After the owner opened the existing support conversation, the separate read-only
+probe captured the actual foreground app. The private comparison finds all four
+baseline message/date/status pairs exactly once, each under the same row parent,
+adjacent in the text-node sequence and in the same relative order. No normalization,
+message send or private app-file export. This verifies the previously observed page,
+not the complete message database or the separately pending local pinned-key UI.
+
+Existing exported navigation opens options without injecting input. A fresh normal
+tap on the unique visible “Applications and VPN” button is denied with exit255 and
+INJECT_EVENTS. There is no bypass, private activity launch or repeated USB-grant
+request. The next required UI action is opening that page and its selected-only
+display filter; do not change the routing-mode spinner, app selections or save.
+Compare the whole saved selected set privately against the retained baseline.
+
+The installed immutable APK stays4f288cbb,50,478,496bytes; no build, signature,
+installation, server deployment, policy loading or catalog change occurs here.
+Consent remains at the preceding OFF/tombstone observation; it was not re-enabled.
+Paid v2 is still staged/not loaded. Public125 and generation2 remain the accepted
+base; no new production-preservation claim is derived from a phone UI comparison.
+
+At this readback documentation headfbd7444f has7 completed successful workflows.
+Its Android job133318003937/run43872703759 passes the native race step and is still
+building before the runtime matrix; phase0/Linux preview also remain running.
+This is not full current-head CI PASS. Accepted Android sourceba3e9370 and its fixed
+artifact remain separate; do not select a new artifact from this documentation run.
 
 ### Replacement installed — 16 November12:58UTC
 
