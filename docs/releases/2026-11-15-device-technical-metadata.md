@@ -1,8 +1,28 @@
 # DEVICE-TECHNICAL-METADATA-1 — 15 November 2026
 
+## Separate RU incident receipt — 16 November evening
+
+The owner's latest request selects RU cause investigation/restoration, not another
+metadata rollout. The [separate incident receipt](2026-11-16-ru-recurrence.md#watchdog-cascade-and-guarded-recovery--16-november-evening)
+establishes the watchdog cascade and records fresh guarded recovery, exact current
+runtime/data/HMAC2 preservation and six post-convergence samples crossing a lease.
+The initiating-stall cause remains open; restored services are not a permanent fix.
+Normal inventory/subscription/metadata imports and original support baseline/cursor
+remain. No APK/signing/server/paid overlay, publication or phone action is repeated.
+Signed4f288cbb and exact paid126-v2 remain the accepted bytes/policy; public126 is
+still not activated by this incident task. Existing phone OFF/revoke acceptance is
+not invalidated or silently repeated.
+
+At19:03UTC all ten applicable workflows on entry head
+`2ec88d3656fef70210667a9c885af4f4b1ac17cb` pass; Client builds43921899457 includes
+Android133491153349 and the Windows/Linux checks. The tag-only release job is skipped
+as expected, not public-delivery evidence. This is separate from artifact source
+ba3e9370, prior f781c77e qualification and the later incident-documentation head.
+PR38 remains draft; no full-PR production deployment or merge is performed here.
+
 ## Restoration, CI and pre-publication stop — 16 November17:41UTC
 
-**Current outcome: PREPARED_NOT_PUBLISHED / BLOCKED_RU_RUNTIME.** The selected
+**Historical outcome: PREPARED_NOT_PUBLISHED / BLOCKED_RU_RUNTIME.** The selected
 corrected APK remains signed, installed and immutable. Device/metadata acceptance
 and the complete f781c77e CI gate now pass. A new RU transport failure prevents
 the first publication write. Public125/catalog8 and PR38 draft remain; this is not

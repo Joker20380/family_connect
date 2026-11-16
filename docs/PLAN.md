@@ -2,7 +2,25 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Current boundary — DEVICE-TECHNICAL-METADATA-1 publication BLOCKED17:41UTC,16 November.**
+**Current boundary — separate RU investigation/restoration selected by the owner,16 November evening.**
+RECOVERED_CAUSE_OPEN: watchdog→dependent engine stop→watcher-only restart cascade is
+established. The initiating stall is not conclusively attributed: the failure interval
+shows I/O/reclaim pressure and concurrent broad diagnostic reads, without a surviving
+pre-kill stack. Do not call correlation a provider fault, OOM or a complete cause fix.
+Use bounded selected-file journal reads; no live overload reproduction, weakened
+8s/12s/120s guarantees or unqualified recorder deployment. Fresh backup/isolated
+restore and guarded recovery preserve current metadata/paid-v2/HMAC2. After explained
+lease-expiry/renewal TCP restarts, six strict samples cross a lease deadline over
+223.969s with exact20/20 bindings and66 records. Support/imports/baseline/cursor remain.
+[Receipt and evidence boundary](releases/2026-11-16-ru-recurrence.md#watchdog-cascade-and-guarded-recovery--16-november-evening).
+
+This incident task does not publish126 or reopen completed phone/signing/server gates.
+Keep APK4f288cbb/sourceba3e9370 immutable. All ten entry-head2ec88d36 workflows pass,
+including Android133491153349; do not transfer that result to a later documentation
+head. Metadata publication/review/integration remains the selected product work after
+this separate incident, with a fresh service guard; recurring-stall cause remains open.
+
+**Historical boundary — DEVICE-TECHNICAL-METADATA-1 publication BLOCKED17:41UTC,16 November.**
 Keep installed signed4f288cbb, exact paid-v2, metadata server/panel and HMAC2 unchanged.
 Owner restoration and normal revoke are complete: OFF/NL1/VPN disconnected; canonical
 and panel epoch6/sequence116 contain zero groups/no geography. Revoked browser24PASS.

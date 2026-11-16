@@ -1,5 +1,166 @@
 # RU recurrence — 16 November 2026
 
+## Watchdog cascade and guarded recovery — 16 November evening
+
+**RECOVERED_CAUSE_OPEN; cascade established, initiating stall not conclusively
+attributed.** The owner's request to find why the processes stop explicitly selects
+this separate RU investigation/restoration. It does not authorize a new APK, HMAC
+rotation, publication, relaxed paid deadlines or deployment of the unqualified
+recorder. Entry source/remote feature is
+`2ec88d3656fef70210667a9c885af4f4b1ac17cb`; main remains
+`53a780d9ccfcdb2c3ec6141a197917190f9be7a5`. The dirty primary checkout is untouched.
+
+### What actually stops the services
+
+The corrected, bounded manager timeline attributes events using `UNIT`, not the
+manager process's `_SYSTEMD_UNIT=init.scope`:
+
+| UTC | Observed event |
+| --- | --- |
+|17:38:50.578553 | paid-watch watchdog timeout; systemd sends SIGABRT |
+|17:38:50.594249 | AWG stop begins through the dependency/fail-closed boundary |
+|17:38:50.599222 | TCP stop begins; it exits successfully at17:38:50.736201 |
+|17:38:55.892582 | AWG exceeds its5s SIGTERM stop window |
+|17:38:55.896649–.897600 | systemd sends SIGKILL to AWG and watcher |
+|17:38:56.007452–.008763 | AWG result timeout; watcher result watchdog |
+|17:39:01.087305 | automatic watcher restart scheduled |
+
+These are not two independent transport crashes, a metadata revoke, an expired
+user subscription or an HMAC-generation switch. Losing the local paid controller
+intentionally closes both ordinary transports, including noncohort clients. Restarting
+only the watcher does not start the engines again. Subsequent queries against stopped
+engines fail, explaining the growing restart counter without restored connectivity.
+At19:21:16UTC the counter is172 while both engines are still down.
+
+The retained first-failure file is **secondary**, not the initiating watchdog stack:
+register/engine_query, COMMAND_FAILED, elapsed1.89077s, recorded17:39:09.859747UTC
+after the engine stops. Its unchanged SHA256 is
+`5ad8504e02f4924df2e8f252e07dfc12b2cb3704549b2bc3d4944b67bc406d90`.
+Do not relabel this as an8s persistence failure or blame registration for17:38:50.
+
+### Resource evidence and limits of attribution
+
+Existing sysstat samples cover the failure, but their ten-minute resolution cannot
+identify the process or syscall stalled at the watchdog instant:
+
+| Interval ending UTC | CPU iowait | vda read KiB/s | vda await ms | Average queue | IO PSI full | Memory PSI full |
+| --- | --- | --- | --- | --- | --- | --- |
+|17:30 |5.40% |979.63 |52.95 |1.83 |5.91% |0.04% |
+|17:40 |20.19% |5779.53 |129.21 |17.52 |21.10% |8.36% |
+|17:50 |3.55% |49.50 |50.85 |1.50 |3.97% |0.03% |
+
+The middle interval also has26.89 swap-in/58.56 swap-out pages per second,
+1696.87 kswapd-scanned pages/s and48.40 direct-reclaim-scanned pages/s. This supports
+an I/O/reclaim-pressure hypothesis on the approximately2GiB guest, not a claim of
+OOM, exhausted disk space, a provider fault or CPU throttling. The bounded kernel
+window has no matching OOM/hung/I/O-error records; that is not a whole-host historical
+exclusion. Current post-failure free memory does not disprove transient pressure.
+
+Our operator diagnostics are a possible contributor and are not exempt merely
+because they are read-only. Broad journal-query receipts finish at17:37:41 and
+17:39:22, bracketing the watchdog in that workflow. The25 system journal files total
+1,560,281,088 bytes. A bounded footprint check of the same broad credential-renewal
+query, while the engines were already down, reads19,030,016 bytes before its20s
+limit. Its cgroup peak is29,966,336 bytes and CPU time47.129ms. Limits are128MiB
+memory/no swap,10% CPU and1MB/s vda reads; output goes to null. It exits on the
+configured timeout/SIGTERM, and the transient diagnostic unit is subsequently
+not-found/inactive/PID0. This demonstrates nontrivial read I/O, **not reproduction
+of a watcher failure**, nor proof that this reader alone caused the incident. File
+receipt times are not a complete process start/end/I/O trace.
+
+The accepted controller's8s operation checks cannot preempt a blocking filesystem
+call; systemd's independent12s watchdog can terminate it before another Python
+deadline check. Earlier14November evidence actually measured6.51–7.43s in fsync
+chains in8.65–9.26s failed operations. That remains specific earlier evidence, not
+a recovered stack for this watchdog. See the
+[persistence-pressure report](2026-11-14-ru-persistence-pressure.md).
+
+For this failure the effective watcher `StandardError=null` discards its progress
+diagnostics. No matching systemd coredump, working-directory core or relevant
+time-matching Python/Family apport file is found; the configured handler is apport.
+SIGABRT followed by SIGKILL alone does not prove an uninterruptible I/O stack, since
+core handling/termination can also delay exit. A complete initiating syscall/off-CPU
+trace is unavailable. No journaling/persistence guarantee, timeout, BindsTo rule or
+stderr configuration is changed to manufacture a fix. No stress reproduction is
+attempted on a live restored gateway.
+
+### Fresh recovery and preservation
+
+At19:21:16UTC current archive/owner/private-parent/effective-unit guards pass, with
+7,498,117,120 bytes free. All pins in the16:08 table below remain accepted, including
+HTTP4e2df679, operator19efd0b4, reconcilerff4601aa and node125c796a. Generation2 manifest
+8602e652 is unchanged and both active key copies agree inside the process.
+
+At19:21:43UTC a new consistent canonical backup restores all27 tables with identical
+fingerprints, integrity/FK checks and all three exact-runtime paid projections.
+Backup SHA256:
+`7eaf94b7d2cada61442154a8804bd0eda39042c1ee368e53e4343a65d132c005`.
+The paused backup is encrypted off-host,194,871 bytes, SHA256
+`7605ca66985815cf0b2fb312471a5715f261eb429630afed408a850a6ad77e00`;
+decryption/digest roundtrip passes. No old DB is restored over live events.
+
+At19:22:23UTC the RU-only command fence/drain/grouped stop proves PID/control PID0,
+no relevant jobs and zero gateway handlers. NL commands remain unchanged. Retained
+66 records/20 peers and bindings pass preflight. The original failure is preserved
+while stopped. Unchanged watcher/AWG/TCP start19:23:40–41; original three-node commands
+are restored. HTTP PID1866519 and peer PID3967036 are not restarted, nor are panel,
+support, reconciler timer or NL services. This does not reverse the earlier normal
+17:10 HTTP credential-renewal restart.
+
+The first post-start continuity assertion **fails**, and is retained, because TCP
+changes process. Investigation, not an assertion bypass, establishes this sequence:
+the retained allowed cohort lease ends19:23:57, after startup but before the first
+fresh renewal. TCP stops/restarts19:23:58.051302 and19:24:14.668115 as membership closes
+then returns. The exact decision/binding/terms/revision/prepared/boot fields remain;
+only observation/lease clocks advance. Watcher/AWG/HTTP/peer keep their original
+invocations; no new failure file exists. At19:32:10 an explicit post-convergence
+anchor passes actual AWG/TCP set, persisted readback and applied-revision assertions
+for66 records and20/20 allowed bindings. Original start and failed continuity receipts
+remain; the later stable window is not backdated across those TCP restarts.
+
+Six unchanged strict observations at19:33:21,19:33:59,19:34:36,19:35:15,19:35:52 and
+19:37:05UTC span223.969s and cross the initial observed cohort deadline. That deadline
+advances1794857719→1794857921 through normal reconciliation. Every sample has66 applied
+records and exact20 AWG/20 TCP bindings, with stable watcher2287887/AWG2287942/TCP2289844
+and NRestarts0. HTTP/peer remain their original processes. At19:41:06UTC the final
+readback again passes exact actual/persisted state, transport identity/membership/
+terms/prepared-state preservation, all protected canonical fingerprints, unchanged
+effective units, restored command map and the archived original failure digest.
+Protected counts are devices66, invitations121, subscriptions/events1/4, chat bindings/
+service senders53/1 and referral links/claims19/59. Counts are accompanied by exact
+fingerprints, not substituted for them. The final checker first rejected a stale
+previous-incident failure-archive filename; that reader failure is retained. Correcting
+only its archive selector verifies this incident's unchanged5ad8504e bytes. No runtime
+file, historical failure, acceptance assertion or protected data is changed to pass.
+The reconciler finishes inactive/success and its timer remains active/waiting.
+
+At19:33:54 support IPC and original notification baseline/cursor position4, baseline
+time14November12:48:20UTC, excluded count4 and matching anchor pass; source_error is
+null. No test payment, term change or message is created. New real notification
+delivery remains NOT_OBSERVED. Normal19:34:21–32 imports show all three current
+transport sources ok/66, RU inventory ok/66 and canonical subscriptions ok/66 on
+HTTP4e2df679. NL registry not_collected and the old gateway-nl unavailable record are
+existing source boundaries, not new canonical data loss. Metadata source is ok;
+panel image5ae92f8c remains unchanged.
+
+### Operational correction and remaining boundary
+
+Do not perform unrestricted whole-journal scans on this gateway during acceptance
+or recovery. Select the observed journal file and a short time/unit window; bound
+runtime, memory, I/O and output. A narrow query still needs an execution limit.
+Preserve logs; do not vacuum/delete evidence or bypass permissions. The bounded
+read procedure and uncertainty are now explicit in the operator runbook.
+
+This removes an avoidable diagnostic load, not a proven durable repair of the
+initiating stall. Closing the cause requires a time-aligned initiating operation,
+blocked syscall/scheduler interval and I/O/reclaim attribution; later engine errors
+or another successful recovery cannot supply it. Unqualified observer/recorder
+deployment remains outside this change. Metadata/public126 delivery is not performed
+by this incident task; its existing installed/paid/HMAC2/device acceptance is retained.
+Documentation checks cover6 changed files/874 local links with zero errors, plus
+whitespace and scoped known-private-value review. This is the author's own scoped
+review, not independent review, a runtime patch or a new full Android qualification.
+
 ## Authorized recovery — 16 November16:08UTC
 
 **RECOVERED_CAUSE_OPEN.** After the15:34 outage diagnosis, the owner explicitly

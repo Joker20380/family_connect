@@ -1,6 +1,34 @@
 # Текущее состояние / Current state
 
-**16 November17:41UTC — device restoration and CI PASS; publication BLOCKED by a new RU outage.**
+**16 November evening — separately authorized RU investigation/recovery: RECOVERED_CAUSE_OPEN.**
+The17:38:50 outage is a paid-watch watchdog cascade, not independent AWG/TCP crashes:
+systemd aborts the watcher, closes both dependent engines and later kills AWG after
+its stop timeout. Watcher-only automatic restarts cannot restore stopped engines.
+The17:39 register/query failure is secondary. The failure interval has severe I/O
+and memory-reclaim pressure; broad operator journal reads are a possible contributor,
+not a proven sole cause. No initiating stack survives: stderr is null and no matching
+core is found. Avoid unrestricted journal scans; do not claim a durable runtime fix.
+
+Fresh backup/isolated27-table and paid-projection restore, RU-only fence/drain/stop,
+encrypted off-host backup and unchanged start pass. A retained lease expires after
+startup and before first renewal, explaining two TCP membership restarts; the first
+failed continuity assertion is retained. A separately qualified convergence anchor
+then passes six strict samples over223.969s, crossing the initial lease deadline:
+66 records, exact20 AWG/20 TCP, all revisions and stable processes. HMAC2/aliases,
+accepted archives, identities/terms/prepared state and protected data remain; HTTP,
+peer, support/panel and NL are not restarted. Normal imports and original notification
+baseline/cursor pass. No new real notification delivery or physical traffic PASS.
+[Investigation, limits and recovery receipt](releases/2026-11-16-ru-recurrence.md#watchdog-cascade-and-guarded-recovery--16-november-evening).
+
+Metadata delivery is still unpublished, not redone here. Entry head2ec88d36 has all
+ten applicable workflows PASS, including Android133491153349; that is distinct from
+the immutable artifact sourceba3e9370 and from this documentation change's checks.
+Keep signed4f288cbb, exact paid-v2 and the completed phone OFF/revoke acceptance.
+No build/signing/vault, server overlay, HMAC rotation, invitation/catalog change or
+new recorder deployment. The initiating-stall cause remains open; this recovery
+receipt must not be presented as a recurrence fix.
+
+**Historical16 November17:41UTC — device restoration and CI PASS; publication BLOCKED by a new RU outage.**
 Owner restoration is observed: consent OFF, original NL1, VPN disconnected, Wi-Fi/mobile
 ON and airplane mode OFF. Automatic revoke epoch6/sequence116 leaves zero canonical
 and panel groups and no geographic projection. Revoked-card checks pass24 assertions
