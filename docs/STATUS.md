@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**16 November15:48UTC — new RU outage confirmed; publication held.**
+The owner reports stopped services again. Read-only systemd evidence at15:43:45UTC:
+AWG failed/timeout/PID0, TCP inactive/PID0, watcher restarting (NRestarts16), paid
+reconcile failed/exit1 while its timer remains active. HTTP and verified public125
+HTTPS remain available. Normal inventory/metadata IMPORTED does not establish VPN
+health. No recovery, reset-failed, fence, service restart or observer change is issued.
+
+Bounded current-journal evidence places reconcile timeout at15:34:36.622UTC, watcher
+watchdog timeout at15:34:36.968UTC, then dependent transport stops and AWG stop timeout.
+The preserved failure record is later,15:35:08UTC, register/engine_query/COMMAND_FAILED;
+it does not identify the initiating delay. Gateway and effective watcher unit hashes
+still match. See the [new incident receipt](releases/2026-11-16-ru-recurrence.md#new-outage--16-november1534utc).
+The earlier recovery is historical, not current health. RU restoration remains a
+separately coordinated operation under the existing guarded runbook; metadata delivery
+does not silently repeat it. Public126/catalog9 are still unpublished. The installed
+metadata/revoke acceptance, exact paid-v2 and immutable artifacts remain recorded.
+
 **16 November15:38UTC — online revoke and original-card cleanup accepted.**
 After connectivity returns with consent OFF, the device automatically delivers the
 revoke: canonical epoch4/sequence83, received15:18:21UTC, has no observations. By

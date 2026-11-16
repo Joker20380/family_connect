@@ -2,6 +2,15 @@
 
 ## State
 
+Latest16 November15:48UTC: the owner reports a new RU outage; read-only checks confirm
+AWG failed/timeout, TCP stopped and watcher restart loop. HTTP/public125 and panel
+imports remain available, not proof of working VPN. The initiating watchdog is recorded
+at15:34:36UTC; a later register/engine-query failure is preserved without assigning
+root cause. See [new RU receipt](2026-11-16-ru-recurrence.md#new-outage--16-november1534utc).
+No recovery or service restart is performed in the metadata task. Public delivery is
+held; catalog9/assets remain staged, beta125/catalog8 unchanged. The accepted installed
+chain and durable revoke are earlier successful observations, not current RU health.
+
 Latest16 November15:38UTC: automatic online revocation clears canonical observations
 and the original generation2 panel's groups/GeoIP. OFF without pending survives a new
 process; subsequent reads preserve the exact tombstones. Real revoked UI passes24

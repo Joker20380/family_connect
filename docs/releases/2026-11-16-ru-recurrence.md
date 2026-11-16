@@ -1,6 +1,62 @@
 # RU recurrence — 16 November 2026
 
-## Current outcome: RECOVERED_CAUSE_OPEN
+## New outage — 16 November15:34UTC
+
+**Current outcome at15:48UTC: NOT_RECOVERED / CAUSE_OPEN.** The owner reports another
+outage during the metadata-release continuation. This section supersedes current-health
+inferences from the earlier successful recovery; it does not erase its acceptance.
+Only bounded read-only checks are performed. No fence, stop/start, reset-failed,
+configuration/timeout change, database restoration or new observer is authorized or
+performed by this diagnostic checkpoint.
+
+| Observed at15:43:45UTC | Result |
+| --- | --- |
+| AWG | failed / timeout / PID0, inactive since15:34:43UTC |
+| TCP | inactive / success / PID0, inactive since15:34:36UTC |
+| Watcher | transiently active, NRestarts16; restarting is not healthy VPN |
+| Paid reconcile | failed / exit1; timer active/waiting |
+| HTTP | active/success; accepted archive, separate14:25:14UTC start |
+| Public HTTPS |200; beta125 remains advertised |
+| Monitor | inventory/metadata IMPORTED15:44:04UTC; not VPN/reconcile acceptance |
+
+A single current journal file yields43 selected records in the bounded15:32–15:36UTC
+window. The private original records and failure bytes are retained locally, without
+printing request identities, IPs, keys, configuration or message content.
+
+| UTC | Recorded ordering |
+| --- | --- |
+| 15:34:36.622163–.622307 | Paid reconcile exits; systemd result timeout. |
+| 15:34:36.968379 | Watcher watchdog timeout. |
+| 15:34:36.969224–.970888 | AWG/TCP stopping; TCP stops. |
+| 15:34:43.020721–.031913 | AWG stop-sigterm timeout, failed/timeout, stopped. |
+| 15:34:43.050430–.050879 | Watcher exits, failed/watchdog. |
+| 15:34:48.080202 onward | Watcher restarts, followed by further exit-code failures. |
+| 15:35:08.189397 | Retained failure: register/engine_query/body, COMMAND_FAILED. |
+
+The2,105-byte retained failure has SHA256
+`950ed783f48bdfc289343abffe5c98b3750901d223233e48caeee8f2334fa2f5`.
+It records CalledProcessError,0.065945s elapsed/8s budget, four calls, no dropped calls.
+Its timestamp follows the initial watchdog and engine stops; it is not proof that
+registration or persistence initiated the outage. Effective watcher unit SHA256
+`659b954beb67d1e23c0cea45ffda62704f48dc2fb0b1f5bd30d0ae733760bd4e`
+and gateway SHA256
+`9023d2c3f7c3a5127d67c509a16eb2d974810ff54d5b76cc225cd9b93e0b4234`
+match the accepted foundation. The later resource sample has7,519,301,632 free bytes
+and1,289,424KiB MemAvailable; this does not reconstruct resource conditions at failure.
+
+Metadata work's last short health sample15:33:19UTC still showed the old watcher/AWG/TCP
+PIDs active with zero restarts. Candidate nginx syntax checking completes15:38:07UTC,
+after the recorded transport failure, without HUP/container restart or live-file
+replacement. No new release asset, catalog, paid policy or server runtime is activated
+in this interval. The evidence does not establish the cause of the initiating delay.
+
+Public metadata delivery is held. Installed126's completed offline/online revocation
+and original-card cleanup remain valid earlier observations; no fresh broad protected-
+data equality or restored VPN is claimed. Resume recovery only as the separately
+coordinated [guarded procedure](../operators/subscriptions.ru.md), preserving accepted
+paid-v2/metadata/HMAC2 and current user data. Do not simply restart the watcher.
+
+## Earlier outcome at12:06UTC: RECOVERED_CAUSE_OPEN
 
 After the read-only diagnosis, the owner explicitly confirmed a separate controlled
 RU recovery on the existing runbook, without new runtime code, HMAC2 changes or

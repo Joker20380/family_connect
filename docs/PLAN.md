@@ -2,6 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Current interruption — RU outage16 November15:48UTC:** new owner report is confirmed:
+AWG failed/timeout, TCP inactive, watcher restart loop and failed reconciliation.
+HTTP/public125 and normal panel imports remain available, not proof of VPN health.
+Bounded first-failure/journal evidence is preserved without restarting or changing
+anything. DEVICE-TECHNICAL-METADATA-1 public delivery is held pending separately
+coordinated guarded RU restoration/health and remaining CI. Do not reinterpret the
+earlier successful recovery as current health, repeat it silently inside metadata,
+introduce an observer, or publish staged126/catalog9 while this interruption is open.
+
 **Current boundary — online cleanup16 November15:38UTC:** offline OFF/pending becomes
 an authenticated epoch4/sequence83 tombstone after normal connectivity returns.
 Canonical and generation2 panel observations/GeoIP are empty; original card remains.
