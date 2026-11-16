@@ -10,7 +10,11 @@ from test_friends_http_runtime import running, runtime
 
 
 RELEASE = next(item for item in paid_beta.PAID_ANDROID_RELEASES if item.version_code == 126)
-UNSIGNED126 = '645ef3970cd1264c8d24237752319cb454184fe6fa2ce8cbb6a9ed8a1c2822b1'
+UNSIGNED126 = '2dd0729becd32e3df4b99bfcc65ebeb74fa9eff7bbbad1d106645b07670f3ed5'
+RETIRED126 = (
+    '645ef3970cd1264c8d24237752319cb454184fe6fa2ce8cbb6a9ed8a1c2822b1',
+    '97513e3f62fe107a36e6e1453e07dfdf7fab33588ed637a676fb2cfb0d2de5b8',
+)
 
 
 @pytest.mark.parametrize('latest', ['support', 'ack'])
@@ -29,7 +33,7 @@ def test_latest126_requires_final_signed_bytes(paid_setup, latest):
                  apk_sha256=RELEASE.apk_sha256)['event']['result'] == 'APPLIED'
 
 
-@pytest.mark.parametrize('apk', [UNSIGNED126, '0' * 64,
+@pytest.mark.parametrize('apk', [UNSIGNED126, *RETIRED126, '0' * 64,
                                *[release.apk_sha256 for release in paid_beta.PAID_ANDROID_RELEASES
                                  if release.version_code != 126]])
 def test_unsigned_or_other_release_hash_does_not_admit126(registry, apk):

@@ -2,9 +2,10 @@
 
 ## State
 
-Latest16 November12:23UTC: delivery resumed, subscriptions projection repaired and
-corrected-source hosted CI PASS. A distinct unsigned replacement126 is verified,
-not yet signed or installed. Old frozen signed bytes remain unchanged/test-only.
+Latest16 November: delivery resumed, subscriptions projection repaired and
+corrected-source hosted CI PASS. The distinct replacement126 is now signed and its
+exact paid v2 passes isolated qualification; not installed, loaded or published.
+Old frozen signed bytes remain unchanged/test-only.
 See [resumed delivery](#resumed-delivery--16-november); earlier states remain history.
 
 16 November12:06UTC: separately authorized unchanged-runtime RU recovery is complete.
@@ -32,7 +33,7 @@ Earlier installed-chain results remain historical evidence, not current RU VPN o
 GeoIP acceptance. Public publication, paid126 loading and physical VPN tests remain
 blocked; this incident does not replace the separately recorded native-race gate.
 
-Android source candidate:0.1.18-beta126/code126, package remains
+Retired Android source61b00409 candidate:0.1.18-beta126/code126, package remains
 com.familyconnect.app.friends. PREVIOUSLY_CI_QUALIFIED / SIGNED / INSTALLED_ON_TEST_DEVICE /
 NOT_PUBLISHED / RELEASE_BLOCKED_NATIVE_RACE. The current artifact receipt below supersedes the historical
 not-built checkpoints. Public125/catalog8, invitation routes
@@ -48,6 +49,70 @@ checkout8937e71e has unrelated modified/untracked files and diverged history;
 all preserved. Worktree branch: feature/device-technical-metadata-20261115.
 
 ## Resumed delivery — 16 November
+
+### Replacement signature and exact paid v2
+
+The first local password dialog was cancelled: no signature/output was accepted.
+After the owner's explicit repeat, the same verified unsigned candidate was signed
+through the existing vault and signer credential/memfd checks. No alternate vault,
+new certificate or keystore; no secret in output/argv/plaintext export.
+
+| Field | Distinct replacement126 |
+| --- | --- |
+| Qualified Android head | `ba3e93703d407c945350c1187e3738d25a3c9eab` |
+| CI merge source / same source tree | `0a2863b3b182ce8ec7a03e91c11749dac2d87c89` / `8e974dc32e65d2a3096ec28aa773f16c01453e93` |
+| Package / version / code | com.familyconnect.app.friends / 0.1.18-beta126 / 126 |
+| Signed size | 50,478,496bytes |
+| Signed SHA256 | `4f288cbb107ac46c8c99ec0e274f57a5e1e8164796796781c4a2c275b57e2134` |
+| Certificate SHA256 | `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a` |
+| ABI / alignment | ARM64 only /16KiB PASS |
+| Payload / signature | Every unsigned ZIP member unchanged; signature/certificate verify PASS |
+| State | SIGNED / IMMUTABLE / NOT_INSTALLED / NOT_PUBLISHED |
+
+The old frozen signed SHA97513e3f is unchanged. Source and signed bytes are separate
+from the subsequent server-policy change: `android-paid-108-119-123-125-126-v2`
+replaces only the never-loaded126 descriptor with SHA4f288cbb, retaining exact
+108/119/123/125. Both old/new unsigned hashes and retired signed126 are rejected;
+support/readiness metadata is not payment or access authority.
+
+Using control/identity lockfiles:153 focused tests and the full normal paid selection
+of501 tests pass. This covers initial payment, new-operation renewal, grace, replay,
+conflicts, negative hashes/version pairs and existing-access independence. Seven
+additional tests on the actual staged HTTP/operator overlays pass. All operations
+use isolated synthetic stores; no production payments/terms/messages are created.
+
+| Staged overlay | Accepted baseline SHA256 | Candidate SHA256 |
+| --- | --- | --- |
+| HTTP | `70a924dbc02c4ebdb15fe2b935f29070bda0a5fa37f140ac2d35765b34500614` | `4e2df679761ba9e7af74128984ef2e19e8e7b228f1cc85b36d50be2b0bc24ce8` |
+| Operator | `a7c801dba6a09e35c9ca7a6e6d816bbb57bc4f483404d44b5ee7f641e70cac15` | `19efd0b46fb145dcef06a9a092ee0d8ee4d062d09d99b1b0e0065425be02d90f` |
+| Reconciler | `40e1d7212b158fa01e4e4a92c0b635a910ae05b8b350840c07629629108b7aeb` | `ff4601aa3bb0990b4f8566aadde1fd6b12120bffbd912b4b901e2d77a114d6aa` |
+
+Every archive member except `control/friends/paid_beta.py` is byte-preserved.
+These are staged, not installed. Actual-package policy assertions are not a claim
+about loaded production policy. After device/CI gates, revalidate baselines and
+backups; preserve HMAC2/metadata, and update both subscription/metadata source pins
+for the new serving HTTP archive. No whole-main deployment or old DB restoration.
+
+Exact source-tree archive is17,011,109bytes/SHA256
+`3bcf9a6ff44e8d65b80cf8f3c6436c873040bbebaec4cbfe016d78b4079d764e`.
+Matching audio-source package is7,602,082bytes/SHA256
+`780c7717faad7a21fcd894324a1e350cc525e2719573835cf72abe40d0cd9039`;
+every packaged source member matches the exact downloaded CI artifact. Both assets
+are staged immutable, not published; no catalog or invitation changes.
+
+Fresh Redmi readback still shows installed code126, not the replacement. The existing
+read-only permissionless UI probe captures35 home nodes; VPN is off. A single actual
+known-target options tap fails with255/INJECT_EVENTS. The app's temporary USB support
+grant is no longer enabled. No repeated reboot, permission bypass, app data entry,
+uninstall, downgrade or clear-data. Owner navigation to options/temporary support is
+needed for the remaining fresh baseline before replacement installation; no personal
+values need to be transcribed. The grant ends again on app process restart.
+
+Java DEX is identical between candidates; other packaged members differ, including
+native binaries, build receipts and Python archives. This is not whole-APK identity
+or a waiver of native/session acceptance. Original125→old-test126 preservation stays
+historical; no direct125→replacement or replacement installed-chain PASS is claimed.
+New consent/session/revoke/RU-AWG geography and publication remain mandatory.
 
 The owner resumes metadata delivery after accepted RU recovery. Fresh bounded
 readback finds unchanged active watcher/AWG/TCP/HTTP/peer processes and NRestarts0;
@@ -97,12 +162,13 @@ main53a780d9/sourceba3e9370 and identical tree
 `8e974dc32e65d2a3096ec28aa773f16c01453e93` to the source head. This distinguishes the
 source head, tested merge and later documentation heads rather than relabelling them.
 
-The **new unsigned** candidate is50,458,549bytes, SHA256
+Before signing, the **new unsigned** candidate is50,458,549bytes, SHA256
 `2dd0729becd32e3df4b99bfcc65ebeb74fa9eff7bbbad1d106645b07670f3ed5`;
 package `com.familyconnect.app.friends`,0.1.18-beta126/code126, ARM64 only. Manifest,
 unsigned status and16KiB alignment pass. Original signed SHA97513e3f is unchanged;
-its acceptance is not transferred to these bytes. Signing with the existing
-certificate, exact signed descriptor and affected installed gates are still required.
+its acceptance is not transferred to these bytes. The signing/descriptor requirement
+at this checkpoint is completed separately in the replacement receipt above; affected
+installed gates remain required.
 Redmi is actually connected by ADB; no downgrade/uninstall/data clearing occurs.
 
 ## Installed metadata chain — 16 November

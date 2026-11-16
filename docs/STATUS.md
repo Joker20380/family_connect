@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+**16 November — corrected126 signed; exact paid v2 qualified locally, not loaded.**
+After the owner cancelled then explicitly repeated the local vault dialog, the
+distinct ba3e9370/CI-merge0a2863b3 candidate is signed with the accepted certificate.
+Immutable APK:50,478,496bytes, SHA4f288cbb107ac46c8c99ec0e274f57a5e1e8164796796781c4a2c275b57e2134.
+Package/code126/ARM64, signer,16KiB alignment and unchanged unsigned payload pass.
+Old signed SHA97513e3f is not overwritten, re-signed or declared corrected.
+Policy `android-paid-108-119-123-125-126-v2` admits this exact signed hash and retains
+108/119/123/125. Both unsigned126 candidates and retired signed126 are negative cases.
+Locked full paid gate501 PASS;153 focused and7 actual overlay-package tests PASS.
+Three staged overlays change only paid_beta.py over current metadata/HMAC runtimes;
+none is loaded. Source/audio assets are staged and verified, not published.
+Redmi still has the old test126. A fresh known-target options tap is denied with
+INJECT_EVENTS; the existing one-hour in-app USB grant has expired. The separate
+read-only UI probe works without touch injection; current home says VPN off.
+Do not reinstall/reset125 or bypass MIUI. Before replacement installation, obtain
+the remaining fresh visible settings/diagnostics baseline through owner navigation.
+No repeated one-button permission loop or private-data transcription. Remaining
+replacement/session/revoke/GeoIP/publication gates are not PASS.
+
 **16 November12:23UTC — metadata delivery resumed; subscription projection repaired.**
 Only the private subscriptions-source archive pin changes from617c7d75 to accepted
 HTTP70a924db, after provenance/live SHA and negative-pin checks. Configuration backup

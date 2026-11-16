@@ -2,7 +2,21 @@
 
 ## Current engineering priority / Текущий critical path
 
-**16 November12:23UTC — DEVICE-TECHNICAL-METADATA-1 resumed by owner.**
+**Current replacement boundary:** signed ba3e9370/merge0a2863b3 candidate126 is frozen
+at SHA4f288cbb/50,478,496bytes, accepted signer; retired SHA97513e3f stays unchanged.
+Exact paid v2 and108/119/123/125 preservation pass153 focused/501 full locked tests,
+plus7 tests on actual metadata-aware overlay packages. HTTP/operator/reconciler
+overlays and matching source/audio assets are staged, NOT_LOADED/NOT_PUBLISHED.
+Mandatory hosted policy checks apply to the new policy source separately from the
+already accepted Android CI source. Redmi is still on old test126: do not downgrade
+or erase data to replay125. Fresh read-only home capture succeeds, but MIUI still
+denies injected options taps and the temporary app USB grant is expired. Next owner
+step is options/temporary USB support with no transcription; then finish the fresh
+baseline, install replacement in place and compare affected state/session paths.
+Old125→test126 evidence stays scoped to those bytes; do not call it direct125→new
+acceptance. Unchanged Java DEX does not waive native/session or remaining release gates.
+
+**Historical16 November12:23UTC — DEVICE-TECHNICAL-METADATA-1 resumed by owner.**
 The stale subscriptions producer pin is corrected, not bypassed: provenance/live
 hash, fail-closed mismatch and config restore/permissions checks pass. Three normal
 imports are ok/66; existing handles/events/HMAC2/baseline/cursor remain. No server

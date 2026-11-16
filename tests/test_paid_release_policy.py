@@ -25,10 +25,10 @@ def test_exact_signed_release_descriptors_only():
         ('android', '0.1.18-beta119', 119, '52a9847b74181c48808c86a0c5bf5925b53ef498eec628aef2d78d26f1c92d2d'),
         ('android', '0.1.18-beta123', 123, 'ae011307b4afc58ea211ea6c5cd27c28bc472bda6af9b19892de400a3d3de15d'),
         ('android', '0.1.18-beta125', 125, 'f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c'),
-        ('android', '0.1.18-beta126', 126, '97513e3f62fe107a36e6e1453e07dfdf7fab33588ed637a676fb2cfb0d2de5b8'),
+        ('android', '0.1.18-beta126', 126, '4f288cbb107ac46c8c99ec0e274f57a5e1e8164796796781c4a2c275b57e2134'),
     ]
     assert paid_beta.LEGACY_ANDROID_RELEASE == paid_beta.PAID_ANDROID_RELEASES[0]
-    assert paid_beta.policy()['policy'] == 'android-paid-108-119-123-125-126-v1'
+    assert paid_beta.policy()['policy'] == 'android-paid-108-119-123-125-126-v2'
 
 
 @pytest.mark.parametrize('release', paid_beta.PAID_ANDROID_RELEASES)
