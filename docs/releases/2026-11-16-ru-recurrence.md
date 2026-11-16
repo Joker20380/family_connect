@@ -1,5 +1,83 @@
 # RU recurrence — 16 November 2026
 
+## New recurrence — 16 November22:07UTC
+
+**OPEN / RU AWG down, TCP down; initiating stall still CAUSE_OPEN.** A fresh readback
+during final source qualification discovers a new failure at22:31UTC. This checkpoint
+is bounded read-only diagnosis, not another recovery or observer deployment. Public126
+was accepted/published20:42UTC while the previous recovered transport guard passed;
+later source integration does not change production or imply healthy RU.
+
+### Observed sequence
+
+A single observed active journal file, the22:06–22:09UTC window and four exact
+Family Connect units produce21,179bytes of selected records. The diagnostic runs with
+20s wall/128MiB/no-swap/10% CPU/1MB/s disk-read limits and finishes exit0; its unit is
+then not-found/inactive/PID0. No whole-journal scan, deletion, vacuum or overload test.
+
+| UTC | Observed event |
+| --- | --- |
+|22:07:31.837827 | scheduled paid reconciler starts |
+|22:07:37.828226 | paid-watch watchdog timeout; systemd begins killing watcher |
+|22:07:37.831940–.833648 | dependent AWG/TCP stops begin |
+|22:07:40.384016 | TCP exits successfully |
+|22:07:43.604546–.609046 | AWG stop times out, SIGKILL, result timeout |
+|22:07:48.829789–49.928537 | watcher-only automatic restart, without engine restart |
+|22:07:54.317494 | secondary register/engine_query COMMAND_FAILED record |
+|22:08:04.028113 | reconciler exits1 after the engine failure |
+
+The initial blocked operation is not in the retained failure record. Its SHA256 is
+`80639df0b1666340813885ccf92ccb10ed435291088bab6d6ad1b1e2c5c1531b`:
+register/engine_query, CalledProcessError/awg-query, returncode1, elapsed5.055984s,
+budget8. Do not call this record the initiating watchdog stack. At22:31 watcher
+NRestarts40; at22:33 it is44. Six bounded current-process samples show polling/sleep
+and another restart, not a surviving initiating blocked syscall.
+
+### Resource evidence and exclusions
+
+Existing sysstat's68,148byte daily file provides ten-minute samples; these are
+interval aggregates, not per-process or instantaneous attribution:
+
+| Interval ending UTC | CPU iowait | vda read KiB/s | vda await ms | Average queue | IO PSI full | Memory PSI full |
+| --- | --- | --- | --- | --- | --- | --- |
+|22:00:01 |4.34% |0.06 |44.54 |1.42 |4.93% |0.00% |
+|22:10:00 |8.93% |1565.42 |160.97 |9.71 |9.37% |2.65% |
+
+The failure interval also has7.08/17.22 swap-in/out pages/s,303.01 kswapd and29.45
+direct-reclaim scanned pages/s. This supports a recurring I/O/reclaim-pressure
+condition, not a proved OOM, provider fault, specific process or filesystem syscall.
+The same bounded kernel window has18 records and no matching OOM/hung/I/O-error
+category. No existing atop history is available. Checked standard apt/man-db/logrotate/
+fstrim/dpkg-backup/tmpfiles jobs do not start in this interval; that is not an exclusion
+of all possible host workload. Neighbouring application data/services are untouched.
+
+**No journal scan from this task runs near22:07.** Thus earlier broad operator scans
+cannot be the sufficient general explanation for the recurrences. They remain an
+avoidable load, not a proven sole root cause. Metadata has only one retained device
+row, revoked epoch6/sequence116, with zero enabled/eligible GeoIP rows. The collector's
+no-eligible branch returns before opening/hashing MMDB; no diagnostic hashes the
+126,873,350byte City or9,648,279byte ASN files. Do not attribute this event to a GeoIP
+lookup without actual eligible-input evidence.
+
+### Preserved state and remaining scope
+
+Node SHA125c796a30c3fba1772c47b96963517350087ad04aad675b6f33a31a5383276c,
+gateway9023d2c3f7c3a5127d67c509a16eb2d974810ff54d5b76cc225cd9b93e0b4234 and
+effective watcher unit659b954beb67d1e23c0cea45ffda62704f48dc2fb0b1f5bd30d0ae733760bd4e
+remain accepted. The standalone unit file has a different hash from `systemctl cat`
+including drop-ins; that distinction is verified, not treated as unknown runtime drift.
+Loaded watchdog12s/stop5s/restart-on-failure5s and stdout journal/stderr null are
+unchanged. No timeout, dependency, persistence guarantee or policy is weakened.
+
+HTTP2394053 and peer3967036 remain active. At22:30 HMAC2/manifest, canonical/panel
+revocation with zero groups/no geography, support IPC, original baseline/cursor4,
+baseline time1794660500, anchor and four excluded events pass. No selected-device
+jobs/source error or new real notification delivery. No recovery, stop/start,
+reset-failed, reconciler/timer change, new backup/restore or observer deployment is
+performed for this new incident. An unchanged recovery can restore availability but
+cannot establish the initiating cause; do not report it as a recurrence fix. Keep
+fresh incident evidence separate from the successful earlier recovery below.
+
 ## Watchdog cascade and guarded recovery — 16 November evening
 
 **RECOVERED_CAUSE_OPEN; cascade established, initiating stall not conclusively

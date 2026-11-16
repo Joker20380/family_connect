@@ -2,7 +2,23 @@
 
 ## Current engineering priority / Текущий critical path
 
-**16 November21:45UTC — finish PR38 qualification; no blind rerun or merge.**
+**16 November22:47UTC — DEVICE-TECHNICAL-METADATA-1 public/source delivery completed;
+separate RU availability is OPEN.** PR38 merge7123b95e is remote-verified with the
+qualified588e793a tree. All ten source PR workflows and four push workflows pass.
+Keep signed4f288cbb/sourceba3e9370, catalog9, exact paid-v2 and installed acceptance.
+Do not select a CI APK, redo completed phone/HMAC/server stages or start another
+queued product task. Final documentation records actual source/merge results,
+observation limits and the new RU incident; it is not a production overlay.
+
+The22:07:37UTC watcher watchdog again stops RU AWG/TCP on unchanged runtime. The
+limited readback preserves support/HMAC2/tombstones and identifies recurring I/O/
+reclaim pressure without this task's earlier journal-scan load. Initiating cause is
+still open; no recovery or observer has been performed for this new incident.
+Separate incident handling must use fresh backups/guards and its authorized scope,
+not restore old data/keys or weaken paid deadlines. Do not call RU healthy merely
+because source CI passes. [Evidence and remaining boundary](releases/2026-11-16-ru-recurrence.md#new-recurrence--16-november2207utc).
+
+**Historical16 November21:45UTC — finish PR38 qualification; no blind rerun or merge.**
 Public126/catalog9 remains immutable and available. Final-head a1d5f632 Android
 push/API35 and PR/API31 fail separately; main99-case success does not cover the
 independent per-app harness. API31 fails DNS presence after TCP resume; exact probe
