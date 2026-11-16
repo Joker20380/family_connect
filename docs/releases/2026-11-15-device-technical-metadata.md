@@ -1,6 +1,12 @@
 # DEVICE-TECHNICAL-METADATA-1 — 15 November 2026
 
-**Current16 November20:42UTC — PUBLIC, optional catalog9.** The same accepted signed
+**Current16 November22:47UTC — PUBLIC, optional catalog9; PR38 merged7123b95e.**
+Source588e793a has all ten PR/four push workflows PASS; remote main and equal merge
+tree verify. New22:07UTC RU outage remains separate and unresolved; this is not a
+claim that all gateways are healthy. No new recovery/observer is performed.
+[New incident](2026-11-16-ru-recurrence.md#new-recurrence--16-november2207utc).
+
+**Historical16 November20:42UTC — PUBLIC, optional catalog9.** The same accepted signed
 4f288cbb APK is published; both invitations, signature/HTTPS/Range and legacy discovery
 match. No new build/signing/server/HMAC/RU deployment. The separate RU recovery is
 accepted; initiating-stall CAUSE_OPEN remains. [Final publication receipt, exact hashes

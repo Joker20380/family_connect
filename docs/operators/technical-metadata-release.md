@@ -1,5 +1,12 @@
 # Technical metadata: minimal delivery and recovery
 
+**22:47UTC update: PR38 merged7123b95e after qualified588e793a checks.** A later
+readback finds a new22:07UTC RU watchdog cascade. Public files/catalog9, metadata API,
+HMAC2 and protected support state are not rolled back; RU AWG/TCP are down. Source
+merge is not a runtime recovery. Do not repeat signing/device/HMAC/metadata deployment
+or weaken service deadlines to address this separate incident.
+[Bounded incident receipt](../releases/2026-11-16-ru-recurrence.md#new-recurrence--16-november2207utc).
+
 **Current16 November20:42UTC: PUBLIC126 / optional catalog9.** Accepted installed-device
 network/restart/revoke/restoration and RU/AWG geography gates are complete within the
 recorded scope. Public APK/source/audio/signature/Range, both invitations and legacy
@@ -142,9 +149,9 @@ rebuild the already accepted metadata server or repeat HMAC/RU recovery.
 
 ### Guarded public delivery
 
-The corrected4f288cbb artifact and complete f781c77e CI are accepted; the original
-native race is no longer its open gate. Current publication is held by the separate
-new RU outage, not signing or phone consent. See the
+Historical17:41UTC boundary: the corrected4f288cbb artifact and complete f781c77e CI
+are accepted; the original native race is no longer its open gate. Publication at
+that time is held by the separate new RU outage, not signing or phone consent. See the
 [17:41UTC receipt](../releases/2026-11-15-device-technical-metadata.md#restoration-ci-and-pre-publication-stop--16-november1741utc).
 
 1. Require a fresh accepted runtime/service baseline and unchanged paid/HMAC pins.

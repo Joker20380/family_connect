@@ -1,6 +1,22 @@
 # Текущее состояние / Current state
 
-**16 November21:45UTC — public126 unchanged; final PR38 integration is CI-blocked.**
+**16 November22:47UTC — public126 integrated; NEW RU outage remains OPEN.**
+PR38 is ordinarily merged as `7123b95e83e1d5dc592492ba6104d04ebcf8178d`; remote
+main matches and its tree equals qualified source588e793a. All ten PR workflows and
+four push workflows pass; Android133637121094/133637065919 included. Artifact source
+ba3e9370, immutable signed4f288cbb and catalog9 remain unchanged. Self-review is not
+independent approval; subsequent merge-head checks are separate from source checks.
+
+Fresh22:31 readback discovers a **new22:07:37UTC RU watchdog cascade**: AWG failed,
+TCP inactive, watcher-only restart loop. Accepted runtime/effective unit hashes are
+unchanged. HTTP/peer, HMAC2, revoked metadata and original support baseline/cursor
+remain intact. No recovery/restart/observer is performed. I/O/reclaim pressure recurs
+without a journal scan from this task near the failure; initiating cause remains
+unproven. Public delivery and source integration are not a claim of healthy RU.
+[Release/source receipt](releases/2026-11-16-android126-publication.md#qualified-source-and-ordinary-merge)
+and [new bounded incident evidence](releases/2026-11-16-ru-recurrence.md#new-recurrence--16-november2207utc).
+
+**Historical16 November21:45UTC — public126 unchanged; PR38 integration CI-blocked.**
 Head a1d5f632 fails two separate Android jobs: push133603441862 at API35, with
 99-case main summary clean but no retained per-app receipt; PR133603450734 passes
 per-app API35/27/28 and fails one API31 DNS assertion after TCP service resume.

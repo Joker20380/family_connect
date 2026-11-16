@@ -7,6 +7,12 @@ no new build/signing, vault access, server-image deployment, RU recovery or HMAC
 rotation in this publication. Separate RU restoration is accepted; its initiating
 watchdog stall remains **CAUSE_OPEN**, not a claimed fix in this release.
 
+**22:47UTC update:** PR38 is merged with qualified source588e793a. A later health
+readback discovers a **new22:07UTC RU outage**, detailed below and in the
+[incident report](2026-11-16-ru-recurrence.md#new-recurrence--16-november2207utc).
+HTTP/public delivery and protected support/HMAC2 state remain available; RU AWG/TCP
+are not healthy. No recovery or transport restart is part of this publication.
+
 ## Immutable public files
 
 | File | Bytes | SHA256 |
@@ -185,3 +191,39 @@ files. This is evidence repair, not an assertion failure/root-cause fix. The nex
 actual run must supply its own result; no automatic repeated rerun until green.
 Local evidence-retention/fixture/public-release regression checks pass28 tests in
 the existing locked environment; whitespace passes. They are not instrumentation.
+
+## Qualified source and ordinary merge
+
+At22:43:46UTC source `588e793a5833bc50397a44f2c41d82e802c37a0f` has **all ten
+applicable PR workflows and four push workflows SUCCESS**. Android PR job133637121094
+(run43963581094) and push job133637065919 (run43963566707) both pass. The test-only
+evidence repair changes no installed Android/native executable or assertion budget.
+Earlier a1d5f632 failures remain retained and unexplained; success is not an
+infrastructure attribution or proof that a routing implementation bug was fixed.
+
+Routing artifact14278048563 is65,849bytes, SHA256
+`7809c923ebc99cfd2a8fad1463d6ea22780f724a30a4be746de0208bf445c96f`.
+Each API35/27/28/31 reports10 passed independent tests and ten service observations
+without DNS errors. Harness/fixture/service receipts are actually present; no PEM/key
+is uploaded. These results are distinct from the main99-case enumeration and from
+physical Redmi acceptance. Current source differs from artifact sourceba3e9370 in
+later server/docs/test work, not the installed Android executable.
+
+The author's review5929226637 is explicitly **self-review**, not independent approval.
+PR38 moves from draft and merges normally with expected-head588e793a as
+`7123b95e83e1d5dc592492ba6104d04ebcf8178d`. Remote main matches. Merge parents are
+main53a780d9 and qualified588e793a; the merge/source trees both equal
+`7a264ca6a3fdb8381992bc0aacce8bf7658fbb17`. No full main/PR deployment follows merge.
+Merge-head workflow results remain separate; tree equality is not a new CI execution.
+
+The new RU incident is disclosed before integration. At22:30UTC the selected metadata
+is still revoked, epoch6/sequence116, zero canonical/panel groups/no geography;
+HMAC2/manifest and support IPC/original baseline/cursor/excluded history pass.
+At22:31 HTTP2394053/peer3967036 remain active, but AWG is failed and TCP inactive after
+the22:07:37 watchdog cascade. Accepted node/gateway/effective unit hashes are unchanged.
+No user message/payment, transport restart, DB restore or old-key reactivation occurs.
+Source integration and the publicly downloadable release do not close this separate
+availability incident. Final receipt updates are documentation-only, not another
+Android candidate or permission to start an unrelated queued task.
+The documentation-only closure checks six files/509 links without errors and passes
+whitespace review. No private identifiers, mapping, raw endpoints or keys are included.
