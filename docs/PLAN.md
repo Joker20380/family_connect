@@ -2,7 +2,21 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Current boundary — installed metadata chain16 November14:49UTC:** explicit consent
+**Current boundary — cellular/restart16 November15:03UTC:** real Wi-Fi→cellular
+handover preserves established RU/AWG, independently confirmed by the app-owned VPN
+capabilities and exact canonical/panel sequence71. Real cellular UI passes32 checks.
+Controlled process restart retains consent/identity; canonical/panel sequence75
+correctly changes to DISCONNECTED/NONE and cellular default network. The retained
+GeoIP observation keeps its original age. Next: offline consent revocation/pending,
+online cleanup and restoration of initial network/country/consent, then public gates.
+Settings are open; owner asked to disable mobile data and the technical-information
+switch, keeping the phone offline for verification. No automatic taps/bypass.
+
+Source9c421a9d native race/diagnostic CI steps pass; Android133378630911 full matrix
+and phase0 remain in progress. Do not replace frozen signed4f288cbb or re-deploy the
+accepted server/paid/HMAC2 stages. Public125/catalog8 and draft PR38 stay unchanged.
+
+**Historical boundary — installed metadata chain16 November14:49UTC:** explicit consent
 produces epoch3 and an authenticated body-bound report. Its exact observations and
 received_at reach the original generation2 production card; Android properties and
 Wi-Fi match independently. Real1440/390px card/list/filter/source/navigation checks

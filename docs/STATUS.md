@@ -1,5 +1,29 @@
 # Текущее состояние / Current state
 
+**16 November15:03UTC — cellular handover and consent-preserving restart observed.**
+After the owner disables Wi-Fi, the app-owned VPN capabilities independently show
+CELLULAR, not WIFI; the actual session remains CONNECTED/AWG/gateway-ru. At14:58:51UTC,
+epoch3/sequence71, all five canonical groups and received_at exactly match the original
+generation2 panel row. A fresh identity-bound RU peer lookup agrees with the panel;
+real cellular card/list checks pass32 assertions at1440/390px. The first transition
+read still had Wi-Fi/previous IP geography in the panel; its two stale filter failures
+remain recorded rather than being called PASS. Normal import catches up without a
+manual collector run, replacement profile or gateway restart.
+
+At15:00UTC, a controlled app force-stop/start verifies a genuinely new process without
+data clearing. Consent stays ON. At15:02UTC the same identity/epoch reaches canonical
+and panel sequence75: DISCONNECTED/NONE and CELLULAR/default_network, rather than
+the previous established underlay. The retained qualified GeoIP keeps its older
+sampled_at; the disconnected report does not refresh it. Settings are open; Wi-Fi is
+OFF and mobile data remains ON at readback. Next owner action: disable mobile data,
+then disable technical-information consent while offline; verify pending revoke,
+online cleanup and final restoration. No injected-input bypass.
+
+Source9c421a9d is pushed/remote-verified. Android133378630911 has passed the previously
+failing native race step and diagnostic contracts; the full matrix is still running,
+not a current-head PASS. Frozen signed4f288cbb, exact paid-v2, HMAC2, production server
+components and public125/catalog8 are unchanged. Public delivery remains gated.
+
 **16 November14:49UTC — corrected installed126 and real RU peer geography accepted.**
 The owner explicitly enabled technical-information consent. Epoch3/sequence36 has
 one used content-bound proof; canonical observations and received_at exactly match

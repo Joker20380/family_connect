@@ -2,14 +2,17 @@
 
 ## State
 
-Latest16 November14:38UTC: corrected installed126 now reaches its original real
-generation2 production card after explicit consent. Android observations, exact
-canonical/imported groups and real1440/390px UI pass. Actual AWG/NL1 over Wi-Fi is
-observed; RU/AWG peer geography and revoke/network acceptance remain open. Current
-Android CI fails a cancellation-test ordering assumption; its test-only correction
-passes local repeated/full selected race checks, awaiting hosted qualification.
-APK4f288cbb and loaded exact paid-v2 stay unchanged. Public125/catalog8 remain; this
-is not a public release. See [installed chain](#installed-chain-real-ru-geography-and-batch-harness--16-november1449utc).
+Latest16 November15:03UTC: corrected installed126 reaches its original generation2
+production card after explicit consent. Android observations, exact canonical/imported
+groups and real1440/390px UI pass. Actual RU/AWG peer geography and Wi-Fi→cellular
+underlay are observed; process restart preserves consent/identity and reports the
+disconnected/default-network state correctly. Offline revoke/online cleanup and final
+restoration remain open. Source9c421a9d's test-only cancellation-harness correction
+passes local repeated/full selected race checks and the hosted native gate; full
+Android matrix/phase0 remain in progress. APK4f288cbb, loaded exact paid-v2 and HMAC2
+stay unchanged. Public125/catalog8 remain; this is not a public release.
+See [cellular and restart](#cellular-handover-and-process-restart--16-november1503utc)
+and [installed chain](#installed-chain-real-ru-geography-and-batch-harness--16-november1449utc).
 
 Historical16 November14:07UTC: the owner displayed the local support fingerprint and it
 matches the preserved canonical key. Exact paid-v2 is now loaded in all three
@@ -68,6 +71,48 @@ checkout8937e71e has unrelated modified/untracked files and diverged history;
 all preserved. Worktree branch: feature/device-technical-metadata-20261115.
 
 ## Resumed delivery — 16 November
+
+### Cellular handover and process restart — 16 November15:03UTC
+
+The owner disables only Wi-Fi, retaining cellular data and the current RU/AWG
+session. At14:56:58UTC, the canonical report says CELLULAR/session_underlay, with
+CONNECTED/AWG/gateway-ru. Independent Android capabilities identify the app-owned
+VPN as CELLULAR=true/WIFI=false. The panel is initially one report behind, still
+showing Wi-Fi and the prior IP observation. The first browser traversal crosses this
+normal import boundary and fails its old network/city filters on the narrow viewport;
+this is retained as a failed dynamic-snapshot check, not hidden or called PASS.
+
+At14:58:51UTC, epoch3/sequence71 and all five canonical groups/received_at exactly
+equal the real panel row. At14:58:56UTC, canonical device→exact AWG peer binding and
+fresh handshake114seconds qualify the current local DB-IP Lite2026-11 observation;
+all geographic/ASN fields agree with the panel, without raw IP/coordinates in it.
+At14:59:18UTC the real cellular card/list passes32 assertions at1440/390px, including
+cellular/city filters and age/source disclosure; no page errors, temporary session
+deleted. No manually forced collector cycle, payment, message or server restart.
+Radio remains UNKNOWN/permission_not_granted on API31; physical5G/dual-SIM remain
+NOT_OBSERVED. The observed mobile operator names are not ASN-provider identity.
+
+At15:00:05UTC, normal ADB force-stop followed by exported FriendsActivity start
+verifies the old process is absent and a different process starts; no uninstall,
+clear-data, downgrade or private settings edits. This intentionally disconnects the
+test VPN. A read-only UI capture shows consent still ON. At15:02:07UTC canonical and
+panel have the same epoch3/sequence75: DISCONNECTED, installed transport NONE,
+gateway UNKNOWN, preference AWG and CELLULAR/default_network. A fresh content-bound
+request still uses the same device identity/card. The previous RU peer geography is
+retained with sampled_at older than the new report; it is not a fresh disconnected
+location claim. The first immediate post-start read still showed the preceding
+session report; no instantaneous-upload guarantee or freshness reset is inferred.
+
+The app settings are open; Wi-Fi is OFF, cellular ON and consent ON. Owner is asked
+to disable cellular, then consent, leaving the device offline to verify pending
+revocation before restoring connectivity. Online/offline deletion, final restoration
+and public release are not yet accepted.
+
+Source9c421a9db759c551b14c1009ee139273769ae2c2 is pushed and remote-verified. Own review
+is explicitly labelled, not independent approval. At14:57UTC Android133378630911 /
+run43890061758 passes JVM control, native race and diagnostic/readiness steps; the
+build/runtime matrix and phase0 remain in progress. The selected APK sourceba3e9370
+and paid policy408fb282 qualifications remain separate from this test-only change.
 
 ### Installed chain, real RU geography and batch harness — 16 November14:49UTC
 
