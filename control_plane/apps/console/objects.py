@@ -16,6 +16,8 @@ from .server_inventory import observation_state, STATE_LABELS
 from .subscription_presentation import STATES, ATTEMPTS
 from .subscriptions import display_rows, freshness
 from .views import staff
+from . import technical_metadata
+from .models import TechnicalMetadata, TechnicalMetadataSource
 
 PERIODS = {'1h': ('Час', 3600), '24h': ('Сутки', 86400), '7d': ('7 дней', 604800)}
 SERVICE_LABELS = {
@@ -131,7 +133,12 @@ def production(now):
         if server['pending_count']:
             server['issue'] = server['issue'] or 'Есть неподтверждённые или расходящиеся применения'
         servers.append(server)
+    technical = {entry.pseudonym: entry for entry in TechnicalMetadata.objects.all()}
+    technical_source = TechnicalMetadataSource.objects.filter(source='gateway-ru').first()
     for row in rows.values():
+        version_code = row['inventory'].version_code if row['inventory'] else None
+        row['technical'] = technical_metadata.presentation(technical.get(row['pseudonym']), now, technical_source,
+            supported=None if version_code is None else version_code >= 126)
         if not canonical_ok:
             row['issues'].append('Нет свежего канонического ответа')
         if not registry_ok:
@@ -240,7 +247,8 @@ def timeline(pseudonym=None, source=None):
 def filtered(rows, request):
     query = request.GET.get('q', request.GET.get('query', '')).strip()[:128].casefold()
     state = request.GET.get('state', '')
-    return [row for row in rows if (not query or query in row['label'].casefold() or query in row['pseudonym'])
+    return [row for row in rows if (not query or query in row['label'].casefold() or query in row['pseudonym'] or query in row.get('technical', {}).get('search', ''))
+            and (not row.get('technical') or technical_metadata.matches(row['technical'], request.GET))
             and (not request.GET.get('source') or request.GET['source'] == 'gateway-ru'
                  or any(binding['server']['source'] == request.GET['source'] for binding in row['nodes']))
             and (not state or row['state_key'] == state) and (request.GET.get('problem') != '1' or row['problem'])
@@ -302,6 +310,9 @@ def device(request, pseudonym):
         data.update(canonical=canonical, registry=history.snapshot if history else None,
             canonical_age='Историческое наблюдение', registry_age='Историческое наблюдение')
     from .support import notification_status
+    if 'technical' not in row:
+        row['technical'] = technical_metadata.presentation(TechnicalMetadata.objects.filter(pseudonym=pseudonym).first(),
+            now, TechnicalMetadataSource.objects.filter(source='gateway-ru').first())
     data.update(device=row, notifications=notification_status(request, pseudonym), events=timeline(pseudonym=pseudonym),
         graphs=[graph_data(binding['server']['source'], now, selected_period(request), pseudonym)[0] for binding in row['nodes']])
     if request.GET.get('kind') in ('event', 'observation'):

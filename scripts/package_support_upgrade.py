@@ -11,7 +11,7 @@ REPLACE = {
     'friends_http.py': ('fb049818aa1e515d7c682e30dba56b7e1a92fac4e74e980ce6bede63f1d5b32b', 'deploy/friends/access-api.py'),
     'control/friends/chat.py': ('6401c061aab650416e733c4433ce9a3a4f12742bcb0acd136248ab344736eda7', 'control/friends/chat.py'),
 }
-ADD = ('control/friends/chat_service.py', 'control/friends/support.py', 'messenger/support.py')
+ADD = ('control/friends/chat_service.py', 'control/friends/support.py', 'messenger/support.py', 'control/friends/pseudonyms.py')
 
 
 def build(base, output, source=ROOT):

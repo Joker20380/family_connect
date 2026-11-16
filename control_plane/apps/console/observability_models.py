@@ -69,6 +69,22 @@ class InventoryDevice(models.Model):
         verbose_name_plural = 'устройства в снимках'
 
 
+class TechnicalMetadata(models.Model):
+    pseudonym = models.CharField(max_length=64, primary_key=True)
+    consent_epoch = models.BigIntegerField()
+    sequence = models.BigIntegerField()
+    consent = models.CharField(max_length=16)
+    received_at = models.BigIntegerField()
+    observations = models.JSONField(default=dict)
+    geoip = models.JSONField(null=True, default=None)
+
+
+class TechnicalMetadataSource(models.Model):
+    source = models.CharField(max_length=32, primary_key=True)
+    observed_at = models.BigIntegerField(default=0)
+    status = models.CharField(max_length=16, default='unavailable')
+
+
 class DeviceLabel(models.Model):
     pseudonym = models.CharField(max_length=64, unique=True, validators=[RegexValidator(r'^[a-f0-9]{64}$')])
     label = models.CharField('Локальное название', max_length=120)

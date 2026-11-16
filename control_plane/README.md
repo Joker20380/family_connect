@@ -1,5 +1,44 @@
 # CONTROL-PLANE · русская локальная панель и наблюдаемость
 
+## Technical metadata · server path deployed; public Android release pending
+
+The accepted minimal metadata/HMAC-aware server and panel are installed. Corrected
+beta126 is on the authorized test device, not publicly released; exact paid126 is
+staged, not loaded. Follow the current release receipt below, not the historical
+source-preparation status. Do not redeploy this repository's demo Compose over the
+live alias-aware panel or treat a server deployment as installed-client acceptance.
+
+Migrations0014/0015 store only the latest consented observations/GeoIP by full HMAC; these never
+enter InventorySnapshot, audit details or dated collector files. External
+`collect_technical_metadata.py` uses private `.local/technical-metadata-source.json`
+with exact `python`, `archive`, `archive_sha256` of the accepted serving HTTP archive
+and the existing `inventory-hmac.key`. Pipe transient bytes to
+`manage.py import_technical_metadata`; never redirect them to retained files/logs.
+The monitor enables this independent path only when that config exists; errors call
+`import_technical_metadata --unavailable`, which still prunes expired data. Keep this
+cleanup running if collection is disabled. Do not back up the observations table or
+new metadata SQLite payloads into indefinite archives. Preserve consent tombstones.
+No SSH credentials or production registry are mounted in the web container.
+Metadata-only transient export/import is bounded at64MiB for the5000-device store;
+ordinary inventory remains capped at4MiB. Neither path silently truncates a fleet.
+The local monitor's500s budget includes the independent metadata cleanup fallback.
+Panel backups must exclude `console_technicalmetadata` row data; restore projections
+only from the current consent-fenced source, never from an old metadata snapshot.
+Use Gunicorn access format `%(m)s %(U)s %(s)s %(D)s` when overlaying the existing
+production command: method/path/status/duration only, no query, referrer or peer IP.
+Otherwise a city/operator search could be retained in ordinary access logs.
+All groups, including hardware, expire independently after at most7days. UI source
+and the current implementation limits are recorded in the
+[selected task receipt](../docs/releases/2026-11-15-device-technical-metadata.md).
+GeoIP uses the canonical RU host's local DB-IP Lite MMDB pair and authenticated
+AWG peer binding, not loopback/XFF or a client-provided IP. The updater is
+`scripts/update_geoip.py --root /opt/apps/family_connect/geoip --version YYYY-MM`;
+install `control/geoip-requirements.lock` in the isolated collector environment.
+This command is preparation guidance, NOT a deployed scheduler. Preserve current/
+previous manifests and one rollback pair. Alert on update-status failure and45day
+age. Keep DB-IP attribution on every page rendering results. NL/TCP peer enrichment
+and live end-to-end qualification are pending; see the task receipt.
+
 ## Системные сообщения · source candidate11 ноября2026
 
 `/system-messages/`: отдельная общедоступная лента объявлений, не личный чат.

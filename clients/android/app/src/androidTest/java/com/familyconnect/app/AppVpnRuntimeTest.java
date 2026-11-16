@@ -44,16 +44,17 @@ public class AppVpnRuntimeTest {
     }
     private void route(String name,String expected)throws Exception{
         JSONObject result=probe(name);String nonce=result.getString("nonce");
-        assertEquals("ipv4_error="+result.optString("ipv4_error")+", dns_error="+result.optString("dns_error")+", vpn="+result.optBoolean("vpn_capability"),expected+"/"+nonce,result.optString("ipv4"));
-        assertFalse(result.getString("ipv4_tls").isEmpty());
-        assertTrue(result.has("dns")&&result.getJSONArray("dns").length()>0);
+        String observation="expected="+expected+", probe="+result;
+        assertEquals(observation,expected+"/"+nonce,result.optString("ipv4"));
+        assertFalse(observation,result.getString("ipv4_tls").isEmpty());
+        assertTrue(observation,result.has("dns")&&result.getJSONArray("dns").length()>0);
         if(expected.startsWith("VPN")){
-            assertEquals(expected+"/"+nonce,result.optString("ipv6"));
-            assertFalse(result.getString("ipv6_tls").isEmpty());
-            assertTrue(result.getJSONArray("dns").toString().contains("198.19.1.1"));
+            assertEquals(observation,expected+"/"+nonce,result.optString("ipv6"));
+            assertFalse(observation,result.getString("ipv6_tls").isEmpty());
+            assertTrue(observation,result.getJSONArray("dns").toString().contains("198.19.1.1"));
         }else{
-            assertFalse(result.optString("ipv6").startsWith("VPN"));
-            assertFalse(result.getJSONArray("dns").toString().contains("198.19.1.1"));
+            assertFalse(observation,result.optString("ipv6").startsWith("VPN"));
+            assertFalse(observation,result.getJSONArray("dns").toString().contains("198.19.1.1"));
         }
     }
     private AppVpnPolicy policy(AppVpnPolicy.Mode mode){return new AppVpnPolicy(mode,Set.of(ALPHA),Set.of(BETA));}

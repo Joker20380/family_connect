@@ -1,5 +1,9 @@
 # Подпись Android APK из KeePassXC
 
+**16 ноября: принятая126 опубликована; vault повторно не открывать.** Неизменяемый
+подписанный APK4f288cbb,50,478,496байт, прежний сертификат. Повторная подпись создаёт
+другие байты и требует новой приёмки. [Точный SHA256 и публичная поставка](releases/2026-11-16-android126-publication.md).
+
 Linux operator tool: [scripts/sign_android_vault.py](../scripts/sign_android_vault.py).
 Общий reader: `scripts/signing_key.py:vault_archive`; Ed25519 issuers сохраняют свои
 проверки32-byte key и public anchor. Root/signing secrets не передаются на серверы/CI.
@@ -62,6 +66,21 @@ python -m scripts.sign_android_vault \
 root/скомпрометированная ОС/память и swap остаются отдельной границей защиты.
 
 ## Проверки и статус миграции
+
+16.11: исправленный native sourceba3e9370 прошёл Android CI; отдельный кандидат126
+подписан после отменённого окна и явной просьбы владельца повторить. Прежняя подпись
+подтверждена,50,478,496bytes/SHA4f288cbb; исходные signed bytes97513e3f не менялись.
+Это новая подпись отдельных квалифицированных байтов, а не переподпись старого файла.
+Exact paid v2 проверен изолированно, но не загружен; установка и публичная доставка
+ещё не приняты. [Актуальный receipt](releases/2026-11-15-device-technical-metadata.md#replacement-signature-and-exact-paid-v2).
+
+15.11: выбранный CI APK126 подписан через существующий vault после локального
+выбора и ввода пароля владельцем. Прежний certificate pin, подпись,16KiB alignment
+и неизменность исходного payload подтверждены; итоговые байты зафиксированы без
+пересборки. [Точный SHA/размер и границы приёмки](releases/2026-11-15-device-technical-metadata.md#signed-candidate2048utc).
+Это успешная production-key APK-операция, но не публикация126
+и не разрешение удалять сохранённые оригиналы/резервные копии. ADB не требуется для
+подписи; проверка обновления реального устройства остаётся отдельным обязательным gate.
 
 `tests/test_android_vault_signing.py`: PKCS12/pin/manifest/tamper/path/duplicates;
 дополнительный реальный KDBX→apksigner→verify прогон использует одноразовый RSA key,

@@ -1,0 +1,13 @@
+{
+  "source": "53a780d9ccfcdb2c3ec6141a197917190f9be7a5",
+  "files": {
+    "control/friends/support.py": "bf26d950159329c9a4f5ad614cf735267503626fb3806dc7d94f57454ff73a3c",
+    "provisioning/support_worker.py": "d72aa7ecae3896c90ba636762ddfb9f9d147622fa11a8b1a8fbcc14f23261b19",
+    "provisioning/support_bindings.py": "e7c3e0733ae4f9520bf3530e6b8d73f4f7934294f157170f547c88f06de471a7",
+    "deploy/friends/support-bindings-read.py": "c49202036b1b2750312c71531906529c4bea7cf5742b0c415c097dccc9a9f125",
+    "control_plane/collect_inventory.py": "bf3f02d966cce2ae2834b6c9d0b5ca5959ebaa5ac2c4f33d52fc500da85ae14a",
+    "control_plane/monitor_inventory.py": "7d8b566d486c8c42265e8bb55918f72853fa91af337798962dbd05392b8e619e",
+    "control_plane/apps/console/management/commands/import_inventory.py": "c9821545eb925e06f22d6640fa5519ef6eccd408d66f4d898c23f0837a960def",
+    "control_plane/apps/console/management/commands/import_subscriptions.py": "075e4192bf6f8a8d6cf3e8bda0f91a14fc0e13ec35843bd945ee3fcf0ba1355d"
+  }
+}

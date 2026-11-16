@@ -10,21 +10,19 @@ No manual service setup is needed. Affected Windows10 device acceptance is pendi
 
 Android8.1+, ARM64; access is invitation-only. Installing the APK does not grant access.
 
-The invitation page and in-app updater now provide **beta125**, optional catalog8.
-It includes current subscription status and addressed operator-support compatibility.
-The owner's two-way exchange with the user tunnel OFF is confirmed, not acceptance
-on every restricted network. Updating grants neither paid VPN rights nor restricted
-FIELD admission. [Artifact and limitations](releases/2026-11-13-android125-publication.md).
+Invitations and the in-app updater offer **beta126**, optional catalog9. Separate
+technical-information consent is OFF by default; enable it in Settings if you want
+support observations. Subscription/support remain compatible; updating grants no new
+VPN entitlement. [Artifacts and limits](releases/2026-11-16-android126-publication.md).
 
-Beta125 retains MESH and quiet VPN-notification updates. Android8.1/API27 is the
-minimum; Android8.0 and older are unsupported. Exact CI43048235831/sourceb293f9ac,
-original signer and full verified-HTTPS hash checks pass; publication does not rebuild the APK.
-Every mode now lists Russia, Netherlands and Netherlands2, with per-node load squares:
-green below85%, orange from85%, grey/dash when unavailable. Selected rows have a green tint
-and checkmark. Russia cannot use MESH; choose AWG/TCP/Auto. Owner123→125 installation
-and support exchange pass; other-model acceptance, sustained MESH stability and cold
-no-cache restricted-network startup remain open.
-![Historical Android113 server-list illustration; synthetic loads, not a125 screenshot](assets/android113-server-picker-en.png)
+Beta126 retains MESH and quiet VPN-notification updates. Android8.1/API27 is the
+minimum; Android8.0 and older are unsupported. Accepted sourceba3e9370, original signer
+and full HTTPS hashes pass; publication uses the same file, without rebuilding.
+Every mode lists Russia, Netherlands and Netherlands2; Russia cannot use MESH, so choose
+AWG/TCP/Auto. Preservation is recorded125→first126→corrected126, not direct125→corrected126.
+Other-model acceptance, sustained MESH stability and cold no-cache restricted-network
+startup remain open.
+![Historical Android113 server-list illustration; synthetic loads, not a126 screenshot](assets/android113-server-picker-en.png)
 Server policy and existing entitlement are unchanged. No Mi account or ADB is needed.
 MESH still requires accepted admission and current readiness material, not an old cached READY.
 
@@ -40,14 +38,14 @@ MESH still requires accepted admission and current readiness material, not an ol
 ## Update an existing app
 
 The [older beta118 field material](releases/2026-11-05-android118-field.md) is retained
-as history, not a downgrade instruction for125. Restricted-network field testing is
+as history, not a downgrade instruction for126. Restricted-network field testing is
 separately coordinated; an ordinary Wi-Fi test does not replace it.
 
-[Download beta125 — 50.5 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta125.apk).
-Version `0.1.18-beta125`, code125, ARM64,50470304 bytes; SHA256:
+[Download beta126 — 50.5 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta126.apk).
+Version `0.1.18-beta126`, code126, ARM64,50478496 bytes; SHA256:
 
 ```text
-f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c
+4f288cbb107ac46c8c99ec0e274f57a5e1e8164796796781c4a2c275b57e2134
 ```
 
 The app also checks for updates. An update restarts the VPN; tap Connect again if needed. Open the APK and select **Update** in Android’s system
@@ -57,15 +55,15 @@ do not copy another device’s profiles or keys.
 
 The [older universal beta13](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.12-beta13.apk)
 remains available for other architectures,240.5 MB. It lacks current features and is not
-an equivalent alternative to125.
+an equivalent alternative to126.
 
-[Exact125 audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta125-audio-source.tar.gz)
+[Exact126 audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta126-audio-source.tar.gz)
 are available with the release. Installation requires Android confirmation; it is not forced.
 
-Update over the existing app via **Settings → Check for updates → Install beta125**.
+Update over the existing app via **Settings → Check for updates → Install beta126**.
 If the old updater fails, download the APK above in a browser. Do not uninstall, clear
-data or reenroll. Catalog8 is optional; publication does not mean other users have
-already installed125. [Public108 rollback evidence](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk)
+data or reenroll. Catalog9 is optional; publication does not mean other users have
+already installed126. [Public108 rollback evidence](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk)
 remains immutable; no paid event or canary replay accompanies this update.
 
 ## Text and voice
@@ -95,7 +93,7 @@ not established. [Notification and announcement guide (RU)](testing/messenger-no
 - Update failure: record the error and versions; do not erase data to bypass a signature mismatch.
 
 Report model, Android/app version and network type. Exclude invitations, keys, profiles
-and messages. [Beta125 validation/publication](releases/2026-11-13-android125-publication.md).
+and messages. [Beta125 validation/publication](releases/2026-11-16-android126-publication.md).
 
 ## Desktop clients
 
@@ -118,3 +116,15 @@ Each row uses that node's measurements: green squares below85%, orange from85%, 
 and a dash without fresh data, never an inferred country CPU value. CPU-only and estimated
 capacity values remain labelled; the two NL channel capacities are assumed5000Mbps,
 not a measured connection speed.
+## Technical information for support
+
+Public126 keeps this setting OFF by default. Explicit opt-in shares model/Android/app,
+connection/available operator and radio, VPN/gateway, bounded errors and approximate
+IP geography/ASN. This is not GPS or proof of physical location. Consent lasts until
+disabled; latest groups, including hardware, independently expire within7days, without
+movement history. Off immediately stops collection; offline revoke visibly awaits
+server delivery/deletion. Previous seven-day diagnostics consent is not reused.
+Refusal does not restrict services. Real RU/AWG peer attribution and local DB-IP
+lookup reach the panel; NL/TCP/MESH have no qualified direct-IP source. Test-phone
+consent is restored OFF and deletion is verified. [Privacy](privacy.md) ·
+[Release and acceptance limits](releases/2026-11-16-android126-publication.md).

@@ -62,6 +62,7 @@ public final class FriendsActivity extends LocalizedActivity {
     private final Runnable refresh=new Runnable(){public void run(){render();handler.postDelayed(this,500);}};
     @Override public void onCreate(Bundle state){
         super.onCreate(state);getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE);transport=getPreferences(MODE_PRIVATE).getString("transport","auto");country=getPreferences(MODE_PRIVATE).getString("country","nl");
+        TechnicalMetadataUpload.start(this);
         String selectedGateway=getPreferences(MODE_PRIVATE).getString("gateway_id","");lastManualGateway=ControlFriendsCatalog.explicit(selectedGateway)?selectedGateway:"nl-amsterdam-1";
         country=GatewayPicker.target(country,lastManualGateway,transport);gatewayTargets=GatewayPicker.targets(transport);
         motion=getPreferences(MODE_PRIVATE).getBoolean("motion",true);activeCountry=getPreferences(MODE_PRIVATE).getString("session_country",country);
@@ -234,6 +235,7 @@ public final class FriendsActivity extends LocalizedActivity {
         TerminalUi.label(panel,getString(R.string.product_version,TerminalUi.version(this)),12,TerminalUi.MUTED);
         appUpdate.attach(panel);
         SupportAutomation.controls(this,panel);
+        TechnicalMetadataUpload.controls(this,panel);
         TerminalUi.button(panel,R.string.diagnostics_send,()->Diagnostics.share(this));
         TerminalUi.label(panel,getString(R.string.friends_hint),12,TerminalUi.MUTED);
         attach(panel,activate);
@@ -378,7 +380,7 @@ public final class FriendsActivity extends LocalizedActivity {
             final boolean result=ready;runOnUiThread(()->{
                 if(isDestroyed())return;busy=false;if(!result){detail.setText(R.string.friends_unavailable);render();return;}
                 activeCountry=chosen;getPreferences(MODE_PRIVATE).edit().putString("session_country",chosen).apply();detail.setText("");ConnectionService.status="connecting";ConnectionService.activeTransport=chosenTransport;ConnectionService.requestedTransport=chosenTransport;
-                startForegroundService(new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport",chosenTransport));render();
+                startForegroundService(new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport",chosenTransport).putExtra("country",chosen));render();
             });
         });
     }

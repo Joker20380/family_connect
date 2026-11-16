@@ -42,7 +42,8 @@ def test_latest125_observation_wins_over_stale_supported_and_unknown(paid_setup,
     ('0.1.18-beta125', 123, RELEASE.apk_sha256, 'BASELINE_REQUIRED'),
     ('0.1.18-beta123', 125, RELEASE.apk_sha256, 'BASELINE_REQUIRED'),
     ('0.1.18-beta125', '125', RELEASE.apk_sha256, 'BASELINE_REQUIRED'),
-    ('0.1.18-beta126', 126, RELEASE.apk_sha256, 'BASELINE_REQUIRED'),
+    ('0.1.18-beta126', 126, RELEASE.apk_sha256, 'APK_INVALID'),
+    ('0.1.18-beta127', 127, RELEASE.apk_sha256, 'BASELINE_REQUIRED'),
 ])
 def test_inexact125_rejected_without_mutation(paid_setup, version, code, apk, reason):
     service, device, support, now = paid_setup

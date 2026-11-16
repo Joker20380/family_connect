@@ -1,4 +1,5 @@
 import sys
+from control.friends.pseudonyms import unseal
 
 from django.core.management.base import BaseCommand, CommandError
 
@@ -18,8 +19,8 @@ class Command(BaseCommand):
             self.stdout.write('Subscription attempt failure recorded; production writes: 0')
             return
         try:
-            snapshot = ingest(strict_load(sys.stdin.buffer.read(4 * 1024 * 1024 + 1)), attempt=True)
-        except SnapshotError as error:
+            snapshot = ingest(unseal(strict_load(sys.stdin.buffer.read(4 * 1024 * 1024 + 1)), 'subscriptions'), attempt=True)
+        except (SnapshotError, ValueError, OSError, KeyError, TypeError):
             record_attempt('import_failed')
-            raise CommandError(str(error)) from None
+            raise CommandError('Subscription import rejected; no payload logged') from None
         self.stdout.write(f'Subscription observation imported: {snapshot.status}; production writes: 0')

@@ -22,6 +22,8 @@ UNITS = ('family-connect-support.service', 'family-connect-support-bindings.serv
 def build(output, source=ROOT):
     inputs = {'app/messenger/' + name + '.py': 'messenger/' + name + '.py' for name in MESSENGER}
     inputs.update({'app/provisioning/' + name + '.py': 'provisioning/' + name + '.py' for name in PROVISIONING})
+    inputs['app/control/friends/pseudonyms.py'] = 'control/friends/pseudonyms.py'
+    inputs['registry/pseudonyms.py'] = 'control/friends/pseudonyms.py'
     inputs.update({'units/' + name: 'deploy/support-chat/' + name for name in UNITS})
     inputs.update({'provisioning.lock': 'provisioning/requirements.lock', 'messenger.lock': 'messenger/requirements.lock',
                    'panel.override.yaml': 'deploy/support-chat/panel.override.yaml',

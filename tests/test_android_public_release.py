@@ -3,6 +3,8 @@ import hashlib
 import importlib.util
 import json
 import re
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -26,9 +28,9 @@ def test_android_changes_do_not_start_desktop_suites():
     assert not any(platforms(['docs/STATUS.md']).values())
 
 
-def test_android125_candidate_keeps_test_seam_disabled_and_requires_native_provenance():
+def test_android126_candidate_keeps_test_seam_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 125' in gradle and "versionName '0.1.18-beta125'" in gradle
+    assert 'versionCode 126' in gradle and "versionName '0.1.18-beta126'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
@@ -68,28 +70,36 @@ def test_signaling_read_classes_match_without_changing_legacy_recovery():
         '5fc3a518a74c1e05de1d99216ee9196e400fad3338994b8150caaa207cb75a00')
 
 
-def test_public_invitation_offers_qualified_android125_and_audio_source():
+def test_public_invitation_offers_qualified_android126_and_corresponding_sources():
     landing = (ROOT / 'deploy/friends/invite/index.html').read_text()
     android = next(line for line in landing.splitlines() if line.lstrip().startswith('android:{'))
-    assert 'Beta125 · Android 8.1+ · ARM64 · MESH' in android
-    assert '/downloads/FamilyConnect-Test-0.1.18-beta125.apk' in android
-    assert '/downloads/FamilyConnect-Android-0.1.18-beta125-audio-source.tar.gz' in android
+    assert 'Beta126 · Android 8.1+ · ARM64 · MESH' in android
+    assert '/downloads/FamilyConnect-Test-0.1.18-beta126.apk' in android
+    assert '/downloads/FamilyConnect-Android-0.1.18-beta126-source.tar.gz' in android
+    assert '/downloads/FamilyConnect-Android-0.1.18-beta126-audio-source.tar.gz' in android
     assert 'beta60' not in android
 
 
-def test_public_android125_catalog_is_signed_sdk_bound_and_remains_optional():
-    envelope = json.loads((ROOT / 'updates/android-friends-v2.json').read_bytes())
+@pytest.mark.parametrize('path,sequence,code,size,digest', [
+    ('tests/fixtures/android_updates/public125-v2.json', 8, 125, 50470304,
+     'f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c'),
+    ('updates/android-friends-v2.json', 9, 126, 50478496,
+     '4f288cbb107ac46c8c99ec0e274f57a5e1e8164796796781c4a2c275b57e2134'),
+])
+def test_public_android_catalogs_are_signed_sdk_bound_and_remain_optional(path, sequence, code, size, digest):
+    envelope = json.loads((ROOT / path).read_bytes())
     payload = base64.b64decode(envelope['payload'], validate=True)
     anchor = base64.b64decode((ROOT / 'clients/desktop/update.pub').read_text().strip(), validate=True)
     Ed25519PublicKey.from_public_bytes(anchor).verify(
         base64.b64decode(envelope['signature'], validate=True), b'family-connect/android-update/v1\0' + payload)
     catalog = json.loads(payload)
-    assert catalog['sequence'] == 8 and catalog['min_sdk'] == 27
-    assert catalog['version_code'] == 125 and catalog['version'] == '0.1.18-beta125'
+    assert catalog['sequence'] == sequence and catalog['min_sdk'] == 27
+    assert catalog['version_code'] == code and catalog['version'] == f'0.1.18-beta{code}'
     assert catalog['minimum_supported_version'] == 1 and catalog['mandatory_after'] == 0
-    assert catalog['size'] == 50470304
-    assert catalog['sha256'] == 'f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c'
-    assert catalog['url'] == 'https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta125.apk'
+    assert catalog['size'] == size
+    assert catalog['sha256'] == digest
+    assert catalog['url'] == f'https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta{code}.apk'
+    assert catalog['signer_fingerprint'] == '67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a'
     assert 0 < catalog['expires_at'] - catalog['issued_at'] <= 90 * 86400
 
 
@@ -195,7 +205,22 @@ def test_ui_runner_offline_wait_is_bounded(monkeypatch):
         helper.ready_emulator()
 
 
-def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
+def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main(tmp_path):
+    patch = ROOT / 'tests/fixtures/device_technical_metadata/beta125-to126.patch'
+    assert hashlib.sha256(patch.read_bytes()).hexdigest() == 'd465e822bf098ac678f36ed4c964299d50f91634302d14b643ff6286f6df2d5e'
+    metadata_overlay = {
+        'ConnectionTerminal.java': '008f6aa25ff16fec0e49746dfe74a884e6db3b0ef47f2a804d739196478eb17a',
+        'FriendsAccessAndroid.java': '97e21b93387a9a48616d291e6ab3fcce7f24eb1f72643776a7e6a29d8cc7ab39',
+    }
+    restored = {}
+    for filename, digest in metadata_overlay.items():
+        name = 'clients/android/app/src/main/java/com/familyconnect/app/' + filename
+        assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == digest
+        destination = tmp_path / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / name, destination)
+        restored[name] = destination
+    subprocess.run(['git', 'apply', '--reverse', str(patch)], cwd=tmp_path, check=True, capture_output=True)
     reference = json.loads((ROOT / 'clients/shared/android106-reference.json').read_text())
     reviewed_ui109 = {
         'ConnectionTerminal.java': '6aedb6c35dd9119d9005e5e6f328ef7b7c23eb1d9e0e6f2e007a34ce0913d582',
@@ -324,7 +349,7 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
     for name, expected in reference['android_ui_and_handlers'].items():
         if name not in changes:
             reviewed = reviewed_resources.get(name, reviewed_handlers.get(Path(name).name, expected))
-            assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == reviewed, name
+            assert hashlib.sha256(restored.get(name, ROOT / name).read_bytes()).hexdigest() == reviewed, name
 
 
 def test_accepted_jni_startup_observation_helper_is_in_public_source():

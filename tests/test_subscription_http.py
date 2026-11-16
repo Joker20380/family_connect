@@ -372,6 +372,7 @@ def test_personal_allowlists_and_no_paid_vpn_dependency():
     client = (sources / 'FriendsAccessAndroid.java').read_text()
     runtime = (sources / 'ChatRuntime.java').read_text()
     assert 'device/(status|subscription|support|diagnostics)' in client
+    assert '||path.equals("/friends/device/technical-metadata/v1")' in client
     assert 'new FriendsAccessAndroid(app,android.os.SystemClock.elapsedRealtime()+20000).subscription(identity)' in runtime
     assert 'direct&&!viaVpn?new ChatNetworkAndroid(context).openHttps' in client
     assert 'subscription' not in (sources / 'ReadinessBootstrapRoute.java').read_text()

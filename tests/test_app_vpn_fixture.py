@@ -79,3 +79,19 @@ def test_collect_retains_failed_probe_and_other_receipts(tmp_path, monkeypatch):
     assert module.collect_receipts(['adb'], tmp_path, ['routing', 'absent', 'catalog']) == ['absent']
     assert json.loads((tmp_path/'routing.json').read_text())[0]['ipv4_error'] == 'SocketTimeoutException'
     assert json.loads((tmp_path/'catalog.json').read_text()) == {'ok': True}
+
+
+def test_ci_retains_per_app_setup_and_service_failure_evidence():
+    workflow = (ROOT/'.github/workflows/clients.yml').read_text()
+    for api in (35, 27, 28, 31):
+        assert (f"bash -o pipefail -c 'python3 -u pilot/android-app-vpn/run.py --serial emulator-5554 "
+                f'--out "$RUNNER_TEMP/app-vpn-api{api}" 2>&1 | tee "$RUNNER_TEMP/app-vpn-api{api}-harness.log"\'') in workflow
+    upload = workflow.split('name: Save per-app routing receipts', 1)[1].split('      - name:', 1)[0]
+    assert 'if: always()' in upload
+    for path in ('app-vpn-api*-harness.log', 'app-vpn-api*/fixture.log',
+                 'app-vpn-api*/fixture/awg.log', 'app-vpn-api*/fixture/xray.log',
+                 'app-vpn-api*/fixture/traffic.json', 'app-vpn-api*/service.json'):
+        assert '${{ runner.temp }}/'+path in upload
+    fixture_paths = {line.strip() for line in upload.splitlines() if '/fixture/' in line}
+    assert fixture_paths == {'${{ runner.temp }}/app-vpn-api*/fixture/'+name
+                             for name in ('awg.log', 'xray.log', 'traffic.json')}

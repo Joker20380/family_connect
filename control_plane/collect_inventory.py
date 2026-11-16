@@ -10,6 +10,9 @@ from pathlib import Path
 import secrets
 import shlex
 import subprocess
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from control.friends.pseudonyms import seal
 
 if __package__:
     from .apps.console.collector import ACTIVE_SOURCES, SOURCES
@@ -115,6 +118,7 @@ def main():
                     if type(device) is not str or len(device) != 32 or any(value not in '0123456789abcdef' for value in device):
                         raise ValueError('Invalid transport binding')
                     row['pseudonym'] = hmac.new(key, device.encode(), hashlib.sha256).hexdigest()
+        data = seal(data, 'inventory', key_path.read_bytes() if key_path.is_file() else None)
         raw = json.dumps(data, ensure_ascii=False, allow_nan=False, indent=2).encode()
     except (OSError, ValueError, subprocess.TimeoutExpired):
         parser.error('Снимок не получен; предыдущие данные не изменены.')

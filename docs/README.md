@@ -1,5 +1,18 @@
 # Documentation
 
+[Android126 · PUBLIC: technical metadata, optional catalog9, exact APK/source/audio and acceptance](releases/2026-11-16-android126-publication.md).
+
+[RU · 16 November evening: verified watchdog cascade, fresh guarded recovery; initiating stall still open](releases/2026-11-16-ru-recurrence.md#watchdog-cascade-and-guarded-recovery--16-november-evening).
+
+[Technical metadata · 16 November17:41UTC: device restoration and CI pass; publication held by new RU outage](releases/2026-11-15-device-technical-metadata.md#restoration-ci-and-pre-publication-stop--16-november1741utc).
+[Minimal deployment and data-preserving recovery](operators/technical-metadata-release.md).
+
+[RU · 16 ноября16:08UTC: повторно восстановлен на текущих принятых байтах; причина открыта](releases/2026-11-16-ru-recurrence.md#authorized-recovery--16-november1608utc).
+[RU · 15 ноября: предыдущее восстановление и проверка продления допуска](releases/2026-11-15-ru-recurrence.md).
+
+[HMAC · 15 ноября: generation2 переключено; сохранность и отдельная деградация RU](releases/2026-11-15-hmac-generation2-cutover.md).
+[Порядок и восстановление](operators/hmac-generation.md). Это не выпуск метаданных или beta126.
+
 [RU · 14 ноября: attribution задержек persistence и ограниченный сбор](releases/2026-11-14-ru-persistence-pressure.md).
 [RU · first-failure v2: NO_GO, проверяемые потери burst](releases/2026-11-14-ru-attribution-v2-qualification.md);
 [исторический кандидат PR34: NO_GO](releases/2026-11-14-ru-first-failure-qualification.md).

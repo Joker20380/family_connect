@@ -7,7 +7,7 @@ from django.db import models
 from .labels import LABELS, label
 from .observability_models import (InventorySnapshot, InventoryDevice, ServerObservation, TechnicalSample,
     OperationSwitch, NetworkProbe, SubscriptionSnapshot, TransportSnapshot, DeviceLabel,
-    MeasurementSnapshot, SubscriptionEventObservation)
+    MeasurementSnapshot, SubscriptionEventObservation, TechnicalMetadata, TechnicalMetadataSource)
 
 
 class DeviceProjection(models.Model):

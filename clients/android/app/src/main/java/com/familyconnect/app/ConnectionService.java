@@ -18,6 +18,8 @@ public final class ConnectionService extends Service {
     private TunnelEngine engine;
     private AppVpnAndroid applications;
     static volatile AppVpnPolicy activeApplications;
+    static volatile String observedGateway="UNKNOWN";
+    private String connectionGateway;
     private volatile AutomaticConnection automaticConnection;
     private final ScheduledExecutorService rnsWorker=Executors.newSingleThreadScheduledExecutor();
     private volatile ControlRnsAndroid rnsCarrier;
@@ -40,7 +42,7 @@ public final class ConnectionService extends Service {
     private volatile VpnHealth health;
     private ScheduledFuture<?> pending;
     private String source;
-    @Override public void onCreate(){super.onCreate();ControlOperations.APP.beginAttempt(operationOwner);}
+    @Override public void onCreate(){super.onCreate();ControlOperations.APP.beginAttempt(operationOwner);TechnicalMetadataUpload.start(this);}
     private void unclaimedOff(){ControlOperations.APP.unclaimed(operationOwner,()->{status="off";});}
     private void rejectPolicy(){
         ControlOperations.APP.unclaimed(operationOwner,()->{
@@ -105,6 +107,7 @@ public final class ConnectionService extends Service {
                 if(stopping||closing){stopConnection();return;}
                 status="connecting";failed=false;failureMessage=R.string.failed;
                 String id=intent.getStringExtra("transport");requestedTransport=id==null?"auto":id;
+                connectionGateway=intent.getStringExtra("country");observedGateway="UNKNOWN";
                 automatic="auto".equals(requestedTransport)||"telemost".equals(requestedTransport);
                 terminalAttempt=ConnectionTerminal.VPN.begin(ConnectionTerminal.Stage.PREPARING);
                 if(connectRequested){
@@ -200,7 +203,7 @@ public final class ConnectionService extends Service {
             }
             if("restoration_attempted".equals(event.name)){sessionId=sessionCounter.incrementAndGet();vpnSource=null;}
             switch(event.state){
-                case CONNECTED:status="on";healthStatus="ok";break;
+                case CONNECTED:observedGateway=TechnicalMetadataSnapshot.gateway(country);status="on";healthStatus="ok";break;
                 case RESTORING:status="restoring";healthStatus="checking";break;
                 case FAILED:status="failed";healthStatus="unavailable";failed=true;forgetRequest(this);break;
                 case DISCONNECTED:status="disconnecting";healthStatus="off";break;
@@ -229,6 +232,7 @@ public final class ConnectionService extends Service {
         final long token=++generation;sessionId=sessionCounter.incrementAndGet();vpnSource=source;healthStatus="checking";
         engine=TunnelEngine.create(this,type,up->{if(!up&&token==generation&&!stopping&&!closing){cancel();worker.execute(()->owned(this::stopConnection));}},applications);
         engine.up(profile);
+        observedGateway=TechnicalMetadataSnapshot.gateway(connectionGateway);
         if(stopping||closing){stopConnection();return;}
         health=new VpnHealth(this,applications.routesOwnUid()?null:engine::probeDns);if(!controlApplying)schedule(()->probe(token),1);
         if(!automatic&&!controlApplying){status="on";ConnectionTerminal.VPN.end(terminalAttempt,ConnectionTerminal.Stage.VPN_READY,true);main.post(this::notifyState);}
@@ -364,7 +368,7 @@ public final class ConnectionService extends Service {
             .setContentText(automatic?getString(status.equals("on")?R.string.on:status.equals("restoring")?R.string.restoring:status.equals("failed")?R.string.unable_connect:R.string.connecting):activeTransport.toUpperCase(java.util.Locale.ROOT)+" · "+getString(status.equals("on")?(healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.on):R.string.connecting)).setContentIntent(open)
             .setOngoing(true).setOnlyAlertOnce(true).addAction(new Notification.Action.Builder(null,getString(R.string.disconnect),stop).build()).build();
     }
-    private void notifyState(){if(!closing)getSystemService(NotificationManager.class).notify(1,notification());}
+    private void notifyState(){TechnicalMetadataUpload.changed(this);if(!closing)getSystemService(NotificationManager.class).notify(1,notification());}
     @Override public void onDestroy(){
         closing=true;rnsEnabled=false;ControlRnsAndroid transport=rnsCarrier;if(transport!=null)transport.cancel();rnsWorker.shutdownNow();
         interruptWork();

@@ -61,7 +61,32 @@ def test_monitor_rejects_symlink_local_directory(tmp_path):
 def test_timer_budget_covers_all_three_bounded_collection_import_pairs():
     unit = (monitor.BASE / 'monitor.service.in').read_text()
     timeout = next(int(line.split('=', 1)[1]) for line in unit.splitlines() if line.startswith('TimeoutStartSec='))
-    assert timeout >= len(monitor.SOURCES) * 120 + 20
+    assert timeout >= len(monitor.SOURCES) * 120 + 100
+
+
+@pytest.mark.parametrize('failure', [False, True])
+def test_metadata_has_independent_capacity_and_cleanup_without_retained_payload(tmp_path, monkeypatch, failure):
+    monkeypatch.setattr(monitor, 'SOURCES', ())
+    local = tmp_path / '.local'
+    local.mkdir()
+    (local / 'technical-metadata-source.json').write_text('{}')
+    raw = b' ' * (4 * 1024 * 1024 + 1)
+    calls = []
+    def run(command, **options):
+        calls.append(command)
+        if command[0] != 'docker':
+            if failure:
+                raise subprocess.TimeoutExpired(command, 50, stderr=b'private metadata')
+            return subprocess.CompletedProcess(command, 0, stdout=raw)
+        assert 'import_technical_metadata' in command
+        assert options.get('input') == (None if failure else raw)
+        assert (command[-1] == '--unavailable') == failure
+        return subprocess.CompletedProcess(command, 0)
+    receipt = monitor.cycle(tmp_path, run)
+    assert receipt['technical_metadata'] == ('UNAVAILABLE' if failure else 'IMPORTED')
+    assert 'private metadata' not in json.dumps(receipt)
+    assert len(calls) == 2
+    assert {path.name for path in local.iterdir()} == {'technical-metadata-source.json', 'monitor.lock', 'monitor-latest.json'}
 
 
 @pytest.mark.parametrize('failure', ['collection_failed', 'import_failed'])
