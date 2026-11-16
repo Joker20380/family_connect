@@ -2,6 +2,14 @@
 
 ## State
 
+16 November11:42UTC interruption: the owner's new RU outage is confirmed by
+[separate read-only diagnosis](2026-11-16-ru-recurrence.md). AWG/TCP are down after
+a watchdog timeout; no recovery or server mutation is performed here. Accepted
+metadata HTTP/panel hashes remain, and the normal monitor still imports metadata.
+Earlier installed-chain results remain historical evidence, not current RU VPN or
+GeoIP acceptance. Public publication, paid126 loading and physical VPN tests remain
+blocked; this incident does not replace the separately recorded native-race gate.
+
 Android source candidate:0.1.18-beta126/code126, package remains
 com.familyconnect.app.friends. PREVIOUSLY_CI_QUALIFIED / SIGNED / INSTALLED_ON_TEST_DEVICE /
 NOT_PUBLISHED / RELEASE_BLOCKED_NATIVE_RACE. The current artifact receipt below supersedes the historical

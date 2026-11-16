@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**16 November11:42UTC — RU recurrence confirmed, NOT_RECOVERED / CAUSE_OPEN.**
+Read-only diagnosis of the owner's new report finds a watchdog timeout at08:12:36UTC,
+followed by protective AWG/TCP stops. The retained8s lock-deadline failure at08:13:10
+belongs to a subsequent watcher start, not the initiating failure. AWG is failed/PID0,
+TCP inactive/PID0; watcher retries rise335→349 and reconciliation fails. Incident-window
+disk/pressure counters show substantial I/O delay, without attributing its cause.
+Accepted node/gateway/watcher and HTTP/operator/reconciler hashes still match.
+HTTP separately stops/starts at11:39:28–11:40:07 during this read-only diagnosis;
+the initiating actor is unknown. Panel remains running and metadata imports continue.
+No restart, recovery, backup restore, policy/key change or deployment was performed.
+Metadata physical/release work is interrupted, not rolled back or declared complete.
+[Current incident and recovery boundary](releases/2026-11-16-ru-recurrence.md).
+
 **16 November00:38UTC — installed metadata reaches the real production card.**
 The owner explicitly enabled the separate technical-information consent on the
 authorized Redmi. Installed frozen126 sent authenticated observations; canonical

@@ -2,6 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
+**16 November incident interruption: RU-INCIDENT-20261116, read-only diagnosis.**
+The owner's new outage report supersedes the assumption that RU is currently healthy.
+Watchdog08:12:36UTC precedes protective transport stops; the retained08:13:10 lock
+timeout is a later startup failure. Accepted runtime pins match, but RU is not restored.
+HTTP also restarts during observation without any command from this diagnostic run;
+coordinate its unknown initiating activity before production mutation. No new observer,
+restart loop, timeout change, key rotation or deployment is selected. Separate narrow
+RU recovery must use fresh guards and the existing data-preserving procedure; earlier
+15November recovery is historical, not today's availability PASS.
+[Evidence and exact boundary](releases/2026-11-16-ru-recurrence.md).
+
 **Selected now: DEVICE-TECHNICAL-METADATA-1 delivery.** Accept the completed RU
 recovery, HMAC generation2 and minimal metadata server deployment without repeating
 them. Frozen signed126 is now installed over original ARM64125. Finish its remaining
