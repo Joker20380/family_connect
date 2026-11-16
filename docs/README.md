@@ -3,7 +3,7 @@
 [Technical metadata · 16 November: corrected126 installed; remaining device/release gates open](releases/2026-11-15-device-technical-metadata.md).
 [Minimal deployment and data-preserving recovery](operators/technical-metadata-release.md).
 
-[RU · 16 ноября: восстановлен на прежних байтах; продление проверено, причина открыта](releases/2026-11-16-ru-recurrence.md).
+[RU · 16 ноября16:08UTC: повторно восстановлен на текущих принятых байтах; причина открыта](releases/2026-11-16-ru-recurrence.md#authorized-recovery--16-november1608utc).
 [RU · 15 ноября: предыдущее восстановление и проверка продления допуска](releases/2026-11-15-ru-recurrence.md).
 
 [HMAC · 15 ноября: generation2 переключено; сохранность и отдельная деградация RU](releases/2026-11-15-hmac-generation2-cutover.md).

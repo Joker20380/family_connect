@@ -1,6 +1,33 @@
 # Текущее состояние / Current state
 
-**16 November15:48UTC — new RU outage confirmed; publication held.**
+**16 November16:08UTC — separately authorized RU recovery: RECOVERED_CAUSE_OPEN.**
+Fresh accepted-byte/owner/unit/HMAC2 guards pass against the current paid-v2 foundation,
+not the earlier pre-paid archives. A new consistent backup restores all27 canonical
+tables and all three exact-runtime paid projections in isolation. RU-only fencing,
+drain, grouped stop/PID0/no jobs/no handlers and retained-state preflight pass. The
+encrypted off-host backup decrypts correctly. Unchanged watcher/AWG/TCP start at
+16:00:48UTC; the original three-node command map is restored. HTTP/peer, panel/support
+and paid reconcile timer are not restarted; NL renewal is not fenced.
+
+Six strict samples16:01:12–16:04:57UTC span224.856s and cross the initial observed
+lease deadline: exact20 AWG/20 TCP,66 applied records, stable PIDs/invocations and
+zero restarts. Final16:07 and16:12 readbacks also pass, including all protected canonical
+fingerprints, transport identities/membership/terms/prepared state and effective units.
+HMAC generation2 and exact paid108/119/123/125/126-v2 remain unchanged. Normal RU/NL
+transport, inventory, subscriptions and metadata imports are current. Support IPC
+works; original baseline/cursor position4, excluded history and baseline time remain.
+No test payment, term change, message or physical client traffic is performed.
+See the [recovery receipt](releases/2026-11-16-ru-recurrence.md#authorized-recovery--16-november1608utc).
+This restores service, **not the unresolved cause of recurring watchdog failures**.
+
+Public126/catalog9 remain unpublished; the metadata release is not resumed by this
+recovery. One fresh read also finds a newer enabled metadata epoch5/sequence104,
+received15:56:54UTC, before the recovery pause. Therefore earlier OFF/tombstone
+acceptance is historical, not a claim of the phone's current setting. This recovery
+does not touch the phone or infer who changed consent; recheck its intended final
+state when metadata acceptance resumes.
+
+**Historical16 November15:48UTC — new RU outage confirmed; publication held.**
 The owner reports stopped services again. Read-only systemd evidence at15:43:45UTC:
 AWG failed/timeout/PID0, TCP inactive/PID0, watcher restarting (NRestarts16), paid
 reconcile failed/exit1 while its timer remains active. HTTP and verified public125

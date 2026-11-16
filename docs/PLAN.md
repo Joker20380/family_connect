@@ -2,7 +2,25 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Current interruption — RU outage16 November15:48UTC:** new owner report is confirmed:
+**Current boundary — separate RU recovery16 November16:08UTC:** the owner's explicit
+confirmation is executed on the accepted current paid-v2/metadata/HMAC2 foundation.
+Fresh backup/isolated restore, RU-only fence/drain/stop/preflight, encrypted off-host
+backup and sequential unchanged start pass. Six strict samples over224.856s cross a
+lease deadline without process changes; final protected-state/unit checks pass.
+Normal three-node transport and canonical subscription imports resume, support IPC
+and original notification baseline/cursor remain. No active fence remains. Outcome:
+RECOVERED_CAUSE_OPEN, not a runtime fix or physical traffic acceptance. See the
+[receipt](releases/2026-11-16-ru-recurrence.md#authorized-recovery--16-november1608utc).
+
+DEVICE-TECHNICAL-METADATA-1 public delivery stays separate and unpublished. Do not
+rebuild/re-sign APK4f288cbb or repeat server/HMAC deployment. Remaining release work:
+recheck intended phone country/network/consent (new enabled epoch5/sequence104 was
+already received before the recovery pause), finish applicable CI and publish the
+accepted immutable assets/catalog/invitations, then review/integrate. Earlier OFF
+acceptance does not establish the current setting. No observer or new runtime work
+is started automatically because the recurrence cause remains open.
+
+**Historical interruption — RU outage16 November15:48UTC:** new owner report is confirmed:
 AWG failed/timeout, TCP inactive, watcher restart loop and failed reconciliation.
 HTTP/public125 and normal panel imports remain available, not proof of VPN health.
 Bounded first-failure/journal evidence is preserved without restarting or changing
@@ -11,7 +29,7 @@ coordinated guarded RU restoration/health and remaining CI. Do not reinterpret t
 earlier successful recovery as current health, repeat it silently inside metadata,
 introduce an observer, or publish staged126/catalog9 while this interruption is open.
 
-**Current boundary — online cleanup16 November15:38UTC:** offline OFF/pending becomes
+**Historical boundary — online cleanup16 November15:38UTC:** offline OFF/pending becomes
 an authenticated epoch4/sequence83 tombstone after normal connectivity returns.
 Canonical and generation2 panel observations/GeoIP are empty; original card remains.
 OFF without pending survives a new process, and the exact tombstones remain unchanged

@@ -2,7 +2,23 @@
 
 ## State
 
-Latest16 November15:48UTC: the owner reports a new RU outage; read-only checks confirm
+Latest16 November16:08UTC: separately authorized RU restoration completes on the
+current accepted node125c796a, HTTP4e2df679, operator19efd0b4 and reconcilerff4601aa;
+no APK, paid policy, metadata runtime, HMAC2 or panel change. Six strict samples over
+224.856s and a final protected-state readback pass. HTTP/peer/support/panel are not
+restarted. Current subscriptions and three-node transport imports are successful.
+[Exact recovery receipt and remaining cause](2026-11-16-ru-recurrence.md#authorized-recovery--16-november1608utc).
+No physical VPN/GeoIP acceptance or new notification delivery is inferred here.
+Public125/catalog8 remain; staged126/catalog9 are not published by this operation.
+
+Fresh16:02:56UTC metadata readback finds enabled epoch5/sequence104, received
+15:56:54UTC, before the15:59:59 recovery pause. Canonical and original generation2
+panel row agree. No phone interaction or consent mutation is performed in this RU
+operation; actor/intent are not inferred. The completed epoch4 revoke remains valid
+historical evidence, but OFF is no longer claimed as the current final phone state.
+Recheck intended consent/country/network restoration before closing release acceptance.
+
+Historical16 November15:48UTC: the owner reports a new RU outage; read-only checks confirm
 AWG failed/timeout, TCP stopped and watcher restart loop. HTTP/public125 and panel
 imports remain available, not proof of working VPN. The initiating watchdog is recorded
 at15:34:36UTC; a later register/engine-query failure is preserved without assigning
@@ -11,7 +27,7 @@ No recovery or service restart is performed in the metadata task. Public deliver
 held; catalog9/assets remain staged, beta125/catalog8 unchanged. The accepted installed
 chain and durable revoke are earlier successful observations, not current RU health.
 
-Latest16 November15:38UTC: automatic online revocation clears canonical observations
+Historical16 November15:38UTC: automatic online revocation clears canonical observations
 and the original generation2 panel's groups/GeoIP. OFF without pending survives a new
 process; subsequent reads preserve the exact tombstones. Real revoked UI passes24
 checks at1440/390px. Original country restoration and remaining CI/public delivery

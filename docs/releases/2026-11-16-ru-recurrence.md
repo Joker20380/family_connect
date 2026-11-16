@@ -1,8 +1,133 @@
 # RU recurrence — 16 November 2026
 
+## Authorized recovery — 16 November16:08UTC
+
+**RECOVERED_CAUSE_OPEN.** After the15:34 outage diagnosis, the owner explicitly
+authorizes separate controlled RU restoration on the existing runbook, with backup
+and isolated restore, without changing runtime code, subscriptions or HMAC2. Entry
+source is21fc927fcc59ed391a38721b6832de266562ed0a; remote feature matches and main is
+53a780d9ccfcdb2c3ec6141a197917190f9be7a5. The dirty primary checkout is untouched.
+This section supersedes current-health claims below, not their historical evidence.
+
+### Current foundation and backups
+
+At15:57:45UTC all accepted hashes, runtime ownership/private parents and effective
+watcher unit match. RU/operator HMAC keys agree in-process; generation2 manifest
+8602e6526ca1ec0e408c99a7ca37aedc4413b417f392e32096d5167517fcdcb8 is unchanged.
+Free space is7,518,609,408 bytes. HTTP remains PID1325435 and peer PID3967036.
+AWG/TCP are still stopped and the watcher restart counter is39, not healthy VPN.
+
+| Preserved runtime | SHA256 |
+| --- | --- |
+| RU node | `125c796a30c3fba1772c47b96963517350087ad04aad675b6f33a31a5383276c` |
+| Gateway | `9023d2c3f7c3a5127d67c509a16eb2d974810ff54d5b76cc225cd9b93e0b4234` |
+| Effective watcher unit | `659b954beb67d1e23c0cea45ffda62704f48dc2fb0b1f5bd30d0ae733760bd4e` |
+| Current metadata HTTP | `4e2df679761ba9e7af74128984ef2e19e8e7b228f1cc85b36d50be2b0bc24ce8` |
+| Current paid operator | `19efd0b46fb145dcef06a9a092ee0d8ee4d062d09d99b1b0e0065425be02d90f` |
+| Current paid reconciler | `ff4601aa3bb0990b4f8566aadde1fd6b12120bffbd912b4b901e2d77a114d6aa` |
+| Unchanged panel image | `5ae92f8c7775d2ff0ad26627f6cdfcda53a3d4193a08b9fe1de1e89f32c432da` |
+
+The qualified recovery driver is adapted only to this current foundation and a new
+private evidence/failure-archive location. No old pre-paid archive is installed.
+An initial preflight reader used stdlib Python and failed to import RNS before any
+fence/stop. Its partial backup/error remain separate, not PASS. Repeating with the
+existing accepted `/opt/apps/family_connect/friends-access/venv/bin/python` and a new
+snapshot location passes at15:59:24UTC: SQLite integrity/FK checks, equality of all27
+table fingerprints and all three exact-runtime paid projections at the same clock.
+No dependency or runtime installation is performed to repair that reader.
+
+Fresh canonical backup SHA256:
+`7c93fd3234753a5a713bf95a0d8a57b68e0df14536b52783755fe8dd56921eb8`.
+The paused state/config/peer backup is retained off-host encrypted with AES-256-GCM:
+198,075 bytes, SHA256
+`8b6a3594bd47f03aae23324963cfde8589c28cfa996c802585b57df9add92b93`.
+Decryption/digest roundtrip passes. Keys, raw identifiers, state and backup contents
+remain private; nothing is restored over the live registry.
+
+### Pause, unchanged start and normal renewal
+
+At15:59:59UTC the RU-only command fence is applied with NL command entries unchanged.
+The in-flight reconciler drains; grouped watcher/AWG/TCP stop leaves all PID/control
+PID0, no relevant jobs and zero gateway handlers. Retained-state validation passes:
+66 records and20 existing peers, with no conflicting TCP bindings or state rewrite.
+
+The15:35 first-failure bytes are archived unchanged while stopped, retaining SHA256
+950ed783f48bdfc289343abffe5c98b3750901d223233e48caeee8f2334fa2f5. Sequential unchanged
+watcher, AWG and TCP start completes16:00:48UTC. The exact original three-node command
+map returns, SHA256 d07803df7c82d4dfabd6eb1131d8c9132a1df8f1a84f2103ca33fe13a5d48b11.
+No fence remains. HTTP, peer/MESH, panel, support owner and paid reconcile timer are
+not restarted. No timeout, guard, BindsTo, engine config or access policy is changed.
+
+| Ordinary strict sample, UTC | Applied records | Actual AWG / TCP | Result |
+| --- | --- | --- | --- |
+| 16:01:12 |66 |20 /20 | PASS |
+| 16:02:27 |66 |20 /20 | PASS |
+| 16:03:03 |66 |20 /20 | PASS |
+| 16:03:42 |66 |20 /20 | PASS |
+| 16:04:18 |66 |20 /20 | PASS |
+| 16:04:57 |66 |20 /20 | PASS |
+
+These samples span224.856s, exceed120s and cross the first observed cohort deadline.
+The deadline advances1794844983→1794845188 through normal reconciliation. Every
+actual peer/user set and binding matches expectations and persisted applied revisions.
+PIDs/invocations remain continuous from start: watcher1635653, AWG1635657, TCP1635667;
+all NRestarts0. HTTP/peer retain their original processes. No convergence-anchor
+replacement or discarded continuity failure is needed in this recovery.
+
+### Preservation and operator readback
+
+Final16:07:01UTC strict engine/continuity readback passes again. All protected
+canonical table fingerprints, not just counts, match the fresh baseline:
+
+| Protected domain | Rows | Exact fingerprint |
+| --- | --- | --- |
+| Devices |66 | unchanged |
+| Invitations |121 | unchanged |
+| Paid subscriptions / events |1 /4 | unchanged |
+| Chat bindings / service senders |53 /1 | unchanged |
+| Referral links / claims |19 /59 | unchanged |
+
+Transport identity, membership, revision, terms, identity/access decisions and
+prepared state match the paused snapshot; observation/renewal clocks are compared
+separately. Effective units and HMAC2 guard files remain equal. Reconciler is an
+inactive/success completed oneshot with its timer active/waiting, not failed.
+Exact paid108/119/123/125/126-v2 stays on the same accepted bytes.
+The final16:12:32UTC readback repeats all these assertions successfully with the
+same watcher/AWG/TCP/HTTP/peer processes and no new first-failure record.
+
+At16:05:50UTC existing read-only support IPC works. Original cursor/baseline position4,
+baseline time14November12:48:20UTC and excluded count4 remain; baseline hash equals
+cursor anchor and source_error is null. The selected existing device has zero jobs.
+This is not a full encrypted support-history/global-job comparison or proof of new
+notification delivery; no test payment, term operation or message is created.
+
+Normal imports at16:07:41–16:07:52UTC show RU/NL1/NL2 transport status ok with66
+records each. RU inventory status ok/66 and subscriptions status ok/66 on HTTP4e2df679
+are current; metadata source is ok. NL inventory registry not_collected is its
+existing source boundary, not lost canonical rows. The panel image and read-only
+generation2 alias mount are unchanged. No stale pre-paid collector pin is restored.
+
+A separate read-only metadata check sees a newer enabled epoch5/sequence104 received
+15:56:54UTC, **before** the recovery fence, and matching canonical/panel values. Earlier
+epoch4 OFF/tombstone acceptance remains history, not the phone's current state. This
+operation does not touch the phone, change consent or identify the actor. Recheck
+the intended final consent/country/network state in the metadata task.
+
+### Remaining boundary
+
+The recurring watchdog/latency cause is still open. This is controlled restoration,
+not a durable fix, automatic restart policy, new observer or physical client traffic
+test. The existing guarded runbook still applies to any new failure. Retain first
+failure evidence; never restore an old DB over live events or reactivate the old key.
+Public126/catalog9 are not activated; metadata publication/CI/integration remain
+separate. No APK, source/audio artifact or release-signing material is changed.
+Documentation qualification:6 changed files/864 local links, zero errors; staged
+whitespace and known-private-value checks pass. This is the author's own scoped
+review, not independent review or a new runtime/full-Android-CI qualification.
+
 ## New outage — 16 November15:34UTC
 
-**Current outcome at15:48UTC: NOT_RECOVERED / CAUSE_OPEN.** The owner reports another
+**Historical outcome at15:48UTC: NOT_RECOVERED / CAUSE_OPEN.** The owner reports another
 outage during the metadata-release continuation. This section supersedes current-health
 inferences from the earlier successful recovery; it does not erase its acceptance.
 Only bounded read-only checks are performed. No fence, stop/start, reset-failed,
