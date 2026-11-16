@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**16 November15:03UTC — cellular handover and consent-preserving restart observed.**
+**16 November15:12UTC — offline revoke persists; online cleanup next.**
 After the owner disables Wi-Fi, the app-owned VPN capabilities independently show
 CELLULAR, not WIFI; the actual session remains CONNECTED/AWG/gateway-ru. At14:58:51UTC,
 epoch3/sequence71, all five canonical groups and received_at exactly match the original
@@ -14,10 +14,14 @@ At15:00UTC, a controlled app force-stop/start verifies a genuinely new process w
 data clearing. Consent stays ON. At15:02UTC the same identity/epoch reaches canonical
 and panel sequence75: DISCONNECTED/NONE and CELLULAR/default_network, rather than
 the previous established underlay. The retained qualified GeoIP keeps its older
-sampled_at; the disconnected report does not refresh it. Settings are open; Wi-Fi is
-OFF and mobile data remains ON at readback. Next owner action: disable mobile data,
-then disable technical-information consent while offline; verify pending revoke,
-online cleanup and final restoration. No injected-input bypass.
+sampled_at; the disconnected report does not refresh it. At15:10UTC, Wi-Fi/mobile
+data are OFF, Android has no default network and the technical-info switch is OFF
+with visible revocation-pending text. A second controlled process restart at15:11UTC
+retains OFF/pending without data clearing. Canonical and panel remain at the original
+epoch3/sequence75; the complete canonical row is unchanged, with no new observations
+received. Remote deletion is not claimed while the revoke is offline. Owner is asked
+to restore Wi-Fi/mobile data, leaving consent OFF, for automatic online cleanup and
+final restoration. No injected-input bypass.
 
 Source9c421a9d is pushed/remote-verified. Android133378630911 has passed the previously
 failing native race step and diagnostic contracts; the full matrix is still running,

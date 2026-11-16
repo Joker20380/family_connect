@@ -2,15 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Current boundary — cellular/restart16 November15:03UTC:** real Wi-Fi→cellular
+**Current boundary — durable offline revoke16 November15:12UTC:** real Wi-Fi→cellular
 handover preserves established RU/AWG, independently confirmed by the app-owned VPN
 capabilities and exact canonical/panel sequence71. Real cellular UI passes32 checks.
 Controlled process restart retains consent/identity; canonical/panel sequence75
 correctly changes to DISCONNECTED/NONE and cellular default network. The retained
-GeoIP observation keeps its original age. Next: offline consent revocation/pending,
-online cleanup and restoration of initial network/country/consent, then public gates.
-Settings are open; owner asked to disable mobile data and the technical-information
-switch, keeping the phone offline for verification. No automatic taps/bypass.
+GeoIP observation keeps its original age. Offline consent is now OFF/pending and
+survives a new process; no new canonical report is received. Server/panel still hold
+epoch3/sequence75 until the pending revoke arrives, not falsely claimed deleted.
+Next owner action: restore Wi-Fi/mobile data, leaving consent OFF. Verify automatic
+online cleanup and final country/network restoration, then public gates. Settings
+remain open; no automatic taps/bypass or private preference editing.
 
 Source9c421a9d native race/diagnostic CI steps pass; Android133378630911 full matrix
 and phase0 remain in progress. Do not replace frozen signed4f288cbb or re-deploy the

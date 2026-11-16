@@ -2,12 +2,14 @@
 
 ## State
 
-Latest16 November15:03UTC: corrected installed126 reaches its original generation2
+Latest16 November15:12UTC: corrected installed126 reaches its original generation2
 production card after explicit consent. Android observations, exact canonical/imported
 groups and real1440/390px UI pass. Actual RU/AWG peer geography and Wi-Fi→cellular
 underlay are observed; process restart preserves consent/identity and reports the
-disconnected/default-network state correctly. Offline revoke/online cleanup and final
-restoration remain open. Source9c421a9d's test-only cancellation-harness correction
+disconnected/default-network state correctly. Offline OFF/pending revoke now survives
+process restart without new received observations. Online cleanup and final restoration
+remain open; owner is asked to restore connectivity with consent OFF.
+Source9c421a9d's test-only cancellation-harness correction
 passes local repeated/full selected race checks and the hosted native gate; full
 Android matrix/phase0 remain in progress. APK4f288cbb, loaded exact paid-v2 and HMAC2
 stay unchanged. Public125/catalog8 remain; this is not a public release.
@@ -103,10 +105,27 @@ retained with sampled_at older than the new report; it is not a fresh disconnect
 location claim. The first immediate post-start read still showed the preceding
 session report; no instantaneous-upload guarantee or freshness reset is inferred.
 
-The app settings are open; Wi-Fi is OFF, cellular ON and consent ON. Owner is asked
-to disable cellular, then consent, leaving the device offline to verify pending
-revocation before restoring connectivity. Online/offline deletion, final restoration
-and public release are not yet accepted.
+At15:07:33UTC, the app settings are open; Wi-Fi and cellular data are both OFF, with
+no active default network. The read-only capture finds exactly one visible/checkable
+technical-information switch, still checked, and no pending-revoke text. This is not
+an observed revocation. Canonical/panel remain enabled at epoch3/sequence75 with the
+same received_at as before the outage. Owner is asked to switch technical information
+OFF while keeping the device offline. Online/offline deletion, final restoration and
+public release are not yet accepted; no claim of deletion without a received revoke.
+
+At15:10:06UTC, the owner's subsequent action is independently observed: the visible
+technical-information switch is OFF, revocation-pending text is present, Wi-Fi and
+cellular data are OFF and Android has no default network. At15:11:26UTC another
+controlled force-stop/exported-activity start creates a new process and preserves
+OFF/pending. No data clear, private preference editing, synthetic upload or bypass.
+Readbacks at15:10:11 and15:11:30UTC keep canonical/panel epoch3/sequence75. The complete
+canonical row, including payload/digest/received_at, equals its pre-revoke baseline;
+no new observation is received while offline or after the offline process restart.
+Existing remote metadata has not yet been deleted, honestly matching pending-revoke
+semantics. Owner is now asked to restore Wi-Fi/mobile data with consent still OFF;
+automatic authenticated revocation, collector/panel cleanup and final restoration
+remain required. Delayed-request/TTL fencing has separate isolated tests; no old
+report or modified clock is injected into production for this device check.
 
 Source9c421a9db759c551b14c1009ee139273769ae2c2 is pushed and remote-verified. Own review
 is explicitly labelled, not independent approval. At14:57UTC Android133378630911 /
