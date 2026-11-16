@@ -2,9 +2,11 @@
 
 ## State
 
-Latest16 November: delivery resumed, subscriptions projection repaired and
-corrected-source hosted CI PASS. The distinct replacement126 is now signed and its
-exact paid v2 passes isolated qualification; not installed, loaded or published.
+Latest16 November12:58UTC: corrected replacement126 is installed in place on the
+authorized ARM64 Redmi; bounded data preservation and restart checks pass. Full local
+history/per-app/session and replacement metadata-chain acceptance remain open.
+Its exact paid v2 passes isolated/hosted qualification but remains not loaded; APK
+is not published. Subscriptions projection is repaired; corrected Android CI passes.
 Old frozen signed bytes remain unchanged/test-only.
 See [resumed delivery](#resumed-delivery--16-november); earlier states remain history.
 
@@ -50,7 +52,58 @@ all preserved. Worktree branch: feature/device-technical-metadata-20261115.
 
 ## Resumed delivery — 16 November
 
+### Replacement installed — 16 November12:58UTC
+
+The owner enabled temporary app USB support; its authenticated local snapshot works.
+Both the freshly pulled installed SHA97513e3f and frozen replacement SHA4f288cbb
+verify against the accepted certificate before installation. At12:58:22–12:58:28UTC,
+normal `adb install --no-streaming -r` succeeds. No rebuild/re-sign, uninstall,
+clear-data, downgrade, translation workaround or new USB permission bypass.
+The pulled installed replacement is50,478,496bytes/SHA256
+`4f288cbb107ac46c8c99ec0e274f57a5e1e8164796796781c4a2c275b57e2134`;
+package/code126 and signer remain the accepted values in the signature receipt.
+
+| Boundary | Fresh before/after result |
+| --- | --- |
+| Android installation | Same UID/first-install time; exact replacement bytes; normal cold relaunch succeeds |
+| Device and activation | Same canonical device/public/WG/TCP/revoked and invite rows; fresh used device proof issued after installation |
+| Support binding | Same canonical chat public identity/pinned support sender and Support ID; fresh used chat proof after installation |
+| Visible settings | Motion, online diagnostics, technical consent and two picker values match; five Android network settings unchanged |
+| Local contacts | All13 visible contact-list texts match; not a full history or pinned-key UI comparison |
+| Subscription | Canonical selected subscription/event rows unchanged; fresh UI again confirms outside paid pilot, not denial of existing VPN access |
+| Consent and revoke | Already OFF before install; server epoch2/sequence30 empty-payload tombstone unchanged; OFF remains after cold relaunch |
+
+The preceding revoke is observed, not performed or newly attributed
+by this session. No metadata report is synthesized or collection automatically
+enabled. Preserve its epoch/sequence; subsequent explicit opt-in must advance them.
+No production payment, term mutation, support message, paid policy load or public
+catalog change. No RU recovery, HMAC rotation or metadata server rebuild/deployment.
+
+Existing exported `FriendsActivity` navigation intents open options, chats and the
+subscription read view; the bounded read-only probe requires a fresh
+`captured_read_only` result. They do not inject touches or grant access to private
+activities/data. The first subscription capture showed the underlying options page;
+it is not accepted as a subscription result. A fresh confirmed dialog subsequently
+shows the expected response before and after installation. Likewise, cached or
+unavailable reader output must not be treated as a current observation.
+
+The chat list is left open for the owner to select the existing support conversation
+without sending anything. Remaining local-history/per-app, actual VPN/underlay,
+replacement metadata-chain, offline revoke/cleanup and RU/AWG geography gates remain.
+No direct125→replacement PASS: original125→old-test126 and this replacement step are
+separate observations. Temporary app USB grant ends on restart as designed; UI reads
+do not require re-enabling it. Android USB debugging is left unchanged until the
+remaining acceptance is finished and its restoration is agreed with the owner.
+
+Policy source408fb282 hosted paid43868845382 passes. Its client-build/preview runs
+were cancelled after the documentation push, not passed. Documentation head59e37cb7
+has8 successful workflows, including paid43869539382 and panel43869542308; phase0
+and client builds remain running at this checkpoint. Android sourceba3e9370's full
+qualification and immutable artifact remain separate; no later artifact is selected.
+
 ### Replacement signature and exact paid v2
+
+Historical signing checkpoint; installation is recorded separately above.
 
 The first local password dialog was cancelled: no signature/output was accepted.
 After the owner's explicit repeat, the same verified unsigned candidate was signed

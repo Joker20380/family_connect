@@ -163,6 +163,13 @@ owner's request, without silently changing databases.
    Its existing connect operation requires MESH already selected; it cannot select
    RU/AWG, open arbitrary dialogs or toggle technical consent. Do not expand this
    endpoint or rebuild the frozen candidate to get around an acceptance blocker.
+   The existing exported FriendsActivity supports its normal navigation extras:
+   integer `tab` (1 chats,3 options) and boolean `subscription_access` (read view).
+   These can reduce owner navigation without touch injection; they do not authorize
+   other extras/private activities, change consent, select a peer or connect VPN.
+   A read-only probe receipt must say `captured_read_only` before reading its file;
+   an exit0 alone can leave an older capture after a non-target/unavailable result.
+   Confirm the expected screen, not just a successful activity launch.
    A contact-list preview is not a full local history or pinned-key comparison.
    Record package verification separately from UI/data-preservation acceptance.
    Compare rendered multiline subscription summaries by their public status

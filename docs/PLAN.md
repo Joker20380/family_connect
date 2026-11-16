@@ -2,7 +2,21 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Current replacement boundary:** signed ba3e9370/merge0a2863b3 candidate126 is frozen
+**Current replacement boundary — installed16 November12:58UTC:** immutable4f288cbb
+is installed over the earlier test126 without data clearing. Pulled bytes/signer,
+UID/first-install time, network settings, bounded options/contact-list comparison,
+fresh device/chat proof and canonical identity/activation/chat pin/subscription/event
+preservation pass. Consent was already OFF with an empty epoch2/sequence30 tombstone;
+both remain after replacement/restart. Do not attribute the earlier revoke to this test.
+Normal exported tab/subscription intents remove unnecessary navigation prompts but
+do not change consent, connect VPN or bypass denied input. Chat list is open: remaining
+local history/per-app/session acceptance needs the actual supported UI actions.
+Next owner action is opening the existing support conversation, not sharing its text.
+Then finish affected data/session acceptance, exact paid loading, new-APK metadata
+chain/revoke/RU-AWG geography and public delivery. No full-release or direct125→new
+PASS; preserve the separate125→old126→replacement evidence. No new build/signing.
+
+**Historical signature checkpoint:** signed ba3e9370/merge0a2863b3 candidate126 is frozen
 at SHA4f288cbb/50,478,496bytes, accepted signer; retired SHA97513e3f stays unchanged.
 Exact paid v2 and108/119/123/125 preservation pass153 focused/501 full locked tests,
 plus7 tests on actual metadata-aware overlay packages. HTTP/operator/reconciler

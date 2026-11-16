@@ -1,6 +1,25 @@
 # Текущее состояние / Current state
 
-**16 November — corrected126 signed; exact paid v2 qualified locally, not loaded.**
+**16 November12:58UTC — corrected126 installed in place; bounded preservation PASS.**
+After the owner enabled temporary USB support, the exact old installed SHA97513e3f
+and replacement SHA4f288cbb both verify with the accepted signer. Normal install -r
+loads the frozen50,478,496byte replacement without uninstall, clear-data or downgrade.
+Pulled installed bytes match4f288cbb; UID, first-install time and five network settings
+remain. Cold relaunch, three controls/two picker values, displayed Support ID and all
+13 visible contact-list texts match. Fresh successful device/chat proofs issued after
+installation confirm retained signing identities; canonical device/invite/chat pin,
+subscription and event rows match. This is not full local-history/per-app acceptance.
+Metadata is already OFF before replacement: server epoch2/sequence30 is a received
+revoke with empty payload. Replacement/restart preserve OFF and the same tombstone;
+this session did not toggle consent or perform that preceding revoke.
+Existing exported tab/subscription intents permit bounded navigation without injected
+taps or new endpoints. The chat list is open; selecting the existing support thread
+still needs owner input. Do not request private-data transcription or another USB grant
+merely to read UI. Paid126 remains staged/not loaded; no public release or new server
+deployment. Source408 hosted paid passes; documentation59e37cb7 has8 workflows PASS,
+with phase0/client builds still running. Original125→old126 evidence stays separate.
+
+**Historical16 November — corrected126 signed; exact paid v2 qualified locally, not loaded.**
 After the owner cancelled then explicitly repeated the local vault dialog, the
 distinct ba3e9370/CI-merge0a2863b3 candidate is signed with the accepted certificate.
 Immutable APK:50,478,496bytes, SHA4f288cbb107ac46c8c99ec0e274f57a5e1e8164796796781c4a2c275b57e2134.

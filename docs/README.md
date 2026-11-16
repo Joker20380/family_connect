@@ -1,6 +1,6 @@
 # Documentation
 
-[Technical metadata · 15 November: server deployed, signed126 frozen; device acceptance pending](releases/2026-11-15-device-technical-metadata.md).
+[Technical metadata · 16 November: corrected126 installed; remaining device/release gates open](releases/2026-11-15-device-technical-metadata.md).
 [Minimal deployment and data-preserving recovery](operators/technical-metadata-release.md).
 
 [RU · 16 ноября: восстановлен на прежних байтах; продление проверено, причина открыта](releases/2026-11-16-ru-recurrence.md).
