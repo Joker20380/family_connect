@@ -7,8 +7,10 @@ at SHA4f288cbb/50,478,496bytes, accepted signer; retired SHA97513e3f stays uncha
 Exact paid v2 and108/119/123/125 preservation pass153 focused/501 full locked tests,
 plus7 tests on actual metadata-aware overlay packages. HTTP/operator/reconciler
 overlays and matching source/audio assets are staged, NOT_LOADED/NOT_PUBLISHED.
-Mandatory hosted policy checks apply to the new policy source separately from the
-already accepted Android CI source. Redmi is still on old test126: do not downgrade
+Policy source408fb282 passes hosted paid43868845382/job133304328602, panel,
+readiness-wire, notification-route and messenger contexts; remaining workflows
+are still running. These checks remain separate from accepted Android sourceba3e9370
+and do not establish full new-head CI PASS. Redmi is still on old test126: do not downgrade
 or erase data to replay125. Fresh read-only home capture succeeds, but MIUI still
 denies injected options taps and the temporary app USB grant is expired. Next owner
 step is options/temporary USB support with no transcription; then finish the fresh

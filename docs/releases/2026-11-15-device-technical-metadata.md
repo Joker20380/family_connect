@@ -81,6 +81,14 @@ conflicts, negative hashes/version pairs and existing-access independence. Seven
 additional tests on the actual staged HTTP/operator overlays pass. All operations
 use isolated synthetic stores; no production payments/terms/messages are created.
 
+Policy source `408fb282421ce180a8e28803a1857c7d4adb5d99` passes hosted paid
+run43868845382/job133304328602, including the normal lockfile installation and exact
+descriptor/payment contracts. Panel43868845054, readiness-wire43868845041,
+notification-route43868845368 and messenger43868845328 also pass. Other workflows
+are still running at this checkpoint: no full new-head CI or merge PASS. These
+results qualify the policy source separately from Android sourceba3e9370 and its
+immutable signed APK; no new build is selected and no vault is reopened.
+
 | Staged overlay | Accepted baseline SHA256 | Candidate SHA256 |
 | --- | --- | --- |
 | HTTP | `70a924dbc02c4ebdb15fe2b935f29070bda0a5fa37f140ac2d35765b34500614` | `4e2df679761ba9e7af74128984ef2e19e8e7b228f1cc85b36d50be2b0bc24ce8` |

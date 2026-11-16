@@ -9,6 +9,9 @@ Old signed SHA97513e3f is not overwritten, re-signed or declared corrected.
 Policy `android-paid-108-119-123-125-126-v2` admits this exact signed hash and retains
 108/119/123/125. Both unsigned126 candidates and retired signed126 are negative cases.
 Locked full paid gate501 PASS;153 focused and7 actual overlay-package tests PASS.
+Policy source408fb282 also passes hosted paid run43868845382/job133304328602,
+panel, readiness-wire, notification-route and messenger contexts. Other workflows
+are still running at this checkpoint; this is not a full new-head CI PASS.
 Three staged overlays change only paid_beta.py over current metadata/HMAC runtimes;
 none is loaded. Source/audio assets are staged and verified, not published.
 Redmi still has the old test126. A fresh known-target options tap is denied with
@@ -19,7 +22,7 @@ the remaining fresh visible settings/diagnostics baseline through owner navigati
 No repeated one-button permission loop or private-data transcription. Remaining
 replacement/session/revoke/GeoIP/publication gates are not PASS.
 
-**16 November12:23UTC — metadata delivery resumed; subscription projection repaired.**
+**Historical16 November12:23UTC — metadata delivery resumed; subscription projection repaired.**
 Only the private subscriptions-source archive pin changes from617c7d75 to accepted
 HTTP70a924db, after provenance/live SHA and negative-pin checks. Configuration backup
 roundtrip, owner/mode and unchanged other fields pass. Local monitor timer alone is
