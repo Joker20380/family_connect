@@ -23,6 +23,15 @@ Generation2 and the accepted RU recovery are the base. Public125 remains support
   Keep current inventory/subscription paths, key and alias normalization unchanged.
   Metadata source configuration pins the current HTTP archive and dedicated GeoIP
   Python environment; it contains no client IP or identity mapping.
+- When the serving HTTP archive changes, inspect **both** private subscriptions and
+  metadata source pins. Updating only the new metadata source leaves subscriptions
+  fail-closed on the previous archive. Verify the accepted archive provenance and
+  live hash, back up/roundtrip the configuration, drain only the local monitor under
+  its normal lock, then atomically update the exact pin with other fields/owner/mode
+  preserved. Resume normal cycles and require subscription source `ok` with the
+  expected archive hash and preserved handles/events, not just importer exit0.
+  Retain a mismatched-pin negative check; never remove the digest guard. This
+  configuration-only repair needs no server restart, image rebuild or DB restore.
 
 ## Preflight and backups
 

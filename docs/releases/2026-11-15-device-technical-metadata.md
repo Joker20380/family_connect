@@ -2,6 +2,11 @@
 
 ## State
 
+Latest16 November12:23UTC: delivery resumed, subscriptions projection repaired and
+corrected-source hosted CI PASS. A distinct unsigned replacement126 is verified,
+not yet signed or installed. Old frozen signed bytes remain unchanged/test-only.
+See [resumed delivery](#resumed-delivery--16-november); earlier states remain history.
+
 16 November12:06UTC: separately authorized unchanged-runtime RU recovery is complete.
 [Fresh recovery receipt](2026-11-16-ru-recurrence.md) records consistent backup/restore,
 protected-data/HMAC2 preservation and six strict post-convergence checks over210.483s
@@ -41,6 +46,64 @@ baseline, not qualification of this change. No delegated agents.
 Remote main53a780d9ccfcdb2c3ec6141a197917190f9be7a5 verified by fetch. Primary
 checkout8937e71e has unrelated modified/untracked files and diverged history;
 all preserved. Worktree branch: feature/device-technical-metadata-20261115.
+
+## Resumed delivery — 16 November
+
+The owner resumes metadata delivery after accepted RU recovery. Fresh bounded
+readback finds unchanged active watcher/AWG/TCP/HTTP/peer processes and NRestarts0;
+no RU recovery, HMAC rotation, server rebuild or deployment is repeated.
+
+### Exact subscriptions-source pin repair
+
+The private configuration still pins617c7d75. Installed HTTP hash and the accepted
+overlay receipt both verify
+`70a924dbc02c4ebdb15fe2b935f29070bda0a5fa37f140ac2d35765b34500614`.
+The unchanged collector rejects the old mismatched pin as unavailable with no rows;
+the correct pin yields ok/66 devices/4 historical events, not truncated. These
+read-only checks do not create production observations with synthetic pseudonyms.
+
+Only the local monitor timer is paused; its current cycle drains and its normal
+lock is acquired. Original configuration is backed up privately and roundtrip
+verified. Atomic replacement changes only `archive_sha256`, preserving paths,
+owner/group/0600; the timer resumes. No archive/image/unit, database or HMAC change.
+Recovery of this configuration-only step uses the retained config with the runtime
+pin revalidated; it never restores an old DB or disables fail-closed hashing.
+
+| Normal source observation UTC | Imported UTC | Status / devices | Runtime |
+| --- | --- | --- | --- |
+| 12:20:47 | 12:20:48.692 | ok / 66 | 70a924db |
+| 12:22:01 | 12:22:02.582 | ok / 66 | 70a924db |
+| 12:23:12 | 12:23:13.380 | ok / 66 | 70a924db |
+
+Compared inside the protected process with the last successful pre-metadata
+snapshot, all66 device handles and latest event handles match. Four unique event
+rows remain; zero local labels was the observed baseline, not a deletion. HMAC
+generation2 and metadata source `ok` remain. Original notification baseline/cursor4
+and matching anchor are preserved; no notification delivery test or history replay.
+
+### Corrected-source qualification and distinct candidate
+
+All10 applicable workflows for source
+`ba3e93703d407c945350c1187e3738d25a3c9eab` complete successfully. Android job
+133023081315/run43782627662 passes mandatory carrier race, API35/27/28/31 lifecycle,
+per-app routing, conformance and exact restricted release payload. Linux's earlier
+appimagetool403 and the prior native-race failure remain historical failures; they
+are not reclassified as infrastructure or waived. No parallel rerun was started.
+
+Downloaded artifact14190548672 is57,492,144bytes, ZIP SHA256
+`7756a1003de2874b4cb9b7c1800ded8949bc18fdbc284fea538c729926917edd`.
+Its receipt source is CI merge `0a2863b3b182ce8ec7a03e91c11749dac2d87c89`, with parents
+main53a780d9/sourceba3e9370 and identical tree
+`8e974dc32e65d2a3096ec28aa773f16c01453e93` to the source head. This distinguishes the
+source head, tested merge and later documentation heads rather than relabelling them.
+
+The **new unsigned** candidate is50,458,549bytes, SHA256
+`2dd0729becd32e3df4b99bfcc65ebeb74fa9eff7bbbad1d106645b07670f3ed5`;
+package `com.familyconnect.app.friends`,0.1.18-beta126/code126, ARM64 only. Manifest,
+unsigned status and16KiB alignment pass. Original signed SHA97513e3f is unchanged;
+its acceptance is not transferred to these bytes. Signing with the existing
+certificate, exact signed descriptor and affected installed gates are still required.
+Redmi is actually connected by ADB; no downgrade/uninstall/data clearing occurs.
 
 ## Installed metadata chain — 16 November
 

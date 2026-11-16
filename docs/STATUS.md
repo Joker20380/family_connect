@@ -1,5 +1,26 @@
 # Текущее состояние / Current state
 
+**16 November12:23UTC — metadata delivery resumed; subscription projection repaired.**
+Only the private subscriptions-source archive pin changes from617c7d75 to accepted
+HTTP70a924db, after provenance/live SHA and negative-pin checks. Configuration backup
+roundtrip, owner/mode and unchanged other fields pass. Local monitor timer alone is
+paused, its cycle drained under the normal lock, then resumed; no server restart,
+archive/image replacement or data rollback. Three ordinary imports at12:20:47,
+12:22:01 and12:23:12 report ok/66 devices. Existing66 device handles and latest event
+handles match the prior successful snapshot; four unique event rows remain. HMAC2,
+metadata source and original notification baseline/cursor remain intact. RU processes
+still match the accepted recovery; recovery and key rotation are not repeated.
+
+Corrected native sourceba3e9370 now has all10 applicable hosted workflows PASS.
+Android133023081315/run43782627662 passes carrier race, API35/27/28/31, separate
+per-app routing and exact release payload. Its downloaded ARM64 artifact14190548672
+is verified: CI merge source0a2863b3 has the identical tree to sourceba3e9370.
+Distinct unsigned candidate126 is50,458,549bytes/SHA2dd0729b; package/code/ARM64 and
+16KiB alignment pass. This does not qualify or alter frozen installed SHA97513e3f.
+Replacement signing, exact signed descriptor and affected device/release gates
+remain. Redmi is connected by ADB; this alone is not replacement acceptance.
+[Current resumed-delivery receipt](releases/2026-11-15-device-technical-metadata.md#resumed-delivery--16-november).
+
 **16 November12:06UTC — authorized RU recovery complete, RECOVERED_CAUSE_OPEN.**
 Fresh consistent backup and isolated27-table restore pass. RU-only fence, drain,
 grouped stop/PID0/no-jobs/zero handlers and retained-state validation precede the

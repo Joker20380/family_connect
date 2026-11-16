@@ -2,6 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
+**16 November12:23UTC — DEVICE-TECHNICAL-METADATA-1 resumed by owner.**
+The stale subscriptions producer pin is corrected, not bypassed: provenance/live
+hash, fail-closed mismatch and config restore/permissions checks pass. Three normal
+imports are ok/66; existing handles/events/HMAC2/baseline/cursor remain. No server
+restart or repeated RU/HMAC/server deployment. Sourceba3e9370 has10 hosted workflows
+PASS, including Android133023081315 API35/27/28/31 and mandatory native race gate.
+Download14190548672 has CI merge0a2863b3/tree equal toba3e9370. The distinct unsigned
+replacement126 SHA2dd0729b/50,458,549bytes passes package/ABI/alignment. Preserve old
+signed SHA97513e3f, its bounded acceptance and failed-source history; it cannot inherit
+this correction. Next: sign this separately qualified replacement, record immutable
+signed bytes/exact descriptor, and repeat affected installed acceptance without
+downgrade or data clearing. Then remaining session/revoke/GeoIP, paid and publication
+gates. ADB Redmi is present; signing/device acceptance is not presumed complete.
+
 **16 November incident interruption: RU-INCIDENT-20261116 recovery complete.**
 The owner separately authorized unchanged-runtime recovery. Fresh backup/isolated
 restore, RU-only fence/drain/grouped stop/retained-state validation and sequential
@@ -14,7 +28,7 @@ restarted. RECOVERED_CAUSE_OPEN is not a permanent latency fix or client-traffic
 acceptance. No observer, restart loop, timeout change or recovery successor selected.
 [Evidence and exact boundary](releases/2026-11-16-ru-recurrence.md).
 
-**Product task to resume: DEVICE-TECHNICAL-METADATA-1 delivery.** Accept the completed RU
+**Product scope: DEVICE-TECHNICAL-METADATA-1 delivery.** Accept the completed RU
 recovery, HMAC generation2 and minimal metadata server deployment without repeating
 them. Frozen signed126 is now installed over original ARM64125. Finish its remaining
 physical acceptance, then load exact paid126 and qualify the installed production
@@ -23,7 +37,7 @@ Preserve aliases and existing paid descriptors. A connected device alone is not
 data-preservation or installed-metadata acceptance.
 No observer/recovery successor is selected. See the current metadata receipt.
 
-Fresh12:04UTC readback identifies a separate pre-existing subscriptions projection
+Historical12:04UTC readback identifies a separate pre-existing subscriptions projection
 gap: the producer still pins HTTP617c7d75, not installed70a924db. Last successful
 snapshot is15November13:47UTC; fresh snapshots are unavailable, despite preserved
 canonical subscriptions and enforcement. Before further metadata acceptance, validate
