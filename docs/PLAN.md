@@ -11,7 +11,24 @@ Preserve aliases and existing paid descriptors. A connected device alone is not
 data-preservation or installed-metadata acceptance.
 No observer/recovery successor is selected. See the current metadata receipt.
 
-Current16 November gate: in-place installation, exact installed bytes, fresh
+Current16 November00:38UTC: owner-enabled installed126 now reaches authenticated API,
+canonical storage, normal generation2 import and the existing real device card.
+Available model/OS/app/default-Wi-Fi/operator observations match; missing radio and
+unqualified IP geography have explicit reasons. Real authenticated1440/390px layout,
+filters and navigation pass. Consent survives process restart and stays ON by the
+owner's explicit choice. Canonical identity/chat pin/subscription are preserved.
+Physical established-session/underlay/RU-AWG city and offline-revoke/cleanup remain.
+Wi-Fi→cellular reaches the same production card; original network settings are
+restored. Do not confuse this disconnected default-network check with VPN underlay.
+New mandatory CI failure133013037055 identifies a native batch/credential-renewal
+data race also present in the frozen artifact source. Fix and qualify that bounded
+defect; do not retry until green while ignoring it or transfer fixed-source results
+to unchanged signed bytes. The old candidate remains immutable/test-only; a corrected
+candidate needs its own source/hash/signature/exact paid descriptor and affected
+device gates. No paid126 loading or publication until then. Linux's independent
+pinned-appimagetool HTTP403 is separate. Accepted server/RU/HMAC stages are not reopened.
+
+Historical16 November00:10UTC gate: in-place installation, exact installed bytes, fresh
 device/chat proof, activation/canonical pin/subscription, four visible settings,
 complete two-entry per-app choice and four observed history rows are preserved.
 Normal relaunch and new metadata consent OFF pass. Five network settings remain

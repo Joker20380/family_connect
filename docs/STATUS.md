@@ -1,5 +1,41 @@
 # Текущее состояние / Current state
 
+**16 November00:38UTC — installed metadata reaches the real production card.**
+The owner explicitly enabled the separate technical-information consent on the
+authorized Redmi. Installed frozen126 sent authenticated observations; canonical
+storage and the normal generation2 collector/importer agree on the existing device
+handle. Model/Android12/API31/app126 and default Wi-Fi match the phone. Both available
+operator fields are present; radio is UNKNOWN with permission_not_granted, without
+adding permissions. AWG is a preference, not a session: DISCONNECTED/NONE is honest.
+City/ASN remain unavailable/no_suitable_direct_observation; actual RU/AWG geography
+and tunnel-underlay acceptance remain open. Multiple normal monitor cycles import
+metadata and ordinary inventory/subscriptions. The authenticated real list/card and
+filters pass at1440/390px; the temporary browser session was removed. Consent stays
+ON after an ordinary process restart, as explicitly chosen by the owner. Canonical
+identity/activation/chat pin/subscription/event count remain unchanged. No server
+deployment, HMAC rotation, payment, public update or paid126 loading occurred.
+The authorized short Wi-Fi→cellular test also reaches canonical storage and the
+same real panel card at sequence13. Standard public ADB Wi-Fi control, not input
+injection, performs the transition; Wi-Fi/mobile-data/airplane-mode settings are
+restored exactly. This is default-network coverage while VPN is disconnected.
+
+New release blocker: Android job133013037055 on documentation head7b86f3 fails the
+mandatory carrier race gate before instrumentation. Downloaded evidence identifies
+a real unsynchronized batch expiry read against credential-renewal commit, not an
+infrastructure assertion or the earlier IPv6 probe. The same code is in frozen
+source61b00409. A deterministic regression fails before the minimal shared-security-
+IO correction; corrected batch tests pass five race-enabled repetitions and the
+original leaf/CRL renewal cases pass. The complete Android carrier dependency
+selection passes locally with packages serialized:13 packages,812 test/subtest
+passes,55 skips, one package without tests, no failures; hosted CI is still required.
+The initial local32-stream reset and missing-vector mount failure remain recorded.
+Frozen signed bytes remain
+unchanged, but cannot inherit this native fix: a separately qualified new candidate,
+signature, exact descriptor and relevant installed checks are required before release.
+Linux133013037148 separately fails downloading pinned appimagetool with HTTP403.
+Earlier0610 full CI PASS remains historical, not a PASS for this newer run.
+[Current real-chain receipt](releases/2026-11-15-device-technical-metadata.md#installed-metadata-chain--16-november).
+
 **16 November00:10UTC — frozen126 installed; observed data preserved; release gate open.**
 Original signed125 was updated in place at23:43:23UTC on the authorized Redmi
 Note9Pro/Android12/API31/ARM64. Pulled installed126 matches the frozen signed APK:

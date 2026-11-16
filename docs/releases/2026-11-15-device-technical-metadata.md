@@ -3,8 +3,8 @@
 ## State
 
 Android source candidate:0.1.18-beta126/code126, package remains
-com.familyconnect.app.friends. CI_QUALIFIED / SIGNED / INSTALLED_ON_TEST_DEVICE /
-NOT_PUBLISHED. The current artifact receipt below supersedes the historical
+com.familyconnect.app.friends. PREVIOUSLY_CI_QUALIFIED / SIGNED / INSTALLED_ON_TEST_DEVICE /
+NOT_PUBLISHED / RELEASE_BLOCKED_NATIVE_RACE. The current artifact receipt below supersedes the historical
 not-built checkpoints. Public125/catalog8, invitation routes
 and accepted paid108/119/123/125 remain unchanged. Never publish a rebuilt125.
 
@@ -16,6 +16,97 @@ baseline, not qualification of this change. No delegated agents.
 Remote main53a780d9ccfcdb2c3ec6141a197917190f9be7a5 verified by fetch. Primary
 checkout8937e71e has unrelated modified/untracked files and diverged history;
 all preserved. Worktree branch: feature/device-technical-metadata-20261115.
+
+## Installed metadata chain — 16 November
+
+The owner explicitly enabled the new separate consent. The selected installed126
+first reached canonical metadata storage (epoch1/sequence1); earlier
+OFF observations and the initially absent lazy database remain valid historical
+evidence. The disclosure dialog was dismissed and the actual switch is ON, not
+inferred from USB support or a conversational acknowledgment.
+
+Normal generation2 collection/import resolves the current pseudonym to the existing
+historical device handle. Canonical and panel payload/received_at match at sequence3
+and sequence6. Later snapshots may briefly lead the next scheduled import; that is
+ordinary asynchronous advancement, not a duplicate card or refreshed old timestamp.
+Normal completed monitor cycles at00:26:44,00:28:00 and00:31:43 import metadata and all
+three inventory sources. The same current card is unique in filtered UI; historical
+InventoryDevice snapshot rows are not counted as duplicate devices.
+
+| Observed group | Real installed-client result / source |
+| --- | --- |
+| Profile | Xiaomi Redmi Note9Pro, Android12/API31, beta126/code126; android_build_package |
+| Network | Wi-Fi/default_network from android_default_network while VPN disconnected; not tunnel-underlay evidence |
+| Mobile | SIM/default-data and registered-network operator fields available; radio UNKNOWN/permission_not_granted; public telephony API, no extra dangerous permission |
+| VPN | Preference AWG, attempt NONE, established transport NONE, state DISCONNECTED, gateway UNKNOWN; connection_service |
+| Diagnostic | Limited NONE/READY observation; no claimed connection failure or established VPN |
+| Geography | DB-IP source reports unknown origin/no_suitable_direct_observation; no city/ASN or physical-location claim |
+| Quality | Five independently timestamped groups, server received_at, explicit reasons and seven-day expiry reach the same card |
+
+Authenticated production browser checks pass at1440 and390px: real matching card,
+combined model/Android/app/network/operator/actual-transport filters, exclusion by a
+nonmatching city, source/freshness disclosure, DB-IP attribution and existing
+subscriptions/servers/support navigation; no horizontal overflow. The temporary
+ten-minute local operator browser session was deleted after the check, without
+changing users/passwords. Screenshots and identifiers remain private, outside Git.
+Panel remains image5ae92f8c with read-only generation2 manifest8602e652; HTTP remains
+70a924db. No server rebuild/redeploy, RU recovery or HMAC rotation.
+
+At00:33:59UTC ordinary app process restart preserves ON and does not show the consent
+dialog again. The temporary in-app USB-provider grant is not silently re-enabled.
+The owner chose metadata ON; network settings remain unchanged and VPN is OFF.
+Read-only canonical comparison still preserves identity, activation/revocation,
+chat binding/support pin, subscription and event count. No payment, term mutation,
+support message, notification baseline reset or public update was issued.
+
+Remaining physical gates: established session/actual underlay, real identity-bound
+RU/AWG GeoIP, offline revoke/online cleanup and post-upgrade
+displayed local support fingerprint. NL/TCP/MESH direct-IP source remains unqualified;
+5G/dual-SIM physical cases remain NOT_OBSERVED. Prior isolated TTL/replay/retention
+tests are not relabelled as a physical offline-revoke observation.
+
+The authorized short Wi-Fi→cellular transition reaches canonical storage and the
+same generation2 production card at sequence13. It uses the standard public ADB
+`svc wifi` command, not input injection or a new app endpoint. Mobile data was already
+enabled; it and airplane mode are not changed. A `finally` restoration returns Wi-Fi
+to its original state and confirms all three settings exactly. Scope is the actual
+default network while disconnected, not a VPN-underlay or physical5G acceptance.
+
+### New mandatory native CI blocker
+
+Android job133013037055/run43779410133 on documentation head7b86f3 fails in
+`Restricted carrier race regression`, before Android instrumentation. Artifact
+14187454221 (1402bytes, SHA4525aa827b7807e06972d4ebc4430a1a82846241b9e6552fcecf1acb9cde758b)
+contains the exact race: `SendBatchContext` reads `session.expiry` in batch.go:32
+while `commitRenewal` writes it in renewal.go:312 under `securityMu`.
+`TestCredentialExchangeSurvivesOriginalDeadline/leaf` detects it during concurrent
+mux traffic and renewal. These source files are unchanged from Android source61b00409;
+this is not attributed to infrastructure or dismissed because a previous run passed.
+
+The bounded correction uses the same begin/end security-IO helper as single-message
+send/receive. It synchronizes expiry and registers the in-flight context bound so
+renewal cannot silently replace that bound. A deterministic blocked-TLS-write
+regression fails on the old implementation for both success/cancellation cases.
+Corrected batch tests pass five repetitions with Go1.26.1/race detection. The
+original leaf/CRL renewal-continuity cases also pass in the broader run. That initial
+local run retains two separate failures: missing repository-level timestamp vectors
+in the carrier-only container mount, and a32-stream TCP forwarding reset. With the
+complete repository mounted, both targeted checks pass twice without assertion or
+timeout changes; the reset's cause is not proven by a later pass. The complete
+Android carrier dependency selection then passes with packages serialized locally:
+13 packages,812 test/subtest pass events,55 skipped cases and one package without
+tests; no failures. This is Go1.26.1/race-enabled local evidence, not Android
+instrumentation or a hosted-CI PASS. Hosted checks remain required.
+No timeout, IPv6 assertion, race detection or certificate/CRL check is relaxed.
+
+Frozen signed126 SHA97513e3f remains unchanged and installed for the recorded metadata
+observations, but it cannot inherit the correction. Do not publish those bytes as
+fixed or load their staged paid descriptor as the final release. A corrected Android
+candidate requires a separate executable source/CI receipt, new immutable hash and
+signature, exact descriptor and affected installed acceptance. This does not reopen
+the accepted metadata server or HMAC/RU work. Linux job133013037148 separately receives
+HTTP403 downloading the pinned appimagetool asset; its GTK/tests pass before that step.
+Prior0610 full CI PASS remains recorded independently.
 
 ## Redmi installed126 — 16 November
 

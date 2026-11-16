@@ -97,6 +97,14 @@ Publish the same signed APK/audio source, increasing signed discovery sequence,
 legacy descriptor and both invitation paths only after those gates. Verify full
 HTTPS bytes, signature/package/signer/code, Range/resume and updater behavior.
 
+If a later mandatory gate proves an Android/native defect also present in the
+frozen candidate, keep its signed bytes and acceptance receipt immutable but block
+publication. Do not transfer corrected-source CI results to that file or silently
+re-sign it. Qualify a distinct replacement candidate with explicit provenance,
+hash/signature and exact paid descriptor, then repeat the affected installed gates.
+The16November batch/credential-renewal race is such a blocker, not an excuse to
+rebuild the already accepted metadata server or repeat HMAC/RU recovery.
+
 ## Owner-assisted signing and device session
 
 Signing and exact signed-descriptor isolated qualification do not require ADB.
