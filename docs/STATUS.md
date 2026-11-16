@@ -1,6 +1,35 @@
 # Текущее состояние / Current state
 
-**15 November23:05UTC — Redmi authorized; private baseline partial, no upgrade.**
+**16 November00:10UTC — frozen126 installed; observed data preserved; release gate open.**
+Original signed125 was updated in place at23:43:23UTC on the authorized Redmi
+Note9Pro/Android12/API31/ARM64. Pulled installed126 matches the frozen signed APK:
+50,478,496bytes, SHA97513e3f, accepted certificate; UID and first-install time remain.
+Fresh post-install device/chat proof, canonical activation/binding/support pin and
+subscription are preserved. Four visible settings, the exact two selected per-app
+entries/mode, five Android network settings and four observed support-history rows
+match125. This is not an export or comparison of the entire local message database.
+Normal relaunch passes; new metadata consent remains OFF. The app again displays a
+fresh non-paid-cohort subscription response, not a claim that VPN access is absent.
+The owner re-enabled app USB support; status/snapshot work. A normal menu tap still
+fails with SecurityException/INJECT_EVENTS. No bypass, repeated permission prompts
+or further one-button navigation requests: the owner has declined that workflow.
+Post-upgrade displayed contact fingerprint, actual VPN/session, opt-in/revoke and
+installed API→collector→panel/GeoIP acceptance remain open. USB support does not
+grant arbitrary taps or technical-metadata consent control. VPN is OFF; no network
+setting changed; temporary USB debugging remains available for unfinished acceptance.
+Android job132995666033/run43773890962 on0610be56 completes PASS, including API35,
+27,28,31 and release-payload checks. Earlier failures/cancellation stay recorded;
+this CI APK does not replace frozen source61b00409's signed bytes.
+Three paid-only overlays are prepared from the actual installed HTTP/operator/
+reconciler archives; only paid_beta changes, all other members remain exact.
+Their archive-origin policies agree on108/119/123/125/126;7 actual-package isolated
+tests PASS in addition to prior168/499 checks. These overlays are NOT_LOADED.
+Fresh readback preserves HTTP70a924db, panel5ae92f8c and read-only generation2
+manifest8602e652. No server restart/deployment, RU recovery, HMAC rotation, payment,
+expiry mutation or public release. Public125/catalog8/paid108/119/123/125 remain.
+[Installed-device receipt and remaining gate](releases/2026-11-15-device-technical-metadata.md#redmi-installed126--16-november).
+
+**Historical15 November23:05UTC — Redmi authorized; private baseline partial, no upgrade.**
 The same original125 Redmi is connected and authorized. A fresh authenticated
 support request proves its existing device identity/activation; read-only canonical
 chat binding and pinned support sender are retained privately. The app confirms a

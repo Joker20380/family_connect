@@ -3,7 +3,7 @@
 ## State
 
 Android source candidate:0.1.18-beta126/code126, package remains
-com.familyconnect.app.friends. CI_QUALIFIED / SIGNED / NOT_INSTALLED /
+com.familyconnect.app.friends. CI_QUALIFIED / SIGNED / INSTALLED_ON_TEST_DEVICE /
 NOT_PUBLISHED. The current artifact receipt below supersedes the historical
 not-built checkpoints. Public125/catalog8, invitation routes
 and accepted paid108/119/123/125 remain unchanged. Never publish a rebuilt125.
@@ -17,7 +17,137 @@ Remote main53a780d9ccfcdb2c3ec6141a197917190f9be7a5 verified by fetch. Primary
 checkout8937e71e has unrelated modified/untracked files and diverged history;
 all preserved. Worktree branch: feature/device-technical-metadata-20261115.
 
+## Redmi installed126 — 16 November
+
+This checkpoint supersedes the earlier NOT_INSTALLED and incomplete-baseline
+checkpoints, not the remaining user-release gates. Development head0610be56;
+Android artifact source61b00409 and frozen signed bytes remain unchanged.
+
+### In-place update and preservation
+
+At23:43:23UTC on15November, normal `adb install --no-streaming -r` succeeded on the
+single authorized ARM64 Redmi. Immediately before installation, the pulled125 still
+matched the accepted public APK hash/size. No uninstall, clear-data, downgrade,
+translation workaround, rebuild or re-sign occurred. At23:44:05UTC the pulled
+installed126 exactly matches SHA256
+`97513e3f62fe107a36e6e1453e07dfdf7fab33588ed637a676fb2cfb0d2de5b8`,
+50,478,496bytes and the previously verified signer
+`67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+Package/code remain `com.familyconnect.app.friends`/126; UID and first-install time
+are unchanged. Installation through ADB is observed; installer/update-button UI
+acceptance is a separate, not yet observed result.
+
+| Boundary | Observed result |
+| --- | --- |
+| Identity and activation | Fresh used device/chat proof issued after installation; canonical device/public/WG/TCP/revoked fields and activation unchanged; no Keystore export |
+| Chat binding | Canonical chat public identity and pinned support sender unchanged; post-upgrade displayed contact fingerprint remains NOT_OBSERVED |
+| Settings | Four previously observed controls unchanged; complete selected-only per-app set of two entries and INCLUDE mode unchanged, no shared-UID ambiguity or unsaved draft |
+| Local support history | All four previously observed rows match, including their visible text/date/status; not an export or verification of the entire message database |
+| Subscription | Canonical subscription/event count unchanged; fresh app response again says not in the paid cohort, which is not a statement that existing VPN access is denied |
+| Restart and consent | Normal relaunch succeeds; new technical consent is observed OFF initially, after relaunch and at00:10UTC |
+| Network/device state | All five observed Android network settings unchanged; VPN OFF; no network setting, paid term or user message created for testing |
+
+Private observations contain the comparisons; no serial, identity, application
+choices, message text, fingerprint or mapping is exported into this report/Git.
+The subscription result is a multiline UI message: matching only complete resource
+strings initially missed its public status fragments. Reading those fragments in
+the actual rendered message confirms the current result; those incomplete reader
+checks are not evidence that the subscription changed. Likewise, per-app mode
+comparison excludes the independent category-filter spinner.
+
+### Actual USB boundary, not another permission prompt
+
+The owner re-enabled in-app USB support on126. Its bounded status/snapshot provider
+works; the snapshot identifies installed code126/API31 and default Wi-Fi while
+disconnected. This is not evidence of an established tunnel underlay. At00:03:14UTC
+a normal ADB tap on the observed chat-menu button still returns exit255,
+SecurityException/INJECT_EVENTS. App USB support is not Android input permission;
+the owner explicitly declines further one-button navigation requests.
+
+No alternate injection channel, secure-window bypass, private app-file extraction
+or expanded support endpoint is used. The existing USB provider has no generic UI
+or metadata-consent operation; its connect command also requires MESH selected in
+the app. Do not change the frozen APK to manufacture an acceptance PASS. Technical
+consent remains OFF and no installed metadata report/real RU-AWG city is claimed.
+Pending local fingerprint, VPN/session, consent/revoke/cleanup and full production
+card acceptance require a usable authorized UI-control path. Temporary USB debug
+settings are not disabled during this unfinished session; restore by agreement
+after acceptance. The disposable read-only UI probe remains needed until then.
+
+### New exact paid overlay qualification, not deployment
+
+Fresh readback retains the actually installed metadata HTTP70a924db, preparation-
+aware operatora7c801db and reconciler40e1d721. The reconciler path comes from its
+effective unit. Each candidate replaces only `control/friends/paid_beta.py`; all
+other ZIP members, including metadata, aliases-related code and preparation hooks,
+remain byte-for-byte unchanged. No whole-main/PR archive substitution.
+
+| Candidate | SHA256 | Other members preserved |
+| --- | --- | ---: |
+| HTTP metadata + paid126 | `7f35b735dcb8a8f39d9adf2e717d1d55afd4ce9f794770028b3f1cf0da4200be` |43|
+| Operator paid126 | `1720ae120843a61e8e5684986918bb68c3a944c8c7606828a5648dcf61048aea` |39|
+| Reconciler paid126 | `ef5afd62a74eca7683158b3ec55f1788db80d1db4ad72907fc2e7aaf451e85c3` |38|
+
+All three origin-verified archive loaders report the identical exact
+`android-paid-108-119-123-125-126-v1` descriptors, including the final signed126 hash.
+Seven actual HTTP/operator package tests PASS in a separate lockfile-based local
+environment and synthetic stores (payment/grace/replay across all five releases,
+policy agreement and complete overlay inventory). Prior168 focused/499 full paid
+tests remain applicable; no real registry payment or expiry change was used.
+Candidates are private/read-only and **NOT_LOADED**. Fresh consistent backups,
+isolated restore and current delta checks remain required immediately before any
+future authorized load; these code copies are not fresh data-backup receipts.
+
+### Current Android CI
+
+Job132995666033, run43773890962, source0610be56: **PASS** on16November,
+with final artifacts uploaded00:08UTC.
+API35 main instrumentation and the separate per-app harness pass; API27 lifecycle/
+Friends/conformance, API28 per-app, API31 catalog/rejected-policy recovery, pinned
+native/release build and exact release-payload verification all complete normally.
+Linux, Windows and Windows compatibility in the same run also pass. The automatic
+publication job is correctly skipped for this PR; no public artifact was released.
+No additional parallel rerun, relaxed assertion, omitted IPv6 or timeout change.
+
+Downloaded/hash-verified evidence distinguishes execution from enumeration:
+API35 main debug73/41 skips and Friends26/4 skips (54 executed,45 skipped);
+API27 debug73/42 skips and Friends26/5 skips (52 executed,47 skipped).
+Both APIs have zero failures/errors. All three metadata instrumentation cases in
+each variant execute without skipping/failure. The independent per-app runner
+reports10 passed tests on each of API35/27/28/31, separately from the main runner.
+
+Bounded evidence artifacts:
+- Runtime14187511753:1,294,982bytes, SHA256
+  `cadfeca6cfe4f52b96ed866963659eeed407b3818de957004d2256409341eb46`.
+- Per-app14187372147:27,550bytes, SHA256
+  `51bf0be210cc6bff1ab59b5319e252357a1a5cab80cf7926c3dde0975e5274bb`.
+
+Earlier TCP reset/IPv6 timeout attempts and the0ecf API27 cancellation remain below;
+a later PASS does not establish their cause. New CI APKs are not substitutes for
+source61's already signed/installed immutable candidate. Subsequent documentation-
+head checks and any future merge head must be reported separately.
+
+### Preserved production and remaining gate
+
+Fresh readback: HTTP70a924db active, panel5ae92f8c running, read-only generation2
+manifest8602e652 unchanged. The dedicated metadata store has not yet been created
+before the first opted-in report; no empty collector result is called end-to-end
+success. No server deployment/restart, RU recovery, HMAC-key access/rotation,
+notification baseline reset, real payment or public publication in this continuation.
+Public125/catalog8/invitations and loaded paid108/119/123/125 stay unchanged.
+
+Next remains the device/UI-dependent acceptance, then the already authorized exact
+paid load and real metadata API→canonical→generation2 collector→production card
+tests, including consent/revoke, real bound RU/AWG observation and layout. NL/TCP/
+MESH retain honest unavailable/aged geography. Physical5G/dual-SIM are NOT_OBSERVED.
+Only after those gates: same APK/source publication, separately signed increasing
+catalog, legacy/invitations/HTTPS/Range/updater checks, ordinary review and merge.
+PR38 stays draft and NOT_USER_READY. No test-device reset to manufacture125 updater
+acceptance; keep protocol and physical update-button installation distinct.
+
 ## Redmi continuation23:05UTC
+
+Historical checkpoint, superseded by the installed-device receipt above.
 
 Continuation source/head0ecf2fe833d6892291d9830404bf904f5220923a. The selected
 Redmi Note9Pro remains original signed125/Android12/API31/ARM64. At22:26UTC ADB

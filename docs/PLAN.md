@@ -4,13 +4,36 @@
 
 **Selected now: DEVICE-TECHNICAL-METADATA-1 delivery.** Accept the completed RU
 recovery, HMAC generation2 and minimal metadata server deployment without repeating
-them. Finish original ARM64125→frozen signed126, then load exact paid126 and qualify
-its installed production chain before optional public release in the agreed order.
+them. Frozen signed126 is now installed over original ARM64125. Finish its remaining
+physical acceptance, then load exact paid126 and qualify the installed production
+chain before optional public release in the agreed order.
 Preserve aliases and existing paid descriptors. A connected device alone is not
 data-preservation or installed-metadata acceptance.
 No observer/recovery successor is selected. See the current metadata receipt.
 
-Current gate: metadata HTTP/panel/collector/GeoIP are minimally deployed and normal
+Current16 November gate: in-place installation, exact installed bytes, fresh
+device/chat proof, activation/canonical pin/subscription, four visible settings,
+complete two-entry per-app choice and four observed history rows are preserved.
+Normal relaunch and new metadata consent OFF pass. Five network settings remain
+unchanged; VPN is OFF. Local displayed support fingerprint and actual VPN/metadata
+opt-in/revoke/production-card/RU-AWG acceptance are still NOT_OBSERVED after upgrade.
+The owner enabled in-app USB support: bounded status/snapshot succeed, but Android
+still rejects ordinary taps with INJECT_EVENTS. It is not an absent ADB connection,
+an expired release vault or permission to bypass input security. Do not keep asking
+the owner for individual navigation taps after their explicit refusal. No support
+messages or private-data entry forms. Keep technical consent OFF until a deliberate
+authorized UI action can actually be performed and verified.
+Android132995666033/run43773890962 on0610be56 is full PASS (API35/27/28/31,
+separate per-app routing, final release payload). Keep prior failed/cancelled results
+and distinguish later documentation-head checks from this qualification.
+Three exact paid126 overlays now preserve the actual metadata/HMAC-aware runtime;
+archive-origin policies agree and7 actual-package isolated tests PASS. No loading
+before the outstanding device gate; fresh backups/delta checks still precede loading.
+No APK rebuild/re-sign, server-stage repeat or public126 publication.
+[Current receipt](releases/2026-11-15-device-technical-metadata.md#redmi-installed126--16-november).
+
+Historical checkpoints below are superseded by this installed-device boundary.
+Metadata HTTP/panel/collector/GeoIP are minimally deployed and normal
 generation2 imports/real legacy-card layout pass. Public125 remains unchanged.
 Vault-backed signing completed20:48UTC: frozen signed126 SHA97513e3f,50,478,496bytes,
 accepted certificate/package/ARM64/alignment and unchanged payload verified. Its
@@ -102,11 +125,12 @@ Source61b00409 full Python/Cargo and failover CI PASS with
 all6337 tests assigned to their normal contexts; explicit276 skips retained.
 Original public125 ARM64 crashes under x86_64 translation; preserve immutable125
 and qualify upgrade on compatible ARM64 rather than rebuilding the accepted APK.
-Versioned API, consent/revoke/retention, Android observations, GeoIP candidate and
-collector/object UI/filter source are prepared, not deployed. Draft PR38 is not
-completion of this task. Android successor source candidate126 is reserved;
-CI test builds are not a qualified release-signed or distributed artifact;
-exact APK descriptor/payment policy and125→126 upgrade remain release gates.
+Versioned API, consent/revoke/retention, GeoIP and collector/object UI/filter server
+path are minimally deployed. Frozen release-signed126 is installed in place on the
+authorized ARM64 Redmi; observed preservation passes with explicitly bounded scope.
+Draft PR38 is not completion: remaining physical consent/session/revoke/GeoIP gates,
+exact paid126 loading and public delivery are still open. CI test builds never
+replace the selected immutable signed artifact.
 Controlled local GeoIP IPv4/IPv6 lookup passes; actual installed-client/production
 peer enrichment remains NOT_OBSERVED. RU/AWG source does not qualify NL/TCP or
 MESH city attribution. Keep unavailable/aged semantics, not gateway geography.

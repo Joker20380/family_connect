@@ -139,8 +139,20 @@ owner's request, without silently changing databases.
    If the owner declines data-entry forms, stop those forms. Request only the
    concrete on-device navigation/unlock that cannot be performed with the available
    permissions; the assistant can read/compare the resulting screen privately.
+   If the owner also declines repeated navigation taps, stop that workflow and
+   finish independent qualification rather than repeatedly asking the same thing.
+   In-app USB support is a separate, temporary provider grant: status/snapshot
+   success does not authorize Android input injection or change metadata consent.
+   Its existing connect operation requires MESH already selected; it cannot select
+   RU/AWG, open arbitrary dialogs or toggle technical consent. Do not expand this
+   endpoint or rebuild the frozen candidate to get around an acceptance blocker.
    A contact-list preview is not a full local history or pinned-key comparison.
    Record package verification separately from UI/data-preservation acceptance.
+   Compare rendered multiline subscription summaries by their public status
+   fragments, not equality with a single resource string. For per-app policy,
+   compare the mode spinner and complete saved selected-only set separately from
+   the category filter. Keep observed history-page scope distinct from a full DB
+   comparison. Never interpret a reader-shape mismatch as lost application data.
 2. Select the existing release KeePassXC vault in the local signing dialog and
    unlock it there. Do not send its password, key or recovery attachment in chat.
    Follow the [vault signer procedure](../android-vault-signing.ru.md); pin the
