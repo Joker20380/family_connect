@@ -2,18 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
-**16 November incident interruption: RU-INCIDENT-20261116, read-only diagnosis.**
-The owner's new outage report supersedes the assumption that RU is currently healthy.
-Watchdog08:12:36UTC precedes protective transport stops; the retained08:13:10 lock
-timeout is a later startup failure. Accepted runtime pins match, but RU is not restored.
-HTTP also restarts during observation without any command from this diagnostic run;
-coordinate its unknown initiating activity before production mutation. No new observer,
-restart loop, timeout change, key rotation or deployment is selected. Separate narrow
-RU recovery must use fresh guards and the existing data-preserving procedure; earlier
-15November recovery is historical, not today's availability PASS.
+**16 November incident interruption: RU-INCIDENT-20261116 recovery complete.**
+The owner separately authorized unchanged-runtime recovery. Fresh backup/isolated
+restore, RU-only fence/drain/grouped stop/retained-state validation and sequential
+start pass; original command map restored. After an explained first-renewal TCP
+restart, six strict observations over210.483s confirm stable actual20 AWG/20 TCP,
+66 applied records and admission renewal across the initial observed deadline.
+The failed initial continuity check remains evidence, not PASS. Protected data,
+generation2 and notification baseline/cursor are preserved; HTTP/peer were not
+restarted. RECOVERED_CAUSE_OPEN is not a permanent latency fix or client-traffic
+acceptance. No observer, restart loop, timeout change or recovery successor selected.
 [Evidence and exact boundary](releases/2026-11-16-ru-recurrence.md).
 
-**Selected now: DEVICE-TECHNICAL-METADATA-1 delivery.** Accept the completed RU
+**Product task to resume: DEVICE-TECHNICAL-METADATA-1 delivery.** Accept the completed RU
 recovery, HMAC generation2 and minimal metadata server deployment without repeating
 them. Frozen signed126 is now installed over original ARM64125. Finish its remaining
 physical acceptance, then load exact paid126 and qualify the installed production
@@ -21,6 +22,15 @@ chain before optional public release in the agreed order.
 Preserve aliases and existing paid descriptors. A connected device alone is not
 data-preservation or installed-metadata acceptance.
 No observer/recovery successor is selected. See the current metadata receipt.
+
+Fresh12:04UTC readback identifies a separate pre-existing subscriptions projection
+gap: the producer still pins HTTP617c7d75, not installed70a924db. Last successful
+snapshot is15November13:47UTC; fresh snapshots are unavailable, despite preserved
+canonical subscriptions and enforcement. Before further metadata acceptance, validate
+the installed archive/provenance, update only that exact collector pin atomically
+with fields/permissions preserved, and verify ordinary imports and negative-pin
+checks. Do not weaken the pin or claim earlier monitor completion proved fresh
+subscriptions. This follow-up was not performed by the narrow RU recovery.
 
 Current16 November00:38UTC: owner-enabled installed126 now reaches authenticated API,
 canonical storage, normal generation2 import and the existing real device card.

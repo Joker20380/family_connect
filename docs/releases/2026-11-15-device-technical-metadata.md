@@ -2,7 +2,24 @@
 
 ## State
 
-16 November11:42UTC interruption: the owner's new RU outage is confirmed by
+16 November12:06UTC: separately authorized unchanged-runtime RU recovery is complete.
+[Fresh recovery receipt](2026-11-16-ru-recurrence.md) records consistent backup/restore,
+protected-data/HMAC2 preservation and six strict post-convergence checks over210.483s
+with admission renewal. The initial continuity failure and explained first-renewal
+TCP restart are retained. Root cause remains open; no new physical VPN/GeoIP or
+release acceptance is inferred. No APK, paid policy, HTTP/panel image or HMAC change.
+
+Fresh readback also corrects the earlier broad claim of successful subscription
+imports: panel subscription snapshots are unavailable, with last success at
+15November13:47:21UTC on HTTP617c7d75. The subscriptions source still pins that
+pre-metadata archive instead of accepted70a924db. Canonical subscriptions/enforcement
+and notification baseline/cursor remain intact. This pre-existing producer-pin gap
+is not changed by RU recovery. Before metadata acceptance resumes, validate and
+atomically correct the exact source pin, preserve other configuration/permissions,
+then verify normal imports and fail-closed mismatch checks. Inventory/transport and
+metadata imports themselves remain fresh. Native-race and release gates stay open.
+
+Historical16 November11:42UTC interruption: the owner's new RU outage is confirmed by
 [separate read-only diagnosis](2026-11-16-ru-recurrence.md). AWG/TCP are down after
 a watchdog timeout; no recovery or server mutation is performed here. Accepted
 metadata HTTP/panel hashes remain, and the normal monitor still imports metadata.

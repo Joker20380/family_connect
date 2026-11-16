@@ -1,6 +1,31 @@
 # Текущее состояние / Current state
 
-**16 November11:42UTC — RU recurrence confirmed, NOT_RECOVERED / CAUSE_OPEN.**
+**16 November12:06UTC — authorized RU recovery complete, RECOVERED_CAUSE_OPEN.**
+Fresh consistent backup and isolated27-table restore pass. RU-only fence, drain,
+grouped stop/PID0/no-jobs/zero handlers and retained-state validation precede the
+sequential start of unchanged watcher/AWG/TCP; the original three-node command map
+is restored. Six strict post-convergence observations span210.483s:66 applied records,
+exact20 AWG/20 TCP sets, stable processes and admission renewal across the first
+observed deadline. The first continuity check failed on a TCP restart during the
+ordinary first reconciliation after the paused lease expired; both the failure and
+separate post-convergence anchor are retained, not treated as an unbroken start.
+Eight protected canonical-table fingerprints, transport identities/terms/prepared
+state, six effective units and HMAC generation2 remain unchanged. Support stays up;
+notification baseline/cursor remain4 with the original baseline time and matching
+anchor. HTTP/peer services were not restarted by recovery. Fresh panel transport,
+inventory and metadata imports continue. This restores service, not the unknown
+cause of recurring watchdog/I/O delay or physical-client VPN acceptance.
+
+Separate pre-existing metadata delivery gap: the panel subscriptions collector still
+pins HTTP617c7d75, while accepted HTTP is70a924db; latest subscription projections
+are unavailable (last successful15November13:47UTC). Canonical subscriptions and
+enforcement are preserved. No pin was changed by this narrow recovery. Correct and
+verify this exact producer pin when metadata work resumes; the earlier claim of
+successful fresh subscription imports is not supported by this readback.
+Public125, paid108/119/123/125 and frozen test126 are unchanged; no release resumes
+automatically. [Recovery receipt and limits](releases/2026-11-16-ru-recurrence.md).
+
+**Historical16 November11:42UTC — RU recurrence confirmed, NOT_RECOVERED / CAUSE_OPEN.**
 Read-only diagnosis of the owner's new report finds a watchdog timeout at08:12:36UTC,
 followed by protective AWG/TCP stops. The retained8s lock-deadline failure at08:13:10
 belongs to a subsequent watcher start, not the initiating failure. AWG is failed/PID0,

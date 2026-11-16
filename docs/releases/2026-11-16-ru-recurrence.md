@@ -1,6 +1,137 @@
 # RU recurrence — 16 November 2026
 
-## Outcome: NOT_RECOVERED / CAUSE_OPEN
+## Current outcome: RECOVERED_CAUSE_OPEN
+
+After the read-only diagnosis, the owner explicitly confirmed a separate controlled
+RU recovery on the existing runbook, without new runtime code, HMAC2 changes or
+subscription/user-data changes. Recovery runs from source documentation checkpoint
+26b267625a52781fe1589b15703500b81e5b3786; the dirty primary checkout is untouched.
+This is service restoration on accepted bytes, not a permanent watchdog/latency fix.
+
+### Fresh guards, backup and recovery
+
+At11:51:57UTC accepted runtime hashes listed below, effective units, ownership and
+private-parent permissions match. Root free space is7.02GiB; MemAvailable1,211,020KiB.
+RU/operator generation2 key agreement is checked in-process without exporting keys.
+HTTP remains active from11:40:07 and its process/invocation stays unchanged throughout
+recovery; no further concurrent HTTP action is observed. Peer service also remains.
+
+A fresh consistent canonical SQLite backup is restored in isolation: integrity,
+foreign keys, all27 table fingerprints and exact-runtime paid projections for all
+three nodes at the same clock pass. Backup SHA256:
+`f3e9240de5939d0c81e3b376f4bd1dbf9e62fae143504f92492a3f4d369e7bd4`.
+The pre-start native state/config/peer backup is copied offline with AES-256-GCM;
+203,650 encrypted bytes, SHA256:
+`8f8da951cb6d208b65ecddcf789a03782051e1110778d5dc0ff82f39b97ced0f`.
+Decryption/digest roundtrip passes; key and raw evidence stay in the protected local
+contour. No backup is restored over live data.
+
+At11:52:56UTC the RU-only command fence is in place, NL entries are unchanged and
+central reconciliation continues. Current work is drained; grouped watcher/AWG/TCP
+stop reaches PID0, no jobs and zero gateway handlers. Retained-state validation
+passes with66 records/20 peers before startup. The first-failure bytes are preserved
+without overwrite. At11:54:45UTC the unchanged watcher, AWG and TCP are started
+sequentially; original three-node command-map bytes are restored. No HTTP, peer,
+paid-reconciler timer, local support worker or panel restart is issued by recovery.
+
+### Initial continuity failure and separate convergence anchor
+
+The first continuity check **fails**: TCP changes PID after the startup receipt.
+That failure and the original receipt remain retained, not relabelled PASS.
+The paused cohort deadline was11:54:26UTC, before the11:54:45 start. The ordinary
+11:55:12–18 reconciliation renews admission; TCP restarts at11:55:14. Accepted
+`Gateway.plan()` excludes expired admission at startup and `apply_serialized()`
+restarts TCP when configuration changes. The paused and post-renewal20-client
+id/email/flow dictionaries match exactly. The intermediate configuration was not
+sampled: no claim of an observed19-client intermediate set is made.
+
+Watcher/AWG/HTTP/peer process and invocation remain unchanged, no new failure record
+appears, and subsequent reconciliation applies all three nodes. Only after those
+checks a separate post-convergence anchor is recorded. All original continuity,
+actual/persisted, identity, protected-data and lease assertions are rerun against
+that anchor; none is removed. This is not an unbroken startup or a restart retry.
+
+### Six strict observations and preservation
+
+| UTC | Records / AWG / TCP | Attempt age, seconds | Cohort deadline UTC |
+| --- | --- | --- | --- |
+| 12:00:31.247 | 66 / 20 / 20 | 1.247 | 12:02:17 |
+| 12:01:35.178 | 66 / 20 / 20 | 1.179 | 12:03:25 |
+| 12:02:11.968 | 66 / 20 / 20 | 0.968 | 12:03:59 |
+| 12:02:48.562 | 66 / 20 / 20 | 1.562 | 12:04:33 |
+| 12:03:25.041 | 66 / 20 / 20 | 1.041 | 12:05:07 |
+| 12:04:01.731 | 66 / 20 / 20 | 1.731 | 12:05:40 |
+
+The210.483s window crosses the first observed deadline and exceeds120s. All revisions
+are applied; actual AWG/TCP sets and TCP bindings match persisted decisions. Watcher,
+AWG and TCP remain active with stable processes/invocations and NRestarts0 throughout
+this window. Original command map and generation2 files remain unchanged.
+
+Fresh12:06:35UTC preservation readback compares full table fingerprints, not only
+historical counts:
+
+| Protected canonical domain | Before | After | Fingerprint |
+| --- | --- | --- | --- |
+| devices | 66 | 66 | unchanged |
+| invites | 121 | 121 | unchanged |
+| paid_beta_subscriptions | 1 | 1 | unchanged |
+| paid_beta_events | 4 | 4 | unchanged |
+| chat_bindings | 53 | 53 | unchanged |
+| chat_service_senders | 1 | 1 | unchanged |
+| referral_links | 19 | 19 | unchanged |
+| referral_claims | 59 | 59 | unchanged |
+
+All66 retained transport identities, membership, terms and prepared state match;
+normal renewal/observation timestamps are compared separately, not mistaken for
+data loss. Six effective unit definitions are unchanged. Original command-map SHA:
+`d07803df7c82d4dfabd6eb1131d8c9132a1df8f1a84f2103ca33fe13a5d48b11`.
+Generation2 manifest digest:
+`8602e6526ca1ec0e408c99a7ca37aedc4413b417f392e32096d5167517fcdcb8`.
+RU/operator active keys agree inside the protected process. Archived first-failure
+hash remains83daf777; no replacement failure appears. No old key, database, timeout
+or policy is installed. Public125/catalog8 and paid108/119/123/125 are unchanged.
+
+### Support, panel and a separate existing projection gap
+
+Local support worker stays active without restart. Read-only support IPC confirms
+cursor4, baseline position4, excluded-events4, original baseline time14November
+12:48:20UTC and baseline-position hash equal to cursor anchor; source_error is null.
+The selected existing device has no notification jobs. This is not a full encrypted
+message-history comparison or global-job-count proof. No test payment, term change,
+support message or notification is created; new notification delivery is NOT_OBSERVED.
+
+Panel stays on image5ae92f8c with generation2/manifest8602e652. Normal RU transport
+observation12:02:08/import12:02:09 reports ok/66 records on node125c796a; inventory
+and metadata imports are fresh. Both NL transport sources report ok/66 records.
+
+However, subscriptions snapshots are **unavailable**, last success15November
+13:47:21UTC/66 devices. Structured read of the existing source configuration finds
+its expected archive SHA still
+`617c7d752a20631d624b301c59142af34f3624483a5d2d5adc2a7c7722dd74b1`,
+while installed metadata HTTP is70a924db. The collector rejects that mismatch before
+canonical import. This is a pre-existing stale producer pin, not erased subscriptions
+or a recovery-induced change. The earlier broad metadata receipt claim of fresh
+subscription imports is corrected by this readback. Canonical data/enforcement and
+notification cursor remain preserved. No source pin is changed in this RU-only task.
+Metadata follow-up must validate provenance, atomically update this exact pin while
+preserving other fields/permissions, then verify normal import and fail-closed pins.
+
+### Limits and recovery posture
+
+Root cause remains open: the incident evidence below shows watchdog ordering and
+concurrent I/O delay, not causal attribution. No observer, pressure workload, runtime
+fix or restart loop is introduced. Physical client traffic and RU/AWG geography are
+NOT_RUN here. No phone/network/consent setting changes; no APK or paid126 publication.
+There is no active fence left to undo. On a new incident use fresh guarded recovery,
+not a stale DB restore or automatic old-key rollback. Metadata release does not
+resume automatically from this incident closeout.
+
+Closeout qualification: documentation checker passes6 files/851 links with zero
+errors; whitespace and staged secret/raw-identifier checks pass. Review is the
+author's own. No new runtime source or full CI qualification is claimed by this
+documentation-only change; operational checks are the separate receipts above.
+
+## Historical diagnosis: NOT_RECOVERED / CAUSE_OPEN at11:42UTC
 
 The owner's new report is confirmed by read-only checks at11:32–11:42UTC.
 AWG is failed/PID0/result timeout; TCP is inactive/PID0. Watcher is intermittently
@@ -77,7 +208,7 @@ subscription reconciliation or actual notification delivery. No keys, aliases,
 identities, messages, canonical data, paid terms, baseline/cursor or phone settings
 are changed by this diagnosis. No new full preservation comparison is claimed.
 
-## Recovery boundary
+## Historical recovery boundary before owner confirmation
 
 Metadata release/physical acceptance is interrupted. The signed candidate stays
 immutable and unpublished; exact paid126 remains unloaded. The independent native
@@ -95,6 +226,6 @@ If drain/preflight fails, keep the safe fence and diagnose rather than retry-loo
 Recovery preserves generation2 and all current user data; it would not close the
 cause of recurring latency or substitute for physical client acceptance.
 
-Documentation checks:6 changed files/849 links, zero errors; whitespace and staged
+Initial diagnosis documentation checks:6 changed files/849 links, zero errors; whitespace and staged
 secret/raw-device-ID pattern checks pass. Review is the author's own; no runtime
 or independent review PASS is claimed by this documentation checkpoint.
