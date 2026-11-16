@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**16 November21:45UTC — public126 unchanged; final PR38 integration is CI-blocked.**
+Head a1d5f632 fails two separate Android jobs: push133603441862 at API35, with
+99-case main summary clean but no retained per-app receipt; PR133603450734 passes
+per-app API35/27/28 and fails one API31 DNS assertion after TCP service resume.
+The missing/empty DNS result follows successful IPv4/TLS in that probe; its UID,
+resolver error and cause are not retained. This is not a proven infrastructure fault.
+Preserve both failures. A test-only diagnostics change adds assertion observations,
+the omitted service receipt and explicit harness/fixture logs; no condition, IPv6
+check or timeout changes. Published APK4f288cbb/sourceba3e9370 and production remain
+unchanged. Do not merge or claim final-head PASS before the applicable checks finish.
+[Failure evidence and scope](releases/2026-11-16-android126-publication.md#final-head-ci-failure-and-evidence-repair).
+
 **16 November20:42UTC — DEVICE-TECHNICAL-METADATA-1 PUBLIC / optional catalog9.**
 The accepted signed126/4f288cbb is now the invitation and updater release. Full HTTPS
 APK/source/audio hashes, signer/package/ARM64/API27, Range/resume, signed discovery,

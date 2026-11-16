@@ -108,7 +108,7 @@ jobs:
             bash -o pipefail -c 'python3 -u pilot/android-awg/run.py 2>&1 | tee android-emulator-runner.log'
             bash -o pipefail -c 'python3 -u pilot/android-awg/friends_ci.py 2>&1 | tee android-friends-runtime.log'
             bash -o pipefail -c 'python3 -u pilot/android-awg/consolidated_ci.py 2>&1 | tee android-consolidated-runtime.log'
-            python3 pilot/android-app-vpn/run.py --serial emulator-5554 --out "$RUNNER_TEMP/app-vpn-api35"
+            bash -o pipefail -c 'python3 -u pilot/android-app-vpn/run.py --serial emulator-5554 --out "$RUNNER_TEMP/app-vpn-api35" 2>&1 | tee "$RUNNER_TEMP/app-vpn-api35-harness.log"'
       - name: Publish bounded Android runtime summary
         if: always()
         run: python3 pilot/android-awg/report_ci.py
@@ -130,7 +130,7 @@ jobs:
           script: |
             bash -o pipefail -c 'python3 -u pilot/android-awg/run.py 2>&1 | tee android-legacy-emulator-runner.log'
             bash -o pipefail -c 'python3 -u pilot/android-awg/friends_ci.py --legacy 2>&1 | tee android-legacy-friends-runtime.log'
-            python3 pilot/android-app-vpn/run.py --serial emulator-5554 --out "$RUNNER_TEMP/app-vpn-api27"
+            bash -o pipefail -c 'python3 -u pilot/android-app-vpn/run.py --serial emulator-5554 --out "$RUNNER_TEMP/app-vpn-api27" 2>&1 | tee "$RUNNER_TEMP/app-vpn-api27-harness.log"'
       - name: Publish bounded Android 8.1 runtime summary
         if: always()
         run: python3 pilot/android-awg/report_ci.py
@@ -144,7 +144,7 @@ jobs:
           target: default
           disable-animations: true
           emulator-options: -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -dns-server 1.1.1.1
-          script: python3 pilot/android-app-vpn/run.py --serial emulator-5554 --out "$RUNNER_TEMP/app-vpn-api28"
+          script: bash -o pipefail -c 'python3 -u pilot/android-app-vpn/run.py --serial emulator-5554 --out "$RUNNER_TEMP/app-vpn-api28" 2>&1 | tee "$RUNNER_TEMP/app-vpn-api28-harness.log"'
       - name: Android 12 catalog and rejected-policy recovery
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -153,19 +153,25 @@ jobs:
           target: google_apis
           disable-animations: true
           emulator-options: -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect -dns-server 1.1.1.1
-          script: python3 pilot/android-app-vpn/run.py --serial emulator-5554 --out "$RUNNER_TEMP/app-vpn-api31"
+          script: bash -o pipefail -c 'python3 -u pilot/android-app-vpn/run.py --serial emulator-5554 --out "$RUNNER_TEMP/app-vpn-api31" 2>&1 | tee "$RUNNER_TEMP/app-vpn-api31-harness.log"'
       - name: Save per-app routing receipts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: Android-app-vpn-routing
           path: |
+            ${{ runner.temp }}/app-vpn-api*-harness.log
+            ${{ runner.temp }}/app-vpn-api*/fixture.log
+            ${{ runner.temp }}/app-vpn-api*/fixture/awg.log
+            ${{ runner.temp }}/app-vpn-api*/fixture/xray.log
+            ${{ runner.temp }}/app-vpn-api*/fixture/traffic.json
             ${{ runner.temp }}/app-vpn-api*/instrumentation.log
             ${{ runner.temp }}/app-vpn-api*/routing.json
             ${{ runner.temp }}/app-vpn-api*/automatic.json
             ${{ runner.temp }}/app-vpn-api*/owner-health.json
             ${{ runner.temp }}/app-vpn-api*/package-removal.json
             ${{ runner.temp }}/app-vpn-api*/screen.json
+            ${{ runner.temp }}/app-vpn-api*/service.json
             ${{ runner.temp }}/app-vpn-api*/catalog.json
             ${{ runner.temp }}/app-vpn-api*/ui-recovery.json
             ${{ runner.temp }}/app-vpn-api*/rejection.json

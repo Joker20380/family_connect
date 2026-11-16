@@ -2,6 +2,16 @@
 
 ## Current engineering priority / Текущий critical path
 
+**16 November21:45UTC — finish PR38 qualification; no blind rerun or merge.**
+Public126/catalog9 remains immutable and available. Final-head a1d5f632 Android
+push/API35 and PR/API31 fail separately; main99-case success does not cover the
+independent per-app harness. API31 fails DNS presence after TCP resume; exact probe
+details were lost because service.json was omitted from artifacts. Repair evidence
+retention without weakening assertions/timeouts, qualify the test-only change and
+retain the original failed attempts. No executable/candidate change or production
+redeployment; no infrastructure cause or full current-head PASS is established.
+[Evidence](releases/2026-11-16-android126-publication.md#final-head-ci-failure-and-evidence-repair).
+
 **16 November20:42UTC — DEVICE-TECHNICAL-METADATA-1 PUBLIC / optional catalog9.**
 The accepted signed126/4f288cbb is now the invitation and updater release. Full HTTPS
 APK/source/audio hashes, signer/package/ARM64/API27, Range/resume, signed discovery,
