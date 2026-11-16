@@ -4,6 +4,24 @@ Current receipt: [15 November](../releases/2026-11-15-device-technical-metadata.
 This is not RU recovery, HMAC rotation or permission to install all of PR38.
 Generation2 and the accepted RU recovery are the base. Public125 remains supported.
 
+Installed-chain checkpoint16 November14:49UTC: corrected signed4f288cbb reaches its
+original generation2 card after explicit consent, with exact canonical/imported
+observations and independent Android/Wi-Fi checks. Real UI1440/390px passes. Observed
+AWG/NL1 Wi-Fi does not qualify a city: only the prepared RU/AWG peer source does.
+Actual Russia/AWG acceptance now binds the device's canonical AWG key to one fresh
+peer and local DB-IP Lite2026-11; required geographic/ASN fields match the real panel.
+The raw endpoint remains transient inside the collector process, not evidence/logs.
+This confirms database lookup provenance, not physical location. NL/TCP/MESH remain
+unqualified. Finish network/revoke tests, then restore the initial NL1/consent state.
+Do not treat a latest-report/collector-cycle lag as refreshed old observations.
+
+For native cancellation qualification, `Session.Done()` signals cancellation, not
+completed underlying `Close()`. A blocked-write harness must observe actual transport
+closure before releasing that write and asserting its error. Retain the existing
+deadline/error/bound-cleanup assertions; do not extend timeouts or weaken them.
+The current correction changes only the test harness. Frozen APK/source provenance
+and loaded paid descriptor are unchanged; hosted corrected-head CI is still required.
+
 ## Qualified boundaries
 
 - HTTP: `scripts/package_technical_metadata_overlay.py` changes only

@@ -2,7 +2,27 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Current boundary — exact paid loaded16 November14:07UTC:** local support fingerprint
+**Current boundary — installed metadata chain16 November14:49UTC:** explicit consent
+produces epoch3 and an authenticated body-bound report. Its exact observations and
+received_at reach the original generation2 production card; Android properties and
+Wi-Fi match independently. Real1440/390px card/list/filter/source/navigation checks
+pass30 assertions. AWG/NL1 establishes over the owned VPN's observed Wi-Fi underlay;
+preference, connecting attempt and established transport remain separate. NL1 city
+stays unavailable. Real Russia/AWG peer geography now passes: canonical device/key
+binding, fresh handshake, local DB-IP Lite2026-11 and panel fields agree, without raw
+IP/coordinates. This is database attribution, not physical-location proof. Next
+finish network/restart/online-offline revoke, restore initial settings/consent and
+complete public delivery. MIUI still denies normal injected taps; no bypass.
+
+Android133352606266 fails the batch cancellation harness before instrumentation.
+The bounded test-only fix awaits actual transport closure, not only Done, retaining
+timeouts/assertions. Local100-repeat race and full selected scope812/55 skips pass;
+hosted corrected-head acceptance is pending. No native executable/APK change and no
+rebuild/re-sign. Keep signed4f288cbb, loaded exact paid-v2, HMAC2, accepted server image
+and public125/catalog8. Do not repeat RU recovery, rotation or server deployment.
+PR remains draft; this is a successful installed metadata path, not a public release.
+
+**Historical boundary — exact paid loaded16 November14:07UTC:** local support fingerprint
 matches the preserved canonical key, without exporting it. The frozen installed4f288cbb
 retains the completed bounded identity/settings/history acceptance. Exact paid-v2
 overlays are now loaded in HTTP/operator/reconciler, preserving108/119/123/125; both
@@ -239,11 +259,12 @@ and qualify upgrade on compatible ARM64 rather than rebuilding the accepted APK.
 Versioned API, consent/revoke/retention, GeoIP and collector/object UI/filter server
 path are minimally deployed. Frozen release-signed126 is installed in place on the
 authorized ARM64 Redmi; observed preservation passes with explicitly bounded scope.
-Draft PR38 is not completion: remaining physical consent/session/revoke/GeoIP gates,
-exact paid126 loading and public delivery are still open. CI test builds never
+Exact paid126 is loaded and the corrected installed metadata chain reaches its real
+generation2 card. Draft PR38 is not completion: remaining physical network/revoke
+gates, current-head CI and public delivery are still open. CI test builds never
 replace the selected immutable signed artifact.
-Controlled local GeoIP IPv4/IPv6 lookup passes; actual installed-client/production
-peer enrichment remains NOT_OBSERVED. RU/AWG source does not qualify NL/TCP or
+Controlled local GeoIP IPv4/IPv6 lookup and actual installed-client/production
+RU peer enrichment pass. RU/AWG source does not qualify NL/TCP or
 MESH city attribution. Keep unavailable/aged semantics, not gateway geography.
 Complete exact source/platform CI before signing/deployment; no acceptance waiver.
 Implement separately consented, identity/content-bound technical observations,

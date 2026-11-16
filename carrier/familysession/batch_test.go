@@ -13,13 +13,21 @@ type batchWriteBarrier struct {
 	net.Conn
 	entered chan struct{}
 	release chan struct{}
+	closed  chan struct{}
 	once    sync.Once
+	closing sync.Once
 }
 
 func (barrier *batchWriteBarrier) Write(payload []byte) (int, error) {
 	barrier.once.Do(func() { close(barrier.entered) })
 	<-barrier.release
 	return barrier.Conn.Write(payload)
+}
+
+func (barrier *batchWriteBarrier) Close() error {
+	err := barrier.Conn.Close()
+	barrier.closing.Do(func() { close(barrier.closed) })
+	return err
 }
 
 func TestBatchRegistersAndClearsSecurityBound(test *testing.T) {
@@ -33,7 +41,7 @@ func TestBatchRegistersAndClearsSecurityBound(test *testing.T) {
 			defer cancel()
 			clientProfile, serverProfile := profiles(test)
 			client, server := connect(test, ctx, clientProfile, serverProfile)
-			barrier := &batchWriteBarrier{Conn: client.stream.Conn, entered: make(chan struct{}), release: make(chan struct{})}
+			barrier := &batchWriteBarrier{Conn: client.stream.Conn, entered: make(chan struct{}), release: make(chan struct{}), closed: make(chan struct{})}
 			client.stream.Conn = barrier
 			var release sync.Once
 			unblock := func() { release.Do(func() { close(barrier.release) }) }
@@ -60,6 +68,11 @@ func TestBatchRegistersAndClearsSecurityBound(test *testing.T) {
 				case <-client.Done():
 				case <-ctx.Done():
 					test.Fatal("cancelled batch did not stop its session")
+				}
+				select {
+				case <-barrier.closed:
+				case <-ctx.Done():
+					test.Fatal("cancelled batch did not close its transport")
 				}
 			}
 			unblock()

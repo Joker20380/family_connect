@@ -1,6 +1,46 @@
 # Текущее состояние / Current state
 
-**16 November14:07UTC — local pin verified; exact paid126 LOADED, not published.**
+**16 November14:49UTC — corrected installed126 and real RU peer geography accepted.**
+The owner explicitly enabled technical-information consent. Epoch3/sequence36 has
+one used content-bound proof; canonical observations and received_at exactly match
+the generation2 panel import on the original durable handle, with one existing card
+and retained inventory history. Manufacturer/model/Android/API match Android system
+properties, app is126, and Wi-Fi/default-network matches independent OS evidence.
+SIM and registered operator names are available for the default data subscription;
+radio is honestly UNKNOWN/permission_not_granted on API31. No new permission.
+Authenticated real-card/list checks pass30 assertions at1440/390px, including filters,
+source expansion, freshness, unavailable geography and existing navigation; temporary
+browser session removed. No synthetic device data or public identifiers were used.
+
+The owner then connected: actual AWG/NL1 over Wi-Fi is observed independently of
+preference/attempt; the owned VPN's OS capabilities confirm Wi-Fi underlay. During
+the attempt, CONNECTING/AWG/NONE remained distinct from CONNECTED/NONE/AWG. The next
+normal imports may lag a newer device sample; their original timestamps are retained.
+NL1/AWG has no qualified direct GeoIP source, so city is unavailable rather than a
+gateway location. The owner subsequently selected Russia/AWG. At14:42 and14:46UTC,
+the canonical device's exact AWG public key identifies one live peer with a fresh
+handshake; local DB-IP Lite2026-11 enrichment and the real panel agree on country,
+region, city, ASN and organization. Both database hashes are present; no retail ISP,
+raw IP or coordinates are projected. This proves database attribution, not physical
+location. Real geographic display/city filter and sources pass32 browser assertions
+at1440/390px, with no page errors and the temporary session removed. Restore original
+NL1 and consent after acceptance. Normal
+input still receives INJECT_EVENTS/exit255; no bypass or repeated USB grant.
+
+Current-head Android133352606266 failed the native batch cancellation test, before
+instrumentation (zero runtime cases, not the earlier TCP/IPv6 failure). The retained
+artifact identifies a harness ordering error: Done closes before transport Close.
+The test now waits for observed Close completion, retaining every existing assertion
+and timeout and adding a closure assertion. No executable Android/native source or
+APK bytes change. Local Go1.26.1 race checks pass100 repetitions and the complete
+CI dependency scope812 cases/55 explicit skips. The first local network-none run
+failed two ICE tests and exposed a test-error logging race; it is not a full PASS.
+The subsequent run uses a normal isolated container network rather than network-none;
+no production transport change. Hosted acceptance of this correction is pending.
+Paid-v2/HMAC2/server image remain as accepted below; public125/catalog8 stay unchanged.
+Corrected-byte revoke/network acceptance and public release remain open.
+
+**Historical16 November14:07UTC — local pin verified; exact paid126 LOADED, not published.**
 The owner opened the support fingerprint dialog. Its locally compared digest matches
 the preserved canonical support key; no fingerprint/private key was exported. This
 closes the observed contact-pin gate alongside retained identity, settings and the

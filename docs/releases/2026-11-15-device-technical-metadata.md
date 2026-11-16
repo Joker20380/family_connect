@@ -2,7 +2,16 @@
 
 ## State
 
-Latest16 November14:07UTC: the owner displayed the local support fingerprint and it
+Latest16 November14:38UTC: corrected installed126 now reaches its original real
+generation2 production card after explicit consent. Android observations, exact
+canonical/imported groups and real1440/390px UI pass. Actual AWG/NL1 over Wi-Fi is
+observed; RU/AWG peer geography and revoke/network acceptance remain open. Current
+Android CI fails a cancellation-test ordering assumption; its test-only correction
+passes local repeated/full selected race checks, awaiting hosted qualification.
+APK4f288cbb and loaded exact paid-v2 stay unchanged. Public125/catalog8 remain; this
+is not a public release. See [installed chain](#installed-chain-real-ru-geography-and-batch-harness--16-november1449utc).
+
+Historical16 November14:07UTC: the owner displayed the local support fingerprint and it
 matches the preserved canonical key. Exact paid-v2 is now loaded in all three
 consumers; normal imports and protected-state checks pass. Corrected126 is installed,
 but its consent is still OFF and its metadata/session/revoke/GeoIP gates are pending.
@@ -59,6 +68,86 @@ checkout8937e71e has unrelated modified/untracked files and diverged history;
 all preserved. Worktree branch: feature/device-technical-metadata-20261115.
 
 ## Resumed delivery — 16 November
+
+### Installed chain, real RU geography and batch harness — 16 November14:49UTC
+
+Owner consent is explicitly ON, not inherited from old diagnostics. At14:20:11UTC,
+epoch3/sequence36 has one used proof bound to its report digest. The latest canonical
+groups and server received_at exactly equal the real panel row through generation2.
+The private identity/alias comparison resolves to the original durable handle: one
+card, existing historical inventory, no new identity or synthetic report. Source is
+ok/11seconds old. Hardware/OS fields match actual Android properties; app reports
+0.1.18-beta126/code126. Wi-Fi/default_network independently matches the non-VPN default
+network. Default-data SIM and registered network names are present and kept distinct;
+API31 radio remains UNKNOWN/permission_not_granted, without adding a permission.
+
+Authenticated real card/list checks at1440 and390px pass30 assertions: values, radio/
+GeoIP reasons, no horizontal overflow, subscription/server/support navigation,
+collapsed/expanded sources and original ages, model/OS/app/network/operator/transport
+filters, and no city match for unavailable geography. No browser errors; the temporary
+ten-minute session is deleted immediately. Private screenshots stay outside Git;
+only masked technical blocks were inspected. No user/password change or message send.
+
+Owner connection progresses from AWG preference + AWG attempt + no installed
+transport to CONNECTED/AWG/NL1. API sequence47/49 records WIFI/session_underlay; OS
+capabilities identify exactly the app-owned VPN with Wi-Fi, not the first/default
+network. The collector can legitimately lag a newer report within its normal cycle;
+do not call unequal sequence/timestamp values identical. NL1/AWG also lacks the
+qualified RU peer source and reports no_suitable_direct_observation; no gateway city
+is inferred. Original selection is NL1/AWG, original consent OFF; restore them after
+tests unless the owner says otherwise.
+The normal connect tap at14:24:18UTC still returns255/INJECT_EVENTS. The owner, not
+an injection bypass, presses Connect. No new USB grant or private-data transcription.
+
+The owner then selects Russia/AWG. At14:42:12 and14:46:58UTC, the installed client
+reports CONNECTED/AWG/gateway-ru and Wi-Fi/session_underlay. In-process checks bind
+the same canonical device to exactly its AWG public key and a live peer endpoint;
+handshake ages are86 and7seconds respectively. The endpoint never leaves the remote
+process. The actually installed GeoIP collector enriches that observation from local
+DB-IP Lite2026-11; source=db_ip_lite, origin=authenticated_awg_peer, status=available,
+reason=none. Country, region, city, ASN and organization are present; retail ISP is
+absent because this source does not provide it. City/ASN database hashes are recorded.
+The production panel uses the same consent epoch and agrees on session and every
+GeoIP field, with source ages43/28seconds. No raw IP or coordinates are projected.
+This is a genuine selected-device/peer observation, not the isolated MMDB fixture;
+it proves a database mapping, not where the person physically is. NL/TCP/MESH city
+remains unavailable or a separately dated previous qualified observation.
+
+At14:49:19UTC, the authenticated real card/list at1440/390px passes32 assertions,
+including actual city/ASN display, positive city filter, original independent ages,
+source disclosure and existing navigation. No page errors; temporary session removed.
+The first browser assertion incorrectly searched for peer origin inside the collapsed
+details rather than its visible observation row (two failures); correcting that test
+location retains both origin and database/group-source checks. No UI code changed.
+The masked narrow-screen block remains readable without horizontal overflow.
+
+Documentation head397cac4d Android job133352606266/run43882633521 fails before device
+instrumentation. Its downloaded artifact14234170067 is724bytes, SHA256
+`3ce166cd9352749f456b088fa2d28a7825f752102c13b995c42c725e4f616312`.
+The retained `restricted-carrier-race.log` identifies
+`TestBatchRegistersAndClearsSecurityBound/cancelled`, batch_test.go:75:
+`unexpected batch write outcome <nil>`. This is not the old TCP/IPv6 harness failure
+and no Android runtime cases ran. Previous Android133337546192 was cancelled during
+API27 after API35, not a full PASS. Original Android artifact sourceba3e9370 retains
+its separate completed platform qualification.
+
+`stream.stop()` calls cancel before underlying Conn.Close. Waiting only for Done in
+the new batch test therefore released the deliberately blocked write while Close
+could still be pending. The test-only correction records Close completion through a
+channel and waits for it before unblocking. The original expected error, registered
+deadline, success receive and cleared bound assertions remain, with the same timeouts;
+missing transport closure is now an additional failure. No production/native code,
+Java, package, signed bytes, paid descriptor or source/audio asset is changed.
+
+Local Go1.26.1 `-race -count=100` passes both success/cancelled subcases in128.955s.
+The full workflow-selected native dependency scope then passes812 cases/55 explicit
+skips in a normal isolated Docker network. Preserve the preceding network-none run:
+810pass/55skip/2fail, ICE connection deadlines in TestLocalTwoProcessVP8 and
+TestLocalVP8IdleGapDeadline, plus an error-path stderr-buffer test race. It did not
+reproduce the hosted batch failure and is not claimed as full qualification. No
+assertion was excluded; the subsequent scope uses the normal network environment.
+Hosted corrected-head CI remains required. No emulator or production service was
+started/restarted, no payment/term/support fixture or publication occurred.
 
 ### Exact paid loading and local pin — 16 November14:04UTC
 
