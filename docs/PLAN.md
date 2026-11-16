@@ -2,7 +2,23 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Current boundary — durable offline revoke16 November15:12UTC:** real Wi-Fi→cellular
+**Current boundary — online cleanup16 November15:38UTC:** offline OFF/pending becomes
+an authenticated epoch4/sequence83 tombstone after normal connectivity returns.
+Canonical and generation2 panel observations/GeoIP are empty; original card remains.
+OFF without pending survives a new process, and the exact tombstones remain unchanged
+over subsequent normal imports. Real revoked-card/filter UI passes24 checks at1440/390px.
+The initial unfiltered first-page assumption failed twice; corrected handle selection
+verifies retention without weakening the cleared-field/filter assertions.
+
+Remaining phone action: restore original NL1 on the open home screen, leaving VPN
+disconnected and consent OFF. Wi-Fi/mobile data are restored; USB remains until final
+owner-approved restoration. Frozen signed4f288cbb/source/audio are verified unchanged.
+Optional signed catalog9 and minimal privacy-preserving nginx delta are prepared only;
+public125/catalog8 remain. Complete remaining source/current-head CI and public
+APK/source/audio/catalog/invitation delivery, then normal PR review/integration.
+Do not rebuild/re-sign, repeat server deployment/RU recovery/HMAC2 or reopen the vault.
+
+**Historical boundary — durable offline revoke16 November15:12UTC:** real Wi-Fi→cellular
 handover preserves established RU/AWG, independently confirmed by the app-owned VPN
 capabilities and exact canonical/panel sequence71. Real cellular UI passes32 checks.
 Controlled process restart retains consent/identity; canonical/panel sequence75

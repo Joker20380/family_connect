@@ -2,7 +2,14 @@
 
 ## State
 
-Latest16 November15:12UTC: corrected installed126 reaches its original generation2
+Latest16 November15:38UTC: automatic online revocation clears canonical observations
+and the original generation2 panel's groups/GeoIP. OFF without pending survives a new
+process; subsequent reads preserve the exact tombstones. Real revoked UI passes24
+checks at1440/390px. Original country restoration and remaining CI/public delivery
+still remain; signed catalog9 is staged only. No APK rebuild/re-sign or server reload.
+See [online revocation](#online-revocation-and-publication-preparation--16-november1538utc).
+
+Historical16 November15:12UTC: corrected installed126 reaches its original generation2
 production card after explicit consent. Android observations, exact canonical/imported
 groups and real1440/390px UI pass. Actual RU/AWG peer geography and Wi-Fi→cellular
 underlay are observed; process restart preserves consent/identity and reports the
@@ -73,6 +80,67 @@ checkout8937e71e has unrelated modified/untracked files and diverged history;
 all preserved. Worktree branch: feature/device-technical-metadata-20261115.
 
 ## Resumed delivery — 16 November
+
+### Online revocation and publication preparation — 16 November15:38UTC
+
+At15:16:08UTC the independent Android read confirms Wi-Fi/mobile data ON and an active
+default network. The switch is OFF/pending; canonical/panel still hold epoch3/sequence75.
+This intermediate state is not labelled deletion. The pending revoke arrives without
+another consent toggle: server received_at is15:18:21UTC, epoch4/sequence83, enabled=false,
+empty payload. At15:20:44UTC the normal generation2 import has the exact epoch/sequence,
+consent=revoked, zero groups and no GeoIP. The original alias/handle is unchanged.
+
+At15:24:00UTC a controlled process stop/start confirms a different live process,
+consent OFF, no pending text and no data clearing. At15:26:08UTC the full canonical
+tombstone and panel row still equal their prior post-revoke values. Neither restart,
+readiness/support progress nor ordinary import resurrects the removed observations.
+Old-epoch/delayed-report rejection and independent seven-day TTL remain covered by
+the accepted isolated contract tests; no forged replay or clock/term mutation is sent
+to production for this check.
+
+The authenticated real card/list passes24 assertions at1440/390px: OFF state; cleared
+profile/network/GeoIP/source timestamps; no previous model/city filter match; original
+card retained; no overflow/page errors. Temporary session is deleted. The first
+helper's two failures are a pagination mistake: it looked for the handle on the first
+unfiltered page. The corrected query selects that exact handle before verifying its
+retention and the negative metadata filters. No product assertion or source changed.
+Private receipts remain local; no handles, operators, messages or geographic values
+are published. Wi-Fi/mobile data are restored, VPN is disconnected, consent OFF;
+the home screen is open for the owner to restore original NL1 from Russia. MIUI still
+prohibits injected input; no bypass. USB restoration is deferred until work is complete.
+
+Independent public preparation rechecks the same frozen APK's signature, package,
+code126, ARM64/non-debuggable identity and16KiB alignment. Matching full source/audio
+archives are unchanged. Local optional catalog9 binds signed SHA256
+`4f288cbb107ac46c8c99ec0e274f57a5e1e8164796796781c4a2c275b57e2134`,
+50,478,496bytes, previous signer; minimum_supported_version1/mandatory_after0.
+It is signed using the existing offline update key and independently verified with
+the public anchor. Catalog SHA256:
+`ccad442cd87bbb9a880383de4641f2f1aacc0296944de193923e0c1b1f4ddd29`.
+This is NOT_PUBLISHED: verified live HTTPS still serves125/catalog8 and identical
+invitation paths. No root signing key is copied to the server/CI and the APK is not
+re-signed. The preliminary local signer check lacked Java on PATH; using the existing
+accepted JDK resolves tool invocation, not a certificate or APK verification failure.
+
+The proposed nginx delta is derived from actual `/etc/fc/nginx.conf`, not the unused
+nginx-final file. It adds three immutable download locations, updates both invitation
+CSPs and preserves every other config byte, including loaded metadata log privacy.
+At15:38:07UTC the actual nginx container validates the candidate configuration; four
+current publication files pass an isolated write/read digest roundtrip. The temporary
+candidate is removed, container PID/start time and all live file hashes remain unchanged,
+and the three126 downloads are absent. No HUP or public asset upload occurs. Locked
+pytest9.1.1/cryptography46.0.7 signing/invitation regressions pass34 tests; the existing
+prepared catalog is independently reverified, not replaced, using that environment.
+Before later activation, recheck current hashes/sequence and create a retained fresh
+publication journal; prepared bytes alone are not deployment. All three paid-v2 archive
+hashes and alias-aware panel image/read-only mount match at15:33UTC. Watcher/AWG/TCP are
+active/success on their existing PIDs with zero restarts. HTTP is active/success on
+accepted4e2df679 but starts14:25:14UTC with a different PID; continuity from the earlier
+paid receipt and its restart cause are not inferred. A bounded journal read times out;
+the separate short systemd property read succeeds. No service is restarted here.
+Normal monitor inventory/metadata imports complete15:35:02UTC with zero production
+writes. Source9c421a9d passes API35/API27/API28, remaining Android matrix/current-head CI is
+not yet a full PASS. Public publication and ordinary integration remain gated.
 
 ### Cellular handover and process restart — 16 November15:03UTC
 

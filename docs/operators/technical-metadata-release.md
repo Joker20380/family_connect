@@ -251,6 +251,21 @@ new normal reconciliation, source hashes, support IPC and original cursor/anchor
 Policy-only recovery must retain metadata-aware code, generation2 and all current
 data/tombstones; restoring a backup database is never the code rollback procedure.
 
+### Installed offline-revoke acceptance
+
+Verify the device really has no active default network before accepting OFF/pending.
+Do not call offline state server deletion. Preserve the pending revoke across a normal
+process restart without clearing data. After connectivity returns, allow the bounded
+retry schedule and normal importer to advance; do not turn consent ON to force upload.
+Require canonical enabled=false with the new epoch/sequence and empty payload, then
+the same original generation2 panel handle with revoked consent, empty groups and no
+GeoIP. Reopen settings normally to refresh the visible status after asynchronous
+delivery, then verify OFF/no pending persists across a new process. Check tombstones
+stay unchanged over normal cycles; isolated stale-report/TTL tests are separate from
+observed production behavior. In browser checks, select the exact handle before
+testing presence: the unfiltered inventory is paginated. Metadata-only model/city
+filters must stop matching after cleanup, while history/navigation remain available.
+
 ### General data-preserving recovery
 
 Keep generation2, aliases, canonical operations, metadata epochs/sequences/tombstones

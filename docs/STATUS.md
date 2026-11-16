@@ -1,6 +1,35 @@
 # Текущее состояние / Current state
 
-**16 November15:12UTC — offline revoke persists; online cleanup next.**
+**16 November15:38UTC — online revoke and original-card cleanup accepted.**
+After connectivity returns with consent OFF, the device automatically delivers the
+revoke: canonical epoch4/sequence83, received15:18:21UTC, has no observations. By
+15:20:44UTC the same generation2 panel row is revoked, with no groups or GeoIP.
+At15:24UTC a new app process retains OFF without pending text; at15:26UTC the exact
+canonical/panel tombstones remain unchanged. Real-card/list checks pass24 assertions
+at1440/390px, including cleared sources, absent model/city filter matches and retained
+original card. The first helper incorrectly required that card on the first unfiltered
+page; its two failed pagination assertions are retained. The corrected check selects
+the exact existing handle, without changing the application or panel.
+
+Wi-Fi/mobile data are back ON; VPN remains disconnected. Original country NL1 still
+needs restoration from the displayed home screen; MIUI injected input remains denied.
+Consent stays OFF. Do not disable USB until the remaining phone work is finished and
+the owner agrees. No private identity, message, IP or location is published.
+
+The identical APK4f288cbb and source/audio archives are staged for publication, with
+fresh signer/package/code/ABI/alignment verification. Optional catalog9 is signed and
+verified locally, NOT_PUBLISHED. Live125/catalog8/both invitations remain unchanged.
+Prepared nginx changes retain every other byte of the actual privacy-aware config.
+Actual-container syntax validation and four-file isolated configuration roundtrip pass;
+temporary config removed, no nginx reload. Locked signing/invitation regressions:34 PASS.
+At15:33UTC all three exact paid-v2 archives, alias-aware panel and read-only manifest
+mount still match. Watcher/AWG/TCP retain their PIDs with zero restarts. HTTP is healthy
+on the accepted hash but has a14:25:14UTC start, not continuous with the earlier paid
+receipt; this task does not claim its restart cause or repeat RU recovery. Normal
+inventory/metadata imports continue. Android9c421a9d passes API35/API27/API28; remaining
+matrix/current-head checks and publication/integration are still gates.
+
+**Historical16 November15:12UTC — offline revoke persists; online cleanup next.**
 After the owner disables Wi-Fi, the app-owned VPN capabilities independently show
 CELLULAR, not WIFI; the actual session remains CONNECTED/AWG/gateway-ru. At14:58:51UTC,
 epoch3/sequence71, all five canonical groups and received_at exactly match the original
