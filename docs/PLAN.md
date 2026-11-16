@@ -2,7 +2,7 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Current replacement boundary — history checked16 November13:14UTC:** immutable4f288cbb
+**Current replacement boundary — settings checked16 November13:22UTC:** immutable4f288cbb
 is installed over the earlier test126 without data clearing. Pulled bytes/signer,
 UID/first-install time, network settings, bounded options/contact-list comparison,
 fresh device/chat proof and canonical identity/activation/chat pin/subscription/event
@@ -12,11 +12,16 @@ Normal exported tab/subscription intents remove unnecessary navigation prompts b
 do not change consent, connect VPN or bypass denied input. The owner opened the
 existing conversation; all four previously observed message/date/status pairs match
 exactly and in order. This closes that bounded history-page comparison, not a full
-local database or pinned-key comparison. Fresh input remains denied by MIUI. Options
-are open; next owner action is opening “Applications and VPN” and its selected-only
-display filter, not changing the routing mode or saving a new selection. Compare the
-complete saved selection privately. Then finish affected data/session acceptance,
-exact paid loading, new-APK metadata
+local database or pinned-key comparison. The owner then opened the selected-only
+display filter: both saved applications, INCLUDE mode and count match the original125
+and earlier126 baselines, without invalid/unsaved/shared-UID ambiguity or policy save.
+Fresh input remains denied by MIUI. Chats are open; next owner action is displaying
+the existing support contact's “Verify fingerprint” dialog, not transcribing it.
+Fresh27-table canonical/paid projection and37-table panel restore checks pass; both
+dynamic metadata tables are excluded from the panel backup. Three exact paid-v2
+overlays are server-staged and verified, NOT_LOADED; accepted live runtime/policy,
+generation2 and services remain. Recheck live delta before loading. Then finish
+affected data/session acceptance, exact paid loading, new-APK metadata
 chain/revoke/RU-AWG geography and public delivery. No full-release or direct125→new
 PASS; preserve the separate125→old126→replacement evidence. No new build/signing.
 

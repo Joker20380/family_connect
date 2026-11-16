@@ -2,12 +2,12 @@
 
 ## State
 
-Latest16 November13:14UTC: corrected replacement126 is installed in place on the
-authorized ARM64 Redmi; bounded data preservation and restart checks pass. The four
-previously observed history rows now match exactly. Complete local database,
-per-app/pinned-key UI/session and replacement metadata-chain checks are not inferred.
-Its exact paid v2 passes isolated/hosted qualification but remains not loaded; APK
-is not published. Subscriptions projection is repaired; corrected Android CI passes.
+Latest16 November13:38UTC: corrected replacement126 is installed in place on the
+authorized ARM64 Redmi; bounded data preservation/restart, four observed history rows
+and complete saved per-app selection match. Full local database, pinned-key UI/session
+and replacement metadata-chain checks are not inferred. Fresh canonical/panel restore
+checks pass; exact paid-v2 overlays are verified and staged on the server, not loaded.
+APK is not published. Subscriptions projection is repaired; corrected Android CI passes.
 Old frozen signed bytes remain unchanged/test-only.
 See [resumed delivery](#resumed-delivery--16-november); earlier states remain history.
 
@@ -52,6 +52,54 @@ checkout8937e71e has unrelated modified/untracked files and diverged history;
 all preserved. Worktree branch: feature/device-technical-metadata-20261115.
 
 ## Resumed delivery — 16 November
+
+### Saved selection and fresh paid preparation — 16 November13:38UTC
+
+The actual selected-only view contains both previously saved applications. The
+private exact-set comparison matches the original125 and earlier126 baselines.
+Both rows are visible/checked and unique; INCLUDE mode and the saved count agree.
+There is no unsaved draft, invalid policy or shared-UID ambiguity. The display filter
+is distinct from routing mode; no policy selection/save occurs. This closes the
+retained per-app-setting comparison, not a new routing/traffic test.
+
+The normal public navigation intent opens chats without injection. The existing
+contact-key dialog is still NOT_OBSERVED: absence of the dialog is not a key mismatch.
+The owner is asked to display the support conversation's “Verify fingerprint” dialog;
+its value is compared privately, never transcribed into chat/Git. Canonical chat pin
+and fresh proof preservation are already recorded separately.
+
+Fresh paid-preload preparation uses the actual current runtimes, not old rehearsal
+counts or an arbitrary main archive:
+
+| Boundary | Result |
+| --- | --- |
+| HTTP/operator/reconciler | Exact accepted70a924db/a7c801db/40e1d721 hashes match; no runtime replacement |
+| Service readback | HTTP/watcher/AWG/TCP active, NRestarts0; reconcile timer active and last one-shot result success |
+| Panel/HMAC | Image5ae92f8c healthy; manifest8602e652 matches, generation2 and read-only mount retained; keys not accessed |
+| Canonical backup | Consistent SQLite backup; all27 current tables, integrity/FKs and canonical paid projections match isolated restore |
+| Off-host backup | Encrypted canonical/runtime bundle roundtrip and isolated decrypted restore pass; key stored separately, no value in output/argv |
+| Panel backup | One exported read-only PostgreSQL snapshot; all37 protected table contents/counts match isolated restore using the installed PostgreSQL image |
+| Dynamic observations | Both technical-metadata tables' data excluded; old payloads are not archived/restored; live tombstones/source remain untouched |
+| Isolation cleanup | No ports or network for restore container; temporary container removed after PASS |
+| Collector configs | Both private sources backed up with unchanged accepted HTTP archive pin |
+| Paid candidates | Three existing exact v2 overlays server-staged, each changes only paid_beta.py; origin-checked policy is108/119/123/125/126 with signed4f288cbb |
+
+These are backups and **STAGED_NOT_LOADED** code, not a rollout or payment test.
+Actual active policy remains `android-paid-108-119-123-125-v1`. No production ledger
+write, service restart, RU recovery, HMAC rotation, metadata-server build/deployment,
+APK/signature/catalog change or real user message. The one-shot reconciler is
+successfully inactive between cycles with its timer active; this is not a failed or
+paused service. No new notification delivery is claimed.
+
+Before eventual loading, recheck archive/config/process and protected-data delta;
+normal intervening operations are legitimate. Preserve current data/tombstones and
+generation2; code/config recovery must not restore an old DB or re-enable old keys.
+These backups do not qualify cold recovery of every service or waive device/CI gates.
+
+Documentation source5fe22abc has8 completed successful workflows, including
+paid43874634299 and panel43874634206. Phase043874634243 and client builds43874634501
+remain running at readback; no full-current-head CI PASS. Fixed Android sourceba3e9370
+and its already accepted immutable APK remain unchanged.
 
 ### Replacement history readback — 16 November13:14UTC
 

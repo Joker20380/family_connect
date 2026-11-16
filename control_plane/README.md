@@ -1,6 +1,12 @@
 # CONTROL-PLANE · русская локальная панель и наблюдаемость
 
-## Technical metadata candidate · 15 November 2026 · NOT DEPLOYED
+## Technical metadata · server path deployed; public Android release pending
+
+The accepted minimal metadata/HMAC-aware server and panel are installed. Corrected
+beta126 is on the authorized test device, not publicly released; exact paid126 is
+staged, not loaded. Follow the current release receipt below, not the historical
+source-preparation status. Do not redeploy this repository's demo Compose over the
+live alias-aware panel or treat a server deployment as installed-client acceptance.
 
 Migrations0014/0015 store only the latest consented observations/GeoIP by full HMAC; these never
 enter InventorySnapshot, audit details or dated collector files. External

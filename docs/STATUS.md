@@ -1,6 +1,28 @@
 # Текущее состояние / Current state
 
-**16 November13:14UTC — replacement history comparison PASS within observed scope.**
+**16 November13:38UTC — saved per-app policy preserved; fresh paid preparation PASS.**
+The owner opened the selected-only display filter. Both saved applications match
+the original125 and prior126 baselines; INCLUDE mode and saved count match, with
+no draft/invalid/shared-UID ambiguity. No selection was changed or saved. Together
+with the four-row history comparison this closes the observed settings/history
+scope, not a full private-database export. The local contact-key dialog is still
+NOT_OBSERVED; the chat list is open for the owner to display “Verify fingerprint”.
+No fingerprint transcription or repeated USB-grant request is needed.
+
+Fresh live HTTP/operator/reconciler hashes match accepted70a924db/a7c801db/40e1d721;
+watcher/AWG/TCP/HTTP are active with0 restarts, reconcile timer active/last cycle
+successful. Panel5ae92f8c is healthy; read-only aliases8602e652 remain generation2.
+Consistent canonical backup verifies all27 tables and paid projections; encrypted
+off-host decrypt/restore passes. Same-snapshot panel backup/isolated network-none
+restore verifies37 protected tables, excluding both dynamic metadata tables. Its
+temporary container is removed. Both collector configurations are privately backed
+up with the accepted HTTP pin. Three paid-v2 candidates are staged and origin/policy/
+single-member-delta verified on the server, NOT_LOADED. Active policy is still exact
+108/119/123/125. No production DB write, service restart, APK/catalog change or key
+access. Revalidate live delta before loading; do not restore these backups over live
+events. Source5fe22abc has8 successful workflows; phase0/client builds remain running.
+
+**Historical16 November13:14UTC — replacement history comparison PASS within observed scope.**
 The owner opened the existing conversation. All four previously recorded message/
 date/status pairs match exactly, once each, under the same row parent and in the
 same order. This is the saved visible page, not a full message-database export.
