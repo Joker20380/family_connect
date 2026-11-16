@@ -206,6 +206,35 @@ owner's request, without silently changing databases.
 
 ## Recovery without losing new data
 
+### Exact paid126 layer accepted16 November
+
+The independently qualified signed4f288cbb candidate has exact policy
+`android-paid-108-119-123-125-126-v2` loaded in HTTP4e2df679, operator19efd0b4 and
+reconcilerff4601aa. See the [paid loading receipt](../releases/2026-11-15-device-technical-metadata.md#exact-paid-loading-and-local-pin--16-november1404utc)
+for full hashes and preserved-state checks. This is not permission to replace the
+immutable APK or publish before the remaining installed acceptance gates.
+
+For any later correction, derive paths from actual serving processes/effective units
+and compare exact live hashes. The operator current path is a root-owned symlink to
+the accepted runtime archive: validate its exact resolution/hash/target owner and
+preserve that link. Do not treat an unchecked symlink as a regular replacement target.
+Archive overlays change only the qualified paid module; retain metadata, identity,
+support and HMAC members. Pause/drain only the local monitor and preserve its lock;
+keep reconciler renewal/timers and VPN/watch services running. Restart only independent
+HTTP. Update both subscription and technical-metadata source pins together, retaining
+all other fields/permissions, before resuming the monitor. Confirm normal import cycles.
+
+Preservation comparison must distinguish mutable progress and append-only additions
+from corruption: compare all protected canonical domains; explain challenge/sequence
+changes; verify old panel row/digests as historical prefixes when new normal imports
+append snapshots/audit rows. Do not delete new rows to force whole-table equality.
+Use the existing protected backup/restore evidence, and record real service PIDs,
+new normal reconciliation, source hashes, support IPC and original cursor/anchor.
+Policy-only recovery must retain metadata-aware code, generation2 and all current
+data/tombstones; restoring a backup database is never the code rollback procedure.
+
+### General data-preserving recovery
+
 Keep generation2, aliases, canonical operations, metadata epochs/sequences/tombstones
 and all newer user data. Never restore an old database over live operations, reactivate
 the retired HMAC key, recreate notification baseline or restart VPN for metadata.

@@ -2,7 +2,27 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Current replacement boundary — settings checked16 November13:22UTC:** immutable4f288cbb
+**Current boundary — exact paid loaded16 November14:07UTC:** local support fingerprint
+matches the preserved canonical key, without exporting it. The frozen installed4f288cbb
+retains the completed bounded identity/settings/history acceptance. Exact paid-v2
+overlays are now loaded in HTTP/operator/reconciler, preserving108/119/123/125; both
+collector pins match the new HTTP archive. Only HTTP restarted. Protected canonical
+data, all37 panel historical row/digests, generation2, labels/users/events and original
+notification cursor/anchor pass. Three full automatic inventory/metadata cycles pass
+through14:06:19UTC. Normal subscription imports continue; no real payment or message
+fixture. This is not public126 delivery or corrected-byte metadata acceptance.
+
+Settings are open, consent OFF and empty epoch2/sequence30 tombstone unchanged. The
+next concrete owner action is enabling “Технические сведения для поддержки” and
+confirming the explanation. No private-data transcription or new USB grant is needed;
+MIUI input remains denied. Continue corrected installed APK → authenticated metadata
+API → generation2 collector → real panel, then available sessions/network changes,
+RU/AWG geography and online/offline revoke. Finish remaining release gates and public
+delivery of the same APK/source/audio, signed catalog/invitations and ordinary merge.
+No rebuild/re-sign, repeated server deployment, RU recovery or HMAC rotation. Keep
+original125→old126 and old126→corrected126 evidence separate. PR stays draft until gates.
+
+**Historical replacement boundary — settings checked16 November13:22UTC:** immutable4f288cbb
 is installed over the earlier test126 without data clearing. Pulled bytes/signer,
 UID/first-install time, network settings, bounded options/contact-list comparison,
 fresh device/chat proof and canonical identity/activation/chat pin/subscription/event

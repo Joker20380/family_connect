@@ -1,6 +1,39 @@
 # Текущее состояние / Current state
 
-**16 November13:38UTC — saved per-app policy preserved; fresh paid preparation PASS.**
+**16 November14:07UTC — local pin verified; exact paid126 LOADED, not published.**
+The owner opened the support fingerprint dialog. Its locally compared digest matches
+the preserved canonical support key; no fingerprint/private key was exported. This
+closes the observed contact-pin gate alongside retained identity, settings and the
+four-row history comparison. The frozen installed APK remains signed4f288cbb.
+
+After fresh delta checks and the already completed27-table canonical/37-table panel
+restore rehearsals, the three single-member paid overlays are loaded: HTTP4e2df679,
+operator19efd0b4, reconcilerff4601aa. Policy is exact
+`android-paid-108-119-123-125-126-v2`, retaining108/119/123/125 and admitting only the
+accepted signed4f288cbb descriptor for126. Both collector pins now match HTTP4e2df679.
+Only the independent HTTP API restarted; watcher/AWG/TCP PIDs and all unit files
+remain unchanged, and the reconciler completes new normal timer cycles. The operator
+current symlink, its target owner/mode and the unchanged archive members are retained.
+Normal chat challenge/sequence progress is explained; protected canonical rows remain.
+All37 panel tables' pre-existing rows/digests match, accounting for normal append-only
+imports/audit records. Labels/users/passwords/events remain, panel5ae92f8c and read-only
+generation2 manifest8602e652 are unchanged. Support IPC and the original notification
+cursor/anchor pass; no new real notification delivery is claimed. Three fresh
+subscription imports are ok/66 on the new HTTP hash; metadata source is ok. Three
+complete automatic monitor cycles at14:03:39/14:04:59/14:06:19UTC import all three
+inventory sources and metadata successfully, with no canonical production writes.
+
+The settings screen is open and technical-information consent is still OFF. Canonical
+epoch2/sequence30 remains an empty tombstone. Next owner action: enable “Технические
+сведения для поддержки” and confirm its explanation; MIUI still denies injected
+input. Then qualify the corrected installed bytes through API/collector/real card,
+session/network/GeoIP and revoke/cleanup. Public125 and both invitations remain on125
+over verified HTTPS. No APK rebuild/signing, server-image deployment, RU/HMAC work,
+payment, term change, user message or publication. Android sourceba3e9370 remains
+qualified; documentation head2da57fff has8 workflows PASS with Android133337546192
+and phase0 still running, not full current-head acceptance. PR38 remains draft.
+
+**Historical16 November13:38UTC — saved per-app policy preserved; fresh paid preparation PASS.**
 The owner opened the selected-only display filter. Both saved applications match
 the original125 and prior126 baselines; INCLUDE mode and saved count match, with
 no draft/invalid/shared-UID ambiguity. No selection was changed or saved. Together

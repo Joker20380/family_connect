@@ -2,7 +2,14 @@
 
 ## State
 
-Latest16 November13:38UTC: corrected replacement126 is installed in place on the
+Latest16 November14:07UTC: the owner displayed the local support fingerprint and it
+matches the preserved canonical key. Exact paid-v2 is now loaded in all three
+consumers; normal imports and protected-state checks pass. Corrected126 is installed,
+but its consent is still OFF and its metadata/session/revoke/GeoIP gates are pending.
+Public125 remains; no publication or full current-head CI/merge claim. See
+[paid loading](#exact-paid-loading-and-local-pin--16-november1404utc).
+
+Historical16 November13:38UTC: corrected replacement126 is installed in place on the
 authorized ARM64 Redmi; bounded data preservation/restart, four observed history rows
 and complete saved per-app selection match. Full local database, pinned-key UI/session
 and replacement metadata-chain checks are not inferred. Fresh canonical/panel restore
@@ -52,6 +59,82 @@ checkout8937e71e has unrelated modified/untracked files and diverged history;
 all preserved. Worktree branch: feature/device-technical-metadata-20261115.
 
 ## Resumed delivery — 16 November
+
+### Exact paid loading and local pin — 16 November14:04UTC
+
+The fresh13:42:48UTC read-only capture contains the actual contact fingerprint
+dialog. Its whitespace-formatted digest matches SHA256 of the preserved canonical
+support public key. Comparison stays private; no raw fingerprint/key/identity is
+included here. Together with the earlier bounded identity, settings, saved per-app
+and four-row history results, this closes the local pin gate. It is not a full
+message-database export or direct125→corrected126 observation.
+
+Device bytes remain signed/installed4f288cbb107ac46c8c99ec0e274f57a5e1e8164796796781c4a2c275b57e2134,
+50,478,496bytes, sourceba3e9370, accepted signer. No rebuild, re-sign or vault access.
+The14:04UTC boundary has new consent OFF with the unchanged empty epoch2/sequence30
+tombstone; no new consent/revoke test is claimed in this step.
+
+Fresh readback matches the accepted serving archives and the existing root-owned
+operator current symlink. The initial conservative preflight rejects that symlink
+without changing anything; bounded resolution proves its accepted target/hash/owner.
+The final guarded operation atomically replaces that target while retaining the link,
+not an unknown file or a new release archive. Canonical12 protected domains match the
+fresh backup. Changed chat challenges remain bound to existing devices and the chat
+snapshot sequence advances monotonically; this is normal operation, not data loss.
+No operator invocation is present in the bounded installation window.
+
+| Consumer | Loaded SHA256 | Policy |
+|---|---|---|
+| HTTP | `4e2df679761ba9e7af74128984ef2e19e8e7b228f1cc85b36d50be2b0bc24ce8` | exact108/119/123/125/126-v2 |
+| Operator | `19efd0b46fb145dcef06a9a092ee0d8ee4d062d09d99b1b0e0065425be02d90f` | exact108/119/123/125/126-v2 |
+| Reconciler | `ff4601aa3bb0990b4f8566aadde1fd6b12120bffbd912b4b901e2d77a114d6aa` | exact108/119/123/125/126-v2 |
+
+Only `control/friends/paid_beta.py` differs in each archive; every other member,
+including metadata/support/HMAC integration, matches its actual serving baseline.
+Policy source408fb282 and its153 focused/501 locked paid tests plus7 actual-overlay
+tests remain applicable. The actual operator `policy` command verifies archive/module
+provenance without opening the registry. Exact126 accepts signed4f288cbb only;
+unsigned/retired126 are not accepted. Existing access remains independent of version.
+No real payment, term change, cohort operation or test user message is created.
+
+The local monitor timer pauses and its current work drains normally under its existing
+lock. Reconciler and HTTP archives switch, only independent HTTP restarts, then the
+operator target switches. Both source pins are atomically updated; all other config
+fields/permissions remain. Monitor resumes. Watcher/AWG/TCP PIDs822616/822621/824674
+and NRestarts0 remain; all effective unit-file hashes match. HTTP has new PID1217393
+and is healthy. A subsequent normal reconciler timer cycle succeeds. Unauthenticated
+support/subscription/metadata requests remain403. No transport/watcher/timer restart,
+image rebuild, RU recovery, HMAC change, schema change or full-main deployment.
+
+The fresh canonical encrypted backup/off-host restore and same-snapshot panel restore
+from13:29–13:38UTC are retained privately; no repeat recovery or DB rollback is done.
+Post-load comparison confirms all37 protected panel tables' pre-existing rows/digests:
+29 match wholly and eight have verified unchanged historical prefixes plus normal
+append-only imports/audit rows. An initial whole-audit equality check does not pass
+because imports legitimately append audit records; prefix comparison explains it,
+rather than deleting new rows. Users/passwords, labels, events and operation records
+remain. Dynamic metadata is excluded from long-lived backups. Panel5ae92f8c and the
+read-only generation2 manifest8602e652 are unchanged and healthy.
+
+Three normal subscription observations at13:59:40,14:00:59,14:02:14UTC are ok/66 and
+pin HTTP4e2df679; the metadata source is ok. Support-owner IPC succeeds; cursor position,
+anchor and original baseline anchor match retained evidence. No baseline reset or
+new real notification delivery is inferred. Three separately captured complete
+automatic monitor cycles end at14:03:39,14:04:59,14:06:19UTC; all three inventory
+sources and metadata import successfully with zero canonical production writes.
+Both public invitation paths return200
+over verified HTTPS and still reference125, not126. Public artifacts/catalog remain
+unchanged; this paid policy load alone is not user-release readiness.
+
+Android sourceba3e9370 has the previously recorded complete qualification. Current
+documentation head2da57fff has8 successful workflows; Android133337546192 passes
+native race/build/lint but its runtime matrix is still running, as is phase0. These
+are not full current-head PASS and do not replace the frozen accepted APK. Own review
+only; PR remains draft. Next owner action is enabling the visible technical-information
+switch and confirming its explanation; no private data needs transcription. Then
+complete new-byte chain/session/RU-AWG/revoke acceptance and public delivery. Code/config
+recovery retains generation2, current records/tombstones and all newer user operations;
+never restore an old DB or retired key.
 
 ### Saved selection and fresh paid preparation — 16 November13:38UTC
 
