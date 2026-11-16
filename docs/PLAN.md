@@ -2,20 +2,27 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Current boundary — DEVICE-TECHNICAL-METADATA-1 resumed16 November16:35UTC.**
+**Current boundary — DEVICE-TECHNICAL-METADATA-1 publication BLOCKED17:41UTC,16 November.**
 Keep installed signed4f288cbb, exact paid-v2, metadata server/panel and HMAC2 unchanged.
-The test-only9c421a9d Android job completes all required Android/per-app stages;
-separate runtime/routing artifacts are downloaded and digest-verified. Do not call
-its whole push workflow green (Linux appimagetool installation failed), or transfer
-that result to the still-running documentation-head matrix. No duplicate CI rerun.
-Original125 updater sources accept prepared optional catalog9 and exact signed bytes
-in an isolated JVM protocol check, not a physical updater installation. Fresh ingress,
-immutable assets and public125/catalog8/both invitations are verified without writes.
-Next: owner restores technical-information consent OFF and original NL1 (USB input
-still denied); verify resulting cleanup/current phone state, finish applicable CI,
-publish accepted immutable assets/discovery/invitations, then review/integrate.
-Keep USB until remaining phone work is complete; agree its restoration afterward.
-Do not repeat completed RU/HMAC/server work. [Receipt](releases/2026-11-15-device-technical-metadata.md#delivery-resumption-and-updater125-protocol--16-november1635utc).
+Owner restoration and normal revoke are complete: OFF/NL1/VPN disconnected; canonical
+and panel epoch6/sequence116 contain zero groups/no geography. Revoked browser24PASS.
+ADB later disappears, without another phone operation; temporary probe removal and
+USB-setting restoration are not observed. No repeat USB permission/device gate.
+All ten applicable f781c77e workflows PASS, including Android133448566529 and
+Windows/Linux. Keep artifact-source, test-only9c421a9d and documentation-head results
+distinct; no duplicate manual rerun. Original125 JVM updater protocol and isolated
+two-phase publication guards pass, not a physical updater UI installation.
+
+Publication stops before its first write: new RU AWG timeout/TCP inactive/watcher
+restart observed17:40:42UTC. This is not the separately reconciled17:10UTC HTTP
+scheduled-renewal stop/start on unchanged accepted bytes. Public125/catalog8, both
+invitations/CSP and all live ingress files remain unchanged; publication journal
+absent. HMAC2, support IPC and original notification baseline/cursor remain intact.
+Next external prerequisite: receipt of a separate RU recovery. Then short fresh
+service/pin checks, publish the same immutable APK/source/audio and discovery, verify
+public HTTPS/signature/Range/original125 protocol, review and ordinary integration.
+Do not start RU investigation/recovery, observer work, HMAC rotation or a new build
+inside this selected task. [Receipt](releases/2026-11-15-device-technical-metadata.md#restoration-ci-and-pre-publication-stop--16-november1741utc).
 
 **Historical boundary — separate RU recovery16 November16:08UTC:** the owner's explicit
 confirmation is executed on the accepted current paid-v2/metadata/HMAC2 foundation.
@@ -27,7 +34,7 @@ and original notification baseline/cursor remain. No active fence remains. Outco
 RECOVERED_CAUSE_OPEN, not a runtime fix or physical traffic acceptance. See the
 [receipt](releases/2026-11-16-ru-recurrence.md#authorized-recovery--16-november1608utc).
 
-DEVICE-TECHNICAL-METADATA-1 public delivery stays separate and unpublished. Do not
+Historical16:08 boundary: DEVICE-TECHNICAL-METADATA-1 delivery stayed unpublished. Do not
 rebuild/re-sign APK4f288cbb or repeat server/HMAC deployment. Remaining release work:
 recheck intended phone country/network/consent (new enabled epoch5/sequence104 was
 already received before the recovery pause), finish applicable CI and publish the
@@ -334,8 +341,9 @@ Versioned API, consent/revoke/retention, GeoIP and collector/object UI/filter se
 path are minimally deployed. Frozen release-signed126 is installed in place on the
 authorized ARM64 Redmi; observed preservation passes with explicitly bounded scope.
 Exact paid126 is loaded and the corrected installed metadata chain reaches its real
-generation2 card. Draft PR38 is not completion: remaining physical network/revoke
-gates, current-head CI and public delivery are still open. CI test builds never
+generation2 card. Draft PR38 is not completion: physical network/revoke and full
+f781c77e CI now pass; public delivery and integration await the newer RU boundary
+recorded at the top. CI test builds never
 replace the selected immutable signed artifact.
 Controlled local GeoIP IPv4/IPv6 lookup and actual installed-client/production
 RU peer enrichment pass. RU/AWG source does not qualify NL/TCP or

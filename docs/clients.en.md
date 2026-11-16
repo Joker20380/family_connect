@@ -3,8 +3,9 @@
 **16 November — beta126 technical information is not yet released to users.**
 Compatible server components are installed;125 remains the public update.
 The corrected signed126 (SHA256 prefix4f288cbb) is installed on the authorized ARM64
-test device. Bounded preservation/restart checks pass; remaining acceptance and
-public delivery are not complete. Do not install the retired test candidate97513e3f.
+test device. Installed metadata, preservation, restart, network/revoke and complete
+f781c77e CI checks pass. Publication stops before any write on a new RU transport
+failure; it awaits the separate recovery receipt. Do not install retired97513e3f.
 126 uses separate consent, OFF by default, for model/Android/app, connection and
 available data-SIM operator information, VPN session, limited errors and approximate
 IP-network geography. Consent lasts until disabled; each latest group, including
@@ -12,12 +13,14 @@ the hardware profile, expires independently within seven days. Offline disabling
 shows a pending revoke. Refusal does not restrict VPN, subscriptions or support.
 City currently requires a suitable RU/AWG observation; NL/TCP and MESH show unavailable
 or the genuine age of the last suitable observation. This is not GPS or proof of
-physical location; the real replacement-device RU/AWG observation remains unverified.
+physical location. The actual corrected device's identity-bound RU/AWG peer and
+local DB-IP lookup match the real panel; NL/TCP/MESH are not thereby qualified.
 Original125→earlier test126 and its corrected replacement are separately recorded,
-not a claim of direct125→new APK acceptance.
+not a claim of direct125→new APK acceptance. Final observed phone state is consent
+OFF, original NL1 and VPN disconnected; automatic canonical/panel deletion passes.
 [Privacy](privacy.md) · [Current receipt](releases/2026-11-15-device-technical-metadata.md).
 
-**13 November — public Android125, optional signed catalog8.** Both invitation
+**Historical13 November — public Android125, optional signed catalog8.** Both invitation
 paths and update discovery now offer125. Install over the current app without
 deleting data. The owner already runs125; no repeat installation is needed.
 [APK, verification and limits](releases/2026-11-13-android125-publication.md).

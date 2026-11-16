@@ -1,5 +1,143 @@
 # DEVICE-TECHNICAL-METADATA-1 — 15 November 2026
 
+## Restoration, CI and pre-publication stop — 16 November17:41UTC
+
+**Current outcome: PREPARED_NOT_PUBLISHED / BLOCKED_RU_RUNTIME.** The selected
+corrected APK remains signed, installed and immutable. Device/metadata acceptance
+and the complete f781c77e CI gate now pass. A new RU transport failure prevents
+the first publication write. Public125/catalog8 and PR38 draft remain; this is not
+a user-ready126 release or another RU recovery. Earlier checkpoints below are
+historical and retain their actual observation boundaries.
+
+### Final phone state and deletion
+
+After the owner's restoration,16:41:06UTC read-only UI/Android observations show
+technical-information consent OFF, Wi-Fi and mobile data ON, airplane mode OFF.
+At16:43:10UTC the home screen shows original NL1, AWG preference and VPN disconnected.
+The first literal/case-sensitive home-label comparison was inconclusive; normalized
+matching of the app's public labels confirms those states without an injected action
+or a setting change. At16:46:01UTC the revoked production card/list passes24 assertions
+at1440/390px with no page errors; the temporary browser login session is removed.
+
+Canonical and original generation2 panel row agree at epoch6/sequence116, received
+16:40:16UTC: disabled/revoked, zero observation groups, no geographic projection.
+The17:41:25UTC readback retains exactly that payload-free tombstone. This is the
+current OFF result, superseding the historical enabled epoch5 and earlier OFF4.
+No actor is inferred for the intervening enable; old reports do not resurrect data.
+
+At16:57UTC an additional optional phone read stops at its first ADB assertion because
+no device is listed. It performs no force-stop, restart, installation or data access.
+The completed installed hash/signer and restart acceptance remain valid; no second
+physical check is claimed. The temporary read-only probe could not be removed after
+disconnect. USB-debugging restoration is not observed and must not be inferred from
+an empty ADB list. No further USB grant is required to repeat completed acceptance.
+
+The physical upgrade scope remains **original125 → first signed126 → corrected126**,
+not a direct125→corrected126 experiment. Identity/activation, bounded settings,
+complete saved per-app selection, local support fingerprint, four observed history
+rows and subscription/access comparisons retain their recorded scope. No uninstall,
+clear-data, downgrade or Keystore export occurred. A new physical125 updater UI
+installation is NOT_OBSERVED; the original125 protocol check is separate evidence.
+
+### Complete current-head CI
+
+Qualified documentation head: `f781c77ebbfc9fc159ff7e4f865de6fc07816073`.
+All ten applicable PR workflows are completed/success by17:27:19UTC:
+
+| Context | Run | Result |
+| --- | ---: | --- |
+| Client builds |43909793376|PASS|
+| phase0 |43909793514|PASS|
+| Control panel |43909793655|PASS|
+| Paid Android release compatibility |43909793763|PASS|
+| Android Friends readiness wire contract |43909793176|PASS|
+| Subscription notification route |43909793233|PASS|
+| Messenger prototype |43909793569|PASS|
+| Linux control preview |43909793663|PASS|
+| Linux internal candidate |43909793385|PASS|
+| Linux voice and encrypted messaging |43909793504|PASS|
+
+Client builds includes successful Windows/Linux, Windows compatibility and Android
+job133448566529, completed17:26:18UTC: native race/JNI, JVM/lint, API35/27/28/31,
+separate per-app harness and exact release payload. No IPv6 assertion or timeout
+was weakened. The earlier99-case reports include explicit skips, not99 unskipped
+physical executions. No duplicate manual rerun was started.
+
+Keep three boundaries distinct: Android artifact sourceba3e9370 and its accepted
+CI; test-only correction9c421a9d with Android PASS but a separate Linux failure;
+complete f781c77e documentation-head PASS. This later documentation checkpoint
+does not inherit a complete-head PASS or establish a merge result. Main remains
+53a780d9 at this boundary; reviews remain self-review, not independent approval.
+
+### Publication preparation and safe stop
+
+| Immutable prepared artifact | Bytes | SHA256 |
+| --- | ---: | --- |
+| Signed beta126 APK |50,478,496|`4f288cbb107ac46c8c99ec0e274f57a5e1e8164796781c4a2c275b57e2134`|
+| Exact Android source archive |17,011,109|`3bcf9a6ff44e8d65b80cf8f3c6436c873040bbebaec4cbfe016d78b4079d764e`|
+| Audio corresponding source |7,602,082|`780c7717faad7a21fcd894324a1e350cc525e2719573835cf72abe40d0cd9039`|
+
+Package `com.familyconnect.app.friends`,0.1.18-beta126/code126, ARM64; signer
+`67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`;
+Android source `ba3e93703d407c945350c1187e3738d25a3c9eab`. No rebuild/re-sign/vault
+access occurs. The retired97513e3f test artifact is not a release asset or paid match.
+
+Prepared optional signed catalog9 binds these final APK bytes, not its unsigned hash.
+Local ownership/modes/hashes, full original125 JVM parser/signature/download protocol,
+four local file/journal primitive checks and four isolated publication scenarios pass:
+normal two-phase delivery/backup roundtrip, concurrent-file rejection, interrupted
+reload/replay protection and invalid-syntax no-write behavior. The isolated engine
+has no production network access. Actual-container route-only nginx syntax passes
+at16:52UTC; its temporary file is removed without reload. The final configuration
+syntax/restore acceptance remains applicable. These are preparation, not public
+HTTPS126/Range acceptance.
+
+The first live guard stops on HTTP's changed PID, before publication initialization.
+Read-only manager events show a successful stop17:09:42UTC/start17:10:22UTC. The
+scheduled credential-renewal run spans17:09:18–17:10:27UTC, reports COMMITTED with
+no first_cause, and its actual node configuration includes HTTP in the renewal
+barrier. The process executes the accepted HTTP archive4e2df679; its hash is unchanged.
+This reconciles a normal scheduled renewal, not an unidentified deployment, RU
+transport restart or a new recovery action. Only the local expected HTTP PID is
+refreshed; every archive, HMAC and RU transport guard remains enforced.
+
+The next staging attempt stops at that transport guard. Fresh17:40:42UTC state:
+
+| Component | Observed state |
+| --- | --- |
+| RU AWG |failed / timeout / PID0|
+| RU TCP |inactive / dead / PID0|
+| RU paid-watch |active / running / NRestarts3; changed process|
+| HTTP |active / success / same scheduled-renewal process|
+| Peer worker |active / success / original process|
+
+No cause of this new RU failure is assigned. No new RU recovery/investigation,
+observer development, transport restart or policy change is performed in this task.
+At17:41:18UTC the private publication journal is absent and all four live files
+(nginx, invitation, legacy and signed descriptor) retain their original hashes.
+At17:41:20UTC verified HTTPS still serves125/catalog8 and both original invitations
+with matching CSP. All local126 assets remain intact. There has been no asset upload,
+staging, nginx reload, catalog publication or user broadcast; no rollback is needed.
+
+At17:41:25UTC HMAC2 and its manifest remain unchanged, metadata is revoked in both
+stores, support IPC passes, the original baseline/cursor position4, baseline time,
+anchor and four excluded historical events remain. No source error or selected
+device job is present. New real notification delivery remains NOT_OBSERVED.
+
+### Single external prerequisite and continuation
+
+Accept the **separate RU recovery's current receipt** before publishing. Do not
+refresh transport PID expectations merely to bypass the failed guard. Then perform
+short current runtime/pin/discovery checks, a fresh protected four-file backup and
+isolated roundtrip, and the already prepared two-phase publication: immutable assets
+and routes first, complete HTTPS/hash/signer/Range verification, then invitation/CSP,
+legacy descriptor and signed catalog last. Re-read the public sequence before using9;
+never roll back a sequence already seen by clients. Preserve all older immutable
+assets, generation2, paid-v2, data and notification state. Finish post-publication
+readback, source/docs, required checks, self-review and ordinary PR integration.
+No new APK, vault session, metadata server deployment or repeat device acceptance
+is required absent a concrete defect. Until then, do not advertise126 as released.
+
 ## Delivery resumption and updater125 protocol — 16 November16:35UTC
 
 The owner resumes product delivery after the separately accepted recovery. A short

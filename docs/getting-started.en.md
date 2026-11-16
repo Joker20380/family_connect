@@ -127,5 +127,9 @@ of a person's location. Consent lasts until disabled; latest information, includ
 hardware, expires within7days. No movement history. Turning off stops collection
 immediately; offline revocation awaits delivery for server deletion. Existing
 seven-day diagnostics consent does not carry over. All services remain optional
-with respect to this setting. **Public125 does not yet have it;126 is not signed,
-installed or published.** Existing download links stay unchanged; never replace125.
+with respect to this setting. **Public125 does not yet have it. The corrected126 is
+signed and accepted on the authorized ARM64 device, but is not publicly released.**
+Actual RU/AWG peer attribution and local DB-IP results reach the real panel; NL/TCP
+and MESH still lack a qualified direct-IP source. Consent is restored OFF with
+verified deletion. Publication awaits a separate RU recovery, not another signing
+or device permission. Existing download links stay unchanged; never replace125.

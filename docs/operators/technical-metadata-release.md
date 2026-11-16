@@ -132,6 +132,42 @@ hash/signature and exact paid descriptor, then repeat the affected installed gat
 The16November batch/credential-renewal race is such a blocker, not an excuse to
 rebuild the already accepted metadata server or repeat HMAC/RU recovery.
 
+### Guarded public delivery
+
+The corrected4f288cbb artifact and complete f781c77e CI are accepted; the original
+native race is no longer its open gate. Current publication is held by the separate
+new RU outage, not signing or phone consent. See the
+[17:41UTC receipt](../releases/2026-11-15-device-technical-metadata.md#restoration-ci-and-pre-publication-stop--16-november1741utc).
+
+1. Require a fresh accepted runtime/service baseline and unchanged paid/HMAC pins.
+   A changed HTTP PID may be a scheduled credential-renewal barrier: reconcile the
+   successful renewal receipt, its configured service list, bounded manager stop/start
+   events and actually loaded archive before refreshing that single PID guard. Do not
+   infer a new deployment or RU recovery from PID alone. Failed AWG/TCP/watch guards
+   stop publication; do not refresh them to the failed state or weaken assertions.
+2. Check actual ingress container/image/arguments and read-only directory mount.
+   Preserve the installed privacy-aware configuration, not an older nginx template.
+   Snapshot the four exact live files with owner/mode/hash and verify an isolated
+   restore. Keep a protected intent/completion journal; never erase it to retry.
+3. Stage immutable APK/full source/audio with exact hashes and exclusive creation.
+   Validate route-only configuration inside the actual nginx container, then expose
+   assets with the first reload, leaving current invitations/catalog/CSP unchanged.
+   Verify full trusted-HTTPS bytes, APK identity/signature,206/416 and resume behavior.
+4. Validate final invitation/CSP configuration, record intent and perform the second
+   reload. Install matching legacy discovery, then the signed catalog last. Verify
+   both invitation paths, signature/sequence/hash/size and original125 updater protocol.
+   Keep physical UI installation evidence separate from protocol/HTTP results.
+5. If an intent lacks a completion receipt, inspect the actual files and nginx state
+   before any retry. Keep immutable assets and all new user data; restore only a
+   qualified compatible ingress configuration if necessary. Once a signed sequence
+   has been exposed, recovery must not lower it. No database/key rollback, transport
+   restart, rebuild or automatic user broadcast is part of this publication.
+
+The isolated publication scenarios cover concurrent-change rejection, interrupted
+reload/replay guards, invalid syntax and backup/restore on the successful two-phase
+path. At17:41UTC the production journal is absent: both guarded attempts stopped
+before initialization, so there is no partially installed publication to recover.
+
 ## Owner-assisted signing and device session
 
 ### Final restoration and updater protocol scope

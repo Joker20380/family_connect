@@ -1,6 +1,34 @@
 # Текущее состояние / Current state
 
-**16 November16:35UTC — metadata delivery resumed; Android correction qualified.**
+**16 November17:41UTC — device restoration and CI PASS; publication BLOCKED by a new RU outage.**
+Owner restoration is observed: consent OFF, original NL1, VPN disconnected, Wi-Fi/mobile
+ON and airplane mode OFF. Automatic revoke epoch6/sequence116 leaves zero canonical
+and panel groups and no geographic projection. Revoked-card checks pass24 assertions
+at1440/390px. Later ADB is absent; no new phone operation or probe removal is claimed.
+Do not ask for another USB grant to repeat completed device acceptance.
+
+All ten applicable workflows on `f781c77ebbfc9fc159ff7e4f865de6fc07816073` finish
+successfully, including Android133448566529 and Windows/Linux in Client builds.
+This complete-head result is separate from artifact sourceba3e9370 and the test-only
+9c421a9d source whose separate Linux job failed. Signed4f288cbb remains unchanged.
+The original125 updater protocol and guarded two-phase publication preparation pass;
+actual public126 download/Range/catalog checks still require publication.
+
+The first fresh guard detects a new HTTP PID. Bounded readback identifies successful
+scheduled credential renewal (COMMITTED), whose configured barrier manages HTTP;
+its accepted archive is unchanged. No HTTP restart is issued here. A subsequent
+pre-publication guard catches a **new** RU failure at17:40:42UTC: AWG failed/timeout,
+TCP inactive, watcher active with NRestarts3 instead of the accepted process.
+No publication journal or staging exists; all four live ingress files, public125,
+catalog8 and both invitations/CSP remain unchanged. No reload, recovery or rotation.
+At17:41UTC HMAC2, revoked metadata and support IPC/original notification baseline,
+cursor and excluded history remain intact. No new notification delivery is observed.
+Next: accept a separately completed RU recovery receipt, short fresh guards, publish
+the same accepted assets/discovery/invitations, then review/integrate. No APK rebuild,
+new signing, paid-policy change or repeat phone acceptance is needed without a defect.
+[Current receipt](releases/2026-11-15-device-technical-metadata.md#restoration-ci-and-pre-publication-stop--16-november1741utc).
+
+**Historical16 November16:35UTC — metadata delivery resumed; Android correction qualified.**
 Source9c421a9d Android133378630911 finishes successfully: native race, JVM/lint,
 API35/27/28/31, separate per-app harness and exact release payload. Downloaded runtime
 and routing receipts match GitHub artifact digests. The99-case instrumentation reports

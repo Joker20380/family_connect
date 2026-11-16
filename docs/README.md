@@ -1,6 +1,6 @@
 # Documentation
 
-[Technical metadata · 16 November: corrected126 installed; remaining device/release gates open](releases/2026-11-15-device-technical-metadata.md).
+[Technical metadata · 16 November17:41UTC: device restoration and CI pass; publication held by new RU outage](releases/2026-11-15-device-technical-metadata.md#restoration-ci-and-pre-publication-stop--16-november1741utc).
 [Minimal deployment and data-preserving recovery](operators/technical-metadata-release.md).
 
 [RU · 16 ноября16:08UTC: повторно восстановлен на текущих принятых байтах; причина открыта](releases/2026-11-16-ru-recurrence.md#authorized-recovery--16-november1608utc).

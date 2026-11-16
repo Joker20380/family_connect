@@ -1,14 +1,15 @@
 # Privacy notes
 
 These are technical observations about the pilot, not a complete commercial privacy policy.
-Retention rules, a public operator contact and a formal policy remain to be established.
+General retention rules outside the explicit technical-information limits below,
+a public operator contact and a formal policy remain to be established.
 Check [STATUS](STATUS.md) for the actual deployed versions.
 
 ## On the device
 
 The unpublished Android126 technical-information candidate uses new, separate,
 explicit opt-in, off by default; old seven-day diagnostics consent is not reused.
-It proposes model/OS/app, network type, available SIM and registered-network names,
+When enabled it collects model/OS/app, network type, available SIM and registered-network names,
 radio category, actual VPN/session/gateway, limited error/readiness and approximate
 IP-derived country/region/city/ASN. No phone number, GPS coordinates, IMEI, serial,
 advertising ID, SSID/BSSID, cell ID, contacts, installed-app lists, sites, traffic,
@@ -23,9 +24,10 @@ deletes the payload on receipt of the revoke. Offline revocation is shown as pen
 Minimal consent/sequence tombstones last for the device lifetime to prevent delayed
 resurrection; they contain no device/network/geographic payload. The current metadata
 database and panel projection must not enter indefinite backups or append-only logs.
-Public125 is unchanged. The compatible server/collector/panel path is deployed,
-but126 signing, upgrade and installed opt-in/revoke acceptance are not complete;
-this is not a public126 rollout. The first geographic source is only a recent RU/AWG
+Public125 is unchanged. The compatible server/collector/panel path is deployed;
+the corrected signed126 is installed and opt-in/revoke/deletion acceptance passes.
+Publication remains held by a separate RU outage; this is not a public126 rollout.
+The first geographic source is only a recent RU/AWG
 peer endpoint joined through the authenticated device's canonical AWG key. NL/TCP
 and MESH have no qualified direct-IP source here: show unavailable or an older
 suitable observation with its own age. Ordinary HTTP/VPN-exit/relay addresses do
