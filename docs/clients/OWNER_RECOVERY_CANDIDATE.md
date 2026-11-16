@@ -1,5 +1,12 @@
 # Owner recovery106 — private candidate / закрытый кандидат
 
+**16 November — public126/catalog9; corrected126 already accepted on the owner phone.**
+Do not reinstall/downgrade or request USB access to repeat completed acceptance.
+Original125→first126→corrected126 and their preservation evidence remain distinct.
+Last observed state: consent OFF/NL1/VPN disconnected/Wi-Fi and mobile ON; later ADB
+absent. Temporary-probe removal/USB-debugging restoration are not observed.
+[Public APK and exact acceptance](../releases/2026-11-16-android126-publication.md).
+
 **13 November — public125/catalog8; owner already on125.** Default invitation and
 updater now offer the exact qualified APK installed on12 November. Update existing
 users in place, without uninstall/data clear; no repeat owner installation or identity

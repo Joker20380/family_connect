@@ -7,7 +7,7 @@ Check [STATUS](STATUS.md) for the actual deployed versions.
 
 ## On the device
 
-The unpublished Android126 technical-information candidate uses new, separate,
+Public Android126 technical information uses new, separate,
 explicit opt-in, off by default; old seven-day diagnostics consent is not reused.
 When enabled it collects model/OS/app, network type, available SIM and registered-network names,
 radio category, actual VPN/session/gateway, limited error/readiness and approximate
@@ -24,9 +24,9 @@ deletes the payload on receipt of the revoke. Offline revocation is shown as pen
 Minimal consent/sequence tombstones last for the device lifetime to prevent delayed
 resurrection; they contain no device/network/geographic payload. The current metadata
 database and panel projection must not enter indefinite backups or append-only logs.
-Public125 is unchanged. The compatible server/collector/panel path is deployed;
-the corrected signed126 is installed and opt-in/revoke/deletion acceptance passes.
-Publication remains held by a separate RU outage; this is not a public126 rollout.
+The compatible server/collector/panel path and public126 are deployed; installed
+opt-in/revoke/deletion acceptance passes. Previous125 downloads/admissions remain.
+[Public release and bounded acceptance](releases/2026-11-16-android126-publication.md).
 The first geographic source is only a recent RU/AWG
 peer endpoint joined through the authenticated device's canonical AWG key. NL/TCP
 and MESH have no qualified direct-IP source here: show unavailable or an older

@@ -1,5 +1,12 @@
 # DEVICE-TECHNICAL-METADATA-1 — 15 November 2026
 
+**Current16 November20:42UTC — PUBLIC, optional catalog9.** The same accepted signed
+4f288cbb APK is published; both invitations, signature/HTTPS/Range and legacy discovery
+match. No new build/signing/server/HMAC/RU deployment. The separate RU recovery is
+accepted; initiating-stall CAUSE_OPEN remains. [Final publication receipt, exact hashes
+and remaining observation limits](2026-11-16-android126-publication.md).
+Earlier checkpoints below preserve their original states, not current release advice.
+
 ## Separate RU incident receipt — 16 November evening
 
 The owner's latest request selects RU cause investigation/restoration, not another
@@ -93,7 +100,7 @@ does not inherit a complete-head PASS or establish a merge result. Main remains
 
 | Immutable prepared artifact | Bytes | SHA256 |
 | --- | ---: | --- |
-| Signed beta126 APK |50,478,496|`4f288cbb107ac46c8c99ec0e274f57a5e1e8164796781c4a2c275b57e2134`|
+| Signed beta126 APK |50,478,496|`4f288cbb107ac46c8c99ec0e274f57a5e1e8164796796781c4a2c275b57e2134`|
 | Exact Android source archive |17,011,109|`3bcf9a6ff44e8d65b80cf8f3c6436c873040bbebaec4cbfe016d78b4079d764e`|
 | Audio corresponding source |7,602,082|`780c7717faad7a21fcd894324a1e350cc525e2719573835cf72abe40d0cd9039`|
 

@@ -70,28 +70,36 @@ def test_signaling_read_classes_match_without_changing_legacy_recovery():
         '5fc3a518a74c1e05de1d99216ee9196e400fad3338994b8150caaa207cb75a00')
 
 
-def test_public_invitation_offers_qualified_android125_and_audio_source():
+def test_public_invitation_offers_qualified_android126_and_corresponding_sources():
     landing = (ROOT / 'deploy/friends/invite/index.html').read_text()
     android = next(line for line in landing.splitlines() if line.lstrip().startswith('android:{'))
-    assert 'Beta125 · Android 8.1+ · ARM64 · MESH' in android
-    assert '/downloads/FamilyConnect-Test-0.1.18-beta125.apk' in android
-    assert '/downloads/FamilyConnect-Android-0.1.18-beta125-audio-source.tar.gz' in android
+    assert 'Beta126 · Android 8.1+ · ARM64 · MESH' in android
+    assert '/downloads/FamilyConnect-Test-0.1.18-beta126.apk' in android
+    assert '/downloads/FamilyConnect-Android-0.1.18-beta126-source.tar.gz' in android
+    assert '/downloads/FamilyConnect-Android-0.1.18-beta126-audio-source.tar.gz' in android
     assert 'beta60' not in android
 
 
-def test_public_android125_catalog_is_signed_sdk_bound_and_remains_optional():
-    envelope = json.loads((ROOT / 'updates/android-friends-v2.json').read_bytes())
+@pytest.mark.parametrize('path,sequence,code,size,digest', [
+    ('tests/fixtures/android_updates/public125-v2.json', 8, 125, 50470304,
+     'f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c'),
+    ('updates/android-friends-v2.json', 9, 126, 50478496,
+     '4f288cbb107ac46c8c99ec0e274f57a5e1e8164796796781c4a2c275b57e2134'),
+])
+def test_public_android_catalogs_are_signed_sdk_bound_and_remain_optional(path, sequence, code, size, digest):
+    envelope = json.loads((ROOT / path).read_bytes())
     payload = base64.b64decode(envelope['payload'], validate=True)
     anchor = base64.b64decode((ROOT / 'clients/desktop/update.pub').read_text().strip(), validate=True)
     Ed25519PublicKey.from_public_bytes(anchor).verify(
         base64.b64decode(envelope['signature'], validate=True), b'family-connect/android-update/v1\0' + payload)
     catalog = json.loads(payload)
-    assert catalog['sequence'] == 8 and catalog['min_sdk'] == 27
-    assert catalog['version_code'] == 125 and catalog['version'] == '0.1.18-beta125'
+    assert catalog['sequence'] == sequence and catalog['min_sdk'] == 27
+    assert catalog['version_code'] == code and catalog['version'] == f'0.1.18-beta{code}'
     assert catalog['minimum_supported_version'] == 1 and catalog['mandatory_after'] == 0
-    assert catalog['size'] == 50470304
-    assert catalog['sha256'] == 'f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c'
-    assert catalog['url'] == 'https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta125.apk'
+    assert catalog['size'] == size
+    assert catalog['sha256'] == digest
+    assert catalog['url'] == f'https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta{code}.apk'
+    assert catalog['signer_fingerprint'] == '67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a'
     assert 0 < catalog['expires_at'] - catalog['issued_at'] <= 90 * 86400
 
 

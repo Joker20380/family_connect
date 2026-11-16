@@ -1,5 +1,13 @@
 # Technical metadata: minimal delivery and recovery
 
+**Current16 November20:42UTC: PUBLIC126 / optional catalog9.** Accepted installed-device
+network/restart/revoke/restoration and RU/AWG geography gates are complete within the
+recorded scope. Public APK/source/audio/signature/Range, both invitations and legacy
+discovery pass. No repeated signing/server deployment is required. Preserve sequence9
+and immutable bytes; use the journal/compatible ingress for recovery, never an old DB
+or key. [Publication and exact acceptance](../releases/2026-11-16-android126-publication.md).
+Dated preparation instructions below retain their historical context.
+
 Current receipt: [15 November](../releases/2026-11-15-device-technical-metadata.md).
 This is not RU recovery, HMAC rotation or permission to install all of PR38.
 Generation2 and the accepted RU recovery are the base. Public125 remains supported.

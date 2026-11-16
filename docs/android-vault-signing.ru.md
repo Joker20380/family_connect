@@ -1,5 +1,9 @@
 # Подпись Android APK из KeePassXC
 
+**16 ноября: принятая126 опубликована; vault повторно не открывать.** Неизменяемый
+подписанный APK4f288cbb,50,478,496байт, прежний сертификат. Повторная подпись создаёт
+другие байты и требует новой приёмки. [Точный SHA256 и публичная поставка](releases/2026-11-16-android126-publication.md).
+
 Linux operator tool: [scripts/sign_android_vault.py](../scripts/sign_android_vault.py).
 Общий reader: `scripts/signing_key.py:vault_archive`; Ed25519 issuers сохраняют свои
 проверки32-byte key и public anchor. Root/signing secrets не передаются на серверы/CI.

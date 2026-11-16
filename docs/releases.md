@@ -1,5 +1,12 @@
 # Release distribution / Выпуски
 
+**16 November — Android0.1.18-beta126/code126 PUBLIC, optional catalog9.**
+Consented device/network/VPN information reaches the real production card; only
+RU/AWG currently qualifies IP geography. Installed preservation/revoke, full public
+HTTPS APK/source/audio, signer, Range/resume, invitations/CSP and discovery pass.
+Exact paid-v2 keeps108/119/123/125; old assets/data/HMAC2 remain. No forced installation.
+[Exact release files, limitations and recovery](releases/2026-11-16-android126-publication.md).
+
 **13 November — Android0.1.18-beta125/code125 is PUBLIC, optional catalog8.**
 The exact qualified APK already installed on the owner phone is now the default
 invitation/updater release. Full verified-HTTPS APK/audio-source readback, original
@@ -337,7 +344,7 @@ Python3.14's implicit-directory imports must not hide a broken isolated archive.
 The [client workflow](../.github/workflows/clients.yml) defines platform builds and
 release conditions. CI artifacts do not by themselves establish a release. Validate native
 UI/runtime and downloaded artifacts before signing/publishing. Windows cross-build alone
-is insufficient. The current public releases are Android0.1.18-beta125, Linux0.2.11 and Windows0.2.16; see [current Android delivery](releases/2026-11-13-android125-publication.md) and [desktop delivery](releases/2026-11-02-gateway-selection.md). The [FIELD report](releases/2026-10-03-field1-release-final.md), [desktop cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md) are historical evidence.
+is insufficient. The current public releases are Android0.1.18-beta126, Linux0.2.11 and Windows0.2.16; see [current Android delivery](releases/2026-11-16-android126-publication.md) and [desktop delivery](releases/2026-11-02-gateway-selection.md). The [FIELD report](releases/2026-10-03-field1-release-final.md), [desktop cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md) are historical evidence.
 
 Desktop catalogs use offline signing with increasing sequence numbers. Keep keys out of
 CI and servers; never replace an existing version/tag with different binaries.

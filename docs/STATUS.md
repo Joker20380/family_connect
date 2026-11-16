@@ -1,6 +1,18 @@
 # Текущее состояние / Current state
 
-**16 November evening — separately authorized RU investigation/recovery: RECOVERED_CAUSE_OPEN.**
+**16 November20:42UTC — DEVICE-TECHNICAL-METADATA-1 PUBLIC / optional catalog9.**
+The accepted signed126/4f288cbb is now the invitation and updater release. Full HTTPS
+APK/source/audio hashes, signer/package/ARM64/API27, Range/resume, signed discovery,
+legacy equality and both invitation/CSP paths pass. Installed metadata→API→HMAC2
+collector→real panel, device preservation and consent/revoke acceptance remain valid;
+phone consent is OFF. Exact paid-v2 retains108/119/123/125. No rebuild, signing,
+server deployment, RU recovery/rotation or user broadcast in publication. The separate
+watchdog initiating stall remains CAUSE_OPEN; fresh transport guards pass unchanged.
+Pre-publication head43da3339 has all ten workflows PASS, Android133562778411. Final
+source/catalog/docs integration uses PR38's own checks and ordinary merge, not inherited
+artifact CI. [Public files, device scope, checks and recovery](releases/2026-11-16-android126-publication.md).
+
+**Historical16 November evening — separately authorized RU investigation/recovery: RECOVERED_CAUSE_OPEN.**
 The17:38:50 outage is a paid-watch watchdog cascade, not independent AWG/TCP crashes:
 systemd aborts the watcher, closes both dependent engines and later kills AWG after
 its stop timeout. Watcher-only automatic restarts cannot restore stopped engines.

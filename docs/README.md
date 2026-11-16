@@ -1,5 +1,7 @@
 # Documentation
 
+[Android126 · PUBLIC: technical metadata, optional catalog9, exact APK/source/audio and acceptance](releases/2026-11-16-android126-publication.md).
+
 [RU · 16 November evening: verified watchdog cascade, fresh guarded recovery; initiating stall still open](releases/2026-11-16-ru-recurrence.md#watchdog-cascade-and-guarded-recovery--16-november-evening).
 
 [Technical metadata · 16 November17:41UTC: device restoration and CI pass; publication held by new RU outage](releases/2026-11-15-device-technical-metadata.md#restoration-ci-and-pre-publication-stop--16-november1741utc).

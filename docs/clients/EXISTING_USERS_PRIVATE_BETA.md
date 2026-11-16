@@ -1,5 +1,11 @@
 # Existing-users private Android update / Частное обновление Android
 
+**16 November — PUBLIC126 / optional catalog9.** Settings → Check for updates →
+Install beta126, or use the current invitation. Update in place; do not uninstall,
+clear data or downgrade. Separate technical-information consent stays OFF unless
+you enable it. RU:126 доступна через приглашение и проверку обновлений, установка
+добровольная. [APK, hashes and acceptance](../releases/2026-11-16-android126-publication.md).
+
 **13 November — default public Android125 / optional signed catalog8.**
 Use Settings → Check for updates → Install125, or the current invitation link.
 Preserve app data/identity; do not uninstall, clear data or downgrade to the historical

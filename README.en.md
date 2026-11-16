@@ -9,13 +9,12 @@ media path; Windows/Linux media clients remain incomplete.
 [Current status](docs/STATUS.md). The earlier Stage5 notes below are historical,
 not current implementation or release claims.
 
-Public Android **beta125 / Android8.1+ / ARM64**: [download and update in place](docs/getting-started.en.md).
-Invitation and optional signed updater catalog8 now offer125, including addressed
-operator-support compatibility. The exact qualified APK already runs on the owner's
-phone; two-way support with the user tunnel OFF is confirmed. No forced installation
-or new VPN entitlement. Russia/MESH remains unavailable; cold restricted bootstrap
-and sustained MESH stability remain separate gates. Older118 field material is
-historical, not a downgrade instruction. [Publication and limits](docs/releases/2026-11-13-android125-publication.md).
+Public Android **beta126 / Android8.1+ / ARM64**: [download and update in place](docs/getting-started.en.md).
+Invitations and optional signed catalog9 offer the accepted APK with separate, default-OFF
+technical-information consent. Installed device→real panel, revoke, signature, HTTPS and
+Range/resume checks pass. IP city is qualified only for RU/AWG, not GPS. Existing data,
+HMAC2 and paid admissions remain; installation needs user confirmation. The recurring
+RU stall remains unresolved, not fixed by this release. [Artifacts and limits](docs/releases/2026-11-16-android126-publication.md).
 
 **Stage5 priority update:** Android → Telemost VP8 → Linux EU Gateway → Internet.
 Reticulum control/recovery remains; Windows Home Gateway is a secondary feature.

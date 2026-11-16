@@ -59,13 +59,12 @@ desktop media integration remains incomplete. See the
 [transport model and limits](carrier/README.md#mesh-product-contract) and
 [current status](docs/STATUS.md) and release details below.
 
-Public Android **beta125 / Android8.1+ / ARM64**: [download and update in place](docs/getting-started.en.md).
-Invitation and optional signed updater catalog8 now offer125, including addressed
-operator-support compatibility. The exact qualified APK already runs on the owner's
-phone; two-way support with the user tunnel OFF is confirmed. No forced installation
-or new VPN entitlement. Russia/MESH remains unavailable; cold restricted bootstrap
-and sustained MESH stability remain separate gates. Older118 field material is
-historical, not a downgrade instruction. [Publication and limits](docs/releases/2026-11-13-android125-publication.md).
+Public Android **beta126 / Android8.1+ / ARM64**: [download and update in place](docs/getting-started.en.md).
+Invitations and optional signed catalog9 offer the accepted APK with separate, default-OFF
+technical-information consent. Installed device→real panel, revoke, signature, HTTPS and
+Range/resume checks pass. IP city is qualified only for RU/AWG, not GPS. Existing data,
+HMAC2 and paid admissions remain; installation needs user confirmation. The recurring
+RU stall remains unresolved, not fixed by this release. [Artifacts and limits](docs/releases/2026-11-16-android126-publication.md).
 
 **Resilient connectivity for families and personal devices.**
 
@@ -91,7 +90,7 @@ lifecycle. Automatic orchestration across normal and restricted transports is
 
 | Platform | Latest documented distribution and limits |
 | --- | --- |
-| Android8.1+ / ARM64 | **0.1.18-beta125 / code125**; signed optional catalog8, addressed support compatibility, existing three-server picker. Exact CI/signature/HTTPS and owner123→125 installation PASS; support with tunnel OFF confirmed. Other users are not assumed upgraded; cold restricted bootstrap/MESH stability remain open. No entitlement change. |
+| Android8.1+ / ARM64 | **0.1.18-beta126 / code126**; optional catalog9, consented technical information. Installed chain/revoke/signature/HTTPS/Range accepted; preservation is separately recorded125→first126→corrected126. NL/TCP/MESH geography and physical5G/dual-SIM are not accepted. Existing entitlement remains unchanged. |
 | Linux | **0.2.11**, GTK 4/libadwaita; AppImage and DEB, legacy archive retained for advanced/manual use and updater compatibility. System dependencies and VPN helpers still require setup. |
 | Windows 10 1809+ / 11 x64 | **0.2.16**; explicit Amsterdam1/2 for AWG/TCP, invitation activation, independent signed update catalog12; installer has no trusted publisher signature. Prior installers remain immutable; affected Windows 10 device acceptance is pending. |
 | macOS / iOS | No client release; iOS is later work, after real beta evidence. |
