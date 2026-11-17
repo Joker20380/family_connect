@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**17 November — PR42 final CI repair selected / IN_PROGRESS.**
+Remote head2b32b69e and mainbda954fb verified; other worktrees preserved. Owner
+selects accepted-native staging for Desktop Auto, Android TCP fixture ownership/
+readiness repair and actual final-head iOS qualification. FD/AppImage fixes remain
+accepted; historical FD owner/403 cause UNKNOWN. Desktop workflow now stages the
+full efc13f1c closure, builds its own verified builder outside that tree and keeps
+all current-head compatibility/protocol/overlay gates. Android repair and final CI
+remain pending, not replaced by historical PASS. PR42 stays draft until acceptance.
+No hosting, release or phone changes. [Report](releases/2026-11-17-pr42-final-ci.md).
+
 **17 November12:44UTC — PR42 CI fixes implemented / broader integration gate BLOCKED.**
 Owner authorizes desktop fixture/confirmed cleanup and pinned AppImage downloader
 repair, superseding the earlier docs-only boundary. Remote base is stillbda954fb;

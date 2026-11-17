@@ -2,7 +2,25 @@
 
 ## Current engineering priority / Текущий critical path
 
-**PR42-CI-REPAIR-1 — selected17 November / fixes ready, integration BLOCKED.**
+**PR42-CI-REPAIR-2 — selected17 November / implementation and qualification.**
+Owner explicitly extends the repair boundary: Desktop Auto must build the immutable
+accepted native closure via stage_linux_native, while current-head protocol,
+frontend and intentional lifetime overlays retain their existing gates. Repair
+Android TCP fixture readiness/ownership and port isolation; qualify actual runtime.
+Obtain executed final-head iOS device/simulator/ABI acceptance (one justified retry
+of an unacquired runner is allowed, not retries of executed failures for PASS).
+Entry2b32b69e; remote mainbda954fb verified unchanged. Preserve FD/AppImage repairs
+and their original UNKNOWN causes. Historical TCP port owner/reset sender UNKNOWN;
+the API35 bind failure is separate from API27 DNS. No accepted106 rehash, transport
+changes, product features, hosting, public releases or phone signing/install.
+Gate: all retained Desktop Auto checks, real Android/full Client builds, executed
+iOS and other applicable final-head push/PR gates; author self-review, normal merge
+and remote/tree verification. Do not stop after the first partial repair.
+[Continuation evidence](releases/2026-11-17-pr42-final-ci.md).
+
+### Historical two-blocker repair (superseded scope)
+
+**PR42-CI-REPAIR-1 — fixes accepted; broader integration remained BLOCKED.**
 This replaces the previous docs-only restriction for two confirmed CI blockers:
 desktop resource-boundary diagnostics/repair (and runtime cleanup only if proven
 defective), plus pinned AppImage dependency acquisition and its CI integration.
