@@ -27,6 +27,9 @@ struct ImportedMaterial: Codable {
 
     static func validate(_ data: Data) throws {
         guard !data.isEmpty && data.count <= 96 * 1024 else { throw SafeFailure(message: "Import size rejected") }
+        guard let decoded = try? JSONDecoder().decode(ImportedMaterial.self, from: data), decoded.version == 1 else {
+            throw SafeFailure(message: "Import format/version rejected by Swift decoder")
+        }
         let code = data.withUnsafeBytes { fc_ios_validate_material(UnsafeMutableRawPointer(mutating: $0.baseAddress), Int32($0.count)) }
         guard code == 0 else { throw SafeFailure(message: "Material format, version, trust, revocation or expiry rejected") }
     }

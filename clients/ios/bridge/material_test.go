@@ -99,6 +99,12 @@ func syntheticMaterial(test *testing.T, fault string) []byte {
 	if fault == "trailing" {
 		raw = append(raw, []byte(`{}`)...)
 	}
+	if fault == "case-alias" {
+		raw = []byte(strings.Replace(string(raw), `"version":1`, `"Version":1`, 1))
+	}
+	if fault == "case-shadow" {
+		raw = []byte(strings.Replace(string(raw), `"version":1`, `"version":2,"Version":1`, 1))
+	}
 	return raw
 }
 
@@ -106,7 +112,7 @@ func TestOfflineImportExistingTrustPolicy(test *testing.T) {
 	if ValidateMaterial(syntheticMaterial(test, "")) != nil {
 		test.Fatal("valid synthetic import rejected")
 	}
-	for _, fault := range []string{"revoked", "expired-crl", "bad-crl-signature", "expired-certificate", "bad-certificate-signature", "wrong-role", "wrong-family", "stale-revision", "expired-directory", "wrong-directory-gateway", "version", "resolver", "duplicate", "duplicate-profile", "trailing"} {
+	for _, fault := range []string{"revoked", "expired-crl", "bad-crl-signature", "expired-certificate", "bad-certificate-signature", "wrong-role", "wrong-family", "stale-revision", "expired-directory", "wrong-directory-gateway", "version", "resolver", "duplicate", "duplicate-profile", "trailing", "case-alias", "case-shadow"} {
 		test.Run(fault, func(test *testing.T) {
 			if ValidateMaterial(syntheticMaterial(test, fault)) == nil {
 				test.Fatal("invalid material accepted")

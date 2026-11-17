@@ -29,6 +29,15 @@ func ValidateMaterial(raw []byte) error {
 	if uniqueJSON(json.NewDecoder(bytes.NewReader(raw)), 0) != nil {
 		return rejected
 	}
+	var fields map[string]json.RawMessage
+	if json.Unmarshal(raw, &fields) != nil || len(fields) != 4 {
+		return rejected
+	}
+	for _, name := range []string{"version", "profile", "directory", "resolver"} {
+		if _, present := fields[name]; !present {
+			return rejected
+		}
+	}
 	decoder := json.NewDecoder(bytes.NewReader(raw))
 	decoder.DisallowUnknownFields()
 	var material ImportMaterial

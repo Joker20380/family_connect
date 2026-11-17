@@ -89,6 +89,14 @@ change or unchanged retry; subsequent heads contain actual reviewed iOS fixes.
 UI review adds safe operation-stage context for save/consent, reload and start
 errors, and descriptive numeric native errors without material values.
 
+Cross-language format review found Go encoding/json accepts case-insensitive
+field aliases while Swift Codable does not. Require the exact four outer import
+keys before decoding; reject Version/version shadowing rather than validate one
+value in Go and consume another in Swift. Synthetic case-alias/case-shadow tests
+exercise this agreement. Import also runs Swift decoding before storing, so base64
+or format accepted by only one decoder cannot become an unusable stored item.
+Existing common profile/trust parsing is unchanged.
+
 ## Gates
 
 New device/simulator builds, native coordination, provider/manager/material tests:
