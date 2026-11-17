@@ -42,14 +42,16 @@ var ErrUnderlay = errors.New("iOS underlay denied")
 type Opener func(context.Context) (*wholedevice.Session, error)
 
 type Bridge struct {
-	ctx      context.Context
-	cancel   context.CancelFunc
-	done     chan struct{}
-	mu       sync.Mutex
-	state    int
-	failure  int
-	incoming chan []byte
-	endpoint *channel.Endpoint
+	ctx       context.Context
+	cancel    context.CancelFunc
+	done      chan struct{}
+	mu        sync.Mutex
+	state     int
+	failure   int
+	incoming  chan []byte
+	endpoint  *channel.Endpoint
+	session   *wholedevice.Session
+	committed bool
 }
 
 func New(open Opener) *Bridge {
@@ -114,6 +116,7 @@ func (bridge *Bridge) run(open Opener) {
 		joined.Wait()
 	}()
 	bridge.mu.Lock()
+	bridge.session = session
 	if bridge.ctx.Err() == nil && !session.Failed() {
 		bridge.state = Ready
 	}
@@ -202,5 +205,32 @@ func (bridge *Bridge) Read(wait time.Duration) ([]byte, int, int) {
 	return nil, 0, Timeout
 }
 
-func (bridge *Bridge) Cancel() { bridge.cancel() }
-func (bridge *Bridge) Stop()   { bridge.cancel(); <-bridge.done }
+func (bridge *Bridge) CommitStart() int {
+	bridge.mu.Lock()
+	defer bridge.mu.Unlock()
+	if bridge.failure != 0 {
+		return bridge.failure
+	}
+	if bridge.ctx.Err() != nil {
+		return Closed
+	}
+	if bridge.session != nil && bridge.session.Failed() {
+		bridge.failure, bridge.state = TransportFailed, Failed
+		return TransportFailed
+	}
+	if bridge.state != Ready || bridge.committed {
+		return Invalid
+	}
+	bridge.committed = true
+	return OK
+}
+
+func (bridge *Bridge) Cancel() {
+	bridge.mu.Lock()
+	defer bridge.mu.Unlock()
+	if bridge.failure == 0 && bridge.ctx.Err() == nil && bridge.session != nil && bridge.session.Failed() {
+		bridge.failure, bridge.state = TransportFailed, Failed
+	}
+	bridge.cancel()
+}
+func (bridge *Bridge) Stop() { bridge.Cancel(); <-bridge.done }

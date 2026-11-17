@@ -1,5 +1,132 @@
 # Текущее состояние / Current state
 
+**17 November — restart reservation corrected; final CI still required.**
+815251a8 passes actual iOS44116635234 attempt1, Desktop Auto44116635479, Linux
+control/packaging and full API35 acceptance including repaired per-app DNS fixture.
+Push44116620114/job134156503788 fails before API27 instrumentation: reservation
+51900 EADDRINUSE. No false-ready or application PASS is emitted. Its log lacks
+socket states, so the exact conflict owner/state remains UNKNOWN. A deterministic
+closed-peer regression proves the reservation also rejects TIME_WAIT with no live
+listener. Match Go's SO_REUSEADDR, then listen exclusively (no SO_REUSEPORT); keep
+PID/inode readiness and foreign-listener denial.58 focused tests pass, including
+old failure/new restart, simultaneous reusable listener rejection and cleanup.
+Add bounded endpoint-state diagnostics; no wait/retry/kill workaround or product
+change. Await mandatory CI for this repaired candidate; keep PR42 draft.
+
+**17 November — final CI continuation: per-app DNS fixture correction.**
+b8b3dc05 actually passes iOS44109501083 attempt1 (artifact14340853001,208 hashes,
+both arm64 platforms/nine groups verified), Desktop Auto PR and Linux gates.
+Its Android push44109482163 passes the real WG/AWG/TCP/Auto suite and all three
+actual system-consent handovers, but later per-app API35 DNS times out in8 seconds.
+No claim that the earlier consent failure is explained. Peer ownership and
+HTTP30/DNS86 are proven. Xray logs prove TCP853 wrongly enters the HTTPS fixture;
+the same route also incorrectly handles TCP53. Correct only that synthetic routing:
+UDP/TCP53 DNS responder, explicit unsupported853 rejection, bounded DNS receipt.
+No Android/desktop transport, Private DNS setting, assertion or deadline changes.
+Actual pinned-Xray before/after regression and negative codec/cleanup tests pass;
+new final-head full Android and all mandatory gates remain required before merge.
+The live receipt below records terminal results; hosting/phone work remains excluded.
+
+**17 November — PR42 native/TCP repairs validated; Android consent gate BLOCKED.**
+Exactc568e5b7 passes Desktop Auto push/PR (all retained gates), Linux control
+push/PR, Linux Client packaging and actual iOS device/simulator acceptance:
+artifact14338920484,208 hashes verified, nine isolated groups PASS/handles0.
+Client PR44103613326/job134110824377 fails at system VPN confirmation (no observed
+system roots), then cleanup-required/remaining VPN causes ten further failures.
+TCP peer ownership is proven before/after instrumentation, HTTP12/DNS44, all
+fixture resources join/reap. This is not the old bind failure. Bounded consent
+launch/activity/accessibility diagnostics are added to obtain missing boundary
+evidence; no timing/assertion change, no claim of repaired consent, no blind rerun.
+Full legacy Android/payload gates were skipped, not passed; keep PR draft.
+Entry remote head2b32b69e and mainbda954fb verified; other worktrees preserved. Owner
+selects accepted-native staging for Desktop Auto, Android TCP fixture ownership/
+readiness repair and actual final-head iOS qualification. FD/AppImage fixes remain
+accepted; historical FD owner/403 cause UNKNOWN. Desktop workflow now stages the
+full efc13f1c closure, builds its own verified builder outside that tree and keeps
+all current-head compatibility/protocol/overlay gates. Android fixture now requires
+own PID/socket-inode LISTEN plus IPv4 readiness;10 isolated regressions PASS.
+Historical debug confirms bind failure while instrumentation ran (http0/dns0).
+Intermediate Desktop Auto builds accepted native and passes compatibility/root
+gates. The exposed lifetime overlay bypass is repaired at the common provisioned/
+cached boundary: old DEADLINE reproduced, then15 real-native lifecycle and3
+isolated system tests PASS with unchanged assertions and host routes/resolver.
+The [live final acceptance receipt](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6950900474)
+records exact candidate SHA, real Android, executed iOS, all final push/PR gates,
+artifact verification and merge/main readback. Source/local PASS alone never
+authorizes merge; draft is retained until that complete gate.
+No hosting, release or phone changes. [Report](releases/2026-11-17-pr42-final-ci.md).
+
+**17 November12:44UTC — PR42 CI fixes implemented / broader integration gate BLOCKED.**
+Owner authorizes desktop fixture/confirmed cleanup and pinned AppImage downloader
+repair, superseding the earlier docs-only boundary. Remote base is stillbda954fb;
+entry head690c9e57. A deterministic independent predecessor-socket finalizer
+reproduces the invalid process-wide FD-count invariant (7 vs8) while all current
+participants clean up. Identity-scoped socket/thread audit passes that scenario
+and82 focused/context tests, including negative leak/early-close/FD-reuse cases.
+This does not identify the descriptor in historical13-vs14 failures. Pinned API/CDN
+downloader now verifies both actual ELF files (15133176/944632 bytes, original
+digests), atomic publication/cache revalidation;52 downloader/CI/scope tests pass.
+Final candidate mandatory CI remains pending. Newly applicable Desktop Auto native
+bridge44084203290 fails source verification:49 Android106 manifest mismatches,
+48 already reproducible on mainbda954fb plus PR42's documented deadline test change.
+No manifest rehash, transport requalification or skipped gate: PR42 remains draft.
+No iOS feature, hosting or device signing changes. [Repair report](releases/2026-11-17-pr42-ci-repair.md).
+
+**17 November11:15UTC — owner resumes iOS; hosting work deferred.**
+Remote main remains PR41 mergebda954fb; the existing iOS worktree is preserved.
+Exact47e89416 macOS44038770792 passes both unsigned targets and nine isolated
+groups, handles0; all208 downloaded artifact hashes match. Client builds44038770794
+now passes Android (including API27/28/31), Linux and Windows without retries or
+Android changes. This does not explain or erase the earlier DNS failure.
+The current mandatory blocker is Linux control44038770715: unchanged desktop
+teardown sees13 process descriptors instead of14 in prepare-CONFLICT. No assertion
+is relaxed, no unrelated desktop repair or unchanged CI rerun is selected.
+PR42 stays draft pending exact-head gates; the subsequent documentation checkpoint
+reconciles this evidence, not a new runtime qualification. Follow the
+[final PR42 receipt](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6940824604)
+for its final checks and integration decision. No hosting/server access this turn;
+the separate [RU recovery receipt](https://github.com/Joker20380/family_connect/pull/43#issuecomment-6942592489)
+supersedes the05:20 outage observation, not proof of current health or a durable fix.
+Signed iPhone/Keychain sharing/routes/Telemost/whitelist remain NOT_RUN.
+[Resumed-stage evidence](releases/2026-11-17-ios-development-handoff.md#owner-resumption--17-november1115utc).
+
+**Historical17 November07:23UTC — iOS candidate verified; PR42 integration BLOCKED/DRAFT.**
+Exact168f90c6 passes unsigned device/simulator and nine isolated groups (handles0,
+208 hashes verified), both phase0 runs, Linux control, readiness and scoped push
+Client builds. PR Client builds44033617391/job133871424629 fails unchanged Android
+API27 per-app routing: four DIRECT probes time out on DNS after8000–8009ms despite
+successful direct IPv4/TLS. API28/31 are skipped, not PASS. No Android runtime or
+DNS assertion is changed, no unchanged rerun or merge; remote main remainsbda954fb.
+This evidence-only documentation checkpoint does not requalify or replace168f90c6.
+The failed mandatory gate needs a separately scoped diagnosis, not relaxed checks.
+[Exact results and blocker](releases/2026-11-17-ios-development-handoff.md#final-source-gates--integration-blocked).
+
+**Historical17 November05:20UTC — RU down; iOS development handoff selected.**
+Owner-requested bounded readback finds AWG/TCP inactive since01:03:56UTC and watcher
+auto-restarting (432 restarts at05:20). First failure proves decision_state file_fsync
+9.538854s against8s operation budget; elapsed9.593907s, TRANSPORT_OPERATION_DEADLINE.
+This is an exit-code fail-closed event, not a new12s watchdog event. Underlying
+storage-latency cause remains open. No recovery, observer or production mutation.
+IOS-DEVELOPMENT-HANDOFF-1 now selected from PR41 mainbda954fb; reproduce startup race,
+then provider ownership, manager, Keychain handoff and development build preparation.
+[Readback and selected scope](releases/2026-11-17-ios-development-handoff.md).
+
+iOS0.0.1/build2 source candidate implements native startup commit, provider
+generation ownership, VPN preferences/session UI, immutable shared-Keychain handoff
+and manual development build parameters. Baseline2ea1f6f2 macOS44023861642 reproduced
+false startup success deterministically. Sourcefb13d23b macOS PR44032183193 and
+push44032176415 PASS both unsigned targets and nine isolated groups, zero handles;
+all208 downloaded artifact hashes verified. Local Go race and10 project tests PASS.
+Earlier common-gate failures and two explicit test-fixture adjustments are retained
+in the report; no transport runtime change, desktop assertion change or blind retry.
+[Final exact-head CI/artifact/integration receipt for PR42](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6940824604)
+tracks broader gates, later documentation heads and merge; pending is not PASS.
+Signed physical VPN/Keychain sharing/routing/Telemost remain NOT_RUN. The next owner
+inputs are a specific iPhone/iOS + compatible Mac/Xcode, Team/capability grants,
+development profiles and agreed test identity; no phone trial is automatically run.
+PR41 [finald02fce99 acceptance](https://github.com/Joker20380/family_connect/pull/41#issuecomment-6935466490)
+supersedes its earlier source receipts without deleting them.
+
 **17 November — IOS-MESH-BRIDGE-1 unsigned technical gate PASS.**
 Sourcefc08a50e macOS CI43991766964 builds unsigned iphoneos/arm64 app + Packet
 Tunnel extension and separate iOS Simulator/arm64 targets, verifies linked MESH,

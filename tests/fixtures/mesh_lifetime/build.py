@@ -10,6 +10,15 @@ import tarfile
 ROOT = Path(__file__).resolve().parents[3]
 
 
+def session_overlay(text):
+    signature = 'func openDirectoryWithTransport(ctx context.Context, raw []byte, directory bootstrap.Directory, network *underlay.Network, event func(string), transport *PacketTransport) (*Session, error) {'
+    if text.count(signature) != 1:
+        raise ValueError('Expected the single common directory/transport boundary')
+    text = text.replace('import (', 'import (\n "os"\n "net/netip"', 1)
+    return text.replace(signature, signature + '\n return l021Open(ctx, raw)\n}\n\n' +
+                        signature.replace('openDirectoryWithTransport(', 'unusedProductionDirectoryWithTransport('))
+
+
 def build(go, output, xray_source):
     sys.path.insert(0, str(ROOT))
     from scripts.build_desktop_mesh import XRAY_REVISION, PATCH_SHA256, digest
@@ -25,10 +34,7 @@ def build(go, output, xray_source):
     subprocess.run(['git', 'apply', str(patch)], cwd=xray, check=True,
                    env=dict(os.environ, GIT_CEILING_DIRECTORIES=str(output)))
     source = ROOT / 'carrier/wholedevice/session.go'
-    text = source.read_text().replace('import (', 'import (\n "os"\n "net/netip"', 1)
-    signature = 'func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Directory, network *underlay.Network, event func(string)) (*Session, error) {'
-    assert text.count(signature) == 1
-    text = text.replace(signature, signature + '\n return l021Open(ctx, raw)\n}\n\n' + signature.replace('openDirectory(', 'unusedProductionDirectory('))
+    text = session_overlay(source.read_text())
     replacement = output / 'session.go'
     replacement.write_text(text + '\n' + Path(__file__).with_name('session.go.txt').read_text())
     overlay = output / 'overlay.json'
@@ -71,6 +77,16 @@ func l021Drained() {
     subprocess.run([go, 'build', '-race', '-buildvcs=false', '-overlay=' + str(overlay), '-modfile=' + str(module),
                     '-ldflags=-checklinkname=0', '-o', str(output / 'fc-mesh-fixture'), './cmd/fc-mesh'],
                    cwd=ROOT / 'clients/mesh', env=environment, check=True)
+    (output / 'fixture-build.json').write_text(json.dumps(dict(
+        kind='current-source-test-overlay-not-release',
+        source_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
+        source_tree=subprocess.check_output(['git', 'rev-parse', 'HEAD^{tree}'], cwd=ROOT, text=True).strip(),
+        go=subprocess.check_output([go, 'version'], text=True).strip(),
+        xray_revision=XRAY_REVISION, patch_sha256=PATCH_SHA256,
+        binary_sha256=digest(output / 'fc-mesh-fixture'),
+        overlays={str(Path(original).relative_to(ROOT)): dict(source_sha256=digest(Path(original)),
+                  overlay_sha256=digest(Path(replaced))) for original, replaced in
+                  json.loads(overlay.read_text())['Replace'].items()}), indent=2) + '\n')
 
 
 if __name__ == '__main__':

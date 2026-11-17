@@ -108,12 +108,16 @@ func TestDNSPairedDatagramsReuseSourcePort(test *testing.T) {
 		test.Fatal(err)
 	}
 	defer connection.Close()
-	connection.SetDeadline(time.Now().Add(time.Second))
+	const completionBudget = 3 * time.Second
+	started := time.Now()
+	if err := connection.SetDeadline(started.Add(completionBudget)); err != nil {
+		test.Fatal(err)
+	}
 	expected := make(map[uint16][]byte)
 	for _, kind := range []dnsmessage.Type{dnsmessage.TypeA, dnsmessage.TypeAAAA} {
 		query := dnsPacketQuery(test, uint16(kind), kind)
-		if _, err := connection.Write(query); err != nil {
-			test.Fatal(err)
+		if count, err := connection.Write(query); err != nil || count != len(query) {
+			test.Fatal("paired DNS write", count, err)
 		}
 		query[2] |= 0x80
 		expected[uint16(kind)] = query
@@ -122,6 +126,7 @@ func TestDNSPairedDatagramsReuseSourcePort(test *testing.T) {
 	for index := 0; index < 2; index++ {
 		answer := make([]byte, 4096)
 		count, err := connection.Read(answer)
+		test.Logf("paired DNS response=%d count=%d elapsed=%s budget=%s queries=%d error=%v", index+1, count, time.Since(started), completionBudget, plane.dns.Load(), err)
 		if err != nil || count < 12 || !bytes.Equal(answer[:count], expected[binary.BigEndian.Uint16(answer)]) {
 			test.Fatal("paired DNS packet lost", err)
 		}

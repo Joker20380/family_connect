@@ -44,6 +44,37 @@ func waitState(test *testing.T, bridge *Bridge, expected int) {
 	test.Fatalf("state %d failure %d, wanted %d", state, failure, expected)
 }
 
+func TestStartupCommitLinearization(test *testing.T) {
+	bridge := New(NewFixture().Attach)
+	waitState(test, bridge, Ready)
+	if bridge.CommitStart() != OK || bridge.CommitStart() != Invalid {
+		test.Fatal("single startup admission")
+	}
+	bridge.Stop()
+	if bridge.CommitStart() != Closed {
+		test.Fatal("stop must win")
+	}
+	cancelled := New(NewFixture().Attach)
+	waitState(test, cancelled, Ready)
+	cancelled.Cancel()
+	if cancelled.CommitStart() != Closed {
+		test.Fatal("cancelled session admitted")
+	}
+	cancelled.Stop()
+	fixture := NewFixture()
+	failed := New(fixture.Attach)
+	waitState(test, failed, Ready)
+	fixture.Close()
+	waitState(test, failed, Failed)
+	if failed.CommitStart() != TransportFailed {
+		test.Fatal("transport failure lost")
+	}
+	failed.Stop()
+	if _, failure := failed.Status(); failure != TransportFailed {
+		test.Fatal("stop replaced first error")
+	}
+}
+
 func TestPacketCopyDNSAndProtocolFamily(test *testing.T) {
 	gate := make(chan struct{})
 	fixture := NewFixture()

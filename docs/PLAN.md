@@ -2,6 +2,100 @@
 
 ## Current engineering priority / Текущий critical path
 
+**PR42-CI-REPAIR-2 — native/TCP/DNS validated / restart reservation correction.**
+815251a8 push passes full API35, then fails before API27 on reservation51900.
+Reproduce closed-peer TIME_WAIT false rejection locally; match Go SO_REUSEADDR
+with exclusive listen, preserving foreign-listener/child ownership checks.58 tests
+PASS; bounded socket-state receipt distinguishes future live conflicts from
+TIME_WAIT. Old actual conflict state/owner is not known. Final CI remains required.
+b8b3dc05 passes actual iOS attempt1, Desktop Auto and real WG/AWG/TCP/Auto with three
+successful system-consent transfers; old c568 consent cause remains UNKNOWN.
+Push44109482163 later fails per-app API35 DNS8s while IPv4/IPv6 TLS succeed.
+Logs prove853-to-HTTPS misrouting; actual pinned-Xray regression also reproduces
+TCP53-to-HTTPS. Correct the synthetic DNS endpoint/rules and retain bounded DNS
+diagnostics, with unchanged Android settings, deadline and routing assertions.
+All final-head gates including full legacy Android/payload remain mandatory;
+historical iOS/runtime PASS never substitutes for the new candidate.
+Owner explicitly extends the repair boundary: Desktop Auto must build the immutable
+accepted native closure via stage_linux_native, while current-head protocol,
+frontend and intentional lifetime overlays retain their existing gates. Repair
+Android TCP fixture readiness/ownership and port isolation; qualify actual runtime.
+Desktop staging15 tests PASS; Android ownership/cleanup10 isolated tests PASS.
+Current-code lifetime overlay bypass repaired: reproduced DEADLINE, then15 native
+lifecycle and3 isolated system gates PASS; hook/staging regressions13 PASS.
+Remaining integration gate: real Android and executed final-head iOS acceptance
+(one justified retry of an unacquired runner is allowed, not retries of executed
+failures for PASS).
+Entry2b32b69e; remote mainbda954fb verified unchanged. Preserve FD/AppImage repairs
+and their original UNKNOWN causes. Historical TCP port owner/reset sender UNKNOWN;
+the API35 bind failure is separate from API27 DNS. No accepted106 rehash, transport
+changes, product features, hosting, public releases or phone signing/install.
+Gate: all retained Desktop Auto checks, real Android/full Client builds, executed
+iOS and other applicable final-head push/PR gates; author self-review, normal merge
+and remote/tree verification. Do not stop after the first partial repair.
+[Live final gate/merge status](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6950900474)
+is authoritative for terminal CI and integration; no follow-on product task starts
+automatically after merge.
+[Continuation evidence](releases/2026-11-17-pr42-final-ci.md).
+
+### Historical two-blocker repair (superseded scope)
+
+**PR42-CI-REPAIR-1 — fixes accepted; broader integration remained BLOCKED.**
+This replaces the previous docs-only restriction for two confirmed CI blockers:
+desktop resource-boundary diagnostics/repair (and runtime cleanup only if proven
+defective), plus pinned AppImage dependency acquisition and its CI integration.
+Dependencies: accepted iOS development implementation; entry690c9e57, mainbda954fb.
+Desktop: deterministic false failure reproduced; owned-resource audit and82
+targeted/context tests pass. Historical FD owner remains UNKNOWN; no runtime
+cleanup defect established. AppImage downloader retains both pins; both full binary
+downloads/hash verification and52 targeted downloader/workflow/scope tests pass.
+Full final-head Linux packaging and broader CI are pending; preserve old failures.
+Newly applicable Desktop Auto source verification fails49 reference entries (48
+also on mainbda954fb). Its accepted106 baseline cannot be updated by blind rehash;
+separate shared-transport reference reconciliation/qualification is outside these
+two CI repairs. Preserve this blocker and draft status unless legitimately resolved.
+Gate: negative tests, exact final-head phase0 push AND PR, Client Linux, Linux
+control, Android/iOS and all other applicable checks, explicit self-review and
+ordinary PR42 merge with remote verification. Do not retry unchanged CI for green.
+No hosting, production, Android DNS investigation, new iOS features or phone work.
+Next product step only after integration: separately agreed signed iPhone prototype.
+[Repair evidence and outstanding gates](releases/2026-11-17-pr42-ci-repair.md).
+
+### Historical iOS checkpoint (superseded repair boundary)
+
+**IOS-DEVELOPMENT-HANDOFF-1 — iOS source gate PASS / integration BLOCKED, PR42 DRAFT.**
+Owner resumes this stage17 November; hosting work is explicitly deferred.
+Exact47e89416 now passes iOS, Client builds (including Android API27/28/31), phase0
+and readiness. Linux control44038770715 fails unchanged desktop teardown:
+prepare-CONFLICT observes13 process descriptors against14 at entry. Preserve the
+earlier168f90c6 Android DNS failure too; a later success does not establish its cause.
+Do not merge with a failed mandatory gate, retry for green, or weaken/change unrelated
+desktop/Android runtime/assertions. Reconcile the completed evidence in one docs
+checkpoint; its automatic CI receives its own exact-head review. Further outcomes
+belong in the final PR receipt rather than repeated documentation pushes to rerun CI.
+
+Base PR41 merge bda954fb, remote unchanged; its5 post-merge workflows PASS.
+Gate: deterministic startup regression, generation-scoped provider lifecycle,
+idempotent NETunnelProviderManager, shared app-specific Keychain reference handoff,
+development signing parameters, exact-head unsigned device/simulator and isolated tests.
+Historical RU readback:01:03:56UTC operation-deadline failure proven at file_fsync;
+the later separate recovery is recorded in PR43. No new host access, repair or observer
+is selected here; underlying latency remains open. Physical VPN,
+Keychain sharing, routing, Telemost and whitelist remain a later device gate.
+[Receipt](releases/2026-11-17-ios-development-handoff.md).
+
+Development0.0.1/build2: startup commit/provider cleanup, manager, Keychain and
+signing preparation implemented. Exactfb13d23b macOS PR44032183193/push44032176415
+PASS both unsigned targets and nine isolated groups, zero handles;208 hashes
+verified. Author self-review is explicit, not independent approval. Broader gates
+and any subsequent documentation-head qualification/ordinary merge are recorded in
+[the final PR42 integration receipt](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6940824604);
+a pending receipt does not authorize merge. Prior failed runs remain evidence.
+Next owner step: confirm actual phone/iOS/Xcode pairing, Team/capabilities,
+development provisioning and disposable test identity, then separately authorize
+the bounded signed-device plan in the iOS README. No real phone/Telemost/whitelist
+trial or RU recovery is selected automatically. PR41 finald02fce99 remains accepted.
+
 **IOS-MESH-BRIDGE-1 — explicitly selected17 November / technical gate COMPLETE.**
 Dependency satisfied: PR40 exact3539ebe4 push/PR phase0 PASS, ordinary merge3468f828;
 retain RECOVERED_CAUSE_OPEN without repeating recovery.
