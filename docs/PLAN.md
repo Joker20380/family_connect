@@ -2,6 +2,13 @@
 
 ## Current engineering priority / Текущий critical path
 
+**17 November — selected local Blender integration DONE.** Gate: control the installed
+GUI over local MCP, save a separate test scene, render it and inspect image readback.
+All pass; a local skill, launcher and rollback instructions are installed. No Family
+Connect implementation/release gate advances. Next Blender modeling task awaits the
+owner's choice; do not resume the product queue automatically.
+[Versions, limitations and rollback](releases/2026-11-17-local-blender-setup.md).
+
 **15 November — selected local root-disk cleanup DONE.** Root readback:19GiB free,
 89% used;18 containers remain running. No implementation/release gate advances.
 Further `/mnt/data` cleanup is stopped. The separate37GiB NTFS volume remains

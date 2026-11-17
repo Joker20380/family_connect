@@ -1,5 +1,12 @@
 # Текущее состояние / Current state
 
+**17 November — local Blender/Codex setup verified.** Existing Blender5.3.0 retained;
+isolated MCP for Blender2.3.0 installed with a loopback-only listener, telemetry off
+and the upstream code guard enabled. Live scene creation/save, NVIDIA/Vulkan viewport,
+EEVEE render and MCP screenshot readback pass. No Family Connect source, client/server
+version or deployment change; no queued engineering task was resumed.
+[Local setup, verification and rollback](releases/2026-11-17-local-blender-setup.md).
+
 **15 November — local system-disk cleanup complete.** Final selected scope is the
 owner laptop's `/`, not further `/mnt/data` cleanup. Root now has approximately19GiB
 available/89% used, versus1.1GiB at session entry. Current applications, all18 running
