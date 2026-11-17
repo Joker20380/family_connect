@@ -15,6 +15,19 @@ The direct emulator DNS must be reachable; the local run uses the emulator's
 `-dns-server 1.1.1.1`, without changing host or production resolvers. A direct DNS
 failure is fixture/network unavailability, not split-tunnel acceptance.
 
+The synthetic DNS responder supports UDP and framed TCP on port53. Xray routes
+both there, never to the HTTPS responder. Port853 is explicitly rejected: this
+stand does not implement trusted DNS-over-TLS/QUIC. Android Private DNS settings
+are not changed; strict Private DNS is not qualified by this fixture. Opportunistic
+validation must fail normally instead of entering an unrelated HTTPS handshake.
+The default-network `InetAddress` probe,8-second lookup deadline and independent
+UID/address assertions are unchanged. Bounded `fixture/dns.json` records only
+protocol/type/send time (no query names/material); it is retained with Xray logs.
+`FC_APP_VPN_XRAY=/path/to/pinned/xray-peer python -m pytest -q tests/test_app_vpn_dns.py`
+reproduces the old TCP53/853-to-HTTPS misrouting and verifies the corrected routes
+with actual Xray, plus UDP/TCP framing, malformed input and joined stalled-client
+cleanup. This local routing test is not Android or REALITY acceptance.
+
 The MESH policy test invokes the production owned-TUN attachment and uses the
 REALITY carrier behind it. This proves Android application selection and guard
 replacement, **not MESH wire, cold-entry, readiness or provider qualification**.

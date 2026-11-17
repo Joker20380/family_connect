@@ -2,13 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
-**PR42-CI-REPAIR-2 — native/TCP repairs validated / Android consent diagnosis.**
-Final-candidate c568 Desktop Auto push/PR and actual iOS PASS; small Android
-diagnostics prove own TCP peer readiness/cleanup but system-revocation confirmation
-fails, followed by cleanup-required. Obtain bounded launch/activity/window evidence
-with unchanged actual-dialog assertions/deadlines; do not substitute earlier4badd
-runtime success or rerun unchanged executed failures for green. Legacy/payload gates
-remain required. Diagnostic source checkpoint is not a consent fix or acceptance.
+**PR42-CI-REPAIR-2 — native/TCP validated / per-app fixture DNS isolation.**
+b8b3dc05 passes actual iOS attempt1, Desktop Auto and real WG/AWG/TCP/Auto with three
+successful system-consent transfers; old c568 consent cause remains UNKNOWN.
+Push44109482163 later fails per-app API35 DNS8s while IPv4/IPv6 TLS succeed.
+Logs prove853-to-HTTPS misrouting; actual pinned-Xray regression also reproduces
+TCP53-to-HTTPS. Correct the synthetic DNS endpoint/rules and retain bounded DNS
+diagnostics, with unchanged Android settings, deadline and routing assertions.
+All final-head gates including full legacy Android/payload remain mandatory;
+historical iOS/runtime PASS never substitutes for the new candidate.
 Owner explicitly extends the repair boundary: Desktop Auto must build the immutable
 accepted native closure via stage_linux_native, while current-head protocol,
 frontend and intentional lifetime overlays retain their existing gates. Repair

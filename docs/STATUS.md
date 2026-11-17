@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**17 November — final CI continuation: per-app DNS fixture correction.**
+b8b3dc05 actually passes iOS44109501083 attempt1 (artifact14340853001,208 hashes,
+both arm64 platforms/nine groups verified), Desktop Auto PR and Linux gates.
+Its Android push44109482163 passes the real WG/AWG/TCP/Auto suite and all three
+actual system-consent handovers, but later per-app API35 DNS times out in8 seconds.
+No claim that the earlier consent failure is explained. Peer ownership and
+HTTP30/DNS86 are proven. Xray logs prove TCP853 wrongly enters the HTTPS fixture;
+the same route also incorrectly handles TCP53. Correct only that synthetic routing:
+UDP/TCP53 DNS responder, explicit unsupported853 rejection, bounded DNS receipt.
+No Android/desktop transport, Private DNS setting, assertion or deadline changes.
+Actual pinned-Xray before/after regression and negative codec/cleanup tests pass;
+new final-head full Android and all mandatory gates remain required before merge.
+The live receipt below records terminal results; hosting/phone work remains excluded.
+
 **17 November — PR42 native/TCP repairs validated; Android consent gate BLOCKED.**
 Exactc568e5b7 passes Desktop Auto push/PR (all retained gates), Linux control
 push/PR, Linux Client packaging and actual iOS device/simulator acceptance:
