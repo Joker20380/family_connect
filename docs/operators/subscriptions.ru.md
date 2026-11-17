@@ -457,7 +457,24 @@ watchdog/crash watcher, повреждении cache/bindings или реаль�
 потерей центрального paid-контроллера; после устранения причины нужны watcher,
 оба engines и успешная сверка. Неизвестные/чужие bindings не удаляются массово.
 
-**Текущее расследование/восстановление RU,16 ноября вечером — RECOVERED_CAUSE_OPEN:**
+**Текущее восстановление RU,17 ноября00:02UTC — RECOVERED_CAUSE_OPEN:** после явного
+подтверждения владельца восстановлена доступность после нового watchdog22:07UTC.
+Свежий backup/изолированное восстановление27 таблиц и paid projections, RU-only
+fence/drain/stop, retained-state preflight и запуск прежних bytes прошли. Шесть
+строгих наблюдений за203.900с пересекли lease deadline:66 records, точные20/20,
+неизменные процессы и нулевые рестарты. HTTP/peer, поддержка/панель, NL и timer
+reconciler не перезапускались; HMAC2, paid-v2, metadata tombstones и baseline/cursor
+сохранены. Новый observer/ослабление сроков не устанавливались. Это восстановление
+доступности, не исправление причины. [Receipt](../releases/2026-11-17-ru-recovery.md).
+
+При повторном использовании локального recovery-checker его evidence selector
+должен указывать на **текущий** startup receipt. Convergence anchor предыдущего
+инцидента не существует в новом backup и не заменяет startup baseline. Ошибку
+читателя сохранить; исправить только selector, не ослабляя PID/invocation/restart,
+engine-set, revision и preservation assertions. Новый convergence anchor допустим
+только после отдельно объяснённой штатной смены процесса, не ради зелёной проверки.
+
+**Историческое расследование/восстановление RU,16 ноября вечером — RECOVERED_CAUSE_OPEN:**
 для сбоя17:38:50 доказана цепочка watchdog→остановка AWG/TCP→повторные старты только
 watcher. Последующая ошибка register/awg-query не является первопричиной. Интервал
 сбоя содержит высокие I/O wait/reclaim; широкие чтения журналов оператором — возможный

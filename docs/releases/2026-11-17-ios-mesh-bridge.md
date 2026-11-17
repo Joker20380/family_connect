@@ -57,6 +57,8 @@ PR43984770165 phase0 completed SUCCESS, review-triggered panel43984863961 SKIPPE
 3468f828c793079a839e3306b5fc101f7c6155f3 is remote-main verified with the same tree
 as accepted PR40. No rerun or fresh restoration/readback was performed. The
 00:05:38 author-review receipt remains the supplied operational acceptance boundary.
+The iOS branch incorporates this main by ordinary merge, preserving both top-level
+documentation entries; no dirty original worktree, published commit or history is rewritten.
 
 ## First macOS attempts — retained failures
 

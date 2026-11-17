@@ -11,7 +11,17 @@ limits and signed-iPhone prerequisites. No production/recovery/observer/next bac
 task. Local Go boundary/original packet regression pass; macOS CI/review pending.
 [Receipt](releases/2026-11-17-ios-mesh-bridge.md) · [Build](../clients/ios/README.md).
 
-**16 November22:47UTC — DEVICE-TECHNICAL-METADATA-1 public/source delivery completed;
+**17 November00:02UTC — owner-requested RU recovery COMPLETE / RECOVERED_CAUSE_OPEN.**
+Fresh backup/isolated restore, RU-only fence/drain/stop, unchanged start, restored
+command map and six strict actual/persisted observations pass. The203.900s window
+crosses a lease deadline without process changes; final preservation and normal
+imports/support checks pass. Keep current HMAC2, exact paid-v2, metadata tombstones,
+public126/catalog9 and all current user data. No further recovery, runtime change or
+observer is selected automatically. The initiating stall remains a separate open
+cause, not a reason to claim this availability restoration is a durable fix.
+[Recovery receipt](releases/2026-11-17-ru-recovery.md).
+
+**Historical16 November22:47UTC — DEVICE-TECHNICAL-METADATA-1 public/source delivery completed;
 separate RU availability is OPEN.** PR38 merge7123b95e is remote-verified with the
 qualified588e793a tree. All ten source PR workflows and four push workflows pass.
 Keep signed4f288cbb/sourceba3e9370, catalog9, exact paid-v2 and installed acceptance.
