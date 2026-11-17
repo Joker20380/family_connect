@@ -2,6 +2,13 @@
 
 ## Current engineering priority / Текущий critical path
 
+**17 November — selected Blender N185 rebuild, local reference checkpoint.**
+Replace the rejected generic shell using N185-specific factory drawings and photos;
+preserve the original draft, save an editable scene, inspect rendered views and
+record measured anchors plus source uncertainty. Owner likeness acceptance remains
+OPEN; do not label it an exact CAD replica. No Family Connect task is resumed.
+[Evidence and remaining limits](releases/2026-11-17-blender-n185.md).
+
 **17 November — selected local Blender integration DONE.** Gate: control the installed
 GUI over local MCP, save a separate test scene, render it and inspect image readback.
 All pass; a local skill, launcher and rollback instructions are installed. No Family

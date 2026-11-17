@@ -1,5 +1,13 @@
 # Текущее состояние / Current state
 
+**17 November — local 4Runner N185 reference rebuild.** The first generic vehicle
+draft was rejected for likeness and preserved. A separate editable N185 scene uses
+Toyota factory side/top catalogue drawings, official dimensions and photographs;
+wheelbase2675mm and bumper length4655mm checked. This is a visual reconstruction,
+not OEM CAD or an owner-accepted exact replica. Assets remain outside this repository;
+Family Connect versions, services and engineering gates are unchanged.
+[Sources, local files, validation and limitations](releases/2026-11-17-blender-n185.md).
+
 **17 November — local Blender/Codex setup verified.** Existing Blender5.3.0 retained;
 isolated MCP for Blender2.3.0 installed with a loopback-only listener, telemetry off
 and the upstream code guard enabled. Live scene creation/save, NVIDIA/Vulkan viewport,
