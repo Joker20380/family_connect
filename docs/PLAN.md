@@ -3,6 +3,11 @@
 ## Current engineering priority / Текущий critical path
 
 **RU-PERSISTENCE-READBACK-1 — selected / source-only qualification.**
+Opt-in implementation and local native-query comparison are present; retain
+baseline tests and obtain final exact-head CI and separate candidate review.
+[Contract and remaining delivery boundaries](operators/transport-readback-candidate.md).
+Source qualification never closes historical storage attribution or RU availability.
+
 First integrate documentation PR43 by ordinary merge with current main, exact-head
 checks and author self-review. PR42 source `af1b37b6`/merge `b3fefac1` is complete;
 do not reopen its CI. Then prepare a separate opt-in candidate retaining durable

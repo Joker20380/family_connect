@@ -1,5 +1,6 @@
 """Gateway decision cache and bounded application, not a subscription authority."""
 import fcntl
+import hashlib
 from contextlib import contextmanager
 from contextvars import ContextVar
 import json
@@ -13,6 +14,7 @@ import stat
 import subprocess
 import sys
 import time
+import uuid
 
 from . import transport_policy as policy
 
@@ -340,16 +342,29 @@ def boot_id():
     return Path('/proc/sys/kernel/random/boot_id').read_text().strip()
 
 
+def state_digest(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
+
+
+def process_start(pid):
+    return Path(f'/proc/{pid}/stat').read_text().rsplit(')', 1)[1].split()[19]
+
+
 class Gateway:
+    observation_mode = False
+
     def __init__(self, gateway, *, clock=time.time, monotonic=time.monotonic, run=execute):
         self.gateway, self.root, self.clock, self.monotonic, self.run = gateway, gateway.ROOT, clock, monotonic, run
         self.path = self.root / 'transport-state.json'
         config = read(self.root / 'transport-enforcement.json')
-        if (set(config) != {'schema', 'profile', 'node', 'enabled'} or config['schema'] != 1
+        self.observation_mode = config.get('readback_mode') == 'observations-v1'
+        if (set(config) != {'schema', 'profile', 'node', 'enabled'} | ({'readback_mode'} if self.observation_mode else set()) or config['schema'] != 1
                 or config['profile'] != policy.PROFILE or config['node'] not in policy.NODES or config['enabled'] is not True):
             raise ValueError('INVALID_GATEWAY_POLICY')
         self.node = config['node']
         self.metrics = None
+        self.producer = dict(pid=os.getpid(), start=process_start(os.getpid()), generation=uuid.uuid4().hex) if self.observation_mode else None
+        self.observation_path = self.root / 'transport-observation.json'
 
     @contextmanager
     def operation(self):
@@ -364,6 +379,11 @@ class Gateway:
             operation.remaining()
             result = 'complete'
         except BaseException as error:
+            if self.observation_mode:
+                try:
+                    self.observation_path.unlink(missing_ok=True)
+                except OSError as cleanup:
+                    emit(dict(observation_cleanup_error=type(cleanup).__name__))
             if not hasattr(error, 'transport_context'):
                 error.transport_context = operation.context('operation', 'body')
             raise
@@ -424,6 +444,8 @@ class Gateway:
                 and self.monotonic() < cached['deadline'])
 
     def accept(self, envelope):
+        if self.observation_mode:
+            self.observation_path.unlink(missing_ok=True)
         policy.validate(envelope, self.node, self.clock())
         state = self.load()
         for decision in envelope['decisions']:
@@ -472,7 +494,10 @@ class Gateway:
         report_failure(error, mode, self.root)
         token = CURRENT_OPERATION.set(None)
         try:
-            for action in (self.stop_all, self.failure):
+            actions = (self.stop_all, self.failure)
+            if self.observation_mode:
+                actions = (lambda: self.observation_path.unlink(missing_ok=True), *actions)
+            for action in actions:
                 try:
                     action()
                 except BaseException as cleanup:
@@ -489,6 +514,10 @@ class Gateway:
             self.apply_serialized()
 
     def apply_serialized(self):
+        if self.observation_mode:
+            self.observation_path.unlink(missing_ok=True)
+            if self.producer['pid'] != os.getpid() or self.producer['start'] != process_start(os.getpid()):
+                self.producer = dict(pid=os.getpid(), start=process_start(os.getpid()), generation=uuid.uuid4().hex)
         for attempt in range(12):
             with self.lock():
                 with self.stage('plan'):
@@ -498,7 +527,7 @@ class Gateway:
                     self.run(['systemctl', 'restart', SERVICES[1]])
             with self.lock():
                 with self.stage('readback'):
-                    if self.readback(state, peers, observations):
+                    if self.readback(state, peers, observations, changed=changed):
                         return
         raise ValueError('APPLICATION_DID_NOT_CONVERGE')
 
@@ -540,7 +569,10 @@ class Gateway:
             os.chown(tcp_path, info.st_uid, info.st_gid)
         return state, peers, observations, changed
 
-    def readback(self, state, peers, observations):
+    def readback(self, state, peers, observations, *, changed=False):
+        if self.observation_mode and state != self.load():
+            return False
+        committed = {device: cached['applied'] for device, cached in state['records'].items()}
         live = self.awg_snapshot()
         for device, cached in state['records'].items():
             decision, observation = cached['decision'], observations[device]
@@ -549,9 +581,11 @@ class Gateway:
                 if allowed and live.get(public) != peers[public]:
                     with self.stage('actuation'):
                         self.gateway.add_peer(public, peers[public])
+                        changed = True
                 elif not allowed and public in live:
                     with self.stage('actuation'):
                         self.run([str(self.root / 'awg'), 'set', self.gateway.IFACE, 'peer', public, 'remove'])
+                        changed = True
         tcp_by_email, tcp_by_id = self.tcp_snapshot()
         live = self.awg_snapshot()
         for device, cached in state['records'].items():
@@ -571,15 +605,64 @@ class Gateway:
                     return False
                 raise ValueError('ENGINE_READBACK_MISMATCH')
             observation.update(applied_revision=decision['revision'], allowed=expected, result='applied')
+            if self.observation_mode:
+                observation['decision_sha256'] = state_digest(cached['decision'])
             cached['applied'] = observation
         if any(observations[key]['allowed'] != (observations[key]['registered'] and self.allowed(value))
                for key, value in state['records'].items()):
             return False
+        if self.observation_mode:
+            return self.record_observation(state, observations, committed, changed)
         state['observed_at'] = int(self.clock())
         write(self.path, state)
         write(self.root/'transport-attempt.json', dict(schema=1, node=self.node,
             observed_at=int(self.clock()), result='applied'))
         return True
+
+    def record_observation(self, state, observations, committed, changed):
+        def semantic(value):
+            return {key: item for key, item in (value or {}).items() if key != 'observed_at'}
+        required = changed or any(semantic(committed[device]) != semantic(observation)
+            for device, observation in observations.items())
+        for device, cached in state['records'].items():
+            cached['applied'] = observations[device] if required else committed[device]
+        attempt_path = self.root / 'transport-attempt.json'
+        try:
+            attempt = read(attempt_path)
+        except (OSError, ValueError):
+            attempt = None
+        binding = dict(schema=2, node=self.node, result='applied', boot=boot_id(), producer=self.producer,
+            state_sha256=state_digest(state))
+        if required or attempt != dict(binding, observed_at=(attempt or {}).get('observed_at')):
+            for device, cached in state['records'].items():
+                cached['applied'] = observations[device]
+            state['observed_at'] = int(self.clock())
+            write(self.path, state)
+            binding['state_sha256'] = state_digest(state)
+            write(attempt_path, dict(binding, observed_at=int(self.clock())))
+        if any(observations[device]['allowed'] != (observations[device]['registered'] and self.allowed(cached))
+                for device, cached in state['records'].items()):
+            return False
+        remaining()
+        completed = int(self.clock())
+        observation = dict(binding, observed_at=completed, monotonic=self.monotonic(),
+            records={device: dict(value, observed_at=completed) for device, value in observations.items()})
+        temporary = self.observation_path.with_suffix('.pending')
+        try:
+            with self.stage('publish_observation'):
+                descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW, 0o600)
+                with os.fdopen(descriptor, 'w') as handle:
+                    os.fchmod(handle.fileno(), 0o600)
+                    json.dump(observation, handle, sort_keys=True, allow_nan=False)
+                remaining()
+                os.replace(temporary, self.observation_path)
+            if any(observations[device]['allowed'] != (observations[device]['registered'] and self.allowed(cached))
+                    for device, cached in state['records'].items()):
+                self.observation_path.unlink(missing_ok=True)
+                return False
+            return True
+        finally:
+            temporary.unlink(missing_ok=True)
 
     def awg_snapshot(self):
         live = {}
@@ -630,7 +713,8 @@ def watch(gateway, *, run=execute):
                         engine.run(['systemctl', 'is-active', '--quiet', service])
                 break
             except subprocess.SubprocessError:
-                notify('WATCHDOG=1')
+                if not engine.observation_mode:
+                    notify('WATCHDOG=1')
                 time.sleep(policy.TICK_SECONDS)
         else:
             raise ValueError('ENGINE_START_TIMEOUT')

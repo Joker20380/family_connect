@@ -2,6 +2,9 @@ from copy import deepcopy
 from datetime import timedelta
 import hashlib
 import json
+import os
+from pathlib import Path
+import time
 
 from django.db import DatabaseError, transaction
 from django.utils import timezone
@@ -142,3 +145,36 @@ def test_historical_observation_does_not_invent_schema(console, client, monkeypa
     transports.ingest(transport_observation(), 'gateway-ru')
     client.force_login(console)
     assert 'Schema не сохранена в историческом наблюдении' in client.get('/subscriptions/').content.decode()
+
+
+def test_candidate_collector_ingestion_keeps_readback_age_and_errors(console, tmp_path, monkeypatch):
+    from control.friends import transport_gateway as gateway
+    now = int(time.time())
+    raw = b'synthetic candidate source'
+    (tmp_path/'paid-transport.pyz').write_bytes(raw)
+    for name in ('application.lock', 'registration.lock'):
+        (tmp_path/name).touch(mode=0o600)
+    gateway.write(tmp_path/'transport-enforcement.json', dict(schema=1, profile='paid-transports-v2',
+        node='gateway-ru', enabled=True, readback_mode='observations-v1'))
+    decision = dict(revision=3, observed_at=now-4, valid_until=now+116, cohort=True, allowed=False)
+    applied = dict(expected_revision=3, applied_revision=3, observed_at=now-4, registered=True,
+        allowed=False, result='applied', reason='canonical', decision_sha256=gateway.state_digest(decision))
+    state = dict(schema=1, node='gateway-ru', observed_at=now-4, records={'b'*32:dict(decision=decision,
+        applied=applied, prepared=None, boot=gateway.boot_id(), deadline=time.monotonic()+116)})
+    producer = dict(pid=os.getpid(), start=gateway.process_start(os.getpid()), generation='d'*32)
+    binding = dict(schema=2, node='gateway-ru', result='applied', boot=gateway.boot_id(), producer=producer,
+        state_sha256=gateway.state_digest(state))
+    gateway.write(tmp_path/'transport-state.json', state)
+    gateway.write(tmp_path/'transport-attempt.json', dict(binding, observed_at=now-4))
+    gateway.write(tmp_path/'transport-observation.json', dict(binding, observed_at=now-2,
+        monotonic=time.monotonic()-2, records={'b'*32:dict(applied, observed_at=now-2)}))
+    value = transport_collector.collect_transport('gateway-ru', b'k'*32, hashlib.sha256(raw).hexdigest(), tmp_path)
+    assert value['status'] == 'ok' and value['observed_at'] == now-2
+    saved = transports.ingest(value, 'gateway-ru')
+    assert saved.devices[0]['applied_at'] == now-2
+    assert int(saved.observed_at.timestamp()) == now-2
+    (tmp_path/'transport-observation.json').write_text('{')
+    value = transport_collector.collect_transport('gateway-ru', b'k'*32, hashlib.sha256(raw).hexdigest(), tmp_path)
+    assert value['status'] == 'unavailable' and value['devices'] == []
+    rejected = transports.ingest(value, 'gateway-ru')
+    assert rejected.status == 'unavailable' and not rejected.devices

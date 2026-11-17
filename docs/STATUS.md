@@ -1,6 +1,14 @@
 # Текущее состояние / Current state
 
 **17 November — PR42 COMPLETE; isolated RU persistence/readback selected.**
+The opt-in source candidate now separates disposable completed readback from
+unchanged durable authority. Local real AWG/Xray six-cycle comparison:18 queries
+in both modes; durable/file-sync/directory-sync counts12→0 after warm-up, collector
+6/6 in both. Legacy contract remains default. Candidate crash/ACK/expiry/revoke/
+generation tests and panel ingestion are isolated; exact-head CI/review pending.
+**NOT_DEPLOYED, not RU FIXED.**
+[Candidate and reproduction](releases/2026-11-17-ru-readback-candidate.md).
+
 PR42 accepted source `af1b37b6`, ordinary merge `b3fefac1`;
 [final CI/integration receipt](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6950900474).
 Apple enrollment/TestFlight and physical iOS installation, provisioned Keychain,

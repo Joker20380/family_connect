@@ -1,0 +1,42 @@
+name: Isolated transport persistence readback
+on:
+  workflow_dispatch:
+  push:
+    paths: ['control/friends/transport_gateway.py', 'control/friends/transport_policy.py', 'deploy/friends/awg-gateway.py', 'control_plane/apps/console/transport_collector.py', 'tests/test_transport_observation_mode.py', 'scripts/check_transport_readback.py', 'pilot/readback/**', '.github/workflows/transport-readback.yml']
+  pull_request:
+    paths: ['control/friends/transport_gateway.py', 'control/friends/transport_policy.py', 'deploy/friends/awg-gateway.py', 'control_plane/apps/console/transport_collector.py', 'tests/test_transport_observation_mode.py', 'scripts/check_transport_readback.py', 'pilot/readback/**', '.github/workflows/transport-readback.yml']
+permissions:
+  contents: read
+jobs:
+  readback:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r control/requirements.lock -r device_identity/requirements.lock
+      - name: Legacy and opt-in crash, ACK, expiry, ownership boundaries
+        run: >-
+          python -m pytest -q tests/test_transport_enforcement.py tests/test_transport_application_regressions.py
+          tests/test_transport_budget.py tests/test_transport_readback_cost.py tests/test_transport_call_diagnostics.py
+          tests/test_transport_failure_diagnostics.py tests/test_transport_lifecycle.py tests/test_transport_observation_mode.py
+      - name: Existing pinned native inputs
+        run: |
+          docker build -f pilot/awg31/Dockerfile -t family-connect-amneziawg:3.1-desktop .
+          docker build -f pilot/tcp/Dockerfile -t family-connect-xray:26.3.27-pilot1 .
+          docker build -f pilot/readback/Dockerfile -t fc-readback:isolated .
+      - name: Actual native queries and sync counters, network isolated
+        run: |
+          mkdir -p artifacts/readback
+          docker run --rm --network none --cap-add NET_ADMIN --device /dev/net/tun \
+            -e FC_SOURCE_SHA="$(git rev-parse HEAD)" -e PYTHONDONTWRITEBYTECODE=1 \
+            -v "$PWD:/source:ro" fc-readback:isolated \
+            > artifacts/readback/native.json 2> artifacts/readback/diagnostics.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: transport-readback-${{ github.sha }}
+          path: artifacts/readback
+          if-no-files-found: warn

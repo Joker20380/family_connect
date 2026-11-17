@@ -26,7 +26,11 @@ def command(args,check=True):
 @contextmanager
 def registration(engine):
  if engine is not None:
-  with engine.serialized():yield
+  try:
+   with engine.serialized():yield
+  except BaseException as error:
+   if engine.observation_mode:engine.fail_closed(error,'register')
+   raise
  else:
   with (ROOT/'registration.lock').open('a') as lock:
    fcntl.flock(lock,fcntl.LOCK_EX);yield
@@ -81,12 +85,14 @@ def register():
  if engine is not None and request.get('operation') in ('reconcile','prepare'):
   preparing=request['operation']=='prepare'
   assert set(request)==({'operation','paid','token'} if preparing else {'operation','paid'})
-  with engine.serialized():
+  with registration(engine):
    with engine.lock():
     if preparing:engine.prepare(request['paid'],request['token'])
     else:engine.accept(request['paid'])
    try:engine.apply_serialized()
-   except BaseException as error:engine.fail_closed(error,'register');raise
+   except BaseException as error:
+    if not engine.observation_mode:engine.fail_closed(error,'register')
+    raise
   reply={'schema':1,'node':engine.node,'result':'prepared' if preparing else 'applied'}
   if preparing:reply['token']=request['token']
   print(json.dumps(reply));return
@@ -110,7 +116,7 @@ def register():
   try:
    if engine is not None:engine.apply_serialized()
   except BaseException as error:
-   if engine is not None:engine.fail_closed(error,'register')
+   if engine is not None and not engine.observation_mode:engine.fail_closed(error,'register')
    raise
   print(json.dumps({'public_key':key,'address':assigned,'transport':'amneziawg-3.1'}))
 

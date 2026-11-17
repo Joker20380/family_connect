@@ -9,6 +9,19 @@ from scripts import package_paid_transport as kit
 from scripts.package_friends_http import build as build_http
 
 
+@pytest.fixture
+def historical_overlay_source(tmp_path):
+    source = tmp_path/'accepted-overlay-source'
+    commit = 'b3fefac1240c02e5bdcdd0c0d047548c3a834ae6'
+    subprocess.run(['git', '-C', str(kit.ROOT), 'worktree', 'add', '--detach', str(source), commit],
+        check=True, capture_output=True)
+    try:
+        assert subprocess.check_output(['git', '-C', str(source), 'rev-parse', 'HEAD'], text=True).strip() == commit
+        yield source
+    finally:
+        subprocess.run(['git', '-C', str(kit.ROOT), 'worktree', 'remove', str(source)], check=True, capture_output=True)
+
+
 def test_closed_overlay_modules_and_tamper(tmp_path, monkeypatch):
     baseline_dir = tmp_path/'http'
     build_http(baseline_dir)
@@ -81,7 +94,7 @@ def test_lifetime_fences_and_disabled_default():
     assert 'OnUnitInactiveSec=30' in (root/'family-connect-paid-reconcile.timer').read_text()
 
 
-def test_exact_ru_diagnostic_overlay_executes_pinned_package(tmp_path):
+def test_exact_ru_diagnostic_overlay_executes_pinned_package(tmp_path, historical_overlay_source):
     from scripts import package_transport_diagnostics as diagnostic
     inputs = {name: subprocess.check_output(['git', '-C', str(kit.ROOT), 'show',
         diagnostic.BASE_SOURCE+':'+name]) for name in kit.MODULES}
@@ -93,7 +106,11 @@ def test_exact_ru_diagnostic_overlay_executes_pinned_package(tmp_path):
         diagnostic.BASE_SOURCE+':deploy/friends/awg-gateway.py']))
     assert kit.sha(node.read_bytes()) == diagnostic.BASE_NODE
     output = tmp_path/'candidate'
-    receipt = diagnostic.build(node, gateway, output)
+    with pytest.raises(ValueError, match='GATEWAY_CHANGE_FORBIDDEN'):
+        diagnostic.build(node, gateway, tmp_path/'current-source-rejected')
+    receipt = diagnostic.build(node, gateway, output, source=historical_overlay_source)
+    assert receipt['source_sha'] == 'b3fefac1240c02e5bdcdd0c0d047548c3a834ae6'
+    assert receipt['source_dirty'] is False
     assert {name for name in inputs if receipt['before_modules'][name] != receipt['after_modules'][name]} == {diagnostic.MODULE}
     code = '''import json,sys,tempfile
 from pathlib import Path
@@ -120,7 +137,7 @@ print(json.dumps({'result':'PASS','calls':len(operation.calls)}))
         diagnostic.build(node, gateway, tmp_path/'rejected')
 
 
-def test_exact_pr15_lifecycle_package_rejects_drift(tmp_path):
+def test_exact_pr15_lifecycle_package_rejects_drift(tmp_path, historical_overlay_source):
     from scripts import package_ru_lifecycle as lifecycle
     def historical(name):
         return subprocess.check_output(['git','-C',str(kit.ROOT),'show',lifecycle.BASE_SOURCE+':'+name])
@@ -130,7 +147,11 @@ def test_exact_pr15_lifecycle_package_rejects_drift(tmp_path):
     kit.archive(node, inputs)
     gateway.write_bytes(historical('deploy/friends/awg-gateway.py'))
     unit.write_bytes(historical('deploy/friends/paid-transport/'+lifecycle.UNIT))
-    receipt = lifecycle.build(node,gateway,unit,tmp_path/'candidate')
+    with pytest.raises(ValueError, match='GATEWAY_CHANGE_FORBIDDEN'):
+        lifecycle.build(node,gateway,unit,tmp_path/'current-source-rejected')
+    receipt = lifecycle.build(node,gateway,unit,tmp_path/'candidate',source=historical_overlay_source)
+    assert receipt['source_sha'] == 'b3fefac1240c02e5bdcdd0c0d047548c3a834ae6'
+    assert receipt['source_dirty'] is False
     assert {name for name in inputs if receipt['before_modules'][name]!=receipt['after_modules'][name]}=={lifecycle.MODULE}
     assert set(receipt['files'])=={'paid-transport.pyz',lifecycle.UNIT}
     code = '''import sys,socket,json
