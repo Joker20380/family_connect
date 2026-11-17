@@ -14,7 +14,7 @@ def historical_overlay_source(tmp_path):
     source = tmp_path/'accepted-overlay-source'
     commit = 'b3fefac1240c02e5bdcdd0c0d047548c3a834ae6'
     subprocess.run(['git', '-C', str(kit.ROOT), 'worktree', 'add', '--detach', str(source), commit],
-        check=True, capture_output=True)
+        check=True)
     try:
         assert subprocess.check_output(['git', '-C', str(source), 'rev-parse', 'HEAD'], text=True).strip() == commit
         yield source

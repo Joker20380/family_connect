@@ -62,6 +62,16 @@ all old assertions and pins remain, and an additional negative case requires the
 old tools to reject this new candidate. No PR16/17 packaging contract is broadened
 and no historical deployment is repeated.
 
+First candidate `2509d4a4` passes native-query push/PR, panel and Linux gates,
+but phase0 push44159742219 fails in Docker's full-test context: two historical
+overlay fixtures cannot create their accepted-source worktree. The closed Git
+export omitted `b3fefac1`; a host checkout's history masked this dependency.
+Reproduced from a restored export as `fatal: invalid reference` (exit128).
+Add that exact commit and its complete tree to the existing public object pack;
+test detached historical worktree creation from restored, host-independent Git.
+Preserve the failed attempt; no unchanged retry or historical pin replacement.
+The corrected source requires its own complete applicable CI qualification.
+
 Fault injections use synthetic storage/engines where stated, real temporary-file
 operations and process exits, not destructive power-loss tests. Long kernel I/O
 cannot be cancelled by Python; the unchanged external watchdog/delivery contract

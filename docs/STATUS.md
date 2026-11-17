@@ -6,6 +6,8 @@ unchanged durable authority. Local real AWG/Xray six-cycle comparison:18 queries
 in both modes; durable/file-sync/directory-sync counts12→0 after warm-up, collector
 6/6 in both. Legacy contract remains default. Candidate crash/ACK/expiry/revoke/
 generation tests and panel ingestion are isolated; exact-head CI/review pending.
+First CI exposed a missing historical commit in Docker's closed fixture export;
+the complete pinned tree is now included, with host-independent worktree regression.
 **NOT_DEPLOYED, not RU FIXED.**
 [Candidate and reproduction](releases/2026-11-17-ru-readback-candidate.md).
 

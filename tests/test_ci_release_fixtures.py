@@ -41,6 +41,14 @@ def test_public_export_restores_exact_commit_without_host_git_or_untracked_files
     assert fixtures.git('show', historical + ':public.txt') == b'public source\n'
     assert fixtures.git('archive', historical) == (output / 'historical.tar').read_bytes()
     assert b'private-marker' not in (restored / '.git/config').read_bytes()
+    historical_source = tmp_path / 'historical-worktree'
+    fixtures.git('worktree', 'add', '--detach', str(historical_source), historical)
+    try:
+        assert fixtures.git('rev-parse', 'HEAD', source=historical_source).decode().strip() == historical
+        assert fixtures.git('status', '--porcelain', source=historical_source) == b''
+        assert (historical_source / 'public.txt').read_text() == 'public source\n'
+    finally:
+        fixtures.git('worktree', 'remove', str(historical_source))
     with pytest.raises(ValueError, match='replace Git'):
         fixtures.restore_git(output / 'current.commit', output / 'tracked.paths')
 
@@ -52,7 +60,8 @@ def test_required_git_objects_cover_the_real_native_and_renewal_inputs():
     from scripts.package_transport_diagnostics import BASE_SOURCE
     from scripts.package_ru_lifecycle import BASE_SOURCE as LIFECYCLE_BASE
     assert set(fixtures.REQUIRED_COMMITS) == {fixtures.HISTORICAL, ACCEPTED_API_SOURCE,
-        reference()['commit'], PREVIOUS_SOURCE, BASE_SOURCE, LIFECYCLE_BASE}
+        reference()['commit'], PREVIOUS_SOURCE, BASE_SOURCE, LIFECYCLE_BASE,
+        'b3fefac1240c02e5bdcdd0c0d047548c3a834ae6'}
 
 
 def test_fixture_environment_rejects_modified_artifact_or_commit(tmp_path, monkeypatch):

@@ -5,6 +5,8 @@
 **RU-PERSISTENCE-READBACK-1 — selected / source-only qualification.**
 Opt-in implementation and local native-query comparison are present; retain
 baseline tests and obtain final exact-head CI and separate candidate review.
+Include the historical overlay's complete pinned source in the closed CI export;
+the initial Docker fixture failure is retained, not retried unchanged for PASS.
 [Contract and remaining delivery boundaries](operators/transport-readback-candidate.md).
 Source qualification never closes historical storage attribution or RU availability.
 
