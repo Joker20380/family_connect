@@ -10,16 +10,19 @@ IOS-DEVELOPMENT-HANDOFF-1 now selected from PR41 mainbda954fb; reproduce startup
 then provider ownership, manager, Keychain handoff and development build preparation.
 [Readback and selected scope](releases/2026-11-17-ios-development-handoff.md).
 
-iOS0.0.1/build2 source candidate now implements native startup commit, provider
+iOS0.0.1/build2 source candidate implements native startup commit, provider
 generation ownership, VPN preferences/session UI, immutable shared-Keychain handoff
 and manual development build parameters. Baseline2ea1f6f2 macOS44023861642 reproduced
-false startup success deterministically. New Go race tests and10 project tests pass
-locally. Source7b915ddb macOS PR44030134489/push44030127738 PASS both unsigned
-targets and nine isolated groups, zero handles; all208 artifact hashes verified.
-Common gates are not yet accepted: competing peer deadline in a carrier fixture
-is isolated without relaxing sender assertions; unrelated Linux desktop teardown
-reports13 descriptors versus14. Failures retained, no unchanged retry or desktop
-assertion change. Final-head acceptance pending. No physical VPN/Keychain-sharing claim.
+false startup success deterministically. Sourcefb13d23b macOS PR44032183193 and
+push44032176415 PASS both unsigned targets and nine isolated groups, zero handles;
+all208 downloaded artifact hashes verified. Local Go race and10 project tests PASS.
+Earlier common-gate failures and two explicit test-fixture adjustments are retained
+in the report; no transport runtime change, desktop assertion change or blind retry.
+[Final exact-head CI/artifact/integration receipt for PR42](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6940824604)
+tracks broader gates, later documentation heads and merge; pending is not PASS.
+Signed physical VPN/Keychain sharing/routing/Telemost remain NOT_RUN. The next owner
+inputs are a specific iPhone/iOS + compatible Mac/Xcode, Team/capability grants,
+development profiles and agreed test identity; no phone trial is automatically run.
 PR41 [finald02fce99 acceptance](https://github.com/Joker20380/family_connect/pull/41#issuecomment-6935466490)
 supersedes its earlier source receipts without deleting them.
 

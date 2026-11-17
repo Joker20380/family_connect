@@ -5,6 +5,15 @@ release). [New-stage receipt](../../docs/releases/2026-11-17-ios-development-han
 Base [PR41 final d02fce99 acceptance](https://github.com/Joker20380/family_connect/pull/41#issuecomment-6935466490),
 merge `bda954fb27ad7115b8c373929cf3e80e84992175`; the earlier receipts below remain evidence.
 
+Development source `fb13d23b138ca16ce969ad24d1f3d093ba641f0a`: macOS44032183193
+and44032176415 PASS device/simulator, nine isolated groups and zero handles;
+[verified unsigned artifact](https://github.com/Joker20380/family_connect/actions/runs/44032183193/artifacts/14305768210),
+all208 file hashes matched. ZIP SHA256
+`5363ef4dd9511615bfcf4c192289cd6b9f956f97fbc0504a524bb67028feee89`.
+[Final exact-head CI and integration receipt](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6940824604)
+tracks later documentation heads and ordinary merge; pending is not PASS.
+No signed installation, system VPN or provisioned Keychain sharing is claimed.
+
 Selected task **IOS-MESH-BRIDGE-1**,17 November2026. This is an unsigned technical
 prototype, not a distributed VPN. [Current results](../../docs/releases/2026-11-17-ios-mesh-bridge.md).
 Qualified source `fc08a50ecec45ea94e9ab27b1a9cfe28d507dc5d`: macOS CI43991766964

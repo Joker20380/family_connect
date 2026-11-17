@@ -1,6 +1,9 @@
 # 17 November2026 — IOS-DEVELOPMENT-HANDOFF-1
 
-Source checkpoint, not acceptance. Owner selected startup coordination, provider
+iOS source gate PASS; development candidate, not physical VPN acceptance.
+[Final exact-head CI, artifact and integration receipt in PR42](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6940824604)
+is authoritative for subsequent documentation heads and ordinary merge. A pending
+receipt is not integration PASS. Owner selected startup coordination, provider
 lifecycle, VPN manager, secure synthetic-material handoff and development build.
 Base remote main bda954fb27ad7115b8c373929cf3e80e84992175 unchanged since PR41.
 All5 post-merge workflows SUCCESS (43999095437/95720/95477/95425/95469).
@@ -158,10 +161,65 @@ Paired DNS replies completed at403.105/403.441ms tagged and335.983/336.365ms
 untagged, with two queries and29-byte exact replies in each. These observations
 do not explain prior1s failures or establish a performance SLA.
 
-## Gates
+## Qualified development candidate
 
-New device/simulator builds, native coordination, provider/manager/material tests:
-PENDING. Real VPN preference installation, extension launch, interprocess Keychain
-sharing/provisioning, physical routes/memory/background, Telemost/whitelist: NOT_RUN.
-Public beta126/catalog9 and production unchanged. No release signing or installation.
-Rollback is source revert; development stage is not a rollout.
+Source `fb13d23b138ca16ce969ad24d1f3d093ba641f0a`, development0.0.1/build2:
+[PR macOS44032183193](https://github.com/Joker20380/family_connect/actions/runs/44032183193)
+and [push macOS44032176415](https://github.com/Joker20380/family_connect/actions/runs/44032176415)
+PASS. [Unsigned artifact14305768210](https://github.com/Joker20380/family_connect/actions/runs/44032183193/artifacts/14305768210)
+is79,931,780 bytes; downloaded ZIP SHA256
+`5363ef4dd9511615bfcf4c192289cd6b9f956f97fbc0504a524bb67028feee89`.
+All208 per-file hashes match. Actual runner image20261112.0539.3, macOS15.8.2;
+Xcode16.4/16F6, Swift6.1.2, clang17.0.0, Go1.26.1, SDK18.5 unchanged.
+
+| Gate | Observed result |
+| --- | --- |
+| iPhone build | PASS unsigned app + embedded Packet Tunnel extension; ios/arm64, device platform |
+| Simulator build | PASS separate ios/arm64 simulator platform; iPhone16/iOS18.5 runtime |
+| MESH linkage/call | PASS real C exports, Go session/packet code and unchanged408-package/31-module closure |
+| Startup regression | PASS real native cancellation while configure is held, one error/no pump/zero handles; baseline failure retained |
+| Async boundary | PASS stale worker/control, configure error, late callback, cancellation, packet copy/family/queue and first-error checks |
+| Provider lifecycle | PASS isolated generation cleanup/recreation/settings lease; not installed extension execution |
+| Manager/Keychain | PASS isolated adapters/models + real Go synthetic trust validation; not system preferences or provisioned sharing |
+| Simulator suite | PASS all nine named groups, handles0; ad-hoc runtime copy only, retained artifacts unsigned |
+| Local source checks | PASS10 Python project/provisioning tests; Go race/strict-import tests and30 isolated-peer repetitions; public-source/docs guards |
+| Mandatory integration CI | Final exact source and all outcomes recorded in the linked PR42 receipt; not inferred from iOS PASS |
+
+Both native archives remain actually linked into the products, not unused sidecars.
+Live mode still uses bootstrap/admission, Family TLS, ReliableStream, mux/DNS,
+Telemost VP8/RTP and the existing packet engine; no Android JNI copy, new carrier,
+direct fallback or production credential is introduced. The simulator fixture is
+not a Telemost connection or a system TUN. Notices, source archives, original and
+endpoint patches remain in the artifact; this is procedural, not bitwise reproducibility.
+
+Author self-review5934075934 reviewed this source (not independent approval).
+At this documentation checkpoint the broader gates are still running. Their final
+exact-head receipts, any failure and merge decision remain visible at the stable
+PR42 link, without rewriting the failed attempts above or retrying unchanged runs.
+
+## Owner handoff and remaining gate
+
+Source preparation can proceed to an explicitly authorized **signed development
+prototype**, not to a user VPN claim. The owner must supply/confirm:
+- A specific iPhone model and actual iOS build, compatible authorized Mac/Xcode,
+  device trust and Developer Mode. SDK18.5 does not qualify every newer phone.
+- Apple Team and app/extension bundle IDs, granted packet-tunnel and shared
+  app-specific Keychain capabilities, Apple Development identity and two valid
+  device provisioning profiles. Keep all private signing material outside Git/CI.
+- Disposable agreed test Family identity/CA/admission/directory and controlled
+  IPv4 network access. Authenticate test material out of band; no production identity.
+
+[Concrete signing/install commands and bounded five-step device plan](../../clients/ios/README.md#development-signing-and-installation--owner-mac-only)
+cover consent/save/reload, unique own configuration, extension launch and Keychain,
+then one real MESH startup before routes/recursion/containment and stop/restart tests.
+Whitelist trial is separate and follows those gates. Do not put secrets in chat,
+screenshots, CI or shared logs. No purchases/accounts are created by this task.
+
+Real VPN preference installation, extension launch, interprocess Keychain sharing,
+development signing/install, physical routes/recursion/leaks/memory/background,
+Telemost and whitelist are all **NOT_RUN**. IPv4 IP_BOUND_IF and NWPathMonitor remain
+experimental; IPv6-only/NAT64 and enforced routes are unsupported. No always-on or
+kill switch; stopping can restore ordinary OS routing. No guaranteed erasure of
+all Swift/Go secret copies. Public beta126/catalog9 and production unchanged.
+Rollback is source revert; this development stage is not a rollout. RU availability
+and underlying fsync latency remain a separate unresolved operational matter.

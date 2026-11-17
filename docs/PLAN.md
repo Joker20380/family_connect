@@ -2,7 +2,7 @@
 
 ## Current engineering priority / Текущий critical path
 
-**IOS-DEVELOPMENT-HANDOFF-1 — selected17 November / IN_PROGRESS.**
+**IOS-DEVELOPMENT-HANDOFF-1 — selected17 November / iOS source gate PASS.**
 Base PR41 merge bda954fb, remote unchanged; its5 post-merge workflows PASS.
 Gate: deterministic startup regression, generation-scoped provider lifecycle,
 idempotent NETunnelProviderManager, shared app-specific Keychain reference handoff,
@@ -12,9 +12,17 @@ latency root cause open, no repair/observer automatically selected. Physical VPN
 Keychain sharing, routing, Telemost and whitelist remain a later device gate.
 [Receipt](releases/2026-11-17-ios-development-handoff.md).
 
-Implementation checkpoint0.0.1/build2: startup commit/provider cleanup, manager,
-Keychain and signing preparation implemented; new exact-head macOS acceptance and
-self-review still pending. Prior PR41 finald02fce99 receipt remains accepted.
+Development0.0.1/build2: startup commit/provider cleanup, manager, Keychain and
+signing preparation implemented. Exactfb13d23b macOS PR44032183193/push44032176415
+PASS both unsigned targets and nine isolated groups, zero handles;208 hashes
+verified. Author self-review is explicit, not independent approval. Broader gates
+and any subsequent documentation-head qualification/ordinary merge are recorded in
+[the final PR42 integration receipt](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6940824604);
+a pending receipt does not authorize merge. Prior failed runs remain evidence.
+Next owner step: confirm actual phone/iOS/Xcode pairing, Team/capabilities,
+development provisioning and disposable test identity, then separately authorize
+the bounded signed-device plan in the iOS README. No real phone/Telemost/whitelist
+trial or RU recovery is selected automatically. PR41 finald02fce99 remains accepted.
 
 **IOS-MESH-BRIDGE-1 — explicitly selected17 November / technical gate COMPLETE.**
 Dependency satisfied: PR40 exact3539ebe4 push/PR phase0 PASS, ordinary merge3468f828;
