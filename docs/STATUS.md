@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**17 November07:23UTC — iOS candidate verified; PR42 integration BLOCKED/DRAFT.**
+Exact168f90c6 passes unsigned device/simulator and nine isolated groups (handles0,
+208 hashes verified), both phase0 runs, Linux control, readiness and scoped push
+Client builds. PR Client builds44033617391/job133871424629 fails unchanged Android
+API27 per-app routing: four DIRECT probes time out on DNS after8000–8009ms despite
+successful direct IPv4/TLS. API28/31 are skipped, not PASS. No Android runtime or
+DNS assertion is changed, no unchanged rerun or merge; remote main remainsbda954fb.
+This evidence-only documentation checkpoint does not requalify or replace168f90c6.
+The failed mandatory gate needs a separately scoped diagnosis, not relaxed checks.
+[Exact results and blocker](releases/2026-11-17-ios-development-handoff.md#final-source-gates--integration-blocked).
+
 **17 November05:20UTC — RU down; iOS development handoff selected.**
 Owner-requested bounded readback finds AWG/TCP inactive since01:03:56UTC and watcher
 auto-restarting (432 restarts at05:20). First failure proves decision_state file_fsync

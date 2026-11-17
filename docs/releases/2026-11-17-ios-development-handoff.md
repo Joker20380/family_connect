@@ -1,6 +1,7 @@
 # 17 November2026 — IOS-DEVELOPMENT-HANDOFF-1
 
-iOS source gate PASS; development candidate, not physical VPN acceptance.
+iOS source gate PASS; integration **BLOCKED**, PR42 stays **DRAFT**, no merge.
+Development candidate, not physical VPN acceptance.
 [Final exact-head CI, artifact and integration receipt in PR42](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6940824604)
 is authoritative for subsequent documentation heads and ordinary merge. A pending
 receipt is not integration PASS. Owner selected startup coordination, provider
@@ -223,3 +224,57 @@ kill switch; stopping can restore ordinary OS routing. No guaranteed erasure of
 all Swift/Go secret copies. Public beta126/catalog9 and production unchanged.
 Rollback is source revert; this development stage is not a rollout. RU availability
 and underlying fsync latency remain a separate unresolved operational matter.
+
+## Final source gates — integration blocked
+
+Qualified iOS source is `168f90c6637df44b2f9094b3123f17c74a98f3f8`.
+The subsequent documentation-only blocker checkpoint does not replace that source
+or its failed mandatory integration result. No manual CI retry is requested.
+
+| Workflow for168f90c6 | Final result |
+| --- | --- |
+| iOS PR44033617409 / push44033608488 | SUCCESS / SUCCESS |
+| phase0 PR44033617614 / push44033608495 | SUCCESS / SUCCESS, including isolated failover and full tests |
+| Linux control PR44033617415 | SUCCESS |
+| Readiness PR44033617520 | SUCCESS |
+| Client builds push44033608482 | SUCCESS with push path scope; not a substitute for PR Android |
+| Client builds PR44033617391 | FAILURE, Android job133871424629; Linux/Windows/compatibility pass |
+| Control panel review-event44035114768 | SKIPPED, unrelated scope |
+
+iOS artifact14306427709 is79,930,485 bytes, ZIP SHA256
+`9799b6df1a8168e55c4da7196eac24a75cb2167819814076891c42b2d8f513ce`;
+all208 hashes verified. Manifest/simulator receipt both identify168f90c6, all nine
+groups PASS and handles0. Toolchain unchanged, actual runner image20261104.0514.1.
+Final author self-review5934249382 is not independent approval.
+Other PR jobs use synthetic merge0ac934e2c3523f9c6d4dbfdeffb64bdbd474ba2f;
+its tree and168f90c6 are both8217d95850abee626e07b159df334b534055fc5b.
+Linux full-suite artifact14307086659 SHA256
+`e816fa6252610ca0a86076a3cc111f4d7f2a48b250a55069eafd237051d4ced5`:
+standard6070/root258/snapshot31498 return0, coverage PASS, no failure/error IDs.
+
+**Concrete merge blocker:** Android API27 independent per-app harness reports
+four failures out of10 at unchanged `AppVpnRuntimeTest.java:50` (DNS presence):
+`automaticHandoffKeepsCapturedPolicy`, `removedLastPackageCannotEstablishAll`,
+`screenSavesRealRoutingAndPendingSelection`, `ownerUnderlayAndCarrierHealthRemainSeparate`.
+All four expected DIRECT probes have vpn_capability=false, correct direct IPv4
+response and TLS, but dns_error=TimeoutException at8001/8009/8000/8000ms respectively.
+Do not infer successful DNS from IPv4/TLS or a green main instrumentation summary.
+API35 per-app10 tests pass. API27 main115 cases/42 skipped/0 failures and Friends
+pass, but cannot cover the independent failing harness. API28/31 steps are skipped.
+Carrier race, restricted diagnostics, native builds and Gradle unit/lint gates pass.
+
+Downloaded routing artifact14308027328 SHA256
+`16d927aa4b7db5b79f19896414709b970019370d3d7492642d66e3065f2c246a`;
+runtime artifact14307808082 SHA256
+`078b2875f3e13bbd0502b28aba863e32541dcae2e50122dfaa5c42f8127d76ab`.
+Both retain exact synthetic receipts/logs, without adding them to Git. No changes
+exist in `clients/android` or `pilot/android-app-vpn` relative to the accepted base;
+the only shared changes are the two documented Go test fixtures. This does not
+establish the DNS failure's root cause or authorize calling it infrastructure noise.
+Keep the8s assertion and do not broaden this task into an Android transport repair.
+
+PR42 remains draft; normal merge is withheld. Remote main remains accepted
+`bda954fb27ad7115b8c373929cf3e80e84992175`. Resolving this mandatory gate needs a
+separately selected diagnosis with the preserved evidence, not an unchanged rerun
+or a result from another SHA. The iOS development code/artifacts and owner-device
+procedure are available, but source integration is not accepted.

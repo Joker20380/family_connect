@@ -2,7 +2,14 @@
 
 ## Current engineering priority / Текущий critical path
 
-**IOS-DEVELOPMENT-HANDOFF-1 — selected17 November / iOS source gate PASS.**
+**IOS-DEVELOPMENT-HANDOFF-1 — iOS source gate PASS / integration BLOCKED, PR42 DRAFT.**
+Exact168f90c6 fails mandatory Android API27 per-app DNS assertions in
+44033617391/job133871424629; iOS and the other applicable workflows pass.
+Keep the candidate and all failure evidence; do not merge, retry for green, or
+weaken/change unrelated Android runtime/assertions within this iOS task. A separately
+scoped diagnosis of this shared integration gate is required before integration.
+The following documentation-only checkpoint is not another accepted runtime head.
+
 Base PR41 merge bda954fb, remote unchanged; its5 post-merge workflows PASS.
 Gate: deterministic startup regression, generation-scoped provider lifecycle,
 idempotent NETunnelProviderManager, shared app-specific Keychain reference handoff,
