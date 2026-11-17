@@ -60,11 +60,23 @@ console ingestion/UI retains its compatibility and error/previous-snapshot rules
 Legacy collector semantics are unchanged. Metrics use durable identity mappings
 and their own real AWG counter queries, not applied receipt freshness.
 
-Reconciliation and membership clients still require their unchanged bounded ACKs;
-the node's candidate registration context now fail-closes even if acceptance or
-preparation fails before application. This closes that candidate-specific error
-boundary without changing the legacy mode. No successful ACK or fresh observation
-survives a mandatory commit timeout. Synchronous writes may still block; enforcement
+Reconciliation and membership clients still require their unchanged bounded ACKs.
+Candidate registration uses `serialized(failure_mode='register')`: the owned
+application descriptor outlives both the operation's final deadline check and
+fail-closed handling. This covers acceptance/preparation, apply, and context-exit
+errors; ordinary registration also prints its ACK only after context exit.
+The first error/context is retained in memory, observation invalidated, protective
+stop requested, error attempt written, and only then the first diagnostic receipt
+persisted; application lock is released last. Cleanup errors are recorded safely
+without replacing the original failure, and an already handled exception is not
+handled twice by the outer context. Legacy's order/default remain unchanged.
+Failure to open/acquire the lock never enters the registration body; it requests
+stop without re-acquiring the same lock or closing another participant's descriptor.
+This is a stop **request**, not proof of actual systemd termination. Diagnostic
+fsync can still block, but a held application lock prevents competing application
+and successful watch heartbeat; the real collector reports unavailable. See the
+[P1 reproduction and new acceptance gate](../releases/2026-11-17-pr44-failure-serialization.md).
+Synchronous writes may still block; enforcement
 does not send background heartbeat. Candidate startup wait sends no WATCHDOG before
 the first completed application; READY remains dependency readiness, not applied
 health. The existing systemd watchdog remains the external bound during startup.

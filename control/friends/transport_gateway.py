@@ -404,17 +404,41 @@ class Gateway:
     @contextmanager
     def lock(self, name='registration.lock'):
         with self.operation(), (self.root/name).open('a') as handle:
-            with self.stage('lock'):
-                while True:
-                    try:
-                        fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                        break
-                    except BlockingIOError:
-                        time.sleep(min(.02, remaining()))
+            self.acquire(handle)
             yield
 
-    def serialized(self):
-        return self.lock('application.lock')
+    def acquire(self, handle):
+        with self.stage('lock'):
+            while True:
+                try:
+                    fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    break
+                except BlockingIOError:
+                    time.sleep(min(.02, remaining()))
+
+    @contextmanager
+    def serialized(self, *, failure_mode=None):
+        if not self.observation_mode or failure_mode is None:
+            with self.lock('application.lock'):
+                yield
+            return
+        first_error = None
+        try:
+            with (self.root/'application.lock').open('a') as handle:
+                try:
+                    with self.operation():
+                        self.acquire(handle)
+                        yield
+                except BaseException as error:
+                    first_error = error
+                    self.fail_closed(error, failure_mode)
+                    raise
+        except BaseException as error:
+            if first_error is not None and error is not first_error:
+                emit(dict(transport_cleanup_failure=failure_record(error, failure_mode)))
+            error = first_error if first_error is not None else error
+            self.fail_closed(error, failure_mode)
+            raise error
 
     def load(self):
         value = read(self.path)
@@ -491,12 +515,18 @@ class Gateway:
             observed_at=int(self.clock()), result='error'))
 
     def fail_closed(self, error, mode):
-        report_failure(error, mode, self.root)
+        if self.observation_mode:
+            if getattr(error, 'transport_fail_closed', False):
+                return
+            error.transport_fail_closed = True
+        else:
+            report_failure(error, mode, self.root)
         token = CURRENT_OPERATION.set(None)
         try:
             actions = (self.stop_all, self.failure)
             if self.observation_mode:
-                actions = (lambda: self.observation_path.unlink(missing_ok=True), *actions)
+                actions = (lambda: self.observation_path.unlink(missing_ok=True), *actions,
+                    lambda: report_failure(error, mode, self.root))
             for action in actions:
                 try:
                     action()

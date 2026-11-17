@@ -26,11 +26,7 @@ def command(args,check=True):
 @contextmanager
 def registration(engine):
  if engine is not None:
-  try:
-   with engine.serialized():yield
-  except BaseException as error:
-   if engine.observation_mode:engine.fail_closed(error,'register')
-   raise
+  with engine.serialized(failure_mode='register'):yield
  else:
   with (ROOT/'registration.lock').open('a') as lock:
    fcntl.flock(lock,fcntl.LOCK_EX);yield
@@ -118,7 +114,7 @@ def register():
   except BaseException as error:
    if engine is not None and not engine.observation_mode:engine.fail_closed(error,'register')
    raise
-  print(json.dumps({'public_key':key,'address':assigned,'transport':'amneziawg-3.1'}))
+ print(json.dumps({'public_key':key,'address':assigned,'transport':'amneziawg-3.1'}))
 
 def run():
  assert Path('/proc/sys/net/ipv4/ip_forward').read_text().strip()=='1','Existing gateway forwarding required'

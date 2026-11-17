@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**17 November — PR44 P1 fail-closed serialization repair / review gate reopened.**
+Owner selects source-only repair, not merge/deployment. On exact `c086d131`, all
+nine controlled fsync/deadline/context-exit scenarios reproduce premature lock
+release: competing real watch/notify reaches WATCHDOG, three engine queries and
+collector `ok` during blocked failure-receipt fsync. The prior
+[13-workflow receipt](https://github.com/Joker20380/family_connect/pull/44#issuecomment-6960939690)
+remains valid only for that old head; it did not cover this P1.
+Candidate registration now retains application serialization through operation-exit
+validation and fail-closed; invalidation and stop request precede blocking diagnostic
+persistence, and ACK follows context exit.24 focused cases and179 transport/source
+guard tests pass; new exact-head CI/re-review is required. Legacy/timing/security contracts and
+unchanged-cycle savings remain gates. PR43 is merged, remote main `380da279`.
+[Repair evidence and residual delivery gate](releases/2026-11-17-pr44-failure-serialization.md).
+**NOT_DEPLOYED; RU NOT_FIXED; physical iOS deferred. Stop at repeat review PR44.**
+
+### Previous source checkpoint / historical evidence
+
 **17 November — PR42 COMPLETE; isolated RU persistence/readback selected.**
 The opt-in source candidate now separates disposable completed readback from
 unchanged durable authority. Local real AWG/Xray six-cycle comparison:18 queries
