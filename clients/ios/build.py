@@ -108,9 +108,9 @@ def build(args):
         module = prepare(workspace, go)
         flags = ['-tags=fc_packet_endpoint', '-mod=readonly', '-modfile='+str(module)]
         run(go, 'test', *flags, '-v', '-race', '-count=3', '-timeout=90s', '-ldflags=-checklinkname=0', './bridge', env=environment)
-        run(go, 'test', *flags, '-race', '-count=1', '-timeout=90s', '-ldflags=-checklinkname=0',
+        run(go, 'test', *flags, '-v', '-race', '-count=1', '-timeout=90s', '-ldflags=-checklinkname=0',
             'github.com/Joker20380/family_connect/restrictedandroid/packet', env=environment)
-        run(go, 'test', '-mod=readonly', '-modfile='+str(module), '-race', '-count=1', '-timeout=90s',
+        run(go, 'test', '-mod=readonly', '-modfile='+str(module), '-v', '-race', '-count=1', '-timeout=90s',
             '-ldflags=-checklinkname=0', 'github.com/Joker20380/family_connect/restrictedandroid/packet', env=environment)
         if args.host_only:
             return

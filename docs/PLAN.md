@@ -8,7 +8,8 @@ retain RECOVERED_CAUSE_OPEN without repeating recovery.
 Gate: exact-head macOS unsigned iphoneos/arm64 and separate simulator builds,
 linked/invoked MESH, isolated Swift/C/Go lifecycle, notices/source closure, underlay
 limits and signed-iPhone prerequisites. No production/recovery/observer/next backlog
-task. Local Go boundary/original packet regression pass; macOS CI/review pending.
+task. Sourcec125c0ea iOS/macOS qualification passes; qualify newer candidate and
+its isolated positive-DNS test-budget repair, then complete review/integration.
 [Receipt](releases/2026-11-17-ios-mesh-bridge.md) · [Build](../clients/ios/README.md).
 
 **17 November00:02UTC — owner-requested RU recovery COMPLETE / RECOVERED_CAUSE_OPEN.**

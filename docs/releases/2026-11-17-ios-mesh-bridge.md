@@ -78,3 +78,21 @@ terminal error after native handle release, and reject unqualified enforced-rout
 configurations. New Linux boundary suite8 tests ×3 race PASS. Swift lifecycle
 results still require the exact candidate simulator run. Action SHAs are pinned
 to the first macOS run's resolved versions; Swift/clang/Python enter the manifest.
+
+## First complete iOS acceptance / repeated macOS fixture deadline
+
+Sourcec125c0ea PR43990153357 SUCCESS: both unsigned app/extension targets, real
+linked MESH symbols/platforms and simulator Swift/C/Go checks execute. This success
+is limited to that SHA, not substituted for the newer9f242c6a candidate.
+On9f242c6a push43990930518 the new bridge races and tagged original packet test
+pass; the untagged original test fails the same100ms positive DNS read. Together
+with the earlier PR failure this establishes a repeatable test-budget sensitivity,
+not its scheduling/root-cause attribution or a network failure diagnosis.
+
+The old fixture used the same100ms deadline for successful DNS and expected-denied
+UDP. Its positive DNS wait now uses the existing TCP fixture's bounded3s budget;
+negative unsupported-UDP remains100ms and all response/counter/cleanup assertions
+remain. Query writes are checked, and exact elapsed time/budget/query count/error
+are logged for both tagged and untagged runs. This changes only an isolated test,
+not Android/desktop transport deadlines or wire/runtime behavior. Original failures
+are retained (artifact14287582193); no unchanged rerun to obtain green is requested.
