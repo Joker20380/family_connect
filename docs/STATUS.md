@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**17 November12:32UTC — PR42-CI-REPAIR-1 explicitly selected / in progress.**
+Owner authorizes desktop fixture/confirmed cleanup and pinned AppImage downloader
+repair, superseding the earlier docs-only boundary. Remote base is stillbda954fb;
+entry head690c9e57. A deterministic independent predecessor-socket finalizer
+reproduces the invalid process-wide FD-count invariant (7 vs8) while all current
+participants clean up. Identity-scoped socket/thread audit passes that scenario
+and82 focused/context tests, including negative leak/early-close/FD-reuse cases.
+This does not identify the descriptor in historical13-vs14 failures. AppImage
+download repair and final exact-head mandatory CI remain pending; PR42 stays draft.
+No iOS feature, hosting or device signing changes. [Repair report](releases/2026-11-17-pr42-ci-repair.md).
+
 **17 November11:15UTC — owner resumes iOS; hosting work deferred.**
 Remote main remains PR41 mergebda954fb; the existing iOS worktree is preserved.
 Exact47e89416 macOS44038770792 passes both unsigned targets and nine isolated

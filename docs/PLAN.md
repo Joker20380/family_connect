@@ -2,6 +2,24 @@
 
 ## Current engineering priority / Текущий critical path
 
+**PR42-CI-REPAIR-1 — explicitly selected17 November / IN PROGRESS.**
+This replaces the previous docs-only restriction for two confirmed CI blockers:
+desktop resource-boundary diagnostics/repair (and runtime cleanup only if proven
+defective), plus pinned AppImage dependency acquisition and its CI integration.
+Dependencies: accepted iOS development implementation; entry690c9e57, mainbda954fb.
+Desktop: deterministic false failure reproduced; owned-resource audit and82
+targeted/context tests pass. Historical FD owner remains UNKNOWN; no runtime
+cleanup defect established. AppImage pins must remain unchanged, both actual
+binaries and full Linux packaging must pass. Preserve all old failed receipts.
+Gate: negative tests, exact final-head phase0 push AND PR, Client Linux, Linux
+control, Android/iOS and all other applicable checks, explicit self-review and
+ordinary PR42 merge with remote verification. Do not retry unchanged CI for green.
+No hosting, production, Android DNS investigation, new iOS features or phone work.
+Next product step only after integration: separately agreed signed iPhone prototype.
+[Repair evidence and outstanding gates](releases/2026-11-17-pr42-ci-repair.md).
+
+### Historical iOS checkpoint (superseded repair boundary)
+
 **IOS-DEVELOPMENT-HANDOFF-1 — iOS source gate PASS / integration BLOCKED, PR42 DRAFT.**
 Owner resumes this stage17 November; hosting work is explicitly deferred.
 Exact47e89416 now passes iOS, Client builds (including Android API27/28/31), phase0
