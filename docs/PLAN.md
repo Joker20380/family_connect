@@ -2,6 +2,16 @@
 
 ## Current engineering priority / Текущий critical path
 
+**IOS-DEVELOPMENT-HANDOFF-1 — selected17 November / IN_PROGRESS.**
+Base PR41 merge bda954fb, remote unchanged; its5 post-merge workflows PASS.
+Gate: deterministic startup regression, generation-scoped provider lifecycle,
+idempotent NETunnelProviderManager, shared app-specific Keychain reference handoff,
+development signing parameters, exact-head unsigned device/simulator and isolated tests.
+RU readback only: new01:03:56UTC operation-deadline failure proven at file_fsync;
+latency root cause open, no repair/observer automatically selected. Physical VPN,
+Keychain sharing, routing, Telemost and whitelist remain a later device gate.
+[Receipt](releases/2026-11-17-ios-development-handoff.md).
+
 **IOS-MESH-BRIDGE-1 — explicitly selected17 November / technical gate COMPLETE.**
 Dependency satisfied: PR40 exact3539ebe4 push/PR phase0 PASS, ordinary merge3468f828;
 retain RECOVERED_CAUSE_OPEN without repeating recovery.

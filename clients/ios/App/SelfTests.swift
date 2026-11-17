@@ -6,9 +6,10 @@ final class FixtureFlow: PacketFlow {
     private(set) var received: [(Data, NSNumber)] = []
     let written = DispatchSemaphore(value: 0)
     var acceptWrites = true
+    private(set) var reads = 0
 
     func readPackets(completionHandler: @escaping ([Data], [NSNumber]) -> Void) {
-        lock.lock(); callback = completionHandler; lock.unlock()
+        lock.lock(); reads += 1; callback = completionHandler; lock.unlock()
     }
     func writePackets(_ packets: [Data], withProtocols protocols: [NSNumber]) -> Bool {
         lock.lock()
@@ -137,6 +138,33 @@ enum SelfTests {
         bridge.stop { stopped.signal() }; try wait(stopped)
     }
 
+    static func nativeEndsDuringConfiguration() throws {
+        let native = try NativeSession(mode: 1)
+        let bridge = PacketBridge(native: native)
+        let flow = FixtureFlow()
+        let configuring = DispatchSemaphore(value: 0)
+        let completed = DispatchSemaphore(value: 0)
+        let stopped = DispatchSemaphore(value: 0)
+        var configureReply: ((Error?) -> Void)?
+        var startupError: Error?
+        bridge.start(flow: flow, configure: { configureReply = $0; configuring.signal() },
+                     completion: { startupError = $0; completed.signal() }, failed: { _ in })
+        try wait(configuring)
+        native.cancel()
+        let deadline = Date().addingTimeInterval(3)
+        while native.state == 1 || native.state == 2 {
+            try require(Date() < deadline, "native-terminal-bounded")
+            Thread.sleep(forTimeInterval: 0.005)
+        }
+        configureReply?(nil)
+        try wait(completed)
+        bridge.stop { stopped.signal() }; try wait(stopped)
+        try require(startupError != nil, "cancelled-native-must-not-start-successfully")
+        try require(flow.reads == 0, "cancelled-native-no-pump")
+        try require(completed.wait(timeout: .now() + 0.05) == .timedOut, "native-end-exactly-once")
+        try require(fc_ios_handles() == 0, "native-end-cleanup")
+    }
+
     static func run() -> [String: Any] {
         var completed: [String] = []
         do {
@@ -144,6 +172,7 @@ enum SelfTests {
             try packetFlowBoundary(); completed.append("async-flow-real-gvisor-wholedevice-DNS")
             try cancelConfiguration(); completed.append("cancel-config-late-completion")
             try writeFailure(); completed.append("write-error-propagation")
+            try nativeEndsDuringConfiguration(); completed.append("native-end-during-configure")
             try require(fc_ios_handles() == 0, "handle-release")
             return ["passed": true, "checks": completed, "handles": fc_ios_handles(), "scope": "isolated-not-system-TUN-or-Telemost"]
         } catch {

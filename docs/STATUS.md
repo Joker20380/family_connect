@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**17 November05:20UTC — RU down; iOS development handoff selected.**
+Owner-requested bounded readback finds AWG/TCP inactive since01:03:56UTC and watcher
+auto-restarting (432 restarts at05:20). First failure proves decision_state file_fsync
+9.538854s against8s operation budget; elapsed9.593907s, TRANSPORT_OPERATION_DEADLINE.
+This is an exit-code fail-closed event, not a new12s watchdog event. Underlying
+storage-latency cause remains open. No recovery, observer or production mutation.
+IOS-DEVELOPMENT-HANDOFF-1 now selected from PR41 mainbda954fb; reproduce startup race,
+then provider ownership, manager, Keychain handoff and development build preparation.
+[Readback and selected scope](releases/2026-11-17-ios-development-handoff.md).
+
 **17 November — IOS-MESH-BRIDGE-1 unsigned technical gate PASS.**
 Sourcefc08a50e macOS CI43991766964 builds unsigned iphoneos/arm64 app + Packet
 Tunnel extension and separate iOS Simulator/arm64 targets, verifies linked MESH,
