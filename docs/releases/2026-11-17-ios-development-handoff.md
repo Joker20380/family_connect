@@ -97,6 +97,20 @@ exercise this agreement. Import also runs Swift decoding before storing, so base
 or format accepted by only one decoder cannot become an unusable stored item.
 Existing common profile/trust parsing is unchanged.
 
+3c36a571 push run44029055867 failed the same paired-DNS positive completion test,
+this time tagged (1.07s); new bridge/trust tests passed. Artifact14304108782 ZIP
+SHA256 `411c70d2b8eb9097eb7088cf98780015487888369b0938d7f8f81071ac064f1f`.
+This repeats the1s harness sensitivity but does not prove host scheduling versus
+packet-loss cause. No unchanged run was retried. The paired fixture's positive
+completion budget is now explicitly **1s → 3s**, matching the previously accepted
+positive DNS/TCP fixture budget; it is a bounded correctness check, not a1s product
+latency SLA. Both exact A/AAAA replies, distinct IDs, source-port reuse and two
+queries remain mandatory. Add checked full writes and per-response elapsed/budget/
+query-count/error diagnostics. No skips/retries, no negative-UDP/cancel/startup
+budget changes, and no transport/runtime change. A genuinely lost reply still
+fails within3s. This test-only common-file change is qualified tagged and untagged;
+do not describe it as proof of a network performance improvement or a loss fix.
+
 ## Gates
 
 New device/simulator builds, native coordination, provider/manager/material tests:
