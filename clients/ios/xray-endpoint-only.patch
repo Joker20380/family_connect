@@ -51,7 +51,7 @@ diff --git a/proxy/tun/packet_handler.go b/proxy/tun/packet_handler.go
 new file mode 100644
 --- /dev/null
 +++ b/proxy/tun/packet_handler.go
-@@ -0,0 +1,9 @@
+@@ -0,0 +1,15 @@
 +//go:build fc_packet_endpoint
 +
 +package tun
@@ -60,4 +60,10 @@ new file mode 100644
 +
 +type ConnectionHandler interface {
 +	HandleConnection(connection net.Conn, destination net.Destination)
++}
++
++func (engine *stackGVisor) Wait() {
++	if engine.stack != nil {
++		engine.stack.Wait()
++	}
 +}

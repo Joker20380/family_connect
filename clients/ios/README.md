@@ -35,6 +35,8 @@ Mach-O platform/symbol inventories, exact package/module closure, source archive
 original notices, toolchain/SHA manifest, logs and simulator receipt/screenshot.
 Hashes identify artifacts; procedural reproducibility is not bitwise determinism.
 Swift/C/Go tests execute in the iOS simulator app, not a macOS binary substitute.
+For runtime only, a temporary simulator copy is ad-hoc signed locally (no account
+or certificate); the device and retained simulator artifacts remain unsigned.
 
 ## Reuse and dependency closure
 
@@ -74,6 +76,8 @@ States1/2/3/4: starting/packet-engine-ready/failed/stopped, **not** generic CONN
 Errors: invalid-1, closed-2, full-3, unsupported-4, wait-timeout-5, startup-6,
 transport-7, underlay-8. First failure survives stop; stop drains resources/removes
 handles. Cancellation unblocks startup/read. Late callbacks cannot restart a pump.
+The iOS-only stack wrapper also joins gVisor workers after close; pending Swift
+flow callbacks hold the pump weakly and path-monitor handlers are released on stop.
 
 App-only diagnostic modes1/2 use synthetic DNS/cancelled startup. Real gVisor and
 wholedevice execute, but no Family authentication/ReliableStream/Telemost exchange

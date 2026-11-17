@@ -52,7 +52,7 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
                     }, completion: { error in
                         self.lifecycle.async { self.finishStart(error) }
                     }, failed: { error in
-                        self.lifecycle.async { self.monitor?.cancel(); self.cancelTunnelWithError(error) }
+                        self.lifecycle.async { self.stopMonitor(); self.cancelTunnelWithError(error) }
                     })
                 } catch { self.finishStart(error) }
             }
@@ -63,21 +63,26 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
     private func finishStart(_ error: Error?) {
         let reply = startReply
         startReply = nil
-        if error != nil { monitor?.cancel(); monitor = nil }
+        if error != nil { stopMonitor() }
         reply?(error)
     }
 
     private func failPath() {
-        monitor?.cancel()
+        stopMonitor()
         if startReply != nil { finishStart(BridgeFailure(code: -8)) }
         bridge?.stop {}
         cancelTunnelWithError(BridgeFailure(code: -8))
     }
 
+    private func stopMonitor() {
+        monitor?.pathUpdateHandler = nil
+        monitor?.cancel()
+        monitor = nil
+    }
+
     override func stopTunnel(with reason: NEProviderStopReason, completionHandler: @escaping () -> Void) {
         lifecycle.async {
-            self.monitor?.cancel()
-            self.monitor = nil
+            self.stopMonitor()
             self.selectedInterface = nil
             self.finishStart(BridgeFailure(code: -2))
             guard let bridge = self.bridge else { completionHandler(); return }

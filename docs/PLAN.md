@@ -3,7 +3,8 @@
 ## Current engineering priority / Текущий critical path
 
 **IOS-MESH-BRIDGE-1 — explicitly selected17 November / IN_PROGRESS.**
-Dependency: qualify/ordinarily merge PR40 exact3539ebe4, retain RECOVERED_CAUSE_OPEN.
+Dependency satisfied: PR40 exact3539ebe4 push/PR phase0 PASS, ordinary merge3468f828;
+retain RECOVERED_CAUSE_OPEN without repeating recovery.
 Gate: exact-head macOS unsigned iphoneos/arm64 and separate simulator builds,
 linked/invoked MESH, isolated Swift/C/Go lifecycle, notices/source closure, underlay
 limits and signed-iPhone prerequisites. No production/recovery/observer/next backlog

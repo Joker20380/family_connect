@@ -103,7 +103,12 @@ func (bridge *Bridge) run(open Opener) {
 		bridge.fail(StartupFailed)
 		return
 	}
-	defer engine.Close()
+	defer func() {
+		engine.Close()
+		if joined, ok := engine.(interface{ Wait() }); ok {
+			joined.Wait()
+		}
+	}()
 	bridge.mu.Lock()
 	if bridge.ctx.Err() == nil && !session.Failed() {
 		bridge.state = Ready

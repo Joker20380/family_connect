@@ -107,7 +107,8 @@ final class PacketBridge {
 
     private func readFlow(_ flow: PacketFlow) {
         guard !stopped else { return }
-        flow.readPackets { packets, families in
+        flow.readPackets { [weak self] packets, families in
+            guard let self = self else { return }
             self.control.async {
                 guard !self.stopped else { return }
                 guard packets.count == families.count else { self.terminate(BridgeFailure(code: -1)); return }

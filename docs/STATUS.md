@@ -3,8 +3,9 @@
 **17 November — IOS-MESH-BRIDGE-1 selected / source candidate, CI pending.**
 Separate worktree preserves dirty original main. New unsigned iOS app/Packet Tunnel
 extension/Swift-C-Go bridge reuse existing MESH; Linux bounded packet/race tests pass.
-Device/simulator builds and Swift execution not yet claimed. PR40 exact3539ebe4 CI
-pending; RECOVERED_CAUSE_OPEN not reopened. No production/observer/catalog/signing
+Device/simulator builds and Swift execution not yet claimed. PR40 exact3539ebe4
+push/PR phase0 PASS; ordinary merge3468f828 is remote-verified. RECOVERED_CAUSE_OPEN
+not reopened. No production/observer/catalog/signing
 or physical checks. [Receipt](releases/2026-11-17-ios-mesh-bridge.md).
 
 **16 November22:47UTC — public126 integrated; NEW RU outage remains OPEN.**

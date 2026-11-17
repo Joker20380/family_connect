@@ -101,12 +101,13 @@ def build(args):
     environment.update(GOTOOLCHAIN='local', GOWORK='off')
     manifest = dict(source_sha=capture('git', 'rev-parse', 'HEAD', cwd=ROOT), go=version, xray=XRAY,
                     patch_sha256=hashlib.sha256(PATCH.read_bytes()).hexdigest(), targets=[],
+                    endpoint_patch_sha256=hashlib.sha256((SOURCE / 'xray-endpoint-only.patch').read_bytes()).hexdigest(),
                     system=platform.platform(), image=os.environ.get('ImageVersion'), real_vpn='NOT_RUN', telemost='NOT_RUN')
     with tempfile.TemporaryDirectory(prefix='fc-ios-') as directory:
         workspace = Path(directory)
         module = prepare(workspace, go)
         flags = ['-tags=fc_packet_endpoint', '-mod=readonly', '-modfile='+str(module)]
-        run(go, 'test', *flags, '-race', '-count=3', '-timeout=90s', '-ldflags=-checklinkname=0', './bridge', env=environment)
+        run(go, 'test', *flags, '-v', '-race', '-count=3', '-timeout=90s', '-ldflags=-checklinkname=0', './bridge', env=environment)
         run(go, 'test', *flags, '-race', '-count=1', '-timeout=90s', '-ldflags=-checklinkname=0',
             'github.com/Joker20380/family_connect/restrictedandroid/packet', env=environment)
         run(go, 'test', '-mod=readonly', '-modfile='+str(module), '-race', '-count=1', '-timeout=90s',

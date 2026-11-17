@@ -7,8 +7,8 @@ from pathlib import Path
 def generate(root: Path, output: Path, native: Path, notices: Path):
     objects = {}
 
-    def add(name, kind, **fields):
-        identifier = hashlib.sha256(name.encode()).hexdigest()[:24].upper()
+    def add(key, kind, **fields):
+        identifier = hashlib.sha256(key.encode()).hexdigest()[:24].upper()
         objects[identifier] = dict(isa=kind, **fields)
         return identifier
 
