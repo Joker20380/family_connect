@@ -1,5 +1,7 @@
 # Documentation
 
+[RU · 17 November00:02UTC: availability restored on accepted bytes; initiating cause remains open](releases/2026-11-17-ru-recovery.md).
+
 [Android126 · PUBLIC: technical metadata, optional catalog9, exact APK/source/audio and acceptance](releases/2026-11-16-android126-publication.md).
 
 [RU · 16 November evening: verified watchdog cascade, fresh guarded recovery; initiating stall still open](releases/2026-11-16-ru-recurrence.md#watchdog-cascade-and-guarded-recovery--16-november-evening).

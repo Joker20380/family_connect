@@ -1,6 +1,20 @@
 # Текущее состояние / Current state
 
-**16 November22:47UTC — public126 integrated; NEW RU outage remains OPEN.**
+**17 November00:02UTC — RU recovered on unchanged accepted bytes; CAUSE_OPEN.**
+The owner-authorized recovery restores watcher/AWG/TCP after the22:07 outage.
+Fresh canonical backup and isolated27-table/paid-projection restore pass. RU-only
+fence/drain/stop and retained-state preflight pass; the original command map returns.
+Six strict observations over203.900s cross a lease deadline with66 applied records,
+exact20 AWG/20 TCP bindings, stable processes and zero restarts. Final00:02:29 readback
+passes identity/membership/terms/prepared-state and protected canonical fingerprints.
+HMAC2, exact paid-v2, support IPC/original baseline/cursor and metadata revocation
+remain intact. Current RU/NL, inventory/subscription/metadata imports pass. HTTP/peer,
+support/panel, NL and reconciler timer are not restarted. Public126/catalog9 is unchanged.
+This restores availability, not the unproven initiating watchdog-stall cause; no
+observer, timeout relaxation, source deployment or old-data/key restore is performed.
+[Fresh recovery and limits](releases/2026-11-17-ru-recovery.md).
+
+**Historical16 November22:47UTC — public126 integrated; new RU outage remained OPEN.**
 PR38 is ordinarily merged as `7123b95e83e1d5dc592492ba6104d04ebcf8178d`; remote
 main matches and its tree equals qualified source588e793a. All ten PR workflows and
 four push workflows pass; Android133637121094/133637065919 included. Artifact source
