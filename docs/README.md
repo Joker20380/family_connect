@@ -1,5 +1,10 @@
 # Documentation
 
+[iOS development handoff — resumed stage, verified unsigned artifacts and exact CI boundary](releases/2026-11-17-ios-development-handoff.md#owner-resumption--17-november1115utc)
+
+[iOS PR41 final d02fce99 acceptance](https://github.com/Joker20380/family_connect/pull/41#issuecomment-6935466490)
+· [unsigned packet bridge and retained receipts](releases/2026-11-17-ios-mesh-bridge.md)
+
 [RU · 17 November:9.54s state-file sync caused protective stop; recovery is not a durable fix](releases/2026-11-17-ru-storage-stall.md).
 
 [iOS MESH unsigned packet bridge — candidate and exact evidence](releases/2026-11-17-ios-mesh-bridge.md)

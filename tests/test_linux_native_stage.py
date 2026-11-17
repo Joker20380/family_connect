@@ -94,3 +94,23 @@ def test_ci_uses_one_native_stage_and_current_package_sources():
     assert 'src=$work/native-source,dst=/native-source,readonly' in source
     assert '--os linux --test' in source
     assert 'scripts.verify_linux_candidate' in source
+
+
+def test_auto_ci_builds_accepted_native_but_keeps_current_protocol_and_overlays():
+    source = (Path(__file__).resolve().parents[1] / '.github/workflows/desktop-auto-bridge.yml').read_text()
+    build = source.split('name: Build from the pinned packet boundary', 1)[1].split('- name:', 1)[0]
+    assert f'git fetch --no-tags --depth=1 origin {staging.reference()["commit"]}' in build
+    assert 'export PYTHONDONTWRITEBYTECODE=1' in build
+    assert 'scripts.stage_linux_native --out "$RUNNER_TEMP/auto-native-source"' in build
+    assert 'cd "$RUNNER_TEMP/auto-native-source"\n            python -m scripts.build_desktop_mesh' in build
+    assert '--out "$RUNNER_TEMP/auto-native" --os linux --test' in build
+    assert 'from scripts.stage_linux_native import verify' in build
+    assert 'git rev-parse HEAD > desktop-auto-test-source.txt' in build
+    assert 'go test -race -count=5 -timeout=90s ./automatic ./normal ./direct' in source
+    assert 'python tests/fixtures/mesh_lifetime/build.py' in source
+    assert 'bash tests/fixtures/mesh_combined/check.sh' in source
+    for gate in ('test_auto_configuration_native.py', 'test_mesh_ownership.py',
+                 'check_desktop_auto_policy.py', 'check_chat_direct_underlay.py',
+                 'test_mesh_chat_lifetime_native.py', 'test_mesh_chat_terminal_native.py',
+                 'test_mesh_chat_status_native.py', './platform ./chatipc ./worker'):
+        assert gate in source

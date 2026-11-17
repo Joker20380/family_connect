@@ -115,13 +115,27 @@ func fc_ios_cancel(handle C.uint64_t) {
 }
 
 //export fc_ios_stop
-func fc_ios_stop(handle C.uint64_t) {
+func fc_ios_stop(handle C.uint64_t) C.int32_t {
+	result := bridge.Closed
 	if owned := lookup(handle); owned != nil {
 		owned.Stop()
+		_, failure := owned.Status()
+		if failure != 0 {
+			result = failure
+		}
 	}
 	registry.Lock()
 	delete(registry.items, uint64(handle))
 	registry.Unlock()
+	return C.int32_t(result)
+}
+
+//export fc_ios_commit_start
+func fc_ios_commit_start(handle C.uint64_t) C.int32_t {
+	if owned := lookup(handle); owned != nil {
+		return C.int32_t(owned.CommitStart())
+	}
+	return bridge.Closed
 }
 
 //export fc_ios_handles
@@ -132,3 +146,16 @@ func fc_ios_handles() C.int32_t {
 }
 
 func main() {}
+
+//export fc_ios_validate_material
+func fc_ios_validate_material(data unsafe.Pointer, size C.int32_t) C.int32_t {
+	if data == nil || size <= 0 || size > 96<<10 {
+		return -9
+	}
+	raw := C.GoBytes(data, C.int(size))
+	defer clear(raw)
+	if bridge.ValidateMaterial(raw) != nil {
+		return -9
+	}
+	return 0
+}

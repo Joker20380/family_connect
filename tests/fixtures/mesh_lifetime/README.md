@@ -37,10 +37,16 @@ kernel routes. No TUN is created in this service-only gate.
 - External provisioning refresh is replaced by a pre-issued cache in cooldown;
   the fixture-only MaterialOwner subclass requests the normal cached path. Native
   signature/certificate/CRL/expiry validation and inspect/readback are not replaced.
-- `wholedevice.openDirectory` is overlaid with paired bounded packet channels:
+- `wholedevice.openDirectoryWithTransport` is overlaid with paired bounded packet channels:
   external bootstrap rendezvous, Telemost signaling/ICE/VP8/RTP carrier, room-broker
   binding and remote lease maintenance are not exercised. FamilyTLS/Mux still run
   on both endpoints, using the verified client profile and issued gateway profile.
+  This common boundary covers both cached and provisioned entry paths. After the
+  iOS transport seam, replacing only openDirectory missed OpenProvisioned and
+  accidentally attempted real bootstrap in the isolated kernel (DEADLINE).
+  The builder rejects a missing/duplicate hook and emits fixture-build.json with
+  current source commit/tree and overlay/binary hashes. This remains current-code
+  qualification, separate from Desktop Auto's accepted efc13f1c native worker.
 - The two fixed services terminate at loopback peers. API TLS uses the fixed product
   origin and an ephemeral matching certificate; `SSL_CERT_FILE` is added only to
   the fixture subprocess environment, not production `ENV` or product roots.

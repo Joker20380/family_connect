@@ -31,6 +31,71 @@ class RoutingHTTPServer(http.server.ThreadingHTTPServer):
         return self.tls.wrap_socket(connection, server_side=True, do_handshake_on_connect=False), address
 
 
+def dns_answer(data):
+    if len(data) < 12 or len(data) > 4096 or data[2] & 0x80 or data[4:6] != b'\x00\x01':
+        return None
+    end = 12
+    while end < len(data) and data[end]:
+        length = data[end]
+        if length > 63 or end+length+1 >= len(data):
+            return None
+        end += length+1
+    if end+5 > len(data):
+        return None
+    end += 1
+    kind, family = struct.unpack('!HH', data[end:end+4])
+    if family != 1 or kind not in (1, 28):
+        return None
+    end += 4
+    value = ipaddress.ip_address('198.19.1.1' if kind == 1 else 'fd79:fc::1').packed
+    answer = data[:2]+b'\x81\x80'+struct.pack('!HHHH', 1, 1, 0, 0)+data[12:end]+b'\xc0\x0c'+struct.pack('!HHIH', kind, 1, 0, len(value))+value
+    return kind, answer
+
+
+class DNSDatagram(socketserver.BaseRequestHandler):
+    def handle(self):
+        data, connection = self.request
+        parsed = dns_answer(data)
+        if parsed is not None:
+            kind, answer = parsed
+            connection.sendto(answer, self.client_address)
+            self.server.record_dns('udp', kind)
+
+
+class DNSStream(socketserver.StreamRequestHandler):
+    timeout = 2
+
+    def handle(self):
+        try:
+            for _ in range(16):
+                header = self.rfile.read(2)
+                if len(header) != 2:
+                    return
+                length = struct.unpack('!H', header)[0]
+                if not 12 <= length <= 4096:
+                    return
+                data = self.rfile.read(length)
+                if len(data) != length:
+                    return
+                parsed = dns_answer(data)
+                if parsed is None:
+                    return
+                kind, answer = parsed
+                self.wfile.write(struct.pack('!H', len(answer))+answer)
+                self.server.record_dns('tcp', kind)
+        except (TimeoutError, ConnectionError):
+            return
+
+
+class DNSStreamServer(socketserver.ThreadingTCPServer):
+    allow_reuse_address = True
+
+
+def dns_routes():
+    return [dict(type='field', port='53', network='tcp,udp', outboundTag='dns'),
+            dict(type='field', port='853', network='tcp,udp', outboundTag='unsupported-dot')]
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--out', type=Path, required=True)
@@ -53,6 +118,7 @@ def main():
     tls.minimum_version = ssl.TLSVersion.TLSv1_2
     tls.load_cert_chain(cert_path, key_path)
     records = []
+    dns_records = []
     records_lock = threading.Lock()
     servers = []
     started_servers = []
@@ -75,31 +141,20 @@ def main():
                 pass
         return HTTP
 
-    class DNS(socketserver.BaseRequestHandler):
-        def handle(self):
-            data, sock = self.request
-            try:
-                end = 12
-                while data[end]:
-                    end += data[end]+1
-                end += 1
-                kind = struct.unpack('!H', data[end:end+2])[0]
-                end += 4
-                if kind not in (1, 28):
-                    return
-                value = ipaddress.ip_address(self.server.ipv4 if kind == 1 else 'fd79:fc::1').packed
-                answer = data[:2]+b'\x81\x80'+struct.pack('!HHHH', 1, 1, 0, 0)+data[12:end]+b'\xc0\x0c'+struct.pack('!HHIH', kind, 1, 0, len(value))+value
-                sock.sendto(answer, self.client_address)
-            except (IndexError, struct.error):
-                pass
+    def record_dns(protocol, kind):
+        with records_lock:
+            if len(dns_records) < 512:
+                dns_records.append(dict(protocol=protocol, kind=kind, sent=True,
+                                        at=datetime.datetime.now(datetime.timezone.utc).isoformat()))
 
     try:
         for port, route in [(51904, 'DIRECT'), (51905, 'VPN_TCP')]:
             server = RoutingHTTPServer(('127.0.0.1', port), handler(route), tls)
             servers.append(server)
-        for address, port, answer in [('127.0.0.1', 51906, '198.19.1.1')]:
-            server = socketserver.ThreadingUDPServer((address, port), DNS)
-            server.ipv4 = answer
+        for server_type, handler_type in [(socketserver.ThreadingUDPServer, DNSDatagram),
+                                          (DNSStreamServer, DNSStream)]:
+            server = server_type(('127.0.0.1', 51906), handler_type)
+            server.record_dns = record_dns
             servers.append(server)
         for server in servers:
             threading.Thread(target=server.serve_forever, daemon=True).start()
@@ -114,7 +169,7 @@ def main():
         ready = queue.Queue()
         threading.Thread(target=lambda: ready.put(awg.stdout.readline()), daemon=True).start()
         assert ready.get(timeout=30).strip() == 'ready'
-        config = dict(log=dict(loglevel='warning'), inbounds=[dict(listen='0.0.0.0', port=51900, protocol='vless', settings=dict(clients=[dict(id='11111111-2222-4333-8444-555555555555', flow='xtls-rprx-vision')], decryption='none'), streamSettings=dict(network='raw', security='reality', realitySettings=dict(show=False, target='127.0.0.1:51904', xver=0, serverNames=['android.test'], privateKey='AgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgI', shortIds=['0102030405060708'])))], outbounds=[dict(tag='tls', protocol='freedom', settings=dict(redirect='127.0.0.1:51905')), dict(tag='dns', protocol='freedom', settings=dict(redirect='127.0.0.1:51906'))], routing=dict(rules=[dict(type='field', network='udp', outboundTag='dns')]))
+        config = dict(log=dict(loglevel='warning'), inbounds=[dict(listen='0.0.0.0', port=51900, protocol='vless', settings=dict(clients=[dict(id='11111111-2222-4333-8444-555555555555', flow='xtls-rprx-vision')], decryption='none'), streamSettings=dict(network='raw', security='reality', realitySettings=dict(show=False, target='127.0.0.1:51904', xver=0, serverNames=['android.test'], privateKey='AgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgI', shortIds=['0102030405060708'])))], outbounds=[dict(tag='tls', protocol='freedom', settings=dict(redirect='127.0.0.1:51905')), dict(tag='dns', protocol='freedom', settings=dict(redirect='127.0.0.1:51906')), dict(tag='unsupported-dot', protocol='blackhole')], routing=dict(rules=dns_routes()))
         output = (args.out/'xray.log').open('wb')
         streams.append(output)
         xray = subprocess.Popen([str(args.xray), 'run', '-config', 'stdin:'], stdin=subprocess.PIPE, stdout=output, stderr=subprocess.STDOUT, text=True)
@@ -142,6 +197,7 @@ def main():
         for stream in streams:
             stream.close()
         (args.out/'traffic.json').write_text(json.dumps(records, indent=2))
+        (args.out/'dns.json').write_text(json.dumps(dns_records, indent=2))
 
 
 if __name__ == '__main__':

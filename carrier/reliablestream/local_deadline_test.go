@@ -42,7 +42,9 @@ func TestLocalCompletionDeadlinesRepeatedGenerations(test *testing.T) {
 		if err != nil {
 			test.Fatal(err)
 		}
-		receiver, err := New(ctx, right, config)
+		peerConfig := config
+		peerConfig.MaxAge = time.Second
+		receiver, err := New(ctx, right, peerConfig)
 		if err != nil {
 			test.Fatal(err)
 		}

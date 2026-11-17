@@ -94,4 +94,4 @@ def test_ci_retains_per_app_setup_and_service_failure_evidence():
         assert '${{ runner.temp }}/'+path in upload
     fixture_paths = {line.strip() for line in upload.splitlines() if '/fixture/' in line}
     assert fixture_paths == {'${{ runner.temp }}/app-vpn-api*/fixture/'+name
-                             for name in ('awg.log', 'xray.log', 'traffic.json')}
+                             for name in ('awg.log', 'xray.log', 'traffic.json', 'dns.json')}

@@ -116,6 +116,18 @@ Local documentation links, whitespace and the public-source guard are checked.
 The incident/recovery documentation is a separate source change; its CI and author
 self-review are recorded on its PR. No source publication deploys a runtime fix.
 
+## Integration and newly selected source boundary
+
+PR42 is accepted at source `af1b37b6`, merge `b3fefac1`; physical iOS and Apple
+enrollment/TestFlight are deferred by the owner. PR43 preserves this historical
+incident/recovery evidence while merging current main without rewriting history.
+Its exact-head checks, self-review and final merge/tree readback are recorded on
+[PR43](https://github.com/Joker20380/family_connect/pull/43), not as a runtime fix.
+The newly selected RU-PERSISTENCE-READBACK-1 task is isolated source qualification
+of an opt-in durability/observation split. It does not authorize production SSH,
+deployment, restart or infrastructure work. The next section retains the original
+incident decision; it is not a simultaneous instruction to contact hosting.
+
 ## Durable-fix decision and next action
 
 The immediate failure mechanism is established: **synchronous durable state write

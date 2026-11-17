@@ -1,19 +1,48 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 @main
+@MainActor
 struct FamilyConnectApp: App {
+    @StateObject private var vpn = VPNController()
+    @State private var importing = false
     @State private var report = "Unsigned iOS MESH laboratory. No VPN or Telemost acceptance."
     @State private var running = false
 
     var body: some Scene {
         WindowGroup {
-            VStack(alignment: .leading, spacing: 20) {
+            ScrollView { VStack(alignment: .leading, spacing: 16) {
                 Text("Family Connect · MESH").font(.title)
-                Text("Swift → C → Go → existing Xray/gVisor → wholedevice").font(.headline)
-                Text(report).accessibilityIdentifier("mesh-report")
-                Button("Run isolated packet checks") { runChecks() }.disabled(running)
-                Text("A synthetic DNS data plane is used only in this laboratory. The extension uses signed Family bootstrap, TLS, ReliableStream and Telemost VP8/RTP; real network tests require a provisioned iPhone.").font(.footnote)
-            }.padding().onAppear {
+                Text("Development candidate · not an always-on VPN or kill switch").font(.headline)
+                Text(vpn.statusText).accessibilityIdentifier("vpn-status")
+                Text(vpn.message).font(.footnote)
+                Picker("Configuration", selection: $vpn.selectedID) {
+                    ForEach(Array(Set(vpn.identifiers + [vpn.selectedID])).sorted(), id: \.self) { Text($0).tag($0) }
+                }.disabled(vpn.busy)
+                Picker("Test material reference", selection: $vpn.selectedReference) {
+                    Text("Select imported material").tag("")
+                    ForEach(vpn.references, id: \.self) { Text($0).tag($0) }
+                }.disabled(vpn.busy)
+                Button("Import test material…") { importing = true }.disabled(vpn.busy)
+                Button("Reload saved VPN configurations") { Task { await vpn.refresh() } }.disabled(vpn.busy)
+                Button("Save / update selected VPN") { Task { await vpn.prepare(connect: false) } }.disabled(vpn.busy)
+                Button("Connect") { Task { await vpn.prepare(connect: true) } }.disabled(vpn.busy)
+                Button("Disconnect / cancel startup") { vpn.disconnect() }
+                Button("Revoke selected material", role: .destructive) { Task { await vpn.removeMaterial(revoke: true) } }.disabled(vpn.busy)
+                Button("Delete selected material", role: .destructive) { Task { await vpn.removeMaterial(revoke: false) } }.disabled(vpn.busy)
+                DisclosureGroup("Isolated diagnostics (not a VPN)") {
+                    Text(report).accessibilityIdentifier("mesh-report")
+                    Button("Run isolated packet / lifecycle checks") { runChecks() }.disabled(running)
+                }
+                Text("System Connected is not proof of MESH traffic, correct routing or absence of leaks. Disconnect restores ordinary OS routing. Real identity and device acceptance are separate.").font(.footnote)
+            }.padding() }.fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
+                switch result {
+                case .success(let url): vpn.importFile(url)
+                case .failure(let error): vpn.importFailed(error)
+                }
+            }.task {
+                if !ProcessInfo.processInfo.arguments.contains("--self-test") { await vpn.refresh() }
+            }.onAppear {
                 if ProcessInfo.processInfo.arguments.contains("--self-test") { runChecks() }
             }
         }

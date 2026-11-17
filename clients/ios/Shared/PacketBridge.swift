@@ -1,9 +1,27 @@
 import Foundation
 import NetworkExtension
 
-struct BridgeFailure: Error, CustomStringConvertible {
+struct BridgeFailure: Error, CustomStringConvertible, CustomNSError {
     let code: Int32
-    var description: String { "MESH bridge error \(code)" }
+    var description: String {
+        let reason: String
+        switch code {
+        case -1: reason = "invalid packet or session arguments"
+        case -2: reason = "session cancelled or closed"
+        case -3: reason = "bounded packet queue full"
+        case -4: reason = "unsupported packet family"
+        case -5: reason = "operation timed out"
+        case -6: reason = "startup failed; verify test trust, admission and network"
+        case -7: reason = "MESH transport terminated"
+        case -8: reason = "underlay/interface policy rejected"
+        case -9: reason = "test material rejected"
+        default: reason = "operation failed"
+        }
+        return "MESH bridge error \(code): \(reason)"
+    }
+    static var errorDomain: String { "org.familyconnect.mesh.bridge" }
+    var errorCode: Int { Int(code) }
+    var errorUserInfo: [String: Any] { [NSLocalizedDescriptionKey: description] }
 }
 
 final class NativeSession {
@@ -23,12 +41,11 @@ final class NativeSession {
         return terminal ?? fc_ios_state(handle)
     }
     func cancel() { fc_ios_cancel(handle) }
+    func commitStart() -> Int32 { fc_ios_commit_start(handle) }
     func stop() {
         lock.lock(); defer { lock.unlock() }
         guard terminal == nil else { return }
-        let observed = fc_ios_state(handle)
-        fc_ios_stop(handle)
-        terminal = observed < 0 ? observed : -2
+        terminal = fc_ios_stop(handle)
     }
     deinit { stop() }
 
@@ -64,15 +81,18 @@ extension NEPacketTunnelFlow: PacketFlow {}
 
 final class PacketBridge {
     private let native: NativeSession
-    private let control = DispatchQueue(label: "family.mesh.control")
-    private let worker = DispatchQueue(label: "family.mesh.receive")
+    private let control: DispatchQueue
+    private let worker: DispatchQueue
     private var stopped = false
     private var started = false
     private var startup: ((Error?) -> Void)?
     private var failure: ((Error) -> Void)?
     private var dropped = 0
 
-    init(native: NativeSession) { self.native = native }
+    init(native: NativeSession, control: DispatchQueue = DispatchQueue(label: "family.mesh.control"),
+         worker: DispatchQueue = DispatchQueue(label: "family.mesh.receive")) {
+        self.native = native; self.control = control; self.worker = worker
+    }
 
     func start(flow: PacketFlow, configure: @escaping (@escaping (Error?) -> Void) -> Void,
                completion: @escaping (Error?) -> Void, failed: @escaping (Error) -> Void) {
@@ -84,14 +104,21 @@ final class PacketBridge {
             self.worker.async {
                 let deadline = Date().addingTimeInterval(180)
                 while self.native.state == 1 && Date() < deadline { Thread.sleep(forTimeInterval: 0.01) }
-                let state = self.native.state
                 self.control.async {
                     guard !self.stopped else { return }
-                    guard state == 2 else { self.terminate(BridgeFailure(code: state == 1 ? -5 : state)); return }
-                    configure { error in
+                    let state = self.native.state
+                    guard state == 2 else { self.terminate(BridgeFailure(code: state < 0 ? state : state == 1 ? -5 : -2)); return }
+                    configure { [weak self] error in
+                        guard let self = self else { return }
                         self.control.async {
-                            guard !self.stopped else { return }
-                            if let error = error { self.terminate(error); return }
+                            guard !self.stopped && self.startup != nil else { return }
+                            if let error = error {
+                                let state = self.native.state
+                                self.terminate(state < 0 && state != -2 ? BridgeFailure(code: state) : error)
+                                return
+                            }
+                            let admission = self.native.commitStart()
+                            guard admission == 0 else { self.terminate(BridgeFailure(code: admission)); return }
                             self.finishStartup(nil)
                             self.readFlow(flow)
                             self.worker.async { self.receive(flow) }
@@ -145,7 +172,8 @@ final class PacketBridge {
                     if !accepted { throw BridgeFailure(code: -7) }
                 }
             }
-            throw BridgeFailure(code: native.state)
+            let state = native.state
+            throw BridgeFailure(code: state < 0 ? state : -2)
         } catch {
             control.async { self.terminate(error) }
         }

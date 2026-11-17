@@ -407,7 +407,7 @@ def test_runtime_consent_harness_targets_system_button_and_checks_quiet_notifica
 def test_runtime_consent_requires_awake_unlocked_emulator_without_bypassing_dialog():
     harness = (ROOT / 'clients/android/app/src/androidTest/java/com/familyconnect/app/AwgRuntimeTest.java').read_text()
     consent = harness.split('void revokeThroughSystemDialog()', 1)[1].split('void quietNotification()', 1)[0]
-    assert consent.index('shell("input keyevent 224")') < consent.index('shell("am start -W -n ')
+    assert consent.index('shell("input keyevent 224")') < consent.index('consentCommand("am start -W -n ')
     assert 'shell("wm dismiss-keyguard")' in consent
     assert 'assertTrue("System VPN consent requires an interactive display",power.isInteractive())' in consent
     assert 'assertFalse("System VPN consent blocked by keyguard",keyguard.isKeyguardLocked())' in consent
@@ -420,6 +420,21 @@ def test_runtime_consent_requires_awake_unlocked_emulator_without_bypassing_dial
     assert 'VpnService.prepare(this)' in activity and 'startActivityForResult(permission,1)' in activity
     runner = (ROOT / 'pilot/android-awg/run.py').read_text()
     assert "'logcat','-d','-b','main','-b','system','-b','crash','-t','2000'" in runner
+
+
+def test_consent_diagnostics_are_bounded_and_do_not_dump_view_text_or_material():
+    harness = (ROOT / 'clients/android/app/src/androidTest/java/com/familyconnect/app/AwgRuntimeTest.java').read_text()
+    consent = harness.split('void revokeThroughSystemDialog()', 1)[1].split('void quietNotification()', 1)[0]
+    assert 'captured.size()<16384' in consent and 'packages.size()<8' in consent
+    assert 'root.getText()' not in consent and 'getContentDescription()' not in consent
+    assert 'appops get ' in consent and 'ACTIVATE_VPN allow' not in consent
+    activity = (ROOT / 'clients/android/app/src/androidTest/java/com/familyconnect/app/RevokeVpnActivity.java').read_text()
+    assert 'prepare_requires_confirmation=' in activity and 'activity_result request=' in activity
+    runner = (ROOT / 'pilot/android-awg/run.py').read_text()
+    assert "'FCConsent:I','*:S'" in runner and 'result.stdout[-65536:]' in runner
+    assert runner.index('peer.kill()') < runner.index("'FCConsent:I'")
+    diagnostics = (ROOT / '.github/workflows/clients.yml').read_text().split('name: FamilyConnect-Android-runtime-diagnostics', 1)[1].split('- uses:', 1)[0]
+    assert 'android-consent.log' in diagnostics
 
 
 def test_runtime_ui_checks_match_retained_async_and_scroll_contracts():
