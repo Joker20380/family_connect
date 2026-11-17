@@ -111,6 +111,53 @@ budget changes, and no transport/runtime change. A genuinely lost reply still
 fails within3s. This test-only common-file change is qualified tagged and untagged;
 do not describe it as proof of a network performance improvement or a loss fix.
 
+7b915ddb iOS push44030127738 and PR44030134489 both PASS, but mandatory Client
+builds PR44030134337 failed the unchanged carrier test
+TestLocalCompletionDeadlinesRepeatedGenerations (`local_deadline_test.go:55`):
+expected local DeadlineExceeded, got `reliable stream: remote reset` (0.82s test).
+Artifact14304304964 SHA256 `344f729db14e11dbae148b7239262ab09854b188e597e80dbbbddb78dd1e8138`.
+Inspection shows both peers used MaxAge150ms: the fixture deliberately stalls a
+DATA write, blocking subsequent local ACK writes; the receiving peer's idle/handshake
+deadline can send RESET before the local completion deadline. This is a competing
+terminal cause in the fixture, not evidence the new iOS code changed ReliableStream.
+Isolate the peer with MaxAge1s. Keep the **sender**150ms completion deadline,
+500ms assertion,1s parent context, exact DeadlineExceeded, zero retransmissions
+and repeated-generation checks unchanged. Do not accept ErrReset as an alternative
+or alter runtime first-error selection. Only the peer test setup changes. A local
+30-repeat race run of the original fixture passed; that does not erase its CI
+failure or prove the precise scheduling of the remote reset.
+The isolated-peer version also passes30 repetitions under `-race` locally
+(60.236s), with the sender deadline and all assertions retained.
+
+The same7b915ddb Linux control PR run44030134438 fails an unrelated desktop
+teardown invariant: `test_control_completion_interruptions_are_bounded[prepare-deadline]`
+observes13 process descriptors versus14 at entry (`test_chat_public_completion.py:23`).
+Standard context:5794 passed,276 skipped,1 teardown error; root258 and snapshot314
+98 pass. Artifact14304439543 SHA256
+`75058ec35c9d9c22d09bfc91d6175abf55874796c9789307ca63ea1a1f38a98c`.
+This is not an iOS failure or a proven leak; cause of the descriptor disappearance
+is unproven. Do not change unrelated desktop assertions or retry this head for green.
+The subsequent head changes the reviewed carrier fixture, not desktop runtime.
+
+### Qualified intermediate iOS source7b915ddb
+
+Exact head `7b915ddbadb5aa4c248e7c9e9d57333f0146e348`: macOS PR run44030134489
+and push44030127738 PASS. Artifact14304543162 (79,930,391 bytes), ZIP SHA256
+`7c87bb82ab9639e7ad3d29c02b68f50c46ce07ac0ba16891d33f157f17ee56b1`;
+all208 manifest file hashes verified after download. Unsigned device arm64 and
+separate simulator arm64 builds, native symbols, nine Swift/C/Go isolated test
+groups and zero surviving handles PASS. Screenshot inspected: development controls
+and NOT_RUN/ordinary-routing warnings present; no material values displayed.
+This qualifies this iOS source only, not the failed common gates or later heads.
+
+Toolchain: macOS15.8.2 runner image20261104.0514.1, Xcode16.4/16F6, SDK18.5,
+Swift6.1.2, clang17.0.0, Go1.26.1, Python3.15.2. Both Go targets are **ios/arm64**;
+C triples `arm64-apple-ios16.0` and `arm64-apple-ios16.0-simulator` respectively.
+Same408-package/31-module closure and required notices/sources/patches retained.
+Paired DNS replies completed at403.105/403.441ms tagged and335.983/336.365ms
+untagged, with two queries and29-byte exact replies in each. These observations
+do not explain prior1s failures or establish a performance SLA.
+
 ## Gates
 
 New device/simulator builds, native coordination, provider/manager/material tests:

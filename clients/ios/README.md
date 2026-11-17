@@ -181,7 +181,11 @@ ignored. An outstanding setTunnelNetworkSettings operation prevents another run
 on that owner until its callback arrives; public API has no cancellation handle.
 Stop still frees native handles without waiting forever on that callback. A fresh
 path has a new10s eligibility deadline (separate from unchanged180s native startup
-budget); no transport test budget was increased. Reuse on one provider object is
+budget). The shared paired-DNS positive fixture now has a declared3s rather than
+1s completion budget with exact payload/count assertions and timing diagnostics.
+The local-write fixture isolates its peer's idle timer at1s; sender150ms deadline,
+500ms assertion and cancellation budgets are unchanged. See retained failures and
+reasoning in the new-stage receipt. No transport runtime changed. Reuse on one provider object is
 isolated robustness coverage, **not** a claim about Apple's instance reuse policy.
 
 Official references: [manager](https://developer.apple.com/documentation/networkextension/netunnelprovidermanager),
