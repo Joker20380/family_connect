@@ -173,6 +173,10 @@ enum SelfTests {
             try cancelConfiguration(); completed.append("cancel-config-late-completion")
             try writeFailure(); completed.append("write-error-propagation")
             try nativeEndsDuringConfiguration(); completed.append("native-end-during-configure")
+            try DevelopmentTests.startup(); completed.append("stale-worker-control-config-error")
+            try DevelopmentTests.provider(); completed.append("provider-generation-cleanup-settings-lease")
+            try DevelopmentTests.material(); completed.append("keychain-wrapper-handoff-model")
+            try DevelopmentTests.manager(); completed.append("VPN-preferences-session-model")
             try require(fc_ios_handles() == 0, "handle-release")
             return ["passed": true, "checks": completed, "handles": fc_ios_handles(), "scope": "isolated-not-system-TUN-or-Telemost"]
         } catch {

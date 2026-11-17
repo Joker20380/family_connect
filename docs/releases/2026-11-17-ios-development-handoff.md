@@ -38,8 +38,27 @@ deadline or a durability bypass disguised as a fix.
 Added the requested deterministic real NativeSession(mode1) regression: hold network
 configuration completion, cancel native only, bounded wait for terminal, release
 configure(nil), require one startup error/no pump/zero handles. Old implementation
-is intentionally retained for baseline CI; a failed assertion is expected and must
-be retained before the fix. No old test assertion or budget is weakened.
+is retained in checkpoint `2ea1f6f2e9c995e9611c7648cac87630951a1dc7`.
+macOS run44023861642 builds both unsigned targets successfully, then **fails**
+`isolated.cancelled-native-must-not-start-successfully` with handles0, exactly as
+predicted. Downloaded artifact14302731166 ZIP SHA256
+`a01da92536bc1da02a35fb0d731bd4d5962894375501b5c510b9534e5bb1a47e`.
+No unchanged retry. This is baseline failure evidence, not acceptance.
+
+Implementation candidate0.0.1/build2 adds native serialized CommitStart after
+settings completion; fresh control-queue status; stop returns retained first error.
+Provider generation cleanup joins native resources, isolates old callbacks, and
+blocks overlap while a system settings callback remains outstanding. Manager uses
+load/find/save/reload/session APIs; status is observed NEVPNStatus, not start return.
+Keychain immutable bundle/reference handoff, strict offline existing trust checks,
+AfterFirstUnlockThisDeviceOnly policy and parameterized manual development signing
+are implemented. No common Android/desktop transport runtime change. New Swift
+checks cover deterministic stale handoff, settings error, provider cleanup/recreate,
+fake preferences save/reload/permission errors and fake Keychain denial/corruption.
+These models do not prove system VPN preferences or interprocess Keychain sharing.
+Go tests generate fresh synthetic certs/CRLs in memory, never stored as artifacts.
+No old assertion or test budget weakened; a new10s initial path eligibility deadline
+is distinct from unchanged180s native startup.
 
 ## Gates
 

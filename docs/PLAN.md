@@ -12,6 +12,10 @@ latency root cause open, no repair/observer automatically selected. Physical VPN
 Keychain sharing, routing, Telemost and whitelist remain a later device gate.
 [Receipt](releases/2026-11-17-ios-development-handoff.md).
 
+Implementation checkpoint0.0.1/build2: startup commit/provider cleanup, manager,
+Keychain and signing preparation implemented; new exact-head macOS acceptance and
+self-review still pending. Prior PR41 finald02fce99 receipt remains accepted.
+
 **IOS-MESH-BRIDGE-1 — explicitly selected17 November / technical gate COMPLETE.**
 Dependency satisfied: PR40 exact3539ebe4 push/PR phase0 PASS, ordinary merge3468f828;
 retain RECOVERED_CAUSE_OPEN without repeating recovery.

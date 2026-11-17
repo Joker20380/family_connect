@@ -10,6 +10,14 @@ IOS-DEVELOPMENT-HANDOFF-1 now selected from PR41 mainbda954fb; reproduce startup
 then provider ownership, manager, Keychain handoff and development build preparation.
 [Readback and selected scope](releases/2026-11-17-ios-development-handoff.md).
 
+iOS0.0.1/build2 source candidate now implements native startup commit, provider
+generation ownership, VPN preferences/session UI, immutable shared-Keychain handoff
+and manual development build parameters. Baseline2ea1f6f2 macOS44023861642 reproduced
+false startup success deterministically. New Go race tests and8 project tests pass
+locally; new-head macOS acceptance pending. No physical VPN/Keychain-sharing claim.
+PR41 [finald02fce99 acceptance](https://github.com/Joker20380/family_connect/pull/41#issuecomment-6935466490)
+supersedes its earlier source receipts without deleting them.
+
 **17 November — IOS-MESH-BRIDGE-1 unsigned technical gate PASS.**
 Sourcefc08a50e macOS CI43991766964 builds unsigned iphoneos/arm64 app + Packet
 Tunnel extension and separate iOS Simulator/arm64 targets, verifies linked MESH,

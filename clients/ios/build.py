@@ -143,7 +143,7 @@ def build(args):
             for name in ('FamilyConnect', 'MeshPacketTunnel'):
                 binary = destination / 'FamilyConnect.app' / ('FamilyConnect' if name == 'FamilyConnect' else 'PlugIns/MeshPacketTunnel.appex/MeshPacketTunnel')
                 symbols = capture('xcrun', 'nm', binary)
-                for symbol in ('_fc_ios_start', '_fc_ios_write', '_fc_ios_read', 'wholedevice', 'tcpforward', 'familysession', 'bootstrap', 'telemost', 'xray-core/proxy/tun'):
+                for symbol in ('_fc_ios_start', '_fc_ios_write', '_fc_ios_read', '_fc_ios_commit_start', '_fc_ios_validate_material', 'wholedevice', 'tcpforward', 'familysession', 'bootstrap', 'telemost', 'xray-core/proxy/tun'):
                     if symbol not in symbols:
                         raise RuntimeError('Missing linked symbol: '+symbol)
                 (destination / (name+'-symbols.txt')).write_text(symbols+'\n')
