@@ -193,6 +193,7 @@ enum DevelopmentTests {
         for stage in ["save", "reload", "start"] {
             entry.failure = stage; await reopened.prepare(connect: true)
             try SelfTests.require(entry.starts == 1 && !reopened.busy, "save-reload-permission-error-no-start")
+            try SelfTests.require(reopened.message.lowercased().contains(stage), "operation-error-context")
         }
         entry.failure = ""
         entry.saving = { reopened.disconnect(); entry.saved?.resume(); entry.saved = nil }

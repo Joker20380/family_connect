@@ -157,16 +157,20 @@ import Combine
         generation += 1
         busy = true; defer { busy = false }
         let token = generation
+        var stage = "Load saved VPN configurations"
         do {
             let entries = try await owned(); try check(token)
             let existing = entries.first { (try? Handoff(configuration: $0.configuration).identifier) == selectedID }
             guard !entries.contains(where: { !inactive($0) }) else { throw SafeFailure(message: "Disconnect the active development VPN before changing or connecting") }
             let handoff = try Handoff(reference: selectedReference, identifier: selectedID)
+            stage = "Validate selected Keychain material"
             _ = try store().load(handoff.reference)
             let entry = existing ?? preferences.make()
             attach(entry)
             entry.configure(handoff, provider: provider)
+            stage = "Save VPN configuration (system consent/provisioning required)"
             try await entry.save(); try check(token)
+            stage = "Reload saved VPN configuration"
             try await entry.reload(); try check(token)
             let saved = try Handoff(configuration: entry.configuration)
             guard entry.provider == provider, saved.identifier == handoff.identifier, saved.reference == handoff.reference else {
@@ -174,6 +178,7 @@ import Combine
             }
             attach(entry)
             if connect {
+                stage = "Start VPN session"
                 _ = try store().load(handoff.reference)
                 try check(token)
                 requested = true
@@ -181,7 +186,7 @@ import Combine
                 status = entry.status
                 message = "Start requested; wait for system status. No traffic acceptance is implied."
             } else { message = "Configuration saved and reloaded; not connected" }
-        } catch { message = safeMessage(error) }
+        } catch { message = stage + ": " + safeMessage(error) }
     }
     func disconnect() {
         generation += 1; requested = false

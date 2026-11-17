@@ -15,7 +15,7 @@ func safeMessage(_ error: Error) -> String {
     if let error = error as? BridgeFailure { return error.description }
     let system = error as NSError
     if system.domain == SafeFailure.errorDomain { return system.localizedDescription }
-    if system.domain == BridgeFailure.errorDomain { return "MESH bridge error \(system.code); inspect test trust, underlay and session lifecycle" }
+    if system.domain == BridgeFailure.errorDomain, let code = Int32(exactly: system.code) { return BridgeFailure(code: code).description }
     return "System operation failed (code \((error as NSError).code)); no material is logged."
 }
 

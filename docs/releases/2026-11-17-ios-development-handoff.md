@@ -79,6 +79,16 @@ Signing self-review additionally rejects a lone profile parameter and verifies
 the final signed app/extension identifiers, Team, grants and expanded Info values.
 10 Python tests and20 repetitions of new Go trust/commit race tests pass locally.
 
+b7ebab4d PR run44026619810 failed the **unchanged untagged** shared packet test
+TestDNSPairedDatagramsReuseSourcePort at dns_test.go:126, UDP read timeout under
+its existing1s deadline (test elapsed1.37s). Tagged packet and new Go bridge tests
+passed in that run; device/simulator build was not reached. Log-only artifact
+14302894331 ZIP SHA256 `6b630b04d95f556f3460d727309c43737cb94c9759473301a7debad9684341b3`.
+Cause of that timing failure is not proven. No assertion/deadline/common runtime
+change or unchanged retry; subsequent heads contain actual reviewed iOS fixes.
+UI review adds safe operation-stage context for save/consent, reload and start
+errors, and descriptive numeric native errors without material values.
+
 ## Gates
 
 New device/simulator builds, native coordination, provider/manager/material tests:

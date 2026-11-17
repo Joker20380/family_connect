@@ -3,7 +3,22 @@ import NetworkExtension
 
 struct BridgeFailure: Error, CustomStringConvertible, CustomNSError {
     let code: Int32
-    var description: String { "MESH bridge error \(code)" }
+    var description: String {
+        let reason: String
+        switch code {
+        case -1: reason = "invalid packet or session arguments"
+        case -2: reason = "session cancelled or closed"
+        case -3: reason = "bounded packet queue full"
+        case -4: reason = "unsupported packet family"
+        case -5: reason = "operation timed out"
+        case -6: reason = "startup failed; verify test trust, admission and network"
+        case -7: reason = "MESH transport terminated"
+        case -8: reason = "underlay/interface policy rejected"
+        case -9: reason = "test material rejected"
+        default: reason = "operation failed"
+        }
+        return "MESH bridge error \(code): \(reason)"
+    }
     static var errorDomain: String { "org.familyconnect.mesh.bridge" }
     var errorCode: Int { Int(code) }
     var errorUserInfo: [String: Any] { [NSLocalizedDescriptionKey: description] }
