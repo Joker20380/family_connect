@@ -1,7 +1,7 @@
 """Gateway decision cache and bounded application, not a subscription authority."""
 import fcntl
 import hashlib
-from contextlib import contextmanager
+from contextlib import contextmanager, ExitStack
 from contextvars import ContextVar
 import json
 import os
@@ -424,9 +424,10 @@ class Gateway:
             return
         first_error = None
         try:
-            with (self.root/'application.lock').open('a') as handle:
+            with ExitStack() as resources:
                 try:
                     with self.operation():
+                        handle = resources.enter_context((self.root/'application.lock').open('a'))
                         self.acquire(handle)
                         yield
                 except BaseException as error:

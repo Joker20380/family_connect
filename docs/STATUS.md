@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**17 November — PR44 registration budget + panel clock repair selected.**
+Exact `cff3e466` loses nine seconds spent opening application.lock: all three
+entrypoint paths query engines and ACK; exact `c086d131` rejects them without
+queries/ACK. Start the same operation before open, while an outer resource scope
+retains the handle through final deadline validation and guarded fail-closed.
+101 focused tests pass, including the prior real-flock/watch/collector barrier.
+Panel's independent wall-clock test repair and final exact-head CI are next;
+the [cff3 receipt](https://github.com/Joker20380/family_connect/pull/44#issuecomment-6962872364)
+is historical, including its panel failure/skipped downstream steps.
+The pre-existing external watch fail-closed/concurrent registration window remains
+a separate delivery gate, not a new regression or a universal no-ACK proof.
+[Budget/clock evidence and scope](releases/2026-11-17-pr44-budget-clock.md).
+**PR44 DRAFT, NOT_DEPLOYED; main `380da279`; no merge; RU NOT_FIXED.**
+
+### Previous P1 checkpoint
+
 **17 November — PR44 P1 fail-closed serialization repair / review gate reopened.**
 Owner selects source-only repair, not merge/deployment. On exact `c086d131`, all
 nine controlled fsync/deadline/context-exit scenarios reproduce premature lock

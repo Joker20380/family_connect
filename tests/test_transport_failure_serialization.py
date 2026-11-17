@@ -40,6 +40,64 @@ def entrypoint_for(monkeypatch, gateway, registry, initial, operation):
 
 
 @pytest.mark.parametrize('operation', ['reconcile', 'prepare', 'register'])
+def test_slow_application_open_consumes_registration_budget(candidate, registry, monkeypatch, capsys, operation):
+    gateway, current, live, initial = candidate
+    gateway.accept(envelope(registry))
+    gateway.apply()
+    authority = gateway.path.read_bytes()
+    entrypoint = entrypoint_for(monkeypatch, gateway, registry, initial, operation)
+    original_open = Path.open
+    lock_path = gateway.root/'application.lock'
+    clock, handles, bodies, failures = [1000.0], [], [], []
+    original_apply, original_accept, original_prepare = gateway.apply_serialized, gateway.accept, gateway.prepare
+
+    def open_file(path, *args, **kwargs):
+        handle = original_open(path, *args, **kwargs)
+        if path == lock_path:
+            handles.append(handle)
+            clock[0] += 9
+        return handle
+
+    def apply(*args, **kwargs):
+        bodies.append('apply')
+        return original_apply(*args, **kwargs)
+
+    def accept(*args, **kwargs):
+        bodies.append('accept')
+        return original_accept(*args, **kwargs)
+
+    def prepare(*args, **kwargs):
+        bodies.append('prepare')
+        return original_prepare(*args, **kwargs)
+
+    monkeypatch.setattr(module.time, 'monotonic', lambda: clock[0])
+    monkeypatch.setattr(Path, 'open', open_file)
+    monkeypatch.setattr(gateway, 'apply_serialized', apply)
+    monkeypatch.setattr(gateway, 'accept', accept)
+    monkeypatch.setattr(gateway, 'prepare', prepare)
+    live['calls'].clear()
+    try:
+        entrypoint.register()
+    except BaseException as error:
+        failures.append(error)
+    ack = capsys.readouterr().out
+    queries = [command for command in live['calls'] if command[0] != 'systemctl']
+    receipt = dict(errors=[str(error) for error in failures], bodies=bodies, queries=len(queries),
+        ack=bool(ack), elapsed=gateway.metrics['total'])
+    print(json.dumps(receipt))
+    assert receipt == dict(errors=['TRANSPORT_OPERATION_DEADLINE'], bodies=[], queries=0, ack=False, elapsed=9.0)
+    assert isinstance(failures[0], TimeoutError)
+    assert failures[0].transport_context['elapsed'] == 9.0
+    assert gateway.path.read_bytes() == authority
+    assert not gateway.observation_path.exists()
+    assert len(handles) == 1 and handles[0].closed
+    assert module.CURRENT_OPERATION.get() is None
+    with original_open(lock_path, 'a') as probe:
+        fcntl.flock(probe, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    assert live['calls'] == [['systemctl', '--no-block', 'stop', *module.SERVICES]]
+
+
+@pytest.mark.parametrize('operation', ['reconcile', 'prepare', 'register'])
 @pytest.mark.parametrize('fault', ['fsync', 'deadline', 'context_exit'])
 def test_failure_receipt_barrier_excludes_real_watch_notify_and_collector(
         candidate, registry, collector, monkeypatch, capsys, tmp_path, operation, fault):

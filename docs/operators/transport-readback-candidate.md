@@ -63,7 +63,9 @@ and their own real AWG counter queries, not applied receipt freshness.
 Reconciliation and membership clients still require their unchanged bounded ACKs.
 Candidate registration uses `serialized(failure_mode='register')`: the owned
 application descriptor outlives both the operation's final deadline check and
-fail-closed handling. This covers acceptance/preparation, apply, and context-exit
+fail-closed handling. The shared operation starts before opening the descriptor;
+open latency consumes the same8s budget used by acquisition and the body, with
+no fresh budget at either boundary. This covers acceptance/preparation, apply, and context-exit
 errors; ordinary registration also prints its ACK only after context exit.
 The first error/context is retained in memory, observation invalidated, protective
 stop requested, error attempt written, and only then the first diagnostic receipt
@@ -76,6 +78,12 @@ This is a stop **request**, not proof of actual systemd termination. Diagnostic
 fsync can still block, but a held application lock prevents competing application
 and successful watch heartbeat; the real collector reports unavailable. See the
 [P1 reproduction and new acceptance gate](../releases/2026-11-17-pr44-failure-serialization.md).
+This exclusion proof concerns guarded **registration errors**, not every fail-closed.
+The separate `watch → apply → unlock → external fail_closed` path already existed
+on main380da279. If its asynchronous protective stop has not completed, a competing
+registration can acquire the lock and succeed. This remains an open systemd/package/
+deployment qualification question; the budget repair does not redesign watch or
+prove the absence of ACKs during that interval.
 Synchronous writes may still block; enforcement
 does not send background heartbeat. Candidate startup wait sends no WATCHDOG before
 the first completed application; READY remains dependency readiness, not applied

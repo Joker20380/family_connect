@@ -2,7 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
-**RU-PERSISTENCE-READBACK-1/P1 — selected / PR44 serialization repair.**
+**RU-PERSISTENCE-READBACK-1/P1 — selected / PR44 budget + panel clock repair.**
+Reproduce slow successful application.lock open on exact cff3 and compare c086.
+Start the shared budget before open; retain serialization through operation-exit
+validation and guarded error handling.101 focused tests pass, including the prior
+barrier matrix. Separately fix only the panel test's aware UTC clock; require exact
+3600→3601 ages and clock-skew label. Final-head panel must execute browser,
+deployment-boundary and build steps; recheck native artifact provenance and
+six-cycle18-query/12→0-sync comparison. Record the pre-existing external watch
+fail-closed/concurrent registration window separately before delivery qualification.
+Keep PR44 draft; stop at repeat review, no merge/deployment or physical iOS.
+[Current evidence](releases/2026-11-17-pr44-budget-clock.md).
+
+Previous P1 checkpoint (retained evidence):
 Preserve the accepted old-head receipts, closed historical fixture export and
 opt-in persistence design. Reproduce premature application-lock release during
 blocked failure-receipt fsync on `c086d131`, then fix operation body/exit handling
