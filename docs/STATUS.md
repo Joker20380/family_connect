@@ -1,6 +1,24 @@
 # Текущее состояние / Current state
 
-**17 November07:23UTC — iOS candidate verified; PR42 integration BLOCKED/DRAFT.**
+**17 November11:15UTC — owner resumes iOS; hosting work deferred.**
+Remote main remains PR41 mergebda954fb; the existing iOS worktree is preserved.
+Exact47e89416 macOS44038770792 passes both unsigned targets and nine isolated
+groups, handles0; all208 downloaded artifact hashes match. Client builds44038770794
+now passes Android (including API27/28/31), Linux and Windows without retries or
+Android changes. This does not explain or erase the earlier DNS failure.
+The current mandatory blocker is Linux control44038770715: unchanged desktop
+teardown sees13 process descriptors instead of14 in prepare-CONFLICT. No assertion
+is relaxed, no unrelated desktop repair or unchanged CI rerun is selected.
+PR42 stays draft pending exact-head gates; the subsequent documentation checkpoint
+reconciles this evidence, not a new runtime qualification. Follow the
+[final PR42 receipt](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6940824604)
+for its final checks and integration decision. No hosting/server access this turn;
+the separate [RU recovery receipt](https://github.com/Joker20380/family_connect/pull/43#issuecomment-6942592489)
+supersedes the05:20 outage observation, not proof of current health or a durable fix.
+Signed iPhone/Keychain sharing/routes/Telemost/whitelist remain NOT_RUN.
+[Resumed-stage evidence](releases/2026-11-17-ios-development-handoff.md#owner-resumption--17-november1115utc).
+
+**Historical17 November07:23UTC — iOS candidate verified; PR42 integration BLOCKED/DRAFT.**
 Exact168f90c6 passes unsigned device/simulator and nine isolated groups (handles0,
 208 hashes verified), both phase0 runs, Linux control, readiness and scoped push
 Client builds. PR Client builds44033617391/job133871424629 fails unchanged Android
@@ -11,7 +29,7 @@ This evidence-only documentation checkpoint does not requalify or replace168f90c
 The failed mandatory gate needs a separately scoped diagnosis, not relaxed checks.
 [Exact results and blocker](releases/2026-11-17-ios-development-handoff.md#final-source-gates--integration-blocked).
 
-**17 November05:20UTC — RU down; iOS development handoff selected.**
+**Historical17 November05:20UTC — RU down; iOS development handoff selected.**
 Owner-requested bounded readback finds AWG/TCP inactive since01:03:56UTC and watcher
 auto-restarting (432 restarts at05:20). First failure proves decision_state file_fsync
 9.538854s against8s operation budget; elapsed9.593907s, TRANSPORT_OPERATION_DEADLINE.

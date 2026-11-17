@@ -5,7 +5,15 @@ release). [New-stage receipt](../../docs/releases/2026-11-17-ios-development-han
 Base [PR41 final d02fce99 acceptance](https://github.com/Joker20380/family_connect/pull/41#issuecomment-6935466490),
 merge `bda954fb27ad7115b8c373929cf3e80e84992175`; the earlier receipts below remain evidence.
 
-Development source `fb13d23b138ca16ce969ad24d1f3d093ba641f0a`: macOS44032183193
+Latest verified unsigned source `47e894163d3c6cfcb3036b74813d466d13c31313`:
+[macOS44038770792 artifact14309286227](https://github.com/Joker20380/family_connect/actions/runs/44038770792/artifacts/14309286227),
+device/simulator and nine isolated groups PASS, handles0, all208 file hashes matched.
+ZIP SHA256 `97bd109492a734f8d716bd0f0244feae855fb180990dfaad6c59d40501cc1232`.
+Source integration is still blocked by a separate mandatory Linux desktop teardown
+failure; no signed installation or device traffic is inferred. The final receipt
+below tracks the documentation checkpoint's own gates and integration decision.
+
+Earlier development source `fb13d23b138ca16ce969ad24d1f3d093ba641f0a`: macOS44032183193
 and44032176415 PASS device/simulator, nine isolated groups and zero handles;
 [verified unsigned artifact](https://github.com/Joker20380/family_connect/actions/runs/44032183193/artifacts/14305768210),
 all208 file hashes matched. ZIP SHA256

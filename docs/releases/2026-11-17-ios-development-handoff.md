@@ -227,6 +227,8 @@ and underlying fsync latency remain a separate unresolved operational matter.
 
 ## Final source gates — integration blocked
 
+Historical168f90c6 boundary; see the resumed-stage evidence below for47e89416.
+
 Qualified iOS source is `168f90c6637df44b2f9094b3123f17c74a98f3f8`.
 The subsequent documentation-only blocker checkpoint does not replace that source
 or its failed mandatory integration result. No manual CI retry is requested.
@@ -278,3 +280,71 @@ PR42 remains draft; normal merge is withheld. Remote main remains accepted
 separately selected diagnosis with the preserved evidence, not an unchanged rerun
 or a result from another SHA. The iOS development code/artifacts and owner-device
 procedure are available, but source integration is not accepted.
+
+## Owner resumption — 17 November11:15UTC
+
+The owner explicitly resumes the iOS development stage and defers hosting. No RU/NL
+SSH, observer, recovery or policy operation is performed during this continuation.
+The separate RU recovery and its remaining durability limitation are preserved in
+[PR43's receipt](https://github.com/Joker20380/family_connect/pull/43#issuecomment-6942592489),
+not silently imported as iOS acceptance or current health. Remote main remains
+`bda954fb27ad7115b8c373929cf3e80e84992175`; original dirty worktrees remain untouched.
+
+The already-triggered runs for exact head
+`47e894163d3c6cfcb3036b74813d466d13c31313` have now completed. No rerun was requested.
+
+| Workflow for47e89416 | Final result |
+| --- | --- |
+| iOS PR44038770792 | SUCCESS: iphoneos/arm64 and iphonesimulator/arm64, nine isolated groups, handles0 |
+| Client builds PR44038770794 | SUCCESS: Android, Linux, Windows, Windows compatibility; release skipped |
+| phase0 PR44038770858 / push44038762348 | SUCCESS / SUCCESS |
+| Readiness PR44038770788 | SUCCESS |
+| Linux control PR44038770715 | FAILURE: desktop teardown invariant; later GTK/packaging steps skipped |
+
+Android job133888060626 passes the independent API27 per-app suite plus API28/31
+steps previously skipped. The earlier168f90c6 four DNS timeouts are still failures;
+this later result neither diagnoses their cause nor substitutes another SHA.
+No Android source/assertion or desktop source/assertion changed in this continuation.
+
+Downloaded iOS artifact14309286227 is79,930,753 bytes. ZIP SHA256
+`97bd109492a734f8d716bd0f0244feae855fb180990dfaad6c59d40501cc1232`; all208
+manifest hashes independently verified locally. Both manifest and simulator receipt
+identify47e89416. Actual toolchain: macOS15.8.2 arm64/image20261104.0514.1,
+Xcode16.4/16F6, iOS/device+simulator SDK18.5, Go1.26.1, Swift6.1.2. The Swift driver's
+reported host triple is not mistaken for the built product platform: retained targets
+are arm64-apple-ios16.0 and arm64-apple-ios16.0-simulator. The simulator runtime is
+iOS18.5/iPhone16; its temporary ad-hoc copy does not change unsigned stored products.
+Nine groups retain packet-copy/family/queue/cancel/recreate, real gVisor/wholedevice
+DNS fixture, late configure, write error, native-end-during-configure, stale worker,
+provider ownership/settings lease, Keychain wrapper and VPN preferences model.
+
+Current Linux blocker: job133887972137 reports
+`clients/desktop/tests/test_chat_public_completion.py::test_control_terminal_reason_does_not_wait_for_cleanup[prepare-CONFLICT]`
+at teardown line23:13 process descriptors versus14 before the test. Standard context
+has5794 passed,276 skipped,356 deselected,1 teardown error; root258 and snapshot314
+98 pass. No test-body failure is reported. Receipt identifies synthetic PR merge
+`95a38a71432f6b50591b988f659aee11013bccde`, not the literal iOS head checkout.
+Downloaded artifact14308987411 ZIP SHA256
+`816d502c885adadf1d1f141128df0be4dbc833f1791d90bbcf9fbc0423df954e` matches the
+server digest. Process-wide count cannot identify which descriptor disappeared;
+its owner/closure cause is unproven. Do not weaken equality, infer no leak from a
+decrease, call this infrastructure noise, or change unrelated desktop code here.
+
+This docs-only reconciliation is necessary to retire the obsolete current Android
+blocker and record the owner's resumed scope. It is not a runtime fix, a release,
+or a rerun of47e89416. Its automatic workflows must be assessed for their own exact
+head. Preserve failures; no additional docs pushes just to trigger retries. The
+[final integration receipt](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6940824604)
+records the new SHA, author self-review, final CI and any ordinary merge; while
+pending or failed PR42 remains draft. Source rollback is ordinary revert; nothing
+is deployed to production or a phone.
+
+The concrete candidate and [owner-only signing/install procedure](../../clients/ios/README.md#development-signing-and-installation--owner-mac-only)
+remain available. Next inputs: exact iPhone model/iOS build and compatible Mac/Xcode,
+Apple Team and granted packet-tunnel/shared-Keychain capabilities for both app IDs,
+local development identity/profiles for the registered device, and separately agreed
+disposable test Family identity/directory. No password, key or profile in chat/CI/Git.
+The five-step phone plan separately accepts system preferences/extension startup,
+Keychain and first unlock, one real MESH session, underlay/routing/containment and
+then any whitelist trial. Signed build/install, provisioned interprocess Keychain,
+physical VPN/routes/leaks/background/memory/Telemost/whitelist remain **NOT_RUN**.

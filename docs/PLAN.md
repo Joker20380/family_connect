@@ -3,19 +3,23 @@
 ## Current engineering priority / Текущий critical path
 
 **IOS-DEVELOPMENT-HANDOFF-1 — iOS source gate PASS / integration BLOCKED, PR42 DRAFT.**
-Exact168f90c6 fails mandatory Android API27 per-app DNS assertions in
-44033617391/job133871424629; iOS and the other applicable workflows pass.
-Keep the candidate and all failure evidence; do not merge, retry for green, or
-weaken/change unrelated Android runtime/assertions within this iOS task. A separately
-scoped diagnosis of this shared integration gate is required before integration.
-The following documentation-only checkpoint is not another accepted runtime head.
+Owner resumes this stage17 November; hosting work is explicitly deferred.
+Exact47e89416 now passes iOS, Client builds (including Android API27/28/31), phase0
+and readiness. Linux control44038770715 fails unchanged desktop teardown:
+prepare-CONFLICT observes13 process descriptors against14 at entry. Preserve the
+earlier168f90c6 Android DNS failure too; a later success does not establish its cause.
+Do not merge with a failed mandatory gate, retry for green, or weaken/change unrelated
+desktop/Android runtime/assertions. Reconcile the completed evidence in one docs
+checkpoint; its automatic CI receives its own exact-head review. Further outcomes
+belong in the final PR receipt rather than repeated documentation pushes to rerun CI.
 
 Base PR41 merge bda954fb, remote unchanged; its5 post-merge workflows PASS.
 Gate: deterministic startup regression, generation-scoped provider lifecycle,
 idempotent NETunnelProviderManager, shared app-specific Keychain reference handoff,
 development signing parameters, exact-head unsigned device/simulator and isolated tests.
-RU readback only: new01:03:56UTC operation-deadline failure proven at file_fsync;
-latency root cause open, no repair/observer automatically selected. Physical VPN,
+Historical RU readback:01:03:56UTC operation-deadline failure proven at file_fsync;
+the later separate recovery is recorded in PR43. No new host access, repair or observer
+is selected here; underlying latency remains open. Physical VPN,
 Keychain sharing, routing, Telemost and whitelist remain a later device gate.
 [Receipt](releases/2026-11-17-ios-development-handoff.md).
 
