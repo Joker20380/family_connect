@@ -13,7 +13,8 @@ def platforms(paths):
     return {
         'android': any(path.startswith(COMMON + ('clients/android/', 'pilot/android-', 'pilot/awg31/',
                                                 '.github/workflows/clients.yml', 'tests/test_android_public_release.py',
-                                                'tests/android-consolidated/', 'tests/fixtures/mobile_bootstrap/go_dispatch_test.c')) for path in paths),
+                                                'tests/android-consolidated/', 'tests/fixtures/mobile_bootstrap/go_dispatch_test.c',
+                                                'tests/test_android_tcp_fixture.py')) for path in paths),
         'windows': any(path.startswith(COMMON + ('clients/windows/', 'clients/desktop/', 'pilot/windows-',
                                                 'scripts/package_desktop.py', 'scripts/ci_desktop_env.sh')) for path in paths),
         'linux': any(path.startswith(COMMON + ('clients/linux/', 'clients/desktop/', 'scripts/package_linux.py',

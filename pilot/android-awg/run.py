@@ -13,6 +13,7 @@ try:
   peer=subprocess.Popen([str(r/'clients/android/awg-generated'/('peer-fixture' if awg else 'wg-peer-fixture'))],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,env=os.environ|{"FC_PEER_DROP_FILE":str(r/("android-auto-awg.drop" if awg else "android-auto-wg.drop"))});processes.append(peer)
   peer.stdin.write(json.dumps({'config':config}));peer.stdin.close();q=queue.Queue();threading.Thread(target=lambda:q.put(peer.stdout.readline().strip()),daemon=True).start();assert q.get(timeout=20)=='ready'
  with peers(r) as counts,(r/'android-awg-runtime.log').open('w') as log:
+  counts.begin_tests()
   result=subprocess.run(['gradle','--no-daemon',':app:connectedDebugAndroidTest','-Pandroid.testInstrumentationRunnerArguments.fc_disposable=true'],cwd=r/'clients/android',stdout=log,stderr=subprocess.STDOUT)
  print((r/'android-awg-runtime.log').read_text(),flush=True)
  result.check_returncode()

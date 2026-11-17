@@ -6,8 +6,13 @@ selects accepted-native staging for Desktop Auto, Android TCP fixture ownership/
 readiness repair and actual final-head iOS qualification. FD/AppImage fixes remain
 accepted; historical FD owner/403 cause UNKNOWN. Desktop workflow now stages the
 full efc13f1c closure, builds its own verified builder outside that tree and keeps
-all current-head compatibility/protocol/overlay gates. Android repair and final CI
-remain pending, not replaced by historical PASS. PR42 stays draft until acceptance.
+all current-head compatibility/protocol/overlay gates. Android fixture now requires
+own PID/socket-inode LISTEN plus IPv4 readiness;10 isolated regressions PASS.
+Historical debug confirms bind failure while instrumentation ran (http0/dns0).
+Real Android/final CI remain pending. Intermediate Desktop Auto builds accepted
+native and passes compatibility/root gates, then exposes a current-source lifetime
+overlay failure; repairing that isolated boundary is selected, not baseline rehash.
+PR42 stays draft until acceptance.
 No hosting, release or phone changes. [Report](releases/2026-11-17-pr42-final-ci.md).
 
 **17 November12:44UTC — PR42 CI fixes implemented / broader integration gate BLOCKED.**

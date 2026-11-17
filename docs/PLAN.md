@@ -7,7 +7,9 @@ Owner explicitly extends the repair boundary: Desktop Auto must build the immuta
 accepted native closure via stage_linux_native, while current-head protocol,
 frontend and intentional lifetime overlays retain their existing gates. Repair
 Android TCP fixture readiness/ownership and port isolation; qualify actual runtime.
-Obtain executed final-head iOS device/simulator/ABI acceptance (one justified retry
+Desktop staging15 tests PASS; Android ownership/cleanup10 isolated tests PASS.
+Next: repair the exposed current-code lifetime overlay boundary, run real Android
+and obtain executed final-head iOS device/simulator/ABI acceptance (one justified retry
 of an unacquired runner is allowed, not retries of executed failures for PASS).
 Entry2b32b69e; remote mainbda954fb verified unchanged. Preserve FD/AppImage repairs
 and their original UNKNOWN causes. Historical TCP port owner/reset sender UNKNOWN;

@@ -1,15 +1,41 @@
 """Disposable CI-only REALITY gateway + local TLS camouflage + HTTP and DNS fixtures."""
-import contextlib,datetime,hashlib,http.server,ipaddress,json,os,socket,socketserver,ssl,struct,subprocess,tempfile,threading,time
+import contextlib,datetime,http.server,json,os,socket,socketserver,ssl,struct,tempfile,threading
 from pathlib import Path
 from cryptography import x509
 from cryptography.x509.oid import NameOID
 from cryptography.hazmat.primitives import serialization,hashes
 from cryptography.hazmat.primitives.asymmetric import rsa
+from readiness import Receipt, require_ready, reserve_endpoint, running_peer, running_server
 ID='11111111-2222-4333-8444-555555555555'
+
+class FixtureCounts(dict):
+ def begin_tests(self):
+  require_ready(self.process,self.port,self.receipt)
+  self.receipt.record('instrumentation_start',pid=self.process.pid,port=self.port)
+
+class BoundedHTTPServer(http.server.ThreadingHTTPServer):
+ daemon_threads=False
+ def get_request(self):
+  connection,address=super().get_request();connection.settimeout(3);return connection,address
+
 @contextlib.contextmanager
 def peers(root):
  assert os.environ.get('GITHUB_ACTIONS')=='true'
- counts={'http':0,'dns':0};lock=threading.Lock()
+ receipt=Receipt(root/'android-tcp-lifecycle.json');counts=FixtureCounts(http=0,dns=0)
+ try:
+  with contextlib.ExitStack() as resources:
+   with _peers(root,counts,receipt,resources):yield counts
+ except BaseException as error:
+  receipt.record('failed',error_type=type(error).__name__)
+  raise
+ finally:
+  receipt.record('cleanup_finished')
+  (root/'android-tcp-peer-result.json').write_text(json.dumps(counts,indent=2)+'\n')
+
+@contextlib.contextmanager
+def _peers(root,counts,receipt,resources):
+ lock=threading.Lock()
+ reservation=resources.enter_context(reserve_endpoint(51900,receipt))
  class HTTP(http.server.BaseHTTPRequestHandler):
   def do_GET(self):
    data=self.path.encode();self.send_response(200);self.send_header('Content-Length',str(len(data)));self.end_headers();self.wfile.write(data)
@@ -38,39 +64,25 @@ def peers(root):
     else:path.unlink(missing_ok=True)
    self.send_response(200);self.end_headers()
   def log_message(self,*args):pass
- control=http.server.ThreadingHTTPServer(('0.0.0.0',51902),Control)
- threading.Thread(target=control.serve_forever,daemon=True).start()
- http_server=http.server.ThreadingHTTPServer(('127.0.0.1',0),HTTP);dns=socketserver.ThreadingUDPServer(('127.0.0.1',0),DNS)
- for server in (http_server,dns):threading.Thread(target=server.serve_forever,daemon=True).start()
+ def serve(server,label):return resources.enter_context(running_server(server,receipt,label))
+ control=serve(BoundedHTTPServer(('0.0.0.0',51902),Control),'control')
+ http_server=serve(BoundedHTTPServer(('127.0.0.1',0),HTTP),'http')
+ dns=serve(socketserver.ThreadingUDPServer(('127.0.0.1',0),DNS),'dns')
  with tempfile.TemporaryDirectory(prefix='fc-tcp-fixture-') as directory:
   temp=Path(directory);key=rsa.generate_private_key(public_exponent=65537,key_size=2048);name=x509.Name([x509.NameAttribute(NameOID.COMMON_NAME,'android.test')]);now=datetime.datetime.now(datetime.timezone.utc)
   cert=x509.CertificateBuilder().subject_name(name).issuer_name(name).public_key(key.public_key()).serial_number(x509.random_serial_number()).not_valid_before(now-datetime.timedelta(days=1)).not_valid_after(now+datetime.timedelta(days=1)).add_extension(x509.SubjectAlternativeName([x509.DNSName('android.test')]),False).sign(key,hashes.SHA256())
   (temp/'cert.pem').write_bytes(cert.public_bytes(serialization.Encoding.PEM));(temp/'key.pem').write_bytes(key.private_bytes(serialization.Encoding.PEM,serialization.PrivateFormat.PKCS8,serialization.NoEncryption()))
   tls=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER);tls.minimum_version=ssl.TLSVersion.TLSv1_3;tls.maximum_version=ssl.TLSVersion.TLSv1_3;tls.set_alpn_protocols(['h2','http/1.1']);tls.load_cert_chain(temp/'cert.pem',temp/'key.pem')
-  camouflage=socket.socket();camouflage.bind(('127.0.0.1',0));camouflage.listen();camouflage.settimeout(.5);stop=threading.Event()
-  def handle(conn):
-   try:
-    with tls.wrap_socket(conn,server_side=True) as secure:secure.settimeout(3);secure.recv(4096)
-   except (OSError,ssl.SSLError):conn.close()
-  def accept():
-   while not stop.is_set():
-    try:conn,_=camouflage.accept();threading.Thread(target=handle,args=(conn,),daemon=True).start()
-    except socket.timeout:pass
-    except OSError:break
-  threading.Thread(target=accept,daemon=True).start()
-  config={'log':{'loglevel':'warning'},'inbounds':[{'listen':'0.0.0.0','port':51900,'protocol':'vless','settings':{'clients':[{'id':ID,'flow':'xtls-rprx-vision'}],'decryption':'none'},'streamSettings':{'network':'raw','security':'reality','realitySettings':{'show':False,'target':'127.0.0.1:'+str(camouflage.getsockname()[1]),'xver':0,'serverNames':['android.test'],'privateKey':'AgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgI','shortIds':['0102030405060708']}}}], 'outbounds':[{'tag':'http','protocol':'freedom','settings':{'redirect':'127.0.0.1:'+str(http_server.server_port)}},{'tag':'dns','protocol':'freedom','settings':{'redirect':'127.0.0.1:'+str(dns.server_address[1])}}], 'routing':{'rules':[{'type':'field','network':'udp','outboundTag':'dns'}]}}
-  log=(root/'android-tcp-peer.log').open('w');process=subprocess.Popen([str(root/'clients/android/awg-generated/xray-peer'),'run','-config','stdin:'],stdin=subprocess.PIPE,stdout=log,stderr=subprocess.STDOUT,text=True);process.stdin.write(json.dumps(config));process.stdin.close()
-  try:
-   until=time.monotonic()+15
-   while True:
-    if process.poll() is not None:raise RuntimeError('Synthetic REALITY server failed')
+  class TLS(socketserver.BaseRequestHandler):
+   def handle(self):
+    self.request.settimeout(3)
     try:
-     with socket.create_connection(('127.0.0.1',51900),timeout=.2):break
-    except OSError:
-     if time.monotonic()>until:raise
-     time.sleep(.1)
+     with tls.wrap_socket(self.request,server_side=True) as secure:secure.recv(4096)
+    except (OSError,ssl.SSLError):pass
+  camouflage=serve(socketserver.ThreadingTCPServer(('127.0.0.1',0),TLS),'camouflage')
+  config={'log':{'loglevel':'warning'},'inbounds':[{'listen':'0.0.0.0','port':51900,'protocol':'vless','settings':{'clients':[{'id':ID,'flow':'xtls-rprx-vision'}],'decryption':'none'},'streamSettings':{'network':'raw','security':'reality','realitySettings':{'show':False,'target':'127.0.0.1:'+str(camouflage.server_address[1]),'xver':0,'serverNames':['android.test'],'privateKey':'AgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgI','shortIds':['0102030405060708']}}}], 'outbounds':[{'tag':'http','protocol':'freedom','settings':{'redirect':'127.0.0.1:'+str(http_server.server_port)}},{'tag':'dns','protocol':'freedom','settings':{'redirect':'127.0.0.1:'+str(dns.server_address[1])}}], 'routing':{'rules':[{'type':'field','network':'udp','outboundTag':'dns'}]}}
+  reservation.close();receipt.record('reservation_released',port=51900)
+  with running_peer([str(root/'clients/android/awg-generated/xray-peer'),'run','-config','stdin:'],config,root,51900,receipt) as process:
+   counts.process=process;counts.port=51900;counts.receipt=receipt
    yield counts
-  finally:
-   if process.poll() is None:process.kill();process.wait(timeout=10)
-   control.shutdown();control.server_close();log.close();stop.set();camouflage.close();http_server.shutdown();http_server.server_close();dns.shutdown();dns.server_close()
-   (root/'android-tcp-peer-result.json').write_text(json.dumps(counts,indent=2)+'\n')
+   require_ready(process,51900,receipt)
