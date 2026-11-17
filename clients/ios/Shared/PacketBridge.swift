@@ -8,6 +8,8 @@ struct BridgeFailure: Error, CustomStringConvertible {
 
 final class NativeSession {
     let handle: UInt64
+    private let lock = NSLock()
+    private var terminal: Int32?
 
     init(config: Data = Data(), mode: Int32 = 0) throws {
         handle = config.withUnsafeBytes {
@@ -16,9 +18,18 @@ final class NativeSession {
         guard handle != 0 else { throw BridgeFailure(code: -1) }
     }
 
-    var state: Int32 { fc_ios_state(handle) }
+    var state: Int32 {
+        lock.lock(); defer { lock.unlock() }
+        return terminal ?? fc_ios_state(handle)
+    }
     func cancel() { fc_ios_cancel(handle) }
-    func stop() { fc_ios_stop(handle) }
+    func stop() {
+        lock.lock(); defer { lock.unlock() }
+        guard terminal == nil else { return }
+        let observed = fc_ios_state(handle)
+        fc_ios_stop(handle)
+        terminal = observed < 0 ? observed : -2
+    }
     deinit { stop() }
 
     func write(_ data: Data, family: Int32) -> Int32 {
@@ -102,6 +113,7 @@ final class PacketBridge {
         stopped = true
         native.cancel()
         if startup != nil { finishStartup(error) } else { failure?(error) }
+        failure = nil
         worker.async { self.native.stop() }
     }
 
@@ -144,6 +156,7 @@ final class PacketBridge {
             self.stopped = true
             self.native.cancel()
             self.finishStartup(BridgeFailure(code: -2))
+            self.failure = nil
             self.worker.async {
                 self.native.stop()
                 completion()

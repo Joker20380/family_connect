@@ -98,6 +98,10 @@ of installed-provider routing. macOS checks real unconnected socket bind/readbac
 device routing still requires an iPhone. Path change/loss cancels, not silently
 migrates. Context cancellation and session cleanup close mux/TLS/carrier, engine
 and packet buffers; `underlay.Close` alone only forbids new sockets.
+The prototype rejects `includeAllNetworks`/`enforceRoutes`: Apple documents that
+enforced routing can supersede interface scoping. Default routes alone also do not
+override more specific/local routes or other apps' interface scoping. This is not
+a leak-proof system policy. The signed-device gate must qualify those distinctions.
 
 Numeric IPv4 DNS, tcp4/udp4, ip4 resolution/route discovery remain. IPv6-only,
 DNS64/NAT64 and general IPv6 Internet are unsupported, not automatically repaired

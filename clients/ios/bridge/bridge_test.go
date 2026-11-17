@@ -190,6 +190,28 @@ func TestCancelReadAndConcurrentStop(test *testing.T) {
 	}
 }
 
+func TestCancelWhileReaderWaitsWithoutData(test *testing.T) {
+	bridge := New(NewFixture().Attach)
+	defer bridge.Stop()
+	waitState(test, bridge, Ready)
+	result := make(chan int, 1)
+	go func() { _, _, code := bridge.Read(time.Second); result <- code }()
+	select {
+	case code := <-result:
+		test.Fatal("read did not wait", code)
+	case <-time.After(20 * time.Millisecond):
+	}
+	bridge.Cancel()
+	select {
+	case code := <-result:
+		if code != Closed {
+			test.Fatal("cancel did not interrupt reader", code)
+		}
+	case <-time.After(time.Second):
+		test.Fatal("reader remained blocked")
+	}
+}
+
 func TestUnderlayRejectsNonPhysicalInterface(test *testing.T) {
 	for _, name := range []string{"", "lo0", "utun0", "en999999999"} {
 		if protect, err := boundInterface(name); err == nil || protect != nil {

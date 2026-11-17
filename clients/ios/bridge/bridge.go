@@ -103,11 +103,15 @@ func (bridge *Bridge) run(open Opener) {
 		bridge.fail(StartupFailed)
 		return
 	}
+	joined, ok := engine.(interface{ Wait() })
+	if !ok {
+		engine.Close()
+		bridge.fail(StartupFailed)
+		return
+	}
 	defer func() {
 		engine.Close()
-		if joined, ok := engine.(interface{ Wait() }); ok {
-			joined.Wait()
-		}
+		joined.Wait()
 	}()
 	bridge.mu.Lock()
 	if bridge.ctx.Err() == nil && !session.Failed() {

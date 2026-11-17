@@ -17,6 +17,9 @@ func (fixture *Fixture) Open(context.Context, string, uint16) (wholedevice.Strea
 	return nil, wholedevice.ErrClosed
 }
 func (fixture *Fixture) QueryDNS(ctx context.Context, query []byte) ([]byte, error) {
+	if len(query) < 12 {
+		return nil, wholedevice.ErrClosed
+	}
 	if ctx.Err() != nil {
 		return nil, ctx.Err()
 	}

@@ -63,6 +63,8 @@ enum SelfTests {
         let deadline = Date().addingTimeInterval(3)
         while denied.state == 1 && Date() < deadline { Thread.sleep(forTimeInterval: 0.005) }
         try require(denied.state == -8, "no-fake-underlay-ready")
+        denied.stop()
+        try require(denied.state == -8, "terminal-error-after-release")
         for _ in 0..<8 {
             let native = try NativeSession(mode: 1)
             defer { native.stop() }

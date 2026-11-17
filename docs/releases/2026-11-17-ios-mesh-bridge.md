@@ -71,3 +71,10 @@ test's100ms DNS read deadline. This is not diagnosed as infrastructure, hidden b
 the successful push test or retried unchanged. Original tests/timeouts remain.
 Neither attempt built an app/extension or ran simulator checks; no overall PASS.
 Artifacts14287780072 and14286014603 retain both logs.
+
+Further author-review checks require the tagged gVisor join (not optional), add
+deterministic cancellation while a reader waits without packets, retain Swift's
+terminal error after native handle release, and reject unqualified enforced-route
+configurations. New Linux boundary suite8 tests ×3 race PASS. Swift lifecycle
+results still require the exact candidate simulator run. Action SHAs are pinned
+to the first macOS run's resolved versions; Swift/clang/Python enter the manifest.

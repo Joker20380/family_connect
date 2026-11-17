@@ -13,7 +13,11 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
         lifecycle.async {
             guard self.startReply == nil && self.bridge == nil else { completionHandler(BridgeFailure(code: -1)); return }
             self.startReply = completionHandler
-            guard let config = (self.protocolConfiguration as? NETunnelProviderProtocol)?.providerConfiguration,
+            guard let tunnelProtocol = self.protocolConfiguration as? NETunnelProviderProtocol,
+                  !tunnelProtocol.includeAllNetworks, !tunnelProtocol.enforceRoutes else {
+                self.finishStart(BridgeFailure(code: -8)); return
+            }
+            guard let config = tunnelProtocol.providerConfiguration,
                   let profile = config["profile"] as? Data, let directory = config["directory"] as? Data,
                   let resolver = config["resolver"] as? String else {
                 self.finishStart(BridgeFailure(code: -1)); return

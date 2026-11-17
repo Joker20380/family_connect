@@ -102,7 +102,7 @@ def build(args):
     manifest = dict(source_sha=capture('git', 'rev-parse', 'HEAD', cwd=ROOT), go=version, xray=XRAY,
                     patch_sha256=hashlib.sha256(PATCH.read_bytes()).hexdigest(), targets=[],
                     endpoint_patch_sha256=hashlib.sha256((SOURCE / 'xray-endpoint-only.patch').read_bytes()).hexdigest(),
-                    system=platform.platform(), image=os.environ.get('ImageVersion'), real_vpn='NOT_RUN', telemost='NOT_RUN')
+                    system=platform.platform(), python=platform.python_version(), image=os.environ.get('ImageVersion'), real_vpn='NOT_RUN', telemost='NOT_RUN')
     with tempfile.TemporaryDirectory(prefix='fc-ios-') as directory:
         workspace = Path(directory)
         module = prepare(workspace, go)
@@ -117,6 +117,8 @@ def build(args):
         if platform.system() != 'Darwin' or capture('xcodebuild', '-version') != 'Xcode 16.4\nBuild version 16F6':
             raise RuntimeError('macOS and Xcode 16.4 (16F6) required')
         manifest['xcode'] = capture('xcodebuild', '-version')
+        manifest['swift'] = capture('xcrun', 'swift', '--version')
+        manifest['clang'] = capture('xcrun', 'clang', '--version')
         for sdk, target in [('iphoneos', 'arm64-apple-ios16.0'), ('iphonesimulator', 'arm64-apple-ios16.0-simulator')]:
             sdkpath = capture('xcrun', '--sdk', sdk, '--show-sdk-path')
             if capture('xcrun', '--sdk', sdk, '--show-sdk-version') != '18.5':
