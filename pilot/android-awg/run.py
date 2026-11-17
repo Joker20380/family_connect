@@ -24,9 +24,15 @@ except BaseException:
  with (r/"android-tcp-runner.log").open("w") as log:traceback.print_exc(file=log)
  raise
 finally:
+ for peer in processes:
+  if peer.poll() is None:peer.kill();peer.wait(timeout=10)
+  peer.stdout.close()
+ with (r/'android-consent.log').open('wb') as log:
+  try:
+   result=subprocess.run(['adb','logcat','-d','-s','FCConsent:I','*:S'],stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=20)
+   log.write(result.stdout[-65536:])
+  except (OSError,subprocess.TimeoutExpired) as failure:log.write(json.dumps({'capture_error':type(failure).__name__}).encode())
  with (r/'android-awg-crash.log').open('w') as log:
   subprocess.run(['adb','logcat','-d','-b','crash'],stdout=log,stderr=subprocess.STDOUT,timeout=20)
  with (r/'android-awg-app.log').open('w') as log:
   subprocess.run(['adb','logcat','-d','-b','main','-b','system','-b','crash','-t','2000'],stdout=log,stderr=subprocess.STDOUT,timeout=20)
- for peer in processes:
-  if peer.poll() is None:peer.kill();peer.wait(timeout=10)

@@ -1,6 +1,16 @@
 # Текущее состояние / Current state
 
-**17 November — PR42 source CI repairs validated; integration tracked by receipt.**
+**17 November — PR42 native/TCP repairs validated; Android consent gate BLOCKED.**
+Exactc568e5b7 passes Desktop Auto push/PR (all retained gates), Linux control
+push/PR, Linux Client packaging and actual iOS device/simulator acceptance:
+artifact14338920484,208 hashes verified, nine isolated groups PASS/handles0.
+Client PR44103613326/job134110824377 fails at system VPN confirmation (no observed
+system roots), then cleanup-required/remaining VPN causes ten further failures.
+TCP peer ownership is proven before/after instrumentation, HTTP12/DNS44, all
+fixture resources join/reap. This is not the old bind failure. Bounded consent
+launch/activity/accessibility diagnostics are added to obtain missing boundary
+evidence; no timing/assertion change, no claim of repaired consent, no blind rerun.
+Full legacy Android/payload gates were skipped, not passed; keep PR draft.
 Entry remote head2b32b69e and mainbda954fb verified; other worktrees preserved. Owner
 selects accepted-native staging for Desktop Auto, Android TCP fixture ownership/
 readiness repair and actual final-head iOS qualification. FD/AppImage fixes remain

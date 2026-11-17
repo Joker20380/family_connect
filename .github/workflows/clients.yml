@@ -214,6 +214,7 @@ jobs:
             android-tcp-peer.log
             android-tcp-peer-result.json
             android-tcp-runner.log
+            android-consent.log
             android-emulator-runner.log
             android-friends-runtime.log
             android-consolidated-runtime.log

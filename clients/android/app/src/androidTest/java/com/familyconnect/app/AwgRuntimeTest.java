@@ -78,17 +78,21 @@ public class AwgRuntimeTest {
         info.flags|=android.accessibilityservice.AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS|android.accessibilityservice.AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS|android.accessibilityservice.AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
         automation.setServiceInfo(info);
         String testPackage=InstrumentationRegistry.getInstrumentation().getContext().getPackageName();
+        android.util.Log.i("FCConsent","begin interactive="+power.isInteractive()+" locked="+keyguard.isKeyguardLocked());
         // Each test must exercise a fresh system confirmation, even after another handover.
         shell("appops set "+testPackage+" ACTIVATE_VPN deny");
-        shell("am start -W -n "+testPackage+"/"+RevokeVpnActivity.class.getName());
+        consentCommand("appops get "+testPackage+" ACTIVATE_VPN");
+        consentCommand("am start -W -n "+testPackage+"/"+RevokeVpnActivity.class.getName());
         long until=android.os.SystemClock.elapsedRealtime()+15000;boolean clicked=false;
         int observedRoots=0,systemRoots=0,observedButtons=0,enabledButtons=0;
+        java.util.Set<String> packages=new java.util.TreeSet<>();
         while(android.os.SystemClock.elapsedRealtime()<until&&!clicked){
             java.util.List<android.view.accessibility.AccessibilityNodeInfo> roots=new java.util.ArrayList<>();
             roots.add(automation.getRootInActiveWindow());
             for(android.view.accessibility.AccessibilityWindowInfo window:automation.getWindows())roots.add(window.getRoot());
             for(android.view.accessibility.AccessibilityNodeInfo root:roots)if(root!=null){
                 observedRoots++;
+                if(packages.size()<8&&root.getPackageName()!=null)packages.add(root.getPackageName().toString());
                 if("com.android.vpndialogs".contentEquals(root.getPackageName()))systemRoots++;
                 for(android.view.accessibility.AccessibilityNodeInfo node:root.findAccessibilityNodeInfosByViewId("android:id/button1")){
                     if(!"com.android.vpndialogs".contentEquals(node.getPackageName()))continue;
@@ -109,8 +113,25 @@ public class AwgRuntimeTest {
             }
             if(!clicked)Thread.sleep(100);
         }
+        android.util.Log.i("FCConsent","observation clicked="+clicked+" roots="+observedRoots+" system_roots="+systemRoots+" buttons="+observedButtons+" enabled="+enabledButtons+" packages="+packages);
         if(!clicked)automation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK);
         assertTrue("System VPN confirmation not found: roots="+observedRoots+", system_roots="+systemRoots+", buttons="+observedButtons+", enabled="+enabledButtons+", interactive="+power.isInteractive()+", locked="+keyguard.isKeyguardLocked(),clicked);
+    }
+    void consentCommand(String command)throws Exception{
+        try(ParcelFileDescriptor descriptor=InstrumentationRegistry.getInstrumentation().getUiAutomation().executeShellCommand(command);
+            InputStream input=new ParcelFileDescriptor.AutoCloseInputStream(descriptor)){
+            java.io.ByteArrayOutputStream captured=new java.io.ByteArrayOutputStream();
+            byte[] buffer=new byte[1024];int count;
+            while(captured.size()<16384&&(count=input.read(buffer,0,Math.min(buffer.length,16384-captured.size())))!=-1)captured.write(buffer,0,count);
+            byte[] output=captured.toByteArray();
+            String text=new String(output,java.nio.charset.StandardCharsets.UTF_8);
+            for(String line:text.split("\\n")){
+                String trimmed=line.trim();
+                if(trimmed.startsWith("Status:")||trimmed.startsWith("Activity:")||trimmed.startsWith("Error:")||trimmed.startsWith("Warning:")||trimmed.startsWith("ACTIVATE_VPN:"))
+                    android.util.Log.i("FCConsent","command="+(command.startsWith("appops")?"appops":"launch")+" "+trimmed.substring(0,Math.min(trimmed.length(),256)));
+            }
+            android.util.Log.i("FCConsent","command_bytes="+output.length);
+        }
     }
     void quietNotification(){
         android.app.NotificationManager manager=context.getSystemService(android.app.NotificationManager.class);

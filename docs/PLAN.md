@@ -2,7 +2,13 @@
 
 ## Current engineering priority / Текущий critical path
 
-**PR42-CI-REPAIR-2 — source repairs complete / exact-head integration gate.**
+**PR42-CI-REPAIR-2 — native/TCP repairs validated / Android consent diagnosis.**
+Final-candidate c568 Desktop Auto push/PR and actual iOS PASS; small Android
+diagnostics prove own TCP peer readiness/cleanup but system-revocation confirmation
+fails, followed by cleanup-required. Obtain bounded launch/activity/window evidence
+with unchanged actual-dialog assertions/deadlines; do not substitute earlier4badd
+runtime success or rerun unchanged executed failures for green. Legacy/payload gates
+remain required. Diagnostic source checkpoint is not a consent fix or acceptance.
 Owner explicitly extends the repair boundary: Desktop Auto must build the immutable
 accepted native closure via stage_linux_native, while current-head protocol,
 frontend and intentional lifetime overlays retain their existing gates. Repair
