@@ -1,5 +1,5 @@
 from copy import deepcopy
-from datetime import timedelta
+from datetime import UTC, datetime, timedelta
 import hashlib
 import hmac
 import json
@@ -77,15 +77,21 @@ def test_conflicting_receipt_and_raw_private_fields_are_rejected(db):
         technical_metadata.ingest(data)
 
 
-def test_wrong_clock_and_independent_age(db):
+def test_wrong_clock_and_independent_age(db, monkeypatch):
+    initial_time = datetime(2026, 11, 17, 12, 0, 0, tzinfo=UTC)
+    monkeypatch.setattr(timezone, 'now', lambda: initial_time)
     data = observation()
     group = data['devices'][0]['observations']['profile']
     group.update(age_at_receive_ms=3600000, clock_status='clock_skew')
     technical_metadata.ingest(data)
     source = TechnicalMetadataSource.objects.first()
-    presented = technical_metadata.presentation(TechnicalMetadata.objects.first(), timezone.now(), source)
+    row = TechnicalMetadata.objects.first()
+    presented = technical_metadata.presentation(row, initial_time, source)
     assert presented['observations']['profile']['age_seconds'] == 3600
     assert 'не согласованы' in presented['observations']['profile']['clock_label']
+    later = technical_metadata.presentation(row, initial_time + timedelta(seconds=1), source)
+    assert later['observations']['profile']['age_seconds'] == 3601
+    assert 'не согласованы' in later['observations']['profile']['clock_label']
 
 
 def test_real_object_list_card_and_search_not_synthetic(console, client):

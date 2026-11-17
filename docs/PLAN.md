@@ -5,9 +5,10 @@
 **RU-PERSISTENCE-READBACK-1/P1 — selected / PR44 budget + panel clock repair.**
 Reproduce slow successful application.lock open on exact cff3 and compare c086.
 Start the shared budget before open; retain serialization through operation-exit
-validation and guarded error handling.101 focused tests pass, including the prior
-barrier matrix. Separately fix only the panel test's aware UTC clock; require exact
-3600→3601 ages and clock-skew label. Final-head panel must execute browser,
+validation and guarded error handling.101 focused/182 transport tests pass, including
+the prior barrier matrix. Separate test-only aware UTC clock fix passes exact
+3600→3601 ages and clock-skew label;36 targeted/320 full panel, browser2 and
+deployment-boundary1 checks pass locally. Final-head panel must execute browser,
 deployment-boundary and build steps; recheck native artifact provenance and
 six-cycle18-query/12→0-sync comparison. Record the pre-existing external watch
 fail-closed/concurrent registration window separately before delivery qualification.

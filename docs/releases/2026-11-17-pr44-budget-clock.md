@@ -32,13 +32,21 @@ no competing queries, fresh observation, collector ok, WATCHDOG datagram or ACK
 while registration diagnostic fsync is held; stop is already requested. Existing
 open/acquire/context-exit/cleanup and successful-path cases remain enabled.
 Legacy's two durable writes and six-cycle18-query/12→0-sync tests remain unchanged.
+All182 transport/public-source tests pass; public-source guard4045 entries/0 blocked.
+The transport repair was separately committed/pushed and remote-verified as
+`98c692abae63f2ca5ae17718e16b477159713f80` before the panel change.
 
 ## Panel and final qualification
 
-Separate logical change pending at this source checkpoint: fixed aware UTC t0 for
-test_wrong_clock_and_independent_age, explicit presentation at t0 and t0+1s. Do not
-change production age formula/TTL or transport monotonic time. Use the pinned panel
-environment and a task-owned disposable database. Final-head CI must actually run
+Separate logical test-only change: fixed aware UTC t0=2026-11-17T12:00:00Z for
+test_wrong_clock_and_independent_age. Test-scoped monkeypatch of Django timezone.now
+aligns observation and ingest; explicit presentation at t0 and t0+1s asserts exact
+ages3600 and3601, with clock-skew label checked at both times. Production age formula,
+TTL and transport monotonic time are untouched; no sleeps, tolerance or retries.
+Locked panel environment passes36 targeted and320 full tests on a new loopback-only
+task-owned PostgreSQL17 container, removed after completion. Browser request identity/
+network-loss checks2 and external deployment-boundary check1 also pass locally.
+Final-head CI must actually run
 panel browser/deployment-boundary/build and all other applicable gates. Native
 artifact must name the literal or synthetic source SHA, with tree comparison.
 

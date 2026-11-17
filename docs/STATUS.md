@@ -5,8 +5,12 @@ Exact `cff3e466` loses nine seconds spent opening application.lock: all three
 entrypoint paths query engines and ACK; exact `c086d131` rejects them without
 queries/ACK. Start the same operation before open, while an outer resource scope
 retains the handle through final deadline validation and guarded fail-closed.
-101 focused tests pass, including the prior real-flock/watch/collector barrier.
-Panel's independent wall-clock test repair and final exact-head CI are next;
+101 focused and182 transport/source-guard tests pass, including the prior
+real-flock/watch/collector barrier. The separate panel test now uses fixed aware
+UTC and explicit presentation times: exact3600→3601 ages, clock-skew label retained.
+36 targeted and320 full panel tests pass on a task-owned disposable PostgreSQL;
+browser2 and deployment-boundary1 pass locally. Final exact-head CI, including
+actual panel build and native artifact verification, remains required;
 the [cff3 receipt](https://github.com/Joker20380/family_connect/pull/44#issuecomment-6962872364)
 is historical, including its panel failure/skipped downstream steps.
 The pre-existing external watch fail-closed/concurrent registration window remains
