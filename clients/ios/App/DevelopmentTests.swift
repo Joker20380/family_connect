@@ -75,8 +75,8 @@ enum DevelopmentTests {
     }
     static func terminal(_ native: NativeSession) throws {
         let deadline = Date().addingTimeInterval(3)
-        while native.state > 0 && Date() < deadline { Thread.sleep(forTimeInterval: 0.005) }
-        try SelfTests.require(native.state < 0, "native-terminal")
+        while (native.state == 1 || native.state == 2) && Date() < deadline { Thread.sleep(forTimeInterval: 0.005) }
+        try SelfTests.require(native.state == 4 || native.state < 0, "native-terminal")
     }
     static func startup() throws {
         let native = try NativeSession(mode: 1); try SelfTests.ready(native)

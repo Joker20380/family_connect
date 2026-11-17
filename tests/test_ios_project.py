@@ -59,7 +59,8 @@ def test_development_parameters_and_matching_groups(tmp_path):
 
 
 @pytest.mark.parametrize('kwargs', [{'bundle': 'com.apple.managed.vpn.shared'}, {'bundle': 'bad'},
-                                    {'team': 'short'}, {'team': 'TESTTEAM01'}, {'app_profile': 'private.p12'}])
+                                    {'team': 'short'}, {'team': 'TESTTEAM01'}, {'app_profile': 'private.p12'},
+                                    {'app_profile': '11111111-1111-1111-1111-111111111111'}])
 def test_development_rejects_inconsistent_parameters(tmp_path, kwargs):
     with pytest.raises(ValueError):
         PROJECT.generate(ROOT / 'clients/ios', tmp_path, tmp_path, tmp_path, **kwargs)

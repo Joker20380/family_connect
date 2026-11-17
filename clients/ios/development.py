@@ -59,11 +59,20 @@ def main(args):
                     '-sdk', 'iphoneos', '-destination', 'generic/platform=iOS', 'ARCHS=arm64',
                     'CONFIGURATION_BUILD_DIR='+str(output / 'products'), 'build'], check=True)
     app = output / 'products/FamilyConnect.app'
-    for product in (app / 'PlugIns/MeshPacketTunnel.appex', app):
+    for product, bundle in ((app / 'PlugIns/MeshPacketTunnel.appex', args.bundle+'.tunnel'), (app, args.bundle)):
         subprocess.run(['codesign', '--verify', '--strict', str(product)], check=True)
         signed = plistlib.loads(subprocess.check_output(['codesign', '-d', '--entitlements', ':-', str(product)], stderr=subprocess.DEVNULL))
-        if signed.get('keychain-access-groups') != [prefixes[0]+'.'+args.bundle+'.materials']:
-            raise ValueError('Signed Keychain group mismatch')
+        group = prefixes[0]+'.'+args.bundle+'.materials'
+        info = plistlib.loads((product / 'Info.plist').read_bytes())
+        if (signed.get('keychain-access-groups') != [group]
+                or signed.get('application-identifier') != prefixes[0]+'.'+bundle
+                or signed.get('com.apple.developer.team-identifier') != args.team
+                or signed.get('get-task-allow') is not True
+                or 'packet-tunnel-provider' not in signed.get('com.apple.developer.networking.networkextension', [])
+                or info.get('CFBundleIdentifier') != bundle or info.get('FCKeychainGroup') != group
+                or info.get('FCMaterialService') != args.bundle+'.materials'
+                or info.get('FCTunnelBundleID') != args.bundle+'.tunnel'):
+            raise ValueError('Signed entitlements and app/extension parameters do not match')
     receipt = {'source_sha': head, 'unsigned_manifest_sha256': hashlib.sha256((result / 'manifest.json').read_bytes()).hexdigest(),
                'development_signed': True, 'device_install': 'NOT_RUN', 'physical_VPN': 'NOT_RUN'}
     (output / 'development-receipt.json').write_text(json.dumps(receipt, indent=2)+'\n')

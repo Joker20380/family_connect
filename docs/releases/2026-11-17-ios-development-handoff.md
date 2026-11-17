@@ -67,6 +67,18 @@ development provisioning grants with synthetic Python models (including a valid
 App ID prefix different from Team ID).9 project/provisioning tests pass locally.
 This is not real signing or cross-process Keychain acceptance.
 
+Candidatea9e27770/run44026144720: device/simulator builds PASS; original requested
+native-end-during-configure regression PASS. New stale-worker test then failed
+`isolated.native-terminal`: its helper incorrectly treated **Stopped=4** as a live
+state (ABI already documents1/2/3/4). Artifact14304015353 ZIP SHA256
+`385e10180fe4eec91354d66235b2d7254ec609d5b8636e1cd2fb85462c18c242`.
+Correct the helper to require state4 or a negative failure, preserving its3s limit
+and all no-pump/exactly-once/cleanup assertions. Also map positive stopped state
+to Closed(-2) in Swift error reporting. This changes no native ABI or test budget.
+Signing self-review additionally rejects a lone profile parameter and verifies
+the final signed app/extension identifiers, Team, grants and expanded Info values.
+10 Python tests and20 repetitions of new Go trust/commit race tests pass locally.
+
 ## Gates
 
 New device/simulator builds, native coordination, provider/manager/material tests:

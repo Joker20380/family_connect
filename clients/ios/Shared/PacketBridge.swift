@@ -92,7 +92,7 @@ final class PacketBridge {
                 self.control.async {
                     guard !self.stopped else { return }
                     let state = self.native.state
-                    guard state == 2 else { self.terminate(BridgeFailure(code: state == 1 ? -5 : state)); return }
+                    guard state == 2 else { self.terminate(BridgeFailure(code: state < 0 ? state : state == 1 ? -5 : -2)); return }
                     configure { [weak self] error in
                         guard let self = self else { return }
                         self.control.async {
@@ -157,7 +157,8 @@ final class PacketBridge {
                     if !accepted { throw BridgeFailure(code: -7) }
                 }
             }
-            throw BridgeFailure(code: native.state)
+            let state = native.state
+            throw BridgeFailure(code: state < 0 ? state : -2)
         } catch {
             control.async { self.terminate(error) }
         }

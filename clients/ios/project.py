@@ -2,6 +2,7 @@ import hashlib
 import json
 import plistlib
 import re
+import uuid
 from pathlib import Path
 
 
@@ -11,11 +12,16 @@ def generate(root: Path, output: Path, native: Path, notices: Path, *,
         raise ValueError('Invalid app-specific bundle identifier')
     if team is not None and not re.fullmatch(r'[A-Z0-9]{10}', team):
         raise ValueError('Team must be a ten-character identifier')
-    if bool(team) != bool(app_profile and tunnel_profile):
+    if any(value is not None for value in (team, app_profile, tunnel_profile)) and not all((team, app_profile, tunnel_profile)):
         raise ValueError('Development signing requires Team and both local profile UUIDs')
     for profile in (app_profile, tunnel_profile):
-        if profile is not None and not re.fullmatch(r'[A-Fa-f0-9-]{36}', profile):
-            raise ValueError('Provisioning profile must be a UUID, not a file or secret')
+        if profile is not None:
+            try:
+                valid = str(uuid.UUID(profile)) == profile.lower()
+            except ValueError:
+                valid = False
+            if not valid:
+                raise ValueError('Provisioning profile must be a UUID, not a file or secret')
     service = bundle + '.materials'
     group_name = '$(AppIdentifierPrefix)' + service
     objects = {}
