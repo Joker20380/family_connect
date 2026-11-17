@@ -2,6 +2,9 @@ import importlib.util
 from pathlib import Path
 import plistlib
 import pytest
+import sys
+import datetime
+import copy
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -60,3 +63,34 @@ def test_development_parameters_and_matching_groups(tmp_path):
 def test_development_rejects_inconsistent_parameters(tmp_path, kwargs):
     with pytest.raises(ValueError):
         PROJECT.generate(ROOT / 'clients/ios', tmp_path, tmp_path, tmp_path, **kwargs)
+
+
+def test_provisioning_grants_model(monkeypatch):
+    monkeypatch.setitem(sys.modules, 'project', PROJECT)
+    spec = importlib.util.spec_from_file_location('ios_development', ROOT / 'clients/ios/development.py')
+    development = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(development)
+    profile = {'TeamIdentifier': ['TESTTEAM01'], 'ApplicationIdentifierPrefix': ['OTHERPRE01'],
+               'ExpirationDate': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=1),
+               'ProvisionedDevices': ['synthetic-device-only'],
+               'Entitlements': {'get-task-allow': True, 'application-identifier': 'OTHERPRE01.org.example.mesh',
+                                'com.apple.developer.team-identifier': 'TESTTEAM01',
+                                'com.apple.developer.networking.networkextension': ['packet-tunnel-provider'],
+                                'keychain-access-groups': ['OTHERPRE01.org.example.mesh.materials']}}
+    def check(value):
+        return development.validate_profile(value, team='TESTTEAM01', bundle='org.example.mesh', service='org.example.mesh.materials')
+    assert check(profile) == 'OTHERPRE01'
+    for field, value in [('get-task-allow', False), ('application-identifier', 'OTHERPRE01.wrong.bundle'),
+                         ('com.apple.developer.team-identifier', 'WRONGTEAM1'),
+                         ('com.apple.developer.networking.networkextension', []),
+                         ('keychain-access-groups', ['com.apple.managed.vpn.shared'])]:
+        invalid = copy.deepcopy(profile)
+        invalid['Entitlements'][field] = value
+        with pytest.raises(ValueError):
+            check(invalid)
+    for field, value in [('TeamIdentifier', ['WRONGTEAM1']), ('ProvisionedDevices', []),
+                         ('ExpirationDate', datetime.datetime(2000, 1, 1)), ('ApplicationIdentifierPrefix', [])]:
+        invalid = copy.deepcopy(profile)
+        invalid[field] = value
+        with pytest.raises(ValueError):
+            check(invalid)

@@ -43,6 +43,7 @@ private final class FixtureKeychain: KeychainDriver {
     var reloads = 0
     var update: (() -> Void)?
     var saving: (() -> Void)?
+    var reloading: (() -> Void)?
     var saved: CheckedContinuation<Void, Never>?
     func configure(_ handoff: Handoff, provider: String) { self.provider = provider; configuration = handoff.configuration }
     func save() async throws {
@@ -50,10 +51,14 @@ private final class FixtureKeychain: KeychainDriver {
         if failure == "save" { throw NSError(domain: NEVPNErrorDomain, code: NEVPNError.configurationReadWriteFailed.rawValue) }
         if let saving = saving { await withCheckedContinuation { saved = $0; saving() } }
     }
-    func reload() async throws { reloads += 1; if failure == "reload" { throw SafeFailure(message: "reload rejected") } }
+    func reload() async throws {
+        reloads += 1; reloading?()
+        if failure == "reload" { throw SafeFailure(message: "reload rejected") }
+    }
     func start() throws { if failure == "start" { throw SafeFailure(message: "permission/start rejected") }; starts += 1 }
     func stop() { stops += 1; status = .disconnected; update?() }
     func observe(_ update: @escaping () -> Void) { self.update = update }
+    func lastError() async -> Error? { BridgeFailure(code: -6) }
 }
 
 @MainActor private final class FixturePreferences: VPNPreferences {
@@ -100,6 +105,11 @@ enum DevelopmentTests {
         let entered = DispatchSemaphore(value: 0), completed = DispatchSemaphore(value: 0), stopped = DispatchSemaphore(value: 0)
         var configureReply: ((Error?) -> Void)?, error: Error?
         var native: NativeSession?
+        let rejectedPath = FixturePath()
+        owner.start(flow: flow, watcher: rejectedPath, makeNative: { _ in throw BridgeFailure(code: -81) }, configure: { $0(nil) },
+                    completion: { error = $0; completed.signal() }, failed: { _ in completed.signal() })
+        try SelfTests.wait(completed)
+        try SelfTests.require((error as? BridgeFailure)?.code == -81 && rejectedPath.stopped && fc_ios_handles() == 0, "provider-material-failure-cleans")
         owner.start(flow: flow, watcher: path, makeNative: { _ in let session = try NativeSession(mode: 1); native = session; return session },
                     configure: { configureReply = $0; entered.signal() }, completion: { error = $0; completed.signal() }, failed: { _ in completed.signal() })
         try SelfTests.wait(entered)
@@ -132,6 +142,7 @@ enum DevelopmentTests {
         try JSONEncoder().encode(ImportedMaterial(version: 1, profile: Data("synthetic-not-credentials".utf8), directory: Data("synthetic-not-directory".utf8), resolver: "192.0.2.1:53"))
     }
     static func material() throws {
+        try SelfTests.require((BridgeFailure(code: -6) as NSError).code == -6, "transport-error-survives-NSError")
         let driver = FixtureKeychain(), store = try vault(driver)
         let reference = try store.insert(synthetic())
         try SelfTests.require(driver.last[kSecAttrAccessible as String] as? String == kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly as String, "keychain-after-first-unlock-device-only")
@@ -188,6 +199,10 @@ enum DevelopmentTests {
         await reopened.prepare(connect: true)
         try SelfTests.require(entry.starts == 1, "disconnect-during-save-cancels-start")
         entry.saving = nil
+        entry.reloading = { reopened.disconnect() }
+        await reopened.prepare(connect: true)
+        try SelfTests.require(entry.starts == 1, "disconnect-during-reload-cancels-start")
+        entry.reloading = nil
         preferences.loadFailure = true; await reopened.prepare(connect: true)
         try SelfTests.require(entry.starts == 1, "load-failure-no-start"); preferences.loadFailure = false
         try store.delete(reference); await reopened.prepare(connect: true)

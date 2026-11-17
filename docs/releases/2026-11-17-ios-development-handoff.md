@@ -60,6 +60,13 @@ Go tests generate fresh synthetic certs/CRLs in memory, never stored as artifact
 No old assertion or test budget weakened; a new10s initial path eligibility deadline
 is distinct from unchanged180s native startup.
 
+Self-review follow-up: preserve BridgeFailure numeric code across NSError/process
+boundary, read actual last disconnect error with generation guards, expose file
+import failure safely, test cancellation during reload as well as save, and verify
+development provisioning grants with synthetic Python models (including a valid
+App ID prefix different from Team ID).9 project/provisioning tests pass locally.
+This is not real signing or cross-process Keychain acceptance.
+
 ## Gates
 
 New device/simulator builds, native coordination, provider/manager/material tests:

@@ -82,7 +82,7 @@ reference. This is bounded loss, not lossless backpressure. Swift arms one read 
 a time and synchronously drains each output callback, avoiding dispatch backlog.
 States1/2/3/4: starting/packet-engine-ready/failed/stopped, **not** generic CONNECTED.
 Errors: invalid-1, closed-2, full-3, unsupported-4, wait-timeout-5, startup-6,
-transport-7, underlay-8. First failure survives stop; stop drains resources/removes
+transport-7, underlay-8, material-validation-9. First failure survives stop; stop drains resources/removes
 handles. Cancellation unblocks startup/read. Late callbacks cannot restart a pump.
 The iOS-only stack wrapper also joins gVisor workers after close; pending Swift
 flow callbacks hold the pump weakly and path-monitor handlers are released on stop.
@@ -133,7 +133,9 @@ configuration UUID, create only when absent, save, reload, verify opaque handoff
 then request start. Duplicate IDs fail for manual inspection, never bulk deletion.
 Repeated Connect is guarded; Disconnect invalidates an in-flight save/reload/start
 operation. NEVPNStatus notifications are the only connection-status source; a
-successful start call is not Connected. External Settings can race app operations:
+successful start call is not Connected. Disconnection errors use public
+fetchLastDisconnectError, preserving native NSError codes without raw material.
+External Settings can race app operations:
 this is not a system-wide transaction or instant revocation mechanism.
 
 Import one UTF-8 JSON object (maximum96KiB), version1, with `profile` and `directory`
@@ -231,5 +233,23 @@ Verify real extension launch/memory budget, packet families, IPv4/IPv6/default/D
 routes, absence of signaling/DNS/ICE/STUN/TURN/media from captured tunnel traffic,
 trust/CRL/expiry rejection, TCP/DNS and UDP/IPv6 containment, cancel/stop/restart,
 process death, sleep and Wi-Fi/cellular changes. `cancelTunnelWithError` can restore
-ordinary OS routing; no always-on/kill-switch claim. Only after this gate authorize
-real Telemost and whitelist-network trials. Simulator is not physical VPN proof.
+ordinary OS routing; no always-on/kill-switch claim. Simulator is not physical VPN proof.
+
+Bounded first trial, separately authorized by the owner:
+1. Record phone model/iOS build, compatible Xcode, Team/capability grants and local
+   development provisioning. Install; deny/allow VPN consent, reopen app, check
+   unique own configuration and Disconnect during startup.
+2. Confirm extension launch and shared Keychain with missing/revoked/expired
+   **synthetic** items (expected failures), reboot-before-unlock denial and
+   after-unlock accessibility. Do not inject a fixture as a successful VPN.
+3. On controlled IPv4 Wi-Fi with disposable authorized test identity/directory,
+   allow one bounded **real MESH/Telemost** startup. Live MESH admission precedes
+   network settings, so successful system startup and route checks cannot be
+   performed as if this were a transport-free phase. Correlate system status,
+   extension lifecycle and gateway-side test observations; never log identities.
+4. Separately measure captured packets, external underlay sockets, DNS/ICE/STUN/
+   TURN/media recursion, TCP/DNS success and disallowed UDP/IPv6 containment; stop
+   immediately on loop/leak/error. Check Stop frees resources and ordinary OS
+   routing restoration. Then bounded restart/background/path-change/memory tests.
+5. Only after these gates select a whitelist-network trial. IPv6-only/NAT64 and
+   enforced routes remain unsupported; no includeAllNetworks/enforceRoutes policy.

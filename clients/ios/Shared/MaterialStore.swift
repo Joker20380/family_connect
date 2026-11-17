@@ -1,15 +1,21 @@
 import Foundation
 import Security
 
-struct SafeFailure: Error, LocalizedError, CustomStringConvertible {
+struct SafeFailure: Error, LocalizedError, CustomStringConvertible, CustomNSError {
     let message: String
     var errorDescription: String? { message }
     var description: String { message }
+    static var errorDomain: String { "org.familyconnect.mesh.safe" }
+    var errorCode: Int { 1 }
+    var errorUserInfo: [String: Any] { [NSLocalizedDescriptionKey: message] }
 }
 
 func safeMessage(_ error: Error) -> String {
     if let error = error as? SafeFailure { return error.message }
     if let error = error as? BridgeFailure { return error.description }
+    let system = error as NSError
+    if system.domain == SafeFailure.errorDomain { return system.localizedDescription }
+    if system.domain == BridgeFailure.errorDomain { return "MESH bridge error \(system.code); inspect test trust, underlay and session lifecycle" }
     return "System operation failed (code \((error as NSError).code)); no material is logged."
 }
 

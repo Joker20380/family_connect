@@ -12,6 +12,7 @@ import Combine
     func start() throws
     func stop()
     func observe(_ update: @escaping () -> Void)
+    func lastError() async -> Error?
 }
 
 @MainActor protocol VPNPreferences {
@@ -52,6 +53,11 @@ import Combine
         try session.startTunnel(options: nil)
     }
     func stop() { manager.connection.stopVPNTunnel() }
+    func lastError() async -> Error? {
+        await withCheckedContinuation { reply in
+            manager.connection.fetchLastDisconnectError { reply.resume(returning: $0) }
+        }
+    }
     func observe(_ update: @escaping () -> Void) {
         if let observation = observation { NotificationCenter.default.removeObserver(observation) }
         observation = NotificationCenter.default.addObserver(forName: .NEVPNStatusDidChange, object: manager.connection, queue: .main) { _ in
@@ -113,7 +119,16 @@ import Combine
         entry.observe { [weak self, weak entry] in
             guard let self = self, let entry = entry, self.current === entry else { return }
             self.status = entry.status
-            if entry.status == .disconnected || entry.status == .invalid { self.requested = false }
+            if entry.status == .disconnected || entry.status == .invalid {
+                self.requested = false
+                let token = self.generation
+                Task { @MainActor [weak self, weak entry] in
+                    guard let self = self, let entry = entry else { return }
+                    let error = await entry.lastError()
+                    guard self.current === entry, self.generation == token, self.inactive(entry) else { return }
+                    if let error = error { self.message = safeMessage(error) }
+                }
+            }
         }
     }
     private func owned() async throws -> [VPNEntry] {
@@ -139,6 +154,7 @@ import Combine
     }
     func prepare(connect: Bool) async {
         guard !busy && !requested else { message = "Operation already in progress"; return }
+        generation += 1
         busy = true; defer { busy = false }
         let token = generation
         do {
@@ -188,6 +204,7 @@ import Combine
             try importData(data)
         } catch { message = safeMessage(error) }
     }
+    func importFailed(_ error: Error) { message = safeMessage(error) }
     func removeMaterial(revoke: Bool) async {
         guard !busy && !requested else { message = "Disconnect and wait before material removal"; return }
         busy = true; defer { busy = false }

@@ -36,7 +36,10 @@ struct FamilyConnectApp: App {
                 }
                 Text("System Connected is not proof of MESH traffic, correct routing or absence of leaks. Disconnect restores ordinary OS routing. Real identity and device acceptance are separate.").font(.footnote)
             }.padding() }.fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
-                if case .success(let url) = result { vpn.importFile(url) }
+                switch result {
+                case .success(let url): vpn.importFile(url)
+                case .failure(let error): vpn.importFailed(error)
+                }
             }.task {
                 if !ProcessInfo.processInfo.arguments.contains("--self-test") { await vpn.refresh() }
             }.onAppear {

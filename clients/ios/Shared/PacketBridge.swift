@@ -1,9 +1,12 @@
 import Foundation
 import NetworkExtension
 
-struct BridgeFailure: Error, CustomStringConvertible {
+struct BridgeFailure: Error, CustomStringConvertible, CustomNSError {
     let code: Int32
     var description: String { "MESH bridge error \(code)" }
+    static var errorDomain: String { "org.familyconnect.mesh.bridge" }
+    var errorCode: Int { Int(code) }
+    var errorUserInfo: [String: Any] { [NSLocalizedDescriptionKey: description] }
 }
 
 final class NativeSession {
