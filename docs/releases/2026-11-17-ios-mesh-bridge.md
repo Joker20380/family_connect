@@ -1,6 +1,60 @@
 # 17 November2026 — IOS-MESH-BRIDGE-1
 
-## Source checkpoint — qualification pending
+## Technical acceptance — sourcefc08a50e
+
+Exact source **fc08a50ecec45ea94e9ab27b1a9cfe28d507dc5d**:
+[macOS push43991766964](https://github.com/Joker20380/family_connect/actions/runs/43991766964)
+SUCCESS; separate exact-head [PR43991774552](https://github.com/Joker20380/family_connect/actions/runs/43991774552)
+also SUCCESS. [PR41](https://github.com/Joker20380/family_connect/pull/41) retains author
+self-review (not independent approval), final-head applicable CI and integration
+receipt. This report identifies tested artifacts, not a public release or a claim
+that an in-progress later documentation head has passed.
+
+| Gate | Result on fc08a50e |
+| --- | --- |
+| unsigned iPhone | PASS: app + embedded Packet Tunnel extension, iphoneos/arm64, Mach-O IOS, minimum16.0/SDK18.5 |
+| separate simulator | PASS: app + extension, arm64, Mach-O IOSSIMULATOR; iPhone16/iOS18.5 runtime |
+| real native link/call | PASS: C exports + existing wholedevice/tcpforward/Family TLS/bootstrap/Telemost/Xray symbols in both executables; Swift/C/Go packet calls execute in simulator app |
+| Go isolated boundary | PASS:9 Darwin tests ×3 with race detector; original packet regressions tagged and untagged |
+| Swift isolated boundary | PASS:4 check groups, copy/family/queue/cancel/recreate, async real-gVisor DNS, late configuration callback, write failure;0 live handles |
+| socket underlay adaptation | PASS: actual Darwin IP_BOUND_IF set/get and invalid-interface/fd rejection; routing through installed extension NOT_RUN |
+| real TUN / VPN / Telemost / whitelist | NOT_RUN; packet-flow mock and synthetic DNS are explicitly isolated |
+| production / public artifacts | NO CHANGE: public beta126/catalog9; no server, profile, identity, release-signing or deployment actions |
+
+Runner macOS15.8.2/arm64 image20261104.0514.1, Xcode16.4/16F6,
+Swift6.1.2, clang17.0.0, Python3.15.2, Go1.26.1. Laboratory app0.0.1/build1.
+Retained builds are unsigned; only a temporary simulator copy receives local
+ad-hoc signing, with no Apple account/certificate/provisioning. All208 per-file
+hashes in the downloaded artifact match; screenshot shows actual PASS/zero handles.
+
+[Artifact14288332488](https://github.com/Joker20380/family_connect/actions/runs/43991766964/artifacts/14288332488)
+ZIP SHA256 `5164ebc2d5dcaa235ba8d82bcbf1858673036037e653da91f00ef93cc0ef746a`.
+[Sanitized verification receipt](evidence/2026-11-17-ios-fc08a50e.json) preserves
+toolchain, both platform/ABI targets, simulator result, exact31-module/408-package
+closure and selected binary/archive hashes. Full notices, modified dependency
+sources, Family sources, both patches, commands, link maps, symbols and logs are
+in the30-day CI artifact. Procedural reproducibility, not bitwise determinism.
+
+Unchanged Android JNI/desktop runtime uses the original packet engine. The only
+shared-file edit is an isolated positive DNS test budget:3s, matching its TCP
+fixture; rejected UDP retains100ms and all assertions remain. Successful macOS
+DNS reads were258.666µs tagged and430.875µs untagged, query count1. No claim is made
+that earlier timeouts' scheduler/root cause was proven. Prior failures remain below.
+
+Remaining device gate: development enrollment/capabilities/provisioning and consented
+iPhone; reviewed secure device-only configuration/keychain handoff plus disposable
+authorized Family identity/admission; extension memory/lifecycle, scoped underlay
+anti-recursion and path changes; IPv4 DNS/TCP, IPv6/UDP containment, trust failures;
+then real Telemost/whitelist trials. No unattended follow-on task is selected.
+IPv6-only/DNS64/NAT64 is unsupported. `includeAllNetworks`/`enforceRoutes` are rejected
+pending a different qualified routing strategy. A scoped bind is not leak-proof
+VPN evidence. [Detailed public API rationale and checklist](../../clients/ios/README.md#next-signed-iphone-prerequisites).
+
+Rollout/rollback: no installation/distribution here; artifacts are technical-only.
+Revert the source change/disable its laboratory workflow to roll it back. Existing
+public/installed Android and desktop versions and all gateway policies stay intact.
+
+## Historical source checkpoint — qualification was pending
 
 Owner explicitly selected deferred iOS preparation. Separate worktree/branch
 `feature/ios-mesh-packet-bridge-20261117` starts from remote main86663dfe; dirty

@@ -2,6 +2,9 @@
 
 Selected task **IOS-MESH-BRIDGE-1**,17 November2026. This is an unsigned technical
 prototype, not a distributed VPN. [Current results](../../docs/releases/2026-11-17-ios-mesh-bridge.md).
+Qualified source `fc08a50ecec45ea94e9ab27b1a9cfe28d507dc5d`: macOS CI43991766964
+builds both targets and runs the simulator boundary suite. The receipt includes
+verified artifact hashes; it is not an installed-device or Telemost result.
 
 ## Reproduce from Linux through macOS CI
 

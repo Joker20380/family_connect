@@ -2,14 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
-**IOS-MESH-BRIDGE-1 — explicitly selected17 November / IN_PROGRESS.**
+**IOS-MESH-BRIDGE-1 — explicitly selected17 November / technical gate COMPLETE.**
 Dependency satisfied: PR40 exact3539ebe4 push/PR phase0 PASS, ordinary merge3468f828;
 retain RECOVERED_CAUSE_OPEN without repeating recovery.
 Gate: exact-head macOS unsigned iphoneos/arm64 and separate simulator builds,
 linked/invoked MESH, isolated Swift/C/Go lifecycle, notices/source closure, underlay
 limits and signed-iPhone prerequisites. No production/recovery/observer/next backlog
-task. Sourcec125c0ea iOS/macOS qualification passes; qualify newer candidate and
-its isolated positive-DNS test-budget repair, then complete review/integration.
+task. Exactfc08a50e macOS43991766964 passes both builds, linked/invoked shared code,
+isolated Swift/Go lifecycle and closure checks; downloaded hashes verified. PR41
+records final source integration, author self-review and exact-head applicable CI.
+Do not substitute the earlierc125c0ea result or merge before those checks finish.
+Next, only if separately selected: secure device configuration + development
+provisioning and physical IPv4 underlay/NEPacketTunnelFlow/Telemost qualification.
+IPv6-only/NAT64 and user VPN readiness remain unaccepted.
 [Receipt](releases/2026-11-17-ios-mesh-bridge.md) · [Build](../clients/ios/README.md).
 
 **17 November00:02UTC — owner-requested RU recovery COMPLETE / RECOVERED_CAUSE_OPEN.**
