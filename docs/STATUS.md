@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**17 November — IOS-MESH-BRIDGE-1 unsigned technical gate PASS.**
+Sourcefc08a50e macOS CI43991766964 builds unsigned iphoneos/arm64 app + Packet
+Tunnel extension and separate iOS Simulator/arm64 targets, verifies linked MESH,
+and executes Swift/C/Go isolated packet/lifecycle checks (zero remaining handles).
+All208 downloaded artifact checksums match. Darwin interface bind/readback passes;
+installed-provider routing, physical VPN/Telemost/whitelist remain NOT_RUN.
+PR41 carries source integration and exact final-head CI/self-review receipts, not
+a product release. PR40 exact3539ebe4 was normally merged as remote-verified3468f828;
+RECOVERED_CAUSE_OPEN is not reopened. Original dirty worktree, production RU/NL,
+public126/catalog9, profiles and signing secrets remain untouched. Next signed-device
+stage requires separate authorization. [Receipt](releases/2026-11-17-ios-mesh-bridge.md).
+
 **17 November00:02UTC — RU recovered on unchanged accepted bytes; CAUSE_OPEN.**
 The owner-authorized recovery restores watcher/AWG/TCP after the22:07 outage.
 Fresh canonical backup and isolated27-table/paid-projection restore pass. RU-only

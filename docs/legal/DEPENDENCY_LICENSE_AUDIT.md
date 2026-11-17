@@ -14,6 +14,18 @@ signature. Only required country/region/city/ASN/organization values are retaine
 no location coordinates or invented accuracy/confidence. Source preparation only,
 not a completed production deployment or blanket license audit of older releases.
 
+## iOS endpoint closure — 2026-11-17
+
+`clients/ios` reuses pinned Xray/gVisor and Family carrier, not JNI. Inspection
+finds GPL-3.0-or-later sing in the full Xray dispatcher closure; it is not described
+as permissive. The additional endpoint-only build-tag patch excludes that unused
+dispatcher and all platform TUN constructors without changing the packet engine.
+CI rejects sing in the selected iOS closure, retains all included-module notices,
+complete dependency sources, both MPL Xray patches and exact Family source SHA.
+No new third-party module pin, proprietary relicensing of MPL files, product
+release approval or re-audit of unrelated Android/desktop distributions is claimed.
+[Scope and reproduction](../../clients/ios/README.md).
+
 ## Desktop restricted-chat adaptation — 2026-10-24
 
 The portable API/mailbox adapter derives from this project's accepted native105

@@ -1,0 +1,45 @@
+name: iOS MESH unsigned boundary
+on:
+  push:
+    paths: ['clients/ios/**', 'tests/test_ios_project.py', 'carrier/**', 'pilot/android-restricted/packet/**', 'pilot/android-restricted/go.*', 'pilot/android-restricted/xray-packet-boundary.patch', '.github/workflows/ios-mesh.yml']
+  pull_request:
+    paths: ['clients/ios/**', 'tests/test_ios_project.py', 'carrier/**', 'pilot/android-restricted/packet/**', 'pilot/android-restricted/go.*', 'pilot/android-restricted/xray-packet-boundary.patch', '.github/workflows/ios-mesh.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unsigned:
+    runs-on: macos-15
+    timeout-minutes: 45
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff
+        with:
+          go-version: '1.26.1'
+          cache-dependency-path: clients/ios/go.sum
+      - name: Public-source safety gate
+        run: python3 scripts/check_public_sources.py
+      - name: Unsigned iPhone and simulator builds, linked closure, host race checks
+        shell: bash
+        run: |
+          set -o pipefail
+          python3 -u clients/ios/build.py --out "$RUNNER_TEMP/ios-mesh" 2>&1 | tee "$RUNNER_TEMP/ios-build.log"
+      - name: Run real iOS simulator Swift C Go boundary checks (not a VPN)
+        shell: bash
+        run: |
+          set -o pipefail
+          python3 -u clients/ios/simulator.py --out "$RUNNER_TEMP/ios-mesh" 2>&1 | tee "$RUNNER_TEMP/ios-simulator.log"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: ios-mesh-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/ios-mesh
+            ${{ runner.temp }}/ios-build.log
+            ${{ runner.temp }}/ios-simulator.log
+          if-no-files-found: error
+          retention-days: 30
