@@ -2,6 +2,14 @@
 
 ## Current engineering priority / Текущий critical path
 
+**IOS-MESH-BRIDGE-1 — explicitly selected17 November / IN_PROGRESS.**
+Dependency: qualify/ordinarily merge PR40 exact3539ebe4, retain RECOVERED_CAUSE_OPEN.
+Gate: exact-head macOS unsigned iphoneos/arm64 and separate simulator builds,
+linked/invoked MESH, isolated Swift/C/Go lifecycle, notices/source closure, underlay
+limits and signed-iPhone prerequisites. No production/recovery/observer/next backlog
+task. Local Go boundary/original packet regression pass; macOS CI/review pending.
+[Receipt](releases/2026-11-17-ios-mesh-bridge.md) · [Build](../clients/ios/README.md).
+
 **16 November22:47UTC — DEVICE-TECHNICAL-METADATA-1 public/source delivery completed;
 separate RU availability is OPEN.** PR38 merge7123b95e is remote-verified with the
 qualified588e793a tree. All ten source PR workflows and four push workflows pass.
