@@ -2,6 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
+**RU-STABILITY-20261117 — explicitly selected by owner; availability recovery, cause open.**
+Investigate and address recurring service stops before continuing the separate iOS
+candidate. Entry main isbda954fb; iOS draft42 and the dirty checkout are preserved.
+The01:03:56 trigger is now measured: state-file fsync9.538854s exceeds8s. Guest
+ext4/jbd2 waits are also observed in a separate finite synthetic test, but the
+historical storage-delay source is not established. Fresh guarded recovery starts
+the accepted runtime at07:42:14UTC. Thirteen observations over474.358s and final
+07:50:53 renewal/preservation checks pass; availability recovery is complete.
+Durable fix is NOT_ACCEPTED: do not substitute successful recovery, relax8/12/120s,
+drop durable ACK semantics, or introduce blind restarts. Next evidence needed is
+hosting-side latency attribution/qualified storage, or a separately qualified
+security-state/liveness design; no migration, purchase or unrelated task is implied.
+[Current receipt and remaining gate](releases/2026-11-17-ru-storage-stall.md).
+
 **IOS-MESH-BRIDGE-1 — explicitly selected17 November / technical gate COMPLETE.**
 Dependency satisfied: PR40 exact3539ebe4 push/PR phase0 PASS, ordinary merge3468f828;
 retain RECOVERED_CAUSE_OPEN without repeating recovery.

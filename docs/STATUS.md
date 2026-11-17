@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**17 November07:50UTC — RU availability restored; durable stability NOT_ACCEPTED.**
+The owner's RU request interrupts iOS work. The original01:03:56 failure now pins
+the trigger to decision-state file fsync9.538854s against an8s operation budget,
+not a slow AWG/TCP query. Both engines remained stopped while watcher retried668
+times. A finite same-filesystem synthetic probe observes ext4/jbd2 commit waits;
+it does not reproduce the original9.54s stall or attribute it to the VPS provider.
+Fresh backup/isolated restore and guarded RU-only recovery preserve all current
+data/policy and restore20 AWG/20 TCP bindings. Thirteen strict observations over
+474.358s cross/renew leases without process changes or restarts; final07:50:53
+identity/membership/terms/prepared-state, unit and protected-data checks pass.
+No runtime, timeout, persistence, NL, catalog or iOS change; the durable-fix goal
+remains unfulfilled, not hidden behind another restart.
+[Evidence, recovery and concrete remaining decision](releases/2026-11-17-ru-storage-stall.md).
+
 **17 November — IOS-MESH-BRIDGE-1 unsigned technical gate PASS.**
 Sourcefc08a50e macOS CI43991766964 builds unsigned iphoneos/arm64 app + Packet
 Tunnel extension and separate iOS Simulator/arm64 targets, verifies linked MESH,
