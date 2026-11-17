@@ -1,7 +1,7 @@
 # Текущее состояние / Current state
 
-**17 November — PR42 final CI repair selected / IN_PROGRESS.**
-Remote head2b32b69e and mainbda954fb verified; other worktrees preserved. Owner
+**17 November — PR42 source CI repairs validated; integration tracked by receipt.**
+Entry remote head2b32b69e and mainbda954fb verified; other worktrees preserved. Owner
 selects accepted-native staging for Desktop Auto, Android TCP fixture ownership/
 readiness repair and actual final-head iOS qualification. FD/AppImage fixes remain
 accepted; historical FD owner/403 cause UNKNOWN. Desktop workflow now stages the
@@ -9,10 +9,14 @@ full efc13f1c closure, builds its own verified builder outside that tree and kee
 all current-head compatibility/protocol/overlay gates. Android fixture now requires
 own PID/socket-inode LISTEN plus IPv4 readiness;10 isolated regressions PASS.
 Historical debug confirms bind failure while instrumentation ran (http0/dns0).
-Real Android/final CI remain pending. Intermediate Desktop Auto builds accepted
-native and passes compatibility/root gates, then exposes a current-source lifetime
-overlay failure; repairing that isolated boundary is selected, not baseline rehash.
-PR42 stays draft until acceptance.
+Intermediate Desktop Auto builds accepted native and passes compatibility/root
+gates. The exposed lifetime overlay bypass is repaired at the common provisioned/
+cached boundary: old DEADLINE reproduced, then15 real-native lifecycle and3
+isolated system tests PASS with unchanged assertions and host routes/resolver.
+The [live final acceptance receipt](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6950900474)
+records exact candidate SHA, real Android, executed iOS, all final push/PR gates,
+artifact verification and merge/main readback. Source/local PASS alone never
+authorizes merge; draft is retained until that complete gate.
 No hosting, release or phone changes. [Report](releases/2026-11-17-pr42-final-ci.md).
 
 **17 November12:44UTC — PR42 CI fixes implemented / broader integration gate BLOCKED.**

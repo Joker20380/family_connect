@@ -2,15 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
-**PR42-CI-REPAIR-2 — selected17 November / implementation and qualification.**
+**PR42-CI-REPAIR-2 — source repairs complete / exact-head integration gate.**
 Owner explicitly extends the repair boundary: Desktop Auto must build the immutable
 accepted native closure via stage_linux_native, while current-head protocol,
 frontend and intentional lifetime overlays retain their existing gates. Repair
 Android TCP fixture readiness/ownership and port isolation; qualify actual runtime.
 Desktop staging15 tests PASS; Android ownership/cleanup10 isolated tests PASS.
-Next: repair the exposed current-code lifetime overlay boundary, run real Android
-and obtain executed final-head iOS device/simulator/ABI acceptance (one justified retry
-of an unacquired runner is allowed, not retries of executed failures for PASS).
+Current-code lifetime overlay bypass repaired: reproduced DEADLINE, then15 native
+lifecycle and3 isolated system gates PASS; hook/staging regressions13 PASS.
+Remaining integration gate: real Android and executed final-head iOS acceptance
+(one justified retry of an unacquired runner is allowed, not retries of executed
+failures for PASS).
 Entry2b32b69e; remote mainbda954fb verified unchanged. Preserve FD/AppImage repairs
 and their original UNKNOWN causes. Historical TCP port owner/reset sender UNKNOWN;
 the API35 bind failure is separate from API27 DNS. No accepted106 rehash, transport
@@ -18,6 +20,9 @@ changes, product features, hosting, public releases or phone signing/install.
 Gate: all retained Desktop Auto checks, real Android/full Client builds, executed
 iOS and other applicable final-head push/PR gates; author self-review, normal merge
 and remote/tree verification. Do not stop after the first partial repair.
+[Live final gate/merge status](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6950900474)
+is authoritative for terminal CI and integration; no follow-on product task starts
+automatically after merge.
 [Continuation evidence](releases/2026-11-17-pr42-final-ci.md).
 
 ### Historical two-blocker repair (superseded scope)
