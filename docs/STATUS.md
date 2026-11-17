@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**17 November — PR42 COMPLETE; isolated RU persistence/readback selected.**
+PR42 accepted source `af1b37b6`, ordinary merge `b3fefac1`;
+[final CI/integration receipt](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6950900474).
+Apple enrollment/TestFlight and physical iOS installation, provisioned Keychain,
+routing and MESH are owner-deferred / NOT_RUN. RU recovery is established only
+in the historical 07:42–07:50UTC window; long-term stability is NOT_FIXED.
+Selected work: an opt-in isolated persistence/readback source candidate, preserving
+durable security ACK and 8/12/120s contracts, real enforcement and honest freshness.
+PR43 integrates incident evidence only, not runtime repair. No production access,
+deployment/restarts, new hosting or iOS work. Stop at the new candidate's review.
+
+### Retained historical checkpoints
+
 **17 November — restart reservation corrected; final CI still required.**
 815251a8 passes actual iOS44116635234 attempt1, Desktop Auto44116635479, Linux
 control/packaging and full API35 acceptance including repaired per-app DNS fixture.
@@ -126,6 +139,20 @@ inputs are a specific iPhone/iOS + compatible Mac/Xcode, Team/capability grants,
 development profiles and agreed test identity; no phone trial is automatically run.
 PR41 [finald02fce99 acceptance](https://github.com/Joker20380/family_connect/pull/41#issuecomment-6935466490)
 supersedes its earlier source receipts without deleting them.
+
+**17 November07:50UTC — RU availability restored; durable stability NOT_ACCEPTED.**
+The owner's RU request interrupts iOS work. The original01:03:56 failure now pins
+the trigger to decision-state file fsync9.538854s against an8s operation budget,
+not a slow AWG/TCP query. Both engines remained stopped while watcher retried668
+times. A finite same-filesystem synthetic probe observes ext4/jbd2 commit waits;
+it does not reproduce the original9.54s stall or attribute it to the VPS provider.
+Fresh backup/isolated restore and guarded RU-only recovery preserve all current
+data/policy and restore20 AWG/20 TCP bindings. Thirteen strict observations over
+474.358s cross/renew leases without process changes or restarts; final07:50:53
+identity/membership/terms/prepared-state, unit and protected-data checks pass.
+No runtime, timeout, persistence, NL, catalog or iOS change; the durable-fix goal
+remains unfulfilled, not hidden behind another restart.
+[Evidence, recovery and concrete remaining decision](releases/2026-11-17-ru-storage-stall.md).
 
 **17 November — IOS-MESH-BRIDGE-1 unsigned technical gate PASS.**
 Sourcefc08a50e macOS CI43991766964 builds unsigned iphoneos/arm64 app + Packet

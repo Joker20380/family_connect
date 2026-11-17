@@ -2,6 +2,22 @@
 
 ## Current engineering priority / Текущий critical path
 
+**RU-PERSISTENCE-READBACK-1 — selected / source-only qualification.**
+First integrate documentation PR43 by ordinary merge with current main, exact-head
+checks and author self-review. PR42 source `af1b37b6`/merge `b3fefac1` is complete;
+do not reopen its CI. Then prepare a separate opt-in candidate retaining durable
+decisions/leases/denies, membership preparation and applied-change ACKs; bind
+observations to revision, boot/runtime generation and completed real readback.
+Gate: baseline/candidate counters plus crash, expiry/revoke, ACK, concurrency,
+watchdog and collector safety, synthetic fixtures and all applicable exact-head CI.
+Legacy mode and its two-write regression remain unchanged. Stop at the new PR's
+review, NOT_DEPLOYED; no production SSH/deployment/restart or infrastructure work.
+RU historical recovery is not durable stability. Physical iOS and Apple enrollment/
+TestFlight are explicitly deferred; all physical iOS gates remain NOT_RUN.
+[Incident mechanism and limits](releases/2026-11-17-ru-storage-stall.md).
+
+### Superseded priorities / retained evidence
+
 **PR42-CI-REPAIR-2 — native/TCP/DNS validated / restart reservation correction.**
 815251a8 push passes full API35, then fails before API27 on reservation51900.
 Reproduce closed-peer TIME_WAIT false rejection locally; match Go SO_REUSEADDR
@@ -95,6 +111,20 @@ Next owner step: confirm actual phone/iOS/Xcode pairing, Team/capabilities,
 development provisioning and disposable test identity, then separately authorize
 the bounded signed-device plan in the iOS README. No real phone/Telemost/whitelist
 trial or RU recovery is selected automatically. PR41 finald02fce99 remains accepted.
+
+**RU-STABILITY-20261117 — explicitly selected by owner; availability recovery, cause open.**
+Investigate and address recurring service stops before continuing the separate iOS
+candidate. Entry main isbda954fb; iOS draft42 and the dirty checkout are preserved.
+The01:03:56 trigger is now measured: state-file fsync9.538854s exceeds8s. Guest
+ext4/jbd2 waits are also observed in a separate finite synthetic test, but the
+historical storage-delay source is not established. Fresh guarded recovery starts
+the accepted runtime at07:42:14UTC. Thirteen observations over474.358s and final
+07:50:53 renewal/preservation checks pass; availability recovery is complete.
+Durable fix is NOT_ACCEPTED: do not substitute successful recovery, relax8/12/120s,
+drop durable ACK semantics, or introduce blind restarts. Next evidence needed is
+hosting-side latency attribution/qualified storage, or a separately qualified
+security-state/liveness design; no migration, purchase or unrelated task is implied.
+[Current receipt and remaining gate](releases/2026-11-17-ru-storage-stall.md).
 
 **IOS-MESH-BRIDGE-1 — explicitly selected17 November / technical gate COMPLETE.**
 Dependency satisfied: PR40 exact3539ebe4 push/PR phase0 PASS, ordinary merge3468f828;
