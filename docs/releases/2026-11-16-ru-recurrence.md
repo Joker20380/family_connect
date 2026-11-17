@@ -1,5 +1,11 @@
 # RU recurrence — 16 November 2026
 
+**Current outcome17 November00:02UTC: RECOVERED_CAUSE_OPEN.** The owner separately
+authorizes restoration of the22:07 recurrence. Fresh backup/isolated restore and
+unchanged-runtime recovery pass, followed by six strict observations and preservation
+checks. The initiating cause remains open. See the [new recovery receipt](2026-11-17-ru-recovery.md);
+the earlier unavailable observations below remain historical evidence.
+
 ## New recurrence — 16 November22:07UTC
 
 **OPEN / RU AWG down, TCP down; initiating stall still CAUSE_OPEN.** A fresh readback

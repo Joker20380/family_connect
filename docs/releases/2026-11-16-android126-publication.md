@@ -7,7 +7,17 @@ no new build/signing, vault access, server-image deployment, RU recovery or HMAC
 rotation in this publication. Separate RU restoration is accepted; its initiating
 watchdog stall remains **CAUSE_OPEN**, not a claimed fix in this release.
 
-**22:47UTC update:** PR38 is merged with qualified source588e793a. A later health
+**17 November00:02UTC update:** the owner separately authorizes RU restoration.
+Fresh backup/isolated restore, unchanged watcher/AWG/TCP recovery and six strict
+observations pass; protected data, support and imports remain. Public APK/catalog9
+are unchanged. Availability is restored, but the initiating cause is still open:
+[separate recovery receipt](2026-11-17-ru-recovery.md).
+Source merge7123b95e has all ten workflows PASS, including Android133670910620.
+Documentation head dd07a680 and merge86663dfe pass applicable phase0; source, docs
+and merge executions remain distinct. Remote main is verified as86663dfe before
+this recovery documentation, which does not change the installed executable.
+
+**Historical22:47UTC update:** PR38 is merged with qualified source588e793a. A later health
 readback discovers a **new22:07UTC RU outage**, detailed below and in the
 [incident report](2026-11-16-ru-recurrence.md#new-recurrence--16-november2207utc).
 HTTP/public delivery and protected support/HMAC2 state remain available; RU AWG/TCP
