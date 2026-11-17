@@ -5,6 +5,8 @@ import subprocess
 import textwrap
 
 import pytest
+from scripts.client_ci_scope import platforms
+from scripts.fetch_appimage_tools import ASSETS
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,11 +17,14 @@ RUNTIME_PIN = '617aa77314d57c8b8e4fae9c3f0b35af7b30d5529cb69e98f64f92510ed98a46'
 @pytest.mark.parametrize('tamper', ['', 'appimage-tool', 'appimage-runtime'])
 def test_ci_appimage_fetch_checks_both_inputs_before_execution(tmp_path, tamper):
     workflow = (ROOT / '.github/workflows/clients.yml').read_text()
-    step = workflow.split('      - name: Install appimagetool\n        run: |\n', 1)[1].split('      - name:', 1)[0]
+    step = workflow.split('      - name: Install appimagetool\n', 1)[1].split('      - name:', 1)[0]
+    assert 'APPIMAGE_GITHUB_TOKEN: ${{ github.token }}' in step
+    step = step.split('        run: |\n', 1)[1]
     script = textwrap.dedent(step)
     assert TOOL_PIN in script and RUNTIME_PIN in script
-    assert 'https://api.github.com/repos/AppImage/appimagetool/releases/assets/715388534' in script
-    assert 'https://api.github.com/repos/AppImage/type2-runtime/releases/assets/657374641' in script
+    assert 'python3 scripts/fetch_appimage_tools.py --directory "$RUNNER_TEMP"' in script
+    assert ASSETS[0].url == 'https://api.github.com/repos/AppImage/appimagetool/releases/assets/715388534'
+    assert ASSETS[1].url == 'https://api.github.com/repos/AppImage/type2-runtime/releases/assets/657374641'
     assert '--runtime-file' in script
     assert 'Verify DEB metadata, desktop integration and content audit' in workflow
     assert 'AppImage extract smoke' in workflow
@@ -30,12 +35,15 @@ def test_ci_appimage_fetch_checks_both_inputs_before_execution(tmp_path, tamper)
     binaries.mkdir()
     (tmp_path / 'tool.fixture').write_bytes(tool)
     (tmp_path / 'runtime.fixture').write_bytes(runtime)
-    curl = binaries / 'curl'
-    curl.write_text('#!/bin/bash\nset -e\noutput="${@: -1}"\n'
-                    'if [[ "$output" == */appimage-tool ]]; then fixture=tool; else fixture=runtime; fi\n'
-                    'cp "$RUNNER_TEMP/$fixture.fixture" "$output"\n'
-                    'if [[ -n "$TAMPER" && "$output" == */"$TAMPER" ]]; then printf corrupted >> "$output"; fi\n')
-    curl.chmod(0o755)
+    downloader = binaries / 'python3'
+    downloader.write_text('#!/bin/bash\nset -e\n'
+                          'test "$1" = scripts/fetch_appimage_tools.py\n'
+                          'test "$2" = --directory\ntest "$3" = "$RUNNER_TEMP"\n'
+                          'for fixture in tool runtime; do\n'
+                          'cp "$RUNNER_TEMP/$fixture.fixture" "$RUNNER_TEMP/appimage-$fixture"\n'
+                          'done\n'
+                          'if [[ -n "$TAMPER" ]]; then printf corrupted >> "$RUNNER_TEMP/$TAMPER"; fi\n')
+    downloader.chmod(0o755)
     environment = os.environ | {'RUNNER_TEMP': str(tmp_path), 'TAMPER': tamper,
                                 'PATH': str(binaries) + ':' + os.environ['PATH']}
     result = subprocess.run(['bash', '-e', '-o', 'pipefail', '-c', script], env=environment, capture_output=True, text=True)
@@ -47,3 +55,10 @@ def test_ci_appimage_fetch_checks_both_inputs_before_execution(tmp_path, tamper)
         assert result.returncode == 0, result.stderr
         invoked = subprocess.check_output([wrapper, 'input path', 'output path'], text=True)
         assert invoked.splitlines() == ['--runtime-file', str(tmp_path / 'appimage-runtime'), 'input path', 'output path']
+
+
+@pytest.mark.parametrize('source', ['scripts/fetch_appimage_tools.py', 'tests/test_fetch_appimage_tools.py', 'tests/test_ci_appimage_tool.py'])
+def test_downloader_changes_select_real_linux_packaging(source):
+    workflow = (ROOT / '.github/workflows/clients.yml').read_text()
+    assert workflow.count(f"'{source}'") == 2
+    assert platforms([source]) == dict(android=False, windows=False, linux=True)

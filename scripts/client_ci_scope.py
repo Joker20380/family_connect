@@ -17,6 +17,8 @@ def platforms(paths):
         'windows': any(path.startswith(COMMON + ('clients/windows/', 'clients/desktop/', 'pilot/windows-',
                                                 'scripts/package_desktop.py', 'scripts/ci_desktop_env.sh')) for path in paths),
         'linux': any(path.startswith(COMMON + ('clients/linux/', 'clients/desktop/', 'scripts/package_linux.py',
+                                              'scripts/fetch_appimage_tools.py', 'tests/test_fetch_appimage_tools.py',
+                                              'tests/test_ci_appimage_tool.py',
                                               'scripts/package_desktop.py', 'scripts/ci_desktop_env.sh')) for path in paths),
     }
 

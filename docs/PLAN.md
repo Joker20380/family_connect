@@ -2,15 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
-**PR42-CI-REPAIR-1 — explicitly selected17 November / IN PROGRESS.**
+**PR42-CI-REPAIR-1 — selected17 November / fixes ready, integration BLOCKED.**
 This replaces the previous docs-only restriction for two confirmed CI blockers:
 desktop resource-boundary diagnostics/repair (and runtime cleanup only if proven
 defective), plus pinned AppImage dependency acquisition and its CI integration.
 Dependencies: accepted iOS development implementation; entry690c9e57, mainbda954fb.
 Desktop: deterministic false failure reproduced; owned-resource audit and82
 targeted/context tests pass. Historical FD owner remains UNKNOWN; no runtime
-cleanup defect established. AppImage pins must remain unchanged, both actual
-binaries and full Linux packaging must pass. Preserve all old failed receipts.
+cleanup defect established. AppImage downloader retains both pins; both full binary
+downloads/hash verification and52 targeted downloader/workflow/scope tests pass.
+Full final-head Linux packaging and broader CI are pending; preserve old failures.
+Newly applicable Desktop Auto source verification fails49 reference entries (48
+also on mainbda954fb). Its accepted106 baseline cannot be updated by blind rehash;
+separate shared-transport reference reconciliation/qualification is outside these
+two CI repairs. Preserve this blocker and draft status unless legitimately resolved.
 Gate: negative tests, exact final-head phase0 push AND PR, Client Linux, Linux
 control, Android/iOS and all other applicable checks, explicit self-review and
 ordinary PR42 merge with remote verification. Do not retry unchanged CI for green.
