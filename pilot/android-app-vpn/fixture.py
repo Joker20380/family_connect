@@ -87,6 +87,10 @@ class DNSStream(socketserver.StreamRequestHandler):
             return
 
 
+class DNSStreamServer(socketserver.ThreadingTCPServer):
+    allow_reuse_address = True
+
+
 def dns_routes():
     return [dict(type='field', port='53', network='tcp,udp', outboundTag='dns'),
             dict(type='field', port='853', network='tcp,udp', outboundTag='unsupported-dot')]
@@ -148,7 +152,7 @@ def main():
             server = RoutingHTTPServer(('127.0.0.1', port), handler(route), tls)
             servers.append(server)
         for server_type, handler_type in [(socketserver.ThreadingUDPServer, DNSDatagram),
-                                          (socketserver.ThreadingTCPServer, DNSStream)]:
+                                          (DNSStreamServer, DNSStream)]:
             server = server_type(('127.0.0.1', 51906), handler_type)
             server.record_dns = record_dns
             servers.append(server)

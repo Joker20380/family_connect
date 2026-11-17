@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**17 November — restart reservation corrected; final CI still required.**
+815251a8 passes actual iOS44116635234 attempt1, Desktop Auto44116635479, Linux
+control/packaging and full API35 acceptance including repaired per-app DNS fixture.
+Push44116620114/job134156503788 fails before API27 instrumentation: reservation
+51900 EADDRINUSE. No false-ready or application PASS is emitted. Its log lacks
+socket states, so the exact conflict owner/state remains UNKNOWN. A deterministic
+closed-peer regression proves the reservation also rejects TIME_WAIT with no live
+listener. Match Go's SO_REUSEADDR, then listen exclusively (no SO_REUSEPORT); keep
+PID/inode readiness and foreign-listener denial.58 focused tests pass, including
+old failure/new restart, simultaneous reusable listener rejection and cleanup.
+Add bounded endpoint-state diagnostics; no wait/retry/kill workaround or product
+change. Await mandatory CI for this repaired candidate; keep PR42 draft.
+
 **17 November — final CI continuation: per-app DNS fixture correction.**
 b8b3dc05 actually passes iOS44109501083 attempt1 (artifact14340853001,208 hashes,
 both arm64 platforms/nine groups verified), Desktop Auto PR and Linux gates.

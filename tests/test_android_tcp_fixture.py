@@ -1,4 +1,5 @@
 import contextlib
+import errno
 import importlib.util
 import json
 import os
@@ -35,6 +36,40 @@ def child(script, *arguments):
 @pytest.fixture
 def receipt(tmp_path):
     return readiness.Receipt(tmp_path / 'lifecycle.json')
+
+
+def test_reservation_accepts_closed_reusable_connection_not_live_listener(receipt):
+    with socket.socket() as listener:
+        listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        listener.bind(('0.0.0.0', 0))
+        listener.listen()
+        port = listener.getsockname()[1]
+        with socket.create_connection(('127.0.0.1', port), timeout=2) as client:
+            accepted, _ = listener.accept()
+            with accepted:
+                accepted.shutdown(socket.SHUT_WR)
+                assert client.recv(1) == b''
+    assert not readiness.listening_inodes('self', port)
+    with socket.socket() as old_reservation:
+        with pytest.raises(OSError) as failure:
+            old_reservation.bind(('0.0.0.0', port))
+        assert failure.value.errno == errno.EADDRINUSE
+    with readiness.reserve_endpoint(port, receipt) as reservation:
+        assert reservation.getsockname()[1] == port
+        assert any(state['state'] == '06' for state in receipt.events[-1]['previous'])
+        with socket.socket() as competitor:
+            competitor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            with pytest.raises(OSError):
+                competitor.bind(('0.0.0.0', port))
+    with socket.socket() as next_peer:
+        next_peer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        next_peer.bind(('0.0.0.0', port))
+        next_peer.listen()
+        with pytest.raises(RuntimeError, match='unavailable'):
+            with readiness.reserve_endpoint(port, receipt):
+                pytest.fail('must not reserve a live reusable listener')
+        assert next_peer.fileno() >= 0
+    assert not readiness.listening_inodes('self', port)
 
 
 def test_old_probe_accepts_foreign_listener_after_child_bind_failure(receipt):

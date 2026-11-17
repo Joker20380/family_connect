@@ -33,6 +33,16 @@ def listening_inodes(pid, port, any_address=False):
     return found
 
 
+def endpoint_states(port):
+    states = []
+    for table in ('tcp', 'tcp6'):
+        for line in Path(f'/proc/self/net/{table}').read_text().splitlines()[1:]:
+            fields = line.split()
+            if fields[1].endswith(f':{port:04X}') and len(states) < 32:
+                states.append(dict(family=table, state=fields[3], inode=fields[9]))
+    return states
+
+
 def owned_listener(process, port):
     if process.poll() is not None:
         return set()
@@ -93,13 +103,18 @@ def wait_ready(process, port, receipt, timeout=15):
 @contextlib.contextmanager
 def reserve_endpoint(port, receipt):
     with socket.socket() as reservation:
+        previous = endpoint_states(port)
+        reservation.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         try:
             reservation.bind(('0.0.0.0', port))
+            reservation.listen(1)
         except OSError as error:
-            receipt.record('reservation_failed', port=port, errno=error.errno)
+            receipt.record('reservation_failed', port=port, errno=error.errno,
+                           previous=previous, current=endpoint_states(port))
             raise RuntimeError(f'TCP fixture endpoint 0.0.0.0:{port} unavailable; '
                                f'errno={error.errno}; no foreign process terminated') from error
-        receipt.record('reserved', port=reservation.getsockname()[1])
+        receipt.record('reserved', port=reservation.getsockname()[1], previous=previous,
+                       reuse_address=True, exclusive_listener=True)
         yield reservation
 
 

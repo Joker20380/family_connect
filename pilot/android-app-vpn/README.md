@@ -27,6 +27,10 @@ protocol/type/send time (no query names/material); it is retained with Xray logs
 reproduces the old TCP53/853-to-HTTPS misrouting and verifies the corrected routes
 with actual Xray, plus UDP/TCP framing, malformed input and joined stalled-client
 cleanup. This local routing test is not Android or REALITY acceptance.
+The TCP DNS listener, like Go's listeners, uses SO_REUSEADDR for closed-connection
+TIME_WAIT on sequential API runs; it never uses SO_REUSEPORT or shares a live
+listener. The separate TCP lifecycle fixture reserves its endpoint with the same
+option plus exclusive listen, then still proves the spawned peer's PID/inode.
 
 The MESH policy test invokes the production owned-TUN attachment and uses the
 REALITY carrier behind it. This proves Android application selection and guard

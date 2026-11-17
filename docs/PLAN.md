@@ -2,7 +2,12 @@
 
 ## Current engineering priority / Текущий critical path
 
-**PR42-CI-REPAIR-2 — native/TCP validated / per-app fixture DNS isolation.**
+**PR42-CI-REPAIR-2 — native/TCP/DNS validated / restart reservation correction.**
+815251a8 push passes full API35, then fails before API27 on reservation51900.
+Reproduce closed-peer TIME_WAIT false rejection locally; match Go SO_REUSEADDR
+with exclusive listen, preserving foreign-listener/child ownership checks.58 tests
+PASS; bounded socket-state receipt distinguishes future live conflicts from
+TIME_WAIT. Old actual conflict state/owner is not known. Final CI remains required.
 b8b3dc05 passes actual iOS attempt1, Desktop Auto and real WG/AWG/TCP/Auto with three
 successful system-consent transfers; old c568 consent cause remains UNKNOWN.
 Push44109482163 later fails per-app API35 DNS8s while IPv4/IPv6 TLS succeed.

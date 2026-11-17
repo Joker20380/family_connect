@@ -66,7 +66,7 @@ def test_udp_and_fragmented_tcp_dns_return_same_answer(kind):
             connection.settimeout(2)
             connection.sendto(question, udp.server_address)
             assert connection.recv(4096) == expected
-    with server(socketserver.ThreadingTCPServer, FIXTURE.DNSStream) as tcp:
+    with server(FIXTURE.DNSStreamServer, FIXTURE.DNSStream) as tcp:
         with socket.create_connection(tcp.server_address, timeout=3) as connection:
             frame = struct.pack('!H', len(question))+question
             connection.sendall(frame[:1])
@@ -83,7 +83,7 @@ def test_invalid_questions_are_not_synthetic_success(question):
 
 @pytest.mark.parametrize('frame', [b'\xff\xff', b'\x00', b'\x00\x20partial'])
 def test_bad_or_stalled_tcp_client_is_closed_and_joined(frame):
-    with server(socketserver.ThreadingTCPServer, FIXTURE.DNSStream) as tcp:
+    with server(FIXTURE.DNSStreamServer, FIXTURE.DNSStream) as tcp:
         with socket.create_connection(tcp.server_address, timeout=3) as connection:
             connection.sendall(frame)
             assert connection.recv(1) == b''
@@ -100,7 +100,7 @@ def test_real_pinned_xray_routes_dns_not_https(tmp_path):
         def handle(self):
             self.request.sendall(b'NOT_DNS')
 
-    with server(socketserver.ThreadingTCPServer, FIXTURE.DNSStream) as dns, server(socketserver.ThreadingTCPServer, NotDNS) as tls:
+    with server(FIXTURE.DNSStreamServer, FIXTURE.DNSStream) as dns, server(socketserver.ThreadingTCPServer, NotDNS) as tls:
         for repaired in (False, True):
             with socket.socket() as reserved:
                 reserved.bind(('0.0.0.0', 0))
