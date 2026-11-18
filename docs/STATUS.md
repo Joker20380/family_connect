@@ -1,5 +1,14 @@
 # Текущее состояние / Current state
 
+**18 November — local N185 2001 facelift detail revision.** Headlights, grille,
+both bumpers, scoop hood and stamped liftgate are revised against late-generation
+Toyota photographs and the 2001 US brochure. Latest owner choices replace silver,
+black aftermarket rims and basket with champagne gold, OEM 16x7 five-spoke wheels
+and two factory-style crossbars. Chrome/custom stance is retained; this is not a
+factory Sport trim claim or owner likeness PASS.
+Pre-facelift rollback is preserved; Family Connect remains unchanged.
+[Scope, references, local files and checks](releases/2026-11-18-blender-2001-facelift.md).
+
 **18 November — local Blender N185 surfacing revision.** The owner rejected the
 angular reference checkpoint. Lower body, hood/wing transitions, roof corners,
 integrated window apertures, bumper sweeps and mirrors were rebuilt; old geometry

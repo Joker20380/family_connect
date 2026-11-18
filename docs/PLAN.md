@@ -2,6 +2,14 @@
 
 ## Current engineering priority / Текущий critical path
 
+**18 November — selected N185 late-2001 exterior revision, local checkpoint complete.**
+Requested headlights/bumpers, scoop hood, liftgate, gold paint, OEM five-spoke
+wheels and two roof crossbars are implemented; the surfacing rollback is retained.
+Front/rear details, orthographic and clay views are inspected. Exact likeness remains
+OPEN for owner review, not an accepted engineering model. No Family Connect task
+is resumed by this local Blender work.
+[Facelift revision evidence](releases/2026-11-18-blender-2001-facelift.md).
+
 **18 November — selected Blender N185 surfacing revision, local checkpoint.**
 Address the owner's angular/uneven-body complaint by rebuilding the surfaces and
 their joins, not adding detail over the rejected shell. Preserve rollback; check
