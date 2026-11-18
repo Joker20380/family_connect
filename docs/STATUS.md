@@ -1,6 +1,53 @@
 # Текущее состояние / Current state
 
+**17 November — PR44 registration budget + panel clock repair selected.**
+Exact `cff3e466` loses nine seconds spent opening application.lock: all three
+entrypoint paths query engines and ACK; exact `c086d131` rejects them without
+queries/ACK. Start the same operation before open, while an outer resource scope
+retains the handle through final deadline validation and guarded fail-closed.
+101 focused and182 transport/source-guard tests pass, including the prior
+real-flock/watch/collector barrier. The separate panel test now uses fixed aware
+UTC and explicit presentation times: exact3600→3601 ages, clock-skew label retained.
+36 targeted and320 full panel tests pass on a task-owned disposable PostgreSQL;
+browser2 and deployment-boundary1 pass locally. Final exact-head CI, including
+actual panel build and native artifact verification, remains required;
+the [cff3 receipt](https://github.com/Joker20380/family_connect/pull/44#issuecomment-6962872364)
+is historical, including its panel failure/skipped downstream steps.
+The pre-existing external watch fail-closed/concurrent registration window remains
+a separate delivery gate, not a new regression or a universal no-ACK proof.
+[Budget/clock evidence and scope](releases/2026-11-17-pr44-budget-clock.md).
+**PR44 DRAFT, NOT_DEPLOYED; main `380da279`; no merge; RU NOT_FIXED.**
+
+### Previous P1 checkpoint
+
+**17 November — PR44 P1 fail-closed serialization repair / review gate reopened.**
+Owner selects source-only repair, not merge/deployment. On exact `c086d131`, all
+nine controlled fsync/deadline/context-exit scenarios reproduce premature lock
+release: competing real watch/notify reaches WATCHDOG, three engine queries and
+collector `ok` during blocked failure-receipt fsync. The prior
+[13-workflow receipt](https://github.com/Joker20380/family_connect/pull/44#issuecomment-6960939690)
+remains valid only for that old head; it did not cover this P1.
+Candidate registration now retains application serialization through operation-exit
+validation and fail-closed; invalidation and stop request precede blocking diagnostic
+persistence, and ACK follows context exit.24 focused cases and179 transport/source
+guard tests pass; new exact-head CI/re-review is required. Legacy/timing/security contracts and
+unchanged-cycle savings remain gates. PR43 is merged, remote main `380da279`.
+[Repair evidence and residual delivery gate](releases/2026-11-17-pr44-failure-serialization.md).
+**NOT_DEPLOYED; RU NOT_FIXED; physical iOS deferred. Stop at repeat review PR44.**
+
+### Previous source checkpoint / historical evidence
+
 **17 November — PR42 COMPLETE; isolated RU persistence/readback selected.**
+The opt-in source candidate now separates disposable completed readback from
+unchanged durable authority. Local real AWG/Xray six-cycle comparison:18 queries
+in both modes; durable/file-sync/directory-sync counts12→0 after warm-up, collector
+6/6 in both. Legacy contract remains default. Candidate crash/ACK/expiry/revoke/
+generation tests and panel ingestion are isolated; exact-head CI/review pending.
+First CI exposed a missing historical commit in Docker's closed fixture export;
+the complete pinned tree is now included, with host-independent worktree regression.
+**NOT_DEPLOYED, not RU FIXED.**
+[Candidate and reproduction](releases/2026-11-17-ru-readback-candidate.md).
+
 PR42 accepted source `af1b37b6`, ordinary merge `b3fefac1`;
 [final CI/integration receipt](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6950900474).
 Apple enrollment/TestFlight and physical iOS installation, provisioned Keychain,

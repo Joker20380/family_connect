@@ -2,15 +2,38 @@
 
 ## Current engineering priority / Текущий critical path
 
-**RU-PERSISTENCE-READBACK-1 — selected / source-only qualification.**
-First integrate documentation PR43 by ordinary merge with current main, exact-head
-checks and author self-review. PR42 source `af1b37b6`/merge `b3fefac1` is complete;
-do not reopen its CI. Then prepare a separate opt-in candidate retaining durable
+**RU-PERSISTENCE-READBACK-1/P1 — selected / PR44 budget + panel clock repair.**
+Reproduce slow successful application.lock open on exact cff3 and compare c086.
+Start the shared budget before open; retain serialization through operation-exit
+validation and guarded error handling.101 focused/182 transport tests pass, including
+the prior barrier matrix. Separate test-only aware UTC clock fix passes exact
+3600→3601 ages and clock-skew label;36 targeted/320 full panel, browser2 and
+deployment-boundary1 checks pass locally. Final-head panel must execute browser,
+deployment-boundary and build steps; recheck native artifact provenance and
+six-cycle18-query/12→0-sync comparison. Record the pre-existing external watch
+fail-closed/concurrent registration window separately before delivery qualification.
+Keep PR44 draft; stop at repeat review, no merge/deployment or physical iOS.
+[Current evidence](releases/2026-11-17-pr44-budget-clock.md).
+
+Previous P1 checkpoint (retained evidence):
+Preserve the accepted old-head receipts, closed historical fixture export and
+opt-in persistence design. Reproduce premature application-lock release during
+blocked failure-receipt fsync on `c086d131`, then fix operation body/exit handling
+without losing the first error or ACK/deadline guarantees. Controlled real flock,
+watch/notify and collector tests must observe the unsafe interval, not only final
+cleanup.24 focused cases and179 transport/source-guard tests pass; finish exact new-head
+CI, author self-review and repeat review. **Do not merge or deploy PR44.**
+[Contract and remaining delivery boundaries](operators/transport-readback-candidate.md).
+Source qualification never closes historical storage attribution or RU availability.
+
+Documentation PR43 is integrated at main `380da279`; PR42 source
+`af1b37b6`/merge `b3fefac1` is complete; do not reopen their CI.
+The PR44 opt-in candidate retains durable
 decisions/leases/denies, membership preparation and applied-change ACKs; bind
 observations to revision, boot/runtime generation and completed real readback.
 Gate: baseline/candidate counters plus crash, expiry/revoke, ACK, concurrency,
 watchdog and collector safety, synthetic fixtures and all applicable exact-head CI.
-Legacy mode and its two-write regression remain unchanged. Stop at the new PR's
+Legacy mode and its two-write regression remain unchanged. Stop at PR44's repeat
 review, NOT_DEPLOYED; no production SSH/deployment/restart or infrastructure work.
 RU historical recovery is not durable stability. Physical iOS and Apple enrollment/
 TestFlight are explicitly deferred; all physical iOS gates remain NOT_RUN.
