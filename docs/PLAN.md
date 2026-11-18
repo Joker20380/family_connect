@@ -22,6 +22,13 @@ terminal controller state, real per-node traffic and successful due renewal.
 Initial registry writer and device-level fsync cause remain UNKNOWN. No storage fix
 or VPN acceptance PASS is claimed. [Report and explicit stop gates](releases/2026-11-18-mesh-ru-incident.md).
 
+**18 November — selected N185 headlamp correction, local visual checkpoint.**
+The owner rejected the previous optics. Rebuild clear late-N185 headlamps and
+corner lights from close references; verify symmetry, optical depth and panel fit
+with rendered inspection, preserve rollback and save the editable revision.
+Owner likeness acceptance remains OPEN; no product queue is resumed.
+[Headlamp evidence and limits](releases/2026-11-18-blender-headlamps.md).
+
 **18 November — selected N185 late-2001 exterior revision, local checkpoint complete.**
 Requested headlights/bumpers, scoop hood, liftgate, gold paint, OEM five-spoke
 wheels and two roof crossbars are implemented; the surfacing rollback is retained.

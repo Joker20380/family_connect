@@ -22,6 +22,13 @@ the installed helper's validity guard currently blocks it. Do not bypass it.
 [Causes, exact recovery prerequisites, limits](releases/2026-11-18-mesh-ru-incident.md)
 · [Sanitized live receipt](releases/2026-11-18-mesh-ru-incident.receipt.json).
 
+**18 November — rejected N185 headlights rebuilt.** The prior photo-covered lamps
+are replaced by separate clear glass, faceted H4 reflectors and curved amber/clear
+corner assemblies. Lamp spacing, grille fit and adjacent panel returns are revised;
+gold, OEM-pattern wheels and two crossbars remain. A separate gold pre-headlamp
+rollback is preserved. Local visual checkpoint, not owner likeness acceptance or
+Family Connect rollout. [References and checks](releases/2026-11-18-blender-headlamps.md).
+
 **18 November — local N185 2001 facelift detail revision.** Headlights, grille,
 both bumpers, scoop hood and stamped liftgate are revised against late-generation
 Toyota photographs and the 2001 US brochure. Latest owner choices replace silver,
