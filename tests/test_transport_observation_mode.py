@@ -202,6 +202,12 @@ def test_crash_reload_has_no_completed_readback(candidate, registry, collector, 
     assert collector()['status'] == 'unavailable'
     reloaded = module.Gateway(gateway.gateway, clock=gateway.clock, monotonic=gateway.monotonic, run=gateway.run)
     reloaded.load()
+    with pytest.raises(ValueError, match='TRANSPORT_RECOVERY_REQUIRED'):
+        reloaded.apply()
+    original_run = reloaded.run
+    reloaded.run = lambda command: b'LoadState=loaded\nActiveState=inactive\nMainPID=0\nControlPID=0\nJob=\n'
+    reloaded.recover()
+    reloaded.run = original_run
     reloaded.apply()
     assert collector()['status'] == 'ok'
 

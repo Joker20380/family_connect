@@ -79,6 +79,8 @@ def collect_transport(source, key, expected_sha256, root=Path('/opt/apps/family_
                 for name in ('application.lock', 'registration.lock'):
                     lock = locks.enter_context((root/name).open('r'))
                     fcntl.flock(lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
+                if os.path.lexists(root/'application-incomplete'):
+                    raise ValueError('TRANSPORT_RECOVERY_REQUIRED')
             return collect_locked_transport(source, key, expected_sha256, root, candidate)
     except Exception:
         return dict(schema=2, source=source, observed_at=int(time.time()), status='unavailable', runtime_sha256=None, devices=[])

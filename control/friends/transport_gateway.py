@@ -26,7 +26,8 @@ FAILURE_CODES = frozenset(('TRANSPORT_OPERATION_DEADLINE', 'ENGINE_START_TIMEOUT
     'ENGINE_READBACK_MISMATCH', 'INVALID_AWG_READBACK', 'INVALID_TCP_READBACK',
     'UNSAFE_GATEWAY_STATE', 'INVALID_GATEWAY_POLICY', 'INVALID_GATEWAY_CACHE',
     'INVALID_MEMBERSHIP_CACHE', 'INVALID_GATEWAY_BINDING', 'TCP_BINDING_CONFLICT',
-    'INCOMPLETE_NODE_BINDING', 'APPLICATION_DID_NOT_CONVERGE', 'DUPLICATE_JSON_FIELD'))
+    'INCOMPLETE_NODE_BINDING', 'APPLICATION_DID_NOT_CONVERGE', 'DUPLICATE_JSON_FIELD',
+    'TRANSPORT_RECOVERY_REQUIRED'))
 
 
 def emit(value):
@@ -365,6 +366,7 @@ class Gateway:
         self.metrics = None
         self.producer = dict(pid=os.getpid(), start=process_start(os.getpid()), generation=uuid.uuid4().hex) if self.observation_mode else None
         self.observation_path = self.root / 'transport-observation.json'
+        self.fence_path = self.root / 'application-incomplete'
 
     @contextmanager
     def operation(self):
@@ -418,10 +420,11 @@ class Gateway:
 
     @contextmanager
     def serialized(self, *, failure_mode=None):
-        if not self.observation_mode or failure_mode is None:
+        if not self.observation_mode:
             with self.lock('application.lock'):
                 yield
             return
+        failure_mode = failure_mode or 'watch'
         first_error = None
         try:
             with ExitStack() as resources:
@@ -429,7 +432,11 @@ class Gateway:
                     with self.operation():
                         handle = resources.enter_context((self.root/'application.lock').open('a'))
                         self.acquire(handle)
+                        if os.path.lexists(self.fence_path):
+                            raise ValueError('TRANSPORT_RECOVERY_REQUIRED')
+                        self.fence_path.mkdir(mode=0o700)
                         yield
+                        self.fence_path.rmdir()
                 except BaseException as error:
                     first_error = error
                     self.fail_closed(error, failure_mode)
@@ -440,6 +447,27 @@ class Gateway:
             error = first_error if first_error is not None else error
             self.fail_closed(error, failure_mode)
             raise error
+
+    def recover(self):
+        if not self.observation_mode:
+            raise ValueError('OBSERVATION_MODE_REQUIRED')
+        with ExitStack() as resources:
+            with self.operation():
+                handle = resources.enter_context((self.root/'application.lock').open('a'))
+                self.acquire(handle)
+                for service in ('family-connect-paid-watch.service', *SERVICES):
+                    raw = self.run(['systemctl', 'show', service, '-p', 'LoadState', '-p', 'ActiveState',
+                        '-p', 'MainPID', '-p', 'ControlPID', '-p', 'Job']).decode()
+                    state = dict(line.split('=', 1) for line in raw.strip().splitlines())
+                    if (state.get('LoadState') != 'loaded' or state.get('ActiveState') not in ('inactive', 'failed')
+                            or state.get('MainPID') != '0' or state.get('ControlPID') != '0' or state.get('Job') != ''):
+                        raise ValueError('TRANSPORT_RECOVERY_REQUIRES_STOPPED_UNITS')
+                self.load()
+                self.observation_path.unlink(missing_ok=True)
+                if os.path.lexists(self.fence_path):
+                    if self.fence_path.is_symlink():
+                        raise ValueError('UNSAFE_GATEWAY_STATE')
+                    self.fence_path.rmdir()
 
     def load(self):
         value = read(self.path)
@@ -526,7 +554,8 @@ class Gateway:
         try:
             actions = (self.stop_all, self.failure)
             if self.observation_mode:
-                actions = (lambda: self.observation_path.unlink(missing_ok=True), *actions,
+                actions = (lambda: self.fence_path.mkdir(mode=0o700, exist_ok=True),
+                    lambda: self.observation_path.unlink(missing_ok=True), *actions,
                     lambda: report_failure(error, mode, self.root))
             for action in actions:
                 try:
@@ -735,7 +764,11 @@ def notify(value):
 def watch(gateway, *, run=execute):
     engine = Gateway(gateway, run=run)
     try:
-        engine.apply(starting=True)
+        if getattr(engine, 'observation_mode', False):
+            with engine.serialized(failure_mode='watch'):
+                engine.apply(starting=True)
+        else:
+            engine.apply(starting=True)
         notify('READY=1')
         for attempt in range(15):
             try:

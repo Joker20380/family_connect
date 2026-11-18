@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**18 November — PR44 merged; RU-PERSISTENCE-READBACK-1 delivery qualification selected.**
+PR44 accepted head `ea6619962a7197d95d578d089971b8d859db206f`, merge
+`bc8f7b5b42800269aeb43bcf54059205e7a7cbf7`, identical tree
+`037783c0db372a6290917420319a0b6de56d399d`. Ten applicable head workflows and
+eight merge push workflows SUCCESS (merge attempt1); no repeat acceptance/merge.
+[Accepted receipt](https://github.com/Joker20380/family_connect/pull/44#issuecomment-6970610003).
+Latest recovery is retained from local `ef55433c`: RU transport12:18UTC,
+both NL MESH13:05, shared HTTP13:10, public paths verified and owner-confirmed.
+Runtime remains legacy; initiating storage/renewal causes UNKNOWN, not FIXED.
+Current source reproduces and fences the watch/unlock/asynchronous-stop ACK window;
+190 transport tests pass. Installed package, real systemd, rollback and final-head
+CI remain OPEN. Production **NOT_DEPLOYED**. Android subscription-card auto-refresh
+is the next small product task, not started. iOS deferred; desktop L04.2 paused.
+[Recovery and this stage](releases/2026-11-18-readback-delivery.md).
+
+### Superseded PR44 source checkpoints (historical, not active gates)
+
 **17 November — PR44 registration budget + panel clock repair selected.**
 Exact `cff3e466` loses nine seconds spent opening application.lock: all three
 entrypoint paths query engines and ACK; exact `c086d131` rejects them without

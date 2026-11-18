@@ -7,6 +7,13 @@ is UNKNOWN. Reducing repeated commits cannot protect against every VPS/storage s
 
 ## Contract before qualification
 
+18 November continuation: PR44 is merged; its historical open delivery question
+is now under package/systemd qualification, not yet accepted. The new same-boot
+`application-incomplete` intent fence prevents automatic reuse after failed/killed
+application. `paid-recover` requires explicitly stopped units and preserves authority
+and first failure. [Current evidence and exact remaining gates](../releases/2026-11-18-readback-delivery.md).
+The older source-only limits below describe PR44, not an instruction to repeat it.
+
 The default configuration retains the exact legacy two-durable-write readback.
 The existing `test_converged_readback_keeps_both_durable_writes` remains mandatory.
 Only a node configuration explicitly containing `readback_mode: observations-v1`

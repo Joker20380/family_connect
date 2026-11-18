@@ -2,6 +2,26 @@
 
 ## Current engineering priority / Текущий critical path
 
+**RU-PERSISTENCE-READBACK-1 — coordinated package/systemd qualification.**
+PR44 source/CI/merge COMPLETE: accepted `ea661996`, main `bc8f7b5b`, tree
+`037783c0`; ten head and eight merge workflows SUCCESS. Do not repeat those gates.
+Preserve the recovered legacy RU/MESH runtime and local recovery receipt `ef55433c`.
+Selected continuation: reproduce watcher error/unlock/asynchronous-stop race;
+close it without loosening8/12/120s or PR44 budget/ACK contracts; package node,
+gateway, collector and units with explicit provenance; qualify installed bytes on
+disposable real systemd with synthetic authority, actual allowed/denied traffic,
+durable failures, generation/freshness and authority-preserving rollback.
+190 transport source tests PASS; packaging/systemd/rollback/final CI still OPEN.
+Finish self-review and a review-ready PR, not production delivery. Production
+**NOT_DEPLOYED**; storage latency and initial renewal writer causes remain UNKNOWN.
+Separate next delivery: explicitly authorized RU-only fence/drain/stop and qualified
+bundle/rollback. Separate next small product task: Android subscription-card
+auto-refresh. Do not reopen accepted support/notifications/split tunneling/beta126,
+historical G4 RUNNING, deferred physical iOS, or paused desktop L04.2.
+[Stage receipt and gates](releases/2026-11-18-readback-delivery.md).
+
+### Superseded PR44 source queue / retained evidence
+
 **RU-PERSISTENCE-READBACK-1/P1 — selected / PR44 budget + panel clock repair.**
 Reproduce slow successful application.lock open on exact cff3 and compare c086.
 Start the shared budget before open; retain serialization through operation-exit
