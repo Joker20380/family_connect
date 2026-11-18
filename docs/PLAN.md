@@ -2,6 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
+**18 November — selected N185 outline refinement, local visual checkpoint.**
+Request: make the open Blender model's vehicle outlines more believable. Dependencies:
+current gold N185 scene, retained Toyota side/three-quarter references and local MCP.
+Gate: preserve rollback; revise cabin/bonnet/roof/side/arch profiles coherently;
+inspect front, side, rear, top and three-quarter renders; check symmetry and fixed
+axle/lift datums; save editable files. Local checks complete, owner likeness review
+OPEN. No queued Family Connect task, release or deployment is authorized by this work.
+[Evidence and remaining limits](releases/2026-11-18-blender-outline-refinement.md).
+
 **OPS-MESH-RU-20261118 recovery — OWNER-CONFIRMED, availability gate COMPLETE.** Unprepared
 ownership cleanup, fresh normal renewal COMMITTED, current directories, both MESH
 starts and shared HTTP restoration are complete without changing installed runtime.
