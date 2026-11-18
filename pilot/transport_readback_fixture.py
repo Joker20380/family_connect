@@ -47,7 +47,7 @@ def properties(unit):
     output = command(['systemctl', 'show', unit, '-p', 'ActiveState', '-p', 'MainPID',
         '-p', 'ControlPID', '-p', 'Job', '-p', 'Restart', '-p', 'WatchdogUSec', '-p', 'Result', '-p', 'ExecStart',
         '-p', 'TimeoutStopUSec', '-p', 'KillMode', '-p', 'BindsTo', '-p', 'After', '-p', 'User',
-        '-p', 'FragmentPath', '-p', 'DropInPaths', '-p', 'ExecStartPre']).stdout.decode()
+        '-p', 'FragmentPath', '-p', 'DropInPaths', '-p', 'ExecStartPre', '-p', 'NRestarts']).stdout.decode()
     return dict(line.split('=', 1) for line in output.strip().splitlines())
 
 
@@ -230,6 +230,7 @@ def start(legacy=False):
         command(['systemctl', 'start', unit])
     if not legacy:
         wait_for(lambda: observation() and collect() == 'ok')
+    assert all(properties(unit)['NRestarts'] == '0' for unit in UNITS), 'UNEXPECTED_AUTOMATIC_RESTART'
 
 
 def instrumented_watch():
@@ -326,6 +327,7 @@ def qualify(fixture, phase):
             assert UNITS[0] in effective['BindsTo'].split() and UNITS[0] in effective['After'].split()
             assert effective['TimeoutStopUSec'] == '5s' and effective['KillMode'] == 'control-group'
         assert properties(UNITS[2])['User'] == 'fc-friends'
+        assert all(properties(unit)['NRestarts'] == '0' for unit in UNITS), 'UNEXPECTED_AUTOMATIC_RESTART'
         wait_for(lambda: observation() and collect() == 'ok')
         result = dict(result='PASS', effective={unit:properties(unit) for unit in UNITS}, candidate_cost=paused_cost())
         result['native_sha256'] = {name:hashlib.sha256((Path('/native')/name).read_bytes()).hexdigest()

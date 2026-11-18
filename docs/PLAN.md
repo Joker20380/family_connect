@@ -11,8 +11,10 @@ retain budget-before-open, final descriptor/deadline/ACK ordering and8/12/120.
 Gate:213 source tests, including real process/flock and final-outcome ordering.
 Require two reproducible bundles, new installed-systemd pending-stop scenarios plus
 previous watchdog/generation/expiry/revoke/retained-authority rollback/cost matrix,
-all applicable final-head CI and self-review. Record terminal hashes/results on
-PR45; old manifest/PASS is only evidence for3f5698e4. No merge before repeat review.
+all applicable final-head CI and self-review. Panel fixture now matches the new
+outcome-lock;320 panel tests pass. Record terminal hashes/results on PR45, including
+the retained native recovery FAIL and stricter NRestarts=0 gate; old manifest/PASS
+is only evidence for3f5698e4. No merge before repeat review.
 Production **NOT_DEPLOYED**; no RU/NL operation or storage root-cause investigation.
 [Repair evidence/contract](releases/2026-11-18-pr45-prelock-fence.md).
 Android subscription-card auto-refresh remains the next product task, not this repair.

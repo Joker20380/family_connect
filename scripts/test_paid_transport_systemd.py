@@ -390,7 +390,7 @@ def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=Fa
         except Exception as error:
             (report.parent/(prefix+'-traceback.private.txt')).write_text(traceback.format_exc())
             receipt['error']=type(error).__name__+':'+str(error)[:300]
-            diagnostics={role:call(['docker','exec',container,'sh','-c','journalctl --no-pager -n 160; cat /run/fc-canary/*.log 2>/dev/null; ip route; ip address; iptables -t nat -S; /native/awg show all'],check=False).stdout.decode(errors='replace') for role,container in containers.items()}
+            diagnostics={role:call(['docker','exec',container,'sh','-c','journalctl --no-pager -n 400 -u family-connect-paid-watch -u family-connect-friends-awg -u family-connect-friends-tcp; systemctl show family-connect-paid-watch family-connect-friends-awg family-connect-friends-tcp -p NRestarts -p MainPID -p ControlPID -p Job -p Result; cat /run/fc-canary/*.log 2>/dev/null; ip route; ip address; iptables -t nat -S; /native/awg show all'],check=False).stdout.decode(errors='replace') for role,container in containers.items()}
             (report.parent/(prefix+'-diagnostics.private.json')).write_text(json.dumps(diagnostics))
         finally:
             failures=cleanup(prefix)

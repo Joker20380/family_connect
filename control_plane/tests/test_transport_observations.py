@@ -1,5 +1,6 @@
 from copy import deepcopy
 from datetime import timedelta
+import fcntl
 import hashlib
 import json
 import os
@@ -152,7 +153,7 @@ def test_candidate_collector_ingestion_keeps_readback_age_and_errors(console, tm
     now = int(time.time())
     raw = b'synthetic candidate source'
     (tmp_path/'paid-transport.pyz').write_bytes(raw)
-    for name in ('application.lock', 'registration.lock'):
+    for name in ('application.lock', 'registration.lock', 'application-outcome.lock'):
         (tmp_path/name).touch(mode=0o600)
     gateway.write(tmp_path/'transport-enforcement.json', dict(schema=1, profile='paid-transports-v2',
         node='gateway-ru', enabled=True, readback_mode='observations-v1'))
@@ -173,6 +174,15 @@ def test_candidate_collector_ingestion_keeps_readback_age_and_errors(console, tm
     saved = transports.ingest(value, 'gateway-ru')
     assert saved.devices[0]['applied_at'] == now-2
     assert int(saved.observed_at.timestamp()) == now-2
+    for name in ('application-incomplete', 'application-failed'):
+        (tmp_path/name).mkdir()
+        denied = transport_collector.collect_transport('gateway-ru', b'k'*32, hashlib.sha256(raw).hexdigest(), tmp_path)
+        assert denied['status'] == 'unavailable' and not denied['devices']
+        (tmp_path/name).rmdir()
+    with (tmp_path/'application-outcome.lock').open('a') as handle:
+        fcntl.flock(handle, fcntl.LOCK_EX)
+        denied = transport_collector.collect_transport('gateway-ru', b'k'*32, hashlib.sha256(raw).hexdigest(), tmp_path)
+        assert denied['status'] == 'unavailable' and not denied['devices']
     (tmp_path/'transport-observation.json').write_text('{')
     value = transport_collector.collect_transport('gateway-ru', b'k'*32, hashlib.sha256(raw).hexdigest(), tmp_path)
     assert value['status'] == 'unavailable' and value['devices'] == []

@@ -13,6 +13,9 @@ The final post-deadline emergency check is the success linearization point; norm
 operations never clear the emergency latch.213 source tests cover the repair. New package,
 systemd/rollback and exact-head CI gates must finish before repeat review; terminal
 results belong in PR45 without a cosmetic follow-up commit. No production operation.
+The first repair package run has a retained native AWG recovery FAIL (cause unknown);
+diagnostic full-matrix PASS does not explain it. Final unwrapped-AWG qualification
+adds NRestarts=0; the panel fixture is updated for the new outcome-lock (320 tests).
 [P1 contract, reproductions and remaining gates](releases/2026-11-18-pr45-prelock-fence.md).
 Android subscription-card auto-refresh stays queued; PR44 remains complete.
 

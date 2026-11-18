@@ -68,6 +68,30 @@ No unconditional restart, timeout increase, heartbeat or historical latency clai
 
 ## Repair gates and evidence routing
 
+Checkpoint `fdcdf961cd399728c199ab9c42281c1d6599e5cc` passes213 transport tests
+and produces two identical24-file bundles (nodef3eca939, manifest7db3aef4). Its panel
+CI fails because the old synthetic observation fixture creates only two lock files;
+local exact-case FAIL confirms missing outcome-lock, not a reason to weaken collector
+checks. The corrected fixture creates all three and tests both markers/exclusive
+outcome writer as unavailable; full320 panel tests pass on a disposable synthetic DB.
+Keep the failed CI runs44411941321/44411933262 and skipped downstream steps historical;
+new final-head panel CI must execute the complete gate, not rerun unchanged failure.
+
+First installedfdcdf961 run fails during controlled AWG recovery: native actuation
+exits1, then watcher readback fails closed; cleanup PASS. Receipt SHA256
+`18e333d40a27ab4003e1f0710917b2a086e3a6ee76e4472bef18d89a0854b0d5`.
+The short original journal cannot establish the native cause; it remains unassigned,
+not declared fixed by later availability. A separate diagnostic-only AWG wrapper
+calls unchanged installed code and classifies native stderr without exposing values;
+that run passes full matrix including both P1 overlaps/rollback, but does not reproduce
+or explain the native failure (receipt `b53793bd25839466cfbfb7f36e09187726ebc6dbca6cc7f1ed3fcfe457665f62`).
+It is not final uninstrumented-AWG acceptance. Its patch stays local with the receipt.
+Final source removes that wrapper, records more unit-scoped failure evidence and
+requires NRestarts=0 after every controlled start, so automatic restart cannot mask
+a native startup failure. Runtime/gateway bytes and service limits are not altered.
+Repeat full installed qualification of the final manifest under that stricter gate;
+retain the first FAIL and this limitation even if the final bounded run passes.
+
 213 transport/source/package tests cover the repair with locked control/identity dependencies.
 New tests distinguish failure-before-completion from later failure publication for
 registration/watch/recovery; cover final deadline, outcome-lock I/O fallback and
