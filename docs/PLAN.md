@@ -2,6 +2,12 @@
 
 ## Current engineering priority / Текущий critical path
 
+**OPS-MESH-RU-20261118 recovery — explicitly authorized, IN_PROGRESS.** Retain the
+already recovered ordinary RU transport; complete the expired/unprepared MESH
+operation without data rollback, then require fresh normal renewal/directory,
+terminal cleanup, restored schedules and actual traffic evidence. No product task
+or observations-v1 deployment is selected. [Recovery checkpoint](releases/2026-11-18-guarded-recovery.md).
+
 **OPS-MESH-RU-20261118 — selected operational priority; read-only diagnosis COMPLETE,
 recovery NOT_RUN.** Fresh pinned sequential observations establish renewal-driven
 HTTP/both-NL fence17 November20:41 and separate RU fsync/deadline transport failure

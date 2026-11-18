@@ -7,7 +7,8 @@ import re
 import sys
 
 
-def reconcile(controller, node, operation, *, apply=False, fault=lambda event: None):
+def reconcile(controller, node, operation, *, apply=False, fault=lambda event: None,
+              expired_leaf_predecessor=False):
     from credential_renewal import atomic, canonical, digest, parse, read_private, require
 
     require(re.fullmatch('[a-z0-9-]{16,96}', operation) is not None, 'OPERATION_ID')
@@ -45,10 +46,17 @@ def reconcile(controller, node, operation, *, apply=False, fault=lambda event: N
         snapshot, gateway, current, pending_revocations = controller.read(operation)
         require(not pending_revocations, 'PENDING_REVOCATIONS')
         require(snapshot == original['previous'], 'AUTHORITY_OR_GRANTS_CHANGED')
-        controller.validator.validate(canonical(snapshot), int(controller.clock()))
+        now = int(controller.clock())
+        primary = controller.validator.validate(canonical(snapshot), now,
+            expired_leaf_predecessor=expired_leaf_predecessor)
+        if expired_leaf_predecessor:
+            require(primary[4].not_valid_after_utc.timestamp() <= now, 'PREVIOUS_LEAF_NOT_EXPIRED')
         if controller.multiple:
             require(gateway['secondary_snapshot'] == original['previous_secondary'], 'SECONDARY_CHANGED')
-            controller.validator.validate(canonical(gateway['secondary_snapshot']), int(controller.clock()))
+            secondary = controller.validator.validate(canonical(gateway['secondary_snapshot']), now,
+                expired_leaf_predecessor=expired_leaf_predecessor)
+            if expired_leaf_predecessor:
+                require(secondary[4].not_valid_after_utc.timestamp() <= now, 'PREVIOUS_LEAF_NOT_EXPIRED')
         require(set(current) == set(original['before']), 'NODE_SET')
         for role, actual in current.items():
             expected = copy.deepcopy(original['before'][role])

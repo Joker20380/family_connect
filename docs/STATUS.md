@@ -1,5 +1,12 @@
 # Текущее состояние / Current state
 
+**18 November12:38UTC — owner-authorized recovery IN_PROGRESS.** RU AWG/TCP were
+already recovered at12:18 by another session; fresh exact-set/continuity readback
+passes without another restart. MESH/HTTP remain stopped. An explicit non-activating
+expired/unprepared completion helper passes27 tests on source and the installed
+fcb31164 capsule; no MESH apply or PR44 deployment is claimed at this checkpoint.
+[Recovery gates and qualification](releases/2026-11-18-guarded-recovery.md).
+
 **18 November12:00–12:18UTC — OPS-MESH-RU-20261118, DIAGNOSED / NOT_RECOVERED.**
 Fresh panel/direct readback confirms both NL MESH inactive and RU AWG/TCP/HTTP down.
 17 November20:41: common renewal STALE_NODE_STATE after all three acquisitions;
