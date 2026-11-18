@@ -1,0 +1,3546 @@
+{
+  "schema": 1,
+  "task": "OPS-MESH-RU-20261118",
+  "status": "DIAGNOSED_NOT_RECOVERED",
+  "source_main_verified": "bc8f7b5b42800269aeb43bcf54059205e7a7cbf7",
+  "observations_v1": "NOT_DEPLOYED",
+  "collection": {
+    "started_at": "2026-11-18T12:00:01.869744+00:00",
+    "finished_at": "2026-11-18T12:18:40.410368+00:00",
+    "sequential": true,
+    "remote_mutations": 0,
+    "journal_read_timeout_seconds": 9,
+    "ssh_outer_timeout_seconds": 50,
+    "new_observers": 0
+  },
+  "nodes": {
+    "gateway-ru": {
+      "at": "2026-11-18T12:00:01.869744+00:00",
+      "boot_id": "411dc329-437f-418d-bb71-37a8d1e4d4bf",
+      "boot_time": "2026-09-01 15:13:26",
+      "uptime": "6738395.89 10179019.64",
+      "units": {
+        "family-connect-credential-renewal-alert.service": {
+          "Id": "family-connect-credential-renewal-alert.service",
+          "Requires": "system.slice sysinit.target",
+          "Wants": "-.mount tmp.mount",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "shutdown.target",
+          "After": "systemd-tmpfiles-setup.service basic.target sysinit.target system.slice tmp.mount systemd-journald.socket -.mount",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "FragmentPath": "/etc/systemd/system/family-connect-credential-renewal-alert.service",
+          "DropInPaths": "",
+          "UnitFileState": "static",
+          "InactiveExitTimestamp": "Wed 2026-11-18 14:56:48 MSK",
+          "ActiveEnterTimestamp": "",
+          "ActiveExitTimestamp": "",
+          "InactiveEnterTimestamp": "Wed 2026-11-18 14:56:49 MSK",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "85723e7096c640ad95a6c9a87607dc5e",
+          "Restart": "no",
+          "RestartUSec": "100ms",
+          "TimeoutStartUSec": "infinity",
+          "TimeoutStopUSec": "1min 30s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "0",
+          "WatchdogTimestamp": "",
+          "MainPID": "0",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Wed 2026-11-18 14:56:48 MSK",
+          "ExecMainExitTimestamp": "Wed 2026-11-18 14:56:49 MSK",
+          "ExecMainCode": "1",
+          "ExecMainStatus": "0",
+          "MemoryMax": "infinity",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-credential-renewal-alert.service": {
+              "size": 376,
+              "mtime_ns": 1791975557822091854,
+              "ctime_ns": 1791975557829091603,
+              "inode": 1839,
+              "sha256": "b628ffad3a6ac52f0b3a65a377f22e0735235449f707e4abf70eafcfa84e7edf"
+            }
+          }
+        },
+        "family-connect-credential-renewal.service": {
+          "Id": "family-connect-credential-renewal.service",
+          "Requires": "system.slice sysinit.target",
+          "Wants": "-.mount tmp.mount",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "shutdown.target",
+          "After": "systemd-tmpfiles-setup.service systemd-journald.socket sysinit.target -.mount basic.target tmp.mount system.slice family-connect-credential-renewal.timer",
+          "Triggers": "",
+          "TriggeredBy": "family-connect-credential-renewal.timer",
+          "LoadState": "loaded",
+          "ActiveState": "failed",
+          "SubState": "failed",
+          "FragmentPath": "/etc/systemd/system/family-connect-credential-renewal.service",
+          "DropInPaths": "/etc/systemd/system/family-connect-credential-renewal.service.d/90-canonical-profile.conf /etc/systemd/system/family-connect-credential-renewal.service.d/zzzz-nl-replacement-runtime.conf /etc/systemd/system/family-connect-credential-renewal.service.d/zzzzz-mesh2-fleet.conf /etc/systemd/system/family-connect-credential-renewal.service.d/zzzzzz-serialized-directory.conf",
+          "UnitFileState": "static",
+          "InactiveExitTimestamp": "Wed 2026-11-18 14:56:29 MSK",
+          "ActiveEnterTimestamp": "",
+          "ActiveExitTimestamp": "",
+          "InactiveEnterTimestamp": "Wed 2026-11-18 14:56:48 MSK",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "303c9b683b684e79b87996e1c120d092",
+          "Restart": "no",
+          "RestartUSec": "100ms",
+          "TimeoutStartUSec": "10min",
+          "TimeoutStopUSec": "1min 30s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "0",
+          "WatchdogTimestamp": "",
+          "MainPID": "0",
+          "ControlPID": "0",
+          "Result": "exit-code",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Wed 2026-11-18 14:56:29 MSK",
+          "ExecMainExitTimestamp": "Wed 2026-11-18 14:56:48 MSK",
+          "ExecMainCode": "1",
+          "ExecMainStatus": "75",
+          "MemoryMax": "infinity",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-credential-renewal.service": {
+              "size": 708,
+              "mtime_ns": 1791975557838283662,
+              "ctime_ns": 1791975557844091063,
+              "inode": 2505,
+              "sha256": "ed0a197396d419696e50d5d34572276a12963059fa453f5b416828e9ef9da561"
+            },
+            "/etc/systemd/system/family-connect-credential-renewal.service.d/90-canonical-profile.conf": {
+              "size": 265,
+              "mtime_ns": 1793218576851633691,
+              "ctime_ns": 1793218576874711991,
+              "inode": 30631,
+              "sha256": "5f99651e8a3291b275c0b8e7d8b3ade196f17034229c0e3350c2b4150ba95ff6"
+            },
+            "/etc/systemd/system/family-connect-credential-renewal.service.d/zzzz-nl-replacement-runtime.conf": {
+              "size": 282,
+              "mtime_ns": 1793401605808529166,
+              "ctime_ns": 1793401605808529166,
+              "inode": 30714,
+              "sha256": "35a6a3a5881f61e142023a0cc0337925867badf71b7ad7bdc0733da9528941a6"
+            },
+            "/etc/systemd/system/family-connect-credential-renewal.service.d/zzzzz-mesh2-fleet.conf": {
+              "size": 276,
+              "mtime_ns": 1793735942998684664,
+              "ctime_ns": 1793735942998684664,
+              "inode": 31239,
+              "sha256": "57ec2002811025cff597f2c7bac897d646eef201bf92d2787e5d3c7fc12fca1d"
+            },
+            "/etc/systemd/system/family-connect-credential-renewal.service.d/zzzzzz-serialized-directory.conf": {
+              "size": 322,
+              "mtime_ns": 1793973947442381479,
+              "ctime_ns": 1793973947450756264,
+              "inode": 1152,
+              "sha256": "e423fe1ca218e6a065055967fedcc1be94ec47a7fb58699b2f59a46efb4370af"
+            }
+          }
+        },
+        "family-connect-friends-awg.service": {
+          "Id": "family-connect-friends-awg.service",
+          "Requires": "system.slice sysinit.target",
+          "Wants": "network-online.target tmp.mount -.mount",
+          "BindsTo": "family-connect-paid-watch.service",
+          "PartOf": "",
+          "Before": "multi-user.target shutdown.target family-connect-friends-access.service",
+          "After": "family-connect-paid-watch.service basic.target system.slice -.mount network-online.target systemd-journald.socket tmp.mount sysinit.target systemd-tmpfiles-setup.service",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "FragmentPath": "/etc/systemd/system/family-connect-friends-awg.service",
+          "DropInPaths": "/etc/systemd/system/family-connect-friends-awg.service.d/70-private-files.conf /etc/systemd/system/family-connect-friends-awg.service.d/80-stop-timeout.conf /etc/systemd/system/family-connect-friends-awg.service.d/90-paid.conf",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Tue 2026-11-17 10:42:13 MSK",
+          "ActiveEnterTimestamp": "Tue 2026-11-17 10:42:13 MSK",
+          "ActiveExitTimestamp": "Wed 2026-11-18 04:49:35 MSK",
+          "InactiveEnterTimestamp": "Wed 2026-11-18 04:49:39 MSK",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "159c62451f954881972092ff58dd44f8",
+          "Restart": "on-failure",
+          "RestartUSec": "3s",
+          "TimeoutStartUSec": "1min 30s",
+          "TimeoutStopUSec": "5s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "0",
+          "WatchdogTimestamp": "",
+          "MainPID": "0",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Tue 2026-11-17 10:42:13 MSK",
+          "ExecMainExitTimestamp": "Wed 2026-11-18 04:49:39 MSK",
+          "ExecMainCode": "1",
+          "ExecMainStatus": "0",
+          "MemoryMax": "268435456",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-friends-awg.service": {
+              "size": 453,
+              "mtime_ns": 1789394060392509511,
+              "ctime_ns": 1794088126098532628,
+              "inode": 1832,
+              "sha256": "46b04571f038ec5961f61d2e3c552a71dfd3fe680819c4e78361133e6dbceb45"
+            },
+            "/etc/systemd/system/family-connect-friends-awg.service.d/70-private-files.conf": {
+              "size": 21,
+              "mtime_ns": 1790258733662035627,
+              "ctime_ns": 1790258733662035627,
+              "inode": 252821,
+              "sha256": "d2bb7c9f85695671b5056a03cbf3ed19a2b8ccd98cceb8dfd91383441024d1a7"
+            },
+            "/etc/systemd/system/family-connect-friends-awg.service.d/80-stop-timeout.conf": {
+              "size": 28,
+              "mtime_ns": 1790422656491682235,
+              "ctime_ns": 1790422656491682235,
+              "inode": 252824,
+              "sha256": "2bebe06302f8b4e2f3a943d14dbbbc7937229b6f1ef3422ecaa8d9ab0694f340"
+            },
+            "/etc/systemd/system/family-connect-friends-awg.service.d/90-paid.conf": {
+              "size": 140,
+              "mtime_ns": 1794088121087509987,
+              "ctime_ns": 1794088121087509987,
+              "inode": 251389,
+              "sha256": "f99e4cc434d36d9005a0ae046c90b4d360e5342d023eee1349b984dfa42dc8b2"
+            }
+          }
+        },
+        "family-connect-friends-http-candidate.service": {
+          "Id": "family-connect-friends-http-candidate.service",
+          "Requires": "system.slice sysinit.target",
+          "Wants": "-.mount tmp.mount",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "shutdown.target multi-user.target",
+          "After": "network-online.target tmp.mount basic.target -.mount systemd-tmpfiles-setup.service system.slice sysinit.target",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "FragmentPath": "/etc/systemd/system/family-connect-friends-http-candidate.service",
+          "DropInPaths": "/etc/systemd/system/family-connect-friends-http-candidate.service.d/62-four-hour.conf /etc/systemd/system/family-connect-friends-http-candidate.service.d/95-issuer-aki.conf /etc/systemd/system/family-connect-friends-http-candidate.service.d/96-owner74-publisher.conf /etc/systemd/system/family-connect-friends-http-candidate.service.d/zz-private-beta-existing-users.conf /etc/systemd/system/family-connect-friends-http-candidate.service.d/zzz-support-diagnostics.conf /etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzz-control-plane-2-paid-boundary.conf /etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzz-nl-replacement-routing.conf /etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzzz-paid-baseline108.conf /etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzzzz-second-nl-routing.conf /etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzzzzz-gateway-selection.conf /etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzzzzzz-mesh2-readiness.conf /etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzzzzzzz-subscription.conf /etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzzzzzzz-subscription.conf.paid119.conf /etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzzzzzzzz-paid-transports-v2.conf",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Tue 2026-11-17 20:56:36 MSK",
+          "ActiveEnterTimestamp": "Tue 2026-11-17 20:56:36 MSK",
+          "ActiveExitTimestamp": "Tue 2026-11-17 23:41:01 MSK",
+          "InactiveEnterTimestamp": "Tue 2026-11-17 23:41:01 MSK",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "0234d051a4e34a7db150a0e647bf812b",
+          "Restart": "no",
+          "RestartUSec": "100ms",
+          "TimeoutStartUSec": "1min 30s",
+          "TimeoutStopUSec": "1min 30s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "0",
+          "WatchdogTimestamp": "",
+          "MainPID": "0",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Tue 2026-11-17 20:56:36 MSK",
+          "ExecMainExitTimestamp": "Tue 2026-11-17 23:41:01 MSK",
+          "ExecMainCode": "2",
+          "ExecMainStatus": "15",
+          "MemoryMax": "268435456",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-friends-http-candidate.service": {
+              "size": 576,
+              "mtime_ns": 1790980689947779704,
+              "ctime_ns": 1790980689965699538,
+              "inode": 1706,
+              "sha256": "a338635937bb9e36d8d99fcbe9fa08dd1857cae5f62fcb5238c2148c10138520"
+            },
+            "/etc/systemd/system/family-connect-friends-http-candidate.service.d/62-four-hour.conf": {
+              "size": 230,
+              "mtime_ns": 1791208552289548545,
+              "ctime_ns": 1791208552316547567,
+              "inode": 252897,
+              "sha256": "a2247aca6e717a24f4388b6fde4f2c9d4b010a192a4442f30efe74cfcd9e5122"
+            },
+            "/etc/systemd/system/family-connect-friends-http-candidate.service.d/95-issuer-aki.conf": {
+              "size": 175,
+              "mtime_ns": 1791578270121619469,
+              "ctime_ns": 1791578270129158710,
+              "inode": 252906,
+              "sha256": "b290b9b94879eb574f30ecdc9d0d7fc2b7c56c6a704c6319132e9846b4904085"
+            },
+            "/etc/systemd/system/family-connect-friends-http-candidate.service.d/96-owner74-publisher.conf": {
+              "size": 192,
+              "mtime_ns": 1791600863652073129,
+              "ctime_ns": 1791600863667072593,
+              "inode": 252915,
+              "sha256": "50c06c7f704b7dd09e2c4a3f912f5cfc864252ee81e7e96344bf250f57265fbe"
+            },
+            "/etc/systemd/system/family-connect-friends-http-candidate.service.d/zz-private-beta-existing-users.conf": {
+              "size": 225,
+              "mtime_ns": 1792363745049287995,
+              "ctime_ns": 1792363745073288272,
+              "inode": 252839,
+              "sha256": "b24a54d042fe075d7d20cf700aa579edab7b54eab2537e65d9f3604561213927"
+            },
+            "/etc/systemd/system/family-connect-friends-http-candidate.service.d/zzz-support-diagnostics.conf": {
+              "size": 220,
+              "mtime_ns": 1792594889132204097,
+              "ctime_ns": 1792594889143203699,
+              "inode": 252842,
+              "sha256": "57fe645f5de2d7df5f326f3a3042675fde2b19eeb7d853f9c96161d85fb36bcf"
+            },
+            "/etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzz-control-plane-2-paid-boundary.conf": {
+              "size": 257,
+              "mtime_ns": 1793131805572730621,
+              "ctime_ns": 1793131805572730621,
+              "inode": 251386,
+              "sha256": "4ab62dd9a692413f704d206db5bb8a95ccf51033e457fc443147fee6072685b0"
+            },
+            "/etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzz-nl-replacement-routing.conf": {
+              "size": 196,
+              "mtime_ns": 1793442953999587805,
+              "ctime_ns": 1793442953999587805,
+              "inode": 252869,
+              "sha256": "7d85fb4e6f797c7cdde31192cf561db830f94f37cc163b093d019550a5e2e1fb"
+            },
+            "/etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzzz-paid-baseline108.conf": {
+              "size": 190,
+              "mtime_ns": 1793509027921586038,
+              "ctime_ns": 1793509027921586038,
+              "inode": 252923,
+              "sha256": "1f582535c152de5952d896bf737873688b1c17f6539d9c8515c8ebdd54f08924"
+            },
+            "/etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzzzz-second-nl-routing.conf": {
+              "size": 183,
+              "mtime_ns": 1793581166595489470,
+              "ctime_ns": 1793581166595489470,
+              "inode": 252926,
+              "sha256": "d76ba31c9fce267ed69e0c2c3228084a5bdc51411407dd0775174207a9c745a4"
+            },
+            "/etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzzzzz-gateway-selection.conf": {
+              "size": 183,
+              "mtime_ns": 1793620585998317516,
+              "ctime_ns": 1793620585998317516,
+              "inode": 252872,
+              "sha256": "90ede8319e43e43c5b8a4e0cf07bae07a7c014a648708a155e2b6f4220b050ff"
+            },
+            "/etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzzzzzz-mesh2-readiness.conf": {
+              "size": 179,
+              "mtime_ns": 1793781170889480851,
+              "ctime_ns": 1793781170889480851,
+              "inode": 252938,
+              "sha256": "bb80c829b9006125b8f85434de6c9e886e727e59bc45ccd102499cc146a2fce3"
+            },
+            "/etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzzzzzzz-subscription.conf": {
+              "size": 186,
+              "mtime_ns": 1793987029445983255,
+              "ctime_ns": 1793987029445983255,
+              "inode": 253922,
+              "sha256": "d3cfc41e6ed7744a543bba9572881fa9b80d4eac96d5a90a3d9498019b528cde"
+            },
+            "/etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzzzzzzz-subscription.conf.paid119.conf": {
+              "size": 216,
+              "mtime_ns": 1794057317644708059,
+              "ctime_ns": 1794057317644708059,
+              "inode": 251388,
+              "sha256": "c3465d747abddd5fd0310fd2ed8a32b8cbc87210ff024de356fd530ed6357850"
+            },
+            "/etc/systemd/system/family-connect-friends-http-candidate.service.d/zzzzzzzzzzz-paid-transports-v2.conf": {
+              "size": 181,
+              "mtime_ns": 1794077873495594688,
+              "ctime_ns": 1794077959154247709,
+              "inode": 251393,
+              "sha256": "bfca30627e0fb70ebd1c1ddbebc3cc14c96d76b89bea4c8e11de32767ff5ab71"
+            }
+          }
+        },
+        "family-connect-friends-tcp.service": {
+          "Id": "family-connect-friends-tcp.service",
+          "Requires": "system.slice sysinit.target",
+          "Wants": "network-online.target tmp.mount -.mount",
+          "BindsTo": "family-connect-paid-watch.service",
+          "PartOf": "",
+          "Before": "multi-user.target shutdown.target family-connect-friends-access.service",
+          "After": "system.slice family-connect-paid-watch.service basic.target systemd-tmpfiles-setup.service sysinit.target network-online.target tmp.mount -.mount",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "FragmentPath": "/etc/systemd/system/family-connect-friends-tcp.service",
+          "DropInPaths": "/etc/systemd/system/family-connect-friends-tcp.service.d/70-private-files.conf /etc/systemd/system/family-connect-friends-tcp.service.d/90-paid.conf /etc/systemd/system/family-connect-friends-tcp.service.d/91-paid-preflight.conf",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Tue 2026-11-17 10:42:13 MSK",
+          "ActiveEnterTimestamp": "Tue 2026-11-17 10:42:14 MSK",
+          "ActiveExitTimestamp": "Wed 2026-11-18 04:49:35 MSK",
+          "InactiveEnterTimestamp": "Wed 2026-11-18 04:49:35 MSK",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "3629fc3559fc4485991333b4f60e1fb9",
+          "Restart": "on-failure",
+          "RestartUSec": "3s",
+          "TimeoutStartUSec": "1min 30s",
+          "TimeoutStopUSec": "5s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "0",
+          "WatchdogTimestamp": "",
+          "MainPID": "0",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Tue 2026-11-17 10:42:14 MSK",
+          "ExecMainExitTimestamp": "Wed 2026-11-18 04:49:35 MSK",
+          "ExecMainCode": "1",
+          "ExecMainStatus": "0",
+          "MemoryMax": "268435456",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-friends-tcp.service": {
+              "size": 665,
+              "mtime_ns": 1789392927748857975,
+              "ctime_ns": 1794088126099151124,
+              "inode": 1960,
+              "sha256": "b59be3c131ba2e6c81acd4cf18c0be3730e81fd9df1c6d8631b9a03a49fec867"
+            },
+            "/etc/systemd/system/family-connect-friends-tcp.service.d/70-private-files.conf": {
+              "size": 21,
+              "mtime_ns": 1790258733689675597,
+              "ctime_ns": 1790258733689675597,
+              "inode": 252825,
+              "sha256": "d2bb7c9f85695671b5056a03cbf3ed19a2b8ccd98cceb8dfd91383441024d1a7"
+            },
+            "/etc/systemd/system/family-connect-friends-tcp.service.d/90-paid.conf": {
+              "size": 140,
+              "mtime_ns": 1794088121087707021,
+              "ctime_ns": 1794088121087707021,
+              "inode": 251390,
+              "sha256": "f99e4cc434d36d9005a0ae046c90b4d360e5342d023eee1349b984dfa42dc8b2"
+            },
+            "/etc/systemd/system/family-connect-friends-tcp.service.d/91-paid-preflight.conf": {
+              "size": 108,
+              "mtime_ns": 1794088121087953056,
+              "ctime_ns": 1794088121087953056,
+              "inode": 251391,
+              "sha256": "da4e902d1fd00aa80dc55af5d0a66c19df604697513232255361fb517154dc3d"
+            }
+          }
+        },
+        "family-connect-paid-reconcile.service": {
+          "Id": "family-connect-paid-reconcile.service",
+          "Requires": "system.slice sysinit.target",
+          "Wants": "",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "shutdown.target",
+          "After": "systemd-journald.socket family-connect-paid-reconcile.timer basic.target system.slice sysinit.target network-online.target",
+          "Triggers": "",
+          "TriggeredBy": "family-connect-paid-reconcile.timer",
+          "LoadState": "loaded",
+          "ActiveState": "failed",
+          "SubState": "failed",
+          "FragmentPath": "/etc/systemd/system/family-connect-paid-reconcile.service",
+          "DropInPaths": "",
+          "UnitFileState": "static",
+          "InactiveExitTimestamp": "Wed 2026-11-18 14:59:50 MSK",
+          "ActiveEnterTimestamp": "",
+          "ActiveExitTimestamp": "",
+          "InactiveEnterTimestamp": "Wed 2026-11-18 14:59:55 MSK",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "0d427d329f6e46ecb8c3bb3c0f64f3c3",
+          "Restart": "no",
+          "RestartUSec": "100ms",
+          "TimeoutStartUSec": "40s",
+          "TimeoutStopUSec": "5s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "0",
+          "WatchdogTimestamp": "",
+          "MainPID": "0",
+          "ControlPID": "0",
+          "Result": "exit-code",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Wed 2026-11-18 14:59:50 MSK",
+          "ExecMainExitTimestamp": "Wed 2026-11-18 14:59:55 MSK",
+          "ExecMainCode": "1",
+          "ExecMainStatus": "1",
+          "MemoryMax": "infinity",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-paid-reconcile.service": {
+              "size": 478,
+              "mtime_ns": 1794077686452232012,
+              "ctime_ns": 1794077686452232012,
+              "inode": 1830,
+              "sha256": "358592c38534cd22d93569fc95f2282c1fe97f1f2aabac629b1876d5f6ca8d3c"
+            }
+          }
+        },
+        "family-connect-paid-watch.service": {
+          "Id": "family-connect-paid-watch.service",
+          "Requires": "system.slice sysinit.target",
+          "Wants": "",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "shutdown.target family-connect-friends-awg.service multi-user.target family-connect-friends-tcp.service",
+          "After": "system.slice sysinit.target time-sync.target systemd-journald.socket basic.target",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "active",
+          "SubState": "running",
+          "FragmentPath": "/etc/systemd/system/family-connect-paid-watch.service",
+          "DropInPaths": "/etc/systemd/system/family-connect-paid-watch.service.d/90-optional-stderr-null.conf",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Wed 2026-11-18 14:59:34 MSK",
+          "ActiveEnterTimestamp": "Wed 2026-11-18 14:59:39 MSK",
+          "ActiveExitTimestamp": "Wed 2026-11-18 14:59:34 MSK",
+          "InactiveEnterTimestamp": "Wed 2026-11-18 14:59:34 MSK",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "d7f1cc5e127a454ba0daec4a1f0584ad",
+          "Restart": "on-failure",
+          "RestartUSec": "5s",
+          "TimeoutStartUSec": "45s",
+          "TimeoutStopUSec": "5s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "12s",
+          "WatchdogTimestamp": "Wed 2026-11-18 15:00:01 MSK",
+          "MainPID": "1805553",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "1027",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Wed 2026-11-18 14:59:39 MSK",
+          "ExecMainExitTimestamp": "",
+          "ExecMainCode": "0",
+          "ExecMainStatus": "0",
+          "MemoryMax": "infinity",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-paid-watch.service": {
+              "size": 375,
+              "mtime_ns": 1794308968390377846,
+              "ctime_ns": 1794308968403377375,
+              "inode": 2239,
+              "sha256": "e9a9d82841d0d5aa257780660107d9588af80a24b32d604dccf9c81c2730523a"
+            },
+            "/etc/systemd/system/family-connect-paid-watch.service.d/90-optional-stderr-null.conf": {
+              "size": 29,
+              "mtime_ns": 1794393851826226285,
+              "ctime_ns": 1794393851826226285,
+              "inode": 2135,
+              "sha256": "94e55b4fb640b7dd6c689b260fbcdc3f14ad9d933ce5451568a94656cd97d42a"
+            }
+          }
+        },
+        "family-connect-product-cert-renew.service": {
+          "Id": "family-connect-product-cert-renew.service",
+          "Requires": "docker.service sysinit.target system.slice",
+          "Wants": "-.mount tmp.mount",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "shutdown.target",
+          "After": "sysinit.target systemd-tmpfiles-setup.service network-online.target tmp.mount basic.target docker.service systemd-journald.socket -.mount system.slice family-connect-product-cert-renew.timer",
+          "Triggers": "",
+          "TriggeredBy": "family-connect-product-cert-renew.timer",
+          "LoadState": "loaded",
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "FragmentPath": "/etc/systemd/system/family-connect-product-cert-renew.service",
+          "DropInPaths": "",
+          "UnitFileState": "static",
+          "InactiveExitTimestamp": "Wed 2026-11-18 12:08:03 MSK",
+          "ActiveEnterTimestamp": "",
+          "ActiveExitTimestamp": "",
+          "InactiveEnterTimestamp": "Wed 2026-11-18 12:08:24 MSK",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "9734c458bd0749cf9f9ceaea28cf86ac",
+          "Restart": "no",
+          "RestartUSec": "100ms",
+          "TimeoutStartUSec": "5min",
+          "TimeoutStopUSec": "1min 30s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "0",
+          "WatchdogTimestamp": "",
+          "MainPID": "0",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Wed 2026-11-18 12:08:03 MSK",
+          "ExecMainExitTimestamp": "Wed 2026-11-18 12:08:24 MSK",
+          "ExecMainCode": "1",
+          "ExecMainStatus": "0",
+          "MemoryMax": "infinity",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-product-cert-renew.service": {
+              "size": 330,
+              "mtime_ns": 1789384803570425637,
+              "ctime_ns": 1789384803570425637,
+              "inode": 2971,
+              "sha256": "b125097a4bd593bea5ab6c4456f5dc9b45f806c087c72b58ffe965c52e2f569f"
+            }
+          }
+        },
+        "family-connect-restricted-directory-sync.service": {
+          "Id": "family-connect-restricted-directory-sync.service",
+          "Requires": "system.slice sysinit.target",
+          "Wants": "-.mount tmp.mount",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "shutdown.target",
+          "After": "family-connect-restricted-directory-sync.timer systemd-journald.socket sysinit.target system.slice tmp.mount systemd-tmpfiles-setup.service basic.target -.mount",
+          "Triggers": "",
+          "TriggeredBy": "family-connect-restricted-directory-sync.timer",
+          "LoadState": "loaded",
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "FragmentPath": "/etc/systemd/system/family-connect-restricted-directory-sync.service",
+          "DropInPaths": "/etc/systemd/system/family-connect-restricted-directory-sync.service.d/zzzz-nl-replacement-runtime.conf /etc/systemd/system/family-connect-restricted-directory-sync.service.d/zzzzz-mesh2-fleet.conf",
+          "UnitFileState": "static",
+          "InactiveExitTimestamp": "Wed 2026-11-18 14:59:54 MSK",
+          "ActiveEnterTimestamp": "",
+          "ActiveExitTimestamp": "",
+          "InactiveEnterTimestamp": "Wed 2026-11-18 14:59:55 MSK",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "5ae55ef355234e7cb785ec9a9239385e",
+          "Restart": "no",
+          "RestartUSec": "100ms",
+          "TimeoutStartUSec": "1min",
+          "TimeoutStopUSec": "1min 30s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "0",
+          "WatchdogTimestamp": "",
+          "MainPID": "0",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Wed 2026-11-18 14:59:54 MSK",
+          "ExecMainExitTimestamp": "Wed 2026-11-18 14:59:55 MSK",
+          "ExecMainCode": "1",
+          "ExecMainStatus": "0",
+          "MemoryMax": "infinity",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-restricted-directory-sync.service": {
+              "size": 784,
+              "mtime_ns": 1791975557873786455,
+              "ctime_ns": 1791975557889089444,
+              "inode": 2648,
+              "sha256": "e80469d5a93385f17c97525b8762b4f2b35798bb9876f7e0bfc1acf902e801e2"
+            },
+            "/etc/systemd/system/family-connect-restricted-directory-sync.service.d/zzzz-nl-replacement-runtime.conf": {
+              "size": 419,
+              "mtime_ns": 1793401779632810026,
+              "ctime_ns": 1793401779646945795,
+              "inode": 30718,
+              "sha256": "e3eec7c0d81c58ad39942913ec8167f8054dad6c33294dc20dbaaa832af27275"
+            },
+            "/etc/systemd/system/family-connect-restricted-directory-sync.service.d/zzzzz-mesh2-fleet.conf": {
+              "size": 510,
+              "mtime_ns": 1793735943046136040,
+              "ctime_ns": 1793735943046136040,
+              "inode": 31240,
+              "sha256": "61f152c7e1dbddf203302f75026e8348925145c7c857572802fa747181ba1f0e"
+            }
+          }
+        },
+        "family-connect-restricted-sync.service": {
+          "Id": "family-connect-restricted-sync.service",
+          "Requires": "system.slice sysinit.target -.mount",
+          "Wants": "tmp.mount network-online.target -.mount",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "shutdown.target",
+          "After": "-.mount basic.target systemd-tmpfiles-setup.service system.slice network-online.target systemd-journald.socket tmp.mount sysinit.target",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "FragmentPath": "/etc/systemd/system/family-connect-restricted-sync.service",
+          "DropInPaths": "/etc/systemd/system/family-connect-restricted-sync.service.d/61-diagnostic-window.conf /etc/systemd/system/family-connect-restricted-sync.service.d/99-controller-v1-disabled.conf",
+          "UnitFileState": "static",
+          "InactiveExitTimestamp": "",
+          "ActiveEnterTimestamp": "",
+          "ActiveExitTimestamp": "",
+          "InactiveEnterTimestamp": "",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "",
+          "Restart": "no",
+          "RestartUSec": "100ms",
+          "TimeoutStartUSec": "25s",
+          "TimeoutStopUSec": "1min 30s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "infinity",
+          "WatchdogTimestamp": "",
+          "MainPID": "0",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "",
+          "ExecMainExitTimestamp": "",
+          "ExecMainCode": "0",
+          "ExecMainStatus": "0",
+          "MemoryMax": "infinity",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-restricted-sync.service": {
+              "size": 865,
+              "mtime_ns": 1790980649709536954,
+              "ctime_ns": 1790980649709536954,
+              "inode": 1744,
+              "sha256": "b400bf9f1f3e2943728b2c9303499bcd126336cfc134aa31039e1e0e5d27beb6"
+            },
+            "/etc/systemd/system/family-connect-restricted-sync.service.d/61-diagnostic-window.conf": {
+              "size": 395,
+              "mtime_ns": 1791208548596682361,
+              "ctime_ns": 1791208548606681998,
+              "inode": 252852,
+              "sha256": "7cf9217087f989dfdb4facaf9bc76e6e7fcee92bf622e5e77a1713995dcf4b6f"
+            },
+            "/etc/systemd/system/family-connect-restricted-sync.service.d/99-controller-v1-disabled.conf": {
+              "size": 96,
+              "mtime_ns": 1791977397392517908,
+              "ctime_ns": 1791977397392517908,
+              "inode": 252912,
+              "sha256": "788a40b2a16d5b2b41c6d743ae949b2e71336522b7259e053a546da7b522bf0f"
+            }
+          }
+        },
+        "family-connect-credential-renewal.timer": {
+          "Id": "family-connect-credential-renewal.timer",
+          "Requires": "sysinit.target",
+          "Wants": "",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "timers.target family-connect-credential-renewal.service shutdown.target",
+          "After": "sysinit.target",
+          "Triggers": "family-connect-credential-renewal.service",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "active",
+          "SubState": "waiting",
+          "FragmentPath": "/etc/systemd/system/family-connect-credential-renewal.timer",
+          "DropInPaths": "",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Fri 2026-11-06 17:06:05 MSK",
+          "ActiveEnterTimestamp": "Fri 2026-11-06 17:06:05 MSK",
+          "ActiveExitTimestamp": "Fri 2026-11-06 16:55:48 MSK",
+          "InactiveEnterTimestamp": "Fri 2026-11-06 16:55:48 MSK",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "8a0e76f70a6d4c4e9f961bd8c32a3ea9",
+          "NextElapseUSecRealtime": "",
+          "NextElapseUSecMonotonic": "2month 2w 3d 2h 58min 3.223558s",
+          "LastTriggerUSec": "Wed 2026-11-18 14:56:29 MSK",
+          "Result": "success",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-credential-renewal.timer": {
+              "size": 224,
+              "mtime_ns": 1791975557855841129,
+              "ctime_ns": 1791975557863090380,
+              "inode": 2627,
+              "sha256": "8b12b62b40e11e24b9e5a0cdf35eeae5820fddd609edba6219016efa4d4e51f7"
+            }
+          }
+        },
+        "family-connect-paid-reconcile.timer": {
+          "Id": "family-connect-paid-reconcile.timer",
+          "Requires": "sysinit.target",
+          "Wants": "",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "family-connect-paid-reconcile.service timers.target shutdown.target",
+          "After": "sysinit.target",
+          "Triggers": "family-connect-paid-reconcile.service",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "active",
+          "SubState": "waiting",
+          "FragmentPath": "/etc/systemd/system/family-connect-paid-reconcile.timer",
+          "DropInPaths": "",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Sat 2026-11-07 21:55:37 MSK",
+          "ActiveEnterTimestamp": "Sat 2026-11-07 21:55:37 MSK",
+          "ActiveExitTimestamp": "Sat 2026-11-07 21:55:28 MSK",
+          "InactiveEnterTimestamp": "Sat 2026-11-07 21:55:28 MSK",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "f8f952e3843940b4a9597a632eb3f7f4",
+          "NextElapseUSecRealtime": "",
+          "NextElapseUSecMonotonic": "2month 2w 3d 2h 46min 58.375103s",
+          "LastTriggerUSec": "Wed 2026-11-18 14:59:50 MSK",
+          "Result": "success",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-paid-reconcile.timer": {
+              "size": 195,
+              "mtime_ns": 1794077686460231719,
+              "ctime_ns": 1794077686460231719,
+              "inode": 2093,
+              "sha256": "0957e810d5f84b3b45c6e2b54899fd97500b1aa8421b1a829c39c2491e38719e"
+            }
+          }
+        },
+        "family-connect-product-cert-renew.timer": {
+          "Id": "family-connect-product-cert-renew.timer",
+          "Requires": "-.mount sysinit.target",
+          "Wants": "",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "family-connect-product-cert-renew.service timers.target shutdown.target",
+          "After": "time-sync.target -.mount time-set.target sysinit.target",
+          "Triggers": "family-connect-product-cert-renew.service",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "active",
+          "SubState": "waiting",
+          "FragmentPath": "/etc/systemd/system/family-connect-product-cert-renew.timer",
+          "DropInPaths": "",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Mon 2026-09-14 14:20:06 MSK",
+          "ActiveEnterTimestamp": "Mon 2026-09-14 14:20:06 MSK",
+          "ActiveExitTimestamp": "",
+          "InactiveEnterTimestamp": "",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "d3b1354acee642e38560e01fa49c095a",
+          "NextElapseUSecRealtime": "Thu 2026-11-19 00:27:50 MSK",
+          "NextElapseUSecMonotonic": "0",
+          "LastTriggerUSec": "Wed 2026-11-18 12:08:03 MSK",
+          "Result": "success",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-product-cert-renew.timer": {
+              "size": 191,
+              "mtime_ns": 1789384803578425352,
+              "ctime_ns": 1789384803578425352,
+              "inode": 2976,
+              "sha256": "a7c77bc1011247ffa544b8a8416b73875780afc3589156728c2ece8103a59278"
+            }
+          }
+        },
+        "family-connect-restricted-directory-sync.timer": {
+          "Id": "family-connect-restricted-directory-sync.timer",
+          "Requires": "sysinit.target",
+          "Wants": "",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "shutdown.target timers.target family-connect-restricted-directory-sync.service",
+          "After": "sysinit.target",
+          "Triggers": "family-connect-restricted-directory-sync.service",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "active",
+          "SubState": "waiting",
+          "FragmentPath": "/etc/systemd/system/family-connect-restricted-directory-sync.timer",
+          "DropInPaths": "",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Wed 2026-11-18 14:56:48 MSK",
+          "ActiveEnterTimestamp": "Wed 2026-11-18 14:56:48 MSK",
+          "ActiveExitTimestamp": "Wed 2026-11-18 14:56:30 MSK",
+          "InactiveEnterTimestamp": "Wed 2026-11-18 14:56:30 MSK",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "ece9bbf078804b53aab7922fe1b8d220",
+          "NextElapseUSecRealtime": "",
+          "NextElapseUSecMonotonic": "2month 2w 3d 2h 46min 58.605069s",
+          "LastTriggerUSec": "Wed 2026-11-18 14:59:54 MSK",
+          "Result": "success",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-restricted-directory-sync.timer": {
+              "size": 239,
+              "mtime_ns": 1791975557896147424,
+              "ctime_ns": 1791975557911088653,
+              "inode": 2697,
+              "sha256": "7fc3035b37cf8947f8d50aee62d4bfe09dee860bbf13f3196c88cbd878ef22b6"
+            }
+          }
+        },
+        "family-connect-restricted-sync.timer": {
+          "Id": "family-connect-restricted-sync.timer",
+          "Requires": "sysinit.target",
+          "Wants": "",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "family-connect-restricted-sync.service timers.target shutdown.target",
+          "After": "sysinit.target",
+          "Triggers": "family-connect-restricted-sync.service",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "FragmentPath": "/etc/systemd/system/family-connect-restricted-sync.timer",
+          "DropInPaths": "",
+          "UnitFileState": "disabled",
+          "InactiveExitTimestamp": "",
+          "ActiveEnterTimestamp": "",
+          "ActiveExitTimestamp": "",
+          "InactiveEnterTimestamp": "",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "",
+          "NextElapseUSecRealtime": "",
+          "NextElapseUSecMonotonic": "infinity",
+          "LastTriggerUSec": "",
+          "Result": "success",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-restricted-sync.timer": {
+              "size": 199,
+              "mtime_ns": 1790980649710029300,
+              "ctime_ns": 1790980649710029300,
+              "inode": 3017,
+              "sha256": "30bbf64f6b27b56d5f9822d7282df506139b3850dd3450a701e152c3795db89b"
+            }
+          }
+        }
+      },
+      "pressure": {
+        "cpu": "some avg10=7.60 avg60=9.18 avg300=9.53 total=504603008333\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0\n",
+        "io": "some avg10=3.23 avg60=3.50 avg300=3.71 total=285164466510\nfull avg10=2.44 avg60=2.59 avg300=2.48 total=225116847676\n",
+        "memory": "some avg10=0.00 avg60=0.00 avg300=0.00 total=14819720325\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=12564896584\n"
+      },
+      "final": {
+        "at": "2026-11-18T12:14:42.930646+00:00",
+        "boot_id": "411dc329-437f-418d-bb71-37a8d1e4d4bf",
+        "processes": "",
+        "units": "Id=family-connect-paid-watch.service\nRequires=system.slice sysinit.target\nBindsTo=\nPartOf=\nLoadState=loaded\nActiveState=active\nSubState=running\nInactiveEnterTimestamp=Wed 2026-11-18 15:14:26 MSK\nInvocationID=f00f5d6039374432899bb2d67734b77b\nRestart=on-failure\nRestartUSec=5s\nTimeoutStartUSec=45s\nTimeoutStopUSec=5s\nWatchdogUSec=12s\nMainPID=1853877\nControlPID=0\nResult=success\nNRestarts=1052\nExecMainStartTimestamp=Wed 2026-11-18 15:14:31 MSK\nExecMainExitTimestamp=\nExecMainCode=0\nExecMainStatus=0\n\nId=family-connect-friends-awg.service\nRequires=system.slice sysinit.target\nBindsTo=family-connect-paid-watch.service\nPartOf=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nInactiveEnterTimestamp=Wed 2026-11-18 04:49:39 MSK\nInvocationID=159c62451f954881972092ff58dd44f8\nRestart=on-failure\nRestartUSec=3s\nTimeoutStartUSec=1min 30s\nTimeoutStopUSec=5s\nWatchdogUSec=0\nMainPID=0\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Tue 2026-11-17 10:42:13 MSK\nExecMainExitTimestamp=Wed 2026-11-18 04:49:39 MSK\nExecMainCode=1\nExecMainStatus=0\n\nId=family-connect-friends-tcp.service\nRequires=system.slice sysinit.target\nBindsTo=family-connect-paid-watch.service\nPartOf=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nInactiveEnterTimestamp=Wed 2026-11-18 04:49:35 MSK\nInvocationID=3629fc3559fc4485991333b4f60e1fb9\nRestart=on-failure\nRestartUSec=3s\nTimeoutStartUSec=1min 30s\nTimeoutStopUSec=5s\nWatchdogUSec=0\nMainPID=0\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Tue 2026-11-17 10:42:14 MSK\nExecMainExitTimestamp=Wed 2026-11-18 04:49:35 MSK\nExecMainCode=1\nExecMainStatus=0\n\nId=family-connect-credential-renewal.service\nRequires=system.slice sysinit.target\nBindsTo=\nPartOf=\nLoadState=loaded\nActiveState=failed\nSubState=failed\nInactiveEnterTimestamp=Wed 2026-11-18 15:11:50 MSK\nInvocationID=ad26723d17db43a9abda2bacd4502202\nRestart=no\nRestartUSec=100ms\nTimeoutStartUSec=10min\nTimeoutStopUSec=1min 30s\nWatchdogUSec=0\nMainPID=0\nControlPID=0\nResult=exit-code\nNRestarts=0\nExecMainStartTimestamp=Wed 2026-11-18 15:11:30 MSK\nExecMainExitTimestamp=Wed 2026-11-18 15:11:50 MSK\nExecMainCode=1\nExecMainStatus=75\n\nId=family-connect-restricted-directory-sync.service\nRequires=system.slice sysinit.target\nBindsTo=\nPartOf=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nInactiveEnterTimestamp=Wed 2026-11-18 15:14:25 MSK\nInvocationID=134c9d45114e41d682691c1b2485c8b0\nRestart=no\nRestartUSec=100ms\nTimeoutStartUSec=1min\nTimeoutStopUSec=1min 30s\nWatchdogUSec=0\nMainPID=0\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Wed 2026-11-18 15:14:24 MSK\nExecMainExitTimestamp=Wed 2026-11-18 15:14:25 MSK\nExecMainCode=1\nExecMainStatus=0\n\nId=family-connect-paid-reconcile.service\nRequires=system.slice sysinit.target\nBindsTo=\nPartOf=\nLoadState=loaded\nActiveState=failed\nSubState=failed\nInactiveEnterTimestamp=Wed 2026-11-18 15:14:37 MSK\nInvocationID=5ec68c53726e44d6b6b33f47165869e4\nRestart=no\nRestartUSec=100ms\nTimeoutStartUSec=40s\nTimeoutStopUSec=5s\nWatchdogUSec=0\nMainPID=0\nControlPID=0\nResult=exit-code\nNRestarts=0\nExecMainStartTimestamp=Wed 2026-11-18 15:14:34 MSK\nExecMainExitTimestamp=Wed 2026-11-18 15:14:37 MSK\nExecMainCode=1\nExecMainStatus=1\n\nId=family-connect-friends-http-candidate.service\nRequires=system.slice sysinit.target\nBindsTo=\nPartOf=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nInactiveEnterTimestamp=Tue 2026-11-17 23:41:01 MSK\nInvocationID=0234d051a4e34a7db150a0e647bf812b\nRestart=no\nRestartUSec=100ms\nTimeoutStartUSec=1min 30s\nTimeoutStopUSec=1min 30s\nWatchdogUSec=0\nMainPID=0\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Tue 2026-11-17 20:56:36 MSK\nExecMainExitTimestamp=Tue 2026-11-17 23:41:01 MSK\nExecMainCode=2\nExecMainStatus=15",
+        "effective_units": {
+          "family-connect-paid-watch.service": "659b954beb67d1e23c0cea45ffda62704f48dc2fb0b1f5bd30d0ae733760bd4e",
+          "family-connect-friends-awg.service": "5e0458aebc926e919eb4da5cbe608514a27193c2ccb6fb5b5a64a8e1b16ac2d5",
+          "family-connect-friends-tcp.service": "4d32639cf27be0348d395bf232969b266696c2dd89044613e73b91824e3c2e79",
+          "family-connect-credential-renewal.service": "40dcc510a6af50e693b5c3e950338620447ddc0e5ac9da0db6b3a1f695bf2342",
+          "family-connect-restricted-directory-sync.service": "08cd990a63e71a775bf6c1389b9cdbfa0d4eb268361f8a9a7eb75c81a957e37d",
+          "family-connect-paid-reconcile.service": "76ffb946c60844c8c46019dc33a7cb77487dfb01f3e83ab82b4b0479f4003946",
+          "family-connect-friends-http-candidate.service": "75019feca4120f864be054f1ccdec6da29c0bcd82b052b25659f9db0262f008e"
+        },
+        "timers": "NEXT                         LEFT LAST                              PASSED UNIT                                           ACTIVATES\nWed 2026-11-18 15:14:55 MSK   12s Wed 2026-11-18 15:14:24 MSK      18s ago family-connect-restricted-directory-sync.timer family-connect-restricted-directory-sync.service\nWed 2026-11-18 15:15:07 MSK   24s Wed 2026-11-18 15:14:34 MSK       8s ago family-connect-paid-reconcile.timer            family-connect-paid-reconcile.service\nWed 2026-11-18 15:26:30 MSK 11min Wed 2026-11-18 15:11:30 MSK 3min 12s ago family-connect-credential-renewal.timer        family-connect-credential-renewal.service\n\n3 timers listed.",
+        "first_failure_stat": {
+          "size": 1977,
+          "mtime_ns": 1794966575102842653,
+          "ctime_ns": 1794966575102842653,
+          "inode": 1064363,
+          "sha256": "40f39f13667fb5e710a6103e83adcb6741487430cc20efe0f57d24f87289d050"
+        },
+        "transport-attempt.json": {
+          "stat": {
+            "size": 81,
+            "mtime_ns": 1795004074957416956,
+            "ctime_ns": 1795004074974421729,
+            "inode": 1064336,
+            "sha256": "fc530f5d4f49973d074498f877c96cb02c5edee205acc1183dde691c844be157"
+          },
+          "observed_at": 1795004074,
+          "result": "error",
+          "records_count": null
+        },
+        "transport-state.json": {
+          "stat": {
+            "size": 45536,
+            "mtime_ns": 1795004074867425637,
+            "ctime_ns": 1795004074892424724,
+            "inode": 1064320,
+            "sha256": "81b0daebbb933c354e44aa820d030330815c058275797de60743672d627e50cf"
+          },
+          "observed_at": 1795004074,
+          "result": null,
+          "records_count": 68
+        },
+        "renewal_last": {
+          "operation_id": "scheduled-1794948040-548f317346ab83ca",
+          "state": "RECOVERY_REQUIRED",
+          "first_cause": "STALE_NODE_STATE",
+          "timestamp": 1795003910
+        },
+        "jobs": "",
+        "disk": "1B-blocks        Used      Avail Use%\n30010245120 22888787968 7104679936  77%"
+      }
+    },
+    "nl-amsterdam-1": {
+      "at": "2026-11-18T12:01:01.102465+00:00",
+      "boot_id": "4eed71cc-19ed-4351-8042-33e4d3931b9f",
+      "boot_time": "2026-10-30 19:10:24",
+      "uptime": "1615836.32 2594396.38",
+      "units": {
+        "family-connect-friends-awg.service": {
+          "Id": "family-connect-friends-awg.service",
+          "Requires": "sysinit.target system.slice",
+          "Wants": "-.mount tmp.mount network-online.target",
+          "BindsTo": "family-connect-paid-watch.service",
+          "PartOf": "",
+          "Before": "multi-user.target shutdown.target",
+          "After": "basic.target -.mount sysinit.target systemd-tmpfiles-setup.service system.slice family-connect-paid-watch.service tmp.mount network-online.target systemd-journald.socket",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "active",
+          "SubState": "running",
+          "FragmentPath": "/etc/systemd/system/family-connect-friends-awg.service",
+          "DropInPaths": "/etc/systemd/system/family-connect-friends-awg.service.d/00-restoration-inactive.conf /etc/systemd/system/family-connect-friends-awg.service.d/70-private-files.conf /etc/systemd/system/family-connect-friends-awg.service.d/80-stop-timeout.conf /etc/systemd/system/family-connect-friends-awg.service.d/90-paid.conf",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Sat 2026-11-07 21:55:20 UTC",
+          "ActiveEnterTimestamp": "Sat 2026-11-07 21:55:20 UTC",
+          "ActiveExitTimestamp": "Sat 2026-11-07 21:55:16 UTC",
+          "InactiveEnterTimestamp": "Sat 2026-11-07 21:55:16 UTC",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "7594e0fa4eb342f0b3a636fd4a320731",
+          "Restart": "on-failure",
+          "RestartUSec": "3s",
+          "TimeoutStartUSec": "1min 30s",
+          "TimeoutStopUSec": "5s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "0",
+          "WatchdogTimestamp": "",
+          "MainPID": "1913904",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Sat 2026-11-07 21:55:20 UTC",
+          "ExecMainExitTimestamp": "",
+          "ExecMainCode": "0",
+          "ExecMainStatus": "0",
+          "MemoryMax": "268435456",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-friends-awg.service": {
+              "size": 453,
+              "mtime_ns": 1793389979369986064,
+              "ctime_ns": 1793389979369986064,
+              "inode": 131375,
+              "sha256": "46b04571f038ec5961f61d2e3c552a71dfd3fe680819c4e78361133e6dbceb45"
+            },
+            "/etc/systemd/system/family-connect-friends-awg.service.d/00-restoration-inactive.conf": {
+              "size": 79,
+              "mtime_ns": 1793389978620237900,
+              "ctime_ns": 1793389978620237900,
+              "inode": 394419,
+              "sha256": "04f62904c42faa266192ceccedaa8c0fc6929f79a6b9c5b9c5639fd8f8f0fb86"
+            },
+            "/etc/systemd/system/family-connect-friends-awg.service.d/70-private-files.conf": {
+              "size": 21,
+              "mtime_ns": 1793389979370325562,
+              "ctime_ns": 1793389979370325562,
+              "inode": 395120,
+              "sha256": "d2bb7c9f85695671b5056a03cbf3ed19a2b8ccd98cceb8dfd91383441024d1a7"
+            },
+            "/etc/systemd/system/family-connect-friends-awg.service.d/80-stop-timeout.conf": {
+              "size": 28,
+              "mtime_ns": 1793389979370612961,
+              "ctime_ns": 1793389979370612961,
+              "inode": 395121,
+              "sha256": "2bebe06302f8b4e2f3a943d14dbbbc7937229b6f1ef3422ecaa8d9ab0694f340"
+            },
+            "/etc/systemd/system/family-connect-friends-awg.service.d/90-paid.conf": {
+              "size": 140,
+              "mtime_ns": 1794088516183556351,
+              "ctime_ns": 1794088516183556351,
+              "inode": 401181,
+              "sha256": "f99e4cc434d36d9005a0ae046c90b4d360e5342d023eee1349b984dfa42dc8b2"
+            }
+          }
+        },
+        "family-connect-friends-tcp.service": {
+          "Id": "family-connect-friends-tcp.service",
+          "Requires": "sysinit.target system.slice",
+          "Wants": "-.mount tmp.mount network-online.target",
+          "BindsTo": "family-connect-paid-watch.service",
+          "PartOf": "",
+          "Before": "multi-user.target shutdown.target",
+          "After": "network-online.target basic.target tmp.mount systemd-tmpfiles-setup.service -.mount sysinit.target family-connect-paid-watch.service system.slice",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "active",
+          "SubState": "running",
+          "FragmentPath": "/etc/systemd/system/family-connect-friends-tcp.service",
+          "DropInPaths": "/etc/systemd/system/family-connect-friends-tcp.service.d/00-restoration-inactive.conf /etc/systemd/system/family-connect-friends-tcp.service.d/70-private-files.conf /etc/systemd/system/family-connect-friends-tcp.service.d/90-paid.conf /etc/systemd/system/family-connect-friends-tcp.service.d/91-paid-preflight.conf",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Tue 2026-11-17 16:42:34 UTC",
+          "ActiveEnterTimestamp": "Tue 2026-11-17 16:42:34 UTC",
+          "ActiveExitTimestamp": "Tue 2026-11-17 16:42:34 UTC",
+          "InactiveEnterTimestamp": "Tue 2026-11-17 16:42:34 UTC",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "3b0d315516e84b2486300bdadccac545",
+          "Restart": "on-failure",
+          "RestartUSec": "3s",
+          "TimeoutStartUSec": "1min 30s",
+          "TimeoutStopUSec": "5s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "0",
+          "WatchdogTimestamp": "",
+          "MainPID": "2181958",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Tue 2026-11-17 16:42:34 UTC",
+          "ExecMainExitTimestamp": "",
+          "ExecMainCode": "0",
+          "ExecMainStatus": "0",
+          "MemoryMax": "268435456",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-friends-tcp.service": {
+              "size": 665,
+              "mtime_ns": 1793389979370899799,
+              "ctime_ns": 1793389979370899799,
+              "inode": 131376,
+              "sha256": "b59be3c131ba2e6c81acd4cf18c0be3730e81fd9df1c6d8631b9a03a49fec867"
+            },
+            "/etc/systemd/system/family-connect-friends-tcp.service.d/00-restoration-inactive.conf": {
+              "size": 79,
+              "mtime_ns": 1793389978620443185,
+              "ctime_ns": 1793389978620443185,
+              "inode": 394421,
+              "sha256": "04f62904c42faa266192ceccedaa8c0fc6929f79a6b9c5b9c5639fd8f8f0fb86"
+            },
+            "/etc/systemd/system/family-connect-friends-tcp.service.d/70-private-files.conf": {
+              "size": 21,
+              "mtime_ns": 1793389979371865416,
+              "ctime_ns": 1793389979371865416,
+              "inode": 395122,
+              "sha256": "d2bb7c9f85695671b5056a03cbf3ed19a2b8ccd98cceb8dfd91383441024d1a7"
+            },
+            "/etc/systemd/system/family-connect-friends-tcp.service.d/90-paid.conf": {
+              "size": 140,
+              "mtime_ns": 1794088516183783804,
+              "ctime_ns": 1794088516183783804,
+              "inode": 401182,
+              "sha256": "f99e4cc434d36d9005a0ae046c90b4d360e5342d023eee1349b984dfa42dc8b2"
+            },
+            "/etc/systemd/system/family-connect-friends-tcp.service.d/91-paid-preflight.conf": {
+              "size": 108,
+              "mtime_ns": 1794088516184102718,
+              "ctime_ns": 1794088516184102718,
+              "inode": 401183,
+              "sha256": "da4e902d1fd00aa80dc55af5d0a66c19df604697513232255361fb517154dc3d"
+            }
+          }
+        },
+        "family-connect-mailbox.service": {
+          "Id": "family-connect-mailbox.service",
+          "Requires": "\"opt-apps-family_connect-mailbox\\\\x2dpilot-state.mount\" sysinit.target system.slice -.mount",
+          "Wants": "-.mount tmp.mount network-online.target",
+          "BindsTo": "\"opt-apps-family_connect-mailbox\\\\x2dpilot-state.mount\"",
+          "PartOf": "",
+          "Before": "multi-user.target shutdown.target",
+          "After": "basic.target sysinit.target \"opt-apps-family_connect-mailbox\\\\x2dpilot-state.mount\" network-online.target -.mount systemd-journald.socket systemd-tmpfiles-setup.service system.slice tmp.mount",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "active",
+          "SubState": "running",
+          "FragmentPath": "/etc/systemd/system/family-connect-mailbox.service",
+          "DropInPaths": "/etc/systemd/system/family-connect-mailbox.service.d/00-restoration-inactive.conf /etc/systemd/system.control/family-connect-mailbox.service.d/50-MemoryMax.conf",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Fri 2026-10-30 20:02:13 UTC",
+          "ActiveEnterTimestamp": "Fri 2026-10-30 20:02:19 UTC",
+          "ActiveExitTimestamp": "",
+          "InactiveEnterTimestamp": "",
+          "StartLimitIntervalUSec": "5min",
+          "StartLimitBurst": "3",
+          "InvocationID": "2955be23002148a9a4aaf216aa9b334f",
+          "Restart": "on-failure",
+          "RestartUSec": "5s",
+          "TimeoutStartUSec": "1min 30s",
+          "TimeoutStopUSec": "15s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "0",
+          "WatchdogTimestamp": "",
+          "MainPID": "3705",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Fri 2026-10-30 20:02:19 UTC",
+          "ExecMainExitTimestamp": "",
+          "ExecMainCode": "0",
+          "ExecMainStatus": "0",
+          "MemoryMax": "536870912",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-mailbox.service": {
+              "size": 1347,
+              "mtime_ns": 1793389979372196456,
+              "ctime_ns": 1793389979372196456,
+              "inode": 131456,
+              "sha256": "ff35aab79f74ef615b8399580ba0f251ffd0f32ab3ccf558d55f38479a335311"
+            },
+            "/etc/systemd/system/family-connect-mailbox.service.d/00-restoration-inactive.conf": {
+              "size": 79,
+              "mtime_ns": 1793389978620753122,
+              "ctime_ns": 1793389978620753122,
+              "inode": 394425,
+              "sha256": "04f62904c42faa266192ceccedaa8c0fc6929f79a6b9c5b9c5639fd8f8f0fb86"
+            },
+            "/etc/systemd/system.control/family-connect-mailbox.service.d/50-MemoryMax.conf": {
+              "size": 151,
+              "mtime_ns": 1794083145614365348,
+              "ctime_ns": 1794083145614365348,
+              "inode": 265960,
+              "sha256": "0bb52b5b83bfda04972c235e3b54cbedbaad1aadd2918c37d6fe53c242c6c5ed"
+            }
+          }
+        },
+        "family-connect-paid-watch.service": {
+          "Id": "family-connect-paid-watch.service",
+          "Requires": "sysinit.target system.slice",
+          "Wants": "",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "multi-user.target family-connect-friends-tcp.service shutdown.target family-connect-friends-awg.service",
+          "After": "systemd-journald.socket sysinit.target basic.target system.slice time-sync.target",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "active",
+          "SubState": "running",
+          "FragmentPath": "/etc/systemd/system/family-connect-paid-watch.service",
+          "DropInPaths": "",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Sat 2026-11-07 21:55:20 UTC",
+          "ActiveEnterTimestamp": "Sat 2026-11-07 21:55:20 UTC",
+          "ActiveExitTimestamp": "Sat 2026-11-07 21:55:16 UTC",
+          "InactiveEnterTimestamp": "Sat 2026-11-07 21:55:16 UTC",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "0bad5e7b4c484d01a25c56dbe557f7d6",
+          "Restart": "on-failure",
+          "RestartUSec": "5s",
+          "TimeoutStartUSec": "45s",
+          "TimeoutStopUSec": "5s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "12s",
+          "WatchdogTimestamp": "Wed 2026-11-18 12:00:59 UTC",
+          "MainPID": "1913886",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Sat 2026-11-07 21:55:20 UTC",
+          "ExecMainExitTimestamp": "",
+          "ExecMainCode": "0",
+          "ExecMainStatus": "0",
+          "MemoryMax": "infinity",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-paid-watch.service": {
+              "size": 375,
+              "mtime_ns": 1794088516183183443,
+              "ctime_ns": 1794088516183183443,
+              "inode": 132199,
+              "sha256": "e9a9d82841d0d5aa257780660107d9588af80a24b32d604dccf9c81c2730523a"
+            }
+          }
+        },
+        "family-connect-restricted-bootstrap.service": {
+          "Id": "family-connect-restricted-bootstrap.service",
+          "Requires": "system.slice -.mount sysinit.target",
+          "Wants": "network-online.target -.mount tmp.mount",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "shutdown.target",
+          "After": "tmp.mount -.mount sysinit.target basic.target systemd-journald.socket system.slice systemd-tmpfiles-setup.service network-online.target",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "FragmentPath": "/etc/systemd/system/family-connect-restricted-bootstrap.service",
+          "DropInPaths": "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/00-restoration-inactive.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/62-four-hour.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/90-owner-diagnostic-control.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/95-exit-chat-services.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-telemost-peer-observer.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-z-admission-ownership.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zz-stability-continuation.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzz-lease-continuity82.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzz-whitelist-bootstrap83.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzz-fatal-observer.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzzz-seed-observation.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzzzz-signal-observation.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/zz-canonical-profile.conf",
+          "UnitFileState": "disabled",
+          "InactiveExitTimestamp": "",
+          "ActiveEnterTimestamp": "",
+          "ActiveExitTimestamp": "",
+          "InactiveEnterTimestamp": "",
+          "StartLimitIntervalUSec": "10min",
+          "StartLimitBurst": "5",
+          "InvocationID": "",
+          "Restart": "always",
+          "RestartUSec": "30s",
+          "TimeoutStartUSec": "1min 30s",
+          "TimeoutStopUSec": "20s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "infinity",
+          "WatchdogTimestamp": "",
+          "MainPID": "0",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "",
+          "ExecMainExitTimestamp": "",
+          "ExecMainCode": "0",
+          "ExecMainStatus": "0",
+          "MemoryMax": "infinity",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-restricted-bootstrap.service": {
+              "size": 834,
+              "mtime_ns": 1793389979372464328,
+              "ctime_ns": 1793389979372464328,
+              "inode": 131471,
+              "sha256": "306aef9328bac4ae2fca2d2b4b6f17d1f87315d192e5f5b6e7906a6c20ae5f68"
+            },
+            "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/00-restoration-inactive.conf": {
+              "size": 79,
+              "mtime_ns": 1793389978620617755,
+              "ctime_ns": 1793389978620617755,
+              "inode": 394423,
+              "sha256": "04f62904c42faa266192ceccedaa8c0fc6929f79a6b9c5b9c5639fd8f8f0fb86"
+            },
+            "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/62-four-hour.conf": {
+              "size": 286,
+              "mtime_ns": 1793389979372798012,
+              "ctime_ns": 1793389979372798012,
+              "inode": 395123,
+              "sha256": "864a67582f7b478dd0ed896b36e119b4c39969636afa9a59a32a5857ea3e9167"
+            },
+            "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/90-owner-diagnostic-control.conf": {
+              "size": 55,
+              "mtime_ns": 1793389979373045519,
+              "ctime_ns": 1793389979373058317,
+              "inode": 395124,
+              "sha256": "97b3cd2f868150a08fc7b81b43582a624f3d40bc75f07193bd62079cf8af4ff8"
+            },
+            "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/95-exit-chat-services.conf": {
+              "size": 333,
+              "mtime_ns": 1793389979373348894,
+              "ctime_ns": 1793389979373348894,
+              "inode": 395125,
+              "sha256": "c1e33f6c2d530f007aeb6085ffdf4e20a36ed67d66765a1ab0cd198692f43b85"
+            },
+            "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-telemost-peer-observer.conf": {
+              "size": 359,
+              "mtime_ns": 1793389979373644556,
+              "ctime_ns": 1793389979373644556,
+              "inode": 395126,
+              "sha256": "5d5b0dda5f3a8d0da0829490d6186606a1f04b22f07f4fd02dea53a48cfe056d"
+            },
+            "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-z-admission-ownership.conf": {
+              "size": 454,
+              "mtime_ns": 1793389979373919639,
+              "ctime_ns": 1793389979373919639,
+              "inode": 395127,
+              "sha256": "7dbb4b1aedbbe4de3af18efecc45c8eb2182f83194942d145a9f7d62b727090f"
+            },
+            "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zz-stability-continuation.conf": {
+              "size": 577,
+              "mtime_ns": 1793389979374233335,
+              "ctime_ns": 1793389979374233335,
+              "inode": 395128,
+              "sha256": "ce394f10f0d377ed4024533510980f47e990bca518fb50ffb6fd1c1dda441552"
+            },
+            "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzz-lease-continuity82.conf": {
+              "size": 339,
+              "mtime_ns": 1793389979374465316,
+              "ctime_ns": 1793389979374465316,
+              "inode": 395129,
+              "sha256": "b1ab399971162468e27f669c374742868b32b788f34a721ad8aaa2b921064847"
+            },
+            "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzz-whitelist-bootstrap83.conf": {
+              "size": 370,
+              "mtime_ns": 1793389979374718387,
+              "ctime_ns": 1793389979374718387,
+              "inode": 395130,
+              "sha256": "9e708f10b20d5ed76a38cd236507f16001658110d468936cdcb1061c7c64df89"
+            },
+            "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzz-fatal-observer.conf": {
+              "size": 681,
+              "mtime_ns": 1793389979374967171,
+              "ctime_ns": 1793389979374967171,
+              "inode": 395131,
+              "sha256": "dc9d968301e30f09814893c0ee5d69f28e576b8da684c7230229c3e5167ab034"
+            },
+            "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzzz-seed-observation.conf": {
+              "size": 375,
+              "mtime_ns": 1793389979375297952,
+              "ctime_ns": 1793389979375297952,
+              "inode": 395132,
+              "sha256": "125b18416694ae2fdfaef930d88d5537b0453c323d15f67f0d8ee48042133d39"
+            },
+            "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzzzz-signal-observation.conf": {
+              "size": 377,
+              "mtime_ns": 1793389979375609247,
+              "ctime_ns": 1793389979375609247,
+              "inode": 395133,
+              "sha256": "a51090687818d3409fc1e597c5c57c203b942d219a4816e227353cf0509c5ff4"
+            },
+            "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/zz-canonical-profile.conf": {
+              "size": 339,
+              "mtime_ns": 1793824110037865716,
+              "ctime_ns": 1793824110038630990,
+              "inode": 400700,
+              "sha256": "529425bd0d8c9483c3bf5dd33d9c86f13ae378fe73827668fe0b428ed88e0734"
+            }
+          }
+        },
+        "family-connect-reticulum.service": {
+          "Id": "family-connect-reticulum.service",
+          "Requires": "system.slice -.mount sysinit.target",
+          "Wants": "-.mount network-online.target tmp.mount",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "multi-user.target shutdown.target",
+          "After": "-.mount sysinit.target system.slice basic.target systemd-journald.socket tmp.mount network-online.target systemd-tmpfiles-setup.service",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "active",
+          "SubState": "running",
+          "FragmentPath": "/etc/systemd/system/family-connect-reticulum.service",
+          "DropInPaths": "/etc/systemd/system/family-connect-reticulum.service.d/00-restoration-inactive.conf /etc/systemd/system/family-connect-reticulum.service.d/90-existing-users-readiness.conf",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Fri 2026-10-30 20:02:21 UTC",
+          "ActiveEnterTimestamp": "Fri 2026-10-30 20:02:21 UTC",
+          "ActiveExitTimestamp": "",
+          "InactiveEnterTimestamp": "",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "a7c5aa8ff9c1459094ddb00f9d56457b",
+          "Restart": "on-failure",
+          "RestartUSec": "5s",
+          "TimeoutStartUSec": "1min 30s",
+          "TimeoutStopUSec": "1min 30s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "0",
+          "WatchdogTimestamp": "",
+          "MainPID": "3769",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Fri 2026-10-30 20:02:21 UTC",
+          "ExecMainExitTimestamp": "",
+          "ExecMainCode": "0",
+          "ExecMainStatus": "0",
+          "MemoryMax": "268435456",
+          "MemorySwapMax": "infinity",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-reticulum.service": {
+              "size": 849,
+              "mtime_ns": 1793389979378261302,
+              "ctime_ns": 1793389979378261302,
+              "inode": 131730,
+              "sha256": "ef3c61556981acfc586c3d0da3e608ecfc4c0c4aac2cf1f3f2f3bc374326b183"
+            },
+            "/etc/systemd/system/family-connect-reticulum.service.d/00-restoration-inactive.conf": {
+              "size": 79,
+              "mtime_ns": 1793389978620890002,
+              "ctime_ns": 1793389978620890002,
+              "inode": 394427,
+              "sha256": "04f62904c42faa266192ceccedaa8c0fc6929f79a6b9c5b9c5639fd8f8f0fb86"
+            },
+            "/etc/systemd/system/family-connect-reticulum.service.d/90-existing-users-readiness.conf": {
+              "size": 366,
+              "mtime_ns": 1793389979378596015,
+              "ctime_ns": 1793389979378596015,
+              "inode": 395135,
+              "sha256": "e6d830029183ff897d7dc39bb53757e8510c1fda31a39cd89d12e38c521cecc1"
+            }
+          }
+        }
+      },
+      "pressure": {
+        "cpu": "some avg10=1.63 avg60=3.05 avg300=3.30 total=114204670319\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0\n",
+        "io": "some avg10=0.00 avg60=0.00 avg300=0.00 total=13629480204\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=10818808851\n",
+        "memory": "some avg10=0.00 avg60=0.00 avg300=0.00 total=2275790890\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=1813349388\n"
+      },
+      "final": {
+        "at": "2026-11-18T12:12:43.893675+00:00",
+        "ownership": {
+          "state": "ACQUIRED",
+          "operation_id": "scheduled-1794948040-548f317346ab83ca",
+          "expected_keys": [
+            "admission_mode",
+            "files",
+            "gateway_ids",
+            "gateway_slot",
+            "policy",
+            "role",
+            "session_inventory"
+          ]
+        },
+        "fatal": {
+          "fatal-application": {
+            "timestamp_utc": "2026-11-17T20:41:06.786966187Z",
+            "invocation_id": "bbab5532b2cd4e6180c95330eeed977d",
+            "pid": 2286244,
+            "exit_path": "signal",
+            "last_confirmed_stage": "SEED_RUN",
+            "first_stage": "RUN",
+            "first_cause": "CANCELLED",
+            "safe_error_class": "typed",
+            "parent_context_at_failure": "CANCELLED",
+            "fatal": false,
+            "signal": "SIGTERM",
+            "credential_limiting_expiry": "2026-11-17T21:55:59Z",
+            "credential_headroom_seconds": 4492,
+            "cleanup_started": true,
+            "cleanup_completed": true
+          },
+          "fatal-systemd": {
+            "exit_code": "exited",
+            "exit_status": "0",
+            "invocation_id": "bbab5532b2cd4e6180c95330eeed977d",
+            "property_invocation_match": true,
+            "service_result": "success",
+            "timestamp_utc": "2026-11-17T20:41:06.962840+00:00",
+            "properties": {
+              "ExecMainCode": "1",
+              "ExecMainExitTimestamp": "Tue 2026-11-17 20:41:06 UTC",
+              "ExecMainStartTimestamp": "Tue 2026-11-17 17:56:29 UTC",
+              "ExecMainStatus": "0",
+              "InvocationID": "bbab5532b2cd4e6180c95330eeed977d",
+              "NRestarts": "0"
+            }
+          }
+        },
+        "guard_state": "Id=family-connect-restricted-bootstrap.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nInvocationID=\nMainPID=0\nControlPID=0\nResult=success\nNRestarts=0\n\nId=family-connect-friends-awg.service\nLoadState=loaded\nActiveState=active\nSubState=running\nInvocationID=7594e0fa4eb342f0b3a636fd4a320731\nMainPID=1913904\nControlPID=0\nResult=success\nNRestarts=0\n\nId=family-connect-friends-tcp.service\nLoadState=loaded\nActiveState=active\nSubState=running\nInvocationID=3b0d315516e84b2486300bdadccac545\nMainPID=2181958\nControlPID=0\nResult=success\nNRestarts=0\n\nId=family-connect-paid-watch.service\nLoadState=loaded\nActiveState=active\nSubState=running\nInvocationID=0bad5e7b4c484d01a25c56dbe557f7d6\nMainPID=1913886\nControlPID=0\nResult=success\nNRestarts=0",
+        "processes": "",
+        "state_files": [
+          "operation.lock",
+          "directory-before.json",
+          "archive",
+          "services-before.json",
+          "completed.json",
+          "owner.json"
+        ],
+        "profile_matches_acquired": true
+      },
+      "material": {
+        "at": "2026-11-18T12:06:50.887842+00:00",
+        "materials": {
+          "/etc/fc-canonical-pinned-venv/profile.json": {
+            "sha256": "0192bd4dfd62d9d7ce5dca366d6a86d86ca5c8d68dde6d438faa1b245757f0fc",
+            "minimum_crl": 27372,
+            "minimum_revision": 1,
+            "certificate": {
+              "parse_returncode": 0,
+              "validity": "notBefore=Nov 17 17:55:59 2026 GMT\nnotAfter=Nov 17 21:55:59 2026 GMT"
+            },
+            "revocations": {
+              "parse_returncode": 0,
+              "validity": "lastUpdate=Nov 17 17:55:59 2026 GMT\nnextUpdate=Nov 17 21:55:59 2026 GMT\ncrlNumber=0x6AEC"
+            },
+            "authority": {
+              "parse_returncode": 0,
+              "validity": "notBefore=Oct 18 22:36:48 2026 GMT\nnotAfter=Jan 16 22:36:48 2027 GMT"
+            }
+          },
+          "/opt/apps/family_connect/friends-restricted/directory.json": {
+            "stat": {
+              "size": 292,
+              "mtime_ns": 1794938191659830583,
+              "ctime_ns": 1794938191662830571,
+              "inode": 401475,
+              "sha256": "23f8ef7e860e63fa99c5029e2a71b35fa3deba3daa1567646fe8e8d9964ccd52"
+            },
+            "validity": {
+              "issued_at": "2026-11-17T17:56:31.658198335Z",
+              "expires_at": "2026-11-17T21:56:29.405747096Z",
+              "version": 1
+            },
+            "seed_count": 1
+          }
+        },
+        "units": {
+          "family-connect-restricted-bootstrap.service": "LoadState=loaded\nActiveState=inactive\nSubState=dead\nActiveEnterTimestamp=\nInactiveEnterTimestamp=\nStartLimitIntervalUSec=10min\nStartLimitBurst=5\nInvocationID=\nRestart=always\nRestartUSec=30s\nTimeoutStartUSec=1min 30s\nTimeoutStopUSec=20s\nWatchdogUSec=infinity\nMainPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=\nExecMainExitTimestamp=",
+          "family-connect-paid-watch.service": "LoadState=loaded\nActiveState=active\nSubState=running\nActiveEnterTimestamp=Sat 2026-11-07 21:55:20 UTC\nInactiveEnterTimestamp=Sat 2026-11-07 21:55:16 UTC\nStartLimitIntervalUSec=10s\nStartLimitBurst=5\nInvocationID=0bad5e7b4c484d01a25c56dbe557f7d6\nRestart=on-failure\nRestartUSec=5s\nTimeoutStartUSec=45s\nTimeoutStopUSec=5s\nWatchdogUSec=12s\nMainPID=1913886\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Sat 2026-11-07 21:55:20 UTC\nExecMainExitTimestamp="
+        },
+        "fatal-application": [
+          {
+            "name": "application-bbab5532b2cd4e6180c95330eeed977d.json",
+            "stat": {
+              "size": 810,
+              "mtime_ns": 1794948066787547641,
+              "ctime_ns": 1794948066795547600,
+              "inode": 401939,
+              "sha256": "5e0bf7d2debaf4ab6f4faed125e8592bde6308bf16adbde2adc7e8e58429c562"
+            },
+            "keys": [
+              "schema",
+              "timestamp_utc",
+              "elapsed_ms",
+              "invocation_id",
+              "pid",
+              "binary_sha256",
+              "source_sha",
+              "exit_path",
+              "last_confirmed_stage",
+              "first_stage",
+              "first_cause",
+              "safe_error_class",
+              "seed_generation",
+              "parent_context_at_failure",
+              "fatal",
+              "signal",
+              "directory_sha256",
+              "directory_generation",
+              "credential_limiting_expiry",
+              "credential_headroom_seconds",
+              "credential_snapshot",
+              "broker_lifecycle",
+              "cleanup_started",
+              "cleanup_completed"
+            ],
+            "safe": {
+              "schema": 1,
+              "signal": "SIGTERM",
+              "invocation_id": "bbab5532b2cd4e6180c95330eeed977d",
+              "pid": 2286244
+            }
+          }
+        ],
+        "fatal-systemd": [
+          {
+            "name": "systemd-bbab5532b2cd4e6180c95330eeed977d.json",
+            "stat": {
+              "size": 599,
+              "mtime_ns": 1794948066964442196,
+              "ctime_ns": 1794948066968546710,
+              "inode": 401699,
+              "sha256": "bcb2fd8661865a3fedc4651c18f3b524779333aa57a7de8f52d592939fef65ff"
+            },
+            "keys": [
+              "exit_code",
+              "exit_status",
+              "invocation_id",
+              "properties",
+              "property_invocation_match",
+              "schema",
+              "service_result",
+              "timestamp_utc"
+            ],
+            "safe": {
+              "schema": 1,
+              "exit_code": "exited",
+              "invocation_id": "bbab5532b2cd4e6180c95330eeed977d",
+              "service_result": "success",
+              "exit_status": "0"
+            }
+          }
+        ]
+      },
+      "gateway_runtime": {
+        "/usr/local/lib/fc-profile-tools/unified-a597d2a/gateway": {
+          "size": 17937478,
+          "mtime_ns": 1793823782896855840,
+          "ctime_ns": 1793823782926762896,
+          "inode": 400956,
+          "sha256": "70e6c0fc1b920ad308e24667be94f674c34979dab6aa518e1a8194fff7c131b6"
+        }
+      },
+      "ownership": {
+        "renewal-state/owner.json": {
+          "stat": {
+            "size": 576,
+            "mtime_ns": 1794948059320586062,
+            "ctime_ns": 1794948059322586052,
+            "inode": 401911,
+            "sha256": "c74bd803cb02f35d6408b76b3f6aca42cef7cc7ffe1a059ac4c7a3e17ac456b1"
+          },
+          "value": {
+            "first_cause": null,
+            "operation_id": "scheduled-1794948040-548f317346ab83ca",
+            "state": "ACQUIRED"
+          }
+        },
+        "renewal-state/services-before.json": {
+          "stat": {
+            "size": 198,
+            "mtime_ns": 1794948066633661122,
+            "ctime_ns": 1794948066634548427,
+            "inode": 401938,
+            "sha256": "4ca8b0f2989c0b64a7c7eb6e15ecd96602efcac51fced8549ce4dcf0cedfbf64"
+          },
+          "value": {
+            "family-connect-restricted-bootstrap.service": {
+              "ActiveState": "active",
+              "InvocationID": "bbab5532b2cd4e6180c95330eeed977d",
+              "MainPID": "2286244",
+              "NRestarts": "0",
+              "Result": "success",
+              "SubState": "running"
+            }
+          }
+        }
+      },
+      "publisher_prerequisite": {
+        "at": "2026-11-18T12:18:32.740485+00:00",
+        "files": {
+          "/var/lib/fc-publisher-recovery/source-a11eb8f2614e/publisher-recovery": {
+            "size": 16342590,
+            "mtime_ns": 1793400002540037618,
+            "ctime_ns": 1793400002548251600,
+            "inode": 1924,
+            "sha256": "f44ace11d7013cdf2908e888a5ed6175a936970ab9c9195ddf9846d77f587995"
+          },
+          "/etc/fc-publisher-recovery-worker.json": {
+            "exists": false
+          },
+          "/var/lib/fc-publisher-recovery/generation-20261106/retired-worker-config.json": {
+            "size": 1112,
+            "mtime_ns": 1793973391526349810,
+            "ctime_ns": 1793974546293777268,
+            "inode": 132145,
+            "sha256": "4d2dd26c2ccf59b8e880a6355d8acd3310563e0f9abc41f9d2b4be169f750345"
+          }
+        },
+        "diagnostics_remaining": ""
+      }
+    },
+    "nl-amsterdam-2": {
+      "at": "2026-11-18T12:01:07.273274+00:00",
+      "boot_id": "6f2236ce-5aa5-4a5e-82a5-8df57afc14d7",
+      "boot_time": "2026-11-01 23:16:36",
+      "uptime": "1428270.48 2594392.15",
+      "units": {
+        "family-connect-friends-awg.service": {
+          "Restart": "on-failure",
+          "RestartUSec": "3s",
+          "TimeoutStartUSec": "1min 30s",
+          "TimeoutStopUSec": "5s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "0",
+          "WatchdogTimestamp": "",
+          "MainPID": "5829",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Sat 2026-11-07 21:55:37 UTC",
+          "ExecMainExitTimestamp": "",
+          "ExecMainCode": "0",
+          "ExecMainStatus": "0",
+          "MemoryMax": "268435456",
+          "MemorySwapMax": "infinity",
+          "Id": "family-connect-friends-awg.service",
+          "Requires": "sysinit.target -.mount system.slice",
+          "Wants": "tmp.mount network-online.target",
+          "BindsTo": "family-connect-paid-watch.service",
+          "PartOf": "",
+          "Before": "shutdown.target multi-user.target",
+          "After": "basic.target network-online.target family-connect-paid-watch.service systemd-tmpfiles-setup.service tmp.mount -.mount sysinit.target system.slice",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "active",
+          "SubState": "running",
+          "FragmentPath": "/etc/systemd/system/family-connect-friends-awg.service",
+          "DropInPaths": "/etc/systemd/system/family-connect-friends-awg.service.d/90-paid.conf",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Sat 2026-11-07 21:55:37 UTC",
+          "ActiveEnterTimestamp": "Sat 2026-11-07 21:55:37 UTC",
+          "ActiveExitTimestamp": "Sat 2026-11-07 21:55:34 UTC",
+          "InactiveEnterTimestamp": "Sat 2026-11-07 21:55:34 UTC",
+          "StartLimitIntervalUSec": "2min",
+          "StartLimitBurst": "5",
+          "InvocationID": "ae07a5b7d56846c5b1f824e81c9e86ac",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-friends-awg.service": {
+              "size": 474,
+              "mtime_ns": 1793580149156872034,
+              "ctime_ns": 1794077666365606235,
+              "inode": 134546,
+              "sha256": "b0ecdb01a93336b54808e3884234563e6a2e51e35ca09a2913cf0f082492644b"
+            },
+            "/etc/systemd/system/family-connect-friends-awg.service.d/90-paid.conf": {
+              "size": 140,
+              "mtime_ns": 1794088534162553287,
+              "ctime_ns": 1794088534162553287,
+              "inode": 926275,
+              "sha256": "f99e4cc434d36d9005a0ae046c90b4d360e5342d023eee1349b984dfa42dc8b2"
+            }
+          }
+        },
+        "family-connect-friends-tcp.service": {
+          "Restart": "on-failure",
+          "RestartUSec": "3s",
+          "TimeoutStartUSec": "1min 30s",
+          "TimeoutStopUSec": "5s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "0",
+          "WatchdogTimestamp": "",
+          "MainPID": "5846",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Sat 2026-11-07 21:55:38 UTC",
+          "ExecMainExitTimestamp": "",
+          "ExecMainCode": "0",
+          "ExecMainStatus": "0",
+          "MemoryMax": "268435456",
+          "MemorySwapMax": "infinity",
+          "Id": "family-connect-friends-tcp.service",
+          "Requires": "sysinit.target -.mount system.slice",
+          "Wants": "tmp.mount network-online.target",
+          "BindsTo": "family-connect-paid-watch.service",
+          "PartOf": "",
+          "Before": "shutdown.target multi-user.target",
+          "After": "family-connect-paid-watch.service -.mount tmp.mount network-online.target basic.target system.slice sysinit.target systemd-tmpfiles-setup.service",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "active",
+          "SubState": "running",
+          "FragmentPath": "/etc/systemd/system/family-connect-friends-tcp.service",
+          "DropInPaths": "/etc/systemd/system/family-connect-friends-tcp.service.d/90-paid.conf /etc/systemd/system/family-connect-friends-tcp.service.d/91-paid-preflight.conf",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Sat 2026-11-07 21:55:37 UTC",
+          "ActiveEnterTimestamp": "Sat 2026-11-07 21:55:38 UTC",
+          "ActiveExitTimestamp": "Sat 2026-11-07 21:55:34 UTC",
+          "InactiveEnterTimestamp": "Sat 2026-11-07 21:55:34 UTC",
+          "StartLimitIntervalUSec": "2min",
+          "StartLimitBurst": "5",
+          "InvocationID": "f456355e8135424eaa745b9d1df4e0c5",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-friends-tcp.service": {
+              "size": 671,
+              "mtime_ns": 1793580149154872043,
+              "ctime_ns": 1794077666365606235,
+              "inode": 134545,
+              "sha256": "c438d0b9a3a1d76d30d95a39ae832d4702249e312f787886f37aa79d5095c528"
+            },
+            "/etc/systemd/system/family-connect-friends-tcp.service.d/90-paid.conf": {
+              "size": 140,
+              "mtime_ns": 1794088534162553287,
+              "ctime_ns": 1794088534163553283,
+              "inode": 926276,
+              "sha256": "f99e4cc434d36d9005a0ae046c90b4d360e5342d023eee1349b984dfa42dc8b2"
+            },
+            "/etc/systemd/system/family-connect-friends-tcp.service.d/91-paid-preflight.conf": {
+              "size": 108,
+              "mtime_ns": 1794088534163553283,
+              "ctime_ns": 1794088534163553283,
+              "inode": 926277,
+              "sha256": "da4e902d1fd00aa80dc55af5d0a66c19df604697513232255361fb517154dc3d"
+            }
+          }
+        },
+        "family-connect-paid-watch.service": {
+          "Restart": "on-failure",
+          "RestartUSec": "5s",
+          "TimeoutStartUSec": "45s",
+          "TimeoutStopUSec": "5s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "12s",
+          "WatchdogTimestamp": "Wed 2026-11-18 12:01:06 UTC",
+          "MainPID": "5827",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "Sat 2026-11-07 21:55:37 UTC",
+          "ExecMainExitTimestamp": "",
+          "ExecMainCode": "0",
+          "ExecMainStatus": "0",
+          "MemoryMax": "infinity",
+          "MemorySwapMax": "infinity",
+          "Id": "family-connect-paid-watch.service",
+          "Requires": "system.slice sysinit.target",
+          "Wants": "",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "family-connect-friends-tcp.service shutdown.target family-connect-friends-awg.service multi-user.target",
+          "After": "system.slice time-sync.target basic.target systemd-journald.socket sysinit.target",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "active",
+          "SubState": "running",
+          "FragmentPath": "/etc/systemd/system/family-connect-paid-watch.service",
+          "DropInPaths": "",
+          "UnitFileState": "enabled",
+          "InactiveExitTimestamp": "Sat 2026-11-07 21:55:37 UTC",
+          "ActiveEnterTimestamp": "Sat 2026-11-07 21:55:37 UTC",
+          "ActiveExitTimestamp": "Sat 2026-11-07 21:55:34 UTC",
+          "InactiveEnterTimestamp": "Sat 2026-11-07 21:55:34 UTC",
+          "StartLimitIntervalUSec": "10s",
+          "StartLimitBurst": "5",
+          "InvocationID": "ff1ebd5d1ab14760bdc544c93b7ecd10",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-paid-watch.service": {
+              "size": 375,
+              "mtime_ns": 1794088534162553287,
+              "ctime_ns": 1794088534162553287,
+              "inode": 143337,
+              "sha256": "e9a9d82841d0d5aa257780660107d9588af80a24b32d604dccf9c81c2730523a"
+            }
+          }
+        },
+        "family-connect-restricted-bootstrap.service": {
+          "Restart": "always",
+          "RestartUSec": "30s",
+          "TimeoutStartUSec": "1min 30s",
+          "TimeoutStopUSec": "20s",
+          "RuntimeMaxUSec": "infinity",
+          "WatchdogUSec": "infinity",
+          "WatchdogTimestamp": "",
+          "MainPID": "0",
+          "ControlPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "OOMPolicy": "stop",
+          "ExecMainStartTimestamp": "",
+          "ExecMainExitTimestamp": "",
+          "ExecMainCode": "0",
+          "ExecMainStatus": "0",
+          "MemoryMax": "infinity",
+          "MemorySwapMax": "infinity",
+          "Id": "family-connect-restricted-bootstrap.service",
+          "Requires": "-.mount sysinit.target system.slice",
+          "Wants": "tmp.mount network-online.target",
+          "BindsTo": "",
+          "PartOf": "",
+          "Before": "shutdown.target",
+          "After": "systemd-tmpfiles-setup.service systemd-journald.socket basic.target system.slice -.mount sysinit.target tmp.mount network-online.target",
+          "Triggers": "",
+          "TriggeredBy": "",
+          "LoadState": "loaded",
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "FragmentPath": "/etc/systemd/system/family-connect-restricted-bootstrap.service",
+          "DropInPaths": "",
+          "UnitFileState": "disabled",
+          "InactiveExitTimestamp": "",
+          "ActiveEnterTimestamp": "",
+          "ActiveExitTimestamp": "",
+          "InactiveEnterTimestamp": "",
+          "StartLimitIntervalUSec": "10min",
+          "StartLimitBurst": "5",
+          "InvocationID": "",
+          "unit_files": {
+            "/etc/systemd/system/family-connect-restricted-bootstrap.service": {
+              "size": 956,
+              "mtime_ns": 1793824079760165854,
+              "ctime_ns": 1793824079762165847,
+              "inode": 141170,
+              "sha256": "89763069c22df5c9c35be3eb9637e1f4bed6c42cf9e9e2e5b6d77210d70ee06b"
+            }
+          }
+        }
+      },
+      "pressure": {
+        "cpu": "some avg10=1.10 avg60=0.80 avg300=0.78 total=31212886926\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0\n",
+        "io": "some avg10=0.00 avg60=0.00 avg300=0.00 total=3844911427\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=3494693424\n",
+        "memory": "some avg10=0.00 avg60=0.00 avg300=0.00 total=6166618\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=5256848\n"
+      },
+      "final": {
+        "at": "2026-11-18T12:12:50.453714+00:00",
+        "ownership": {
+          "state": "ACQUIRED",
+          "operation_id": "scheduled-1794948040-548f317346ab83ca",
+          "expected_keys": [
+            "admission_mode",
+            "files",
+            "gateway_ids",
+            "gateway_slot",
+            "policy",
+            "role",
+            "session_inventory"
+          ]
+        },
+        "fatal": {},
+        "guard_state": "MainPID=0\nControlPID=0\nResult=success\nNRestarts=0\nId=family-connect-restricted-bootstrap.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nInvocationID=\n\nMainPID=5829\nControlPID=0\nResult=success\nNRestarts=0\nId=family-connect-friends-awg.service\nLoadState=loaded\nActiveState=active\nSubState=running\nInvocationID=ae07a5b7d56846c5b1f824e81c9e86ac\n\nMainPID=5846\nControlPID=0\nResult=success\nNRestarts=0\nId=family-connect-friends-tcp.service\nLoadState=loaded\nActiveState=active\nSubState=running\nInvocationID=f456355e8135424eaa745b9d1df4e0c5\n\nMainPID=5827\nControlPID=0\nResult=success\nNRestarts=0\nId=family-connect-paid-watch.service\nLoadState=loaded\nActiveState=active\nSubState=running\nInvocationID=ff1ebd5d1ab14760bdc544c93b7ecd10",
+        "processes": "",
+        "state_files": [
+          "operation.lock",
+          "directory-before.json",
+          "archive",
+          "services-before.json",
+          "completed.json",
+          "owner.json"
+        ],
+        "profile_matches_acquired": true
+      },
+      "material": {
+        "at": "2026-11-18T12:06:36.662652+00:00",
+        "materials": {
+          "/etc/fc-canonical-mesh2/profile.json": {
+            "sha256": "588bf116bbdc22e0718aa75c8ba59a355ff042a6bde60ac11a720836386bd150",
+            "minimum_crl": 27372,
+            "minimum_revision": 1,
+            "certificate": {
+              "parse_returncode": 0,
+              "validity": "notBefore=Nov 17 17:55:59 2026 GMT\nnotAfter=Nov 17 21:55:59 2026 GMT"
+            },
+            "revocations": {
+              "parse_returncode": 0,
+              "validity": "lastUpdate=Nov 17 17:55:59 2026 GMT\nnextUpdate=Nov 17 21:55:59 2026 GMT\ncrlNumber=0x6AEC"
+            },
+            "authority": {
+              "parse_returncode": 0,
+              "validity": "notBefore=Oct 18 22:36:48 2026 GMT\nnotAfter=Jan 16 22:36:48 2027 GMT"
+            }
+          },
+          "/opt/apps/family_connect/friends-restricted/directory.json": {
+            "stat": {
+              "size": 292,
+              "mtime_ns": 1794938193811028481,
+              "ctime_ns": 1794938193814028470,
+              "inode": 146842,
+              "sha256": "f0ef6f845fc253be4229688726e31f7d0d0acb686ab4d7184f6fbd905550d546"
+            },
+            "validity": {
+              "issued_at": "2026-11-17T17:56:33.810945968Z",
+              "expires_at": "2026-11-17T21:56:31.480202067Z",
+              "version": 1
+            },
+            "seed_count": 1
+          }
+        },
+        "units": {
+          "family-connect-restricted-bootstrap.service": "Restart=always\nRestartUSec=30s\nTimeoutStartUSec=1min 30s\nTimeoutStopUSec=20s\nWatchdogUSec=infinity\nMainPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=\nExecMainExitTimestamp=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nActiveEnterTimestamp=\nInactiveEnterTimestamp=\nStartLimitIntervalUSec=10min\nStartLimitBurst=5\nInvocationID=",
+          "family-connect-paid-watch.service": "Restart=on-failure\nRestartUSec=5s\nTimeoutStartUSec=45s\nTimeoutStopUSec=5s\nWatchdogUSec=12s\nMainPID=5827\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Sat 2026-11-07 21:55:37 UTC\nExecMainExitTimestamp=\nLoadState=loaded\nActiveState=active\nSubState=running\nActiveEnterTimestamp=Sat 2026-11-07 21:55:37 UTC\nInactiveEnterTimestamp=Sat 2026-11-07 21:55:34 UTC\nStartLimitIntervalUSec=10s\nStartLimitBurst=5\nInvocationID=ff1ebd5d1ab14760bdc544c93b7ecd10"
+        }
+      },
+      "gateway_runtime": {
+        "/usr/local/lib/fc-profile-tools/unified-a597d2a/gateway": {
+          "size": 17937478,
+          "mtime_ns": 1793823765733343428,
+          "ctime_ns": 1793823765752343358,
+          "inode": 143088,
+          "sha256": "70e6c0fc1b920ad308e24667be94f674c34979dab6aa518e1a8194fff7c131b6"
+        }
+      },
+      "ownership": {
+        "renewal-state/owner.json": {
+          "stat": {
+            "size": 577,
+            "mtime_ns": 1794948061269008040,
+            "ctime_ns": 1794948061272008031,
+            "inode": 146828,
+            "sha256": "849eed4415896058e08839cfcc1e0efa3d97e5251185156fbbd9a7d2c28fe00b"
+          },
+          "value": {
+            "first_cause": null,
+            "operation_id": "scheduled-1794948040-548f317346ab83ca",
+            "state": "ACQUIRED"
+          }
+        },
+        "renewal-state/services-before.json": {
+          "stat": {
+            "size": 198,
+            "mtime_ns": 1794948070991978790,
+            "ctime_ns": 1794948070993978784,
+            "inode": 146853,
+            "sha256": "a9ff0b20936bf13019d463736f18e1b68be2e47b2eff0c4f681c9ccd40364b3e"
+          },
+          "value": {
+            "family-connect-restricted-bootstrap.service": {
+              "ActiveState": "active",
+              "InvocationID": "0e90005dde8e4967b74f1bad1dd0f466",
+              "MainPID": "1633582",
+              "NRestarts": "0",
+              "Result": "success",
+              "SubState": "running"
+            }
+          }
+        }
+      },
+      "publisher_prerequisite": {
+        "at": "2026-11-18T12:18:40.410368+00:00",
+        "files": {
+          "/var/lib/fc-publisher-recovery/source-a11eb8f2614e/publisher-recovery": {
+            "size": 16342590,
+            "mtime_ns": 1793973271100378376,
+            "ctime_ns": 1793973271199378002,
+            "inode": 143214,
+            "sha256": "f44ace11d7013cdf2908e888a5ed6175a936970ab9c9195ddf9846d77f587995"
+          },
+          "/etc/fc-publisher-recovery-worker.json": {
+            "exists": false
+          },
+          "/var/lib/fc-publisher-recovery/generation-20261106/retired-worker-config.json": {
+            "size": 1100,
+            "mtime_ns": 1793973392784918399,
+            "ctime_ns": 1793974627369204110,
+            "inode": 143217,
+            "sha256": "410bc509f2be064d25ab6ee2ccf67bd6a9e5976ea51db2c32061645c4d648167"
+          }
+        },
+        "diagnostics_remaining": ""
+      }
+    }
+  },
+  "panel": {
+    "at": "2026-11-18T12:14:57.483557+00:00",
+    "sources": {
+      "gateway-ru": {
+        "label": "Россия · управление",
+        "host": "185.251.89.19",
+        "registry": true,
+        "required_services": [
+          "family-connect-friends-http-candidate.service",
+          "family-connect-server-load.service"
+        ]
+      },
+      "gateway-nl": {
+        "label": "Прежний NL · архив",
+        "host": null,
+        "registry": false,
+        "required_services": []
+      },
+      "nl-amsterdam-1": {
+        "label": "Амстердам 1",
+        "host": "185.10.158.212",
+        "registry": false,
+        "required_services": [
+          "family-connect-friends-awg.service",
+          "family-connect-friends-tcp.service",
+          "family-connect-server-load.service"
+        ]
+      },
+      "nl-amsterdam-2": {
+        "label": "Амстердам 2",
+        "host": "185.10.158.196",
+        "registry": false,
+        "required_services": [
+          "family-connect-friends-awg.service",
+          "family-connect-friends-tcp.service",
+          "family-connect-server-load.service"
+        ]
+      }
+    },
+    "collector_sha256": "3272f2ad2a0ac95b4a7c448853fc4bf33f2632cc1fbfaa496b1951a6c00f8bfb",
+    "nodes": {
+      "gateway-ru": {
+        "inventory": {
+          "observed_at": "2026-11-18 12:14:26.083204+00:00",
+          "imported_at": "2026-11-18 12:14:27.671937+00:00",
+          "registry_status": "ok",
+          "services": {
+            "wg-quick@fcams.service": "not_found",
+            "family-connect-mailbox.service": "not_found",
+            "family-connect-reticulum.service": "not_found",
+            "family-connect-friends-awg.service": "inactive",
+            "family-connect-friends-tcp.service": "inactive",
+            "family-connect-server-load.service": "active",
+            "family-connect-restricted-bootstrap.service": "not_found",
+            "family-connect-friends-http-candidate.service": "inactive"
+          }
+        },
+        "transport": [
+          {
+            "observed_at": "2026-11-18 12:14:26+00:00",
+            "imported_at": "2026-11-18 12:14:27.659775+00:00",
+            "status": "unavailable",
+            "runtime_sha256": null
+          }
+        ],
+        "attempts": [
+          {
+            "action": "transports.attempt",
+            "at": "2026-11-18 12:14:27.660558+00:00",
+            "details": {
+              "source": "gateway-ru",
+              "status": "unavailable"
+            }
+          }
+        ]
+      },
+      "nl-amsterdam-1": {
+        "inventory": {
+          "observed_at": "2026-11-18 12:14:28.686322+00:00",
+          "imported_at": "2026-11-18 12:14:29.925910+00:00",
+          "registry_status": "not_collected",
+          "services": {
+            "wg-quick@fcams.service": "active",
+            "family-connect-mailbox.service": "active",
+            "family-connect-reticulum.service": "active",
+            "family-connect-friends-awg.service": "active",
+            "family-connect-friends-tcp.service": "active",
+            "family-connect-server-load.service": "active",
+            "family-connect-restricted-bootstrap.service": "inactive",
+            "family-connect-friends-http-candidate.service": "not_found"
+          }
+        },
+        "transport": [
+          {
+            "observed_at": "2026-11-18 12:14:28+00:00",
+            "imported_at": "2026-11-18 12:14:29.921233+00:00",
+            "status": "ok",
+            "runtime_sha256": "f7571bd42bbd583017fc590b20c7c7097059d7f202fef8323558c4fa8f47885d"
+          }
+        ],
+        "attempts": [
+          {
+            "action": "transports.attempt",
+            "at": "2026-11-18 12:14:29.923265+00:00",
+            "details": {
+              "source": "nl-amsterdam-1",
+              "status": "ok"
+            }
+          }
+        ]
+      },
+      "nl-amsterdam-2": {
+        "inventory": {
+          "observed_at": "2026-11-18 12:14:30.789729+00:00",
+          "imported_at": "2026-11-18 12:14:32.067535+00:00",
+          "registry_status": "not_collected",
+          "services": {
+            "wg-quick@fcams.service": "not_found",
+            "family-connect-mailbox.service": "not_found",
+            "family-connect-reticulum.service": "not_found",
+            "family-connect-friends-awg.service": "active",
+            "family-connect-friends-tcp.service": "active",
+            "family-connect-server-load.service": "active",
+            "family-connect-restricted-bootstrap.service": "inactive",
+            "family-connect-friends-http-candidate.service": "not_found"
+          }
+        },
+        "transport": [
+          {
+            "observed_at": "2026-11-18 12:14:30+00:00",
+            "imported_at": "2026-11-18 12:14:32.063023+00:00",
+            "status": "ok",
+            "runtime_sha256": "f7571bd42bbd583017fc590b20c7c7097059d7f202fef8323558c4fa8f47885d"
+          }
+        ],
+        "attempts": [
+          {
+            "action": "transports.attempt",
+            "at": "2026-11-18 12:14:32.065061+00:00",
+            "details": {
+              "source": "nl-amsterdam-2",
+              "status": "ok"
+            }
+          }
+        ]
+      }
+    },
+    "mesh_label_matches": [
+      {
+        "file": "/app/control_plane/apps/console/objects.py",
+        "line": 26,
+        "text": "'family-connect-restricted-bootstrap.service': 'MESH · bootstrap',",
+        "sha256": "3ebdd74f313e8952b7255ea6e743bbbe9103cdb820a6b7f555f0870cf22a19ed"
+      }
+    ]
+  },
+  "panel_runtime": {
+    "image_id": "sha256:5ae92f8c7775d2ff0ad26627f6cdfcda53a3d4193a08b9fe1de1e89f32c432da",
+    "configured_image": "sha256:5ae92f8c7775d2ff0ad26627f6cdfcda53a3d4193a08b9fe1de1e89f32c432da",
+    "started_at": "2026-11-15T13:53:01.009900496Z",
+    "state": "running"
+  },
+  "monitor": {
+    "schema": 1,
+    "completed_at": "2026-11-18T12:09:38.691702+00:00",
+    "production_writes": 0,
+    "technical_metadata": "IMPORTED",
+    "sources": [
+      {
+        "source": "gateway-ru",
+        "attempted_at": "2026-11-18T12:09:27.873999+00:00",
+        "status": "IMPORTED",
+        "error": null,
+        "observed_at": "2026-11-18T12:09:29.433219+00:00",
+        "imported_at": null,
+        "import_seconds": null
+      },
+      {
+        "source": "nl-amsterdam-1",
+        "attempted_at": "2026-11-18T12:09:31.398670+00:00",
+        "status": "IMPORTED",
+        "error": null,
+        "observed_at": "2026-11-18T12:09:32.252628+00:00",
+        "imported_at": null,
+        "import_seconds": null
+      },
+      {
+        "source": "nl-amsterdam-2",
+        "attempted_at": "2026-11-18T12:09:33.540857+00:00",
+        "status": "IMPORTED",
+        "error": null,
+        "observed_at": "2026-11-18T12:09:34.453815+00:00",
+        "imported_at": null,
+        "import_seconds": null
+      }
+    ]
+  },
+  "host_pins": [
+    {
+      "path": "/mnt/data/PycharmProjects/family_connect/control_plane/.local/inventory-known_hosts-20261103",
+      "sha256": "d9d3f20ff0ad6f72c82aeebdbb06395925045605451dd451801845e0143b23d1",
+      "hosts_present": {
+        "185.251.89.19": true,
+        "185.10.158.212": true,
+        "185.10.158.196": true
+      }
+    }
+  ],
+  "ru_receipts": {
+    "transport-failure.json": {
+      "stat": {
+        "size": 1977,
+        "mtime_ns": 1794966575102842653,
+        "ctime_ns": 1794966575102842653,
+        "inode": 1064363,
+        "sha256": "40f39f13667fb5e710a6103e83adcb6741487430cc20efe0f57d24f87289d050"
+      },
+      "keys": [
+        "boundary",
+        "budget",
+        "calls",
+        "calls_dropped",
+        "elapsed",
+        "errno",
+        "exception_class",
+        "invocation_id",
+        "mode",
+        "observed_at",
+        "phase",
+        "pid",
+        "reason",
+        "schema",
+        "stage_counts"
+      ],
+      "safe": {
+        "observed_at": 1794966575.1020086,
+        "mode": "watch",
+        "phase": "persist_file",
+        "boundary": "after",
+        "reason": "TRANSPORT_OPERATION_DEADLINE",
+        "elapsed": 8.597512247040868,
+        "budget": 8,
+        "pid": 477344,
+        "invocation_id": "227bfdbc4bcc4bf9a5e5dc9ebfdfbcb3",
+        "schema": 1
+      }
+    },
+    "transport-attempt.json": {
+      "stat": {
+        "size": 81,
+        "mtime_ns": 1795003363394782718,
+        "ctime_ns": 1795003363411411982,
+        "inode": 1064321,
+        "sha256": "b664841bbc1889c06f96fb800325bf48a8054fb2b5ddd7da1e8d097217381c41"
+      },
+      "keys": [
+        "node",
+        "observed_at",
+        "result",
+        "schema"
+      ],
+      "safe": {
+        "observed_at": 1795003363,
+        "result": "error",
+        "schema": 1
+      }
+    },
+    "transport-state.json": {
+      "stat": {
+        "size": 45534,
+        "mtime_ns": 1795003363306415817,
+        "ctime_ns": 1795003363351414172,
+        "inode": 1064353,
+        "sha256": "a3d2cc6440ae5114d4d2a6af97a66f415e98c12fc676ca805f1ef526d05134cc"
+      },
+      "keys": [
+        "node",
+        "observed_at",
+        "records",
+        "schema"
+      ],
+      "safe": {
+        "observed_at": 1795003363,
+        "schema": 1
+      }
+    }
+  },
+  "ru_failure_calls": [
+    {
+      "boundary": "after",
+      "completed": true,
+      "duration": 0.0034151412546634674,
+      "entered": 0.007427101954817772,
+      "finished": 0.010866625234484673,
+      "involuntary_switches": 0,
+      "kind": "awg-query",
+      "major_faults": 0,
+      "remaining": 7.992572359740734,
+      "replace_completed": null,
+      "role": null,
+      "self_cpu_seconds": 0.0008970000000374512,
+      "started": 0.007451483979821205,
+      "voluntary_switches": 3
+    },
+    {
+      "boundary": "after",
+      "completed": true,
+      "duration": 0.029645372182130814,
+      "entered": 0.011359886266291142,
+      "finished": 0.04102479666471481,
+      "involuntary_switches": 0,
+      "kind": "tcp-query",
+      "major_faults": 0,
+      "remaining": 7.988639740273356,
+      "replace_completed": null,
+      "role": null,
+      "self_cpu_seconds": 0.0011529999999879692,
+      "started": 0.011379424482584,
+      "voluntary_switches": 4
+    },
+    {
+      "boundary": "after",
+      "completed": true,
+      "duration": 0.0033880341798067093,
+      "entered": 0.04148418549448252,
+      "finished": 0.04488696809858084,
+      "involuntary_switches": 2,
+      "kind": "awg-query",
+      "major_faults": 0,
+      "remaining": 7.958515457808971,
+      "replace_completed": null,
+      "role": null,
+      "self_cpu_seconds": 0.0011040000000122063,
+      "started": 0.04149893391877413,
+      "voluntary_switches": 3
+    },
+    {
+      "boundary": "after",
+      "completed": true,
+      "duration": 8.547969387844205,
+      "entered": 0.04941545333713293,
+      "finished": 8.597422724589705,
+      "involuntary_switches": 0,
+      "kind": "file_fsync",
+      "major_faults": 0,
+      "remaining": 7.950582726858556,
+      "replace_completed": false,
+      "role": "decision_state",
+      "self_cpu_seconds": 0.00036199999999553256,
+      "started": 0.049453336745500565,
+      "voluntary_switches": 3
+    }
+  ],
+  "ru_failure_stage_counts": {
+    "engine_query": 3,
+    "lock": 3,
+    "persist_file": 1,
+    "plan": 1,
+    "readback": 1
+  },
+  "ru_transport_runtime": {
+    "configuration": {
+      "stat": {
+        "size": 85,
+        "mtime_ns": 1794077710365622469,
+        "ctime_ns": 1794077710373356202,
+        "inode": 1050924,
+        "sha256": "d7265c1ddc55629d7438db74fdf6bbe0824f0e2344a99b3e0275a55dcda1bd8f"
+      },
+      "readback_mode": "legacy (key absent)",
+      "schema": 1,
+      "configuration_keys": [
+        "enabled",
+        "node",
+        "profile",
+        "schema"
+      ]
+    },
+    "/opt/apps/family_connect/friends-awg/paid-transport.pyz": {
+      "size": 33732,
+      "mtime_ns": 1794308968290514788,
+      "ctime_ns": 1794308968305380923,
+      "inode": 1051458,
+      "sha256": "125c796a30c3fba1772c47b96963517350087ad04aad675b6f33a31a5383276c"
+    },
+    "/opt/apps/family_connect/friends-awg/awg-gateway.py": {
+      "size": 9370,
+      "mtime_ns": 1794117015959688216,
+      "ctime_ns": 1794117015959688216,
+      "inode": 1050922,
+      "sha256": "9023d2c3f7c3a5127d67c509a16eb2d974810ff54d5b76cc225cd9b93e0b4234"
+    },
+    "/opt/apps/family_connect/private-paid-transport-v2/paid-operator.pyz": {
+      "size": 191489,
+      "mtime_ns": 1794837176268963439,
+      "ctime_ns": 1794837176297962386,
+      "inode": 1050574,
+      "sha256": "19efd0b46fb145dcef06a9a092ee0d8ee4d062d09d99b1b0e0065425be02d90f"
+    },
+    "/opt/apps/family_connect/private-paid-transport-v2/paid-reconcile.pyz": {
+      "size": 187605,
+      "mtime_ns": 1794837176058357643,
+      "ctime_ns": 1794837176087970012,
+      "inode": 1064160,
+      "sha256": "ff4601aa3bb0990b4f8566aadde1fd6b12120bffbd912b4b901e2d77a114d6aa"
+    },
+    "/opt/apps/family_connect/private-paid-transport-v2/friends-http.pyz": {
+      "size": 84746,
+      "mtime_ns": 1794837176106969323,
+      "ctime_ns": 1794837176132968378,
+      "inode": 1062110,
+      "sha256": "4e2df679761ba9e7af74128984ef2e19e8e7b228f1cc85b36d50be2b0bc24ce8"
+    }
+  },
+  "renewal_files": {
+    "/var/lib/fc-profile-control/mesh-serialization-ea1bfc9/run_serialized_renewal.py": {
+      "size": 2541,
+      "mtime_ns": 1793973921048709514,
+      "ctime_ns": 1793973921048709514,
+      "inode": 253918,
+      "sha256": "9a0df90fbfe461f3e826d31bb9124b4c3dc50d2ecac273c927ff14c9bc238353"
+    },
+    "/var/lib/fc-profile-control/mesh2-fcb3116414571654/controller-fleet.json": {
+      "size": 799,
+      "mtime_ns": 1793735664940442812,
+      "ctime_ns": 1793735664940442812,
+      "inode": 31229,
+      "sha256": "a3fae10e013b770bf4edf1e18ceec3046c4670feee784f3f567ea0a256c30801"
+    },
+    "/var/lib/fc-profile-control/mesh2-fcb3116414571654/renewal/scheduled_evaluate.py": {
+      "size": 13253,
+      "mtime_ns": 1793729007090113696,
+      "ctime_ns": 1793729007090113696,
+      "inode": 31219,
+      "sha256": "53f5e256667b8724d344b216b4e51e1986c7ce8eadb875ab77f06d55fd866c0e"
+    },
+    "/var/lib/fc-profile-control/mesh2-fcb3116414571654/node-fleet.json": {
+      "size": 2303,
+      "mtime_ns": 1793735664938006898,
+      "ctime_ns": 1793735664938006898,
+      "inode": 31228,
+      "sha256": "1c67646a0648a0c80e8ee01f177e237edf89abf977a6f4303c7b7f5bfc673668"
+    },
+    "/var/lib/fc-profile-control/mesh2-fcb3116414571654/gateway-routes.json": {
+      "size": 554,
+      "mtime_ns": 1793735664940563648,
+      "ctime_ns": 1793735664940563648,
+      "inode": 31230,
+      "sha256": "1a51e477c2e76c4b161875ebdcc66200a966e7cb8a27709287f3737726f59bf3"
+    }
+  },
+  "renewal_transaction": {
+    "renewal-coordinator/transaction.json": {
+      "stat": {
+        "size": 8274,
+        "mtime_ns": 1795003008682256959,
+        "ctime_ns": 1795003008692367976,
+        "inode": 1064360,
+        "sha256": "3ee7ac22704a1228500ee53b9639ea89894c0eaec66d9b068c05e305a0e4cad8"
+      },
+      "value": {
+        "first_cause": "STALE_NODE_STATE",
+        "gate": {
+          "authorization": "OPERATOR_APPROVED_LEAF_CRL_SCHEDULE",
+          "pre_stop_sessions": "UNKNOWN",
+          "result": "RENEWAL_READY",
+          "zero_downtime": false
+        },
+        "operation_id": "scheduled-1794948040-548f317346ab83ca",
+        "state": "RECOVERY_REQUIRED",
+        "commit_decided": false,
+        "acquired": [
+          "RU",
+          "NL",
+          "NL2"
+        ],
+        "quiesced": []
+      }
+    },
+    "renewal-coordinator/last-receipt.json": {
+      "stat": {
+        "size": 329,
+        "mtime_ns": 1795003008703364422,
+        "ctime_ns": 1795003008723366844,
+        "inode": 1064320,
+        "sha256": "b7c85e326aa7c4893ad2fe26bad3454e8a9dbd6039601adfff18a8863c960fb5"
+      },
+      "value": {
+        "first_cause": "STALE_NODE_STATE",
+        "operation_id": "scheduled-1794948040-548f317346ab83ca",
+        "state": "RECOVERY_REQUIRED"
+      }
+    },
+    "renewal-state/owner.json": {
+      "stat": {
+        "size": 909,
+        "mtime_ns": 1794948057491716913,
+        "ctime_ns": 1794948057504544689,
+        "inode": 1064349,
+        "sha256": "cf1e231c7ec744866dcc72dc99cbc27203abcbcaadc276bc1038fb51e1ef05e7"
+      },
+      "value": {
+        "first_cause": null,
+        "operation_id": "scheduled-1794948040-548f317346ab83ca",
+        "state": "ACQUIRED"
+      }
+    },
+    "renewal-state/services-before.json": {
+      "stat": {
+        "size": 832,
+        "mtime_ns": 1794948061671211004,
+        "ctime_ns": 1794948061751389768,
+        "inode": 1064364,
+        "sha256": "771de5992ee10c545cb7ccc3315678b03d54b7e18d0f3cb02890030a36c4524f"
+      },
+      "value": {
+        "family-connect-friends-http-candidate.service": {
+          "ActiveState": "active",
+          "InvocationID": "0234d051a4e34a7db150a0e647bf812b",
+          "MainPID": "2505370",
+          "NRestarts": "0",
+          "Result": "success",
+          "SubState": "running"
+        },
+        "family-connect-restricted-directory-sync.service": {
+          "ActiveState": "inactive",
+          "InvocationID": "19c43b77636045628af4a3b1d91ac543",
+          "MainPID": "0",
+          "NRestarts": "0",
+          "Result": "success",
+          "SubState": "dead"
+        },
+        "family-connect-restricted-directory-sync.timer": {
+          "ActiveState": "inactive",
+          "InvocationID": "b631a6f206c34cb2840d133388de401b",
+          "Result": "success",
+          "SubState": "dead"
+        },
+        "family-connect-restricted-sync.service": {
+          "ActiveState": "inactive",
+          "InvocationID": "",
+          "MainPID": "0",
+          "NRestarts": "0",
+          "Result": "success",
+          "SubState": "dead"
+        },
+        "family-connect-restricted-sync.timer": {
+          "ActiveState": "inactive",
+          "InvocationID": "",
+          "Result": "success",
+          "SubState": "dead"
+        }
+      }
+    }
+  },
+  "renewal_current_comparison": {
+    "database_digest_matches_acquired": false,
+    "current_database_sha256": "76e80cc9ce50c2d1ee17128a157dd16f885dc06d1912491e02dbf217d5425a3f",
+    "acquired_database_sha256": "b186daa3f7889355304ee7da361d332b276075cee98d9e288b690b3d5fcb0a5d",
+    "table_counts": {
+      "devices": 68,
+      "invites": 124,
+      "restricted_grants": 2,
+      "restricted_certificates": 9,
+      "restricted_crl_sequence": 1
+    },
+    "files_match": {
+      "issuer-NL2.json": true,
+      "issuer.json": true,
+      "revocations.pem": true
+    },
+    "expected_state_keys": [
+      "admission_mode",
+      "database_sha256",
+      "files",
+      "gateway_ids",
+      "gateway_slot",
+      "policy",
+      "role",
+      "session_inventory"
+    ],
+    "policy_keys": [
+      "admission",
+      "anchor",
+      "node_config"
+    ]
+  },
+  "renewal_policy_comparison": {
+    "policies": {
+      "node_config": true,
+      "admission": true,
+      "anchor": true
+    },
+    "previous_keys": [
+      "authority",
+      "certificate",
+      "crl",
+      "grants",
+      "schema"
+    ],
+    "owner_same_before": true
+  },
+  "recovery_helpers": [
+    {
+      "path": "/var/lib/fc-profile-control/mesh2-unprepared-20261104/reconcile_unprepared_renewal.py",
+      "stat": {
+        "size": 6577,
+        "mtime_ns": 1793791361820816917,
+        "ctime_ns": 1793791361820816917,
+        "inode": 252952,
+        "sha256": "35d76e893f168784cc4835c297000d5afe8802f03f16f0a29f65ea41feca2114"
+      },
+      "permits_expired_predecessor": false,
+      "functions": [
+        "reconcile",
+        "main"
+      ]
+    }
+  ],
+  "installed_transport_features": {
+    "archive_sha256": "125c796a30c3fba1772c47b96963517350087ad04aad675b6f33a31a5383276c",
+    "has_O_EXCL": true,
+    "has_observations_v1": false,
+    "has_readback_mode": false,
+    "modules": [
+      "control/friends/__init__.py",
+      "control/friends/transport_gateway.py",
+      "control/friends/transport_policy.py"
+    ]
+  },
+  "journal_receipts": {
+    "ru_transport_stop": {
+      "at": "2026-11-18T12:04:21.882518+00:00",
+      "journal_file": "/var/log/journal/828e436bb3b159b7e36fbd58f4182b17/system@17b9fb49584748039d1841f0042983e7-0000000000567fb2-0006607e11e5c7c4.journal",
+      "header": "File path: /var/log/journal/828e436bb3b159b7e36fbd58f4182b17/system@17b9fb49584748039d1841f0042983e7-0000000000567fb2-0006607e11e5c7c4.journal\nFile ID: 28c5dfae093146fe9e4eb9fe54085c26\nMachine ID: 828e436bb3b159b7e36fbd58f4182b17\nBoot ID: 411dc329437f418dbb7137a8d1e4d4bf\nSequential number ID: 17b9fb49584748039d1841f0042983e7\nState: ARCHIVED\nCompatible flags: TAIL_ENTRY_BOOT_ID\nIncompatible flags: COMPRESSED-ZSTD KEYED-HASH COMPACT\nHeader size: 272\nArena size: 50331376\nData hash table size: 233016\nField hash table size: 1023\nRotate suggested: yes\nHead sequential number: 5668786 (567fb2)\nTail sequential number: 5733672 (577d28)\nHead realtime timestamp: Tue 2026-11-17 22:40:42 MSK (6607e11e5c7c4)\nTail realtime timestamp: Wed 2026-11-18 09:24:48 MSK (660871157f526)\nTail monotonic timestamp: 2month 2w 2d 21h 11min 21.359s (61c38c620c2)\nObjects: 303789\nEntry objects: 64887\nData objects: 174765\nData hash table fill: 75.0%\nField objects: 59\nField hash table fill: 5.8%\nTag objects: 0\nEntry array objects: 64076\nDeepest field hash chain: 1\nDeepest data hash chain: 6\nDisk usage: 45.8M",
+      "window": "2026-11-18 01:49:15..01:50:05 UTC",
+      "rows": [
+        {
+          "__REALTIME_TIMESTAMP": "1794966575167246",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-friends-awg.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "159c62451f954881972092ff58dd44f8",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "Stopping family-connect-friends-awg.service - Family Connect open test AWG3.1 gateway..."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794966575188582",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-friends-tcp.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "3629fc3559fc4485991333b4f60e1fb9",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "Stopping family-connect-friends-tcp.service - Family Connect open test TCP gateway..."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794966575306185",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-friends-tcp.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "3629fc3559fc4485991333b4f60e1fb9",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-friends-tcp.service: Deactivated successfully."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794966575312616",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-friends-tcp.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "3629fc3559fc4485991333b4f60e1fb9",
+          "RESULT": null,
+          "JOB_RESULT": "done",
+          "message": "Stopped family-connect-friends-tcp.service - Family Connect open test TCP gateway."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794966575313021",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-friends-tcp.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "3629fc3559fc4485991333b4f60e1fb9",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-friends-tcp.service: Consumed 1min 20.835s CPU time over 18h 7min 21.437s wall clock time, 23.8M memory peak, 452K memory swap peak."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794966576054468",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "227bfdbc4bcc4bf9a5e5dc9ebfdfbcb3",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-paid-watch.service: Main process exited, code=exited, status=1/FAILURE"
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794966576055083",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "227bfdbc4bcc4bf9a5e5dc9ebfdfbcb3",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-paid-watch.service: Failed with result 'exit-code'."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794966576055882",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "227bfdbc4bcc4bf9a5e5dc9ebfdfbcb3",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-paid-watch.service: Consumed 26min 11.297s CPU time over 18h 7min 22.494s wall clock time, 84M memory peak, 752K memory swap peak."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794966579576956",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-friends-awg.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "159c62451f954881972092ff58dd44f8",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-friends-awg.service: Deactivated successfully."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794966579577640",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-friends-awg.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "159c62451f954881972092ff58dd44f8",
+          "RESULT": null,
+          "JOB_RESULT": "done",
+          "message": "Stopped family-connect-friends-awg.service - Family Connect open test AWG3.1 gateway."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794966579577746",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-friends-awg.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "159c62451f954881972092ff58dd44f8",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-friends-awg.service: Consumed 1min 10.713s CPU time over 18h 7min 25.768s wall clock time, 22.6M memory peak, 5.7M memory swap peak."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794966581079944",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "227bfdbc4bcc4bf9a5e5dc9ebfdfbcb3",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-paid-watch.service: Scheduled restart job, restart counter is at 1."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794966581092858",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "91c1674669cc40f2864421b66fd81164",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "Starting family-connect-paid-watch.service - Bounded Friends transport decision application..."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794966581230453",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "91c1674669cc40f2864421b66fd81164",
+          "RESULT": null,
+          "JOB_RESULT": "done",
+          "message": "Started family-connect-paid-watch.service - Bounded Friends transport decision application."
+        }
+      ],
+      "timed_out": false
+    },
+    "ru_renewal_first": {
+      "at": "2026-11-18T12:07:24.756703+00:00",
+      "specification": {
+        "label": "renewal-first-journal",
+        "file": "/var/log/journal/828e436bb3b159b7e36fbd58f4182b17/system@17b9fb49584748039d1841f0042983e7-0000000000567fb2-0006607e11e5c7c4.journal",
+        "since": "2026-11-17 20:40:35 UTC",
+        "until": "2026-11-17 20:42:00 UTC",
+        "units": [
+          "family-connect-credential-renewal.service",
+          "family-connect-restricted-directory-sync.service",
+          "family-connect-friends-http-candidate.service"
+        ]
+      },
+      "returncode": 0,
+      "rows": [
+        {
+          "__REALTIME_TIMESTAMP": "1794948039839640",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-credential-renewal.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "a19093a1e8604be9a9a48d694afacc2f",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "Starting family-connect-credential-renewal.service - Current-policy leaf/CRL maintenance renewal; grants require operator approval..."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948061851947",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-friends-http-candidate.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "0234d051a4e34a7db150a0e647bf812b",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "Stopping family-connect-friends-http-candidate.service - Family Connect isolated HTTP candidate (operator controlled)..."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948061863684",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-friends-http-candidate.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "0234d051a4e34a7db150a0e647bf812b",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-friends-http-candidate.service: Deactivated successfully."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948061864572",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-friends-http-candidate.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "0234d051a4e34a7db150a0e647bf812b",
+          "RESULT": null,
+          "JOB_RESULT": "done",
+          "message": "Stopped family-connect-friends-http-candidate.service - Family Connect isolated HTTP candidate (operator controlled)."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948061866228",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-friends-http-candidate.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "0234d051a4e34a7db150a0e647bf812b",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-friends-http-candidate.service: Consumed 55.959s CPU time over 2h 44min 25.726s wall clock time, 34.2M memory peak."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948080352953",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "3048319",
+          "UNIT": null,
+          "_SYSTEMD_UNIT": "family-connect-credential-renewal.service",
+          "_SYSTEMD_INVOCATION_ID": "a19093a1e8604be9a9a48d694afacc2f",
+          "INVOCATION_ID": null,
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "error_codes": [
+            "STALE_NODE_STATE",
+            "CURRENT_PRODUCTION_VALIDITY_LIMITS",
+            "UNAVAILABLE",
+            "RECOVERY_REQUIRED"
+          ],
+          "receipt": {
+            "automatic_restart": false,
+            "first_cause": "STALE_NODE_STATE",
+            "result": "RECOVERY_REQUIRED"
+          }
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948080503015",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "c8dfb9902958474dac19c8dab359b509",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "Starting family-connect-restricted-directory-sync.service - Read-only NL snapshot and validated directory copy; never publish CRL..."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948080537759",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-credential-renewal.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "a19093a1e8604be9a9a48d694afacc2f",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-credential-renewal.service: Main process exited, code=exited, status=75/TEMPFAIL"
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948080538073",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-credential-renewal.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "a19093a1e8604be9a9a48d694afacc2f",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-credential-renewal.service: Failed with result 'exit-code'."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948080538620",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-credential-renewal.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "a19093a1e8604be9a9a48d694afacc2f",
+          "RESULT": null,
+          "JOB_RESULT": "failed",
+          "message": "Failed to start family-connect-credential-renewal.service - Current-policy leaf/CRL maintenance renewal; grants require operator approval."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948080539147",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-credential-renewal.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "a19093a1e8604be9a9a48d694afacc2f",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-credential-renewal.service: Consumed 2.314s CPU time over 40.698s wall clock time, 37.1M memory peak."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948080539283",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-credential-renewal.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "a19093a1e8604be9a9a48d694afacc2f",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-credential-renewal.service: Triggering OnFailure= dependencies."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948080966200",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "3050505",
+          "UNIT": null,
+          "_SYSTEMD_UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_INVOCATION_ID": "c8dfb9902958474dac19c8dab359b509",
+          "INVOCATION_ID": null,
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "error_codes": [
+            "MAINTENANCE_IN_PROGRESS"
+          ],
+          "receipt": {
+            "result": "MAINTENANCE_IN_PROGRESS"
+          }
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948081098101",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "c8dfb9902958474dac19c8dab359b509",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-restricted-directory-sync.service: Deactivated successfully."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948081098317",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "c8dfb9902958474dac19c8dab359b509",
+          "RESULT": null,
+          "JOB_RESULT": "done",
+          "message": "Finished family-connect-restricted-directory-sync.service - Read-only NL snapshot and validated directory copy; never publish CRL."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948111112431",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "a2d329c4285b486685f8328a83fb65b2",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "Starting family-connect-restricted-directory-sync.service - Read-only NL snapshot and validated directory copy; never publish CRL..."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948111688945",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "3051909",
+          "UNIT": null,
+          "_SYSTEMD_UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_INVOCATION_ID": "a2d329c4285b486685f8328a83fb65b2",
+          "INVOCATION_ID": null,
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "error_codes": [
+            "MAINTENANCE_IN_PROGRESS"
+          ],
+          "receipt": {
+            "result": "MAINTENANCE_IN_PROGRESS"
+          }
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948111810125",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "a2d329c4285b486685f8328a83fb65b2",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-restricted-directory-sync.service: Deactivated successfully."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948111811203",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "a2d329c4285b486685f8328a83fb65b2",
+          "RESULT": null,
+          "JOB_RESULT": "done",
+          "message": "Finished family-connect-restricted-directory-sync.service - Read-only NL snapshot and validated directory copy; never publish CRL."
+        }
+      ],
+      "diagnostic_process_reaped": true
+    },
+    "nl2_stop": {
+      "at": "2026-11-18T12:07:33.358857+00:00",
+      "specification": {
+        "label": "mesh-stop-journal",
+        "file": "/var/log/journal/da22c5b88e7e42878bac05c5c8b46e4f/system@45a26f43354a46d9b07ab70d30a217c9-0000000000838e4d-0006607e28849f42.journal",
+        "since": "2026-11-17 20:40:55 UTC",
+        "until": "2026-11-17 20:41:30 UTC",
+        "units": [
+          "family-connect-restricted-bootstrap.service"
+        ]
+      },
+      "returncode": 0,
+      "rows": [
+        {
+          "__REALTIME_TIMESTAMP": "1794948071029243",
+          "_BOOT_ID": "6f2236ce5aa54a5e82a58df57afc14d7",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-bootstrap.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "0e90005dde8e4967b74f1bad1dd0f466",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "Stopping family-connect-restricted-bootstrap.service - Family Connect Amsterdam2 MESH..."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948071040433",
+          "_BOOT_ID": "6f2236ce5aa54a5e82a58df57afc14d7",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-bootstrap.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "0e90005dde8e4967b74f1bad1dd0f466",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-restricted-bootstrap.service: Deactivated successfully."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948071040886",
+          "_BOOT_ID": "6f2236ce5aa54a5e82a58df57afc14d7",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-bootstrap.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "0e90005dde8e4967b74f1bad1dd0f466",
+          "RESULT": null,
+          "JOB_RESULT": "done",
+          "message": "Stopped family-connect-restricted-bootstrap.service - Family Connect Amsterdam2 MESH."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1794948071041393",
+          "_BOOT_ID": "6f2236ce5aa54a5e82a58df57afc14d7",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-bootstrap.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "0e90005dde8e4967b74f1bad1dd0f466",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-restricted-bootstrap.service: Consumed 4min 15.085s CPU time, 15.5M memory peak, 0B memory swap peak."
+        }
+      ],
+      "diagnostic_process_reaped": true
+    },
+    "ru_current_retries": {
+      "at": "2026-11-18T12:12:36.230590+00:00",
+      "specification": {
+        "label": "ru-current-retries",
+        "file": "/var/log/journal/828e436bb3b159b7e36fbd58f4182b17/system.journal",
+        "since": "2026-11-18 12:09:00 UTC",
+        "until": "2026-11-18 12:10:00 UTC",
+        "units": [
+          "family-connect-paid-watch.service",
+          "family-connect-paid-reconcile.service",
+          "family-connect-restricted-directory-sync.service"
+        ]
+      },
+      "returncode": 0,
+      "rows": [
+        {
+          "__REALTIME_TIMESTAMP": "1795003745260445",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "51111a5d9a054a2fa1b9aeb91cd3903e",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-paid-watch.service: Main process exited, code=exited, status=1/FAILURE"
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003745260717",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "51111a5d9a054a2fa1b9aeb91cd3903e",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-paid-watch.service: Failed with result 'exit-code'."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003750330964",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "51111a5d9a054a2fa1b9aeb91cd3903e",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-paid-watch.service: Scheduled restart job, restart counter is at 1043."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003750340259",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "dd51791e22834d4391678abe5a7da972",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "Starting family-connect-paid-watch.service - Bounded Friends transport decision application..."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003750505890",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "dd51791e22834d4391678abe5a7da972",
+          "RESULT": null,
+          "JOB_RESULT": "done",
+          "message": "Started family-connect-paid-watch.service - Bounded Friends transport decision application."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003752540607",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "85443eeffd4c40dd8f2697c673218571",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "Starting family-connect-restricted-directory-sync.service - Read-only NL snapshot and validated directory copy; never publish CRL..."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003753086851",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1836643",
+          "UNIT": null,
+          "_SYSTEMD_UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_INVOCATION_ID": "85443eeffd4c40dd8f2697c673218571",
+          "INVOCATION_ID": null,
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "error_codes": [
+            "MAINTENANCE_IN_PROGRESS"
+          ],
+          "receipt": {
+            "result": "MAINTENANCE_IN_PROGRESS"
+          }
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003753211454",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "85443eeffd4c40dd8f2697c673218571",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-restricted-directory-sync.service: Deactivated successfully."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003753211841",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "85443eeffd4c40dd8f2697c673218571",
+          "RESULT": null,
+          "JOB_RESULT": "done",
+          "message": "Finished family-connect-restricted-directory-sync.service - Read-only NL snapshot and validated directory copy; never publish CRL."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003767129438",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-reconcile.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "0d4742d15df9404ebad5ded47aa6924a",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "Starting family-connect-paid-reconcile.service - Read-only canonical Friends transport reconciliation..."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003771052963",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1836911",
+          "UNIT": null,
+          "_SYSTEMD_UNIT": "family-connect-paid-reconcile.service",
+          "_SYSTEMD_INVOCATION_ID": "0d4742d15df9404ebad5ded47aa6924a",
+          "INVOCATION_ID": null,
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "error_codes": [],
+          "receipt": {}
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003771150569",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-reconcile.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "0d4742d15df9404ebad5ded47aa6924a",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-paid-reconcile.service: Main process exited, code=exited, status=1/FAILURE"
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003771153598",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-reconcile.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "0d4742d15df9404ebad5ded47aa6924a",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-paid-reconcile.service: Failed with result 'exit-code'."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003771153805",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-reconcile.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "0d4742d15df9404ebad5ded47aa6924a",
+          "RESULT": null,
+          "JOB_RESULT": "failed",
+          "message": "Failed to start family-connect-paid-reconcile.service - Read-only canonical Friends transport reconciliation."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003780846529",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "dd51791e22834d4391678abe5a7da972",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-paid-watch.service: Main process exited, code=exited, status=1/FAILURE"
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003780847248",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "dd51791e22834d4391678abe5a7da972",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-paid-watch.service: Failed with result 'exit-code'."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003783834986",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "04fbf097d7c6431a902b3607f27fbdc4",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "Starting family-connect-restricted-directory-sync.service - Read-only NL snapshot and validated directory copy; never publish CRL..."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003784257947",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1837993",
+          "UNIT": null,
+          "_SYSTEMD_UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_INVOCATION_ID": "04fbf097d7c6431a902b3607f27fbdc4",
+          "INVOCATION_ID": null,
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "error_codes": [
+            "MAINTENANCE_IN_PROGRESS"
+          ],
+          "receipt": {
+            "result": "MAINTENANCE_IN_PROGRESS"
+          }
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003784371044",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "04fbf097d7c6431a902b3607f27fbdc4",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-restricted-directory-sync.service: Deactivated successfully."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003784371930",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-restricted-directory-sync.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "04fbf097d7c6431a902b3607f27fbdc4",
+          "RESULT": null,
+          "JOB_RESULT": "done",
+          "message": "Finished family-connect-restricted-directory-sync.service - Read-only NL snapshot and validated directory copy; never publish CRL."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003785917349",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "dd51791e22834d4391678abe5a7da972",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "family-connect-paid-watch.service: Scheduled restart job, restart counter is at 1044."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003785928185",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "e66ea8cde2a8465eabaea4ab770d6dd9",
+          "RESULT": null,
+          "JOB_RESULT": null,
+          "message": "Starting family-connect-paid-watch.service - Bounded Friends transport decision application..."
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795003786147446",
+          "_BOOT_ID": "411dc329437f418dbb7137a8d1e4d4bf",
+          "_PID": "1",
+          "UNIT": "family-connect-paid-watch.service",
+          "_SYSTEMD_UNIT": "init.scope",
+          "_SYSTEMD_INVOCATION_ID": null,
+          "INVOCATION_ID": "e66ea8cde2a8465eabaea4ab770d6dd9",
+          "RESULT": null,
+          "JOB_RESULT": "done",
+          "message": "Started family-connect-paid-watch.service - Bounded Friends transport decision application."
+        }
+      ],
+      "diagnostic_process_reaped": true
+    }
+  },
+  "limits": [
+    "No current user VPN traffic test",
+    "Initial RU stale-state row/writer not retained",
+    "Device/provider cause of 8.548s fsync is UNKNOWN",
+    "MESH recovery blocked by expired predecessor guard; no guard bypass",
+    "NL1 stop reconstructed from matching durable exit receipts, not an assumed retained journal window"
+  ]
+}

@@ -2,6 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
+**OPS-MESH-RU-20261118 — selected operational priority; read-only diagnosis COMPLETE,
+recovery NOT_RUN.** Fresh pinned sequential observations establish renewal-driven
+HTTP/both-NL fence17 November20:41 and separate RU fsync/deadline transport failure
+18 November01:49. Panel/runtime mapping and timestamps agree; PR44 merge is not
+deployment. No queued product task, restart or recovery is implicitly authorized.
+Completion evidence: current units/timers/boot/runtime hashes, first-failure
+invocation chronology, renewal ownership/material expiry and concrete guarded plan.
+Remaining recovery gates: fresh RU backup/isolated restore, RU-only fence/drain and
+coordinated unchanged-byte start; MESH additionally needs qualified non-activating
+expired/unprepared reconciliation (current helper NO-GO), then fresh crypto/directory,
+terminal controller state, real per-node traffic and successful due renewal.
+Initial registry writer and device-level fsync cause remain UNKNOWN. No storage fix
+or VPN acceptance PASS is claimed. [Report and explicit stop gates](releases/2026-11-18-mesh-ru-incident.md).
+
 **18 November — selected N185 late-2001 exterior revision, local checkpoint complete.**
 Requested headlights/bumpers, scoop hood, liftgate, gold paint, OEM five-spoke
 wheels and two roof crossbars are implemented; the surfacing rollback is retained.

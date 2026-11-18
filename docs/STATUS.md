@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**18 November12:00–12:18UTC — OPS-MESH-RU-20261118, DIAGNOSED / NOT_RECOVERED.**
+Fresh panel/direct readback confirms both NL MESH inactive and RU AWG/TCP/HTTP down.
+17 November20:41: common renewal STALE_NODE_STATE after all three acquisitions;
+quiesce/fence stops HTTP and both MESH readers BEFORE leaf/CRL expiry21:55:59.
+18 November01:49:35: separate RU decision-state fsync8.548s exceeds8s operation
+budget; protective AWG/TCP stop, watcher exit1/retry loop (1052 restarts at12:14).
+No initiating watchdog, reboot or MESH restart-limit diagnosis is substituted.
+RU bootstrap is not-found and not required by its control role. Panel is fresh.
+PR44 merged atbc8f7b5b, but installed125c796a transport is legacy; observations-v1
+NOT_DEPLOYED. Zero recovery/deployment changes. RU guarded recovery is specified;
+MESH requires a qualified expired/unprepared ownership reconciliation first:
+the installed helper's validity guard currently blocks it. Do not bypass it.
+[Causes, exact recovery prerequisites, limits](releases/2026-11-18-mesh-ru-incident.md)
+· [Sanitized live receipt](releases/2026-11-18-mesh-ru-incident.receipt.json).
+
 **18 November — local N185 2001 facelift detail revision.** Headlights, grille,
 both bumpers, scoop hood and stamped liftgate are revised against late-generation
 Toyota photographs and the 2001 US brochure. Latest owner choices replace silver,
