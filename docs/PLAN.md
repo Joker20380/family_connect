@@ -2,6 +2,13 @@
 
 ## Current engineering priority / Текущий critical path
 
+**18 November — selected Blender N185 surfacing revision, local checkpoint.**
+Address the owner's angular/uneven-body complaint by rebuilding the surfaces and
+their joins, not adding detail over the rejected shell. Preserve rollback; check
+colour, orthographic and clay renders. Owner likeness acceptance remains OPEN.
+No Family Connect implementation or deployment gate advances.
+[Surface revision evidence](releases/2026-11-18-blender-surfacing.md).
+
 **17 November — selected Blender N185 rebuild, local reference checkpoint.**
 Replace the rejected generic shell using N185-specific factory drawings and photos;
 preserve the original draft, save an editable scene, inspect rendered views and

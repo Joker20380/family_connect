@@ -1,5 +1,12 @@
 # Текущее состояние / Current state
 
+**18 November — local Blender N185 surfacing revision.** The owner rejected the
+angular reference checkpoint. Lower body, hood/wing transitions, roof corners,
+integrated window apertures, bumper sweeps and mirrors were rebuilt; old geometry
+is preserved in a separate rollback blend. This is a local visual revision, not
+owner likeness acceptance or Toyota CAD. Family Connect remains unchanged.
+[Revised surfaces, checks, local files and limits](releases/2026-11-18-blender-surfacing.md).
+
 **17 November — local 4Runner N185 reference rebuild.** The first generic vehicle
 draft was rejected for likeness and preserved. A separate editable N185 scene uses
 Toyota factory side/top catalogue drawings, official dimensions and photographs;
