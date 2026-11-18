@@ -44,7 +44,7 @@ def progress_maxima(journal):
 
 
 def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=False, expect_restart_loop=False,
-            tcp_query_fixtures=None, readback_bundle=None, reproduce_watch_window=False):
+            tcp_query_fixtures=None, readback_bundle=None, reproduce_watch_window=False, reproduce_prelock_failure=None):
     os.umask(0o077)
     prefix = 'fc-enforcement-fix-' + secrets.token_hex(5)
     receipt = dict(result='FAIL',run_id=prefix,production_writes=0,checks={})
@@ -203,6 +203,10 @@ def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=Fa
                 return json.loads(process.stdout)
 
             if readback_bundle:
+                if reproduce_prelock_failure:
+                    receipt['checks']['prelock_failure'] = inner('gateway-ru', 'readback', dict(phase='prelock-'+reproduce_prelock_failure+'-baseline'))
+                    receipt['result'] = 'REPRODUCED_UNSAFE_ACK'
+                    return receipt
                 if reproduce_watch_window:
                     receipt['checks']['accepted_base_race'] = inner('gateway-ru', 'readback', dict(phase='race-baseline'))
                     receipt['result'] = 'REPRODUCED_UNSAFE_ACK'
@@ -215,6 +219,9 @@ def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=Fa
                 receipt['phase'] = 'independent-case-start-limit-window'
                 time.sleep(125)
                 receipt['checks']['fixture_case_spacing_seconds'] = 125
+                for fault in ('deadline', 'open-error'):
+                    receipt['checks']['prelock_'+fault] = inner('gateway-ru', 'readback', dict(phase='prelock-'+fault))
+                time.sleep(125)
                 assert transport_reconcile.cycle(access.path, commands) == dict.fromkeys(nodes, 'applied')
                 start = int(time.time())
                 operator('activate', 'readback-paid', start=start, end=start+1200)
@@ -405,11 +412,12 @@ if __name__=='__main__':
     parser.add_argument('--tcp-query-fixtures',type=Path,help='Exact-Xray generated protobufs and pinned offline Python RPC wheels, isolated test only')
     parser.add_argument('--readback-bundle',type=Path,help='Verified coordinated bundle; real systemd readback qualification only')
     parser.add_argument('--reproduce-watch-window',action='store_true',help='Require unsafe ACK on accepted pre-fix bytes; not candidate acceptance')
+    parser.add_argument('--reproduce-prelock-failure',choices=('deadline', 'open-error'),help='Reproduce PR45 pre-lock failure lost by a later owner; not acceptance')
     args=parser.parse_args()
     assert not args.expect_restart_loop or args.lifecycle_diagnostics
     result=execute(args.kit.resolve(),args.report,recovery_diagnostics=args.recovery_diagnostics,
         lifecycle_diagnostics=args.lifecycle_diagnostics,expect_restart_loop=args.expect_restart_loop,
         tcp_query_fixtures=args.tcp_query_fixtures,readback_bundle=args.readback_bundle,
-        reproduce_watch_window=args.reproduce_watch_window)
+        reproduce_watch_window=args.reproduce_watch_window,reproduce_prelock_failure=args.reproduce_prelock_failure)
     print(json.dumps(result))
-    raise SystemExit(result['result'] != ('REPRODUCED_UNSAFE_ACK' if args.reproduce_watch_window else 'PASS'))
+    raise SystemExit(result['result'] != ('REPRODUCED_UNSAFE_ACK' if args.reproduce_watch_window or args.reproduce_prelock_failure else 'PASS'))

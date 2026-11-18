@@ -2,9 +2,9 @@ name: Isolated transport persistence readback
 on:
   workflow_dispatch:
   push:
-    paths: ['control/friends/transport_gateway.py', 'control/friends/transport_policy.py', 'deploy/friends/awg-gateway.py', 'control_plane/apps/console/transport_collector.py', 'tests/test_transport_observation_mode.py', 'tests/test_transport_failure_serialization.py', 'tests/test_transport_watch_fence.py', 'tests/test_transport_readback_package.py', 'scripts/check_transport_readback.py', 'scripts/package_transport_readback.py', 'scripts/test_paid_transport_systemd.py', 'pilot/transport*fixture.py', 'pilot/readback/**', '.github/workflows/transport-readback.yml']
+    paths: ['control/friends/transport_gateway.py', 'control/friends/transport_policy.py', 'deploy/friends/awg-gateway.py', 'control_plane/apps/console/transport_collector.py', 'tests/test_transport_observation_mode.py', 'tests/test_transport_failure_serialization.py', 'tests/test_transport_watch_fence.py', 'tests/test_transport_prelock_failure.py', 'tests/test_transport_readback_package.py', 'scripts/check_transport_readback.py', 'scripts/package_transport_readback.py', 'scripts/test_paid_transport_systemd.py', 'pilot/transport*fixture.py', 'pilot/readback/**', '.github/workflows/transport-readback.yml']
   pull_request:
-    paths: ['control/friends/transport_gateway.py', 'control/friends/transport_policy.py', 'deploy/friends/awg-gateway.py', 'control_plane/apps/console/transport_collector.py', 'tests/test_transport_observation_mode.py', 'tests/test_transport_failure_serialization.py', 'tests/test_transport_watch_fence.py', 'tests/test_transport_readback_package.py', 'scripts/check_transport_readback.py', 'scripts/package_transport_readback.py', 'scripts/test_paid_transport_systemd.py', 'pilot/transport*fixture.py', 'pilot/readback/**', '.github/workflows/transport-readback.yml']
+    paths: ['control/friends/transport_gateway.py', 'control/friends/transport_policy.py', 'deploy/friends/awg-gateway.py', 'control_plane/apps/console/transport_collector.py', 'tests/test_transport_observation_mode.py', 'tests/test_transport_failure_serialization.py', 'tests/test_transport_watch_fence.py', 'tests/test_transport_prelock_failure.py', 'tests/test_transport_readback_package.py', 'scripts/check_transport_readback.py', 'scripts/package_transport_readback.py', 'scripts/test_paid_transport_systemd.py', 'pilot/transport*fixture.py', 'pilot/readback/**', '.github/workflows/transport-readback.yml']
 permissions:
   contents: read
 jobs:
@@ -22,7 +22,7 @@ jobs:
           python -m pytest -q tests/test_transport_enforcement.py tests/test_transport_application_regressions.py
           tests/test_transport_budget.py tests/test_transport_readback_cost.py tests/test_transport_call_diagnostics.py
           tests/test_transport_failure_diagnostics.py tests/test_transport_lifecycle.py tests/test_transport_observation_mode.py
-          tests/test_transport_failure_serialization.py tests/test_transport_watch_fence.py tests/test_transport_readback_package.py
+          tests/test_transport_failure_serialization.py tests/test_transport_watch_fence.py tests/test_transport_prelock_failure.py tests/test_transport_readback_package.py
       - name: Existing pinned native inputs
         run: |
           docker build -f pilot/awg31/Dockerfile -t family-connect-amneziawg:3.1-desktop .

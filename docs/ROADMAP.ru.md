@@ -2,6 +2,15 @@
 
 ## Актуальная сводка — 18.11.2026
 
+Сейчас только repair PR45/P1: на3f5698e4 воспроизведена потеря аварийного запрета
+после ошибки другого процесса до flock. Source и установленный systemd дают unsafe
+ACK/collector ok; прежний PASS не закрывает этот случай. Аварийный latch отделён от
+активной операции; повторная приёмка новых bytes/CI и review обязательны.
+[Контракт и границы repair](releases/2026-11-18-pr45-prelock-fence.md).
+Production NOT_DEPLOYED; Android auto-refresh остаётся в очереди.
+
+### Предыдущая сводка / историческая приёмка
+
 PR44 source/CI/merge завершены (`ea661996` → `bc8f7b5b`). Выбран только следующий
 RU-PERSISTENCE-READBACK-1 этап: согласованный node/gateway/collector комплект,
 закрытие watcher-гонки, установленная systemd-приёмка и откат без потери authority.

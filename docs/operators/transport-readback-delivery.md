@@ -1,6 +1,9 @@
 # Coordinated RU readback delivery — future procedure, NOT_DEPLOYED
 
 This is a reviewed-candidate procedure, **not current authorization to deploy**.
+PR45's3f5698e4 manifest is superseded for delivery by the P1 repair; it reproduced
+unsafe concurrent ACK after pre-lock failure. Require the new repeat-review receipt,
+not its old PASS. [Repair contract](../releases/2026-11-18-pr45-prelock-fence.md).
 Require a separate explicit RU-only delivery instruction, terminal PR45 receipt,
 successful applicable exact-head CI and the exact installed-systemd/rollback
 manifest. No production command in this document has been executed by this task.
@@ -52,7 +55,10 @@ Old pressure observer requires the exact legacy archive and durable timestamp
 liveness; it is incompatible with observations-v1 and must remain stopped.
 Old schema1-attempt readers cannot certify candidate freshness. The current collector
 requires schema2 attempt/observation generation, real live producer, monotonic/wall
-freshness and no application writer/fence. `prepare_paid_transport.py` is a virgin
+freshness and no application writer/fence. The repaired collector also takes the
+shared `application-outcome.lock` and rejects sticky `application-failed`; ship it
+with the repaired node, not an older single-marker collector. Do not unlink live
+lock files (replacement creates a different flock inode). `prepare_paid_transport.py` is a virgin
 node initializer, not an upgrade/rollback tool. Existing central reconciliation and
 operator ACK/envelope interfaces are unchanged; do not replace their installed
 archives or reset authority merely to match a newer source checkout.
@@ -74,7 +80,7 @@ archives or reset authority merely to match a newer source checkout.
    observed locations, daemon-reload and compare effective definitions with receipt.
    No hidden drop-in may change8/12/120, Restart=no, BindsTo/After or KillMode.
 4. Install matching collector source and RU pin; select the authorized explicit mode
-   while stopped. For a retained incomplete intent, execute the new `paid-recover`
+   while stopped. For a retained active intent or emergency latch, execute `paid-recover`
    only with the external fence/drain and all three units demonstrably stopped. It
    validates retained authority and removes no first-failure/decision/preparation data.
 5. Start watcher, AWG, then TCP sequentially. READY means dependency readiness only.
@@ -97,7 +103,8 @@ latency of mandatory security writes.
 ## Authority-preserving rollback and return
 
 While externally fenced/drained and all three units stopped, snapshot **current**
-authority, including events after candidate installation. Clear an incomplete intent
+authority, including events after candidate installation. Clear active intent and
+the separate emergency latch
 only via the new stopped-unit recovery path before removing that code. Restore the
 manifest's exact `legacy/` node/entrypoint/watcher bytes plus compatible dependency
 drop-ins and explicit legacy config; do not restore old DB, transport-state, attempt,

@@ -76,10 +76,10 @@ def collect_transport(source, key, expected_sha256, root=Path('/opt/apps/family_
             config_path = root/'transport-enforcement.json'
             candidate = config_path.exists() and json.loads(config_path.read_text()).get('readback_mode') == 'observations-v1'
             if candidate:
-                for name in ('application.lock', 'registration.lock'):
+                for name in ('application.lock', 'registration.lock', 'application-outcome.lock'):
                     lock = locks.enter_context((root/name).open('r'))
                     fcntl.flock(lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
-                if os.path.lexists(root/'application-incomplete'):
+                if any(os.path.lexists(root/name) for name in ('application-incomplete', 'application-failed')):
                     raise ValueError('TRANSPORT_RECOVERY_REQUIRED')
             return collect_locked_transport(source, key, expected_sha256, root, candidate)
     except Exception:

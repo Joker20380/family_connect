@@ -2,6 +2,23 @@
 
 ## Current engineering priority / Текущий critical path
 
+**PR45/P1 — preserve pre-lock participant failures, repeat review only.**
+Continue the existing feature worktree from3f5698e4; mainbc8f7b5b and accepted PR44
+are unchanged. Exact old source and installed-systemd reproductions demonstrate
+the blocking shared-intent deletion race for expired open and immediate open error.
+Separate active/failed state, serialize outcome publication and explicit recovery,
+retain budget-before-open, final descriptor/deadline/ACK ordering and8/12/120.
+Gate:213 source tests, including real process/flock and final-outcome ordering.
+Require two reproducible bundles, new installed-systemd pending-stop scenarios plus
+previous watchdog/generation/expiry/revoke/retained-authority rollback/cost matrix,
+all applicable final-head CI and self-review. Record terminal hashes/results on
+PR45; old manifest/PASS is only evidence for3f5698e4. No merge before repeat review.
+Production **NOT_DEPLOYED**; no RU/NL operation or storage root-cause investigation.
+[Repair evidence/contract](releases/2026-11-18-pr45-prelock-fence.md).
+Android subscription-card auto-refresh remains the next product task, not this repair.
+
+### Previous PR45 package qualification / historical gates
+
 **RU-PERSISTENCE-READBACK-1 — coordinated package/systemd qualification.**
 PR44 source/CI/merge COMPLETE: accepted `ea661996`, main `bc8f7b5b`, tree
 `037783c0`; ten head and eight merge workflows SUCCESS. Do not repeat those gates.

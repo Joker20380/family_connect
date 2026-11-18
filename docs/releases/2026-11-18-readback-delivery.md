@@ -1,5 +1,9 @@
 # 18 November — readback delivery qualification, NOT_DEPLOYED
 
+**Superseded for review-readiness by independent P1 on3f5698e4.** The measurements
+below remain historical for their exact bytes, not acceptance of the repair.
+[Pre-lock failure reproduction, corrected concurrency contract and repeat gates](2026-11-18-pr45-prelock-fence.md).
+
 ## Entry and recovered handoff
 
 Remote readback confirms main `bc8f7b5b42800269aeb43bcf54059205e7a7cbf7`,

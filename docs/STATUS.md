@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**18 November — PR45 P1 pre-lock failure repair selected; NOT_DEPLOYED.**
+Independent review of `3f5698e4` found that a later application-lock owner can
+remove the shared intent after an earlier participant fails before acquiring it.
+Exact3f5698e4 source and installed-systemd deadline/open-error reproductions both
+show unsafe applied ACK, three queries, removed intent and collector ok with real
+engine stop Jobs pending. Those FAIL receipts supersede review-readiness, not the
+historical measurements for the old bytes. PR45 is draft again.
+Repair separates active intent from sticky `application-failed`; an outcome flock
+orders failure publication, final success and explicit stopped-unit recovery.
+The final post-deadline emergency check is the success linearization point; normal
+operations never clear the emergency latch.213 source tests cover the repair. New package,
+systemd/rollback and exact-head CI gates must finish before repeat review; terminal
+results belong in PR45 without a cosmetic follow-up commit. No production operation.
+[P1 contract, reproductions and remaining gates](releases/2026-11-18-pr45-prelock-fence.md).
+Android subscription-card auto-refresh stays queued; PR44 remains complete.
+
+### Previous PR45 delivery qualification / historical bytes
+
 **18 November — PR44 merged; RU-PERSISTENCE-READBACK-1 delivery qualification selected.**
 PR44 accepted head `ea6619962a7197d95d578d089971b8d859db206f`, merge
 `bc8f7b5b42800269aeb43bcf54059205e7a7cbf7`, identical tree

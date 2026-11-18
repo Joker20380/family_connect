@@ -1,8 +1,11 @@
 """Disposable namespace only: installed-bundle readback qualification and fault hooks."""
 import fcntl
+import contextlib
 import hashlib
 import importlib.util
+import io
 import json
+import multiprocessing
 import os
 from pathlib import Path
 import shutil
@@ -89,10 +92,139 @@ def register(payload):
         input=json.dumps(payload).encode(), capture_output=True, timeout=12)
 
 
+def prelock_race(fault, baseline=False):
+    gateway, module = installed_engine()
+    context = multiprocessing.get_context('fork')
+    opened, release_open, owned, release_owner, finished, exit_owner = [context.Event() for _ in range(6)]
+    results, events = context.Queue(), context.Queue()
+    request = dict(operation='reconcile', paid=envelope())
+    first_path = ROOT/'transport-failure.json'
+    previous = first_path.read_bytes() if first_path.exists() else None
+    for unit in UNITS[1:]:
+        (Path('/etc/systemd/system')/(unit+'.d')/'99-pending-stop.conf').write_text('[Service]\nExecStop=/bin/sleep 4\n')
+    command(['systemctl', 'daemon-reload'])
+
+    def participant(role):
+        worker = module.Gateway(gateway)
+        gateway.paid_engine = lambda: worker
+        gateway.sys.stdin = io.TextIOWrapper(io.BytesIO(json.dumps(request).encode()))
+        original_open, original_accept, original_stop, original_run = Path.open, worker.accept, worker.stop_all, worker.run
+        queries = []
+        def open_file(path, *args, **kwargs):
+            if path == ROOT/'application.lock':
+                events.put((role, 'open-entered', time.monotonic()))
+                opened.set()
+                assert release_open.wait(20)
+                if fault == 'open-error':
+                    raise OSError(5, 'synthetic application open failure')
+            return original_open(path, *args, **kwargs)
+        def accept(*args, **kwargs):
+            events.put((role, 'owns-application-lock', time.monotonic()))
+            owned.set()
+            assert release_owner.wait(6)
+            return original_accept(*args, **kwargs)
+        def stop():
+            original_stop()
+            events.put((role, 'async-stop-request', time.monotonic()))
+        def run(arguments):
+            if arguments[0] != 'systemctl':
+                queries.append(arguments[0])
+            return original_run(arguments)
+        worker.stop_all, worker.run = stop, run
+        if role == 'B':
+            Path.open = open_file
+        else:
+            worker.accept = accept
+        output, failure = io.StringIO(), None
+        with contextlib.redirect_stdout(output):
+            try:
+                gateway.register()
+            except BaseException as error:
+                failure = str(error)
+        events.put((role, 'operation-exited', time.monotonic()))
+        results.put(dict(role=role, ack=output.getvalue(), error=failure, queries=len(queries)))
+        if role == 'A':
+            finished.set()
+            assert exit_owner.wait(10)
+
+    early = context.Process(target=participant, args=('B',))
+    later = context.Process(target=participant, args=('A',))
+    watcher = int(properties(UNITS[0])['MainPID'])
+    early.start()
+    try:
+        assert opened.wait(5)
+        if fault == 'deadline':
+            time.sleep(8.15)
+        with (ROOT/'application.lock').open('a') as handle:
+            fcntl.flock(handle, fcntl.LOCK_EX)
+            os.kill(watcher, signal.SIGSTOP)
+        later.start()
+        assert owned.wait(5)
+        release_open.set()
+        early.join(5)
+        assert early.exitcode == 0
+        first = first_path.read_bytes()
+        assert json.loads((ROOT/'transport-attempt.json').read_text())['result'] == 'error'
+        wait_for(lambda: all(properties(unit)['ActiveState'] == 'deactivating' for unit in UNITS[1:]), timeout=2)
+        pending = {unit:properties(unit) for unit in UNITS[1:]}
+        assert all(value['MainPID'] != '0' and value['Job'] for value in pending.values())
+        release_owner.set()
+        assert finished.wait(4)
+        observed = {result['role']:result for result in [results.get(timeout=2), results.get(timeout=2)]}
+        trace = [events.get(timeout=2) for index in range(5 if observed['A']['ack'] else 6)]
+        result = dict(result='REPRODUCED_UNSAFE_ACK' if baseline else 'PASS', fault=fault,
+            participants=observed, events=sorted(trace, key=lambda value:value[2]), stop_pending=pending,
+            collector=collect(), incomplete=(ROOT/'application-incomplete').exists(),
+            emergency=(ROOT/'application-failed').exists())
+        assert not observed['B']['ack'] and observed['B']['queries'] == 0
+        assert 'TRANSPORT_OPERATION_DEADLINE' in observed['B']['error'] if fault == 'deadline' else 'synthetic application open failure' in observed['B']['error']
+        assert first_path.read_bytes() == (previous or first)
+        if baseline:
+            assert json.loads(observed['A']['ack'])['result'] == 'applied' and observed['A']['queries'] == 3
+            assert result['collector'] == 'ok' and not result['incomplete']
+        else:
+            assert not observed['A']['ack'] and observed['A']['error'] == 'TRANSPORT_RECOVERY_REQUIRED'
+            assert result['collector'] == 'unavailable' and result['emergency']
+            subsequent = register(request)
+            assert subsequent.returncode != 0 and not subsequent.stdout
+            assert (ROOT/'application-failed').exists()
+            recovery = subprocess.run(['/usr/bin/python3', str(ROOT/'awg-gateway.py'), 'paid-recover'], capture_output=True, timeout=12)
+            assert recovery.returncode != 0 and not recovery.stdout
+            assert (ROOT/'application-failed').exists()
+            result['pending_recovery_rejected'] = True
+    finally:
+        release_open.set()
+        release_owner.set()
+        exit_owner.set()
+        for process in (early, later):
+            if process.pid is not None:
+                process.join(3)
+                if process.is_alive():
+                    process.kill()
+                    process.join()
+        os.kill(watcher, signal.SIGCONT)
+        command(['systemctl', 'stop', *UNITS])
+        for unit in UNITS[1:]:
+            (Path('/etc/systemd/system')/(unit+'.d')/'99-pending-stop.conf').unlink()
+        command(['systemctl', 'daemon-reload'])
+        results.close()
+        events.close()
+    assert all(properties(unit)['MainPID'] == '0' and properties(unit)['ControlPID'] == '0' and properties(unit)['Job'] == '' for unit in UNITS)
+    if not baseline:
+        assert (ROOT/'application-failed').exists() and collect() == 'unavailable'
+        start()
+        assert not (ROOT/'application-failed').exists()
+        assert json.loads(register(dict(operation='reconcile', paid=envelope())).stdout)['result'] == 'applied'
+        wait_for(lambda: observation() and collect() == 'ok')
+        assert first_path.read_bytes() == first
+        result['stopped_then_explicitly_recovered'] = True
+    return result
+
+
 def start(legacy=False):
     command(['systemctl', 'stop', *UNITS])
     assert all(properties(unit)['MainPID'] == '0' and properties(unit)['Job'] == '' for unit in UNITS)
-    if not legacy and (ROOT/'application-incomplete').exists():
+    if not legacy and any((ROOT/name).exists() for name in ('application-incomplete', 'application-failed')):
         command(['/usr/bin/python3', str(ROOT/'awg-gateway.py'), 'paid-recover'])
     for unit in UNITS:
         command(['systemctl', 'start', unit])
@@ -126,7 +258,7 @@ def instrumented_watch():
         current = observation() if value == 'WATCHDOG=1' else None
         with EVENTS.open('a') as output:
             output.write(json.dumps(dict(value=value, at=time.monotonic(),
-                observation=bool(current), fenced=(ROOT/'application-incomplete').exists()))+'\n')
+                observation=bool(current), fenced=any((ROOT/name).exists() for name in ('application-incomplete', 'application-failed'))))+'\n')
         original_notify(value)
     module.Gateway.apply_serialized, os.fsync, module.notify = apply, sync, notify
     module.watch(gateway)
@@ -171,6 +303,8 @@ def paused_cost():
 
 
 def qualify(fixture, phase):
+    if phase.startswith('prelock-'):
+        return json.loads(command(['/usr/bin/python3', '/readback_fixture.py', phase]).stdout)
     if phase == 'installed':
         manifest = json.loads(Path('/kit/manifest.json').read_text())
         for name in ('paid-transport.pyz', 'awg-gateway.py', 'collectors/transport_collector.py'):
@@ -324,7 +458,7 @@ def qualify(fixture, phase):
         before = snapshot()
         assert any(value['decision']['state'] == 'revoked' for value in before.values())
         assert any(value['prepared'] == 'c'*64 for value in before.values())
-        if (ROOT/'application-incomplete').exists():
+        if any((ROOT/name).exists() for name in ('application-incomplete', 'application-failed')):
             command(['/usr/bin/python3', str(ROOT/'awg-gateway.py'), 'paid-recover'])
         source = Path('/kit/legacy' if phase == 'rollback' else '/kit')
         for name in ('paid-transport.pyz', 'awg-gateway.py'):
@@ -358,5 +492,8 @@ if __name__ == '__main__':
     elif sys.argv[1:] == ['mode-check']:
         gateway, module = installed_engine()
         module.Gateway(gateway)
+    elif len(sys.argv) == 2 and sys.argv[1].startswith('prelock-'):
+        phase = sys.argv[1]
+        print(json.dumps(prelock_race(phase.removeprefix('prelock-').removesuffix('-baseline'), phase.endswith('-baseline'))))
     else:
         raise ValueError('ISOLATED_FIXTURE_ACTION_REQUIRED')
