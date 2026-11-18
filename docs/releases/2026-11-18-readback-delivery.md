@@ -63,6 +63,23 @@ durable writes. This is NOT real systemd acceptance or physical power-loss testi
 
 ## Open gates
 
+Installed c188b591 bundle already passes real systemd cold-start/effective units,
+18 native queries/zero repeated syncs, watcher failure with both actual engine PIDs
+still deactivating and stop Jobs pending (no concurrent ACK), actual termination,
+explicit recovery, generation/collector negatives and mandatory write error/delay.
+The same fixture on exact merged PR44 reproduces a successful concurrent ACK with
+both real engine stops pending (`REPRODUCED_UNSAFE_ACK`, not an acceptance PASS).
+The first full c188 run fails later at terminal reconciliation: the dense sequence
+of intentionally restarted fixture cases exhausts TCP's unchanged5-start/120s
+systemd limit. Preserve that FAIL; subsequent cases are separated by the real125s
+quiescent interval, not increased service deadlines or reset-failed/restart loops.
+The new packager preserves package_ru_lifecycle.py unchanged and checks its exact
+PR15 baseline hashes before replacing only transport_gateway within the node ZIP.
+It carries coordinated gateway, all five collector modules, units/drop-ins, explicit
+legacy/observations configs and verified rollback bytes. It excludes live state and
+central HTTP/operator/reconciler archives. A separate self-review regression rearms
+the intent fence if explicit recovery's final deadline fails after directory removal.
+
 Coordinated reproducible package/manifest; installed-path and effective-unit proof;
 real systemd lifecycle/fault/traffic/collector matrix; baseline/candidate sync
 comparison; retained-authority legacy rollback and return; exact-head CI; self-review

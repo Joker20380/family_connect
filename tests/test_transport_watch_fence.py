@@ -2,6 +2,7 @@ import contextlib
 import io
 import json
 import multiprocessing
+from pathlib import Path
 
 import pytest
 
@@ -103,5 +104,21 @@ def test_pending_stop_or_live_pid_never_clears_fence(candidate, registry, field,
     properties[field] = value
     gateway.run = lambda command: '\n'.join(key+'='+value for key, value in properties.items()).encode()
     with pytest.raises(ValueError, match='TRANSPORT_RECOVERY_REQUIRES_STOPPED_UNITS'):
+        gateway.recover()
+    assert gateway.fence_path.exists()
+
+
+def test_recovery_final_deadline_rearms_fence_before_unlock(candidate, registry, monkeypatch):
+    gateway, current, live, initial = candidate
+    gateway.accept(envelope(registry))
+    gateway.fence_path.mkdir()
+    gateway.run = lambda command: b'LoadState=loaded\nActiveState=inactive\nMainPID=0\nControlPID=0\nJob=\n'
+    original_rmdir = Path.rmdir
+    def remove(path):
+        original_rmdir(path)
+        if path == gateway.fence_path:
+            module.CURRENT_OPERATION.get().deadline -= 9
+    monkeypatch.setattr(Path, 'rmdir', remove)
+    with pytest.raises(TimeoutError, match='TRANSPORT_OPERATION_DEADLINE'):
         gateway.recover()
     assert gateway.fence_path.exists()

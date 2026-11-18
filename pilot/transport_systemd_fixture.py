@@ -16,6 +16,8 @@ import transport_fixture as traffic
 import canary
 
 sys.path.insert(0, '/kit/paid-reconcile.pyz')
+if Path('/kit/manifest.json').exists():
+    sys.path.insert(0, '/kit/paid-transport.pyz')
 from control.friends import transport_policy as policy
 from control.friends.transport_gateway import write
 
@@ -79,7 +81,11 @@ def setup(document):
         (ROOT/name).chmod(0o600)
     write(ROOT/'settings.json',dict(network='10.254.253.0/24',address='10.254.253.1/24',external='eth1'))
     (ROOT/'server.conf').write_text((canary.ROOT/'server.awg').read_text().split('[Peer]')[0])
-    write(ROOT/'transport-enforcement.json',dict(schema=1,profile=policy.PROFILE,node=document['node'],enabled=True))
+    config = dict(schema=1,profile=policy.PROFILE,node=document['node'],enabled=True)
+    if document.get('readback'):
+        config['readback_mode'] = 'observations-v1'
+        shutil.copytree('/kit/collectors', ROOT/'collectors')
+    write(ROOT/'transport-enforcement.json',config)
     write(ROOT/'transport-state.json',dict(schema=1,node=document['node'],records={},observed_at=int(time.time())))
     config = json.loads((canary.ROOT/'server.json').read_text())
     config['log'] = dict(loglevel='warning')
@@ -115,7 +121,7 @@ def setup(document):
         drop = units/(service+'.d')
         drop.mkdir()
         (drop/'70-private-files.conf').write_text('[Service]\nUMask=0077\n')
-        if service == SERVICES[1]:
+        if service == SERVICES[1] and not document.get('readback'):
             (drop/'80-stop-timeout.conf').write_text('[Service]\nTimeoutStopSec=90\n')
         shutil.copyfile('/kit/paid-dependency.conf',drop/'90-paid.conf')
     shutil.copyfile('/kit/paid-tcp-preflight.conf',units/(SERVICES[2]+'.d')/'91-paid-preflight.conf')
@@ -327,6 +333,9 @@ def main():
         result = setup(document)
     elif action == 'info':
         result = info()
+    elif action == 'readback':
+        import readback_fixture
+        result = readback_fixture.qualify(sys.modules[__name__], document['phase'])
     elif action == 'client':
         result = start_client(document)
     elif action == 'probe':

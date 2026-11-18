@@ -452,22 +452,26 @@ class Gateway:
         if not self.observation_mode:
             raise ValueError('OBSERVATION_MODE_REQUIRED')
         with ExitStack() as resources:
-            with self.operation():
-                handle = resources.enter_context((self.root/'application.lock').open('a'))
-                self.acquire(handle)
-                for service in ('family-connect-paid-watch.service', *SERVICES):
-                    raw = self.run(['systemctl', 'show', service, '-p', 'LoadState', '-p', 'ActiveState',
-                        '-p', 'MainPID', '-p', 'ControlPID', '-p', 'Job']).decode()
-                    state = dict(line.split('=', 1) for line in raw.strip().splitlines())
-                    if (state.get('LoadState') != 'loaded' or state.get('ActiveState') not in ('inactive', 'failed')
-                            or state.get('MainPID') != '0' or state.get('ControlPID') != '0' or state.get('Job') != ''):
-                        raise ValueError('TRANSPORT_RECOVERY_REQUIRES_STOPPED_UNITS')
-                self.load()
-                self.observation_path.unlink(missing_ok=True)
-                if os.path.lexists(self.fence_path):
-                    if self.fence_path.is_symlink():
-                        raise ValueError('UNSAFE_GATEWAY_STATE')
-                    self.fence_path.rmdir()
+            try:
+                with self.operation():
+                    handle = resources.enter_context((self.root/'application.lock').open('a'))
+                    self.acquire(handle)
+                    for service in ('family-connect-paid-watch.service', *SERVICES):
+                        raw = self.run(['systemctl', 'show', service, '-p', 'LoadState', '-p', 'ActiveState',
+                            '-p', 'MainPID', '-p', 'ControlPID', '-p', 'Job']).decode()
+                        state = dict(line.split('=', 1) for line in raw.strip().splitlines())
+                        if (state.get('LoadState') != 'loaded' or state.get('ActiveState') not in ('inactive', 'failed')
+                                or state.get('MainPID') != '0' or state.get('ControlPID') != '0' or state.get('Job') != ''):
+                            raise ValueError('TRANSPORT_RECOVERY_REQUIRES_STOPPED_UNITS')
+                    self.load()
+                    self.observation_path.unlink(missing_ok=True)
+                    if os.path.lexists(self.fence_path):
+                        if self.fence_path.is_symlink():
+                            raise ValueError('UNSAFE_GATEWAY_STATE')
+                        self.fence_path.rmdir()
+            except BaseException as error:
+                self.fail_closed(error, 'register')
+                raise
 
     def load(self):
         value = read(self.path)
