@@ -176,7 +176,16 @@
     "receipt_written": true,
     "result": "COMMITTED"
   },
-  "outcome": "SERVER_CONFIGURATION_AND_PUBLIC_MESH_VERIFIED_PHYSICAL_CLIENT_PENDING",
+  "outcome": "SERVER_CONFIGURATION_AND_PUBLIC_MESH_VERIFIED_OWNER_CONFIRMED",
+  "owner_confirmation": {
+    "basis": "USER_REPORT",
+    "date": "2026-11-18",
+    "quote": "все работает да",
+    "scope": "AFFECTED_DEVICE_RECOVERY_CONFIRMED",
+    "device_gateway_transport_matrix": "NOT_SPECIFIED",
+    "new_automated_observation": false,
+    "server_changes_in_follow_up": false
+  },
   "panel": {
     "at": "2026-11-18T14:38:01.984293+00:00",
     "collector_sha256": "3272f2ad2a0ac95b4a7c448853fc4bf33f2632cc1fbfaa496b1951a6c00f8bfb",
@@ -540,7 +549,6 @@
     "INITIAL_CONCURRENT_REGISTRY_WRITER",
     "UNDERLYING_FSYNC_STALL_CAUSE",
     "LATER_SUPPORT_SENDER_WRITER",
-    "AFFECTED_PHYSICAL_CLIENT_RETRY",
     "NEXT_FUTURE_DUE_CREDENTIAL_ROTATION"
   ]
 }

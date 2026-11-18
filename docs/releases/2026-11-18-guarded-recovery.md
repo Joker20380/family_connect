@@ -156,10 +156,17 @@ fresh readback; never clear an owner, failure, transaction, deny or cache to pro
   this readback; preserve these live changes rather than restoring the backup.
   This is explicitly recorded, not suppressed to manufacture an equality PASS.
 
-Remaining acceptance: the owner's affected device/network retry. Successful scheduled evaluation is
-not proof of the next future credential-rotation cycle. The recurrence causes above
-remain open operational risks; no storage/root-cause fix or observations-v1 rollout
-is claimed by this recovery.
+## Owner confirmation — 18 November 2026
+
+The owner reports “все работает да”. This closes the affected-device retry and
+reported-outage availability gates on the basis of owner feedback, alongside the
+server/public-path evidence above. No device, client version, gateway or transport
+matrix was supplied in this confirmation; it is not a new automated measurement
+or a claim of universal client coverage. This follow-up makes no server changes.
+
+Successful scheduled evaluation is not proof of the next future credential-rotation
+cycle. The recurrence causes above remain open operational risks; no storage or
+root-cause fix or observations-v1 rollout is claimed by this recovery.
 
 Source/checkpoint commits are local. Ordinary push remains rejected because the
 existing local main and remote main diverge; no force push, reset or unrelated merge

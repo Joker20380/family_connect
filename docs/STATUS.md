@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**18 November — owner-authorized recovery APPLIED; public paths verified.**
+**18 November — recovery OWNER-CONFIRMED; public paths verified.**
 The expired/unprepared MESH operation is safely finalized without DB rollback;
 normal fresh leaf/CRL renewal is COMMITTED and ownership cleaned. Both NL MESH
 start at13:05, shared RU HTTP at13:10. Real signed configuration requests for RU
@@ -8,8 +8,10 @@ and both Amsterdam choices pass over public TLS, directly addressing the owner's
 “не удалось получить список серверов”. Original schedules are restored; scheduled
 renewal/sync succeed. RU AWG/TCP retain their12:18 recovery invocations and exact
 sets. Both Amsterdam public MESH auth/4HTTPS/3DNS/expected-egress tests pass
-independently. Physical-device retry and underlying recurrence causes remain
-open. Runtime/unit bytes unchanged; observations-v1 remains NOT_DEPLOYED.
+independently. The owner confirms “все работает да”, closing the affected-device
+recovery gate, not a full device/transport matrix. Underlying recurrence causes
+and the next future due credential rotation remain open. Runtime/unit bytes are
+unchanged; no server changes in this follow-up; observations-v1 remains NOT_DEPLOYED.
 [Recovery timeline, guards and remaining checks](releases/2026-11-18-guarded-recovery.md)
 · [Sanitized verification](releases/2026-11-18-guarded-recovery.receipt.json).
 

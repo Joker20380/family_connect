@@ -2,15 +2,16 @@
 
 ## Current engineering priority / Текущий critical path
 
-**OPS-MESH-RU-20261118 recovery — APPLIED, public paths verified.** Unprepared
+**OPS-MESH-RU-20261118 recovery — OWNER-CONFIRMED, availability gate COMPLETE.** Unprepared
 ownership cleanup, fresh normal renewal COMMITTED, current directories, both MESH
 starts and shared HTTP restoration are complete without changing installed runtime.
 RU and both Amsterdam signed configuration requests pass; original schedules are
 restored and scheduled evaluation/sync succeed. Both Amsterdam public tests pass
-independent auth/4HTTPS/3DNS/expected-egress checks; require the owner's device retry
-before claiming physical-client recovery. Initial registry-writer/fsync causes and
-the next future due rotation remain open. No product task or observations-v1
-deployment is selected. [Recovery evidence](releases/2026-11-18-guarded-recovery.md).
+independent auth/4HTTPS/3DNS/expected-egress checks. The owner's “все работает да”
+closes the affected-device retry gate, without claiming a full device/transport
+matrix. Initial registry-writer/fsync causes and the next future due rotation remain
+open. No further server change, product task or observations-v1 deployment is
+selected. [Recovery evidence](releases/2026-11-18-guarded-recovery.md).
 
 **OPS-MESH-RU-20261118 — initial read-only diagnosis COMPLETE; historical entry.**
 Recovery was not run during this initial phase; the separately authorized recovery
