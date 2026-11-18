@@ -7,8 +7,9 @@ is UNKNOWN. Reducing repeated commits cannot protect against every VPS/storage s
 
 ## Contract before qualification
 
-18 November continuation: PR44 is merged; its historical open delivery question
-is now under package/systemd qualification, not yet accepted. The new same-boot
+18 November continuation: PR44 is merged; installed6aba3211 package/systemd and
+authority-preserving rollback pass. Final manifest/stronger fixture/CI receipts and
+review-readiness are tracked on PR45, independently of this checkpoint. The new same-boot
 `application-incomplete` intent fence prevents automatic reuse after failed/killed
 application. `paid-recover` requires explicitly stopped units and preserves authority
 and first failure. [Current evidence and exact remaining gates](../releases/2026-11-18-readback-delivery.md).

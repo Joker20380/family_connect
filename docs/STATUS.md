@@ -9,9 +9,13 @@ eight merge push workflows SUCCESS (merge attempt1); no repeat acceptance/merge.
 Latest recovery is retained from local `ef55433c`: RU transport12:18UTC,
 both NL MESH13:05, shared HTTP13:10, public paths verified and owner-confirmed.
 Runtime remains legacy; initiating storage/renewal causes UNKNOWN, not FIXED.
-Current source reproduces and fences the watch/unlock/asynchronous-stop ACK window;
-190 transport tests pass. Installed package, real systemd, rollback and final-head
-CI remain OPEN. Production **NOT_DEPLOYED**. Android subscription-card auto-refresh
+Current source reproduces and fences the watch/unlock/asynchronous-stop ACK window.
+Installed package/systemd/rollback PASS on source6aba3211 (nodef454af6a): real
+watchdog, expiry/revoke flows, generation/collector negatives, retained-authority
+legacy rollback and return;18 queries both, repeated sync12→0.197 transport/package
+tests cover the final source gates. Final PR45 head CI and strengthened closure/
+fixture receipts are recorded on PR45 before ready-for-review, not inferred from
+earlier PASS. Production **NOT_DEPLOYED**. Android subscription-card auto-refresh
 is the next small product task, not started. iOS deferred; desktop L04.2 paused.
 [Recovery and this stage](releases/2026-11-18-readback-delivery.md).
 

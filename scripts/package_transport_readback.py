@@ -59,6 +59,9 @@ def build(node, gateway, output, revision, source=ROOT):
     for name in COLLECTORS:
         path = 'control_plane/apps/console/'+name
         save('collectors/'+name, source_bytes(source, revision, path), path)
+        save('operator/'+path, source_bytes(source, revision, path), path)
+    for path in ('control_plane/collect_inventory.py', 'control/friends/pseudonyms.py'):
+        save('operator/'+path, source_bytes(source, revision, path), path)
     config = dict(schema=1, profile='paid-transports-v2', node='gateway-ru', enabled=True)
     save('transport-enforcement.legacy.json', (json.dumps(config, sort_keys=True)+'\n').encode())
     save('transport-enforcement.observations-v1.json',
@@ -79,7 +82,13 @@ def build(node, gateway, output, revision, source=ROOT):
 
 
 def verify(root):
+    if root.is_symlink() or (root/'manifest.json').is_symlink():
+        raise ValueError('BUNDLE_VERIFICATION_FAILED')
     manifest = json.loads((root/'manifest.json').read_text())
+    actual = {path.relative_to(root).as_posix() for path in root.rglob('*') if path.is_file() or path.is_symlink()}
+    if (manifest.get('schema') != 1 or manifest.get('kind') != 'transport-readback-coordinated'
+            or actual != set(manifest.get('files', {})) | {'manifest.json'}):
+        raise ValueError('BUNDLE_VERIFICATION_FAILED')
     for name, expected in manifest['files'].items():
         path = root/name
         if (Path(name).is_absolute() or '..' in Path(name).parts or path.is_symlink()

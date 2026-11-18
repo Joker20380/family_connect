@@ -61,7 +61,7 @@ validation and error handling, ACK remains after successful operation exit.
 all previous serialization regressions and explicit recovery after interrupted
 durable writes. This is NOT real systemd acceptance or physical power-loss testing.
 
-## Open gates
+## Installed systemd acceptance and final review gates
 
 Installed c188b591 bundle already passes real systemd cold-start/effective units,
 18 native queries/zero repeated syncs, watcher failure with both actual engine PIDs
@@ -80,9 +80,40 @@ legacy/observations configs and verified rollback bytes. It excludes live state 
 central HTTP/operator/reconciler archives. A separate self-review regression rearms
 the intent fence if explicit recovery's final deadline fails after directory removal.
 
-Coordinated reproducible package/manifest; installed-path and effective-unit proof;
-real systemd lifecycle/fault/traffic/collector matrix; baseline/candidate sync
-comparison; retained-authority legacy rollback and return; exact-head CI; self-review
-and review-ready PR. No old PASS substitutes for these new bytes. Production
-NOT_DEPLOYED; no installer/catalog/version change. Final refs, run IDs and package
-hashes belong in the PR receipt, not a cosmetic final CI-triggering docs commit.
+The complete6aba3211 installed run is PASS with cleanup PASS. Runtime node SHA256
+`f454af6a36d4005c0b159bc5c6ade992951a1ca583d0a25e1e59344ea0c55c70` is verified
+at the real ExecStart import path, not imported from the checkout. Systemd PID1,
+private cgroup/network/PID/mount namespaces, no host mounts/ports/socket and bounded
+resources are checked. Cold-start/dependency order, READY before completed readback,
+WATCHDOG only after it, mandatory write error/9s delay and actual watchdog kill on
+a30s blocked write pass. Both engine PIDs and stop Jobs remain real during the
+concurrent-registration attempt: no ACK/collector ok, then all three processes stop.
+First error survives explicit recovery and subsequent faults. No service deadline,
+StartLimit, restart policy or production setting is increased to pass this test.
+Sanitized installed-run receipt SHA256:
+`118707c81ea4192a2b12c9b2871d6373c12edced0bc5f26ae15617b8a3c282a7`;
+separate exact-PR44 real-systemd unsafe-ACK reproduction receipt:
+`c0e64a16cdba7a9b667e56f26b49923283f4973c5b7d44858c00a341880653a4`.
+
+Live expiry/renewal/revoke flows pass. Generation changes and missing/corrupt/stale/
+old-generation observations and an active writer all produce unavailable. After
+post-install paid extension/revoke and a prepared operation, rollback to exact node
+125c796a/gateway9023d2c3 retains every decision/boot/deadline/prepared field; no DB
+or transport-state is restored. Actual legacy readback/deny traffic and return to
+candidate also pass. Six unchanged cycles of the installed legacy and candidate
+each execute18 real AWG/Xray queries, collector6/6; durable/file/directory sync
+counts12→0. Each experiment records its actual archive loader/hash. This does not
+attribute historical storage latency or guarantee mandatory-write latency.
+
+Final refinement adds the runnable operator-side collector source closure, closed
+manifest verification (reject unlisted files/path escape/symlink/permission drift),
+installed unknown-mode negatives, effective-unit/native hashes and explicit no-late-
+application/no-notify-during-durable-fault assertions. Runtime node bytes remain
+f454af6a; final rebuilt manifest and repeated strengthened installed qualification
+are mandatory PR receipts.197 transport/package tests and public-source/links/
+whitespace gates accompany these changes. Applicable exact-final-head CI and
+self-review must complete before PR45 leaves draft; no previous PASS substitutes.
+Production NOT_DEPLOYED; no installer/catalog/version change. Final refs, run IDs
+and manifest hashes belong in the PR receipt, without another cosmetic commit.
+
+[Future RU-only delivery, pins, compatibility and code-only rollback](../operators/transport-readback-delivery.md).

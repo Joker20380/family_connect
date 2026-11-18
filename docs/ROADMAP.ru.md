@@ -5,8 +5,11 @@
 PR44 source/CI/merge завершены (`ea661996` → `bc8f7b5b`). Выбран только следующий
 RU-PERSISTENCE-READBACK-1 этап: согласованный node/gateway/collector комплект,
 закрытие watcher-гонки, установленная systemd-приёмка и откат без потери authority.
-Сейчас source-тесты190 PASS; package/systemd/rollback/final CI OPEN,
-production **NOT_DEPLOYED**. Последнее RU/MESH восстановление подтверждено владельцем;
+Package/systemd/rollback на6aba3211 PASS, включая настоящий watchdog, потоки,
+сохранённый authority и18 queries/12→0 sync. Финальные197 source/package тестов,
+точные CI/manifest/усиленная fixture-приёмка и review-readiness — в
+[PR45](https://github.com/Joker20380/family_connect/pull/45), без переноса старого PASS.
+Production **NOT_DEPLOYED**. Последнее RU/MESH восстановление подтверждено владельцем;
 причины повторения не устранены. [Точные границы](releases/2026-11-18-readback-delivery.md).
 Затем отдельная разрешённая RU-only поставка; следующая небольшая продуктовая задача —
 автообновление карточки подписки Android. Принятые поддержка, уведомления,

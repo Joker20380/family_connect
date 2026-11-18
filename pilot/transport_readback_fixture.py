@@ -42,7 +42,9 @@ def installed_engine():
 
 def properties(unit):
     output = command(['systemctl', 'show', unit, '-p', 'ActiveState', '-p', 'MainPID',
-        '-p', 'ControlPID', '-p', 'Job', '-p', 'Restart', '-p', 'WatchdogUSec', '-p', 'Result', '-p', 'ExecStart']).stdout.decode()
+        '-p', 'ControlPID', '-p', 'Job', '-p', 'Restart', '-p', 'WatchdogUSec', '-p', 'Result', '-p', 'ExecStart',
+        '-p', 'TimeoutStopUSec', '-p', 'KillMode', '-p', 'BindsTo', '-p', 'After', '-p', 'User',
+        '-p', 'FragmentPath', '-p', 'DropInPaths', '-p', 'ExecStartPre']).stdout.decode()
     return dict(line.split('=', 1) for line in output.strip().splitlines())
 
 
@@ -183,9 +185,30 @@ def qualify(fixture, phase):
             assert all(hashlib.sha256(path.read_bytes()).hexdigest() == expected for path in paths)
         current = properties(UNITS[0])
         assert current['Restart'] == 'no' and current['WatchdogUSec'] == '12s'
+        assert current['TimeoutStopUSec'] == '5s' and current['KillMode'] == 'control-group'
         assert str(ROOT/'awg-gateway.py')+' paid-watch' in current['ExecStart']
+        for unit in UNITS[1:]:
+            effective = properties(unit)
+            assert UNITS[0] in effective['BindsTo'].split() and UNITS[0] in effective['After'].split()
+            assert effective['TimeoutStopUSec'] == '5s' and effective['KillMode'] == 'control-group'
+        assert properties(UNITS[2])['User'] == 'fc-friends'
         wait_for(lambda: observation() and collect() == 'ok')
         result = dict(result='PASS', effective={unit:properties(unit) for unit in UNITS}, candidate_cost=paused_cost())
+        result['native_sha256'] = {name:hashlib.sha256((Path('/native')/name).read_bytes()).hexdigest()
+            for name in ('awg', 'amneziawg-go', 'xray')}
+        config_path = ROOT/'transport-enforcement.json'
+        original = config_path.read_bytes()
+        try:
+            for mode in ('unknown', 'legacy'):
+                config = json.loads(original)
+                config['readback_mode'] = mode
+                config_path.write_text(json.dumps(config))
+                process = subprocess.run(['/usr/bin/python3', '/readback_fixture.py', 'mode-check'], capture_output=True, timeout=8)
+                assert process.returncode != 0 and not process.stdout
+                assert collect() == 'unavailable'
+        finally:
+            config_path.write_bytes(original)
+        result['unknown_or_incompatible_mode_rejected'] = True
         return result
     if phase in ('race', 'race-baseline'):
         command(['systemctl', 'stop', *UNITS])
@@ -213,6 +236,10 @@ def qualify(fixture, phase):
         command(['systemctl', 'stop', *UNITS])
         assert all(properties(unit)['MainPID'] == '0' for unit in UNITS)
         assert not (ROOT/'transport-observation.json').exists()
+        stopped_state = (ROOT/'transport-state.json').read_bytes()
+        time.sleep(2)
+        assert (ROOT/'transport-state.json').read_bytes() == stopped_state
+        assert not (ROOT/'transport-observation.json').exists()
         events = [json.loads(line) for line in EVENTS.read_text().splitlines()]
         assert events[0]['value'] == 'READY=1' and not events[0]['observation']
         assert any(event['value'] == 'WATCHDOG=1' for event in events)
@@ -223,7 +250,7 @@ def qualify(fixture, phase):
         start()
         assert (ROOT/'transport-failure.json').read_bytes() == first
         return dict(result='PASS', stop_pending=pending, concurrent_ack=False, collector='unavailable',
-            processes_stopped=True, notify_events=events, explicit_recovery=True)
+            processes_stopped=True, no_late_application=True, notify_events=events, explicit_recovery=True)
     if phase == 'collector':
         wait_for(lambda: observation() and collect() == 'ok')
         previous = observation()['producer']
@@ -266,7 +293,11 @@ def qualify(fixture, phase):
         for fault in ('write-error', 'write-delay', 'write-hang'):
             before = snapshot()
             TRIGGER.write_text(fault)
+            wait_for(lambda: not TRIGGER.exists())
+            notified = EVENTS.read_bytes()
+            assert collect() == 'unavailable'
             wait_for(lambda: all(properties(unit)['MainPID'] == '0' for unit in UNITS), timeout=20)
+            assert EVENTS.read_bytes() == notified
             assert snapshot() == before
             assert collect() == 'unavailable' and not (ROOT/'transport-observation.json').exists()
             assert (ROOT/'transport-failure.json').read_bytes() == first
@@ -324,5 +355,8 @@ if __name__ == '__main__':
         instrumented_watch()
     elif sys.argv[1:] == ['cost']:
         cost()
+    elif sys.argv[1:] == ['mode-check']:
+        gateway, module = installed_engine()
+        module.Gateway(gateway)
     else:
         raise ValueError('ISOLATED_FIXTURE_ACTION_REQUIRED')
