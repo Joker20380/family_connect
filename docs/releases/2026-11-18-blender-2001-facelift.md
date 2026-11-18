@@ -109,3 +109,9 @@ performed to publish this modeling note. Unrelated local changes are preserved.
 The current checkout remains divergent (10 local/288 upstream-only commits before
 this checkpoint); ordinary publication is blocked by the existing non-fast-forward
 boundary. The saved Blender assets do not depend on a successful repository push.
+
+Publication receipt: checkpoint `a66924154bf25ff4777cf86d21e7359e6b5dace1` was
+committed locally; its ordinary `main` push was rejected as non-fast-forward.
+Post-attempt remote `main` readback is `bc8f7b5b42800269aeb43bcf54059205e7a7cbf7`.
+No reconciliation or force push was performed; the local Blender files and verified
+asset manifest are complete independently of that documentation-publication block.
