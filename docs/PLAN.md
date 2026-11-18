@@ -2,23 +2,28 @@
 
 ## Current engineering priority / Текущий critical path
 
-**OPS-MESH-RU-20261118 recovery — explicitly authorized, IN_PROGRESS.** Retain the
-already recovered ordinary RU transport; complete the expired/unprepared MESH
-operation without data rollback, then require fresh normal renewal/directory,
-terminal cleanup, restored schedules and actual traffic evidence. No product task
-or observations-v1 deployment is selected. [Recovery checkpoint](releases/2026-11-18-guarded-recovery.md).
+**OPS-MESH-RU-20261118 recovery — APPLIED, public paths verified.** Unprepared
+ownership cleanup, fresh normal renewal COMMITTED, current directories, both MESH
+starts and shared HTTP restoration are complete without changing installed runtime.
+RU and both Amsterdam signed configuration requests pass; original schedules are
+restored and scheduled evaluation/sync succeed. Both Amsterdam public tests pass
+independent auth/4HTTPS/3DNS/expected-egress checks; require the owner's device retry
+before claiming physical-client recovery. Initial registry-writer/fsync causes and
+the next future due rotation remain open. No product task or observations-v1
+deployment is selected. [Recovery evidence](releases/2026-11-18-guarded-recovery.md).
 
-**OPS-MESH-RU-20261118 — selected operational priority; read-only diagnosis COMPLETE,
-recovery NOT_RUN.** Fresh pinned sequential observations establish renewal-driven
+**OPS-MESH-RU-20261118 — initial read-only diagnosis COMPLETE; historical entry.**
+Recovery was not run during this initial phase; the separately authorized recovery
+above supersedes its unexecuted gates. Fresh pinned observations establish renewal-driven
 HTTP/both-NL fence17 November20:41 and separate RU fsync/deadline transport failure
 18 November01:49. Panel/runtime mapping and timestamps agree; PR44 merge is not
 deployment. No queued product task, restart or recovery is implicitly authorized.
 Completion evidence: current units/timers/boot/runtime hashes, first-failure
 invocation chronology, renewal ownership/material expiry and concrete guarded plan.
-Remaining recovery gates: fresh RU backup/isolated restore, RU-only fence/drain and
-coordinated unchanged-byte start; MESH additionally needs qualified non-activating
-expired/unprepared reconciliation (current helper NO-GO), then fresh crypto/directory,
-terminal controller state, real per-node traffic and successful due renewal.
+Initial recovery prerequisites were fresh RU backup/isolated restore, RU-only
+fence/drain and coordinated unchanged-byte start; MESH additionally required a
+qualified non-activating expired/unprepared completion, fresh crypto/directory,
+terminal controller state and independent per-node traffic evidence.
 Initial registry writer and device-level fsync cause remain UNKNOWN. No storage fix
 or VPN acceptance PASS is claimed. [Report and explicit stop gates](releases/2026-11-18-mesh-ru-incident.md).
 

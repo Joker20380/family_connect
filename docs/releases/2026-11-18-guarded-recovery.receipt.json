@@ -1,0 +1,546 @@
+{
+  "evidence_sha256": {
+    "gateway-ru-restored-final-1795012680949384947.private.json": "a9d86361aff1f426503ff95ff90e48c1e1108248dc41672e75b827daf98d7611",
+    "panel-1795012682276426421.private.json": "134c5415f0f2f1e6a2527c917abed7c669f8221e46582b5f070e811777718ed0",
+    "verify_restored-1795007835738351189.private.json": "34425e28a3af757273148ff5a4c77625992354092681891df781f950f6066a92"
+  },
+  "later_ru_activity": {
+    "all_revisions_applied": true,
+    "allowed_awg": 20,
+    "allowed_tcp": 20,
+    "attempt_age_seconds": 1.084,
+    "first_failure_preserved": true,
+    "http": {
+      "ActiveState": "active",
+      "ControlPID": "0",
+      "InvocationID": "9472a2f370334fbfa510972032890c67",
+      "MainPID": "2038708",
+      "NRestarts": "0",
+      "Result": "success",
+      "SubState": "running"
+    },
+    "post_restore_activity_audit": {
+      "chat_bindings": {
+        "added": 0,
+        "changed_columns": [
+          "support_sender"
+        ],
+        "changed_rows": 2,
+        "removed": 0
+      }
+    },
+    "protected": {
+      "chat_bindings": {
+        "after": 55,
+        "before": 55,
+        "unchanged": false
+      },
+      "chat_service_senders": {
+        "after": 1,
+        "before": 1,
+        "unchanged": true
+      },
+      "devices": {
+        "after": 68,
+        "before": 68,
+        "unchanged": true
+      },
+      "invites": {
+        "after": 124,
+        "before": 124,
+        "unchanged": true
+      },
+      "paid_beta_events": {
+        "after": 4,
+        "before": 4,
+        "unchanged": true
+      },
+      "paid_beta_subscriptions": {
+        "after": 1,
+        "before": 1,
+        "unchanged": true
+      },
+      "referral_claims": {
+        "after": 62,
+        "before": 62,
+        "unchanged": true
+      },
+      "referral_links": {
+        "after": 19,
+        "before": 19,
+        "unchanged": true
+      }
+    },
+    "records": 68,
+    "utc": "2026-11-18T14:37:59.084105+00:00"
+  },
+  "mesh_backup": {
+    "bytes": 171092,
+    "result": "ENCRYPTED_OFFHOST_ROUNDTRIP_PASS",
+    "sha256": "983e33aa55f896dc885757e495dcf1b896d96333cb0aef5d3d9f02442329c23a"
+  },
+  "nl_verification": {
+    "nl-amsterdam-1": {
+      "at": "2026-11-18T14:14:49.414384+00:00",
+      "boot_id": "4eed71cc-19ed-4351-8042-33e4d3931b9f",
+      "boot_time": "2026-10-30 19:10:24",
+      "diagnostic_processes": "",
+      "directory": {
+        "expires_at": "2026-11-18T17:05:14.349471871Z",
+        "issued_at": "2026-11-18T13:05:17.327804283Z",
+        "metadata": {
+          "ctime_ns": 1795007117330958677,
+          "inode": 401499,
+          "mtime_ns": 1795007117327958697,
+          "sha256": "e9a373b712e27b0c0c35d990c0a1ca9a2a4a5197e2d82a1aaab8a0067df81f00",
+          "size": 292
+        }
+      },
+      "effective_unit_hashes": {
+        "family-connect-friends-awg.service": "671b4146832884278e498c790c825f6e27f330d1ea9ac3fbd43bd76234bd3423",
+        "family-connect-friends-tcp.service": "0c435d745dd04cc69d23e2a39b46d16085303e4c79b3293ecef8e13d37cfb108",
+        "family-connect-restricted-bootstrap.service": "422fc2951780d11dbc1703748cfb7db7b0f1ea438c1891d70664b04ef963fc90"
+      },
+      "ownership_present": false,
+      "profile": {
+        "ctime_ns": 1795006943145189114,
+        "inode": 401947,
+        "mtime_ns": 1795006942699299655,
+        "sha256": "52be975e630a89d47ccfea42ddbe397e2cfc3445612eb39a56b1982a3ddd4891",
+        "size": 2457
+      },
+      "runtime": {
+        "ctime_ns": 1793823782926762896,
+        "inode": 400956,
+        "mtime_ns": 1793823782896855840,
+        "sha256": "70e6c0fc1b920ad308e24667be94f674c34979dab6aa518e1a8194fff7c131b6",
+        "size": 17937478
+      },
+      "temporary_publisher_present": false,
+      "units": "Id=family-connect-restricted-bootstrap.service\nLoadState=loaded\nActiveState=active\nSubState=running\nUnitFileState=disabled\nInactiveEnterTimestamp=\nInvocationID=4099dac0ac8e49418545c17988859b84\nMainPID=3314958\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Wed 2026-11-18 13:05:14 UTC\nExecMainExitTimestamp=\nExecMainCode=0\nExecMainStatus=0\n\nId=family-connect-friends-awg.service\nLoadState=loaded\nActiveState=active\nSubState=running\nUnitFileState=enabled\nInactiveEnterTimestamp=Sat 2026-11-07 21:55:16 UTC\nInvocationID=7594e0fa4eb342f0b3a636fd4a320731\nMainPID=1913904\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Sat 2026-11-07 21:55:20 UTC\nExecMainExitTimestamp=\nExecMainCode=0\nExecMainStatus=0\n\nId=family-connect-friends-tcp.service\nLoadState=loaded\nActiveState=active\nSubState=running\nUnitFileState=enabled\nInactiveEnterTimestamp=Tue 2026-11-17 16:42:34 UTC\nInvocationID=3b0d315516e84b2486300bdadccac545\nMainPID=2181958\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Tue 2026-11-17 16:42:34 UTC\nExecMainExitTimestamp=\nExecMainCode=0\nExecMainStatus=0",
+      "validity": {
+        "authority": "notBefore=Oct 18 22:36:48 2026 GMT\nnotAfter=Jan 16 22:36:48 2027 GMT",
+        "certificate": "notBefore=Nov 18 13:02:08 2026 GMT\nnotAfter=Nov 18 17:02:08 2026 GMT",
+        "revocations": "lastUpdate=Nov 18 13:02:08 2026 GMT\nnextUpdate=Nov 18 17:02:08 2026 GMT\ncrlNumber=0x6AED"
+      }
+    },
+    "nl-amsterdam-2": {
+      "at": "2026-11-18T14:14:50.785882+00:00",
+      "boot_id": "6f2236ce-5aa5-4a5e-82a5-8df57afc14d7",
+      "boot_time": "2026-11-01 23:16:36",
+      "diagnostic_processes": "",
+      "directory": {
+        "expires_at": "2026-11-18T17:05:15.73477003Z",
+        "issued_at": "2026-11-18T13:05:17.775023617Z",
+        "metadata": {
+          "ctime_ns": 1795007117778661946,
+          "inode": 146842,
+          "mtime_ns": 1795007117774661962,
+          "sha256": "781d6d28860b437abe1170c471b9c44f550488b3dfdce2cccbfb004b4ca8cb43",
+          "size": 291
+        }
+      },
+      "effective_unit_hashes": {
+        "family-connect-friends-awg.service": "e2d12aa8d2bc516fb3312ad7f7e1be140c9d69b4a91361cc323825604018655e",
+        "family-connect-friends-tcp.service": "8ac779ab8635c465c5cd1ddad444b0eb0e9e5f790630bcf2797bf37f62598f75",
+        "family-connect-restricted-bootstrap.service": "a6406a9c6a9f55060ff33fcc503a2e6c046aab35e801d137fba0eaea62a1a0d2"
+      },
+      "ownership_present": false,
+      "profile": {
+        "ctime_ns": 1795006946118369373,
+        "inode": 146869,
+        "mtime_ns": 1795006945918370196,
+        "sha256": "b475f028486b05a8711802baae486834d307ad334eedb939fe27baaee78db879",
+        "size": 2451
+      },
+      "runtime": {
+        "ctime_ns": 1793823765752343358,
+        "inode": 143088,
+        "mtime_ns": 1793823765733343428,
+        "sha256": "70e6c0fc1b920ad308e24667be94f674c34979dab6aa518e1a8194fff7c131b6",
+        "size": 17937478
+      },
+      "temporary_publisher_present": false,
+      "units": "MainPID=2344269\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Wed 2026-11-18 13:05:15 UTC\nExecMainExitTimestamp=\nExecMainCode=0\nExecMainStatus=0\nId=family-connect-restricted-bootstrap.service\nLoadState=loaded\nActiveState=active\nSubState=running\nUnitFileState=disabled\nInactiveEnterTimestamp=\nInvocationID=06b50053e96842e6bb5234422fdcbc14\n\nMainPID=5829\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Sat 2026-11-07 21:55:37 UTC\nExecMainExitTimestamp=\nExecMainCode=0\nExecMainStatus=0\nId=family-connect-friends-awg.service\nLoadState=loaded\nActiveState=active\nSubState=running\nUnitFileState=enabled\nInactiveEnterTimestamp=Sat 2026-11-07 21:55:34 UTC\nInvocationID=ae07a5b7d56846c5b1f824e81c9e86ac\n\nMainPID=2348014\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Wed 2026-11-18 13:10:38 UTC\nExecMainExitTimestamp=\nExecMainCode=0\nExecMainStatus=0\nId=family-connect-friends-tcp.service\nLoadState=loaded\nActiveState=active\nSubState=running\nUnitFileState=enabled\nInactiveEnterTimestamp=Wed 2026-11-18 13:10:38 UTC\nInvocationID=1cb817b9ecf440adaec8b5ea4e66e6cb",
+      "validity": {
+        "authority": "notBefore=Oct 18 22:36:48 2026 GMT\nnotAfter=Jan 16 22:36:48 2027 GMT",
+        "certificate": "notBefore=Nov 18 13:02:08 2026 GMT\nnotAfter=Nov 18 17:02:08 2026 GMT",
+        "revocations": "lastUpdate=Nov 18 13:02:08 2026 GMT\nnextUpdate=Nov 18 17:02:08 2026 GMT\ncrlNumber=0x6AED"
+      }
+    }
+  },
+  "observations_v1": "NOT_DEPLOYED",
+  "operation": {
+    "first_cause": "NEW_DIRECTORY_NOT_READY",
+    "operation_id": "owner-mesh-recovery-20261118",
+    "receipt_written": true,
+    "result": "COMMITTED"
+  },
+  "outcome": "SERVER_CONFIGURATION_AND_PUBLIC_MESH_VERIFIED_PHYSICAL_CLIENT_PENDING",
+  "panel": {
+    "at": "2026-11-18T14:38:01.984293+00:00",
+    "collector_sha256": "3272f2ad2a0ac95b4a7c448853fc4bf33f2632cc1fbfaa496b1951a6c00f8bfb",
+    "mesh_label_matches": [
+      {
+        "file": "/app/control_plane/apps/console/objects.py",
+        "line": 26,
+        "sha256": "3ebdd74f313e8952b7255ea6e743bbbe9103cdb820a6b7f555f0870cf22a19ed",
+        "text": "'family-connect-restricted-bootstrap.service': 'MESH \u00b7 bootstrap',"
+      }
+    ],
+    "nodes": {
+      "gateway-ru": {
+        "attempts": [
+          {
+            "action": "transports.attempt",
+            "at": "2026-11-18 14:36:51.905282+00:00",
+            "details": {
+              "source": "gateway-ru",
+              "status": "ok"
+            }
+          }
+        ],
+        "inventory": {
+          "imported_at": "2026-11-18 14:36:51.919994+00:00",
+          "observed_at": "2026-11-18 14:36:50.096221+00:00",
+          "registry_status": "ok",
+          "services": {
+            "family-connect-friends-awg.service": "active",
+            "family-connect-friends-http-candidate.service": "active",
+            "family-connect-friends-tcp.service": "active",
+            "family-connect-mailbox.service": "not_found",
+            "family-connect-restricted-bootstrap.service": "not_found",
+            "family-connect-reticulum.service": "not_found",
+            "family-connect-server-load.service": "active",
+            "wg-quick@fcams.service": "not_found"
+          }
+        },
+        "transport": [
+          {
+            "imported_at": "2026-11-18 14:36:51.903019+00:00",
+            "observed_at": "2026-11-18 14:36:50+00:00",
+            "runtime_sha256": "125c796a30c3fba1772c47b96963517350087ad04aad675b6f33a31a5383276c",
+            "status": "ok"
+          }
+        ]
+      },
+      "nl-amsterdam-1": {
+        "attempts": [
+          {
+            "action": "transports.attempt",
+            "at": "2026-11-18 14:36:54.239786+00:00",
+            "details": {
+              "source": "nl-amsterdam-1",
+              "status": "ok"
+            }
+          }
+        ],
+        "inventory": {
+          "imported_at": "2026-11-18 14:36:54.242557+00:00",
+          "observed_at": "2026-11-18 14:36:52.894266+00:00",
+          "registry_status": "not_collected",
+          "services": {
+            "family-connect-friends-awg.service": "active",
+            "family-connect-friends-http-candidate.service": "not_found",
+            "family-connect-friends-tcp.service": "active",
+            "family-connect-mailbox.service": "active",
+            "family-connect-restricted-bootstrap.service": "active",
+            "family-connect-reticulum.service": "active",
+            "family-connect-server-load.service": "active",
+            "wg-quick@fcams.service": "active"
+          }
+        },
+        "transport": [
+          {
+            "imported_at": "2026-11-18 14:36:54.237866+00:00",
+            "observed_at": "2026-11-18 14:36:52+00:00",
+            "runtime_sha256": "f7571bd42bbd583017fc590b20c7c7097059d7f202fef8323558c4fa8f47885d",
+            "status": "ok"
+          }
+        ]
+      },
+      "nl-amsterdam-2": {
+        "attempts": [
+          {
+            "action": "transports.attempt",
+            "at": "2026-11-18 14:36:56.912742+00:00",
+            "details": {
+              "source": "nl-amsterdam-2",
+              "status": "ok"
+            }
+          }
+        ],
+        "inventory": {
+          "imported_at": "2026-11-18 14:36:56.915161+00:00",
+          "observed_at": "2026-11-18 14:36:55.551960+00:00",
+          "registry_status": "not_collected",
+          "services": {
+            "family-connect-friends-awg.service": "active",
+            "family-connect-friends-http-candidate.service": "not_found",
+            "family-connect-friends-tcp.service": "active",
+            "family-connect-mailbox.service": "not_found",
+            "family-connect-restricted-bootstrap.service": "active",
+            "family-connect-reticulum.service": "not_found",
+            "family-connect-server-load.service": "active",
+            "wg-quick@fcams.service": "not_found"
+          }
+        },
+        "transport": [
+          {
+            "imported_at": "2026-11-18 14:36:56.910776+00:00",
+            "observed_at": "2026-11-18 14:36:55+00:00",
+            "runtime_sha256": "f7571bd42bbd583017fc590b20c7c7097059d7f202fef8323558c4fa8f47885d",
+            "status": "ok"
+          }
+        ]
+      }
+    }
+  },
+  "probe_cleanup": {
+    "NL1": {
+      "identity_unchanged": true,
+      "native_probe_reaped": true,
+      "no_ssh_forward": true
+    },
+    "NL2": {
+      "identity_unchanged": true,
+      "native_probe_reaped": true,
+      "no_ssh_forward": true
+    }
+  },
+  "public_mesh": {
+    "NL1": {
+      "at": 1795011108,
+      "binary_sha256": "344db2c25d978473a096f70e83d23fe8a9ee618f4ac1951e330bfc9fee0b5a02",
+      "directory_source": "AUTHENTICATED_HTTPS_READINESS_NATIVE_IMPORT",
+      "dns_pass": 3,
+      "events": {
+        "bootstrap_cache_loaded": 1,
+        "bootstrap_carrier_connected": 1,
+        "bootstrap_closed_before_dedicated": 1,
+        "bootstrap_descriptor_received": 1,
+        "bootstrap_family_auth": 1,
+        "bootstrap_normal_control_unavailable": 1,
+        "connected": 1,
+        "family_auth": 1,
+        "fleet_probe_egress": 1,
+        "mux_dns": 3,
+        "mux_https": 4,
+        "mux_open": 1,
+        "mux_result": 1,
+        "mux_sample": 3,
+        "reliability_final": 1,
+        "start": 1,
+        "summary": 1
+      },
+      "expected_egress": true,
+      "family_authenticated": true,
+      "https_pass": 4,
+      "mux_pass": true,
+      "node": "NL1",
+      "returncode": 0
+    },
+    "NL2": {
+      "at": 1795011911,
+      "binary_sha256": "0552949c1b45375cc42c08c2956a5dd51b75e93f259635a99faa3c66440c59e2",
+      "directory_source": "AUTHENTICATED_HTTPS_READINESS_NATIVE_IMPORT",
+      "dns_pass": 3,
+      "events": {
+        "bootstrap_cache_loaded": 1,
+        "bootstrap_carrier_connected": 1,
+        "bootstrap_closed_before_dedicated": 1,
+        "bootstrap_descriptor_received": 1,
+        "bootstrap_family_auth": 1,
+        "bootstrap_normal_control_unavailable": 1,
+        "connected": 1,
+        "family_auth": 1,
+        "mesh2_probe_egress": 1,
+        "mux_dns": 3,
+        "mux_https": 4,
+        "mux_open": 1,
+        "mux_result": 1,
+        "mux_sample": 3,
+        "reliability_final": 1,
+        "start": 1,
+        "summary": 1
+      },
+      "expected_egress": true,
+      "family_authenticated": true,
+      "https_pass": 4,
+      "mux_pass": true,
+      "node": "NL2",
+      "returncode": 0
+    }
+  },
+  "qualification": {
+    "current_source_tests": 27,
+    "installed_fcb31164_capsule_tests": 27
+  },
+  "recorded_at": "2026-11-18T14:40:01.769213+00:00",
+  "retained_failed_probe": {
+    "cleanup": {
+      "forward_exited": true,
+      "identity_unchanged": true
+    },
+    "path": "DIAGNOSTIC_SSH_BOOTSTRAP_REFRESH",
+    "result": "control_unavailable"
+  },
+  "ru_final": {
+    "at": "2026-11-18T14:38:00.625476+00:00",
+    "boot_id": "411dc329-437f-418d-bb71-37a8d1e4d4bf",
+    "disk": "1B-blocks        Used      Avail Use%\n30010245120 22897770496 7095697408  77%",
+    "effective_units": {
+      "family-connect-credential-renewal.service": "40dcc510a6af50e693b5c3e950338620447ddc0e5ac9da0db6b3a1f695bf2342",
+      "family-connect-friends-awg.service": "5e0458aebc926e919eb4da5cbe608514a27193c2ccb6fb5b5a64a8e1b16ac2d5",
+      "family-connect-friends-http-candidate.service": "75019feca4120f864be054f1ccdec6da29c0bcd82b052b25659f9db0262f008e",
+      "family-connect-friends-tcp.service": "4d32639cf27be0348d395bf232969b266696c2dd89044613e73b91824e3c2e79",
+      "family-connect-paid-reconcile.service": "76ffb946c60844c8c46019dc33a7cb77487dfb01f3e83ab82b4b0479f4003946",
+      "family-connect-paid-watch.service": "659b954beb67d1e23c0cea45ffda62704f48dc2fb0b1f5bd30d0ae733760bd4e",
+      "family-connect-restricted-directory-sync.service": "08cd990a63e71a775bf6c1389b9cdbfa0d4eb268361f8a9a7eb75c81a957e37d"
+    },
+    "first_failure_stat": {
+      "exists": false
+    },
+    "jobs": "",
+    "processes": "",
+    "renewal_last": {
+      "first_cause": "NEW_DIRECTORY_NOT_READY",
+      "operation_id": "owner-mesh-recovery-20261118",
+      "state": "COMMITTED",
+      "timestamp": 1795007394
+    },
+    "timers": "NEXT                        LEFT LAST                          PASSED UNIT                                           ACTIVATES\nWed 2026-11-18 17:38:03 MSK   2s Wed 2026-11-18 17:37:29 MSK  31s ago family-connect-paid-reconcile.timer            family-connect-paid-reconcile.service\nWed 2026-11-18 17:38:21 MSK  20s Wed 2026-11-18 17:37:46 MSK  14s ago family-connect-restricted-directory-sync.timer family-connect-restricted-directory-sync.service\nWed 2026-11-18 17:43:03 MSK 5min Wed 2026-11-18 17:28:03 MSK 9min ago family-connect-credential-renewal.timer        family-connect-credential-renewal.service\n\n3 timers listed.",
+    "transport-attempt.json": {
+      "observed_at": 1795012680,
+      "records_count": null,
+      "result": "applied",
+      "stat": {
+        "ctime_ns": 1795012680779754238,
+        "inode": 1064360,
+        "mtime_ns": 1795012680762400912,
+        "sha256": "0aca9ff56d1704ea6884b81854c2d987b6db12a19ab6abff23b0994c0faa0a4f",
+        "size": 83
+      }
+    },
+    "transport-state.json": {
+      "observed_at": 1795012680,
+      "records_count": 68,
+      "result": null,
+      "stat": {
+        "ctime_ns": 1795012680750755300,
+        "inode": 1064366,
+        "mtime_ns": 1795012680722756324,
+        "sha256": "ba1e234bafe2548bb6782abf749a8e6db82b6edc7c2789f19d00b157a8415cf9",
+        "size": 45538
+      }
+    },
+    "units": "Id=family-connect-paid-watch.service\nRequires=system.slice sysinit.target\nBindsTo=\nPartOf=\nLoadState=loaded\nActiveState=active\nSubState=running\nInactiveEnterTimestamp=Wed 2026-11-18 15:18:19 MSK\nInvocationID=79157e9ae24d4c8e9378f05454cc8213\nRestart=on-failure\nRestartUSec=5s\nTimeoutStartUSec=45s\nTimeoutStopUSec=5s\nWatchdogUSec=12s\nMainPID=1868388\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Wed 2026-11-18 15:18:57 MSK\nExecMainExitTimestamp=\nExecMainCode=0\nExecMainStatus=0\n\nId=family-connect-friends-awg.service\nRequires=system.slice sysinit.target\nBindsTo=family-connect-paid-watch.service\nPartOf=\nLoadState=loaded\nActiveState=active\nSubState=running\nInactiveEnterTimestamp=Wed 2026-11-18 04:49:39 MSK\nInvocationID=c945e6fbf1a54862a917808198d3f8cf\nRestart=on-failure\nRestartUSec=3s\nTimeoutStartUSec=1min 30s\nTimeoutStopUSec=5s\nWatchdogUSec=0\nMainPID=1868393\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Wed 2026-11-18 15:18:58 MSK\nExecMainExitTimestamp=\nExecMainCode=0\nExecMainStatus=0\n\nId=family-connect-friends-tcp.service\nRequires=system.slice sysinit.target\nBindsTo=family-connect-paid-watch.service\nPartOf=\nLoadState=loaded\nActiveState=active\nSubState=running\nInactiveEnterTimestamp=Wed 2026-11-18 04:49:35 MSK\nInvocationID=74ed8b6a00a04538a80aadc46195a4ad\nRestart=on-failure\nRestartUSec=3s\nTimeoutStartUSec=1min 30s\nTimeoutStopUSec=5s\nWatchdogUSec=0\nMainPID=1868432\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Wed 2026-11-18 15:18:58 MSK\nExecMainExitTimestamp=\nExecMainCode=0\nExecMainStatus=0\n\nId=family-connect-credential-renewal.service\nRequires=system.slice sysinit.target\nBindsTo=\nPartOf=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nInactiveEnterTimestamp=Wed 2026-11-18 17:28:13 MSK\nInvocationID=c3943211b8404c98a6e4065ef865c6ee\nRestart=no\nRestartUSec=100ms\nTimeoutStartUSec=10min\nTimeoutStopUSec=1min 30s\nWatchdogUSec=0\nMainPID=0\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Wed 2026-11-18 17:28:03 MSK\nExecMainExitTimestamp=Wed 2026-11-18 17:28:13 MSK\nExecMainCode=1\nExecMainStatus=0\n\nId=family-connect-restricted-directory-sync.service\nRequires=system.slice sysinit.target\nBindsTo=\nPartOf=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nInactiveEnterTimestamp=Wed 2026-11-18 17:37:51 MSK\nInvocationID=d4b2aee1bc874a89963b0c9784ed0b2a\nRestart=no\nRestartUSec=100ms\nTimeoutStartUSec=1min\nTimeoutStopUSec=1min 30s\nWatchdogUSec=0\nMainPID=0\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Wed 2026-11-18 17:37:46 MSK\nExecMainExitTimestamp=Wed 2026-11-18 17:37:51 MSK\nExecMainCode=1\nExecMainStatus=0\n\nId=family-connect-paid-reconcile.service\nRequires=system.slice sysinit.target\nBindsTo=\nPartOf=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nInactiveEnterTimestamp=Wed 2026-11-18 17:37:33 MSK\nInvocationID=1e94762a3c9e4be5bb2cc1f287e48874\nRestart=no\nRestartUSec=100ms\nTimeoutStartUSec=40s\nTimeoutStopUSec=5s\nWatchdogUSec=0\nMainPID=0\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Wed 2026-11-18 17:37:29 MSK\nExecMainExitTimestamp=Wed 2026-11-18 17:37:33 MSK\nExecMainCode=1\nExecMainStatus=0\n\nId=family-connect-friends-http-candidate.service\nRequires=system.slice sysinit.target\nBindsTo=\nPartOf=\nLoadState=loaded\nActiveState=active\nSubState=running\nInactiveEnterTimestamp=Tue 2026-11-17 23:41:01 MSK\nInvocationID=9472a2f370334fbfa510972032890c67\nRestart=no\nRestartUSec=100ms\nTimeoutStartUSec=1min 30s\nTimeoutStopUSec=1min 30s\nWatchdogUSec=0\nMainPID=2038708\nControlPID=0\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Wed 2026-11-18 16:10:04 MSK\nExecMainExitTimestamp=\nExecMainCode=0\nExecMainStatus=0"
+  },
+  "ru_verification": {
+    "all_revisions_applied": true,
+    "allowed_awg": 20,
+    "allowed_tcp": 20,
+    "attempt_age_seconds": 2.469,
+    "commands_restored": true,
+    "effective_units_unchanged": true,
+    "first_failure_archived_sha256": "40f39f13667fb5e710a6103e83adcb6741487430cc20efe0f57d24f87289d050",
+    "generation2_files_unchanged": true,
+    "protected": {
+      "chat_bindings": {
+        "after": 55,
+        "before": 55,
+        "unchanged": true
+      },
+      "chat_service_senders": {
+        "after": 1,
+        "before": 1,
+        "unchanged": true
+      },
+      "devices": {
+        "after": 68,
+        "before": 68,
+        "unchanged": true
+      },
+      "invites": {
+        "after": 124,
+        "before": 124,
+        "unchanged": true
+      },
+      "paid_beta_events": {
+        "after": 4,
+        "before": 4,
+        "unchanged": true
+      },
+      "paid_beta_subscriptions": {
+        "after": 1,
+        "before": 1,
+        "unchanged": true
+      },
+      "referral_claims": {
+        "after": 62,
+        "before": 62,
+        "unchanged": true
+      },
+      "referral_links": {
+        "after": 19,
+        "before": 19,
+        "unchanged": true
+      }
+    },
+    "records": 68,
+    "transport_identity_membership_terms_prepared_preserved": true,
+    "utc": "2026-11-18T13:17:15.468792+00:00"
+  },
+  "schema": 1,
+  "server_configuration": {
+    "at": "2026-11-18T13:10:33.613351+00:00",
+    "identity_unchanged": true,
+    "nodes": {
+      "nl-amsterdam-1": {
+        "result": "TLS_CONFIGURATION_SIGNATURE_VERIFIED",
+        "seconds": 1.476
+      },
+      "nl-amsterdam-2": {
+        "result": "TLS_CONFIGURATION_SIGNATURE_VERIFIED",
+        "seconds": 3.171
+      },
+      "ru": {
+        "result": "TLS_CONFIGURATION_SIGNATURE_VERIFIED",
+        "seconds": 1.13
+      }
+    },
+    "requests": [
+      {
+        "path": "/friends/challenge",
+        "status": 200
+      },
+      {
+        "path": "/friends/configuration/ru",
+        "status": 200
+      },
+      {
+        "path": "/friends/challenge",
+        "status": 200
+      },
+      {
+        "path": "/friends/gateway-configuration/nl-amsterdam-1",
+        "status": 200
+      },
+      {
+        "path": "/friends/challenge",
+        "status": 200
+      },
+      {
+        "path": "/friends/gateway-configuration/nl-amsterdam-2",
+        "status": 200
+      }
+    ]
+  },
+  "unknowns": [
+    "INITIAL_CONCURRENT_REGISTRY_WRITER",
+    "UNDERLYING_FSYNC_STALL_CAUSE",
+    "LATER_SUPPORT_SENDER_WRITER",
+    "AFFECTED_PHYSICAL_CLIENT_RETRY",
+    "NEXT_FUTURE_DUE_CREDENTIAL_ROTATION"
+  ]
+}

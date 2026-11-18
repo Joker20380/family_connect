@@ -1,11 +1,17 @@
 # Текущее состояние / Current state
 
-**18 November12:38UTC — owner-authorized recovery IN_PROGRESS.** RU AWG/TCP were
-already recovered at12:18 by another session; fresh exact-set/continuity readback
-passes without another restart. MESH/HTTP remain stopped. An explicit non-activating
-expired/unprepared completion helper passes27 tests on source and the installed
-fcb31164 capsule; no MESH apply or PR44 deployment is claimed at this checkpoint.
-[Recovery gates and qualification](releases/2026-11-18-guarded-recovery.md).
+**18 November — owner-authorized recovery APPLIED; public paths verified.**
+The expired/unprepared MESH operation is safely finalized without DB rollback;
+normal fresh leaf/CRL renewal is COMMITTED and ownership cleaned. Both NL MESH
+start at13:05, shared RU HTTP at13:10. Real signed configuration requests for RU
+and both Amsterdam choices pass over public TLS, directly addressing the owner's
+“не удалось получить список серверов”. Original schedules are restored; scheduled
+renewal/sync succeed. RU AWG/TCP retain their12:18 recovery invocations and exact
+sets. Both Amsterdam public MESH auth/4HTTPS/3DNS/expected-egress tests pass
+independently. Physical-device retry and underlying recurrence causes remain
+open. Runtime/unit bytes unchanged; observations-v1 remains NOT_DEPLOYED.
+[Recovery timeline, guards and remaining checks](releases/2026-11-18-guarded-recovery.md)
+· [Sanitized verification](releases/2026-11-18-guarded-recovery.receipt.json).
 
 **18 November12:00–12:18UTC — OPS-MESH-RU-20261118, DIAGNOSED / NOT_RECOVERED.**
 Fresh panel/direct readback confirms both NL MESH inactive and RU AWG/TCP/HTTP down.
