@@ -28,6 +28,14 @@ terminal controller state and independent per-node traffic evidence.
 Initial registry writer and device-level fsync cause remain UNKNOWN. No storage fix
 or VPN acceptance PASS is claimed. [Report and explicit stop gates](releases/2026-11-18-mesh-ru-incident.md).
 
+**18 November — selected N185 end curvature and fit, local visual checkpoint.**
+Correct the overly flat front/rear plan silhouette and adjacent panel mismatches.
+Dependencies: current gold facelift blend, existing local Blender/MCP and retained
+Toyota references. Gate: shared corner sweep, fitted adjoining panels, inspected
+front/rear/top/close views, paired-geometry/datum checks and rollback/save.
+Local revision saved; owner likeness acceptance remains OPEN. No product task resumes.
+[Evidence and remaining limits](releases/2026-11-18-blender-end-rounding.md).
+
 **18 November — selected N185 headlamp correction, local visual checkpoint.**
 The owner rejected the previous optics. Rebuild clear late-N185 headlamps and
 corner lights from close references; verify symmetry, optical depth and panel fit

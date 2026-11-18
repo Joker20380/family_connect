@@ -30,6 +30,14 @@ the installed helper's validity guard currently blocks it. Do not bypass it.
 [Causes, exact recovery prerequisites, limits](releases/2026-11-18-mesh-ru-incident.md)
 · [Sanitized live receipt](releases/2026-11-18-mesh-ru-incident.receipt.json).
 
+**18 November — N185 nose/tail curvature and panel-fit revision.** Both ends now
+sweep back toward the sides in plan, with body, lights, trim and bumpers transformed
+together. Front wing/side shoulders and lamp aprons are rebuilt; rear corner joins
+are revised. Paired surfaces are symmetric; wheelbase2675mm and centre bumper
+envelope4655mm remain. Editable local files and a pre-rounding rollback are saved;
+owner likeness acceptance remains OPEN. No product/deployment change.
+[Reference limits, checks and local artifacts](releases/2026-11-18-blender-end-rounding.md).
+
 **18 November — rejected N185 headlights rebuilt.** The prior photo-covered lamps
 are replaced by separate clear glass, faceted H4 reflectors and curved amber/clear
 corner assemblies. Lamp spacing, grille fit and adjacent panel returns are revised;
