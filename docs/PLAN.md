@@ -2,6 +2,35 @@
 
 ## Current engineering priority / Текущий critical path
 
+**OPS-RU-20261119 — guarded recovery complete; storage investigation OPEN.**
+Selected by the owner's renewed outage report and explicit repair request. Preserve
+the02:08 first-failure receipt and the failed initial continuity check; do not
+substitute restored availability for permanent remediation. Current legacy RU
+passes engine/revision and public signed-configuration checks; no PR45 rollout.
+Next incident gate: collect the bounded tmpfs capture before reboot/loss, correlate
+any long fsync with kernel stacks, disk/PSI and the first transport failure, then
+obtain provider-side storage/host evidence if guest measurements cannot resolve
+the remaining cause. The24h collector stops no later than20Nov12:06UTC or earlier
+on failure/target exit/limits; no automatic rearm or recovery. A daytime1.11s
+sampled writeback wait is evidence, not a reproduction of the9.637s overnight stall.
+Affected physical-client confirmation remains open. Do not alter8/12/120 budgets,
+restart policies, durability, mount options or unrelated workloads on speculation.
+[Incident, current pins, retained deviations and handoff](releases/2026-11-19-ru-storage-recurrence.md).
+
+**PR44/PR45 source/package integration CLOSED.** PR45 accepted08187960 merged as
+cb47bf23 with treeacada981; accepted-head9 and automatic main6 workflows SUCCESS.
+[Final integration receipt](https://github.com/Joker20380/family_connect/pull/45#issuecomment-6997163178).
+Do not rerun historical draft/P1 gates. Package provenance remains08187960;
+production **NOT_DEPLOYED** and the first native AWG recovery FAIL remains UNKNOWN.
+Separate future delivery requires explicit RU-only authorization, fresh pins,
+fence/drain, stopped units/PIDs/Jobs, coherent installation, sequential startup,
+real acceptance and authority-preserving rollback under the
+[current runbook](operators/transport-readback-delivery.md). Android subscription-card
+auto-refresh remains the next product task after the server stage; not started.
+Physical iOS remains deferred; desktop L04.2 paused; no old G4 restart.
+
+### Superseded PR45 repair queue / retained evidence
+
 **PR45/P1 — preserve pre-lock participant failures, repeat review only.**
 Continue the existing feature worktree from3f5698e4; mainbc8f7b5b and accepted PR44
 are unchanged. Exact old source and installed-systemd reproductions demonstrate

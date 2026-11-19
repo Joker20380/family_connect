@@ -1,5 +1,31 @@
 # Текущее состояние / Current state
 
+**19 November — OPS-RU-20261119: availability RECOVERED; storage cause OPEN.**
+The owner authorizes RU repair/investigation, not PR45 deployment. At02:08UTC,
+decision-state file fsync9.637s exceeds the8s operation budget; the real12s watchdog
+fires and AWG/TCP stop. Guarded recovery preserves current authority, runtime and
+effective-unit bytes. At12:24UTC:20AWG/20TCP, all68 revisions applied, no new failure,
+NRestarts=0; settled invocations unchanged since11:47. Public signed RU configuration
+passes. Initial strict TCP invocation-continuity FAIL is retained separately:
+two explicit stop/start cycles correlate with lease expiry/renewal after recovery.
+Passive kernel evidence locates observed fsync waits in writeback/ext4 journal/WBT;
+the underlying cause of the overnight9.637s stall remains UNKNOWN, not FIXED.
+A bounded24h read-only diagnostic capture runs in tmpfs until at most20Nov12:06UTC;
+no heartbeat, runtime patch, automatic recovery, NL operation or old-state restore.
+Physical-client confirmation remains open.
+[Recovery, evidence limits and capture handoff](releases/2026-11-19-ru-storage-recurrence.md).
+
+**PR45 integration COMPLETE; SOURCE/PACKAGE INTEGRATED, production NOT_DEPLOYED.**
+Accepted08187960 was merged normally ascb47bf23, treeacada981, matching the reviewed
+synthetic merge. Nine accepted-head and six automatic main workflows SUCCESS,
+attempt1. [Terminal integration receipt](https://github.com/Joker20380/family_connect/pull/45#issuecomment-6997163178).
+Package provenance remains literal08187960, not this incident checkpoint or merge.
+First native AWG recovery FAIL remains UNKNOWN. Future separately authorized
+RU-only delivery follows [the accepted runbook](operators/transport-readback-delivery.md);
+Android subscription-card auto-refresh follows the server stage, not started here.
+
+### Superseded PR45 repair checkpoints / historical, not active gates
+
 **18 November — PR45 P1 pre-lock failure repair selected; NOT_DEPLOYED.**
 Independent review of `3f5698e4` found that a later application-lock owner can
 remove the shared intent after an earlier participant fails before acquiring it.
