@@ -26,7 +26,8 @@ FAILURE_CODES = frozenset(('TRANSPORT_OPERATION_DEADLINE', 'ENGINE_START_TIMEOUT
     'ENGINE_READBACK_MISMATCH', 'INVALID_AWG_READBACK', 'INVALID_TCP_READBACK',
     'UNSAFE_GATEWAY_STATE', 'INVALID_GATEWAY_POLICY', 'INVALID_GATEWAY_CACHE',
     'INVALID_MEMBERSHIP_CACHE', 'INVALID_GATEWAY_BINDING', 'TCP_BINDING_CONFLICT',
-    'INCOMPLETE_NODE_BINDING', 'APPLICATION_DID_NOT_CONVERGE', 'DUPLICATE_JSON_FIELD'))
+    'INCOMPLETE_NODE_BINDING', 'APPLICATION_DID_NOT_CONVERGE', 'DUPLICATE_JSON_FIELD',
+    'TRANSPORT_RECOVERY_REQUIRED'))
 
 
 def emit(value):
@@ -365,11 +366,15 @@ class Gateway:
         self.metrics = None
         self.producer = dict(pid=os.getpid(), start=process_start(os.getpid()), generation=uuid.uuid4().hex) if self.observation_mode else None
         self.observation_path = self.root / 'transport-observation.json'
+        self.fence_path = self.root / 'application-incomplete'
+        self.failed_path = self.root / 'application-failed'
 
     @contextmanager
-    def operation(self):
+    def operation(self, *, completion=None):
         if CURRENT_OPERATION.get() is not None:
             yield
+            if completion is not None:
+                completion()
             return
         operation = Operation()
         token = CURRENT_OPERATION.set(operation)
@@ -377,6 +382,9 @@ class Gateway:
         try:
             yield
             operation.remaining()
+            if completion is not None:
+                completion()
+                operation.remaining()
             result = 'complete'
         except BaseException as error:
             if self.observation_mode:
@@ -418,18 +426,27 @@ class Gateway:
 
     @contextmanager
     def serialized(self, *, failure_mode=None):
-        if not self.observation_mode or failure_mode is None:
+        if not self.observation_mode:
             with self.lock('application.lock'):
                 yield
             return
+        failure_mode = failure_mode or 'watch'
         first_error = None
         try:
             with ExitStack() as resources:
                 try:
-                    with self.operation():
-                        handle = resources.enter_context((self.root/'application.lock').open('a'))
-                        self.acquire(handle)
-                        yield
+                    with ExitStack() as outcome:
+                        with self.operation(completion=self.require_no_failure):
+                            handle = resources.enter_context((self.root/'application.lock').open('a'))
+                            self.acquire(handle)
+                            self.require_no_failure()
+                            if os.path.lexists(self.fence_path):
+                                raise ValueError('TRANSPORT_RECOVERY_REQUIRED')
+                            self.fence_path.mkdir(mode=0o700)
+                            yield
+                            outcome.enter_context(self.outcome_lock())
+                            self.require_no_failure()
+                            self.fence_path.rmdir()
                 except BaseException as error:
                     first_error = error
                     self.fail_closed(error, failure_mode)
@@ -440,6 +457,54 @@ class Gateway:
             error = first_error if first_error is not None else error
             self.fail_closed(error, failure_mode)
             raise error
+
+    def require_no_failure(self):
+        if os.path.lexists(self.failed_path):
+            raise ValueError('TRANSPORT_RECOVERY_REQUIRED')
+
+    def latch_failure(self):
+        self.failed_path.mkdir(mode=0o700, exist_ok=True)
+
+    @contextmanager
+    def outcome_lock(self):
+        with ExitStack() as resources:
+            token = CURRENT_OPERATION.set(Operation()) if CURRENT_OPERATION.get() is None else None
+            try:
+                handle = resources.enter_context((self.root/'application-outcome.lock').open('a'))
+                self.acquire(handle)
+            finally:
+                if token is not None:
+                    CURRENT_OPERATION.reset(token)
+            yield
+
+    def recover(self):
+        if not self.observation_mode:
+            raise ValueError('OBSERVATION_MODE_REQUIRED')
+        with ExitStack() as resources:
+            try:
+                with ExitStack() as outcome:
+                    with self.operation(completion=self.require_no_failure):
+                        handle = resources.enter_context((self.root/'application.lock').open('a'))
+                        self.acquire(handle)
+                        outcome.enter_context(self.outcome_lock())
+                        self.fence_path.mkdir(mode=0o700, exist_ok=True)
+                        for service in ('family-connect-paid-watch.service', *SERVICES):
+                            raw = self.run(['systemctl', 'show', service, '-p', 'LoadState', '-p', 'ActiveState',
+                                '-p', 'MainPID', '-p', 'ControlPID', '-p', 'Job']).decode()
+                            state = dict(line.split('=', 1) for line in raw.strip().splitlines())
+                            if (state.get('LoadState') != 'loaded' or state.get('ActiveState') not in ('inactive', 'failed')
+                                    or state.get('MainPID') != '0' or state.get('ControlPID') != '0' or state.get('Job') != ''):
+                                raise ValueError('TRANSPORT_RECOVERY_REQUIRES_STOPPED_UNITS')
+                        self.load()
+                        self.observation_path.unlink(missing_ok=True)
+                        for path in (self.failed_path, self.fence_path):
+                            if os.path.lexists(path):
+                                if path.is_symlink():
+                                    raise ValueError('UNSAFE_GATEWAY_STATE')
+                                path.rmdir()
+            except BaseException as error:
+                self.fail_closed(error, 'register')
+                raise
 
     def load(self):
         value = read(self.path)
@@ -524,15 +589,25 @@ class Gateway:
             report_failure(error, mode, self.root)
         token = CURRENT_OPERATION.set(None)
         try:
-            actions = (self.stop_all, self.failure)
-            if self.observation_mode:
-                actions = (lambda: self.observation_path.unlink(missing_ok=True), *actions,
-                    lambda: report_failure(error, mode, self.root))
-            for action in actions:
-                try:
-                    action()
-                except BaseException as cleanup:
-                    emit(dict(transport_cleanup_failure=failure_record(cleanup, mode)))
+            with ExitStack() as outcome:
+                if self.observation_mode:
+                    try:
+                        outcome.enter_context(self.outcome_lock())
+                    except BaseException as cleanup:
+                        emit(dict(transport_cleanup_failure=failure_record(cleanup, mode)))
+                actions = (self.stop_all, self.failure)
+                if self.observation_mode:
+                    actions = (self.latch_failure,
+                        lambda: self.fence_path.mkdir(mode=0o700, exist_ok=True),
+                        lambda: self.observation_path.unlink(missing_ok=True), *actions,
+                        lambda: report_failure(error, mode, self.root))
+                for action in actions:
+                    try:
+                        action()
+                    except BaseException as cleanup:
+                        emit(dict(transport_cleanup_failure=failure_record(cleanup, mode)))
+        except BaseException as cleanup:
+            emit(dict(transport_cleanup_failure=failure_record(cleanup, mode)))
         finally:
             CURRENT_OPERATION.reset(token)
 
@@ -546,6 +621,7 @@ class Gateway:
 
     def apply_serialized(self):
         if self.observation_mode:
+            self.require_no_failure()
             self.observation_path.unlink(missing_ok=True)
             if self.producer['pid'] != os.getpid() or self.producer['start'] != process_start(os.getpid()):
                 self.producer = dict(pid=os.getpid(), start=process_start(os.getpid()), generation=uuid.uuid4().hex)
@@ -735,7 +811,11 @@ def notify(value):
 def watch(gateway, *, run=execute):
     engine = Gateway(gateway, run=run)
     try:
-        engine.apply(starting=True)
+        if getattr(engine, 'observation_mode', False):
+            with engine.serialized(failure_mode='watch'):
+                engine.apply(starting=True)
+        else:
+            engine.apply(starting=True)
         notify('READY=1')
         for attempt in range(15):
             try:

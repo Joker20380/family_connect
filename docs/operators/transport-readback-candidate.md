@@ -7,6 +7,30 @@ is UNKNOWN. Reducing repeated commits cannot protect against every VPS/storage s
 
 ## Contract before qualification
 
+PR45 P1 repair supersedes the single-marker claim below. `application-incomplete`
+is only active/interrupted application intent; `application-failed` is a separate
+sticky emergency latch, never removed by ordinary success. An independent outcome
+flock orders final success, failure publication and explicit recovery. The final
+post-deadline latch check, with application and outcome descriptors still held,
+linearizes success; a later failure does not retroactively cancel an earlier
+committed result, but permanently excludes later operations until recovery.
+Collector takes shared application/registration/outcome locks and rejects either
+marker. Recovery requires external fence/drain and actual stopped units/no PID/Job;
+it clears markers only after retained-state validation, with final deadline and
+emergency recheck. Gate-open errors conservatively latch failure even if outcome
+synchronization fails. No successful path may delete that emergency latch.
+[P1 reproduction, proof scope and updated gates](../releases/2026-11-18-pr45-prelock-fence.md).
+
+Historical3f5698e4 delivery checkpoint (not the repaired-byte acceptance):
+
+18 November continuation: PR44 is merged; installed6aba3211 package/systemd and
+authority-preserving rollback pass. Final manifest/stronger fixture/CI receipts and
+review-readiness are tracked on PR45, independently of this checkpoint. The new same-boot
+`application-incomplete` intent fence prevents automatic reuse after failed/killed
+application. `paid-recover` requires explicitly stopped units and preserves authority
+and first failure. [Current evidence and exact remaining gates](../releases/2026-11-18-readback-delivery.md).
+The older source-only limits below describe PR44, not an instruction to repeat it.
+
 The default configuration retains the exact legacy two-durable-write readback.
 The existing `test_converged_readback_keeps_both_durable_writes` remains mandatory.
 Only a node configuration explicitly containing `readback_mode: observations-v1`

@@ -2,6 +2,49 @@
 
 ## Current engineering priority / Текущий critical path
 
+**PR45/P1 — preserve pre-lock participant failures, repeat review only.**
+Continue the existing feature worktree from3f5698e4; mainbc8f7b5b and accepted PR44
+are unchanged. Exact old source and installed-systemd reproductions demonstrate
+the blocking shared-intent deletion race for expired open and immediate open error.
+Separate active/failed state, serialize outcome publication and explicit recovery,
+retain budget-before-open, final descriptor/deadline/ACK ordering and8/12/120.
+Gate:213 source tests, including real process/flock and final-outcome ordering.
+Require two reproducible bundles, new installed-systemd pending-stop scenarios plus
+previous watchdog/generation/expiry/revoke/retained-authority rollback/cost matrix,
+all applicable final-head CI and self-review. Panel fixture now matches the new
+outcome-lock;320 panel tests pass. Record terminal hashes/results on PR45, including
+the retained native recovery FAIL and stricter NRestarts=0 gate; old manifest/PASS
+is only evidence for3f5698e4. No merge before repeat review.
+Production **NOT_DEPLOYED**; no RU/NL operation or storage root-cause investigation.
+[Repair evidence/contract](releases/2026-11-18-pr45-prelock-fence.md).
+Android subscription-card auto-refresh remains the next product task, not this repair.
+
+### Previous PR45 package qualification / historical gates
+
+**RU-PERSISTENCE-READBACK-1 — coordinated package/systemd qualification.**
+PR44 source/CI/merge COMPLETE: accepted `ea661996`, main `bc8f7b5b`, tree
+`037783c0`; ten head and eight merge workflows SUCCESS. Do not repeat those gates.
+Preserve the recovered legacy RU/MESH runtime and local recovery receipt `ef55433c`.
+Selected continuation: reproduce watcher error/unlock/asynchronous-stop race;
+close it without loosening8/12/120s or PR44 budget/ACK contracts; package node,
+gateway, collector and units with explicit provenance; qualify installed bytes on
+disposable real systemd with synthetic authority, actual allowed/denied traffic,
+durable failures, generation/freshness and authority-preserving rollback.
+Installed6aba3211 package/systemd/rollback PASS;197 transport/package source tests.
+Final head closure/fixture receipts, applicable CI and review-readiness are tracked
+on [PR45](https://github.com/Joker20380/family_connect/pull/45); no historical PASS
+may be substituted. Package source/runtime mapping must remain explicit.
+Finish self-review and a review-ready PR, not production delivery. Production
+**NOT_DEPLOYED**; storage latency and initial renewal writer causes remain UNKNOWN.
+Separate next delivery: explicitly authorized RU-only fence/drain/stop and qualified
+bundle/rollback. Separate next small product task: Android subscription-card
+auto-refresh. Do not reopen accepted support/notifications/split tunneling/beta126,
+historical G4 RUNNING, deferred physical iOS, or paused desktop L04.2.
+[Stage receipt and gates](releases/2026-11-18-readback-delivery.md).
+[Future guarded delivery/rollback procedure](operators/transport-readback-delivery.md).
+
+### Superseded PR44 source queue / retained evidence
+
 **RU-PERSISTENCE-READBACK-1/P1 — selected / PR44 budget + panel clock repair.**
 Reproduce slow successful application.lock open on exact cff3 and compare c086.
 Start the shared budget before open; retain serialization through operation-exit

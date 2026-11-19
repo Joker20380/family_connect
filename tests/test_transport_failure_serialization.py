@@ -115,15 +115,15 @@ def test_failure_receipt_barrier_excludes_real_watch_notify_and_collector(
     failures, watch_failures, injected = [], [], []
     original_sync, original_flock, original_notify = os.fsync, fcntl.flock, module.notify
     stop_command = ['systemctl', '--no-block', 'stop', *module.SERVICES]
-    original_apply = registration.apply_serialized
+    original_rmdir = Path.rmdir
 
-    def apply():
-        original_apply()
-        if fault == 'context_exit':
+    def remove(path):
+        original_rmdir(path)
+        if fault == 'context_exit' and path == registration.fence_path:
             injected.append(True)
             expire_operation()
 
-    monkeypatch.setattr(registration, 'apply_serialized', apply)
+    monkeypatch.setattr(Path, 'rmdir', remove)
 
     def sync(descriptor):
         filename = Path(os.readlink(f'/proc/self/fd/{descriptor}')).name
@@ -246,13 +246,13 @@ def test_success_ack_after_context_exit_without_stop(candidate, registry, collec
             with (gateway.root/'application.lock').open('a') as probe:
                 with pytest.raises(BlockingIOError):
                     fcntl.flock(probe, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            exit_checked.append(True)
+            exit_checked.append(not gateway.fence_path.exists())
         return original_remaining(operation)
 
     monkeypatch.setattr(gateway, 'apply_serialized', apply)
     monkeypatch.setattr(module.Operation, 'remaining', remaining)
     entrypoint.register()
-    assert exit_checked == [True]
+    assert exit_checked[-2:] == [True, True] and exit_checked.count(True) == 2
     reply = json.loads(capsys.readouterr().out)
     assert reply.get('result', reply.get('transport')) == {'reconcile': 'applied', 'prepare': 'prepared', 'register': 'amneziawg-3.1'}[operation]
     assert not any('--no-block' in command for command in live['calls'])

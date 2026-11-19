@@ -44,7 +44,7 @@ def progress_maxima(journal):
 
 
 def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=False, expect_restart_loop=False,
-            tcp_query_fixtures=None):
+            tcp_query_fixtures=None, readback_bundle=None, reproduce_watch_window=False, reproduce_prelock_failure=None):
     os.umask(0o077)
     prefix = 'fc-enforcement-fix-' + secrets.token_hex(5)
     receipt = dict(result='FAIL',run_id=prefix,production_writes=0,checks={})
@@ -54,6 +54,11 @@ def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=Fa
             with tempfile.TemporaryDirectory(prefix='fc-systemd-image-') as temporary:
                 context = Path(temporary)
                 shutil.copytree(kit,context/'kit')
+                if readback_bundle:
+                    from scripts.package_transport_readback import verify
+                    receipt['bundle'] = verify(readback_bundle)
+                    shutil.copytree(readback_bundle, context/'kit', dirs_exist_ok=True)
+                    shutil.copyfile(ROOT/'pilot/transport_readback_fixture.py', context/'readback_fixture.py')
                 shutil.copyfile(ROOT/'pilot/fleet_canary.py', context/'canary.py')
                 shutil.copyfile(ROOT/'pilot/transport-production-tcp.service', context/'production-tcp.service')
                 shutil.copyfile(ROOT/'pilot/transport-production-awg.service', context/'production-awg.service')
@@ -71,13 +76,16 @@ def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=Fa
                     rpc_setup = ('COPY rpc /rpc\nCOPY tcp_query.py /tcp_query.py\n'
                         'RUN python3 -m pip install --target=/rpc/lib --no-index --find-links=/rpc/wheels '
                         'grpcio==1.76.0 protobuf==6.33.6 typing-extensions==4.16.0\n')
-                (context/'Dockerfile').write_text('FROM sha256:af9c993c2fcd60804ef576e2190dee88699830624ec74317a91eb6d9855284e9\nCOPY kit /kit\nCOPY canary.py transport_fixture.py systemd_fixture.py production-tcp.service production-awg.service /\n'+rpc_setup+'ENTRYPOINT ["sleep","1800"]\n')
+                (context/'Dockerfile').write_text('FROM sha256:af9c993c2fcd60804ef576e2190dee88699830624ec74317a91eb6d9855284e9\nCOPY kit /kit\nCOPY canary.py transport_fixture.py systemd_fixture.py production-tcp.service production-awg.service /\n'+('COPY readback_fixture.py /\n' if readback_bundle else '')+rpc_setup+'ENTRYPOINT ["sleep","1800"]\n')
                 image = prefix+':local'
                 built = call(['docker','build','-t',image,str(context)],timeout=300,check=False)
                 (report.parent/(prefix+'-build.log')).write_bytes(built.stdout+built.stderr)
                 assert built.returncode == 0, 'fixture image build'
             receipt['image_id'] = inspect('image',image)['Id']
-            receipt['kit'] = {path.name:hashlib.sha256(path.read_bytes()).hexdigest() for path in kit.iterdir() if path.is_file()}
+            receipt['fixture_control_inputs' if readback_bundle else 'kit'] = {path.name:hashlib.sha256(path.read_bytes()).hexdigest() for path in kit.iterdir() if path.is_file()}
+            if readback_bundle:
+                receipt['fixture_sources'] = {name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest()
+                    for name in ('scripts/test_paid_transport_systemd.py', 'pilot/transport_systemd_fixture.py', 'pilot/transport_readback_fixture.py')}
             for kind in ('entry','egress'):
                 subnet = ['--subnet',f'198.18.{secrets.randbelow(200)+20}.0/24'] if kind == 'egress' else []
                 call(['docker','network','create','--internal','--label',LABEL+'='+prefix,*subnet,prefix+'-'+kind])
@@ -167,7 +175,7 @@ def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=Fa
             client = None
             registrations = dict(zip(nodes, (identities[:19], identities[:4]+identities[19:], identities[1:6])))
             for node in nodes:
-                result = inner(node,'setup',dict(node=node,envelope=policy.snapshot(access.path,node),registered=[identity.reference for identity in registrations[node]]))
+                result = inner(node,'setup',dict(node=node,envelope=policy.snapshot(access.path,node),registered=[identity.reference for identity in registrations[node]],readback=bool(readback_bundle)))
                 if node=='gateway-ru':
                     client=result['client']
                 assert 'paid-preflight' in result['info']['preflight']
@@ -193,6 +201,48 @@ def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=Fa
                 process=call(args,timeout=50,check=False)
                 assert process.returncode==expect, process.stdout.decode()
                 return json.loads(process.stdout)
+
+            if readback_bundle:
+                if reproduce_prelock_failure:
+                    receipt['checks']['prelock_failure'] = inner('gateway-ru', 'readback', dict(phase='prelock-'+reproduce_prelock_failure+'-baseline'))
+                    receipt['result'] = 'REPRODUCED_UNSAFE_ACK'
+                    return receipt
+                if reproduce_watch_window:
+                    receipt['checks']['accepted_base_race'] = inner('gateway-ru', 'readback', dict(phase='race-baseline'))
+                    receipt['result'] = 'REPRODUCED_UNSAFE_ACK'
+                    return receipt
+                receipt['checks']['installed_bundle'] = inner('gateway-ru', 'readback', dict(phase='installed'))
+                receipt['checks']['watcher_race'] = inner('gateway-ru', 'readback', dict(phase='race'))
+                inner('client', 'probe', dict(allowed=True))
+                receipt['checks']['generation_and_collector'] = inner('gateway-ru', 'readback', dict(phase='collector'))
+                receipt['checks']['durable_faults'] = inner('gateway-ru', 'readback', dict(phase='durable'))
+                receipt['phase'] = 'independent-case-start-limit-window'
+                time.sleep(125)
+                receipt['checks']['fixture_case_spacing_seconds'] = 125
+                for fault in ('deadline', 'open-error'):
+                    receipt['checks']['prelock_'+fault] = inner('gateway-ru', 'readback', dict(phase='prelock-'+fault))
+                time.sleep(125)
+                assert transport_reconcile.cycle(access.path, commands) == dict.fromkeys(nodes, 'applied')
+                start = int(time.time())
+                operator('activate', 'readback-paid', start=start, end=start+1200)
+                operator('activate', 'readback-extension', start=start, end=start+1800)
+                assert transport_reconcile.cycle(access.path, commands) == dict.fromkeys(nodes, 'applied')
+                inner('client', 'probe', dict(allowed=True))
+                receipt['checks']['lease_expiry'] = inner('gateway-ru', 'readback', dict(phase='expire'))
+                inner('client', 'probe', dict(allowed=False))
+                assert transport_reconcile.cycle(access.path, commands) == dict.fromkeys(nodes, 'applied')
+                inner('client', 'probe', dict(allowed=True))
+                operator('revoke', 'readback-terminal')
+                assert transport_reconcile.cycle(access.path, commands) == dict.fromkeys(nodes, 'applied')
+                inner('client', 'probe', dict(allowed=False))
+                receipt['phase'] = 'rollback-case-start-limit-window'
+                time.sleep(125)
+                receipt['checks']['retained_authority_rollback'] = inner('gateway-ru', 'readback', dict(phase='rollback'))
+                inner('client', 'probe', dict(allowed=False))
+                receipt['checks']['candidate_return'] = inner('gateway-ru', 'readback', dict(phase='return'))
+                inner('client', 'probe', dict(allowed=False))
+                receipt['result'] = 'PASS'
+                return receipt
 
             if recovery_diagnostics or lifecycle_diagnostics:
                 start=int(time.time());end=start+1200
@@ -340,7 +390,7 @@ def execute(kit, report, *, recovery_diagnostics=False, lifecycle_diagnostics=Fa
         except Exception as error:
             (report.parent/(prefix+'-traceback.private.txt')).write_text(traceback.format_exc())
             receipt['error']=type(error).__name__+':'+str(error)[:300]
-            diagnostics={role:call(['docker','exec',container,'sh','-c','journalctl --no-pager -n 160; cat /run/fc-canary/*.log 2>/dev/null; ip route; ip address; iptables -t nat -S; /native/awg show all'],check=False).stdout.decode(errors='replace') for role,container in containers.items()}
+            diagnostics={role:call(['docker','exec',container,'sh','-c','journalctl --no-pager -n 400 -u family-connect-paid-watch -u family-connect-friends-awg -u family-connect-friends-tcp; systemctl show family-connect-paid-watch family-connect-friends-awg family-connect-friends-tcp -p NRestarts -p MainPID -p ControlPID -p Job -p Result; cat /run/fc-canary/*.log 2>/dev/null; ip route; ip address; iptables -t nat -S; /native/awg show all'],check=False).stdout.decode(errors='replace') for role,container in containers.items()}
             (report.parent/(prefix+'-diagnostics.private.json')).write_text(json.dumps(diagnostics))
         finally:
             failures=cleanup(prefix)
@@ -360,10 +410,14 @@ if __name__=='__main__':
     parser.add_argument('--lifecycle-diagnostics',action='store_true',help='Watcher loss, dependent stops, restart behavior, retained deny and controlled recovery')
     parser.add_argument('--expect-restart-loop',action='store_true',help='Reproduce the historical loop using the exact old package, not candidate acceptance')
     parser.add_argument('--tcp-query-fixtures',type=Path,help='Exact-Xray generated protobufs and pinned offline Python RPC wheels, isolated test only')
+    parser.add_argument('--readback-bundle',type=Path,help='Verified coordinated bundle; real systemd readback qualification only')
+    parser.add_argument('--reproduce-watch-window',action='store_true',help='Require unsafe ACK on accepted pre-fix bytes; not candidate acceptance')
+    parser.add_argument('--reproduce-prelock-failure',choices=('deadline', 'open-error'),help='Reproduce PR45 pre-lock failure lost by a later owner; not acceptance')
     args=parser.parse_args()
     assert not args.expect_restart_loop or args.lifecycle_diagnostics
     result=execute(args.kit.resolve(),args.report,recovery_diagnostics=args.recovery_diagnostics,
         lifecycle_diagnostics=args.lifecycle_diagnostics,expect_restart_loop=args.expect_restart_loop,
-        tcp_query_fixtures=args.tcp_query_fixtures)
+        tcp_query_fixtures=args.tcp_query_fixtures,readback_bundle=args.readback_bundle,
+        reproduce_watch_window=args.reproduce_watch_window,reproduce_prelock_failure=args.reproduce_prelock_failure)
     print(json.dumps(result))
-    raise SystemExit(result['result']!='PASS')
+    raise SystemExit(result['result'] != ('REPRODUCED_UNSAFE_ACK' if args.reproduce_watch_window or args.reproduce_prelock_failure else 'PASS'))

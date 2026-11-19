@@ -164,6 +164,9 @@ if __name__=='__main__':
   elif sys.argv[1:] == ['paid-preflight']:
    engine=paid_engine();assert engine is not None
    engine.apply(starting=True)
+  elif sys.argv[1:] == ['paid-recover']:
+   engine=paid_engine();assert engine is not None
+   engine.recover()
   elif sys.argv[1:] == ['paid-watch']:
    assert paid_engine() is not None
    from control.friends.transport_gateway import watch

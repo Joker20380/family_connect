@@ -1,5 +1,11 @@
 # 17 November — PR44 slow-open budget and panel clock
 
+Historical source checkpoint: PR44 is now merged atbc8f7b5b, accepted headea661996.
+[Terminal head receipt](https://github.com/Joker20380/family_connect/pull/44#issuecomment-6970610003).
+The separate delivery question below is addressed by the explicitly selected
+[18 November package/systemd continuation](2026-11-18-readback-delivery.md), not by
+retroactively expanding this PR44 acceptance.
+
 Source-only iteration; PR44 stays **DRAFT / NOT_DEPLOYED**, no merge. Remote entry
 head `cff3e4664bce2adbbbc9303593c2d7c2abcef881`, main
 `380da279588761c83e5433bec33a0511e4781133`. Other worktrees remain untouched.

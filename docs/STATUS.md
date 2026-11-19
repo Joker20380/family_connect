@@ -1,5 +1,47 @@
 # Текущее состояние / Current state
 
+**18 November — PR45 P1 pre-lock failure repair selected; NOT_DEPLOYED.**
+Independent review of `3f5698e4` found that a later application-lock owner can
+remove the shared intent after an earlier participant fails before acquiring it.
+Exact3f5698e4 source and installed-systemd deadline/open-error reproductions both
+show unsafe applied ACK, three queries, removed intent and collector ok with real
+engine stop Jobs pending. Those FAIL receipts supersede review-readiness, not the
+historical measurements for the old bytes. PR45 is draft again.
+Repair separates active intent from sticky `application-failed`; an outcome flock
+orders failure publication, final success and explicit stopped-unit recovery.
+The final post-deadline emergency check is the success linearization point; normal
+operations never clear the emergency latch.213 source tests cover the repair. New package,
+systemd/rollback and exact-head CI gates must finish before repeat review; terminal
+results belong in PR45 without a cosmetic follow-up commit. No production operation.
+The first repair package run has a retained native AWG recovery FAIL (cause unknown);
+diagnostic full-matrix PASS does not explain it. Final unwrapped-AWG qualification
+adds NRestarts=0; the panel fixture is updated for the new outcome-lock (320 tests).
+[P1 contract, reproductions and remaining gates](releases/2026-11-18-pr45-prelock-fence.md).
+Android subscription-card auto-refresh stays queued; PR44 remains complete.
+
+### Previous PR45 delivery qualification / historical bytes
+
+**18 November — PR44 merged; RU-PERSISTENCE-READBACK-1 delivery qualification selected.**
+PR44 accepted head `ea6619962a7197d95d578d089971b8d859db206f`, merge
+`bc8f7b5b42800269aeb43bcf54059205e7a7cbf7`, identical tree
+`037783c0db372a6290917420319a0b6de56d399d`. Ten applicable head workflows and
+eight merge push workflows SUCCESS (merge attempt1); no repeat acceptance/merge.
+[Accepted receipt](https://github.com/Joker20380/family_connect/pull/44#issuecomment-6970610003).
+Latest recovery is retained from local `ef55433c`: RU transport12:18UTC,
+both NL MESH13:05, shared HTTP13:10, public paths verified and owner-confirmed.
+Runtime remains legacy; initiating storage/renewal causes UNKNOWN, not FIXED.
+Current source reproduces and fences the watch/unlock/asynchronous-stop ACK window.
+Installed package/systemd/rollback PASS on source6aba3211 (nodef454af6a): real
+watchdog, expiry/revoke flows, generation/collector negatives, retained-authority
+legacy rollback and return;18 queries both, repeated sync12→0.197 transport/package
+tests cover the final source gates. Final PR45 head CI and strengthened closure/
+fixture receipts are recorded on PR45 before ready-for-review, not inferred from
+earlier PASS. Production **NOT_DEPLOYED**. Android subscription-card auto-refresh
+is the next small product task, not started. iOS deferred; desktop L04.2 paused.
+[Recovery and this stage](releases/2026-11-18-readback-delivery.md).
+
+### Superseded PR44 source checkpoints (historical, not active gates)
+
 **17 November — PR44 registration budget + panel clock repair selected.**
 Exact `cff3e466` loses nine seconds spent opening application.lock: all three
 entrypoint paths query engines and ACK; exact `c086d131` rejects them without
