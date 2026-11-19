@@ -1,13 +1,12 @@
 # Текущее состояние / Current state
 
-**18 November — N185 outline refinement, local visual checkpoint.** The current
-gold model has revised A-pillar rake, bonnet/roof crown, side stampings and less
-circular wheel-arch corners; mirrors and parked wiper placement are refined.
-Four checked mirrored surface pairs have zero nearest-vertex error; wheelbase2675mm,
-170mm body-root offset, four tires and two crossbars remain. Editable revision and
-separate rollback are retained outside Git. Owner likeness review remains OPEN;
-no Family Connect source, version, catalog or deployment changes.
-[Scope, renders, rollback and limits](releases/2026-11-18-blender-outline-refinement.md).
+**19 November — N185 outline revision OWNER-REJECTED / UNDONE.** The owner requested
+“верни все назад. получилось плохо”. The active `4runner_n185.blend` is restored
+byte-for-byte from the checkpoint before the last outline refinement and reopened
+in Blender. The outline revision marker is absent; rejected geometry is retained
+only as a separate local archive. No further modelling is selected and no Family
+Connect product/deployment state changes.
+[Rollback verification](releases/2026-11-19-blender-outline-rollback.md).
 
 **18 November — recovery OWNER-CONFIRMED; public paths verified.**
 The expired/unprepared MESH operation is safely finalized without DB rollback;

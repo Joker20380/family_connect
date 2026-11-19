@@ -1,5 +1,10 @@
 # N185 outline refinement — 18 November 2026
 
+**Superseded19 November: OWNER-REJECTED / UNDONE.** The owner requested rollback.
+The active model is restored from the pre-outline checkpoint; the geometry and
+checks below describe the rejected historical revision, not the current model.
+[Verified rollback](2026-11-19-blender-outline-rollback.md).
+
 ## Scope and references
 
 The owner requested more believable vehicle outlines in the open Blender scene.
