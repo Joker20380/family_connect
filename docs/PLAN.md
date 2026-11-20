@@ -2,6 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
+**OPS-RU-20261120 — selected recovery COMPLETE at server-validation scope.**
+Owner requests restoration and verification of impact on other gateways. Gates:
+fresh failure/observer preservation; pinned runtime; fresh27-table backup and
+isolated restore; RU-only fence/drain/PID0; unchanged-byte coordinated start;
+exact actual/expected sets and revision freshness; shared HTTP/both-NL continuity;
+public signed configurations and fresh panel readback. These checks PASS. Original
+command map is restored; protected identities/terms/tables and timers remain intact.
+Device reconnect/real tunneled traffic and permanent slow-fsync remediation remain
+OPEN, not a full fleet acceptance. Retained observer now ties the initiating8.629s
+fsync to ext4 writeback/journal waiting; provider/storage attribution remains unknown.
+Do not automatically deploy PR45, change deadlines, restart NL or resume product work.
+[Recovery evidence and operational stop path](releases/2026-11-20-ru-recovery.md).
+
 **19 November — selected N185 rollback COMPLETE; outline revision REJECTED.**
 The owner requests undo, not another refinement. Gate: preserve the rejected file,
 restore the exact pre-outline checkpoint as the current file, reopen it and confirm

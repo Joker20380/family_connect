@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**20 November — RU recurrence RECOVERED; server checks PASS, device retry OPEN.**
+At01:50:47UTC decision-state fsync8.629s exceeded the8s operation budget; RU AWG/TCP
+stopped and the watcher retried2095 times by22:36. The retained bounded observer
+captured this same event in ext4 writeback/journal waits; underlying storage latency
+is not fixed. Guarded RU-only recovery at22:38:51 preserves runtime/unit bytes,
+first-failure evidence and live databases. Exact20 AWG/20 TCP sets,68 revisions,
+eight protected tables and fresh applied readback pass. Shared HTTP and both NL
+AWG/TCP/MESH were active at entry and are not restarted by this recovery. All three
+public TLS configuration/signature checks pass; fresh panel imports agree and
+scheduled reconciliation succeeds. Shared RU control remains a fleet dependency,
+not evidence of NL independence. No timeout relaxation, observations rollout,
+client release or permanent recurrence fix. [Evidence, limits and rollback](releases/2026-11-20-ru-recovery.md).
+
 **19 November — N185 outline revision OWNER-REJECTED / UNDONE.** The owner requested
 “верни все назад. получилось плохо”. The active `4runner_n185.blend` is restored
 byte-for-byte from the checkpoint before the last outline refinement and reopened
