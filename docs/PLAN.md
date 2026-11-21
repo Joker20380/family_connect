@@ -2,6 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
+**OPS-RU-20261121 — selected recurrence recovery COMPLETE at server scope.**
+Preserve the new first failure, check live control/NL roles, take a fresh27-table
+backup and isolated restore, fence/drain only RU, start unchanged runtime, then
+verify exact sets/revisions, protected state, public configs and panel. Gates PASS.
+Recorded trigger is a TCP query timeout, not the preceding incident's slow fsync;
+do not attribute today's cause from yesterday's kernel trace. Current I/O pressure
+supports further diagnosis, not a proven provider fault. Permanent prevention and
+owner real-traffic confirmation remain OPEN; no automatic product work, PR45 rollout,
+deadline relaxation, NL restart or scheduled auto-recovery is selected.
+[Recovery, diagnostic timeout and stop path](releases/2026-11-21-ru-recovery.md).
+
 **OPS-RU-20261120 — selected recovery COMPLETE at server-validation scope.**
 Owner requests restoration and verification of impact on other gateways. Gates:
 fresh failure/observer preservation; pinned runtime; fresh27-table backup and

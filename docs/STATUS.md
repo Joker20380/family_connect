@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**21 November — RU recurrence RECOVERED; new trigger is TCP query timeout.**
+At14:53:23UTC the previously restored watcher records `COMMAND_TIMEOUT` during
+`tcp-query`, total8.353s against8s budget; this is not another demonstrated fsync
+failure. RU AWG/TCP are restored at17:18:53–54 with unchanged runtime, fresh backup
+and RU-only guards. Exact20/20 sets,68 revisions, eight protected tables and strict
+process continuity PASS; all three public signed configurations and panel readback
+PASS. HTTP and both NL remain untouched. Strong I/O stalls are sampled during the
+follow-up, but their causal role in the14:53 event is unproved; bounded journal read
+times out. Permanent prevention and physical-client traffic remain OPEN. No timeout
+relaxation, automatic restart policy, PR45 deployment or version change.
+[Fresh evidence and limits](releases/2026-11-21-ru-recovery.md).
+
 **20 November — RU recurrence RECOVERED; server checks PASS, device retry OPEN.**
 At01:50:47UTC decision-state fsync8.629s exceeded the8s operation budget; RU AWG/TCP
 stopped and the watcher retried2095 times by22:36. The retained bounded observer
