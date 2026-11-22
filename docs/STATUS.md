@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**22 November — evening RU recurrence RECOVERED; lock deadline, prevention OPEN.**
+New first failure21 November21:55:08UTC is `TRANSPORT_OPERATION_DEADLINE` in the
+first lock stage,8.000318s/8s, with no recorded native calls; it is not the earlier
+TCP-query or fsync receipt. Guarded RU-only recovery at22:34:32–33 preserves runtime,
+fresh backup,20/20 exact sets,68 revisions and protected state. Strict30-minute
+audit PASS;22 November01:06 readback retains the recovered RU invocations and zero
+restarts, no new latch. A90-second bounded lock sample does not reproduce the
+failure; the historical owner/long wait remains unknown. Both NL ordinary transports
+remain unchanged. Existing scheduled leaf/CRL renewal commits at23:33:18, restarting
+HTTP and both NL MESH separately; do not claim their overnight process continuity
+or zero downtime. Fresh public signed configurations and panel all-node readback
+PASS. RU shared control remains a fleet dependency. No runtime/version change,
+deadline relaxation, new auto-recovery schedule or PR45 deployment. Permanent
+prevention and owner-device tunneled traffic remain OPEN.
+[Evidence, rotation distinction and stop path](releases/2026-11-22-ru-lock-recovery.md).
+
 **21 November — RU recurrence RECOVERED; new trigger is TCP query timeout.**
 At14:53:23UTC the previously restored watcher records `COMMAND_TIMEOUT` during
 `tcp-query`, total8.353s against8s budget; this is not another demonstrated fsync

@@ -2,6 +2,18 @@
 
 ## Current engineering priority / Текущий critical path
 
+**OPS-RU-20261122 — selected evening recurrence recovery COMPLETE at server scope.**
+Preserve the fresh lock-deadline receipt; pin runtime, back up/restore-test, fence and
+drain only RU; restart unchanged bytes; verify exact sets, protected state and
+process continuity. Gates PASS, with RU continuity still present after2.5hours.
+Read-only lock sampling is complete without reproducing the8s contention; observed
+watcher/reconciler lock ownership does not identify the historical holder. Separate
+scheduled renewal commits normally; HTTP/NL MESH continuity is not claimed across
+that maintenance. Public signed configurations and fresh panel checks PASS.
+Permanent lock/deadline remediation and real owner-device traffic remain OPEN.
+No queued implementation, timeout relaxation, automatic recovery or PR45 rollout
+is selected by this recovery. [Evidence and boundaries](releases/2026-11-22-ru-lock-recovery.md).
+
 **OPS-RU-20261121 — selected recurrence recovery COMPLETE at server scope.**
 Preserve the new first failure, check live control/NL roles, take a fresh27-table
 backup and isolated restore, fence/drain only RU, start unchanged runtime, then
