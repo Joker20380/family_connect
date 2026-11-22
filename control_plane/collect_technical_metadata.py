@@ -8,8 +8,9 @@ import re
 import shlex
 import subprocess
 import sys
+import time
 
-from collect_inventory import BASE, ssh_command
+from collect_inventory import BASE, ssh_command, transport_pin
 from control.friends.pseudonyms import seal
 
 MAX_EXPORT_BYTES = 64 * 1024 * 1024
@@ -33,11 +34,42 @@ def collect(known_hosts=None, base=BASE, run=subprocess.run):
     command = ssh_command('gateway-ru', known_hosts)
     command[-1] = shlex.quote(config['python']) + ' -I -B -'
     script = (base / 'apps/console/technical_metadata_collector.py').read_text()
-    script += '\nimport json\nprint(json.dumps(collect_technical_metadata(' + repr(config) + '), ensure_ascii=False, allow_nan=False))\n'
-    response = run(command, input=script.encode(), capture_output=True, check=True, timeout=45)
-    if len(response.stdout) > MAX_EXPORT_BYTES:
-        raise ValueError('Metadata bound exceeded')
-    data = json.loads(response.stdout)
+    deadline = time.monotonic() + 45
+    def remote(arguments, invocation, timeout, reserve=0):
+        timeout = min(timeout, deadline - time.monotonic() - reserve)
+        if timeout <= 0:
+            raise subprocess.TimeoutExpired(arguments, 0)
+        payload = script + '\nprint(json.dumps(' + invocation + ', ensure_ascii=False, allow_nan=False))\n'
+        response = run(arguments, input=payload.encode(), capture_output=True, check=True, timeout=timeout)
+        if len(response.stdout) > MAX_EXPORT_BYTES:
+            raise ValueError('Metadata bound exceeded')
+        return json.loads(response.stdout)
+
+    data = remote(command, 'collect_technical_metadata(' + repr(config) + ', include_targets=True)', 45)
+    targets = data.pop('_targets', [])
+    if type(targets) is not list or len(targets) > 5000:
+        raise ValueError('Invalid peer targets')
+    if targets:
+        samples = {}
+        for source in ('nl-amsterdam-1', 'nl-amsterdam-2'):
+            selected = [target for target in targets if target['source'] == source]
+            if not selected:
+                continue
+            try:
+                pin_path = local / 'transport-source.json'
+                if any(parent.is_symlink() for parent in (pin_path, *pin_path.parents)) or pin_path.stat().st_mode & 0o077:
+                    raise ValueError('Private transport pins required')
+                pin = transport_pin(json.loads(pin_path.read_text()), source)
+                samples[source] = remote(ssh_command(source, known_hosts),
+                    'sample_awg_peers(' + repr(source) + ', ' + repr(selected) + ', ' + repr(pin) + ')', 15, reserve=10)
+            except (OSError, ValueError, KeyError, subprocess.SubprocessError):
+                samples[source] = dict(source=source, status='unavailable', peers=[])
+        try:
+            refreshed = remote(command, 'collect_technical_metadata(' + repr(config) + ', peer_observations=' + repr(samples) + ')', 45)
+            if refreshed.get('status') == 'ok':
+                data = refreshed
+        except (OSError, ValueError, KeyError, subprocess.SubprocessError):
+            pass
     if data.get('source') != 'gateway-ru' or type(data.get('devices')) is not list or len(data['devices']) > 5000:
         raise ValueError('Invalid source')
     for row in data['devices']:

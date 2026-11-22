@@ -2,6 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
+**DEVICE-METADATA-NL-20261122 — selected implementation; qualification in progress.**
+Dependencies: accepted metadata/HMAC2 runtime and DB-IP2026-11, the22 November
+coverage audit, explicit owner approval to extend NL/AWG without changing consent.
+Gate: exact-key/node/freshness and revoke-race tests; isolated installed-image panel
+regressions; three-file overlay/preimage and effective Compose preservation; fresh
+encrypted panel backup/isolated restore; bounded live NL read; installation of only
+two external collector files and the presentation image; three normal imports and
+authenticated1440/390px readback; protected state and rollback verification.
+NL2 live read-only city/ASN is observed; NL1 controlled coverage is not an observed
+physical-client location. No client release, default-consent change, desktop sender,
+TCP/MESH lookup, RU service recovery or automatic next task is selected.
+[Current checkpoint](releases/2026-11-22-nl-geoip.md).
+
 **17 November00:02UTC — owner-requested RU recovery COMPLETE / RECOVERED_CAUSE_OPEN.**
 Fresh backup/isolated restore, RU-only fence/drain/stop, unchanged start, restored
 command map and six strict actual/persisted observations pass. The203.900s window

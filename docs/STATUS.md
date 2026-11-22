@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**22 November — NL/AWG GeoIP and missing-data labels: source qualification.**
+Owner-selected follow-up to the device metadata audit; not RU recovery. The external
+collector now samples both NL nodes only for fresh, consenting AWG sessions, binds
+the full canonical key to the pinned node state, then rereads consent/session on RU
+before local DB-IP lookup. Raw endpoints stay transient; the existing45s total
+collector budget and all gateway runtimes remain unchanged. A read-only live NL2
+sample yields city and ASN without importing it. Presentation distinguishes absent
+reports, explicit revoke, unsupported transports and unavailable observations.
+Installed panel/monitor changes and three normal-cycle/browser acceptance remain
+pending at this source checkpoint. Public Android126/catalog9 stays unchanged.
+[Scope, tests and rollout gates](releases/2026-11-22-nl-geoip.md).
+
 **17 November00:02UTC — RU recovered on unchanged accepted bytes; CAUSE_OPEN.**
 The owner-authorized recovery restores watcher/AWG/TCP after the22:07 outage.
 Fresh canonical backup and isolated27-table/paid-projection restore pass. RU-only

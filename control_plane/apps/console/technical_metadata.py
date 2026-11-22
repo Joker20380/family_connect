@@ -17,6 +17,45 @@ LABELS = {'not_received': 'Ещё не получено', 'unsupported': 'Не �
           'revoked': 'Сбор выключен', 'stale': 'Устарело', 'unavailable': 'Источник недоступен',
           'available': 'Получено', 'clock_skew': 'Часы устройства не согласованы'}
 
+GEOIP_LABELS = {
+    'no_city': 'В базе нет города для этой IP-сети',
+    'no_asn': 'Город определён, ASN отсутствует в базе',
+    'lookup_miss': 'В базе нет географии этой IP-сети',
+    'lookup_failed': 'Ошибка локальной базы географии',
+    'origin_unverified': 'Источник IP не подтверждён',
+    'non_public_address': 'Нет подходящего публичного IP',
+    'known_vpn_exit': 'Наблюдается адрес VPN, а не исходной сети',
+    'peer_observation_stale': 'Нет свежего подтверждения AWG-пира',
+    'database_missing': 'База географии не установлена',
+    'database_stale': 'База географии устарела',
+    'database_invalid': 'База географии не прошла проверку',
+    'reader_unavailable': 'Модуль чтения базы недоступен',
+    'no_suitable_direct_observation': 'Нет свежего подтверждённого IP-наблюдения',
+    'peer_source_unavailable': 'Источник AWG-пиров временно недоступен',
+}
+
+
+def location_label(status, location, observations):
+    if location and location.get('city'):
+        return 'Последнее приблизительное местоположение по IP'
+    if status == 'revoked':
+        return 'Сбор выключен'
+    if status == 'unsupported':
+        return 'Эта версия не передаёт технические сведения'
+    if status == 'not_received':
+        return 'Сведения не получены: проверьте версию приложения и добровольное включение сбора'
+    if status == 'unavailable':
+        return 'Источник технических сведений недоступен'
+    session = observations.get('session', {})
+    values = session.get('values', {})
+    if not session or session['age_seconds'] > 180:
+        return 'Нет свежих сведений об установленной сессии'
+    if values.get('transport') in ('TCP', 'MESH'):
+        return 'Этот транспорт пока не поддерживает географию по IP'
+    if values.get('state') != 'CONNECTED':
+        return 'Нет активной установленной сессии'
+    return GEOIP_LABELS.get((location or {}).get('reason'), 'Нет свежего подтверждённого IP-наблюдения')
+
 
 def load_export(raw):
     require(len(raw) <= MAX_EXPORT_BYTES)
@@ -151,6 +190,7 @@ def presentation(row, now, source=None, supported=None):
         terms += [location.get(name) for name in ('city', 'country', 'region', 'asn', 'organization')]
     return dict(status=status, label=LABELS[status], observations=observations, profile=profile,
                 network=network, mobile=mobile, session=session, geoip=location, error_time=error_time,
+                geoip_label=location_label(status, location, observations),
                 search=' '.join(str(value) for value in terms if value is not None).casefold())
 
 

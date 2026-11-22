@@ -1,3 +1,4 @@
 <small>{{ device.technical.profile.model|default:device.technical.label }}{% if device.technical.profile.android_version %} · Android {{ device.technical.profile.android_version }}{% endif %}</small>
 <small>{{ device.technical.network.kind|default:'—' }} · {{ device.technical.session.transport|default:'—' }} · {{ device.technical.profile.app_version|default:'—' }}</small>
-{% if device.technical.geoip.city %}<small>Город по IP · ≈ {{ device.technical.geoip.city }} · {{ device.technical.geoip.age_seconds }} с · <a href="https://db-ip.com/" rel="noreferrer">DB-IP</a></small>{% endif %}
+{% if not device.technical.profile.android_version %}<small>ОС · {% if device.technical.status == 'available' %}Версия не получена{% else %}{{ device.technical.label }}{% endif %}</small>{% endif %}
+{% if device.technical.geoip.city %}<small>Последний город по IP · ≈ {{ device.technical.geoip.city }} · {{ device.technical.geoip.age_seconds }} с · <a href="https://db-ip.com/" rel="noreferrer">DB-IP</a></small>{% else %}<small>Город по IP · {{ device.technical.geoip_label }}</small>{% endif %}

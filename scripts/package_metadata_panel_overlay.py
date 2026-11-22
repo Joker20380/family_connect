@@ -30,6 +30,12 @@ ADDED = (
     'control_plane/templates/console/technical_metadata_compact.html',
 )
 LOG_FORMAT = '%(m)s %(U)s %(s)s %(D)s'
+GEOIP_IMAGE = 'sha256:5ae92f8c7775d2ff0ad26627f6cdfcda53a3d4193a08b9fe1de1e89f32c432da'
+GEOIP_REPLACED = {
+    'control_plane/apps/console/technical_metadata.py': '41bf2f16f40bff38a6c5500a575a9f3b772366cd087f9c0e0d011825ce4d5110',
+    'control_plane/templates/console/technical_metadata.html': '368d66efc78f7aa546df8aa597e49fd555bfd6ef83f782d0bbeec46b8ed877b0',
+    'control_plane/templates/console/technical_metadata_compact.html': '60791416260690645dfaaae2208e6570e91d31809c0478fc3ae9ed2c4c3b5ee1',
+}
 
 
 def digest(raw):
@@ -94,13 +100,40 @@ def prepare(baseline, image, output, source=ROOT):
                 boundary='Build context only; preserve live settings, aliases mount and data volumes')
 
 
+def prepare_geoip_delta(baseline, image, output, source=ROOT):
+    if image != GEOIP_IMAGE:
+        raise ValueError('Unqualified metadata panel image')
+    for name, expected in GEOIP_REPLACED.items():
+        if digest((baseline / name).read_bytes()) != expected:
+            raise ValueError('GeoIP panel preimage mismatch')
+    payloads = {name: (source / name).read_bytes() for name in GEOIP_REPLACED}
+    for name, raw in payloads.items():
+        if name.endswith('.py'):
+            compile(raw, name, 'exec')
+    output.mkdir(mode=0o700)
+    for name, raw in payloads.items():
+        target = output / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(raw)
+        target.chmod(0o644)
+    dockerfile = [f'FROM {image}', 'USER root']
+    dockerfile.extend(f'COPY {name} /app/{name}' for name in payloads)
+    dockerfile.append('USER console')
+    (output / 'Dockerfile').write_text('\n'.join(dockerfile) + '\n')
+    return dict(schema=1, baseline_image=image, replaced=GEOIP_REPLACED,
+                installed={name: digest(raw) for name, raw in payloads.items()},
+                boundary='Three presentation files only; no migration, settings, command or runtime change')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--baseline', type=Path, required=True)
     parser.add_argument('--image', required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--geoip-delta', action='store_true')
     args = parser.parse_args()
-    print(json.dumps(prepare(args.baseline, args.image, args.output), sort_keys=True))
+    prepare_delta = prepare_geoip_delta if args.geoip_delta else prepare
+    print(json.dumps(prepare_delta(args.baseline, args.image, args.output), sort_keys=True))
 
 
 if __name__ == '__main__':

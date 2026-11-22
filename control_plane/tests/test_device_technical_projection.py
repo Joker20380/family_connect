@@ -227,3 +227,42 @@ def test_geoip_real_object_filter_age_and_attribution(console, client):
     assert client.get('/inventory/?city=absent').context['total'] == 0
     html = client.get('/inventory/' + 'a'*64 + '/').content.decode()
     assert 'Controlled city' in html and 'DB-IP' in html and 'приблизительно' in html
+
+
+@pytest.mark.parametrize('status,expected', [
+    ('not_received', 'Сведения не получены'), ('revoked', 'Сбор выключен'),
+    ('unsupported', 'Эта версия'), ('unavailable', 'Источник технических сведений недоступен')])
+def test_missing_location_is_not_silently_blank_or_inferred_consent(status, expected):
+    label = technical_metadata.location_label(status, None, {})
+    assert expected in label
+    assert ('Сбор выключен' in label) == (status == 'revoked')
+
+
+@pytest.mark.parametrize('transport,state,age,expected', [
+    ('TCP', 'CONNECTED', 0, 'Этот транспорт пока не поддерживает'),
+    ('MESH', 'CONNECTED', 0, 'Этот транспорт пока не поддерживает'),
+    ('NONE', 'DISCONNECTED', 0, 'Нет активной'),
+    ('AWG', 'CONNECTED', 181, 'Нет свежих сведений'),
+    ('AWG', 'CONNECTED', 0, 'Источник AWG-пиров временно недоступен')])
+def test_location_reason_explains_session_and_source(transport, state, age, expected):
+    groups = dict(session=dict(age_seconds=age, values=dict(transport=transport, state=state)))
+    label = technical_metadata.location_label('available', dict(reason='peer_source_unavailable'), groups)
+    assert expected in label
+
+
+def test_compact_and_full_views_show_missing_location_reason(console, client):
+    inventory.ingest(snapshot())
+    technical_metadata.ingest(observation())
+    client.force_login(console)
+    for url in ('/inventory/', '/inventory/' + 'a' * 64 + '/'):
+        html = client.get(url).content.decode()
+        assert 'Нет свежих сведений об установленной сессии' in html
+        assert 'Сбор выключен' not in html
+
+
+def test_compact_does_not_claim_os_received_from_other_groups():
+    from django.template.loader import render_to_string
+    html = render_to_string('console/technical_metadata_compact.html', dict(device=dict(technical=dict(
+        status='available', label='Получено', profile={}, geoip_label='Нет свежих сведений'))))
+    assert 'ОС · Версия не получена' in html
+    assert 'ОС · Получено' not in html

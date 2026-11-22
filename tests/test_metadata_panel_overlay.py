@@ -6,6 +6,29 @@ import pytest
 from scripts import package_metadata_panel_overlay as overlay
 
 
+def test_geoip_delta_is_three_files_no_migration_or_command_change(tmp_path, monkeypatch):
+    baseline = tmp_path / 'baseline'
+    pins = {}
+    for name in overlay.GEOIP_REPLACED:
+        target = baseline / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(b'accepted metadata baseline')
+        pins[name] = overlay.digest(target.read_bytes())
+    monkeypatch.setattr(overlay, 'GEOIP_REPLACED', pins)
+    output = tmp_path / 'output'
+    receipt = overlay.prepare_geoip_delta(baseline, overlay.GEOIP_IMAGE, output)
+    assert len(receipt['installed']) == 3
+    assert {str(item.relative_to(output)) for item in output.rglob('*') if item.is_file()} == set(pins) | {'Dockerfile'}
+    assert 'CMD' not in (output / 'Dockerfile').read_text()
+    assert 'RUN' not in (output / 'Dockerfile').read_text()
+    assert all((output / name).stat().st_mode & 0o777 == 0o644 for name in pins)
+    with pytest.raises(ValueError, match='image'):
+        overlay.prepare_geoip_delta(baseline, 'unqualified', tmp_path / 'bad')
+    (baseline / next(iter(pins))).write_bytes(b'changed')
+    with pytest.raises(ValueError, match='preimage'):
+        overlay.prepare_geoip_delta(baseline, overlay.GEOIP_IMAGE, tmp_path / 'changed')
+
+
 @pytest.fixture
 def baseline(tmp_path, monkeypatch):
     root = tmp_path / 'baseline'
