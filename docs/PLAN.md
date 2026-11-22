@@ -2,6 +2,18 @@
 
 ## Current engineering priority / Текущий critical path
 
+**DEVICE-METADATA-NL-20261122 — selected follow-up COMPLETE / INSTALLED.**
+Depends on the accepted metadata/HMAC2 runtime and22 November coverage audit.
+The approved scope is both NL/AWG sources plus missing-data explanations, preserving
+separate voluntary consent. Gates pass:69+92 relevant tests, exact three-file image,
+fresh encrypted panel backup/isolated restore, protected old rows/configuration,
+exercised file/image rollback, three normal source-`ok` imports and real owner UI at
+1440/390px. NL2 city/ASN reaches the panel; NL1 physical-client sampling remains
+unobserved, not a failed or invented acceptance. No desktop sender, TCP/MESH lookup,
+consent change, client release, RU recovery or next queued task is selected.
+Use the existing metadata worktree/branch for code; this main checkout is older and
+divergent. [Implementation handoff and evidence](releases/2026-11-22-nl-geoip-rollout.md).
+
 **DEVICE-METADATA-AUDIT-20261122 — selected read-only diagnosis COMPLETE.**
 Compare live panel/canonical counts, collector freshness, consent/profile contract
 and deployed GeoIP eligibility without changing consent or exporting raw IPs.

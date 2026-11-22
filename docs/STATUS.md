@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**22 November20:57UTC — NL/AWG GeoIP and missing-data labels INSTALLED / VERIFIED.**
+Owner-approved follow-up is implemented in the existing metadata worktree, not this
+older/divergent main tree. Source2d880be1 is pushed to the metadata branch; panel
+5ce82415 and two external collectors are installed.69 focused +92 isolated tests,
+fresh encrypted backup/39-table restore,36 protected preimages,6 configuration pins,
+three normal imports and real1440/390px owner cards pass. NL2 now has an independently
+aged approximate city/ASN. Two enabled and one revoked row remain; consent is not
+changed and revoked payloads stay empty. NL1 has controlled test coverage, not a new
+physical-client sample. Only console is recreated; gateways, PostgreSQL, publisher
+and support are not restarted. Public Android126/catalog9 and RU outage are unchanged.
+[Current source handoff, installed hashes and rollback](releases/2026-11-22-nl-geoip-rollout.md).
+
 **22 November19:17UTC — device OS/GeoIP coverage audit COMPLETE; no rollout.**
 Live panel and canonical metadata store both contain two enabled profiles and one
 revoked tombstone; OS is Android15/API35 and13/API33. Of69 inventory records,
