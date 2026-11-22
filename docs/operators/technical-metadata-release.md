@@ -1,5 +1,22 @@
 # Technical metadata: minimal delivery and recovery
 
+**22 November20:57UTC — NL/AWG collector and reason labels installed.**
+The external collector now supports both NL gateways without gateway runtime changes
+or copying GeoIP databases. A pinned node/key/handshake observation is followed by a
+fresh canonical consent/session read and central lookup. The original45s overall
+deadline remains. NL2 live city/ASN and three normal imports are verified; NL1 has
+controlled coverage only. Missing reports are not treated as denied consent, while
+an explicit revoke clears observations. Retained cities are independently aged and
+approximate; TCP/MESH and desktop OS reporting remain outside this change.
+
+Use the [22 November receipt and exercised rollback](../releases/2026-11-22-nl-geoip.md)
+for current panel5ce82415 and the two external collector preimages. Do not rerun the
+initial14-file metadata overlay or old migrations/signing steps below. Restore only
+the previous5ae92f8c presentation image/collector files if needed, preserving the full
+effective Compose chain, current stores, consent epochs and HMAC2 aliases. Concurrent
+network-probe/audit appends must be verified separately from unchanged old row hashes.
+Public Android126/catalog9 is unchanged; later dated sections below are historical.
+
 **22:47UTC update: PR38 merged7123b95e after qualified588e793a checks.** A later
 readback finds a new22:07UTC RU watchdog cascade. Public files/catalog9, metadata API,
 HMAC2 and protected support state are not rolled back; RU AWG/TCP are down. Source

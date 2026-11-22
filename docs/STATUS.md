@@ -1,16 +1,19 @@
 # Текущее состояние / Current state
 
-**22 November — NL/AWG GeoIP and missing-data labels: source qualification.**
-Owner-selected follow-up to the device metadata audit; not RU recovery. The external
-collector now samples both NL nodes only for fresh, consenting AWG sessions, binds
-the full canonical key to the pinned node state, then rereads consent/session on RU
-before local DB-IP lookup. Raw endpoints stay transient; the existing45s total
-collector budget and all gateway runtimes remain unchanged. A read-only live NL2
-sample yields city and ASN without importing it. Presentation distinguishes absent
-reports, explicit revoke, unsupported transports and unavailable observations.
-Installed panel/monitor changes and three normal-cycle/browser acceptance remain
-pending at this source checkpoint. Public Android126/catalog9 stays unchanged.
-[Scope, tests and rollout gates](releases/2026-11-22-nl-geoip.md).
+**22 November20:57UTC — NL/AWG GeoIP and missing-data labels INSTALLED / VERIFIED.**
+Source2d880be1 is pushed to the existing metadata branch. Two external collector
+files and the three-file console overlay5ce82415 are installed at20:53:48UTC.
+69 focused tests and92 isolated panel tests pass. Three normal monitor cycles import
+all nodes with metadata source `ok`; the existing NL2 session has a last-known city
+and ASN with its independent age. Two enabled/one revoked metadata rows remain;
+revoked payloads stay empty. Real owner GET-only list/card checks pass1440/390px.
+Encrypted backup/39-table isolated restore,36 protected table preimages,6 configuration
+pins and non-console service continuity pass. A first attempt safely rolled back
+after independent network-probe appends; the corrected guard verifies all old rows
+and permits only validated new probe/audit pairs. No gateway restart/runtime write,
+consent change, migration or client release. NL1 has controlled coverage, not a new
+physical-client location sample. Public Android126/catalog9 stays unchanged.
+[Scope, evidence and exercised rollback](releases/2026-11-22-nl-geoip.md).
 
 **17 November00:02UTC — RU recovered on unchanged accepted bytes; CAUSE_OPEN.**
 The owner-authorized recovery restores watcher/AWG/TCP after the22:07 outage.
