@@ -2,6 +2,16 @@
 
 ## Current engineering priority / Текущий critical path
 
+**DEVICE-METADATA-AUDIT-20261122 — selected read-only diagnosis COMPLETE.**
+Compare live panel/canonical counts, collector freshness, consent/profile contract
+and deployed GeoIP eligibility without changing consent or exporting raw IPs.
+Evidence explains two OS profiles and zero locations: default-OFF Android-only
+reporting plus RU/AWG-only geography, not an absent GeoIP database. Missing reports
+do not prove users explicitly disabled collection. Potential follow-up: consent-
+preserving NL/AWG enrichment, clear missing-data reasons, separately qualified
+desktop/other-transport coverage. None is automatically selected or deployed.
+[Current evidence and limits](releases/2026-11-22-device-metadata-audit.md).
+
 **OPS-RU-NL-CHECK-20261122 — requested availability diagnosis COMPLETE; RU NOT_RECOVERED.**
 Fresh direct unit/attempt evidence, signed configurations, panel and bounded AWG
 activity counters distinguish RU transport failure from shared control and NL

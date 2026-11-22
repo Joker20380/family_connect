@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**22 November19:17UTC — device OS/GeoIP coverage audit COMPLETE; no rollout.**
+Live panel and canonical metadata store both contain two enabled profiles and one
+revoked tombstone; OS is Android15/API35 and13/API33. Of69 inventory records,
+66 have no metadata row. Fresh collector status is `ok`, not a broken import.
+Android126 introduces a separate default-OFF consent; support/readiness alone does
+not send OS, and this profile contract is Android-only. GeoIP enriches only fresh
+connected RU/AWG peers: the two current sessions are NL2/AWG and disconnected,
+so both report `no_suitable_direct_observation`. DB-IP2026-11 files are present;
+NL/TCP/MESH enrichment is not implemented. No consent, client/server or policy
+change; wider collection remains unimplemented. RU outage remains separate/open.
+[Audit evidence and follow-up boundaries](releases/2026-11-22-device-metadata-audit.md).
+
 **22 November13:48UTC — RU DOWN again; NL1 traffic observed, NL2 service checks PASS.**
 Read-only follow-up confirms RU AWG failed/TCP inactive, watcher955 retries and
 failed reconcile. New first failure04:20:49 is `tcp-query` `COMMAND_FAILED`, exit1
