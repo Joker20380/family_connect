@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**22 November13:48UTC — RU DOWN again; NL1 traffic observed, NL2 service checks PASS.**
+Read-only follow-up confirms RU AWG failed/TCP inactive, watcher955 retries and
+failed reconcile. New first failure04:20:49 is `tcp-query` `COMMAND_FAILED`, exit1
+after3.584s, NOT an8s timeout or the previous lock receipt. Shared HTTP is active:
+RU configuration503, both NL signed configurations200. Both NL AWG/TCP/MESH are
+active with fresh applied state. NL1 has four recent AWG handshakes and increasing
+RX/TX; NL2 has no recent AWG handshake or counter change in the5s sample, so its
+real data-plane acceptance is NOT_RUN, not failed. No restart or recovery in this
+check; RU remains unavailable. [Fresh evidence and limits](releases/2026-11-22-ru-outage-nl-check.md).
+
 **22 November — evening RU recurrence RECOVERED; lock deadline, prevention OPEN.**
 New first failure21 November21:55:08UTC is `TRANSPORT_OPERATION_DEADLINE` in the
 first lock stage,8.000318s/8s, with no recorded native calls; it is not the earlier

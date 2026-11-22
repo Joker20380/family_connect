@@ -2,6 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
+**OPS-RU-NL-CHECK-20261122 — requested availability diagnosis COMPLETE; RU NOT_RECOVERED.**
+Fresh direct unit/attempt evidence, signed configurations, panel and bounded AWG
+activity counters distinguish RU transport failure from shared control and NL
+availability. NL1 has observed live AWG traffic; NL2 has service/control checks only,
+not new tunneled DNS/HTTPS acceptance. Preserve new04:20 TCP query exit1 evidence;
+do not reuse the prior lock-timeout diagnosis. No fleet restart, recovery, migration
+or software change is performed. RU restoration and initiating command-error cause
+remain OPEN. [Scope and evidence](releases/2026-11-22-ru-outage-nl-check.md).
+
 **OPS-RU-20261122 — selected evening recurrence recovery COMPLETE at server scope.**
 Preserve the fresh lock-deadline receipt; pin runtime, back up/restore-test, fence and
 drain only RU; restart unchanged bytes; verify exact sets, protected state and
