@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02N source file/writer inventory VERIFIED.**
+Checkpoint `7b8d8efa` ordinarily pushed and remote-SHA verified in the authoritative
+metadata branch.123 focused tests PASS /0 skips, including five new alias/allocator
+recovery-boundary cases. Profiles/journals, aliases, node allocation and receiver
+safety state are separated from derived leases/files and offline-signed catalogs.
+No runtime changes, live reads, import, service switch or new backend installation.
+Stage2 of5 continues: next is versioned all-store synthetic import/preflight with
+table/external-reference coverage; live writer census, full recovery/strict
+replication, fencing and API/client failover remain pending. RU still a dependency.
+Console5ce82415, NL GeoIP22 November, Android126/catalog9 and8/12/120s/all-three-node
+ACKs unchanged. Rollback of this checkpoint is source/tests/docs only.
+Old divergent main is navigation only; original dirty/untracked work preserved.
+[Authoritative file map, evidence and next gate](releases/2026-11-23-control-ha.md#ha-02n--file-authority-inventory).
+
 **23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02M VERIFIED.**
 Notice authority checkpoint `864dca64` ordinarily pushed and remote-SHA verified
 in the authoritative metadata branch.119 real DB contracts PASS /0 skips

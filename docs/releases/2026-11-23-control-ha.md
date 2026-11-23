@@ -58,6 +58,36 @@ not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
 
+## HA-02N — file authority inventory
+
+Source checkpoint `7b8d8efa944ead3670a39a650c37870fe4cf252d` ordinarily pushed to
+the authoritative metadata branch; remote SHA independently matched. Source-only
+continuation fromf4c21afb; no runtime change, SSH, private/product input or deployment.
+This old main is navigation only; original dirty/untracked work remains intact.
+
+[File/CLI map and recovery contract](https://github.com/Joker20380/family_connect/blob/7b8d8efa944ead3670a39a650c37870fe4cf252d/docs/control-ha-files.md)
+distinguishes profile/maintenance and alias authority, node-local peers allocator,
+receiver prepared/denied/high-water safety state, derived membership/support/notice
+files, signed catalogs/policy and offline trust inputs. Aliases cannot be recreated
+exactly from canonical rows/keys; peers registration order cannot reconstruct IPs.
+
+Final123 focused tests PASS /0 skips, including five new synthetic tests. Alias
+restore preserves historical IDs/handles/deltas; stale/recreated manifests reject
+newer/accepted envelopes respectively. Real isolated node registration plus SQLite
+backup preserves public/row-ID/IP bindings and allocator sequence; replay into an
+empty DB in another order changes addresses. AWG/TCP effects are disabled.
+949 local Markdown targets and whitespace PASS in the source worktree. No new
+root-profile/native/PG/packaging or full-product recovery qualification is claimed.
+
+Still stage2 of5. Next: versioned all-store synthetic import/preflight with exact
+table/external-reference coverage, then live consistency barrier/writer census,
+full current recovery and strict replication/RPO0. HA-03 fencing, HA-04 API/client
+failover and HA-05 production shadow/cutover remain pending; none started here.
+Console5ce82415, NL GeoIP22 November, Android126/catalog9 and8/12/120s/all-three-node
+ACKs unchanged. RU dependency remains; this is not fresh health evidence.
+Rollback is source/tests/docs only; never restore stale production files or DBs
+over new accepted writes. Full evidence and reproducer remain in the linked branch.
+
 ## HA-02M — notice recovery
 
 Source checkpoint `864dca64428144ded89eea4d9ae5fb3c665d60e6`, fromc411e187, is

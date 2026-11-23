@@ -75,9 +75,13 @@ PASS. Stale pre-edit/revoke refused; restored history/revision guards pass. Lega
 SQLite remains live; canonical file export refused until HA-03 fencing. Stored is
 not delivery; no new delegation API/backend selector/full import is qualified.
 We remain at stage2 of5, not production HA; HA-03..05 are pending.
-NEXT within HA-02: remaining writer/CLI/file inventory (profile_store, pseudonyms,
-membership/catalog files) and canonical-versus-derived boundaries,
-all-table import, PostgreSQL/Patroni strict replication and full
+HA-02N source file/CLI inventory qualified/pushed7b8d8efa:123 focused tests /0 skips.
+Depends on A–M and accepted profile/HMAC/catalog/receiver contracts. Gate: traced
+callers, authority/derived classification, private recovery inputs/freeze boundary,
+five new synthetic alias/allocator checks PASS. Not a live writer census or importer.
+NEXT within HA-02: versioned all-store synthetic import/preflight with exact table
+and external-reference coverage; live consistency barrier/writer census,
+all-store import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse
 import is not implemented. Then HA-03 receiver-enforced
 fencing (required for distributed CRL publication), HA-04 multi-endpoint API/clients,
