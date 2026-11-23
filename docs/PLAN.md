@@ -11,7 +11,11 @@ lab restore retains acknowledged events/revoke/proof. No production cutover.
 HA-02C membership contracts qualified/pushed0ed728f0:131 PASS /0 skips;389 broader
 checks PASS /16 optional skips /4 historical-overlay failures reproduced on the
 unchanged baseline. Missing ACK/DB failure retains node denies without partial payment.
-NEXT within HA-02: remaining writers/CLI (support/admin/referral first), metadata/
+HA-02D referral contracts/recovery qualified/pushed22caaf6c:181 contracts /0 skips,
+379 consumer/runner checks /21 optional skips. Atomic proof/link, invitation/claim,
+pool500/daily20, sponsor-bound replay and exact nine-table/18-row restore pass;
+stale pre-claim restore refused. No production backend change or full recovery claim.
+NEXT within HA-02: remaining writers/CLI (support/admin next), metadata/
 tombstones/files, all-table import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse
 import is not implemented. Then HA-03 receiver-enforced

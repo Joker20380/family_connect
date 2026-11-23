@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02D VERIFIED.**
+Referral checkpoint22caaf6c is ordinarily pushed and remote-SHA verified in the
+metadata branch.181 SQLite/PostgreSQL contracts PASS /0 skips (50 referral +131
+existing);379 consumer/runner checks PASS /21 optional skips. Atomic proof/link and
+invitation/claim, pool500/daily20, sponsor-bound replay, revocation and rollback pass.
+Real PostgreSQL crash/current nine-table/18-row restore pass; stale pre-claim backup
+refused. Not a full product backup or replication. Production RU/NL, console5ce82415
+and Android126/catalog9 unchanged. Next: support/admin and other writers/CLI,
+metadata/tombstones/files, full import/recovery and replication. Prior four packaging
+failures remain an open deployment gate. RU dependency is not removed.
+[Authoritative source, results and rollback](releases/2026-11-23-control-ha.md).
+
 **23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02C VERIFIED.**
 Node-preparation checkpoint0ed728f0 is ordinarily pushed and remote-SHA verified
 in the metadata branch.131 real SQLite/PostgreSQL contracts PASS /0 skips:

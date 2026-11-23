@@ -17,6 +17,8 @@ divergent; pre-existing modifications are preserved. Do not deploy its runtime.
   push to that branch succeeded; remote SHA independently matched.
 - HA-02C implementation: `0ed728f06acdb131ba17869e6d57a1122451e58e`, ordinary
   push to the same branch succeeded and remote SHA independently matched.
+- HA-02D implementation: `22caaf6c4d9fa0167f8e8b93d1cad64971c9a019`, ordinary
+  push to the same branch succeeded and remote SHA independently matched.
 - Full architecture: [CONTROL-HA plan](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/control-ha.md).
 - Full evidence: [source-worktree release record](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/releases/2026-11-23-control-ha.md).
 - Commands/limits: [isolated rehearsal runbook](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/deploy/control-ha/README.md).
@@ -37,6 +39,37 @@ and direct readback from every recovered member. Final local failover is1.766s,
 not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
+
+## HA-02D — referral transactions and recovery
+
+Shared SQLite/PostgreSQL referral transactions now commit proof/link and
+invitation/claim atomically. Pool500/daily20 and same-proof/request races use the
+existing enrollment/revoke transaction locks. Replay must match the original
+sponsor and reconstructed invitation hash; another sponsor token is rejected.
+Existing child invitations remain independent of later sponsor revocation;
+revoked child invitations are not returned. SQLite remains the production default.
+
+Final qualification:181 DB contracts PASS /0 skips in99.07s (50 referral +131 prior),
+379 consumer/runner checks PASS /21 optional skips in37.01s (16 real nginx,
+1 pinned sync archive,4 locked Go checks). Actual PostgreSQL17.11 SIGKILL/restart
+preserves committed records and rolls back unfinished invite/claim. Current dump
+restores row-for-row into another owned container:9 nonempty lab tables/18 rows.
+Consumed proofs and revocation survive; a pending invitation activates after
+restore. A pre-claim backup is refused. This is not all-table product recovery,
+replication or production reverse migration. Prior four packaging failures remain
+an open deployment gate; old pins were neither weakened nor requalified here.
+
+After lost claim ACK, retry the same token/request ID with the existing secret.
+After committed issue, use a fresh proof to obtain the same link; do not reuse a
+consumed proof, rotate the secret or restore stale DB state. Before commit failure,
+all associated writes roll back. Raw evidence/credentials/dumps stay outside Git
+under `/tmp/fc-control-ha-20261123/referrals-2/`; owned-container cleanup verified.
+
+No live servers, product databases, consent, transport policies, client builds or
+catalogs changed. Console5ce82415 and Android126/catalog9 unchanged; RU remains a
+shared dependency. Rollback of this checkpoint stops only the disposable lab.
+Next: support/admin and other writers/CLI, metadata/tombstones/files, full import
+and recovery, replication, then mandatory fencing/API/cutover gates.
 
 ## HA-02C — node preparation and failure consistency
 
