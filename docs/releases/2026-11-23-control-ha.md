@@ -58,6 +58,37 @@ not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
 
+## HA-02O — synthetic all-store shape import
+
+Authoritative source/tests/docs `5bb61ccb8a3dc92282bcaa02e0d2bddc30e3c85d` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA
+matched. Runtime remains in `/home/joker/.codex/worktrees/dad9/family_connect`;
+no source/runtime merge into this divergent main, no SSH/live read or deployment.
+Original dirty/untracked work remains outside the navigation checkpoint. Main
+already has a non-fast-forward push blocker; never force/rewrite to resolve it.
+
+- Four versioned **laboratory** SQLite images,30 data tables/34 rows; native PG
+  factories in one schema/data/receipt transaction,12 markers plus one receipt.
+- 111 real-run contracts PASS /0 skips (71 import +40 enrollment),97 regressions
+  PASS /0 skips. PostgreSQL17.11 SIGKILL/current restore preserves43 tables/47 rows.
+  Restored pending proof works once; next audit ID42. Atomic failures, concurrent
+  import, ACK loss/exact retry, target/sequence/guard drift and paid projections pass.
+- Source schemas are artificial v1 and some family rows are storage sentinels;
+  external inputs are eight **declared-reference manifests**, not actual private
+  files/keys, accepted credentials or a validated live consistency barrier.
+- `activation=FORBIDDEN`; production import/replication not implemented. Next
+  bounded scope: explicit deployed-schema adapters and semantically valid joint
+  synthetic fixture. Full external recovery/live barrier/strict RPO0 remain open.
+
+[Qualified boundary](https://github.com/Joker20380/family_connect/blob/5bb61ccb8a3dc92282bcaa02e0d2bddc30e3c85d/docs/control-ha-storage.md#ha-02o--synthetic-all-store-shape-import) ·
+[Evidence and commands](https://github.com/Joker20380/family_connect/blob/5bb61ccb8a3dc92282bcaa02e0d2bddc30e3c85d/docs/releases/2026-11-23-control-ha.md#ha-02o--synthetic-all-store-shape-import).
+
+No installed/public/invitation version changes: console5ce82415, NL GeoIP22 November,
+public Android126/catalog9,8/12/120s and all-three-node ACKs remain. RU still a
+dependency; no fresh server-health claim. Stage2 of5, not production HA. Rollback
+now means ownership-checked lab cleanup only; after new canonical writes use
+fencing/current recovery, not pre-cutover SQLite/files. Prior package gates stay open.
+
 ## HA-02N — file authority inventory
 
 Source checkpoint `7b8d8efa944ead3670a39a650c37870fe4cf252d` ordinarily pushed to

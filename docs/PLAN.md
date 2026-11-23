@@ -79,8 +79,14 @@ HA-02N source file/CLI inventory qualified/pushed7b8d8efa:123 focused tests /0 s
 Depends on A–M and accepted profile/HMAC/catalog/receiver contracts. Gate: traced
 callers, authority/derived classification, private recovery inputs/freeze boundary,
 five new synthetic alias/allocator checks PASS. Not a live writer census or importer.
-NEXT within HA-02: versioned all-store synthetic import/preflight with exact table
-and external-reference coverage; live consistency barrier/writer census,
+HA-02O laboratory shape import qualified/pushed5bb61ccb:111 contracts /0 skips,
+97 regressions /0 skips. Depends on native A–M factories and N external-authority map.
+Gate: four explicit lab schemas/30 tables, typed preflight/eight declared-reference
+roles, atomic data/schema/receipt, exact retry or refusal, sequence reseed, three
+paid projections and43-table/47-row SIGKILL/current restore PASS. Not deployed SQLite
+adapters, semantic full-system migration or actual external-file recovery.
+NEXT bounded scope: deployed-schema adapters and semantically valid joint synthetic
+fixture; fail closed on unsupported/missing inputs. Separately, live consistency barrier/writer census,
 all-store import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse
 import is not implemented. Then HA-03 receiver-enforced

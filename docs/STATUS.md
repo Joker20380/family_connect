@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02O synthetic all-store shape import VERIFIED.**
+Source `5bb61ccb` ordinarily pushed and independently remote-SHA verified on the
+authoritative metadata branch.111 contracts PASS /0 skips (71 import +40 enrollment),
+97 focused regressions PASS /0 skips. Four lab SQLite images/30 data tables import
+atomically into native PostgreSQL17.11; exact43-table/47-row SIGKILL/current restore,
+lost-reply readback, proof once and next audit ID42 pass. Changed target/guards/
+sequence refuse replay; failed pre-commit import leaves no schema.
+Scope is laboratory storage-shape preservation, NOT deployed SQLite migration:
+some families use sentinels, eight external manifests only declare references.
+Activation forbidden; no live barrier, replication, real key/file recovery or
+production importer. Stage2 of5; RU still a dependency. NEXT: deployed-schema
+adapters and semantically valid joint synthetic fixture, not production cutover.
+No server/live-health/client change; console5ce82415, NL GeoIP22 November,
+Android126/catalog9,8/12/120s and all-three-node ACKs unchanged. Safe abort affects
+only owned lab containers; never restore old SQLite over new accepted writes.
+This divergent old main is navigation only; preserve existing dirty/untracked work.
+[Source, exact scope and rollback](releases/2026-11-23-control-ha.md#ha-02o--synthetic-all-store-shape-import).
+
 **23 November — CONTROL-HA HA-02N source file/writer inventory VERIFIED.**
 Checkpoint `7b8d8efa` ordinarily pushed and remote-SHA verified in the authoritative
 metadata branch.123 focused tests PASS /0 skips, including five new alias/allocator
