@@ -25,7 +25,7 @@ HA-02E Support ID/backfill/lookup qualified/pushed ed6a664f:155 real DB contract
 operator smoke PASS. Exact12-table/19-row synthetic restore preserves observations,
 proofs/revoke and coexisting paid state; restricted rows are read-side fixtures only.
 At HA-02E, FIELD grant/audit/CRL/file writers were not migrated.
-HA-02F grant/revoke/audit DB boundary qualified:176 real DB contracts /0 skips
+HA-02F grant/revoke/audit DB boundary qualified/pushed20129a67:176 real DB contracts /0 skips
 (70 admin +40 enrollment +66 support);264 focused regressions /4 optional Go skips.
 Exact12-table/20-row lab recovery preserves revisions, revokes, pending audit/proofs
 and paid state. Stale backup refused; SQLite compensates after APPLIED commit ACK loss.

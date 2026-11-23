@@ -1,8 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02F grant/audit DB transactions VERIFIED; migration IN_PROGRESS.**
-Source checkpoint continues the metadata branch from57e6c854; publication recorded
-in the dated report. Shared SQLite/PostgreSQL grant renewal, idempotent grant revoke
+Source `20129a67` is ordinarily pushed and remote-SHA verified in the metadata branch
+(base57e6c854). Shared SQLite/PostgreSQL grant renewal, idempotent grant revoke
 and audit transactions pass176 real DB contracts /0 skips (70 admin +106 prior).
 264 focused consumer/operator/runner checks PASS /4 optional locked-Go skips.
 PostgreSQL17.11 SIGKILL and exact12-table/20-row current restore pass; stale backup

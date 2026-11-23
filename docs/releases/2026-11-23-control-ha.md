@@ -34,6 +34,19 @@ No production DB/configuration, server service, policy/8/12/120s, consent or key
 No SSH/live RU/NL health checks; RU dependence remains. Four prior exact-overlay
 package failures remain open and were not rerun/reclassified as PASS here.
 
+Source/tests/docs checkpoint `20129a67e2b6febd9eadd98e2c3425a070ab82a4` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; remote SHA independently
+matched, source worktree clean after push. Staged16-file scope/private-key-token
+marker check,870 local Markdown targets, whitespace and locked `pip check` PASS.
+Docker readback finds no remaining containers with the HA enrollment rehearsal label.
+
+Old-main navigation-only handoff `f38e39099112836b7b17ab1fdc72c124695ea0b1` remains
+local: ordinary push rejected `non-fast-forward`; independently read remote main is
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`. No force/reset/merge/rebase. Original
+unstaged additions remain40 PLAN/66 STATUS/11 private-beta guide/6 recovery guide
+lines and the same six untracked historical paths. Only the metadata branch contains
+published HA source; this divergent main is not a deployment candidate.
+
 ### Change and failure semantics
 
 - Shared `RestrictedAdminTransaction`: active-registration grant/renewal, monotonic
