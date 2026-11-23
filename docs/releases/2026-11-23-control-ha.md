@@ -37,6 +37,16 @@ deployment, product DB access, key/profile/catalog rewrite or client change.
 Latest recorded installation remains console5ce82415, NL GeoIP22 November and
 public Android126/catalog9.8/12/120s and all-three-node ACKs remain unchanged.
 
+Implementation/tests/docs `7b8d8efa944ead3670a39a650c37870fe4cf252d` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA
+matched. Staged scope/credential-pattern review and whitespace PASS; no private
+state or build output committed. The source worktree was clean after that push.
+Old-main navigation `04bc38c48b0fc35739f680c869d220cb942904a6` is retained locally:
+ordinary push rejected `non-fast-forward`; observed remote main remains
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`. Its359 local Markdown targets pass;
+all four original dirty files and six untracked paths remain untouched. No force,
+merge, reset or live deployment; use the published feature branch as source.
+
 ### Deliverable and findings
 
 [Source file/CLI map](../control-ha-files.md) completes the selected HA-02N

@@ -93,7 +93,7 @@ pre-edit/revoke backup refused; restored immutable history/revision guards pass.
 Legacy SQLite and separate public exports remain unchanged; canonical DB-only path
 returns stored, not delivery, and refuses file export. No production selector,
 role delegation API, cross-store import or distributed publication is qualified.
-HA-02N source writer/CLI/file inventory qualified fromf4c21afb:123 focused tests
+HA-02N source writer/CLI/file inventory qualified/pushed7b8d8efa:123 focused tests
 /0 skips, including five new alias/allocator boundary cases. Depends on HA-02A–M
 and accepted profile/maintenance/HMAC/catalog/receiver contracts. Gate: source
 caller map, canonical-versus-derived classification, private external recovery

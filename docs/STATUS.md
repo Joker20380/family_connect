@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02N source file/writer inventory VERIFIED.**
-Continuation fromf4c21afb; source/tests/docs only, no deployment or live read.
+Checkpoint `7b8d8efa` ordinarily pushed and independently remote-SHA verified
+fromf4c21afb; source/tests/docs only, no deployment or live read.
 The remaining profile/maintenance, aliases, node allocation, receiver membership,
 support/admission, directory, catalog and notice file boundaries are classified.
 Aliases are private authority; node `peers.db` preserves assigned IPs and allocator
@@ -16,6 +17,8 @@ HA-03..05 remain pending. No queued import or production switch started here.
 Latest recorded installation unchanged: console5ce82415, NL GeoIP22 November,
 public Android126/catalog9;8/12/120s and all-three-node first-cohort ACKs preserved.
 RU still a dependency; this is not fresh availability evidence or outage recovery.
+Old-main navigation `04bc38c4` retained locally: ordinary push refused non-fast-forward;
+original dirty/untracked work preserved, no history rewrite or runtime merge.
 [File inventory and rollback](control-ha-files.md) ·
 [Evidence](releases/2026-11-23-control-ha.md#ha-02n--file-authority-inventory).
 
