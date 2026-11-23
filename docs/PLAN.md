@@ -223,6 +223,8 @@ writes; no snapshot barrier/signature/payload/approval-custody acceptance.
 Depends on V's explicit limits and current installed entrypoint discovery; the selected
 inventory gate is actual three-host census, sanitized reconciliation and refusal of
 unsafe/racing input. [Evidence](releases/2026-11-24-control-ha-installed-inventory.md).
+Sourcebea5ab07 ordinarily pushed/remote-SHA verified; old-main navigationf743f70f
+stays local after non-fast-forward rejection againstcb47bf23. Original work preserved.
 NEXT bounded scope within the journal block: lossless legacy-prefix custody contract
 for the observed mixed/service-bearing archives and adjunct/fenced evidence. Gate:
 preserve every observed ledger/archive member and opaque legacy byte without inventing

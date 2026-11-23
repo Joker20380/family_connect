@@ -19,6 +19,10 @@ service-bearing histories, including adjunct/fenced evidence; no invented coordi
 bytes, pruning, host resume or automatic deployment. Other HA-02 blocks remain open.
 Stage2 of5; RU dependence persists. Console5ce82415, NL GeoIP22 November,
 Android126/catalog9 and8/12/120s/all-three-node ACK are unchanged, not freshly qualified.
+Sourcebea5ab07 ordinarily pushed and independently remote-SHA verified. Old-main
+navigationf743f70f remains local: ordinary push rejected non-fast-forward against
+cb47bf23. Three staged navigation docs/365 links PASS; original four dirty files and
+six untracked paths preserved. No force/reset/rebase/merge or production activation.
 [Observed evidence, scope and rollback](releases/2026-11-24-control-ha-installed-inventory.md).
 
 **23 November — CONTROL-HA HA-02V completed stopped variants.**

@@ -149,3 +149,18 @@ inactive/success with exit0; inactive is normal for a completed oneshot. The sep
 product-cert-renew.service was observed failed while its timer was active. This is
 an uninvestigated, unrelated health observation, not evidence that the management
 service is stopped or a reason to restart it. No corrective server action was taken.
+
+## Publication receipt
+
+Implementation/test/docs commit `bea5ab07a5a5305d02e5b23d569a2e941cc06c0c`
+was ordinarily pushed to feature/device-technical-metadata-20261115; independent
+ls-remote matched the complete SHA. Safe source/tests/docs only, no private receipts,
+state, key/profile payloads, product DB, capsules or build output in the staged diff.
+No build installation, deployment, release tag or public catalog change follows.
+
+Old-main navigation commit `f743f70f987f669f2a055bd776d7d66df6efe5b4` remains local:
+ordinary main push rejected non-fast-forward; independent remote main readback remains
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`. No force/reset/rebase/merge.
+Three staged navigation docs/365 links and whitespace PASS. Four original dirty
+file deltas and all six original untracked contents were compared with the retained
+baseline and preserved exactly; this checkpoint does not absorb unrelated work.
