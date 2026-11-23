@@ -21,6 +21,8 @@ divergent; pre-existing modifications are preserved. Do not deploy its runtime.
   push to the same branch succeeded and remote SHA independently matched.
 - HA-02E implementation: `ed6a664ffe6f377caf37af173b68a0cecca3e418`, ordinary
   push to the same branch succeeded and remote SHA independently matched.
+- HA-02F implementation: `20129a67e2b6febd9eadd98e2c3425a070ab82a4`, ordinary
+  push to the same branch succeeded and remote SHA independently matched.
 - Full architecture: [CONTROL-HA plan](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/control-ha.md).
 - Full evidence: [source-worktree release record](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/releases/2026-11-23-control-ha.md).
 - Commands/limits: [isolated rehearsal runbook](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/deploy/control-ha/README.md).
@@ -41,6 +43,40 @@ and direct readback from every recovered member. Final local failover is1.766s,
 not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
+
+## HA-02F — restricted grants and audit recovery
+
+Shared SQLite/PostgreSQL explicit grant/renewal, idempotent grant revoke and audit
+transactions are qualified. Native PG grant FK/CHECK and explicit DB-only marker;
+no production backend/CLI selector. Concurrent renewals preserve revision, device
+revoke cannot be overridden. Grant ACK loss needs readback, not a blind renewal.
+Audit/revoke rollback together; APPLIED→INCOMPLETE compensation is permitted after
+lost commit ACK, but INCOMPLETE→APPLIED replay is refused. Actual SQLite FIELD
+CRL/file path and this compensation are tested. This is not DB/file atomicity.
+
+176 real DB contracts PASS /0 skips in40.68s (70 admin,40 enrollment,66 support).
+264 focused consumer/operator/runner checks PASS /4 optional locked-Go skips in10.23s.
+Pinned PostgreSQL17.11 SIGKILL/current restore preserves12 lab tables/20 rows,
+including grant/device revoke, revisions, consumed/pending proof, Support IDs, paid
+ledger and pending audit. Audit ID sequence continues; pending audit closes only by
+an explicit operation. A stale pre-revoke backup is refused against known lab state.
+This is not a full product backup, production watermark, reverse migration or RPO0.
+
+First `admin-1` run passed contracts but recovery setup correctly hit
+ANDROID_BASELINE_REQUIRED; fixture now records the supported Android observation
+before its synthetic payment. No guard weakened; failed evidence retained outside
+Git. Successful evidence is `/tmp/fc-control-ha-20261123/admin-2/`; focused regression
+log is `admin-regressions-1.log` in its parent. Owned container cleanup, locked pip
+check, staged16-file secret-marker/scope scan and870 local Markdown targets PASS.
+
+PG FIELD/CRL publication stays blocked before file I/O. Auto-enroll, restricted
+challenges/certificates/readiness, CRL sequence, fenced file reconciliation, sender
+and remaining writers/import/replication remain pending. No SSH/deployment or new
+RU/NL health claim. Console5ce82415 and Android126/catalog9 unchanged; RU remains a
+dependency. Four prior exact-package failures stay open. Rollback now stops only
+the disposable lab; after future cutover writes use fenced current-state recovery,
+never an older SQLite backup. Authoritative implementation is in the metadata branch,
+not this divergent main; preserve unrelated local edits and do not force its push.
 
 ## HA-02E — Support ID observation and recovery
 

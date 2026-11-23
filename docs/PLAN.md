@@ -19,8 +19,13 @@ HA-02E Support ID transactions/recovery qualified/pushed ed6a664f:155 contracts 
 skips (66 support +40 enrollment +49 paid),443 regressions /21 optional skips and
 expanded packaged operator smoke PASS. Current12-table/19-row synthetic restore
 preserves proof/alias/observation/paid state; restricted rows are read-side fixtures.
-PG FIELD changes refuse before file I/O; grant/audit/CRL/admission writers still pending.
-NEXT within HA-02: restricted/admin DB, support sender and remaining writers/CLI, metadata/
+At HA-02E, grant/audit/CRL/admission writers were still pending.
+HA-02F grant/revoke/audit DB transactions qualified/pushed20129a67:176 contracts
+/0 skips (70 admin,40 enrollment,66 support),264 regressions /4 optional Go skips.
+Exact12-table/20-row restore retains revokes/revisions, pending audit/proofs and paid
+state; stale backup refused. APPLIED ACK loss triggers fail-closed SQLite compensation.
+PG FIELD/CRL file publication stays blocked; no production backend or CLI switch.
+NEXT within HA-02: restricted challenges/certificates/readiness, support sender and remaining writers/CLI, metadata/
 tombstones/files, all-table import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse
 import is not implemented. Then HA-03 receiver-enforced

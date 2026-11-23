@@ -1,6 +1,20 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02E VERIFIED.**
+**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02F VERIFIED.**
+Grant/revoke/audit DB checkpoint `20129a67` is ordinarily pushed and remote-SHA
+verified in the metadata branch.176 real DB contracts PASS /0 skips (70 admin,
+40 enrollment,66 support);264 focused regressions PASS /4 optional locked-Go skips.
+Actual PostgreSQL17.11 crash and exact12-table/20-row restore preserve grant/device
+revokes, revisions, pending audit/proofs, aliases and paid state. Stale backup refused.
+SQLite FIELD compensation survives lost APPLIED commit ACK. PG FIELD/CRL file
+publication still refuses before file I/O; restricted certificates/readiness and
+support sender remain pending. No server/backend/client/consent changes: console
+5ce82415, Android126/catalog9 and8/12/120s unchanged. RU dependency and four prior
+package failures remain open. Next: remaining restricted writers, sender, complete
+import/recovery/replication and fencing. This old divergent main is not runtime.
+[Authoritative source, evidence and rollback](releases/2026-11-23-control-ha.md#ha-02f--restricted-grants-and-audit-recovery).
+
+**Earlier23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02E VERIFIED.**
 Support ID checkpoint `ed6a664f` is ordinarily pushed and remote-SHA verified in the
 metadata branch.155 real DB contracts PASS /0 skips (66 support +40 enrollment
 and49 paid);443 consumer/runner checks PASS /21 optional skips, expanded isolated
