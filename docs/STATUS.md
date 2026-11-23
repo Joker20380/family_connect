@@ -1,9 +1,11 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA implementation STARTED; production unchanged.**
+**23 November — CONTROL-HA HA-01 isolated foundation VERIFIED; migration IN_PROGRESS.**
 Owner selected distributed management and full documentation. Use the existing
-metadata branch, not dirty divergent main. HA-01 starts with read-only consistency
-checks and an isolated three-voter rehearsal. Canonical migration, fenced authority,
+metadata branch, not dirty divergent main. HA-01 implements read-only consistency
+checks and a pinned etcd3.7.4 three-voter mTLS rehearsal:61 tests PASS, leader loss,
+minority refusal and direct per-member recovery PASS (local failover1.766s).
+This is synthetic evidence, not replicated product data. Canonical migration, fenced authority,
 multi-endpoint clients and cutover remain pending; RU is still a shared dependency.
 Latest known console5ce82415 and Android126/catalog9 unchanged.
 [Architecture/gates](control-ha.md) · [Checkpoint](releases/2026-11-23-control-ha.md).

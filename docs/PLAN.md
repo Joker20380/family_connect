@@ -4,9 +4,10 @@
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 Depends on accepted paid-v2/HMAC2/metadata runtime and owner request.
-HA-01: read-only consistency tool, real three-voter rehearsal; mTLS, leader-loss
-survival, no-quorum refusal, recovery, zero production writes. HA-02 repository/
-replication, HA-03 fenced authority, HA-04 API/client failover, HA-05 shadow/cutover
+HA-01 isolated scope COMPLETE: read-only fingerprints, real three-voter mTLS
+rehearsal, leader loss, no-quorum refusal and direct recovery;61 tests PASS,
+zero production writes. HA-02 canonical repository/replication is NEXT and NOT_IMPLEMENTED.
+HA-03 fenced authority, HA-04 API/client failover and HA-05 shadow/cutover
 follow mandatory gates. Keep8/12/120s, offline signing and consent tombstones.
 No copied SQLite becomes a second writer; source checkpoint is not production HA.
 [Stages and rollback](control-ha.md) · [Evidence](releases/2026-11-23-control-ha.md).

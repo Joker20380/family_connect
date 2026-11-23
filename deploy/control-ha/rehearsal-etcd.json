@@ -1,0 +1,8 @@
+{
+  "purpose": "isolated-rehearsal-only",
+  "version": "3.7.4",
+  "platform": "linux-amd64",
+  "source": "https://github.com/etcd-io/etcd/releases/download/v3.7.4/etcd-v3.7.4-linux-amd64.tar.gz",
+  "archive_sha256": "a0d47d07d081c12611fe69dc81a16ae8dd758401c0fe3a83d508823a1dac558e",
+  "binary_sha256": "6fcf4a133e477a2340c59a287461b4988f0ed5c7559ff4750a8695ac41ae5a2a"
+}
