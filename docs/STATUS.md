@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+**24 November — CONTROL-HA installed journal inventory COMPLETE, not recovery acceptance.**
+Actual read-only RU/NL1/NL2 census:366/366/172 entries and matching archive directories,
+all service-bearing;15/6/5 shapes, including3/3/2 fenced rollbacks.172 shared operations
+agree on result; current scheduled COMMITTED operation is shared. No owner marker
+observed.194 RU/NL1 operations are outside NL2's ledger; do not equalize cohorts.
+Canonical coordinator history is absent;365 RU entries lack a current/history-name
+counterpart. Five adjunct JSON files are not validated history; approval custody is
+unestablished. Installed14-file manifests match e9fd3175; online_history.py is absent.
+26 focused tests /0 skips; six source docs/1014 local links and whitespace PASS.
+Sourcebea5ab07a5a5305d02e5b23d569a2e941cc06c0c ordinarily pushed and remote-SHA verified
+on the metadata branch in `/home/joker/.codex/worktrees/dad9/family_connect`.
+This old main remains navigation only. No server writes, journal execution or deployment;
+serial metadata observations are not a snapshot barrier or general health acceptance.
+NEXT: lossless legacy-prefix custody contract for actual mixed/service-bearing histories
+and adjunct/fenced evidence, without fabricated approvals/history, pruning or host resume.
+Stage2 of5, other HA-02 blocks and RU dependency remain. Console5ce82415,
+NL GeoIP22 November, Android126/catalog9 and8/12/120s/all-three-node ACK unchanged.
+[Evidence, limitations and rollback](releases/2026-11-24-control-ha-installed-inventory.md).
+
 **23 November — CONTROL-HA HA-02V completed stopped variants VERIFIED in isolation.**
 Source1322c714df9dee82eb56d6f846e9fa0986c97bde ordinarily pushed and independently
 remote-SHA verified on the metadata branch. Implementation remains in

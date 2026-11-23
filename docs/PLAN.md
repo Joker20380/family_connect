@@ -147,9 +147,18 @@ bind45 capsule artifacts and both NL publications to issuer/current five-table s
 333 PG17.11 contracts /0 skips +191 focused checks /0 skips; all three source-removed
 crash/current restores PASS,44 tables each,81→86/88→93 rows. Missing original approval
 or handoff-envelope bytes are not reconstructed or replayed. No host activation/full DR.
-NEXT bounded scope: read-only installed-shape inventory and actual host reconciliation,
-including legacy history gaps, service-bearing archives, mixed modes and approval
-custody. Identify real installed shapes before implementing more speculative variants.
+HA-02V installed-shape inventory COMPLETE, sourcebea5ab07 ordinarily pushed/verified:
+366/366/172 RU/NL1/NL2 ledger entries with matching service-bearing archives;15/6/5
+shapes and3/3/2 fenced rollbacks.172 common operations agree on result, current
+COMMITTED scheduled operation is shared.194 RU/NL1 entries are outside NL2; no
+canonical coordinator history,365 RU entries without current/history-name counterpart,
+five adjunct JSON files not accepted as history. Installed e9fd3175 manifests omit
+online_history.py.26 focused tests /0 skips; no application writes or recovery acceptance.
+NEXT bounded scope: lossless legacy-prefix custody contract for these actual mixed
+cohorts, service-bearing archives and adjunct/fenced evidence. Preserve every member
+and opaque legacy byte; distinguish preservation from validated history. Do not invent
+coordinator/approval bytes, equalize cohorts, resume hosts or deploy a speculative fix.
+[Observed inventory and gate](releases/2026-11-24-control-ha-installed-inventory.md).
 Journal block remains partial; never infer empty journals,
 reset unknowns or re-sign host bindings. This is not permission for live deployment.
 Separately, installed-schema/live writer census and consistency barrier,
