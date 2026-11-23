@@ -66,7 +66,17 @@ exact12-table/19-row SIGKILL/current restore PASS; stale pre-prune/revoke refuse
 Live separate SQLite and HTTP/CLI/worker wiring unchanged. No persistent diagnostic
 consent epoch/replay floor: fresh signed resubmission after expiry remains allowed.
 Cross-store import and physical-erasure policy still pending; no backend selector.
-NEXT within HA-02: notices and remaining writers/CLI/files,
+HA-02M notice authority qualified/pushed864dca64:119 real DB contracts /0 skips
+(79 notices +40 enrollment),118 regressions /16 optional skips,8 legacy CLI commands.
+Depends on HA-02A and accepted publisher-role/v1/v2/edit contracts. Gate: atomic
+proof/role/event/revision/history, concurrency/idempotency/order/quota/expiry,
+rollback/ACK loss/backend failure and exact16-table/26-row SIGKILL/current restore
+PASS. Stale pre-edit/revoke refused; restored history/revision guards pass. Legacy
+SQLite remains live; canonical file export refused until HA-03 fencing. Stored is
+not delivery; no new delegation API/backend selector/full import is qualified.
+We remain at stage2 of5, not production HA; HA-03..05 are pending.
+NEXT within HA-02: remaining writer/CLI/file inventory (profile_store, pseudonyms,
+membership/catalog files) and canonical-versus-derived boundaries,
 all-table import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse
 import is not implemented. Then HA-03 receiver-enforced

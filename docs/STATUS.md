@@ -1,6 +1,25 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02L VERIFIED.**
+**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02M VERIFIED.**
+Notice authority checkpoint `864dca64` ordinarily pushed and remote-SHA verified
+in the authoritative metadata branch.119 real DB contracts PASS /0 skips
+(79 notices +40 enrollment),118 focused regressions PASS /16 optional skips and
+8 isolated legacy CLI commands PASS. Roles/token digests/revoke, device proofs,
+immutable v1 notices, v2 revisions and edit journals share canonical SQLite/PG
+transactions. SIGKILL/current restore preserves16 lab tables/26 rows; stale
+pre-edit/revoke backup refused. Canonical file export stays blocked until fencing;
+`stored` does not mean public delivery. Legacy HTTP/CLI/files remain unchanged.
+**Stage2 of5, not production HA:** HA-01 laboratory foundation complete; HA-02 still
+needs remaining writer/CLI/file inventory, all-store import/full recovery and
+strict replication/RPO0. HA-03 fencing, HA-04 API/client failover and HA-05 production
+shadow/cutover remain pending. RU dependency remains; no live-health check or server
+change. Console5ce82415, NL GeoIP22 November, Android126/catalog9,8/12/120s and all-three-
+node first-cohort ACKs unchanged. No completion percentage implied. Prior packaging
+gates remain open. This old main is navigation only; original dirty/untracked work
+preserved. Next bounded step is remaining writer/file inventory, not live cutover.
+[Authoritative evidence, implementation stage and rollback](releases/2026-11-23-control-ha.md#ha-02m--notice-recovery).
+
+**Earlier23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02L VERIFIED.**
 Diagnostics checkpoint `6cd46c93` ordinarily pushed and remote-SHA verified in the
 authoritative metadata branch.113 real DB contracts PASS /0 skips (73 diagnostics
 +40 enrollment),217 focused regressions PASS /16 explicit optional skips. Proof,

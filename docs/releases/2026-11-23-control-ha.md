@@ -35,6 +35,8 @@ divergent; pre-existing modifications are preserved. Do not deploy its runtime.
   push to the same branch succeeded and remote SHA independently matched.
 - HA-02L implementation: `6cd46c938405d2a6294f6339ee1fdb58dcfe39f9`, ordinary
   push to the same branch succeeded and remote SHA independently matched.
+- HA-02M implementation: `864dca64428144ded89eea4d9ae5fb3c665d60e6`, ordinary
+  push to the same branch succeeded and remote SHA independently matched.
 - Full architecture: [CONTROL-HA plan](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/control-ha.md).
 - Full evidence: [source-worktree release record](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/releases/2026-11-23-control-ha.md).
 - Commands/limits: [isolated rehearsal runbook](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/deploy/control-ha/README.md).
@@ -55,6 +57,46 @@ and direct readback from every recovered member. Final local failover is1.766s,
 not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
+
+## HA-02M — notice recovery
+
+Source checkpoint `864dca64428144ded89eea4d9ae5fb3c665d60e6`, fromc411e187, is
+published in the authoritative metadata branch. This old divergent main remains
+navigation only, not a deployment source. Original dirty/untracked work preserved.
+
+**Stage2 of5, not40% completion and not production HA:** HA-01 laboratory foundation
+is complete. HA-02 A–M DB slices are qualified separately, but remaining writer/CLI/
+file inventory, consistent all-store import/full recovery and strict replication/RPO0
+are pending. HA-03 receiver fencing, HA-04 API/client failover and HA-05 production
+shadow/guarded cutover are not implemented. RU remains a dependency. Next bounded
+step is remaining writer/file inventory before all-store migration, not live cutover.
+
+Notice roles, bearer digests/revoke, device proofs, immutable v1 events and v2
+revisions/edit journals now share canonical SQLite/PG transactions. Notice/edit
+IDs preserve content/device-bound retries; proofs remain action-bound, not newly
+payload-signed. Role delegation stays operator-only. Explicit device-publisher
+regrant is permitted by existing policy, never automatic after recovery.
+Native stable position replaces SQLite rowid; quota/expiry/pages/archived notices
+and client feeds remain compatible. Canonical `stored` is not public delivery;
+file export refuses until HA-03 fencing. Live separate SQLite/HTTP/CLI/export
+boundaries are unchanged; no credentials/public feeds were deployed.
+
+Final119 real DB contracts PASS /0 skips (79 notices +40 enrollment),118 focused
+regressions PASS /16 optional skips (15 real nginx,1 pinned archive),8 isolated CLI
+commands PASS. PostgreSQL17.11 SIGKILL discards unfinished edit/history, role re-enable
+and proof writes. Exact16 lab tables/26 rows survive restart/current restore; stale
+pre-edit/revoke backup refused against externally retained current lab state.
+Restored history/revision guards, revoked credentials, used/pending proofs, edit
+idempotency and coexisting paid state pass. Keys/token/clock retained, NOT restored.
+No all-product backup/import, replication/RPO0, reverse migration or public-file
+reconciliation claim. Prior overlay/readiness package gates remain open.
+
+Abort now only stops owned disposable containers; no live data needs restoration.
+After new canonical writes, fence publishers and recover current roles/revisions/
+history/proofs; never old SQLite or stale public feeds. Console5ce82415, NL GeoIP22
+November, Android126/catalog9,8/12/120s and all-three-node ACKs unchanged. No fresh
+live-health check or server change. Full runbook/evidence/stage table are in the
+linked authoritative branch, not this old main runtime.
 
 ## HA-02L — diagnostics recovery
 
