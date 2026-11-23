@@ -35,6 +35,19 @@ authoritative metadata worktree. No SSH/live-health check, runtime/backend/clien
 or consent change. Console5ce82415, NL GeoIP22 November and Android126/catalog9
 remain installed/public as previously recorded;8/12/120s/all-three-node ACKs unchanged.
 
+Source/tests/docs `864dca64428144ded89eea4d9ae5fb3c665d60e6` ordinarily pushed to
+`feature/device-technical-metadata-20261115`; independent remote SHA matched and
+authoritative worktree was clean after push.15 intended source/test/doc files only.
+Generic secret scanning matched the literal recovery-status enum
+`EPHEMERAL_RETAINED_NOT_RESTORED`; exact-match review confirmed a false positive,
+not credential material. Private-key/token checks otherwise found no literals.
+Old-main navigation `5dcc6ec0c7e81b1f05855319fd383ac50c1f9420` stays local: ordinary
+push rejected `non-fast-forward`; independently read remote main remains
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`. No force/reset/rebase/merge performed.
+Original40 PLAN/66 STATUS/11 private-beta/6 recovery-guide additions and six untracked
+paths preserved;358 root-navigation Markdown targets PASS. Continue implementation
+from the published metadata branch, never this divergent old main runtime.
+
 **Stage2 of5:** HA-01 laboratory foundation is complete; HA-02 A–M storage slices
 are individually qualified. Remaining writer/file inventory, consistent all-store
 import/full recovery and strict replication/RPO0 are not done. HA-03 fencing,

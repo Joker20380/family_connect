@@ -83,7 +83,7 @@ remain; diagnostics has no consent epoch or durable replay floor. Fresh signed
 resubmission after expiry is still allowed. Legacy separate SQLite commits and
 production HTTP/CLI/worker wiring remain unchanged; no cross-store import,
 physical-erasure policy or production selector is qualified.
-HA-02M notice authority synthetic DB boundary qualified:119 real DB contracts
+HA-02M notice authority synthetic DB boundary qualified/pushed864dca64:119 real DB contracts
 /0 skips (79 notices +40 enrollment),118 focused regressions /16 optional skips.
 Depends on HA-02A proof transactions and accepted publisher-role/v1/v2/edit contracts.
 Gate: atomic role/revoke/proof/event/revision/history, concurrent edits/publication,

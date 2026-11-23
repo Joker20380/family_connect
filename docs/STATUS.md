@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02M notices DB recovery VERIFIED; migration IN_PROGRESS.**
-Source-only continuation fromc411e187 in the authoritative metadata worktree.
+Source `864dca64` ordinarily pushed and remote-SHA verified fromc411e187 in the
+authoritative metadata worktree; not deployment.
 Notice publisher roles, bearer digest grants/revokes, immutable v1 events, v2
 revisions/edit journals and device proofs share canonical SQLite/PG transactions.
 119 real DB contracts PASS /0 skips (79 notices +40 enrollment),118 focused
