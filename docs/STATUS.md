@@ -1,5 +1,25 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02V retained online-history extension VERIFIED in isolation.**
+Sourcecd995994e4429f0672524e76ea35a7a8ae54a898 ordinarily pushed and independently
+remote-SHA verified on the metadata branch. Implementation remains in
+`/home/joker/.codex/worktrees/dad9/family_connect`; this old main is navigation only.
+Coordinator predecessors are now saved durably before replacement. The explicit
+history gate checks all three node ledgers/archives, successor links and current
+issuer/five-table DB state, preserving original evidence without executing it.
+207 PostgreSQL17.11 contracts /0 skips +281 native/package/evidence/runner regressions
+/0 skips PASS. Three consecutive native operations survive source deletion and
+encrypted restore; exact44-table/81→86-row crash/current recovery PASS, stale restore
+and old import after new writes refuse. Eight source docs/1066 links checked.
+NEXT inside the partial journal block: installed offline/emergency variants, then
+actual host reconciliation, including legacy histories missing coordinator records.
+The live schema/writer barrier, full-system recovery/off-host custody and strict
+replication/RPO0 remain. Stage2 of5; RU dependency persists. No SSH/deployment,
+service/policy/version/catalog changes or fresh health claim. Console5ce82415,
+NL GeoIP22 November, Android126/catalog9 and8/12/120s unchanged; all-three-node ACK
+gate retained. Original four dirty files/six untracked paths preserved.
+[Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02v--retained-online-history).
+
 **23 November — CONTROL-HA HA-02V combined renewal capsule VERIFIED in isolation.**
 Sourcebce4df725fc57b7de4aea2a77a671783159222d4 ordinarily pushed and independently
 remote-SHA verified on the authoritative metadata branch. This old main remains

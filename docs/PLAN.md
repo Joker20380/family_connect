@@ -135,8 +135,15 @@ and issuer/CRL/directory binding; pending and weaker receipts refuse.
 162 PG contracts /0 skips +186 focused checks /0 skips; source removal and
 44-table/81→86-row crash/current-state recovery PASS, stale restore/old import refuse.
 One completed operation plus one bounded journal per node, not full DR or host resume.
-NEXT bounded scope: retained history and installed offline/emergency variants, then
-actual host reconciliation. Journal block remains partial; never infer empty journals,
+HA-02V retained-history extension qualified/pushedcd995994; remote SHA verified.
+Native predecessor retention and explicit v2 capsule gate check all-three-node
+history, ordered successors, historical expiry versus current authorization and
+exact latest DB/issuer binding.207 PG contracts /0 skips +281 targeted regressions
+/0 skips; three sequential operations and44-table/81→86-row recovery PASS.
+Source-only, not installed-history migration or host resume.
+NEXT bounded scope: installed offline/emergency variants, then actual host
+reconciliation, including legacy histories missing coordinator records.
+Journal block remains partial; never infer empty journals,
 reset unknowns or re-sign host bindings. This is not permission for live deployment.
 Separately, installed-schema/live writer census and consistency barrier,
 all-store import, PostgreSQL/Patroni strict replication and full

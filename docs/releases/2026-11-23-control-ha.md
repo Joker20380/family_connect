@@ -58,6 +58,40 @@ not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
 
+## HA-02V — retained online history
+
+Authoritative implementation `cd995994e4429f0672524e76ea35a7a8ae54a898` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA matched.
+Source remains `/home/joker/.codex/worktrees/dad9/family_connect`. This old main is
+navigation only, not a deployment source. Original four dirty files/six untracked
+paths preserved; no force/reset/rebase/merge. No SSH, deployment or service change.
+
+Native coordinator history is saved as exact bytes with hashes and fsync before a
+new online operation replaces the current transaction. Conflict, unsafe file,
+reused operation ID and capacity exhaustion refuse; no automatic history pruning.
+The explicit v2 combined capsule validates all three node ledgers/archives and
+coordinator predecessors, chronological certificate/authority successors and CRL
+floors/revocations. Latest DB/issuer/publication binding remains mandatory. Older
+evidence is checked at its terminal timestamp, not made currently valid or executed.
+
+Qualification:207 real-PostgreSQL17.11 contracts /0 skips (45 history,44 original
+combined,78 bounded,40 enrollment), plus281 native online/emergency/package/evidence/
+runner checks /0 skips. Three sequential native operations; original source removal;
+exact44-table/81-row crash/restore and86-row current-state restore; stale backup and
+old import after new writes refuse. Owned cleanup PASS. Eight source docs/1066 links
+PASS; private evidence remains `/tmp/fc-control-ha-20261123/history-recovery-1/` and
+`history-regression.log`, never Git. No release/platform acceptance is inferred.
+
+Rollback is stopping owned lab containers, not restoring production or deleting
+journals. Source-only module/package changes need separate installed qualification.
+The imported format is bounded to2–8 completed online operations; larger histories,
+missing legacy coordinator records, pending/offline/emergency variants refuse without
+truncation. Live inventory/history-prefix attestation, host rebinding/resume, writer
+barrier, off-host key/checkpoint custody and replication/RPO0 are not qualified.
+NEXT: installed offline/emergency variants, then actual host reconciliation. Stage2
+of5; RU dependency remains. Console5ce82415, NL GeoIP22 November, Android126/catalog9,
+8/12/120s and all-three-node first-cohort ACK gate unchanged; no fresh host-health claim.
+
 ## HA-02V — combined online renewal capsule
 
 Authoritative source/tests/docs `bce4df725fc57b7de4aea2a77a671783159222d4` ordinarily
