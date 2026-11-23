@@ -164,7 +164,8 @@ No opaque probes in this pinned38-artifact fixture; not full maintenance recover
 Only one canonical bounded operation and one publisher contract per node, explicitly
 empty separate renewal ledgers. Missing/legacy/multiple/history/renewal variants
 refuse rather than becoming empty. Native host resume remains NOT_QUALIFIED.
-HA-02U adds a separate online-renewal evidence checkpoint from18cd0c2b, not a capsule
+HA-02U source9a9724a1 ordinarily pushed/remote-SHA verified from18cd0c2b adds a
+separate online-renewal evidence checkpoint, not a capsule
 importer or host-resume command. Dependencies: N caller inventory, T distinction
 between bounded and renewal journals, native online controller/node contracts.
 Gate: independent checkpoint, all-three-node decision/plan/archive/receipt binding,
@@ -172,7 +173,9 @@ signed two-gateway material, exact private pending evidence after source removal
 lost-reply/partial-cleanup and precommit-abort/postcommit-resume fault tests.
 Same-host comparison refuses changed bytes/path/inode; it is not execution permission.
 162 final adapter/fault tests and97 native regressions PASS /0 skips; eight docs/
-1041 links checked. Publication is recorded in the dated report. Simulated
+1041 links checked; three staged navigation docs/375 links PASS. Old-mainaa43da98
+push rejected non-fast-forward againstcb47bf23; no history rewrite or lost dirty work.
+Publication is recorded in the dated report. Simulated
 RPC/readers/barriers and one retained online operation only; no live attestation.
 NEXT bounded scope within the journal block: canonical capsule/issuer/DB binding
 of renewal evidence, retained history and installed offline/emergency variants,

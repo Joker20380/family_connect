@@ -43,6 +43,14 @@ migration acceptance. Console5ce82415, NL GeoIP22 November, Android126/catalog9,
 8/12/120s and all-three-node first-cohort ACK gate remain unchanged. No SSH, live
 read/write, runtime package, release artifact/catalog/tag or service changes.
 
+Publication: source/tests/docs9a9724a180ad3b1293ad9620a428d9b50af223d0 ordinarily
+pushed to the existing metadata branch; independent remote branch SHA matched.
+Old-main navigationaa43da98230b072fecbbe8633c1da716040f3ac0 is retained locally:
+ordinary push rejected non-fast-forward againstcb47bf230c6795cf21f4e6948253f49aa5377ed0.
+Three staged navigation docs/375 links PASS. Four original dirty files/six untracked
+paths remain unchanged; no force/reset/rebase/merge. The metadata branch is
+authoritative, not the unpushed old-main handoff.
+
 Implemented the [separate renewal inspector](../../scripts/control_ha_renewal_v1.py)
 and [native fault tests](../../tests/test_control_ha_renewal_v1.py). Five private
 documents retain coordinator and every node's transaction/owner/plan, before/staged

@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02U online-renewal evidence checkpoint; no host activation.**
-Continuation from18cd0c2b on the authoritative metadata branch. Source/tests/docs
+Source9a9724a1 ordinarily pushed and independently remote-SHA verified from18cd0c2b
+on the authoritative metadata branch. Source/tests/docs
 only: no SSH, live reads, deployment, service restart or policy change.
 A separate read-only adapter now checks the native online-renewal coordinator,
 all three node owners, immutable decisions/fences, plans, completion ledgers and
@@ -18,6 +19,9 @@ filesystem metadata. No live capture/barrier, new-host reconciliation or canonic
 capsule integration. T still refuses nonempty renewal ledgers; U cannot bypass it.
 162 final adapter/fault tests and97 focused native renewal regressions PASS /0 skips.
 Eight source docs/1041 links and whitespace checked; external URLs not fetched.
+Three staged old-main navigation docs/375 links PASS. Navigationaa43da98 retained
+locally: ordinary push rejected non-fast-forward against remotecb47bf23. Original
+four dirty files/six untracked paths preserved; no force/reset/rebase/merge.
 Publication results are recorded in the dated report below.
 NEXT within the partially closed journal block: integrate renewal evidence with
 the canonical capsule/issuer/DB checkpoint, cover retained history and installed
