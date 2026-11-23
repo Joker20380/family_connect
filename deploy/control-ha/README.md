@@ -447,3 +447,36 @@ SQLite; production migration, privacy-aware backup retention, full all-table imp
 replication/RPO0 and fencing remain gates. Abort stops only owned disposable containers;
 after future canonical writes recover current state, never stale SQLite. No server,
 client, serving set, consent or8/12/120s change is part of this checkpoint.
+
+## HA-02M: isolated notice recovery
+
+Use the authoritative metadata worktree and the same locked control/identity/HA
+Python plus local Docker. Only generated identities/notice text and an in-memory
+bearer token; no product registry, live reports or public feed paths.
+
+```sh
+python -m scripts.notices_postgres_rehearsal --workdir /tmp/fc-control-ha-20261123/notices-2
+python -m pytest -q -ra tests/test_device_notices.py messenger/tests/test_announcements.py messenger/tests/test_inbox_events.py messenger/tests/test_resilient.py tests/test_friends_http_runtime.py tests/test_friends_access.py tests/test_support_package.py tests/test_referral_rehearsal.py tests/test_enrollment_rehearsal.py
+```
+
+Use a new absent directory on rerun. Expected119 real DB contracts /0 skips,
+`ISOLATED_NOTICES_POSTGRES_PASS` and owned-container cleanup PASS. Focused consumer/
+package/runner checks:118 PASS /16 optional skips (15 real nginx,1 pinned archive).
+Marker, permissions, digest-only credentials, role/revoke/proof atomicity, concurrent
+edits/publications, immutable v1, revision CAS, payload/device-bound operation retry,
+order/pagination/quota/expiry, failed/ambiguous commit and backend termination pass.
+
+Inject an unfinished edit/history write, role re-enable and proof consumption, then
+SIGKILL only the owned disposable container. Compare all16 lab tables/26 rows after
+restart and separate current restore. Stale pre-edit/revoke backup must be refused.
+Restored UPDATE/TRUNCATE guards must reject history loss/revision rewind. Revoked
+token/device publisher and used proof refuse; pending edit applies exactly once,
+fresh-proof duplicate returns the same result, payment retry adds no event, v1 is
+unchanged by edits and both feeds filter expiry. Keys/token/clock are retained, not
+recovered. No canonical export is performed; DB storage is not public delivery.
+
+Abort before cutover stops only the owned lab. After future canonical writes,
+fence publishers and recover current roles/revisions/journals/proofs; never copy
+pre-revoke SQLite or republish stale v1/v2 files as rollback. Remaining writer/file
+inventory, all-store import/full backup/strict replication and HA-03..05 still gate
+production. Prior package gates remain open; no source push authorizes cutover.

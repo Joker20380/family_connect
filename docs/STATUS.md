@@ -1,6 +1,29 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA HA-02L diagnostics DB recovery VERIFIED; migration IN_PROGRESS.**
+**23 November — CONTROL-HA HA-02M notices DB recovery VERIFIED; migration IN_PROGRESS.**
+Source-only continuation fromc411e187 in the authoritative metadata worktree.
+Notice publisher roles, bearer digest grants/revokes, immutable v1 events, v2
+revisions/edit journals and device proofs share canonical SQLite/PG transactions.
+119 real DB contracts PASS /0 skips (79 notices +40 enrollment),118 focused
+regressions PASS /16 explicit optional skips. PostgreSQL17.11 SIGKILL/current
+restore preserves16 laboratory tables/26 rows; stale pre-edit/revoke restore
+refused. Restored history/revision guards, pending/used proofs, roles and paid
+state pass. DB-only requests return `stored`, not public-file delivery. Legacy
+SQLite HTTP/CLI/proof/export boundaries remain separate; canonical file export
+refuses before I/O until HA-03 fencing. No new credential/role delegation API.
+No source release/deployment, live-health check, server/consent/client change:
+console5ce82415, NL GeoIP22 November, Android126/catalog9 and8/12/120s unchanged.
+**Stage2 of5, not production HA:** HA-01 lab complete; HA-02 common storage still
+needs remaining writer/file inventory, all-store import/full recovery and strict
+replication/RPO0. HA-03 fencing, HA-04 API/client failover and HA-05 production
+shadow/cutover remain pending. RU is still a dependency; all-three-node first-cohort
+ACKs remain required. No percentage completion or delivery date is implied.
+Prior overlay/readiness packaging gates remain open. No next queued task started.
+[Scope](control-ha-storage.md#ha-02m--notice-transactions) ·
+[Evidence and rollback](releases/2026-11-23-control-ha.md#ha-02m--notice-recovery) ·
+[Implementation stage](control-ha.md#стадия-внедрения-на-23-ноября).
+
+**Earlier23 November — CONTROL-HA HA-02L diagnostics DB recovery VERIFIED; migration IN_PROGRESS.**
 Source `6cd46c93` ordinarily pushed and remote-SHA verified fromc484d6d4 in the
 authoritative metadata worktree; not deployment.
 Diagnostics proof, Support ID binding and latest snapshot share a canonical

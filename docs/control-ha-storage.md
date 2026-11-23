@@ -512,6 +512,54 @@ fence writers and recover current acknowledged state, including retention deleti
 [Reproducer](../deploy/control-ha/README.md#ha-02l-isolated-diagnostics-recovery) ·
 [Evidence](releases/2026-11-23-control-ha.md#ha-02l--diagnostics-recovery).
 
+## HA-02M — notice transactions
+
+Common `NoticeTransaction` lives in the already bundled `scripts/service_notices.py`;
+legacy `Notices` owns its SQLite transaction/file side effects, canonical adapters
+participate only in the outer enrollment transaction. Explicit synthetic schemas
+add a marker and stable `events.position`, replacing SQLite-only rowid ordering.
+The existing global writer lock serializes position allocation, quota, role revoke,
+revision CAS and immutable edit-operation insertion. No all-product import exists.
+
+Synthetic device requests consume action-bound proof with role/list/publish/edit
+and device/invitation revoke checks in one transaction. Existing proof protocol
+binds `notices-<action>`, NOT the request payload; do not describe it as a new signed
+body protocol. Notice ID binds author/content/audience/lifetime; edit request ID
+binds full request plus device. Fresh-proof retries preserve receipt/revision and
+cannot re-enable roles, refresh expiry or duplicate history. Any publisher may edit
+under the existing policy; bearer credentials only publish, never delegate roles.
+Operator-only grant/revoke helpers have no new HTTP route. Explicit operator device
+regrant remains allowed; these roles are not irreversible device-revoke tombstones.
+
+Original v1 remains immutable; v2 reads latest revision. Append-only event/edit
+history and monotonic revision update/delete/TRUNCATE guards survive PG restore.
+These guards do not protect against a privileged DB owner disabling them. Feeds use
+read-only snapshots without writer locks; proof-bearing list/role requests remain
+writers. Pagination orders by stable position within each snapshot, not a pinned
+snapshot across multiple requests during concurrent publication.200 active notices,
+50-row pages,1MB feeds and existing text/audience/lifetime validation remain.
+Expired notices stay archived; fresh retries do not refresh them. No history prune
+or consent/metadata policy change is introduced.
+
+Canonical publish returns `status=stored`, not proof of public delivery. Export and
+legacy entrypoints refuse canonical marker/PG access before proof/file mutation.
+Legacy production still has separate proof, notice DB and v1/v2 file commits; file
+failure cannot roll back an already committed notice. Its token-file handling,
+schema and CLI remain; no canonical credentials are printed or written to token files.
+Two public feed files are not a distributed atomic transaction. Public-file outbox,
+receiver ACK/epoch fencing and reconciled export belong to HA-03; no publication
+or runtime backend is selected here.
+
+119 real DB contracts /0 skips (79 notices +40 enrollment),118 focused regressions
+/16 optional skips. Actual PostgreSQL17.11 SIGKILL discards unfinished revision,
+edit journal, role re-enable and proof consumption; exact16-table/26-row current
+restore preserves v1/v2, active/revoked publishers, used/pending proofs and paid
+state. Stale pre-edit/revoke backup is refused against externally retained current
+lab state, not a live freshness oracle. Keys/token/clock are retained, NOT restored.
+No full all-store backup/import, replication/RPO0 or reverse migration claim.
+[Reproducer](../deploy/control-ha/README.md#ha-02m-isolated-notice-recovery) ·
+[Evidence and rollback](releases/2026-11-23-control-ha.md#ha-02m--notice-recovery).
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -532,7 +580,7 @@ CLI и периодические задания; число таблиц produc
 | `gateway_routing.py`, `gateway_selection.py` | Assignment versions, operation IDs, append-only events, atomic projections | HA-02I DB synthetic PASS; signed-file recovery, production HTTP/CLI wiring and fencing pending |
 | `technical_metadata.py`, `geoip.py` | Отдельная SQLite, consent epoch/sequence/digest, revoke tombstone, retention, no resurrection | HA-02K canonical DB contracts/recovery synthetic PASS; live отдельная SQLite unchanged, multi-store import/collector wiring/physical-erasure policy pending; GeoIP ephemeral read-side не перенесён |
 | `diagnostics.py` | Отдельное хранилище snapshots, ограничения данных/retention | HA-02L canonical DB/recovery synthetic PASS; live separate SQLite unchanged, HTTP/CLI/worker wiring, cross-store import and physical-erasure policy pending |
-| `notices.py` → `scripts/service_notices.py` | Отдельная notices БД, publisher roles/revisions и exports | Pending |
+| `notices.py` → `scripts/service_notices.py` | Отдельная notices БД, publisher roles/revisions и exports | HA-02M canonical DB authority/recovery synthetic PASS; live SQLite unchanged, HTTP/CLI/import pending; canonical export refused until HA-03 fenced publication |
 | `profile_store.py`, `pseudonyms.py`, generated membership/catalog files | Atomic file replace/fsync, local locks, authority versus derived copies | Pending; не копировать локальные locks как global fencing |
 
 `transport_gateway.py` содержит node-local cache/receipt state: это не новый master
@@ -541,7 +589,8 @@ signing keys не входят в migration и остаются офлайн.
 
 ## Следующие gates
 
-1. Перевести notices и остальные writers/CLI/files из карты; live metadata/diagnostics
+1. Закрыть remaining writer/CLI/file inventory и canonical-versus-derived boundaries
+   (profile_store/pseudonyms/membership/catalog); live notices/metadata/diagnostics
    остаются отдельными SQLite до согласованного cross-store import/collector/worker cutover.
    Distributed CRL/file publication отдельно зависит от HA-03 fencing. Не допускать mixed backend writers;
    synthetic membership не заменяет production wiring, deadline и package gates.

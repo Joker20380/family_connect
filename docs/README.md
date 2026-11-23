@@ -2,7 +2,9 @@
 
 [CONTROL-HA · 23 November: distributed management implementation, staged gates and rollback; production unchanged](control-ha.md).
 
-[CONTROL-HA storage: enrollment, paid/subscription, membership, referrals, Support ID, grant/audit, issuance/readiness, chat/support, gateway routing, durable CRL, metadata/consent and diagnostics rehearsals; remaining canonical writers](control-ha-storage.md).
+[CONTROL-HA storage: enrollment, paid/subscription, membership, referrals, Support ID, grant/audit, issuance/readiness, chat/support, gateway routing, durable CRL, metadata/consent, diagnostics and notice authority rehearsals; remaining canonical writers](control-ha-storage.md).
+
+[CONTROL-HA implementation stage: stage2 of5; production still depends on RU](control-ha.md#стадия-внедрения-на-23-ноября).
 
 [Device metadata · 22 November: NL/AWG GeoIP and explicit missing-data labels installed; consent unchanged](releases/2026-11-22-nl-geoip.md).
 

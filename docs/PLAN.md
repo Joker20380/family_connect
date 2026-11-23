@@ -83,12 +83,26 @@ remain; diagnostics has no consent epoch or durable replay floor. Fresh signed
 resubmission after expiry is still allowed. Legacy separate SQLite commits and
 production HTTP/CLI/worker wiring remain unchanged; no cross-store import,
 physical-erasure policy or production selector is qualified.
-NEXT within HA-02: notices and remaining writers/CLI/files,
+HA-02M notice authority synthetic DB boundary qualified:119 real DB contracts
+/0 skips (79 notices +40 enrollment),118 focused regressions /16 optional skips.
+Depends on HA-02A proof transactions and accepted publisher-role/v1/v2/edit contracts.
+Gate: atomic role/revoke/proof/event/revision/history, concurrent edits/publication,
+idempotency/conflicts, order/pagination/quota/expiry, read-only feed, rollback/ACK loss/
+backend termination and exact16-table/26-row SIGKILL/current restore PASS. Stale
+pre-edit/revoke backup refused; restored immutable history/revision guards pass.
+Legacy SQLite and separate public exports remain unchanged; canonical DB-only path
+returns stored, not delivery, and refuses file export. No production selector,
+role delegation API, cross-store import or distributed publication is qualified.
+NEXT within HA-02: remaining writer/CLI/file inventory (profile_store, pseudonyms,
+membership/catalog files) and their canonical-versus-derived boundaries,
 all-table shadow import, full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.
 HA-03 fenced authority, HA-04 API/client failover and HA-05 shadow/cutover
 follow mandatory gates; distributed CRL publication requires HA-03 fencing.
+Current stage is2 of5, not a completion percentage: remaining HA-02 all-store
+import/recovery/strict replication gates block production cutover. HA-03..05 are
+pending; no installed control-HA backend or automatic RU-independent failover exists.
 Keep8/12/120s, offline signing and consent tombstones.
 No copied SQLite becomes a second writer; source checkpoint is not production HA.
 All three serving nodes still ACK the first cohort transition; unavailable RU is

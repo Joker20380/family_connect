@@ -14,7 +14,8 @@ source inspection is not a fresh server-health check.
 - HA-01 isolated scope implemented and verified; details below.
 - HA-02A enrollment, HA-02B paid/subscription, HA-02C membership, HA-02D referral,
   HA-02E Support ID, HA-02F grant/audit, HA-02G issuance/readiness, HA-02H chat/support
-  HA-02I gateway routing, HA-02J durable CRL, HA-02K metadata/consent and HA-02L diagnostics DB recovery slices qualified below; remaining
+  HA-02I gateway routing, HA-02J durable CRL, HA-02K metadata/consent, HA-02L diagnostics
+  and HA-02M notice authority DB recovery slices qualified below; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -26,6 +27,84 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02M — notice recovery
+
+Source-only continuation from `c411e1870b358dff50d983d61165ea5870833580` in the
+authoritative metadata worktree. No SSH/live-health check, runtime/backend/client
+or consent change. Console5ce82415, NL GeoIP22 November and Android126/catalog9
+remain installed/public as previously recorded;8/12/120s/all-three-node ACKs unchanged.
+
+**Stage2 of5:** HA-01 laboratory foundation is complete; HA-02 A–M storage slices
+are individually qualified. Remaining writer/file inventory, consistent all-store
+import/full recovery and strict replication/RPO0 are not done. HA-03 fencing,
+HA-04 API/client failover and HA-05 production shadow/cutover remain pending.
+RU is still a dependency; no percentage completion or delivery date is claimed.
+
+### Boundary and validation
+
+Shared `NoticeTransaction` preserves the existing bundled service module and legacy
+SQLite CLI while canonical role/token-digest/revoke/proof/event/edit writes share
+the enrollment transaction. Explicit synthetic native PG DDL; immutable v1 events,
+v2 revisions and append-only edit operations. Stable position replaces SQLite rowid;
+no production import/selector. Device proofs are action-bound, NOT payload signatures;
+notice IDs and edit request IDs retain their existing content/device idempotency.
+Operator grants are not a new HTTP delegation route. Explicit device-publisher regrant
+is permitted, while device/invitation revocation still denies access.
+
+Canonical publish reports `stored`, not delivery. No token file/public JSON export is
+performed; canonical export refuses until HA-03 fenced publication. Legacy production
+proof/notice DB/file transactions remain separate, including committed-notice behavior
+after export failure. Immutable v1/current v2,200 active notices,50-row pages,1MB feed,
+archived expired notices, text/audience validation and no-expiry-refresh retries remain.
+
+Private evidence under `/tmp/fc-control-ha-20261123/`; no keys/tokens/dumps/logs in Git.
+Locked control/identity/HA Python uses psycopg3.3.9; PostgreSQL17.11 image pinned to
+`postgres@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73`.
+
+- `notices-legacy-1.log`:23 existing device-notices/runner checks PASS.
+- `notices-local-1.log`:57 PASS /35 unavailable-PG skips; SQLite/legacy checks.
+- `notices-1/contracts.log`:109 real DB contracts PASS /0 skips; initial recovery PASS.
+- Final `notices-2/contracts.log`/XML:119 PASS /0 skips in29.32s (79 notices +40 enrollment).
+  Expanded gate includes outer-transaction grant/revoke rollback, expired duplicate,
+  actual unfinished-edit crash rollback and restored history/revision guards.
+  `notices-2/receipt.json`:SIGKILL/current restore PASS, stale restore refused, cleanup PASS.
+- `notices-regressions-1.log`:118 PASS /16 explicit optional skips in10.43s. Includes
+  actual HTTP/support closed packages, legacy API/CLI-backed announcements, client feeds,
+  enrollment and runner guards.15 skips need real nginx,1 the pinned sync archive.
+  Prior HA-02C/K overlay failures and HA-02G artifact/readiness gate stay open; this
+  is not full runtime/release acceptance.
+- Eight isolated legacy CLI commands PASS: token grant/private mode, publish/export,
+  revoke/denial, device grant/revoke and duplicate-grant token-file cleanup. Only
+  generated state in a removed temporary directory, no product credentials read.
+- `pip check`, whitespace and894 local Markdown targets including new stage/HA-02M
+  anchors PASS. Owned local containers removed. Source staging excludes private
+  state, token files, dumps and build output.
+
+[Exact reproducer/test selection](../../deploy/control-ha/README.md#ha-02m-isolated-notice-recovery).
+
+### Recovery and rollback
+
+Exact16 lab tables/26 rows:admins1, challenges7, device_admins2, device_support2,
+devices2, edit_operations1, events2, field_support_audit0, ha_enrollment_schema1,
+ha_notices_schema1, ha_paid_schema1, ha_support_schema1, invites2, paid_beta_events1,
+paid_beta_subscriptions1, revisions1. Two generated identities and one generated
+bearer token remain in memory; they are retained, NOT restored from the DB backup.
+
+Actual owned-container SIGKILL discards unfinished revision/history, role re-enable
+and proof writes. Restart and separate current restore match every row; stale
+pre-edit/revoke dump fails comparison with externally retained current state, not
+an automatic production freshness oracle. Restored history/revision UPDATE/TRUNCATE
+guards refuse. Revoked token/publisher and used proof refuse, pending edit succeeds
+once, fresh-proof duplicate does not add history, payment is not duplicated, v1
+does not change with v2 edits, and expiry filters feeds. No public file is produced.
+
+Rollback now is only stopping the owned lab; no live state needs restoration.
+After new canonical writes, fence publishers and recover current role/revision/
+edit/proof state, never old SQLite/stale public feeds. Reverse migration, full
+cross-store product backup/import, strict replication/RPO0 and fenced publication
+remain unqualified. Next: remaining writer/CLI/file inventory and canonical-versus-
+derived boundaries before all-store import. No next task was automatically started.
 
 ## HA-02L — diagnostics recovery
 

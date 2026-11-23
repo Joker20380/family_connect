@@ -116,6 +116,10 @@ class SQLiteEnrollment(EnrollmentTransaction):
         from .diagnostics import DiagnosticsTransaction
         return DiagnosticsTransaction(self.database)
 
+    def notices(self):
+        from scripts.service_notices import NoticeTransaction
+        return NoticeTransaction(self.database)
+
 
 class Access:
  def __init__(self,path,clock=time.time,*,enrollment_repository=None):
