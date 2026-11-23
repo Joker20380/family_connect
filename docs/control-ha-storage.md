@@ -678,6 +678,63 @@ receipt и CRL anchor; после новых операций восстанов
 [Команды](../deploy/control-ha/README.md#ha-02p-application-sqlite-import) ·
 [Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02p--application-sqlite-import).
 
+## HA-02Q — encrypted recovery bundle
+
+[Bundle contract](../scripts/control_ha_recovery_bundle.py) и
+[owned rehearsal](../scripts/control_ha_bundle_rehearsal.py) добавляют отдельный
+version1 recovery capsule, **не production backup/restore command**. Основа —
+HA-02P application images и HA-02N external-role inventory. В рабочие Friends/
+registry/publisher entrypoints ничего не подключено; activation всегда FORBIDDEN.
+
+- AES-256-GCM с новым96-bit nonce и version/purpose в authenticated data;
+  wrapping key32 bytes поступает отдельно, не хранится внутри capsule или в Git.
+  Это raw random key, не пароль/KDF и не offline release/root signing key.
+- Detached trusted checkpoint связывает точные encrypted bytes, checkpoint ID,
+  отдельно полученный public issuer root и import fingerprint. Старый bundle
+  против текущего checkpoint отвергается. Сам bundle не доказывает свежесть:
+  при утрате/откате checkpoint или wrapping key гарантии восстановления нет.
+- Внутри четыре SQLite images, восемь reference manifests, восемь непустых
+  artifact roles и signed bootstrap. Каждый artifact hash входит в PG import
+  fingerprint; замена только внешнего файла меняет import identity и запрещает
+  повторный import поверх прежнего состояния. При этом случайный encryption nonce
+  не меняет identity тех же recovery inputs.
+- До PG I/O: exact fields/version, duplicate JSON keys/NaN, canonical base64,
+  fixed role/store coverage, bounded memory/rows, safe logical artifact names,
+  pinned SQLite schema/row references и HA-02P CRL checks. Не используется
+  archive extraction; library возвращает bytes в память, не пишет файлы/БД.
+  Limits:96MiB plaintext,16MiB/image,1MiB/artifact, максимум64 artifacts;
+  ошибки не включают secret bytes, private paths или входной JSON.
+- Дополнительно проверяются delegated runtime Ed25519 key против issuer certificate,
+  точные CRL/delegation bytes, действующий seed directory и referral secret против
+  всех сохранённых link/claim hashes. Несовпадение/истечение — отказ, не reissue.
+
+Fixture содержит19 artifacts: настоящие ephemeral issuer/referral bytes, signed
+routing files, sender policy и generated alias manifest/HMAC bytes. **Admission,
+maintenance_state, node_allocations, receiver_state — четыре явно маркированных
+opaque byte probes, НЕ их runtime formats или восстановленные node authorities.**
+Все семь non-issuer roles пока имеют только exact-byte/provenance coverage в
+preflight, без полноценного semantic binding к DB/profile/receiver floors. В
+частности alias fixture не является полной canonical device/event coverage.
+Непустой artifact role не доказывает completeness соответствующей реальной службы.
+
+Rehearsal удаляет только созданный им private synthetic source directory и
+отбрасывает исходные service/referral references **до** DB restore. Из encrypted
+capsule создаются новые service/key objects, SQLite baseline и routing/sender files
+в новом0700 каталоге (файлы0600). PostgreSQL17.11 SIGKILL, exact44-table/82-row
+restore, business continuation и44-table/87-row current restore PASS; stale backup
+и old import отвергаются. Три paid projections, proofs, referral replay, readiness,
+CRL advance, metadata tombstone, diagnostics, notices, routing, Support ID и audit
+сохраняются. Это не secure memory erasure: wrapping key/checkpoint/root и client
+test drivers остаются в памяти, remote custody/off-host restore не проверены.
+
+154 contracts /0 skips (60 bundle +54 adapter +40 enrollment),31 runner/file guards
+/0 skips. No live capture, live schema census, coherent writer barrier, complete
+profile/allocator/receiver recovery, strict replication/RPO0 or fencing acceptance.
+Следующий scope — заменить probes реальными versioned role adapters и semantic
+checks; полный DR и production migration остаются отдельными gates.
+[Команды](../deploy/control-ha/README.md#ha-02q-encrypted-recovery-bundle) ·
+[Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02q--encrypted-recovery-bundle).
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -710,8 +767,10 @@ signing keys не входят в migration и остаются офлайн.
 
 ## Следующие gates
 
-1. Использовать [HA-02N source inventory](control-ha-files.md) и HA-02P pinned adapters
-   для versioned external recovery bundle и dry-run consistency preflight.
+1. Использовать [HA-02N source inventory](control-ha-files.md), HA-02P pinned adapters
+   и HA-02Q encrypted bundle для настоящих versioned external-role adapters и
+   semantic consistency preflight. Заменить четыре opaque probes, проверить
+   alias/routing/sender bindings; отдельно квалифицировать key/checkpoint custody.
    До live cutover отдельно сверить установленные схемы/версии и
    effective writer/CLI/timer census и consistency barrier; live notices/metadata/diagnostics
    остаются отдельными SQLite до согласованного cross-store import/collector/worker cutover.

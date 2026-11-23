@@ -83,7 +83,7 @@
 | Этап | Состояние | Что остаётся до перехода дальше |
 | --- | --- | --- |
 | HA-01: quorum/shadow foundation | Лабораторный gate завершён | Не считать стенд установленным production quorum |
-| HA-02: общее хранилище | В работе; A–O отдельные contracts и P application SQLite adapters/joint semantic recovery проверены на стенде | External recovery bundle, installed-schema/writer census, live consistency barrier, полный recovery, strict replication/RPO0 |
+| HA-02: общее хранилище | В работе; A–P DB/import contracts и Q encrypted bundle/partial external recovery проверены на стенде | Полные external-role adapters, installed-schema/writer census, live consistency barrier, полный recovery, strict replication/RPO0 |
 | HA-03: единственный уполномоченный writer | Не внедрён | Epoch/fencing на принимающих узлах, запрет действий старого лидера и безопасная публикация файлов |
 | HA-04: API/клиентский failover | Не внедрён | Несколько API endpoints, безопасные retries и клиентские compatibility/acceptance gates |
 | HA-05: production shadow/cutover | Не начат | Актуальные backup/restore, guarded sole-writer switch, отказ RU/возврат узла, RTO и rollback |
@@ -106,9 +106,15 @@ SIGKILL/current restore и безопасный повтор PASS. Это storag
 128 CRL regressions и98 consumers/runner checks, все без skips. Exact44-table
 recovery сохраняет82 строки после импорта и87 после новых операций. Это один
 поддержанный source schema вариант, не live census установленных схем.
-Следующий ограниченный шаг — external recovery bundle/consistency preflight,
-а не включение PostgreSQL на серверах. Внешние ключи/файлы нельзя восстановить
-из DB-only dump; distributed fencing и client failover не установлены.
+[HA-02Q](control-ha-storage.md#ha-02q--encrypted-recovery-bundle) добавляет
+зашифрованный комплект и проверку до записи:154 contracts и31 runner/file checks,
+все без skips. После удаления исходного fixture новые issuer/referral objects
+восстанавливаются из комплекта;44-table crash/current/stale recovery PASS.
+Это ещё не полный внешний recovery: четыре роли — явно обозначенные byte probes,
+остальные требуют дополнительных semantic bindings; wrapping key/checkpoint
+пока сохранены в памяти стенда. Следующий ограниченный шаг — настоящие role adapters
+и cross-authority проверки, а не включение PostgreSQL на серверах. Внешние ключи/
+файлы нельзя восстановить из DB-only dump; fencing и client failover не установлены.
 
 ## Откат
 

@@ -587,3 +587,44 @@ fence writers and recover current accepted state. Do not restore old SQLite/file
 or use an old import receipt as a reverse migration. Next bounded scope is an
 external recovery bundle/consistency preflight; no replication or cutover starts
 automatically. [Contract](../../docs/control-ha-storage.md#ha-02p--application-sqlite-adapters).
+
+## HA-02Q: encrypted recovery bundle
+
+Only fresh private laboratory inputs; no live-path, production-DSN, wrapping-key
+CLI argument or production restore command is supplied. Reuse the control/identity
+and HA lockfile environment above, with Docker's local owned-container guards:
+
+```sh
+python -m scripts.control_ha_bundle_rehearsal --workdir /tmp/fc-ha-bundle-fresh
+python -m scripts.control_ha_sqlite_rehearsal --workdir /tmp/fc-ha-bundle-parent-fresh
+python -m pytest -q -ra tests/test_referral_rehearsal.py tests/test_enrollment_rehearsal.py tests/test_control_ha_file_boundaries.py
+```
+
+The first runner checks154 contracts with real PostgreSQL and zero skips, then
+removes its own original synthetic fixture and reconstructs issuer/referral
+authority and routing/sender files from the AES-256-GCM capsule after DB restore.
+Do not substitute a live directory. The second reruns the changed parent runner's
+existing application-SQLite import/recovery gate. The last31 runner/file guards
+check temporary-directory, symlink, inherited environment and ownership limits.
+Running bundle pytest alone without the owned PG environment skips two integration
+tests and does not count as the mandatory gate.
+
+PASS is `ISOLATED_RECOVERY_BUNDLE_PASS`; activation remains forbidden. It covers
+four stores/eight roles/19 private artifacts, exact44-table/82-row import/crash
+restore and44-table/87-row current recovery after business writes; stale backup
+and old import refuse. The library dry run opens only in-memory SQLite databases
+and reads the pinned source-schema manifest, not a writable database or archive.
+
+The **four opaque probe roles** (admission, maintenance, allocator, receiver) are
+not real runtime state. Other non-issuer roles remain byte-bound, not fully
+semantically cross-checked. The receipt explicitly reports these limitations.
+Wrapping key/trusted checkpoint/public root remain in memory across the rehearsal;
+the private capsule on disk alone is deliberately insufficient to recover. This
+is not key escrow, an off-host/durable full backup or a live cross-store barrier.
+Never copy root/release signing keys into this format, CI or HA servers; only
+ephemeral delegated runtime keys are used here. No dumps/capsules/keys in Git.
+
+Rollback is owned laboratory cleanup only, no RU/NL change. After future production
+writes use fenced current-state recovery, never stale SQLite/external state.
+NEXT: real role adapters/semantic checks; replication and deployment are not started.
+[Scope](../../docs/control-ha-storage.md#ha-02q--encrypted-recovery-bundle).

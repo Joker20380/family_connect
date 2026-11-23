@@ -19,12 +19,19 @@ class SQLiteImportRehearsal(PaidRehearsal):
     CONTRACT_FILES = ('tests/test_control_ha_sqlite_import.py', 'tests/test_control_ha_import.py',
                       'tests/test_enrollment_repository.py')
 
-    def joint_recovery(self):
+    def capture_fixture(self):
         root = self.root / 'fixture'
         root.mkdir(mode=0o700)
         fixture = joint_fixture(root)
         frozen = preflight_sqlite(fixture.stores, fixture.external, fixture.expected, CHECKPOINT,
                                  fixture.bootstrap, fixture.service.anchor, now=NOW)
+        return fixture, frozen
+
+    def recover_fixture(self, fixture):
+        return fixture
+
+    def joint_recovery(self):
+        fixture, frozen = self.capture_fixture()
         repository = self.repository()
         import_snapshot(repository, frozen)
         imported = snapshot(repository)
@@ -47,7 +54,7 @@ class SQLiteImportRehearsal(PaidRehearsal):
             restored = self.restore(target, repository, backup)
             require_current_restore(imported, snapshot(restored))
             require(import_snapshot(restored, frozen)['result'] == 'EXACT_RETRY', 'RESTORE_READBACK_CHANGED')
-            behavior = exercise_import(fixture, restored)
+            behavior = exercise_import(self.recover_fixture(fixture), restored)
             acknowledged = snapshot(restored)
             current = target.dump(restored, 'after-new-writes.dump')
         with PaidRehearsal(self.root / 'stale-restore') as target:

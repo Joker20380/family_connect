@@ -12,6 +12,8 @@
 
 [CONTROL-HA HA-02P: pinned application SQLite adapters, signed CRL continuity and joint semantic recovery; no live cutover](control-ha-storage.md#ha-02p--application-sqlite-adapters).
 
+[CONTROL-HA HA-02Q: encrypted recovery capsule, independent checkpoint and reconstructed issuer/referral authority; partial external scope](control-ha-storage.md#ha-02q--encrypted-recovery-bundle).
+
 [Device metadata · 22 November: NL/AWG GeoIP and explicit missing-data labels installed; consent unchanged](releases/2026-11-22-nl-geoip.md).
 
 [RU · 17 November00:02UTC: availability restored on accepted bytes; initiating cause remains open](releases/2026-11-17-ru-recovery.md).

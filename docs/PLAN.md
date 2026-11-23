@@ -119,8 +119,19 @@ fixture,44-table/82-row crash/restore and semantic operations after restore PASS
 Current recovery retains87 rows after new writes; stale restore and old import
 refuse. No live installed-schema census, real external key/file recovery, writer
 freeze or activation. Unknown source variants fail closed, not automatically migrated.
-NEXT bounded scope within HA-02: versioned external recovery bundle and dry-run
-consistency preflight. Then separately qualify installed schemas/live writer barrier,
+HA-02Q encrypted bundle/partial external preflight qualified in isolation:
+154 contracts /0 skips (60 bundle +54 adapter +40 enrollment),31 runner/file guards
+/0 skips;165 parent import contracts and full recovery regression PASS /0 skips.
+Depends on HA-02N external map and HA-02P application adapters/CRL trust.
+Gate: bounded versioned AEAD capsule, independent checkpoint/root, mandatory roles,
+artifact-bound atomic import, issuer/referral semantic validation, source-directory
+removal and reconstructed authority after44-table/82-row SIGKILL/restore PASS;
+87 acknowledged rows survive current restore and stale copies refuse. Four opaque
+external-role probes and exact-byte-only roles do NOT qualify full external recovery.
+No key escrow/off-host checkpoint recovery, live collector/barrier or activation.
+NEXT bounded scope within HA-02: real versioned external-role adapters and semantic
+consistency checks, replacing opaque admission/maintenance/allocator/receiver probes
+and qualifying alias/routing/sender bindings. Then separately qualify installed schemas/live writer barrier,
 all-store shadow/full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.

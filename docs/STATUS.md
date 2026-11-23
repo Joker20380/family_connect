@@ -1,5 +1,30 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02Q encrypted recovery bundle VERIFIED in isolation.**
+Continuation from10faf0ff; source/tests/docs only, no live read or deployment.
+Versioned AES-256-GCM capsule binds four application SQLite images, eight reference
+roles and19 private artifacts to a separately supplied checkpoint/public anchor.
+All artifact hashes enter the atomic PG import receipt. Read-only preflight rejects
+tamper, truncation, wrong key/anchor, missing roles, unsupported format, mixed stores,
+expired issuer/CRL/directory and issuer/referral-secret mismatches before PG writes.
+154 real DB contracts PASS /0 skips (60 bundle +54 SQLite adapter +40 enrollment);
+31 runner/file guards PASS /0 skips;165 parent SQLite-import contracts and its
+full crash/recovery rehearsal PASS /0 skips. Owned PostgreSQL17.11 SIGKILL/current/stale
+recovery PASS:44 tables/82 rows imported,87 after new acknowledged operations.
+Original synthetic source directory and service references are discarded before
+restore; new issuer/referral objects and routing/sender files come from the capsule.
+This is PARTIAL external recovery, not a complete disaster-recovery gate: four roles
+(admission, maintenance, allocator, receiver) still use explicit opaque byte probes;
+aliases/routing/sender have exact-byte coverage, not full cross-authority preflight.
+Wrapping key, trusted checkpoint/root and client test drivers remain in memory;
+off-host key recovery, anti-rollback checkpoint custody and live barrier unqualified.
+NEXT bounded scope: real versioned external-role adapters and semantic consistency
+checks, replacing opaque probes; do not start replication or deployment automatically.
+Stage2 of5; RU dependency remains. Console5ce82415, NL GeoIP22 November,
+Android126/catalog9,8/12/120s and all-three-node ACK gate unchanged. No health claim.
+[Bundle and limits](control-ha-storage.md#ha-02q--encrypted-recovery-bundle) ·
+[Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02q--encrypted-recovery-bundle).
+
 **23 November — CONTROL-HA HA-02P application SQLite import VERIFIED in isolation.**
 Source867c6854 ordinarily pushed and independently remote-SHA verified frombf1a4cea;
 source/tests/docs only, no SSH/live read/deployment.
