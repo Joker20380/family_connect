@@ -208,6 +208,8 @@ all-three-mode atomic PG import/crash/current restore and stale/weaker receipt r
 Gate PASS:333 real-PG17.11 contracts /0 skips,191 focused checks /0 skips; all three
 source-removed recoveries,44 tables each,81→86 stopped/offline and88→93 emergency rows.
 No installed-host/full-DR acceptance. Eight source docs/1078 local links checked.
+Source1322c714 ordinarily pushed/remote-SHA verified. Navigation6e514cc1 is local only:
+old-main ordinary push rejected non-fast-forward; original local work preserved.
 Qualification/publication: [dated report](releases/2026-11-23-control-ha.md#ha-02v--completed-stopped-variants).
 NEXT bounded scope within the journal block: read-only installed-shape inventory and
 actual host reconciliation, including legacy histories missing coordinator bytes,

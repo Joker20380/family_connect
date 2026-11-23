@@ -12,6 +12,11 @@ Every variant removes its sources before restore, passes actual PG crash/current
 recovery and refuses stale restore/old import after new writes.44 tables each;
 stopped/offline81→86 rows, emergency88→93. Owned-container cleanup PASS. Eight source
 docs/1078 local links and whitespace PASS. This is source-only, not deployment or full DR.
+Source1322c714 ordinarily pushed and independently remote-SHA verified on the metadata
+branch. Old-main navigation6e514cc1 stays local: ordinary push rejected non-fast-forward
+againstcb47bf23. Three staged navigation docs/378 links PASS; four original dirty files
+and six untracked paths verified unchanged. No force/reset/rebase/merge. All15 owned
+PostgreSQL containers from retained attempts independently verified removed.
 NEXT after this slice: read-only installed-shape inventory/host reconciliation,
 including legacy evidence gaps, actual service files and mixed histories. No automatic
 variant expansion, pruning or rebinding. The other three HA-02 blocks remain open:

@@ -108,6 +108,19 @@ fence and recover current state rather than copying an older SQLite/profile snap
 [Contract](../control-ha-storage.md#completed-stopped-variants) ·
 [Runbook](../../deploy/control-ha/README.md#ha-02v-completed-stopped-variants).
 
+### Stopped-variant publication receipt
+
+Source/tests/docs commit `1322c714df9dee82eb56d6f846e9fa0986c97bde` ordinarily pushed
+to `feature/device-technical-metadata-20261115`; independent `ls-remote` SHA matched.
+Old-main navigation-only commit `6e514cc1b7533da3fcd597396cf4d773507202b0` remains
+local: ordinary push rejected `non-fast-forward`; remote main is still
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`. No force/reset/rebase/merge. Three staged
+navigation docs/378 links and whitespace PASS. The original four dirty-file diff
+line sets and six untracked-file hashes match their pre-task snapshot; none entered
+the navigation commit. All15 owned PostgreSQL container IDs across four retained
+attempts were independently checked absent after cleanup. This publication records
+source qualification, not an installed version, new runtime health check or HA cutover.
+
 ## HA-02V — retained online history
 
 Continuation from2c2e978765a4786a90a5f8a09320849f2706221c on the authoritative
