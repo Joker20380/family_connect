@@ -41,6 +41,16 @@ backend/client/policy/catalog/version change. Console5ce82415, NL GeoIP22 Novemb
 Android126/catalog9,8/12/120s and all-three-node first-cohort ACKs unchanged;
 RU dependency persists. No fresh health check, deployment or full release PASS.
 
+Source/tests/docs commit `20698f669f0d624b5fc9e43151d605b43cf2bbe8` ordinarily
+pushed to the existing metadata branch; independent remote SHA matched.
+Seven source docs/962 local links PASS; no external HTTP availability claim.
+Old-main navigation `b0f38259e765d10c8646cc524f375f71b66f329d` is retained locally:
+ordinary push rejected `non-fast-forward` against remote main
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`. Three staged navigation docs/370 links
+PASS; checks intentionally exclude preserved unrelated dirty hunks. Original
+four dirty files/six untracked paths retained; no force/reset/merge. The published
+metadata branch is authoritative, not that old-main runtime or unpushed handoff.
+
 ### Deliverable and scope
 
 [Strict external-v1 adapter](../control-ha-storage.md#ha-02r--external-role-adapters)

@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02R five external-role adapters VERIFIED in isolation.**
-Continuation fromf355fb3a; source/tests/docs only, no live read or deployment.
+Source20698f66 ordinarily pushed and independently remote-SHA verified fromf355fb3a;
+source/tests/docs only, no live read or deployment.
 Strict external-v1 profile adds real alias/HMAC, FIELD admission, schema2 service
 sender, signed routing and three node-local allocator formats to HA-02Q's capsule.
 Admission/allocator opaque probes are replaced;23 artifacts across eight roles.
@@ -23,6 +24,10 @@ NEXT bounded scope: real maintenance/profile journal and receiver safety adapter
 unknown/unsettled inputs must refuse, not be reset. No queued deployment started.
 Stage2 of5; RU dependency persists. Console5ce82415, NL GeoIP22 November,
 Android126/catalog9,8/12/120s and all-three-node ACK gate unchanged; no health claim.
+Seven source docs/962 links and three staged navigation docs/370 links PASS.
+Old-main navigationb0f38259 retained locally: ordinary push rejected non-fast-forward
+against remotecb47bf23. Original four dirty files/six untracked paths preserved;
+no force/reset/merge. Published metadata branch remains authoritative.
 [Formats and limits](control-ha-storage.md#ha-02r--external-role-adapters) ·
 [Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02r--external-role-adapters).
 

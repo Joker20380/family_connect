@@ -129,7 +129,7 @@ removal and reconstructed authority after44-table/82-row SIGKILL/restore PASS;
 87 acknowledged rows survive current restore and stale copies refuse. Four opaque
 external-role probes and exact-byte-only roles do NOT qualify full external recovery.
 No key escrow/off-host checkpoint recovery, live collector/barrier or activation.
-HA-02R five real external-role adapters qualified in isolation:161 contracts /0 skips
+HA-02R five real external-role adapters qualified/pushed20698f66 in isolation:161 contracts /0 skips
 (61 external +60 bundle +40 enrollment),90 consumers/runner checks /0 skips;
 154 parent bundle contracts and full recovery regression PASS /0 skips.
 Depends on HA-02N authority map, HA-02P SQLite schemas and HA-02Q encrypted capsule.
