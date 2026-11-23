@@ -1,13 +1,15 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-01 VERIFIED.**
-Owner requested distributed management and documentation. Implementationbbc0a9fb
-is pushed and remote-verified in the existing metadata worktree/branch, not this
-dirty divergent main.61 focused tests, three-member mTLS quorum, leader crash,
-minority refusal, direct recovery and SIGTERM cleanup pass. Local failover1.766s
-is synthetic evidence, not production SLA. Canonical migration, fenced authority,
-alternate API/client fallback and cutover are not implemented; RU remains a shared
-dependency. No production writes/restarts or client release.
+**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02A VERIFIED.**
+Enrollment checkpoint9d1219d8 is committed/pushed in the existing metadata branch,
+not this dirty divergent main. Shared SQLite/PostgreSQL transaction contracts40/0
+skips PASS;353 consumer tests PASS /20 optional gates skipped;6 runner safety tests
+PASS. Actual PostgreSQL17.11 crash recovery and separate five-table backup/restore
+pass, including consumed-proof refusal and monotonic revocation. HA-01 remains
+qualified separately; neither stage is production HA. Full canonical import,
+paid/metadata/other writers, synchronous replication, fenced authority, alternate
+API/client fallback and cutover remain pending. RU remains a shared dependency;
+console5ce82415 and Android126/catalog9 unchanged. No production writes/restarts.
 [Source location, evidence, remaining gates and rollback](releases/2026-11-23-control-ha.md).
 
 **22 November20:57UTC — NL/AWG GeoIP and missing-data labels INSTALLED / VERIFIED.**

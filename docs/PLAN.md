@@ -3,10 +3,12 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-HA-01 isolated foundation COMPLETE in metadata branchbbc0a9fb:61 tests and real
-three-member mTLS crash/recovery rehearsal PASS; production unchanged. HA-02 NEXT:
-canonical repository/all writers, PostgreSQL replication, transaction/idempotency/
-challenge/tombstone parity, RPO0 and backup/restore. Then HA-03 receiver-enforced
+HA-01 isolated foundation COMPLETE in metadata branchbbc0a9fb. HA-02 IN_PROGRESS:
+HA-02A enrollment boundary/PostgreSQL crash/restore qualified in9d1219d8;
+40 contracts PASS /0 skips,353 consumer tests PASS /20 optional skips,6 runner
+checks PASS. NEXT within HA-02: paid/subscription transaction parity, remaining
+writers/tombstones/files, all-table import, PostgreSQL/Patroni strict replication
+and RPO0/full backup gates. Then HA-03 receiver-enforced
 fencing, HA-04 multi-endpoint API/clients, HA-05 production shadow and guarded cutover.
 Retain8/12/120s and offline signing. Do not promote this old main or copied SQLite.
 [Authoritative worktree, full plan and current receipt](releases/2026-11-23-control-ha.md).
