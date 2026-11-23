@@ -46,18 +46,15 @@ def snapshot(registry, node, *, device=None, clock=time.time):
 
 def read_snapshot(database, node, now, *, device=None):
     from . import paid_beta
-    query = 'SELECT device,wg,tcp,revoked FROM devices'
-    records = database.execute(query + (' WHERE device=?' if device else '') + ' ORDER BY device',
-                               (device,) if device else ()).fetchall()
+    database = paid_beta.transaction(database)
+    records = database.devices(device)
     if device and len(records) != 1:
         raise ValueError('UNKNOWN_DEVICE')
     decisions = []
     for record in records:
-        identity = not record['revoked'] and database.execute(
-            'SELECT 1 FROM invites WHERE device=? AND revoked=0', (record['device'],)).fetchone() is not None
+        identity = not record['revoked'] and database.invitation_active(record['device'])
         effective = paid_beta.effective_subscription_state(database, record['device'], now)
-        row = database.execute('SELECT state,version,paid_until,grace_until FROM paid_beta_subscriptions WHERE device=?',
-                               (record['device'],)).fetchone()
+        row = database.subscription(record['device'])
         allowed = bool(identity and (effective is None or effective.allowed))
         deadline = min(now + LEASE_SECONDS, effective.expires_at) if allowed and effective else now + LEASE_SECONDS
         decisions.append(dict(device=record['device'], public_key=record['wg'], tcp_id=record['tcp'],

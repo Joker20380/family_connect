@@ -22,6 +22,8 @@ LABEL = 'family-connect.ha-enrollment-rehearsal'
 
 
 class Rehearsal:
+    CONTRACT_FILES = ('tests/test_enrollment_repository.py',)
+
     def __init__(self, root):
         self.root = Path(root)
         require(not any(parent.is_symlink() for parent in (self.root, *self.root.parents)), 'REHEARSAL_SYMLINK')
@@ -104,10 +106,10 @@ class Rehearsal:
         environment = self.environment | {'FC_HA_PG_PORT': str(self.port),
             'FC_HA_PG_PASSWORD_FILE': str(self.password_file)}
         result = subprocess.run([sys.executable, '-m', 'pytest', '-q', '-ra',
-            'tests/test_enrollment_repository.py', '--junitxml=' + str(self.root / 'contracts.xml')],
+            *self.CONTRACT_FILES, '--junitxml=' + str(self.root / 'contracts.xml')],
             cwd=ROOT, env=environment, capture_output=True, timeout=120)
         private_file(self.root / 'contracts.log', result.stdout + result.stderr)
-        require(result.returncode == 0, 'ENROLLMENT_CONTRACTS_FAILED')
+        require(result.returncode == 0, 'REPOSITORY_CONTRACTS_FAILED')
         from xml.etree import ElementTree
         suites = ElementTree.parse(self.root / 'contracts.xml').getroot().findall('testsuite')
         require(suites and all(int(suite.get('skipped', '0')) == 0 for suite in suites), 'CONTRACTS_SKIPPED')

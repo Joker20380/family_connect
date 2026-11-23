@@ -1,6 +1,19 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA HA-02A enrollment checkpoint VERIFIED; migration IN_PROGRESS.**
+**23 November — CONTROL-HA HA-02B paid/subscription rehearsal VERIFIED; migration IN_PROGRESS.**
+Shared payment validation now uses SQLite/native PostgreSQL transactions; the
+personal subscription proof and projection share one transaction/savepoint.
+89 real SQLite/PostgreSQL contracts PASS /0 skips;366 consumer/runner checks PASS
+/20 explicitly optional skips. Owned-container crash recovery and exact nine-table
+synthetic restore pass. An older pre-payment backup is explicitly REFUSED; current
+restore preserves acknowledged payment/grace/revoke, consumed proof and bindings.
+This is single-store recovery, not a reverse migration or replicated RPO0 guarantee.
+Production remains SQLite; transport membership/remaining writers, full import,
+replication, receiver fencing and serving/client failover remain pending.
+No server deployment/restart; console5ce82415 and Android126/catalog9 unchanged.
+[Safety boundary and rollback](control-ha-storage.md) · [Evidence](releases/2026-11-23-control-ha.md#ha-02b--paid-ledger-subscription-and-recovery-checkpoint).
+
+**Earlier23 November — CONTROL-HA HA-02A enrollment checkpoint VERIFIED.**
 Source9d1219d8 is ordinarily pushed and remote-SHA verified in the metadata branch.
 One shared enrollment algorithm now has an explicit transaction boundary; production
 still defaults to SQLite. The isolated PostgreSQL17.11/psycopg3.3.9 adapter passes40

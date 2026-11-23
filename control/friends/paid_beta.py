@@ -92,10 +92,115 @@ def connection(path, *, write=False):
         database.close()
 
 
+class PaidTransaction:
+    def __init__(self, database, placeholder):
+        self.database, self.placeholder = database, placeholder
+
+    def schema_present(self):
+        found = {table for table in TABLES if self.table_exists(table)}
+        require(not found or found == TABLES, 'INCOMPLETE_PAID_SCHEMA')
+        return bool(found)
+
+    def subscription(self, device):
+        return self.database.execute('SELECT device,state,period_start,paid_until,grace_until,created_at,updated_at,'
+            f'version,last_event_id,revoked_at FROM paid_beta_subscriptions WHERE device={self.placeholder}', (device,)).fetchone()
+
+    def event(self, event_id):
+        return self.database.execute('SELECT event_id,device,event_type,occurred_at,previous_state,new_state,'
+            'period_start,paid_until,grace_until,reference_hash,payload_hash,applied_at,result '
+            f'FROM paid_beta_events WHERE event_id={self.placeholder}', (event_id,)).fetchone()
+
+    def resolve(self, support):
+        return self.database.execute('SELECT s.device,d.revoked,i.revoked AS invite_revoked FROM device_support s '
+            'JOIN devices d ON s.device=d.device LEFT JOIN invites i ON i.device=d.device '
+            f'WHERE s.support_id={self.placeholder}', (support,)).fetchall()
+
+    def support(self, device):
+        return self.database.execute('SELECT platform,app_version,version_code,last_seen FROM device_support '
+            f'WHERE device={self.placeholder}', (device,)).fetchone()
+
+    def readiness(self, device):
+        if not self.table_exists('restricted_readiness_results'):
+            return []
+        return self.database.execute('SELECT ack,ack_at FROM restricted_readiness_results '
+            f'WHERE device={self.placeholder} AND ack IS NOT NULL AND ack_at=(SELECT MAX(ack_at) '
+            f'FROM restricted_readiness_results WHERE device={self.placeholder} AND ack IS NOT NULL)',
+            (device, device)).fetchall()
+
+    def mesh_revoked(self, device):
+        if not self.table_exists('restricted_grants'):
+            return False
+        row = self.database.execute(f'SELECT revoked FROM restricted_grants WHERE device={self.placeholder}', (device,)).fetchone()
+        return row is not None and bool(row['revoked'])
+
+    def cohort_size(self):
+        return self.database.execute('SELECT count(*) AS total FROM paid_beta_subscriptions').fetchone()['total']
+
+    def devices(self, device=None):
+        return self.database.execute('SELECT device,wg,tcp,revoked FROM devices' +
+            (f' WHERE device={self.placeholder}' if device else '') + ' ORDER BY device',
+            (device,) if device else ()).fetchall()
+
+    def invitation_active(self, device):
+        return self.database.execute(f'SELECT 1 FROM invites WHERE device={self.placeholder} AND revoked=0',
+            (device,)).fetchone() is not None
+
+    def append_event(self, record):
+        columns = ('event_id', 'device', 'event_type', 'occurred_at', 'previous_state', 'new_state',
+                   'period_start', 'paid_until', 'grace_until', 'reference_hash', 'payload_hash', 'applied_at', 'result')
+        placeholders = ','.join([self.placeholder] * len(columns))
+        self.database.execute('INSERT INTO paid_beta_events (' + ','.join(columns) + f') VALUES ({placeholders})',
+                              tuple(record[name] for name in columns))
+
+    def save_subscription(self, record):
+        placeholders = ','.join([self.placeholder] * 10)
+        self.database.execute('INSERT INTO paid_beta_subscriptions '
+            '(device,state,period_start,paid_until,grace_until,created_at,updated_at,version,last_event_id,revoked_at) '
+            f'VALUES ({placeholders}) ON CONFLICT(device) DO UPDATE SET state=excluded.state,'
+            'period_start=excluded.period_start,paid_until=excluded.paid_until,grace_until=excluded.grace_until,'
+            'updated_at=excluded.updated_at,version=paid_beta_subscriptions.version+1,'
+            'last_event_id=excluded.last_event_id,revoked_at=excluded.revoked_at',
+            (record['device'], record['new_state'], record['period_start'], record['paid_until'], record['grace_until'],
+             record['applied_at'], record['applied_at'], 1, record['event_id'],
+             record['applied_at'] if record['new_state'] == 'revoked' else None))
+
+    @contextmanager
+    def projection(self):
+        self.database.execute('SAVEPOINT paid_projection')
+        try:
+            yield self
+        except BaseException:
+            self.database.execute('ROLLBACK TO SAVEPOINT paid_projection')
+            raise
+        finally:
+            self.database.execute('RELEASE SAVEPOINT paid_projection')
+
+
+class SQLitePaidTransaction(PaidTransaction):
+    def __init__(self, database):
+        super().__init__(database, '?')
+
+    @property
+    def in_transaction(self):
+        return self.database.in_transaction
+
+    def table_exists(self, table):
+        return self.database.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
+
+    def prepare_membership(self, device, token, now):
+        registry_path = next(row[2] for row in self.database.execute('PRAGMA database_list') if row[1] == 'main')
+        transport_config = Path(registry_path).parent / 'transport-enforcement.json'
+        if transport_config.exists() or transport_config.is_symlink():
+            from .transport_membership import prepare
+            prepare(self.database, device, token, now)
+
+
+def transaction(database):
+    return database if isinstance(database, PaidTransaction) else SQLitePaidTransaction(database)
+
+
 def schema_present(database):
-    found = {row[0] for row in database.execute("SELECT name FROM sqlite_master WHERE type='table' AND name IN (?,?)", tuple(sorted(TABLES)))}
-    require(not found or found == TABLES, 'INCOMPLETE_PAID_SCHEMA')
-    return bool(found)
+    return transaction(database).schema_present()
 
 
 def migrate(database):
@@ -142,11 +247,12 @@ class SubscriptionState:
 
 
 def effective_subscription_state(database, device, now):
+    database = transaction(database)
     instant(now)
     require(type(device) is str and re.fullmatch('[0-9a-f]{32}', device), 'INVALID_DEVICE')
     if not schema_present(database):
         return None
-    row = database.execute('SELECT state,paid_until,grace_until,revoked_at FROM paid_beta_subscriptions WHERE device=?', (device,)).fetchone()
+    row = database.subscription(device)
     if row is None:
         return None
     if row['state'] == 'revoked' or row['revoked_at'] is not None:
@@ -164,22 +270,20 @@ def resolve_device(database, support):
         support = support_ids.normalize(support)
     except ValueError:
         raise PaidBetaError('INVALID_SUPPORT_SELECTOR') from None
-    rows = database.execute('SELECT s.device,d.revoked,i.revoked AS invite_revoked FROM device_support s '
-        'JOIN devices d ON s.device=d.device LEFT JOIN invites i ON i.device=d.device WHERE s.support_id=?', (support,)).fetchall()
+    rows = transaction(database).resolve(support)
     require(len(rows) == 1, 'UNIQUE_EXISTING_DEVICE_REQUIRED')
     return rows[0]
 
 
 def confirmed_android_release(database, device):
-    support = database.execute('SELECT platform,app_version,version_code,last_seen FROM device_support WHERE device=?', (device,)).fetchone()
+    database = transaction(database)
+    support = database.support(device)
     require(support is not None and support['platform'] == 'android', 'ANDROID_BASELINE_REQUIRED')
     observations = []
     if support['last_seen'] is not None:
         observations.append((support['last_seen'], support['app_version'], support['version_code']))
-    if database.execute("SELECT 1 FROM sqlite_master WHERE name='restricted_readiness_results'").fetchone():
-        records = database.execute('SELECT ack,ack_at FROM restricted_readiness_results WHERE device=? AND ack IS NOT NULL '
-            'AND ack_at=(SELECT MAX(ack_at) FROM restricted_readiness_results WHERE device=? AND ack IS NOT NULL)',
-            (device, device)).fetchall()
+    records = database.readiness(device)
+    if records:
         for record in records:
             if support['last_seen'] is not None and record['ack_at'] < support['last_seen']:
                 continue
@@ -215,7 +319,7 @@ def status(database, support, now):
     result = dict(schema=1, device=device['device'], activation_active=not device['revoked'] and device['invite_revoked'] == 0,
                   cohort=effective is not None, legacy_admission_unchanged=effective is None)
     if effective is not None:
-        row = database.execute('SELECT * FROM paid_beta_subscriptions WHERE device=?', (device['device'],)).fetchone()
+        row = transaction(database).subscription(device['device'])
         result.update(subscription=dict(row), effective_state=effective.state,
                       paid_allow=effective.allowed, entitlement_until=effective.expires_at)
     return result
@@ -223,6 +327,7 @@ def status(database, support, now):
 
 def apply_event(database, support, event_type, event_id, reference, *, now, period_start=None,
                 paid_until=None, grace_until=None, apk_sha256=None):
+    database = transaction(database)
     require(database.in_transaction, 'TRANSACTION_REQUIRED')
     require(schema_present(database), 'PAID_MIGRATION_REQUIRED')
     instant(now)
@@ -247,7 +352,7 @@ def apply_event(database, support, event_type, event_id, reference, *, now, peri
                    period_start=period_start, paid_until=paid_until, grace_until=grace_until,
                    reference_hash=reference_hash, apk_sha256=apk_sha256)
     payload_hash = hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
-    previous_event = database.execute('SELECT * FROM paid_beta_events WHERE event_id=?', (event_id,)).fetchone()
+    previous_event = database.event(event_id)
     if previous_event is not None:
         require(previous_event['payload_hash'] == payload_hash, 'EVENT_ID_CONFLICT')
         return dict(schema=1, duplicate=True, event=dict(previous_event))
@@ -255,7 +360,7 @@ def apply_event(database, support, event_type, event_id, reference, *, now, peri
         require(period_start <= now < paid_until, 'PAYMENT_BOUNDS_INVALID')
     if event_type == 'grace':
         require(grace_until > now, 'GRACE_BOUNDS_INVALID')
-    previous = database.execute('SELECT * FROM paid_beta_subscriptions WHERE device=?', (device['device'],)).fetchone()
+    previous = database.subscription(device['device'])
     effective = effective_subscription_state(database, device['device'], now)
     require(effective is None or effective.state != 'revoked', 'REVOCATION_TERMINAL')
     if event_type in ('payment', 'grace'):
@@ -263,12 +368,10 @@ def apply_event(database, support, event_type, event_id, reference, *, now, peri
         release = confirmed_android_release(database, device['device'])
         if event_type == 'payment':
             require(apk_sha256 == release.apk_sha256, 'PAYMENT_BOUNDS_OR_APK_INVALID')
-        if database.execute("SELECT 1 FROM sqlite_master WHERE name='restricted_grants'").fetchone():
-            grant = database.execute('SELECT revoked FROM restricted_grants WHERE device=?', (device['device'],)).fetchone()
-            require(grant is None or not grant['revoked'], 'EXISTING_MESH_REVOCATION')
+        require(not database.mesh_revoked(device['device']), 'EXISTING_MESH_REVOCATION')
     require(previous is not None or event_type == 'payment', 'COHORT_ENROLLMENT_REQUIRES_PAYMENT')
     if previous is None:
-        require(database.execute('SELECT count(*) FROM paid_beta_subscriptions').fetchone()[0] < COHORT_LIMIT, 'COHORT_LIMIT')
+        require(database.cohort_size() < COHORT_LIMIT, 'COHORT_LIMIT')
     if event_type == 'payment':
         if previous is not None:
             require(period_start >= previous['period_start'] and paid_until >= max(previous['paid_until'], previous['grace_until'] or 0), 'PAYMENT_MUST_NOT_SHORTEN')
@@ -286,17 +389,7 @@ def apply_event(database, support, event_type, event_id, reference, *, now, peri
                   period_start=period_start, paid_until=paid_until, grace_until=grace_until,
                   reference_hash=reference_hash, payload_hash=payload_hash, applied_at=now, result='APPLIED')
     if previous is None:
-        registry_path = next(row[2] for row in database.execute('PRAGMA database_list') if row[1] == 'main')
-        transport_config = Path(registry_path).parent/'transport-enforcement.json'
-        if transport_config.exists() or transport_config.is_symlink():
-            from .transport_membership import prepare
-            prepare(database, device['device'], payload_hash, now)
-    database.execute('INSERT INTO paid_beta_events VALUES (:event_id,:device,:event_type,:occurred_at,:previous_state,'
-        ':new_state,:period_start,:paid_until,:grace_until,:reference_hash,:payload_hash,:applied_at,:result)', record)
-    database.execute('INSERT INTO paid_beta_subscriptions VALUES (?,?,?,?,?,?,?,?,?,?) '
-        'ON CONFLICT(device) DO UPDATE SET state=excluded.state,period_start=excluded.period_start,'
-        'paid_until=excluded.paid_until,grace_until=excluded.grace_until,updated_at=excluded.updated_at,'
-        'version=paid_beta_subscriptions.version+1,last_event_id=excluded.last_event_id,revoked_at=excluded.revoked_at',
-        (device['device'], new_state, period_start, paid_until, grace_until,
-         now, now, 1, event_id, now if new_state == 'revoked' else None))
+        database.prepare_membership(device['device'], payload_hash, now)
+    database.append_event(record)
+    database.save_subscription(record)
     return dict(schema=1, duplicate=False, event=record)

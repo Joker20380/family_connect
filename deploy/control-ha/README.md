@@ -94,6 +94,35 @@ only those containers and anonymous volumes. Failure, Ctrl-C and SIGTERM also
 clean up; SIGKILL of the runner/daemon failure needs ownership-checked recovery.
 Never use a global Docker prune or remove an unrelated PostgreSQL container.
 
-No alternate serving API, production DSN, SQLite import, paid/metadata migration,
+No alternate serving API, production DSN, SQLite import, production paid/metadata migration,
 replica, Patroni failover or receiver fencing exists here. See the
 [writer inventory and remaining HA-02 gates](../../docs/control-ha-storage.md).
+
+## HA-02B: isolated paid/subscription recovery
+
+Use the same pinned local Docker image and dedicated dependencies as HA-02A:
+
+```sh
+python -m pytest -q tests/test_paid_rehearsal.py tests/test_enrollment_rehearsal.py
+python -m scripts.paid_postgres_rehearsal --workdir /tmp/fc-ha-paid-new
+```
+
+The runner requires a new private temporary directory. It runs89 enrollment/paid
+contracts with zero skips, then SIGKILL/restarts its source container. Confirmed
+payment/grace/revoke and a consumed subscription proof survive; an uncommitted
+event does not. Retries with the same event ID/payload never grant a new period.
+
+Two backups are deliberately exercised in two sequential fresh restore containers:
+the earlier **pre-payment** backup must be refused as stale, and the latest backup
+must match every row of all nine lab tables. Restored payment replay, proof refusal,
+revocation, immutable triggers and audit sequence are checked. No live database is
+read or restored. Existing ownership guards, loopback binding, resource limits and
+cleanup apply. Keep receipts/logs/dumps/password files private and out of Git.
+
+The only success receipt is `ISOLATED_PAID_POSTGRES_PASS`, emitted after cleanup.
+This proves neither replication/host-loss RPO0 nor SQLite reverse migration. The
+`no-transports` lab marker explicitly excludes node-membership preparation; the
+SQLite production path retains that prerequisite. Remaining writers, metadata,
+files/CRL and full canonical backup remain gates. An old snapshot is **not** a safe
+production rollback after acknowledged writes: fence writers, retain current
+state and use a separately verified recovery path before any cutover.

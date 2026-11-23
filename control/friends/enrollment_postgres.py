@@ -27,6 +27,10 @@ class PostgresEnrollmentTransaction(EnrollmentTransaction):
     def __init__(self, database):
         super().__init__(database, '%s')
 
+    def paid(self):
+        from .paid_postgres import PostgresPaidTransaction
+        return PostgresPaidTransaction(self.database)
+
     def registered(self, device):
         row = self.database.execute('SELECT support_id FROM device_support WHERE device=%s', (device,)).fetchone()
         if row is not None:

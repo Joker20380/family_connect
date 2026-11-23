@@ -76,6 +76,10 @@ class SQLiteEnrollment(EnrollmentTransaction):
         from .support_ids import registered
         return registered(self.database, device)
 
+    def paid(self):
+        from .paid_beta import SQLitePaidTransaction
+        return SQLitePaidTransaction(self.database)
+
 
 class Access:
  def __init__(self,path,clock=time.time,*,enrollment_repository=None):

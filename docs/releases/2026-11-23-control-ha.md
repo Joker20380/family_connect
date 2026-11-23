@@ -12,7 +12,8 @@ source inspection is not a fresh server-health check.
 ## Progress
 
 - HA-01 isolated scope implemented and verified; details below.
-- HA-02A enrollment slice qualified below; remaining HA-02 and HA-03..05 pending:
+- HA-02A enrollment and HA-02B paid/subscription slices qualified below; remaining
+  HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
 - No server service/policy, product database, consent or client artifact changed.
@@ -23,6 +24,74 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02B — paid ledger, subscription and recovery checkpoint
+
+Owner continuation explicitly prioritizes rollback on failure. This is a source
+checkpoint on the existing metadata branch, **not** production deployment or
+completion of HA-02. No release/version/catalog change. Rollout remains blocked
+on remaining writers, full import/recovery, strict replication and HA-03..05 gates.
+
+- `paid_beta.py` adds semantic paid operations without duplicating admission,
+  payment/release validation or event state transitions. SQLite stays the default;
+  its first-payment transport preparation remains mandatory when configured.
+  Native `paid_postgres.py` is an explicit synthetic-only/no-transports schema,
+  with immutable ledger, cohort10, binding and terminal-revoke triggers.
+- Personal subscription proof consumption and paid projection now share the
+  enrollment transaction. A projection savepoint preserves consumed-proof behavior
+  on missing/corrupt schema or SQL failure without committing a PostgreSQL aborted
+  transaction. No noncohort/allow response replaces a failed read. A failed/unknown
+  outer commit is not asserted successful; no alternate SQLite write is attempted.
+- All three transport projections share semantic reads; wire shape, entitlement
+  boundaries, paid/noncohort separation and8/12/120s remain unchanged. No transport
+  receiver, legacy archive pin or production/client dependency lock is changed.
+- **89 contracts PASS /0 skipped** on real PostgreSQL17.11/psycopg3.3.9 and SQLite:
+  40 enrollment +49 paid/subscription/parity cases. Concurrent duplicate/event-ID
+  conflict/last-cohort-slot/proof races, rollback after ledger append, exact ledger
+  and all-node decision parity, latest Android observation/mesh revoke, identity
+  revoke, natural grace expiry, coherent concurrent reads, marker guards, native
+  update/delete/truncate refusal and direct-writer trigger concurrency pass.
+- **366 regression/runner checks PASS /20 optional skips** in47.97s, covering
+  Access/support, paid policy/membership/enforcement, HA shadow/backup, packaged
+  HTTP, restricted/chat/referral/subscription, technical metadata/GeoIP and runners.
+  The skipped15 real-nginx,1 pinned sync archive and4 locked-Go compatibility gates
+  are unchanged and not represented as release acceptance. Runner checks include
+  six inherited isolation/ownership/driver tests and seven restore-comparison tests.
+- Final rehearsal: `python -m scripts.paid_postgres_rehearsal --workdir
+  /tmp/fc-control-ha-20261123/paid-3` using the existing dedicated locked venv and
+  pinned official image from HA-02A. Source, stale-restore and current-restore
+  containers use disposable private state and ownership-checked cleanup; no SSH,
+  live export, server restart or product write.
+- Real SIGKILL/restart retains committed payment/grace/revoke and consumed proof,
+  drops an uncommitted ledger/invitation write and returns the original payment
+  for same-ID/payload retry. An older backup taken **before those payments** is
+  restored only into another disposable container and explicitly REFUSED against
+  current state; accepting it would lose acknowledged events/revocation.
+- Latest dump restores every row in all nine lab tables:2 challenges,1 device,
+  1 invite,1 Support ID,1 audit row,3 events,1 subscription,2 schema-marker rows
+  (12 total). Payment replay adds nothing, proof replay is refused, revoked state
+  persists, restored immutability triggers reject updates and audit sequence
+  advances. This is not the full product schema, metadata/file/CRL restore,
+  reverse migration, host-loss durability or replicated RPO0.
+- Before cutover, rollback means stopping only the lab/shadow; unchanged production
+  needs no restore. After new-store writes, fence writers, preserve acknowledged
+  current state and use verified forward recovery or a separately qualified reverse
+  import. Old SQLite restoration is not a safe shortcut. No production reverse
+  importer exists yet; do not switch writers assuming this lab provides one.
+
+Failed attempts retained outside Git: the first SQLite regression caught malformed
+empty event schema returning200 instead of503 after a generic `SELECT *`; explicit
+column reads restore fail-closed behavior (162 passed /1 failed before correction).
+The first real run passed78 cases and failed one fixture expecting a binding error
+on an already terminal-revoked row, where SQLite correctly rejected revocation
+first. The binding fixture now uses an active row; the terminal test remains
+separate. The corrected run passed89; the final run additionally verified restored
+triggers and audit sequence. No production failure/restore occurred.
+
+Private evidence: `/tmp/fc-control-ha-20261123/paid-{1,2,3}/`,
+`paid-sqlite-first.log`, `paid-regressions.log` and each run's log. Dumps, credentials,
+JUnit, SQL rows and raw test evidence remain local; only safe sources/tests/docs
+are published. Read [remaining writer gates and recovery rules](../control-ha-storage.md).
 
 ## HA-02A — enrollment repository checkpoint, not complete HA-02
 

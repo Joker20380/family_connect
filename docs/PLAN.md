@@ -9,9 +9,14 @@ rehearsal, leader loss, no-quorum refusal and direct recovery;61 tests PASS,
 zero production writes. HA-02 canonical repository/replication is IN_PROGRESS:
 HA-02A enrollment transaction boundary and isolated PostgreSQL crash/backup/restore
 qualified/pushed9d1219d8 (40 contracts /0 skips,353 regressions /20 optional skips,6 runner checks).
-NEXT within HA-02: paid ledger/subscription transaction parity, remaining writers,
-all-table shadow import and strict synchronous PostgreSQL/Patroni replication/RPO0.
-The five-table synthetic enrollment schema is not a migrated canonical database.
+HA-02B paid ledger/subscription synthetic parity and recovery qualified:89 contracts
+/0 skips;366 consumer/runner checks /20 optional skips. Stale pre-payment restore
+refused; current nine-table lab restore preserves acknowledged writes and one-use
+proofs. No production cutover or reverse migration is qualified.
+NEXT within HA-02: transport-membership preparation/failure consistency and the
+remaining canonical writers, all-table shadow import, full backup/recovery and
+strict PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
+after new writes require fencing and current-state recovery, never old SQLite.
 HA-03 fenced authority, HA-04 API/client failover and HA-05 shadow/cutover
 follow mandatory gates. Keep8/12/120s, offline signing and consent tombstones.
 No copied SQLite becomes a second writer; source checkpoint is not production HA.
