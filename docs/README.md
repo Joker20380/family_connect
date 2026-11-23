@@ -18,6 +18,8 @@
 
 [CONTROL-HA HA-02S: receiver preparation/denial/lease and mailbox replay-floor recovery; maintenance journals remain pending](control-ha-storage.md#ha-02s--receiver-safety-adapter).
 
+[CONTROL-HA HA-02T: authenticated canonical maintenance journals and fail-closed pending operations; renewal ledgers/host resume still unqualified](control-ha-storage.md#ha-02t--bounded-maintenance-journal-preflight).
+
 [Device metadata · 22 November: NL/AWG GeoIP and explicit missing-data labels installed; consent unchanged](releases/2026-11-22-nl-geoip.md).
 
 [RU · 17 November00:02UTC: availability restored on accepted bytes; initiating cause remains open](releases/2026-11-17-ru-recovery.md).

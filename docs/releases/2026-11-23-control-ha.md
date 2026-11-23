@@ -20,7 +20,7 @@ source inspection is not a fresh server-health check.
   synthetic storage-shape import/recovery qualified; HA-02P pinned application SQLite
   adapters/joint semantic recovery and HA-02Q encrypted capsule/partial external
   recovery, HA-02R five real external-role adapters and HA-02S receiver safety
-  qualified in isolation,
+  qualified in isolation; HA-02T adds canonical bounded-maintenance preflight,
   not a live schema census or full DR; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
@@ -33,6 +33,84 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02T — bounded maintenance journal preflight
+
+Continuation from6c4f0a3835c8dff9e338cc695a7cc7bd8592ac25 on the authoritative
+`feature/device-technical-metadata-20261115` branch. No production read/write,
+SSH/deployment, installer/catalog/tag or operator-policy change. Latest known
+console5ce82415, NL GeoIP22 November and public Android126/catalog9 remain unchanged;
+not a fresh RU/NL health observation. Operation8s/watchdog12s/paid lease120s and
+all-three-node first-cohort ACK requirement are preserved.
+
+Implemented a strict maintenance adapter above Q/R/S. The pinned fixture contains
+38 artifacts across eight roles; all roles now have semantic checks, but their
+conservative variant coverage is not a live census or full recovery qualification.
+Every node contributes real canonical Locator/ProfileStore/Operation evidence:
+HMAC journal, permit/request, before/target/current profiles, directory checkpoint,
+publisher contract, metadata, journal key and receipt. The schema is intentionally
+bounded to one canonical operation/one publisher contract per node and no separate
+renewal ledgers. Missing, legacy, multiple/history and nonempty renewal variants
+refuse. Do not clear legitimate operations to fit this laboratory profile.
+
+The checker validates paths, ownership declarations, parent/lock/operations inode
+bindings, signatures, credential correspondence, native floor/exact-CRL transitions,
+canonical current CRL and exact completed readback. Pending/unknown/conflict/rolled
+back journals can be authenticated as retained evidence but block strict import.
+No inferred completion, automatic resume or fresh expiry/lease is generated.
+Adapter identity and artifact digests bind the atomic import receipt; old S receipts
+cannot claim T. Old trusted checkpoint and existing import reject replaced journals.
+Off-host custody and proof that a newly trusted capture omitted no history remain open.
+
+Root qualification uses the local immutable image in
+[`rehearsal-maintenance.json`](../../deploy/control-ha/rehearsal-maintenance.json):
+Python3.13.15/cryptography46.0.7, no network, read-only source/root, tmpfs-only state,
+no Docker socket mount, bounded resources and minimum ownership capabilities.
+Only a separate selected tracked Python/control-HA manifest snapshot is mounted;
+ignored state/keys/backups/Git metadata are excluded, symlink/traversal refused.
+Native floor/exact-CRL execution and retry succeed. Wrong owner/mode, symlink,
+replaced lock, missing journal, copied operations directory with changed inode and
+expired directory refuse. The latter is intentional: copying inode values or
+re-signing metadata is not a qualified recovery procedure. Private synthetic keys,
+raw capture, encrypted capsule, DB dumps and root stderr stay outside Git.
+
+Evidence under `/tmp/fc-control-ha-20261123/`:
+
+- `maintenance-recovery-4/contracts.log`:187 PASS /0 skips in42.88s (78 maintenance,
+  69 receiver,40 enrollment). PostgreSQL17.11, psycopg3.3.9, host Python3.14.4.
+- `maintenance-recovery-4/receipt.json`: `ISOLATED_BOUNDED_MAINTENANCE_PASS`;
+  source fixture removed,44 tables/82 rows imported,44/87 after business writes;
+  SIGKILL/current exact/stale refused, all four owned PG containers cleaned up.
+  Three COMMITTED journals restored byte-exact into private evidence files;
+  `native_activation=false`, `maintenance_resume=NOT_QUALIFIED`.
+- `maintenance-root-focused-2.log`:28 PASS /0 skips in2.19s, selected existing
+  canonical maintenance/profile/ownership/rollback/shared-lock tests in isolated UID0.
+- `maintenance-focused-1.log`:60 PASS /0 skips in2.25s, runner environment/ownership
+  guards and native transport membership/enforcement/budget regressions.
+- `maintenance-unit-3.log`:75 PASS /3 explicit PG skips in7.05s; diagnostic run
+  only, superseded by the no-skip mandatory runner. Initial fixture pipe omitted
+  Docker `-i`; corrected before qualification. Initial read-only spy also blocked
+  the pinned source-schema manifest; narrowed to that exact allowed file.
+- Seven source documents/984 links checked PASS; external URLs listed, not HTTP validated.
+- The previous broader route fixture failure remains unmodified; this task does
+  not claim a broad suite, packaged forced-command, live publisher or TLS/Go PASS.
+
+The87-row recovery is DB current-state recovery, not a new coherent maintenance/
+receiver capture after later business writes. Root fixture files disappear with
+their owned container; recovered evidence is not installed at source paths.
+Encrypted capsule key and trusted checkpoint remain in memory, not off-host restored.
+
+**Four-block HA-02 progress:** journal handling is partial (canonical bounded format
+verified; renewal coordinator/online-node ledgers, history/installed variants and
+safe host reconciliation remain); live schema/writer barrier, full recovery/custody
+and strict PostgreSQL/Patroni replication/RPO0 remain unqualified. Stage2/5, RU
+dependency persists. No queued task was started after this slice.
+
+Rollback now: discard/stop only owned disposable rehearsal resources; no RU/NL
+restart or old database/profile restore is needed. After future acknowledged
+canonical writes, use fenced current-state recovery, never stale SQLite/files.
+[Contract](../control-ha-storage.md#ha-02t--bounded-maintenance-journal-preflight) ·
+[Runbook](../../deploy/control-ha/README.md#ha-02t-bounded-maintenance-journal-preflight).
 
 ## HA-02S — receiver safety adapter
 

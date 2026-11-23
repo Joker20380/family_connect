@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "image": "sha256:89598610ee266cf1efa164092d1193479069784f1c94493c46fcff82f5a6736f",
+  "local_image_hint": "fc-online-runtime-tests:20261105",
+  "python": "3.13.15",
+  "cryptography": "46.0.7",
+  "purpose": "isolated-root-canonical-maintenance-only"
+}

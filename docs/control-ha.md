@@ -83,7 +83,7 @@
 | Этап | Состояние | Что остаётся до перехода дальше |
 | --- | --- | --- |
 | HA-01: quorum/shadow foundation | Лабораторный gate завершён | Не считать стенд установленным production quorum |
-| HA-02: общее хранилище | В работе; A–R DB/import/bundle/role contracts и S receiver safety проверены на стенде | Maintenance/profile adapter, installed-schema/writer census, live consistency barrier, полный recovery, strict replication/RPO0 |
+| HA-02: общее хранилище | В работе; A–S и T bounded-maintenance preflight проверены на стенде | Renewal ledgers/host reconciliation; installed-schema/writer barrier; полный recovery/custody; strict replication/RPO0 |
 | HA-03: единственный уполномоченный writer | Не внедрён | Epoch/fencing на принимающих узлах, запрет действий старого лидера и безопасная публикация файлов |
 | HA-04: API/клиентский failover | Не внедрён | Несколько API endpoints, безопасные retries и клиентские compatibility/acceptance gates |
 | HA-05: production shadow/cutover | Не начат | Актуальные backup/restore, guarded sole-writer switch, отказ RU/возврат узла, RTO и rollback |
@@ -131,7 +131,24 @@ fixture сохранены история aliases, IP/ID и allocator high-water
 сохраняются после восстановления. Повтор/перезагрузка не продлевают paid lease;
 истёкшая membership не даёт доступ и не удаляет floor. Это native file consumers
 на стенде с моделируемыми clocks/engines, не применение на серверах. Журналы
-maintenance/profile ещё не восстановлены; activation по-прежнему FORBIDDEN.
+maintenance/profile в S ещё не восстановлены; activation по-прежнему FORBIDDEN.
+
+[HA-02T](control-ha-storage.md#ha-02t--bounded-maintenance-journal-preflight) проверяет
+canonical bounded journal каждого узла:187 mandatory contracts без skips, HMAC,
+profile/CRL floors, metadata/path/config bindings и запрет импорта pending/unknown.
+Настоящий root-container доказывает отказ при потере journal, изменении owner,
+lock/operations inode или symlink. Из capsule возвращается evidence, не host resume.
+
+Оставшийся HA-02 учитывается четырьмя крупными блоками, не количеством букв:
+
+1. **Журналы — частично:** canonical bounded формат проверен; отдельные renewal
+   coordinator/online-node ledgers, история и перенос host bindings ещё не закрыты.
+2. **Рабочие схемы и writers:** live census и согласованный capture barrier не выполнены.
+3. **Полное восстановление:** off-host key/checkpoint custody и актуальное recovery
+   всей системы после новых записей не квалифицированы.
+4. **Репликация:** PostgreSQL/Patroni strict quorum, primary loss/return и RPO0 впереди.
+
+T не закрывает первый блок целиком и не меняет установленную архитектуру.
 
 ## Откат
 

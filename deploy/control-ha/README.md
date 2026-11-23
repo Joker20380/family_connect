@@ -708,3 +708,55 @@ Rollback now is owned-container cleanup. After future acknowledged canonical
 writes use fencing/current-state recovery, never old DB/files. NEXT: remaining
 maintenance/profile and receiver adapters only; no queued production step starts.
 [Contract](../../docs/control-ha-storage.md#ha-02r--external-role-adapters).
+
+## HA-02T bounded maintenance journal preflight
+
+Source-only continuation of the receiver adapter. Use the locked control/identity
+Python environment and a fresh private temporary workdir:
+
+```sh
+python -m scripts.control_ha_maintenance_rehearsal --workdir /tmp/fc-ha-maintenance-fresh
+python -m pytest -q -ra tests/test_referral_rehearsal.py tests/test_enrollment_rehearsal.py tests/test_transport_membership.py tests/test_transport_enforcement.py tests/test_transport_budget.py
+```
+
+The root-only fixture requires the **local** image pinned by
+[`rehearsal-maintenance.json`](rehearsal-maintenance.json): Python3.13.15,
+cryptography46.0.7. The tag is only a discovery hint; execution uses the immutable
+image ID. A missing image is a hard prerequisite failure, not a skip or permission
+to use sudo/live material. A replacement image needs its own pinned qualification.
+The PostgreSQL runner retains the existing17.11 pin, resource and ownership checks.
+Docker uses the explicit local socket, ignoring caller DOCKER_/PG/FC_HA_ overrides.
+
+The child has no network, read-only source/root filesystem, no socket or state
+mount, bounded tmpfs/CPU/memory/pids and only CHOWN/FOWNER/DAC_OVERRIDE capabilities.
+Source is a separate snapshot of selected tracked Python files/control-HA manifests,
+not a checkout mount; ignored state, keys/backups and Git metadata are excluded.
+Symlink/traversal source selections refuse before container creation.
+Native source files are generated inside tmpfs; credential input/output uses
+captured pipes, never arguments or terminal output. Cleanup verifies the exact
+container name and random ownership label before removal. Root fixture errors
+retain only stderr in a private `/tmp/fc-ha-maintenance-error-*.log`; inspect locally,
+do not commit private evidence. Do not run the fixture CLI directly on a host.
+
+`ISOLATED_BOUNDED_MAINTENANCE_PASS` qualifies187 real-PG contracts /0 skips plus
+source removal, exact44-table/82-row import,87-row current restore, stale refusal
+and cleanup. All recovered maintenance documents are private evidence only.
+No production executable, locator, operation directory, database, CRL or key changes.
+Missing/malformed/unauthenticated journals refuse. Authenticated unfinished states
+remain archived but block import; no automatic resume, rollback or empty-journal repair.
+
+Only one canonical bounded operation and one publisher contract per node, with
+explicitly empty separate renewal ledgers, is supported. Nonempty coordinator/
+online-node ledgers, legacy/multiple/history variants and relocated host activation
+remain unqualified and refuse. No live capture/census or absence proof is claimed.
+An operation-directory copy has a new inode: native recovery rejects it, as intended;
+do not rewrite authenticated metadata to bypass that boundary.
+
+There are38 capsule artifacts and no opaque probes **in this pinned fixture**.
+This does not qualify full maintenance recovery, off-host key/checkpoint custody,
+fresh coherent file state after new DB writes, replication/RPO0 or live cutover.
+Rollback is owned disposable-container cleanup; RU/NL need no restore or restart.
+After future new canonical writes, old SQLite/profile backups are not a rollback.
+NEXT within the journal block: renewal-ledger variants and controlled host
+reconciliation. Do not automatically start live schema/barrier or deployment work.
+[Contract](../../docs/control-ha-storage.md#ha-02t--bounded-maintenance-journal-preflight).

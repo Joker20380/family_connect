@@ -1,5 +1,35 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02T bounded maintenance journal preflight VERIFIED in isolation.**
+Continuation from6c4f0a38 on the metadata branch; source/tests/docs only, no SSH,
+live reads, deployment, public artifacts or service changes.
+Canonical locator/configuration, HMAC journals, exact permit/request/before/target,
+profile/CRL floors, private-key/leaf binding and path/owner/directory metadata now
+have a strict read-only adapter. Three native node journals replace the last
+opaque probe in the pinned fixture:38 artifacts; this is not full DR.
+Authenticated PREPARED/APPLYING/UNKNOWN/CONFLICT/ROLLED_BACK evidence is retained
+but blocks import. Empty/missing journals and unsupported renewal ledgers refuse.
+Native root-container operations prove floor/exact-CRL/retry and rejection of
+changed owner/mode, symlink, replaced lock, missing journal, relocated operations
+inode and expired directory. Recovered bytes remain private evidence, not host resume.
+187 mandatory real-PG contracts PASS /0 skips (78 maintenance +69 receiver +40
+enrollment);28 focused root maintenance/profile checks and60 runner/transport
+checks PASS /0 skips. PostgreSQL17.11:44 tables/82 imported rows,87 after new writes;
+SIGKILL/current exact/stale refused and owned-container cleanup PASS.
+Scope is one canonical bounded operation/publisher contract per node, with explicitly
+empty separate renewal ledgers. Legacy/multiple/history variants refuse; a synthetic
+absence declaration is not a live census. The journal block is only partially closed.
+NEXT bounded scope: separate renewal coordinator/online-node evidence and controlled
+host reconciliation, without resetting pending state or rewriting authenticated
+path/inode bindings. Then the other three HA-02 blocks: live schema/writer barrier,
+full current-state recovery/key-checkpoint custody, strict replication/RPO0.
+Stage2 of5; production still depends on RU.8/12/120s and all-three-node ACK gate
+unchanged. Console5ce82415, NL GeoIP22 November, Android126/catalog9 unchanged;
+no fresh health or installation claim. Old-main source divergence remains unresolved.
+Seven source documents/984 links checked PASS; external URLs were listed, not fetched.
+[Contract/limits](control-ha-storage.md#ha-02t--bounded-maintenance-journal-preflight) ·
+[Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02t--bounded-maintenance-journal-preflight).
+
 **23 November — CONTROL-HA HA-02S receiver safety recovery VERIFIED in isolation.**
 Source05efe2db ordinarily pushed and independently remote-SHA verified from3fa2674e;
 source/tests/docs only, no SSH/live read/deployment.

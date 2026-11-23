@@ -152,8 +152,21 @@ through duplicate import, reboot or expiry. Simulated engine/clock/SSH UID only;
 not live node attestation, root ownership/volume acceptance or receiver activation.
 Broader routes regression64 PASS /1 old fixture failure reproduced alone on
 unchanged3fa2674e files (registry.access absent). No broad suite/release PASS.
-NEXT bounded scope within HA-02: maintenance/profile journal adapter; authenticated
-pending/unknown operations, path/owner bindings and floors must not be reset.
+HA-02T canonical bounded-maintenance preflight qualified in isolation from6c4f0a38:
+187 real-PG contracts /0 skips (78 maintenance +69 receiver +40 enrollment),28 root
+and60 runner/transport focused checks /0 skips. Depends on N authority inventory,
+P SQLite adapters and Q/R/S capsule/receiver checks. Gate: HMAC journal, native
+floor/exact-CRL target, permit/request/config/metadata/receipt bindings, every node,
+pending/unknown refusal before PG I/O, exact private evidence and native root
+owner/symlink/inode/expiry guards. Source removal and44-table/82→87-row recovery PASS.
+No opaque probes in this pinned38-artifact fixture; not full maintenance recovery.
+Only one canonical bounded operation and one publisher contract per node, explicitly
+empty separate renewal ledgers. Missing/legacy/multiple/history/renewal variants
+refuse rather than becoming empty. Native host resume remains NOT_QUALIFIED.
+NEXT bounded scope within the journal block: separate renewal coordinator/online-node
+evidence and controlled host reconciliation; authenticated pending/unknown operations,
+path/owner bindings and floors must not be reset or re-signed to bypass checks.
+The journal block is partially closed, not complete; the other three blocks remain.
 Then separately qualify installed schemas/live writer barrier,
 all-store shadow/full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;

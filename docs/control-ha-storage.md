@@ -845,6 +845,66 @@ Full DR/live barrier/strict replication/HA-03..05 остаются незакр�
 [Runbook](../deploy/control-ha/README.md#ha-02s-receiver-safety-adapter) ·
 [Evidence](releases/2026-11-23-control-ha.md#ha-02s--receiver-safety-adapter).
 
+## HA-02T — bounded maintenance journal preflight
+
+[Maintenance-v1](../scripts/control_ha_maintenance_v1.py) добавляет strict,
+read-only preflight поверх Q/R/S. Это **ограниченный формат**, не универсальное
+восстановление maintenance и не команда resume. В лабораторном capsule последняя
+opaque роль заменена четырьмя документами: capture и по одному native journal
+на RU/NL1/NL2; всего38 artifacts. Отсутствие opaque probes не означает full DR.
+
+Поддержан canonical locator v1 / configuration v2, один bounded operation на узел,
+один publisher contract и явно объявленное отсутствие отдельных renewal ledgers.
+Legacy configuration, несколько/ноль операций, неизвестные поля/форматы и любой
+coordinator/online-node ledger отказываются; **удалять их ради прохождения нельзя**.
+Это pinned synthetic variant, не census фактического содержимого рабочих хостов.
+
+Проверки до любых PostgreSQL или host-material writes:
+
+- HMAC journal, точные permit/request/before/target/configuration hashes, набор
+  operation files, attempt budget и согласованность state/replace/commit/receipt.
+- Native floor/exact-CRL transformation; signature/issuer/family/gateway/revision,
+  leaf/private-key correspondence, validity на исходном capture и revocation.
+  Текущий CRL связан с проверенным issuer material capsule. Это не TLS/Go acceptance.
+- Абсолютные нормализованные paths без traversal/overlap, раздельные control и
+  publisher domains, UID/GID/modes, parent chain, сохранённые inode/lock hashes,
+  locator/config contract, publisher digest и directory generation checkpoint.
+  Declared metadata проверяется на согласованность, не выдается за live attestation.
+- COMMITTED/IDEMPOTENT требуют точного target profile и readback receipt.
+  PREPARED/APPLYING/UNKNOWN/CONFLICT/ROLLED_BACK можно аутентифицировать как evidence,
+  но они блокируют строгий import. Ни один state не очищается и не повышается в PASS.
+  Неизвестное/неполное evidence также блокирует импорт, а не становится empty state.
+- Adapter version входит в atomic import identity: прежний S receipt не становится T.
+  Изменённый журнал отвергается прежними независимым checkpoint/import receipt.
+  Новый доверенный checkpoint не доказывает, что более ранние журналы не потеряны.
+
+[Root fixture](../scripts/control_ha_maintenance_fixture.py) работает в отдельном
+networkless read-only контейнере с tmpfs, без host state/docker-socket mount.
+Монтируется отдельная копия выбранных tracked Python sources/manifests, не весь
+checkout: ignored state, ключи, backups и Git metadata не передаются. Symlink и
+traversal в source selection отказываются; эти guards также проверяются тестами.
+Настоящие Locator/ProfileStore/Operation создают PREPARED и COMMITTED журналы,
+выполняют floor и exact-CRL операции. Native retry идемпотентен; другой owner/mode,
+symlink, заменённый lock inode, отсутствующий journal, новый operations inode после
+копирования и истёкшая directory отказываются. Подписи и private keys синтетические.
+Generated source удаляется до restore; восстановленные документы остаются private
+evidence, не устанавливаются на исходные paths и не исполняются.
+
+187 mandatory real-PG contracts /0 skips; PostgreSQL17.11:44 таблицы/82 строки
+после import,87 после новых business writes; SIGKILL/current exact/stale refusal
+и cleanup PASS. Семантическая проверка maintenance относится к исходному capture;
+87-row DB restore не является новым согласованным file capture после business writes.
+Wrapping key/checkpoint остаются в памяти; off-host custody/full restore не закрыты.
+
+**Остаток первого из четырёх блоков HA-02:** отдельные renewal coordinator и
+online-node ledgers, поддержка установленных вариантов/истории и безопасная
+host reconciliation при изменении path/inode. Нельзя переподписать metadata или
+очистить неизвестную операцию только для успешного resume. Остальные три блока —
+live schema/writer barrier, полный backup/current-state recovery/custody и strict
+replication/RPO0 — не выполнялись. Stage2/5, production RU dependency сохраняется.
+[Runbook](../deploy/control-ha/README.md#ha-02t-bounded-maintenance-journal-preflight) ·
+[Evidence](releases/2026-11-23-control-ha.md#ha-02t--bounded-maintenance-journal-preflight).
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -878,9 +938,10 @@ signing keys не входят в migration и остаются офлайн.
 ## Следующие gates
 
 1. Использовать [HA-02N source inventory](control-ha-files.md), HA-02P pinned adapters
-   и HA-02Q/R/S encrypted bundle/role adapters для maintenance/profile journals.
-   Заменить последний opaque probe; незавершённые
-   операции и потерянные floors должны блокировать recovery, не очищаться.
+   и HA-02Q/R/S/T encrypted bundle/role adapters. T проверяет один canonical bounded
+   maintenance journal на узел; отдельные renewal coordinator/online-node ledgers,
+   история/установленные варианты и host reconciliation ещё не квалифицированы.
+   Незавершённые операции и потерянные floors должны блокировать recovery, не очищаться.
    Отдельно квалифицировать key/checkpoint custody и полный consumer/node census.
    До live cutover отдельно сверить установленные схемы/версии и
    effective writer/CLI/timer census и consistency barrier; live notices/metadata/diagnostics
