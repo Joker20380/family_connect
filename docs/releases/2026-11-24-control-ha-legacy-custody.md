@@ -132,3 +132,18 @@ Rollback is to stop using/revert this source-only module; preserve any independe
 custody receipt and native evidence. No server restart, old database restore, history
 rewrite or cleanup is needed or authorized. Original dirty main work is preserved;
 implementation stays on the existing metadata branch/worktree.
+
+## Source publication receipt
+
+Implementation/tests/docs commit `0ec3e5c91b8fe3b38e673f08e150cd8874be1e18` was
+ordinarily pushed to `feature/device-technical-metadata-20261115` and its full remote
+SHA independently verified. Source scope, fixture aggregation and secret-pattern
+screening pass; private evidence, keys, state and generated capsules remain outside Git.
+The qualification is source-only, not an installed release or recovery acceptance.
+
+Old-main navigation commit `470e8eb95bced6550cc674b514309aaf38ccdd77` remains local:
+ordinary `git push origin main` was rejected non-fast-forward. Independently observed
+remote main is still `cb47bf230c6795cf21f4e6948253f49aa5377ed0`. No force push,
+reset, rebase, merge or deployment was attempted. Original four dirty files and six
+untracked paths remain byte-for-byte unchanged against the retained baseline.
+Its three staged navigation docs passed368 local-link checks and whitespace validation.

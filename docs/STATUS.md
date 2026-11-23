@@ -20,6 +20,11 @@ Stage2 of5, RU dependence unchanged. No gateway SSH, deployment, state/key/profi
 export or service changes in this slice. Console5ce82415, NL GeoIP22 November,
 Android126/catalog9 and8/12/120s/all-three-node ACK unchanged; no fresh health claim.
 [Custody contract, tests and rollback](releases/2026-11-24-control-ha-legacy-custody.md).
+Source0ec3e5c91b8fe3b38e673f08e150cd8874be1e18 ordinarily pushed and independently
+remote-SHA verified. Old-main navigation470e8eb95bced6550cc674b514309aaf38ccdd77
+remains local: ordinary push rejected non-fast-forward; remote main still
+cb47bf230c6795cf21f4e6948253f49aa5377ed0. Original four dirty files/six untracked paths
+preserved. No force push, history rewrite or deployment.
 
 **24 November — CONTROL-HA installed journal inventory COMPLETE, not recovery acceptance.**
 Read-only RU/NL1/NL2 census at23 November23:16:08–23:16:13UTC

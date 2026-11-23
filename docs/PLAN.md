@@ -237,6 +237,9 @@ import gate is relaxed. Independent checkpoint binds inventory/manifest/cipherte
 pending, unknown, service and fenced evidence remain opaque. No production export,
 off-host custody rollout or writer-barrier qualification.
 [Contract and evidence](releases/2026-11-24-control-ha-legacy-custody.md).
+Implementation0ec3e5c9 pushed/remote-SHA verified; old-main navigation470e8eb9
+stays local after non-fast-forward rejection againstcb47bf23. Original work preserved;
+no force push, reconciliation or deployment performed.
 NEXT bounded scope within the journal block: semantic validation of the actual installed
 completed scheduled/service-bearing current operation, separately from opaque history.
 Gate: native current operation/three-node service receipts, original gate provenance,
