@@ -58,6 +58,48 @@ not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
 
+## HA-02S — receiver safety adapter
+
+Authoritative source/tests/docs `05efe2db5d8d12403fe02e0f33b2f51d71b433d4` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA
+matched. Source remains `/home/joker/.codex/worktrees/dad9/family_connect`.
+This divergent old main is navigation, not a deployable runtime. Original four
+dirty files/six untracked paths preserved; no force/reset/merge.
+
+- Receiver probe replaced with13 actual-format artifacts,35 total: three node
+  configs/caches, synthetic capture clock declarations, mailbox floor/members,
+  settings/bootstrap/controller binding/private identity/volume marker.
+- Strict read-only checks bind decisions, receipts, preparations, leases and
+  mailbox sequence/key/configuration to captured canonical state. Unknown shapes,
+  missing rows or conflicting versions refuse before PG I/O. Adapter/artifact
+  identity prevents relabelling an old R receipt or overwriting accepted state.
+- After original fixture deletion, native consumers preserve two-node partial
+  preparation and terminal denies. Duplicate accepts/reboots do not renew paid
+  leases; wall/monotonic expiry deny access. Native mailbox stale guard rejects
+  equal/older sequences; expired membership grants no keys and retains its floor.
+- `receiver-recovery-1/contracts.log`:170 PASS /0 skips in69.90s;69 receiver,
+  61 external-role and40 enrollment tests. PostgreSQL17.11 SIGKILL/import restore
+  exact44 tables/82 rows, current44/87 after business writes; stale/old import
+  refuse; four owned containers cleaned up. Receiver continuation is checked at
+  the import checkpoint, not a new coherent external capture after later writes.
+- `receiver-focused-1.log`:53 PASS /0 skips in3.01s. Broader
+  `receiver-consumers-1.log`:64 PASS /1 old chat-sync fixture failure. The stub
+  omits registry.access; reproduced alone on unchanged3fa2674e files in0.28s.
+  No unrelated fix or broad suite/release PASS. Seven source docs/971 links PASS.
+
+[Contract](https://github.com/Joker20380/family_connect/blob/05efe2db5d8d12403fe02e0f33b2f51d71b433d4/docs/control-ha-storage.md#ha-02s--receiver-safety-adapter) ·
+[Detailed evidence/runbook](https://github.com/Joker20380/family_connect/blob/05efe2db5d8d12403fe02e0f33b2f51d71b433d4/docs/releases/2026-11-23-control-ha.md#ha-02s--receiver-safety-adapter).
+
+Private evidence `/tmp/fc-control-ha-20261123/`; no keys/capsules/databases in Git.
+Engine/clock/root-SSH entry are simulated; live identity/ownership/mounted mailbox
+volume/spool not qualified. Only maintenance_state remains opaque; authenticated
+maintenance/profile journals and pending renewal operations are the sole NEXT.
+Full DR/key-checkpoint custody/live barrier/strict replication/HA-03..05 stay open.
+No server/client/policy/catalog/version change: console5ce82415, NL GeoIP22 November,
+Android126/catalog9,8/12/120s and all-three-node first-cohort ACK unchanged.
+Stage2 of5; RU dependency persists. Rollback now only cleans owned lab state;
+future canonical writes require fenced current-state recovery, not old files.
+
 ## HA-02R — external-role adapters
 
 Authoritative source/tests/docs `20698f669f0d624b5fc9e43151d605b43cf2bbe8` ordinarily

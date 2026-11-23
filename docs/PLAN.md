@@ -107,8 +107,16 @@ sender, signed routing and three node-local allocator schema/settings/high-water
 bindings; adapter-bound receipt, source removal and44-table/82→87-row recovery PASS.
 Actual alias/allocator consumers preserve history, IP/ID and deleted-ID floor.
 Two opaque roles remain; no full DR, live identity/barrier or activation claim.
-NEXT bounded scope: real maintenance/profile journal and receiver safety adapters;
-unknown/unsettled operations or missing floors must refuse, not be reset.
+HA-02S receiver safety qualified/pushed05efe2db:170 contracts and53 native transport/
+runner checks PASS /0 skips. Depends on N file map, P SQLite and Q/R bundle/roles.
+Gate: all-three-node safety state, canonical decision/receipt bindings, mailbox
+identity/config/member sequence, exact import/source removal/current/stale recovery
+PASS. Native consumers preserve partial preparation/terminal denies and mailbox
+floor; duplicates/reboots/expiry never renew paid leases. Clock/engine/root-SSH
+conditions simulated; no live receiver activation/volume/ownership acceptance.
+Broader routes64 PASS /1 unchanged fixture failure, reproduced separately.
+NEXT bounded scope: maintenance/profile authenticated journal and pending-operation
+recovery, with path/owner/floor checks; never infer empty journals or reset unknowns.
 Separately, installed-schema/live writer census and consistency barrier,
 all-store import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse

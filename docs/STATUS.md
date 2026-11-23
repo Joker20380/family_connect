@@ -1,5 +1,29 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02S receiver safety VERIFIED in isolation.**
+Source05efe2db ordinarily pushed and independently remote-SHA verified on the
+authoritative metadata branch. Receiver probe replaced with13 actual-format
+artifacts: three node configs/caches and mailbox identity/config/membership/floor,
+plus explicit synthetic capture clocks.35 artifacts total; maintenance_state is
+the only remaining opaque role. Canonical decision/receipt/allocator bindings,
+mailbox sequence/members/key/settings and adapter-bound import checks fail closed.
+170 mandatory DB contracts and53 native transport/runner checks PASS /0 skips.
+Owned PostgreSQL17.11 crash/current/stale recovery PASS:44 tables/82→87 rows.
+At imported checkpoint after source removal, partial two-node preparation,
+terminal denies and mailbox anti-replay floor survive. Duplicate accepts/reboots
+never renew paid leases; expired membership grants no keys but retains its floor.
+Current87-row DB recovery is not a fresh external capture after business writes.
+Engine/clock/root-SSH entry are simulated, not live host/volume qualification.
+Broader routes run64 PASS /1 old chat-sync fixture failure, reproduced alone on
+unchanged files (missing registry.access); no broad release PASS.
+NEXT: maintenance/profile authenticated journals, pending operations and path/owner
+bindings. Full DR/key custody/live barrier/strict replication/HA-03..05 still open.
+Stage2 of5; RU dependency persists. No server/client/health change: console5ce82415,
+NL GeoIP22 November, Android126/catalog9,8/12/120s and all-three-node ACK unchanged.
+Rollback now is owned-lab cleanup; future writes require fenced current-state
+recovery, not old SQLite/files. Dirty work preserved; old main is navigation only.
+[Source, evidence and rollback](releases/2026-11-23-control-ha.md#ha-02s--receiver-safety-adapter).
+
 **23 November — CONTROL-HA HA-02R five external-role adapters VERIFIED in isolation.**
 Source20698f66 ordinarily pushed and independently remote-SHA verified on the
 authoritative metadata branch. Five real formats now have semantic checks before
