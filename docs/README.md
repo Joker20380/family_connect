@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 23 November: distributed management implementation, staged gates and rollback; production unchanged](control-ha.md).
+
 [Device metadata · 22 November: NL/AWG GeoIP and explicit missing-data labels installed; consent unchanged](releases/2026-11-22-nl-geoip.md).
 
 [RU · 17 November00:02UTC: availability restored on accepted bytes; initiating cause remains open](releases/2026-11-17-ru-recovery.md).

@@ -1,5 +1,13 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA implementation STARTED; production unchanged.**
+Owner selected distributed management and full documentation. Use the existing
+metadata branch, not dirty divergent main. HA-01 starts with read-only consistency
+checks and an isolated three-voter rehearsal. Canonical migration, fenced authority,
+multi-endpoint clients and cutover remain pending; RU is still a shared dependency.
+Latest known console5ce82415 and Android126/catalog9 unchanged.
+[Architecture/gates](control-ha.md) · [Checkpoint](releases/2026-11-23-control-ha.md).
+
 **22 November20:57UTC — NL/AWG GeoIP and missing-data labels INSTALLED / VERIFIED.**
 Source2d880be1 is pushed to the existing metadata branch. Two external collector
 files and the three-file console overlay5ce82415 are installed at20:53:48UTC.
