@@ -330,6 +330,51 @@ pending proof работает один раз, sender revoke/support binding с
 import, mailbox ACK/fencing или WAN failover. Откат сейчас — убрать owned стенд;
 после live writes нужны fence и current-state recovery, а не старая SQLite.
 
+## HA-02I — gateway routing transactions
+
+Общий `RoutingTransaction` находится в уже упаковываемом `gateway_routing.py`;
+`Access.enrollment().routing()` выбирает SQLite или native synthetic PG adapter.
+Новый `gateway_routing_postgres.py` содержит отдельные DDL, marker и PL/pgSQL
+append-only trigger. Нет SQL string translation, production DSN, automatic import
+или переключателя работающего сервиса. Существующие raw SQLite helpers совместимы.
+
+Одна writer transaction включает install/seed существующих устройств, изменение
+policy generation, первое sticky assignment либо явный move **вместе с event**.
+Selection import создаёт свой journal в той же транзакции; policy digest и generation
+проверяются вместе. Status и explicit selection используют read-only snapshot.
+Selection не меняет sticky assignment; policy replacement не перемещает устройства.
+Revoke устройства/приглашения запрещает новые назначения и выдачу обоих каталогов.
+
+Operation ID связан с payload hash. Retry того же committed запроса — `UNCHANGED`,
+конфликт payload отвергается. Старый retry после следующего move/selection не
+перематывает state. Assignment и selection sequences монотонны; rollback на прежний
+host требует **нового подписанного каталога с большей sequence**, а не старой БД.
+SQLite UPDATE/DELETE и PG UPDATE/DELETE/TRUNCATE journals запрещены триггерами;
+это не защита от DB-superuser, который способен отключить schema guards.
+
+111 контрактов на настоящих SQLite/PostgreSQL:71 routing +40 enrollment, без skips.
+Конкурентные install/first assignment/identical и conflicting moves, selection,
+exact predecessor, immutable journals, lost commit ACK, rollback DDL/state/event,
+revoke, missing signed files и generation corruption проверены. Отдельно PG schema
+marker и termination backend во время install/move/selection. Подписи/права файлов
+и public wire format не ослаблены; ephemeral offline signer только в тесте advance.
+
+Owned PostgreSQL17.11 runner принудительно завершает контейнер с незавершёнными
+изменениями; после restart и отдельного current restore сверяет **все15 lab таблиц/
+28 строк**, включая payment/alias/proof/revoke. Stale pre-routing dump отвергается.
+Повтор committed operations не меняет snapshot; pending proof usable once; consumed
+proof/revoked device refused; восстановленные append-only triggers остаются active.
+Forward catalog rollback и invalidation selection при policy replacement проверены.
+
+Граница: signed files/anchors и synthetic identity keys удерживаются вне dump,
+их recovery не доказан. HTTP сначала отдельно потребляет challenge, затем читает/
+создаёт assignment, проверяет paid policy и регистрирует на удалённом gateway.
+Этот slice **не** делает всё это atomic и не повторяет использованный proof после
+потери ответа: нужен новый challenge. All-node membership/deadlines, file publication,
+remote ACK, HA-03 fencing, all-table import, replica/RPO0 и full product recovery
+остаются обязательными. PG не подключён к production HTTP/CLI. Rollback сейчас —
+cleanup собственного lab; после live writes только fenced current-state recovery.
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -347,7 +392,7 @@ CLI и периодические задания; число таблиц produc
 | `chat.py`, `chat_service.py`, `chat_sync.py` | Chat identity/proof, directory sequence, service sender revoke; filesystem exports | HA-02H DB synthetic PASS; mailbox/SSH/file publication and HA-03 fencing pending, PG publication refused before I/O |
 | `restricted.py`, `restricted_admin.py`, `readiness_receipts.py` | Grants, отдельные restricted challenges, certificates, readiness, CRL sequence | HA-02F admin и HA-02G auto-enroll/challenge/certificate/readiness DB synthetic PASS; CRL sequence/file writers, issuer fencing и production wiring pending |
 | `restricted_maintenance.py`, `restricted_sync.py`, `paid_canary_crl.py` | HMAC journal, local flock, signed directory/CRL, publication/receipt ordering | Pending; требует также HA-03 fencing |
-| `gateway_routing.py`, `gateway_selection.py` | Assignment versions, operation IDs, append-only events, atomic projections | Pending |
+| `gateway_routing.py`, `gateway_selection.py` | Assignment versions, operation IDs, append-only events, atomic projections | HA-02I DB synthetic PASS; signed-file recovery, production HTTP/CLI wiring and fencing pending |
 | `technical_metadata.py`, `geoip.py` | Отдельная SQLite, consent epoch/sequence/digest, revoke tombstone, retention, no resurrection | Pending; не входит в access registry |
 | `diagnostics.py` | Отдельное хранилище snapshots, ограничения данных/retention | Pending |
 | `notices.py` → `scripts/service_notices.py` | Отдельная notices БД, publisher roles/revisions и exports | Pending |
@@ -359,7 +404,7 @@ signing keys не входят в migration и остаются офлайн.
 
 ## Следующие gates
 
-1. Перевести остальные writers/CLI (далее gateway assignment/routing и CRL/file publication), затем metadata,
+1. Перевести остальные writers/CLI (далее CRL/file publication), затем metadata,
    tombstones/files и остальные строки карты. Не допускать mixed backend writers;
    synthetic membership не заменяет production wiring, deadline и package gates.
 2. Создать явную versioned all-table migration: snapshot consistency, nullable и

@@ -84,7 +84,7 @@ ledger, отзывах и challenge, не только числе устройс
 потери quorum, ремонта узла, CA renewal, backup restore и независимый мониторинг.
 HA не устраняет причину локальных зависаний RU.
 
-HA-02A/B/C/D/E/F/G/H: enrollment, paid ledger/subscription, synthetic all-node membership,
+HA-02A/B/C/D/E/F/G/H/I: enrollment, paid ledger/subscription, synthetic all-node membership,
 referral, Support ID, grant/audit, issuance/readiness и chat/support DB transactions, PostgreSQL crash/restore
 стенд реализованы. HA-02B отвергает stale backup после новых payment/revoke/proof
 записей и проверяет актуальный restore всех девяти лабораторных таблиц. Это не
@@ -116,6 +116,13 @@ membership550 и challenge8 не расширяются. Номера продо
 не оживает после restore/replay. Политика и ephemeral keys удерживаются вне БД,
 их recovery не проверен. PG mailbox/support-file публикация запрещена до I/O;
 policy-file race, external ACK и общий publisher lock требуют HA-03 fencing.
+HA-02I переносит sticky assignments, policy generation и explicit selection с общими
+операциями SQLite/PG.111 contracts PASS; SIGKILL и current restore15 таблиц/28 строк,
+stale restore refusal, append-only triggers и forward-only catalog rollback проверены.
+Status/selection читаются без writer lock; потеря ACK не дублирует operation journal.
+Это DB-only: подписанные файлы сохранены, а не восстановлены; HTTP proof consumption,
+paid decision и SSH registration не стали одной транзакцией. Их failures/fencing и
+production wiring остаются следующими gates; старый proof после commit не переигрывается.
 Ни один из этих стендов не включает replicated writer, epoch fencing или live failover.
 [Точная граница и карта writers](control-ha-storage.md).
 

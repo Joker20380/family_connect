@@ -44,7 +44,15 @@ guards PASS. Atomic support sender validation/enrollment closes the two-transact
 gap; one-use proof, immutable identity, terminal sender revoke, sequence and leases
 survive SIGKILL/exact15-table/29-row restore. Stale backup refused. Keys/local policy
 retained, NOT restored. PG mailbox/support file publication refuses before I/O.
-NEXT within HA-02: gateway assignment/routing and remaining writers/CLI, CRL publication,
+HA-02I gateway assignment/policy/explicit selection DB boundary qualified:111 contracts
+/0 skips (71 routing +40 enrollment),327 regressions /26 optional skips. Depends on HA-02A transaction semantics and
+accepted schema2/schema3 offline-signed catalogs; no new trust anchor or endpoint.
+Gate: SQLite/real-PG parity, concurrent/idempotent operations, append-only events,
+failed/ambiguous commits, revoke checks and exact current/stale recovery PASS.
+SIGKILL/current restore preserves15 lab tables/28 rows; signed files/identity keys
+are retained, not restored. Forward catalog rollback uses a newer signed sequence;
+no old assignment/catalog resurrection. Production wiring and HA remain pending.
+NEXT within HA-02: CRL publication and remaining writers/CLI,
 metadata/tombstones/files, all-table shadow import, full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.

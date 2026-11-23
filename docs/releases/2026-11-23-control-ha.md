@@ -13,7 +13,8 @@ source inspection is not a fresh server-health check.
 
 - HA-01 isolated scope implemented and verified; details below.
 - HA-02A enrollment, HA-02B paid/subscription, HA-02C membership, HA-02D referral,
-  HA-02E Support ID, HA-02F grant/audit, HA-02G issuance/readiness and HA-02H chat/support DB slices qualified below; remaining
+  HA-02E Support ID, HA-02F grant/audit, HA-02G issuance/readiness, HA-02H chat/support
+  and HA-02I gateway routing DB slices qualified below; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -25,6 +26,91 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02I — gateway routing recovery
+
+Continuation from `ccef2c0824ae27d8a4b625e350d47ea5d3effbdb` in the authoritative
+metadata worktree/branch. Synthetic DB slice only: no SSH, live health check, server
+restart/deployment, backend/CLI switch, policy/consent or client change. Installed
+console5ce82415 and public Android126/catalog9 unchanged. RU remains a dependency;
+8/12/120s and all-three-serving-node first-cohort ACKs remain mandatory. This is
+neither a full release nor completed HA-02/03..05.
+
+### Implementation and recovery boundaries
+
+`RoutingTransaction` stays inside bundled `gateway_routing.py`; SQLite remains
+default. Native PG DDL/marker/append-only function are isolated in
+`gateway_routing_postgres.py`, with no automatic import or production selector.
+Install/seed, policy generation, first assignment, explicit move and corresponding
+operation event are transactional. Selection import has an independent append-only
+journal; selection and status read a snapshot without taking the writer lock.
+Both selection install/read now also reject a corrupted active policy generation.
+
+Payload-bound retries cannot change a committed operation, rewind a newer route
+or duplicate journal entries after lost ACK. Concurrent conflicting moves have
+one winner. Policy replacement preserves existing assignments and invalidates an
+old policy-bound selection catalog. Rollback to the prior physical host requires
+a **newer signed catalog sequence**; old catalog/state rewind is rejected.
+Device/invitation revocation, signature/digest/private-file validation and public
+schema2/schema3 format remain intact. UPDATE/DELETE journal mutation is refused;
+PG also rejects TRUNCATE. This is not a privilege boundary against a DB superuser.
+
+The HTTP handler still consumes its challenge separately before routing, paid
+authorization and remote registration. These are NOT a distributed atomic operation
+or a remote-ACK recovery guarantee; consumed proof cannot be replayed after a lost
+response. Use a fresh proof. Signed files/anchors and synthetic identity keys are
+retained outside the DB backup, not restored. Replication/RPO0, full product/secret
+recovery, reverse import and HA-03 fencing are not implemented by this slice.
+
+### Qualification
+
+Locked control/identity/HA environment, psycopg3.3.9, PostgreSQL17.11 pinned image
+`sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73`.
+Private logs/credentials/dumps stay under `/tmp/fc-control-ha-20261123/`, never Git.
+
+```sh
+python -m scripts.gateway_routing_postgres_rehearsal --workdir /tmp/fc-control-ha-20261123/routing-2
+python -m pytest -q -ra tests/test_gateway_routing.py tests/test_gateway_selection.py tests/test_restricted_gateway_selection.py tests/test_friends_access.py tests/test_friends_client.py tests/test_friends_store.py tests/test_friends_floor.py tests/test_friends_http_runtime.py tests/test_subscription_http.py tests/test_control_channel.py tests/test_support_package.py tests/test_served_publishers.py tests/test_referral_rehearsal.py tests/test_enrollment_rehearsal.py
+```
+
+- `routing-local-1.log`:107 PASS /34 unavailable-PG skips,6.61s; preliminary SQLite
+  and existing routing/selection/runner tests, not real-PG acceptance.
+- `routing-1/contracts.log`:99 PASS /0 skips,37.16s; initial real-PG recovery PASS.
+  Retained as initial evidence, not the final expanded contract count.
+- Final `routing-2/contracts.log`/XML: **111 PASS /0 skips**,44.21s (71 routing +40
+  enrollment). Added later-operation replay, ephemeral-signed sequence advancement
+  and missing-file checks; all final contracts rerun with both databases.
+- `routing-regressions-1.log`: **327 PASS /26 skips**,63.05s. Skips:16 unavailable
+  real-nginx cases,2 locked-Go native-delivery cases,1 pinned-sync artifact and7
+  exact private served-archive checks. Current closed HTTP/support package build,
+  imports/reproducibility, existing HTTP proof routing and client floor tests pass.
+  This does not qualify those skipped native/deployed-artifact gates or full release.
+- `routing-2/receipt.json`: `ISOLATED_ROUTING_POSTGRES_PASS`; actual owned SIGKILL,
+  restart and exact current restore PASS; stale pre-routing restore REFUSED;
+  append-only triggers preserved; committed operation/payment retries unchanged,
+  consumed proof/revoked device refused, pending proof consumed once, forward
+  signed-catalog host rollback PASS; production writes0, owned cleanup PASS.
+
+Recovery compares all15 lab tables/**28 rows** before any new write:
+challenges6, device_support3, devices3, field_support_audit0,
+gateway_assignment_events2, gateway_assignments3, gateway_routing_state1,
+gateway_selection_events1, ha_enrollment_schema1, ha_paid_schema1,
+ha_routing_schema1, ha_support_schema1, invites3, paid_beta_events1,
+paid_beta_subscriptions1. Empty audit is included in equality, not hidden.
+
+Earlier four exact-overlay failures reproduced on the old baseline and HA-02G
+artifact-dependent readiness packaging remain open; no historical pins are weakened
+and those historical suites are not claimed rerun here. Independent focused checks
+do not erase these production gates. Local SQLite is still the live backend.
+
+### Rollback and next gates
+
+Before cutover remove only owned lab/shadow; there is no product DB to restore.
+Source rollback, if requested, is a new revert commit, not published-history rewrite.
+After future canonical writes, fence writers and recover current acknowledged state;
+never restore old SQLite and lose operation/payment/revoke/proof history. All-table
+import, full recovery, CRL/file publication/remaining writers, metadata/tombstones,
+strict PostgreSQL/Patroni replication and HA-03..05 gates still block production HA.
 
 ## HA-02H — chat and support sender recovery
 

@@ -314,3 +314,36 @@ Retain failed evidence outside Git. Rollback is owned-lab cleanup; after future 
 writes require fencing/current-state recovery, never an unconditional old SQLite
 restore. Gateway assignment and remaining canonical writers/import/recovery/replicas
 and HA-03..05 gates still block production cutover.
+
+## HA-02I: isolated gateway routing recovery
+
+Use the same control/identity/HA locked environment and pinned PostgreSQL17.11:
+
+```sh
+python -m scripts.gateway_routing_postgres_rehearsal --workdir /tmp/fc-ha-routing-new
+```
+
+Runs111 SQLite/real-PG contracts (71 routing +40 enrollment), then actual owned
+container SIGKILL/restart and separate stale/current restores. Temporary workdir,
+loopback-only, private credentials/evidence, image and ownership checks are retained;
+never reuse a live DB, existing workdir, remote Docker daemon or product credentials.
+
+Verify atomic install/seed, policy generation, sticky assignment and move journal,
+independent explicit selection, bound operation retries and forward-only sequence.
+Concurrent conflicting moves have one winner; lost ACK retry does not duplicate
+events or undo later work. Revoke checks, read-only status/selection, schema guards,
+signed files and append-only UPDATE/DELETE/TRUNCATE must fail closed as applicable.
+
+Recovery compares all15 lab tables/28 rows exactly before new writes, including
+payment/proof/revoke state. Stale pre-routing restore must be refused. Restored
+triggers must still reject modification; committed operations are idempotent,
+consumed proofs refused, pending proof used once, newer-catalog host rollback works.
+Signed public files/anchors and synthetic identity keys are retained, NOT recovered.
+No file publication, remote gateway registration, replica/RPO0, reverse migration,
+full product backup or production HTTP/CLI selector is qualified by this receipt.
+
+HTTP proof use, routing and paid/SSH registration remain separate transactions;
+retry a failed request with a fresh proof, not a replay. Before cutover abort only
+the owned lab. After future live writes fence writers and recover current state,
+never rewind old SQLite. Remaining writers/CRL/files/import/replication and HA-03..05
+remain mandatory;8/12/120s and all-three-node first-cohort ACKs are unchanged.

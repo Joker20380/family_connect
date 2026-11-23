@@ -9,7 +9,7 @@ from pathlib import Path
 import re
 import stat
 
-from .access import Rejected
+from .access import Rejected, SQLiteEnrollment
 from provisioning.friends_catalog import parse, verify_catalog
 
 
@@ -108,39 +108,24 @@ class Policy:
         return cls(raw, anchor, catalogs)
 
 
-def state(database):
-    exists = database.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='gateway_routing_state'").fetchone()
-    if exists is None:
-        return None
-    rows = database.execute('SELECT * FROM gateway_routing_state').fetchall()
-    require(len(rows) == 1 and rows[0]['singleton'] == 1)
-    return rows[0]
+class RoutingTransaction:
+    def __init__(self, enrollment):
+        self.enrollment = enrollment
+        self.database = enrollment.database
+        self.placeholder = enrollment.placeholder
 
+    def exists(self, table):
+        return self.database.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
+                                     (table,)).fetchone() is not None
 
-def operation(value):
-    require(type(value) is str and re.fullmatch('[a-zA-Z0-9][a-zA-Z0-9_-]{7,95}', value))
-    return value
+    def state(self):
+        if not self.exists('gateway_routing_state'):
+            return None
+        rows = self.database.execute('SELECT * FROM gateway_routing_state').fetchall()
+        require(len(rows) == 1 and rows[0]['singleton'] == 1)
+        return rows[0]
 
-
-def replayed(database, operation_id, request_hash):
-    record = database.execute('SELECT request_sha256 FROM gateway_assignment_events WHERE operation_id=?',
-                              (operation_id,)).fetchone()
-    if record is not None:
-        require(record['request_sha256'] == request_hash)
-    return record is not None
-
-
-def install(access, policy, legacy_raw, *, operation_id=None):
-    """Offline operator transaction; seeds existing devices without moving any of them."""
-    require(digest(legacy_raw) == policy.value['legacy'])
-    operation_id = operation(operation_id or 'install-'+policy.sha256)
-    request_hash = digest(canonical(dict(action='install', policy=policy.sha256)))
-    with access.db() as database:
-        current = state(database)
-        if current is not None:
-            require(current['policy_sha256'] == policy.sha256 and current['generation'] == policy.value['generation'])
-            require(replayed(database, operation_id, request_hash))
-            return dict(result='UNCHANGED', policy_sha256=policy.sha256)
+    def initialize_routing(self):
         statements = (
             'CREATE TABLE gateway_routing_state (singleton INTEGER PRIMARY KEY CHECK(singleton=1), '
             'policy_sha256 TEXT NOT NULL, generation INTEGER NOT NULL)',
@@ -154,15 +139,107 @@ def install(access, policy, legacy_raw, *, operation_id=None):
             "BEGIN SELECT RAISE(ABORT, 'append-only routing evidence'); END",
         )
         for statement in statements:
-            database.execute(statement)
+            self.database.execute(statement)
+
+    def initialize_selection(self):
+        self.database.execute('CREATE TABLE gateway_selection_events ('
+            'operation_id TEXT PRIMARY KEY, request_sha256 TEXT NOT NULL, '
+            'catalog_sha256 TEXT NOT NULL, policy_sha256 TEXT NOT NULL, sequence INTEGER NOT NULL UNIQUE)')
+        for action in ('UPDATE', 'DELETE'):
+            self.database.execute(f'CREATE TRIGGER gateway_selection_no_{action.lower()} '
+                f'BEFORE {action} ON gateway_selection_events BEGIN '
+                "SELECT RAISE(ABORT, 'append-only'); END")
+
+    def replayed(self, operation_id, request_hash, *, selection=False):
+        table = 'gateway_selection_events' if selection else 'gateway_assignment_events'
+        record = self.database.execute('SELECT request_sha256 FROM ' + table + ' WHERE operation_id=' +
+            self.placeholder, (operation_id,)).fetchone()
+        if record is not None:
+            require(record['request_sha256'] == request_hash)
+        return record is not None
+
+    def seed(self, sha256, route):
+        self.database.execute('INSERT INTO gateway_assignments SELECT device,' +
+            ','.join([self.placeholder] * 3) + ' FROM devices', (sha256, route['node'], route['sequence']))
+        return self.database.execute('SELECT COUNT(*) AS total FROM gateway_assignments').fetchone()['total']
+
+    def set_state(self, policy, *, initial=False):
+        query = ('INSERT INTO gateway_routing_state VALUES (1,' + ','.join([self.placeholder] * 2) + ')'
+                 if initial else 'UPDATE gateway_routing_state SET policy_sha256=' + self.placeholder +
+                 ', generation=' + self.placeholder + ' WHERE singleton=1')
+        self.database.execute(query, (policy.sha256, policy.value['generation']))
+
+    def event(self, operation_id, request_hash, device, previous, destination):
+        self.database.execute('INSERT INTO gateway_assignment_events VALUES (' +
+            ','.join([self.placeholder] * 5) + ')', (operation_id, request_hash, device, previous, destination))
+
+    def active(self, device):
+        record = self.database.execute('SELECT d.revoked, i.revoked AS invite_revoked FROM devices d '
+            'JOIN invites i ON i.device=d.device WHERE d.device=' + self.placeholder, (device,)).fetchone()
+        if record is None or record['revoked'] or record['invite_revoked']:
+            raise Rejected()
+
+    def assignment(self, device):
+        return self.database.execute('SELECT * FROM gateway_assignments WHERE device=' +
+            self.placeholder, (device,)).fetchone()
+
+    def set_assignment(self, device, sha256, route, *, initial=False):
+        if initial:
+            self.database.execute('INSERT INTO gateway_assignments VALUES (' +
+                ','.join([self.placeholder] * 4) + ')', (device, sha256, route['node'], route['sequence']))
+        else:
+            self.database.execute('UPDATE gateway_assignments SET catalog_sha256=' + self.placeholder +
+                ', node=' + self.placeholder + ', sequence=' + self.placeholder + ' WHERE device=' + self.placeholder,
+                (sha256, route['node'], route['sequence'], device))
+
+    def counts(self):
+        return {row['node']: row['total'] for row in self.database.execute(
+            'SELECT node, COUNT(*) AS total FROM gateway_assignments GROUP BY node')}
+
+    def selection(self):
+        if not self.exists('gateway_selection_events'):
+            return None
+        return self.database.execute('SELECT * FROM gateway_selection_events ORDER BY sequence DESC LIMIT 1').fetchone()
+
+    def selection_event(self, operation_id, request_hash, catalog, policy, sequence):
+        self.database.execute('INSERT INTO gateway_selection_events VALUES (' +
+            ','.join([self.placeholder] * 5) + ')', (operation_id, request_hash, catalog, policy, sequence))
+
+
+def routing_transaction(database):
+    return database if isinstance(database, RoutingTransaction) else SQLiteEnrollment(database).routing()
+
+
+def state(database):
+    return routing_transaction(database).state()
+
+
+def operation(value):
+    require(type(value) is str and re.fullmatch('[a-zA-Z0-9][a-zA-Z0-9_-]{7,95}', value))
+    return value
+
+
+def replayed(database, operation_id, request_hash):
+    return routing_transaction(database).replayed(operation_id, request_hash)
+
+
+def install(access, policy, legacy_raw, *, operation_id=None):
+    """Offline operator transaction; seeds existing devices without moving any of them."""
+    require(digest(legacy_raw) == policy.value['legacy'])
+    operation_id = operation(operation_id or 'install-'+policy.sha256)
+    request_hash = digest(canonical(dict(action='install', policy=policy.sha256)))
+    with access.enrollment() as enrollment:
+        database = enrollment.routing()
+        current = state(database)
+        if current is not None:
+            require(current['policy_sha256'] == policy.sha256 and current['generation'] == policy.value['generation'])
+            require(replayed(database, operation_id, request_hash))
+            return dict(result='UNCHANGED', policy_sha256=policy.sha256)
+        database.initialize_routing()
         route = policy.routes[policy.value['legacy']]
-        database.execute('INSERT INTO gateway_assignments SELECT device, ?, ?, ? FROM devices',
-                         (policy.value['legacy'], route['node'], route['sequence']))
-        database.execute('INSERT INTO gateway_routing_state VALUES (1, ?, ?)',
-                         (policy.sha256, policy.value['generation']))
-        database.execute('INSERT INTO gateway_assignment_events VALUES (?, ?, ?, ?, ?)',
-                         (operation_id, request_hash, '', policy.value['legacy'], policy.sha256))
-        count = database.execute('SELECT COUNT(*) FROM gateway_assignments').fetchone()[0]
+        count = database.seed(policy.value['legacy'], route)
+        database.set_state(policy, initial=True)
+        database.event(operation_id, request_hash, '', policy.value['legacy'], policy.sha256)
     return dict(result='INSTALLED', policy_sha256=policy.sha256, preserved_devices=count)
 
 
@@ -174,7 +251,8 @@ def replace_policy(access, previous, replacement, *, operation_id=None):
     require(all(previous.routes[key] == replacement.routes[key] for key in previous.routes))
     operation_id = operation(operation_id or 'policy-'+replacement.sha256)
     request_hash = digest(canonical(dict(action='replace-policy', previous=previous.sha256, policy=replacement.sha256)))
-    with access.db() as database:
+    with access.enrollment() as enrollment:
+        database = enrollment.routing()
         current = state(database)
         require(current is not None and current['policy_sha256'] in (previous.sha256, replacement.sha256))
         expected = previous if current['policy_sha256'] == previous.sha256 else replacement
@@ -182,25 +260,20 @@ def replace_policy(access, previous, replacement, *, operation_id=None):
         if replayed(database, operation_id, request_hash):
             return dict(result='UNCHANGED', policy_sha256=replacement.sha256)
         require(current['policy_sha256'] == previous.sha256)
-        database.execute('UPDATE gateway_routing_state SET policy_sha256=?, generation=? WHERE singleton=1',
-                         (replacement.sha256, replacement.value['generation']))
-        database.execute('INSERT INTO gateway_assignment_events VALUES (?, ?, ?, ?, ?)',
-                         (operation_id, request_hash, '', previous.sha256, replacement.sha256))
+        database.set_state(replacement)
+        database.event(operation_id, request_hash, '', previous.sha256, replacement.sha256)
     return dict(result='POLICY_INSTALLED', policy_sha256=replacement.sha256)
 
 
 def assign(database, policy, device):
+    database = routing_transaction(database)
     require(type(device) is str and re.fullmatch('[0-9a-f]{32}', device))
-    record = database.execute('SELECT d.revoked, i.revoked AS invite_revoked FROM devices d '
-                              'JOIN invites i ON i.device=d.device WHERE d.device=?', (device,)).fetchone()
-    if record is None or record['revoked'] or record['invite_revoked']:
-        raise Rejected()
-    assigned = database.execute('SELECT * FROM gateway_assignments WHERE device=?', (device,)).fetchone()
+    database.active(device)
+    assigned = database.assignment(device)
     if assigned is None:
         sha256 = policy.value['admit']
         route = policy.routes[sha256]
-        database.execute('INSERT INTO gateway_assignments VALUES (?, ?, ?, ?)',
-                         (device, sha256, route['node'], route['sequence']))
+        database.set_assignment(device, sha256, route, initial=True)
     else:
         sha256 = assigned['catalog_sha256']
         require(sha256 in policy.routes)
@@ -211,7 +284,8 @@ def assign(database, policy, device):
 
 def configuration(access, root, country, device):
     require(country in ('ru', 'nl'))
-    with access.db() as database:
+    with access.enrollment() as enrollment:
+        database = enrollment.routing()
         current = state(database)
         if current is None:
             return None
@@ -231,7 +305,8 @@ def move(access, policy, *, device, expected, destination, operation_id):
     require(policy.routes[destination]['sequence'] > policy.routes[expected]['sequence'])
     request_hash = digest(canonical(dict(action='assign', device=device, expected=expected, destination=destination,
                                         policy=policy.sha256, operation_id=operation_id)))
-    with access.db() as database:
+    with access.enrollment() as enrollment:
+        database = enrollment.routing()
         current = state(database)
         require(current is not None and current['policy_sha256'] == policy.sha256
                 and current['generation'] == policy.value['generation'])
@@ -239,10 +314,8 @@ def move(access, policy, *, device, expected, destination, operation_id):
             return dict(result='UNCHANGED', operation_id=operation_id)
         require(assign(database, policy, device) == expected)
         route = policy.routes[destination]
-        database.execute('UPDATE gateway_assignments SET catalog_sha256=?, node=?, sequence=? WHERE device=?',
-                         (destination, route['node'], route['sequence'], device))
-        database.execute('INSERT INTO gateway_assignment_events VALUES (?, ?, ?, ?, ?)',
-                         (operation_id, request_hash, device, expected, destination))
+        database.set_assignment(device, destination, route)
+        database.event(operation_id, request_hash, device, expected, destination)
     return dict(result='ASSIGNED', operation_id=operation_id)
 
 
@@ -261,14 +334,14 @@ def administer(access, root, request):
     require(type(action) is str and action in fields and set(request) == fields[action])
     root = Path(root)
     if action == 'status':
-        with access.db() as database:
+        with access.read_enrollment() as enrollment:
+            database = enrollment.routing()
             current = state(database)
             if current is None:
                 return dict(result='LEGACY_SINGLE_NL', mutations=0)
             policy = Policy.load(root / 'gateway-routing', current['policy_sha256'])
             require(current['generation'] == policy.value['generation'])
-            counts = {row['node']: row['total'] for row in database.execute(
-                'SELECT node, COUNT(*) AS total FROM gateway_assignments GROUP BY node')}
+            counts = database.counts()
             require(set(counts) <= {route['node'] for route in policy.routes.values()})
             return dict(result='ROUTING_CONFIGURED', policy_sha256=policy.sha256, assigned_counts=counts,
                         mutations=0, dataplane_acceptance='NOT_CHECKED', restricted_routing='UNCHANGED')

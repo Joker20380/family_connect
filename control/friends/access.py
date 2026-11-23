@@ -100,6 +100,10 @@ class SQLiteEnrollment(EnrollmentTransaction):
         from .chat import ChatTransaction
         return ChatTransaction(self)
 
+    def routing(self):
+        from .gateway_routing import RoutingTransaction
+        return RoutingTransaction(self)
+
 
 class Access:
  def __init__(self,path,clock=time.time,*,enrollment_repository=None):

@@ -52,6 +52,10 @@ class PostgresEnrollmentTransaction(EnrollmentTransaction):
         from .chat_postgres import PostgresChatTransaction
         return PostgresChatTransaction(self)
 
+    def routing(self):
+        from .gateway_routing_postgres import PostgresRoutingTransaction
+        return PostgresRoutingTransaction(self)
+
     def registered(self, device):
         row = self.database.execute('SELECT support_id FROM device_support WHERE device=%s', (device,)).fetchone()
         if row is not None:

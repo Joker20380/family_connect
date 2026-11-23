@@ -1,6 +1,24 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA HA-02H chat/support sender DB transactions VERIFIED; migration IN_PROGRESS.**
+**23 November — CONTROL-HA HA-02I gateway routing DB transactions VERIFIED; migration IN_PROGRESS.**
+Continuation from ccef2c08 in the authoritative metadata worktree. Sticky assignments,
+policy generations, explicit selection and operation journals share SQLite/PostgreSQL
+transactions.111 real DB contracts PASS /0 skips (71 routing +40 enrollment);
+327 focused consumer/package/runner regressions PASS /26 explicit optional skips.
+Concurrent install/moves, payload-bound retries, ACK loss, rollback, revoke and
+append-only journals pass; selection/status use read-only snapshots. PostgreSQL17.11
+SIGKILL and exact15-table/28-row current restore pass; stale backup is refused.
+Signed catalog files and synthetic identity keys are retained, NOT restored. No
+full product recovery, replication/RPO0 or fenced authority claim. HTTP proof use,
+paid authorization and remote registration are still separate boundaries, not an
+atomic distributed transaction. No server/backend/client/consent change; console
+5ce82415, Android126/catalog9,8/12/120s and all-three-node first-cohort ACKs unchanged.
+RU remains a dependency. Next: CRL/file publication and remaining writers/CLI,
+metadata/tombstones, full import/recovery/replication and fencing. Prior packaging
+gates remain open. [Scope](control-ha-storage.md#ha-02i--gateway-routing-transactions) ·
+[Checks and rollback](releases/2026-11-23-control-ha.md#ha-02i--gateway-routing-recovery).
+
+**Earlier23 November — CONTROL-HA HA-02H chat/support sender DB transactions VERIFIED; migration IN_PROGRESS.**
 Source `9a1f7f44` ordinarily pushed and remote-SHA verified in the authoritative
 metadata branch (base5cc00bf0). Chat registration,
 one-use proofs, service sender revoke, membership sequence and support bindings
