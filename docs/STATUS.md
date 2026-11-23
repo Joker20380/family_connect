@@ -1,5 +1,27 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02Q encrypted recovery bundle VERIFIED in isolation.**
+Sourced9ec4983 ordinarily pushed and remote-SHA independently verified on the
+authoritative metadata branch. Versioned AES-256-GCM capsule binds four SQLite
+images/eight roles/19 private artifacts to an independent checkpoint/public root.
+All artifact hashes enter the import fingerprint; wrong/stale/incomplete inputs
+and issuer/referral mismatches refuse before writable DB access. Original
+synthetic source directory is removed before restore; fresh issuer/referral
+objects and routing/sender files are reconstructed from the capsule.
+154 bundle/import/enrollment contracts,165 parent import regression contracts and
+31 runner/file guards PASS, all /0 skips. PostgreSQL17.11 SIGKILL/current/stale
+recovery PASS:44 tables/82 rows imported,87 after new acknowledged operations.
+PARTIAL external scope: admission/maintenance/allocator/receiver still use four
+explicit opaque probes; non-issuer roles need full semantic bindings. Wrapping
+key/checkpoint/root remain in memory, not off-host recovered. NEXT: real versioned
+external-role adapters and semantic checks, not replication/deployment.
+Stage2 of5; RU dependency persists. No server/client/live-health change:
+console5ce82415, NL GeoIP22 November, Android126/catalog9,8/12/120s and all-three-node
+ACK gate unchanged. Rollback now is owned-lab cleanup only; later canonical writes
+require fenced current-state recovery, never old SQLite/files. Dirty work preserved;
+this divergent main remains navigation, not deployable runtime.
+[Source, evidence and rollback](releases/2026-11-23-control-ha.md#ha-02q--encrypted-recovery-bundle).
+
 **23 November — CONTROL-HA HA-02P application SQLite import VERIFIED in isolation.**
 Source867c6854 ordinarily pushed and remote-SHA independently verified on the
 authoritative metadata branch. Four application-produced SQLite stores/29 tables

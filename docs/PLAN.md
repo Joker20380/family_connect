@@ -91,8 +91,17 @@ on A–O native storage and external-authority map. Gate: exact current-code sch
 variant,29 source tables, immutable signed-CRL import anchor, semantic operations
 after restore and44-table/82-row import →87-row current recovery PASS. Unknown
 schemas fail closed; no live installed-schema census/full external recovery.
-NEXT bounded scope: versioned external recovery bundle and dry-run consistency
-preflight. Separately, installed-schema/live writer census and consistency barrier,
+HA-02Q encrypted bundle/partial external recovery qualified/pushedd9ec4983:
+154 bundle/adapter/enrollment contracts,165 parent import contracts and31 runner/
+file guards PASS, all /0 skips. Depends on N external map and P application adapters.
+Gate: versioned authenticated capsule, independent checkpoint/root, required roles,
+artifact-bound import, issuer/referral consistency and source-directory removal
+before reconstructed-authority crash/restore PASS (44 tables/82 then87 rows).
+Four opaque external-role probes and byte-only non-issuer roles are not full DR;
+key/checkpoint custody, live barrier and activation remain unqualified.
+NEXT bounded scope: real versioned external-role adapters and semantic consistency
+checks, replacing opaque probes and qualifying alias/routing/sender bindings.
+Separately, installed-schema/live writer census and consistency barrier,
 all-store import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse
 import is not implemented. Then HA-03 receiver-enforced

@@ -58,6 +58,41 @@ not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
 
+## HA-02Q — encrypted recovery bundle
+
+Authoritative source/tests/docs `d9ec49835bb04bdfc3a01d0beee6073a357418c8` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA
+matched. Worktree `/home/joker/.codex/worktrees/dad9/family_connect` remains the
+runtime source. This old main only records navigation; original four dirty files
+and six untracked paths preserved. No force/reset/merge or runtime promotion.
+
+- AES-256-GCM versioned capsule: four images, eight roles,19 private artifacts;
+  separate wrapping key/trusted checkpoint/root. Every artifact digest enters the
+  atomic import identity. Tamper, missing roles, wrong key/anchor, mixed stores,
+  expired credentials and issuer/referral mismatches fail closed before PG writes.
+- Original owned synthetic source directory removed before restore. New issuer/
+  referral objects and routing/sender files reconstructed from capsule; no reused
+  original issuer object or source directory needed for semantic continuation.
+- 154 bundle/import/enrollment contracts PASS /0 skips in33.89s;165 parent import
+  contracts PASS /0 skips in66.42s;31 runner/file guards PASS /0 skips. Owned pinned
+  PostgreSQL17.11 SIGKILL/current/stale recovery exact:44 tables/82 rows imported,
+  87 after new operations. Stale restore and old import refuse; cleanup PASS.
+- This is PARTIAL external recovery: admission, maintenance_state, node_allocations
+  and receiver_state remain four explicit opaque byte probes, not runtime formats.
+  Other non-issuer roles need semantic bindings; wrapping key/checkpoint/root and
+  test drivers remain in memory. No full off-host/key-custody recovery claim.
+
+[Contract](https://github.com/Joker20380/family_connect/blob/d9ec49835bb04bdfc3a01d0beee6073a357418c8/docs/control-ha-storage.md#ha-02q--encrypted-recovery-bundle) ·
+[Evidence and commands](https://github.com/Joker20380/family_connect/blob/d9ec49835bb04bdfc3a01d0beee6073a357418c8/docs/releases/2026-11-23-control-ha.md#ha-02q--encrypted-recovery-bundle).
+
+Private evidence: `/tmp/fc-control-ha-20261123/bundle-recovery-2/`,
+`bundle-parent-regression-1/` and `bundle-guards-1.log`; no capsule/key/dump in Git.
+No SSH/live read or server/client/policy/catalog change. Console5ce82415, NL GeoIP22
+November, Android126/catalog9,8/12/120s and all-three-node first-cohort ACKs unchanged.
+Stage2 of5; RU dependency remains. NEXT: real external-role adapters/semantic
+checks, not automatic replication/cutover. Rollback now is owned-lab cleanup; after
+future canonical writes require fencing/current-state recovery, never stale files.
+
 ## HA-02P — application SQLite import
 
 Authoritative source/tests/docs `867c68544a483a94e687f2136712ae931956f22d` ordinarily
