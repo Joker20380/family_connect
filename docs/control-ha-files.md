@@ -39,7 +39,11 @@ Keep separate:
 [HA-02U](control-ha-storage.md#ha-02u--online-renewal-evidence) checks a separate
 single-operation online-renewal evidence format. It does not replace this caller
 census, qualify installed histories/offline modes, or authorize host relocation.
-Canonical capsule integration and actual host reconciliation remain pending.
+[HA-02V](control-ha-storage.md#ha-02v--combined-online-renewal-capsule) binds this
+single completed-operation variant to the canonical capsule/issuer/DB checkpoint.
+The combined format explicitly declares renewal evidence on every bounded node;
+it does not reinterpret T's empty-ledger declaration or change native HMAC journals.
+History/offline/emergency variants and actual host reconciliation remain pending.
 
 All paths below are source paths or relative logical artifacts, not an instruction
 to read/copy a live directory. Scope includes callers outside `control/friends`.

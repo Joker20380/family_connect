@@ -177,9 +177,19 @@ Same-host comparison refuses changed bytes/path/inode; it is not execution permi
 push rejected non-fast-forward againstcb47bf23; no history rewrite or lost dirty work.
 Publication is recorded in the dated report. Simulated
 RPC/readers/barriers and one retained online operation only; no live attestation.
-NEXT bounded scope within the journal block: canonical capsule/issuer/DB binding
-of renewal evidence, retained history and installed offline/emergency variants,
-then actual host reconciliation. T still refuses nonempty renewal ledgers;
+HA-02V qualified in isolation: T/U with canonical Q/R/S inputs in a44-artifact
+encrypted capsule.162 real-PG contracts /0 skips (44 combined,78 bounded,40 enrollment)
+and186 focused renewal/runner checks /0 skips;44-table/81→86-row recovery PASS.
+Depends on P schema/CRL adapters, Q independent checkpoint, R/S external/receiver
+checks and T/U native evidence validation. Gate: exact five-table native grant-plan
+projection versus canonical DB, same issuer/CRL/published directory, all bounded
+journals settled, all-three-node online operation COMMITTED, source removal,
+atomic import/exact retry, crash/current restore and stale/new-write refusal.
+Qualification/publication results: [dated report](releases/2026-11-23-control-ha.md#ha-02v--combined-online-renewal-capsule).
+This is one synthetic current-state variant, not installed-host reconciliation.
+NEXT bounded scope within the journal block: retained multi-operation history and
+installed offline/emergency variants, then actual host reconciliation. T alone
+still refuses nonempty renewal ledgers; V is an explicit combined format/gate;
 authenticated pending/unknown operations, path/owner bindings and floors must
 not be reset or re-signed to bypass checks. This checkpoint does not qualify relocation.
 The journal block is partially closed, not complete; the other three blocks remain.

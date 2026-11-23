@@ -1,5 +1,31 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02V combined online-renewal capsule checkpoint.**
+Continues9df213c4 on the authoritative metadata branch; source/tests/docs only.
+One encrypted capsule now holds four application stores, issuer/referral material,
+five external-role formats, receiver state, three bounded journals and one completed
+native online renewal:44 private artifacts, no opaque probes in this fixture.
+The independently trusted capsule checkpoint binds every byte. A versioned manifest
+binds all store/issuer hashes; native grant-plan projections must exactly match the
+current devices, invitations, grants, certificates and CRL sequence. Current authority,
+CRL and published directory must match the same completed renewal. Pending/mixed
+states, absent parts, unknown history and weaker import receipts refuse.
+No journal is executed, rebound to a new host or emptied during restore.
+Qualification:162 real-PostgreSQL17.11 contracts /0 skips (44 combined,78 bounded,
+40 enrollment), plus186 focused renewal/runner checks /0 skips. Source removal,
+44-table/81-row crash/restore and86-row current-state restore PASS; stale restore
+and old import after new writes refuse. Publication results are recorded below.
+NEXT within the partial journal block: retained multi-operation history and installed
+offline/emergency variants, then actual host reconciliation. The separate bounded
+and online fixture paths do not constitute an installed-host inventory or live barrier.
+The other three HA-02 blocks remain: live schema/writer barrier, full current-state
+recovery/key-checkpoint custody and strict replication/RPO0. Stage2 of5; RU dependency
+persists. No SSH, deployment, service/policy/version/catalog changes or fresh host-health
+claim. Console5ce82415, NL GeoIP22 November, Android126/catalog9,8/12/120s and
+all-three-node first-cohort ACK gate unchanged.
+[Contract/limits](control-ha-storage.md#ha-02v--combined-online-renewal-capsule) ·
+[Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02v--combined-online-renewal-capsule).
+
 **23 November — CONTROL-HA HA-02U online-renewal evidence checkpoint; no host activation.**
 Source9a9724a1 ordinarily pushed and independently remote-SHA verified from18cd0c2b
 on the authoritative metadata branch. Source/tests/docs

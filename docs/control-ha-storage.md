@@ -935,11 +935,62 @@ Mailbox membership file также хранит receiver sequence. Panel Django/
 read-side projection, не grant authority; operator queues/cursors нельзя терять. Root/release
 signing keys не входят в migration и остаются офлайн.
 
+## HA-02V — combined online renewal capsule
+
+[Combined preflight](../scripts/control_ha_online_capsule.py) combines Q/R/S/T/U,
+not a bypass of T's empty-renewal requirement. A new versioned maintenance inventory
+contains the four bounded documents, five byte-exact U documents under fixed lowercase
+logical names, and a binding manifest. Each bounded capture explicitly declares the
+same renewal digest. Native HMAC journals, permits, plans, owners, archives and receipt
+bytes remain unchanged; only the synthetic capture inventory declaration is extended.
+The manifest pins all four source-store and issuer-part hashes plus the checkpoint ID.
+It is not its own trust root: the separately supplied Q checkpoint pins the AEAD
+ciphertext, anchor and canonical snapshot; Q validates runtime key, delegation and CRL.
+
+The wrapper requires one fully COMMITTED online operation and settled bounded
+journals on every node. U still verifies all-three-node decisions, receipts and archive
+ledgers. V then compares the canonical devices, invitations, grants, certificates and
+CRL sequence with the native grant-plan after-state, row-for-row, including revoked
+and expired records. The current delegation/CRL and primary directory must match the
+same native candidate/publication receipt. Matching sequence or issuer name alone is
+insufficient. R/S external files and receiver safety remain mandatory. The stronger
+adapter identity joins the atomic import provenance; an old weaker receipt cannot
+be promoted to a combined qualification by repeating import.
+
+[Fixture](../scripts/control_ha_online_fixture.py) produces a native two-gateway
+online renewal using the very same issuer, registry and devices as the four-store
+application fixture. Three separately owned root-container bounded profile consumers
+are captured against that issuer/CRL. They are synthetic separate paths, not a claim
+that these paths or all consumers exist on RU/NL. RPC/readers/barriers remain simulated.
+The44-artifact capsule has no opaque probes, but covers only this pinned variant.
+
+[Tests](../tests/test_control_ha_online_capsule.py) and the
+[owned rehearsal](../scripts/control_ha_online_rehearsal.py) cover exact encrypted
+retention after deleting the original source, native DB/issuer contradictions, pending
+state refusal, atomic rollback/retry, real PostgreSQL crash/restore, preserved new
+writes and refusal of stale restore or old import after new writes. Private journals
+are recovered as evidence in a700/600 directory, never installed into original paths.
+The service/keys are reconstructed from the capsule; wrapping key and checkpoint
+are still retained in memory, not recovered from an off-host custodian.
+
+Pending evidence can be encrypted and preserved by Q, but V refuses importing it.
+Post-renewal DB drift, history, offline/emergency archives and unknown variants are
+not normalized, deleted or re-signed into acceptance. Even a valid standalone U
+inspection is insufficient to bypass V. Expiry is never extended for recovery.
+No host commands, remote reads, writer barrier, activation or automatic resume occur
+in preflight. This is NOT full DR or permission to relocate a lock/journal.
+
+NEXT within the journal block: retained multi-operation history and installed
+offline/emergency variants, then actual host reconciliation. The other three HA-02
+blocks and HA-03..05 remain separate gates; no automatic continuation into live work.
+[Runbook](../deploy/control-ha/README.md#ha-02v-combined-online-renewal-capsule) ·
+[Qualification](releases/2026-11-23-control-ha.md#ha-02v--combined-online-renewal-capsule).
+
 ## HA-02U — online renewal evidence
 
 [Renewal-v1](../scripts/control_ha_renewal_v1.py) — отдельный read-only inspector,
-не runtime importer и не resume API. Он не расширяет T: nonempty renewal ledgers
-по-прежнему отвергаются в canonical capsule до совместного gate с issuer/DB state.
+не runtime importer и не resume API. Сам U не расширяет T: nonempty renewal ledgers
+требуют отдельного совместного V gate с issuer/DB state, описанного выше.
 Пять bounded документов содержат capture, coordinator и RU/NL/NL2 state; один
 retained online operation. Независимый ожидаемый digest и trust anchor передаются
 отдельно. Hash внутри самого архива не заменяет доверенный checkpoint; этот digest
@@ -982,9 +1033,9 @@ and rollback are in the [dated report](releases/2026-11-23-control-ha.md#ha-02u-
 
 1. Использовать [HA-02N source inventory](control-ha-files.md), HA-02P pinned adapters
    и HA-02Q/R/S/T encrypted bundle/role adapters. T проверяет один canonical bounded
-   maintenance journal на узел; U отдельно проверяет online-renewal evidence,
-   но его canonical capsule/issuer/DB integration, история/установленные варианты
-   и host reconciliation ещё не квалифицированы.
+   maintenance journal на узел; U проверяет online-renewal evidence, V связывает
+   один completed вариант с canonical capsule/issuer/DB. История/установленные
+   offline/emergency варианты и host reconciliation ещё не квалифицированы.
    Незавершённые операции и потерянные floors должны блокировать recovery, не очищаться.
    Отдельно квалифицировать key/checkpoint custody и полный consumer/node census.
    До live cutover отдельно сверить установленные схемы/версии и

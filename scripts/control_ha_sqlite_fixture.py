@@ -64,12 +64,17 @@ class JointFixture:
     bootstrap: bytes = field(repr=False)
 
 
-def joint_fixture(root):
+def joint_fixture(root, *, authority=None):
     paths = {name: root / (name + '.sqlite') for name in STORES}
-    access = Access(paths['registry'], clock=lambda: NOW)
-    access.initialize()
-    restricted.migrate(access)
-    service, device = synthetic_service(access)
+    if authority is None:
+        access = Access(paths['registry'], clock=lambda: NOW)
+        access.initialize()
+        restricted.migrate(access)
+        service, device = synthetic_service(access)
+    else:
+        service, device = authority
+        access = service.access
+        paths['registry'] = access.path
     alias = support_ids.request(access, dict(proof=proof(access, device, 'support'), platform='android',
         app_version='0.1.18-beta126', version_code=126))['device_support_id']
     with access.enrollment() as enrollment:
@@ -135,7 +140,13 @@ def joint_fixture(root):
     pending['status'] = proof(access, child, 'status')
     pending['invitation'] = invitation
     pending['routing'] = routing
-    stores = {name: image(path) for name, path in paths.items()}
+    fixture = JointFixture(access, service, device, child, secret, token, pending, consumed, paths, {}, {}, {}, feeds, b'')
+    refresh_fixture(fixture)
+    return fixture
+
+
+def refresh_fixture(fixture):
+    stores = {name: image(path) for name, path in fixture.paths.items()}
     rows = {}
     for name, raw in stores.items():
         with closing(sqlite3.connect(':memory:')) as database:
@@ -151,10 +162,10 @@ def joint_fixture(root):
     refs = reference_sets(rows, CHECKPOINT)
     external = {role: json.dumps(dict(schema=VERSION, purpose=PURPOSE, role=role, checkpoint=CHECKPOINT,
         references=sorted(values))).encode() for role, values in refs.items()}
-    bootstrap = json.dumps(dict(version=1, checkpoint=CHECKPOINT, manifest=service.manifest,
-                                crl=service.crl_source().decode())).encode()
-    return JointFixture(access, service, device, child, secret, token, pending, consumed, paths, stores,
-                        external, {role: digest(raw) for role, raw in external.items()}, feeds, bootstrap)
+    fixture.stores, fixture.external = stores, external
+    fixture.expected = {role: digest(raw) for role, raw in external.items()}
+    fixture.bootstrap = json.dumps(dict(version=1, checkpoint=CHECKPOINT, manifest=fixture.service.manifest,
+                                       crl=fixture.service.crl_source().decode())).encode()
 
 
 def exercise_import(fixture, repository):

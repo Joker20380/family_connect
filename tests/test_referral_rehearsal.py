@@ -21,6 +21,7 @@ from scripts.control_ha_bundle_rehearsal import BundleRehearsal
 from scripts.control_ha_external_rehearsal import ExternalRehearsal
 from scripts.control_ha_receiver_rehearsal import ReceiverRehearsal
 from scripts.control_ha_maintenance_rehearsal import MaintenanceRehearsal
+from scripts.control_ha_online_rehearsal import OnlineRehearsal
 
 
 def test_chat_recovery_requires_exact_refusal_not_any_error():
@@ -56,7 +57,7 @@ def test_restore_cannot_silently_lose_referral_state(mutation):
         require_current_restore(current, restored)
 
 
-@pytest.mark.parametrize('runner', [ReferralRehearsal, SupportRehearsal, RestrictedAdminRehearsal, RestrictedRehearsal, ChatRehearsal, RoutingRehearsal, CRLRehearsal, MetadataRehearsal, DiagnosticsRehearsal, NoticesRehearsal, ImportRehearsal, SQLiteImportRehearsal, BundleRehearsal, ExternalRehearsal, ReceiverRehearsal, MaintenanceRehearsal])
+@pytest.mark.parametrize('runner', [ReferralRehearsal, SupportRehearsal, RestrictedAdminRehearsal, RestrictedRehearsal, ChatRehearsal, RoutingRehearsal, CRLRehearsal, MetadataRehearsal, DiagnosticsRehearsal, NoticesRehearsal, ImportRehearsal, SQLiteImportRehearsal, BundleRehearsal, ExternalRehearsal, ReceiverRehearsal, MaintenanceRehearsal, OnlineRehearsal])
 def test_writer_runner_uses_temporary_owned_local_docker_only(tmp_path, monkeypatch, runner):
     with pytest.raises(ValueError, match='TEMPORARY_REHEARSAL_ONLY'):
         runner(Path('/not-a-temporary-writer-rehearsal'))

@@ -19,6 +19,7 @@ from scripts.control_ha_recovery_bundle import parse
 
 ADAPTER = 'family-connect/canonical-maintenance/v1/not-for-activation'
 PURPOSE = 'synthetic-canonical-maintenance/v1/not-live-attestation'
+ONLINE_RENEWAL_FORMAT = 'bounded-and-online-renewal/v1'
 PARTS = frozenset({'capture.json'} | {node + '.json' for node in NODES})
 FILES = {'profile': 49152, 'directory': 8192, 'lock': 4096, 'journal-key': 32, 'publisher': 131072}
 OP_FILES = {'permit.json': 8192, 'request.json': 20000, 'journal.json': 16384,
@@ -220,9 +221,12 @@ def operation_check(operation_id, encoded_files, node, files, trust, captured_at
     return state
 
 
-def inspect_maintenance(parts, issuer, *, now):
+def inspect_maintenance(parts, issuer, *, now, renewal=None):
     """Authenticate archived evidence; unresolved evidence is retained, not executable."""
     try:
+        require(renewal is None or (type(renewal) is dict and set(renewal) == {'format', 'evidence_sha256'} and
+                renewal['format'] == ONLINE_RENEWAL_FORMAT and type(renewal['evidence_sha256']) is str and
+                re.fullmatch('[0-9a-f]{64}', renewal['evidence_sha256'])), 'MAINTENANCE_RENEWAL_UNSUPPORTED')
         require(set(parts) == PARTS, 'MAINTENANCE_PARTS')
         require(all(type(raw) is bytes and 0 < len(raw) <= (8192 if name == 'capture.json' else 1024 * 1024)
                     for name, raw in parts.items()), 'MAINTENANCE_BOUNDS')
@@ -238,7 +242,8 @@ def inspect_maintenance(parts, issuer, *, now):
             require(type(value) is dict and set(value) == {'schema', 'node', 'locator', 'contract', 'metadata',
                     'files', 'operations', 'renewal'} and type(value['schema']) is int and value['schema'] == 1 and
                     value['node'] == node, 'MAINTENANCE_NODE')
-            require(value['renewal'] == dict(format='none-declared/v1', coordinator=[], node=[]),
+            require(value['renewal'] == (renewal if renewal is not None else
+                    dict(format='none-declared/v1', coordinator=[], node=[])),
                     'MAINTENANCE_RENEWAL_UNSUPPORTED')
             files = binaries(value['files'], FILES)
             require(len(files['journal-key']) == 32, 'MAINTENANCE_KEY')

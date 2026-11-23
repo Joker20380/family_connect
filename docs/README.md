@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA HA-02V: combined encrypted capsule, exact renewal/issuer/DB binding and isolated recovery; no host activation](control-ha-storage.md#ha-02v--combined-online-renewal-capsule).
+
 [CONTROL-HA · 23 November: distributed management implementation, staged gates and rollback; production unchanged](control-ha.md).
 
 [CONTROL-HA storage: enrollment, paid/subscription, membership, referrals, Support ID, grant/audit, issuance/readiness, chat/support, gateway routing, durable CRL, metadata/consent, diagnostics and notice authority rehearsals; remaining canonical writers](control-ha-storage.md).

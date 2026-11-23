@@ -68,8 +68,10 @@ def create_node(root, node, issuer):
         .add_extension(x509.AuthorityKeyIdentifier.from_issuer_public_key(signing.public_key()), False).sign(signing, None))
     profile = material / 'profile.json'
     exact_crl = node == 'nl-amsterdam-1'
+    incoming_crl = x509.load_pem_x509_crl(issuer['crl'])
     previous_crl = ((x509.CertificateRevocationListBuilder().issuer_name(authority.subject)
-        .last_update(restricted.utc(NOW - 2)).next_update(restricted.utc(NOW + 3598))
+        .last_update(restricted.utc(min(NOW - 2, int(incoming_crl.last_update_utc.timestamp()))))
+        .next_update(restricted.utc(NOW + 3598))
         .add_extension(x509.CRLNumber(0), False).sign(signing, None).public_bytes(Encoding.PEM))
         if exact_crl else issuer['crl'])
     before = encoded(dict(authority=trust['authority'], family=trust['family'], gateway=trust['gateway'],

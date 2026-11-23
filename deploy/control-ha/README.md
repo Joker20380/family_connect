@@ -791,3 +791,42 @@ NEXT is canonical capsule/issuer/DB integration plus history/installed variants,
 not an automatic deployment or transition to HA-03.
 [Contract](../../docs/control-ha-storage.md#ha-02u--online-renewal-evidence) ·
 [Evidence](../../docs/releases/2026-11-23-control-ha.md#ha-02u--online-renewal-evidence).
+
+## HA-02V: combined online-renewal capsule
+
+Use the pinned control+identity environment and a fresh private `/tmp` directory:
+
+```sh
+umask 077
+python -m scripts.control_ha_online_rehearsal --workdir /tmp/fc-ha-online-recovery-UNIQUE
+python -m pytest -q tests/test_control_ha_renewal_v1.py tests/test_referral_rehearsal.py
+```
+
+The owned runner checks44 combined,78 bounded and40 enrollment contracts against
+real PostgreSQL, requiring zero skips. It composes the native laboratory renewal
+with the application fixture and pinned root-container bounded operations. It never
+reads a production path, contacts a gateway or installs a recovered journal. Docker
+uses the local Unix socket, pinned images and ownership labels; ambient PG/DOCKER
+selectors are ignored. Evidence, ciphertext and logs stay private and out of Git/CI.
+
+Capture is one synthetic all-writer-quiescent instant, not a live capture barrier.
+Both formats must be explicitly declared; missing or unknown parts refuse. All
+bounded journals must be settled and all three renewal nodes cleaned under the
+same COMMIT; then the five-table native after-state and canonical DB must match
+exactly. Current issuer/CRL/directory and the independent capsule checkpoint are
+mandatory. A successful standalone inspector or lower-level importer is not this gate.
+
+The runner removes original inputs before reconstructing authority and evidence,
+checks atomic import/exact retry, kills its own PostgreSQL during an uncommitted
+write, restores current backups, exercises application/receiver operations and
+refuses stale backups or the old import after new writes. It does not reconstruct
+host ownership from declared metadata or resume native operations.
+
+Rollback for this checkpoint is disposal of owned temporary containers; no production
+rollback is needed. Preserve private evidence when a check fails; do not clear state
+or substitute an older capsule. After future canonical writes, use fenced current-state
+recovery, never reverse-copy old SQLite. Off-host wrapping-key/checkpoint custody,
+retained history/offline/emergency variants, installed schemas/writers, actual host
+reconciliation and replication/RPO0 remain unqualified. Stage2 of5; RU still required.
+[Contract](../../docs/control-ha-storage.md#ha-02v--combined-online-renewal-capsule) ·
+[Evidence](../../docs/releases/2026-11-23-control-ha.md#ha-02v--combined-online-renewal-capsule).

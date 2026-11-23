@@ -142,14 +142,20 @@ lock/operations inode или symlink. Из capsule возвращается evid
 [HA-02U](control-ha-storage.md#ha-02u--online-renewal-evidence) отдельно проверяет
 online-renewal coordinator и три node ledger/archive, включая потерянный ответ,
 частичную очистку, precommit abort и postcommit resume на исходном стенде.
-Это не importer: привязка к canonical capsule и перенос на новый хост не завершены.
+Сам U не importer; совместная capsule привязка реализована отдельным V ниже.
 Сравнение точных bytes/path/inode само по себе не разрешает продолжение операции.
+
+[HA-02V](control-ha-storage.md#ha-02v--combined-online-renewal-capsule) объединяет
+bounded и online evidence с четырьмя БД и issuer в одной encrypted capsule.
+Проверяются не только hashes: пять native DB projections, подписанный issuer/CRL
+и опубликованный directory должны соответствовать той же завершённой операции.
+Это один synthetic формат, не live inventory и не разрешение исполнить журналы.
 
 Оставшийся HA-02 учитывается четырьмя крупными блоками, не количеством букв:
 
-1. **Журналы — частично:** bounded формат и отдельный online-renewal evidence
-   checkpoint проверены; renewal capsule integration, история/другие варианты
-   и перенос host bindings ещё не закрыты. Целиком блок не завершён.
+1. **Журналы — частично:** bounded и один completed online-renewal объединены
+   с canonical capsule/issuer/DB; история/другие установленные варианты и
+   перенос host bindings ещё не закрыты. Целиком блок не завершён.
 2. **Рабочие схемы и writers:** live census и согласованный capture barrier не выполнены.
 3. **Полное восстановление:** off-host key/checkpoint custody и актуальное recovery
    всей системы после новых записей не квалифицированы.

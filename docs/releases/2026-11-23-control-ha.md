@@ -35,6 +35,62 @@ source inspection is not a fresh server-health check.
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
 
+## HA-02V — combined online renewal capsule
+
+Continuation from9df213c4120c1ec40c19371d1d15d2b6033ff64c on the authoritative
+metadata branch. Source/tests/docs only; no SSH, live reads/writes, runtime changes,
+version/tag/catalog/public artifact or service/policy changes. Console5ce82415,
+NL GeoIP22 November, Android126/catalog9,8/12/120s and all-three-node first-cohort
+ACK gate unchanged. This is not a new server-health observation.
+
+Implemented [combined preflight](../../scripts/control_ha_online_capsule.py),
+[coherent fixture](../../scripts/control_ha_online_fixture.py),
+[tests](../../tests/test_control_ha_online_capsule.py) and
+[owned recovery runner](../../scripts/control_ha_online_rehearsal.py).
+One encrypted44-artifact capsule now contains canonical application stores and
+Q/R/S/T/U material. Native five-table after-state, issuer, CRL and published directory
+must match exactly. A pending/mixed/unknown operation cannot become an empty journal
+or pass from a mere matching DB count. Native authenticated bytes are never rewritten.
+New inventory declarations explicitly bind each bounded node to the renewal evidence.
+
+Qualification:
+- Final owned `online-recovery-3`:162 PostgreSQL17.11 contracts /0 skips
+  (44 combined capsule,78 bounded maintenance,40 enrollment). Source removed before
+  restore;44 tables/81 imported rows survive SIGKILL and exact restore. Application
+  and external/receiver operations produce86 current rows; their current backup
+  survives and stale restore/old import refuses. Owned-container cleanup PASS.
+- `online-regression-1.log`:186 PASS /0 skips in45.26s (162 unchanged standalone
+  renewal/fault cases and24 runner/restore guards, including the new runner).
+- Eight source docs/1059 local links and whitespace checked; external URLs not fetched.
+  Final staged secret/private-evidence/build-output audit and publication recorded below.
+
+Initial diagnostics corrected fixture composition (exclusive-create versus native
+atomic replacement, common registry/support root, predecessor CRL issue time and
+the existing admission grant) and a test's uncopyable cryptographic object. The first
+PG run found a test expecting the injected exception instead of the importer's
+sanitized unknown-outcome/readback contract. The test was corrected and expanded
+through postcommit lost reply; no production check was weakened. The159-contract
+second recovery passed, then the final162-contract run repeated full recovery after
+narrowing inventory declarations and binding both adapter identities. Earlier runs
+are diagnostic evidence, not additional acceptance totals.
+
+Implementation qualification is complete within the stated synthetic scope;
+source publication has not yet been recorded at this checkpoint.
+
+Scope: one completed online operation and one bounded journal per node, generated
+under a common authority. Bounded profiles use separate synthetic root-container
+paths; this is not an installed-host profile inventory. RPC/readers/barriers and
+receiver engines/clocks are simulated. History/offline/emergency variants, actual
+host reconciliation, live schema/writer census/barrier, off-host key/checkpoint custody,
+full current-state system DR and strict replication/RPO0 remain pending. Stage2 of5,
+not stage3; the first journal block remains partial.
+
+Rollback: only dispose of owned laboratory resources. Private evidence remains under
+`/tmp/fc-control-ha-20261123/`; no keys/profiles/DB/archive are committed. No RU/NL
+restart/rollback is required. Future canonical writes require fenced current-state
+recovery, never old SQLite/profile restore. NEXT is retained history/installed variants,
+then host reconciliation, not automatic deployment or HA-03 work.
+
 ## HA-02U — online renewal evidence
 
 Continuation from18cd0c2babaf50fa8cbdb21375fae0a24ca08e4b on the authoritative
