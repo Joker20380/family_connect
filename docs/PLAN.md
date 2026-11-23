@@ -99,8 +99,16 @@ artifact-bound import, issuer/referral consistency and source-directory removal
 before reconstructed-authority crash/restore PASS (44 tables/82 then87 rows).
 Four opaque external-role probes and byte-only non-issuer roles are not full DR;
 key/checkpoint custody, live barrier and activation remain unqualified.
-NEXT bounded scope: real versioned external-role adapters and semantic consistency
-checks, replacing opaque probes and qualifying alias/routing/sender bindings.
+HA-02R five real external-role adapters qualified/pushed20698f66:161 contracts,
+154 parent bundle regression contracts and90 consumers/runner checks PASS, all
+/0 skips. Depends on N file map, P SQLite schemas and Q encrypted capsule.
+Gate: captured-registry aliases/current HMAC, FIELD/grant, registered schema2
+sender, signed routing and three node-local allocator schema/settings/high-water
+bindings; adapter-bound receipt, source removal and44-table/82→87-row recovery PASS.
+Actual alias/allocator consumers preserve history, IP/ID and deleted-ID floor.
+Two opaque roles remain; no full DR, live identity/barrier or activation claim.
+NEXT bounded scope: real maintenance/profile journal and receiver safety adapters;
+unknown/unsettled operations or missing floors must refuse, not be reset.
 Separately, installed-schema/live writer census and consistency barrier,
 all-store import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse

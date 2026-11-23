@@ -1,5 +1,25 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02R five external-role adapters VERIFIED in isolation.**
+Source20698f66 ordinarily pushed and independently remote-SHA verified on the
+authoritative metadata branch. Five real formats now have semantic checks before
+PG writes: aliases/current HMAC, FIELD admission, schema2 sender, signed routing
+and three separate native peers.db/settings ledgers.23 artifacts/eight roles;
+adapter version is bound to the import receipt. Generic byte-only Q acceptance
+cannot masquerade as strict R.161 contracts,154 parent bundle regression contracts
+and90 consumers/runner checks PASS, all /0 skips; both recovery rehearsals PASS.
+After source removal/SIGKILL/current restore, aliases retain history and all three
+allocators retain IPs/IDs and deleted-highest-ID floor. No gateway commands run.
+Still partial: maintenance/profile journals and receiver safety remain two opaque
+probes, now the sole NEXT bounded scope. No live writer barrier, node attestation,
+off-host key/checkpoint custody, full DR/replication or activation is qualified.
+Stage2 of5; RU dependency persists. No server/client/live-health change:
+console5ce82415, NL GeoIP22 November, Android126/catalog9,8/12/120s and all-three-node
+ACK gate unchanged. Rollback now only cleans the owned lab; after future canonical
+writes require fenced current-state recovery, never stale SQLite/files.
+Original dirty work preserved; this divergent main is navigation, not runtime.
+[Source, evidence and rollback](releases/2026-11-23-control-ha.md#ha-02r--external-role-adapters).
+
 **23 November — CONTROL-HA HA-02Q encrypted recovery bundle VERIFIED in isolation.**
 Sourced9ec4983 ordinarily pushed and remote-SHA independently verified on the
 authoritative metadata branch. Versioned AES-256-GCM capsule binds four SQLite

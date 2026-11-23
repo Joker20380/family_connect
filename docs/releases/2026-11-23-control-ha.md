@@ -58,6 +58,43 @@ not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
 
+## HA-02R — external-role adapters
+
+Authoritative source/tests/docs `20698f669f0d624b5fc9e43151d605b43cf2bbe8` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA
+matched. Worktree `/home/joker/.codex/worktrees/dad9/family_connect` remains the
+runtime source. This old main is navigation only; original four dirty files and
+six untracked paths preserved. No force/reset/merge or runtime promotion.
+
+- Five actual external formats replace byte-only assumptions: aliases/current
+  HMAC, FIELD admission, schema2 sender, signed routing and three independent
+  native peers.db/settings ledgers.23 artifacts/eight roles. Semantic preflight
+  binds captured registry/grants/services/policy/catalogs/allocator settings before
+  PG I/O. Strict adapter version joins the import identity; Q cannot claim R.
+- Restored files pass native consumers after original fixture removal. Alias
+  history survives extension without legacy key; reverse native registration
+  preserves all three nodes' IP/IDs and next insertion skips deleted highest ID.
+  Kernel/TCP/paid-engine/command effects disabled; no live node registration.
+- `external-recovery-1/contracts.log`:161 PASS /0 skips in33.80s. Owned PostgreSQL
+  17.11 SIGKILL/import restore exact44 tables/82 rows; current restore87 rows;
+  stale restore/old import refused and all four owned containers cleaned up.
+- `external-parent-regression-1/contracts.log`:154 PASS /0 skips in30.60s and full
+  Q crash/current/stale rehearsal PASS. `external-consumers-1.log`:90 PASS /0 skips
+  in2.16s. `external-selection-1.log`:22 PASS /1 explicit optional nginx skip;
+  no nginx activation qualification claimed. Seven source docs/962 links PASS.
+
+[Formats and limits](https://github.com/Joker20380/family_connect/blob/20698f669f0d624b5fc9e43151d605b43cf2bbe8/docs/control-ha-storage.md#ha-02r--external-role-adapters) ·
+[Evidence and commands](https://github.com/Joker20380/family_connect/blob/20698f669f0d624b5fc9e43151d605b43cf2bbe8/docs/releases/2026-11-23-control-ha.md#ha-02r--external-role-adapters).
+
+Private evidence is under `/tmp/fc-control-ha-20261123/`; no keys/capsules/DBs in Git.
+Still partial: maintenance/profile journals and receiver safety remain two opaque
+roles, the sole NEXT bounded scope. No live writer/schema census, node attestation,
+off-host key/checkpoint custody, full DR, strict replication or HA-03..05 acceptance.
+No SSH/live read or server/client/policy/catalog/version change. Console5ce82415,
+NL GeoIP22 November, Android126/catalog9,8/12/120s and all-three-node ACKs unchanged.
+Stage2 of5; RU dependency persists. Rollback now is owned-lab cleanup only; after
+future canonical writes require fenced current-state recovery, never stale files.
+
 ## HA-02Q — encrypted recovery bundle
 
 Authoritative source/tests/docs `d9ec49835bb04bdfc3a01d0beee6073a357418c8` ordinarily
