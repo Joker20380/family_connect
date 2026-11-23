@@ -1,6 +1,18 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA HA-01 isolated foundation VERIFIED; migration IN_PROGRESS.**
+**23 November — CONTROL-HA HA-02A enrollment checkpoint VERIFIED; migration IN_PROGRESS.**
+One shared enrollment algorithm now has an explicit transaction boundary; production
+still defaults to SQLite. The isolated PostgreSQL17.11/psycopg3.3.9 adapter passes40
+SQLite/PostgreSQL contracts with no skips, concurrent proof/invitation/limit races,
+transaction rollback and real container crash recovery. Five nonempty enrollment
+tables restore row-for-row into a separate container, including sequence continuity.
+353 consumer regressions PASS /20 explicitly optional gates skipped;6 runner safety
+checks PASS. No canonical import, paid/metadata writer migration, replica, Patroni,
+alternate serving API or production deployment. RU dependency and installed
+console5ce82415 / Android126 / catalog9 remain unchanged.
+[Writer map / next gates](control-ha-storage.md) · [Exact evidence](releases/2026-11-23-control-ha.md).
+
+**Earlier23 November — CONTROL-HA HA-01 isolated foundation VERIFIED.**
 Owner selected distributed management and full documentation. Use the existing
 metadata branch, not dirty divergent main. HA-01 implements read-only consistency
 checks and a pinned etcd3.7.4 three-voter mTLS rehearsal:61 tests PASS, leader loss,

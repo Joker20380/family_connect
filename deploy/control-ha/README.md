@@ -59,3 +59,41 @@ forced SIGKILL of the runner cannot guarantee cleanup. Never kill unrelated etcd
 
 See [migration gates and rollback](../../docs/control-ha.md) and
 [dated evidence](../../docs/releases/2026-11-23-control-ha.md).
+
+## HA-02A: isolated PostgreSQL enrollment
+
+Requires local Docker and Python dependencies in a **dedicated** environment:
+
+```sh
+python -m pip install -r control/requirements.lock -r device_identity/requirements.lock -r deploy/control-ha/requirements.lock
+docker pull postgres@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73
+python -m pytest -q tests/test_enrollment_rehearsal.py
+python -m scripts.enrollment_postgres_rehearsal --workdir /tmp/fc-ha-enrollment-new
+```
+
+The runner requires the pinned image already present (`--pull=never`), verifies
+PostgreSQL17.11 and durability settings, and uses the explicit local Unix Docker
+socket, never an inherited remote Docker context. Two owned containers (source and
+isolated restore) use their own anonymous volumes,512MiB/one CPU each and ephemeral
+ports published only on127.0.0.1. No host product-directory mount, production
+environment, database or SSH access. Plain PostgreSQL/SCRAM over this disposable
+loopback binding is **not** a production TLS design; do not expose the port.
+
+The forty contract cases include both SQLite and real PostgreSQL; standalone
+pytest without `FC_HA_PG_PORT` reports PostgreSQL cases as skipped, **not PASS**.
+The runner supplies private test credentials, requires zero skipped contracts,
+SIGKILLs only its marked source container, restarts retained test data and verifies
+committed identity/revocation/invitation, consumed proof, uncommitted rollback and
+reconnection. It then dumps five nonempty enrollment tables, restores them into
+a fresh container, compares every row and checks identity-sequence continuation.
+
+`receipt.json` records bounded results/counts. Password/env files, binary dump,
+JUnit and logs remain in the private0700 workdir (secret/dump/log files0600).
+Cleanup verifies exact container ID and random ownership label before removing
+only those containers and anonymous volumes. Failure, Ctrl-C and SIGTERM also
+clean up; SIGKILL of the runner/daemon failure needs ownership-checked recovery.
+Never use a global Docker prune or remove an unrelated PostgreSQL container.
+
+No alternate serving API, production DSN, SQLite import, paid/metadata migration,
+replica, Patroni failover or receiver fencing exists here. See the
+[writer inventory and remaining HA-02 gates](../../docs/control-ha-storage.md).

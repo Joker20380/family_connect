@@ -78,3 +78,15 @@ The subsequent direct Android→Telemost→Linux EU priority correction adds no 
 or dependencies. Both community references remain reference-only. Any future
 crypto/mux/reliability/TUN-conversion reuse requires a separate exact-version audit;
 existing Xray notices and obligations remain applicable.
+
+## Isolated control HA lab — 23 November 2026
+
+- PostgreSQL17.11: PostgreSQL License; official `postgres` container pinned by
+  digest in `deploy/control-ha/rehearsal-postgres.json`. Container OS components
+  retain their own upstream notices; the image is not vendored into this repository.
+- Psycopg and psycopg-binary3.3.9: package metadata identifies LGPL-3.0-only.
+  Installed only through the optional `deploy/control-ha/requirements.lock` into
+  the disposable test environment; not added to client or serving-archive bundles.
+  Bundled libpq and other binary-wheel dependencies retain their own licenses.
+  Preserve upstream wheel/image notices and audit exact transitive artifacts
+  before any future redistribution; this test pin is not a distribution audit.
