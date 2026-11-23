@@ -100,7 +100,7 @@ caller map, canonical-versus-derived classification, private external recovery
 inputs and freeze/activation boundaries documented; synthetic exact alias and
 node allocation backup/replay checks PASS. Not a live writer census, runtime
 change, all-store importer or full recovery. Receiver safety state is not disposable.
-HA-02O synthetic all-store storage-shape import qualified:111 contracts /0 skips
+HA-02O synthetic all-store storage-shape import qualified/pushed5bb61ccb:111 contracts /0 skips
 (71 import +40 enrollment),97 focused regressions /0 skips. Depends on HA-02A–M
 native schemas and HA-02N external-authority map. Gate: exact versioned lab schemas,
 four stores/30 tables, eight declared-reference roles, bounded typed preflight,

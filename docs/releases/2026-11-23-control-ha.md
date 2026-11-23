@@ -38,6 +38,21 @@ backend selector, deployment, client version/signing/catalog change. Installed
 console5ce82415, NL GeoIP22 November, public Android126/catalog9 and8/12/120s
 unchanged. All-three-node first-cohort ACKs still required; RU remains a dependency.
 
+Implementation/tests/docs `5bb61ccb8a3dc92282bcaa02e0d2bddc30e3c85d` ordinarily
+pushed to the metadata branch; independent remote SHA matched. Staged allowlist,
+credential-pattern review, whitespace and928 source Markdown targets PASS. No
+private state, raw fixture/dump or build output committed; source worktree clean
+after the implementation push.
+
+Old-main navigation `34a4833784ff06ba52af580290b0023f6fbf7cc5` retained locally:
+ordinary main push rejected `non-fast-forward`, observed remote remains
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`.361 staged navigation Markdown targets
+PASS. A full root working-copy check also sees a pre-existing unstaged STATUS
+link to the missing `evening-readback--1736utc` anchor in an untracked27 October
+report; it is unrelated and left untouched. Original40 PLAN/66 STATUS/11 private-
+beta/6 recovery-guide additions and six untracked paths preserved. No force/reset/
+merge; use the published feature branch, not this divergent main runtime.
+
 ### Qualified boundary
 
 [HA-02O contract](../control-ha-storage.md#ha-02o--synthetic-all-store-shape-import)

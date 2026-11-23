@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02O synthetic all-store shape import VERIFIED.**
-Continuation from87ff67b5; source/tests/docs only, no SSH/deployment/live read.
+Source5bb61ccb ordinarily pushed and independently remote-SHA verified from87ff67b5;
+source/tests/docs only, no SSH/deployment/live read.
 Four laboratory SQLite images import atomically into one native PostgreSQL schema:
 30 data tables/34 rows,12 family markers and one receipt,43 tables/47 rows total.
 111 contracts PASS /0 skips (71 import +40 enrollment);97 focused regressions
@@ -19,6 +20,8 @@ joint synthetic fixture, with missing/unsupported sources refused before target
 writes. Do not auto-start replication or production changes from this checkpoint.
 Installed console5ce82415, NL GeoIP22 November, public Android126/catalog9,
 8/12/120s and all-three-node first-cohort ACKs unchanged. No fresh health claim.
+Old-main navigation34a48337 retained locally: ordinary push rejected non-fast-forward;
+four original dirty files and six untracked paths preserved; no history rewrite.
 [Import boundary](control-ha-storage.md#ha-02o--synthetic-all-store-shape-import) ·
 [Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02o--synthetic-all-store-shape-import).
 
