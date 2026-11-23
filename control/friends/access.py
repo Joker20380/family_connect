@@ -96,6 +96,10 @@ class SQLiteEnrollment(EnrollmentTransaction):
         from .restricted import RestrictedTransaction
         return RestrictedTransaction(self)
 
+    def chat(self):
+        from .chat import ChatTransaction
+        return ChatTransaction(self)
+
 
 class Access:
  def __init__(self,path,clock=time.time,*,enrollment_repository=None):

@@ -9,12 +9,14 @@ ROOT=Path('/opt/apps/family_connect/friends-access')
 
 
 def synchronize(registry):
+    require_local_registry(registry)
     with (ROOT/'chat-sync.lock').open('a') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         return _synchronize(registry)
 
 
 def _synchronize(registry):
+    require_local_registry(registry)
     snapshot=registry.snapshot()
     node=json.loads((ROOT/'chat-node.json').read_bytes())
     host=str(ipaddress.IPv4Address(node['host']))
@@ -29,3 +31,8 @@ def _synchronize(registry):
     expected=dict(sequence=snapshot['sequence'],expires_at=snapshot['expires_at'],**node)
     if reply!=expected:raise ValueError('Node acknowledgement mismatch')
     return snapshot,reply
+
+
+def require_local_registry(registry):
+    if registry is not None and registry.access.enrollment_repository is not None:
+        raise NotImplementedError('PostgreSQL mailbox publication requires fenced authority')

@@ -2,7 +2,7 @@
 
 [CONTROL-HA · 23 November: distributed management implementation, staged gates and rollback; production unchanged](control-ha.md).
 
-[CONTROL-HA storage: enrollment, paid/subscription, membership, referrals, Support ID, grant/audit and issuance/readiness rehearsals; remaining canonical writers](control-ha-storage.md).
+[CONTROL-HA storage: enrollment, paid/subscription, membership, referrals, Support ID, grant/audit, issuance/readiness and chat/support sender rehearsals; remaining canonical writers](control-ha-storage.md).
 
 [Device metadata · 22 November: NL/AWG GeoIP and explicit missing-data labels installed; consent unchanged](releases/2026-11-22-nl-geoip.md).
 

@@ -17,16 +17,17 @@ def register(access, public, signature):
     identity = RNS.Identity(create_keys=False)
     if not identity.load_public_key(bytes.fromhex(public)) or not identity.validate(bytes.fromhex(signature), payload):
         raise ValueError('Invalid service proof')
-    with access.db() as database:
-        if database.execute('SELECT 1 FROM chat_bindings WHERE public=?', (public,)).fetchone():
+    with access.enrollment() as enrollment:
+        database = enrollment.chat()
+        if database.public_binding(public):
             raise ValueError('Device identity cannot become a service identity')
-        prior = database.execute('SELECT enabled FROM chat_service_senders WHERE public=?', (public,)).fetchone()
+        prior = database.service(public)
         if prior is not None and not prior['enabled']:
             raise ValueError('Revoked service identity cannot be reactivated by replay')
-        database.execute('INSERT OR IGNORE INTO chat_service_senders VALUES (?,1)', (public,))
+        database.add_service(public)
 
 
 def revoke(access, public):
     message(public)
-    with access.db() as database:
-        database.execute('UPDATE chat_service_senders SET enabled=0 WHERE public=?', (public,))
+    with access.enrollment() as enrollment:
+        enrollment.chat().revoke_service(public)

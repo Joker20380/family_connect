@@ -288,6 +288,48 @@ FIELD/CRL/file writers, issuer fencing и production wiring остаются pen
 понадобятся fence + current-state recovery, не замена старой SQLite. Полный cutover
 блокируют остальные строки карты и HA-03..05; этот DB slice их не обходит.
 
+## HA-02H — chat and support sender transactions
+
+`ChatTransaction` в существующем bundled `chat.py` переносит SQL для chat identity,
+отдельных challenges, service senders, sequence и support binding. SQLite использует
+тот же алгоритм; PostgreSQL получает native DDL/FK/unique/check и marker
+`family-connect/ha-chat-synthetic/v1/db-only`. Никакого production DSN/selector,
+автоматического migration/import или нового сетевого протокола нет.
+
+- Регистрация требует обе подписи и активные device/invite. Bind и расход challenge
+  атомарны; повтор нового proof идемпотентен по identity, старый proof одноразовый.
+  Конкурентный device/service claim одного public key имеет одного победителя.
+  Existing service revoke terminal: повтор регистрации не включает отозванный sender.
+  Service identity не создаёт device/invite/VPN grant.
+- Sequence продвигается в одной транзакции со snapshot; membership cap550,
+  challenge cap8 и lease100s сохраняются. Неизвестный commit sequence нельзя
+  трактовать как неслучившийся: readback либо новая, строго большая generation;
+  это не доказательство ACK от mailbox и не восстановление старого номера.
+- `support.enroll` проверяет активность клиента, binding и sender (schema1/device
+  или schema2/service) **в той же writer transaction**, где сохраняет support_sender.
+  Прежний промежуток между отдельными configuration/read и enroll/write устранён.
+  Менять прежний support_sender на другой по retry нельзя. Configuration/inventory
+  остаются read-only и не записывают enrollment, revokes/disabled state не скрываются.
+- Часы проверяются после входа в транзакцию; expired chat proof/support role/node
+  lease отвергаются. Read-side snapshots используют `Access.read_enrollment`.
+  Local policy загружается отдельно: атомарность DB **не** распространяется на
+  concurrent policy-file change, SSH/ACK или file replace; это gates HA-03.
+- `chat_sync.synchronize`, direct `_synchronize` и `support.publish` отвергают PG
+  до lock/key/file/network I/O. Локальный flock не объявлен distributed fence;
+  текущий SQLite publication path сохранён. CLI и служба не выбирают новый backend.
+
+114 настоящих SQLite/PG contracts (74 chat/support +40 enrollment),238 consumer/
+package regressions и18 окончательных runner guards PASS;23 optional nginx/pinned
+archive cases не выполнялись. Closed support kit reproducibility/import проходит.
+Recovery совмещает chat/support с enrollment/aliases/paid/audit: SIGKILL откатывает
+незавершённые binding/proof/revoke/sequence изменения, актуальный restore совпадает
+по всем15 lab таблицам/29 строкам. Старый dump отвергнут; consumed proof не оживает,
+pending proof работает один раз, sender revoke/support binding сохраняются, sequence
+продолжается. Keys/policy удерживаются в private lab, **не** восстанавливаются.
+Не доказаны full product recovery, production high-watermark, replica/RPO0, reverse
+import, mailbox ACK/fencing или WAN failover. Откат сейчас — убрать owned стенд;
+после live writes нужны fence и current-state recovery, а не старая SQLite.
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -300,9 +342,9 @@ CLI и периодические задания; число таблиц produc
 | `paid_beta.py`, `transport_membership.py`, paid CLI | Immutable ledger, payload-bound event ID, cohort/binding triggers, terminal revoke, exact paid/noncohort projection | HA-02B/C DB + membership contracts synthetic PASS; production CLI/wiring pending |
 | `subscription.py` | Собственное атомарное потребление challenge вместе с paid projection, не только `Access.complete` | HA-02B synthetic PASS; production остаётся SQLite |
 | `support_ids.py` | Stable aliases, atomic backfill и proof/observation; safe inventory/lookup | HA-02E synthetic PASS; full import/production wiring pending |
-| `support_admin.py`, `support.py` | Admission-file + grant + audit consistency; support sender bindings | HA-02F DB grant/revoke/audit synthetic PASS; FIELD file consistency/fencing and sender pending, PG FIELD refused before file I/O |
+| `support_admin.py`, `support.py` | Admission-file + grant + audit consistency; support sender bindings | HA-02F admin и HA-02H sender DB synthetic PASS; FIELD/support file publication/fencing pending, PG publication refused before file I/O |
 | `referrals.py` | Sponsor-bound request idempotency, pool/daily limits, proof/link и claim/invitation в одной транзакции | HA-02D synthetic PASS; full import/production wiring pending |
-| `chat.py`, `chat_service.py`, `chat_sync.py` | Chat identity/proof, directory sequence, service sender revoke; filesystem exports | Pending |
+| `chat.py`, `chat_service.py`, `chat_sync.py` | Chat identity/proof, directory sequence, service sender revoke; filesystem exports | HA-02H DB synthetic PASS; mailbox/SSH/file publication and HA-03 fencing pending, PG publication refused before I/O |
 | `restricted.py`, `restricted_admin.py`, `readiness_receipts.py` | Grants, отдельные restricted challenges, certificates, readiness, CRL sequence | HA-02F admin и HA-02G auto-enroll/challenge/certificate/readiness DB synthetic PASS; CRL sequence/file writers, issuer fencing и production wiring pending |
 | `restricted_maintenance.py`, `restricted_sync.py`, `paid_canary_crl.py` | HMAC journal, local flock, signed directory/CRL, publication/receipt ordering | Pending; требует также HA-03 fencing |
 | `gateway_routing.py`, `gateway_selection.py` | Assignment versions, operation IDs, append-only events, atomic projections | Pending |
@@ -317,7 +359,7 @@ signing keys не входят в migration и остаются офлайн.
 
 ## Следующие gates
 
-1. Перевести остальные writers/CLI (далее support sender и CRL/file publication), затем metadata,
+1. Перевести остальные writers/CLI (далее gateway assignment/routing и CRL/file publication), затем metadata,
    tombstones/files и остальные строки карты. Не допускать mixed backend writers;
    synthetic membership не заменяет production wiring, deadline и package gates.
 2. Создать явную versioned all-table migration: snapshot consistency, nullable и

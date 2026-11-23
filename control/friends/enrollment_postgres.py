@@ -48,6 +48,10 @@ class PostgresEnrollmentTransaction(EnrollmentTransaction):
         from .restricted_postgres import PostgresRestrictedTransaction
         return PostgresRestrictedTransaction(self)
 
+    def chat(self):
+        from .chat_postgres import PostgresChatTransaction
+        return PostgresChatTransaction(self)
+
     def registered(self, device):
         row = self.database.execute('SELECT support_id FROM device_support WHERE device=%s', (device,)).fetchone()
         if row is not None:

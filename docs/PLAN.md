@@ -38,7 +38,13 @@ concurrent requests, lost commit ACK, backend loss, node binding, expiry and rea
 snapshot pass. SIGKILL/current restore preserves16 lab tables/36 rows; stale backup refused.
 Ephemeral issuer keys retained in memory, NOT backed up/restored. CRL/file publication,
 replication/RPO0 and fenced authority are not qualified; no production selector added.
-NEXT within HA-02: support sender and remaining writers/CLI, CRL publication,
+HA-02H chat/support sender DB boundary qualified:114 real DB contracts /0 skips
+(74 chat/support +40 enrollment),238 regressions /23 optional skips and18 final runner
+guards PASS. Atomic support sender validation/enrollment closes the two-transaction
+gap; one-use proof, immutable identity, terminal sender revoke, sequence and leases
+survive SIGKILL/exact15-table/29-row restore. Stale backup refused. Keys/local policy
+retained, NOT restored. PG mailbox/support file publication refuses before I/O.
+NEXT within HA-02: gateway assignment/routing and remaining writers/CLI, CRL publication,
 metadata/tombstones/files, all-table shadow import, full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.

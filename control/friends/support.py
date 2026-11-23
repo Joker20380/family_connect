@@ -8,7 +8,7 @@ import stat
 import tempfile
 
 from messenger.support import validate
-from .chat import ChatAccess
+from .chat import ChatAccess, chat_transaction
 from .chat_publishers import unique
 from .pseudonyms import load as load_aliases, seal
 
@@ -32,40 +32,45 @@ def load(path):
 
 
 def sender(database, document):
+    database = chat_transaction(database)
     if document['schema'] == 2:
-        registered = database.execute('SELECT enabled FROM chat_service_senders WHERE public=?',
-                                      (document['sender_public'],)).fetchone()
+        registered = database.service(document['sender_public'])
         if registered is None or not registered['enabled']:
             raise ValueError('Unregistered support service sender')
         return
     ChatAccess.active(database, document['sender_device'])
-    registered = database.execute('SELECT public FROM chat_bindings WHERE device=?', (document['sender_device'],)).fetchone()
+    registered = database.binding(document['sender_device'])
     if registered is None or registered['public'] != document['sender_public']:
         raise ValueError('Unregistered support sender')
 
 
 def configuration(access, path, device, chat_public, expires):
     document = load(path)
-    with access.db() as database:
-        ChatAccess.active(database, device)
-        sender(database, document)
-        binding = database.execute('SELECT public FROM chat_bindings WHERE device=?', (device,)).fetchone()
-        if binding is None or binding['public'] != chat_public:
-            raise ValueError('Unregistered support binding')
+    with access.read_enrollment() as enrollment:
+        return _configuration(access, enrollment.chat(), document, device, chat_public, expires)
+
+
+def _configuration(access, database, document, device, chat_public, expires):
+    ChatAccess.active(database, device)
+    sender(database, document)
+    binding = database.binding(device)
+    if binding is None or binding['public'] != chat_public:
+        raise ValueError('Unregistered support binding')
     return validate(dict(schema=1, device=device, chat_public=chat_public,
                          sender_public=document['sender_public'], revision=document['revision'],
                          enabled=document['enabled'], expires_at=expires), device, chat_public, int(access.clock()))
 
 
 def enroll(access, path, device, chat_public, expires):
-    value = configuration(access, path, device, chat_public, expires)
-    with access.db() as database:
-        ChatAccess.active(database, device)
-        binding = database.execute('SELECT public,support_sender FROM chat_bindings WHERE device=?', (device,)).fetchone()
+    document = load(path)
+    with access.enrollment() as enrollment:
+        database = enrollment.chat()
+        value = _configuration(access, database, document, device, chat_public, expires)
+        binding = database.binding(device)
         if (binding is None or binding['public'] != chat_public
                 or binding['support_sender'] not in (None, value['sender_public'])):
             raise ValueError('Support enrollment identity changed')
-        database.execute('UPDATE chat_bindings SET support_sender=? WHERE device=?', (value['sender_public'], device))
+        database.enroll_support(device, value['sender_public'])
     return value
 
 
@@ -73,17 +78,17 @@ def bindings(access, key, path, node):
     if type(key) is not bytes or len(key) != 32:
         raise ValueError('Inventory HMAC key required')
     document = load(path)
-    if (type(node) is not dict or set(node) != {'sequence', 'expires_at', 'host', 'port', 'public_key'}
-            or type(node['sequence']) is not int or node['sequence'] < 1
-            or type(node['expires_at']) is not int or not access.clock() < node['expires_at'] <= access.clock() + 120):
-        raise ValueError('Fresh acknowledged mailbox lease required')
-    with access.db() as database:
+    with access.read_enrollment() as enrollment:
+        database = enrollment.chat()
+        now = access.clock()
+        if (type(node) is not dict or set(node) != {'sequence', 'expires_at', 'host', 'port', 'public_key'}
+                or type(node['sequence']) is not int or node['sequence'] < 1
+                or type(node['expires_at']) is not int or not now < node['expires_at'] <= now + 120):
+            raise ValueError('Fresh acknowledged mailbox lease required')
         sender(database, document)
-        if database.execute('SELECT value FROM chat_sequence WHERE id=1').fetchone()[0] != node['sequence']:
+        if database.sequence() != node['sequence']:
             raise ValueError('Mailbox lease sequence mismatch')
-        rows = database.execute('''SELECT d.device, c.public, c.support_sender, d.revoked,
-            EXISTS(SELECT 1 FROM invites i WHERE i.device=d.device AND i.revoked=0) AS active
-            FROM devices d LEFT JOIN chat_bindings c ON c.device=d.device ORDER BY d.device''').fetchall()
+        rows = database.support_bindings()
     return dict(schema=1, sequence=node['sequence'], expires_at=node['expires_at'], sender_public=document['sender_public'],
                 node={name: value for name, value in node.items() if name != 'sequence'},
                 devices=[dict(pseudonym=hmac.new(key, row['device'].encode(), hashlib.sha256).hexdigest(),
@@ -95,6 +100,8 @@ def bindings(access, key, path, node):
 
 
 def publish(access, root, node):
+    if access.enrollment_repository is not None:
+        raise NotImplementedError('PostgreSQL support file publication requires fenced authority')
     descriptor = os.open(root / 'support-inventory-hmac.key', os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
     with os.fdopen(descriptor, 'rb') as stream:
         info = os.fstat(stream.fileno())

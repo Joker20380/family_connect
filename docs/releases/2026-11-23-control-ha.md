@@ -13,7 +13,7 @@ source inspection is not a fresh server-health check.
 
 - HA-01 isolated scope implemented and verified; details below.
 - HA-02A enrollment, HA-02B paid/subscription, HA-02C membership, HA-02D referral,
-  HA-02E Support ID, HA-02F grant/audit and HA-02G issuance/readiness DB slices qualified below; remaining
+  HA-02E Support ID, HA-02F grant/audit, HA-02G issuance/readiness and HA-02H chat/support DB slices qualified below; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -25,6 +25,94 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02H — chat and support sender recovery
+
+Continuation from `5cc00bf0c6021f672e920b3997e131995527a0fe` in the authoritative
+metadata branch. Source-only synthetic DB slice; no SSH/live health check, deployment,
+backend/CLI switch, production policy/consent or client change. Console5ce82415,
+Android126/catalog9,8/12/120s and all-three-serving-node first-cohort ACKs unchanged.
+RU remains a dependency; HA-02/03..05 are not complete.
+
+### Implementation and rollback semantics
+
+Common `ChatTransaction` stays in bundled `chat.py`; native PostgreSQL uses separate
+DDL/marker, no SQL string translation or automatic import. Device registration and
+chat-proof consumption, service registration/revoke, sequence update and support
+enrollment now use `Access.enrollment`. Configuration/inventory use read-only
+snapshots. Bindings stay immutable; two signatures remain required; service public
+keys cannot also claim a device and cannot reactivate after revoke. Service identity
+creates no VPN entitlement. Cap8/cap550,100s lease and120s validation bound remain.
+
+Support sender validation (device or service) and binding write now share **one**
+writer transaction, closing the previous read/write gap. Time is sampled after
+transaction acquisition; stale proof/role/node lease is refused. DB atomicity does
+not make a mutable policy file or SSH/mailbox ACK atomic. Both chat-sync entrypoints
+and support-file publication refuse PG before file/lock/key/network I/O; no local
+flock is reused as distributed fencing. SQLite publisher behavior stays intact.
+
+Commit ACK loss: registration needs readback/new proof; service registration/revoke
+and same support binding retry idempotently. Snapshot retry produces a greater
+sequence, never reuses a presumed uncommitted number. These are DB semantics, not
+remote publication ACK or authority. New and prior packaging gates remain separate.
+
+### Qualification and retained attempts
+
+Locked control/identity/HA environment, psycopg3.3.9, PostgreSQL17.11 pinned image
+`sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73`.
+Private evidence under `/tmp/fc-control-ha-20261123/`; commands:
+
+```sh
+python -m scripts.chat_postgres_rehearsal --workdir /tmp/fc-control-ha-20261123/chat-3
+python -m pytest -q -ra tests/test_friends_access.py tests/test_friends_chat.py tests/test_chat_service_sender.py tests/test_support_binding.py tests/test_friends_client.py tests/test_friends_http_runtime.py tests/test_support_ids.py tests/test_support_http.py tests/test_friends_support_owner.py tests/test_friends_owner.py tests/test_subscription_http.py tests/test_control_channel.py tests/test_referral_rehearsal.py tests/test_enrollment_rehearsal.py tests/test_support_collector.py tests/test_served_publishers.py tests/test_support_package.py
+python -m pytest -q tests/test_referral_rehearsal.py tests/test_enrollment_rehearsal.py
+```
+
+- `chat-3/contracts.log`/XML: **114 PASS /0 skips**,34.42s;74 chat/support plus40
+  enrollment contracts. Concurrent single-proof use, identity/capacity/sequence
+  races, write rollback, commit ACK loss, real backend termination, schema refusal,
+  sender revoke, immutable support binding, post-wait expiry and PG publication guard.
+- `chat-regressions-1.log`: **238 PASS /23 explicit skips**,46.05s. Ordinary HTTP,
+  clients/owner/support, collectors, publisher wrappers and closed support kit
+  import/reproducibility pass. Skips:15 real nginx,1 pinned sync,7 exact private
+  served-archive cases. No full native/release acceptance claimed.
+- `chat-runner-3.log`: **18 PASS**,0.67s, final guard check after recovery-helper
+  repair, including new exact-refusal test. Overlaps the broader regression's
+  runner selection; not18 additional unique regression cases. `pip check` PASS.
+- Preliminary `chat-local-1.log`:66 PASS/40 unavailable-PG skips. All those PG
+  contracts subsequently run in the real runner without skips.
+- `chat-1` contracts114 PASS/38.82s, but recovery fails `ANDROID_BASELINE_REQUIRED`:
+  synthetic payment lacked the required support observation. Corrected fixture
+  records an actual proof-bearing Android126 observation before payment; no paid
+  guard weakened. `chat-2` contracts114 PASS/33.41s and crash comparison passes,
+  but expected stale-restore ValueError escaped a helper accepting only Rejected.
+  New bounded helper checks the **exact** refusal reason and rejects success or
+  unrelated errors; same treatment for revoked-service replay. Neither attempt is
+  reported as a recovery PASS; final `chat-3` completes all checks.
+
+### Recovery and remaining gates
+
+`chat-3/receipt.json`: `ISOLATED_CHAT_POSTGRES_PASS`. Actual SIGKILL discards unfinished
+binding/proof/service-revoke/sequence updates. Current restore in a separate owned
+container matches **all15 synthetic tables/29 rows** before new writes, including
+paid ledger/subscription, aliases/observations and audit. Stale pre-chat dump is
+restored only in another disposable container and rejected against known committed
+state. Consumed/revoked proofs and revoked sender replay are refused; same service/
+support/payment retries preserve state, pending chat proof works once, sequence
+continues. Comparison is a lab oracle, not a production high-watermark service.
+
+Device/chat keys, support policy and frozen clock are retained by the lab, not
+restored from backup. No real mailbox/SSH/publication, full product/secret recovery,
+replication/RPO0, reverse import, fencing or WAN failover is qualified. All owned
+containers are cleaned; private rows, dumps and credentials stay out of Git.
+Prior four overlay failures and HA-02G artifact-dependent package gaps stay open,
+not rerun/reclassified here. This source push is not a runtime installation.
+
+Rollback now: stop only owned lab; production has no changes to undo. After future
+canonical writes: fence all writers, preserve current acknowledged state and use
+qualified current-state/forward recovery or reverse import, never stale SQLite.
+NEXT: gateway assignment/routing and remaining DB writers/CLI, metadata/tombstones,
+CRL/files, full import/recovery/replicas and HA-03..05 before any live cutover.
 
 ## HA-02G — restricted issuance and readiness recovery
 

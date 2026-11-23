@@ -84,8 +84,8 @@ ledger, отзывах и challenge, не только числе устройс
 потери quorum, ремонта узла, CA renewal, backup restore и независимый мониторинг.
 HA не устраняет причину локальных зависаний RU.
 
-HA-02A/B/C/D/E/F/G: enrollment, paid ledger/subscription, synthetic all-node membership,
-referral, Support ID, grant/audit и issuance/readiness DB transactions, PostgreSQL crash/restore
+HA-02A/B/C/D/E/F/G/H: enrollment, paid ledger/subscription, synthetic all-node membership,
+referral, Support ID, grant/audit, issuance/readiness и chat/support DB transactions, PostgreSQL crash/restore
 стенд реализованы. HA-02B отвергает stale backup после новых payment/revoke/proof
 записей и проверяет актуальный restore всех девяти лабораторных таблиц. Это не
 production reverse migration: serving-set fencing, production wiring/deadlines,
@@ -109,6 +109,13 @@ proofs, paid expiry, owner/node binding и receipt retention сохраняют�
 использует read-only snapshot без writer lock. Ephemeral issuer keys при restore
 сохранены в памяти, не восстановлены из backup: secret/authority recovery не доказан.
 FIELD/CRL/file publication и replication остаются pending; backend для production нет.
+HA-02H переносит chat identity/proof, service sender revoke, sequence и support binding:
+114 contracts,238 regressions,18 final runner guards; exact restore15 lab таблиц/29 строк.
+Support sender проверяется и привязывается в одной транзакции. Lease100s/cap120s,
+membership550 и challenge8 не расширяются. Номера продолжаются, отозванный sender
+не оживает после restore/replay. Политика и ephemeral keys удерживаются вне БД,
+их recovery не проверен. PG mailbox/support-file публикация запрещена до I/O;
+policy-file race, external ACK и общий publisher lock требуют HA-03 fencing.
 Ни один из этих стендов не включает replicated writer, epoch fencing или live failover.
 [Точная граница и карта writers](control-ha-storage.md).
 

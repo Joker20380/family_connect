@@ -1,6 +1,22 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA HA-02G issuance/readiness DB transactions VERIFIED; migration IN_PROGRESS.**
+**23 November — CONTROL-HA HA-02H chat/support sender DB transactions VERIFIED; migration IN_PROGRESS.**
+Continuation from5cc00bf0 in the authoritative metadata branch. Chat registration,
+one-use proofs, service sender revoke, membership sequence and support bindings
+share SQLite/PostgreSQL transactions. Support sender validation and enrollment are
+now atomic rather than two separate transactions; fresh time is checked after waits.
+114 real DB contracts PASS /0 skips (74 chat/support +40 enrollment),238 focused
+regressions PASS /23 explicit optional skips,18 final runner guards PASS.
+PostgreSQL17.11 SIGKILL and exact15-table/29-row restore pass; stale backup refused.
+Keys, local policy and synthetic time are retained in memory/files, not recovered:
+no full product backup, RPO0, replication or fenced authority claim. PG mailbox/
+support-file publishers refuse before I/O. No backend/server/client/consent change;
+console5ce82415, Android126/catalog9 and8/12/120s unchanged, RU remains a dependency.
+Next: gateway assignment/remaining DB writers, metadata/tombstones, CRL/files,
+full import/recovery/replication and fencing. Prior packaging gates remain open.
+[Scope](control-ha-storage.md#ha-02h--chat-and-support-sender-transactions) · [Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02h--chat-and-support-sender-recovery).
+
+**Earlier23 November — CONTROL-HA HA-02G issuance/readiness DB transactions VERIFIED; migration IN_PROGRESS.**
 Source `e8240e81` ordinarily pushed and remote-SHA verified in the authoritative
 metadata branch (base2057a32c). Restricted challenge,
 certificate, auto-enrollment and readiness ACK/readback share SQLite/PostgreSQL

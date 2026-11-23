@@ -282,3 +282,35 @@ reverse migration or RPO0 is provided. Rollback now means stopping the owned lab
 not restoring a product DB. After future production writes, fence writers and use
 current-state recovery; old SQLite is not an unconditional rollback. All-three-node
 first-cohort ACKs and8/12/120s remain unchanged. Full HA gates still block cutover.
+
+## HA-02H: isolated chat/support sender recovery
+
+Use the same dedicated control/identity/HA locks, psycopg3.3.9 and pinned PostgreSQL17.11:
+
+```sh
+python -m scripts.chat_postgres_rehearsal --workdir /tmp/fc-ha-chat-new
+```
+
+Runs114 SQLite/real-PG contracts (74 chat/support +40 enrollment), then actual
+SIGKILL/restart and separate stale/current restores. Reuse no existing workdir or
+credentials: loopback-only, temporary/private evidence, image/ownership/cleanup
+guards are unchanged. No SSH, production DB, product identity or policy is read.
+
+Check both device signatures, immutable bindings, one-use proofs/cap8, service vs
+device identity exclusion, terminal service revoke, support sender validation/write
+in one transaction, membership550, monotonic sequence and100s lease. Failure and
+commit-ACK-loss tests must not turn old proof/sequence into a fresh authorization.
+Read-only configuration/inventory cannot enroll; fresh time is checked after waits.
+PG mailbox/support-file publication must refuse before lock/key/file/network I/O.
+
+Recovery must match all15 lab tables/29 rows before new writes, including paid/
+aliases/audit coexistence. Stale pre-chat snapshot must fail with the exact restore
+refusal reason. Consumed proof and revoked service registration remain refused;
+pending chat proof consumes once, support binding persists, sequence continues.
+Test keys and local policy are retained, not recovered: secret/file recovery, remote
+mailbox ACK, replica/RPO0 and reverse migration are unqualified. No production selector.
+
+Retain failed evidence outside Git. Rollback is owned-lab cleanup; after future live
+writes require fencing/current-state recovery, never an unconditional old SQLite
+restore. Gateway assignment and remaining canonical writers/import/recovery/replicas
+and HA-03..05 gates still block production cutover.
