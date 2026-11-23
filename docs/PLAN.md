@@ -93,9 +93,16 @@ pre-edit/revoke backup refused; restored immutable history/revision guards pass.
 Legacy SQLite and separate public exports remain unchanged; canonical DB-only path
 returns stored, not delivery, and refuses file export. No production selector,
 role delegation API, cross-store import or distributed publication is qualified.
-NEXT within HA-02: remaining writer/CLI/file inventory (profile_store, pseudonyms,
-membership/catalog files) and their canonical-versus-derived boundaries,
-all-table shadow import, full backup/recovery and strict
+HA-02N source writer/CLI/file inventory qualified fromf4c21afb:123 focused tests
+/0 skips, including five new alias/allocator boundary cases. Depends on HA-02A–M
+and accepted profile/maintenance/HMAC/catalog/receiver contracts. Gate: source
+caller map, canonical-versus-derived classification, private external recovery
+inputs and freeze/activation boundaries documented; synthetic exact alias and
+node allocation backup/replay checks PASS. Not a live writer census, runtime
+change, all-store importer or full recovery. Receiver safety state is not disposable.
+NEXT within HA-02: versioned all-store synthetic import/preflight, exact table and
+external-reference coverage; then qualified live consistency barrier/writer census,
+all-store shadow/full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.
 HA-03 fenced authority, HA-04 API/client failover and HA-05 shadow/cutover
@@ -107,7 +114,7 @@ Keep8/12/120s, offline signing and consent tombstones.
 No copied SQLite becomes a second writer; source checkpoint is not production HA.
 All three serving nodes still ACK the first cohort transition; unavailable RU is
 not silently removed. Any serving-set/quarantine change needs HA-03 fencing.
-[Stages and rollback](control-ha.md) · [Writer map](control-ha-storage.md) · [Evidence](releases/2026-11-23-control-ha.md).
+[Stages and rollback](control-ha.md) · [Writer map](control-ha-storage.md) · [File/CLI boundaries](control-ha-files.md) · [Evidence](releases/2026-11-23-control-ha.md).
 
 **DEVICE-METADATA-NL-20261122 — selected implementation COMPLETE / INSTALLED.**
 Dependencies: accepted metadata/HMAC2 runtime and DB-IP2026-11, the22 November

@@ -6,6 +6,8 @@
 
 [CONTROL-HA implementation stage: stage2 of5; production still depends on RU](control-ha.md#стадия-внедрения-на-23-ноября).
 
+[CONTROL-HA HA-02N: file/CLI authority inventory, non-rebuildable aliases/IP allocation and import recovery inputs](control-ha-files.md).
+
 [Device metadata · 22 November: NL/AWG GeoIP and explicit missing-data labels installed; consent unchanged](releases/2026-11-22-nl-geoip.md).
 
 [RU · 17 November00:02UTC: availability restored on accepted bytes; initiating cause remains open](releases/2026-11-17-ru-recovery.md).

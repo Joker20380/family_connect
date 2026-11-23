@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02N source file/writer inventory VERIFIED.**
+Continuation fromf4c21afb; source/tests/docs only, no deployment or live read.
+The remaining profile/maintenance, aliases, node allocation, receiver membership,
+support/admission, directory, catalog and notice file boundaries are classified.
+Aliases are private authority; node `peers.db` preserves assigned IPs and allocator
+state. Receiver caches also retain prepared/denied/high-water safety state, not
+just disposable projections.123 focused tests PASS /0 skips, including five new
+synthetic alias/allocator boundary cases. No runtime source changed; root profile,
+Go publisher, PostgreSQL or historical package gates are not newly qualified.
+Stage2 of5 remains IN_PROGRESS. NEXT selected scope: versioned all-store synthetic
+import/preflight with exact table and external-reference coverage; live writer
+census, cross-store consistency barrier, full recovery, replication/RPO0 and
+HA-03..05 remain pending. No queued import or production switch started here.
+Latest recorded installation unchanged: console5ce82415, NL GeoIP22 November,
+public Android126/catalog9;8/12/120s and all-three-node first-cohort ACKs preserved.
+RU still a dependency; this is not fresh availability evidence or outage recovery.
+[File inventory and rollback](control-ha-files.md) ·
+[Evidence](releases/2026-11-23-control-ha.md#ha-02n--file-authority-inventory).
+
 **23 November — CONTROL-HA HA-02M notices DB recovery VERIFIED; migration IN_PROGRESS.**
 Source `864dca64` ordinarily pushed and remote-SHA verified fromc411e187 in the
 authoritative metadata worktree; not deployment.

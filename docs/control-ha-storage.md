@@ -1,8 +1,7 @@
 # HA-02 — каноническое хранилище и очередь writers
 
-23 November 2026. **IN_PROGRESS; HA-02A enrollment, HA-02B paid/subscription и
-HA-02C membership, HA-02D referral, HA-02E Support ID и HA-02F grant/audit contracts
-квалифицированы на синтетическом стенде.**
+23 November 2026. **IN_PROGRESS; HA-02A–M DB contracts квалифицированы по отдельности
+на синтетическом стенде; HA-02N source file/writer inventory проверен отдельно.**
 Это не production, не репликация и не cutover.
 [Общие gates](control-ha.md) · [Результаты](releases/2026-11-23-control-ha.md).
 
@@ -581,16 +580,20 @@ CLI и периодические задания; число таблиц produc
 | `technical_metadata.py`, `geoip.py` | Отдельная SQLite, consent epoch/sequence/digest, revoke tombstone, retention, no resurrection | HA-02K canonical DB contracts/recovery synthetic PASS; live отдельная SQLite unchanged, multi-store import/collector wiring/physical-erasure policy pending; GeoIP ephemeral read-side не перенесён |
 | `diagnostics.py` | Отдельное хранилище snapshots, ограничения данных/retention | HA-02L canonical DB/recovery synthetic PASS; live separate SQLite unchanged, HTTP/CLI/worker wiring, cross-store import and physical-erasure policy pending |
 | `notices.py` → `scripts/service_notices.py` | Отдельная notices БД, publisher roles/revisions и exports | HA-02M canonical DB authority/recovery synthetic PASS; live SQLite unchanged, HTTP/CLI/import pending; canonical export refused until HA-03 fenced publication |
-| `profile_store.py`, `pseudonyms.py`, generated membership/catalog files | Atomic file replace/fsync, local locks, authority versus derived copies | Pending; не копировать локальные locks как global fencing |
+| `profile_store.py`, `pseudonyms.py`, generated membership/catalog files | Private authority versus derived copies; atomic file replace/fsync; local locks | HA-02N source inventory +123 focused tests PASS; live writer census/activation/fencing pending; [точные границы](control-ha-files.md) |
+| `deploy/friends/awg-gateway.py`: `peers.db`, transport receiver state | Stable public-key/row-ID/IP allocation and allocator sequence; durable prepared/denied/floor state | HA-02N distinguishes node-local authority from cache; remains node-scoped, not imported into the control DB or reconstructed from public keys |
 
-`transport_gateway.py` содержит node-local cache/receipt state: это не новый master
-канонической БД. Panel Django/Postgres — read-side projection, не authority. Root/release
+`transport_gateway.py` содержит node-local decision/prepared/denied/receipt state:
+это не новый master канонической БД, но его safety state нельзя просто удалить.
+Mailbox membership file также хранит receiver sequence. Panel Django/Postgres —
+read-side projection, не grant authority; operator queues/cursors нельзя терять. Root/release
 signing keys не входят в migration и остаются офлайн.
 
 ## Следующие gates
 
-1. Закрыть remaining writer/CLI/file inventory и canonical-versus-derived boundaries
-   (profile_store/pseudonyms/membership/catalog); live notices/metadata/diagnostics
+1. Использовать [HA-02N source inventory](control-ha-files.md) при подготовке
+   versioned all-store synthetic import/preflight. До live cutover отдельно сверить
+   effective writer/CLI/timer census и consistency barrier; live notices/metadata/diagnostics
    остаются отдельными SQLite до согласованного cross-store import/collector/worker cutover.
    Distributed CRL/file publication отдельно зависит от HA-03 fencing. Не допускать mixed backend writers;
    synthetic membership не заменяет production wiring, deadline и package gates.
@@ -601,8 +604,8 @@ signing keys не входят в migration и остаются офлайн.
 3. Отдельный PostgreSQL/Patroni + etcd стенд: synchronous replication, strict
    no-quorum refusal, primary loss, повторное включение старого primary, RPO0 на
    подтверждённых payment/revoke/challenge/tombstone, bounded ACK-loss recovery.
-4. Непустой полный backup/isolated restore и current-state recovery. Нынешний
-   restore девяти **лабораторных** таблиц — не backup всей системы; reverse import
+4. Непустой полный backup/isolated restore и current-state recovery. Отдельные
+   A–M наборы **лабораторных** таблиц — не backup всей системы; reverse import
    после новых записей не реализован. Старая pre-cutover копия не подходит.
 5. После HA-03/04 — production preflight/shadow/sole-writer cutover по HA-05.
 

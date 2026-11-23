@@ -480,3 +480,26 @@ fence publishers and recover current roles/revisions/journals/proofs; never copy
 pre-revoke SQLite or republish stale v1/v2 files as rollback. Remaining writer/file
 inventory, all-store import/full backup/strict replication and HA-03..05 still gate
 production. Prior package gates remain open; no source push authorizes cutover.
+
+## HA-02N: file authority boundaries
+
+Source-only [file/CLI inventory](../../docs/control-ha-files.md); no live paths,
+SSH, private configuration, gateway commands or new runtime backend. Use the
+existing control/identity locked environment:
+
+```sh
+python -m pytest -q -ra tests/test_control_ha_file_boundaries.py tests/test_pseudonym_generation.py tests/test_friends_gateway.py tests/test_transport_membership.py tests/test_friends_catalog.py tests/test_gateway_routing.py messenger/tests/test_membership.py
+```
+
+123 PASS /0 skips. Five new cases use generated alias inputs and a temporary node
+ledger; real registration logic is exercised with AWG/TCP effects stubbed out.
+Recreated aliases lose entity IDs/digest; reordered registration loses addresses.
+Exact manifest and SQLite backup retain history/bindings/allocator high-water;
+stale manifests refuse newer envelopes. This is not all-store import, encrypted
+off-host recovery or distributed publication. No root profile or Go publisher
+qualification is claimed; existing mandatory gates remain open.
+
+Rollback needs no server action. Keep production profiles/allocators/receiver
+state intact. Next scope is versioned all-store synthetic import/preflight;
+live writer census, consistency barrier, full recovery, strict replication and
+HA-03..05 remain separate gates. Never copy old SQLite/files over new accepted state.

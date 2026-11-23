@@ -15,7 +15,8 @@ source inspection is not a fresh server-health check.
 - HA-02A enrollment, HA-02B paid/subscription, HA-02C membership, HA-02D referral,
   HA-02E Support ID, HA-02F grant/audit, HA-02G issuance/readiness, HA-02H chat/support
   HA-02I gateway routing, HA-02J durable CRL, HA-02K metadata/consent, HA-02L diagnostics
-  and HA-02M notice authority DB recovery slices qualified below; remaining
+  and HA-02M notice authority DB recovery slices qualified below; HA-02N source
+  file/CLI inventory and synthetic alias/allocator checks complete; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -27,6 +28,69 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02N — file authority inventory
+
+Source-only continuation from `f4c21afbf879fc5f916c0092327ddf3b0775b130` in the
+authoritative metadata worktree. No runtime source changes, SSH/live read,
+deployment, product DB access, key/profile/catalog rewrite or client change.
+Latest recorded installation remains console5ce82415, NL GeoIP22 November and
+public Android126/catalog9.8/12/120s and all-three-node ACKs remain unchanged.
+
+### Deliverable and findings
+
+[Source file/CLI map](../control-ha-files.md) completes the selected HA-02N
+source-level inventory, not a live writer census or all-store migration:
+
+- Root profile/locator/maintenance journals, generation aliases and admission/
+  policy choices are private recovery inputs, not derivable DB projections.
+- AWG `peers.db` is node-local allocation authority. Preserve public/row-ID/IP
+  bindings, allocator sequence and matching network configuration.
+- Receiver transport state includes prepared/terminal-denied safety state;
+  mailbox `members.json` also holds the last-sequence comparison. “Cache” is not
+  permission to discard either, reset expiry or admit an older snapshot.
+- Signed catalog/policy inputs, sender policy, directory ownership and offline
+  trust are separate from DB rows. Public notices and membership/support leases
+  stay derived; canonical publication remains guarded pending HA-03.
+- Freeze checklist covers HTTP, operator/queued commands, timers/collectors,
+  node registration, renewal/maintenance and independent publishers. Actual
+  installed path/hash/owner/process evidence must be collected privately later.
+
+### Validation
+
+Private local logs under `/tmp/fc-control-ha-20261123/`:
+
+- `file-boundaries-1.log`:18 PASS /0 skips in1.20s; five new boundary cases plus
+  existing pseudonym and gateway registration regressions.
+- `file-boundaries-2.log`:123 PASS /0 skips in1.92s; adds all-node preparation,
+  terminal/restart checks, signed catalogs/routing and mailbox membership expiry.
+  [Exact command](../../deploy/control-ha/README.md#ha-02n-file-authority-boundaries).
+- `file-boundaries-3.log`:final123 PASS /0 skips in2.02s, with alias restore into
+  a separate private temporary file. Whitespace and949 local Markdown targets,
+  including six HA-02N/stage anchors, PASS.
+- Synthetic tests show identical-key alias regeneration changes entity IDs/digest;
+  exact restore keeps historical handles/deltas without the old key; stale
+  manifest rejects a newer envelope. Actual isolated registration reordered into
+  an empty ledger changes IPs; SQLite backup retains assignments and allocator
+  high-water, including a synthetic deleted-highest-row case.
+
+All data is synthetic under pytest temporary directories; external AWG/TCP
+effects are disabled. No all-store/PG/SIGKILL/network/key recovery was run here.
+Root-profile/native Go and historical package gates remain open, not skipped
+out of this test selection to claim full runtime acceptance. No full release PASS.
+
+### Stage, next scope and rollback
+
+Still **stage2 of5 (HA-02)**, not production HA. Next selected scope is versioned
+all-store synthetic import/preflight, explicit table and external-reference coverage.
+Live writer census/consistency barrier, full backup/current recovery, synchronous
+replication/RPO0, receiver-enforced fencing, API/client failover and production
+shadow/cutover remain pending. No next queued task started by this slice.
+
+Rollback is source/tests/docs only; leave installed services/data untouched.
+After future acknowledged writes, stale alias/allocator/profile/receiver snapshots
+are no safer than stale SQLite: fence and reconcile current state, not data loss.
+RU remains a dependency; this is not fresh health evidence or RU recovery.
 
 ## HA-02M — notice recovery
 

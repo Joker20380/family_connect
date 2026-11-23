@@ -83,7 +83,7 @@
 | Этап | Состояние | Что остаётся до перехода дальше |
 | --- | --- | --- |
 | HA-01: quorum/shadow foundation | Лабораторный gate завершён | Не считать стенд установленным production quorum |
-| HA-02: общее хранилище | В работе; A–M DB slices проверены отдельно | Remaining writer/CLI/file inventory; согласованный импорт всех хранилищ, полный recovery, strict replication/RPO0 |
+| HA-02: общее хранилище | В работе; A–M DB slices и N source file inventory проверены отдельно | Versioned all-store import/preflight, live writer census/consistency barrier, полный recovery, strict replication/RPO0 |
 | HA-03: единственный уполномоченный writer | Не внедрён | Epoch/fencing на принимающих узлах, запрет действий старого лидера и безопасная публикация файлов |
 | HA-04: API/клиентский failover | Не внедрён | Несколько API endpoints, безопасные retries и клиентские compatibility/acceptance gates |
 | HA-05: production shadow/cutover | Не начат | Актуальные backup/restore, guarded sole-writer switch, отказ RU/возврат узла, RTO и rollback |
@@ -92,8 +92,11 @@
 Это лишь DB authority: публичные v1/v2 файлы не публикуются из нового backend.
 Рабочие console5ce82415, Android126/catalog9 и отдельные SQLite остаются прежними.
 RU пока остаётся точкой зависимости; восстанавливать/перенастраивать серверы этим
-checkpoint нельзя. Следующая выбранная работа должна закрывать remaining writer
-inventory перед all-store migration, а не сразу включать новый PostgreSQL.
+checkpoint нельзя. [HA-02N inventory](control-ha-files.md) различает DB authority,
+private aliases/profiles, node-local allocator/receiver safety state и derived
+leases/exports;123 focused tests PASS /0 skips. Это не live process census.
+Следующий шаг — versioned all-store synthetic import/preflight, а не включение
+нового PostgreSQL на серверах. Внешние ключи/файлы нельзя восстановить из DB-only dump.
 
 ## Откат
 
