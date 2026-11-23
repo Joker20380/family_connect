@@ -15,6 +15,8 @@ divergent; pre-existing modifications are preserved. Do not deploy its runtime.
   push to the same metadata branch; no source merge/deployment to this old main.
 - HA-02B implementation: `a62b5b2e3ef58598a062e19289c2c06642c3af78`, ordinary
   push to that branch succeeded; remote SHA independently matched.
+- HA-02C implementation: `0ed728f06acdb131ba17869e6d57a1122451e58e`, ordinary
+  push to the same branch succeeded and remote SHA independently matched.
 - Full architecture: [CONTROL-HA plan](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/control-ha.md).
 - Full evidence: [source-worktree release record](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/releases/2026-11-23-control-ha.md).
 - Commands/limits: [isolated rehearsal runbook](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/deploy/control-ha/README.md).
@@ -35,6 +37,41 @@ and direct readback from every recovered member. Final local failover is1.766s,
 not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
+
+## HA-02C — node preparation and failure consistency
+
+SQLite and the explicitly enabled synthetic PostgreSQL mode now share first-payment
+preparation of all three serving nodes. ACK validation is strict (size, UTF-8,
+JSON duplicates, exact node/token/fields, integer schema); commands validate before
+contact. PostgreSQL's membership-required mode cannot silently fall back to the
+separate no-transports mode, including after real pg_dump/pg_restore.
+
+131 real SQLite/PostgreSQL contracts PASS /0 skipped, including42 new membership
+cases. The three node fixtures use actual Gateway cache/locks/fsync/readback logic
+with simulated AWG/TCP/systemctl/network, not live servers. ACK loss on each node,
+readback failure, DB rollback, real backend termination after all ACKs, unchanged
+5s idle timeout, concurrent retry, cache reload, stale noncohort snapshots and
+terminal revoke pass. Inherited crash/current restore/stale-backup refusal also pass.
+
+**A DB rollback must not undo a prepared node deny.** No partial payment commits;
+already-prepared target nodes stay denied, other noncohort/foreign entries remain.
+Retry the same event ID/payload to finish the transition; do not delete `prepared`,
+restore old node cache or automatically extend time. First cohort transition still
+requires all three nodes including RU; a smaller serving set needs HA-03 fencing.
+Node8s/watchdog12s/paid120s and network12s remain unchanged. The lab's5s PostgreSQL
+idle timeout is fail-closed, not a qualified WAN scheduling/deadline design.
+
+Broader suite:389 PASS /16 optional skips /4 failures. All four historical exact
+overlay tests also fail on unchanged baselineeeb11ba7 after checking capsule imports
+and bytes (`UNRELATED_PAID_DELTA`, `POLICY_CHANGE_FORBIDDEN`). These are not introduced
+by HA-02C; they remain an explicit package/deployment gate. No old pin/guard or public
+artifact was changed. Full release acceptance is not claimed. Failed attempts and
+exact test commands/evidence are retained in the authoritative source report.
+
+Final private evidence: `/tmp/fc-control-ha-20261123/membership-3/`; no owned test
+containers remain. No live export, server restart, production DB switch or client
+release. Next are remaining support/admin/referral writers, metadata/tombstones/files,
+full migration/recovery and replication, followed by mandatory fencing/API/cutover gates.
 
 ## HA-02B — paid/subscription and exercised recovery
 
@@ -92,9 +129,10 @@ are removed; credentials/dumps/logs remain private under `/tmp`, not Git.
 ## Not yet implemented
 
 These are isolated checkpoints, **not completed migration**. HA-02 must finish all
-transport-membership preparation, other canonical writers/CLI, metadata revoke
+production transport-membership wiring/deadlines, other canonical writers/CLI, metadata revoke
 tombstones and file coordination to an explicitly qualified replicated store.
-Paid/subscription synthetic parity does not qualify production import or recovery.
+Paid/subscription/membership synthetic parity does not qualify production import,
+new runtime packaging or full recovery.
 HA-03 adds receiver-enforced fencing, HA-04 multi-endpoint API/clients, HA-05 live
 shadow and cutover with real failure tests. No HA controller is installed on NL and
 no alternative API serves users. RU remains a shared dependency.

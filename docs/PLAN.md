@@ -8,12 +8,17 @@ HA-02A enrollment qualified in9d1219d8; HA-02B paid/subscription contracts and
 recovery qualified/pusheda62b5b2e.89 contracts /0 skips and366 regression/runner
 checks /20 optional skips PASS. Stale pre-payment restore refused; current nine-table
 lab restore retains acknowledged events/revoke/proof. No production cutover.
-NEXT within HA-02: transport-membership preparation/failure consistency, remaining
-writers/tombstones/files, all-table import, PostgreSQL/Patroni strict replication
-and full current-state recovery. Old SQLite is not safe after new writes; reverse
+HA-02C membership contracts qualified/pushed0ed728f0:131 PASS /0 skips;389 broader
+checks PASS /16 optional skips /4 historical-overlay failures reproduced on the
+unchanged baseline. Missing ACK/DB failure retains node denies without partial payment.
+NEXT within HA-02: remaining writers/CLI (support/admin/referral first), metadata/
+tombstones/files, all-table import, PostgreSQL/Patroni strict replication and full
+current-state recovery. Old SQLite is not safe after new writes; reverse
 import is not implemented. Then HA-03 receiver-enforced
 fencing, HA-04 multi-endpoint API/clients, HA-05 production shadow and guarded cutover.
 Retain8/12/120s and offline signing. Do not promote this old main or copied SQLite.
+All three serving-node ACKs remain mandatory; removing unavailable RU needs fencing.
+New HA runtime package qualification is pending; do not weaken historical pins.
 [Authoritative worktree, full plan and current receipt](releases/2026-11-23-control-ha.md).
 
 **DEVICE-METADATA-NL-20261122 — selected follow-up COMPLETE / INSTALLED.**

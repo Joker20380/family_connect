@@ -1,6 +1,18 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02B VERIFIED.**
+**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02C VERIFIED.**
+Node-preparation checkpoint0ed728f0 is ordinarily pushed and remote-SHA verified
+in the metadata branch.131 real SQLite/PostgreSQL contracts PASS /0 skips:
+partial ACK loss, backend failure, timeout and retry preserve durable target denies
+without partial payment. Restored membership-required schema cannot skip preparation.
+Broader checks:389 PASS /16 optional skips /4 old-overlay failures; the same four
+failures reproduce on unchanged baselineeeb11ba7. Exact packaging guards remain;
+this is not full release acceptance. Production RU/NL, console5ce82415 and Android126/
+catalog9 unchanged. Next: remaining writers/CLI, full import/recovery and replication.
+RU is still required by the current serving-node set; no production HA is installed.
+[Source, evidence, package blocker and rollback](releases/2026-11-23-control-ha.md).
+
+**Earlier23 November — isolated HA-02B VERIFIED.**
 Paid/subscription checkpointa62b5b2e is ordinarily pushed and remote-SHA verified
 in the existing metadata branch, not this divergent main.89 SQLite/PostgreSQL
 contracts PASS /0 skips;366 regression/runner checks PASS /20 optional skips.
