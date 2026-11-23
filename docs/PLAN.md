@@ -85,8 +85,14 @@ Gate: four explicit lab schemas/30 tables, typed preflight/eight declared-refere
 roles, atomic data/schema/receipt, exact retry or refusal, sequence reseed, three
 paid projections and43-table/47-row SIGKILL/current restore PASS. Not deployed SQLite
 adapters, semantic full-system migration or actual external-file recovery.
-NEXT bounded scope: deployed-schema adapters and semantically valid joint synthetic
-fixture; fail closed on unsupported/missing inputs. Separately, live consistency barrier/writer census,
+HA-02P application SQLite adapters/joint semantic fixture qualified/pushed867c6854:
+165 import contracts,128 CRL contracts and98 focused checks, all /0 skips. Depends
+on A–O native storage and external-authority map. Gate: exact current-code schema
+variant,29 source tables, immutable signed-CRL import anchor, semantic operations
+after restore and44-table/82-row import →87-row current recovery PASS. Unknown
+schemas fail closed; no live installed-schema census/full external recovery.
+NEXT bounded scope: versioned external recovery bundle and dry-run consistency
+preflight. Separately, installed-schema/live writer census and consistency barrier,
 all-store import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse
 import is not implemented. Then HA-03 receiver-enforced

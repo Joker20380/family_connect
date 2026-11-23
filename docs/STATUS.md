@@ -1,5 +1,25 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02P application SQLite import VERIFIED in isolation.**
+Source867c6854 ordinarily pushed and remote-SHA independently verified on the
+authoritative metadata branch. Four application-produced SQLite stores/29 tables
+import with exact schema/provenance/binding preflight; no credential sentinels in
+the joint fixture.165 import/enrollment contracts,128 CRL contracts and98 focused
+regressions PASS, all /0 skips. PostgreSQL17.11 SIGKILL/import restore preserves44
+tables/82 rows; business operations after restore and current recovery preserve87
+rows. Stale copies and replay of the old import refuse, without overwriting data.
+Verified immutable CRL import anchor retains legacy floor without inventing
+publication history; exact predecessor required, public export still blocked.
+Only a pinned current-code schema variant is accepted; installed schemas/live
+writers are not surveyed. External authority is retained, not disaster-recovered.
+NEXT: versioned external recovery bundle and dry-run consistency preflight.
+Stage2 of5; RU dependency, actual live barrier/full recovery/strict replication
+and HA-03..05 remain. No server/client/health change: console5ce82415, NL GeoIP22
+November, Android126/catalog9,8/12/120s and all-three-node first-cohort ACKs unchanged.
+Rollback now only cleans the owned lab. Original dirty/untracked work preserved;
+this divergent main is navigation, not deployable runtime.
+[Source, qualification and rollback](releases/2026-11-23-control-ha.md#ha-02p--application-sqlite-import).
+
 **23 November — CONTROL-HA HA-02O synthetic all-store shape import VERIFIED.**
 Source `5bb61ccb` ordinarily pushed and independently remote-SHA verified on the
 authoritative metadata branch.111 contracts PASS /0 skips (71 import +40 enrollment),

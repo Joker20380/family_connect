@@ -58,6 +58,41 @@ not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
 
+## HA-02P — application SQLite import
+
+Authoritative source/tests/docs `867c68544a483a94e687f2136712ae931956f22d` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA
+matched. Worktree `/home/joker/.codex/worktrees/dad9/family_connect` remains the
+runtime source. This divergent old main only records navigation; original four
+dirty files and six untracked paths are preserved. No force/reset/runtime merge.
+
+- Pinned application-produced SQLite schemas replace artificial source shapes:
+  four stores/29 source tables/68 rows, exact schema/type/binding/provenance checks
+  before target writes. Only this source-code schema variant is qualified; no
+  live installed-schema/writer census or source file access occurred.
+- Real generated activation/referral/payment, support/audit, signed certificates/
+  readiness/CRL/catalogs, chat, metadata tombstone, diagnostics and notices v1/v2
+  continue after import/restore. No credential sentinels in this joint fixture.
+- A separate immutable CRL import anchor preserves the checked legacy floor;
+  the new outbox begins empty. No invented operation history or remote ACK, and
+  first/subsequent predecessors remain strictly checked. Export requires HA-03.
+- 165 import/enrollment contracts,128 CRL regression contracts and98 consumer/
+  runner checks PASS, all /0 skips. PostgreSQL17.11 SIGKILL/current restore exact:
+  44 tables/82 rows imported,87 rows after new operations. Stale restore and old
+  import over acknowledged new state refuse. Owned containers cleaned up.
+
+[Contract](https://github.com/Joker20380/family_connect/blob/867c68544a483a94e687f2136712ae931956f22d/docs/control-ha-storage.md#ha-02p--application-sqlite-adapters) ·
+[Evidence and commands](https://github.com/Joker20380/family_connect/blob/867c68544a483a94e687f2136712ae931956f22d/docs/releases/2026-11-23-control-ha.md#ha-02p--application-sqlite-import).
+
+No server/service/client/catalog change or fresh live-health claim. Installed
+console5ce82415, NL GeoIP22 November, public Android126/catalog9 and8/12/120s remain;
+all-three-node first-cohort ACKs still mandatory. Stage2 of5; RU remains a dependency.
+External issuer/referral/HMAC keys, profiles/aliases/allocators/receiver floors
+are retained, not disaster-recovered. NEXT bounded scope: versioned external
+recovery bundle/dry-run consistency preflight. Actual live barrier/full recovery,
+strict replication and HA-03..05 remain pending. Abort only the owned lab; after
+future canonical writes recover current accepted state, never old SQLite/files.
+
 ## HA-02O — synthetic all-store shape import
 
 Authoritative source/tests/docs `5bb61ccb8a3dc92282bcaa02e0d2bddc30e3c85d` ordinarily
