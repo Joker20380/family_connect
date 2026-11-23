@@ -62,7 +62,17 @@ restore preserves19 lab tables/22 rows; stale snapshot refused. File-ahead repai
 uses exact stored bytes; local receipt is not a serving-node ACK. Issuer keys are
 retained, not recovered. No distributed publisher or production backend selected;
 PG/synthetic-outbox legacy publication refuses before key/lock/file/network I/O.
-NEXT within HA-02: metadata/consent tombstones and remaining writers/CLI/files,
+HA-02K metadata/consent synthetic DB boundary qualified:120 real DB contracts /0 skips
+(80 metadata +40 enrollment),152 focused regressions /16 optional skips /2 historical
+overlay fixture failures reproduced on unchanged36c23756. Depends on HA-02A proof
+transactions and accepted metadata-v1 consent/retention contract. Gate: atomic
+proof/report, concurrent sample/revoke, epoch/sequence/digest floors, capacity/rate,
+expiry/read-only view, rollback/ACK loss/backend failure and exact current/stale
+restore PASS. SIGKILL/current restore preserves12 lab tables/26 rows and tombstones.
+New epoch is required to opt in again; duplicate reports do not refresh TTL. Live
+SQLite proof/file commits stay separate; cross-store import/collector wiring and
+physical erasure of PG/WAL/backups are not qualified. No production selector.
+NEXT within HA-02: diagnostics/notices and remaining writers/CLI/files,
 all-table shadow import, full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.

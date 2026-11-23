@@ -1,6 +1,26 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA HA-02J durable CRL preparation/recovery VERIFIED; migration IN_PROGRESS.**
+**23 November — CONTROL-HA HA-02K metadata/consent DB recovery VERIFIED; migration IN_PROGRESS.**
+Continuation from36c23756 in the authoritative metadata worktree; synthetic source
+checkpoint, not deployment. Signed proof use, latest-only metadata and consent
+epoch/sequence/digest now share one canonical SQLite/PG transaction.120 real DB
+contracts PASS /0 skips (80 metadata +40 enrollment);152 focused regressions PASS,
+16 explicit optional skips,2 historical-overlay fixture failures also reproduced
+on unchanged36c23756. No full packaging/release PASS. PostgreSQL17.11 SIGKILL and
+exact12-table/26-row restore pass; stale pre-revoke backup refused. Revoke tombstones
+survive prune/restart/restore; old report retries never renew expired observations.
+New consent needs a newer epoch. Production still uses separate SQLite files:
+legacy proof/file commits remain separate, canonical requests are rehearsal-only.
+No cross-database import, physical erasure of PG WAL/backups, replication/RPO0,
+key recovery or fencing claim. No server/backend/collector/client/consent change;
+console5ce82415, Android126/catalog9,8/12/120s and all-three-node first-cohort ACKs
+unchanged. RU remains a dependency; no fresh live-health check. Next: diagnostics/
+notices and remaining writers/CLI/files, all-table/cross-store import and full
+recovery/replication. Distributed CRL publication still requires HA-03 fencing.
+[Scope](control-ha-storage.md#ha-02k--metadata-and-consent-transactions) ·
+[Checks and rollback](releases/2026-11-23-control-ha.md#ha-02k--metadata-and-consent-recovery).
+
+**Earlier23 November — CONTROL-HA HA-02J durable CRL preparation/recovery VERIFIED; migration IN_PROGRESS.**
 Source `019aa578` ordinarily pushed and remote-SHA verified from86660b86 in the
 authoritative metadata worktree; not deployment. CRL sequence and immutable signed candidate share one SQLite/PG
 transaction.128 real DB contracts PASS /0 skips (88 CRL +40 enrollment),285 focused

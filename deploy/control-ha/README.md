@@ -380,3 +380,36 @@ is qualified. Production publication still requires HA-03 and all-node ACK gates
 Abort before cutover by removing only owned lab resources. No product restore is
 needed. After future live writes fence old writers and recover current acknowledged
 state; never deploy an old SQLite snapshot or replay an old CRL to roll back.
+
+## HA-02K: isolated metadata and consent recovery
+
+Use the same control/identity/HA locks, psycopg3.3.9 and pinned PostgreSQL17.11:
+
+```sh
+python -m scripts.metadata_postgres_rehearsal --workdir /tmp/fc-ha-metadata-new
+```
+
+Runs120 SQLite/real-PG contracts (80 metadata +40 enrollment), then owned-container
+SIGKILL/restart and separate stale/current restores. New temporary/private workdir,
+loopback-only DB and image/ownership/cleanup guards are mandatory. No live metadata,
+keys, addresses, GeoIP MMDB, registry or remote Docker service is used.
+
+Require atomic proof/latest report, exact digest replay, concurrent sample/revoke,
+new-epoch opt-in, monotonic floors and retained capacity slots. Existing revoke must
+bypass sample rate limit; a duplicate never renews received/expiry. Read-only views
+must not prune or take writer locks. Failed save/prune/proof commit must roll back;
+after ambiguous commit use a fresh proof with the same report, not a new consent epoch.
+Legacy separate-file API must refuse PG/synthetic canonical state before mutation.
+
+Compare all12 lab tables/26 rows before new writes, including the erased payload
+and retained consent tombstone. Stale pre-revoke restore must fail with the exact
+refusal. Restored triggers, consumed/revoked/pending proofs and payment replay must
+hold; expired duplicate/delayed reports cannot resurrect observations. New explicit
+epoch can opt in again. Synthetic keys are retained, NOT recovered; backup contains
+only synthetic observations. Logical TTL is not qualified physical PG/WAL/backup
+erasure. No cross-database product import, replica/RPO0 or reverse migration claim.
+
+Before cutover abort only the owned lab; no working data needs restoration. Future
+rollback must fence writers and preserve current consent floors/proofs/payment state,
+not copy pre-revoke SQLite or stale panel rows. Diagnostics/notices/remaining writers,
+cross-store snapshot/import, privacy-aware backup policy and HA-03..05 remain gates.

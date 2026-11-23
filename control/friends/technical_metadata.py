@@ -18,6 +18,7 @@ MAX_DEVICES = 5000
 RETENTION = 7 * 86400
 MIN_INTERVAL = 60
 MAX_INTEGER = 2**53 - 1
+REPOSITORY_PURPOSE = 'family-connect/ha-metadata-synthetic/v1/db-only'
 SOURCES = {
     'profile': {'android_build_package'},
     'network': {'tunnel_socket', 'vpn_transport_capabilities', 'android_default_network', 'unavailable'},
@@ -145,45 +146,102 @@ def project(observations, received):
     return result
 
 
+class MetadataTransaction:
+    def __init__(self, database, placeholder='?'):
+        self.database, self.placeholder = database, placeholder
+
+    def fetch(self, query, parameters=()):
+        cursor = self.database.execute(query, parameters)
+        fields = [description[0] for description in cursor.description]
+        return [dict(row) if hasattr(row, 'keys') else dict(zip(fields, row)) for row in cursor.fetchall()]
+
+    def require_schema(self):
+        if self.fetch('SELECT version,purpose FROM ha_metadata_schema') != [dict(version=1, purpose=REPOSITORY_PURPOSE)]:
+            raise RuntimeError('Metadata rehearsal schema mismatch')
+
+    def prepare_write(self):
+        self.database.execute('PRAGMA secure_delete=ON')
+
+    def previous(self, device):
+        rows = self.fetch('SELECT * FROM device_metadata WHERE device=' + self.placeholder, (device,))
+        return rows[0] if rows else None
+
+    def count(self):
+        return self.fetch('SELECT COUNT(*) AS total FROM device_metadata')[0]['total']
+
+    def rows(self):
+        return self.fetch('SELECT * FROM device_metadata ORDER BY device')
+
+    def save(self, device, epoch, sequence, digest, enabled, now, payload):
+        self.database.execute('INSERT INTO device_metadata(device,epoch,sequence,digest,enabled,received,payload) VALUES (' +
+            ','.join([self.placeholder] * 7) + ') ON CONFLICT(device) DO UPDATE SET epoch=excluded.epoch, '
+            'sequence=excluded.sequence,digest=excluded.digest,enabled=excluded.enabled,received=excluded.received,payload=excluded.payload',
+            (device, epoch, sequence, digest, int(enabled), now, json.dumps(payload, ensure_ascii=False, separators=(',', ':'))))
+
+    def expire(self, now):
+        for row in self.fetch("SELECT device,payload FROM device_metadata WHERE payload!='{}'"):
+            observations = json.loads(row['payload'])
+            retained = {name: value for name, value in observations.items() if value['expires_at'] > now}
+            if retained != observations:
+                self.database.execute('UPDATE device_metadata SET payload=' + self.placeholder + ' WHERE device=' + self.placeholder,
+                    (json.dumps(retained, ensure_ascii=False, separators=(',', ':')), row['device']))
+
+
 def expire(database, now):
-    for device, raw in database.execute("SELECT device,payload FROM device_metadata WHERE payload!='{}'").fetchall():
-        observations = json.loads(raw)
-        retained = {name: value for name, value in observations.items() if value['expires_at'] > now}
-        if retained != observations:
-            database.execute('UPDATE device_metadata SET payload=? WHERE device=?',
-                             (json.dumps(retained, separators=(',', ':')), device))
+    MetadataTransaction(database).expire(now)
+
+
+def validated_request(value):
+    if type(value) is not dict or set(value) != {'proof', 'report'}:
+        raise Rejected()
+    return validate(value['report']), hashlib.sha256(value['report'].encode('utf-8')).hexdigest()
+
+
+def record(transaction, device, report, digest, now):
+    transaction.prepare_write()
+    transaction.expire(now)
+    previous = transaction.previous(device)
+    epoch, sequence = report['consent_epoch'], report['sequence']
+    enabled = report['operation'] == 'sample'
+    if previous:
+        if (epoch, sequence) == (previous['epoch'], previous['sequence']):
+            if digest != previous['digest']:
+                raise Rejected()
+            return receipt(report, previous['received'], previous['enabled'])
+        if epoch < previous['epoch'] or epoch == previous['epoch'] and (
+                sequence <= previous['sequence'] or not previous['enabled'] and enabled):
+            raise Rejected()
+        if enabled and now - previous['received'] < MIN_INTERVAL:
+            raise RateLimited()
+    elif transaction.count() >= MAX_DEVICES:
+        raise RateLimited()
+    payload = project(report['observations'], now) if enabled else {}
+    transaction.save(device, epoch, sequence, digest, enabled, now, payload)
+    return receipt(report, now, enabled)
 
 
 def request(access, path, value):
-    if type(value) is not dict or set(value) != {'proof', 'report'}:
-        raise Rejected()
-    report = validate(value['report'])
-    digest = hashlib.sha256(value['report'].encode('utf-8')).hexdigest()
+    if access.path is None:
+        raise NotImplementedError('Legacy metadata requires SQLite; canonical import and fencing are pending')
+    with closing(sqlite3.connect(Path(access.path).resolve().as_uri() + '?mode=ro', uri=True)) as database:
+        if database.execute("SELECT 1 FROM sqlite_master WHERE name='ha_metadata_schema'").fetchone():
+            raise NotImplementedError('Legacy metadata cannot split a canonical rehearsal transaction')
+    report, digest = validated_request(value)
     device = access.complete(value['proof'], 'technical-metadata-v1:' + digest)['device']
-    now = int(access.clock())
     with store(path) as database:
-        expire(database, now)
-        previous = database.execute('SELECT epoch,sequence,digest,enabled,received FROM device_metadata WHERE device=?',
-                                    (device,)).fetchone()
-        epoch, sequence = report['consent_epoch'], report['sequence']
-        enabled = report['operation'] == 'sample'
-        if previous:
-            old_epoch, old_sequence, old_digest, old_enabled, old_received = previous
-            if (epoch, sequence) == (old_epoch, old_sequence):
-                if digest != old_digest:
-                    raise Rejected()
-                return receipt(report, old_received, old_enabled)
-            if epoch < old_epoch or epoch == old_epoch and (sequence <= old_sequence or not old_enabled and enabled):
-                raise Rejected()
-            if enabled and now - old_received < MIN_INTERVAL:
-                raise RateLimited()
-        elif database.execute('SELECT count(*) FROM device_metadata').fetchone()[0] >= MAX_DEVICES:
-            raise RateLimited()
-        payload = project(report['observations'], now) if enabled else {}
-        database.execute('INSERT OR REPLACE INTO device_metadata VALUES(?,?,?,?,?,?,?)',
-                         (device, epoch, sequence, digest, int(enabled), now,
-                          json.dumps(payload, ensure_ascii=False, separators=(',', ':'))))
-    return receipt(report, now, enabled)
+        return record(MetadataTransaction(database), device, report, digest, int(access.clock()))
+
+
+def request_repository(access, value):
+    report, digest = validated_request(value)
+    with access.enrollment() as enrollment:
+        transaction = enrollment.metadata()
+        transaction.require_schema()
+        device = access.complete(value['proof'], 'technical-metadata-v1:' + digest, transaction=enrollment)['device']
+        invitation = enrollment.device_invitation(device)
+        if invitation is None or invitation['revoked']:
+            raise Rejected()
+        return record(transaction, device, report, digest, int(access.clock()))
 
 
 def receipt(report, received, enabled):
@@ -191,15 +249,33 @@ def receipt(report, received, enabled):
                 consent='enabled' if enabled else 'revoked', retention_seconds=RETENTION)
 
 
+def view(rows, now):
+    return [dict(device=row['device'], consent_epoch=row['epoch'], sequence=row['sequence'],
+                 consent='enabled' if row['enabled'] else 'revoked', received_at=row['received'],
+                 observations={name: value for name, value in json.loads(row['payload']).items() if value['expires_at'] > now})
+            for row in rows]
+
+
 def read_all(path, now):
     if not Path(path).exists():
         return []
     with closing(sqlite3.connect('file:' + str(Path(path).resolve()) + '?mode=ro', uri=True)) as database:
-        rows = database.execute('SELECT device,epoch,sequence,enabled,received,payload FROM device_metadata').fetchall()
-    return [dict(device=device, consent_epoch=epoch, sequence=sequence,
-                 consent='enabled' if enabled else 'revoked', received_at=received,
-                 observations={name: value for name, value in json.loads(raw).items() if value['expires_at'] > now})
-            for device, epoch, sequence, enabled, received, raw in rows]
+        return view(MetadataTransaction(database).rows(), now)
+
+
+def read_repository(access):
+    with access.read_enrollment() as enrollment:
+        transaction = enrollment.metadata()
+        transaction.require_schema()
+        return view(transaction.rows(), int(access.clock()))
+
+
+def prune_repository(access):
+    with access.enrollment() as enrollment:
+        transaction = enrollment.metadata()
+        transaction.require_schema()
+        transaction.prepare_write()
+        transaction.expire(int(access.clock()))
 
 
 def prune(path, now):

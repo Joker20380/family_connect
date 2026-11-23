@@ -12,6 +12,7 @@ from scripts.restricted_postgres_rehearsal import RestrictedRehearsal
 from scripts.chat_postgres_rehearsal import ChatRehearsal, refused_value
 from scripts.gateway_routing_postgres_rehearsal import RoutingRehearsal
 from scripts.crl_postgres_rehearsal import CRLRehearsal
+from scripts.metadata_postgres_rehearsal import MetadataRehearsal
 
 
 def test_chat_recovery_requires_exact_refusal_not_any_error():
@@ -47,7 +48,7 @@ def test_restore_cannot_silently_lose_referral_state(mutation):
         require_current_restore(current, restored)
 
 
-@pytest.mark.parametrize('runner', [ReferralRehearsal, SupportRehearsal, RestrictedAdminRehearsal, RestrictedRehearsal, ChatRehearsal, RoutingRehearsal, CRLRehearsal])
+@pytest.mark.parametrize('runner', [ReferralRehearsal, SupportRehearsal, RestrictedAdminRehearsal, RestrictedRehearsal, ChatRehearsal, RoutingRehearsal, CRLRehearsal, MetadataRehearsal])
 def test_writer_runner_uses_temporary_owned_local_docker_only(tmp_path, monkeypatch, runner):
     with pytest.raises(ValueError, match='TEMPORARY_REHEARSAL_ONLY'):
         runner(Path('/not-a-temporary-writer-rehearsal'))

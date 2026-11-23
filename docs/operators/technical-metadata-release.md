@@ -1,5 +1,15 @@
 # Technical metadata: minimal delivery and recovery
 
+**23 November — HA-02K source-only storage rehearsal, NOT a new installation.**
+Canonical SQLite/PG proof+metadata transactions and consent-floor recovery pass on
+synthetic data. The installed API still uses separate SQLite files and the existing
+NL/AWG collectors. Do not select the synthetic repository or copy its schema into
+production. Cross-store snapshot/import, collector/retention cutover, physical-erasure
+and backup-retention policy require separate gates. Never restore a pre-revoke consent
+row or prolong expired observations to recover availability. Current version, default
+consent, public126/catalog9 and rollback preimages below are unchanged.
+[Scope, checks and rollback](../releases/2026-11-23-control-ha.md#ha-02k--metadata-and-consent-recovery).
+
 **22 November20:57UTC — NL/AWG collector and reason labels installed.**
 The external collector now supports both NL gateways without gateway runtime changes
 or copying GeoIP databases. A pinned node/key/handshake observation is followed by a

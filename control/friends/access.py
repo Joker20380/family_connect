@@ -108,6 +108,10 @@ class SQLiteEnrollment(EnrollmentTransaction):
         from .restricted_admin import CRLTransaction
         return CRLTransaction(self)
 
+    def metadata(self):
+        from .technical_metadata import MetadataTransaction
+        return MetadataTransaction(self.database)
+
 
 class Access:
  def __init__(self,path,clock=time.time,*,enrollment_repository=None):

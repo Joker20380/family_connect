@@ -132,6 +132,14 @@ commit ACK не дублирует кандидат. Expired/superseded candidat
 путь остаётся отдельно, PG/synthetic outbox запрещены в legacy sync/canary до I/O.
 Issuer keys удерживаются, не восстановлены. Migration должна отдельно fence старые
 writers; эта проверка marker не заменяет fencing, remote readback или HA-03.
+HA-02K выделяет latest-only metadata, consent floors и retention в общий SQLite/PG
+adapter. В canonical rehearsal proof consumption и запись теперь атомарны; legacy
+двухфайловый путь не выдаётся за общую транзакцию.120 contracts PASS; SIGKILL/current
+restore12 таблиц/26 строк, stale pre-revoke backup refused. Revoke tombstone остаётся
+после TTL; старый duplicate не обновляет наблюдения, новый opt-in требует нового epoch.
+Это logical retention, не доказанное физическое удаление из PG pages/WAL/backups.
+Multi-DB snapshot/import, collector wiring и secret recovery остаются gates; никакие
+клиентские метаданные/IP не читались, политика согласия и GeoIP collectors не менялись.
 Ни один из этих стендов не включает replicated writer, epoch fencing или live failover.
 [Точная граница и карта writers](control-ha-storage.md).
 

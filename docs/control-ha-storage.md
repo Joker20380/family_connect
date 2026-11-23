@@ -421,6 +421,54 @@ triggers, consumed/revoked proofs, payment replay, pending candidate и sequence
 не восстановлены из backup. Это не full product backup, replication/RPO0 или reverse
 migration. [Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02j--durable-crl-recovery).
 
+## HA-02K — metadata and consent transactions
+
+`MetadataTransaction` находится в уже упаковываемом `technical_metadata.py`;
+`Access.enrollment().metadata()` выбирает SQLite либо native `metadata_postgres.py`.
+Synthetic schema содержит только current `device_metadata` и marker, без истории
+raw reports/IP. PostgreSQL DDL написан отдельно, не SQL string translation. SQLite
+canonical schema создаётся только rehearsal; live `technical-metadata.sqlite` не
+перемещается, новый DSN/HTTP/CLI selector не добавлен.
+
+`request_repository` требует synthetic marker и в одной writer transaction проверяет
+точно подписанный digest, расходует one-use proof, проверяет device/invitation revoke,
+сохраняет latest-only report либо пустой revoke tombstone. Любой отказ capacity/rate/
+consent либо DB failure откатывает proof и metadata вместе. При потерянном commit ACK
+нужен **новый proof с теми же report bytes**, а не новый consent epoch: подтверждённый
+report возвращает прежний receipt без обновления received/TTL. Новый opt-in после
+отзыва допустим лишь с большим epoch и сохранённым rate limit. Revoke обходит sample
+rate limit, но не освобождает slot/floor. Limits6144 bytes/5000 devices/60s/7days и
+неизменённая metadata-v1 schema сохранены. Часы проверяются после writer acquisition.
+
+Epoch/sequence/digest и revoked state не сбрасываются при prune. Synthetic DB triggers
+блокируют UPDATE regression/DELETE (и PG TRUNCATE); в том же report version разрешено
+только удалять целые observation groups, не восстанавливать старые payload/received.
+Это guards обычных DB operations, не защита от superuser, отключающего triggers.
+Read-only snapshot фильтрует expired groups без записи/writer lock. Prune удаляет
+payload groups, но хранит consent floor и digest. SQLite writer использует secure_delete;
+PG physical pages/MVCC/WAL/backups и гарантированное физическое стирание НЕ квалифицированы.
+Production backup policy должна исключать долгоживущие observation payload histories
+и одновременно сохранять актуальные consent floors. Старый backup с enabled вместо
+revoke нельзя принимать как безопасное восстановление.
+
+Legacy `request(access,path,...)` остаётся двумя SQLite commits: identity proof раньше
+metadata-файла, поэтому при file failure нужен fresh proof. Он отвергает PG либо
+synthetic canonical marker до proof/file mutation, но это не distributed fencing.
+Общая policy/SQL boundary не требует новых Access APIs в старом overlay; минимальный
+legacy API проверен отдельно. GeoIP ephemeral enrichment и panel read-side не перенесены:
+multi-store snapshot/import, collectors/retention scheduler и все CLI надо переключать
+вместе в будущих gates. Сырые IP, реальные наблюдения и product DB не читались.
+
+120 real SQLite/PG contracts PASS /0 skips (80 metadata +40 enrollment): concurrency,
+sample/revoke ordering, one-use/digest, rate/capacity, explicit new epoch, per-group
+TTL, clock skew/writer waits, trigger floors, rollback, backend termination, lost ACK,
+read-only/legacy guards. Actual PostgreSQL17.11 SIGKILL/current restore сравнивает все
+12 lab tables/26 rows; stale pre-revoke snapshot отвергнут. Restored tombstones,
+one-use proofs/payment retry и triggers сохранены; delayed reports не оживляют
+payload, явный новый epoch позволяет согласие. Identity keys удерживаются в памяти,
+не восстановлены. Нет full product/cross-store import, RPO0, replicas или reverse
+migration. [Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02k--metadata-and-consent-recovery).
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -439,7 +487,7 @@ CLI и периодические задания; число таблиц produc
 | `restricted.py`, `restricted_admin.py`, `readiness_receipts.py` | Grants, отдельные restricted challenges, certificates, readiness, CRL sequence | HA-02F/G DB и HA-02J CRL sequence/immutable outbox synthetic PASS; distributed file publication, issuer fencing и production wiring pending |
 | `restricted_maintenance.py`, `restricted_sync.py`, `paid_canary_crl.py` | HMAC journal, local flock, signed directory/CRL, publication/receipt ordering | HA-02J local lab file-failure/reconciliation PASS; existing SQLite-only journals unchanged, distributed publication/remote ACK require HA-03 fencing |
 | `gateway_routing.py`, `gateway_selection.py` | Assignment versions, operation IDs, append-only events, atomic projections | HA-02I DB synthetic PASS; signed-file recovery, production HTTP/CLI wiring and fencing pending |
-| `technical_metadata.py`, `geoip.py` | Отдельная SQLite, consent epoch/sequence/digest, revoke tombstone, retention, no resurrection | Pending; не входит в access registry |
+| `technical_metadata.py`, `geoip.py` | Отдельная SQLite, consent epoch/sequence/digest, revoke tombstone, retention, no resurrection | HA-02K canonical DB contracts/recovery synthetic PASS; live отдельная SQLite unchanged, multi-store import/collector wiring/physical-erasure policy pending; GeoIP ephemeral read-side не перенесён |
 | `diagnostics.py` | Отдельное хранилище snapshots, ограничения данных/retention | Pending |
 | `notices.py` → `scripts/service_notices.py` | Отдельная notices БД, publisher roles/revisions и exports | Pending |
 | `profile_store.py`, `pseudonyms.py`, generated membership/catalog files | Atomic file replace/fsync, local locks, authority versus derived copies | Pending; не копировать локальные locks как global fencing |
@@ -450,7 +498,8 @@ signing keys не входят в migration и остаются офлайн.
 
 ## Следующие gates
 
-1. Перевести metadata/consent tombstones и остальные writers/CLI/files из карты.
+1. Перевести diagnostics/notices и остальные writers/CLI/files из карты; live metadata
+   остаётся отдельной SQLite до согласованного cross-store import/collector cutover.
    Distributed CRL/file publication отдельно зависит от HA-03 fencing. Не допускать mixed backend writers;
    synthetic membership не заменяет production wiring, deadline и package gates.
 2. Создать явную versioned all-table migration: snapshot consistency, nullable и

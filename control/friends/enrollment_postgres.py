@@ -60,6 +60,10 @@ class PostgresEnrollmentTransaction(EnrollmentTransaction):
         from .crl_postgres import PostgresCRLTransaction
         return PostgresCRLTransaction(self)
 
+    def metadata(self):
+        from .metadata_postgres import PostgresMetadataTransaction
+        return PostgresMetadataTransaction(self.database)
+
     def registered(self, device):
         row = self.database.execute('SELECT support_id FROM device_support WHERE device=%s', (device,)).fetchone()
         if row is not None:

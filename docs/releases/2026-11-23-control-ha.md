@@ -14,7 +14,7 @@ source inspection is not a fresh server-health check.
 - HA-01 isolated scope implemented and verified; details below.
 - HA-02A enrollment, HA-02B paid/subscription, HA-02C membership, HA-02D referral,
   HA-02E Support ID, HA-02F grant/audit, HA-02G issuance/readiness, HA-02H chat/support
-  HA-02I gateway routing and HA-02J durable CRL DB/local recovery slices qualified below; remaining
+  HA-02I gateway routing, HA-02J durable CRL and HA-02K metadata/consent DB recovery slices qualified below; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -26,6 +26,107 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02K — metadata and consent recovery
+
+Continuation from `36c23756c945a64bf18c54bf314c302c21e309c0` in the authoritative
+metadata worktree/branch. Synthetic source-only scope: no SSH/live health check,
+server/runtime/backend/collector/consent change or client artifact. Installed
+console5ce82415, NL GeoIP22 November and public Android126/catalog9 unchanged.
+RU remains a dependency;8/12/120s and all-three-serving-node first-cohort ACKs
+remain mandatory. HA-02/03..05 and production migration are not complete.
+
+### Implementation and privacy boundary
+
+Common `MetadataTransaction` stays in the existing bundled metadata module; native
+PG has separate DDL/marker and floor-retention triggers. Synthetic canonical
+`request_repository` consumes the signed one-use proof and writes metadata in one
+transaction. Device/invitation revoke is checked there. Failure/rate/capacity rejection
+rolls back proof too. A committed response lost in transit requires a fresh proof
+with identical report bytes; its receipt/received/TTL do not change. Sample/revoke
+concurrency always retains the newer consent floor. After revoke, same/older epoch
+samples refuse; a new explicit epoch is required to opt in again.
+
+Reports remain latest-only; TTL is independent per observation group. Read-only
+views hide expired groups without mutation/writer lock, prune deletes payload but
+retains epoch/sequence/digest and capacity slot. Triggers reject row deletion,
+version/floor regression, old-payload resurrection and PG TRUNCATE. These are not
+guards against a privileged DB owner disabling triggers. Original6144-byte/5000-device/
+60s/7day limits and schema1 are retained. No raw report history, IP, new permission
+or automatic consent is added. Only generated identities/observations are used.
+
+Legacy API still commits proof before writing its separate SQLite file; after a
+file failure it needs a fresh proof. It refuses PG/synthetic canonical state before
+proof/file mutation. The shared semantic adapter remains compatible with the minimal
+old Access API; the new synthetic entrypoint is NOT wired into HTTP, CLI, collectors
+or retention workers. No cross-store product snapshot/import has been qualified.
+SQLite keeps secure_delete, but PG logical pruning is NOT proof of physical erasure
+from pages/MVCC/WAL/backups. Privacy-aware backup retention and current tombstone
+recovery remain explicit production gates; never restore old enabled consent rows.
+
+### Reproducible validation
+
+Private evidence root `/tmp/fc-control-ha-20261123/`; no raw logs/dumps/state in Git.
+Control/identity/HA locked Python uses psycopg3.3.9. PostgreSQL17.11 image remains
+`postgres@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73`.
+
+```sh
+python -m scripts.metadata_postgres_rehearsal --workdir /tmp/fc-control-ha-20261123/metadata-2
+python -m pytest -q -ra tests/test_technical_metadata.py tests/test_technical_geoip.py tests/test_technical_geoip_fleet.py tests/test_technical_metadata_overlay.py tests/test_friends_http_runtime.py tests/test_friends_access.py tests/test_support_ids.py tests/test_support_package.py tests/test_referral_rehearsal.py tests/test_enrollment_rehearsal.py
+```
+
+- `metadata-local-1.log`:88 PASS /41 unavailable-PG skips,4.38s. Preliminary SQLite,
+  legacy and runner checks; not real-PG acceptance.
+- `metadata-1/contracts.log`:120 PASS /0 skips,44.56s. Its subsequent recovery
+  setup failed `ANDROID_BASELINE_REQUIRED`: the synthetic payment lacked a signed
+  Android observation. Added the ordinary proof-bearing Support ID Android126
+  observation/marker, not a payment-policy bypass; failed evidence retained.
+- Final `metadata-2/contracts.log`/XML: **120 PASS /0 skips**,36.52s (80 metadata
+  +40 enrollment). Includes concurrent reports/capacity/revoke, atomic proof use,
+  rollback/backend termination/commit ACK loss, TTL/clock/writer waits, readonly
+  projection, schema floors and legacy split-file refusal/compatibility.
+- `metadata-regressions-1.log`: **152 PASS /16 skips /2 failures**,36.26s. Skips:
+  15 real-nginx activation and1 pinned-sync artifact. Both failures are the historical
+  metadata-overlay baseline fixture's `git apply --reverse`, before candidate build.
+  On unchanged base36c23756, exported to `metadata-overlay-baseline-36c`, the same two
+  named tests fail at that same reverse-apply step: `metadata-overlay-baseline-36c.log`,
+  2 failures,0.22s. No pins changed, tests hidden or full packaging PASS claimed.
+  Current closed HTTP/support imports/reproducibility, actual metadata HTTP routes,
+  legacy consent/retention and GeoIP/fleet regressions pass; panel/Android/native
+  release qualification and exact serving-overlay acceptance are not claimed.
+- `metadata-2/receipt.json`: `ISOLATED_METADATA_POSTGRES_PASS`, actual SIGKILL/restart,
+  exact current restore PASS, stale restore REFUSED, consent tombstone PRESERVED,
+  expired replay NO_REFRESH, pending proof CONSUMED_ONCE, production writes0,
+  owned-container cleanup PASS. Identity keys retained in memory, NOT restored.
+
+Restore compares all12 lab tables/**26 rows** before new writes:
+challenges9, device_metadata2, device_support3, devices3, field_support_audit0,
+ha_enrollment_schema1, ha_metadata_schema1, ha_paid_schema1, ha_support_schema1,
+invites3, paid_beta_events1, paid_beta_subscriptions1. Empty audit included. Restored
+DELETE/TRUNCATE/re-enable guards reject; consumed/revoked proofs refuse and payment
+retry is unchanged. Uncommitted payload pruning/proof use does not survive crash.
+Pending proof succeeds once, TTL prune retains floors, stale/same-epoch reports
+refuse without consuming proof and a new explicit epoch can restore consent.
+
+Final locked `pip check`, whitespace and891 local Markdown-target checks PASS.
+Independent Docker readback finds no owned rehearsal-labelled containers. No raw
+logs, dumps, keys, profiles, product observations/DBs or build output are included.
+
+Earlier baseline-reproduced overlay failures and HA-02G artifact-dependent readiness
+packaging remain open in addition to the two reproduced metadata-overlay fixtures.
+Individual synthetic slices are not product-wide backup/import, strict replication,
+RPO0, key recovery, physical erasure, reverse migration or fenced authority.
+
+### Rollback and next gates
+
+Before cutover remove only owned lab/shadow; no product DB/server change to undo.
+Source rollback, if requested, is a new revert commit, not history rewrite. After
+future canonical writes fence old writers and recover current acknowledged consent
+floors/proofs/payments; never restore a pre-revoke SQLite snapshot or old panel rows.
+Next bounded area: diagnostics/notices and remaining writers/CLI/files. Cross-store
+consistent snapshot/import, collector wiring, privacy-aware backup policy, full
+recovery/strict replication and HA-03..05 still gate production. Distributed CRL
+publication remains fenced separately. No next task starts automatically here.
 
 ## HA-02J — durable CRL recovery
 
