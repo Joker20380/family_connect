@@ -1,6 +1,20 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02F VERIFIED.**
+**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02G VERIFIED.**
+Issuance/readiness checkpoint `e8240e81` is ordinarily pushed and remote-SHA verified
+in the metadata branch.163 real DB contracts PASS /0 skips (123 restricted +40
+enrollment);521 focused regressions /36 optional skips and121 isolated-root
+maintenance /3 snapshot skips PASS. Challenge/certificate/auto-enroll/ACK/readback
+now use a shared SQLite/PostgreSQL DB boundary. Real SIGKILL and exact16-table/
+36-row restore pass; stale pre-issuance backup refused. Issuer keys retained only
+in memory, NOT restored: no secret recovery, replication/RPO0 or fenced authority.
+Production unchanged: console5ce82415, Android126/catalog9 and8/12/120s preserved;
+RU remains a dependency. Artifact-dependent readiness packaging and prior overlay
+gates stay open. Next: support sender, remaining writers/CLI, CRL/files/import/full
+recovery/replication/fencing. This divergent main remains navigation only.
+[Authoritative evidence and rollback](releases/2026-11-23-control-ha.md#ha-02g--restricted-issuance-and-readiness-recovery).
+
+**Earlier23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02F VERIFIED.**
 Grant/revoke/audit DB checkpoint `20129a67` is ordinarily pushed and remote-SHA
 verified in the metadata branch.176 real DB contracts PASS /0 skips (70 admin,
 40 enrollment,66 support);264 focused regressions PASS /4 optional locked-Go skips.

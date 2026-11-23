@@ -25,7 +25,12 @@ HA-02F grant/revoke/audit DB transactions qualified/pushed20129a67:176 contracts
 Exact12-table/20-row restore retains revokes/revisions, pending audit/proofs and paid
 state; stale backup refused. APPLIED ACK loss triggers fail-closed SQLite compensation.
 PG FIELD/CRL file publication stays blocked; no production backend or CLI switch.
-NEXT within HA-02: restricted challenges/certificates/readiness, support sender and remaining writers/CLI, metadata/
+HA-02G issuance/readiness DB boundary qualified/pushed e8240e81:163 contracts /0 skips,
+521 focused regressions /36 optional skips,121 isolated-root maintenance /3 snapshot skips.
+Atomic proof/certificate/ACK, safe readback, paid/node/revoke binding and exact16-table/
+36-row crash/restore pass. Issuer keys ephemeral/retained, not restored; no production
+selector, replication/RPO0 or fencing. Artifact-dependent package gates remain open.
+NEXT within HA-02: support sender and remaining writers/CLI, CRL publication, metadata/
 tombstones/files, all-table import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse
 import is not implemented. Then HA-03 receiver-enforced

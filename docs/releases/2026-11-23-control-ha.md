@@ -23,6 +23,8 @@ divergent; pre-existing modifications are preserved. Do not deploy its runtime.
   push to the same branch succeeded and remote SHA independently matched.
 - HA-02F implementation: `20129a67e2b6febd9eadd98e2c3425a070ab82a4`, ordinary
   push to the same branch succeeded and remote SHA independently matched.
+- HA-02G implementation: `e8240e81ea63d280324acb20193da6d22d0e137b`, ordinary
+  push to the same branch succeeded and remote SHA independently matched.
 - Full architecture: [CONTROL-HA plan](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/control-ha.md).
 - Full evidence: [source-worktree release record](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/releases/2026-11-23-control-ha.md).
 - Commands/limits: [isolated rehearsal runbook](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/deploy/control-ha/README.md).
@@ -43,6 +45,36 @@ and direct readback from every recovered member. Final local failover is1.766s,
 not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
+
+## HA-02G — restricted issuance and readiness recovery
+
+Restricted challenge/certificate/auto-enrollment and readiness ACK/readback now
+share a SQLite/native-PostgreSQL transaction boundary. Proof use and writes commit
+together; readback is a read-only snapshot without a PG writer lock. Preserve
+owner/node/revision/family/CRL binding, paid expiry, capacity8, receipt24h/cap16 and
+offline noncohort policy. Lost commit ACK requires readback/new proof, never replay.
+Strict PG markers include paid schema; no fallback to unpaid or production selector.
+
+163 real DB contracts PASS /0 skips (123 restricted +40 enrollment),521 focused
+regressions PASS /36 explicit optional skips,121 isolated-root maintenance checks
+PASS /3 retained-snapshot skips. Earlier unprivileged ownership attempt failed;
+proper no-network/read-only-source Docker rerun passes.28 artifact-dependent adapter
+cases remain unqualified without accepted Go/HTTP fixtures, not masked as PASS.
+Four prior baseline overlay failures remain open. See authoritative report for all
+attempts/commands; raw logs/dumps/credentials remain private outside Git.
+
+Actual PostgreSQL17.11 SIGKILL/restart discards unfinished writes. Exact current
+restore of16 lab tables/36 rows preserves consumed/pending proofs, ACKs, certificates,
+revokes, support/paid/audit; stale pre-issuance dump is rejected. Pending fetch/ACK
+works once after restore, certificate reuse/paid bounds hold. Ephemeral issuer keys
+are retained in memory, **not restored**: no secret recovery, full product backup,
+replication/RPO0 or fenced authority is qualified.
+
+No server/backend/client change, SSH/live-health readback or release publication;
+console5ce82415 and Android126/catalog9 unchanged, RU dependency remains. Rollback
+now is owned-lab cleanup only. After future writes, fence and recover current state,
+not old SQLite. Next: support sender, remaining writers/CLI, CRL/files/metadata/
+tombstones, full import/recovery/replicas and HA-03..05 gates before cutover.
 
 ## HA-02F — restricted grants and audit recovery
 
