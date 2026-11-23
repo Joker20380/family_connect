@@ -42,6 +42,15 @@ unchanged; RU dependency persists. No fresh availability claim or full release P
 
 ### Deliverable and scope
 
+[Implementation/tests/docs d9ec49835bb04bdfc3a01d0beee6073a357418c8](https://github.com/Joker20380/family_connect/commit/d9ec49835bb04bdfc3a01d0beee6073a357418c8)
+ordinarily pushed to the metadata branch; independent remote SHA matched.
+Old-main navigation `720222bf8e69db326b3f03b98024bf053b545381` is retained locally;
+ordinary `main` push rejected `non-fast-forward`, remote observed
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`. No force/reset/runtime merge; original
+four dirty files/six untracked paths preserved. Source7-document/950-link check
+and separate staged root-navigation check pass; unrelated unstaged historical
+links were not claimed fixed. Source publication does not mean deployment.
+
 [Version1 encrypted capsule](../control-ha-storage.md#ha-02q--encrypted-recovery-bundle)
 combines four pinned application SQLite images, reference manifests and actual
 private byte artifacts, authenticated by AES-256-GCM. Independent checkpoint/root

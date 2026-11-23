@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02Q encrypted recovery bundle VERIFIED in isolation.**
-Continuation from10faf0ff; source/tests/docs only, no live read or deployment.
+Sourced9ec4983 ordinarily pushed and independently remote-SHA verified from10faf0ff;
+source/tests/docs only, no live read or deployment.
 Versioned AES-256-GCM capsule binds four application SQLite images, eight reference
 roles and19 private artifacts to a separately supplied checkpoint/public anchor.
 All artifact hashes enter the atomic PG import receipt. Read-only preflight rejects
@@ -22,6 +23,9 @@ NEXT bounded scope: real versioned external-role adapters and semantic consisten
 checks, replacing opaque probes; do not start replication or deployment automatically.
 Stage2 of5; RU dependency remains. Console5ce82415, NL GeoIP22 November,
 Android126/catalog9,8/12/120s and all-three-node ACK gate unchanged. No health claim.
+Old-main navigation720222bf retained locally: ordinary push rejected non-fast-forward
+against remotecb47bf23. Original four dirty files/six untracked paths preserved;
+no force/reset/merge. Published metadata branch remains authoritative.
 [Bundle and limits](control-ha-storage.md#ha-02q--encrypted-recovery-bundle) ·
 [Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02q--encrypted-recovery-bundle).
 

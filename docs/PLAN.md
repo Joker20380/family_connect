@@ -119,7 +119,7 @@ fixture,44-table/82-row crash/restore and semantic operations after restore PASS
 Current recovery retains87 rows after new writes; stale restore and old import
 refuse. No live installed-schema census, real external key/file recovery, writer
 freeze or activation. Unknown source variants fail closed, not automatically migrated.
-HA-02Q encrypted bundle/partial external preflight qualified in isolation:
+HA-02Q encrypted bundle/partial external preflight qualified/pushedd9ec4983 in isolation:
 154 contracts /0 skips (60 bundle +54 adapter +40 enrollment),31 runner/file guards
 /0 skips;165 parent import contracts and full recovery regression PASS /0 skips.
 Depends on HA-02N external map and HA-02P application adapters/CRL trust.
