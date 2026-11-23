@@ -44,7 +44,7 @@ guards PASS. Atomic support sender validation/enrollment closes the two-transact
 gap; one-use proof, immutable identity, terminal sender revoke, sequence and leases
 survive SIGKILL/exact15-table/29-row restore. Stale backup refused. Keys/local policy
 retained, NOT restored. PG mailbox/support file publication refuses before I/O.
-HA-02I gateway assignment/policy/explicit selection DB boundary qualified:111 contracts
+HA-02I gateway assignment/policy/explicit selection DB boundary qualified/pushedb5cb676b:111 contracts
 /0 skips (71 routing +40 enrollment),327 regressions /26 optional skips. Depends on HA-02A transaction semantics and
 accepted schema2/schema3 offline-signed catalogs; no new trust anchor or endpoint.
 Gate: SQLite/real-PG parity, concurrent/idempotent operations, append-only events,

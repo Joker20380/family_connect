@@ -36,6 +36,15 @@ console5ce82415 and public Android126/catalog9 unchanged. RU remains a dependenc
 8/12/120s and all-three-serving-node first-cohort ACKs remain mandatory. This is
 neither a full release nor completed HA-02/03..05.
 
+Source/tests/docs checkpoint `b5cb676bd905580e2519a55bdea1d70a7b3d7153` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA
+matched. Separate old-main navigation commit `c968717698da22002eedf3b0700ee51401caea98`
+is retained locally: ordinary push rejected `non-fast-forward`, remote main still
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`. No force/rebase/reset/merge performed.
+Original unstaged40 PLAN/66 STATUS/11 private-beta/6 recovery-guide additions and
+six untracked historical paths are preserved. Use the published feature branch,
+not this divergent navigation-only main, for source continuation.
+
 ### Implementation and recovery boundaries
 
 `RoutingTransaction` stays inside bundled `gateway_routing.py`; SQLite remains
@@ -102,6 +111,12 @@ Earlier four exact-overlay failures reproduced on the old baseline and HA-02G
 artifact-dependent readiness packaging remain open; no historical pins are weakened
 and those historical suites are not claimed rerun here. Independent focused checks
 do not erase these production gates. Local SQLite is still the live backend.
+
+Final environment `pip check`, whitespace checks and staged15-file scope/private-key
+marker inspection PASS;876 local Markdown targets exist. Independent local Docker
+readback finds no container with the owned rehearsal label. No raw logs, dumps,
+profiles, DBs, credentials or build output are staged. These sanity checks do not
+substitute for the optional native/deployment gates listed above.
 
 ### Rollback and next gates
 

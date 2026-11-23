@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02I gateway routing DB transactions VERIFIED; migration IN_PROGRESS.**
-Continuation from ccef2c08 in the authoritative metadata worktree. Sticky assignments,
+Source `b5cb676b` ordinarily pushed and remote-SHA verified from ccef2c08 in the
+authoritative metadata worktree. Sticky assignments,
 policy generations, explicit selection and operation journals share SQLite/PostgreSQL
 transactions.111 real DB contracts PASS /0 skips (71 routing +40 enrollment);
 327 focused consumer/package/runner regressions PASS /26 explicit optional skips.
