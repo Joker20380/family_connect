@@ -347,3 +347,36 @@ retry a failed request with a fresh proof, not a replay. Before cutover abort on
 the owned lab. After future live writes fence writers and recover current state,
 never rewind old SQLite. Remaining writers/CRL/files/import/replication and HA-03..05
 remain mandatory;8/12/120s and all-three-node first-cohort ACKs are unchanged.
+
+## HA-02J: isolated durable CRL recovery
+
+Use the same control/identity/HA locked environment (psycopg3.3.9) and pinned PostgreSQL17.11:
+
+```sh
+python -m scripts.crl_postgres_rehearsal --workdir /tmp/fc-ha-crl-new
+```
+
+Runs128 SQLite/real-PG contracts (88 CRL +40 enrollment), then owned container
+SIGKILL/restart and separate stale/current restores. Use a new private temporary
+workdir, loopback-only DB and the existing image/ownership/cleanup guards. Never
+pass product credentials, keys or a live registry; raw evidence/dumps stay out of Git.
+
+Require atomic sequence/signed candidate, immutable bytes, bound operation replay,
+fresh clock/expiry, paid/revoke snapshot, backend loss and ambiguous commit checks.
+File fsync/replace/directory fsync/receipt failures must leave no invented receipt;
+retry exact stored bytes. Expired/superseded operation replay is readback ONLY, not
+permission to publish. Legacy SQLite file-ahead/ACK-loss retries advance the number.
+PG/synthetic-outbox legacy sync/canary must refuse before key/lock/file/network I/O.
+
+Compare all19 lab tables/22 rows before recovery writes, including pending receipt0
+for the already replaced local file. Stale restore must fail with the exact refusal.
+Restored UPDATE/TRUNCATE guards, revoked/consumed proofs and payment retry must hold.
+Reconcile the retained local file from exact DB bytes; next candidate advances.
+Issuer keys are ephemeral and retained, NOT restored. `local_receipt=1` is not an
+independent remote ACK: the temporary file helper has only one lab publisher and no
+epoch/fence. No distributed publication, full backup, replica/RPO0 or reverse import
+is qualified. Production publication still requires HA-03 and all-node ACK gates.
+
+Abort before cutover by removing only owned lab resources. No product restore is
+needed. After future live writes fence old writers and recover current acknowledged
+state; never deploy an old SQLite snapshot or replay an old CRL to roll back.

@@ -123,6 +123,15 @@ Status/selection читаются без writer lock; потеря ACK не ду
 Это DB-only: подписанные файлы сохранены, а не восстановлены; HTTP proof consumption,
 paid decision и SSH registration не стали одной транзакцией. Их failures/fencing и
 production wiring остаются следующими gates; старый proof после commit не переигрывается.
+HA-02J переносит CRL sequence и неизменяемый signed candidate в одну DB-транзакцию:
+128 contracts PASS; SIGKILL/current restore19 таблиц/22 строки, stale backup refused.
+После замены файла без DB receipt повтор использует ровно сохранённые bytes; потеря
+commit ACK не дублирует кандидат. Expired/superseded candidate нельзя публиковать через
+локальный lab-helper. Это не распределённая атомарная публикация: helper лишь для
+одного lab writer, local receipt не доказывает удалённый ACK или epoch. Legacy SQLite
+путь остаётся отдельно, PG/synthetic outbox запрещены в legacy sync/canary до I/O.
+Issuer keys удерживаются, не восстановлены. Migration должна отдельно fence старые
+writers; эта проверка marker не заменяет fencing, remote readback или HA-03.
 Ни один из этих стендов не включает replicated writer, epoch fencing или live failover.
 [Точная граница и карта writers](control-ha-storage.md).
 

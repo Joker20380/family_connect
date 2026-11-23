@@ -104,6 +104,10 @@ class SQLiteEnrollment(EnrollmentTransaction):
         from .gateway_routing import RoutingTransaction
         return RoutingTransaction(self)
 
+    def crl(self):
+        from .restricted_admin import CRLTransaction
+        return CRLTransaction(self)
+
 
 class Access:
  def __init__(self,path,clock=time.time,*,enrollment_repository=None):

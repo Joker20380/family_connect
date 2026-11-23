@@ -17,7 +17,7 @@ from cryptography import x509
 from provisioning.friends_catalog import fields, parse, require
 from .access import Access
 from .restricted import MAX_TEST_LIFETIME, DirectoryValidationError, bounded_file, clock_nanoseconds, delegation, directory, from_env, iso, utc
-from .restricted_admin import publish_crl
+from .restricted_admin import publish_crl, require_local_crl
 
 
 def atomic(path, raw):
@@ -68,6 +68,7 @@ def gateway(profile_path, directory_path, request, now=None):
 
 
 def sync(access, host, ssh_key, known_hosts, *, crl_lifetime=900):
+    require_local_crl(access)
     require(host == '186.246.45.246')
     root = Path(os.environ['FC_FRIENDS_RESTRICTED_DIR'])
     service = from_env(access)
@@ -88,6 +89,7 @@ def sync(access, host, ssh_key, known_hosts, *, crl_lifetime=900):
 
 
 def check(access, host, ssh_key, known_hosts):
+    require_local_crl(access)
     require(host == '186.246.45.246' and access.path.is_file())
     service = from_env(access)
     _, _, _, _, number = service._trust(int(access.clock()))

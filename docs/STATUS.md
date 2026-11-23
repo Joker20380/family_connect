@@ -1,6 +1,25 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA HA-02I gateway routing DB transactions VERIFIED; migration IN_PROGRESS.**
+**23 November — CONTROL-HA HA-02J durable CRL preparation/recovery VERIFIED; migration IN_PROGRESS.**
+Continuation from86660b86 in the authoritative metadata worktree; source checkpoint,
+not deployment. CRL sequence and immutable signed candidate share one SQLite/PG
+transaction.128 real DB contracts PASS /0 skips (88 CRL +40 enrollment),285 focused
+consumer/package/runner regressions PASS /20 explicit optional skips. Actual
+PostgreSQL17.11 SIGKILL and exact19-table/22-row restore pass; stale backup refused.
+File-ahead/DB-receipt-missing recovery reuses exact bytes without re-signing or
+rewinding sequence. Expired/superseded candidates cannot be locally acknowledged.
+Legacy SQLite publisher stays separate; PG and synthetic-outbox use refuse before
+key/lock/file/network I/O. Local receipt is NOT a remote gateway ACK or fencing.
+Ephemeral issuer keys are retained, NOT restored; full backup, replication/RPO0,
+distributed publication and production wiring remain unqualified. No SSH/live
+health check or server/backend/client/consent change. Console5ce82415,
+Android126/catalog9,8/12/120s and all-three-node first-cohort ACKs unchanged; RU
+remains a dependency. Next: metadata/consent tombstones and remaining writers/CLI,
+full import/recovery/replication; distributed CRL publication requires HA-03 fencing.
+Prior artifact/overlay packaging gates stay open. [Scope](control-ha-storage.md#ha-02j--durable-crl-preparation-and-local-recovery) ·
+[Checks and rollback](releases/2026-11-23-control-ha.md#ha-02j--durable-crl-recovery).
+
+**Earlier23 November — CONTROL-HA HA-02I gateway routing DB transactions VERIFIED; migration IN_PROGRESS.**
 Source `b5cb676b` ordinarily pushed and remote-SHA verified from ccef2c08 in the
 authoritative metadata worktree. Sticky assignments,
 policy generations, explicit selection and operation journals share SQLite/PostgreSQL

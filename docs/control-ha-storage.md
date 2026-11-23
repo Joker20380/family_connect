@@ -375,6 +375,52 @@ remote ACK, HA-03 fencing, all-table import, replica/RPO0 и full product recove
 остаются обязательными. PG не подключён к production HTTP/CLI. Rollback сейчас —
 cleanup собственного lab; после live writes только fenced current-state recovery.
 
+## HA-02J — durable CRL preparation and local recovery
+
+Общий `CRLTransaction` находится в уже упаковываемом `restricted_admin.py`;
+`Access.enrollment().crl()` выбирает SQLite/native PG adapter. `crl_postgres.py`
+содержит отдельные synthetic DDL/marker и immutable UPDATE/DELETE/TRUNCATE guards.
+Нет live initializer, product DB import, production DSN/CLI switch или scheduler.
+SQLite outbox schema создаётся только rehearsal. Это не импорт legacy CRL state.
+
+`prepare_crl` сохраняет signed PEM, sequence, operation/request/payload hashes и
+validity в одной writer transaction с grant/device/invite/revision/paid snapshot.
+Время читается после writer lock. Проверяются signer/delegation, предыдущая подпись,
+continuity, целочисленный предел2**53, expiry и reader bound16384 bytes. Operation
+retry возвращает прежние bytes без подписи/продления. Даже expired/superseded replay
+является **только readback**, не разрешением публикации. `pending_crl` и
+`acknowledge_crl` допускают лишь текущий непросроченный candidate с согласованными
+sequence/hash. DB `local_receipt` монотонен, но сам по себе не доказывает file durability,
+удалённый ACK, epoch или наличие актуального CRL на всех serving nodes.
+
+`scripts/crl_postgres_rehearsal.py` содержит только temporary single-publisher helper:
+pending read → file fsync/replace/directory fsync → hash readback → DB receipt.
+Между этими действиями нет global fence; concurrent publisher/revoke-after-prepare
+и удалённая доставка НЕ квалифицированы. Для production нужны HA-03 epoch/fencing,
+node-specific durable ACK, независимый readback и ограниченный recovery deadline.
+Нельзя превращать helper в production publisher или считать DB receipt gateway ACK.
+
+Legacy `publish_crl` остаётся SQLite-only и file-before-commit: после ошибки commit
+файл может опережать DB. Retry использует max(signed-file floor,DB floor)+1, а не
+перематывает номер; exact-byte retry относится к outbox, не legacy-пути. Legacy sync,
+check и paid-canary lock отвергают PG/synthetic outbox до key/lock/file/network I/O;
+publisher повторяет outbox guard внутри writer transaction. Это защита от случайного
+mixed-backend вызова, не fencing уже запущенных старых процессов/CLI/file journals.
+
+128 реальных DB контрактов PASS /0 skips:88 CRL +40 enrollment. Проверены concurrent
+identical/conflicting operation IDs, paid/revoke/revision snapshot, immutable bytes,
+rollback, backend termination, потеря commit ACK и clock/expiry. Ошибки file fsync,
+replace, directory fsync и DB receipt не выдумывают ACK; повтор восстанавливает те
+же bytes. Legacy file-ahead/ACK-loss и fresh-clock после writer lock также проверены.
+
+PostgreSQL17.11 actual owned SIGKILL, restart и отдельные stale/current restore
+сравнивают все19 лабораторных таблиц/22 строки. Stale snapshot отвергнут; restored
+triggers, consumed/revoked proofs, payment replay, pending candidate и sequence
+сохраняются. Уже заменённый local file с receipt0 согласуется с DB exact bytes,
+последующий candidate получает больший номер. Эфемерные ключи удерживаются в памяти,
+не восстановлены из backup. Это не full product backup, replication/RPO0 или reverse
+migration. [Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02j--durable-crl-recovery).
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -390,8 +436,8 @@ CLI и периодические задания; число таблиц produc
 | `support_admin.py`, `support.py` | Admission-file + grant + audit consistency; support sender bindings | HA-02F admin и HA-02H sender DB synthetic PASS; FIELD/support file publication/fencing pending, PG publication refused before file I/O |
 | `referrals.py` | Sponsor-bound request idempotency, pool/daily limits, proof/link и claim/invitation в одной транзакции | HA-02D synthetic PASS; full import/production wiring pending |
 | `chat.py`, `chat_service.py`, `chat_sync.py` | Chat identity/proof, directory sequence, service sender revoke; filesystem exports | HA-02H DB synthetic PASS; mailbox/SSH/file publication and HA-03 fencing pending, PG publication refused before I/O |
-| `restricted.py`, `restricted_admin.py`, `readiness_receipts.py` | Grants, отдельные restricted challenges, certificates, readiness, CRL sequence | HA-02F admin и HA-02G auto-enroll/challenge/certificate/readiness DB synthetic PASS; CRL sequence/file writers, issuer fencing и production wiring pending |
-| `restricted_maintenance.py`, `restricted_sync.py`, `paid_canary_crl.py` | HMAC journal, local flock, signed directory/CRL, publication/receipt ordering | Pending; требует также HA-03 fencing |
+| `restricted.py`, `restricted_admin.py`, `readiness_receipts.py` | Grants, отдельные restricted challenges, certificates, readiness, CRL sequence | HA-02F/G DB и HA-02J CRL sequence/immutable outbox synthetic PASS; distributed file publication, issuer fencing и production wiring pending |
+| `restricted_maintenance.py`, `restricted_sync.py`, `paid_canary_crl.py` | HMAC journal, local flock, signed directory/CRL, publication/receipt ordering | HA-02J local lab file-failure/reconciliation PASS; existing SQLite-only journals unchanged, distributed publication/remote ACK require HA-03 fencing |
 | `gateway_routing.py`, `gateway_selection.py` | Assignment versions, operation IDs, append-only events, atomic projections | HA-02I DB synthetic PASS; signed-file recovery, production HTTP/CLI wiring and fencing pending |
 | `technical_metadata.py`, `geoip.py` | Отдельная SQLite, consent epoch/sequence/digest, revoke tombstone, retention, no resurrection | Pending; не входит в access registry |
 | `diagnostics.py` | Отдельное хранилище snapshots, ограничения данных/retention | Pending |
@@ -404,8 +450,8 @@ signing keys не входят в migration и остаются офлайн.
 
 ## Следующие gates
 
-1. Перевести остальные writers/CLI (далее CRL/file publication), затем metadata,
-   tombstones/files и остальные строки карты. Не допускать mixed backend writers;
+1. Перевести metadata/consent tombstones и остальные writers/CLI/files из карты.
+   Distributed CRL/file publication отдельно зависит от HA-03 fencing. Не допускать mixed backend writers;
    synthetic membership не заменяет production wiring, deadline и package gates.
 2. Создать явную versioned all-table migration: snapshot consistency, nullable и
    INTEGER/TEXT/BLOB типы, sequence reseed, FK/unique/check/trigger parity. Сравнить

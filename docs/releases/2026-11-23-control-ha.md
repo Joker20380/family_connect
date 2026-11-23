@@ -14,7 +14,7 @@ source inspection is not a fresh server-health check.
 - HA-01 isolated scope implemented and verified; details below.
 - HA-02A enrollment, HA-02B paid/subscription, HA-02C membership, HA-02D referral,
   HA-02E Support ID, HA-02F grant/audit, HA-02G issuance/readiness, HA-02H chat/support
-  and HA-02I gateway routing DB slices qualified below; remaining
+  HA-02I gateway routing and HA-02J durable CRL DB/local recovery slices qualified below; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -26,6 +26,102 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02J — durable CRL recovery
+
+Continuation from `86660b860d5693c76382da174d9f0d5f687124f7` in the authoritative
+metadata worktree/branch. Source-only synthetic DB/file-boundary slice: no SSH/live
+health check, deployment, production backend/CLI, consent, server or client change.
+Installed console5ce82415 and public Android126/catalog9 unchanged. RU remains a
+dependency;8/12/120s and all-three-serving-node first-cohort ACKs remain mandatory.
+This is not a full release, product backup or completed HA-02/03..05.
+
+### Implementation and publication boundary
+
+Common bundled CRL adapter plus native synthetic PG schema reserve sequence and
+store an immutable signed candidate in one transaction. Candidate includes payload,
+operation/request/payload hashes and validity; grants/device/invite/revision/paid
+state are read in that same snapshot. Clock is sampled after the writer lock;
+signer/delegation, signature/continuity, sequence bound2**53, validity and16384-byte
+reader bound fail closed. Request replay returns exact bytes without re-signing.
+Expired/superseded replay is readback only; pending/receipt gates refuse it.
+
+The script-only single-publisher helper writes/fsyncs/replaces/fsyncs the local
+temporary file, reads back its hash, then records a local DB receipt. This is NOT
+atomic distributed publication, a remote ACK or authority fencing. The prepare/file/
+receipt gaps, concurrent publishers and revoke-after-prepare need HA-03 fencing and
+node-specific durable ACK/readback before production. No production selector added.
+SQLite/PG candidate triggers prevent mutation/deletion and receipt regression;
+superusers disabling schema guards are not covered by these tests.
+
+Legacy SQLite publication still writes the file before committing DB state. Its
+file-ahead/commit-ACK-loss recovery advances max(file floor,DB floor)+1; only the
+synthetic outbox promises exact-byte retry. Legacy publish/sync/check/canary refuse
+PG or the synthetic outbox before key/lock/file/network I/O. Existing HMAC file
+journals and local flock are not copied as a substitute for distributed fencing.
+
+### Reproducible validation
+
+Private evidence: `/tmp/fc-control-ha-20261123/`; no raw evidence in Git. Locked
+control/identity/HA Python uses psycopg3.3.9. PostgreSQL17.11 is pinned to
+`postgres@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73`.
+
+```sh
+python -m scripts.crl_postgres_rehearsal --workdir /tmp/fc-control-ha-20261123/crl-2
+python -m pytest -q -ra tests/test_friends_restricted.py tests/test_paid_canary_crl.py tests/test_package_paid_canary_crl.py tests/test_package_restricted_maintenance.py tests/test_restricted_runtime.py tests/test_multi_gateway_directory_sync.py tests/test_friends_support_owner.py tests/test_friends_http_runtime.py tests/test_support_package.py tests/test_referral_rehearsal.py tests/test_enrollment_rehearsal.py
+```
+
+- `crl-local-1.log`:149 PASS /4 optional Go skips,4.30s; initial legacy tests.
+- `crl-local-2.log`:51 PASS /37 unavailable-PG skips /1 failure,3.14s. Test-only
+  fixture assertion incorrectly expected an empty temp directory containing the
+  SQLite registry. Corrected to compare before/after entries; publication guard
+  unchanged. Failed evidence retained, not reported as PASS.
+- `crl-1/contracts.log`:125 PASS /0 skips,76.91s, initial actual recovery PASS.
+  Superseded by expanded contracts below, not added to final unique test count.
+- `crl-legacy-1.log`:4 PASS /1 unavailable-PG skip /83 deselected,0.64s; new legacy
+  file-ahead/ACK-loss/fresh-clock cases and SQLite-outbox refusal. Overlaps final run.
+- Final `crl-2/contracts.log`/XML: **128 PASS /0 skips**,63.13s (88 CRL +40 enrollment).
+- `crl-regressions-1.log`:285 PASS /20 explicit optional skips,88.30s, before the
+  final SQLite-outbox preflight guard; final rerun recorded separately below.
+- Final `crl-regressions-2.log`: **285 PASS /20 explicit optional skips**,71.34s.
+  Skips:4 locked-Go cross-language,15 real-nginx activation and1 pinned-sync archive
+  interoperability. Current closed CRL-canary/maintenance/support/HTTP packaging,
+  imports/reproducibility and runtime/runner guards pass, not a full release gate.
+- `crl-2/receipt.json`: `ISOLATED_CRL_POSTGRES_PASS`; actual owned SIGKILL/restart,
+  exact current restore PASS, stale restore REFUSED, file-ahead `RECONCILED`,
+  pending payload `EXACT_BYTES`, sequence `CONTINUES`, production writes0,
+  owned-container cleanup PASS. Issuer keys retained in memory, NOT restored.
+
+Recovery compares all19 lab tables/**22 rows** before any new write:
+challenges4, device_support1, devices1, field_support_audit0, ha_crl_schema1,
+ha_enrollment_schema1, ha_paid_schema1, ha_restricted_admin_schema1,
+ha_restricted_schema1, ha_support_schema1, invites1, paid_beta_events1,
+paid_beta_subscriptions1, restricted_certificates1, restricted_challenges2,
+restricted_crl_publications2, restricted_crl_sequence1, restricted_grants1,
+restricted_readiness_results0. Empty tables are included in equality. Restored
+candidate UPDATE/TRUNCATE guards remain effective; consumed/revoked proofs refuse,
+payment retry does not duplicate, receipt0 stays pending despite the replaced file,
+exact-byte reconciliation succeeds and the next candidate gets a larger number.
+
+Earlier four baseline-reproduced exact-overlay failures and HA-02G artifact-dependent
+readiness packaging remain open; no pins weakened or historical suites claimed
+rerun. Individual synthetic slices are not all-table product migration. No strict
+replication/RPO0, key recovery, reverse import or distributed CRL acceptance claim.
+
+Final locked `pip check`, whitespace and879 local Markdown-target checks PASS.
+Independent Docker readback finds no remaining owned rehearsal-labelled container.
+No raw logs, dumps, profiles, keys, DBs, credentials or build output are included.
+
+### Rollback and next gates
+
+Before cutover remove only owned lab/shadow; production has no change to undo.
+Source rollback, if requested, is a new revert commit, not history rewrite. After
+future canonical writes fence old writers and recover current acknowledged state;
+never restore an old SQLite/CRL and lose payments, revokes, proof use or tombstones.
+Next bounded work is metadata/consent tombstones and remaining writers/CLI/files;
+full import/recovery/replication and HA-03..05 gates still block production HA.
+Distributed CRL publication specifically remains gated by HA-03, not enabled by
+this local file receipt. No next task is automatically started in this checkpoint.
 
 ## HA-02I — gateway routing recovery
 

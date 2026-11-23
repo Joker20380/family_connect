@@ -202,6 +202,7 @@ class Operation:
 
     @contextmanager
     def locked(self):
+        restricted_admin.require_local_crl(self.config.service.access)
         checked_path(self.config.operations, folder=True)
         checked_path(self.config.sync_lock)
         descriptor = os.open(self.config.sync_lock, os.O_RDWR | os.O_NOFOLLOW)

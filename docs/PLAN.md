@@ -52,12 +52,23 @@ failed/ambiguous commits, revoke checks and exact current/stale recovery PASS.
 SIGKILL/current restore preserves15 lab tables/28 rows; signed files/identity keys
 are retained, not restored. Forward catalog rollback uses a newer signed sequence;
 no old assignment/catalog resurrection. Production wiring and HA remain pending.
-NEXT within HA-02: CRL publication and remaining writers/CLI,
-metadata/tombstones/files, all-table shadow import, full backup/recovery and strict
+HA-02J CRL sequence/immutable signed outbox DB boundary and local reconciliation
+qualified:128 real DB contracts /0 skips (88 CRL +40 enrollment),285 focused regressions
+/20 optional skips. Depends on HA-02A
+transaction semantics and HA-02F/G grant/issuance/paid snapshot checks. Gate:
+atomic prepare/sequence, payload-bound replay, rollback/ACK loss, file-fsync/replace/
+directory-fsync failure, expiry and exact recovery PASS. Actual SIGKILL/current
+restore preserves19 lab tables/22 rows; stale snapshot refused. File-ahead repair
+uses exact stored bytes; local receipt is not a serving-node ACK. Issuer keys are
+retained, not recovered. No distributed publisher or production backend selected;
+PG/synthetic-outbox legacy publication refuses before key/lock/file/network I/O.
+NEXT within HA-02: metadata/consent tombstones and remaining writers/CLI/files,
+all-table shadow import, full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.
 HA-03 fenced authority, HA-04 API/client failover and HA-05 shadow/cutover
-follow mandatory gates. Keep8/12/120s, offline signing and consent tombstones.
+follow mandatory gates; distributed CRL publication requires HA-03 fencing.
+Keep8/12/120s, offline signing and consent tombstones.
 No copied SQLite becomes a second writer; source checkpoint is not production HA.
 All three serving nodes still ACK the first cohort transition; unavailable RU is
 not silently removed. Any serving-set/quarantine change needs HA-03 fencing.
