@@ -1,6 +1,18 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02A VERIFIED.**
+**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02B VERIFIED.**
+Paid/subscription checkpointa62b5b2e is ordinarily pushed and remote-SHA verified
+in the existing metadata branch, not this divergent main.89 SQLite/PostgreSQL
+contracts PASS /0 skips;366 regression/runner checks PASS /20 optional skips.
+Actual crash recovery and exact nine-table synthetic restore pass; an old
+pre-payment backup is explicitly refused to avoid losing payments/revocation.
+Production is unchanged: no DB switch, service restart, client/catalog change or
+claim of fresh RU/NL health. Full canonical migration, replication, fencing and
+API/client failover remain pending; RU remains a shared dependency. Production
+reverse migration is not implemented and remains a cutover gate.
+[Source, tests, remaining gates and rollback](releases/2026-11-23-control-ha.md).
+
+**Earlier23 November — isolated HA-02A VERIFIED.**
 Enrollment checkpoint9d1219d8 is committed/pushed in the existing metadata branch,
 not this dirty divergent main. Shared SQLite/PostgreSQL transaction contracts40/0
 skips PASS;353 consumer tests PASS /20 optional gates skipped;6 runner safety tests

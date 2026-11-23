@@ -13,6 +13,8 @@ divergent; pre-existing modifications are preserved. Do not deploy its runtime.
 - Both ordinarily pushed; remote branch SHA matched after each push.
 - HA-02A implementation: `9d1219d89b462e3ba87daa6e1e560dc1f238ce8b`, ordinary
   push to the same metadata branch; no source merge/deployment to this old main.
+- HA-02B implementation: `a62b5b2e3ef58598a062e19289c2c06642c3af78`, ordinary
+  push to that branch succeeded; remote SHA independently matched.
 - Full architecture: [CONTROL-HA plan](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/control-ha.md).
 - Full evidence: [source-worktree release record](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/releases/2026-11-23-control-ha.md).
 - Commands/limits: [isolated rehearsal runbook](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/deploy/control-ha/README.md).
@@ -33,6 +35,36 @@ and direct readback from every recovered member. Final local failover is1.766s,
 not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
+
+## HA-02B — paid/subscription and exercised recovery
+
+Owner explicitly requires rollback safety. Payment state transitions and personal
+subscription proofs now have a shared semantic transaction boundary; SQLite is
+still the default. Native PostgreSQL paid tables/triggers exist only in the
+explicit synthetic `no-transports` store. SQLite retains first-payment node
+preparation; production transport membership/wiring is not migrated.
+
+89 real SQLite/PostgreSQL contracts PASS /0 skips, including duplicate ACK-loss,
+event-ID conflict, cohort/proof races, atomic rollback, terminal revocation and
+exact all-node projection parity.366 consumer/runner checks PASS /20 optional
+nginx/sync/Go skips; separate final runner checks13 PASS. No release gate claim.
+
+Actual SIGKILL/restart preserves acknowledged payment/grace/revoke and consumed
+proof while dropping uncommitted writes. An older pre-payment dump is restored in
+an isolated container and explicitly REFUSED because it loses acknowledged state.
+The latest dump restores all12 rows across nine lab tables exactly in another
+fresh container. Replay, restored immutable triggers and audit sequence pass.
+Final private evidence is `/tmp/fc-control-ha-20261123/paid-3/`; owned containers
+and anonymous volumes are removed, dumps/credentials/raw rows stay outside Git.
+Earlier failures and their corrections are documented in the source-worktree
+dated report, not erased or relabelled as successful first attempts.
+
+This proves single-instance synthetic recovery, not full product backup,
+replication/RPO0, reverse SQLite import or production failover. Before cutover,
+abort only the lab/shadow; production needs no restore. After new writes, fence
+writers and recover the current acknowledged state; never restore old SQLite
+and lose payments/revokes. A production rollback/recovery procedure must pass
+its full gates before switching management.
 
 ## HA-02A — enrollment checkpoint
 
@@ -60,8 +92,9 @@ are removed; credentials/dumps/logs remain private under `/tmp`, not Git.
 ## Not yet implemented
 
 These are isolated checkpoints, **not completed migration**. HA-02 must finish all
-other canonical writers, subscription challenge transactions, immutable payment events, metadata revoke
+transport-membership preparation, other canonical writers/CLI, metadata revoke
 tombstones and file coordination to an explicitly qualified replicated store.
+Paid/subscription synthetic parity does not qualify production import or recovery.
 HA-03 adds receiver-enforced fencing, HA-04 multi-endpoint API/clients, HA-05 live
 shadow and cutover with real failure tests. No HA controller is installed on NL and
 no alternative API serves users. RU remains a shared dependency.
