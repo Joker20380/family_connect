@@ -26,6 +26,15 @@ source inspection is not a fresh server-health check.
 
 ## HA-02A — enrollment repository checkpoint, not complete HA-02
 
+- Source/tests/docs checkpoint `9d1219d89b462e3ba87daa6e1e560dc1f238ce8b`
+  ordinarily pushed to `feature/device-technical-metadata-20261115`; exact remote
+  branch SHA independently matched. Staged scope/private-key markers, local
+  documentation links and whitespace checks pass; no build output/private state.
+- Old-main navigation checkpoint `a22efc6e3f1be5a813ac6469b9f80ce6c5543463`
+  remains local. First push failed transient DNS; one ordinary retry was rejected
+  `non-fast-forward`. Remote main remains `cb47bf230c6795cf21f4e6948253f49aa5377ed0`.
+  No force/rebase/merge; the pre-existing40/66/11/6-line documentation changes and
+  untracked root work remain untouched. Use the published feature-branch source.
 - Shared `Access` domain logic now uses semantic transaction operations for invite,
   challenge, activation, status and device revocation. SQLite remains the default;
   existing API signatures, proof/binding validation,TTL100s and challenge limit8

@@ -8,7 +8,7 @@ HA-01 isolated scope COMPLETE: read-only fingerprints, real three-voter mTLS
 rehearsal, leader loss, no-quorum refusal and direct recovery;61 tests PASS,
 zero production writes. HA-02 canonical repository/replication is IN_PROGRESS:
 HA-02A enrollment transaction boundary and isolated PostgreSQL crash/backup/restore
-qualified (40 contracts /0 skips,353 regressions /20 optional skips,6 runner checks).
+qualified/pushed9d1219d8 (40 contracts /0 skips,353 regressions /20 optional skips,6 runner checks).
 NEXT within HA-02: paid ledger/subscription transaction parity, remaining writers,
 all-table shadow import and strict synchronous PostgreSQL/Patroni replication/RPO0.
 The five-table synthetic enrollment schema is not a migrated canonical database.

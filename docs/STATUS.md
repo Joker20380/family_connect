@@ -1,6 +1,7 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02A enrollment checkpoint VERIFIED; migration IN_PROGRESS.**
+Source9d1219d8 is ordinarily pushed and remote-SHA verified in the metadata branch.
 One shared enrollment algorithm now has an explicit transaction boundary; production
 still defaults to SQLite. The isolated PostgreSQL17.11/psycopg3.3.9 adapter passes40
 SQLite/PostgreSQL contracts with no skips, concurrent proof/invitation/limit races,
