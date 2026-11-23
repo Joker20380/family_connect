@@ -30,7 +30,12 @@ HA-02G issuance/readiness DB boundary qualified/pushed e8240e81:163 contracts /0
 Atomic proof/certificate/ACK, safe readback, paid/node/revoke binding and exact16-table/
 36-row crash/restore pass. Issuer keys ephemeral/retained, not restored; no production
 selector, replication/RPO0 or fencing. Artifact-dependent package gates remain open.
-NEXT within HA-02: support sender and remaining writers/CLI, CRL publication, metadata/
+HA-02H chat/support sender boundary qualified/pushed9a1f7f44:114 contracts /0 skips,
+238 regressions /23 explicit optional skips and18 final runner guards PASS. Sender
+validation/enrollment is atomic; proof/identity/revoke/sequence and exact15-table/
+29-row restore pass. PG mailbox/support-file publication refuses before I/O. Keys/
+policy retained, not recovered; no production backend, replication or fencing.
+NEXT within HA-02: gateway assignment/routing and remaining writers/CLI, CRL publication, metadata/
 tombstones/files, all-table import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse
 import is not implemented. Then HA-03 receiver-enforced

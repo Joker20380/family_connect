@@ -1,6 +1,20 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02G VERIFIED.**
+**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02H VERIFIED.**
+Chat/support sender checkpoint `9a1f7f44` is ordinarily pushed and remote-SHA verified
+in the metadata branch.114 real DB contracts PASS /0 skips (74 chat/support +40
+enrollment),238 focused regressions /23 explicit skips,18 final runner guards PASS.
+Chat proof/identity, service revoke, sequence and support binding now share SQLite/
+PostgreSQL transactions. Sender validation/enrollment is atomic; lost ACK and stale
+proof/lease handling pass. SIGKILL/exact15-table/29-row restore preserves current
+state; stale backup refused. Keys/local policy retained, NOT restored; no full
+recovery/RPO0/replication/fencing claim. PG mailbox/support-file publication refuses
+before I/O. Production unchanged: console5ce82415, Android126/catalog9,8/12/120s;
+RU remains a dependency. Next: gateway assignment/remaining DB writers, CRL/files,
+full import/recovery/replicas and fencing. Prior packaging gates remain open.
+[Authoritative evidence and rollback](releases/2026-11-23-control-ha.md#ha-02h--chat-and-support-sender-recovery).
+
+**Earlier23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02G VERIFIED.**
 Issuance/readiness checkpoint `e8240e81` is ordinarily pushed and remote-SHA verified
 in the metadata branch.163 real DB contracts PASS /0 skips (123 restricted +40
 enrollment);521 focused regressions /36 optional skips and121 isolated-root

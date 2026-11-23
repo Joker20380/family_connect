@@ -25,6 +25,8 @@ divergent; pre-existing modifications are preserved. Do not deploy its runtime.
   push to the same branch succeeded and remote SHA independently matched.
 - HA-02G implementation: `e8240e81ea63d280324acb20193da6d22d0e137b`, ordinary
   push to the same branch succeeded and remote SHA independently matched.
+- HA-02H implementation: `9a1f7f44dc8089fa6b41a8fa6e7bb754617dfac4`, ordinary
+  push to the same branch succeeded and remote SHA independently matched.
 - Full architecture: [CONTROL-HA plan](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/control-ha.md).
 - Full evidence: [source-worktree release record](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/releases/2026-11-23-control-ha.md).
 - Commands/limits: [isolated rehearsal runbook](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/deploy/control-ha/README.md).
@@ -45,6 +47,35 @@ and direct readback from every recovered member. Final local failover is1.766s,
 not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
+
+## HA-02H — chat and support sender recovery
+
+Common SQLite/PostgreSQL transactions now cover chat identity/proof, service sender
+registration/revoke, membership sequence and support binding. Both signatures,
+immutable identity, terminal sender revoke, capacity8/550 and100s lease remain.
+Support sender validation and enrollment share one transaction; time is checked
+after transaction waits. Safe read-only configuration/inventory does not enroll.
+No production selector; PG mailbox/support-file publication refuses before any I/O.
+
+114 real DB contracts PASS /0 skips (74 chat/support +40 enrollment),238 consumer/
+package regressions PASS /23 explicit optional skips,18 final runner guards PASS
+(overlapping runner selection, not18 extra unique cases). Closed support kit import/
+reproducibility passes; nginx/pinned archives and prior packaging gates remain open.
+Two initial recovery attempts failed in fixture setup/error classification; both
+retained, repaired without weakening paid or stale-restore guards. Full commands
+and evidence are in the authoritative feature-branch report.
+
+Actual PostgreSQL17.11 SIGKILL and separate exact15-table/29-row current restore
+preserve proof use, identities, service revokes, support binding, sequence and
+coexisting aliases/paid/audit. Stale dump refused; pending proof consumes once and
+sequence continues. Keys/local policy are retained, NOT restored: not full product/
+secret recovery, remote mailbox ACK, RPO0, replication or reverse migration.
+
+No SSH/live-health check or production/server/client/consent change. Console5ce82415,
+Android126/catalog9 and RU dependency unchanged. Rollback now is owned-lab cleanup;
+after future writes, fence and use current-state recovery, never stale SQLite.
+Next: gateway assignment/routing, remaining DB writers/CLI, CRL/files/metadata,
+full import/recovery/replicas and HA-03..05 gates before live cutover.
 
 ## HA-02G — restricted issuance and readiness recovery
 
