@@ -30,7 +30,15 @@ HA-02F grant/revoke/audit DB boundary qualified/pushed20129a67:176 real DB contr
 Exact12-table/20-row lab recovery preserves revisions, revokes, pending audit/proofs
 and paid state. Stale backup refused; SQLite compensates after APPLIED commit ACK loss.
 FIELD/CRL file publication on PG remains refused before file I/O; this is DB-only.
-NEXT within HA-02: restricted challenge/certificate/readiness writers, support sender and remaining writers/CLI,
+HA-02G restricted challenge/certificate/auto-enroll and readiness ACK/readback DB boundary
+qualified:163 real DB contracts /0 skips (123 restricted +40 enrollment),521 focused
+regressions /36 optional skips and121 isolated-root maintenance /3 snapshot skips.
+Artifact-dependent adapter packaging and prior overlay gates stay open. Atomic proof use,
+concurrent requests, lost commit ACK, backend loss, node binding, expiry and read-only
+snapshot pass. SIGKILL/current restore preserves16 lab tables/36 rows; stale backup refused.
+Ephemeral issuer keys retained in memory, NOT backed up/restored. CRL/file publication,
+replication/RPO0 and fenced authority are not qualified; no production selector added.
+NEXT within HA-02: support sender and remaining writers/CLI, CRL publication,
 metadata/tombstones/files, all-table shadow import, full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.

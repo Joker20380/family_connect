@@ -21,7 +21,7 @@ from cryptography.x509.oid import ExtendedKeyUsageOID, NameOID
 
 from device_identity.device import verify_transport_key_proof
 from provisioning.friends_catalog import fields, key, parse, require
-from .access import Rejected, CHALLENGE_TTL
+from .access import Rejected, CHALLENGE_TTL, SQLiteEnrollment
 from . import paid_beta, readiness_receipts
 
 DOMAIN = b'family-connect/restricted-issuer/v1\0'
@@ -76,11 +76,89 @@ def admission_policy(raw):
     return policy['devices'], False
 
 
-def activated_grant(database, device, family, minimum_revision):
-    row = database.execute('SELECT d.*, i.revoked AS invite_revoked, g.family, g.revision, '
+class RestrictedTransaction:
+    def __init__(self, enrollment):
+        self.enrollment = enrollment
+        self.database = enrollment.database
+        self.placeholder = enrollment.placeholder
+
+    def activated_row(self, device):
+        return self.database.execute('SELECT d.*, i.revoked AS invite_revoked, g.family, g.revision, '
                            'g.revoked AS grant_revoked FROM devices d '
                            'JOIN invites i ON d.device=i.device '
-                           'LEFT JOIN restricted_grants g ON d.device=g.device WHERE d.device=?', (device,)).fetchone()
+                           'LEFT JOIN restricted_grants g ON d.device=g.device WHERE d.device=' + self.placeholder,
+                           (device,)).fetchone()
+
+    def grant_row(self, device):
+        return self.database.execute('SELECT d.*, g.family, g.revision, g.expires, g.revoked AS grant_revoked '
+            'FROM devices d JOIN restricted_grants g ON d.device=g.device WHERE d.device=' + self.placeholder,
+            (device,)).fetchone()
+
+    def auto_enroll(self, device, family, revision):
+        self.database.execute('INSERT INTO restricted_grants(device,family,revision,expires,revoked) VALUES (' +
+            ','.join([self.placeholder] * 3) + ',NULL,0)', (device, family, revision))
+
+    def prune_challenges(self, now):
+        self.database.execute('DELETE FROM restricted_challenges WHERE expires<=' + self.placeholder, (now,))
+        self.enrollment.expire_challenges(now)
+
+    def add_challenge(self, nonce, revision, family, expires):
+        self.database.execute('INSERT INTO restricted_challenges(nonce,revision,family,expires) VALUES (' +
+            ','.join([self.placeholder] * 4) + ')', (nonce, revision, family, expires))
+
+    def challenge(self, nonce):
+        return self.database.execute('SELECT c.*, r.revision, r.family FROM challenges c '
+            'JOIN restricted_challenges r ON c.nonce=r.nonce WHERE c.nonce=' + self.placeholder, (nonce,)).fetchone()
+
+    def prune_certificates(self, now):
+        self.database.execute('DELETE FROM restricted_certificates WHERE expires<=' + self.placeholder, (now,))
+
+    def serials(self, device, revision):
+        return self.database.execute('SELECT serial FROM restricted_certificates WHERE device=' + self.placeholder +
+            ' AND revision=' + self.placeholder, (device, revision)).fetchall()
+
+    def previous_certificate(self, device, revision, after):
+        return self.database.execute('SELECT * FROM restricted_certificates WHERE device=' + self.placeholder +
+            ' AND revision=' + self.placeholder + ' AND expires>' + self.placeholder +
+            ' ORDER BY expires DESC,serial ASC LIMIT 1', (device, revision, after)).fetchone()
+
+    def add_certificate(self, device, revision, serial, expires, pem):
+        self.database.execute('INSERT INTO restricted_certificates(device,revision,serial,expires,certificate) VALUES (' +
+            ','.join([self.placeholder] * 5) + ')', (device, revision, serial, expires, pem))
+
+    def correlate(self, correlation, nonce, device, now, gateway_binding):
+        self.database.execute('DELETE FROM restricted_readiness_results WHERE challenge_at<' + self.placeholder, (now - 86400,))
+        self.database.execute('DELETE FROM restricted_readiness_results WHERE device=' + self.placeholder +
+            ' AND correlation NOT IN (SELECT correlation FROM restricted_readiness_results WHERE device=' +
+            self.placeholder + ' ORDER BY challenge_at DESC,correlation ASC LIMIT 15)', (device, device))
+        self.database.execute('INSERT INTO restricted_readiness_results(correlation,nonce,device,challenge_at,gateway_binding) VALUES (' +
+            ','.join([self.placeholder] * 5) + ')', (correlation, nonce, device, now, gateway_binding))
+
+    def receipt_for_nonce(self, nonce):
+        return self.database.execute('SELECT correlation FROM restricted_readiness_results WHERE nonce=' +
+                                     self.placeholder, (nonce,)).fetchone()
+
+    def fetched(self, nonce, fetch_id, response, now):
+        self.database.execute('UPDATE restricted_readiness_results SET fetch_id=' + self.placeholder +
+            ',fetch_at=' + self.placeholder + ',revision=' + self.placeholder + ',minimum_crl=' + self.placeholder +
+            ',expires=' + self.placeholder + ' WHERE nonce=' + self.placeholder,
+            (fetch_id, now, response['revision'], response['minimum_crl'], response['expires_at'], nonce))
+
+    def receipt(self, correlation, device):
+        return self.database.execute('SELECT * FROM restricted_readiness_results WHERE correlation=' + self.placeholder +
+            ' AND device=' + self.placeholder, (correlation, device)).fetchone()
+
+    def acknowledge(self, correlation, raw, now):
+        self.database.execute('UPDATE restricted_readiness_results SET ack=' + self.placeholder + ',ack_at=' +
+                             self.placeholder + ' WHERE correlation=' + self.placeholder, (raw.decode(), now, correlation))
+
+
+def restricted_transaction(database):
+    return database if isinstance(database, RestrictedTransaction) else SQLiteEnrollment(database).restricted()
+
+
+def activated_grant(database, device, family, minimum_revision):
+    row = restricted_transaction(database).activated_row(device)
     if row is None or row['revoked'] or row['invite_revoked'] or row['grant_revoked']:
         raise Rejected()
     if row['family'] is not None and (row['family'] != family or row['revision'] < minimum_revision):
@@ -331,17 +409,17 @@ class RestrictedReadiness:
         return purpose + ':' + binding if binding else purpose
 
     def _enroll(self, database, device, public, wg, trust, now):
+        database = restricted_transaction(database)
         if self.all_activated:
             return
-        if database.execute('SELECT 1 FROM restricted_grants WHERE device=?', (device,)).fetchone():
+        if database.grant_row(device):
             return
         if self.eligible_devices is None or (device not in self.eligible_devices and '*' not in self.eligible_devices):
             raise Rejected()
-        row = database.execute('SELECT d.*, i.revoked AS invite_revoked FROM devices d '
-                               'JOIN invites i ON d.device=i.device WHERE d.device=?', (device,)).fetchone()
+        row = database.activated_row(device)
         if row is None or row['revoked'] or row['invite_revoked'] or row['public'] != public or row['wg'] != wg:
             raise Rejected()
-        database.execute('INSERT INTO restricted_grants VALUES (?,?,?,?,0)', (device, trust['family'], trust['minimum_revision'], None))
+        database.auto_enroll(device, trust['family'], trust['minimum_revision'])
 
     def _trust(self, now):
         trust, authority = delegation(self.manifest, self.anchor, now)
@@ -364,11 +442,14 @@ class RestrictedReadiness:
         return activated_grant(database, device, trust['family'], trust['minimum_revision'])
 
     def _grant(self, database, device, now):
+        database = restricted_transaction(database)
         row = self._legacy_grant(database, device, now)
-        subscription = paid_beta.effective_subscription_state(database, device, now)
+        subscription = paid_beta.effective_subscription_state(database.enrollment.paid(), device, now)
         if subscription is None:
             return row
-        subscription = paid_beta.effective_subscription_state(database, device, max(now, int(self.access.clock())))
+        if not subscription.allowed:
+            raise Rejected()
+        subscription = paid_beta.effective_subscription_state(database.enrollment.paid(), device, max(now, int(self.access.clock())))
         if not subscription.allowed:
             raise Rejected()
         result = dict(row)
@@ -377,14 +458,13 @@ class RestrictedReadiness:
         return result
 
     def _legacy_grant(self, database, device, now):
+        database = restricted_transaction(database)
         if getattr(self, 'all_activated', False):
             return self._activated_grant(database, device, now)
         if self.eligible_devices is not None and device not in self.eligible_devices and '*' not in self.eligible_devices:
             raise Rejected()
-        row = database.execute('SELECT d.*, g.family, g.revision, g.expires, g.revoked AS grant_revoked '
-                               'FROM devices d JOIN restricted_grants g ON d.device=g.device '
-                               'WHERE d.device=?', (device,)).fetchone()
-        invite = database.execute('SELECT revoked FROM invites WHERE device=?', (device,)).fetchone()
+        row = database.grant_row(device)
+        invite = database.enrollment.device_invitation(device)
         if row is None or row['revoked'] or row['grant_revoked'] or (row['expires'] is not None and row['expires'] <= now) or invite is None or invite['revoked']:
             raise Rejected()
         return row
@@ -396,28 +476,29 @@ class RestrictedReadiness:
             stage = 'clock'
             now = int(self.access.clock())
             stage = 'authority'
-            trust, _, _, _, _ = self._trust(now)
+            trust, _, crl, _, _ = self._trust(now)
             stage = 'device_lookup'
-            with self.access.db() as database:
+            with self.access.enrollment() as transaction:
+                database = transaction.restricted()
+                now = max(now, int(self.access.clock()))
+                if not (trust['issued_at'] <= now < trust['expires_at'] and crl.last_update_utc <= utc(now) < crl.next_update_utc):
+                    raise Rejected()
                 self._enroll(database, device, public_identity, wireguard_public_key, trust, now)
                 row = self._grant(database, device, now)
                 if row['family'] != trust['family'] or row['revision'] < trust['minimum_revision'] or row['public'] != public_identity or row['wg'] != wireguard_public_key:
                     raise Rejected()
                 stage = 'challenge_store'
-                database.execute('DELETE FROM restricted_challenges WHERE expires<=?', (now,))
-                database.execute('DELETE FROM challenges WHERE expires<=?', (now,))
-                if database.execute('SELECT COUNT(*) FROM challenges WHERE device=? AND used=0', (device,)).fetchone()[0] >= 8:
+                database.prune_challenges(now)
+                if transaction.pending_challenges(device) >= 8:
                     raise ChallengeUnavailable(stage, 'CHALLENGE_CAPACITY_EXHAUSTED')
                 stage = 'nonce'
                 nonce = base64.b64encode(secrets.token_bytes(32)).decode()
                 digest = hashlib.sha256(nonce.encode()).hexdigest()
                 expiry = min(now + CHALLENGE_TTL, row['expires'] if row['expires'] is not None else trust['expires_at'], trust['expires_at'])
                 stage = 'challenge_store'
-                database.execute('INSERT INTO challenges VALUES (?,?,?,?,?,?,?,0)',
-                                 (digest, device, public_identity, wireguard_public_key,
-                                  self.challenge_purpose('restricted', trust), None, expiry))
-                database.execute('INSERT INTO restricted_challenges VALUES (?,?,?,?)',
-                                 (digest, row['revision'], row['family'], expiry))
+                transaction.add_challenge(digest, device, public_identity, wireguard_public_key,
+                                          self.challenge_purpose('restricted', trust), None, expiry)
+                database.add_challenge(digest, row['revision'], row['family'], expiry)
                 if request_id is not None:
                     stage = 'correlation_store'
                     readiness_receipts.challenge(database, request_id, digest, device, now, self.gateway_binding(trust))
@@ -435,13 +516,13 @@ class RestrictedReadiness:
         trust, authority, crl, crl_pem, crl_number = self._trust(now)
         publication = online_generation(self.publication_source, crl_pem.encode(), trust['gateway'], now)
         seeds = directory(self.seed_source(), trust['family'], trust['gateway'], now_ns=clock_nanoseconds(self.access.clock))
-        with self.access.db() as database:
+        with self.access.enrollment() as transaction:
+            database = transaction.restricted()
             now = int(self.access.clock())
             require(trust['issued_at'] <= now < trust['expires_at'] and crl.last_update_utc <= utc(now) < crl.next_update_utc)
             directory(json.dumps(seeds).encode(), trust['family'], trust['gateway'], now_ns=clock_nanoseconds(self.access.clock))
             row = self._grant(database, device, now)
-            challenge = database.execute('SELECT c.*, r.revision, r.family FROM challenges c '
-                                         'JOIN restricted_challenges r ON c.nonce=r.nonce WHERE c.nonce=?', (digest,)).fetchone()
+            challenge = database.challenge(digest)
             if (challenge is None or challenge['used'] or challenge['expires'] <= now
                     or challenge['purpose'] != self.challenge_purpose('restricted', trust)
                     or challenge['device'] != device or challenge['public'] != proof['public_identity']
@@ -455,13 +536,11 @@ class RestrictedReadiness:
             paid = 'paid_beta_until' in row.keys()
             if self.delivery_lifetime == MAX_TEST_LIFETIME or paid:
                 expires = min(expires, timestamp(seeds['expires_at']))
-            database.execute('DELETE FROM restricted_certificates WHERE expires<=?', (now,))
-            current = database.execute('SELECT serial FROM restricted_certificates WHERE device=? AND revision=?',
-                                       (device, row['revision'])).fetchall()
+            database.prune_certificates(now)
+            current = database.serials(device, row['revision'])
             if any(crl.get_revoked_certificate_by_serial_number(int(record['serial'])) is not None for record in current):
                 raise Rejected()
-            previous = database.execute('SELECT * FROM restricted_certificates WHERE device=? AND revision=? '
-                                        'AND expires>? ORDER BY expires DESC LIMIT 1', (device, row['revision'], now + 300)).fetchone()
+            previous = database.previous_certificate(device, row['revision'], now + 300)
             if publication is not None and previous is not None:
                 target = min(expires, publication['issued_at'] + self.delivery_lifetime - readiness_receipts.CLOCK_SKEW_SECONDS)
                 retained = x509.load_pem_x509_certificate(previous['certificate'].encode())
@@ -476,8 +555,7 @@ class RestrictedReadiness:
             if previous is None or (self.delivery_lifetime == MAX_TEST_LIFETIME and previous['expires'] < expires):
                 certificate = self._issue(row, authority, now, expires)
                 pem = certificate.public_bytes(Encoding.PEM).decode()
-                database.execute('INSERT INTO restricted_certificates VALUES (?,?,?,?,?)',
-                                 (device, row['revision'], str(certificate.serial_number), expires, pem))
+                database.add_certificate(device, row['revision'], str(certificate.serial_number), expires, pem)
             else:
                 pem = previous['certificate']
                 certificate = x509.load_pem_x509_certificate(pem.encode())
@@ -493,7 +571,7 @@ class RestrictedReadiness:
             if online_generation(self.publication_source, crl_pem.encode(), trust['gateway'], int(self.access.clock())) != publication:
                 raise ChallengeUnavailable('publication', 'PUBLICATION_NOT_READY')
             require(len(encoded) <= MAX_RESPONSE)
-            database.execute('UPDATE challenges SET used=1 WHERE nonce=?', (digest,))
+            transaction.consume_challenge(digest)
             if request_id is not None:
                 readiness_receipts.fetched(database, digest, request_id, result, now)
             return result

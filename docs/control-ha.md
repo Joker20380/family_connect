@@ -84,8 +84,8 @@ ledger, отзывах и challenge, не только числе устройс
 потери quorum, ремонта узла, CA renewal, backup restore и независимый мониторинг.
 HA не устраняет причину локальных зависаний RU.
 
-HA-02A/B/C/D/E/F: enrollment, paid ledger/subscription, synthetic all-node membership,
-referral, Support ID и grant/audit DB transactions, PostgreSQL crash/restore
+HA-02A/B/C/D/E/F/G: enrollment, paid ledger/subscription, synthetic all-node membership,
+referral, Support ID, grant/audit и issuance/readiness DB transactions, PostgreSQL crash/restore
 стенд реализованы. HA-02B отвергает stale backup после новых payment/revoke/proof
 записей и проверяет актуальный restore всех девяти лабораторных таблиц. Это не
 production reverse migration: serving-set fencing, production wiring/deadlines,
@@ -102,7 +102,13 @@ FIELD grant/audit/CRL/admission-file writers этим не выполнен. Pos
 HA-02F переносит grant/revoke/audit DB boundary:176 contracts,264 focused regressions,
 точный restore12 лабораторных таблиц/20 строк. Pending audit не становится APPLIED
 автоматически; потеря подтверждения grant требует readback, не слепого renewal.
-FIELD file/CRL publication и restricted certificate/readiness writers ещё не перенесены.
+На этом этапе FIELD file/CRL publication и certificate/readiness writers ещё не перенесены.
+HA-02G отдельно переносит restricted challenge/certificate/auto-enroll и readiness
+ACK/readback:163 contracts, точный restore16 лабораторных таблиц/36 строк. Одноразовые
+proofs, paid expiry, owner/node binding и receipt retention сохраняются. Readback
+использует read-only snapshot без writer lock. Ephemeral issuer keys при restore
+сохранены в памяти, не восстановлены из backup: secret/authority recovery не доказан.
+FIELD/CRL/file publication и replication остаются pending; backend для production нет.
 Ни один из этих стендов не включает replicated writer, epoch fencing или live failover.
 [Точная граница и карта writers](control-ha-storage.md).
 

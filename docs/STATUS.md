@@ -1,6 +1,23 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA HA-02F grant/audit DB transactions VERIFIED; migration IN_PROGRESS.**
+**23 November — CONTROL-HA HA-02G issuance/readiness DB transactions VERIFIED; migration IN_PROGRESS.**
+Continuation from2057a32c in the authoritative metadata branch. Restricted challenge,
+certificate, auto-enrollment and readiness ACK/readback share SQLite/PostgreSQL
+repositories:163 real DB contracts PASS /0 skips (123 restricted +40 enrollment).
+521 focused regressions PASS /36 optional skips;121 isolated-root maintenance
+checks PASS /3 snapshot skips. Artifact-dependent readiness packaging is unqualified.
+Concurrent proof use, failed/ambiguous commits, revokes, node binding, paid expiry,
+receipt retention and read-only snapshot behavior pass. PostgreSQL17.11 SIGKILL and
+exact16-table/36-row lab restore pass; stale pre-issuance backup is refused.
+Issuer keys remain ephemeral in memory: this proves DB recovery, not key recovery,
+replication/RPO0, fenced authority, full product backup or a production backend.
+No server/DB/client change; console5ce82415 and Android126/catalog9 unchanged.
+RU remains a dependency;8/12/120s and all-three-node first-cohort ACKs are preserved.
+Next: support sender and remaining writers/CLI, CRL/files, import/full recovery,
+replication and fencing. Prior exact-overlay packaging gates remain open.
+[Scope](control-ha-storage.md#ha-02g--issuance-and-readiness-transactions) · [Checks/rollback](releases/2026-11-23-control-ha.md#ha-02g--restricted-issuance-and-readiness-recovery).
+
+**Earlier23 November — CONTROL-HA HA-02F grant/audit DB transactions VERIFIED; migration IN_PROGRESS.**
 Source `20129a67` is ordinarily pushed and remote-SHA verified in the metadata branch
 (base57e6c854). Shared SQLite/PostgreSQL grant renewal, idempotent grant revoke
 and audit transactions pass176 real DB contracts /0 skips (70 admin +106 prior).

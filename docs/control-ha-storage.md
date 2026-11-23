@@ -246,6 +246,48 @@ sequence продолжается, pending audit закрывается толь
 dump отвергнут сравнением с известным lab snapshot. Это не production watermark,
 полный product backup, reverse migration или replicated RPO0.
 
+## HA-02G — issuance and readiness transactions
+
+`RestrictedTransaction` в существующем `restricted.py` выносит challenge/certificate,
+auto-enrollment и readiness receipt SQL в семантическую границу. SQLite использует
+тот же алгоритм; PostgreSQL — native placeholders и отдельные DDL/marker, не перевод
+SQLite SQL строк. `Access.enrollment` объединяет запись и расход proof; readback
+использует `Access.read_enrollment`: SQLite URI `mode=ro` + explicit snapshot и
+PostgreSQL `REPEATABLE READ, READ ONLY`, без advisory writer lock.
+
+- Новый PG marker `family-connect/ha-restricted-synthetic/v1` требует валидные
+  enrollment/admin/paid schemas. Отсутствие paid schema не допускает noncohort fallback.
+  Серийные номера X509 хранятся как TEXT, без потери159-bit значений. Инициализация
+  явная и только в disposable store; production selector/import не добавлены.
+- Challenge + restricted binding + correlation и fetch + certificate + consumed
+  proof + receipt атомарны; ACK proof + exact payload тоже. Capacity8 сохраняется.
+  Часы повторно проверяются после ожидания транзакции; истёкшие trust/CRL/paid права
+  не становятся разрешёнными за счёт старого времени. Wire payload не меняется.
+- Owner/device/invite/grant/revision/family, primary/secondary node, publication,
+  CRL revoke и paid bounds проверяются прежним алгоритмом. Новая короткая paid
+  lease не наследует старый долгий certificate. Offline noncohort остаётся отдельным.
+- Receipt retention24h/cap16 и certificate reuse детерминированы при равных timestamps
+  (correlation/serial tie-break); это не новый lifetime или продление разрешений.
+  Lost commit ACK требует readback/нового proof, не повторного использования старого.
+  При rollback старый proof остаётся usable; при доказанном commit replay запрещён.
+- 123 restricted +40 enrollment contracts проходят с настоящим PostgreSQL, без
+  skips. Проверены конкурентные fetch/ACK/capacity, ошибки после записи, потеря ACK,
+  kill backend, paid/node/CRL revoke, strict schema и repeatable readonly snapshot.
+
+Отдельный recovery сохраняет16 synthetic таблиц/36 строк: enrollment/support/admin/
+paid + restricted rows. Незавершённые certificate/ACK/proof изменения исчезают после
+SIGKILL. Старый pre-issuance dump отвергается сравнением с известным committed
+snapshot; актуальный dump точно восстанавливается в другом owned контейнере.
+Consumed proofs отвергаются, pending fetch/ACK работают ровно один раз; certificate
+reuse, paid bounds, revokes, audit и safe readback сохраняются. **Issuer keys только
+ephemeral и удерживаются в памяти между проверками**: это не тест их backup/restore,
+не full product recovery, production watermark, replication или RPO0.
+
+FIELD/CRL/file writers, issuer fencing и production wiring остаются pending. Сейчас
+откат — остановить только свой стенд; серверы не менялись. После production writes
+понадобятся fence + current-state recovery, не замена старой SQLite. Полный cutover
+блокируют остальные строки карты и HA-03..05; этот DB slice их не обходит.
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -261,7 +303,7 @@ CLI и периодические задания; число таблиц produc
 | `support_admin.py`, `support.py` | Admission-file + grant + audit consistency; support sender bindings | HA-02F DB grant/revoke/audit synthetic PASS; FIELD file consistency/fencing and sender pending, PG FIELD refused before file I/O |
 | `referrals.py` | Sponsor-bound request idempotency, pool/daily limits, proof/link и claim/invitation в одной транзакции | HA-02D synthetic PASS; full import/production wiring pending |
 | `chat.py`, `chat_service.py`, `chat_sync.py` | Chat identity/proof, directory sequence, service sender revoke; filesystem exports | Pending |
-| `restricted.py`, `restricted_admin.py`, `readiness_receipts.py` | Grants, отдельные restricted challenges, certificates, readiness, CRL sequence | HA-02F explicit admin grant/revoke DB PASS; auto-enroll, challenges/certificates/readiness/CRL writers pending |
+| `restricted.py`, `restricted_admin.py`, `readiness_receipts.py` | Grants, отдельные restricted challenges, certificates, readiness, CRL sequence | HA-02F admin и HA-02G auto-enroll/challenge/certificate/readiness DB synthetic PASS; CRL sequence/file writers, issuer fencing и production wiring pending |
 | `restricted_maintenance.py`, `restricted_sync.py`, `paid_canary_crl.py` | HMAC journal, local flock, signed directory/CRL, publication/receipt ordering | Pending; требует также HA-03 fencing |
 | `gateway_routing.py`, `gateway_selection.py` | Assignment versions, operation IDs, append-only events, atomic projections | Pending |
 | `technical_metadata.py`, `geoip.py` | Отдельная SQLite, consent epoch/sequence/digest, revoke tombstone, retention, no resurrection | Pending; не входит в access registry |
@@ -275,7 +317,7 @@ signing keys не входят в migration и остаются офлайн.
 
 ## Следующие gates
 
-1. Перевести остальные writers/CLI (далее restricted challenges/certificates/readiness и support sender), затем metadata,
+1. Перевести остальные writers/CLI (далее support sender и CRL/file publication), затем metadata,
    tombstones/files и остальные строки карты. Не допускать mixed backend writers;
    synthetic membership не заменяет production wiring, deadline и package gates.
 2. Создать явную versioned all-table migration: snapshot consistency, nullable и

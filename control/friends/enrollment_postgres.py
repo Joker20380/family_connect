@@ -44,6 +44,10 @@ class PostgresEnrollmentTransaction(EnrollmentTransaction):
         from .restricted_admin_postgres import PostgresRestrictedAdminTransaction
         return PostgresRestrictedAdminTransaction(self)
 
+    def restricted(self):
+        from .restricted_postgres import PostgresRestrictedTransaction
+        return PostgresRestrictedTransaction(self)
+
     def registered(self, device):
         row = self.database.execute('SELECT support_id FROM device_support WHERE device=%s', (device,)).fetchone()
         if row is not None:
@@ -95,10 +99,15 @@ class PostgresEnrollment:
             database.execute('INSERT INTO ha_enrollment_schema VALUES (%s,%s)', (SCHEMA_VERSION, PURPOSE))
 
     @contextmanager
-    def transaction(self):
+    def transaction(self, *, readonly=False):
+        if type(readonly) is not bool:
+            raise ValueError('Invalid transaction mode')
         with self.connect() as database:
             self.configure(database)
-            database.execute('SELECT pg_advisory_xact_lock(%s)', (LOCK_ID,))
+            if readonly:
+                database.execute('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY')
+            else:
+                database.execute('SELECT pg_advisory_xact_lock(%s)', (LOCK_ID,))
             rows = database.execute('SELECT version,purpose FROM ha_enrollment_schema').fetchall()
             if rows != [dict(version=SCHEMA_VERSION, purpose=PURPOSE)]:
                 raise RuntimeError('Enrollment rehearsal schema mismatch')

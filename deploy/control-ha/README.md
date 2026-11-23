@@ -255,3 +255,30 @@ All ownership/loopback/private-file rules apply; only the runner's containers an
 volumes are cleaned. Preserve failed evidence. Rollback is stopping this lab, never
 restoring an old SQLite/product backup. Fencing, file reconciliation, full canonical
 import, replicas and production cutover remain blocked on their separate gates.
+
+## HA-02G: isolated restricted issuance/readiness recovery
+
+Use the same dedicated control/identity/HA locks, psycopg3.3.9 and pinned PostgreSQL17.11:
+
+```sh
+python -m scripts.restricted_postgres_rehearsal --workdir /tmp/fc-ha-restricted-new
+```
+
+This runs163 SQLite/real-PG contracts (123 restricted +40 enrollment), then an actual
+SIGKILL/restart and distinct stale/current restore. Fresh workdir, loopback-only DB,
+private evidence and owned-container guards are inherited unchanged. No SSH, existing
+product database, production credentials or authority keys are used. Synthetic issuer
+keys are generated in memory and retained across restore, **not backed up/restored**.
+
+Required checks: one-use concurrent fetch/ACK, rollback and lost-ACK semantics,
+node/owner/grant/CRL binding, auto-enroll eligibility, paid expiry, receipt retention
+and read-only snapshot. Current16-table/36-row lab restore must match exactly before
+testing consumed-proof refusal, pending fetch/ACK once, certificate reuse and paid
+bound. Stale pre-issuance restore must fail known-snapshot comparison. Private logs,
+dumps and credentials remain outside Git; retain failed attempts as well as PASS.
+
+No production selector, replicated issuer, CRL/file publisher, secret recovery,
+reverse migration or RPO0 is provided. Rollback now means stopping the owned lab,
+not restoring a product DB. After future production writes, fence writers and use
+current-state recovery; old SQLite is not an unconditional rollback. All-three-node
+first-cohort ACKs and8/12/120s remain unchanged. Full HA gates still block cutover.

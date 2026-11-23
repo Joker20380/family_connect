@@ -4,7 +4,6 @@ import hashlib
 import json
 import re
 import secrets
-import sqlite3
 
 from device_identity.device import verify_transport_key_proof
 from provisioning.friends_catalog import fields, require
@@ -58,25 +57,27 @@ def migrate(database):
 
 def challenge(database, correlation, nonce, device, now, gateway_binding=''):
     request_id(correlation)
-    database.execute('DELETE FROM restricted_readiness_results WHERE challenge_at<?', (now - 86400,))
-    database.execute('DELETE FROM restricted_readiness_results WHERE device=? AND correlation NOT IN '
-                     '(SELECT correlation FROM restricted_readiness_results WHERE device=? ORDER BY challenge_at DESC LIMIT 15)', (device, device))
-    database.execute('INSERT INTO restricted_readiness_results(correlation,nonce,device,challenge_at,gateway_binding) VALUES (?,?,?,?,?)',
-                     (correlation, nonce, device, now, gateway_binding))
+    transaction(database).correlate(correlation, nonce, device, now, gateway_binding)
+
+
+def transaction(database):
+    from .restricted import restricted_transaction
+    return restricted_transaction(database)
 
 
 def fetched(database, nonce, fetch_id, response, now):
     request_id(fetch_id)
-    row = database.execute('SELECT correlation FROM restricted_readiness_results WHERE nonce=?', (nonce,)).fetchone()
+    database = transaction(database)
+    row = database.receipt_for_nonce(nonce)
     if row is not None:
         require(row['correlation'] != fetch_id)
-        database.execute('UPDATE restricted_readiness_results SET fetch_id=?,fetch_at=?,revision=?,minimum_crl=?,expires=? WHERE nonce=?',
-                         (fetch_id, now, response['revision'], response['minimum_crl'], response['expires_at'], nonce))
+        database.fetched(nonce, fetch_id, response, now)
 
 
 def _attempt(service, database, payload, device, now):
+    database = transaction(database)
     raw = validate(payload)
-    row = database.execute('SELECT * FROM restricted_readiness_results WHERE correlation=? AND device=?', (payload['correlation_id'], device)).fetchone()
+    row = database.receipt(payload['correlation_id'], device)
     grant = service._grant(database, device, now)
     trust, authority, crl, _, floor = service._trust(now)
     if (row is None or row['gateway_binding'] != service.gateway_binding(trust) or row['challenge_at'] < now - 86400
@@ -91,7 +92,7 @@ def _attempt(service, database, payload, device, now):
                 or payload['expires_at'] != row['expires'] or payload['expires_at'] <= now
                 or floor < payload['minimum_crl']):
             raise Rejected()
-        serials = database.execute('SELECT serial FROM restricted_certificates WHERE device=? AND revision=?', (device, grant['revision']))
+        serials = database.serials(device, grant['revision'])
         if any(crl.get_revoked_certificate_by_serial_number(int(item['serial'])) is not None for item in serials):
             raise Rejected()
     if row['ack'] is not None:
@@ -104,20 +105,20 @@ def _attempt(service, database, payload, device, now):
 def ack_challenge(service, value):
     fields(value, 'public_identity wireguard_public_key receipt')
     device = service.access.binding(value['public_identity'], value['wireguard_public_key'])
-    now = int(service.access.clock())
-    with service.access.db() as database:
+    with service.access.enrollment() as enrollment:
+        database = enrollment.restricted()
+        now = int(service.access.clock())
         row, raw = _attempt(service, database, value['receipt'], device, now)
         grant = service._grant(database, device, now)
         trust, _, _, _, _ = service._trust(now)
         if grant['public'] != value['public_identity'] or grant['wg'] != value['wireguard_public_key']:
             raise Rejected()
-        database.execute('DELETE FROM challenges WHERE expires<=?', (now,))
-        require(database.execute('SELECT COUNT(*) FROM challenges WHERE device=? AND used=0', (device,)).fetchone()[0] < 8)
+        enrollment.expire_challenges(now)
+        require(enrollment.pending_challenges(device) < 8)
         nonce = base64.b64encode(secrets.token_bytes(32)).decode()
         expiry = now + CHALLENGE_TTL
-        database.execute('INSERT INTO challenges VALUES (?,?,?,?,?,?,?,0)',
-                         (hashlib.sha256(nonce.encode()).hexdigest(), device, grant['public'], grant['wg'],
-                          service.challenge_purpose('readiness-ack', trust), hashlib.sha256(raw).hexdigest(), expiry))
+        enrollment.add_challenge(hashlib.sha256(nonce.encode()).hexdigest(), device, grant['public'], grant['wg'],
+                                 service.challenge_purpose('readiness-ack', trust), hashlib.sha256(raw).hexdigest(), expiry)
     return dict(challenge=nonce, expires_at=expiry, audience='family-connect/enrollment/v1')
 
 
@@ -126,29 +127,29 @@ def acknowledge(service, value):
     proof = value['proof']
     device = verify_transport_key_proof(proof, expected_challenge=proof['challenge'])
     nonce = hashlib.sha256(proof['challenge'].encode()).hexdigest()
-    now = int(service.access.clock())
-    with service.access.db() as database:
+    with service.access.enrollment() as enrollment:
+        database = enrollment.restricted()
+        now = int(service.access.clock())
         row, raw = _attempt(service, database, value['receipt'], device, now)
-        challenge_row = database.execute('SELECT * FROM challenges WHERE nonce=?', (nonce,)).fetchone()
+        challenge_row = enrollment.challenge(nonce)
         trust, _, _, _, _ = service._trust(now)
         if (challenge_row is None or challenge_row['used'] or challenge_row['expires'] <= now
                 or challenge_row['purpose'] != service.challenge_purpose('readiness-ack', trust) or challenge_row['device'] != device
                 or challenge_row['public'] != proof['public_identity'] or challenge_row['wg'] != proof['wireguard_public_key']
                 or challenge_row['invite'] != hashlib.sha256(raw).hexdigest()):
             raise Rejected()
-        database.execute('UPDATE challenges SET used=1 WHERE nonce=?', (nonce,))
-        database.execute('UPDATE restricted_readiness_results SET ack=?,ack_at=? WHERE correlation=?', (raw.decode(), now, row['correlation']))
+        enrollment.consume_challenge(nonce)
+        database.acknowledge(row['correlation'], raw, now)
     return dict(version=1, correlation_id=value['receipt']['correlation_id'], status='ACK_RECEIVED')
 
 
 def readback(service, correlation, expected_owner):
     request_id(correlation)
-    now = int(service.access.clock())
     result = dict(version=1, correlation_id=correlation, status='UNKNOWN', receipt=None)
-    database = sqlite3.connect(service.access.path.resolve().as_uri() + '?mode=ro', uri=True)
-    database.row_factory = sqlite3.Row
-    try:
-        row = database.execute('SELECT * FROM restricted_readiness_results WHERE correlation=? AND device=?', (correlation, expected_owner)).fetchone()
+    with service.access.read_enrollment() as enrollment:
+        database = enrollment.restricted()
+        now = int(service.access.clock())
+        row = database.receipt(correlation, expected_owner)
         if row is None:
             return result
         if row['gateway_binding'] or service.gateway_id != 'nl-amsterdam-1':
@@ -166,6 +167,4 @@ def readback(service, correlation, expected_owner):
             except (ValueError, Rejected):
                 return result
             result.update(status='ACK_RECEIVED', receipt=payload, received_at=row['ack_at'])
-    finally:
-        database.close()
     return result

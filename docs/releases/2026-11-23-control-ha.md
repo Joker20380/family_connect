@@ -12,7 +12,8 @@ source inspection is not a fresh server-health check.
 ## Progress
 
 - HA-01 isolated scope implemented and verified; details below.
-- HA-02A enrollment, HA-02B paid/subscription, HA-02C membership, HA-02D referral, HA-02E Support ID and HA-02F grant/audit DB slices qualified below; remaining
+- HA-02A enrollment, HA-02B paid/subscription, HA-02C membership, HA-02D referral,
+  HA-02E Support ID, HA-02F grant/audit and HA-02G issuance/readiness DB slices qualified below; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -24,6 +25,100 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02G — restricted issuance and readiness recovery
+
+Continuation from `2057a32c46a45912929700bd635d804eceb04ab5` in the authoritative
+metadata worktree/branch. Source-only synthetic DB slice; no SSH/live health check,
+production selector, deployment, server policy, user data, consent, client or key
+change. Console5ce82415, Android126/catalog9,8/12/120s and all-three-node first-cohort
+ACKs unchanged. RU remains a dependency. HA-02 and HA-03..05 are not complete.
+
+### DB scope and failure semantics
+
+- Common `RestrictedTransaction` stays in the existing bundled `restricted.py`.
+  SQLite and native PostgreSQL now execute challenge/certificate/auto-enroll and
+  readiness receipt operations through one semantic boundary. No SQLite DDL/string
+  translation, mixed-backend selector or runtime migration is introduced.
+- Challenge + binding + correlation, fetch + certificate + consumed proof + receipt,
+  and ACK + exact payload + consumed proof commit together. Capacity8, receipt24h/
+  cap16, owner/node/purpose/revision/family binding and revocation remain checked.
+  Equal-timestamp retention/reuse has deterministic correlation/serial ordering.
+- Fresh time after transaction acquisition prevents stale trust/CRL/paid decisions
+  after a wait. Noncohort remains distinct from paid; a paid limit does not inherit
+  an older long certificate. Wire formats, publication checks and expiry are retained.
+- Safe readback uses SQLite read-only URI/BEGIN or PostgreSQL repeatable-read,
+  read-only transaction without writer lock. The PG schema requires matching
+  enrollment/admin/paid/restricted markers; missing paid state cannot silently
+  become unrestricted. Native X509 serial TEXT preserves159-bit values.
+- Rollback leaves proofs usable; commit ACK loss requires readback/new proof and
+  does not authorize replay. Actual PG backend termination after fetch/ACK writes
+  verifies rollback, not just injected exceptions. Certificate reuse is retained.
+
+### Qualification and retained failures
+
+Locked control/identity environment with optional HA psycopg3.3.9; PostgreSQL17.11
+uses the previously pinned digest
+`sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73`.
+Private evidence is under `/tmp/fc-control-ha-20261123/`, outside Git. Commands:
+
+```sh
+python -m scripts.restricted_postgres_rehearsal --workdir /tmp/fc-control-ha-20261123/restricted-1
+python -m pytest -q -ra tests/test_friends_restricted.py tests/test_readiness_receipts.py tests/test_restricted_clock_skew.py tests/test_restricted_gateway_selection.py tests/test_read_readiness_ack.py tests/test_paid_beta_readiness.py tests/test_support_ids.py tests/test_restricted_activation_policy.py tests/test_restricted_activation_http.py tests/test_restricted_correlation.py tests/test_restricted_boundaries.py tests/test_package_restricted_maintenance.py tests/test_paid_canary_crl.py tests/test_package_paid_canary_crl.py tests/test_activated_maintenance.py tests/test_gateway_publication_crypto.py tests/test_readiness_ack_artifacts.py tests/test_friends_http_runtime.py tests/test_referral_rehearsal.py tests/test_enrollment_rehearsal.py tests/test_control_channel.py
+```
+
+- `restricted-1/contracts.log`/XML: **163 PASS /0 skips**,123 restricted contracts
+  plus40 enrollment,59.19s. Includes concurrent proof use/capacity, invalid/revoked
+  grants, node binding, receipt retention, injected write failure/commit ACK loss,
+  real backend loss, paid bounds and PG read-only snapshot/schema refusal.
+- `restricted-regressions-2.log`: **521 PASS /36 explicit optional skips**,77.50s.
+  Includes SQLite consumers, package maintenance/paid CRL, HTTP and owned-lab guards.
+  Skips:17 locked-Go cross-language,1 accepted activated-native,1 native checker,
+  1 pinned ACK artifact,15 nginx and1 pinned sync. This is not native/release PASS.
+- `restricted-root-1.log`: **121 PASS /3 retained-snapshot skips**,3.97s, for
+  `tests/test_restricted_maintenance.py`. Runs only in disposable UID0 Docker
+  `fc-online-runtime-tests:20261105`, image89598610ee26, network disabled, read-only
+  filesystem/source export and private `/run`/`/tmp`; no host root pytest or product
+  state mounts. The export includes current uncommitted candidate sources, not
+  merely HEAD. `pip check` and source whitespace PASS.
+- Earlier `restricted-sqlite-1.log`:215 PASS/17 skips/1 failure. The added fresh clock
+  sample exposed the two-value paid-expiry fixture; reject an already-denied first
+  paid decision before sampling again. The repaired paid-wait contract passes in
+  final regression. Interim `restricted-local-1.log`:99 PASS/60 unavailable-PG skips;
+  final real-PG run includes the subsequently added concurrency/lost-ACK/retention cases.
+- Broad `restricted-regressions-1.log` is **not PASS**:562 PASS/39 skips/38 failures/
+  75 errors.36 failures +49 setup errors came from running root-only ownership tests
+  unprivileged; the proper isolated-root run passes.2 failures +26 setup errors in
+  readiness adapter packaging lacked required `FC_TEST_GO`/`FC_TEST_HTTP_ARTIFACT`.
+  Those28 artifact-dependent cases remain unqualified, not fixed by changing pins
+  or replacing accepted artifacts. Five static adapter checks passed, but no full
+  adapter package/native acceptance is claimed. Four HA-02C baseline overlay
+  failures also remain open; not rerun/reclassified in this slice.
+
+### Crash, restore and rollback boundary
+
+`restricted-1/receipt.json` reports `ISOLATED_RESTRICTED_POSTGRES_PASS`: actual
+SIGKILL/restart discards unfinished certificate/ACK/proof updates. A stale
+pre-issuance dump is restored only in another disposable container and rejected
+against the known committed snapshot. Current dump restores **all16 lab tables /
+36 rows** exactly before new writes. Consumed fetch/ACK and revoked-device proofs
+are refused; pending fetch/ACK consume once, certificate reuse and paid bound hold,
+and support/grants/revokes/paid ledger/audit/readback remain intact. This is a
+synthetic known-snapshot comparison, not a production high-watermark service.
+
+Issuer/root keys are generated only in memory and **retained, not restored**, across
+the DB recovery test. This does not qualify secret recovery, independent host loss,
+WAN partition, full product backup, replication/RPO0, reverse migration, CRL/FIELD
+file publication, issuer fencing or failover. Existing file writers still cannot
+use PG as a production backend. Raw dumps, credentials and rows remain private.
+Owned containers are cleaned; a source push is not a production installation.
+
+Rollback now: stop only the owned lab, preserve evidence; live servers were not
+changed and need no restore. After future new canonical writes: fence writers,
+preserve current acknowledged state and use qualified current-state/forward recovery
+or a separately qualified reverse import. Never replace it with stale SQLite.
+NEXT: support sender and remaining writers/CLI, CRL/files/metadata/tombstones,
+all-table import/full recovery, replicas and HA-03 fencing before any live cutover.
 
 ## HA-02F — restricted grants and audit recovery
 

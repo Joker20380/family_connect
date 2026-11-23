@@ -92,6 +92,10 @@ class SQLiteEnrollment(EnrollmentTransaction):
         from .restricted_admin import RestrictedAdminTransaction
         return RestrictedAdminTransaction(self)
 
+    def restricted(self):
+        from .restricted import RestrictedTransaction
+        return RestrictedTransaction(self)
+
 
 class Access:
  def __init__(self,path,clock=time.time,*,enrollment_repository=None):
@@ -111,6 +115,16 @@ class Access:
    with self.enrollment_repository.transaction() as transaction:yield transaction
   else:
    with self.db() as database:yield SQLiteEnrollment(database)
+ @contextmanager
+ def read_enrollment(self):
+  if self.enrollment_repository is not None:
+   with self.enrollment_repository.transaction(readonly=True) as transaction:yield transaction
+  else:
+   connection=sqlite3.connect(self.path.resolve().as_uri()+'?mode=ro',uri=True);connection.row_factory=sqlite3.Row
+   try:
+    connection.execute('BEGIN')
+    yield SQLiteEnrollment(connection)
+   finally:connection.close()
  def initialize(self):
   if self.path is None:raise NotImplementedError('Repository initialization requires an isolated migration')
   assert self.path.parent.is_dir() and not self.path.exists();fd=os.open(self.path,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600);os.close(fd)
