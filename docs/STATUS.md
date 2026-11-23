@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**24 November — CONTROL-HA legacy journal custody contract COMPLETE IN ISOLATION.**
+Source0ec3e5c91b8fe3b38e673f08e150cd8874be1e18 ordinarily pushed and remote-SHA
+verified on the metadata branch in `/home/joker/.codex/worktrees/dad9/family_connect`.
+Separate encrypted custody preserves all selected opaque bytes, empty files/directories,
+basic metadata and unequal historical cohorts without inventing history or approval.
+Sanitized actual filename shapes with generated payloads:366/366/172 entries,904 archives,
+8546 files/917 directories; exact readback after deleting sources PASS.45 custody +26
+inventory +12 selected envelope/parser tests /0 skips PASS; six source docs/993 links
+and whitespace PASS. This is not a production backup, SQL import or executable recovery.
+NEXT: semantic validation of the actual completed scheduled/service-bearing current
+operation and its native gate/three-node receipts/current issuer/publication/DB binding.
+Next gate not started. Stage2 of5; journal block and other three HA-02 blocks remain
+open, RU dependency unchanged. No gateway SSH, deployment, service/policy/version
+change or fresh health claim. Console5ce82415, NL GeoIP22 November, Android126/catalog9,
+8/12/120s and all-three-node ACK unchanged. This old main remains navigation only.
+[Custody contract, qualification and rollback](releases/2026-11-24-control-ha-legacy-custody.md).
+
 **24 November — CONTROL-HA installed journal inventory COMPLETE, not recovery acceptance.**
 Actual read-only RU/NL1/NL2 census:366/366/172 entries and matching archive directories,
 all service-bearing;15/6/5 shapes, including3/3/2 fenced rollbacks.172 shared operations
