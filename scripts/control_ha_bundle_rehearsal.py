@@ -19,15 +19,21 @@ class BundleRehearsal(SQLiteImportRehearsal):
     CONTRACT_FILES = ('tests/test_control_ha_recovery_bundle.py', 'tests/test_control_ha_sqlite_import.py',
                       'tests/test_enrollment_repository.py')
 
+    def fixture_artifacts(self, fixture):
+        return artifacts_for(fixture)
+
+    def validate_bundle(self, bundle):
+        return preflight_bundle(bundle, self.bundle_key, self.checkpoint, self.anchor, now=NOW)
+
     def capture_fixture(self):
         root = self.root / 'fixture'
         root.mkdir(mode=0o700)
         fixture = joint_fixture(root)
         self.bundle_key, self.anchor = secrets.token_bytes(32), fixture.service.anchor
-        bundle, self.checkpoint = seal(fixture.stores, fixture.external, artifacts_for(fixture), CHECKPOINT,
+        bundle, self.checkpoint = seal(fixture.stores, fixture.external, self.fixture_artifacts(fixture), CHECKPOINT,
             fixture.bootstrap, self.anchor, self.bundle_key, now=NOW)
         private_file(self.root / 'recovery.bundle', bundle)
-        recovered = preflight_bundle(bundle, self.bundle_key, self.checkpoint, self.anchor, now=NOW)
+        recovered = self.validate_bundle(bundle)
         self.bundle_summary = recovered.summary()
         fixture.service, fixture.access, fixture.referral_secret = None, None, b''
         fixture.stores, fixture.external, fixture.expected, fixture.paths = {}, {}, {}, {}
@@ -37,8 +43,7 @@ class BundleRehearsal(SQLiteImportRehearsal):
         return fixture, recovered.snapshot
 
     def recover_fixture(self, fixture):
-        recovered = preflight_bundle((self.root / 'recovery.bundle').read_bytes(), self.bundle_key,
-                                     self.checkpoint, self.anchor, now=NOW)
+        recovered = self.validate_bundle((self.root / 'recovery.bundle').read_bytes())
         return reconstruct(fixture, recovered, self.anchor, self.root / 'recovered-external')
 
 

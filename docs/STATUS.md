@@ -1,5 +1,31 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02R five external-role adapters VERIFIED in isolation.**
+Continuation fromf355fb3a; source/tests/docs only, no live read or deployment.
+Strict external-v1 profile adds real alias/HMAC, FIELD admission, schema2 service
+sender, signed routing and three node-local allocator formats to HA-02Q's capsule.
+Admission/allocator opaque probes are replaced;23 artifacts across eight roles.
+Complete captured-registry device/paid-event alias coverage, active grant/sender
+bindings, catalog signatures/hash/policy/selection and node settings/SQLite schema/
+sequence checks run before PG I/O. The adapter version is bound to the import
+receipt; generic byte-only acceptance cannot masquerade as strict qualification.
+161 real DB contracts PASS /0 skips (61 external +60 bundle +40 enrollment);
+90 focused consumer/runner checks PASS /0 skips;154 parent bundle contracts and
+full recovery regression PASS /0 skips. PostgreSQL17.11 SIGKILL/current/
+stale recovery PASS:44 tables/82 rows imported,87 after new business operations.
+Source fixture removed before restore; recovered actual files preserve alias
+history, FIELD/sender state and all three independent IP ledgers, including reverse
+registration replay and deleted-highest-ID high-water. No gateway command executes.
+Still PARTIAL: maintenance/profile journals and receiver safety state remain two
+explicit opaque probes. No live schema/ownership census, node attestation, writer
+barrier, key/checkpoint custody, full DR, strict replication/RPO0 or activation.
+NEXT bounded scope: real maintenance/profile journal and receiver safety adapters;
+unknown/unsettled inputs must refuse, not be reset. No queued deployment started.
+Stage2 of5; RU dependency persists. Console5ce82415, NL GeoIP22 November,
+Android126/catalog9,8/12/120s and all-three-node ACK gate unchanged; no health claim.
+[Formats and limits](control-ha-storage.md#ha-02r--external-role-adapters) ·
+[Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02r--external-role-adapters).
+
 **23 November — CONTROL-HA HA-02Q encrypted recovery bundle VERIFIED in isolation.**
 Sourced9ec4983 ordinarily pushed and independently remote-SHA verified from10faf0ff;
 source/tests/docs only, no live read or deployment.

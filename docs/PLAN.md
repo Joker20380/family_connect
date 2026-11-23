@@ -129,9 +129,21 @@ removal and reconstructed authority after44-table/82-row SIGKILL/restore PASS;
 87 acknowledged rows survive current restore and stale copies refuse. Four opaque
 external-role probes and exact-byte-only roles do NOT qualify full external recovery.
 No key escrow/off-host checkpoint recovery, live collector/barrier or activation.
-NEXT bounded scope within HA-02: real versioned external-role adapters and semantic
-consistency checks, replacing opaque admission/maintenance/allocator/receiver probes
-and qualifying alias/routing/sender bindings. Then separately qualify installed schemas/live writer barrier,
+HA-02R five real external-role adapters qualified in isolation:161 contracts /0 skips
+(61 external +60 bundle +40 enrollment),90 consumers/runner checks /0 skips;
+154 parent bundle contracts and full recovery regression PASS /0 skips.
+Depends on HA-02N authority map, HA-02P SQLite schemas and HA-02Q encrypted capsule.
+Gate: captured-registry alias/HMAC coverage, FIELD/grant binding, registered schema2
+sender, signed routing/policy/selection and exact per-node peers schema/settings/
+high-water checks before PG I/O; adapter-bound import receipt, source removal and
+44-table/82→87-row crash/current/stale recovery PASS. Restored aliases extend without
+legacy key/history loss; three allocators preserve IDs under reverse replay and
+do not reuse deleted highest IDs. No real gateway command or production write.
+Two roles (maintenance/profile journals and receiver safety) remain opaque probes;
+no complete external recovery, node attestation, live barrier or activation claim.
+NEXT bounded scope within HA-02: real maintenance/profile journal and receiver
+safety adapters, including unresolved-operation/floor refusal rather than reset.
+Then separately qualify installed schemas/live writer barrier,
 all-store shadow/full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.

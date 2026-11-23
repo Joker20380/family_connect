@@ -14,6 +14,8 @@
 
 [CONTROL-HA HA-02Q: encrypted recovery capsule, independent checkpoint and reconstructed issuer/referral authority; partial external scope](control-ha-storage.md#ha-02q--encrypted-recovery-bundle).
 
+[CONTROL-HA HA-02R: five real external formats, cross-store checks and node-local allocator recovery; maintenance/receiver still pending](control-ha-storage.md#ha-02r--external-role-adapters).
+
 [Device metadata · 22 November: NL/AWG GeoIP and explicit missing-data labels installed; consent unchanged](releases/2026-11-22-nl-geoip.md).
 
 [RU · 17 November00:02UTC: availability restored on accepted bytes; initiating cause remains open](releases/2026-11-17-ru-recovery.md).

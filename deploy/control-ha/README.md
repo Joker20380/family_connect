@@ -628,3 +628,46 @@ Rollback is owned laboratory cleanup only, no RU/NL change. After future product
 writes use fenced current-state recovery, never stale SQLite/external state.
 NEXT: real role adapters/semantic checks; replication and deployment are not started.
 [Scope](../../docs/control-ha-storage.md#ha-02q--encrypted-recovery-bundle).
+
+## HA-02R: external-role adapters
+
+Use the same locked control/identity/HA environment and fresh temporary workdirs:
+
+```sh
+python -m scripts.control_ha_external_rehearsal --workdir /tmp/fc-ha-external-fresh
+python -m scripts.control_ha_bundle_rehearsal --workdir /tmp/fc-ha-external-parent-fresh
+python -m pytest -q -ra tests/test_referral_rehearsal.py tests/test_enrollment_rehearsal.py tests/test_control_ha_file_boundaries.py tests/test_pseudonym_generation.py tests/test_gateway_routing.py
+python -m pytest -q -ra tests/test_gateway_selection.py
+```
+
+`ISOLATED_EXTERNAL_ROLES_PASS` qualifies five real application formats inside the
+encrypted capsule: aliases/current HMAC, explicit FIELD admission, schema2 service
+sender, signed routing and all three independent peers SQLite/settings images.
+The issuer/referral checks from Q remain mandatory. Basic Q preflight is still a
+byte-only gate for non-issuer roles; R adds a distinct versioned profile to the
+PG import receipt. It cannot silently upgrade an already imported Q target.
+
+The runner checks161 real-PG contracts /0 skips, deletes its original fixture,
+restores44 tables/82 rows, reconstructs files and exercises actual consumers and
+offline native registration. New DB operations yield87 acknowledged rows; current
+restore succeeds, stale restore/old import refuse. Three allocator images retain
+independent IDs/addresses under reverse replay and do not reuse deleted highest
+IDs. No system gateway command, live peer, network/profile/key or service changes.
+All generated node registration side effects are blocked; do not reuse this fixture
+helper as an operational registration/capture tool.
+
+Consumer/runner gate:90 PASS /0 skips. Native selection regressions:22 PASS /1
+explicit optional `FC_TEST_NGINX` skip, not nginx/server activation acceptance.
+Without the owned PG environment, external pytest alone skips three integration
+cases and does not qualify the mandatory gate. The parent bundle runner rechecks
+its default hooks and recovery independently.
+
+PARTIAL scope: maintenance/profile journal and receiver safety roles remain two
+opaque probes. Wrapping key/trusted checkpoint/public root stay in memory, not
+off-host recovered. This is not live node identity/ownership attestation or a
+coherent writer freeze, full DR, replication/RPO0 or cutover. Unknown schema/cohort/
+peer variants refuse; do not delete extra state to make validation pass.
+Rollback now is owned-container cleanup. After future acknowledged canonical
+writes use fencing/current-state recovery, never old DB/files. NEXT: remaining
+maintenance/profile and receiver adapters only; no queued production step starts.
+[Contract](../../docs/control-ha-storage.md#ha-02r--external-role-adapters).

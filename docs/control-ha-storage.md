@@ -735,6 +735,57 @@ checks; полный DR и production migration остаются отдельн�
 [Команды](../deploy/control-ha/README.md#ha-02q-encrypted-recovery-bundle) ·
 [Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02q--encrypted-recovery-bundle).
 
+## HA-02R — external-role adapters
+
+[Strict adapter](../scripts/control_ha_external_v1.py) поверх HA-02Q capsule принимает
+отдельный versioned profile `family-connect/external-roles/v1/not-for-activation`.
+Это source-level формат текущих реализаций, **не автоматически обнаруженная live
+схема**. Поддержаны пять non-issuer ролей; неизвестные поля/варианты отклоняются.
+Проверка читает SQLite только в памяти, не открывает PG или live filesystem.
+Дополнительный profile digest входит в import fingerprint: receipt от generic
+byte-only Q нельзя использовать как подтверждение strict R acceptance.
+
+| Роль | Проверяемый формат и связь | Ограничение |
+| --- | --- | --- |
+| aliases | Настоящий `fc-pseudonym-aliases-v1`, current HMAC key-check, покрытие всех device и paid-event IDs захваченной registry, current generation resolution | Только `manifest` + `current-hmac`; legacy secret не переносится. Исторические entity IDs/handles сохраняются точно, а не генерируются заново. Полный census внешних consumer references ещё нужен. |
+| admission | Настоящий FIELD `devices` список до3 IDs; уникальность, активная device/invitation, существующий unrevoked grant, family/minimum revision/expiry | Это explicit FIELD профиль; не `all_activated` и не иной cohort-cap overlay. Допуск может быть уже множества grants. |
+| sender_policy | Реальный `support.json` schema2, typed fields/revision, enabled зарегистрированный service sender и согласованные support sender bindings | Schema1 и иной multi-sender вариант требуют отдельного adapter gate; публикация bindings не выполняется. |
+| routing_files | Anchor, content-addressed policy/catalog/selection bytes; настоящая signature/schema2/schema3 verification, policy generation, assignment node/sequence, исторические ссылки и selection templates/sequence/current policy | Global install/replace events содержат policy SHA в поле `catalog_sha256`; validator различает их с device assignment. Не подписывает/не переписывает catalogs. |
+| node_allocations | По одному `peers.db` image и полному installer settings на каждый из трёх узлов; exact native schema/index, SQLite pragmas/integrity, known registry public keys, row IDs, AUTOINCREMENT floor, network/address и signed-catalog host binding | Закрытый known-peer вариант, nonempty ledger, `/16` networks RU10.84/NL10.83; неизвестные peers/settings требуют census, не удаления. Allocators независимы и не сливаются. |
+
+[Fixture](../scripts/control_ha_external_fixture.py) создаёт файлы через реальные
+alias/admission writers и native AWG registration code, но **в собственных temp
+каталогах с gateway/TCP/paid-engine/command side effects отключёнными**. Original
+capsule содержит23 artifacts; admission и node allocations больше не probes.
+Две роли `maintenance_state` и `receiver_state` всё ещё явно opaque probes;
+ни профили/журналы, ни prepared/denied/high-water receivers не считаются восстановленными.
+
+[Rehearsal](../scripts/control_ha_external_rehearsal.py) удаляет исходный fixture
+до восстановления. После DB SIGKILL/current restore новые service objects и реальные
+файлы восстанавливаются из capsule. Alias history расширяется только current key;
+FIELD и sender читаются штатными consumers. Для каждого из трёх synthetic peers DB
+четыре записи имеют собственный порядок/IDs и сохранённый floor5 после удаления
+пятой записи. Обратный registration replay сохраняет адреса, следующая запись
+получаетID6, а не переиспользует удалённыйID5. Это isolated allocator continuation,
+не применение kernel AWG/TCP и не новый live node checkpoint.
+
+161 contracts /0 skips (61 external +60 bundle +40 enrollment),90 focused consumer/
+runner checks /0 skips. Exact44-table/82-row import/restore и44-table/87-row current
+restore после новых business writes PASS; stale DB и old import отвергаются.
+Семантически валидное пересоздание alias entity IDs всё равно меняет trusted
+checkpoint/import identity и не заменяет прежний receipt. Отдельный checksum не
+доказывает свежесть/происхождение snapshot: wrapping key/trusted checkpoint/root
+пока retained in memory, live node ownership/floors не аттестованы. Подстановка
+семантически допустимых bytes при создании нового доверенного checkpoint требует
+будущего capture/barrier/ownership gate; validator не угадывает утраченную историю.
+
+Не квалифицированы maintenance/profile journals, receiver state, off-host key/
+checkpoint custody, installed versions/writers, coherent live capture, полный DR,
+strict replication/RPO0 или HA-03 fencing. Activation остаётся FORBIDDEN.
+NEXT: два оставшихся external-role adapters; не переходить к replication/deploy.
+[Команды](../deploy/control-ha/README.md#ha-02r-external-role-adapters) ·
+[Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02r--external-role-adapters).
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -768,9 +819,10 @@ signing keys не входят в migration и остаются офлайн.
 ## Следующие gates
 
 1. Использовать [HA-02N source inventory](control-ha-files.md), HA-02P pinned adapters
-   и HA-02Q encrypted bundle для настоящих versioned external-role adapters и
-   semantic consistency preflight. Заменить четыре opaque probes, проверить
-   alias/routing/sender bindings; отдельно квалифицировать key/checkpoint custody.
+   и HA-02Q/R encrypted bundle/пять role adapters для maintenance/profile journals
+   и receiver safety preflight. Заменить два оставшихся opaque probes; незавершённые
+   операции и потерянные floors должны блокировать recovery, не очищаться.
+   Отдельно квалифицировать key/checkpoint custody и полный consumer/node census.
    До live cutover отдельно сверить установленные схемы/версии и
    effective writer/CLI/timer census и consistency barrier; live notices/metadata/diagnostics
    остаются отдельными SQLite до согласованного cross-store import/collector/worker cutover.

@@ -83,7 +83,7 @@
 | Этап | Состояние | Что остаётся до перехода дальше |
 | --- | --- | --- |
 | HA-01: quorum/shadow foundation | Лабораторный gate завершён | Не считать стенд установленным production quorum |
-| HA-02: общее хранилище | В работе; A–P DB/import contracts и Q encrypted bundle/partial external recovery проверены на стенде | Полные external-role adapters, installed-schema/writer census, live consistency barrier, полный recovery, strict replication/RPO0 |
+| HA-02: общее хранилище | В работе; A–Q DB/import/bundle contracts и R пять external-role adapters проверены на стенде | Maintenance/profile и receiver adapters, installed-schema/writer census, live consistency barrier, полный recovery, strict replication/RPO0 |
 | HA-03: единственный уполномоченный writer | Не внедрён | Epoch/fencing на принимающих узлах, запрет действий старого лидера и безопасная публикация файлов |
 | HA-04: API/клиентский failover | Не внедрён | Несколько API endpoints, безопасные retries и клиентские compatibility/acceptance gates |
 | HA-05: production shadow/cutover | Не начат | Актуальные backup/restore, guarded sole-writer switch, отказ RU/возврат узла, RTO и rollback |
@@ -115,6 +115,15 @@ recovery сохраняет82 строки после импорта и87 пос
 пока сохранены в памяти стенда. Следующий ограниченный шаг — настоящие role adapters
 и cross-authority проверки, а не включение PostgreSQL на серверах. Внешние ключи/
 файлы нельзя восстановить из DB-only dump; fencing и client failover не установлены.
+
+[HA-02R](control-ha-storage.md#ha-02r--external-role-adapters) закрывает следующий
+ограниченный slice:161 contracts /0 skips и90 consumer/runner checks /0 skips.
+Пять реальных форматов проверяются вместе с БД: aliases/HMAC, FIELD, sender,
+signed routing и peers.db/settings трёх узлов. После аварии и удаления исходного
+fixture сохранены история aliases, IP/ID и allocator high-water. Заменены две
+из четырёх заглушек Q; maintenance/profile и receiver safety всё ещё не квалифицированы.
+Ни полного DR, ни автоматического отказоустойчивого управления в production пока нет.
+Следующий scope — эти два оставшихся формата, не установка PostgreSQL.
 
 ## Откат
 

@@ -19,7 +19,8 @@ source inspection is not a fresh server-health check.
   file/CLI inventory and synthetic alias/allocator checks complete; HA-02O common
   synthetic storage-shape import/recovery qualified; HA-02P pinned application SQLite
   adapters/joint semantic recovery and HA-02Q encrypted capsule/partial external
-  recovery qualified in isolation, not a live schema census or full DR; remaining
+  recovery and HA-02R five real external-role adapters qualified in isolation,
+  not a live schema census or full DR; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -31,6 +32,76 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02R — external-role adapters
+
+Continuation fromf355fb3a9c8a13b65071de86771bdd7b50cdb44e in the authoritative
+metadata worktree. Source/tests/docs only; no SSH/live read, production write,
+backend/client/policy/catalog/version change. Console5ce82415, NL GeoIP22 November,
+Android126/catalog9,8/12/120s and all-three-node first-cohort ACKs unchanged;
+RU dependency persists. No fresh health check, deployment or full release PASS.
+
+### Deliverable and scope
+
+[Strict external-v1 adapter](../control-ha-storage.md#ha-02r--external-role-adapters)
+checks five roles before PG access. Actual formats replace admission/allocator
+probes; aliases now cover all captured registry device/paid-event IDs using only
+the current HMAC secret. FIELD binds active identity/invitation/grant/family/
+revision/expiry. Schema2 sender must be registered and match bindings. Routing
+verifies signed catalog/selection bytes, content hashes, policy/assignments/history
+and selection templates/sequence. Three native allocator images preserve separate
+IDs/sequences/settings and bind to signed host configuration, not central rows alone.
+
+A source inspection resolved a real schema detail: global routing install/replace
+events use `catalog_sha256` for policy SHA; they must not be interpreted as device
+catalog moves. The initial isolated fixture probe rejected that history; the
+validator now explicitly distinguishes global policy events. Production unchanged.
+
+The artifact hashes and external adapter version enter the atomic PG import
+identity. A generic Q receipt cannot be relabelled strict R. Semantically valid
+alias-regeneration bytes still change the trusted checkpoint/import fingerprint
+and cannot overwrite previous accepted state. Unknown variants fail closed.
+
+Original fixture is removed before recovery; restored files pass native consumers.
+Alias extension preserves historical IDs/handles without a legacy key. All three
+synthetic allocators keep four rows, distinct order/IDs and floor5 after deletion;
+reverse replay preserves IPs and next insertion getsID6. Gateway/TCP/paid-engine/
+command side effects are disabled in the disposable fixture. No kernel/live peer
+registration or complete fleet recovery is claimed.
+
+### Validation and rollback
+
+Private evidence under `/tmp/fc-control-ha-20261123/`; no real user keys/profiles,
+capsule, databases or dumps enter Git. Existing lockfiles, Python3.14/psycopg3.3.9
+and pinned PostgreSQL17.11 unchanged.
+
+- `external-unit-1.log`:52 PASS /3 explicit PG skips, diagnostic-only run before
+  adding grant/sender binding negatives. Not the mandatory acceptance gate.
+- `external-recovery-1/contracts.log`:161 PASS /0 skips in33.80s (61 external,
+  60 bundle,40 enrollment). `receipt.json`: `ISOLATED_EXTERNAL_ROLES_PASS`, eight
+  roles/23 artifacts, source fixture removed before restore, all semantic and
+  external continuation checks PASS. SIGKILL/import restore exact44 tables/82 rows;
+  current restore exact44 tables/87 rows after new writes; stale/old import refuse.
+  All four owned containers cleaned up; no unrelated processes targeted.
+- `external-consumers-1.log`:90 PASS /0 skips in2.16s; runner/environment/ownership,
+  native alias/allocator boundaries, pseudonym generation and routing regressions.
+- `external-selection-1.log`:22 PASS /1 explicit optional nginx skip in1.64s.
+  Existing `FC_TEST_NGINX` activation matrix is not rerun/waived or claimed PASS.
+- `external-parent-regression-1/contracts.log`:154 PASS /0 skips in30.60s;
+  parent Q receipt `ISOLATED_RECOVERY_BUNDLE_PASS`, full SIGKILL/current/stale
+  recovery and owned-container cleanup PASS. Default bundle semantics unchanged.
+
+Still partial: maintenance/profile journals and receiver safety remain two opaque
+roles. Key/checkpoint/root custody is in memory only; node labels/host binding are
+not live identity attestation. Alias consumer references outside the captured
+registry, unknown/unmanaged peers, installed schema variants, live writer barrier,
+full DR/strict replication and HA-03..05 remain open. Current receipt is not an
+activation permit or proof that independently captured live files are coherent.
+
+Rollback now is owned-lab cleanup only. After future canonical writes require
+fencing and current accepted DB/external recovery, never stale SQLite/files or an
+old import receipt. NEXT bounded scope: maintenance/profile journal and receiver
+safety adapters, refusing unresolved operations/floor loss; no queued deployment.
 
 ## HA-02Q — encrypted recovery bundle
 
