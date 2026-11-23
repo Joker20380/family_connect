@@ -115,8 +115,16 @@ PASS. Native consumers preserve partial preparation/terminal denies and mailbox
 floor; duplicates/reboots/expiry never renew paid leases. Clock/engine/root-SSH
 conditions simulated; no live receiver activation/volume/ownership acceptance.
 Broader routes64 PASS /1 unchanged fixture failure, reproduced separately.
-NEXT bounded scope: maintenance/profile authenticated journal and pending-operation
-recovery, with path/owner/floor checks; never infer empty journals or reset unknowns.
+HA-02T bounded maintenance preflight qualified/pushed8b04ef6c:187 mandatory real-PG
+contracts,28 root and60 runner/transport checks PASS /0 skips. Depends on N source
+inventory, P SQLite adapters and Q/R/S capsule/receiver checks. HMAC/config/path/
+owner/floor/receipt checks, native root guards and44-table/82→87-row recovery PASS.
+One canonical bounded operation/publisher contract per node, explicitly empty
+separate renewal ledgers only.38 artifacts/no opaque probes in this pinned fixture,
+not full maintenance recovery; unknown/missing/history/renewal variants refuse.
+NEXT bounded scope: separate renewal coordinator/online-node evidence and controlled
+host reconciliation. Journal block remains partial; never infer empty journals,
+reset unknowns or re-sign metadata merely to make host resume succeed.
 Separately, installed-schema/live writer census and consistency barrier,
 all-store import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse

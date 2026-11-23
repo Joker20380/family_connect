@@ -1,5 +1,30 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02T bounded maintenance preflight VERIFIED in isolation.**
+Source8b04ef6c ordinarily pushed and independently remote-SHA verified on the
+authoritative metadata branch. This old main remains navigation only.
+HMAC journals, exact permit/request/before/target/config/metadata/receipt bindings,
+native floor/exact-CRL checks and profile credential correspondence now fail closed.
+Three canonical node journals replace the last opaque probe in the pinned fixture;
+38 artifacts. Missing/unknown/unfinished operations are never reset or inferred done.
+Authenticated pending evidence is retained but blocks import; unsupported renewal
+ledgers and legacy/multiple/history variants refuse. No host resume is qualified.
+187 mandatory real-PG contracts,28 root maintenance/profile and60 runner/transport
+checks PASS /0 skips. PostgreSQL17.11:44 tables/82→87 rows, source removal,
+SIGKILL/current exact/stale refused and cleanup PASS. Native root checks reject
+wrong owner/mode, symlink, lost journal and changed lock/operations inode.
+Root fixture mounts only selected source/manifests, not checkout state or keys.
+Journal block remains PARTIAL: one canonical bounded operation per node is covered;
+NEXT is separate renewal coordinator/online-node ledgers and controlled host
+reconciliation. Other three HA-02 blocks: live schemas/writer barrier, full
+current-state recovery/custody, strict replication/RPO0. Stage2/5; RU dependency persists.
+No server/client/health change: console5ce82415, NL GeoIP22 November, Android126/
+catalog9,8/12/120s and all-three-node ACK gate unchanged. Rollback is owned-lab
+cleanup; future acknowledged writes require fenced current-state recovery.
+Seven source docs/984 links checked; external URLs not fetched. Original dirty
+work preserved; main divergence is not resolved or force-pushed.
+[Source, evidence, limits and rollback](releases/2026-11-23-control-ha.md#ha-02t--bounded-maintenance-journal-preflight).
+
 **23 November — CONTROL-HA HA-02S receiver safety VERIFIED in isolation.**
 Source05efe2db ordinarily pushed and independently remote-SHA verified on the
 authoritative metadata branch. Receiver probe replaced with13 actual-format

@@ -58,6 +58,50 @@ not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
 
+## HA-02T — bounded maintenance journal preflight
+
+Authoritative source/tests/docs `8b04ef6c6865b126fa66be5342c89b87b2bd90a6` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA matched.
+Source remains `/home/joker/.codex/worktrees/dad9/family_connect`. This divergent old
+main is navigation only; original four dirty files/six untracked paths preserved.
+
+- Strict canonical journal preflight authenticates HMAC, permit/request/before/
+  target/config/metadata/receipt, profile credentials, native floor/exact-CRL and
+  directory generation. Every node is required; no DB writes during preflight.
+- Pending/unknown/conflict/rolled-back evidence is retained but blocks import;
+  missing operations never become empty state. Adapter/import/checkpoint identity
+  rejects relabelling old receipts or replacing accepted journal evidence.
+- Root-container native consumers prove idempotency and rejection of wrong owner/
+  mode, symlink, missing journal, changed lock inode, relocated operations inode and
+  expired directory. Only selected source/manifests are mounted, no checkout state,
+  keys/backups/Git metadata or Docker socket. Recovered files are private evidence,
+  not activated profiles or resumed operations.
+- Pinned scope: one canonical bounded operation/publisher contract per node and
+  no separate renewal ledgers. Legacy/multiple/history/renewal variants refuse;
+  38 artifacts with no opaque probes does not mean full maintenance recovery.
+
+Evidence `/tmp/fc-control-ha-20261123/maintenance-recovery-4/`:187 contracts PASS
+/0 skips in42.88s; PostgreSQL17.11/psycopg3.3.9/host Python3.14.4. Source removal,
+44 tables/82 imported rows,87 after new business writes, SIGKILL/current exact/stale
+refused and owned-container cleanup PASS. `maintenance-root-focused-2.log`:28 PASS
+/0 skips in2.19s on isolated Python3.13.15/cryptography46.0.7;
+`maintenance-focused-1.log`:60 PASS /0 skips in2.25s. Seven source docs/984 links
+checked; external URLs not fetched. Private keys/capsules/DB dumps remain outside Git.
+
+First of four remaining HA-02 blocks is PARTIAL: canonical bounded journals checked;
+renewal coordinator/online-node ledgers, history/installed variants and safe host
+reconciliation still open. Other blocks: live schema/writer barrier, full current-
+state recovery/key-checkpoint custody and strict replication/RPO0. Stage2/5; no
+automatic RU-independent management exists.87-row DB recovery is not a new coherent
+file capture after business writes. No fresh health/deployment/client release:
+console5ce82415, NL GeoIP22 November, Android126/catalog9 and8/12/120s unchanged.
+All three serving-node ACKs remain required; RU is not silently removed.
+
+Rollback now is owned disposable-lab cleanup only. After future canonical writes,
+use fenced current-state recovery, not stale SQLite/profile backups. No queued
+deployment was started. Full contract, runbook and source evidence live on the
+authoritative branch; do not deploy this old main or copy its runtime sources.
+
 ## HA-02S — receiver safety adapter
 
 Authoritative source/tests/docs `05efe2db5d8d12403fe02e0f33b2f51d71b433d4` ordinarily
