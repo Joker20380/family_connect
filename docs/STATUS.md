@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**24 November — CONTROL-HA scheduled current-content audit PARTIAL; same selected gate remains open.**
+Source174f525a632ebbb7aa0cc6798090030a69d93420 pushed and independently remote-SHA
+verified on the metadata branch in `/home/joker/.codex/worktrees/dad9/family_connect`.
+Read-only audit checks native scheduled records, service snapshots/start intents,
+signed material, both publications and five DB tables without rewriting unequal history.
+56 new tests /0 skips +111 stopped regressions /15 explicit PostgreSQL skips +45 custody
+regressions /0 skips:212 PASS. No PostgreSQL qualification; six source docs/1007 links PASS.
+Result remains recovery BLOCKED: original approval/configuration custody, installed
+unit-order provenance and actual coherent current capture are not established. Start
+intent is not proof of service liveness. No import/replay/host resume or acceptance flag.
+Continue this same selected provenance/installed-current task, not a new variant.
+Stage2 ends only when all four gates pass: journals; installed schemas/writer barrier;
+full off-host/current recovery; strict quorum/RPO0. First is partial, other three open;
+no defensible calendar ETA. HA-03..05 and RU dependency remain. No gateway SSH/deployment,
+service/policy/version change. Console5ce82415, NL GeoIP22 November, Android126/catalog9,
+8/12/120s/all-three-node ACK unchanged. Old main is navigation only; original work preserved.
+[Audit, stage2 endpoint and rollback](releases/2026-11-24-control-ha-current-audit.md).
+
 **24 November — CONTROL-HA legacy journal custody contract COMPLETE IN ISOLATION.**
 Source0ec3e5c91b8fe3b38e673f08e150cd8874be1e18 ordinarily pushed and remote-SHA
 verified on the metadata branch in `/home/joker/.codex/worktrees/dad9/family_connect`.
