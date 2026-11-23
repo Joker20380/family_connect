@@ -141,7 +141,7 @@ legacy key/history loss; three allocators preserve IDs under reverse replay and
 do not reuse deleted highest IDs. No real gateway command or production write.
 Two roles (maintenance/profile journals and receiver safety) remain opaque probes;
 no complete external recovery, node attestation, live barrier or activation claim.
-HA-02S receiver safety adapter qualified in isolation:170 contracts /0 skips
+HA-02S receiver safety adapter qualified/pushed05efe2db in isolation:170 contracts /0 skips
 (69 receiver +61 external +40 enrollment),53 native transport/runner checks /0 skips.
 Depends on N file-authority map, P application SQLite and Q/R encrypted role inputs.
 Gate: exact three-node config/cache/clock/decision/receipt bindings, mailbox key/

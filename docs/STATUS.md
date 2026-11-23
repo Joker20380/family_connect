@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02S receiver safety recovery VERIFIED in isolation.**
-Continuation from3fa2674e; source/tests/docs only, no SSH/live read/deployment.
+Source05efe2db ordinarily pushed and independently remote-SHA verified from3fa2674e;
+source/tests/docs only, no SSH/live read/deployment.
 Versioned receiver adapter replaces the receiver opaque probe with13 real-format
 artifacts: all three transport configs/caches, capture clock declarations and
 mailbox membership/settings/bootstrap/controller binding/private identity/volume ID.
@@ -24,6 +25,9 @@ No full DR, off-host key/checkpoint custody, live node attestation/barrier, rece
 activation or strict replication qualified. Stage2 of5; RU dependency persists.
 Console5ce82415, NL GeoIP22 November, Android126/catalog9,8/12/120s and all-three-node
 first-cohort ACK gate unchanged. No fresh health claim or public release.
+Seven source docs/971 links and three staged navigation docs/373 links PASS.
+Old-main navigation3ab8724c retained locally: ordinary push rejected non-fast-forward
+against remotecb47bf23; four dirty files/six untracked paths preserved, no force/reset.
 [Contract/limits](control-ha-storage.md#ha-02s--receiver-safety-adapter) ·
 [Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02s--receiver-safety-adapter).
 

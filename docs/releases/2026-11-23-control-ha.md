@@ -42,6 +42,15 @@ journals remain unimplemented, not silently cleared. Source inspection found
 authenticated bounded-operation journals, path/owner metadata and separate renewal
 ledgers; they require their own recovery contract. No SSH/live reads/server changes.
 
+Source/tests/docs `05efe2db5d8d12403fe02e0f33b2f51d71b433d4` ordinarily pushed
+to the existing metadata branch; independent remote SHA matched. Seven source
+docs/971 local links PASS. Old-main navigation
+`3ab8724cb6a0206e025f2a4054728d1fded7f27e` retained locally: ordinary push rejected
+`non-fast-forward` against remote main `cb47bf230c6795cf21f4e6948253f49aa5377ed0`.
+Three staged navigation docs/373 links PASS; untouched dirty hunks intentionally
+excluded from that check. Original four dirty files/six untracked paths preserved;
+no force/reset/merge. Published metadata branch remains authoritative.
+
 ### Delivered boundary
 
 [Strict adapter](../control-ha-storage.md#ha-02s--receiver-safety-adapter) replaces
