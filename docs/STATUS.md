@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02H chat/support sender DB transactions VERIFIED; migration IN_PROGRESS.**
-Continuation from5cc00bf0 in the authoritative metadata branch. Chat registration,
+Source `9a1f7f44` ordinarily pushed and remote-SHA verified in the authoritative
+metadata branch (base5cc00bf0). Chat registration,
 one-use proofs, service sender revoke, membership sequence and support bindings
 share SQLite/PostgreSQL transactions. Support sender validation and enrollment are
 now atomic rather than two separate transactions; fresh time is checked after waits.

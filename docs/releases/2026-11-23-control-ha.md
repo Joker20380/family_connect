@@ -34,6 +34,19 @@ backend/CLI switch, production policy/consent or client change. Console5ce82415,
 Android126/catalog9,8/12/120s and all-three-serving-node first-cohort ACKs unchanged.
 RU remains a dependency; HA-02/03..05 are not complete.
 
+Source/tests/docs checkpoint `9a1f7f44dc8089fa6b41a8fa6e7bb754617dfac4` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA
+matches and source worktree is clean after push. Staged17-file scope/private-key/
+token checks,874 local Markdown targets, whitespace and locked `pip check` PASS.
+Docker readback finds no remaining containers with the HA enrollment rehearsal label.
+
+Old-main navigation-only `7ad7270bd63e2db46a7babf2fcfd053762058286` remains local:
+ordinary push rejected `non-fast-forward`; independent remote main remains
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`. No force/reset/merge/rebase. Original
+unstaged40 PLAN/66 STATUS/11 private-beta/6 recovery-guide additions and six
+untracked historical paths are preserved. Published source is the feature branch,
+not this divergent navigation-only main.
+
 ### Implementation and rollback semantics
 
 Common `ChatTransaction` stays in bundled `chat.py`; native PostgreSQL uses separate
