@@ -1,6 +1,22 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02H VERIFIED.**
+**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02I VERIFIED.**
+Gateway routing checkpoint `b5cb676b` is ordinarily pushed and remote-SHA verified
+in the metadata branch.111 real DB contracts PASS /0 skips (71 routing +40 enrollment),
+327 focused regressions PASS /26 explicit optional skips. Assignments, policy
+generation, explicit selection and operation journals now share SQLite/PostgreSQL
+transactions. Concurrent/repeated requests, lost ACK, revoke and append-only events
+pass. SIGKILL/exact15-table/28-row current restore PASS; stale backup refused.
+Rollback to the earlier host uses a newer signed catalog, not old DB state. Files/
+identity keys retained, NOT restored; no full recovery/RPO0/replication/fencing claim.
+HTTP proof, paid policy and remote registration remain separate boundaries.
+Production unchanged: console5ce82415, Android126/catalog9,8/12/120s and all-three-node
+first-cohort ACKs. RU remains a dependency. Next: CRL/file publication, remaining
+writers/metadata/tombstones, full import/recovery/replicas and fencing. Prior package
+gates remain open. This divergent main is navigation only, not deployment source.
+[Authoritative evidence and rollback](releases/2026-11-23-control-ha.md#ha-02i--gateway-routing-recovery).
+
+**Earlier23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02H VERIFIED.**
 Chat/support sender checkpoint `9a1f7f44` is ordinarily pushed and remote-SHA verified
 in the metadata branch.114 real DB contracts PASS /0 skips (74 chat/support +40
 enrollment),238 focused regressions /23 explicit skips,18 final runner guards PASS.

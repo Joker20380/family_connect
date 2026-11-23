@@ -27,6 +27,8 @@ divergent; pre-existing modifications are preserved. Do not deploy its runtime.
   push to the same branch succeeded and remote SHA independently matched.
 - HA-02H implementation: `9a1f7f44dc8089fa6b41a8fa6e7bb754617dfac4`, ordinary
   push to the same branch succeeded and remote SHA independently matched.
+- HA-02I implementation: `b5cb676bd905580e2519a55bdea1d70a7b3d7153`, ordinary
+  push to the same branch succeeded and remote SHA independently matched.
 - Full architecture: [CONTROL-HA plan](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/control-ha.md).
 - Full evidence: [source-worktree release record](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/releases/2026-11-23-control-ha.md).
 - Commands/limits: [isolated rehearsal runbook](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/deploy/control-ha/README.md).
@@ -47,6 +49,44 @@ and direct readback from every recovered member. Final local failover is1.766s,
 not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
+
+## HA-02I — gateway routing recovery
+
+Source checkpoint `b5cb676bd905580e2519a55bdea1d70a7b3d7153`, fromccef2c08, is
+published on the authoritative metadata branch; source worktree is named above.
+No source merge/deployment from this older main. Its unrelated dirty/untracked
+work is preserved; independent root navigation push may remain non-fast-forward.
+
+Common SQLite/PostgreSQL transactions now cover policy generation/install/seed,
+sticky assignments, explicit moves and operation journals; selection import is
+separate from sticky state. Status/selection use read-only snapshots. Operation
+IDs bind exact payloads, ACK-loss retries do not duplicate evidence or undo later
+work, and conflicting concurrent moves have one winner. Device/invite revoke is
+checked before assignment/catalog read. Selection also rejects generation corruption.
+Offline catalog verification and all existing public protocol formats are preserved.
+
+111 real DB contracts PASS /0 skips (71 routing +40 enrollment),327 focused existing
+HTTP/client/catalog/package/runner checks PASS /26 optional skips. These are16 nginx,
+2 locked-Go native delivery,1 pinned-sync and7 exact served-archive cases; not accepted.
+Prior exact-overlay and artifact-dependent readiness packaging gates remain open.
+
+PostgreSQL17.11 actual owned SIGKILL/restart and separate current restore preserve
+all15 synthetic tables/28 rows, including assignments, operation history, proofs,
+revokes and payment state. Stale pre-routing backup refused; restored append-only
+triggers still reject writes. Consumed proof refused, pending proof usable once;
+committed operations/payment retries unchanged. Return to the earlier physical host
+works with a newer signed catalog, never an old sequence/DB rewind. Final private
+receipt: `/tmp/fc-control-ha-20261123/routing-2/receipt.json`; cleanup PASS.
+
+Signed files/anchors and synthetic identity keys are retained, NOT recovered.
+HTTP proof use, routing, paid decision and remote registration remain separate
+boundaries; use a fresh proof after a lost response. No distributed atomicity,
+full product recovery, replication/RPO0, fencing or production selector claim.
+Rollback now is owned-lab cleanup; after live writes require fenced current-state
+recovery, not old SQLite. CRL/files/remaining writers, metadata/tombstones, full
+import/recovery/strict replication and HA-03..05 still block production HA.
+Console5ce82415, Android126/catalog9,8/12/120s and all-three-node first-cohort ACKs
+unchanged; RU remains a dependency, no fresh server-health claim.
 
 ## HA-02H — chat and support sender recovery
 

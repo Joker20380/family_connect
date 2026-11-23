@@ -35,7 +35,14 @@ HA-02H chat/support sender boundary qualified/pushed9a1f7f44:114 contracts /0 sk
 validation/enrollment is atomic; proof/identity/revoke/sequence and exact15-table/
 29-row restore pass. PG mailbox/support-file publication refuses before I/O. Keys/
 policy retained, not recovered; no production backend, replication or fencing.
-NEXT within HA-02: gateway assignment/routing and remaining writers/CLI, CRL publication, metadata/
+HA-02I gateway routing/selection DB boundary qualified/pushedb5cb676b:111 contracts
+/0 skips (71 routing +40 enrollment),327 regressions /26 explicit optional skips.
+Depends on HA-02A transactions and accepted offline-signed schema2/schema3 catalogs.
+Atomic assignment/event, payload-bound retries, concurrent moves, revoke, read-only
+selection/status, append-only triggers and exact15-table/28-row crash/restore pass.
+Stale restore refused; prior-host rollback uses a newer catalog sequence. Signed
+files/identity keys retained, not recovered. No production backend or HA cutover.
+NEXT within HA-02: CRL publication and remaining writers/CLI, metadata/
 tombstones/files, all-table import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse
 import is not implemented. Then HA-03 receiver-enforced
