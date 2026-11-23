@@ -129,9 +129,15 @@ native online renewal contracts. Gate: all-three-node decision/plan/archive/rece
 binding, signatures/key/floors, private pending retention, lost-reply/cleanup and
 abort/resume fault tests. One operation, simulated RPC/readers/barriers; no activation.
 Same-evidence comparison is not resume authorization. T still refuses renewal ledgers.
-NEXT bounded scope: canonical capsule/issuer/DB integration, retained history and
-installed offline/emergency variants, then actual host reconciliation. Journal block
-remains partial; never infer empty journals, reset unknowns or re-sign host bindings.
+HA-02V combined capsule qualified/pushedbce4df72; independent remote SHA verified.
+Depends on Q/R/S/T/U:44 encrypted artifacts, exact native five-table after-state
+and issuer/CRL/directory binding; pending and weaker receipts refuse.
+162 PG contracts /0 skips +186 focused checks /0 skips; source removal and
+44-table/81→86-row crash/current-state recovery PASS, stale restore/old import refuse.
+One completed operation plus one bounded journal per node, not full DR or host resume.
+NEXT bounded scope: retained history and installed offline/emergency variants, then
+actual host reconciliation. Journal block remains partial; never infer empty journals,
+reset unknowns or re-sign host bindings. This is not permission for live deployment.
 Separately, installed-schema/live writer census and consistency barrier,
 all-store import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse

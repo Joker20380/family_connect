@@ -58,6 +58,47 @@ not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
 
+## HA-02V — combined online renewal capsule
+
+Authoritative source/tests/docs `bce4df725fc57b7de4aea2a77a671783159222d4` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA matched.
+Source remains `/home/joker/.codex/worktrees/dad9/family_connect`. This divergent old
+main is navigation only. No force/reset/rebase/merge; original four dirty files and
+six untracked paths are preserved. No SSH, live read/write, deployment or service change.
+
+Combined recovery now includes44 encrypted artifacts: four canonical application
+stores, issuer/referral authority, external/receiver state, three bounded journals
+and one completed online renewal. Independent checkpoint and explicit inventory
+binding prevent mixing snapshots. Native devices/invitations/grants/certificates/CRL
+after-state must equal the canonical DB; authority, CRL and published directory must
+belong to the same renewal. Pending/missing/mixed/unknown evidence refuses, not resets.
+Authenticated native journals are not rewritten, relocated or executed on restore.
+
+Final isolated `online-recovery-3`:162 PostgreSQL17.11 contracts /0 skips in60.48s
+(44 combined,78 bounded,40 enrollment), then full44-table/81-row import/SIGKILL/restore.
+Original source removed before restore; reconstructed application/external/receiver
+operations produce86 current rows. Current restore PASS; stale restore and old import
+after new writes refuse. Owned-container cleanup PASS. Additional186 renewal/runner
+checks /0 skips in45.26s PASS. Eight source docs/1059 links and staged
+whitespace/private-evidence/key/build-output audit PASS; external URLs not fetched.
+Private receipt/logs stay under `/tmp/fc-control-ha-20261123/`; no raw state in Git.
+
+Initial fixture composition and test-expectation errors were corrected without
+weakening checks;159-contract second recovery preceded the final162-contract run.
+One synthetic completed-operation variant is qualified, not installed histories.
+Bounded profile consumers use separate root-container paths; online RPC/readers/barriers
+and receiver clocks/engines are simulated. No live writer barrier or host attestation.
+Wrapping key/checkpoint custody is still in-memory, not off-host recovery.
+
+Stage2 of5. NEXT within the partial journal block: retained history and installed
+offline/emergency variants, then actual host reconciliation. Live schema/writer census,
+full current-state system recovery and strict replication/RPO0 remain the other three
+blocks. RU dependency persists. Console5ce82415, NL GeoIP22 November,
+Android126/catalog9,8/12/120s and all-three-node first-cohort ACK gate unchanged.
+Rollback here is owned laboratory cleanup only; no RU/NL rollback or restart is needed.
+After future canonical writes, use fenced current recovery, never old SQLite/profiles.
+This source push does not authorize automatic deployment or HA-03 work.
+
 ## HA-02U — online renewal evidence
 
 Authoritative source/tests/docs `9a9724a180ad3b1293ad9620a428d9b50af223d0` ordinarily

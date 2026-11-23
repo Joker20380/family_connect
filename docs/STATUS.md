@@ -1,5 +1,29 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02V combined renewal capsule VERIFIED in isolation.**
+Sourcebce4df725fc57b7de4aea2a77a671783159222d4 ordinarily pushed and independently
+remote-SHA verified on the authoritative metadata branch. This old main remains
+navigation only; implementation is in `/home/joker/.codex/worktrees/dad9/family_connect`.
+Four application stores, issuer/referral material, external/receiver state, three
+bounded journals and one completed online renewal now share one encrypted capsule:
+44 artifacts. Native devices/invitations/grants/certificates/CRL after-state must match
+the canonical DB exactly; authority, CRL and directory bind to the same publication.
+Pending/mixed/missing/unknown state refuses, never becomes empty or automatically resumed.
+162 PostgreSQL17.11 contracts /0 skips +186 renewal/runner checks /0 skips PASS.
+Source removed before recovery;44 tables/81 imported rows survive crash/restore;
+86 current rows survive after new writes. Stale restore and old import refuse.
+Eight source docs/1059 local links and staged whitespace/private-payload audit PASS.
+NEXT: retained history and installed offline/emergency variants, then actual host
+reconciliation. Bounded and renewal paths are separate synthetic fixture consumers,
+not an installed-host inventory or live capture barrier. Journal block remains partial.
+Other HA-02 blocks: live schema/writer barrier, full current-state DR/key-checkpoint
+custody, strict replication/RPO0. Stage2 of5; RU dependency remains.
+No SSH, deployment, service/policy/version/catalog change or fresh host-health claim.
+Console5ce82415, NL GeoIP22 November, Android126/catalog9,8/12/120s and all-three-node
+first-cohort ACK gate unchanged. Original four dirty files/six untracked paths preserved;
+no reset/force/rebase/merge. Old-main navigation publication is recorded separately.
+[Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02v--combined-online-renewal-capsule).
+
 **23 November — CONTROL-HA HA-02U online-renewal evidence checkpoint VERIFIED in isolation.**
 Source9a9724a1 ordinarily pushed and independently remote-SHA verified on the
 authoritative metadata branch. This old main remains navigation only.
