@@ -24,12 +24,13 @@ DDL = (
 
 
 class PostgresEnrollmentTransaction(EnrollmentTransaction):
-    def __init__(self, database):
+    def __init__(self, database, *, membership_exchange=None):
         super().__init__(database, '%s')
+        self.membership_exchange = membership_exchange
 
     def paid(self):
         from .paid_postgres import PostgresPaidTransaction
-        return PostgresPaidTransaction(self.database)
+        return PostgresPaidTransaction(self.database, membership_exchange=self.membership_exchange)
 
     def registered(self, device):
         row = self.database.execute('SELECT support_id FROM device_support WHERE device=%s', (device,)).fetchone()
@@ -47,12 +48,14 @@ class PostgresEnrollmentTransaction(EnrollmentTransaction):
 
 
 class PostgresEnrollment:
-    def __init__(self, *, port, schema, password):
+    def __init__(self, *, port, schema, password, membership_exchange=None):
         if (type(port) is not int or not 1024 <= port <= 65535 or type(schema) is not str
                 or re.fullmatch(r'ha_enrollment_[0-9a-f]{32}', schema) is None
-                or type(password) is not str or not password):
+                or type(password) is not str or not password
+                or membership_exchange is not None and not callable(membership_exchange)):
             raise ValueError('Invalid isolated enrollment store')
         self.port, self.schema, self.password = port, schema, password
+        self.membership_exchange = membership_exchange
 
     def connect(self):
         import psycopg
@@ -87,4 +90,4 @@ class PostgresEnrollment:
             rows = database.execute('SELECT version,purpose FROM ha_enrollment_schema').fetchall()
             if rows != [dict(version=SCHEMA_VERSION, purpose=PURPOSE)]:
                 raise RuntimeError('Enrollment rehearsal schema mismatch')
-            yield PostgresEnrollmentTransaction(database)
+            yield PostgresEnrollmentTransaction(database, membership_exchange=self.membership_exchange)

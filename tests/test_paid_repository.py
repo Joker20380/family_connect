@@ -15,10 +15,10 @@ from test_enrollment_repository import postgres_store
 NOW = 1800000000
 
 
-def new_store(backend, tmp_path):
+def new_store(backend, tmp_path, *, membership_required=False):
     if backend == 'postgres':
         access = postgres_store()
-        initialize_synthetic_paid(access.enrollment_repository)
+        initialize_synthetic_paid(access.enrollment_repository, membership_required=membership_required)
     else:
         access = Access(tmp_path / 'paid.sqlite')
         access.initialize()

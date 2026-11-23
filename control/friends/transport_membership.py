@@ -2,9 +2,37 @@
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 
 from . import paid_beta, transport_policy as policy
+
+
+def unique(pairs):
+    value = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError('DUPLICATE_PREPARATION_ACK_FIELD')
+        value[key] = item
+    return value
+
+
+def prepare_nodes(database, device, token, now, exchange):
+    try:
+        if type(token) is not str or re.fullmatch('[a-f0-9]{64}', token) is None or not callable(exchange):
+            raise ValueError('INVALID_PREPARATION_REQUEST')
+        for node in policy.NODES:
+            request = dict(operation='prepare', token=token,
+                paid=policy.read_snapshot(database, node, now, device=device))
+            reply = exchange(node, request)
+            if type(reply) is not bytes or len(reply) > 1024:
+                raise ValueError('INVALID_PREPARATION_ACK')
+            acknowledgement = json.loads(reply.decode('utf-8'), object_pairs_hook=unique)
+            if (type(acknowledgement) is not dict or type(acknowledgement.get('schema')) is not int
+                    or acknowledgement != dict(schema=1, node=node, result='prepared', token=token)):
+                raise ValueError('INVALID_PREPARATION_ACK')
+    except (OSError, ValueError, subprocess.SubprocessError) as error:
+        raise paid_beta.PaidBetaError('TRANSPORT_PREPARATION_REQUIRED') from error
 
 
 def prepare(database, device, token, now):
@@ -23,10 +51,11 @@ def prepare(database, device, token, now):
             command = commands[node]
             if not isinstance(command, list) or not command or not all(type(item) is str for item in command):
                 raise ValueError('INVALID_NODE_COMMAND')
-            request = dict(operation='prepare', token=token,
-                paid=policy.read_snapshot(database, node, now, device=device))
-            reply = subprocess.run(command, input=json.dumps(request).encode(), capture_output=True, timeout=12, check=True)
-            if len(reply.stdout) > 1024 or json.loads(reply.stdout) != dict(schema=1,node=node,result='prepared',token=token):
-                raise ValueError('INVALID_PREPARATION_ACK')
+
+        def exchange(node, request):
+            return subprocess.run(commands[node], input=json.dumps(request).encode(),
+                capture_output=True, timeout=12, check=True).stdout
+
+        prepare_nodes(database, device, token, now, exchange)
     except (OSError, ValueError, subprocess.SubprocessError) as error:
         raise paid_beta.PaidBetaError('TRANSPORT_PREPARATION_REQUIRED') from error

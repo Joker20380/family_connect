@@ -36,7 +36,8 @@ def apply(transaction, support, kind='payment', event_id='synthetic-payment-0001
 
 
 class PaidRehearsal(Rehearsal):
-    CONTRACT_FILES = ('tests/test_enrollment_repository.py', 'tests/test_paid_repository.py')
+    CONTRACT_FILES = ('tests/test_enrollment_repository.py', 'tests/test_paid_repository.py',
+                      'tests/test_membership_repository.py')
 
     def dump(self, repository, name):
         backup = self.docker('exec', self.container, 'pg_dump', '--username=fc_ha_synthetic',
@@ -50,6 +51,32 @@ class PaidRehearsal(Rehearsal):
             '--dbname=fc_ha_synthetic', '--no-owner', '--no-acl', '--exit-on-error', '--single-transaction',
             input_data=backup)
         return PostgresEnrollment(port=target.port, schema=repository.schema, password=target.password)
+
+    def required_mode_restore(self):
+        repository = self.repository()
+        repository.initialize_synthetic()
+        initialize_synthetic_paid(repository, membership_required=True)
+        access = Access(None, clock=lambda: NOW, enrollment_repository=repository)
+        device = DeviceIdentity.generate()
+        pending = access.challenge(device.public_identity, device.wireguard_public_key, 'activate', access.invite())
+        access.complete(device.prove_transport_key(pending['challenge']), 'activate')
+        with repository.transaction() as transaction:
+            support = transaction.registered(device.reference)
+            transaction.database.execute('UPDATE device_support SET platform=%s,app_version=%s,version_code=%s,last_seen=%s',
+                ('android', '0.1.18-beta126', 126, NOW))
+        before = snapshot(repository)
+        backup = self.dump(repository, 'membership-required.dump')
+        with Rehearsal(self.root / 'membership-mode-restore') as target:
+            restored = self.restore(target, repository, backup)
+            require_current_restore(before, snapshot(restored))
+            try:
+                with restored.transaction() as transaction:
+                    apply(transaction.paid(), support)
+            except paid_beta.PaidBetaError as error:
+                require(str(error) == 'TRANSPORT_PREPARATION_REQUIRED', 'UNEXPECTED_RESTORED_MODE_FAILURE')
+            else:
+                raise RuntimeError('Restored required mode silently skipped node preparation')
+            require_current_restore(before, snapshot(restored))
 
     def recovery(self):
         repository = self.repository()
@@ -147,13 +174,15 @@ def main():
     with PaidRehearsal(args.workdir) as rehearsal:
         tests = rehearsal.contracts()
         restored = rehearsal.recovery()
+        rehearsal.required_mode_restore()
         receipt = dict(schema=1, result='ISOLATED_PAID_POSTGRES_PASS', contracts=tests,
             postgres=rehearsal.manifest['version'], driver='psycopg3.3.9', synthetic_only=True,
             crash_recovery='PASS', uncommitted_ledger='ROLLED_BACK', stale_restore='REFUSED',
             current_restore='EXACT_ALL_LAB_TABLES', restored_rows=restored, proof_replay='REFUSED',
             restored_triggers='PASS', restored_audit_sequence='PASS',
+            required_mode_restore='REFUSES_MISSING_EXCHANGE',
             payment_ack_loss='IDEMPOTENT', production_writes=0, reverse_migration='NOT_IMPLEMENTED',
-            transport_membership='NOT_MIGRATED', replication='NOT_IMPLEMENTED')
+            transport_membership='SYNTHETIC_CONTRACTS_ONLY', replication='NOT_IMPLEMENTED')
     receipt['owned_container_cleanup'] = 'PASS'
     private_file(args.workdir / 'receipt.json', json.dumps(receipt, indent=2).encode())
     print(json.dumps(receipt, sort_keys=True))

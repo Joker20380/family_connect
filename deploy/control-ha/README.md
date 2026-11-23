@@ -107,7 +107,7 @@ python -m pytest -q tests/test_paid_rehearsal.py tests/test_enrollment_rehearsal
 python -m scripts.paid_postgres_rehearsal --workdir /tmp/fc-ha-paid-new
 ```
 
-The runner requires a new private temporary directory. It runs89 enrollment/paid
+The runner requires a new private temporary directory. It now runs131 enrollment/paid/membership
 contracts with zero skips, then SIGKILL/restarts its source container. Confirmed
 payment/grace/revoke and a consumed subscription proof survive; an uncommitted
 event does not. Retries with the same event ID/payload never grant a new period.
@@ -126,3 +126,38 @@ SQLite production path retains that prerequisite. Remaining writers, metadata,
 files/CRL and full canonical backup remain gates. An old snapshot is **not** a safe
 production rollback after acknowledged writes: fence writers, retain current
 state and use a separately verified recovery path before any cutover.
+
+## HA-02C: required membership and rollback consistency
+
+The same `scripts.paid_postgres_rehearsal` command now includes42 membership cases.
+They use the real `Gateway` cache/locking/fsync and readback algorithms on three
+separate temporary node roots, with **simulated AWG/TCP/systemctl commands and
+network exchange**. No real host service or firewall is touched. SQLite's existing
+command-map wrapper and the native PostgreSQL transaction invoke the same protocol.
+
+First payment requires exact durable-preparation ACKs for all three nodes. Missing,
+ambiguous, duplicated, incorrectly typed or mismatched ACKs cannot commit payment.
+Partial prepare, failed commit, killed PostgreSQL backend and the unchanged5s
+idle-in-transaction timeout preserve prepared target denies. Cache reload/restart
+and noncohort snapshots never clear them. Retry only the original event ID/payload;
+after commit it returns the original event without re-preparing or extending time.
+This is not automatic compensation or a permission to erase node cache.
+
+An additional fresh-store rehearsal creates `membership-required` schema version2,
+dumps/restores it into a separate disposable container and verifies that a first
+payment still fails without an explicitly supplied exchange, leaving every row
+unchanged. Receipt field `required_mode_restore=REFUSES_MISSING_EXCHANGE` records
+this gate. Version1/no-transports remains the explicitly separate HA-02B lab mode.
+The source plus three sequential restore containers retain all ownership/cleanup
+guards; credentials, dumps and raw receipts remain private.
+
+Do not infer WAN-ready behavior: PG's5s idle timeout may interrupt a slow prepare
+before the existing12s network timeout. No timeout is increased; node8s/watchdog12s/
+paid120s remain. Production CLI/wiring, serving-set fencing/quarantine, remaining
+writers, replicas and full recovery remain gates. RU is still in the required
+three-node set and cannot silently be dropped to make a payment succeed.
+
+Broader qualification currently includes four historical exact-overlay failures
+also reproduced on the unchanged source baseline; see the dated report. Do not
+update old hashes/guards or use those packagers to deploy HA source. Qualify a new
+closed runtime separately before any production switch.

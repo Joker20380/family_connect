@@ -1,6 +1,19 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA HA-02B paid/subscription rehearsal VERIFIED; migration IN_PROGRESS.**
+**23 November — CONTROL-HA HA-02C membership contracts VERIFIED; migration IN_PROGRESS.**
+SQLite and synthetic PostgreSQL now share all-node first-payment preparation and
+strict ACK validation.131 real DB contracts PASS /0 skips, including partial ACK
+loss, node-cache reload, backend termination after all ACKs, idle timeout and exact
+retry. Rollback preserves already-prepared target denies; it never clears a fence.
+Restored membership-required schema refuses payment without its explicit exchange.
+Broader checks:389 PASS,16 optional skips,4 historical-overlay failures; all four
+reproduce on baselineeeb11ba7 with verified baseline imports/bytes. Old exact
+packagers/pins are not weakened; release packaging remains a separate open gate.
+No server deployment/restart or client/catalog change; RU dependency remains.
+Next: remaining canonical writers/CLI, full import/recovery, replication and fencing.
+[Storage/gates](control-ha-storage.md) · [Full results](releases/2026-11-23-control-ha.md#ha-02c--first-payment-node-preparation-and-failure-consistency).
+
+**Earlier23 November — CONTROL-HA HA-02B paid/subscription rehearsal VERIFIED.**
 Sourcea62b5b2e is ordinarily pushed and remote-SHA verified in the metadata branch.
 Shared payment validation now uses SQLite/native PostgreSQL transactions; the
 personal subscription proof and projection share one transaction/savepoint.

@@ -84,11 +84,13 @@ ledger, отзывах и challenge, не только числе устройс
 потери quorum, ремонта узла, CA renewal, backup restore и независимый мониторинг.
 HA не устраняет причину локальных зависаний RU.
 
-HA-02A/B: enrollment, paid ledger/subscription и настоящий PostgreSQL crash/restore
+HA-02A/B/C: enrollment, paid ledger/subscription, synthetic all-node membership и PostgreSQL crash/restore
 стенд реализованы. HA-02B отвергает stale backup после новых payment/revoke/proof
 записей и проверяет актуальный restore всех девяти лабораторных таблиц. Это не
-production reverse migration: transport membership, остальные canonical writers,
-полный import/recovery и репликация остаются pending и блокируют cutover.
+production reverse migration: serving-set fencing, production wiring/deadlines,
+остальные canonical writers, полный import/recovery и репликация остаются pending
+и блокируют cutover. Частичный prepare сохраняет target deny после DB rollback;
+обратное снятие fence не реализовано и не должно имитироваться старым cache.
 [Точная граница и карта writers](control-ha-storage.md).
 
 Результаты: [checkpoint 23 ноября](releases/2026-11-23-control-ha.md).

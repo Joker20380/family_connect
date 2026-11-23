@@ -12,7 +12,7 @@ source inspection is not a fresh server-health check.
 ## Progress
 
 - HA-01 isolated scope implemented and verified; details below.
-- HA-02A enrollment and HA-02B paid/subscription slices qualified below; remaining
+- HA-02A enrollment, HA-02B paid/subscription and HA-02C membership slices qualified below; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -24,6 +24,107 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02C — first-payment node preparation and failure consistency
+
+Continuation from `eeb11ba7fb8e95c2d0cad300b71359417f97f77b` on the same metadata
+branch. The selected scope is synthetic transport-membership transaction parity,
+not live migration, service recovery, client release or provider move. Latest
+known installed console5ce82415 and Android126/catalog9 remain unchanged; no fresh
+RU/NL health assertion. Production still uses the accepted SQLite/runtime bytes.
+
+### Implementation and safety boundary
+
+- `transport_membership.prepare_nodes` shares the first-payment protocol between
+  SQLite's existing private command-map wrapper and explicit lab PostgreSQL exchange.
+  All command entries validate before contact. The complete three-node set, payload
+  token, single-device binding, pre-commit preparation and12s subprocess bound remain.
+- ACK validation now rejects duplicate JSON keys, non-UTF8/non-bytes, oversized
+  replies, bool/float schema and unexpected/mismatched fields. It does not retry a
+  failed node or assume commit from a missing response. Existing node8s operation,
+  watchdog12s and paid lease120s are unchanged; noncohort retains its separate policy.
+- Native disposable schema version2 has purpose `membership-required`. First payment
+  refuses a missing exchange; version1/no-transports refuses a configured exchange
+  instead of claiming that preparation ran. There is no production DSN, environment/
+  HTTP/CLI switch, automatic migration or alternate writer. Constructor injection
+  carries the same exchange through the existing enrollment/paid transaction.
+- Rollback never removes already-durable target fences. On partial prepare/ACK loss
+  or transaction failure, canonical ledger/subscription remain unchanged; prepared
+  target nodes deny across restart, timeout and newer noncohort snapshots. Other
+  noncohort/foreign entries remain. Exact retry completes preparation and one commit;
+  a committed replay skips all node calls. Terminal revoke is not undone.
+- All three nodes, including RU, are still required for first cohort admission.
+  Excluding an unavailable node needs a separately qualified serving-set quarantine/
+  fencing protocol, not a smaller quorum silently introduced here. No HA-03 epoch
+  receiver fencing, compensation/unprepare or production reverse import is supplied.
+
+### Verification
+
+- Final real PostgreSQL17.11/psycopg3.3.9 runner: **131 contracts PASS /0 skipped**
+  in56.32s (40 enrollment +49 paid/subscription +42 membership). Membership uses real
+  `Gateway` state files, locks, atomic writes/fsync and algorithms with simulated
+  kernel/service/network executors; it is not three live servers or WAN acceptance.
+- Lost ACK after durable prepare on each node, malformed ACKs, readback failure,
+  last-step DB rollback, concurrent duplicate payment, pre-commit invisibility,
+  stale snapshots, expired leases and terminal revoke/restart pass. A real owned
+  PostgreSQL backend is terminated after every node ACK and uncommitted ledger/
+  subscription writes: no payment survives, node denies do, exact retry succeeds.
+- The unchanged PostgreSQL5s idle-in-transaction timeout terminates a delayed
+  preparation after the first node; no subsequent node contact or payment occurs.
+  Target deny survives and exact retry works. This explicitly exposes a lab versus
+  WAN deadline limitation; the5s timeout is **not** increased to hide it.
+- Inherited SIGKILL/restart, stale-backup refusal and exact current nine-table/
+  twelve-row restore pass; restored proof/ledger/revoke/triggers/audit sequence hold.
+  Additionally, a real pg_dump/pg_restore of a fresh membership-required schema
+  refuses first payment without its exchange and preserves every row. This only
+  qualifies the marker/no-fallback guard, not production node+DB backup consistency.
+- Receipt `/tmp/fc-control-ha-20261123/membership-3/receipt.json` records
+  `ISOLATED_PAID_POSTGRES_PASS`, `SYNTHETIC_CONTRACTS_ONLY`,
+  `REFUSES_MISSING_EXCHANGE`, zero production writes and owned-container cleanup.
+  Logs, source capsule, credentials, dumps and raw synthetic state stay outside Git.
+- Broader changed-risk suite: **389 PASS /16 skipped /4 FAIL** in48.07s, including
+  payment CLI/HTTP/readiness/release policy, registry backup, policy packaging,
+  transport enforcement/membership/budgets/lifecycle/application/HTTP, subscription,
+  packaged HTTP, HA shadow and runner safety. The16 skips are15 configured real-nginx
+  gates and1 pinned sync-archive interoperability gate. This is not a green full suite.
+
+### Historical package blocker and retained attempts
+
+All four failures are `tests/test_transport_package.py`: closed overlay/tamper,
+exact RU diagnostic overlay, PR15 lifecycle and v2 node-forward package. They fail
+with `UNRELATED_PAID_DELTA` or `POLICY_CHANGE_FORBIDDEN`: strict historical packagers
+do not accept HA-02B's current paid/policy source as an old exact overlay. No guard,
+historical hash, installer, archive or public release was changed to hide the failure.
+
+Verified baseline reproduction from a separate source capsule at exact
+`eeb11ba7fb8e95c2d0cad300b71359417f97f77b` produces the **same4 failures /2 passes**.
+The working directory/import roots and paid/policy/membership bytes were checked
+against that commit; the initial invocation from the current worktree is not used
+as baseline proof. Evidence: `membership-baseline-packages-verified.log`. This is
+not a new HA-02C regression, but it remains a deployment/package gate; a separately
+reviewed closed HA runtime is required rather than weakening old overlay pins.
+
+First SQLite-focused run:55 PASS /22 PostgreSQL skips (not PostgreSQL acceptance).
+First real runner:130 PASS and recovery PASS. The extended run:130 PASS /1 failure
+because the timeout fixture expected generic `OperationalError`, while psycopg
+correctly raises `IdleInTransactionSessionTimeout` (different exception family).
+The test now expects that exact server error, retaining the5s timeout and all deny/
+rollback assertions; final131 cases and restores pass. Failed attempts remain in
+`membership-{1,2,3}/`, `membership-sqlite-1.log`, `membership-regressions.log` and
+the baseline logs under `/tmp/fc-control-ha-20261123/`.
+
+### Next and rollback
+
+Next HA-02 slice: remaining canonical support/admin/referral writers, followed by
+metadata/tombstones/files, full import/backup and PostgreSQL/Patroni replication.
+Production membership scheduling/wiring and new runtime package qualification stay
+open. HA-03 receiver fencing, HA-04 API/client failover and HA-05 guarded cutover
+remain mandatory. No copied SQLite becomes a second writer.
+
+Current rollback stops only disposable tests; production needs no restore. After
+future acknowledged writes, fence writers and preserve the current state before
+forward recovery or qualified reverse import. Do not restore old SQL/node caches,
+clear `prepared` or automatically extend a payment to make recovery appear green.
 
 ## HA-02B — paid ledger, subscription and recovery checkpoint
 

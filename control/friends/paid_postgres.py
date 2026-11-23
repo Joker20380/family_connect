@@ -3,6 +3,7 @@ from .enrollment_postgres import LOCK_ID
 from .paid_beta import COHORT_LIMIT, PaidTransaction, require
 
 PURPOSE = 'family-connect/ha-paid-synthetic/v1/no-transports'
+PREPARATION_PURPOSE = 'family-connect/ha-paid-synthetic/v2/membership-required'
 DDL = (
     'CREATE TABLE ha_paid_schema(version BIGINT PRIMARY KEY, purpose TEXT NOT NULL)',
     'CREATE TABLE paid_beta_subscriptions ('
@@ -52,8 +53,9 @@ DDL = (
 
 
 class PostgresPaidTransaction(PaidTransaction):
-    def __init__(self, database):
+    def __init__(self, database, *, membership_exchange=None):
         super().__init__(database, '%s')
+        self.membership_exchange = membership_exchange
 
     @property
     def in_transaction(self):
@@ -68,16 +70,26 @@ class PostgresPaidTransaction(PaidTransaction):
         present = super().schema_present()
         if present:
             require(self.table_exists('ha_paid_schema'), 'PAID_REHEARSAL_MARKER_REQUIRED')
-            require(self.database.execute('SELECT version,purpose FROM ha_paid_schema').fetchall() ==
-                    [dict(version=1, purpose=PURPOSE)], 'PAID_REHEARSAL_SCHEMA_MISMATCH')
+            rows = self.database.execute('SELECT version,purpose FROM ha_paid_schema').fetchall()
+            require(rows in ([dict(version=1, purpose=PURPOSE)], [dict(version=2, purpose=PREPARATION_PURPOSE)]),
+                    'PAID_REHEARSAL_SCHEMA_MISMATCH')
         return present
 
     def prepare_membership(self, device, token, now):
         require(self.schema_present(), 'PAID_REHEARSAL_MARKER_REQUIRED')
+        marker = self.database.execute('SELECT version FROM ha_paid_schema').fetchone()
+        if marker['version'] == 1:
+            require(self.membership_exchange is None, 'PAID_REHEARSAL_MODE_CONFLICT')
+            return
+        require(callable(self.membership_exchange), 'TRANSPORT_PREPARATION_REQUIRED')
+        from .transport_membership import prepare_nodes
+        prepare_nodes(self, device, token, now, self.membership_exchange)
 
 
-def initialize_synthetic_paid(repository):
+def initialize_synthetic_paid(repository, *, membership_required=False):
+    require(type(membership_required) is bool, 'INVALID_PAID_REHEARSAL_MODE')
     with repository.transaction() as transaction:
         for statement in DDL:
             transaction.database.execute(statement)
-        transaction.database.execute('INSERT INTO ha_paid_schema VALUES (%s,%s)', (1, PURPOSE))
+        transaction.database.execute('INSERT INTO ha_paid_schema VALUES (%s,%s)',
+            (2, PREPARATION_PURPOSE) if membership_required else (1, PURPOSE))

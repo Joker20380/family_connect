@@ -13,13 +13,18 @@ HA-02B paid ledger/subscription synthetic parity and recovery qualified/pusheda6
 /0 skips;366 consumer/runner checks /20 optional skips. Stale pre-payment restore
 refused; current nine-table lab restore preserves acknowledged writes and one-use
 proofs. No production cutover or reverse migration is qualified.
-NEXT within HA-02: transport-membership preparation/failure consistency and the
-remaining canonical writers, all-table shadow import, full backup/recovery and
-strict PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
+HA-02C synthetic membership preparation/failure consistency qualified:131 contracts
+/0 skips;389 broader checks PASS,16 optional skips,4 historical-overlay failures
+also reproduced on the unchanged baselineeeb11ba7. No full packaging/release PASS.
+NEXT within HA-02: remaining canonical writers/CLI (support/admin/referral first),
+metadata/tombstones/files, all-table shadow import, full backup/recovery and strict
+PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.
 HA-03 fenced authority, HA-04 API/client failover and HA-05 shadow/cutover
 follow mandatory gates. Keep8/12/120s, offline signing and consent tombstones.
 No copied SQLite becomes a second writer; source checkpoint is not production HA.
+All three serving nodes still ACK the first cohort transition; unavailable RU is
+not silently removed. Any serving-set/quarantine change needs HA-03 fencing.
 [Stages and rollback](control-ha.md) · [Writer map](control-ha-storage.md) · [Evidence](releases/2026-11-23-control-ha.md).
 
 **DEVICE-METADATA-NL-20261122 — selected implementation COMPLETE / INSTALLED.**

@@ -1,7 +1,8 @@
 # HA-02 — каноническое хранилище и очередь writers
 
-23 November 2026. **IN_PROGRESS; HA-02A enrollment и HA-02B paid/subscription slices
-квалифицированы на синтетическом стенде.** Это не production, не репликация и не cutover.
+23 November 2026. **IN_PROGRESS; HA-02A enrollment, HA-02B paid/subscription и
+HA-02C membership contracts квалифицированы на синтетическом стенде.**
+Это не production, не репликация и не cutover.
 [Общие gates](control-ha.md) · [Результаты](releases/2026-11-23-control-ha.md).
 
 ## Реализованная граница HA-02A
@@ -44,7 +45,7 @@ selector не добавлен. Legacy `Access.db()` и `initialize()` в это
   HA-02A store с дополнительным purpose marker `no-transports` и native CHECK/FK.
   Immutable event/update/delete/truncate guards, cohort10 и binding/revoke triggers
   проверены, включая конкурентные вставки без repository lock.
-- Это **не перенос transport-membership**: SQLite по-прежнему вызывает подготовку
+- Режим HA-02B **не переносит transport-membership**: SQLite по-прежнему вызывает подготовку
   всех nodes перед первым payment. Стенд явно не имеет транспортов/конфигурации и
   проверяет только БД; его marker/метод нельзя использовать как production ACK.
   CLI, service/HTTP selector, production DSN и автоматический импорт не добавлены.
@@ -79,6 +80,51 @@ forward recovery либо отдельно квалифицированный re
 полный backup metadata/files/CRL этим checkpoint не квалифицированы; это блокеры
 cutover, а не необязательная доработка после переключения.
 
+## HA-02C — подготовка transport membership
+
+`transport_membership.prepare_nodes` — общий протокол для прежнего SQLite wrapper
+и явного PostgreSQL test exchange: подготовить конкретный device/binding/token на
+**всех трёх** serving nodes до первого canonical payment. SQLite сохраняет private
+command map, прежний subprocess timeout12s и проверяет все команды до первого
+контакта. ACK ограничен1024 bytes, строгим UTF-8/JSON, целочисленным schema1,
+точными node/token/result/полями; duplicate keys и bool/float schema отвергаются.
+
+Новая disposable схема `version2 / membership-required` требует явный injected
+exchange. Нет environment/HTTP/CLI selector, production DSN или SSH-конфигурации
+для PostgreSQL. Старая v1 `no-transports` остаётся отдельным HA-02B режимом;
+попытка настроить exchange для первого платежа в v1 отклоняется. В v2 отсутствующий
+exchange не превращается в успешную no-op подготовку, в том числе после pg_restore.
+
+131 контракт с реальным PostgreSQL и SQLite PASS /0 skips.42 membership cases
+включают стенд из трёх настоящих `Gateway` instance с отдельными файлами cache, locks,
+atomic writes/fsync и повторным чтением с диска; **AWG/TCP/systemctl и сеть заменены
+тестовыми исполнителями**. Это не три хоста, WAN, реальный kernel readback или SLA.
+Проверены потеря ACK на каждом узле, неверный ACK, отсутствие видимого платежа до
+всех ACK, конкурентный повтор, DB backend termination после all-ACK/uncommitted
+ledger, старый noncohort snapshot, expiry/revoke/restart и PostgreSQL idle timeout.
+
+**Откат БД не является откатом запрета на узле.** При частичной подготовке ledger
+остаётся без платежа, уже подготовленный target остаётся denied; остальные
+noncohort не закрываются. Нельзя стирать `prepared`/cache, возвращать старый cache
+или автоматически продлевать период. Точный повтор event ID/payload завершает
+подготовку и commit; только свежая canonical cohort projection открывает доступ.
+После commit повтор не обращается к узлам и не добавляет событие. Если период
+истёк, требуется новое явно проверенное основание, не автоматический retry renewal.
+
+PG connect3s/lock3s/statement5s/idle-in-transaction5s не расширены. Медленный node ACK
+может закрыть лабораторную транзакцию раньше прежних12s сетевого ожидания; проверено,
+что это сохраняет запрет и не создаёт payment. WAN scheduling/deadline redesign
+не квалифицирован и требует отдельного решения перед production wiring.
+8s node operation /12s watchdog /до120s paid lease и offline noncohort не изменены.
+Unavailable RU всё ещё блокирует первый cohort переход; исключать его из serving
+set ради доступности без HA-03 fencing/quarantine запрещено.
+
+Broader suite:389 PASS /16 optional skips /4 FAIL. Все четыре точных исторических
+overlay-packager теста также падают на исходномeeb11ba7 (`UNRELATED_PAID_DELTA`,
+`POLICY_CHANGE_FORBIDDEN`): HA-02B уже изменил canonical paid/policy bytes. Pins и
+guards оставлены строгими. Это не новый membership regression, но и не release
+PASS: новый closed runtime/overlay должен пройти отдельный gate до deployment.
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -88,7 +134,7 @@ CLI и периодические задания; число таблиц produc
 | Семейство / источник | Инварианты переноса | Статус |
 | --- | --- | --- |
 | `access.py`: invites/devices/challenges, регистрационный Support ID | One-use, binding uniqueness, limit8, TTL, monotonic revoke, rollback | HA-02A synthetic PASS; production SQLite |
-| `paid_beta.py`, `transport_membership.py`, paid CLI | Immutable ledger, payload-bound event ID, cohort/binding triggers, terminal revoke, exact paid/noncohort projection | HA-02B DB contracts synthetic PASS; transport preparation и CLI/wiring pending |
+| `paid_beta.py`, `transport_membership.py`, paid CLI | Immutable ledger, payload-bound event ID, cohort/binding triggers, terminal revoke, exact paid/noncohort projection | HA-02B/C DB + membership contracts synthetic PASS; production CLI/wiring pending |
 | `subscription.py` | Собственное атомарное потребление challenge вместе с paid projection, не только `Access.complete` | HA-02B synthetic PASS; production остаётся SQLite |
 | `support_ids.py`, `support_admin.py`, `support.py` | Backfill/observation/audit; admission-file + grant + audit consistency; support sender bindings | Pending; новая DDL audit не означает перенос writer |
 | `referrals.py` | Request idempotency, pool/daily limits, referral claim + invitation в одной транзакции | Pending; тоже пишет invites вне Access |
@@ -107,9 +153,9 @@ signing keys не входят в migration и остаются офлайн.
 
 ## Следующие gates
 
-1. Перевести transport-membership preparation с теми же fail-closed гарантиями,
-   остальные writers/CLI и строки карты. Не допускать mixed backend writers;
-   лабораторные paid/subscription contracts не заменяют этот gate.
+1. Перевести остальные writers/CLI (сначала support/admin/referral), затем metadata,
+   tombstones/files и остальные строки карты. Не допускать mixed backend writers;
+   synthetic membership не заменяет production wiring, deadline и package gates.
 2. Создать явную versioned all-table migration: snapshot consistency, nullable и
    INTEGER/TEXT/BLOB типы, sequence reseed, FK/unique/check/trigger parity. Сравнить
    все строки/три paid projections без вывода персональных данных. Не считать

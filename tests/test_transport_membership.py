@@ -104,3 +104,15 @@ def test_invalid_ack_never_commits_membership(registry, monkeypatch, reply):
     with pytest.raises(paid_beta.PaidBetaError, match='TRANSPORT_PREPARATION_REQUIRED'):
         event(registry)
     assert snapshot(registry[0]) == before
+
+
+def test_all_commands_validated_before_any_node_contact(registry, monkeypatch):
+    configure(registry)
+    commands = {node: [node] for node in policy.NODES}
+    commands[policy.NODES[-1]] = []
+    write(registry[0].path.parent / 'transport-commands.json', commands)
+    before = snapshot(registry[0])
+    monkeypatch.setattr(transport_membership.subprocess, 'run', lambda *args, **kwargs: pytest.fail('No node contact allowed'))
+    with pytest.raises(paid_beta.PaidBetaError, match='TRANSPORT_PREPARATION_REQUIRED'):
+        event(registry)
+    assert snapshot(registry[0]) == before

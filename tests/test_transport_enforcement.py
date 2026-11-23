@@ -55,13 +55,16 @@ def test_noncohort_and_missing_schema_are_distinct(registry):
 
 @pytest.fixture
 def engine(tmp_path, registry):
+    return make_engine(tmp_path, envelope(registry)['decisions'][0])
+
+
+def make_engine(tmp_path, initial, *, node='gateway-ru', current=None):
     root = tmp_path / 'friends-awg'
     root.mkdir()
     tcp = tmp_path / 'friends-tcp'
     tcp.mkdir()
-    initial = envelope(registry)['decisions'][0]
-    write(root / 'transport-enforcement.json', dict(schema=1, profile=policy.PROFILE, node='gateway-ru', enabled=True))
-    write(root / 'transport-state.json', dict(schema=1, node='gateway-ru', observed_at=NOW, records={}))
+    write(root / 'transport-enforcement.json', dict(schema=1, profile=policy.PROFILE, node=node, enabled=True))
+    write(root / 'transport-state.json', dict(schema=1, node=node, observed_at=NOW, records={}))
     client = dict(id=initial['tcp_id'], email=initial['device']+'@family.test', flow='xtls-rprx-vision')
     foreign = dict(id='foreign', email='unmanaged@example.invalid')
     write(tcp / 'server.json', dict(inbounds=[dict(tag='friends', settings=dict(clients=[client, foreign]))]))
@@ -90,7 +93,7 @@ def engine(tmp_path, registry):
         live['addresses'][key] = address
     runtime = SimpleNamespace(ROOT=root, IFACE='fixture', database=lambda: sqlite3.connect(root/'peers.db'),
         address=lambda index: '10.1.0.2/32', add_peer=add_peer)
-    current = [NOW]
+    current = [NOW] if current is None else current
     gateway = Gateway(runtime, clock=lambda: current[0], monotonic=lambda: current[0], run=run)
     return gateway, current, live, initial
 
