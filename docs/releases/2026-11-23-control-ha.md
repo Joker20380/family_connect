@@ -36,6 +36,17 @@ Installed console5ce82415 and public Android126/catalog9 unchanged. RU remains a
 dependency;8/12/120s and all-three-serving-node first-cohort ACKs remain mandatory.
 This is not a full release, product backup or completed HA-02/03..05.
 
+Source/tests/docs checkpoint `019aa578788d58a044798a0604fcab5be61c7ec8` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA
+matched and source worktree was clean after push. Staged16-file scope/private-key/
+token inspection PASS. Separate old-main navigation-only commit
+`7a81e0c9b9715bd1eb905603d6a8b825c4276f4b` remains local: ordinary push rejected
+`non-fast-forward`; independently checked remote main remains
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`. No force/reset/merge/rebase performed.
+Original unstaged40 PLAN/66 STATUS/11 private-beta/6 recovery-guide additions and
+six untracked paths preserved;344 navigation-doc local link targets PASS. Published
+implementation is the metadata branch, not the divergent navigation-only main.
+
 ### Implementation and publication boundary
 
 Common bundled CRL adapter plus native synthetic PG schema reserve sequence and

@@ -1,8 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02J durable CRL preparation/recovery VERIFIED; migration IN_PROGRESS.**
-Continuation from86660b86 in the authoritative metadata worktree; source checkpoint,
-not deployment. CRL sequence and immutable signed candidate share one SQLite/PG
+Source `019aa578` ordinarily pushed and remote-SHA verified from86660b86 in the
+authoritative metadata worktree; not deployment. CRL sequence and immutable signed candidate share one SQLite/PG
 transaction.128 real DB contracts PASS /0 skips (88 CRL +40 enrollment),285 focused
 consumer/package/runner regressions PASS /20 explicit optional skips. Actual
 PostgreSQL17.11 SIGKILL and exact19-table/22-row restore pass; stale backup refused.

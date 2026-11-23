@@ -53,7 +53,7 @@ SIGKILL/current restore preserves15 lab tables/28 rows; signed files/identity ke
 are retained, not restored. Forward catalog rollback uses a newer signed sequence;
 no old assignment/catalog resurrection. Production wiring and HA remain pending.
 HA-02J CRL sequence/immutable signed outbox DB boundary and local reconciliation
-qualified:128 real DB contracts /0 skips (88 CRL +40 enrollment),285 focused regressions
+qualified/pushed019aa578:128 real DB contracts /0 skips (88 CRL +40 enrollment),285 focused regressions
 /20 optional skips. Depends on HA-02A
 transaction semantics and HA-02F/G grant/issuance/paid snapshot checks. Gate:
 atomic prepare/sequence, payload-bound replay, rollback/ACK loss, file-fsync/replace/
