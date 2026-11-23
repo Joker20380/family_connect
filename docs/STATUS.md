@@ -1,6 +1,24 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02J VERIFIED.**
+**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02K VERIFIED.**
+Metadata/consent checkpoint `a72941d0` ordinarily pushed and remote-SHA verified
+in the metadata branch.120 real DB contracts PASS /0 skips (80 metadata +40 enrollment);
+152 focused regressions PASS /16 optional skips /2 historical-overlay fixture failures
+also reproduced on unchanged36c23756. No full packaging/release PASS. Signed proof
+and latest metadata/tombstone now share a canonical SQLite/PG transaction. Actual
+SIGKILL and exact12-table/26-row restore pass; pre-revoke stale backup refused.
+Consent floors survive restart/prune/restore, old report replay cannot renew expired
+observations; opt-in again needs a newer epoch. Legacy two-file SQLite remains live,
+not an atomic shared transaction. No cross-store import, physical PG/WAL/backup
+erasure, key recovery, replication/RPO0 or fencing claim. Production unchanged:
+console5ce82415, Android126/catalog9,8/12/120s and all-three-node first-cohort ACKs.
+RU remains a dependency; no fresh live-health check. Next: diagnostics/notices and
+remaining writers/CLI/files, cross-store import/collector wiring/full recovery and
+replication. Distributed CRL still needs HA-03 fencing. This divergent main is
+navigation only; existing dirty/untracked work is preserved.
+[Authoritative evidence and rollback](releases/2026-11-23-control-ha.md#ha-02k--metadata-and-consent-recovery).
+
+**Earlier23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02J VERIFIED.**
 Durable CRL checkpoint `019aa578` is ordinarily pushed and remote-SHA verified in
 the metadata branch.128 real DB contracts PASS /0 skips (88 CRL +40 enrollment),
 285 focused regressions PASS /20 explicit optional skips. Signed CRL candidate and

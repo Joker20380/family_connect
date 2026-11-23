@@ -31,6 +31,8 @@ divergent; pre-existing modifications are preserved. Do not deploy its runtime.
   push to the same branch succeeded and remote SHA independently matched.
 - HA-02J implementation: `019aa578788d58a044798a0604fcab5be61c7ec8`, ordinary
   push to the same branch succeeded and remote SHA independently matched.
+- HA-02K implementation: `a72941d0840a28e0fa5292fdbf97ab9eb5f6b6d1`, ordinary
+  push to the same branch succeeded and remote SHA independently matched.
 - Full architecture: [CONTROL-HA plan](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/control-ha.md).
 - Full evidence: [source-worktree release record](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/releases/2026-11-23-control-ha.md).
 - Commands/limits: [isolated rehearsal runbook](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/deploy/control-ha/README.md).
@@ -51,6 +53,54 @@ and direct readback from every recovered member. Final local failover is1.766s,
 not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
+
+## HA-02K — metadata and consent recovery
+
+Source checkpoint `a72941d0840a28e0fa5292fdbf97ab9eb5f6b6d1`, from36c23756, is
+published on the authoritative metadata branch. No source merge/deployment from
+this older main. Its independent navigation push may remain non-fast-forward;
+preserve existing dirty/untracked work and never force/rewrite history.
+
+Canonical synthetic SQLite/PG now commits signed proof consumption with latest-only
+metadata or revoke tombstone. Failure/rejection rolls back both. Exact report retry
+after commit ACK loss needs a fresh proof, not a new consent epoch, and does not
+refresh received/TTL. Sample/revoke races retain newer consent; old/same-epoch samples
+cannot undo revoke, but a new explicit epoch can opt in. Per-group expiry/prune
+retains epoch/sequence/digest/capacity slot; read-only view takes no writer lock.
+
+Legacy production API still commits proof before its separate metadata file; this
+two-store boundary is not falsely described as atomic. PG/synthetic canonical state
+refuses that legacy entrypoint. No HTTP/CLI selector, actual cross-store import,
+collector/retention cutover or default-consent change. Schema1 and6144-byte/5000-device/
+60s/7day limits remain. GeoIP source/lookup unchanged; no real metadata/IP read.
+
+Final120 real DB contracts PASS /0 skips (80 metadata +40 enrollment).152 focused
+regressions PASS /16 optional skips /2 failures;15 skips need real nginx and1 needs
+a pinned sync archive. Both failures are historical metadata-overlay fixture reverse
+patching, reproduced on unchanged36c23756. Pins/tests were not weakened. Actual
+current HTTP metadata route, legacy consent/retention, GeoIP/fleet and closed support/
+HTTP packaging checks pass, not a full release gate. Earlier package gates stay open.
+First recovery setup lacked the required signed Android baseline for synthetic
+payment; corrected with ordinary proof-bearing Android126 support observation,
+without changing policy. Failed evidence retained; final entire runner passes.
+
+Actual owned PostgreSQL17.11 SIGKILL/restart/current restore preserves12 lab tables/
+26 rows; stale pre-revoke snapshot refused. Restored triggers/tombstones/proof use/
+paid retry retained; expired replay does not resurrect observations, pending proof
+works once and explicit new-epoch consent works. Private receipt:
+`/tmp/fc-control-ha-20261123/metadata-2/receipt.json`; owned cleanup PASS. Synthetic
+keys retained, NOT restored. Logical TTL does not qualify physical erasure from PG
+pages/WAL/backups; no full product backup/replication/RPO0/reverse-import/fencing claim.
+Locked pip, whitespace,891 local source-doc links and staged15-file scope/key/token
+scan PASS. Production console5ce82415, Android126/catalog9 and8/12/120s unchanged.
+
+Before cutover abort only owned lab; no product restore needed. After live writes
+fence old writers and recover current acknowledged consent/proof/payment state,
+never old SQLite/CRL or pre-revoke panel rows. Source rollback is a new revert commit
+if requested. Next: diagnostics/notices/remaining writers, cross-store import,
+privacy-aware backup and full recovery/replication, then HA-03..05. All-three-node
+first-cohort ACKs remain mandatory; RU dependency and its separate availability
+problem are not resolved by this source checkpoint.
 
 ## HA-02J — durable CRL recovery
 

@@ -49,7 +49,15 @@ operations, immutable bytes, rollback/ACK loss, expiry and file-failure reconcil
 PASS. Exact19-table/22-row SIGKILL/restore preserves pending receipt0; stale backup
 refused, exact-byte repair and forward sequence pass. Keys retained, not recovered;
 local receipt is not a remote gateway ACK. No production backend or cutover selected.
-NEXT within HA-02: metadata/consent tombstones and remaining writers/CLI/files,
+HA-02K metadata/consent DB boundary qualified/pusheda72941d0:120 real DB contracts
+/0 skips (80 metadata +40 enrollment),152 regressions /16 optional skips /2 historical
+overlay fixture failures reproduced on unchanged36c23756. Depends on HA-02A and
+metadata-v1 consent/retention contract. Gate: atomic proof/report, concurrent revoke,
+retained consent/version floors, TTL/rate/capacity, rollback/ACK loss/backend failure
+and exact12-table/26-row SIGKILL/restore PASS; stale pre-revoke backup refused.
+Legacy separate SQLite files unchanged; cross-store import/collector wiring and
+physical-erasure policy pending. No production backend or cutover selected.
+NEXT within HA-02: diagnostics/notices and remaining writers/CLI/files,
 all-table import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse
 import is not implemented. Then HA-03 receiver-enforced
