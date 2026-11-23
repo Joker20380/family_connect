@@ -20,6 +20,7 @@ from gateway_set import bound_profile, membership, selected, validate as validat
 from grant_cutover import validate_grant_plan
 
 STOPPED_PURPOSE = 'synthetic-stopped-renewal/v1/not-live-attestation'
+CURRENT_PURPOSE = 'scheduled-current-content/v1/not-recovery-acceptance'
 MATERIAL = {'revocations.pem', 'issuer.json', 'issuer-NL2.json', 'gateway.json'}
 ARCHIVE = {'files.json', 'plan.json', 'prepared-plan.json', 'reconciliation.json', 'directory-before.json',
            'directory-accepted.json', 'authority-request.json', 'online-origin.json'} | {
@@ -152,11 +153,22 @@ def parent_check(parts, documents, parent_archives, record, plan, anchor, now):
 
 
 def inspect_stopped(parts, publication, anchor, now):
+    return _inspect_stopped(parts, publication, anchor, now)
+
+
+def inspect_scheduled(parts, publication, anchor, now, units):
+    require(type(units) is dict and set(units) == SLOTS, 'CURRENT_UNIT_COHORT')
+    return _inspect_stopped(parts, publication, anchor, now, current_units=units)
+
+
+def _inspect_stopped(parts, publication, anchor, now, *, current_units=None):
     try:
+        scheduled = current_units is not None
         evidence_digest(parts)
         capture = parse(parts['capture.json'])
         require(set(capture) == {'schema', 'purpose', 'operation_id', 'captured_at', 'anchor_sha256', 'nodes'} and
-            type(capture['schema']) is int and capture['schema'] == 1 and capture['purpose'] == STOPPED_PURPOSE and
+            type(capture['schema']) is int and capture['schema'] == 1 and
+            capture['purpose'] == (CURRENT_PURPOSE if scheduled else STOPPED_PURPOSE) and
             capture['nodes'] == sorted(SLOTS) and integer(capture['captured_at'], 1) and integer(now, capture['captured_at']) and
             type(anchor) is bytes and len(anchor) == 32 and capture['anchor_sha256'] == digest(anchor) and
             type(capture['operation_id']) is str and re.fullmatch('[a-z0-9-]{16,96}', capture['operation_id']), 'STOPPED_CAPTURE')
@@ -165,6 +177,9 @@ def inspect_stopped(parts, publication, anchor, now):
         require(set(coordinator_files) == {'operation.lock', 'plan.json', 'transaction.json', 'last-receipt.json'}, 'STOPPED_COORDINATOR')
         record, plan = parse(coordinator_files['transaction.json']), parse(coordinator_files['plan.json'])
         emergency = record.get('mode') == 'online-emergency'
+        if scheduled:
+            require(not emergency and coordinator_files['operation.lock'] == b'' and record.get('first_cause') is None,
+                    'CURRENT_SETTLED_REQUIRED')
         required = (BASE_RECORD | EMERGENCY_RECORD) if emergency else STANDARD_RECORD
         allowed = required | OPTIONAL_RECORD | {'emergency_cause'} if emergency else required
         require(required <= set(record) <= allowed and type(record['schema']) is int and record['schema'] == 1 and
@@ -183,8 +198,10 @@ def inspect_stopped(parts, publication, anchor, now):
         gate = record['gate']
         require(set(gate) == {'result', 'authorization', 'pre_stop_sessions', 'zero_downtime'} and
                 gate['result'] == 'RENEWAL_READY' and gate['zero_downtime'] is False and
-                gate['authorization'] == 'OPERATOR_APPROVED_OUTAGE' and
+                gate['authorization'] == ('OPERATOR_APPROVED_LEAF_CRL_SCHEDULE' if scheduled else 'OPERATOR_APPROVED_OUTAGE') and
                 (gate['pre_stop_sessions'] == 'UNKNOWN' or integer(gate['pre_stop_sessions'])), 'STOPPED_GATE')
+        if scheduled:
+            require(gate['pre_stop_sessions'] == 'UNKNOWN', 'CURRENT_SCHEDULE_GATE')
         receipt = parse(coordinator_files['last-receipt.json'])
         receipt_keys = {'schema', 'operation_id', 'state', 'first_cause', 'before_sha256', 'timestamp',
                         'remote_alert_delivery', 'grant_successor_model'} | ({'terminal_result'} if emergency else set())
@@ -212,11 +229,15 @@ def inspect_stopped(parts, publication, anchor, now):
         require(record['reconciliation'] == {slot: expected for slot in SLOTS}, 'STOPPED_RECONCILIATION')
         authority_changed = any(selected(plan, slot)['previous']['authority'] != selected(plan, slot)['candidate']['authority']
                                 for slot in ('NL', 'NL2'))
+        if scheduled:
+            require(not authority_changed, 'CURRENT_SCHEDULE_AUTHORITY_CHANGE')
         documents, archives, parents = {'coordinator': (coordinator, coordinator_files)}, {}, {}
         for slot in sorted(SLOTS):
             prefix = 'archive/' + operation + '/'
             parent_prefix = 'archive/online-' + digest(operation.encode()) + '/'
             allowed = {'operation.lock', 'completed.json'} | {prefix + name for name in ARCHIVE | {'archive-manifest.json'}}
+            if scheduled:
+                allowed |= {prefix + name for name in ('services-before.json', 'start-intent-0.json', 'start-intent-3.json')}
             if emergency:
                 allowed |= {parent_prefix + name for name in NODE_FILES | {'manifest.json', 'owner.json', 'origin.json'}}
             document, files = decode_document(parts[slot + '.json'], slot, operation, allowed_files=allowed)
@@ -226,7 +247,8 @@ def inspect_stopped(parts, publication, anchor, now):
             archives[slot] = archived
             manifest = manifest_check(archived, 'archive-manifest.json', {'archive-manifest.json'})
             ledger = parse(files['completed.json'])
-            require(type(ledger) is dict and set(ledger) == {operation}, 'STOPPED_HISTORY_UNSUPPORTED')
+            require(type(ledger) is dict and (operation in ledger if scheduled else set(ledger) == {operation}),
+                    'STOPPED_HISTORY_UNSUPPORTED')
             entry = ledger[operation]
             require(set(entry) == {'result', 'manifest_sha256', 'timestamp'} and entry['result'] == 'CLEANED' and
                     entry['manifest_sha256'] == digest(canonical(manifest)) and integer(entry['timestamp'], issued) and
@@ -240,6 +262,9 @@ def inspect_stopped(parts, publication, anchor, now):
             if slot == 'RU' and authority_changed:
                 required_files.add('authority-request.json')
             required_files |= {name + suffix for name in parse(archived['files.json']) for suffix in ('.before', '.staged')}
+            if scheduled:
+                from scripts.control_ha_current_services import inspect_services
+                required_files |= inspect_services(archived, current_units[slot], slot, issued, receipt['timestamp'])
             require(required_files == set(archived) and all(archived[name] == canonical(plan) for name in
                     ('plan.json', 'prepared-plan.json') if name in archived) and
                     archived['reconciliation.json'] == canonical(record['reconciliation']), 'STOPPED_ARCHIVE_BINDING')
@@ -277,7 +302,7 @@ def inspect_stopped(parts, publication, anchor, now):
             directory(raw, trust['family'], identities[slot], now_ns=now * 10**9)
             before = parse(archives[slot]['directory-before.json'])
             require(set(before) == {'sha256'} and sha(before['sha256']) and before['sha256'] != digest(raw), 'STOPPED_DIRECTORY_UNCHANGED')
-        return plan, directories, 'emergency' if emergency else 'offline' if authority_changed else 'stopped'
+        return plan, directories, 'scheduled' if scheduled else 'emergency' if emergency else 'offline' if authority_changed else 'stopped'
     except ImportRejected:
         raise
     except (Rejected, ValueError, KeyError, TypeError, AttributeError, OverflowError, RecursionError,

@@ -1,5 +1,27 @@
 # Текущее состояние / Current state
 
+**24 November — CONTROL-HA current scheduled-content audit PARTIAL; selected gate remains open.**
+Read-only audit selects the current operation from authenticated opaque custody without
+rewriting the full unequal ledgers or legacy files. It checks native scheduled COMMITTED
+records, service snapshots/start intents, signed material, both publications and the
+five-table current DB projection. Native scheduled/SystemdBarrier fixtures run only on
+disposable local data; no gateway SSH, production capture or live acceptance occurred.
+The result is always CURRENT_CONTENT_CHECKED_RECOVERY_BLOCKED: native gate stores the
+decision, not original approval/configuration custody; caller unit order is not attested,
+start intent is not service liveness, and separately supplied state is not an atomic capture.
+No new acceptance switch, import, filesystem restore, replay or host resume is provided.
+Qualification:56 new tests /0 skips +111 stopped regressions /15 explicit PostgreSQL
+skips +45 custody regressions /0 skips;212 PASS total. PostgreSQL was not started or
+requalified. Six docs/1007 local links and whitespace pass.
+The same task remains IN_PROGRESS: establish original gate/configuration provenance
+and qualify actual installed current inputs. Do not move to a new speculative variant.
+Stage2 remains partial across the same four blocks. Its explicit exit checklist is now
+documented; no measured calendar ETA or completion percentage is available. RU dependence
+remains, and HA-03..05 still follow HA-02. Console5ce82415, NL GeoIP22 November,
+Android126/catalog9,8/12/120s and all-three-node ACK unchanged; no fresh health claim.
+[Current audit and remaining gate](releases/2026-11-24-control-ha-current-audit.md) ·
+[When stage2 ends](control-ha.md#когда-заканчивается-этап-2).
+
 **24 November — CONTROL-HA legacy journal custody contract COMPLETE IN ISOLATION.**
 New domain-separated encrypted custody preserves all four selected trees, exact file
 bytes, empty files/directories, basic metadata and unequal historical cohorts. It does

@@ -1033,6 +1033,28 @@ blocks and HA-03..05 remain separate gates; no automatic continuation into live 
 [Runbook](../deploy/control-ha/README.md#ha-02v-combined-online-renewal-capsule) ·
 [Qualification](releases/2026-11-23-control-ha.md#ha-02v--combined-online-renewal-capsule).
 
+### Scheduled current-content audit
+
+[Read-only auditor](../scripts/control_ha_current_audit.py) selects current native
+coordinator/archive files from authenticated legacy custody, preserving complete node
+ledgers and all unselected history/adjunct bytes. It uses a separate content-only purpose;
+existing stopped/online recovery gates do not accept it. It checks the recorded scheduled
+gate, COMMITTED reconciliation, signed material, exact five-table DB projection and both
+NL publications. Native service-before snapshots and start intents are checked against
+the supplied unit order and SystemdBarrier's role-specific resume rules, including native
+subsecond timestamps. Pending/unknown current roots, pruned or conflicting receipts and
+stale current material refuse even after archive hashes/checkpoints are recalculated.
+
+This is only a content check, not historical authorization or current live observation.
+The original schedule/configuration permission is not persisted by the native transaction;
+absence from that transaction is not proof that no original evidence exists elsewhere.
+Unit order is caller-supplied, separate state is not an atomic capture, and a start intent
+does not prove a running service. The result is always CURRENT_CONTENT_CHECKED_RECOVERY_BLOCKED;
+there is no flag to override the open gate or enable import/replay/host resume. Synthetic
+native qualification does not close the selected installed-current task. Continue with
+original provenance and installed capture evidence, not another speculative variant.
+[Qualification and remaining work](releases/2026-11-24-control-ha-current-audit.md).
+
 ### Opaque legacy journal custody
 
 [Custody contract](../scripts/control_ha_legacy_custody.py) and

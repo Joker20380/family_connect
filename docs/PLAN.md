@@ -240,17 +240,29 @@ off-host custody rollout or writer-barrier qualification.
 Implementation0ec3e5c9 pushed/remote-SHA verified; old-main navigation470e8eb9
 stays local after non-fast-forward rejection againstcb47bf23. Original work preserved;
 no force push, reconciliation or deployment performed.
-NEXT bounded scope within the journal block: semantic validation of the actual installed
+SELECTED / IN_PROGRESS within the journal block: semantic validation of the actual installed
 completed scheduled/service-bearing current operation, separately from opaque history.
 Gate: native current operation/three-node service receipts, original gate provenance,
 current issuer/both publications/five-table DB binding and refusal of pending/unknown
-or stale inputs; never replay historical approvals or resume a host. This next gate
-is not started by custody qualification. No further speculative mode expansion or
-deployment is authorized by the queued task. T alone
+or stale inputs; never replay historical approvals or resume a host. Content-audit
+implementation and native synthetic qualification are complete, not the selected gate:
+it retains full unequal ledgers/opaque history and checks native scheduled service
+archives/current bindings, but always reports recovery BLOCKED. Original gate/configuration
+provenance, supplied unit-order attestation and actual installed consistent capture are
+still unqualified. A recorded schedule result and a start intent are not original approval
+or fresh service liveness. Continue this same task with provenance/installed evidence;
+do not invent approval, add a permissive switch or select another hypothetical variant.
+[Current checkpoint](releases/2026-11-24-control-ha-current-audit.md).
+56 new tests /0 skips,111 stopped regressions /15 PostgreSQL skips and45 custody
+regressions /0 skips PASS; no new PostgreSQL/import/recovery acceptance is claimed.
+No deployment or further queued block is selected. T alone
 still refuses nonempty renewal ledgers; V is an explicit combined format/gate;
 authenticated pending/unknown operations, path/owner bindings and floors must
 not be reset or re-signed to bypass checks. This checkpoint does not qualify relocation.
 The journal block is partially closed, not complete; the other three blocks remain.
+The four-block [stage2 exit checklist](control-ha.md#когда-заканчивается-этап-2)
+is the completion criterion, not A–V counts or passing-test totals. No measured ETA
+exists before the remaining integration gates are qualified; do not promise one more slice.
 Then separately qualify installed schemas/live writer barrier,
 all-store shadow/full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
