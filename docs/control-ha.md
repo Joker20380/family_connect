@@ -83,7 +83,7 @@
 | Этап | Состояние | Что остаётся до перехода дальше |
 | --- | --- | --- |
 | HA-01: quorum/shadow foundation | Лабораторный gate завершён | Не считать стенд установленным production quorum |
-| HA-02: общее хранилище | В работе; A–M DB slices и N source file inventory проверены отдельно | Versioned all-store import/preflight, live writer census/consistency barrier, полный recovery, strict replication/RPO0 |
+| HA-02: общее хранилище | В работе; A–M DB slices, N file inventory и O общий лабораторный shape import проверены | Адаптеры deployed SQLite и семантический joint fixture, live writer census/consistency barrier, полный external recovery, strict replication/RPO0 |
 | HA-03: единственный уполномоченный writer | Не внедрён | Epoch/fencing на принимающих узлах, запрет действий старого лидера и безопасная публикация файлов |
 | HA-04: API/клиентский failover | Не внедрён | Несколько API endpoints, безопасные retries и клиентские compatibility/acceptance gates |
 | HA-05: production shadow/cutover | Не начат | Актуальные backup/restore, guarded sole-writer switch, отказ RU/возврат узла, RTO и rollback |
@@ -95,8 +95,14 @@ RU пока остаётся точкой зависимости; восстан
 checkpoint нельзя. [HA-02N inventory](control-ha-files.md) различает DB authority,
 private aliases/profiles, node-local allocator/receiver safety state и derived
 leases/exports;123 focused tests PASS /0 skips. Это не live process census.
-Следующий шаг — versioned all-store synthetic import/preflight, а не включение
-нового PostgreSQL на серверах. Внешние ключи/файлы нельзя восстановить из DB-only dump.
+[HA-02O](control-ha-storage.md#ha-02o--synthetic-all-store-shape-import) переносит
+четыре **лабораторных** SQLite образа в одной транзакции:30 data tables/34 rows,
+43 таблицы/47 строк с markers/receipt.111 contracts /0 skips и97 regressions /0 skips;
+SIGKILL/current restore и безопасный повтор PASS. Это storage-shape gate, не
+адаптер реальных схем: часть данных — sentinels, внешние файлы — только декларации
+ссылок. Следующий ограниченный шаг — deployed-schema adapters и семантически
+валидный общий synthetic fixture, а не включение PostgreSQL на серверах.
+Внешние ключи/файлы нельзя восстановить из DB-only dump.
 
 ## Откат
 

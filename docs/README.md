@@ -8,6 +8,8 @@
 
 [CONTROL-HA HA-02N: file/CLI authority inventory, non-rebuildable aliases/IP allocation and import recovery inputs](control-ha-files.md).
 
+[CONTROL-HA HA-02O: atomic four-store laboratory shape import and exact recovery; not a deployed-schema importer](control-ha-storage.md#ha-02o--synthetic-all-store-shape-import).
+
 [Device metadata · 22 November: NL/AWG GeoIP and explicit missing-data labels installed; consent unchanged](releases/2026-11-22-nl-geoip.md).
 
 [RU · 17 November00:02UTC: availability restored on accepted bytes; initiating cause remains open](releases/2026-11-17-ru-recovery.md).

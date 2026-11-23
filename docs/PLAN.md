@@ -100,8 +100,18 @@ caller map, canonical-versus-derived classification, private external recovery
 inputs and freeze/activation boundaries documented; synthetic exact alias and
 node allocation backup/replay checks PASS. Not a live writer census, runtime
 change, all-store importer or full recovery. Receiver safety state is not disposable.
-NEXT within HA-02: versioned all-store synthetic import/preflight, exact table and
-external-reference coverage; then qualified live consistency barrier/writer census,
+HA-02O synthetic all-store storage-shape import qualified:111 contracts /0 skips
+(71 import +40 enrollment),97 focused regressions /0 skips. Depends on HA-02A–M
+native schemas and HA-02N external-authority map. Gate: exact versioned lab schemas,
+four stores/30 tables, eight declared-reference roles, bounded typed preflight,
+atomic schema/data/receipt, sequence reseed, exact retry or refusal after drift,
+three paid projections and exact43-table/47-row SIGKILL/current restore PASS.
+This is NOT deployed SQLite import: storage sentinels and declared references do
+not qualify semantic credentials, real file recovery or a live cross-store barrier.
+Activation remains forbidden; canonical production/backend selectors unchanged.
+NEXT bounded scope within HA-02: explicit deployed-schema adapters and a semantically
+valid joint synthetic fixture; reject unknown/missing schemas and external inputs
+before target writes. Then separately qualify live consistency barrier/writer census,
 all-store shadow/full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.

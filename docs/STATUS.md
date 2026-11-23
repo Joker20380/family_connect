@@ -1,5 +1,27 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02O synthetic all-store shape import VERIFIED.**
+Continuation from87ff67b5; source/tests/docs only, no SSH/deployment/live read.
+Four laboratory SQLite images import atomically into one native PostgreSQL schema:
+30 data tables/34 rows,12 family markers and one receipt,43 tables/47 rows total.
+111 contracts PASS /0 skips (71 import +40 enrollment);97 focused regressions
+PASS /0 skips. PostgreSQL17.11 SIGKILL/current restore, exact lost-reply retry,
+pending proof once and restored next audit ID42 PASS. Changed target/sequence/
+guards refuse retry; incomplete import leaves no schema. Sources remain unchanged.
+**Limited gate:** explicit lab v1 shapes, not deployed SQLite schema adapters;
+eight external inputs are declared-reference manifests, not recovered files/keys.
+Several families contain typed storage sentinels, not usable certificates/CRLs.
+No production importer, live consistency barrier, replication or activation;
+the runner reports `activation=FORBIDDEN`. Full all-store semantic migration and
+external recovery remain unqualified. Stage2 of5 remains IN_PROGRESS; RU remains
+a dependency. NEXT bounded scope: deployed-schema adapters and semantically valid
+joint synthetic fixture, with missing/unsupported sources refused before target
+writes. Do not auto-start replication or production changes from this checkpoint.
+Installed console5ce82415, NL GeoIP22 November, public Android126/catalog9,
+8/12/120s and all-three-node first-cohort ACKs unchanged. No fresh health claim.
+[Import boundary](control-ha-storage.md#ha-02o--synthetic-all-store-shape-import) ·
+[Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02o--synthetic-all-store-shape-import).
+
 **23 November — CONTROL-HA HA-02N source file/writer inventory VERIFIED.**
 Checkpoint `7b8d8efa` ordinarily pushed and independently remote-SHA verified
 fromf4c21afb; source/tests/docs only, no deployment or live read.

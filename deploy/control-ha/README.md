@@ -503,3 +503,41 @@ Rollback needs no server action. Keep production profiles/allocators/receiver
 state intact. Next scope is versioned all-store synthetic import/preflight;
 live writer census, consistency barrier, full recovery, strict replication and
 HA-03..05 remain separate gates. Never copy old SQLite/files over new accepted state.
+
+## HA-02O: synthetic all-store shape import
+
+Use the same control/identity/HA lockfiles and pre-pulled pinned PostgreSQL17.11
+image as HA-02A. This runner accepts only a fresh temporary workdir, not source
+paths or a production DSN; it generates its own inputs. It inherits loopback-only
+Docker, dedicated synthetic role/database, sanitized PG/Docker environment and
+ownership-checked cleanup. Never point it at a product database.
+
+```sh
+python -m scripts.control_ha_import_rehearsal --workdir /tmp/fc-ha-import-new
+python -m pytest -q -ra tests/test_referral_rehearsal.py tests/test_enrollment_rehearsal.py tests/test_control_ha_file_boundaries.py tests/test_pseudonym_generation.py tests/test_transport_membership.py tests/test_gateway_routing.py
+```
+
+111 contracts /0 skips, then97 focused regressions /0 skips. Unit-only pytest
+without the runner skips PostgreSQL cases and is **not** the mandatory gate.
+PASS is `ISOLATED_ALL_STORE_SHAPE_IMPORT_PASS`: four lab SQLite images,30 data
+tables/34 rows,12 markers/one receipt; exact43-table/47-row SIGKILL/current restore.
+Proof-once and next audit ID42 are checked after restore. A retry compares schema,
+all data and identity state, never replaces a drifted target. Native guards stay
+enabled; a failed pre-commit import leaves no schema. An uncertain outcome requires
+readback, not automatic cleanup or a different checkpoint.
+
+**Source contract is `SYNTHETIC_SHAPE_NOT_DEPLOYED_SQLITE`; external inputs are
+`DECLARED_REFERENCES_ONLY`.** Several family rows are storage sentinels, not valid
+credentials/policies; source images have artificial v1 schemas. Eight manifests
+cover required declared references but do not restore keys, profiles, aliases,
+node ledgers, receiver high-water state or signed files. No actual production
+schema adapter, live barrier, replication or activation is implemented.
+Private images/keys/dumps/logs/receipt remain outside Git; only aggregate counts
+are public. See [boundary](../../docs/control-ha-storage.md#ha-02o--synthetic-all-store-shape-import).
+
+Rollback now: stop/remove only ownership-checked disposable containers; retain
+private failed-run evidence. No RU/NL service/database/client has changed. Do not
+restore production or deploy/revert runtime source for this lab-only checkpoint.
+After future canonical writes, fence writers and recover current accepted state;
+pre-cutover SQLite/files are not a safe reverse migration. Next bounded scope is
+deployed-schema adapters and a semantically valid joint fixture, not cutover.

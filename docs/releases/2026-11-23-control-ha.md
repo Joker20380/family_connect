@@ -16,7 +16,8 @@ source inspection is not a fresh server-health check.
   HA-02E Support ID, HA-02F grant/audit, HA-02G issuance/readiness, HA-02H chat/support
   HA-02I gateway routing, HA-02J durable CRL, HA-02K metadata/consent, HA-02L diagnostics
   and HA-02M notice authority DB recovery slices qualified below; HA-02N source
-  file/CLI inventory and synthetic alias/allocator checks complete; remaining
+  file/CLI inventory and synthetic alias/allocator checks complete; HA-02O common
+  synthetic storage-shape import/recovery qualified (not deployed-schema import); remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -28,6 +29,61 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02O — synthetic all-store shape import
+
+Continuation from87ff67b545fce8567a3f0d9c88426aa09634188b in the authoritative
+metadata worktree. Source/tests/docs only; no SSH/live read, production access,
+backend selector, deployment, client version/signing/catalog change. Installed
+console5ce82415, NL GeoIP22 November, public Android126/catalog9 and8/12/120s
+unchanged. All-three-node first-cohort ACKs still required; RU remains a dependency.
+
+### Qualified boundary
+
+[HA-02O contract](../control-ha-storage.md#ha-02o--synthetic-all-store-shape-import)
+adds explicit versioned **laboratory** source shapes, typed/bounded read-only
+preflight and atomic import across four SQLite images/30 data tables. The target
+reuses all native A–M PostgreSQL factories with their guards enabled, within one
+schema/data/receipt transaction. It refuses unrelated existing schemas and changed
+targets, including sequence/constraint/trigger drift. Lost commit reply is resolved
+by exact readback; no blind rerun, cleanup or overwrite of acknowledged state.
+SQLite notice rowid gaps persist as positions; audit identity resumes at42.
+
+This is **not the completed all-store production migration gate**. Source schema
+is artificial v1, not deployed SQLite; several families use typed storage sentinels
+rather than semantic certificates/CRLs/catalogs/notice feeds. Eight external JSON
+manifests validate pinned bytes/checkpoint/required references only, not the actual
+private file contents, signatures, receiver floors or global freeze. Every run
+reports `activation=FORBIDDEN`, production import/live barrier/replication not
+implemented. Next selected bounded scope: deployed-schema adapters and semantically
+valid joint synthetic fixture; later full external recovery and strict replication
+remain separate mandatory gates. No next queued implementation started here.
+
+### Validation and recovery
+
+Private local evidence under `/tmp/fc-control-ha-20261123/`; no raw fixture,
+credential, source image, dump, receipt fingerprint or private log enters Git:
+
+- `import-1/contracts.log`: initial105 PASS /0 skips and exact crash/current restore.
+- `import-2/contracts.log`: final111 PASS /0 skips in46.76s (71 import +40 enrollment).
+  `import-2/receipt.json`: `ISOLATED_ALL_STORE_SHAPE_IMPORT_PASS`, PostgreSQL17.11,
+  four sources,30 data tables/34 rows,43 tables/47 rows including markers/receipt.
+  Unfinished write aborted by owned-container SIGKILL; exact committed readback
+  after restart and exact isolated dump/restore PASS. Restored pending proof works
+  once; next audit ID42. Both owned test containers cleaned up successfully.
+- `import-regressions-1.log`:97 PASS /0 skips in5.93s; runner environment/ownership
+  guards, file boundaries, pseudonym generations, membership and routing consumers.
+  [Reproduction commands](../../deploy/control-ha/README.md#ha-02o-synthetic-all-store-shape-import).
+- Fault tests cover pre-commit schema/data/receipt rollback, post-commit reply loss,
+  concurrent import, native FK/unique/check/immutable/consent guards, sequence drift,
+  rowid gaps, int64/Unicode/NULL and exact three-node paid projection parity.
+
+No historical packaging, artifact readiness, Windows/Android, production health
+or WAN strict-replication gate is newly claimed. Prior blockers remain open.
+Rollback needs no server action: stop only owned laboratory containers; keep
+private failure evidence. After future canonical writes, fence and recover current
+state; never restore pre-cutover SQLite/files over newly acknowledged operations.
+Stage remains HA-02,2 of5; source publication is not installation or production HA.
 
 ## HA-02N — file authority inventory
 

@@ -1,7 +1,8 @@
 # HA-02 — каноническое хранилище и очередь writers
 
 23 November 2026. **IN_PROGRESS; HA-02A–M DB contracts квалифицированы по отдельности
-на синтетическом стенде; HA-02N source file/writer inventory проверен отдельно.**
+на синтетическом стенде; HA-02N source file/writer inventory и HA-02O общий
+лабораторный storage-shape import проверены отдельно.**
 Это не production, не репликация и не cutover.
 [Общие gates](control-ha.md) · [Результаты](releases/2026-11-23-control-ha.md).
 
@@ -559,6 +560,63 @@ No full all-store backup/import, replication/RPO0 or reverse migration claim.
 [Reproducer](../deploy/control-ha/README.md#ha-02m-isolated-notice-recovery) ·
 [Evidence and rollback](releases/2026-11-23-control-ha.md#ha-02m--notice-recovery).
 
+## HA-02O — synthetic all-store shape import
+
+**Ограниченный лабораторный gate, не production importer.**
+[`control_ha_import.py`](../scripts/control_ha_import.py) принимает только bytes
+четырёх SQLite images: registry, metadata, diagnostics, notices. Явный список30
+data tables покрывает A–M; native PostgreSQL DDL создаются существующими factory
+в одной внешней транзакции, вместе с12 markers и import receipt. Не переводим
+произвольный SQLite DDL, не читаем live paths и не выбираем новый backend в HTTP/CLI.
+
+- Source v1 имеет отдельный purpose `family-connect/ha-all-store-synthetic/v1/not-for-activation`
+  и одинаковый checkpoint во всех четырёх images. Schema/columns/object coverage
+  сравниваются точно; лишние таблицы, views, indexes, triggers, другой marker или
+  частичный набор дают NO_GO. Это **искусственная source schema**, не утверждение
+  совместимости с действующими SQLite таблицами/triggers/migration versions.
+- Inputs ограничены16MiB каждый,20000 rows/table и SQLite VM budget. Образы
+  десериализуются в read-only in-memory connections; исходные bytes не меняются.
+  INTEGER сохраняется как signed64, TEXT — Unicode, nullable — явно по контракту.
+  FLOAT/BLOB/NUL/non-nullable NULL не приводятся молча. Notices `rowid` переносится
+  в `position` с пропусками; audit identity reseed сохраняет следующий ID.
+- Восемь внешних ролей: aliases, admission, sender_policy, routing_files,
+  issuer_material, maintenance_state, node_allocations, receiver_state. Только
+  JSON **декларации ссылок**: pinned bytes/checkpoint/role и требуемые ссылки
+  сверяются, отсутствующие/duplicate/неверные inputs отклоняются. Дополнительные
+  исторические ссылки разрешены. Hash здесь не подпись и не доказательство
+  полноты actual aliases/private profiles/allocator/receiver floors/certificates.
+- Fresh schema, rows, native FK/unique/check/triggers, sequence reseed и receipt
+  создаются атомарно. Ошибка до commit не оставляет частичную схему. Existing
+  unrelated target никогда не очищается. После неоднозначного commit сначала
+  readback: тот же fingerprint, полный набор rows, markers, constraints/functions/
+  triggers/indexes/sequence definition и текущее identity state дают `EXACT_RETRY`;
+  любое обнаруженное изменение — отказ, не повторная перезапись. Advisory lock
+  сериализует два lab importer, но не является distributed fencing.
+- Receipt/fingerprint приватны; stdout содержит только counts/result/limitations.
+  Нет команд активации или разблокирования публичной записи; `activation=FORBIDDEN`.
+
+[`control_ha_import_fixture.py`](../scripts/control_ha_import_fixture.py) генерирует
+регистрацию, pending/used proofs, Android Support ID observation и платёж через
+реальные helpers. Остальные семьи частично представлены typed storage sentinels:
+это не usable certificate/CRL, signed catalog, корректный notice feed или full
+semantic acceptance. Поэтому30 непустых data tables/34 rows доказывают **coverage
+и storage preservation**, а не единый работающий issuance/renewal flow.
+
+111 real-run contracts PASS /0 skips (71 import +40 enrollment),97 focused
+regressions PASS /0 skips. PostgreSQL17.11 abrupt SIGKILL с незавершённой записью
+и restore в отдельный owned container сохраняют все43 tables/47 rows. После
+restore pending proof работает один раз, next audit ID42; отдельные tests
+проверяют все три paid projections, append order, nullable/Unicode/int64,
+native guards, rollback, concurrent import, lost reply и отказ при target drift.
+Это не encrypted off-host/full external recovery и не strict replica RPO0.
+
+Следующий bounded scope: explicit deployed-schema adapters + семантически валидный
+joint synthetic fixture. Отдельно нужны actual external recovery inputs, live
+writer census/consistency barrier и production version/row-count coverage.
+HA-02O не разрешает переход к репликации или cutover автоматически.
+[Команды/rollback](../deploy/control-ha/README.md#ha-02o-synthetic-all-store-shape-import) ·
+[Evidence](releases/2026-11-23-control-ha.md#ha-02o--synthetic-all-store-shape-import).
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -591,13 +649,14 @@ signing keys не входят в migration и остаются офлайн.
 
 ## Следующие gates
 
-1. Использовать [HA-02N source inventory](control-ha-files.md) при подготовке
-   versioned all-store synthetic import/preflight. До live cutover отдельно сверить
+1. Использовать [HA-02N source inventory](control-ha-files.md) и ограниченный HA-02O
+   shape importer при подготовке explicit deployed-schema adapters и семантически
+   валидного joint synthetic fixture. До live cutover отдельно сверить
    effective writer/CLI/timer census и consistency barrier; live notices/metadata/diagnostics
    остаются отдельными SQLite до согласованного cross-store import/collector/worker cutover.
    Distributed CRL/file publication отдельно зависит от HA-03 fencing. Не допускать mixed backend writers;
    synthetic membership не заменяет production wiring, deadline и package gates.
-2. Создать явную versioned all-table migration: snapshot consistency, nullable и
+2. Квалифицировать явную versioned all-table migration реальных source schemas: snapshot consistency, nullable и
    INTEGER/TEXT/BLOB типы, sequence reseed, FK/unique/check/trigger parity. Сравнить
    все строки/три paid projections без вывода персональных данных. Не считать
    произвольный перенос SQLite DDL полноценной миграцией PostgreSQL.

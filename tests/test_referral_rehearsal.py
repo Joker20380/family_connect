@@ -15,6 +15,7 @@ from scripts.crl_postgres_rehearsal import CRLRehearsal
 from scripts.metadata_postgres_rehearsal import MetadataRehearsal
 from scripts.diagnostics_postgres_rehearsal import DiagnosticsRehearsal
 from scripts.notices_postgres_rehearsal import NoticesRehearsal
+from scripts.control_ha_import_rehearsal import ImportRehearsal
 
 
 def test_chat_recovery_requires_exact_refusal_not_any_error():
@@ -50,7 +51,7 @@ def test_restore_cannot_silently_lose_referral_state(mutation):
         require_current_restore(current, restored)
 
 
-@pytest.mark.parametrize('runner', [ReferralRehearsal, SupportRehearsal, RestrictedAdminRehearsal, RestrictedRehearsal, ChatRehearsal, RoutingRehearsal, CRLRehearsal, MetadataRehearsal, DiagnosticsRehearsal, NoticesRehearsal])
+@pytest.mark.parametrize('runner', [ReferralRehearsal, SupportRehearsal, RestrictedAdminRehearsal, RestrictedRehearsal, ChatRehearsal, RoutingRehearsal, CRLRehearsal, MetadataRehearsal, DiagnosticsRehearsal, NoticesRehearsal, ImportRehearsal])
 def test_writer_runner_uses_temporary_owned_local_docker_only(tmp_path, monkeypatch, runner):
     with pytest.raises(ValueError, match='TEMPORARY_REHEARSAL_ONLY'):
         runner(Path('/not-a-temporary-writer-rehearsal'))
