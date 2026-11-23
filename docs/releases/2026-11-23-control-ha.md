@@ -33,6 +33,8 @@ divergent; pre-existing modifications are preserved. Do not deploy its runtime.
   push to the same branch succeeded and remote SHA independently matched.
 - HA-02K implementation: `a72941d0840a28e0fa5292fdbf97ab9eb5f6b6d1`, ordinary
   push to the same branch succeeded and remote SHA independently matched.
+- HA-02L implementation: `6cd46c938405d2a6294f6339ee1fdb58dcfe39f9`, ordinary
+  push to the same branch succeeded and remote SHA independently matched.
 - Full architecture: [CONTROL-HA plan](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/control-ha.md).
 - Full evidence: [source-worktree release record](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/releases/2026-11-23-control-ha.md).
 - Commands/limits: [isolated rehearsal runbook](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/deploy/control-ha/README.md).
@@ -53,6 +55,44 @@ and direct readback from every recovered member. Final local failover is1.766s,
 not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
+
+## HA-02L — diagnostics recovery
+
+Source checkpoint `6cd46c938405d2a6294f6339ee1fdb58dcfe39f9`, fromc484d6d4, is
+published in the authoritative metadata branch. This old main is navigation only;
+no runtime merge/deployment or removal of original dirty/untracked work.
+
+Synthetic canonical proof consumption, Support ID binding and latest report now
+share one SQLite/PG transaction. Validation/conflict/rate/capacity/save/prune failures
+roll back proof too; ambiguous committed ACK needs a fresh proof with the same report.
+Duplicates of the retained report preserve receipt/TTL. Schema1 per-report opt-in
+is NOT metadata consent epochs/tombstones: fresh signed resubmission after expiry
+remains allowed.4096 bytes/5000 devices/60s/7 days and no raw log/IP/history remain.
+Legacy separate SQLite commits remain separate; canonical state refuses the split
+entrypoint. Production HTTP/CLI/retention worker and backend are not changed.
+
+Final113 real DB contracts PASS /0 skips (73 diagnostics +40 enrollment),217 focused
+regressions PASS /16 explicit optional skips (15 nginx,1 pinned sync archive).
+Closed HTTP/support packages, legacy diagnostics/desktop senders, metadata and
+proof/support behavior pass; prior overlay/readiness gates remain open. Final
+`diagnostics-3/receipt.json` under the private `/tmp/fc-control-ha-20261123/` records
+actual SIGKILL/restart/current restore PASS and owned-container cleanup. An earlier
+unregistered-device test expected proof issuance, but policy already refuses the
+challenge: fixed the test, not the policy. Final runner has no failures/skips.
+
+Exact12 lab tables/19 rows survive: current report, acknowledged expiry deletion,
+Support IDs, paid state, device revoke and still-valid used/pending challenges.
+Stale pre-prune/revoke backup refuses against retained current lab state; not an
+automatic live freshness oracle. Keys/clock retained in memory, NOT restored.
+No full cross-store product backup/import, PG/WAL/backup physical-erasure policy,
+replication/RPO0 or reverse migration is qualified. Abort before cutover only stops
+the owned lab; after new writes fence writers and recover current state, never
+old SQLite. No live service/database needs restoration in this checkpoint.
+
+Console5ce82415, NL GeoIP22 November, Android126/catalog9,8/12/120s and all-three-node
+ACKs unchanged. RU remains a dependency; no fresh live-health check. Next bounded
+writer is notices, then remaining writers/full import/recovery/replication and
+HA-03..05. Full sanitized evidence/runbook remain in the linked source worktree.
 
 ## HA-02K — metadata and consent recovery
 

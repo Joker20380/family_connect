@@ -57,7 +57,16 @@ retained consent/version floors, TTL/rate/capacity, rollback/ACK loss/backend fa
 and exact12-table/26-row SIGKILL/restore PASS; stale pre-revoke backup refused.
 Legacy separate SQLite files unchanged; cross-store import/collector wiring and
 physical-erasure policy pending. No production backend or cutover selected.
-NEXT within HA-02: diagnostics/notices and remaining writers/CLI/files,
+HA-02L diagnostics DB boundary qualified/pushed6cd46c93:113 real DB contracts
+/0 skips (73 diagnostics +40 enrollment),217 regressions /16 optional skips.
+Depends on HA-02A proof transactions, HA-02E Support IDs and schema1 snapshot
+retention/privacy. Gate: atomic proof/report, binding/isolation, concurrent
+requests/revoke/prune, limits/read-only TTL, rollback/ACK loss/backend failure and
+exact12-table/19-row SIGKILL/current restore PASS; stale pre-prune/revoke refused.
+Live separate SQLite and HTTP/CLI/worker wiring unchanged. No persistent diagnostic
+consent epoch/replay floor: fresh signed resubmission after expiry remains allowed.
+Cross-store import and physical-erasure policy still pending; no backend selector.
+NEXT within HA-02: notices and remaining writers/CLI/files,
 all-table import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse
 import is not implemented. Then HA-03 receiver-enforced

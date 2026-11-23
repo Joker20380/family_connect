@@ -1,6 +1,24 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02K VERIFIED.**
+**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02L VERIFIED.**
+Diagnostics checkpoint `6cd46c93` ordinarily pushed and remote-SHA verified in the
+authoritative metadata branch.113 real DB contracts PASS /0 skips (73 diagnostics
++40 enrollment),217 focused regressions PASS /16 explicit optional skips. Proof,
+Support ID binding and latest snapshot share one canonical SQLite/PG transaction.
+Actual PostgreSQL17.11 SIGKILL/current restore preserves12 lab tables/19 rows,
+including used/pending proofs, revoke, paid state and acknowledged expiry deletion;
+stale pre-prune/revoke backup refused. No full product import/backup, physical erasure,
+replication/RPO0 or fencing claim. Live separate SQLite HTTP/CLI/retention unchanged.
+Diagnostics consent is per-report, not metadata epochs: duplicates of the retained
+report do not refresh TTL, but fresh signed resubmission after expiry stays allowed.
+No server/client/consent change or live-health check: console5ce82415, Android126/catalog9,
+NL GeoIP22 November,8/12/120s and all-three-node first-cohort ACKs unchanged.
+RU remains a dependency. Next: notices and remaining writers, all-table import,
+full recovery/replication and HA-03..05. Prior packaging gates remain open.
+This old divergent main is navigation only; original dirty/untracked work preserved.
+[Authoritative evidence and rollback](releases/2026-11-23-control-ha.md#ha-02l--diagnostics-recovery).
+
+**Earlier23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02K VERIFIED.**
 Metadata/consent checkpoint `a72941d0` ordinarily pushed and remote-SHA verified
 in the metadata branch.120 real DB contracts PASS /0 skips (80 metadata +40 enrollment);
 152 focused regressions PASS /16 optional skips /2 historical-overlay fixture failures
