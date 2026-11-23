@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02E Support ID transactions VERIFIED; migration IN_PROGRESS.**
-Continuation from23dfd4ba in the metadata branch. Support request proof/observation
+Source `ed6a664f` is ordinarily pushed and remote-SHA verified in the metadata branch
+(base23dfd4ba). Support request proof/observation
 and whole-batch alias backfill now share SQLite/PostgreSQL transactions; inventory
 and safe lookup use the same repository.155 real DB contracts PASS /0 skips
 (66 support +40 enrollment +49 paid),443 consumer/runner checks PASS /21 optional

@@ -20,7 +20,7 @@ HA-02D referral transactions/recovery qualified/pushed22caaf6c:181 real DB contr
 (50 referral +131 prior),379 consumer/runner checks /21 optional skips. Pool500,
 daily20, sponsor-bound replay, atomic proof/link and invitation/claim, backend loss
 and exact nine-table/18-row isolated restore pass. No production backend selected.
-HA-02E Support ID/backfill/lookup qualified:155 real DB contracts /0 skips (66 support,
+HA-02E Support ID/backfill/lookup qualified/pushed ed6a664f:155 real DB contracts /0 skips (66 support,
 40 enrollment,49 paid),443 regressions /21 optional skips and expanded packaged
 operator smoke PASS. Exact12-table/19-row synthetic restore preserves observations,
 proofs/revoke and coexisting paid state; restricted rows are read-side fixtures only.

@@ -33,6 +33,19 @@ writers. Production SQLite, console5ce82415, public Android126/catalog9 and RU
 serving membership unchanged. No SSH, server restart, deployment, client release,
 new OS/GeoIP collection, consent change or fresh RU/NL health claim.
 
+Source/tests/docs checkpoint `ed6a664ffe6f377caf37af173b68a0cecca3e418` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA
+matched. Staged16-file scope, credential/private-key-marker scan,868 Markdown link
+targets, whitespace and locked-environment `pip check` PASS. No marked rehearsal
+containers remain; source worktree was clean after the implementation push.
+
+Old-main navigation-only handoff `6b211c9f0c0f1236e97445fe2709f2d7453efdf5` stays
+local: its ordinary push was rejected `non-fast-forward`. Remote main remains
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`. No forced update, reset, merge or rebase.
+Original unstaged additions remain40 PLAN/66 STATUS/11 private-beta guide/6 recovery
+guide lines, with the same untracked historical files. Only the metadata branch is
+published HA source; this old main is not a deployment candidate.
+
 ### Implementation and failure semantics
 
 - Shared `SupportTransaction` serves backfill/request/inventory/lookup. Explicit
