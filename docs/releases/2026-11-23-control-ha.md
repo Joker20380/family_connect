@@ -1,5 +1,8 @@
 # 23 November 2026 — CONTROL-HA implementation checkpoint
 
+Continuation: [24 November installed journal inventory](2026-11-24-control-ha-installed-inventory.md)
+identifies actual legacy/service-bearing shapes; it does not deploy the source slices below.
+
 Owner requests implementation and documentation of distributed management.
 Source: existing metadata branch33b9cbdc; dirty divergent main preserved.
 [Architecture, ordered gates and rollback](../control-ha.md).

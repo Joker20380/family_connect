@@ -211,10 +211,24 @@ No installed-host/full-DR acceptance. Eight source docs/1078 local links checked
 Source1322c714 ordinarily pushed/remote-SHA verified. Navigation6e514cc1 is local only:
 old-main ordinary push rejected non-fast-forward; original local work preserved.
 Qualification/publication: [dated report](releases/2026-11-23-control-ha.md#ha-02v--completed-stopped-variants).
-NEXT bounded scope within the journal block: read-only installed-shape inventory and
-actual host reconciliation, including legacy histories missing coordinator bytes,
-service-bearing archives, mixed histories and missing approval custody. Do not implement
-further speculative variants before identifying the actual installed shapes. T alone
+HA-02V installed-shape inventory COMPLETE (read-only, not recovery acceptance):
+RU/NL1/NL2 have366/366/172 entries and matching archive directories, all service-bearing;
+15/6/5 shapes and3/3/2 fenced rollbacks.172 common operations agree on result, current
+COMMITTED scheduled operation is common, no owner marker observed.194 RU/NL1 entries
+are outside NL2's ledger; never synthesize missing cohort membership. Canonical history
+is absent,365 RU entries lack current/history-name counterparts; five adjunct JSON
+files are not qualified history. Installed14-file manifests match e9fd3175 and omit
+online_history.py.26 targeted tests /0 skips, bounded SSH census with no application
+writes; no snapshot barrier/signature/payload/approval-custody acceptance.
+Depends on V's explicit limits and current installed entrypoint discovery; the selected
+inventory gate is actual three-host census, sanitized reconciliation and refusal of
+unsafe/racing input. [Evidence](releases/2026-11-24-control-ha-installed-inventory.md).
+NEXT bounded scope within the journal block: lossless legacy-prefix custody contract
+for the observed mixed/service-bearing archives and adjunct/fenced evidence. Gate:
+preserve every observed ledger/archive member and opaque legacy byte without inventing
+coordinator/approval bytes or equalizing cohorts; distinguish preserved from validated
+history and refuse executable recovery/host resume. No implementation of additional
+speculative modes, deployment or rollout is implied by that queued task. T alone
 still refuses nonempty renewal ledgers; V is an explicit combined format/gate;
 authenticated pending/unknown operations, path/owner bindings and floors must
 not be reset or re-signed to bypass checks. This checkpoint does not qualify relocation.

@@ -1,5 +1,26 @@
 # Текущее состояние / Current state
 
+**24 November — CONTROL-HA installed journal inventory COMPLETE, not recovery acceptance.**
+Read-only RU/NL1/NL2 census at23 November23:16:08–23:16:13UTC
+(24 November00:16 Brussels):366/366/172 ledger entries and matching archive directories.
+All archives carry service state;15/6/5 distinct shapes include3/3/2 fenced rollbacks.
+172 operations are common, with no result disagreements;194 RU/NL1 operations are
+outside NL2's ledger. This is not proof of lost data or permission to equalize ledgers.
+Current coordinator is COMMITTED under OPERATOR_APPROVED_LEAF_CRL_SCHEDULE, present
+in all three ledgers; no active owner marker observed. Canonical coordinator history
+is absent:365 RU entries lack a current/history-name counterpart; five adjunct JSON
+files are not validated history. Original approval/envelope custody remains unestablished.
+Installed14-file renewal manifests match e9fd3175 on all nodes; online_history.py is
+not installed.26 focused read-only/privacy/race/bounds/reconciliation tests PASS /0 skips.
+No archive profile payload, DB, private-key file, service action or journal execution.
+No-observed-change metadata checks are not a cross-host snapshot/writer barrier.
+NEXT selected scope: lossless legacy-prefix custody contract for these actual mixed,
+service-bearing histories, including adjunct/fenced evidence; no invented coordinator
+bytes, pruning, host resume or automatic deployment. Other HA-02 blocks remain open.
+Stage2 of5; RU dependence persists. Console5ce82415, NL GeoIP22 November,
+Android126/catalog9 and8/12/120s/all-three-node ACK are unchanged, not freshly qualified.
+[Observed evidence, scope and rollback](releases/2026-11-24-control-ha-installed-inventory.md).
+
 **23 November — CONTROL-HA HA-02V completed stopped variants.**
 Selected source slice: one completed operator-approved stopped renewal, planned
 offline authority handoff, or online-emergency rollforward after revocation. Each

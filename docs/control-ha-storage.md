@@ -1033,6 +1033,36 @@ blocks and HA-03..05 remain separate gates; no automatic continuation into live 
 [Runbook](../deploy/control-ha/README.md#ha-02v-combined-online-renewal-capsule) ·
 [Qualification](releases/2026-11-23-control-ha.md#ha-02v--combined-online-renewal-capsule).
 
+### Installed journal inventory
+
+[24 November observation](releases/2026-11-24-control-ha-installed-inventory.md) closes
+the selected read-only inventory, not this journal block. The standalone
+[census](../scripts/control_ha_installed_inventory.py) runs from SSH stdin without
+importing installed modules or invoking any renewal command. It reads bounded ledgers,
+coordinator/adjunct JSON and source files; archive contents remain unopened for reads.
+It reports known filenames/counts, hashes operation names for private reconciliation,
+redacts arbitrary values/names, rejects symlinks/hardlinks/special files and detects
+observed metadata changes. Its1MiB document/16MiB total-read/4096-entry/32768-metadata
+bounds refuse instead of truncating. Unknown filenames are counted, not treated as safe.
+No signature, private profile, database consistency or authorization validation occurs.
+Metadata stability across serial reads is not an atomic capture or a live writer barrier.
+
+Actual RU/NL1/NL2:366/366/172 entries, all with archives and services-before.json;
+15/6/5 shapes, including start intents, authority requests and fenced rollback/registry
+overlay evidence.172 shared operations agree on result;194 RU/NL1 entries are outside
+NL2. The current scheduled COMMITTED operation is shared. No active owner marker was
+observed. Installed renewal manifests match e9fd3175 and have no online_history.py.
+There is no canonical coordinator history directory;365 RU ledger entries lack a
+current/history-name counterpart. Five supplemental JSON files are inventoried but
+not promoted to complete historical coordinator records. Approval custody is unknown,
+not globally proven absent. Existing V import limits intentionally refuse these shapes.
+
+Next contract must preserve the entire heterogeneous legacy prefix and adjunct/fenced
+custody, separately from any validated current operation. Do not delete194 older
+operations, backfill NL2, fabricate approval/history or install the source retention
+module as an unreviewed repair. Preservation alone cannot authorize replay or resume.
+Full capture/restore, installed writer barriers and replication gates remain separate.
+
 ### Completed stopped variants
 
 The explicit `bounded-and-stopped-renewal/v1` declaration and
