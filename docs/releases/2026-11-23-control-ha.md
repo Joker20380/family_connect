@@ -34,6 +34,16 @@ metadata worktree/branch. Source-only, no SSH/live health check or deployment.
 Installed console5ce82415/NL GeoIP22 November and public Android126/catalog9 remain
 unchanged. RU dependency and8/12/120s/all-three-node first-cohort ACK rules remain.
 
+Implementation/tests/docs `6cd46c938405d2a6294f6339ee1fdb58dcfe39f9` ordinarily pushed
+to `feature/device-technical-metadata-20261115`; independent remote SHA matched,
+authoritative source worktree clean after push. Navigation-only old-main commit
+`2221c641a54e906862ec704c9b6f0620059d7dac` remains local: ordinary push rejected
+`non-fast-forward`; independently verified remote main still
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`. No force/reset/merge/rebase performed.
+Original40 PLAN/66 STATUS/11 private-beta/6 recovery-guide additions and six untracked
+paths preserved;357 root-navigation Markdown targets PASS. Use the published feature
+branch, not the old main, for subsequent implementation. No deployment occurred.
+
 ### Boundary and validation
 
 Shared diagnostics adapter makes proof consumption, Support ID binding and latest

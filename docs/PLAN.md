@@ -72,7 +72,7 @@ restore PASS. SIGKILL/current restore preserves12 lab tables/26 rows and tombsto
 New epoch is required to opt in again; duplicate reports do not refresh TTL. Live
 SQLite proof/file commits stay separate; cross-store import/collector wiring and
 physical erasure of PG/WAL/backups are not qualified. No production selector.
-HA-02L diagnostics synthetic DB boundary qualified:113 real DB contracts /0 skips
+HA-02L diagnostics synthetic DB boundary qualified/pushed6cd46c93:113 real DB contracts /0 skips
 (73 diagnostics +40 enrollment),217 focused regressions /16 explicit optional skips.
 Depends on HA-02A proof transactions, HA-02E stable Support IDs and accepted schema1
 snapshot privacy/retention. Gate: atomic proof/report, binding/isolation, concurrent

@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02L diagnostics DB recovery VERIFIED; migration IN_PROGRESS.**
-Source-only continuation fromc484d6d4 in the authoritative metadata worktree.
+Source `6cd46c93` ordinarily pushed and remote-SHA verified fromc484d6d4 in the
+authoritative metadata worktree; not deployment.
 Diagnostics proof, Support ID binding and latest snapshot share a canonical
 SQLite/PostgreSQL transaction.113 real DB contracts PASS /0 skips (73 diagnostics
 +40 enrollment);217 focused regressions PASS /16 explicit optional skips.
