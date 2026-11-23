@@ -88,6 +88,10 @@ class SQLiteEnrollment(EnrollmentTransaction):
         from .support_ids import SupportTransaction
         return SupportTransaction(self)
 
+    def restricted_admin(self):
+        from .restricted_admin import RestrictedAdminTransaction
+        return RestrictedAdminTransaction(self)
+
 
 class Access:
  def __init__(self,path,clock=time.time,*,enrollment_repository=None):

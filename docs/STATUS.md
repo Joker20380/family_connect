@@ -1,6 +1,22 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA HA-02E Support ID transactions VERIFIED; migration IN_PROGRESS.**
+**23 November — CONTROL-HA HA-02F grant/audit DB transactions VERIFIED; migration IN_PROGRESS.**
+Source checkpoint continues the metadata branch from57e6c854; publication recorded
+in the dated report. Shared SQLite/PostgreSQL grant renewal, idempotent grant revoke
+and audit transactions pass176 real DB contracts /0 skips (70 admin +106 prior).
+264 focused consumer/operator/runner checks PASS /4 optional locked-Go skips.
+PostgreSQL17.11 SIGKILL and exact12-table/20-row current restore pass; stale backup
+is refused. Pending audit remains pending until explicit reconciliation; audit
+sequence, consumed/pending proofs, device/grant revoke and paid state survive.
+SQLite FIELD compensation also passes loss of the APPLIED commit acknowledgement.
+This does not migrate restricted certificate/readiness/CRL or FIELD file publication;
+PG FIELD/CRL remain refused before file I/O. No live backend, server or client change.
+Console5ce82415, Android126/catalog9 and8/12/120s unchanged; RU dependency remains.
+Next: restricted challenge/certificate/readiness writers, support sender, remaining
+writers/import/recovery/replication and fencing; four prior package failures stay open.
+[Scope](control-ha-storage.md#ha-02f--grant-and-audit-transactions) · [Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02f--restricted-grants-and-audit-recovery).
+
+**Earlier23 November — CONTROL-HA HA-02E Support ID transactions VERIFIED; migration IN_PROGRESS.**
 Source `ed6a664f` is ordinarily pushed and remote-SHA verified in the metadata branch
 (base23dfd4ba). Support request proof/observation
 and whole-batch alias backfill now share SQLite/PostgreSQL transactions; inventory

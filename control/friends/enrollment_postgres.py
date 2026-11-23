@@ -40,6 +40,10 @@ class PostgresEnrollmentTransaction(EnrollmentTransaction):
         from .support_postgres import PostgresSupportTransaction
         return PostgresSupportTransaction(self)
 
+    def restricted_admin(self):
+        from .restricted_admin_postgres import PostgresRestrictedAdminTransaction
+        return PostgresRestrictedAdminTransaction(self)
+
     def registered(self, device):
         row = self.database.execute('SELECT support_id FROM device_support WHERE device=%s', (device,)).fetchone()
         if row is not None:

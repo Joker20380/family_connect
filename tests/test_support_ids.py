@@ -187,6 +187,38 @@ def test_operator_publication_failure_does_not_admit(tmp_path, monkeypatch):
         assert database.execute('SELECT outcome FROM field_support_audit').fetchone()[0] == 'INCOMPLETE'
 
 
+def test_operator_compensates_after_applied_commit_ack_loss(tmp_path, monkeypatch):
+    from contextlib import contextmanager
+    from tests.test_friends_restricted import configured
+    service, owner, now = configured(tmp_path, 1800000000)
+    access = service.access
+    path = tmp_path / 'admission.json'
+    path.write_text(json.dumps(dict(devices=[owner.reference])))
+    monkeypatch.setattr(support_admin, 'from_env', lambda unused: service)
+    device, support = enroll(access)
+    original = access.enrollment
+    failed = False
+
+    @contextmanager
+    def lost_ack():
+        nonlocal failed
+        with original() as transaction:
+            yield transaction
+            applied = transaction.database.execute("SELECT 1 FROM field_support_audit WHERE outcome='APPLIED'").fetchone()
+        if applied is not None and not failed:
+            failed = True
+            raise ConnectionError('synthetic commit ACK loss')
+
+    monkeypatch.setattr(access, 'enrollment', lost_ack)
+    with pytest.raises(RuntimeError, match='FIELD operation incomplete'):
+        support_admin.change(access, path, support, True, now + 3600)
+    assert failed
+    assert device.reference in support_admin.admission(path)
+    assert support_ids.lookup(access, support, support_admin.admission(path))['family_state'] == 'REVOKED'
+    with access.db() as database:
+        assert database.execute('SELECT outcome FROM field_support_audit').fetchone()[0] == 'INCOMPLETE'
+
+
 def test_operator_retains_owner_and_caps_admission(access, tmp_path):
     pairs = [enroll(access) for index in range(4)]
     path = tmp_path / 'admission.json'

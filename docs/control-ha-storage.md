@@ -1,7 +1,7 @@
 # HA-02 — каноническое хранилище и очередь writers
 
 23 November 2026. **IN_PROGRESS; HA-02A enrollment, HA-02B paid/subscription и
-HA-02C membership, HA-02D referral и HA-02E Support ID contracts
+HA-02C membership, HA-02D referral, HA-02E Support ID и HA-02F grant/audit contracts
 квалифицированы на синтетическом стенде.**
 Это не production, не репликация и не cutover.
 [Общие gates](control-ha.md) · [Результаты](releases/2026-11-23-control-ha.md).
@@ -207,6 +207,45 @@ service. Pending proof после restore работает один раз. Эт
 контракт. Production данные, ключи, архивы и клиентские версии не менялись. Откат
 checkpoint — остановка owned disposable стенда; live DB из старого backup не нужна.
 
+## HA-02F — grant and audit transactions
+
+`RestrictedAdminTransaction` переносит только DB-операции явного grant/renewal,
+revoke и audit. SQLite использует эту же реализацию через `Access.enrollment`;
+`support_admin.change` сохраняет порядок pending/revoke → CRL/file → audit completion
+и компенсирующий revoke при ошибке. Это не атомарность между БД и файлами.
+
+- PostgreSQL требует отдельный marker `family-connect/ha-restricted-admin-synthetic/v1/db-only`.
+  Инициализатор создаёт native grant FK/CHECK и marker только в disposable store;
+  не импортирует существующие таблицы, не выбирает production DSN/backend/CLI.
+- Grant разрешён только активному device с активным invite и ещё будущим expires,
+  проверенным внутри сериализованной транзакции. Revision растёт с учётом minimum;
+  параллельные renewal не теряются. Неявных retry/новых operation IDs нет.
+  **Grant не идемпотентен:** после неизвестного commit прочитать текущую revision,
+  а не повторять renewal и лишний раз инвалидировать сертификаты.
+- Revoke меняет revision только при переходе active→revoked. Повтор — no-op;
+  явный grant может восстановить grant, но не revoked registration. Неверные
+  типы/диапазоны expires/minimum revision, пустая family и переполнение BIGINT
+  отклоняются одинаково на SQLite/PG, без float/wrap. Device revoke остаётся доступен.
+- Audit получает ID от БД и известный Support ID, без device identity/ключей.
+  Pending audit и revoke могут быть одной транзакцией. Completion идемпотентен;
+  APPLIED→INCOMPLETE разрешён для fail-closed компенсации при потере commit ACK,
+  но INCOMPLETE→APPLIED запрещён. Компенсация не откатывается из-за уже записанного
+  APPLIED. Неизвестные IDs/outcomes отклоняются.
+- Полный PG FIELD operator и `publish_crl` по-прежнему отказывают до файловых I/O.
+  PostgreSQL restricted challenges/certificates/readiness и CRL sequence ещё не
+  перенесены. Отдельно остаются fencing, file reconciliation, support sender.
+  Ни успешный DB audit, ни marker не являются подтверждением выдачи сетевого допуска.
+
+176 real DB contracts /0 skips (70 admin +40 enrollment +66 support),264 focused
+regressions /4 optional Go skips. Проверены concurrent renew/revoke, device revoke
+race, commit ACK loss, атомарный rollback и реальное отключение PG backend. SQLite
+FIELD проверен с реальной CRL/file записью и потерей APPLIED commit ACK.
+Отдельный SIGKILL/restart и restore точных12 synthetic таблиц/20 строк сохраняет
+grant/device revoke, revision, Support ID/proofs, paid ledger и pending audit;
+sequence продолжается, pending audit закрывается только явно. Stale pre-revoke
+dump отвергнут сравнением с известным lab snapshot. Это не production watermark,
+полный product backup, reverse migration или replicated RPO0.
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -219,10 +258,10 @@ CLI и периодические задания; число таблиц produc
 | `paid_beta.py`, `transport_membership.py`, paid CLI | Immutable ledger, payload-bound event ID, cohort/binding triggers, terminal revoke, exact paid/noncohort projection | HA-02B/C DB + membership contracts synthetic PASS; production CLI/wiring pending |
 | `subscription.py` | Собственное атомарное потребление challenge вместе с paid projection, не только `Access.complete` | HA-02B synthetic PASS; production остаётся SQLite |
 | `support_ids.py` | Stable aliases, atomic backfill и proof/observation; safe inventory/lookup | HA-02E synthetic PASS; full import/production wiring pending |
-| `support_admin.py`, `support.py` | Admission-file + grant + audit consistency; support sender bindings | Writers pending; PG FIELD mutations explicitly refused before file I/O, SQLite CLI retained |
+| `support_admin.py`, `support.py` | Admission-file + grant + audit consistency; support sender bindings | HA-02F DB grant/revoke/audit synthetic PASS; FIELD file consistency/fencing and sender pending, PG FIELD refused before file I/O |
 | `referrals.py` | Sponsor-bound request idempotency, pool/daily limits, proof/link и claim/invitation в одной транзакции | HA-02D synthetic PASS; full import/production wiring pending |
 | `chat.py`, `chat_service.py`, `chat_sync.py` | Chat identity/proof, directory sequence, service sender revoke; filesystem exports | Pending |
-| `restricted.py`, `restricted_admin.py`, `readiness_receipts.py` | Grants, отдельные restricted challenges, certificates, readiness, CRL sequence | Pending |
+| `restricted.py`, `restricted_admin.py`, `readiness_receipts.py` | Grants, отдельные restricted challenges, certificates, readiness, CRL sequence | HA-02F explicit admin grant/revoke DB PASS; auto-enroll, challenges/certificates/readiness/CRL writers pending |
 | `restricted_maintenance.py`, `restricted_sync.py`, `paid_canary_crl.py` | HMAC journal, local flock, signed directory/CRL, publication/receipt ordering | Pending; требует также HA-03 fencing |
 | `gateway_routing.py`, `gateway_selection.py` | Assignment versions, operation IDs, append-only events, atomic projections | Pending |
 | `technical_metadata.py`, `geoip.py` | Отдельная SQLite, consent epoch/sequence/digest, revoke tombstone, retention, no resurrection | Pending; не входит в access registry |
@@ -236,7 +275,7 @@ signing keys не входят в migration и остаются офлайн.
 
 ## Следующие gates
 
-1. Перевести остальные writers/CLI (далее restricted/admin DB и support sender), затем metadata,
+1. Перевести остальные writers/CLI (далее restricted challenges/certificates/readiness и support sender), затем metadata,
    tombstones/files и остальные строки карты. Не допускать mixed backend writers;
    synthetic membership не заменяет production wiring, deadline и package gates.
 2. Создать явную versioned all-table migration: snapshot consistency, nullable и

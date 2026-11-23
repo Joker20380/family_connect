@@ -7,6 +7,7 @@ import pytest
 from scripts.paid_postgres_rehearsal import require_current_restore
 from scripts.referral_postgres_rehearsal import ReferralRehearsal
 from scripts.support_postgres_rehearsal import SupportRehearsal
+from scripts.restricted_admin_postgres_rehearsal import RestrictedAdminRehearsal
 
 
 @pytest.mark.parametrize('mutation', ['claim', 'sponsor', 'invitation', 'revocation', 'proof', 'table'])
@@ -31,7 +32,7 @@ def test_restore_cannot_silently_lose_referral_state(mutation):
         require_current_restore(current, restored)
 
 
-@pytest.mark.parametrize('runner', [ReferralRehearsal, SupportRehearsal])
+@pytest.mark.parametrize('runner', [ReferralRehearsal, SupportRehearsal, RestrictedAdminRehearsal])
 def test_writer_runner_uses_temporary_owned_local_docker_only(tmp_path, monkeypatch, runner):
     with pytest.raises(ValueError, match='TEMPORARY_REHEARSAL_ONLY'):
         runner(Path('/not-a-temporary-writer-rehearsal'))

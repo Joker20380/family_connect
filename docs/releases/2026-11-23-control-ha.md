@@ -12,7 +12,7 @@ source inspection is not a fresh server-health check.
 ## Progress
 
 - HA-01 isolated scope implemented and verified; details below.
-- HA-02A enrollment, HA-02B paid/subscription, HA-02C membership, HA-02D referral and HA-02E Support ID slices qualified below; remaining
+- HA-02A enrollment, HA-02B paid/subscription, HA-02C membership, HA-02D referral, HA-02E Support ID and HA-02F grant/audit DB slices qualified below; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -24,6 +24,69 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02F — restricted grants and audit recovery
+
+Continuation from `57e6c854af2046b7236b1fbb7476227b1b54c064` in the authoritative
+metadata worktree/branch. This is a source-only DB slice, not completion of HA-02 or
+a restricted serving backend. Console5ce82415 and Android126/catalog9 unchanged.
+No production DB/configuration, server service, policy/8/12/120s, consent or key changes.
+No SSH/live RU/NL health checks; RU dependence remains. Four prior exact-overlay
+package failures remain open and were not rerun/reclassified as PASS here.
+
+### Change and failure semantics
+
+- Shared `RestrictedAdminTransaction`: active-registration grant/renewal, monotonic
+  revision, idempotent revoke, pending audit and guarded audit completion. SQLite
+  uses the same path. Explicit PG marker and native grant FK/CHECK; no backend selector.
+- Expires/minimum revision must be bounded integers; family nonempty. Clock check
+  occurs inside the write transaction; revision cannot wrap/convert to float.
+  Device revoke still works at exhausted grant revision. This does not alter TTL policy.
+- Grant renewal is not idempotent: lost commit ACK requires revision readback,
+  not an automatic second renewal. Concurrent admin/device revokes serialize.
+- Audit + revoke roll back together on DB/backend failure. APPLIED→INCOMPLETE is
+  allowed for fail-closed compensation after lost APPLIED ACK; INCOMPLETE→APPLIED
+  is refused. Existing SQLite FIELD ordering and actual CRL/file path are tested.
+- PG FIELD/CRL publication still refuses before file I/O; DB-only success is not
+  admission acceptance. Auto-enroll, restricted challenges/certificates/readiness,
+  CRL sequence, fenced file reconciliation and support sender remain pending.
+
+### Qualification and recovery
+
+Same locked venv `/tmp/fc-control-ha-20261123/venv`, psycopg/psycopg-binary3.3.9,
+PostgreSQL17.11 and pinned image
+`postgres@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73`.
+No dependency/version/artifact change. Commands from the authoritative worktree:
+
+```sh
+python -m scripts.restricted_admin_postgres_rehearsal --workdir /tmp/fc-control-ha-20261123/admin-2
+python -m pytest -q -ra tests/test_friends_access.py tests/test_support_ids.py tests/test_support_http.py tests/test_friends_support_owner.py tests/test_friends_owner.py tests/test_friends_restricted.py tests/test_subscription_http.py tests/test_paid_beta.py tests/test_paid_beta_readiness.py tests/test_read_readiness_ack.py tests/test_referral_rehearsal.py tests/test_enrollment_rehearsal.py tests/test_paid_rehearsal.py
+```
+
+- 176 real DB contracts PASS /0 skips in40.68s:70 admin,40 enrollment,66 support.
+  Risk-selected suites; unchanged referral/membership PG suites not rerun here.
+- 264 consumer/operator/runner checks PASS /4 optional locked-Go skips in10.23s,
+  including isolated deterministic operator.pyz and actual SQLite FIELD compensation.
+  This is not full transport/platform CI; counts from separate runs are not additive.
+- Actual PG backend termination verifies audit/revoke rollback. Whole-container
+  SIGKILL/restart then separate current restore pass exact12 synthetic tables/20 rows.
+  Consumed proof refused, pending proof consumed once, device/grant revoke and revision
+  retained, payment retry duplicate, audit IDs continue. Pending audit survives as
+  PENDING and is explicitly closed INCOMPLETE without reopening admission.
+- Separate stale pre-revoke restore is refused by comparison with known committed
+  lab state. Not full product backup, production reverse migration, replication or RPO0.
+- First run `admin-1` passed176 contracts in43.74s but recovery fixture hit the real
+  `ANDROID_BASELINE_REQUIRED` guard before crash/restore. Fixture preparation now
+  records a valid Support ID observation before payment; requests retain all fields.
+  No baseline/proof gate was weakened. Failed evidence is retained, not acceptance.
+
+Raw logs/JUnit/credentials/dumps stay private under `/tmp/fc-control-ha-20261123/admin-1/`
+and `admin-2/`, plus `admin-regressions-1.log`. Successful receipt:
+`ISOLATED_RESTRICTED_ADMIN_POSTGRES_PASS`, production_writes0, owned cleanup PASS.
+Rollback now: stop only this disposable lab; no live restore or gateway restart.
+After any future cutover writes: fence writers and recover current state, never old
+SQLite. Next within HA-02 remains restricted certificate/readiness writers,
+support sender and the remaining HA-02 migration/replication gates; HA-03..05 follow.
 
 ## HA-02E — Support ID observation and recovery
 

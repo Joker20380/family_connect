@@ -84,8 +84,8 @@ ledger, отзывах и challenge, не только числе устройс
 потери quorum, ремонта узла, CA renewal, backup restore и независимый мониторинг.
 HA не устраняет причину локальных зависаний RU.
 
-HA-02A/B/C/D/E: enrollment, paid ledger/subscription, synthetic all-node membership,
-referral и Support ID transactions, PostgreSQL crash/restore
+HA-02A/B/C/D/E/F: enrollment, paid ledger/subscription, synthetic all-node membership,
+referral, Support ID и grant/audit DB transactions, PostgreSQL crash/restore
 стенд реализованы. HA-02B отвергает stale backup после новых payment/revoke/proof
 записей и проверяет актуальный restore всех девяти лабораторных таблиц. Это не
 production reverse migration: serving-set fencing, production wiring/deadlines,
@@ -99,6 +99,11 @@ HA-02E отдельно проверяет Support ID/наблюдения вм�
 таблиц/19 строк. Restricted grants/readiness — только read-side fixtures; перенос
 FIELD grant/audit/CRL/admission-file writers этим не выполнен. PostgreSQL FIELD
 операции явно запрещены до файловых побочных эффектов. Это не новый CLI backend.
+HA-02F переносит grant/revoke/audit DB boundary:176 contracts,264 focused regressions,
+точный restore12 лабораторных таблиц/20 строк. Pending audit не становится APPLIED
+автоматически; потеря подтверждения grant требует readback, не слепого renewal.
+FIELD file/CRL publication и restricted certificate/readiness writers ещё не перенесены.
+Ни один из этих стендов не включает replicated writer, epoch fencing или live failover.
 [Точная граница и карта writers](control-ha-storage.md).
 
 Результаты: [checkpoint 23 ноября](releases/2026-11-23-control-ha.md).

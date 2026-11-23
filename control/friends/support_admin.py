@@ -72,25 +72,25 @@ def change(access, path, support, enabled, expires=None):
             trust, _, _, _, _ = service._trust(int(access.clock()))
             if type(expires) is not int or not access.clock() < expires <= trust['expires_at']:
                 raise ValueError('Explicit grant expiry required')
-        with access.db() as database:
-            cursor = database.execute('INSERT INTO field_support_audit(timestamp,support_id,previous_state,new_state,outcome) VALUES (?,?,?,?,?)',
-                                      (int(access.clock()), support, int(old), int(enabled), 'PENDING'))
-            audit_id = cursor.lastrowid
+        with access.enrollment() as transaction:
+            admin = transaction.restricted_admin()
+            audit_id = admin.begin_audit(int(access.clock()), support, int(old), int(enabled))
             if not enabled:
-                database.execute('UPDATE restricted_grants SET revoked=1,revision=revision+1 WHERE device=? AND revoked=0', (device,))
+                admin.revoke_grant(device)
         try:
             if enabled:
                 grant(access, device, trust['family'], expires, trust['minimum_revision'])
             publish_crl(service, path.parent / 'revocations.pem')
             devices = sorted(set(previous) | {device}) if enabled else [value for value in previous if value != device]
             write_admission(path, previous, devices)
-            with access.db() as database:
-                database.execute('UPDATE field_support_audit SET outcome=? WHERE id=?', ('APPLIED', audit_id))
+            with access.enrollment() as transaction:
+                transaction.restricted_admin().finish_audit(audit_id, 'APPLIED')
         except Exception:
-            with access.db() as database:
+            with access.enrollment() as transaction:
+                admin = transaction.restricted_admin()
                 if enabled:
-                    database.execute('UPDATE restricted_grants SET revoked=1,revision=revision+1 WHERE device=? AND revoked=0', (device,))
-                database.execute('UPDATE field_support_audit SET outcome=? WHERE id=?', ('INCOMPLETE', audit_id))
+                    admin.revoke_grant(device)
+                admin.finish_audit(audit_id, 'INCOMPLETE')
             raise RuntimeError('FIELD operation incomplete; inspect the safe audit') from None
         return support_ids.lookup(access, support, devices)
 

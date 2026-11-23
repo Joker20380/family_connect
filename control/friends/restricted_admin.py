@@ -15,16 +15,70 @@ from .readiness_receipts import CLOCK_SKEW_SECONDS
 from .restricted import MAX_TEST_LIFETIME, from_env, migrate, delegation, utc
 
 
-def grant(access, device, family, expires, minimum_revision=1):
-    with access.db() as database:
-        row = database.execute('SELECT d.revoked, i.revoked AS invite_revoked FROM devices d '
-                               'JOIN invites i ON d.device=i.device WHERE d.device=?', (device,)).fetchone()
-        if row is None or row['revoked'] or row['invite_revoked'] or expires <= access.clock():
+MAX_INTEGER = 2**63 - 1
+
+
+class RestrictedAdminTransaction:
+    def __init__(self, enrollment):
+        self.database = enrollment.database
+        self.placeholder = enrollment.placeholder
+
+    def grant_row(self, device):
+        return self.database.execute('SELECT * FROM restricted_grants WHERE device=' + self.placeholder,
+                                     (device,)).fetchone()
+
+    def grant(self, device, family, expires, minimum_revision, now):
+        if (type(family) is not str or not family or type(expires) is not int
+                or not 0 <= expires <= MAX_INTEGER or expires <= now
+                or type(minimum_revision) is not int or not 1 <= minimum_revision <= MAX_INTEGER):
             raise ValueError('grant rejected')
-        old = database.execute('SELECT revision FROM restricted_grants WHERE device=?', (device,)).fetchone()
-        database.execute('INSERT INTO restricted_grants VALUES (?,?,?,?,0) ON CONFLICT(device) DO UPDATE SET '
-                         'family=excluded.family, revision=excluded.revision, expires=excluded.expires, revoked=0',
-                         (device, family, max(old['revision'] + 1 if old else 1, minimum_revision), expires))
+        row = self.database.execute('SELECT d.revoked, i.revoked AS invite_revoked FROM devices d '
+            'JOIN invites i ON d.device=i.device WHERE d.device=' + self.placeholder, (device,)).fetchone()
+        if row is None or row['revoked'] or row['invite_revoked']:
+            raise ValueError('grant rejected')
+        old = self.grant_row(device)
+        revision = max(old['revision'] + 1 if old else 1, minimum_revision)
+        if revision > MAX_INTEGER:
+            raise ValueError('grant revision exhausted')
+        self.database.execute('INSERT INTO restricted_grants(device,family,revision,expires,revoked) VALUES (' +
+            ','.join([self.placeholder] * 4) + ',0) ON CONFLICT(device) DO UPDATE SET '
+            'family=excluded.family, revision=excluded.revision, expires=excluded.expires, revoked=0',
+            (device, family, revision, expires))
+
+    def revoke_grant(self, device):
+        old = self.grant_row(device)
+        if old is not None and not old['revoked'] and old['revision'] >= MAX_INTEGER:
+            raise ValueError('grant revision exhausted')
+        self.database.execute('UPDATE restricted_grants SET revoked=1,revision=revision+1 WHERE device=' +
+                              self.placeholder + ' AND revoked=0', (device,))
+
+    def begin_audit(self, timestamp, support, previous_state, new_state):
+        if (type(timestamp) is not int or not 0 <= timestamp <= MAX_INTEGER
+                or type(previous_state) is not int or previous_state not in (0, 1)
+                or type(new_state) is not int or new_state not in (0, 1)
+                or self.database.execute('SELECT 1 FROM device_support WHERE support_id=' + self.placeholder,
+                                         (support,)).fetchone() is None):
+            raise ValueError('audit rejected')
+        statement = ('INSERT INTO field_support_audit(timestamp,support_id,previous_state,new_state,outcome) VALUES (' +
+                     ','.join([self.placeholder] * 4) + ",'PENDING')")
+        return self.insert_audit(statement, (timestamp, support, previous_state, new_state))
+
+    def insert_audit(self, statement, values):
+        return self.database.execute(statement, values).lastrowid
+
+    def finish_audit(self, audit_id, outcome):
+        if type(audit_id) is not int or not 1 <= audit_id <= MAX_INTEGER or outcome not in ('APPLIED', 'INCOMPLETE'):
+            raise ValueError('audit completion rejected')
+        allowed = "('PENDING','APPLIED')" if outcome == 'APPLIED' else "('PENDING','APPLIED','INCOMPLETE')"
+        cursor = self.database.execute('UPDATE field_support_audit SET outcome=' + self.placeholder +
+            ' WHERE id=' + self.placeholder + ' AND outcome IN ' + allowed, (outcome, audit_id))
+        if cursor.rowcount != 1:
+            raise ValueError('audit completion rejected')
+
+
+def grant(access, device, family, expires, minimum_revision=1):
+    with access.enrollment() as transaction:
+        transaction.restricted_admin().grant(device, family, expires, minimum_revision, access.clock())
 
 
 def build_crl_payload(service, database, previous_crl, previous_sequence, now, lifetime, *, receipt_key=None):

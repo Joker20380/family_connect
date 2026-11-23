@@ -24,8 +24,13 @@ HA-02E Support ID/backfill/lookup qualified/pushed ed6a664f:155 real DB contract
 40 enrollment,49 paid),443 regressions /21 optional skips and expanded packaged
 operator smoke PASS. Exact12-table/19-row synthetic restore preserves observations,
 proofs/revoke and coexisting paid state; restricted rows are read-side fixtures only.
-FIELD operations on PG refuse before file I/O; grant/audit/CRL/file writers NOT migrated.
-NEXT within HA-02: restricted/admin DB writers, support sender and remaining writers/CLI,
+At HA-02E, FIELD grant/audit/CRL/file writers were not migrated.
+HA-02F grant/revoke/audit DB boundary qualified:176 real DB contracts /0 skips
+(70 admin +40 enrollment +66 support);264 focused regressions /4 optional Go skips.
+Exact12-table/20-row lab recovery preserves revisions, revokes, pending audit/proofs
+and paid state. Stale backup refused; SQLite compensates after APPLIED commit ACK loss.
+FIELD/CRL file publication on PG remains refused before file I/O; this is DB-only.
+NEXT within HA-02: restricted challenge/certificate/readiness writers, support sender and remaining writers/CLI,
 metadata/tombstones/files, all-table shadow import, full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.

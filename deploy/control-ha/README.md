@@ -223,3 +223,35 @@ or disaster-recovery service is implemented. Existing ownership/loopback/private
 guards and cleanup apply unchanged. No live configuration, product secret or server
 data is read. Stop only the owned disposable lab for rollback. This does not complete
 FIELD grant/audit/file writers, sender bindings, canonical import, replicas or HA.
+
+## HA-02F: isolated restricted grant/audit DB recovery
+
+Use the same dedicated locks, psycopg3.3.9 and pinned PostgreSQL17.11 image. No
+production selector, credentials or existing database is used:
+
+```sh
+python -m scripts.restricted_admin_postgres_rehearsal --workdir /tmp/fc-ha-admin-new
+```
+
+The runner exercises176 SQLite/real-PG contracts (70 admin,40 enrollment,66 support)
+without skips. Admin scope is explicit grant/revoke/audit transactions, not restricted
+certificate/readiness/CRL or FIELD file publication. PG FIELD/CRL operations must
+still refuse before file access. SQLite operator ordering and compensating revoke
+remain; a separate consumer test covers loss of APPLIED commit acknowledgement.
+
+Grant renewal increments revision and is **not idempotent**: unknown commit needs
+readback, not blind retry. Revoke and audit completion are idempotent. A pending
+audit is not success. APPLIED can become INCOMPLETE during fail-closed compensation;
+INCOMPLETE cannot be promoted back to APPLIED by replaying the completion.
+
+Recovery combines enrollment/support/admin with paid state. SIGKILL with unfinished
+grant/audit/proof changes must preserve committed data and discard those changes.
+Restore runs in distinct owned containers: stale pre-revoke dump is refused; current
+12-table/20-row lab snapshot must match exactly. Check grant/device revokes/revisions,
+paid replay, consumed/pending proof, pending audit and continuation of audit IDs.
+Known-snapshot comparison is not a production high-watermark or RPO0 service.
+
+All ownership/loopback/private-file rules apply; only the runner's containers and
+volumes are cleaned. Preserve failed evidence. Rollback is stopping this lab, never
+restoring an old SQLite/product backup. Fencing, file reconciliation, full canonical
+import, replicas and production cutover remain blocked on their separate gates.
