@@ -1,5 +1,30 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02U online-renewal evidence checkpoint VERIFIED in isolation.**
+Source9a9724a1 ordinarily pushed and independently remote-SHA verified on the
+authoritative metadata branch. This old main remains navigation only.
+Separate inspector checks coordinator and all three node owners, plans, immutable
+decisions/fences, completed ledgers and partial archives. Signed gateway material,
+grant/CRL continuity, private-key/profile correspondence and exact receipts are
+verified against independent checkpoint/anchor inputs. No host is activated.
+162 final adapter/fault checks and97 native renewal regressions PASS /0 skips.
+Eight source docs/1041 links checked; external URLs not fetched. Tests cover lost
+replies, partial cleanup, precommit abort, postcommit same-host resume, emergency
+fencing after revocation and exact700/600 pending evidence after source removal.
+Changed bytes/path/owner/inode refuse the same-evidence comparison. Even unchanged
+evidence is not authorization to resume. RPC/readers/barriers are fixture adapters;
+declared metadata is not live attestation or root runtime acceptance.
+Scope is one retained online operation. T still refuses nonempty renewal ledgers:
+U is not yet integrated with the canonical capsule/issuer/DB checkpoint.
+NEXT: that integration, retained history/installed offline-emergency variants and
+actual host reconciliation. Journal block remains partial; the other three HA-02
+blocks remain live schema/writer barrier, full recovery/custody, strict replication/RPO0.
+Stage2/5; RU dependency persists. Console5ce82415, NL GeoIP22 November, Android126/
+catalog9,8/12/120s and all-three-node ACK gate unchanged. No SSH, live read, deployment,
+service change or fresh health claim. Rollback is local-test cleanup, not old DB restore.
+Original four dirty files/six untracked paths preserved; no force/reset/history rewrite.
+[Source, evidence, limits and rollback](releases/2026-11-23-control-ha.md#ha-02u--online-renewal-evidence).
+
 **23 November — CONTROL-HA HA-02T bounded maintenance preflight VERIFIED in isolation.**
 Source8b04ef6c ordinarily pushed and independently remote-SHA verified on the
 authoritative metadata branch. This old main remains navigation only.

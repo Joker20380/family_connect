@@ -58,6 +58,47 @@ not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
 
+## HA-02U — online renewal evidence
+
+Authoritative source/tests/docs `9a9724a180ad3b1293ad9620a428d9b50af223d0` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA matched.
+Source remains `/home/joker/.codex/worktrees/dad9/family_connect`. This divergent old
+main is navigation only; original four dirty files/six untracked paths preserved.
+No force/reset/rebase/merge, SSH, live read/write, package deployment or service change.
+
+Added a separate read-only online-renewal inspector: independent expected digest
+and trust anchor bind five private documents with coordinator/RU/NL/NL2 state.
+Checks native plans, owners/fences, immutable decisions, completion ledgers and
+partially moved archives; validates signed two-gateway material, grant/CRL continuity,
+private-key/profile correspondence, floors and cross-node receipts. Retains pending
+state, never repairs it into empty or assumes COMMITTED from database rows.
+Exact byte/path/owner/lock/file/root-inode comparison refuses changes, and returns
+`host_resume=NOT_AUTHORIZED` even when unchanged. This is not new-host reconciliation.
+
+Final adapter/fault tests:162 PASS /0 skips in45.95s (`renewal-final-1.log`). Native
+online/abort-unacquired/reconcile-unprepared regressions:97 PASS /0 skips within
+the earlier256-test/122.99s combined run (`renewal-qualification-1.log`); its159
+adapter cases are superseded by the162-case final run. Eight source docs/1041 links
+and whitespace/secrets/source-only checks PASS; external URLs not fetched.
+Evidence stays private under `/tmp/fc-control-ha-20261123/`, never in Git.
+
+Native disposable tests cover coordinator interruption, node lost replies, partial
+cleanup, precommit abort without rollback, postcommit resume with the same plan,
+revocation-triggered emergency fencing and refusal of abort after commit. Source
+removal preserves exact700/600 evidence without installing it at original host paths.
+RPC/readers/barriers are simulated; declared metadata is not live/root attestation.
+
+Scope is one retained online operation. Multi-operation history, offline/emergency
+handoff variants, live capture/barrier, canonical capsule/issuer/DB binding and actual
+host reconciliation remain unqualified. T still refuses nonempty renewal ledgers;
+U cannot bypass this gate. No new PG import/recovery acceptance claimed.
+NEXT: canonical integration and history/installed variants, then host reconciliation.
+Journal block remains partial; the other three HA-02 blocks and HA-03..05 remain.
+Stage2/5, RU dependency persists. Console5ce82415, NL GeoIP22 November and public
+Android126/catalog9 unchanged;8/12/120s and all-three-node ACK gate retained.
+Rollback is local-test cleanup only. No production restore/restart is needed;
+old SQLite/profile state is not a rollback after future new acknowledged writes.
+
 ## HA-02T — bounded maintenance journal preflight
 
 Authoritative source/tests/docs `8b04ef6c6865b126fa66be5342c89b87b2bd90a6` ordinarily

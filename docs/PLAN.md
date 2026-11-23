@@ -122,9 +122,16 @@ owner/floor/receipt checks, native root guards and44-table/82→87-row recovery 
 One canonical bounded operation/publisher contract per node, explicitly empty
 separate renewal ledgers only.38 artifacts/no opaque probes in this pinned fixture,
 not full maintenance recovery; unknown/missing/history/renewal variants refuse.
-NEXT bounded scope: separate renewal coordinator/online-node evidence and controlled
-host reconciliation. Journal block remains partial; never infer empty journals,
-reset unknowns or re-sign metadata merely to make host resume succeed.
+HA-02U separate online-renewal evidence checkpoint qualified/pushed9a9724a1:
+162 final adapter/fault checks +97 native regressions PASS /0 skips, eight source
+docs/1041 links checked. Depends on N caller inventory, T journal separation and
+native online renewal contracts. Gate: all-three-node decision/plan/archive/receipt
+binding, signatures/key/floors, private pending retention, lost-reply/cleanup and
+abort/resume fault tests. One operation, simulated RPC/readers/barriers; no activation.
+Same-evidence comparison is not resume authorization. T still refuses renewal ledgers.
+NEXT bounded scope: canonical capsule/issuer/DB integration, retained history and
+installed offline/emergency variants, then actual host reconciliation. Journal block
+remains partial; never infer empty journals, reset unknowns or re-sign host bindings.
 Separately, installed-schema/live writer census and consistency barrier,
 all-store import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse
