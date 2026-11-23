@@ -629,6 +629,43 @@ writes use fenced current-state recovery, never stale SQLite/external state.
 NEXT: real role adapters/semantic checks; replication and deployment are not started.
 [Scope](../../docs/control-ha-storage.md#ha-02q--encrypted-recovery-bundle).
 
+## HA-02S: receiver safety adapter
+
+Selected continuation from HA-02R, not a live collector or activation command.
+Use the existing control/identity lockfile environment and pinned local PostgreSQL
+17.11 image. Workdirs must be fresh, owned temp directories; no external DB URL.
+
+```sh
+python -m scripts.control_ha_receiver_rehearsal \
+  --workdir /tmp/fc-control-ha-receiver-recovery
+python -m pytest -q tests/test_transport_membership.py \
+  tests/test_transport_enforcement.py tests/test_transport_budget.py \
+  tests/test_referral_rehearsal.py
+```
+
+Mandatory gate:170 contracts /0 skips (69 receiver +61 external +40 enrollment),
+source removal, SIGKILL/exact import/current restore, stale/old import refusal,
+all owned container cleanup. Receipt `ISOLATED_RECEIVER_SAFETY_PASS` contains
+only aggregate evidence, never identity keys, device lists or capsule content.
+Focused consumers/runner guard selection:53 PASS /0 skips. Running the receiver
+test file outside the runner explicitly skips its3 PG tests and is not acceptance.
+
+Native receiver fixtures preserve partial two-node preparation/terminal denial,
+three independent clocks/boots and mailbox floor. Engine readback, clock values
+and root/SSH entry condition are simulated; commands and publication are forbidden.
+No root filesystem ownership, mounted mailbox volume/spool or live node identity
+attestation is claimed. Strict profile requires complete captured registry coverage,
+exact mailbox canonical sequence/member set and no unknown static pilot identities.
+Expired leases remain expired; neither restore nor duplicate accept renews them.
+
+One broader routes test still fails on unchanged baseline: its chat-sync fixture
+has no `access` attribute. See dated evidence; no broad suite/release PASS.
+Only maintenance_state remains opaque; authenticated maintenance/profile journals
+and unresolved renewal operations are the next bounded scope. Do not infer empty
+journals or publish copied receiver state. Key/checkpoint custody, live barrier,
+full DR/strict replication/HA-03 fencing remain required. Rollback before cutover
+is owned-lab cleanup; future canonical writes require fenced current-state recovery.
+
 ## HA-02R: external-role adapters
 
 Use the same locked control/identity/HA environment and fresh temporary workdirs:

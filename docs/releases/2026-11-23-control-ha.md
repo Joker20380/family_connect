@@ -19,7 +19,8 @@ source inspection is not a fresh server-health check.
   file/CLI inventory and synthetic alias/allocator checks complete; HA-02O common
   synthetic storage-shape import/recovery qualified; HA-02P pinned application SQLite
   adapters/joint semantic recovery and HA-02Q encrypted capsule/partial external
-  recovery and HA-02R five real external-role adapters qualified in isolation,
+  recovery, HA-02R five real external-role adapters and HA-02S receiver safety
+  qualified in isolation,
   not a live schema census or full DR; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
@@ -32,6 +33,73 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02S — receiver safety adapter
+
+Continuation from3fa2674e7a50651d83d309f3a84014ec02edc7dd on the authoritative
+metadata branch. This slice qualifies receiver safety; maintenance/profile
+journals remain unimplemented, not silently cleared. Source inspection found
+authenticated bounded-operation journals, path/owner metadata and separate renewal
+ledgers; they require their own recovery contract. No SSH/live reads/server changes.
+
+### Delivered boundary
+
+[Strict adapter](../control-ha-storage.md#ha-02s--receiver-safety-adapter) replaces
+the receiver probe with13 actual-format artifacts;35 total across eight roles.
+Three node configs/caches bind device/paid decisions, registration/receipts,
+prepared markers, boots/deadlines to captured inputs. Mailbox membership/floor,
+settings/static pilot identities, private node identity, bootstrap/destination,
+controller endpoint and volume marker are cross-checked. Capture clock metadata
+is explicitly synthetic, not live node attestation. Unknown shapes fail closed.
+
+Exact original bytes and adapter version enter the import identity. R's byte-only
+receiver receipt cannot claim S qualification. Changing a valid prepared marker
+still changes checkpoint/import identity: old trusted checkpoint and existing
+receipt refuse replacement. Validators cannot reconstruct a history missing before
+a newly trusted capture; custody/live consistency barrier remain required.
+
+After original fixture deletion, native Gateway consumers preserve partial
+preparation on two nodes (third unprepared), terminal identity denies and receipts.
+Identical accept does not renew leases. Reboot and wall/monotonic expiry each deny
+paid access. Native mailbox forced-command guard rejects equal/older sequence;
+Membership returns no keys after expiry without deleting the retained floor.
+Engine readback, clocks and root/SSH entry condition are simulated; no runtime
+command runs. Mailbox volume mount/spool/config and root ownership not qualified.
+
+### Checks and limits
+
+Private evidence `/tmp/fc-control-ha-20261123/`; Python3.14/psycopg3.3.9 and pinned
+PostgreSQL17.11 unchanged. No identities, profiles, capsule or databases in Git.
+
+- Initial disposable probe exposed a test-harness lock held across two calls to
+  a one-shot mailbox command; only that identified probe was stopped. Harness now
+  closes each acquired descriptor after each invocation. No production change.
+- `receiver-unit-1.log`:66 PASS /3 explicit PG skips in28.56s, diagnostic only.
+- `receiver-recovery-1/contracts.log`:170 PASS /0 skips in69.90s;69 receiver,
+  61 external-role and40 enrollment tests. Receipt `ISOLATED_RECEIVER_SAFETY_PASS`:
+  44 tables/82 rows after import,44/87 after acknowledged business writes; SIGKILL,
+  current/stale restore and old-import refusal PASS; all four owned containers gone.
+  Receiver behavior checks PASS; original source fixture removed before restore.
+  Receiver continuation is checked at the imported checkpoint; subsequent87-row
+  current DB recovery is not a new coherent external capture/publication after writes.
+- `receiver-focused-1.log`:53 PASS /0 skips in3.01s (native transport preparation,
+  enforcement/budget and owned runner/environment/path guards).
+- `receiver-consumers-1.log`:64 PASS /1 FAIL in3.17s when adding broader NL routes.
+  `test_chat_sync_uses_configured_host_and_keeps_pinning` supplies a registry stub
+  without `access`; unchanged `chat_sync.require_local_registry` rejects it with
+  AttributeError before SSH. `receiver-baseline-route-1.log`: same failure alone
+  in0.28s, both relevant files identical to3fa2674e. Not fixed or hidden; no broad
+  suite/package/release acceptance claimed.
+
+Remaining: maintenance/profile journal adapter, installed-schema/active-writer
+census, live node ownership/clock attestation and coherent capture barrier,
+off-host key/checkpoint custody, full external DR, strict replication/RPO0 and
+HA-03..05. Expired receiver material does not authorize fresh publication.
+No service/backend/client/catalog/version change. Console5ce82415, NL GeoIP22
+November, Android126/catalog9,8/12/120s and all-three-node first-cohort ACK unchanged.
+Stage2 of5; RU dependency persists; no fresh health claim. Rollback now only cleans
+owned lab state. After future canonical writes, fence and recover current state;
+never restore old SQLite/receiver files or reset pending journals to undo writes.
 
 ## HA-02R — external-role adapters
 

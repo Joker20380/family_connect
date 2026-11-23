@@ -141,8 +141,19 @@ legacy key/history loss; three allocators preserve IDs under reverse replay and
 do not reuse deleted highest IDs. No real gateway command or production write.
 Two roles (maintenance/profile journals and receiver safety) remain opaque probes;
 no complete external recovery, node attestation, live barrier or activation claim.
-NEXT bounded scope within HA-02: real maintenance/profile journal and receiver
-safety adapters, including unresolved-operation/floor refusal rather than reset.
+HA-02S receiver safety adapter qualified in isolation:170 contracts /0 skips
+(69 receiver +61 external +40 enrollment),53 native transport/runner checks /0 skips.
+Depends on N file-authority map, P application SQLite and Q/R encrypted role inputs.
+Gate: exact three-node config/cache/clock/decision/receipt bindings, mailbox key/
+membership/floor/configuration, adapter-bound atomic import and source removal;
+44-table/82→87-row crash/current/stale recovery PASS. Native consumers preserve
+partial preparation/terminal denies, refuse mailbox replay and never extend leases
+through duplicate import, reboot or expiry. Simulated engine/clock/SSH UID only;
+not live node attestation, root ownership/volume acceptance or receiver activation.
+Broader routes regression64 PASS /1 old fixture failure reproduced alone on
+unchanged3fa2674e files (registry.access absent). No broad suite/release PASS.
+NEXT bounded scope within HA-02: maintenance/profile journal adapter; authenticated
+pending/unknown operations, path/owner bindings and floors must not be reset.
 Then separately qualify installed schemas/live writer barrier,
 all-store shadow/full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;

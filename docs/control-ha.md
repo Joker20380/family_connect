@@ -83,7 +83,7 @@
 | Этап | Состояние | Что остаётся до перехода дальше |
 | --- | --- | --- |
 | HA-01: quorum/shadow foundation | Лабораторный gate завершён | Не считать стенд установленным production quorum |
-| HA-02: общее хранилище | В работе; A–Q DB/import/bundle contracts и R пять external-role adapters проверены на стенде | Maintenance/profile и receiver adapters, installed-schema/writer census, live consistency barrier, полный recovery, strict replication/RPO0 |
+| HA-02: общее хранилище | В работе; A–R DB/import/bundle/role contracts и S receiver safety проверены на стенде | Maintenance/profile adapter, installed-schema/writer census, live consistency barrier, полный recovery, strict replication/RPO0 |
 | HA-03: единственный уполномоченный writer | Не внедрён | Epoch/fencing на принимающих узлах, запрет действий старого лидера и безопасная публикация файлов |
 | HA-04: API/клиентский failover | Не внедрён | Несколько API endpoints, безопасные retries и клиентские compatibility/acceptance gates |
 | HA-05: production shadow/cutover | Не начат | Актуальные backup/restore, guarded sole-writer switch, отказ RU/возврат узла, RTO и rollback |
@@ -124,6 +124,14 @@ fixture сохранены история aliases, IP/ID и allocator high-water
 из четырёх заглушек Q; maintenance/profile и receiver safety всё ещё не квалифицированы.
 Ни полного DR, ни автоматического отказоустойчивого управления в production пока нет.
 Следующий scope — эти два оставшихся формата, не установка PostgreSQL.
+
+[HA-02S](control-ha-storage.md#ha-02s--receiver-safety-adapter) дополнительно
+проверяет receiver safety:170 contracts и53 native transport/runner checks без skips.
+Подготовка только на двух из трёх узлов, terminal denies и mailbox sequence floor
+сохраняются после восстановления. Повтор/перезагрузка не продлевают paid lease;
+истёкшая membership не даёт доступ и не удаляет floor. Это native file consumers
+на стенде с моделируемыми clocks/engines, не применение на серверах. Журналы
+maintenance/profile ещё не восстановлены; activation по-прежнему FORBIDDEN.
 
 ## Откат
 

@@ -786,6 +786,65 @@ NEXT: два оставшихся external-role adapters; не переходи�
 [Команды](../deploy/control-ha/README.md#ha-02r-external-role-adapters) ·
 [Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02r--external-role-adapters).
 
+## HA-02S — receiver safety adapter
+
+[Receiver-v1](../scripts/control_ha_receiver_v1.py) добавляет ещё один strict
+profile поверх Q/R. Это проверка реально используемых форматов до PG/file writes,
+не collector и не запуск gateway/mailbox. Восстановление возвращает точные bytes;
+оно не обновляет timestamps, boot IDs, leases, sequence или prepared markers.
+
+Поддержан ограниченный согласованный capture:
+
+- Три отдельные пары `transport-enforcement.json`/`transport-state.json`: точный
+  node/profile/schema, все captured registry devices, native decision validation
+  и canonical snapshot binding на исходном времени; unknown/missing records,
+  revoked identity allow и несовместимые paid versions отказываются.
+- `prepared` сохраняется независимо от наличия canonical payment. В fixture
+  первая подготовка дошла лишь до RU/NL1; NL2 остаётся неподготовленным. Это не
+  разрешение исключить RU, очистить pending markers или завершить payment.
+- Native applied receipts проверяются по revision/identity/registration и denial.
+  Boot/deadline проверяются типами и declared capture clocks; same-boot deadline
+  не может быть дальше capture monotonic+120s. Старый boot/истёкшие leases не
+  обновляются. Capture metadata прямо помечена synthetic/not-live-attestation.
+- Mailbox `members.json` должен иметь точный canonical chat sequence/member set;
+  истёкший snapshot сохраняется как anti-replay floor, но не разрешает доступ.
+  Settings/static pilot list, bootstrap/destination, controller chat-node,
+  private node identity и volume marker согласованы. Static identities вне
+  canonical member set, lagging/ahead sequence и неизвестные варианты fail closed.
+
+Receiver роль содержит13 artifacts, весь capsule35. Maintenance/profile state
+остаётся **одной** opaque ролью. Adapter version и все artifact digests входят в
+import fingerprint; старый R receipt не становится S. Если заново доверить capture
+уже с потерянным prepared marker, формат сам не угадает прошлое: независимый
+trusted checkpoint и старый import receipt отвергают подмену; custody ещё отдельный gate.
+
+[Fixture/recovery](../scripts/control_ha_receiver_fixture.py) вызывает native
+Gateway accept/prepare/readback/load/allowed и mailbox forced-command stale guard
+только в temp каталогах. Engine snapshots, clocks и root/SSH entry condition
+моделируются; реальные commands запрещены. Native mailbox stale guard вызывается
+только до service/publish side effects. Root ownership, mounted volume, RNS config/
+spool restoration и живой publisher/receiver handshake этим не квалифицированы.
+Ни оплаченный доступ после reboot, ни новые leases не публикуются автоматически.
+
+170 mandatory contracts /0 skips;53 focused checks /0 skips; exact44-table/82-row
+import и44-table/87-row current recovery после новых business writes. Source fixture
+удалён до восстановления. Older/equal mailbox sequence отклоняются, expired
+membership отдаёт пустой список с сохранением файла/floor. Повтор native accept
+не меняет caches/lease deadlines; reboot и каждый из двух clocks запрещают paid.
+Более широкий routes run имеет одну старую fixture failure; подробности в evidence.
+Receiver continuation проверяется на imported checkpoint. Последующее87-row
+current DB restore не означает нового согласованного external capture после
+business writes: membership/receiver publications для него ещё не квалифицированы.
+
+Следующий ограниченный шаг — maintenance/profile journals. Source inspection
+показывает authenticated journal, permit/request/before/target/config hashes,
+root-owned locator/metadata и отдельные renewal transaction/owner ledgers.
+Pending/unknown нельзя объявить committed или очистить; path/owner revalidation
+на другом host — отдельная часть recovery, не копирование inode metadata.
+Full DR/live barrier/strict replication/HA-03..05 остаются незакрытыми.
+[Runbook](../deploy/control-ha/README.md#ha-02s-receiver-safety-adapter) ·
+[Evidence](releases/2026-11-23-control-ha.md#ha-02s--receiver-safety-adapter).
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -819,8 +878,8 @@ signing keys не входят в migration и остаются офлайн.
 ## Следующие gates
 
 1. Использовать [HA-02N source inventory](control-ha-files.md), HA-02P pinned adapters
-   и HA-02Q/R encrypted bundle/пять role adapters для maintenance/profile journals
-   и receiver safety preflight. Заменить два оставшихся opaque probes; незавершённые
+   и HA-02Q/R/S encrypted bundle/role adapters для maintenance/profile journals.
+   Заменить последний opaque probe; незавершённые
    операции и потерянные floors должны блокировать recovery, не очищаться.
    Отдельно квалифицировать key/checkpoint custody и полный consumer/node census.
    До live cutover отдельно сверить установленные схемы/версии и

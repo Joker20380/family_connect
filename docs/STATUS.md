@@ -1,5 +1,32 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02S receiver safety recovery VERIFIED in isolation.**
+Continuation from3fa2674e; source/tests/docs only, no SSH/live read/deployment.
+Versioned receiver adapter replaces the receiver opaque probe with13 real-format
+artifacts: all three transport configs/caches, capture clock declarations and
+mailbox membership/settings/bootstrap/controller binding/private identity/volume ID.
+35 artifacts total; only maintenance_state remains an explicit opaque probe.
+Read-only preflight binds decisions/receipts to canonical identity/paid state and
+allocators, checks clocks/preparation markers, exact mailbox floor/member set and
+receiver key/configuration. Adapter identity enters the atomic import receipt.
+170 real DB contracts PASS /0 skips (69 receiver +61 external +40 enrollment);
+53 focused native transport/runner checks PASS /0 skips. PostgreSQL17.11 recovery
+PASS:44 tables/82 rows imported,87 after new writes; current exact/stale refused.
+After source removal, native consumers retain two-node partial preparation and
+terminal denies; replay does not renew paid leases, reboot/each clock expires them.
+Mailbox rejects older/equal sequences and expiry grants nothing without deleting
+the floor. Engine readback/clock/SSH-UID boundary are simulated, not host acceptance.
+Broader routes run:64 PASS /1 pre-existing chat-sync fixture failure; reproduced
+alone on unchanged files at3fa2674e (missing registry.access), not fixed/waived.
+NEXT bounded scope: maintenance/profile journals, including authenticated pending/
+unknown operation evidence and ownership/path/floor checks; never reset to empty.
+No full DR, off-host key/checkpoint custody, live node attestation/barrier, receiver
+activation or strict replication qualified. Stage2 of5; RU dependency persists.
+Console5ce82415, NL GeoIP22 November, Android126/catalog9,8/12/120s and all-three-node
+first-cohort ACK gate unchanged. No fresh health claim or public release.
+[Contract/limits](control-ha-storage.md#ha-02s--receiver-safety-adapter) ·
+[Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02s--receiver-safety-adapter).
+
 **23 November — CONTROL-HA HA-02R five external-role adapters VERIFIED in isolation.**
 Source20698f66 ordinarily pushed and independently remote-SHA verified fromf355fb3a;
 source/tests/docs only, no live read or deployment.

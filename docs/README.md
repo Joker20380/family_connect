@@ -16,6 +16,8 @@
 
 [CONTROL-HA HA-02R: five real external formats, cross-store checks and node-local allocator recovery; maintenance/receiver still pending](control-ha-storage.md#ha-02r--external-role-adapters).
 
+[CONTROL-HA HA-02S: receiver preparation/denial/lease and mailbox replay-floor recovery; maintenance journals remain pending](control-ha-storage.md#ha-02s--receiver-safety-adapter).
+
 [Device metadata · 22 November: NL/AWG GeoIP and explicit missing-data labels installed; consent unchanged](releases/2026-11-22-nl-geoip.md).
 
 [RU · 17 November00:02UTC: availability restored on accepted bytes; initiating cause remains open](releases/2026-11-17-ru-recovery.md).
