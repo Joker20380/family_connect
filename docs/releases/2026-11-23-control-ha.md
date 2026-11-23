@@ -34,6 +34,20 @@ production selector, deployment, server policy, user data, consent, client or ke
 change. Console5ce82415, Android126/catalog9,8/12/120s and all-three-node first-cohort
 ACKs unchanged. RU remains a dependency. HA-02 and HA-03..05 are not complete.
 
+Source/tests/docs checkpoint `e8240e81ea63d280324acb20193da6d22d0e137b` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent `ls-remote`
+matches the commit and source worktree is clean after push. Staged15-file scope,
+private-key/token marker check,872 local Markdown targets, whitespace and locked
+`pip check` PASS. Docker readback finds no remaining enrollment-rehearsal-label
+containers or the isolated `fc-ha02g-root-check` container.
+
+Old-main navigation-only commit `937a10beec11c6362b0046901da3527dbb747c5d` remains
+local: ordinary push rejected `non-fast-forward`. Independent remote main SHA is
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`; no force/reset/merge/rebase. Original
+unstaged40 PLAN/66 STATUS/11 private-beta/6 recovery-guide additions and six
+untracked historical paths remain preserved. This does not block the published
+feature source; this divergent main is still not a deployment candidate.
+
 ### DB scope and failure semantics
 
 - Common `RestrictedTransaction` stays in the existing bundled `restricted.py`.

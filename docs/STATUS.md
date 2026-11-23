@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02G issuance/readiness DB transactions VERIFIED; migration IN_PROGRESS.**
-Continuation from2057a32c in the authoritative metadata branch. Restricted challenge,
+Source `e8240e81` ordinarily pushed and remote-SHA verified in the authoritative
+metadata branch (base2057a32c). Restricted challenge,
 certificate, auto-enrollment and readiness ACK/readback share SQLite/PostgreSQL
 repositories:163 real DB contracts PASS /0 skips (123 restricted +40 enrollment).
 521 focused regressions PASS /36 optional skips;121 isolated-root maintenance

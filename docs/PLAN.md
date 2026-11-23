@@ -31,7 +31,7 @@ Exact12-table/20-row lab recovery preserves revisions, revokes, pending audit/pr
 and paid state. Stale backup refused; SQLite compensates after APPLIED commit ACK loss.
 FIELD/CRL file publication on PG remains refused before file I/O; this is DB-only.
 HA-02G restricted challenge/certificate/auto-enroll and readiness ACK/readback DB boundary
-qualified:163 real DB contracts /0 skips (123 restricted +40 enrollment),521 focused
+qualified/pushed e8240e81:163 real DB contracts /0 skips (123 restricted +40 enrollment),521 focused
 regressions /36 optional skips and121 isolated-root maintenance /3 snapshot skips.
 Artifact-dependent adapter packaging and prior overlay gates stay open. Atomic proof use,
 concurrent requests, lost commit ACK, backend loss, node binding, expiry and read-only
