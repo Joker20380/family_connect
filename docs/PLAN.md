@@ -42,11 +42,19 @@ Atomic assignment/event, payload-bound retries, concurrent moves, revoke, read-o
 selection/status, append-only triggers and exact15-table/28-row crash/restore pass.
 Stale restore refused; prior-host rollback uses a newer catalog sequence. Signed
 files/identity keys retained, not recovered. No production backend or HA cutover.
-NEXT within HA-02: CRL publication and remaining writers/CLI, metadata/
-tombstones/files, all-table import, PostgreSQL/Patroni strict replication and full
+HA-02J CRL sequence/immutable signed outbox qualified/pushed019aa578:128 real DB
+contracts /0 skips (88 CRL +40 enrollment),285 regressions /20 optional skips.
+Depends on HA-02A/F/G transaction/grant/issuance boundaries. Gate: concurrent bound
+operations, immutable bytes, rollback/ACK loss, expiry and file-failure reconciliation
+PASS. Exact19-table/22-row SIGKILL/restore preserves pending receipt0; stale backup
+refused, exact-byte repair and forward sequence pass. Keys retained, not recovered;
+local receipt is not a remote gateway ACK. No production backend or cutover selected.
+NEXT within HA-02: metadata/consent tombstones and remaining writers/CLI/files,
+all-table import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse
 import is not implemented. Then HA-03 receiver-enforced
-fencing, HA-04 multi-endpoint API/clients, HA-05 production shadow and guarded cutover.
+fencing (required for distributed CRL publication), HA-04 multi-endpoint API/clients,
+HA-05 production shadow and guarded cutover.
 Retain8/12/120s and offline signing. Do not promote this old main or copied SQLite.
 All three serving-node ACKs remain mandatory; removing unavailable RU needs fencing.
 New HA runtime package qualification is pending; do not weaken historical pins.

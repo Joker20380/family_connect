@@ -29,6 +29,8 @@ divergent; pre-existing modifications are preserved. Do not deploy its runtime.
   push to the same branch succeeded and remote SHA independently matched.
 - HA-02I implementation: `b5cb676bd905580e2519a55bdea1d70a7b3d7153`, ordinary
   push to the same branch succeeded and remote SHA independently matched.
+- HA-02J implementation: `019aa578788d58a044798a0604fcab5be61c7ec8`, ordinary
+  push to the same branch succeeded and remote SHA independently matched.
 - Full architecture: [CONTROL-HA plan](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/control-ha.md).
 - Full evidence: [source-worktree release record](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/releases/2026-11-23-control-ha.md).
 - Commands/limits: [isolated rehearsal runbook](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/deploy/control-ha/README.md).
@@ -49,6 +51,46 @@ and direct readback from every recovered member. Final local failover is1.766s,
 not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
+
+## HA-02J — durable CRL recovery
+
+Source checkpoint `019aa578788d58a044798a0604fcab5be61c7ec8`, from86660b86, is
+published on the authoritative metadata branch. No source merge/deployment from
+this old main; existing dirty/untracked work preserved. Its separate navigation
+push may remain non-fast-forward; do not force or rewrite history to resolve it.
+
+CRL sequence, immutable signed candidate, request/payload hashes and validity now
+share a SQLite/PG transaction with grant/device/invite/revision/paid checks. Replay
+returns exact bytes without signing or prolonging validity. Pending/local-receipt
+checks refuse stale, expired or inconsistent candidates. Local file helper is
+script-only, temporary and single-publisher; DB receipt is NOT a remote ACK/fence.
+Legacy SQLite file-before-commit behavior stays separate: file-ahead retry advances
+max(file floor,DB floor)+1. PG/synthetic outbox cannot use legacy sync/canary writers.
+Production distributed publication still requires HA-03, node ACK/readback and
+bounded recovery; old processes/CLI/file journals need explicit migration fencing.
+
+Final128 real DB contracts PASS /0 skips (88 CRL +40 enrollment),285 focused consumer/
+package/runner regressions PASS /20 optional skips. These are4 locked-Go,15 nginx
+and1 pinned-sync archive checks, not qualified. One preliminary SQLite test-only
+directory assertion failed because the fixture already contained its DB; corrected
+to compare before/after entries and rerun on both databases without weakening guards.
+Prior exact-overlay and HA-02G artifact-dependent package gates remain open.
+
+Actual PostgreSQL17.11 owned-container SIGKILL/restart and separate current restore
+preserve19 lab tables/22 rows. Stale restore refused; immutable triggers retained,
+consumed/revoked proofs refused, payment retry unchanged. Pending receipt0 survives
+despite already replaced local file; exact stored bytes reconcile and next candidate
+advances. Private receipt `/tmp/fc-control-ha-20261123/crl-2/receipt.json`; owned
+cleanup PASS. Keys retained, NOT restored; no full product/key recovery, RPO0,
+replication, reverse import or distributed authority claim. Locked pip/whitespace/
+879 local source-doc link targets and staged16-file scope/key/token scan PASS.
+
+Before cutover abort only owned lab; no production restore needed. After future
+canonical writes fence writers and recover current acknowledged state, never old
+SQLite/CRL. Source rollback is a new revert commit if requested. Next: metadata/
+consent tombstones and remaining writers/CLI/files, full import/recovery/replication,
+then HA-03..05. Console5ce82415, Android126/catalog9,8/12/120s and all-three-node
+first-cohort ACKs unchanged. RU remains a dependency; no fresh live-health claim.
 
 ## HA-02I — gateway routing recovery
 

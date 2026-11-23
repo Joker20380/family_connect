@@ -1,6 +1,23 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02I VERIFIED.**
+**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02J VERIFIED.**
+Durable CRL checkpoint `019aa578` is ordinarily pushed and remote-SHA verified in
+the metadata branch.128 real DB contracts PASS /0 skips (88 CRL +40 enrollment),
+285 focused regressions PASS /20 explicit optional skips. Signed CRL candidate and
+sequence now share one SQLite/PG transaction; retries preserve exact bytes. Actual
+SIGKILL and exact19-table/22-row restore pass; stale backup refused. File replacement
+without DB receipt recovers without re-signing/rewinding; expired or superseded
+candidates cannot receive a local ACK. Local receipt is NOT a remote gateway ACK
+or fencing. Ephemeral issuer keys retained, NOT restored; no full backup/RPO0/HA claim.
+Legacy SQLite publisher stays separate; synthetic-outbox/PG legacy calls fail closed.
+Production unchanged: console5ce82415, Android126/catalog9,8/12/120s and all-three-node
+first-cohort ACKs. RU remains a dependency. Next: metadata/consent tombstones and
+remaining writers/CLI/files, full import/recovery/replicas. Distributed CRL publication
+requires HA-03 fencing. Prior packaging gates remain open. This divergent main is
+navigation only, not deployment source; its existing dirty work is preserved.
+[Authoritative evidence and rollback](releases/2026-11-23-control-ha.md#ha-02j--durable-crl-recovery).
+
+**Earlier23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02I VERIFIED.**
 Gateway routing checkpoint `b5cb676b` is ordinarily pushed and remote-SHA verified
 in the metadata branch.111 real DB contracts PASS /0 skips (71 routing +40 enrollment),
 327 focused regressions PASS /26 explicit optional skips. Assignments, policy
