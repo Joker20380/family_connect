@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02D referral transactions VERIFIED; migration IN_PROGRESS.**
+Continuation from1171b9dc in the existing metadata branch. Shared SQLite/PostgreSQL
+referral transactions atomically issue proof/link and invitation/claim; sponsor-bound
+retries, pool500/daily20 concurrency, revocation, ACK loss and backend loss are covered.
+181 real DB contracts PASS /0 skips (50 referral +131 existing);379 consumer/runner
+checks PASS /21 explicit optional skips. Actual PostgreSQL17.11 SIGKILL/restart and
+separate exact nine-table/18-row referral restore pass; stale pre-claim restore refused.
+Not a full product backup, replication or production reverse migration. Support/admin,
+other writers/CLI, metadata/tombstones/files, import and replication remain pending.
+The four previously confirmed historical packaging failures remain an open gate;
+this step does not repair/requalify old overlays. No live service/DB/client change;
+console5ce82415 and Android126/catalog9 unchanged, RU dependency remains.
+[Scope and rollback](control-ha-storage.md#ha-02d--referral-transactions) · [Evidence](releases/2026-11-23-control-ha.md#ha-02d--referral-transactions-and-recovery).
+
 **23 November — CONTROL-HA HA-02C membership contracts VERIFIED; migration IN_PROGRESS.**
 Source0ed728f0 is ordinarily pushed and remote-SHA verified in the metadata branch.
 SQLite and synthetic PostgreSQL now share all-node first-payment preparation and

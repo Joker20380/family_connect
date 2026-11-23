@@ -4,7 +4,7 @@ Every subsequent configuration request requires a fresh single-use device proof.
 No entitlement expiry/payment condition. Operator revocation remains explicit.
 """
 import base64,hashlib,json,os,re,secrets,sqlite3,time,uuid
-from contextlib import contextmanager
+from contextlib import contextmanager,nullcontext
 from pathlib import Path
 from device_identity.device import _decode,verify_transport_key_proof
 
@@ -80,6 +80,10 @@ class SQLiteEnrollment(EnrollmentTransaction):
         from .paid_beta import SQLitePaidTransaction
         return SQLitePaidTransaction(self.database)
 
+    def referrals(self):
+        from .referrals import ReferralTransaction
+        return ReferralTransaction(self)
+
 
 class Access:
  def __init__(self,path,clock=time.time,*,enrollment_repository=None):
@@ -145,9 +149,9 @@ CREATE TABLE challenges(nonce TEXT PRIMARY KEY, device TEXT NOT NULL, public TEX
    nonce=base64.b64encode(secrets.token_bytes(32)).decode()
    transaction.add_challenge(hashlib.sha256(nonce.encode()).hexdigest(),device,public_identity,wireguard_public_key,purpose,invite,now+CHALLENGE_TTL)
   return {'challenge':nonce,'expires_at':now+CHALLENGE_TTL,'audience':'family-connect/enrollment/v1'}
- def complete(self,proof,purpose):
+ def complete(self,proof,purpose,*,transaction=None):
   device=verify_transport_key_proof(proof,expected_challenge=proof['challenge']);now=int(self.clock());nonce=hashlib.sha256(proof['challenge'].encode()).hexdigest()
-  with self.enrollment() as transaction:
+  with self.enrollment() if transaction is None else nullcontext(transaction) as transaction:
    challenge=transaction.challenge(nonce)
    if challenge is None or challenge['used'] or challenge['expires']<=now or challenge['purpose']!=purpose or challenge['device']!=device or challenge['public']!=proof['public_identity'] or challenge['wg']!=proof['wireguard_public_key']:raise Rejected()
    row=transaction.device(device)

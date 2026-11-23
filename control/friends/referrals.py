@@ -9,6 +9,45 @@ class Exhausted(Rejected): pass
 class RateLimited(Rejected): pass
 
 
+class ReferralTransaction:
+    def __init__(self, enrollment):
+        self.enrollment = enrollment
+        self.database = enrollment.database
+        self.placeholder = enrollment.placeholder
+
+    def active(self, device):
+        row = self.enrollment.device(device)
+        invitation = self.enrollment.device_invitation(device)
+        if row is None or row['revoked'] or invitation is None or invitation['revoked']:
+            raise Rejected()
+
+    def link(self, token):
+        return self.database.execute(
+            f'SELECT sponsor FROM referral_links WHERE token={self.placeholder}', (token,)).fetchone()
+
+    def add_link(self, token, sponsor):
+        self.database.execute(f'INSERT INTO referral_links(token,sponsor) VALUES ({self.placeholder},{self.placeholder}) '
+                              'ON CONFLICT DO NOTHING', (token, sponsor))
+        row = self.link(token)
+        if row is None or row['sponsor'] != sponsor:
+            raise Rejected()
+
+    def claim(self, request):
+        return self.database.execute(
+            f'SELECT sponsor,invite FROM referral_claims WHERE request={self.placeholder}', (request,)).fetchone()
+
+    def total(self):
+        return self.database.execute('SELECT COUNT(*) AS total FROM referral_claims').fetchone()['total']
+
+    def daily(self, sponsor, since):
+        return self.database.execute('SELECT COUNT(*) AS total FROM referral_claims '
+            f'WHERE sponsor={self.placeholder} AND created>{self.placeholder}', (sponsor, since)).fetchone()['total']
+
+    def add_claim(self, request, sponsor, invitation, created):
+        self.database.execute('INSERT INTO referral_claims(request,sponsor,invite,created) VALUES (' +
+                              ','.join([self.placeholder] * 4) + ')', (request, sponsor, invitation, created))
+
+
 class Referrals:
     LIMIT = 500
     DAILY = 20
@@ -26,20 +65,15 @@ class Referrals:
 
     def digest(self, value):return hmac.new(self.secret,value.encode(),hashlib.sha256).hexdigest()
 
-    @staticmethod
-    def active(db, device):
-        row=db.execute('''SELECT d.revoked AS device_revoked,i.revoked AS invite_revoked
-            FROM devices d JOIN invites i ON i.device=d.device WHERE d.device=?''',(device,)).fetchone()
-        if row is None or row['device_revoked'] or row['invite_revoked']:raise Rejected()
-
     def issue(self, proof):
-        device=self.access.complete(proof,'refer')['device']
-        token=self.digest('referral-v1:'+device)
-        token_hash=hashlib.sha256(token.encode()).hexdigest()
-        with self.access.db() as db:
-            self.active(db,device)
-            db.execute('INSERT OR IGNORE INTO referral_links VALUES (?,?)',(token_hash,device))
-            remaining=self.LIMIT-db.execute('SELECT COUNT(*) FROM referral_claims').fetchone()[0]
+        with self.access.enrollment() as transaction:
+            database=transaction.referrals()
+            device=self.access.complete(proof,'refer',transaction=transaction)['device']
+            token=self.digest('referral-v1:'+device)
+            token_hash=hashlib.sha256(token.encode()).hexdigest()
+            database.active(device)
+            database.add_link(token_hash,device)
+            remaining=self.LIMIT-database.total()
         return dict(url='https://185.251.89.19:8443/i/#'+token,pool_limit=self.LIMIT,remaining=max(0,remaining))
 
     def claim(self, token, request_id):
@@ -51,19 +85,19 @@ class Referrals:
         raw=self.digest('invite-v1:'+request)[:32].upper()
         code='FC-'+'-'.join(raw[i:i+4] for i in range(0,32,4))
         now=int(self.access.clock())
-        with self.access.db() as db:
-            link=db.execute('SELECT sponsor FROM referral_links WHERE token=?',(token_hash,)).fetchone()
+        with self.access.enrollment() as transaction:
+            database=transaction.referrals()
+            link=database.link(token_hash)
             if link is None:raise Rejected()
-            prior=db.execute('SELECT invite FROM referral_claims WHERE request=?',(request,)).fetchone()
+            prior=database.claim(request)
             if prior is not None:
-                grant=db.execute('SELECT device,revoked FROM invites WHERE hash=?',(prior['invite'],)).fetchone()
+                if prior['sponsor']!=link['sponsor'] or prior['invite']!=self.access.code_hash(code):raise Rejected()
+                grant=transaction.invitation(prior['invite'])
                 if grant is None or grant['revoked']:raise Rejected()
                 return dict(invitation=code,status='activated' if grant['device'] else 'issued')
-            self.active(db,link['sponsor'])
-            if db.execute('SELECT COUNT(*) FROM referral_claims').fetchone()[0]>=self.LIMIT:raise Exhausted()
-            if db.execute('SELECT COUNT(*) FROM referral_claims WHERE sponsor=? AND created>?',
-                          (link['sponsor'],now-86400)).fetchone()[0]>=self.DAILY:raise RateLimited()
-            db.execute('INSERT INTO invites(hash) VALUES (?)',(self.access.code_hash(code),))
-            db.execute('INSERT INTO referral_claims VALUES (?,?,?,?)',
-                       (request,link['sponsor'],self.access.code_hash(code),now))
+            database.active(link['sponsor'])
+            if database.total()>=self.LIMIT:raise Exhausted()
+            if database.daily(link['sponsor'],now-86400)>=self.DAILY:raise RateLimited()
+            transaction.add_invitation(self.access.code_hash(code))
+            database.add_claim(request,link['sponsor'],self.access.code_hash(code),now)
         return dict(invitation=code,status='issued')

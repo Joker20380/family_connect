@@ -16,7 +16,11 @@ proofs. No production cutover or reverse migration is qualified.
 HA-02C synthetic membership preparation/failure consistency qualified/pushed0ed728f0:131 contracts
 /0 skips;389 broader checks PASS,16 optional skips,4 historical-overlay failures
 also reproduced on the unchanged baselineeeb11ba7. No full packaging/release PASS.
-NEXT within HA-02: remaining canonical writers/CLI (support/admin/referral first),
+HA-02D referral transactions/recovery qualified:181 real DB contracts /0 skips
+(50 referral +131 prior),379 consumer/runner checks /21 optional skips. Pool500,
+daily20, sponsor-bound replay, atomic proof/link and invitation/claim, backend loss
+and exact nine-table/18-row isolated restore pass. No production backend selected.
+NEXT within HA-02: remaining canonical writers/CLI (support/admin next),
 metadata/tombstones/files, all-table shadow import, full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.

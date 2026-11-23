@@ -1,7 +1,7 @@
 # HA-02 — каноническое хранилище и очередь writers
 
 23 November 2026. **IN_PROGRESS; HA-02A enrollment, HA-02B paid/subscription и
-HA-02C membership contracts квалифицированы на синтетическом стенде.**
+HA-02C membership и HA-02D referral contracts квалифицированы на синтетическом стенде.**
 Это не production, не репликация и не cutover.
 [Общие gates](control-ha.md) · [Результаты](releases/2026-11-23-control-ha.md).
 
@@ -125,6 +125,44 @@ overlay-packager теста также падают на исходномeeb11ba
 guards оставлены строгими. Это не новый membership regression, но и не release
 PASS: новый closed runtime/overlay должен пройти отдельный gate до deployment.
 
+## HA-02D — referral transactions
+
+`referrals.py` теперь выполняет issue/claim через существующую enrollment transaction,
+а не через отдельный SQLite-only writer. SQLite остаётся production default;
+`referrals_postgres.py` доступен только явно созданному synthetic loopback store
+с точным purpose `family-connect/ha-referrals-synthetic/v1`. Инициализация PG не
+выбирается автоматически; прежний SQLite initializer на PG по-прежнему запрещён.
+Native PG DDL имеет FK на sponsor/device и invitation, unique request/invite/sponsor,
+BIGINT timestamp и индекс daily. SQLite on-disk schema не меняется.
+
+- Общий `Access.complete(..., transaction=...)` не открывает/коммитит вложенную БД:
+  caller владеет транзакцией. Обычный вызов сохраняет проверку подписи перед открытием
+  своей транзакции. Referral issue атомарно потребляет proof, назначает отсутствующий
+  Support ID и сохраняет link; ошибка откатывает всё, пока proof ещё действителен.
+- Claim атомарно создаёт invitation и request row. Все API используют тот же
+  `BEGIN IMMEDIATE`/PG advisory transaction lock, что enrollment/revoke; pool500 и
+  daily20 проверяются внутри блокировки, включая точную границу86400s.
+- Идемпотентность привязана к исходному sponsor и восстановленному invitation hash.
+  Попытка повторить request ID с чужим referral token или несогласованной записью
+  отклоняется, а не возвращает чужой код. URL/формат кода и HMAC derivation не меняются.
+- Сохраняется существующая политика: отзыв sponsor запрещает новые claims/issue,
+  но не отзывает уже выданные независимые child invitations. Отозванная child invite
+  не возвращается при replay. Конкурентные claim/revoke имеют последовательный исход.
+- При потере ответа после commit повторять тот же token/request ID с тем же
+  существующим referral secret. Issue proof после commit одноразовый: нужен новый
+  proof, который вернёт прежний link. Не ротировать secret и не создавать новый
+  request ID, чтобы «исправить» неопределённый результат.
+
+Реальный стенд:181 contracts (50 referral +131 A/B/C),0 skipped; SIGKILL/restart
+PostgreSQL17.11 сохраняет committed state и удаляет обе uncommitted записи.
+Current dump восстанавливается в другом контейнере row-for-row (9 таблиц/18 строк);
+stale pre-claim dump отклонён. Проверены consumed activation/issue proof,
+revocation и активация ещё не использованного приглашения после restore.
+Это один synthetic store, не RPO0 replica, не production secret migration,
+не all-table product recovery. Support/admin/audit writers и файлы остаются pending.
+SQLite semantics выше изменены только в исходниках; accepted production bytes не
+заменены. Rollback текущего шага — остановка owned стенда, без восстановления RU/NL.
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -137,7 +175,7 @@ CLI и периодические задания; число таблиц produc
 | `paid_beta.py`, `transport_membership.py`, paid CLI | Immutable ledger, payload-bound event ID, cohort/binding triggers, terminal revoke, exact paid/noncohort projection | HA-02B/C DB + membership contracts synthetic PASS; production CLI/wiring pending |
 | `subscription.py` | Собственное атомарное потребление challenge вместе с paid projection, не только `Access.complete` | HA-02B synthetic PASS; production остаётся SQLite |
 | `support_ids.py`, `support_admin.py`, `support.py` | Backfill/observation/audit; admission-file + grant + audit consistency; support sender bindings | Pending; новая DDL audit не означает перенос writer |
-| `referrals.py` | Request idempotency, pool/daily limits, referral claim + invitation в одной транзакции | Pending; тоже пишет invites вне Access |
+| `referrals.py` | Sponsor-bound request idempotency, pool/daily limits, proof/link и claim/invitation в одной транзакции | HA-02D synthetic PASS; full import/production wiring pending |
 | `chat.py`, `chat_service.py`, `chat_sync.py` | Chat identity/proof, directory sequence, service sender revoke; filesystem exports | Pending |
 | `restricted.py`, `restricted_admin.py`, `readiness_receipts.py` | Grants, отдельные restricted challenges, certificates, readiness, CRL sequence | Pending |
 | `restricted_maintenance.py`, `restricted_sync.py`, `paid_canary_crl.py` | HMAC journal, local flock, signed directory/CRL, publication/receipt ordering | Pending; требует также HA-03 fencing |
@@ -153,7 +191,7 @@ signing keys не входят в migration и остаются офлайн.
 
 ## Следующие gates
 
-1. Перевести остальные writers/CLI (сначала support/admin/referral), затем metadata,
+1. Перевести остальные writers/CLI (далее support/admin), затем metadata,
    tombstones/files и остальные строки карты. Не допускать mixed backend writers;
    synthetic membership не заменяет production wiring, deadline и package gates.
 2. Создать явную versioned all-table migration: snapshot consistency, nullable и

@@ -12,7 +12,7 @@ source inspection is not a fresh server-health check.
 ## Progress
 
 - HA-01 isolated scope implemented and verified; details below.
-- HA-02A enrollment, HA-02B paid/subscription and HA-02C membership slices qualified below; remaining
+- HA-02A enrollment, HA-02B paid/subscription, HA-02C membership and HA-02D referral slices qualified below; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -24,6 +24,75 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02D — referral transactions and recovery
+
+Continues from `1171b9dcd8a5369e2c8355e65ec480991c30d9eb` on the existing metadata
+branch. This is the independent referral writer in the support/admin/referral
+group; support/admin is not silently marked complete. No deployment, production
+SQL/file writes, secret rotation, endpoint change or fresh server-health claim.
+Console5ce82415, Android126/catalog9 and required RU serving node remain unchanged.
+
+### Changes and retry contract
+
+- `access.py` adds optional caller-owned transaction participation to the existing
+  proof completion algorithm; ordinary callers retain signature verification before
+  opening the transaction. `referrals.py` uses one shared SQLite/PG algorithm.
+- Issue proof consumption, missing Support ID allocation and link write are one
+  transaction. Claim invitation and request ledger are one transaction. Existing
+  enrollment/revoke serialization also protects pool500/daily20; no lock timeout
+  increase, process-global Python mutex or second canonical writer.
+- Explicit synthetic PG schema has purpose/version, native FK/unique constraints
+  and daily index. It is not a production DB selector or automatic SQLite import.
+- Deliberate validation tightening: a request ID replay with a different sponsor
+  token or inconsistent reconstructed invitation hash is rejected. Existing valid
+  response shape, URL, code derivation and independent child-grant semantics stay.
+- Failure before commit rolls back proof/link or invitation/claim together. A lost
+  committed response does not authorize a new request or old backup: replay exact
+  token/request ID with the original secret. Consumed issue proof needs a fresh
+  proof, returning the existing link. No production secret is read or exported.
+
+### Qualification
+
+Environment: existing locked control/identity/provisioning/messenger environment,
+optional HA lock psycopg/psycopg-binary3.3.9, PostgreSQL17.11 image digest unchanged.
+No new package or public version. Commands run from the authoritative worktree:
+
+```sh
+python -m scripts.referral_postgres_rehearsal --workdir /tmp/fc-control-ha-20261123/referrals-2
+python -m pytest -q -ra tests/test_friends_access.py tests/test_referrals.py tests/test_friends_client.py tests/test_friends_http_runtime.py tests/test_support_ids.py tests/test_support_http.py tests/test_friends_support_owner.py tests/test_friends_owner.py tests/test_friends_restricted.py tests/test_friends_chat.py tests/test_gateway_routing.py tests/test_gateway_selection.py tests/test_online_diagnostics.py tests/test_technical_metadata.py tests/test_subscription_http.py tests/test_paid_beta.py tests/test_enrollment_rehearsal.py tests/test_paid_rehearsal.py tests/test_referral_rehearsal.py
+```
+
+- 181 DB contracts PASS /0 skips:50 referral,40 enrollment,49 paid/subscription,
+  42 membership. Independent connections race at actual500/20 boundaries; same
+  request replay consumes one slot, same proof issues once; revoke/claim serialize.
+  Failure after each write and actual backend termination roll back both records.
+- 379 consumer/runner checks PASS /21 optional skips:16 real nginx,1 pinned sync
+  archive,4 locked Go compatibility checks require their explicit environments.
+  Not a platform/full-release PASS; no skipped contract counted as PostgreSQL PASS.
+- Actual source-container SIGKILL/restart preserves current referral state exactly;
+  uncommitted invite/claim disappear. Current dump restores to a fresh owned
+  container:9 nonempty tables/18 rows, including3 claims,4 invitations,2 devices,
+  2 support IDs,3 challenges,1 link,1 audit and2 purpose markers. Old pre-claim
+  restore is refused, not promoted to authority. Activated invitation remains
+  activated, pending child invitation activates after restore, consumed proofs and
+  revocation remain enforced. This is not full product recovery or replication.
+- Earlier SQLite-only pass:38 PASS /26 real-PG skips. First full run `referrals-1`
+  passed181 contracts/recovery; first consumer run379/21. Final repeat follows the
+  smaller `Access.complete(transaction=...)` implementation; intermediate evidence
+  is retained rather than relabelled as final bytes.
+- Private evidence stays outside Git under `/tmp/fc-control-ha-20261123/`:
+  `referrals-{1,2}/` (credentials, dumps, logs, JUnit, receipt),
+  `referrals-sqlite-1.log`, `referrals-regressions-{1,2}.log`.
+- HA-02C's four independently reproduced historical exact-overlay failures remain
+  open; those old builders were not rerun or weakened here. New deployment packaging
+  and all production gates still apply. No production acceptance claimed.
+
+Rollback now: stop only ownership-checked disposable containers; do not restore any
+product DB. No server state changed. Production reverse import remains unimplemented
+and blocks cutover after new writes. Next: support/admin and remaining canonical
+writers/files/metadata, full shadow import/recovery, strict synchronous replication,
+then HA-03 fencing, HA-04 client/API failover and HA-05 cutover.
 
 ## HA-02C — first-payment node preparation and failure consistency
 
@@ -339,9 +408,9 @@ are published. Read [remaining writer gates and recovery rules](../control-ha-st
 
 ## Remaining work — not a production HA acceptance
 
-HA-02 must finish **all** canonical writers beyond the enrollment slice, including
-subscription's own challenge transaction, immutable paid events, separate metadata
-tombstones and filesystem coordination. Full import, PostgreSQL replication and
+HA-02 must finish **all** canonical writers beyond the qualified enrollment,
+paid/subscription, membership and referral slices: support/admin, separate metadata
+tombstones, remaining writers/CLI and filesystem coordination. Full import, PostgreSQL replication and
 Patroni/RPO0 gates are not implemented by this checkpoint.
 Then HA-03 receiver-enforced fencing, HA-04 multi-endpoint clients and HA-05 live
 shadow/cutover and real failure acceptance. No alternate API is serving users;

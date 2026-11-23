@@ -161,3 +161,34 @@ Broader qualification currently includes four historical exact-overlay failures
 also reproduced on the unchanged source baseline; see the dated report. Do not
 update old hashes/guards or use those packagers to deploy HA source. Qualify a new
 closed runtime separately before any production switch.
+
+## HA-02D: isolated referral transactions and recovery
+
+Use the same locked environment, psycopg3.3.9 and preloaded pinned PostgreSQL17.11
+image as HA-02A/B/C. No new dependency, network download or production selector:
+
+```sh
+python -m scripts.referral_postgres_rehearsal --workdir /tmp/fc-ha-new-referral-rehearsal
+```
+
+The runner executes181 SQLite/PostgreSQL contracts with zero skips:50 referrals
+plus the131 enrollment/paid/membership contracts. The referral tests exercise the
+actual shared500-slot pool,20-per-day boundary, independent concurrent connections,
+atomic proof/link and invitation/claim, sponsor-bound replay, ACK loss, revoked
+sponsor versus independent child invitation, and killed backend rollback.
+
+The source container's actual SIGKILL/restart must preserve every committed row
+and roll back both unfinished invitation and claim. Two sequential owned restore
+containers compare an old pre-claim dump (refused) and a current dump (exact9-table,
+18-row synthetic store). Consumed proofs, sponsor/child revocation, activated and
+still-pending invitations survive; the pending invitation activates after restore.
+`restored_rows` refers to this referral fixture, not the distinct paid fixture or
+the whole product. This runner re-executes prior DB contracts, not prior paid
+backup/restore scenarios. All file/privacy, loopback, pinned image, ownership and
+cleanup protections are inherited unchanged. No volume from production is mounted.
+
+SQLite remains the production backend. No support/admin migration, secret rotation,
+replication, alternate endpoint, serving-set change or server deployment is implied.
+Rollback stops only the disposable owned containers. After a lost claim response,
+retain the same secret/token/request ID; after committed issue, use a fresh one-use
+proof for the same link. Never restore stale state to recover an ambiguous result.
