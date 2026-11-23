@@ -83,7 +83,7 @@
 | Этап | Состояние | Что остаётся до перехода дальше |
 | --- | --- | --- |
 | HA-01: quorum/shadow foundation | Лабораторный gate завершён | Не считать стенд установленным production quorum |
-| HA-02: общее хранилище | В работе; A–S и T bounded-maintenance preflight проверены на стенде | Renewal ledgers/host reconciliation; installed-schema/writer barrier; полный recovery/custody; strict replication/RPO0 |
+| HA-02: общее хранилище | В работе; A–T и отдельный U online-renewal evidence checkpoint проверены на стенде | Renewal capsule/history/host reconciliation; installed-schema/writer barrier; полный recovery/custody; strict replication/RPO0 |
 | HA-03: единственный уполномоченный writer | Не внедрён | Epoch/fencing на принимающих узлах, запрет действий старого лидера и безопасная публикация файлов |
 | HA-04: API/клиентский failover | Не внедрён | Несколько API endpoints, безопасные retries и клиентские compatibility/acceptance gates |
 | HA-05: production shadow/cutover | Не начат | Актуальные backup/restore, guarded sole-writer switch, отказ RU/возврат узла, RTO и rollback |
@@ -139,10 +139,17 @@ profile/CRL floors, metadata/path/config bindings и запрет импорта
 Настоящий root-container доказывает отказ при потере journal, изменении owner,
 lock/operations inode или symlink. Из capsule возвращается evidence, не host resume.
 
+[HA-02U](control-ha-storage.md#ha-02u--online-renewal-evidence) отдельно проверяет
+online-renewal coordinator и три node ledger/archive, включая потерянный ответ,
+частичную очистку, precommit abort и postcommit resume на исходном стенде.
+Это не importer: привязка к canonical capsule и перенос на новый хост не завершены.
+Сравнение точных bytes/path/inode само по себе не разрешает продолжение операции.
+
 Оставшийся HA-02 учитывается четырьмя крупными блоками, не количеством букв:
 
-1. **Журналы — частично:** canonical bounded формат проверен; отдельные renewal
-   coordinator/online-node ledgers, история и перенос host bindings ещё не закрыты.
+1. **Журналы — частично:** bounded формат и отдельный online-renewal evidence
+   checkpoint проверены; renewal capsule integration, история/другие варианты
+   и перенос host bindings ещё не закрыты. Целиком блок не завершён.
 2. **Рабочие схемы и writers:** live census и согласованный capture barrier не выполнены.
 3. **Полное восстановление:** off-host key/checkpoint custody и актуальное recovery
    всей системы после новых записей не квалифицированы.

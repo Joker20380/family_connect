@@ -164,9 +164,21 @@ No opaque probes in this pinned38-artifact fixture; not full maintenance recover
 Only one canonical bounded operation and one publisher contract per node, explicitly
 empty separate renewal ledgers. Missing/legacy/multiple/history/renewal variants
 refuse rather than becoming empty. Native host resume remains NOT_QUALIFIED.
-NEXT bounded scope within the journal block: separate renewal coordinator/online-node
-evidence and controlled host reconciliation; authenticated pending/unknown operations,
-path/owner bindings and floors must not be reset or re-signed to bypass checks.
+HA-02U adds a separate online-renewal evidence checkpoint from18cd0c2b, not a capsule
+importer or host-resume command. Dependencies: N caller inventory, T distinction
+between bounded and renewal journals, native online controller/node contracts.
+Gate: independent checkpoint, all-three-node decision/plan/archive/receipt binding,
+signed two-gateway material, exact private pending evidence after source removal,
+lost-reply/partial-cleanup and precommit-abort/postcommit-resume fault tests.
+Same-host comparison refuses changed bytes/path/inode; it is not execution permission.
+162 final adapter/fault tests and97 native regressions PASS /0 skips; eight docs/
+1041 links checked. Publication is recorded in the dated report. Simulated
+RPC/readers/barriers and one retained online operation only; no live attestation.
+NEXT bounded scope within the journal block: canonical capsule/issuer/DB binding
+of renewal evidence, retained history and installed offline/emergency variants,
+then actual host reconciliation. T still refuses nonempty renewal ledgers;
+authenticated pending/unknown operations, path/owner bindings and floors must
+not be reset or re-signed to bypass checks. This checkpoint does not qualify relocation.
 The journal block is partially closed, not complete; the other three blocks remain.
 Then separately qualify installed schemas/live writer barrier,
 all-store shadow/full backup/recovery and strict

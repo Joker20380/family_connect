@@ -1,5 +1,35 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02U online-renewal evidence checkpoint; no host activation.**
+Continuation from18cd0c2b on the authoritative metadata branch. Source/tests/docs
+only: no SSH, live reads, deployment, service restart or policy change.
+A separate read-only adapter now checks the native online-renewal coordinator,
+all three node owners, immutable decisions/fences, plans, completion ledgers and
+partially moved archives. It validates signed two-gateway material, grant/CRL
+continuity, private-key/profile correspondence and exact receipt/archive bindings.
+An independent digest pins all five evidence documents, including declared state
+paths, root/file identities and lock inodes. A changed host/path/inode or any changed
+byte refuses the same-evidence comparison. This is NOT authorization to resume.
+Native isolated fault tests exercise precommit abort, postcommit same-host resume,
+lost replies, partial cleanup and revocation-triggered emergency fencing. Pending
+evidence survives source removal as exact private bytes; it is not reset to empty.
+Scope: one retained online operation, simulated RPC/readers/barriers, declared
+filesystem metadata. No live capture/barrier, new-host reconciliation or canonical
+capsule integration. T still refuses nonempty renewal ledgers; U cannot bypass it.
+162 final adapter/fault tests and97 focused native renewal regressions PASS /0 skips.
+Eight source docs/1041 links and whitespace checked; external URLs not fetched.
+Publication results are recorded in the dated report below.
+NEXT within the partially closed journal block: integrate renewal evidence with
+the canonical capsule/issuer/DB checkpoint, cover retained history and installed
+offline/emergency variants, then qualify actual host reconciliation. Do not rewrite
+authenticated bindings or clear pending state to make an import succeed.
+The other three HA-02 blocks remain: live schema/writer barrier, full current-state
+recovery/key-checkpoint custody, strict replication/RPO0. Stage2 of5; RU dependency
+persists. Console5ce82415, NL GeoIP22 November, Android126/catalog9,8/12/120s and
+all-three-node first-cohort ACK gate unchanged. No fresh server-health claim.
+[Contract/limits](control-ha-storage.md#ha-02u--online-renewal-evidence) ·
+[Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02u--online-renewal-evidence).
+
 **23 November — CONTROL-HA HA-02T bounded maintenance journal preflight VERIFIED in isolation.**
 Source8b04ef6c ordinarily pushed and independently remote-SHA verified from6c4f0a38
 on the metadata branch; source/tests/docs only, no SSH,

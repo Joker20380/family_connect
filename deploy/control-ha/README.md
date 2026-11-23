@@ -760,3 +760,34 @@ After future new canonical writes, old SQLite/profile backups are not a rollback
 NEXT within the journal block: renewal-ledger variants and controlled host
 reconciliation. Do not automatically start live schema/barrier or deployment work.
 [Contract](../../docs/control-ha-storage.md#ha-02t--bounded-maintenance-journal-preflight).
+
+## HA-02U: online-renewal evidence only
+
+Run in the pinned control+identity Python environment:
+
+```sh
+python -m pytest -q tests/test_control_ha_renewal_v1.py
+python -m pytest -q tests/test_online_renewal.py tests/test_abort_unacquired_renewal.py tests/test_reconcile_unprepared_renewal.py
+```
+
+The new inspector has no live exporter, SQL importer, SSH route or resume command.
+Its synthetic five-part input includes private staged/before profiles and must
+remain in private local evidence, never Git/CI logs. Checkpoint and anchor are
+separate trusted inputs; the digest is integrity checking, not encryption/custody.
+Never fabricate a live absence declaration from this fixture.
+
+It validates one native online transaction across coordinator/RU/NL/NL2, including
+partial archive cleanup and immutable commit decisions. Native same-host tests
+resume only disposable fixture nodes; RPC/readers/barriers are simulated.
+`compare_same_host` refuses every byte/path/owner/inode change and never authorizes
+execution, even when unchanged. No authenticated binding is rewritten.
+Root/runtime attestation, existing history/other modes and actual host reconciliation
+are not qualified. Missing/unknown variants fail closed; retain their bytes rather
+than resetting them. T's capsule still refuses nonempty renewal ledgers.
+
+Rollback: stop local tests and retain private evidence as needed. No production
+restore/restart, old SQLite import or profile/key rollback is needed or allowed.
+NEXT is canonical capsule/issuer/DB integration plus history/installed variants,
+not an automatic deployment or transition to HA-03.
+[Contract](../../docs/control-ha-storage.md#ha-02u--online-renewal-evidence) ·
+[Evidence](../../docs/releases/2026-11-23-control-ha.md#ha-02u--online-renewal-evidence).

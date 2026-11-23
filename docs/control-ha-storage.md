@@ -935,12 +935,56 @@ Mailbox membership file также хранит receiver sequence. Panel Django/
 read-side projection, не grant authority; operator queues/cursors нельзя терять. Root/release
 signing keys не входят в migration и остаются офлайн.
 
+## HA-02U — online renewal evidence
+
+[Renewal-v1](../scripts/control_ha_renewal_v1.py) — отдельный read-only inspector,
+не runtime importer и не resume API. Он не расширяет T: nonempty renewal ledgers
+по-прежнему отвергаются в canonical capsule до совместного gate с issuer/DB state.
+Пять bounded документов содержат capture, coordinator и RU/NL/NL2 state; один
+retained online operation. Независимый ожидаемый digest и trust anchor передаются
+отдельно. Hash внутри самого архива не заменяет доверенный checkpoint; этот digest
+не шифрует private keys и не квалифицирует off-host custody.
+
+Проверяются native transaction/owner, immutable COMMIT/ABORT и fencing counters,
+all-three-node cohort, canonical plan, grant plan, подписанные authority/leaf/CRL
+двух gateway identities, CRL continuity, key/profile binding, staged/before floors,
+prepared/published/delivery/reconciliation receipts, completed ledger и manifest
+каждого архива. Mixed active/archive files при прерванном cleanup сохраняются;
+collision, missing file, hash/decision mismatch и неизвестные варианты отказывают.
+Отсутствие owner/ledger до acquisition помечается `ABSENCE_UNPROVEN`, не «чистый узел».
+COMMITTED coordinator без подтверждённых архивов всех трёх узлов не проходит.
+
+Evidence содержит declared state-directory и file device/inode/owner/mode, включая
+lock. `compare_same_host` сравнивает **весь** checkpoint без исправлений и возвращает
+только `UNCHANGED_EVIDENCE_ONLY`, `host_resume=NOT_AUTHORIZED`. Никакого чтения живого
+хоста, SSH, SQL, chmod/chown, re-sign, reload или исполнения операции нет. Даже PASS
+не защищает от изменений после capture: настоящая аттестация/locks/barrier и
+контролируемый new-host reconciliation остаются отдельным gate.
+
+[Tests](../tests/test_control_ha_renewal_v1.py) используют настоящий ProductionController/
+ProductionNode и cryptographic материал, но fixture RPC/readers/barriers вместо SSH,
+Go runtime и systemd. На исходных disposable путях проверяются interruption до/после
+решения, lost replies, частичное перемещение archive, precommit abort без rollback,
+postcommit resume с тем же plan и revocation-triggered emergency/abort refusal.
+Перенесённый state directory не считается прежним хостом. После удаления source
+пять документов сохраняются byte-exact в700/600 evidence directory; activation
+остаётся запрещена. Это не root ownership/runtime acceptance и не full DR.
+
+Limits: one online operation only; retained multi-operation history, offline
+maintenance, emergency handoff/rollback archives, installed variants and canonical
+profile-locator reconciliation are not accepted by this version. Do not delete
+legitimate history to fit it. Capture is synthetic, not a live absence declaration.
+No new PostgreSQL gate is claimed: this change neither imports nor changes DB code.
+Current capsule remains T's38-artifact fixture. Results, exact source checkpoint
+and rollback are in the [dated report](releases/2026-11-23-control-ha.md#ha-02u--online-renewal-evidence).
+
 ## Следующие gates
 
 1. Использовать [HA-02N source inventory](control-ha-files.md), HA-02P pinned adapters
    и HA-02Q/R/S/T encrypted bundle/role adapters. T проверяет один canonical bounded
-   maintenance journal на узел; отдельные renewal coordinator/online-node ledgers,
-   история/установленные варианты и host reconciliation ещё не квалифицированы.
+   maintenance journal на узел; U отдельно проверяет online-renewal evidence,
+   но его canonical capsule/issuer/DB integration, история/установленные варианты
+   и host reconciliation ещё не квалифицированы.
    Незавершённые операции и потерянные floors должны блокировать recovery, не очищаться.
    Отдельно квалифицировать key/checkpoint custody и полный consumer/node census.
    До live cutover отдельно сверить установленные схемы/версии и

@@ -21,7 +21,8 @@ source inspection is not a fresh server-health check.
   adapters/joint semantic recovery and HA-02Q encrypted capsule/partial external
   recovery, HA-02R five real external-role adapters and HA-02S receiver safety
   qualified in isolation; HA-02T adds canonical bounded-maintenance preflight,
-  not a live schema census or full DR; remaining
+  U adds separate online-renewal evidence inspection/native same-host fault tests,
+  not a capsule importer, live schema census or full DR; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -33,6 +34,58 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02U — online renewal evidence
+
+Continuation from18cd0c2babaf50fa8cbdb21375fae0a24ca08e4b on the authoritative
+metadata branch. This is a source/evidence checkpoint, not a deployment or full
+migration acceptance. Console5ce82415, NL GeoIP22 November, Android126/catalog9,
+8/12/120s and all-three-node first-cohort ACK gate remain unchanged. No SSH, live
+read/write, runtime package, release artifact/catalog/tag or service changes.
+
+Implemented the [separate renewal inspector](../../scripts/control_ha_renewal_v1.py)
+and [native fault tests](../../tests/test_control_ha_renewal_v1.py). Five private
+documents retain coordinator and every node's transaction/owner/plan, before/staged
+material, receipts, completed ledger and partial archives. The independent digest
+pins exact bytes and declared host/file/lock identities. Signed two-gateway material,
+grant/CRL continuity, private-key correspondence and cross-node decisions/receipts
+are checked, not inferred from a matching DB row count.
+
+Pending states remain pending. The unchanged-evidence comparison never authorizes
+execution; a changed path/inode/owner or any byte refuses. Isolated tests exercise
+native same-host recovery after interrupted coordinator/node writes and lost replies,
+partial cleanup, precommit abort and immutable postcommit decisions. A revocation
+during commit requires emergency reconciliation, not rollback/automatic retry.
+Source-removal test retains exact700/600 evidence without reinstalling host state.
+
+Qualification:
+- Final adapter/fault suite:162 PASS /0 skips in45.95s, `renewal-final-1.log`.
+- Native online/abort-unacquired/reconcile-unprepared regression:97 PASS /0 skips
+  in the combined256-test/122.99s run, `renewal-qualification-1.log`. Its159 earlier
+  adapter cases are superseded by the162-case final run after additional receipt
+  binding hardening; unchanged native modules/regression tests were not rerun.
+- Eight source docs/1041 links and staged whitespace PASS; external URLs not fetched.
+  Staged paths/PEM/token/build-output audit PASS. Source publication recorded below.
+
+Initial diagnostics found a primary gateway projection with fleet-only fields and
+an ineffective negative fixture that replaced an already empty grant list. Both
+were corrected before the final run; no verification was weakened or waived.
+Logs remain private under `/tmp/fc-control-ha-20261123/`; no raw keys/profiles,
+database, archive or captured evidence is committed. No PostgreSQL rerun or new
+DB acceptance is claimed; the importer and T's187-contract qualification are unchanged.
+
+Limits: one retained online operation, simulated RPC/readers/barriers and declared
+metadata only. No live consistency barrier/attestation, multi-operation history,
+offline/emergency-handoff variant support, root runtime acceptance or new-host
+reconciliation. This is not wired into Q/T's canonical capsule: T still refuses
+nonempty renewal ledgers. It must not be bypassed using U's inspection result.
+The journal block remains partial; the three other HA-02 blocks are unchanged.
+NEXT: canonical capsule/issuer/DB binding plus retained history/installed variants,
+then actual host reconciliation. Stage2 of5; RU-independent management not deployed.
+
+Rollback: disposable local tests only; production needs no restore or restart.
+Retain private unresolved evidence. Never clear pending state, rewrite authenticated
+path/inode bindings, or restore old SQLite/profile state after future new writes.
 
 ## HA-02T — bounded maintenance journal preflight
 

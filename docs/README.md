@@ -20,6 +20,8 @@
 
 [CONTROL-HA HA-02T: authenticated canonical maintenance journals and fail-closed pending operations; renewal ledgers/host resume still unqualified](control-ha-storage.md#ha-02t--bounded-maintenance-journal-preflight).
 
+[CONTROL-HA HA-02U: native online-renewal coordinator/node/archive evidence and interrupted same-host tests; no capsule import or host-resume authorization](control-ha-storage.md#ha-02u--online-renewal-evidence).
+
 [Device metadata · 22 November: NL/AWG GeoIP and explicit missing-data labels installed; consent unchanged](releases/2026-11-22-nl-geoip.md).
 
 [RU · 17 November00:02UTC: availability restored on accepted bytes; initiating cause remains open](releases/2026-11-17-ru-recovery.md).
