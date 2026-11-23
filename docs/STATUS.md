@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02T bounded maintenance journal preflight VERIFIED in isolation.**
-Continuation from6c4f0a38 on the metadata branch; source/tests/docs only, no SSH,
+Source8b04ef6c ordinarily pushed and independently remote-SHA verified from6c4f0a38
+on the metadata branch; source/tests/docs only, no SSH,
 live reads, deployment, public artifacts or service changes.
 Canonical locator/configuration, HMAC journals, exact permit/request/before/target,
 profile/CRL floors, private-key/leaf binding and path/owner/directory metadata now
@@ -25,8 +26,11 @@ path/inode bindings. Then the other three HA-02 blocks: live schema/writer barri
 full current-state recovery/key-checkpoint custody, strict replication/RPO0.
 Stage2 of5; production still depends on RU.8/12/120s and all-three-node ACK gate
 unchanged. Console5ce82415, NL GeoIP22 November, Android126/catalog9 unchanged;
-no fresh health or installation claim. Old-main source divergence remains unresolved.
-Seven source documents/984 links checked PASS; external URLs were listed, not fetched.
+no fresh health or installation claim. Seven source docs/984 links and three staged
+navigation docs/374 links checked PASS; external URLs listed, not fetched.
+Old-main navigation155600b6 retained locally: ordinary push rejected non-fast-forward
+against remotecb47bf23. Four original dirty files/six untracked paths preserved;
+no force/reset/rebase/merge. The metadata branch remains authoritative.
 [Contract/limits](control-ha-storage.md#ha-02t--bounded-maintenance-journal-preflight) ·
 [Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02t--bounded-maintenance-journal-preflight).
 

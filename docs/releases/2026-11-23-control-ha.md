@@ -43,6 +43,14 @@ console5ce82415, NL GeoIP22 November and public Android126/catalog9 remain uncha
 not a fresh RU/NL health observation. Operation8s/watchdog12s/paid lease120s and
 all-three-node first-cohort ACK requirement are preserved.
 
+Publication: source/tests/docs8b04ef6c6865b126fa66be5342c89b87b2bd90a6 ordinarily
+pushed; independent remote branch SHA matched. Seven source docs/984 links and
+three staged navigation docs/374 links checked PASS; external URLs not fetched.
+Old-main navigation155600b6e80ed9786986543659ab6085f1db3dc4 remains local:
+ordinary push rejected non-fast-forward against cb47bf230c6795cf21f4e6948253f49aa5377ed0.
+Original four dirty files/six untracked paths preserved. No force/reset/history
+rewrite or deployment. Source branch is authoritative, not the unpushed handoff.
+
 Implemented a strict maintenance adapter above Q/R/S. The pinned fixture contains
 38 artifacts across eight roles; all roles now have semantic checks, but their
 conservative variant coverage is not a live census or full recovery qualification.

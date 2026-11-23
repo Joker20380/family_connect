@@ -152,7 +152,8 @@ through duplicate import, reboot or expiry. Simulated engine/clock/SSH UID only;
 not live node attestation, root ownership/volume acceptance or receiver activation.
 Broader routes regression64 PASS /1 old fixture failure reproduced alone on
 unchanged3fa2674e files (registry.access absent). No broad suite/release PASS.
-HA-02T canonical bounded-maintenance preflight qualified in isolation from6c4f0a38:
+HA-02T canonical bounded-maintenance preflight qualified/pushed8b04ef6c in isolation
+from6c4f0a38; independent remote SHA verified:
 187 real-PG contracts /0 skips (78 maintenance +69 receiver +40 enrollment),28 root
 and60 runner/transport focused checks /0 skips. Depends on N authority inventory,
 P SQLite adapters and Q/R/S capsule/receiver checks. Gate: HMAC journal, native
