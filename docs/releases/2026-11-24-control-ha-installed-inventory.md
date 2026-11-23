@@ -1,5 +1,8 @@
 # 24 November 2026 — CONTROL-HA installed journal inventory
 
+Continuation: [opaque legacy custody contract](2026-11-24-control-ha-legacy-custody.md)
+qualifies generated data with these observed shapes; it does not export or restore production journals.
+
 ## Scope and result
 
 Selected NEXT from HA-02V: read-only installed-shape census and host reconciliation,

@@ -1,5 +1,26 @@
 # Текущее состояние / Current state
 
+**24 November — CONTROL-HA legacy journal custody contract COMPLETE IN ISOLATION.**
+New domain-separated encrypted custody preserves all four selected trees, exact file
+bytes, empty files/directories, basic metadata and unequal historical cohorts. It does
+not validate historical operations, import a database, restore files or resume hosts.
+Qualification uses sanitized installed filename shapes with generated opaque bytes:
+366/366/172 entries,904 archives,8546 files and917 directories survive source deletion
+and authenticated readback. Scheduled, service/start-intent, adjunct and fenced-overlay
+bytes remain intact; missing coordinator history/approval is not invented.
+45 custody +26 inventory tests and12 selected envelope/parser regressions PASS /0 skips;
+the other48 envelope tests were deselected, not claimed. Independent checkpoint binds
+inventory, complete manifest and ciphertext; tamper/prune/cohort repair/unsafe paths,
+races and stale checkpoint substitution refuse. Pending/unknown evidence stays opaque.
+NEXT: validate the actual installed completed scheduled/service-bearing current
+operation separately from opaque history, then bind it to current issuer/publication/DB
+state. This next gate is not started. Journal block and other three HA-02 blocks remain
+open: live writer barrier, full-system/off-host recovery and strict replication/RPO0.
+Stage2 of5, RU dependence unchanged. No gateway SSH, deployment, state/key/profile/DB
+export or service changes in this slice. Console5ce82415, NL GeoIP22 November,
+Android126/catalog9 and8/12/120s/all-three-node ACK unchanged; no fresh health claim.
+[Custody contract, tests and rollback](releases/2026-11-24-control-ha-legacy-custody.md).
+
 **24 November — CONTROL-HA installed journal inventory COMPLETE, not recovery acceptance.**
 Read-only RU/NL1/NL2 census at23 November23:16:08–23:16:13UTC
 (24 November00:16 Brussels):366/366/172 ledger entries and matching archive directories.

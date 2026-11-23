@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: encrypted opaque legacy custody, 904-archive source-removed readback; preserves history without authorizing restore/resume](releases/2026-11-24-control-ha-legacy-custody.md).
+
 [CONTROL-HA · 24 November: actual three-host journal inventory, 366/366/172 entries, service-bearing legacy gaps; read-only, no recovery/cutover acceptance](releases/2026-11-24-control-ha-installed-inventory.md).
 
 [CONTROL-HA HA-02V: combined encrypted capsule, retained online history and completed stopped/offline/emergency variants; exact renewal/issuer/DB binding, no host activation](control-ha-storage.md#ha-02v--combined-online-renewal-capsule).

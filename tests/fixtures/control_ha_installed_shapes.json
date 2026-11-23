@@ -1,0 +1,397 @@
+{
+  "purpose": "Sanitized filename shapes only; generated opaque test bytes are not production evidence.",
+  "hosts": {
+    "RU": {
+      "ledger_count": 366,
+      "result_counts": {
+        "CLEANED": 363,
+        "CLEANED_FENCED_ROLLBACK": 3
+      },
+      "shapes": [
+        {
+          "count": 2,
+          "known": [
+            "archive-manifest.json",
+            "authority-request.json",
+            "directory-accepted.json",
+            "files.json",
+            "issuer.json.before",
+            "issuer.json.staged",
+            "plan.json",
+            "prepared-plan.json",
+            "reconciliation.json",
+            "revocations.pem.before",
+            "revocations.pem.staged",
+            "services-before.json",
+            "start-intent-0.json",
+            "start-intent-3.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 1,
+          "known": [
+            "archive-manifest.json",
+            "authority-request.json",
+            "directory-accepted.json",
+            "files.json",
+            "issuer.json.before",
+            "issuer.json.staged",
+            "plan.json",
+            "prepared-plan.json",
+            "reconciliation.json",
+            "services-before.json",
+            "start-intent-0.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 2,
+          "known": [
+            "archive-manifest.json",
+            "directory-accepted.json",
+            "files.json",
+            "issuer.json.before",
+            "issuer.json.staged",
+            "plan.json",
+            "prepared-plan.json",
+            "reconciliation.json",
+            "revocations.pem.before",
+            "revocations.pem.staged",
+            "services-before.json",
+            "start-intent-0.json",
+            "start-intent-3.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 1,
+          "known": [
+            "archive-manifest.json",
+            "directory-accepted.json",
+            "files.json",
+            "issuer.json.before",
+            "issuer.json.staged",
+            "plan.json",
+            "prepared-plan.json",
+            "reconciliation.json",
+            "services-before.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 178,
+          "known": [
+            "archive-manifest.json",
+            "directory-accepted.json",
+            "files.json",
+            "plan.json",
+            "prepared-plan.json",
+            "reconciliation.json",
+            "revocations.pem.before",
+            "revocations.pem.staged",
+            "services-before.json",
+            "start-intent-0.json",
+            "start-intent-3.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 147,
+          "known": [
+            "archive-manifest.json",
+            "directory-accepted.json",
+            "files.json",
+            "plan.json",
+            "prepared-plan.json",
+            "reconciliation.json",
+            "revocations.pem.before",
+            "revocations.pem.staged",
+            "services-before.json",
+            "start-intent-0.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 2,
+          "known": [
+            "archive-manifest.json",
+            "directory-accepted.json",
+            "files.json",
+            "plan.json",
+            "prepared-plan.json",
+            "reconciliation.json",
+            "revocations.pem.before",
+            "revocations.pem.staged",
+            "services-before.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 19,
+          "known": [
+            "archive-manifest.json",
+            "directory-accepted.json",
+            "files.json",
+            "plan.json",
+            "prepared-plan.json",
+            "reconciliation.json",
+            "services-before.json",
+            "start-intent-0.json",
+            "start-intent-3.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 1,
+          "known": [
+            "archive-manifest.json",
+            "directory-accepted.json",
+            "files.json",
+            "plan.json",
+            "prepared-plan.json",
+            "reconciliation.json",
+            "services-before.json",
+            "start-intent-0.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 6,
+          "known": [
+            "archive-manifest.json",
+            "directory-accepted.json",
+            "prepared-plan.json",
+            "services-before.json",
+            "start-intent-0.json",
+            "start-intent-3.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 3,
+          "known": [
+            "archive-manifest.json",
+            "directory-accepted.json",
+            "services-before.json",
+            "start-intent-0.json",
+            "start-intent-3.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 1,
+          "known": [
+            "archive-manifest.json",
+            "directory-accepted.json",
+            "services-before.json",
+            "start-intent-0.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 1,
+          "known": [
+            "archive-manifest.json",
+            "files.json",
+            "owner-before-cleanup.json",
+            "plan.json",
+            "prepared-plan.json",
+            "revocations.pem.before",
+            "revocations.pem.staged",
+            "rollback-registry-overlay.json",
+            "rollback-terminal.json",
+            "services-before.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 1,
+          "known": [
+            "archive-manifest.json",
+            "files.json",
+            "owner-before-cleanup.json",
+            "plan.json",
+            "prepared-plan.json",
+            "revocations.pem.before",
+            "revocations.pem.staged",
+            "rollback-terminal.json",
+            "services-before.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 1,
+          "known": [
+            "archive-manifest.json",
+            "owner-before-cleanup.json",
+            "rollback-terminal.json",
+            "services-before.json"
+          ],
+          "other_count": 0
+        }
+      ]
+    },
+    "NL1": {
+      "ledger_count": 366,
+      "result_counts": {
+        "CLEANED": 363,
+        "CLEANED_FENCED_ROLLBACK": 3
+      },
+      "shapes": [
+        {
+          "count": 2,
+          "known": [
+            "archive-manifest.json",
+            "directory-before.json",
+            "files.json",
+            "gateway.json.before",
+            "gateway.json.staged",
+            "owner-before-cleanup.json",
+            "plan.json",
+            "rollback-terminal.json",
+            "services-before.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 343,
+          "known": [
+            "archive-manifest.json",
+            "directory-before.json",
+            "files.json",
+            "gateway.json.before",
+            "gateway.json.staged",
+            "plan.json",
+            "reconciliation.json",
+            "services-before.json",
+            "start-intent-0.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 4,
+          "known": [
+            "archive-manifest.json",
+            "directory-before.json",
+            "files.json",
+            "gateway.json.before",
+            "gateway.json.staged",
+            "plan.json",
+            "reconciliation.json",
+            "services-before.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 6,
+          "known": [
+            "archive-manifest.json",
+            "directory-before.json",
+            "files.json",
+            "plan.json",
+            "reconciliation.json",
+            "services-before.json",
+            "start-intent-0.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 1,
+          "known": [
+            "archive-manifest.json",
+            "directory-before.json",
+            "owner-before-cleanup.json",
+            "rollback-terminal.json",
+            "services-before.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 10,
+          "known": [
+            "archive-manifest.json",
+            "directory-before.json",
+            "services-before.json",
+            "start-intent-0.json"
+          ],
+          "other_count": 0
+        }
+      ]
+    },
+    "NL2": {
+      "ledger_count": 172,
+      "result_counts": {
+        "CLEANED": 170,
+        "CLEANED_FENCED_ROLLBACK": 2
+      },
+      "shapes": [
+        {
+          "count": 1,
+          "known": [
+            "archive-manifest.json",
+            "directory-before.json",
+            "files.json",
+            "gateway.json.before",
+            "gateway.json.staged",
+            "owner-before-cleanup.json",
+            "plan.json",
+            "rollback-terminal.json",
+            "services-before.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 165,
+          "known": [
+            "archive-manifest.json",
+            "directory-before.json",
+            "files.json",
+            "gateway.json.before",
+            "gateway.json.staged",
+            "plan.json",
+            "reconciliation.json",
+            "services-before.json",
+            "start-intent-0.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 2,
+          "known": [
+            "archive-manifest.json",
+            "directory-before.json",
+            "files.json",
+            "gateway.json.before",
+            "gateway.json.staged",
+            "plan.json",
+            "reconciliation.json",
+            "services-before.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 1,
+          "known": [
+            "archive-manifest.json",
+            "directory-before.json",
+            "owner-before-cleanup.json",
+            "rollback-terminal.json",
+            "services-before.json"
+          ],
+          "other_count": 0
+        },
+        {
+          "count": 3,
+          "known": [
+            "archive-manifest.json",
+            "directory-before.json",
+            "services-before.json",
+            "start-intent-0.json"
+          ],
+          "other_count": 0
+        }
+      ]
+    }
+  }
+}

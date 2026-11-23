@@ -1033,6 +1033,41 @@ blocks and HA-03..05 remain separate gates; no automatic continuation into live 
 [Runbook](../deploy/control-ha/README.md#ha-02v-combined-online-renewal-capsule) ·
 [Qualification](releases/2026-11-23-control-ha.md#ha-02v--combined-online-renewal-capsule).
 
+### Opaque legacy journal custody
+
+[Custody contract](../scripts/control_ha_legacy_custody.py) and
+[24 November qualification](releases/2026-11-24-control-ha-legacy-custody.md) address
+the actual installed mixed prefix without weakening Q/V recovery acceptance. An
+explicit set of RU/NL1/NL2/coordinator source trees and a prior read-only census is
+sealed using AES-256-GCM, a new purpose/MAGIC and a separate CustodyCheckpoint.
+Every regular file and directory under those roots is preserved, including empty
+locks/directories, unknown filenames, native service/start intents, fenced overlays
+and coordinator adjunct subtrees. Archive bodies remain opaque; malformed/expired
+historical objects are not normalized, re-signed or interpreted as live authority.
+
+File bytes, names, structure and basic uid/gid/mode/device/inode/nlink/size/mtime/ctime
+metadata bind a complete manifest. The independent receipt binds that manifest, the
+input census and ciphertext. Readback verifies those bindings and the original unequal
+ledger/archive sets. Missing history stays missing;365 uncovered RU coordinator entries
+are not backfilled. The format has no writer, SQL importer, filesystem extractor or
+host executor. Its result is OPAQUE_CUSTODY_VERIFIED, never current-state recovery PASS.
+Even preserved pending/unknown transactions cannot authorize replay or resume.
+
+Bounds: four nonoverlapping explicit roots,32768 entries,4096 children per directory,
+eight relative path components,1MiB per file,64MiB raw payload and128MiB plaintext.
+Unsafe paths, symlinks, hardlinks, special files, aliases, malformed input and changed
+metadata refuse, not truncate. This is not an atomic multi-host snapshot, source-host
+attestation, ACL/xattr/filesystem image or evidence that actual production bytes fit
+the limits. Caller-owned key/independent receipt need separate protected custody;
+durable/off-host production storage and full-system recovery remain unqualified.
+
+The fixture mirrors all15/6/5 observed filename shapes and366/366/172 cohorts using
+generated opaque data:904 archives,8546 files and917 directories survive deletion of
+all sources.45 new tests plus26 inventory and12 selected Q envelope/parser regressions
+pass. No gateway was accessed and no real private archive/profile/DB was exported.
+NEXT remains a separate semantic gate for the actual current scheduled/service-bearing
+operation and its issuer/publication/five-table state; opaque history is not its substitute.
+
 ### Installed journal inventory
 
 [24 November observation](releases/2026-11-24-control-ha-installed-inventory.md) closes
