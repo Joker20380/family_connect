@@ -58,6 +58,46 @@ not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
 
+## HA-02V — completed stopped variants
+
+Authoritative source/tests/docs `1322c714df9dee82eb56d6f846e9fa0986c97bde` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA matched.
+Source remains `/home/joker/.codex/worktrees/dad9/family_connect`. This divergent old
+main is navigation only, not the deployed runtime or a merge of the implementation.
+
+The explicit adapter covers one completed operator-approved stopped renewal, planned
+offline authority handoff, or completed online-emergency rollforward after revocation.
+45 exact capsule artifacts include both NL publication payloads and complete native
+parent emergency archives. Current issuer and all five native DB projections must
+match. Original approval objects and signed offline handoff envelopes are not retained
+by native archives: missing evidence is not recreated, and restore never authorizes
+an outage or executes a journal. Pending/unknown/mixed histories and unqualified
+installed service shapes remain fail-closed rather than being reset.
+
+Final `stopped-recovery-4`:333 real-PostgreSQL17.11 contracts /0 skips (126 new,
+44 combined,45 history,78 bounded,40 enrollment);191 focused native evidence/runner
+checks /0 skips. Shared contracts run once in five bounded processes; all three
+recovery variants run independently. Sources are removed before encrypted restore;
+real PG SIGKILL, current backup recovery and stale/old-import refusal PASS.
+44 tables each: stopped/offline81→86 rows; emergency88→93. Owned cleanup PASS.
+Eight source docs/1078 local links and whitespace checked. Private evidence under
+`/tmp/fc-control-ha-20261123/` stays out of Git/CI. Earlier test-shape/deadline/parent-field
+failures are retained in the authoritative report, not counted as acceptance.
+
+No SSH/deployment/version/catalog/service/policy changes or fresh health claim.
+Console5ce82415, NL GeoIP22 November, Android126/catalog9 and8/12/120s unchanged;
+all-three-node ACK still mandatory. Stage2 of5; RU dependence remains. The journal
+block is partial: NEXT is read-only installed-shape inventory and host reconciliation,
+including legacy gaps, service files, mixed histories and missing approval custody.
+Live writer/capture barrier, full-system recovery/off-host custody and strict
+replication/RPO0 remain separate. No queued task is automatically started here.
+
+Rollback now means stopping owned lab resources, not touching RU/NL. After future
+canonical writes, fence writers and recover current state; never restore old SQLite
+or profiles over new acknowledged writes. Four original dirty files/six untracked
+paths are preserved; navigation staging excludes them. Ordinary publication of this
+old-main handoff may be blocked by divergence; no force/reset/rebase/merge is permitted.
+
 ## HA-02V — retained online history
 
 Authoritative implementation `cd995994e4429f0672524e76ea35a7a8ae54a898` ordinarily

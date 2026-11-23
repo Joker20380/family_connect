@@ -141,8 +141,15 @@ history, ordered successors, historical expiry versus current authorization and
 exact latest DB/issuer binding.207 PG contracts /0 skips +281 targeted regressions
 /0 skips; three sequential operations and44-table/81→86-row recovery PASS.
 Source-only, not installed-history migration or host resume.
-NEXT bounded scope: installed offline/emergency variants, then actual host
-reconciliation, including legacy histories missing coordinator records.
+HA-02V completed stopped variants qualified/pushed1322c714; remote SHA verified.
+Three native completed modes (stopped, offline authority handoff, emergency rollforward)
+bind45 capsule artifacts and both NL publications to issuer/current five-table state.
+333 PG17.11 contracts /0 skips +191 focused checks /0 skips; all three source-removed
+crash/current restores PASS,44 tables each,81→86/88→93 rows. Missing original approval
+or handoff-envelope bytes are not reconstructed or replayed. No host activation/full DR.
+NEXT bounded scope: read-only installed-shape inventory and actual host reconciliation,
+including legacy history gaps, service-bearing archives, mixed modes and approval
+custody. Identify real installed shapes before implementing more speculative variants.
 Journal block remains partial; never infer empty journals,
 reset unknowns or re-sign host bindings. This is not permission for live deployment.
 Separately, installed-schema/live writer census and consistency barrier,

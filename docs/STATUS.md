@@ -1,5 +1,26 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02V completed stopped variants VERIFIED in isolation.**
+Source1322c714df9dee82eb56d6f846e9fa0986c97bde ordinarily pushed and independently
+remote-SHA verified on the metadata branch. Implementation remains in
+`/home/joker/.codex/worktrees/dad9/family_connect`; this old main is navigation only.
+Three completed native variants now bind to the canonical capsule: operator-approved
+stopped renewal, planned offline authority handoff and online-emergency rollforward.
+Both NL publications and all three native archives are preserved; missing original
+approval/envelope bytes are not recreated or replayed.45 private artifacts per capsule.
+333 PostgreSQL17.11 contracts /0 skips +191 focused checks /0 skips PASS. All three
+source-removed crash/current restores PASS:44 tables,81→86 stopped/offline rows,
+88→93 emergency rows. Stale restore and old import after new writes refuse; owned
+cleanup PASS. Eight source docs/1078 links checked. No host resume/full DR claim.
+NEXT: read-only installed-shape inventory and host reconciliation, including legacy
+gaps, service files, mixed histories and missing approval custody; no speculative
+variant expansion or automatic state reset. Other HA-02 blocks remain: live writer
+barrier, full-system recovery/off-host custody and strict replication/RPO0.
+Stage2 of5; RU dependence remains. No SSH/deployment/service/policy/version/catalog
+changes or fresh health claim. Console5ce82415, NL GeoIP22 November, Android126/catalog9,
+8/12/120s and all-three-node ACK unchanged. Original local work preserved.
+[Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02v--completed-stopped-variants).
+
 **23 November — CONTROL-HA HA-02V retained online-history extension VERIFIED in isolation.**
 Sourcecd995994e4429f0672524e76ea35a7a8ae54a898 ordinarily pushed and independently
 remote-SHA verified on the metadata branch. Implementation remains in
