@@ -33,6 +33,16 @@ not live migration, service recovery, client release or provider move. Latest
 known installed console5ce82415 and Android126/catalog9 remain unchanged; no fresh
 RU/NL health assertion. Production still uses the accepted SQLite/runtime bytes.
 
+Source/tests/docs checkpoint `0ed728f06acdb131ba17869e6d57a1122451e58e` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; exact remote SHA matched.
+Staged source/doc scope, secret-marker scan, Markdown targets, whitespace and
+locked-environment `pip check` PASS; final Docker readback finds no marked rehearsal
+containers. No private artifacts were staged. Root navigation commit
+`c62d63a2798898e2c605daafc70a50eda5605fe6` remains local: ordinary main push rejected
+`non-fast-forward`, remote main still `cb47bf230c6795cf21f4e6948253f49aa5377ed0`.
+Root's original40/66/11/6-line edits and untracked work are preserved; no force,
+rebase, merge or accidental source deployment from that old checkout.
+
 ### Implementation and safety boundary
 
 - `transport_membership.prepare_nodes` shares the first-payment protocol between
@@ -89,6 +99,27 @@ RU/NL health assertion. Production still uses the accepted SQLite/runtime bytes.
   gates and1 pinned sync-archive interoperability gate. This is not a green full suite.
 
 ### Historical package blocker and retained attempts
+
+Commands used from the source worktree with the existing dedicated locked venv
+(`/tmp/fc-control-ha-20261123/venv/bin/python`), not system or production Python:
+
+```sh
+python -m scripts.paid_postgres_rehearsal --workdir /tmp/fc-control-ha-20261123/membership-3
+python -m pytest -q -ra \
+  tests/test_paid_beta.py tests/test_paid_beta_cli.py tests/test_paid_beta_http.py \
+  tests/test_paid_beta_readiness.py tests/test_paid_release_policy.py \
+  tests/test_paid_registry_backup.py tests/test_paid_policy_package.py \
+  tests/test_transport_membership.py tests/test_transport_enforcement.py \
+  tests/test_transport_budget.py tests/test_transport_command_budget.py \
+  tests/test_transport_lifecycle.py tests/test_transport_application_regressions.py \
+  tests/test_transport_package.py tests/test_transport_http.py \
+  tests/test_subscription_http.py tests/test_friends_http_runtime.py \
+  tests/test_control_ha_shadow.py tests/test_enrollment_rehearsal.py tests/test_paid_rehearsal.py
+```
+
+The recorded workdir already exists: use a fresh private `/tmp` path for a new
+rehearsal. The second command intentionally retains the four failures below;
+do not remove them from the result or call this a green release suite.
 
 All four failures are `tests/test_transport_package.py`: closed overlay/tamper,
 exact RU diagnostic overlay, PR15 lifecycle and v2 node-forward package. They fail

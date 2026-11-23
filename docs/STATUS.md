@@ -1,6 +1,7 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02C membership contracts VERIFIED; migration IN_PROGRESS.**
+Source0ed728f0 is ordinarily pushed and remote-SHA verified in the metadata branch.
 SQLite and synthetic PostgreSQL now share all-node first-payment preparation and
 strict ACK validation.131 real DB contracts PASS /0 skips, including partial ACK
 loss, node-cache reload, backend termination after all ACKs, idle timeout and exact

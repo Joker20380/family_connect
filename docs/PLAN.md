@@ -13,7 +13,7 @@ HA-02B paid ledger/subscription synthetic parity and recovery qualified/pusheda6
 /0 skips;366 consumer/runner checks /20 optional skips. Stale pre-payment restore
 refused; current nine-table lab restore preserves acknowledged writes and one-use
 proofs. No production cutover or reverse migration is qualified.
-HA-02C synthetic membership preparation/failure consistency qualified:131 contracts
+HA-02C synthetic membership preparation/failure consistency qualified/pushed0ed728f0:131 contracts
 /0 skips;389 broader checks PASS,16 optional skips,4 historical-overlay failures
 also reproduced on the unchanged baselineeeb11ba7. No full packaging/release PASS.
 NEXT within HA-02: remaining canonical writers/CLI (support/admin/referral first),
