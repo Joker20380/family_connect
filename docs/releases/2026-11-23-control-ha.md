@@ -39,6 +39,20 @@ service/consent/client change or deployment. Console5ce82415, NL GeoIP22 Novembe
 public Android126/catalog9 and invitation distribution unchanged.8/12/120s and
 all-three-node first-cohort ACKs remain mandatory. RU is still a dependency.
 
+Source/tests/docs `867c68544a483a94e687f2136712ae931956f22d` ordinarily pushed to
+`feature/device-technical-metadata-20261115`; independent remote branch SHA matched.
+Staged diff/allowlist, credential-pattern and SQL-only schema-manifest review,
+whitespace and940 local source Markdown targets PASS. Source worktree clean after
+the implementation push. No private data/binary/key/dump committed.
+
+Old-main navigation `f462c6bbf2d0fad5fed85ed452938b742d397aa5` retained locally:
+ordinary push rejected `non-fast-forward`; observed remote main remains
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`.364 staged navigation Markdown targets
+PASS; this excludes the unchanged original unstaged historical-link issue noted
+under HA-02O. Original40 PLAN/66 STATUS/11 private-beta/6 recovery-guide additions
+and six untracked paths preserved. No force, reset, merge or runtime promotion
+from this divergent checkout. The published metadata branch is authoritative.
+
 ### Deliverable and scope
 
 [Pinned application SQLite adapter](../control-ha-storage.md#ha-02p--application-sqlite-adapters)

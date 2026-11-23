@@ -109,7 +109,7 @@ three paid projections and exact43-table/47-row SIGKILL/current restore PASS.
 This is NOT deployed SQLite import: storage sentinels and declared references do
 not qualify semantic credentials, real file recovery or a live cross-store barrier.
 Activation remains forbidden; canonical production/backend selectors unchanged.
-HA-02P application SQLite adapters/joint semantic fixture qualified in isolation:
+HA-02P application SQLite adapters/joint semantic fixture qualified/pushed867c6854 in isolation:
 165 contracts /0 skips (54 adapter +71 import +40 enrollment),128 CRL contracts
 /0 skips,98 consumer/runner checks /0 skips. Depends on A–O storage/file contracts.
 Gate: pinned current-code SQLite schema variant, four images/29 source tables,

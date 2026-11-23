@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02P application SQLite import VERIFIED in isolation.**
-Continuation frombf1a4cea; source/tests/docs only, no SSH/live read/deployment.
+Source867c6854 ordinarily pushed and independently remote-SHA verified frombf1a4cea;
+source/tests/docs only, no SSH/live read/deployment.
 Pinned adapters accept one exact application-produced SQLite schema variant:
 four stores/29 source tables/68 rows, not HA-02O storage-sentinel source schemas.
 Joint fixture exercises real activation/referral/payment, support/audit, issued
@@ -21,6 +22,8 @@ bundle and dry-run consistency preflight. Actual live barrier/full recovery,
 strict replication/RPO0 and HA-03..05 still gate cutover. Stage2 of5; RU dependency
 remains. Console5ce82415, NL GeoIP22 November, public Android126/catalog9,
 8/12/120s and all-three-node first-cohort ACKs unchanged. No fresh health claim.
+Old-main navigationf462c6bb retained locally: ordinary push rejected non-fast-forward;
+original four dirty files/six untracked paths preserved; no force/reset/merge.
 [Adapter/rollback](control-ha-storage.md#ha-02p--application-sqlite-adapters) ·
 [Evidence](releases/2026-11-23-control-ha.md#ha-02p--application-sqlite-import).
 
