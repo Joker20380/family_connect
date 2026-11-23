@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02E VERIFIED.**
+Support ID checkpoint `ed6a664f` is ordinarily pushed and remote-SHA verified in the
+metadata branch.155 real DB contracts PASS /0 skips (66 support +40 enrollment
+and49 paid);443 consumer/runner checks PASS /21 optional skips, expanded isolated
+operator.pyz smoke PASS. Proof/observation and batch backfill are atomic; real PG
+crash/current12-table/19-row restore preserves aliases/versions/proofs/revoke/paid.
+Restricted grants/readiness are read-side fixtures, not migrated FIELD writers.
+PG FIELD mutation refuses before file I/O. No production, OS/GeoIP, consent or
+client change; console5ce82415 and Android126/catalog9 unchanged. Next: restricted/
+admin DB writers, support sender and remaining writers/import/recovery/replication.
+Prior four packaging failures and RU dependency remain open.
+[Authoritative source, exact results and rollback](releases/2026-11-23-control-ha.md).
+
 **23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-02D VERIFIED.**
 Referral checkpoint22caaf6c is ordinarily pushed and remote-SHA verified in the
 metadata branch.181 SQLite/PostgreSQL contracts PASS /0 skips (50 referral +131

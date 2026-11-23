@@ -15,7 +15,12 @@ HA-02D referral contracts/recovery qualified/pushed22caaf6c:181 contracts /0 ski
 379 consumer/runner checks /21 optional skips. Atomic proof/link, invitation/claim,
 pool500/daily20, sponsor-bound replay and exact nine-table/18-row restore pass;
 stale pre-claim restore refused. No production backend change or full recovery claim.
-NEXT within HA-02: remaining writers/CLI (support/admin next), metadata/
+HA-02E Support ID transactions/recovery qualified/pushed ed6a664f:155 contracts /0
+skips (66 support +40 enrollment +49 paid),443 regressions /21 optional skips and
+expanded packaged operator smoke PASS. Current12-table/19-row synthetic restore
+preserves proof/alias/observation/paid state; restricted rows are read-side fixtures.
+PG FIELD changes refuse before file I/O; grant/audit/CRL/admission writers still pending.
+NEXT within HA-02: restricted/admin DB, support sender and remaining writers/CLI, metadata/
 tombstones/files, all-table import, PostgreSQL/Patroni strict replication and full
 current-state recovery. Old SQLite is not safe after new writes; reverse
 import is not implemented. Then HA-03 receiver-enforced

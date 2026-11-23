@@ -19,6 +19,8 @@ divergent; pre-existing modifications are preserved. Do not deploy its runtime.
   push to the same branch succeeded and remote SHA independently matched.
 - HA-02D implementation: `22caaf6c4d9fa0167f8e8b93d1cad64971c9a019`, ordinary
   push to the same branch succeeded and remote SHA independently matched.
+- HA-02E implementation: `ed6a664ffe6f377caf37af173b68a0cecca3e418`, ordinary
+  push to the same branch succeeded and remote SHA independently matched.
 - Full architecture: [CONTROL-HA plan](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/control-ha.md).
 - Full evidence: [source-worktree release record](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/docs/releases/2026-11-23-control-ha.md).
 - Commands/limits: [isolated rehearsal runbook](https://github.com/Joker20380/family_connect/blob/feature/device-technical-metadata-20261115/deploy/control-ha/README.md).
@@ -39,6 +41,44 @@ and direct readback from every recovered member. Final local failover is1.766s,
 not a WAN/product RTO or SLA. A separate SIGTERM check confirms all three owned
 children are stopped. Initial strict X.509 failure was repaired with AKI/SKI and
 KeyUsage extensions, not by weakening certificate checks.
+
+## HA-02E — Support ID observation and recovery
+
+Support ID backfill/request/inventory/lookup now share SQLite/PostgreSQL transaction
+semantics. Request proof and app-version observation commit together; a failed
+UPDATE/backend loss rolls both back. Missing aliases are not allocated during
+delivery. Batch backfill preserves existing aliases/bindings/revoked rows, retries
+collisions within32 attempts, and rolls back the whole batch on failure.
+
+Readiness does not infer platform or replace newer request data. Null timestamps
+sort last with a deterministic correlation tie-break; malformed optional receipt
+objects/timestamps are not observations. Safe lookup and existing explicit-list/
+all-activated rules remain. This is app-version support metadata, not OS/GeoIP or
+new consent/telemetry collection.
+
+155 real DB contracts PASS /0 skips in54.05s:66 support +40 enrollment +49 paid.
+443 consumer/runner tests PASS /21 optional skips in44.21s (16 real nginx,1 pinned
+sync artifact,4 locked Go checks). Expanded deterministic operator.pyz test1 PASS
+in2.33s runs backfill/inventory/lookup under `python -I` on synthetic SQLite; this
+overlaps the443 selection rather than adding another distinct test.
+
+Actual PostgreSQL17.11 SIGKILL/restart and fresh-container restore preserve12 lab
+tables/19 rows, including paid state, support observations and read-side restricted
+fixtures. Consumed/pending proofs, stable aliases, revocation and audit sequence
+survive. Uncommitted observation/proof changes roll back; older readiness does not
+downgrade the app version. A stale pre-observation backup is refused by comparison
+with the known committed lab snapshot. Not full product recovery, replication or
+production reverse import. Raw evidence stays outside Git at
+`/tmp/fc-control-ha-20261123/support-1/`; owned test-container cleanup verified.
+
+FIELD grant/audit/CRL/admission-file writers and support sender are still pending.
+PostgreSQL FIELD mutation explicitly refuses before opening any files; SQLite
+operator behavior remains. No server services, production DBs, clients/catalogs,
+keys or consent changed. Console5ce82415 and Android126/catalog9 unchanged. Prior
+four historical packaging failures remain open; no new production HA/RU independence.
+Rollback of this checkpoint stops only the owned disposable lab, never restores
+old production state. Next: restricted/admin DB and support sender writers, then
+other canonical writers/metadata/files/import/recovery, replication and HA-03..05.
 
 ## HA-02D — referral transactions and recovery
 
