@@ -16,7 +16,12 @@ source inspection is not a fresh server-health check.
   alternate API, client fallback or live cutover installed.
 - No server service/policy, product database, consent or client artifact changed.
 - Design checkpoint `e5eaef838863e2ce43110dd1821eef9df9b67df3` is committed/pushed;
-  remote branch SHA independently matched. Implementation is a separate checkpoint.
+  remote branch SHA independently matched. Implementation checkpoint
+  `bbc0a9fb925165716052e3e574f8fa9da7c77a57` is also ordinarily pushed and verified
+  against the remote feature-branch SHA; the worktree is clean after that commit.
+- Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
+  `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
+  The feature branch, not that unpushed handoff, is the available source checkpoint.
 
 ## HA-01 implementation and validation
 
