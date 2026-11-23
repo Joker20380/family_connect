@@ -188,7 +188,8 @@ journals settled, all-three-node online operation COMMITTED, source removal,
 atomic import/exact retry, crash/current restore and stale/new-write refusal.
 Qualification/publication results: [dated report](releases/2026-11-23-control-ha.md#ha-02v--combined-online-renewal-capsule).
 This is one synthetic current-state variant, not installed-host reconciliation.
-HA-02V retained-history continuation COMPLETE in isolation: native coordinator
+HA-02V retained-history continuation COMPLETE in isolation, qualified/pushedcd995994
+with independent remote-SHA verification: native coordinator
 predecessor retention plus explicit v2 combined-capsule gate, not another standalone
 inspector. Depends on V's independent checkpoint/issuer/DB binding and U's native
 operation checks. Gate: three sequential operations, all-three-node ledgers/archives,

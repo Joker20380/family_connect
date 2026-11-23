@@ -84,6 +84,15 @@ Qualification:
   diff reviewed for secrets, private payloads and accidental build output before
   committing; publication and navigation receipts follow separately.
 
+Publication: source/tests/docs committed as `cd995994e4429f0672524e76ea35a7a8ae54a898`,
+ordinary push to `feature/device-technical-metadata-20261115` succeeded; independent
+`ls-remote` SHA matched. Navigation-only old-main commit
+`2f91375377c4c57a8946c4c91abdfff80fe3e300` is local: ordinary push rejected
+non-fast-forward against `cb47bf230c6795cf21f4e6948253f49aa5377ed0`. No merge/rebase/
+force/reset; original four dirty-file additions and six untracked-file hashes
+matched the saved preservation snapshot. Three staged navigation docs/377 links
+PASS. This publication receipt is a separate docs-only checkpoint, not deployment.
+
 Rollback: stop only owned laboratory containers and retain private evidence. No
 production rollback is needed because nothing was installed. Do not downgrade an
 import receipt, erase history or restore old SQLite after acknowledged new writes;

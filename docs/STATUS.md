@@ -12,7 +12,11 @@ Qualification:207 real-PostgreSQL17.11 contracts /0 skips (45 history,44 combine
 78 bounded,40 enrollment), plus281 native online/emergency/package/evidence/runner
 regressions /0 skips. Exact44-table/81-row crash/restore and86-row current restore
 PASS; stale restore and old import after new writes refuse. Owned cleanup PASS.
-Source publication is recorded in the dated report; no runtime installation implied.
+Sourcecd995994 ordinarily pushed and independently remote-SHA verified on the
+metadata branch; no runtime installation implied. Eight source docs/1066 links
+and three staged navigation docs/377 links PASS. Old-main navigation2f913753 remains
+local: ordinary push rejected non-fast-forward againstcb47bf23. Four original dirty
+files/six untracked paths verified unchanged; no force/reset/rebase/merge.
 NEXT inside the partial journal block: installed offline/emergency variants, then
 actual host reconciliation, including legacy histories lacking coordinator records.
 No automatic pruning or reconstruction of missing evidence. The other three HA-02
