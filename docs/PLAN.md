@@ -62,7 +62,7 @@ restore preserves19 lab tables/22 rows; stale snapshot refused. File-ahead repai
 uses exact stored bytes; local receipt is not a serving-node ACK. Issuer keys are
 retained, not recovered. No distributed publisher or production backend selected;
 PG/synthetic-outbox legacy publication refuses before key/lock/file/network I/O.
-HA-02K metadata/consent synthetic DB boundary qualified:120 real DB contracts /0 skips
+HA-02K metadata/consent synthetic DB boundary qualified/pusheda72941d0:120 real DB contracts /0 skips
 (80 metadata +40 enrollment),152 focused regressions /16 optional skips /2 historical
 overlay fixture failures reproduced on unchanged36c23756. Depends on HA-02A proof
 transactions and accepted metadata-v1 consent/retention contract. Gate: atomic

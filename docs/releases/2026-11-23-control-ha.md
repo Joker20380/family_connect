@@ -36,6 +36,17 @@ console5ce82415, NL GeoIP22 November and public Android126/catalog9 unchanged.
 RU remains a dependency;8/12/120s and all-three-serving-node first-cohort ACKs
 remain mandatory. HA-02/03..05 and production migration are not complete.
 
+Source/tests/docs checkpoint `a72941d0840a28e0fa5292fdbf97ab9eb5f6b6d1` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA
+matched and source worktree was clean after push. Staged15-file scope/private-key/
+token inspection PASS. Separate old-main navigation-only
+`cd9783c5c4002c9458607b4f4997366d2e77848a` remains local: ordinary push rejected
+`non-fast-forward`; independently checked remote main remains
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`. No force/reset/merge/rebase performed.
+Original unstaged40 PLAN/66 STATUS/11 private-beta/6 recovery-guide additions and
+six untracked paths preserved;345 navigation-doc local link targets PASS. Published
+implementation is the metadata branch, not the divergent navigation-only main.
+
 ### Implementation and privacy boundary
 
 Common `MetadataTransaction` stays in the existing bundled metadata module; native

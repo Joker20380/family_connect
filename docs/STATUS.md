@@ -1,8 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02K metadata/consent DB recovery VERIFIED; migration IN_PROGRESS.**
-Continuation from36c23756 in the authoritative metadata worktree; synthetic source
-checkpoint, not deployment. Signed proof use, latest-only metadata and consent
+Source `a72941d0` ordinarily pushed and remote-SHA verified from36c23756 in the
+authoritative metadata worktree; not deployment. Signed proof use, latest-only metadata and consent
 epoch/sequence/digest now share one canonical SQLite/PG transaction.120 real DB
 contracts PASS /0 skips (80 metadata +40 enrollment);152 focused regressions PASS,
 16 explicit optional skips,2 historical-overlay fixture failures also reproduced
