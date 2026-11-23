@@ -1025,11 +1025,64 @@ may leave a duplicate current predecessor; native exact retry is tested, capsule
 import of that unresolved shape is not authorized. This closes the selected retained
 online-history slice, not the journal block or installed-host recovery.
 
-NEXT within the journal block: installed offline/emergency variants, then actual
-host reconciliation (including pre-existing histories without coordinator records). The other three HA-02
+The following explicit adapter covers three completed native stopped variants;
+it does not extend the retained-online-history format to mixed histories.
+NEXT within the journal block: actual host reconciliation and installed-shape inventory,
+including pre-existing histories without coordinator records. The other three HA-02
 blocks and HA-03..05 remain separate gates; no automatic continuation into live work.
 [Runbook](../deploy/control-ha/README.md#ha-02v-combined-online-renewal-capsule) ·
 [Qualification](releases/2026-11-23-control-ha.md#ha-02v--combined-online-renewal-capsule).
+
+### Completed stopped variants
+
+The explicit `bounded-and-stopped-renewal/v1` declaration and
+[capsule adapter](../scripts/control_ha_stopped_capsule.py) cover one completed native
+operator-approved stopped renewal, planned offline authority handoff, or completed
+online-emergency rollforward after revocation. This is not a generic interpreter or
+an installed-host census. The existing single-online and retained-history gates remain
+strict and do not silently accept this format. The capsule contains45 private artifacts:
+the existing44 plus both published NL directories in `publication.json`. Its manifest
+binds both payloads, all five native capture documents, all four stores, issuer material
+and independent checkpoint. Both publication hashes must match the RU archive receipt;
+each signed directory must belong to the correct family/gateway and be currently valid.
+The primary directory, issuer and exact five-table grant-plan after-state must also
+match the canonical snapshot, including revoked devices and certificates.
+
+[Native validation](../scripts/control_ha_stopped_v1.py) requires COMMITTED, all three
+acquired/quiesced nodes, explicit outage-gate attestation, exact prepared/current plans,
+promotion reconciliation, CLEANED ledgers, complete hashed archives and before/staged
+material. Native signature, authority/CRL floors, grants, profile/private-key bindings,
+path/owner/mode metadata and completion timestamps are checked. Offline mode additionally
+binds both authority requests to their previous authority and signed successors.
+Emergency mode preserves the immutable parent COMMIT, all three parent archives/owners,
+stopped handoff receipts, continuation ID, virtual successor plan and incremented CRL
+floor. The parent inspection projection is derived only from retained native bytes;
+it is not an invented historical coordinator file and is never installed or executed.
+
+Important custody limit: native archives do not retain the original signed offline
+handoff envelope or the original operator-approval object. Candidate authority signatures
+and recorded gate/request bindings can be checked, but missing authorization evidence
+cannot be fabricated, re-signed or replayed as permission for a new outage. The adapter
+explicitly reports `approval_replay=NOT_AUTHORIZED`, `host_resume=NOT_AUTHORIZED` and
+`activation=FORBIDDEN`. Declared metadata is not a live-host attestation.
+
+Unfinished operations remain byte-exact authenticated Q evidence but refuse strict
+import. Expired recovery, fenced rollback, mixed/multi-operation stopped histories,
+scheduled/zero-session gates, service-bearing installed archives and incomplete legacy
+history are outside this format and refuse; no ledger is emptied to make them fit.
+Existing Q/R/S/T checks still run; import provenance includes this stronger adapter,
+so a weaker prior import receipt cannot be upgraded by retrying it as stopped evidence.
+The three-mode rehearsal uses native operations, then removes original sources before
+canonical import/crash/current-state restore. Captured RPC/readers are simulated and
+bounded root operations run in owned containers; no installed runtime is claimed.
+
+NEXT is read-only installed-shape inventory/host reconciliation, not another speculative
+variant or deployment. Determine the actual journals and missing custody evidence before
+defining a relocation gate. The other three HA-02 blocks remain open. Before cutover,
+rollback is disposal of owned lab resources; after canonical writes, fence and recover
+current state, never restore an older SQLite/profile snapshot.
+[Runbook](../deploy/control-ha/README.md#ha-02v-completed-stopped-variants) ·
+[Qualification](releases/2026-11-23-control-ha.md#ha-02v--completed-stopped-variants).
 
 ## HA-02U — online renewal evidence
 

@@ -152,12 +152,17 @@ bounded и online evidence с четырьмя БД и issuer в одной encr
 Продолжение V добавляет сохранение coordinator history до замены текущей операции
 и проверку цепочки completed online renewals; стенд выполняет три операции подряд.
 Это synthetic qualification, не live inventory и не разрешение исполнить журналы.
+Следующий V-adapter включает три completed native варианта: остановленное обновление,
+плановую офлайн-смену authority и аварийный rollforward после отзыва устройства.
+Оба опубликованных NL directory и parent emergency archive сохраняются целиком;
+старое согласие на остановку не превращается в новое разрешение.
 
 Оставшийся HA-02 учитывается четырьмя крупными блоками, не количеством букв:
 
 1. **Журналы — частично:** bounded и retained completed online-history объединены
-   с canonical capsule/issuer/DB; офлайн/аварийные установленные варианты и
-   перенос host bindings ещё не закрыты. Целиком блок не завершён.
+   с canonical capsule/issuer/DB; три completed stopped/offline/emergency варианта
+   добавлены отдельно. Фактические installed histories/service archives и перенос
+   host bindings ещё не закрыты. Целиком блок не завершён.
 2. **Рабочие схемы и writers:** live census и согласованный capture barrier не выполнены.
 3. **Полное восстановление:** off-host key/checkpoint custody и актуальное recovery
    всей системы после новых записей не квалифицированы.

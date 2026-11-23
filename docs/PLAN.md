@@ -199,8 +199,20 @@ atomic PG import/crash/current restore and stale/weaker receipt refusal.
 207 real-PG contracts /0 skips and281 targeted regressions /0 skips PASS;
 source removed,44-table81→86-row recovery PASS. No installed history migration or
 host activation. [Evidence](releases/2026-11-23-control-ha.md#ha-02v--retained-online-history).
-NEXT bounded scope within the journal block: installed offline/emergency variants,
-then actual host reconciliation, including legacy histories missing coordinator bytes. T alone
+HA-02V completed stopped-variant slice COMPLETE IN ISOLATION: native operator-approved stopped
+renewal, planned offline authority handoff and completed emergency rollforward.
+Depends on Q's independent checkpoint, R/S/T private-state checks and V's current
+issuer/five-table binding. Gate: both NL publications and full three-node native
+archives, unchanged parent emergency evidence, no approval replay, source removal,
+all-three-mode atomic PG import/crash/current restore and stale/weaker receipt refusal.
+Gate PASS:333 real-PG17.11 contracts /0 skips,191 focused checks /0 skips; all three
+source-removed recoveries,44 tables each,81→86 stopped/offline and88→93 emergency rows.
+No installed-host/full-DR acceptance. Eight source docs/1078 local links checked.
+Qualification/publication: [dated report](releases/2026-11-23-control-ha.md#ha-02v--completed-stopped-variants).
+NEXT bounded scope within the journal block: read-only installed-shape inventory and
+actual host reconciliation, including legacy histories missing coordinator bytes,
+service-bearing archives, mixed histories and missing approval custody. Do not implement
+further speculative variants before identifying the actual installed shapes. T alone
 still refuses nonempty renewal ledgers; V is an explicit combined format/gate;
 authenticated pending/unknown operations, path/owner bindings and floors must
 not be reset or re-signed to bypass checks. This checkpoint does not qualify relocation.

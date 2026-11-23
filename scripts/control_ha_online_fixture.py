@@ -22,7 +22,7 @@ from test_control_ha_renewal_v1 import OPERATION, capture
 from credential_renewal import atomic
 
 
-def online_fixture(root, *, interrupt=False, history=False):
+def native_fixture(root, *, history=False):
     fleet_root = root / 'native'
     fleet_root.mkdir(mode=0o700)
     fleet = make_fleet(fleet_root, now=NOW - (36000 if history else 12000))
@@ -44,6 +44,11 @@ def online_fixture(root, *, interrupt=False, history=False):
         profile = parse(path.read_bytes())
         profile.update(revocations=crl.decode(), minimum_crl=number)
         atomic(path, encoded(profile))
+    return fixture, fleet
+
+
+def online_fixture(root, *, interrupt=False, history=False):
+    fixture, fleet = native_fixture(root, history=history)
     def fault(phase):
         if interrupt and phase == 'ONLINE_COMMIT_DECIDED':
             raise Crash()

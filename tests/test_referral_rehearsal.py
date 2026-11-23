@@ -22,6 +22,58 @@ from scripts.control_ha_external_rehearsal import ExternalRehearsal
 from scripts.control_ha_receiver_rehearsal import ReceiverRehearsal
 from scripts.control_ha_maintenance_rehearsal import MaintenanceRehearsal
 from scripts.control_ha_online_rehearsal import OnlineRehearsal
+from scripts.control_ha_stopped_rehearsal import StoppedRehearsal
+
+
+def test_stopped_contract_partitions_preserve_every_gate(tmp_path, monkeypatch):
+    runner = StoppedRehearsal(tmp_path / 'stopped-contracts')
+    calls = []
+    def contracts(self):
+        calls.extend(self.CONTRACT_FILES)
+        for extension in ('log', 'xml'):
+            (self.root / ('contracts.' + extension)).write_text(self.CONTRACT_FILES[0])
+        return 7
+    monkeypatch.setattr(OnlineRehearsal, 'contracts', contracts)
+    expected = StoppedRehearsal.CONTRACT_FILES
+    assert runner.contracts() == 7 * len(expected)
+    assert calls == list(expected) and runner.CONTRACT_FILES == expected
+    for source in expected:
+        assert (runner.root / (Path(source).stem + '.log')).read_text() == source
+        assert (runner.root / (Path(source).stem + '.xml')).read_text() == source
+
+
+def test_stopped_contract_partition_failure_is_not_a_pass(tmp_path, monkeypatch):
+    runner = StoppedRehearsal(tmp_path / 'stopped-failure')
+    def contracts(self):
+        raise RuntimeError('CONTRACTS_SKIPPED')
+    monkeypatch.setattr(OnlineRehearsal, 'contracts', contracts)
+    expected = StoppedRehearsal.CONTRACT_FILES
+    with pytest.raises(RuntimeError, match='CONTRACTS_SKIPPED'):
+        runner.contracts()
+    assert runner.CONTRACT_FILES == expected
+
+
+def test_stopped_contract_deadline_is_bounded_without_changing_other_runners(tmp_path, monkeypatch):
+    runner = StoppedRehearsal(tmp_path / 'stopped-deadline')
+    runner.port = 54321
+    def command(arguments, **settings):
+        assert settings['timeout'] == 300
+        target = next(argument.removeprefix('--junitxml=') for argument in arguments if argument.startswith('--junitxml='))
+        Path(target).write_text('<testsuites><testsuite tests="1" skipped="0"/></testsuites>')
+        return SimpleNamespace(returncode=0, stdout=b'passed', stderr=b'')
+    monkeypatch.setattr('subprocess.run', command)
+    assert runner.contracts() == len(StoppedRehearsal.CONTRACT_FILES)
+    assert OnlineRehearsal.CONTRACT_TIMEOUT == 120
+
+
+def test_stopped_parent_is_validated_before_creation(tmp_path, monkeypatch):
+    from scripts.control_ha_stopped_rehearsal import main
+    destination = tmp_path / 'outside'
+    monkeypatch.setattr('sys.argv', ['stopped-rehearsal', '--workdir', str(destination)])
+    monkeypatch.setattr('tempfile.gettempdir', lambda: str(tmp_path / 'allowed'))
+    with pytest.raises(ValueError, match='TEMPORARY_REHEARSAL_ONLY'):
+        main()
+    assert not destination.exists()
 
 
 def test_chat_recovery_requires_exact_refusal_not_any_error():
@@ -57,7 +109,7 @@ def test_restore_cannot_silently_lose_referral_state(mutation):
         require_current_restore(current, restored)
 
 
-@pytest.mark.parametrize('runner', [ReferralRehearsal, SupportRehearsal, RestrictedAdminRehearsal, RestrictedRehearsal, ChatRehearsal, RoutingRehearsal, CRLRehearsal, MetadataRehearsal, DiagnosticsRehearsal, NoticesRehearsal, ImportRehearsal, SQLiteImportRehearsal, BundleRehearsal, ExternalRehearsal, ReceiverRehearsal, MaintenanceRehearsal, OnlineRehearsal])
+@pytest.mark.parametrize('runner', [ReferralRehearsal, SupportRehearsal, RestrictedAdminRehearsal, RestrictedRehearsal, ChatRehearsal, RoutingRehearsal, CRLRehearsal, MetadataRehearsal, DiagnosticsRehearsal, NoticesRehearsal, ImportRehearsal, SQLiteImportRehearsal, BundleRehearsal, ExternalRehearsal, ReceiverRehearsal, MaintenanceRehearsal, OnlineRehearsal, StoppedRehearsal])
 def test_writer_runner_uses_temporary_owned_local_docker_only(tmp_path, monkeypatch, runner):
     with pytest.raises(ValueError, match='TEMPORARY_REHEARSAL_ONLY'):
         runner(Path('/not-a-temporary-writer-rehearsal'))

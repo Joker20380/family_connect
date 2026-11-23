@@ -40,14 +40,20 @@ Keep separate:
 single-operation online-renewal evidence format. It does not replace this caller
 census, qualify installed histories/offline modes, or authorize host relocation.
 [HA-02V](control-ha-storage.md#ha-02v--combined-online-renewal-capsule) binds this
-completed-operation variants to the canonical capsule/issuer/DB checkpoint.
+completed-operation evidence to the canonical capsule/issuer/DB checkpoint.
 The combined format explicitly declares renewal evidence on every bounded node;
 it does not reinterpret T's empty-ledger declaration or change native HMAC journals.
 The explicit history extension retains coordinator predecessors before replacement,
 checks the matching full three-node archive/ledger set and preserves all original
 bytes. It does not reconstruct missing legacy coordinator records or attest live
-inventory completeness. Offline/emergency variants and actual host reconciliation
-remain pending; no automatic pruning, rebinding or host resume is authorized.
+inventory completeness. The explicit [stopped variant adapter](control-ha-storage.md#completed-stopped-variants)
+also binds one completed operator-approved stopped renewal, planned offline authority
+handoff or completed online-emergency rollforward to the current capsule. Both NL
+publication payloads and native parent archives are retained. Missing original approval
+or signed handoff-envelope bytes are not reconstructed; these records cannot authorize
+another outage. Mixed histories, expired-recovery/fenced rollback, service-bearing
+installed archives and actual host reconciliation remain unqualified. No automatic
+pruning, rebinding or host resume is authorized.
 
 All paths below are source paths or relative logical artifacts, not an instruction
 to read/copy a live directory. Scope includes callers outside `control/friends`.

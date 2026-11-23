@@ -18,8 +18,8 @@ from credential_renewal import Rejected
 OPERATION = 'ha-online-renewal-fixture'
 
 
-def capture(fleet, operation=OPERATION):
-    parts = {'capture.json': encoded(dict(schema=1, purpose=PURPOSE, operation_id=operation,
+def capture(fleet, operation=OPERATION, *, purpose=PURPOSE):
+    parts = {'capture.json': encoded(dict(schema=1, purpose=purpose, operation_id=operation,
         captured_at=fleet.now, anchor_sha256=digest(fleet.validator.anchor), nodes=sorted(SLOTS)))}
     roots = dict(coordinator=fleet.controller.root, **{slot: node.state for slot, node in fleet.nodes.items()})
     for slot, root in roots.items():

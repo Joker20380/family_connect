@@ -1,6 +1,6 @@
 # Documentation
 
-[CONTROL-HA HA-02V: combined encrypted capsule, retained online history, exact renewal/issuer/DB binding and isolated recovery; no host activation](control-ha-storage.md#ha-02v--combined-online-renewal-capsule).
+[CONTROL-HA HA-02V: combined encrypted capsule, retained online history and completed stopped/offline/emergency variants; exact renewal/issuer/DB binding, no host activation](control-ha-storage.md#ha-02v--combined-online-renewal-capsule).
 
 [CONTROL-HA · 23 November: distributed management implementation, staged gates and rollback; production unchanged](control-ha.md).
 

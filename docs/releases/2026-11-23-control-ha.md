@@ -35,6 +35,79 @@ source inspection is not a fresh server-health check.
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
 
+## HA-02V — completed stopped variants
+
+Continuation from8cf110cd6fc167686cc53ca48861055e98b3a600 on the authoritative
+metadata branch. The selected work is source-only canonical capsule binding for
+three completed native variants, not host reconciliation or a live migration:
+
+- Operator-approved stopped renewal with exact three-node archives/reconciliation.
+- Planned offline authority handoff with both requests and signed successor authorities.
+- Completed online-emergency rollforward after a real synthetic device revocation,
+  retaining immutable parent COMMIT/archive evidence and both NL publication payloads.
+
+The explicit stopped declaration binds45 private artifacts, all four stores, current
+issuer and exact five native DB projections to the independent capsule checkpoint.
+All three CLEANED ledgers, material/profile/private-key bindings, native signatures,
+timestamps and metadata are required. Weaker import provenance cannot be promoted.
+Unsettled evidence is still byte-exact Q-recoverable, but strict import refuses it.
+The parent inspection projection is never persisted as a manufactured coordinator
+record or executed on a host. No raw keys, approval objects, profiles or journals
+appear in Git or public receipts.
+
+Native custody gap found and documented: the original operator-approval object and
+signed offline handoff envelope are not retained in the native completed archives.
+Recorded gates/requests and authority signatures are not permission to replay an
+outage. No missing bytes are reconstructed; `approval_replay` and `host_resume` are
+NOT_AUTHORIZED. Mixed histories, expired-recovery/fenced rollback, scheduled or
+zero-session gates, installed service files and legacy gaps remain fail-closed.
+
+Final qualification: `stopped-recovery-4` PASS,333 real-PostgreSQL17.11 contracts /0
+failures/errors/skips across five file-scoped processes:126 stopped variants,
+44 combined,45 retained history,78 bounded and40 enrollment. One shared contract
+gate and three independent source-removed recoveries, not one recovery reused three
+times. Every mode passes real PG SIGKILL/import readback, application/receiver
+operations, current-state restore, stale-backup and old-import refusal. Each has44
+tables: stopped/offline81→86 rows; emergency88→93 (additional revoked device evidence).
+All owned-container cleanup PASS;45 exact private artifacts per capsule. Wrapping
+key/checkpoint remain in memory, not independently recovered off-host.
+
+Focused native evidence/runner regressions:191 PASS /0 skips (162 U evidence,
+29 final runner guards). `stopped-regression.log` contains162+27; the final expanded
+runner file passes29 in `stopped-runner-final.log`. `stopped-guards.log` additionally
+passes75 bounded checks and28 interim runner checks, with3 PG cases deselected;
+all78 bounded cases subsequently pass in the owned real-PG gate above. Eight source
+docs/1078 local links and whitespace PASS. Staged source/test/doc review excludes
+private state, raw profiles/keys/journals, dumps and build output. Evidence stays
+under private `/tmp/fc-control-ha-20261123/` (700/600), never Git/CI.
+
+Retained development attempts, not acceptance results: initial focused
+attempt exposed a test-only assumption (`Snapshot.tables` rather than `rows`):
+15 failures/86 passes, retained privately, not a qualification PASS. Corrected focused
+gate:110 passes/15 PG cases deselected; these PG cases must run in the owned runner.
+Attempts `stopped-recovery-1` and `stopped-recovery-2` exceeded the original120s
+contract-process deadline; neither is a recovery PASS. The new three-mode gate
+keeps every test, partitions by file, and allows bounded300s per process. Other
+runners retain120s; production8/12/120s deadlines are unrelated and unchanged.
+Partition completeness, failure propagation and timeout isolation have explicit tests.
+Attempt `stopped-recovery-3`:109 passes/17 failures exposed an incorrect adapter
+assumption that emergency completion overwrites the parent's online `cleaned` list.
+Native emergency uses the stopped completion path; actual completion is proved by
+all three CLEANED ledgers/manifests and reconciliation, not that parent-only list.
+The adapter now preserves/validates the parent field as parent evidence without
+rewriting it. This failed attempt is retained, not counted as acceptance.
+
+No SSH or server/database/service/policy/version/catalog changes. Last known console
+5ce82415, NL GeoIP22 November and Android126/catalog9 unchanged;8/12/120s and
+all-three-node ACK gate unchanged. No new health assertion. Stage2 of5, RU dependence
+persists. NEXT within the journal block is read-only installed-shape inventory and
+host reconciliation, not further speculative variants. Live schema/writer barrier,
+full-system recovery/off-host custody and strict replication/RPO0 remain separate.
+Rollback before cutover is disposal of owned lab resources; after canonical writes,
+fence and recover current state rather than copying an older SQLite/profile snapshot.
+[Contract](../control-ha-storage.md#completed-stopped-variants) ·
+[Runbook](../../deploy/control-ha/README.md#ha-02v-completed-stopped-variants).
+
 ## HA-02V — retained online history
 
 Continuation from2c2e978765a4786a90a5f8a09320849f2706221c on the authoritative

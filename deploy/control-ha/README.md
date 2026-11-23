@@ -835,7 +835,42 @@ Rollback for this checkpoint is disposal of owned temporary containers; no produ
 rollback is needed. Preserve private evidence when a check fails; do not clear state
 or substitute an older capsule. After future canonical writes, use fenced current-state
 recovery, never reverse-copy old SQLite. Off-host wrapping-key/checkpoint custody,
-offline/emergency or incomplete legacy histories, installed schemas/writers, actual host
+mixed offline/emergency or incomplete legacy histories, installed schemas/writers, actual host
 reconciliation and replication/RPO0 remain unqualified. Stage2 of5; RU still required.
 [Contract](../../docs/control-ha-storage.md#ha-02v--combined-online-renewal-capsule) ·
 [Evidence](../../docs/releases/2026-11-23-control-ha.md#ha-02v--combined-online-renewal-capsule).
+
+## HA-02V: completed stopped variants
+
+Run only from the authoritative source worktree, using the same pinned environment:
+
+```sh
+umask 077
+python -m scripts.control_ha_stopped_rehearsal --workdir /tmp/fc-ha-stopped-recovery-UNIQUE
+python -m pytest -q tests/test_control_ha_renewal_v1.py tests/test_referral_rehearsal.py
+```
+
+The first command runs one shared zero-skip real-PG contract gate in five file-scoped
+processes (bounded300s per process; other runners keep120s), then three sequential
+owned recovery runs: stopped renewal, planned offline authority handoff and completed
+online-emergency rollforward after revocation. It uses a fresh private parent directory;
+each variant owns its containers and evidence. Original inputs are deleted before
+restoring45 capsule artifacts. Actual PG SIGKILL, exact current-state backup/restore,
+stale-backup and old-import refusal are mandatory in every variant. Only the contract
+suite is shared, not the recovery result. Failure retains private evidence; do not
+reuse a failed directory or relabel a partial run as all-three PASS.
+
+This adapter is for terminal, operator-approved native evidence, not an approval
+replay or host-resume tool. Original authorization objects/envelopes missing from
+native archives stay missing; no reconstruction is permitted. Pending, mixed-history,
+expired-recovery/fenced-rollback, unknown service files or metadata shapes refuse.
+Both NL publication payloads and the complete emergency parent archives are required;
+checking only the primary publication or CRL number is insufficient.
+
+Rollback remains disposal of owned lab resources; no production writer is switched.
+NEXT is read-only installed inventory/host reconciliation, including legacy gaps and
+actual service-bearing shapes. Live capture barriers, off-host key/checkpoint custody,
+full-system DR and strict replication/RPO0 remain separate gates. Stage2 of5, RU dependence
+unchanged. No live paths, private keys, raw journals, DB dumps or capsules belong in Git.
+[Contract](../../docs/control-ha-storage.md#completed-stopped-variants) ·
+[Evidence](../../docs/releases/2026-11-23-control-ha.md#ha-02v--completed-stopped-variants).

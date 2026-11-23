@@ -1,5 +1,27 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02V completed stopped variants.**
+Selected source slice: one completed operator-approved stopped renewal, planned
+offline authority handoff, or online-emergency rollforward after revocation. Each
+variant binds45 capsule artifacts, both NL publications, native three-node archives,
+current issuer and exact five-table DB state. Missing original approval/envelope
+bytes are not reconstructed; restore neither replays approval nor resumes a host.
+Qualified in isolation:333 real-PostgreSQL17.11 contracts /0 skips (126 new,44 combined,
+45 history,78 bounded,40 enrollment), plus191 focused evidence/runner checks /0 skips.
+Every variant removes its sources before restore, passes actual PG crash/current
+recovery and refuses stale restore/old import after new writes.44 tables each;
+stopped/offline81→86 rows, emergency88→93. Owned-container cleanup PASS. Eight source
+docs/1078 local links and whitespace PASS. This is source-only, not deployment or full DR.
+NEXT after this slice: read-only installed-shape inventory/host reconciliation,
+including legacy evidence gaps, actual service files and mixed histories. No automatic
+variant expansion, pruning or rebinding. The other three HA-02 blocks remain open:
+live schema/writer barrier, full-system recovery/off-host custody, strict replication/RPO0.
+Stage2 of5; RU dependence persists. No SSH/service/policy/version/catalog change or
+fresh health claim. Console5ce82415, NL GeoIP22 November, Android126/catalog9 and
+8/12/120s/all-three-node ACK remain unchanged.
+[Contract](control-ha-storage.md#completed-stopped-variants) ·
+[Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02v--completed-stopped-variants).
+
 **23 November — CONTROL-HA HA-02V retained online-history continuation.**
 The selected history slice is qualified in isolation, not deployed. Native online
 renewal now retains exact predecessor coordinator bytes durably before replacement;

@@ -29,6 +29,9 @@ class OnlineRehearsal(ReceiverRehearsal):
     def validate_bundle(self, bundle):
         return preflight_online(bundle, self.bundle_key, self.checkpoint, self.anchor, now=NOW, history=self.history)
 
+    def inspect_journals(self, recovered):
+        return inspect_online_inputs(recovered, self.checkpoint.checkpoint, self.anchor, now=NOW, history=self.history)
+
     def recover_fixture(self, fixture):
         fixture = super().recover_fixture(fixture)
         fixture.service.all_activated = True
@@ -41,8 +44,7 @@ class OnlineRehearsal(ReceiverRehearsal):
         retained = {name: (destination / name).read_bytes() for name in parts}
         require(retained == parts, 'ONLINE_RETAINED_EVIDENCE_CHANGED')
         recovered.artifacts['maintenance_state'] = retained
-        self.journal_behavior = inspect_online_inputs(recovered, self.checkpoint.checkpoint, self.anchor,
-                                                     now=NOW, history=self.history)
+        self.journal_behavior = self.inspect_journals(recovered)
         return fixture
 
 

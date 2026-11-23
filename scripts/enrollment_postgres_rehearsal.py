@@ -23,6 +23,7 @@ LABEL = 'family-connect.ha-enrollment-rehearsal'
 
 class Rehearsal:
     CONTRACT_FILES = ('tests/test_enrollment_repository.py',)
+    CONTRACT_TIMEOUT = 120
 
     def __init__(self, root):
         self.root = Path(root)
@@ -107,7 +108,7 @@ class Rehearsal:
             'FC_HA_PG_PASSWORD_FILE': str(self.password_file)}
         result = subprocess.run([sys.executable, '-m', 'pytest', '-q', '-ra',
             *self.CONTRACT_FILES, '--junitxml=' + str(self.root / 'contracts.xml')],
-            cwd=ROOT, env=environment, capture_output=True, timeout=120)
+            cwd=ROOT, env=environment, capture_output=True, timeout=self.CONTRACT_TIMEOUT)
         private_file(self.root / 'contracts.log', result.stdout + result.stderr)
         require(result.returncode == 0, 'REPOSITORY_CONTRACTS_FAILED')
         from xml.etree import ElementTree

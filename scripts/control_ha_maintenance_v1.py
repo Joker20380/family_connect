@@ -21,6 +21,7 @@ ADAPTER = 'family-connect/canonical-maintenance/v1/not-for-activation'
 PURPOSE = 'synthetic-canonical-maintenance/v1/not-live-attestation'
 ONLINE_RENEWAL_FORMAT = 'bounded-and-online-renewal/v1'
 ONLINE_HISTORY_FORMAT = 'bounded-and-online-renewal-history/v1'
+STOPPED_RENEWAL_FORMAT = 'bounded-and-stopped-renewal/v1'
 PARTS = frozenset({'capture.json'} | {node + '.json' for node in NODES})
 FILES = {'profile': 49152, 'directory': 8192, 'lock': 4096, 'journal-key': 32, 'publisher': 131072}
 OP_FILES = {'permit.json': 8192, 'request.json': 20000, 'journal.json': 16384,
@@ -226,7 +227,8 @@ def inspect_maintenance(parts, issuer, *, now, renewal=None):
     """Authenticate archived evidence; unresolved evidence is retained, not executable."""
     try:
         require(renewal is None or (type(renewal) is dict and set(renewal) == {'format', 'evidence_sha256'} and
-                renewal['format'] in (ONLINE_RENEWAL_FORMAT, ONLINE_HISTORY_FORMAT) and type(renewal['evidence_sha256']) is str and
+                renewal['format'] in (ONLINE_RENEWAL_FORMAT, ONLINE_HISTORY_FORMAT, STOPPED_RENEWAL_FORMAT) and
+                type(renewal['evidence_sha256']) is str and
                 re.fullmatch('[0-9a-f]{64}', renewal['evidence_sha256'])), 'MAINTENANCE_RENEWAL_UNSUPPORTED')
         require(set(parts) == PARTS, 'MAINTENANCE_PARTS')
         require(all(type(raw) is bytes and 0 < len(raw) <= (8192 if name == 'capture.json' else 1024 * 1024)

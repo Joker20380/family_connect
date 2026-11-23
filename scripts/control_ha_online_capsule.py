@@ -86,18 +86,7 @@ def inspect_online_inputs(recovered, checkpoint, anchor, *, now, history=False):
         _, coordinator = decode_document(renewal['coordinator.json'], 'coordinator', evidence.operation)
         plan = parse(coordinator['plan.json'])
         record = parse(coordinator['transaction.json'])
-        require(parse(issuer['delegation']) == plan['candidate']['authority'] and
-                issuer['crl'] == plan['candidate']['crl'].encode() and issuer['directory'] ==
-                base64.b64decode(record['published']['NL']['directory']['payload'], validate=True),
-                'ONLINE_CAPSULE_ISSUER_MISMATCH')
-        number = x509.load_pem_x509_crl(issuer['crl']).extensions.get_extension_for_class(x509.CRLNumber).value.crl_number
-        before = plan['grant_plan']['before']
-        require(set(before) == set(DATABASE_TABLES), 'ONLINE_CAPSULE_DATABASE_SCOPE')
-        target = dict(before, restricted_grants=plan['grant_plan']['after_grants'],
-                      restricted_crl_sequence=[dict(singleton=1, sequence=number)])
-        current = records(recovered.snapshot)
-        require(all(encoded(sorted(current[table], key=encoded)) == encoded(sorted(target[table], key=encoded))
-                    for table in DATABASE_TABLES), 'ONLINE_CAPSULE_DATABASE_MISMATCH')
+        bind_current(recovered, plan, base64.b64decode(record['published']['NL']['directory']['payload'], validate=True))
         return dict(result='BOUND_COMPLETED_RENEWAL', renewal_sha256=binding['renewal_sha256'],
                     database_tables=len(DATABASE_TABLES), operations=operations,
                     activation='FORBIDDEN', host_resume='NOT_AUTHORIZED')
@@ -105,6 +94,21 @@ def inspect_online_inputs(recovered, checkpoint, anchor, *, now, history=False):
         raise
     except (KeyError, TypeError, ValueError, AttributeError, OverflowError, RecursionError):
         raise ImportRejected('ONLINE_CAPSULE_INVALID') from None
+
+
+def bind_current(recovered, plan, directory):
+    issuer = recovered.artifacts['issuer_material']
+    require(parse(issuer['delegation']) == plan['candidate']['authority'] and
+            issuer['crl'] == plan['candidate']['crl'].encode() and issuer['directory'] == directory,
+            'ONLINE_CAPSULE_ISSUER_MISMATCH')
+    number = x509.load_pem_x509_crl(issuer['crl']).extensions.get_extension_for_class(x509.CRLNumber).value.crl_number
+    before = plan['grant_plan']['before']
+    require(set(before) == set(DATABASE_TABLES), 'ONLINE_CAPSULE_DATABASE_SCOPE')
+    target = dict(before, restricted_grants=plan['grant_plan']['after_grants'],
+                  restricted_crl_sequence=[dict(singleton=1, sequence=number)])
+    current = records(recovered.snapshot)
+    require(all(encoded(sorted(current[table], key=encoded)) == encoded(sorted(target[table], key=encoded))
+                for table in DATABASE_TABLES), 'ONLINE_CAPSULE_DATABASE_MISMATCH')
 
 
 def preflight_online(bundle, key, expected, anchor, *, now, history=False):
