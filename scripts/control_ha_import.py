@@ -137,10 +137,12 @@ class Snapshot:
     checkpoint: str
     rows: tuple = field(repr=False)
     external_digests: tuple = field(repr=False)
+    crl_anchor: tuple = field(default=(), repr=False)
 
     @property
     def fingerprint(self):
-        return digest(encoded((VERSION, PURPOSE, self.checkpoint, self.rows, self.external_digests)))
+        values = (VERSION, PURPOSE, self.checkpoint, self.rows, self.external_digests)
+        return digest(encoded(values + (self.crl_anchor,) if self.crl_anchor else values))
 
     @property
     def counts(self):
@@ -281,7 +283,11 @@ def structure(database):
 def verify(database, snapshot):
     tables = {row['tablename'] for row in database.execute(
         'SELECT tablename FROM pg_tables WHERE schemaname=current_schema()')}
-    require(tables == {table.name for table in TABLES} | MARKERS | {'ha_import_receipt'}, 'TARGET_COVERAGE')
+    extra = {'ha_import_crl_anchor'} if snapshot.crl_anchor else set()
+    require(tables == {table.name for table in TABLES} | MARKERS | {'ha_import_receipt'} | extra, 'TARGET_COVERAGE')
+    if snapshot.crl_anchor:
+        require(database.execute('SELECT * FROM ha_import_crl_anchor').fetchall() == [dict(zip(
+            ('singleton', 'version', 'purpose', 'sequence', 'payload_sha256'), snapshot.crl_anchor, strict=True))], 'TARGET_CRL_ANCHOR_CHANGED')
     for table, expected in zip(TABLES, snapshot.rows, strict=True):
         rows = database.execute('SELECT ' + ','.join(table.columns) + ' FROM ' + table.name).fetchmany(MAX_ROWS + 1)
         actual = tuple(sorted((tuple(row[name] for name in table.columns) for row in rows), key=encoded))
@@ -311,6 +317,15 @@ def import_snapshot(repository, snapshot, *, fault=lambda stage: None):
                 return dict(result='EXACT_RETRY', activation='FORBIDDEN', tables=snapshot.counts)
             database.execute(sql.SQL('CREATE SCHEMA {}').format(sql.Identifier(repository.schema)))
             initialize(database)
+            if snapshot.crl_anchor:
+                database.execute('CREATE TABLE ha_import_crl_anchor(singleton BIGINT PRIMARY KEY CHECK(singleton=1), '
+                    'version BIGINT NOT NULL, purpose TEXT NOT NULL, sequence BIGINT NOT NULL CHECK(sequence>0 AND sequence<9007199254740992), '
+                    'payload_sha256 TEXT NOT NULL)')
+                database.execute('INSERT INTO ha_import_crl_anchor VALUES (%s,%s,%s,%s,%s)', snapshot.crl_anchor)
+                database.execute("CREATE FUNCTION import_crl_immutable() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN "
+                    "RAISE EXCEPTION 'immutable CRL import anchor' USING ERRCODE='23514'; END $$")
+                database.execute('CREATE TRIGGER import_crl_immutable BEFORE UPDATE OR DELETE OR TRUNCATE ON ha_import_crl_anchor '
+                    'FOR EACH STATEMENT EXECUTE FUNCTION import_crl_immutable()')
             fault('schema')
             for table, rows in zip(TABLES, snapshot.rows, strict=True):
                 statement = 'INSERT INTO ' + table.name + '(' + ','.join(table.columns) + ') VALUES (' + ','.join(['%s'] * len(table.columns)) + ')'

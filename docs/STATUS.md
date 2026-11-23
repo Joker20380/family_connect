@@ -1,5 +1,29 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02P application SQLite import VERIFIED in isolation.**
+Continuation frombf1a4cea; source/tests/docs only, no SSH/live read/deployment.
+Pinned adapters accept one exact application-produced SQLite schema variant:
+four stores/29 source tables/68 rows, not HA-02O storage-sentinel source schemas.
+Joint fixture exercises real activation/referral/payment, support/audit, issued
+certificates/readiness ACK, signed CRL/routing, chat, metadata tombstone, diagnostics
+and valid notice revisions.165 contracts PASS /0 skips (54 adapter +71 prior import
++40 enrollment);128 CRL regression contracts PASS /0 skips;98 consumer/runner
+checks PASS /0 skips. PostgreSQL17.11 imported44-table/82-row SIGKILL/restore PASS;
+new operations after restore produce44 tables/87 rows; stale restore/old import
+refused and exact current recovery PASS. Sources remain unchanged.
+Legacy CRL floor is preserved using an immutable verified import anchor; first
+outbox entry must use that exact signed predecessor, then normal journal rules
+resume. No invented publication history or remote ACK. Activation remains forbidden.
+Installed schema history/live writer census not surveyed; separate public trust
+anchor is required. External keys/profiles/aliases/allocators/receiver safety state
+are retained, not fully recovered. NEXT bounded scope: versioned external recovery
+bundle and dry-run consistency preflight. Actual live barrier/full recovery,
+strict replication/RPO0 and HA-03..05 still gate cutover. Stage2 of5; RU dependency
+remains. Console5ce82415, NL GeoIP22 November, public Android126/catalog9,
+8/12/120s and all-three-node first-cohort ACKs unchanged. No fresh health claim.
+[Adapter/rollback](control-ha-storage.md#ha-02p--application-sqlite-adapters) ·
+[Evidence](releases/2026-11-23-control-ha.md#ha-02p--application-sqlite-import).
+
 **23 November — CONTROL-HA HA-02O synthetic all-store shape import VERIFIED.**
 Source5bb61ccb ordinarily pushed and independently remote-SHA verified from87ff67b5;
 source/tests/docs only, no SSH/deployment/live read.

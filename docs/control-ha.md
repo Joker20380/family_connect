@@ -83,7 +83,7 @@
 | Этап | Состояние | Что остаётся до перехода дальше |
 | --- | --- | --- |
 | HA-01: quorum/shadow foundation | Лабораторный gate завершён | Не считать стенд установленным production quorum |
-| HA-02: общее хранилище | В работе; A–M DB slices, N file inventory и O общий лабораторный shape import проверены | Адаптеры deployed SQLite и семантический joint fixture, live writer census/consistency barrier, полный external recovery, strict replication/RPO0 |
+| HA-02: общее хранилище | В работе; A–O отдельные contracts и P application SQLite adapters/joint semantic recovery проверены на стенде | External recovery bundle, installed-schema/writer census, live consistency barrier, полный recovery, strict replication/RPO0 |
 | HA-03: единственный уполномоченный writer | Не внедрён | Epoch/fencing на принимающих узлах, запрет действий старого лидера и безопасная публикация файлов |
 | HA-04: API/клиентский failover | Не внедрён | Несколько API endpoints, безопасные retries и клиентские compatibility/acceptance gates |
 | HA-05: production shadow/cutover | Не начат | Актуальные backup/restore, guarded sole-writer switch, отказ RU/возврат узла, RTO и rollback |
@@ -100,9 +100,15 @@ leases/exports;123 focused tests PASS /0 skips. Это не live process census.
 43 таблицы/47 строк с markers/receipt.111 contracts /0 skips и97 regressions /0 skips;
 SIGKILL/current restore и безопасный повтор PASS. Это storage-shape gate, не
 адаптер реальных схем: часть данных — sentinels, внешние файлы — только декларации
-ссылок. Следующий ограниченный шаг — deployed-schema adapters и семантически
-валидный общий synthetic fixture, а не включение PostgreSQL на серверах.
-Внешние ключи/файлы нельзя восстановить из DB-only dump.
+ссылок. Следующий выполненный slice —
+[HA-02P](control-ha-storage.md#ha-02p--application-sqlite-adapters):29 штатных source
+таблиц и валидный совместный fixture без credential-sentinels;165 import contracts,
+128 CRL regressions и98 consumers/runner checks, все без skips. Exact44-table
+recovery сохраняет82 строки после импорта и87 после новых операций. Это один
+поддержанный source schema вариант, не live census установленных схем.
+Следующий ограниченный шаг — external recovery bundle/consistency preflight,
+а не включение PostgreSQL на серверах. Внешние ключи/файлы нельзя восстановить
+из DB-only dump; distributed fencing и client failover не установлены.
 
 ## Откат
 

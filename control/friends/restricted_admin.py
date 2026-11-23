@@ -64,6 +64,11 @@ class CRLTransaction:
     def latest(self):
         return self.database.execute('SELECT * FROM restricted_crl_publications ORDER BY sequence DESC LIMIT 1').fetchone()
 
+    def predecessor_matches(self, previous_crl):
+        latest = self.latest()
+        return (self.sequence() == (latest['sequence'] if latest else 0) and
+                (latest is None or latest['payload'].encode() == previous_crl))
+
     def record(self, operation_id, request_hash, raw, metadata):
         self.database.execute('INSERT INTO restricted_crl_publications'
             '(operation_id,request_sha256,sequence,payload,payload_sha256,issued_at,expires_at,local_receipt) VALUES (' +
@@ -214,9 +219,7 @@ def prepare_crl(service, operation_id, previous_crl, *, lifetime=900):
             if previous['request_sha256'] != request_hash:
                 raise ValueError('CRL operation conflict')
             return dict(previous)
-        latest = transaction.latest()
-        if (transaction.sequence() != (latest['sequence'] if latest else 0)
-                or latest is not None and latest['payload'].encode() != previous_crl):
+        if not transaction.predecessor_matches(previous_crl):
             raise ValueError('CRL predecessor mismatch')
         now = int(service.access.clock())
         raw, metadata = build_crl_payload(service, transaction, previous_crl, transaction.sequence(), now, lifetime)

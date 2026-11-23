@@ -10,6 +10,8 @@
 
 [CONTROL-HA HA-02O: atomic four-store laboratory shape import and exact recovery; not a deployed-schema importer](control-ha-storage.md#ha-02o--synthetic-all-store-shape-import).
 
+[CONTROL-HA HA-02P: pinned application SQLite adapters, signed CRL continuity and joint semantic recovery; no live cutover](control-ha-storage.md#ha-02p--application-sqlite-adapters).
+
 [Device metadata · 22 November: NL/AWG GeoIP and explicit missing-data labels installed; consent unchanged](releases/2026-11-22-nl-geoip.md).
 
 [RU · 17 November00:02UTC: availability restored on accepted bytes; initiating cause remains open](releases/2026-11-17-ru-recovery.md).

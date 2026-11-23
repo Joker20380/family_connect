@@ -2,7 +2,8 @@
 
 23 November 2026. **IN_PROGRESS; HA-02A–M DB contracts квалифицированы по отдельности
 на синтетическом стенде; HA-02N source file/writer inventory и HA-02O общий
-лабораторный storage-shape import проверены отдельно.**
+лабораторный storage-shape import проверены отдельно. HA-02P добавляет pinned
+application SQLite adapters и joint semantic fixture; live schemas не обследованы.**
 Это не production, не репликация и не cutover.
 [Общие gates](control-ha.md) · [Результаты](releases/2026-11-23-control-ha.md).
 
@@ -617,6 +618,66 @@ HA-02O не разрешает переход к репликации или cut
 [Команды/rollback](../deploy/control-ha/README.md#ha-02o-synthetic-all-store-shape-import) ·
 [Evidence](releases/2026-11-23-control-ha.md#ha-02o--synthetic-all-store-shape-import).
 
+## HA-02P — application SQLite adapters
+
+[`control_ha_sqlite_import.py`](../scripts/control_ha_sqlite_import.py) принимает
+четыре согласованных SQLite images, созданных **штатными migrations/операциями**,
+а не искусственным source DDL HA-02O. Контракт
+[`sqlite-source-v1.json`](../deploy/control-ha/sqlite-source-v1.json) фиксирует
+точные table/index/trigger definitions текущего source-кода и отсутствие нового
+CRL outbox в legacy SQLite. Это поддержка одного явно рассмотренного schema
+варианта, **не доказательство совпадения с установленными RU/NL schemas**.
+
+- Registry22 + metadata1 + diagnostics1 + notices5 =29 исходных таблиц. Все они
+  копируются по явному списку колонок; notices rowid становится position.
+  Единственная новая пустая data table — `restricted_crl_publications`: старого
+  журнала operation IDs нет, его нельзя придумать или пометить доставленным.
+  Legacy CRL sequence сохраняется, а не сбрасывается в0. Ни один optional/missing
+  source/table не пропускается автоматически: другой вариант требует нового gate.
+- До PostgreSQL проверяются точные schema definitions, user_version/application_id0,
+  UTF-8, quick_check/FK,16MiB/image,20000 rows/table, typed/null contract HA-02O,
+  cross-store device/Support ID references и восемь external-reference manifests.
+  Пустой device в global routing event допустим по исходному контракту; pending
+  activation challenges могут относиться к ещё не зарегистрированному устройству.
+  Source images не изменяются. Их digests, adapter manifest и bootstrap bytes
+  привязаны к private import receipt: даже другой image с теми же rows не означает
+  тот же retry. Нет подключения к target до завершения preflight.
+- Дополнительно обязателен versioned CRL bootstrap: checkpoint, подписанный
+  delegation manifest и текущий CRL; доверенный root public anchor передаётся
+  **отдельно**, не выбирается из входного bundle. Проверяются delegation/issuer,
+  CRL signature/issuer/validity, точное совпадение CRLNumber с legacy DB floor,
+  подписи сохранённых сертификатов, их serial/expiry. Смешанные issuer generations
+  или file/DB floor mismatch — отказ, не автоматическое исправление.
+- Первый canonical CRL не мог продолжиться с legacy nonzero floor и пустым outbox:
+  прежний guard правильно ожидал journal predecessor. Теперь в **той же import
+  transaction** создаётся immutable `ha_import_crl_anchor` с исходным sequence и
+  SHA256 проверенного CRL. Это migration anchor, не publication/remote ACK. Только
+  точный predecessor может начать outbox; после первой записи снова требуется
+  последний outbox payload/sequence. Повтор старого baseline не разрешается.
+  UPDATE/DELETE/TRUNCATE anchor запрещены. Без import anchor прежний guard unchanged.
+  Public file export по-прежнему запрещён до HA-03 fencing.
+
+[`control_ha_sqlite_fixture.py`](../scripts/control_ha_sqlite_fixture.py) использует
+настоящие activation/referral/payment/support/grant/issuance/ACK/chat/routing/
+metadata/diagnostic/notice операции с локально созданными identities и ephemeral
+issuer. Сертификаты/CRL и routing catalogs действительно подписаны; notices v1/v2
+валидны, metadata содержит sample и revoke tombstone, отдельное устройство revoked.
+Нет storage-sentinel credentials. Тестовый root/private key, referral secret,
+sender policy и signed routing files **удерживаются в памяти процесса/приватной
+fixture directory**, не восстанавливаются из PostgreSQL. Поэтому semantic parity
+не равна полному external disaster recovery.
+
+Recovery gate: exact imported DB после SIGKILL/restore, затем business operations
+на восстановленной БД и новый backup. Старая pre-operation копия отвергается;
+current-state restore сохраняет новые proofs/edits/CRL/audit. Попытка повторить
+старый import поверх них отклоняется без записи. Действующие production SQLite,
+service selectors, client endpoints и внешние publishers не переключались.
+165 contracts /0 skips,128 CRL regression contracts /0 skips и98 focused regressions
+/0 skips PASS. Исходные29 таблиц/68 rows становятся44 таблицами/82 rows с markers,
+receipt и CRL anchor; после новых операций восстановлены44 таблицы/87 rows.
+[Команды](../deploy/control-ha/README.md#ha-02p-application-sqlite-import) ·
+[Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02p--application-sqlite-import).
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -649,14 +710,15 @@ signing keys не входят в migration и остаются офлайн.
 
 ## Следующие gates
 
-1. Использовать [HA-02N source inventory](control-ha-files.md) и ограниченный HA-02O
-   shape importer при подготовке explicit deployed-schema adapters и семантически
-   валидного joint synthetic fixture. До live cutover отдельно сверить
+1. Использовать [HA-02N source inventory](control-ha-files.md) и HA-02P pinned adapters
+   для versioned external recovery bundle и dry-run consistency preflight.
+   До live cutover отдельно сверить установленные схемы/версии и
    effective writer/CLI/timer census и consistency barrier; live notices/metadata/diagnostics
    остаются отдельными SQLite до согласованного cross-store import/collector/worker cutover.
    Distributed CRL/file publication отдельно зависит от HA-03 fencing. Не допускать mixed backend writers;
    synthetic membership не заменяет production wiring, deadline и package gates.
-2. Квалифицировать явную versioned all-table migration реальных source schemas: snapshot consistency, nullable и
+2. Сопоставить HA-02P поддержанный schema вариант с установленными source schemas;
+   неизвестные варианты требуют отдельного adapter gate. Проверить snapshot consistency, nullable и
    INTEGER/TEXT/BLOB типы, sequence reseed, FK/unique/check/trigger parity. Сравнить
    все строки/три paid projections без вывода персональных данных. Не считать
    произвольный перенос SQLite DDL полноценной миграцией PostgreSQL.

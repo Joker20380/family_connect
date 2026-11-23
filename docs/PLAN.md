@@ -109,9 +109,18 @@ three paid projections and exact43-table/47-row SIGKILL/current restore PASS.
 This is NOT deployed SQLite import: storage sentinels and declared references do
 not qualify semantic credentials, real file recovery or a live cross-store barrier.
 Activation remains forbidden; canonical production/backend selectors unchanged.
-NEXT bounded scope within HA-02: explicit deployed-schema adapters and a semantically
-valid joint synthetic fixture; reject unknown/missing schemas and external inputs
-before target writes. Then separately qualify live consistency barrier/writer census,
+HA-02P application SQLite adapters/joint semantic fixture qualified in isolation:
+165 contracts /0 skips (54 adapter +71 import +40 enrollment),128 CRL contracts
+/0 skips,98 consumer/runner checks /0 skips. Depends on A–O storage/file contracts.
+Gate: pinned current-code SQLite schema variant, four images/29 source tables,
+typed/cross-store/predecessor preflight before PG writes, exact provenance/atomic
+import, independently anchored signed CRL continuity, valid application-generated
+fixture,44-table/82-row crash/restore and semantic operations after restore PASS.
+Current recovery retains87 rows after new writes; stale restore and old import
+refuse. No live installed-schema census, real external key/file recovery, writer
+freeze or activation. Unknown source variants fail closed, not automatically migrated.
+NEXT bounded scope within HA-02: versioned external recovery bundle and dry-run
+consistency preflight. Then separately qualify installed schemas/live writer barrier,
 all-store shadow/full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.

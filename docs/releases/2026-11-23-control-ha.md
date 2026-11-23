@@ -17,7 +17,8 @@ source inspection is not a fresh server-health check.
   HA-02I gateway routing, HA-02J durable CRL, HA-02K metadata/consent, HA-02L diagnostics
   and HA-02M notice authority DB recovery slices qualified below; HA-02N source
   file/CLI inventory and synthetic alias/allocator checks complete; HA-02O common
-  synthetic storage-shape import/recovery qualified (not deployed-schema import); remaining
+  synthetic storage-shape import/recovery qualified; HA-02P pinned application SQLite
+  adapters/joint semantic recovery qualified in isolation, not a live schema census; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -29,6 +30,80 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02P — application SQLite import
+
+Continuation frombf1a4cea3d2100b0dbf50f7754a1e2342e55cce1 on the authoritative
+metadata branch. No SSH/live read, installed schema census, production DB access,
+service/consent/client change or deployment. Console5ce82415, NL GeoIP22 November,
+public Android126/catalog9 and invitation distribution unchanged.8/12/120s and
+all-three-node first-cohort ACKs remain mandatory. RU is still a dependency.
+
+### Deliverable and scope
+
+[Pinned application SQLite adapter](../control-ha-storage.md#ha-02p--application-sqlite-adapters)
+accepts four application-produced images with exact schema definitions, not the
+artificial HA-02O source shapes.29 source tables/68 rows map to30 native data
+tables. Unknown schema/migration history, missing stores, changed indexes/triggers,
+unsupported pragmas, bad types/bindings or an inconsistent CRL bootstrap refuse
+before target writes. Source images are unchanged; private receipt binds input
+image digests as well as rows, schema manifest, checkpoint and bootstrap trust.
+
+The real SQLite schema has a legacy CRL sequence but no canonical outbox. A first
+probe correctly stopped at `CRL predecessor mismatch`; simply resetting the floor
+or inventing publication history would be unsafe. The completed adapter verifies
+the signed delegation/current CRL against a separately provided public root,
+checks DB floor and stored certificate signature/serial/expiry, and atomically
+installs a distinct immutable import anchor. First preparation requires the exact
+baseline bytes/floor, then ordinary outbox continuity takes over. No local/remote
+delivery ACK is fabricated; distributed file publication remains forbidden.
+
+The joint fixture runs activation/referral/payment/support/audit/grant/issuance/
+readiness/chat/routing APIs and real metadata/diagnostic/notice stores. Issuer and
+catalog keys are ephemeral, certificates/CRLs/catalogs signed, notices v1/v2 valid;
+metadata includes a revoke tombstone and an active sample. After import/restore,
+three paid projections, payment/referral replay, Support ID, routing selection,
+readiness, one-use status/chat proofs, notice edit, CRL advance, audit ID2 and
+metadata no-resurrection checks pass. This replaces sentinels for this fixture,
+not every possible historical schema/business-state combination.
+
+### Validation and rollback
+
+Private local evidence: `/tmp/fc-control-ha-20261123/`. No actual user database,
+private key/profile, fixture bytes, raw logs or dumps enter Git; the tracked
+source-schema manifest contains SQL definitions only.
+
+- `sqlite-import-1/contracts.log`:165 PASS /0 skips in80.51s; initial integrated
+  crash/current/stale restore PASS, before adding explicit support/routing/audit
+  continuation checks to the semantic recovery probe.
+- `sqlite-import-2/contracts.log`:final165 PASS /0 skips in48.21s (54 new adapter,
+  71 HA-02O import and40 enrollment contracts). `sqlite-import-2/receipt.json`:
+  `ISOLATED_APPLICATION_SQLITE_IMPORT_PASS`, PostgreSQL17.11,44 tables/82 rows
+  after import and44 tables/87 rows after acknowledged new operations.
+  Owned-container SIGKILL, exact isolated restore, semantic continuation, second
+  backup/current restore, stale-copy refusal and rejection of the old import PASS.
+  All four owned containers cleaned up; no unrelated Docker process targeted.
+- `sqlite-crl-regression-1/contracts.log`:128 PASS /0 skips in70.18s;
+  `ISOLATED_CRL_POSTGRES_PASS`. Existing SQLite/PG CRL guards, signed payload/
+  sequence, SIGKILL, current/stale restore and local-file reconciliation retained.
+- `sqlite-consumers-1.log`:98 PASS /0 skips in5.58s; ownership/environment runner
+  guards, alias/allocator boundaries, pseudonym generation, membership and routing.
+  [Commands](../../deploy/control-ha/README.md#ha-02p-application-sqlite-import).
+
+Only one current-source schema variant is accepted; installed schemas/writer
+versions still need private verification. A shared checkpoint/hash is not a live
+freeze barrier. Eight external manifests still declare references; signed CRL
+bootstrap does not recover issuer/referral/HMAC keys, private aliases/profiles,
+allocators or receiver safety floors. Fixture authority is retained in memory/
+temporary files across DB restores, not disaster-recovered. No strict replication/
+RPO0, client failover, production/full package qualification or fresh availability
+claim. Prior historical packaging/readiness gates remain open.
+
+Rollback now means cleanup of owned laboratory containers only; no server action
+is needed. After future canonical writes, fence publishers and recover current
+accepted state, never pre-cutover SQLite/files or an old import receipt. Stage2
+of5 continues. NEXT bounded scope: versioned external recovery bundle and dry-run
+consistency preflight; no queued replication/deployment automatically started.
 
 ## HA-02O — synthetic all-store shape import
 

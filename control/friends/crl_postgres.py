@@ -1,5 +1,9 @@
 """Synthetic durable CRL preparation, not a fenced file or gateway publisher."""
+import hashlib
+
 from .restricted_admin import CRLTransaction, CRL_PURPOSE
+
+IMPORT_PURPOSE = 'family-connect/ha-crl-import-anchor/v1/not-for-activation'
 
 DDL = (
     'CREATE TABLE ha_crl_schema(version BIGINT PRIMARY KEY, purpose TEXT NOT NULL)',
@@ -25,6 +29,13 @@ class PostgresCRLTransaction(CRLTransaction):
         if type(number) is not int or not self.sequence() < number < 2**53:
             raise ValueError('invalid CRL sequence advance')
         self.database.execute('UPDATE restricted_crl_sequence SET sequence=%s WHERE singleton=1', (number,))
+
+    def predecessor_matches(self, previous_crl):
+        if self.latest() is not None or not self.exists('ha_import_crl_anchor'):
+            return super().predecessor_matches(previous_crl)
+        rows = self.database.execute('SELECT * FROM ha_import_crl_anchor').fetchall()
+        return rows == [dict(singleton=1, version=1, purpose=IMPORT_PURPOSE, sequence=self.sequence(),
+                             payload_sha256=hashlib.sha256(previous_crl).hexdigest())]
 
 
 def initialize_synthetic_crl(repository):
