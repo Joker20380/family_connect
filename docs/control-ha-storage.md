@@ -974,14 +974,59 @@ The service/keys are reconstructed from the capsule; wrapping key and checkpoint
 are still retained in memory, not recovered from an off-host custodian.
 
 Pending evidence can be encrypted and preserved by Q, but V refuses importing it.
-Post-renewal DB drift, history, offline/emergency archives and unknown variants are
+Post-renewal DB drift, unsupported history, offline/emergency archives and unknown variants are
 not normalized, deleted or re-signed into acceptance. Even a valid standalone U
 inspection is insufficient to bypass V. Expiry is never extended for recovery.
 No host commands, remote reads, writer barrier, activation or automatic resume occur
 in preflight. This is NOT full DR or permission to relocate a lock/journal.
 
-NEXT within the journal block: retained multi-operation history and installed
-offline/emergency variants, then actual host reconciliation. The other three HA-02
+### Retained online history
+
+The explicit `bounded-and-online-renewal-history/v1` inventory and v2 capsule
+adapter extend this gate to two through eight fully completed online operations.
+The original single-operation path remains strict and rejects this format.
+[Native retention](../deploy/friends/restricted/maintenance/online_history.py) saves
+the predecessor coordinator's transaction, plan and last receipt as exact bytes in
+private `history/<operation>.json`, with content hashes, before replacing the current
+transaction. The operation lock covers retention and transition; file and parent
+directory fsync precede the transition. Exact retry after interruption is idempotent;
+conflicting bytes, unsafe files, reused IDs and capacity exhaustion refuse. A not-due
+attempt creates no history. Native history is never pruned automatically (4096 limit).
+This is source-only; installing the new packaged module/config hashes is a separate gate.
+
+[History inspection](../scripts/control_ha_renewal_history.py) preserves the entire
+five-document capture, including full node ledgers/archives, in the same44-artifact
+encrypted capsule. Every operation must occur in all three node completion ledgers
+and have its exact coordinator evidence and manifest-verified node archives.
+It validates each operation through U, including native signatures, decisions,
+private-key/profile binding and runtime/publication receipts. Internal inspection
+projections select a single ledger entry and coordinator container; they are NOT
+replacement native files or an instruction to recreate historical inodes. Their
+metadata comes from the retained container, not a new host attestation. Original
+bytes remain unchanged in the capsule and recovered evidence directory.
+
+Historical material is checked at its recorded terminal receipt time, bounded by
+the current capture; current material still uses the current capture and Q's current
+validity gates. No expiry or signature is rewritten. Strict chronological order,
+same gateway cohort, both certificate/authority successor links, nondecreasing CRL
+floors and retained revocations are required. Missing middle operations cannot be
+hidden by deleting the matching ledger entries. Legitimate intervening registry/CRL
+writes are not reconstructed from history: the latest operation still must match
+all five current DB projections and issuer/publication bytes exactly. This does not
+prove live writer completeness or an independently witnessed history prefix.
+
+Qualification uses three real sequential native operations, two already historical
+at final capture, then canonical import/crash/current restore with source removal.
+The8-operation and1MiB-per-document bounds are fail-closed import limits, not a
+claim that every4096-entry installed history fits. Larger histories, missing old
+coordinator records, pending operations and offline/emergency modes refuse without
+truncation or guessed reconstruction. A crash after retention but before transition
+may leave a duplicate current predecessor; native exact retry is tested, capsule
+import of that unresolved shape is not authorized. This closes the selected retained
+online-history slice, not the journal block or installed-host recovery.
+
+NEXT within the journal block: installed offline/emergency variants, then actual
+host reconciliation (including pre-existing histories without coordinator records). The other three HA-02
 blocks and HA-03..05 remain separate gates; no automatic continuation into live work.
 [Runbook](../deploy/control-ha/README.md#ha-02v-combined-online-renewal-capsule) ·
 [Qualification](releases/2026-11-23-control-ha.md#ha-02v--combined-online-renewal-capsule).

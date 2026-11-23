@@ -35,6 +35,63 @@ source inspection is not a fresh server-health check.
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
 
+## HA-02V — retained online history
+
+Continuation from2c2e978765a4786a90a5f8a09320849f2706221c on the authoritative
+metadata branch. This closes the selected retained online-history slice of V, not
+the entire journal block or HA-02. Source/tests/docs only, no SSH, deployment,
+service/policy/catalog/version changes. Console5ce82415, NL GeoIP22 November and
+Android126/catalog9 remain unchanged;8/12/120s and all-three-node ACK gate preserved.
+
+Root cause: native nodes retain old archives but the coordinator replaced its last
+transaction/plan/receipt on a later operation. New
+[native retention](../../deploy/friends/restricted/maintenance/online_history.py)
+preserves those exact predecessor bytes with hashes under the operation lock,
+fsyncs before replacement, refuses conflicting archives/unsafe files/reused IDs and
+does not prune history. Packaging includes the module; native source/config hashes
+must be qualified before any future deployment. Existing lost coordinator history
+is NOT fabricated from current state or node plans.
+
+The [history gate](../../scripts/control_ha_renewal_history.py) extends the existing
+combined capsule: all three node ledgers/archives and coordinator predecessors,
+same cohort, ordered certificate/authority successors, nondecreasing CRL floors and
+retained revocations. Original bytes remain encrypted and are recovered unchanged;
+per-operation inspection projections never become installed files. Old evidence is
+validated at its recorded completion time, not made currently valid. Latest native
+state must still match all five DB projections, issuer and publication. Unknown,
+pending, offline/emergency and over-limit history shapes refuse. Limits:2–8 operations
+per imported history,1MiB per capture document; native retention limit4096. Neither
+limit permits truncation. No independently attested live inventory/history prefix,
+cross-writer capture barrier, off-host wrapping-key custody or host resume is claimed.
+
+Qualification:
+
+- `history-recovery-1`:207 real-PostgreSQL17.11 contracts /0 skips:45 history,
+  44 original combined,78 bounded and40 enrollment. Three real sequential native
+  online operations; source deletion before capsule restore; exact44-table/81-row
+  import/SIGKILL/recovery and86-row current-state restore. Stale backup and original
+  import after new writes refuse; owned-container cleanup PASS.
+- `history-regression.log`:281 PASS /0 skips, covering native online/emergency,
+  packaging, prior U evidence and owned-runner guards. No platform/release acceptance
+  is inferred from these targeted checks.
+- Native crash after predecessor fsync leaves old current bytes intact; exact retry
+  completes the next operation without changing history. Missing ledger/archive/
+  coordinator entries, a removed middle operation, re-sealed corrupt history,
+  invalid paths/permissions, weaker import provenance and import/lost-ACK faults refuse.
+- Private evidence is under `/tmp/fc-control-ha-20261123/`, mode700/600; no raw
+  journals, DB dumps, profiles, secrets or capsule contents are committed.
+- Eight source docs/1066 local links and staged whitespace PASS. Source/test/doc
+  diff reviewed for secrets, private payloads and accidental build output before
+  committing; publication and navigation receipts follow separately.
+
+Rollback: stop only owned laboratory containers and retain private evidence. No
+production rollback is needed because nothing was installed. Do not downgrade an
+import receipt, erase history or restore old SQLite after acknowledged new writes;
+future activation requires fencing and current-state recovery. Next authorized
+selection remains offline/emergency variants, then actual host reconciliation;
+the live writer barrier, full-system recovery/custody and strict replication/RPO0
+remain separate HA-02 blocks. Stage2 of5; RU dependency remains.
+
 ## HA-02V — combined online renewal capsule
 
 Continuation from9df213c4120c1ec40c19371d1d15d2b6033ff64c on the authoritative

@@ -188,8 +188,18 @@ journals settled, all-three-node online operation COMMITTED, source removal,
 atomic import/exact retry, crash/current restore and stale/new-write refusal.
 Qualification/publication results: [dated report](releases/2026-11-23-control-ha.md#ha-02v--combined-online-renewal-capsule).
 This is one synthetic current-state variant, not installed-host reconciliation.
-NEXT bounded scope within the journal block: retained multi-operation history and
-installed offline/emergency variants, then actual host reconciliation. T alone
+HA-02V retained-history continuation COMPLETE in isolation: native coordinator
+predecessor retention plus explicit v2 combined-capsule gate, not another standalone
+inspector. Depends on V's independent checkpoint/issuer/DB binding and U's native
+operation checks. Gate: three sequential operations, all-three-node ledgers/archives,
+historical-time validation without extending current expiry, intact successor links,
+missing/corrupt history refusal, interrupted native retention/idempotent retry,
+atomic PG import/crash/current restore and stale/weaker receipt refusal.
+207 real-PG contracts /0 skips and281 targeted regressions /0 skips PASS;
+source removed,44-table81→86-row recovery PASS. No installed history migration or
+host activation. [Evidence](releases/2026-11-23-control-ha.md#ha-02v--retained-online-history).
+NEXT bounded scope within the journal block: installed offline/emergency variants,
+then actual host reconciliation, including legacy histories missing coordinator bytes. T alone
 still refuses nonempty renewal ledgers; V is an explicit combined format/gate;
 authenticated pending/unknown operations, path/owner bindings and floors must
 not be reset or re-signed to bypass checks. This checkpoint does not qualify relocation.

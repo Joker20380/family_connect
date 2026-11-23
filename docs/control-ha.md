@@ -149,12 +149,14 @@ online-renewal coordinator и три node ledger/archive, включая пот�
 bounded и online evidence с четырьмя БД и issuer в одной encrypted capsule.
 Проверяются не только hashes: пять native DB projections, подписанный issuer/CRL
 и опубликованный directory должны соответствовать той же завершённой операции.
-Это один synthetic формат, не live inventory и не разрешение исполнить журналы.
+Продолжение V добавляет сохранение coordinator history до замены текущей операции
+и проверку цепочки completed online renewals; стенд выполняет три операции подряд.
+Это synthetic qualification, не live inventory и не разрешение исполнить журналы.
 
 Оставшийся HA-02 учитывается четырьмя крупными блоками, не количеством букв:
 
-1. **Журналы — частично:** bounded и один completed online-renewal объединены
-   с canonical capsule/issuer/DB; история/другие установленные варианты и
+1. **Журналы — частично:** bounded и retained completed online-history объединены
+   с canonical capsule/issuer/DB; офлайн/аварийные установленные варианты и
    перенос host bindings ещё не закрыты. Целиком блок не завершён.
 2. **Рабочие схемы и writers:** live census и согласованный capture barrier не выполнены.
 3. **Полное восстановление:** off-host key/checkpoint custody и актуальное recovery

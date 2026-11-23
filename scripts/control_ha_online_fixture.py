@@ -22,10 +22,15 @@ from test_control_ha_renewal_v1 import OPERATION, capture
 from credential_renewal import atomic
 
 
-def online_fixture(root, *, interrupt=False):
+def online_fixture(root, *, interrupt=False, history=False):
     fleet_root = root / 'native'
     fleet_root.mkdir(mode=0o700)
-    fleet = make_fleet(fleet_root, now=NOW - 12000)
+    fleet = make_fleet(fleet_root, now=NOW - (36000 if history else 12000))
+    if history:
+        for operation in ('ha-online-history-0001', 'ha-online-history-0002'):
+            enable(fleet)
+            require(fleet.controller.run_online(operation, schedule_seconds=0)['result'] == 'COMMITTED',
+                    'ONLINE_HISTORY_FIXTURE_NOT_COMMITTED')
     enable(fleet)
     restricted_admin.grant(fleet.service.access, fleet.device.reference, fleet.family, NOW + 86400)
     fixture = joint_fixture(fleet_root, authority=(fleet.service, fleet.device))
@@ -52,5 +57,5 @@ def online_fixture(root, *, interrupt=False):
     refresh_fixture(fixture)
     artifacts, bounded = artifacts_for_maintenance(fixture)
     artifacts['maintenance_state'] = assemble(bounded['settled'], renewal, fixture.stores,
-                                              artifacts['issuer_material'], CHECKPOINT)
+                                              artifacts['issuer_material'], CHECKPOINT, history=history)
     return fixture, artifacts, bounded

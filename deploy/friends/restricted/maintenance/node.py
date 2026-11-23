@@ -13,7 +13,8 @@ from grant_cutover import GrantDatabase
 
 NODE_MODULES = frozenset(('node.py','credential_renewal.py','production_node.py','production_transport.py',
                          'grant_cutover.py','offline_handoff.py','expired_recovery.py','gateway_set.py',
-                         'online_contract.py','online_controller.py','online_node.py','online_reader.py','online_emergency.py'))
+                         'online_contract.py','online_controller.py','online_node.py','online_reader.py','online_emergency.py',
+                         'online_history.py'))
 
 
 def construct(config_path, *, fenced_recovery=False):

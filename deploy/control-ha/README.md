@@ -802,7 +802,16 @@ python -m scripts.control_ha_online_rehearsal --workdir /tmp/fc-ha-online-recove
 python -m pytest -q tests/test_control_ha_renewal_v1.py tests/test_referral_rehearsal.py
 ```
 
-The owned runner checks44 combined,78 bounded and40 enrollment contracts against
+Use `--history` with a fresh workdir for the retained-history extension. It executes
+three native online renewals before capture, preserves two coordinator predecessors
+and all node archives/ledgers, then uses the explicit v2 adapter. Old certificates
+are checked only as historical evidence; the current issuer must still be valid.
+The original source is removed before restoring the44-artifact capsule. History
+is private evidence, not executable recovery instructions. Missing predecessor bytes,
+partial/mixed modes, divergent ledgers, unsafe metadata and oversized histories refuse.
+Do not truncate histories or use this flag to claim installed-host reconciliation.
+
+The owned runner checks combined, history,78 bounded and40 enrollment contracts against
 real PostgreSQL, requiring zero skips. It composes the native laboratory renewal
 with the application fixture and pinned root-container bounded operations. It never
 reads a production path, contacts a gateway or installs a recovered journal. Docker
@@ -826,7 +835,7 @@ Rollback for this checkpoint is disposal of owned temporary containers; no produ
 rollback is needed. Preserve private evidence when a check fails; do not clear state
 or substitute an older capsule. After future canonical writes, use fenced current-state
 recovery, never reverse-copy old SQLite. Off-host wrapping-key/checkpoint custody,
-retained history/offline/emergency variants, installed schemas/writers, actual host
+offline/emergency or incomplete legacy histories, installed schemas/writers, actual host
 reconciliation and replication/RPO0 remain unqualified. Stage2 of5; RU still required.
 [Contract](../../docs/control-ha-storage.md#ha-02v--combined-online-renewal-capsule) ·
 [Evidence](../../docs/releases/2026-11-23-control-ha.md#ha-02v--combined-online-renewal-capsule).

@@ -43,6 +43,8 @@ def run(controller, operation, *, schedule_seconds, resume):
         else:
             require(record is None or record['state'] in ('COMMITTED', 'ABORTED'), 'OTHER_OPERATION_RECOVERY_REQUIRED')
             require(not resume, 'ONLINE_OPERATION_MISSING')
+            from online_history import check_operation, retain
+            check_operation(controller.root, operation)
             previous, gateway, _, changed = controller.read(operation)
             require(not changed, 'ONLINE_REVOCATION_FORBIDDEN')
             decision = controller.decision(previous, gateway, changed)
@@ -54,6 +56,7 @@ def run(controller, operation, *, schedule_seconds, resume):
             controller.check_admission(before)
             eligible(controller.validator, previous, int(controller.clock()), timing)
             eligible(controller.validator, gateway['secondary_snapshot'], int(controller.clock()), timing)
+            retain(controller, record, operation)
             record = dict(schema=1, mode='online', operation_id=operation, online=dict(contract=CONTRACT, timing=timing),
                           before=before, before_sha256=digest(canonical(before)), previous=previous,
                           gateway=gateway, prepared={}, published={}, acquired=[], cleaned=[],

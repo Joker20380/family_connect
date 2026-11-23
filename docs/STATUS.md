@@ -1,5 +1,29 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02V retained online-history continuation.**
+The selected history slice is qualified in isolation, not deployed. Native online
+renewal now retains exact predecessor coordinator bytes durably before replacement;
+crash/readback retry, conflict/permission refusal and operation-ID reuse protection
+are tested. The explicit v2 capsule gate validates complete captured three-node
+ledgers/archives, chronological successor links and current issuer/five-table state.
+Three consecutive native operations survive source removal and encrypted recovery;
+historical expiry is not current authorization and no journal is executed on restore.
+Qualification:207 real-PostgreSQL17.11 contracts /0 skips (45 history,44 combined,
+78 bounded,40 enrollment), plus281 native online/emergency/package/evidence/runner
+regressions /0 skips. Exact44-table/81-row crash/restore and86-row current restore
+PASS; stale restore and old import after new writes refuse. Owned cleanup PASS.
+Source publication is recorded in the dated report; no runtime installation implied.
+NEXT inside the partial journal block: installed offline/emergency variants, then
+actual host reconciliation, including legacy histories lacking coordinator records.
+No automatic pruning or reconstruction of missing evidence. The other three HA-02
+blocks remain: live schema/writer barrier, full-system recovery/off-host custody,
+and strict replication/RPO0. Stage2 of5; RU dependence persists. No SSH or service,
+policy, version/catalog changes; console5ce82415, NL GeoIP22 November and Android126/
+catalog9 remain the last known installation/publication.8/12/120s and all-three-node
+first-cohort ACK gate unchanged. No fresh server-health claim.
+[Contract](control-ha-storage.md#retained-online-history) ·
+[Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02v--retained-online-history).
+
 **23 November — CONTROL-HA HA-02V combined online-renewal capsule checkpoint.**
 Sourcebce4df72 ordinarily pushed and independently remote-SHA verified from9df213c4
 on the authoritative metadata branch; source/tests/docs only.

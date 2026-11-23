@@ -58,8 +58,8 @@ def evidence_digest(parts):
     return digest(encoded({name: digest(raw) for name, raw in parts.items()}))
 
 
-def file_map(value, allowed):
-    require(type(value) is dict and set(value) <= allowed and len(value) <= 32, 'RENEWAL_FILES')
+def file_map(value, allowed, *, maximum=32):
+    require(type(value) is dict and set(value) <= allowed and len(value) <= maximum, 'RENEWAL_FILES')
     result = {}
     for name, content in value.items():
         require(type(content) is str and len(content) <= 262144, 'RENEWAL_FILE_SIZE')
@@ -83,7 +83,7 @@ def host_identity(value):
             type(value['mode']) is int and value['mode'] == 0o700, 'RENEWAL_HOST_IDENTITY')
 
 
-def decode_document(raw, slot, operation):
+def decode_document(raw, slot, operation, *, allowed_files=None):
     document = parse(raw)
     require(type(document) is dict and set(document) == {'schema', 'slot', 'host', 'files', 'metadata'} and
             type(document['schema']) is int and document['schema'] == 1 and document['slot'] == slot,
@@ -94,7 +94,8 @@ def decode_document(raw, slot, operation):
     else:
         allowed = NODE_FILES | {'owner.json', 'completed.json', 'operation.lock'} | {
             'archive/' + operation + '/' + name for name in NODE_FILES | {'archive-manifest.json'}}
-    files = file_map(document['files'], allowed)
+    files = file_map(document['files'], allowed if allowed_files is None else allowed_files,
+                     maximum=32 if allowed_files is None else 256)
     require(type(document['metadata']) is dict and set(document['metadata']) == set(files), 'RENEWAL_METADATA')
     for name, metadata in document['metadata'].items():
         require(type(metadata) is dict and set(metadata) == {'uid', 'gid', 'mode', 'device', 'inode', 'nlink'} and

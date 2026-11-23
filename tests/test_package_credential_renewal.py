@@ -79,7 +79,7 @@ def test_renewal_package_pins_every_source_and_shared_profile_module(source, tmp
              'assert hasattr(node.ProductionNode,"rollback_registry_overlay");'
              'assert hasattr(node.ProductionNode,"finalize_fenced_rollback");'
              'assert profile_store.__file__.startswith(sys.argv[2]+"/");'
-             'assert {"online_contract.py","online_controller.py","online_node.py","online_reader.py"} <= node.NODE_MODULES')
+             'assert {"online_contract.py","online_controller.py","online_node.py","online_reader.py","online_history.py"} <= node.NODE_MODULES')
     subprocess.run([sys.executable, '-I', '-B', '-c', probe, str(extracted / 'renewal'), str(extracted / 'api.pyz')],
                    capture_output=True, check=True)
     with pytest.raises(FileExistsError):
