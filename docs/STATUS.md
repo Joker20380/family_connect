@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA migration IN_PROGRESS; isolated HA-01 VERIFIED.**
+Owner requested distributed management and documentation. Implementationbbc0a9fb
+is pushed and remote-verified in the existing metadata worktree/branch, not this
+dirty divergent main.61 focused tests, three-member mTLS quorum, leader crash,
+minority refusal, direct recovery and SIGTERM cleanup pass. Local failover1.766s
+is synthetic evidence, not production SLA. Canonical migration, fenced authority,
+alternate API/client fallback and cutover are not implemented; RU remains a shared
+dependency. No production writes/restarts or client release.
+[Source location, evidence, remaining gates and rollback](releases/2026-11-23-control-ha.md).
+
 **22 November20:57UTC — NL/AWG GeoIP and missing-data labels INSTALLED / VERIFIED.**
 Owner-approved follow-up is implemented in the existing metadata worktree, not this
 older/divergent main tree. Source2d880be1 is pushed to the metadata branch; panel

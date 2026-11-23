@@ -2,6 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
+**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+HA-01 isolated foundation COMPLETE in metadata branchbbc0a9fb:61 tests and real
+three-member mTLS crash/recovery rehearsal PASS; production unchanged. HA-02 NEXT:
+canonical repository/all writers, PostgreSQL replication, transaction/idempotency/
+challenge/tombstone parity, RPO0 and backup/restore. Then HA-03 receiver-enforced
+fencing, HA-04 multi-endpoint API/clients, HA-05 production shadow and guarded cutover.
+Retain8/12/120s and offline signing. Do not promote this old main or copied SQLite.
+[Authoritative worktree, full plan and current receipt](releases/2026-11-23-control-ha.md).
+
 **DEVICE-METADATA-NL-20261122 — selected follow-up COMPLETE / INSTALLED.**
 Depends on the accepted metadata/HMAC2 runtime and22 November coverage audit.
 The approved scope is both NL/AWG sources plus missing-data explanations, preserving
