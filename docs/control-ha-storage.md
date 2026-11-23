@@ -469,6 +469,49 @@ payload, явный новый epoch позволяет согласие. Identi
 не восстановлены. Нет full product/cross-store import, RPO0, replicas или reverse
 migration. [Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02k--metadata-and-consent-recovery).
 
+## HA-02L — diagnostics transactions
+
+Synthetic scope extends HA-02A proof transactions and HA-02E stable Support IDs;
+no production schema/backend is selected. Shared `DiagnosticsTransaction` stays
+in the bundled `diagnostics.py`; native PG has explicit DDL and a synthetic marker.
+`request_repository` validates exact signed bytes, consumes proof, checks device/
+invitation revoke, resolves Support ID and saves the latest snapshot atomically.
+SQLite uses BEGIN IMMEDIATE; PG uses the existing advisory transaction lock.
+Timestamp/rate/TTL checks run after writer acquisition. Failed validation, conflict,
+rate/capacity, save/prune or transaction commit leaves proof and snapshot unchanged.
+An ambiguous committed result needs a fresh proof for the same report, not replay
+of its consumed challenge. A duplicate of the retained report preserves receipt/TTL;
+same report ID with different parsed content refuses. Signed bytes remain exact,
+but idempotency compares parsed report content as in the existing schema1 API.
+
+Unchanged privacy contract:4096 bytes, explicit `consent=true` on each submitted
+report, bounded metrics/enums,5000 latest snapshots,60s sampling and7-day retention.
+No IP/raw log/arbitrary metrics/history are added. TTL boundary is inclusive at
+`received + RETENTION`, then hidden by read-only snapshots and deleted by prune.
+Reads do not prune/take writer locks; prune is a separate canonical writer.
+This is NOT metadata-v1 consent: no epoch/tombstone or historical report-ID ledger
+exists. After expiry/replacement, a fresh signed request can submit the old report
+again under the existing rate/capacity rules. No permanent anti-replay claim is made.
+
+Legacy API still uses separate registry/snapshot SQLite commits: a file failure
+requires a fresh proof. It refuses PG/canonical-marker stores before proof/file I/O;
+its timestamp is now sampled after the snapshot writer lock. Production HTTP,
+operator CLI and retention thread are not wired to canonical entrypoints. Closed
+HTTP/support packages and old diagnostics/desktop senders pass focused regressions.
+No live reports/client keys were read; synthetic keys are retained, NOT restored.
+
+113 real DB contracts /0 skips (73 diagnostics +40 enrollment),217 focused regressions
+/16 explicit optional skips. PostgreSQL17.11 SIGKILL and exact12-table/19-row restore
+preserve the current snapshot, acknowledged expiry deletion, used/pending challenges,
+device revoke, Support IDs and paid state. Stale pre-prune/revoke restore refuses via
+exact comparison to externally retained current lab state, not an automatic live
+backup freshness oracle. Current restore is not all-product backup/import, replicated
+RPO0, physical PG/MVCC/WAL/backup erasure, fencing or reverse migration. Before cutover
+abort only the owned lab. After new canonical writes never restore old SQLite;
+fence writers and recover current acknowledged state, including retention deletions.
+[Reproducer](../deploy/control-ha/README.md#ha-02l-isolated-diagnostics-recovery) ·
+[Evidence](releases/2026-11-23-control-ha.md#ha-02l--diagnostics-recovery).
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -488,7 +531,7 @@ CLI и периодические задания; число таблиц produc
 | `restricted_maintenance.py`, `restricted_sync.py`, `paid_canary_crl.py` | HMAC journal, local flock, signed directory/CRL, publication/receipt ordering | HA-02J local lab file-failure/reconciliation PASS; existing SQLite-only journals unchanged, distributed publication/remote ACK require HA-03 fencing |
 | `gateway_routing.py`, `gateway_selection.py` | Assignment versions, operation IDs, append-only events, atomic projections | HA-02I DB synthetic PASS; signed-file recovery, production HTTP/CLI wiring and fencing pending |
 | `technical_metadata.py`, `geoip.py` | Отдельная SQLite, consent epoch/sequence/digest, revoke tombstone, retention, no resurrection | HA-02K canonical DB contracts/recovery synthetic PASS; live отдельная SQLite unchanged, multi-store import/collector wiring/physical-erasure policy pending; GeoIP ephemeral read-side не перенесён |
-| `diagnostics.py` | Отдельное хранилище snapshots, ограничения данных/retention | Pending |
+| `diagnostics.py` | Отдельное хранилище snapshots, ограничения данных/retention | HA-02L canonical DB/recovery synthetic PASS; live separate SQLite unchanged, HTTP/CLI/worker wiring, cross-store import and physical-erasure policy pending |
 | `notices.py` → `scripts/service_notices.py` | Отдельная notices БД, publisher roles/revisions и exports | Pending |
 | `profile_store.py`, `pseudonyms.py`, generated membership/catalog files | Atomic file replace/fsync, local locks, authority versus derived copies | Pending; не копировать локальные locks как global fencing |
 
@@ -498,8 +541,8 @@ signing keys не входят в migration и остаются офлайн.
 
 ## Следующие gates
 
-1. Перевести diagnostics/notices и остальные writers/CLI/files из карты; live metadata
-   остаётся отдельной SQLite до согласованного cross-store import/collector cutover.
+1. Перевести notices и остальные writers/CLI/files из карты; live metadata/diagnostics
+   остаются отдельными SQLite до согласованного cross-store import/collector/worker cutover.
    Distributed CRL/file publication отдельно зависит от HA-03 fencing. Не допускать mixed backend writers;
    synthetic membership не заменяет production wiring, deadline и package gates.
 2. Создать явную versioned all-table migration: snapshot consistency, nullable и

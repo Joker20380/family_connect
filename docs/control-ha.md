@@ -140,6 +140,15 @@ restore12 таблиц/26 строк, stale pre-revoke backup refused. Revoke to
 Это logical retention, не доказанное физическое удаление из PG pages/WAL/backups.
 Multi-DB snapshot/import, collector wiring и secret recovery остаются gates; никакие
 клиентские метаданные/IP не читались, политика согласия и GeoIP collectors не менялись.
+HA-02L переносит diagnostics proof/Support ID/latest snapshot в одну canonical
+SQLite/PG транзакцию:113 contracts и217 focused regressions PASS,16 optional skips.
+SIGKILL/current restore12 лабораторных таблиц/19 строк сохраняет подтверждённый prune,
+report, used/pending proofs, revoke и paid state; stale pre-prune/revoke refused.
+Legacy отдельная SQLite остаётся отдельной. Это per-report opt-in, не consent epoch:
+duplicate текущего report не продлевает TTL, но новый signed request после expiry
+по существующему контракту допустим. Не заявляется вечная deduplication/tombstone
+или физическое удаление PG/WAL/backups. Notices/остальные writers и полный import,
+privacy-aware backup/recovery, replication и HA-03..05 ещё не квалифицированы.
 Ни один из этих стендов не включает replicated writer, epoch fencing или live failover.
 [Точная граница и карта writers](control-ha-storage.md).
 

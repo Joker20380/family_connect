@@ -1,6 +1,27 @@
 # Текущее состояние / Current state
 
-**23 November — CONTROL-HA HA-02K metadata/consent DB recovery VERIFIED; migration IN_PROGRESS.**
+**23 November — CONTROL-HA HA-02L diagnostics DB recovery VERIFIED; migration IN_PROGRESS.**
+Source-only continuation fromc484d6d4 in the authoritative metadata worktree.
+Diagnostics proof, Support ID binding and latest snapshot share a canonical
+SQLite/PostgreSQL transaction.113 real DB contracts PASS /0 skips (73 diagnostics
++40 enrollment);217 focused regressions PASS /16 explicit optional skips.
+PostgreSQL17.11 SIGKILL and exact12-table/19-row current restore pass; stale
+pre-prune/revoke backup refused. Consumed and pending proofs, revoke, paid state,
+current report and acknowledged retention deletion survive recovery. No production
+backend, HTTP/CLI/worker cutover, cross-store import or physical-erasure claim.
+Existing separate SQLite API stays separate; failure there still consumes proof.
+Diagnostics schema1 is per-report opt-in, NOT metadata consent epochs/tombstones:
+duplicates of the retained report do not refresh TTL; a fresh signed resubmission
+after expiry remains allowed by the existing contract. No raw logs/IP/history added.
+No live health check, server/client/consent change; console5ce82415, Android126/catalog9,
+NL GeoIP22 November,8/12/120s and all-three-node first-cohort ACKs unchanged.
+RU remains a dependency. Next: notices/remaining writers, all-table import, full
+recovery/strict replication, then fenced authority/API failover/guarded cutover.
+Prior overlay/readiness packaging gates remain open; no full release PASS.
+[Scope](control-ha-storage.md#ha-02l--diagnostics-transactions) ·
+[Evidence and rollback](releases/2026-11-23-control-ha.md#ha-02l--diagnostics-recovery).
+
+**Earlier23 November — CONTROL-HA HA-02K metadata/consent DB recovery VERIFIED; migration IN_PROGRESS.**
 Source `a72941d0` ordinarily pushed and remote-SHA verified from36c23756 in the
 authoritative metadata worktree; not deployment. Signed proof use, latest-only metadata and consent
 epoch/sequence/digest now share one canonical SQLite/PG transaction.120 real DB

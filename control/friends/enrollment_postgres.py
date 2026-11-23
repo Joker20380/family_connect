@@ -64,6 +64,10 @@ class PostgresEnrollmentTransaction(EnrollmentTransaction):
         from .metadata_postgres import PostgresMetadataTransaction
         return PostgresMetadataTransaction(self.database)
 
+    def diagnostics(self):
+        from .diagnostics_postgres import PostgresDiagnosticsTransaction
+        return PostgresDiagnosticsTransaction(self.database)
+
     def registered(self, device):
         row = self.database.execute('SELECT support_id FROM device_support WHERE device=%s', (device,)).fetchone()
         if row is not None:

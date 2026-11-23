@@ -14,7 +14,7 @@ source inspection is not a fresh server-health check.
 - HA-01 isolated scope implemented and verified; details below.
 - HA-02A enrollment, HA-02B paid/subscription, HA-02C membership, HA-02D referral,
   HA-02E Support ID, HA-02F grant/audit, HA-02G issuance/readiness, HA-02H chat/support
-  HA-02I gateway routing, HA-02J durable CRL and HA-02K metadata/consent DB recovery slices qualified below; remaining
+  HA-02I gateway routing, HA-02J durable CRL, HA-02K metadata/consent and HA-02L diagnostics DB recovery slices qualified below; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -26,6 +26,85 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02L — diagnostics recovery
+
+Continuation from `c484d6d473501f0c5fc4f24ad17462f0836219ba` in the authoritative
+metadata worktree/branch. Source-only, no SSH/live health check or deployment.
+Installed console5ce82415/NL GeoIP22 November and public Android126/catalog9 remain
+unchanged. RU dependency and8/12/120s/all-three-node first-cohort ACK rules remain.
+
+### Boundary and validation
+
+Shared diagnostics adapter makes proof consumption, Support ID binding and latest
+snapshot atomic in synthetic canonical SQLite/PG. Explicit native PG schema/marker;
+no production selector/import or HTTP/CLI/worker rewiring. Legacy separate SQLite
+commits remain separate, refuse canonical stores before proof/file mutation and
+sample server time after writer acquisition. Existing4096-byte/5000-device/60s/7-day
+schema1 contract is retained. Fresh proof plus the same retained report returns
+the original receipt without TTL refresh; failures roll back canonical proof too.
+No raw logs/IP/history added. Per-report consent is NOT a metadata epoch/tombstone:
+fresh signed resubmission after expiry remains allowed, not permanent deduplication.
+Logical prune is not physical erasure of PG/MVCC/WAL/backups.
+
+Private evidence: `/tmp/fc-control-ha-20261123/`; no private state/logs/dumps in Git.
+Control/identity/HA locked Python with psycopg3.3.9; PostgreSQL17.11 pinned image
+`postgres@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73`.
+
+- `diagnostics-local-2.log`:65 PASS /34 unavailable-PG skips, SQLite/legacy/runner checks.
+- `diagnostics-1/contracts.log`:107 PASS /0 skips; initial recovery PASS. Review then
+  strengthened recovery to retain a still-valid consumed challenge after long TTL
+  advancement; an expired/garbage-collected proof is not sufficient evidence.
+- `diagnostics-2/contracts.log`:111 PASS /2 new test failures. Test incorrectly tried
+  to obtain diagnostics proof for an unregistered device; existing policy rejects
+  it at challenge issuance. Corrected test asserts that earlier refusal; no policy
+  bypass or production code relaxation. Recovery did not run in this attempt.
+- `diagnostics-3/contracts.log`/XML:113 PASS /0 skips in37.42s (73 diagnostics +40 enrollment).
+  `diagnostics-3/receipt.json`:actual SIGKILL/restart/current restore PASS, stale restore
+  refused, owned-container cleanup PASS. Exact12 laboratory tables/19 rows below.
+- `diagnostics-regressions-1.log`:217 PASS /16 explicit optional skips in26.69s:
+  old diagnostics/desktop senders, HTTP routes, Support ID, enrollment, metadata,
+  closed HTTP/support packages and runner ownership guards.15 skips require real
+  nginx,1 requires the pinned sync archive. Prior HA-02C/K overlay fixture failures
+  and HA-02G artifact/readiness gate remain open, not reclassified as release PASS.
+- `pip check`, staged whitespace/scope/private-key/token scan and887 local Markdown
+  link targets PASS; all owned enrollment-rehearsal containers removed.14 staged
+  source/test/doc files only; no private state, dumps or build output included.
+
+Reproducer and exact test selection: [HA-02L runbook](../../deploy/control-ha/README.md#ha-02l-isolated-diagnostics-recovery).
+
+### Recovery and rollback
+
+Three generated identities, one current report, a pruned expired report, paid state,
+Support IDs, used/pending proofs and a revoked device. Before actual owned-container
+SIGKILL, uncommitted report deletion/proof consumption is injected. Restart and
+separate current dump restore must match every lab row; stale pre-prune/revoke dump
+is rejected against externally retained current state, not a live freshness oracle.
+Keys/synthetic clock are retained in memory, NOT recovered from backup.
+
+| Table | Restored rows |
+| --- | ---: |
+| challenges | 3 |
+| device_support | 3 |
+| devices | 3 |
+| field_support_audit | 0 |
+| ha_diagnostics_schema | 1 |
+| ha_enrollment_schema | 1 |
+| ha_paid_schema | 1 |
+| ha_support_schema | 1 |
+| invites | 3 |
+| paid_beta_events | 1 |
+| paid_beta_subscriptions | 1 |
+| snapshots | 1 |
+
+Current restore keeps acknowledged expiry deletion, rejects consumed/revoked proof,
+accepts pending proof exactly once and does not duplicate payment. Within-retention
+duplicate, inclusive TTL boundary and later prune pass. Before cutover rollback is
+only stopping the owned lab; no live service/database needs restoration. After new
+canonical writes, fence writers and recover current acknowledged state including
+retention deletion; old SQLite/stale backup is unsafe. Reverse import, cross-store
+all-product backup, physical-erasure policy, strict replication/RPO0 and HA-03..05
+are not qualified. Next bounded writer is notices; it is not started by this slice.
 
 ## HA-02K — metadata and consent recovery
 

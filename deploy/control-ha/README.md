@@ -413,3 +413,37 @@ Before cutover abort only the owned lab; no working data needs restoration. Futu
 rollback must fence writers and preserve current consent floors/proofs/payment state,
 not copy pre-revoke SQLite or stale panel rows. Diagnostics/notices/remaining writers,
 cross-store snapshot/import, privacy-aware backup policy and HA-03..05 remain gates.
+
+## HA-02L: isolated diagnostics recovery
+
+From the authoritative metadata worktree with the same locked control/identity/HA
+Python and local Docker; never use production reports, keys, volumes or a remote
+Docker daemon. No production PostgreSQL DSN/backend selector is introduced.
+
+```sh
+python -m scripts.diagnostics_postgres_rehearsal --workdir /tmp/fc-control-ha-20261123/diagnostics-3
+python -m pytest -q -ra tests/test_online_diagnostics.py tests/test_desktop_support.py tests/test_friends_http_runtime.py tests/test_friends_access.py tests/test_support_ids.py tests/test_support_package.py tests/test_referral_rehearsal.py tests/test_enrollment_rehearsal.py tests/test_technical_metadata.py
+```
+
+Choose a new absent workdir on reruns. Runner pins PostgreSQL17.11 by digest and
+requires its ownership label, loopback port and synthetic schema; dumps/logs stay
+private under `/tmp`. Expected113 real DB contracts /0 skips and
+`ISOLATED_DIAGNOSTICS_POSTGRES_PASS`. Regressions:217 PASS /16 explicit optional skips
+(15 real-nginx cases,1 pinned sync archive); not a full packaging/release gate.
+
+Gate requires atomic proof/snapshot, stable Support ID isolation, concurrency,
+validation/rate/capacity rollback, read-only views, revoke, failed/ambiguous commit
+and actual backend termination. SIGKILL must discard unfinished snapshot deletion
+and proof consumption. Compare all12 lab tables/19 rows before any restored writes;
+stale pre-prune/revoke backup must fail the exact current-state comparison. Current
+restore keeps the expired row absent and the unexpired row intact. Still-valid used
+proof refuses, pending proof succeeds once, revoked device refuses and payment retry
+does not add an event. TTL read/prune and duplicate receipt remain correct afterwards.
+
+Diagnostics is per-report opt-in, not metadata consent epochs: a fresh signed report
+after expiry is allowed. Do not claim durable report replay floors or physical
+erasure from PG/WAL/backups. Legacy HTTP/CLI/retention thread still uses separate
+SQLite; production migration, privacy-aware backup retention, full all-table import,
+replication/RPO0 and fencing remain gates. Abort stops only owned disposable containers;
+after future canonical writes recover current state, never stale SQLite. No server,
+client, serving set, consent or8/12/120s change is part of this checkpoint.

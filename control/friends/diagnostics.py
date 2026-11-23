@@ -16,6 +16,7 @@ from .support_ids import registered
 MAX_REPORT = 4096
 RETENTION = 7 * 86400
 MAX_DEVICES = 5000
+REPOSITORY_PURPOSE = 'family-connect/ha-diagnostics-synthetic/v1/db-only'
 COUNTERS = frozenset(('protocol_errors', 'retransmissions', 'retry_bytes', 'sent_bytes',
                       'received_bytes', 'recovery_timeouts', 'mux_window', 'effective_send_window',
                       'receive_window', 'peer_receive_window', 'send_window', 'observed_at_ms',
@@ -73,15 +74,79 @@ def validate(raw):
     return report
 
 
-def request(access, path, value):
+class DiagnosticsTransaction:
+    def __init__(self, database, placeholder='?'):
+        self.database = database
+        self.placeholder = placeholder
+
+    def fetch(self, query, values=()):
+        cursor = self.database.execute(query, values)
+        fields = [description[0] for description in cursor.description]
+        return [dict(row) if hasattr(row, 'keys') else dict(zip(fields, row)) for row in cursor.fetchall()]
+
+    def require_schema(self):
+        if self.fetch('SELECT version,purpose FROM ha_diagnostics_schema') != [dict(version=1, purpose=REPOSITORY_PURPOSE)]:
+            raise RuntimeError('Diagnostics rehearsal schema mismatch')
+
+    def prepare_write(self):
+        self.database.execute('PRAGMA secure_delete=ON')
+
+    def previous(self, device):
+        rows = self.fetch('SELECT received,report FROM snapshots WHERE device=' + self.placeholder, (device,))
+        return rows[0] if rows else None
+
+    def count(self):
+        return self.fetch('SELECT COUNT(*) AS total FROM snapshots')[0]['total']
+
+    def read(self, support, now):
+        rows = self.fetch('SELECT received,report FROM snapshots WHERE support=' + self.placeholder +
+                          ' AND received>=' + self.placeholder, (support, now - RETENTION))
+        return None if not rows else dict(stored_at=rows[0]['received'], report=json.loads(rows[0]['report']))
+
+    def save(self, device, support, now, report):
+        self.database.execute('INSERT INTO snapshots(device,support,received,report) VALUES (' +
+            ','.join([self.placeholder] * 4) + ') ON CONFLICT(device) DO UPDATE SET '
+            'support=excluded.support,received=excluded.received,report=excluded.report',
+            (device, support, now, json.dumps(report, separators=(',', ':'))))
+
+    def expire(self, now):
+        self.database.execute('DELETE FROM snapshots WHERE received<' + self.placeholder, (now - RETENTION,))
+
+
+def validated_request(value):
     if not isinstance(value, dict) or set(value) != {'proof', 'report'}:
         raise Rejected()
     report = validate(value['report'])
     purpose = 'diagnostics:' + hashlib.sha256(value['report'].encode('utf-8')).hexdigest()
+    return report, purpose
+
+
+def record(transaction, device, support, report, now):
+    transaction.prepare_write()
+    transaction.expire(now)
+    previous = transaction.previous(device)
+    if previous and json.loads(previous['report'])['report_id'] == report['report_id']:
+        if json.loads(previous['report']) != report:
+            raise Rejected()
+        return dict(schema=1, report_id=report['report_id'], stored_at=previous['received'])
+    if previous and now - previous['received'] < 60:
+        raise RateLimited()
+    if not previous and transaction.count() >= MAX_DEVICES:
+        raise RateLimited()
+    transaction.save(device, support, now, report)
+    return dict(schema=1, report_id=report['report_id'], stored_at=now)
+
+
+def request(access, path, value):
+    if access.path is None:
+        raise NotImplementedError('Legacy diagnostics requires SQLite; canonical import is pending')
+    with closing(sqlite3.connect(Path(access.path).resolve().as_uri() + '?mode=ro', uri=True)) as database:
+        if database.execute("SELECT 1 FROM sqlite_master WHERE name='ha_diagnostics_schema'").fetchone():
+            raise NotImplementedError('Canonical diagnostics cannot use a separate snapshot file')
+    report, purpose = validated_request(value)
     device = access.complete(value['proof'], purpose)['device']
     with access.db() as database:
         support = registered(database, device)
-    now = int(access.clock())
     path = Path(path)
     descriptor = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
     os.close(descriptor)
@@ -89,19 +154,36 @@ def request(access, path, value):
         database.execute('PRAGMA secure_delete=ON')
         database.execute('CREATE TABLE IF NOT EXISTS snapshots(device TEXT PRIMARY KEY, support TEXT NOT NULL, received INTEGER NOT NULL, report TEXT NOT NULL)')
         database.execute('BEGIN IMMEDIATE')
-        database.execute('DELETE FROM snapshots WHERE received<?', (now - RETENTION,))
-        previous = database.execute('SELECT received,report FROM snapshots WHERE device=?', (device,)).fetchone()
-        if previous and json.loads(previous[1])['report_id'] == report['report_id']:
-            if json.loads(previous[1]) != report:
-                raise Rejected()
-            return {'schema': 1, 'report_id': report['report_id'], 'stored_at': previous[0]}
-        if previous and now - previous[0] < 60:
-            raise RateLimited()
-        if not previous and database.execute('SELECT count(*) FROM snapshots').fetchone()[0] >= MAX_DEVICES:
-            raise RateLimited()
-        database.execute('INSERT OR REPLACE INTO snapshots VALUES(?,?,?,?)',
-                         (device, support, now, json.dumps(report, separators=(',', ':'))))
-    return {'schema': 1, 'report_id': report['report_id'], 'stored_at': now}
+        return record(DiagnosticsTransaction(database), device, support, report, int(access.clock()))
+
+
+def request_repository(access, value):
+    report, purpose = validated_request(value)
+    with access.enrollment() as enrollment:
+        transaction = enrollment.diagnostics()
+        transaction.require_schema()
+        device = access.complete(value['proof'], purpose, transaction=enrollment)['device']
+        invitation = enrollment.device_invitation(device)
+        if invitation is None or invitation['revoked']:
+            raise Rejected()
+        return record(transaction, device, enrollment.registered(device), report, int(access.clock()))
+
+
+def read_repository(access, support):
+    from .support_ids import normalize
+    support = normalize(support)
+    with access.read_enrollment() as enrollment:
+        transaction = enrollment.diagnostics()
+        transaction.require_schema()
+        return transaction.read(support, int(access.clock()))
+
+
+def prune_repository(access):
+    with access.enrollment() as enrollment:
+        transaction = enrollment.diagnostics()
+        transaction.require_schema()
+        transaction.prepare_write()
+        transaction.expire(int(access.clock()))
 
 
 def read(path, support, now):

@@ -72,7 +72,18 @@ restore PASS. SIGKILL/current restore preserves12 lab tables/26 rows and tombsto
 New epoch is required to opt in again; duplicate reports do not refresh TTL. Live
 SQLite proof/file commits stay separate; cross-store import/collector wiring and
 physical erasure of PG/WAL/backups are not qualified. No production selector.
-NEXT within HA-02: diagnostics/notices and remaining writers/CLI/files,
+HA-02L diagnostics synthetic DB boundary qualified:113 real DB contracts /0 skips
+(73 diagnostics +40 enrollment),217 focused regressions /16 explicit optional skips.
+Depends on HA-02A proof transactions, HA-02E stable Support IDs and accepted schema1
+snapshot privacy/retention. Gate: atomic proof/report, binding/isolation, concurrent
+requests/revoke/prune, rate/capacity, read-only TTL view, rollback/ACK loss/backend
+failure and SIGKILL/current/stale restore PASS. Exact12 lab tables/19 rows include
+used/pending proofs and retained deletion. Existing7-day/60s/5000/4096-byte bounds
+remain; diagnostics has no consent epoch or durable replay floor. Fresh signed
+resubmission after expiry is still allowed. Legacy separate SQLite commits and
+production HTTP/CLI/worker wiring remain unchanged; no cross-store import,
+physical-erasure policy or production selector is qualified.
+NEXT within HA-02: notices and remaining writers/CLI/files,
 all-table shadow import, full backup/recovery and strict
 PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.
