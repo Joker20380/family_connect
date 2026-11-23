@@ -1,6 +1,7 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02B paid/subscription rehearsal VERIFIED; migration IN_PROGRESS.**
+Sourcea62b5b2e is ordinarily pushed and remote-SHA verified in the metadata branch.
 Shared payment validation now uses SQLite/native PostgreSQL transactions; the
 personal subscription proof and projection share one transaction/savepoint.
 89 real SQLite/PostgreSQL contracts PASS /0 skips;366 consumer/runner checks PASS

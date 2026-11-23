@@ -32,6 +32,17 @@ checkpoint on the existing metadata branch, **not** production deployment or
 completion of HA-02. No release/version/catalog change. Rollout remains blocked
 on remaining writers, full import/recovery, strict replication and HA-03..05 gates.
 
+Source/tests/docs `a62b5b2e3ef58598a062e19289c2c06642c3af78` ordinarily pushed to
+`feature/device-technical-metadata-20261115`; independent remote SHA matched.
+Final staged scope/private-key marker scan, local documentation targets and
+whitespace checks PASS; locked environment `pip check` PASS. Final runner-only
+rerun13 PASS. No marked rehearsal containers remain after the final readback.
+Root navigation checkpoint `e95ddcdb5a2da556557403b781076218d97af0d1` remains local:
+ordinary main push rejected `non-fast-forward`; remote main is still
+`cb47bf230c6795cf21f4e6948253f49aa5377ed0`. No force/rebase/merge. Root's existing
+40/66/11/6-line documentation edits and untracked work are preserved exactly;
+the verified metadata branch is the published source, not that old main.
+
 - `paid_beta.py` adds semantic paid operations without duplicating admission,
   payment/release validation or event state transitions. SQLite stays the default;
   its first-payment transport preparation remains mandatory when configured.

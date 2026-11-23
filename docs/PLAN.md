@@ -9,7 +9,7 @@ rehearsal, leader loss, no-quorum refusal and direct recovery;61 tests PASS,
 zero production writes. HA-02 canonical repository/replication is IN_PROGRESS:
 HA-02A enrollment transaction boundary and isolated PostgreSQL crash/backup/restore
 qualified/pushed9d1219d8 (40 contracts /0 skips,353 regressions /20 optional skips,6 runner checks).
-HA-02B paid ledger/subscription synthetic parity and recovery qualified:89 contracts
+HA-02B paid ledger/subscription synthetic parity and recovery qualified/pusheda62b5b2e:89 contracts
 /0 skips;366 consumer/runner checks /20 optional skips. Stale pre-payment restore
 refused; current nine-table lab restore preserves acknowledged writes and one-use
 proofs. No production cutover or reverse migration is qualified.
