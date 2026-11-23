@@ -177,7 +177,8 @@ Same-host comparison refuses changed bytes/path/inode; it is not execution permi
 push rejected non-fast-forward againstcb47bf23; no history rewrite or lost dirty work.
 Publication is recorded in the dated report. Simulated
 RPC/readers/barriers and one retained online operation only; no live attestation.
-HA-02V qualified in isolation: T/U with canonical Q/R/S inputs in a44-artifact
+HA-02V qualified/pushedbce4df72 in isolation; independent remote SHA verified:
+T/U with canonical Q/R/S inputs in a44-artifact
 encrypted capsule.162 real-PG contracts /0 skips (44 combined,78 bounded,40 enrollment)
 and186 focused renewal/runner checks /0 skips;44-table/81→86-row recovery PASS.
 Depends on P schema/CRL adapters, Q independent checkpoint, R/S external/receiver

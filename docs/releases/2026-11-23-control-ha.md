@@ -54,7 +54,7 @@ or pass from a mere matching DB count. Native authenticated bytes are never rewr
 New inventory declarations explicitly bind each bounded node to the renewal evidence.
 
 Qualification:
-- Final owned `online-recovery-3`:162 PostgreSQL17.11 contracts /0 skips
+- Final owned `online-recovery-3`:162 PostgreSQL17.11 contracts /0 skips in60.48s
   (44 combined capsule,78 bounded maintenance,40 enrollment). Source removed before
   restore;44 tables/81 imported rows survive SIGKILL and exact restore. Application
   and external/receiver operations produce86 current rows; their current backup
@@ -62,7 +62,7 @@ Qualification:
 - `online-regression-1.log`:186 PASS /0 skips in45.26s (162 unchanged standalone
   renewal/fault cases and24 runner/restore guards, including the new runner).
 - Eight source docs/1059 local links and whitespace checked; external URLs not fetched.
-  Final staged secret/private-evidence/build-output audit and publication recorded below.
+  Final staged secret/private-evidence/build-output audit PASS; publication below.
 
 Initial diagnostics corrected fixture composition (exclusive-create versus native
 atomic replacement, common registry/support root, predecessor CRL issue time and
@@ -74,8 +74,13 @@ second recovery passed, then the final162-contract run repeated full recovery af
 narrowing inventory declarations and binding both adapter identities. Earlier runs
 are diagnostic evidence, not additional acceptance totals.
 
-Implementation qualification is complete within the stated synthetic scope;
-source publication has not yet been recorded at this checkpoint.
+Publication: source/tests/docsbce4df725fc57b7de4aea2a77a671783159222d4 ordinarily
+pushed to the existing metadata branch; independent remote branch SHA matched.
+Old-main navigationbb9c2796a9223055cde151d183514e3f099e0e27 is retained locally:
+ordinary push rejected non-fast-forward againstcb47bf230c6795cf21f4e6948253f49aa5377ed0.
+Three staged navigation docs/376 links PASS. Original four dirty-file additions and
+six untracked file hashes were checked unchanged; no force/reset/rebase/merge.
+The metadata branch remains authoritative, not the unpushed old-main navigation.
 
 Scope: one completed online operation and one bounded journal per node, generated
 under a common authority. Bounded profiles use separate synthetic root-container

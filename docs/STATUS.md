@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02V combined online-renewal capsule checkpoint.**
-Continues9df213c4 on the authoritative metadata branch; source/tests/docs only.
+Sourcebce4df72 ordinarily pushed and independently remote-SHA verified from9df213c4
+on the authoritative metadata branch; source/tests/docs only.
 One encrypted capsule now holds four application stores, issuer/referral material,
 five external-role formats, receiver state, three bounded journals and one completed
 native online renewal:44 private artifacts, no opaque probes in this fixture.
@@ -14,7 +15,10 @@ No journal is executed, rebound to a new host or emptied during restore.
 Qualification:162 real-PostgreSQL17.11 contracts /0 skips (44 combined,78 bounded,
 40 enrollment), plus186 focused renewal/runner checks /0 skips. Source removal,
 44-table/81-row crash/restore and86-row current-state restore PASS; stale restore
-and old import after new writes refuse. Publication results are recorded below.
+and old import after new writes refuse. Eight source docs/1059 links and three staged
+navigation docs/376 links PASS. Old-main navigationbb9c2796 remains local: ordinary
+push rejected non-fast-forward againstcb47bf23. Original four dirty files/six untracked
+paths were verified unchanged; no force/reset/rebase/merge. Publication details below.
 NEXT within the partial journal block: retained multi-operation history and installed
 offline/emergency variants, then actual host reconciliation. The separate bounded
 and online fixture paths do not constitute an installed-host inventory or live barrier.
