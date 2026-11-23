@@ -33,6 +33,20 @@ group; support/admin is not silently marked complete. No deployment, production
 SQL/file writes, secret rotation, endpoint change or fresh server-health claim.
 Console5ce82415, Android126/catalog9 and required RU serving node remain unchanged.
 
+Source/tests/docs checkpoint `22caaf6c4d9fa0167f8e8b93d1cad64971c9a019` ordinarily
+pushed to `feature/device-technical-metadata-20261115`; independent remote SHA
+matches. Staged14-file scope, private-key/credential-marker scan,866 Markdown
+targets, whitespace and locked-environment `pip check` PASS. No marked rehearsal
+containers remained after the final run. The source worktree was clean after push.
+Final contracts181/0 in99.07s; final consumer/runner selection379/21 in37.01s.
+
+Old-main navigation-only handoff `ae71ca10e4488eb95115035d633bc0d2e17cd844` is
+retained locally. Its ordinary push was rejected `non-fast-forward`; remote main
+remains `cb47bf230c6795cf21f4e6948253f49aa5377ed0`. No force, merge, rebase or reset.
+Pre-existing unstaged additions remain exactly40 PLAN,66 STATUS,11 private-beta
+guide and6 recovery-guide lines, plus the same untracked historical files. The
+metadata branch is the published source; the old main is not deployable HA runtime.
+
 ### Changes and retry contract
 
 - `access.py` adds optional caller-owned transaction participation to the existing

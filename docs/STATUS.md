@@ -1,7 +1,8 @@
 # Текущее состояние / Current state
 
 **23 November — CONTROL-HA HA-02D referral transactions VERIFIED; migration IN_PROGRESS.**
-Continuation from1171b9dc in the existing metadata branch. Shared SQLite/PostgreSQL
+Source22caaf6c is ordinarily pushed and remote-SHA verified in the existing metadata
+branch (base1171b9dc). Shared SQLite/PostgreSQL
 referral transactions atomically issue proof/link and invitation/claim; sponsor-bound
 retries, pool500/daily20 concurrency, revocation, ACK loss and backend loss are covered.
 181 real DB contracts PASS /0 skips (50 referral +131 existing);379 consumer/runner
